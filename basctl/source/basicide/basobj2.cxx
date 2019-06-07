@@ -72,7 +72,8 @@ void Organize( sal_Int16 tabId )
             aDesc = pCurWin->CreateEntryDescriptor();
 
     vcl::Window* pParent = Application::GetDefDialogParent();
-    VclPtr<OrganizeDialog>::Create(pParent, tabId, aDesc)->StartExecuteAsync(nullptr);
+    auto xDlg(std::make_shared<OrganizeDialog>(pParent ? pParent->GetFrameWeld() : nullptr, tabId, aDesc));
+    weld::DialogController::runAsync(xDlg, [](int) {});
 }
 
 bool IsValidSbxName( const OUString& rName )
@@ -247,7 +248,7 @@ OUString ChooseMacro(weld::Window* pParent,
     OUString aScriptURL;
     SbMethod* pMethod = nullptr;
 
-    MacroChooser aChooser(pParent, xDocFrame);
+    MacroChooser aChooser(pParent, xDocFrame, true);
     if ( bChooseOnly || !SvtModuleOptions::IsBasicIDE() )
         aChooser.SetMode(MacroChooser::ChooseOnly);
 

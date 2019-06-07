@@ -6651,6 +6651,50 @@ private:
         gtk_tree_path_free(tree_path);
     }
 
+    DECL_LINK(async_stop_cell_editing, void*, void);
+
+    static void signalCellEditingStarted(GtkCellRenderer*, GtkCellEditable*, const gchar *path, gpointer widget)
+    {
+        GtkInstanceTreeView* pThis = static_cast<GtkInstanceTreeView*>(widget);
+        if (!pThis->signal_cell_editing_started(path))
+            Application::PostUserEvent(LINK(pThis, GtkInstanceTreeView, async_stop_cell_editing));
+    }
+
+    bool signal_cell_editing_started(const gchar *path)
+    {
+        GtkTreePath *tree_path = gtk_tree_path_new_from_string(path);
+
+        GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
+        GtkInstanceTreeIter aGtkIter(nullptr);
+        gtk_tree_model_get_iter(pModel, &aGtkIter.iter, tree_path);
+        gtk_tree_path_free(tree_path);
+
+        return signal_editing_started(aGtkIter);
+    }
+
+    static void signalCellEdited(GtkCellRendererText* pCell, const gchar *path, const gchar *pNewText, gpointer widget)
+    {
+        GtkInstanceTreeView* pThis = static_cast<GtkInstanceTreeView*>(widget);
+        pThis->signal_cell_edited(pCell, path, pNewText);
+    }
+
+    void signal_cell_edited(GtkCellRendererText* pCell, const gchar *path, const gchar* pNewText)
+    {
+        GtkTreePath *tree_path = gtk_tree_path_new_from_string(path);
+
+        GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
+        GtkInstanceTreeIter aGtkIter(nullptr);
+        gtk_tree_model_get_iter(pModel, &aGtkIter.iter, tree_path);
+        gtk_tree_path_free(tree_path);
+
+        OUString sText = OUString(pNewText, pNewText ? strlen(pNewText) : 0, RTL_TEXTENCODING_UTF8);
+        if (signal_editing_done(std::pair<const weld::TreeIter&, OUString>(aGtkIter, sText)))
+        {
+            void* pData = g_object_get_data(G_OBJECT(pCell), "g-lo-CellIndex");
+            set(aGtkIter.iter, reinterpret_cast<sal_IntPtr>(pData), sText);
+        }
+    }
+
     void signal_column_clicked(GtkTreeViewColumn* pClickedColumn)
     {
         int nIndex(0);
@@ -6752,15 +6796,17 @@ public:
             for (GList* pRenderer = g_list_first(pRenderers); pRenderer; pRenderer = g_list_next(pRenderer))
             {
                 GtkCellRenderer* pCellRenderer = GTK_CELL_RENDERER(pRenderer->data);
+                g_object_set_data(G_OBJECT(pCellRenderer), "g-lo-CellIndex", reinterpret_cast<gpointer>(nIndex));
                 if (GTK_IS_CELL_RENDERER_TEXT(pCellRenderer))
                 {
                     if (m_nTextCol == -1)
                         m_nTextCol = nIndex;
                     m_aWeightMap[nIndex] = -1;
+                    g_signal_connect(G_OBJECT(pCellRenderer), "editing-started", G_CALLBACK(signalCellEditingStarted), this);
+                    g_signal_connect(G_OBJECT(pCellRenderer), "edited", G_CALLBACK(signalCellEdited), this);
                 }
                 else if (GTK_IS_CELL_RENDERER_TOGGLE(pCellRenderer))
                 {
-                    g_object_set_data(G_OBJECT(pCellRenderer), "g-lo-CellIndex", reinterpret_cast<gpointer>(nIndex));
                     g_signal_connect(G_OBJECT(pCellRenderer), "toggled", G_CALLBACK(signalCellToggled), this);
                     m_aToggleVisMap[nIndex] = -1;
                     m_aToggleTriStateMap[nIndex] = -1;
@@ -7318,6 +7364,10 @@ public:
 
     void set_image(const GtkTreeIter& iter, int col, GdkPixbuf* pixbuf)
     {
+        if (col == -1)
+            col = m_nExpanderImageCol;
+        else
+            col = get_model_col(col);
         gtk_tree_store_set(m_pTreeStore, const_cast<GtkTreeIter*>(&iter), col, pixbuf, -1);
         if (pixbuf)
             g_object_unref(pixbuf);
@@ -7351,20 +7401,12 @@ public:
     virtual void set_image(const weld::TreeIter& rIter, const css::uno::Reference<css::graphic::XGraphic>& rImage, int col) override
     {
         const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);
-        if (col == -1)
-            col = m_nExpanderImageCol;
-        else
-            col = get_model_col(col);
         set_image(rGtkIter.iter, col, getPixbuf(rImage));
     }
 
     virtual void set_image(const weld::TreeIter& rIter, const OUString& rImage, int col) override
     {
         const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);
-        if (col == -1)
-            col = m_nExpanderImageCol;
-        else
-            col = get_model_col(col);
         set_image(rGtkIter.iter, col, getPixbuf(rImage));
     }
 
@@ -7919,12 +7961,11 @@ public:
 
     virtual bool get_dest_row_at_pos(const Point &rPos, weld::TreeIter* pResult) override
     {
-        gtk_drag_unhighlight(GTK_WIDGET(m_pTreeView));
-        gtk_drag_highlight(gtk_widget_get_parent(GTK_WIDGET(m_pTreeView)));
+        const bool bAsTree = gtk_tree_view_get_enable_tree_lines(m_pTreeView);
 
         // to keep it simple we'll default to always drop before the current row
         // except for the special edge cases
-        GtkTreeViewDropPosition pos = GTK_TREE_VIEW_DROP_BEFORE;
+        GtkTreeViewDropPosition pos = bAsTree ? GTK_TREE_VIEW_DROP_INTO_OR_BEFORE : GTK_TREE_VIEW_DROP_BEFORE;
 
         // unhighlight current highlighted row
         gtk_tree_view_set_drag_dest_row(m_pTreeView, nullptr, pos);
@@ -7933,7 +7974,7 @@ public:
             gtk_drag_unhighlight(GTK_WIDGET(m_pTreeView));
 
         GtkTreePath *path = nullptr;
-        GtkTreeViewDropPosition gtkpos = GTK_TREE_VIEW_DROP_BEFORE;
+        GtkTreeViewDropPosition gtkpos = bAsTree ? GTK_TREE_VIEW_DROP_INTO_OR_BEFORE : GTK_TREE_VIEW_DROP_BEFORE;
         bool ret = gtk_tree_view_get_dest_row_at_pos(m_pTreeView, rPos.X(), rPos.Y(),
                                                      &path, &gtkpos);
 
@@ -8072,6 +8113,14 @@ public:
 IMPL_LINK_NOARG(GtkInstanceTreeView, async_signal_changed, void*, void)
 {
     signal_changed();
+}
+
+IMPL_LINK_NOARG(GtkInstanceTreeView, async_stop_cell_editing, void*, void)
+{
+    GtkTreeViewColumn *focus_column = nullptr;
+    gtk_tree_view_get_cursor(m_pTreeView, nullptr, &focus_column);
+    if (focus_column)
+        gtk_cell_area_stop_editing(gtk_cell_layout_get_area(GTK_CELL_LAYOUT(focus_column)), true);
 }
 
 class GtkInstanceSpinButton : public GtkInstanceEntry, public virtual weld::SpinButton
