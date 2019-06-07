@@ -47,8 +47,8 @@ private:
     private:
         SwTextAttr*  m_pInitialArray[ INITIAL_NUM_ATTR ];
         SwTextAttr** m_pArray;
-        sal_uInt16 m_nCount; // number of elements on stack
-        sal_uInt16 m_nSize;  // number of positions in Array
+        sal_uInt32 m_nCount; // number of elements on stack
+        sal_uInt32 m_nSize;  // number of positions in Array
 
     public:
         // Ctor, Dtor
@@ -64,7 +64,7 @@ private:
         void Push( const SwTextAttr& rAttr ) { Insert(rAttr, m_nCount); };
         // insert at specified position, take care for not inserting behind
         // the value returned by Count()
-        void Insert( const SwTextAttr& rAttr, const sal_uInt16 nPos );
+        void Insert( const SwTextAttr& rAttr, const sal_uInt32 nPos );
 
         // remove specified attribute
         void Remove( const SwTextAttr& rAttr );
@@ -73,11 +73,11 @@ private:
         const SwTextAttr* Top() const;
 
         // number of elements on stack
-        sal_uInt16 Count() const { return m_nCount; };
+        sal_uInt32 Count() const { return m_nCount; };
 
         // returns position of rAttr on Stack if found, otherwise USHRT_MAX
         // can be used for Remove of an attribute
-        sal_uInt16 Pos( const SwTextAttr& rAttr ) const;
+        sal_uInt32 Pos( const SwTextAttr& rAttr ) const;
     };
 
     SwAttrStack m_aAttrStack[ NUM_ATTRIBUTE_STACKS ]; // stack collection
