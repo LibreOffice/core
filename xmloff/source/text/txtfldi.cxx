@@ -3314,7 +3314,7 @@ SvXMLImportContextRef XMLAnnotationImportContext::CreateChildContext(
     const Reference<XAttributeList >& xAttrList )
 {
     SvXMLImportContext *pContext = nullptr;
-    if( XML_NAMESPACE_DC == nPrefix )
+    if( XML_NAMESPACE_DC == nPrefix || XML_NAMESPACE_LO_EXT == nPrefix )
     {
         if( IsXMLToken( rLocalName, XML_CREATOR ) )
             pContext = new XMLStringBufferImportContext(GetImport(), nPrefix,
@@ -3322,6 +3322,10 @@ SvXMLImportContextRef XMLAnnotationImportContext::CreateChildContext(
         else if( IsXMLToken( rLocalName, XML_DATE ) )
             pContext = new XMLStringBufferImportContext(GetImport(), nPrefix,
                                             rLocalName, aDateBuffer);
+        else if( IsXMLToken( rLocalName, XML_RESOLVED ) )
+            pContext = new XMLStringBufferImportContext(GetImport(), nPrefix,
+                                             rLocalName, aResolvedBuffer);
+
     }
     else if (((XML_NAMESPACE_TEXT == nPrefix || XML_NAMESPACE_LO_EXT == nPrefix)
                  && IsXMLToken(rLocalName, XML_SENDER_INITIALS))
@@ -3468,6 +3472,14 @@ void XMLAnnotationImportContext::PrepareField(
     // import (possibly empty) initials
     OUString sInitials( aInitialsBuffer.makeStringAndClear() );
     xPropertySet->setPropertyValue("Initials", makeAny(sInitials));
+
+    // import resolved flag
+    OUString sResolved( aResolvedBuffer.makeStringAndClear() );
+    if(sResolved == "Resolved") {
+        xPropertySet->setPropertyValue("Resolved", makeAny(true));
+    } else {
+        xPropertySet->setPropertyValue("Resolved", makeAny(false));
+    }
 
     util::DateTime aDateTime;
     if (::sax::Converter::parseDateTime(aDateTime,
