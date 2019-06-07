@@ -7318,6 +7318,10 @@ public:
 
     void set_image(const GtkTreeIter& iter, int col, GdkPixbuf* pixbuf)
     {
+        if (col == -1)
+            col = m_nExpanderImageCol;
+        else
+            col = get_model_col(col);
         gtk_tree_store_set(m_pTreeStore, const_cast<GtkTreeIter*>(&iter), col, pixbuf, -1);
         if (pixbuf)
             g_object_unref(pixbuf);
@@ -7351,20 +7355,12 @@ public:
     virtual void set_image(const weld::TreeIter& rIter, const css::uno::Reference<css::graphic::XGraphic>& rImage, int col) override
     {
         const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);
-        if (col == -1)
-            col = m_nExpanderImageCol;
-        else
-            col = get_model_col(col);
         set_image(rGtkIter.iter, col, getPixbuf(rImage));
     }
 
     virtual void set_image(const weld::TreeIter& rIter, const OUString& rImage, int col) override
     {
         const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);
-        if (col == -1)
-            col = m_nExpanderImageCol;
-        else
-            col = get_model_col(col);
         set_image(rGtkIter.iter, col, getPixbuf(rImage));
     }
 

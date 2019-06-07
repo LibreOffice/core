@@ -309,8 +309,11 @@ public:
     void copy_iterator(const weld::TreeIter& rSource, weld::TreeIter& rDest) const { m_xControl->copy_iterator(rSource, rDest); }
     bool get_selected(weld::TreeIter* pIter) const { return m_xControl->get_selected(pIter); }
     void select(const weld::TreeIter& rIter) { m_xControl->select(rIter); }
+    void remove(const weld::TreeIter& rIter) { m_xControl->remove(rIter); }
     bool get_cursor(weld::TreeIter* pIter) const { return m_xControl->get_cursor(pIter); }
     void set_cursor(const weld::TreeIter& rIter) { m_xControl->set_cursor(rIter); }
+    OUString get_text(weld::TreeIter& rIter) const { return m_xControl->get_text(rIter); }
+    OUString get_id(const weld::TreeIter& rIter) const { return m_xControl->get_id(rIter); }
     bool get_iter_first(weld::TreeIter& rIter) const { return m_xControl->get_iter_first(rIter); }
     bool iter_next_sibling(weld::TreeIter& rIter) const { return m_xControl->iter_next_sibling(rIter); }
     bool iter_children(weld::TreeIter& rIter) const { return m_xControl->iter_children(rIter); }
