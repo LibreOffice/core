@@ -40,7 +40,7 @@ static void QImage2BitmapBuffer(QImage* pImg, BitmapBuffer* pBuf)
 }
 
 KDE5SalGraphics::KDE5SalGraphics(Qt5Frame* pFrame)
-    : Qt5SvpGraphics(pFrame->GetQWidget())
+    : Qt5SvpGraphics(pFrame ? pFrame->GetQWidget() : nullptr)
     , m_pFrame(pFrame)
 {
 }
