@@ -593,6 +593,8 @@ protected:
     Link<TreeView&, void> m_aRowActivatedHdl;
     Link<int, void> m_aColumnClickedHdl;
     Link<const std::pair<int, int>&, void> m_aRadioToggleHdl;
+    Link<const TreeIter&, bool> m_aEditingStartedHdl;
+    Link<const std::pair<const TreeIter&, OUString>&, bool> m_aEditingDoneHdl;
     // if handler returns false, the expansion of the row is refused
     Link<const TreeIter&, bool> m_aExpandingHdl;
     Link<TreeView&, void> m_aVisibleRangeChangedHdl;
@@ -614,6 +616,13 @@ protected:
 
     // arg is pair<row,col>
     void signal_toggled(const std::pair<int, int>& rRowCol) { m_aRadioToggleHdl.Call(rRowCol); }
+
+    bool signal_editing_started(const TreeIter& rIter) { return m_aEditingStartedHdl.Call(rIter); }
+
+    bool signal_editing_done(const std::pair<const TreeIter&, OUString>& rIterText)
+    {
+        return m_aEditingDoneHdl.Call(rIterText);
+    }
 
 public:
     virtual void insert(const TreeIter* pParent, int pos, const OUString* pStr, const OUString* pId,
@@ -806,6 +815,18 @@ public:
         = 0;
 
     void connect_expanding(const Link<const TreeIter&, bool>& rLink) { m_aExpandingHdl = rLink; }
+
+    // return true to allow editing, false to disallow
+    virtual void connect_editing_started(const Link<const TreeIter&, bool>& rLink)
+    {
+        m_aEditingStartedHdl = rLink;
+    }
+
+    virtual void
+    connect_editing_done(const Link<const std::pair<const TreeIter&, OUString>&, bool>& rLink)
+    {
+        m_aEditingDoneHdl = rLink;
+    }
 
     virtual void connect_visible_range_changed(const Link<TreeView&, void>& rLink)
     {
