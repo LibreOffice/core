@@ -130,7 +130,7 @@ public:
         OUString dummy; // pass in empty HeadingStyleName - can't import anyway
         uno::Sequence<beans::PropertyValue> const ret(
             SwXNumberingRules::GetPropertiesForNumFormat(
-                *pNumFormat, *pCharStyleName, &dummy));
+                *pNumFormat, *pCharStyleName, &dummy, ""));
         return uno::makeAny(ret);
     }
 

@@ -210,7 +210,7 @@ public:
 
     static css::uno::Sequence<css::beans::PropertyValue> GetPropertiesForNumFormat(
             const SwNumFormat& rFormat, OUString const& rCharFormatName,
-            OUString const* pHeadingStyleName);
+            OUString const* pHeadingStyleName, OUString const & referer);
     static void SetPropertiesToNumFormat(
             SwNumFormat & aFormat,
             OUString & rCharStyleName,
