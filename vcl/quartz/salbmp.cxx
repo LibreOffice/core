@@ -84,7 +84,7 @@ bool QuartzSalBitmap::Create(CGLayerHolder const & rLayerHolder, int nBitmapBits
     }
 
     const CGSize aLayerSize = CGLayerGetSize(rLayerHolder.get());
-    SAL_INFO("vcl.cg", "CGLayerGetSize(" << rLayerHolder.get() << ") = " << aLayerSize );
+
     if( nWidth >= static_cast<int>(aLayerSize.width) - nX )
         nWidth = static_cast<int>(aLayerSize.width) - nX;
 
@@ -106,12 +106,10 @@ bool QuartzSalBitmap::Create(CGLayerHolder const & rLayerHolder, int nBitmapBits
     const CGPoint aSrcPoint = { static_cast<CGFloat>(-nX), static_cast<CGFloat>(-nY) };
     if (maGraphicContext.isSet()) // remove warning
     {
-        SAL_INFO("vcl.cg", "CGContextDrawLayerAtPoint(" << maGraphicContext.get() << "," << aSrcPoint << "," << rLayerHolder.get() << ")");
         if( bFlipped )
         {
-            SAL_INFO( "vcl.cg", "CGContextTranslateCTM(" << maGraphicContext.get() << ",0," << mnHeight << ")" );
             CGContextTranslateCTM( maGraphicContext.get(), 0, +mnHeight );
-            SAL_INFO( "vcl.cg", "CGContextScaleCTM(" << maGraphicContext.get() << ",+1,-1)" );
+
             CGContextScaleCTM( maGraphicContext.get(), +1, -1 );
         }
 
@@ -181,14 +179,12 @@ void QuartzSalBitmap::DestroyContext()
 {
     if( mxCachedImage )
     {
-        SAL_INFO("vcl.cg", "CGImageRelease(" << mxCachedImage << ")" );
         CGImageRelease( mxCachedImage );
         mxCachedImage = nullptr;
     }
 
     if (maGraphicContext.isSet())
     {
-        SAL_INFO("vcl.cg", "CGContextRelease(" << maGraphicContext.get() << ")" );
         CGContextRelease(maGraphicContext.get());
         maGraphicContext.set(nullptr);
         m_pContextBuffer.reset();
@@ -252,7 +248,6 @@ bool QuartzSalBitmap::CreateContext()
         maGraphicContext.set(CGBitmapContextCreate(m_pContextBuffer.get(), mnWidth, mnHeight,
                                                    bitsPerComponent, nContextBytesPerRow,
                                                    aCGColorSpace, aCGBmpInfo));
-        SAL_INFO("vcl.cg", "CGBitmapContextCreate(" << mnWidth << "x" << mnHeight << "x" << bitsPerComponent << ") = " << maGraphicContext.get());
     }
 
     if (!maGraphicContext.isSet())
@@ -804,7 +799,6 @@ CGImageRef QuartzSalBitmap::CreateCroppedImage( int nX, int nY, int nNewWidth, i
             }
         }
         mxCachedImage = CGBitmapContextCreateImage(maGraphicContext.get());
-        SAL_INFO("vcl.cg", "CGBitmapContextCreateImage(" << maGraphicContext.get() << ") = " << mxCachedImage );
     }
 
     CGImageRef xCroppedImage = nullptr;
@@ -812,7 +806,6 @@ CGImageRef QuartzSalBitmap::CreateCroppedImage( int nX, int nY, int nNewWidth, i
     if( !nX && !nY && (mnWidth == nNewWidth) && (mnHeight == nNewHeight) )
     {
           xCroppedImage = mxCachedImage;
-          SAL_INFO("vcl.cg", "CFRetain(" << xCroppedImage << ")" );
           CFRetain( xCroppedImage );
     }
     else
@@ -820,7 +813,6 @@ CGImageRef QuartzSalBitmap::CreateCroppedImage( int nX, int nY, int nNewWidth, i
         nY = mnHeight - (nY + nNewHeight); // adjust for y-mirrored context
         const CGRect aCropRect = { { static_cast<CGFloat>(nX), static_cast<CGFloat>(nY) }, { static_cast<CGFloat>(nNewWidth), static_cast<CGFloat>(nNewHeight) } };
         xCroppedImage = CGImageCreateWithImageInRect( mxCachedImage, aCropRect );
-        SAL_INFO("vcl.cg", "CGImageCreateWithImageInRect(" << mxCachedImage << "," << aCropRect << ") = " << xCroppedImage );
     }
 
     return xCroppedImage;
@@ -854,19 +846,14 @@ CGImageRef QuartzSalBitmap::CreateWithMask( const QuartzSalBitmap& rMask,
         void* pMaskMem = std::malloc( nMaskBytesPerRow * nHeight );
         CGContextRef xMaskContext = CGBitmapContextCreate( pMaskMem,
             nWidth, nHeight, 8, nMaskBytesPerRow, GetSalData()->mxGraySpace, kCGImageAlphaNone );
-        SAL_INFO("vcl.cg", "CGBitmapContextCreate(" << nWidth << "x" << nHeight << "x8," << nMaskBytesPerRow << ") = " << xMaskContext );
-        SAL_INFO("vcl.cg", "CGContextDrawImage(" << xMaskContext << "," << xImageRect << "," << xMask << ")" );
         CGContextDrawImage( xMaskContext, xImageRect, xMask );
-        SAL_INFO("vcl.cg", "CFRelease(" << xMask << ")" );
         CFRelease( xMask );
         CGDataProviderRef xDataProvider( CGDataProviderCreateWithData( nullptr,
         pMaskMem, nHeight * nMaskBytesPerRow, &CFRTLFree ) );
 
         static const CGFloat* pDecode = nullptr;
         xMask = CGImageMaskCreate( nWidth, nHeight, 8, 8, nMaskBytesPerRow, xDataProvider, pDecode, false );
-        SAL_INFO("vcl.cg", "CGImageMaskCreate(" << nWidth << "," << nHeight << ",8,8) = " << xMask );
         CFRelease( xDataProvider );
-        SAL_INFO("vcl.cg", "CFRelease(" << xMaskContext << ")" );
         CFRelease( xMaskContext );
     }
 
@@ -875,10 +862,7 @@ CGImageRef QuartzSalBitmap::CreateWithMask( const QuartzSalBitmap& rMask,
 
     // combine image and alpha mask
     CGImageRef xMaskedImage = CGImageCreateWithMask( xImage, xMask );
-    SAL_INFO("vcl.cg", "CGImageCreateWithMask(" << xImage << "," << xMask << ") = " << xMaskedImage );
-    SAL_INFO("vcl.cg", "CFRelease(" << xMask << ")" );
     CFRelease( xMask );
-    SAL_INFO("vcl.cg", "CFRelease(" << xImage << ")" );
     CFRelease( xImage );
     return xMaskedImage;
 }
@@ -925,7 +909,6 @@ CGImageRef QuartzSalBitmap::CreateColorMask( int nX, int nY, int nWidth,
 
             CGDataProviderRef xDataProvider( CGDataProviderCreateWithData(nullptr, pMaskBuffer.release(), nHeight * nDestBytesPerRow, &CFRTLFree) );
             xMask = CGImageCreate(nWidth, nHeight, 8, 32, nDestBytesPerRow, GetSalData()->mxRGBSpace, kCGImageAlphaPremultipliedFirst, xDataProvider, nullptr, true, kCGRenderingIntentDefault);
-            SAL_INFO("vcl.cg", "CGImageCreate(" << nWidth << "x" << nHeight << "x8) = " << xMask );
             CFRelease(xDataProvider);
         }
     }
@@ -959,10 +942,8 @@ bool QuartzSalBitmap::GetSystemData( BitmapSystemData& rData )
              * This whole if statement was originally (before 2011) inside #ifdef CAIRO. Did we use Cairo on Mac back then?
              * Anyway, nowadays (since many years, I think) we don't, so should this if statement be dropped? Fun.
              */
-            SAL_INFO("vcl.cg", "QuartzSalBitmap::" << __func__ << "(): kCGBitmapByteOrder32Host not found => inserting it.");
 
             CGImageRef xImage = CGBitmapContextCreateImage(maGraphicContext.get());
-            SAL_INFO("vcl.cg", "CGBitmapContextCreateImage(" << maGraphicContext.get() << ") = " << xImage );
 
             // re-create the context with single change: include kCGBitmapByteOrder32Host flag.
             CGContextHolder maGraphicContextNew(CGBitmapContextCreate(CGBitmapContextGetData(maGraphicContext.get()),
@@ -972,29 +953,17 @@ bool QuartzSalBitmap::GetSystemData( BitmapSystemData& rData )
                                                                       CGBitmapContextGetBytesPerRow(maGraphicContext.get()),
                                                                       CGBitmapContextGetColorSpace(maGraphicContext.get()),
                                                                       CGBitmapContextGetBitmapInfo(maGraphicContext.get()) | kCGBitmapByteOrder32Host));
-            SAL_INFO("vcl.cg", "CGBitmapContextCreate(" << CGBitmapContextGetWidth(maGraphicContext.get()) << "x"
-                                                        << CGBitmapContextGetHeight(maGraphicContext.get()) << "x"
-                                                        << CGBitmapContextGetBitsPerComponent(maGraphicContext.get()) << ") = "
-                                                        << maGraphicContextNew.get());
-
-            SAL_INFO("vcl.cg", "CFRelease(" << maGraphicContext.get() << ")");
             CFRelease(maGraphicContext.get());
 
             // Needs to be flipped
             maGraphicContextNew.saveState();
-            SAL_INFO("vcl.cg", "CGContextTranslateCTM(" << maGraphicContextNew.get() << ",0," << CGBitmapContextGetHeight(maGraphicContextNew.get()) << ")" );
             CGContextTranslateCTM (maGraphicContextNew.get(), 0, CGBitmapContextGetHeight(maGraphicContextNew.get()));
-            SAL_INFO("vcl.cg", "CGContextScaleCTM(" << maGraphicContextNew.get() << ",1,-1)" );
             CGContextScaleCTM (maGraphicContextNew.get(), 1.0, -1.0);
 
-            SAL_INFO("vcl.cg", "CGContextDrawImage(" << maGraphicContextNew.get() << "," << CGRectMake(0, 0, CGImageGetWidth(xImage), CGImageGetHeight(xImage)) << "," << xImage << ")" );
             CGContextDrawImage(maGraphicContextNew.get(), CGRectMake( 0, 0, CGImageGetWidth(xImage), CGImageGetHeight(xImage)), xImage);
 
             // Flip back
-            SAL_INFO("vcl.cg", "CGContextRestoreGState(" << maGraphicContextNew.get() << ")" );
             CGContextRestoreGState( maGraphicContextNew.get() );
-
-            SAL_INFO("vcl.cg", "CGImageRelease(" << xImage << ")" );
             CGImageRelease( xImage );
             maGraphicContext = maGraphicContextNew;
         }

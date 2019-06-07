@@ -45,7 +45,6 @@ public:
         if (mpLayer)
         {
             aSize = CGLayerGetSize(mpLayer);
-            SAL_INFO("vcl.cg", "CGLayerGetSize(" << mpLayer << ") = " << aSize);
         }
         return aSize;
     }
@@ -78,24 +77,15 @@ class CGContextHolder
 {
 private:
     CGContextRef mpContext;
-#if OSL_DEBUG_LEVEL > 0
-    int mnContextStackDepth;
-#endif
 
 public:
     CGContextHolder()
         : mpContext(nullptr)
-#if OSL_DEBUG_LEVEL > 0
-        , mnContextStackDepth(0)
-#endif
     {
     }
 
     CGContextHolder(CGContextRef pContext)
         : mpContext(pContext)
-#if OSL_DEBUG_LEVEL > 0
-        , mnContextStackDepth(0)
-#endif
     {
     }
 
@@ -105,21 +95,9 @@ public:
 
     void set(CGContextRef const& pContext) { mpContext = pContext; }
 
-    void saveState()
-    {
-#if OSL_DEBUG_LEVEL > 0
-        SAL_INFO("vcl.cg", "CGContextSaveGState(" << mpContext << ") " << ++mnContextStackDepth);
-#endif
-        CGContextSaveGState(mpContext);
-    }
+    void saveState() { CGContextSaveGState(mpContext); }
 
-    void restoreState()
-    {
-#if OSL_DEBUG_LEVEL > 0
-        SAL_INFO("vcl.cg", "CGContextRestoreGState(" << mpContext << ") " << mnContextStackDepth--);
-#endif
-        CGContextRestoreGState(mpContext);
-    }
+    void restoreState() { CGContextRestoreGState(mpContext); }
 };
 
 #endif // INCLUDED_VCL_INC_QUARTZ_CGHELPER_HXX
