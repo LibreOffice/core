@@ -965,6 +965,14 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
       </rng:element>
     </rng:define>
 
+    <rng:define name="office-annotation-attlist" combine="interleave">
+      <rng:optional>
+        <rng:attribute name="loext:resolved">
+          <rng:ref name="boolean"/>
+        </rng:attribute>
+      </rng:optional>
+    </rng:define>
+
     <rng:define name="style-style-content">
       <rng:choice>
         <rng:group>
