@@ -1374,6 +1374,19 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 dynamic_cast<::sw::mark::DropDownFieldmark*>(pFieldBM)->HideButton();
             }
         }
+        else if ( pFieldBM && pFieldBM->GetFieldname() == ODF_FORMDATE )
+        {
+            SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
+            ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateDateFormFieldDialog(rWrtSh.GetView().GetFrameWeld(), pFieldBM));
+            if (pDlg->Execute() == RET_OK)
+            {
+                pFieldBM->Invalidate();
+                rWrtSh.InvalidateWindows( rWrtSh.GetView().GetVisArea() );
+                rWrtSh.UpdateCursor(); // cursor position might be invalid
+                // Hide the button here and make it visible later, to make transparent background work with SAL_USE_VCLPLUGIN=gen
+                dynamic_cast<::sw::mark::DateFieldmark*>(pFieldBM)->HideButton();
+            }
+        }
         else
         {
             SfxRequest aReq( GetView().GetViewFrame(), SID_FM_CTL_PROPERTIES );
@@ -1942,7 +1955,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                     --aPos.nContent;
                     pFieldBM = GetShell().getIDocumentMarkAccess()->getFieldmarkFor(aPos);
                 }
-                if ( pFieldBM && pFieldBM->GetFieldname() == ODF_FORMDROPDOWN )
+                if ( pFieldBM && (pFieldBM->GetFieldname() == ODF_FORMDROPDOWN || pFieldBM->GetFieldname() == ODF_FORMDATE) )
                 {
                     bDisable = false;
                 }

@@ -3378,7 +3378,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                                 aContentAtPos.aFnd.pFieldmark != nullptr)
                         {
                             IFieldmark *pFieldBM = const_cast< IFieldmark* > ( aContentAtPos.aFnd.pFieldmark );
-                            if ( pFieldBM->GetFieldname( ) == ODF_FORMDROPDOWN )
+                            if ( pFieldBM->GetFieldname( ) == ODF_FORMDROPDOWN || pFieldBM->GetFieldname( ) == ODF_FORMDATE )
                             {
                                 RstMBDownFlags();
                                 rSh.getIDocumentMarkAccess()->ClearFieldActivation();
