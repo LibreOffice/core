@@ -181,7 +181,11 @@ static PyTypeObject PyUNO_callable_Type =
     sizeof (PyUNO_callable),
     0,
     ::pyuno::PyUNO_callable_del,
-    nullptr,
+#if PY_VERSION_HEX >= 0x03080000
+    0, // Py_ssize_t tp_vectorcall_offset
+#else
+    nullptr, // printfunc tp_print
+#endif
     nullptr,
     nullptr,
     nullptr,
@@ -225,6 +229,9 @@ static PyTypeObject PyUNO_callable_Type =
     , 0
 #if PY_VERSION_HEX >= 0x03040000
     , nullptr
+#if PY_VERSION_HEX >= 0x03080000
+    , nullptr // vectorcallfunc tp_vectorcall
+#endif
 #endif
 };
 
