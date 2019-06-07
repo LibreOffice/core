@@ -20,10 +20,10 @@
 #ifndef INCLUDED_SW_SOURCE_CORE_TEXT_ATRHNDL_HXX
 #define INCLUDED_SW_SOURCE_CORE_TEXT_ATRHNDL_HXX
 
-#define INITIAL_NUM_ATTR 3
 #define NUM_ATTRIBUTE_STACKS 44
 
 #include <memory>
+#include <vector>
 #include <swfntcch.hxx>
 
 class SwTextAttr;
@@ -40,47 +40,7 @@ extern const sal_uInt8 StackPos[];
 class SwAttrHandler
 {
 private:
-
-    /// Container for SwTextAttr Objects
-    class SwAttrStack
-    {
-    private:
-        SwTextAttr*  m_pInitialArray[ INITIAL_NUM_ATTR ];
-        SwTextAttr** m_pArray;
-        sal_uInt32 m_nCount; // number of elements on stack
-        sal_uInt32 m_nSize;  // number of positions in Array
-
-    public:
-        // Ctor, Dtor
-        inline SwAttrStack();
-        ~SwAttrStack() {
-            if (m_nSize > INITIAL_NUM_ATTR) delete [] m_pArray;
-        }
-
-        // reset stack
-        void Reset() { m_nCount = 0; };
-
-        // insert on top
-        void Push( const SwTextAttr& rAttr ) { Insert(rAttr, m_nCount); };
-        // insert at specified position, take care for not inserting behind
-        // the value returned by Count()
-        void Insert( const SwTextAttr& rAttr, const sal_uInt32 nPos );
-
-        // remove specified attribute
-        void Remove( const SwTextAttr& rAttr );
-
-        // get attribute from top if exists, otherwise 0
-        const SwTextAttr* Top() const;
-
-        // number of elements on stack
-        sal_uInt32 Count() const { return m_nCount; };
-
-        // returns position of rAttr on Stack if found, otherwise USHRT_MAX
-        // can be used for Remove of an attribute
-        sal_uInt32 Pos( const SwTextAttr& rAttr ) const;
-    };
-
-    SwAttrStack m_aAttrStack[ NUM_ATTRIBUTE_STACKS ]; // stack collection
+    std::vector<const SwTextAttr*> m_aAttrStack[NUM_ATTRIBUTE_STACKS]; // stack collection
     const SfxPoolItem* m_pDefaultArray[ NUM_DEFAULT_VALUES ];
     const IDocumentSettingAccess* m_pIDocumentSettingAccess;
     const SwViewShell* m_pShell;
@@ -90,6 +50,9 @@ private:
     std::unique_ptr<SwFont> m_pFnt;
 
     bool m_bVertLayout;
+
+    const SwTextAttr* GetTop(sal_uInt16 nStack);
+    void RemoveFromStack(sal_uInt16 nWhich, const SwTextAttr& rAttr);
 
     // change font according to pool item
     void FontChg(const SfxPoolItem& rItem, SwFont& rFnt, bool bPush );
