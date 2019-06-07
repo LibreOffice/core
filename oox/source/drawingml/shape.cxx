@@ -476,7 +476,7 @@ static void lcl_createPresetShape(const uno::Reference<drawing::XShape>& xShape,
             || (rClass == "fontwork-circle-curve")
             || (rClass == "fontwork-circle-pour" && aEntry.maName == "adj1"))
         {
-            // DrawingML has 1/60000 degree unit, but WortArt simple degree. Range [0..360[
+            // DrawingML has 1/60000 degree unit, but WordArt simple degree. Range [0..360[
             // or range ]-180..180] doesn't matter, because only cos(angle) and
             // sin(angle) are used.
             fValue = NormAngle360(fValue / 60000.0);
