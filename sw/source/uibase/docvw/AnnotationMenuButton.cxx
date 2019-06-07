@@ -102,7 +102,7 @@ void AnnotationMenuButton::MouseButtonDown( const MouseEvent& rMEvt )
 
     if (mrSidebarWin.IsProtected())
     {
-        pButtonPopup->EnableItem(FN_REPLY, false);
+        pButtonPopup->EnableItem(pButtonPopup->GetItemId("reply"), false);
     }
     else
     {
@@ -118,11 +118,11 @@ void AnnotationMenuButton::MouseButtonDown( const MouseEvent& rMEvt )
         // do not allow to reply to ourself and no answer possible if this note is in a protected section
         if (sAuthor == mrSidebarWin.GetAuthor())
         {
-            pButtonPopup->EnableItem(FN_REPLY, false);
+            pButtonPopup->EnableItem(pButtonPopup->GetItemId("reply"), false);
         }
         else
         {
-            pButtonPopup->EnableItem(FN_REPLY);
+            pButtonPopup->EnableItem(pButtonPopup->GetItemId("reply"));
         }
     }
 
