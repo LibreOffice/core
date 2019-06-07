@@ -29,7 +29,7 @@
 #include <tools/ref.hxx>
 #include <IMark.hxx>
 #include <swrect.hxx>
-#include "DropDownFormFieldButton.hxx"
+#include <DropDownFormFieldButton.hxx>
 
 namespace com {
     namespace sun {
