@@ -24,11 +24,10 @@
 
 #include <memory>
 
+#include <QtGui/QImage>
 #include <QtGui/QPainter>
 #include <QtGui/QRegion>
-
-class QImage;
-class QPushButton;
+#include <QtWidgets/QPushButton>
 
 // Native control support
 class VCLPLUG_QT5_PUBLIC Qt5Graphics_Controls
