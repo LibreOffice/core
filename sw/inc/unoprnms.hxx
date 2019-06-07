@@ -866,6 +866,8 @@
 #define UNO_NAME_TABLE_FIRST_ROW_START_COLUMN "FirstRowStartColumn"
 #define UNO_NAME_TABLE_LAST_ROW_END_COLUMN "LastRowEndColumn"
 #define UNO_NAME_TABLE_LAST_ROW_START_COLUMN "LastRowStartColumn"
+
+#define UNO_NAME_RESOLVED "Resolved"
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
