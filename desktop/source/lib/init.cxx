@@ -2132,6 +2132,7 @@ static void doc_iniUnoCommands ()
         OUString(".uno:InsertAnnotation"),
         OUString(".uno:DeleteAnnotation"),
         OUString(".uno:ReplyComment"),
+        OUString(".uno:ResolveComment"),
         OUString(".uno:InsertRowsBefore"),
         OUString(".uno:InsertRowsAfter"),
         OUString(".uno:InsertColumnsBefore"),

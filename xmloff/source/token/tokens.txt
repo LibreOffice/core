@@ -3111,4 +3111,5 @@ reference-language
 newline
 creator-initials
 transliteration-spellout
+resolved
 TOKEN_END_DUMMY

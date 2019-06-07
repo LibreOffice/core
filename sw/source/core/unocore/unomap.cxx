@@ -933,6 +933,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     {OUString(UNO_NAME_CONTENT),    FIELD_PROP_PAR2,    cppu::UnoType<OUString>::get(),   PROPERTY_NONE, 0},
                     {OUString(UNO_NAME_INITIALS),   FIELD_PROP_PAR3,    cppu::UnoType<OUString>::get(),   PROPERTY_NONE, 0},
                     {OUString(UNO_NAME_NAME),       FIELD_PROP_PAR4,    cppu::UnoType<OUString>::get(),   PROPERTY_NONE, 0},
+                    {OUString(UNO_NAME_RESOLVED),       FIELD_PROP_BOOL1,    cppu::UnoType<bool>::get(),   PROPERTY_NONE, 0},
                     {OUString(UNO_NAME_DATE_TIME_VALUE),    FIELD_PROP_DATE_TIME,   cppu::UnoType<css::util::DateTime>::get(),    PROPERTY_NONE, 0},
                     {OUString(UNO_NAME_DATE),    FIELD_PROP_DATE,   cppu::UnoType<css::util::Date>::get(),    PROPERTY_NONE, 0},
                     {OUString(UNO_NAME_TEXT_RANGE), FIELD_PROP_TEXT, cppu::UnoType<css::uno::XInterface>::get(),  PropertyAttribute::READONLY,    0},
