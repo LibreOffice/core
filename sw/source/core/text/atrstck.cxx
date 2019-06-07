@@ -270,7 +270,7 @@ inline SwAttrHandler::SwAttrStack::SwAttrStack()
     m_pArray = m_pInitialArray;
 }
 
-void SwAttrHandler::SwAttrStack::Insert( const SwTextAttr& rAttr, const sal_uInt16 nPos )
+void SwAttrHandler::SwAttrStack::Insert( const SwTextAttr& rAttr, const sal_uInt32 nPos )
 {
     // do we still have enough space?
     if (m_nCount >= m_nSize)
@@ -311,7 +311,7 @@ void SwAttrHandler::SwAttrStack::Insert( const SwTextAttr& rAttr, const sal_uInt
 
 void SwAttrHandler::SwAttrStack::Remove( const SwTextAttr& rAttr )
 {
-    sal_uInt16 nPos = Pos( rAttr );
+    sal_uInt32 nPos = Pos( rAttr );
     if (nPos < m_nCount)
     {
         memmove( m_pArray + nPos, m_pArray + nPos + 1,
@@ -326,20 +326,20 @@ const SwTextAttr* SwAttrHandler::SwAttrStack::Top() const
     return m_nCount ? m_pArray[ m_nCount - 1 ] : nullptr;
 }
 
-sal_uInt16 SwAttrHandler::SwAttrStack::Pos( const SwTextAttr& rAttr ) const
+sal_uInt32 SwAttrHandler::SwAttrStack::Pos( const SwTextAttr& rAttr ) const
 {
     if ( ! m_nCount )
         // empty stack
-        return USHRT_MAX;
+        return std::numeric_limits<sal_uInt32>::max();
 
-    for (sal_uInt16 nIdx = m_nCount; nIdx > 0;)
+    for (sal_uInt32 nIdx = m_nCount; nIdx > 0;)
     {
         if (&rAttr == m_pArray[ --nIdx ])
             return nIdx;
     }
 
     // element not found
-    return USHRT_MAX;
+    return std::numeric_limits<sal_uInt32>::max();
 }
 
 SwAttrHandler::SwAttrHandler()
@@ -487,7 +487,7 @@ bool SwAttrHandler::Push( const SwTextAttr& rAttr, const SfxPoolItem& rItem )
         return true;
     }
 
-    const sal_uInt16 nPos = m_aAttrStack[ nStack ].Count();
+    const sal_uInt32 nPos = m_aAttrStack[ nStack ].Count();
     OSL_ENSURE( nPos, "empty stack?" );
     m_aAttrStack[ nStack ].Insert( rAttr, nPos - 1 );
     return false;
