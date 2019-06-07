@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_a61b4019",
+        "filename": "sw/source/core/text/atrstck.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 420,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-06-07T14:19:57Z",
+      "side": 1,
+      "message": "nStack -\u003e nWhich here and in the .hxx file",
+      "revId": "89503a7dfa8e193066b868ea197d447cc129333e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
