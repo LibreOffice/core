@@ -89,7 +89,7 @@ private:
     std::unique_ptr<weld::Button> m_xNewLibButton;
     std::unique_ptr<weld::Button> m_xNewModButton;
 public:
-    MacroChooser(weld::Window *pParent, const ::css::uno::Reference< ::css::frame::XFrame >& xDocFrame);
+    MacroChooser(weld::Window *pParent, const ::css::uno::Reference< ::css::frame::XFrame >& xDocFrame, bool bCreateEntries);
     virtual ~MacroChooser() override;
 
     SbMethod*           GetMacro();

@@ -328,10 +328,10 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
             if ( rReq.GetArgs() )
             {
                 const SfxUInt16Item &rTabId = rReq.GetArgs()->Get(SID_BASICIDE_ARG_TABID );
-                Organize( rTabId.GetValue() );
+                Organize(rReq.GetFrameWeld(), rTabId.GetValue());
             }
             else
-                Organize( 0 );
+                Organize(rReq.GetFrameWeld(), 0);
         }
         break;
         case SID_BASICIDE_CHOOSEMACRO:

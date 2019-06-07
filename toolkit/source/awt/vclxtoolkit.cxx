@@ -111,7 +111,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/syschild.hxx>
 #include <vcl/tabctrl.hxx>
-#include <vcl/tabdlg.hxx>
+#include <vcl/toolkit/tabdlg.hxx>
 #include <vcl/tabpage.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/virdev.hxx>

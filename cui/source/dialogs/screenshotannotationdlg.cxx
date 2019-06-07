@@ -638,7 +638,7 @@ IMPL_LINK(ScreenshotAnnotationDlg_Impl, pictureFrameListener, VclWindowEvent&, r
 ScreenshotAnnotationDlg::ScreenshotAnnotationDlg(
     vcl::Window* pParent,
     Dialog& rParentDialog)
-:   SfxModalDialog(pParent, "ScreenshotAnnotationDialog", "cui/ui/screenshotannotationdialog.ui")
+:   ModalDialog(pParent, "ScreenshotAnnotationDialog", "cui/ui/screenshotannotationdialog.ui")
 {
     m_pImpl.reset(new ScreenshotAnnotationDlg_Impl(*this, rParentDialog));
 }
