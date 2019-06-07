@@ -414,14 +414,14 @@ void SfxApplication::Invalidate( sal_uInt16 nId )
 #ifndef DISABLE_DYNLOADING
 
 typedef long (*basicide_handle_basic_error)(void const *);
-typedef void (*basicide_macro_organizer)(sal_Int16);
+typedef void (*basicide_macro_organizer)(void const *, sal_Int16);
 
 extern "C" { static void thisModule() {} }
 
 #else
 
 extern "C" long basicide_handle_basic_error(void*);
-extern "C" void basicide_macro_organizer(sal_Int16);
+extern "C" void basicide_macro_organizer(void*, sal_Int16);
 
 #endif
 
@@ -520,7 +520,7 @@ SfxApplication::ChooseScript(weld::Window *pParent)
     return aScriptURL;
 }
 
-void SfxApplication::MacroOrganizer( sal_Int16 nTabId )
+void SfxApplication::MacroOrganizer(weld::Window* pParent, sal_Int16 nTabId)
 {
 #if !HAVE_FEATURE_SCRIPTING
     (void) nTabId;
@@ -541,11 +541,11 @@ void SfxApplication::MacroOrganizer( sal_Int16 nTabId )
         return;
 
     // call basicide_macro_organizer in basctl
-    pSymbol( nTabId );
+    pSymbol(pParent, nTabId);
 
 #else
 
-    basicide_macro_organizer( nTabId );
+    basicide_macro_organizer(pParent, nTabId);
 
 #endif
 

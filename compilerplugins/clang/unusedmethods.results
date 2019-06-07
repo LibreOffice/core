@@ -742,7 +742,7 @@ include/vcl/svapp.hxx:801
     void Application::AppEvent(const class ApplicationEvent &)
 include/vcl/syswin.hxx:172
     void SystemWindow::SetIdleDebugName(const char *)
-include/vcl/tabdlg.hxx:48
+include/vcl/toolkit/tabdlg.hxx:49
     class vcl::Window * TabDialog::GetViewWindow() const
 include/vcl/textrectinfo.hxx:45
     _Bool TextRectInfo::operator!=(const class TextRectInfo &) const

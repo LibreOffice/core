@@ -2661,6 +2661,9 @@ private:
     DECL_LINK(ModelChangedHdl, SvTreeListBox*, void);
     DECL_LINK(StartDragHdl, SvTreeListBox*, void);
     DECL_STATIC_LINK(SalInstanceTreeView, FinishDragHdl, SvTreeListBox*, void);
+    DECL_LINK(EditingEntryHdl, SvTreeListEntry*, bool);
+    typedef std::pair<SvTreeListEntry*, OUString> IterString;
+    DECL_LINK(EditedEntryHdl, IterString, bool);
     DECL_LINK(VisibleRangeChangedHdl, SvTreeListBox*, void);
     DECL_LINK(CompareHdl, const SvSortData&, sal_Int32);
     DECL_LINK(PopupMenuHdl, const CommandEvent&, bool);
@@ -2699,6 +2702,8 @@ public:
             static_cast<LclTabListBox&>(*m_xTreeView).SetModelChangedHdl(LINK(this, SalInstanceTreeView, ModelChangedHdl));
             static_cast<LclTabListBox&>(*m_xTreeView).SetStartDragHdl(LINK(this, SalInstanceTreeView, StartDragHdl));
             static_cast<LclTabListBox&>(*m_xTreeView).SetEndDragHdl(LINK(this, SalInstanceTreeView, FinishDragHdl));
+            static_cast<LclTabListBox&>(*m_xTreeView).SetEditingEntryHdl(LINK(this, SalInstanceTreeView, EditingEntryHdl));
+            static_cast<LclTabListBox&>(*m_xTreeView).SetEditedEntryHdl(LINK(this, SalInstanceTreeView, EditedEntryHdl));
         }
         m_aCheckButtonData.SetLink(LINK(this, SalInstanceTreeView, ToggleHdl));
         m_aRadioButtonData.SetLink(LINK(this, SalInstanceTreeView, ToggleHdl));
@@ -3226,6 +3231,18 @@ public:
     {
         SvTreeListEntry* pEntry = m_xTreeView->GetEntry(nullptr, pos);
         return ::get_text_emphasis(pEntry, col);
+    }
+
+    virtual void connect_editing_started(const Link<const weld::TreeIter&, bool>& rLink) override
+    {
+        m_xTreeView->EnableInplaceEditing(true);
+        weld::TreeView::connect_editing_started(rLink);
+    }
+
+    virtual void connect_editing_done(const Link<const std::pair<const weld::TreeIter&, OUString>&, bool>& rLink) override
+    {
+        m_xTreeView->EnableInplaceEditing(true);
+        weld::TreeView::connect_editing_done(rLink);
     }
 
     void set_image(SvTreeListEntry* pEntry, const Image& rImage, int col)
@@ -3927,6 +3944,16 @@ IMPL_LINK_NOARG(SalInstanceTreeView, ExpandingHdl, SvTreeListBox*, bool)
 IMPL_LINK(SalInstanceTreeView, PopupMenuHdl, const CommandEvent&, rEvent, bool)
 {
     return m_aPopupMenuHdl.Call(rEvent);
+}
+
+IMPL_LINK(SalInstanceTreeView, EditingEntryHdl, SvTreeListEntry*, pEntry, bool)
+{
+    return signal_editing_started(SalInstanceTreeIter(pEntry));
+}
+
+IMPL_LINK(SalInstanceTreeView, EditedEntryHdl, IterString, rIterString, bool)
+{
+    return signal_editing_done(std::pair<const weld::TreeIter&, OUString>(SalInstanceTreeIter(rIterString.first), rIterString.second));
 }
 
 class SalInstanceSpinButton : public SalInstanceEntry, public virtual weld::SpinButton

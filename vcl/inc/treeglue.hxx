@@ -34,6 +34,8 @@ class LclTabListBox : public SvTabListBox
     Link<SvTreeListBox*, void> m_aModelChangedHdl;
     Link<SvTreeListBox*, void> m_aStartDragHdl;
     Link<SvTreeListBox*, void> m_aEndDragHdl;
+    Link<SvTreeListEntry*, bool> m_aEditingEntryHdl;
+    Link<std::pair<SvTreeListEntry*, OUString>, bool> m_aEditedEntryHdl;
 
 public:
     LclTabListBox(vcl::Window* pParent, WinBits nWinStyle)
@@ -44,6 +46,14 @@ public:
     void SetModelChangedHdl(const Link<SvTreeListBox*, void>& rLink) { m_aModelChangedHdl = rLink; }
     void SetStartDragHdl(const Link<SvTreeListBox*, void>& rLink) { m_aStartDragHdl = rLink; }
     void SetEndDragHdl(const Link<SvTreeListBox*, void>& rLink) { m_aEndDragHdl = rLink; }
+    void SetEditingEntryHdl(const Link<SvTreeListEntry*, bool>& rLink)
+    {
+        m_aEditingEntryHdl = rLink;
+    }
+    void SetEditedEntryHdl(const Link<std::pair<SvTreeListEntry*, OUString>, bool>& rLink)
+    {
+        m_aEditedEntryHdl = rLink;
+    }
 
     virtual DragDropMode NotifyStartDrag(TransferDataContainer&, SvTreeListEntry*) override
     {
@@ -113,6 +123,16 @@ public:
         }
 
         return pTargetEntry;
+    }
+
+    virtual bool EditingEntry(SvTreeListEntry* pEntry, Selection&) override
+    {
+        return m_aEditingEntryHdl.Call(pEntry);
+    }
+
+    virtual bool EditedEntry(SvTreeListEntry* pEntry, const OUString& rNewText) override
+    {
+        return m_aEditedEntryHdl.Call(std::pair<SvTreeListEntry*, OUString>(pEntry, rNewText));
     }
 };
 

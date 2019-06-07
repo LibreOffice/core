@@ -1520,7 +1520,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
                 nTabId = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
             }
 
-            SfxApplication::MacroOrganizer( nTabId );
+            SfxApplication::MacroOrganizer(rReq.GetFrameWeld(), nTabId);
             rReq.Done();
         }
         break;
