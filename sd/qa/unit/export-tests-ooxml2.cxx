@@ -205,6 +205,7 @@ public:
     void testTdf125360();
     void testTdf125360_1();
     void testTdf125360_2();
+    void testTdf125551();
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest2);
 
@@ -292,6 +293,7 @@ public:
     CPPUNIT_TEST(testTdf125360);
     CPPUNIT_TEST(testTdf125360_1);
     CPPUNIT_TEST(testTdf125360_2);
+    CPPUNIT_TEST(testTdf125551);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -2316,6 +2318,21 @@ void SdOOXMLExportTest2::testTdf125360_2()
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(23), nTransparence);
 
     xDocShRef->DoClose();
+}
+
+void SdOOXMLExportTest2::testTdf125551()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/tdf125551.pptx"), PPTX);
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+
+    uno::Reference<drawing::XShapes> xGroupShape(getShapeFromPage(0, 0, xDocShRef), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShapeBg(xGroupShape->getByIndex(0), uno::UNO_QUERY);
+
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1024), xShapeBg->getPosition().X);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(576), xShapeBg->getPosition().Y);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(10815), xShapeBg->getSize().Width);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(8587), xShapeBg->getSize().Height);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdOOXMLExportTest2);

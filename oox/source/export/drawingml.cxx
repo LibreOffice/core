@@ -67,6 +67,7 @@
 #include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
+#include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
@@ -4074,10 +4075,19 @@ void DrawingML::WriteDiagram(const css::uno::Reference<css::drawing::XShape>& rX
 
         mpFS->endElementNS(XML_p, XML_nvGraphicFramePr);
 
-        awt::Point aPos = rXShape->getPosition();
-        awt::Size aSize = rXShape->getSize();
-        WriteTransformation(tools::Rectangle(Point(aPos.X, aPos.Y), Size(aSize.Width, aSize.Height)),
-            XML_p, false, false, 0, false);
+        // store size and position of background shape instead of group shape
+        // as some shapes may be outside
+        css::uno::Reference<css::drawing::XShapes> xShapes(rXShape, uno::UNO_QUERY);
+        if (xShapes.is() && xShapes->hasElements())
+        {
+            css::uno::Reference<css::drawing::XShape> xShapeBg(xShapes->getByIndex(0),
+                                                               uno::UNO_QUERY);
+            awt::Point aPos = xShapeBg->getPosition();
+            awt::Size aSize = xShapeBg->getSize();
+            WriteTransformation(
+                tools::Rectangle(Point(aPos.X, aPos.Y), Size(aSize.Width, aSize.Height)),
+                XML_p, false, false, 0, false);
+        }
 
         mpFS->startElementNS(XML_a, XML_graphic);
     }
