@@ -432,8 +432,8 @@ void SwViewShell::ImplEndAction( const bool bIdleEnd )
                             DLPostPaint2(true);
                         }
                     }
-                    else
-                        lcl_PaintTransparentFormControls(*this, aRect); // i#107365
+
+                    lcl_PaintTransparentFormControls(*this, aRect); // i#107365
                 }
 
                 delete pRegion;
