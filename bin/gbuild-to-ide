@@ -1671,6 +1671,12 @@ class QtCreatorIntegrationGenerator(IdeIntegrationGenerator):
                 if ext:
                     headers_list.append(lopath(file_ + ext))
 
+            cxxflags_list = []
+            for cxxflag in lib.cxxflags:
+                # extract flag for C++ standard version
+                if cxxflag.startswith('-std'):
+                    cxxflags_list.append(cxxflag)
+
             # List all include paths
             for hdir in (lib.include + lib.include_sys):
                 hf_lopath = lopath(hdir)
@@ -1695,12 +1701,14 @@ class QtCreatorIntegrationGenerator(IdeIntegrationGenerator):
             if lib_folder in self.data_libs:
                 self.data_libs[lib_folder]['sources'] |= set(sources_list)
                 self.data_libs[lib_folder]['headers'] |= set(headers_list)
+                self.data_libs[lib_folder]['cxxflags'] |= set(cxxflags_list)
                 self.data_libs[lib_folder]['includepath'] |= set(includepath_list)
                 self.data_libs[lib_folder]['defines'] |= set(defines_list)
             else:
                 self.data_libs[lib_folder] = {
                     'sources': set(sources_list),
                     'headers': set(headers_list),
+                    'cxxflags': set(cxxflags_list),
                     'includepath': set(includepath_list),
                     'defines': set(defines_list),
                     'loc': lib.location,
@@ -1723,6 +1731,7 @@ class QtCreatorIntegrationGenerator(IdeIntegrationGenerator):
         for lib_folder in subdirs_list:
             sources_list = sorted(self.data_libs[lib_folder]['sources'])
             headers_list = sorted(self.data_libs[lib_folder]['headers'])
+            cxxflags_list = sorted(self.data_libs[lib_folder]['cxxflags'])
             includepath_list = sorted(self.data_libs[lib_folder]['includepath'])
             defines_list = sorted(self.data_libs[lib_folder]['defines'])
             lib_loc = self.data_libs[lib_folder]['loc']
@@ -1730,13 +1739,15 @@ class QtCreatorIntegrationGenerator(IdeIntegrationGenerator):
 
             sources = " \\\n".join(sources_list)
             headers = " \\\n".join(headers_list)
+            cxxflags = " \\\n".join(cxxflags_list)
             includepath = " \\\n".join(includepath_list)
             defines = " \\\n".join(defines_list)
 
             # create .pro file
             qt_pro_file = '%s/%s.pro' % (lib_loc, lib_name)
             try:
-                content = QtCreatorIntegrationGenerator.pro_template % {'sources': sources, 'headers': headers, 'includepath': includepath, 'defines': defines}
+                content = QtCreatorIntegrationGenerator.pro_template % {'sources': sources, 'headers': headers,
+                                                                        'cxxflags': cxxflags, 'includepath': includepath, 'defines': defines}
                 mode = 'w+'
                 with open(qt_pro_file, mode) as fpro:
                     fpro.write(content)
@@ -1798,6 +1809,8 @@ class QtCreatorIntegrationGenerator(IdeIntegrationGenerator):
 CONFIG += console
 CONFIG -= app_bundle
 CONFIG -= qt
+
+QMAKE_CXXFLAGS += %(cxxflags)s
 
 INCLUDEPATH += %(includepath)s
 
