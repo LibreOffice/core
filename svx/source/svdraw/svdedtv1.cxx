@@ -88,7 +88,7 @@ void SdrEditView::SetMarkedObjRect(const tools::Rectangle& rRect)
     long w1=rRect.Right()-x1;
     long h1=rRect.Bottom()-y1;
 
-    const bool bUndo = IsUndoEnabled();
+    const bool bUndo = IsUndoEnabled() && CanDoSdrUndo();
     if( bUndo )
         BegUndo(ImpGetDescriptionString(STR_EditPosSize));
 
@@ -208,7 +208,7 @@ void SdrEditView::MoveMarkedObj(const Size& rSiz, bool bCopy)
 
 void SdrEditView::ResizeMarkedObj(const Point& rRef, const Fraction& xFact, const Fraction& yFact, bool bCopy)
 {
-    const bool bUndo = IsUndoEnabled();
+    const bool bUndo = IsUndoEnabled() && CanDoSdrUndo();
     if( bUndo )
     {
         OUString aStr {ImpGetDescriptionString(STR_EditResize)};
@@ -242,7 +242,7 @@ void SdrEditView::ResizeMultMarkedObj(const Point& rRef,
     const bool bWdh,
     const bool bHgt)
 {
-    const bool bUndo = IsUndoEnabled();
+    const bool bUndo = IsUndoEnabled() && CanDoSdrUndo();
     if( bUndo )
     {
         BegUndo(ImpGetDescriptionString(STR_EditResize));
@@ -302,7 +302,7 @@ long SdrEditView::GetMarkedObjRotate() const
 
 void SdrEditView::RotateMarkedObj(const Point& rRef, long nAngle, bool bCopy)
 {
-    const bool bUndo = IsUndoEnabled();
+    const bool bUndo = IsUndoEnabled() && CanDoSdrUndo();
     if( bUndo )
     {
         OUString aStr {ImpGetDescriptionString(STR_EditRotate)};
@@ -357,7 +357,7 @@ void SdrEditView::RotateMarkedObj(const Point& rRef, long nAngle, bool bCopy)
 
 void SdrEditView::MirrorMarkedObj(const Point& rRef1, const Point& rRef2, bool bCopy)
 {
-    const bool bUndo = IsUndoEnabled();
+    const bool bUndo = IsUndoEnabled() && CanDoSdrUndo();
 
     if( bUndo )
     {
@@ -456,7 +456,7 @@ long SdrEditView::GetMarkedObjShear() const
 
 void SdrEditView::ShearMarkedObj(const Point& rRef, long nAngle, bool bVShear, bool bCopy)
 {
-    const bool bUndo = IsUndoEnabled();
+    const bool bUndo = IsUndoEnabled() && CanDoSdrUndo();
 
     if( bUndo )
     {
@@ -569,7 +569,7 @@ void SdrEditView::CrookMarkedObj(const Point& rRef, const Point& rRad, SdrCrookM
     bool bVertical, bool bNoContortion, bool bCopy)
 {
     tools::Rectangle aMarkRect(GetMarkedObjRect());
-    const bool bUndo = IsUndoEnabled();
+    const bool bUndo = IsUndoEnabled() && CanDoSdrUndo();
 
     bool bRotate=bNoContortion && eMode==SdrCrookMode::Rotate && IsRotateAllowed();
 
@@ -644,7 +644,7 @@ void SdrEditView::ImpDistortObj(SdrObject* pO, const tools::Rectangle& rRef, con
 
 void SdrEditView::DistortMarkedObj(const tools::Rectangle& rRef, const XPolygon& rDistortedRect, bool bNoContortion, bool bCopy)
 {
-    const bool bUndo = IsUndoEnabled();
+    const bool bUndo = IsUndoEnabled() && CanDoSdrUndo();
 
     if( bUndo )
     {
@@ -753,7 +753,7 @@ void SdrEditView::SetNotPersistAttrToMarked(const SfxItemSet& rAttr)
         ShearMarkedObj(aAllSnapRect.Center(),nAngle,true);
     }
 
-    const bool bUndo = IsUndoEnabled();
+    const bool bUndo = IsUndoEnabled() && CanDoSdrUndo();
 
     // TODO: check if WhichRange is necessary.
     const size_t nMarkCount=GetMarkedObjectCount();
@@ -1001,7 +1001,7 @@ void SdrEditView::SetAttrToMarked(const SfxItemSet& rAttr, bool bReplaceAll)
         nWhich = aIter.NextWhich();
     }
 
-    const bool bUndo = IsUndoEnabled();
+    const bool bUndo = IsUndoEnabled() && CanDoSdrUndo();
     if( bUndo )
     {
         BegUndo(ImpGetDescriptionString(STR_EditSetAttributes));
@@ -1179,7 +1179,7 @@ void SdrEditView::SetStyleSheetToMarked(SfxStyleSheet* pStyleSheet, bool bDontRe
 {
     if (AreObjectsMarked())
     {
-        const bool bUndo = IsUndoEnabled();
+        const bool bUndo = IsUndoEnabled() && CanDoSdrUndo();
 
         if( bUndo )
         {
@@ -1741,7 +1741,7 @@ void SdrEditView::AlignMarkedObjects(SdrHorAlign eHor, SdrVertAlign eVert)
     if (!GetMarkedObjectCount())
         return;
 
-    const bool bUndo = IsUndoEnabled();
+    const bool bUndo = IsUndoEnabled() && CanDoSdrUndo();
     if( bUndo )
     {
         OUString aStr(GetDescriptionOfMarkedObjects());
