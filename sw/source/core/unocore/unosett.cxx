@@ -60,6 +60,7 @@
 #include <vcl/metric.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/GraphicLoader.hxx>
+#include <sfx2/docfile.hxx>
 #include <svtools/ctrltool.hxx>
 #include <vcl/svapp.hxx>
 #include <editeng/unofdesc.hxx>
@@ -1300,13 +1301,21 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetNumberingRuleByIndex(
         SwStyleNameMapper::FillProgName(sValue, aUString, SwGetPoolIdFromName::TxtColl);
     }
 
-    return GetPropertiesForNumFormat(rFormat, CharStyleName, (pDocShell) ? & aUString : nullptr);
+    OUString referer;
+    if (pDoc != nullptr) {
+        auto const sh = pDoc->GetPersist();
+        if (sh != nullptr && sh->HasName()) {
+            referer = sh->GetMedium()->GetName();
+        }
+    }
+    return GetPropertiesForNumFormat(
+        rFormat, CharStyleName, (pDocShell) ? & aUString : nullptr, referer);
 
 }
 
 uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetPropertiesForNumFormat(
         const SwNumFormat& rFormat, OUString const& rCharFormatName,
-        OUString const*const pHeadingStyleName)
+        OUString const*const pHeadingStyleName, OUString const & referer)
 {
     bool bChapterNum = pHeadingStyleName != nullptr;
 
@@ -1428,7 +1437,7 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetPropertiesForNumFormat
         if (SVX_NUM_BITMAP == rFormat.GetNumberingType())
         {
             const SvxBrushItem* pBrush = rFormat.GetBrush();
-            const Graphic* pGraphic = pBrush ? pBrush->GetGraphic() : nullptr;
+            const Graphic* pGraphic = pBrush ? pBrush->GetGraphic(referer) : nullptr;
             if (pGraphic)
             {
                 //GraphicBitmap
