@@ -504,8 +504,6 @@ void FuDraw::ForcePointer(const MouseEvent* pMEvt)
         }
         else if (!mpView->IsAction())
         {
-            SdrObject* pObj = nullptr;
-            SdrPageView* pPV = nullptr;
             SdrViewEvent aVEvt;
             SdrHitKind eHit = SdrHitKind::NONE;
             SdrDragMode eDragMode = mpView->GetDragMode();
@@ -530,16 +528,7 @@ void FuDraw::ForcePointer(const MouseEvent* pMEvt)
                 }
             }
 
-            if (eHit == SdrHitKind::NONE)
-            {
-                // found nothing -> look after at the masterpage
-                pObj = mpView->PickObj(aPnt, mpView->getHitTolLog(), pPV, SdrSearchOptions::ALSOONMASTER);
-            }
-            else if (eHit == SdrHitKind::UnmarkedObject)
-            {
-                pObj = aVEvt.pObj;
-            }
-            else if (eHit == SdrHitKind::TextEditObj && dynamic_cast< const FuSelection *>( this ) !=  nullptr)
+            if (eHit == SdrHitKind::TextEditObj && dynamic_cast< const FuSelection *>( this ) !=  nullptr)
             {
                 sal_uInt16 nSdrObjKind = aVEvt.pObj->GetObjIdentifier();
 
@@ -548,23 +537,8 @@ void FuDraw::ForcePointer(const MouseEvent* pMEvt)
                      nSdrObjKind != OBJ_OUTLINETEXT &&
                      aVEvt.pObj->IsEmptyPresObj() )
                 {
-                    pObj = nullptr;
                     bDefPointer = false;
                     mpWindow->SetPointer(PointerStyle::Arrow);
-                }
-            }
-
-            if (pObj && pMEvt && !pMEvt->IsMod2() && dynamic_cast< const   FuSelection *>( this ) !=  nullptr)
-            {
-                // test for animation or ImageMap
-                bDefPointer = !SetPointer(pObj, aPnt);
-
-                if (bDefPointer && (dynamic_cast< const SdrObjGroup *>( pObj ) != nullptr || dynamic_cast< const E3dScene* >(pObj) !=  nullptr))
-                {
-                    // take a glance into the group
-                    pObj = mpView->PickObj(aPnt, mpView->getHitTolLog(), pPV, SdrSearchOptions::ALSOONMASTER | SdrSearchOptions::DEEP);
-                    if (pObj)
-                        bDefPointer = !SetPointer(pObj, aPnt);
                 }
             }
         }
@@ -575,94 +549,6 @@ void FuDraw::ForcePointer(const MouseEvent* pMEvt)
         mpWindow->SetPointer(mpView->GetPreferredPointer(
                             aPnt, mpWindow, nModifier, bLeftDown));
     }
-}
-
-/**
- * Set cursor for animation or imagemap
- */
-bool FuDraw::SetPointer(SdrObject* pObj, const Point& rPos)
-{
-    bool bSet = false;
-
-    bool bAnimationInfo = dynamic_cast< const GraphicDocShell *>( mpDocSh ) ==  nullptr &&
-                          SdDrawDocument::GetAnimationInfo(pObj);
-
-    bool bImageMapInfo = false;
-
-    if (!bAnimationInfo)
-        bImageMapInfo = SdDrawDocument::GetIMapInfo(pObj) != nullptr;
-
-    if (bAnimationInfo || bImageMapInfo)
-    {
-        const SdrLayerIDSet* pVisiLayer = &mpView->GetSdrPageView()->GetVisibleLayers();
-        sal_uInt16 nHitLog(sal_uInt16 (mpWindow->PixelToLogic(Size(HITPIX,0)).Width()));
-        long  n2HitLog(nHitLog * 2);
-        Point aHitPosR(rPos);
-        Point aHitPosL(rPos);
-        Point aHitPosT(rPos);
-        Point aHitPosB(rPos);
-
-        aHitPosR.AdjustX(n2HitLog );
-        aHitPosL.AdjustX( -n2HitLog );
-        aHitPosT.AdjustY(n2HitLog );
-        aHitPosB.AdjustY( -n2HitLog );
-
-        if ( !pObj->IsClosedObj() ||
-            ( SdrObjectPrimitiveHit(*pObj, aHitPosR, nHitLog, *mpView->GetSdrPageView(), pVisiLayer, false) &&
-              SdrObjectPrimitiveHit(*pObj, aHitPosL, nHitLog, *mpView->GetSdrPageView(), pVisiLayer, false) &&
-              SdrObjectPrimitiveHit(*pObj, aHitPosT, nHitLog, *mpView->GetSdrPageView(), pVisiLayer, false) &&
-              SdrObjectPrimitiveHit(*pObj, aHitPosB, nHitLog, *mpView->GetSdrPageView(), pVisiLayer, false)))
-        {
-            /**********************************************************
-            * hit inside the object (without margin) or open object
-            ********************************************************/
-
-            if (bAnimationInfo)
-            {
-                /******************************************************
-                * Click-Action
-                ******************************************************/
-                SdAnimationInfo* pInfo = SdDrawDocument::GetAnimationInfo(pObj);
-
-                if(( dynamic_cast< const DrawView *>( mpView ) !=  nullptr &&
-                      (pInfo->meClickAction == presentation::ClickAction_BOOKMARK  ||
-                       pInfo->meClickAction == presentation::ClickAction_DOCUMENT  ||
-                       pInfo->meClickAction == presentation::ClickAction_PREVPAGE  ||
-                       pInfo->meClickAction == presentation::ClickAction_NEXTPAGE  ||
-                       pInfo->meClickAction == presentation::ClickAction_FIRSTPAGE ||
-                       pInfo->meClickAction == presentation::ClickAction_LASTPAGE  ||
-                       pInfo->meClickAction == presentation::ClickAction_VERB      ||
-                       pInfo->meClickAction == presentation::ClickAction_PROGRAM   ||
-                       pInfo->meClickAction == presentation::ClickAction_MACRO     ||
-                       pInfo->meClickAction == presentation::ClickAction_SOUND))
-                                                                    ||
-                    ( dynamic_cast< const DrawView *>( mpView ) !=  nullptr &&
-                        SlideShow::IsRunning( mpViewShell->GetViewShellBase() )   &&
-                         (pInfo->meClickAction == presentation::ClickAction_VANISH            ||
-                          pInfo->meClickAction == presentation::ClickAction_INVISIBLE         ||
-                          pInfo->meClickAction == presentation::ClickAction_STOPPRESENTATION ||
-                         (pInfo->mbActive &&
-                          ( pInfo->meEffect != presentation::AnimationEffect_NONE ||
-                            pInfo->meTextEffect != presentation::AnimationEffect_NONE )))))
-                    {
-                        // Animation object
-                        bSet = true;
-                        mpWindow->SetPointer(PointerStyle::RefHand);
-                    }
-            }
-            else if (bImageMapInfo &&
-                     SdDrawDocument::GetHitIMapObject(pObj, rPos))
-            {
-                /******************************************************
-                * ImageMap
-                ******************************************************/
-                bSet = true;
-                mpWindow->SetPointer(PointerStyle::RefHand);
-            }
-        }
-    }
-
-    return bSet;
 }
 
 /**
@@ -820,112 +706,6 @@ bool FuDraw::SetHelpText(SdrObject* pObj, const Point& rPosPixel, const SdrViewE
         {
             // Hint about just clicking hyperlink
             aHelpText = SdResId(STR_CLICKHYPERLINK) + aURL;
-        }
-    }
-    else if (dynamic_cast< GraphicDocShell *>( mpDocSh ) ==  nullptr && SdDrawDocument::GetAnimationInfo(pObj))
-    {
-        SdAnimationInfo* pInfo = SdDrawDocument::GetAnimationInfo(pObj);
-
-        switch (pInfo->meClickAction)
-        {
-            case presentation::ClickAction_PREVPAGE:
-            {
-                // jump to the prior page
-                aHelpText = SdResId(STR_CLICK_ACTION_PREVPAGE);
-            }
-            break;
-
-            case presentation::ClickAction_NEXTPAGE:
-            {
-                // jump to the next page
-                aHelpText = SdResId(STR_CLICK_ACTION_NEXTPAGE);
-            }
-            break;
-
-            case presentation::ClickAction_FIRSTPAGE:
-            {
-                // jump to the first page
-                aHelpText = SdResId(STR_CLICK_ACTION_FIRSTPAGE);
-            }
-            break;
-
-            case presentation::ClickAction_LASTPAGE:
-            {
-                // jump to the last page
-                aHelpText = SdResId(STR_CLICK_ACTION_LASTPAGE);
-            }
-            break;
-
-            case presentation::ClickAction_BOOKMARK:
-            {
-                // jump to object/page
-                aHelpText = SdResId(STR_CLICK_ACTION_BOOKMARK)
-                    + ": "
-                    + INetURLObject::decode( pInfo->GetBookmark(), INetURLObject::DecodeMechanism::WithCharset );
-            }
-            break;
-
-            case presentation::ClickAction_DOCUMENT:
-            {
-                // jump to document (object/page)
-                aHelpText = SdResId(STR_CLICK_ACTION_DOCUMENT)
-                    + ": "
-                    + INetURLObject::decode( pInfo->GetBookmark(), INetURLObject::DecodeMechanism::WithCharset );
-            }
-            break;
-
-            case presentation::ClickAction_PROGRAM:
-            {
-                // execute program
-                aHelpText = SdResId(STR_CLICK_ACTION_PROGRAM)
-                    + ": "
-                    + INetURLObject::decode( pInfo->GetBookmark(), INetURLObject::DecodeMechanism::WithCharset );
-            }
-            break;
-
-            case presentation::ClickAction_MACRO:
-            {
-                // execute program
-                aHelpText = SdResId(STR_CLICK_ACTION_MACRO) + ": ";
-
-                if ( SfxApplication::IsXScriptURL( pInfo->GetBookmark() ) )
-                {
-                    aHelpText += pInfo->GetBookmark();
-                }
-                else
-                {
-                    OUString sBookmark( pInfo->GetBookmark() );
-                    sal_Int32 nIdx{ 0 };
-                    const OUString s0{ sBookmark.getToken( 0, '.', nIdx ) };
-                    const OUString s1{ sBookmark.getToken( 0, '.', nIdx ) };
-                    const OUString s2{ sBookmark.getToken( 0, '.', nIdx ) };
-                    aHelpText += s2 + "." + s1 + "." + s0;
-                }
-            }
-            break;
-
-            case presentation::ClickAction_SOUND:
-            {
-                // play-back sound
-                aHelpText = SdResId(STR_CLICK_ACTION_SOUND);
-            }
-            break;
-
-            case presentation::ClickAction_VERB:
-            {
-                // execute OLE-verb
-                aHelpText = SdResId(STR_CLICK_ACTION_VERB);
-            }
-            break;
-
-            case presentation::ClickAction_STOPPRESENTATION:
-            {
-                // quit presentation
-                aHelpText = SdResId(STR_CLICK_ACTION_STOPPRESENTATION);
-            }
-            break;
-            default:
-                break;
         }
     }
 
