@@ -24,17 +24,15 @@
 #undef Status
 
 #include <qt5/Qt5Frame.hxx>
+#include <qt5/Qt5SvpGraphics.hxx>
 #include <unx/screensaverinhibitor.hxx>
 
-#include "KDE5SalGraphics.hxx"
-
 class QWidget;
-class KDE5SalGraphics;
 
 class KDE5SalFrame : public Qt5Frame
 {
 private:
-    std::unique_ptr<KDE5SalGraphics> m_pKDE5Graphics;
+    std::unique_ptr<Qt5SvpGraphics> m_pKDE5Graphics;
     ScreenSaverInhibitor m_ScreenSaverInhibitor;
     bool m_bGraphicsInUse;
 

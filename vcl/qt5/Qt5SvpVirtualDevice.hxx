@@ -20,17 +20,17 @@
 #pragma once
 
 #include <headless/svpvd.hxx>
-#include "KDE5SalGraphics.hxx"
+#include <qt5/Qt5SvpGraphics.hxx>
 
-class VCL_DLLPUBLIC KDE5SalVirtualDevice : public SvpSalVirtualDevice
+class VCL_DLLPUBLIC Qt5SvpVirtualDevice : public SvpSalVirtualDevice
 {
 public:
-    KDE5SalVirtualDevice(DeviceFormat eFormat, cairo_surface_t* pRefSurface)
+    Qt5SvpVirtualDevice(DeviceFormat eFormat, cairo_surface_t* pRefSurface)
         : SvpSalVirtualDevice(eFormat, pRefSurface)
     {
     }
 
-    SalGraphics* AcquireGraphics() override { return AddGraphics(new KDE5SalGraphics(nullptr)); }
+    SalGraphics* AcquireGraphics() override { return AddGraphics(new Qt5SvpGraphics(nullptr)); }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
