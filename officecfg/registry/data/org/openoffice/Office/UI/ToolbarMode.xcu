@@ -369,7 +369,7 @@
             <value>false</value>
           </prop>
           <prop oor:name="MenuPosition">
-            <value>4</value>
+            <value>3</value>
           </prop>
           <prop oor:name="CommandArg">
             <value>notebookbar.ui</value>
@@ -397,7 +397,7 @@
             <value>false</value>
           </prop>
           <prop oor:name="MenuPosition">
-            <value>3</value>
+            <value>4</value>
           </prop>
           <prop oor:name="CommandArg">
             <value>notebookbar_compact.ui</value>
