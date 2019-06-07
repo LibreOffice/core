@@ -8365,12 +8365,16 @@ AC_SUBST(XMLLINT)
 # ./configure PYTHON=/usr/bin/python
 # =====================================================================
 if test "$build_os" != "cygwin" -a "$enable_python" != fully-internal; then
-    # This allows a lack of system python with no error, we use internal one in that case.
-    AM_PATH_PYTHON([2.7],, [:])
-    # Clean PYTHON_VERSION checked below if cross-compiling
-    PYTHON_VERSION=""
-    if test "$PYTHON" != ":"; then
+    if test -n "$PYTHON"; then
         PYTHON_FOR_BUILD=$PYTHON
+    else
+        # This allows a lack of system python with no error, we use internal one in that case.
+        AM_PATH_PYTHON([2.7],, [:])
+        # Clean PYTHON_VERSION checked below if cross-compiling
+        PYTHON_VERSION=""
+        if test "$PYTHON" != ":"; then
+            PYTHON_FOR_BUILD=$PYTHON
+        fi
     fi
 fi
 AC_SUBST(PYTHON_FOR_BUILD)
