@@ -805,7 +805,7 @@ void PushButton::ImplDrawPushButtonContent(OutputDevice* pDev, DrawFlags nDrawFl
     DrawSymbolFlags         nStyle;
 
     if( aInRect.Right() < aInRect.Left() || aInRect.Bottom() < aInRect.Top() )
-        aInRect.SetEmpty();
+        return; // nothing to do
 
     pDev->Push( PushFlags::CLIPREGION );
     pDev->IntersectClipRegion( aInRect );
