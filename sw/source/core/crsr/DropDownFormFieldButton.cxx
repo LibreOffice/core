@@ -8,8 +8,6 @@
  */
 
 #include <DropDownFormFieldButton.hxx>
-#include <vcl/svapp.hxx>
-#include <vcl/settings.hxx>
 #include <edtwin.hxx>
 #include <basegfx/color/bcolortools.hxx>
 #include <viewopt.hxx>
@@ -124,132 +122,16 @@ IMPL_LINK(SwFieldDialog, MyListBoxHandler, ListBox&, rBox, void)
 
 DropDownFormFieldButton::DropDownFormFieldButton(SwEditWin* pEditWin,
                                                  sw::mark::DropDownFieldmark& rFieldmark)
-    : MenuButton(pEditWin, WB_DIALOGCONTROL)
-    , m_rFieldmark(rFieldmark)
+    : FormFieldButton(pEditWin, rFieldmark)
 {
-    assert(GetParent());
-    assert(dynamic_cast<SwEditWin*>(GetParent()));
 }
 
 DropDownFormFieldButton::~DropDownFormFieldButton() { disposeOnce(); }
 
-void DropDownFormFieldButton::dispose()
+void DropDownFormFieldButton::InitPopup()
 {
-    m_pFieldPopup.disposeAndClear();
-    MenuButton::dispose();
-}
-
-void DropDownFormFieldButton::CalcPosAndSize(const SwRect& rPortionPaintArea)
-{
-    assert(GetParent());
-
-    Point aBoxPos = GetParent()->LogicToPixel(rPortionPaintArea.Pos());
-    Size aBoxSize = GetParent()->LogicToPixel(rPortionPaintArea.SSize());
-
-    // First calculate the size of the frame around the field
-    int nPadding = aBoxSize.Height() / 4;
-    aBoxPos.AdjustX(-nPadding);
-    aBoxPos.AdjustY(-nPadding);
-    aBoxSize.AdjustWidth(2 * nPadding);
-    aBoxSize.AdjustHeight(2 * nPadding);
-
-    m_aFieldFramePixel = tools::Rectangle(aBoxPos, aBoxSize);
-
-    // Then extend the size with the button area
-    aBoxSize.AdjustWidth(GetParent()->LogicToPixel(rPortionPaintArea.SSize()).Height());
-
-    SetPosSizePixel(aBoxPos, aBoxSize);
-}
-
-void DropDownFormFieldButton::MouseButtonUp(const MouseEvent&)
-{
-    assert(GetParent());
-
-    Point aPixPos = GetPosPixel();
-    aPixPos.AdjustY(GetSizePixel().Height());
-
     m_pFieldPopup = VclPtr<SwFieldDialog>::Create(static_cast<SwEditWin*>(GetParent()),
                                                   &m_rFieldmark, GetSizePixel().Width());
-    m_pFieldPopup->SetPopupModeEndHdl(LINK(this, DropDownFormFieldButton, FieldPopupModeEndHdl));
-
-    tools::Rectangle aRect(GetParent()->OutputToScreenPixel(aPixPos), Size(0, 0));
-    m_pFieldPopup->StartPopupMode(aRect, FloatWinPopupFlags::Down | FloatWinPopupFlags::GrabFocus);
-    Invalidate();
-}
-
-IMPL_LINK_NOARG(DropDownFormFieldButton, FieldPopupModeEndHdl, FloatingWindow*, void)
-{
-    m_pFieldPopup.disposeAndClear();
-    m_rFieldmark.Invalidate();
-    // Hide the button here and make it visible later, to make transparent background work with SAL_USE_VCLPLUGIN=gen
-    Show(false);
-    Invalidate();
-}
-
-static basegfx::BColor lcl_GetFillColor(const basegfx::BColor& rLineColor, double aLuminance)
-{
-    basegfx::BColor aHslLine = basegfx::utils::rgb2hsl(rLineColor);
-    aHslLine.setZ(aLuminance);
-    return basegfx::utils::hsl2rgb(aHslLine);
-}
-
-void DropDownFormFieldButton::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
-{
-    SetMapMode(MapMode(MapUnit::MapPixel));
-
-    //const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
-    Color aLineColor = COL_BLACK;
-    Color aFillColor(lcl_GetFillColor(aLineColor.getBColor(), (m_pFieldPopup ? 0.5 : 0.75)));
-
-    // Draw the frame around the field
-    // GTK3 backend cuts down the frame's top and left border, to avoid that add a padding around the frame
-    int nPadding = 1;
-    Point aPos(nPadding, nPadding);
-    Size aSize(m_aFieldFramePixel.GetSize().Width() - nPadding,
-               m_aFieldFramePixel.GetSize().Height() - nPadding);
-    const tools::Rectangle aFrameRect(tools::Rectangle(aPos, aSize));
-    rRenderContext.SetLineColor(aLineColor);
-    rRenderContext.SetFillColor(COL_TRANSPARENT);
-    rRenderContext.DrawRect(aFrameRect);
-
-    // Draw the button next to the frame
-    Point aButtonPos(aFrameRect.TopLeft());
-    aButtonPos.AdjustX(aFrameRect.GetSize().getWidth() - 1);
-    Size aButtonSize(aFrameRect.GetSize());
-    aButtonSize.setWidth(GetSizePixel().getWidth() - aFrameRect.getWidth() - nPadding);
-    const tools::Rectangle aButtonRect(tools::Rectangle(aButtonPos, aButtonSize));
-
-    // Background & border
-    rRenderContext.SetLineColor(aLineColor);
-    rRenderContext.SetFillColor(aFillColor);
-    rRenderContext.DrawRect(aButtonRect);
-
-    // the arrowhead
-    rRenderContext.SetLineColor(aLineColor);
-    rRenderContext.SetFillColor(aLineColor);
-
-    Point aCenter(aButtonPos.X() + (aButtonSize.Width() / 2),
-                  aButtonPos.Y() + (aButtonSize.Height() / 2));
-    Size aArrowSize(aButtonSize.Width() / 4, aButtonSize.Height() / 10);
-
-    tools::Polygon aPoly(3);
-    aPoly.SetPoint(Point(aCenter.X() - aArrowSize.Width(), aCenter.Y() - aArrowSize.Height()), 0);
-    aPoly.SetPoint(Point(aCenter.X() + aArrowSize.Width(), aCenter.Y() - aArrowSize.Height()), 1);
-    aPoly.SetPoint(Point(aCenter.X(), aCenter.Y() + aArrowSize.Height()), 2);
-    rRenderContext.DrawPolygon(aPoly);
-}
-
-WindowHitTest DropDownFormFieldButton::ImplHitTest(const Point& rFramePos)
-{
-    // We need to check whether the position hits the button (the frame should be mouse transparent)
-    WindowHitTest aResult = MenuButton::ImplHitTest(rFramePos);
-    if (aResult != WindowHitTest::Inside)
-        return aResult;
-    else
-    {
-        return rFramePos.X() >= m_aFieldFramePixel.Right() ? WindowHitTest::Inside
-                                                           : WindowHitTest::Transparent;
-    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

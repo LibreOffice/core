@@ -155,6 +155,7 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/core/crsr/findcoll \
     sw/source/core/crsr/findfmt \
     sw/source/core/crsr/findtxt \
+    sw/source/core/crsr/FormFieldButton \
     sw/source/core/crsr/pam \
     sw/source/core/crsr/paminit \
     sw/source/core/crsr/swcrsr \
