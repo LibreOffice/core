@@ -824,6 +824,7 @@ SfxAcceleratorConfigPage::SfxAcceleratorConfigPage(TabPageParent pParent, const 
     , m_pMacroInfoItem()
     , aLoadAccelConfigStr(CuiResId(RID_SVXSTR_LOADACCELCONFIG))
     , aSaveAccelConfigStr(CuiResId(RID_SVXSTR_SAVEACCELCONFIG))
+    , aFilterAllStr(SfxResId(STR_SFX_FILTERNAME_ALL))
     , aFilterCfgStr(CuiResId(RID_SVXSTR_FILTERNAME_CFG))
     , m_bStylesInfoInitialized(false)
     , m_xGlobal()
@@ -851,8 +852,6 @@ SfxAcceleratorConfigPage::SfxAcceleratorConfigPage(TabPageParent pParent, const 
     m_xFunctionBox->set_size_request(aSize.Width(), aSize.Height());
     aSize = LogicToPixel(Size(80, 91), MapMode(MapUnit::MapAppFont));
     m_xKeyBox->set_size_request(aSize.Width(), aSize.Height());
-
-    aFilterAllStr = SfxResId( STR_SFX_FILTERNAME_ALL );
 
     // install handler functions
     m_xChangeButton->connect_clicked( LINK( this, SfxAcceleratorConfigPage, ChangeHdl ));
