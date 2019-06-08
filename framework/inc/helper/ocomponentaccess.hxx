@@ -37,7 +37,7 @@ namespace framework{
 
 /*-************************************************************************************************************
     @short          implement XEnumerationAccess interface as helper to create many oneway enumeration of components
-    @descr          We share mutex and framecontainer with our owner and have full access to his child tasks.
+    @descr          We share mutex and framecontainer with our owner and have full access to its child tasks.
                     (Our owner can be the Desktop only!) We create oneway enumerations on demand. These "lists"
                     can be used for one time only. Step during the list from first to last element.
                     (The type of created enumerations is OComponentEnumeration.)
@@ -65,7 +65,7 @@ class OComponentAccess  :   public ::cppu::WeakImplHelper< css::container::XEnum
             @short      constructor to initialize this instance
             @descr      A desktop will create an enumeration-access-object. An enumeration is a oneway-list and a
                         snapshot of the components of current tasks under the desktop.
-                        But we need a instance to create more than one enumerations at different times!
+                        But we need an instance to create more than one enumerations at different times!
 
             @seealso    class Desktop
             @seealso    class OComponentEnumeration
