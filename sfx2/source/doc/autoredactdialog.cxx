@@ -19,19 +19,22 @@
 #include <tools/urlobj.hxx>
 #include <tools/debug.hxx>
 
-#include <sfx2/strings.hrc>
-#include <sfx2/sfxsids.hrc>
 #include <sfx2/app.hxx>
-#include <sfx2/objsh.hxx>
-#include <sfx2/sfxresid.hxx>
 #include <sfx2/docfile.hxx>
-#include <preview.hxx>
+#include <sfx2/filedlghelper.hxx>
+#include <sfx2/objsh.hxx>
 #include <sfx2/printer.hxx>
+#include <sfx2/sfxresid.hxx>
+#include <sfx2/sfxsids.hrc>
+#include <sfx2/strings.hrc>
+#include <preview.hxx>
 #include <unotools/viewoptions.hxx>
 #include <vcl/waitobj.hxx>
 #include <vcl/weld.hxx>
 
 #include <sal/log.hxx>
+
+#include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 
 int TargetsTable::GetRowByTargetName(const OUString& sName)
 {
@@ -180,17 +183,20 @@ void TargetsTable::setRowData(const int& nRowIndex, const RedactionTarget* pTarg
     m_xControl->set_text(nRowIndex, pTarget->bWholeWords ? OUString("Yes") : OUString("No"), 4);
 }
 
-/*IMPL_LINK_NOARG(SfxAutoRedactDialog, LoadHdl, weld::Button&, void)
+IMPL_LINK_NOARG(SfxAutoRedactDialog, Load, weld::Button&, void)
 {
     //TODO: Implement
-    //Load a targets list from a previously saved file (a json file in the user profile dir?)
+    //Load a targets list from a previously saved file (a json file?)
+    // ask for filename, where we should load the new config data from
+    StartFileDialog(StartFileDialogType::Open, "Load Targets");
 }
 
-IMPL_LINK_NOARG(SfxAutoRedactDialog, SaveHdl, weld::Button&, void)
+IMPL_LINK_NOARG(SfxAutoRedactDialog, Save, weld::Button&, void)
 {
     //TODO: Implement
     //Allow saving the targets into a file
-}*/
+    StartFileDialog(StartFileDialogType::SaveAs, "Save Targets");
+}
 
 IMPL_LINK_NOARG(SfxAutoRedactDialog, AddHdl, weld::Button&, void)
 {
@@ -345,6 +351,45 @@ IMPL_LINK_NOARG(SfxAutoRedactDialog, DeleteHdl, weld::Button&, void)
     }
 }
 
+IMPL_LINK_NOARG(SfxAutoRedactDialog, LoadHdl, sfx2::FileDialogHelper*, void)
+{
+    //TODO: Implement
+    bool bDummy = hasTargets();
+
+    if (bDummy)
+        void();
+}
+
+IMPL_LINK_NOARG(SfxAutoRedactDialog, SaveHdl, sfx2::FileDialogHelper*, void)
+{
+    //TODO: Implement
+    bool bDummy = hasTargets();
+
+    if (bDummy)
+        void();
+}
+
+void SfxAutoRedactDialog::StartFileDialog(StartFileDialogType nType, const OUString& rTitle)
+{
+    OUString aFilterAllStr(SfxResId(STR_SFX_FILTERNAME_ALL));
+    OUString aFilterCfgStr("Configuration (*.cfg)");
+
+    bool bSave = nType == StartFileDialogType::SaveAs;
+    short nDialogType = bSave ? css::ui::dialogs::TemplateDescription::FILESAVE_AUTOEXTENSION
+                              : css::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE;
+    m_pFileDlg.reset(new sfx2::FileDialogHelper(nDialogType, FileDialogFlags::NONE, getDialog()));
+
+    m_pFileDlg->SetTitle(rTitle);
+    m_pFileDlg->AddFilter(aFilterAllStr, FILEDIALOG_FILTER_ALL);
+    m_pFileDlg->AddFilter(aFilterCfgStr, "*.cfg");
+    m_pFileDlg->SetCurrentFilter(aFilterCfgStr);
+
+    Link<sfx2::FileDialogHelper*, void> aDlgClosedLink
+        = bSave ? LINK(this, SfxAutoRedactDialog, SaveHdl)
+                : LINK(this, SfxAutoRedactDialog, LoadHdl);
+    m_pFileDlg->StartExecuteModal(aDlgClosedLink);
+}
+
 SfxAutoRedactDialog::SfxAutoRedactDialog(weld::Window* pParent)
     : SfxDialogController(pParent, "sfx/ui/autoredactdialog.ui", "AutoRedactDialog")
     , m_xRedactionTargetsLabel(m_xBuilder->weld_label("labelRedactionTargets"))
@@ -374,8 +419,8 @@ SfxAutoRedactDialog::SfxAutoRedactDialog(weld::Window* pParent)
     // TODO: fill the targets box
 
     // Handler connections
-    //m_xLoadBtn->connect_clicked(LINK(this, SfxAutoRedactDialog, LoadHdl));
-    //m_xSaveBtn->connect_clicked(LINK(this, SfxAutoRedactDialog, SaveHdl));
+    m_xLoadBtn->connect_clicked(LINK(this, SfxAutoRedactDialog, Load));
+    m_xSaveBtn->connect_clicked(LINK(this, SfxAutoRedactDialog, Save));
     m_xAddBtn->connect_clicked(LINK(this, SfxAutoRedactDialog, AddHdl));
     m_xEditBtn->connect_clicked(LINK(this, SfxAutoRedactDialog, EditHdl));
     m_xDeleteBtn->connect_clicked(LINK(this, SfxAutoRedactDialog, DeleteHdl));
