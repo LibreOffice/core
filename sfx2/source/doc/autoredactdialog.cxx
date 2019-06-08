@@ -161,7 +161,7 @@ IMPL_LINK_NOARG(SfxAutoRedactDialog, SaveHdl, weld::Button&, void)
 
 IMPL_LINK_NOARG(SfxAutoRedactDialog, AddHdl, weld::Button&, void)
 {
-    // Open the Add Target dialog, craete a new target and insert into the targets vector and the listbox
+    // Open the Add Target dialog, create a new target and insert into the targets vector and the listbox
     SfxAddTargetDialog aAddTargetDialog(getDialog(), m_xTargetsBox->GetNameProposal());
 
     bool bIncomplete;
@@ -208,7 +208,7 @@ IMPL_LINK_NOARG(SfxAutoRedactDialog, AddHdl, weld::Button&, void)
     {
         std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(
             getDialog(), VclMessageType::Warning, VclButtonsType::Ok,
-            "An error occured while adding new target. Please report this incidence."));
+            "An error occurred while adding new target. Please report this incident."));
         xBox->run();
         delete redactiontarget;
     }
@@ -258,7 +258,7 @@ SfxAutoRedactDialog::SfxAutoRedactDialog(weld::Window* pParent)
     , m_xEditBtn(m_xBuilder->weld_button("edit"))
     , m_xDeleteBtn(m_xBuilder->weld_button("delete"))
 {
-    // Can be used to remmeber the last set of redaction targets?
+    // Can be used to remeber the last set of redaction targets?
     OUString sExtraData;
     SvtViewOptions aDlgOpt(EViewType::Dialog,
                            OStringToOUString(m_xDialog->get_help_id(), RTL_TEXTENCODING_UTF8));
