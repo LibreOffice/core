@@ -16,6 +16,24 @@
       "revId": "58a095ac31b9db967fa4529f5d072e0d01e32f33",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_ac0241b3",
+        "filename": "vcl/qt5/Qt5Widget.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 643,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2019-06-08T21:18:08Z",
+      "side": 1,
+      "message": "It is. Updated accordingly.",
+      "parentUuid": "3fa0c359_e90d9b3e",
+      "revId": "58a095ac31b9db967fa4529f5d072e0d01e32f33",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
