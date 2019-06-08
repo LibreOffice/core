@@ -3084,7 +3084,7 @@ $(call gb_LinkTarget_set_include,$(1),\
 	$$(INCLUDE) \
 )
 
-$(call gb_LinkTarget_add_defs,$(1),\
+$(call gb_LinkTarget_add_cxxflags,$(1),\
 	$(filter-out -I% -isystem%,$(subst -isystem /,-isystem/,$(KF5_CFLAGS))) \
 )
 

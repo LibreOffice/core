@@ -62,7 +62,7 @@ $(eval $(call gb_Library_use_externals,vclplug_kde5,\
 ))
 
 ifneq ($(QT5_HAVE_GLIB),)
-$(eval $(call gb_Library_add_defs,vclplug_kde5,\
+$(eval $(call gb_Library_add_cxxflags,vclplug_kde5,\
     $(QT5_GLIB_CFLAGS) \
 ))
 
@@ -71,7 +71,7 @@ $(eval $(call gb_Library_add_libs,vclplug_kde5,\
 ))
 endif
 
-$(eval $(call gb_Library_add_defs,vclplug_kde5,\
+$(eval $(call gb_Library_add_cxxflags,vclplug_kde5,\
     $(KF5_CFLAGS) \
 ))
 $(eval $(call gb_Library_add_libs,vclplug_kde5,\
