@@ -365,7 +365,6 @@ public:
 
     bool            CopySelection( SvTreeListBox* pSource, SvTreeListEntry* pTarget );
     bool            MoveSelectionCopyFallbackPossible( SvTreeListBox* pSource, SvTreeListEntry* pTarget, bool bAllowCopyFallback );
-    void            RemoveSelection();
     /**
      * Removes the entry along with all of its descendants
      */
@@ -465,8 +464,6 @@ public:
                                          SvTreeListEntry* );
     virtual void             DragFinished( sal_Int8 nDropAction );
     virtual bool             NotifyAcceptDrop( SvTreeListEntry* );
-
-    void                     SetDragOptions( sal_Int8 nOptions ) { nDragOptions = nOptions; }
 
     virtual SvTreeListEntry* CloneEntry( SvTreeListEntry* pSource );
 

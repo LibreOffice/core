@@ -202,28 +202,6 @@ void SwGlossaryHdl::RenameGroup(const OUString& rOld, OUString& rNew, const OUSt
     }
 }
 
-bool SwGlossaryHdl::CopyOrMove( const OUString& rSourceGroupName, OUString& rSourceShortName,
-                                const OUString& rDestGroupName, const OUString& rLongName, bool bMove )
-{
-    std::unique_ptr<SwTextBlocks> pSourceGroup = rStatGlossaries.GetGroupDoc(rSourceGroupName);
-    std::unique_ptr<SwTextBlocks> pDestGroup = rStatGlossaries.GetGroupDoc(rDestGroupName);
-    if (pDestGroup->IsReadOnly() || (bMove && pSourceGroup->IsReadOnly()) )
-    {
-        return false;
-    }
-
-    //The index must be determined here because rSourceShortName maybe changed in CopyBlock
-    sal_uInt16 nDeleteIdx = pSourceGroup->GetIndex( rSourceShortName );
-    OSL_ENSURE(USHRT_MAX != nDeleteIdx, "entry not found");
-    ErrCode nRet = pSourceGroup->CopyBlock( *pDestGroup, rSourceShortName, rLongName );
-    if(!nRet && bMove)
-    {
-        // the index must be existing
-        nRet = pSourceGroup->Delete( nDeleteIdx ) ? ERRCODE_NONE : ErrCode(1);
-    }
-    return !nRet;
-}
-
 // delete a autotext-file-group
 bool SwGlossaryHdl::DelGroup(const OUString &rGrpName)
 {

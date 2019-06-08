@@ -61,7 +61,6 @@ public:
     // because this seems to be to expensive if compared to inline methods.
     sal_uInt8 GetType() const { return nType; }
     bool IsReference() { return XML_HINT_REFERENCE==nType; }
-    bool IsIndexMark() { return XML_HINT_INDEX_MARK==nType; }
 };
 
 class XMLStyleHint_Impl : public XMLHint_Impl

@@ -39,7 +39,6 @@ private:
     weld::Button* m_pCloseButton;
 
     void SetBuildIdLink();
-    void StyleControls();
     void SetLogo();
 
     static OUString GetBuildId();

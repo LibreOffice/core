@@ -669,25 +669,6 @@ bool SvTreeListBox::MoveSelectionCopyFallbackPossible( SvTreeListBox* pSource, S
     return bSuccess;
 }
 
-void SvTreeListBox::RemoveSelection()
-{
-    std::vector<const SvTreeListEntry*> aList;
-    // cache selection, as the implementation deselects everything on the first
-    // remove
-    SvTreeListEntry* pEntry = FirstSelected();
-    while ( pEntry )
-    {
-        aList.push_back( pEntry );
-        if ( pEntry->HasChildren() )
-            // remove deletes all children automatically
-            SelectChildren(pEntry, false);
-        pEntry = NextSelected( pEntry );
-    }
-
-    for (auto const& elem : aList)
-        pModel->Remove(elem);
-}
-
 void SvTreeListBox::RemoveEntry(SvTreeListEntry const * pEntry)
 {
     pModel->Remove(pEntry);

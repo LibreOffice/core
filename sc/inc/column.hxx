@@ -555,7 +555,6 @@ public:
     void StartListeners( sc::StartListeningContext& rCxt, bool bAll );
     void        SetDirtyIfPostponed();
     void BroadcastRecalcOnRefMove();
-    void TransferListeners( ScColumn& rDestCol, SCROW nRow1, SCROW nRow2, SCROW nRowDelta );
     void CollectListeners( std::vector<SvtListener*>& rListeners, SCROW nRow1, SCROW nRow2 );
     void CollectFormulaCells( std::vector<ScFormulaCell*>& rCells, SCROW nRow1, SCROW nRow2 );
 

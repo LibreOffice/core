@@ -182,8 +182,6 @@ public:
     OUString const & GetAccessibleText();
 
     EditEngine &    GetEditEngine();
-    SfxItemPool &   GetEditEngineItemPool();
-    const SvtLinguOptions & GetLinguOptions() const { return maLinguOptions; }
 
     void        DrawFormula(OutputDevice &rDev, Point &rPosition, bool bDrawSelection = false);
     Size        GetSize();

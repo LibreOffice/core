@@ -40,10 +40,6 @@ class AccessibleSmElementsControl final : public comphelper::OAccessibleComponen
     std::vector<rtl::Reference<AccessibleSmElement>> m_aAccessibleChildren;
     VclPtr<SmElementsControl> m_pControl;
 
-    AccessibleSmElement* GetItem_Impl(sal_uInt16 _nPos);
-    void ReleaseFocus_Impl(sal_uInt16 _nPos);
-    sal_Int32 implGetAccessibleChildCount();
-    void ReleaseItems(bool bNotifyRemoval);
     void UpdateFocus(sal_uInt16);
     inline void TestControl();
 
