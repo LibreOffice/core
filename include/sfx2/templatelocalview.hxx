@@ -237,9 +237,6 @@ protected:
 
     TemplateViewItem *maSelectedItem;
 
-    long mnThumbnailWidth;
-    long mnThumbnailHeight;
-
     Point maPosition; //store the point of click event
 
     Link<void*,void>              maOpenRegionHdl;

@@ -1281,7 +1281,6 @@ void SvTreeListBox::InitTreeView()
     nFirstSelTab = 0;
     nLastSelTab = 0;
     nFocusWidth = -1;
-    nAllItemAccRoleType = SvTreeAccRoleType::NONE;
     mnCheckboxItemWidth = 0;
 
     nTreeFlags = SvTreeFlags::RECALCTABS;

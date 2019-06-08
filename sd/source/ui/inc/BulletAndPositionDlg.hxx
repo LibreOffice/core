@@ -62,7 +62,6 @@ class SvxBulletAndPositionDlg : public weld::GenericDialogController
 
     bool bLastWidthModified : 1;
     bool bModified : 1;
-    bool bAutomaticCharStyles : 1;
     bool bInInitControl : 1; // workaround for Modify-error, is said to be corrected from 391 on
     bool bLabelAlignmentPosAndSpaceModeActive;
     bool bApplyToMaster;

@@ -212,8 +212,6 @@ private:
     VclPtr<ScTextWnd> maTextWnd;
     VclPtr<ScrollBar> maScrollBar;
 
-    long mnBorderWidth, mnBorderHeight;
-
     DECL_LINK(Impl_ScrollHdl, ScrollBar*, void);
 };
 
