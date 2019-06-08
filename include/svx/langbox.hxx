@@ -66,11 +66,8 @@ public:
     sal_Int32       InsertLanguage( const LanguageType eLangType );
     void            InsertDefaultLanguage( sal_Int16 nType );
     void            InsertSystemLanguage();
-    void            InsertLanguage( const LanguageType eLangType,
-                                    bool bCheckEntry );
     void            SelectLanguage( const LanguageType eLangType );
     LanguageType    GetSelectedLanguage() const;
-    bool            IsLanguageSelected( const LanguageType eLangType ) const;
 
 protected:
     Image                   m_aNotCheckedImage;

@@ -191,15 +191,6 @@ void TemplateLocalView::showRegion(TemplateContainerItem const *pItem)
     insertItems(pItem->maTemplates);
 }
 
-TemplateContainerItem* TemplateLocalView::getRegion(OUString const & rName)
-{
-    for (auto const & pRegion : maRegions)
-        if (pRegion->maTitle == rName)
-            return pRegion.get();
-
-    return nullptr;
-}
-
 IMPL_LINK(TemplateLocalView, ContextMenuSelectHdl, Menu*, pMenu, bool)
 {
     sal_uInt16 nMenuId = pMenu->GetCurItemId();
@@ -244,11 +235,6 @@ IMPL_LINK(TemplateLocalView, ContextMenuSelectHdl, Menu*, pMenu, bool)
     }
 
     return false;
-}
-
-OUString TemplateLocalView::getRegionName(const sal_uInt16 nRegionId) const
-{
-    return mpDocTemplates->GetRegionName(nRegionId);
 }
 
 bool TemplateLocalView::renameItem(ThumbnailViewItem* pItem, const OUString& sNewTitle)

@@ -192,8 +192,6 @@ public:
 
     void AppendItem(std::unique_ptr<ThumbnailViewItem> pItem);
 
-    void RemoveItem(sal_uInt16 nItemId);
-
     virtual void Clear();
 
     // Change current thumbnail item list with new one (invalidates all pointers to a thumbnail item)

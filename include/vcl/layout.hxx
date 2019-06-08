@@ -810,10 +810,6 @@ inline bool isContainerWindow(const vcl::Window *pWindow)
     return pWindow && isContainerWindow(*pWindow);
 }
 
-//Returns true if the containing dialog is doing its initial
-//layout and isn't visible yet
-VCL_DLLPUBLIC bool isInitialLayout(const vcl::Window *pWindow);
-
 // retro-fitting utilities
 
 //Get a Size which is large enough to contain all children with

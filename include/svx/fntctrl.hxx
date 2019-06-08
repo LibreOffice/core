@@ -52,8 +52,6 @@ public:
     virtual void        StateChanged( StateChangedType nStateChange ) override;
     virtual void        DataChanged( const DataChangedEvent& rDCEvt ) override;
 
-    void                Init( const SfxItemSet& rSet );
-
     // for reasons of efficiency not const
     SvxFont&            GetFont();
     const SvxFont&      GetFont() const;

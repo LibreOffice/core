@@ -54,10 +54,6 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxContourDlg : public SfxModelessDialogCont
 {
     std::unique_ptr<SvxSuperContourDlg> m_xImpl;
 
-protected:
-
-    void                SetSuperClass( SvxSuperContourDlg& rSuperClass );
-
 public:
 
     SvxContourDlg(SfxBindings *pBindings, SfxChildWindow *pCW, weld::Window* pParent);

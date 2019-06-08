@@ -57,8 +57,6 @@ public:
                                  sal_Int32 nIndexInParent);
 
     void SetFocus(bool _bFocus);
-    bool HasFocus() const { return m_bHasFocus; }
-    void ReleaseSmElementsControl() { m_pSmElementsControl = nullptr; }
     sal_uInt16 itemId() const { return m_nItemId; }
 
     DECLARE_XINTERFACE()

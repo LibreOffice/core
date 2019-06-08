@@ -932,45 +932,6 @@ void ThumbnailView::DataChanged( const DataChangedEvent& rDCEvt )
     }
 }
 
-void ThumbnailView::RemoveItem( sal_uInt16 nItemId )
-{
-    size_t nPos = GetItemPos( nItemId );
-
-    if ( nPos == THUMBNAILVIEW_ITEM_NOTFOUND )
-        return;
-
-    if ( nPos < mFilteredItemList.size() ) {
-
-        // delete item from the thumbnail list
-        for (size_t i = 0, n = mItemList.size(); i < n; ++i)
-        {
-            if (mItemList[i]->mnId == nItemId)
-            {
-                mItemList.erase(mItemList.begin()+i);
-                break;
-            }
-        }
-
-        // delete item from the filter item list
-        ThumbnailValueItemList::iterator it = mFilteredItemList.begin();
-        ::std::advance( it, nPos );
-
-        if ((*it)->isSelected())
-        {
-            (*it)->setSelection(false);
-        }
-
-        delete *it;
-        mFilteredItemList.erase( it );
-        mpStartSelRange = mFilteredItemList.end();
-    }
-
-    CalculateItemPositions();
-
-    if ( IsReallyVisible() && IsUpdateMode() )
-        Invalidate();
-}
-
 void ThumbnailView::Clear()
 {
     ImplDeleteItems();

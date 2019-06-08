@@ -133,10 +133,6 @@ public:
     void                SetTargetList( TargetList& rTargetList );
 
     const NotifyInfo&   GetInfo() const { return aInfo; }
-
-    void                CreateDefaultObject();
-    void                SelectFirstObject();
-    void                StartPolyEdit();
 };
 
 

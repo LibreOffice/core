@@ -79,7 +79,6 @@ public:
     virtual ~ScCondFrmtEntry();
 
     void Show() { mxGrid->show(); }
-    void Hide() { mxGrid->hide(); }
 
     void set_grid_top_attach(int nAttach) { mxBorder->set_grid_top_attach(nAttach); }
     int get_grid_top_attach() const { return mxBorder->get_grid_top_attach(); }

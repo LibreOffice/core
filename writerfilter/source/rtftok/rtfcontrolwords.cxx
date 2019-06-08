@@ -1843,11 +1843,6 @@ RTFSymbol const aRTFControlWords[] = {
 };
 int nRTFControlWords = SAL_N_ELEMENTS(aRTFControlWords);
 
-bool RTFSymbol::operator<(const RTFSymbol& rOther) const
-{
-    return std::strcmp(m_sKeyword, rOther.m_sKeyword) < 0;
-}
-
 RTFMathSymbol const aRTFMathControlWords[] = {
     // eKeyword nToken eDestination
     { RTF_MOMATH, M_TOKEN(oMath), Destination::MOMATH },

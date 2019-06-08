@@ -368,7 +368,6 @@ public:
     sal_uInt16          GetCurItemId() const { return mnCurItemId; }
     sal_uInt16          GetDownItemId() const { return mnDownItemId; }
     sal_uInt16          GetModifier() const { return mnMouseModifier; }
-    sal_uInt16          GetKeyModifier() const { return mnKeyModifier; }
 
     void                SetItemBits( sal_uInt16 nItemId, ToolBoxItemBits nBits );
     ToolBoxItemBits     GetItemBits( sal_uInt16 nItemId ) const;

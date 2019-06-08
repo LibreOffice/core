@@ -234,7 +234,6 @@ public:
     void                    SetFormulaMode(bool bSet) override;
     void                    MakeDialogEditView() override;
     bool                    IsInputActive() override;
-    ScrollBar&              GetScrollBar() { return maTextWndGroup->GetScrollBar(); }
     void                    IncrementVerticalSize();
     void                    DecrementVerticalSize();
     long                    GetNumLines() { return maTextWndGroup->GetNumLines(); }

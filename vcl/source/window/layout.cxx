@@ -2669,10 +2669,4 @@ bool isLayoutEnabled(const vcl::Window *pWindow)
     return pChild && isContainerWindow(*pChild) && !pChild->GetWindow(GetWindowType::Next);
 }
 
-bool isInitialLayout(const vcl::Window *pWindow)
-{
-    Dialog *pParentDialog = pWindow ? pWindow->GetParentDialog() : nullptr;
-    return pParentDialog && pParentDialog->isCalculatingInitialLayoutSize();
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
