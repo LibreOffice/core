@@ -393,6 +393,26 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf115813_OOXML_XY_handle)
     }
     CPPUNIT_ASSERT_EQUAL(OUString(), sErrors);
 }
+
+CPPUNIT_TEST_FIXTURE(CustomshapesTest, testQuadraticCurveTo)
+{
+    // tdf125782 command Q (quadraticcurveto) uses wrong 'current point'.
+    // When converting to cubic Bezier curve, this had resulted in a wrong first control point.
+    // The quadraticcurveto segment starts in shape center in the test file. The first control
+    // point should produce a horizontal tangent in the start point.
+    const OUString sFileName("tdf125782_QuadraticCurveTo.odg");
+    const OUString sURL = m_directories.getURLFromSrc(sDataDirectory) + sFileName;
+    mxComponent = loadFromDesktop(sURL, "com.sun.star.comp.drawing.DrawingDocument");
+    CPPUNIT_ASSERT_MESSAGE("Could not load document", mxComponent.is());
+    uno::Reference<drawing::XShape> xShape(getShape(0));
+    uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
+    CPPUNIT_ASSERT_MESSAGE("Could not get the shape properties", xShapeProps.is());
+    awt::Rectangle aBoundRect;
+    xShapeProps->getPropertyValue(UNO_NAME_MISC_OBJ_BOUNDRECT) >>= aBoundRect;
+    const double fHeight = static_cast<double>(aBoundRect.Height);
+    //Add some tolerance
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("bad height of quadraticcurveto", 3004, fHeight, 10.0);
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

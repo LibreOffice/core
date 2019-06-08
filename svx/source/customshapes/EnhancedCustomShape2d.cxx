@@ -2292,27 +2292,21 @@ void EnhancedCustomShape2d::CreateSubPath(
                 {
                     for ( sal_Int32 i(0); ( i < nPntCount ) && ( rSrcPt + 1 < nCoordSize ); i++ )
                     {
-                        if ( rSrcPt )
+                        DBG_ASSERT(aNewB2DPolygon.count(), "EnhancedCustomShape2d::CreateSubPath: Error no previous point for Q (!)");
+                        if (aNewB2DPolygon.count() > 0)
                         {
-                            const Point aPreviousEndPoint(GetPoint( seqCoordinates[ rSrcPt - 1 ], true, true));
-                            const Point aControlQ(GetPoint( seqCoordinates[ rSrcPt++ ], true, true ));
-                            const Point aEnd(GetPoint( seqCoordinates[ rSrcPt++ ], true, true ));
-                            const Point aControlA((aPreviousEndPoint + (aControlQ * 2)) / 3);
-                            const Point aControlB(((aControlQ * 2) + aEnd) / 3);
-
-                            DBG_ASSERT(aNewB2DPolygon.count(), "EnhancedCustomShape2d::CreateSubPath: Error in adding Q control point (!)");
-                            aNewB2DPolygon.appendBezierSegment(
-                                basegfx::B2DPoint(aControlA.X(), aControlA.Y()),
-                                basegfx::B2DPoint(aControlB.X(), aControlB.Y()),
-                                basegfx::B2DPoint(aEnd.X(), aEnd.Y()));
+                            const basegfx::B2DPoint aPreviousEndPoint(aNewB2DPolygon.getB2DPoint(aNewB2DPolygon.count()-1));
+                            const basegfx::B2DPoint aControlQ(GetPointAsB2DPoint( seqCoordinates[ rSrcPt++ ], true, true ));
+                            const basegfx::B2DPoint aEnd(GetPointAsB2DPoint( seqCoordinates[ rSrcPt++ ], true, true ));
+                            const basegfx::B2DPoint aControlA((aPreviousEndPoint + (aControlQ * 2)) / 3);
+                            const basegfx::B2DPoint aControlB(((aControlQ * 2) + aEnd) / 3);
+                            aNewB2DPolygon.appendBezierSegment(aControlA, aControlB, aEnd);
                         }
-                        else // no previous point , do a moveto
+                        else // no previous point; ill structured path, but try to draw as much as possible
                         {
                             rSrcPt++; // skip control point
-                            const Point aEnd(GetPoint( seqCoordinates[ rSrcPt++ ], true, true ));
-
-                            DBG_ASSERT(aNewB2DPolygon.count(), "EnhancedCustomShape2d::CreateSubPath: Error in adding Q control point (!)");
-                            aNewB2DPolygon.append(basegfx::B2DPoint(aEnd.X(), aEnd.Y()));
+                            const basegfx::B2DPoint aEnd(GetPointAsB2DPoint( seqCoordinates[ rSrcPt++ ], true, true ));
+                            aNewB2DPolygon.append(aEnd);
                         }
                     }
                 }
