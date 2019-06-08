@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_8c3ae595",
+        "filename": "vcl/inc/qt5/Qt5Transferable.hxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2019-06-08T20:10:45Z",
+      "side": 1,
+      "message": "typo: -\u003e \"reliable\" (\u0027i\u0027 instead of \u0027y\u0027)",
+      "range": {
+        "startLine": 51,
+        "startChar": 64,
+        "endLine": 51,
+        "endChar": 72
+      },
+      "revId": "8c0eccea880960f0c2e350b6818267f9607bccbb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_2c41510c",
+        "filename": "vcl/inc/qt5/Qt5Transferable.hxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2019-06-08T20:10:45Z",
+      "side": 1,
+      "message": "typo: -\u003e \"through\" (remove \u0027t\u0027)",
+      "range": {
+        "startLine": 63,
+        "startChar": 64,
+        "endLine": 63,
+        "endChar": 72
+      },
+      "revId": "8c0eccea880960f0c2e350b6818267f9607bccbb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_4c44dd1b",
+        "filename": "vcl/inc/qt5/Qt5Transferable.hxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2019-06-08T20:10:45Z",
+      "side": 1,
+      "message": "typo: -\u003e \"accessible\" (remove \u0027a\u0027)",
+      "range": {
+        "startLine": 77,
+        "startChar": 59,
+        "endLine": 77,
+        "endChar": 70
+      },
+      "revId": "8c0eccea880960f0c2e350b6818267f9607bccbb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_ec4a8925",
+        "filename": "vcl/qt5/Qt5Clipboard.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2019-06-08T20:10:45Z",
+      "side": 1,
+      "message": "not sure, but this might need to RunInMainThread() as well",
+      "range": {
+        "startLine": 52,
+        "startChar": 0,
+        "endLine": 64,
+        "endChar": 1
+      },
+      "revId": "8c0eccea880960f0c2e350b6818267f9607bccbb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_0c46d522",
+        "filename": "vcl/qt5/Qt5Transferable.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2019-06-08T20:10:45Z",
+      "side": 1,
+      "message": "just see here you didn\u0027t even change that, but this could be a reference (vector\u0026), so if you want to change it while at it anyway...",
+      "range": {
+        "startLine": 67,
+        "startChar": 4,
+        "endLine": 67,
+        "endChar": 57
+      },
+      "revId": "8c0eccea880960f0c2e350b6818267f9607bccbb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
