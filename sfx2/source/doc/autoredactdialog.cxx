@@ -355,7 +355,7 @@ SfxAutoRedactDialog::SfxAutoRedactDialog(weld::Window* pParent)
     , m_xEditBtn(m_xBuilder->weld_button("edit"))
     , m_xDeleteBtn(m_xBuilder->weld_button("delete"))
 {
-    // Can be used to remeber the last set of redaction targets?
+    // Can be used to remember the last set of redaction targets?
     OUString sExtraData;
     SvtViewOptions aDlgOpt(EViewType::Dialog,
                            OStringToOUString(m_xDialog->get_help_id(), RTL_TEXTENCODING_UTF8));
