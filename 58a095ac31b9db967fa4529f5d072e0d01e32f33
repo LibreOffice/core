@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_e90d9b3e",
+        "filename": "vcl/qt5/Qt5Widget.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 643,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2019-06-08T15:46:28Z",
+      "side": 1,
+      "message": "Very likely sufficient to put the mutex  into lcl_retrieveSurrounding. There are really many requests, which we don\u0027t handle (yet).",
+      "revId": "58a095ac31b9db967fa4529f5d072e0d01e32f33",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
