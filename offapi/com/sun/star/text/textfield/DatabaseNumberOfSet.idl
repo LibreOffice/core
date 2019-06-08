@@ -58,7 +58,7 @@ published service DatabaseNumberOfSet
      */
     [property] string DataTableName;
 
-    /** contains the conditions that determins whether the SetNumber is applied or not.
+    /** contains the conditions that determines whether the SetNumber is applied or not.
      */
     [property] string Condition;
 

@@ -111,7 +111,7 @@ published service CellRange
 
     //-----------------------------------------------------------------------------
 
-    /** determins the location of the background graphic.
+    /** determines the location of the background graphic.
      */
     [property] com::sun::star::style::GraphicLocation BackGraphicLocation;
 
@@ -123,20 +123,20 @@ published service CellRange
 
     //-----------------------------------------------------------------------------
 
-    /** determins if the background color is transparent.
+    /** determines if the background color is transparent.
      */
     [property] boolean BackTransparent;
 
     //-----------------------------------------------------------------------------
 
-    /** determins if the first column of the table should be treated as
+    /** determines if the first column of the table should be treated as
         axis labels when a chart is to be created.
      */
     [property] boolean ChartColumnAsLabel;
 
     //-----------------------------------------------------------------------------
 
-    /** determins if the first row of the table should be treated as
+    /** determines if the first row of the table should be treated as
         axis labels when a chart is to be created.
      */
     [property] boolean ChartRowAsLabel;

@@ -29,7 +29,7 @@
  module com {  module sun {  module star {  module text {
 
 //=============================================================================
-/**  Determins the type and position of an emphasis mark in asian texts.
+/**  Determines the type and position of an emphasis mark in asian texts.
  */
 published constants FontEmphasis
 {

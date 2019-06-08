@@ -69,7 +69,7 @@ published service TextPageStyle
 {
     //-------------------------------------------------------------------------
 
-    /** determins whether the register mode is active on that page.
+    /** determines whether the register mode is active on that page.
       */
     [property] boolean RegisterModeActive;
 

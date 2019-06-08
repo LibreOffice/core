@@ -90,30 +90,30 @@ published service PageProperties
  */
 [property] string BackGraphicFilter;
 //-----------------------------------------------------------------------------
-/** determins the location of the background graphic.
+/** determines the location of the background graphic.
  */
 [property] com::sun::star::style::GraphicLocation BackGraphicLocation;
 //-----------------------------------------------------------------------------
-/** determins if the background color is transparent.
+/** determines if the background color is transparent.
 
     <p>If this property is set to <TRUE/>,
     <member>PageStyle::BackColor</member> will not be used.</p>
  */
 [property] boolean BackTransparent;
 //-----------------------------------------------------------------------------
-/** determins the left margin of the page.
+/** determines the left margin of the page.
  */
 [property] long LeftMargin;
 //-----------------------------------------------------------------------------
-/** determins the right margin of the page.
+/** determines the right margin of the page.
  */
 [property] long RightMargin;
 //-----------------------------------------------------------------------------
-/** determins the top margin of the page.
+/** determines the top margin of the page.
  */
 [property] long TopMargin;
 //-----------------------------------------------------------------------------
-/** determins the bottom margin of the page.
+/** determines the bottom margin of the page.
  */
 [property] long BottomMargin;
 //-----------------------------------------------------------------------------
@@ -133,35 +133,35 @@ published service PageProperties
  */
 [property] com::sun::star::table::BorderLine BottomBorder;
 //-----------------------------------------------------------------------------
-/** determins the left border distance of the page.
+/** determines the left border distance of the page.
  */
 [property] long LeftBorderDistance;
 //-----------------------------------------------------------------------------
-/** determins the right border distance of the page.
+/** determines the right border distance of the page.
  */
 [property] long RightBorderDistance;
 //-----------------------------------------------------------------------------
-/** determins the top border distance of the page.
+/** determines the top border distance of the page.
  */
 [property] long TopBorderDistance;
 //-----------------------------------------------------------------------------
-/** determins the bottom border distance of the page.
+/** determines the bottom border distance of the page.
  */
 [property] long BottomBorderDistance;
 //-----------------------------------------------------------------------------
-/** determins the shadow of the page.
+/** determines the shadow of the page.
  */
 [property] com::sun::star::table::ShadowFormat ShadowFormat;
 //-----------------------------------------------------------------------------
-/** determins if the page format is landscape.
+/** determines if the page format is landscape.
  */
 [property] boolean IsLandscape;
 //-----------------------------------------------------------------------------
-/** determins the default numbering type for this page.
+/** determines the default numbering type for this page.
  */
 [property] short NumberingType;
 //-----------------------------------------------------------------------------
-/** determins the layout of the page.
+/** determines the layout of the page.
  */
 [property] com::sun::star::style::PageStyleLayout PageStyleLayout;
 //-----------------------------------------------------------------------------
@@ -169,7 +169,7 @@ published service PageProperties
  */
 [property] string PrinterPaperTray;
 //-----------------------------------------------------------------------------
-/** determins if the register mode is active on that page.
+/** determines if the register mode is active on that page.
  */
 [optional, property] boolean RegisterModeActive;
 //-----------------------------------------------------------------------------

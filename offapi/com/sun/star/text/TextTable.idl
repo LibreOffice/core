@@ -135,7 +135,7 @@ published service TextTable
 
     [optional] interface com::sun::star::sheet::XCellRangeData;
 
-    /** determins the type of break that is applied at the beginning of the table. @see com::sun::star::style::BreakType
+    /** determines the type of break that is applied at the beginning of the table. @see com::sun::star::style::BreakType
      */
     [property] com::sun::star::style::BreakType BreakType;
     //-------------------------------------------------------------------------
@@ -179,40 +179,40 @@ published service TextTable
     [property] string PageDescName;
     //-------------------------------------------------------------------------
 
-    /** determins the width of the table relative to its environment.
+    /** determines the width of the table relative to its environment.
      */
     [property] short RelativeWidth;
     //-------------------------------------------------------------------------
-    /** determins if the value of the relative width is valid.
+    /** determines if the value of the relative width is valid.
      */
     [property] boolean IsWidthRelative;
     //-------------------------------------------------------------------------
 
-    /** determins if the first row of the table is repeated on every new page.
+    /** determines if the first row of the table is repeated on every new page.
      */
     [property] boolean RepeatHeadline;
         //-------------------------------------------------------------------------
-        /** determins the number of rows of the table repeated on every new page.
+        /** determines the number of rows of the table repeated on every new page.
          */
         [optional, property] long HeaderRowCount;
         //-------------------------------------------------------------------------
 
-    /** determins the type, color and size of the shadow. @see com::sun::star::table::ShadowFormat
+    /** determines the type, color and size of the shadow. @see com::sun::star::table::ShadowFormat
      */
     [property] com::sun::star::table::ShadowFormat ShadowFormat;
     //-------------------------------------------------------------------------
 
-    /** determins the top margin.
+    /** determines the top margin.
      */
     [property] long TopMargin;
     //-------------------------------------------------------------------------
 
-    /** determins the bottom margin.
+    /** determines the bottom margin.
      */
     [property] long BottomMargin;
     //-------------------------------------------------------------------------
 
-    /** determins if the background color is transparent.
+    /** determines if the background color is transparent.
      */
     [property] boolean BackTransparent;
     //-------------------------------------------------------------------------
@@ -226,13 +226,13 @@ published service TextTable
     [property] long Width;
     //-------------------------------------------------------------------------
 
-    /** determins if the first row of the table should be treated as
+    /** determines if the first row of the table should be treated as
         axis labels when a chart is to be created.
      */
     [property] boolean ChartRowAsLabel;
     //-------------------------------------------------------------------------
 
-    /** determins if the first column of the table should be treated as
+    /** determines if the first column of the table should be treated as
         axis labels when a chart is to be created.
      */
     [property] boolean ChartColumnAsLabel;

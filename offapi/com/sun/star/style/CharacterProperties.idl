@@ -177,7 +177,7 @@ published service CharacterProperties
 
     //-------------------------------------------------------------------------
 
-    /** This property determins the type of the strike out of the character.
+    /** This property determines the type of the strike out of the character.
         @see com::sun::star::awt::FontStrikeout
     */
     [optional, property] short CharStrikeout;
@@ -252,7 +252,7 @@ published service CharacterProperties
 
     //-------------------------------------------------------------------------
 
-    /** This optional property determins whether text is formatted in two lines.
+    /** This optional property determines whether text is formatted in two lines.
 
         <p>It is linked to the properties CharCombinePrefix and CharCombineSuffix.</p>
      */
@@ -298,7 +298,7 @@ published service CharacterProperties
 
     //-------------------------------------------------------------------------
 
-    /** This optional property determins the adjustment of the ruby .
+    /** This optional property determines the adjustment of the ruby .
         @see com::sun::star::text::RubyAdjust
      */
     [optional, property] short RubyAdjust;
@@ -312,14 +312,14 @@ published service CharacterProperties
 
     //-------------------------------------------------------------------------
 
-    /** This optional property determins whether the ruby text is printed
+    /** This optional property determines whether the ruby text is printed
         above/left or below/right of the text.
      */
     [optional, property] boolean RubyIsAbove;
 
     //-------------------------------------------------------------------------
 
-    /** This optional property determins the rotation of a character in tenths
+    /** This optional property determines the rotation of a character in tenths
         of a degree.
 
        <p>Depending on the implementation only certain values may be allowed.</p>
@@ -328,14 +328,14 @@ published service CharacterProperties
 
     //-------------------------------------------------------------------------
 
-    /** This optional property determins whether the text formatting tries to
+    /** This optional property determines whether the text formatting tries to
         fit rotated text into the surrounded line height.
      */
     [optional, property] boolean CharRotationIsFitToLine;
 
     //-------------------------------------------------------------------------
 
-    /** This optional property determins the percentage value for scaling the
+    /** This optional property determines the percentage value for scaling the
         width of characters.
 
         <p>The value refers to the original width which is denoted by 100,

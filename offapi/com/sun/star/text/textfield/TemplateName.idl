@@ -38,7 +38,7 @@ module com { module sun { module star { module text { module textfield {
 published service TemplateName
 {
     service com::sun::star::text::TextField;
-    /** determins the format the template file name is displayed as specified in
+    /** determines the format the template file name is displayed as specified in
         <type scope="com::sun::star::text">FilenameDisplayFormat</type>.
       */
     [property]short FileFormat;

@@ -46,7 +46,7 @@ published interface XNumberingTypeInfo : com::sun::star::uno::XInterface
     /** returns the corresponding numbering type to an identifier.
     */
     short   getNumberingType([in]string NumberingIdentifier);
-    /** determins whether an identifier is supported.
+    /** determines whether an identifier is supported.
     */
     boolean hasNumberingType([in]string NumberingIdentifier);
     /** returns the corresponding identifiert to a numbering type.

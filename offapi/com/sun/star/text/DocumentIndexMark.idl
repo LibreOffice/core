@@ -57,7 +57,7 @@ published service DocumentIndexMark
      */
     [property] string SecondaryKey;
     //-------------------------------------------------------------------------
-    /** determins if this entry is a main entry. In a document index this entry will
+    /** determines if this entry is a main entry. In a document index this entry will
         be emphasized by assigning a character style to it.
      */
     [property] boolean IsMainEntry;

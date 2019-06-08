@@ -37,11 +37,11 @@ module com { module sun { module star { module text { module textfield {
 published service Chapter
 {
     service  com::sun::star::text::TextField;
-    /** determins how the chapter should be displayed as described in
+    /** determines how the chapter should be displayed as described in
         <type scope="com::sun::star::text">ChapterFormat</type>.
      */
     [property]short ChapterFormat;
-    /** determins which chapter level should be used. The highest chapter
+    /** determines which chapter level should be used. The highest chapter
      level has the value 0.
      */
     [property]byte Level;

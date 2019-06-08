@@ -37,13 +37,13 @@ module com { module sun { module star { module text { module textfield {
 published service JumpEdit
 {
     service  com::sun::star::text::TextField;
-    /** determins a hint that is displayed at the user interface as tip.
+    /** determines a hint that is displayed at the user interface as tip.
      */
     [property]string Hint;
-    /** determins the text of the place holder.
+    /** determines the text of the place holder.
      */
     [property]string PlaceHolder;
-    /** determins the type of the place holder as described in
+    /** determines the type of the place holder as described in
         <type scope="com::sun::star::text">PlaceholderType</type>.
      */
     [property]short PlaceHolderType;

@@ -63,7 +63,7 @@ struct SwMultiCreator
 
 struct SwBracket
 {
-    xub_StrLen nStart;      // Start of text attribute determins the font
+    xub_StrLen nStart;      // Start of text attribute determines the font
     KSHORT nAscent;         // Ascent of the brackets
     KSHORT nHeight;         // Height of them
     KSHORT nPreWidth;       // Width of the opening bracket

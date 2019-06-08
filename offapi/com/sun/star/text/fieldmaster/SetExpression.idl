@@ -40,17 +40,17 @@ published service SetExpression
     service  com::sun::star::text::TextFieldMaster;
 
     //------------------------------------------------------------------------
-    /** determins the number of the chapter. This values is used if the field master
+    /** determines the number of the chapter. This values is used if the field master
      is set as number sequence.
      */
     [property]  byte ChapterNumberingLevel;
     //------------------------------------------------------------------------
-    /** determins the numbering separator string if the field master
+    /** determines the numbering separator string if the field master
      is set as number sequence.
      */
     [property]  string NumberingSeparator;
     //------------------------------------------------------------------------
-    /** determins the type of the field as <type scope="com::sun::star::text"SetVariableType</type>
+    /** determines the type of the field as <type scope="com::sun::star::text"SetVariableType</type>
      */
     [property]  short SubType;
 };

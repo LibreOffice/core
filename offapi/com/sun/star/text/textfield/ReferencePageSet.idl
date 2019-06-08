@@ -38,10 +38,10 @@ module com { module sun { module star { module text { module textfield {
 published service ReferencePageSet
 {
     service  com::sun::star::text::TextField;
-    /** determins an offset value to change the displayed value of a ReferencePageGet text field.
+    /** determines an offset value to change the displayed value of a ReferencePageGet text field.
      */
     [property]short Offset;
-    /** determins whether the ReferencePageGet text fields are displayed or not.
+    /** determines whether the ReferencePageGet text fields are displayed or not.
      */
     [property]boolean NameOn;
 

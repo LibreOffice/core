@@ -42,7 +42,7 @@ published service FileName
         <p> This property is especially useful for import/export purposes. </p>
      */
     [property]string CurrentPresentation;
-    /** determins the format the file name is displayed as specified in
+    /** determines the format the file name is displayed as specified in
         <type scope="com::sun::star::text">FilenameDisplayFormat</type>.
       */
     [property]short FileFormat;

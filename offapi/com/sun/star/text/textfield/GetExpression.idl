@@ -52,10 +52,10 @@ published service GetExpression
         <type scope="com::sun::star::style">NumberingType</type>
      */
     [property]short NumberingType;
-    /** determins whether the content is displayed or evaluated.
+    /** determines whether the content is displayed or evaluated.
      */
     [property]boolean IsShowFormula;
-    /** determins the type of the variable as described in
+    /** determines the type of the variable as described in
         <type scope="com::sun::star::text">SetVariableType</type>
      */
     [property]short SubType;

@@ -52,7 +52,7 @@ published service DDE
      */
     [property]  string DDECommandType;
     //------------------------------------------------------------------------
-    /** determins whether DDE link is updated automatically.
+    /** determines whether DDE link is updated automatically.
      */
     [property]  boolean IsAutomaticUpdate;
     //------------------------------------------------------------------------

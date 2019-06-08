@@ -154,90 +154,90 @@ published service TextSection
         @see GraphicLocation
     */
     [property] com::sun::star::style::GraphicLocation BackGraphicLocation;
-    /** determins whether footnotes inside the section are displayed at the end of the
+    /** determines whether footnotes inside the section are displayed at the end of the
      section text.
     */
     [property] boolean FootnoteIsCollectAtTextEnd;
     //-------------------------------------------------------------------------
-    /** determins whether the footnotes numbering restarts within the section.
+    /** determines whether the footnotes numbering restarts within the section.
      This is only valid if <code>FootnoteIsRestartNumbering</code> is set.
     */
     [property] boolean FootnoteIsRestartNumbering;
     //-------------------------------------------------------------------------
-    /** determins at which number the footnote numbering inside of the section starts.
+    /** determines at which number the footnote numbering inside of the section starts.
      This is only valid if <code>FootnoteIsRestartNumbering</code> is set.
     */
     [property] short FootnoteRestartNumberingAt;
     //-------------------------------------------------------------------------
-    /** determins whether the footnotes within the section use an own numbering format.
+    /** determines whether the footnotes within the section use an own numbering format.
      This is only valid if <code>FootnoteIsRestartNumbering</code> is set.
     */
     [property] boolean FootnoteIsOwnNumbering;
     //-------------------------------------------------------------------------
-    /** determins the numbering type of the footnote numbering as a value of
+    /** determines the numbering type of the footnote numbering as a value of
      <type scope="com::sun::star::style">NumberingType</type>.
      This is only valid if <code>FootnoteIsOwnNumbering</code> is set.
     */
     [property] short FootnoteNumberingType;
     //-------------------------------------------------------------------------
-    /** determins the prefix that is display before the footnote number.
+    /** determines the prefix that is display before the footnote number.
      This is only valid if <code>FootnoteIsOwnNumbering</code> is set.
     */
     [property] string FootnoteNumberingPrefix;
     //-------------------------------------------------------------------------
-    /** determins the suffix that is display after of the footnote number.
+    /** determines the suffix that is display after of the footnote number.
      This is only valid if <code>FootnoteIsOwnNumbering</code> is set.
     */
     [property] string FootnoteNumberingSuffix;
     //-------------------------------------------------------------------------
-    /** determins whether endnotes inside the section are displayed at the end of the
+    /** determines whether endnotes inside the section are displayed at the end of the
      section text.
     */
     [property] boolean EndnoteIsCollectAtTextEnd;
     //-------------------------------------------------------------------------
-    /** determins whether the endnotes numbering restarts within the section.
+    /** determines whether the endnotes numbering restarts within the section.
      This is only valid if <code>EndnoteIsRestartNumbering</code> is set.
     */
     [property] boolean EndnoteIsRestartNumbering;
     //-------------------------------------------------------------------------
-    /** determins at which number the endnote numbering inside of the section starts.
+    /** determines at which number the endnote numbering inside of the section starts.
      This is only valid if <code>EndnoteIsRestartNumbering</code> is set.
     */
     [property] short EndnoteRestartNumberingAt;
     //-------------------------------------------------------------------------
-    /** determins whether the endnotes within the section use an own numbering format.
+    /** determines whether the endnotes within the section use an own numbering format.
      This is only valid if <code>EndnoteIsRestartNumbering</code> is set.
     */
     [property] boolean EndnoteIsOwnNumbering;
     //-------------------------------------------------------------------------
-    /** determins the numbering type of the endnote numbering as a value of
+    /** determines the numbering type of the endnote numbering as a value of
      <type scope="com::sun::star::style">NumberingType</type>.
      This is only valid if <code>EndoteIsOwnNumbering</code> is set.
     */
     [property] short EndnoteNumberingType;
     //-------------------------------------------------------------------------
-    /** determins the prefix that is display before the endnote number.
+    /** determines the prefix that is display before the endnote number.
      This is only valid if <code>EndnoteIsOwnNumbering</code> is set.
     */
     [property] string EndnoteNumberingPrefix;
     //-------------------------------------------------------------------------
-    /** determins the suffix that is display after the endnote number.
+    /** determines the suffix that is display after the endnote number.
      This is only valid if <code>EndnoteIsOwnNumbering</code> is set.
     */
     [property] string EndnoteNumberingSuffix;
     //-------------------------------------------------------------------------
-    /** determins if a DDE link is updated automatically.
+    /** determines if a DDE link is updated automatically.
     */
     [property] boolean IsAutomaticUpdate;
     //-------------------------------------------------------------------------
     /** allows columns to be set into the text section
     */
     [property] com::sun::star::text::XTextColumns TextColumns;
-    /** determins the left margin of the section
+    /** determines the left margin of the section
      */
     [optional, property] long SectionLeftMargin;
     //-------------------------------------------------------------------------
-    /** determins the left margin of the section
+    /** determines the left margin of the section
      */
     [optional, property] long SectionRightMargin;
     //-------------------------------------------------------------------------

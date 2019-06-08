@@ -29,7 +29,7 @@
  module com {  module sun {  module star {  module text {
 
 //=============================================================================
-/**  Determins the relief type of a font.
+/**  Determines the relief type of a font.
  */
 published constants FontRelief
 {

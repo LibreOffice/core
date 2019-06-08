@@ -110,7 +110,7 @@ published interface XReportControlFormat
         get raises ( com::sun::star::beans::UnknownPropertyException );
     };
 
-    /** determins whether text is formatted in two lines.
+    /** determines whether text is formatted in two lines.
      <p>It is linked to the properties CharCombinePrefix and CharCombineSuffix.</p>
      */
     [attribute,bound] boolean CharCombineIsOn
@@ -351,7 +351,7 @@ published interface XReportControlFormat
     };
 
     //-------------------------------------------------------------------------
-    /** determins the type of the strike out of the character.
+    /** determines the type of the strike out of the character.
         @see com::sun::star::awt::FontStrikeout
     */
     [attribute,bound] short CharStrikeout
@@ -369,7 +369,7 @@ published interface XReportControlFormat
         get raises ( com::sun::star::beans::UnknownPropertyException );
     };
 
-    /** determins the rotation of a character in degree.
+    /** determines the rotation of a character in degree.
         <p>Depending on the implementation only certain values may be allowed.
         </p>
      */
@@ -380,7 +380,7 @@ published interface XReportControlFormat
     };
     //-------------------------------------------------------------------------
 
-    /** determins the percentage value for scaling the width of characters.
+    /** determines the percentage value for scaling the width of characters.
 
         <p>The value refers to the original width which is denoted by 100,
         and it has to be greater than 0.</p>

@@ -47,7 +47,7 @@ published service TableFormula
      */
     [property] string CurrentPresentation;
 
-    /** determins whether the formula displayed as text or evaluated.
+    /** determines whether the formula displayed as text or evaluated.
     */
     [property] boolean IsShowFormula;
     /** this is the number format for this field.

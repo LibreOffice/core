@@ -48,27 +48,27 @@ published service UserDefinedIndex
      */
     [optional, property] com::sun::star::container::XIndexReplace LevelParagraphStyles;
 
-    /** determins if the document index marks are included in this index.
+    /** determines if the document index marks are included in this index.
      */
     [optional, property] boolean CreateFromMarks;
 
-    /** determins if the outline level of the location of the indexed object is
+    /** determines if the outline level of the location of the indexed object is
      used as index level of the index entry.*/
     [optional, property] boolean UseLevelFromSource;
 
-    /** determins if tables are included in the index.
+    /** determines if tables are included in the index.
      */
     [optional, property] boolean CreateFromTables;
 
-    /** determins if text frames are included in the index.
+    /** determines if text frames are included in the index.
      */
     [optional, property] boolean CreateFromTextFrames;
 
-    /** determins if graphic objects are included in the index.
+    /** determines if graphic objects are included in the index.
      */
     [optional, property] boolean CreateFromGraphicObjects;
 
-    /** determins if embedded objects are included in the index.
+    /** determines if embedded objects are included in the index.
      */
     [optional, property] boolean CreateFromEmbeddedObjects;
 

@@ -42,35 +42,35 @@ published service DocumentIndex
 {
     service  com::sun::star::text::BaseIndex;
 
-    /** determins if alphabetical separators are genererated.
+    /** determines if alphabetical separators are genererated.
      */
     [optional, property] boolean UseAlphabeticalSeparators;
 
-    /** determins if a index entry is generated for each primary/secondary key.
+    /** determines if a index entry is generated for each primary/secondary key.
      */
     [optional, property] boolean UseKeyAsEntry;
 
-    /** determins if same entries on different pages are combined into one index entry.
+    /** determines if same entries on different pages are combined into one index entry.
      */
     [optional, property] boolean UseCombinedEntries;
 
-    /** determins if the similarity of index entries is checked case sensitively.
+    /** determines if the similarity of index entries is checked case sensitively.
      */
     [optional, property] boolean IsCaseSensitive;
 
-    /** determins if following page numbers are displayed using a 'pp.'.
+    /** determines if following page numbers are displayed using a 'pp.'.
      */
     [optional, property] boolean UsePP;
 
-    /** determins if if following page numbers are displayed using a dash.
+    /** determines if if following page numbers are displayed using a dash.
      */
     [optional, property] boolean UseDash;
 
-    /** determins if all entries start with a capital letter.
+    /** determines if all entries start with a capital letter.
      */
     [optional, property] boolean UseUpperCase;
 
-    /** determins the name of the character style that is applied to the number
+    /** determines the name of the character style that is applied to the number
      of a page where main index entry is located.
      */
     [optional, property] string MainEntryCharacterStyleName;

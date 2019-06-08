@@ -40,11 +40,11 @@ published service User
 {
     service  com::sun::star::text::DependentTextField;
 
-    /** determins if the content is shown as text rather than as value.
+    /** determines if the content is shown as text rather than as value.
      */
     [optional, property] boolean IsShowFormula;
 
-    /** determins if the field is visible.
+    /** determines if the field is visible.
      */
     [optional, property] boolean IsVisible;
 

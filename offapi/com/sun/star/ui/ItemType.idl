@@ -25,7 +25,7 @@
 
 module com {  module sun {  module star {  module ui {
 
-/** Determins the type of an item.
+/** Determines the type of an item.
 
     @since OpenOffice 2.0
  */

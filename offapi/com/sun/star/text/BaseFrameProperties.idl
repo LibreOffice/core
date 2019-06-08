@@ -203,11 +203,11 @@ published service BaseFrameProperties
      */
     [property] short RelativeWidth;
     //-------------------------------------------------------------------------
-    /** determins whether the width follows the height.
+    /** determines whether the width follows the height.
      */
     [property] boolean IsSyncWidthToHeight;
     //-------------------------------------------------------------------------
-    /** determins whether the height follows the width.
+    /** determines whether the height follows the width.
      */
     [property] boolean IsSyncHeightToWidth;
     //-------------------------------------------------------------------------

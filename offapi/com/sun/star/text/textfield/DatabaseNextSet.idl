@@ -57,7 +57,7 @@ published service DatabaseNextSet
      */
     [property] string DataTableName;
 
-    /** determins whether the database selection is set to the next position or not.
+    /** determines whether the database selection is set to the next position or not.
      */
     [property] string Condition;
 

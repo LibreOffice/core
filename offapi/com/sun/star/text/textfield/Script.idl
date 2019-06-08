@@ -44,7 +44,7 @@ published service Script
     /** contains the name of the script type (i.e. JavaScript)
      */
     [property]string ScriptType;
-    /** determins whether the property Content contains a URL or a script.
+    /** determines whether the property Content contains a URL or a script.
      */
     [property]boolean URLContent;
 

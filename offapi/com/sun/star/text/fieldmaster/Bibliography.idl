@@ -41,37 +41,37 @@ published service Bibliography
     service  com::sun::star::text::TextFieldMaster;
 
     //------------------------------------------------------------------------
-    /** determins whether the bibiliography text fields are numbered. If <FALSE/> the
+    /** determines whether the bibiliography text fields are numbered. If <FALSE/> the
      short name of the bibliography entry is displayed instead.
      */
     [property] boolean IsNumberEntries;
     //------------------------------------------------------------------------
-    /** determins whether the bibliography entries in a bibliography index are sorted
-     by the document position. If <FALSE/> the SortKey property determins the
+    /** determines whether the bibliography entries in a bibliography index are sorted
+     by the document position. If <FALSE/> the SortKey property determines the
      sorting of the entries.
      */
     [property] boolean IsSortByPosition;
     //------------------------------------------------------------------------
-    /** determins the opening bracket used to display the bibliography text fields.
+    /** determines the opening bracket used to display the bibliography text fields.
      */
     [property] string BracketBefore;
     //------------------------------------------------------------------------
-    /** determins the closing bracket used to display the bibliography text fields.
+    /** determines the closing bracket used to display the bibliography text fields.
      */
     [property] string BracketAfter;
     //------------------------------------------------------------------------
-    /** determins the sorting of the bibliography entries in a bibliography index.
+    /** determines the sorting of the bibliography entries in a bibliography index.
         This property is used if the property IsSortByPosition is not set.
         Each contained element of the sequence is a sequence of the following
         two properties:
         <UL>
             <LI><P>[property] short SortKey;</P>
             <UL>
-                <LI><P>Determins the bibliography field that is used to sort by.</P>
+                <LI><P>Determines the bibliography field that is used to sort by.</P>
             </UL>
             <LI><P>[property] boolean IsSortAscending;</P>
             <UL>
-                <LI><P>Determins wheter the sorting is ascending or descending.
+                <LI><P>Determines wheter the sorting is ascending or descending.
                  It uses the type <type scope="com::sun::star::text">BibliographyDataField</type></P>
             </UL>
         </UL>

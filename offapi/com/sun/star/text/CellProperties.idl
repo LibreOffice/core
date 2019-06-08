@@ -94,7 +94,7 @@ published service CellProperties
     [property] string BackGraphicFilter;
 
     //-------------------------------------------------------------------------
-    /** determins the position of the background graphic.
+    /** determines the position of the background graphic.
      */
     [property] com::sun::star::style::GraphicLocation BackGraphicLocation;
 
@@ -104,7 +104,7 @@ published service CellProperties
     [property] long NumberFormat;
 
     //-------------------------------------------------------------------------
-    /** determins whether the background is transparent.
+    /** determines whether the background is transparent.
      */
     [property] boolean BackTransparent;
 
@@ -154,7 +154,7 @@ published service CellProperties
     [readonly, property]com::sun::star::text::XTextSection TextSection;
 
     //-------------------------------------------------------------------------
-    /** determins whether the cell is write protected or not.
+    /** determines whether the cell is write protected or not.
      */
     [property] boolean IsProtected;
 

@@ -40,12 +40,12 @@ published service ContentIndex
     // DocMerge: empty anyway
     service  com::sun::star::text::BaseIndex;
 
-    /** determins the depth of outline levels that are included into the content index.*/
+    /** determines the depth of outline levels that are included into the content index.*/
 
     /// @missing
     [optional, property] short Level;
 
-    /** determins if the document index is created from outlines.
+    /** determines if the document index is created from outlines.
     */
     [optional, property] boolean CreateFromOutline;
 

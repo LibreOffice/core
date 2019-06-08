@@ -55,7 +55,7 @@ published service SetExpression
         <type scope="com::sun::star::style">NumberingType</type>
      */
     [property]short NumberingType;
-    /** determins whether the content is displayed or evaluated.
+    /** determines whether the content is displayed or evaluated.
      */
     [property]boolean IsShowFormula;
     /** contains an informational text that is displayed at the user
@@ -71,7 +71,7 @@ published service SetExpression
     /** contains the sequence value when this field is used as sequence field.
      */
     [property]short SequenceValue;
-    /** determins the type of the variable as described in
+    /** determines the type of the variable as described in
         <type scope="com::sun::star::text">SetVariableType</type>
      */
     [property]short SubType;

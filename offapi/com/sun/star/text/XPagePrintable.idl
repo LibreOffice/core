@@ -60,7 +60,7 @@ published interface XPagePrintable: com::sun::star::uno::XInterface
                 <LI><P>long BottomMargin - bottom margin of the page</P>
                 <LI><P>long HoriMargin  - margin between rows of pages</P>
                 <LI><P>long VertMargin  - margin between columns of pages</P>
-                <LI><P>boolean IsLandscape - determins if the output page is printed in landscape format</P>
+                <LI><P>boolean IsLandscape - determines if the output page is printed in landscape format</P>
             </UL>
              </p>
      */

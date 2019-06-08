@@ -40,7 +40,7 @@ published service User
     service  com::sun::star::text::TextFieldMaster;
 
     //------------------------------------------------------------------------
-    /** determins whether the field contains an expression.
+    /** determines whether the field contains an expression.
      */
     [property]  boolean IsExpression;
     //------------------------------------------------------------------------

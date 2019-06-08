@@ -581,7 +581,7 @@ struct YieldEntry
     YieldEntry* next;       // pointer to next entry
     int         fd;         // file descriptor for reading
     void*           data;       // data for predicate and callback
-    YieldFunc       pending;    // predicate (determins pending events)
+    YieldFunc       pending;    // predicate (determines pending events)
     YieldFunc       queued;     // read and queue up events
     YieldFunc       handle;     // handle pending events
 

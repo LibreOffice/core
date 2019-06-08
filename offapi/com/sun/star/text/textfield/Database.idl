@@ -47,7 +47,7 @@ published service Database
         <p> This property is escpecially useful for import/export purposes. </p>
      */
     [property]string CurrentPresentation;
-    /** determins whether the number format is number display format is read
+    /** determines whether the number format is number display format is read
      from the database settings.
      */
     [property]boolean DataBaseFormat;

@@ -361,7 +361,7 @@ published service ParagraphProperties
         [property, optional] long BottomBorderDistance;
 
     //-------------------------------------------------------------------------
-        /** determins the type of break that is applied at the beginning of the table.
+        /** determines the type of break that is applied at the beginning of the table.
             @see com::sun::star::style::BreakType
          */
         [optional, property] com::sun::star::style::BreakType BreakType;

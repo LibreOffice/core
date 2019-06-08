@@ -39,15 +39,15 @@ published service PageNumber
 {
     service  com::sun::star::text::TextField;
 
-    /** determins the type of the numbering.
+    /** determines the type of the numbering.
      @see <const scope="com::sun::star::style">NumberingType</const>
      */
     [property] short NumberingType;
 
-    /** determins an offset value to show a different page number.
+    /** determines an offset value to show a different page number.
      */
     [property] short Offset;
-    /** determins which page the field refers to.
+    /** determines which page the field refers to.
         @see <const scope="com::sun::star::text">PageNumberType</const>
      */
     [property] PageNumberType SubType;
