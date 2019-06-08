@@ -446,7 +446,7 @@ void SAL_CALL CachedContentResultSetStub
 
         if(!bFirstPropagationDone)
         {
-            //check wether the properties 'FetchSize' and 'FetchDirection' do exist
+            //check whether the properties 'FetchSize' and 'FetchDirection' do exist
 
             Reference< XPropertySetInfo > xPropertySetInfo = getPropertySetInfo();
             sal_Bool bHasSize = xPropertySetInfo->hasPropertyByName( m_aPropertyNameForFetchSize );

@@ -77,13 +77,13 @@
     <!-- set "modern" java compiler -->
     <property name="build.compiler" value="modern"/>
 
-    <!-- set wether we want to compile with debug information -->
+    <!-- set whether we want to compile with debug information -->
     <property name="debug" value="on"/>
 
-    <!-- set wether we want to compile with optimisation -->
+    <!-- set whether we want to compile with optimisation -->
     <property name="optimize" value="off"/>
 
-    <!-- set wether we want to compile with or without deprecation -->
+    <!-- set whether we want to compile with or without deprecation -->
     <property name="deprecation" value="on"/>
 
     <target name="info">

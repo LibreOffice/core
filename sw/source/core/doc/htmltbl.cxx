@@ -1273,7 +1273,7 @@ void SwHTMLTableLayout::AutoLayoutPass2( sal_uInt16 nAbsAvail, sal_uInt16 nRelAv
         nAbsTabWidth = IsTopTable() ? MAX_TABWIDTH : nAbsAvail;
         nRelTabWidth = (nRelAvail ? nRelAvail : nAbsTabWidth );
 
-        // First of all, we check wether we can fit the layout constrains,
+        // First of all, we check whether we can fit the layout constrains,
         // that are: Every cell's width excluding the borders must be at least
         // MINLAY:
 

@@ -977,7 +977,7 @@ sal_Bool PspSalPrinter::StartJob(
         m_aJobData.setCollate( bCollate );
     }
 
-    // check wether this printer is configured as fax
+    // check whether this printer is configured as fax
     int nMode = 0;
     const PrinterInfo& rInfo( PrinterInfoManager::get().getPrinterInfo( m_aJobData.m_aPrinterName ) );
     sal_Int32 nIndex = 0;

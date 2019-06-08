@@ -133,7 +133,7 @@ private:
     /** @descr  This method bundles some settings to the chart model and executes them with
             a locked controller.  This includes setting the chart type.
         @param  aServiceName The name of the service the diagram is initialized with.
-        @param  bSetWitchData   Indicates wether the data set takes it's data series from
+        @param  bSetWitchData   Indicates whether the data set takes it's data series from
             rows or from columns.
     */
     void    InitChart   (const ::rtl::OUString & rChartTypeServiceName,

@@ -59,7 +59,7 @@ public class GlobalEventBroadcaster {
 
     @Before public void initialize() {
         m_xMSF = getMSF();
-        System.out.println("check wether there is a valid MultiServiceFactory");
+        System.out.println("check whether there is a valid MultiServiceFactory");
 
         assertNotNull("## Couldn't get MultiServiceFactory make sure your Office is started", m_xMSF);
 
@@ -79,7 +79,7 @@ public class GlobalEventBroadcaster {
 
         System.out.println("... done");
 
-        System.out.println("check wether the created instance is valid");
+        System.out.println("check whether the created instance is valid");
 
         assertNotNull("couldn't create service", GlobalEventBroadcaster);
 

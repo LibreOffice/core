@@ -262,7 +262,7 @@ public class SortingComponent
                     SortFieldNames.add(new String[]{CurFieldName,iCurState == 1 ? PropertyNames.ASC :"DESC" });
                 }
             }
-            // When searching for a duplicate entry we can neglect wether the entries are to be sorted ascending or descending
+            // When searching for a duplicate entry we can neglect whether the entries are to be sorted ascending or descending
             // TODO for the future we should deliver a messagebox when two different sorting modes have been applied to one field
             int iduplicate = JavaTools.getDuplicateFieldIndex(SortDescriptions.toArray(new String[SortDescriptions.size()]));
             if (iduplicate != -1)

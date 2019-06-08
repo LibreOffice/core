@@ -56,7 +56,7 @@
         <pathelement location="${env.XERCES_JAR}"/>
     </path>
 
-    <!-- set wether we want to compile with or without deprecation -->
+    <!-- set whether we want to compile with or without deprecation -->
     <property name="deprecation" value="on"/>
 
     <!-- ================================================================= -->

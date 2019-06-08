@@ -746,7 +746,7 @@ void SfxInPlaceClient::SetObject( const uno::Reference < embed::XEmbeddedObject 
 
     if ( rObject.is() )
     {
-        // as soon as an object was connected to a client it has to be checked wether the object wants
+        // as soon as an object was connected to a client it has to be checked whether the object wants
         // to be activated
         rObject->addStateChangeListener( uno::Reference < embed::XStateChangeListener >( m_pImp->m_xClient, uno::UNO_QUERY ) );
         rObject->addEventListener( uno::Reference < document::XEventListener >( m_pImp->m_xClient, uno::UNO_QUERY ) );

@@ -402,7 +402,7 @@ protected: //methods
         , const tPropertyNameMap& rMap
         , tPropertyNameValueMap* pOverwriteMap=0 );
 
-    virtual PlottingPositionHelper& getPlottingPositionHelper( sal_Int32 nAxisIndex ) const;//nAxisIndex indicates wether the position belongs to the main axis ( nAxisIndex==0 ) or secondary axis ( nAxisIndex==1 )
+    virtual PlottingPositionHelper& getPlottingPositionHelper( sal_Int32 nAxisIndex ) const;//nAxisIndex indicates whether the position belongs to the main axis ( nAxisIndex==0 ) or secondary axis ( nAxisIndex==1 )
 
     VDataSeries* getFirstSeries() const;
 

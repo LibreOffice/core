@@ -292,7 +292,7 @@ public:
         @param pReplacement
             The replacement for the current child.
         @return
-            The returned value indicates wether the replacement has been
+            The returned value indicates whether the replacement has been
             finished successfully.
     */
     virtual sal_Bool ReplaceChild (

@@ -127,7 +127,7 @@ namespace dxcanvas
         // internal implementation of the iColorBuffer interface
         canvas::IColorBufferSharedPtr mpColorBuffer;
 
-        // indicates wether the associated surface needs
+        // indicates whether the associated surface needs
         // to refresh its contents or not. in other words,
         // this flag is set iff both representations are
         // out of sync.

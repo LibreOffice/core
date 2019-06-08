@@ -60,7 +60,7 @@ public class DocumentInfo
     {
         m_xMSF = getMSF();
 
-        System.out.println("check wether there is a valid MultiServiceFactory");
+        System.out.println("check whether there is a valid MultiServiceFactory");
 
         assertNotNull("## Couldn't get MultiServiceFactory make sure your Office is started", m_xMSF);
 

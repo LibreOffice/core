@@ -165,7 +165,7 @@ namespace dbaui
                         xController.set( xFrame->getController(), UNO_SET_THROW );
                     }
 
-                    // check wether there is a model (not required)
+                    // check whether there is a model (not required)
                     xModel.set( xController->getModel() );
                 }
 

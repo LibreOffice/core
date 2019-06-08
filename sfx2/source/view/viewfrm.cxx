@@ -2397,7 +2397,7 @@ sal_Bool SfxViewFrame::SwitchToViewShell_Impl
         OSL_PRECOND( pOldSh, "SfxViewFrame::SwitchToViewShell_Impl: that's called *switch* (not for *initial-load*) for a reason" );
         if ( pOldSh )
         {
-            // ask wether it can be closed
+            // ask whether it can be closed
             if ( !pOldSh->PrepareClose( sal_True ) )
                 return sal_False;
 

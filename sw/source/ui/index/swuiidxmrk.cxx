@@ -989,7 +989,7 @@ void SwIndexMarkDlg::UpdateDialog()
 }
 
 /*--------------------------------------------------------------------
-     Remind wether the edit boxes for Phonetic reading are changed manually
+     Remind whether the edit boxes for Phonetic reading are changed manually
  --------------------------------------------------------------------*/
 
 IMPL_LINK( SwIndexMarkDlg, PhoneticEDModifyHdl, Edit *, pEdit )

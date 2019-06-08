@@ -1785,7 +1785,7 @@ void SfxDispatcher::_Update_Impl( sal_Bool bUIActive, sal_Bool bIsMDIApp, sal_Bo
             if ( bReadOnlyShell && !( nPos & SFX_VISIBILITY_READONLYDOC ) )
                 continue;
 
-            // check wether toolbar needs activation of a special feature
+            // check whether toolbar needs activation of a special feature
             sal_uInt32 nFeature = pIFace->GetObjectBarFeature(nNo);
             if ( nFeature && !pShell->HasUIFeature( nFeature ) )
                 continue;
@@ -1842,7 +1842,7 @@ void SfxDispatcher::_Update_Impl( sal_Bool bUIActive, sal_Bool bIsMDIApp, sal_Bo
             if ( nFeature && !pShell->HasUIFeature( nFeature ) )
                 continue;
 
-            // slot decides wether a ChildWindow is shown when document is OLE server or OLE client
+            // slot decides whether a ChildWindow is shown when document is OLE server or OLE client
             sal_uInt16 nMode = SFX_VISIBILITY_STANDARD;
             if( pSlot )
             {

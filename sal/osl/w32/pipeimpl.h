@@ -50,7 +50,7 @@
 
 // Because the value of an invalid HANDLE returned by API functions differs
 // between different functions and differs on different Windows platforms,
-// this function checks wether the handle has a meaningful value.
+// this function checks whether the handle has a meaningful value.
 #ifndef __cplusplus
 
 #define IsValidHandle( handle ) ((DWORD)(handle) + 1 > 1)

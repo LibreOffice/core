@@ -114,7 +114,7 @@ published interface XSection
     */
     [attribute,bound] string ConditionalPrintExpression;
 
-    /** Specifies wether the section is printed on a separate page.
+    /** Specifies whether the section is printed on a separate page.
         <p>Not valid for page header or page footer.</p>
         @see ForceNewPage
     */
@@ -124,7 +124,7 @@ published interface XSection
         get raises ( com::sun::star::beans::UnknownPropertyException );
     };
 
-    /** Specifies wether the section is printed in a new row or column within a multi column report.
+    /** Specifies whether the section is printed in a new row or column within a multi column report.
         <p>Not valid for page header or page footer.</p>
         @see ForceNewPage
     */

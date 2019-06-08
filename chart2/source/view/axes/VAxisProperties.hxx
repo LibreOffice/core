@@ -81,7 +81,7 @@ struct AxisLabelProperties
     double               fRotationAngleDegree;
 
     sal_Int32   nRhythm; //show only each nth label with n==nRhythm
-    bool        bRhythmIsFix; //states wether the given rhythm is fix or may be changed
+    bool        bRhythmIsFix; //states whether the given rhythm is fix or may be changed
 
     //methods:
     void init( const ::com::sun::star::uno::Reference<

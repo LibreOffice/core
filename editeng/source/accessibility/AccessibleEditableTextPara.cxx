@@ -758,7 +758,7 @@ namespace accessibility
             !pStateSet->contains(nStateId) )
         {
             pStateSet->AddState( nStateId );
-        // MT: Removed method IsShapeParaFocusable which was introduced with IA2 - basically it was only about figuring out wether or not the window has the focus, should be solved differently
+        // MT: Removed method IsShapeParaFocusable which was introduced with IA2 - basically it was only about figuring out whether or not the window has the focus, should be solved differently
         // if(IsShapeParaFocusable())
             GotPropertyEvent( uno::makeAny( nStateId ), AccessibleEventId::STATE_CHANGED );
         }

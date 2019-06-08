@@ -573,7 +573,7 @@ SfxFrame* SdModule::ExecuteNewDocument( SfxRequest& rReq )
         {
             //we start without wizard
 
-            //check wether we should load a template document
+            //check whether we should load a template document
             const ::rtl::OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.presentation.PresentationDocument" ) );
             String aStandardTemplate( SfxObjectFactory::GetStandardTemplate( aServiceName ) );
 

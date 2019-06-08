@@ -362,7 +362,7 @@ void Window::ImplInitAppFontData( Window* pWindow )
     // platforms
     if( pSVData->maNWFData.mbNoFocusRects )
     {
-        // try to find out wether there is a large correction
+        // try to find out whether there is a large correction
         // of control sizes, if yes, make app font scalings larger
         // so dialog positioning is not completely off
         ImplControlValue aControlValue;

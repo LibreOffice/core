@@ -590,7 +590,7 @@ void BarChart::createShapes()
                             bDrawConnectionLines = false;
                         if( bDrawConnectionLines && pSeriesList->size()==1 )
                         {
-                            //detect wether we have a stacked chart or not:
+                            //detect whether we have a stacked chart or not:
                             StackingDirection eDirection = pSeries->getStackingDirection();
                             if( eDirection  != StackingDirection_Y_STACKING )
                                 bDrawConnectionLines = false;

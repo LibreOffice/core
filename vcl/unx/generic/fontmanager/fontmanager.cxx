@@ -835,7 +835,7 @@ bool PrintFontManager::PrintFont::readAfmMetrics( const OString& rFileName, Mult
     else if( m_aEncoding == RTL_TEXTENCODING_DONTKNOW )
         m_aEncoding = RTL_TEXTENCODING_ADOBE_STANDARD;
 
-    // try to parse the font name and decide wether it might be a
+    // try to parse the font name and decide whether it might be a
     // japanese font. Who invented this PITA ?
     OUString aPSNameLastToken( aPSName.copy( aPSName.lastIndexOf( '-' )+1 ) );
     if( ! aPSNameLastToken.compareToAscii( "H" )    ||

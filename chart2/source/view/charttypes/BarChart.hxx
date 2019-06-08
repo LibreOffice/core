@@ -75,7 +75,7 @@ private: //methods
                         , double fScaledLowerBarDepth, double fScaledUpperBarDepth, double fBaseValue
                         , BarPositionHelper* pPosHelper ) const;
 
-    virtual PlottingPositionHelper& getPlottingPositionHelper( sal_Int32 nAxisIndex ) const;//nAxisIndex indicates wether the position belongs to the main axis ( nAxisIndex==0 ) or secondary axis ( nAxisIndex==1 )
+    virtual PlottingPositionHelper& getPlottingPositionHelper( sal_Int32 nAxisIndex ) const;//nAxisIndex indicates whether the position belongs to the main axis ( nAxisIndex==0 ) or secondary axis ( nAxisIndex==1 )
 
     void adaptOverlapAndGapwidthForGroupBarsPerAxis();
 

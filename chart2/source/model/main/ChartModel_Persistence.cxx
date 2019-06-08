@@ -257,7 +257,7 @@ void SAL_CALL ChartModel::store()
 
     if( aLocation.isEmpty() )
         throw io::IOException( C2U( "no location specified" ), static_cast< ::cppu::OWeakObject* >(this));
-    //@todo check wether aLocation is something like private:factory...
+    //@todo check whether aLocation is something like private:factory...
     if( m_bReadOnly )
         throw io::IOException( C2U( "document is read only" ), static_cast< ::cppu::OWeakObject* >(this));
 

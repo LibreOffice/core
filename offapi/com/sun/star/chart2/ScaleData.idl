@@ -93,7 +93,7 @@ struct ScaleData
     */
     boolean AutoDateAxis;
 
-    /** describes wether data points on category or date axis are placed between tickmarks or not
+    /** describes whether data points on category or date axis are placed between tickmarks or not
     if true the maximum on the scale will be expanded for one interval
     */
     boolean ShiftedCategoryPosition;

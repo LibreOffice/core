@@ -3013,7 +3013,7 @@ int SelectionManager::getXdndVersion( XLIB_Window aWindow, XLIB_Window& rProxy )
                 pBytes = NULL;
                 if( rProxy != None )
                 {
-                    // now check proxy wether it points to itself
+                    // now check proxy whether it points to itself
                     XGetWindowProperty( m_pDisplay, rProxy, m_nXdndProxy, 0, 1, False, XA_WINDOW,
                                         &nType, &nFormat, &nItems, &nBytes, &pBytes );
                     if( pBytes )

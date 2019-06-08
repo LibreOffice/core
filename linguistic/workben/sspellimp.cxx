@@ -134,7 +134,7 @@ sal_Bool SAL_CALL SpellChecker::hasLocale(const Locale& rLocale)
 
 INT16 SpellChecker::GetSpellFailure( const OUString &rWord, const Locale &rLocale )
 {
-    // Checks wether a word is OK in a given language (Locale) or not, and
+    // Checks whether a word is OK in a given language (Locale) or not, and
     // provides a failure type for the incorrect ones.
     // - words with "liss" (case sensitiv) as substring will be negative.
     // - words with 'x' or 'X' will have incorrect spelling.

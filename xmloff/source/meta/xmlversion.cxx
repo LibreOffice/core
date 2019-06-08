@@ -367,7 +367,7 @@ void SAL_CALL XMLVersionListPersistence::store( const uno::Reference< embed::XSt
                 OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Writer"))));
         DBG_ASSERT( xWriter.is(), "com.sun.star.xml.sax.Writer service missing" );
 
-        // check wether there's already a sub storage with the version info
+        // check whether there's already a sub storage with the version info
         // and delete it
         OUString sVerName( RTL_CONSTASCII_USTRINGPARAM( XMLN_VERSIONSLIST ) );
 

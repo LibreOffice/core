@@ -49,7 +49,7 @@ namespace canvas
          */
         virtual bool selectTexture() = 0;
 
-        /** Tells wether the surface is valid or not
+        /** Tells whether the surface is valid or not
         */
         virtual bool isValid() = 0;
 

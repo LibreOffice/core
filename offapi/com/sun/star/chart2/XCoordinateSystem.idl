@@ -59,8 +59,8 @@ interface XCoordinateSystem : ::com::sun::star::uno::XInterface
     */
     string getViewServiceName();
 
-    /** The dimension says wether it is a x, y or z axis.
-        The index says wether it is a primary or a secondary axis.
+    /** The dimension says whether it is a x, y or z axis.
+        The index says whether it is a primary or a secondary axis.
         Use nIndex == 0 for a primary axis.
      */
     void setAxisByDimension( [in] long nDimension,
@@ -68,8 +68,8 @@ interface XCoordinateSystem : ::com::sun::star::uno::XInterface
                               [in] long nIndex )
         raises( com::sun::star::lang::IndexOutOfBoundsException );
 
-    /** The dimension says wether it is a x, y or z axis.
-        The index indicates wether it is a primary or a secondary axis or maybe more in future.
+    /** The dimension says whether it is a x, y or z axis.
+        The index indicates whether it is a primary or a secondary axis or maybe more in future.
         Use nIndex == 0 for a primary axis.
         An empty Reference will be returned if the given nDimension and nIndex are in the valid range but no axis is set for those values.
         An IndexOutOfBoundsException will be thrown if nDimension is lower than 0 or greater than the value returned by getDimension()

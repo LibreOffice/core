@@ -246,7 +246,7 @@ const short HITPIX=2; //hit-tolerance in pixel
         Size aLogicSize = m_pChartWindow->PixelToLogic( Size( Width, Height ), MapMode( MAP_100TH_MM )  );
 
         bool bIsEmbedded = true;
-        //todo: for standalone chart: detect wether we are standalone
+        //todo: for standalone chart: detect whether we are standalone
         if( bIsEmbedded )
         {
             //change map mode to fit new size

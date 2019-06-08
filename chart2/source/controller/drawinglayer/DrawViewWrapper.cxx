@@ -281,7 +281,7 @@ void DrawViewWrapper::MarkObject( SdrObject* pObj )
     if( m_pMarkHandleProvider )
         bFrameDragSingles = m_pMarkHandleProvider->getFrameDragSingles();
 
-    this->SetFrameDragSingles(bFrameDragSingles);//decide wether each single object should get handles
+    this->SetFrameDragSingles(bFrameDragSingles);//decide whether each single object should get handles
     this->SdrView::MarkObj( pObj, this->GetPageView() );
     this->showMarkHandles();
 }

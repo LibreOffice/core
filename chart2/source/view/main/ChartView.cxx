@@ -455,7 +455,7 @@ VCoordinateSystem* lcl_getCooSysForPlotter( const std::vector< VCoordinateSystem
     return 0;
 }
 
-typedef std::pair< sal_Int32, sal_Int32 > tFullAxisIndex; //first index is the dimension, second index is the axis index that indicates wether this is a main or secondary axis
+typedef std::pair< sal_Int32, sal_Int32 > tFullAxisIndex; //first index is the dimension, second index is the axis index that indicates whether this is a main or secondary axis
 typedef std::pair< VCoordinateSystem* , tFullAxisIndex > tFullCoordinateSystem;
 typedef std::map< VCoordinateSystem*, tFullAxisIndex > tCoordinateSystemMap;
 
@@ -1948,7 +1948,7 @@ awt::Rectangle ExplicitValueProvider::addAxisTitleSizes(
         ExplicitValueProvider* pExplicitValueProvider = ExplicitValueProvider::getExplicitValueProvider(xChartView);
         if( pExplicitValueProvider )
         {
-            //detect wether x axis points into x direction or not
+            //detect whether x axis points into x direction or not
             if( lcl_getPropertySwapXAndYAxis( ChartModelHelper::findDiagram( xChartModel ) ) )
             {
                 std::swap( xTitle_Height, xTitle_Width );
@@ -2015,7 +2015,7 @@ awt::Rectangle ExplicitValueProvider::substractAxisTitleSizes(
         ExplicitValueProvider* pExplicitValueProvider = ExplicitValueProvider::getExplicitValueProvider(xChartView);
         if( pExplicitValueProvider )
         {
-            //detect wether x axis points into x direction or not
+            //detect whether x axis points into x direction or not
             if( lcl_getPropertySwapXAndYAxis( ChartModelHelper::findDiagram( xChartModel ) ) )
             {
                 std::swap( xTitle_Height, xTitle_Width );
@@ -2113,7 +2113,7 @@ bool getAvailablePosAndSizeForDiagram(
     chart2::RelativePosition aRelativePosition;
     if( xProp.is() && (xProp->getPropertyValue( C2U( "RelativePosition" ) )>>=aRelativePosition) )
     {
-        //@todo decide wether x is primary or secondary
+        //@todo decide whether x is primary or secondary
 
         //the coordinates re relative to the page
         double fX = aRelativePosition.Primary*rPageSize.Width;
@@ -2244,7 +2244,7 @@ std::auto_ptr<VTitle> lcl_createTitle( TitleHelper::eTitleType eType
         {
             rbAutoPosition = false;
 
-            //@todo decide wether x is primary or secondary
+            //@todo decide whether x is primary or secondary
             double fX = aRelativePosition.Primary*rPageSize.Width;
             double fY = aRelativePosition.Secondary*rPageSize.Height;
 

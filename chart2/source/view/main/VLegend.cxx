@@ -375,7 +375,7 @@ awt::Size lcl_placeLegendEntries(
                 nCurrentColumn++;
                 if( nCurrentColumn < nCurrentColumnCount )
                 {
-                    //check wether the current column width is sufficient for the new entry
+                    //check whether the current column width is sufficient for the new entry
                     if( aColumnWidths[nCurrentColumn]>=nNewWidth )
                     {
                         //all good proceed with next entry

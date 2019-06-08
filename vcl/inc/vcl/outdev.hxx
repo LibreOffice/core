@@ -907,7 +907,7 @@ public:
     the OutDevViewType should be set to 'OUTDEV_VIEWTYPE_PRINTPREVIEW'.
 
     A View than can make painting decisions dependent on this OutDevViewType.
-    E.g. text colors need to be handled different, dependent on wether it's a PrintPreview or not. (see #106611# for more)
+    E.g. text colors need to be handled different, dependent on whether it's a PrintPreview or not. (see #106611# for more)
     */
     void                SetOutDevViewType( OutDevViewType eOutDevViewType ) { meOutDevViewType=eOutDevViewType; }
     OutDevViewType      GetOutDevViewType() const { return meOutDevViewType; }

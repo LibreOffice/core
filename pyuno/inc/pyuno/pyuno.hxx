@@ -84,7 +84,7 @@ namespace pyuno
 
 /** Helper class for keeping references to python objects.
     BEWARE: Look up every python function you use to check
-    wether you get an acquired or not acquired object pointer
+    whether you get an acquired or not acquired object pointer
     (python terminus for a not acquired object pointer
     is 'borrowed reference'). Use in the acquired pointer cases the
     PyRef( pointer, SAL_NO_ACQUIRE) ctor.

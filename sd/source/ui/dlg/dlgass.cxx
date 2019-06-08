@@ -628,7 +628,7 @@ AssistentDlgImpl::AssistentDlgImpl( ::Window* pWindow, const Link& rFinishLink, 
 
     UpdatePreview( sal_True );
 
-    //check wether we should start with a template document initialy and preselect it
+    //check whether we should start with a template document initialy and preselect it
     const ::rtl::OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.presentation.PresentationDocument" ) );
     String aStandardTemplate( SfxObjectFactory::GetStandardTemplate( aServiceName ) );
     if( aStandardTemplate.Len() )

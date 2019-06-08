@@ -39,7 +39,7 @@ interface XAxisSupplier : ::com::sun::star::uno::XInterface
             the primary axis of the specified dimension. The returned object supports service <type>ChartAxis</type>.
 
         @param nDimensionIndex
-            Parameter nDimensionIndex says wether it is a x, y or z-axis (0 for x).
+            Parameter nDimensionIndex says whether it is a x, y or z-axis (0 for x).
      */
     com::sun::star::chart::XAxis getAxis( [in] long nDimensionIndex );
 
@@ -47,7 +47,7 @@ interface XAxisSupplier : ::com::sun::star::uno::XInterface
             the secondary axis of the specified dimension. The returned object supports service <type>ChartAxis</type>.
 
         @param nDimensionIndex
-            Parameter nDimensionIndex says wether it is a x, y or z-axis (0 for x).
+            Parameter nDimensionIndex says whether it is a x, y or z-axis (0 for x).
      */
     com::sun::star::chart::XAxis getSecondaryAxis( [in] long nDimensionIndex );
 };

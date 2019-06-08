@@ -159,7 +159,7 @@ sal_Int32 AxisHelper::getExplicitNumberFormatKeyForAxis(
     if( xProp.is() && !( xProp->getPropertyValue( C2U( "NumberFormat" ) ) >>= nNumberFormatKey ) )
     {
         bool bFormatSet = false;
-        //check wether we have a percent scale -> use percent format
+        //check whether we have a percent scale -> use percent format
         if( xNumberFormatsSupplier.is() )
         {
             ScaleData aData = AxisHelper::getDateCheckedScale( xAxis, Reference< frame::XModel >( xNumberFormatsSupplier, uno::UNO_QUERY ) );

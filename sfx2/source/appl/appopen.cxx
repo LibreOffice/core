@@ -828,7 +828,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
 
     if ( !rReq.IsSynchronCall() )
     {
-        // now check wether a stream is already there
+        // now check whether a stream is already there
         // if not: download it in a thread and restart the call
         // return;
     }

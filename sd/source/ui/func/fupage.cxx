@@ -358,7 +358,7 @@ const SfxItemSet* FuPage::ExecuteDialog( Window* pParent )
 
             bool bSetToAllPages = false;
 
-            // Ask, wether the setting are for the background-page or for the current page
+            // Ask, whether the setting are for the background-page or for the current page
             if( !mbMasterPage && bChanges )
             {
                 // But don't ask in notice-view, because we can't change the background of

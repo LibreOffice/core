@@ -63,7 +63,7 @@ published interface XTextTableCursor: com::sun::star::uno::XInterface
             specifies the name of the cell to go to.
 
         @param bExpand
-            determines wether the selection is to be expanded.
+            determines whether the selection is to be expanded.
 
         @see com::sun::star::text::Cell
      */
@@ -78,7 +78,7 @@ published interface XTextTableCursor: com::sun::star::uno::XInterface
             the number of cells to move.
 
         @param bExpand
-            determines wether the selection is to be expanded.
+            determines whether the selection is to be expanded.
      */
     boolean goLeft( [in] short nCount,
              [in] boolean bExpand );
@@ -91,7 +91,7 @@ published interface XTextTableCursor: com::sun::star::uno::XInterface
             the number of cells to move.
 
         @param bExpand
-            determines wether the selection is to be expanded.
+            determines whether the selection is to be expanded.
      */
     boolean goRight( [in] short nCount,
              [in] boolean bExpand );
@@ -104,7 +104,7 @@ published interface XTextTableCursor: com::sun::star::uno::XInterface
             the number of cells to move.
 
         @param bExpand
-            determines wether the selection is to be expanded.
+            determines whether the selection is to be expanded.
      */
     boolean goUp( [in] short nCount,
              [in] boolean bExpand );
@@ -117,7 +117,7 @@ published interface XTextTableCursor: com::sun::star::uno::XInterface
             the number of cells to move.
 
         @param bExpand
-            determines wether the selection is to be expanded.
+            determines whether the selection is to be expanded.
      */
     boolean goDown( [in] short nCount,
              [in] boolean bExpand );
@@ -127,7 +127,7 @@ published interface XTextTableCursor: com::sun::star::uno::XInterface
     /** moves the cursor to the top left cell of the table.
 
         @param bExpand
-            determines wether the selection is to be expanded.
+            determines whether the selection is to be expanded.
      */
     void gotoStart( [in] boolean bExpand );
 
@@ -136,7 +136,7 @@ published interface XTextTableCursor: com::sun::star::uno::XInterface
     /** moves the cursor to the bottom right cell of the table.
 
         @param bExpand
-            determines wether the selection is to be expanded.
+            determines whether the selection is to be expanded.
      */
     void gotoEnd( [in] boolean bExpand );
 

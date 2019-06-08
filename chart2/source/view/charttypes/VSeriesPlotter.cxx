@@ -448,7 +448,7 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
                 m_pShapeFactory->createGroup2D( this->getLabelsGroupShape(rDataSeries, xTarget)
                     , ObjectIdentifier::createPointCID( rDataSeries.getLabelCID_Stub(),nPointIndex ) ) );
 
-        //check wether the label needs to be created and how:
+        //check whether the label needs to be created and how:
         DataPointLabel* pLabel = rDataSeries.getDataPointLabelIfLabel( nPointIndex );
 
         if( !pLabel )
@@ -1117,7 +1117,7 @@ void VSeriesPlotter::createRegressionCurveEquationShapes(
         chart2::RelativePosition aRelativePosition;
         if( xEquationProperties->getPropertyValue( C2U("RelativePosition")) >>= aRelativePosition )
         {
-            //@todo decide wether x is primary or secondary
+            //@todo decide whether x is primary or secondary
             double fX = aRelativePosition.Primary*m_aPageReferenceSize.Width;
             double fY = aRelativePosition.Secondary*m_aPageReferenceSize.Height;
             aScreenPosition2D.X = static_cast< sal_Int32 >( ::rtl::math::round( fX ));

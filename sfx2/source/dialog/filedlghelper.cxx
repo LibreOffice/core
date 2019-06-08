@@ -592,7 +592,7 @@ void FileDialogHelper_Impl::updatePreviewState( sal_Bool _bUpdatePreviewWindow )
     {
         uno::Reference< XFilePickerControlAccess > xCtrlAccess( mxFileDlg, UNO_QUERY );
 
-        // check, wether or not we have to display a preview
+        // check, whether or not we have to display a preview
         if ( xCtrlAccess.is() )
         {
             try
@@ -1624,7 +1624,7 @@ ErrCode FileDialogHelper_Impl::execute( SvStringsDtor*& rpURLList,
         if ( rpURLList == NULL || rpURLList->GetObject(0) == NULL )
             return ERRCODE_ABORT;
 
-        // check, wether or not we have to display a password box
+        // check, whether or not we have to display a password box
         if ( pCurrentFilter && mbHasPassword && mbIsPwdEnabled && xCtrlAccess.is() )
         {
             try

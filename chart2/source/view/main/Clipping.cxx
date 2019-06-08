@@ -110,7 +110,7 @@ bool lcl_clip2d(B2DTuple& rPoint0, B2DTuple& rPoint1, const B2DRectangle& rRecta
         double fTE = 0,
                fTL = 1;
 
-        //  Test wether at least a part lies in the four half-planes with respect to
+        //  Test whether at least a part lies in the four half-planes with respect to
         //  the rectangles four edges.
         if( lcl_CLIPt(aDirection.getX(), rRectangle.getMinX() - rPoint0.getX(), fTE, fTL) )
             if( lcl_CLIPt(-aDirection.getX(), rPoint0.getX() - rRectangle.getMaxX(), fTE, fTL) )

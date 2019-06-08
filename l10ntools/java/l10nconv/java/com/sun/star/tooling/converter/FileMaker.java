@@ -45,7 +45,7 @@ public final class FileMaker {
      * ask if existing files should be overwritten
      *
      * @param fileName the files name to overwrite
-     * @param overwrite indicates wether the file can be overwritten
+     * @param overwrite indicates whether the file can be overwritten
      * @return the File created from the fileName
      * @throws IOException
      */

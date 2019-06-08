@@ -235,7 +235,7 @@ BOOL WINAPI IsValidFilePathComponent(
         lpComponentEnd = lpCurrent;
     }
 
-    /* Test wether the component specifies a device name what is not allowed */
+    /* Test whether the component specifies a device name what is not allowed */
 
     // MT: PERFORMANCE:
     // This is very expensive. A lot of calls to _tcsicmp.

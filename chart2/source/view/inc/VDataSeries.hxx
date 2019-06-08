@@ -219,7 +219,7 @@ private: //member
 
     ::com::sun::star::chart2::StackingDirection     m_eStackingDirection;
 
-    sal_Int32               m_nAxisIndex;//indicates wether this is attached to a main or secondary axis
+    sal_Int32               m_nAxisIndex;//indicates whether this is attached to a main or secondary axis
 
     sal_Bool                m_bConnectBars;
 

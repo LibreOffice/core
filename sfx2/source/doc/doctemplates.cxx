@@ -1001,7 +1001,7 @@ sal_Bool SfxDocTplService_Impl::setProperty( Content& rContent,
         Any aPropValue( rPropValue );
         uno::Reference< XPropertySetInfo > aPropInfo = rContent.getProperties();
 
-        // check, wether or not the property exists, create it, when not
+        // check, whether or not the property exists, create it, when not
         if ( !aPropInfo.is() || !aPropInfo->hasPropertyByName( rPropName ) )
         {
             uno::Reference< XPropertyContainer > xProperties( rContent.get(), UNO_QUERY );
@@ -1068,7 +1068,7 @@ sal_Bool SfxDocTplService_Impl::getProperty( Content& rContent,
     {
         uno::Reference< XPropertySetInfo > aPropInfo = rContent.getProperties();
 
-        // check, wether or not the property exists
+        // check, whether or not the property exists
         if ( !aPropInfo.is() || !aPropInfo->hasPropertyByName( rPropName ) )
         {
             return sal_False;
@@ -1472,7 +1472,7 @@ sal_Bool SfxDocTplService_Impl::addGroup( const OUString& rGroupName )
 {
     ::osl::MutexGuard aGuard( maMutex );
 
-    // Check, wether or not there is a group with this name
+    // Check, whether or not there is a group with this name
     Content      aNewGroup;
     OUString        aNewGroupURL;
     INetURLObject   aNewGroupObj( maRootURL );
@@ -1766,7 +1766,7 @@ sal_Bool SfxDocTplService_Impl::storeTemplate( const OUString& rGroupName,
 {
     ::osl::MutexGuard aGuard( maMutex );
 
-    // Check, wether or not there is a group with this name
+    // Check, whether or not there is a group with this name
     // Return false, if there is no group with the given name
     Content         aGroup, aTemplate, aTargetGroup, aTemplateToRemove;
     OUString        aGroupURL, aTemplateURL, aTemplateToRemoveTargetURL;
@@ -1958,7 +1958,7 @@ sal_Bool SfxDocTplService_Impl::addTemplate( const OUString& rGroupName,
 {
     ::osl::MutexGuard aGuard( maMutex );
 
-    // Check, wether or not there is a group with this name
+    // Check, whether or not there is a group with this name
     // Return false, if there is no group with the given name
     Content         aGroup, aTemplate, aTargetGroup;
     OUString        aGroupURL, aTemplateURL;
@@ -2110,7 +2110,7 @@ sal_Bool SfxDocTplService_Impl::removeTemplate( const OUString& rGroupName,
 {
     ::osl::MutexGuard aGuard( maMutex );
 
-    // Check, wether or not there is a group with this name
+    // Check, whether or not there is a group with this name
     // Return false, if there is no group with the given name
     Content         aGroup, aTemplate;
     OUString        aGroupURL, aTemplateURL;
@@ -2163,7 +2163,7 @@ sal_Bool SfxDocTplService_Impl::renameTemplate( const OUString& rGroupName,
 {
     ::osl::MutexGuard aGuard( maMutex );
 
-    // Check, wether or not there is a group with this name
+    // Check, whether or not there is a group with this name
     // Return false, if there is no group with the given name
     Content         aGroup, aTemplate;
     OUString        aGroupURL, aTemplateURL;

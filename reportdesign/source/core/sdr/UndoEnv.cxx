@@ -340,7 +340,7 @@ void SAL_CALL OXUndoEnvironment::propertyChange( const PropertyChangeEvent& _rEv
     implSetModified();
 
     // now we have access to the cached info about the property affected
-    // and are able to decide wether or not we need an undo action
+    // and are able to decide whether or not we need an undo action
 
     // no UNDO for transient/readonly properties
     if ( aPropertyPos->second.bIsReadonlyOrTransient )

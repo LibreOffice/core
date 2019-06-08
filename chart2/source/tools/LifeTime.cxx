@@ -503,7 +503,7 @@ the XCloseable::close method has to be implemented in the following way:
     uno::Reference< uno::XInterface > xSelfHold( static_cast< ::cppu::OWeakObject* >(this) );
 
     //the listeners have had no veto
-    //check wether we self can close
+    //check whether we self can close
     {
         util::CloseVetoException aVetoException = util::CloseVetoException(
                         ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(

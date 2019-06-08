@@ -171,7 +171,7 @@ private:
     /** Remember the specified page.  If it differs from mpDescriptor then
         the buttons are placed anew.
         @return
-            The returned flag indicates wether the mpDescriptor member
+            The returned flag indicates whether the mpDescriptor member
             is set to a new value.
     */
     bool SetPage (const model::SharedPageDescriptor& rpDescriptor);

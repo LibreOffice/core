@@ -91,7 +91,7 @@ awt::Point PolarLabelPositionHelper::getLabelScreenPositionAndAlignmentForUnitCi
 
     if(3==m_nDimensionCount && nLabelPlacement == ::com::sun::star::chart::DataLabelPlacement::OUTSIDE)
     {
-        //check wether the upper or the downer edge is more distant from the center
+        //check whether the upper or the downer edge is more distant from the center
         //take the farest point to put the label to
 
         awt::Point aP0( this->transformSceneToScreenPosition(

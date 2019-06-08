@@ -991,7 +991,7 @@ void WriterXmlFinalizer::visit( ParagraphElement& elem, const std::list< Element
         }
 
         // check whether to leave some space to next paragraph
-        // find wether there is a next paragraph
+        // find whether there is a next paragraph
         std::list< Element* >::const_iterator it = rParentIt;
         const ParagraphElement* pNextPara = NULL;
         while( ++it != elem.Parent->Children.end() && ! pNextPara )

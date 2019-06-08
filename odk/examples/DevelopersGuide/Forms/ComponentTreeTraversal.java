@@ -39,7 +39,7 @@ interface IFormComponentAction
 class ComponentTreeTraversal implements IFormComponentAction
 {
     /* ------------------------------------------------------------------ */
-    /** Indicator method to decide wether to step down the tree.
+    /** Indicator method to decide whether to step down the tree.
 
         <p>The default implementation checks if the container given is a grid
         control model or a <service scope="com.sun.star.form">FormComponents</service>

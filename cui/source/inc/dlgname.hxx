@@ -66,7 +66,7 @@ public:
     void    GetName( String& rName ){rName = aEdtName.GetText();}
 
     /** add a callback Link that is called whenever the content of the edit
-        field is changed.  The Link result determines wether the OK
+        field is changed.  The Link result determines whether the OK
         Button is enabled (> 0) or disabled (== 0).
 
         @param rLink a Callback declared with DECL_LINK and implemented with

@@ -159,7 +159,7 @@ service DataSeries
      */
     [readonly, optional, property] sequence< long > AttributedDataPoints;
 
-    /** indicates wether this series should be stacked with respect to the previous series.
+    /** indicates whether this series should be stacked with respect to the previous series.
     */
     [property] StackingDirection StackingDirection;
 
@@ -168,7 +168,7 @@ service DataSeries
      */
     [optional, property] boolean                    VaryColorsByPoint;
 
-    /** This property describes wether the series should be shown at
+    /** This property describes whether the series should be shown at
         the main value axis or at the secondary value axis.  Having
         this property not set or setting it to 0 means that this data
         series will be scaled at the primary y-axis ( of the

@@ -88,7 +88,7 @@ protected:
     virtual void SAL_CALL onTerminated (void);
 
 private:
-    /** Flag that indicates wether the onTerminated method has been already
+    /** Flag that indicates whether the onTerminated method has been already
         called.  If so then a subsequent call to detach deletes the thread.
     */
     volatile bool mbIsTerminated;

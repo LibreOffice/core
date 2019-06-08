@@ -2707,7 +2707,7 @@ sal_Bool getTextProperty_Impl( Content& rContent,
     {
         uno::Reference< XPropertySetInfo > aPropInfo = rContent.getProperties();
 
-        // check, wether or not the property exists
+        // check, whether or not the property exists
         if ( !aPropInfo.is() || !aPropInfo->hasPropertyByName( rPropName ) )
         {
             return sal_False;

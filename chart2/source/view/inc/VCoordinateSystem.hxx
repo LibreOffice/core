@@ -160,7 +160,7 @@ protected: //member
 
     rtl::OUString m_aCooSysParticle;
 
-    typedef std::pair< sal_Int32, sal_Int32 > tFullAxisIndex; //first index is the dimension, second index is the axis index that indicates wether this is a main or secondary axis
+    typedef std::pair< sal_Int32, sal_Int32 > tFullAxisIndex; //first index is the dimension, second index is the axis index that indicates whether this is a main or secondary axis
 
     //
     ::com::sun::star::uno::Reference<

@@ -248,7 +248,7 @@ inline sal_uIntPtr DbgIsErrorOut()
         return sal_False;
 }
 
-inline sal_uIntPtr DbgGetErrorOut()   // Testtool: test wether to collect OSL_ASSERTions as well
+inline sal_uIntPtr DbgGetErrorOut()   // Testtool: test whether to collect OSL_ASSERTions as well
 {
     DbgData* pData = DbgGetData();
     if ( pData )

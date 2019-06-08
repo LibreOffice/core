@@ -231,7 +231,7 @@ static sal_Bool sal_GetVisualInfo( Display *pDisplay, XID nVID, XVisualInfo &rVI
 
 // ---------------------------------------------------------------------------
 
-// check wether displaystring is in format N.M or N. or just N
+// check whether displaystring is in format N.M or N. or just N
 // with N and M beeing natural numbers
 static sal_Bool
 sal_IsDisplayNumber( const char *pDisplayString )

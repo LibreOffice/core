@@ -670,13 +670,13 @@ public:
         virtual bool isCanceled() = 0;
     };
 
-    // checks wether font import would fail due to no writeable directory
+    // checks whether font import would fail due to no writeable directory
     bool checkImportPossible() const;
     // expects system paths not UNC paths
     // returns the number of fonts successfully imported
     int importFonts( const std::list< rtl::OString >& rFiles, bool bLinkOnly = false, ImportFontCallback* pCallback = NULL );
 
-    // check wether changeFontProperties would fail due to not writable fonts.dir
+    // check whether changeFontProperties would fail due to not writable fonts.dir
     bool checkChangeFontPropertiesPossible( fontID nFont ) const;
     // change fonts.dir entry for font
     bool changeFontProperties( fontID nFont, const rtl::OUString& rXLFD );

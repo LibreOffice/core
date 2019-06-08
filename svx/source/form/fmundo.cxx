@@ -671,7 +671,7 @@ void SAL_CALL FmXUndoEnvironment::propertyChange(const PropertyChangeEvent& evt)
         }
 
         // now we have access to the cached info about the property affected
-        // and are able to decide wether or not we need an undo action
+        // and are able to decide whether or not we need an undo action
 
         bool bAddUndoAction = rModel.IsUndoEnabled();
         // no UNDO for transient/readonly properties

@@ -116,7 +116,7 @@ class SwIndexMarkDlg : public Window
     sal_Bool            bPhoneticED1_ChangedByUser;
     sal_Bool            bPhoneticED2_ChangedByUser;
     LanguageType    nLangForPhoneticReading; //Language of current text used for phonetic reading proposal
-    sal_Bool            bIsPhoneticReadingEnabled; //this value states wether phopentic reading is enabled in principle dependend of global cjk settings and language of current entry
+    sal_Bool            bIsPhoneticReadingEnabled; //this value states whether phopentic reading is enabled in principle dependend of global cjk settings and language of current entry
     com::sun::star::uno::Reference< com::sun::star::i18n::XExtendedIndexEntrySupplier >
                     xExtendedIndexEntrySupplier;
 

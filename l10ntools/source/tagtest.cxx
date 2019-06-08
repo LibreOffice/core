@@ -447,7 +447,7 @@ sal_Bool TokenInfo::MatchesTranslation( TokenInfo& rInfo, sal_Bool bGenErrors, P
 {
     // check if tags are equal
     // check if all existing properties are in the translation as well and
-    // wether they have a matching content (the same in most cases)
+    // whether they have a matching content (the same in most cases)
 
     if ( nId != rInfo.nId )
         return sal_False;

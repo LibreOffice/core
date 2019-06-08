@@ -477,7 +477,7 @@ void XMLStyleExport::exportStyleFamily(
                                               xStyles,pPrefix );
                 if( bUsed && bFirstStyle && bExported  )
                 {
-                    // If this is the first style, find out wether next styles
+                    // If this is the first style, find out whether next styles
                     // are supported.
                     Reference< XPropertySet > xPropSet( xStyle, UNO_QUERY );
                     Reference< XPropertySetInfo > xPropSetInfo =

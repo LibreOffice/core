@@ -58,7 +58,7 @@ bool PositionAndSizeHelper::moveObject( ObjectType eObjectType
 
     if( OBJECTTYPE_TITLE==eObjectType )
     {
-        //@todo decide wether x is primary or secondary
+        //@todo decide whether x is primary or secondary
         chart2::RelativePosition aRelativePosition;
         aRelativePosition.Anchor = drawing::Alignment_CENTER;
         //the anchor point at the title object is top/middle
@@ -69,7 +69,7 @@ bool PositionAndSizeHelper::moveObject( ObjectType eObjectType
     }
     else if( OBJECTTYPE_DATA_CURVE_EQUATION==eObjectType )
     {
-        //@todo decide wether x is primary or secondary
+        //@todo decide whether x is primary or secondary
         chart2::RelativePosition aRelativePosition;
         aRelativePosition.Anchor = drawing::Alignment_TOP_LEFT;
         //the anchor point at the title object is top/middle
@@ -110,7 +110,7 @@ bool PositionAndSizeHelper::moveObject( ObjectType eObjectType
     }
     else if(OBJECTTYPE_DIAGRAM==eObjectType || OBJECTTYPE_DIAGRAM_WALL==eObjectType || OBJECTTYPE_DIAGRAM_FLOOR==eObjectType)
     {
-        //@todo decide wether x is primary or secondary
+        //@todo decide whether x is primary or secondary
 
         //set position:
         chart2::RelativePosition aRelativePosition;

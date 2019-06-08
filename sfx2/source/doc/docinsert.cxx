@@ -205,7 +205,7 @@ IMPL_LINK( DocumentInserter, DialogClosedHdl, sfx2::FileDialogHelper*, EMPTYARG 
                TemplateDescription::FILESAVE_AUTOEXTENSION_PASSWORD == nDlgType
             || TemplateDescription::FILESAVE_AUTOEXTENSION_PASSWORD_FILTEROPTIONS == nDlgType );
 
-        // check, wether or not we have to display a password box
+        // check, whether or not we have to display a password box
         if ( bHasPassword && m_pFileDlg->IsPasswordEnabled() )
         {
             try

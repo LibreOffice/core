@@ -140,7 +140,7 @@ void SAL_CALL ShellExec::execute( const OUString& aCommand, const OUString& aPar
     // DESKTOP_LAUNCH, see http://freedesktop.org/pipermail/xdg/2004-August/004489.html
     static const char *pDesktopLaunch = getenv( "DESKTOP_LAUNCH" );
 
-    // Check wether aCommand contains a document url or not
+    // Check whether aCommand contains a document url or not
     sal_Int32 nIndex = aCommand.indexOf( OUString( RTL_CONSTASCII_USTRINGPARAM(":/") ) );
 
     if( nIndex > 0 || 0 == aCommand.compareToAscii("mailto:", 7) )

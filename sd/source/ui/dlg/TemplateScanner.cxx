@@ -249,7 +249,7 @@ TemplateScanner::State TemplateScanner::ScanEntry (void)
             ::ucbhelper::Content  aContent = ::ucbhelper::Content (aId, mxEntryEnvironment);
             if (aContent.isDocument ())
             {
-                //  Check wether the entry is an impress template.  If so
+                //  Check whether the entry is an impress template.  If so
                 //  add a new entry to the resulting list (which is created
                 //  first if necessary).
                 if (    (sContentType == MIMETYPE_OASIS_OPENDOCUMENT_PRESENTATION_TEMPLATE)
