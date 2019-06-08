@@ -182,7 +182,7 @@ Desktop::Desktop( const css::uno::Reference< css::uno::XComponentContext >& xCon
 
 /*-************************************************************************************************************
     @short      standard destructor
-    @descr      This one do NOTHING! Use dispose() instaed of this.
+    @descr      This one do NOTHING! Use dispose() instead of this.
 
     @seealso    method dispose()
 *//*-*************************************************************************************************************/
