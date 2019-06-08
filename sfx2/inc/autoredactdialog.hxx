@@ -102,7 +102,7 @@ class SFX2_DLLPUBLIC SfxAutoRedactDialog : public SfxDialogController
     /*DECL_LINK(LoadHdl, weld::Button&, void);
     DECL_LINK(SaveHdl, weld::Button&, void);*/
     DECL_LINK(AddHdl, weld::Button&, void);
-    //DECL_LINK(EditHdl, weld::Button&, void);
+    DECL_LINK(EditHdl, weld::Button&, void);
     DECL_LINK(DeleteHdl, weld::Button&, void);
 
 public:
@@ -130,6 +130,9 @@ private:
 
 public:
     SfxAddTargetDialog(weld::Window* pWindow, const OUString& rName);
+    SfxAddTargetDialog(weld::Window* pWindow, const OUString& sName,
+                       const RedactionTargetType& eTargetType, const OUString& sContent,
+                       const bool& bCaseSensitive, const bool& bWholeWords);
 
     OUString getName() const { return m_xName->get_text(); }
     RedactionTargetType getType() const;
