@@ -147,6 +147,7 @@ LibreOffice.VC.VC.opendb
 # QtCreator specific
 *.pro
 *.pro.user
+*.pro.user.*
 
 # doxygen output
 /docs
