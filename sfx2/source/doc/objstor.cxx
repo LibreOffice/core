@@ -2081,7 +2081,7 @@ bool SfxObjectShell::ConvertFrom
 
     Files which are to be opened here should be opened through 'rMedium'
     to guarantee the right open modes. Especially if the format is retained
-    (only possible with SfxFilterFlags::SIMULATE or SfxFilterFlags::ONW) file which must
+    (only possible with SfxFilterFlags::SIMULATE or SfxFilterFlags::OWN) file which must
     be opened STREAM_SHARE_DENYWRITE.
 
     [Return value]
@@ -2444,7 +2444,7 @@ bool SfxObjectShell::ConvertTo
 
     Files which are to be opened here should be opened through 'rMedium'
     to guarantee the right open modes. Especially if the format is retained
-    (only possible with SfxFilterFlags::SIMULATE or SfxFilterFlags::ONW) file which must
+    (only possible with SfxFilterFlags::SIMULATE or SfxFilterFlags::OWN) file which must
     be opened STREAM_SHARE_DENYWRITE.
 
     [Return value]
