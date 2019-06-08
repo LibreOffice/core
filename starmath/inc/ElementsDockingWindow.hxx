@@ -140,7 +140,6 @@ public:
 
     sal_uInt16 itemCount() const;
     sal_uInt16 itemHighlighted() const;
-    sal_uInt16 itemFocused() const;
     sal_uInt16 itemAtPos(const Point& rPos) const;
     tools::Rectangle itemPosRect(sal_uInt16) const;
     bool itemIsSeparator(sal_uInt16) const;

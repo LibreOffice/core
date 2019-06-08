@@ -2016,8 +2016,6 @@ public:
     RTFKeyword GetIndex() const { return m_nIndex; }
 
     int GetDefValue() const { return m_nDefValue; }
-
-    bool operator<(const RTFSymbol& rOther) const;
 };
 
 extern RTFSymbol const aRTFControlWords[];

@@ -48,8 +48,6 @@ class SvxThesaurusDialog : public SfxDialogController
 public:
     virtual ~SvxThesaurusDialog() override;
 
-    bool                    WordFound() const { return m_bWordFound; }
-
     // Handler
     DECL_LINK( ReplaceBtnHdl_Impl, weld::Button&, void );
     DECL_LINK( LeftBtnHdl_Impl, weld::Button&, void );

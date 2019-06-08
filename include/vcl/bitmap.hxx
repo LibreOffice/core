@@ -116,8 +116,6 @@ public:
     inline bool             operator!() const;
     bool                    operator==( const Bitmap& rBitmap ) const;
     bool                    operator!=( const Bitmap& rBitmap ) const { return !operator==(rBitmap); }
-    // only compares if we are using the same internal copy-on-write SalBitmap class
-    bool                    ShallowEquals( const Bitmap& rBitmap ) const { return mxSalBmp == rBitmap.mxSalBmp; }
 
     inline bool             IsEmpty() const;
     void                    SetEmpty();

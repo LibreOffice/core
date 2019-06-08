@@ -1465,13 +1465,6 @@ void CustomPropertiesWindow::ValidateLine( CustomPropertyLine* pLine, bool bIsFr
     }
 }
 
-sal_uInt16 CustomPropertiesWindow::GetVisibleLineCount() const
-{
-    sal_Int32 nScrollOffset = GetLineHeight();
-    sal_uInt16 nCount = ceil(static_cast<double>(GetHeight()) / nScrollOffset);
-    return nCount;
-}
-
 void CustomPropertiesWindow::SetVisibleLineCount(sal_uInt32 nCount)
 {
     while (GetExistingLineCount() < nCount)
@@ -2021,11 +2014,6 @@ CmisPropertyLine::CmisPropertyLine(weld::Widget* pParent)
 
 CmisPropertyLine::~CmisPropertyLine( )
 {
-}
-
-long CmisPropertyLine::getItemHeight() const
-{
-    return m_xFrame->get_preferred_size().Height();
 }
 
 // class CmisPropertiesWindow -----------------------------------------

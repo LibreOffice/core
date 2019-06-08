@@ -377,14 +377,6 @@ EditEngine& SmDocShell::GetEditEngine()
 }
 
 
-SfxItemPool& SmDocShell::GetEditEngineItemPool()
-{
-    if (!mpEditEngineItemPool)
-        GetEditEngine();
-    assert(mpEditEngineItemPool && "EditEngineItemPool missing");
-    return *mpEditEngineItemPool;
-}
-
 void SmDocShell::DrawFormula(OutputDevice &rDev, Point &rPosition, bool bDrawSelection)
 {
     if (!mpTree)

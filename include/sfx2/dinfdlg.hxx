@@ -390,7 +390,6 @@ public:
 
     sal_uInt16          GetExistingLineCount() const { return m_aCustomPropertiesLines.size(); }
     sal_uInt16          GetTotalLineCount() const { return m_aCustomProperties.size(); }
-    sal_uInt16          GetVisibleLineCount() const;
     void                SetVisibleLineCount(sal_uInt32 nCount);
     sal_Int32           GetHeight() const { return m_nHeight; }
     void                SetHeight(int nHeight) { m_nHeight = nHeight; }
@@ -519,7 +518,6 @@ struct CmisPropertyLine
     std::vector< std::unique_ptr<CmisValue> >     m_aValues;
     std::vector< std::unique_ptr<CmisDateTime> >  m_aDateTimes;
     std::vector< std::unique_ptr<CmisYesNo> >     m_aYesNos;
-    long getItemHeight() const;
     CmisPropertyLine(weld::Widget* pParent);
     ~CmisPropertyLine();
 };

@@ -83,7 +83,6 @@ public:
 
     // Access to (anyway) private buffers, used by the sdr exporter
     OStringBuffer& RunText();
-    OStringBuffer& Styles() { return m_aStyles; }
     OString MoveCharacterProperties(bool aAutoWriteRtlLtr = false);
 
     /// Output text (without markup).

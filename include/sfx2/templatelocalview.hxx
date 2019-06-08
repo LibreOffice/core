@@ -88,10 +88,6 @@ public:
 
     DECL_LINK(ContextMenuSelectHdl, Menu*, bool);
 
-    TemplateContainerItem* getRegion(OUString const & sStr);
-
-    OUString getRegionName(const sal_uInt16 nRegionId) const;
-
     virtual bool renameItem(ThumbnailViewItem* pItem, const OUString& sNewTitle) override;
 
     virtual void MouseButtonDown( const MouseEvent& rMEvt ) override;
