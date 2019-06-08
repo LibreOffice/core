@@ -85,6 +85,30 @@ OUString getTypeName(RedactionTargetType nType)
 
     return sTypeName;
 }
+
+/// Returns TypeID to be used in the add/edit target dialog
+OUString getTypeID(RedactionTargetType nType)
+{
+    OUString sTypeID("unknown");
+
+    switch (nType)
+    {
+        case RedactionTargetType::REDACTION_TARGET_TEXT:
+            sTypeID = "text";
+            break;
+        case RedactionTargetType::REDACTION_TARGET_REGEX:
+            sTypeID = "regex";
+            break;
+        case RedactionTargetType::REDACTION_TARGET_PREDEFINED:
+            sTypeID = "predefined";
+            break;
+        case RedactionTargetType::REDACTION_TARGET_UNKNOWN:
+            sTypeID = "unknown";
+            break;
+    }
+
+    return sTypeID;
+}
 }
 
 void TargetsTable::InsertTarget(RedactionTarget* pTarget)
@@ -145,6 +169,15 @@ OUString TargetsTable::GetNameProposal()
         }
     }
     return sDefaultTargetName + " " + OUString::number(nHighestTargetId + 1);
+}
+
+void TargetsTable::setRowData(const int& nRowIndex, const RedactionTarget* pTarget)
+{
+    m_xControl->set_text(nRowIndex, pTarget->sName, 0);
+    m_xControl->set_text(nRowIndex, getTypeName(pTarget->sType), 1);
+    m_xControl->set_text(nRowIndex, pTarget->sContent, 2);
+    m_xControl->set_text(nRowIndex, pTarget->bCaseSensitive ? OUString("Yes") : OUString("No"), 3);
+    m_xControl->set_text(nRowIndex, pTarget->bWholeWords ? OUString("Yes") : OUString("No"), 4);
 }
 
 /*IMPL_LINK_NOARG(SfxAutoRedactDialog, LoadHdl, weld::Button&, void)
@@ -214,11 +247,75 @@ IMPL_LINK_NOARG(SfxAutoRedactDialog, AddHdl, weld::Button&, void)
     }
 }
 
-/*IMPL_LINK_NOARG(SfxAutoRedactDialog, EditHdl, weld::Button&, void)
+IMPL_LINK_NOARG(SfxAutoRedactDialog, EditHdl, weld::Button&, void)
 {
-    //TODO: Implement
-    //Reuse the Add Target dialog
-}*/
+    sal_Int32 nSelectedRow = m_xTargetsBox->get_selected_index();
+
+    // No selection, nothing to edit
+    if (nSelectedRow < 0)
+        return;
+
+    // Only one entry should be selected for editing
+    if (m_xTargetsBox->get_selected_rows().size() > 1)
+    {
+        OUString sMsg(
+            "You have selected multiple targets, but only one target can be edited at once.");
+        //Warn the user about multiple selections
+        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(
+            getDialog(), VclMessageType::Error, VclButtonsType::Ok, sMsg));
+        xBox->run();
+        return;
+    }
+
+    // Get the redaction target to be edited
+    RedactionTarget* pTarget
+        = reinterpret_cast<RedactionTarget*>(m_xTargetsBox->get_id(nSelectedRow).toInt64());
+
+    // Construct and run the edit target dialog
+    SfxAddTargetDialog aEditTargetDialog(getDialog(), pTarget->sName, pTarget->sType,
+                                         pTarget->sContent, pTarget->bCaseSensitive,
+                                         pTarget->bWholeWords);
+
+    bool bIncomplete;
+    do
+    {
+        bIncomplete = false;
+
+        if (aEditTargetDialog.run() != RET_OK)
+            return;
+
+        if (aEditTargetDialog.getName().isEmpty()
+            || aEditTargetDialog.getType() == RedactionTargetType::REDACTION_TARGET_UNKNOWN
+            || aEditTargetDialog.getContent().isEmpty())
+        {
+            bIncomplete = true;
+            std::unique_ptr<weld::MessageDialog> xBox(
+                Application::CreateMessageDialog(getDialog(), VclMessageType::Warning,
+                                                 VclButtonsType::Ok, "All fields are required"));
+            xBox->run();
+        }
+        else if (aEditTargetDialog.getName() != pTarget->sName
+                 && m_xTargetsBox->GetTargetByName(aEditTargetDialog.getName()))
+        {
+            bIncomplete = true;
+            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(
+                getDialog(), VclMessageType::Warning, VclButtonsType::Ok,
+                "There is already a target with this name"));
+            xBox->run();
+        }
+
+    } while (bIncomplete);
+
+    // Update the redaction target
+    pTarget->sName = aEditTargetDialog.getName();
+    pTarget->sType = aEditTargetDialog.getType();
+    pTarget->sContent = aEditTargetDialog.getContent();
+    pTarget->bCaseSensitive = aEditTargetDialog.isCaseSensitive();
+    pTarget->bWholeWords = aEditTargetDialog.isWholeWords();
+
+    // And sync the targets box row with the actual target data
+    m_xTargetsBox->setRowData(nSelectedRow, pTarget);
+}
 
 IMPL_LINK_NOARG(SfxAutoRedactDialog, DeleteHdl, weld::Button&, void)
 {
@@ -280,7 +377,7 @@ SfxAutoRedactDialog::SfxAutoRedactDialog(weld::Window* pParent)
     //m_xLoadBtn->connect_clicked(LINK(this, SfxAutoRedactDialog, LoadHdl));
     //m_xSaveBtn->connect_clicked(LINK(this, SfxAutoRedactDialog, SaveHdl));
     m_xAddBtn->connect_clicked(LINK(this, SfxAutoRedactDialog, AddHdl));
-    //m_xEditBtn->connect_clicked(LINK(this, SfxAutoRedactDialog, EditHdl));
+    m_xEditBtn->connect_clicked(LINK(this, SfxAutoRedactDialog, EditHdl));
     m_xDeleteBtn->connect_clicked(LINK(this, SfxAutoRedactDialog, DeleteHdl));
 }
 
@@ -310,6 +407,30 @@ SfxAddTargetDialog::SfxAddTargetDialog(weld::Window* pParent, const OUString& rN
 {
     m_xName->set_text(rName);
     m_xName->select_region(0, rName.getLength());
+}
+
+SfxAddTargetDialog::SfxAddTargetDialog(weld::Window* pParent, const OUString& sName,
+                                       const RedactionTargetType& eTargetType,
+                                       const OUString& sContent, const bool& bCaseSensitive,
+                                       const bool& bWholeWords)
+    : GenericDialogController(pParent, "sfx/ui/addtargetdialog.ui", "AddTargetDialog")
+    , m_xName(m_xBuilder->weld_entry("name"))
+    , m_xType(m_xBuilder->weld_combo_box("type"))
+    , m_xContent(m_xBuilder->weld_entry("content"))
+    , m_xCaseSensitive(m_xBuilder->weld_check_button("checkboxCaseSensitive"))
+    , m_xWholeWords(m_xBuilder->weld_check_button("checkboxWholeWords"))
+{
+    m_xName->set_text(sName);
+    m_xName->select_region(0, sName.getLength());
+
+    m_xType->set_active_id(getTypeID(eTargetType));
+
+    m_xContent->set_text(sContent);
+
+    m_xCaseSensitive->set_active(bCaseSensitive);
+    m_xWholeWords->set_active(bWholeWords);
+
+    set_title("Edit Target");
 }
 
 RedactionTargetType SfxAddTargetDialog::getType() const
