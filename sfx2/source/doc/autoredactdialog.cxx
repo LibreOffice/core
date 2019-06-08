@@ -7,31 +7,34 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <osl/file.hxx>
 #include <autoredactdialog.hxx>
-#include <vcl/layout.hxx>
-#include <vcl/idle.hxx>
-#include <vcl/gdimtf.hxx>
-#include <svl/itemset.hxx>
-#include <svl/eitem.hxx>
-#include <svtools/sfxecode.hxx>
-#include <svtools/ehdl.hxx>
-#include <tools/urlobj.hxx>
-#include <tools/debug.hxx>
 
-#include <sfx2/strings.hrc>
-#include <sfx2/sfxsids.hrc>
+#include <preview.hxx>
 #include <sfx2/app.hxx>
+#include <sfx2/docfile.hxx>
+#include <sfx2/filedlghelper.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/sfxresid.hxx>
-#include <sfx2/docfile.hxx>
-#include <preview.hxx>
-#include <sfx2/printer.hxx>
-#include <unotools/viewoptions.hxx>
+#include <sfx2/sfxsids.hrc>
+#include <sfx2/strings.hrc>
+
+#include <osl/file.hxx>
+#include <sal/log.hxx>
+#include <svl/eitem.hxx>
+#include <svl/itemset.hxx>
+#include <svtools/ehdl.hxx>
+#include <svtools/sfxecode.hxx>
+#include <vcl/idle.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/waitobj.hxx>
 #include <vcl/weld.hxx>
+#include <tools/debug.hxx>
+#include <tools/urlobj.hxx>
+#include <unotools/viewoptions.hxx>
 
-#include <sal/log.hxx>
+#include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
+
+#include <boost/property_tree/json_parser.hpp>
 
 int TargetsTable::GetRowByTargetName(const OUString& sName)
 {
@@ -180,17 +183,20 @@ void TargetsTable::setRowData(const int& nRowIndex, const RedactionTarget* pTarg
     m_xControl->set_text(nRowIndex, pTarget->bWholeWords ? OUString("Yes") : OUString("No"), 4);
 }
 
-/*IMPL_LINK_NOARG(SfxAutoRedactDialog, LoadHdl, weld::Button&, void)
+IMPL_LINK_NOARG(SfxAutoRedactDialog, Load, weld::Button&, void)
 {
     //TODO: Implement
-    //Load a targets list from a previously saved file (a json file in the user profile dir?)
+    //Load a targets list from a previously saved file (a json file?)
+    // ask for filename, where we should load the new config data from
+    StartFileDialog(StartFileDialogType::Open, "Load Targets");
 }
 
-IMPL_LINK_NOARG(SfxAutoRedactDialog, SaveHdl, weld::Button&, void)
+IMPL_LINK_NOARG(SfxAutoRedactDialog, Save, weld::Button&, void)
 {
     //TODO: Implement
     //Allow saving the targets into a file
-}*/
+    StartFileDialog(StartFileDialogType::SaveAs, "Save Targets");
+}
 
 IMPL_LINK_NOARG(SfxAutoRedactDialog, AddHdl, weld::Button&, void)
 {
@@ -345,6 +351,96 @@ IMPL_LINK_NOARG(SfxAutoRedactDialog, DeleteHdl, weld::Button&, void)
     }
 }
 
+namespace
+{
+boost::property_tree::ptree redactionTargetToJSON(RedactionTarget* pTarget)
+{
+    boost::property_tree::ptree aNode;
+    aNode.put("sName", pTarget->sName.toUtf8().getStr());
+    aNode.put("eType", pTarget->sType);
+    aNode.put("sContent", pTarget->sContent.toUtf8().getStr());
+    aNode.put("bWholeWords", pTarget->bWholeWords);
+    aNode.put("bCaseSensitive", pTarget->bCaseSensitive);
+    aNode.put("nID", pTarget->nID);
+
+    return aNode;
+}
+}
+
+IMPL_LINK_NOARG(SfxAutoRedactDialog, LoadHdl, sfx2::FileDialogHelper*, void)
+{
+    //TODO: Implement
+    bool bDummy = hasTargets();
+
+    if (bDummy)
+        void();
+}
+
+IMPL_LINK_NOARG(SfxAutoRedactDialog, SaveHdl, sfx2::FileDialogHelper*, void)
+{
+    assert(m_pFileDlg);
+
+    OUString sTargetsFile;
+    if (ERRCODE_NONE == m_pFileDlg->GetError())
+        sTargetsFile = m_pFileDlg->GetPath();
+
+    if (sTargetsFile.isEmpty())
+        return;
+
+    OUString sSysPath;
+    osl::File::getSystemPathFromFileURL(sTargetsFile, sSysPath);
+    sTargetsFile = sSysPath;
+
+    weld::WaitObject aWaitObject(getDialog());
+
+    try
+    {
+        // Put the targets into a JSON array
+        boost::property_tree::ptree aTargetsArray;
+        for (const auto& targetPair : m_aTableTargets)
+        {
+            aTargetsArray.push_back(std::make_pair("", redactionTargetToJSON(targetPair.first)));
+        }
+
+        // Build the JSON tree
+        boost::property_tree::ptree aTargetsTree;
+        aTargetsTree.add_child("RedactionTargets", aTargetsArray);
+
+        // Create path string, and write JSON to file
+        std::string sPathStr(OUStringToOString(sTargetsFile, RTL_TEXTENCODING_UTF8).getStr());
+
+        boost::property_tree::write_json(sPathStr, aTargetsTree);
+    }
+    catch (css::uno::Exception& e)
+    {
+        SAL_WARN("sfx.doc",
+                 "Exception caught while trying to save the targets JSON to file: " << e.Message);
+        return;
+        //TODO: Warn the user with a message box
+    }
+}
+
+void SfxAutoRedactDialog::StartFileDialog(StartFileDialogType nType, const OUString& rTitle)
+{
+    OUString aFilterAllStr(SfxResId(STR_SFX_FILTERNAME_ALL));
+    OUString aFilterCfgStr("Target Set (*.json)");
+
+    bool bSave = nType == StartFileDialogType::SaveAs;
+    short nDialogType = bSave ? css::ui::dialogs::TemplateDescription::FILESAVE_AUTOEXTENSION
+                              : css::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE;
+    m_pFileDlg.reset(new sfx2::FileDialogHelper(nDialogType, FileDialogFlags::NONE, getDialog()));
+
+    m_pFileDlg->SetTitle(rTitle);
+    m_pFileDlg->AddFilter(aFilterAllStr, FILEDIALOG_FILTER_ALL);
+    m_pFileDlg->AddFilter(aFilterCfgStr, "*.json");
+    m_pFileDlg->SetCurrentFilter(aFilterCfgStr);
+
+    Link<sfx2::FileDialogHelper*, void> aDlgClosedLink
+        = bSave ? LINK(this, SfxAutoRedactDialog, SaveHdl)
+                : LINK(this, SfxAutoRedactDialog, LoadHdl);
+    m_pFileDlg->StartExecuteModal(aDlgClosedLink);
+}
+
 SfxAutoRedactDialog::SfxAutoRedactDialog(weld::Window* pParent)
     : SfxDialogController(pParent, "sfx/ui/autoredactdialog.ui", "AutoRedactDialog")
     , m_xRedactionTargetsLabel(m_xBuilder->weld_label("labelRedactionTargets"))
@@ -374,8 +470,8 @@ SfxAutoRedactDialog::SfxAutoRedactDialog(weld::Window* pParent)
     // TODO: fill the targets box
 
     // Handler connections
-    //m_xLoadBtn->connect_clicked(LINK(this, SfxAutoRedactDialog, LoadHdl));
-    //m_xSaveBtn->connect_clicked(LINK(this, SfxAutoRedactDialog, SaveHdl));
+    m_xLoadBtn->connect_clicked(LINK(this, SfxAutoRedactDialog, Load));
+    m_xSaveBtn->connect_clicked(LINK(this, SfxAutoRedactDialog, Save));
     m_xAddBtn->connect_clicked(LINK(this, SfxAutoRedactDialog, AddHdl));
     m_xEditBtn->connect_clicked(LINK(this, SfxAutoRedactDialog, EditHdl));
     m_xDeleteBtn->connect_clicked(LINK(this, SfxAutoRedactDialog, DeleteHdl));
