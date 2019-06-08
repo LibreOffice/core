@@ -89,10 +89,22 @@ public:
     //void connect_row_activated(const Link<weld::TreeView&, void>& rLink) { m_xControl->connect_row_activated(rLink); }
 };
 
+namespace sfx2
+{
+class FileDialogHelper;
+}
+
+enum class StartFileDialogType
+{
+    Open,
+    SaveAs
+};
+
 class SFX2_DLLPUBLIC SfxAutoRedactDialog : public SfxDialogController
 {
     SfxObjectShellLock m_xDocShell;
     std::vector<std::pair<RedactionTarget*, OUString>> m_aTableTargets;
+    std::unique_ptr<sfx2::FileDialogHelper> m_pFileDlg;
 
     std::unique_ptr<weld::Label> m_xRedactionTargetsLabel;
     std::unique_ptr<TargetsTable> m_xTargetsBox;
@@ -102,11 +114,16 @@ class SFX2_DLLPUBLIC SfxAutoRedactDialog : public SfxDialogController
     std::unique_ptr<weld::Button> m_xEditBtn;
     std::unique_ptr<weld::Button> m_xDeleteBtn;
 
-    /*DECL_LINK(LoadHdl, weld::Button&, void);
-    DECL_LINK(SaveHdl, weld::Button&, void);*/
+    DECL_LINK(Load, weld::Button&, void);
+    DECL_LINK(Save, weld::Button&, void);
     DECL_LINK(AddHdl, weld::Button&, void);
     DECL_LINK(EditHdl, weld::Button&, void);
     DECL_LINK(DeleteHdl, weld::Button&, void);
+
+    DECL_LINK(LoadHdl, sfx2::FileDialogHelper*, void);
+    DECL_LINK(SaveHdl, sfx2::FileDialogHelper*, void);
+
+    void StartFileDialog(StartFileDialogType nType, const OUString& rTitle);
 
 public:
     SfxAutoRedactDialog(weld::Window* pParent);
