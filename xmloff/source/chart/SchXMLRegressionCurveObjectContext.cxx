@@ -167,7 +167,7 @@ void SchXMLEquationContext::StartElement( const uno::Reference< xml::sax::XAttri
 
     if( !sAutoStyleName.isEmpty() || bShowEquation || bShowRSquare )
     {
-        uno::Reference< beans::XPropertySet > xEqationProperties = chart2::RegressionEquation::create( comphelper::getProcessComponentContext() );
+        uno::Reference< beans::XPropertySet > xEquationProperties = chart2::RegressionEquation::create( comphelper::getProcessComponentContext() );
 
         if( !sAutoStyleName.isEmpty() )
         {
@@ -181,20 +181,20 @@ void SchXMLEquationContext::StartElement( const uno::Reference< xml::sax::XAttri
                     const_cast< XMLPropStyleContext* >( dynamic_cast< const XMLPropStyleContext* >( pStyle ));
 
                 if( pPropStyleContext )
-                    pPropStyleContext->FillPropertySet( xEqationProperties );
+                    pPropStyleContext->FillPropertySet( xEquationProperties );
             }
         }
-        xEqationProperties->setPropertyValue( "ShowEquation", uno::makeAny( bShowEquation ));
-        xEqationProperties->setPropertyValue( "ShowCorrelationCoefficient", uno::makeAny( bShowRSquare ));
+        xEquationProperties->setPropertyValue( "ShowEquation", uno::makeAny( bShowEquation ));
+        xEquationProperties->setPropertyValue( "ShowCorrelationCoefficient", uno::makeAny( bShowRSquare ));
 
         if( bHasXPos && bHasYPos )
         {
             chart2::RelativePosition aRelPos;
             aRelPos.Primary = static_cast< double >( aPosition.X ) / static_cast< double >( maChartSize.Width );
             aRelPos.Secondary = static_cast< double >( aPosition.Y ) / static_cast< double >( maChartSize.Height );
-            xEqationProperties->setPropertyValue( "RelativePosition", uno::makeAny( aRelPos ));
+            xEquationProperties->setPropertyValue( "RelativePosition", uno::makeAny( aRelPos ));
         }
-        mrRegressionStyle.m_xEquationProperties.set( xEqationProperties );
+        mrRegressionStyle.m_xEquationProperties.set( xEquationProperties );
     }
 }
 
