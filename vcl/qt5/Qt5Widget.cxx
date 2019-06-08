@@ -588,6 +588,7 @@ void Qt5Widget::inputMethodEvent(QInputMethodEvent* pEvent)
 static bool lcl_retrieveSurrounding(sal_Int32& rPosition, sal_Int32& rAnchor, QString* pText,
                                     QString* pSelection)
 {
+    SolarMutexGuard aGuard;
     vcl::Window* pFocusWin = Application::GetFocusWindow();
     if (!pFocusWin)
         return false;
