@@ -498,8 +498,6 @@ SfxTemplateLocalView::SfxTemplateLocalView(std::unique_ptr<weld::ScrolledWindow>
     : SfxThumbnailView(std::move(xWindow), std::move(xMenu))
     , mnCurRegionId(0)
     , maSelectedItem(nullptr)
-    , mnThumbnailWidth(TEMPLATE_THUMBNAIL_MAX_WIDTH)
-    , mnThumbnailHeight(TEMPLATE_THUMBNAIL_MAX_HEIGHT)
     , maPosition(0,0)
     , mpDocTemplates(new SfxDocumentTemplates)
 {
@@ -538,8 +536,8 @@ void SfxTemplateLocalView::Populate()
             aProperties.aPath = aURL;
             aProperties.aRegionName = aRegionName;
             aProperties.aThumbnail = TemplateLocalView::fetchThumbnail(aURL,
-                                                                          mnThumbnailWidth,
-                                                                          mnThumbnailHeight);
+                                                                          TEMPLATE_THUMBNAIL_MAX_WIDTH,
+                                                                          TEMPLATE_THUMBNAIL_MAX_HEIGHT);
 
             pItem->maTemplates.push_back(aProperties);
             maAllTemplates.push_back(aProperties);

@@ -394,13 +394,6 @@ namespace accessibility
     {
         ::comphelper::OExternalLockGuard aGuard( this );
 
-        if(getListBox())
-        {
-            SvTreeAccRoleType nType = getListBox()->GetAllEntriesAccessibleRoleType();
-            if( nType == SvTreeAccRoleType::TREE)
-                return AccessibleRole::TREE;
-        }
-
         //o is: return AccessibleRole::TREE;
         bool bHasButtons = (getListBox()->GetStyle() & WB_HASBUTTONS)!=0;
         if(!bHasButtons && (getListBox()->GetTreeFlags() & SvTreeFlags::CHKBTN))
