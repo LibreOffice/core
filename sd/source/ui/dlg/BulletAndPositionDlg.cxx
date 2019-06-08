@@ -117,7 +117,6 @@ SvxBulletAndPositionDlg::SvxBulletAndPositionDlg(weld::Window* pWindow, const Sf
     : GenericDialogController(pWindow, "cui/ui/bulletandposition.ui", "BulletAndPosition")
     , bLastWidthModified(false)
     , bModified(false)
-    , bAutomaticCharStyles(true)
     , bInInitControl(false)
     , bLabelAlignmentPosAndSpaceModeActive(false)
     , bApplyToMaster(false)
@@ -794,10 +793,7 @@ IMPL_LINK(SvxBulletAndPositionDlg, NumberTypeSelectHdl_Impl, weld::ComboBox&, rB
                 pActNum->SetLevel(i, aNumFmt);
                 SwitchNumberType(SHOW_BULLET);
                 // allocation of the drawing pattern is automatic
-                if (bAutomaticCharStyles)
-                {
-                    sSelectStyle = m_sBulletCharFormatName;
-                }
+                sSelectStyle = m_sBulletCharFormatName;
             }
             else
             {
@@ -808,10 +804,7 @@ IMPL_LINK(SvxBulletAndPositionDlg, NumberTypeSelectHdl_Impl, weld::ComboBox&, rB
                 CheckForStartValue_Impl(nNumberingType);
 
                 // allocation of the drawing pattern is automatic
-                if (bAutomaticCharStyles)
-                {
-                    sSelectStyle = m_sNumCharFmtName;
-                }
+                sSelectStyle = m_sNumCharFmtName;
             }
         }
         nMask <<= 1;

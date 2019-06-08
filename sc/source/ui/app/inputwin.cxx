@@ -991,16 +991,17 @@ void ScInputBarGroup::TextGrabFocus()
     maTextWndGroup->TextGrabFocus();
 }
 
+constexpr long gnBorderWidth = INPUTLINE_INSET_MARGIN + 1;
+constexpr long gnBorderHeight = INPUTLINE_INSET_MARGIN + 1;
+
 ScTextWndGroup::ScTextWndGroup(vcl::Window* pParent, ScTabViewShell* pViewSh)
     : ScTextWndBase(pParent, WinBits(WB_TABSTOP)),
       maTextWnd(VclPtr<ScTextWnd>::Create(this, pViewSh)),
       maScrollBar(VclPtr<ScrollBar>::Create(this, WB_TABSTOP | WB_VERT | WB_DRAG))
 {
-    mnBorderWidth = INPUTLINE_INSET_MARGIN + 1;
-    mnBorderHeight = INPUTLINE_INSET_MARGIN + 1;
-    maTextWnd->SetPosPixel(Point(mnBorderWidth, mnBorderHeight));
+    maTextWnd->SetPosPixel(Point(gnBorderWidth, gnBorderHeight));
     Size aSize = GetSizePixel();
-    maTextWnd->SetSizePixel(Size(aSize.Width() - 2 * mnBorderWidth, aSize.Height() - 2 * mnBorderHeight));
+    maTextWnd->SetSizePixel(Size(aSize.Width() - 2 * gnBorderWidth, aSize.Height() - 2 * gnBorderHeight));
     maTextWnd->Show();
     maTextWnd->SetQuickHelpText(ScResId(SCSTR_QHELP_INPUTWND));
     maTextWnd->SetHelpId(HID_INSWIN_INPUT);
@@ -1044,7 +1045,7 @@ long ScTextWndGroup::GetNumLines()
 
 long ScTextWndGroup::GetPixelHeightForLines(long nLines)
 {
-    return maTextWnd->GetPixelHeightForLines(nLines) + 2 * mnBorderHeight;
+    return maTextWnd->GetPixelHeightForLines(nLines) + 2 * gnBorderHeight;
 }
 
 ScrollBar& ScTextWndGroup::GetScrollBar()
@@ -1110,13 +1111,13 @@ void ScTextWndGroup::Resize()
         maScrollBar->SetLineSize(maTextWnd->GetTextHeight());
         maScrollBar->Resize();
         maScrollBar->Show();
-        maTextWnd->SetSizePixel(Size(aSize.Width() - aScrollBarSize.Width() - mnBorderWidth - 1,
-                                     aSize.Height() - 2 * mnBorderHeight));
+        maTextWnd->SetSizePixel(Size(aSize.Width() - aScrollBarSize.Width() - gnBorderWidth - 1,
+                                     aSize.Height() - 2 * gnBorderHeight));
     }
     else
     {
         maScrollBar->Hide();
-        maTextWnd->SetSizePixel(Size(aSize.Width() - 2 * mnBorderWidth, aSize.Height() - 2 * mnBorderHeight));
+        maTextWnd->SetSizePixel(Size(aSize.Width() - 2 * gnBorderWidth, aSize.Height() - 2 * gnBorderHeight));
     }
     maTextWnd->Resize();
     Invalidate();

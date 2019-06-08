@@ -397,10 +397,6 @@ namespace accessibility
         SvTreeListBox* pBox = getListBox();
         if(pBox)
         {
-            SvTreeAccRoleType nType = pBox->GetAllEntriesAccessibleRoleType();
-            if( nType == SvTreeAccRoleType::TREE)
-                return AccessibleRole::TREE_ITEM;
-
             SvTreeFlags treeFlag = pBox->GetTreeFlags();
             if(treeFlag & SvTreeFlags::CHKBTN )
             {

@@ -105,12 +105,6 @@ namespace o3tl
     template<> struct typed_flags<SvTreeFlags> : is_typed_flags<SvTreeFlags, 0x1f> {};
 }
 
-enum class SvTreeAccRoleType
-{
-    NONE   = 0x00,
-    TREE   = 0x02
-};
-
 enum class SvLBoxItemType {String, Button, ContextBmp};
 
 class VCL_DLLPUBLIC SvLBoxTab
@@ -222,7 +216,6 @@ class VCL_DLLPUBLIC SvTreeListBox
     short           nEntryHeightOffs;
     short           nIndent;
     short           nFocusWidth;
-    SvTreeAccRoleType nAllItemAccRoleType;
     sal_uInt16      nFirstSelTab;
     sal_uInt16      nLastSelTab;
     long mnCheckboxItemWidth;
@@ -500,9 +493,6 @@ public:
 
     /** Enables, that one cell of a tablistbox entry can be focused */
     void                EnableCellFocus();
-
-                        // For overwriting accessible role for all entries - normally 0, so each entry can be different
-    SvTreeAccRoleType   GetAllEntriesAccessibleRoleType() const { return nAllItemAccRoleType; }
 
     SvTreeFlags         GetTreeFlags() const {return nTreeFlags;}
 

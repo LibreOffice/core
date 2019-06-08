@@ -303,7 +303,6 @@ protected:
     bool mbScroll : 1;
     bool mbHasVisibleItems : 1;
     bool mbShowTooltips : 1;
-    bool mbIsMultiSelectionEnabled: 1;
     Color maFillColor;              ///< Background color of the thumbnail view widget.
     Color maTextColor;              ///< Text color.
     Color maHighlightColor;         ///< Color of the highlight (background) of the hovered item.

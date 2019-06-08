@@ -142,7 +142,6 @@ void ThumbnailView::ImplInit()
     mbScroll = false;
     mbHasVisibleItems = false;
     mbShowTooltips = false;
-    mbIsMultiSelectionEnabled = true;
     maFilterFunc = ViewFilterAll();
     maFillColor = GetSettings().GetStyleSettings().GetFieldColor();
     maTextColor = GetSettings().GetStyleSettings().GetWindowTextColor();
@@ -602,7 +601,7 @@ void ThumbnailView::KeyInput( const KeyEvent& rKEvt )
             Control::KeyInput( rKEvt );
     }
 
-    if ( pNext  && mbIsMultiSelectionEnabled)
+    if ( pNext )
     {
         if (aKeyCode.IsShift() && bValidRange)
         {
@@ -665,12 +664,6 @@ void ThumbnailView::KeyInput( const KeyEvent& rKEvt )
 
         MakeItemVisible(pNext->mnId);
     }
-    else if(pNext && !mbIsMultiSelectionEnabled)
-    {
-        deselectItems();
-        SelectItem(pNext->mnId);
-        MakeItemVisible(pNext->mnId);
-    }
 }
 
 void ThumbnailView::MakeItemVisible( sal_uInt16 nItemId )
@@ -723,15 +716,7 @@ void ThumbnailView::MouseButtonDown( const MouseEvent& rMEvt )
         return;
     }
 
-    if ( rMEvt.GetClicks() == 1 && !mbIsMultiSelectionEnabled )
-    {
-        deselectItems();
-        pItem->setSelection(!pItem->isSelected());
-
-        if (!pItem->isHighlighted())
-            DrawItem(pItem);
-    }
-    else if(rMEvt.GetClicks() == 1)
+    if(rMEvt.GetClicks() == 1)
     {
         if (rMEvt.IsMod1())
         {
