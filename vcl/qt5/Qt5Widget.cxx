@@ -640,6 +640,7 @@ static bool lcl_retrieveSurrounding(sal_Int32& rPosition, sal_Int32& rAnchor, QS
 
 QVariant Qt5Widget::inputMethodQuery(Qt::InputMethodQuery property) const
 {
+    SolarMutexGuard aGuard;
     switch (property)
     {
         case Qt::ImSurroundingText:
