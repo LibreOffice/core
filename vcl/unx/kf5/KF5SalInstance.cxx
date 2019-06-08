@@ -27,39 +27,39 @@
 
 #include <Qt5Data.hxx>
 
-#include "KDE5FilePicker.hxx"
-#include "KDE5SalFrame.hxx"
-#include "KDE5SalInstance.hxx"
+#include "KF5FilePicker.hxx"
+#include "KF5SalFrame.hxx"
+#include "KF5SalInstance.hxx"
 
 using namespace com::sun::star;
 
-KDE5SalInstance::KDE5SalInstance(std::unique_ptr<QApplication>& pQApp)
+KF5SalInstance::KF5SalInstance(std::unique_ptr<QApplication>& pQApp)
     : Qt5Instance(pQApp, true)
 {
     ImplSVData* pSVData = ImplGetSVData();
-    pSVData->maAppData.mxToolkitName = OUString("kde5");
+    pSVData->maAppData.mxToolkitName = OUString("kf5");
 }
 
-SalFrame* KDE5SalInstance::CreateFrame(SalFrame* pParent, SalFrameStyleFlags nState)
+SalFrame* KF5SalInstance::CreateFrame(SalFrame* pParent, SalFrameStyleFlags nState)
 {
     SalFrame* pRet(nullptr);
     RunInMainThread(std::function([&pRet, pParent, nState]() {
-        pRet = new KDE5SalFrame(static_cast<KDE5SalFrame*>(pParent), nState, true);
+        pRet = new KF5SalFrame(static_cast<KF5SalFrame*>(pParent), nState, true);
     }));
     assert(pRet);
     return pRet;
 }
 
-bool KDE5SalInstance::hasNativeFileSelection() const
+bool KF5SalInstance::hasNativeFileSelection() const
 {
-    if (Application::GetDesktopEnvironment() == "KDE5")
+    if (Application::GetDesktopEnvironment() == "PLASMA5")
         return true;
     return Qt5Instance::hasNativeFileSelection();
 }
 
 Qt5FilePicker*
-KDE5SalInstance::createPicker(css::uno::Reference<css::uno::XComponentContext> const& context,
-                              QFileDialog::FileMode eMode)
+KF5SalInstance::createPicker(css::uno::Reference<css::uno::XComponentContext> const& context,
+                             QFileDialog::FileMode eMode)
 {
     if (!IsMainThread())
     {
@@ -70,16 +70,16 @@ KDE5SalInstance::createPicker(css::uno::Reference<css::uno::XComponentContext> c
         return pPicker;
     }
 
-    // In order to insert custom controls, KDE5FilePicker currently relies on KFileWidget
+    // In order to insert custom controls, KF5FilePicker currently relies on KFileWidget
     // being used in the native file picker, which is only the case for KDE Plasma.
     // Therefore, return the plain qt5 one in order to not lose custom controls.
-    if (Application::GetDesktopEnvironment() == "KDE5")
-        return new KDE5FilePicker(context, eMode);
+    if (Application::GetDesktopEnvironment() == "PLASMA5")
+        return new KF5FilePicker(context, eMode);
     return Qt5Instance::createPicker(context, eMode);
 }
 
 extern "C" {
-VCLPLUG_KDE5_PUBLIC SalInstance* create_SalInstance()
+VCLPLUG_KF5_PUBLIC SalInstance* create_SalInstance()
 {
     std::unique_ptr<char* []> pFakeArgv;
     std::unique_ptr<int> pFakeArgc;
@@ -89,7 +89,7 @@ VCLPLUG_KDE5_PUBLIC SalInstance* create_SalInstance()
     std::unique_ptr<QApplication> pQApp
         = Qt5Instance::CreateQApplication(*pFakeArgc, pFakeArgv.get());
 
-    KDE5SalInstance* pInstance = new KDE5SalInstance(pQApp);
+    KF5SalInstance* pInstance = new KF5SalInstance(pQApp);
     pInstance->MoveFakeCmdlineArgs(pFakeArgv, pFakeArgc, aFakeArgvFreeable);
 
     new Qt5Data(pInstance);

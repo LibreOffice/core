@@ -27,7 +27,7 @@ enum GenericUnixSalDataType
 {
     SAL_DATA_GTK,
     SAL_DATA_GTK3,
-    SAL_DATA_KDE5,
+    SAL_DATA_KF5,
     SAL_DATA_UNX,
     SAL_DATA_SVP,
     SAL_DATA_ANDROID,

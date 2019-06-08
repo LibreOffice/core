@@ -125,8 +125,8 @@ local file="$1"
         */libavmediagst_0_10.so)
             whitelist="${whitelist} ${gtk2whitelist} ${gstreamer010whitelist}"
         ;;
-        */libvclplug_kde5lo.so|*/libkde5be1lo.so)
-            if [ "$ENABLE_KDE5" = TRUE ]; then
+        */libvclplug_kf5lo.so|*/libkf5be1lo.so)
+            if [ "$ENABLE_KF5" = TRUE ]; then
                 whitelist="${whitelist} ${qt5whitelist} ${kf5whitelist}"
             fi
         ;;

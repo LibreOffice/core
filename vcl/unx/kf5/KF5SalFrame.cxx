@@ -28,7 +28,7 @@
 #include <KConfigGroup>
 #include <KSharedConfig>
 
-#include "KDE5SalFrame.hxx"
+#include "KF5SalFrame.hxx"
 
 #include <tools/color.hxx>
 
@@ -42,7 +42,7 @@
 
 #include <boost/optional.hpp>
 
-KDE5SalFrame::KDE5SalFrame(KDE5SalFrame* pParent, SalFrameStyleFlags nState, bool bUseCairo)
+KF5SalFrame::KF5SalFrame(KF5SalFrame* pParent, SalFrameStyleFlags nState, bool bUseCairo)
     : Qt5Frame(pParent, nState, bUseCairo)
     , m_bGraphicsInUse(false)
 {
@@ -101,13 +101,13 @@ static vcl::Font toFont(const QFont& rQFont, const css::lang::Locale& rLocale)
     else
         aInfo.m_eWidth = WIDTH_ULTRA_EXPANDED;
 
-    SAL_INFO("vcl.kde5", "font name BEFORE system match: \"" << aInfo.m_aFamilyName << "\"");
+    SAL_INFO("vcl.kf5", "font name BEFORE system match: \"" << aInfo.m_aFamilyName << "\"");
 
     // match font to e.g. resolve "Sans"
     psp::PrintFontManager::get().matchFont(aInfo, rLocale);
 
-    SAL_INFO("vcl.kde5", "font match " << (aInfo.m_nID != 0 ? "succeeded" : "failed")
-                                       << ", name AFTER: \"" << aInfo.m_aFamilyName << "\"");
+    SAL_INFO("vcl.kf5", "font match " << (aInfo.m_nID != 0 ? "succeeded" : "failed")
+                                      << ", name AFTER: \"" << aInfo.m_aFamilyName << "\"");
 
     // font height
     int nPointHeight = qFontInfo.pointSize();
@@ -130,7 +130,7 @@ static vcl::Font toFont(const QFont& rQFont, const css::lang::Locale& rLocale)
 
 /** Implementation of KDE integration's main method.
 */
-void KDE5SalFrame::UpdateSettings(AllSettings& rSettings)
+void KF5SalFrame::UpdateSettings(AllSettings& rSettings)
 {
     Qt5Frame::UpdateSettings(rSettings);
 
@@ -196,26 +196,26 @@ void KDE5SalFrame::UpdateSettings(AllSettings& rSettings)
     rSettings.SetStyleSettings(style);
 }
 
-SalGraphics* KDE5SalFrame::AcquireGraphics()
+SalGraphics* KF5SalFrame::AcquireGraphics()
 {
     if (m_bGraphicsInUse)
         return nullptr;
 
     m_bGraphicsInUse = true;
 
-    if (!m_pKDE5Graphics.get())
+    if (!m_pKF5Graphics.get())
     {
-        m_pKDE5Graphics.reset(new Qt5SvpGraphics(this));
-        Qt5Frame::InitQt5SvpGraphics(m_pKDE5Graphics.get());
+        m_pKF5Graphics.reset(new Qt5SvpGraphics(this));
+        Qt5Frame::InitQt5SvpGraphics(m_pKF5Graphics.get());
     }
 
-    return m_pKDE5Graphics.get();
+    return m_pKF5Graphics.get();
 }
 
-void KDE5SalFrame::ReleaseGraphics(SalGraphics* pSalGraph)
+void KF5SalFrame::ReleaseGraphics(SalGraphics* pSalGraph)
 {
     (void)pSalGraph;
-    assert(pSalGraph == m_pKDE5Graphics.get());
+    assert(pSalGraph == m_pKF5Graphics.get());
     m_bGraphicsInUse = false;
 }
 

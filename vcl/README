@@ -38,8 +38,8 @@ unx/
 		+ GTK2 support
 	gtk3/
 		+ GTK3 support
-	kde5/
-		+ KDE5 support
+	kf5/
+		+ KF5 support
 	gtk3_kde5/
 		+ GTK3 support with KDE5 file pickers (alternative to native kde5 one)
 	generic/

@@ -605,7 +605,7 @@ linux-gnu*|k*bsd*-gnu*)
     test_gtk=yes
     build_gstreamer_1_0=yes
     build_gstreamer_0_10=yes
-    test_kde5=yes
+    test_kf5=yes
     test_gtk3_kde5=yes
     test_gdb_index=yes
     test_split_debug=yes
@@ -700,7 +700,7 @@ freebsd*)
     test_gtk=yes
     build_gstreamer_1_0=yes
     build_gstreamer_0_10=yes
-    test_kde5=yes
+    test_kf5=yes
     test_gtk3_kde5=yes
     test_freetype=yes
     AC_MSG_CHECKING([the FreeBSD operating system release])
@@ -729,7 +729,7 @@ freebsd*)
     test_gtk=yes
     build_gstreamer_1_0=yes
     build_gstreamer_0_10=yes
-    test_kde5=yes
+    test_kf5=yes
     test_gtk3_kde5=yes
     test_freetype=yes
     PTHREAD_LIBS="-pthread -lpthread"
@@ -755,7 +755,7 @@ dragonfly*)
     test_gtk=yes
     build_gstreamer_1_0=yes
     build_gstreamer_0_10=yes
-    test_kde5=yes
+    test_kf5=yes
     test_gtk3_kde5=yes
     test_freetype=yes
     PTHREAD_LIBS="-pthread"
@@ -779,7 +779,8 @@ linux-android*)
     test_fontconfig=no
     test_freetype=no
     test_gtk=no
-    test_kde5=no
+    test_kf5=no
+    test_qt5=no
     test_gtk3_kde5=no
     test_randr=no
     test_xrender=no
@@ -1263,15 +1264,20 @@ AC_ARG_ENABLE(qt5,
          available.]),
 ,)
 
-AC_ARG_ENABLE(kde5,
-    AS_HELP_STRING([--enable-kde5],
+AC_ARG_ENABLE(kf5,
+    AS_HELP_STRING([--enable-kf5],
         [Determines whether to use Qt5/KF5 vclplug on platforms where Qt5 and
          KF5 are available.]),
 ,)
 
+AC_ARG_ENABLE(kde5,
+    AS_HELP_STRING([--enable-kde5],
+        [Compatibility switch for the kde5 => kf5 rename. Use --enable-kf5!])
+,)
+
 AC_ARG_ENABLE(gtk3_kde5,
     AS_HELP_STRING([--enable-gtk3-kde5],
-        [Determines whether to use Gtk3 vclplug with KDE file dialogs on
+        [Determines whether to use Gtk3 vclplug with KF5 file dialogs on
          platforms where Gtk3, Qt5 and Plasma is available.]),
 ,)
 
@@ -4857,7 +4863,7 @@ if test "$USING_X11" != TRUE; then
     test_gtk=no
     build_gstreamer_1_0=no
     build_gstreamer_0_10=no
-    test_kde5=no
+    test_kf5=no
     test_qt5=no
     test_gtk3_kde5=no
     enable_cairo_canvas=no
@@ -4865,16 +4871,22 @@ fi
 
 if test "$OS" = "HAIKU"; then
     enable_cairo_canvas=yes
-    test_kde5=yes
+    test_kf5=yes
 fi
 
-if test "$test_kde5" = "yes"; then
+if test "$test_kf5" = "yes" -a "$enable_kde5" = "yes"; then
+    AC_MSG_WARN([The kde5 VCL plugin was renamed to kf5. Please update your configuration to use --enable-kf5, as --enable-kde5 will be removed after the next major release!])
+    add_warning "The kde5 VCL plugin was renamed to kf5. Please update your configuration to use --enable-kf5, as --enable-kde5 will be removed after the next major release!"
+    test_kf5=yes
+fi
+
+if test "$test_kf5" = "yes"; then
     test_qt5=yes
 fi
 
-if test "$test_kde5" = "yes" -a  "$enable_kde5" = "yes"; then
+if test "$test_kf5" = "yes" -a "$enable_kf5" = "yes"; then
     if test "$enable_qt5" = "no"; then
-        AC_MSG_ERROR([KDE5 support depends on QT5, so it conflicts with --disable-qt5])
+        AC_MSG_ERROR([KF5 support depends on QT5, so it conflicts with --disable-qt5])
     else
         enable_qt5=yes
     fi
@@ -10387,13 +10399,13 @@ if test "x$enable_qt5" = "xyes"; then
 fi
 AC_SUBST(ENABLE_QT5)
 
-ENABLE_KDE5=""
-if test "x$enable_kde5" = "xyes"; then
-    ENABLE_KDE5="TRUE"
-    AC_DEFINE(ENABLE_KDE5)
-    R="$R kde5"
+ENABLE_KF5=""
+if test "x$enable_kf5" = "xyes"; then
+    ENABLE_KF5="TRUE"
+    AC_DEFINE(ENABLE_KF5)
+    R="$R kf5"
 fi
-AC_SUBST(ENABLE_KDE5)
+AC_SUBST(ENABLE_KF5)
 
 ENABLE_GTK3_KDE5=""
 if test "x$enable_gtk3_kde5" = "xyes"; then
@@ -11184,7 +11196,7 @@ AC_SUBST(ENABLE_SCRIPTING_JAVASCRIPT)
 AC_SUBST(SYSTEM_RHINO)
 AC_SUBST(RHINO_JAR)
 
-# This is only used in Qt5/KDE5 checks to determine if /usr/lib64
+# This is only used in Qt5/KF5 checks to determine if /usr/lib64
 # paths should be added to library search path. So lets put all 64-bit
 # platforms there.
 supports_multilib=
@@ -11209,7 +11221,7 @@ MOC5="moc"
 QT5_GOBJECT_CFLAGS=""
 QT5_GOBJECT_LIBS=""
 QT5_HAVE_GOBJECT=""
-if test \( "$test_kde5" = "yes" -a "$ENABLE_KDE5" = "TRUE" \) -o \
+if test \( "$test_kf5" = "yes" -a "$ENABLE_KF5" = "TRUE" \) -o \
         \( "$test_qt5" = "yes" -a "$ENABLE_QT5" = "TRUE" \) -o \
         \( "$test_gtk3_kde5" = "yes" -a "$ENABLE_GTK3_KDE5" = "TRUE" \)
 then
@@ -11308,14 +11320,13 @@ AC_SUBST(QT5_GOBJECT_LIBS)
 AC_SUBST(QT5_HAVE_GOBJECT)
 
 dnl ===================================================================
-dnl KDE5 Integration
+dnl KF5 Integration
 dnl ===================================================================
 
 KF5_CFLAGS=""
 KF5_LIBS=""
 KF5_CONFIG="kf5-config"
-if test \( "$test_kde5" = "yes" -a "$ENABLE_KDE5" = "TRUE" \) -o \
-        \( "$test_kf5" = "yes" -a "$ENABLE_KF5" = "TRUE" \) -o \
+if test \( "$test_kf5" = "yes" -a "$ENABLE_KF5" = "TRUE" \) -o \
         \( "$test_gtk3_kde5" = "yes" -a "$ENABLE_GTK3_KDE5" = "TRUE" \)
 then
     if test "$OS" = "HAIKU"; then
