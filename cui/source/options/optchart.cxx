@@ -54,7 +54,6 @@ void SvxDefaultColorOptPage::InsertColorEntry(const XColorEntry& rEntry, sal_Int
     else
     {
         aColorList.push_back( rColor );
-        nPos = aColorList.size() - 1;
     }
 }
 
