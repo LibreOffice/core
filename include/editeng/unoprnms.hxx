@@ -177,6 +177,12 @@
 #define UNO_NAME_GRAPHOBJ_SIGNATURELINE_UNSIGNED_IMAGE "SignatureLineUnsignedImage"
 #define UNO_NAME_GRAPHOBJ_SIGNATURELINE_IS_SIGNED "SignatureLineIsSigned"
 
+#define UNO_NAME_GRAPHOBJ_IS_QRCODE      "IsQrCode"
+#define UNO_NAME_GRAPHOBJ_QRCODE_ID      "QrCodeId"
+#define UNO_NAME_GRAPHOBJ_QRCODE_TEXT   "QrCodeText"
+#define UNO_NAME_GRAPHOBJ_QRCODE_ECC    "QrCodeECC"
+#define UNO_NAME_GRAPHOBJ_QRCODE_BORDER "QrCodeBorder"
+
 #define UNO_NAME_OLE2_METAFILE                  "MetaFile"
 #define UNO_NAME_OLE2_PERSISTNAME               "PersistName"
 

@@ -154,6 +154,24 @@ published service GraphicObjectShape
 
     /// Whether the signature line is signed using a digital signature
     [optional, property] boolean SignatureLineIsSigned;
+
+    /// Whether this shape is actually a qr code
+    [optional, property] boolean IsQrCode;
+
+    /// The ID of the qr code, in case of multiple qr code.
+    [optional, property] string QrCodeId;
+
+    /// Text for which qr code is to be made
+    [optional, property] string QrCodeText;
+
+    /// Qr Code error correction value
+    [optional, property] int QrCodeECC;
+
+    /// Qr Code Border Value
+    [optional, property] int QrCodeBorder;
+
+    ///Image
+    [optional, property] com::sun::star::graphic::XGraphic QrCodeImage;
 };
 
 

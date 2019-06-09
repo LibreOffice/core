@@ -1289,6 +1289,38 @@ void XMLShapeExport::ImpExportSignatureLine(const uno::Reference<drawing::XShape
                                              true);
 }
 
+void XMLShapeExport::ImpExportQrCodeGen(const uno::Reference<drawing::XShape>& xShape)
+{
+    uno::Reference<beans::XPropertySet> xPropSet(xShape, uno::UNO_QUERY);
+
+    bool bIsQrCode = false;
+    xPropSet->getPropertyValue("IsQrCode") >>= bIsQrCode;
+    if (!bIsQrCode)
+        return;
+
+    OUString aQrCodeId;
+    xPropSet->getPropertyValue("QrCodeId") >>= aQrCodeId;
+    mrExport.AddAttribute(XML_NAMESPACE_LO_EXT, XML_ID, aQrCodeId);
+
+    OUString aURLText;
+    xPropSet->getPropertyValue("QrCodeText") >>= aURLText;
+    if (!aURLText.isEmpty())
+        mrExport.AddAttribute(XML_NAMESPACE_LO_EXT, XML_QRCODEGEN_TEXT, aURLText);
+
+    int aECCValue
+    xPropSet->getPropertyValue("QrCodeECC") >>= aECCValue;
+    if (!aECCValue.isEmpty())
+        mrExport.AddAttribute(XML_NAMESPACE_LO_EXT, XML_QRCODEGEN_ECC, aECCValue);
+
+    OUString aBorderValue;
+    xPropSet->getPropertyValue("QrCodeBorder") >>= aBorderValue;
+    if (!aBorderValue.isEmpty())
+        mrExport.AddAttribute(XML_NAMESPACE_LO_EXT, XML_QRCODEGEN_BORDER, aBorderValue);
+
+    SvXMLElementExport aQrCodeElement(mrExport, XML_NAMESPACE_LO_EXT, XML_QRCODEGEN, true,
+                                             true);
+}
+
 void XMLShapeExport::ExportGraphicDefaults()
 {
     rtl::Reference<XMLStyleExport> aStEx(new XMLStyleExport(mrExport, mrExport.GetAutoStylePool().get()));
@@ -2451,7 +2483,10 @@ void XMLShapeExport::ImpExportGraphicObjectShape(
 
     // Signature Line - needs to be after the images!
     if (GetExport().getDefaultVersion() > SvtSaveOptions::ODFVER_012)
+    {
         ImpExportSignatureLine(xShape);
+        ImpExportQrCodeGen(xShape);
+    }
 }
 
 void XMLShapeExport::ImpExportChartShape(

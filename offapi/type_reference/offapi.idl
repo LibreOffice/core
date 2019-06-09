@@ -5649,6 +5649,12 @@ module com {
      [property, optional] boolean SignatureLineCanAddComment;
      [property, optional] ::com::sun::star::graphic::XGraphic SignatureLineUnsignedImage;
      [property, optional] boolean SignatureLineIsSigned;
+     [property, optional] boolean IsQrCode;
+     [property, optional] string QrCodeId;
+     [property, optional] string QrCodeText;
+     [property, optional] int QrCodeECC;
+     [property, optional] int QrCodeBorder;
+     [property, optional] ::com::sun::star::graphic::XGraphic QrCodeImage;
     };
     /** @deprecated */ published interface XShapeGroup {
      interface ::com::sun::star::drawing::XShape;
