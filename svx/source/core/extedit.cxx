@@ -28,6 +28,7 @@
 #include <osl/process.h>
 #include <osl/time.h>
 #include <svtools/filechangedchecker.hxx>
+#include <tools/diagnose_ex.h>
 #include <unotools/ucbstreamhelper.hxx>
 #include <comphelper/processfactory.hxx>
 
@@ -95,9 +96,9 @@ void ExternalToolEditThread::execute()
         xSystemShellExecute->execute(m_aFileName, OUString(),
                 SystemShellExecuteFlags::URIS_ONLY);
     }
-    catch (Exception const& e)
+    catch (Exception const&)
     {
-        SAL_WARN("svx", "ExternalToolEditThread: " << e);
+        TOOLS_WARN_EXCEPTION("svx", "ExternalToolEditThread");
     }
 }
 

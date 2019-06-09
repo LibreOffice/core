@@ -1291,9 +1291,9 @@ void ChartExport::exportBitmapFill( const Reference< XPropertySet >& xPropSet )
                 }
             }
         }
-        catch (const uno::Exception & rEx)
+        catch (const uno::Exception &)
         {
-            SAL_INFO("oox", "ChartExport::exportBitmapFill " << rEx);
+            TOOLS_WARN_EXCEPTION("oox", "ChartExport::exportBitmapFill");
         }
     }
 }
@@ -1318,10 +1318,9 @@ void ChartExport::exportGradientFill( const Reference< XPropertySet >& xPropSet 
                 mpFS->endElementNS( XML_a, XML_gradFill );
             }
         }
-        catch (const uno::Exception & rEx)
+        catch (const uno::Exception &)
         {
-            SAL_INFO("oox",
-                "ChartExport::exportGradientFill " << rEx);
+            TOOLS_INFO_EXCEPTION("oox", "ChartExport::exportGradientFill");
         }
 
     }

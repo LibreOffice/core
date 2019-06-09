@@ -436,11 +436,11 @@ namespace
                 {
                     _rxDest->setPropertyValue( sourceprop.Name, _rxSource->getPropertyValue( sourceprop.Name ) );
                 }
-                catch(const IllegalArgumentException& e)
+                catch(const IllegalArgumentException&)
                 {
-                    SAL_WARN( "forms.component", "could not transfer the property named '"
+                    TOOLS_WARN_EXCEPTION( "forms.component", "could not transfer the property named '"
                                 << sourceprop.Name
-                                << "'. " << e );
+                                << "'" );
                 }
             }
         }

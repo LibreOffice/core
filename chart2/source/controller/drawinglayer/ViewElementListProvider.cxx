@@ -34,6 +34,7 @@
 #include <svx/svdview.hxx>
 #include <svx/svdpage.hxx>
 #include <sal/log.hxx>
+#include <tools/diagnose_ex.h>
 
 namespace chart
 {
@@ -128,9 +129,9 @@ SdrObjList* ViewElementListProvider::GetSymbolList() const
         if (pSdrObject)
             pSymbolList = pSdrObject->GetSubList();
     }
-    catch( const uno::Exception& e )
+    catch( const uno::Exception& )
     {
-        SAL_WARN("chart2", "Exception caught. " << e );
+        TOOLS_WARN_EXCEPTION("chart2", "" );
     }
     return pSymbolList;
 }

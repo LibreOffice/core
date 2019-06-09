@@ -36,6 +36,7 @@
 #include <svx/svdundo.hxx>
 #include <comphelper/lok.hxx>
 #include <sal/log.hxx>
+#include <tools/diagnose_ex.h>
 #include <IDocumentLayoutAccess.hxx>
 #include <IDocumentDrawModelAccess.hxx>
 #include <IDocumentDeviceAccess.hxx>
@@ -302,9 +303,9 @@ void SwViewShellImp::UpdateAccessible()
         {
             GetAccessibleMap().GetDocumentView();
         }
-        catch (uno::Exception const& e)
+        catch (uno::Exception const&)
         {
-            SAL_WARN("sw.a11y", e);
+            TOOLS_WARN_EXCEPTION("sw.a11y", "");
             assert(!"SwViewShellImp::UpdateAccessible: unhandled exception");
         }
     }

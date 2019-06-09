@@ -28,6 +28,7 @@
 
 #include <comphelper/processfactory.hxx>
 #include <sal/log.hxx>
+#include <tools/diagnose_ex.h>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmlement.hxx>
 #include <xmloff/nmspmap.hxx>
@@ -116,9 +117,10 @@ void SchXML3DSceneAttributesHelper::getCameraDefaultFromDiagram( const uno::Refe
             maVUP.setZ( aCamGeo.vup.DirectionZ );
         }
     }
-    catch( const uno::Exception & rEx )
+    catch( const uno::Exception & )
     {
-        SAL_INFO("xmloff.chart", "Exception caught for property NumberOfLines: " << rEx);
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_INFO("xmloff.chart", "Exception caught for property NumberOfLines: " << exceptionToString(ex));
     }
 }
 
@@ -382,9 +384,9 @@ void SchXMLPlotAreaContext::StartElement( const uno::Reference< xml::sax::XAttri
         xProp->getPropertyValue("NumberOfLines") >>= mnNumOfLinesProp;
         xProp->getPropertyValue("Volume") >>= mbStockHasVolume;
     }
-    catch( const uno::Exception & rEx )
+    catch( const uno::Exception & )
     {
-        SAL_INFO("xmloff.chart", "PlotAreaContext:EndElement(): Exception caught: " << rEx);
+        TOOLS_INFO_EXCEPTION("xmloff.chart", "PlotAreaContext:EndElement(): Exception caught");
     }
     } // if
 
@@ -552,9 +554,9 @@ void SchXMLPlotAreaContext::EndElement()
                 xDiaProp->setPropertyValue("NumberOfLines",
                                             uno::makeAny( mnNumOfLinesProp ));
             }
-            catch( const uno::Exception & rEx )
+            catch( const uno::Exception & )
             {
-                SAL_INFO("xmloff.chart", "Exception caught for property NumberOfLines: " << rEx);
+                TOOLS_INFO_EXCEPTION("xmloff.chart", "Exception caught for property NumberOfLines");
             }
         }
 
@@ -567,9 +569,9 @@ void SchXMLPlotAreaContext::EndElement()
                 xDiaProp->setPropertyValue("Volume",
                                             uno::makeAny( true ));
             }
-            catch( const uno::Exception & rEx )
+            catch( const uno::Exception & )
             {
-                SAL_INFO("xmloff.chart", "Exception caught for property Volume: " << rEx);
+                TOOLS_INFO_EXCEPTION("xmloff.chart", "Exception caught for property Volume");
             }
         }
     }

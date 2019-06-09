@@ -3233,9 +3233,9 @@ lcl_StoreMediaAndGetURL(SvXMLExport & rExport,
 
             return urlPath;
         }
-        catch (uno::Exception const& e)
+        catch (uno::Exception const&)
         {
-            SAL_INFO("xmloff", "exception while storing embedded media: " << e);
+            TOOLS_INFO_EXCEPTION("xmloff", "exception while storing embedded media");
         }
         return OUString();
     }
