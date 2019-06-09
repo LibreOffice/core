@@ -75,6 +75,7 @@
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/ucb/TransferInfo.hpp>
 #include <com/sun/star/ucb/NameClash.hpp>
+#include <tools/diagnose_ex.h>
 #include <xmloff/xmltoken.hxx>
 #include <vcl/help.hxx>
 #include <set>
@@ -2275,9 +2276,9 @@ SvStringsISortDtor* SvxAutoCorrectLanguageLists::LoadWrdSttExceptList()
         if( xStg.is() && xStg->IsContained( sTemp ) )
             LoadXMLExceptList_Imp( pWrdStt_ExcptLst, pXMLImplWrdStt_ExcptLstStr, xStg );
     }
-    catch (const css::ucb::ContentCreationException &e)
+    catch (const css::ucb::ContentCreationException &)
     {
-        SAL_WARN("editeng", "SvxAutoCorrectLanguageLists::LoadWrdSttExceptList: Caught " << e);
+        TOOLS_WARN_EXCEPTION("editeng", "SvxAutoCorrectLanguageLists::LoadWrdSttExceptList");
     }
     return pWrdStt_ExcptLst.get();
 }

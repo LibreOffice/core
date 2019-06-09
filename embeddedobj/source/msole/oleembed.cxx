@@ -49,6 +49,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/mimeconfighelper.hxx>
 #include <sal/log.hxx>
+#include <tools/diagnose_ex.h>
 
 
 #include <targetstatecontrol.hxx>
@@ -934,9 +935,9 @@ void SAL_CALL OleEmbeddedObject::doVerb( sal_Int32 nVerbID )
             {
                 throw;
             }
-            catch (uno::Exception const& e)
+            catch (uno::Exception const&)
             {
-                SAL_WARN("embeddedobj.ole", "OleEmbeddedObject::doVerb: -9 fallback path: " << e);
+                TOOLS_WARN_EXCEPTION("embeddedobj.ole", "OleEmbeddedObject::doVerb: -9 fallback path:");
             }
         }
 

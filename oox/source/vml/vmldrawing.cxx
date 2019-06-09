@@ -282,9 +282,9 @@ Reference< XShape > Drawing::createAndInsertXShape( const OUString& rService,
         }
         xShape->setSize( awt::Size( rShapeRect.Width, rShapeRect.Height ) );
     }
-    catch( Exception& e )
+    catch( const Exception& )
     {
-        SAL_WARN( "oox", "Drawing::createAndInsertXShape - error during shape object creation: " << e );
+        TOOLS_WARN_EXCEPTION( "oox", "Drawing::createAndInsertXShape - error during shape object creation" );
     }
     OSL_ENSURE( xShape.is(), "Drawing::createAndInsertXShape - cannot instantiate shape object" );
     return xShape;

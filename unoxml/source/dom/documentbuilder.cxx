@@ -32,6 +32,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/implbase.hxx>
@@ -200,8 +201,8 @@ namespace DOM
             // copy bytes to the provided buffer
             memcpy(buffer, chunk.getConstArray(), nread);
             return nread;
-        } catch (const css::uno::Exception& ex) {
-            SAL_WARN( "unoxml", ex);
+        } catch (const css::uno::Exception&) {
+            TOOLS_WARN_EXCEPTION( "unoxml", "");
             return -1;
         }
     }
@@ -219,8 +220,8 @@ namespace DOM
             if (pctx->freeOnClose)
                 delete pctx;
             return 0;
-        } catch (const css::uno::Exception& ex) {
-            SAL_WARN( "unoxml", ex);
+        } catch (const css::uno::Exception&) {
+            TOOLS_WARN_EXCEPTION( "unoxml", "");
             return -1;
         }
     }
@@ -293,10 +294,10 @@ namespace DOM
                 pDocBuilder->getErrorHandler()->warning(::css::uno::Any(saxex));
             }
         }
-        catch (const css::uno::Exception &e)
+        catch (const css::uno::Exception &)
         {
             // Protect lib2xml from UNO Exception
-            SAL_WARN("unoxml", "DOM::warning_func: caught " << e);
+            TOOLS_WARN_EXCEPTION("unoxml", "DOM::warning_func");
         }
     }
 
@@ -325,10 +326,10 @@ namespace DOM
                 pDocBuilder->getErrorHandler()->error(::css::uno::Any(saxex));
             }
         }
-        catch (const css::uno::Exception &e)
+        catch (const css::uno::Exception &)
         {
             // Protect lib2xml from UNO Exception
-            SAL_WARN("unoxml", "DOM::error_func: caught " << e);
+            TOOLS_WARN_EXCEPTION("unoxml", "DOM::error_func");
         }
     }
     } // extern "C"

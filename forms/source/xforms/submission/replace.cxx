@@ -25,6 +25,7 @@
 #include <rtl/ustring.hxx>
 #include <rtl/string.hxx>
 #include <sal/log.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/uno/Reference.hxx>
@@ -101,8 +102,8 @@ CSubmission::SubmissionResult CSubmission::replace(const OUString& aReplace, con
             // do nothing \o/
             return CSubmission::SUCCESS;
         }
-    } catch (const Exception& e) {
-        SAL_WARN( "forms.xforms", "Exception during replace: " << e);
+    } catch (const Exception&) {
+        TOOLS_WARN_EXCEPTION( "forms.xforms", "Exception during replace");
     }
     return CSubmission::UNKNOWN_ERROR;
 }

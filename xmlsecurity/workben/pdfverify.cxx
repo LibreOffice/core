@@ -18,6 +18,7 @@
 #include <osl/file.hxx>
 #include <sal/log.hxx>
 #include <sal/main.h>
+#include <tools/diagnose_ex.h>
 #include <vcl/pngwrite.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/graphicfilter.hxx>
@@ -67,10 +68,10 @@ int pdfVerify(int nArgc, char** pArgv)
     {
         xComponentContext = cppu::defaultBootstrap_InitialComponentContext();
     }
-    catch (const uno::RuntimeException& rException)
+    catch (const uno::RuntimeException&)
     {
-        SAL_WARN("xmlsecurity.pdfio",
-                 "cppu::defaultBootstrap_InitialComponentContext() failed: " << rException);
+        TOOLS_WARN_EXCEPTION("xmlsecurity.pdfio",
+                             "cppu::defaultBootstrap_InitialComponentContext() failed:");
         return 1;
     }
     uno::Reference<lang::XMultiComponentFactory> xMultiComponentFactory
@@ -92,10 +93,10 @@ int pdfVerify(int nArgc, char** pArgv)
     {
         xSEInitializer = xml::crypto::SEInitializer::create(xComponentContext);
     }
-    catch (const uno::DeploymentException& rException)
+    catch (const uno::DeploymentException&)
     {
-        SAL_WARN("xmlsecurity.pdfio",
-                 "DeploymentException while creating SEInitializer: " << rException);
+        TOOLS_WARN_EXCEPTION("xmlsecurity.pdfio",
+                             "DeploymentException while creating SEInitializer:");
         return 1;
     }
     uno::Reference<xml::crypto::XXMLSecurityContext> xSecurityContext
