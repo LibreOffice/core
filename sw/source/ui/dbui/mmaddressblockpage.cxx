@@ -36,6 +36,7 @@
 #include <com/sun/star/sdb/XColumn.hpp>
 #include <comphelper/string.hxx>
 #include <sal/log.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <vector>
 #include <globals.hrc>
@@ -179,7 +180,7 @@ IMPL_LINK_NOARG(SwMailMergeAddressBlockPage, AddressListHdl_Impl, Button*, void)
     }
     catch (const uno::Exception& e)
     {
-        SAL_WARN("sw", e);
+        TOOLS_WARN_EXCEPTION("sw", "");
         std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(),
                                                   VclMessageType::Warning, VclButtonsType::Ok, e.Message));
         xBox->run();

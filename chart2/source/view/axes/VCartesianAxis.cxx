@@ -31,6 +31,7 @@
 #include <com/sun/star/chart2/AxisType.hpp>
 
 #include <rtl/math.hxx>
+#include <tools/diagnose_ex.h>
 #include <tools/color.hxx>
 #include <svx/unoshape.hxx>
 #include <svx/unoshtxt.hxx>
@@ -1778,9 +1779,9 @@ void VCartesianAxis::updatePositions()
                     {
                         xProp->setPropertyValue( "Transformation", aATransformation );
                     }
-                    catch( const uno::Exception& e )
+                    catch( const uno::Exception& )
                     {
-                        SAL_WARN("chart2", "Exception caught. " << e );
+                        TOOLS_WARN_EXCEPTION("chart2", "" );
                     }
                 }
 

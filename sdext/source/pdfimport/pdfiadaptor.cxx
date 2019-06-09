@@ -39,6 +39,7 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
+#include <tools/diagnose_ex.h>
 
 #include <memory>
 
@@ -153,9 +154,9 @@ sal_Bool SAL_CALL PDFIHybridAdaptor::filter( const uno::Sequence< beans::Propert
                         m_xContext ),
                     uno::UNO_QUERY );
             }
-            catch(const uno::Exception& e)
+            catch(const uno::Exception&)
             {
-                SAL_INFO("sdext.pdfimport", "subfilter: " << e);
+                TOOLS_INFO_EXCEPTION("sdext.pdfimport", "subfilter");
             }
 
             SAL_INFO("sdext.pdfimport", "subfilter: " << xSubFilter.get() );

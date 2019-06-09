@@ -31,6 +31,7 @@
 #include <svx/svdpage.hxx>
 #include <svx/svxids.hrc>
 #include <svx/unoshape.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <comphelper/propertysequence.hxx>

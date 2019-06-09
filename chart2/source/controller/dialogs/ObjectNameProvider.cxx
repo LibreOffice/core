@@ -171,9 +171,9 @@ OUString lcl_getDataPointValueText( const Reference< XDataSeries >& xSeries, sal
                     a_Size = aNumberFormatterWrapper.getFormattedString( nNumberFormatKey, fValue, nLabelColor, bColorChanged );
                 }
             }
-            catch( const uno::Exception& e )
+            catch( const uno::Exception& )
             {
-                SAL_WARN("chart2", "Exception caught. " << e );
+                TOOLS_WARN_EXCEPTION("chart2", "" );
             }
         }
     }

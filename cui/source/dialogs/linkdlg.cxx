@@ -21,6 +21,7 @@
 #include <sal/log.hxx>
 #include <vcl/svapp.hxx>
 
+#include <tools/diagnose_ex.h>
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/idle.hxx>
@@ -333,9 +334,9 @@ IMPL_LINK_NOARG(SvBaseLinksDlg, ChangeSourceClickHdl, weld::Button&, void)
                 SetManager( pNewMgr );
             }
         }
-        catch (uno::Exception & e)
+        catch (const uno::Exception &)
         {
-            SAL_WARN("cui.dialogs", "SvBaseLinksDlg: " << e);
+            TOOLS_WARN_EXCEPTION("cui.dialogs", "SvBaseLinksDlg");
         }
     }
     else
