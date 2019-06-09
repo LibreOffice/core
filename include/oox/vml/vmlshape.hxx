@@ -217,6 +217,11 @@ struct ShapeModel
     OUString     maSignatureLineSigningInstructions;
     bool         mbSignatureLineShowSignDate;
     bool         mbSignatureLineCanAddComment;
+    bool         mbIsQrCode;  ///< Shape is a qr code
+    OUString     maQrCodeId;      ///< ID of the qr
+    OUString     maQrCodeText;
+    int         maQrCodeECC;
+    int         maQrCodeBorder;
 
     explicit            ShapeModel();
                         ~ShapeModel();

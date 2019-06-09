@@ -681,6 +681,40 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const tools::Rectangle&
                                        OUStringToOString(aImageId, RTL_TEXTENCODING_UTF8));
                         imageData = true;
                     }
+                    else if (pSdrGrafObj && pSdrGrafObj->isQrCode() && m_pTextExport)
+                    {
+                        sax_fastparser::FastAttributeList* pAttrListQrCode
+                            = FastSerializerHelper::createAttrList();
+                        pAttrListQrCode->add(XML_isqrcode, "t");
+                        if (!pSdrGrafObj->getQrCodeId().isEmpty())
+                        {
+                            pAttrListQrCode->add(
+                                XML_id, OUStringToOString(pSdrGrafObj->getQrCodeId(),
+                                                          RTL_TEXTENCODING_UTF8));
+                        }
+                        if (!pSdrGrafObj->getQrCodeText().isEmpty())
+                        {
+                            pAttrListQrCode->add(
+                                FSNS(XML_o, XML_qrcodetext),
+                                OUStringToOString(
+                                    pSdrGrafObj->getQrCodeText(),
+                                    RTL_TEXTENCODING_UTF8));
+                        }
+
+                        pAttrListQrCode->add(
+                            FSNS(XML_o, XML_qrcodeecc),
+                                OStringBuffer(pSdrGrafObj->getQrCodeECC()).makeStringAndClear());
+
+                        pAttrListQrCode->add(
+                            FSNS(XML_o, XML_qrcodeborder),
+                                OStringBuffer(pSdrGrafObj->getQrCodeBorder()).makeStringAndClear());
+
+                        m_pSerializer->singleElementNS(
+                            XML_o, XML_qrcode,
+                            XFastAttributeListRef(pAttrListQrCode));
+
+                        // SOME work may be needed.
+                    }
                     else if (rProps.GetOpt(ESCHER_Prop_fillBlip, aStruct) && m_pTextExport)
                     {
                         SvMemoryStream aStream;

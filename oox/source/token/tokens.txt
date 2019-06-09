@@ -2898,6 +2898,7 @@ isometricRightDown
 isometricRightUp
 isometricTopDown
 isometricTopUp
+isqrcode
 issignatureline
 italic
 item
@@ -4158,6 +4159,10 @@ qFormat
 qs
 qsCatId
 qsTypeId
+qrcode
+qrcodeborder
+qrcodeecc
+qrcodetext
 quadArrow
 quadArrowCallout
 quadBezTo
