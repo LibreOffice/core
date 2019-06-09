@@ -129,7 +129,7 @@ public:
     }
 };
 
-static Plugin::Registration<LogExceptionNicely> X("logexceptionnicely", false);
+static Plugin::Registration<LogExceptionNicely> X("logexceptionnicely");
 
 } // namespace
 
