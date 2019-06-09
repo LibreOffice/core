@@ -44,6 +44,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/bootstrap.hxx>
 #include <sal/log.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <rtl/instance.hxx>
 #include <comphelper/processfactory.hxx>
@@ -159,11 +160,11 @@ void Desktop::createAcceptor(const OUString& aAcceptString)
                 rAcceptor->initialize( aSeq );
                 rMap.emplace(aAcceptString, rAcceptor);
             }
-            catch (const css::uno::Exception& e)
+            catch (const css::uno::Exception&)
             {
                 // no error handling needed...
                 // acceptor just won't come up
-                SAL_WARN( "desktop.app", "Acceptor could not be created: " << e);
+                TOOLS_WARN_EXCEPTION( "desktop.app", "Acceptor could not be created");
             }
         }
         else

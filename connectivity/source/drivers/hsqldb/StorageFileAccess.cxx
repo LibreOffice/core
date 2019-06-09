@@ -27,7 +27,7 @@
 #include <hsqldb/HStorageMap.hxx>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
-
+#include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::uno;
@@ -76,12 +76,11 @@ extern "C" SAL_JNI_EXPORT jboolean JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_S
         catch(const NoSuchElementException&)
         {
         }
-        catch(const Exception& e)
+        catch(const Exception&)
         {
-            OSL_FAIL("Exception caught! : Java_com_sun_star_sdbcx_comp_hsqldb_StorageFileAccess_isStreamElement");
+            TOOLS_WARN_EXCEPTION("connectivity.hsqldb", "forwarding");
             if (env->ExceptionCheck())
                 env->ExceptionClear();
-            SAL_WARN("connectivity.hsqldb", "forwarding Exception: " << e);
         }
     }
     return JNI_FALSE;
@@ -117,7 +116,7 @@ extern "C" SAL_JNI_EXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_Stora
         }
         catch(const Exception& e)
         {
-            SAL_WARN("connectivity.hsqldb", "Exception caught! : Java_com_sun_star_sdbcx_comp_hsqldb_StorageFileAccess_removeElement " << e);
+            TOOLS_WARN_EXCEPTION("connectivity.hsqldb", "");
             StorageContainer::throwJavaException(e,env);
         }
     }

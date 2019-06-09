@@ -21,6 +21,7 @@
 #include <rtl/uri.hxx>
 #include <ucbhelper/content.hxx>
 #include <ucbhelper/commandenvironment.hxx>
+#include <tools/diagnose_ex.h>
 #include <toolkit/helper/vclunohelper.hxx>
 
 #include <svtools/PlaceEditDialog.hxx>
@@ -467,9 +468,9 @@ IMPL_LINK_NOARG( CmisDetailsContainer, RefreshReposHdl, weld::Button&, void  )
             m_pDialog->m_xLBRepository->append_text(sName);
         }
     }
-    catch ( const Exception& e)
+    catch ( const Exception&)
     {
-        SAL_WARN( "svtools.dialogs", "RefreshReposHdl exception=" << e );
+        TOOLS_WARN_EXCEPTION( "svtools.dialogs", "RefreshReposHdl" );
     }
 
     // Auto-select the first one

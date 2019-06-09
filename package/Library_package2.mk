@@ -32,6 +32,7 @@ $(eval $(call gb_Library_use_libraries,package2,\
 	sax \
 	salhelper \
 	ucbhelper \
+	tl \
 	utl \
 ))
 

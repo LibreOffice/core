@@ -24,6 +24,7 @@
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/calendarwrapper.hxx>
 #include <unotools/digitgroupingiterator.hxx>
+#include <tools/diagnose_ex.h>
 #include <tools/debug.hxx>
 #include <i18nlangtag/languagetag.hxx>
 
@@ -164,9 +165,9 @@ css::i18n::LanguageCountryInfo LocaleDataWrapper::getLanguageCountryInfo() const
     {
         return xLD->getLanguageCountryInfo( getMyLocale() );
     }
-    catch (const Exception& e)
+    catch (const Exception&)
     {
-        SAL_WARN( "unotools.i18n", "getLanguageCountryInfo: Exception caught " << e );
+        TOOLS_WARN_EXCEPTION( "unotools.i18n", "getLanguageCountryInfo" );
     }
     return css::i18n::LanguageCountryInfo();
 }
@@ -191,9 +192,9 @@ const css::i18n::LocaleDataItem2& LocaleDataWrapper::getLocaleItem() const
         assert(aRet.second);
         return aRet.first->second;
     }
-    catch (const Exception& e)
+    catch (const Exception&)
     {
-        SAL_WARN( "unotools.i18n", "getLocaleItem: Exception caught " << e );
+        TOOLS_WARN_EXCEPTION( "unotools.i18n", "getLocaleItem" );
     }
     static css::i18n::LocaleDataItem2 aEmptyItem;
     return aEmptyItem;
@@ -205,9 +206,9 @@ css::uno::Sequence< css::i18n::Currency2 > LocaleDataWrapper::getAllCurrencies()
     {
         return xLD->getAllCurrencies2( getMyLocale() );
     }
-    catch (const Exception& e)
+    catch (const Exception&)
     {
-        SAL_WARN( "unotools.i18n", "getAllCurrencies: Exception caught " << e );
+        TOOLS_WARN_EXCEPTION( "unotools.i18n", "getAllCurrencies" );
     }
     return css::uno::Sequence< css::i18n::Currency2 >(0);
 }
@@ -218,9 +219,9 @@ css::uno::Sequence< css::i18n::FormatElement > LocaleDataWrapper::getAllFormats(
     {
         return xLD->getAllFormats( getMyLocale() );
     }
-    catch (const Exception& e)
+    catch (const Exception&)
     {
-        SAL_WARN( "unotools.i18n", "getAllFormats: Exception caught " << e );
+        TOOLS_WARN_EXCEPTION( "unotools.i18n", "getAllFormats" );
     }
     return css::uno::Sequence< css::i18n::FormatElement >(0);
 }
@@ -231,9 +232,9 @@ css::i18n::ForbiddenCharacters LocaleDataWrapper::getForbiddenCharacters() const
     {
         return xLD->getForbiddenCharacters( getMyLocale() );
     }
-    catch (const Exception& e)
+    catch (const Exception&)
     {
-        SAL_WARN( "unotools.i18n", "getForbiddenCharacters: Exception caught " << e );
+        TOOLS_WARN_EXCEPTION( "unotools.i18n", "getForbiddenCharacters" );
     }
     return css::i18n::ForbiddenCharacters();
 }
@@ -244,9 +245,9 @@ css::uno::Sequence< OUString > LocaleDataWrapper::getReservedWord() const
     {
         return xLD->getReservedWord( getMyLocale() );
     }
-    catch ( const Exception& e )
+    catch ( const Exception& )
     {
-        SAL_WARN( "unotools.i18n", "getReservedWord: Exception caught " << e );
+        TOOLS_WARN_EXCEPTION( "unotools.i18n", "getReservedWord" );
     }
     return css::uno::Sequence< OUString >(0);
 }
@@ -262,9 +263,9 @@ css::uno::Sequence< css::lang::Locale > LocaleDataWrapper::getAllInstalledLocale
     {
         rInstalledLocales = xLD->getAllInstalledLocaleNames();
     }
-    catch ( const Exception& e )
+    catch ( const Exception& )
     {
-        SAL_WARN( "unotools.i18n", "getAllInstalledLocaleNames: Exception caught " << e );
+        TOOLS_WARN_EXCEPTION( "unotools.i18n", "getAllInstalledLocaleNames" );
     }
     return rInstalledLocales;
 }
@@ -1772,9 +1773,9 @@ css::uno::Sequence< css::i18n::Calendar2 > LocaleDataWrapper::getAllCalendars() 
     {
         return xLD->getAllCalendars2( getMyLocale() );
     }
-    catch (const Exception& e)
+    catch (const Exception&)
     {
-        SAL_WARN( "unotools.i18n", "getAllCalendars: Exception caught " << e );
+        TOOLS_WARN_EXCEPTION( "unotools.i18n", "getAllCalendars" );
     }
     return css::uno::Sequence< css::i18n::Calendar2 >(0);
 }
@@ -1796,9 +1797,9 @@ css::uno::Sequence< OUString > LocaleDataWrapper::getDateAcceptancePatterns() co
             xLD->getDateAcceptancePatterns( getMyLocale() );
         return aDateAcceptancePatterns;
     }
-    catch (const Exception& e)
+    catch (const Exception&)
     {
-        SAL_WARN( "unotools.i18n", "getDateAcceptancePatterns: Exception caught " << e );
+        TOOLS_WARN_EXCEPTION( "unotools.i18n", "getDateAcceptancePatterns" );
     }
     return css::uno::Sequence< OUString >(0);
 }
@@ -1816,9 +1817,9 @@ void LocaleDataWrapper::setDateAcceptancePatterns(
         {
             aDateAcceptancePatterns = xLD->getDateAcceptancePatterns( getMyLocale() );
         }
-        catch (const Exception& e)
+        catch (const Exception&)
         {
-            SAL_WARN( "unotools.i18n", "setDateAcceptancePatterns: Exception caught " << e );
+            TOOLS_WARN_EXCEPTION( "unotools.i18n", "setDateAcceptancePatterns" );
         }
         if (!rPatterns.hasElements())
             return;     // just a reset
