@@ -19,6 +19,7 @@
 #include <vcl/gdimtf.hxx>
 #include <vcl/wmf.hxx>
 
+#include <tools/diagnose_ex.h>
 #include <tools/urlobj.hxx>
 #include <tools/stream.hxx>
 #include <tools/vcompat.hxx>
@@ -91,9 +92,9 @@ public:
 
             Application::Execute();
         }
-        catch (const css::uno::Exception& e)
+        catch (const css::uno::Exception&)
         {
-            SAL_WARN("vcl.app", "Fatal: " << e);
+            TOOLS_WARN_EXCEPTION("vcl.app", "Fatal");
             return 1;
         }
         catch (const std::exception& e)

@@ -27,6 +27,7 @@
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
+#include <tools/diagnose_ex.h>
 #include <unotools/mediadescriptor.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -124,9 +125,9 @@ void OLEHandler::lcl_attribute(Id rName, Value & rVal)
 
                     xShapeProps->getPropertyValue( getPropertyName( PROP_BITMAP ) ) >>= m_xReplacement;
                 }
-                catch( const uno::Exception& e )
+                catch( const uno::Exception& )
                 {
-                    SAL_WARN("writerfilter", "Exception in OLE Handler: " << e);
+                    TOOLS_WARN_EXCEPTION("writerfilter", "Exception in OLE Handler");
                 }
                 // No need to set the wrapping here as it's either set in oox or will be set later
             }
@@ -175,9 +176,9 @@ void OLEHandler::lcl_sprm(Sprm & rSprm)
                     if( m_rDomainMapper.IsInHeaderFooter() )
                         xShapeProps->setPropertyValue("Opaque", uno::makeAny(m_nWrapMode != text::WrapTextMode_THROUGH));
                 }
-                catch( const uno::Exception& e )
+                catch( const uno::Exception& )
                 {
-                    SAL_WARN("writerfilter", "Exception in OLE Handler: " << e);
+                    TOOLS_WARN_EXCEPTION("writerfilter", "Exception in OLE Handler");
                 }
             }
         }

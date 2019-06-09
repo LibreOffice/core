@@ -43,6 +43,7 @@
 #include <vcl/uitest/eventdescription.hxx>
 #include <vcl/svapp.hxx>
 #include <splitwin.hxx>
+#include <tools/diagnose_ex.h>
 #include <tools/link.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <comphelper/processfactory.hxx>
@@ -903,9 +904,9 @@ Reference<ui::XUIElement> SidebarController::CreateUIElement (
 
         return xUIElement;
     }
-    catch(const Exception& rException)
+    catch(const Exception&)
     {
-        SAL_WARN("sfx.sidebar", "Cannot create panel " << rsImplementationURL << ": " << rException);
+        TOOLS_WARN_EXCEPTION("sfx.sidebar", "Cannot create panel " << rsImplementationURL);
         return nullptr;
     }
 }

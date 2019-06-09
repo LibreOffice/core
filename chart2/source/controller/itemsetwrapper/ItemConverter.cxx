@@ -110,9 +110,9 @@ void ItemConverter::FillItemSet( SfxItemSet & rOutItemSet ) const
                             rOutItemSet.Put( std::move(pItem) );
                         }
                     }
-                    catch( const beans::UnknownPropertyException &ex )
+                    catch( const beans::UnknownPropertyException & )
                     {
-                        SAL_WARN( "chart2", ex << " - unknown Property: " << aProperty.first);
+                        TOOLS_WARN_EXCEPTION( "chart2", "unknown Property: " << aProperty.first);
                     }
                     catch( const uno::Exception & )
                     {
@@ -174,13 +174,13 @@ bool ItemConverter::ApplyItemSet( const SfxItemSet & rItemSet )
                         bItemsChanged = true;
                     }
                 }
-                catch( const beans::UnknownPropertyException &ex )
+                catch( const beans::UnknownPropertyException & )
                 {
-                    SAL_WARN( "chart2", ex << " - unknown Property: " << aProperty.first);
+                    TOOLS_WARN_EXCEPTION( "chart2", "unknown Property: " << aProperty.first);
                 }
-                catch( const uno::Exception &ex )
+                catch( const uno::Exception & )
                 {
-                    SAL_WARN( "chart2", ex );
+                    TOOLS_WARN_EXCEPTION( "chart2", "" );
                 }
             }
             else

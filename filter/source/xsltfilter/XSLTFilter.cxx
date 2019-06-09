@@ -234,11 +234,7 @@ namespace XSLT
     void
     XSLTFilter::error(const Any& a)
     {
-        Exception e;
-        if (a >>= e)
-        {
-            SAL_WARN("filter.xslt", "XSLTFilter::error was called: " << e);
-        }
+        SAL_WARN("filter.xslt", "XSLTFilter::error was called: " << exceptionToString(a));
         m_bError = true;
         m_cTransformed.set();
     }

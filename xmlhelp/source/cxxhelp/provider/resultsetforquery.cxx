@@ -26,6 +26,7 @@
 #include <com/sun/star/lang/Locale.hpp>
 
 #include <helpcompiler/HelpSearch.hxx>
+#include <tools/diagnose_ex.h>
 
 #if defined(__GNUC__)
 #  pragma GCC visibility push (default)
@@ -234,9 +235,9 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< uno::XComponentConte
 
             aIndexFolderResultVectorVector.push_back( std::move(aIndexFolderResultVector) );
         }
-        catch (const Exception &e)
+        catch (const Exception &)
         {
-            SAL_WARN("xmlhelp", e);
+            TOOLS_WARN_EXCEPTION("xmlhelp", "");
         }
 
         if( bTemporary )
