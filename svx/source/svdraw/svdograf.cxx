@@ -200,6 +200,7 @@ SdrGrafObj::SdrGrafObj(SdrModel& rSdrModel)
     ,mbIsSignatureLineShowSignDate(true)
     ,mbIsSignatureLineCanAddComment(false)
     ,mbSignatureLineIsSigned(false)
+    ,mbIsQrCode(false)
 {
     onGraphicChanged();
 
@@ -227,6 +228,7 @@ SdrGrafObj::SdrGrafObj(
     ,mbIsSignatureLineShowSignDate(true)
     ,mbIsSignatureLineCanAddComment(false)
     ,mbSignatureLineIsSigned(false)
+    ,mbIsQrCode(false)
 {
     onGraphicChanged();
 
@@ -253,6 +255,7 @@ SdrGrafObj::SdrGrafObj(
     ,mbIsSignatureLineShowSignDate(true)
     ,mbIsSignatureLineCanAddComment(false)
     ,mbSignatureLineIsSigned(false)
+    ,mbIsQrCode(false)
 {
     onGraphicChanged();
 
@@ -744,6 +747,17 @@ SdrGrafObj& SdrGrafObj::operator=( const SdrGrafObj& rObj )
     mpSignatureLineUnsignedGraphic = rObj.mpSignatureLineUnsignedGraphic;
     if (mbIsSignatureLine && rObj.mpSignatureLineUnsignedGraphic)
         mpGraphicObject->SetGraphic(rObj.mpSignatureLineUnsignedGraphic);
+    else
+        mpGraphicObject->SetGraphic( rObj.GetGraphic(), &rObj.GetGraphicObject() );
+
+    mbIsQrCode = rObj.mbIsQrCode;
+    maQrCodeId = rObj.maQrCodeId;
+    maQrCodeText = rObj.maQrCodeText;
+    maQrCodeECC = rObj.maQrCodeECC;
+    maQrCodeBorder = rObj.maQrCodeBorder;
+    mpQrCodeUnsignedGraphic = rObj.mpQrCodeUnsignedGraphic;
+    if (mbIsQrCode && rObj.mpQrCodeUnsignedGraphic)
+        mpGraphicObject->SetGraphic(rObj.mpQrCodeUnsignedGraphic);
     else
         mpGraphicObject->SetGraphic( rObj.GetGraphic(), &rObj.GetGraphicObject() );
 

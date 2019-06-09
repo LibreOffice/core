@@ -191,6 +191,12 @@
 #define OWN_ATTR_SIGNATURELINE_CAN_ADD_COMMENT  (OWN_ATTR_VALUE_START+101)
 #define OWN_ATTR_SIGNATURELINE_UNSIGNED_IMAGE   (OWN_ATTR_VALUE_START+102)
 #define OWN_ATTR_SIGNATURELINE_IS_SIGNED        (OWN_ATTR_VALUE_START+103)
+#define OWN_ATTR_IS_QRCODE                      (OWN_ATTR_VALUE_START+104)
+#define OWN_ATTR_QRCODE_ID                      (OWN_ATTR_VALUE_START+105)
+#define OWN_ATTR_QRCODE_TEXT                    (OWN_ATTR_VALUE_START+106)
+#define OWN_ATTR_QRCODE_ECC                     (OWN_ATTR_VALUE_START+107)
+#define OWN_ATTR_QRCODE_BORDER                  (OWN_ATTR_VALUE_START+108)
+#define OWN_ATTR_QRCODE_UNSIGNED_IMAGE          (OWN_ATTR_VALUE_START+109)
 // ATTENTION: maximum is OWN_ATTR_VALUE_START+103 svx, see include/svl/solar.hrc
 
 // #FontWork#
@@ -442,7 +448,13 @@
     { OUString(UNO_NAME_GRAPHOBJ_SIGNATURELINE_SHOW_SIGN_DATE), OWN_ATTR_SIGNATURELINE_SHOW_SIGN_DATE, cppu::UnoType<bool>::get(), 0, 0}, \
     { OUString(UNO_NAME_GRAPHOBJ_SIGNATURELINE_CAN_ADD_COMMENT), OWN_ATTR_SIGNATURELINE_CAN_ADD_COMMENT, cppu::UnoType<bool>::get(), 0, 0}, \
     { OUString(UNO_NAME_GRAPHOBJ_SIGNATURELINE_UNSIGNED_IMAGE), OWN_ATTR_SIGNATURELINE_UNSIGNED_IMAGE, cppu::UnoType<css::graphic::XGraphic>::get(), 0, 0}, \
-    { OUString(UNO_NAME_GRAPHOBJ_SIGNATURELINE_IS_SIGNED), OWN_ATTR_SIGNATURELINE_IS_SIGNED, cppu::UnoType<bool>::get(), 0, 0},
+    { OUString(UNO_NAME_GRAPHOBJ_SIGNATURELINE_IS_SIGNED),     OWN_ATTR_SIGNATURELINE_IS_SIGNED   , cppu::UnoType<bool>::get(), 0, 0}, \
+    { OUString(UNO_NAME_GRAPHOBJ_IS_QRCODE),           OWN_ATTR_IS_QRCODE          , cppu::UnoType<bool>::get(), 0, 0}, \
+    { OUString(UNO_NAME_GRAPHOBJ_QRCODE_ID),            OWN_ATTR_QRCODE_ID          , cppu::UnoType<OUString>::get(), 0, 0}, \
+    { OUString(UNO_NAME_GRAPHOBJ_QRCODE_TEXT),          OWN_ATTR_QRCODE_TEXT        , cppu::UnoType<OUString>::get(), 0, 0}, \
+    { OUString(UNO_NAME_GRAPHOBJ_QRCODE_ECC),           OWN_ATTR_QRCODE_ECC         , cppu::UnoType<short>::get(), 0, 0}, \
+    { OUString(UNO_NAME_GRAPHOBJ_QRCODE_BORDER),        OWN_ATTR_QRCODE_BORDER      , cppu::UnoType<short>::get(), 0, 0}, \
+    { OUString(UNO_NAME_GRAPHOBJ_QRCODE_UNSIGNED_IMAGE),OWN_ATTR_QRCODE_UNSIGNED_IMAGE, cppu::UnoType<OUString>::get(), 0, 0},
 
 #define SPECIAL_3DSCENEOBJECT_PROPERTIES_DEFAULTS \
     { OUString(UNO_NAME_3D_SCENE_AMBIENTCOLOR),     SDRATTR_3DSCENE_AMBIENTCOLOR   , ::cppu::UnoType<sal_Int32>::get(),   0,  0}, \
