@@ -23,6 +23,30 @@ chart2/res/dataeditor_icon03.png cmd/sc_deleterows.png
 chart2/res/dataeditor_icon04.png cmd/sc_deletecolumns.png
 chart2/res/selectrange.png formula/res/refinp1.png
 
+cmd/32/charttitlemenu.png cmd/32/toggletitle.png
+cmd/32/insertmenulegend.png cmd/32/legend.png
+cmd/32/insertmenuaxes.png cmd/32/diagramaxis.png
+cmd/32/insertmenugrids.png cmd/32/togglegridhorizontal.png
+cmd/32/diagramaxisall.png cmd/32/diagramaxisxyz.png
+cmd/32/diagramaxismenu.png cmd/32/diagramaxis.png
+cmd/32/diagramgridmenu.png cmd/32/togglegridhorizontal.png
+
+cmd/lc_charttitlemenu.png cmd/lc_toggletitle.png
+cmd/lc_insertmenulegend.png cmd/lc_legend.png
+cmd/lc_insertmenuaxes.png cmd/lc_diagramaxis.png
+cmd/lc_insertmenugrids.png cmd/lc_togglegridhorizontal.png
+cmd/lc_diagramaxisall.png cmd/lc_diagramaxisxyz.png
+cmd/lc_diagramaxismenu.png cmd/lc_diagramaxis.png
+cmd/lc_diagramgridmenu.png cmd/lc_togglegridhorizontal.png
+
+cmd/sc_charttitlemenu.png cmd/sc_toggletitle.png
+cmd/sc_insertmenulegend.png cmd/sc_legend.png
+cmd/sc_insertmenuaxes.png cmd/sc_diagramaxis.png
+cmd/sc_insertmenugrids.png cmd/sc_togglegridhorizontal.png
+cmd/sc_diagramaxisall.png cmd/sc_diagramaxisxyz.png
+cmd/sc_diagramaxismenu.png cmd/sc_diagramaxis.png
+cmd/sc_diagramgridmenu.png cmd/sc_togglegridhorizontal.png
+
 # cmd
 # ==============================================
 
@@ -1491,6 +1515,7 @@ reportdesign/res/sx12594.png cmd/sc_dbviewfunctions.png
 # ==============================================
 res/adrbook.png cmd/sc_viewdatasourcebrowser.png
 res/browse.png cmd/sc_browseview.png
+res/da02.png res/da01.png
 res/dir-clos.png cmd/sc_open.png
 res/dir-open.png cmd/sc_open.png
 res/fileopen.png cmd/sc_open.png
