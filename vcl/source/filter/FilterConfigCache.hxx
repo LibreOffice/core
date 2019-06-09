@@ -33,7 +33,7 @@ class FilterConfigCache
     {
         OUString sInternalFilterName;
         OUString sType;
-        css::uno::Sequence< OUString > lExtensionList;
+        std::vector< OUString > lExtensionList;
         OUString sUIName;
         OUString sExternalFilterName;
 
