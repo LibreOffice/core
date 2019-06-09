@@ -29,6 +29,7 @@
 #include <svtools/toolboxcontroller.hxx>
 #include <toolkit/awt/vclxmenu.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
+#include <tools/diagnose_ex.h>
 #include <tools/urlobj.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <vcl/commandinfoprovider.hxx>
@@ -138,9 +139,9 @@ void SAL_CALL PopupMenuToolbarController::initialize(
         m_bHasController = m_xPopupMenuFactory->hasController(
             m_aPopupCommand, getModuleName() );
     }
-    catch (const css::uno::Exception& e)
+    catch (const css::uno::Exception&)
     {
-        SAL_INFO( "fwk.uielement", e );
+        TOOLS_INFO_EXCEPTION( "fwk.uielement", "" );
     }
 
     SolarMutexGuard aSolarLock;
@@ -245,10 +246,10 @@ void PopupMenuToolbarController::createPopupMenuController()
 
             m_xPopupMenuController->setPopupMenu( m_xPopupMenu );
         }
-        catch ( const css::uno::Exception &e )
+        catch ( const css::uno::Exception & )
         {
+            TOOLS_INFO_EXCEPTION( "fwk.uielement", "" );
             m_xPopupMenu.clear();
-            SAL_INFO( "fwk.uielement", e );
         }
     }
 }

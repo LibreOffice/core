@@ -20,6 +20,7 @@
 #include <fstream>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
+#include <tools/diagnose_ex.h>
 #include <unotools/configmgr.hxx>
 #include <vcl/graph.hxx>
 #include <map>
@@ -458,9 +459,9 @@ bool SwCTB::ImportCustomToolBar( SwCTBWrapper& rWrapper, CustomToolBarImportHelp
 #endif
         bRes = true;
     }
-    catch( const uno::Exception& e )
+    catch( const uno::Exception& )
     {
-        SAL_INFO("sw.ww8","***** For some reason we have an " << e );
+        TOOLS_INFO_EXCEPTION("sw.ww8","***** For some reason we have an" );
         bRes = false;
     }
     return bRes;

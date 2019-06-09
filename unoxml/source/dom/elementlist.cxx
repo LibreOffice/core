@@ -24,6 +24,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
+#include <tools/diagnose_ex.h>
 
 #include "element.hxx"
 #include "document.hxx"
@@ -107,8 +108,8 @@ namespace DOM
                     static_cast<XElement*>(& rElement), UNO_QUERY_THROW);
             m_xEventListener = new WeakEventListener(this);
             xTarget->addEventListener("DOMSubtreeModified", m_xEventListener, false/*capture*/);
-        } catch (const Exception &e){
-            SAL_WARN( "unoxml", "Exception caught while registering NodeList as listener: " << e);
+        } catch (const Exception &){
+            TOOLS_WARN_EXCEPTION( "unoxml", "Exception caught while registering NodeList as listener");
         }
     }
 
