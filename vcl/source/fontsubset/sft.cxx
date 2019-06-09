@@ -1523,11 +1523,6 @@ static SFErrCodes doOpenTTFont( sal_uInt32 facenum, TrueTypeFont* t )
         return SFErrCodes::TtFormat;
     }
 
-    t->tables = static_cast<const sal_uInt8**>(calloc(NUM_TAGS, sizeof(sal_uInt8 *)));
-    assert(t->tables != nullptr);
-    t->tlens = static_cast<sal_uInt32*>(calloc(NUM_TAGS, sizeof(sal_uInt32)));
-    assert(t->tlens != nullptr);
-
     /* parse the tables */
     for (i=0; i<static_cast<int>(t->ntables); i++) {
         int nIndex;
@@ -1702,8 +1697,6 @@ void CloseTTFont(TrueTypeFont *ttf)
     free(ttf->subfamily);
     if( ttf->usubfamily )
         free( ttf->usubfamily );
-    free(ttf->tables);
-    free(ttf->tlens);
 
     free(ttf);
 }
