@@ -177,9 +177,9 @@ void lcl_insertOrDeleteDataLabelsToSeriesAndAllPoints( const Reference< chart2::
             }
         }
     }
-    catch(const uno::Exception &e)
+    catch(const uno::Exception &)
     {
-        SAL_WARN("chart2", "Exception caught. " << e );
+        TOOLS_WARN_EXCEPTION("chart2", "" );
     }
 }
 
@@ -724,9 +724,9 @@ bool hasDataLabelsAtSeries( const Reference< chart2::XDataSeries >& xSeries )
                 bRet = aLabel.ShowNumber || aLabel.ShowNumberInPercent || aLabel.ShowCategoryName;
         }
     }
-    catch(const uno::Exception &e)
+    catch(const uno::Exception &)
     {
-        SAL_WARN("chart2", "Exception caught. " << e );
+        TOOLS_WARN_EXCEPTION("chart2", "" );
     }
     return bRet;
 }
@@ -757,9 +757,9 @@ bool hasDataLabelsAtPoints( const Reference< chart2::XDataSeries >& xSeries )
             }
         }
     }
-    catch(const uno::Exception &e)
+    catch(const uno::Exception &)
     {
-        SAL_WARN("chart2", "Exception caught. " << e );
+        TOOLS_WARN_EXCEPTION("chart2", "" );
     }
     return bRet;
 }
@@ -791,9 +791,9 @@ bool hasDataLabelAtPoint( const Reference< chart2::XDataSeries >& xSeries, sal_I
             }
         }
     }
-    catch(const uno::Exception &e)
+    catch(const uno::Exception &)
     {
-        SAL_WARN("chart2", "Exception caught. " << e );
+        TOOLS_WARN_EXCEPTION("chart2", "" );
     }
     return bRet;
 }
@@ -820,9 +820,9 @@ void insertDataLabelToPoint( const Reference< beans::XPropertySet >& xPointProp 
             xPointProp->setPropertyValue(CHART_UNONAME_LABEL, uno::Any(aLabel));
         }
     }
-    catch(const uno::Exception &e)
+    catch(const uno::Exception &)
     {
-        SAL_WARN("chart2", "Exception caught. " << e );
+        TOOLS_WARN_EXCEPTION("chart2", "" );
     }
 }
 
@@ -840,9 +840,9 @@ void deleteDataLabelsFromPoint( const Reference< beans::XPropertySet >& xPointPr
             xPointProp->setPropertyValue(CHART_UNONAME_LABEL, uno::Any(aLabel));
         }
     }
-    catch(const uno::Exception &e)
+    catch(const uno::Exception &)
     {
-        SAL_WARN("chart2", "Exception caught. " << e );
+        TOOLS_WARN_EXCEPTION("chart2", "" );
     }
 }
 

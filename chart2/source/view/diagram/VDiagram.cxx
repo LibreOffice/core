@@ -189,9 +189,9 @@ void VDiagram::createShapes_2d()
                     xProp->setPropertyValue( UNO_NAME_MISC_OBJ_NAME, uno::Any( aWallCID ) );
                 }
             }
-            catch( const uno::Exception& e )
+            catch( const uno::Exception& )
             {
-                SAL_WARN("chart2", "Exception caught. " << e );
+                TOOLS_WARN_EXCEPTION("chart2", "" );
             }
         }
 
@@ -433,9 +433,9 @@ void VDiagram::adjustAspectRatio3d( const awt::Size& rAvailableSize )
             m_xAspectRatio3D->setPropertyValue( UNO_NAME_3D_TRANSFORM_MATRIX
                 , uno::Any(BaseGFXHelper::B3DHomMatrixToHomogenMatrix( aResult )) );
         }
-        catch( const uno::Exception& e )
+        catch( const uno::Exception& )
         {
-            SAL_WARN("chart2", "Exception caught. " << e );
+            TOOLS_WARN_EXCEPTION("chart2", "" );
         }
     }
 }
@@ -653,9 +653,9 @@ void VDiagram::createShapes_3d()
                 xShapeProp->setPropertyValue( UNO_NAME_3D_TRANSFORM_MATRIX
                     , uno::Any(BaseGFXHelper::B3DHomMatrixToHomogenMatrix(aM)) );
             }
-            catch( const uno::Exception& e )
+            catch( const uno::Exception& )
             {
-                SAL_WARN("chart2", "Exception caught. " << e );
+                TOOLS_WARN_EXCEPTION("chart2", "" );
             }
         }
     }

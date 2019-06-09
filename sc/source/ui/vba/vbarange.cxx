@@ -26,6 +26,7 @@
 #include <o3tl/any.hxx>
 #include <sfx2/objsh.hxx>
 #include <sal/log.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <com/sun/star/script/ArrayWrapper.hpp>
 #include <com/sun/star/script/XTypeConverter.hpp>
@@ -1550,9 +1551,9 @@ ScVbaRange::setValue( const uno::Any& aValue, ValueSetter& valueSetter )
                 visitArray( setter );
             }
         }
-        catch ( const uno::Exception& e )
+        catch ( const uno::Exception& )
         {
-            SAL_WARN("sc", "Bahhh, caught " << e );
+            TOOLS_WARN_EXCEPTION("sc", "Bahhh, caught" );
         }
     }
     else

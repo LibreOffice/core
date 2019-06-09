@@ -30,6 +30,7 @@
 #include <com/sun/star/xml/sax/SAXException.hpp>
 #include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
@@ -174,13 +175,13 @@ void BasicElementBase::processingInstruction( const OUString& /*rTarget*/, const
                         if ( xLib.is() )
                             xElement.set( new BasicElementBase( rLocalName, xAttributes, this, m_xImport.get() ) );
                     }
-                    catch ( const container::ElementExistException& e )
+                    catch ( const container::ElementExistException& )
                     {
-                        SAL_INFO("xmlscript.xmlflat", "BasicLibrariesElement::startChildElement: caught ElementExceptionExist reason " << e );
+                        TOOLS_INFO_EXCEPTION("xmlscript.xmlflat", "BasicLibrariesElement::startChildElement" );
                     }
-                    catch ( const lang::IllegalArgumentException& e )
+                    catch ( const lang::IllegalArgumentException& )
                     {
-                        SAL_INFO("xmlscript.xmlflat", "BasicLibrariesElement::startChildElement: caught IllegalArgumentException reason " << e );
+                        TOOLS_INFO_EXCEPTION("xmlscript.xmlflat", "BasicLibrariesElement::startChildElement" );
                     }
                 }
             }
@@ -214,9 +215,9 @@ void BasicElementBase::processingInstruction( const OUString& /*rTarget*/, const
                         if ( xLib.is() )
                             xElement.set( new BasicEmbeddedLibraryElement( rLocalName, xAttributes, this, m_xImport.get(), m_xLibContainer, aName, bReadOnly ) );
                     }
-                    catch ( const lang::IllegalArgumentException& e )
+                    catch ( const lang::IllegalArgumentException& )
                     {
-                        SAL_INFO("xmlscript.xmlflat", "BasicLibrariesElement::startChildElement: caught IllegalArgumentException reason " << e );
+                        TOOLS_INFO_EXCEPTION("xmlscript.xmlflat", "BasicLibrariesElement::startChildElement" );
                     }
                 }
             }
@@ -250,9 +251,9 @@ void BasicElementBase::processingInstruction( const OUString& /*rTarget*/, const
             if ( m_xLibContainer.is() && m_xLibContainer->hasByName( m_aLibName ) )
                 m_xLibContainer->getByName( m_aLibName ) >>= m_xLib;
         }
-        catch ( const lang::WrappedTargetException& e )
+        catch ( const lang::WrappedTargetException& )
         {
-            SAL_INFO("xmlscript.xmlflat", "BasicEmbeddedLibraryElement CTOR: caught WrappedTargetException reason " << e );
+            TOOLS_INFO_EXCEPTION("xmlscript.xmlflat", "BasicEmbeddedLibraryElement::CTOR:" );
         }
     }
 
@@ -370,17 +371,17 @@ void BasicElementBase::processingInstruction( const OUString& /*rTarget*/, const
                 m_xLib->insertByName( m_aName, aElement );
             }
         }
-        catch ( const container::ElementExistException& e )
+        catch ( const container::ElementExistException& )
         {
-            SAL_INFO("xmlscript.xmlflat", "BasicSourceCodeElement::endElement: caught ElementExceptionExist reason " << e );
+            TOOLS_INFO_EXCEPTION("xmlscript.xmlflat", "BasicSourceCodeElement::endElement" );
         }
-        catch ( const lang::IllegalArgumentException& e )
+        catch ( const lang::IllegalArgumentException& )
         {
-            SAL_INFO("xmlscript.xmlflat", "BasicSourceCodeElement::endElement: caught IllegalArgumentException reason " << e );
+            TOOLS_INFO_EXCEPTION("xmlscript.xmlflat", "BasicSourceCodeElement::endElement" );
         }
-        catch ( const lang::WrappedTargetException& e )
+        catch ( const lang::WrappedTargetException& )
         {
-            SAL_INFO("xmlscript.xmlflat", "BasicSourceCodeElement::endElement: caught WrappedTargetException reason " << e );
+            TOOLS_INFO_EXCEPTION("xmlscript.xmlflat", "BasicSourceCodeElement::endElement" );
         }
     }
 

@@ -22,6 +22,7 @@
 #include <memory>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
+#include <tools/diagnose_ex.h>
 #include <tools/helpers.hxx>
 #include <tools/stream.hxx>
 #include <tools/vcompat.hxx>
@@ -426,10 +427,10 @@ bool GDIMetaFile::ImplPlayWithRenderer( OutputDevice* pOut, const Point& rPos, S
     {
         throw; // runtime errors are fatal
     }
-    catch (const uno::Exception& e)
+    catch (const uno::Exception&)
     {
         // ignore errors, no way of reporting them here
-        SAL_WARN("vcl.gdi", "GDIMetaFile::ImplPlayWithRenderer: " << e);
+        TOOLS_WARN_EXCEPTION("vcl.gdi", "GDIMetaFile::ImplPlayWithRenderer");
     }
 
     return false;
