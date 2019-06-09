@@ -69,21 +69,6 @@ void Qt5Clipboard::flushClipboard()
     });
 }
 
-OUString Qt5Clipboard::getImplementationName()
-{
-    return OUString("com.sun.star.datatransfer.Qt5Clipboard");
-}
-
-css::uno::Sequence<OUString> Qt5Clipboard::getSupportedServiceNames()
-{
-    return { "com.sun.star.datatransfer.clipboard.SystemClipboard" };
-}
-
-sal_Bool Qt5Clipboard::supportsService(const OUString& ServiceName)
-{
-    return cppu::supportsService(this, ServiceName);
-}
-
 css::uno::Reference<css::datatransfer::XTransferable> Qt5Clipboard::getContents()
 {
     osl::MutexGuard aGuard(m_aMutex);
@@ -135,25 +120,6 @@ void Qt5Clipboard::setContents(
         xOldOwner->lostOwnership(this, xOldContents);
 }
 
-OUString Qt5Clipboard::getName() { return m_aClipboardName; }
-
-sal_Int8 Qt5Clipboard::getRenderingCapabilities() { return 0; }
-
-void Qt5Clipboard::addClipboardListener(
-    const css::uno::Reference<css::datatransfer::clipboard::XClipboardListener>& listener)
-{
-    osl::MutexGuard aGuard(m_aMutex);
-    m_aListeners.push_back(listener);
-}
-
-void Qt5Clipboard::removeClipboardListener(
-    const css::uno::Reference<css::datatransfer::clipboard::XClipboardListener>& listener)
-{
-    osl::MutexGuard aGuard(m_aMutex);
-    m_aListeners.erase(std::remove(m_aListeners.begin(), m_aListeners.end(), listener),
-                       m_aListeners.end());
-}
-
 void Qt5Clipboard::handleChanged(QClipboard::Mode aMode)
 {
     if (aMode != m_aClipboardMode)
@@ -182,6 +148,40 @@ void Qt5Clipboard::handleChanged(QClipboard::Mode aMode)
         xOldOwner->lostOwnership(this, xOldContents);
     for (auto const& listener : aListeners)
         listener->changedContents(aEv);
+}
+
+OUString Qt5Clipboard::getImplementationName()
+{
+    return OUString("com.sun.star.datatransfer.Qt5Clipboard");
+}
+
+css::uno::Sequence<OUString> Qt5Clipboard::getSupportedServiceNames()
+{
+    return { "com.sun.star.datatransfer.clipboard.SystemClipboard" };
+}
+
+sal_Bool Qt5Clipboard::supportsService(const OUString& ServiceName)
+{
+    return cppu::supportsService(this, ServiceName);
+}
+
+OUString Qt5Clipboard::getName() { return m_aClipboardName; }
+
+sal_Int8 Qt5Clipboard::getRenderingCapabilities() { return 0; }
+
+void Qt5Clipboard::addClipboardListener(
+    const css::uno::Reference<css::datatransfer::clipboard::XClipboardListener>& listener)
+{
+    osl::MutexGuard aGuard(m_aMutex);
+    m_aListeners.push_back(listener);
+}
+
+void Qt5Clipboard::removeClipboardListener(
+    const css::uno::Reference<css::datatransfer::clipboard::XClipboardListener>& listener)
+{
+    osl::MutexGuard aGuard(m_aMutex);
+    m_aListeners.erase(std::remove(m_aListeners.begin(), m_aListeners.end(), listener),
+                       m_aListeners.end());
 }
 
 bool Qt5Clipboard::isSupported(const QClipboard::Mode aMode)
