@@ -35,6 +35,7 @@
 #include <svtools/printoptions.hxx>
 #include <unotools/options.hxx>
 #include <svtools/miscopt.hxx>
+#include <tools/diagnose_ex.h>
 
 namespace svtools {
 
@@ -54,13 +55,13 @@ ItemHolder2::ItemHolder2()
         throw;
     }
 #ifdef DBG_UTIL
-    catch(const css::uno::Exception& rEx)
+    catch(const css::uno::Exception&)
     {
         static bool bMessage = true;
         if(bMessage)
         {
             bMessage = false;
-            SAL_WARN( "svtools", "CreateInstance with arguments: " << rEx );
+            TOOLS_WARN_EXCEPTION( "svtools", "CreateInstance with arguments" );
         }
     }
 #else
