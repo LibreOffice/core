@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_ecd049fa",
+        "filename": "configure.ac",
+        "patchSetId": 7
+      },
+      "lineNbr": 9938,
+      "author": {
+        "id": 1000130
+      },
+      "writtenOn": "2019-06-09T09:27:33Z",
+      "side": 1,
+      "message": "yup, correct, noticed that too.",
+      "revId": "734e9af1ec08595ae4a66ee2537dda683fc99b53",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_0ccc955f",
+        "filename": "configure.ac",
+        "patchSetId": 7
+      },
+      "lineNbr": 9941,
+      "author": {
+        "id": 1000130
+      },
+      "writtenOn": "2019-06-09T09:27:33Z",
+      "side": 1,
+      "message": "why delete it? One should check it...\n\nhttps://sources.debian.org/src/qr-code-generator/1.4.0-1/debian/patches/cpp-lib.patch/?hl\u003d25#L25\n\nGah.\n\nI am sorry, I didn\u0027t think about that the Debian packager changed the library name (probably because it otherwise would conflict against the C version with the name).. Upstream definitely installs it as libqrcodegen. So for this your initial check was correct...\n\nNo idea how to get out of this if we do want to use the C++ version instead of the C version (except local patching)...",
+      "revId": "734e9af1ec08595ae4a66ee2537dda683fc99b53",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_2ce711e7",
+        "filename": "configure.ac",
+        "patchSetId": 7
+      },
+      "lineNbr": 9944,
+      "author": {
+        "id": 1000130
+      },
+      "writtenOn": "2019-06-09T09:27:33Z",
+      "side": 1,
+      "message": "And this one - if I don\u0027t miss something - will now result in QRCODEGEN_LIBS not set at all for the external case?",
+      "revId": "734e9af1ec08595ae4a66ee2537dda683fc99b53",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
