@@ -213,8 +213,21 @@ void UITestLogger::logKeyInput(VclPtr<vcl::Window> const & xUIElement, const Key
 
     OUString aParentID = pParent->get_id();
 
-    OUString aContent = pUIObject->get_type() + " Action:TYPE Id:" +
-            rID + " Parent:"+ aParentID +" " + aKeyCode;
+    OUString aContent;
+
+    if(pUIObject->get_type()=="EditUIObject"){
+        aContent =  "Type on '" + rID + "' " + aKeyCode + " from " + aParentID ;
+    }
+    else if(pUIObject->get_type()=="SwEditWinUIObject" && rID=="writer_edit"){
+        aContent = "Type on writer " + aKeyCode ;
+    }
+    else if(pUIObject->get_type()=="ScGridWinUIObject" && rID=="grid_window"){
+        aContent = "Type on current cell " + aKeyCode ;
+    }
+    else{
+        aContent= pUIObject->get_type() + " Action:TYPE Id:" +
+                rID + " Parent:"+ aParentID +" " + aKeyCode;
+    }
     maStream.WriteLine(OUStringToOString(aContent, RTL_TEXTENCODING_UTF8));
 }
 
@@ -240,16 +253,75 @@ OUString StringMapToOUString(const std::map<OUString, OUString>& rParameters)
     return aParameterString.makeStringAndClear();
 }
 
+OUString GetValueInMapWithIndex(const std::map<OUString, OUString>& rParameters,sal_Int32 index)
+{
+    sal_Int32 j=0;
+
+    std::map<OUString, OUString>::const_iterator itr = rParameters.begin();
+
+    for ( ; itr != rParameters.end() && j<index ; ++itr,++j);
+
+    return itr->second;
+}
+
+
+OUString GetKeyInMapWithIndex(const std::map<OUString, OUString>& rParameters,sal_Int32 index)
+{
+    sal_Int32 j=0;
+
+    std::map<OUString, OUString>::const_iterator itr = rParameters.begin();
+
+    for ( ; itr != rParameters.end() && j<index ; ++itr,++j);
+
+    return itr->first;
+}
+
 }
 
 void UITestLogger::logEvent(const EventDescription& rDescription)
 {
     OUString aParameterString = StringMapToOUString(rDescription.aParameters);
 
-    OUString aLogLine = rDescription.aKeyWord + " Action:" +
-        rDescription.aAction + " Id:" + rDescription.aID +
-        " Parent:" + rDescription.aParent + aParameterString;
+    //here we will customize our statments depending on the caller of this function
+    OUString aLogLine ;
 
+    if(rDescription.aID=="writer_edit"){
+
+        if(rDescription.aAction=="GOTO"){
+            aLogLine = "GOTO page number " + GetValueInMapWithIndex(rDescription.aParameters,0);
+        }
+        else if(rDescription.aAction=="SET"){
+            aLogLine =  "Set Zoom to be "  + GetValueInMapWithIndex(rDescription.aParameters,0);
+        }
+        else if(rDescription.aAction=="SELECT"){
+            OUString to = GetValueInMapWithIndex(rDescription.aParameters,0);
+            OUString from =   GetValueInMapWithIndex(rDescription.aParameters,1);
+            aLogLine =  "Select from Pos "  +  from + " to " + to ;
+        }
+    }
+    else if(rDescription.aID=="grid_window"){
+
+        if(rDescription.aAction=="SELECT"){
+            OUString type = GetKeyInMapWithIndex(rDescription.aParameters,0);
+            if(type=="CELL" || type=="RANGE"){
+                aLogLine = "Select from calc" + aParameterString ;
+            }
+            else if(type=="TABLE")
+            {
+                aLogLine = "Switch to sheet number " + GetValueInMapWithIndex(rDescription.aParameters,0) ;
+            }
+        }
+        else if(rDescription.aAction=="LAUNCH"){
+            aLogLine = "Lanuch AutoFilter from Col "+
+            GetValueInMapWithIndex(rDescription.aParameters,2) +
+            " and Row " + GetValueInMapWithIndex(rDescription.aParameters,1);
+        }
+    }
+    else{
+        aLogLine = rDescription.aKeyWord + " Action:" +
+            rDescription.aAction + " Id:" + rDescription.aID +
+            " Parent:" + rDescription.aParent + aParameterString;
+    }
     log(aLogLine);
 }
 
