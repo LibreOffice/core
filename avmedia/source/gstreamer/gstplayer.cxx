@@ -926,7 +926,7 @@ uno::Reference< ::media::XPlayerWindow > SAL_CALL Player::createPlayerWindow( co
                             SAL_WARN("avmedia.gstreamer", "Couldn't initialize qwidget5videosink."
                                                           " Video playback might not work as expected."
                                                           " Please install Qt5 packages for QtGStreamer.");
-                            // with no videosink explicitly set, GStreamer will open it's own (misplaced) window(s) to display video
+                            // with no videosink explicitly set, GStreamer will open its own (misplaced) window(s) to display video
                         }
                     }
 #endif
