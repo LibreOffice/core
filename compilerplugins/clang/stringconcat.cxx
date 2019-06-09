@@ -9,6 +9,7 @@
 
 #include "plugin.hxx"
 #include "check.hxx"
+#include <iostream>
 
 namespace {
 
@@ -100,6 +101,16 @@ bool StringConcat::VisitCallExpr(CallExpr const * expr) {
         }
         leftLoc = compat::getBeginLoc(left->getArg(1));
     }
+
+    if (loplugin::isSamePathname(
+            compiler.getSourceManager().getFilename(
+                compiler.getSourceManager().getSpellingLoc(
+                    compiler.getSourceManager().getImmediateMacroCallerLoc(
+                        compiler.getSourceManager().getImmediateMacroCallerLoc(
+                            compat::getBeginLoc(expr))))),
+            SRCDIR "/include/tools/diagnose_ex.h"))
+        return true;
+
     StringRef name {
         getFileNameOfSpellingLoc(
             compiler.getSourceManager().getSpellingLoc(compat::getBeginLoc(expr))) };

@@ -30,6 +30,7 @@
 #include <osl/diagnose.h>
 #include <comphelper/processfactory.hxx>
 #include <sal/log.hxx>
+#include <tools/diagnose_ex.h>
 
 using namespace com::sun::star;
 
@@ -83,9 +84,9 @@ void ScSolverUtil::GetImplementations( uno::Sequence<OUString>& rImplNames,
                             rDescriptions[nCount] = sDescription;
                             ++nCount;
                         }
-                        catch (const css::uno::Exception& e)
+                        catch (const css::uno::Exception&)
                         {
-                            SAL_INFO("sc.ui", "ScSolverUtil::GetImplementations: cannot instantiate: " << sName << ", because: " << e);
+                            TOOLS_INFO_EXCEPTION("sc.ui", "ScSolverUtil::GetImplementations: cannot instantiate: " << sName);
                         }
                     }
                 }
