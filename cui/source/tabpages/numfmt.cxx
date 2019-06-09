@@ -167,16 +167,13 @@ void SvxNumberPreview::Paint(vcl::RenderContext& rRenderContext, const ::tools::
                 aTmpStr = aTmpStr.replaceAt(mnPos, 0, OUString(mnChar));
         }
     }
-    long nX;
-    if (mnPos != -1)
-        nX = 0;
-    else
+
+    long nX = 0;
+    if (mnPos == -1 && nLeadSpace > 0) //tdf#122120 if it won't fit anyway, then left align it
     {
-        //tdf#122120 if it won't fit anyway, then left align it
-        if (nLeadSpace > 0)
-            nX = nLeadSpace;
-        nX = 0;
+        nX = nLeadSpace;
     }
+
     Point aPosText = Point(nX, (aSzWnd.Height() - GetTextHeight()) / 2);
     rRenderContext.DrawText(aPosText, aTmpStr);
     rRenderContext.Pop();
