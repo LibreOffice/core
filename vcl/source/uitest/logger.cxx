@@ -216,8 +216,15 @@ void UITestLogger::logKeyInput(VclPtr<vcl::Window> const & xUIElement, const Key
 
     OUString aParentID = pParent->get_id();
 
-    OUString aContent = pUIObject->get_type() + " Action:TYPE Id:" +
-            rID + " Parent:"+ aParentID +" " + aKeyCode;
+    OUString aContent;
+
+    if(pUIObject->get_type()=="EditUIObject"){
+         aContent =  "Type on '" + rID + "' " + aKeyCode + " from " + aParentID ;
+    }
+    else{
+        aContent= pUIObject->get_type() + " Action:TYPE Id:" +
+                rID + " Parent:"+ aParentID +" " + aKeyCode;
+    }
     maStream.WriteLine(OUStringToOString(aContent, RTL_TEXTENCODING_UTF8));
 }
 
