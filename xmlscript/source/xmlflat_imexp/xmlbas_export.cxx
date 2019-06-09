@@ -32,6 +32,7 @@
 #include <com/sun/star/xml/sax/SAXException.hpp>
 #include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
@@ -294,24 +295,24 @@ sal_Bool XMLBasicExporterBase::filter( const Sequence< beans::PropertyValue >& /
                 m_xHandler->endDocument();
             }
         }
-        catch ( const container::NoSuchElementException& e )
+        catch ( const container::NoSuchElementException& )
         {
-            SAL_INFO("xmlscript.xmlflat", "XMLBasicExporterBase::filter: caught NoSuchElementException reason " << e );
+            TOOLS_INFO_EXCEPTION("xmlscript.xmlflat", "XMLBasicExporterBase::filter" );
             bReturn = false;
         }
-        catch ( const lang::IllegalArgumentException& e )
+        catch ( const lang::IllegalArgumentException& )
         {
-            SAL_INFO("xmlscript.xmlflat", "XMLBasicExporterBase::filter: caught IllegalArgumentException reason " << e );
+            TOOLS_INFO_EXCEPTION("xmlscript.xmlflat", "XMLBasicExporterBase::filter" );
             bReturn = false;
         }
-        catch ( const lang::WrappedTargetException& e )
+        catch ( const lang::WrappedTargetException& )
         {
-            SAL_INFO("xmlscript.xmlflat", "XMLBasicExporterBase::filter: caught WrappedTargetException reason " << e );
+            TOOLS_INFO_EXCEPTION("xmlscript.xmlflat", "XMLBasicExporterBase::filter:" );
             bReturn = false;
         }
-        catch ( const xml::sax::SAXException& e )
+        catch ( const xml::sax::SAXException& )
         {
-            SAL_INFO("xmlscript.xmlflat", "XMLBasicExporterBase::filter: caught SAXException reason " << e );
+            TOOLS_INFO_EXCEPTION("xmlscript.xmlflat", "XMLBasicExporterBase::filter:" );
             bReturn = false;
         }
 
