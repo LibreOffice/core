@@ -49,6 +49,7 @@
 #include <vcl/fontcapabilities.hxx>
 #include <i18nlangtag/lang.h>
 
+#include <array>
 #include <memory>
 #include <vector>
 #include <cstdint>
@@ -440,6 +441,26 @@ namespace vcl
 
 /*- private definitions */
 
+/* indexes into TrueTypeFont::tables[] and TrueTypeFont::tlens[] */
+#define O_maxp 0     /* 'maxp' */
+#define O_glyf 1     /* 'glyf' */
+#define O_head 2     /* 'head' */
+#define O_loca 3     /* 'loca' */
+#define O_name 4     /* 'name' */
+#define O_hhea 5     /* 'hhea' */
+#define O_hmtx 6     /* 'hmtx' */
+#define O_cmap 7     /* 'cmap' */
+#define O_vhea 8     /* 'vhea' */
+#define O_vmtx 9     /* 'vmtx' */
+#define O_OS2  10    /* 'OS/2' */
+#define O_post 11    /* 'post' */
+#define O_cvt  13    /* 'cvt_' - only used in TT->TT generation */
+#define O_prep 14    /* 'prep' - only used in TT->TT generation */
+#define O_fpgm 15    /* 'fpgm' - only used in TT->TT generation */
+#define O_gsub 16    /* 'GSUB' */
+#define O_CFF  17    /* 'CFF' */
+#define NUM_TAGS 18
+
     struct TrueTypeFont {
         char        *fname;
         sal_Int32   fsize;
@@ -460,29 +481,10 @@ namespace vcl
         const sal_uInt8* cmap;
         int         cmapType;
         sal_uInt32 (*mapper)(const sal_uInt8 *, sal_uInt32, sal_uInt32); /* character to glyphID translation function                          */
-        const sal_uInt8   **tables;                        /* array of pointers to raw subtables in SFNT file                    */
-        sal_uInt32  *tlens;                                /* array of table lengths                                             */
+        std::array<const sal_uInt8 *, NUM_TAGS> tables;                  /* array of pointers to raw subtables in SFNT file                    */
+        std::array<sal_uInt32, NUM_TAGS>  tlens;                         /* array of table lengths                                             */
     };
 
-/* indexes into TrueTypeFont::tables[] and TrueTypeFont::tlens[] */
-#define O_maxp 0     /* 'maxp' */
-#define O_glyf 1     /* 'glyf' */
-#define O_head 2     /* 'head' */
-#define O_loca 3     /* 'loca' */
-#define O_name 4     /* 'name' */
-#define O_hhea 5     /* 'hhea' */
-#define O_hmtx 6     /* 'hmtx' */
-#define O_cmap 7     /* 'cmap' */
-#define O_vhea 8     /* 'vhea' */
-#define O_vmtx 9     /* 'vmtx' */
-#define O_OS2  10    /* 'OS/2' */
-#define O_post 11    /* 'post' */
-#define O_cvt  13    /* 'cvt_' - only used in TT->TT generation */
-#define O_prep 14    /* 'prep' - only used in TT->TT generation */
-#define O_fpgm 15    /* 'fpgm' - only used in TT->TT generation */
-#define O_gsub 16    /* 'GSUB' */
-#define O_CFF  17    /* 'CFF' */
-#define NUM_TAGS 18
 
 } // namespace vcl
 
