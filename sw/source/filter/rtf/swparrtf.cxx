@@ -32,6 +32,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <sal/log.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/document/XImporter.hpp>
@@ -99,9 +100,9 @@ ErrCode SwRTFReader::Read(SwDoc& rDoc, const OUString& /*rBaseURL*/, SwPaM& rPam
     {
         xFilter->filter(aDescriptor);
     }
-    catch (uno::Exception const& e)
+    catch (uno::Exception const&)
     {
-        SAL_WARN("sw.rtf", "SwRTFReader::Read(): " << e);
+        TOOLS_WARN_EXCEPTION("sw.rtf", "SwRTFReader::Read()");
         ret = ERR_SWG_READ_ERROR;
     }
 

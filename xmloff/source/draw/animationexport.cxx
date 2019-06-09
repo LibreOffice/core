@@ -56,6 +56,7 @@
 #include <sax/tools/converter.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
+#include <tools/diagnose_ex.h>
 
 #include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
 #include "sdxmlexp_impl.hxx"
@@ -537,9 +538,9 @@ static OUString lcl_StoreMediaAndGetURL(SvXMLExport & rExport, OUString const& r
 
             return urlPath;
         }
-        catch (uno::Exception const& e)
+        catch (uno::Exception const&)
         {
-            SAL_INFO("xmloff", "exception while storing embedded media: '" << e << "'");
+            TOOLS_INFO_EXCEPTION("xmloff", "exception while storing embedded media");
         }
         return OUString();
     }

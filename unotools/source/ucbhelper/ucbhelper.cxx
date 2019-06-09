@@ -265,11 +265,9 @@ bool utl::UCBContentHelper::MakeFolder(
         if (e.Code == css::ucb::IOErrorCode_ALREADY_EXISTING) {
             exists = true;
         } else {
-            SAL_INFO(
+            TOOLS_INFO_EXCEPTION(
                 "unotools.ucbhelper",
-                "UCBContentHelper::MakeFolder(" << title
-                    << ") InteractiveIOException \"" << e
-                    << "\", code " << + static_cast<sal_Int32>(e.Code));
+                "UCBContentHelper::MakeFolder(" << title << ")");
         }
     } catch (css::ucb::NameClashException const &) {
         exists = true;
@@ -279,11 +277,9 @@ bool utl::UCBContentHelper::MakeFolder(
         assert(false && "this cannot happen");
         throw;
     } catch (css::uno::Exception const &) {
-        css::uno::Any e(cppu::getCaughtException());
-        SAL_INFO(
+        TOOLS_INFO_EXCEPTION(
             "unotools.ucbhelper",
-            "UCBContentHelper::MakeFolder(" << title << ") "
-                << exceptionToString(e));
+            "UCBContentHelper::MakeFolder(" << title << ") ");
     }
     if (exists) {
         INetURLObject o(parent.getURL());
