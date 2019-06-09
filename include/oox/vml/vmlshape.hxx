@@ -217,6 +217,9 @@ struct ShapeModel
     OUString     maSignatureLineSigningInstructions;
     bool         mbSignatureLineShowSignDate;
     bool         mbSignatureLineCanAddComment;
+    OUString     maQrCodeText;
+    int         maQrCodeECC;
+    int         maQrCodeBorder;
 
     explicit            ShapeModel();
                         ~ShapeModel();

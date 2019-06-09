@@ -1416,6 +1416,39 @@ bool SvxGraphicObject::setPropertyValueImpl( const OUString& rName, const SfxIte
         break;
     }
 
+    case OWN_ATTR_QRCODE_TEXT:
+    {
+        OUString aText;
+        if (rValue >>= aText)
+        {
+            static_cast<SdrGrafObj*>(GetSdrObject())->setQrCodeText(aText);
+            bOk = true;
+        }
+        break;
+    }
+
+    case OWN_ATTR_QRCODE_ECC:
+    {
+        int aECC;
+        if (rValue >>= aECC)
+        {
+            static_cast<SdrGrafObj*>(GetSdrObject())->setQrCodeECC(aECC);
+            bOk = true;
+        }
+        break;
+    }
+
+    case OWN_ATTR_QRCODE_BORDER:
+    {
+        int aBorder;
+        if (rValue >>= aBorder)
+        {
+            static_cast<SdrGrafObj*>(GetSdrObject())->setQrCodeBorder(aBorder);
+            bOk = true;
+        }
+        break;
+    }
+
     default:
         return SvxShapeText::setPropertyValueImpl( rName, pProperty, rValue );
     }
@@ -1555,6 +1588,24 @@ bool SvxGraphicObject::getPropertyValueImpl( const OUString& rName, const SfxIte
     case OWN_ATTR_SIGNATURELINE_IS_SIGNED:
     {
         rValue <<= static_cast<SdrGrafObj*>(GetSdrObject())->isSignatureLineSigned();
+        break;
+    }
+
+    case OWN_ATTR_QRCODE_TEXT:
+    {
+        rValue <<= static_cast<SdrGrafObj*>(GetSdrObject())->getQrCodeText();
+        break;
+    }
+
+    case OWN_ATTR_QRCODE_ECC:
+    {
+        rValue <<= static_cast<SdrGrafObj*>(GetSdrObject())->getQrCodeECC();
+        break;
+    }
+
+    case OWN_ATTR_QRCODE_BORDER:
+    {
+        rValue <<= static_cast<SdrGrafObj*>(GetSdrObject())->getQrCodeBorder();
         break;
     }
 

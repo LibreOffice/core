@@ -1353,6 +1353,36 @@ Reference< XShape > ComplexShape::implConvertAndInsert( const Reference< XShapes
         return xShape;
     }
 
+    // SOME hack may be needed
+    if( getShapeModel().mbIsQrCode )
+    {
+        uno::Reference<graphic::XGraphic> xGraphic;
+
+        Reference< XShape > xShape;
+        if (xGraphic.is())
+        {
+            xShape = SimpleShape::createPictureObject(rxShapes, rShapeRect, xGraphic);
+        }
+        else
+        {
+            xShape = SimpleShape::createEmbeddedPictureObject(rxShapes, rShapeRect, aGraphicPath);
+        }
+
+        // Store qr code properties
+        uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
+        xPropertySet->setPropertyValue(
+            "QrCode.Text",
+            uno::makeAny(getShapeModel().maQrCodeText));
+        xPropertySet->setPropertyValue(
+            "QrCode.ECC",
+            uno::makeAny(getShapeModel().maQrCodeECC));
+        xPropertySet->setPropertyValue(
+            "QrCode.Border",
+            uno::makeAny(getShapeModel().maQrCodeBorder));
+
+        return xShape;
+    }
+
     // try to create a picture object
     if( !aGraphicPath.isEmpty() )
     {

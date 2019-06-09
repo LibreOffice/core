@@ -148,12 +148,22 @@ published service GraphicObjectShape
      *
      *  Images for signed signature lines (valid and invalid)
      *  are to be retrieved via com::sun::star::security::DocumentSignatureInformation
-     *  (you can get the matching signature with the SignatureLineId property).
+     *  (you can get the matching signature with the SignaturBaseeLineId property).
      */
     [optional, property] com::sun::star::graphic::XGraphic SignatureLineUnsignedImage;
 
     /// Whether the signature line is signed using a digital signature
     [optional, property] boolean SignatureLineIsSigned;
+
+    published struct QrCode{
+        [optional, property] string Text;
+
+        /// Qr Code Error Correction Level
+        [optional, property] short ECC;
+
+        /// Border surrounding the QR code
+        [optional, property] short Border;
+    }
 };
 
 
