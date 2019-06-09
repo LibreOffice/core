@@ -856,7 +856,7 @@ void SvxToolbarConfigPage::SelectElement()
     UpdateButtonStates();
 }
 
-void SvxToolbarConfigPage::AddFunction(int nTarget, bool bFront)
+void SvxToolbarConfigPage::AddFunction(int nTarget)
 {
     SvxConfigEntry* pToolbar = GetTopLevelSelection();
 
@@ -865,7 +865,7 @@ void SvxToolbarConfigPage::AddFunction(int nTarget, bool bFront)
 
     // Add the command to the contents listbox of the selected toolbar
     int nNewLBEntry =
-        SvxConfigPage::AddFunction(nTarget, bFront, true/*bAllowDuplicates*/);
+        SvxConfigPage::AddFunction(nTarget, /*bFront*/false, true/*bAllowDuplicates*/);
 
     if (nNewLBEntry == -1)
         return;

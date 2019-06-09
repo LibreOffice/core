@@ -70,14 +70,12 @@ void AccessibleSmElementsControl::UpdateFocus(sal_uInt16 nPos)
     }
 }
 
-void AccessibleSmElementsControl::ReleaseAllItems(bool bNotifyRemoval)
+void AccessibleSmElementsControl::ReleaseAllItems()
 {
     if (m_aAccessibleChildren.empty())
         return;
 
     m_aAccessibleChildren.clear();
-    if (!bNotifyRemoval)
-        return;
 
     // The original toolbox accessibility code uses individual NAME_CHANGED
     // events in a loop. We can't do this, because on each remove event the

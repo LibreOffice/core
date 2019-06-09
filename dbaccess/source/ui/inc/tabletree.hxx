@@ -216,8 +216,7 @@ private:
     */
     void implAddEntry(
             const css::uno::Reference< css::sdbc::XDatabaseMetaData >& _rxMeta,
-            const OUString& _rTableName,
-            bool _bCheckName = true
+            const OUString& _rTableName
         );
 
     void    implOnNewConnection( const css::uno::Reference< css::sdbc::XConnection >& _rxConnection );

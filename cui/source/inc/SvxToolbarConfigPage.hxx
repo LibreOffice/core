@@ -70,7 +70,7 @@ public:
     virtual ~SvxToolbarConfigPage() override;
     virtual void dispose() override;
 
-    void            AddFunction(int nTarget = -1, bool bFront = false);
+    void            AddFunction(int nTarget = -1);
 
     void            MoveEntry( bool bMoveUp ) override;
 

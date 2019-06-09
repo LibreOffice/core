@@ -1003,7 +1003,7 @@ void SmElementsControl::build()
     mxScroll->SetThumbPos(0);
     mxScroll->Hide();
     if (m_xAccessible.is())
-        m_xAccessible->ReleaseAllItems(true);
+        m_xAccessible->ReleaseAllItems();
     setCurrentElement(SAL_MAX_UINT16);
 
     // The first element is the scrollbar. We can't change its indexInParent

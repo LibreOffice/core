@@ -355,7 +355,7 @@ void SdTPAction::UpdateTree()
 {
     if( !bTreeUpdated && mpDoc && mpDoc->GetDocSh() && mpDoc->GetDocSh()->GetMedium() )
     {
-        m_xLbTree->Fill( mpDoc, true, mpDoc->GetDocSh()->GetMedium()->GetName() );
+        m_xLbTree->Fill( mpDoc, mpDoc->GetDocSh()->GetMedium()->GetName() );
         bTreeUpdated = true;
     }
 }
@@ -649,7 +649,7 @@ IMPL_LINK_NOARG(SdTPAction, CheckFileHdl, weld::Widget&, void)
                         aLastFile = aFile;
 
                         m_xLbTreeDocument->clear();
-                        m_xLbTreeDocument->Fill(pBookmarkDoc, true, aFile);
+                        m_xLbTreeDocument->Fill(pBookmarkDoc, aFile);
                         mpDoc->CloseBookmarkDoc();
                         m_xLbTreeDocument->show();
                         bHideTreeDocument = false;
