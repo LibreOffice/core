@@ -70,6 +70,7 @@
 #include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
 #include <unotools/configmgr.hxx>
+#include <tools/diagnose_ex.h>
 #include <tools/debug.hxx>
 
 #include <cassert>
@@ -3283,9 +3284,9 @@ Reference< XClipboard > Window::GetClipboard()
                     = css::datatransfer::clipboard::SystemClipboard::create(
                         comphelper::getProcessComponentContext());
             }
-            catch (DeploymentException & e)
+            catch (DeploymentException const &)
             {
-                SAL_WARN("vcl.window", "ignoring " << e);
+                TOOLS_WARN_EXCEPTION("vcl.window", "ignoring");
             }
         }
 
@@ -3324,9 +3325,9 @@ Reference< XClipboard > Window::GetPrimarySelection()
                 mpWindowImpl->mpFrameData->mxSelection = s_xSelection;
 #endif
             }
-            catch (RuntimeException & e)
+            catch (RuntimeException const &)
             {
-                SAL_WARN("vcl.window", "ignoring " << e);
+                TOOLS_WARN_EXCEPTION("vcl.window", "ignoring");
             }
         }
 

@@ -23,6 +23,7 @@
 #include <unotools/transliterationwrapper.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <i18nutil/transliteration.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <com/sun/star/i18n/Transliteration.hpp>
 
@@ -145,9 +146,9 @@ void TransliterationWrapper::loadModuleImpl() const
         if ( xTrans.is() )
             xTrans->loadModule( static_cast<TransliterationModules>(nType), aLanguageTag.getLocale() );
     }
-    catch ( const Exception& e )
+    catch ( const Exception& )
     {
-        SAL_WARN( "unotools.i18n", "loadModuleImpl: Exception caught " << e );
+        TOOLS_WARN_EXCEPTION( "unotools.i18n", "loadModuleImpl" );
     }
 
     bFirstCall = false;
@@ -166,9 +167,9 @@ void TransliterationWrapper::loadModuleByImplName(const OUString& rModuleName,
         if ( xTrans.is() )
             xTrans->loadModuleByImplName( rModuleName, aLocale );
     }
-    catch ( const Exception& e )
+    catch ( const Exception& )
     {
-        SAL_WARN( "unotools.i18n", "loadModuleByImplName: Exception caught " << e );
+        TOOLS_WARN_EXCEPTION( "unotools.i18n", "loadModuleByImplName" );
     }
 
     bFirstCall = false;
@@ -185,9 +186,9 @@ bool TransliterationWrapper::equals(
         if ( xTrans.is() )
             return xTrans->equals( rStr1, nPos1, nCount1, nMatch1, rStr2, nPos2, nCount2, nMatch2 );
     }
-    catch ( const Exception& e )
+    catch ( const Exception& )
     {
-        SAL_WARN( "unotools.i18n", "equals: Exception caught " << e );
+        TOOLS_WARN_EXCEPTION( "unotools.i18n", "equals" );
     }
     return false;
 }
@@ -201,9 +202,9 @@ sal_Int32 TransliterationWrapper::compareString( const OUString& rStr1, const OU
         if ( xTrans.is() )
             return xTrans->compareString( rStr1, rStr2 );
     }
-    catch (const Exception& e)
+    catch (const Exception&)
     {
-        SAL_WARN( "unotools.i18n", "compareString: Exception caught " << e );
+        TOOLS_WARN_EXCEPTION( "unotools.i18n", "compareString" );
     }
     return 0;
 }

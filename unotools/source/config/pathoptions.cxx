@@ -21,6 +21,7 @@
 
 #include <sal/log.hxx>
 #include <unotools/pathoptions.hxx>
+#include <tools/diagnose_ex.h>
 #include <tools/urlobj.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -294,9 +295,9 @@ void SvtPathOptions_Impl::SetPath( SvtPathOptions::Paths ePath, const OUString& 
         {
             m_xPathSettings->setFastPropertyValue( m_aMapEnumToPropHandle[ static_cast<sal_Int32>(ePath)], a );
         }
-        catch (const Exception& e)
+        catch (const Exception&)
         {
-            SAL_WARN("unotools.config", "SetPath: " << e);
+            TOOLS_WARN_EXCEPTION("unotools.config", "SetPath");
         }
     }
 }

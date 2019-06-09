@@ -419,9 +419,9 @@ BasicManager* SfxLibraryContainer::getBasicManager()
             mpBasMgr = BasicManagerRepository::getDocumentBasicManager( xDocument );
         }
     }
-    catch (const css::ucb::ContentCreationException& e)
+    catch (const css::ucb::ContentCreationException&)
     {
-        SAL_WARN( "basic", "SfxLibraryContainer::getBasicManager: " << e );
+        TOOLS_WARN_EXCEPTION( "basic", "SfxLibraryContainer::getBasicManager:" );
     }
     return mpBasMgr;
 }
@@ -806,14 +806,14 @@ void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
                 xParser->setDocumentHandler( ::xmlscript::importLibraryContainer( pLibArray.get() ) );
                 xParser->parseStream( source );
             }
-            catch ( const xml::sax::SAXException& e )
+            catch ( const xml::sax::SAXException& )
             {
-                SAL_WARN("basic", e);
+                TOOLS_WARN_EXCEPTION( "basic", "" );
                 return;
             }
-            catch ( const io::IOException& e )
+            catch ( const io::IOException& )
             {
-                SAL_WARN("basic", e);
+                TOOLS_WARN_EXCEPTION( "basic", "" );
                 return;
             }
 
@@ -1174,10 +1174,10 @@ void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
                 mxSFI->kill( aPrevFolder );
             }
         }
-        catch(const Exception& e)
+        catch(const Exception&)
         {
+            TOOLS_WARN_EXCEPTION("basic", "Upgrade of Basic installation failed somehow" );
             bCleanUp = true;
-            SAL_WARN("basic", "Upgrade of Basic installation failed somehow: " << e);
         }
 
         // #i93163

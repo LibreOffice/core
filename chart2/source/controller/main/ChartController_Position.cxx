@@ -37,6 +37,7 @@
 #include <svl/aeitem.hxx>
 #include <svl/intitem.hxx>
 #include <svx/svxdlg.hxx>
+#include <tools/diagnose_ex.h>
 #include <vcl/svapp.hxx>
 #include <memory>
 
@@ -200,9 +201,9 @@ void ChartController::executeDispatch_PositionAndSize(const ::css::uno::Sequence
                 aUndoGuard.commit();
         }
     }
-    catch(const uno::Exception& e)
+    catch(const uno::Exception&)
     {
-        SAL_WARN("chart2", "Exception caught. " << e );
+        TOOLS_WARN_EXCEPTION("chart2", "" );
     }
 }
 
