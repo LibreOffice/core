@@ -371,16 +371,12 @@ public:
         @param rTransformation
         The back transformation for each pixel in (0 .. fWidth),(0 .. fHeight) to
         local pixel coordinates
-
-        @param bSmooth
-        Defines if pixel interpolation is to be used to create the result
     */
     [[nodiscard]]
     BitmapEx            TransformBitmapEx(
                             double fWidth,
                             double fHeight,
-                            const basegfx::B2DHomMatrix& rTransformation,
-                            bool bSmooth) const;
+                            const basegfx::B2DHomMatrix& rTransformation) const;
 
     /** Create transformed Bitmap
 

@@ -410,11 +410,7 @@ void TableTreeListBox::UpdateTableList( const Reference< XConnection >& _rxConne
         for (auto const& table : _rTables)
         {
             // add the entry
-            implAddEntry(
-                xMeta,
-                table.first,
-                false
-            );
+            implAddEntry(xMeta, table.first);
         }
 
         if ( !m_bNoEmptyFolders && lcl_shouldDisplayEmptySchemasAndCatalogs( _rxConnection ) )
@@ -684,8 +680,7 @@ SvTreeListEntry* OTableTreeListBox::implAddEntry(
 
 void TableTreeListBox::implAddEntry(
         const Reference< XDatabaseMetaData >& _rxMeta,
-        const OUString& _rTableName,
-        bool _bCheckName
+        const OUString& _rTableName
     )
 {
     OSL_PRECOND( _rxMeta.is(), "OTableTreeListBox::implAddEntry: invalid meta data!" );
@@ -746,23 +741,20 @@ void TableTreeListBox::implAddEntry(
         xParentEntry = std::move(xFolder);
     }
 
-    if (!_bCheckName || !GetEntryPosByName(sName, xParentEntry.get()))
-    {
-        std::unique_ptr<weld::TreeIter> xEntry = m_xTreeView->make_iterator();
-        m_xTreeView->insert(xParentEntry.get(), -1, nullptr, nullptr, nullptr, nullptr, nullptr, false, xEntry.get());
+    std::unique_ptr<weld::TreeIter> xEntry = m_xTreeView->make_iterator();
+    m_xTreeView->insert(xParentEntry.get(), -1, nullptr, nullptr, nullptr, nullptr, nullptr, false, xEntry.get());
 
-        auto xGraphic = m_xImageProvider->getXGraphic(_rTableName, DatabaseObject::TABLE);
-        if (xGraphic.is())
-            m_xTreeView->set_image(*xEntry, xGraphic, -1);
-        else
-        {
-            OUString sImageId(m_xImageProvider->getImageId(_rTableName, DatabaseObject::TABLE));
-            m_xTreeView->set_image(*xEntry, sImageId, -1);
-        }
-        if (m_bShowToggles)
-            m_xTreeView->set_toggle(*xEntry, TRISTATE_FALSE, 0);
-        m_xTreeView->set_text(*xEntry, sName, m_nTextColumn);
+    auto xGraphic = m_xImageProvider->getXGraphic(_rTableName, DatabaseObject::TABLE);
+    if (xGraphic.is())
+        m_xTreeView->set_image(*xEntry, xGraphic, -1);
+    else
+    {
+        OUString sImageId(m_xImageProvider->getImageId(_rTableName, DatabaseObject::TABLE));
+        m_xTreeView->set_image(*xEntry, sImageId, -1);
     }
+    if (m_bShowToggles)
+        m_xTreeView->set_toggle(*xEntry, TRISTATE_FALSE, 0);
+    m_xTreeView->set_text(*xEntry, sName, m_nTextColumn);
 }
 
 NamedDatabaseObject OTableTreeListBox::describeObject( SvTreeListEntry* _pEntry )

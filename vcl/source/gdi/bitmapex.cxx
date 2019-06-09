@@ -872,22 +872,21 @@ namespace
 BitmapEx BitmapEx::TransformBitmapEx(
     double fWidth,
     double fHeight,
-    const basegfx::B2DHomMatrix& rTransformation,
-    bool bSmooth) const
+    const basegfx::B2DHomMatrix& rTransformation) const
 {
     if(fWidth <= 1 || fHeight <= 1)
         return BitmapEx();
 
     // force destination to 24 bit, we want to smooth output
     const Size aDestinationSize(basegfx::fround(fWidth), basegfx::fround(fHeight));
-    const Bitmap aDestination(impTransformBitmap(GetBitmapRef(), aDestinationSize, rTransformation, bSmooth));
+    const Bitmap aDestination(impTransformBitmap(GetBitmapRef(), aDestinationSize, rTransformation, /*bSmooth*/true));
 
     // create mask
     if(IsTransparent())
     {
         if(IsAlpha())
         {
-            const Bitmap aAlpha(impTransformBitmap(GetAlpha().GetBitmap(), aDestinationSize, rTransformation, bSmooth));
+            const Bitmap aAlpha(impTransformBitmap(GetAlpha().GetBitmap(), aDestinationSize, rTransformation, /*bSmooth*/true));
             return BitmapEx(aDestination, AlphaMask(aAlpha));
         }
         else
@@ -976,7 +975,7 @@ BitmapEx BitmapEx::getTransformed(
     aTransform.invert();
 
     // create bitmap using source, destination and linear back-transformation
-    aRetval = TransformBitmapEx(fWidth, fHeight, aTransform, /*bSmooth*/true);
+    aRetval = TransformBitmapEx(fWidth, fHeight, aTransform);
 
     return aRetval;
 }

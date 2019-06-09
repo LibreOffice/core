@@ -413,7 +413,7 @@ public:
 
     void SetViewFrame(const SfxViewFrame* pViewFrame);
 
-    void Fill(const SdDrawDocument*, bool bAllPages, const OUString& rDocName);
+    void Fill(const SdDrawDocument*, const OUString& rDocName);
     void Fill(const SdDrawDocument*, SfxMedium* pSfxMedium, const OUString& rDocName);
 
     /** Add one list box entry for the parent of the given shapes and one child entry for

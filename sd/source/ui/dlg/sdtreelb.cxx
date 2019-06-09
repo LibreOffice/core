@@ -1696,14 +1696,14 @@ void SdPageObjsTLV::AddShapeList (
 /**
  * Fill TreeLB with pages and objects
  */
-void SdPageObjsTLV::Fill(const SdDrawDocument* pInDoc, bool bAllPages, const OUString& rDocName)
+void SdPageObjsTLV::Fill(const SdDrawDocument* pInDoc, const OUString& rDocName)
 {
     OUString aSelection = m_xTreeView->get_selected_text();
     clear();
 
     m_pDoc = pInDoc;
     m_aDocName = rDocName;
-    m_bShowAllPages = bAllPages;
+    m_bShowAllPages = true;
     m_pMedium = nullptr;
 
     // first insert all pages including objects

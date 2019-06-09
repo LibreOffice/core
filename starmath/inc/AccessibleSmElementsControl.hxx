@@ -50,7 +50,7 @@ class AccessibleSmElementsControl final : public comphelper::OAccessibleComponen
 public:
     AccessibleSmElementsControl(SmElementsControl& rControl);
 
-    void ReleaseAllItems(bool bNotify);
+    void ReleaseAllItems();
     void AddAllItems();
     inline void AcquireFocus();
     inline void ReleaseFocus(sal_uInt16);
