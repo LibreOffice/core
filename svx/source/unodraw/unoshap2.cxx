@@ -1416,6 +1416,72 @@ bool SvxGraphicObject::setPropertyValueImpl( const OUString& rName, const SfxIte
         break;
     }
 
+    case OWN_ATTR_IS_QRCODE:
+    {
+        bool bIsQrCode;
+        if (rValue >>= bIsQrCode)
+        {
+            static_cast<SdrGrafObj*>(GetSdrObject())->setIsQrCode(bIsQrCode);
+            bOk = true;
+        }
+        break;
+    }
+
+    case OWN_ATTR_QRCODE_ID:
+    {
+        OUString aQrCodeId;
+        if (rValue >>= aQrCodeId)
+        {
+            static_cast<SdrGrafObj*>(GetSdrObject())->setQrCodeId(aQrCodeId);
+            bOk = true;
+        }
+        break;
+    }
+
+    case OWN_ATTR_QRCODE_TEXT:
+    {
+        OUString aText;
+        if (rValue >>= aText)
+        {
+            static_cast<SdrGrafObj*>(GetSdrObject())->setQrCodeText(aText);
+            bOk = true;
+        }
+        break;
+    }
+
+    case OWN_ATTR_QRCODE_ECC:
+    {
+        int aECC;
+        if (rValue >>= aECC)
+        {
+            static_cast<SdrGrafObj*>(GetSdrObject())->setQrCodeECC(aECC);
+            bOk = true;
+        }
+        break;
+    }
+
+    case OWN_ATTR_QRCODE_BORDER:
+    {
+        int aBorder;
+        if (rValue >>= aBorder)
+        {
+            static_cast<SdrGrafObj*>(GetSdrObject())->setQrCodeBorder(aBorder);
+            bOk = true;
+        }
+        break;
+    }
+
+    case OWN_ATTR_QRCODE_UNSIGNED_IMAGE:
+    {
+        Reference<graphic::XGraphic> xGraphic(rValue, uno::UNO_QUERY);
+        if (xGraphic.is())
+        {
+            static_cast<SdrGrafObj*>(GetSdrObject())->setQrCodeUnsignedGraphic(xGraphic);
+            bOk = true;
+        }
+        break;
+    }
+
     default:
         return SvxShapeText::setPropertyValueImpl( rName, pProperty, rValue );
     }
@@ -1555,6 +1621,44 @@ bool SvxGraphicObject::getPropertyValueImpl( const OUString& rName, const SfxIte
     case OWN_ATTR_SIGNATURELINE_IS_SIGNED:
     {
         rValue <<= static_cast<SdrGrafObj*>(GetSdrObject())->isSignatureLineSigned();
+        break;
+    }
+
+    case OWN_ATTR_IS_QRCODE:
+    {
+        rValue <<= static_cast<SdrGrafObj*>(GetSdrObject())->isQrCode();
+        break;
+    }
+
+    case OWN_ATTR_QRCODE_ID:
+    {
+        rValue <<= static_cast<SdrGrafObj*>(GetSdrObject())->getQRCodeId();
+        break;
+    }
+
+    case OWN_ATTR_QRCODE_TEXT:
+    {
+        rValue <<= static_cast<SdrGrafObj*>(GetSdrObject())->getQrCodeText();
+        break;
+    }
+
+    case OWN_ATTR_QRCODE_ECC:
+    {
+        rValue <<= static_cast<SdrGrafObj*>(GetSdrObject())->getQrCodeECC();
+        break;
+    }
+
+    case OWN_ATTR_QRCODE_BORDER:
+    {
+        rValue <<= static_cast<SdrGrafObj*>(GetSdrObject())->getQrCodeBorder();
+        break;
+    }
+
+    case OWN_ATTR_QRCODE_UNSIGNED_IMAGE:
+    {
+        Reference<graphic::XGraphic> xGraphic(
+            static_cast<SdrGrafObj*>(GetSdrObject())->getQrCodeUnsignedGraphic());
+        rValue <<= xGraphic;
         break;
     }
 

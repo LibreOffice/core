@@ -681,6 +681,71 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const tools::Rectangle&
                                        OUStringToOString(aImageId, RTL_TEXTENCODING_UTF8));
                         imageData = true;
                     }
+                    if (pSdrGrafObj && pSdrGrafObj->isQrCode() && m_pTextExport)
+                    {
+                        sax_fastparser::FastAttributeList* pAttrListQrCode
+                            = FastSerializerHelper::createAttrList();
+                        pAttrListQrCode->add(XML_isqrcode, "t");
+                        if (!pSdrGrafObj->getQrCodeId().isEmpty())
+                        {
+                            pAttrListQrCode->add(
+                                XML_id, OUStringToOString(pSdrGrafObj->getQrCodeId(),
+                                                          RTL_TEXTENCODING_UTF8));
+                        }
+                        if (!pSdrGrafObj->getQrCodeText().isEmpty())
+                        {
+                            pAttrListQrCode->add(
+                                FSNS(XML_o, XML_qrcodetext),
+                                OUStringToOString(
+                                    pSdrGrafObj->getQrCodeText(),
+                                    RTL_TEXTENCODING_UTF8));
+                        }
+                        if (!pSdrGrafObj->getQrCodeECC().isEmpty())
+                        {
+                            pAttrListQrCode->add(
+                                FSNS(XML_o, XML_qrcodeecc),
+                                OUStringToOString(
+                                    pSdrGrafObj->getQrCodeECC(),
+                                    RTL_TEXTENCODING_UTF8));
+                        }
+                        if (!pSdrGrafObj->getQrCodeBorder().isEmpty())
+                        {
+                            pAttrListQrCode->add(
+                                FSNS(XML_o, XML_qrcodeborder),
+                                OUStringToOString(
+                                    pSdrGrafObj->getQrCodeBorder(),
+                                    RTL_TEXTENCODING_UTF8));
+                        }
+                        if (!pSdrGrafObj->getSignatureLineSigningInstructions().isEmpty())
+                        {
+                            pAttrListSignatureLine->add(XML_signinginstructionsset, "t");
+                            pAttrListSignatureLine->add(
+                                FSNS(XML_o, XML_signinginstructions),
+                                OUStringToOString(
+                                    pSdrGrafObj->getSignatureLineSigningInstructions(),
+                                    RTL_TEXTENCODING_UTF8));
+                        }
+
+                        m_pSerializer->singleElementNS(
+                            XML_o, XML_qrcode,
+                            XFastAttributeListRef(pAttrListQrCode));
+
+                        // Get signature line graphic
+                        const uno::Reference<graphic::XGraphic>& xGraphic
+                            = pSdrGrafObj->getQrCodeUnsignedGraphic();
+                        Graphic aGraphic(xGraphic);
+
+                        BitmapChecksum nChecksum = aGraphic.GetChecksum();
+                        OUString aImageId = m_pTextExport->FindRelId(nChecksum);
+                        if (aImageId.isEmpty())
+                        {
+                            aImageId = m_pTextExport->GetDrawingML().WriteImage(aGraphic);
+                            m_pTextExport->CacheRelId(nChecksum, aImageId);
+                        }
+                        pAttrList->add(FSNS(XML_r, XML_id),
+                                       OUStringToOString(aImageId, RTL_TEXTENCODING_UTF8));
+                        imageData = true;
+                    }
                     else if (rProps.GetOpt(ESCHER_Prop_fillBlip, aStruct) && m_pTextExport)
                     {
                         SvMemoryStream aStream;

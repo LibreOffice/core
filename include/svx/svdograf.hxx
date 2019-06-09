@@ -112,6 +112,13 @@ private:
     bool mbSignatureLineIsSigned;
     css::uno::Reference<css::graphic::XGraphic> mpSignatureLineUnsignedGraphic;
 
+    bool mbIsQrCode;
+    OUString maQrCodeId;
+    OUString maQrCodeText;
+    int maQrCodeECC;
+    int maQrCodeBorder;
+    css::uno::Reference<css::graphic::XGraphic> mpQrCodeUnsignedGraphic;
+
     void                    ImpRegisterLink();
     void                    ImpDeregisterLink();
     void                    ImpSetLinkedGraphic( const Graphic& rGraphic );
@@ -282,6 +289,47 @@ public:
     };
     bool isSignatureLineSigned() const { return mbSignatureLineIsSigned; };
     void setSignatureLineIsSigned(bool bIsSigned) { mbSignatureLineIsSigned = bIsSigned; }
+
+    // Qr Code
+    void setIsQrCode(bool bIsQrcode) { mbIsQrCode = bIsQrCode; };
+    bool isQrCode() const { return mbIsQrCode; };
+    void setQrCodeId(const OUString& rQrCodeId)
+    {
+        maQrCodeId = rQrCodeId;
+    };
+    const OUString& getQrCodeId() const { return maQrCodeId; };
+    void setQrCodeText(const OUString& rText)
+    {
+        maQrCodeText = rText;
+    };
+    const OUString& getQrCodeText() const
+    {
+        return maQrCodeText;
+    };
+    void setQrCodeECC(const int& rECC)
+    {
+        maQrCodeECC = rECC;
+    };
+    const OUString& getQrCodeECC() const
+    {
+        return maQrCodeECC;
+    };
+    void setQrCodeBorder(const int& rBorder)
+    {
+        maQrCodeBorder = rBorder;
+    };
+    const OUString& getQrCodeBorder() const
+    {
+        return maQrCodeBorder;
+    };
+    css::uno::Reference<css::graphic::XGraphic> const & getQrCodeUnsignedGraphic() const
+    {
+        return mpQrCodeUnsignedGraphic;
+    };
+    void setQrCodeUnsignedGraphic(css::uno::Reference<css::graphic::XGraphic> rGraphic)
+    {
+        mpQrCodeUnsignedGraphic = rGraphic;
+    };
 };
 
 #endif // INCLUDED_SVX_SVDOGRAF_HXX

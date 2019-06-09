@@ -269,6 +269,7 @@ ShapeModel::ShapeModel()
     : mbIsSignatureLine(false)
     , mbSignatureLineShowSignDate(true)
     , mbSignatureLineCanAddComment(false)
+    , mbIsQrCode(false)
 {
 }
 
@@ -1349,6 +1350,43 @@ Reference< XShape > ComplexShape::implConvertAndInsert( const Reference< XShapes
         {
             xGraphic = rFilter.getGraphicHelper().importEmbeddedGraphic(aGraphicPath);
             xPropertySet->setPropertyValue("SignatureLineUnsignedImage", uno::makeAny(xGraphic));
+        }
+        return xShape;
+    }
+
+    if( getShapeModel().mbIsQrCode )
+    {
+        uno::Reference<graphic::XGraphic> xGraphic;
+
+        Reference< XShape > xShape;
+        if (xGraphic.is())
+        {
+            xShape = SimpleShape::createPictureObject(rxShapes, rShapeRect, xGraphic);
+        }
+        else
+        {
+            xShape = SimpleShape::createEmbeddedPictureObject(rxShapes, rShapeRect, aGraphicPath);
+        }
+
+        // Store qr code properties
+        uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
+        xPropertySet->setPropertyValue("IsQrCode", uno::makeAny(true));
+        xPropertySet->setPropertyValue("QrCodeId",
+                                        uno::makeAny(getShapeModel().maSignatureId));
+        xPropertySet->setPropertyValue(
+            "QrCodeText",
+            uno::makeAny(getShapeModel().maQrCodeText));
+        xPropertySet->setPropertyValue(
+            "QrCodeECC",
+            uno::makeAny(getShapeModel().maQrCodeECC));
+        xPropertySet->setPropertyValue(
+            "QrCodeBorder",
+            uno::makeAny(getShapeModel().maQrCodeBorder));
+
+        if (!aGraphicPath.isEmpty())
+        {
+            xGraphic = rFilter.getGraphicHelper().importEmbeddedGraphic(aGraphicPath);
+            xPropertySet->setPropertyValue("QrCodeUnsignedImage", uno::makeAny(xGraphic));
         }
         return xShape;
     }
