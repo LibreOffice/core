@@ -453,6 +453,11 @@ VclPtr<AbstractMorphDlg> SdAbstractDialogFactory_Impl::CreateMorphDlg(weld::Wind
     return VclPtr<AbstractMorphDlg_Impl>::Create(std::make_unique<::sd::MorphDlg>(pParent, pObj1, pObj2));
 }
 
+VclPtr<SfxAbstractTabDialog>  SdAbstractDialogFactory_Impl::CreateSdOutlineBulletTabDlg(weld::Window* pParent, const SfxItemSet* pAttr, ::sd::View* pView)
+{
+    return VclPtr<AbstractBulletDialog_Impl>::Create(std::make_unique<::sd::OutlineBulletDlg>(pParent, pAttr, pView));
+}
+
 VclPtr<SfxAbstractTabDialog> SdAbstractDialogFactory_Impl::CreateSdParagraphTabDlg(weld::Window* pParent, const SfxItemSet* pAttr )
 {
     return VclPtr<SdAbstractTabController_Impl>::Create(std::make_unique<SdParagraphDlg>(pParent, pAttr));
