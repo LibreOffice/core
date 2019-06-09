@@ -25,6 +25,7 @@
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/text/XTextFrame.hpp>
@@ -2077,9 +2078,9 @@ void XMLParaContext::EndElement()
                         xTxtImport->GetText()->insertTextContent(
                             xAttrCursor, xContent, true );
                     }
-                    catch (uno::RuntimeException const& e)
+                    catch (uno::RuntimeException const&)
                     {
-                        SAL_INFO("xmloff.text", "could not insert index mark, presumably in editengine text " << e);
+                        TOOLS_INFO_EXCEPTION("xmloff.text", "could not insert index mark, presumably in editengine text");
                     }
                 }
                 break;

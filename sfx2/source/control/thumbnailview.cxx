@@ -32,6 +32,7 @@
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
 #include <svtools/optionsdrawinglayer.hxx>
+#include <tools/diagnose_ex.h>
 #include <unotools/ucbstreamhelper.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/svapp.hxx>
@@ -1181,11 +1182,10 @@ BitmapEx ThumbnailView::readThumbnail(const OUString &msURL)
                 }
             }
         }
-        catch (const uno::Exception& rException)
+        catch (const uno::Exception&)
         {
-            SAL_WARN("sfx",
-                "caught exception while trying to access Thumbnail/thumbnail.png of "
-                 << msURL << ": " << rException);
+            TOOLS_WARN_EXCEPTION("sfx",
+                "caught exception while trying to access Thumbnail/thumbnail.png of " << msURL);
         }
 
         try
@@ -1208,18 +1208,18 @@ BitmapEx ThumbnailView::readThumbnail(const OUString &msURL)
                 }
             }
         }
-        catch (const uno::Exception& rException)
+        catch (const uno::Exception&)
         {
-            SAL_WARN("sfx",
-                "caught exception while trying to access Thumbnails/thumbnail.png of "
-                << msURL << ": " << rException);
+            TOOLS_WARN_EXCEPTION("sfx",
+                "caught exception while trying to access Thumbnails/thumbnail.png of " << msURL);
         }
     }
-    catch (const uno::Exception& rException)
+    catch (const uno::Exception&)
     {
+        css::uno::Any ex( cppu::getCaughtException() );
         SAL_WARN("sfx",
             "caught exception while trying to access thumbnail of "
-            << msURL << ": " << rException);
+            << msURL << ": " << exceptionToString(ex));
     }
 
     // Extract the image from the stream.

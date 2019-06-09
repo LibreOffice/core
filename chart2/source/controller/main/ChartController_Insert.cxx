@@ -58,6 +58,7 @@
 #include <svx/ActionDescriptionProvider.hxx>
 
 #include <sal/log.hxx>
+#include <tools/diagnose_ex.h>
 #include <vcl/svapp.hxx>
 
 using namespace ::com::sun::star;
@@ -116,9 +117,9 @@ void ChartController::executeDispatch_InsertAxes()
                 aUndoGuard.commit();
         }
     }
-    catch(const uno::RuntimeException& e)
+    catch(const uno::RuntimeException&)
     {
-        SAL_WARN("chart2", "Exception caught. " << e );
+        TOOLS_WARN_EXCEPTION("chart2", "" );
     }
 }
 
@@ -150,9 +151,9 @@ void ChartController::executeDispatch_InsertGrid()
                 aUndoGuard.commit();
         }
     }
-    catch(const uno::RuntimeException& e)
+    catch(const uno::RuntimeException&)
     {
-        SAL_WARN("chart2", "Exception caught. " << e );
+        TOOLS_WARN_EXCEPTION("chart2", "" );
     }
 }
 
@@ -181,9 +182,9 @@ void ChartController::executeDispatch_InsertTitles()
                 aUndoGuard.commit();
         }
     }
-    catch(const uno::RuntimeException& e)
+    catch(const uno::RuntimeException&)
     {
-        SAL_WARN("chart2", "Exception caught. " << e );
+        TOOLS_WARN_EXCEPTION("chart2", "" );
     }
 }
 
@@ -232,9 +233,9 @@ void ChartController::executeDispatch_OpenLegendDialog()
             aUndoGuard.commit();
         }
     }
-    catch(const uno::RuntimeException& e)
+    catch(const uno::RuntimeException&)
     {
-        SAL_WARN("chart2", "Exception caught. " << e );
+        TOOLS_WARN_EXCEPTION("chart2", "" );
     }
 }
 
@@ -294,9 +295,9 @@ void ChartController::executeDispatch_InsertMenu_DataLabels()
                 aUndoGuard.commit();
         }
     }
-    catch(const uno::RuntimeException& e)
+    catch(const uno::RuntimeException&)
     {
-        SAL_WARN("chart2", "Exception caught. " << e );
+        TOOLS_WARN_EXCEPTION("chart2", "" );
     }
 }
 
@@ -505,9 +506,9 @@ void ChartController::executeDispatch_InsertErrorBars( bool bYError )
                     aUndoGuard.commit();
             }
         }
-        catch(const uno::RuntimeException& e)
+        catch(const uno::RuntimeException&)
         {
-            SAL_WARN("chart2", "Exception caught. " << e );
+            TOOLS_WARN_EXCEPTION("chart2", "" );
         }
     }
 }
@@ -730,9 +731,9 @@ void ChartController::executeDispatch_InsertAxisTitle()
             aUndoGuard.commit();
         }
     }
-    catch(const uno::RuntimeException& e)
+    catch(const uno::RuntimeException&)
     {
-        SAL_WARN("chart2", "Exception caught. " << e );
+        TOOLS_WARN_EXCEPTION("chart2", "" );
     }
 }
 
@@ -752,9 +753,9 @@ void ChartController::executeDispatch_InsertAxis()
             aUndoGuard.commit();
         }
     }
-    catch(const uno::RuntimeException& e)
+    catch(const uno::RuntimeException&)
     {
-        SAL_WARN("chart2", "Exception caught. " << e );
+        TOOLS_WARN_EXCEPTION("chart2", "" );
     }
 }
 
@@ -774,9 +775,9 @@ void ChartController::executeDispatch_DeleteAxis()
             aUndoGuard.commit();
         }
     }
-    catch(const uno::RuntimeException& e)
+    catch(const uno::RuntimeException&)
     {
-        SAL_WARN("chart2", "Exception caught. " << e );
+        TOOLS_WARN_EXCEPTION("chart2", "" );
     }
 }
 
@@ -796,9 +797,9 @@ void ChartController::executeDispatch_InsertMajorGrid()
             aUndoGuard.commit();
         }
     }
-    catch(const uno::RuntimeException& e)
+    catch(const uno::RuntimeException&)
     {
-        SAL_WARN("chart2", "Exception caught. " << e );
+        TOOLS_WARN_EXCEPTION("chart2", "" );
     }
 }
 
@@ -818,9 +819,9 @@ void ChartController::executeDispatch_DeleteMajorGrid()
             aUndoGuard.commit();
         }
     }
-    catch(const uno::RuntimeException& e)
+    catch(const uno::RuntimeException&)
     {
-        SAL_WARN("chart2", "Exception caught. " << e );
+        TOOLS_WARN_EXCEPTION("chart2", "" );
     }
 }
 
@@ -842,9 +843,9 @@ void ChartController::executeDispatch_InsertMinorGrid()
             aUndoGuard.commit();
         }
     }
-    catch(const uno::RuntimeException& e)
+    catch(const uno::RuntimeException&)
     {
-        SAL_WARN("chart2", "Exception caught. " << e );
+        TOOLS_WARN_EXCEPTION("chart2", "" );
     }
 }
 
@@ -866,9 +867,9 @@ void ChartController::executeDispatch_DeleteMinorGrid()
             aUndoGuard.commit();
         }
     }
-    catch(const uno::RuntimeException& e)
+    catch(const uno::RuntimeException&)
     {
-        SAL_WARN("chart2", "Exception caught. " << e );
+        TOOLS_WARN_EXCEPTION("chart2", "" );
     }
 }
 

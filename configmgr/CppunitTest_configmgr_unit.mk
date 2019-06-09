@@ -32,6 +32,7 @@ $(eval $(call gb_CppunitTest_use_libraries,configmgr_unit, \
 	    sal \
 	    salhelper \
 	    test \
+	    tl \
 	    unotest \
 	    xmlreader \
 		i18nlangtag \

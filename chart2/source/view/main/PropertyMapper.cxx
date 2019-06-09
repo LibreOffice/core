@@ -27,6 +27,7 @@
 #include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
 #include <com/sun/star/drawing/LineJoint.hpp>
 #include <comphelper/sequence.hxx>
+#include <tools/diagnose_ex.h>
 
 namespace chart
 {
@@ -108,9 +109,9 @@ void PropertyMapper::getValueMap(
                 if( aAny.hasValue() )
                     rValueMap.emplace(  aTarget, aAny );
             }
-            catch( const uno::Exception& e )
+            catch( const uno::Exception& )
             {
-                SAL_WARN("chart2", "Exception caught. " << e );
+                TOOLS_WARN_EXCEPTION("chart2", "" );
             }
         }
     }
@@ -399,9 +400,9 @@ void PropertyMapper::setMultiProperties(
             bSuccess = true;
         }
     }
-    catch( const uno::Exception& e )
+    catch( const uno::Exception& )
     {
-        SAL_WARN("chart2", "Exception caught. " << e ); //if this occurs more often think of removing the XMultiPropertySet completely for better performance
+        TOOLS_WARN_EXCEPTION("chart2", "" ); //if this occurs more often think of removing the XMultiPropertySet completely for better performance
     }
 
     if(!bSuccess)
@@ -419,15 +420,15 @@ void PropertyMapper::setMultiProperties(
             {
                 xTarget->setPropertyValue( aPropName, aValue );
             }
-            catch( const uno::Exception& e )
+            catch( const uno::Exception& )
             {
-                SAL_WARN("chart2", "Exception caught. " << e );
+                TOOLS_WARN_EXCEPTION("chart2", "" );
             }
         }
     }
-    catch( const uno::Exception& e )
+    catch( const uno::Exception& )
     {
-        SAL_WARN("chart2", "Exception caught. " << e );
+        TOOLS_WARN_EXCEPTION("chart2", "" );
     }
 }
 

@@ -51,6 +51,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
+#include <tools/diagnose_ex.h>
 #include <uno/current_context.hxx>
 #include <vcl/svapp.hxx>
 
@@ -284,9 +285,9 @@ css::uno::Reference< css::uno::XInterface > createBackend(
     } catch (css::uno::RuntimeException &) {
         // Assuming these exceptions are real errors:
         throw;
-    } catch (const css::uno::Exception & e) {
+    } catch (const css::uno::Exception &) {
         // Assuming these exceptions indicate that the service is not installed:
-        SAL_WARN("shell", "createInstance(" << name << ") failed with " << e);
+        TOOLS_WARN_EXCEPTION("shell", "createInstance(" << name << ") failed");
         return css::uno::Reference< css::uno::XInterface >();
     }
 }

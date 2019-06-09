@@ -36,6 +36,7 @@
 #include <comphelper/fileurl.hxx>
 #include <comphelper/hash.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <tools/diagnose_ex.h>
 #include <memory>
 #include <string.h>
 
@@ -290,8 +291,8 @@ OUString SAL_CALL PDFDetector::detect( uno::Sequence< beans::PropertyValue >& rF
                 }
                 osl_closeFile( aFile );
             }
-        } catch (css::io::IOException & e) {
-            SAL_WARN("sdext.pdfimport", "caught " << e);
+        } catch (const css::io::IOException &) {
+            TOOLS_WARN_EXCEPTION("sdext.pdfimport", "caught");
             return OUString();
         }
         OUString aEmbedMimetype;

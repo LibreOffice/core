@@ -12,6 +12,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <sal/log.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <libwps/libwps.h>
 
@@ -83,9 +84,9 @@ bool MSWorksImportFilter::doImportDocument(weld::Window* pParent,
                 return false;
         }
     }
-    catch (css::uno::Exception& e)
+    catch (css::uno::Exception&)
     {
-        SAL_WARN("writerperfect", "ignoring " << e);
+        TOOLS_WARN_EXCEPTION("writerperfect", "ignoring");
     }
     return libwps::WPS_OK
            == libwps::WPSDocument::parse(&rInput, &rGenerator, "", fileEncoding.c_str());

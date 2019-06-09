@@ -12,6 +12,7 @@
 #include <osl/security.hxx>
 #include <osl/thread.h>
 #include <sal/log.hxx>
+#include <tools/diagnose_ex.h>
 #include <unotools/securityoptions.hxx>
 #include "certpath.hxx"
 
@@ -91,9 +92,9 @@ CertPathDialog::CertPathDialog(weld::Window* pParent)
         if (!sUserSetCertPath.isEmpty())
             AddCertPath(m_sManual, sUserSetCertPath);
     }
-    catch (const uno::Exception &e)
+    catch (const uno::Exception &)
     {
-        SAL_WARN("cui.options", "CertPathDialog::CertPathDialog(): " << e);
+        TOOLS_WARN_EXCEPTION("cui.options", "CertPathDialog::CertPathDialog()");
     }
 
     const char* pEnv = getenv("MOZILLA_CERTIFICATE_FOLDER");
@@ -117,9 +118,9 @@ IMPL_LINK_NOARG(CertPathDialog, OKHdl_Impl, weld::Button&, void)
             getDirectory(), batch);
         batch->commit();
     }
-    catch (const uno::Exception &e)
+    catch (const uno::Exception &)
     {
-        SAL_WARN("cui.options", "CertPathDialog::OKHdl_Impl(): " << e);
+        TOOLS_WARN_EXCEPTION("cui.options", "CertPathDialog::OKHdl_Impl()");
     }
 
     m_xDialog->response(RET_OK);
@@ -200,9 +201,9 @@ IMPL_LINK_NOARG(CertPathDialog, AddHdl_Impl, weld::Button&, void)
                 AddCertPath(m_sManual, aPath);
         }
     }
-    catch (uno::Exception & e)
+    catch (const uno::Exception &)
     {
-        SAL_WARN("cui.options", e);
+        TOOLS_WARN_EXCEPTION("cui.options", "");
     }
 }
 

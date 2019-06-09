@@ -158,12 +158,11 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
                         {
                             xListener->dispatchFinished( aEvent ) ;
                         }
-                        catch(RuntimeException & e)
+                        catch(const RuntimeException &)
                         {
-                            SAL_WARN("scripting",
+                            TOOLS_WARN_EXCEPTION("scripting",
                                 "ScriptProtocolHandler::dispatchWithNotification: caught RuntimeException"
-                                "while dispatchFinished with failure of the execution "
-                                << e );
+                                "while dispatchFinished with failure of the execution");
                         }
                     }
                     return;
@@ -285,11 +284,11 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
         {
             xListener->dispatchFinished( aEvent ) ;
         }
-        catch(const RuntimeException & e)
+        catch(const RuntimeException &)
         {
-            SAL_WARN("scripting",
+            TOOLS_WARN_EXCEPTION("scripting",
                 "ScriptProtocolHandler::dispatchWithNotification: caught RuntimeException"
-                "while dispatchFinished " << e );
+                "while dispatchFinished" );
         }
     }
 }
