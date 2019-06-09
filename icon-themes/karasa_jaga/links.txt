@@ -59,6 +59,7 @@ cmd/32/changesmenu.png cmd/32/accepttrackedchange.png
 cmd/32/charactermenu.png cmd/32/fontdialog.png
 cmd/32/charbackcolor.png cmd/32/backcolor.png
 cmd/32/charmapcontrol.png cmd/32/insertsymbol.png
+cmd/32/charttitlemenu.png cmd/32/toggletitle.png
 cmd/32/circle.png cmd/32/basicshapes.circle.png
 cmd/32/circlepie.png cmd/32/basicshapes.circle-pie.png
 cmd/32/closedocs.png cmd/32/closedoc.png
@@ -89,7 +90,9 @@ cmd/32/deletecell.png cmd/32/delete.png
 cmd/32/deletenote.png cmd/32/deleteannotation.png
 cmd/32/deleteshapehyperlink.png cmd/32/removehyperlink.png
 cmd/32/diagramaxisall.png cmd/32/diagramaxisxyz.png
+cmd/32/diagramaxismenu.png cmd/32/diagramaxis.png
 cmd/32/diagramdata.png cmd/32/changedatabasefield.png
+cmd/32/diagramgridmenu.png cmd/32/togglegridhorizontal.png
 cmd/32/draw.png cmd/32/reload.png
 cmd/32/drawselect.png cmd/32/selectobject.png
 cmd/32/drawtext.png cmd/32/text.png
@@ -237,6 +240,9 @@ cmd/32/insertgridcontrol.png cmd/32/grid.png
 cmd/32/insertheaderfootermenu.png cmd/32/editheaderandfooter.png
 cmd/32/insertimagecontrol.png cmd/32/imagecontrol.png
 cmd/32/insertlistbox.png cmd/32/listbox.png
+cmd/32/insertmenuaxes.png cmd/32/diagramaxis.png
+cmd/32/insertmenugrids.png cmd/32/togglegridhorizontal.png
+cmd/32/insertmenulegend.png cmd/32/togglelegend.png
 cmd/32/insertnumericfield.png cmd/32/numericfield.png
 cmd/32/insertobjctrl.png cmd/32/insertobject.png
 cmd/32/insertobjectchart.png cmd/32/drawchart.png
@@ -692,6 +698,7 @@ cmd/lc_changesmenu.png cmd/lc_accepttrackedchange.png
 cmd/lc_charactermenu.png cmd/lc_fontdialog.png
 cmd/lc_charbackcolor.png cmd/lc_backcolor.png
 cmd/lc_charmapcontrol.png cmd/lc_insertsymbol.png
+cmd/lc_charttitlemenu.png cmd/lc_toggletitle.png
 cmd/lc_circle.png cmd/lc_basicshapes.circle.png
 cmd/lc_circlepie.png cmd/lc_basicshapes.circle-pie.png
 cmd/lc_closedocs.png cmd/lc_closedoc.png
@@ -722,7 +729,9 @@ cmd/lc_deletecell.png cmd/lc_delete.png
 cmd/lc_deletenote.png cmd/lc_deleteannotation.png
 cmd/lc_deleteshapehyperlink.png cmd/lc_removehyperlink.png
 cmd/lc_diagramaxisall.png cmd/lc_diagramaxisxyz.png
+cmd/lc_diagramaxismenu.png cmd/lc_diagramaxis.png
 cmd/lc_diagramdata.png cmd/lc_changedatabasefield.png
+cmd/lc_diagramgridmenu.png cmd/lc_togglegridhorizontal.png
 cmd/lc_draw.png cmd/lc_reload.png
 cmd/lc_drawselect.png cmd/lc_selectobject.png
 cmd/lc_drawtext.png cmd/lc_text.png
@@ -824,6 +833,9 @@ cmd/lc_insertgridcontrol.png cmd/lc_grid.png
 cmd/lc_insertheaderfootermenu.png cmd/lc_editheaderandfooter.png
 cmd/lc_insertimagecontrol.png cmd/lc_imagecontrol.png
 cmd/lc_insertlistbox.png cmd/lc_listbox.png
+cmd/lc_insertmenuaxes.png cmd/lc_diagramaxis.png
+cmd/lc_insertmenugrids.png cmd/lc_togglegridhorizontal.png
+cmd/lc_insertmenulegend.png cmd/lc_togglelegend.png
 cmd/lc_insertnumericfield.png cmd/lc_numericfield.png
 cmd/lc_insertobjctrl.png cmd/lc_insertobject.png
 cmd/lc_insertobjectchart.png cmd/lc_drawchart.png
@@ -1045,6 +1057,7 @@ cmd/sc_changesmenu.png cmd/sc_accepttrackedchange.png
 cmd/sc_charactermenu.png cmd/sc_fontdialog.png
 cmd/sc_charbackcolor.png cmd/sc_backcolor.png
 cmd/sc_charmapcontrol.png cmd/sc_insertsymbol.png
+cmd/sc_charttitlemenu.png cmd/sc_toggletitle.png
 cmd/sc_circle.png cmd/sc_basicshapes.circle.png
 cmd/sc_circlepie.png cmd/sc_basicshapes.circle-pie.png
 cmd/sc_closedocs.png cmd/sc_closedoc.png
@@ -1075,7 +1088,9 @@ cmd/sc_deletecell.png cmd/sc_delete.png
 cmd/sc_deletenote.png cmd/sc_deleteannotation.png
 cmd/sc_deleteshapehyperlink.png cmd/sc_removehyperlink.png
 cmd/sc_diagramaxisall.png cmd/sc_diagramaxisxyz.png
+cmd/sc_diagramaxismenu.png cmd/sc_diagramaxis.png
 cmd/sc_diagramdata.png cmd/sc_changedatabasefield.png
+cmd/sc_diagramgridmenu.png cmd/sc_togglegridhorizontal.png
 cmd/sc_draw.png cmd/sc_reload.png
 cmd/sc_drawselect.png cmd/sc_selectobject.png
 cmd/sc_drawtext.png cmd/sc_text.png
@@ -1177,6 +1192,9 @@ cmd/sc_insertgridcontrol.png cmd/sc_grid.png
 cmd/sc_insertheaderfootermenu.png cmd/sc_editheaderandfooter.png
 cmd/sc_insertimagecontrol.png cmd/sc_imagecontrol.png
 cmd/sc_insertlistbox.png cmd/sc_listbox.png
+cmd/sc_insertmenuaxes.png cmd/sc_diagramaxis.png
+cmd/sc_insertmenugrids.png cmd/sc_togglegridhorizontal.png
+cmd/sc_insertmenulegend.png cmd/sc_togglelegend.png
 cmd/sc_insertnumericfield.png cmd/sc_numericfield.png
 cmd/sc_insertobjctrl.png cmd/sc_insertobject.png
 cmd/sc_insertobjectchart.png cmd/sc_drawchart.png
@@ -1841,9 +1859,9 @@ svx/res/symphony/sc_backgroundcolor.png cmd/sc_formatarea.png
 svx/res/symphony/sch_backgroundcolor.png cmd/sc_formatarea.png
 svx/res/symphony/spacing3.png cmd/sc_spacepara2.png
 svx/res/symphony/para_numbullet01.png cmd/sc_defaultbullet.png
+svx/res/symphony/para_numbullet02.png cmd/sc_defaultnumbering.png
 svx/res/symphony/para_numbullet_rtl01.png cmd/ar/sc_defaultbullet.png
 svx/res/symphony/para_numbullet_rtl02.png cmd/ar/sc_defaultnumbering.png
-svx/res/symphony/para_numbullet02.png cmd/sc_defaultnumbering.png
 svx/res/time.png cmd/sc_timefield.png
 sw/res/all_left.png dbaccess/res/all_left.png
 sw/res/all_right.png dbaccess/res/all_right.png
@@ -1902,8 +1920,10 @@ sw/res/wr06.png cmd/32/wrapideal.png
 sw/res/wr07.png cmd/32/wrapoff.png
 sw/res/wr010.png cmd/32/wrapcontour.png
 sw/res/wr011.png cmd/32/wrapideal.png
+vcl/res/check5.png vcl/res/check3.png
 vcl/res/closedoc.png sfx2/res/closedoc.png
 vcl/res/index.png cmd/sc_insertindexesentry.png
+vcl/res/radio5.png vcl/res/radio3.png
 vcl/source/src/msgbox.png vcl/res/msgbox.png
 xmlsecurity/res/notcertificate_16.png svx/res/notcertificate_16.png
 xmlsecurity/res/signet_11x16.png svx/res/signet_11x16.png
