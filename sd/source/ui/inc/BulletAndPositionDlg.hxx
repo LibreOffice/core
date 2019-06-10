@@ -145,7 +145,6 @@ class SvxBulletAndPositionDlg : public weld::GenericDialogController
 public:
     SvxBulletAndPositionDlg(weld::Window* pWindow, const SfxItemSet& rSet, ::sd::View* pView);
     virtual ~SvxBulletAndPositionDlg() override;
-    virtual void dispose();
 
     SfxItemSet* GetOutputItemSet(SfxItemSet* rSet);
     bool IsApplyToMaster();
