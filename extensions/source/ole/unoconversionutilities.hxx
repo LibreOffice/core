@@ -952,7 +952,7 @@ void UnoConversionUtilities<T>::anyToVariant(VARIANT* pVariant, const Any& rAny)
             //TypeClass_MODULE:
             throw CannotConvertException(
                       "[automation bridge]UnoConversionUtilities<T>::anyToVariant\n"
-                      "There is no conversion for this UNO type to a Automation type."
+                      "There is no conversion for this UNO type to an Automation type."
                       "The destination type class is the type class of the UNO "
                       "argument which was to be converted.",
                 Reference<XInterface>(), rAny.getValueTypeClass(),
