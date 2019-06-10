@@ -59,7 +59,7 @@ export LOCAL_COMMON_OUT := $(instsetoo_OUT)
 
 instsetoo_native_WITH_LANG := en-US $(filter-out en-US,$(gb_WITH_LANG))
 
-PRODUCTNAME_no_spaces := $(subst $(WHITESPACE),,$(PRODUCTNAME))
+PRODUCTNAME_no_spaces := $(PRODUCTNAME_WITHOUT_SPACES)
 
 ifeq (WNT,$(OS))
 define instsetoo_native_msitemplates
