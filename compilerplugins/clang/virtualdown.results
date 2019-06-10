@@ -1,0 +1,675 @@
+basic/source/comp/codegen.cxx:464
+    void OffSetAccumulator::start(const unsigned char *,)
+basic/source/comp/codegen.cxx:465
+    void OffSetAccumulator::processOpCode0(enum SbiOpcode,)
+basic/source/comp/codegen.cxx:466
+    void OffSetAccumulator::processOpCode1(enum SbiOpcode,type-parameter-0-0,)
+basic/source/comp/codegen.cxx:467
+    void OffSetAccumulator::processOpCode2(enum SbiOpcode,type-parameter-0-0,type-parameter-0-0,)
+basic/source/comp/codegen.cxx:476
+    _Bool OffSetAccumulator::processParams()
+basic/source/comp/codegen.cxx:487
+    void BufferTransformer::start(const unsigned char *,)
+basic/source/comp/codegen.cxx:488
+    void BufferTransformer::processOpCode0(enum SbiOpcode,)
+basic/source/comp/codegen.cxx:492
+    void BufferTransformer::processOpCode1(enum SbiOpcode,type-parameter-0-0,)
+basic/source/comp/codegen.cxx:517
+    void BufferTransformer::processOpCode2(enum SbiOpcode,type-parameter-0-0,type-parameter-0-0,)
+basic/source/comp/codegen.cxx:526
+    _Bool BufferTransformer::processParams()
+chart2/qa/extras/chart2dump/chart2dump.cxx:141
+    void Chart2DumpTest::verify()
+chart2/source/inc/WeakListenerAdapter.hxx:57
+    void chart::WeakListenerAdapter::disposing(const struct com::sun::star::lang::EventObject &,)
+extensions/source/dbpilots/unoautopilot.hxx:99
+    class cppu::IPropertyArrayHelper * dbp::OUnoAutoPilot::createArrayHelper()const
+extensions/source/propctrlr/commoncontrol.hxx:127
+    short pcr::CommonBehaviourControl::getControlType()
+extensions/source/propctrlr/commoncontrol.hxx:129
+    class com::sun::star::uno::Reference<class com::sun::star::inspection::XPropertyControlContext> pcr::CommonBehaviourControl::getControlContext()
+extensions/source/propctrlr/commoncontrol.hxx:131
+    void pcr::CommonBehaviourControl::setControlContext(const class com::sun::star::uno::Reference<class com::sun::star::inspection::XPropertyControlContext> &,)
+extensions/source/propctrlr/commoncontrol.hxx:133
+    class com::sun::star::uno::Reference<class com::sun::star::awt::XWindow> pcr::CommonBehaviourControl::getControlWindow()
+extensions/source/propctrlr/commoncontrol.hxx:135
+    unsigned char pcr::CommonBehaviourControl::isModified()
+forms/source/xforms/collection.hxx:130
+    _Bool Collection<com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> >::isValid(const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> &,)const
+forms/source/xforms/collection.hxx:130
+    _Bool Collection<com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue> >::isValid(const class com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> &,)const
+forms/source/xforms/collection.hxx:139
+    void Collection<com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue> >::_insert(const class com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> &,)
+forms/source/xforms/collection.hxx:139
+    void Collection<com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> >::_insert(const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> &,)
+forms/source/xforms/collection.hxx:142
+    void Collection<com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue> >::_remove(const class com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> &,)
+forms/source/xforms/collection.hxx:142
+    void Collection<com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> >::_remove(const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> &,)
+forms/source/xforms/datatypes.hxx:234
+    class cppu::IPropertyArrayHelper * xforms::ODerivedDataType::createArrayHelper()const
+forms/source/xforms/datatypes.hxx:237
+    class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySetInfo> xforms::ODerivedDataType::getPropertySetInfo()
+forms/source/xforms/namedcollection.hxx:80
+    class com::sun::star::uno::Type NamedCollection::getElementType()
+forms/source/xforms/namedcollection.hxx:85
+    unsigned char NamedCollection::hasElements()
+forms/source/xforms/namedcollection.hxx:91
+    class com::sun::star::uno::Any NamedCollection::getByName(const class rtl::OUString &,)
+forms/source/xforms/namedcollection.hxx:99
+    class com::sun::star::uno::Sequence<class rtl::OUString> NamedCollection::getElementNames()
+forms/source/xforms/namedcollection.hxx:104
+    unsigned char NamedCollection::hasByName(const class rtl::OUString &,)
+include/basic/sbxvar.hxx:127
+    enum SbxClassType SbxValue::GetClass()const
+include/canvas/base/basemutexhelper.hxx:54
+    void canvas::BaseMutexHelper<cppu::WeakComponentImplHelper<com::sun::star::rendering::XCustomSprite, com::sun::star::rendering::XCanvas> >::disposeThis()
+include/canvas/base/basemutexhelper.hxx:54
+    void canvas::BaseMutexHelper<cppu::WeakComponentImplHelper<com::sun::star::rendering::XBitmapCanvas, com::sun::star::rendering::XIntegerBitmap, com::sun::star::lang::XServiceInfo, com::sun::star::beans::XFastPropertySet> >::disposeThis()
+include/canvas/base/basemutexhelper.hxx:54
+    void canvas::BaseMutexHelper<cppu::WeakComponentImplHelper<com::sun::star::rendering::XBitmapCanvas, com::sun::star::rendering::XIntegerBitmap, com::sun::star::rendering::XGraphicDevice, com::sun::star::lang::XMultiServiceFactory, com::sun::star::util::XUpdatable, com::sun::star::beans::XPropertySet, com::sun::star::lang::XServiceName> >::disposeThis()
+include/canvas/base/basemutexhelper.hxx:54
+    void canvas::BaseMutexHelper<cppu::WeakComponentImplHelper<com::sun::star::rendering::XBitmapCanvas, com::sun::star::rendering::XIntegerBitmap> >::disposeThis()
+include/canvas/base/basemutexhelper.hxx:54
+    void canvas::BaseMutexHelper<cppu::WeakComponentImplHelper<com::sun::star::rendering::XCustomSprite, com::sun::star::rendering::XBitmapCanvas, com::sun::star::rendering::XIntegerBitmap, com::sun::star::lang::XServiceInfo> >::disposeThis()
+include/canvas/base/basemutexhelper.hxx:59
+    void canvas::BaseMutexHelper::disposing()
+include/canvas/base/bitmapcanvasbase.hxx:80
+    unsigned char canvas::BitmapCanvasBase::hasAlpha()
+include/canvas/base/bitmapcanvasbase.hxx:85
+    class com::sun::star::uno::Reference<class com::sun::star::rendering::XBitmap> canvas::BitmapCanvasBase::getScaledBitmap(const struct com::sun::star::geometry::RealSize2D &,unsigned char,)
+include/canvas/base/bitmapcanvasbase.hxx:106
+    void canvas::BitmapCanvasBase2::copyRect(const class com::sun::star::uno::Reference<class com::sun::star::rendering::XBitmapCanvas> &,const struct com::sun::star::geometry::RealRectangle2D &,const struct com::sun::star::rendering::ViewState &,const struct com::sun::star::rendering::RenderState &,const struct com::sun::star::geometry::RealRectangle2D &,const struct com::sun::star::rendering::ViewState &,const struct com::sun::star::rendering::RenderState &,)
+include/canvas/base/bufferedgraphicdevicebase.hxx:95
+    class com::sun::star::uno::Reference<class com::sun::star::rendering::XBufferController> canvas::BufferedGraphicDeviceBase::getBufferController()
+include/canvas/base/bufferedgraphicdevicebase.hxx:101
+    int canvas::BufferedGraphicDeviceBase::createBuffers(int,)
+include/canvas/base/bufferedgraphicdevicebase.hxx:108
+    void canvas::BufferedGraphicDeviceBase::destroyBuffers()
+include/canvas/base/bufferedgraphicdevicebase.hxx:210
+    void canvas::BufferedGraphicDeviceBase::disposeEventSource(const struct com::sun::star::lang::EventObject &,)
+include/canvas/base/bufferedgraphicdevicebase.hxx:220
+    void canvas::BufferedGraphicDeviceBase::windowResized(const struct com::sun::star::awt::WindowEvent &,)
+include/canvas/base/bufferedgraphicdevicebase.hxx:225
+    void canvas::BufferedGraphicDeviceBase::windowMoved(const struct com::sun::star::awt::WindowEvent &,)
+include/canvas/base/bufferedgraphicdevicebase.hxx:230
+    void canvas::BufferedGraphicDeviceBase::windowShown(const struct com::sun::star::lang::EventObject &,)
+include/canvas/base/bufferedgraphicdevicebase.hxx:237
+    void canvas::BufferedGraphicDeviceBase::windowHidden(const struct com::sun::star::lang::EventObject &,)
+include/canvas/base/canvasbase.hxx:144
+    void canvas::CanvasBase::drawPoint(const struct com::sun::star::geometry::RealPoint2D &,const struct com::sun::star::rendering::ViewState &,const struct com::sun::star::rendering::RenderState &,)
+include/canvas/base/canvasbase.hxx:157
+    void canvas::CanvasBase::drawLine(const struct com::sun::star::geometry::RealPoint2D &,const struct com::sun::star::geometry::RealPoint2D &,const struct com::sun::star::rendering::ViewState &,const struct com::sun::star::rendering::RenderState &,)
+include/canvas/base/canvasbase.hxx:173
+    void canvas::CanvasBase::drawBezier(const struct com::sun::star::geometry::RealBezierSegment2D &,const struct com::sun::star::geometry::RealPoint2D &,const struct com::sun::star::rendering::ViewState &,const struct com::sun::star::rendering::RenderState &,)
+include/canvas/base/canvasbase.hxx:190
+    class com::sun::star::uno::Reference<class com::sun::star::rendering::XCachedPrimitive> canvas::CanvasBase::drawPolyPolygon(const class com::sun::star::uno::Reference<class com::sun::star::rendering::XPolyPolygon2D> &,const struct com::sun::star::rendering::ViewState &,const struct com::sun::star::rendering::RenderState &,)
+include/canvas/base/canvasbase.hxx:206
+    class com::sun::star::uno::Reference<class com::sun::star::rendering::XCachedPrimitive> canvas::CanvasBase::strokePolyPolygon(const class com::sun::star::uno::Reference<class com::sun::star::rendering::XPolyPolygon2D> &,const struct com::sun::star::rendering::ViewState &,const struct com::sun::star::rendering::RenderState &,const struct com::sun::star::rendering::StrokeAttributes &,)
+include/canvas/base/canvasbase.hxx:223
+    class com::sun::star::uno::Reference<class com::sun::star::rendering::XCachedPrimitive> canvas::CanvasBase::strokeTexturedPolyPolygon(const class com::sun::star::uno::Reference<class com::sun::star::rendering::XPolyPolygon2D> &,const struct com::sun::star::rendering::ViewState &,const struct com::sun::star::rendering::RenderState &,const class com::sun::star::uno::Sequence<struct com::sun::star::rendering::Texture> &,const struct com::sun::star::rendering::StrokeAttributes &,)
+include/canvas/base/canvasbase.hxx:241
+    class com::sun::star::uno::Reference<class com::sun::star::rendering::XCachedPrimitive> canvas::CanvasBase::strokeTextureMappedPolyPolygon(const class com::sun::star::uno::Reference<class com::sun::star::rendering::XPolyPolygon2D> &,const struct com::sun::star::rendering::ViewState &,const struct com::sun::star::rendering::RenderState &,const class com::sun::star::uno::Sequence<struct com::sun::star::rendering::Texture> &,const class com::sun::star::uno::Reference<class com::sun::star::geometry::XMapping2D> &,const struct com::sun::star::rendering::StrokeAttributes &,)
+include/canvas/base/canvasbase.hxx:260
+    class com::sun::star::uno::Reference<class com::sun::star::rendering::XPolyPolygon2D> canvas::CanvasBase::queryStrokeShapes(const class com::sun::star::uno::Reference<class com::sun::star::rendering::XPolyPolygon2D> &,const struct com::sun::star::rendering::ViewState &,const struct com::sun::star::rendering::RenderState &,const struct com::sun::star::rendering::StrokeAttributes &,)
+include/canvas/base/canvasbase.hxx:277
+    class com::sun::star::uno::Reference<class com::sun::star::rendering::XCachedPrimitive> canvas::CanvasBase::fillPolyPolygon(const class com::sun::star::uno::Reference<class com::sun::star::rendering::XPolyPolygon2D> &,const struct com::sun::star::rendering::ViewState &,const struct com::sun::star::rendering::RenderState &,)
+include/canvas/base/canvasbase.hxx:293
+    class com::sun::star::uno::Reference<class com::sun::star::rendering::XCachedPrimitive> canvas::CanvasBase::fillTexturedPolyPolygon(const class com::sun::star::uno::Reference<class com::sun::star::rendering::XPolyPolygon2D> &,const struct com::sun::star::rendering::ViewState &,const struct com::sun::star::rendering::RenderState &,const class com::sun::star::uno::Sequence<struct com::sun::star::rendering::Texture> &,)
+include/canvas/base/canvasbase.hxx:310
+    class com::sun::star::uno::Reference<class com::sun::star::rendering::XCachedPrimitive> canvas::CanvasBase::fillTextureMappedPolyPolygon(const class com::sun::star::uno::Reference<class com::sun::star::rendering::XPolyPolygon2D> &,const struct com::sun::star::rendering::ViewState &,const struct com::sun::star::rendering::RenderState &,const class com::sun::star::uno::Sequence<struct com::sun::star::rendering::Texture> &,const class com::sun::star::uno::Reference<class com::sun::star::geometry::XMapping2D> &,)
+include/canvas/base/canvasbase.hxx:329
+    class com::sun::star::uno::Reference<class com::sun::star::rendering::XCanvasFont> canvas::CanvasBase::createFont(const struct com::sun::star::rendering::FontRequest &,const class com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> &,const struct com::sun::star::geometry::Matrix2D &,)
+include/canvas/base/canvasbase.hxx:347
+    class com::sun::star::uno::Sequence<struct com::sun::star::rendering::FontInfo> canvas::CanvasBase::queryAvailableFonts(const struct com::sun::star::rendering::FontInfo &,const class com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> &,)
+include/canvas/base/canvasbase.hxx:361
+    class com::sun::star::uno::Reference<class com::sun::star::rendering::XCachedPrimitive> canvas::CanvasBase::drawText(const struct com::sun::star::rendering::StringContext &,const class com::sun::star::uno::Reference<class com::sun::star::rendering::XCanvasFont> &,const struct com::sun::star::rendering::ViewState &,const struct com::sun::star::rendering::RenderState &,signed char,)
+include/canvas/base/canvasbase.hxx:383
+    class com::sun::star::uno::Reference<class com::sun::star::rendering::XCachedPrimitive> canvas::CanvasBase::drawTextLayout(const class com::sun::star::uno::Reference<class com::sun::star::rendering::XTextLayout> &,const struct com::sun::star::rendering::ViewState &,const struct com::sun::star::rendering::RenderState &,)
+include/canvas/base/canvasbase.hxx:416
+    class com::sun::star::uno::Reference<class com::sun::star::rendering::XCachedPrimitive> canvas::CanvasBase::drawBitmapModulated(const class com::sun::star::uno::Reference<class com::sun::star::rendering::XBitmap> &,const struct com::sun::star::rendering::ViewState &,const struct com::sun::star::rendering::RenderState &,)
+include/canvas/base/canvasbase.hxx:432
+    class com::sun::star::uno::Reference<class com::sun::star::rendering::XGraphicDevice> canvas::CanvasBase::getDevice()
+include/canvas/base/canvascustomspritebase.hxx:103
+    void canvas::CanvasCustomSpriteBase::clear()
+include/canvas/base/canvascustomspritebase.hxx:114
+    class com::sun::star::uno::Reference<class com::sun::star::rendering::XCachedPrimitive> canvas::CanvasCustomSpriteBase::drawBitmap(const class com::sun::star::uno::Reference<class com::sun::star::rendering::XBitmap> &,const struct com::sun::star::rendering::ViewState &,const struct com::sun::star::rendering::RenderState &,)
+include/canvas/base/canvascustomspritebase.hxx:140
+    void canvas::CanvasCustomSpriteBase::setAlpha(double,)
+include/canvas/base/canvascustomspritebase.hxx:149
+    void canvas::CanvasCustomSpriteBase::move(const struct com::sun::star::geometry::RealPoint2D &,const struct com::sun::star::rendering::ViewState &,const struct com::sun::star::rendering::RenderState &,)
+include/canvas/base/canvascustomspritebase.hxx:162
+    void canvas::CanvasCustomSpriteBase::transform(const struct com::sun::star::geometry::AffineMatrix2D &,)
+include/canvas/base/canvascustomspritebase.hxx:173
+    void canvas::CanvasCustomSpriteBase::clip(const class com::sun::star::uno::Reference<class com::sun::star::rendering::XPolyPolygon2D> &,)
+include/canvas/base/canvascustomspritebase.hxx:182
+    void canvas::CanvasCustomSpriteBase::setPriority(double,)
+include/canvas/base/canvascustomspritebase.hxx:189
+    void canvas::CanvasCustomSpriteBase::show()
+include/canvas/base/canvascustomspritebase.hxx:196
+    void canvas::CanvasCustomSpriteBase::hide()
+include/canvas/base/canvascustomspritebase.hxx:205
+    class com::sun::star::uno::Reference<class com::sun::star::rendering::XCanvas> canvas::CanvasCustomSpriteBase::getContentCanvas()
+include/canvas/base/canvascustomspritebase.hxx:213
+    _Bool canvas::CanvasCustomSpriteBase::isAreaUpdateOpaque(const class basegfx::B2DRange &,)const
+include/canvas/base/canvascustomspritebase.hxx:220
+    _Bool canvas::CanvasCustomSpriteBase::isContentChanged()const
+include/canvas/base/canvascustomspritebase.hxx:227
+    class basegfx::B2DPoint canvas::CanvasCustomSpriteBase::getPosPixel()const
+include/canvas/base/canvascustomspritebase.hxx:234
+    class basegfx::B2DVector canvas::CanvasCustomSpriteBase::getSizePixel()const
+include/canvas/base/canvascustomspritebase.hxx:241
+    class basegfx::B2DRange canvas::CanvasCustomSpriteBase::getUpdateArea()const
+include/canvas/base/canvascustomspritebase.hxx:248
+    double canvas::CanvasCustomSpriteBase::getPriority()const
+include/canvas/base/disambiguationhelper.hxx:62
+    void canvas::DisambiguationHelper<cppu::WeakComponentImplHelper<com::sun::star::rendering::XSpriteCanvas, com::sun::star::rendering::XGraphicDevice, com::sun::star::lang::XMultiServiceFactory, com::sun::star::rendering::XBufferController, com::sun::star::awt::XWindowListener, com::sun::star::util::XUpdatable, com::sun::star::beans::XPropertySet, com::sun::star::lang::XServiceName> >::disposeThis()
+include/canvas/base/disambiguationhelper.hxx:62
+    void canvas::DisambiguationHelper<cppu::WeakComponentImplHelper<com::sun::star::rendering::XSpriteCanvas, com::sun::star::rendering::XIntegerBitmap, com::sun::star::rendering::XGraphicDevice, com::sun::star::lang::XMultiServiceFactory, com::sun::star::rendering::XBufferController, com::sun::star::awt::XWindowListener, com::sun::star::util::XUpdatable, com::sun::star::beans::XPropertySet, com::sun::star::lang::XServiceName> >::disposeThis()
+include/canvas/base/disambiguationhelper.hxx:65
+    void canvas::DisambiguationHelper<cppu::WeakComponentImplHelper<com::sun::star::rendering::XSpriteCanvas, com::sun::star::rendering::XIntegerBitmap, com::sun::star::rendering::XGraphicDevice, com::sun::star::lang::XMultiServiceFactory, com::sun::star::rendering::XBufferController, com::sun::star::awt::XWindowListener, com::sun::star::util::XUpdatable, com::sun::star::beans::XPropertySet, com::sun::star::lang::XServiceName> >::disposeEventSource(const struct com::sun::star::lang::EventObject &,)
+include/canvas/base/disambiguationhelper.hxx:65
+    void canvas::DisambiguationHelper<cppu::WeakComponentImplHelper<com::sun::star::rendering::XSpriteCanvas, com::sun::star::rendering::XGraphicDevice, com::sun::star::lang::XMultiServiceFactory, com::sun::star::rendering::XBufferController, com::sun::star::awt::XWindowListener, com::sun::star::util::XUpdatable, com::sun::star::beans::XPropertySet, com::sun::star::lang::XServiceName> >::disposeEventSource(const struct com::sun::star::lang::EventObject &,)
+include/canvas/base/disambiguationhelper.hxx:71
+    void canvas::DisambiguationHelper::disposing()
+include/canvas/base/disambiguationhelper.hxx:74
+    void canvas::DisambiguationHelper::disposing(const struct com::sun::star::lang::EventObject &,)
+include/canvas/base/graphicdevicebase.hxx:140
+    class com::sun::star::uno::Reference<class com::sun::star::rendering::XBufferController> canvas::GraphicDeviceBase::getBufferController()
+include/canvas/base/graphicdevicebase.hxx:145
+    class com::sun::star::uno::Reference<class com::sun::star::rendering::XColorSpace> canvas::GraphicDeviceBase::getDeviceColorSpace()
+include/canvas/base/graphicdevicebase.hxx:152
+    struct com::sun::star::geometry::RealSize2D canvas::GraphicDeviceBase::getPhysicalResolution()
+include/canvas/base/graphicdevicebase.hxx:159
+    struct com::sun::star::geometry::RealSize2D canvas::GraphicDeviceBase::getPhysicalSize()
+include/canvas/base/graphicdevicebase.hxx:166
+    class com::sun::star::uno::Reference<class com::sun::star::rendering::XLinePolyPolygon2D> canvas::GraphicDeviceBase::createCompatibleLinePolyPolygon(const class com::sun::star::uno::Sequence<class com::sun::star::uno::Sequence<struct com::sun::star::geometry::RealPoint2D> > &,)
+include/canvas/base/graphicdevicebase.hxx:173
+    class com::sun::star::uno::Reference<class com::sun::star::rendering::XBezierPolyPolygon2D> canvas::GraphicDeviceBase::createCompatibleBezierPolyPolygon(const class com::sun::star::uno::Sequence<class com::sun::star::uno::Sequence<struct com::sun::star::geometry::RealBezierSegment2D> > &,)
+include/canvas/base/graphicdevicebase.hxx:180
+    class com::sun::star::uno::Reference<class com::sun::star::rendering::XBitmap> canvas::GraphicDeviceBase::createCompatibleBitmap(const struct com::sun::star::geometry::IntegerSize2D &,)
+include/canvas/base/graphicdevicebase.hxx:191
+    class com::sun::star::uno::Reference<class com::sun::star::rendering::XVolatileBitmap> canvas::GraphicDeviceBase::createVolatileBitmap(const struct com::sun::star::geometry::IntegerSize2D &,)
+include/canvas/base/graphicdevicebase.hxx:202
+    class com::sun::star::uno::Reference<class com::sun::star::rendering::XBitmap> canvas::GraphicDeviceBase::createCompatibleAlphaBitmap(const struct com::sun::star::geometry::IntegerSize2D &,)
+include/canvas/base/graphicdevicebase.hxx:213
+    class com::sun::star::uno::Reference<class com::sun::star::rendering::XVolatileBitmap> canvas::GraphicDeviceBase::createVolatileAlphaBitmap(const struct com::sun::star::geometry::IntegerSize2D &,)
+include/canvas/base/graphicdevicebase.hxx:224
+    class com::sun::star::uno::Reference<class com::sun::star::lang::XMultiServiceFactory> canvas::GraphicDeviceBase::getParametricPolyPolygonFactory()
+include/canvas/base/graphicdevicebase.hxx:229
+    unsigned char canvas::GraphicDeviceBase::hasFullScreenMode()
+include/canvas/base/graphicdevicebase.hxx:234
+    unsigned char canvas::GraphicDeviceBase::enterFullScreenMode(unsigned char,)
+include/canvas/base/graphicdevicebase.hxx:240
+    class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface> canvas::GraphicDeviceBase::createInstance(const class rtl::OUString &,)
+include/canvas/base/graphicdevicebase.hxx:248
+    class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface> canvas::GraphicDeviceBase::createInstanceWithArguments(const class rtl::OUString &,const class com::sun::star::uno::Sequence<class com::sun::star::uno::Any> &,)
+include/canvas/base/graphicdevicebase.hxx:256
+    class com::sun::star::uno::Sequence<class rtl::OUString> canvas::GraphicDeviceBase::getAvailableServiceNames()
+include/canvas/base/graphicdevicebase.hxx:263
+    void canvas::GraphicDeviceBase::update()
+include/canvas/base/graphicdevicebase.hxx:273
+    class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySetInfo> canvas::GraphicDeviceBase::getPropertySetInfo()
+include/canvas/base/graphicdevicebase.hxx:279
+    void canvas::GraphicDeviceBase::setPropertyValue(const class rtl::OUString &,const class com::sun::star::uno::Any &,)
+include/canvas/base/graphicdevicebase.hxx:286
+    class com::sun::star::uno::Any canvas::GraphicDeviceBase::getPropertyValue(const class rtl::OUString &,)
+include/canvas/base/graphicdevicebase.hxx:292
+    void canvas::GraphicDeviceBase::addPropertyChangeListener(const class rtl::OUString &,const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertyChangeListener> &,)
+include/canvas/base/graphicdevicebase.hxx:300
+    void canvas::GraphicDeviceBase::removePropertyChangeListener(const class rtl::OUString &,const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertyChangeListener> &,)
+include/canvas/base/graphicdevicebase.hxx:305
+    void canvas::GraphicDeviceBase::addVetoableChangeListener(const class rtl::OUString &,const class com::sun::star::uno::Reference<class com::sun::star::beans::XVetoableChangeListener> &,)
+include/canvas/base/graphicdevicebase.hxx:313
+    void canvas::GraphicDeviceBase::removeVetoableChangeListener(const class rtl::OUString &,const class com::sun::star::uno::Reference<class com::sun::star::beans::XVetoableChangeListener> &,)
+include/canvas/base/integerbitmapbase.hxx:45
+    class com::sun::star::uno::Sequence<signed char> canvas::IntegerBitmapBase::getData(struct com::sun::star::rendering::IntegerBitmapLayout &,const struct com::sun::star::geometry::IntegerRectangle2D &,)
+include/canvas/base/integerbitmapbase.hxx:59
+    void canvas::IntegerBitmapBase::setData(const class com::sun::star::uno::Sequence<signed char> &,const struct com::sun::star::rendering::IntegerBitmapLayout &,const struct com::sun::star::geometry::IntegerRectangle2D &,)
+include/canvas/base/integerbitmapbase.hxx:73
+    void canvas::IntegerBitmapBase::setPixel(const class com::sun::star::uno::Sequence<signed char> &,const struct com::sun::star::rendering::IntegerBitmapLayout &,const struct com::sun::star::geometry::IntegerPoint2D &,)
+include/canvas/base/integerbitmapbase.hxx:87
+    class com::sun::star::uno::Sequence<signed char> canvas::IntegerBitmapBase::getPixel(struct com::sun::star::rendering::IntegerBitmapLayout &,const struct com::sun::star::geometry::IntegerPoint2D &,)
+include/canvas/base/integerbitmapbase.hxx:101
+    struct com::sun::star::rendering::IntegerBitmapLayout canvas::IntegerBitmapBase::getMemoryLayout()
+include/canvas/base/spritecanvasbase.hxx:96
+    class com::sun::star::uno::Reference<class com::sun::star::rendering::XAnimatedSprite> canvas::SpriteCanvasBase::createSpriteFromAnimation(const class com::sun::star::uno::Reference<class com::sun::star::rendering::XAnimation> &,)
+include/canvas/base/spritecanvasbase.hxx:107
+    class com::sun::star::uno::Reference<class com::sun::star::rendering::XAnimatedSprite> canvas::SpriteCanvasBase::createSpriteFromBitmaps(const class com::sun::star::uno::Sequence<class com::sun::star::uno::Reference<class com::sun::star::rendering::XBitmap> > &,signed char,)
+include/canvas/base/spritecanvasbase.hxx:122
+    class com::sun::star::uno::Reference<class com::sun::star::rendering::XCustomSprite> canvas::SpriteCanvasBase::createCustomSprite(const struct com::sun::star::geometry::RealSize2D &,)
+include/canvas/base/spritecanvasbase.hxx:133
+    class com::sun::star::uno::Reference<class com::sun::star::rendering::XSprite> canvas::SpriteCanvasBase::createClonedSprite(const class com::sun::star::uno::Reference<class com::sun::star::rendering::XSprite> &,)
+include/canvas/base/spritecanvasbase.hxx:145
+    void canvas::SpriteCanvasBase::showSprite(const class rtl::Reference<class canvas::Sprite> &,)
+include/canvas/base/spritecanvasbase.hxx:154
+    void canvas::SpriteCanvasBase::hideSprite(const class rtl::Reference<class canvas::Sprite> &,)
+include/canvas/base/spritecanvasbase.hxx:163
+    void canvas::SpriteCanvasBase::moveSprite(const class rtl::Reference<class canvas::Sprite> &,const class basegfx::B2DPoint &,const class basegfx::B2DPoint &,const class basegfx::B2DVector &,)
+include/canvas/base/spritecanvasbase.hxx:175
+    void canvas::SpriteCanvasBase::updateSprite(const class rtl::Reference<class canvas::Sprite> &,const class basegfx::B2DPoint &,const class basegfx::B2DRange &,)
+include/comphelper/interaction.hxx:54
+    void comphelper::OInteraction::select()
+include/comphelper/proparrhlp.hxx:83
+    class cppu::IPropertyArrayHelper * comphelper::OAggregationArrayUsageHelper::createArrayHelper()const
+include/comphelper/servicedecl.hxx:164
+    class rtl::OUString comphelper::service_decl::detail::OwnServiceImpl::getImplementationName()
+include/comphelper/servicedecl.hxx:167
+    unsigned char comphelper::service_decl::detail::OwnServiceImpl::supportsService(const class rtl::OUString &,)
+include/comphelper/servicedecl.hxx:171
+    class com::sun::star::uno::Sequence<class rtl::OUString> comphelper::service_decl::detail::OwnServiceImpl::getSupportedServiceNames()
+include/comphelper/unique_disposing_ptr.hxx:41
+    void comphelper::unique_disposing_ptr<basctl::(anonymous namespace)::Dll>::reset(class basctl::(anonymous namespace)::Dll *,)
+include/comphelper/unique_disposing_ptr.hxx:41
+    void comphelper::unique_disposing_ptr<SwDLL>::reset(class SwDLL *,)
+include/comphelper/unique_disposing_ptr.hxx:41
+    void comphelper::unique_disposing_ptr<(anonymous namespace)::ImpTimedRefDev>::reset(class (anonymous namespace)::ImpTimedRefDev *,)
+include/comphelper/unique_disposing_ptr.hxx:41
+    void comphelper::unique_disposing_ptr<sd::SdGlobalResourceContainer>::reset(class sd::SdGlobalResourceContainer *,)
+include/comphelper/weakeventlistener.hxx:119
+    void comphelper::OWeakListenerAdapter::disposing(const struct com::sun::star::lang::EventObject &,)
+include/editeng/flditem.hxx:61
+    _Bool SvxFieldData::operator==(const class SvxFieldData &,)const
+include/filter/msfilter/msocximex.hxx:55
+    _Bool SvxMSConvertOCXControls::InsertControl(const class com::sun::star::uno::Reference<class com::sun::star::form::XFormComponent> &,const struct com::sun::star::awt::Size &,class com::sun::star::uno::Reference<class com::sun::star::drawing::XShape> *,_Bool,)
+include/sfx2/viewsh.hxx:216
+    class SfxShell * SfxViewShell::GetFormShell()
+include/svl/poolitem.hxx:156
+    _Bool SfxPoolItem::operator<(const class SfxPoolItem &,)const
+include/svl/svdde.hxx:227
+    class DdeData * DdeGetPutItem::Get(enum SotClipboardFormatId,)
+include/svl/svdde.hxx:228
+    _Bool DdeGetPutItem::Put(const class DdeData *,)
+include/svl/svdde.hxx:229
+    void DdeGetPutItem::AdviseLoop(_Bool,)
+include/svl/svdde.hxx:237
+    class DdeData * DdeTopic::Get(enum SotClipboardFormatId,)
+include/svl/svdde.hxx:238
+    _Bool DdeTopic::Put(const class DdeData *,)
+include/svl/svdde.hxx:239
+    _Bool DdeTopic::Execute(const class rtl::OUString *,)
+include/svl/svdde.hxx:241
+    _Bool DdeTopic::MakeItem(const class rtl::OUString &,)
+include/svl/svdde.hxx:244
+    _Bool DdeTopic::StartAdviseLoop()
+include/svtools/svparser.hxx:127
+    void SvParser<int>::Continue(int,)
+include/svtools/svparser.hxx:127
+    void SvParser<HtmlTokenId>::Continue(enum HtmlTokenId,)
+include/svx/AccessibleShape.hxx:416
+    class rtl::OUString accessibility::AccessibleShape::CreateAccessibleDescription()
+include/svx/ctredlin.hxx:150
+    void SvxTPage::DeactivatePage()
+include/svx/svdpage.hxx:472
+    enum Orientation SdrPage::GetOrientation()const
+include/svx/svdtext.hxx:73
+    void SdrText::SetObjectItem(const class SfxPoolItem &,)
+include/test/container/xnamecontainer.hxx:38
+    void apitest::XNameContainer::setElement(const class com::sun::star::uno::Any &,)
+include/test/drawing/xdrawpages.hxx:26
+    void apitest::XDrawPages::testInsertNewByIndex()
+include/test/drawing/xdrawpages.hxx:27
+    void apitest::XDrawPages::testRemove()
+include/test/table/xtablerows.hxx:27
+    void apitest::XTableRows::testInsertByIndex()
+include/test/table/xtablerows.hxx:28
+    void apitest::XTableRows::testRemoveByIndex()
+include/toolkit/controls/geometrycontrolmodel.hxx:184
+    void OGeometryControlModel::fillProperties(class com::sun::star::uno::Sequence<struct com::sun::star::beans::Property> &,class com::sun::star::uno::Sequence<struct com::sun::star::beans::Property> &,)const
+include/vbahelper/vbacollectionimpl.hxx:244
+    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XColumns> >::getItemByStringIndex(const class rtl::OUString &,)
+include/vbahelper/vbacollectionimpl.hxx:244
+    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::XCollection> >::getItemByStringIndex(const class rtl::OUString &,)
+include/vbahelper/vbacollectionimpl.hxx:244
+    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XAddins> >::getItemByStringIndex(const class rtl::OUString &,)
+include/vbahelper/vbacollectionimpl.hxx:244
+    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XHeadersFooters> >::getItemByStringIndex(const class rtl::OUString &,)
+include/vbahelper/vbacollectionimpl.hxx:244
+    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::msforms::XPages> >::getItemByStringIndex(const class rtl::OUString &,)
+include/vbahelper/vbacollectionimpl.hxx:244
+    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::excel::XAxes> >::getItemByStringIndex(const class rtl::OUString &,)
+include/vbahelper/vbacollectionimpl.hxx:244
+    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XListLevels> >::getItemByStringIndex(const class rtl::OUString &,)
+include/vbahelper/vbacollectionimpl.hxx:244
+    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XListTemplates> >::getItemByStringIndex(const class rtl::OUString &,)
+include/vbahelper/vbacollectionimpl.hxx:244
+    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XSections> >::getItemByStringIndex(const class rtl::OUString &,)
+include/vbahelper/vbacollectionimpl.hxx:244
+    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XFrames> >::getItemByStringIndex(const class rtl::OUString &,)
+include/vbahelper/vbacollectionimpl.hxx:244
+    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::excel::XPivotTables> >::getItemByStringIndex(const class rtl::OUString &,)
+include/vbahelper/vbacollectionimpl.hxx:244
+    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XListGalleries> >::getItemByStringIndex(const class rtl::OUString &,)
+include/vbahelper/vbacollectionimpl.hxx:244
+    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::XDocumentsBase> >::getItemByStringIndex(const class rtl::OUString &,)
+include/vbahelper/vbacollectionimpl.hxx:244
+    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::excel::XStyles> >::getItemByStringIndex(const class rtl::OUString &,)
+include/vbahelper/vbacollectionimpl.hxx:244
+    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::excel::XHyperlinks> >::getItemByStringIndex(const class rtl::OUString &,)
+include/vbahelper/vbacollectionimpl.hxx:244
+    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::excel::XOLEObjects> >::getItemByStringIndex(const class rtl::OUString &,)
+include/vbahelper/vbacollectionimpl.hxx:244
+    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XTablesOfContents> >::getItemByStringIndex(const class rtl::OUString &,)
+include/vbahelper/vbacollectionimpl.hxx:244
+    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::excel::XFileDialogSelectedItems> >::getItemByStringIndex(const class rtl::OUString &,)
+include/vbahelper/vbacollectionimpl.hxx:244
+    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::excel::XMenuBars> >::getItemByStringIndex(const class rtl::OUString &,)
+include/vbahelper/vbacollectionimpl.hxx:244
+    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XRows> >::getItemByStringIndex(const class rtl::OUString &,)
+include/vbahelper/vbacollectionimpl.hxx:244
+    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::excel::XChartObjects> >::getItemByStringIndex(const class rtl::OUString &,)
+include/vbahelper/vbacollectionimpl.hxx:244
+    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::XDocumentProperties> >::getItemByStringIndex(const class rtl::OUString &,)
+include/vbahelper/vbacollectionimpl.hxx:244
+    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::msforms::XControls> >::getItemByStringIndex(const class rtl::OUString &,)
+include/vbahelper/vbacollectionimpl.hxx:244
+    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::msforms::XShapes> >::getItemByStringIndex(const class rtl::OUString &,)
+include/vbahelper/vbacollectionimpl.hxx:244
+    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XFields> >::getItemByStringIndex(const class rtl::OUString &,)
+include/vbahelper/vbacollectionimpl.hxx:244
+    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XBookmarks> >::getItemByStringIndex(const class rtl::OUString &,)
+include/vbahelper/vbacollectionimpl.hxx:244
+    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::excel::XWindows> >::getItemByStringIndex(const class rtl::OUString &,)
+include/vbahelper/vbacollectionimpl.hxx:244
+    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::XCommandBars> >::getItemByStringIndex(const class rtl::OUString &,)
+include/vbahelper/vbacollectionimpl.hxx:244
+    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::excel::XMenus> >::getItemByStringIndex(const class rtl::OUString &,)
+include/vbahelper/vbacollectionimpl.hxx:244
+    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::excel::XHPageBreaks> >::getItemByStringIndex(const class rtl::OUString &,)
+include/vbahelper/vbacollectionimpl.hxx:244
+    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XVariables> >::getItemByStringIndex(const class rtl::OUString &,)
+include/vbahelper/vbacollectionimpl.hxx:244
+    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::msforms::XShapeRange> >::getItemByStringIndex(const class rtl::OUString &,)
+include/vbahelper/vbacollectionimpl.hxx:244
+    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XAutoTextEntries> >::getItemByStringIndex(const class rtl::OUString &,)
+include/vbahelper/vbacollectionimpl.hxx:244
+    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::excel::XNames> >::getItemByStringIndex(const class rtl::OUString &,)
+include/vbahelper/vbacollectionimpl.hxx:244
+    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XTabStops> >::getItemByStringIndex(const class rtl::OUString &,)
+include/vbahelper/vbacollectionimpl.hxx:244
+    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::XCommandBarControls> >::getItemByStringIndex(const class rtl::OUString &,)
+include/vbahelper/vbacollectionimpl.hxx:244
+    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XParagraphs> >::getItemByStringIndex(const class rtl::OUString &,)
+include/vbahelper/vbacollectionimpl.hxx:244
+    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XBorders> >::getItemByStringIndex(const class rtl::OUString &,)
+include/vbahelper/vbacollectionimpl.hxx:244
+    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::excel::XVPageBreaks> >::getItemByStringIndex(const class rtl::OUString &,)
+include/vbahelper/vbacollectionimpl.hxx:244
+    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::excel::XBorders> >::getItemByStringIndex(const class rtl::OUString &,)
+include/vbahelper/vbacollectionimpl.hxx:244
+    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XTables> >::getItemByStringIndex(const class rtl::OUString &,)
+include/vbahelper/vbacollectionimpl.hxx:244
+    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::excel::XComments> >::getItemByStringIndex(const class rtl::OUString &,)
+include/vbahelper/vbacollectionimpl.hxx:244
+    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::excel::XMenuItems> >::getItemByStringIndex(const class rtl::OUString &,)
+include/vbahelper/vbacollectionimpl.hxx:244
+    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XPanes> >::getItemByStringIndex(const class rtl::OUString &,)
+include/vbahelper/vbacollectionimpl.hxx:244
+    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::excel::XWorksheets> >::getItemByStringIndex(const class rtl::OUString &,)
+include/vbahelper/vbacollectionimpl.hxx:244
+    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XCells> >::getItemByStringIndex(const class rtl::OUString &,)
+include/vbahelper/vbacollectionimpl.hxx:244
+    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XRevisions> >::getItemByStringIndex(const class rtl::OUString &,)
+include/vbahelper/vbacollectionimpl.hxx:244
+    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XStyles> >::getItemByStringIndex(const class rtl::OUString &,)
+include/vbahelper/vbacollectionimpl.hxx:244
+    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::excel::XFormatConditions> >::getItemByStringIndex(const class rtl::OUString &,)
+include/vbahelper/vbacollectionimpl.hxx:266
+    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::msforms::XShapeRange> >::getItemByIntIndex(const int,)
+include/vbahelper/vbacollectionimpl.hxx:266
+    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::excel::XNames> >::getItemByIntIndex(const int,)
+include/vbahelper/vbacollectionimpl.hxx:266
+    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XSections> >::getItemByIntIndex(const int,)
+include/vbahelper/vbacollectionimpl.hxx:266
+    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XListLevels> >::getItemByIntIndex(const int,)
+include/vbahelper/vbacollectionimpl.hxx:266
+    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::msforms::XShapes> >::getItemByIntIndex(const int,)
+include/vbahelper/vbacollectionimpl.hxx:266
+    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XFrames> >::getItemByIntIndex(const int,)
+include/vbahelper/vbacollectionimpl.hxx:266
+    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::excel::XStyles> >::getItemByIntIndex(const int,)
+include/vbahelper/vbacollectionimpl.hxx:266
+    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::excel::XBorders> >::getItemByIntIndex(const int,)
+include/vbahelper/vbacollectionimpl.hxx:266
+    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::msforms::XControls> >::getItemByIntIndex(const int,)
+include/vbahelper/vbacollectionimpl.hxx:266
+    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::XDocumentProperties> >::getItemByIntIndex(const int,)
+include/vbahelper/vbacollectionimpl.hxx:266
+    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::XCollection> >::getItemByIntIndex(const int,)
+include/vbahelper/vbacollectionimpl.hxx:266
+    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::excel::XMenuBars> >::getItemByIntIndex(const int,)
+include/vbahelper/vbacollectionimpl.hxx:266
+    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::msforms::XPages> >::getItemByIntIndex(const int,)
+include/vbahelper/vbacollectionimpl.hxx:266
+    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::excel::XComments> >::getItemByIntIndex(const int,)
+include/vbahelper/vbacollectionimpl.hxx:266
+    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XAutoTextEntries> >::getItemByIntIndex(const int,)
+include/vbahelper/vbacollectionimpl.hxx:266
+    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XBorders> >::getItemByIntIndex(const int,)
+include/vbahelper/vbacollectionimpl.hxx:266
+    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XTabStops> >::getItemByIntIndex(const int,)
+include/vbahelper/vbacollectionimpl.hxx:266
+    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::excel::XPivotTables> >::getItemByIntIndex(const int,)
+include/vbahelper/vbacollectionimpl.hxx:266
+    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::excel::XFormatConditions> >::getItemByIntIndex(const int,)
+include/vbahelper/vbacollectionimpl.hxx:266
+    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::excel::XFileDialogSelectedItems> >::getItemByIntIndex(const int,)
+include/vbahelper/vbacollectionimpl.hxx:266
+    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XBookmarks> >::getItemByIntIndex(const int,)
+include/vbahelper/vbacollectionimpl.hxx:266
+    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::XCommandBarControls> >::getItemByIntIndex(const int,)
+include/vbahelper/vbacollectionimpl.hxx:266
+    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::XCommandBars> >::getItemByIntIndex(const int,)
+include/vbahelper/vbacollectionimpl.hxx:266
+    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XTablesOfContents> >::getItemByIntIndex(const int,)
+include/vbahelper/vbacollectionimpl.hxx:266
+    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XParagraphs> >::getItemByIntIndex(const int,)
+include/vbahelper/vbacollectionimpl.hxx:266
+    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::excel::XWorksheets> >::getItemByIntIndex(const int,)
+include/vbahelper/vbacollectionimpl.hxx:266
+    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XCells> >::getItemByIntIndex(const int,)
+include/vbahelper/vbacollectionimpl.hxx:266
+    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::excel::XHyperlinks> >::getItemByIntIndex(const int,)
+include/vbahelper/vbacollectionimpl.hxx:266
+    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::XDocumentsBase> >::getItemByIntIndex(const int,)
+include/vbahelper/vbacollectionimpl.hxx:266
+    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::excel::XAxes> >::getItemByIntIndex(const int,)
+include/vbahelper/vbacollectionimpl.hxx:266
+    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XListGalleries> >::getItemByIntIndex(const int,)
+include/vbahelper/vbacollectionimpl.hxx:266
+    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::excel::XMenuItems> >::getItemByIntIndex(const int,)
+include/vbahelper/vbacollectionimpl.hxx:266
+    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::excel::XHPageBreaks> >::getItemByIntIndex(const int,)
+include/vbahelper/vbacollectionimpl.hxx:266
+    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XAddins> >::getItemByIntIndex(const int,)
+include/vbahelper/vbacollectionimpl.hxx:266
+    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::excel::XWindows> >::getItemByIntIndex(const int,)
+include/vbahelper/vbacollectionimpl.hxx:266
+    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XTables> >::getItemByIntIndex(const int,)
+include/vbahelper/vbacollectionimpl.hxx:266
+    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XColumns> >::getItemByIntIndex(const int,)
+include/vbahelper/vbacollectionimpl.hxx:266
+    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XPanes> >::getItemByIntIndex(const int,)
+include/vbahelper/vbacollectionimpl.hxx:266
+    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XVariables> >::getItemByIntIndex(const int,)
+include/vbahelper/vbacollectionimpl.hxx:266
+    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XStyles> >::getItemByIntIndex(const int,)
+include/vbahelper/vbacollectionimpl.hxx:266
+    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XHeadersFooters> >::getItemByIntIndex(const int,)
+include/vbahelper/vbacollectionimpl.hxx:266
+    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::excel::XMenus> >::getItemByIntIndex(const int,)
+include/vbahelper/vbacollectionimpl.hxx:266
+    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XFields> >::getItemByIntIndex(const int,)
+include/vbahelper/vbacollectionimpl.hxx:266
+    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::excel::XVPageBreaks> >::getItemByIntIndex(const int,)
+include/vbahelper/vbacollectionimpl.hxx:266
+    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XRevisions> >::getItemByIntIndex(const int,)
+include/vbahelper/vbacollectionimpl.hxx:266
+    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::excel::XOLEObjects> >::getItemByIntIndex(const int,)
+include/vbahelper/vbacollectionimpl.hxx:266
+    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XListTemplates> >::getItemByIntIndex(const int,)
+include/vbahelper/vbacollectionimpl.hxx:266
+    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::excel::XChartObjects> >::getItemByIntIndex(const int,)
+include/vbahelper/vbacollectionimpl.hxx:266
+    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XRows> >::getItemByIntIndex(const int,)
+include/vbahelper/vbacollectionimpl.hxx:324
+    unsigned char ScVbaCollectionBase::hasElements()
+include/vbahelper/vbahelperinterface.hxx:77
+    int InheritedHelperInterfaceImpl::getCreator()
+include/vbahelper/vbahelperinterface.hxx:91
+    class rtl::OUString InheritedHelperInterfaceImpl::getImplementationName()
+include/vbahelper/vbahelperinterface.hxx:92
+    unsigned char InheritedHelperInterfaceImpl::supportsService(const class rtl::OUString &,)
+include/vbahelper/vbareturntypes.hxx:40
+    void ooo::vba::DefaultReturnHelper::setValue(type-parameter-0-0,)
+include/vbahelper/vbareturntypes.hxx:41
+    type-parameter-0-0 ooo::vba::DefaultReturnHelper::getValue()
+include/vcl/customweld.hxx:41
+    class rtl::OUString weld::CustomWidgetController::GetHelpText()const
+include/vcl/svapp.hxx:801
+    void Application::AppEvent(const class ApplicationEvent &,)
+sc/source/core/opencl/formulagroupcl.cxx:1053
+    _Bool sc::opencl::DynamicKernelSlidingArgument::NeedParallelReduction()const
+sc/source/core/opencl/formulagroupcl.cxx:1061
+    void sc::opencl::DynamicKernelSlidingArgument::GenSlidingWindowFunction(class std::__cxx11::basic_stringstream<char> &,)
+sc/source/core/opencl/formulagroupcl.cxx:1340
+    void sc::opencl::ParallelReductionVectorRef::GenSlidingWindowFunction(class std::__cxx11::basic_stringstream<char> &,)
+sc/source/core/opencl/formulagroupcl.cxx:1520
+    class std::__cxx11::basic_string<char, struct std::char_traits<char>, class std::allocator<char> > sc::opencl::ParallelReductionVectorRef::GenSlidingWindowDeclRef(_Bool,)const
+sc/source/core/opencl/formulagroupcl.cxx:1555
+    unsigned long sc::opencl::ParallelReductionVectorRef::Marshal(struct _cl_kernel *,int,int,struct _cl_program *,)
+sc/source/ui/inc/dataprovider.hxx:85
+    class std::__debug::map<class rtl::OUString, class rtl::OUString, struct std::less<class rtl::OUString>, class std::allocator<struct std::pair<const class rtl::OUString, class rtl::OUString> > > sc::DataProvider::getDataSourcesForURL(const class rtl::OUString &,)
+sc/source/ui/vba/vbacondition.hxx:41
+    class rtl::OUString ScVbaCondition::Formula1()
+sc/source/ui/vba/vbacondition.hxx:42
+    class rtl::OUString ScVbaCondition::Formula2()
+sc/source/ui/vba/vbacondition.hxx:44
+    int ScVbaCondition<ooo::vba::excel::XFormatCondition>::Operator(_Bool,)
+sc/source/ui/vba/vbaformat.hxx:62
+    class ScCellRangesBase * ScVbaFormat<ooo::vba::excel::XRange>::getCellRangesBase()
+sc/source/ui/vba/vbaformat.hxx:62
+    class ScCellRangesBase * ScVbaFormat<ooo::vba::excel::XStyle>::getCellRangesBase()
+sc/source/ui/vba/vbaformat.hxx:74
+    class com::sun::star::uno::Any ScVbaFormat::Borders(const class com::sun::star::uno::Any &,)
+sc/source/ui/vba/vbaformat.hxx:77
+    class com::sun::star::uno::Reference<class ooo::vba::excel::XFont> ScVbaFormat::Font()
+sc/source/ui/vba/vbaformat.hxx:80
+    class com::sun::star::uno::Reference<class ooo::vba::excel::XInterior> ScVbaFormat::Interior()
+sc/source/ui/vba/vbaformat.hxx:83
+    void ScVbaFormat::setNumberFormat(const class com::sun::star::uno::Any &,)
+sc/source/ui/vba/vbaformat.hxx:86
+    class com::sun::star::uno::Any ScVbaFormat::getNumberFormat()
+sc/source/ui/vba/vbaformat.hxx:89
+    void ScVbaFormat::setNumberFormatLocal(const class com::sun::star::uno::Any &,)
+sc/source/ui/vba/vbaformat.hxx:92
+    class com::sun::star::uno::Any ScVbaFormat::getNumberFormatLocal()
+sc/source/ui/vba/vbaformat.hxx:95
+    void ScVbaFormat::setIndentLevel(const class com::sun::star::uno::Any &,)
+sc/source/ui/vba/vbaformat.hxx:98
+    class com::sun::star::uno::Any ScVbaFormat::getIndentLevel()
+sc/source/ui/vba/vbaformat.hxx:101
+    void ScVbaFormat::setHorizontalAlignment(const class com::sun::star::uno::Any &,)
+sc/source/ui/vba/vbaformat.hxx:104
+    class com::sun::star::uno::Any ScVbaFormat::getHorizontalAlignment()
+sc/source/ui/vba/vbaformat.hxx:107
+    void ScVbaFormat::setVerticalAlignment(const class com::sun::star::uno::Any &,)
+sc/source/ui/vba/vbaformat.hxx:110
+    class com::sun::star::uno::Any ScVbaFormat::getVerticalAlignment()
+sc/source/ui/vba/vbaformat.hxx:113
+    void ScVbaFormat::setOrientation(const class com::sun::star::uno::Any &,)
+sc/source/ui/vba/vbaformat.hxx:116
+    class com::sun::star::uno::Any ScVbaFormat::getOrientation()
+sc/source/ui/vba/vbaformat.hxx:119
+    void ScVbaFormat::setShrinkToFit(const class com::sun::star::uno::Any &,)
+sc/source/ui/vba/vbaformat.hxx:122
+    class com::sun::star::uno::Any ScVbaFormat::getShrinkToFit()
+sc/source/ui/vba/vbaformat.hxx:125
+    void ScVbaFormat::setWrapText(const class com::sun::star::uno::Any &,)
+sc/source/ui/vba/vbaformat.hxx:128
+    class com::sun::star::uno::Any ScVbaFormat::getWrapText()
+sc/source/ui/vba/vbaformat.hxx:131
+    void ScVbaFormat::setLocked(const class com::sun::star::uno::Any &,)
+sc/source/ui/vba/vbaformat.hxx:134
+    class com::sun::star::uno::Any ScVbaFormat::getLocked()
+sc/source/ui/vba/vbaformat.hxx:137
+    void ScVbaFormat::setFormulaHidden(const class com::sun::star::uno::Any &,)
+sc/source/ui/vba/vbaformat.hxx:140
+    class com::sun::star::uno::Any ScVbaFormat::getFormulaHidden()
+sc/source/ui/vba/vbaformat.hxx:149
+    void ScVbaFormat::setReadingOrder(const class com::sun::star::uno::Any &,)
+sc/source/ui/vba/vbaformat.hxx:152
+    class com::sun::star::uno::Any ScVbaFormat::getReadingOrder()
+sc/source/ui/vba/vbapagebreak.hxx:45
+    int ScVbaPageBreak::getType()
+sc/source/ui/vba/vbapagebreak.hxx:46
+    void ScVbaPageBreak::setType(int,)
+sc/source/ui/vba/vbapagebreak.hxx:48
+    void ScVbaPageBreak::Delete()
+sc/source/ui/vba/vbapagebreak.hxx:49
+    class com::sun::star::uno::Reference<class ooo::vba::excel::XRange> ScVbaPageBreak::Location()
+sd/source/ui/inc/BulletAndPositionDlg.hxx:153
+    void SvxBulletAndPositionDlg::dispose()
+sd/source/ui/inc/OutlinerIteratorImpl.hxx:93
+    _Bool sd::outliner::IteratorImplBase::operator==(const class sd::outliner::IteratorImplBase &,)const
+sfx2/source/inc/docundomanager.hxx:45
+    void SfxModelSubComponent::disposing()
+slideshow/source/engine/activities/activitiesfactory.cxx:173
+    void slideshow::internal::(anonymous namespace)::FromToByActivity::startAnimation()
+slideshow/source/engine/activities/activitiesfactory.cxx:242
+    void slideshow::internal::(anonymous namespace)::FromToByActivity::endAnimation()
+slideshow/source/engine/activities/activitiesfactory.cxx:332
+    void slideshow::internal::(anonymous namespace)::FromToByActivity::performEnd()
+slideshow/source/engine/activities/activitiesfactory.cxx:345
+    void slideshow::internal::(anonymous namespace)::FromToByActivity::dispose()
+slideshow/source/engine/activities/activitiesfactory.cxx:527
+    void slideshow::internal::(anonymous namespace)::ValuesActivity::startAnimation()
+slideshow/source/engine/activities/activitiesfactory.cxx:538
+    void slideshow::internal::(anonymous namespace)::ValuesActivity::endAnimation()
+slideshow/source/engine/activities/activitiesfactory.cxx:583
+    void slideshow::internal::(anonymous namespace)::ValuesActivity::performEnd()
+slideshow/source/engine/animationfactory.cxx:443
+    void slideshow::internal::(anonymous namespace)::GenericAnimation::prefetch(const class std::shared_ptr<class slideshow::internal::AnimatableShape> &,const class std::shared_ptr<class slideshow::internal::ShapeAttributeLayer> &,)
+slideshow/source/engine/animationfactory.cxx:447
+    void slideshow::internal::(anonymous namespace)::GenericAnimation::start(const class std::shared_ptr<class slideshow::internal::AnimatableShape> &,const class std::shared_ptr<class slideshow::internal::ShapeAttributeLayer> &,)
+slideshow/source/engine/opengl/TransitionImpl.hxx:180
+    void OGLTransitionImpl::finish(double,double,double,double,double,)
+sw/inc/redline.hxx:50
+    _Bool SwRedlineExtraData::operator==(const class SwRedlineExtraData &,)const
+vcl/inc/unx/saldata.hxx:68
+    void X11SalData::initNWF()
+workdir/../vcl/inc/qt5/Qt5FilePicker.hxx:142
+    void Qt5FilePicker::disposing(const struct com::sun::star::lang::EventObject &,)
+workdir/../vcl/inc/qt5/Qt5Frame.hxx:143
+    void Qt5Frame::deregisterDragSource(const class Qt5DragSource *,)
+workdir/../vcl/inc/qt5/Qt5Frame.hxx:145
+    void Qt5Frame::deregisterDropTarget(const class Qt5DropTarget *,)
+writerfilter/source/ooxml/OOXMLFastContextHandler.hxx:141
+    void writerfilter::ooxml::OOXMLFastContextHandler::pushBiDiEmbedLevel()
+writerfilter/source/ooxml/OOXMLFastContextHandler.hxx:142
+    void writerfilter::ooxml::OOXMLFastContextHandler::popBiDiEmbedLevel()
+writerfilter/source/ooxml/OOXMLFastContextHandler.hxx:184
+    void writerfilter::ooxml::OOXMLFastContextHandler::setDefaultBooleanValue()
+writerfilter/source/ooxml/OOXMLFastContextHandler.hxx:185
+    void writerfilter::ooxml::OOXMLFastContextHandler::setDefaultIntegerValue()
+writerfilter/source/ooxml/OOXMLFastContextHandler.hxx:186
+    void writerfilter::ooxml::OOXMLFastContextHandler::setDefaultHexValue()
+writerfilter/source/ooxml/OOXMLFastContextHandler.hxx:187
+    void writerfilter::ooxml::OOXMLFastContextHandler::setDefaultStringValue()
+writerperfect/inc/ImportFilter.hxx:166
+    void writerperfect::detail::ImportFilterImpl<OdpGenerator>::doRegisterHandlers(class OdpGenerator &,)
+writerperfect/inc/ImportFilter.hxx:166
+    void writerperfect::detail::ImportFilterImpl<OdtGenerator>::doRegisterHandlers(class OdtGenerator &,)
+writerperfect/inc/ImportFilter.hxx:166
+    void writerperfect::detail::ImportFilterImpl<OdgGenerator>::doRegisterHandlers(class OdgGenerator &,)
+writerperfect/inc/ImportFilter.hxx:166
+    void writerperfect::detail::ImportFilterImpl<OdsGenerator>::doRegisterHandlers(class OdsGenerator &,)
+xmloff/source/forms/elementimport.hxx:575
+    class rtl::Reference<class SvXMLImportContext> xmloff::OContainerImport::CreateChildContext(unsigned short,const class rtl::OUString &,const class com::sun::star::uno::Reference<class com::sun::star::xml::sax::XAttributeList> &,)
+xmloff/source/forms/elementimport.hxx:583
+    class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> xmloff::OContainerImport::createElement()
+xmloff/source/forms/elementimport.hxx:610
+    class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> xmloff::OColumnImport::createElement()
+xmloff/source/transform/TransformerContext.hxx:96
+    void XMLTransformerContext::ExportContent()
+
