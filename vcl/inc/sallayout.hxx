@@ -21,7 +21,6 @@
 #define INCLUDED_VCL_INC_SALLAYOUT_HXX
 
 #include <iostream>
-#include <list>
 #include <memory>
 #include <vector>
 

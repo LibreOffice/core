@@ -26,7 +26,6 @@
 
 #include <osl/endian.h>
 #include <vcl/sysdata.hxx>
-#include <vcl/metric.hxx>
 #include <config_cairo_canvas.h>
 
 #include <salgdi.hxx>

@@ -43,6 +43,7 @@
 
 #include <unx/saldisp.hxx>
 #include <unx/saldata.hxx>
+#include <unx/salunxtime.h>
 #include <unx/sm.hxx>
 #include <unx/i18n_im.hxx>
 #include <unx/i18n_xkb.hxx>
@@ -54,6 +55,7 @@
 #include <salinst.hxx>
 #include <saltimer.hxx>
 
+#include <osl/diagnose.h>
 #include <osl/signal.h>
 #include <osl/thread.h>
 #include <rtl/strbuf.hxx>

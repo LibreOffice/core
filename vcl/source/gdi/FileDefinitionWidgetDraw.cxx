@@ -9,6 +9,7 @@
  */
 
 #include <FileDefinitionWidgetDraw.hxx>
+#include <widgetdraw/WidgetDefinitionReader.hxx>
 
 #include <sal/config.h>
 #include <svdata.hxx>

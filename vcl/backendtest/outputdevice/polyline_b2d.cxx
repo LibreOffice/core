@@ -9,6 +9,7 @@
  */
 
 #include <test/outputdevice.hxx>
+#include <vcl/bitmapex.hxx>
 
 namespace vcl
 {

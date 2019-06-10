@@ -24,7 +24,6 @@
 #include <tools/gen.hxx>
 
 #include <X11/Xlib.h>
-#include <X11/Xutil.h>
 
 #include <vclpluginapi.h>
 #include "salframe.h"

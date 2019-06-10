@@ -15,9 +15,9 @@
 
 #include <glm/glm.hpp>
 
-#include <vcl/opengl/OpenGLHelper.hxx>
 #include <vcl/salgtype.hxx>
 #include <basegfx/range/b2drange.hxx>
+#include <basegfx/polygon/b2dpolypolygon.hxx>
 
 #include <opengl/texture.hxx>
 

@@ -22,12 +22,10 @@
 
 #include <vcl/opengl/OpenGLContext.hxx>
 
-#include <vcl/salbtype.hxx>
 #include <opengl/texture.hxx>
 
 #include <salbmp.hxx>
 
-#include <deque>
 #include <memory>
 
 struct  BitmapBuffer;

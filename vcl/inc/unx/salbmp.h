@@ -21,13 +21,11 @@
 #define INCLUDED_VCL_INC_UNX_SALBMP_H
 
 #include <X11/Xlib.h>
-#include <X11/Xutil.h>
 
 #include <vcl/salgtype.hxx>
 #include <unx/saldisp.hxx>
 #include <salbmp.hxx>
 #include <vclpluginapi.h>
-#include <list>
 
 struct  BitmapBuffer;
 class   BitmapPalette;

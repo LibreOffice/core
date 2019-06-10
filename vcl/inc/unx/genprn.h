@@ -24,7 +24,6 @@
 #include <unx/printergfx.hxx>
 #include <unx/printerjob.hxx>
 #include <salprn.hxx>
-#include <vclpluginapi.h>
 
 class GenPspGraphics;
 class VCL_DLLPUBLIC PspSalInfoPrinter : public SalInfoPrinter

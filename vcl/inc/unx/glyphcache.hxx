@@ -21,21 +21,18 @@
 #define INCLUDED_VCL_INC_GENERIC_GLYPHCACHE_HXX
 
 #include <memory>
-#include <ft2build.h>
+#include <freetype/config/ftheader.h>
 #include FT_FREETYPE_H
 #include FT_GLYPH_H
 
-#include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <tools/gen.hxx>
 #include <tools/solar.h>
 #include <vcl/dllapi.h>
-#include <vcl/metric.hxx>
+#include <vcl/outdev.hxx>
 
-#include <sallayout.hxx>
 #include <fontattributes.hxx>
-#include <fontselect.hxx>
+#include <fontinstance.hxx>
 #include <impfontmetricdata.hxx>
-#include <hb-ot.h>
 
 #include <unordered_map>
 

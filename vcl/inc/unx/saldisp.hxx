@@ -27,17 +27,14 @@ class   SalXLib;
 
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
-#include <X11/extensions/Xrender.h>
+#include <X11/extensions/render.h>
 #include <epoxy/glx.h>
 
 #include <rtl/string.hxx>
-#include <unx/salunx.h>
 #include <unx/saltype.h>
 #include <vcl/opengl/OpenGLContext.hxx>
-#include <vcl/salgtype.hxx>
 #include <vcl/ptrstyle.hxx>
 #include <sal/types.h>
-#include <osl/mutex.h>
 #include <cassert>
 #include <list>
 #include <unordered_map>

@@ -20,6 +20,7 @@
 #include <memory>
 
 #include <hb-icu.h>
+#include <hb-ot.h>
 
 #include <sallayout.hxx>
 

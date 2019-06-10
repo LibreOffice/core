@@ -21,28 +21,14 @@
 #define INCLUDED_VCL_INC_UNX_SALDATA_HXX
 
 #include <X11/Xlib.h>
-#include <X11/Xutil.h>
 
 #include <unx/saldisp.hxx>
-#include <unx/salunx.h>
-#include <vcl/salgtype.hxx>
-#include <salframe.hxx>
-#include <unx/salinst.h>
 #include <unx/gendata.hxx>
-#include <osl/module.h>
 #include <vclpluginapi.h>
 
 class SalXLib;
 class SalDisplay;
 class SalPrinter;
-
-#if defined LINUX || defined NETBSD || defined AIX || \
-    defined FREEBSD || defined OPENBSD || defined DRAGONFLY || \
-    defined ANDROID
-#include <pthread.h>
-#else
-typedef unsigned int pthread_t;
-#endif
 
 class VCLPLUG_GEN_PUBLIC X11SalData : public GenericUnixSalData
 {

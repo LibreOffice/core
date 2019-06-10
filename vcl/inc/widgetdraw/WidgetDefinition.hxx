@@ -18,7 +18,6 @@
 #include <unordered_map>
 #include <vector>
 #include <cstddef>
-#include <functional>
 #include <boost/functional/hash.hpp>
 #include <vcl/salnativewidgets.hxx>
 

@@ -23,6 +23,7 @@
 #include <unistd.h>
 
 #include <unx/salunx.h>
+#include <unx/salunxtime.h>
 #include <unx/saldisp.hxx>
 #include <unx/saltimer.h>
 #include <unx/salinst.h>

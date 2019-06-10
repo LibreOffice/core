@@ -22,7 +22,6 @@
 
 #include <vcl/jobdata.hxx>
 #include <osl/file.hxx>
-#include <rtl/string.hxx>
 
 #include <vector>
 

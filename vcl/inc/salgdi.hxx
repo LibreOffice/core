@@ -20,7 +20,6 @@
 #ifndef INCLUDED_VCL_INC_SALGDI_HXX
 #define INCLUDED_VCL_INC_SALGDI_HXX
 
-#include <vcl/metric.hxx>
 #include <vcl/outdev.hxx>
 
 #include "impfontmetricdata.hxx"
@@ -32,7 +31,6 @@
 #include <config_cairo_canvas.h>
 
 #include <map>
-#include <set>
 #include <vector>
 
 class PhysicalFontCollection;

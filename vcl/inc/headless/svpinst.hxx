@@ -20,21 +20,17 @@
 #ifndef INCLUDED_VCL_INC_HEADLESS_SVPINST_HXX
 #define INCLUDED_VCL_INC_HEADLESS_SVPINST_HXX
 
-#include <osl/mutex.hxx>
 #include <osl/thread.hxx>
 #include <osl/conditn.hxx>
 #include <salinst.hxx>
-#include <salwtype.hxx>
 #include <saltimer.hxx>
 #include <salusereventlist.hxx>
 #include <unx/geninst.h>
 #include <unx/genprn.h>
 
-#include <list>
 #include <condition_variable>
 
 #include <sys/time.h>
-#include <time.h>
 
 #define VIRTUAL_DESKTOP_WIDTH 1024
 #define VIRTUAL_DESKTOP_HEIGHT 768

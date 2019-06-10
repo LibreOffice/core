@@ -11,8 +11,7 @@
 #ifndef INCLUDED_VCL_INC_FILEDEFINITIONWIDGETDRAW_HXX
 #define INCLUDED_VCL_INC_FILEDEFINITIONWIDGETDRAW_HXX
 
-#include <vcl/dllapi.h>
-#include "widgetdraw/WidgetDefinitionReader.hxx"
+#include "widgetdraw/WidgetDefinition.hxx"
 #include "salgdi.hxx"
 #include "WidgetDrawInterface.hxx"
 

@@ -23,6 +23,7 @@
 
 #include <unx/cpdmgr.hxx>
 #include <unx/cupsmgr.hxx>
+#include <unx/helper.hxx>
 #include <vcl/strhelper.hxx>
 
 #include <saldatabasic.hxx>
@@ -36,6 +37,7 @@
 #include <sal/macros.h>
 #include <sal/log.hxx>
 
+#include <osl/file.hxx>
 #include <osl/thread.hxx>
 #include <osl/mutex.hxx>
 #include <osl/process.h>

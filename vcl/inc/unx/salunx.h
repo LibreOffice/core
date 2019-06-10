@@ -20,8 +20,6 @@
 #ifndef INCLUDED_VCL_INC_UNX_SALUNX_H
 #define INCLUDED_VCL_INC_UNX_SALUNX_H
 
-#include <unx/salunxtime.h>
-
 inline long Divide( long nDividend, long nDivisor )
 { return (nDividend + nDivisor/2) / nDivisor; }
 

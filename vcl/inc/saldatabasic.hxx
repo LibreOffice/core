@@ -20,7 +20,6 @@
 #ifndef INCLUDED_VCL_INC_SALDATABASIC_HXX
 #define INCLUDED_VCL_INC_SALDATABASIC_HXX
 
-#include <osl/module.h>
 #include <vcl/dllapi.h>
 
 #include "svdata.hxx"

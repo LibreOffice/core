@@ -10,10 +10,8 @@
 #ifndef INCLUDED_VCL_INC_UNX_PIXMAP_HXX
 #define INCLUDED_VCL_INC_UNX_PIXMAP_HXX
 
-#include <X11/Xlib.h>
-#include <X11/Xutil.h>
+#include <X11/X.h>
 
-#include <tools/gen.hxx>
 #include <unx/saltype.h>
 #include <vclpluginapi.h>
 

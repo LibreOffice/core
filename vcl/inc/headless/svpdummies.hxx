@@ -23,8 +23,6 @@
 #include <vcl/sysdata.hxx>
 #include <unx/gensys.h>
 #include <salobj.hxx>
-#include <salimestatus.hxx>
-#include <salsys.hxx>
 
 class SalGraphics;
 

@@ -15,12 +15,8 @@
 #include <vcl/bitmapex.hxx>
 #include <vcl/animate/Animation.hxx>
 #include <vcl/vectorgraphicdata.hxx>
-#include <vcl/metaact.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/GraphicExternalLink.hxx>
-
-#include <officecfg/Office/Common.hxx>
-#include <unotools/configmgr.hxx>
 
 #include <memory>
 #include <mutex>
