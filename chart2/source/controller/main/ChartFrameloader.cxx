@@ -112,7 +112,7 @@ sal_Bool SAL_CALL ChartFrameLoader::load( const uno::Sequence< beans::PropertyVa
             , uno::UNO_QUERY );
 
         //!!!it is a special characteristic of the example application
-        //that the controller simultaniously provides the XWindow controller functionality
+        //that the controller simultaneously provides the XWindow controller functionality
         xComponentWindow =
                       uno::Reference< awt::XWindow >( xController, uno::UNO_QUERY );
 
