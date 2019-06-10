@@ -4447,9 +4447,4 @@ SfxModelSubComponent::~SfxModelSubComponent()
 {
 }
 
-void SfxModelSubComponent::disposing()
-{
-    // nothing to do here
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
