@@ -14,5 +14,7 @@ Settings about which desktops have support enabled.
 #define ENABLE_QT5 0
 
 #define QT5_USING_X11 0
+#define QT5_HAVE_GOBJECT 0
+#define ENABLE_GSTREAMER_1_0 0
 
 #endif
