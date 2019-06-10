@@ -70,8 +70,8 @@
           List of context descriptors.  Each context descriptor is a string that contains three comma
           separated values (note that values are case sensitive):
           1. UIItemID - contains the ID of uiitem(GtkToolButton/GtkMenuItem) of notebookbar
-          2. propertyName - contains the value of attibute(name) of property node.
-          3. propertyValue - cotains the value of property node.
+          2. propertyName - contains the value of attribute(name) of property node.
+          3. propertyValue - contains the value of property node.
           </desc>
         </info>
       </prop>
