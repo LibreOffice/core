@@ -13,15 +13,21 @@
 #include <sfx2/dllapi.h>
 #include <rtl/ustring.hxx>
 
-namespace com::sun::star::frame { class XFrame; }
-namespace com::sun::star::uno { template <typename > class Reference; }
+namespace com::sun::star::frame
+{
+class XFrame;
+}
+namespace com::sun::star::uno
+{
+template <typename> class Reference;
+}
 
 class SfxBindings;
 class SfxViewFrame;
 class SystemWindow;
 
-namespace sfx2 {
-
+namespace sfx2
+{
 /** Helpers for easier access to NotebookBar via the sfx2 infrastructure.
 */
 class SFX2_DLLPUBLIC SfxNotebookBar
@@ -36,23 +42,25 @@ public:
     static void ExecMethod(SfxBindings& rBindings, const OUString& rUIName);
 
     /// Function to be called from the sdi's StateMethod.
-    static bool StateMethod(SfxBindings& rBindings, const OUString& rUIFile);
+    static bool StateMethod(SfxBindings& rBindings, const OUString& rUIFile,
+                            bool bReloadNotebookbar = false);
     static bool StateMethod(SystemWindow* pSysWindow,
-                            const css::uno::Reference<css::frame::XFrame> & xFrame,
-                            const OUString& rUIFile);
+                            const css::uno::Reference<css::frame::XFrame>& xFrame,
+                            const OUString& rUIFile, bool bReloadNotebookbar = false);
 
     /// Method temporarily blocks showing of the NotebookBar
     static void LockNotebookBar();
     /// Method restores normal behaviour of the Notebookbar
     static void UnlockNotebookBar();
 
-    static void RemoveListeners(SystemWindow const * pSysWindow);
+    static void RemoveListeners(SystemWindow const* pSysWindow);
 
     /** Show menu bar in all frames of current application */
     static void ShowMenubar(bool bShow);
     /** Show menu bar only in current frame */
-    static void ShowMenubar(SfxViewFrame const * pViewFrame, bool bShow);
+    static void ShowMenubar(SfxViewFrame const* pViewFrame, bool bShow);
     static void ToggleMenubar();
+    static void ReloadNotebookBar(OUString& sUIPath);
 
 private:
     static bool m_bLock;
