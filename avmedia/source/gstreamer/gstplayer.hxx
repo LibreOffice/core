@@ -20,18 +20,12 @@
 #ifndef INCLUDED_AVMEDIA_SOURCE_GSTREAMER_GSTPLAYER_HXX
 #define INCLUDED_AVMEDIA_SOURCE_GSTREAMER_GSTPLAYER_HXX
 
-#include <config_vclplug.h>
-
 #include <osl/conditn.hxx>
 #include "gstcommon.hxx"
 
 #include <com/sun/star/media/XPlayer.hpp>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
-
-#if ENABLE_GTK3
-#    include <gtk/gtk.h>
-#endif
 
 typedef struct _GstVideoOverlay GstVideoOverlay;
 
@@ -85,9 +79,6 @@ private:
     // Add elements and pipeline here
     GstElement*             mpPlaybin;  // the playbin is also a pipeline
     GstElement*             mpVolumeControl;  // the playbin is also a pipeline
-#if ENABLE_GTK3
-    GtkWidget*              mpGtkWidget;
-#endif
     bool                    mbUseGtkSink;
     bool                    mbFakeVideo;
 
