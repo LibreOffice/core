@@ -1228,7 +1228,7 @@
             <xsl:attribute name="office:string-value"><xsl:value-of select="$field_content"/></xsl:attribute>
         </text:user-field-decl>
     </xsl:template>
-    <!-- =========this following template to convert the ms number format to OOo wirter format === -->
+    <!-- =========this following template to convert the ms number format to OOo writer format === -->
     <xsl:template name="get_field_num_format">
         <xsl:param name="input_MS_num_format"/>
         <xsl:choose>
