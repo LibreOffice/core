@@ -72,6 +72,8 @@ public:
     virtual void setUp() override;
     virtual void tearDown() override;
 
+    void testCreateDestroy();
+    void testCreateView();
     void testRegisterCallback();
     void testPostKeyEvent();
     void testPostMouseEvent();
@@ -120,6 +122,8 @@ public:
     void testInsertDeletePageInvalidation();
 
     CPPUNIT_TEST_SUITE(SdTiledRenderingTest);
+    CPPUNIT_TEST(testCreateDestroy);
+    CPPUNIT_TEST(testCreateView);
     CPPUNIT_TEST(testRegisterCallback);
     CPPUNIT_TEST(testPostKeyEvent);
     CPPUNIT_TEST(testPostMouseEvent);
@@ -344,6 +348,19 @@ xmlDocPtr SdTiledRenderingTest::parseXmlDump()
     xmlFreeTextWriter(pXmlWriter);
 
     return xmlParseMemory(reinterpret_cast<const char*>(xmlBufferContent(m_pXmlBuffer)), xmlBufferLength(m_pXmlBuffer));
+}
+
+void SdTiledRenderingTest::testCreateDestroy()
+{
+    createDoc("dummy.odp");
+    // Nothing to do, the tearDown call should cleanup.
+}
+
+void SdTiledRenderingTest::testCreateView()
+{
+    createDoc("dummy.odp");
+
+    SfxLokHelper::createView();
 }
 
 void SdTiledRenderingTest::testRegisterCallback()
