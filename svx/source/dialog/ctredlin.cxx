@@ -307,10 +307,6 @@ void SvxTPage::ActivatePage()
 {
 }
 
-void SvxTPage::DeactivatePage()
-{
-}
-
 SvxTPView::SvxTPView(weld::Container* pParent, weld::Builder* pTopLevel)
     : SvxTPage(pParent, "svx/ui/redlineviewpage.ui", "RedlineViewPage")
     , bEnableAccept(true)
