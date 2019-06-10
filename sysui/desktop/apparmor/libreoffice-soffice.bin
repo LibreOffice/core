@@ -91,8 +91,10 @@ profile libreoffice-soffice.bin INSTDIR-program/soffice.bin {
   #include <abstractions/gnome>
 # GnuPG1 only...
 # #include <abstractions/gnupg>
+  #include <abstractions/openssl>
   #include <abstractions/python>
   #include <abstractions/p11-kit>
+  #include <abstractions/qt5>
 
   #List directories for file browser
   /                                     r,
@@ -109,8 +111,10 @@ profile libreoffice-soffice.bin INSTDIR-program/soffice.bin {
   /etc/libreoffice/**                   r,
 
   /etc/cups/ppd/*.ppd                   r,
+  /etc/xdg/kdeglobals                   r,
   /etc/xml/catalog                      r, #exporting to .xhtml, for libxml2
   /proc/*/status                        r,
+  /proc/sys/kernel/core_pattern         r,
 
   owner @{HOME}/.config/libreoffice{,dev}/** rwk,
   owner @{HOME}/.config/soffice.binrc rwl -> @{HOME}/.config/#[0-9]*,
@@ -118,6 +122,7 @@ profile libreoffice-soffice.bin INSTDIR-program/soffice.bin {
   owner @{HOME}/.config/soffice.binrc.lock rwk,
   owner @{HOME}/.cache/fontconfig/**    rw,
   owner @{HOME}/.config/gtk-???/bookmarks r,  #Make bookmarks work
+  owner /tmp/#[0-9]*[0-9] m,
   owner /tmp/psp[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]* rw, #/tmp/psp1534203998 (printing to file)
 
   owner /{,var/}run/user/*/dconf/user   rw,
@@ -188,6 +193,7 @@ profile libreoffice-soffice.bin INSTDIR-program/soffice.bin {
   /sys/devices/pci[0-9]*/**/{device,subsystem_device,subsystem_vendor,uevent,vendor} r, # for libdrm
   /usr/share/*-fonts/conf.avail/*.conf  r,
   /usr/share/fonts-config/conf.avail/*.conf r,
+  /usr/share/hwdata/pnp.ids r,
   /{,var/}run/udev/data/+usb:* r, # Solid::Device::listFromQuery()
   /{,var/}run/udev/data/{c,b}*:* r, # Solid::Device::description(), Solid::Device::listFromQuery()
   @{PROC}/sys/kernel/random/boot_id r, # KRecentDocument::add() -> QSysInfo::bootUniqueId()
@@ -261,4 +267,10 @@ profile libreoffice-soffice.bin INSTDIR-program/soffice.bin {
   owner @{HOME}/.config/kdeglobals rw,
   owner @{HOME}/.config/kdeglobals.* rwl -> @{HOME}/.config/#[0-9]*,
   owner @{HOME}/.config/kdeglobals.lock rwk,
+
+  # TODO: use mesa abstraction when it is available
+  owner @{HOME}/.cache/mesa_shader_cache/index rw,
+
+  # TODO: use dri-common abstraction when it is available
+  /usr/share/drirc.d/*.conf r,
 }

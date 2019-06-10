@@ -26,6 +26,7 @@ profile libreoffice-oopslash INSTDIR-program/oosplash {
   /sys/devices/{virtual,pci[0-9]*}/**/queue/rotational  r, # for isRotational() in desktop/unx/source/pagein.c
   /usr/lib{,32,64}/ure/bin/javaldx      rmpux,
   /usr/share/libreoffice/program/*      r,
+  /var/lib/nscd/passwd                  r,
   INSTDIR-program/** 			r,
   INSTDIR-program/soffice.bin rmpx,
   INSTDIR-program/javaldx rmpux,
