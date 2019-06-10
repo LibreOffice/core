@@ -21,7 +21,6 @@
 #define INCLUDED_VCL_INC_UNX_CUPSMGR_HXX
 
 #include <printerinfomanager.hxx>
-#include <osl/module.h>
 #include <osl/thread.h>
 #include <osl/mutex.hxx>
 

@@ -22,9 +22,6 @@
 
 #include <memory>
 #include <comphelper/solarmutex.hxx>
-#include <tools/solar.h>
-#include <osl/thread.hxx>
-#include <vclpluginapi.h>
 #include <salinst.hxx>
 #include <saldatabasic.hxx>
 #include <unx/genprn.h>

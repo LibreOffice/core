@@ -22,15 +22,11 @@
 
 #include <vcl/dllapi.h>
 
-#include <rtl/ustring.hxx>
-
 #include <tools/color.hxx>
 #include <tools/poly.hxx>
-#include <tools/solar.h>
 
 #include <vcl/salgtype.hxx>
 #include <vcl/region.hxx>
-#include <vcl/salnativewidgets.hxx>
 
 #include <com/sun/star/drawing/LineCap.hpp>
 

@@ -22,10 +22,12 @@
 
 #include <rtl/ustring.hxx>
 #include <tools/color.hxx>
+#include <tools/fontenum.hxx>
+#include <tools/gen.hxx>
 #include <i18nlangtag/languagetag.hxx>
-#include <vcl/vclenum.hxx>
+#include <vcl/fntstyle.hxx>
 
-#include "fontinstance.hxx"
+#include "fontselect.hxx"
 
 /* The following class is extraordinarily similar to FontAttributes. */
 

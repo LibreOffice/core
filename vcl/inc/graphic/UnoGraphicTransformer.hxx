@@ -21,7 +21,6 @@
 #define INCLUDED_VCL_SOURCE_GRAPHIC_TRANSFORMER_HXX
 
 #include <cppuhelper/implbase1.hxx>
-#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/graphic/XGraphicTransformer.hpp>
 
 namespace unographic {

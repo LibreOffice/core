@@ -20,13 +20,11 @@
 #ifndef INCLUDED_VCL_INC_UNX_SALINST_H
 #define INCLUDED_VCL_INC_UNX_SALINST_H
 
-#include <osl/thread.hxx>
 #include <vclpluginapi.h>
 #include <salinst.hxx>
 #include <unx/geninst.h>
 
-#include <X11/Xlib.h>
-#include <X11/Xutil.h>
+#include <X11/X.h>
 
 namespace com { namespace sun { namespace star { namespace datatransfer {
     namespace clipboard { class XClipboard; }

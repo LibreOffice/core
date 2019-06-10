@@ -21,12 +21,11 @@
 #define INCLUDED_VCL_INC_FONTSELECT_HXX
 
 #include <i18nlangtag/lang.h>
-#include <rtl/ref.hxx>
+#include <vcl/vclenum.hxx>
 
 #include "fontattributes.hxx"
 
 #include <ostream>
-#include <unordered_map>
 
 namespace vcl { class Font; }
 

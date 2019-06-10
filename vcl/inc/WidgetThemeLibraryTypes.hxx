@@ -11,8 +11,6 @@
 #ifndef INCLUDED_VCL_INC_WIDGETTHEMETYPES_HXX
 #define INCLUDED_VCL_INC_WIDGETTHEMETYPES_HXX
 
-#include <cstdint>
-
 #include <o3tl/typed_flags_set.hxx>
 
 /**

@@ -23,7 +23,7 @@
 #include <com/sun/star/datatransfer/dnd/XDropTargetListener.hpp>
 #include <com/sun/star/datatransfer/dnd/XDropTargetDragContext.hpp>
 
-#include <com/sun/star/datatransfer/dnd/XDragGestureRecognizer.hpp>
+#include <com/sun/star/datatransfer/dnd/XDragGestureListener.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <vcl/window.hxx>
 

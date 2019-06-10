@@ -10,6 +10,7 @@
 #include <memory>
 #include <thread>
 #include <opengl/win/gdiimpl.hxx>
+#include <vcl/opengl/OpenGLHelper.hxx>
 
 #include <sal/log.hxx>
 #include <comphelper/windowserrorstring.hxx>

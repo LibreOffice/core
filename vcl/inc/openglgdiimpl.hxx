@@ -26,7 +26,6 @@
 #include "regionband.hxx"
 #include "salgeom.hxx"
 #include "salgdiimpl.hxx"
-#include "opengl/framebuffer.hxx"
 #include "opengl/program.hxx"
 #include "opengl/texture.hxx"
 #include "opengl/RenderList.hxx"

@@ -25,8 +25,6 @@
 #include <osl/mutex.hxx>
 #include <osl/thread.hxx>
 
-#include <assert.h>
-
 #include <list>
 #include <unordered_set>
 

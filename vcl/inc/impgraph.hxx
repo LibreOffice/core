@@ -21,6 +21,7 @@
 #define INCLUDED_VCL_INC_IMPGRAPH_HXX
 
 #include <vcl/GraphicExternalLink.hxx>
+#include <vcl/gdimtf.hxx>
 #include <vcl/graph.hxx>
 #include "graphic/Manager.hxx"
 

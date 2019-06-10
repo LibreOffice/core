@@ -9,6 +9,7 @@
  */
 
 #include <opengl/LineRenderUtils.hxx>
+#include <opengl/VertexUtils.hxx>
 
 namespace vcl
 {

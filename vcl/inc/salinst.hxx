@@ -22,10 +22,8 @@
 
 #include <sal/types.h>
 #include <rtl/ref.hxx>
-#include <tools/solar.h>
 #include <vcl/dllapi.h>
 #include <vcl/salgtype.hxx>
-#include <osl/thread.hxx>
 #include <vcl/vclenum.hxx>
 
 #include "backend/BackendCapabilities.hxx"

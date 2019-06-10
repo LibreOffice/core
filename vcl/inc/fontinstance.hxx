@@ -23,17 +23,17 @@
 #include "fontselect.hxx"
 #include "impfontmetricdata.hxx"
 
+#include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <rtl/ref.hxx>
 #include <salhelper/simplereferenceobject.hxx>
 #include <tools/gen.hxx>
 #include <tools/fontenum.hxx>
 #include <vcl/glyphitem.hxx>
-#include <vcl/vcllayout.hxx>
 
 #include <unordered_map>
 #include <memory>
 
-#include <hb-ot.h>
+#include <hb.h>
 
 class ConvertChar;
 class ImplFontCache;

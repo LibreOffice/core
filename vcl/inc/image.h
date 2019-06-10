@@ -22,9 +22,6 @@
 
 #include <vcl/bitmapex.hxx>
 
-#include <unordered_map>
-#include <vector>
-
 class ImplImage
 {
 private:

@@ -12,8 +12,6 @@
 #define INCLUDED_VCL_OUTDEVTESTS_HXX
 
 #include <vcl/virdev.hxx>
-#include <vcl/bitmapaccess.hxx>
-#include <vcl/bitmapex.hxx>
 
 namespace vcl {
 namespace test {

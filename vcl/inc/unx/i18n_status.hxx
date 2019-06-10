@@ -24,8 +24,6 @@
 #include <salimestatus.hxx>
 #include <vcl/vclptr.hxx>
 
-#include <vector>
-
 class SalFrame;
 class WorkWindow;
 class ListBox;

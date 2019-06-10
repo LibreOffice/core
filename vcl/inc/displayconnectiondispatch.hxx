@@ -24,7 +24,6 @@
 #include <com/sun/star/awt/XDisplayConnection.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <osl/mutex.hxx>
-#include <rtl/ref.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <vector>
 

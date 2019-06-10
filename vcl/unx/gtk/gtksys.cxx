@@ -22,6 +22,7 @@
 #include <gtk/gtk.h>
 #include <unx/gtk/gtkinst.hxx>
 #include <unx/gtk/gtksys.hxx>
+#include <osl/module.h>
 
 GtkSalSystem *GtkSalSystem::GetSingleton()
 {

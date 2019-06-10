@@ -11,10 +11,7 @@
 #define INCLUDED_VCL_INC_UNX_SCREENSAVERINHIBITOR_HXX
 
 #include <X11/Xlib.h>
-#include <X11/Xutil.h>
-#if !defined(__sun) && !defined(AIX)
-#include <X11/extensions/dpms.h>
-#endif
+#include <X11/Xmd.h>
 
 #include <rtl/ustring.hxx>
 #include <vcl/dllapi.h>

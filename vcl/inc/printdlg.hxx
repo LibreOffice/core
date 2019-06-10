@@ -20,19 +20,15 @@
 #ifndef VCL_INC_NEWPRINTDLG_HXX
 #define VCL_INC_NEWPRINTDLG_HXX
 
-#include <vcl/dllapi.h>
-
 #include <vcl/print.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/button.hxx>
-#include <vcl/prgsbar.hxx>
 #include <vcl/field.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/tabctrl.hxx>
-#include <vcl/tabpage.hxx>
-#include <vcl/virdev.hxx>
 #include <vcl/gdimtf.hxx>
+#include <vcl/weld.hxx>
 
 namespace vcl {
     class PrintDialog;

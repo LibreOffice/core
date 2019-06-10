@@ -39,8 +39,6 @@
 
 #include <sal/config.h>
 
-#include <sal/types.h>
-#include <unicode/utypes.h>
 #include <unicode/uobject.h>
 #include <unicode/uscript.h>
 #include <vector>
