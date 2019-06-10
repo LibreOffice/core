@@ -390,7 +390,7 @@ public:
     SC_DLLPUBLIC void SetCursor( SCCOL nPosX, SCROW nPosY, bool bNew = false );
 
     SC_DLLPUBLIC void           CellContentChanged();
-    void            SelectionChanged();
+    void            SelectionChanged( bool bFromPaste = false );
     void            CursorPosChanged();
     void            UpdateInputContext();
 
@@ -404,7 +404,7 @@ public:
     Point           GetChartInsertPos( const Size& rSize, const ScRange& rCellRange );
     Point           GetChartDialogPos( const Size& rDialogSize, const tools::Rectangle& rLogicChart );
 
-    void            UpdateAutoFillMark();
+    void            UpdateAutoFillMark( bool bFromPaste = false );
 
     void            ShowCursor();
     void            HideAllCursors();

@@ -176,7 +176,7 @@ void ScTabView::ClickCursor( SCCOL nPosX, SCROW nPosY, bool bControl )
     }
 }
 
-void ScTabView::UpdateAutoFillMark()
+void ScTabView::UpdateAutoFillMark(bool bFromPaste)
 {
     // single selection or cursor
     ScRange aMarkRange;
@@ -198,7 +198,8 @@ void ScTabView::UpdateAutoFillMark()
 
     //  selection transfer object is checked together with AutoFill marks,
     //  because it has the same requirement of a single continuous block.
-    CheckSelectionTransfer();   // update selection transfer object
+    if (!bFromPaste)
+        CheckSelectionTransfer();   // update selection transfer object
 }
 
 void ScTabView::FakeButtonUp( ScSplitPos eWhich )
@@ -486,15 +487,6 @@ void ScTabView::CheckSelectionTransfer()
                 collectUIInformation({{"RANGE", aStartAddress + ":" + aEndAddress}});
             }
         }
-        else if ( pOld && pOld->GetView() == this )
-        {
-            //  remove own selection
-
-            pOld->ForgetView();
-            pScMod->SetSelectionTransfer( nullptr );
-            TransferableHelper::ClearSelection( GetActiveWin() );       // may delete pOld
-        }
-        // else: selection from outside: leave unchanged
     }
 }
 
@@ -521,7 +513,7 @@ void ScTabView::SetTabProtectionSymbol( SCTAB nTab, const bool bProtect )
     pTabControl->SetProtectionSymbol( static_cast<sal_uInt16>(nTab)+1, bProtect);
 }
 
-void ScTabView::SelectionChanged()
+void ScTabView::SelectionChanged(bool bFromPaste)
 {
     SfxViewFrame* pViewFrame = aViewData.GetViewShell()->GetViewFrame();
     if (pViewFrame)
@@ -535,7 +527,7 @@ void ScTabView::SelectionChanged()
         }
     }
 
-    UpdateAutoFillMark();   // also calls CheckSelectionTransfer
+    UpdateAutoFillMark(bFromPaste);   // also calls CheckSelectionTransfer
 
     SfxBindings& rBindings = aViewData.GetBindings();
 
