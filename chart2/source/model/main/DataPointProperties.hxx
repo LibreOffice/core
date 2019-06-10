@@ -84,7 +84,7 @@ namespace DataPointProperties
         PROP_DATAPOINT_LABEL_BORDER_TRANS,
         PROP_DATAPOINT_CUSTOM_LABEL_FIELDS
 
-        // additionally some properites from ::chart::LineProperties
+        // additionally some properties from ::chart::LineProperties
     };
 
     void AddPropertiesToVector(
