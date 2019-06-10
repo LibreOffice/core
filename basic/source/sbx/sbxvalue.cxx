@@ -690,11 +690,6 @@ bool SbxValue::ImpIsNumeric( bool bOnlyIntntl ) const
             || ( t >= SbxCHAR && t <= SbxUINT );
 }
 
-SbxClassType SbxValue::GetClass() const
-{
-    return SbxClassType::Value;
-}
-
 SbxDataType SbxValue::GetType() const
 {
     return SbxDataType( aData.eType & 0x0FFF );
