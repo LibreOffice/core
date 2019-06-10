@@ -143,7 +143,6 @@ public:
     SvxTPage(weld::Container* pParent, const OUString& rUIXMLDescription, const OString& rID);
     virtual ~SvxTPage();
     virtual void ActivatePage();
-    virtual void DeactivatePage();
     void Show() { m_xContainer->show(); }
 };
 
@@ -191,7 +190,7 @@ public:
     SvxTPFilter(weld::Container* pParent);
     virtual ~SvxTPFilter() override;
 
-    virtual void    DeactivatePage() override;
+    void            DeactivatePage();
     void            SetRedlinTable(SvxRedlinTable*);
 
     Date            GetFirstDate() const;
@@ -302,7 +301,7 @@ public:
     void            SetUndoClickHdl( const Link<SvxTPView*,void>& rLink ) { UndoClickLk = rLink; }
 
     virtual void    ActivatePage() override;
-    virtual void    DeactivatePage() override;
+    void            DeactivatePage();
 };
 
 //  Redlining - Control (Accept- Changes)
