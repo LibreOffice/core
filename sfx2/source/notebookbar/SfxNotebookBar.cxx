@@ -8,6 +8,7 @@
  */
 
 #include <sfx2/bindings.hxx>
+#include <sfx2/viewsh.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/notebookbar/SfxNotebookBar.hxx>
 #include <unotools/viewoptions.hxx>
@@ -283,15 +284,17 @@ void SfxNotebookBar::ExecMethod(SfxBindings& rBindings, const OUString& rUIName)
     rBindings.Update();
 }
 
-bool SfxNotebookBar::StateMethod(SfxBindings& rBindings, const OUString& rUIFile)
+bool SfxNotebookBar::StateMethod(SfxBindings& rBindings, const OUString& rUIFile,
+                                 bool bReloadNotebookbar)
 {
     SfxFrame& rFrame = rBindings.GetDispatcher_Impl()->GetFrame()->GetFrame();
-    return StateMethod(rFrame.GetSystemWindow(), rFrame.GetFrameInterface(), rUIFile);
+    return StateMethod(rFrame.GetSystemWindow(), rFrame.GetFrameInterface(), rUIFile,
+                       bReloadNotebookbar);
 }
 
 bool SfxNotebookBar::StateMethod(SystemWindow* pSysWindow,
-                                 const Reference<css::frame::XFrame> & xFrame,
-                                 const OUString& rUIFile)
+                                 const Reference<css::frame::XFrame>& xFrame,
+                                 const OUString& rUIFile, bool bReloadNotebookbar)
 {
     if (!pSysWindow)
     {
@@ -325,15 +328,17 @@ bool SfxNotebookBar::StateMethod(SystemWindow* pSysWindow,
             bChangedFile = sNewFile != sCurrentFile;
         }
 
-        if ( ( !sFile.isEmpty() && bChangedFile ) || !pNotebookBar || !pNotebookBar->IsVisible() )
+        if ((!sFile.isEmpty() && bChangedFile) || !pNotebookBar || !pNotebookBar->IsVisible()
+            || bReloadNotebookbar)
         {
             RemoveListeners(pSysWindow);
 
             OUStringBuffer aBuf(rUIFile);
             aBuf.append( sFile );
+            OUString aVal = aBuf.makeStringAndClear();
 
             // setup if necessary
-            pSysWindow->SetNotebookBar(aBuf.makeStringAndClear(), xFrame);
+            pSysWindow->SetNotebookBar(aVal, xFrame, bReloadNotebookbar);
             pNotebookBar = pSysWindow->GetNotebookBar();
             pNotebookBar->Show();
             pNotebookBar->GetParent()->Resize();
@@ -500,6 +505,15 @@ void SfxNotebookBar::ToggleMenubar()
         utl::OConfigurationNode aModeNode(lcl_getCurrentImplConfigNode(xFrame, aRoot));
         aModeNode.setNodeValue( "HasMenubar", toAny<bool>( bShow ) );
         aRoot.commit();
+    }
+}
+
+void SfxNotebookBar::ReloadNotebookBar(OUString& sUIPath)
+{
+    if (SfxNotebookBar::IsActive())
+    {
+        SfxViewShell* pViewShell = SfxViewShell::Current();
+        sfx2::SfxNotebookBar::StateMethod(pViewShell->GetViewFrame()->GetBindings(), sUIPath, true);
     }
 }
 
