@@ -133,11 +133,6 @@ const SfxItemSet& SdrText::GetObjectItemSet()
     return mrObject.GetObjectItemSet();
 }
 
-void SdrText::SetObjectItem(const SfxPoolItem& rItem)
-{
-    mrObject.SetObjectItem( rItem );
-}
-
 SfxStyleSheet* SdrText::GetStyleSheet() const
 {
     return mrObject.GetStyleSheet();
