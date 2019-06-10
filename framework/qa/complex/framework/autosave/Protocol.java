@@ -49,7 +49,7 @@ public class Protocol extends JComponent
      * @const   TYPE_SCOPE_OPEN         open, mark or count a new scope for following log statements
      * @const   TYPE_SCOPE_CLOSE        close, mark or count the current scope
      * @const   TYPE_TESTMARK           it marks the beginning of a (sub)test, can be used for statistic purposes
-     * @const   TYPE_OK                 this protocol line is marked as a OK message
+     * @const   TYPE_OK                 this protocol line is marked as an OK message
      * @const   TYPE_ERROR              this protocol line is marked as an error
      * @const   TYPE_WARNING            this protocol line is marked as a warning
      * @const   TYPE_INFO               this protocol line represent some debug data for analyzing
@@ -478,7 +478,7 @@ public class Protocol extends JComponent
     /**
      * log an unspecified message.
      *
-     * Sometimes it's not necessary to set a special type for an message.
+     * Sometimes it's not necessary to set a special type for a message.
      * The pure message seems to be enough. The type of such "pure messages"
      * will be set to INFO.
      *
