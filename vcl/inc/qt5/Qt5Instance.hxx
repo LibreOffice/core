@@ -151,6 +151,8 @@ public:
     virtual css::uno::Reference<css::uno::XInterface> CreateDropTarget() override;
 
     void UpdateStyle(bool bFontsChanged);
+
+    void* CreateGStreamerSink(const SystemChildWindow*) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

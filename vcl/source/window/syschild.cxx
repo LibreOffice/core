@@ -185,4 +185,9 @@ sal_IntPtr SystemChildWindow::GetParentWindowHandle()
     return nRet;
 }
 
+void* SystemChildWindow::CreateGStreamerSink()
+{
+    return ImplGetSVData()->mpDefInst->CreateGStreamerSink(this);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

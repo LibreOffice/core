@@ -42,10 +42,6 @@
 #include "gstframegrabber.hxx"
 #include "gstwindow.hxx"
 
-#if ENABLE_QT5
-#include <QtWidgets/QWidget>
-#endif
-
 #include <gst/video/videooverlay.h>
 #define AVMEDIA_GST_PLAYER_IMPLEMENTATIONNAME "com.sun.star.comp.avmedia.Player_GStreamer"
 #define AVMEDIA_GST_PLAYER_SERVICENAME        "com.sun.star.media.Player_GStreamer"
@@ -287,9 +283,6 @@ Player::Player() :
     GstPlayer_BASE( m_aMutex ),
     mpPlaybin( nullptr ),
     mpVolumeControl( nullptr ),
-#if ENABLE_GTK3
-    mpGtkWidget( nullptr ),
-#endif
     mbUseGtkSink( false ),
     mbFakeVideo (false ),
     mnUnmutedVolume( 0 ),
@@ -347,14 +340,6 @@ void SAL_CALL Player::disposing()
     // Release the elements and pipeline
     if( mbInitialized )
     {
-#if ENABLE_GTK3
-        if (mpGtkWidget)
-        {
-            gtk_widget_destroy(mpGtkWidget);
-            mpGtkWidget = nullptr;
-        }
-#endif
-
         if( mpPlaybin )
         {
             gst_element_set_state( mpPlaybin, GST_STATE_NULL );
@@ -557,14 +542,6 @@ GstBusSyncReply Player::processSyncMessage( GstMessage *message )
 
 void Player::preparePlaybin( const OUString& rURL, GstElement *pSink )
 {
-#if ENABLE_GTK3
-    if (mpGtkWidget)
-    {
-        gtk_widget_destroy(mpGtkWidget);
-        mpGtkWidget = nullptr;
-    }
-#endif
-
     if (mpPlaybin != nullptr)
     {
         gst_element_set_state( mpPlaybin, GST_STATE_NULL );
@@ -870,98 +847,64 @@ uno::Reference< ::media::XPlayerWindow > SAL_CALL Player::createPlayerWindow( co
     if( aSize.Width > 0 && aSize.Height > 0 )
     {
         ::avmedia::gstreamer::Window* pWindow = new ::avmedia::gstreamer::Window;
+        if (rArguments.getLength() <= 2)
+        {
+            xRet = pWindow;
+            return xRet;
+        }
+
+        sal_IntPtr pIntPtr = 0;
+        rArguments[ 2 ] >>= pIntPtr;
+        SystemChildWindow *pParentWindow = reinterpret_cast< SystemChildWindow* >( pIntPtr );
+        if (!pParentWindow)
+            return nullptr;
+
+        const SystemEnvData* pEnvData = pParentWindow->GetSystemData();
+        if (!pEnvData)
+            return nullptr;
+
+        OUString aToolkit = OUString::createFromAscii(pEnvData->pToolkit);
+        OUString aPlatform = OUString::createFromAscii(pEnvData->pPlatformName);
+
+        // tdf#124027: the position of embedded window is identical w/ the position
+        // of media object in all other vclplugs (gtk, kde5, gen), in gtk3 w/o gtksink it
+        // needs to be translated
+        if (aToolkit == "gtk3")
+        {
+            Point aPoint = pParentWindow->GetPosPixel();
+            maArea.X = aPoint.getX();
+            maArea.Y = aPoint.getY();
+        }
+
+        mbUseGtkSink = false;
+
+        GstElement *pVideosink = static_cast<GstElement*>(pParentWindow->CreateGStreamerSink());
+        if (pVideosink)
+        {
+            if (aToolkit == "gtk3")
+                mbUseGtkSink = true;
+        }
+        else
+        {
+            if (aPlatform == "wayland")
+                pVideosink = gst_element_factory_make("waylandsink", "video-output");
+            else
+                pVideosink = gst_element_factory_make("autovideosink", "video-output");
+            if (!pVideosink)
+                return nullptr;
+        }
 
         xRet = pWindow;
 
-        if( rArguments.getLength() > 2 )
-        {
-            sal_IntPtr pIntPtr = 0;
-            rArguments[ 2 ] >>= pIntPtr;
-            SystemChildWindow *pParentWindow = reinterpret_cast< SystemChildWindow* >( pIntPtr );
+        g_object_set(G_OBJECT(mpPlaybin), "video-sink", pVideosink, nullptr);
+        g_object_set(G_OBJECT(mpPlaybin), "force-aspect-ratio", FALSE, nullptr);
 
-            const SystemEnvData* pEnvData = pParentWindow ? pParentWindow->GetSystemData() : nullptr;
-            OSL_ASSERT(pEnvData);
-            if (pEnvData)
-            {
-                OUString aToolkit = OUString::createFromAscii(pEnvData->pToolkit);
-                OUString aPlatform = OUString::createFromAscii(pEnvData->pPlatformName);
-
-                // tdf#124027: the position of embedded window is identical w/ the position
-                // of media object in all other vclplugs (gtk, kde5, gen), in gtk3 w/o gtksink it
-                // needs to be translated
-                if (aToolkit == "gtk3")
-                {
-                    if (pParentWindow)
-                    {
-                        Point aPoint = pParentWindow->GetPosPixel();
-                        maArea.X = aPoint.getX();
-                        maArea.Y = aPoint.getY();
-                    }
-                }
-
-                GstElement *pVideosink = nullptr;
-#if ENABLE_GTK3
-                pVideosink = (aToolkit == "gtk3") ?
-                              gst_element_factory_make("gtksink", "gtksink") : nullptr;
-                if (pVideosink)
-                {
-                    mbUseGtkSink = true;
-                    g_object_get(pVideosink, "widget", &mpGtkWidget, nullptr);
-                    gtk_widget_set_vexpand(mpGtkWidget, true);
-                    gtk_widget_set_hexpand(mpGtkWidget, true);
-                    GtkWidget *pParent = static_cast<GtkWidget*>(pEnvData->pWidget);
-                    gtk_container_add (GTK_CONTAINER(pParent), mpGtkWidget);
-
-                    g_object_set( G_OBJECT( mpPlaybin ), "video-sink", pVideosink, nullptr);
-                    g_object_set( G_OBJECT( mpPlaybin ), "force-aspect-ratio", FALSE, nullptr);
-
-                    gtk_widget_show_all (pParent);
-                }
-                else
-#endif
-                {
-#if ENABLE_QT5
-                    // try to use qwidget5videosink for qt5 on Wayland, which requires the Qt5 packages for QtGStreamer to be installed
-                    if (aToolkit == "qt5" && aPlatform == "wayland")
-                    {
-                        pVideosink = gst_element_factory_make("qwidget5videosink", "qwidget5videosink");
-                        if (pVideosink) {
-                            QWidget* pQWidget = static_cast<QWidget*>(pEnvData->pWidget);
-                            g_object_set(G_OBJECT(pVideosink), "widget", pQWidget, nullptr);
-                        }
-                        else
-                        {
-                            SAL_WARN("avmedia.gstreamer", "Couldn't initialize qwidget5videosink."
-                                                          " Video playback might not work as expected."
-                                                          " Please install Qt5 packages for QtGStreamer.");
-                            // with no videosink explicitly set, GStreamer will open its own (misplaced) window(s) to display video
-                        }
-                    }
-#endif
-                    if (!pVideosink)
-                    {
-                        if (aPlatform == "wayland")
-                            pVideosink = gst_element_factory_make("waylandsink", "video-output");
-                        else
-                            pVideosink = gst_element_factory_make("autovideosink", "video-output");
-                    }
-
-                    if (!pVideosink)
-                    {
-                        xRet.clear();
-                        return nullptr;
-                    }
-                    g_object_set(G_OBJECT(mpPlaybin), "video-sink", pVideosink, nullptr);
-                    mbUseGtkSink = false;
-                    mnWindowID = pEnvData->aWindow;
-                    mpDisplay = pEnvData->pDisplay;
-                    SAL_INFO( "avmedia.gstreamer", AVVERSION "set window id to " << static_cast<int>(mnWindowID) << " XOverlay " << mpXOverlay);
-                    gst_element_set_state( mpPlaybin, GST_STATE_PAUSED );
-                    if ( mpXOverlay != nullptr )
-                        gst_video_overlay_set_window_handle( mpXOverlay, mnWindowID );
-                }
-            }
-        }
+        mnWindowID = pEnvData->aWindow;
+        mpDisplay = pEnvData->pDisplay;
+        SAL_INFO( "avmedia.gstreamer", AVVERSION "set window id to " << static_cast<int>(mnWindowID) << " XOverlay " << mpXOverlay);
+        gst_element_set_state( mpPlaybin, GST_STATE_PAUSED );
+        if ( mpXOverlay != nullptr )
+            gst_video_overlay_set_window_handle( mpXOverlay, mnWindowID );
     }
 
     return xRet;

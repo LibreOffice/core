@@ -57,6 +57,8 @@ public:
     void                    SetLeaveEnterBackgrounds(const css::uno::Sequence<css::uno::Any>& rLeaveArgs, const css::uno::Sequence<css::uno::Any>& rEnterArgs);
     // return the platform specific handle/id of this window;
     sal_IntPtr              GetParentWindowHandle();
+
+    void*                   CreateGStreamerSink();
 };
 
 #endif // INCLUDED_VCL_SYSCHILD_HXX

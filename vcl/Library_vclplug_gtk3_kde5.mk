@@ -36,6 +36,7 @@ $(eval $(call gb_Library_add_cxxflags,vclplug_gtk3_kde5,\
     $$(INCLUDE) \
     $$(GTK3_CFLAGS) \
     $(KF5_CFLAGS) \
+    $$(GSTREAMER_1_0_CFLAGS) \
 ))
 
 $(eval $(call gb_Library_add_defs,vclplug_gtk3_kde5,\

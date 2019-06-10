@@ -36,6 +36,7 @@
 #include <tools/fract.hxx>
 #include <tools/stream.hxx>
 #include <unotools/resmgr.hxx>
+#include <unx/gstsink.hxx>
 #include <vcl/ImageTree.hxx>
 #include <vcl/i18nhelp.hxx>
 #include <vcl/quickselectionengine.hxx>
@@ -10776,6 +10777,38 @@ weld::Window* GtkSalFrame::GetFrameWeld() const
     if (!m_xFrameWeld)
         m_xFrameWeld.reset(new GtkInstanceWindow(GTK_WINDOW(getWindow()), nullptr, false));
     return m_xFrameWeld.get();
+}
+
+void* GtkInstance::CreateGStreamerSink(const SystemChildWindow *pWindow)
+{
+#if ENABLE_GSTREAMER_1_0
+    auto aSymbol = gstElementFactoryNameSymbol();
+    if (!aSymbol)
+        return nullptr;
+
+    const SystemEnvData* pEnvData = pWindow->GetSystemData();
+    if (!pEnvData)
+        return nullptr;
+
+    GstElement* pVideosink = aSymbol("gtksink", "gtksink");
+    if (!pVideosink)
+        return nullptr;
+
+    GtkWidget *pGstWidget;
+    g_object_get(pVideosink, "widget", &pGstWidget, nullptr);
+    gtk_widget_set_vexpand(pGstWidget, true);
+    gtk_widget_set_hexpand(pGstWidget, true);
+
+    GtkWidget *pParent = static_cast<GtkWidget*>(pEnvData->pWidget);
+    gtk_container_add(GTK_CONTAINER(pParent), pGstWidget);
+    g_object_unref(pGstWidget);
+    gtk_widget_show_all(pParent);
+
+    return pVideosink;
+#else
+    (void*)pWindow;
+    return nullptr;
+#endif
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

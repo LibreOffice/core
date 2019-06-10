@@ -254,6 +254,10 @@ public:
 
     std::shared_ptr<vcl::unx::GtkPrintWrapper> const & getPrintWrapper() const;
 
+#if GTK_CHECK_VERSION(3,0,0)
+    void* CreateGStreamerSink(const SystemChildWindow*) override;
+#endif
+
 private:
     GtkSalTimer *m_pTimer;
 #if GTK_CHECK_VERSION(3,0,0)

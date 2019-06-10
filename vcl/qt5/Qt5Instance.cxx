@@ -48,7 +48,7 @@
 #include <comphelper/flagguard.hxx>
 #include <sal/log.hxx>
 #include <osl/process.h>
-
+#include <unx/gstsink.hxx>
 #include <headless/svpbmp.hxx>
 
 #include <mutex>
@@ -486,6 +486,42 @@ void Qt5Instance::UpdateStyle(bool bFontsChanged)
         m_bUpdateFonts = true;
     if (!m_aUpdateStyleTimer.IsActive())
         m_aUpdateStyleTimer.Start();
+}
+
+void* Qt5Instance::CreateGStreamerSink(const SystemChildWindow* pWindow)
+{
+#if ENABLE_GSTREAMER_1_0 && QT5_HAVE_GOBJECT
+    auto pSymbol = gstElementFactoryNameSymbol();
+    if (!pSymbol)
+        return nullptr;
+
+    const SystemEnvData* pEnvData = pWindow->GetSystemData();
+    if (!pEnvData)
+        return nullptr;
+
+    OUString aPlatform = OUString::createFromAscii(pEnvData->pPlatformName);
+    if (aPlatform != "wayland")
+        return nullptr;
+
+    GstElement* pVideosink = pSymbol("qwidget5videosink", "qwidget5videosink");
+    if (pVideosink)
+    {
+        QWidget* pQWidget = static_cast<QWidget*>(pEnvData->pWidget);
+        g_object_set(G_OBJECT(pVideosink), "widget", pQWidget, nullptr);
+    }
+    else
+    {
+        SAL_WARN("vcl.qt5", "Couldn't initialize qwidget5videosink."
+                            " Video playback might not work as expected."
+                            " Please install Qt5 packages for QtGStreamer.");
+        // with no videosink explicitly set, GStreamer will open it's own (misplaced) window(s) to display video
+    }
+
+    return pVideosink;
+#else
+    (void*)pWindow;
+    return nullptr;
+#endif
 }
 
 void Qt5Instance::AllocFakeCmdlineArgs(std::unique_ptr<char* []>& rFakeArgv,

@@ -10512,6 +10512,7 @@ if test "$build_gstreamer_1_0" = "yes"; then
         GSTREAMER_1_0_CFLAGS=$(printf '%s' "$GSTREAMER_1_0_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
         FilterLibs "${GSTREAMER_1_0_LIBS}"
         GSTREAMER_1_0_LIBS="${filteredlibs}"
+        AC_DEFINE(ENABLE_GSTREAMER_1_0)
     else
         AC_MSG_RESULT([no])
     fi
@@ -11073,9 +11074,9 @@ QT5_CFLAGS=""
 QT5_LIBS=""
 QMAKE5="qmake"
 MOC5="moc"
-QT5_GLIB_CFLAGS=""
-QT5_GLIB_LIBS=""
-QT5_HAVE_GLIB=""
+QT5_GOBJECT_CFLAGS=""
+QT5_GOBJECT_LIBS=""
+QT5_HAVE_GOBJECT=""
 if test \( "$test_kde5" = "yes" -a "$ENABLE_KDE5" = "TRUE" \) -o \
         \( "$test_qt5" = "yes" -a "$ENABLE_QT5" = "TRUE" \) -o \
         \( "$test_gtk3_kde5" = "yes" -a "$ENABLE_GTK3_KDE5" = "TRUE" \)
@@ -11149,21 +11150,22 @@ then
 the root of your Qt installation by exporting QT5DIR before running "configure".])
     fi
 
-    # Glib is needed for properly handling Qt event loop with Qt's Glib integration enabled.
-    # Sets also QT5_GLIB_CFLAGS/QT5_GLIB_LIBS if successful.
-    PKG_CHECK_MODULES(QT5_GLIB,[glib-2.0 >= 2.4],
-        [
-            QT5_HAVE_GLIB=1
-        ],
-        AC_MSG_WARN([[No Glib found, Qt5 support will not use native file pickers!]])
-    )
+
+    if test "$build_gstreamer_1_0" = "yes"; then
+        PKG_CHECK_MODULES(QT5_GOBJECT,[gobject-2.0], [
+                QT5_HAVE_GOBJECT=1
+                AC_DEFINE(QT5_HAVE_GOBJECT)
+            ],
+            AC_MSG_WARN([[No GObject found, can't use QWidget GStreamer sink on wayland!]])
+        )
+    fi
 fi
 AC_SUBST(QT5_CFLAGS)
 AC_SUBST(QT5_LIBS)
 AC_SUBST(MOC5)
-AC_SUBST(QT5_GLIB_CFLAGS)
-AC_SUBST(QT5_GLIB_LIBS)
-AC_SUBST(QT5_HAVE_GLIB)
+AC_SUBST(QT5_GOBJECT_CFLAGS)
+AC_SUBST(QT5_GOBJECT_LIBS)
+AC_SUBST(QT5_HAVE_GOBJECT)
 
 dnl ===================================================================
 dnl KDE5 Integration
