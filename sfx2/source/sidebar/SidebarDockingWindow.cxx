@@ -73,7 +73,10 @@ void SidebarDockingWindow::DoDispose()
     if (comphelper::LibreOfficeKit::isActive())
     {
         if (const vcl::ILibreOfficeKitNotifier* pNotifier = GetLOKNotifier())
+        {
             pNotifier->notifyWindow(GetLOKWindowId(), "close");
+            ReleaseLOKNotifier();
+        }
     }
 
     Reference<lang::XComponent> xComponent (static_cast<XWeak*>(mpSidebarController.get()), UNO_QUERY);
