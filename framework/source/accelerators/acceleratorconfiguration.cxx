@@ -67,7 +67,7 @@ namespace framework
 
     static OUString lcl_getKeyString(const css::awt::KeyEvent& aKeyEvent)
     {
-        const sal_Int32 nBeginIndex = 4; // "KEY_" is the prefix of a identifier...
+        const sal_Int32 nBeginIndex = 4; // "KEY_" is the prefix of an identifier...
         OUStringBuffer sKeyBuffer((KeyMapping::get().mapCodeToIdentifier(aKeyEvent.KeyCode)).copy(nBeginIndex));
 
         if ( (aKeyEvent.Modifiers & css::awt::KeyModifier::SHIFT) == css::awt::KeyModifier::SHIFT )
@@ -459,7 +459,7 @@ AcceleratorCache& XMLBasedAcceleratorConfiguration::impl_getCFG(bool bWriteAcces
     }
 
     // in case, we have a writeable cache, we use it for reading too!
-    // Otherwise the API user can't find its own changes ...
+    // Otherwise the API user can't find its own changes...
     if (m_pWriteCache)
         return *m_pWriteCache;
     else
@@ -1296,7 +1296,7 @@ AcceleratorCache& XCUBasedAcceleratorConfiguration::impl_getCFG(bool bPreferred,
         }
 
         // in case, we have a writeable cache, we use it for reading too!
-        // Otherwise the API user can't find its own changes ...
+        // Otherwise the API user can't find its own changes...
         if (m_pPrimaryWriteCache)
             return *m_pPrimaryWriteCache;
         else
@@ -1313,7 +1313,7 @@ AcceleratorCache& XCUBasedAcceleratorConfiguration::impl_getCFG(bool bPreferred,
         }
 
         // in case, we have a writeable cache, we use it for reading too!
-        // Otherwise the API user can't find its own changes ...
+        // Otherwise the API user can't find its own changes...
         if (m_pSecondaryWriteCache)
             return *m_pSecondaryWriteCache;
         else
