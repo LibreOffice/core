@@ -105,7 +105,7 @@ css::uno::Reference< css::embed::XStorage > StorageHolder::openPath(const OUStri
         aReadLock.reset();
 
         // If we found an already open storage ... we must increase
-        // its use count. Otherwise it will may be closed to early :-)
+        // its use count. Otherwise it will may be closed too early :-)
         TPath2StorageInfo::iterator pCheck = m_lStorages.find(sCheckPath);
         TStorageInfo*               pInfo  = nullptr;
         if (pCheck != m_lStorages.end())
