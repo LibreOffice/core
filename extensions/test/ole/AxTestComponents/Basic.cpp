@@ -762,7 +762,7 @@ STDMETHODIMP CBasic::inMulDimArrayByte2(LPSAFEARRAY val)
     return S_OK;
 }
 
-// supports 2 and 3 dimensionals SAFEARRAY with elements of long or VARIANT
+// supports 2 and 3 dimensional SAFEARRAY with elements of long or VARIANT
 void CBasic::printMulArray( SAFEARRAY* val, VARTYPE type)
 {
     HRESULT hr= S_OK;
