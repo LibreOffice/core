@@ -215,7 +215,10 @@ public:
     MenuBar*        GetMenuBar() const { return mpMenuBar; }
     void            SetMenuBarMode( MenuBarMode nMode );
 
-    void            SetNotebookBar(const OUString& rUIXMLDescription, const css::uno::Reference<css::frame::XFrame>& rFrame);
+    void SetNotebookBar(const OUString& rUIXMLDescription,
+                        const css::uno::Reference<css::frame::XFrame>& rFrame,
+                        bool bReloadNotebookbar = false);
+
     void            CloseNotebookBar();
     VclPtr<NotebookBar> const & GetNotebookBar() const;
 
