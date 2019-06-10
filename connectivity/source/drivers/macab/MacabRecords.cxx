@@ -353,7 +353,7 @@ MacabHeader *MacabRecords::createHeaderForRecordType(const CFArrayRef _records, 
      *
      * Note: with the addition of required properties, I am not sure that
      * this method still works for kABGroupRecordType (since the required
-     * properites are all for kABPersonRecordType).
+     * properties are all for kABPersonRecordType).
      *
      * Note: required properties are constructed in the method
      * bootstrap_requiredProperties() (above).
