@@ -8462,6 +8462,9 @@ if test $enable_python = system; then
         if test -z "$PKG_CONFIG"; then
             PYTHON_CFLAGS="-I$python_include"
             PYTHON_LIBS="-L$python_libdir -lpython$python_version $python_libs"
+        elif $PKG_CONFIG --exists python-$python_version-embed; then
+            PYTHON_CFLAGS="`$PKG_CONFIG --cflags python-$python_version-embed`"
+            PYTHON_LIBS="`$PKG_CONFIG --libs python-$python_version-embed` $python_libs"
         elif $PKG_CONFIG --exists python-$python_version; then
             PYTHON_CFLAGS="`$PKG_CONFIG --cflags python-$python_version`"
             PYTHON_LIBS="`$PKG_CONFIG --libs python-$python_version` $python_libs"
