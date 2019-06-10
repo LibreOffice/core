@@ -162,7 +162,7 @@ public class RecoveryTest extends ComplexTestCase {
         catch ( com.sun.star.container.NoSuchElementException e){}
         catch ( com.sun.star.lang.WrappedTargetException e){}
 
-        String msg ="The amount of documents to recover is different form the expected amount:\n";
+        String msg ="The amount of documents to recover is different from the expected amount:\n";
         msg += "\texpected:\t" + expectedDocumentCount + "\n";
         msg += "\tto recover:\t" + documentCount;
 
@@ -243,7 +243,7 @@ public class RecoveryTest extends ComplexTestCase {
             String[] documents = oUITools.getListBoxItems("The following files will be recovered");
             log.println("there are " + documents.length + " documents to save");
 
-            String msg ="The amount of documents to recover is different form the expected amount:\n";
+            String msg ="The amount of documents to recover is different from the expected amount:\n";
             msg += "\texpected:\t" + expectedDocumentCount + "\n";
             msg += "\tto recover:\t" + documents.length;
 
@@ -338,7 +338,7 @@ public class RecoveryTest extends ComplexTestCase {
                 log.println(documents[i]);
             }
 
-            String msg ="The amount of documents to recover is different form the expected amount:\n";
+            String msg ="The amount of documents to recover is different from the expected amount:\n";
             msg += "\texpected:\t" + expectedDocumentCount + "\n";
             msg += "\tto recover:\t" + documents.length;
 
