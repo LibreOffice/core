@@ -110,7 +110,7 @@ public class PathSettingsTest
 
             aListOfWorkingProperty = new ArrayList<Property>();
 
-            // get intitial values and create new ones
+            // get initial values and create new ones
             for (int i = 0; i < xPropertyInfoOfPathSettings.length; i++)
             {
                 final String sName = xPropertyInfoOfPathSettings[i].Name;
