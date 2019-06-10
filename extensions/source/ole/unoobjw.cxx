@@ -57,8 +57,12 @@
 #include <salhelper/simplereferenceobject.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
+#include <tools/diagnose_ex.h>
 #include <com/sun/star/beans/MethodConcept.hpp>
 #include <com/sun/star/beans/PropertyConcept.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
+#include <com/sun/star/frame/TerminationVetoException.hpp>
+#include <com/sun/star/frame/XTerminateListener.hpp>
 #include <com/sun/star/lang/NoSuchMethodException.hpp>
 #include <com/sun/star/script/CannotConvertException.hpp>
 #include <com/sun/star/script/FailReason.hpp>
@@ -110,6 +114,50 @@ static bool writeBackOutParameter(VARIANTARG* pDest, VARIANT* pSource);
 static bool writeBackOutParameter2( VARIANTARG* pDest, VARIANT* pSource);
 static HRESULT mapCannotConvertException(const CannotConvertException &e, unsigned int * puArgErr);
 
+class TerminationVetoer : public WeakImplHelper<css::frame::XTerminateListener>
+{
+public:
+    int mnCount;
+
+    TerminationVetoer()
+        : mnCount(0)
+    {
+        try
+        {
+            Reference< css::frame::XDesktop > xDesktop =
+                css::frame::Desktop::create( comphelper::getProcessComponentContext() );
+            xDesktop->addTerminateListener( this );
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
+    }
+
+    // XTerminateListener
+    void SAL_CALL queryTermination( const EventObject& ) override
+    {
+        // Always veto termination while an OLE object is active
+        if (mnCount > 0)
+        {
+            throw css::frame::TerminationVetoException();
+        }
+    }
+
+    void SAL_CALL notifyTermination( const EventObject& ) override
+    {
+        // ???
+    }
+
+    // XEventListener
+    void SAL_CALL disposing( const css::lang::EventObject& Source ) override
+    {
+        // ???
+    }
+};
+
+static TerminationVetoer aTerminationVetoer;
+
 /* Does not throw any exceptions.
    Param pInfo can be NULL.
  */
@@ -128,6 +176,7 @@ InterfaceOleWrapper::InterfaceOleWrapper( Reference<XMultiServiceFactory> const 
         UnoConversionUtilities<InterfaceOleWrapper>( xFactory, unoWrapperClass, comWrapperClass),
         m_defaultValueType( 0)
 {
+    aTerminationVetoer.mnCount++;
 }
 
 InterfaceOleWrapper::~InterfaceOleWrapper()
@@ -137,6 +186,8 @@ InterfaceOleWrapper::~InterfaceOleWrapper()
     auto it = UnoObjToWrapperMap.find( reinterpret_cast<sal_uIntPtr>(m_xOrigin.get()));
     if(it != UnoObjToWrapperMap.end())
         UnoObjToWrapperMap.erase(it);
+
+    aTerminationVetoer.mnCount--;
 }
 
 STDMETHODIMP InterfaceOleWrapper::QueryInterface(REFIID riid, LPVOID FAR * ppv)
