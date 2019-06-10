@@ -247,7 +247,7 @@ namespace utils
                 case SUBTRACT:
                     assert( !bIsEmpty );
 
-                    // first union all pending ones, subtract en bloc then
+                    // first union all pending ones, subtract in block then
                     maPendingPolygons = solveCrossovers(maPendingPolygons);
                     maPendingPolygons = stripNeutralPolygons(maPendingPolygons);
                     maPendingPolygons = stripDispensablePolygons(maPendingPolygons);
@@ -349,7 +349,7 @@ namespace utils
                 case SUBTRACT:
                     assert( !bIsEmpty );
 
-                    // first union all pending ranges, subtract en bloc then
+                    // first union all pending ranges, subtract in block then
                     aCollectedRanges = maPendingRanges.solveCrossovers();
                     aCollectedRanges = stripNeutralPolygons(aCollectedRanges);
                     aCollectedRanges = stripDispensablePolygons(aCollectedRanges);
