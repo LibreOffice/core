@@ -77,7 +77,7 @@
 
 #include <tunables/global>
 
-profile libreoffice-soffice INSTDIR-program/soffice.bin {
+profile libreoffice-soffice.bin INSTDIR-program/soffice.bin {
   #include <abstractions/private-files>
 
   #include <abstractions/audio>
