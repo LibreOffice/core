@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_af6313dc",
+        "filename": "sd/source/ui/func/fusel.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 314,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-06-10T08:21:04Z",
+      "side": 1,
+      "message": "Wouldn\u0027t introduce a double-click interaction. Better load the reference only when in presentation mode (per single click) and don\u0027t open while in edit mode. If you are afraid of users who wants to interact while in edit mode, we could provide a content menu item.",
+      "revId": "2e030e031a304c360efaa4b00d1095da6ec1fac3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
