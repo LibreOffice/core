@@ -31,7 +31,7 @@ namespace sw {
     namespace mark {
     typedef std::unordered_map<OUString, sal_Int32> MarkBasenameMapUniqueOffset_t;
 
-    class DropDownFieldmark;
+    class FieldmarkWithDropDownButton;
 
     class MarkManager
         : virtual public IDocumentMarkAccess
@@ -138,7 +138,7 @@ namespace sw {
 
             SwDoc * const m_pDoc;
 
-            sw::mark::DropDownFieldmark* m_pLastActiveFieldmark;
+            sw::mark::FieldmarkWithDropDownButton* m_pLastActiveFieldmark;
     };
     } // namespace mark
 }
