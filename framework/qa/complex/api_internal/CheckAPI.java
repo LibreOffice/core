@@ -41,7 +41,7 @@ import com.sun.star.uno.UnoRuntime;
 
 /**
  * This test executes the API tests internally in LibreOffice. Prerequisite is
- * that a OOoRunner.jar is registered inside of LibreOffice. Adjust the joblist
+ * that an OOoRunner.jar is registered inside of LibreOffice. Adjust the joblist
  * inside of the CheckAPI.props to determine which tests will be executed.
  */
 public class CheckAPI  {
