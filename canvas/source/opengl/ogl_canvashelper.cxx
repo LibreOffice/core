@@ -65,7 +65,7 @@ namespace oglcanvas
        over and over again to the OpenGL subsystem. Alternatively,
        there are display lists, which at least keep the data on the
        server, or even better, vertex buffers, which copy geometry
-       data over en bloc.
+       data over in block.
 
        Next todo: put polygon geometry into vertex buffer (LRU cache
        necessary?) - or, rather, buffer objects! prune entries older
