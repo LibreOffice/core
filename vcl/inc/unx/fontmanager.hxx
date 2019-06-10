@@ -20,22 +20,18 @@
 #ifndef INCLUDED_VCL_INC_FONTMANAGER_HXX
 #define INCLUDED_VCL_INC_FONTMANAGER_HXX
 
+#include <tools/fontenum.hxx>
 #include <vcl/dllapi.h>
-#include <unx/helper.hxx>
+#include <vcl/glyphitem.hxx>
 #include <vcl/timer.hxx>
-#include <vcl/vclenum.hxx>
 #include <com/sun/star/lang/Locale.hpp>
-#include <sallayout.hxx>
 #include <unx/fc_fontoptions.hxx>
 
-#include <list>
 #include <map>
 #include <set>
 #include <memory>
 #include <vector>
 #include <unordered_map>
-
-#include <config_gio.h>
 
 /*
  *  some words on metrics: every length returned by PrintFontManager and

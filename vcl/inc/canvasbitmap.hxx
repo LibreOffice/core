@@ -23,11 +23,9 @@
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/rendering/XIntegerReadOnlyBitmap.hpp>
 #include <com/sun/star/rendering/XIntegerBitmapColorSpace.hpp>
-#include <com/sun/star/rendering/XIntegerBitmap.hpp>
 #include <com/sun/star/rendering/XBitmapPalette.hpp>
 
 #include <vcl/bitmapex.hxx>
-#include <vcl/bitmapaccess.hxx>
 
 namespace vcl
 {

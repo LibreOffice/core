@@ -18,6 +18,7 @@
  */
 
 #include <openglgdiimpl.hxx>
+#include <opengl/framebuffer.hxx>
 
 #include <vcl/gradient.hxx>
 #include <vcl/idle.hxx>

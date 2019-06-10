@@ -13,7 +13,6 @@
 #include <vcl/dllapi.h>
 #include <vcl/font/Feature.hxx>
 #include <rtl/instance.hxx>
-#include <memory>
 #include <vector>
 #include <unordered_map>
 

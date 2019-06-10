@@ -20,11 +20,12 @@
 #ifndef INCLUDED_VCL_INC_GENERIC_PRINTERGFX_HXX
 #define INCLUDED_VCL_INC_GENERIC_PRINTERGFX_HXX
 
-#include <unx/helper.hxx>
-#include <sallayout.hxx>
 #include <osl/file.hxx>
 #include <tools/gen.hxx>
-#include <vclpluginapi.h>
+#include <vcl/dllapi.h>
+#include <vcl/glyphitem.hxx>
+
+#include <impglyphitem.hxx>
 
 #include <list>
 #include <vector>

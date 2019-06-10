@@ -11,7 +11,8 @@
 #ifndef INCLUDED_VCL_INC_UNX_GTK_GLOACTIONGROUP_H
 #define INCLUDED_VCL_INC_UNX_GTK_GLOACTIONGROUP_H
 
-#include <gio/gio.h>
+#include <glib-object.h>
+#include <glib.h>
 
 G_BEGIN_DECLS
 

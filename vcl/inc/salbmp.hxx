@@ -23,8 +23,8 @@
 #include <tools/gen.hxx>
 #include <tools/solar.h>
 #include <vcl/checksum.hxx>
-#include <vcl/salbtype.hxx>
-
+#include <vcl/BitmapAccessMode.hxx>
+#include <vcl/BitmapBuffer.hxx>
 #include <com/sun/star/rendering/XBitmapCanvas.hpp>
 
 struct BitmapBuffer;

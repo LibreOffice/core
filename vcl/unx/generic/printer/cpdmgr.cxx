@@ -22,6 +22,7 @@
 #include <unx/cpdmgr.hxx>
 
 #include <osl/diagnose.h>
+#include <osl/file.hxx>
 #include <osl/thread.h>
 
 #include <rtl/ustrbuf.hxx>

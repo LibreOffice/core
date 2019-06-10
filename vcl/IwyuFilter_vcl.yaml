@@ -1,0 +1,24 @@
+---
+assumeFilename: vcl/source/app/svapp.cxx
+blacklist:
+    vcl/inc/salusereventlist.hxx:
+    # Don't propose hxx -> h change in URE libs
+    - osl/thread.hxx
+    vcl/inc/headless/svpgdi.hxx:
+    # OSL_BIGENDIAN is being checked
+    - osl/endian.h
+    vcl/inc/headless/svpinst.hxx:
+    # Don't propose hxx -> h change in URE libs
+    - osl/thread.hxx
+    vcl/inc/opengl/RenderList.hxx:
+    # Don't replace with impl. details
+    - glm/glm.hpp
+    vcl/inc/opengl/VertexUtils.hxx:
+    # Don't replace with impl. details
+    - glm/gtx/norm.hpp
+    vcl/inc/unx/gendata.hxx:
+    # Don't propose hxx -> h change in URE libs
+    - osl/socket.hxx
+    vcl/inc/unx/saldisp.hxx:
+    # Don't replace with generated header
+    - epoxy/glx.h

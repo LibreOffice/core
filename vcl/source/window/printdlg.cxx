@@ -32,8 +32,10 @@
 #include <vcl/help.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/tabpage.hxx>
 #include <vcl/unohelp.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/virdev.hxx>
 #include <vcl/builderfactory.hxx>
 #include <vcl/lstbox.hxx>
 #include <jobset.h>

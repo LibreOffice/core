@@ -21,7 +21,6 @@
 #define INCLUDED_VCL_INC_HEADLESS_SVPFRAME_HXX
 
 #include <vcl/sysdata.hxx>
-#include <basegfx/range/b2ibox.hxx>
 
 #include <salframe.hxx>
 

@@ -21,9 +21,7 @@
 #define INCLUDED_VCL_INC_UNX_SALFRAME_H
 
 #include <X11/Xlib.h>
-#include <X11/Xutil.h>
 
-#include <unx/salunx.h>
 #include <unx/saltype.h>
 #include <unx/saldisp.hxx>
 #include <unx/screensaverinhibitor.hxx>

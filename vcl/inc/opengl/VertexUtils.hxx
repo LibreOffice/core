@@ -14,7 +14,7 @@
 #include <basegfx/numeric/ftools.hxx>
 #include <epoxy/gl.h>
 #include <glm/gtx/norm.hpp>
-#include <vcl/salgtype.hxx>
+#include <tools/color.hxx>
 #include <vector>
 
 namespace vcl

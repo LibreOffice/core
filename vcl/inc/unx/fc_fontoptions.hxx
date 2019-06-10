@@ -20,11 +20,7 @@
 #ifndef INCLUDED_VCL_INC_UNX_FC_FONTOPTIONS_HXX
 #define INCLUDED_VCL_INC_UNX_FC_FONTOPTIONS_HXX
 
-#include <rtl/ustring.hxx>
-#include <tools/gen.hxx>
-#include <vcl/dllapi.h>
-#include <vcl/vclenum.hxx>
-#include <vcl/fntstyle.hxx>
+#include <rtl/string.hxx>
 
 typedef struct _FcPattern   FcPattern;
 class FontConfigFontOptions

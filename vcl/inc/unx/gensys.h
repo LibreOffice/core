@@ -21,8 +21,6 @@
 #define INCLUDED_VCL_INC_GENERIC_GENSYS_H
 
 #include <salsys.hxx>
-#include <salframe.hxx>
-#include <vclpluginapi.h>
 #include <vector>
 
 /*

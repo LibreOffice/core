@@ -9,6 +9,7 @@
 
 #include <sal/config.h>
 #include <sal/log.hxx>
+#include <osl/module.h>
 
 #include <config_cairo_canvas.h>
 

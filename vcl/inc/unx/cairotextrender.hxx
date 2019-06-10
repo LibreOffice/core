@@ -20,11 +20,7 @@
 #ifndef INCLUDED_VCL_INC_UNX_CAIROTEXTRENDER_HXX
 #define INCLUDED_VCL_INC_UNX_CAIROTEXTRENDER_HXX
 
-#include <vcl/region.hxx>
-
 #include <textrender.hxx>
-
-#include <deque>
 
 class FreetypeFont;
 class GlyphCache;

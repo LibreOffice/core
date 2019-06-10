@@ -26,7 +26,6 @@
 #include <unx/fontmanager.hxx>
 #include <salgdi.hxx>
 #include <sallayout.hxx>
-#include <vclpluginapi.h>
 
 class PhysicalFontFace;
 class PhysicalFontCollection;

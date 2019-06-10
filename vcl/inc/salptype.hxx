@@ -23,7 +23,6 @@
 #include <sal/config.h>
 
 #include <o3tl/typed_flags_set.hxx>
-#include <sal/types.h>
 
 enum class JobSetFlags : sal_uInt16 {
     ORIENTATION  = 1,

@@ -9,7 +9,6 @@
 
 #pragma once
 
-#include <vcl/sysdata.hxx>
 #include <unx/gensys.h>
 
 class Qt5System : public SalGenericSystem

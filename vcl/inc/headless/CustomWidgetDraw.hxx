@@ -16,7 +16,6 @@
 #include <WidgetThemeLibrary.hxx>
 #include <headless/svpgdi.hxx>
 #include <vcl/settings.hxx>
-#include <memory>
 
 namespace vcl
 {

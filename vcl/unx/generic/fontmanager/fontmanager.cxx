@@ -31,6 +31,7 @@
 #include <svdata.hxx>
 #include <unx/geninst.h>
 #include <unx/gendata.hxx>
+#include <unx/helper.hxx>
 #include <vcl/strhelper.hxx>
 #include <vcl/ppdparser.hxx>
 #include <vcl/embeddedfontshelper.hxx>

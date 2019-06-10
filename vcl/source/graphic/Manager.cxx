@@ -23,6 +23,9 @@
 #include <vcl/svapp.hxx>
 #include <sal/log.hxx>
 
+#include <officecfg/Office/Common.hxx>
+#include <unotools/configmgr.hxx>
+
 using namespace css;
 
 namespace vcl

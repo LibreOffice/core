@@ -19,6 +19,7 @@
 
 #include <memory>
 #include <unx/fontmanager.hxx>
+#include <unx/helper.hxx>
 #include <impfont.hxx>
 #include <comphelper/sequence.hxx>
 #include <vcl/svapp.hxx>

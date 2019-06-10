@@ -29,12 +29,14 @@
 #include <vcl/virdev.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/lineinfo.hxx>
+#include <vcl/metaact.hxx>
 #include <rtl/strbuf.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 
 #include <svmconverter.hxx>
 #include <memory>
+#include <stack>
 
 // Inlines
 static void ImplReadRect( SvStream& rIStm, tools::Rectangle& rRect )

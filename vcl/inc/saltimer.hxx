@@ -23,7 +23,6 @@
 #include <sal/config.h>
 #include <vcl/dllapi.h>
 #include "salwtype.hxx"
-#include <iostream>
 
 /*
  * note: there will be only a single instance of SalTimer

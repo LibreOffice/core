@@ -22,9 +22,6 @@
 
 #include <vector>
 
-#include <vcl/dllapi.h>
-#include <vcl/vclevent.hxx>
-
 #include <rtl/ustring.hxx>
 
 

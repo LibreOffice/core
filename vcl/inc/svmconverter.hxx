@@ -21,10 +21,7 @@
 #define INCLUDED_VCL_INC_SVMCONVERTER_HXX
 
 #include <vcl/dllapi.h>
-#include <vcl/metaact.hxx>
 #include <vcl/gdimtf.hxx>
-
-#include <stack>
 
 #define GDI_PIXEL_ACTION                1
 #define GDI_POINT_ACTION                2

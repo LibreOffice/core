@@ -14,6 +14,10 @@
 #include <X11/Xutil.h>
 #include <X11/Xatom.h>
 
+#if !defined(__sun) && !defined(AIX)
+#include <X11/extensions/dpms.h>
+#endif
+
 #include <config_gio.h>
 
 #if ENABLE_GIO

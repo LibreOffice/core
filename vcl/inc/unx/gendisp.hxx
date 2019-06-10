@@ -20,13 +20,8 @@
 #ifndef INCLUDED_VCL_INC_GENERIC_GENDISP_HXX
 #define INCLUDED_VCL_INC_GENERIC_GENDISP_HXX
 
-#include <sal/types.h>
-#include <osl/mutex.h>
-#include <osl/conditn.hxx>
 #include <salwtype.hxx>
 #include <vcl/dllapi.h>
-#include <list>
-#include <vector>
 #include <salusereventlist.hxx>
 
 class SalFrame;

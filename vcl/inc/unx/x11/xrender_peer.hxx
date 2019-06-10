@@ -25,8 +25,7 @@
 struct _XTrap; // on some older systems this is not declared within Xrender.h
 #include <X11/extensions/Xrender.h>
 
-#include <vcl/salgtype.hxx>
-#include <osl/module.h>
+#include <tools/color.hxx>
 
 
 class XRenderPeer

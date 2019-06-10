@@ -21,6 +21,7 @@
 #include <i18nlangtag/lang.h>
 
 #include <unotools/configmgr.hxx>
+#include <vcl/metric.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/print.hxx>
 #include <vcl/sysdata.hxx>

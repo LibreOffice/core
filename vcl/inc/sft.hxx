@@ -40,11 +40,6 @@
 #ifndef INCLUDED_VCL_INC_SFT_HXX
 #define INCLUDED_VCL_INC_SFT_HXX
 
-#ifdef UNX
-#include <sys/types.h>
-#include <unistd.h>
-#endif
-
 #include <vcl/dllapi.h>
 #include <vcl/fontcapabilities.hxx>
 #include <i18nlangtag/lang.h>
