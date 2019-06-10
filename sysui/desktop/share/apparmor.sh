@@ -31,17 +31,13 @@ CHECK=$5 #Check parsing of the new profile?
 #Ubuntu 16.04, running from git!
 # sudo ./sysui/desktop/share/apparmor.sh /mnt/store/git/libo/instdir/ sysui/desktop/apparmor/ /etc/apparmor.d/ true true
 
-#Need to convert / to . for profile names
-INST_ROOT_FORMAT=${INST_ROOT/\//}
-INST_ROOT_FORMAT=${INST_ROOT_FORMAT////.}
-
 #Need to escape / for sed
 INST_ROOT_SED=${INST_ROOT////\\/}
 
 for filename in $PROFILESFROM/*
 do
     [[ -e $filename ]] || { echo "No profile files found in ""$PROFILESFROM"; exit 1; }
-    tourl=$INSTALLTO$INST_ROOT_FORMAT${filename##*/}
+    tourl=$INSTALLTO${filename##*/}
     sed "s/INSTDIR-/$INST_ROOT_SED/g" "$filename" > "$tourl"
     echo "$tourl"
   if [ "$CHECK" = "true" ]; then
