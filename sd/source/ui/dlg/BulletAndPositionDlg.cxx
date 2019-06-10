@@ -287,14 +287,6 @@ SvxBulletAndPositionDlg::SvxBulletAndPositionDlg(weld::Window* pWindow, const Sf
 
 SvxBulletAndPositionDlg::~SvxBulletAndPositionDlg() {}
 
-void SvxBulletAndPositionDlg::dispose()
-{
-    m_xPreviewWIN.reset();
-    m_xBulColLB.reset();
-    pActNum.reset();
-    pSaveNum.reset();
-}
-
 void SvxBulletAndPositionDlg::SetMetric(FieldUnit eMetric)
 {
     if (eMetric == FieldUnit::MM)
