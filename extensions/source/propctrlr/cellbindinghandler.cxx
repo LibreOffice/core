@@ -101,7 +101,7 @@ namespace pcr
         ::osl::MutexGuard aGuard( m_aMutex );
         PropertyId nActuatingPropId( impl_getPropertyId_throwRuntime( _rActuatingPropertyName ) );
         OSL_PRECOND(m_pHelper,
-                    "CellBindingPropertyHandler::actuatingPropertyChanged: inconsistentcy!");
+                    "CellBindingPropertyHandler::actuatingPropertyChanged: inconsistency!");
         // if we survived impl_getPropertyId_throwRuntime, we should have a helper, since no helper implies no properties
 
         OSL_PRECOND( _rxInspectorUI.is(), "FormComponentPropertyHandler::actuatingPropertyChanged: no access to the UI!" );
