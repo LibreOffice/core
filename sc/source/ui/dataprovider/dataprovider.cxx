@@ -212,11 +212,6 @@ void DataProvider::setDeterministic()
     mbDeterministic = true;
 }
 
-std::map<OUString, OUString> DataProvider::getDataSourcesForURL(const OUString& /*rURL*/)
-{
-    return std::map<OUString, OUString>();
-}
-
 DataProvider::~DataProvider()
 {
 }

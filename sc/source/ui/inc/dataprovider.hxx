@@ -82,8 +82,6 @@ public:
 
     virtual const OUString& GetURL() const = 0;
 
-    virtual std::map<OUString, OUString> getDataSourcesForURL(const OUString& rURL);
-
     static std::unique_ptr<SvStream> FetchStreamFromURL(const OUString&, OStringBuffer& rBuffer);
 
     void setDeterministic();
