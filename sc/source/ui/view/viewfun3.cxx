@@ -1784,7 +1784,7 @@ void ScViewFunc::PostPasteFromClip(const ScRangeList& rPasteRanges, const ScMark
     ScDocShell* pDocSh = rViewData.GetDocShell();
     pDocSh->UpdateOle(&rViewData);
 
-    SelectionChanged();
+    SelectionChanged(true);
 
     ScModelObj* pModelObj = HelperNotifyChanges::getMustPropagateChangesModel(*pDocSh);
     if (!pModelObj)
