@@ -727,19 +727,8 @@ IMPL_LINK(SvxBulletAndPositionDlg, LevelHdl_Impl, weld::TreeView&, rBox, void)
         rBox.unselect(pActNum->GetLevelCount());
     }
     else
-    {
         nActNumLvl = nSaveNumLvl;
-        sal_uInt16 nMask = 1;
-        for (sal_uInt16 i = 0; i < pActNum->GetLevelCount(); i++)
-        {
-            if (nActNumLvl & nMask)
-            {
-                rBox.select(i);
-                break;
-            }
-            nMask <<= 1;
-        }
-    }
+
     InitControls();
 }
 
