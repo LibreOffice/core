@@ -52,6 +52,7 @@ namespace weld {
     class Widget;
     class Window;
 }
+class SystemChildWindow;
 struct SystemParentData;
 struct SalPrinterQueueInfo;
 class ImplJobSetup;
@@ -208,6 +209,8 @@ public:
     virtual OUString        getOSVersion() { return OUString("-"); }
 
     virtual const cairo_font_options_t* GetCairoFontOptions() { return nullptr; }
+
+    virtual void* CreateGStreamerSink(const SystemChildWindow*) { return nullptr; }
 };
 
 // called from SVMain
