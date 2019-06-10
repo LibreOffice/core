@@ -16,6 +16,24 @@
       "revId": "8568f669bca59f47453b5bb8c5ff2e5ca54bb273",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_af2eb3a2",
+        "filename": "extensions/source/ole/unoobjw.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2019-06-10T20:07:36Z",
+      "side": 1,
+      "message": "That wouldn\u0027t fix the problem that it might not have been increased yet even if the constructor is just about to create a new object when another thread is checking, or that it hasn\u0027t been decreased yet even if the last OLE client just went away, though. And I have no idea whether this will be accessed from different threads or not.",
+      "parentUuid": "3fa0c359_cf545f24",
+      "revId": "8568f669bca59f47453b5bb8c5ff2e5ca54bb273",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
