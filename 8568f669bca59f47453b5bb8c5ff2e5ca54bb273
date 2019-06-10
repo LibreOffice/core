@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_cf545f24",
+        "filename": "extensions/source/ole/unoobjw.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-06-10T19:50:59Z",
+      "side": 1,
+      "message": "probably doesn\u0027t matter in practice, but this should be std::atomic\u003cint\u003e or volatile, since it is being accessed from different threads",
+      "revId": "8568f669bca59f47453b5bb8c5ff2e5ca54bb273",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
