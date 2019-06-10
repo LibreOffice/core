@@ -41,9 +41,6 @@ public:
         m_rModel.MethodEntryCheck( true );
     }
 
-    // called when the SfxBaseModel which the component is superordinate of is being disposed
-    virtual void disposing();
-
 protected:
     SfxModelSubComponent( SfxBaseModel& i_model )
         :m_rModel( i_model )
@@ -109,8 +106,7 @@ namespace sfx2
         DocumentUndoManager(const DocumentUndoManager&) = delete;
         DocumentUndoManager& operator=(const DocumentUndoManager&) = delete;
 
-        // SfxModelSubComponent overridables
-        virtual void    disposing() override;
+        void    disposing();
 
         // non-UNO API for our owner
         /** determines whether we have an open Undo context. No mutex locking within this method, no disposal check - this
