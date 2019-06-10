@@ -149,7 +149,7 @@ css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL Disp
 /**
     @short      helper for queryDispatch()
     @descr      Every member of the frame tree (frame, desktop) must handle such request
-                in another way. So we implement different specialized methods for every one.
+                in another way. So we implement different specialized methods for everyone.
 
     @threadsafe yes
  */
@@ -393,7 +393,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryFrame
             // Attention: Found target is our own owner frame!
             // Don't ask him for his dispatcher. We know it already - it's our self dispatch helper.
             // Otherwise we can start a never ending recursiv call. Why?
-            // Somewere called our owner frame - he called some interceptor objects - and may by this dispatch provider
+            // Somewhere called our owner frame - he called some interceptor objects - and may by this dispatch provider
             // is called. If wa use queryDispatch() on our owner frame again - we start this call stack again ... and again.
             if (xFoundFrame==xFrame)
                 xDispatcher = implts_getOrCreateDispatchHelper( E_SELFDISPATCHER, xFrame );
