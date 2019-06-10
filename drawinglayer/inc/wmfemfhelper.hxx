@@ -184,7 +184,7 @@ namespace wmfemfhelper
 
 namespace wmfemfhelper
 {
-    /** stack for properites
+    /** stack for properties
 
     This class builds a stack based on the PropertyHolder
     class. It encapsulates the pointer/new/delete usage to
