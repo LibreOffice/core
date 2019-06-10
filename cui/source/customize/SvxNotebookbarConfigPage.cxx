@@ -206,6 +206,8 @@ short SvxNotebookbarConfigPage::QueryReset()
         OUString sNotebookbarInterface = getFileName(sFileName);
         Sequence<OUString> sSequenceEntries;
         CustomNotebookbarGenerator::setCustomizedUIItem(sSequenceEntries, sNotebookbarInterface);
+        OUString sUIPath = "modules/s" + sAppName.toAsciiLowerCase() + "/ui/";
+        sfx2::SfxNotebookBar::ReloadNotebookBar(sUIPath);
     }
     return nValue;
 }
@@ -374,13 +376,10 @@ static OUString getUIItemID(OUString sString)
     return sUIItemID.makeStringAndClear();
 }
 
-static void EditRegistryFile(OUString& sUIItemID, OUString& sSetEntry)
+static void EditRegistryFile(OUString& sUIItemID, OUString& sSetEntry,
+                             OUString& sNotebookbarInterface)
 {
     int nFlag = 0;
-    OUString sAppName;
-    OUString sFileName;
-    CustomNotebookbarGenerator::getFileNameAndAppName(sAppName, sFileName);
-    OUString sNotebookbarInterface = getFileName(sFileName);
     Sequence<OUString> aOldEntries
         = CustomNotebookbarGenerator::getCustomizedUIItem(sNotebookbarInterface);
     Sequence<OUString> aNewEntries(aOldEntries.getLength() + 1);
@@ -411,6 +410,10 @@ static void EditRegistryFile(OUString& sUIItemID, OUString& sSetEntry)
 void SvxNotebookbarEntriesListBox::ChangedVisibility(int nRow)
 {
     OUString sUIItemID = m_xControl->get_selected_text();
+    OUString sAppName;
+    OUString sFileName;
+    CustomNotebookbarGenerator::getFileNameAndAppName(sAppName, sFileName);
+    OUString sNotebookbarInterface = getFileName(sFileName);
     OUString sVisible;
     sUIItemID = getUIItemID(sUIItemID);
     if (m_xControl->get_toggle(nRow, 0) == TRISTATE_TRUE)
@@ -420,8 +423,10 @@ void SvxNotebookbarEntriesListBox::ChangedVisibility(int nRow)
     OUString sSetEntries = sUIItemID + ",visible," + sVisible;
     Sequence<OUString> sSeqOfEntries(1);
     sSeqOfEntries[0] = sSetEntries;
-    EditRegistryFile(sUIItemID, sSetEntries);
+    EditRegistryFile(sUIItemID, sSetEntries, sNotebookbarInterface);
     CustomNotebookbarGenerator::modifyCustomizedUIFile(sSeqOfEntries);
+    OUString sUIPath = "modules/s" + sAppName.toAsciiLowerCase() + "/ui/";
+    sfx2::SfxNotebookBar::ReloadNotebookBar(sUIPath);
 }
 
 IMPL_LINK(SvxNotebookbarEntriesListBox, CheckButtonHdl, const row_col&, rRowCol, void)
