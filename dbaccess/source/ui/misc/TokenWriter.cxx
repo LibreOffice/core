@@ -196,7 +196,7 @@ void ODatabaseImportExport::impl_initFromDescriptor( const ODataAccessDescriptor
         {
             if ( m_bBookmarkSelection && !m_xRowLocate.is() )
             {
-                SAL_WARN("dbaccess.ui", "ODatabaseImportExport::impl_initFromDescriptor: no XRowLocate -> no bookmars!" );
+                SAL_WARN("dbaccess.ui", "ODatabaseImportExport::impl_initFromDescriptor: no XRowLocate -> no bookmarks!" );
                 m_aSelection.realloc( 0 );
             }
         }
