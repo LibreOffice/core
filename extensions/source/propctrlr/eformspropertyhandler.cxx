@@ -559,7 +559,7 @@ namespace pcr
 
         ::osl::MutexGuard aGuard( m_aMutex );
         PropertyId nActuatingPropId( impl_getPropertyId_throwRuntime( _rActuatingPropertyName ) );
-        OSL_PRECOND(m_pHelper, "EFormsPropertyHandler::actuatingPropertyChanged: inconsistentcy!");
+        OSL_PRECOND(m_pHelper, "EFormsPropertyHandler::actuatingPropertyChanged: inconsistency!");
         // if we survived impl_getPropertyId_throwRuntime, we should have a helper, since no helper implies no properties
 
         DBG_ASSERT( _rxInspectorUI.is(), "EFormsPropertyHandler::actuatingPropertyChanged: invalid callback!" );
