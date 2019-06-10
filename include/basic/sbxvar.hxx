@@ -124,7 +124,6 @@ public:
     bool IsNumericRTL() const;  // #41692 Interface for Basic
     bool ImpIsNumeric( bool bOnlyIntntl ) const;    // Implementation
 
-    virtual SbxClassType GetClass() const;
     virtual SbxDataType GetType() const override;
     SbxDataType GetFullType() const { return aData.eType;}
     bool SetType( SbxDataType );
@@ -272,7 +271,7 @@ public:
     void SetUserData( sal_uInt32 n ) { nUserData = n; }
 
     virtual SbxDataType  GetType()  const override;
-    virtual SbxClassType GetClass() const override;
+    virtual SbxClassType GetClass() const;
 
     // Parameter-Interface
     virtual SbxInfo* GetInfo();
