@@ -321,7 +321,7 @@ namespace pcr
         ::osl::MutexGuard aGuard( m_aMutex );
         PropertyId nActuatingPropId( impl_getPropertyId_throwRuntime( _rActuatingPropertyName ) );
         OSL_PRECOND(m_pHelper,
-                    "SubmissionPropertyHandler::actuatingPropertyChanged: inconsistentcy!");
+                    "SubmissionPropertyHandler::actuatingPropertyChanged: inconsistency!");
         // if we survived impl_getPropertyId_throwRuntime, we should have a helper, since no helper implies no properties
 
         switch ( nActuatingPropId )
