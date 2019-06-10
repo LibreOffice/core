@@ -164,7 +164,7 @@ css::uno::Reference< css::frame::XFrame > FrameContainer::operator[]( sal_uInt32
     try
     {
         // Get element form container WITH automatic test of ranges!
-        // If index not valid, a out_of_range exception is thrown.
+        // If index not valid, an out_of_range exception is thrown.
         SolarMutexGuard g;
         xFrame = m_aContainer.at( nIndex );
     }
