@@ -89,6 +89,8 @@ def ignoreRemoval(include, toAdd, absFileName, moduleRules):
         return True
     if include == "boost/unordered_map.hpp" and "boost/unordered/unordered_map.hpp" in toAdd:
         return True
+    if include == "boost/functional/hash.hpp" and "boost/container_hash/extensions.hpp" in toAdd:
+        return True
 
     # Avoid .hxx to .h proposals in basic css/uno/* API
     unoapi = {
