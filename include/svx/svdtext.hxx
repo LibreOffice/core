@@ -70,7 +70,6 @@ public:
 
 protected:
     virtual const SfxItemSet& GetObjectItemSet();
-    virtual void SetObjectItem(const SfxPoolItem& rItem);
     virtual SfxStyleSheet* GetStyleSheet() const;
 
 private:
