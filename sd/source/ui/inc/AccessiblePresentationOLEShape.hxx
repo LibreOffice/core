@@ -50,8 +50,7 @@ public:
         CreateAccessibleBaseName () override;
 
     /// Create a description string that contains the accessible description.
-    virtual OUString
-        CreateAccessibleDescription () override;
+    OUString CreateAccessibleDescription();
     /// Return this object's role.
     virtual sal_Int16 SAL_CALL getAccessibleRole () override;
 };

@@ -138,8 +138,7 @@ private:
         CreateAccessibleName( ) override;
 
     /// Create a description string that contains the accessible description.
-    virtual OUString
-        CreateAccessibleDescription( ) override;
+    OUString CreateAccessibleDescription();
 
 #ifdef DBG_UTIL
     /// Set the specified state

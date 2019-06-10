@@ -411,9 +411,6 @@ protected:
     virtual OUString
         CreateAccessibleName() override;
 
-    /// Create a description string that contains the accessible description.
-    virtual OUString
-        CreateAccessibleDescription();
     /// @throws css::uno::RuntimeException
     OUString
        GetFullAccessibleName(AccessibleShape *shape);
