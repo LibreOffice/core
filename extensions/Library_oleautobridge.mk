@@ -35,6 +35,7 @@ $(eval $(call gb_Library_use_libraries,oleautobridge,\
 	cppuhelper \
 	cppu \
 	sal \
+	tl \
 ))
 
 $(eval $(call gb_Library_use_system_win32_libs,oleautobridge,\
