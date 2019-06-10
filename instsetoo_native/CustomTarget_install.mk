@@ -62,7 +62,7 @@ export LOCAL_COMMON_OUT := $(instsetoo_OUT)
 
 instsetoo_native_WITH_LANG := en-US $(filter-out en-US,$(gb_WITH_LANG))
 
-PRODUCTNAME_no_spaces := $(subst $(WHITESPACE),,$(PRODUCTNAME))
+PRODUCTNAME_no_spaces := $(PRODUCTNAME_WITHOUT_SPACES)
 
 ifeq (WNT,$(OS))
 define instsetoo_native_msitemplates
@@ -152,8 +152,8 @@ $(call gb_CustomTarget_get_workdir,instsetoo_native/install)/msi_main_signing.do
 			$(if $(PFXFILE),-f $(PFXFILE)) \
 			$(if $(PFXPASSWORD),-p $(PFXPASSWORD)) \
 			$(if $(TIMESTAMPURL),-t $(TIMESTAMPURL)) \
-			-d $(PRODUCTNAME)\ $(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR).$(LIBO_VERSION_MICRO).$(LIBO_VERSION_PATCH) \
-			$(WORKDIR)/installation/$(PRODUCTNAME)/msi/install/*/*.msi \
+                       -d $(shell echo $(PRODUCTNAME) | sed -e 's/ /_/g')\ $(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR).$(LIBO_VERSION_MICRO).$(LIBO_VERSION_PATCH) \
+                       $(WORKDIR)/installation/$(PRODUCTNAME_NO_SPACES)/msi/install/*/*.msi \
 	&& touch $@
 
 $(call gb_CustomTarget_get_workdir,instsetoo_native/install)/msi_helppack_signing.done:
@@ -164,8 +164,8 @@ $(call gb_CustomTarget_get_workdir,instsetoo_native/install)/msi_helppack_signin
 			$(if $(PFXFILE),-f $(PFXFILE)) \
 			$(if $(PFXPASSWORD),-p $(PFXPASSWORD)) \
 			$(if $(TIMESTAMPURL),-t $(TIMESTAMPURL)) \
-			-d $(PRODUCTNAME)\ $(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR).$(LIBO_VERSION_MICRO).$(LIBO_VERSION_PATCH)\ Helppack \
-			$(WORKDIR)/installation/$(PRODUCTNAME)_helppack/msi/install/*/*.msi \
+                       -d $(shell echo $(PRODUCTNAME) | sed -e 's/ /_/g')\ $(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR).$(LIBO_VERSION_MICRO).$(LIBO_VERSION_PATCH)\ Helppack \
+                       $(WORKDIR)/installation/$(PRODUCTNAME_NO_SPACES)_helppack/msi/install/*/*.msi \
 	&& touch $@
 
 $(call gb_CustomTarget_get_workdir,instsetoo_native/install)/msi_sdk_signing.done:
@@ -176,8 +176,8 @@ $(call gb_CustomTarget_get_workdir,instsetoo_native/install)/msi_sdk_signing.don
 			$(if $(PFXFILE),-f $(PFXFILE)) \
 			$(if $(PFXPASSWORD),-p $(PFXPASSWORD)) \
 			$(if $(TIMESTAMPURL),-t $(TIMESTAMPURL)) \
-			-d $(PRODUCTNAME)\ $(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR).$(LIBO_VERSION_MICRO).$(LIBO_VERSION_PATCH)\ SDK \
-			$(WORKDIR)/installation/$(PRODUCTNAME)_SDK/msi/install/*/*.msi \
+                       -d $(shell echo $(PRODUCTNAME) | sed -e 's/ /_/g')\ $(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR).$(LIBO_VERSION_MICRO).$(LIBO_VERSION_PATCH)\ SDK \
+                       $(WORKDIR)/installation/$(PRODUCTNAME_NO_SPACES)_SDK/msi/install/*/*.msi \
 	&& touch $@
 
 # vim: set noet sw=4 ts=4:
