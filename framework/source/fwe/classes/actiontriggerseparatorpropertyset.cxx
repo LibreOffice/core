@@ -180,7 +180,7 @@ void SAL_CALL ActionTriggerSeparatorPropertySet::getFastPropertyValue(
 {
     // Define static member to give structure of properties to baseclass "OPropertySetHelper".
     // "impl_getStaticPropertyDescriptor" is a non exported and static function, who will define a static propertytable.
-    // "rrue" say: Table is sorted by name.
+    // "true" indicates: Table is sorted by name.
     static OPropertyArrayHelper ourInfoHelper( impl_getStaticPropertyDescriptor(), true );
 
     return ourInfoHelper;
