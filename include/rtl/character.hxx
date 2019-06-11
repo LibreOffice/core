@@ -59,7 +59,7 @@ inline bool isAscii(sal_uInt32 code)
 
 /** Check for Unicode variation sequence selectors
 
-    @param code  A Unicode code point.
+    @param nCode  A Unicode code point.
 
     @return  True if code is an Unicode variation sequence selector.
 
@@ -73,7 +73,7 @@ inline bool isIVSSelector(sal_uInt32 nCode)
 
 /** Check for base characters of a CJK ideographic variation sequence (IVS)
 
-    @param code  A Unicode code point.
+    @param nCode  A Unicode code point.
 
     @return  True if code is an Unicode base character part of CJK IVS
 
