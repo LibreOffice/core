@@ -176,10 +176,4 @@ OUString
     return sName;
 }
 
-OUString
-    AccessibleOLEShape::CreateAccessibleDescription()
-{
-    return CreateAccessibleName ();
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

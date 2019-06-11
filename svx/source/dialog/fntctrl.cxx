@@ -72,7 +72,6 @@
 //TODO: remove this and calculate off the actual size of text, not
 //an arbitrary number of characters
 #define TEXT_WIDTH 80
-#define ISITEMSET rSet.GetItemState(nWhich)>=SfxItemState::DEFAULT
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -580,17 +579,6 @@ const SvxFont& SvxFontPrevWindow::GetFont() const
     return pImpl->maFont;
 }
 
-void SvxFontPrevWindow::SetPreviewText( const OUString& rString )
-{
-    pImpl->maText = rString;
-    pImpl->mbTextInited = true;
-}
-
-void SvxFontPrevWindow::SetFontNameAsPreviewText()
-{
-    pImpl->mbUseFontNameAsText = true;
-}
-
 void SvxFontPrevWindow::SetFont( const SvxFont& rNormalOutFont, const SvxFont& rCJKOutFont, const SvxFont& rCTLFont )
 {
     setFont(rNormalOutFont, pImpl->maFont);
@@ -827,20 +815,6 @@ void SvxFontPrevWindow::SetFontWidthScale( sal_uInt16 n )
         Invalidate();
 }
 
-void SvxFontPrevWindow::AutoCorrectFontColor()
-{
-    Color   aFontColor( GetTextColor() );
-
-    if (COL_AUTO == pImpl->maFont.GetColor())
-        pImpl->maFont.SetColor(aFontColor);
-
-    if (COL_AUTO == pImpl->maCJKFont.GetColor())
-        pImpl->maCJKFont.SetColor(aFontColor);
-
-    if (COL_AUTO == pImpl->maCTLFont.GetColor())
-        pImpl->maCTLFont.SetColor(aFontColor);
-}
-
 static bool GetWhich (const SfxItemSet& rSet, sal_uInt16 nSlot, sal_uInt16& rWhich)
 {
     rWhich = rSet.GetPool()->GetWhich(nSlot);
@@ -877,98 +851,11 @@ static void SetPrevFontStyle( const SfxItemSet& rSet, sal_uInt16 nPosture, sal_u
     }
 }
 
-void SvxFontPrevWindow::SetFontSize( const SfxItemSet& rSet, sal_uInt16 nSlot, SvxFont& rFont )
-{
-    sal_uInt16 nWhich;
-    long nH;
-    if (GetWhich(rSet, nSlot, nWhich))
-    {
-        nH = LogicToLogic(static_cast<const SvxFontHeightItem&>(rSet.Get(nWhich)).GetHeight(),
-                          rSet.GetPool()->GetMetric(nWhich),
-                          MapUnit::MapTwip);
-    }
-    else
-        nH = 240;// as default 12pt
-
-    rFont.SetFontSize(Size(0, nH));
-}
-
-void SvxFontPrevWindow::SetFontLang(const SfxItemSet& rSet, sal_uInt16 nSlot, SvxFont& rFont)
-{
-    sal_uInt16 nWhich;
-    LanguageType nLang;
-    if( GetWhich( rSet, nSlot, nWhich ) )
-        nLang = static_cast<const SvxLanguageItem&>(rSet.Get(nWhich)).GetLanguage();
-    else
-        nLang = LANGUAGE_NONE;
-    rFont.SetLanguage(nLang);
-}
-
 static void SetPrevFontEscapement(SvxFont& rFont, sal_uInt8 nProp, sal_uInt8 nEscProp, short nEsc)
 {
     rFont.SetPropr(nProp);
     rFont.SetProprRel(nEscProp);
     rFont.SetEscapement(nEsc);
-}
-
-void SvxFontPrevWindow::SetFont( const SfxItemSet& rSet, sal_uInt16 nSlot, SvxFont& rFont )
-{
-    sal_uInt16 nWhich = rSet.GetPool()->GetWhich( nSlot );
-    if( ISITEMSET )
-    {
-        const SvxFontItem& rFontItem = static_cast<const SvxFontItem&>( rSet.Get(nWhich) );
-        rFont.SetFamily( rFontItem.GetFamily() );
-        rFont.SetFamilyName( rFontItem.GetFamilyName() );
-        rFont.SetPitch( rFontItem.GetPitch() );
-        rFont.SetCharSet( rFontItem.GetCharSet() );
-        rFont.SetStyleName( rFontItem.GetStyleName() );
-    }
-}
-
-void SvxFontPrevWindow::SetFontStyle( const SfxItemSet& rSet, sal_uInt16 nPosture, sal_uInt16 nWeight, SvxFont& rFont )
-{
-    sal_uInt16 nWhich = rSet.GetPool()->GetWhich( nPosture );
-    if( ISITEMSET )
-    {
-        const SvxPostureItem& rItem = static_cast<const SvxPostureItem&>( rSet.Get( nWhich ) );
-        rFont.SetItalic( rItem.GetValue() != ITALIC_NONE ? ITALIC_NORMAL : ITALIC_NONE );
-    }
-
-    nWhich = rSet.GetPool()->GetWhich( nWeight );
-    if( ISITEMSET )
-    {
-        const SvxWeightItem& rItem = static_cast<const SvxWeightItem&>( rSet.Get( nWhich ) );
-        rFont.SetWeight( rItem.GetValue() != WEIGHT_NORMAL ? WEIGHT_BOLD : WEIGHT_NORMAL );
-    }
-}
-
-void SvxFontPrevWindow::SetFontWidthScale( const SfxItemSet& rSet )
-{
-    sal_uInt16  nWhich = rSet.GetPool()->GetWhich( SID_ATTR_CHAR_SCALEWIDTH );
-    if( ISITEMSET )
-    {
-        const SvxCharScaleWidthItem&    rItem = static_cast<const SvxCharScaleWidthItem&>( rSet.Get( nWhich ) );
-
-        SetFontWidthScale( rItem.GetValue() );
-    }
-}
-
-namespace
-{
-    void setFontEscapement(SvxFont& rFont, sal_uInt8 nProp, sal_uInt8 nEscProp, short nEsc)
-    {
-        rFont.SetPropr(nProp);
-        rFont.SetProprRel(nEscProp);
-        rFont.SetEscapement(nEsc);
-    }
-}
-
-void SvxFontPrevWindow::SetFontEscapement(sal_uInt8 nProp, sal_uInt8 nEscProp, short nEsc)
-{
-    setFontEscapement(GetFont(), nProp, nEscProp, nEsc);
-    setFontEscapement(GetCJKFont(), nProp, nEscProp, nEsc);
-    setFontEscapement(GetCTLFont(), nProp, nEscProp, nEsc);
-    Invalidate();
 }
 
 Size SvxFontPrevWindow::GetOptimalSize() const

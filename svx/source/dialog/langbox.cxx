@@ -837,17 +837,6 @@ void SvxLanguageComboBox::ImplSelectEntryPos( sal_Int32 nPos, bool bSelect )
 }
 
 
-bool SvxLanguageBox::ImplIsEntryPosSelected( sal_Int32 nPos ) const
-{
-    return IsEntryPosSelected( nPos);
-}
-
-bool SvxLanguageComboBox::ImplIsEntryPosSelected( sal_Int32 nPos ) const
-{
-    return IsEntryPosSelected( nPos);
-}
-
-
 sal_Int32 SvxLanguageBox::ImplGetEntryPos( const void* pData ) const
 {
     return GetEntryPos( pData);

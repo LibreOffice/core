@@ -328,8 +328,6 @@ public:
 
     bool   Delete( sal_uInt16 );
     void   Rename( sal_uInt16, const OUString*, const OUString* );
-    ErrCode const & CopyBlock( SwTextBlocks const & rSource, OUString& rSrcShort,
-                                    const OUString& rLong );
 
     bool   BeginGetDoc( sal_uInt16 );   // Read text modules.
     void   EndGetDoc();                     // Release text modules.

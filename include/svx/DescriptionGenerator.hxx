@@ -142,14 +142,6 @@ public:
     */
     void AddFillProperties();
 
-    /** Add properties that describes attributes of 3D objects.
-    */
-    void Add3DProperties();
-
-    /** Add properties that describe text attributes.
-    */
-    void AddTextProperties();
-
 private:
     /// Reference to the shape from which the properties are extracted.
     css::uno::Reference< css::drawing::XShape> mxShape;

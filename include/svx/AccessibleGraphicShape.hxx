@@ -93,9 +93,6 @@ protected:
     virtual OUString
         CreateAccessibleBaseName () override;
 
-    /// Create a description string that contains the accessible description.
-    OUString CreateAccessibleDescription();
-
 private:
     AccessibleGraphicShape (const AccessibleGraphicShape&) = delete;
 

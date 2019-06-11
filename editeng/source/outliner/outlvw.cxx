@@ -939,39 +939,6 @@ void OutlinerView::ToggleBulletsNumbering(
 }
 
 
-void OutlinerView::EnableBullets()
-{
-    pOwner->UndoActionStart( OLUNDO_DEPTH );
-
-    ESelection aSel( pEditView->GetSelection() );
-    aSel.Adjust();
-
-    const bool bUpdate = pOwner->pEditEngine->GetUpdateMode();
-    pOwner->pEditEngine->SetUpdateMode( false );
-
-    for ( sal_Int32 nPara = aSel.nStartPara; nPara <= aSel.nEndPara; nPara++ )
-    {
-        Paragraph* pPara = pOwner->pParaList->GetParagraph( nPara );
-        DBG_ASSERT(pPara, "OutlinerView::EnableBullets(), illegal selection?");
-
-        if( pPara && (pOwner->GetDepth(nPara) == -1) )
-        {
-            pOwner->SetDepth( pPara, 0 );
-        }
-    }
-
-    sal_Int32 nParaCount = pOwner->pParaList->GetParagraphCount();
-    pOwner->ImplCheckParagraphs( aSel.nStartPara, nParaCount );
-
-    sal_Int32 nEndPara = (nParaCount > 0) ? nParaCount-1 : nParaCount;
-    pOwner->pEditEngine->QuickMarkInvalid( ESelection( aSel.nStartPara, 0, nEndPara, 0 ) );
-
-    pOwner->pEditEngine->SetUpdateMode( bUpdate );
-
-    pOwner->UndoActionEnd();
-}
-
-
 void OutlinerView::ApplyBulletsNumbering(
     const bool bHandleBullets,
     const SvxNumRule* pNewNumRule,

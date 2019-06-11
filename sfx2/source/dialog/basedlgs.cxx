@@ -186,21 +186,6 @@ void SfxModelessDialog::StateChanged( StateChangedType nStateChange )
     ModelessDialog::StateChanged( nStateChange );
 }
 
-void SfxModelessDialog::Initialize(SfxChildWinInfo const *pInfo)
-
-/*  [Description]
-
-    Initialization of the class SfxModelessDialog via a SfxChildWinInfo.
-    The initialization is done only in a 2nd step after the constructor, this
-    constructor should be called from the derived class or from the
-    SfxChildWindows.
-*/
-
-{
-    if (pInfo)
-        pImpl->aWinState = pInfo->aWinState;
-}
-
 void SfxModelessDialog::Resize()
 
 /*  [Description]
@@ -349,23 +334,6 @@ bool SfxModelessDialog::Close()
     return true;
 }
 
-
-void SfxModelessDialog::FillInfo(SfxChildWinInfo& rInfo) const
-
-/*  [Description]
-
-    Fills a SfxChildWinInfo with specific data from SfxModelessDialog,
-    so that it can be written in the INI file. It is assumed that rinfo
-    receives all other possible relevant data in the ChildWindow class.
-    ModelessDialogs have no specific information, so that the base
-    implementation does nothing and therefore must not be called.
-*/
-
-{
-    rInfo.aSize  = aSize;
-    if ( IsRollUp() )
-        rInfo.nFlags |= SfxChildWindowFlags::ZOOMIN;
-}
 
 void SfxModelessDialogController::Initialize(SfxChildWinInfo const *pInfo)
 

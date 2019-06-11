@@ -271,12 +271,6 @@ OUString
     return CreateAccessibleBaseName()+": "+sCurrentSlideName;
 }
 
-OUString
-    AccessiblePageShape::CreateAccessibleDescription()
-{
-    return OUString ("Page Shape");
-}
-
 } // end of namespace accessibility
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

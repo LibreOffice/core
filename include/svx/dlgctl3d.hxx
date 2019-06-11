@@ -266,7 +266,6 @@ public:
     Svx3DLightControl& GetSvx3DLightControl() { return *maLightControl; }
 
     // register user callback
-    void SetUserInteractiveChangeCallback(Link<SvxLightCtl3D*,void> aNew) { maUserInteractiveChangeCallback = aNew; }
     void SetUserSelectionChangeCallback(Link<SvxLightCtl3D*,void> aNew) { maUserSelectionChangeCallback = aNew; }
 
     virtual void KeyInput( const KeyEvent& rKEvt ) override;
