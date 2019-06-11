@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_3aa2df4c",
+        "filename": "uitest/calc_tests/tdf117987.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1002175
+      },
+      "writtenOn": "2019-06-11T08:12:58Z",
+      "side": 1,
+      "message": "s/movin/moving",
+      "range": {
+        "startLine": 12,
+        "startChar": 34,
+        "endLine": 12,
+        "endChar": 39
+      },
+      "revId": "4c9c035a76ff9e2fdd36103fc3e363efd39dbf7d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
