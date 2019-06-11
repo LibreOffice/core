@@ -32,7 +32,6 @@
 #include <vcl/window.hxx>
 #include <vcl/scrbar.hxx>
 #include <vcl/dockwin.hxx>
-#include <vcl/tabctrl.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/builder.hxx>
 
