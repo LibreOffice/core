@@ -10347,7 +10347,7 @@ if test -n "$enable_sdremote" -a "$enable_sdremote" != "no"; then
     ENABLE_SDREMOTE=TRUE
     AC_MSG_CHECKING([whether to enable Bluetooth support in Impress remote control])
 
-    if test $OS = MACOSX -a "$MAC_OS_X_VERSION_MAX_ALLOWED" -ge 101500; then
+    if test $OS = MACOSX && test "$MAC_OS_X_VERSION_MAX_ALLOWED" -ge 101500; then
         # The Bluetooth code doesn't compile with macOS SDK 10.15
         enable_sdremote_bluetooth=no
     fi
