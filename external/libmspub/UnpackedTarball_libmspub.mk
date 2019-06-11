@@ -15,6 +15,7 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,libmspub,0))
 
 $(eval $(call gb_UnpackedTarball_add_patches,libmspub,\
     external/libmspub/ubsan.patch \
+    external/libmspub/stdint.patch \
 ))
 
 $(eval $(call gb_UnpackedTarball_update_autoconf_configs,libmspub))
