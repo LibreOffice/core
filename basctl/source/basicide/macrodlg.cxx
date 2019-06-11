@@ -37,6 +37,8 @@
 #include <sfx2/minfitem.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/sfxsids.hrc>
+#include <tools/debug.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <osl/diagnose.h>
 
