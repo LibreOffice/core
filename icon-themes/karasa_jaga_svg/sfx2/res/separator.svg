@@ -1,0 +1,1 @@
+<svg height="20" viewBox="0 0 2 20" width="2" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><filter id="a" color-interpolation-filters="sRGB" height="1.025263" width="1.48" x="-.24" y="-.012632"><feGaussianBlur stdDeviation=".1"/></filter><path d="m1 1h1v19h-1z" fill="#3d3d3d" filter="url(#a)"/><path d="m0 0h1v19h-1z" fill="#fff"/></svg>
