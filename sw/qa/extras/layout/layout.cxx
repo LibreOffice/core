@@ -2327,6 +2327,31 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf125335)
     // This failed, if the legend first label is not "Data3". The legend position is bottom.
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf75659)
+{
+    SwDoc* pDoc = createDoc("tdf75659.docx");
+    SwDocShell* pShell = pDoc->GetDocShell();
+
+    // Dump the rendering of the first page as an XML file.
+    std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
+    MetafileXmlDump dumper;
+    xmlDocPtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    assertXPathContent(pXmlDoc,
+                       "/metafile/push[1]/push[1]/push[1]/push[4]/push[1]/textarray[17]/text",
+                       "Unnamed Series 1");
+
+    assertXPathContent(pXmlDoc,
+                       "/metafile/push[1]/push[1]/push[1]/push[4]/push[1]/textarray[18]/text",
+                       "Unnamed Series 2");
+
+    assertXPathContent(pXmlDoc,
+                       "/metafile/push[1]/push[1]/push[1]/push[4]/push[1]/textarray[19]/text",
+                       "Unnamed Series 3");
+    // These failed, if the legend names are empty strings.
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf108021)
 {
     SwDoc* pDoc = createDoc("tdf108021.odt");
