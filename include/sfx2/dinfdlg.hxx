@@ -379,7 +379,6 @@ private:
     bool        IsLineValid( CustomPropertyLine* pLine ) const;
     void        ValidateLine( CustomPropertyLine* pLine, bool bIsFromTypeBox );
     void        CreateNewLine();
-    void        FillLine(sal_uInt32 nLine);
     void        StoreCustomProperties();
     sal_uInt32  GetCurrentDataModelPosition() const { return -1 * m_nScrollPos / m_nLineHeight; }
 

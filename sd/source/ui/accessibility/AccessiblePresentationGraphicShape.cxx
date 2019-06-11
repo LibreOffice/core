@@ -74,30 +74,6 @@ OUString
     return sName;
 }
 
-OUString
-    AccessiblePresentationGraphicShape::CreateAccessibleDescription()
-{
-    //    return createAccessibleName ();
-    DescriptionGenerator aDG (mxShape);
-    ShapeTypeId nShapeType = ShapeTypeHandler::Instance().GetTypeId (mxShape);
-    switch (nShapeType)
-    {
-        case PRESENTATION_GRAPHIC_OBJECT:
-            aDG.Initialize ("PresentationGraphicShape");
-            break;
-        default:
-            aDG.Initialize ("Unknown accessible presentation graphic shape");
-            uno::Reference<drawing::XShapeDescriptor> xDescriptor (mxShape, uno::UNO_QUERY);
-            if (xDescriptor.is())
-            {
-                aDG.AppendString ("service name=");
-                aDG.AppendString (xDescriptor->getShapeType());
-            }
-    }
-
-    return aDG();
-}
-
 sal_Int16 SAL_CALL AccessiblePresentationGraphicShape::getAccessibleRole ()
 {
     return  AccessibleRole::GRAPHIC ;

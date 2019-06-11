@@ -99,9 +99,6 @@ protected:
     virtual OUString
         CreateAccessibleBaseName () override;
 
-    /// Create a description string that contains the accessible description.
-    OUString CreateAccessibleDescription();
-
 private:
     AccessibleOLEShape (const AccessibleOLEShape&) = delete;
 

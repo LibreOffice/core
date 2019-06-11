@@ -150,17 +150,6 @@ OUString
     return sName;
 }
 
-OUString AccessibleGraphicShape::CreateAccessibleDescription()
-{
-    //Don't use the same information for accessible name and accessible description.
-    OUString sDesc;
-    if (m_pShape)
-        sDesc =  m_pShape->GetTitle();
-    if (!sDesc.isEmpty())
-        return sDesc;
-    return CreateAccessibleBaseName();
-}
-
 //  Return this object's role.
 sal_Int16 SAL_CALL AccessibleGraphicShape::getAccessibleRole()
 {
