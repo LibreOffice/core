@@ -716,11 +716,11 @@ struct Convention_A1 : public ScCompiler::Convention
         if ( lcl_isValidQuotedText(rFormula, nSrcPos, aRet) )
             return aRet;
 
-        static const sal_Int32 nStartFlags = KParseTokens::ANY_LETTER_OR_NUMBER |
+        constexpr sal_Int32 nStartFlags = KParseTokens::ANY_LETTER_OR_NUMBER |
             KParseTokens::ASC_UNDERSCORE | KParseTokens::ASC_DOLLAR;
-        static const sal_Int32 nContFlags = nStartFlags | KParseTokens::ASC_DOT;
+        constexpr sal_Int32 nContFlags = nStartFlags | KParseTokens::ASC_DOT;
         // '?' allowed in range names because of Xcl :-/
-        static const char aAddAllowed[] = "?#";
+        static const OUString aAddAllowed("?#");
         return pCharClass->parseAnyToken( rFormula,
                 nSrcPos, nStartFlags, aAddAllowed,
                 (bGroupSeparator ? nContFlags | KParseTokens::GROUP_SEPARATOR_IN_NUMBER : nContFlags),
@@ -1329,11 +1329,11 @@ struct ConventionXL_A1 : public Convention_A1, public ConventionXL
         if ( lcl_isValidQuotedText(rFormula, nSrcPos, aRet) )
             return aRet;
 
-        static const sal_Int32 nStartFlags = KParseTokens::ANY_LETTER_OR_NUMBER |
+        constexpr sal_Int32 nStartFlags = KParseTokens::ANY_LETTER_OR_NUMBER |
             KParseTokens::ASC_UNDERSCORE | KParseTokens::ASC_DOLLAR;
-        static const sal_Int32 nContFlags = nStartFlags | KParseTokens::ASC_DOT;
+        constexpr sal_Int32 nContFlags = nStartFlags | KParseTokens::ASC_DOT;
         // '?' allowed in range names
-        const OUString aAddAllowed("?!");
+        static const OUString aAddAllowed("?!");
         return pCharClass->parseAnyToken( rFormula,
                 nSrcPos, nStartFlags, aAddAllowed,
                 (bGroupSeparator ? nContFlags | KParseTokens::GROUP_SEPARATOR_IN_NUMBER : nContFlags),
@@ -1642,11 +1642,11 @@ struct ConventionXL_R1C1 : public ScCompiler::Convention, public ConventionXL
         if ( lcl_isValidQuotedText(rFormula, nSrcPos, aRet) )
             return aRet;
 
-        static const sal_Int32 nStartFlags = KParseTokens::ANY_LETTER_OR_NUMBER |
+        constexpr sal_Int32 nStartFlags = KParseTokens::ANY_LETTER_OR_NUMBER |
             KParseTokens::ASC_UNDERSCORE ;
-        static const sal_Int32 nContFlags = nStartFlags | KParseTokens::ASC_DOT;
+        constexpr sal_Int32 nContFlags = nStartFlags | KParseTokens::ASC_DOT;
         // '?' allowed in range names
-        const OUString aAddAllowed("?-[]!");
+        static const OUString aAddAllowed("?-[]!");
 
         return pCharClass->parseAnyToken( rFormula,
                 nSrcPos, nStartFlags, aAddAllowed,
@@ -2484,30 +2484,30 @@ Label_MaskStateMachine:
                     // when : is encountered.
 
                     // Encountered leading $ before sheet name.
-                    static const int kDollar    = (1 << 1);
+                    constexpr int kDollar    = (1 << 1);
                     // Encountered ' opening quote, which may be after $ or
                     // not.
-                    static const int kOpen      = (1 << 2);
+                    constexpr int kOpen      = (1 << 2);
                     // Somewhere in name.
-                    static const int kName      = (1 << 3);
+                    constexpr int kName      = (1 << 3);
                     // Encountered ' in name, will be cleared if double or
                     // transformed to kClose if not, in which case kOpen is
                     // cleared.
-                    static const int kQuote     = (1 << 4);
+                    constexpr int kQuote     = (1 << 4);
                     // Past ' closing quote.
-                    static const int kClose     = (1 << 5);
+                    constexpr int kClose     = (1 << 5);
                     // Encountered # file/sheet separator.
-                    static const int kFileSep   = (1 << 6);
+                    constexpr int kFileSep   = (1 << 6);
                     // Past . sheet name separator.
-                    static const int kPast      = (1 << 7);
+                    constexpr int kPast      = (1 << 7);
                     // Marked name $$ follows sheet name separator, detected
                     // while we're still on the separator. Will be cleared when
                     // entering the name.
-                    static const int kMarkAhead = (1 << 8);
+                    constexpr int kMarkAhead = (1 << 8);
                     // In marked defined name.
-                    static const int kDefName   = (1 << 9);
+                    constexpr int kDefName   = (1 << 9);
                     // Encountered # of #REF!
-                    static const int kRefErr    = (1 << 10);
+                    constexpr int kRefErr    = (1 << 10);
 
                     bool bAddToSymbol = true;
                     if ((nMask & ScCharFlags::OdfRBracket) && !(nRefInName & kOpen))
