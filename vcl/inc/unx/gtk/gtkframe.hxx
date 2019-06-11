@@ -269,7 +269,7 @@ class GtkSalFrame : public SalFrame
                                           guint time, gpointer frame);
 
     static void         gestureSwipe(GtkGestureSwipe* gesture, gdouble velocity_x, gdouble velocity_y, gpointer frame);
-    static void         gestureLongPress(GtkGestureLongPress* gesture, gpointer frame);
+    static void         gestureLongPress(GtkGestureLongPress* gesture, gdouble x, gdouble y, gpointer frame);
 #else
     static gboolean     signalExpose( GtkWidget*, GdkEventExpose*, gpointer );
     void askForXEmbedFocus( sal_Int32 nTimecode );

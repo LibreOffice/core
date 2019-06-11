@@ -2739,17 +2739,14 @@ void GtkSalFrame::gestureSwipe(GtkGestureSwipe* gesture, gdouble velocity_x, gdo
     }
 }
 
-void GtkSalFrame::gestureLongPress(GtkGestureLongPress* gesture, gpointer frame)
+void GtkSalFrame::gestureLongPress(GtkGestureLongPress* gesture, gdouble x, gdouble y, gpointer frame)
 {
-    GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
-
-    if(pThis)
+    GdkEventSequence *sequence = gtk_gesture_single_get_current_sequence(GTK_GESTURE_SINGLE(gesture));
+    if (gtk_gesture_get_point(GTK_GESTURE(gesture), sequence, &x, &y))
     {
-        SalLongPressEvent aEvent;
+        GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
 
-        gdouble x, y;
-        GdkEventSequence *sequence = gtk_gesture_single_get_current_sequence(GTK_GESTURE_SINGLE(gesture));
-        gtk_gesture_get_point(GTK_GESTURE(gesture), sequence, &x, &y);
+        SalLongPressEvent aEvent;
         aEvent.mnX = x;
         aEvent.mnY = y;
 
