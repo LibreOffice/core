@@ -1,0 +1,10 @@
+--- src/lib/MSPUBMetaData.h
++++ src/lib/MSPUBMetaData.h
+@@ -13,6 +13,7 @@
+ #include <map>
+ #include <utility>
+ #include <vector>
++#include <stdint.h>
+ 
+ #include <librevenge/librevenge.h>
+ 
