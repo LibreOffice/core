@@ -201,22 +201,6 @@ void DescriptionGenerator::AddFillProperties()
 }
 
 
-void DescriptionGenerator::Add3DProperties()
-{
-    AddProperty ("D3DMaterialColor", DescriptionGenerator::PropertyType::Color,
-        RID_SVXSTR_A11Y_3D_MATERIAL_COLOR);
-    AddLineProperties ();
-    AddFillProperties ();
-}
-
-
-void DescriptionGenerator::AddTextProperties()
-{
-    AddProperty ("CharColor", DescriptionGenerator::PropertyType::Color);
-    AddFillProperties ();
-}
-
-
 /** Search for the given color in the global color table.  If found append
     its name to the description.  Otherwise append its RGB tuple.
 */

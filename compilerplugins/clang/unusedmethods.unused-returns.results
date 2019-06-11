@@ -82,27 +82,27 @@ include/oox/crypto/AgileEngine.hxx:137
     _Bool oox::core::AgileEngine::encryptHmacValue()
 include/oox/crypto/CryptTools.hxx:113
     _Bool oox::core::CryptoHash::update(class std::__debug::vector<unsigned char, class std::allocator<unsigned char> > &,unsigned int)
-include/oox/dump/dumperbase.hxx:642
+include/oox/dump/dumperbase.hxx:640
     long oox::dump::FlagsList::getIgnoreFlags() const
-include/oox/dump/dumperbase.hxx:1412
+include/oox/dump/dumperbase.hxx:1410
     type-parameter-?-? oox::dump::InputObjectBase::dumpName(const class oox::dump::String &,const class oox::dump::NameListWrapper &)
-include/oox/dump/dumperbase.hxx:1418
+include/oox/dump/dumperbase.hxx:1416
     type-parameter-?-? oox::dump::InputObjectBase::dumpBin(const class oox::dump::String &,const class oox::dump::NameListWrapper &)
-include/oox/dump/dumperbase.hxx:1420
+include/oox/dump/dumperbase.hxx:1418
     type-parameter-?-? oox::dump::InputObjectBase::dumpFix(const class oox::dump::String &,const class oox::dump::NameListWrapper &)
-include/oox/dump/dumperbase.hxx:1424
+include/oox/dump/dumperbase.hxx:1422
     type-parameter-?-? oox::dump::InputObjectBase::dumpValue(const struct oox::dump::ItemFormat &)
-include/oox/dump/dumperbase.hxx:1427
+include/oox/dump/dumperbase.hxx:1425
     type-parameter-?-? oox::dump::InputObjectBase::dumpName(_Bool,const class oox::dump::String &,const class oox::dump::NameListWrapper &)
-include/oox/dump/dumperbase.hxx:1429
+include/oox/dump/dumperbase.hxx:1427
     type-parameter-?-? oox::dump::InputObjectBase::dumpDec(_Bool,const class oox::dump::String &,const class oox::dump::NameListWrapper &)
-include/oox/dump/dumperbase.hxx:1433
+include/oox/dump/dumperbase.hxx:1431
     type-parameter-?-? oox::dump::InputObjectBase::dumpBin(_Bool,const class oox::dump::String &,const class oox::dump::NameListWrapper &)
-include/oox/dump/dumperbase.hxx:1435
+include/oox/dump/dumperbase.hxx:1433
     type-parameter-?-? oox::dump::InputObjectBase::dumpFix(_Bool,const class oox::dump::String &,const class oox::dump::NameListWrapper &)
-include/oox/dump/dumperbase.hxx:1437
+include/oox/dump/dumperbase.hxx:1435
     type-parameter-?-? oox::dump::InputObjectBase::dumpBool(_Bool,const class oox::dump::String &,const class oox::dump::NameListWrapper &)
-include/oox/dump/dumperbase.hxx:1439
+include/oox/dump/dumperbase.hxx:1437
     type-parameter-?-? oox::dump::InputObjectBase::dumpValue(_Bool,const struct oox::dump::ItemFormat &)
 include/oox/dump/oledumper.hxx:311
     _Bool oox::dump::AxPropertyObjectBase::dumpBoolProperty()
@@ -130,6 +130,8 @@ include/oox/dump/oledumper.hxx:326
     unsigned int oox::dump::AxPropertyObjectBase::dumpColorProperty(unsigned int)
 include/oox/dump/oledumper.hxx:327
     char16_t oox::dump::AxPropertyObjectBase::dumpUnicodeProperty()
+include/oox/export/shapes.hxx:134
+    class oox::drawingml::ShapeExport & oox::drawingml::ShapeExport::WriteNonVisualDrawingProperties(const class com::sun::star::uno::Reference<class com::sun::star::drawing::XShape> &,const char *)
 include/oox/export/shapes.hxx:182
     class oox::drawingml::ShapeExport & oox::drawingml::ShapeExport::WriteTextBox(const class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface> &,int)
 include/oox/helper/binaryoutputstream.hxx:78
@@ -154,19 +156,21 @@ include/sfx2/linkmgr.hxx:63
     _Bool sfx2::LinkManager::InsertLink(class sfx2::SvBaseLink *,unsigned short,enum SfxLinkUpdateMode,const class rtl::OUString *)
 include/sfx2/lnkbase.hxx:104
     class sfx2::SvLinkSource * sfx2::SvBaseLink::GetRealObject()
-include/svl/macitem.hxx:92
+include/svl/listener.hxx:55
+    _Bool SvtListener::EndListening(class SvtBroadcaster &)
+include/svl/macitem.hxx:90
     class SvStream & SvxMacroTableDtor::Write(class SvStream &) const
-include/svx/autoformathelper.hxx:208
-    _Bool AutoFormatBase::LoadBlockA(class SvStream &,const struct AutoFormatVersions &,unsigned short)
-include/svx/autoformathelper.hxx:209
-    _Bool AutoFormatBase::LoadBlockB(class SvStream &,const struct AutoFormatVersions &,unsigned short)
-include/svx/autoformathelper.hxx:211
-    _Bool AutoFormatBase::SaveBlockA(class SvStream &,unsigned short) const
 include/svx/autoformathelper.hxx:212
+    _Bool AutoFormatBase::LoadBlockA(class SvStream &,const struct AutoFormatVersions &,unsigned short)
+include/svx/autoformathelper.hxx:213
+    _Bool AutoFormatBase::LoadBlockB(class SvStream &,const struct AutoFormatVersions &,unsigned short)
+include/svx/autoformathelper.hxx:215
+    _Bool AutoFormatBase::SaveBlockA(class SvStream &,unsigned short) const
+include/svx/autoformathelper.hxx:216
     _Bool AutoFormatBase::SaveBlockB(class SvStream &,unsigned short) const
 include/svx/dlgctrl.hxx:102
     class Point SvxRectCtl::SetActualRPWithoutInvalidate(enum RectPoint)
-include/svx/framelink.hxx:195
+include/svx/framelink.hxx:188
     class svx::frame::Style & svx::frame::Style::MirrorSelf()
 include/svx/SvxColorValueSet.hxx:55
     class Size ColorValueSet::layoutToGivenHeight(unsigned int,unsigned int)
@@ -194,7 +198,7 @@ include/tools/config.hxx:38
     _Bool Config::ImplUpdateConfig() const
 include/tools/multisel.hxx:93
     _Bool StringRangeEnumerator::insertRange(int,int,_Bool)
-include/vcl/bitmap.hxx:171
+include/vcl/bitmap.hxx:169
     _Bool Bitmap::Dither()
 include/vcl/bitmapex.hxx:241
     _Bool BitmapEx::Rotate(long,const class Color &)
@@ -212,15 +216,13 @@ include/vcl/menu.hxx:388
     _Bool Menu::HandleMenuActivateEvent(class Menu *) const
 include/vcl/menu.hxx:389
     _Bool Menu::HandleMenuDeActivateEvent(class Menu *) const
-include/vcl/texteng.hxx:275
+include/vcl/texteng.hxx:276
     _Bool TextEngine::Read(class SvStream &,const class TextSelection *)
-include/vcl/toolbox.hxx:510
+include/vcl/toolbox.hxx:516
     _Bool ToolBox::ChangeHighlightUpDn(_Bool)
-include/vcl/weld.hxx:402
-    _Bool weld::Dialog::runAsync(const class std::function<void (int)> &)
-include/vcl/weld.hxx:717
+include/vcl/weld.hxx:747
     _Bool weld::TreeView::iter_nth_child(class weld::TreeIter &,int) const
-include/vcl/weld.hxx:1528
+include/vcl/weld.hxx:1576
     _Bool weld::TextView::get_selection_bounds(int &,int &)
 lotuswordpro/inc/lwpsvstream.hxx:76
     class LwpSvStream & LwpSvStream::ReadUInt8(unsigned char &)
@@ -228,9 +230,7 @@ lotuswordpro/inc/lwpsvstream.hxx:77
     class LwpSvStream & LwpSvStream::ReadUInt16(unsigned short &)
 lotuswordpro/inc/lwpsvstream.hxx:78
     class LwpSvStream & LwpSvStream::ReadUInt32(unsigned int &)
-sc/inc/document.hxx:1416
-    _Bool ScDocument::GetDataAreaSubrange(class ScRange &) const
-sc/inc/document.hxx:2140
+sc/inc/document.hxx:2145
     const struct ScDocumentThreadSpecific & ScDocument::CalculateInColumnInThread(struct ScInterpreterContext &,const class ScAddress &,unsigned long,unsigned int,unsigned int)
 sc/inc/orcusfilters.hxx:44
     _Bool ScOrcusFilters::importODS_Styles(class ScDocument &,class rtl::OUString &) const
@@ -242,6 +242,10 @@ sc/source/filter/inc/workbookhelper.hxx:259
     _Bool oox::xls::WorkbookHelper::importOoxFragment(const class rtl::Reference<class oox::core::FragmentHandler> &,class oox::core::FastParser &)
 sc/source/filter/xml/XMLStylesExportHelper.hxx:178
     _Bool ScFormatRangeStyles::AddStyleName(const class rtl::OUString &,int &,const _Bool)
+sc/source/ui/inc/anyrefdg.hxx:98
+    _Bool ScRefHandler::DoClose(unsigned short)
+sc/source/ui/inc/docfunc.hxx:111
+    _Bool ScDocFunc::SetFormulaCells(const class ScAddress &,class std::__debug::vector<class ScFormulaCell *, class std::allocator<class ScFormulaCell *> > &,_Bool)
 sc/source/ui/inc/drawview.hxx:161
     _Bool ScDrawView::calculateGridOffsetForSdrObject(class SdrObject &,class basegfx::B2DVector &) const
 sc/source/ui/inc/drawview.hxx:164
@@ -308,11 +312,11 @@ sw/inc/IDocumentUndoRedo.hxx:181
     _Bool IDocumentUndoRedo::Repeat(class sw::RepeatContext &,const unsigned short)
 sw/inc/swcrsr.hxx:159
     _Bool SwCursor::ExpandToSentenceBorders(const class SwRootFrame *)
-sw/inc/tblafmt.hxx:285
+sw/inc/tblafmt.hxx:289
     _Bool SwTableAutoFormatTable::Load(class SvStream &)
 sw/source/core/inc/laycache.hxx:64
     _Bool SwLayoutCache::CompareLayout(const class SwDoc &) const
-sw/source/core/inc/scriptinfo.hxx:227
+sw/source/core/inc/scriptinfo.hxx:226
     _Bool SwScriptInfo::GetBoundsOfHiddenRange(struct o3tl::strong_int<int, struct Tag_TextFrameIndex>,struct o3tl::strong_int<int, struct Tag_TextFrameIndex> &,struct o3tl::strong_int<int, struct Tag_TextFrameIndex> &) const
 sw/source/filter/ww8/ww8toolbar.hxx:339
     _Bool Tcg::ImportCustomToolBar(class SfxObjectShell &)
@@ -346,8 +350,6 @@ vcl/inc/unx/gtk/gtkdata.hxx:165
     int GtkSalDisplay::CaptureMouse(class SalFrame *)
 vcl/inc/unx/saldisp.hxx:313
     _Bool SalDisplay::Dispatch(union _XEvent *)
-vcl/inc/widgetdraw/WidgetDefinitionReader.hxx:38
-    _Bool vcl::WidgetDefinitionReader::read(class vcl::WidgetDefinition &)
 vcl/inc/WidgetDrawInterface.hxx:97
     _Bool vcl::WidgetDrawInterface::updateSettings(class AllSettings &)
 vcl/source/gdi/pdfwriter_impl.hxx:1228

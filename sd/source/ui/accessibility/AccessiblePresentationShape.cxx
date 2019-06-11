@@ -102,57 +102,6 @@ OUString AccessiblePresentationShape::CreateAccessibleBaseName()
     return sName;
 }
 
-OUString
-    AccessiblePresentationShape::CreateAccessibleDescription()
-{
-    //    return createAccessibleName ();
-    DescriptionGenerator aDG (mxShape);
-    ShapeTypeId nShapeType = ShapeTypeHandler::Instance().GetTypeId (mxShape);
-    switch (nShapeType)
-    {
-        case PRESENTATION_TITLE:
-            aDG.Initialize (SdResId(SID_SD_A11Y_P_TITLE_D));
-            break;
-        case PRESENTATION_OUTLINER:
-            aDG.Initialize (SdResId(SID_SD_A11Y_P_OUTLINER_D));
-            break;
-        case PRESENTATION_SUBTITLE:
-            aDG.Initialize (SdResId(SID_SD_A11Y_P_SUBTITLE_D));
-            break;
-        case PRESENTATION_PAGE:
-            aDG.Initialize (SdResId(SID_SD_A11Y_P_PAGE_D));
-            break;
-        case PRESENTATION_NOTES:
-            aDG.Initialize (SdResId(SID_SD_A11Y_P_NOTES_D));
-            break;
-        case PRESENTATION_HANDOUT:
-            aDG.Initialize (SdResId(SID_SD_A11Y_P_HANDOUT_D));
-            break;
-        case PRESENTATION_HEADER:
-            aDG.Initialize (SdResId(SID_SD_A11Y_P_HEADER_D));
-            break;
-        case PRESENTATION_FOOTER:
-            aDG.Initialize (SdResId(SID_SD_A11Y_P_FOOTER_D));
-            break;
-        case PRESENTATION_DATETIME:
-            aDG.Initialize (SdResId(SID_SD_A11Y_P_DATE_D));
-            break;
-        case PRESENTATION_PAGENUMBER:
-            aDG.Initialize (SdResId(SID_SD_A11Y_P_NUMBER_D));
-            break;
-        default:
-            aDG.Initialize (SdResId(SID_SD_A11Y_P_UNKNOWN_D));
-            uno::Reference<drawing::XShapeDescriptor> xDescriptor (mxShape, uno::UNO_QUERY);
-            if (xDescriptor.is())
-            {
-                aDG.AppendString ("service name=");
-                aDG.AppendString (xDescriptor->getShapeType());
-            }
-    }
-
-    return aDG();
-}
-
 OUString AccessiblePresentationShape::GetStyle()
 {
     OUString sName;

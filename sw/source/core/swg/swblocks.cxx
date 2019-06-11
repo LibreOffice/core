@@ -364,25 +364,6 @@ void SwTextBlocks::Rename( sal_uInt16 n, const OUString* s, const OUString* l )
     }
 }
 
-ErrCode const & SwTextBlocks::CopyBlock( SwTextBlocks const & rSource, OUString& rSrcShort,
-                                const OUString& rLong )
-{
-    bool bIsOld = false;
-    if (rSource.pImp)
-    {
-        SwImpBlocks::FileType nType = rSource.pImp->GetFileType();
-        if (SwImpBlocks::FileType::SW3 == nType)
-            bIsOld = true;
-    }
-    if( bIsOld ) //rSource.IsOld() )
-        nErr = ERR_SWG_OLD_GLOSSARY;
-    else if( pImp->m_bInPutMuchBlocks )
-        nErr = ERR_SWG_INTERNAL_ERROR;
-    else
-        nErr = pImp->CopyBlock(*rSource.pImp, rSrcShort, rLong);
-    return nErr;
-}
-
 bool SwTextBlocks::BeginGetDoc( sal_uInt16 n )
 {
     if( pImp && !pImp->m_bInPutMuchBlocks )
