@@ -5694,12 +5694,15 @@ static void lcl_paintBitmapExToRect(vcl::RenderContext *pOut, const Point& aPoin
     // this, always paint the background color before doing the real paint.
     tools::Rectangle aRect(aPoint, aSize);
 
-    switch (eArea)
+    if (!aRect.IsEmpty())
     {
+        switch (eArea)
+        {
         case LEFT: aRect.SetLeft( aRect.Right() - 1 ); break;
         case RIGHT: aRect.SetRight( aRect.Left() + 1 ); break;
         case TOP: aRect.SetTop( aRect.Bottom() - 1 ); break;
         case BOTTOM: aRect.SetBottom( aRect.Top() + 1 ); break;
+        }
     }
 
     pOut->SetFillColor(SwViewOption::GetAppBackgroundColor());
