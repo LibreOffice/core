@@ -3833,7 +3833,7 @@ IMPL_LINK(SalInstanceTreeView, ToggleHdl, SvLBoxButtonData*, pData, void)
 
     // toggled signal handlers can query get_cursor to get which
     // node was clicked
-    m_xTreeView->pImpl->pCursor = pEntry;
+    m_xTreeView->pImpl->m_pCursor = pEntry;
 
     for (int i = 1, nCount = pEntry->ItemCount(); i < nCount; ++i)
     {
