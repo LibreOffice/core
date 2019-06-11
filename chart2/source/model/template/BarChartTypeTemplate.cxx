@@ -243,6 +243,14 @@ Reference< beans::XPropertySetInfo > SAL_CALL BarChartTypeTemplate::getPropertyS
     return *StaticBarChartTypeTemplateInfo::get();
 }
 
+// ____ XChartStyles ____
+void SAL_CALL BarChartTypeTemplate::setChartStyle( const sal_Int16 nValue )
+{
+    m_nStyle = nValue;
+    setAllPropertiesToDefault();
+    firePropertyChangeEvent();
+}
+
 void SAL_CALL BarChartTypeTemplate::applyStyle(
     const Reference< chart2::XDataSeries >& xSeries,
     ::sal_Int32 nChartTypeIndex,

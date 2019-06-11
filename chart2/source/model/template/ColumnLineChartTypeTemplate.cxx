@@ -156,6 +156,14 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL ColumnLineChartTypeTemplate::
     return *StaticColumnLineChartTypeTemplateInfo::get();
 }
 
+// ____ XChartStyles ____
+void SAL_CALL ColumnLineChartTypeTemplate::setChartStyle( const sal_Int16 nValue )
+{
+    m_nStyle = nValue;
+    setAllPropertiesToDefault();
+    firePropertyChangeEvent();
+}
+
 void ColumnLineChartTypeTemplate::createChartTypes(
     const Sequence< Sequence< Reference< XDataSeries > > > & aSeriesSeq,
     const Sequence< Reference< XCoordinateSystem > > & rCoordSys,

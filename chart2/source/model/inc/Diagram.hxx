@@ -150,6 +150,9 @@ private:
     virtual void firePropertyChangeEvent() override;
     using OPropertySet::disposing;
 
+    // _____ XChartStyles _____
+    virtual void SAL_CALL setChartStyle( const sal_Int16 nValue ) override;
+
     void fireModifyEvent();
 
      css::uno::Reference< css::uno::XComponentContext >                m_xContext;

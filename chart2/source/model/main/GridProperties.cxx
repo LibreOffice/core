@@ -213,6 +213,14 @@ void GridProperties::firePropertyChangeEvent()
     m_xModifyEventForwarder->modified( lang::EventObject( static_cast< uno::XWeak* >( this )));
 }
 
+// ____ XChartStyles ____
+void SAL_CALL GridProperties::setChartStyle( const sal_Int16 nValue )
+{
+    m_nStyle = nValue;
+    setAllPropertiesToDefault();
+    firePropertyChangeEvent();
+}
+
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
 OUString SAL_CALL GridProperties::getImplementationName()
 {

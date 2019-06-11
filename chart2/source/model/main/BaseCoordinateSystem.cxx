@@ -350,6 +350,15 @@ Reference< beans::XPropertySetInfo > SAL_CALL BaseCoordinateSystem::getPropertyS
     return *StaticCooSysInfo::get();
 }
 
+
+// ____ XChartStyles ____
+void SAL_CALL BaseCoordinateSystem::setChartStyle( const sal_Int16 nValue )
+{
+    m_nStyle = nValue;
+    setAllPropertiesToDefault();
+    firePropertyChangeEvent();
+}
+
 using impl::BaseCoordinateSystem_Base;
 
 IMPLEMENT_FORWARD_XINTERFACE2( BaseCoordinateSystem, BaseCoordinateSystem_Base, ::property::OPropertySet )

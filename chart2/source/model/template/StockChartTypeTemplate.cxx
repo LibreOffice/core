@@ -190,6 +190,14 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL StockChartTypeTemplate::getPr
     return *StaticStockChartTypeTemplateInfo::get();
 }
 
+// ____ XChartStyles ____
+void SAL_CALL StockChartTypeTemplate::setChartStyle( const sal_Int16 nValue )
+{
+    m_nStyle = nValue;
+    setAllPropertiesToDefault();
+    firePropertyChangeEvent();
+}
+
 sal_Int32 StockChartTypeTemplate::getAxisCountByDimension( sal_Int32 nDimension )
 {
     // one x-axis

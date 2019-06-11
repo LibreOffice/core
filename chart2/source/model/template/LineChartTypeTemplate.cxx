@@ -193,6 +193,14 @@ StackMode LineChartTypeTemplate::getStackMode( sal_Int32 /* nChartTypeIndex */ )
     return m_eStackMode;
 }
 
+// ____ XChartStyles ____
+void SAL_CALL LineChartTypeTemplate::setChartStyle( const sal_Int16 nValue )
+{
+    m_nStyle = nValue;
+    setAllPropertiesToDefault();
+    firePropertyChangeEvent();
+}
+
 // ____ XChartTypeTemplate ____
 sal_Bool SAL_CALL LineChartTypeTemplate::matchesTemplate(
     const uno::Reference< chart2::XDiagram >& xDiagram,

@@ -197,6 +197,14 @@ void PageBackground::firePropertyChangeEvent()
     m_xModifyEventForwarder->modified( lang::EventObject( static_cast< uno::XWeak* >( this )));
 }
 
+// ____ XChartStyles ____
+void SAL_CALL PageBackground::setChartStyle( const sal_Int16 nValue )
+{
+    m_nStyle = nValue;
+    setAllPropertiesToDefault();
+    firePropertyChangeEvent();
+}
+
 OUString SAL_CALL PageBackground::getImplementationName()
 {
     return OUString("com.sun.star.comp.chart2.PageBackground");

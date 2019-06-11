@@ -183,6 +183,14 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL ScatterChartTypeTemplate::get
     return *StaticScatterChartTypeTemplateInfo::get();
 }
 
+// ____ XChartStyles ____
+void SAL_CALL ScatterChartTypeTemplate::setChartStyle( const sal_Int16 nValue )
+{
+    m_nStyle = nValue;
+    setAllPropertiesToDefault();
+    firePropertyChangeEvent();
+}
+
 sal_Int32 ScatterChartTypeTemplate::getDimension() const
 {
     return m_nDim;

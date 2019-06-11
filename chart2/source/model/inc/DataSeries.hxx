@@ -147,6 +147,9 @@ private:
     virtual void firePropertyChangeEvent() override;
     using OPropertySet::disposing;
 
+    // _____ XChartStyles _____
+    virtual void SAL_CALL setChartStyle( const sal_Int16 nValue ) override;
+
     void fireModifyEvent();
 
     typedef std::vector< css::uno::Reference< css::chart2::data::XLabeledDataSequence > > tDataSequenceContainer;

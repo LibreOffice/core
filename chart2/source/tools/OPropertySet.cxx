@@ -368,6 +368,12 @@ void SAL_CALL OPropertySet::setFastPropertyValue( sal_Int32 nHandle, const Any& 
     firePropertyChangeEvent();
 }
 
+// ____ XChartStyles ____
+sal_Int16 SAL_CALL OPropertySet::getChartStyle()
+{
+    return m_nStyle;
+}
+
 } //  namespace property
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

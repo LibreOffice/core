@@ -265,6 +265,14 @@ Reference< beans::XPropertySetInfo > SAL_CALL Legend::getPropertySetInfo()
     return *StaticLegendInfo::get();
 }
 
+// ____ XChartStyles ____
+void SAL_CALL Legend::setChartStyle( const sal_Int16 nValue )
+{
+    m_nStyle = nValue;
+    setAllPropertiesToDefault();
+    firePropertyChangeEvent();
+}
+
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
 OUString SAL_CALL Legend::getImplementationName()
 {

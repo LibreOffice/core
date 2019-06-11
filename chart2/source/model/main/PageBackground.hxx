@@ -94,6 +94,9 @@ private:
     using OPropertySet::disposing;
 
     css::uno::Reference< css::util::XModifyListener > m_xModifyEventForwarder;
+
+    // _____ XChartStyles _____
+    virtual void SAL_CALL setChartStyle( const sal_Int16 nValue ) override;
 };
 
 } //  namespace chart

@@ -186,6 +186,14 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL PieChartTypeTemplate::getProp
     return *StaticPieChartTypeTemplateInfo::get();
 }
 
+// ____ XChartStyles ____
+void SAL_CALL PieChartTypeTemplate::setChartStyle( const sal_Int16 nValue )
+{
+    m_nStyle = nValue;
+    setAllPropertiesToDefault();
+    firePropertyChangeEvent();
+}
+
 // ____ ChartTypeTemplate ____
 sal_Int32 PieChartTypeTemplate::getDimension() const
 {

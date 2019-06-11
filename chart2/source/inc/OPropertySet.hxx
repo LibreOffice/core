@@ -27,6 +27,7 @@
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/beans/XMultiPropertyStates.hpp>
 #include <com/sun/star/style/XStyleSupplier.hpp>
+#include <com/sun/star/chart2/XChartStyles.hpp>
 #include "charttoolsdllapi.hxx"
 
 #include <memory>
@@ -46,7 +47,8 @@ class OOO_DLLPUBLIC_CHARTTOOLS OPropertySet :
     public css::lang::XTypeProvider,
     public css::beans::XPropertyState,
     public css::beans::XMultiPropertyStates,
-    public css::style::XStyleSupplier
+    public css::style::XStyleSupplier,
+    public css::chart2::XChartStyles
 {
 public:
     OPropertySet( ::osl::Mutex & rMutex );
@@ -190,6 +192,11 @@ protected:
 
     // Note: it is assumed that the base class implements setPropertyValue by
     // using setFastPropertyValue
+
+    //_____ XChartStyles _____
+    virtual sal_Int16 SAL_CALL getChartStyle() override;
+
+    sal_Int16 m_nStyle;
 
 private:
     /// reference to mutex of class deriving from here

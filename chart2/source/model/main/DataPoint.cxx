@@ -178,6 +178,14 @@ uno::Any DataPoint::GetDefaultValue( sal_Int32 nHandle ) const
     return xFast->getFastPropertyValue( nHandle );
 }
 
+// ____ XChartStyles ____
+void SAL_CALL DataPoint::setChartStyle( const sal_Int16 nValue )
+{
+    m_nStyle = nValue;
+    setAllPropertiesToDefault();
+    firePropertyChangeEvent();
+}
+
 void SAL_CALL DataPoint::setFastPropertyValue_NoBroadcast(
     sal_Int32 nHandle, const uno::Any& rValue )
 {

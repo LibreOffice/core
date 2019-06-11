@@ -303,6 +303,14 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL Title::getPropertySetInfo()
     return *StaticTitleInfo::get();
 }
 
+// ____ XChartStyles ____
+void SAL_CALL Title::setChartStyle( const sal_Int16 nValue )
+{
+    m_nStyle = nValue;
+    setAllPropertiesToDefault();
+    firePropertyChangeEvent();
+}
+
 // ____ XModifyBroadcaster ____
 void SAL_CALL Title::addModifyListener( const uno::Reference< util::XModifyListener >& aListener )
 {

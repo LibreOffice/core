@@ -111,6 +111,9 @@ protected:
     virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL
         getPropertySetInfo() override;
 
+    // _____ XChartStyles _____
+    virtual void SAL_CALL setChartStyle( const sal_Int16 nValue ) override;
+
     /// merge XTypeProvider implementations
      DECLARE_XTYPEPROVIDER()
 

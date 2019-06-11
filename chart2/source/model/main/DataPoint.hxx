@@ -102,6 +102,9 @@ private:
     virtual void firePropertyChangeEvent() override;
     using OPropertySet::disposing;
 
+    // _____ XChartStyles _____
+    virtual void SAL_CALL setChartStyle( const sal_Int16 nValue ) override;
+
     css::uno::WeakReference< css::beans::XPropertySet >   m_xParentProperties;
 
     css::uno::Reference< css::util::XModifyListener > m_xModifyEventForwarder;

@@ -150,6 +150,14 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL AreaChartTypeTemplate::getPro
     return *StaticAreaChartTypeTemplateInfo::get();
 }
 
+// ____ XChartStyles ____
+void SAL_CALL AreaChartTypeTemplate::setChartStyle( const sal_Int16 nValue )
+{
+    m_nStyle = nValue;
+    setAllPropertiesToDefault();
+    firePropertyChangeEvent();
+}
+
 sal_Int32 AreaChartTypeTemplate::getDimension() const
 {
     sal_Int32 nDim = 2;

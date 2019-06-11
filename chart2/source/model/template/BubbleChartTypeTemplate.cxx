@@ -128,6 +128,14 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL BubbleChartTypeTemplate::getP
     return *StaticBubbleChartTypeTemplateInfo::get();
 }
 
+// ____ XChartStyles ____
+void SAL_CALL BubbleChartTypeTemplate::setChartStyle( const sal_Int16 nValue )
+{
+    m_nStyle = nValue;
+    setAllPropertiesToDefault();
+    firePropertyChangeEvent();
+}
+
 sal_Int32 BubbleChartTypeTemplate::getDimension() const
 {
     return 2;

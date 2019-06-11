@@ -85,6 +85,9 @@ protected:
     virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL
         getPropertySetInfo() override;
 
+    // _____ XChartStyles _____
+    virtual void SAL_CALL setChartStyle( const sal_Int16 nValue ) override;
+
     // ____ XRegressionCurve ____
     virtual css::uno::Reference< css::chart2::XRegressionCurveCalculator > SAL_CALL getCalculator() override;
     virtual css::uno::Reference< css::beans::XPropertySet > SAL_CALL getEquationProperties() override;

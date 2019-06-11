@@ -231,6 +231,14 @@ Reference< beans::XPropertySetInfo > SAL_CALL RegressionEquation::getPropertySet
     return *StaticRegressionEquationInfo::get();
 }
 
+// ____ XChartStyles ____
+void SAL_CALL RegressionEquation::setChartStyle( const sal_Int16 nValue )
+{
+    m_nStyle = nValue;
+    setAllPropertiesToDefault();
+    firePropertyChangeEvent();
+}
+
 // ____ XModifyBroadcaster ____
 void SAL_CALL RegressionEquation::addModifyListener( const uno::Reference< util::XModifyListener >& aListener )
 {

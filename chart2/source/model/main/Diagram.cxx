@@ -643,6 +643,14 @@ void SAL_CALL Diagram::setFastPropertyValue( sal_Int32 nHandle, const Any& rValu
         ::property::OPropertySet::setFastPropertyValue( nHandle, rValue );
 }
 
+// ____ XChartStyles ____
+void SAL_CALL Diagram::setChartStyle( const sal_Int16 nValue )
+{
+    m_nStyle = nValue;
+    setAllPropertiesToDefault();
+    firePropertyChangeEvent();
+}
+
 void SAL_CALL Diagram::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) const
 {
     //special treatment for some 3D properties

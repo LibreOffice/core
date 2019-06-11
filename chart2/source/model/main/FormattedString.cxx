@@ -246,6 +246,14 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL FormattedString::getPropertyS
     return *StaticFormattedStringInfo::get();
 }
 
+// ____ XChartStyles ____
+void SAL_CALL FormattedString::setChartStyle( const sal_Int16 nValue )
+{
+    m_nStyle = nValue;
+    setAllPropertiesToDefault();
+    firePropertyChangeEvent();
+}
+
 using impl::FormattedString_Base;
 
 IMPLEMENT_FORWARD_XINTERFACE2( FormattedString, FormattedString_Base, ::property::OPropertySet )

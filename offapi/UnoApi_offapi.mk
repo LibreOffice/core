@@ -2021,6 +2021,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/chart2,\
 	XChartDocument \
 	XChartShape \
 	XChartShapeContainer \
+	XChartStyles \
 	XChartType \
 	XChartTypeContainer \
 	XChartTypeManager \

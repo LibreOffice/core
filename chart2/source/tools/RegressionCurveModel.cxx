@@ -315,6 +315,14 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL RegressionCurveModel::getProp
     return *StaticRegressionCurveInfo::get();
 }
 
+// ____ XChartStyles ____
+void SAL_CALL RegressionCurveModel::setChartStyle( const sal_Int16 nValue )
+{
+    m_nStyle = nValue;
+    setAllPropertiesToDefault();
+    firePropertyChangeEvent();
+}
+
 // needed by MSC compiler
 using impl::RegressionCurveModel_Base;
 

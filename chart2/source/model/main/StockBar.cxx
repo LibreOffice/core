@@ -148,6 +148,14 @@ uno::Any StockBar::GetDefaultValue( sal_Int32 nHandle ) const
     return (*aFound).second;
 }
 
+// ____ XChartStyles ____
+void SAL_CALL StockBar::setChartStyle( const sal_Int16 nValue )
+{
+    m_nStyle = nValue;
+    setAllPropertiesToDefault();
+    firePropertyChangeEvent();
+}
+
 ::cppu::IPropertyArrayHelper & SAL_CALL StockBar::getInfoHelper()
 {
     return *StaticStockBarInfoHelper::get();

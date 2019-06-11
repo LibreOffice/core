@@ -267,6 +267,14 @@ void SAL_CALL DataSeries::getFastPropertyValue
         OPropertySet::getFastPropertyValue( rValue, nHandle );
 }
 
+// ____ XChartStyles ____
+void SAL_CALL DataSeries::setChartStyle( const sal_Int16 nValue )
+{
+    m_nStyle = nValue;
+    setAllPropertiesToDefault();
+    firePropertyChangeEvent();
+}
+
 void SAL_CALL DataSeries::setFastPropertyValue_NoBroadcast(
     sal_Int32 nHandle, const uno::Any& rValue )
 {

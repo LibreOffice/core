@@ -588,6 +588,14 @@ Reference< beans::XPropertySetInfo > SAL_CALL Axis::getPropertySetInfo()
     return *StaticAxisInfo::get();
 }
 
+// ____ XChartStyles ____
+void SAL_CALL Axis::setChartStyle( const sal_Int16 nValue )
+{
+    m_nStyle = nValue;
+    setAllPropertiesToDefault();
+    firePropertyChangeEvent();
+}
+
 using impl::Axis_Base;
 
 IMPLEMENT_FORWARD_XINTERFACE2( Axis, Axis_Base, ::property::OPropertySet )

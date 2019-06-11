@@ -240,6 +240,14 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL ChartType::getPropertySetInfo
     return *StaticChartTypeInfo::get();
 }
 
+// ____ XChartStyles ____
+void SAL_CALL ChartType::setChartStyle( const sal_Int16 nValue )
+{
+    m_nStyle = nValue;
+    setAllPropertiesToDefault();
+    firePropertyChangeEvent();
+}
+
 // ____ XModifyBroadcaster ____
 void SAL_CALL ChartType::addModifyListener( const uno::Reference< util::XModifyListener >& aListener )
 {
