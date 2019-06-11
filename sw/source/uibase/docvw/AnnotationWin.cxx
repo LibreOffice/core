@@ -51,6 +51,7 @@
 #include <txtfld.hxx>
 #include <ndtxt.hxx>
 #include <view.hxx>
+#include <viewopt.hxx>
 #include <wrtsh.hxx>
 #include <docsh.hxx>
 #include <doc.hxx>
@@ -225,7 +226,10 @@ void SwAnnotationWin::SetPostItText()
 void SwAnnotationWin::SetResolved(bool resolved)
 {
     static_cast<SwPostItField*>(mpFormatField->GetField())->SetResolved(resolved);
-    mrSidebarItem.bShow = !IsResolved();
+    const SwViewOption* pVOpt = mrView.GetWrtShellPtr()->GetViewOptions();
+    mrSidebarItem.bShow = !IsResolved() || (pVOpt->IsResolvedPostIts());
+
+    mpTextRangeOverlay.reset();
 
     if(IsResolved()) {
         mpMetadataResolved->Show();
