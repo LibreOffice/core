@@ -115,6 +115,9 @@ SwCompatibilityOptPage::SwCompatibilityOptPage(vcl::Window* pParent, const SfxIt
 
     m_pGlobalOptionsCLB->SetStyle( m_pGlobalOptionsCLB->GetStyle() | WB_HSCROLL | WB_HIDESELECTION );
     m_pGlobalOptionsCLB->SetHighlightRange();
+    // tdf#125799, we let only the doc options grow/shrink but give this one more than its bare
+    // min request height because there's only one row in it and that looks somewhat abrupt
+    m_pGlobalOptionsCLB->set_height_request(m_pGlobalOptionsCLB->get_preferred_size().Height() * 2);
 
     InitControls( rSet );
 
