@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_95e66444",
+        "filename": "chart2/source/tools/UncachedDataSequence.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2019-06-11T11:49:54Z",
+      "side": 1,
+      "message": "it\u0027s not true any more",
+      "range": {
+        "startLine": 214,
+        "startChar": 27,
+        "endLine": 214,
+        "endChar": 46
+      },
+      "revId": "6a7754280bf4dbc5d67efb891325eaa3c565bc04",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
