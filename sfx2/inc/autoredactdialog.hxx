@@ -124,6 +124,10 @@ class SFX2_DLLPUBLIC SfxAutoRedactDialog : public SfxDialogController
     DECL_LINK(SaveHdl, sfx2::FileDialogHelper*, void);
 
     void StartFileDialog(StartFileDialogType nType, const OUString& rTitle);
+    /// Carry out proper addition both to the targets box, and to the tabletargets vector.
+    void addTarget(RedactionTarget* pTarget);
+    /// Clear all targets both visually and from the targets vector
+    void clearTargets();
 
 public:
     SfxAutoRedactDialog(weld::Window* pParent);
