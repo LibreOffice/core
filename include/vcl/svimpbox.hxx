@@ -92,15 +92,15 @@ friend class SvTreeListBox;
 friend class SalInstanceTreeView;
 friend class IconView;
 private:
-    SvTreeList*          pTree;
-    SvTreeListEntry*     pAnchor;
-    SvTreeListEntry*     pMostRightEntry;
-    SvLBoxButton*        pActiveButton;
-    SvTreeListEntry*     pActiveEntry;
-    SvLBoxTab*           pActiveTab;
+    SvTreeList*          m_pTree;
+    SvTreeListEntry*     m_pAnchor;
+    SvTreeListEntry*     m_pMostRightEntry;
+    SvLBoxButton*        m_pActiveButton;
+    SvTreeListEntry*     m_pActiveEntry;
+    SvLBoxTab*           m_pActiveTab;
 
-    VclPtr<ScrollBar>    aHorSBar;
-    VclPtr<ScrollBarBox> aScrBarBox;
+    VclPtr<ScrollBar>    m_aHorSBar;
+    VclPtr<ScrollBarBox> m_aScrBarBox;
 
     ::vcl::AccessibleFactoryAccess
                         m_aFactoryAccess;
@@ -124,31 +124,31 @@ private:
     o3tl::enumarray<ImageType, Image>
                         m_aNodeAndEntryImages;
 
-    ImpLBSelEng         aFctSet;
-    Idle                aAsyncBeginDragIdle;
-    Point               aAsyncBeginDragPos;
+    ImpLBSelEng         m_aFctSet;
+    Idle                m_aAsyncBeginDragIdle;
+    Point               m_aAsyncBeginDragPos;
 
-    long                nNodeBmpWidth;
-    long                nMostRight;
-    short               nHorSBarHeight, nVerSBarWidth;
-    sal_uInt16          nCurTabPos;
+    long                m_nNodeBmpWidth;
+    long                m_nMostRight;
+    short               m_nHorSBarHeight, m_nVerSBarWidth;
+    sal_uInt16          m_nCurTabPos;
 
-    bool                bUpdateMode : 1;
-    bool                bAsyncBeginDrag : 1;
-    bool                bSubLstOpRet : 1;   // open/close sublist with return/enter, defaulted with false
-    bool                bSubLstOpLR : 1;    // open/close sublist with cursor left/right, defaulted with false
-    bool                bSubLstOpDblClick : 1; // open/close sublist with mouse double click, defaulted with true
-    bool                bContextMenuHandling : 1;
-    bool                bIsCellFocusEnabled : 1;
-    bool                bAreChildrenTransient;
+    bool                m_bUpdateMode : 1;
+    bool                m_bAsyncBeginDrag : 1;
+    bool                m_bSubLstOpRet : 1;   // open/close sublist with return/enter, defaulted with false
+    bool                m_bSubLstOpLR : 1;    // open/close sublist with cursor left/right, defaulted with false
+    bool                m_bSubLstOpDblClick : 1; // open/close sublist with mouse double click, defaulted with true
+    bool                m_bContextMenuHandling : 1;
+    bool                m_bIsCellFocusEnabled : 1;
+    bool                m_bAreChildrenTransient;
     bool                mbForceMakeVisible;
 
-    Point               aEditClickPos;
-    Idle                aEditIdle;
+    Point               m_aEditClickPos;
+    Idle                m_aEditIdle;
 
     std::unique_ptr<comphelper::string::NaturalStringSorter> m_pStringSorter;
 
-    std::vector< short > aContextBmpWidthVector;
+    std::vector< short > m_aContextBmpWidthVector;
 
     DECL_LINK(EditTimerCall, Timer *, void);
 
@@ -201,25 +201,25 @@ private:
 
     void                CalcCellFocusRect( SvTreeListEntry const * pEntry, tools::Rectangle& rRect );
 
-    bool                AreChildrenTransient() const { return bAreChildrenTransient; }
-    void                SetChildrenNotTransient() { bAreChildrenTransient = false; }
+    bool                AreChildrenTransient() const { return m_bAreChildrenTransient; }
+    void                SetChildrenNotTransient() { m_bAreChildrenTransient = false; }
 
 protected:
-    VclPtr<SvTreeListBox>   pView;
-    VclPtr<ScrollBar>       aVerSBar;
-    SvTreeListEntry*        pCursor;
-    SvTreeListEntry*        pStartEntry;
-    ImplSVEvent*            nCurUserEvent;
-    Size                    aOutputSize;
-    LBoxFlags               nFlags;
+    VclPtr<SvTreeListBox>   m_pView;
+    VclPtr<ScrollBar>       m_aVerSBar;
+    SvTreeListEntry*        m_pCursor;
+    SvTreeListEntry*        m_pStartEntry;
+    ImplSVEvent*            m_nCurUserEvent;
+    Size                    m_aOutputSize;
+    LBoxFlags               m_nFlags;
     WinBits                 m_nStyle;
     bool                    mbNoAutoCurEntry; // disable the behavior of automatically selecting a "CurEntry" upon painting the control
-    SelectionEngine         aSelEng;
-    sal_uLong               nVisibleCount;  // Number of lines in control
-    bool                    bInVScrollHdl : 1;
-    bool                    bSimpleTravel : 1; // is true if SelectionMode::Single
-    long                    nNextVerVisSize;
-    long                    nNodeBmpTabDistance; // typical smaller than 0
+    SelectionEngine         m_aSelEng;
+    sal_uLong               m_nVisibleCount;  // Number of lines in control
+    bool                    m_bInVScrollHdl : 1;
+    bool                    m_bSimpleTravel : 1; // is true if SelectionMode::Single
+    long                    m_nNextVerVisSize;
+    long                    m_nNodeBmpTabDistance; // typical smaller than 0
 
     virtual long        GetEntryLine( SvTreeListEntry* pEntry ) const;
     virtual void        CursorDown();
@@ -250,7 +250,7 @@ public:
     void                Clear();
     void                SetStyle( WinBits i_nWinStyle );
     void                SetNoAutoCurEntry( bool b );
-    void                SetModel( SvTreeList* pModel ) { pTree = pModel;}
+    void                SetModel( SvTreeList* pModel ) { m_pTree = pModel;}
 
     void                EntryInserted( SvTreeListEntry*);
     void                RemovingEntry( SvTreeListEntry* pEntry );
@@ -281,12 +281,12 @@ public:
     void                SetDragDropMode( DragDropMode eDDMode );
     void                SetSelectionMode( SelectionMode eSelMode  );
 
-    SvTreeListEntry*    GetCurrentEntry() const { return pCursor; }
+    SvTreeListEntry*    GetCurrentEntry() const { return m_pCursor; }
     virtual bool        IsEntryInView( SvTreeListEntry* pEntry ) const;
     virtual SvTreeListEntry*    GetEntry( const Point& rPos ) const;
     // returns last entry, if Pos below last entry
     virtual SvTreeListEntry*    GetClickedEntry( const Point& ) const;
-    SvTreeListEntry*    GetCurEntry() const { return pCursor; }
+    SvTreeListEntry*    GetCurEntry() const { return m_pCursor; }
     void                SetCurEntry( SvTreeListEntry* );
     virtual Point       GetEntryPosition( SvTreeListEntry* ) const;
     void                MakeVisible( SvTreeListEntry* pEntry, bool bMoveToTop = false );
@@ -312,32 +312,32 @@ public:
     static const Image& GetDefaultExpandedNodeImage( );
     static const Image& GetDefaultCollapsedNodeImage( );
 
-    const Size&         GetOutputSize() const { return aOutputSize;}
+    const Size&         GetOutputSize() const { return m_aOutputSize;}
     virtual void        KeyUp( bool bPageUp );
     virtual void        KeyDown( bool bPageDown );
     void                Command( const CommandEvent& rCEvt );
 
     void                Invalidate();
-    void                DestroyAnchor() { pAnchor=nullptr; aSelEng.Reset(); }
+    void                DestroyAnchor() { m_pAnchor=nullptr; m_aSelEng.Reset(); }
     void                SelAllDestrAnch( bool bSelect, bool bDestroyAnchor = true, bool bSingleSelToo = false );
     void                ShowCursor( bool bShow );
 
     bool                RequestHelp( const HelpEvent& rHEvt );
     void                EndSelection();
     bool                IsNodeButton( const Point& rPosPixel, SvTreeListEntry* pEntry ) const;
-    void                EnableAsyncDrag( bool b ) { bAsyncBeginDrag = b; }
+    void                EnableAsyncDrag( bool b ) { m_bAsyncBeginDrag = b; }
     void                SetUpdateMode( bool bMode );
-    bool                GetUpdateMode() const { return bUpdateMode; }
+    bool                GetUpdateMode() const { return m_bUpdateMode; }
     tools::Rectangle    GetClipRegionRect() const;
-    bool                HasHorScrollBar() const { return aHorSBar->IsVisible(); }
+    bool                HasHorScrollBar() const { return m_aHorSBar->IsVisible(); }
     void                ShowFocusRect( const SvTreeListEntry* pEntry );
     void                CallEventListeners( VclEventId nEvent, void* pData = nullptr );
 
     /** Enables, that one cell of a tablistbox entry can be focused */
-    bool                IsCellFocusEnabled() const { return bIsCellFocusEnabled; }
-    void                EnableCellFocus() { bIsCellFocusEnabled = true; }
+    bool                IsCellFocusEnabled() const { return m_bIsCellFocusEnabled; }
+    void                EnableCellFocus() { m_bIsCellFocusEnabled = true; }
     bool                SetCurrentTabPos( sal_uInt16 _nNewPos );
-    sal_uInt16          GetCurrentTabPos() const { return nCurTabPos; }
+    sal_uInt16          GetCurrentTabPos() const { return m_nCurTabPos; }
 
     bool                IsSelectable( const SvTreeListEntry* pEntry );
     void                SetForceMakeVisible(bool bEnable) { mbForceMakeVisible = bEnable; }
@@ -403,7 +403,7 @@ inline Point SvImpLBox::GetEntryPosition( SvTreeListEntry* pEntry ) const
 inline bool SvImpLBox::IsLineVisible( long nY ) const
 {
     bool bRet = true;
-    if ( nY < 0 || nY >= aOutputSize.Height() )
+    if ( nY < 0 || nY >= m_aOutputSize.Height() )
         bRet = false;
     return bRet;
 }

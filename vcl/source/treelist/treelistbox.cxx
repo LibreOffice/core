@@ -1394,17 +1394,17 @@ void SvTreeListBox::SetNoAutoCurEntry( bool b )
 
 void SvTreeListBox::SetSublistOpenWithReturn()
 {
-    pImpl->bSubLstOpRet = true;
+    pImpl->m_bSubLstOpRet = true;
 }
 
 void SvTreeListBox::SetSublistOpenWithLeftRight()
 {
-    pImpl->bSubLstOpLR = true;
+    pImpl->m_bSubLstOpLR = true;
 }
 
 void SvTreeListBox::SetSublistDontOpenWithDoubleClick(bool bDontOpen)
 {
-    pImpl->bSubLstOpDblClick = !bDontOpen;
+    pImpl->m_bSubLstOpDblClick = !bDontOpen;
 }
 
 void SvTreeListBox::Resize()
@@ -1963,10 +1963,10 @@ void SvTreeListBox::GetFocus()
     {
         pEntry = pImpl->GetCurrentEntry();
     }
-    if (pImpl->pCursor)
+    if (pImpl->m_pCursor)
     {
-        if (pEntry != pImpl->pCursor)
-            pEntry = pImpl->pCursor;
+        if (pEntry != pImpl->m_pCursor)
+            pEntry = pImpl->m_pCursor;
     }
     if ( pEntry )
         pImpl->CallEventListeners( VclEventId::ListboxTreeFocus, pEntry );
@@ -1985,7 +1985,7 @@ void SvTreeListBox::LoseFocus()
 
 void SvTreeListBox::ModelHasCleared()
 {
-    pImpl->pCursor = nullptr; // else we crash in GetFocus when editing in-place
+    pImpl->m_pCursor = nullptr; // else we crash in GetFocus when editing in-place
     pEdCtrl.reset();
     pImpl->Clear();
     nFocusWidth = -1;
@@ -2005,17 +2005,17 @@ void SvTreeListBox::ModelHasCleared()
 
 void SvTreeListBox::ScrollOutputArea( short nDeltaEntries )
 {
-    if( !nDeltaEntries || !pImpl->aVerSBar->IsVisible() )
+    if( !nDeltaEntries || !pImpl->m_aVerSBar->IsVisible() )
         return;
 
-    long nThumb = pImpl->aVerSBar->GetThumbPos();
-    long nMax = pImpl->aVerSBar->GetRange().Max();
+    long nThumb = pImpl->m_aVerSBar->GetThumbPos();
+    long nMax = pImpl->m_aVerSBar->GetRange().Max();
 
     if( nDeltaEntries < 0 )
     {
         // move window up
         nDeltaEntries *= -1;
-        long nVis = pImpl->aVerSBar->GetVisibleSize();
+        long nVis = pImpl->m_aVerSBar->GetVisibleSize();
         long nTemp = nThumb + nVis;
         if( nDeltaEntries > (nMax - nTemp) )
             nDeltaEntries = static_cast<short>(nMax - nTemp);
@@ -2449,7 +2449,7 @@ void SvTreeListBox::EditItemText(SvTreeListEntry* pEntry, SvLBoxString* pItem, c
 
 void SvTreeListBox::EditEntry( SvTreeListEntry* pEntry )
 {
-    pImpl->aEditClickPos = Point( -1, -1 );
+    pImpl->m_aEditClickPos = Point( -1, -1 );
     ImplEditEntry( pEntry );
 }
 
@@ -2462,7 +2462,7 @@ void SvTreeListBox::ImplEditEntry( SvTreeListEntry* pEntry )
     if( !pEntry )
         return;
 
-    long nClickX = pImpl->aEditClickPos.X();
+    long nClickX = pImpl->m_aEditClickPos.X();
     bool bIsMouseTriggered = nClickX >= 0;
 
     SvLBoxString* pItem = nullptr;
@@ -2813,8 +2813,8 @@ void SvTreeListBox::PaintEntry1(SvTreeListEntry& rEntry, long nLine, vcl::Render
     sal_uInt16 nFirstDynTabPos(0);
     SvLBoxTab* pFirstDynamicTab = GetFirstDynamicTab(nFirstDynTabPos);
     long nDynTabPos = GetTabPos(&rEntry, pFirstDynamicTab);
-    nDynTabPos += pImpl->nNodeBmpTabDistance;
-    nDynTabPos += pImpl->nNodeBmpWidth / 2;
+    nDynTabPos += pImpl->m_nNodeBmpTabDistance;
+    nDynTabPos += pImpl->m_nNodeBmpWidth / 2;
     nDynTabPos += 4; // 4 pixels of buffer, so the node bitmap is not too close
                      // to the next tab
 
@@ -2839,7 +2839,7 @@ void SvTreeListBox::PaintEntry1(SvTreeListEntry& rEntry, long nLine, vcl::Render
         return;
 
     Point aPos(GetTabPos(&rEntry, pFirstDynamicTab), nLine);
-    aPos.AdjustX(pImpl->nNodeBmpTabDistance );
+    aPos.AdjustX(pImpl->m_nNodeBmpTabDistance );
 
     const Image* pImg = nullptr;
 
@@ -3413,12 +3413,12 @@ void SvTreeListBox::EndSelection()
 
 ScrollBar *SvTreeListBox::GetVScroll()
 {
-    return pImpl->aVerSBar.get();
+    return pImpl->m_aVerSBar.get();
 }
 
 ScrollBar *SvTreeListBox::GetHScroll()
 {
-    return pImpl->aHorSBar.get();
+    return pImpl->m_aHorSBar.get();
 }
 
 void SvTreeListBox::EnableAsyncDrag( bool b )
@@ -3557,8 +3557,8 @@ sal_uInt16 SvTreeListBox::GetCurrentTabPos() const
 
 void SvTreeListBox::InitStartEntry()
 {
-    if( !pImpl->pStartEntry )
-        pImpl->pStartEntry = GetModel()->First();
+    if( !pImpl->m_pStartEntry )
+        pImpl->m_pStartEntry = GetModel()->First();
 }
 
 VclPtr<PopupMenu> SvTreeListBox::CreateContextMenu()
@@ -3574,7 +3574,7 @@ void SvTreeListBox::ExecuteContextMenuAction( sal_uInt16 )
 void SvTreeListBox::EnableContextMenuHandling()
 {
     assert(pImpl && "-SvTreeListBox::EnableContextMenuHandling(): No implementation!");
-    pImpl->bContextMenuHandling = true;
+    pImpl->m_bContextMenuHandling = true;
 }
 
 css::uno::Reference< XAccessible > SvTreeListBox::CreateAccessible()
