@@ -121,6 +121,7 @@ class TerminationVetoer : public WeakImplHelper<css::frame::XTerminateListener>
 public:
     int mnCount;
 
+private:
     TerminationVetoer()
         : mnCount(0)
     {
@@ -134,6 +135,15 @@ public:
         {
             DBG_UNHANDLED_EXCEPTION();
         }
+    }
+
+public:
+    static Reference< TerminationVetoer > get()
+    {
+        static TerminationVetoer* pInstance = new TerminationVetoer;
+        static Reference< TerminationVetoer > aInstance( pInstance );
+
+        return aInstance;
     }
 
     // XTerminateListener
@@ -158,8 +168,6 @@ public:
     }
 };
 
-static TerminationVetoer aTerminationVetoer;
-
 /* Does not throw any exceptions.
    Param pInfo can be NULL.
  */
@@ -178,7 +186,7 @@ InterfaceOleWrapper::InterfaceOleWrapper( Reference<XMultiServiceFactory> const 
         UnoConversionUtilities<InterfaceOleWrapper>( xFactory, unoWrapperClass, comWrapperClass),
         m_defaultValueType( 0)
 {
-    aTerminationVetoer.mnCount++;
+    TerminationVetoer::get()->mnCount++;
 }
 
 InterfaceOleWrapper::~InterfaceOleWrapper()
@@ -189,7 +197,7 @@ InterfaceOleWrapper::~InterfaceOleWrapper()
     if(it != UnoObjToWrapperMap.end())
         UnoObjToWrapperMap.erase(it);
 
-    aTerminationVetoer.mnCount--;
+    TerminationVetoer::get()->mnCount--;
 }
 
 STDMETHODIMP InterfaceOleWrapper::QueryInterface(REFIID riid, LPVOID FAR * ppv)
