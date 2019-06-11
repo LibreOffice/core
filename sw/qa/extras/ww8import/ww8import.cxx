@@ -219,6 +219,10 @@ DECLARE_WW8IMPORT_TEST(testTdf125281, "tdf125281.doc")
     // an actual Paint() was performed (and even then, it was wrong).
     long nExpected = 25664;
     CPPUNIT_ASSERT_EQUAL(nExpected, rGraphic.GetPrefSize().getWidth());
+
+    // Without the accompanying fix in place, this test would have failed, as setting the pref size
+    // swapped the image in.
+    CPPUNIT_ASSERT(!rGraphic.isAvailable());
 }
 
 DECLARE_WW8IMPORT_TEST(testTdf122425_1, "tdf122425_1.doc")
