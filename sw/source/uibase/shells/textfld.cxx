@@ -900,12 +900,16 @@ void SwTextShell::StateField( SfxItemSet &rSet )
             break;
 
         case FN_REPLY:
+            if (!comphelper::LibreOfficeKit::isActive())
+                rSet.DisableItem(nWhich);
+            break;
+
         case FN_POSTIT :
         case FN_JAVAEDIT :
             {
                 bool bCurField = false;
                 pField = rSh.GetCurField();
-                if(nWhich == FN_POSTIT || nWhich == FN_REPLY)
+                if(nWhich == FN_POSTIT)
                     bCurField = pField && pField->GetTyp()->Which() == SwFieldIds::Postit;
                 else
                     bCurField = pField && pField->GetTyp()->Which() == SwFieldIds::Script;
