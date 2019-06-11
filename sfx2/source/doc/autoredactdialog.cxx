@@ -185,7 +185,6 @@ void TargetsTable::setRowData(const int& nRowIndex, const RedactionTarget* pTarg
 
 IMPL_LINK_NOARG(SfxAutoRedactDialog, Load, weld::Button&, void)
 {
-    //TODO: Implement
     //Load a targets list from a previously saved file (a json file?)
     // ask for filename, where we should load the new config data from
     StartFileDialog(StartFileDialogType::Open, "Load Targets");
@@ -193,7 +192,6 @@ IMPL_LINK_NOARG(SfxAutoRedactDialog, Load, weld::Button&, void)
 
 IMPL_LINK_NOARG(SfxAutoRedactDialog, Save, weld::Button&, void)
 {
-    //TODO: Implement
     //Allow saving the targets into a file
     StartFileDialog(StartFileDialogType::SaveAs, "Save Targets");
 }
@@ -365,15 +363,70 @@ boost::property_tree::ptree redactionTargetToJSON(RedactionTarget* pTarget)
 
     return aNode;
 }
+
+RedactionTarget* JSONtoRedactionTarget(const boost::property_tree::ptree::value_type& rValue)
+{
+    OUString sName = OUString::fromUtf8(rValue.second.get<std::string>("sName").c_str());
+    RedactionTargetType eType
+        = static_cast<RedactionTargetType>(atoi(rValue.second.get<std::string>("sName").c_str()));
+    OUString sContent = OUString::fromUtf8(rValue.second.get<std::string>("sContent").c_str());
+    bool bCaseSensitive
+        = OUString::fromUtf8(rValue.second.get<std::string>("bCaseSensitive").c_str()).toBoolean();
+    bool bWholeWords
+        = OUString::fromUtf8(rValue.second.get<std::string>("bWholeWords").c_str()).toBoolean();
+    sal_uInt32 nID = atoi(rValue.second.get<std::string>("nID").c_str());
+
+    RedactionTarget* pTarget
+        = new RedactionTarget({ sName, eType, sContent, bCaseSensitive, bWholeWords, nID });
+
+    return pTarget;
+}
 }
 
 IMPL_LINK_NOARG(SfxAutoRedactDialog, LoadHdl, sfx2::FileDialogHelper*, void)
 {
-    //TODO: Implement
-    bool bDummy = hasTargets();
+    assert(m_pFileDlg);
 
-    if (bDummy)
-        void();
+    OUString sTargetsFile;
+    if (ERRCODE_NONE == m_pFileDlg->GetError())
+        sTargetsFile = m_pFileDlg->GetPath();
+
+    if (sTargetsFile.isEmpty())
+        return;
+
+    OUString sSysPath;
+    osl::File::getSystemPathFromFileURL(sTargetsFile, sSysPath);
+    sTargetsFile = sSysPath;
+
+    weld::WaitObject aWaitObject(getDialog());
+
+    try
+    {
+        // Create path string, and read JSON from file
+        std::string sPathStr(OUStringToOString(sTargetsFile, RTL_TEXTENCODING_UTF8).getStr());
+
+        boost::property_tree::ptree aTargetsJSON;
+
+        boost::property_tree::read_json(sPathStr, aTargetsJSON);
+
+        // Clear the dialog
+        clearTargets();
+
+        // Recreate & add the targets to the dialog
+        for (const boost::property_tree::ptree::value_type& rValue :
+             aTargetsJSON.get_child("RedactionTargets"))
+        {
+            RedactionTarget* pTarget = JSONtoRedactionTarget(rValue);
+            addTarget(pTarget);
+        }
+    }
+    catch (css::uno::Exception& e)
+    {
+        SAL_WARN("sfx.doc",
+                 "Exception caught while trying to load the targets JSON from file: " << e.Message);
+        return;
+        //TODO: Warn the user with a message box
+    }
 }
 
 IMPL_LINK_NOARG(SfxAutoRedactDialog, SaveHdl, sfx2::FileDialogHelper*, void)
@@ -439,6 +492,38 @@ void SfxAutoRedactDialog::StartFileDialog(StartFileDialogType nType, const OUStr
         = bSave ? LINK(this, SfxAutoRedactDialog, SaveHdl)
                 : LINK(this, SfxAutoRedactDialog, LoadHdl);
     m_pFileDlg->StartExecuteModal(aDlgClosedLink);
+}
+
+void SfxAutoRedactDialog::addTarget(RedactionTarget* pTarget)
+{
+    // Only the visual/display part
+    m_xTargetsBox->InsertTarget(pTarget);
+
+    // Actually add to the targets vector
+    if (m_xTargetsBox->GetTargetByName(pTarget->sName))
+        m_aTableTargets.emplace_back(pTarget, pTarget->sName);
+    else
+    {
+        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(
+            getDialog(), VclMessageType::Warning, VclButtonsType::Ok,
+            "An error occurred while adding new target. Please report this incident."));
+        xBox->run();
+        delete pTarget;
+    }
+}
+
+void SfxAutoRedactDialog::clearTargets()
+{
+    // Clear the targets box
+    m_xTargetsBox->clear();
+
+    // Clear the targets vector
+    auto delTarget
+        = [](const std::pair<RedactionTarget*, OUString>& targetPair) { delete targetPair.first; };
+
+    std::for_each(m_aTableTargets.begin(), m_aTableTargets.end(), delTarget);
+
+    m_aTableTargets.clear();
 }
 
 SfxAutoRedactDialog::SfxAutoRedactDialog(weld::Window* pParent)
