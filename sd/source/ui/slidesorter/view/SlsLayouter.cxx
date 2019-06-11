@@ -814,6 +814,10 @@ Range Layouter::Implementation::GetValidVerticalSizeRange() const
 
 Range Layouter::Implementation::GetRangeOfVisiblePageObjects (const ::tools::Rectangle& aVisibleArea) const
 {
+    // technically that's not empty, but it's the default, so...
+    if (aVisibleArea.IsEmpty())
+        return Range(-1, -1);
+
     const sal_Int32 nRow0 (GetRowAtPosition(aVisibleArea.Top(), true, GM_NEXT));
     const sal_Int32 nCol0 (GetColumnAtPosition(aVisibleArea.Left(),true, GM_NEXT));
     const sal_Int32 nRow1 (GetRowAtPosition(aVisibleArea.Bottom(), true, GM_PREVIOUS));

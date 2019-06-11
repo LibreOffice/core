@@ -638,6 +638,9 @@ void SlideSorterView::Paint (
     OutputDevice& rDevice,
     const ::tools::Rectangle& rRepaintArea)
 {
+    if (rRepaintArea.IsEmpty())
+        return;
+
     if ( ! mpPageObjectPainter)
         if ( ! GetPageObjectPainter())
             return;
