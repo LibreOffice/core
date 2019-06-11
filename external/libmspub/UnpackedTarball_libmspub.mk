@@ -13,6 +13,8 @@ $(eval $(call gb_UnpackedTarball_set_tarball,libmspub,$(MSPUB_TARBALL)))
 
 $(eval $(call gb_UnpackedTarball_set_patchlevel,libmspub,0))
 
+# * external/libmspub/stdint.patch is upstream at <https://gerrit.libreoffice.org/#/c/73814/>
+#   "missing include":
 $(eval $(call gb_UnpackedTarball_add_patches,libmspub,\
     external/libmspub/ubsan.patch \
     external/libmspub/stdint.patch \
