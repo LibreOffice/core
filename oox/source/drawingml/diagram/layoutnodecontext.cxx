@@ -141,8 +141,11 @@ public:
     ForEachContext( ContextHandler2Helper const & rParent, const AttributeList& rAttribs, const ForEachAtomPtr& pAtom )
         : LayoutNodeContext( rParent, rAttribs, pAtom )
         {
-            rAttribs.getString( XML_ref );
+            pAtom->setRef(rAttribs.getString(XML_ref).get());
             pAtom->iterator().loadFromXAttr( rAttribs.getFastAttributeList() );
+
+            LayoutAtomMap& rLayoutAtomMap = pAtom->getLayoutNode().getDiagram().getLayout()->getLayoutAtomMap();
+            rLayoutAtomMap[pAtom->getName()] = pAtom;
         }
 };
 
