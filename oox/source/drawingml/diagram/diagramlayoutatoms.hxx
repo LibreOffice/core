@@ -188,10 +188,16 @@ public:
 
     IteratorAttr & iterator()
         { return maIter; }
+    void setRef(const OUString& rsRef)
+        { msRef = rsRef; }
+    const OUString& getRef() const
+        { return msRef; }
     virtual void accept( LayoutAtomVisitor& ) override;
+    LayoutAtomPtr getRefAtom();
 
 private:
     IteratorAttr maIter;
+    OUString msRef;
 };
 
 typedef std::shared_ptr< ForEachAtom > ForEachAtomPtr;

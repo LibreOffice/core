@@ -229,6 +229,20 @@ void ForEachAtom::accept( LayoutAtomVisitor& rVisitor )
     rVisitor.visit(*this);
 }
 
+LayoutAtomPtr ForEachAtom::getRefAtom()
+{
+    if (!msRef.isEmpty())
+    {
+        const LayoutAtomMap& rLayoutAtomMap = getLayoutNode().getDiagram().getLayout()->getLayoutAtomMap();
+        LayoutAtomMap::const_iterator pRefAtom = rLayoutAtomMap.find(msRef);
+        if (pRefAtom != rLayoutAtomMap.end())
+            return pRefAtom->second;
+        else
+            SAL_WARN("oox.drawingml", "ForEach reference \"" << msRef << "\" not found");
+    }
+    return LayoutAtomPtr();
+}
+
 void ChooseAtom::accept( LayoutAtomVisitor& rVisitor )
 {
     rVisitor.visit(*this);
