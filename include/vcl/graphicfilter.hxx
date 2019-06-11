@@ -295,7 +295,7 @@ public:
                                    WmfExternal const *pExtHeader = nullptr );
 
     // Setting sizeLimit limits how much will be read from the stream.
-    Graphic ImportUnloadedGraphic(SvStream& rIStream, sal_uInt64 sizeLimit = 0);
+    Graphic ImportUnloadedGraphic(SvStream& rIStream, sal_uInt64 sizeLimit = 0, Size* pSizeHint = nullptr);
 
     const FilterErrorEx&    GetLastError() const { return *pErrorEx;}
     void                    ResetLastError();
