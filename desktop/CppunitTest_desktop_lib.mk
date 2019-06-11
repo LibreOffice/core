@@ -69,6 +69,7 @@ $(eval $(call gb_CppunitTest_use_packages,desktop_lib, \
 ))
 
 $(eval $(call gb_CppunitTest_use_uiconfigs,desktop_lib, \
+    cui \
     modules/swriter \
 ))
 
