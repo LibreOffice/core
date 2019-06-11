@@ -1147,7 +1147,6 @@ void ToolBox::ImplInitToolBoxData()
     meLayoutMode          = ToolBoxLayoutMode::Normal;
     meTextPosition        = ToolBoxTextPosition::Right;
     mnLastFocusItemId     = 0;
-    mnKeyModifier         = 0;
     mnActivateCount       = 0;
     mnImagesRotationAngle = 0;
 
@@ -4456,7 +4455,6 @@ bool ToolBox::ImplOpenItem( vcl::KeyCode aKeyCode )
 void ToolBox::KeyInput( const KeyEvent& rKEvt )
 {
     vcl::KeyCode aKeyCode = rKEvt.GetKeyCode();
-    mnKeyModifier = aKeyCode.GetModifier();
     sal_uInt16 nCode = aKeyCode.GetCode();
 
     vcl::Window *pParent = ImplGetParent();
@@ -4629,8 +4627,6 @@ void ToolBox::KeyInput( const KeyEvent& rKEvt )
         if ( pFocusControl && pFocusControl != this )
             pFocusControl->ImplControlFocus( GetFocusFlags::Init );
     }
-
-    mnKeyModifier = 0;
 
     // #107712#, leave toolbox
     if( bGrabFocusToDocument )

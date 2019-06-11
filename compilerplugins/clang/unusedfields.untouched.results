@@ -24,6 +24,14 @@ canvas/workben/canvasdemo.cxx:82
     DemoRenderer maColorWhite uno::Sequence<double>
 chart2/source/controller/dialogs/res_DataLabel.hxx:86
     chart::DataLabelResources m_xDC_Dial std::unique_ptr<weld::CustomWeld>
+chart2/source/controller/dialogs/tp_3D_SceneAppearance.hxx:60
+    chart::ThreeD_SceneAppearance_TabPage m_xContainer std::unique_ptr<weld::Container>
+chart2/source/controller/dialogs/tp_3D_SceneGeometry.hxx:74
+    chart::ThreeD_SceneGeometry_TabPage m_xContainer std::unique_ptr<weld::Container>
+chart2/source/controller/dialogs/tp_3D_SceneIllumination.hxx:94
+    chart::ThreeD_SceneIllumination_TabPage m_xContainer std::unique_ptr<weld::Container>
+chart2/source/controller/dialogs/tp_3D_SceneIllumination.hxx:111
+    chart::ThreeD_SceneIllumination_TabPage m_xPreviewWnd std::unique_ptr<weld::CustomWeld>
 chart2/source/controller/dialogs/tp_AxisLabel.hxx:60
     chart::SchAxisLabelTabPage m_xFlOrient std::unique_ptr<weld::Label>
 chart2/source/controller/dialogs/tp_AxisPositions.hxx:62
@@ -152,11 +160,11 @@ include/oox/vml/vmlshapecontext.hxx:116
     oox::vml::ShapeTypeContext m_pShapeType std::shared_ptr<ShapeType>
 include/registry/registry.hxx:35
     Registry_Api acquire void (*)(RegHandle)
-include/sfx2/dinfdlg.hxx:479
+include/sfx2/dinfdlg.hxx:478
     CmisValue m_xFrame std::unique_ptr<weld::Frame>
-include/sfx2/dinfdlg.hxx:488
+include/sfx2/dinfdlg.hxx:487
     CmisDateTime m_xFrame std::unique_ptr<weld::Frame>
-include/sfx2/dinfdlg.hxx:498
+include/sfx2/dinfdlg.hxx:497
     CmisYesNo m_xFrame std::unique_ptr<weld::Frame>
 include/sfx2/mgetempl.hxx:63
     SfxManageStyleSheetPage m_xNameFt std::unique_ptr<weld::Label>
@@ -269,9 +277,9 @@ include/sfx2/msg.hxx:145
 include/sfx2/msg.hxx:145
     SfxType16 pType const std::type_info *
 include/sfx2/msg.hxx:146
-    SfxType17 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
-include/sfx2/msg.hxx:146
     SfxType17 pType const std::type_info *
+include/sfx2/msg.hxx:146
+    SfxType17 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
 include/sfx2/msg.hxx:146
     SfxType17 nAttribs sal_uInt16
 include/sfx2/msg.hxx:146
@@ -512,11 +520,9 @@ sd/source/ui/dlg/headerfooterdlg.cxx:142
     sd::HeaderFooterTabPage mxCTPreviewWin std::unique_ptr<weld::CustomWeld>
 sd/source/ui/dlg/PhotoAlbumDialog.hxx:51
     sd::SdPhotoAlbumDialog m_xImg std::unique_ptr<weld::CustomWeld>
-sd/source/ui/inc/BulletAndPositionDlg.hxx:71
-    SvxBulletAndPositionDlg bIsSlideScope _Bool
-sd/source/ui/inc/BulletAndPositionDlg.hxx:81
-    SvxBulletAndPositionDlg p_View ::sd::View *
-sd/source/ui/inc/BulletAndPositionDlg.hxx:111
+sd/source/ui/inc/BulletAndPositionDlg.hxx:102
+    SvxBulletAndPositionDlg m_xPreviewWIN std::unique_ptr<weld::CustomWeld>
+sd/source/ui/inc/BulletAndPositionDlg.hxx:106
     SvxBulletAndPositionDlg m_xIndentFT std::unique_ptr<weld::Label>
 sd/source/ui/inc/custsdlg.hxx:42
     SdCustomShowDlg m_xBtnHelp std::unique_ptr<weld::Button>
@@ -532,15 +538,15 @@ sd/source/ui/slidesorter/view/SlsLayouter.cxx:64
     sd::slidesorter::view::Layouter::Implementation mpTheme std::shared_ptr<view::Theme>
 sd/source/ui/table/TableDesignPane.hxx:100
     sd::TableDesignPane aImpl const class sd::TableDesignWidget
-sd/source/ui/view/DocumentRenderer.cxx:1317
+sd/source/ui/view/DocumentRenderer.cxx:1319
     sd::DocumentRenderer::Implementation mxObjectShell const SfxObjectShellRef
-sd/source/ui/view/viewshel.cxx:1210
+sd/source/ui/view/viewshel.cxx:1165
     sd::KeepSlideSorterInSyncWithPageChanges m_aDrawLock const sd::slidesorter::view::class SlideSorterView::DrawLock
-sd/source/ui/view/viewshel.cxx:1211
+sd/source/ui/view/viewshel.cxx:1166
     sd::KeepSlideSorterInSyncWithPageChanges m_aModelLock const sd::slidesorter::controller::class SlideSorterController::ModelChangeLock
-sd/source/ui/view/viewshel.cxx:1212
+sd/source/ui/view/viewshel.cxx:1167
     sd::KeepSlideSorterInSyncWithPageChanges m_aUpdateLock const sd::slidesorter::controller::class PageSelector::UpdateLock
-sd/source/ui/view/viewshel.cxx:1213
+sd/source/ui/view/viewshel.cxx:1168
     sd::KeepSlideSorterInSyncWithPageChanges m_aContext const sd::slidesorter::controller::class SelectionObserver::Context
 sd/source/ui/view/ViewShellBase.cxx:196
     sd::ViewShellBase::Implementation mpPageCacheManager std::shared_ptr<slidesorter::cache::PageCacheManager>
@@ -548,8 +554,10 @@ sdext/source/pdfimport/pdfparse/pdfparse.cxx:263
     PDFGrammar::definition array rule<ScannerT>
 sdext/source/pdfimport/pdfparse/pdfparse.cxx:263
     PDFGrammar::definition value rule<ScannerT>
-sfx2/source/dialog/tabdlg.cxx:100
-    TabDlg_Impl bModal _Bool
+sfx2/inc/autoredactdialog.hxx:105
+    SfxAutoRedactDialog m_xDocShell class SfxObjectShellLock
+sfx2/inc/autoredactdialog.hxx:109
+    SfxAutoRedactDialog m_xRedactionTargetsLabel std::unique_ptr<weld::Label>
 sfx2/source/doc/doctempl.cxx:117
     DocTempl::DocTempl_EntryData_Impl mxObjShell const class SfxObjectShellLock
 sfx2/source/inc/sfxpicklist.hxx:33
