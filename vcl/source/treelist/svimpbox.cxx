@@ -549,7 +549,11 @@ void SvImpLBox::InvalidateEntry( long nY ) const
             return;
         if( aRect.Bottom() > nMaxBottom )
             aRect.SetBottom( nMaxBottom );
-        pView->Invalidate( aRect );
+        if (pView->SupportsDoubleBuffering())
+            // Perform full paint when flicker is to be avoided explicitly.
+            pView->Invalidate();
+        else
+            pView->Invalidate(aRect);
     }
 }
 
