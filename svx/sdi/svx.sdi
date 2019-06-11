@@ -4531,6 +4531,22 @@ SfxVoidItem ShowAnnotations SID_TOGGLE_NOTES
     GroupId = SfxGroupId::View;
 ]
 
+SfxVoidItem ShowResolvedAnnotations SID_TOGGLE_RESOLVED_NOTES
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::View;
+]
 
 
 SfxVoidItem ReplyToAnnotation SID_REPLYTO_POSTIT

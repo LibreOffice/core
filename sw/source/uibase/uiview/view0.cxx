@@ -182,9 +182,10 @@ void SwView::RecheckBrowseMode()
             SID_RULER_BORDERS, SID_RULER_PAGE_POS,
             //SID_ATTR_LONG_LRSPACE,
             SID_HTML_MODE,
-            SID_RULER_PROTECT,
+            SID_RULER_PROTECT, /* 10915 */
             //SID_AUTOSPELL_CHECK,
             //SID_AUTOSPELL_MARKOFF,
+            SID_TOGGLE_RESOLVED_NOTES, /* 11672*/
             FN_RULER,       /*20211*/
             FN_VIEW_GRAPHIC,    /*20213*/
             FN_VIEW_BOUNDS,     /**/
@@ -274,6 +275,17 @@ void SwView::StateViewOptions(SfxItemSet &rSet)
                 }
                 else
                     aBool.SetValue( pOpt->IsPostIts());
+                break;
+            }
+            case SID_TOGGLE_RESOLVED_NOTES:
+            {
+                if (!GetPostItMgr()->HasNotes())
+                {
+                    rSet.DisableItem(nWhich);
+                    nWhich = 0;
+                }
+                else
+                    aBool.SetValue( pOpt->IsResolvedPostIts());
                 break;
             }
             case FN_VIEW_HIDDEN_PARA:
@@ -422,6 +434,17 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
         pOpt->SetPostIts( bFlag );
         if (pOpt->IsPostIts())
             GetPostItMgr()->CheckMetaText();
+        break;
+
+    case SID_TOGGLE_RESOLVED_NOTES:
+        if ( STATE_TOGGLE == eState )
+            bFlag = pOpt->IsResolvedPostIts();
+
+        GetPostItMgr()->ShowHideResolvedNotes(!bFlag);
+
+        GetPostItMgr()->SetLayout();
+        pOpt->SetResolvedPostIts( !bFlag );
+
         break;
 
     case FN_VIEW_HIDDEN_PARA:
