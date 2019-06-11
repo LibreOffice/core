@@ -580,11 +580,16 @@ void Player::preparePlaybin( const OUString& rURL, GstElement *pSink )
     mpVolumeControl = gst_element_factory_make( "volume", nullptr );
     GstElement *pAudioSink = gst_element_factory_make( "autoaudiosink", nullptr );
     GstElement* pAudioOutput = gst_bin_new("audio-output-bin");
-    gst_bin_add_many(GST_BIN(pAudioOutput), mpVolumeControl, pAudioSink, nullptr);
-    gst_element_link(mpVolumeControl, pAudioSink);
-    GstPad *pPad = gst_element_get_static_pad(mpVolumeControl, "sink");
-    gst_element_add_pad(GST_ELEMENT(pAudioOutput), gst_ghost_pad_new("sink", pPad));
-    gst_object_unref(GST_OBJECT(pPad));
+    gst_bin_add_many(GST_BIN(pAudioOutput), mpVolumeControl, nullptr);
+    gst_bin_add_many(GST_BIN(pAudioOutput), pAudioSink, nullptr);
+    if (mpVolumeControl)
+    {
+        if (pAudioSink)
+            gst_element_link(mpVolumeControl, pAudioSink);
+        GstPad *pPad = gst_element_get_static_pad(mpVolumeControl, "sink");
+        gst_element_add_pad(GST_ELEMENT(pAudioOutput), gst_ghost_pad_new("sink", pPad));
+        gst_object_unref(GST_OBJECT(pPad));
+    }
     g_object_set(G_OBJECT(mpPlaybin), "audio-sink", pAudioOutput, nullptr);
 
     if( pSink != nullptr ) // used for getting preferred size etc.
@@ -759,7 +764,7 @@ void SAL_CALL Player::setMute( sal_Bool bSet )
     SAL_INFO( "avmedia.gstreamer", AVVERSION "set mute: " << bSet << " muted: " << mbMuted << " unmuted volume: " << mnUnmutedVolume );
 
     // change the volume to 0 or the unmuted volume
-    if(  mpPlaybin && mbMuted != bool(bSet) )
+    if (mpVolumeControl && mbMuted != bool(bSet))
     {
         double nVolume = mnUnmutedVolume;
         if( bSet )
@@ -791,7 +796,7 @@ void SAL_CALL Player::setVolumeDB( sal_Int16 nVolumeDB )
     SAL_INFO( "avmedia.gstreamer", AVVERSION "set volume: " << nVolumeDB << " gst volume: " << mnUnmutedVolume );
 
     // change volume
-    if( !mbMuted && mpPlaybin )
+    if (mpVolumeControl && !mbMuted)
     {
         g_object_set( G_OBJECT( mpVolumeControl ), "volume", mnUnmutedVolume, nullptr );
     }
@@ -804,7 +809,8 @@ sal_Int16 SAL_CALL Player::getVolumeDB()
 
     sal_Int16 nVolumeDB(0);
 
-    if( mpPlaybin ) {
+    if (mpVolumeControl)
+    {
         double nGstVolume = 0.0;
 
         g_object_get( G_OBJECT( mpVolumeControl ), "volume", &nGstVolume, nullptr );
