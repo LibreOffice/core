@@ -243,10 +243,18 @@ void SvxMenuConfigPage::UpdateButtonStates()
 
     m_xModifyBtn->set_sensitive( bIsValidSelection && !bIsSeparator);
 
+    // If there is no top level selection (menu), then everything working on the right box
+    // which contains the functions of the selected menu/toolbar needs to be disabled
+    SvxConfigEntry* pMenuData = GetTopLevelSelection();
+
+    m_xInsertBtn->set_sensitive(pMenuData != nullptr);
+
+    m_xAddCommandButton->set_sensitive(pMenuData != nullptr);
+    m_xRemoveCommandButton->set_sensitive(pMenuData != nullptr);
+
     //Handle the gear button
-    if (m_bIsMenuBar)
+    if (pMenuData && m_bIsMenuBar)
     {
-        SvxConfigEntry* pMenuData = GetTopLevelSelection();
         // Add option (gear_add) will always be enabled
         m_xGearBtn->set_item_sensitive( "menu_gear_delete", pMenuData->IsDeletable() );
         m_xGearBtn->set_item_sensitive( "menu_gear_rename", pMenuData->IsRenamable() );
