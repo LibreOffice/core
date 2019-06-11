@@ -91,10 +91,11 @@ enum class ViewOptFlags2 {
     ScrollbarTips   = 0x00400000,
     PrintFormat     = 0x00800000,
     ShadowCursor    = 0x01000000,
-    VRulerRight     = 0x02000000
+    VRulerRight     = 0x02000000,
+    ResolvedPostits = 0x04000000,
 };
 namespace o3tl {
-    template<> struct typed_flags<ViewOptFlags2> : is_typed_flags<ViewOptFlags2, 0x03d7dc00> {};
+    template<> struct typed_flags<ViewOptFlags2> : is_typed_flags<ViewOptFlags2, 0x07d7dc00> {};
 };
 
 // Table background.
@@ -256,6 +257,12 @@ public:
         { return bool(m_nCoreOptions & ViewOptFlags1::Postits); }
     void SetPostIts( bool b )
         { SetCoreOption(b, ViewOptFlags1::Postits); }
+
+    bool IsResolvedPostIts() const
+        { return bool(m_nUIOptions & ViewOptFlags2::ResolvedPostits); }
+    void SetResolvedPostIts( bool b )
+        { SetUIOption(b, ViewOptFlags2::ResolvedPostits); }
+
     static void PaintPostIts( OutputDevice *pOut, const SwRect &rRect,
                               bool bIsScript );
     static sal_uInt16 GetPostItsWidth( const OutputDevice *pOut );
