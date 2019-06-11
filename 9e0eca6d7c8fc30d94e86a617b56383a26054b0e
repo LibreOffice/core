@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_9a80d38d",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/CalcWindowState.xcu",
+        "patchSetId": 2
+      },
+      "lineNbr": 722,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-06-11T08:45:46Z",
+      "side": 1,
+      "message": "Not sure that removing this property means it\u0027s hidden.",
+      "range": {
+        "startLine": 722,
+        "startChar": 17,
+        "endLine": 722,
+        "endChar": 21
+      },
+      "revId": "9e0eca6d7c8fc30d94e86a617b56383a26054b0e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
