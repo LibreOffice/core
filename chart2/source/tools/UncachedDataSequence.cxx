@@ -23,6 +23,8 @@
 
 #include <cppuhelper/supportsservice.hxx>
 #include <algorithm>
+#include <strings.hrc>
+#include <ResId.hxx>
 #include <com/sun/star/chart2/XInternalDataProvider.hpp>
 #include <tools/diagnose_ex.h>
 
@@ -209,8 +211,15 @@ OUString SAL_CALL UncachedDataSequence::getSourceRangeRepresentation()
 
 Sequence< OUString > SAL_CALL UncachedDataSequence::generateLabel( chart2::data::LabelOrigin )
 {
-    // auto-generated label is an empty string
-    return Sequence< OUString >(1);
+    // auto-generated label
+    sal_Int32 nSeries = m_aSourceRepresentation.toInt32() + 1;
+    OUString aResString(::chart::SchResId(STR_DATA_UNNAMED_SERIES_WITH_INDEX));
+    const OUString aReplacementStr("%NUMBER");
+    sal_Int32 nIndex = aResString.indexOf(aReplacementStr);
+    OUString aName;
+    if( nIndex != -1 )
+        aName = aResString.replaceAt(nIndex, aReplacementStr.getLength(), OUString::number(nSeries));
+    return Sequence< OUString >( &aName, 1 );
 }
 
 ::sal_Int32 SAL_CALL UncachedDataSequence::getNumberFormatKeyByIndex( ::sal_Int32 )
