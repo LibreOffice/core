@@ -149,6 +149,8 @@ typedef std::vector< Point >        Points;
 class Diagram;
 class LayoutNode;
 typedef std::shared_ptr< LayoutNode > LayoutNodePtr;
+class LayoutAtom;
+typedef std::shared_ptr<LayoutAtom> LayoutAtomPtr;
 
 typedef std::map< OUString, css::uno::Reference<css::xml::dom::XDocument> > DiagramDomMap;
 
@@ -205,6 +207,8 @@ private:
 
 typedef std::shared_ptr< DiagramData > DiagramDataPtr;
 
+typedef std::map<OUString, LayoutAtomPtr> LayoutAtomMap;
+
 class DiagramLayout
 {
 public:
@@ -233,6 +237,8 @@ public:
         { return mpStyleData; }
     const DiagramDataPtr & getStyleData() const
         { return mpStyleData; }
+    LayoutAtomMap & getLayoutAtomMap()
+        { return maLayoutAtomMap; }
 
 private:
     const Diagram& mrDgm;
@@ -248,6 +254,8 @@ private:
     // TODO
     // catLst
     // clrData
+
+    LayoutAtomMap maLayoutAtomMap;
 };
 
 typedef std::shared_ptr< DiagramLayout > DiagramLayoutPtr;
@@ -283,6 +291,8 @@ public:
         { return mpData; }
     void setLayout( const DiagramLayoutPtr & pLayout )
         { mpLayout = pLayout; }
+    const DiagramLayoutPtr& getLayout() const
+        { return mpLayout; }
 
     DiagramQStyleMap& getStyles() { return maStyles; }
     const DiagramQStyleMap& getStyles() const { return maStyles; }
