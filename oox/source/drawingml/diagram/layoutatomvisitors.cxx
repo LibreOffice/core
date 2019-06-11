@@ -48,6 +48,13 @@ void ShapeCreationVisitor::visit(AlgAtom& rAtom)
 
 void ShapeCreationVisitor::visit(ForEachAtom& rAtom)
 {
+    if (!rAtom.getRef().isEmpty())
+    {
+        if (LayoutAtomPtr pRefAtom = rAtom.getRefAtom())
+            pRefAtom->accept(*this);
+        return;
+    }
+
     if (rAtom.iterator().mnAxis == XML_followSib)
     {
         // If the axis is the follow sibling, then the last atom should not be
@@ -273,6 +280,13 @@ void ShapeLayoutingVisitor::visit(AlgAtom& rAtom)
 
 void ShapeLayoutingVisitor::visit(ForEachAtom& rAtom)
 {
+    if (!rAtom.getRef().isEmpty())
+    {
+        if (LayoutAtomPtr pRefAtom = rAtom.getRefAtom())
+            pRefAtom->accept(*this);
+        return;
+    }
+
     defaultVisit(rAtom);
 }
 
