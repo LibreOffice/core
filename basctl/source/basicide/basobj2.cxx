@@ -31,6 +31,7 @@
 #include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
 #include <unotools/moduleoptions.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 
 #include <memory>
