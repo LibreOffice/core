@@ -24,7 +24,6 @@
 
 #include <vcl/builder.hxx>
 #include <vcl/button.hxx>
-#include <vcl/tabctrl.hxx>
 #include <vcl/layout.hxx>
 
 #include <vcl/menubtn.hxx>
