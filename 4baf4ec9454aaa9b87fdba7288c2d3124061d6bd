@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_558f7c22",
+        "filename": "cui/source/customize/SvxNotebookbarConfigPage.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2019-06-11T14:28:25Z",
+      "side": 1,
+      "message": "It\u0027s not needed if you just call parten\u0027t dispose",
+      "revId": "4baf4ec9454aaa9b87fdba7288c2d3124061d6bd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
