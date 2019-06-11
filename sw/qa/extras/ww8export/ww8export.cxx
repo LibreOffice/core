@@ -288,6 +288,32 @@ DECLARE_WW8EXPORT_TEST(testN816603, "n816603.doc")
     CPPUNIT_ASSERT(getPages() > 1);
 }
 
+DECLARE_WW8EXPORT_TEST(testTdf103967, "tdf103967.doc")
+{
+    // Bugdoc was 1 page in Writer and 2 in Word
+    CPPUNIT_ASSERT(getPages() == 2);
+}
+
+DECLARE_WW8EXPORT_TEST(testTdf104027, "tdf104027.doc")
+{
+    // Bugdoc was 2 pages in Writer and 1 in Word
+    CPPUNIT_ASSERT(getPages() == 1);
+}
+
+DECLARE_WW8EXPORT_TEST(testTdf125602, "tdf125602.doc")
+{
+    //Font size is 11, not 22
+    CPPUNIT_ASSERT_EQUAL(11.0f, getProperty<float>(getRun(getParagraph(1), 1), "CharHeight"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Calibri"), getProperty<OUString>(getRun(getParagraph(1), 1), "CharFontName"));
+}
+
+DECLARE_WW8EXPORT_TEST(testTdf114629, "tdf114629.doc")
+{
+    //Font name is Arial, not Wingdings
+    CPPUNIT_ASSERT_EQUAL(10.0f, getProperty<float>(getRun(getParagraph(1), 1), "CharHeight"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Arial"), getProperty<OUString>(getRun(getParagraph(1), 1), "CharFontName"));
+}
+
 DECLARE_WW8EXPORT_TEST(testPageBorder, "page-border.doc")
 {
     // Page border was missing (LineWidth was 0), due to wrong interpretation of pgbApplyTo.
