@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-05-12 16:57:46 using:
+ Generated on 2019-06-11 16:11:59 using:
  ./bin/update_pch sw sw --cutoff=7 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -30,6 +30,7 @@
 #include <float.h>
 #include <functional>
 #include <limits.h>
+#include <list>
 #include <map>
 #include <memory>
 #include <new>
@@ -66,7 +67,11 @@
 #include <rtl/math.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/strbuf.hxx>
+#include <rtl/string.h>
+#include <rtl/string.hxx>
+#include <rtl/stringutils.hxx>
 #include <rtl/tencinfo.h>
+#include <rtl/textcvt.h>
 #include <rtl/textenc.h>
 #include <rtl/unload.h>
 #include <rtl/uri.hxx>
@@ -80,7 +85,6 @@
 #include <sal/types.h>
 #include <sal/typesizes.h>
 #include <vcl/EnumContext.hxx>
-#include <vcl/GraphicObject.hxx>
 #include <vcl/alpha.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
@@ -90,6 +94,7 @@
 #include <vcl/ctrl.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/dllapi.h>
+#include <vcl/dndhelp.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/errcode.hxx>
 #include <vcl/errinf.hxx>
@@ -104,7 +109,11 @@
 #include <vcl/image.hxx>
 #include <vcl/imap.hxx>
 #include <vcl/imapobj.hxx>
+#include <vcl/keycod.hxx>
+#include <vcl/keycodes.hxx>
+#include <vcl/lstbox.hxx>
 #include <vcl/mapmod.hxx>
+#include <vcl/menu.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/region.hxx>
@@ -112,10 +121,11 @@
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/syswin.hxx>
-#include <vcl/tabctrl.hxx>
 #include <vcl/tabpage.hxx>
 #include <vcl/vclenum.hxx>
+#include <vcl/vclevent.hxx>
 #include <vcl/vclptr.hxx>
+#include <vcl/vclreferencebase.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/window.hxx>
@@ -142,6 +152,8 @@
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
+#include <com/sun/star/awt/Key.hpp>
+#include <com/sun/star/awt/KeyGroup.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -151,6 +163,7 @@
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/XTerminateListener.hpp>
@@ -158,6 +171,7 @@
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/i18n/WordType.hpp>
 #include <com/sun/star/i18n/XBreakIterator.hpp>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -174,6 +188,7 @@
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/uno/Any.h>
 #include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
@@ -212,6 +227,7 @@
 #include <drawinglayer/drawinglayerdllapi.h>
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
+#include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <editeng/acorrcfg.hxx>
 #include <editeng/adjustitem.hxx>
 #include <editeng/blinkitem.hxx>
@@ -272,6 +288,7 @@
 #include <linguistic/lngprops.hxx>
 #include <o3tl/any.hxx>
 #include <o3tl/cow_wrapper.hxx>
+#include <o3tl/deleter.hxx>
 #include <o3tl/safeint.hxx>
 #include <o3tl/sorted_vector.hxx>
 #include <o3tl/strong_int.hxx>
@@ -340,6 +357,7 @@
 #include <svl/whiter.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
+#include <svtools/colorcfg.hxx>
 #include <svtools/ctrltool.hxx>
 #include <svtools/embedhlp.hxx>
 #include <svtools/htmlcfg.hxx>
@@ -369,6 +387,7 @@
 #include <svx/svdoutl.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdpagv.hxx>
+#include <svx/svdundo.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svxdlg.hxx>
 #include <svx/svxdllapi.h>
