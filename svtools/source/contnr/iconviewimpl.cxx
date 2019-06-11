@@ -29,88 +29,88 @@ IconViewImpl::IconViewImpl( SvTreeListBox* pTreeListBox, SvTreeList* pTreeList, 
 
 void IconViewImpl::CursorUp()
 {
-    if (!pStartEntry)
+    if (!m_pStartEntry)
         return;
 
-    SvTreeListEntry* pPrevFirstToDraw = pStartEntry;
+    SvTreeListEntry* pPrevFirstToDraw = m_pStartEntry;
 
-    for(short i = 0; i < pView->GetColumnsCount() && pPrevFirstToDraw; i++)
-        pPrevFirstToDraw = pView->PrevVisible(pPrevFirstToDraw);
+    for(short i = 0; i < m_pView->GetColumnsCount() && pPrevFirstToDraw; i++)
+        pPrevFirstToDraw = m_pView->PrevVisible(pPrevFirstToDraw);
 
     if( !pPrevFirstToDraw )
         return;
 
-    nFlags &= ~LBoxFlags::Filling;
-    long nEntryHeight = pView->GetEntryHeight();
+    m_nFlags &= ~LBoxFlags::Filling;
+    long nEntryHeight = m_pView->GetEntryHeight();
     ShowCursor( false );
-    pView->Update();
-    pStartEntry = pPrevFirstToDraw;
+    m_pView->Update();
+    m_pStartEntry = pPrevFirstToDraw;
     tools::Rectangle aArea( GetVisibleArea() );
     aArea.AdjustBottom( -nEntryHeight );
-    pView->Scroll( 0, nEntryHeight, aArea, ScrollFlags::NoChildren );
-    pView->Update();
+    m_pView->Scroll( 0, nEntryHeight, aArea, ScrollFlags::NoChildren );
+    m_pView->Update();
     ShowCursor( true );
-    pView->NotifyScrolled();
+    m_pView->NotifyScrolled();
 }
 
 void IconViewImpl::CursorDown()
 {
-    if (!pStartEntry)
+    if (!m_pStartEntry)
         return;
 
-    SvTreeListEntry* pNextFirstToDraw = pStartEntry;
+    SvTreeListEntry* pNextFirstToDraw = m_pStartEntry;
 
-    for(short i = 0; i < pView->GetColumnsCount(); i++)
-        pNextFirstToDraw = pView->NextVisible(pNextFirstToDraw);
+    for(short i = 0; i < m_pView->GetColumnsCount(); i++)
+        pNextFirstToDraw = m_pView->NextVisible(pNextFirstToDraw);
 
     if( pNextFirstToDraw )
     {
-        nFlags &= ~LBoxFlags::Filling;
+        m_nFlags &= ~LBoxFlags::Filling;
         ShowCursor( false );
-        pView->Update();
-        pStartEntry = pNextFirstToDraw;
+        m_pView->Update();
+        m_pStartEntry = pNextFirstToDraw;
         tools::Rectangle aArea( GetVisibleArea() );
-        pView->Scroll( 0, -(pView->GetEntryHeight()), aArea, ScrollFlags::NoChildren );
-        pView->Update();
+        m_pView->Scroll( 0, -(m_pView->GetEntryHeight()), aArea, ScrollFlags::NoChildren );
+        m_pView->Update();
         ShowCursor( true );
-        pView->NotifyScrolled();
+        m_pView->NotifyScrolled();
     }
 }
 
 void IconViewImpl::PageDown( sal_uInt16 nDelta )
 {
-    sal_uInt16 nRealDelta = nDelta * pView->GetColumnsCount();
+    sal_uInt16 nRealDelta = nDelta * m_pView->GetColumnsCount();
 
     if( !nDelta )
         return;
 
-    if (!pStartEntry)
+    if (!m_pStartEntry)
         return;
 
-    SvTreeListEntry* pNext = pView->NextVisible(pStartEntry, nRealDelta);
-    if( pNext == pStartEntry )
+    SvTreeListEntry* pNext = m_pView->NextVisible(m_pStartEntry, nRealDelta);
+    if( pNext == m_pStartEntry )
         return;
 
     ShowCursor( false );
 
-    nFlags &= ~LBoxFlags::Filling;
-    pView->Update();
-    pStartEntry = pNext;
+    m_nFlags &= ~LBoxFlags::Filling;
+    m_pView->Update();
+    m_pStartEntry = pNext;
 
-    if( nRealDelta >= nVisibleCount )
+    if( nRealDelta >= m_nVisibleCount )
     {
-        pView->Invalidate( GetVisibleArea() );
-        pView->Update();
+        m_pView->Invalidate( GetVisibleArea() );
+        m_pView->Update();
     }
     else
     {
         tools::Rectangle aArea( GetVisibleArea() );
-        long nScroll = pView->GetEntryHeight() * static_cast<long>(nRealDelta);
+        long nScroll = m_pView->GetEntryHeight() * static_cast<long>(nRealDelta);
         nScroll = -nScroll;
-        pView->Update();
-        pView->Scroll( 0, nScroll, aArea, ScrollFlags::NoChildren );
-        pView->Update();
-        pView->NotifyScrolled();
+        m_pView->Update();
+        m_pView->Scroll( 0, nScroll, aArea, ScrollFlags::NoChildren );
+        m_pView->Update();
+        m_pView->NotifyScrolled();
     }
 
     ShowCursor( true );
@@ -118,35 +118,35 @@ void IconViewImpl::PageDown( sal_uInt16 nDelta )
 
 void IconViewImpl::PageUp( sal_uInt16 nDelta )
 {
-    sal_uInt16 nRealDelta = nDelta * pView->GetColumnsCount();
+    sal_uInt16 nRealDelta = nDelta * m_pView->GetColumnsCount();
     if( !nDelta )
         return;
 
-    if (!pStartEntry)
+    if (!m_pStartEntry)
         return;
 
-    SvTreeListEntry* pPrev = pView->PrevVisible(pStartEntry, nRealDelta);
-    if( pPrev == pStartEntry )
+    SvTreeListEntry* pPrev = m_pView->PrevVisible(m_pStartEntry, nRealDelta);
+    if( pPrev == m_pStartEntry )
         return;
 
-    nFlags &= ~LBoxFlags::Filling;
+    m_nFlags &= ~LBoxFlags::Filling;
     ShowCursor( false );
 
-    pView->Update();
-    pStartEntry = pPrev;
-    if( nRealDelta >= nVisibleCount )
+    m_pView->Update();
+    m_pStartEntry = pPrev;
+    if( nRealDelta >= m_nVisibleCount )
     {
-        pView->Invalidate( GetVisibleArea() );
-        pView->Update();
+        m_pView->Invalidate( GetVisibleArea() );
+        m_pView->Update();
     }
     else
     {
-        long nEntryHeight = pView->GetEntryHeight();
+        long nEntryHeight = m_pView->GetEntryHeight();
         tools::Rectangle aArea( GetVisibleArea() );
-        pView->Update();
-        pView->Scroll( 0, nEntryHeight*nRealDelta, aArea, ScrollFlags::NoChildren );
-        pView->Update();
-        pView->NotifyScrolled();
+        m_pView->Update();
+        m_pView->Scroll( 0, nEntryHeight*nRealDelta, aArea, ScrollFlags::NoChildren );
+        m_pView->Update();
+        m_pView->NotifyScrolled();
     }
 
     ShowCursor( true );
@@ -154,24 +154,24 @@ void IconViewImpl::PageUp( sal_uInt16 nDelta )
 
 void IconViewImpl::KeyDown( bool bPageDown )
 {
-    if( !aVerSBar->IsVisible() )
+    if( !m_aVerSBar->IsVisible() )
         return;
 
     long nDelta;
     if( bPageDown )
-        nDelta = aVerSBar->GetPageSize();
+        nDelta = m_aVerSBar->GetPageSize();
     else
         nDelta = 1;
 
-    long nThumbPos = aVerSBar->GetThumbPos();
+    long nThumbPos = m_aVerSBar->GetThumbPos();
 
     if( nDelta <= 0 )
         return;
 
-    nFlags &= ~LBoxFlags::Filling;
+    m_nFlags &= ~LBoxFlags::Filling;
     BeginScroll();
 
-    aVerSBar->SetThumbPos( nThumbPos+nDelta );
+    m_aVerSBar->SetThumbPos( nThumbPos+nDelta );
     if( bPageDown )
         PageDown( static_cast<short>(nDelta) );
     else
@@ -182,16 +182,16 @@ void IconViewImpl::KeyDown( bool bPageDown )
 
 void IconViewImpl::KeyUp( bool bPageUp )
 {
-    if( !aVerSBar->IsVisible() )
+    if( !m_aVerSBar->IsVisible() )
         return;
 
     long nDelta;
     if( bPageUp )
-        nDelta = aVerSBar->GetPageSize();
+        nDelta = m_aVerSBar->GetPageSize();
     else
         nDelta = 1;
 
-    long nThumbPos = aVerSBar->GetThumbPos();
+    long nThumbPos = m_aVerSBar->GetThumbPos();
 
     if( nThumbPos < nDelta )
         nDelta = nThumbPos;
@@ -199,10 +199,10 @@ void IconViewImpl::KeyUp( bool bPageUp )
     if( nDelta < 0 )
         return;
 
-    nFlags &= ~LBoxFlags::Filling;
+    m_nFlags &= ~LBoxFlags::Filling;
     BeginScroll();
 
-    aVerSBar->SetThumbPos( nThumbPos - nDelta );
+    m_aVerSBar->SetThumbPos( nThumbPos - nDelta );
     if( bPageUp )
         PageUp( static_cast<short>(nDelta) );
     else
@@ -213,11 +213,11 @@ void IconViewImpl::KeyUp( bool bPageUp )
 
 long IconViewImpl::GetEntryLine( SvTreeListEntry* pEntry ) const
 {
-    if(!pStartEntry )
+    if(!m_pStartEntry )
         return -1; // invisible position
 
-    long nFirstVisPos = pView->GetVisiblePos( pStartEntry );
-    long nEntryVisPos = pView->GetVisiblePos( pEntry );
+    long nFirstVisPos = m_pView->GetVisiblePos( m_pStartEntry );
+    long nEntryVisPos = m_pView->GetVisiblePos( pEntry );
     nFirstVisPos = nEntryVisPos - nFirstVisPos;
 
     return nFirstVisPos;
@@ -225,25 +225,25 @@ long IconViewImpl::GetEntryLine( SvTreeListEntry* pEntry ) const
 
 Point IconViewImpl::GetEntryPosition( SvTreeListEntry* pEntry ) const
 {
-    const int pos = pView->GetAbsPos( pEntry );
+    const int pos = m_pView->GetAbsPos( pEntry );
 
-    return Point( ( pos % pView->GetColumnsCount() ) * pView->GetEntryWidth(),
-                 ( pos / pView->GetColumnsCount() ) * pView->GetEntryHeight() );
+    return Point( ( pos % m_pView->GetColumnsCount() ) * m_pView->GetEntryWidth(),
+                 ( pos / m_pView->GetColumnsCount() ) * m_pView->GetEntryHeight() );
 }
 
 SvTreeListEntry* IconViewImpl::GetClickedEntry( const Point& rPoint ) const
 {
-    DBG_ASSERT( pView->GetModel(), "IconViewImpl::GetClickedEntry: how can this ever happen?" );
-    if ( !pView->GetModel() )
+    DBG_ASSERT( m_pView->GetModel(), "IconViewImpl::GetClickedEntry: how can this ever happen?" );
+    if ( !m_pView->GetModel() )
         return nullptr;
-    if( pView->GetEntryCount() == 0 || !pStartEntry || !pView->GetEntryHeight() || !pView->GetEntryWidth())
+    if( m_pView->GetEntryCount() == 0 || !m_pStartEntry || !m_pView->GetEntryHeight() || !m_pView->GetEntryWidth())
         return nullptr;
 
-    sal_uInt16 nY = static_cast<sal_uInt16>(rPoint.Y() / pView->GetEntryHeight() );
-    sal_uInt16 nX = static_cast<sal_uInt16>(rPoint.X() / pView->GetEntryWidth() );
-    sal_uInt16 nTemp = nY * pView->GetColumnsCount() + nX;
+    sal_uInt16 nY = static_cast<sal_uInt16>(rPoint.Y() / m_pView->GetEntryHeight() );
+    sal_uInt16 nX = static_cast<sal_uInt16>(rPoint.X() / m_pView->GetEntryWidth() );
+    sal_uInt16 nTemp = nY * m_pView->GetColumnsCount() + nX;
 
-    SvTreeListEntry* pEntry = pView->NextVisible(pStartEntry, nTemp);
+    SvTreeListEntry* pEntry = m_pView->NextVisible(m_pStartEntry, nTemp);
 
     return pEntry;
 }
@@ -251,44 +251,44 @@ SvTreeListEntry* IconViewImpl::GetClickedEntry( const Point& rPoint ) const
 bool IconViewImpl::IsEntryInView( SvTreeListEntry* pEntry ) const
 {
     // parent collapsed
-    if( !pView->IsEntryVisible(pEntry) )
+    if( !m_pView->IsEntryVisible(pEntry) )
         return false;
 
-    long nY = GetEntryLine( pEntry ) / pView->GetColumnsCount() * pView->GetEntryHeight();
+    long nY = GetEntryLine( pEntry ) / m_pView->GetColumnsCount() * m_pView->GetEntryHeight();
     if( nY < 0 )
         return false;
 
-    long nMax = nVisibleCount / pView->GetColumnsCount() * pView->GetEntryHeight();
+    long nMax = m_nVisibleCount / m_pView->GetColumnsCount() * m_pView->GetEntryHeight();
     if( nY >= nMax )
         return false;
 
-    long nStart = GetEntryLine( pEntry ) - GetEntryLine( pStartEntry );
+    long nStart = GetEntryLine( pEntry ) - GetEntryLine( m_pStartEntry );
     return nStart >= 0;
 }
 
 void IconViewImpl::AdjustScrollBars( Size& rSize )
 {
-    long nEntryHeight = pView->GetEntryHeight();
+    long nEntryHeight = m_pView->GetEntryHeight();
     if( !nEntryHeight )
         return;
 
     sal_uInt16 nResult = 0;
 
-    Size aOSize( pView->Control::GetOutputSizePixel() );
+    Size aOSize( m_pView->Control::GetOutputSizePixel() );
 
-    const WinBits nWindowStyle = pView->GetStyle();
+    const WinBits nWindowStyle = m_pView->GetStyle();
     bool bVerSBar = ( nWindowStyle & WB_VSCROLL ) != 0;
 
     // number of entries that are not collapsed
-    sal_uLong nTotalCount = pView->GetVisibleCount();
+    sal_uLong nTotalCount = m_pView->GetVisibleCount();
 
     // number of entries visible within the view
-    nVisibleCount = aOSize.Height() / nEntryHeight * pView->GetColumnsCount();
+    m_nVisibleCount = aOSize.Height() / nEntryHeight * m_pView->GetColumnsCount();
 
-    long nRows = ( nTotalCount / pView->GetColumnsCount() ) + 1;
+    long nRows = ( nTotalCount / m_pView->GetColumnsCount() ) + 1;
 
     // do we need a vertical scrollbar?
-    if( bVerSBar || nTotalCount > nVisibleCount )
+    if( bVerSBar || nTotalCount > m_nVisibleCount )
     {
         nResult = 1;
     }
@@ -300,23 +300,23 @@ void IconViewImpl::AdjustScrollBars( Size& rSize )
     // refresh output size, in case we have to scroll
     tools::Rectangle aRect;
     aRect.SetSize( aOSize );
-    aSelEng.SetVisibleArea( aRect );
+    m_aSelEng.SetVisibleArea( aRect );
 
     // vertical scrollbar
-    if( !bInVScrollHdl )
+    if( !m_bInVScrollHdl )
     {
-        aVerSBar->SetPageSize( nTotalCount );
-        aVerSBar->SetVisibleSize( nTotalCount - nRows );
+        m_aVerSBar->SetPageSize( nTotalCount );
+        m_aVerSBar->SetVisibleSize( nTotalCount - nRows );
     }
     else
     {
-        nFlags |= LBoxFlags::EndScrollSetVisSize;
+        m_nFlags |= LBoxFlags::EndScrollSetVisSize;
     }
 
     if( nResult & 0x0001 )
-        aVerSBar->Show();
+        m_aVerSBar->Show();
     else
-        aVerSBar->Hide();
+        m_aVerSBar->Hide();
 
     rSize = aOSize;
 }
@@ -324,15 +324,15 @@ void IconViewImpl::AdjustScrollBars( Size& rSize )
 // returns 0 if position is just past the last entry
 SvTreeListEntry* IconViewImpl::GetEntry( const Point& rPoint ) const
 {
-    if( (pView->GetEntryCount() == 0) || !pStartEntry ||
-        (rPoint.Y() > aOutputSize.Height())
-        || !pView->GetEntryHeight()
-        || !pView->GetEntryWidth())
+    if( (m_pView->GetEntryCount() == 0) || !m_pStartEntry ||
+        (rPoint.Y() > m_aOutputSize.Height())
+        || !m_pView->GetEntryHeight()
+        || !m_pView->GetEntryWidth())
         return nullptr;
 
-    sal_uInt16 nClickedEntry = static_cast<sal_uInt16>(rPoint.Y() / pView->GetEntryHeight() * pView->GetColumnsCount() + rPoint.X() / pView->GetEntryWidth() );
+    sal_uInt16 nClickedEntry = static_cast<sal_uInt16>(rPoint.Y() / m_pView->GetEntryHeight() * m_pView->GetColumnsCount() + rPoint.X() / m_pView->GetEntryWidth() );
     sal_uInt16 nTemp = nClickedEntry;
-    SvTreeListEntry* pEntry = pView->NextVisible(pStartEntry, nTemp);
+    SvTreeListEntry* pEntry = m_pView->NextVisible(m_pStartEntry, nTemp);
     if( nTemp != nClickedEntry )
         pEntry = nullptr;
     return pEntry;
@@ -340,120 +340,120 @@ SvTreeListEntry* IconViewImpl::GetEntry( const Point& rPoint ) const
 
 void IconViewImpl::SyncVerThumb()
 {
-    if( pStartEntry )
+    if( m_pStartEntry )
     {
-        long nEntryPos = pView->GetVisiblePos( pStartEntry );
-        aVerSBar->SetThumbPos( nEntryPos );
+        long nEntryPos = m_pView->GetVisiblePos( m_pStartEntry );
+        m_aVerSBar->SetThumbPos( nEntryPos );
     }
     else
-        aVerSBar->SetThumbPos( 0 );
+        m_aVerSBar->SetThumbPos( 0 );
 }
 
 void IconViewImpl::UpdateAll( bool bInvalidateCompleteView )
 {
     FindMostRight( nullptr );
-    aVerSBar->SetRange( Range( 0, pView->GetVisibleCount() ) );
+    m_aVerSBar->SetRange( Range( 0, m_pView->GetVisibleCount() ) );
     SyncVerThumb();
     FillView();
     ShowVerSBar();
-    if( bSimpleTravel && pCursor && pView->HasFocus() )
-        pView->Select( pCursor );
+    if( m_bSimpleTravel && m_pCursor && m_pView->HasFocus() )
+        m_pView->Select( m_pCursor );
     ShowCursor( true );
     if( bInvalidateCompleteView )
-        pView->Invalidate();
+        m_pView->Invalidate();
     else
-        pView->Invalidate( GetVisibleArea() );
+        m_pView->Invalidate( GetVisibleArea() );
 }
 
 void IconViewImpl::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
 {
-    if (!pView->GetVisibleCount())
+    if (!m_pView->GetVisibleCount())
         return;
 
-    nFlags |= LBoxFlags::InPaint;
+    m_nFlags |= LBoxFlags::InPaint;
 
-    if (nFlags & LBoxFlags::Filling)
+    if (m_nFlags & LBoxFlags::Filling)
     {
-        SvTreeListEntry* pFirst = pView->First();
-        if (pFirst != pStartEntry)
+        SvTreeListEntry* pFirst = m_pView->First();
+        if (pFirst != m_pStartEntry)
         {
             ShowCursor(false);
-            pStartEntry = pView->First();
-            aVerSBar->SetThumbPos( 0 );
+            m_pStartEntry = m_pView->First();
+            m_aVerSBar->SetThumbPos( 0 );
             StopUserEvent();
             ShowCursor(true);
-            nCurUserEvent = Application::PostUserEvent(LINK(this, SvImpLBox, MyUserEvent),
+            m_nCurUserEvent = Application::PostUserEvent(LINK(this, SvImpLBox, MyUserEvent),
                                                        reinterpret_cast<void*>(1));
             return;
         }
     }
 
-    if (!pStartEntry)
+    if (!m_pStartEntry)
     {
-        pStartEntry = pView->First();
+        m_pStartEntry = m_pView->First();
     }
 
     long nRectHeight = rRect.GetHeight();
     long nRectWidth = rRect.GetWidth();
-    long nEntryHeight = pView->GetEntryHeight();
-    long nEntryWidth = pView->GetEntryWidth();
+    long nEntryHeight = m_pView->GetEntryHeight();
+    long nEntryWidth = m_pView->GetEntryWidth();
 
     // calculate area for the entries we want to draw
-    sal_uInt16 nStartId = static_cast<sal_uInt16>(rRect.Top() / nEntryHeight * pView->GetColumnsCount() + (rRect.Left() / nEntryWidth));
+    sal_uInt16 nStartId = static_cast<sal_uInt16>(rRect.Top() / nEntryHeight * m_pView->GetColumnsCount() + (rRect.Left() / nEntryWidth));
     sal_uInt16 nCount = static_cast<sal_uInt16>(( nRectHeight / nEntryHeight + 1 ) * nRectWidth / nEntryWidth);
     nCount += 2; // don't miss an entry
 
-    long nY = nStartId / pView->GetColumnsCount() * nEntryHeight;
+    long nY = nStartId / m_pView->GetColumnsCount() * nEntryHeight;
     long nX = 0;
-    SvTreeListEntry* pEntry = pStartEntry;
+    SvTreeListEntry* pEntry = m_pStartEntry;
     while (nStartId && pEntry)
     {
-        pEntry = pView->NextVisible(pEntry);
+        pEntry = m_pView->NextVisible(pEntry);
         nStartId--;
     }
 
     vcl::Region aClipRegion(GetClipRegionRect());
 
-    if (!pCursor && !mbNoAutoCurEntry)
+    if (!m_pCursor && !mbNoAutoCurEntry)
     {
         // do not select if multiselection or explicit set
-        bool bNotSelect = (aSelEng.GetSelectionMode() == SelectionMode::Multiple ) || ((m_nStyle & WB_NOINITIALSELECTION) == WB_NOINITIALSELECTION);
-        SetCursor(pStartEntry, bNotSelect);
+        bool bNotSelect = (m_aSelEng.GetSelectionMode() == SelectionMode::Multiple ) || ((m_nStyle & WB_NOINITIALSELECTION) == WB_NOINITIALSELECTION);
+        SetCursor(m_pStartEntry, bNotSelect);
     }
 
     for(sal_uInt16 n = 0; n< nCount && pEntry; n++)
     {
-        static_cast<IconView*>(pView.get())->PaintEntry(*pEntry, nX, nY, rRenderContext);
+        static_cast<IconView*>(m_pView.get())->PaintEntry(*pEntry, nX, nY, rRenderContext);
         nX += nEntryWidth;
 
-        if(nX + pView->GetEntryWidth() > nEntryWidth * pView->GetColumnsCount())
+        if(nX + m_pView->GetEntryWidth() > nEntryWidth * m_pView->GetColumnsCount())
         {
             nY += nEntryHeight;
             nX = 0;
         }
-        pEntry = pView->NextVisible(pEntry);
+        pEntry = m_pView->NextVisible(pEntry);
     }
 
-    nFlags &= ~LBoxFlags::DeselectAll;
+    m_nFlags &= ~LBoxFlags::DeselectAll;
     rRenderContext.SetClipRegion();
-    nFlags &= ~LBoxFlags::InPaint;
+    m_nFlags &= ~LBoxFlags::InPaint;
 }
 
 void IconViewImpl::InvalidateEntry( long nId ) const
 {
-    if( nFlags & LBoxFlags::InPaint )
+    if( m_nFlags & LBoxFlags::InPaint )
         return;
 
     tools::Rectangle aRect( GetVisibleArea() );
     long nMaxBottom = aRect.Bottom();
-    aRect.SetTop( nId / pView->GetColumnsCount() * pView->GetEntryHeight() );
-    aRect.SetBottom( aRect.Top() ); aRect.AdjustBottom(pView->GetEntryHeight() );
+    aRect.SetTop( nId / m_pView->GetColumnsCount() * m_pView->GetEntryHeight() );
+    aRect.SetBottom( aRect.Top() ); aRect.AdjustBottom(m_pView->GetEntryHeight() );
 
     if( aRect.Top() > nMaxBottom )
         return;
     if( aRect.Bottom() > nMaxBottom )
         aRect.SetBottom( nMaxBottom );
-    pView->Invalidate( aRect );
+    m_pView->Invalidate( aRect );
 }
 
 bool IconViewImpl::KeyInput( const KeyEvent& rKEvt )
@@ -463,11 +463,11 @@ bool IconViewImpl::KeyInput( const KeyEvent& rKEvt )
     if( rKeyCode.IsMod2() )
         return false; // don't evaluate Alt key
 
-    nFlags &= ~LBoxFlags::Filling;
+    m_nFlags &= ~LBoxFlags::Filling;
 
-    if( !pCursor )
-        pCursor = pStartEntry;
-    if( !pCursor )
+    if( !m_pCursor )
+        m_pCursor = m_pStartEntry;
+    if( !m_pCursor )
         return false;
 
     sal_uInt16  aCode = rKeyCode.GetCode();
@@ -480,57 +480,57 @@ bool IconViewImpl::KeyInput( const KeyEvent& rKEvt )
     bool bHandled = true;
 
     long i;
-    long nColumns = pView->GetColumnsCount();
+    long nColumns = m_pView->GetColumnsCount();
 
     switch( aCode )
     {
         case KEY_LEFT:
-            if( !IsEntryInView( pCursor ) )
-                MakeVisible( pCursor );
+            if( !IsEntryInView( m_pCursor ) )
+                MakeVisible( m_pCursor );
 
-            pNewCursor = pCursor;
+            pNewCursor = m_pCursor;
             do
             {
-                pNewCursor = pView->PrevVisible(pNewCursor);
+                pNewCursor = m_pView->PrevVisible(pNewCursor);
             } while( pNewCursor && !IsSelectable(pNewCursor) );
 
             // if there is no next entry, take the current one
             // this ensures that in case of _one_ entry in the list, this entry is selected when pressing
             // the cursor key
             if (!pNewCursor)
-                pNewCursor = pCursor;
+                pNewCursor = m_pCursor;
 
-            aSelEng.CursorPosChanging( bShift, bMod1 );
+            m_aSelEng.CursorPosChanging( bShift, bMod1 );
             SetCursor( pNewCursor, bMod1 );     // no selection, when Ctrl is on
             if( !IsEntryInView( pNewCursor ) )
                 KeyUp( false );
             break;
 
         case KEY_RIGHT:
-            if( !IsEntryInView( pCursor ) )
-                MakeVisible( pCursor );
+            if( !IsEntryInView( m_pCursor ) )
+                MakeVisible( m_pCursor );
 
-            pNewCursor = pCursor;
+            pNewCursor = m_pCursor;
             do
             {
-                pNewCursor = pView->NextVisible(pNewCursor);
+                pNewCursor = m_pView->NextVisible(pNewCursor);
             } while( pNewCursor && !IsSelectable(pNewCursor) );
 
             // if there is no next entry, take the current one
             // this ensures that in case of _one_ entry in the list, this entry is selected when pressing
             // the cursor key
-            if ( !pNewCursor && pCursor )
-                pNewCursor = pCursor;
+            if ( !pNewCursor && m_pCursor )
+                pNewCursor = m_pCursor;
 
             if( pNewCursor )
             {
-                aSelEng.CursorPosChanging( bShift, bMod1 );
+                m_aSelEng.CursorPosChanging( bShift, bMod1 );
                 if( IsEntryInView( pNewCursor ) )
                     SetCursor( pNewCursor, bMod1 ); // no selection, when Ctrl is on
                 else
                 {
-                    if( pCursor )
-                        pView->Select( pCursor, false );
+                    if( m_pCursor )
+                        m_pView->Select( m_pCursor, false );
                     KeyDown( false );
                     SetCursor( pNewCursor, bMod1 ); // no selection, when Ctrl is on
                 }
@@ -542,27 +542,27 @@ bool IconViewImpl::KeyInput( const KeyEvent& rKEvt )
 
         case KEY_UP:
         {
-            if( !IsEntryInView( pCursor ) )
-                MakeVisible( pCursor );
+            if( !IsEntryInView( m_pCursor ) )
+                MakeVisible( m_pCursor );
 
-            pNewCursor = pCursor;
+            pNewCursor = m_pCursor;
             for( i = 0; i < nColumns && pNewCursor; i++)
             {
                 do
                 {
-                    pNewCursor = pView->PrevVisible(pNewCursor);
+                    pNewCursor = m_pView->PrevVisible(pNewCursor);
                 } while( pNewCursor && !IsSelectable(pNewCursor) );
             }
 
             // if there is no next entry, take the current one
             // this ensures that in case of _one_ entry in the list, this entry is selected when pressing
             // the cursor key
-            if ( !pNewCursor && pCursor )
-                pNewCursor = pCursor;
+            if ( !pNewCursor && m_pCursor )
+                pNewCursor = m_pCursor;
 
             if( pNewCursor )
             {
-                aSelEng.CursorPosChanging( bShift, bMod1 );
+                m_aSelEng.CursorPosChanging( bShift, bMod1 );
                 SetCursor( pNewCursor, bMod1 );     // no selection, when Ctrl is on
                 if( !IsEntryInView( pNewCursor ) )
                     KeyUp( false );
@@ -572,33 +572,33 @@ bool IconViewImpl::KeyInput( const KeyEvent& rKEvt )
 
         case KEY_DOWN:
         {
-            if( !IsEntryInView( pCursor ) )
-                MakeVisible( pCursor );
+            if( !IsEntryInView( m_pCursor ) )
+                MakeVisible( m_pCursor );
 
-            pNewCursor = pCursor;
+            pNewCursor = m_pCursor;
             for( i = 0; i < nColumns && pNewCursor; i++)
             {
                 do
                 {
-                    pNewCursor = pView->NextVisible(pNewCursor);
+                    pNewCursor = m_pView->NextVisible(pNewCursor);
                 } while( pNewCursor && !IsSelectable(pNewCursor) );
             }
 
             // if there is no next entry, take the current one
             // this ensures that in case of _one_ entry in the list, this entry is selected when pressing
             // the cursor key
-            if ( !pNewCursor && pCursor )
-                pNewCursor = pCursor;
+            if ( !pNewCursor && m_pCursor )
+                pNewCursor = m_pCursor;
 
             if( pNewCursor )
             {
-                aSelEng.CursorPosChanging( bShift, bMod1 );
+                m_aSelEng.CursorPosChanging( bShift, bMod1 );
                 if( IsEntryInView( pNewCursor ) )
                     SetCursor( pNewCursor, bMod1 ); // no selection, when Ctrl is on
                 else
                 {
-                    if( pCursor )
-                        pView->Select( pCursor, false );
+                    if( m_pCursor )
+                        m_pView->Select( m_pCursor, false );
                     KeyDown( false );
                     SetCursor( pNewCursor, bMod1 ); // no selection, when Ctrl is on
                 }
@@ -611,7 +611,7 @@ bool IconViewImpl::KeyInput( const KeyEvent& rKEvt )
 
         case KEY_RETURN:
         {
-            pView->aDoubleClickHdl.Call( pView );
+            m_pView->aDoubleClickHdl.Call( m_pView );
             bHandled = true;
 
             break;
@@ -619,24 +619,24 @@ bool IconViewImpl::KeyInput( const KeyEvent& rKEvt )
 
         case KEY_END:
         {
-            pNewCursor = pView->GetModel()->Last();
+            pNewCursor = m_pView->GetModel()->Last();
 
             while( pNewCursor && !IsSelectable(pNewCursor) )
             {
-                pNewCursor = pView->PrevVisible(pNewCursor);
+                pNewCursor = m_pView->PrevVisible(pNewCursor);
             }
 
-            pStartEntry = pNewCursor;
+            m_pStartEntry = pNewCursor;
 
-            while( pStartEntry && pView->GetAbsPos( pStartEntry ) % pView->GetColumnsCount() != 0 )
+            while( m_pStartEntry && m_pView->GetAbsPos( m_pStartEntry ) % m_pView->GetColumnsCount() != 0 )
             {
-                pStartEntry = pView->PrevVisible(pStartEntry);
+                m_pStartEntry = m_pView->PrevVisible(m_pStartEntry);
             }
 
-            if( pNewCursor && pNewCursor != pCursor)
+            if( pNewCursor && pNewCursor != m_pCursor)
             {
 //              SelAllDestrAnch( false );
-                aSelEng.CursorPosChanging( bShift, bMod1 );
+                m_aSelEng.CursorPosChanging( bShift, bMod1 );
                 SetCursor( pNewCursor );
                 SyncVerThumb();
             }
