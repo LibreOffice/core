@@ -79,6 +79,7 @@ public:
     void testFontSize();
     void testVerticalBlockList();
     void testBulletList();
+    void testRecursion();
 
     CPPUNIT_TEST_SUITE(SdImportTestSmartArt);
 
@@ -119,6 +120,7 @@ public:
     CPPUNIT_TEST(testFontSize);
     CPPUNIT_TEST(testVerticalBlockList);
     CPPUNIT_TEST(testBulletList);
+    CPPUNIT_TEST(testRecursion);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -1273,6 +1275,46 @@ void SdImportTestSmartArt::testBulletList()
     xDocShRef->DoClose();
 }
 
+void SdImportTestSmartArt::testRecursion()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(
+        m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/smartart-recursion.pptx"), PPTX);
+
+    uno::Reference<drawing::XShapes> xGroup(getShapeFromPage(0, 0, xDocShRef), uno::UNO_QUERY);
+    uno::Reference<drawing::XShapes> xGroup1(xGroup->getByIndex(1), uno::UNO_QUERY);
+
+    uno::Reference<drawing::XShapes> xGroupA(xGroup1->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<text::XText> xTextA(xGroupA->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("A"), xTextA->getString());
+
+    uno::Reference<drawing::XShapes> xGroupB(xGroup1->getByIndex(1), uno::UNO_QUERY);
+    // 5 connectors, B1 with children, B2 with children
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(7), xGroupB->getCount());
+
+    uno::Reference<drawing::XShapes> xGroupB1(xGroupB->getByIndex(1), uno::UNO_QUERY);
+
+    uno::Reference<drawing::XShapes> xGroupB1a(xGroupB1->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<text::XText> xTextB1(xGroupB1a->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("B1"), xTextB1->getString());
+
+    uno::Reference<drawing::XShape> xGroupC12(xGroupB1->getByIndex(1), uno::UNO_QUERY);
+    uno::Reference<text::XText> xTextC1(getChildShape(getChildShape(getChildShape(xGroupC12, 0), 0), 0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("C1"), xTextC1->getString());
+    uno::Reference<text::XText> xTextC2(getChildShape(getChildShape(getChildShape(xGroupC12, 1), 0), 0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("C2"), xTextC2->getString());
+
+    uno::Reference<drawing::XShapes> xGroupB2(xGroupB->getByIndex(5), uno::UNO_QUERY);
+
+    uno::Reference<drawing::XShapes> xGroupB2a(xGroupB2->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<text::XText> xTextB2(xGroupB2a->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("B2"), xTextB2->getString());
+
+    uno::Reference<drawing::XShape> xGroupC3(xGroupB2->getByIndex(1), uno::UNO_QUERY);
+    uno::Reference<text::XText> xTextC3(getChildShape(getChildShape(getChildShape(xGroupC3, 0), 0), 0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("C3"), xTextC3->getString());
+
+    xDocShRef->DoClose();
+}
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdImportTestSmartArt);
 
