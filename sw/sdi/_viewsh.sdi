@@ -801,6 +801,14 @@ interface BaseTextEditView
         StateMethod = StateViewOptions ;
         Export = FALSE;
     ]
+
+    SID_TOGGLE_RESOLVED_NOTES
+    [
+        ExecMethod = ExecViewOptions ;
+        StateMethod = StateViewOptions ;
+        Export = FALSE;
+    ]
+
      // Everything from here can be removed (Export = FALSE;), if the previous works
     FN_RULER // status()
     [
