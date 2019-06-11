@@ -388,8 +388,6 @@ include/svtools/brwbox.hxx:249
     BrowseBox::CursorMoveAttempt m_bScrolledToReachCell const _Bool
 include/svtools/ctrltool.hxx:150
     FontList mpDev2 VclPtr<class OutputDevice>
-include/svtools/simptabl.hxx:59
-    SvSimpleTable aCEvt class CommandEvent
 include/svx/bmpmask.hxx:128
     SvxBmpMask aSelItem class SvxBmpMaskSelectItem
 include/svx/ClassificationDialog.hxx:38
@@ -420,6 +418,8 @@ include/vcl/salnativewidgets.hxx:509
     PushButtonValue mbSingleLine _Bool
 include/vcl/textrectinfo.hxx:32
     TextRectInfo mnLineCount sal_uInt16
+include/vcl/toolbox.hxx:112
+    ToolBox mnKeyModifier sal_uInt16
 include/vcl/vclenum.hxx:199
     ItalicMatrix yy double
 include/vcl/vclenum.hxx:199
@@ -534,8 +534,6 @@ sc/source/core/data/column.cxx:1397
     (anonymous namespace)::CopyByCloneHandler meListenType sc::StartListeningType
 sc/source/core/data/column.cxx:1398
     (anonymous namespace)::CopyByCloneHandler mnFormulaCellCloneFlags const enum ScCloneFlags
-sc/source/core/data/column.cxx:3398
-    (anonymous namespace)::TransferListenersHandler maListenerList (anonymous namespace)::TransferListenersHandler::ListenerListType
 sc/source/core/data/sortparam.cxx:264
     sc::(anonymous namespace)::ReorderIndex mnPos1 SCCOLROW
 sc/source/core/data/table2.cxx:3590
@@ -664,8 +662,6 @@ sd/source/filter/ppt/ppt97animations.hxx:50
     Ppt97AnimationInfoAtom nUnknown1 sal_uInt8
 sd/source/filter/ppt/ppt97animations.hxx:51
     Ppt97AnimationInfoAtom nUnknown2 sal_uInt8
-sd/source/ui/inc/BulletAndPositionDlg.hxx:67
-    SvxBulletAndPositionDlg bHTMLMode _Bool
 sd/source/ui/inc/inspagob.hxx:33
     SdInsertPagesObjsDlg m_pDoc const class SdDrawDocument *
 sd/source/ui/inc/unopage.hxx:277
@@ -784,7 +780,7 @@ svx/source/sidebar/line/LinePropertyPanel.hxx:105
     svx::sidebar::LinePropertyPanel maEdgeStyle sfx2::sidebar::ControllerItem
 svx/source/sidebar/line/LinePropertyPanel.hxx:106
     svx::sidebar::LinePropertyPanel maCapStyle sfx2::sidebar::ControllerItem
-svx/source/svdraw/svdibrow.cxx:94
+svx/source/svdraw/svdibrow.cxx:95
     ImpItemListRow pType const std::type_info *
 svx/source/svdraw/svdpdf.hxx:196
     ImpSdrPdfImport mdPageWidthPts double
@@ -974,7 +970,7 @@ vcl/inc/salwtype.hxx:243
     SalInputContext mpFont rtl::Reference<LogicalFontInstance>
 vcl/inc/salwtype.hxx:250
     SalSwipeEvent mnVelocityY double
-vcl/inc/sft.hxx:462
+vcl/inc/sft.hxx:483
     vcl::TrueTypeFont mapper sal_uInt32 (*)(const sal_uInt8 *, sal_uInt32, sal_uInt32)
 vcl/inc/svdata.hxx:423
     ImplSVEvent mpInstanceRef VclPtr<vcl::Window>

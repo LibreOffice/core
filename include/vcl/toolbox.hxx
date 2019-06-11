@@ -109,7 +109,6 @@ private:
     tools::Rectangle           maLowerRect;
     tools::Rectangle           maPaintRect;
     VclPtr<FloatingWindow> mpFloatWin;
-    sal_uInt16          mnKeyModifier;
     long                mnDX;
     long                mnDY;
     long                mnMaxItemWidth;    // max item width
