@@ -203,6 +203,7 @@
       </menu:menu>
       <menu:menuitem menu:id=".uno:HideWhitespace"/>
       <menu:menuitem menu:id=".uno:ViewTrackChanges"/>
+      <menu:menuitem menu:id=".uno:ShowResolvedAnnotations"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:Marks"/>
       <menu:menuitem menu:id=".uno:Fieldnames"/>
