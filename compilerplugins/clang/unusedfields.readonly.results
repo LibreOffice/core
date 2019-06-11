@@ -348,22 +348,10 @@ include/sfx2/msg.hxx:118
     SfxType0 pType const std::type_info *
 include/sfx2/sidebar/ResourceManager.hxx:110
     sfx2::sidebar::ResourceManager maMiscOptions const class SvtMiscOptions
-include/sfx2/templatelocalview.hxx:134
-    TemplateLocalView maOpenRegionHdl Link<void *, void>
-include/sfx2/templatelocalview.hxx:138
-    TemplateLocalView maDeleteTemplateHdl Link<class ThumbnailViewItem *, void>
-include/sfx2/templatelocalview.hxx:139
-    TemplateLocalView maDefaultTemplateHdl Link<class ThumbnailViewItem *, void>
-include/sfx2/thumbnailview.hxx:315
-    ThumbnailView maItemStateHdl Link<const class ThumbnailViewItem *, void>
 include/svl/ondemand.hxx:55
     OnDemandLocaleDataWrapper aSysLocale class SvtSysLocale
 include/svtools/editsyntaxhighlighter.hxx:32
     MultiLineEditSyntaxHighlight m_aColorConfig const svtools::ColorConfig
-include/svtools/simptabl.hxx:58
-    SvSimpleTable aCommandLink Link<class SvSimpleTable *, void>
-include/svx/ctredlin.hxx:67
-    SvLBoxColorString aPrivColor class Color
 include/svx/dialcontrol.hxx:112
     svx::DialControl::DialControl_Impl mnLinkedFieldValueMultiplyer sal_Int32
 include/svx/graphctl.hxx:53
@@ -372,13 +360,13 @@ include/svx/sdr/overlay/overlayanimatedbitmapex.hxx:51
     sdr::overlay::OverlayAnimatedBitmapEx mbOverlayState _Bool
 include/svx/sdr/overlay/overlaymanager.hxx:72
     sdr::overlay::OverlayManager maDrawinglayerOpt const class SvtOptionsDrawinglayer
-include/svx/svdmark.hxx:141
+include/svx/svdmark.hxx:140
     SdrMarkList maPointName class rtl::OUString
-include/svx/svdmark.hxx:142
+include/svx/svdmark.hxx:141
     SdrMarkList maGluePointName class rtl::OUString
 include/svx/svdoedge.hxx:160
     SdrEdgeObj mbBoundRectCalculationRunning _Bool
-include/svx/svdpntv.hxx:168
+include/svx/svdpntv.hxx:167
     SdrPaintView maDrawinglayerOpt const class SvtOptionsDrawinglayer
 include/test/sheet/xdatapilottable.hxx:31
     apitest::XDataPilotTable xCellForChange css::uno::Reference<css::table::XCell>
@@ -556,7 +544,7 @@ sd/source/ui/sidebar/MasterPageContainer.cxx:160
     sd::sidebar::MasterPageContainer::Implementation maSmallPreviewNotAvailable class Image
 sd/source/ui/slideshow/showwindow.hxx:99
     sd::ShowWindow mbMouseCursorHidden _Bool
-sd/source/ui/slidesorter/cache/SlsPageCacheManager.cxx:143
+sd/source/ui/slidesorter/cache/SlsPageCacheManager.cxx:144
     sd::slidesorter::cache::PageCacheManager::RecentlyUsedPageCaches maMap std::map<key_type, mapped_type>
 sd/source/ui/slidesorter/inc/controller/SlsAnimator.hxx:97
     sd::slidesorter::controller::Animator maElapsedTime const ::canvas::tools::ElapsedTime
@@ -658,8 +646,6 @@ sw/source/core/doc/tblrwcl.cxx:84
     CpyTabFrame::(anonymous) nSize SwTwips
 sw/source/core/inc/swblocks.hxx:69
     SwImpBlocks m_bInPutMuchBlocks _Bool
-sw/source/core/text/atrhndl.hxx:48
-    SwAttrHandler::SwAttrStack m_pInitialArray class SwTextAttr *[3]
 sw/source/filter/inc/rtf.hxx:32
     RTFSurround::(anonymous) nVal sal_uInt8
 sw/source/ui/dbui/dbinsdlg.cxx:117

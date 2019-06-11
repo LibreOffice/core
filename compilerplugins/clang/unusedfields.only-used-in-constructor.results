@@ -28,7 +28,7 @@ canvas/workben/canvasdemo.cxx:82
     DemoRenderer maColorWhite uno::Sequence<double>
 chart2/source/controller/accessibility/AccessibleChartShape.hxx:79
     chart::AccessibleChartShape m_aShapeTreeInfo ::accessibility::AccessibleShapeTreeInfo
-chart2/source/controller/inc/dlg_View3D.hxx:53
+chart2/source/controller/inc/dlg_View3D.hxx:44
     chart::View3DDialog m_aControllerLocker class chart::ControllerLockHelper
 chart2/source/controller/inc/RangeSelectionListener.hxx:63
     chart::RangeSelectionListener m_aControllerLockGuard class chart::ControllerLockGuardUNO
@@ -508,8 +508,6 @@ sc/inc/token.hxx:400
     SingleDoubleRefModifier aDub struct ScComplexRefData
 sc/qa/unit/ucalc_column.cxx:104
     aInputs aName const char *
-sc/source/core/data/column3.cxx:1333
-    (anonymous namespace)::CopyTextAttrsFromClipHandler mrCxt sc::CopyFromClipContext &
 sc/source/core/data/document.cxx:1239
     (anonymous namespace)::BroadcastRecalcOnRefMoveHandler aSwitch const sc::AutoCalcSwitch
 sc/source/core/data/document.cxx:1240
@@ -584,27 +582,21 @@ sd/source/filter/ppt/pptin.hxx:81
     SdPPTImport maParam struct PowerPointImportParam
 sd/source/ui/inc/AccessibleDocumentViewBase.hxx:263
     accessibility::AccessibleDocumentViewBase maViewForwarder class accessibility::AccessibleViewForwarder
-sd/source/ui/inc/BulletAndPositionDlg.hxx:65
-    SvxBulletAndPositionDlg bPreset _Bool
-sd/source/ui/inc/BulletAndPositionDlg.hxx:71
-    SvxBulletAndPositionDlg bIsSlideScope _Bool
-sd/source/ui/inc/BulletAndPositionDlg.hxx:81
-    SvxBulletAndPositionDlg p_View ::sd::View *
 sd/source/ui/remotecontrol/Receiver.hxx:35
     sd::Receiver pTransmitter class sd::Transmitter *
 sd/source/ui/remotecontrol/ZeroconfService.hxx:36
     sd::ZeroconfService port const uint
 sd/source/ui/table/TableDesignPane.hxx:100
     sd::TableDesignPane aImpl const class sd::TableDesignWidget
-sd/source/ui/view/DocumentRenderer.cxx:1317
+sd/source/ui/view/DocumentRenderer.cxx:1319
     sd::DocumentRenderer::Implementation mxObjectShell const SfxObjectShellRef
-sd/source/ui/view/viewshel.cxx:1210
+sd/source/ui/view/viewshel.cxx:1165
     sd::KeepSlideSorterInSyncWithPageChanges m_aDrawLock const sd::slidesorter::view::class SlideSorterView::DrawLock
-sd/source/ui/view/viewshel.cxx:1211
+sd/source/ui/view/viewshel.cxx:1166
     sd::KeepSlideSorterInSyncWithPageChanges m_aModelLock const sd::slidesorter::controller::class SlideSorterController::ModelChangeLock
-sd/source/ui/view/viewshel.cxx:1212
+sd/source/ui/view/viewshel.cxx:1167
     sd::KeepSlideSorterInSyncWithPageChanges m_aUpdateLock const sd::slidesorter::controller::class PageSelector::UpdateLock
-sd/source/ui/view/viewshel.cxx:1213
+sd/source/ui/view/viewshel.cxx:1168
     sd::KeepSlideSorterInSyncWithPageChanges m_aContext const sd::slidesorter::controller::class SelectionObserver::Context
 sdext/source/pdfimport/pdfparse/pdfparse.cxx:262
     PDFGrammar::definition comment rule<ScannerT>
@@ -646,8 +638,8 @@ sdext/source/pdfimport/pdfparse/pdfparse.cxx:265
     PDFGrammar::definition trailer rule<ScannerT>
 sdext/source/pdfimport/pdfparse/pdfparse.cxx:265
     PDFGrammar::definition xref rule<ScannerT>
-sfx2/source/dialog/tabdlg.cxx:100
-    TabDlg_Impl bModal _Bool
+sfx2/inc/autoredactdialog.hxx:105
+    SfxAutoRedactDialog m_xDocShell class SfxObjectShellLock
 sfx2/source/doc/doctempl.cxx:117
     DocTempl::DocTempl_EntryData_Impl mxObjShell const class SfxObjectShellLock
 slideshow/source/engine/animationnodes/animationbasenode.hxx:90
@@ -728,7 +720,7 @@ svx/source/stbctrls/selctrl.cxx:40
     SelectionTypePopup m_aBuilder class VclBuilder
 svx/source/stbctrls/zoomctrl.cxx:60
     ZoomPopup_Impl m_aBuilder class VclBuilder
-svx/source/svdraw/svdcrtv.cxx:51
+svx/source/svdraw/svdcrtv.cxx:53
     ImplConnectMarkerOverlay maObjects sdr::overlay::OverlayObjectList
 svx/source/xml/xmleohlp.cxx:72
     OutputStorageWrapper_Impl aTempFile class utl::TempFile
@@ -738,7 +730,7 @@ sw/qa/core/test_ToxTextGenerator.cxx:139
     ToxTextGeneratorWithMockedChapterField mChapterFieldType class SwChapterFieldType
 sw/qa/extras/layout/layout.cxx:2583
       class SvtSysLocaleOptions &
-sw/qa/extras/uiwriter/uiwriter.cxx:4077
+sw/qa/extras/uiwriter/uiwriter.cxx:4078
     IdleTask maIdle class Idle
 sw/source/core/crsr/crbm.cxx:66
     (anonymous namespace)::CursorStateHelper m_aSaveState const class SwCursorSaveState
