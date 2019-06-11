@@ -475,7 +475,6 @@ OString RtfAttributeOutput::MoveCharacterProperties(bool aAutoWriteRtlLtr)
                 break;
             case i18n::ScriptType::COMPLEX:
                 /* noop */
-                break;
             default:
                 /* should not happen? */
                 break;
@@ -3384,13 +3383,9 @@ void RtfAttributeOutput::FormatFillGradient(const XFillGradientItem& rFillGradie
                     std::make_pair<OString, OString>("fillFocus", OString::number(50)));
                 break;
             case css::awt::GradientStyle_RADIAL:
-                break;
             case css::awt::GradientStyle_ELLIPTICAL:
-                break;
             case css::awt::GradientStyle_SQUARE:
-                break;
             case css::awt::GradientStyle_RECT:
-                break;
             default:
                 break;
         }

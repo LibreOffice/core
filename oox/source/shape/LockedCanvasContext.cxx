@@ -35,9 +35,7 @@ LockedCanvasContext::~LockedCanvasContext() = default;
     switch (getBaseToken(nElementToken))
     {
     case XML_lockedCanvas:
-        break;
     case XML_nvGrpSpPr:
-        break;
     case XML_grpSpPr:
         break;
     case XML_sp:

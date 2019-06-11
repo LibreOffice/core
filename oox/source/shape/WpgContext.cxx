@@ -39,9 +39,7 @@ oox::core::ContextHandlerRef WpgContext::onCreateContext(sal_Int32 nElementToken
     switch (getBaseToken(nElementToken))
     {
     case XML_wgp:
-        break;
     case XML_cNvGrpSpPr:
-        break;
     case XML_grpSpPr:
         return new oox::drawingml::ShapePropertiesContext(*this, *mpShape);
     case XML_wsp:

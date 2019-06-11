@@ -203,10 +203,8 @@ static bool isSPRMChildrenExpected(Id nId)
         case NS_ooxml::LN_CT_PBdr_bottom:
         case NS_ooxml::LN_CT_PBdr_right:
             // Expected children are NS_ooxml::LN_CT_Border_*.
-            [[fallthrough]];
         case NS_ooxml::LN_CT_PrBase_shd:
             // Expected children are NS_ooxml::LN_CT_Shd_*.
-            [[fallthrough]];
         case NS_ooxml::LN_CT_PPrBase_ind:
             // Expected children are NS_ooxml::LN_CT_Ind_*.
             return true;
