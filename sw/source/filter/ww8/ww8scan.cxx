@@ -4808,10 +4808,13 @@ void WW8PLCFMan::AdjustEnds( WW8PLCFxDesc& rDesc )
                 m_pSep->nEndPos--;
         }
     }
-    else if (&rDesc == m_pSep)
+    else if ((&rDesc == m_pSep) || (&rDesc == m_pChp))
     {
-        // Sep Adjust if end Char-Attr == paragraph end ...
-        if( (rDesc.nEndPos == m_nLineEnd) && (rDesc.nEndPos > rDesc.nStartPos) )
+        // Char Adjust or Sep Adjust if end Char-Attr == paragraph end ...
+        if( (rDesc.nEndPos == m_nLineEnd) && (rDesc.nEndPos > rDesc.nStartPos)
+                && !HasCharSprm(NS_sprm::sprmCDttmRMarkDel).pSprm // Exclude redlines
+                && (!HasCharSprm(NS_sprm::sprmCHpsBi).pSprm //tdf#117923
+                    || HasCharSprm(NS_sprm::sprmCRgFtc2).pSprm)) // tdf#125602
             rDesc.nEndPos--;            // ... then shorten by one character
     }
 }
