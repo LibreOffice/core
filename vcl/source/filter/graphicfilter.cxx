@@ -1178,7 +1178,8 @@ void GraphicFilter::ImportGraphics(std::vector< std::shared_ptr<Graphic> >& rGra
     }
 }
 
-Graphic GraphicFilter::ImportUnloadedGraphic(SvStream& rIStream, sal_uInt64 sizeLimit)
+Graphic GraphicFilter::ImportUnloadedGraphic(SvStream& rIStream, sal_uInt64 sizeLimit,
+                                             Size* pSizeHint)
 {
     Graphic aGraphic;
     sal_uInt16 nFormat = GRFILTER_FORMAT_DONTKNOW;
@@ -1403,7 +1404,7 @@ Graphic GraphicFilter::ImportUnloadedGraphic(SvStream& rIStream, sal_uInt64 size
                 bAnimated = IsGIFAnimated(aMemoryStream);
             }
             aGraphic.SetGfxLink(std::make_shared<GfxLink>(std::move(pGraphicContent), nGraphicContentSize, eLinkType));
-            aGraphic.ImplGetImpGraphic()->ImplSetPrepared(bAnimated);
+            aGraphic.ImplGetImpGraphic()->ImplSetPrepared(bAnimated, pSizeHint);
         }
     }
 

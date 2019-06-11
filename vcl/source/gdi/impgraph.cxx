@@ -522,7 +522,7 @@ ImpSwapFile::~ImpSwapFile()
     }
 }
 
-void ImpGraphic::ImplSetPrepared(bool bAnimated)
+void ImpGraphic::ImplSetPrepared(bool bAnimated, Size* pSizeHint)
 {
     mbPrepared = true;
     mbSwapOut = true;
@@ -530,25 +530,33 @@ void ImpGraphic::ImplSetPrepared(bool bAnimated)
 
     SvMemoryStream aMemoryStream(const_cast<sal_uInt8*>(mpGfxLink->GetData()), mpGfxLink->GetDataSize(), StreamMode::READ | StreamMode::WRITE);
 
-    GraphicDescriptor aDescriptor(aMemoryStream, nullptr);
-    if (aDescriptor.Detect(true))
+    if (pSizeHint)
     {
-        // If we have logic size, work with that, as later pixel -> logic
-        // conversion will work with the output device DPI, not the graphic
-        // DPI.
-        Size aLogSize = aDescriptor.GetSize_100TH_MM();
-        if (aLogSize.getWidth() && aLogSize.getHeight())
+        maSwapInfo.maPrefSize = *pSizeHint;
+        maSwapInfo.maPrefMapMode = MapMode(MapUnit::Map100thMM);
+    }
+    else
+    {
+        GraphicDescriptor aDescriptor(aMemoryStream, nullptr);
+        if (aDescriptor.Detect(true))
         {
-            maSwapInfo.maPrefSize = aLogSize;
-            maSwapInfo.maPrefMapMode = MapMode(MapUnit::Map100thMM);
-        }
-        else
-        {
-            maSwapInfo.maPrefSize = aDescriptor.GetSizePixel();
-            maSwapInfo.maPrefMapMode = MapMode(MapUnit::MapPixel);
-        }
+            // If we have logic size, work with that, as later pixel -> logic
+            // conversion will work with the output device DPI, not the graphic
+            // DPI.
+            Size aLogSize = aDescriptor.GetSize_100TH_MM();
+            if (aLogSize.getWidth() && aLogSize.getHeight())
+            {
+                maSwapInfo.maPrefSize = aLogSize;
+                maSwapInfo.maPrefMapMode = MapMode(MapUnit::Map100thMM);
+            }
+            else
+            {
+                maSwapInfo.maPrefSize = aDescriptor.GetSizePixel();
+                maSwapInfo.maPrefMapMode = MapMode(MapUnit::MapPixel);
+            }
 
-        maSwapInfo.maSizePixel = aDescriptor.GetSizePixel();
+            maSwapInfo.maSizePixel = aDescriptor.GetSizePixel();
+        }
     }
     maSwapInfo.mnAnimationLoopCount = 0;
     maSwapInfo.mbIsEPS = false;

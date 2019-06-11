@@ -114,7 +114,7 @@ public:
     ImpGraphic( const GDIMetaFile& rMtf );
     ~ImpGraphic();
 
-    void ImplSetPrepared(bool bAnimated);
+    void ImplSetPrepared(bool bAnimated, Size* pSizeHint);
 
 private:
 
