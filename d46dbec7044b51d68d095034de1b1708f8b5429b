@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_fad557b8",
+        "filename": "include/tools/diagnose_ex.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-06-11T07:42:24Z",
+      "side": 1,
+      "message": "leave the semicolon out here, or the do{...}while(false) boilerplate is useless",
+      "range": {
+        "startLine": 144,
+        "startChar": 19,
+        "endLine": 144,
+        "endChar": 20
+      },
+      "revId": "d46dbec7044b51d68d095034de1b1708f8b5429b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
