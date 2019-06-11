@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_ba710f0f",
+        "filename": "compilerplugins/clang/stringconcat.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-06-11T07:30:32Z",
+      "side": 1,
+      "message": "why?",
+      "revId": "5b25481f46161f66587e0c459b1d98b9658bd7f4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_9a769306",
+        "filename": "compilerplugins/clang/stringconcat.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-06-11T07:30:32Z",
+      "side": 1,
+      "message": "please document exactly what false positive shall be suppressed here",
+      "revId": "5b25481f46161f66587e0c459b1d98b9658bd7f4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_1a5cc37c",
+        "filename": "configmgr/source/components.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-06-11T07:30:32Z",
+      "side": 1,
+      "message": "why add a rather useless const here?  how is that related to this change?",
+      "revId": "5b25481f46161f66587e0c459b1d98b9658bd7f4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_da6c1b38",
+        "filename": "include/tools/diagnose_ex.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-06-11T07:30:32Z",
+      "side": 1,
+      "message": "use the do{...}while(false) idiom for the macro body, to let macro calls be terminated with a semicolon, while avoiding warnings for spurious semicolons or syntax errors for\n\n  if (...)\n    TOOLS_WARN_EXCEPTION(...);\n  else ...",
+      "revId": "5b25481f46161f66587e0c459b1d98b9658bd7f4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
