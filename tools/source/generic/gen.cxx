@@ -55,20 +55,11 @@ OString Pair::toString() const
 void tools::Rectangle::SetSize( const Size& rSize )
 {
     if ( rSize.Width() < 0 )
-    {
         nRight  = nLeft + rSize.Width() +1;
-        mbWidthEmpty = false;
-    }
     else if ( rSize.Width() > 0 )
-    {
         nRight  = nLeft + rSize.Width() -1;
-        mbWidthEmpty = false;
-    }
     else
-    {
-        nRight = 0;
-        mbWidthEmpty = true;
-    }
+        nRight = RECT_EMPTY;
 
     if ( rSize.Height() < 0 )
         nBottom  = nTop + rSize.Height() +1;
@@ -81,20 +72,11 @@ void tools::Rectangle::SetSize( const Size& rSize )
 void tools::Rectangle::SaturatingSetSize(const Size& rSize)
 {
     if (rSize.Width() < 0)
-    {
         nRight = o3tl::saturating_add(nLeft, (rSize.Width() + 1));
-        mbWidthEmpty = false;
-    }
     else if ( rSize.Width() > 0 )
-    {
         nRight = o3tl::saturating_add(nLeft, (rSize.Width() - 1));
-        mbWidthEmpty = false;
-    }
     else
-    {
-        nRight = 0;
-        mbWidthEmpty = true;
-    }
+        nRight = RECT_EMPTY;
 
     if ( rSize.Height() < 0 )
         nBottom = o3tl::saturating_add(nTop, (rSize.Height() + 1));
@@ -106,8 +88,7 @@ void tools::Rectangle::SaturatingSetSize(const Size& rSize)
 
 void tools::Rectangle::SaturatingSetX(long x)
 {
-    if (!mbWidthEmpty)
-        nRight = o3tl::saturating_add(nRight, x - nLeft);
+    nRight = o3tl::saturating_add(nRight, x - nLeft);
     nLeft = x;
 }
 
@@ -165,7 +146,7 @@ tools::Rectangle& tools::Rectangle::Intersection( const tools::Rectangle& rRect 
 
 void tools::Rectangle::Justify()
 {
-    if ( (nRight < nLeft) && !mbWidthEmpty )
+    if ( (nRight < nLeft) && (nRight != RECT_EMPTY) )
     {
         std::swap(nLeft, nRight);
     }
@@ -225,9 +206,8 @@ SvStream& ReadRectangle( SvStream& rIStream, tools::Rectangle& rRect )
 
     rRect.nLeft = nTmpL;
     rRect.nTop = nTmpT;
-    rRect.nRight = nTmpR == Rectangle::RECT_EMPTY ? 0 : nTmpR;
+    rRect.nRight = nTmpR;
     rRect.nBottom = nTmpB;
-    rRect.mbWidthEmpty = nTmpR == Rectangle::RECT_EMPTY;
 
     return rIStream;
 }
@@ -236,7 +216,7 @@ SvStream& WriteRectangle( SvStream& rOStream, const tools::Rectangle& rRect )
 {
     rOStream.WriteInt32( rRect.nLeft )
             .WriteInt32( rRect.nTop )
-            .WriteInt32( rRect.mbWidthEmpty ? Rectangle::RECT_EMPTY : rRect.nRight )
+            .WriteInt32( rRect.nRight )
             .WriteInt32( rRect.nBottom );
 
     return rOStream;

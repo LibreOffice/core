@@ -2921,8 +2921,6 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, tools::Rectangle aClipRect, Po
 {
     if ( !GetUpdateMode() && !bStripOnly )
         return;
-    if ( aClipRect.IsEmpty() )
-        return;
 
     if ( !IsFormatted() )
         FormatDoc();

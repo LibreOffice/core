@@ -1155,9 +1155,6 @@ bool WinSalGraphics::drawNativeControl( ControlType nType,
     bool bOk = false;
     HTHEME hTheme = nullptr;
 
-    if (rControlRegion.IsEmpty()) // nothing to do
-           return true;
-
     tools::Rectangle buttonRect = rControlRegion;
     tools::Rectangle cacheRect = rControlRegion;
     Size keySize = cacheRect.GetSize();
