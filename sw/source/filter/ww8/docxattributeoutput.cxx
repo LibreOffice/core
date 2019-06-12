@@ -1917,8 +1917,6 @@ void DocxAttributeOutput::StartField_Impl( const SwTextNode* pNode, sal_Int32 nP
         }
         else
         {
-            m_bWritingField = true;
-
             // Write the field start
             if ( rInfos.pField && (rInfos.pField->Which() == SwFieldIds::DateTime) && rInfos.pField->GetSubType() & FIXEDFLD )
             {
