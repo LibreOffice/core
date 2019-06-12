@@ -1,5 +1,1 @@
-<svg viewBox="0 0 7 7" xmlns="http://www.w3.org/2000/svg">
-  <path
-     d="M 3.5 0 A 3.5 3.5 0 0 0 0 3.5 A 3.5 3.5 0 0 0 3.5 7 A 3.5 3.5 0 0 0 7 3.5 A 3.5 3.5 0 0 0 3.5 0 z "
-     style="fill:#eac282;opacity:0.66" />
-</svg>
+<svg viewBox="0 0 7 7" xmlns="http://www.w3.org/2000/svg"><path d="m3.5 0a3.5 3.5 0 0 0 -3.5 3.5 3.5 3.5 0 0 0 3.5 3.5 3.5 3.5 0 0 0 3.5-3.5 3.5 3.5 0 0 0 -3.5-3.5z" fill="#eac282" opacity=".66"/></svg>
