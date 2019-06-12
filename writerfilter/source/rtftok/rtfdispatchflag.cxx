@@ -831,11 +831,11 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         case RTF_AENDDOC:
             // Noop, this is the default in Writer.
         case RTF_AENDNOTES:
-            // Noop, Writer does not support having endnotes at the end of section.
+            // Noop
         case RTF_AFTNRSTCONT:
             // Noop, this is the default in Writer.
         case RTF_AFTNRESTART:
-            // Noop, Writer does not support restarting endnotes at each section.
+            // Noop
         case RTF_FTNBJ:
             // Noop, this is the default in Writer.
             break;
