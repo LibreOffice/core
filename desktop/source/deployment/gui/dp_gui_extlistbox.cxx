@@ -176,7 +176,7 @@ ExtensionRemovedListener::~ExtensionRemovedListener()
 
 // ExtensionBox_Impl
 ExtensionBox_Impl::ExtensionBox_Impl(vcl::Window* pParent) :
-    IExtensionListBox( pParent ),
+    Control( pParent, WB_BORDER | WB_TABSTOP ),
     m_bHasScrollBar( false ),
     m_bHasActive( false ),
     m_bNeedsRecalc( true ),
@@ -260,7 +260,7 @@ void ExtensionBox_Impl::dispose()
 
     m_pLocale.reset();
     m_pCollator.reset();
-    IExtensionListBox::dispose();
+    Control::dispose();
 }
 
 
