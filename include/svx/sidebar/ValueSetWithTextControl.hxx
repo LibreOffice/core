@@ -22,8 +22,6 @@
 #include <svx/svxdllapi.h>
 
 #include <svtools/valueset.hxx>
-#include <limits.h>
-#include <vcl/image.hxx>
 
 #include <vector>
 

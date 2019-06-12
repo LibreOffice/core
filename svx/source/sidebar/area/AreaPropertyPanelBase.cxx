@@ -20,6 +20,7 @@
 #include <sfx2/sidebar/SidebarController.hxx>
 #include <sfx2/sidebar/ControlFactory.hxx>
 #include <svx/sidebar/AreaPropertyPanelBase.hxx>
+#include <svx/drawitem.hxx>
 #include <svx/svxids.hrc>
 #include <sfx2/objsh.hxx>
 #include <svx/xfltrit.hxx>
