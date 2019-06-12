@@ -172,7 +172,7 @@ void ExtBoxWithBtns_Impl::RecalcAll()
 {
     const sal_Int32 nActive = getSelIndex();
 
-    if ( nActive != IExtensionListBox::ENTRY_NOTFOUND )
+    if ( nActive != ExtensionBox_Impl::ENTRY_NOTFOUND )
     {
         SetButtonStatus( GetEntryData( nActive) );
     }
@@ -309,7 +309,7 @@ void ExtBoxWithBtns_Impl::MouseButtonDown( const MouseEvent& rMEvt )
     {
         const SolarMutexGuard aGuard;
         if ( rMEvt.IsMod1() && HasActive() )
-            selectEntry( IExtensionListBox::ENTRY_NOTFOUND );
+            selectEntry( ExtensionBox_Impl::ENTRY_NOTFOUND );
                 // selecting a not existing entry will deselect the current one
         else
             selectEntry( nPos );
@@ -323,7 +323,7 @@ void ExtBoxWithBtns_Impl::enableButtons( bool bEnable )
     if ( bEnable )
     {
         sal_Int32 nIndex = getSelIndex();
-        if ( nIndex != IExtensionListBox::ENTRY_NOTFOUND )
+        if ( nIndex != ExtensionBox_Impl::ENTRY_NOTFOUND )
             SetButtonStatus( GetEntryData( nIndex ) );
     }
     else
@@ -910,7 +910,7 @@ IMPL_LINK_NOARG(ExtMgrDialog, HandleOptionsBtn, Button*, void)
 {
     const sal_Int32 nActive = m_pExtensionBox->getSelIndex();
 
-    if ( nActive != IExtensionListBox::ENTRY_NOTFOUND )
+    if ( nActive != ExtensionBox_Impl::ENTRY_NOTFOUND )
     {
         SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
 
@@ -939,7 +939,7 @@ IMPL_LINK_NOARG(ExtMgrDialog, HandleRemoveBtn, Button*, void)
 {
     const sal_Int32 nActive = m_pExtensionBox->getSelIndex();
 
-    if ( nActive != IExtensionListBox::ENTRY_NOTFOUND )
+    if ( nActive != ExtensionBox_Impl::ENTRY_NOTFOUND )
     {
         TEntry_Impl pEntry = m_pExtensionBox->GetEntryData( nActive );
         removePackage( pEntry->m_xPackage );
@@ -950,7 +950,7 @@ IMPL_LINK_NOARG(ExtMgrDialog, HandleEnableBtn, Button*, void)
 {
     const sal_Int32 nActive = m_pExtensionBox->getSelIndex();
 
-    if ( nActive != IExtensionListBox::ENTRY_NOTFOUND )
+    if ( nActive != ExtensionBox_Impl::ENTRY_NOTFOUND )
     {
         TEntry_Impl pEntry = m_pExtensionBox->GetEntryData( nActive );
 
