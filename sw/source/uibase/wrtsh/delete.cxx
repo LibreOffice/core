@@ -23,6 +23,7 @@
 #include <view.hxx>
 #include <drawbase.hxx>
 #include <unobaseclass.hxx>
+#include <i18nutil/unicode.hxx>
 #include <rtl/character.hxx>
 
 inline void SwWrtShell::OpenMark()
@@ -251,14 +252,14 @@ bool SwWrtShell::DelLeft()
                 nCode = sStr.iterateCodePoints( &nIndex );
             }
 
-            if ( rtl::isIVSSelector( nCode ) )
+            if ( unicode::isIVSSelector( nCode ) )
             {
                 SwCursorShell::Push();
                 SwCursorShell::Left(1, CRSR_SKIP_CHARS);
                 OUString sStr = GetSelText();
                 sal_Int32 nIndex = 0;
                 nCode = sStr.iterateCodePoints( &nIndex );
-                if ( rtl::isCJKIVSCharacter( nCode ) )
+                if ( unicode::isCJKIVSCharacter( nCode ) )
                     SwCursorShell::Pop( SwCursorShell::PopMode::DeleteStack );
                 else
                     SwCursorShell::Pop( SwCursorShell::PopMode::DeleteCurrent ); // For the weak script.
