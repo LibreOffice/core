@@ -180,6 +180,7 @@
 #include <memory>
 #include <fchrfmt.hxx>
 #include <redline.hxx>
+#include <DocumentRedlineManager.hxx>
 
 #define TWIPS_PER_PIXEL 15
 
@@ -1877,10 +1878,9 @@ void SwXTextDocument::setPropertyValue(const OUString& rPropertyName, const Any&
             RedlineFlags eMode = pDocShell->GetDoc()->getIDocumentRedlineAccess().GetRedlineFlags();
             if(WID_DOC_CHANGES_SHOW == pEntry->nWID)
             {
-                eMode &= ~RedlineFlags(RedlineFlags::ShowInsert | RedlineFlags::ShowDelete);
-                eMode |= RedlineFlags::ShowInsert;
-                if( bSet )
-                    eMode |= RedlineFlags::ShowDelete;
+                eMode |= RedlineFlags(RedlineFlags::ShowInsert | RedlineFlags::ShowDelete);
+                if( !bSet )
+                    pDocShell->GetDoc()->GetDocumentRedlineManager().SetHideRedlines(true);
             }
             else if(WID_DOC_CHANGES_RECORD == pEntry->nWID)
             {

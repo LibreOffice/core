@@ -234,6 +234,8 @@ struct SettingsTable_Impl
     int                 m_nDefaultTabStop;
 
     bool                m_bRecordChanges;
+    bool                m_bShowInsDelChanges;
+    bool                m_bShowFormattingChanges;
     bool                m_bLinkStyles;
     sal_Int16           m_nZoomFactor;
     sal_Int16 m_nZoomType = 0;
@@ -263,6 +265,8 @@ struct SettingsTable_Impl
     SettingsTable_Impl() :
       m_nDefaultTabStop( 720 ) //default is 1/2 in
     , m_bRecordChanges(false)
+    , m_bShowInsDelChanges(true)
+    , m_bShowFormattingChanges(true)
     , m_bLinkStyles(false)
     , m_nZoomFactor(0)
     , m_nView(0)
@@ -373,6 +377,12 @@ void SettingsTable::lcl_attribute(Id nName, Value & val)
     case NS_ooxml::LN_AG_Password_salt: // 92036
         m_pImpl->m_DocumentProtection.m_sSalt = sStringValue;
         break;
+    case NS_ooxml::LN_CT_TrackChangesView_insDel:
+        m_pImpl->m_bShowInsDelChanges = (nIntValue != 0);
+        break;
+    case NS_ooxml::LN_CT_TrackChangesView_formatting:
+        m_pImpl->m_bShowFormattingChanges = (nIntValue != 0);
+        break;
     default:
     {
 #ifdef DBG_UTIL
@@ -440,6 +450,9 @@ void SettingsTable::lcl_sprm(Sprm& rSprm)
         m_pImpl->m_bRecordChanges = bool(rSprm.getValue( )->getInt( ) );
     }
     break;
+    case NS_ooxml::LN_CT_Settings_revisionView:
+        resolveSprmProps(*this, rSprm);
+        break;
     case NS_ooxml::LN_CT_Settings_documentProtection:
         resolveSprmProps(*this, rSprm);
         break;
@@ -632,6 +645,10 @@ static bool lcl_isDefault(const uno::Reference<beans::XPropertyState>& xProperty
 void SettingsTable::ApplyProperties(uno::Reference<text::XTextDocument> const& xDoc)
 {
     uno::Reference< beans::XPropertySet> xDocProps( xDoc, uno::UNO_QUERY );
+
+    // Show changes value
+    if (xDocProps.is())
+        xDocProps->setPropertyValue("ShowChanges", uno::makeAny( m_pImpl->m_bShowInsDelChanges || m_pImpl->m_bShowFormattingChanges ) );
 
     // Record changes value
     if (xDocProps.is())
