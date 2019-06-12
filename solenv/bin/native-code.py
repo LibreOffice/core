@@ -453,8 +453,6 @@ custom_widgets = [
     'DriverListControl',
     'DropdownBox',
     'EmojiView',
-    'ExtBoxWithBtns',
-    'ExtensionBox',
     'FontNameBox',
     'FontSizeBox',
     'FontStyleBox',

@@ -25,6 +25,8 @@
 #include <vcl/fixed.hxx>
 #include <vcl/fixedhyper.hxx>
 #include <vcl/dialog.hxx>
+#include <vcl/customweld.hxx>
+#include <vcl/weld.hxx>
 
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/weakref.hxx>
@@ -74,7 +76,7 @@ struct Entry_Impl
     OUString        m_sErrorText;
     OUString        m_sLicenseText;
     Image           m_aIcon;
-    VclPtr<FixedHyperlink> m_pPublisher;
+    tools::Rectangle m_aLinkRect;
 
     css::uno::Reference<css::deployment::XPackage> m_xPackage;
 
@@ -91,7 +93,7 @@ class ExtensionBox_Impl;
 
 class ExtensionRemovedListener : public ::cppu::WeakImplHelper<css::lang::XEventListener>
 {
-    VclPtr<ExtensionBox_Impl>   m_pParent;
+    ExtensionBox_Impl*   m_pParent;
 
 public:
 
@@ -103,7 +105,7 @@ public:
     virtual void SAL_CALL disposing(css::lang::EventObject const& evt) override;
 };
 
-class ExtensionBox_Impl : public Control
+class ExtensionBox_Impl : public weld::CustomWidgetController
 {
     bool m_bHasScrollBar : 1;
     bool m_bHasActive : 1;
@@ -121,8 +123,6 @@ class ExtensionBox_Impl : public Control
     Image m_aLockedImage;
     Image m_aWarningImage;
     Image m_aDefaultImage;
-
-    VclPtr<ScrollBar>      m_pScrollBar;
 
     rtl::Reference<ExtensionRemovedListener> m_xRemoveListener;
 
@@ -144,6 +144,9 @@ class ExtensionBox_Impl : public Control
     //Holds weak references to extensions to which is we have added an XEventListener
     std::vector< css::uno::WeakReference<
         css::deployment::XPackage> > m_vListenerAdded;
+
+    std::unique_ptr<weld::ScrolledWindow> m_xScrollBar;
+
     //Removes the dead weak references from m_vListenerAdded
     void cleanVecListenerAdded();
     void addEventListenerOnce(css::uno::Reference<css::deployment::XPackage> const & extension);
@@ -156,27 +159,27 @@ class ExtensionBox_Impl : public Control
     bool FindEntryPos( const TEntry_Impl& rEntry, long nStart, long nEnd, long &nFound );
     void DeleteRemoved();
 
-
-    DECL_LINK( ScrollHdl, ScrollBar*, void );
+    DECL_LINK( ScrollHdl, weld::ScrolledWindow&, void );
 
     void Init();
 public:
-    explicit ExtensionBox_Impl(vcl::Window* pParent);
+    explicit ExtensionBox_Impl(std::unique_ptr<weld::ScrolledWindow> xScroll);
     virtual ~ExtensionBox_Impl() override;
-    virtual void dispose() override;
 
-    virtual void MouseButtonDown( const MouseEvent& rMEvt ) override;
+    virtual bool MouseButtonDown( const MouseEvent& rMEvt ) override;
+    virtual bool MouseMove( const MouseEvent& rMEvt ) override;
+    virtual bool KeyInput(const KeyEvent& rKEvt) override;
     virtual void Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle &rPaintRect ) override;
     virtual void Resize() override;
-    virtual bool EventNotify( NotifyEvent& rNEvt ) override;
-    virtual Size GetOptimalSize() const override;
+    virtual OUString RequestHelp(tools::Rectangle& rRect) override;
+
+    virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
 
     TEntry_Impl const & GetEntryData( long nPos ) { return m_vEntries[ nPos ]; }
     long            GetEntryCount() { return static_cast<long>(m_vEntries.size()); }
     tools::Rectangle       GetEntryRect( const long nPos ) const;
     bool            HasActive() { return m_bHasActive; }
     long            PointToPos( const Point& rPos );
-    void            DoScroll( long nDelta );
     virtual void    RecalcAll();
     void            RemoveUnlocked();
 

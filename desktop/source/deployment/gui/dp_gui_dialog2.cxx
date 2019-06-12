@@ -101,35 +101,23 @@ struct StrAllFiles : public rtl::StaticWithInit< OUString, StrAllFiles >
     }
 };
 
-//                            ExtBoxWithBtns_Impl
-
-enum MENU_COMMAND
-{
-    CMD_NONE    = 0,
-    CMD_REMOVE  = 1,
-    CMD_ENABLE,
-    CMD_DISABLE,
-    CMD_UPDATE,
-    CMD_SHOW_LICENSE
-};
-
+// ExtBoxWithBtns_Impl
 class ExtBoxWithBtns_Impl : public ExtensionBox_Impl
 {
     bool            m_bInterfaceLocked;
 
-    VclPtr<ExtMgrDialog>   m_pParent;
+    ExtMgrDialog*   m_pParent;
 
     void            SetButtonStatus( const TEntry_Impl& rEntry );
-    MENU_COMMAND    ShowPopupMenu( const Point &rPos, const long nPos );
+    OString         ShowPopupMenu( const Point &rPos, const long nPos );
 
 public:
-    explicit ExtBoxWithBtns_Impl(vcl::Window* pParent);
-    virtual ~ExtBoxWithBtns_Impl() override;
-    virtual void dispose() override;
+    explicit ExtBoxWithBtns_Impl(std::unique_ptr<weld::ScrolledWindow> xScroll);
 
     void InitFromDialog(ExtMgrDialog *pParentDialog);
 
-    virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
+    virtual bool    MouseButtonDown( const MouseEvent& rMEvt ) override;
+    virtual bool    ContextMenu( const CommandEvent& rCEvt ) override;
 
     virtual void    RecalcAll() override;
     virtual void    selectEntry( const long nPos ) override;
@@ -137,8 +125,8 @@ public:
     void            enableButtons( bool bEnable );
 };
 
-ExtBoxWithBtns_Impl::ExtBoxWithBtns_Impl(vcl::Window* pParent)
-    : ExtensionBox_Impl(pParent)
+ExtBoxWithBtns_Impl::ExtBoxWithBtns_Impl(std::unique_ptr<weld::ScrolledWindow> xScroll)
+    : ExtensionBox_Impl(std::move(xScroll))
     , m_bInterfaceLocked(false)
     , m_pParent(nullptr)
 {
@@ -150,23 +138,6 @@ void ExtBoxWithBtns_Impl::InitFromDialog(ExtMgrDialog *pParentDialog)
 
     m_pParent = pParentDialog;
 }
-
-extern "C" SAL_DLLPUBLIC_EXPORT void makeExtBoxWithBtns(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap &)
-{
-    rRet = VclPtr<ExtBoxWithBtns_Impl>::Create(pParent);
-}
-
-ExtBoxWithBtns_Impl::~ExtBoxWithBtns_Impl()
-{
-    disposeOnce();
-}
-
-void ExtBoxWithBtns_Impl::dispose()
-{
-    m_pParent.clear();
-    ExtensionBox_Impl::dispose();
-}
-
 
 void ExtBoxWithBtns_Impl::RecalcAll()
 {
@@ -243,15 +214,44 @@ void ExtBoxWithBtns_Impl::SetButtonStatus(const TEntry_Impl& rEntry)
     }
 }
 
-MENU_COMMAND ExtBoxWithBtns_Impl::ShowPopupMenu( const Point & rPos, const long nPos )
+bool ExtBoxWithBtns_Impl::ContextMenu(const CommandEvent& rCEvt)
+{
+    if (rCEvt.GetCommand() != CommandEventId::ContextMenu)
+        return false;
+
+    const Point aMousePos(rCEvt.GetMousePosPixel());
+    const auto nPos = PointToPos(aMousePos);
+    OString sCommand = ShowPopupMenu(aMousePos, nPos);
+
+    if (sCommand == "CMD_ENABLE")
+        m_pParent->enablePackage( GetEntryData( nPos )->m_xPackage, true );
+    else if (sCommand == "CMD_DISABLE")
+        m_pParent->enablePackage( GetEntryData( nPos )->m_xPackage, false );
+    else if (sCommand == "CMD_UPDATE")
+        m_pParent->updatePackage( GetEntryData( nPos )->m_xPackage );
+    else if (sCommand == "CMD_REMOVE")
+        m_pParent->removePackage( GetEntryData( nPos )->m_xPackage );
+    else if (sCommand == "CMD_SHOW_LICENSE")
+    {
+        m_pParent->incBusy();
+        ShowLicenseDialog aLicenseDlg(m_pParent->getDialog(), GetEntryData(nPos)->m_xPackage);
+        aLicenseDlg.run();
+        m_pParent->decBusy();
+    }
+
+    return true;
+}
+
+OString ExtBoxWithBtns_Impl::ShowPopupMenu( const Point & rPos, const long nPos )
 {
     if ( nPos >= static_cast<long>(getItemCount()) )
-        return CMD_NONE;
+        return "CMD_NONE";
 
-    ScopedVclPtrInstance<PopupMenu> aPopup;
+    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(nullptr, "desktop/ui/extensionmenu.ui"));
+    std::unique_ptr<weld::Menu> xPopup(xBuilder->weld_menu("menu"));
 
 #if ENABLE_EXTENSION_UPDATE
-    aPopup->InsertItem( CMD_UPDATE, DpResId( RID_CTX_ITEM_CHECK_UPDATE ) );
+    xPopup->append("CMD_UPDATE", DpResId( RID_CTX_ITEM_CHECK_UPDATE ) );
 #endif
 
     if ( ! GetEntryData( nPos )->m_bLocked )
@@ -259,61 +259,27 @@ MENU_COMMAND ExtBoxWithBtns_Impl::ShowPopupMenu( const Point & rPos, const long 
         if ( GetEntryData( nPos )->m_bUser )
         {
             if ( GetEntryData( nPos )->m_eState == REGISTERED )
-                aPopup->InsertItem( CMD_DISABLE, DpResId( RID_CTX_ITEM_DISABLE ) );
+                xPopup->append("CMD_DISABLE", DpResId(RID_CTX_ITEM_DISABLE));
             else if ( GetEntryData( nPos )->m_eState != NOT_AVAILABLE )
-                aPopup->InsertItem( CMD_ENABLE, DpResId( RID_CTX_ITEM_ENABLE ) );
+                xPopup->append("CMD_ENABLE", DpResId(RID_CTX_ITEM_ENABLE));
         }
         if (!officecfg::Office::ExtensionManager::ExtensionSecurity::DisableExtensionRemoval::get())
         {
-            aPopup->InsertItem( CMD_REMOVE, DpResId( RID_CTX_ITEM_REMOVE ) );
+            xPopup->append("CMD_REMOVE", DpResId(RID_CTX_ITEM_REMOVE));
         }
     }
 
     if ( !GetEntryData( nPos )->m_sLicenseText.isEmpty() )
-        aPopup->InsertItem( CMD_SHOW_LICENSE, DpResId( RID_STR_SHOW_LICENSE_CMD ) );
+        xPopup->append("CMD_SHOW_LICENSE", DpResId(RID_STR_SHOW_LICENSE_CMD));
 
-    return static_cast<MENU_COMMAND>(aPopup->Execute( this, rPos ));
+    return xPopup->popup_at_rect(GetDrawingArea(), tools::Rectangle(rPos, Size(1, 1)));
 }
 
-
-void ExtBoxWithBtns_Impl::MouseButtonDown( const MouseEvent& rMEvt )
+bool ExtBoxWithBtns_Impl::MouseButtonDown( const MouseEvent& rMEvt )
 {
-    if ( m_bInterfaceLocked )
-        return;
-
-    const Point aMousePos( rMEvt.GetPosPixel() );
-    const long nPos = PointToPos( aMousePos );
-
-    if ( rMEvt.IsRight() )
-    {
-        switch( ShowPopupMenu( aMousePos, nPos ) )
-        {
-            case CMD_NONE:      break;
-            case CMD_ENABLE:    m_pParent->enablePackage( GetEntryData( nPos )->m_xPackage, true );
-                                break;
-            case CMD_DISABLE:   m_pParent->enablePackage( GetEntryData( nPos )->m_xPackage, false );
-                                break;
-            case CMD_UPDATE:    m_pParent->updatePackage( GetEntryData( nPos )->m_xPackage );
-                                break;
-            case CMD_REMOVE:    m_pParent->removePackage( GetEntryData( nPos )->m_xPackage );
-                                break;
-            case CMD_SHOW_LICENSE:
-                {
-                    ShowLicenseDialog aLicenseDlg(m_pParent->GetFrameWeld(), GetEntryData(nPos)->m_xPackage);
-                    aLicenseDlg.run();
-                    break;
-                }
-        }
-    }
-    else if ( rMEvt.IsLeft() )
-    {
-        const SolarMutexGuard aGuard;
-        if ( rMEvt.IsMod1() && HasActive() )
-            selectEntry( ExtensionBox_Impl::ENTRY_NOTFOUND );
-                // selecting a not existing entry will deselect the current one
-        else
-            selectEntry( nPos );
-    }
+    if (m_bInterfaceLocked)
+        return false;
+    return ExtensionBox_Impl::MouseButtonDown(rMEvt);
 }
 
 void ExtBoxWithBtns_Impl::enableButtons( bool bEnable )
@@ -337,8 +303,8 @@ void ExtBoxWithBtns_Impl::enableButtons( bool bEnable )
 //                             DialogHelper
 
 DialogHelper::DialogHelper(const uno::Reference< uno::XComponentContext > &xContext,
-                           Dialog *pWindow)
-    : m_xVCLWindow(pWindow)
+                           weld::Window* pWindow)
+    : m_pWindow(pWindow)
     , m_nEventID(nullptr)
 {
     m_xContext = xContext;
@@ -458,14 +424,13 @@ void DialogHelper::PostUserEvent( const Link<void*,void>& rLink, void* pCaller )
     if ( m_nEventID )
         Application::RemoveUserEvent( m_nEventID );
 
-    m_nEventID = Application::PostUserEvent( rLink, pCaller, true/*bReferenceLink*/ );
+    m_nEventID = Application::PostUserEvent(rLink, pCaller);
 }
 
 //                             ExtMgrDialog
-ExtMgrDialog::ExtMgrDialog(vcl::Window *pParent, TheExtensionManager *pManager, Dialog::InitFlag eFlag)
-    : ModelessDialog(pParent, "ExtensionManagerDialog", "desktop/ui/extensionmanager.ui", eFlag)
-    , DialogHelper(pManager->getContext(), static_cast<Dialog*>(this))
-    , m_xRestartParent(pParent ? pParent : Application::GetDefDialogParent())
+ExtMgrDialog::ExtMgrDialog(weld::Window *pParent, TheExtensionManager *pManager)
+    : GenericDialogController(pParent, "desktop/ui/extensionmanager.ui", "ExtensionManagerDialog")
+    , DialogHelper(pManager->getContext(), m_xDialog.get())
     , m_sAddPackages(DpResId(RID_STR_ADD_PACKAGES))
     , m_bHasProgress(false)
     , m_bProgressChanged(false)
@@ -477,60 +442,60 @@ ExtMgrDialog::ExtMgrDialog(vcl::Window *pParent, TheExtensionManager *pManager, 
     , m_bClosed(false)
     , m_nProgress(0)
     , m_pManager(pManager)
+    , m_xExtensionBox(new ExtBoxWithBtns_Impl(m_xBuilder->weld_scrolled_window("scroll")))
+    , m_xExtensionBoxWnd(new weld::CustomWeld(*m_xBuilder, "extensions", *m_xExtensionBox))
+    , m_xOptionsBtn(m_xBuilder->weld_button("optionsbtn"))
+    , m_xAddBtn(m_xBuilder->weld_button("addbtn"))
+    , m_xRemoveBtn(m_xBuilder->weld_button("removebtn"))
+    , m_xEnableBtn(m_xBuilder->weld_button("enablebtn"))
+    , m_xUpdateBtn(m_xBuilder->weld_button("updatebtn"))
+    , m_xCloseBtn(m_xBuilder->weld_button("close"))
+    , m_xBundledCbx(m_xBuilder->weld_check_button("bundled"))
+    , m_xSharedCbx(m_xBuilder->weld_check_button("shared"))
+    , m_xUserCbx(m_xBuilder->weld_check_button("user"))
+    , m_xGetExtensions(m_xBuilder->weld_link_button("getextensions"))
+    , m_xProgressText(m_xBuilder->weld_label("progressft"))
+    , m_xProgressBar(m_xBuilder->weld_progress_bar("progressbar"))
+    , m_xCancelBtn(m_xBuilder->weld_button("cancel"))
 {
-    get(m_pExtensionBox, "extensions");
-    get(m_pOptionsBtn, "optionsbtn");
-    get(m_pAddBtn, "addbtn");
-    get(m_pRemoveBtn, "removebtn");
-    get(m_pEnableBtn, "enablebtn");
-    get(m_pUpdateBtn, "updatebtn");
-    get(m_pCloseBtn, "close");
-    get(m_pBundledCbx, "bundled");
-    get(m_pSharedCbx, "shared");
-    get(m_pUserCbx, "user");
-    get(m_pGetExtensions, "getextensions");
-    get(m_pProgressText, "progressft");
-    get(m_pProgressBar, "progressbar");
-    get(m_pCancelBtn, "cancel");
+    m_xExtensionBox->InitFromDialog(this);
 
-    m_pExtensionBox->InitFromDialog(this);
+    m_xEnableBtn->set_help_id(HID_EXTENSION_MANAGER_LISTBOX_ENABLE);
 
-    m_pEnableBtn->SetHelpId( HID_EXTENSION_MANAGER_LISTBOX_ENABLE );
+    m_xOptionsBtn->connect_clicked( LINK( this, ExtMgrDialog, HandleOptionsBtn ) );
+    m_xAddBtn->connect_clicked( LINK( this, ExtMgrDialog, HandleAddBtn ) );
+    m_xRemoveBtn->connect_clicked( LINK( this, ExtMgrDialog, HandleRemoveBtn ) );
+    m_xEnableBtn->connect_clicked( LINK( this, ExtMgrDialog, HandleEnableBtn ) );
+    m_xCloseBtn->connect_clicked( LINK( this, ExtMgrDialog, HandleCloseBtn ) );
 
-    m_pOptionsBtn->SetClickHdl( LINK( this, ExtMgrDialog, HandleOptionsBtn ) );
-    m_pAddBtn->SetClickHdl( LINK( this, ExtMgrDialog, HandleAddBtn ) );
-    m_pRemoveBtn->SetClickHdl( LINK( this, ExtMgrDialog, HandleRemoveBtn ) );
-    m_pEnableBtn->SetClickHdl( LINK( this, ExtMgrDialog, HandleEnableBtn ) );
-    m_pCloseBtn->SetClickHdl( LINK( this, ExtMgrDialog, HandleCloseBtn ) );
+    m_xCancelBtn->connect_clicked( LINK( this, ExtMgrDialog, HandleCancelBtn ) );
 
-    m_pCancelBtn->SetClickHdl( LINK( this, ExtMgrDialog, HandleCancelBtn ) );
+    m_xBundledCbx->connect_clicked( LINK( this, ExtMgrDialog, HandleExtTypeCbx ) );
+    m_xSharedCbx->connect_clicked( LINK( this, ExtMgrDialog, HandleExtTypeCbx ) );
+    m_xUserCbx->connect_clicked( LINK( this, ExtMgrDialog, HandleExtTypeCbx ) );
 
-    m_pBundledCbx->SetClickHdl( LINK( this, ExtMgrDialog, HandleExtTypeCbx ) );
-    m_pSharedCbx->SetClickHdl( LINK( this, ExtMgrDialog, HandleExtTypeCbx ) );
-    m_pUserCbx->SetClickHdl( LINK( this, ExtMgrDialog, HandleExtTypeCbx ) );
+    m_xBundledCbx->set_active(true);
+    m_xSharedCbx->set_active(true);
+    m_xUserCbx->set_active(true);
 
-    m_pBundledCbx->Check();
-    m_pSharedCbx->Check();
-    m_pUserCbx->Check();
-
-    m_pProgressBar->Hide();
+    m_xProgressBar->hide();
 
 #if ENABLE_EXTENSION_UPDATE
-    m_pUpdateBtn->SetClickHdl( LINK( this, ExtMgrDialog, HandleUpdateBtn ) );
-    m_pUpdateBtn->Enable(false);
+    m_xUpdateBtn->connect_clicked( LINK( this, ExtMgrDialog, HandleUpdateBtn ) );
+    m_xUpdateBtn->set_sensitive(false);
 #else
-    m_pUpdateBtn->Hide();
+    m_xUpdateBtn->hide();
 #endif
 
     if (officecfg::Office::ExtensionManager::ExtensionSecurity::DisableExtensionInstallation::get())
     {
-        m_pAddBtn->Disable();
-        m_pAddBtn->SetQuickHelpText(DpResId(RID_STR_WARNING_INSTALL_EXTENSION_DISABLED));
+        m_xAddBtn->set_sensitive(false);
+        m_xAddBtn->set_tooltip_text(DpResId(RID_STR_WARNING_INSTALL_EXTENSION_DISABLED));
     }
     if (officecfg::Office::ExtensionManager::ExtensionSecurity::DisableExtensionRemoval::get())
     {
-        m_pRemoveBtn->Disable();
-        m_pRemoveBtn->SetQuickHelpText(DpResId(RID_STR_WARNING_REMOVE_EXTENSION_DISABLED));
+        m_xRemoveBtn->set_sensitive(false);
+        m_xRemoveBtn->set_tooltip_text(DpResId(RID_STR_WARNING_REMOVE_EXTENSION_DISABLED));
     }
 
     m_aIdle.SetPriority(TaskPriority::LOWEST);
@@ -538,75 +503,52 @@ ExtMgrDialog::ExtMgrDialog(vcl::Window *pParent, TheExtensionManager *pManager, 
     m_aIdle.SetInvokeHandler( LINK( this, ExtMgrDialog, TimeOutHdl ) );
 }
 
-
 ExtMgrDialog::~ExtMgrDialog()
 {
-    disposeOnce();
-}
-
-void ExtMgrDialog::dispose()
-{
     m_aIdle.Stop();
-    m_pExtensionBox.clear();
-    m_pOptionsBtn.clear();
-    m_pAddBtn.clear();
-    m_pRemoveBtn.clear();
-    m_pEnableBtn.clear();
-    m_pUpdateBtn.clear();
-    m_pCloseBtn.clear();
-    m_pBundledCbx.clear();
-    m_pSharedCbx.clear();
-    m_pUserCbx.clear();
-    m_pGetExtensions.clear();
-    m_pProgressText.clear();
-    m_pProgressBar.clear();
-    m_pCancelBtn.clear();
-    m_xRestartParent.clear();
-    ModelessDialog::dispose();
 }
-
 
 void ExtMgrDialog::setGetExtensionsURL( const OUString &rURL )
 {
-    m_pGetExtensions->SetURL( rURL );
+    m_xGetExtensions->set_uri( rURL );
 }
 
 void ExtMgrDialog::addPackageToList( const uno::Reference< deployment::XPackage > &xPackage,
                                      bool bLicenseMissing )
 {
     const SolarMutexGuard aGuard;
-    m_pUpdateBtn->Enable();
+    m_xUpdateBtn->set_sensitive(true);
 
-    if (m_pBundledCbx->IsChecked() && (xPackage->getRepositoryName() == BUNDLED_PACKAGE_MANAGER) )
+    if (m_xBundledCbx->get_active() && (xPackage->getRepositoryName() == BUNDLED_PACKAGE_MANAGER) )
     {
-        m_pExtensionBox->addEntry( xPackage, bLicenseMissing );
+        m_xExtensionBox->addEntry( xPackage, bLicenseMissing );
     }
-    else if (m_pSharedCbx->IsChecked() && (xPackage->getRepositoryName() == SHARED_PACKAGE_MANAGER) )
+    else if (m_xSharedCbx->get_active() && (xPackage->getRepositoryName() == SHARED_PACKAGE_MANAGER) )
     {
-        m_pExtensionBox->addEntry( xPackage, bLicenseMissing );
+        m_xExtensionBox->addEntry( xPackage, bLicenseMissing );
     }
-    else if (m_pUserCbx->IsChecked() && (xPackage->getRepositoryName() == USER_PACKAGE_MANAGER ))
+    else if (m_xUserCbx->get_active() && (xPackage->getRepositoryName() == USER_PACKAGE_MANAGER ))
     {
-        m_pExtensionBox->addEntry( xPackage, bLicenseMissing );
+        m_xExtensionBox->addEntry( xPackage, bLicenseMissing );
     }
 }
 
 void ExtMgrDialog::prepareChecking()
 {
-    m_pExtensionBox->prepareChecking();
+    m_xExtensionBox->prepareChecking();
 }
 
 void ExtMgrDialog::checkEntries()
 {
     const SolarMutexGuard guard;
-    m_pExtensionBox->checkEntries();
+    m_xExtensionBox->checkEntries();
 }
 
 bool ExtMgrDialog::removeExtensionWarn(const OUString &rExtensionName)
 {
     const SolarMutexGuard guard;
     incBusy();
-    std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(GetFrameWeld(),
+    std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(m_xDialog.get(),
                                                   VclMessageType::Warning, VclButtonsType::OkCancel,
                                                   DpResId(RID_STR_WARNING_REMOVE_EXTENSION)));
 
@@ -629,12 +571,12 @@ void ExtMgrDialog::enablePackage( const uno::Reference< deployment::XPackage > &
 
     if ( bEnable )
     {
-        if (!continueOnSharedExtension(xPackage, GetFrameWeld(), RID_STR_WARNING_ENABLE_SHARED_EXTENSION, m_bEnableWarning))
+        if (!continueOnSharedExtension(xPackage, m_xDialog.get(), RID_STR_WARNING_ENABLE_SHARED_EXTENSION, m_bEnableWarning))
             return;
     }
     else
     {
-        if (!continueOnSharedExtension(xPackage, GetFrameWeld(), RID_STR_WARNING_DISABLE_SHARED_EXTENSION, m_bDisableWarning))
+        if (!continueOnSharedExtension(xPackage, m_xDialog.get(), RID_STR_WARNING_DISABLE_SHARED_EXTENSION, m_bDisableWarning))
             return;
     }
 
@@ -653,7 +595,7 @@ void ExtMgrDialog::removePackage( const uno::Reference< deployment::XPackage > &
             return;
     }
 
-    if (!continueOnSharedExtension(xPackage, GetFrameWeld(), RID_STR_WARNING_REMOVE_SHARED_EXTENSION, m_bDeleteWarning))
+    if (!continueOnSharedExtension(xPackage, m_xDialog.get(), RID_STR_WARNING_REMOVE_SHARED_EXTENSION, m_bDeleteWarning))
         return;
 
     m_pManager->getCmdQueue()->removeExtension( xPackage );
@@ -692,7 +634,7 @@ bool ExtMgrDialog::acceptLicense( const uno::Reference< deployment::XPackage > &
 
 uno::Sequence< OUString > ExtMgrDialog::raiseAddPicker()
 {
-    sfx2::FileDialogHelper aDlgHelper(ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, FileDialogFlags::NONE, GetFrameWeld());
+    sfx2::FileDialogHelper aDlgHelper(ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, FileDialogFlags::NONE, m_xDialog.get());
     const uno::Reference<ui::dialogs::XFilePicker3>& xFilePicker = aDlgHelper.GetFilePicker();
     xFilePicker->setTitle( m_sAddPackages );
 
@@ -757,43 +699,43 @@ uno::Sequence< OUString > ExtMgrDialog::raiseAddPicker()
 
 void ExtMgrDialog::enableOptionsButton( bool bEnable )
 {
-    m_pOptionsBtn->Enable( bEnable );
+    m_xOptionsBtn->set_sensitive( bEnable );
 }
 
 void ExtMgrDialog::enableRemoveButton( bool bEnable )
 {
-    m_pRemoveBtn->Enable( bEnable && !officecfg::Office::ExtensionManager::ExtensionSecurity::DisableExtensionRemoval::get());
+    m_xRemoveBtn->set_sensitive( bEnable && !officecfg::Office::ExtensionManager::ExtensionSecurity::DisableExtensionRemoval::get());
 
     if (officecfg::Office::ExtensionManager::ExtensionSecurity::DisableExtensionRemoval::get())
     {
-        m_pRemoveBtn->SetQuickHelpText(DpResId(RID_STR_WARNING_REMOVE_EXTENSION_DISABLED));
+        m_xRemoveBtn->set_tooltip_text(DpResId(RID_STR_WARNING_REMOVE_EXTENSION_DISABLED));
     }
     else
     {
-        m_pRemoveBtn->SetQuickHelpText("");
+        m_xRemoveBtn->set_tooltip_text("");
     }
 }
 
 void ExtMgrDialog::enableEnableButton( bool bEnable )
 {
-    m_pEnableBtn->Enable( bEnable );
+    m_xEnableBtn->set_sensitive( bEnable );
 }
 
 void ExtMgrDialog::enableButtontoEnable( bool bEnable )
 {
     if (bEnable)
     {
-        m_pEnableBtn->SetText( DpResId( RID_CTX_ITEM_ENABLE ) );
-        m_pEnableBtn->SetHelpId( HID_EXTENSION_MANAGER_LISTBOX_ENABLE );
+        m_xEnableBtn->set_label( DpResId( RID_CTX_ITEM_ENABLE ) );
+        m_xEnableBtn->set_help_id( HID_EXTENSION_MANAGER_LISTBOX_ENABLE );
     }
     else
     {
-        m_pEnableBtn->SetText( DpResId( RID_CTX_ITEM_DISABLE ) );
-        m_pEnableBtn->SetHelpId( HID_EXTENSION_MANAGER_LISTBOX_DISABLE );
+        m_xEnableBtn->set_label( DpResId( RID_CTX_ITEM_DISABLE ) );
+        m_xEnableBtn->set_help_id( HID_EXTENSION_MANAGER_LISTBOX_DISABLE );
     }
 }
 
-IMPL_LINK_NOARG(ExtMgrDialog, HandleCancelBtn, Button*, void)
+IMPL_LINK_NOARG(ExtMgrDialog, HandleCancelBtn, weld::Button&, void)
 {
     if ( m_xAbortChannel.is() )
     {
@@ -808,11 +750,28 @@ IMPL_LINK_NOARG(ExtMgrDialog, HandleCancelBtn, Button*, void)
     }
 }
 
-IMPL_LINK_NOARG(ExtMgrDialog, HandleCloseBtn, Button*, void)
+IMPL_LINK_NOARG(ExtMgrDialog, HandleCloseBtn, weld::Button&, void)
 {
-    Close();
-}
+    bool bCallClose = true;
 
+    //only suggest restart if modified and this is the first close attempt
+    if (!m_bClosed && m_pManager->isModified())
+    {
+        m_pManager->clearModified();
+
+        //only suggest restart if we're actually running, e.g. not from standalone unopkg gui
+        if (dp_misc::office_is_running())
+        {
+            SolarMutexGuard aGuard;
+            bCallClose = !::svtools::executeRestartDialog(comphelper::getProcessComponentContext(),
+                                                          m_xDialog.get(),
+                                                          svtools::RESTART_REASON_EXTENSION_INSTALL);
+        }
+    }
+
+    if (bCallClose)
+        m_xDialog->response(RET_CANCEL);
+}
 
 IMPL_LINK( ExtMgrDialog, startProgress, void*, _bLockInterface, void )
 {
@@ -824,8 +783,8 @@ IMPL_LINK( ExtMgrDialog, startProgress, void*, _bLockInterface, void )
 
     if ( m_bStopProgress )
     {
-        if ( m_pProgressBar->IsVisible() )
-            m_pProgressBar->SetValue( 100 );
+        if ( m_xProgressBar->get_visible() )
+            m_xProgressBar->set_percentage( 100 );
         m_xAbortChannel.clear();
 
         SAL_INFO( "desktop.deployment", " startProgress handler: stop" );
@@ -835,19 +794,19 @@ IMPL_LINK( ExtMgrDialog, startProgress, void*, _bLockInterface, void )
         SAL_INFO( "desktop.deployment", " startProgress handler: start" );
     }
 
-    m_pCancelBtn->Enable( bLockInterface );
-    m_pAddBtn->Enable( !bLockInterface && !officecfg::Office::ExtensionManager::ExtensionSecurity::DisableExtensionInstallation::get());
+    m_xCancelBtn->set_sensitive( bLockInterface );
+    m_xAddBtn->set_sensitive( !bLockInterface && !officecfg::Office::ExtensionManager::ExtensionSecurity::DisableExtensionInstallation::get());
     if (officecfg::Office::ExtensionManager::ExtensionSecurity::DisableExtensionInstallation::get())
     {
-        m_pAddBtn->SetQuickHelpText(DpResId(RID_STR_WARNING_INSTALL_EXTENSION_DISABLED));
+        m_xAddBtn->set_tooltip_text(DpResId(RID_STR_WARNING_INSTALL_EXTENSION_DISABLED));
     }
     else
     {
-        m_pAddBtn->SetQuickHelpText("");
+        m_xAddBtn->set_tooltip_text("");
     }
 
-    m_pUpdateBtn->Enable( !bLockInterface && m_pExtensionBox->getItemCount() );
-    m_pExtensionBox->enableButtons( !bLockInterface );
+    m_xUpdateBtn->set_sensitive( !bLockInterface && m_xExtensionBox->getItemCount() );
+    m_xExtensionBox->enableButtons( !bLockInterface );
 
     clearEventID();
 }
@@ -903,25 +862,25 @@ void ExtMgrDialog::updateProgress( const OUString &rText,
 void ExtMgrDialog::updatePackageInfo( const uno::Reference< deployment::XPackage > &xPackage )
 {
     const SolarMutexGuard aGuard;
-    m_pExtensionBox->updateEntry( xPackage );
+    m_xExtensionBox->updateEntry( xPackage );
 }
 
-IMPL_LINK_NOARG(ExtMgrDialog, HandleOptionsBtn, Button*, void)
+IMPL_LINK_NOARG(ExtMgrDialog, HandleOptionsBtn, weld::Button&, void)
 {
-    const sal_Int32 nActive = m_pExtensionBox->getSelIndex();
+    const sal_Int32 nActive = m_xExtensionBox->getSelIndex();
 
     if ( nActive != ExtensionBox_Impl::ENTRY_NOTFOUND )
     {
         SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
 
-        OUString sExtensionId = m_pExtensionBox->GetEntryData( nActive )->m_xPackage->getIdentifier().Value;
-        ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateOptionsDialog( this, sExtensionId ));
+        OUString sExtensionId = m_xExtensionBox->GetEntryData( nActive )->m_xPackage->getIdentifier().Value;
+        ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateOptionsDialog(m_xDialog.get(), sExtensionId));
 
         pDlg->Execute();
     }
 }
 
-IMPL_LINK_NOARG(ExtMgrDialog, HandleAddBtn, Button*, void)
+IMPL_LINK_NOARG(ExtMgrDialog, HandleAddBtn, weld::Button&, void)
 {
     incBusy();
 
@@ -935,24 +894,24 @@ IMPL_LINK_NOARG(ExtMgrDialog, HandleAddBtn, Button*, void)
     decBusy();
 }
 
-IMPL_LINK_NOARG(ExtMgrDialog, HandleRemoveBtn, Button*, void)
+IMPL_LINK_NOARG(ExtMgrDialog, HandleRemoveBtn, weld::Button&, void)
 {
-    const sal_Int32 nActive = m_pExtensionBox->getSelIndex();
+    const sal_Int32 nActive = m_xExtensionBox->getSelIndex();
 
     if ( nActive != ExtensionBox_Impl::ENTRY_NOTFOUND )
     {
-        TEntry_Impl pEntry = m_pExtensionBox->GetEntryData( nActive );
+        TEntry_Impl pEntry = m_xExtensionBox->GetEntryData( nActive );
         removePackage( pEntry->m_xPackage );
     }
 }
 
-IMPL_LINK_NOARG(ExtMgrDialog, HandleEnableBtn, Button*, void)
+IMPL_LINK_NOARG(ExtMgrDialog, HandleEnableBtn, weld::Button&, void)
 {
-    const sal_Int32 nActive = m_pExtensionBox->getSelIndex();
+    const sal_Int32 nActive = m_xExtensionBox->getSelIndex();
 
     if ( nActive != ExtensionBox_Impl::ENTRY_NOTFOUND )
     {
-        TEntry_Impl pEntry = m_pExtensionBox->GetEntryData( nActive );
+        TEntry_Impl pEntry = m_xExtensionBox->GetEntryData( nActive );
 
         if ( pEntry->m_bMissingLic )
             acceptLicense( pEntry->m_xPackage );
@@ -964,7 +923,7 @@ IMPL_LINK_NOARG(ExtMgrDialog, HandleEnableBtn, Button*, void)
     }
 }
 
-IMPL_LINK_NOARG(ExtMgrDialog, HandleExtTypeCbx, Button*, void)
+IMPL_LINK_NOARG(ExtMgrDialog, HandleExtTypeCbx, weld::Button&, void)
 {
     // re-creates the list of packages with addEntry selecting the packages
     prepareChecking();
@@ -972,7 +931,7 @@ IMPL_LINK_NOARG(ExtMgrDialog, HandleExtTypeCbx, Button*, void)
     checkEntries();
 }
 
-IMPL_LINK_NOARG(ExtMgrDialog, HandleUpdateBtn, Button*, void)
+IMPL_LINK_NOARG(ExtMgrDialog, HandleUpdateBtn, weld::Button&, void)
 {
 #if ENABLE_EXTENSION_UPDATE
     m_pManager->checkUpdates();
@@ -987,83 +946,43 @@ IMPL_LINK_NOARG(ExtMgrDialog, TimeOutHdl, Timer *, void)
     {
         m_bHasProgress = false;
         m_bStopProgress = false;
-        m_pProgressText->Hide();
-        m_pProgressBar->Hide();
-        m_pCancelBtn->Hide();
+        m_xProgressText->hide();
+        m_xProgressBar->hide();
+        m_xCancelBtn->hide();
     }
     else
     {
         if ( m_bProgressChanged )
         {
             m_bProgressChanged = false;
-            m_pProgressText->SetText(m_sProgressText);
+            m_xProgressText->set_label(m_sProgressText);
         }
 
         if ( m_bStartProgress )
         {
             m_bStartProgress = false;
             m_bHasProgress = true;
-            m_pProgressBar->Show();
-            m_pProgressText->Show();
-            m_pCancelBtn->Enable();
-            m_pCancelBtn->Show();
+            m_xProgressBar->show();
+            m_xProgressText->show();
+            m_xCancelBtn->set_sensitive(true);
+            m_xCancelBtn->show();
         }
 
-        if ( m_pProgressBar->IsVisible() )
-            m_pProgressBar->SetValue( static_cast<sal_uInt16>(m_nProgress) );
+        if ( m_xProgressBar->get_visible() )
+            m_xProgressBar->set_percentage( static_cast<sal_uInt16>(m_nProgress) );
     }
 }
 
-
-// VCL::Window / Dialog
-
-bool ExtMgrDialog::EventNotify( NotifyEvent& rNEvt )
+void ExtMgrDialog::Close()
 {
-    bool bHandled = false;
-
-    if ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
-    {
-        const KeyEvent* pKEvt = rNEvt.GetKeyEvent();
-        vcl::KeyCode aKeyCode = pKEvt->GetKeyCode();
-
-        if ( aKeyCode.GetGroup() == KEYGROUP_CURSOR )
-            bHandled = m_pExtensionBox->EventNotify(rNEvt);
-    }
-// VclEventId::WindowClose
-    if ( !bHandled )
-        return ModelessDialog::EventNotify(rNEvt);
-    else
-        return true;
-}
-
-IMPL_STATIC_LINK(ExtMgrDialog, Restart, void*, pParent, void)
-{
-    SolarMutexGuard aGuard;
-    ::svtools::executeRestartDialog(comphelper::getProcessComponentContext(),
-                                    pParent ? static_cast<vcl::Window*>(pParent)->GetFrameWeld() : nullptr,
-                                    svtools::RESTART_REASON_EXTENSION_INSTALL);
-}
-
-bool ExtMgrDialog::Close()
-{
-    bool bRet = ModelessDialog::Close();
     m_pManager->terminateDialog();
-    //only suggest restart if modified and this is the first close attempt
-    if (!m_bClosed && m_pManager->isModified())
-    {
-        m_pManager->clearModified();
-        //only suggest restart if we're actually running, e.g. not from standalone unopkg gui
-        if (dp_misc::office_is_running())
-            Application::PostUserEvent(LINK(nullptr, ExtMgrDialog, Restart), m_xRestartParent);
-    }
     m_bClosed = true;
-    return bRet;
 }
 
 //UpdateRequiredDialog
-UpdateRequiredDialog::UpdateRequiredDialog(vcl::Window *pParent, TheExtensionManager *pManager)
-    : ModalDialog(pParent, "UpdateRequiredDialog", "desktop/ui/updaterequireddialog.ui")
-    , DialogHelper(pManager->getContext(), static_cast<Dialog*>(this))
+UpdateRequiredDialog::UpdateRequiredDialog(weld::Window *pParent, TheExtensionManager *pManager)
+    : GenericDialogController(pParent, "desktop/ui/updaterequireddialog.ui", "UpdateRequiredDialog")
+    , DialogHelper(pManager->getContext(), m_xDialog.get())
     , m_sCloseText(DpResId(RID_STR_CLOSE_BTN))
     , m_bHasProgress(false)
     , m_bProgressChanged(false)
@@ -1072,28 +991,29 @@ UpdateRequiredDialog::UpdateRequiredDialog(vcl::Window *pParent, TheExtensionMan
     , m_bHasLockedEntries(false)
     , m_nProgress(0)
     , m_pManager(pManager)
+    , m_xExtensionBox(new ExtensionBox_Impl(m_xBuilder->weld_scrolled_window("scroll")))
+    , m_xExtensionBoxWnd(new weld::CustomWeld(*m_xBuilder, "extensions", *m_xExtensionBox))
+    , m_xUpdateNeeded(m_xBuilder->weld_label("updatelabel"))
+    , m_xUpdateBtn(m_xBuilder->weld_button("ok"))
+    , m_xCloseBtn(m_xBuilder->weld_button("disable"))
+    , m_xCancelBtn(m_xBuilder->weld_button("cancel"))
+    , m_xProgressText(m_xBuilder->weld_label("progresslabel"))
+    , m_xProgressBar(m_xBuilder->weld_progress_bar("progress"))
 {
-    get(m_pExtensionBox, "extensions");
-    m_pExtensionBox->setExtensionManager(pManager);
-    get(m_pUpdateNeeded, "updatelabel");
-    get(m_pUpdateBtn, "check");
-    get(m_pCloseBtn, "disable");
-    get(m_pCancelBtn, "cancel");
-    get(m_pProgressText, "progresslabel");
-    get(m_pProgressBar, "progress");
+    m_xExtensionBox->setExtensionManager(pManager);
 
-    m_pUpdateBtn->SetClickHdl( LINK( this, UpdateRequiredDialog, HandleUpdateBtn ) );
-    m_pCloseBtn->SetClickHdl( LINK( this, UpdateRequiredDialog, HandleCloseBtn ) );
-    m_pCancelBtn->SetClickHdl( LINK( this, UpdateRequiredDialog, HandleCancelBtn ) );
+    m_xUpdateBtn->connect_clicked( LINK( this, UpdateRequiredDialog, HandleUpdateBtn ) );
+    m_xCloseBtn->connect_clicked( LINK( this, UpdateRequiredDialog, HandleCloseBtn ) );
+    m_xCancelBtn->connect_clicked( LINK( this, UpdateRequiredDialog, HandleCancelBtn ) );
 
-    OUString aText = m_pUpdateNeeded->GetText();
+    OUString aText = m_xUpdateNeeded->get_label();
     aText = aText.replaceAll(
         "%PRODUCTNAME", utl::ConfigManager::getProductName());
-    m_pUpdateNeeded->SetText(aText);
+    m_xUpdateNeeded->set_label(aText);
 
-    m_pProgressBar->Hide();
-    m_pUpdateBtn->Enable( false );
-    m_pCloseBtn->GrabFocus();
+    m_xProgressBar->hide();
+    m_xUpdateBtn->set_sensitive( false );
+    m_xCloseBtn->grab_focus();
 
     m_aIdle.SetPriority( TaskPriority::LOWEST );
     m_aIdle.SetDebugName( "UpdateRequiredDialog m_aIdle TimeOutHdl" );
@@ -1102,20 +1022,7 @@ UpdateRequiredDialog::UpdateRequiredDialog(vcl::Window *pParent, TheExtensionMan
 
 UpdateRequiredDialog::~UpdateRequiredDialog()
 {
-    disposeOnce();
-}
-
-void UpdateRequiredDialog::dispose()
-{
     m_aIdle.Stop();
-    m_pExtensionBox.clear();
-    m_pUpdateNeeded.clear();
-    m_pUpdateBtn.clear();
-    m_pCloseBtn.clear();
-    m_pCancelBtn.clear();
-    m_pProgressText.clear();
-    m_pProgressBar.clear();
-    ModalDialog::dispose();
 }
 
 void UpdateRequiredDialog::addPackageToList( const uno::Reference< deployment::XPackage > &xPackage,
@@ -1126,32 +1033,32 @@ void UpdateRequiredDialog::addPackageToList( const uno::Reference< deployment::X
     {
         m_bHasLockedEntries |= m_pManager->isReadOnly( xPackage );
         const SolarMutexGuard aGuard;
-        m_pUpdateBtn->Enable();
-        m_pExtensionBox->addEntry( xPackage );
+        m_xUpdateBtn->set_sensitive(true);
+        m_xExtensionBox->addEntry( xPackage );
     }
 }
 
 
 void UpdateRequiredDialog::prepareChecking()
 {
-    m_pExtensionBox->prepareChecking();
+    m_xExtensionBox->prepareChecking();
 }
 
 
 void UpdateRequiredDialog::checkEntries()
 {
     const SolarMutexGuard guard;
-    m_pExtensionBox->checkEntries();
+    m_xExtensionBox->checkEntries();
 
     if ( ! hasActiveEntries() )
     {
-        m_pCloseBtn->SetText( m_sCloseText );
-        m_pCloseBtn->GrabFocus();
+        m_xCloseBtn->set_label( m_sCloseText );
+        m_xCloseBtn->grab_focus();
     }
 }
 
 
-IMPL_LINK_NOARG(UpdateRequiredDialog, HandleCancelBtn, Button*, void)
+IMPL_LINK_NOARG(UpdateRequiredDialog, HandleCancelBtn, weld::Button&, void)
 {
     if ( m_xAbortChannel.is() )
     {
@@ -1177,8 +1084,8 @@ IMPL_LINK( UpdateRequiredDialog, startProgress, void*, _bLockInterface, void )
 
     if ( m_bStopProgress )
     {
-        if ( m_pProgressBar->IsVisible() )
-            m_pProgressBar->SetValue( 100 );
+        if ( m_xProgressBar->get_visible() )
+            m_xProgressBar->set_percentage( 100 );
         m_xAbortChannel.clear();
         SAL_INFO( "desktop.deployment", " startProgress handler: stop" );
     }
@@ -1187,8 +1094,8 @@ IMPL_LINK( UpdateRequiredDialog, startProgress, void*, _bLockInterface, void )
         SAL_INFO( "desktop.deployment", " startProgress handler: start" );
     }
 
-    m_pCancelBtn->Enable( bLockInterface );
-    m_pUpdateBtn->Enable( false );
+    m_xCancelBtn->set_sensitive( bLockInterface );
+    m_xUpdateBtn->set_sensitive( false );
     clearEventID();
 }
 
@@ -1247,28 +1154,28 @@ void UpdateRequiredDialog::updatePackageInfo( const uno::Reference< deployment::
     // of the 'disable all' button
     const SolarMutexGuard aGuard;
     if ( isEnabled( xPackage ) && checkDependencies( xPackage ) )
-        m_pExtensionBox->removeEntry( xPackage );
+        m_xExtensionBox->removeEntry( xPackage );
     else
-        m_pExtensionBox->updateEntry( xPackage );
+        m_xExtensionBox->updateEntry( xPackage );
 
     if ( ! hasActiveEntries() )
     {
-        m_pCloseBtn->SetText( m_sCloseText );
-        m_pCloseBtn->GrabFocus();
+        m_xCloseBtn->set_label( m_sCloseText );
+        m_xCloseBtn->grab_focus();
     }
 }
 
 
-IMPL_LINK_NOARG(UpdateRequiredDialog, HandleUpdateBtn, Button*, void)
+IMPL_LINK_NOARG(UpdateRequiredDialog, HandleUpdateBtn, weld::Button&, void)
 {
     ::osl::ClearableMutexGuard aGuard( m_aMutex );
 
     std::vector< uno::Reference< deployment::XPackage > > vUpdateEntries;
-    sal_Int32 nCount = m_pExtensionBox->GetEntryCount();
+    sal_Int32 nCount = m_xExtensionBox->GetEntryCount();
 
     for ( sal_Int32 i = 0; i < nCount; ++i )
     {
-        TEntry_Impl pEntry = m_pExtensionBox->GetEntryData( i );
+        TEntry_Impl pEntry = m_xExtensionBox->GetEntryData( i );
         vUpdateEntries.push_back( pEntry->m_xPackage );
     }
 
@@ -1278,18 +1185,18 @@ IMPL_LINK_NOARG(UpdateRequiredDialog, HandleUpdateBtn, Button*, void)
 }
 
 
-IMPL_LINK_NOARG(UpdateRequiredDialog, HandleCloseBtn, Button*, void)
+IMPL_LINK_NOARG(UpdateRequiredDialog, HandleCloseBtn, weld::Button&, void)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
     if ( !isBusy() )
     {
         if ( m_bHasLockedEntries )
-            EndDialog( -1 );
+            m_xDialog->response(-1);
         else if ( hasActiveEntries() )
             disableAllEntries();
         else
-            EndDialog();
+            m_xDialog->response(RET_CANCEL);
     }
 }
 
@@ -1300,35 +1207,35 @@ IMPL_LINK_NOARG(UpdateRequiredDialog, TimeOutHdl, Timer *, void)
     {
         m_bHasProgress = false;
         m_bStopProgress = false;
-        m_pProgressText->Hide();
-        m_pProgressBar->Hide();
-        m_pCancelBtn->Hide();
+        m_xProgressText->hide();
+        m_xProgressBar->hide();
+        m_xCancelBtn->hide();
     }
     else
     {
         if ( m_bProgressChanged )
         {
             m_bProgressChanged = false;
-            m_pProgressText->SetText( m_sProgressText );
+            m_xProgressText->set_label( m_sProgressText );
         }
 
         if ( m_bStartProgress )
         {
             m_bStartProgress = false;
             m_bHasProgress = true;
-            m_pProgressBar->Show();
-            m_pProgressText->Show();
-            m_pCancelBtn->Enable();
-            m_pCancelBtn->Show();
+            m_xProgressBar->show();
+            m_xProgressText->show();
+            m_xCancelBtn->set_sensitive(true);
+            m_xCancelBtn->show();
         }
 
-        if ( m_pProgressBar->IsVisible() )
-            m_pProgressBar->SetValue( static_cast<sal_uInt16>(m_nProgress) );
+        if (m_xProgressBar->get_visible())
+            m_xProgressBar->set_percentage(m_nProgress);
     }
 }
 
 // VCL::Dialog
-short UpdateRequiredDialog::Execute()
+short UpdateRequiredDialog::run()
 {
     //ToDo
     //I believe m_bHasLockedEntries was used to prevent showing extensions which cannot
@@ -1340,34 +1247,14 @@ short UpdateRequiredDialog::Execute()
     if ( m_bHasLockedEntries )
     {
         // Set other text, disable update btn, remove not shared entries from list;
-        m_pUpdateNeeded->SetText( DpResId( RID_STR_NO_ADMIN_PRIVILEGE ) );
-        m_pCloseBtn->SetText( DpResId( RID_STR_EXIT_BTN ) );
-        m_pUpdateBtn->Enable( false );
-        m_pExtensionBox->RemoveUnlocked();
-        Resize();
+        m_xUpdateNeeded->set_label( DpResId( RID_STR_NO_ADMIN_PRIVILEGE ) );
+        m_xCloseBtn->set_label( DpResId( RID_STR_EXIT_BTN ) );
+        m_xUpdateBtn->set_sensitive( false );
+        m_xExtensionBox->RemoveUnlocked();
     }
 
-    return Dialog::Execute();
+    return GenericDialogController::run();
 }
-
-// VCL::Dialog
-bool UpdateRequiredDialog::Close()
-{
-    ::osl::MutexGuard aGuard( m_aMutex );
-
-    if ( !isBusy() )
-    {
-        if ( m_bHasLockedEntries )
-            EndDialog( -1 );
-        else if ( hasActiveEntries() )
-            disableAllEntries();
-        else
-            EndDialog();
-    }
-
-    return false;
-}
-
 
 // Check dependencies of all packages
 
@@ -1415,10 +1302,10 @@ bool UpdateRequiredDialog::hasActiveEntries()
     ::osl::MutexGuard aGuard( m_aMutex );
 
     bool bRet = false;
-    long nCount = m_pExtensionBox->GetEntryCount();
+    long nCount = m_xExtensionBox->GetEntryCount();
     for ( long nIndex = 0; nIndex < nCount; nIndex++ )
     {
-        TEntry_Impl pEntry = m_pExtensionBox->GetEntryData( nIndex );
+        TEntry_Impl pEntry = m_xExtensionBox->GetEntryData( nIndex );
 
         if ( isEnabled(pEntry->m_xPackage) && !checkDependencies( pEntry->m_xPackage ) )
         {
@@ -1437,17 +1324,17 @@ void UpdateRequiredDialog::disableAllEntries()
 
     incBusy();
 
-    long nCount = m_pExtensionBox->GetEntryCount();
+    long nCount = m_xExtensionBox->GetEntryCount();
     for ( long nIndex = 0; nIndex < nCount; nIndex++ )
     {
-        TEntry_Impl pEntry = m_pExtensionBox->GetEntryData( nIndex );
+        TEntry_Impl pEntry = m_xExtensionBox->GetEntryData( nIndex );
         m_pManager->getCmdQueue()->enableExtension( pEntry->m_xPackage, false );
     }
 
     decBusy();
 
     if ( ! hasActiveEntries() )
-        m_pCloseBtn->SetText( m_sCloseText );
+        m_xCloseBtn->set_label( m_sCloseText );
 }
 
 //                             ShowLicenseDialog

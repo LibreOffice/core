@@ -59,8 +59,6 @@ TheExtensionManager::TheExtensionManager( const uno::Reference< awt::XWindow > &
                                           const uno::Reference< uno::XComponentContext > &xContext ) :
     m_xContext( xContext ),
     m_xParent( xParent ),
-    m_pExtMgrDialog( nullptr ),
-    m_pUpdReqDialog( nullptr ),
     m_bModified(false)
 {
     m_xExtensionManager = deployment::ExtensionManager::get( xContext );
@@ -102,13 +100,15 @@ TheExtensionManager::TheExtensionManager( const uno::Reference< awt::XWindow > &
     }
 }
 
-
 TheExtensionManager::~TheExtensionManager()
 {
-    m_pUpdReqDialog.disposeAndClear();
-    m_pExtMgrDialog.disposeAndClear();
+    if (m_xUpdReqDialog)
+        m_xUpdReqDialog->response(RET_CANCEL);
+    assert(!m_xUpdReqDialog);
+    if (m_xExtMgrDialog)
+        m_xExtMgrDialog->response(RET_CANCEL);
+    assert(!m_xExtMgrDialog);
 }
-
 
 void TheExtensionManager::createDialog( const bool bCreateUpdDlg )
 {
@@ -116,58 +116,56 @@ void TheExtensionManager::createDialog( const bool bCreateUpdDlg )
 
     if ( bCreateUpdDlg )
     {
-        if ( !m_pUpdReqDialog )
+        if ( !m_xUpdReqDialog )
         {
-            m_pUpdReqDialog = VclPtr<UpdateRequiredDialog>::Create( nullptr, this );
-            m_pExecuteCmdQueue.reset( new ExtensionCmdQueue( m_pUpdReqDialog.get(), this, m_xContext ) );
+            m_xUpdReqDialog.reset(new UpdateRequiredDialog(Application::GetFrameWeld(m_xParent), this));
+            m_xExecuteCmdQueue.reset( new ExtensionCmdQueue( m_xUpdReqDialog.get(), this, m_xContext ) );
             createPackageList();
         }
     }
-    else if ( !m_pExtMgrDialog )
+    else if ( !m_xExtMgrDialog )
     {
-        if (m_xParent.is())
-            m_pExtMgrDialog = VclPtr<ExtMgrDialog>::Create( VCLUnoHelper::GetWindow(m_xParent), this );
-        else
-            m_pExtMgrDialog = VclPtr<ExtMgrDialog>::Create( nullptr, this, Dialog::InitFlag::NoParent );
-        m_pExecuteCmdQueue.reset( new ExtensionCmdQueue( m_pExtMgrDialog.get(), this, m_xContext ) );
-        m_pExtMgrDialog->setGetExtensionsURL( m_sGetExtensionsURL );
+        m_xExtMgrDialog.reset(new ExtMgrDialog(Application::GetFrameWeld(m_xParent), this));
+        m_xExecuteCmdQueue.reset( new ExtensionCmdQueue( m_xExtMgrDialog.get(), this, m_xContext ) );
+        m_xExtMgrDialog->setGetExtensionsURL( m_sGetExtensionsURL );
         createPackageList();
     }
 }
-
 
 void TheExtensionManager::Show()
 {
     const SolarMutexGuard guard;
 
-    getDialog()->Show();
+    weld::DialogController::runAsync(m_xExtMgrDialog, [this](sal_Int32 /*nResult*/) {
+        auto xExtMgrDialog = m_xExtMgrDialog;
+        m_xExtMgrDialog.reset();
+        xExtMgrDialog->Close();
+    });
 }
-
 
 void TheExtensionManager::SetText( const OUString &rTitle )
 {
     const SolarMutexGuard guard;
 
-    getDialog()->SetText( rTitle );
+    getDialog()->set_title( rTitle );
 }
 
 
-void TheExtensionManager::ToTop( ToTopFlags nFlags )
+void TheExtensionManager::ToTop()
 {
     const SolarMutexGuard guard;
 
-    getDialog()->ToTop( nFlags );
+    getDialog()->present();
 }
 
 
 bool TheExtensionManager::Close()
 {
-    if ( m_pExtMgrDialog )
-        return m_pExtMgrDialog->Close();
-    else if ( m_pUpdReqDialog )
-        return m_pUpdReqDialog->Close();
-    else
-        return true;
+    if (m_xExtMgrDialog)
+        m_xExtMgrDialog->response(RET_CANCEL);
+    else if (m_xUpdReqDialog)
+        m_xUpdReqDialog->response(RET_CANCEL);
+    return true;
 }
 
 
@@ -175,10 +173,10 @@ sal_Int16 TheExtensionManager::execute()
 {
     sal_Int16 nRet = 0;
 
-    if ( m_pUpdReqDialog )
+    if ( m_xUpdReqDialog )
     {
-        nRet = m_pUpdReqDialog->Execute();
-        m_pUpdReqDialog.disposeAndClear();
+        nRet = m_xUpdReqDialog->run();
+        m_xUpdReqDialog.reset();
     }
 
     return nRet;
@@ -187,7 +185,7 @@ sal_Int16 TheExtensionManager::execute()
 
 bool TheExtensionManager::isVisible()
 {
-    return getDialog()->IsVisible();
+    return getDialog()->get_visible();
 }
 
 
@@ -221,7 +219,7 @@ void TheExtensionManager::checkUpdates()
         }
     }
 
-    m_pExecuteCmdQueue->checkForUpdates( vEntries );
+    m_xExecuteCmdQueue->checkForUpdates( vEntries );
 }
 
 
@@ -243,9 +241,9 @@ bool TheExtensionManager::installPackage( const OUString &rPackageURL, bool bWar
         return false;
 
     if ( bInstallForAll )
-        m_pExecuteCmdQueue->addExtension( rPackageURL, SHARED_PACKAGE_MANAGER, false );
+        m_xExecuteCmdQueue->addExtension( rPackageURL, SHARED_PACKAGE_MANAGER, false );
     else
-        m_pExecuteCmdQueue->addExtension( rPackageURL, USER_PACKAGE_MANAGER, bWarnUser );
+        m_xExecuteCmdQueue->addExtension( rPackageURL, USER_PACKAGE_MANAGER, bWarnUser );
 
     return true;
 }
@@ -256,8 +254,12 @@ void TheExtensionManager::terminateDialog()
     if ( ! dp_misc::office_is_running() )
     {
         const SolarMutexGuard guard;
-        m_pExtMgrDialog.disposeAndClear();
-        m_pUpdReqDialog.disposeAndClear();
+        if (m_xExtMgrDialog)
+            m_xExtMgrDialog->response(RET_CANCEL);
+        assert(!m_xExtMgrDialog);
+        if (m_xUpdReqDialog)
+            m_xUpdReqDialog->response(RET_CANCEL);
+        assert(!m_xUpdReqDialog);
         Application::Quit();
     }
 }
@@ -421,22 +423,25 @@ void TheExtensionManager::disposing( lang::EventObject const & rEvt )
         if ( dp_misc::office_is_running() )
         {
             const SolarMutexGuard guard;
-            m_pExtMgrDialog.disposeAndClear();
-            m_pUpdReqDialog.disposeAndClear();
+            if (m_xExtMgrDialog)
+                m_xExtMgrDialog->response(RET_CANCEL);
+            assert(!m_xExtMgrDialog);
+            if (m_xUpdReqDialog)
+                m_xUpdReqDialog->response(RET_CANCEL);
+            assert(!m_xUpdReqDialog);
         }
         s_ExtMgr.clear();
     }
 }
-
 
 // XTerminateListener
 void TheExtensionManager::queryTermination( ::lang::EventObject const & )
 {
     DialogHelper *pDialogHelper = getDialogHelper();
 
-    if ( m_pExecuteCmdQueue->isBusy() || ( pDialogHelper && pDialogHelper->isBusy() ) )
+    if ( m_xExecuteCmdQueue->isBusy() || ( pDialogHelper && pDialogHelper->isBusy() ) )
     {
-        ToTop( ToTopFlags::RestoreWhenMin );
+        ToTop();
         throw frame::TerminationVetoException(
             "The office cannot be closed while the Extension Manager is running",
             static_cast<frame::XTerminateListener*>(this));
@@ -444,19 +449,17 @@ void TheExtensionManager::queryTermination( ::lang::EventObject const & )
     else
     {
         clearModified();
-        if ( m_pExtMgrDialog )
-            m_pExtMgrDialog->Close();
-        if ( m_pUpdReqDialog )
-            m_pUpdReqDialog->Close();
+        if (m_xExtMgrDialog)
+            m_xExtMgrDialog->response(RET_CANCEL);
+        if (m_xUpdReqDialog)
+            m_xUpdReqDialog->response(RET_CANCEL);
     }
 }
-
 
 void TheExtensionManager::notifyTermination( ::lang::EventObject const & rEvt )
 {
     disposing( rEvt );
 }
-
 
 // XModifyListener
 void TheExtensionManager::modified( ::lang::EventObject const & /*rEvt*/ )
