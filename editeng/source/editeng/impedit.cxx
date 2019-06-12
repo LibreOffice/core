@@ -1142,6 +1142,9 @@ Pair ImpEditView::Scroll( long ndX, long ndY, ScrollRangeCheck nRangeCheck )
     if ( !ndX && !ndY )
         return Pair( 0, 0 );
 
+    if (!pOutWin)
+        return Pair( 0, 0 );
+
 #ifdef DBG_UTIL
     tools::Rectangle aR( aOutArea );
     aR = pOutWin->LogicToPixel( aR );
