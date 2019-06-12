@@ -19,7 +19,6 @@
 #ifndef INCLUDED_SVX_SOURCE_SIDEBAR_LINE_LINEWIDTHPOPUP_HXX
 #define INCLUDED_SVX_SOURCE_SIDEBAR_LINE_LINEWIDTHPOPUP_HXX
 
-#include <svl/poolitem.hxx>
 #include <vcl/floatwin.hxx>
 #include <vcl/layout.hxx>
 #include <array>

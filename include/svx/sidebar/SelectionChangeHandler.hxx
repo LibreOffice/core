@@ -22,7 +22,6 @@
 #include <svx/svxdllapi.h>
 #include <vcl/EnumContext.hxx>
 #include <com/sun/star/frame/XController.hpp>
-#include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/view/XSelectionChangeListener.hpp>
 
 #include <cppuhelper/compbase.hxx>

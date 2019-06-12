@@ -16,10 +16,8 @@
 #include <vcl/ctrl.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/idle.hxx>
-#include <vcl/vclptr.hxx>
 #include <vcl/weld.hxx>
 
-#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 
 /// This class is the base for the Widget Layout-based sidebar panels.

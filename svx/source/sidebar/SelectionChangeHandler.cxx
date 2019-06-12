@@ -21,6 +21,8 @@
 #include <svx/sidebar/ContextChangeEventMultiplexer.hxx>
 #include <svx/svdmrkv.hxx>
 
+#include <com/sun/star/view/XSelectionSupplier.hpp>
+
 #include <vcl/EnumContext.hxx>
 #include <sfx2/shell.hxx>
 
