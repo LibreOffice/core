@@ -260,7 +260,7 @@ void ExtensionBox_Impl::dispose()
 
     m_pLocale.reset();
     m_pCollator.reset();
-    ::svt::IExtensionListBox::dispose();
+    IExtensionListBox::dispose();
 }
 
 

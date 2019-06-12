@@ -6950,7 +6950,6 @@ include/svtools/ehdl.hxx
 include/svtools/embedhlp.hxx
 include/svtools/embedtransfer.hxx
 include/svtools/extcolorcfg.hxx
-include/svtools/extensionlistbox.hxx
 include/svtools/filechangedchecker.hxx
 include/svtools/filectrl.hxx
 include/svtools/fileurlbox.hxx
