@@ -32,7 +32,7 @@ $(eval $(call gb_Library_add_exception_objects,kde5be1,\
 # Workaround for clang+icecream (clang's -frewrite-includes
 # doesn't handle Qt5's QT_HAS_INCLUDE that Qt5 uses for <chrono>).
 ifeq ($(COM_IS_CLANG),TRUE)
-$(eval $(call gb_Library_add_defs,kde5be1, \
+$(eval $(call gb_Library_add_cxxflags,kde5be1, \
     -include chrono \
 ))
 endif

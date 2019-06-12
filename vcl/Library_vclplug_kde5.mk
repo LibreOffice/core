@@ -94,7 +94,7 @@ endif
 # Workaround for clang+icecream (clang's -frewrite-includes
 # doesn't handle Qt5's QT_HAS_INCLUDE that Qt5 uses for <chrono>).
 ifeq ($(COM_IS_CLANG),TRUE)
-$(eval $(call gb_Library_add_defs,vclplug_kde5, \
+$(eval $(call gb_Library_add_cxxflags,vclplug_kde5, \
     -include chrono \
 ))
 endif
