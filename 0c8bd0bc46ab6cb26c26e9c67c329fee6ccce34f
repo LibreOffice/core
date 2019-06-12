@@ -22,6 +22,30 @@
       "revId": "0c8bd0bc46ab6cb26c26e9c67c329fee6ccce34f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_cd6304dc",
+        "filename": "sw/source/uibase/uno/unotxdoc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1881,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2019-06-12T18:58:47Z",
+      "side": 1,
+      "message": "Yes, he did the same. I remember the RedlineManager comments about the role of SetHideRedlines, also the annoying switch off/switch on Show changes of redline handling, that is why I tried this illogic settings...\nI hope, this is ok for the whole UNO, not only for the docx import. :)",
+      "parentUuid": "3fa0c359_bb7b51bc",
+      "range": {
+        "startLine": 1881,
+        "startChar": 15,
+        "endLine": 1881,
+        "endChar": 91
+      },
+      "revId": "0c8bd0bc46ab6cb26c26e9c67c329fee6ccce34f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
