@@ -1935,7 +1935,7 @@ void SAL_CALL AnimationNode::removeChangesListener( const Reference< XChangesLis
 // XUnoTunnel
 ::sal_Int64 SAL_CALL AnimationNode::getSomething( const Sequence< ::sal_Int8 >& rId )
 {
-    if( rId.getLength() == 16 && memcmp( getUnoTunnelId().getConstArray(), rId.getConstArray(), 16 ) == 0 )
+    if( isUnoTunnelId<AnimationNode>(rId) )
     {
         return sal::static_int_cast< sal_Int64 >(reinterpret_cast< sal_IntPtr >(this));
 
