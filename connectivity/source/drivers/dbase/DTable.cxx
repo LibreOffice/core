@@ -186,8 +186,9 @@ void lcl_CalDate(sal_Int32 _nJulianDate,sal_Int32 _nJulianTime,css::util::DateTi
         double d_m = d_s / 60.0;
         double d_h  = d_m / 60.0;
         _rDateTime.Hours = static_cast<sal_uInt16>(d_h);
-        _rDateTime.Minutes = static_cast<sal_uInt16>(d_m);
-        _rDateTime.Seconds = static_cast<sal_uInt16>(( d_m - static_cast<double>(_rDateTime.Minutes) ) * 60.0);
+        _rDateTime.Minutes = static_cast<sal_uInt16>((d_h - static_cast<double>(_rDateTime.Hours)) * 60.0);
+        _rDateTime.Seconds = static_cast<sal_uInt16>(((d_m - static_cast<double>(_rDateTime.Minutes)) * 60.0)
+                - (static_cast<double>(_rDateTime.Hours) * 3600.0));
     }
 }
 
