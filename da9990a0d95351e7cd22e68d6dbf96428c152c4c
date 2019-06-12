@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_6d81904a",
+        "filename": "xmlhelp/source/cxxhelp/provider/databases.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1165,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-06-12T19:16:36Z",
+      "side": 1,
+      "message": "this could be the loop var",
+      "revId": "da9990a0d95351e7cd22e68d6dbf96428c152c4c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_0d980cbe",
+        "filename": "xmlhelp/source/treeview/tvread.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 902,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-06-12T19:16:36Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "da9990a0d95351e7cd22e68d6dbf96428c152c4c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
