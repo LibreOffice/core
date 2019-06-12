@@ -1,0 +1,165 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_a0ab201b",
+        "filename": "vcl/qt5/Qt5Clipboard.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2019-06-12T09:24:38Z",
+      "side": 1,
+      "message": "typo: \"guarantess\" -\u003e \"guarantees\"",
+      "range": {
+        "startLine": 34,
+        "startChar": 24,
+        "endLine": 34,
+        "endChar": 34
+      },
+      "revId": "b40709a799b6f8115f88ce1689ed2e58fd1333fd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_c0a66c54",
+        "filename": "vcl/qt5/Qt5Clipboard.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2019-06-12T09:24:38Z",
+      "side": 1,
+      "message": "why dynamic_cast for assert and static_cast afterwards? (AFAIU, will be pointer of incomplete type if dynamic_cast failed, probably better to have \"proper\" nullptr?), same below in \u0027Qt5Clipboard::getContents\u0027",
+      "range": {
+        "startLine": 63,
+        "startChar": 0,
+        "endLine": 64,
+        "endChar": 85
+      },
+      "revId": "b40709a799b6f8115f88ce1689ed2e58fd1333fd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_80662429",
+        "filename": "vcl/qt5/Qt5Transferable.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2019-06-12T09:24:38Z",
+      "side": 1,
+      "message": "this (and the places where it\u0027s used) looks a bit complicated, maybe easier (and more straight-forward) to just return the corresponding \u0027PlainTextType\u0027 enum value and handle that at the calling places?",
+      "range": {
+        "startLine": 34,
+        "startChar": 0,
+        "endLine": 35,
+        "endChar": 45
+      },
+      "revId": "b40709a799b6f8115f88ce1689ed2e58fd1333fd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_206dd003",
+        "filename": "vcl/qt5/Qt5Transferable.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2019-06-12T09:24:38Z",
+      "side": 1,
+      "message": "not sure I understand what this means: \"get it without locking\"?",
+      "range": {
+        "startLine": 155,
+        "startChar": 51,
+        "endLine": 155,
+        "endChar": 66
+      },
+      "revId": "b40709a799b6f8115f88ce1689ed2e58fd1333fd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_40701cdd",
+        "filename": "vcl/qt5/Qt5Transferable.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2019-06-12T09:24:38Z",
+      "side": 1,
+      "message": "typo: \"save then\" -\u003e \"safe than\"",
+      "range": {
+        "startLine": 159,
+        "startChar": 14,
+        "endLine": 159,
+        "endChar": 18
+      },
+      "revId": "b40709a799b6f8115f88ce1689ed2e58fd1333fd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_c07bccbb",
+        "filename": "vcl/qt5/Qt5Transferable.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 348,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2019-06-12T09:24:38Z",
+      "side": 1,
+      "message": "name sounds a bit like a getter method, but it does change things and is also called for that purpose (e.g. in ::retrieveData)",
+      "range": {
+        "startLine": 348,
+        "startChar": 13,
+        "endLine": 348,
+        "endChar": 46
+      },
+      "revId": "b40709a799b6f8115f88ce1689ed2e58fd1333fd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_604c389e",
+        "filename": "vcl/qt5/Qt5Transferable.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 373,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2019-06-12T09:24:38Z",
+      "side": 1,
+      "message": "don\u0027t really understand why things are added here if we don\u0027t have them (but may be because I didn\u0027t understand the whole concept yet...)",
+      "range": {
+        "startLine": 367,
+        "startChar": 0,
+        "endLine": 373,
+        "endChar": 34
+      },
+      "revId": "b40709a799b6f8115f88ce1689ed2e58fd1333fd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
