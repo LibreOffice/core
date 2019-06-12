@@ -8,6 +8,7 @@
  */
 
 #include <SfxRedactionHelper.hxx>
+#include <autoredactdialog.hxx>
 
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
@@ -206,11 +207,12 @@ void SfxRedactionHelper::getPageMetaFilesFromDoc(std::vector<GDIMetaFile>& aMeta
     }
 }
 
-void SfxRedactionHelper::addPagesToDraw(uno::Reference<XComponent>& xComponent,
-                                        const sal_Int32& nPages,
-                                        const std::vector<GDIMetaFile>& aMetaFiles,
-                                        const std::vector<::Size>& aPageSizes,
-                                        const PageMargins& aPageMargins)
+void SfxRedactionHelper::addPagesToDraw(
+    uno::Reference<XComponent>& xComponent, const sal_Int32& nPages,
+    const std::vector<GDIMetaFile>& aMetaFiles, const std::vector<::Size>& aPageSizes,
+    const PageMargins& aPageMargins,
+    const std::vector<std::pair<RedactionTarget*, OUString>>& r_aTableTargets,
+    const bool& bIsAutoRedact)
 {
     // Access the draw pages
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(xComponent, uno::UNO_QUERY);
@@ -250,7 +252,14 @@ void SfxRedactionHelper::addPagesToDraw(uno::Reference<XComponent>& xComponent,
 
         xPage->add(xShape);
 
-        //autoRedactPage("deployment", rGDIMetaFile, xPage, xComponent);
+        if (bIsAutoRedact && !r_aTableTargets.empty())
+        {
+            for (const auto& targetPair : r_aTableTargets)
+            {
+                OUString sContent(targetPair.first->sContent);
+                autoRedactPage(sContent, rGDIMetaFile, xPage, xComponent);
+            }
+        }
     }
 
     // Remove the extra page at the beginning
