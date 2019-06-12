@@ -21,10 +21,10 @@
 
 namespace cairo
 {
-Qt5SvpSurface::Qt5SvpSurface(const CairoSurfaceSharedPtr& m_pSurface)
+Qt5SvpSurface::Qt5SvpSurface(const CairoSurfaceSharedPtr& pSurface)
     : m_pGraphics(nullptr)
     , m_pCairoContext(nullptr)
-    , m_pSurface(m_pSurface)
+    , m_pSurface(pSurface)
 {
 }
 
