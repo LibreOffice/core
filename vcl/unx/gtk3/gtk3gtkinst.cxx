@@ -2447,8 +2447,8 @@ public:
         }
         else
         {
-            pItem = bCheck ? gtk_check_menu_item_new_with_label(MapToGtkAccelerator(rStr).getStr())
-                           : gtk_menu_item_new_with_label(MapToGtkAccelerator(rStr).getStr());
+            pItem = bCheck ? gtk_check_menu_item_new_with_mnemonic(MapToGtkAccelerator(rStr).getStr())
+                           : gtk_menu_item_new_with_mnemonic(MapToGtkAccelerator(rStr).getStr());
         }
         gtk_buildable_set_name(GTK_BUILDABLE(pItem), OUStringToOString(rId, RTL_TEXTENCODING_UTF8).getStr());
         gtk_menu_shell_append(GTK_MENU_SHELL(m_pMenu), pItem);
@@ -5488,8 +5488,8 @@ public:
         }
         else
         {
-            pItem = bCheck ? gtk_check_menu_item_new_with_label(MapToGtkAccelerator(rStr).getStr())
-                           : gtk_menu_item_new_with_label(MapToGtkAccelerator(rStr).getStr());
+            pItem = bCheck ? gtk_check_menu_item_new_with_mnemonic(MapToGtkAccelerator(rStr).getStr())
+                           : gtk_menu_item_new_with_mnemonic(MapToGtkAccelerator(rStr).getStr());
         }
         gtk_buildable_set_name(GTK_BUILDABLE(pItem), OUStringToOString(rId, RTL_TEXTENCODING_UTF8).getStr());
         gtk_menu_shell_append(GTK_MENU_SHELL(m_pMenu), pItem);
