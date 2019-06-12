@@ -11182,7 +11182,7 @@ then
         kf5_haiku_libdirs="`findpaths -c ' ' -a $haiku_arch B_FIND_PATH_DEVELOP_LIB_DIRECTORY`"
     fi
 
-    kf5_incdirs="$KF5INC /usr/include/ $kf5_haiku_incdirs $x_includes"
+    kf5_incdirs="$KF5INC /usr/include $kf5_haiku_incdirs $x_includes"
     kf5_libdirs="$KF5LIB /usr/lib /usr/lib/kf5 /usr/lib/kf5/devel $kf5_haiku_libdirs $x_libraries"
     if test -n "$supports_multilib"; then
         kf5_libdirs="$kf5_libdirs /usr/lib64 /usr/lib64/kf5 /usr/lib64/kf5/devel"
