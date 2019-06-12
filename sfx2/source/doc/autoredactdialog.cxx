@@ -528,6 +528,7 @@ void SfxAutoRedactDialog::clearTargets()
 
 SfxAutoRedactDialog::SfxAutoRedactDialog(weld::Window* pParent)
     : SfxDialogController(pParent, "sfx/ui/autoredactdialog.ui", "AutoRedactDialog")
+    , m_bIsValidState(true)
     , m_xRedactionTargetsLabel(m_xBuilder->weld_label("labelRedactionTargets"))
     , m_xTargetsBox(new TargetsTable(m_xBuilder->weld_tree_view("targets")))
     , m_xLoadBtn(m_xBuilder->weld_button("btnLoadTargets"))
@@ -574,6 +575,27 @@ bool SfxAutoRedactDialog::hasTargets() const
     //TODO: Add also some validity checks?
     if (m_aTableTargets.empty())
         return false;
+
+    return true;
+}
+
+bool SfxAutoRedactDialog::moveTargets(
+    std::vector<std::pair<RedactionTarget*, OUString>>& r_aTargets)
+{
+    try
+    {
+        r_aTargets.clear();
+        r_aTargets.insert(r_aTargets.end(), std::make_move_iterator(m_aTableTargets.begin()),
+                          std::make_move_iterator(m_aTableTargets.end()));
+        m_aTableTargets.clear();
+        m_bIsValidState = false;
+    }
+    catch (const css::uno::Exception& e)
+    {
+        SAL_WARN("sfx.doc", "Exception caught while moving redaction targets: " << e.Message);
+        m_bIsValidState = false;
+        return false;
+    }
 
     return true;
 }

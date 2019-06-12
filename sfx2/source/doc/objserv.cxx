@@ -441,6 +441,8 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
     SfxInstanceCloseGuard_Impl aModelGuard;
 
     bool bIsPDFExport = false;
+    bool bIsAutoRedact = false;
+    std::vector<std::pair<RedactionTarget*, OUString>> aRedactionTargets;
     switch(nId)
     {
         case SID_VERSION:
@@ -547,17 +549,19 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
 
         case SID_AUTOREDACTDOC:
         {
-            //TODO: Implement
             SfxAutoRedactDialog aDlg(pDialogParent);
-            sal_uInt16 nResult = aDlg.run();
+            sal_Int16 nResult = aDlg.run();
 
-            if (nResult != RET_OK || !aDlg.hasTargets())
+            if (nResult != RET_OK || !aDlg.hasTargets() || !aDlg.isValidState())
             {
                 //Do nothing
                 return;
             }
 
             // else continue with normal redaction
+            bIsAutoRedact = true;
+            aDlg.moveTargets(aRedactionTargets);
+
             [[fallthrough]];
         }
 
@@ -591,7 +595,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             uno::Reference<lang::XComponent> xComponent = xComponentLoader->loadComponentFromURL("private:factory/sdraw", "_default", 0, {});
 
             // Add the doc pages to the new draw document
-            SfxRedactionHelper::addPagesToDraw(xComponent, nPages, aMetaFiles, aPageSizes, aPageMargins);
+            SfxRedactionHelper::addPagesToDraw(xComponent, nPages, aMetaFiles, aPageSizes, aPageMargins, aRedactionTargets, bIsAutoRedact);
 
             // Show the Redaction toolbar
             SfxViewFrame* pViewFrame = SfxViewFrame::Current();

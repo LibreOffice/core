@@ -8,6 +8,7 @@
  */
 
 #include <SfxRedactionHelper.hxx>
+#include <autoredactdialog.hxx>
 
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
@@ -206,11 +207,12 @@ void SfxRedactionHelper::getPageMetaFilesFromDoc(std::vector<GDIMetaFile>& aMeta
     }
 }
 
-void SfxRedactionHelper::addPagesToDraw(uno::Reference<XComponent>& xComponent,
-                                        const sal_Int32& nPages,
-                                        const std::vector<GDIMetaFile>& aMetaFiles,
-                                        const std::vector<::Size>& aPageSizes,
-                                        const PageMargins& aPageMargins)
+void SfxRedactionHelper::addPagesToDraw(
+    uno::Reference<XComponent>& xComponent, const sal_Int32& nPages,
+    const std::vector<GDIMetaFile>& aMetaFiles, const std::vector<::Size>& aPageSizes,
+    const PageMargins& aPageMargins,
+    const std::vector<std::pair<RedactionTarget*, OUString>>& r_aTableTargets,
+    const bool& bIsAutoRedact)
 {
     // Access the draw pages
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(xComponent, uno::UNO_QUERY);
@@ -250,7 +252,13 @@ void SfxRedactionHelper::addPagesToDraw(uno::Reference<XComponent>& xComponent,
 
         xPage->add(xShape);
 
-        //autoRedactPage("deployment", rGDIMetaFile, xPage, xComponent);
+        if (bIsAutoRedact && !r_aTableTargets.empty())
+        {
+            for (const auto& targetPair : r_aTableTargets)
+            {
+                autoRedactPage(targetPair.first, rGDIMetaFile, xPage, xComponent);
+            }
+        }
     }
 
     // Remove the extra page at the beginning
@@ -470,14 +478,19 @@ void SfxRedactionHelper::addRedactionRectToPage(
     }
 }
 
-void SfxRedactionHelper::autoRedactPage(const OUString& sRedactionTerm,
+void SfxRedactionHelper::autoRedactPage(const RedactionTarget* pRedactionTarget,
                                         const GDIMetaFile& rGDIMetaFile,
                                         uno::Reference<drawing::XDrawPage>& xPage,
                                         uno::Reference<XComponent>& xComponent)
 {
+    if (pRedactionTarget == nullptr || pRedactionTarget->sContent.isEmpty())
+        return;
+
+    OUString sContent(pRedactionTarget->sContent);
+
     // Search for the redaction strings, and get the rectangle coordinates
     std::vector<::tools::Rectangle> aRedactionRectangles;
-    searchInMetaFile(sRedactionTerm, rGDIMetaFile, aRedactionRectangles, xComponent);
+    searchInMetaFile(sContent, rGDIMetaFile, aRedactionRectangles, xComponent);
 
     // Add the redaction rectangles to the page
     addRedactionRectToPage(xComponent, xPage, aRedactionRectangles);
