@@ -45,7 +45,6 @@
 #include <osl/mutex.hxx>
 #include <sal/log.hxx>
 
-#include <svtools/extensionlistbox.hxx>
 #include <svtools/restartdialog.hxx>
 
 #include <sfx2/filedlghelper.hxx>
@@ -173,7 +172,7 @@ void ExtBoxWithBtns_Impl::RecalcAll()
 {
     const sal_Int32 nActive = getSelIndex();
 
-    if ( nActive != svt::IExtensionListBox::ENTRY_NOTFOUND )
+    if ( nActive != IExtensionListBox::ENTRY_NOTFOUND )
     {
         SetButtonStatus( GetEntryData( nActive) );
     }
@@ -310,7 +309,7 @@ void ExtBoxWithBtns_Impl::MouseButtonDown( const MouseEvent& rMEvt )
     {
         const SolarMutexGuard aGuard;
         if ( rMEvt.IsMod1() && HasActive() )
-            selectEntry( svt::IExtensionListBox::ENTRY_NOTFOUND );
+            selectEntry( IExtensionListBox::ENTRY_NOTFOUND );
                 // selecting a not existing entry will deselect the current one
         else
             selectEntry( nPos );
@@ -324,7 +323,7 @@ void ExtBoxWithBtns_Impl::enableButtons( bool bEnable )
     if ( bEnable )
     {
         sal_Int32 nIndex = getSelIndex();
-        if ( nIndex != svt::IExtensionListBox::ENTRY_NOTFOUND )
+        if ( nIndex != IExtensionListBox::ENTRY_NOTFOUND )
             SetButtonStatus( GetEntryData( nIndex ) );
     }
     else
@@ -911,7 +910,7 @@ IMPL_LINK_NOARG(ExtMgrDialog, HandleOptionsBtn, Button*, void)
 {
     const sal_Int32 nActive = m_pExtensionBox->getSelIndex();
 
-    if ( nActive != svt::IExtensionListBox::ENTRY_NOTFOUND )
+    if ( nActive != IExtensionListBox::ENTRY_NOTFOUND )
     {
         SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
 
@@ -940,7 +939,7 @@ IMPL_LINK_NOARG(ExtMgrDialog, HandleRemoveBtn, Button*, void)
 {
     const sal_Int32 nActive = m_pExtensionBox->getSelIndex();
 
-    if ( nActive != svt::IExtensionListBox::ENTRY_NOTFOUND )
+    if ( nActive != IExtensionListBox::ENTRY_NOTFOUND )
     {
         TEntry_Impl pEntry = m_pExtensionBox->GetEntryData( nActive );
         removePackage( pEntry->m_xPackage );
@@ -951,7 +950,7 @@ IMPL_LINK_NOARG(ExtMgrDialog, HandleEnableBtn, Button*, void)
 {
     const sal_Int32 nActive = m_pExtensionBox->getSelIndex();
 
-    if ( nActive != svt::IExtensionListBox::ENTRY_NOTFOUND )
+    if ( nActive != IExtensionListBox::ENTRY_NOTFOUND )
     {
         TEntry_Impl pEntry = m_pExtensionBox->GetEntryData( nActive );
 
