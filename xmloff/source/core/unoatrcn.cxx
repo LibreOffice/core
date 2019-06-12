@@ -99,8 +99,7 @@ const css::uno::Sequence< sal_Int8 > & SvUnoAttributeContainer::getUnoTunnelId()
 
 sal_Int64 SAL_CALL SvUnoAttributeContainer::getSomething( const css::uno::Sequence< sal_Int8 >& rId )
 {
-    if( rId.getLength() == 16 && 0 == memcmp( getUnoTunnelId().getConstArray(),
-                                                         rId.getConstArray(), 16 ) )
+    if( isUnoTunnelId<SvUnoAttributeContainer>(rId) )
     {
         return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_uIntPtr>(this));
     }

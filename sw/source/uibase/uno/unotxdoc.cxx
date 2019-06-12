@@ -298,11 +298,9 @@ const Sequence< sal_Int8 > & SwXTextDocument::getUnoTunnelId()
 
 sal_Int64 SAL_CALL SwXTextDocument::getSomething( const Sequence< sal_Int8 >& rId )
 {
-    if( rId.getLength() == 16
-        && 0 == memcmp( getUnoTunnelId().getConstArray(),
-                                        rId.getConstArray(), 16 ) )
+    if( isUnoTunnelId<SwXTextDocument>(rId) )
     {
-            return sal::static_int_cast< sal_Int64 >( reinterpret_cast< sal_IntPtr >( this ));
+        return sal::static_int_cast< sal_Int64 >( reinterpret_cast< sal_IntPtr >( this ));
     }
     if( rId.getLength() == 16
         && 0 == memcmp( SfxObjectShell::getUnoTunnelId().getConstArray(),
