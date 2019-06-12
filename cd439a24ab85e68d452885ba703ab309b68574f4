@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_c0ebccd9",
+        "filename": "sw/source/core/layout/paintfrm.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 5706,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-06-12T06:32:46Z",
+      "side": 1,
+      "message": "looks good, although you might as well skip the whole rest of this method, it will all be a no-op",
+      "revId": "cd439a24ab85e68d452885ba703ab309b68574f4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
