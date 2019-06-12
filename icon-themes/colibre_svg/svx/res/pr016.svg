@@ -1,11 +1,1 @@
-<svg height="15" width="15" xmlns="http://www.w3.org/2000/svg">
-  <path
-     d="M 2 2 L 2 13 L 13 13 L 13 2 L 2 2 z "
-     style="fill:#808080;opacity:0.4" />
-  <path
-     style="fill:#eac282"
-     d="M 6,15 6,0 8,0 8,15 Z" />
-  <path
-     d="M 0 0 L 0 15 L 2 15 L 13 15 L 15 15 L 15 0 L 13 0 L 2 0 L 0 0 z M 2 2 L 13 2 L 13 13 L 2 13 L 2 2 z "
-     style="fill:#808080" />
-</svg>
+<svg height="15" width="15" xmlns="http://www.w3.org/2000/svg"><path d="m2 2v11h11v-11z" fill="#808080" opacity=".4"/><path d="m6 15v-15h2v15z" fill="#eac282"/><path d="m0 0v15h2 11 2v-15h-2-11zm2 2h11v11h-11z" fill="#808080"/></svg>
