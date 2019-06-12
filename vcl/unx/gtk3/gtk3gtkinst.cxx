@@ -8774,6 +8774,8 @@ public:
     virtual void set_cursor(PointerStyle ePointerStyle) override
     {
         GdkCursor *pCursor = GtkSalFrame::getDisplay()->getCursor(ePointerStyle);
+        if (!gtk_widget_get_realized(GTK_WIDGET(m_pDrawingArea)))
+            gtk_widget_realize(GTK_WIDGET(m_pDrawingArea));
         gdk_window_set_cursor(gtk_widget_get_window(GTK_WIDGET(m_pDrawingArea)), pCursor);
     }
 
