@@ -760,7 +760,7 @@ IMPL_STATIC_LINK_NOARG(SvxStyleBox_Impl, ShowMoreHdl, void*, void)
     if (!pViewFrm)
         return;
     pViewFrm->ShowChildWindow(SID_SIDEBAR);
-    ::sfx2::sidebar::Sidebar::ShowPanel("StyleListPanel", pViewFrm->GetFrame().GetFrameInterface());
+    ::sfx2::sidebar::Sidebar::ShowPanel("StyleListPanel", pViewFrm->GetFrame().GetFrameInterface(), true);
 }
 
 void SvxStyleBox_Impl::Select()
