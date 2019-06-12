@@ -271,6 +271,7 @@ core_constructor_list = [
     "com_sun_star_comp_Draw_XMLOasisStylesImporter_get_implementation",
     "com_sun_star_comp_Draw_XMLOasisContentImporter_get_implementation",
     "com_sun_star_comp_Draw_XMLOasisMetaImporter_get_implementation",
+    "com_sun_star_comp_Draw_XMLOasisSettingsImporter_get_implementation",
 # xmlscript/util/xmlscript.component
     "com_sun_star_comp_xmlscript_XMLBasicExporter",
     "com_sun_star_comp_xmlscript_XMLBasicImporter",
