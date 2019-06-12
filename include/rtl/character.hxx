@@ -57,35 +57,6 @@ inline bool isAscii(sal_uInt32 code)
     return code <= 0x7F;
 }
 
-/** Check for Unicode variation sequence selectors
-
-    @param nCode  A Unicode code point.
-
-    @return  True if code is an Unicode variation sequence selector.
-
-    @since LibreOffice 6.3
- */
-inline bool isIVSSelector(sal_uInt32 nCode)
-{
-    return (nCode >= 0xFE00 && nCode <= 0xFE0F)   // Variation Selectors block
-        || (nCode >= 0xE0100 && nCode <= 0xE01EF);// Variation Selectors Supplement block
-}
-
-/** Check for base characters of a CJK ideographic variation sequence (IVS)
-
-    @param nCode  A Unicode code point.
-
-    @return  True if code is an Unicode base character part of CJK IVS
-
-    @since LibreOffice 6.3
- */
-inline bool isCJKIVSCharacter(sal_uInt32 nCode)
-{
-    return (nCode >= 0x4E00 && nCode <= 0x9FFF)       // CJK Unified Ideographs
-        || (nCode >= 0x3400 && nCode <= 0x4DBF)       // CJK Unified Ideographs Extension A
-        || (nCode >= 0x20000 && nCode <= 0x2A6DF);    // CJK Unified Ideographs Extension B
-}
-
 #if defined LIBO_INTERNAL_ONLY
 bool isAscii(char) = delete;
 bool isAscii(signed char) = delete;

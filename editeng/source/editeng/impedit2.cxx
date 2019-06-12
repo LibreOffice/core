@@ -60,7 +60,7 @@
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
 #include <svl/asiancfg.hxx>
-#include <rtl/character.hxx>
+#include <i18nutil/unicode.hxx>
 #include <comphelper/lok.hxx>
 #include <unotools/configmgr.hxx>
 
@@ -2308,8 +2308,8 @@ EditPaM ImpEditEngine::DeleteLeftOrRight( const EditSelection& rSel, sal_uInt8 n
             {
                 const OUString& rString = aCurPos.GetNode()->GetString();
                 sal_Int32 nCode = rString.iterateCodePoints(&nIndex, -1);
-                if (rtl::isIVSSelector(nCode) && nIndex > 0 &&
-                        rtl::isCJKIVSCharacter(rString.iterateCodePoints(&nIndex, -1)))
+                if (unicode::isIVSSelector(nCode) && nIndex > 0 &&
+                        unicode::isCJKIVSCharacter(rString.iterateCodePoints(&nIndex, -1)))
                 {
                     nCharMode = i18n::CharacterIteratorMode::SKIPCELL;
                 }
