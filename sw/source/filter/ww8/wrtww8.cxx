@@ -3198,6 +3198,10 @@ ErrCode MSWordExportBase::ExportDocument( bool bWriteAll )
     m_aFrames = GetFrames( *m_pDoc, bWriteAll? nullptr : m_pOrigPam );
 
     m_nOrigRedlineFlags = m_pDoc->getIDocumentRedlineAccess().GetRedlineFlags();
+
+    SwRootFrame const*const pLayout(m_pDoc->getIDocumentLayoutAccess().GetCurrentLayout());
+    m_bOrigShowChanges = pLayout == nullptr || !pLayout->IsHideRedlines();
+
     if ( !m_pDoc->getIDocumentRedlineAccess().GetRedlineTable().empty() )
     {
         //restored to original state by SwWriter::Write
@@ -3595,6 +3599,7 @@ MSWordExportBase::MSWordExportBase( SwDoc *pDocument, SwPaM *pCurrentPam, SwPaM 
     , m_nUniqueList(0)
     , m_nHdFtIndex(0)
     , m_nOrigRedlineFlags(RedlineFlags::NONE)
+    , m_bOrigShowChanges(true)
     , m_pCurrentPageDesc(nullptr)
     , m_bPrevTextNodeIsEmpty(false)
     , m_bFirstTOCNodeWithSection(false)
