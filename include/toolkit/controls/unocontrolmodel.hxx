@@ -132,7 +132,7 @@ public:
     css::uno::Any  SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
 
     // css::lang::XUnoTunnel
-    static const css::uno::Sequence< sal_Int8 >&   GetUnoTunnelId() throw();
+    static const css::uno::Sequence< sal_Int8 >&   getUnoTunnelId() throw();
     sal_Int64                                                   SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& rIdentifier ) override;
 
     // css::util::XCloneable

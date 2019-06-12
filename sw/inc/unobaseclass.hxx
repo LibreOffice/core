@@ -24,6 +24,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
 
+#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <vcl/svapp.hxx>
 
@@ -114,9 +115,7 @@ namespace sw {
     UnoTunnelImpl(const css::uno::Sequence< sal_Int8 > & rId,
                   C *const pThis)
     {
-        if ((rId.getLength() == 16) &&
-            (0 == memcmp(C::getUnoTunnelId().getConstArray(),
-                                    rId.getConstArray(), 16)))
+        if (isUnoTunnelId<C>(rId))
         {
             return ::sal::static_int_cast< sal_Int64 >(
                     reinterpret_cast< sal_IntPtr >(pThis) );

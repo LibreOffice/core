@@ -601,7 +601,7 @@ sal_Int64 SAL_CALL ValueSetAcc::getSomething( const uno::Sequence< sal_Int8 >& r
 {
     sal_Int64 nRet;
 
-    if( ( rId.getLength() == 16 ) && ( 0 == memcmp( ValueSetAcc::getUnoTunnelId().getConstArray(), rId.getConstArray(), 16 ) ) )
+    if( isUnoTunnelId<ValueSetAcc>(rId) )
         nRet = reinterpret_cast< sal_Int64 >( this );
     else
         nRet = 0;
@@ -1055,7 +1055,7 @@ sal_Int64 SAL_CALL ValueItemAcc::getSomething( const uno::Sequence< sal_Int8 >& 
 {
     sal_Int64 nRet;
 
-    if( ( rId.getLength() == 16 ) && ( 0 == memcmp( ValueItemAcc::getUnoTunnelId().getConstArray(), rId.getConstArray(), 16 ) ) )
+    if( isUnoTunnelId<ValueItemAcc>(rId) )
         nRet = reinterpret_cast< sal_Int64 >( this );
     else
         nRet = 0;
@@ -1404,7 +1404,7 @@ sal_Int64 SAL_CALL SvtValueItemAcc::getSomething( const uno::Sequence< sal_Int8 
 {
     sal_Int64 nRet;
 
-    if( ( rId.getLength() == 16 ) && ( 0 == memcmp( SvtValueItemAcc::getUnoTunnelId().getConstArray(), rId.getConstArray(), 16 ) ) )
+    if( isUnoTunnelId<SvtValueItemAcc>(rId) )
         nRet = reinterpret_cast< sal_Int64 >( this );
     else
         nRet = 0;
@@ -1928,7 +1928,7 @@ sal_Int64 SAL_CALL SvtValueSetAcc::getSomething( const uno::Sequence< sal_Int8 >
 {
     sal_Int64 nRet;
 
-    if( ( rId.getLength() == 16 ) && ( 0 == memcmp( SvtValueSetAcc::getUnoTunnelId().getConstArray(), rId.getConstArray(), 16 ) ) )
+    if( isUnoTunnelId<SvtValueSetAcc>(rId) )
         nRet = reinterpret_cast< sal_Int64 >( this );
     else
         nRet = 0;
