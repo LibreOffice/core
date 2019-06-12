@@ -1160,11 +1160,9 @@ Reference< deployment::XPackage > ExtensionIteratorBase::implGetHelpPackageFromP
         {
             Sequence< Reference< deployment::XPackage > > aPkgSeq = xPackage->getBundle
                 ( Reference<task::XAbortChannel>(), Reference<ucb::XCommandEnvironment>() );
-            sal_Int32 nPkgCount = aPkgSeq.getLength();
-            const Reference< deployment::XPackage >* pSeq = aPkgSeq.getConstArray();
-            for( sal_Int32 iPkg = 0 ; iPkg < nPkgCount ; ++iPkg )
+            for( const auto& rPkg : aPkgSeq )
             {
-                const Reference< deployment::XPackage > xSubPkg = pSeq[ iPkg ];
+                const Reference< deployment::XPackage > xSubPkg = rPkg;
                 const Reference< deployment::XPackageTypeInfo > xPackageTypeInfo = xSubPkg->getPackageType();
                 OUString aMediaType = xPackageTypeInfo->getMediaType();
                 if( aMediaType == aHelpMediaType )
@@ -1319,11 +1317,8 @@ void ExtensionIteratorBase::implGetLanguageVectorFromPackage( ::std::vector< OUS
     OUString aExtensionPath = xPackage->getURL();
     Sequence< OUString > aEntrySeq = m_xSFA->getFolderContents( aExtensionPath, true );
 
-    const OUString* pSeq = aEntrySeq.getConstArray();
-    sal_Int32 nCount = aEntrySeq.getLength();
-    for( sal_Int32 i = 0 ; i < nCount ; ++i )
+    for( const OUString& aEntry : aEntrySeq )
     {
-        OUString aEntry = pSeq[i];
         if( m_xSFA->isFolder( aEntry ) )
         {
             sal_Int32 nLastSlash = aEntry.lastIndexOf( '/' );

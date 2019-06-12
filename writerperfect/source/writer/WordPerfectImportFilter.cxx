@@ -92,16 +92,14 @@ static bool handleEmbeddedWPGImage(const librevenge::RVNGBinaryData& input,
 
 bool WordPerfectImportFilter::importImpl(const Sequence<css::beans::PropertyValue>& aDescriptor)
 {
-    sal_Int32 nLength = aDescriptor.getLength();
-    const PropertyValue* pValue = aDescriptor.getConstArray();
     Reference<XInputStream> xInputStream;
     Reference<XWindow> xDialogParent;
-    for (sal_Int32 i = 0; i < nLength; i++)
+    for (const auto& rValue : aDescriptor)
     {
-        if (pValue[i].Name == "InputStream")
-            pValue[i].Value >>= xInputStream;
-        else if (pValue[i].Name == "ParentWindow")
-            pValue[i].Value >>= xDialogParent;
+        if (rValue.Name == "InputStream")
+            rValue.Value >>= xInputStream;
+        else if (rValue.Name == "ParentWindow")
+            rValue.Value >>= xDialogParent;
     }
     if (!xInputStream.is())
     {
