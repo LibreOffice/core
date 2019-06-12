@@ -94,6 +94,47 @@
     },
     {
       "key": {
+        "uuid": "3fa0c359_edd5a0e6",
+        "filename": "vcl/qt5/Qt5Clipboard.cxx",
+        "patchSetId": 16
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2019-06-12T22:49:53Z",
+      "side": 1,
+      "message": "It\u0027s like a development \"security\" feature. It is a programming error, if the object is not a Qt5MimeData object at this point, so the static_cast should always work. If it\u0027s not you\u0027re crashing in the assert instead of silently ignoring it later.\n\nStill for the release build a user will just lose the clipboard but LO won\u0027t crash. Win-win IMHO.\n\nSure you could simply dynamic_cast and assert on the nullptr afterwards. This is probably a needless optimization. Neither code in the clipboard path is that critical.\n\nI\u0027ll change that.",
+      "parentUuid": "3fa0c359_edc4c061",
+      "range": {
+        "startLine": 63,
+        "startChar": 0,
+        "endLine": 64,
+        "endChar": 85
+      },
+      "revId": "9d5e154abe806fe4cca92a0e8db30c0208f32452",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_2df5c883",
+        "filename": "vcl/qt5/Qt5Clipboard.cxx",
+        "patchSetId": 16
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2019-06-12T22:49:53Z",
+      "side": 1,
+      "message": "Missed the pTrans check here.",
+      "revId": "9d5e154abe806fe4cca92a0e8db30c0208f32452",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3fa0c359_8da17cac",
         "filename": "vcl/qt5/Qt5Transferable.cxx",
         "patchSetId": 16
@@ -163,6 +204,30 @@
     },
     {
       "key": {
+        "uuid": "3fa0c359_8d065c86",
+        "filename": "vcl/qt5/Qt5Transferable.cxx",
+        "patchSetId": 16
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2019-06-12T22:49:53Z",
+      "side": 1,
+      "message": "Will do nMimeTypeCount. It is a counter after all.",
+      "parentUuid": "3fa0c359_4dab7488",
+      "range": {
+        "startLine": 69,
+        "startChar": 4,
+        "endLine": 69,
+        "endChar": 14
+      },
+      "revId": "9d5e154abe806fe4cca92a0e8db30c0208f32452",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3fa0c359_6dae7099",
         "filename": "vcl/qt5/Qt5Transferable.cxx",
         "patchSetId": 16
@@ -174,6 +239,30 @@
       "writtenOn": "2019-06-12T21:02:10Z",
       "side": 1,
       "message": "any reason to keep filledMimeTypeSeq() as a separate method instead of just moving the implementation here?",
+      "range": {
+        "startLine": 117,
+        "startChar": 0,
+        "endLine": 120,
+        "endChar": 1
+      },
+      "revId": "9d5e154abe806fe4cca92a0e8db30c0208f32452",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_0dfa4c74",
+        "filename": "vcl/qt5/Qt5Transferable.cxx",
+        "patchSetId": 16
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2019-06-12T22:49:53Z",
+      "side": 1,
+      "message": "In theory filledMimeType* returns a reference and this function and the formats() function a copy. Now there is (N)RVO, so everything might be pointless, as you - as the programmer - don\u0027t know what the compiler will do. There is no good way to guarantee a refcount increase (you use a copy constructor, but that\u0027s also no guaranteed to work AFAIK).\n\nhttps://stackoverflow.com/questions/12953127/what-are-copy-elision-and-return-value-optimization\n\nAnd both, uno::Sequence and QStringList, are copy-on-write, referenced structures, so the \"copy\" will end as a refcount increase at max. Still all the internal functions could skip that, as these object will never change. They can work fine with the reference.\n\nWe could also fill both lists in the constructor, making the members const, but then constructing would be more expensive, even if the object is never used (which would be pointless, but who knows what will happen to these objects).\n\nNow there aren\u0027t either thousands of MimeTypes in them, nor thousands of calls, so skipping the referencing is pointless.\n\nI\u0027ll just merge them.",
+      "parentUuid": "3fa0c359_6dae7099",
       "range": {
         "startLine": 117,
         "startChar": 0,
