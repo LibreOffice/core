@@ -41,7 +41,6 @@ cmd/32/availabletoolbars.png cmd/32/showtoolbar.png
 cmd/32/backgroundcolor.png cmd/32/formatarea.png
 cmd/32/backgroundpatterncontroller.png cmd/32/formatarea.png
 cmd/32/badcellstyles.png cmd/32/badcellstyle.png
-cmd/32/basicideappear.png cmd/32/toolsmacroedit.png
 cmd/32/basicshapes.png cmd/32/basicshapes.diamond.png
 cmd/32/break.png cmd/32/polygon_unfilled.png
 cmd/32/browsebackward.png cmd/32/navigateback.png
@@ -681,7 +680,6 @@ cmd/lc_availabletoolbars.png cmd/lc_showtoolbar.png
 cmd/lc_backgroundcolor.png cmd/lc_formatarea.png
 cmd/lc_backgroundpatterncontroller.png cmd/lc_formatarea.png
 cmd/lc_badcellstyles.png cmd/lc_badcellstyle.png
-cmd/lc_basicideappear.png cmd/lc_toolsmacroedit.png
 cmd/lc_basicshapes.png cmd/lc_basicshapes.diamond.png
 cmd/lc_break.png cmd/lc_polygon_unfilled.png
 cmd/lc_browsebackward.png cmd/lc_navigateback.png
@@ -1040,7 +1038,6 @@ cmd/sc_availabletoolbars.png cmd/sc_showtoolbar.png
 cmd/sc_backgroundcolor.png cmd/sc_formatarea.png
 cmd/sc_backgroundpatterncontroller.png cmd/sc_formatarea.png
 cmd/sc_badcellstyles.png cmd/sc_badcellstyle.png
-cmd/sc_basicideappear.png cmd/sc_toolsmacroedit.png
 cmd/sc_basicshapes.png cmd/sc_basicshapes.diamond.png
 cmd/sc_break.png cmd/sc_polygon_unfilled.png
 cmd/sc_browsebackward.png cmd/sc_navigateback.png
