@@ -1,13 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.0 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="dkt">
   <requires lib="gtk+" version="3.18"/>
-  <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkDialog" id="ExtensionManagerDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
     <property name="title" translatable="yes" context="extensionmanager|ExtensionManagerDialog">Extension Manager</property>
+    <property name="default_width">0</property>
+    <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
+    <child>
+      <placeholder/>
+    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
@@ -61,9 +65,28 @@
             <property name="orientation">vertical</property>
             <property name="spacing">12</property>
             <child>
-              <object class="deploymentgui-ExtBoxWithBtns" id="extensions">
+              <object class="GtkScrolledWindow" id="scroll">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can_focus">True</property>
+                <property name="hexpand">True</property>
+                <property name="vexpand">True</property>
+                <property name="hscrollbar_policy">never</property>
+                <property name="shadow_type">in</property>
+                <child>
+                  <object class="GtkViewport">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <child>
+                      <object class="GtkDrawingArea" id="extensions">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="events">GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
+                        <property name="hexpand">True</property>
+                        <property name="vexpand">True</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">True</property>
@@ -188,8 +211,8 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
-                            <property name="use_underline">True</property>
                             <property name="halign">center</property>
+                            <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="active">True</property>
                             <property name="draw_indicator">True</property>
@@ -205,8 +228,8 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
-                            <property name="use_underline">True</property>
                             <property name="halign">start</property>
+                            <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="active">True</property>
                             <property name="draw_indicator">True</property>
@@ -222,8 +245,8 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
-                            <property name="use_underline">True</property>
                             <property name="halign">end</property>
+                            <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="active">True</property>
                             <property name="draw_indicator">True</property>
@@ -269,7 +292,6 @@
                   <packing>
                     <property name="left_attach">0</property>
                     <property name="top_attach">0</property>
-                    <property name="width">2</property>
                   </packing>
                 </child>
                 <child>
@@ -281,7 +303,7 @@
                     <property name="use_stock">True</property>
                   </object>
                   <packing>
-                    <property name="left_attach">3</property>
+                    <property name="left_attach">2</property>
                     <property name="top_attach">0</property>
                   </packing>
                 </child>
@@ -289,10 +311,11 @@
                   <object class="GtkProgressBar" id="progressbar">
                     <property name="can_focus">False</property>
                     <property name="no_show_all">True</property>
+                    <property name="valign">center</property>
                     <property name="hexpand">True</property>
                   </object>
                   <packing>
-                    <property name="left_attach">2</property>
+                    <property name="left_attach">1</property>
                     <property name="top_attach">0</property>
                   </packing>
                 </child>
@@ -309,16 +332,8 @@
                   <packing>
                     <property name="left_attach">0</property>
                     <property name="top_attach">1</property>
+                    <property name="width">3</property>
                   </packing>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
                 </child>
               </object>
               <packing>
@@ -338,7 +353,7 @@
     </child>
     <action-widgets>
       <action-widget response="-11">help</action-widget>
-      <action-widget response="-7">close</action-widget>
+      <action-widget response="-6">close</action-widget>
     </action-widgets>
   </object>
 </interface>
