@@ -24,6 +24,7 @@
 #include <com/sun/star/graphic/GraphicType.hpp>
 #include <com/sun/star/graphic/XGraphicTransformer.hpp>
 #include <vcl/dibtools.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/typeprovider.hxx>
@@ -183,7 +184,7 @@ uno::Sequence<sal_Int8> SAL_CALL Graphic::getMaskDIB()
 
 sal_Int64 SAL_CALL Graphic::getSomething( const uno::Sequence< sal_Int8 >& rId )
 {
-    return( ( rId.getLength() == 16 && 0 == memcmp( ::Graphic::getUnoTunnelId().getConstArray(), rId.getConstArray(), 16 ) ) ?
+    return( ( isUnoTunnelId<::Graphic>(rId) ) ?
             reinterpret_cast<sal_Int64>(&maGraphic) : 0 );
 }
 

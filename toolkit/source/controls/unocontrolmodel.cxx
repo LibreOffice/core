@@ -433,14 +433,14 @@ namespace
     class theUnoControlModelUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theUnoControlModelUnoTunnelId> {};
 }
 
-const css::uno::Sequence< sal_Int8 >& UnoControlModel::GetUnoTunnelId() throw()
+const css::uno::Sequence< sal_Int8 >& UnoControlModel::getUnoTunnelId() throw()
 {
     return theUnoControlModelUnoTunnelId::get().getSeq();
 }
 
 sal_Int64 UnoControlModel::getSomething( const css::uno::Sequence< sal_Int8 >& rIdentifier )
 {
-    if( ( rIdentifier.getLength() == 16 ) && ( memcmp( UnoControlModel::GetUnoTunnelId().getConstArray(), rIdentifier.getConstArray(), 16 ) == 0 ) )
+    if( isUnoTunnelId<UnoControlModel>(rIdentifier) )
         return sal::static_int_cast< sal_Int64 >(reinterpret_cast< sal_IntPtr >(this));
 
     return 0;

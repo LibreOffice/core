@@ -750,8 +750,7 @@ const css::uno::Sequence< sal_Int8 >& ScDrawTransferObj::getUnoTunnelId()
 sal_Int64 SAL_CALL ScDrawTransferObj::getSomething( const css::uno::Sequence< sal_Int8 >& rId )
 {
     sal_Int64 nRet;
-    if( ( rId.getLength() == 16 ) &&
-        ( 0 == memcmp( getUnoTunnelId().getConstArray(), rId.getConstArray(), 16 ) ) )
+    if( isUnoTunnelId<ScDrawTransferObj>(rId) )
     {
         nRet = reinterpret_cast< sal_Int64 >( this );
     }
