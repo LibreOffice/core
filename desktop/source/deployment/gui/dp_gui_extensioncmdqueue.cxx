@@ -375,8 +375,12 @@ void ProgressCmdEnv::handle( uno::Reference< task::XInteractionRequest > const &
         }
         {
             SolarMutexGuard guard;
-            DependencyDialog aDlg(m_pDialogHelper ? m_pDialogHelper->getFrameWeld() : nullptr, deps);
+            if (m_pDialogHelper)
+                m_pDialogHelper->incBusy();
+            DependencyDialog aDlg(activeDialog(), deps);
             short n = aDlg.run();
+            if (m_pDialogHelper)
+                m_pDialogHelper->decBusy();
             // Distinguish between closing the dialog and programmatically
             // canceling the dialog (headless VCL):
             approve = n == RET_OK
@@ -386,11 +390,17 @@ void ProgressCmdEnv::handle( uno::Reference< task::XInteractionRequest > const &
     else if (request >>= licExc)
     {
         SolarMutexGuard guard;
+
+        weld::Window *pTopLevel = activeDialog();
+        if (m_pDialogHelper)
+            m_pDialogHelper->incBusy();
         uno::Reference< ui::dialogs::XExecutableDialog > xDialog(
             deployment::ui::LicenseDialog::create(
-            m_xContext, VCLUnoHelper::GetInterface( m_pDialogHelper? m_pDialogHelper->getWindow() : nullptr ),
+            m_xContext, pTopLevel ? pTopLevel->GetXWindow() : nullptr,
             licExc.ExtensionName, licExc.Text ) );
         sal_Int16 res = xDialog->execute();
+        if (m_pDialogHelper)
+            m_pDialogHelper->decBusy();
         if ( res == ui::dialogs::ExecutableDialogResults::CANCEL )
             abort = true;
         else if ( res == ui::dialogs::ExecutableDialogResults::OK )
@@ -421,7 +431,11 @@ void ProgressCmdEnv::handle( uno::Reference< task::XInteractionRequest > const &
             verExc.Deployed->getDisplayName();
         {
             SolarMutexGuard guard;
-            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(m_pDialogHelper ? m_pDialogHelper->getFrameWeld() : nullptr,
+
+            if (m_pDialogHelper)
+                m_pDialogHelper->incBusy();
+
+            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(activeDialog(),
                                                       VclMessageType::Warning, VclButtonsType::OkCancel, DpResId(id)));
             OUString s;
             if (bEqualNames)
@@ -449,6 +463,8 @@ void ProgressCmdEnv::handle( uno::Reference< task::XInteractionRequest > const &
             s = s.replaceAll("$DEPLOYED", getVersion(verExc.Deployed));
             xBox->set_primary_text(s);
             approve = xBox->run() == RET_OK;
+            if (m_pDialogHelper)
+                m_pDialogHelper->decBusy();
             abort = !approve;
         }
     }
@@ -476,9 +492,13 @@ void ProgressCmdEnv::handle( uno::Reference< task::XInteractionRequest > const &
         SolarMutexGuard guard;
         OUString sMsg(DpResId(RID_STR_UNSUPPORTED_PLATFORM));
         sMsg = sMsg.replaceAll("%Name", platExc.package->getDisplayName());
-        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(m_pDialogHelper ? m_pDialogHelper->getFrameWeld() : nullptr,
+        if (m_pDialogHelper)
+            m_pDialogHelper->incBusy();
+        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(activeDialog(),
                                                   VclMessageType::Warning, VclButtonsType::Ok, sMsg));
         xBox->run();
+        if (m_pDialogHelper)
+            m_pDialogHelper->decBusy();
         approve = true;
     }
 
@@ -540,9 +560,13 @@ void ProgressCmdEnv::update_( uno::Any const & rStatus )
             text = ::comphelper::anyToString( rStatus ); // fallback
 
         const SolarMutexGuard aGuard;
-        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(m_pDialogHelper ? m_pDialogHelper->getFrameWeld() : nullptr,
+        if (m_pDialogHelper)
+            m_pDialogHelper->incBusy();
+        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(activeDialog(),
                                                   VclMessageType::Warning, VclButtonsType::Ok, text));
         xBox->run();
+        if (m_pDialogHelper)
+            m_pDialogHelper->decBusy();
     }
     ++m_nCurrentProgress;
     updateProgress();
@@ -783,12 +807,17 @@ void ExtensionCmdQueue::Thread::execute()
                     msg = ::comphelper::anyToString(exc);
 
                 const SolarMutexGuard guard;
+                if (m_pDialogHelper)
+                    m_pDialogHelper->incBusy();
+
                 std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(currentCmdEnv->activeDialog(),
                                                           VclMessageType::Warning, VclButtonsType::Ok, msg));
                 if (m_pDialogHelper)
-                    xBox->set_title(m_pDialogHelper->getWindow()->GetText());
+                    xBox->set_title(m_pDialogHelper->getFrameWeld()->get_title());
                 xBox->run();
-                    //Continue with installation of the remaining extensions
+                if (m_pDialogHelper)
+                    m_pDialogHelper->decBusy();
+                //Continue with installation of the remaining extensions
             }
             {
                 osl::MutexGuard aGuard( m_mutex );
@@ -895,12 +924,19 @@ void ExtensionCmdQueue::Thread::_checkForUpdates(
 {
     const SolarMutexGuard guard;
 
+    if (m_pDialogHelper)
+        m_pDialogHelper->incBusy();
+
     std::vector< UpdateData > vData;
-    UpdateDialog aUpdateDialog(m_xContext, m_pDialogHelper? m_pDialogHelper->getFrameWeld() : nullptr, vExtensionList, &vData);
+    UpdateDialog aUpdateDialog(m_xContext, m_pDialogHelper ? m_pDialogHelper->getFrameWeld() : nullptr, vExtensionList, &vData);
 
     aUpdateDialog.notifyMenubar( true, false ); // prepare the checking, if there updates to be notified via menu bar icon
 
-    if (aUpdateDialog.run() == RET_OK && !vData.empty())
+    bool bOk = aUpdateDialog.run() == RET_OK;
+    if (m_pDialogHelper)
+        m_pDialogHelper->decBusy();
+
+    if (bOk && !vData.empty())
     {
         // If there is at least one directly downloadable extension then we
         // open the install dialog.
@@ -915,8 +951,12 @@ void ExtensionCmdQueue::Thread::_checkForUpdates(
         short nDialogResult = RET_OK;
         if ( !dataDownload.empty() )
         {
-            UpdateInstallDialog aDlg(m_pDialogHelper? m_pDialogHelper->getFrameWeld() : nullptr, dataDownload, m_xContext);
+            if (m_pDialogHelper)
+                m_pDialogHelper->incBusy();
+            UpdateInstallDialog aDlg(m_pDialogHelper ? m_pDialogHelper->getFrameWeld() : nullptr, dataDownload, m_xContext);
             nDialogResult = aDlg.run();
+            if (m_pDialogHelper)
+                m_pDialogHelper->decBusy();
             aUpdateDialog.notifyMenubar( false, true ); // Check, if there are still pending updates to be notified via menu bar icon
         }
         else
@@ -928,7 +968,7 @@ void ExtensionCmdQueue::Thread::_checkForUpdates(
             for (auto const& data : vData)
             {
                 if ( m_pDialogHelper && ( !data.sWebsiteURL.isEmpty() ) )
-                    m_pDialogHelper->openWebBrowser( data.sWebsiteURL, m_pDialogHelper->getWindow()->GetText() );
+                    m_pDialogHelper->openWebBrowser( data.sWebsiteURL, m_pDialogHelper->getFrameWeld()->get_title() );
             }
         }
     }

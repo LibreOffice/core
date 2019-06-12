@@ -22,14 +22,10 @@
 
 #include <config_extensions.h>
 
-#include <vcl/dialog.hxx>
-#include <vcl/button.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/fixedhyper.hxx>
-#include <vcl/prgsbar.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/waitobj.hxx>
+#include <vcl/customweld.hxx>
 #include <vcl/weld.hxx>
 
 #include <osl/conditn.hxx>
@@ -60,18 +56,17 @@ class TheExtensionManager;
 class DialogHelper
 {
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
-    VclPtr<Dialog>  m_xVCLWindow;
+    weld::Window*   m_pWindow;
     ImplSVEvent *   m_nEventID;
     TopLevelWindowLocker m_aBusy;
 
 public:
-                    DialogHelper( const css::uno::Reference< css::uno::XComponentContext > &,
-                                  Dialog *pWindow );
+                    DialogHelper(const css::uno::Reference< css::uno::XComponentContext > &,
+                                 weld::Window* pWindow);
     virtual        ~DialogHelper();
 
     void            openWebBrowser(const OUString& rURL, const OUString& rTitle);
-    Dialog*         getWindow() const { return m_xVCLWindow; };
-    weld::Window*   getFrameWeld() const { return m_xVCLWindow ? m_xVCLWindow->GetFrameWeld() : nullptr; }
+    weld::Window*   getFrameWeld() const { return m_pWindow; }
     void            PostUserEvent( const Link<void*,void>& rLink, void* pCaller );
     void            clearEventID() { m_nEventID = nullptr; }
 
@@ -93,31 +88,16 @@ public:
                                                const char* pResID,
                                                bool &bHadWarning );
 
-    void            incBusy() { m_aBusy.incBusy(m_xVCLWindow->GetFrameWeld()); }
+    void            incBusy() { m_aBusy.incBusy(m_pWindow); }
     void            decBusy() { m_aBusy.decBusy(); }
     bool            isBusy() const { return m_aBusy.isBusy(); }
     bool            installExtensionWarn(const OUString &rExtensionURL);
     bool            installForAllUsers(bool &bInstallForAll);
 };
 
-class ExtMgrDialog : public ModelessDialog,
-                     public DialogHelper
+class ExtMgrDialog : public weld::GenericDialogController
+                   , public DialogHelper
 {
-    VclPtr<vcl::Window> m_xRestartParent;
-    VclPtr<ExtBoxWithBtns_Impl> m_pExtensionBox;
-    VclPtr<PushButton>          m_pOptionsBtn;
-    VclPtr<PushButton>          m_pAddBtn;
-    VclPtr<PushButton>          m_pRemoveBtn;
-    VclPtr<PushButton>          m_pEnableBtn;
-    VclPtr<PushButton>          m_pUpdateBtn;
-    VclPtr<CloseButton>         m_pCloseBtn;
-    VclPtr<CheckBox>            m_pBundledCbx;
-    VclPtr<CheckBox>            m_pSharedCbx;
-    VclPtr<CheckBox>            m_pUserCbx;
-    VclPtr<FixedHyperlink>      m_pGetExtensions;
-    VclPtr<FixedText>           m_pProgressText;
-    VclPtr<ProgressBar>         m_pProgressBar;
-    VclPtr<CancelButton>        m_pCancelBtn;
     const OUString       m_sAddPackages;
     OUString             m_sProgressText;
     OUString             m_sLastFolderURL;
@@ -136,27 +116,38 @@ class ExtMgrDialog : public ModelessDialog,
 
     css::uno::Reference< css::task::XAbortChannel > m_xAbortChannel;
 
+    std::unique_ptr<ExtBoxWithBtns_Impl> m_xExtensionBox;
+    std::unique_ptr<weld::CustomWeld> m_xExtensionBoxWnd;
+    std::unique_ptr<weld::Button> m_xOptionsBtn;
+    std::unique_ptr<weld::Button> m_xAddBtn;
+    std::unique_ptr<weld::Button> m_xRemoveBtn;
+    std::unique_ptr<weld::Button> m_xEnableBtn;
+    std::unique_ptr<weld::Button> m_xUpdateBtn;
+    std::unique_ptr<weld::Button> m_xCloseBtn;
+    std::unique_ptr<weld::CheckButton> m_xBundledCbx;
+    std::unique_ptr<weld::CheckButton> m_xSharedCbx;
+    std::unique_ptr<weld::CheckButton> m_xUserCbx;
+    std::unique_ptr<weld::LinkButton> m_xGetExtensions;
+    std::unique_ptr<weld::Label> m_xProgressText;
+    std::unique_ptr<weld::ProgressBar> m_xProgressBar;
+    std::unique_ptr<weld::Button> m_xCancelBtn;
+
     bool removeExtensionWarn(const OUString &rExtensionTitle);
 
-    DECL_LINK( HandleOptionsBtn, Button*, void );
-    DECL_LINK( HandleAddBtn, Button*, void );
-    DECL_LINK( HandleRemoveBtn, Button*, void );
-    DECL_LINK( HandleEnableBtn, Button*, void );
-    DECL_LINK( HandleUpdateBtn, Button*, void );
-    DECL_LINK( HandleCancelBtn, Button*, void );
-    DECL_LINK( HandleCloseBtn, Button*, void );
-    DECL_LINK( HandleExtTypeCbx, Button*, void );
+    DECL_LINK( HandleOptionsBtn, weld::Button&, void );
+    DECL_LINK( HandleAddBtn, weld::Button&, void );
+    DECL_LINK( HandleRemoveBtn, weld::Button&, void );
+    DECL_LINK( HandleEnableBtn, weld::Button&, void );
+    DECL_LINK( HandleUpdateBtn, weld::Button&, void );
+    DECL_LINK( HandleCancelBtn, weld::Button&, void );
+    DECL_LINK( HandleCloseBtn, weld::Button&, void );
+    DECL_LINK( HandleExtTypeCbx, weld::Button&, void );
     DECL_LINK( TimeOutHdl, Timer *, void );
     DECL_LINK( startProgress, void *, void );
-    DECL_STATIC_LINK( ExtMgrDialog, Restart, void *, void );
 
 public:
-                    ExtMgrDialog( vcl::Window * pParent, TheExtensionManager *pManager, Dialog::InitFlag eFlag = Dialog::InitFlag::Default );
-    virtual        ~ExtMgrDialog() override;
-    virtual void    dispose() override;
-
-    virtual bool    EventNotify( NotifyEvent& rNEvt ) override;
-    virtual bool    Close() override;
+    ExtMgrDialog(weld::Window * pParent, TheExtensionManager *pManager);
+    virtual ~ExtMgrDialog() override;
 
     virtual void    showProgress( bool bStart ) override;
     virtual void    updateProgress( const OUString &rText,
@@ -173,6 +164,8 @@ public:
     void removePackage(const css::uno::Reference< css::deployment::XPackage > &xPackage );
     void updatePackage(const css::uno::Reference< css::deployment::XPackage > &xPackage );
     bool acceptLicense(const css::uno::Reference< css::deployment::XPackage > &xPackage );
+
+    void Close();
 
     TheExtensionManager*    getExtensionManager() const { return m_pManager; }
 
@@ -192,16 +185,9 @@ public:
 };
 
 
-class UpdateRequiredDialog : public ModalDialog,
-                             public DialogHelper
+class UpdateRequiredDialog : public weld::GenericDialogController
+                           , public DialogHelper
 {
-    VclPtr<ExtensionBox_Impl>   m_pExtensionBox;
-    VclPtr<FixedText>           m_pUpdateNeeded;
-    VclPtr<PushButton>          m_pUpdateBtn;
-    VclPtr<PushButton>          m_pCloseBtn;
-    VclPtr<CancelButton>        m_pCancelBtn;
-    VclPtr<FixedText>           m_pProgressText;
-    VclPtr<ProgressBar>         m_pProgressBar;
     const OUString       m_sCloseText;
     OUString             m_sProgressText;
     ::osl::Mutex         m_aMutex;
@@ -216,9 +202,18 @@ class UpdateRequiredDialog : public ModalDialog,
 
     css::uno::Reference< css::task::XAbortChannel > m_xAbortChannel;
 
-    DECL_LINK( HandleUpdateBtn, Button*, void );
-    DECL_LINK( HandleCloseBtn, Button*, void );
-    DECL_LINK( HandleCancelBtn, Button*, void );
+    std::unique_ptr<ExtensionBox_Impl> m_xExtensionBox;
+    std::unique_ptr<weld::CustomWeld> m_xExtensionBoxWnd;
+    std::unique_ptr<weld::Label> m_xUpdateNeeded;
+    std::unique_ptr<weld::Button> m_xUpdateBtn;
+    std::unique_ptr<weld::Button> m_xCloseBtn;
+    std::unique_ptr<weld::Button> m_xCancelBtn;
+    std::unique_ptr<weld::Label> m_xProgressText;
+    std::unique_ptr<weld::ProgressBar> m_xProgressBar;
+
+    DECL_LINK( HandleUpdateBtn, weld::Button&, void );
+    DECL_LINK( HandleCloseBtn, weld::Button&, void );
+    DECL_LINK( HandleCancelBtn, weld::Button&, void );
     DECL_LINK( TimeOutHdl, Timer *, void );
     DECL_LINK( startProgress, void *, void );
 
@@ -228,12 +223,10 @@ class UpdateRequiredDialog : public ModalDialog,
     void            disableAllEntries();
 
 public:
-                    UpdateRequiredDialog( vcl::Window * pParent, TheExtensionManager *pManager );
+    UpdateRequiredDialog(weld::Window * pParent, TheExtensionManager *pManager);
     virtual        ~UpdateRequiredDialog() override;
-    virtual void    dispose() override;
 
-    virtual short   Execute() override;
-    virtual bool    Close() override;
+    virtual short   run() override;
 
     virtual void    showProgress( bool bStart ) override;
     virtual void    updateProgress( const OUString &rText,
