@@ -844,7 +844,7 @@ public:
     virtual VclPtr<SvxAbstractNewTableDialog> CreateSvxNewTableDialog(weld::Window* pParent) override ;
 
     virtual VclPtr<VclAbstractDialog>          CreateOptionsDialog(
-        vcl::Window* pParent, const OUString& rExtensionId ) override;
+        weld::Window* pParent, const OUString& rExtensionId ) override;
 
     virtual VclPtr<SvxAbstractInsRowColDlg> CreateSvxInsRowColDlg(weld::Window* pParent, bool bCol, const OString& rHelpId) override;
 

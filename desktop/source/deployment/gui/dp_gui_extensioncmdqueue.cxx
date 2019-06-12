@@ -386,9 +386,10 @@ void ProgressCmdEnv::handle( uno::Reference< task::XInteractionRequest > const &
     else if (request >>= licExc)
     {
         SolarMutexGuard guard;
+        weld::Window *pTopLevel = m_pDialogHelper ? m_pDialogHelper->getFrameWeld() : nullptr;
         uno::Reference< ui::dialogs::XExecutableDialog > xDialog(
             deployment::ui::LicenseDialog::create(
-            m_xContext, VCLUnoHelper::GetInterface( m_pDialogHelper? m_pDialogHelper->getWindow() : nullptr ),
+            m_xContext, pTopLevel ? pTopLevel->GetXWindow() : nullptr,
             licExc.ExtensionName, licExc.Text ) );
         sal_Int16 res = xDialog->execute();
         if ( res == ui::dialogs::ExecutableDialogResults::CANCEL )
@@ -786,7 +787,7 @@ void ExtensionCmdQueue::Thread::execute()
                 std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(currentCmdEnv->activeDialog(),
                                                           VclMessageType::Warning, VclButtonsType::Ok, msg));
                 if (m_pDialogHelper)
-                    xBox->set_title(m_pDialogHelper->getWindow()->GetText());
+                    xBox->set_title(m_pDialogHelper->getFrameWeld()->get_title());
                 xBox->run();
                     //Continue with installation of the remaining extensions
             }
@@ -928,7 +929,7 @@ void ExtensionCmdQueue::Thread::_checkForUpdates(
             for (auto const& data : vData)
             {
                 if ( m_pDialogHelper && ( !data.sWebsiteURL.isEmpty() ) )
-                    m_pDialogHelper->openWebBrowser( data.sWebsiteURL, m_pDialogHelper->getWindow()->GetText() );
+                    m_pDialogHelper->openWebBrowser( data.sWebsiteURL, m_pDialogHelper->getFrameWeld()->get_title() );
             }
         }
     }

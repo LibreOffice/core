@@ -81,7 +81,7 @@ Entry_Impl::Entry_Impl( const uno::Reference< deployment::XPackage > &xPackage,
     m_bHasButtons( false ),
     m_bMissingLic( false ),
     m_eState( eState ),
-    m_pPublisher( nullptr ),
+//TODO    m_pPublisher( nullptr ),
     m_xPackage( xPackage )
 {
     try
@@ -175,37 +175,33 @@ ExtensionRemovedListener::~ExtensionRemovedListener()
 
 
 // ExtensionBox_Impl
-ExtensionBox_Impl::ExtensionBox_Impl(vcl::Window* pParent) :
-    Control( pParent, WB_BORDER | WB_TABSTOP ),
-    m_bHasScrollBar( false ),
-    m_bHasActive( false ),
-    m_bNeedsRecalc( true ),
-    m_bInCheckMode( false ),
-    m_bAdjustActive( false ),
-    m_bInDelete( false ),
-    m_nActive( 0 ),
-    m_nTopIndex( 0 ),
-    m_nActiveHeight( 0 ),
-    m_aSharedImage(StockImage::Yes, RID_BMP_SHARED),
-    m_aLockedImage(StockImage::Yes, RID_BMP_LOCKED),
-    m_aWarningImage(StockImage::Yes, RID_BMP_WARNING),
-    m_aDefaultImage(StockImage::Yes, RID_BMP_EXTENSION),
-    m_pScrollBar( nullptr ),
-    m_pManager( nullptr )
+ExtensionBox_Impl::ExtensionBox_Impl(std::unique_ptr<weld::ScrolledWindow> xScroll)
+    : m_bHasScrollBar( false )
+    , m_bHasActive( false )
+    , m_bNeedsRecalc( true )
+    , m_bInCheckMode( false )
+    , m_bAdjustActive( false )
+    , m_bInDelete( false )
+    , m_nActive( 0 )
+    , m_nTopIndex( 0 )
+    , m_nActiveHeight( 0 )
+    , m_aSharedImage(StockImage::Yes, RID_BMP_SHARED)
+    , m_aLockedImage(StockImage::Yes, RID_BMP_LOCKED)
+    , m_aWarningImage(StockImage::Yes, RID_BMP_WARNING)
+    , m_aDefaultImage(StockImage::Yes, RID_BMP_EXTENSION)
+    , m_pManager( nullptr )
+    , m_xScrollBar(std::move(xScroll))
 {
-    Init();
 }
 
 void ExtensionBox_Impl::Init()
 {
-    m_pScrollBar = VclPtr<ScrollBar>::Create( this, WB_VERT );
-    m_pScrollBar->SetScrollHdl( LINK( this, ExtensionBox_Impl, ScrollHdl ) );
-    m_pScrollBar->EnableDrag();
+    m_xScrollBar->set_user_managed_scrolling();
+    m_xScrollBar->connect_vadjustment_changed( LINK( this, ExtensionBox_Impl, ScrollHdl ) );
 
-    SetPaintTransparent( true );
-    SetPosPixel( Point( RSC_SP_DLG_INNERBORDER_LEFT, RSC_SP_DLG_INNERBORDER_TOP ) );
-    long nIconHeight = 2*TOP_OFFSET + SMALL_ICON_SIZE;
-    long nTitleHeight = 2*TOP_OFFSET + GetTextHeight();
+//TODO    SetPosPixel( Point( RSC_SP_DLG_INNERBORDER_LEFT, RSC_SP_DLG_INNERBORDER_TOP ) );
+    auto nIconHeight = 2*TOP_OFFSET + SMALL_ICON_SIZE;
+    auto nTitleHeight = 2*TOP_OFFSET + GetTextHeight();
     if ( nIconHeight < nTitleHeight )
         m_nStdHeight = nTitleHeight;
     else
@@ -218,28 +214,14 @@ void ExtensionBox_Impl::Init()
 
     m_nActiveHeight = m_nStdHeight;
 
-    const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-    if( IsControlBackground() )
-        SetBackground( GetControlBackground() );
-    else
-        SetBackground( rStyleSettings.GetFieldColor() );
-
     m_xRemoveListener = new ExtensionRemovedListener( this );
 
     m_pLocale.reset( new lang::Locale( Application::GetSettings().GetLanguageTag().getLocale() ) );
     m_pCollator.reset( new CollatorWrapper( ::comphelper::getProcessComponentContext() ) );
     m_pCollator->loadDefaultCollator( *m_pLocale, i18n::CollatorOptions::CollatorOptions_IGNORE_CASE );
-
-    Show();
 }
-
 
 ExtensionBox_Impl::~ExtensionBox_Impl()
-{
-    disposeOnce();
-}
-
-void ExtensionBox_Impl::dispose()
 {
     if ( ! m_bInDelete )
         DeleteRemoved();
@@ -248,21 +230,17 @@ void ExtensionBox_Impl::dispose()
 
     for (auto const& entry : m_vEntries)
     {
-        entry->m_pPublisher.disposeAndClear();
+//TODO        entry->m_pPublisher.disposeAndClear();
         entry->m_xPackage->removeEventListener( m_xRemoveListener.get() );
     }
 
     m_vEntries.clear();
 
-    m_pScrollBar.disposeAndClear();
-
     m_xRemoveListener.clear();
 
     m_pLocale.reset();
     m_pCollator.reset();
-    Control::dispose();
 }
-
 
 sal_Int32 ExtensionBox_Impl::getItemCount() const
 {
@@ -299,7 +277,7 @@ void ExtensionBox_Impl::CalcActiveHeight( const long nPos )
     // calc description height
     Size aSize = GetOutputSizePixel();
     if ( m_bHasScrollBar )
-        aSize.AdjustWidth( -(m_pScrollBar->GetSizePixel().Width()) );
+        aSize.AdjustWidth(-m_xScrollBar->get_vscroll_width());
 
     aSize.AdjustWidth( -(ICON_OFFSET) );
     aSize.setHeight( 10000 );
@@ -309,8 +287,8 @@ void ExtensionBox_Impl::CalcActiveHeight( const long nPos )
         aText += "\n";
     aText += m_vEntries[ nPos ]->m_sDescription;
 
-    tools::Rectangle aRect = GetTextRect( tools::Rectangle( Point(), aSize ), aText,
-                                   DrawTextFlags::MultiLine | DrawTextFlags::WordBreak );
+    tools::Rectangle aRect = GetDrawingArea()->get_ref_device().GetTextRect(tools::Rectangle( Point(), aSize ), aText,
+                                                                            DrawTextFlags::MultiLine | DrawTextFlags::WordBreak);
     aTextHeight += aRect.GetHeight();
 
     if ( aTextHeight < m_nStdHeight )
@@ -329,7 +307,7 @@ tools::Rectangle ExtensionBox_Impl::GetEntryRect( const long nPos ) const
     Size aSize( GetOutputSizePixel() );
 
     if ( m_bHasScrollBar )
-        aSize.AdjustWidth( -(m_pScrollBar->GetSizePixel().Width()) );
+        aSize.AdjustWidth(-m_xScrollBar->get_vscroll_width());
 
     if ( m_vEntries[ nPos ]->m_bActive )
         aSize.setHeight( m_nActiveHeight );
@@ -354,7 +332,7 @@ void ExtensionBox_Impl::DeleteRemoved()
     {
         for (auto const& removedEntry : m_vRemovedEntries)
         {
-            removedEntry->m_pPublisher.disposeAndClear();
+//TODO            removedEntry->m_pPublisher.disposeAndClear();
         }
 
         m_vRemovedEntries.clear();
@@ -424,8 +402,6 @@ void ExtensionBox_Impl::DrawRow(vcl::RenderContext& rRenderContext, const tools:
         rRenderContext.SetTextColor(rStyleSettings.GetHighlightTextColor());
     else if ((rEntry->m_eState != REGISTERED) && (rEntry->m_eState != NOT_AVAILABLE))
         rRenderContext.SetTextColor(rStyleSettings.GetDisableColor());
-    else if (IsControlForeground())
-        rRenderContext.SetTextColor(GetControlForeground());
     else
         rRenderContext.SetTextColor(rStyleSettings.GetFieldTextColor());
 
@@ -437,11 +413,7 @@ void ExtensionBox_Impl::DrawRow(vcl::RenderContext& rRenderContext, const tools:
     }
     else
     {
-        if (IsControlBackground())
-            rRenderContext.SetBackground(GetControlBackground());
-        else
-            rRenderContext.SetBackground(rStyleSettings.GetFieldColor());
-
+        rRenderContext.SetBackground(rStyleSettings.GetFieldColor());
         rRenderContext.SetTextFillColor();
         rRenderContext.Erase(rRect);
     }
@@ -463,12 +435,16 @@ void ExtensionBox_Impl::DrawRow(vcl::RenderContext& rRenderContext, const tools:
         rRenderContext.DrawImage(aPos, Size(ICON_WIDTH, ICON_HEIGHT), aImage);
 
     // Setup fonts
+    // expand the point size of the desired font to the equivalent pixel size
+    if (vcl::Window* pDefaultDevice = dynamic_cast<vcl::Window*>(Application::GetDefaultDevice()))
+        pDefaultDevice->SetPointFont(rRenderContext, GetDrawingArea()->get_font());
     vcl::Font aStdFont(rRenderContext.GetFont());
     vcl::Font aBoldFont(aStdFont);
     aBoldFont.SetWeight(WEIGHT_BOLD);
     rRenderContext.SetFont(aBoldFont);
-    long aTextHeight = rRenderContext.GetTextHeight();
+    auto aTextHeight = rRenderContext.GetTextHeight();
 
+#if 0
     // Init publisher link here
     if (!rEntry->m_pPublisher && !rEntry->m_sPublisher.isEmpty())
     {
@@ -480,15 +456,16 @@ void ExtensionBox_Impl::DrawRow(vcl::RenderContext& rRenderContext, const tools:
         Size aSize = FixedText::CalcMinimumTextSize(rEntry->m_pPublisher);
         rEntry->m_pPublisher->SetSizePixel(aSize);
     }
-
+#endif
     // Get max title width
-    long nMaxTitleWidth = rRect.GetWidth() - ICON_OFFSET;
+    auto nMaxTitleWidth = rRect.GetWidth() - ICON_OFFSET;
     nMaxTitleWidth -= (2 * SMALL_ICON_SIZE) + (4 * SPACE_BETWEEN);
+#if 0
     if (rEntry->m_pPublisher)
     {
         nMaxTitleWidth -= rEntry->m_pPublisher->GetSizePixel().Width() + (2 * SPACE_BETWEEN);
     }
-
+#endif
     long aVersionWidth = rRenderContext.GetTextWidth(rEntry->m_sVersion);
     long aTitleWidth = rRenderContext.GetTextWidth(rEntry->m_sTitle) + (aTextHeight / 3);
 
@@ -541,12 +518,13 @@ void ExtensionBox_Impl::DrawRow(vcl::RenderContext& rRenderContext, const tools:
     {
         //replace LF to space, so words do not stick together in one line view
         sDescription = sDescription.replace(0x000A, ' ');
-        const long nWidth = GetTextWidth( sDescription );
+        const long nWidth = rRenderContext.GetTextWidth( sDescription );
         if (nWidth > rRect.GetWidth() - aPos.X())
             sDescription = rRenderContext.GetEllipsisString(sDescription, rRect.GetWidth() - aPos.X());
         rRenderContext.DrawText(aPos, sDescription);
     }
 
+#if 0
     // Draw publisher link
     if (rEntry->m_pPublisher)
     {
@@ -554,6 +532,7 @@ void ExtensionBox_Impl::DrawRow(vcl::RenderContext& rRenderContext, const tools:
         aPos = rRect.TopLeft() + Point( ICON_OFFSET + nMaxTitleWidth + (2*SPACE_BETWEEN), TOP_OFFSET );
         rEntry->m_pPublisher->SetPosPixel(aPos);
     }
+#endif
 
     // Draw status icons
     if (!rEntry->m_bUser)
@@ -618,7 +597,7 @@ void ExtensionBox_Impl::RecalcAll()
             }
 
             if ( m_bHasScrollBar )
-                m_pScrollBar->SetThumbPos( m_nTopIndex );
+                m_xScrollBar->vadjustment_set_value( m_nTopIndex );
         }
     }
 
@@ -683,7 +662,7 @@ void ExtensionBox_Impl::Paint(vcl::RenderContext& rRenderContext, const tools::R
     Size aSize(GetOutputSizePixel());
 
     if ( m_bHasScrollBar )
-        aSize.AdjustWidth( -(m_pScrollBar->GetSizePixel().Width()) );
+        aSize.AdjustWidth(-m_xScrollBar->get_vscroll_width());
 
     const ::osl::MutexGuard aGuard( m_entriesMutex );
 
@@ -713,8 +692,8 @@ long ExtensionBox_Impl::GetTotalHeight() const
 void ExtensionBox_Impl::SetupScrollBar()
 {
     const Size aSize = GetOutputSizePixel();
-    const long nScrBarSize = GetSettings().GetStyleSettings().GetScrollBarSize();
-    const long nTotalHeight = GetTotalHeight();
+    const auto nScrBarSize = m_xScrollBar->get_vscroll_width();
+    const auto nTotalHeight = GetTotalHeight();
     const bool bNeedsScrollBar = ( nTotalHeight > aSize.Height() );
 
     if ( bNeedsScrollBar )
@@ -722,20 +701,16 @@ void ExtensionBox_Impl::SetupScrollBar()
         if ( m_nTopIndex + aSize.Height() > nTotalHeight )
             m_nTopIndex = nTotalHeight - aSize.Height();
 
-        m_pScrollBar->SetPosSizePixel( Point( aSize.Width() - nScrBarSize, 0 ),
-                                       Size( nScrBarSize, aSize.Height() ) );
-        m_pScrollBar->SetRangeMax( nTotalHeight );
-        m_pScrollBar->SetVisibleSize( aSize.Height() );
-        m_pScrollBar->SetPageSize( ( aSize.Height() * 4 ) / 5 );
-        m_pScrollBar->SetLineSize( m_nStdHeight );
-        m_pScrollBar->SetThumbPos( m_nTopIndex );
+        m_xScrollBar->vadjustment_configure(m_nTopIndex, 0, nTotalHeight,
+                                            m_nStdHeight, ( aSize.Height() * 4 ) / 5,
+                                            aSize.Height());
 
-        if ( !m_bHasScrollBar )
-            m_pScrollBar->Show();
+        if (!m_bHasScrollBar)
+            m_xScrollBar->set_vpolicy(VclPolicyType::ALWAYS);
     }
     else if ( m_bHasScrollBar )
     {
-        m_pScrollBar->Hide();
+        m_xScrollBar->set_vpolicy(VclPolicyType::NEVER);
         m_nTopIndex = 0;
     }
 
@@ -748,14 +723,14 @@ void ExtensionBox_Impl::Resize()
     RecalcAll();
 }
 
-Size ExtensionBox_Impl::GetOptimalSize() const
+void ExtensionBox_Impl::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 {
-    return LogicToPixel(Size(250, 150), MapMode(MapUnit::MapAppFont));
-}
+    Size aSize = pDrawingArea->get_ref_device().LogicToPixel(Size(250, 150), MapMode(MapUnit::MapAppFont));
+    pDrawingArea->set_size_request(aSize.Width(), aSize.Height());
+    CustomWidgetController::SetDrawingArea(pDrawingArea);
+    SetOutputSizePixel(aSize);
 
-extern "C" SAL_DLLPUBLIC_EXPORT void makeExtensionBox(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap &)
-{
-    rRet = VclPtr<ExtensionBox_Impl>::Create(pParent);
+    Init();
 }
 
 long ExtensionBox_Impl::PointToPos( const Point& rPos )
@@ -774,63 +749,37 @@ long ExtensionBox_Impl::PointToPos( const Point& rPos )
 }
 
 
-void ExtensionBox_Impl::MouseButtonDown( const MouseEvent& rMEvt )
+bool ExtensionBox_Impl::MouseButtonDown( const MouseEvent& rMEvt )
 {
-    long nPos = PointToPos( rMEvt.GetPosPixel() );
-
     if ( rMEvt.IsLeft() )
     {
         if ( rMEvt.IsMod1() && m_bHasActive )
             selectEntry( m_vEntries.size() );   // Selecting a not existing entry will deselect the current one
         else
+        {
+            auto nPos = PointToPos( rMEvt.GetPosPixel() );
             selectEntry( nPos );
+        }
+        return true;
     }
+
+    return false;
 }
 
-
-bool ExtensionBox_Impl::EventNotify( NotifyEvent& rNEvt )
+bool ExtensionBox_Impl::KeyInput(const KeyEvent& rKEvt)
 {
     if ( !m_bInDelete )
         DeleteRemoved();
 
+    vcl::KeyCode aKeyCode = rKEvt.GetKeyCode();
+    sal_uInt16 nKeyCode = aKeyCode.GetCode();
+
     bool bHandled = false;
+    if (nKeyCode != KEY_TAB && aKeyCode.GetGroup() == KEYGROUP_CURSOR)
+        bHandled = HandleCursorKey(nKeyCode);
 
-    if ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
-    {
-        const KeyEvent* pKEvt = rNEvt.GetKeyEvent();
-        vcl::KeyCode aKeyCode = pKEvt->GetKeyCode();
-        sal_uInt16 nKeyCode = aKeyCode.GetCode();
-
-        if ( nKeyCode == KEY_TAB )
-             ;
-        else if ( aKeyCode.GetGroup() == KEYGROUP_CURSOR )
-            bHandled = HandleCursorKey( nKeyCode );
-    }
-
-    if ( rNEvt.GetType() == MouseNotifyEvent::COMMAND )
-    {
-        if ( m_bHasScrollBar &&
-             ( rNEvt.GetCommandEvent()->GetCommand() == CommandEventId::Wheel ) )
-        {
-            const CommandWheelData* pData = rNEvt.GetCommandEvent()->GetWheelData();
-            if ( pData->GetMode() == CommandWheelMode::SCROLL )
-            {
-                long nThumbPos = m_pScrollBar->GetThumbPos();
-                if ( pData->GetDelta() < 0 )
-                    m_pScrollBar->DoScroll( nThumbPos + m_nStdHeight );
-                else
-                    m_pScrollBar->DoScroll( nThumbPos - m_nStdHeight );
-                bHandled = true;
-            }
-        }
-    }
-
-    if ( !bHandled )
-        return Control::EventNotify(rNEvt);
-    else
-        return true;
+    return bHandled;
 }
-
 
 bool ExtensionBox_Impl::FindEntryPos( const TEntry_Impl& rEntry, const long nStart,
                                       const long nEnd, long &nPos )
@@ -1149,23 +1098,10 @@ void ExtensionBox_Impl::checkEntries()
     }
 }
 
-
-void ExtensionBox_Impl::DoScroll( long nDelta )
+IMPL_LINK(ExtensionBox_Impl, ScrollHdl, weld::ScrolledWindow&, rScrBar, void)
 {
-    m_nTopIndex += nDelta;
-    Point aNewSBPt( m_pScrollBar->GetPosPixel() );
-
-    tools::Rectangle aScrRect( Point(), GetOutputSizePixel() );
-    aScrRect.AdjustRight( -(m_pScrollBar->GetSizePixel().Width()) );
-    Scroll( 0, -nDelta, aScrRect );
-
-    m_pScrollBar->SetPosPixel( aNewSBPt );
-}
-
-
-IMPL_LINK( ExtensionBox_Impl, ScrollHdl, ScrollBar*, pScrBar, void )
-{
-    DoScroll( pScrBar->GetDelta() );
+    m_nTopIndex = rScrBar.vadjustment_get_value();
+    Invalidate();
 }
 
 } //namespace dp_gui
