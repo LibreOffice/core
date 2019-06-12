@@ -234,14 +234,13 @@ uno::Any SAL_CALL Content::execute(
         uno::Sequence< uno::Any > ret(propertyValues.getLength());
         uno::Sequence< beans::Property > props(getProperties(Environment));
         // No properties can be set
-        for(sal_Int32 i = 0; i < ret.getLength(); ++i) {
-            ret[i] <<= beans::UnknownPropertyException();
-            for(sal_Int32 j = 0; j < props.getLength(); ++j)
-                if(props[j].Name == propertyValues[i].Name) {
-                    ret[i] <<= lang::IllegalAccessException();
-                    break;
-                }
-        }
+        std::transform(propertyValues.begin(), propertyValues.end(), ret.begin(),
+            [&props](const beans::PropertyValue& rPropVal) {
+                if (std::any_of(props.begin(), props.end(),
+                                [&rPropVal](const beans::Property& rProp) { return rProp.Name == rPropVal.Name; }))
+                    return css::uno::toAny(lang::IllegalAccessException());
+                return css::uno::toAny(beans::UnknownPropertyException());
+            });
 
         aRet <<= ret;
     }
@@ -331,10 +330,8 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
     rtl::Reference< ::ucbhelper::PropertyValueSet > xRow =
         new ::ucbhelper::PropertyValueSet( m_xContext );
 
-    for ( sal_Int32 n = 0; n < rProperties.getLength(); ++n )
+    for ( const beans::Property& rProp : rProperties )
     {
-        const beans::Property& rProp = rProperties[n];
-
         if ( rProp.Name == "ContentType" )
             xRow->appendString(
                 rProp,

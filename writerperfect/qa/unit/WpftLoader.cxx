@@ -181,22 +181,21 @@ void WpftLoader::impl_dispose()
 void WpftLoader::impl_detectFilterName(uno::Sequence<beans::PropertyValue>& rDescriptor,
                                        const OUString& rTypeName)
 {
-    const sal_Int32 nDescriptorLen = rDescriptor.getLength();
-
-    for (sal_Int32 n = 0; nDescriptorLen != n; ++n)
-    {
-        if ("FilterName" == rDescriptor[n].Name)
-            return;
-    }
+    bool bHasFilterName
+        = std::any_of(rDescriptor.begin(), rDescriptor.end(),
+                      [](const beans::PropertyValue& rProp) { return "FilterName" == rProp.Name; });
+    if (bHasFilterName)
+        return;
 
     uno::Sequence<beans::PropertyValue> aTypes;
     if (m_xTypeMap->getByName(rTypeName) >>= aTypes)
     {
-        for (sal_Int32 n = 0; aTypes.getLength() != n; ++n)
+        for (const auto& rType : aTypes)
         {
             OUString aFilterName;
-            if (("PreferredFilter" == aTypes[n].Name) && (aTypes[n].Value >>= aFilterName))
+            if (("PreferredFilter" == rType.Name) && (rType.Value >>= aFilterName))
             {
+                const sal_Int32 nDescriptorLen = rDescriptor.getLength();
                 rDescriptor.realloc(nDescriptorLen + 1);
                 rDescriptor[nDescriptorLen].Name = "FilterName";
                 rDescriptor[nDescriptorLen].Value <<= aFilterName;

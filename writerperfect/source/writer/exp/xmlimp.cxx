@@ -59,14 +59,11 @@ OUString FindMediaDir(const OUString& rDocumentBaseURL,
     OUString aMediaDir;
 
     // See if filter data contains a media directory explicitly.
-    for (sal_Int32 i = 0; i < rFilterData.getLength(); ++i)
-    {
-        if (rFilterData[i].Name == "RVNGMediaDir")
-        {
-            rFilterData[i].Value >>= aMediaDir;
-            break;
-        }
-    }
+    auto pProp = std::find_if(
+        rFilterData.begin(), rFilterData.end(),
+        [](const beans::PropertyValue& rProp) { return rProp.Name == "RVNGMediaDir"; });
+    if (pProp != rFilterData.end())
+        pProp->Value >>= aMediaDir;
 
     if (!aMediaDir.isEmpty())
         return aMediaDir + "/";
@@ -91,14 +88,11 @@ OUString FindCoverImage(const OUString& rDocumentBaseURL, OUString& rMimeType,
     OUString aRet;
 
     // See if filter data contains a cover image explicitly.
-    for (sal_Int32 i = 0; i < rFilterData.getLength(); ++i)
-    {
-        if (rFilterData[i].Name == "RVNGCoverImage")
-        {
-            rFilterData[i].Value >>= aRet;
-            break;
-        }
-    }
+    auto pProp = std::find_if(
+        rFilterData.begin(), rFilterData.end(),
+        [](const beans::PropertyValue& rProp) { return rProp.Name == "RVNGCoverImage"; });
+    if (pProp != rFilterData.end())
+        pProp->Value >>= aRet;
 
     if (!aRet.isEmpty())
     {
@@ -143,35 +137,35 @@ void FindXMPMetadata(const uno::Reference<uno::XComponentContext>& xContext,
 {
     // See if filter data contains metadata explicitly.
     OUString aValue;
-    for (sal_Int32 i = 0; i < rFilterData.getLength(); ++i)
+    for (const auto& rProp : rFilterData)
     {
-        if (rFilterData[i].Name == "RVNGIdentifier")
+        if (rProp.Name == "RVNGIdentifier")
         {
-            rFilterData[i].Value >>= aValue;
+            rProp.Value >>= aValue;
             if (!aValue.isEmpty())
                 rMetaData.insert("dc:identifier", aValue.toUtf8().getStr());
         }
-        else if (rFilterData[i].Name == "RVNGTitle")
+        else if (rProp.Name == "RVNGTitle")
         {
-            rFilterData[i].Value >>= aValue;
+            rProp.Value >>= aValue;
             if (!aValue.isEmpty())
                 rMetaData.insert("dc:title", aValue.toUtf8().getStr());
         }
-        else if (rFilterData[i].Name == "RVNGInitialCreator")
+        else if (rProp.Name == "RVNGInitialCreator")
         {
-            rFilterData[i].Value >>= aValue;
+            rProp.Value >>= aValue;
             if (!aValue.isEmpty())
                 rMetaData.insert("meta:initial-creator", aValue.toUtf8().getStr());
         }
-        else if (rFilterData[i].Name == "RVNGLanguage")
+        else if (rProp.Name == "RVNGLanguage")
         {
-            rFilterData[i].Value >>= aValue;
+            rProp.Value >>= aValue;
             if (!aValue.isEmpty())
                 rMetaData.insert("dc:language", aValue.toUtf8().getStr());
         }
-        else if (rFilterData[i].Name == "RVNGDate")
+        else if (rProp.Name == "RVNGDate")
         {
-            rFilterData[i].Value >>= aValue;
+            rProp.Value >>= aValue;
             if (!aValue.isEmpty())
                 rMetaData.insert("dc:date", aValue.toUtf8().getStr());
         }
@@ -353,14 +347,11 @@ XMLImport::XMLImport(const uno::Reference<uno::XComponentContext>& xContext,
     , mrPageMetafiles(rPageMetafiles)
 {
     uno::Sequence<beans::PropertyValue> aFilterData;
-    for (sal_Int32 i = 0; i < rDescriptor.getLength(); ++i)
-    {
-        if (rDescriptor[i].Name == "FilterData")
-        {
-            rDescriptor[i].Value >>= aFilterData;
-            break;
-        }
-    }
+    auto pDescriptor = std::find_if(
+        rDescriptor.begin(), rDescriptor.end(),
+        [](const beans::PropertyValue& rProp) { return rProp.Name == "FilterData"; });
+    if (pDescriptor != rDescriptor.end())
+        pDescriptor->Value >>= aFilterData;
 
     maMediaDir = FindMediaDir(rURL, aFilterData);
 

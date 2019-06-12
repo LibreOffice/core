@@ -160,11 +160,8 @@ uno::Sequence< beans::PropertyValue > PropertyMap::GetPropertyValues( bool bChar
                 {
                     uno::Sequence< beans::PropertyValue > aSeq;
                     rPropPair.second.getValue() >>= aSeq;
-                    for ( sal_Int32 i = 0; i < aSeq.getLength(); ++i )
-                    {
-                        pCellGrabBagValues[nCellGrabBagValue] = aSeq[i];
-                        ++nCellGrabBagValue;
-                    }
+                    std::copy(aSeq.begin(), aSeq.end(), pCellGrabBagValues + nCellGrabBagValue);
+                    nCellGrabBagValue += aSeq.getLength();
                 }
                 else
                 {
@@ -452,12 +449,11 @@ static OUString lcl_FindUnusedPageStyleName( const uno::Sequence< OUString >& rP
     // find the highest number x in each style with the name "DEFAULT_STYLE+x" and
     // return an incremented name
 
-    const OUString* pStyleNames = rPageStyleNames.getConstArray();
-    for ( sal_Int32 nStyle = 0; nStyle < rPageStyleNames.getLength(); ++nStyle )
+    for ( const auto& rStyleName : rPageStyleNames )
     {
-        if ( pStyleNames[nStyle].startsWith( DEFAULT_STYLE ) )
+        if ( rStyleName.startsWith( DEFAULT_STYLE ) )
         {
-            sal_Int32 nIndex = pStyleNames[nStyle].copy( strlen( DEFAULT_STYLE ) ).toInt32();
+            sal_Int32 nIndex = rStyleName.copy( strlen( DEFAULT_STYLE ) ).toInt32();
             if ( nIndex > nMaxIndex )
                 nMaxIndex = nIndex;
         }
@@ -1604,14 +1600,14 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
                 // Ignore write-only properties.
                 static const std::set<OUString> aBlacklist
                     = { "FooterBackGraphicURL", "BackGraphicURL", "HeaderBackGraphicURL" };
-                for ( int i = 0; i < propertyList.getLength(); ++i )
+                for ( const auto& rProperty : propertyList )
                 {
-                    if ( (propertyList[i].Attributes & beans::PropertyAttribute::READONLY) == 0 )
+                    if ( (rProperty.Attributes & beans::PropertyAttribute::READONLY) == 0 )
                     {
-                        if (aBlacklist.find(propertyList[i].Name) == aBlacklist.end())
+                        if (aBlacklist.find(rProperty.Name) == aBlacklist.end())
                             evenOddStyle->setPropertyValue(
-                                propertyList[i].Name,
-                                pageProperties->getPropertyValue(propertyList[i].Name));
+                                rProperty.Name,
+                                pageProperties->getPropertyValue(rProperty.Name));
                     }
                 }
                 evenOddStyle->setPropertyValue( "FollowStyle", uno::makeAny( *pageStyle ) );

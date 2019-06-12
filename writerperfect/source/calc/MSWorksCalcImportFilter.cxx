@@ -277,18 +277,16 @@ MSWorksCalcImportFilter::filter(const css::uno::Sequence<css::beans::PropertyVal
     css::uno::Reference<ucb::XContent> xContent;
     css::uno::Reference<css::awt::XWindow> xDialogParent;
 
-    sal_Int32 nLength = rDescriptor.getLength();
-    const css::beans::PropertyValue* pValue = rDescriptor.getConstArray();
-    for (sal_Int32 i = 0; i < nLength; i++)
+    for (const auto& rValue : rDescriptor)
     {
-        if (pValue[i].Name == "InputStream")
-            pValue[i].Value >>= xInputStream;
-        else if (pValue[i].Name == "UCBContent")
-            pValue[i].Value >>= xContent;
-        else if (pValue[i].Name == "FileName" || pValue[i].Name == "URL")
-            pValue[i].Value >>= sUrl;
-        else if (pValue[i].Name == "ParentWindow")
-            pValue[i].Value >>= xDialogParent;
+        if (rValue.Name == "InputStream")
+            rValue.Value >>= xInputStream;
+        else if (rValue.Name == "UCBContent")
+            rValue.Value >>= xContent;
+        else if (rValue.Name == "FileName" || rValue.Name == "URL")
+            rValue.Value >>= sUrl;
+        else if (rValue.Name == "ParentWindow")
+            rValue.Value >>= xDialogParent;
     }
 
     if (!getXContext().is() || !xInputStream.is())

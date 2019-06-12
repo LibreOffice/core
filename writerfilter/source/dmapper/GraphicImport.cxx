@@ -656,16 +656,14 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                         xShapeProps->getPropertyValue("RotateAngle") >>= nRotation;
 
                         css::beans::PropertyValues aGrabBag;
-                        bool bContainsEffects = false;
                         xShapeProps->getPropertyValue("InteropGrabBag") >>= aGrabBag;
-                        for( sal_Int32 i = 0; i < aGrabBag.getLength(); ++i )
-                        {
-                            // if the shape contains effects in the grab bag, we should not transform it
-                            // in a XTextContent so those effects can be preserved
-                            if( aGrabBag[i].Name == "EffectProperties" || aGrabBag[i].Name == "3DEffectProperties" ||
-                                    aGrabBag[i].Name == "ArtisticEffectProperties" )
-                                bContainsEffects = true;
-                        }
+                        // if the shape contains effects in the grab bag, we should not transform it
+                        // in a XTextContent so those effects can be preserved
+                        bool bContainsEffects = std::any_of(aGrabBag.begin(), aGrabBag.end(), [](const auto& rProp) {
+                            return rProp.Name == "EffectProperties"
+                                || rProp.Name == "3DEffectProperties"
+                                || rProp.Name == "ArtisticEffectProperties";
+                        });
 
                         xShapeProps->getPropertyValue("Shadow") >>= m_pImpl->bShadow;
                         if (m_pImpl->bShadow)
