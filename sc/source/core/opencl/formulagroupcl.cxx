@@ -51,14 +51,12 @@ static const char* const publicFunc =
  "\n"
  "double CreateDoubleError(ulong nErr)\n"
  "{\n"
- // nVidia OpenCL, at least on Linux, seems to ignore the argument to nan(),
+ // At least nVidia on Linux and Intel on Windows seem to ignore the argument to nan(),
  // so using that would not propagate the type of error, work that around
  // by directly constructing the proper IEEE double NaN value
  // TODO: maybe use a better way to detect such systems?
- "#ifdef cl_nv_pragma_unroll\n"
  "    return as_double(0x7FF8000000000000+nErr);\n"
- "#endif\n"
- "    return nan(nErr);\n"
+// "    return nan(nErr);\n"
  "}\n"
  "\n"
  "uint GetDoubleErrorValue(double fVal)\n"
