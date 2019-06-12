@@ -105,6 +105,7 @@ class SFX2_DLLPUBLIC SfxAutoRedactDialog : public SfxDialogController
     SfxObjectShellLock m_xDocShell;
     std::vector<std::pair<RedactionTarget*, OUString>> m_aTableTargets;
     std::unique_ptr<sfx2::FileDialogHelper> m_pFileDlg;
+    bool m_bIsValidState;
 
     std::unique_ptr<weld::Label> m_xRedactionTargetsLabel;
     std::unique_ptr<TargetsTable> m_xTargetsBox;
@@ -133,10 +134,16 @@ public:
     SfxAutoRedactDialog(weld::Window* pParent);
     virtual ~SfxAutoRedactDialog() override;
 
-    /*
-     * Check if the dialog has any valid redaction targets.
-     */
+    /// Check if the dialog has any valid redaction targets.
     bool hasTargets() const;
+    /// Check if the dialog is in a valid state.
+    bool isValidState() const { return m_bIsValidState; }
+    /** Literally moves targets into the given vector.
+     *  At the end of the operation, m_aTableTargets vector becomes empty.
+     *  The contents of the given vector will be erased before being filled in.
+     *  Returns true if successfull.
+     */
+    bool moveTargets(std::vector<std::pair<RedactionTarget*, OUString>>& r_aTargets);
 
     // TODO: Some method(s) to check emptiness/validity
     // TODO: Some method(s) to get the search params/objects
