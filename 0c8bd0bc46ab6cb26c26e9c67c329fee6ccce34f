@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_bb7b51bc",
+        "filename": "sw/source/uibase/uno/unotxdoc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1881,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2019-06-12T17:51:48Z",
+      "side": 1,
+      "message": "This of course is bigger than just docx import, but I\u0027m guessing that this is the correct change that mstahl probably should have included in his patches.",
+      "range": {
+        "startLine": 1881,
+        "startChar": 15,
+        "endLine": 1881,
+        "endChar": 91
+      },
+      "revId": "0c8bd0bc46ab6cb26c26e9c67c329fee6ccce34f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
