@@ -179,8 +179,8 @@
             </value>
           </prop>
           <prop oor:name="UIItemProperties">
-            <value oor:separator=";">
-             UIItemID , propertyName , propertyValue;
+            <value>
+              <it>UIItemID,propertyName,propertyValue</it>
             </value>
           </prop>
           <prop oor:name="Sidebar">
@@ -212,8 +212,8 @@
             </value>
           </prop>
           <prop oor:name="UIItemProperties">
-            <value oor:separator=";">
-             UIItemID , propertyName , propertyValue;
+            <value>
+              <it>UIItemID,propertyName,propertyValue</it>
             </value>
           </prop>
           <prop oor:name="Sidebar">
@@ -245,8 +245,8 @@
             </value>
           </prop>
           <prop oor:name="UIItemProperties">
-            <value oor:separator=";">
-             UIItemID , propertyName , propertyValue;
+            <value>
+              <it>UIItemID,propertyName,propertyValue</it>
             </value>
           </prop>
           <prop oor:name="Sidebar">
@@ -281,8 +281,8 @@
             </value>
           </prop>
           <prop oor:name="UIItemProperties">
-            <value oor:separator=";">
-             UIItemID , propertyName , propertyValue;
+            <value>
+              <it>UIItemID,propertyName,propertyValue</it>
             </value>
           </prop>
           <prop oor:name="Sidebar">
@@ -431,8 +431,8 @@
             </value>
           </prop>
           <prop oor:name="UIItemProperties">
-            <value oor:separator=";">
-             UIItemID , propertyName , propertyValue;
+            <value>
+              <it>UIItemID,propertyName,propertyValue</it>
             </value>
           </prop>
           <prop oor:name="Sidebar">
@@ -464,8 +464,8 @@
             </value>
           </prop>
           <prop oor:name="UIItemProperties">
-            <value oor:separator=";">
-             UIItemID , propertyName , propertyValue;
+            <value>
+              <it>UIItemID,propertyName,propertyValue</it>
             </value>
           </prop>
           <prop oor:name="Sidebar">
@@ -497,8 +497,8 @@
             </value>
           </prop>
           <prop oor:name="UIItemProperties">
-            <value oor:separator=";">
-             UIItemID , propertyName , propertyValue;
+            <value>
+              <it>UIItemID,propertyName,propertyValue</it>
             </value>
           </prop>
           <prop oor:name="Sidebar">
@@ -530,8 +530,8 @@
             </value>
           </prop>
           <prop oor:name="UIItemProperties">
-            <value oor:separator=";">
-             UIItemID , propertyName , propertyValue;
+            <value>
+              <it>UIItemID,propertyName,propertyValue</it>
             </value>
           </prop>
           <prop oor:name="Sidebar">
@@ -655,8 +655,8 @@
             </value>
           </prop>
           <prop oor:name="UIItemProperties">
-            <value oor:separator=";">
-             UIItemID , propertyName , propertyValue;
+            <value>
+              <it>UIItemID,propertyName,propertyValue</it>
             </value>
           </prop>
           <prop oor:name="Sidebar">
@@ -688,8 +688,8 @@
             </value>
           </prop>
           <prop oor:name="UIItemProperties">
-            <value oor:separator=";">
-             UIItemID , propertyName , propertyValue;
+            <value>
+              <it>UIItemID,propertyName,propertyValue</it>
             </value>
           </prop>
           <prop oor:name="Sidebar">
@@ -721,8 +721,8 @@
             </value>
           </prop>
           <prop oor:name="UIItemProperties">
-            <value oor:separator=";">
-             UIItemID , propertyName , propertyValue;
+            <value>
+              <it>UIItemID,propertyName,propertyValue</it>
             </value>
           </prop>
           <prop oor:name="Sidebar">
@@ -790,8 +790,8 @@
             </value>
           </prop>
           <prop oor:name="UIItemProperties">
-            <value oor:separator=";">
-             UIItemID , propertyName , propertyValue;
+            <value>
+              <it>UIItemID,propertyName,propertyValue</it>
             </value>
           </prop>
           <prop oor:name="Sidebar">
@@ -854,8 +854,8 @@
             </value>
           </prop>
           <prop oor:name="UIItemProperties">
-            <value oor:separator=";">
-             UIItemID , propertyName , propertyValue;
+            <value>
+              <it>UIItemID,propertyName,propertyValue</it>
             </value>
           </prop>
           <prop oor:name="Sidebar">
@@ -890,8 +890,8 @@
             </value>
           </prop>
           <prop oor:name="UIItemProperties">
-            <value oor:separator=";">
-             UIItemID , propertyName , propertyValue;
+            <value>
+              <it>UIItemID,propertyName,propertyValue</it>
             </value>
           </prop>
           <prop oor:name="Sidebar">
