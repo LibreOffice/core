@@ -1,18 +1,1 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" viewBox="0 0 16 16" version="1.1">
- <metadata id="metadata16">
-  <rdf:RDF>
-   <cc:Work>
-    <dc:format>image/svg+xml</dc:format>
-    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
-   </cc:Work>
-  </rdf:RDF>
- </metadata>
- <defs id="defs14"/>
- <sodipodi:namedview pagecolor="#ffffff" bordercolor="#666666" borderopacity="1" objecttolerance="10" gridtolerance="10" guidetolerance="10" inkscape:pageopacity="0" inkscape:pageshadow="2" inkscape:window-width="2560" inkscape:window-height="1319" id="namedview12" showgrid="true" inkscape:zoom="41.7193" inkscape:cx="5.9945056" inkscape:cy="7.266504" inkscape:window-x="0" inkscape:window-y="30" inkscape:window-maximized="1" inkscape:current-layer="svg10">
-  <inkscape:grid type="xygrid" id="grid823"/>
- </sodipodi:namedview>
-
-
-     /&gt;
-  <path d="M 6 1 L 6 15 L 10 15 L 10 1 L 6 1 z " id="rect836" opacity="1" stroke-dasharray="none" stroke-opacity="1" fill="#ffffff" stroke="none" stroke-linejoin="round" fill-opacity="1" stroke-linecap="round" stroke-width="2" stroke-miterlimit="4"/> <path d="m 5,0 v 16 h 6 V 0 Z m 1,1 h 4 V 5 H 6 Z m 0,5 h 4 v 5 H 6 Z m 0,6 h 4 v 3 H 6 Z" id="rect825" inkscape:connector-curvature="0" opacity="1" stroke-dasharray="none" stroke-opacity="1" fill="#808080" stroke="none" stroke-linejoin="round" fill-opacity="1" stroke-linecap="round" stroke-width="2" stroke-miterlimit="4"/></svg>
+<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">/&amp;gt;<path d="m6 1v14h4v-14z" fill="#fff"/><path d="m5 0v16h6v-16zm1 1h4v4h-4zm0 5h4v5h-4zm0 6h4v3h-4z" fill="#808080"/></svg>

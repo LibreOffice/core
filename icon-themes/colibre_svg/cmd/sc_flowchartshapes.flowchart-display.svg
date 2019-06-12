@@ -1,5 +1,1 @@
-<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
-<path
-   d="m 10.503504,0.5 c 2.761424,0 5,3.3578728 5,7.5 0,4.142127 -2.238576,7.5 -5,7.5 l -4.9999997,0 -1,0 L 0.49999332,8 4.5035043,0.5 l 1,0 z"
-   style="fill:#ffffff;stroke:#808080;stroke-linejoin:round" />
-</svg>
+<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="m10.503504.5c2.761424 0 5 3.3578728 5 7.5 0 4.142127-2.238576 7.5-5 7.5h-4.9999997-1l-4.00351098-7.5 4.00351098-7.5h1z" fill="#fff" stroke="#808080" stroke-linejoin="round"/></svg>
