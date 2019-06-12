@@ -60,6 +60,7 @@ struct DocxSettingsData
     bool hasData() const; /// returns true if there are any non-default settings (i.e. something to write)
     bool evenAndOddHeaders;
     int defaultTabStop;
+    bool revisionView;      // don't show tracked changes
     bool trackRevisions;    // Should 'Track Revisions' be set
 };
 

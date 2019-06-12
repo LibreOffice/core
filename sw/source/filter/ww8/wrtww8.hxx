@@ -480,6 +480,7 @@ public:
     unsigned int m_nHdFtIndex;
 
     RedlineFlags m_nOrigRedlineFlags;   ///< Remember the original redline mode
+    bool m_bOrigShowChanges;            ///< Remember the original Show Changes mode
 
 public:
     /* implicit bookmark vector containing pairs of node indexes and bookmark names */

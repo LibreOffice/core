@@ -1012,6 +1012,16 @@ DECLARE_OOXMLEXPORT_TEST(tdf66398_permissions, "tdf66398_permissions.docx")
     CPPUNIT_ASSERT(xBookmarksByName->hasByName("permission-for-group:267014232:everyone"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(tdf89991_revisionView, "tdf89991.docx")
+{
+    // check revisionView (Show Changes) import and export
+    if (xmlDocPtr pXmlSettings = parseExport("word/settings.xml"))
+    {
+        assertXPath(pXmlSettings, "/w:settings/w:revisionView", "insDel",     "0");
+        assertXPath(pXmlSettings, "/w:settings/w:revisionView", "formatting", "0");
+    }
+}
+
 DECLARE_OOXMLEXPORT_TEST(tdf122201_editUnprotectedText, "tdf122201_editUnprotectedText.odt")
 {
     // get the document

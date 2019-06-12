@@ -508,7 +508,8 @@ void DocxExport::OutputDML(uno::Reference<drawing::XShape> const & xShape)
 
 ErrCode DocxExport::ExportDocument_Impl()
 {
-    // Set the 'Track Revisions' flag in the settings structure
+    // Set the 'Reviewing' flags in the settings structure
+    m_aSettings.revisionView = m_bOrigShowChanges;
     m_aSettings.trackRevisions = bool( RedlineFlags::On & m_nOrigRedlineFlags );
 
     InitStyles();
@@ -955,6 +956,11 @@ void DocxExport::WriteSettings()
     }
 
     // Track Changes
+    if ( !m_aSettings.revisionView )
+        pFS->singleElementNS( XML_w, XML_revisionView,
+            FSNS( XML_w, XML_insDel ), "0",
+            FSNS( XML_w, XML_formatting ), "0" );
+
     if ( m_aSettings.trackRevisions )
         pFS->singleElementNS(XML_w, XML_trackRevisions);
 
@@ -1662,6 +1668,7 @@ DocxExport::~DocxExport()
 DocxSettingsData::DocxSettingsData()
 : evenAndOddHeaders( false )
 , defaultTabStop( 0 )
+, revisionView( true )
 , trackRevisions( false )
 {
 }
@@ -1671,6 +1678,8 @@ bool DocxSettingsData::hasData() const
     if( evenAndOddHeaders )
         return true;
     if( defaultTabStop != 0 )
+        return true;
+    if ( !revisionView )
         return true;
     if ( trackRevisions )
         return true;
