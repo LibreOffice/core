@@ -31,6 +31,7 @@ class SfxStringItem;
 class GDIMetaFile;
 class DocumentToGraphicRenderer;
 class SfxViewFrame;
+struct RedactionTarget;
 
 struct PageMargins
 {
@@ -66,10 +67,12 @@ public:
      * Creates one shape and one draw page for each gdimetafile,
      * and inserts the shapes into the newly created draw pages.
      * */
-    static void addPagesToDraw(uno::Reference<XComponent>& xComponent, const sal_Int32& nPages,
-                               const std::vector<GDIMetaFile>& aMetaFiles,
-                               const std::vector<::Size>& aPageSizes,
-                               const PageMargins& aPageMargins);
+    static void
+    addPagesToDraw(uno::Reference<XComponent>& xComponent, const sal_Int32& nPages,
+                   const std::vector<GDIMetaFile>& aMetaFiles,
+                   const std::vector<::Size>& aPageSizes, const PageMargins& aPageMargins,
+                   const std::vector<std::pair<RedactionTarget*, OUString>>& r_aTableTargets,
+                   const bool& bIsAutoRedact);
     /*
      * Makes the Redaction toolbar visible to the user.
      * Meant to be called after converting a document to a Draw doc
@@ -104,7 +107,8 @@ public:
      * Search for the given term through the gdimetafile, which has the whole content of a draw page,
      * and draw redaction rectangles to the appropriate positions with suitable sizes.
      * */
-    static void autoRedactPage(const OUString& sRedactionTerm, const GDIMetaFile& rGDIMetaFile,
+    static void autoRedactPage(const RedactionTarget* pRedactionTarget,
+                               const GDIMetaFile& rGDIMetaFile,
                                uno::Reference<drawing::XDrawPage>& xPage,
                                uno::Reference<XComponent>& xComponent);
 };
