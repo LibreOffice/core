@@ -1,16 +1,1 @@
-<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-  <path
-     d="M 3,6 H 21 V 17 H 3 Z"
-     style="fill:#ffffff"
-     />
-  <rect
-     style="fill:#eac282"
-     width="18"
-     height="3"
-     x="3"
-     y="18" />
-  <path
-     d="m2 2v1 3 15c0 .554.446 1 1 1h18c.554 0 1-.446 1-1v-15-3-1h-1-18zm1 4h5v3h-5zm6 0h6v3h-6zm7 0h5v3h-5zm-13 4h5v3h-5zm6 0h6v3h-6zm7 0h5v3h-5zm-13 4h5v3h-5zm6 0h6v3h-6zm7 0h5v3h-5zm-13 4h5v3h-5zm6 0h6v3h-6zm7 0h5v3h-5z"
-     fill="#808080"
-     />
-</svg>
+<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="m3 6h18v11h-18z" fill="#fff"/><path d="m3 18h18v3h-18z" fill="#eac282"/><path d="m2 2v1 3 15c0 .554.446 1 1 1h18c.554 0 1-.446 1-1v-15-3-1h-1-18zm1 4h5v3h-5zm6 0h6v3h-6zm7 0h5v3h-5zm-13 4h5v3h-5zm6 0h6v3h-6zm7 0h5v3h-5zm-13 4h5v3h-5zm6 0h6v3h-6zm7 0h5v3h-5zm-13 4h5v3h-5zm6 0h6v3h-6zm7 0h5v3h-5z" fill="#808080"/></svg>
