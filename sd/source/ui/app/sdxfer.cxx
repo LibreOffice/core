@@ -707,8 +707,7 @@ sal_Int64 SAL_CALL SdTransferable::getSomething( const css::uno::Sequence< sal_I
 {
     sal_Int64 nRet;
 
-    if( ( rId.getLength() == 16 ) &&
-        ( 0 == memcmp( getUnoTunnelId().getConstArray(), rId.getConstArray(), 16 ) ) )
+    if( isUnoTunnelId<SdTransferable>(rId) )
     {
         nRet = sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(this));
     }

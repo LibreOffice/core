@@ -365,11 +365,9 @@ const uno::Sequence< sal_Int8 > & SmModel::getUnoTunnelId()
 
 sal_Int64 SAL_CALL SmModel::getSomething( const uno::Sequence< sal_Int8 >& rId )
 {
-    if( rId.getLength() == 16
-        && 0 == memcmp( getUnoTunnelId().getConstArray(),
-                                        rId.getConstArray(), 16 ) )
+    if( isUnoTunnelId<SmModel>(rId) )
     {
-            return sal::static_int_cast< sal_Int64 >(reinterpret_cast< sal_uIntPtr >(this));
+        return sal::static_int_cast< sal_Int64 >(reinterpret_cast< sal_uIntPtr >(this));
     }
 
     return SfxBaseModel::getSomething( rId );

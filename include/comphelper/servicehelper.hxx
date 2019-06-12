@@ -51,6 +51,13 @@ namespace comphelper {
 
 }
 
+template <typename T>
+inline bool isUnoTunnelId(const css::uno::Sequence< sal_Int8 >& rId)
+{
+    return rId.getLength() == 16
+        && memcmp( T::getUnoTunnelId().getConstArray(), rId.getConstArray(), 16 ) == 0;
+}
+
 /** the UNO3_GETIMPLEMENTATION_* macros  implement a static helper function
     that gives access to your implementation for a given interface reference,
     if possible.
@@ -83,8 +90,7 @@ const css::uno::Sequence< sal_Int8 > & classname::getUnoTunnelId() throw() \
 UNO3_GETIMPLEMENTATION_BASE_IMPL(classname)\
 sal_Int64 SAL_CALL classname::getSomething( const css::uno::Sequence< sal_Int8 >& rId ) \
 { \
-    if( rId.getLength() == 16 && memcmp( getUnoTunnelId().getConstArray(), \
-                                                         rId.getConstArray(), 16 ) == 0 ) \
+    if( isUnoTunnelId<classname>(rId) ) \
     { \
         return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(this)); \
     } \
@@ -95,8 +101,7 @@ sal_Int64 SAL_CALL classname::getSomething( const css::uno::Sequence< sal_Int8 >
 UNO3_GETIMPLEMENTATION_BASE_IMPL(classname)\
 sal_Int64 SAL_CALL classname::getSomething( const css::uno::Sequence< sal_Int8 >& rId ) \
 { \
-    if( rId.getLength() == 16 && memcmp( getUnoTunnelId().getConstArray(), \
-                                                         rId.getConstArray(), 16 ) == 0 ) \
+    if( isUnoTunnelId<classname>(rId) ) \
     { \
         return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(this)); \
     } \
