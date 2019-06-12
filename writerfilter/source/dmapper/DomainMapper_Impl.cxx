@@ -633,9 +633,9 @@ FieldContextPtr const &  DomainMapper_Impl::GetTopFieldContext()
 void DomainMapper_Impl::InitTabStopFromStyle( const uno::Sequence< style::TabStop >& rInitTabStops )
 {
     OSL_ENSURE(m_aCurrentTabStops.empty(), "tab stops already initialized");
-    for( sal_Int32 nTab = 0; nTab < rInitTabStops.getLength(); ++nTab)
+    for( const auto& rTabStop : rInitTabStops)
     {
-        m_aCurrentTabStops.emplace_back(rInitTabStops[nTab] );
+        m_aCurrentTabStops.emplace_back(rTabStop);
     }
 }
 
@@ -1626,13 +1626,12 @@ void DomainMapper_Impl::appendTextPortion( const OUString& rString, const Proper
         {
             // If we are in comments, then disable CharGrabBag, comment text doesn't support that.
             uno::Sequence< beans::PropertyValue > aValues = pPropertyMap->GetPropertyValues(/*bCharGrabBag=*/!m_bIsInComments);
-            sal_Int32 len = aValues.getLength();
 
             if (m_bStartTOC || m_bStartIndex || m_bStartBibliography)
-                for( int i =0; i < len; ++i )
+                for( auto& rValue : aValues )
                 {
-                    if (aValues[i].Name == "CharHidden")
-                        aValues[i].Value <<= false;
+                    if (rValue.Name == "CharHidden")
+                        rValue.Value <<= false;
                 }
 
             uno::Reference< text::XTextRange > xTextRange;
@@ -2339,18 +2338,18 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
                 xShapePropertySet->getPropertyValue("FrameInteropGrabBag") >>= aGrabBag;
                 bool checkBtLrStatus = false;
 
-                for (int i = 0; i < aGrabBag.getLength(); ++i)
+                for (const auto& rProp : aGrabBag)
                 {
-                    if (aGrabBag[i].Name == "mso-layout-flow-alt")
+                    if (rProp.Name == "mso-layout-flow-alt")
                     {
-                        m_bFrameBtLr = aGrabBag[i].Value.get<OUString>() == "bottom-to-top";
+                        m_bFrameBtLr = rProp.Value.get<OUString>() == "bottom-to-top";
                         checkBtLrStatus = true;
                     }
-                    if (aGrabBag[i].Name == "VML-Z-ORDER")
+                    if (rProp.Name == "VML-Z-ORDER")
                     {
                         GraphicZOrderHelper* pZOrderHelper = m_rDMapper.graphicZOrderHelper();
                         sal_Int32 zOrder(0);
-                        aGrabBag[i].Value >>= zOrder;
+                        rProp.Value >>= zOrder;
                         xShapePropertySet->setPropertyValue( "ZOrder", uno::makeAny(pZOrderHelper->findZOrder(zOrder)));
                         pZOrderHelper->addItem(xShapePropertySet, zOrder);
                         xShapePropertySet->setPropertyValue(getPropertyName( PROP_OPAQUE ), uno::makeAny( zOrder >= 0 ) );
@@ -2359,7 +2358,7 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
                     if(checkBtLrStatus && checkZOrderStatus)
                         break;
 
-                    if ( aGrabBag[i].Name == "TxbxHasLink" )
+                    if ( rProp.Name == "TxbxHasLink" )
                     {
                         //Chaining of textboxes will happen in ~DomainMapper_Impl
                         //i.e when all the textboxes are read and all its attributes
@@ -2391,19 +2390,19 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
                 uno::Reference<beans::XPropertySet> xShapePropertySet(xShape, uno::UNO_QUERY);
                 uno::Sequence<beans::PropertyValue> aGrabBag;
                 xShapePropertySet->getPropertyValue("InteropGrabBag") >>= aGrabBag;
-                for (int i = 0; i < aGrabBag.getLength(); ++i)
+                for (const auto& rProp : aGrabBag)
                 {
-                    if (aGrabBag[i].Name == "VML-Z-ORDER")
+                    if (rProp.Name == "VML-Z-ORDER")
                     {
                         GraphicZOrderHelper* pZOrderHelper = m_rDMapper.graphicZOrderHelper();
                         sal_Int32 zOrder(0);
-                        aGrabBag[i].Value >>= zOrder;
+                        rProp.Value >>= zOrder;
                         xShapePropertySet->setPropertyValue( "ZOrder", uno::makeAny(pZOrderHelper->findZOrder(zOrder)));
                         pZOrderHelper->addItem(xShapePropertySet, zOrder);
                         xShapePropertySet->setPropertyValue(getPropertyName( PROP_OPAQUE ), uno::makeAny( zOrder >= 0 ) );
                         checkZOrderStatus = true;
                     }
-                    else if ( aGrabBag[i].Name == "TxbxHasLink" )
+                    else if ( rProp.Name == "TxbxHasLink" )
                     {
                         //Chaining of textboxes will happen in ~DomainMapper_Impl
                         //i.e when all the textboxes are read and all its attributes
@@ -2527,17 +2526,17 @@ bool DomainMapper_Impl::IsSdtEndBefore()
     if(pContext)
     {
         uno::Sequence< beans::PropertyValue > currentCharProps = pContext->GetPropertyValues();
-        for (int i =0; i< currentCharProps.getLength(); i++)
+        for (const auto& rCurrentCharProp : currentCharProps)
         {
-            if (currentCharProps[i].Name == "CharInteropGrabBag")
+            if (rCurrentCharProp.Name == "CharInteropGrabBag")
             {
                 uno::Sequence<beans::PropertyValue> aCharGrabBag;
-                currentCharProps[i].Value >>= aCharGrabBag;
-                for (int j=0; j < aCharGrabBag.getLength();j++)
+                rCurrentCharProp.Value >>= aCharGrabBag;
+                for (const auto& rProp : aCharGrabBag)
                 {
-                    if(aCharGrabBag[j].Name == "SdtEndBefore")
+                    if(rProp.Name == "SdtEndBefore")
                     {
-                        aCharGrabBag[j].Value >>= bIsSdtEndBefore;
+                        rProp.Value >>= bIsSdtEndBefore;
                     }
                 }
             }
@@ -2935,11 +2934,10 @@ void DomainMapper_Impl::SetNumberFormat( const OUString& rCommand,
 
 static uno::Any lcl_getGrabBagValue( const uno::Sequence<beans::PropertyValue>& grabBag, OUString const & name )
 {
-    for (int i = 0; i < grabBag.getLength(); ++i)
-    {
-        if (grabBag[i].Name == name )
-            return grabBag[i].Value ;
-    }
+    auto pProp = std::find_if(grabBag.begin(), grabBag.end(),
+        [&name](const beans::PropertyValue& rProp) { return rProp.Name == name; });
+    if (pProp != grabBag.end())
+        return pProp->Value;
     return uno::Any();
 }
 
@@ -3728,10 +3726,7 @@ static uno::Sequence< beans::PropertyValues > lcl_createTOXLevelHyperlinks( bool
         pNewLevel[aNewLevel.getLength() - (bHyperlinks ? 3 : 1)] = aChapterSeparator;
     }
     //copy the 'old' entries except the last (page no)
-    for( sal_Int32 nToken = 0; nToken < aLevel.getLength() - 1; ++nToken)
-    {
-        pNewLevel[nToken + 1] = aLevel[nToken];
-    }
+    std::copy(aLevel.begin(), std::prev(aLevel.end()), std::next(aNewLevel.begin()));
     //copy page no entry (last or last but one depending on bHyperlinks
     sal_Int32 nPageNo = aNewLevel.getLength() - (bHyperlinks ? 2 : 3);
     pNewLevel[nPageNo] = aLevel[aLevel.getLength() - 1];
@@ -5966,21 +5961,17 @@ uno::Reference<beans::XPropertySet> DomainMapper_Impl::GetCurrentNumberingCharSt
         }
         uno::Sequence<beans::PropertyValue> aProps;
         xLevels->getByIndex(nListLevel) >>= aProps;
-        for (int i = 0; i < aProps.getLength(); ++i)
+        auto pProp = std::find_if(aProps.begin(), aProps.end(),
+            [](const beans::PropertyValue& rProp) { return rProp.Name == "CharStyleName"; });
+        if (pProp != aProps.end())
         {
-            const beans::PropertyValue& rProp = aProps[i];
-
-            if (rProp.Name == "CharStyleName")
-            {
-                OUString aCharStyle;
-                rProp.Value >>= aCharStyle;
-                uno::Reference<container::XNameAccess> xCharacterStyles;
-                uno::Reference< style::XStyleFamiliesSupplier > xStylesSupplier(GetTextDocument(), uno::UNO_QUERY);
-                uno::Reference< container::XNameAccess > xStyleFamilies = xStylesSupplier->getStyleFamilies();
-                xStyleFamilies->getByName("CharacterStyles") >>= xCharacterStyles;
-                xRet.set(xCharacterStyles->getByName(aCharStyle), uno::UNO_QUERY_THROW);
-                break;
-            }
+            OUString aCharStyle;
+            pProp->Value >>= aCharStyle;
+            uno::Reference<container::XNameAccess> xCharacterStyles;
+            uno::Reference< style::XStyleFamiliesSupplier > xStylesSupplier(GetTextDocument(), uno::UNO_QUERY);
+            uno::Reference< container::XNameAccess > xStyleFamilies = xStylesSupplier->getStyleFamilies();
+            xStyleFamilies->getByName("CharacterStyles") >>= xCharacterStyles;
+            xRet.set(xCharacterStyles->getByName(aCharStyle), uno::UNO_QUERY_THROW);
         }
     }
     catch( const uno::Exception& )
@@ -6039,16 +6030,10 @@ sal_Int32 DomainMapper_Impl::getNumberingProperty(const sal_Int32 nListId, sal_I
         {
             uno::Sequence<beans::PropertyValue> aProps;
             xNumberingRules->getByIndex(nNumberingLevel) >>= aProps;
-            for (int i = 0; i < aProps.getLength(); ++i)
-            {
-                const beans::PropertyValue& rProp = aProps[i];
-
-                if (rProp.Name == aProp)
-                {
-                    rProp.Value >>= nRet;
-                    break;
-                }
-            }
+            auto pProp = std::find_if(aProps.begin(), aProps.end(),
+                [&aProp](const beans::PropertyValue& rProp) { return rProp.Name == aProp; });
+            if (pProp != aProps.end())
+                pProp->Value >>= nRet;
         }
     }
     catch( const uno::Exception& )
@@ -6076,16 +6061,10 @@ sal_Int32 DomainMapper_Impl::getCurrentNumberingProperty(const OUString& aProp)
     {
         uno::Sequence<beans::PropertyValue> aProps;
         xNumberingRules->getByIndex(nNumberingLevel) >>= aProps;
-        for (int i = 0; i < aProps.getLength(); ++i)
-        {
-            const beans::PropertyValue& rProp = aProps[i];
-
-            if (rProp.Name == aProp)
-            {
-                rProp.Value >>= nRet;
-                break;
-            }
-        }
+        auto pPropVal = std::find_if(aProps.begin(), aProps.end(),
+            [&aProp](const beans::PropertyValue& rProp) { return rProp.Name == aProp; });
+        if (pPropVal != aProps.end())
+            pPropVal->Value >>= nRet;
     }
 
     return nRet;

@@ -87,10 +87,10 @@ TVFactory::createInstanceWithArguments(
     }
 
     OUString hierview;
-    for( int i = 0; i < Arguments.getLength(); ++i )
+    for( const auto& rArgument : Arguments )
     {
         PropertyValue pV;
-        if( ! ( Arguments[i] >>= pV ) )
+        if( ! ( rArgument >>= pV ) )
             continue;
 
         if( pV.Name != "nodepath" )

@@ -96,15 +96,13 @@ bool OOXMLStreamImpl::lcl_getTarget(const uno::Reference<embed::XRelationshipAcc
     {
         // Cache is empty? Then let's build it!
         uno::Sequence< uno::Sequence<beans::StringPair> >aSeqs = xRelationshipAccess->getAllRelationships();
-        for (sal_Int32 i = 0; i < aSeqs.getLength(); ++i)
+        for (const uno::Sequence<beans::StringPair>& rSeq : aSeqs)
         {
-            const uno::Sequence<beans::StringPair>& rSeq = aSeqs[i];
             OUString aId;
             OUString aTarget;
             bool bExternal = false;
-            for (sal_Int32 j = 0; j < rSeq.getLength(); ++j)
+            for (const beans::StringPair& rPair : rSeq)
             {
-                const beans::StringPair& rPair = rSeq[j];
                 if (rPair.First == sId)
                     aId = rPair.Second;
                 else if (rPair.First == sTarget)
@@ -262,16 +260,12 @@ bool OOXMLStreamImpl::lcl_getTarget(const uno::Reference<embed::XRelationshipAcc
         uno::Sequence< uno::Sequence< beans::StringPair > >aSeqs =
             xRelationshipAccess->getAllRelationships();
 
-        for (sal_Int32 j = 0; j < aSeqs.getLength(); j++)
+        for (const uno::Sequence< beans::StringPair > &rSeq : aSeqs)
         {
-            const uno::Sequence< beans::StringPair > &rSeq = aSeqs[j];
-
             bool bExternalTarget = false;
             OUString sMyTarget;
-            for (sal_Int32 i = 0; i < rSeq.getLength(); i++)
+            for (const beans::StringPair &rPair : rSeq)
             {
-                const beans::StringPair &rPair = rSeq[i];
-
                 if (rPair.First == sType &&
                     ( rPair.Second == sStreamType ||
                       rPair.Second == sStreamTypeStrict ))
@@ -301,7 +295,6 @@ bool OOXMLStreamImpl::lcl_getTarget(const uno::Reference<embed::XRelationshipAcc
                 else if (rPair.First == sTargetMode &&
                          rPair.Second == sExternal)
                     bExternalTarget = true;
-
             }
 
             if (bFound)

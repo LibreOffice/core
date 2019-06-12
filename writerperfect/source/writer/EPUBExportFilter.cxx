@@ -58,25 +58,25 @@ sal_Bool EPUBExportFilter::filter(const uno::Sequence<beans::PropertyValue>& rDe
     sal_Int32 nLayoutMethod = EPUBExportFilter::GetDefaultLayoutMethod();
     uno::Sequence<beans::PropertyValue> aFilterData;
     OUString aFilterOptions;
-    for (sal_Int32 i = 0; i < rDescriptor.getLength(); ++i)
+    for (const auto& rProp : rDescriptor)
     {
-        if (rDescriptor[i].Name == "FilterData")
-            rDescriptor[i].Value >>= aFilterData;
-        else if (rDescriptor[i].Name == "FilterOptions")
-            rDescriptor[i].Value >>= aFilterOptions;
+        if (rProp.Name == "FilterData")
+            rProp.Value >>= aFilterData;
+        else if (rProp.Name == "FilterOptions")
+            rProp.Value >>= aFilterOptions;
     }
 
     if (aFilterOptions == "layout=fixed")
         nLayoutMethod = libepubgen::EPUB_LAYOUT_METHOD_FIXED;
 
-    for (sal_Int32 i = 0; i < aFilterData.getLength(); ++i)
+    for (const auto& rProp : aFilterData)
     {
-        if (aFilterData[i].Name == "EPUBVersion")
-            aFilterData[i].Value >>= nVersion;
-        else if (aFilterData[i].Name == "EPUBSplitMethod")
-            aFilterData[i].Value >>= nSplitMethod;
-        else if (aFilterData[i].Name == "EPUBLayoutMethod")
-            aFilterData[i].Value >>= nLayoutMethod;
+        if (rProp.Name == "EPUBVersion")
+            rProp.Value >>= nVersion;
+        else if (rProp.Name == "EPUBSplitMethod")
+            rProp.Value >>= nSplitMethod;
+        else if (rProp.Name == "EPUBLayoutMethod")
+            rProp.Value >>= nLayoutMethod;
     }
 
     // Build the export filter chain: the package has direct access to the ZIP
