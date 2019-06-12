@@ -308,7 +308,7 @@ SvxShape* SvxShape::getImplementation( const uno::Reference< uno::XInterface >& 
 
 sal_Int64 SAL_CALL SvxShape::getSomething( const css::uno::Sequence< sal_Int8 >& rId )
 {
-    if( rId.getLength() == 16 && 0 == memcmp( getUnoTunnelId().getConstArray(), rId.getConstArray(), 16 ) )
+    if( isUnoTunnelId<SvxShape>(rId) )
     {
         return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_uIntPtr>(this));
     }
