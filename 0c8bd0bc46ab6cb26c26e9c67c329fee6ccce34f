@@ -46,6 +46,30 @@
       "revId": "0c8bd0bc46ab6cb26c26e9c67c329fee6ccce34f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_4df3740b",
+        "filename": "sw/source/uibase/uno/unotxdoc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1881,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2019-06-12T19:29:23Z",
+      "side": 1,
+      "message": "I am going to check this UNO interface, because it\u0027s possible that we have to keep the original code for the non DOCX import case. (I\u0027ve just noticed, that SetHideRedlines was also Michael\u0027s work: https://gerrit.libreoffice.org/plugins/gitiles/core/+/4532845e22c10f252840887e55002307227b2390%5E%21/#F0)",
+      "parentUuid": "3fa0c359_cd6304dc",
+      "range": {
+        "startLine": 1881,
+        "startChar": 15,
+        "endLine": 1881,
+        "endChar": 91
+      },
+      "revId": "0c8bd0bc46ab6cb26c26e9c67c329fee6ccce34f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
