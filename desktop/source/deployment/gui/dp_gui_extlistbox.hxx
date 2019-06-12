@@ -103,27 +103,7 @@ public:
     virtual void SAL_CALL disposing(css::lang::EventObject const& evt) override;
 };
 
-/** This abstract class provides methods to implement an extension list box.
-    This header is needed for the automatic test tool
-*/
-class IExtensionListBox: public Control
-{
-public:
-    enum { ENTRY_NOTFOUND = -1 };
-
-    IExtensionListBox( vcl::Window* pParent ): Control( pParent, WB_BORDER | WB_TABSTOP ){}
-
-    /** @return  The count of the entries in the list box. */
-    virtual sal_Int32 getItemCount() const = 0;
-
-    /** @return  The index of the first selected entry in the list box.
-        When nothing is selected, which is the case when getItemCount returns '0',
-        then this function returns ENTRY_NOTFOUND */
-    virtual sal_Int32 getSelIndex() const = 0;
-
-};
-
-class ExtensionBox_Impl : public IExtensionListBox
+class ExtensionBox_Impl : public Control
 {
     bool m_bHasScrollBar : 1;
     bool m_bHasActive : 1;
@@ -213,14 +193,19 @@ public:
     void setExtensionManager(TheExtensionManager* pManager) { m_pManager = pManager; }
 
     //These functions are used for automatic testing
+public:
+    enum { ENTRY_NOTFOUND = -1 };
 
     /** @return  The count of the entries in the list box. */
-    virtual sal_Int32 getItemCount() const override;
+    virtual sal_Int32 getItemCount() const;
 
     /** @return  The index of the first selected entry in the list box.
         When nothing is selected, which is the case when getItemCount returns '0',
         then this function returns ENTRY_NOTFOUND */
-    virtual sal_Int32 getSelIndex() const override;
+    /** @return  The index of the first selected entry in the list box.
+        When nothing is selected, which is the case when getItemCount returns '0',
+        then this function returns ENTRY_NOTFOUND */
+    virtual sal_Int32 getSelIndex() const;
 };
 
 }
