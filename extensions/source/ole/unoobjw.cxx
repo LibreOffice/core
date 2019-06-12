@@ -149,9 +149,11 @@ public:
     // XTerminateListener
     void SAL_CALL queryTermination( const EventObject& ) override
     {
+        SAL_INFO("extensions.olebridge", "TerminationVetoer::queryTermination: count=" << mnCount);
         // Always veto termination while an OLE object is active
         if (mnCount > 0)
         {
+            SAL_INFO("extensions.olebridge", "TerminationVetoer::queryTermination: Throwing!");
             throw css::frame::TerminationVetoException();
         }
     }
@@ -187,6 +189,7 @@ InterfaceOleWrapper::InterfaceOleWrapper( Reference<XMultiServiceFactory> const 
         m_defaultValueType( 0)
 {
     TerminationVetoer::get()->mnCount++;
+    SAL_INFO("extensions.olebridge", "InterfaceOleWrapper CTOR, count=" << TerminationVetoer::get()->mnCount);
 }
 
 InterfaceOleWrapper::~InterfaceOleWrapper()
@@ -198,6 +201,7 @@ InterfaceOleWrapper::~InterfaceOleWrapper()
         UnoObjToWrapperMap.erase(it);
 
     TerminationVetoer::get()->mnCount--;
+    SAL_INFO("extensions.olebridge", "InterfaceOleWrapper DTOR, count=" << TerminationVetoer::get()->mnCount);
 }
 
 STDMETHODIMP InterfaceOleWrapper::QueryInterface(REFIID riid, LPVOID FAR * ppv)
