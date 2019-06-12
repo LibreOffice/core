@@ -18,6 +18,7 @@
  */
 
 #include <memory>
+#include <osl/diagnose.h>
 #include <sfx2/sidebar/ControlFactory.hxx>
 #include <svx/sidebar/LinePropertyPanelBase.hxx>
 #include <sfx2/sidebar/SidebarToolBox.hxx>

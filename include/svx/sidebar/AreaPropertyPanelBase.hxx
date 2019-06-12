@@ -21,10 +21,7 @@
 
 #include <memory>
 #include <svx/sidebar/AreaTransparencyGradientPopup.hxx>
-#include <vcl/ctrl.hxx>
-#include <sfx2/sidebar/SidebarPanelBase.hxx>
 #include <sfx2/sidebar/ControllerItem.hxx>
-#include <sfx2/sidebar/SidebarController.hxx>
 #include <sfx2/sidebar/SidebarToolBox.hxx>
 #include <svx/colorbox.hxx>
 #include <svx/xgrad.hxx>
@@ -34,7 +31,6 @@
 #include <svx/xflgrit.hxx>
 #include <svx/xflhtit.hxx>
 #include <svx/xbtmpit.hxx>
-#include <svx/drawitem.hxx>
 #include <svx/sidebar/PanelLayout.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/field.hxx>
@@ -42,7 +38,6 @@
 #include <vcl/fixed.hxx>
 #include <vcl/vclptr.hxx>
 #include <svl/intitem.hxx>
-#include <com/sun/star/ui/XUIElement.hpp>
 #include <svx/svxdllapi.h>
 
 class XFillFloatTransparenceItem;
