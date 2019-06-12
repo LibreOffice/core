@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_7bd5c942",
+        "filename": "toolkit/source/awt/vclxwindows.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1875,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-06-12T10:59:37Z",
+      "side": 1,
+      "message": "The (admittedly opaque) idiom of \u003dT() was used here in cases where the initialization is only necessary to silence false \"may be used uninitialized\" warnings, and thus the actual value used for initialization is irrelevant.  (To avoid giving the false impression that there is any logical reason to initialize e.g. b with false here.)",
+      "revId": "9e1d1e2cab4933e586910604d2044c085666de93",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
