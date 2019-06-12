@@ -1,0 +1,211 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_0dd00c1f",
+        "filename": "vcl/inc/qt5/Qt5Transferable.hxx",
+        "patchSetId": 16
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2019-06-12T21:02:10Z",
+      "side": 1,
+      "message": "typo: \"reliable\" -\u003e \"reliably\"",
+      "range": {
+        "startLine": 55,
+        "startChar": 64,
+        "endLine": 55,
+        "endChar": 72
+      },
+      "revId": "9d5e154abe806fe4cca92a0e8db30c0208f32452",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_2dcb8872",
+        "filename": "vcl/inc/qt5/Qt5Transferable.hxx",
+        "patchSetId": 16
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2019-06-12T21:02:10Z",
+      "side": 1,
+      "message": "typo: \"ourself\" -\u003e \"ourselves\"",
+      "range": {
+        "startLine": 98,
+        "startChar": 71,
+        "endLine": 98,
+        "endChar": 78
+      },
+      "revId": "9d5e154abe806fe4cca92a0e8db30c0208f32452",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_cdc9c478",
+        "filename": "vcl/qt5/Qt5Clipboard.cxx",
+        "patchSetId": 16
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2019-06-12T21:02:10Z",
+      "side": 1,
+      "message": "typo: \"guarantess\" -\u003e \"guarantees\"",
+      "range": {
+        "startLine": 34,
+        "startChar": 24,
+        "endLine": 34,
+        "endChar": 34
+      },
+      "revId": "9d5e154abe806fe4cca92a0e8db30c0208f32452",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_edc4c061",
+        "filename": "vcl/qt5/Qt5Clipboard.cxx",
+        "patchSetId": 16
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2019-06-12T21:02:10Z",
+      "side": 1,
+      "message": "why dynamic_cast for assert and static_cast afterwards? (AFAIU, will be pointer of incomplete type if dynamic_cast failed, maybe better to have \"proper\" nullptr right away?), same below in \u0027Qt5Clipboard::getContents\u0027",
+      "range": {
+        "startLine": 63,
+        "startChar": 0,
+        "endLine": 64,
+        "endChar": 85
+      },
+      "revId": "9d5e154abe806fe4cca92a0e8db30c0208f32452",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_8da17cac",
+        "filename": "vcl/qt5/Qt5Transferable.cxx",
+        "patchSetId": 16
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2019-06-12T21:02:10Z",
+      "side": 1,
+      "message": "\"get it unlocked\" -\u003e \"get it withouth locking\"? (IIUC)",
+      "range": {
+        "startLine": 52,
+        "startChar": 51,
+        "endLine": 52,
+        "endChar": 66
+      },
+      "revId": "9d5e154abe806fe4cca92a0e8db30c0208f32452",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_ada478ba",
+        "filename": "vcl/qt5/Qt5Transferable.cxx",
+        "patchSetId": 16
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2019-06-12T21:02:10Z",
+      "side": 1,
+      "message": "typo: \"save then\" -\u003e \"safe than\"",
+      "range": {
+        "startLine": 56,
+        "startChar": 14,
+        "endLine": 56,
+        "endChar": 23
+      },
+      "revId": "9d5e154abe806fe4cca92a0e8db30c0208f32452",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_4dab7488",
+        "filename": "vcl/qt5/Qt5Transferable.cxx",
+        "patchSetId": 16
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2019-06-12T21:02:10Z",
+      "side": 1,
+      "message": "maybe can give it a more descriptive name, maybe \"nMimeTypes\" or so",
+      "range": {
+        "startLine": 69,
+        "startChar": 4,
+        "endLine": 69,
+        "endChar": 14
+      },
+      "revId": "9d5e154abe806fe4cca92a0e8db30c0208f32452",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_6dae7099",
+        "filename": "vcl/qt5/Qt5Transferable.cxx",
+        "patchSetId": 16
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2019-06-12T21:02:10Z",
+      "side": 1,
+      "message": "any reason to keep filledMimeTypeSeq() as a separate method instead of just moving the implementation here?",
+      "range": {
+        "startLine": 117,
+        "startChar": 0,
+        "endLine": 120,
+        "endChar": 1
+      },
+      "revId": "9d5e154abe806fe4cca92a0e8db30c0208f32452",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_0d956c40",
+        "filename": "vcl/qt5/Qt5Transferable.cxx",
+        "patchSetId": 16
+      },
+      "lineNbr": 352,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2019-06-12T21:02:10Z",
+      "side": 1,
+      "message": "same here: maybe just move implementation from filledMimeTypeList here and remove it?",
+      "range": {
+        "startLine": 352,
+        "startChar": 0,
+        "endLine": 352,
+        "endChar": 73
+      },
+      "revId": "9d5e154abe806fe4cca92a0e8db30c0208f32452",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
