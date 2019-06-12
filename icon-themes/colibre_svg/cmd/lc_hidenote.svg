@@ -1,15 +1,1 @@
-<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-  <path
-     style="fill:#ffffff;stroke:#eac282;stroke-linecap:round;stroke-linejoin:round"
-     d="m 4.5,2.5 c 2.38e-5,-2.37e-5 0,12 0,12 h 4 v 5 l 5.5,-5 h 7.5 v -12 z" />
-  <path
-     style="fill:#ffffff;stroke:#eac282;stroke-linecap:round;stroke-linejoin:round"
-     d="m 2.5,5.5 c 2.38e-5,-2.37e-5 0,11 0,11 h 4 v 5 l 5.5,-5 h 6.5 v -11 z" />
-  <path
-     style="fill:#4d82b8;fill-opacity:1;fill-rule:evenodd"
-     id="path22"
-     d="M 2,2 V 17 L 20,2 Z M 3,3 H 17.183594 L 3,14.900391 Z" />
-  <path
-     style="fill:#ffffff;fill-rule:evenodd"
-     d="M 3,3 H 17.183594 L 3,14.900391 Z" />
-</svg>
+<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="m4.5 2.5c.0000238-.0000237 0 12 0 12h4v5l5.5-5h7.5v-12z" fill="#fff" stroke="#eac282" stroke-linecap="round" stroke-linejoin="round"/><path d="m2.5 5.5c.0000238-.0000237 0 11 0 11h4v5l5.5-5h6.5v-11z" fill="#fff" stroke="#eac282" stroke-linecap="round" stroke-linejoin="round"/><g fill-rule="evenodd"><path d="m2 2v15l18-15zm1 1h14.183594l-14.183594 11.900391z" fill="#4d82b8"/><path d="m3 3h14.183594l-14.183594 11.900391z" fill="#fff"/></g></svg>

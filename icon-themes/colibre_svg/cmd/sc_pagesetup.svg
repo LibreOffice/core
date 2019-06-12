@@ -1,4 +1,1 @@
-<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
-
-     /&gt;
- <path d="m6 3v2c0 .554-.446 1-1 1h-4v4.978516l2.421875 2.021484h11.578125v-10z" fill="#fff"/><path d="m6 2v1h9v10h-10v-3.5c0-.277-.223-.5-.5-.5h-3.5v-3h-1v3.5.863281l3.6367188 3.636719h.8632812 10.5c.554 0 1-.446 1-1v-10c0-.554-.446-1-1-1zm-5 8h3v3z" fill="#808080"/><g fill="#eac282"><rect height="1" ry=".5" width="3"/><rect height="3" rx=".5" width="1"/><path d="m .4999293 4.5 4-3.99999999v3.99999999z" fill-rule="evenodd" stroke="#eac282" stroke-linecap="round" stroke-linejoin="round"/></g></svg>
+<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">/&gt;<path d="m6 3v2c0 .554-.446 1-1 1h-4v4.978516l2.421875 2.021484h11.578125v-10z" fill="#fff"/><path d="m6 2v1h9v10h-10v-3.5c0-.277-.223-.5-.5-.5h-3.5v-3h-1v3.5.863281l3.6367188 3.636719h.8632812 10.5c.554 0 1-.446 1-1v-10c0-.554-.446-1-1-1zm-5 8h3v3z" fill="#808080"/><g fill="#eac282"><rect height="1" ry=".5" width="3"/><rect height="3" rx=".5" width="1"/><path d="m.4999293 4.5 4-3.99999999v3.99999999z" fill-rule="evenodd" stroke="#eac282" stroke-linecap="round" stroke-linejoin="round"/></g></svg>
