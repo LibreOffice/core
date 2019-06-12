@@ -243,13 +243,13 @@ const OUString ThemeTable::getFontNameForTheme(const Id id) const
 
 void ThemeTable::setThemeFontLangProperties(const uno::Sequence<beans::PropertyValue>& aPropSeq)
 {
-    for (sal_Int32 i = 0 ; i < aPropSeq.getLength() ; i ++)
+    for (const auto& rProp : aPropSeq)
     {
         OUString sLocaleName;
-        aPropSeq.getConstArray()[i].Value >>= sLocaleName;
-        if (aPropSeq.getConstArray()[i].Name == "eastAsia")
+        rProp.Value >>= sLocaleName;
+        if (rProp.Name == "eastAsia")
             m_pImpl->m_themeFontLangEastAsia = fromLocaleToScriptTag(sLocaleName);
-        if (aPropSeq.getConstArray()[i].Name == "bidi")
+        if (rProp.Name == "bidi")
             m_pImpl->m_themeFontLangBidi = fromLocaleToScriptTag(sLocaleName);
 
     }

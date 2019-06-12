@@ -889,7 +889,7 @@ static bool lcl_emptyRow(std::vector<RowSequence_t>& rTableRanges, sal_Int32 nRo
     }
 
     RowSequence_t rRowSeq = rTableRanges[nRow];
-    if (rRowSeq.getLength() == 0)
+    if (!rRowSeq.hasElements())
     {
         SAL_WARN("writerfilter.dmapper", "m_aCellProperties not in sync with rTableRanges?");
         return false;
@@ -906,12 +906,14 @@ static bool lcl_emptyRow(std::vector<RowSequence_t>& rTableRanges, sal_Int32 nRo
     uno::Reference<text::XTextRangeCompare> xTextRangeCompare(rRowSeq[0][0]->getText(), uno::UNO_QUERY);
     try
     {
-        for (sal_Int32 nCell = 0; nCell < rRowSeq.getLength(); ++nCell)
-            // See SwXText::Impl::ConvertCell(), we need to compare the start of
-            // the start and the end of the end. However for our text ranges, only
-            // the starts are set, so compareRegionStarts() does what we need.
-            if (xTextRangeCompare->compareRegionStarts(rRowSeq[nCell][0], rRowSeq[nCell][1]) != 0)
-                return false;
+        // See SwXText::Impl::ConvertCell(), we need to compare the start of
+        // the start and the end of the end. However for our text ranges, only
+        // the starts are set, so compareRegionStarts() does what we need.
+        bool bRangesAreNotEqual = std::any_of(rRowSeq.begin(), rRowSeq.end(),
+            [&xTextRangeCompare](const CellSequence_t& rCellSeq) {
+                return xTextRangeCompare->compareRegionStarts(rCellSeq[0], rCellSeq[1]) != 0; });
+        if (bRangesAreNotEqual)
+            return false;
     }
     catch (const lang::IllegalArgumentException& e)
     {
@@ -1083,21 +1085,19 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel, bool bTab
                 }
 
                 // OOXML table style may container paragraph properties, apply these now.
-                for (int i = 0; i < aTableInfo.aTableProperties.getLength(); ++i)
+                auto pTableProp = std::find_if(aTableInfo.aTableProperties.begin(), aTableInfo.aTableProperties.end(),
+                    [](const beans::PropertyValue& rProp) { return rProp.Name == "ParaBottomMargin"; });
+                if (pTableProp != aTableInfo.aTableProperties.end())
                 {
-                    if (aTableInfo.aTableProperties[i].Name == "ParaBottomMargin")
+                    uno::Reference<table::XCellRange> xCellRange(xTable, uno::UNO_QUERY);
+                    uno::Any aBottomMargin = pTableProp->Value;
+                    sal_Int32 nRows = aCellProperties.getLength();
+                    for (sal_Int32 nRow = 0; nRow < nRows; ++nRow)
                     {
-                        uno::Reference<table::XCellRange> xCellRange(xTable, uno::UNO_QUERY);
-                        uno::Any aBottomMargin = aTableInfo.aTableProperties[i].Value;
-                        sal_Int32 nRows = aCellProperties.getLength();
-                        for (sal_Int32 nRow = 0; nRow < nRows; ++nRow)
-                        {
-                            const uno::Sequence< beans::PropertyValues > aCurrentRow = aCellProperties[nRow];
-                            sal_Int32 nCells = aCurrentRow.getLength();
-                            for (sal_Int32 nCell = 0; nCell < nCells; ++nCell)
-                                lcl_ApplyCellParaProps(xCellRange->getCellByPosition(nCell, nRow), aBottomMargin);
-                        }
-                        break;
+                        const uno::Sequence< beans::PropertyValues > aCurrentRow = aCellProperties[nRow];
+                        sal_Int32 nCells = aCurrentRow.getLength();
+                        for (sal_Int32 nCell = 0; nCell < nCells; ++nCell)
+                            lcl_ApplyCellParaProps(xCellRange->getCellByPosition(nCell, nRow), aBottomMargin);
                     }
                 }
             }

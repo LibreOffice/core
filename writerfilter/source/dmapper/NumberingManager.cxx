@@ -74,20 +74,20 @@ static sal_Int32 lcl_findProperty( const uno::Sequence< beans::PropertyValue >& 
 static void lcl_mergeProperties( uno::Sequence< beans::PropertyValue >& aSrc,
         uno::Sequence< beans::PropertyValue >& aDst )
 {
-    for ( sal_Int32 i = 0, nSrcLen = aSrc.getLength( ); i < nSrcLen; i++ )
+    for ( const auto& rProp : aSrc )
     {
         // Look for the same property in aDst
-        sal_Int32 nPos = lcl_findProperty( aDst, aSrc[i].Name );
+        sal_Int32 nPos = lcl_findProperty( aDst, rProp.Name );
         if ( nPos >= 0 )
         {
             // Replace the property value by the one in aSrc
-            aDst[nPos] = aSrc[i];
+            aDst[nPos] = rProp;
         }
         else
         {
             // Simply add the new value
             aDst.realloc( aDst.getLength( ) + 1 );
-            aDst[ aDst.getLength( ) - 1 ] = aSrc[i];
+            aDst[ aDst.getLength( ) - 1 ] = rProp;
         }
     }
 }
@@ -338,19 +338,18 @@ void ListLevel::AddParaProperties( uno::Sequence< beans::PropertyValue >* props 
     OUString sParaLeftMargin = getPropertyName(
             PROP_PARA_LEFT_MARGIN );
 
-    sal_Int32 nLen = aParaProps.getLength( );
-    for ( sal_Int32 i = 0; i < nLen; i++ )
+    for ( const auto& rParaProp : aParaProps )
     {
-        if ( !hasFirstLineIndent && aParaProps[i].Name == sParaIndent )
+        if ( !hasFirstLineIndent && rParaProp.Name == sParaIndent )
         {
             aProps.realloc( aProps.getLength() + 1 );
-            aProps[aProps.getLength( ) - 1] = aParaProps[i];
+            aProps[aProps.getLength( ) - 1] = rParaProp;
             aProps[aProps.getLength( ) - 1].Name = sFirstLineIndent;
         }
-        else if ( !hasIndentAt && aParaProps[i].Name == sParaLeftMargin )
+        else if ( !hasIndentAt && rParaProp.Name == sParaLeftMargin )
         {
             aProps.realloc( aProps.getLength() + 1 );
-            aProps[aProps.getLength( ) - 1] = aParaProps[i];
+            aProps[aProps.getLength( ) - 1] = rParaProp;
             aProps[aProps.getLength( ) - 1].Name = sIndentAt;
         }
 
@@ -547,11 +546,7 @@ void ListDef::CreateNumberingRules( DomainMapper& rDMapper,
                 if( aAbsCharStyleProps.hasElements() )
                 {
                     // Change the sequence into a vector
-                    PropertyValueVector_t aStyleProps;
-                    for ( sal_Int32 i = 0, nLen = aAbsCharStyleProps.getLength() ; i < nLen; i++ )
-                    {
-                        aStyleProps.push_back( aAbsCharStyleProps[i] );
-                    }
+                    auto aStyleProps = comphelper::sequenceToContainer<PropertyValueVector_t>(aAbsCharStyleProps);
 
                     //create (or find) a character style containing the character
                     // attributes of the symbol and apply it to the numbering level

@@ -560,12 +560,10 @@ void OOXMLDocumentImpl::resolveCustomXmlStream(Stream & rStream)
         uno::Sequence<uno::Sequence< beans::StringPair>> aSeqs = xRelationshipAccess->getAllRelationships();
         std::vector<uno::Reference<xml::dom::XDocument>> aCustomXmlDomList;
         std::vector<uno::Reference<xml::dom::XDocument>> aCustomXmlDomPropsList;
-        for (sal_Int32 j = 0; j < aSeqs.getLength(); j++)
+        for (const uno::Sequence<beans::StringPair>& aSeq : aSeqs)
         {
-            const uno::Sequence<beans::StringPair>& aSeq = aSeqs[j];
-            for (sal_Int32 i = 0; i < aSeq.getLength(); i++)
+            for (const beans::StringPair& aPair : aSeq)
             {
-                const beans::StringPair& aPair = aSeq[i];
                 // Need to resolve only customxml files from document relationships.
                 // Skipping other files.
                 if (aPair.Second == sCustomType ||
@@ -629,10 +627,9 @@ void OOXMLDocumentImpl::resolveGlossaryStream(Stream & /*rStream*/)
 
         uno::Sequence< uno::Sequence< beans::StringPair > >aSeqs = xRelationshipAccess->getAllRelationships();
         std::vector< uno::Sequence<uno::Any> > aGlossaryDomList;
-        for (sal_Int32 j = 0; j < aSeqs.getLength(); j++)
+        for (const uno::Sequence< beans::StringPair >& aSeq : aSeqs)
         {
               OOXMLStream::Pointer_t gStream;
-              uno::Sequence< beans::StringPair > aSeq = aSeqs[j];
               //Follows following aSeq[0] is Id, aSeq[1] is Type, aSeq[2] is Target
               if (aSeq.getLength() < 3)
               {
@@ -728,12 +725,10 @@ void OOXMLDocumentImpl::resolveEmbeddingsStream(const OOXMLStream::Pointer_t& pS
         bool bHeaderFooterFound = false;
         OOXMLStream::StreamType_t streamType = OOXMLStream::UNKNOWN;
         uno::Sequence< uno::Sequence< beans::StringPair > >aSeqs = xRelationshipAccess->getAllRelationships();
-        for (sal_Int32 j = 0; j < aSeqs.getLength(); j++)
+        for (const uno::Sequence< beans::StringPair >& aSeq : aSeqs)
         {
-            uno::Sequence< beans::StringPair > aSeq = aSeqs[j];
-            for (sal_Int32 i = 0; i < aSeq.getLength(); i++)
+            for (const beans::StringPair& aPair : aSeq)
             {
-                beans::StringPair aPair = aSeq[i];
                 if (aPair.Second == sChartType ||
                         aPair.Second == sChartTypeStrict)
                 {
