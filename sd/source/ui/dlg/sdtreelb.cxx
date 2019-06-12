@@ -142,8 +142,7 @@ sal_Int64 SAL_CALL SdPageObjsTLB::SdPageObjsTransferable::getSomething( const cs
 {
     sal_Int64 nRet;
 
-    if( ( rId.getLength() == 16 ) &&
-        ( 0 == memcmp( getUnoTunnelId().getConstArray(), rId.getConstArray(), 16 ) ) )
+    if( isUnoTunnelId<SdPageObjsTLB::SdPageObjsTransferable>(rId) )
     {
         nRet = static_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(this));
     }

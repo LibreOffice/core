@@ -426,9 +426,7 @@ uno::Sequence<OUString> SAL_CALL ScNamedRangeObj::getSupportedServiceNames()
 sal_Int64 SAL_CALL ScNamedRangeObj::getSomething(
                 const uno::Sequence<sal_Int8 >& rId )
 {
-    if ( rId.getLength() == 16 &&
-          0 == memcmp( getUnoTunnelId().getConstArray(),
-                                    rId.getConstArray(), 16 ) )
+    if ( isUnoTunnelId<ScNamedRangeObj>(rId) )
     {
         return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(this));
     }
