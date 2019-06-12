@@ -3092,12 +3092,6 @@ $(call gb_LinkTarget_add_libs,$(1),\
 	$(KF5_LIBS) \
 )
 
-ifeq ($(COM),GCC)
-$(call gb_LinkTarget_add_cxxflags,$(1),\
-	-Wno-shadow \
-)
-endif
-
 endef
 
 else # !ENABLE_KDE5
@@ -3125,12 +3119,6 @@ $(call gb_LinkTarget_add_defs,$(1),\
 $(call gb_LinkTarget_add_libs,$(1),\
 	$(QT5_LIBS) \
 )
-
-ifeq ($(COM),GCC)
-$(call gb_LinkTarget_add_cxxflags,$(1),\
-       -Wno-shadow \
-)
-endif
 
 endef
 
