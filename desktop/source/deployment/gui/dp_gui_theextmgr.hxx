@@ -51,9 +51,9 @@ private:
     css::uno::Reference< css::deployment::XExtensionManager > m_xExtensionManager;
     css::uno::Reference< css::container::XNameAccess >        m_xNameAccessNodes;
     css::uno::Reference< css::awt::XWindow >                  m_xParent;
-    VclPtr<ExtMgrDialog>         m_pExtMgrDialog;
-    VclPtr<UpdateRequiredDialog> m_pUpdReqDialog;
-    std::unique_ptr<ExtensionCmdQueue> m_pExecuteCmdQueue;
+    std::shared_ptr<ExtMgrDialog> m_xExtMgrDialog;
+    std::unique_ptr<UpdateRequiredDialog> m_xUpdReqDialog;
+    std::unique_ptr<ExtensionCmdQueue> m_xExecuteCmdQueue;
 
     OUString                     m_sGetExtensionsURL;
     bool                         m_bModified;
@@ -71,23 +71,25 @@ public:
     bool isModified() const { return m_bModified; }
     void clearModified() { m_bModified = false; }
 
-    Dialog* getDialog()
+    weld::Window* getDialog()
     {
-        if (m_pExtMgrDialog)
-            return m_pExtMgrDialog.get();
-        return m_pUpdReqDialog.get();
+        if (m_xExtMgrDialog)
+            return m_xExtMgrDialog->getDialog();
+        if (m_xUpdReqDialog)
+            return m_xUpdReqDialog->getDialog();
+        return nullptr;
     }
     DialogHelper* getDialogHelper()
     {
-        if (m_pExtMgrDialog)
-            return m_pExtMgrDialog.get();
-        return m_pUpdReqDialog.get();
+        if (m_xExtMgrDialog)
+            return m_xExtMgrDialog.get();
+        return m_xUpdReqDialog.get();
     }
-    ExtensionCmdQueue* getCmdQueue() const { return m_pExecuteCmdQueue.get(); }
+    ExtensionCmdQueue* getCmdQueue() const { return m_xExecuteCmdQueue.get(); }
 
     void SetText( const OUString &rTitle );
     void Show();
-    void ToTop( ToTopFlags nFlags );
+    void ToTop();
     bool Close();
     bool isVisible();
 
