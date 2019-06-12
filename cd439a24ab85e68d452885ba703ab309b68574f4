@@ -16,6 +16,24 @@
       "revId": "cd439a24ab85e68d452885ba703ab309b68574f4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_c0542c24",
+        "filename": "sw/source/core/layout/paintfrm.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 5706,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-06-12T09:36:20Z",
+      "side": 1,
+      "message": "True.  But then again, putting the IsEmpty() check just around these aRect modifications makes it more obvious that it is these modifications that are fishy when aRect.IsEmpty(), and that the (otherwise redundant) check has been added especially to address those fishy modifications.",
+      "parentUuid": "3fa0c359_c0ebccd9",
+      "revId": "cd439a24ab85e68d452885ba703ab309b68574f4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
