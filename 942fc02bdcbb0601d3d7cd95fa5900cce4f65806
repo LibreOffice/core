@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_4da5b403",
+        "filename": "xmloff/source/chart/SchXMLExport.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2860,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-06-12T19:09:11Z",
+      "side": 1,
+      "message": "this copy look unnecessary, could be made the loop variable?",
+      "revId": "942fc02bdcbb0601d3d7cd95fa5900cce4f65806",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_6da8b0da",
+        "filename": "xmloff/source/chart/SchXMLExport.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3049,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-06-12T19:09:11Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "942fc02bdcbb0601d3d7cd95fa5900cce4f65806",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_0daface3",
+        "filename": "xmloff/source/chart/SchXMLSeriesHelper.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-06-12T19:09:11Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "942fc02bdcbb0601d3d7cd95fa5900cce4f65806",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_2daaa8d1",
+        "filename": "xmloff/source/chart/SchXMLSeriesHelper.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-06-12T19:09:11Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "942fc02bdcbb0601d3d7cd95fa5900cce4f65806",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_cdb8e42b",
+        "filename": "xmloff/source/chart/SchXMLTableContext.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 976,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-06-12T19:09:11Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "942fc02bdcbb0601d3d7cd95fa5900cce4f65806",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_edb3604c",
+        "filename": "xmloff/source/chart/SchXMLTableContext.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1018,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-06-12T19:09:11Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "942fc02bdcbb0601d3d7cd95fa5900cce4f65806",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
