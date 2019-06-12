@@ -2123,7 +2123,7 @@ Size TabControl::calculateRequisition() const
         tools::Rectangle aTabRect = pThis->ImplGetTabRect(nPos, aOptimalPageSize.Width(), LONG_MAX);
         if (aTabRect.Bottom() > nTabLabelsBottom)
             nTabLabelsBottom = aTabRect.Bottom();
-        if (!aTabRect.IsEmpty() && aTabRect.Right() > nTabLabelsRight)
+        if (aTabRect.Right() > nTabLabelsRight)
             nTabLabelsRight = aTabRect.Right();
     }
 
