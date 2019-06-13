@@ -236,6 +236,7 @@ struct SettingsTable_Impl
     bool                m_bRecordChanges;
     bool                m_bShowInsDelChanges;
     bool                m_bShowFormattingChanges;
+    bool                m_bShowMarkupChanges;
     bool                m_bLinkStyles;
     sal_Int16           m_nZoomFactor;
     sal_Int16 m_nZoomType = 0;
@@ -266,7 +267,8 @@ struct SettingsTable_Impl
       m_nDefaultTabStop( 720 ) //default is 1/2 in
     , m_bRecordChanges(false)
     , m_bShowInsDelChanges(true)
-    , m_bShowFormattingChanges(true)
+    , m_bShowFormattingChanges(false)
+    , m_bShowMarkupChanges(true)
     , m_bLinkStyles(false)
     , m_nZoomFactor(0)
     , m_nView(0)
@@ -382,6 +384,9 @@ void SettingsTable::lcl_attribute(Id nName, Value & val)
         break;
     case NS_ooxml::LN_CT_TrackChangesView_formatting:
         m_pImpl->m_bShowFormattingChanges = (nIntValue != 0);
+        break;
+    case NS_ooxml::LN_CT_TrackChangesView_markup:
+        m_pImpl->m_bShowMarkupChanges = (nIntValue != 0);
         break;
     default:
     {
@@ -648,7 +653,10 @@ void SettingsTable::ApplyProperties(uno::Reference<text::XTextDocument> const& x
 
     // Show changes value
     if (xDocProps.is())
-        xDocProps->setPropertyValue("ShowChanges", uno::makeAny( m_pImpl->m_bShowInsDelChanges || m_pImpl->m_bShowFormattingChanges ) );
+    {
+        bool bHideChanges = !m_pImpl->m_bShowInsDelChanges || !m_pImpl->m_bShowMarkupChanges;
+        xDocProps->setPropertyValue("ShowChanges", uno::makeAny( !bHideChanges || m_pImpl->m_bShowFormattingChanges ) );
+    }
 
     // Record changes value
     if (xDocProps.is())
