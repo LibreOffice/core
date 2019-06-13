@@ -2134,11 +2134,14 @@ Label_MaskStateMachine:
                 }
                 else if( nMask & ScCharFlags::Char )
                 {
-                    // '[' is a special case in OOXML, it can start an external
-                    // reference ID like [1]Sheet1!A1 that needs to be scanned
+                    // '[' is a special case in Excel syntax, it can start an
+                    // external reference, ID in OOXML like [1]Sheet1!A1 or
+                    // Excel_A1 [filename]Sheet!A1 or Excel_R1C1
+                    // [filename]Sheet!R1C1 that needs to be scanned
                     // entirely, or can be ocTableRefOpen, of which the first
                     // transforms an ocDBArea into an ocTableRef.
-                    if (c == '[' && FormulaGrammar::isOOXML( meGrammar) && eLastOp != ocDBArea && maTableRefs.empty())
+                    if (c == '[' && FormulaGrammar::isExcelSyntax( meGrammar)
+                            && eLastOp != ocDBArea && maTableRefs.empty())
                     {
                         nMask &= ~ScCharFlags::Char;
                         goto Label_MaskStateMachine;
