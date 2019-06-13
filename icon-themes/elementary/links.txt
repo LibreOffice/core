@@ -269,11 +269,6 @@ cmd/sc_fontworkcharacterspacingfloater.png cmd/sc_spacing.png
 cmd/sc_fontheight.png cmd/sc_scaletext.png
 cmd/sc_pickthrough.png cmd/sc_doubleclicktextedit.png
 
-# Object
-cmd/32/objectcatalog.png cmd/32/dbnewform.png
-cmd/lc_objectcatalog.png cmd/lc_dbnewform.png
-cmd/sc_objectcatalog.png cmd/sc_dbnewform.png
-
 # 3d
 cmd/32/view3d.png cmd/32/cube.png
 cmd/32/objects3dtoolbox.png cmd/32/cube.png
@@ -1173,6 +1168,7 @@ cmd/sc_macrodialog.png cmd/sc_scriptorganizer.png
 cmd/sc_macrosmenu.png cmd/sc_choosemacro.png
 
 
+
 # Outline
 cmd/32/outlineright.png cmd/32/decrementlevel.png
 cmd/32/outlineleft.png cmd/32/decrementindent.png
@@ -1531,7 +1527,6 @@ res/lc05961.png cmd/lc_recsearch.png
 res/lc06300.png cmd/lc_nextrecord.png
 res/lc06301.png cmd/lc_prevrecord.png
 
-res/lc06303.png cmd/lc_firstpage.png
 res/lc10711.png cmd/lc_removefiltersort.png
 res/lc10715.png cmd/lc_datafilterstandardfilter.png
 res/lc10716.png cmd/lc_datafilterautofilter.png
@@ -1570,18 +1565,17 @@ res/reload.png cmd/sc_reload.png
 res/library_16.png cmd/lc_viewdatasourcebrowser.png
 
 res/sc05508.png cmd/sc_reload.png
-res/sc05555.png cmd/sc_editstyle.png
-res/sc05556.png cmd/sc_reload.png
+res/sc05555.png cmd/sc_stylenewbyexample.png
+res/sc05556.png cmd/sc_styleupdatebyexample.png
 res/sc05501.png cmd/sc_open.png
 res/sc05502.png cmd/sc_saveas.png
 res/sc05504.png cmd/sc_print.png
 res/sc05509.png cmd/sc_print.png
-res/sc05554.png cmd/sc_formatpaintbrush.png
+res/sc05554.png cmd/sc_backgroundcolor.png
 res/sc05711.png cmd/sc_copy.png
 res/sc05961.png cmd/sc_recsearch.png
 res/sc06300.png cmd/sc_nextrecord.png
 res/sc06301.png cmd/sc_prevrecord.png
-res/sc06303.png cmd/sc_firstrecord.png
 res/sc10223.png cmd/sc_position.png
 res/sc10224.png cmd/sc_size.png
 res/sc10350.png cmd/sc_bmpmask.png
@@ -1894,6 +1888,8 @@ sfx2/res/symphony/sidebar-functions-large.png cmd/lc_dbviewfunctions.png
 sfx2/res/symphony/sidebar-functions-small.png cmd/sc_dbviewfunctions.png
 sfx2/res/symphony/sidebar-gallery-large.png cmd/lc_gallery.png
 sfx2/res/symphony/sidebar-gallery-small.png cmd/sc_gallery.png
+sfx2/res/symphony/sidebar-imganim-large.png cmd/lc_animationobjects.png
+sfx2/res/symphony/sidebar-imganim-small.png cmd/sc_animationobjects.png
 sfx2/res/symphony/sidebar-navigator-large.png cmd/lc_navigator.png
 sfx2/res/symphony/sidebar-navigator-small.png cmd/sc_navigator.png
 sfx2/res/symphony/sidebar-property-large.png cmd/lc_configuredialog.png
