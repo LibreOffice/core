@@ -70,6 +70,24 @@
     },
     {
       "key": {
+        "uuid": "3fa0c359_43ab4388",
+        "filename": "cui/source/customize/SvxNotebookbarConfigPage.cxx",
+        "patchSetId": 20
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 1001943
+      },
+      "writtenOn": "2019-06-13T14:50:18Z",
+      "side": 1,
+      "message": "Both are used for different things, this one is used to render things in customization tab(the tree) and the function used in CustomNotebookbarGenerator.cxx is to change the property of Visible nodes(True/False) in .ui files.",
+      "parentUuid": "3fa0c359_c3f0b3cc",
+      "revId": "40ee5285fc0cd088c8a1f84600573d6ba92e8a4d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3fa0c359_e3eb6fd9",
         "filename": "cui/source/customize/SvxNotebookbarConfigPage.cxx",
         "patchSetId": 20
