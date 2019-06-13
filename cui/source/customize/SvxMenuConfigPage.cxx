@@ -223,10 +223,14 @@ void SvxMenuConfigPage::UpdateButtonStates()
     {
         SvxConfigEntry* pMenuData = GetTopLevelSelection();
         PopupMenu* pGearPopup = m_pGearBtn->GetPopupMenu();
+
+        if (!pGearPopup)
+            return;
+
         // Add option (gear_add) will always be enabled
-        pGearPopup->EnableItem( "gear_delete", pMenuData->IsDeletable() );
-        pGearPopup->EnableItem( "gear_rename", pMenuData->IsRenamable() );
-        pGearPopup->EnableItem( "gear_move", pMenuData->IsMovable() );
+        pGearPopup->EnableItem( "gear_delete", pMenuData && pMenuData->IsDeletable() );
+        pGearPopup->EnableItem( "gear_rename", pMenuData && pMenuData->IsRenamable() );
+        pGearPopup->EnableItem( "gear_move", pMenuData && pMenuData->IsMovable() );
     }
 }
 
