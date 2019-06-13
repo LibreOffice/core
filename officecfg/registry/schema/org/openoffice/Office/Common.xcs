@@ -3778,6 +3778,14 @@
         </info>
         <value>1930</value>
       </prop>
+      <prop oor:name="ROCEraExpansion" oor:type="xs:boolean" oor:nillable="false">
+        <!-- UIHints: Tools - Options - General - Other - Treat the input number as ROC era as formatted. -->
+        <info>
+          <desc>Treat the input number as ROC era as formatted.</desc>
+          <label>roceraexpansion</label>
+        </info>
+        <value>false</value>
+      </prop>
     </group>
     <group oor:name="Filter">
       <info>

@@ -10030,6 +10030,24 @@ SfxVoidItem Year2000 SID_ATTR_YEAR2000
 ]
 
 
+SfxVoidItem RocEraExpansion SID_ATTR_ROCERA_EXPANSION
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = SfxGroupId::Intern;
+]
+
+
 SfxVoidItem IncrementIndent SID_INC_INDENT
 ()
 [

@@ -31,6 +31,7 @@
 #include <com/sun/star/i18n/LocaleCalendar2.hpp>
 #include <unotools/digitgroupingiterator.hxx>
 #include <comphelper/sequence.hxx>
+#include <unotools/misccfg.hxx>
 
 #include <svl/zforlist.hxx>
 #include "zforscan.hxx"
@@ -1050,7 +1051,8 @@ sal_uInt16 ImpSvNumberInputScan::ImplGetYear( sal_uInt16 nIndex )
         // Convert the number to CE year if ROC era is used in the date format.
         sal_Int32 nSignLen = sStrArray[0].getLength();
         if (mpFormat && mpFormat->HasEra("ROC", LANGUAGE_CHINESE_TRADITIONAL)
-                && (nSignLen == 0 || sStrArray[0][nSignLen - 1] != '-'))
+                && (nSignLen == 0 || sStrArray[0][nSignLen - 1] != '-')
+                && ::utl::MiscCfg().GetROCEraExpansion())
         {
             nYear += 1911;
         }

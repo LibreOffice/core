@@ -54,6 +54,7 @@ private:
     std::unique_ptr<weld::Widget> m_xYearFrame;
     std::unique_ptr<weld::SpinButton> m_xYearValueField;
     std::unique_ptr<weld::Label> m_xToYearFT;
+    std::unique_ptr<weld::CheckButton> m_xROCEraExpansionCB;
     std::unique_ptr<weld::CheckButton> m_xCollectUsageInfo;
     std::unique_ptr<weld::Widget> m_xQuickStarterFrame;
     std::unique_ptr<weld::CheckButton> m_xQuickLaunchCB;
