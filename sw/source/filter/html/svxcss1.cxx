@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <cmath>
 #include <memory>
 #include <stdlib.h>
 
@@ -1421,15 +1424,15 @@ static void ParseCSS1_background( const CSS1Expression *pExpr,
                 // only distinguish between 0 and !0. Therefore pixel
                 // can be handled like all other units.
 
-                sal_uLong nLength = static_cast<sal_uLong>(pExpr->GetNumber());
+                bool nonZero = std::trunc(pExpr->GetNumber()) != 0.0;
                 if( !bHori )
                 {
-                    ePos = nLength ? GPOS_MM : GPOS_LT;
+                    ePos = nonZero ? GPOS_MM : GPOS_LT;
                     bHori = true;
                 }
                 else if( !bVert )
                 {
-                    MergeVert( ePos, (nLength ? GPOS_LM : GPOS_LT) );
+                    MergeVert( ePos, (nonZero ? GPOS_LM : GPOS_LT) );
                     bVert = true;
                 }
             }
