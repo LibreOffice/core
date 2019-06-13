@@ -24,6 +24,18 @@
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #include <com/sun/star/sheet/XSpreadsheetView.hpp>
 
+// Search util
+#include <i18nutil/searchopt.hxx>
+#include <com/sun/star/util/SearchAlgorithms.hpp>
+#include <com/sun/star/util/SearchAlgorithms2.hpp>
+#include <com/sun/star/util/SearchFlags.hpp>
+#include <com/sun/star/util/SearchResult.hpp>
+#include <unotools/configmgr.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
+#include <i18nlangtag/languagetag.hxx>
+#include <unotools/textsearch.hxx>
+
 #include <sfx2/request.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/viewfrm.hxx>
@@ -409,11 +421,19 @@ SfxRedactionHelper::getPageMarginsForCalc(css::uno::Reference<css::frame::XModel
     return aPageMargins;
 }
 
-void SfxRedactionHelper::searchInMetaFile(const rtl::OUString& sSearchTerm, const GDIMetaFile& rMtf,
+void SfxRedactionHelper::searchInMetaFile(const RedactionTarget* pRedactionTarget,
+                                          const GDIMetaFile& rMtf,
                                           std::vector<::tools::Rectangle>& aRedactionRectangles,
                                           uno::Reference<XComponent>& xComponent)
 {
+    // Initialize search
+    i18nutil::SearchOptions2 aSearchOptions;
+    fillSearchOptions(aSearchOptions, pRedactionTarget);
+
+    utl::TextSearch textSearch(aSearchOptions);
+
     MetaAction* pCurrAct;
+    OUString sSearchTerm(pRedactionTarget->sContent);
 
     // Watch for TEXTARRAY actions.
     // They contain the text of paragraphes.
@@ -424,19 +444,20 @@ void SfxRedactionHelper::searchInMetaFile(const rtl::OUString& sSearchTerm, cons
         {
             MetaTextArrayAction* pMetaTextArrayAction = static_cast<MetaTextArrayAction*>(pCurrAct);
 
-            //sal_Int32 aIndex = pMetaTextArrayAction->GetIndex();
-            //sal_Int32 aLength = pMetaTextArrayAction->GetLen();
-            //Point aPoint = pMetaTextArrayAction->GetPoint();
+            // Search operation takes place here
             OUString sText = pMetaTextArrayAction->GetText();
-            sal_Int32 nFoundIndex = sText.indexOf(sSearchTerm);
+            sal_Int32 nStart = 0;
+            sal_Int32 nEnd = sText.getLength();
+
+            bool bFound = textSearch.SearchForward(sText, &nStart, &nEnd);
 
             // If found the string, add the corresponding rectangle to the collection
-            if (nFoundIndex >= 0)
+            if (bFound /*nFoundIndex >= 0*/)
             {
                 OutputDevice* pOutputDevice
                     = SfxObjectShell::GetShellFromComponent(xComponent)->GetDocumentRefDev();
                 tools::Rectangle aNewRect(ImplCalcActionBounds(
-                    *pMetaTextArrayAction, *pOutputDevice, sSearchTerm, nFoundIndex));
+                    *pMetaTextArrayAction, *pOutputDevice, sSearchTerm, nStart));
 
                 if (!aNewRect.IsEmpty())
                     aRedactionRectangles.push_back(aNewRect);
@@ -486,14 +507,48 @@ void SfxRedactionHelper::autoRedactPage(const RedactionTarget* pRedactionTarget,
     if (pRedactionTarget == nullptr || pRedactionTarget->sContent.isEmpty())
         return;
 
-    OUString sContent(pRedactionTarget->sContent);
-
     // Search for the redaction strings, and get the rectangle coordinates
     std::vector<::tools::Rectangle> aRedactionRectangles;
-    searchInMetaFile(sContent, rGDIMetaFile, aRedactionRectangles, xComponent);
+    searchInMetaFile(pRedactionTarget, rGDIMetaFile, aRedactionRectangles, xComponent);
 
     // Add the redaction rectangles to the page
     addRedactionRectToPage(xComponent, xPage, aRedactionRectangles);
+}
+
+namespace
+{
+const LanguageTag& GetAppLanguageTag() { return Application::GetSettings().GetLanguageTag(); }
+}
+
+void SfxRedactionHelper::fillSearchOptions(i18nutil::SearchOptions2& rSearchOpt,
+                                           const RedactionTarget* pTarget)
+{
+    if (!pTarget)
+    {
+        SAL_WARN("sfx.doc",
+                 "pTarget (pointer to Redactiontarget) is null. This should never happen.");
+        return;
+    }
+
+    if (pTarget->sType == RedactionTargetType::REDACTION_TARGET_REGEX)
+    {
+        rSearchOpt.algorithmType = util::SearchAlgorithms_REGEXP;
+        rSearchOpt.AlgorithmType2 = util::SearchAlgorithms2::REGEXP;
+    }
+    else
+    {
+        rSearchOpt.algorithmType = util::SearchAlgorithms_ABSOLUTE;
+        rSearchOpt.AlgorithmType2 = util::SearchAlgorithms2::ABSOLUTE;
+    }
+
+    rSearchOpt.Locale = GetAppLanguageTag().getLocale();
+    rSearchOpt.searchString = pTarget->sContent;
+    rSearchOpt.replaceString.clear();
+
+    if (!pTarget->bCaseSensitive)
+        rSearchOpt.transliterateFlags |= TransliterationFlags::IGNORE_CASE;
+    if (pTarget->bWholeWords)
+        rSearchOpt.searchFlag |= util::SearchFlags::NORM_WORD_ONLY;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
