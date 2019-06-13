@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "3fa0c359_a63a5595",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Calc.xcs",
+        "patchSetId": 1
+      },
+      "lineNbr": 1421,
+      "author": {
+        "id": 1000821
+      },
+      "writtenOn": "2019-06-13T23:28:34Z",
+      "side": 1,
+      "message": "That was by mistake. It should be the default value of MinguoExpansion property. I\u0027ll fix it.",
+      "parentUuid": "3fa0c359_037e9b18",
+      "range": {
+        "startLine": 1421,
+        "startChar": 10,
+        "endLine": 1421,
+        "endChar": 30
+      },
+      "revId": "e162635c52bc55f0bdabd65c2dd878ad648fbc7c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3fa0c359_63875f11",
         "filename": "officecfg/registry/schema/org/openoffice/Office/Calc.xcs",
         "patchSetId": 1
@@ -36,6 +60,30 @@
       "writtenOn": "2019-06-13T15:19:48Z",
       "side": 1,
       "message": "any reason to make this nillable?",
+      "range": {
+        "startLine": 1423,
+        "startChar": 63,
+        "endLine": 1423,
+        "endChar": 82
+      },
+      "revId": "e162635c52bc55f0bdabd65c2dd878ad648fbc7c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_e64ffd31",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Calc.xcs",
+        "patchSetId": 1
+      },
+      "lineNbr": 1423,
+      "author": {
+        "id": 1000821
+      },
+      "writtenOn": "2019-06-13T23:28:34Z",
+      "side": 1,
+      "message": "I thought it allows the property absent from the user configuration. I forgot whether I actual read it or I just considered it literally from its name. Was my understanding wrong or do you have any concern?",
+      "parentUuid": "3fa0c359_63875f11",
       "range": {
         "startLine": 1423,
         "startChar": 63,
