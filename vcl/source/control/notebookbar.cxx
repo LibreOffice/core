@@ -16,8 +16,25 @@
 #include <comphelper/processfactory.hxx>
 #include <vcl/vclevent.hxx>
 #include <rtl/bootstrap.hxx>
+#include <osl/file.hxx>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/ui/ContextChangeEventMultiplexer.hpp>
+
+static OUString getCustomizedUIRootDir()
+{
+    OUString sShareLayer("$BRAND_BASE_DIR/user/config/soffice.cfg/");
+    rtl::Bootstrap::expandMacros(sShareLayer);
+    return sShareLayer;
+}
+
+static bool doesFileExist(const OUString& sUIDir, const OUString& sUIFile)
+{
+    OUString sUri = sUIDir + sUIFile;
+    osl::File file(sUri);
+    sal_uInt32 flag = 0;
+    return( file.open(flag) == osl::FileBase::E_None );
+}
+
 /**
  * split from the main class since it needs different ref-counting mana
  */
@@ -257,18 +274,4 @@ void NotebookBar::UpdatePersonaSettings()
     PersonaSettings = aAllSettings;
 }
 
-OUString NotebookBar::getCustomizedUIRootDir()
-{
-    OUString sShareLayer("$BRAND_BASE_DIR/user/config/soffice.cfg/");
-    rtl::Bootstrap::expandMacros(sShareLayer);
-    return sShareLayer;
-}
-
-bool NotebookBar::doesFileExist(const OUString& sUIDir, const OUString& sUIFile)
-{
-    OUString sUri = sUIDir + sUIFile;
-    osl::File file(sUri);
-    sal_uInt32 flag = 0;
-    return( file.open(flag) == osl::FileBase::E_None );
-}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
