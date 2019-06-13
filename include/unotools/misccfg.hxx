@@ -47,6 +47,9 @@ public:
                 // 0 ... 99
     sal_Int32   GetYear2000()           const;
     void        SetYear2000( sal_Int32 nSet );
+
+    bool        GetROCEraExpansion()    const;
+    void        SetROCEraExpansion(bool bSet);
 };
 
 }

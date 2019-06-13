@@ -1108,7 +1108,8 @@ std::unique_ptr<SfxItemSet> OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId 
                     SID_ATTR_METRIC, SID_ATTR_METRIC,
                     SID_AUTOSPELL_CHECK, SID_AUTOSPELL_CHECK,
                     SID_ATTR_QUICKLAUNCHER, SID_ATTR_QUICKLAUNCHER,
-                    SID_ATTR_YEAR2000, SID_ATTR_YEAR2000>{} );
+                    SID_ATTR_YEAR2000, SID_ATTR_YEAR2000,
+                    SID_ATTR_ROCERA_EXPANSION,SID_ATTR_ROCERA_EXPANSION>{} );
 
             SfxItemSet aOptSet( SfxGetpApp()->GetPool(), svl::Items<SID_ATTR_QUICKLAUNCHER, SID_ATTR_QUICKLAUNCHER>{} );
             SfxGetpApp()->GetOptions(aOptSet);
@@ -1126,10 +1127,19 @@ std::unique_ptr<SfxItemSet> OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId 
                     pRet->Put( SfxUInt16Item( SID_ATTR_YEAR2000, static_cast<const SfxUInt16Item*>(pItem)->GetValue() ) );
                 else
                     pRet->Put( SfxUInt16Item( SID_ATTR_YEAR2000, static_cast<sal_uInt16>(aMisc.GetYear2000()) ) );
+
+                if(SfxItemState::DEFAULT <= pDispatch->QueryState(SID_ATTR_ROCERA_EXPANSION , pItem))
+                    pRet->Put(SfxBoolItem(SID_ATTR_ROCERA_EXPANSION, static_cast<const SfxBoolItem*>(pItem)->GetValue()));
+                else
+                    pRet->Put(SfxBoolItem(SID_ATTR_ROCERA_EXPANSION, aMisc.GetROCEraExpansion()));
             }
             else
+            {
                 pRet->Put( SfxUInt16Item( SID_ATTR_YEAR2000, static_cast<sal_uInt16>(aMisc.GetYear2000()) ) );
+                // miscellaneous - ROC Era Expansion
+                pRet->Put(SfxBoolItem(SID_ATTR_ROCERA_EXPANSION, aMisc.GetROCEraExpansion()));
 
+            }
 
             // miscellaneous - Tabulator
             pRet->Put(SfxBoolItem(SID_PRINTER_NOTFOUND_WARN, aMisc.IsNotFoundWarning()));
@@ -1277,6 +1287,19 @@ void OfaTreeOptionsDialog::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet 
                 aMisc.SetYear2000(nY2K);
             }
 
+
+//          evaluate ROC Era Expansion
+
+            if(SfxItemState::SET == rSet.GetItemState(SID_ATTR_ROCERA_EXPANSION, false, &pItem))
+            {
+                if (pViewFrame)
+                {
+                    SfxDispatcher* pDispatch = pViewFrame->GetDispatcher();
+                    pDispatch->ExecuteList(SID_ATTR_ROCERA_EXPANSION,
+                            SfxCallMode::ASYNCHRON, { pItem });
+                }
+                aMisc.SetROCEraExpansion(static_cast<const SfxBoolItem*>(pItem)->GetValue());
+            }
 
 //          evaluate print
 

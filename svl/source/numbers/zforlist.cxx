@@ -3301,6 +3301,18 @@ NfEvalDateFormat SvNumberFormatter::GetEvalDateFormat() const
     return eEvalDateFormat;
 }
 
+void SvNumberFormatter::SetROCEraExpansion(bool bVal)
+{
+    ::osl::MutexGuard aGuard(GetInstanceMutex());
+    pStringScanner->SetROCEraExpansion(bVal);
+}
+
+bool SvNumberFormatter::IsROCEraExpansion() const
+{
+    ::osl::MutexGuard aGuard(GetInstanceMutex());
+    return pStringScanner->IsROCEraExpansion();
+}
+
 void SvNumberFormatter::SetYear2000( sal_uInt16 nVal )
 {
     ::osl::MutexGuard aGuard( GetInstanceMutex() );
