@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--***********************************************************
- * 
+ *
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
  * distributed with this work for additional information
@@ -8,21 +8,21 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- * 
+ *
  ***********************************************************-->
 
 
 <!--
-	For further documentation and updates visit http://xml.openoffice.org/odf2xhtml
+	For further documentation and updates visit https://xml.openoffice.org/odf2xhtml
 -->
 <xsl:stylesheet version="1.0"
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -103,7 +103,7 @@
 
 	<!-- OPTIONAL: (MANDATORY: for session management by URL rewriting)
 		 Useful for WebApplications: if a HTTP session is not cookie based, URL rewriting is being used (the session is appended to the URL).
-		 This URL session is used for example when links to graphics are created by XSLT. Otherwise the user havt to log again in for every graphic he liks to see. -->
+		 This URL session is used for example when links to graphics are created by XSLT. Otherwise the user has to log in again for every graphic he likes to see. -->
 	<xsl:param name="optionalURLSuffix" />
 
 	<!-- OPTIONAL: URL to office meta file (flat xml use the URL to the input file) -->
@@ -113,12 +113,12 @@
 	<xsl:param name="stylesFileURL" />
 
 	<!-- OPTIONAL: DPI (dots per inch) the standard resolution of given pictures (necessary for the conversion of 'cm' into 'pixel')-->
-	<!-- Although many pictures have a 96 dpi resolution, a higher resoltion give better results for common browsers -->
+	<!-- Although many pictures have a 96 dpi resolution, a higher resolution gives better results for common browsers -->
 	<!-- Cp. measure_conversion.xsl:
 		 <xsl:param name="dpi" select="111" /> -->
 
 
-	<!-- OPTIONAL: in case of using a different processor than a JAVA XSLT, you can unable the Java functionality
+	<!-- OPTIONAL: in case of using a different processor than a JAVA XSLT, you can enable the Java functionality
 		 (e.g. encoding chapter names for the content-table as href and anchors ) -->
 	<xsl:param name="java"        select="true()" />
 	<xsl:param name="javaEnabled" select="boolean($java)" />
@@ -150,7 +150,7 @@
 		<xsl:param name="globalData" />
 
 		<xsl:element name="html">
-			<xsl:comment>This file was converted to xhtml by OpenOffice.org - see http://xml.openoffice.org/odf2xhtml for more info.</xsl:comment>
+			<xsl:comment>This file was converted to xhtml by Apache OpenOffice - see https://xml.openoffice.org/odf2xhtml for more info.</xsl:comment>
 			<xsl:call-template name='create-header'>
 				<xsl:with-param name="globalData" select="$globalData" />
 			</xsl:call-template>
