@@ -48,6 +48,7 @@
 #include <svx/EnhancedCustomShapeFunctionParser.hxx>
 #include <svx/EnhancedCustomShape2d.hxx>
 #include <com/sun/star/beans/PropertyValues.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/awt/GradientStyle.hpp>
 #include <com/sun/star/awt/RasterOperation.hpp>

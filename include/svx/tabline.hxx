@@ -19,12 +19,6 @@
 #ifndef INCLUDED_SVX_TABLINE_HXX
 #define INCLUDED_SVX_TABLINE_HXX
 
-#include <vcl/button.hxx>
-#include <svx/svdpage.hxx>
-#include <svx/xlineit0.hxx>
-#include <svx/dlgctrl.hxx>
-#include <vcl/menubtn.hxx>
-
 class SvxBrushItem;
 class SdrModel;
 class SdrObject;

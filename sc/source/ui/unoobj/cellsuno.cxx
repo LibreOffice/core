@@ -30,6 +30,7 @@
 #include <editeng/flditem.hxx>
 #include <editeng/justifyitem.hxx>
 #include <editeng/editobj.hxx>
+#include <editeng/unoipset.hxx>
 #include <svx/fmdpage.hxx>
 #include <editeng/langitem.hxx>
 #include <sfx2/linkmgr.hxx>

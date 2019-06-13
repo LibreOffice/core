@@ -30,11 +30,13 @@
 #include <sal/log.hxx>
 #include <editeng/brushitem.hxx>
 #include <editeng/sizeitem.hxx>
+#include <svl/eitem.hxx>
 #include <svl/ilstitem.hxx>
 #include <svl/intitem.hxx>
 #include <svl/stritem.hxx>
 #include <svx/tabline.hxx>
 #include <tools/diagnose_ex.h>
+#include <vcl/graph.hxx>
 
 #include <com/sun/star/chart2/AxisType.hpp>
 #include <com/sun/star/chart2/DataPointLabel.hpp>

@@ -989,3 +989,52 @@ blacklist:
     include/svx/svxids.hrc:
     # Used in macro definition
     - svl/typedwhich.hxx
+    include/svx/unopage.hxx:
+    # Don't propose hxx -> h change in URE libs
+    - cppuhelper/interfacecontainer.hxx
+    include/svx/unoshprp.hxx:
+    # Needed for macro defines
+    - com/sun/star/drawing/PointSequence.hpp
+    - com/sun/star/drawing/PointSequenceSequence.hpp
+    - com/sun/star/uno/Sequence.hxx
+    - com/sun/star/drawing/RectanglePoint.hpp
+    - com/sun/star/awt/XBitmap.hpp
+    - com/sun/star/awt/Gradient.hpp
+    - com/sun/star/drawing/Hatch.hpp
+    - com/sun/star/drawing/FillStyle.hpp
+    - com/sun/star/drawing/LineCap.hpp
+    - com/sun/star/drawing/LineDash.hpp
+    - com/sun/star/drawing/LineJoint.hpp
+    - com/sun/star/drawing/LineStyle.hpp
+    - com/sun/star/beans/PropertyAttribute.hpp
+    - com/sun/star/awt/Rectangle.hpp
+    - com/sun/star/drawing/TextAnimationDirection.hpp
+    - com/sun/star/drawing/TextAnimationKind.hpp
+    - com/sun/star/drawing/TextFitToSizeType.hpp
+    - com/sun/star/drawing/TextVerticalAdjust.hpp
+    - com/sun/star/drawing/TextHorizontalAdjust.hpp
+    - com/sun/star/drawing/ConnectorType.hpp
+    - com/sun/star/drawing/XShape.hpp
+    - com/sun/star/drawing/MeasureKind.hpp
+    - com/sun/star/drawing/MeasureTextHorzPos.hpp
+    - com/sun/star/drawing/MeasureTextVertPos.hpp
+    - com/sun/star/drawing/HomogenMatrix3.hpp
+    - com/sun/star/drawing/CircleKind.hpp
+    - com/sun/star/drawing/PolygonKind.hpp
+    - com/sun/star/drawing/PolyPolygonBezierCoords.hpp
+    - com/sun/star/drawing/ColorMode.hpp
+    - com/sun/star/drawing/HomogenMatrix.hpp
+    - com/sun/star/drawing/Direction3D.hpp
+    - com/sun/star/drawing/ProjectionMode.hpp
+    - com/sun/star/drawing/ShadeMode.hpp
+    - com/sun/star/drawing/Position3D.hpp
+    - com/sun/star/drawing/NormalsKind.hpp
+    - com/sun/star/drawing/TextureKind.hpp
+    - com/sun/star/drawing/TextureMode.hpp
+    - com/sun/star/drawing/TextureProjectionMode.hpp
+    - com/sun/star/drawing/PolyPolygonShape3D.hpp
+    - com/sun/star/text/GraphicCrop.hpp
+    - com/sun/star/drawing/BitmapMode.hpp
+    - com/sun/star/drawing/CameraGeometry.hpp
+    - com/sun/star/text/WritingMode.hpp
+    - com/sun/star/graphic/XGraphic.hpp

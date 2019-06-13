@@ -19,6 +19,7 @@
 
 #include <vector>
 #include <com/sun/star/io/XOutputStream.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XComponent.hpp>

@@ -56,6 +56,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/virdev.hxx>
 #include <svtools/colorcfg.hxx>
+#include <com/sun/star/awt/FontDescriptor.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>

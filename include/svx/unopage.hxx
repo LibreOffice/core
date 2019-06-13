@@ -21,25 +21,17 @@
 
 #include <com/sun/star/lang/XComponent.hpp>
 #include <cppuhelper/interfacecontainer.hxx>
-#include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/drawing/XShapes2.hpp>
 #include <com/sun/star/drawing/XShapeGrouper.hpp>
-#include <com/sun/star/drawing/XShapeCombiner.hpp>
-#include <com/sun/star/drawing/XShapeBinder.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
-#include <cppuhelper/weak.hxx>
-#include <cppuhelper/weakagg.hxx>
-#include <svl/lstner.hxx>
 #include <editeng/mutxhelp.hxx>
 #include <svx/svxdllapi.h>
 
 #include <cppuhelper/implbase6.hxx>
 #include <comphelper/servicehelper.hxx>
 
-#include <svx/unoprov.hxx>
 #include <memory>
 
 class SdrPage;

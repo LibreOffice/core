@@ -21,7 +21,6 @@
 #define INCLUDED_SVX_VIEW3D_HXX
 
 #include <svx/svdview.hxx>
-#include <svx/def3d.hxx>
 #include <svx/deflt3d.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 #include <svx/svxdllapi.h>

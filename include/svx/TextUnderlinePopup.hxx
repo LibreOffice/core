@@ -22,10 +22,6 @@
 #include <sfx2/tbxctrl.hxx>
 #include <svx/svxdllapi.h>
 
-#include <vcl/vclenum.hxx>
-
-#include <functional>
-
 namespace svx {
 
 class SVX_DLLPUBLIC TextUnderlinePopup : public SfxToolBoxControl
