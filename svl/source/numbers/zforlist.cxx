@@ -3301,6 +3301,18 @@ NfEvalDateFormat SvNumberFormatter::GetEvalDateFormat() const
     return eEvalDateFormat;
 }
 
+void SvNumberFormatter::SetMinguoExpansion(bool bVal)
+{
+    ::osl::MutexGuard aGuard(GetInstanceMutex());
+    pStringScanner->SetMinguoExpansion(bVal);
+}
+
+bool SvNumberFormatter::IsMinguoExpansion() const
+{
+    ::osl::MutexGuard aGuard(GetInstanceMutex());
+    return pStringScanner->IsMinguoExpansion();
+}
+
 void SvNumberFormatter::SetYear2000( sal_uInt16 nVal )
 {
     ::osl::MutexGuard aGuard( GetInstanceMutex() );

@@ -60,6 +60,11 @@ public:
     /// get threshold of two-digit year input
     sal_uInt16  GetYear2000() const { return nYear2000; }
 
+    /// enable Minguo expansion.
+    void    SetMinguoExpansion(bool bVal) { bMinguoExpansion = bVal; }
+    /// whether Minguo expansion is enabled.
+    bool    IsMinguoExpansion() const { return bMinguoExpansion; }
+
     /** Whether input can be forced to ISO 8601 format.
 
         Depends on locale's date separator and a specific date format order.
@@ -121,6 +126,7 @@ private:
     sal_uInt16 nStringScanNumFor;               // Fixed strings recognized in
                                                 // pFormat->NumFor[nNumForStringScan]
     short  nStringScanSign;                     // Sign resulting of FixString
+    bool   bMinguoExpansion;                    // Expand two or three digit year based on Minguo calendar.
     sal_uInt16 nYear2000;                       // Two-digit threshold
                                                 // Year as 20xx
                                                 // default 18
