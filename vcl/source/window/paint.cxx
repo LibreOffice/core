@@ -296,7 +296,10 @@ void PaintHelper::DoPaint(const vcl::Region* pRegion)
         else
         {
             // direct painting
+            Wallpaper aBackground = m_pWindow->GetBackground();
             m_pWindow->ApplySettings(*m_pWindow);
+            if (aBackground.IsBitmap())
+                m_pWindow->SetBackground(aBackground);
             m_pWindow->PushPaintHelper(this, *m_pWindow);
             m_pWindow->Paint(*m_pWindow, m_aPaintRect);
         }
