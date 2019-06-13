@@ -22,6 +22,30 @@
       "revId": "0e27158c4f6a6a7676a77afb6b37dd30b3f6d100",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_904d0f74",
+        "filename": "writerfilter/source/dmapper/SettingsTable.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 651,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2019-06-13T06:09:37Z",
+      "side": 1,
+      "message": "\u003e What version where you testing with?\n\nMSO 2016, but you are right, we have to handle the older versions, too. I will reverse the handling of this formatting option: default is false, and true, if it\u0027s not zero in the document. Also I\u0027ll add this markup. Many thanks for feedback!",
+      "parentUuid": "3fa0c359_30375be6",
+      "range": {
+        "startLine": 651,
+        "startChar": 98,
+        "endLine": 651,
+        "endChar": 131
+      },
+      "revId": "0e27158c4f6a6a7676a77afb6b37dd30b3f6d100",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
