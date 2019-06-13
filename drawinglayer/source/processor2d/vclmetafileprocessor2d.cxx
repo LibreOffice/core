@@ -1828,7 +1828,7 @@ namespace drawinglayer
 
             mpOutputDevice->DrawHatch(aToolsPolyPolygon,
                 Hatch(aHatchStyle,
-                    Color(rFillHatchAttribute.getColor()),
+                    Color(maBColorModifierStack.getModifiedColor(rFillHatchAttribute.getColor())),
                     basegfx::fround(rFillHatchAttribute.getDistance()),
                     basegfx::fround(rFillHatchAttribute.getAngle() / F_PI1800)));
 
