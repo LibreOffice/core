@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_30375be6",
+        "filename": "writerfilter/source/dmapper/SettingsTable.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 651,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2019-06-13T06:00:43Z",
+      "side": 1,
+      "message": "Using MSO 2010, I can\u0027t confirm this one. If I have a document with only \"revisionView insDel\u003d0\", then MSO only shows the final without markup, while LO shows the changes. (Since Formatting defaults to true, and it isn\u0027t defined, then show changes becomes true).\n\nAlternatively, if I ONLY have reviewView formatting\u003d0, then MSO open with show changes. So at least in 2010 the formatting flag doesn\u0027t seem to affect show changes.\n\nIn 2010, when I SAVE a docx, I only get the line\n\"revisionView markup\u003d0\"\n\nWhat version where you testing with?\n\nSorry I didn\u0027t test this earlier.  I read your commit message wrong, and thought that MSO2010 just didn\u0027t work right, since it was opening your unittest with show changes on.  Then I re-read the message and saw that the privacy option had to be DISABLED, not ENABLED.",
+      "range": {
+        "startLine": 651,
+        "startChar": 98,
+        "endLine": 651,
+        "endChar": 131
+      },
+      "revId": "0e27158c4f6a6a7676a77afb6b37dd30b3f6d100",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
