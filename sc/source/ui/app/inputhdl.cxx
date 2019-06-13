@@ -3046,15 +3046,16 @@ void ScInputHandler::SetReference( const ScRange& rRef, const ScDocument* pDoc )
 {
     HideTip();
 
-    bool bOtherDoc = ( pRefViewSh &&
-                        pRefViewSh->GetViewData().GetDocument() != pDoc );
-    if (bOtherDoc)
-        if (!pDoc->GetDocumentShell()->HasName())
-        {
-            // References to unnamed document; that doesn't work
-            // SetReference should not be called, then
-            return;
-        }
+    const ScDocument* pThisDoc = nullptr;
+    bool bOtherDoc = (pRefViewSh && ((pThisDoc = pRefViewSh->GetViewData().GetDocument()) != pDoc));
+    if (bOtherDoc && !pDoc->GetDocumentShell()->HasName())
+    {
+        // References to unnamed document; that doesn't work
+        // SetReference should not be called, then
+        return;
+    }
+    if (!pThisDoc)
+        pThisDoc = pDoc;
 
     UpdateActiveView();
     if (!pTableView && !pTopView)
@@ -3089,9 +3090,9 @@ void ScInputHandler::SetReference( const ScRange& rRef, const ScDocument* pDoc )
         }
     }
 
-    // Create string from reference
+    // Create string from reference, in the syntax of the document being edited.
     OUString aRefStr;
-    const ScAddress::Details aAddrDetails( pDoc, aCursorPos );
+    const ScAddress::Details aAddrDetails( pThisDoc, aCursorPos );
     if (bOtherDoc)
     {
         // Reference to other document
