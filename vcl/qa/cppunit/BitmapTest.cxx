@@ -19,8 +19,6 @@
 #include <vcl/virdev.hxx>
 
 #include <rtl/strbuf.hxx>
-#include <tools/stream.hxx>
-#include <vcl/graphicfilter.hxx>
 #include <config_features.h>
 #if HAVE_FEATURE_OPENGL
 #include <vcl/opengl/OpenGLHelper.hxx>

@@ -7,16 +7,11 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <unotest/filters-test.hxx>
 #include <test/bootstrapfixture.hxx>
 
 #include <vcl/virdev.hxx>
 #include <vcl/bitmapaccess.hxx>
-#include <vcl/wrkwin.hxx>
 
-#include <tools/stream.hxx>
-#include <vcl/pngwrite.hxx>
-#include <sal/log.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 
 class VclOutdevTest : public test::BootstrapFixture

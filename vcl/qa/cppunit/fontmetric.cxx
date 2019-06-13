@@ -9,14 +9,8 @@
 
 #include <test/bootstrapfixture.hxx>
 #include <cppunit/TestAssert.h>
-#include <cppunit/TestFixture.h>
-
-#include <osl/file.hxx>
-#include <osl/process.h>
 
 #include <vcl/metric.hxx>
-
-#include <impfont.hxx>
 
 class VclFontMetricTest : public test::BootstrapFixture
 {

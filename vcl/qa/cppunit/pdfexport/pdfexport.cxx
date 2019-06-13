@@ -22,7 +22,6 @@
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
-#include <cppuhelper/implbase.hxx>
 #include <test/bootstrapfixture.hxx>
 #include <unotest/macros_test.hxx>
 #include <unotools/mediadescriptor.hxx>

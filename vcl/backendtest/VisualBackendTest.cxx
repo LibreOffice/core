@@ -8,39 +8,23 @@
  */
 
 #include <math.h>
-#include <rtl/math.hxx>
 #include <sal/log.hxx>
 
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/bootstrap.hxx>
+#include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/lang/XInitialization.hpp>
-#include <com/sun/star/registry/XSimpleRegistry.hpp>
-#include <com/sun/star/ucb/UniversalContentBroker.hpp>
 
-#include <osl/time.h>
+#include <vcl/event.hxx>
 #include <vcl/gradient.hxx>
 #include <vcl/vclmain.hxx>
-#include <vcl/layout.hxx>
-#include <salhelper/thread.hxx>
 
-#include <tools/urlobj.hxx>
-#include <tools/stream.hxx>
-#include <tools/poly.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/pngread.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/virdev.hxx>
-#include <vcl/graphicfilter.hxx>
-#include <vcl/button.hxx>
-#include <vcl/toolbox.hxx>
-#include <vcl/pngwrite.hxx>
-#include <vcl/floatwin.hxx>
-#include <vcl/bitmapaccess.hxx>
-#include <vcl/help.hxx>
 
 #include <basegfx/numeric/ftools.hxx>
-#include <basegfx/matrix/b2dhommatrix.hxx>
 #include <tools/diagnose_ex.h>
 
 #include <chrono>

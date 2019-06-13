@@ -10,9 +10,6 @@
 #include <unotest/filters-test.hxx>
 #include <test/bootstrapfixture.hxx>
 
-#include <osl/file.hxx>
-#include <osl/process.h>
-
 #include <comphelper/fileformat.h>
 
 #include <vcl/graphicfilter.hxx>

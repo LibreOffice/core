@@ -9,9 +9,6 @@
 
 #include <test/bootstrapfixture.hxx>
 
-#include <osl/file.hxx>
-#include <osl/process.h>
-
 #include <vcl/fontcharmap.hxx>
 
 class VclFontCharMapTest : public test::BootstrapFixture

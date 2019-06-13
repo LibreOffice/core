@@ -10,22 +10,15 @@
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/plugin/TestPlugIn.h>
 
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapaccess.hxx>
-#include <vcl/alpha.hxx>
 
-#include <rtl/strbuf.hxx>
 #include <tools/stream.hxx>
 #include <vcl/graphicfilter.hxx>
-#include <config_features.h>
 
-#include <vcl/BitmapTools.hxx>
 #include <BitmapSymmetryCheck.hxx>
 #include <bitmapwriteaccess.hxx>
-#include <svdata.hxx>
-#include <salinst.hxx>
 
 namespace
 {

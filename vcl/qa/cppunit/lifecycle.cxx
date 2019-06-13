@@ -7,7 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <unotest/filters-test.hxx>
 #include <test/bootstrapfixture.hxx>
 
 #include <vcl/wrkwin.hxx>
@@ -19,7 +18,6 @@
 #include <vcl/tabctrl.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/layout.hxx>
-#include <vcl/svapp.hxx>
 #include <vcl/scheduler.hxx>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/lang/XComponent.hpp>

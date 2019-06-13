@@ -9,7 +9,6 @@
 
 #include <test/bootstrapfixture.hxx>
 #include <cppunit/TestAssert.h>
-#include <cppunit/TestFixture.h>
 
 #include <vcl/errinf.hxx>
 

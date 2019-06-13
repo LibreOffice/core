@@ -10,9 +10,11 @@
 
 #include <test/bootstrapfixture.hxx>
 #include <test/xmltesttools.hxx>
-#include <vcl/metaact.hxx>
+#include <vcl/gdimtf.hxx>
+#include <vcl/gradient.hxx>
+#include <vcl/hatch.hxx>
+#include <vcl/lineinfo.hxx>
 #include <vcl/virdev.hxx>
-#include <vcl/bitmapaccess.hxx>
 #include <bitmapwriteaccess.hxx>
 #include <vcl/pngwrite.hxx>
 

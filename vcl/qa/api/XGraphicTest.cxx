@@ -9,18 +9,14 @@
 
 #include <test/bootstrapfixture.hxx>
 
-#include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/graphic/GraphicType.hpp>
 #include <com/sun/star/graphic/GraphicProvider.hpp>
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/awt/Size.hpp>
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
-
-#include <rtl/uri.hxx>
 
 namespace
 {
