@@ -596,6 +596,11 @@ DECLARE_OOXMLEXPORT_TEST(testFdo64826, "fdo64826.docx")
 {
     // 'Track-Changes' (Track Revisions) wasn't exported.
     CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(mxComponent, "RecordChanges"));
+    // 'Show-Changes' should not be exported - default is true.
+    if (xmlDocPtr pXmlSettings = parseExport("word/settings.xml"))
+    {
+        assertXPath(pXmlSettings, "/w:settings/w:revisionView", 0);
+    }
 }
 
 DECLARE_OOXMLEXPORT_TEST(testPageBackground, "page-background.docx")
