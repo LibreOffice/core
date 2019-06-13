@@ -9,10 +9,6 @@
 
 #include <test/bootstrapfixture.hxx>
 #include <cppunit/TestAssert.h>
-#include <cppunit/TestFixture.h>
-
-#include <osl/file.hxx>
-#include <osl/process.h>
 
 #include <vcl/font.hxx>
 

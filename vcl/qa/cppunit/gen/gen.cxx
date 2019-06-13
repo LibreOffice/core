@@ -15,10 +15,8 @@
 #include <sfx2/sfxbasemodel.hxx>
 #include <test/unoapi_test.hxx>
 #include <vcl/bitmapaccess.hxx>
-#include <vcl/pngwrite.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/virdev.hxx>
-#include <tools/stream.hxx>
 
 using namespace com::sun::star;
 

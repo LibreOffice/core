@@ -18,7 +18,6 @@
 #include <vcl/graph.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <tools/stream.hxx>
-#include <vcl/pngwrite.hxx>
 
 using namespace css;
 

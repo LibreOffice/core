@@ -15,7 +15,6 @@
 static std::ostream& operator<<(std::ostream& rStream, const std::vector<long>& rVec);
 #endif
 
-#include <unotest/filters-test.hxx>
 #include <test/bootstrapfixture.hxx>
 
 #include <vcl/wrkwin.hxx>
@@ -23,9 +22,6 @@ static std::ostream& operator<<(std::ostream& rStream, const std::vector<long>& 
 // workaround MSVC2015 issue with std::unique_ptr
 #include <sallayout.hxx>
 #include <salgdi.hxx>
-
-#include <osl/file.hxx>
-#include <osl/process.h>
 
 #if !defined(_WIN32) && HAVE_MORE_FONTS
 static std::ostream& operator<<(std::ostream& rStream, const std::vector<long>& rVec)

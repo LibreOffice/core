@@ -13,7 +13,6 @@
 #include <test/bootstrapfixture.hxx>
 
 #include <osl/thread.hxx>
-#include <salhelper/thread.hxx>
 #include <chrono>
 
 #include <vcl/timer.hxx>
