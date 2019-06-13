@@ -18,6 +18,7 @@
 #include <wrtsh.hxx>
 #include <com/sun/star/document/XEmbeddedObjectSupplier2.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
+#include <com/sun/star/text/WritingMode2.hpp>
 
 class Test : public SwModelTestBase
 {
@@ -253,6 +254,17 @@ DECLARE_OOXMLIMPORT_TEST(testTdf113946, "tdf113946.docx")
     // version line is strict horizontal. Checked against MSWord2013, there the line
     // is also not rotated -> the change is to the better, correct the expected result here.
     CPPUNIT_ASSERT_EQUAL(OUString("1695"), aTop);
+}
+
+DECLARE_OOXMLIMPORT_TEST(testTbrlFrameVml, "tbrl-frame-vml.docx")
+{
+    uno::Reference<beans::XPropertySet> xTextFrame(getShape(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xTextFrame.is());
+
+    auto nActual = getProperty<sal_Int16>(xTextFrame, "WritingMode");
+    // Without the accompanying fix in place, this test would have failed with 'Expected: 2; Actual:
+    // 4', i.e. writing direction was inherited from page, instead of explicit tbrl.
+    CPPUNIT_ASSERT_EQUAL(text::WritingMode2::TB_RL, nActual);
 }
 
 DECLARE_OOXMLIMPORT_TEST(testTdf121804, "tdf121804.docx")

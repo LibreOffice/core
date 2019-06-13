@@ -52,6 +52,7 @@
 #include <com/sun/star/text/GraphicCrop.hpp>
 #include <com/sun/star/security/DocumentDigitalSignatures.hpp>
 #include <com/sun/star/security/XDocumentDigitalSignatures.hpp>
+#include <com/sun/star/text/WritingMode2.hpp>
 #include <rtl/math.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
@@ -726,6 +727,13 @@ Reference< XShape > SimpleShape::implConvertAndInsert( const Reference< XShapes 
             PropertySet( xShape ).setAnyProperty( PROP_RightBorderDistance, makeAny( sal_Int32( getTextBox()->borderDistanceRight )));
             PropertySet( xShape ).setAnyProperty( PROP_BottomBorderDistance, makeAny( sal_Int32( getTextBox()->borderDistanceBottom )));
         }
+
+        if (getTextBox()->maLayoutFlow == "vertical" && maTypeModel.maLayoutFlowAlt.isEmpty())
+        {
+            PropertySet(xShape).setAnyProperty(PROP_WritingMode,
+                                               uno::makeAny(text::WritingMode2::TB_RL));
+        }
+
         if (!maTypeModel.maLayoutFlowAlt.isEmpty())
         {
             // Can't handle this property here, as the frame is not attached yet: pass it to writerfilter.
