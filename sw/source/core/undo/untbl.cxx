@@ -1287,7 +1287,7 @@ void SaveBox::SaveContentAttrs( SwDoc* pDoc )
     else
     {
         sal_uLong nEnd = pDoc->GetNodes()[ nSttNode ]->EndOfSectionIndex();
-        Ptrs.pContentAttrs = new SfxItemSets( static_cast<sal_uInt8>(nEnd - nSttNode - 1 ) );
+        Ptrs.pContentAttrs = new SfxItemSets;
         for( sal_uLong n = nSttNode + 1; n < nEnd; ++n )
         {
             SwContentNode* pCNd = pDoc->GetNodes()[ n ]->GetContentNode();
