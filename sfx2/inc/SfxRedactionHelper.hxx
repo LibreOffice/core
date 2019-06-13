@@ -33,6 +33,11 @@ class DocumentToGraphicRenderer;
 class SfxViewFrame;
 struct RedactionTarget;
 
+namespace i18nutil
+{
+struct SearchOptions2;
+}
+
 struct PageMargins
 {
     // Page margins in mm100th
@@ -92,7 +97,7 @@ public:
      * */
     static PageMargins getPageMarginsForCalc(css::uno::Reference<css::frame::XModel>& xModel);
 
-    static void searchInMetaFile(const OUString& sSearchTerm, const GDIMetaFile& rMtf,
+    static void searchInMetaFile(const RedactionTarget* pRedactionTarget, const GDIMetaFile& rMtf,
                                  std::vector<tools::Rectangle>& aRedactionRectangles,
                                  uno::Reference<XComponent>& xComponent);
 
@@ -111,6 +116,10 @@ public:
                                const GDIMetaFile& rGDIMetaFile,
                                uno::Reference<drawing::XDrawPage>& xPage,
                                uno::Reference<XComponent>& xComponent);
+
+    /// Fill the search options based on the given redaction target
+    static void fillSearchOptions(i18nutil::SearchOptions2& rSearchOpt,
+                                  const RedactionTarget* pTarget);
 };
 
 #endif // INCLUDED_CUI_SOURCE_INC_SFXREDACTIONHELPER_HXX
