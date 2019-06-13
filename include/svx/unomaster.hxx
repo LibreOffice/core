@@ -22,8 +22,8 @@
 
 #include <com/sun/star/uno/Type.h>
 #include <com/sun/star/uno/Any.h>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/beans/XPropertyState.hpp>
+#include <com/sun/star/beans/XPropertySetInfo.hpp>
+#include <com/sun/star/beans/PropertyState.hpp>
 
 /** this abstract class is the interface for an instance that likes to enhance
     the functionality of components implemented with derivations from SvxShape

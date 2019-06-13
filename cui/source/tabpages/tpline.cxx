@@ -26,6 +26,8 @@
 
 #include <strings.hrc>
 #include <svx/colorbox.hxx>
+#include <svx/dlgctrl.hxx>
+#include <svx/xlineit0.hxx>
 #include <svx/xlinjoit.hxx>
 #include <svx/xlncapit.hxx>
 #include <svx/xlndsit.hxx>
@@ -51,6 +53,7 @@
 #include <sfx2/dialoghelper.hxx>
 #include <svx/ofaitem.hxx>
 #include <svx/svdobj.hxx>
+#include <svx/svdpage.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/numvset.hxx>

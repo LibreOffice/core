@@ -18,6 +18,7 @@
  */
 
 
+#include <climits>
 #include <set>
 
 #include <svx/UnoNamespaceMap.hxx>

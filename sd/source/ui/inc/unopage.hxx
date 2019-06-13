@@ -22,6 +22,8 @@
 #include <com/sun/star/document/XLinkTargetSupplier.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/drawing/XMasterPageTarget.hpp>
+#include <com/sun/star/drawing/XShapeCombiner.hpp>
+#include <com/sun/star/drawing/XShapeBinder.hpp>
 #include <com/sun/star/presentation/XPresentationPage.hpp>
 #include <com/sun/star/animations/XAnimationNodeSupplier.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>

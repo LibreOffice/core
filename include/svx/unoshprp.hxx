@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SVX_UNOSHPRP_HXX
 #define INCLUDED_SVX_UNOSHPRP_HXX
 
-#include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/drawing/PointSequence.hpp>
 #include <com/sun/star/drawing/PointSequenceSequence.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -66,13 +65,13 @@
 #include <com/sun/star/text/WritingMode.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 
-#include <svx/unoprov.hxx>
 #include <editeng/unoprnms.hxx>
+#include <svx/svddef.hxx>
 #include <svx/unomid.hxx>
 #include <editeng/unotext.hxx>
-#include <svl/itemprop.hxx>
 
-#include <svx/svxids.hrc>
+#include <editeng/memberids.h>
+#include <svl/solar.hrc>
 
 #define OWN_ATTR_VALUE_START_TEXT               (OWN_ATTR_VALUE_START+0)    // the next 10 entries are reserved for text
 #define OWN_ATTR_VALUE_POLYGONKIND              (OWN_ATTR_VALUE_START+10)

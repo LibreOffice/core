@@ -18,6 +18,7 @@
  */
 
 
+#include <svx/def3d.hxx>
 #include <svx/dlgctl3d.hxx>
 #include <svx/strings.hrc>
 #include <svx/view3d.hxx>

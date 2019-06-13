@@ -29,15 +29,12 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/uno/XAggregation.hpp>
-#include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/drawing/PolygonKind.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/drawing/XShapes2.hpp>
 #include <com/sun/star/drawing/XShapeGroup.hpp>
-#include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
@@ -49,23 +46,18 @@
 #include <tools/weakbase.hxx>
 #include <svl/lstner.hxx>
 #include <editeng/unoipset.hxx>
-#include <cppuhelper/weak.hxx>
-#include <cppuhelper/weakagg.hxx>
-#include <cppuhelper/interfacecontainer.h>
 #include <osl/mutex.hxx>
 #include <svx/svxdllapi.h>
 #include <rtl/ref.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <editeng/unotext.hxx>
 
-#include <svx/svdouno.hxx>
+#include <svx/svdobj.hxx>
 
 #include <comphelper/servicehelper.hxx>
 
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase12.hxx>
-
-#include <svx/unoprov.hxx>
 
 class SfxItemSet;
 class SdrModel;

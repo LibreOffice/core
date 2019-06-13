@@ -29,12 +29,14 @@
 
 #include <strings.hrc>
 
+#include <svx/xlineit0.hxx>
 #include <svx/xlnwtit.hxx>
 #include <svx/xlndsit.hxx>
 #include <svx/xlnclit.hxx>
 #include <svx/xpool.hxx>
 #include <svx/xtable.hxx>
 
+#include <svx/dlgctrl.hxx>
 #include <svx/drawitem.hxx>
 #include <cuitabline.hxx>
 #include <dlgname.hxx>

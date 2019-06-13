@@ -28,11 +28,13 @@
 
 #include <strings.hrc>
 #include <svx/dialmgr.hxx>
+#include <svx/dlgctrl.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdopath.hxx>
 #include <svx/drawitem.hxx>
 #include <svx/xpool.hxx>
 #include <svx/xtable.hxx>
+#include <svx/xlineit0.hxx>
 #include <svx/xlnwtit.hxx>
 #include <svx/xlnclit.hxx>
 #include <svx/xlnstwit.hxx>
