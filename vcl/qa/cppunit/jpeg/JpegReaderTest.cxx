@@ -8,10 +8,8 @@
  *
  */
 
-#include <test/setupvcl.hxx>
 #include <unotest/bootstrapfixturebase.hxx>
 #include <vcl/graphicfilter.hxx>
-#include <vcl/bitmapaccess.hxx>
 #include <bitmapwriteaccess.hxx>
 #include <tools/stream.hxx>
 

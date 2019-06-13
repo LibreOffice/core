@@ -10,7 +10,6 @@
 #include <test/bootstrapfixture.hxx>
 #include <config_features.h>
 #include <cppunit/TestAssert.h>
-#include <cppunit/TestFixture.h>
 
 #include <vcl/font/Feature.hxx>
 #include <vcl/font/FeatureParser.hxx>

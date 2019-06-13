@@ -22,3 +22,6 @@ blacklist:
     vcl/inc/unx/saldisp.hxx:
     # Don't replace with generated header
     - epoxy/glx.h
+    vcl/qa/cppunit/outdev.cxx:
+    # Needed for direct member access
+    - basegfx/matrix/b2dhommatrix.hxx

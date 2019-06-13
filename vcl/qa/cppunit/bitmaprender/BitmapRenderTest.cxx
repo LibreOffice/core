@@ -7,7 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <unotest/filters-test.hxx>
 #include <test/bootstrapfixture.hxx>
 
 #include <vcl/virdev.hxx>
@@ -15,7 +14,6 @@
 #include <vcl/svapp.hxx>
 
 #include <tools/stream.hxx>
-#include <vcl/pngwrite.hxx>
 
 #include <vcl/graphicfilter.hxx>
 #include <vcl/filter/PngImageReader.hxx>
