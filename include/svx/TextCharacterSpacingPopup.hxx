@@ -22,8 +22,6 @@
 #include <sfx2/tbxctrl.hxx>
 #include <svx/svxdllapi.h>
 
-#include <functional>
-
 namespace svx {
 
 class SVX_DLLPUBLIC TextCharacterSpacingPopup : public SfxToolBoxControl

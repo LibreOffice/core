@@ -19,7 +19,9 @@
 #ifndef INCLUDED_SVX_SOURCE_UNODRAW_SHAPEIMPL_HXX
 #define INCLUDED_SVX_SOURCE_UNODRAW_SHAPEIMPL_HXX
 
+#include <svx/unoprov.hxx>
 #include <svx/unoshape.hxx>
+
 class SvxShapeCaption : public SvxShapeText
 {
 public:

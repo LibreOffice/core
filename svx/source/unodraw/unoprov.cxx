@@ -20,6 +20,7 @@
 #include <sal/macros.h>
 #include <com/sun/star/table/XTable.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
+#include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/util/MeasureUnit.hpp>
@@ -37,6 +38,7 @@
 #include <editeng/unotext.hxx>
 #include <svx/unoshprp.hxx>
 #include <svx/svx3ditems.hxx>
+#include <svx/svxids.hrc>
 #include <editeng/editeng.hxx>
 #include <svx/globl3d.hxx>
 #include <svx/strings.hrc>

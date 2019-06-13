@@ -22,6 +22,7 @@
 #include "svgfilter.hxx"
 #include <svgscript.hxx>
 
+#include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/animations/XAnimationNodeSupplier.hpp>
 #include <com/sun/star/drawing/XMasterPageTarget.hpp>
 #include <com/sun/star/graphic/PrimitiveFactory2D.hpp>

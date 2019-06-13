@@ -21,6 +21,7 @@
 #define INCLUDED_CUI_SOURCE_INC_CUITABLINE_HXX
 
 #include <vector>
+#include <svx/svdpage.hxx>
 #include <svx/tabline.hxx>
 #include <svx/tabarea.hxx>
 
