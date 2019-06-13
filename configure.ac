@@ -1268,13 +1268,13 @@ AC_ARG_ENABLE(gtk3_kde5,
          platforms where Gtk3, Qt5 and Plasma is available.]),
 ,)
 
-libo_FUZZ_ARG_ENABLE(gui,
+AC_ARG_ENABLE(gui,
     AS_HELP_STRING([--disable-gui],
         [Disable use of X11 or Wayland to reduce dependencies. Not related to the --headless
          command-line option. Not related to LibreOffice Online functionality. Don't use
          unless you are certain you need to. Nobody will help you if you insist on trying
          this and run into problems.]),
-,test "${enable_gui+set}" = set || enable_gui=yes)
+,enable_gui=yes)
 
 libo_FUZZ_ARG_ENABLE(randr,
     AS_HELP_STRING([--disable-randr],
