@@ -32,7 +32,6 @@
 #include <com/sun/star/awt/WindowAttribute.hpp>
 #include <com/sun/star/awt/WindowClass.hpp>
 #include <com/sun/star/awt/WindowDescriptor.hpp>
-#include <com/sun/star/awt/Toolkit.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/awt/XWindowPeer.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
@@ -504,16 +503,6 @@ UpdateDialog::UpdateDialog(
 
     m_xExtensionManager = deployment::ExtensionManager::get( context );
 
-    uno::Reference< awt::XToolkit2 > toolkit;
-    try {
-        toolkit = awt::Toolkit::create(m_context);
-    } catch (const uno::RuntimeException &) {
-        throw;
-    } catch (const uno::Exception & e) {
-        css::uno::Any anyEx = cppu::getCaughtException();
-        throw css::lang::WrappedTargetRuntimeException( e.Message,
-                        e.Context, anyEx );
-    }
     m_xUpdates->connect_changed(LINK(this, UpdateDialog, selectionHandler));
     m_xUpdates->connect_toggled(LINK(this, UpdateDialog, entryToggled));
     m_xAll->connect_toggled(LINK(this, UpdateDialog, allHandler));
