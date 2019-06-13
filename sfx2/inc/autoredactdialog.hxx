@@ -141,7 +141,7 @@ public:
     /** Literally moves targets into the given vector.
      *  At the end of the operation, m_aTableTargets vector becomes empty.
      *  The contents of the given vector will be erased before being filled in.
-     *  Returns true if successfull.
+     *  Returns true if successful.
      */
     bool moveTargets(std::vector<std::pair<RedactionTarget*, OUString>>& r_aTargets);
 
