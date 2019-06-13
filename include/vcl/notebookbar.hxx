@@ -13,7 +13,6 @@
 #include <vcl/builder.hxx>
 #include <vcl/ctrl.hxx>
 #include <vcl/settings.hxx>
-#include <osl/file.hxx>
 #include <vector>
 
 namespace com { namespace sun { namespace star { namespace ui { class XContextChangeEventListener; } } } }
@@ -58,11 +57,7 @@ private:
 
     void UpdateDefaultSettings();
     void UpdatePersonaSettings();
-    static OUString getCustomizedUIRootDir();
-    static bool doesFileExist(const OUString& sUIDir, const OUString& sUIFile);
-
 };
-
 
 #endif // INCLUDED_VCL_NOTEBOOKBAR_HXX
 
