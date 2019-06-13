@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SVX_INC_DRAGMT3D_HXX
 #define INCLUDED_SVX_INC_DRAGMT3D_HXX
 
+#include <svx/def3d.hxx>
 #include <svx/svddrgmt.hxx>
 #include <svx/view3d.hxx>
 #include <basegfx/polygon/b3dpolypolygon.hxx>

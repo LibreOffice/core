@@ -131,11 +131,8 @@
 // ITEMID_... defines in the *.cxx
 
 #include <svl/style.hxx>
-#include <svl/lstner.hxx>
 #include <sfx2/tbxctrl.hxx>
-#include <svx/strarray.hxx>
 #include <svx/svxdllapi.h>
-#include <com/sun/star/awt/FontDescriptor.hpp>
 #include <com/sun/star/frame/XSubToolbarController.hpp>
 #include <svtools/popupwindowcontroller.hxx>
 #include <svx/colorwindow.hxx>

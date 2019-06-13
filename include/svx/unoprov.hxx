@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SVX_UNOPROV_HXX
 #define INCLUDED_SVX_UNOPROV_HXX
 
-#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <svl/itemprop.hxx>
 #include <svx/svxdllapi.h>

@@ -38,6 +38,7 @@
 
 #include <sal/log.hxx>
 #include <svx/xflclit.hxx>
+#include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
 #include <editeng/sizeitem.hxx>
 #include <svl/stritem.hxx>

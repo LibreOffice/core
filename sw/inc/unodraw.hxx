@@ -19,6 +19,7 @@
 #ifndef INCLUDED_SW_INC_UNODRAW_HXX
 #define INCLUDED_SW_INC_UNODRAW_HXX
 
+#include <svl/itemprop.hxx>
 #include <svx/fmdpage.hxx>
 #include "calbck.hxx"
 #include "frmfmt.hxx"
@@ -26,6 +27,7 @@
 #include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <cppuhelper/implbase4.hxx>
