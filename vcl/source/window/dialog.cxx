@@ -1614,6 +1614,7 @@ void TopLevelWindowLocker::incBusy(const weld::Window* pIgnore)
     for (auto& a : aTopLevels)
         a->IncModalCount();
     m_aBusyStack.push(aTopLevels);
+    ImplGetSVData()->maAppData.mnModalMode++;
 }
 
 void TopLevelWindowLocker::decBusy()
@@ -1626,6 +1627,7 @@ void TopLevelWindowLocker::decBusy()
         a->DecModalCount();
     }
     m_aBusyStack.pop();
+    ImplGetSVData()->maAppData.mnModalMode--;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

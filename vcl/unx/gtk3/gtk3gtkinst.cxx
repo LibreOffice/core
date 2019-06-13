@@ -2937,6 +2937,7 @@ struct DialogRunner
         {
             m_xFrameWindow->IncModalCount();
             ++m_nModalDepth;
+            ImplGetSVData()->maAppData.mnModalMode++;
         }
     }
 
@@ -2945,6 +2946,7 @@ struct DialogRunner
         if (m_xFrameWindow)
         {
             m_xFrameWindow->DecModalCount();
+            ImplGetSVData()->maAppData.mnModalMode--;
             --m_nModalDepth;
         }
     }
@@ -3002,7 +3004,10 @@ struct DialogRunner
             // toggled off during execution ensure that on cleanup the parent
             // is left in the state it was found
             while (m_nModalDepth++ < 0)
+            {
                 m_xFrameWindow->IncModalCount();
+                ImplGetSVData()->maAppData.mnModalMode++;
+            }
         }
     }
 };

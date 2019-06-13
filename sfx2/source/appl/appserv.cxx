@@ -1086,7 +1086,7 @@ void SfxApplication::MiscState_Impl(SfxItemSet &rSet)
                     break;
                 case SID_QUITAPP:
                 {
-                    if ( pImpl->nDocModalMode )
+                    if (pImpl->nDocModalMode || Application::IsInModalMode())
                         rSet.DisableItem(nWhich);
                     else
                         rSet.Put(SfxStringItem(nWhich, SfxResId(STR_QUITAPP)));
