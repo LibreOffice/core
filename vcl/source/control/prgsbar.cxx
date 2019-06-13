@@ -20,6 +20,8 @@
 #include <vcl/status.hxx>
 #include <vcl/prgsbar.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/idle.hxx>
 
 #define PROGRESSBAR_OFFSET          3
 #define PROGRESSBAR_WIN_OFFSET      2
@@ -181,6 +183,16 @@ void ProgressBar::SetValue( sal_uInt16 nNewPercent )
         mnPreviousPercent = mnPercent;
         mnPercent = nNewPercent;
         Invalidate();
+
+        // Make sure the progressbar is actually painted even if the caller is busy with its task,
+        // so the main loop would not be invoked.
+        Idle aIdle("ProgressBar::SetValue aIdle");
+        aIdle.SetPriority(TaskPriority::POST_PAINT);
+        aIdle.Start();
+        while (aIdle.IsActive())
+        {
+            Application::Yield();
+        }
     }
 }
 
