@@ -69,6 +69,7 @@ private:
     VclPtr<NumericField>   m_pEdPrec;
 
     VclPtr<CheckBox>       m_pBtnThread;
+    VclPtr<CheckBox>       m_pBtnMinguoExpansion;
 
     std::unique_ptr<ScDocOptions> pOldOptions;
     std::unique_ptr<ScDocOptions> pLocalOptions;

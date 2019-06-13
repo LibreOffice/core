@@ -74,7 +74,8 @@ ImpSvNumberInputScan::ImpSvNumberInputScan( SvNumberFormatter* pFormatterP )
         bScanGenitiveMonths( false ),
         bScanPartitiveMonths( false ),
         eScannedType( SvNumFormatType::UNDEFINED ),
-        eSetType( SvNumFormatType::UNDEFINED )
+        eSetType( SvNumFormatType::UNDEFINED ),
+        bMinguoExpansion( false )
 {
     pFormatter = pFormatterP;
     pNullDate.reset( new Date(30,12,1899) );
@@ -1033,6 +1034,17 @@ sal_uInt16 ImpSvNumberInputScan::ImplGetMonth( sal_uInt16 nIndex ) const
     return nRes;
 }
 
+namespace
+{
+/** If a provided number valid for Minguo year expansion.
+ */
+bool lcl_IsValidYearForMinguoExpansion(sal_Int16 nYear, sal_Int32 nLen)
+{
+    // No leading 0 expected.
+    return (nYear >= 10 && nYear <= 99 && nLen == 2)
+        || (nYear >= 100 && nYear <= 999 && nLen == 3);
+}
+}
 
 /**
  * 30 -> 1930, 29 -> 2029, or 56 -> 1756, 55 -> 1855, ...
@@ -1047,10 +1059,14 @@ sal_uInt16 ImpSvNumberInputScan::ImplGetYear( sal_uInt16 nIndex )
     if (nLen <= 6)
     {
         nYear = static_cast<sal_uInt16>(sStrArray[nNums[nIndex]].toInt32());
+        if (IsMinguoExpansion() && nIndex == 0 && lcl_IsValidYearForMinguoExpansion(nYear, nLen))
+        {
+            nYear += 1911;
+        }
         // A year in another, not Gregorian CE era is never expanded.
         // A year < 100 entered with at least 3 digits with leading 0 is taken
         // as is without expansion.
-        if (mbEraCE == kDefaultEra && nYear < 100 && nLen < 3)
+        else if (mbEraCE == kDefaultEra && nYear < 100 && nLen < 3)
         {
             nYear = SvNumberFormatter::ExpandTwoDigitYear( nYear, nYear2000 );
         }

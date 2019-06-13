@@ -86,6 +86,7 @@ void ScPoolHelper::SetFormTableOpt(const ScDocOptions& rOpt)
         pFormTable->ChangeNullDate( d,m,y );
         pFormTable->ChangeStandardPrec( aOpt.GetStdPrecision() );
         pFormTable->SetYear2000( aOpt.GetYear2000() );
+        pFormTable->SetMinguoExpansion( aOpt.IsMinguoExpansion() );
     }
 }
 
@@ -105,6 +106,7 @@ std::unique_ptr<SvNumberFormatter> ScPoolHelper::CreateNumberFormatter() const
     p->ChangeNullDate(d, m, y);
     p->ChangeStandardPrec(aOpt.GetStdPrecision());
     p->SetYear2000(aOpt.GetYear2000());
+    p->SetMinguoExpansion(aOpt.IsMinguoExpansion());
     return p;
 }
 
