@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_3bbbc172",
+        "filename": "sw/source/filter/ww8/ww8scan.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 4816,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2019-06-13T12:10:39Z",
+      "side": 1,
+      "message": "This one is font size - right to left or complex text.",
+      "range": {
+        "startLine": 4816,
+        "startChar": 41,
+        "endLine": 4816,
+        "endChar": 52
+      },
+      "revId": "100d5cad44f7e9f657e1b3135806f34306087127",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_9babf51b",
+        "filename": "sw/source/filter/ww8/ww8scan.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 4817,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2019-06-13T12:10:39Z",
+      "side": 1,
+      "message": "non-ascii font",
+      "range": {
+        "startLine": 4817,
+        "startChar": 44,
+        "endLine": 4817,
+        "endChar": 55
+      },
+      "revId": "100d5cad44f7e9f657e1b3135806f34306087127",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
