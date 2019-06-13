@@ -43,6 +43,7 @@ private:
     bool            bPaperOrientation;
     bool            bNotFound;
     sal_Int32       nYear2000;      // two digit year representation
+    bool            bROCEraExpansion;
 
     static const css::uno::Sequence<OUString> GetPropertyNames();
     void                    Load();
@@ -68,6 +69,8 @@ public:
     sal_Int32   GetYear2000()           const { return nYear2000; }
     void        SetYear2000( sal_Int32 nSet );
 
+    bool        GetROCEraExpansion() const { return bROCEraExpansion; }
+    void        SetROCEraExpansion(bool bSet);
 };
 
 SfxMiscCfg::SfxMiscCfg() :
@@ -75,7 +78,8 @@ SfxMiscCfg::SfxMiscCfg() :
     bPaperSize(false),
     bPaperOrientation (false),
     bNotFound (false),
-    nYear2000( 1930 )
+    nYear2000( 1930 ),
+    bROCEraExpansion(false)
 {
     Load();
 }
@@ -114,6 +118,13 @@ void SfxMiscCfg::SetYear2000( sal_Int32 nSet )
     nYear2000 = nSet;
 }
 
+void SfxMiscCfg::SetROCEraExpansion( bool bSet)
+{
+    if(bROCEraExpansion != bSet)
+        SetModified();
+    bROCEraExpansion = bSet;
+}
+
 const Sequence<OUString> SfxMiscCfg::GetPropertyNames()
 {
     const OUString pProperties[] =
@@ -121,9 +132,10 @@ const Sequence<OUString> SfxMiscCfg::GetPropertyNames()
         OUString("Print/Warning/PaperSize"),
         OUString("Print/Warning/PaperOrientation"),
         OUString("Print/Warning/NotFound"),
-        OUString("DateFormat/TwoDigitYear")
+        OUString("DateFormat/TwoDigitYear"),
+        OUString("DateFormat/ROCEraExpansion")
     };
-    const Sequence< OUString > seqPropertyNames( pProperties, 4 );
+    const Sequence< OUString > seqPropertyNames( pProperties, 5 );
     return seqPropertyNames;
 }
 
@@ -146,6 +158,7 @@ void SfxMiscCfg::Load()
                     case  1: bPaperOrientation = *o3tl::doAccess<bool>(pValues[nProp]);  break;     //"Print/Warning/PaperOrientation",
                     case  2: bNotFound         = *o3tl::doAccess<bool>(pValues[nProp]);  break;   //"Print/Warning/NotFound",
                     case  3: pValues[nProp] >>= nYear2000;break;                                    //"DateFormat/TwoDigitYear",
+                    case  4: bROCEraExpansion = *o3tl::doAccess<bool>(pValues[nProp]);  break;   //"DateFormat/ROCEraExpansion",
                 }
             }
         }
@@ -171,6 +184,7 @@ void SfxMiscCfg::ImplCommit()
             case  1: pValues[nProp] <<= bPaperOrientation;break;     //"Print/Warning/PaperOrientation",
             case  2: pValues[nProp] <<= bNotFound;break;   //"Print/Warning/NotFound",
             case  3: pValues[nProp] <<= nYear2000;break;                 //"DateFormat/TwoDigitYear",
+            case  4: pValues[nProp] <<= bROCEraExpansion;break; //"DateFormat/ROCEraExpansion",
         }
     }
     PutProperties(rNames, aValues);
@@ -246,6 +260,15 @@ void MiscCfg::SetYear2000( sal_Int32 nSet )
     m_pImpl->SetYear2000( nSet );
 }
 
+bool MiscCfg::GetROCEraExpansion() const
+{
+    return m_pImpl->GetROCEraExpansion();
+}
+
+void MiscCfg::SetROCEraExpansion(bool bSet)
+{
+    m_pImpl->SetROCEraExpansion(bSet);
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

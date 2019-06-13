@@ -271,6 +271,7 @@ OfaMiscTabPage::OfaMiscTabPage(TabPageParent pParent, const SfxItemSet& rSet)
     , m_xYearFrame(m_xBuilder->weld_widget("yearframe"))
     , m_xYearValueField(m_xBuilder->weld_spin_button("year"))
     , m_xToYearFT(m_xBuilder->weld_label("toyear"))
+    , m_xROCEraExpansionCB(m_xBuilder->weld_check_button("roceraexpansion"))
     , m_xCollectUsageInfo(m_xBuilder->weld_check_button("collectusageinfo"))
     , m_xQuickStarterFrame(m_xBuilder->weld_widget("quickstarter"))
 #if defined(UNX)
@@ -366,6 +367,12 @@ bool OfaMiscTabPage::FillItemSet( SfxItemSet* rSet )
         rSet->Put( SfxUInt16Item( SID_ATTR_YEAR2000, nNum ) );
     }
 
+    if (m_xROCEraExpansionCB->get_state_changed_from_saved())
+    {
+        rSet->Put(SfxBoolItem(SID_ATTR_ROCERA_EXPANSION, m_xROCEraExpansionCB->get_active()));
+        bModified = true;
+    }
+
     if (m_xCollectUsageInfo->get_state_changed_from_saved())
     {
         officecfg::Office::Common::Misc::CollectUsageInformation::set(m_xCollectUsageInfo->get_active(), batch);
@@ -410,6 +417,12 @@ void OfaMiscTabPage::Reset( const SfxItemSet* rSet )
     }
     else
         m_xYearFrame->set_sensitive(false);
+
+    if (SfxItemState::SET == rSet->GetItemState(SID_ATTR_ROCERA_EXPANSION, false, &pItem))
+    {
+        m_xROCEraExpansionCB->set_active(static_cast<const SfxBoolItem*>(pItem)->GetValue());
+        m_xROCEraExpansionCB->save_state();
+    }
 
     m_xCollectUsageInfo->set_active(officecfg::Office::Common::Misc::CollectUsageInformation::get());
     m_xCollectUsageInfo->set_sensitive(!officecfg::Office::Common::Misc::CollectUsageInformation::isReadOnly());

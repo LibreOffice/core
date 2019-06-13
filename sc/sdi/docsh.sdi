@@ -53,6 +53,7 @@ interface TableDocument
     SID_SC_SETTEXT  [ ExecMethod = Execute; StateMethod = GetState; ]
     SID_TABLES_COUNT    [ StateMethod = GetState; ]
     SID_ATTR_YEAR2000   [ StateMethod = GetState; ExecMethod = Execute; ]
+    SID_ATTR_ROCERA_EXPANSION [ StateMethod = GetState; ExecMethod = Execute; ]
     SID_CHART_SOURCE    [ ExecMethod = Execute; ]
     SID_CHART_ADDSOURCE [ ExecMethod = Execute; ]
     FID_AUTO_CALC   [ ExecMethod = Execute; StateMethod = GetState; ]

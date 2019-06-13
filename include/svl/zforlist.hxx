@@ -715,6 +715,10 @@ public:
     sal_uInt16  ExpandTwoDigitYear( sal_uInt16 nYear ) const;
     static sal_uInt16 ExpandTwoDigitYear( sal_uInt16 nYear, sal_uInt16 nTwoDigitYearStart );
 
+    /** Expand two or three digit year based on ROC Era calendar. */
+    void    SetROCEraExpansion(bool bVal);
+    bool    IsROCEraExpansion() const;
+
     /// Return the decimal separator matching the locale of the given format
     OUString GetFormatDecimalSep( sal_uInt32 nFormat ) const;
 
