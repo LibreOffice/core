@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_5014674e",
+        "filename": "include/tools/diagnose_ex.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-06-13T11:38:58Z",
+      "side": 1,
+      "message": "see my \u003chttps://gerrit.libreoffice.org/#/c/73165/\u003e comment: \"(Btw, I would use some lengthy \"tools_warn_exception\" style name instead of \"ex\", to minimize the potential for -Wshadow.)\"",
+      "range": {
+        "startLine": 142,
+        "startChar": 22,
+        "endLine": 142,
+        "endChar": 24
+      },
+      "revId": "0835caa0fea885673a4fb57ade5ca49517357bb1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
