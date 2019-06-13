@@ -1729,6 +1729,13 @@ namespace drawinglayer
 
         void VclMetafileProcessor2D::processPolyPolygonHatchPrimitive2D(const primitive2d::PolyPolygonHatchPrimitive2D& rHatchCandidate)
         {
+            if(getOptionsDrawinglayer().IsAntiAliasing())
+            {
+                // if AA is used (or ignore smoothing is on), there is no need to smooth
+                // hatch painting, use decomposition
+                process(rHatchCandidate);
+                return;
+            }
             // need to handle PolyPolygonHatchPrimitive2D here to support XPATHFILL_SEQ_BEGIN/XPATHFILL_SEQ_END
             const attribute::FillHatchAttribute& rFillHatchAttribute = rHatchCandidate.getFillHatch();
             basegfx::B2DPolyPolygon aLocalPolyPolygon(rHatchCandidate.getB2DPolyPolygon());
