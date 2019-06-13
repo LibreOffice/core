@@ -70,6 +70,30 @@
       "revId": "0e27158c4f6a6a7676a77afb6b37dd30b3f6d100",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_90066f86",
+        "filename": "writerfilter/source/dmapper/SettingsTable.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 651,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2019-06-13T09:04:25Z",
+      "side": 1,
+      "message": "I think, if MSO 2016 and LO always export w:insDel with w:formatting, and the older MSO versions don\u0027t know about w:formatting, it\u0027s ok my suggested solution here (only w:formatting\u003d1 will set ShowChanges), but please, fix me, if I\u0027m wrong:\n\nhttps://gerrit.libreoffice.org/#/c/73943/",
+      "parentUuid": "3fa0c359_f04fb331",
+      "range": {
+        "startLine": 651,
+        "startChar": 98,
+        "endLine": 651,
+        "endChar": 131
+      },
+      "revId": "0e27158c4f6a6a7676a77afb6b37dd30b3f6d100",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
