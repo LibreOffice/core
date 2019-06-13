@@ -715,6 +715,10 @@ public:
     sal_uInt16  ExpandTwoDigitYear( sal_uInt16 nYear ) const;
     static sal_uInt16 ExpandTwoDigitYear( sal_uInt16 nYear, sal_uInt16 nTwoDigitYearStart );
 
+    /** Whether to treat two or three digit year as Minguo calendar. */
+    void    SetMinguoExpansion(bool bVal);
+    bool    IsMinguoExpansion() const;
+
     /// Return the decimal separator matching the locale of the given format
     OUString GetFormatDecimalSep( sal_uInt32 nFormat ) const;
 

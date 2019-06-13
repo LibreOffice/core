@@ -151,6 +151,7 @@ SfxPoolItem* ScTpCalcItem::Clone( SfxItemPool * ) const
 #define SCCALCOPT_FINDLABEL         10
 #define SCCALCOPT_REGEX             11
 #define SCCALCOPT_WILDCARDS         12
+#define SCCALCOPT_MINGUO_EXPANSION  13
 
 #define CFGPATH_DOCLAYOUT   "Office.Calc/Layout/Other"
 
@@ -170,7 +171,8 @@ Sequence<OUString> ScDocCfg::GetCalcPropertyNames()
             "Other/SearchCriteria",             // SCCALCOPT_SEARCHCRIT
             "Other/FindLabel",                  // SCCALCOPT_FINDLABEL
             "Other/RegularExpressions",         // SCCALCOPT_REGEX
-            "Other/Wildcards"};                 // SCCALCOPT_WILDCARDS
+            "Other/Wildcards",                  // SCCALCOPT_WILDCARDS
+            "Other/MinguoExpansion"};           // SCCALCOPT_MINGUO_EXPANSION
 }
 
 Sequence<OUString> ScDocCfg::GetLayoutPropertyNames()
@@ -249,6 +251,9 @@ ScDocCfg::ScDocCfg() :
                         break;
                     case SCCALCOPT_WILDCARDS :
                         SetFormulaWildcardsEnabled( ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );
+                        break;
+                    case SCCALCOPT_MINGUO_EXPANSION:
+                        SetMinguoExpansion( ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );
                         break;
                 }
             }
@@ -337,6 +342,9 @@ IMPL_LINK_NOARG(ScDocCfg, CalcCommitHdl, ScLinkConfigItem&, void)
                 break;
             case SCCALCOPT_WILDCARDS :
                 pValues[nProp] <<= IsFormulaWildcardsEnabled();
+                break;
+            case SCCALCOPT_MINGUO_EXPANSION:
+                pValues[nProp] <<= IsMinguoExpansion();
                 break;
         }
     }

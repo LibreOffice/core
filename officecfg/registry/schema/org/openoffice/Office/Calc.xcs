@@ -1418,6 +1418,14 @@
             <desc>Specifies whether the calculation uses wildcards in formulas, e.g. for functions which look up sheet contents.</desc>
             <label>Enable wildcards in formulas</label>
           </info>
+          <value>false</value>
+        </prop>
+        <prop oor:name="MinguoExpansion" oor:type="xs:boolean" oor:nillable="true">
+          <!-- UIHints: Tools - Options  Spreadsheet  Calculate  [Check box] Expand two or three digit year based on Minguo calendar -->
+          <info>
+            <desc>Specifies whether to expand two or three digit year based on Minguo calendar.</desc>
+            <label>Enable Minguo year expansion.</label>
+          </info>
           <value>true</value>
         </prop>
         <prop oor:name="FormulaSyntax" oor:type="xs:int">
