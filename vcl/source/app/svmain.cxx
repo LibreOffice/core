@@ -112,8 +112,6 @@ using namespace ::com::sun::star;
 
 static bool g_bIsLeanException;
 
-static bool isInitVCL();
-
 static oslSignalAction VCLExceptionSignal_impl( void* /*pData*/, oslSignalInfo* pInfo)
 {
     static volatile bool bIn = false;
@@ -190,7 +188,7 @@ int ImplSVMain()
 
     int nReturn = EXIT_FAILURE;
 
-    const bool bWasInitVCL = isInitVCL();
+    const bool bWasInitVCL = IsVCLInit();
     const bool bInit = bWasInitVCL || InitVCL();
     int nRet = 0;
     if (!bWasInitVCL && bInit && pSVData->mpDefInst->SVMainHook(&nRet))
@@ -273,7 +271,7 @@ uno::Any SAL_CALL DesktopEnvironmentContext::getValueByName( const OUString& Nam
     return retVal;
 }
 
-static bool isInitVCL()
+bool IsVCLInit()
 {
     ImplSVData* pSVData = ImplGetSVData();
     return  pExceptionHandler != nullptr &&
@@ -294,7 +292,7 @@ namespace vclmain
 
 bool InitVCL()
 {
-    if (isInitVCL())
+    if (IsVCLInit())
     {
         SAL_INFO("vcl.app", "Double initialization of vcl");
         return true;

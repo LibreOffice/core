@@ -1482,6 +1482,9 @@ public:
 
 VCL_DLLPUBLIC Application* GetpApp();
 
+// returns true if vcl is already initialized
+VCL_DLLPUBLIC bool IsVCLInit();
+// returns true if vcl successfully initializes or was already initialized
 VCL_DLLPUBLIC bool InitVCL();
 VCL_DLLPUBLIC void DeInitVCL();
 
