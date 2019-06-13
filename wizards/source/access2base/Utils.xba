@@ -194,7 +194,8 @@ Const cstByteLength = 25
 				sArg = Replace(sArg, &quot;,&quot;, &quot;.&quot;)
 			Case vbBigint			:		sArg = CStr(CLng(pvArg))
 			Case vbDate				:		sArg = Year(pvArg) &amp; &quot;-&quot; &amp; Right(&quot;0&quot; &amp; Month(pvArg), 2) &amp; &quot;-&quot; &amp; Right(&quot;0&quot; &amp; Day(pvArg), 2) _
-													&amp; &quot; &quot; &amp; Right(&quot;0&quot; &amp; Hour(pvArg), 2) &amp; &quot;:&quot; &amp; Right(&quot;0&quot; &amp; Minute(pvArg), 2)
+													&amp; &quot; &quot; &amp; Right(&quot;0&quot; &amp; Hour(pvArg), 2) &amp; &quot;:&quot; &amp; Right(&quot;0&quot; &amp; Minute(pvArg), 2) _
+													&amp; &quot;:&quot; &amp; Right(&quot;0&quot; &amp; Second(pvArg), 2)
 			Case Else				:		sArg = CStr(pvArg)
 		End Select
 	End If
@@ -1040,7 +1041,7 @@ REM ----------------------------------------------------------------------------
 Public Sub _ResetCalledSub(ByVal psSub As String)
 &apos;	Called in bottom of each public function. _A2B_.CalledSub variable is used for error handling
 &apos;	Used to trace routine in/outs and to clarify error messages
-		If IsEmpty(_A2B_) Then Call Application._RootInit()	&apos;	Only is Utils module recompiled
+		If IsEmpty(_A2B_) Then Call Application._RootInit()	&apos;	Only when Utils module recompiled
 		With _A2B_
 			If .CalledSub = psSub Then .CalledSub = &quot;&quot;
 			If .MinimalTraceLevel = 1 Then TraceLog(TRACEDEBUG, _GetLabel(&quot;Exiting&quot;) &amp; &quot; &quot; &amp; psSub &amp; &quot; ...&quot;, False)
@@ -1079,6 +1080,7 @@ Public Sub _SetCalledSub(ByVal psSub As String)
 			If .CalledSub = &quot;&quot; Then
 				.CalledSub = psSub
 				.LastErrorCode = 0
+				.LastErrorLevel = &quot;&quot;
 				.ErrorText = &quot;&quot;
 				.ErrorLongText = &quot;&quot;
 			End If

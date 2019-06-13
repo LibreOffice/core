@@ -16,6 +16,7 @@ REM --- CLASS ROOT FIELDS 								        														---
 REM -----------------------------------------------------------------------------------------------------------------------
 
 Private	_Type					As String				&apos;	Must be DIALOG
+Private _This					As Object				&apos;	Workaround for absence of This builtin function
 Private	_Name					As String
 Private _Shortcut				As String
 Private _Dialog					As Object				&apos;	com.sun.star.io.XInputStreamProvider
@@ -28,6 +29,7 @@ REM --- CONSTRUCTORS / DESTRUCTORS						        														---
 REM -----------------------------------------------------------------------------------------------------------------------
 Private Sub Class_Initialize()
 	_Type = OBJDIALOG
+	Set _This = Nothing
 	_Name = &quot;&quot;
 	Set _Dialog = Nothing
 	_Storage = &quot;&quot;
@@ -252,6 +254,7 @@ Dim ogGroup As Object, vGroup() As Variant, vIndex() As Variant
 		ReDim vGroup(0 To iGroupCount - 1)
 		ReDim vIndex(0 To iGroupCount - 1)
 		With ogGroup
+			._This = ogGroup
 			._Name = sGroupName
 			._Count = iGroupCount
 			._ButtonsGroup = vGroup
@@ -349,6 +352,7 @@ Dim j As Integer
 	Set ocControl = Nothing
 	If Not IsLoaded Then Goto Trace_Error_NotOpen
 	Set ocControl = New Control
+	Set ocControl._This = ocControl
 	ocControl._ParentType = CTLPARENTISDIALOG
 	sParentShortcut = _Shortcut
 	sControls() = UnoDialog.Model.getElementNames()
@@ -356,6 +360,7 @@ Dim j As Integer
 	
 	If IsMissing(pvIndex) Then					&apos;	No argument, return Collection object
 		Set oCounter = New Collect
+		Set oCounter._This = oCounter
 		oCounter._CollType = COLLCONTROLS
 		oCounter._Count = iControlCount
 		Set Controls = oCounter
@@ -511,7 +516,6 @@ Public Function Move(	  ByVal Optional pvLeft As Variant _
 						) As Variant
 &apos;	Execute Move method
 	Utils._SetCalledSub(&quot;Dialog.Move&quot;)
-	If IsMissing(pvLeft) Then Call _TraceArguments()
 	On Local Error Goto Error_Function
 	Move = False
 Dim iArgNr As Integer
@@ -519,7 +523,7 @@ Dim iArgNr As Integer
 		Case UCase(&quot;Move&quot;)					:	iArgNr = 1
 		Case UCase(&quot;Dialog.Move&quot;)			:	iArgNr = 0
 	End Select
-	If IsMissing(pvLeft) Then Call _TraceArguments()
+	If IsMissing(pvLeft) Then pvLeft = -1
 	If IsMissing(pvTop) Then pvTop = -1
 	If IsMissing(pvWidth) Then pvWidth = -1
 	If IsMissing(pvHeight) Then pvHeight = -1

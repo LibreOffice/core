@@ -26,6 +26,7 @@ Private TraceLogCount		As Integer
 Private TraceLogLast		As Integer
 Private TraceLogMaxEntries	As Integer
 Private LastErrorCode		As Integer
+Private LastErrorLevel		As String
 Private ErrorText			As String
 Private ErrorLongText		As String
 Private CalledSub			As String
@@ -41,6 +42,7 @@ Private StatusBar			As Object
 Private Dialogs				As Object				&apos;	Collection
 Private TempVars			As Object				&apos;	Collection
 Private CurrentDoc()		As Variant				&apos;	Array of document containers - [0] = Base document, [1 ... N] = other documents
+Private PythonVars()		As Variant				&apos;	Array of objects created in Python scripts
 
 REM -----------------------------------------------------------------------------------------------------------------------
 REM --- CONSTRUCTORS / DESTRUCTORS						        														---
@@ -54,6 +56,7 @@ Private Sub Class_Initialize()
 	TraceLogLast = 0
 	TraceLogMaxEntries = 0
 	LastErrorCode = 0
+	LastErrorLevel = &quot;&quot;
 	ErrorText = &quot;&quot;
 	ErrorLongText = &quot;&quot;
 	CalledSub = &quot;&quot;
@@ -75,6 +78,7 @@ Private Sub Class_Initialize()
 	CurrentDoc = Array()
 	ReDim CurrentDoc(0 To 0)
 	Set CurrentDoc(0) = Nothing
+	PythonVars = Array()
 End Sub		&apos;	Constructor
 
 REM -----------------------------------------------------------------------------------------------------------------------
@@ -94,6 +98,20 @@ REM ----------------------------------------------------------------------------
 REM -----------------------------------------------------------------------------------------------------------------------
 REM --- CLASS METHODS	 								        														---
 REM -----------------------------------------------------------------------------------------------------------------------
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Public Function AddPython(ByRef pvObject As Variant) As Long
+&apos;	Store the object as a new entry in PythonVars and return its entry number
+
+Dim lVars As Long, vObject As Variant
+
+	lVars = UBound(PythonVars) + 1
+	ReDim Preserve PythonVars(0 To lVars)
+	PythonVars(lVars) = pvObject
+
+	AddPython = lVars
+
+End Function	&apos;	AddPython V6.4
 
 REM -----------------------------------------------------------------------------------------------------------------------
 Public Sub CloseConnection()

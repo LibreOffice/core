@@ -428,6 +428,7 @@ Dim oDoc As Object
 	sComponents(UBound(sComponents)) = sSubComponents(0)				&apos;	Ignore final property, if any
 	
 	Set vCurrentObject = New Collect
+	Set vCurrentObject._This = vCurrentObject
 	Select Case UCase(sComponents(0))
 		Case &quot;FORMS&quot;	:	vCurrentObject._CollType = COLLFORMS
 		Case &quot;DIALOGS&quot;	:	vCurrentObject._CollType = COLLALLDIALOGS
@@ -1165,6 +1166,7 @@ Dim iArgNr As Integer, iLen As Integer
 				
 	If IsMissing(pvIndex) Then					&apos;	Call without index argument prepares a Collection object
 		Set oCounter = New Collect
+		Set oCounter._This = oCounter
 		oCounter._CollType = COLLPROPERTIES
 		oCounter._ParentType = UCase(psObject)
 		oCounter._ParentName = psObjectName
@@ -1180,6 +1182,7 @@ Dim iArgNr As Integer, iLen As Integer
 			TraceError(TRACEFATAL, ERRCOLLECTION, Utils._CalledSub(), 0, 1)
 		Else
 			Set opProperty = New Property
+			Set opProperty._This = opProperty
 			opProperty._Name = pvPropertiesList(pvIndex)
 			opProperty._Value = Null
 			Set vProperties = opProperty

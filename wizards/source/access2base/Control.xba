@@ -16,6 +16,7 @@ REM --- CLASS ROOT FIELDS 								        														---
 REM -----------------------------------------------------------------------------------------------------------------------
 
 Private _Type					As String				&apos;	Must be CONTROL
+Private _This					As Object				&apos;	Workaround for absence of This builtin function
 Private	_ImplementationName		As String
 Private _ClassId				As Integer
 Private	_ParentType				As String				&apos;	One of CTLPARENTISxxxx constants
@@ -38,6 +39,7 @@ REM --- CONSTRUCTORS / DESTRUCTORS						        														---
 REM -----------------------------------------------------------------------------------------------------------------------
 Private Sub Class_Initialize()
 	_Type				= OBJCONTROL
+	Set _This			= Nothing
 	_ClassId 			= -1
 	_ParentType			= &quot;&quot;
 	_Shortcut			= &quot;&quot;
@@ -765,6 +767,7 @@ Dim j As Integer, oView As Object
 	
 	If IsMissing(pvIndex) Then					&apos;	No argument, return Collection pseudo-object
 		Set oCounter = New Collect
+		Set oCounter._This = oCounter
 		oCounter._CollType = COLLCONTROLS
 		oCounter._ParentType = OBJCONTROL
 		oCounter._ParentName = _Shortcut
@@ -778,6 +781,7 @@ Dim j As Integer, oView As Object
 	&apos;	Start building the ocControl object
 	&apos;	Determine exact name
 	Set ocControl = New Control
+	Set ocControl._This = ocControl
 	ocControl._ParentType = CTLPARENTISGRID
 	sParentShortcut = _Shortcut
 	sControls() = ControlModel.getElementNames()
@@ -1512,6 +1516,7 @@ Dim oControlEvents As Object, sEventName As String
 		Case UCase(&quot;Form&quot;)
 			Set ofSubForm = New SubForm		&apos;	Start building the SUBFORM object
 			With ofSubForm
+				Set ._This = ofSubForm
 				Set .DatabaseForm = ControlModel
 				._Name = _Name
 				._Shortcut = _Shortcut &amp; &quot;.Form&quot;

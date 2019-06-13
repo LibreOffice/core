@@ -16,6 +16,7 @@ REM --- CLASS ROOT FIELDS 								        														---
 REM -----------------------------------------------------------------------------------------------------------------------
 
 Private	_Type					As String				&apos;	Must be MODULE
+Private _This					As Object				&apos;	Workaround for absence of This builtin function
 Private	_Name					As String
 Private _Library				As Object				&apos;	com.sun.star.container.XNameAccess
 Private _LibraryName			As String
@@ -34,6 +35,7 @@ REM --- CONSTRUCTORS / DESTRUCTORS						        														---
 REM -----------------------------------------------------------------------------------------------------------------------
 Private Sub Class_Initialize()
 	_Type = OBJMODULE
+	Set _This = Nothing
 	_Name = &quot;&quot;
 	Set _Library = Nothing
 	_LibraryName = &quot;&quot;

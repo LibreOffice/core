@@ -18,6 +18,7 @@ REM --- CLASS ROOT FIELDS 								        														---
 REM -----------------------------------------------------------------------------------------------------------------------
 
 Private _Type			As String		&apos;	Must be COLLECTION
+Private _This			As Object		&apos;	Workaround for absence of This builtin function
 Private _CollType		As String
 Private _ParentType		As String
 Private _ParentName		As String		&apos;	Name or shortcut
@@ -29,6 +30,7 @@ REM --- CONSTRUCTORS / DESTRUCTORS						        														---
 REM -----------------------------------------------------------------------------------------------------------------------
 Private Sub Class_Initialize()
 	_Type = OBJCOLLECTION
+	Set _This = Nothing
 	_CollType = &quot;&quot;
 	_ParentType = &quot;&quot;
 	_ParentName = &quot;&quot;
@@ -56,7 +58,7 @@ Property Get Count() As Long
 End Property		&apos;	Count (get)
 
 REM -----------------------------------------------------------------------------------------------------------------------
-Property Get Item(ByVal Optional pvItem As Variant) As Variant
+Function Item(ByVal Optional pvItem As Variant) As Variant
 &apos;Return property value.
 &apos;pvItem either numeric index or property name
 
@@ -150,12 +152,12 @@ Dim vNames() As Variant, oProperty As Object
 
 Exit_Function:
 	Utils._ResetCalledSub(cstThisSub)
-	Exit Property
+	Exit Function
 Error_Function:
 	TraceError(TRACEABORT, Err, Utils._CalledSub(), Erl)
 	Set Item = Nothing
 	GoTo Exit_Function
-End Property		&apos;	V1.1.0
+End Function		&apos;	V1.1.0
 
 REM -----------------------------------------------------------------------------------------------------------------------
 Property Get ObjectType() As String
@@ -225,6 +227,7 @@ Dim vObject As Variant, oTempVar As Object
 			If IsMissing(pvValue) Then Call _TraceArguments()
 			If _A2B_.hasItem(COLLTEMPVARS, pvNew) Then Goto Error_Name
 			Set oTempVar = New TempVar
+			oTempVar._This = oTempVar
 			oTempVar._Name = pvNew
 			oTempVar._Value = pvValue
 			_A2B_.TempVars.Add(oTempVar, UCase(pvNew))

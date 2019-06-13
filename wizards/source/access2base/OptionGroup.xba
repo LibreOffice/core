@@ -16,6 +16,7 @@ REM --- CLASS ROOT FIELDS 								        														---
 REM -----------------------------------------------------------------------------------------------------------------------
 
 Private	_Type					As String				&apos;	Must be FORM
+Private _This					As Object				&apos;	Workaround for absence of This builtin function
 Private	_Name					As String
 Private _ParentType				As String
 Private _ParentComponent		As Object
@@ -31,6 +32,7 @@ REM --- CONSTRUCTORS / DESTRUCTORS						        														---
 REM -----------------------------------------------------------------------------------------------------------------------
 Private Sub Class_Initialize()
 	_Type = OBJOPTIONGROUP
+	Set _This = Nothing
 	_Name = &quot;&quot;
 	_ParentType = &quot;&quot;
 	_ParentComponent = Nothing
@@ -118,6 +120,7 @@ Dim ocControl As Variant, iArgNr As Integer, i As Integer
 	
 	If IsMissing(pvIndex) Then					&apos;	No argument, return Collection object
 		Set oCounter = New Collect
+		Set oCounter._This = oCounter
 		oCounter._SubType = OBJCONTROL
 		oCounter._ParentType = OBJOPTIONGROUP
 		oCounter._ParentName = _Name
@@ -133,6 +136,7 @@ Dim ocControl As Variant, iArgNr As Integer, i As Integer
 	&apos;	Start building the ocControl object
 	&apos;	Determine exact name
 	Set ocControl = New Control
+	Set ocControl._This = ocControl
 	ocControl._ParentType = CTLPARENTISGROUP
 	
 	ocControl._Shortcut = &quot;&quot;

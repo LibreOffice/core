@@ -16,6 +16,7 @@ REM --- CLASS ROOT FIELDS 								        														---
 REM -----------------------------------------------------------------------------------------------------------------------
 
 Private _Type			As String		&apos;	Must be PROPERTY
+Private _This			As Object		&apos;	Workaround for absence of This builtin function
 Private _Name			As String
 Private _Value			As Variant
 Private _ParentDatabase	As Object
@@ -25,6 +26,7 @@ REM --- CONSTRUCTORS / DESTRUCTORS						        														---
 REM -----------------------------------------------------------------------------------------------------------------------
 Private Sub Class_Initialize()
 	_Type = OBJPROPERTY
+	Set _This = Nothing
 	_Name = &quot;&quot;
 	_Value = Null
 End Sub		&apos;	Constructor

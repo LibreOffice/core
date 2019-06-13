@@ -8,7 +8,7 @@ REM ============================================================================
 
 Option Explicit
 
-Public Const cstLogMaxEntries = 20
+Public Const cstLogMaxEntries = 99
 
 REM Typical Usage
 REM		TraceLog(&quot;INFO&quot;, &quot;The OK button was pressed&quot;)
@@ -163,8 +163,10 @@ Dim sErrorText As String, sErrorDesc As String, oDb As Object
 							&amp; Iif(psErrorProc &lt;&gt; &quot;&quot;, &quot; &quot; &amp; _GetLabel(&quot;ERRIN&quot;) &amp; &quot; &quot; &amp; psErrorProc, Iif(_A2B_.CalledSub = &quot;&quot;, &quot;&quot;, &quot; &quot; &amp; _Getlabel(&quot;ERRIN&quot;) &amp; &quot; &quot; &amp; _A2B_.CalledSub))
 	With _A2B_
 		.LastErrorCode = piErrorCode
+		.LastErrorLevel = psErrorLevel
 		.ErrorText = sErrorDesc
 		.ErrorLongText = sErrorText
+		.CalledSub = &quot;&quot;
 	End With
 	If IsMissing(pvMsgBox) Then pvMsgBox = ( psErrorLevel = TRACEERRORS Or psErrorLevel = TRACEFATAL Or psErrorLevel = TRACEABORT )
 	TraceLog(psErrorLevel, sErrorText, pvMsgBox)
@@ -172,7 +174,7 @@ Dim sErrorText As String, sErrorDesc As String, oDb As Object
 	&apos;	Unexpected error detected in user program or in Access2Base
 	If psErrorLevel = TRACEFATAL Or psErrorLevel = TRACEABORT Then
 		If psErrorLevel = TRACEFATAL Then
-			Set oDb = Application.CurrentDb()
+			Set oDb = _A2B_.CurrentDb()
 			If Not IsNull(oDb) Then oDb.CloseAllrecordsets()
 		End If
 		Stop
@@ -181,18 +183,21 @@ Dim sErrorText As String, sErrorDesc As String, oDb As Object
 End Sub		&apos;	TraceError	V0.9.5
 
 REM -----------------------------------------------------------------------------------------------------------------------
-Public Function TraceErrorCode(ByVal Optional piMode As Integer) As Variant
-&apos;	Return the last encountered error code or description
+Public Function TraceErrorCode() As Variant
+&apos;	Return the last encountered error code, level, description in an array
 &apos;	UNPUBLISHED
 
-Const cstCode = 0, cstDesc = 1, cstLongDesc = 2
+Dim vError As Variant
 
-	If IsMissing(piMode) Then piMode = cstCode
-	Select Case piMode
-		Case cstCode		:	TraceErrorCode = _A2B_.LastErrorCode
-		Case cstDesc		:	TraceErrorCode = _A2B_.ErrorText
-		Case cstLongDesc	:	TraceErrorCode = _A2B_.ErrorLongText
-	End Select
+	With _A2B_
+		vError = Array( _
+			.LastErrorCode _
+			, .LastErrorLevel _
+			, .ErrorText _
+			, .ErrorLongText _
+			)
+	End With
+	TraceErrorCode = vError
 
 End Function	&apos;	TraceErrorCode V6.3
 

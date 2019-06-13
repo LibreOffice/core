@@ -16,6 +16,7 @@ REM --- CLASS ROOT FIELDS 								        														---
 REM -----------------------------------------------------------------------------------------------------------------------
 
 Private _Type			As String		&apos;	Must be TEMPVAR
+Private _This			As Object		&apos;	Workaround for absence of This builtin function
 Private _Name			As String
 Private _Value			As Variant
 
@@ -24,6 +25,7 @@ REM --- CONSTRUCTORS / DESTRUCTORS						        														---
 REM -----------------------------------------------------------------------------------------------------------------------
 Private Sub Class_Initialize()
 	_Type = OBJTEMPVAR
+	Set _This = Nothing
 	_Name = &quot;&quot;
 	_Value = Null
 End Sub		&apos;	Constructor

@@ -237,6 +237,7 @@ Const cstSepar = &quot;!&quot;
 
 	If UBound(vDocLibraries) + UBound(vMacLibraries) &lt; 0 Then				&apos;	No library
 		Set vAllDialogs = New Collect
+		Set vAllDialogs._This = vAllDialogs
 		vAllDialogs._CollType = COLLALLDIALOGS
 		vAllDialogs._ParentType = OBJAPPLICATION
 		vAllDialogs._ParentName = &quot;&quot;
@@ -287,6 +288,7 @@ Const cstSepar = &quot;!&quot;
 	
 	If iMode = cstCount Then
 		Set vAllDialogs = New Collect
+		Set vAllDialogs._This = vAllDialogs
 		vAllDialogs._CollType = COLLALLDIALOGS
 		vAllDialogs._ParentType = OBJAPPLICATION
 		vAllDialogs._ParentName = &quot;&quot;
@@ -297,6 +299,7 @@ Const cstSepar = &quot;!&quot;
 		End If
 		Set vAllDialogs = New Dialog
 		With vAllDialogs
+			._This = vAllDialogs
 			._Name = vDialogs(j)
 			._Shortcut = &quot;Dialogs!&quot; &amp; vDialogs(j)
 			Set ._Dialog = oLibDialog
@@ -362,6 +365,7 @@ Const cstSeparator = &quot;\;&quot;
 &apos; Process when NO ARGUMENT
 	If IsMissing(pvIndex) Then					&apos;	No argument
 		Set oCounter = New Collect
+		Set oCounter._This = oCounter
 		oCounter._CollType = COLLALLFORMS
 		oCounter._ParentType = OBJAPPLICATION
 		oCounter._ParentName = &quot;&quot;
@@ -372,6 +376,7 @@ Const cstSeparator = &quot;\;&quot;
 	
 &apos; Process when ARGUMENT = STRING or INDEX =&gt; Initialize form object
 	Set ofForm = New Form
+	Set ofForm._This = ofForm
 	Select Case vCurrentDoc.DbConnect
 		Case DBCONNECTBASE
 			ofForm._DocEntry = 0
@@ -487,6 +492,7 @@ Const cstDot = &quot;.&quot;
 
 	If UBound(vDocLibraries) + UBound(vMacLibraries) &lt; 0 Then				&apos;	No library
 		Set vAllModules = New Collect
+		Set vAllModules._This = vAllModules
 		vAllModules._CollType = COLLALLMODULES
 		vAllModules._ParentType = OBJAPPLICATION
 		vAllModules._ParentName = &quot;&quot;
@@ -537,6 +543,7 @@ Const cstDot = &quot;.&quot;
 	
 	If iMode = cstCount Then
 		Set vAllModules = New Collect
+		Set vAllModules._This =vAllModules
 		vAllModules._CollType = COLLALLMODULES
 		vAllModules._ParentType = OBJAPPLICATION
 		vAllModules._ParentName = &quot;&quot;
@@ -546,6 +553,7 @@ Const cstDot = &quot;.&quot;
 			If iMode = cstByIndex Then Goto Trace_Error_Index Else Goto Trace_Not_Found
 		End If
 		Set vAllModules = New Module
+		Set vAllModules._This = vAllModules
 		vAllModules._Name = vModules(j)
 		vAllModules._LibraryName = sLibrary
 		Set vAllModules._Library = oLibrary
@@ -718,6 +726,7 @@ Const cstCustom = &quot;CUSTOM&quot;
 	Select Case True
 		Case IsMissing(pvIndex)
 			Set oObject = New Collect
+			Set oObject._This = oObject
 			oObject._CollType = COLLCOMMANDBARS
 			oObject._ParentType = OBJAPPLICATION
 			oObject._Count = iObjectsCount
@@ -1028,6 +1037,7 @@ Dim iCount As Integer
 	If IsMissing(pvIndex) Then
 		iCount = Application._CountOpenForms()
 		Set oCounter = New Collect
+		Set oCounter._This = oCounter
 		oCounter._CollType = COLLFORMS
 		oCounter._ParentType = OBJAPPLICATION
 		oCounter._ParentName = &quot;&quot;
@@ -1289,7 +1299,7 @@ Public Function OpenDatabase ( _
 				, ByVal Optional pvUser As Variant _
 				, ByVal Optional pvPassword As Variant _
 				, ByVal Optional pvReadOnly As Variant _
-				) As Object
+				) As Variant
 				
 &apos;	Return a database object based on input arguments:
 &apos;	Call template:
@@ -1498,6 +1508,7 @@ Const cstByName = 2
 		Case cstCount							&apos;	Build Collection object
 			Set vTempVars = New Collect
 			With vTempVars
+				._This = vTempVars
 				._CollType = COLLTEMPVARS
 				._Count = _A2B_.TempVars.Count
 			End With
@@ -1722,6 +1733,7 @@ Private Function _NewCommandBar(psModule As String _
 Dim oObject As Object
 	Set oObject = New CommandBar
 	With oObject
+		._This = oObject
 		._Type = OBJCOMMANDBAR
 		._Name = psToolbarName
 		._ResourceURL = psToolbarFullName

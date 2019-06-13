@@ -16,8 +16,8 @@ REM --- CLASS ROOT FIELDS 								        														---
 REM -----------------------------------------------------------------------------------------------------------------------
 
 Private	_Type					As String				&apos;	Must be RECORDSET
+Private _This					As Object				&apos;	Workaround for absence of This builtin function
 Private _Name					As String				&apos;	Unique, generated
-Private _This					As Object
 Private _Fields()				As Variant
 Private _ParentName				As String
 Private _ParentType				As String
@@ -51,8 +51,8 @@ REM --- CONSTRUCTORS / DESTRUCTORS						        														---
 REM -----------------------------------------------------------------------------------------------------------------------
 Private Sub Class_Initialize()
 	_Type = OBJRECORDSET
-	_Name = &quot;&quot;
 	Set _This = Nothing
+	_Name = &quot;&quot;
 	_Fields = Array()
 	_ParentName = &quot;&quot;
 	Set _ParentDatabase = Nothing
@@ -496,6 +496,7 @@ Dim i As Integer, oFields As Object, iIndex As Integer
 	&apos;	No argument, return a collection
 	If IsMissing(pvIndex) Then
 		Set oObject = New Collect
+		Set oObject._This = oObject
 		oObject._CollType = COLLFIELDS
 		oObject._ParentType = OBJRECORDSET
 		oObject._ParentName = _Name
@@ -538,6 +539,7 @@ Dim i As Integer, oFields As Object, iIndex As Integer
 	&apos;	Otherwise create new field object
 	Else
 		Set oObject = New Field
+		Set oObject._This = oObject
 		oObject._Name = sObjectName
 		Set oObject.Column = oFields.getByName(sObjectName)
 		If Utils._hasUNOProperty(oObject.Column, &quot;Precision&quot;) Then oObject._Precision = oObject.Column.Precision

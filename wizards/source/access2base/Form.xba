@@ -16,6 +16,7 @@ REM --- CLASS ROOT FIELDS 								        														---
 REM -----------------------------------------------------------------------------------------------------------------------
 
 Private	_Type					As String				&apos;	Must be FORM
+Private _This					As Object				&apos;	Workaround for absence of This builtin function
 Private	_Shortcut				As String
 Private	_Name					As String
 Private _DocEntry				As Integer				&apos;	Doc- and DbContainer entries in Root structure
@@ -35,6 +36,7 @@ REM --- CONSTRUCTORS / DESTRUCTORS						        														---
 REM -----------------------------------------------------------------------------------------------------------------------
 Private Sub Class_Initialize()
 	_Type = OBJFORM
+	Set _This = Nothing
 	_Shortcut = &quot;&quot;
 	_Name = &quot;&quot;
 	_DocEntry = -1
@@ -502,6 +504,7 @@ Dim oDatabaseForm As Object, iCtlCount As Integer
 	
 	If IsMissing(pvIndex) Then					&apos;	No argument, return Collection pseudo-object
 		Set oCounter = New Collect
+		Set oCounter._This = oCounter
 		oCounter._CollType = COLLCONTROLS
 		oCounter._ParentType = OBJFORM
 		oCounter._ParentName = _Name
@@ -554,6 +557,7 @@ Dim oDatabaseForm As Object, iCtlCount As Integer
 	&apos;Initialize a new Control object
 	Set ocControl = New Control
 	With ocControl
+		._This = ocControl
 		._ParentType = CTLPARENTISFORM
 		._Name = sName
 		._Shortcut = _Shortcut &amp; &quot;!&quot; &amp; Utils._Surround(sName)
@@ -635,7 +639,6 @@ Public Function Move(	  ByVal Optional pvLeft As Variant _
 						) As Variant
 &apos;	Execute Move method
 	Utils._SetCalledSub(&quot;Form.Move&quot;)
-	If IsMissing(pvLeft) Then Call _TraceArguments()
 	If _ErrorHandler() Then On Local Error Goto Error_Function
 	Move = False
 Dim iArgNr As Integer
@@ -643,7 +646,7 @@ Dim iArgNr As Integer
 		Case UCase(&quot;Move&quot;)				:	iArgNr = 1
 		Case UCase(&quot;Form.Move&quot;)			:	iArgNr = 0
 	End Select
-	If IsMissing(pvLeft) Then Call _TraceArguments()
+	If IsMissing(pvLeft) Then pvLeft = -1
 	If IsMissing(pvTop) Then pvTop = -1
 	If IsMissing(pvWidth) Then pvWidth = -1
 	If IsMissing(pvHeight) Then pvHeight = -1
@@ -942,6 +945,7 @@ Dim i As Integer, oObject As Object
 			If DatabaseForm.Command = &quot;&quot; Then Goto Trace_Error		&apos;	No underlying data ??
 			Set oObject = New Recordset
 			With DatabaseForm
+				oObject._This = oObject
 				oObject._CommandType = .CommandType
 				oObject._Command = .Command
 				oObject._ParentName = _Name

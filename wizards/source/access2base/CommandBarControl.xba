@@ -16,6 +16,7 @@ REM --- CLASS ROOT FIELDS 								        														---
 REM -----------------------------------------------------------------------------------------------------------------------
 
 Private _Type					As String		&apos;	Must be COMMANDBARCONTROL
+Private _This					As Object		&apos;	Workaround for absence of This builtin function
 Private _InternalIndex			As Integer		&apos;	Index in toolbar including separators
 Private _Index					As Integer		&apos;	Index in collection, starting at 1 !!
 Private _ControlType			As Integer		&apos;	1 of the msoControl* constants
@@ -30,6 +31,7 @@ REM --- CONSTRUCTORS / DESTRUCTORS						        														---
 REM -----------------------------------------------------------------------------------------------------------------------
 Private Sub Class_Initialize()
 	_Type = OBJCOMMANDBARCONTROL
+	Set _This = Nothing
 	_Index = -1
 	_ParentCommandBarName = &quot;&quot;
 	Set _ParentCommandBar = Nothing

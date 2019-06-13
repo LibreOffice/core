@@ -16,6 +16,7 @@ REM --- CLASS ROOT FIELDS 								        														---
 REM -----------------------------------------------------------------------------------------------------------------------
 
 Private	_Type					As String				&apos;	Must be TABLEDEF or QUERYDEF
+Private _This					As Object				&apos;	Workaround for absence of This builtin function
 Private _Name					As String				&apos;	For tables: [[Catalog.]Schema.]Table
 Private _ParentDatabase			As Object
 Private _ReadOnly				As Boolean
@@ -33,6 +34,7 @@ REM --- CONSTRUCTORS / DESTRUCTORS						        														---
 REM -----------------------------------------------------------------------------------------------------------------------
 Private Sub Class_Initialize()
 	_Type = &quot;&quot;
+	Set _This = Nothing
 	_Name = &quot;&quot;
 	Set _ParentDatabase = Nothing
 	_ReadOnly = False
@@ -127,6 +129,7 @@ Const cstMaxKeyLength = 30
 
 	Set oNewField = New Field
 	With oNewField
+		._This = oNewField
 		._Name = pvFieldName
 		._ParentName = _Name
 		._ParentType = OBJTABLEDEF
@@ -277,6 +280,7 @@ Dim i As Integer, bFound As Boolean, oFields As Object
 	Select Case True
 		Case IsMissing(pvIndex)
 			Set oObject = New Collect
+			Set oObject._This = oObject
 			oObject._CollType = COLLFIELDS
 			oObject._ParentType = _Type
 			oObject._ParentName = _Name
@@ -300,6 +304,7 @@ Dim i As Integer, bFound As Boolean, oFields As Object
 	End Select
 
 	Set oObject = New Field
+	Set oObject._This = oObject
 	oObject._Name = sObjectName
 	Set oObject.Column = oFields.getByName(sObjectName)
 	oObject._ParentName = _Name
@@ -362,17 +367,17 @@ Dim lCommandType As Long, sCommand As String, oObject As Object,bPassThrough As 
 	If IsMissing(pvType) Then
 		pvType = cstNull
 	Else
-		If Not Utils._CheckArgument(pvType, 1, Utils._AddNumeric(), dbOpenForwardOnly) Then Goto Exit_Function
+		If Not Utils._CheckArgument(pvType, 1, Utils._AddNumeric(), Array(cstNull, dbOpenForwardOnly)) Then Goto Exit_Function
 	End If
 	If IsMissing(pvOptions) Then
 		pvOptions = cstNull
 	Else
-		If Not Utils._CheckArgument(pvOptions, 2, Utils._AddNumeric(), dbSQLPassThrough) Then Goto Exit_Function
+		If Not Utils._CheckArgument(pvOptions, 2, Utils._AddNumeric(), Array(cstNull, dbSQLPassThrough)) Then Goto Exit_Function
 	End If
 	If IsMissing(pvLockEdit) Then
 		pvLockEdit = cstNull
 	Else
-		If Not Utils._CheckArgument(pvLockEdit, 3, Utils._AddNumeric(), dbReadOnly) Then Goto Exit_Function
+		If Not Utils._CheckArgument(pvLockEdit, 3, Utils._AddNumeric(), Array(cstNull, dbReadOnly)) Then Goto Exit_Function
 	End If
 
 	Select Case _Type

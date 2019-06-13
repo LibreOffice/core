@@ -16,6 +16,7 @@ REM --- CLASS ROOT FIELDS 								        														---
 REM -----------------------------------------------------------------------------------------------------------------------
 
 Private	_Type					As String				&apos;	Must be SUBFORM
+Private _This					As Object				&apos;	Workaround for absence of This builtin function
 Private	_Shortcut				As String
 Private	_Name					As String
 Private _MainForm				As String
@@ -30,6 +31,7 @@ REM --- CONSTRUCTORS / DESTRUCTORS						        														---
 REM -----------------------------------------------------------------------------------------------------------------------
 Private Sub Class_Initialize()
 	_Type = OBJSUBFORM
+	Set _This = Nothing
 	_Shortcut = &quot;&quot;
 	_Name = &quot;&quot;
 	_MainForm = &quot;&quot;
@@ -379,6 +381,7 @@ Dim j As Integer
 	
 	If IsMissing(pvIndex) Then					&apos;	No argument, return Collection pseudo-object
 		Set oCounter = New Collect
+		Set oCounter._This = oCounter
 		oCounter._CollType = COLLCONTROLS
 		oCounter._ParentType = OBJSUBFORM
 		oCounter._ParentName = _Shortcut
@@ -392,6 +395,7 @@ Dim j As Integer
 	&apos;	Start building the ocControl object
 	&apos;	Determine exact name
 	Set ocControl = New Control
+	Set ocControl._This = ocControl
 	ocControl._ParentType = CTLPARENTISSUBFORM
 	sParentShortcut = _Shortcut
 	sControls() = DatabaseForm.getElementNames()
@@ -628,6 +632,7 @@ Dim oDatabase As Object, vBookmark As Variant, oObject As Object
 			If DatabaseForm.Command = &quot;&quot; Then Goto Trace_Error		&apos;	No underlying data ??
 			Set oObject = New Recordset
 			With DatabaseForm
+				Set oObject._This = oObject
 				oObject._CommandType = .CommandType
 				oObject._Command = .Command
 				oObject._ParentName = _Name

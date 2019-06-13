@@ -251,6 +251,7 @@ Const cstPixels = 10							&apos;	Tolerance on coordinates when drawn approximat
 	If bFound Then
 
 		ogGroup = New Optiongroup
+		ogGroup._This = ogGroup
 		ogGroup._Name = sGroupName
 		ogGroup._ButtonsGroup = vOptionButtons
 		ogGroup._Count = UBound(vOptionButtons) + 1

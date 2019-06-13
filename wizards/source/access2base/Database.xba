@@ -362,6 +362,7 @@ Dim vNameComponents() As Variant, iNames As Integer
 			End If
 		Next i
 		Set oNewTable = New DataDef
+		Set oNewTable._This = oNewTable
 		oNewTable._Type = OBJTABLEDEF
 		oNewTable._Name = pvTableName
 		vNameComponents = Split(pvTableName, &quot;.&quot;)
@@ -593,17 +594,17 @@ Dim sObjects() As String, bFound As Boolean, oTables As Object, oQueries As Obje
 	If IsMissing(pvType) Then
 		pvType = cstNull
 	Else
-		If Not Utils._CheckArgument(pvType, 2, Utils._AddNumeric(), dbOpenForwardOnly) Then Goto Exit_Function
+		If Not Utils._CheckArgument(pvType, 2, Utils._AddNumeric(), Array(cstNull, dbOpenForwardOnly)) Then Goto Exit_Function
 	End If
 	If IsMissing(pvOptions) Then
 		pvOptions = cstNull
 	Else
-		If Not Utils._CheckArgument(pvOptions, 3, Utils._AddNumeric(), dbSQLPassThrough) Then Goto Exit_Function
+		If Not Utils._CheckArgument(pvOptions, 3, Utils._AddNumeric(), Array(cstNull, dbSQLPassThrough)) Then Goto Exit_Function
 	End If
 	If IsMissing(pvLockEdit) Then
 		pvLockEdit = cstNull
 	Else
-		If Not Utils._CheckArgument(pvLockEdit, 4, Utils._AddNumeric(), dbReadOnly) Then Goto Exit_Function
+		If Not Utils._CheckArgument(pvLockEdit, 4, Utils._AddNumeric(), Array(cstNull, dbReadOnly)) Then Goto Exit_Function
 	End If
 
 	sSource = Split(UCase(Trim(pvSource)), &quot; &quot;)(0)
@@ -906,6 +907,7 @@ Dim i As Integer, bFound As Boolean, oQueries As Object
 	Select Case True
 		Case IsMissing(pvIndex)
 			Set oObject = New Collect
+			Set oObject._This = oObject
 			oObject._CollType = COLLQUERYDEFS
 			oObject._ParentType = OBJDATABASE
 			oObject._ParentName = &quot;&quot;
@@ -929,6 +931,7 @@ Dim i As Integer, bFound As Boolean, oQueries As Object
 	End Select
 
 	Set oObject = New DataDef
+	Set oObject._This = oObject
 	oObject._Type = OBJQUERYDEF
 	oObject._Name = sObjectName
 	Set oObject._ParentDatabase = _This
@@ -969,6 +972,7 @@ Dim i As Integer, bFound As Boolean, oTables As Object
 	Select Case True
 		Case IsMissing(pvIndex)
 			Set oObject = New Collect
+			Set oObject._This = oObject
 			oObject._CollType = COLLRECORDSETS
 			oObject._ParentType = OBJDATABASE
 			oObject._ParentName = &quot;&quot;
@@ -1062,6 +1066,7 @@ Dim i As Integer, bFound As Boolean, oTables As Object
 	Select Case True
 		Case IsMissing(pvIndex)
 			Set oObject = New Collect
+			Set oObject._This = oObject
 			oObject._CollType = COLLTABLEDEFS
 			oObject._ParentType = OBJDATABASE
 			oObject._ParentName = &quot;&quot;
@@ -1086,6 +1091,7 @@ Dim i As Integer, bFound As Boolean, oTables As Object
 
 	Set oObject = New DataDef
 	With oObject
+		._This = oObject
 		._Type = OBJTABLEDEF
 		._Name = sObjectName
 		Set ._ParentDatabase = _This
@@ -1194,7 +1200,7 @@ Exit_Function:
     Set oStatement = Nothing
     Exit Function
 Error_Function:
-    TraceError(TRACEABORT, ERRDFUNCTION, _A2B_.CalledSub, 0, , sSQL)
+    TraceError(TRACEFATAL, ERRDFUNCTION, _A2B_.CalledSub, 0, , sSQL)
     Goto Exit_Function
 End Function		&apos;	DFunction		V1.5.0
 
@@ -1802,7 +1808,7 @@ Dim i As Integer, vEvents As Variant, sEvent As String, vEvent As Variant
 	
 	Select Case UCase(psProperty)
 		Case UCase(&quot;Connect&quot;)
-			_PropertyGet = Document.Datasource.URL
+			If IsNull(Document) Then _PropertyGet = &quot;&quot; Else _PropertyGet = Document.Datasource.URL
 		&apos;	Location = ConvertFromUrl(URL)
 		Case UCase(&quot;Name&quot;)
 			_PropertyGet = Title
@@ -1815,7 +1821,7 @@ Dim i As Integer, vEvents As Variant, sEvent As String, vEvent As Variant
 						, UCase(&quot;OnTitleChanged&quot;), UCase(&quot;OnUnfocus&quot;), UCase(&quot;OnUnload&quot;), UCase(&quot;OnViewClosed&quot;), UCase(&quot;OnViewCreated&quot;)
 			&apos;	Find script event
 			sEvent = &quot;&quot;
-			vEvents = Document.getEvents().ElementNames			&apos;	Returns an array
+			If IsNull(Document) Then vEvents = Array() Else vEvents = Document.getEvents().ElementNames			&apos;	Returns an array
 			For i = 0 To UBound(vEvents)
 				If UCase(vEvents(i)) = UCase(psProperty) Then
 					sEvent = vEvents(i)
