@@ -100,6 +100,17 @@ bool StringConcat::VisitCallExpr(CallExpr const * expr) {
         }
         leftLoc = compat::getBeginLoc(left->getArg(1));
     }
+
+    // We add an extra " " in the TOOLS_WARN_EXCEPTION macro, which triggers this plugin
+    if (loplugin::isSamePathname(
+            compiler.getSourceManager().getFilename(
+                compiler.getSourceManager().getSpellingLoc(
+                    compiler.getSourceManager().getImmediateMacroCallerLoc(
+                        compiler.getSourceManager().getImmediateMacroCallerLoc(
+                            compat::getBeginLoc(expr))))),
+            SRCDIR "/include/tools/diagnose_ex.h"))
+        return true;
+
     StringRef name {
         getFileNameOfSpellingLoc(
             compiler.getSourceManager().getSpellingLoc(compat::getBeginLoc(expr))) };
