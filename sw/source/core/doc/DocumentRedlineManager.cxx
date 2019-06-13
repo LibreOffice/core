@@ -3029,7 +3029,7 @@ void DocumentRedlineManager::SetAutoFormatRedlineComment( const OUString* pText,
 
 void DocumentRedlineManager::FinalizeImport()
 {
-    // tdf#118699 fix numbering after deletion of numbered list items
+    // set correct numbering after deletion
     for( SwRedlineTable::size_type n = 0; n < mpRedlineTable->size(); ++n )
     {
         SwRangeRedline* pRedl = (*mpRedlineTable)[ n ];
@@ -3040,19 +3040,22 @@ void DocumentRedlineManager::FinalizeImport()
                                 ? pRedl->GetMark() : pRedl->GetPoint();
             SwTextNode* pDelNode = pStt->nNode.GetNode().GetTextNode();
             SwTextNode* pTextNode = pEnd->nNode.GetNode().GetTextNode();
-            // avoid of incorrect numbering after the deletion
+
             if ( pDelNode->GetNumRule() && !pTextNode->GetNumRule() )
             {
-                // remove numbering of the first deleted list item
+                // tdf#118699 remove numbering of the first deleted list item
                 const SwPaM aPam( *pStt, *pStt );
                 m_rDoc.DelNumRules( aPam );
             }
             else if ( pDelNode->GetNumRule() != pTextNode->GetNumRule() )
             {
-                // copy numbering to the first deleted list item
+                // tdf#125319 copy numbering to the first deleted list item
                 const SwPaM aPam( *pStt, *pStt );
                 SwNumRule *pRule = pTextNode->GetNumRule();
                 m_rDoc.SetNumRule( aPam, *pRule, false );
+
+                // tdf#125881 copy also numbering level
+                pDelNode->SetAttrListLevel( pTextNode->GetAttrListLevel() );
             }
         }
     }

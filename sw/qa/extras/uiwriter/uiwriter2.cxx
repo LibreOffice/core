@@ -1252,6 +1252,22 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf118699_redline_numbering)
             .is());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf125881_redline_list_level)
+{
+    load(DATA_DIRECTORY, "tdf125881.docx");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    // deleted paragraph gets the numbering of the next paragraph
+    uno::Reference<beans::XPropertySet> xProps(getParagraph(8), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_MESSAGE("first paragraph after the first deletion: missing numbering",
+                           xProps->getPropertyValue("NumberingRules").hasValue());
+
+    // check numbering level at deletion (1 instead of 0)
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(1), getProperty<sal_Int16>(getParagraph(8), "NumberingLevel"));
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf125310)
 {
     load(DATA_DIRECTORY, "tdf125310.fodt");
