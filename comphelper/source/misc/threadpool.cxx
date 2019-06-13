@@ -10,6 +10,7 @@
 #include <comphelper/threadpool.hxx>
 
 #include <com/sun/star/uno/Exception.hpp>
+#include <config_options.h>
 #include <sal/config.h>
 #include <sal/log.hxx>
 #include <rtl/instance.hxx>
@@ -351,10 +352,13 @@ void ThreadTaskTag::waitUntilDone()
     while( mnTasksWorking > 0 )
     {
 #if defined DBG_UTIL && !defined NDEBUG
-        // 3 minute timeout in debug mode so our tests fail sooner rather than later,
-        // unless the code is debugged in valgrind or gdb, in which case the threads
+        // 10 minute timeout in debug mode, unless the code is built with
+        // sanitizers or debugged in valgrind or gdb, in which case the threads
         // should not time out in the middle of a debugging session
-        int maxTimeout = 3 * 60;
+        int maxTimeout = 10 * 60;
+#if !ENABLE_RUNTIME_OPTIMIZATIONS
+        maxTimeout = 30 * 60;
+#endif
 #if defined HAVE_VALGRIND_HEADERS
         if( RUNNING_ON_VALGRIND )
             maxTimeout = 30 * 60;
