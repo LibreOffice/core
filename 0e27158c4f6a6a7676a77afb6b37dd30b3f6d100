@@ -46,6 +46,30 @@
       "revId": "0e27158c4f6a6a7676a77afb6b37dd30b3f6d100",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_f04fb331",
+        "filename": "writerfilter/source/dmapper/SettingsTable.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 651,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2019-06-13T07:56:09Z",
+      "side": 1,
+      "message": "No, the default still needs to be true, because if it doesn\u0027t exist, then it acts as true.",
+      "parentUuid": "3fa0c359_904d0f74",
+      "range": {
+        "startLine": 651,
+        "startChar": 98,
+        "endLine": 651,
+        "endChar": 131
+      },
+      "revId": "0e27158c4f6a6a7676a77afb6b37dd30b3f6d100",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
