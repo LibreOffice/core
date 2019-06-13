@@ -952,6 +952,22 @@ void ScDocShell::Execute( SfxRequest& rReq )
         }
         break;
 
+        case SID_ATTR_ROCERA_EXPANSION:
+        {
+            const SfxPoolItem* pItem;
+            if (pReqArgs->GetItemState(nSlot, true, &pItem) == SfxItemState::SET )
+            {
+                const SfxBoolItem* pROCEraExpansionItem = static_cast<const SfxBoolItem*>(pItem);
+                if (pROCEraExpansionItem)
+                {
+                    ScDocOptions aDocOpt(m_aDocument.GetDocOptions());
+                    aDocOpt.SetROCEraExpansion(pROCEraExpansionItem->GetValue());
+                    m_aDocument.SetDocOptions(aDocOpt);
+                }
+            }
+        }
+        break;
+
 #if HAVE_FEATURE_MULTIUSER_ENVIRONMENT
         case SID_SHARE_DOC:
             {
@@ -1973,6 +1989,11 @@ void ScDocShell::GetState( SfxItemSet &rSet )
             case SID_ATTR_YEAR2000 :
                 rSet.Put( SfxUInt16Item( nWhich,
                     m_aDocument.GetDocOptions().GetYear2000() ) );
+            break;
+
+            case SID_ATTR_ROCERA_EXPANSION:
+                rSet.Put(SfxBoolItem(nWhich,
+                    m_aDocument.GetDocOptions().GetROCEraExpansion()));
             break;
 
             case SID_SHARE_DOC:

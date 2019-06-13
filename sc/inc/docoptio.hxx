@@ -45,6 +45,7 @@ class SC_DLLPUBLIC ScDocOptions
     mutable bool bFormulaRegexEnabled;    ///< regular expressions in formulas enabled, only when reading settings
     mutable bool bFormulaWildcardsEnabled;///< wildcards in formulas enabled, only when reading settings
     bool       bWriteCalcConfig;        ///< (subset of) Calc config will be written to user's profile
+    bool        bROCEraExpansion;       ///< expand two or three digits year based on ROCEra Calendar
 
 public:
                 ScDocOptions();
@@ -100,6 +101,9 @@ public:
 
     void    SetWriteCalcConfig( bool bVal ) { bWriteCalcConfig = bVal; }
     bool    IsWriteCalcConfig() const       { return bWriteCalcConfig; }
+
+    void    SetROCEraExpansion(bool bVal) { bROCEraExpansion = bVal; }
+    bool    GetROCEraExpansion() const { return bROCEraExpansion; }
 };
 
 inline bool ScDocOptions::operator==( const ScDocOptions& rOpt ) const
@@ -123,6 +127,7 @@ inline bool ScDocOptions::operator==( const ScDocOptions& rOpt ) const
             &&  rOpt.bFormulaWildcardsEnabled == bFormulaWildcardsEnabled
             &&  rOpt.eFormulaSearchType     == eFormulaSearchType
             &&  rOpt.bWriteCalcConfig       == bWriteCalcConfig
+            &&  rOpt.bROCEraExpansion       == bROCEraExpansion
             );
 }
 

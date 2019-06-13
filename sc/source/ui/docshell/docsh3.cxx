@@ -418,6 +418,8 @@ void ScDocShell::InitOptions(bool bForLoading)      // called from InitNew and L
     // two-digit year entry from Tools->Options->General
     aDocOpt.SetYear2000( sal::static_int_cast<sal_uInt16>( ::utl::MiscCfg().GetYear2000() ) );
 
+    aDocOpt.SetROCEraExpansion(::utl::MiscCfg().GetROCEraExpansion());
+
     if (bForLoading)
     {
         // #i112123# No style:decimal-places attribute means automatic decimals, not the configured default,

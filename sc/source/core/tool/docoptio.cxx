@@ -63,6 +63,7 @@ void ScDocOptions::ResetDocOptions()
     nMonth              = 12;
     nYear               = 1899;
     nYear2000           = SvNumberFormatter::GetYear2000Default();
+    bROCEraExpansion    = false;
     nTabDistance        = lcl_GetDefaultTabDist();
     bCalcAsShown        = false;
     bMatchWholeCell     = true;
