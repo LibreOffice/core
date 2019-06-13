@@ -877,7 +877,7 @@ static void ToolkitWorkerFunction( void* pArgs )
     }
 
     VCLXToolkit * pTk = static_cast<VCLXToolkit *>(pArgs);
-    bInitedByVCLToolkit = InitVCL();
+    bInitedByVCLToolkit = !IsVCLInit() && InitVCL();
     if( bInitedByVCLToolkit )
     {
         UnoWrapper* pUnoWrapper = new UnoWrapper( pTk );
