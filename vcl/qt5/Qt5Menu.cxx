@@ -545,8 +545,8 @@ Qt5Menu* Qt5Menu::GetTopLevel()
 
 void Qt5Menu::ShowMenuBar(bool bVisible)
 {
-    if (mpQMenuBar && (bVisible != mpQMenuBar->isVisible()))
-        bVisible ? mpQMenuBar->show() : mpQMenuBar->hide();
+    if (mpQMenuBar)
+        mpQMenuBar->setVisible(bVisible);
 }
 
 const Qt5Frame* Qt5Menu::GetFrame() const
