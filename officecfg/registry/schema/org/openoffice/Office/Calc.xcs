@@ -1420,6 +1420,14 @@
           </info>
           <value>true</value>
         </prop>
+        <prop oor:name="MinguoExpansion" oor:type="xs:boolean" oor:nillable="false">
+          <!-- UIHints: Tools - Options  Spreadsheet  Calculate  [Check box] Expand two or three digit year based on Minguo calendar -->
+          <info>
+            <desc>Specifies whether to expand two or three digit year based on Minguo calendar.</desc>
+            <label>Enable Minguo year expansion.</label>
+          </info>
+          <value>false</value>
+        </prop>
         <prop oor:name="FormulaSyntax" oor:type="xs:int">
           <!-- UIHints: Tools - Options  Spreadsheet  Calculate -->
           <!-- This node is deprecated, but we still need to keep it for migration purposes. -->

@@ -60,6 +60,7 @@ ScTpCalcOptions::ScTpCalcOptions(vcl::Window* pParent, const SfxItemSet& rCoreAt
     get(m_pFtPrec, "precft");
     get(m_pEdPrec, "prec");
     get(m_pBtnThread, "threadingenabled");
+    get(m_pBtnMinguoExpansion, "minguo_expansion");
     Init();
     SetExchangeSupport();
 }
@@ -92,6 +93,7 @@ void ScTpCalcOptions::dispose()
     m_pFtPrec.clear();
     m_pEdPrec.clear();
     m_pBtnThread.clear();
+    m_pBtnMinguoExpansion.clear();
     SfxTabPage::dispose();
 }
 
@@ -103,6 +105,7 @@ void ScTpCalcOptions::Init()
     m_pBtnDateSc10->SetClickHdl( LINK( this, ScTpCalcOptions, RadioClickHdl ) );
     m_pBtnDate1904->SetClickHdl( LINK( this, ScTpCalcOptions, RadioClickHdl ) );
     m_pBtnThread->SetClickHdl( LINK( this, ScTpCalcOptions, CheckClickHdl ) );
+    m_pBtnMinguoExpansion->SetClickHdl( LINK( this, ScTpCalcOptions, CheckClickHdl ) );
 }
 
 VclPtr<SfxTabPage> ScTpCalcOptions::Create( TabPageParent pParent, const SfxItemSet* rAttrSet )
@@ -182,6 +185,8 @@ void ScTpCalcOptions::Reset( const SfxItemSet* /* rCoreAttrs */ )
     m_pBtnThread->Enable( !officecfg::Office::Calc::Formula::Calculation::UseThreadedCalculationForFormulaGroups::isReadOnly() );
     m_pBtnThread->Check( officecfg::Office::Calc::Formula::Calculation::UseThreadedCalculationForFormulaGroups::get() );
 
+    m_pBtnMinguoExpansion->Check( pLocalOptions->IsMinguoExpansion() );
+
     CheckClickHdl(m_pBtnIterate);
 }
 
@@ -214,6 +219,9 @@ bool ScTpCalcOptions::FillItemSet( SfxItemSet* rCoreAttrs )
                      svtools::RESTART_REASON_THREADING))
             GetParentDialog()->EndDialog(RET_OK);
     }
+
+    pLocalOptions->SetMinguoExpansion( m_pBtnMinguoExpansion->IsChecked() );
+
     if ( *pLocalOptions != *pOldOptions )
     {
         rCoreAttrs->Put( ScTpCalcItem( nWhichCalc, *pLocalOptions ) );
