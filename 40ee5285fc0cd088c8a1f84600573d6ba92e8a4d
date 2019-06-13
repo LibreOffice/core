@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_63e0bffb",
+        "filename": "cui/source/customize/SvxNotebookbarConfigPage.cxx",
+        "patchSetId": 20
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2019-06-13T14:43:35Z",
+      "side": 1,
+      "message": "new help id should be used instead of toolbar one",
+      "revId": "40ee5285fc0cd088c8a1f84600573d6ba92e8a4d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_03e77b14",
+        "filename": "cui/source/customize/SvxNotebookbarConfigPage.cxx",
+        "patchSetId": 20
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2019-06-13T14:43:35Z",
+      "side": 1,
+      "message": "should be a #define with meaningful name and reused in other places",
+      "revId": "40ee5285fc0cd088c8a1f84600573d6ba92e8a4d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_23e2b702",
+        "filename": "cui/source/customize/SvxNotebookbarConfigPage.cxx",
+        "patchSetId": 20
+      },
+      "lineNbr": 227,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2019-06-13T14:43:35Z",
+      "side": 1,
+      "message": "isn\u0027t that repeaded? don\u0027t we have the same function somehwere else? if yes, can we reuse one?",
+      "revId": "40ee5285fc0cd088c8a1f84600573d6ba92e8a4d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_c3f0b3cc",
+        "filename": "cui/source/customize/SvxNotebookbarConfigPage.cxx",
+        "patchSetId": 20
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2019-06-13T14:43:35Z",
+      "side": 1,
+      "message": "and -\u003e And\nthe same, don\u0027t we have the same function somewhere?",
+      "revId": "40ee5285fc0cd088c8a1f84600573d6ba92e8a4d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_e3eb6fd9",
+        "filename": "cui/source/customize/SvxNotebookbarConfigPage.cxx",
+        "patchSetId": 20
+      },
+      "lineNbr": 311,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2019-06-13T14:43:35Z",
+      "side": 1,
+      "message": "delete?",
+      "revId": "40ee5285fc0cd088c8a1f84600573d6ba92e8a4d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
