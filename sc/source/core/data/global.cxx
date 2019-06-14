@@ -812,7 +812,14 @@ void ScGlobal::OpenURL(const OUString& rURL, const OUString& rTarget)
     }
 
     // Don't fiddle with fragments pointing into current document.
-    if (!aUrlName.startsWith("#"))
+    // Also don't mess around with a vnd.sun.star.script or service or other
+    // internal "URI".
+    if (!aUrlName.startsWith("#")
+            && !aUrlName.startsWithIgnoreAsciiCase("vnd.sun.star.script:")
+            && !aUrlName.startsWithIgnoreAsciiCase("macro:")
+            && !aUrlName.startsWithIgnoreAsciiCase("slot:")
+            && !aUrlName.startsWithIgnoreAsciiCase("service:")
+            && !aUrlName.startsWithIgnoreAsciiCase(".uno:"))
     {
         // Any relative reference would fail with "not an absolute URL"
         // error, try to construct an absolute URI with the path relative
