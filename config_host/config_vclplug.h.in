@@ -12,4 +12,6 @@ Settings about which X11 desktops have support enabled.
 #define ENABLE_KDE5 0
 #define ENABLE_GTK3_KDE5 0
 
+#define QT5_USING_X11 0
+
 #endif
