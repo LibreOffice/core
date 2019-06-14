@@ -172,7 +172,7 @@ bool JobURL::getAlias( /*OUT*/ OUString& sAlias ) const
                     returns the possible existing service value
                     e.g. "vnd.sun.star.job:service=com.sun.star.Service" returns "com.sun.star.Service"
 
-    @return     <TRUE/> if an service part of the job URL exist and the out parameter
+    @return     <TRUE/> if a service part of the job URL exist and the out parameter
                 sService was filled.
 
     @attention  The out parameter will be reset every time. Don't use it if method returns <FALSE/>!
