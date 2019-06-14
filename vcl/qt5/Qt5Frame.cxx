@@ -45,6 +45,10 @@
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QMainWindow>
 
+#if QT5_USING_X11
+#include <QtX11Extras/QX11Info>
+#endif
+
 #include <saldatabasic.hxx>
 #include <window.h>
 #include <vcl/layout.hxx>
@@ -635,11 +639,25 @@ void Qt5Frame::ShowFullScreen(bool bFullScreen, sal_Int32 nScreen)
     }
 }
 
-void Qt5Frame::StartPresentation(bool)
+void Qt5Frame::StartPresentation(bool bStart)
 {
-    // meh - so there's no Qt platform independent solution - defer to
-    // KDE5 impl. For everyone else:
-    // https://forum.qt.io/topic/38504/solved-qdialog-in-fullscreen-disable-os-screensaver
+// meh - so there's no Qt platform independent solution
+// https://forum.qt.io/topic/38504/solved-qdialog-in-fullscreen-disable-os-screensaver
+#if QT5_USING_X11
+    boost::optional<unsigned int> aRootWindow;
+    boost::optional<Display*> aDisplay;
+
+    if (QX11Info::isPlatformX11())
+    {
+        aRootWindow = QX11Info::appRootWindow();
+        aDisplay = QX11Info::display();
+    }
+
+    m_ScreenSaverInhibitor.inhibit(bStart, "presentation", QX11Info::isPlatformX11(), aRootWindow,
+                                   aDisplay);
+#else
+    (void)bStart;
+#endif
 }
 
 void Qt5Frame::SetAlwaysOnTop(bool bOnTop)
