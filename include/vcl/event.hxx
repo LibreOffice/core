@@ -276,9 +276,7 @@ enum class MouseNotifyEvent
     GETFOCUS         = 6,
     LOSEFOCUS        = 7,
     COMMAND          = 8,
-    INPUTENABLE      = 10,
-    EXECUTEDIALOG    = 100,
-    ENDEXECUTEDIALOG = 101
+    INPUTENABLE      = 10
 };
 
 class VCL_DLLPUBLIC NotifyEvent
