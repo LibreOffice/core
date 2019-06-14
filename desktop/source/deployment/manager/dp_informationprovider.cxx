@@ -39,6 +39,7 @@
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
 #include <rtl/ustring.hxx>
+#include <tools/diagnose_ex.h>
 #include <ucbhelper/content.hxx>
 
 #include <dp_dependencies.hxx>
@@ -144,9 +145,9 @@ PackageInformationProvider::getPackageLocation( const OUString& _sExtensionId )
             ::ucbhelper::Content aContent( aLocationURL, nullptr, mxContext );
             aLocationURL = aContent.getURL();
         }
-        catch (const css::ucb::ContentCreationException& e)
+        catch (const css::ucb::ContentCreationException&)
         {
-           SAL_WARN("desktop.deployment", "ignoring " << e);
+            TOOLS_WARN_EXCEPTION("desktop.deployment", "ignoring");
         }
     }
     return aLocationURL;
@@ -215,8 +216,8 @@ PackageInformationProvider::isUpdateAvailable( const OUString& _sExtensionId )
             extensions = extMgr->getExtensionsWithSameIdentifier(
                 dp_misc::getIdentifier(info.extension), info.extension->getName(),
                 uno::Reference<css_ucb::XCommandEnvironment>());
-        } catch (const lang::IllegalArgumentException& e) {
-            SAL_WARN("desktop.deployment", "ignoring " << e);
+        } catch (const lang::IllegalArgumentException&) {
+            TOOLS_WARN_EXCEPTION("desktop.deployment", "ignoring");
             continue;
         }
         OSL_ASSERT(extensions.getLength() == 3);

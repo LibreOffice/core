@@ -55,6 +55,7 @@
 #include <com/sun/star/document/XEmbeddedScripts.hpp>
 
 #include <comphelper/sequence.hxx>
+#include <tools/diagnose_ex.h>
 #include <tools/urlobj.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <unotools/tempfile.hxx>
@@ -446,12 +447,11 @@ bool DispatchWatcher::executeDispatchRequests( const std::vector<DispatchRequest
                     else
                         xDispatcher->dispatch( aURL, aArgs2 );
                 }
-                catch (const css::uno::Exception& e)
+                catch (const css::uno::Exception&)
                 {
-                    SAL_WARN(
+                    TOOLS_WARN_EXCEPTION(
                         "desktop.app",
-                        "Desktop::OpenDefault() ignoring Exception while"
-                            " calling XNotifyingDispatch: " << e);
+                        "Desktop::OpenDefault() ignoring Exception while calling XNotifyingDispatch");
                 }
             }
         }
@@ -503,19 +503,17 @@ bool DispatchWatcher::executeDispatchRequests( const std::vector<DispatchRequest
                              xDesktop, aName, aTarget, comphelper::containerToSequence(aArgs)),
                          UNO_QUERY);
             }
-            catch (const css::lang::IllegalArgumentException& iae)
+            catch (const css::lang::IllegalArgumentException&)
             {
-                SAL_WARN(
+                TOOLS_WARN_EXCEPTION(
                     "desktop.app",
-                    "Dispatchwatcher IllegalArgumentException while calling"
-                        " loadComponentFromURL: " << iae);
+                    "Dispatchwatcher IllegalArgumentException while calling loadComponentFromURL");
             }
-            catch (const css::io::IOException& ioe)
+            catch (const css::io::IOException&)
             {
-                SAL_WARN(
+                TOOLS_WARN_EXCEPTION(
                     "desktop.app",
-                    "Dispatchwatcher IOException while calling"
-                        " loadComponentFromURL: " << ioe);
+                    "Dispatchwatcher IOException while calling loadComponentFromURL");
             }
             if ( aDispatchRequest.aRequestType == REQUEST_OPEN ||
                  aDispatchRequest.aRequestType == REQUEST_VIEW ||
