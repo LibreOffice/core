@@ -1605,6 +1605,7 @@ public:
     virtual bool IsChart() const { return false; }
 
     void SetHelpHdl(const Link<vcl::Window&, bool>& rLink);
+    void SetModalHierarchyHdl(const Link<bool, void>& rLink);
 };
 
 }

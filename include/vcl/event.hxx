@@ -290,8 +290,6 @@ enum class MouseNotifyEvent
     DESTROY          = 9,
     INPUTENABLE      = 10,
     INPUTDISABLE     = 11,
-    EXECUTEDIALOG    = 100,
-    ENDEXECUTEDIALOG = 101
 };
 
 class VCL_DLLPUBLIC NotifyEvent
