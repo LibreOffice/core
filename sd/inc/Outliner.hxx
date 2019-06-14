@@ -30,6 +30,10 @@ class SdrObject;
 class SdrTextObj;
 class SdDrawDocument;
 
+namespace weld {
+class Window;
+}
+
 namespace sd {
 
 class View;
@@ -516,7 +520,7 @@ private:
         that the otherwise non-modal search or spell dialogs, if visible, are
         locked, too.
     */
-    VclPtr<vcl::Window> GetMessageBoxParent();
+    weld::Window* GetMessageBoxParent();
 };
 
 #endif
