@@ -1357,7 +1357,7 @@ std::unique_ptr<AddonsOptions_Impl::ImageEntry> AddonsOptions_Impl::ReadImageDat
             if(!pEntry)
                 pEntry.reset(new ImageEntry());
 
-            // Retrieve image data from a external bitmap file. Make sure that embedded image data
+            // Retrieve image data from an external bitmap file. Make sure that embedded image data
             // has a higher priority.
             aPropertyData[i] >>= aImageURL;
 
