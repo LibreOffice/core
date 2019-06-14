@@ -37,9 +37,9 @@
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/diagnose_ex.h>
+#include <vcl/svapp.hxx>
 #include <vcl/svlbitm.hxx>
 #include <vcl/treelistentry.hxx>
-#include <vcl/builderfactory.hxx>
 #include <vcl/weld.hxx>
 
 #include <com/sun/star/io/Pipe.hpp>

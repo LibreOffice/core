@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-05-12 16:56:51 using:
+ Generated on 2019-06-14 11:55:42 using:
  ./bin/update_pch desktop deploymentgui --cutoff=3 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -24,11 +24,9 @@
 #include <algorithm>
 #include <cassert>
 #include <cstddef>
-#include <deque>
 #include <iomanip>
 #include <limits.h>
 #include <limits>
-#include <list>
 #include <memory>
 #include <new>
 #include <ostream>
@@ -48,7 +46,6 @@
 #include <rtl/alloc.h>
 #include <rtl/locale.h>
 #include <rtl/ref.hxx>
-#include <rtl/textcvt.h>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
@@ -57,27 +54,12 @@
 #include <sal/saldllapi.h>
 #include <sal/types.h>
 #include <sal/typesizes.h>
-#include <vcl/accel.hxx>
-#include <vcl/bitmapex.hxx>
 #include <vcl/ctrl.hxx>
-#include <vcl/dialog.hxx>
 #include <vcl/dllapi.h>
-#include <vcl/idle.hxx>
-#include <vcl/image.hxx>
 #include <vcl/keycod.hxx>
-#include <vcl/menu.hxx>
-#include <vcl/mnemonicengine.hxx>
-#include <vcl/outdev.hxx>
-#include <vcl/quickselectionengine.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/transfer.hxx>
-#include <vcl/treelist.hxx>
-#include <vcl/treelistbox.hxx>
-#include <vcl/vclenum.hxx>
-#include <vcl/vclevent.hxx>
 #include <vcl/vclptr.hxx>
-#include <vcl/vclreferencebase.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/window.hxx>
 #endif // PCH_LEVEL >= 2
@@ -113,7 +95,6 @@
 #include <svtools/controldims.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/color.hxx>
-#include <tools/contnr.hxx>
 #include <tools/gen.hxx>
 #include <tools/link.hxx>
 #include <tools/solar.h>

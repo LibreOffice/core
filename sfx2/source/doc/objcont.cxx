@@ -25,9 +25,9 @@
 #include <com/sun/star/document/UpdateDocMode.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <comphelper/fileurl.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <svl/style.hxx>
-#include <vcl/wrkwin.hxx>
 
 #include <svl/stritem.hxx>
 #include <svl/intitem.hxx>
