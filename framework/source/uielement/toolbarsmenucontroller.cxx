@@ -408,21 +408,11 @@ void ToolbarsMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu > co
         }
 
         // Create commands for non-toolbars
-        if ( m_aModuleIdentifier == "com.sun.star.text.TextDocument" ||
-             m_aModuleIdentifier == "com.sun.star.text.WebDocument" ||
-             m_aModuleIdentifier == "com.sun.star.text.GlobalDocument" ||
-             m_aModuleIdentifier == "com.sun.star.drawing.DrawingDocument" ||
-             m_aModuleIdentifier == "com.sun.star.presentation.PresentationDocument" ||
-             m_aModuleIdentifier == "com.sun.star.sheet.SpreadsheetDocument" )
-        {
-            if ( m_aModuleIdentifier == "com.sun.star.drawing.DrawingDocument" ||
-                 m_aModuleIdentifier == "com.sun.star.presentation.PresentationDocument" )
-                addCommand( m_xPopupMenu, ".uno:ColorControl", "" );
-            else if ( m_aModuleIdentifier == "com.sun.star.sheet.SpreadsheetDocument" )
-                addCommand( m_xPopupMenu, ".uno:InputLineVisible", "" );
-            else
-                addCommand( m_xPopupMenu, ".uno:InsertFormula", "" );
-        }
+        if ( m_aModuleIdentifier == "com.sun.star.drawing.DrawingDocument" ||
+              m_aModuleIdentifier == "com.sun.star.presentation.PresentationDocument" )
+             addCommand( m_xPopupMenu, ".uno:ColorControl", "" );
+        else if ( m_aModuleIdentifier == "com.sun.star.sheet.SpreadsheetDocument" )
+             addCommand( m_xPopupMenu, ".uno:InputLineVisible", "" );
 
         bool          bAddCommand( true );
         SvtCommandOptions aCmdOptions;
