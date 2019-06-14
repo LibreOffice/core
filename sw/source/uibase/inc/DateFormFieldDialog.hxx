@@ -14,6 +14,9 @@
 #include "actctrl.hxx"
 #include "numfmtlb.hxx"
 
+class SvNumberFormatter;
+class SwDoc;
+
 namespace sw
 {
 namespace mark
@@ -29,6 +32,7 @@ class DateFormFieldDialog : public weld::GenericDialogController
 {
 private:
     mark::IFieldmark* m_pDateField;
+    SvNumberFormatter* m_pNumberFormatter;
 
     std::unique_ptr<SwNumFormatTreeView> m_xFormatLB;
 
@@ -36,7 +40,7 @@ private:
     void InitControls();
 
 public:
-    DateFormFieldDialog(weld::Widget* pParent, mark::IFieldmark* pDateField);
+    DateFormFieldDialog(weld::Widget* pParent, mark::IFieldmark* pDateField, SwDoc* pDoc);
     virtual ~DateFormFieldDialog() override;
 
     virtual short run() override
