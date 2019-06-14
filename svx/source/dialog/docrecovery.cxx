@@ -30,13 +30,11 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/string.hxx>
 #include <svtools/imagemgr.hxx>
-#include <vcl/xtextedt.hxx>
 #include <vcl/settings.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/svapp.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <vcl/scrbar.hxx>
 
 #include <toolkit/helper/vclunohelper.hxx>
 

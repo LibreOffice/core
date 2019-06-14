@@ -65,6 +65,7 @@
 #include <sfx2/viewfac.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/svapp.hxx>
 #include <cppuhelper/implbase.hxx>
 
 namespace basctl

@@ -28,6 +28,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/servicedecl.hxx>
 #include <comphelper/unwrapargs.hxx>
+#include <unotools/resmgr.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>

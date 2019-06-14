@@ -80,17 +80,11 @@
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 #include <salhelper/thread.hxx>
-#include <vcl/svlbitm.hxx>
-#include <vcl/treelistbox.hxx>
 #include <svtools/controldims.hxx>
 #include <tools/gen.hxx>
 #include <tools/link.hxx>
 #include <tools/solar.h>
 #include <unotools/configmgr.hxx>
-#include <vcl/button.hxx>
-#include <vcl/dialog.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/image.hxx>
 #include <vcl/svapp.hxx>
 
 #include <comphelper/processfactory.hxx>
@@ -112,7 +106,6 @@
 
 class KeyEvent;
 class MouseEvent;
-namespace vcl { class Window; }
 namespace com { namespace sun { namespace star { namespace uno {
     class XComponentContext;
 } } } }
