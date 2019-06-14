@@ -31,7 +31,7 @@ Qt5Clipboard::Qt5Clipboard(const OUString& aModeString, const QClipboard::Mode a
     , m_aClipboardMode(aMode)
 {
     assert(isSupported(m_aClipboardMode));
-    // DirectConnection guarantess the changed slot runs in the same thread as the QClipboard
+    // DirectConnection guarantees the changed slot runs in the same thread as the QClipboard
     connect(QApplication::clipboard(), &QClipboard::changed, this, &Qt5Clipboard::handleChanged,
             Qt::DirectConnection);
 }
