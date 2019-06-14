@@ -93,6 +93,30 @@
       "revId": "e162635c52bc55f0bdabd65c2dd878ad648fbc7c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_46ea7175",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Calc.xcs",
+        "patchSetId": 1
+      },
+      "lineNbr": 1423,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-06-14T06:33:01Z",
+      "side": 1,
+      "message": "It means that the value set for the prop is the union of what the oor:type says plus {nil}.  That may be a useful choice to model some optional props, but is unlikely to be useful in cases like this where you give a default value here in the .xcs schema anyway.  (And nillability has implications for the configuration\u0027s \"easy access\" C++ API, where such a prop has then type boost::optional\u003cT\u003e, which can be particularly confusing if if the underlying type T is bool, as boost::optional\u003cT\u003e also allows for contextual conversion to bool.  That\u0027s why I, somewhat incompatibly, changed almost all of officecfg/registry/ from implicit oor:nillable\u003d\"true\" to explicit oor:nillable\u003d\"false\" back when I introduced that \"easy access\" API.)",
+      "parentUuid": "3fa0c359_e64ffd31",
+      "range": {
+        "startLine": 1423,
+        "startChar": 63,
+        "endLine": 1423,
+        "endChar": 82
+      },
+      "revId": "e162635c52bc55f0bdabd65c2dd878ad648fbc7c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
