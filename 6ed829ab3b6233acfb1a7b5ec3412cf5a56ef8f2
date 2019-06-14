@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_41f33b0b",
+        "filename": "include/tools/diagnose_ex.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1001501
+      },
+      "writtenOn": "2019-06-14T11:01:14Z",
+      "side": 1,
+      "message": "I know it has been merged but this looks like copypaste typo. Did you mean SAL_INFO?",
+      "revId": "6ed829ab3b6233acfb1a7b5ec3412cf5a56ef8f2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
