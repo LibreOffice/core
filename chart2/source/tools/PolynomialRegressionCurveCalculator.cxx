@@ -185,7 +185,7 @@ void SAL_CALL PolynomialRegressionCurveCalculator::recalculateRegression(
     {
         aRSquared = aSumYpred2 / (aSumError + aSumYpred2);
     }
-    else
+    else if (aSumTotal != 0.0)
     {
         aRSquared = 1.0 - (aSumError / aSumTotal);
     }
