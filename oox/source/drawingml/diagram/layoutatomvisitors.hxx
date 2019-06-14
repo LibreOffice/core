@@ -35,6 +35,7 @@ class ShapeCreationVisitor : public LayoutAtomVisitor
     sal_Int32 mnCurrIdx;
     sal_Int32 mnCurrStep = 0;
     sal_Int32 mnCurrCnt = 0;
+    sal_Int32 mnCurrLevel;
     const dgm::Point* mpCurrentNode;
 
     void defaultVisit(LayoutAtom const & rAtom);
@@ -52,6 +53,7 @@ public:
         mpParentShape(rParentShape),
         mrDgm(rDgm),
         mnCurrIdx(0),
+        mnCurrLevel(0),
         mpCurrentNode(rDgm.getData()->getRootPoint())
     {}
 };
@@ -78,6 +80,7 @@ class ShapeLayoutingVisitor : public LayoutAtomVisitor
 {
     std::vector<Constraint> maConstraints;
     enum {LAYOUT_NODE, CONSTRAINT, ALGORITHM} meLookFor;
+    sal_Int32 mnCurrLevel;
 
     void defaultVisit(LayoutAtom const & rAtom);
     virtual void visit(ConstraintAtom& rAtom) override;
@@ -90,7 +93,8 @@ class ShapeLayoutingVisitor : public LayoutAtomVisitor
 
 public:
     ShapeLayoutingVisitor() :
-        meLookFor(LAYOUT_NODE)
+        meLookFor(LAYOUT_NODE),
+        mnCurrLevel(0)
     {}
 };
 

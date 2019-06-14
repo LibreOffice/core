@@ -161,7 +161,8 @@ public:
     void addParam( sal_Int32 nType, sal_Int32 nVal )
         { maMap[nType]=nVal; }
     void layoutShape( const ShapePtr& rShape,
-                      const std::vector<Constraint>& rConstraints );
+                      const std::vector<Constraint>& rConstraints,
+                      sal_Int32 nShapeLevel );
 
     /// Gives access to <dgm:alg type="..."/>.
     sal_Int32 getType() const { return mnType; }
@@ -239,6 +240,7 @@ class LayoutNode
 {
 public:
     typedef std::map<sal_Int32, OUString> VarMap;
+    typedef std::map<sal_Int32, std::vector<ShapePtr>> ShapeLevelMap;
 
     LayoutNode(const Diagram& rDgm) : LayoutAtom(*this), mrDgm(rDgm), mnChildOrder(0) {}
     const Diagram& getDiagram() const
@@ -256,10 +258,10 @@ public:
         { mpExistingShape = pShape; }
     const ShapePtr& getExistingShape() const
         { return mpExistingShape; }
-    const std::vector<ShapePtr> & getNodeShapes() const
+    const ShapeLevelMap& getNodeShapes() const
         { return mpNodeShapes; }
-    void addNodeShape(const ShapePtr& pShape)
-        { mpNodeShapes.push_back(pShape); }
+    void addNodeShape(const ShapePtr& pShape, sal_Int32 nLevel)
+        { mpNodeShapes[nLevel].push_back(pShape); }
 
     bool setupShape( const ShapePtr& rShape,
                      const dgm::Point* pPresNode ) const;
@@ -276,7 +278,7 @@ private:
     OUString                     msMoveWith;
     OUString                     msStyleLabel;
     ShapePtr                     mpExistingShape;
-    std::vector<ShapePtr>        mpNodeShapes;
+    ShapeLevelMap                mpNodeShapes;
     sal_Int32                    mnChildOrder;
     std::weak_ptr<AlgAtom>       mpAlgAtom;
 };
