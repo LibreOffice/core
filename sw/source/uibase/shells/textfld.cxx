@@ -78,6 +78,12 @@
 #include <xmloff/odffields.hxx>
 #include <IDocumentContentOperations.hxx>
 #include <IDocumentUndoRedo.hxx>
+#include <svx/numfmtsh.hxx>
+#include <svl/zforlist.hxx>
+#include <svl/zformat.hxx>
+#include <IMark.hxx>
+#include <xmloff/odffields.hxx>
+
 
 using namespace nsSwDocInfoSubType;
 
@@ -725,7 +731,16 @@ FIELD_INSERT:
             if(pCursorPos)
             {
                 IDocumentMarkAccess* pMarksAccess = rSh.GetDoc()->getIDocumentMarkAccess();
-                pMarksAccess->makeNoTextFieldBookmark(*pCursorPos, OUString(), ODF_FORMDATE);
+                sw::mark::IFieldmark* pFieldBM = pMarksAccess->makeNoTextFieldBookmark(*pCursorPos, OUString(), ODF_FORMDATE);
+
+                // Use a default date format and language
+                sw::mark::IFieldmark::parameter_map_t* pParameters = pFieldBM->GetParameters();
+                SvNumberFormatter* pFormatter = rSh.GetDoc()->GetNumberFormatter();
+                sal_uInt32 nStandardFormat = pFormatter->GetStandardFormat(SvNumFormatType::DATE);
+                const SvNumberformat* pFormat = pFormatter->GetEntry(nStandardFormat);
+
+                (*pParameters)[ODF_FORMDATE_DATEFORMAT] <<= pFormat->GetFormatstring();
+                (*pParameters)[ODF_FORMDATE_DATEFORMAT_LANGUAGE] <<= LanguageTag(pFormat->GetLanguage()).getBcp47();
             }
 
             rSh.GetDoc()->GetIDocumentUndoRedo().EndUndo(SwUndoId::INSERT_FORM_FIELD, nullptr);

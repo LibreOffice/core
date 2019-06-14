@@ -11,18 +11,24 @@
 #include <vcl/event.hxx>
 #include <IMark.hxx>
 #include <xmloff/odffields.hxx>
+#include <svl/zforlist.hxx>
+#include <svl/zformat.hxx>
+#include <svx/numfmtsh.hxx>
+#include <doc.hxx>
 
 namespace sw
 {
-DateFormFieldDialog::DateFormFieldDialog(weld::Widget* pParent, mark::IFieldmark* pDateField)
+DateFormFieldDialog::DateFormFieldDialog(weld::Widget* pParent, mark::IFieldmark* pDateField,
+                                         SwDoc* pDoc)
     : GenericDialogController(pParent, "modules/swriter/ui/dateformfielddialog.ui",
                               "DateFormFieldDialog")
     , m_pDateField(pDateField)
+    , m_pNumberFormatter(pDoc->GetNumberFormatter())
     , m_xFormatLB(new SwNumFormatTreeView(m_xBuilder->weld_tree_view("date_formats_treeview")))
 {
-    m_xFormatLB->SetFormatType(SvNumFormatType::DATETIME);
-    m_xFormatLB->SetShowLanguageControl(true);
+    m_xFormatLB->SetFormatType(SvNumFormatType::DATE);
     m_xFormatLB->SetAutomaticLanguage(true);
+    m_xFormatLB->SetShowLanguageControl(true);
     m_xFormatLB->SetOneArea(true);
 
     // Set a default height
@@ -38,8 +44,12 @@ void DateFormFieldDialog::Apply()
 {
     if (m_pDateField != nullptr)
     {
-        mark::IFieldmark::parameter_map_t* pParameters = m_pDateField->GetParameters();
-        (*pParameters)[ODF_FORMDATE_DATEFORMAT] <<= m_xFormatLB->GetFormat();
+        const SvNumberformat* pFormat = m_pNumberFormatter->GetEntry(m_xFormatLB->GetFormat());
+        sw::mark::IFieldmark::parameter_map_t* pParameters = m_pDateField->GetParameters();
+        (*pParameters)[ODF_FORMDATE_DATEFORMAT] <<= pFormat->GetFormatstring();
+
+        LanguageType aLang = pFormat->GetLanguage();
+        (*pParameters)[ODF_FORMDATE_DATEFORMAT_LANGUAGE] <<= LanguageTag(aLang).getBcp47();
     }
 }
 
@@ -47,14 +57,41 @@ void DateFormFieldDialog::InitControls()
 {
     if (m_pDateField != nullptr)
     {
-        mark::IFieldmark::parameter_map_t* pParameters = m_pDateField->GetParameters();
+        sw::mark::IFieldmark::parameter_map_t* pParameters = m_pDateField->GetParameters();
 
+        OUString sFormatString;
         auto pResult = pParameters->find(ODF_FORMDATE_DATEFORMAT);
         if (pResult != pParameters->end())
         {
-            sal_uInt32 nDateFormat = 0;
-            pResult->second >>= nDateFormat;
-            m_xFormatLB->SetDefFormat(nDateFormat);
+            pResult->second >>= sFormatString;
+        }
+
+        OUString sLang;
+        pResult = pParameters->find(ODF_FORMDATE_DATEFORMAT_LANGUAGE);
+        if (pResult != pParameters->end())
+        {
+            pResult->second >>= sLang;
+        }
+
+        if (!sFormatString.isEmpty() && !sLang.isEmpty())
+        {
+            LanguageType aLangType = LanguageTag(sLang).getLanguageType();
+            sal_uInt32 nFormatKey = m_pNumberFormatter->GetEntryKey(sFormatString, aLangType);
+
+            if (m_xFormatLB->GetCurLanguage() == aLangType)
+            {
+                m_xFormatLB->SetAutomaticLanguage(true);
+            }
+            else
+            {
+                m_xFormatLB->SetAutomaticLanguage(false);
+                m_xFormatLB->SetLanguage(aLangType);
+
+                // Change format and change back for regenerating the list
+                m_xFormatLB->SetFormatType(SvNumFormatType::ALL);
+                m_xFormatLB->SetFormatType(SvNumFormatType::DATE);
+            }
+            m_xFormatLB->SetDefFormat(nFormatKey);
         }
     }
 }
