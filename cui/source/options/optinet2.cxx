@@ -48,6 +48,7 @@
 #include <unotools/securityoptions.hxx>
 #include <unotools/extendedsecurityoptions.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <dialmgr.hxx>
 #include "optinet2.hxx"
@@ -825,9 +826,9 @@ IMPL_LINK_NOARG(SvxSecurityTabPage, MacroSecPBHdl, Button*, void)
         xD->setParentWindow(VCLUnoHelper::GetInterface(GetParentDialog()));
         xD->manageTrustedSources();
     }
-    catch (const Exception& e)
+    catch (const Exception&)
     {
-        SAL_WARN( "cui.options", e);
+        TOOLS_WARN_EXCEPTION( "cui.options", "");
     }
 }
 
