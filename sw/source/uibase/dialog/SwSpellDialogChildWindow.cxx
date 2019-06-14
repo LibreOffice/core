@@ -383,7 +383,7 @@ The code below would only be part of the solution.
             if(m_pSpellState->m_xStartRange.is())
             {
                 LockFocusNotification( true );
-                std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetWindow()->GetFrameWeld(),
+                std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetController()->getDialog(),
                                                                                         VclMessageType::Question, VclButtonsType::YesNo, SwResId(STR_QUERY_SPELL_CONTINUE)));
                 sal_uInt16 nRet = xBox->run();
                 if (RET_YES == nRet)
@@ -411,10 +411,10 @@ The code below would only be part of the solution.
         {
             LockFocusNotification( true );
             OUString sInfo( SwResId( bNoDictionaryAvailable ? STR_DICTIONARY_UNAVAILABLE : STR_SPELLING_COMPLETED ) );
-            vcl::Window* pThisWindow = GetWindow();
+            auto xSpellController = GetController();
             // #i84610#
             std::unique_ptr<weld::MessageDialog> xBox(
-                Application::CreateMessageDialog( pThisWindow->GetFrameWeld(),
+                Application::CreateMessageDialog( xSpellController->getDialog(),
                                                   VclMessageType::Info,
                                                   VclButtonsType::Ok,
                                                   sInfo ) );
@@ -422,8 +422,7 @@ The code below would only be part of the solution.
             LockFocusNotification( false );
             // take care that the now valid selection is stored
             LoseFocus();
-            if( pThisWindow )
-                pThisWindow->GrabFocus();
+            xSpellController->getDialog()->grab_focus();
         }
     }
     return aRet;

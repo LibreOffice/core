@@ -1209,8 +1209,8 @@ void ScCellShell::GetState(SfxItemSet &rSet)
                         if ( pViewFrame && pViewFrame->HasChildWindow( nWhich ) )
                         {
                             SfxChildWindow* pChild = pViewFrame->GetChildWindow( nWhich );
-                            vcl::Window* pWin = ( pChild ? pChild->GetWindow() : nullptr );
-                            if ( pWin && pWin->IsVisible() )
+                            std::shared_ptr<SfxDialogController> xController = pChild ? pChild->GetController() : nullptr;
+                            if (xController && xController->getDialog()->get_visible())
                             {
                                 bVisible = true;
                             }
