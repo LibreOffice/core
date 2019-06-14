@@ -28,7 +28,7 @@ namespace basegfx
     /** Base class for all Points/Vectors with three sal_Int32 values
 
         This class provides all methods common to Point
-        avd Vector classes which are derived from here.
+        and Vector classes which are derived from here.
 
         @derive Use this class to implement Points or Vectors
         which are based on three sal_Int32 values
