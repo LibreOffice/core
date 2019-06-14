@@ -967,8 +967,8 @@ bool Dialog::ImplStartExecute()
 
         if ( GetParent() )
         {
-            NotifyEvent aNEvt( MouseNotifyEvent::EXECUTEDIALOG, this );
-            GetParent()->CompatNotify( aNEvt );
+            SalFrame* pFrame = GetParent()->ImplGetFrame();
+            pFrame->NotifyModalHierarchy(true);
         }
     }
 
@@ -1161,8 +1161,8 @@ void Dialog::EndDialog( long nResult )
 
     if (bModal && GetParent())
     {
-        NotifyEvent aNEvt( MouseNotifyEvent::ENDEXECUTEDIALOG, this );
-        GetParent()->CompatNotify( aNEvt );
+        SalFrame* pFrame = GetParent()->ImplGetFrame();
+        pFrame->NotifyModalHierarchy(false);
     }
 
     mpDialogImpl->mnResult = nResult;
