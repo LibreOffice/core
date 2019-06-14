@@ -408,10 +408,7 @@ void ToolbarsMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu > co
         }
 
         // Create commands for non-toolbars
-        if ( m_aModuleIdentifier == "com.sun.star.drawing.DrawingDocument" ||
-              m_aModuleIdentifier == "com.sun.star.presentation.PresentationDocument" )
-             addCommand( m_xPopupMenu, ".uno:ColorControl", "" );
-        else if ( m_aModuleIdentifier == "com.sun.star.sheet.SpreadsheetDocument" )
+        if ( m_aModuleIdentifier == "com.sun.star.sheet.SpreadsheetDocument" )
              addCommand( m_xPopupMenu, ".uno:InputLineVisible", "" );
 
         bool          bAddCommand( true );
