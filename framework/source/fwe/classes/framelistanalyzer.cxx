@@ -59,7 +59,7 @@ FrameListAnalyzer::~FrameListAnalyzer()
     frame wrong. Further we analyze this list and split into different parts.
     E.g. for "CloseDoc" we must know, which frames of the given list refer to the same model.
     These frames must be closed then. But all other frames must be untouched.
-    In case the request was "CloseWin" these splitted lists can be used too, to decide if the last window
+    In case the request was "CloseWin" these split lists can be used too, to decide if the last window
     or document was closed. Then we have to initialize the backing window...
     Last but not least we must know something about our special help frame. It must be handled
     separately. And last but not least - the backing component frame must be detected too.
