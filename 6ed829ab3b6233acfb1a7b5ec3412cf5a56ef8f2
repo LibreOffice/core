@@ -16,6 +16,24 @@
       "revId": "6ed829ab3b6233acfb1a7b5ec3412cf5a56ef8f2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_01e77314",
+        "filename": "include/tools/diagnose_ex.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-06-14T12:25:34Z",
+      "side": 1,
+      "message": "thanks, good spotting, patch at\n  https://gerrit.libreoffice.org/74042",
+      "parentUuid": "3fa0c359_41f33b0b",
+      "revId": "6ed829ab3b6233acfb1a7b5ec3412cf5a56ef8f2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
