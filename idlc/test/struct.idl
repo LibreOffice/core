@@ -45,19 +45,19 @@ struct BaseStruct
     /// a short  member
     short   m1;
 
-    /// a unsigned short  member
+    /// an unsigned short  member
     unsigned short  m2;
 
     /// a long member
     long    m3;
 
-    /// a unsigned long  member
+    /// an unsigned long  member
     unsigned long   m4;
 
     /// a hyper member
     hyper   m5;
 
-    /// a unsigned hyper  member
+    /// an unsigned hyper  member
     unsigned hyper  m6;
 
     /// a string member
@@ -81,7 +81,7 @@ struct BaseStruct
     /// a boolean member
     boolean m13;
 
-    /// a any member
+    /// an any member
     any     m14;
 };
 
