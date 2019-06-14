@@ -125,7 +125,7 @@ Reference< XInterface > SAL_CALL UIControllerFactory::createInstanceWithArgument
     OUString   aPropName;
     PropertyValue   aPropValue;
 
-    // Retrieve the optional module name form the Arguments sequence. It is used as a part of
+    // Retrieve the optional module name from the Arguments sequence. It is used as a part of
     // the hash map key to support different controller implementation for the same URL but different
     // module!!
     for ( int i = 0; i < Arguments.getLength(); i++ )
