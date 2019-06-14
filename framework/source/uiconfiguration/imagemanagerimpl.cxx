@@ -884,7 +884,7 @@ void ImageManagerImpl::removeImages( ::sal_Int16 nImageType, const Sequence< OUS
 
                 if ( m_bUseGlobal )
                 {
-                    // Check, if we have a image in our module/global image list. If we find one =>
+                    // Check, if we have an image in our module/global image list. If we find one =>
                     // this is a replace instead of a remove operation!
                     Image aNewImage = pDefaultImageList->getImageFromCommandURL( nIndex, aCommandURLSequence[i] );
                     if ( !aNewImage )
