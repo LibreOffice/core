@@ -135,7 +135,7 @@ void ShapeCreationVisitor::visit(LayoutNode& rAtom)
             pShape->setInternalName(rAtom.getName());
             if (AlgAtomPtr pAlgAtom = rAtom.getAlgAtom())
                 pShape->setAspectRatio(pAlgAtom->getAspectRatio());
-            rAtom.addNodeShape(pShape);
+            rAtom.addNodeShape(pShape, mnCurrLevel);
         }
     }
     else
@@ -148,9 +148,8 @@ void ShapeCreationVisitor::visit(LayoutNode& rAtom)
         {
             SAL_INFO(
                 "oox.drawingml",
-                "processing shape type "
-                    << (pShape->getCustomShapeProperties()
-                        ->getShapePresetType()));
+                "processing shape type " << (pShape->getCustomShapeProperties()->getShapePresetType())
+                << " level " << mnCurrLevel);
 
             if (rAtom.setupShape(pShape, pNewNode))
             {
@@ -159,7 +158,7 @@ void ShapeCreationVisitor::visit(LayoutNode& rAtom)
                     pShape->setAspectRatio(pAlgAtom->getAspectRatio());
                 pCurrParent->addChild(pShape);
                 pCurrParent = pShape;
-                rAtom.addNodeShape(pShape);
+                rAtom.addNodeShape(pShape, mnCurrLevel);
             }
         }
         else
@@ -174,11 +173,13 @@ void ShapeCreationVisitor::visit(LayoutNode& rAtom)
     // set new parent for children
     ShapePtr pPreviousParent(mpParentShape);
     mpParentShape=pCurrParent;
+    mnCurrLevel++;
 
     // process children
     defaultVisit(rAtom);
 
     // restore parent
+    mnCurrLevel--;
     mpParentShape=pPreviousParent;
     mpCurrentNode = pPreviousNode;
 
@@ -266,8 +267,10 @@ void ShapeLayoutingVisitor::visit(AlgAtom& rAtom)
 {
     if (meLookFor == ALGORITHM)
     {
-        for (const auto& pShape : rAtom.getLayoutNode().getNodeShapes())
-            rAtom.layoutShape(pShape, maConstraints);
+        auto pShapes = rAtom.getLayoutNode().getNodeShapes().find(mnCurrLevel);
+        if (pShapes != rAtom.getLayoutNode().getNodeShapes().end())
+            for (const auto& pShape : pShapes->second)
+                rAtom.layoutShape(pShape, maConstraints, mnCurrLevel);
     }
 }
 
@@ -291,6 +294,10 @@ void ShapeLayoutingVisitor::visit(LayoutNode& rAtom)
     if (meLookFor != LAYOUT_NODE)
         return;
 
+    // stop processing if there is no more shapes on this level
+    if (rAtom.getNodeShapes().empty() || mnCurrLevel > rAtom.getNodeShapes().rbegin()->first)
+        return;
+
     size_t nParentConstraintsNumber = maConstraints.size();
 
     // process alg atoms first, nested layout nodes afterwards
@@ -298,8 +305,11 @@ void ShapeLayoutingVisitor::visit(LayoutNode& rAtom)
     defaultVisit(rAtom);
     meLookFor = ALGORITHM;
     defaultVisit(rAtom);
+
+    mnCurrLevel++;
     meLookFor = LAYOUT_NODE;
     defaultVisit(rAtom);
+    mnCurrLevel--;
 
     // delete added constraints, keep parent constraints
     maConstraints.erase(maConstraints.begin() + nParentConstraintsNumber, maConstraints.end());
