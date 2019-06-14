@@ -177,8 +177,8 @@ HandlerCFGAccess::HandlerCFGAccess( const OUString& sPackage )
 
 /**
     @short      use base class mechanism to fill given structures
-    @descr      User use us as a wrapper between configuration api and his internal structures.
-                He give us some pointer to his member and we fill it.
+    @descr      User use us as a wrapper between configuration api and its internal structures.
+                He give us some pointer to its member and we fill it.
 
     @param      rHandlerHash
                 list of protocol handler infos
@@ -227,7 +227,7 @@ void HandlerCFGAccess::read( HandlerHash& rHandlerHash, PatternHash& rPatternHas
         lValues[nTarget] >>= lTemp;
         aHandler.m_lProtocols = Converter::convert_seqOUString2OUStringList(lTemp);
 
-        // register his pattern into the performance search hash
+        // register its pattern into the performance search hash
         for (auto const& item : aHandler.m_lProtocols)
         {
             rPatternHash[item] = lNames[nSource];
