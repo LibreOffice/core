@@ -367,10 +367,10 @@ void LoadEnv::startLoading()
     if (m_eContentType != E_CAN_BE_SET)/* Attention: special feature to set existing component on a frame must ignore type detection! */
         impl_detectTypeAndFilter();
 
-    // start loading the content ...
+    // start loading the content...
     // Attention: Don't check m_eContentType deeper then UNSUPPORTED/SUPPORTED!
-    // Because it was made in the easiest way ... may a flat detection was made only.
-    // And such simple detection can fail some times .-)
+    // Because it was made in the easiest way... may a flat detection was made only.
+    // And such simple detection can fail sometimes .-)
     // Use another strategy here. Try it and let it run into the case "loading not possible".
     bool bStarted = false;
     if (
@@ -1081,7 +1081,7 @@ bool LoadEnv::impl_loadContent()
     css::uno::Reference< css::document::XActionLockable > xTargetLock(xTargetFrame, css::uno::UNO_QUERY);
     m_aTargetLock.setResource(xTargetLock);
 
-    // Add status indicator to descriptor. Loader can show an progresses then.
+    // Add status indicator to descriptor. Loader can show a progress then.
     // But don't do it, if loading should be hidden or preview is used ...!
     // So we prevent our code against wrong using. Why?
     // It could be, that using of this progress could make trouble. e.g. He make window visible ...
@@ -1293,11 +1293,11 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchAlreadyLoaded()
 
     // Note: To detect if a document was already loaded before
     // we check URLs here only. But might the existing and the required
-    // document has different versions! Then its URLs are the same ...
+    // document has different versions! Then its URLs are the same...
     sal_Int16 nNewVersion = m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_VERSION(), sal_Int16(-1));
 
     // will be used to save the first hidden frame referring the searched model
-    // Normally we are interested on visible frames ... but if there is no such visible
+    // Normally we are interested on visible frames... but if there is no such visible
     // frame we refer to any hidden frame also (but as fallback only).
     css::uno::Reference< css::frame::XFrame > xHiddenTask;
     css::uno::Reference< css::frame::XFrame > xTask;
@@ -1412,8 +1412,8 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchRecycleTarget()
 
     // The special backing mode frame will be recycled by definition!
     // It doesn't matter if somewhere wants to create a new view
-    // or open a new untitled document ...
-    // The only exception form that - hidden frames!
+    // or open a new untitled document...
+    // The only exception from that - hidden frames!
     if (m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_HIDDEN(), false))
         return css::uno::Reference< css::frame::XFrame >();
 
@@ -1423,7 +1423,7 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchRecycleTarget()
     {
         if (!impl_isFrameAlreadyUsedForLoading(aTasksAnalyzer.m_xBackingComponent))
         {
-            // bring it to front ...
+            // bring it to front...
             impl_makeFrameWindowVisible(aTasksAnalyzer.m_xBackingComponent->getContainerWindow(), true);
             m_bReactivateControllerOnError = true;
             return aTasksAnalyzer.m_xBackingComponent;
