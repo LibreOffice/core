@@ -1929,7 +1929,7 @@ class ExitTimer : public Timer
     }
     virtual void Invoke() override
     {
-        exit(42);
+        _exit(42);
     }
 };
 
