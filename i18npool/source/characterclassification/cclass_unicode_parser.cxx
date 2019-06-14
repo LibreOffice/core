@@ -704,7 +704,7 @@ void cclass_Unicode::parseText( ParseResult& r, const OUString& rText, sal_Int32
     assert(r.LeadingWhiteSpace == 0);
     eState = ssGetChar;
 
-    //! All the variables below (plus ParseResult) have to be resetted on ssRewindFromValue!
+    //! All the variables below (plus ParseResult) have to be reset on ssRewindFromValue!
     OUStringBuffer aSymbol;
     bool isFirst(true);
     sal_Int32 index(nPos); // index of next code point after current
@@ -717,7 +717,7 @@ void cclass_Unicode::parseText( ParseResult& r, const OUString& rText, sal_Int32
     bool bMightBeWord = true;
     bool bMightBeWordLast = true;
     bool bDecSepAltUsed = false;
-    //! All the variables above (plus ParseResult) have to be resetted on ssRewindFromValue!
+    //! All the variables above (plus ParseResult) have to be reset on ssRewindFromValue!
     sal_Int32 nextCharIndex(nPos); // == index of nextChar
 
     while ((current != 0) && (eState != ssStop))
