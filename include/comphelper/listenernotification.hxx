@@ -37,7 +37,7 @@ namespace comphelper
 
     /** abstract base class which manages a listener container, including
         THB's listener notification pattern which cares for removing listeners
-        which throw an DisposedException upon notification
+        which throw a DisposedException upon notification
 
         Using this class is pretty easy:
         <ul>
