@@ -5246,7 +5246,17 @@ bool ScGridWindow::GetEditUrl( const Point& rPos,
         if (sURL.isEmpty())
             pTextObj = aCell.mpFormula->CreateURLObject();
         else
-            pTextObj = ScEditUtil::CreateURLObjectFromURL(rDoc, sURL, sURL);
+        {
+            OUString aRepres = sURL;
+
+          //TODO: separate text content of number formats
+            if (aCell.hasNumeric())
+                aRepres = OUString::number(aCell.getValue());
+            else if (aCell.meType == CELLTYPE_FORMULA)
+                aRepres = aCell.mpFormula->GetString().getString();
+
+            pTextObj = ScEditUtil::CreateURLObjectFromURL(rDoc, sURL, aRepres);
+        }
 
         if (pTextObj)
             pEngine->SetText(*pTextObj);
@@ -5271,8 +5281,7 @@ bool ScGridWindow::GetEditUrl( const Point& rPos,
     // There is one glitch when dealing with a hyperlink cell and
     // the cell content is NUMERIC. This defaults to right aligned and
     // we need to adjust accordingly.
-    if (aCell.meType == CELLTYPE_FORMULA && aCell.mpFormula->IsValue() &&
-        eHorJust == SvxCellHorJustify::Standard)
+    if (aCell.hasNumeric() && eHorJust == SvxCellHorJustify::Standard)
     {
         aLogicEdit.SetRight( aLogicEdit.Left() + nThisColLogic - 1 );
         aLogicEdit.SetLeft(  aLogicEdit.Right() - nTextWidth );
