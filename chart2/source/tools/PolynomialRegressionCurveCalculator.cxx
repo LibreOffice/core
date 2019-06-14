@@ -70,7 +70,10 @@ void SAL_CALL PolynomialRegressionCurveCalculator::recalculateRegression(
         yVector[i] = yValue;
         yAverage += yValue;
     }
-    yAverage /= aNoValues;
+    if (aNoValues != 0)
+    {
+        yAverage /= aNoValues;
+    }
 
     for(sal_Int32 j = 0; j < aNoPowers; j++)
     {
