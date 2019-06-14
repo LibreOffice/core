@@ -503,7 +503,7 @@ void XFrameImpl::initListeners()
     OFrames* pFramesHelper = new OFrames( this, &m_aChildFrameContainer );
     m_xFramesHelper.set( static_cast< ::cppu::OWeakObject* >(pFramesHelper), css::uno::UNO_QUERY );
 
-    // Initialize a the drop target listener.
+    // Initialize the drop target listener.
     // We hold member as reference ... not as pointer too!
     OpenFileDropTargetListener* pDropListener = new OpenFileDropTargetListener( m_xContext, this );
     m_xDropTargetListener.set( static_cast< ::cppu::OWeakObject* >(pDropListener), css::uno::UNO_QUERY );
@@ -748,7 +748,7 @@ void XFrameImpl::disableLayoutManager(const css::uno::Reference< css::frame::XLa
     @short      initialize frame instance
     @descr      A frame needs a window. This method set a new one ... but should called one times only!
                 We use this window to listen for window events and forward it to our set component.
-                Its used as parent of component window too.
+                It's used as parent of component window too.
 
     @seealso    method getContainerWindow()
     @seealso    method setComponent()
@@ -1434,7 +1434,7 @@ sal_Bool SAL_CALL XFrameImpl::setComponent(const css::uno::Reference< css::awt::
 {
 
     // Ignore this HACK of sfx2!
-    // He call us with an valid controller without a valid window... that's not allowed!
+    // He call us with a valid controller without a valid window... that's not allowed!
     if  ( xController.is() && ! xComponentWindow.is() )
         return true;
 
@@ -2122,7 +2122,7 @@ void SAL_CALL XFrameImpl::disposing()
     xDispatchHelper.clear();
 
     // Don't show any dialogs, errors or something else any more!
-    // If somewhere called dispose() whitout close() before - normally no dialogs
+    // If somewhere called dispose() without close() before - normally no dialogs
     // should exist. Otherwise it's the problem of the outside caller.
     // Note:
     //      (a) Do it after stopWindowListening(). May that force some active/deactivate
@@ -3166,7 +3166,7 @@ void XFrameImpl::implts_stopWindowListening()
 }
 
 /*-****************************************************************************************************
-    @short      helper to force breaked close() request again
+    @short      helper to force broken close() request again
     @descr      If we self disagree with a close() request, and detect that all external locks are gone ...
                 then we must try to close this frame again.
 
@@ -3267,15 +3267,15 @@ void XFrameImpl::impl_checkMenuCloser()
         this,
         FrameAnalyzerFlags::Hidden | FrameAnalyzerFlags::Help | FrameAnalyzerFlags::BackingComponent);
 
-    // specify the new frame, which must have this special state ...
+    // specify the new frame, which must have this special state...
     css::uno::Reference< css::frame::XFrame2 > xNewCloserFrame;
 
     // a)
-    // If there exist ate least one other frame - there are two frames currently open.
+    // If there exist at least one other frame - there are two frames currently open.
     // But we can enable this closer only, if one of these two tasks includes the help module.
     // The "other frame" couldn't be the help. Because then it wouldn't be part of this "other list".
     // In such case it will be separated to the reference aAnalyzer.m_xHelp!
-    // But we must check, if weself includes the help ...
+    // But we must check, if weself includes the help...
     // Check aAnalyzer.m_bReferenceIsHelp!
     if (
         (aAnalyzer.m_lOtherVisibleFrames.size()==1)   &&
