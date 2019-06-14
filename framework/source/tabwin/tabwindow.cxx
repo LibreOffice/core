@@ -835,7 +835,7 @@ css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL TabWindow::getPrope
 const css::uno::Sequence< css::beans::Property > TabWindow::impl_getStaticPropertyDescriptor()
 {
     // Create property array to initialize sequence!
-    // Table of all predefined properties of this class. Its used from OPropertySetHelper-class!
+    // Table of all predefined properties of this class. It's used from OPropertySetHelper-class!
     // Don't forget to change the defines (see begin of this file), if you add, change or delete a property in this list!!!
     // It's necessary for methods of OPropertySetHelper.
     // ATTENTION:
