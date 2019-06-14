@@ -135,7 +135,7 @@ namespace comphelper
 
         <p>AccessibleEvents fired by the inner context are multiplexed, especially, any references to
         children in such events are translated. This means that even in such events, no un-wrapped object
-        will ever leave this class - if the aggregated context notifies an child event, the child passed
+        will ever leave this class - if the aggregated context notifies a child event, the child passed
         to the event is wrapped</p>
 
         @seealso OAccessibleContextWrapper
