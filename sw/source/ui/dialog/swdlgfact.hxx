@@ -652,7 +652,7 @@ public:
     virtual VclPtr<AbstractDropDownFieldDialog> CreateDropDownFieldDialog(weld::Widget* pParent, SwWrtShell &rSh,
         SwField* pField, bool bPrevButton, bool bNextButton) override;
     virtual VclPtr<VclAbstractDialog> CreateDropDownFormFieldDialog(weld::Widget* pParent, sw::mark::IFieldmark* pDropDownField) override;
-    virtual VclPtr<VclAbstractDialog> CreateDateFormFieldDialog(weld::Widget* pParent, sw::mark::IFieldmark* pDateField) override;
+    virtual VclPtr<VclAbstractDialog> CreateDateFormFieldDialog(weld::Widget* pParent, sw::mark::IFieldmark* pDateField, SwDoc* pDoc) override;
 
     virtual VclPtr<SfxAbstractTabDialog> CreateSwEnvDlg(weld::Window* pParent, const SfxItemSet& rSet, SwWrtShell* pWrtSh, Printer* pPrt, bool bInsert) override;
     virtual VclPtr<AbstractSwLabDlg> CreateSwLabDlg(weld::Window* pParent, const SfxItemSet& rSet,
