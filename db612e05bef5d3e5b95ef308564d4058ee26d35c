@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_c659a15a",
+        "filename": "vcl/qt5/Qt5Frame.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1134,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2019-06-14T08:56:46Z",
+      "side": 1,
+      "message": "maybe nicer to do the string operations with O(U)String and only convert to plain C string at the end?",
+      "range": {
+        "startLine": 1131,
+        "startChar": 0,
+        "endLine": 1134,
+        "endChar": 78
+      },
+      "revId": "db612e05bef5d3e5b95ef308564d4058ee26d35c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
