@@ -1612,7 +1612,10 @@ void TopLevelWindowLocker::incBusy(const weld::Window* pIgnore)
         pTopWin = Application::GetNextTopLevelWindow(pTopWin);
     }
     for (auto& a : aTopLevels)
+    {
         a->IncModalCount();
+        a->ImplGetFrame()->NotifyModalHierarchy(true);
+    }
     m_aBusyStack.push(aTopLevels);
 }
 
@@ -1624,6 +1627,7 @@ void TopLevelWindowLocker::decBusy()
         if (a->IsDisposed())
             continue;
         a->DecModalCount();
+        a->ImplGetFrame()->NotifyModalHierarchy(false);
     }
     m_aBusyStack.pop();
 }
