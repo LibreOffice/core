@@ -236,10 +236,16 @@ public:
 namespace svx{ class SpellDialog;}
 class AbstractSpellDialog_Impl : public AbstractSpellDialog
 {
- public:
-    DECL_ABSTDLG_BASE(AbstractSpellDialog_Impl, svx::SpellDialog)
-    virtual void        Invalidate() override;
-    virtual vcl::Window*     GetWindow() override;
+    std::shared_ptr<svx::SpellDialog> m_xDlg;
+public:
+    explicit AbstractSpellDialog_Impl(std::unique_ptr<svx::SpellDialog> p)
+        : m_xDlg(std::move(p))
+    {
+    }
+    virtual short Execute() override;
+    virtual bool StartExecuteAsync(AsyncContext &rCtx) override;
+    virtual void InvalidateDialog() override;
+    virtual std::shared_ptr<SfxDialogController> GetController() override;
     virtual SfxBindings& GetBindings() override;
 };
 
@@ -750,7 +756,7 @@ public:
                                                                      const SdrView* pSdrView,
                                                                      bool bSizeTabPage) override;
     virtual VclPtr<AbstractSpellDialog>  CreateSvxSpellDialog(
-                            vcl::Window* pParent,
+                            weld::Window* pParent,
                             SfxBindings* pBindings,
                             svx::SpellDialogChildWindow* pSpellChildWindow ) override;
 

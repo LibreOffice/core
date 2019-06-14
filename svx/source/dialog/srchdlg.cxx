@@ -523,9 +523,9 @@ void SvxSearchDialog::Close()
     rBindings.GetDispatcher()->Execute( FID_SEARCH_OFF, SfxCallMode::SLOT, ppArgs );
     rBindings.Invalidate(SID_SEARCH_DLG);
 
-    SfxViewShell* pViewShell = SfxViewShell::Current();
-    if (pViewShell)
-        pViewShell->GetViewFrame()->ToggleChildWindow(SID_SEARCH_DLG);
+    SfxViewFrame* pViewFrame = SfxViewFrame::Current();
+    if (pViewFrame)
+        pViewFrame->ToggleChildWindow(SID_SEARCH_DLG);
 }
 
 TransliterationFlags SvxSearchDialog::GetTransliterationFlags() const

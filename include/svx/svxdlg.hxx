@@ -99,8 +99,8 @@ class AbstractSpellDialog : public VclAbstractDialog
 protected:
     virtual ~AbstractSpellDialog() override = default;
 public:
-    virtual void        Invalidate() = 0;
-    virtual vcl::Window*     GetWindow()  = 0;
+    virtual void InvalidateDialog() = 0;
+    virtual std::shared_ptr<SfxDialogController> GetController() = 0;
     virtual SfxBindings& GetBindings() = 0;
 };
 
@@ -352,7 +352,7 @@ public:
 
     virtual VclPtr<AbstractSvxZoomDialog> CreateSvxZoomDialog(weld::Window* pParent, const SfxItemSet& rCoreSet) = 0;
 
-    virtual VclPtr<AbstractSpellDialog>   CreateSvxSpellDialog(vcl::Window* pParent,
+    virtual VclPtr<AbstractSpellDialog>   CreateSvxSpellDialog(weld::Window* pParent,
                                             SfxBindings* pBindings,
                                             svx::SpellDialogChildWindow* pSpellChildWindow )=0;
 
