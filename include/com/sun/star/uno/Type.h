@@ -179,7 +179,7 @@ public:
     */
     bool SAL_CALL operator == ( const Type & rType ) const
         { return ::typelib_typedescriptionreference_equals( _pType, rType._pType ); }
-    /** Unequality operator: Compares two types.
+    /** Inequality operator: Compares two types.
 
         @param rType another type
         @return false if both types refer the same type, true otherwise
