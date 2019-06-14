@@ -31,6 +31,7 @@
 #include <com/sun/star/util/SearchAlgorithms2.hpp>
 #include <unotools/textsearch.hxx>
 #include <sal/log.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <memory>
 #include <vector>
@@ -264,9 +265,9 @@ void CuiAboutConfigTabPage::FillItems(const Reference< XNameAccess >& xNameAcces
             xNextNameAccess.set(aNode, uno::UNO_QUERY);
             bNotLeaf = xNextNameAccess.is();
         }
-        catch (const RuntimeException& e)
+        catch (const RuntimeException&)
         {
-            SAL_WARN( "cui.options", "CuiAboutConfigTabPage: " << e);
+            TOOLS_WARN_EXCEPTION( "cui.options", "CuiAboutConfigTabPage");
         }
 
         if (bNotLeaf)

@@ -254,9 +254,9 @@ IMPL_LINK_NOARG(SvxJavaOptionsPage, AddHdl_Impl, Button*, void)
         else if ( xFolderPicker.is() && xFolderPicker->execute() == ExecutableDialogResults::OK )
             AddFolder( xFolderPicker->getDirectory() );
     }
-    catch (const Exception& e)
+    catch (const Exception&)
     {
-        SAL_WARN( "cui.options", "SvxJavaOptionsPage::AddHdl_Impl(): " << e);
+        TOOLS_WARN_EXCEPTION( "cui.options", "SvxJavaOptionsPage::AddHdl_Impl()");
     }
 }
 

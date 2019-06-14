@@ -11,6 +11,7 @@
 #include <svx/svxdlg.hxx>
 #include <comphelper/sequence.hxx>
 #include <sal/log.hxx>
+#include <tools/diagnose_ex.h>
 #include <vcl/fixed.hxx>
 
 #include "tsaurls.hxx"
@@ -48,9 +49,9 @@ TSAURLsDialog::TSAURLsDialog(weld::Window* pParent)
             }
         }
     }
-    catch (const uno::Exception &e)
+    catch (const uno::Exception &)
     {
-        SAL_WARN("cui.options", "TSAURLsDialog::TSAURLsDialog(): " << e);
+        TOOLS_WARN_EXCEPTION("cui.options", "TSAURLsDialog::TSAURLsDialog()");
     }
 
     if (m_xURLListBox->get_selected_index() == -1)
