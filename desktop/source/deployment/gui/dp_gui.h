@@ -25,10 +25,6 @@
 #include <rtl/ref.hxx>
 #include <rtl/instance.hxx>
 #include <osl/thread.hxx>
-#include <vcl/svapp.hxx>
-#include <vcl/dialog.hxx>
-#include <vcl/button.hxx>
-#include <vcl/fixed.hxx>
 #include <salhelper/simplereferenceobject.hxx>
 #include <com/sun/star/ucb/XContentEventListener.hpp>
 #include <osl/mutex.hxx>
@@ -51,15 +47,9 @@ namespace com { namespace sun { namespace star {
     }
 } } }
 
-namespace svt {
-    class FixedHyperlink;
-}
-
 namespace dp_gui {
 
 enum PackageState { REGISTERED, NOT_REGISTERED, AMBIGUOUS, NOT_AVAILABLE };
-
-
 
 } // namespace dp_gui
 

@@ -21,10 +21,6 @@
 #define INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_GUI_DP_GUI_UPDATEINSTALLDIALOG_HXX
 
 #include <sal/config.h>
-#include <vcl/button.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/dialog.hxx>
-#include <vcl/prgsbar.hxx>
 #include <vcl/weld.hxx>
 #include <rtl/ref.hxx>
 #include <vector>
