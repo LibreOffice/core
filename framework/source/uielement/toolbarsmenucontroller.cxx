@@ -420,8 +420,6 @@ void ToolbarsMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu > co
                 addCommand( m_xPopupMenu, ".uno:ColorControl", "" );
             else if ( m_aModuleIdentifier == "com.sun.star.sheet.SpreadsheetDocument" )
                 addCommand( m_xPopupMenu, ".uno:InputLineVisible", "" );
-            else
-                addCommand( m_xPopupMenu, ".uno:InsertFormula", "" );
         }
 
         bool          bAddCommand( true );
