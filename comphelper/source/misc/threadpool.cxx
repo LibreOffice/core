@@ -100,8 +100,15 @@ ThreadPool::~ThreadPool()
     // note2: there isn't enough MSVCRT left on exit to call assert() properly
     // so these asserts just print something to stderr but exit status is
     // still 0, but hopefully they will be more helpful on non-WNT platforms
-    assert(mbTerminate);
     assert(maTasks.empty());
+    // If OOO_EXIT_POST_STARTUP is set, soffice is forced to terminate after startup.
+    // In particular ~ScDocument is not called, so threads in the threadpool do not
+    // get joined. So lets do that here.
+    const char *pExitPostStartup = getenv("OOO_EXIT_POST_STARTUP");
+    if (pExitPostStartup && *pExitPostStartup)
+        joinAll();
+    else
+        assert(mbTerminate);
 }
 
 struct ThreadPoolStatic : public rtl::StaticWithInit< std::shared_ptr< ThreadPool >,
