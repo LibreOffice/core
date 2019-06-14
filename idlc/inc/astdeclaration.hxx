@@ -39,7 +39,7 @@ enum NodeType
     NT_const,               // Denotes a constant
     NT_exception,           // Denotes an exception
     NT_attribute,           // Denotes an attribute
-    NT_property,            // Denotes an property
+    NT_property,            // Denotes a property
     NT_operation,           // Denotes an operation
     NT_parameter,           // Denotes an op. parameter
     NT_struct,              // Denotes either a plain struct type, or a
