@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_21d62fc5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-06-14T15:40:58Z",
+      "side": 1,
+      "message": "...\"as obtained by bin/get-bugzilla-attachments-by-mimetype\", I meant to write",
+      "range": {
+        "startLine": 10,
+        "startChar": 15,
+        "endLine": 10,
+        "endChar": 33
+      },
+      "revId": "f44d14e5f3909a4271034ba02da92ed2dee7b89c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
