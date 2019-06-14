@@ -19,6 +19,8 @@
 
 #pragma once
 
+#include <config_vclplug.h>
+
 #include <salframe.hxx>
 #include <vclpluginapi.h>
 
@@ -29,6 +31,22 @@
 #include <vcl/sysdata.hxx>
 
 #include <QtCore/QObject>
+
+#if QT5_USING_X11
+#include <unx/screensaverinhibitor.hxx>
+// any better way to get rid of the X11 / Qt type clashes?
+#undef Bool
+#undef CursorShape
+#undef Expose
+#undef KeyPress
+#undef KeyRelease
+#undef FocusIn
+#undef FocusOut
+#undef FontChange
+#undef None
+#undef Status
+#undef Unsorted
+#endif
 
 class Qt5DragSource;
 class Qt5DropTarget;
@@ -86,6 +104,10 @@ class VCLPLUG_QT5_PUBLIC Qt5Frame : public QObject, public SalFrame
     bool m_bFullScreenSpanAll;
     sal_uInt32 m_nRestoreScreen;
     QRect m_aRestoreGeometry;
+
+#if QT5_USING_X11
+    ScreenSaverInhibitor m_ScreenSaverInhibitor;
+#endif
 
     void Center();
     Size CalcDefaultSize();
