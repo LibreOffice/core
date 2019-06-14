@@ -30,6 +30,7 @@
 #include <rtl/bootstrap.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
+#include <tools/diagnose_ex.h>
 #include <unotools/bootstrap.hxx>
 
 #include "userinstall.hxx"
@@ -146,8 +147,8 @@ Status create(OUString const & uri) {
 bool isCreated() {
     try {
         return officecfg::Setup::Office::ooSetupInstCompleted::get();
-    } catch (css::uno::Exception & e) {
-        SAL_WARN("desktop.app", "ignoring " << e);
+    } catch (const css::uno::Exception &) {
+        TOOLS_WARN_EXCEPTION("desktop.app", "ignoring");
         return false;
     }
 }

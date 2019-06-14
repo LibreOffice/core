@@ -36,6 +36,7 @@
 #include <rtl/bootstrap.hxx>
 #include <rtl/uri.hxx>
 #include <i18nlangtag/lang.h>
+#include <tools/diagnose_ex.h>
 #include <tools/urlobj.hxx>
 #include <osl/file.hxx>
 #include <osl/security.hxx>
@@ -205,8 +206,8 @@ void Migration::migrateSettingsIfNecessary()
     bool bResult = false;
     try {
         bResult = aImpl.doMigration();
-    } catch (const Exception& e) {
-        SAL_WARN( "desktop", "doMigration(): " << e);
+    } catch (const Exception&) {
+        TOOLS_WARN_EXCEPTION( "desktop", "doMigration()");
     }
     OSL_ENSURE(bResult, "Migration has not been successful");
 }
@@ -290,11 +291,10 @@ bool MigrationImpl::doMigration()
             uno::UNO_QUERY_THROW)->refresh();
 
         result = true;
-    } catch (css::uno::Exception & e) {
-        SAL_WARN(
+    } catch (const css::uno::Exception &) {
+        TOOLS_WARN_EXCEPTION(
             "desktop.migration",
-            "ignored Exception \"" << e
-            << "\" while migrating from version \"" << m_aInfo.productname
+            "ignored Exception while migrating from version \"" << m_aInfo.productname
             << "\" data \"" << m_aInfo.userdata << "\"");
     }
 
@@ -770,9 +770,8 @@ uno::Reference< XNameAccess > MigrationImpl::getConfigAccess(const sal_Char* pPa
         xNameAccess.set(
             theConfigProvider->createInstanceWithArguments(
                 sAccessSrvc, theArgs ), uno::UNO_QUERY_THROW );
-    } catch (const css::uno::Exception& e) {
-        SAL_WARN(
-            "desktop.migration", "ignoring Exception \"" << e << "\"");
+    } catch (const css::uno::Exception&) {
+        TOOLS_WARN_EXCEPTION("desktop.migration", "ignoring");
     }
     return xNameAccess;
 }
@@ -847,10 +846,9 @@ void MigrationImpl::runServices()
                 xMigrationJob->execute(uno::Sequence< NamedValue >());
 
 
-            } catch (const Exception& e) {
-                SAL_WARN( "desktop", "Execution of migration service failed (Exception caught).\nService: "
-                            << rMigration.service
-                            << "\nMessage: " << e);
+            } catch (const Exception&) {
+                TOOLS_WARN_EXCEPTION( "desktop", "Execution of migration service failed. Service: "
+                            << rMigration.service);
             } catch (...) {
                 SAL_WARN( "desktop", "Execution of migration service failed (Exception caught).\nService: "
                             << rMigration.service << "\nNo message available");

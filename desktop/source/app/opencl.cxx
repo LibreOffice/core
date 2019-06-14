@@ -25,6 +25,7 @@
 #include <officecfg/Office/Common.hxx>
 
 #include <svl/documentlockfile.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <com/sun/star/table/XCell2.hpp>
 #include <com/sun/star/sheet/XCalculatable.hpp>
@@ -106,9 +107,9 @@ static bool testOpenCLCompute(const Reference< XDesktop2 > &xDesktop, const OUSt
             bSuccess = true;
         }
     }
-    catch (const css::uno::Exception &e)
+    catch (const css::uno::Exception &)
     {
-        SAL_WARN("opencl", "OpenCL testing failed - disabling: " << e);
+        TOOLS_WARN_EXCEPTION("opencl", "OpenCL testing failed - disabling");
     }
 
     if (nKernelFailures != openclwrapper::kernelFailures)
