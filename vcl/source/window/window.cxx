@@ -1766,6 +1766,11 @@ void Window::ImplNewInputContext()
         pFontInstance->Release();
 }
 
+void Window::SetModalHierarchyHdl(const Link<bool, void>& rLink)
+{
+    ImplGetFrame()->SetModalHierarchyHdl(rLink);
+}
+
 void Window::doLazyDelete()
 {
     SystemWindow* pSysWin = dynamic_cast<SystemWindow*>(this);

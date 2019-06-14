@@ -58,9 +58,9 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::beans;
 using ::com::sun::star::frame::XComponentLoader;
 
-
 class SfxFrameWindow_Impl : public vcl::Window
 {
+    DECL_LINK(ModalHierarchyHdl, bool, void);
 public:
     SfxFrame*           pFrame;
 
@@ -72,13 +72,21 @@ public:
     virtual bool        EventNotify( NotifyEvent& rEvt ) override;
     virtual void        Resize() override;
     virtual void        GetFocus() override;
+    virtual void        dispose() override;
     void                DoResize();
 };
 
-SfxFrameWindow_Impl::SfxFrameWindow_Impl( SfxFrame* pF, vcl::Window& i_rContainerWindow )
-        : Window( &i_rContainerWindow, WB_BORDER | WB_CLIPCHILDREN | WB_NODIALOGCONTROL | WB_3DLOOK )
-        , pFrame( pF )
+SfxFrameWindow_Impl::SfxFrameWindow_Impl(SfxFrame* pF, vcl::Window& i_rContainerWindow)
+    : Window(&i_rContainerWindow, WB_BORDER | WB_CLIPCHILDREN | WB_NODIALOGCONTROL | WB_3DLOOK)
+    , pFrame(pF)
 {
+    i_rContainerWindow.SetModalHierarchyHdl(LINK(this, SfxFrameWindow_Impl, ModalHierarchyHdl));
+}
+
+void SfxFrameWindow_Impl::dispose()
+{
+    GetParent()->SetModalHierarchyHdl(Link<bool, void>());
+    vcl::Window::dispose();
 }
 
 void SfxFrameWindow_Impl::DataChanged( const DataChangedEvent& rDCEvt )
@@ -116,18 +124,16 @@ bool SfxFrameWindow_Impl::EventNotify( NotifyEvent& rNEvt )
         if ( pView->GetViewShell()->KeyInput( *rNEvt.GetKeyEvent() ) )
             return true;
     }
-    else if ( rNEvt.GetType() == MouseNotifyEvent::EXECUTEDIALOG /*|| rNEvt.GetType() == MouseNotifyEvent::INPUTDISABLE*/ )
-    {
-        pView->SetModalMode( true );
-        return true;
-    }
-    else if ( rNEvt.GetType() == MouseNotifyEvent::ENDEXECUTEDIALOG /*|| rNEvt.GetType() == MouseNotifyEvent::INPUTENABLE*/ )
-    {
-        pView->SetModalMode( false );
-        return true;
-    }
 
     return Window::EventNotify( rNEvt );
+}
+
+IMPL_LINK(SfxFrameWindow_Impl, ModalHierarchyHdl, bool, bSetModal, void)
+{
+    SfxViewFrame* pView = pFrame->GetCurrentViewFrame();
+    if (!pView || !pView->GetObjectShell())
+        return;
+    pView->SetModalMode(bSetModal);
 }
 
 bool SfxFrameWindow_Impl::PreNotify( NotifyEvent& rNEvt )
