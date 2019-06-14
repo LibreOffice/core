@@ -21,11 +21,8 @@
 
 #include <memory>
 
-#undef Status
-
 #include <qt5/Qt5Frame.hxx>
 #include <qt5/Qt5SvpGraphics.hxx>
-#include <unx/screensaverinhibitor.hxx>
 
 class QWidget;
 
@@ -33,7 +30,6 @@ class KDE5SalFrame : public Qt5Frame
 {
 private:
     std::unique_ptr<Qt5SvpGraphics> m_pKDE5Graphics;
-    ScreenSaverInhibitor m_ScreenSaverInhibitor;
     bool m_bGraphicsInUse;
 
 public:
@@ -43,7 +39,6 @@ public:
     virtual void ReleaseGraphics(SalGraphics* pGraphics) override;
     virtual void UpdateSettings(AllSettings& rSettings) override;
 
-    virtual void StartPresentation(bool bStart) override;
     virtual LanguageType GetInputLanguage() override { return LANGUAGE_SYSTEM; }
     virtual SalPointerState GetPointerState() override { return SalPointerState(); }
     virtual KeyIndicatorState GetIndicatorState() override { return KeyIndicatorState(); }
