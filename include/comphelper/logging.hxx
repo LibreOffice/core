@@ -67,7 +67,7 @@ namespace comphelper
     class EventLogger_Impl;
     typedef ::boost::optional< OUString >    OptionalString;
 
-    /** encapsulates an css::logging::XLogger
+    /** encapsulates a css::logging::XLogger
 
         The class silences several (unlikely) errors which could potentially happen
         when working with a logger. Additionally, it provides some convenience methods
