@@ -337,7 +337,7 @@ css::uno::Sequence< css::beans::NamedValue > Job::impl_generateJobArgs( /*IN*/ c
     JobData::EMode eMode = m_aJobCfg.getMode();
 
     // Create list of environment variables. This list must be part of the
-    // returned structure every time... but some of its members are opetional!
+    // returned structure every time... but some of its members are optional!
     css::uno::Sequence< css::beans::NamedValue > lEnvArgs(1);
     lEnvArgs[0].Name = "EnvType";
     lEnvArgs[0].Value <<= m_aJobCfg.getEnvironmentDescriptor();
