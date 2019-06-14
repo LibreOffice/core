@@ -29,8 +29,6 @@ class VCL_DLLPUBLIC TabDialog : public Dialog
 {
 private:
     VclPtr<FixedLine>   mpFixedLine;
-    VclPtr<vcl::Window> mpViewWindow;
-    WindowAlign         meViewAlign;
     bool                mbPosControls;
 
     SAL_DLLPRIVATE void ImplInitTabDialogData();
