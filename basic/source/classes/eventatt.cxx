@@ -42,6 +42,7 @@
 #include <basic/basmgr.hxx>
 
 #include <sal/log.hxx>
+#include <tools/diagnose_ex.h>
 #include <vcl/svapp.hxx>
 #include <xmlscript/xmldlg_imexp.hxx>
 #include <sbunoobj.hxx>
@@ -118,13 +119,13 @@ void SFURL_firing_impl( const ScriptEvent& aScriptEvent, Any* pRet, const Refere
                 *pRet = result;
             }
         }
-        catch ( const RuntimeException& re )
+        catch ( const RuntimeException& )
         {
-            SAL_INFO("basic", "Caught RuntimeException reason " << re);
+            TOOLS_INFO_EXCEPTION("basic", "" );
         }
-        catch ( const Exception& e )
+        catch ( const Exception& )
         {
-            SAL_INFO("basic", "Caught Exception reason " << e);
+            TOOLS_INFO_EXCEPTION("basic", "" );
         }
 
 }

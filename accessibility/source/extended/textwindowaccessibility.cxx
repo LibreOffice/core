@@ -29,6 +29,7 @@
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <vcl/window.hxx>
+#include <tools/diagnose_ex.h>
 #include <toolkit/helper/convert.hxx>
 #include <comphelper/sequence.hxx>
 
@@ -267,11 +268,9 @@ void SAL_CALL Paragraph::grabFocus()
     {
         m_xDocument->changeParagraphSelection(this, 0, 0);
     }
-    catch (const css::lang::IndexOutOfBoundsException & rEx)
+    catch (const css::lang::IndexOutOfBoundsException &)
     {
-        SAL_INFO("accessibility",
-                 "textwindowaccessibility.cxx: Paragraph::grabFocus: caught unexpected "
-                 << rEx);
+        TOOLS_INFO_EXCEPTION("accessibility", "Paragraph::grabFocus: caught unexpected");
     }
 }
 

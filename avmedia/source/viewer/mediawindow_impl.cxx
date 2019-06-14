@@ -31,6 +31,7 @@
 
 #include <sal/log.hxx>
 #include <comphelper/processfactory.hxx>
+#include <tools/diagnose_ex.h>
 #include <tools/urlobj.hxx>
 #include <unotools/securityoptions.hxx>
 #include <vcl/svapp.hxx>
@@ -224,9 +225,9 @@ uno::Reference< media::XPlayer > MediaWindowImpl::createPlayer(
             xPlayer.set( xManager->createPlayer( rURL ), uno::UNO_QUERY );
         else
             SAL_INFO( "avmedia", "failed to create media player service " << rManagerServName );
-    } catch ( const uno::Exception &e )
+    } catch ( const uno::Exception & )
     {
-        SAL_WARN( "avmedia", "couldn't create media player " << rManagerServName << ", " << e);
+        TOOLS_WARN_EXCEPTION( "avmedia", "couldn't create media player " << rManagerServName);
     }
     return xPlayer;
 }
