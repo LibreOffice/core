@@ -72,7 +72,7 @@ protected:
 
     virtual void ProcessEvent( SalUserEvent aEvent ) = 0;
     virtual void TriggerUserEventProcessing() = 0;
-    virtual void TriggerAllUserEventsProcessed() {};
+    virtual void TriggerAllUserEventsProcessed() {}
 
 public:
     SalUserEventList();
