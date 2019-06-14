@@ -77,7 +77,7 @@ namespace canvas
             the argument, checked here, on the UNO interface
             method. Counting starts at 0).
 
-            @throws an lang::IllegalArgumentException, if anything is wrong
+            @throws a lang::IllegalArgumentException, if anything is wrong
          */
         CANVASTOOLS_DLLPUBLIC void verifyInput( const css::geometry::AffineMatrix2D&   rMatrix,
                           const char*                                       pStr,
@@ -99,7 +99,7 @@ namespace canvas
             the argument, checked here, on the UNO interface
             method. Counting starts at 0).
 
-            @throws an lang::IllegalArgumentException, if anything is wrong
+            @throws a lang::IllegalArgumentException, if anything is wrong
          */
         CANVASTOOLS_DLLPUBLIC void verifyInput( const css::geometry::Matrix2D& rMatrix,
                           const char*                                   pStr,
@@ -121,7 +121,7 @@ namespace canvas
             the argument, checked here, on the UNO interface
             method. Counting starts at 0).
 
-            @throws an lang::IllegalArgumentException, if anything is wrong
+            @throws a lang::IllegalArgumentException, if anything is wrong
          */
         CANVASTOOLS_DLLPUBLIC void verifyInput( const css::geometry::RealPoint2D&  rPoint,
                           const char*                                       pStr,
@@ -143,7 +143,7 @@ namespace canvas
             the argument, checked here, on the UNO interface
             method. Counting starts at 0).
 
-            @throws an lang::IllegalArgumentException, if anything is wrong
+            @throws a lang::IllegalArgumentException, if anything is wrong
          */
         CANVASTOOLS_DLLPUBLIC void verifyInput( const css::geometry::RealBezierSegment2D&  rSegment,
                           const char*                                               pStr,
@@ -165,7 +165,7 @@ namespace canvas
             the argument, checked here, on the UNO interface
             method. Counting starts at 0).
 
-            @throws an lang::IllegalArgumentException, if anything is wrong
+            @throws a lang::IllegalArgumentException, if anything is wrong
          */
         CANVASTOOLS_DLLPUBLIC void verifyInput( const css::geometry::RealRectangle2D&  rRect,
                           const char*                                           pStr,
@@ -186,7 +186,7 @@ namespace canvas
             the argument, checked here, on the UNO interface
             method. Counting starts at 0).
 
-            @throws an lang::IllegalArgumentException, if anything is wrong
+            @throws a lang::IllegalArgumentException, if anything is wrong
          */
         CANVASTOOLS_DLLPUBLIC void verifyInput( const css::rendering::ViewState&   viewState,
                           const char*                                   pStr,
@@ -211,7 +211,7 @@ namespace canvas
             Minimal number of color components available in
             RenderState::DeviceColor
 
-            @throws an lang::IllegalArgumentException, if anything is wrong
+            @throws a lang::IllegalArgumentException, if anything is wrong
          */
         CANVASTOOLS_DLLPUBLIC void verifyInput( const css::rendering::RenderState& renderState,
                           const char*                                       pStr,
@@ -233,7 +233,7 @@ namespace canvas
             the argument, checked here, on the UNO interface
             method. Counting starts at 0).
 
-            @throws an lang::IllegalArgumentException, if anything is wrong
+            @throws a lang::IllegalArgumentException, if anything is wrong
          */
         CANVASTOOLS_DLLPUBLIC void verifyInput( const css::rendering::StrokeAttributes&    strokeAttributes,
                           const char*                                           pStr,
@@ -254,7 +254,7 @@ namespace canvas
             the argument, checked here, on the UNO interface
             method. Counting starts at 0).
 
-            @throws an lang::IllegalArgumentException, if anything is wrong
+            @throws a lang::IllegalArgumentException, if anything is wrong
          */
         CANVASTOOLS_DLLPUBLIC void verifyInput( const css::rendering::Texture&     texture,
                           const char*                                   pStr,
@@ -275,7 +275,7 @@ namespace canvas
             the argument, checked here, on the UNO interface
             method. Counting starts at 0).
 
-            @throws an lang::IllegalArgumentException, if anything is wrong
+            @throws a lang::IllegalArgumentException, if anything is wrong
          */
         CANVASTOOLS_DLLPUBLIC void verifyInput( const css::rendering::IntegerBitmapLayout&     bitmapLayout,
                           const char*                                               pStr,
@@ -296,7 +296,7 @@ namespace canvas
             the argument, checked here, on the UNO interface
             method. Counting starts at 0).
 
-            @throws an lang::IllegalArgumentException, if anything is wrong
+            @throws a lang::IllegalArgumentException, if anything is wrong
          */
         CANVASTOOLS_DLLPUBLIC void verifyInput( const css::rendering::FontRequest& fontRequest,
                           const char*                                       pStr,
@@ -317,7 +317,7 @@ namespace canvas
             the argument, checked here, on the UNO interface
             method. Counting starts at 0).
 
-            @throws an lang::IllegalArgumentException, if anything is wrong
+            @throws a lang::IllegalArgumentException, if anything is wrong
          */
         template< class Interface > void verifyInput(
             const css::uno::Reference< Interface >&                 rRef,
@@ -353,7 +353,7 @@ namespace canvas
             the argument, checked here, on the UNO interface
             method. Counting starts at 0).
 
-            @throws an lang::IllegalArgumentException, if anything is wrong
+            @throws a lang::IllegalArgumentException, if anything is wrong
          */
         template< typename SequenceContent > void verifyInput(
             const css::uno::Sequence< SequenceContent >&                rSequence,
