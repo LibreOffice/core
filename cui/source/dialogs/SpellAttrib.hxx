@@ -19,17 +19,12 @@
 #ifndef INCLUDED_CUI_SOURCE_DIALOGS_SPELLATTRIB_HXX
 #define INCLUDED_CUI_SOURCE_DIALOGS_SPELLATTRIB_HXX
 
-#include <vcl/txtattr.hxx>
 #include <i18nlangtag/lang.h>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/linguistic2/XProofreader.hpp>
 #include <tools/color.hxx>
-
-#define TEXTATTR_SPELL_ERROR            (TEXTATTR_USER_START + 1)
-#define TEXTATTR_SPELL_LANGUAGE         (TEXTATTR_USER_START + 2)
-#define TEXTATTR_SPELL_BACKGROUND       (TEXTATTR_USER_START + 3)
 
 namespace svx{
 struct SpellErrorDescription
@@ -61,16 +56,21 @@ struct SpellErrorDescription
         aLocale( rLocale ),
         xGrammarChecker( rxGrammarChecker ),
         aSuggestions( rSuggestions )
-        {
-            if( pDialogTitle )
-                sDialogTitle = *pDialogTitle;
-            if( pExplanation )
-                sExplanation = *pExplanation;
-            if( pExplanationURL )
-                sExplanationURL = *pExplanationURL;
-            if( pRuleId )
-                sRuleId = *pRuleId;
-        };
+    {
+        if( pDialogTitle )
+            sDialogTitle = *pDialogTitle;
+        if( pExplanation )
+            sExplanation = *pExplanation;
+        if( pExplanationURL )
+            sExplanationURL = *pExplanationURL;
+        if( pRuleId )
+            sRuleId = *pRuleId;
+    };
+
+    SpellErrorDescription()
+        : bIsGrammarError(false)
+    {
+    }
 
     bool operator==( const SpellErrorDescription& rDesc ) const
     {
@@ -86,54 +86,36 @@ struct SpellErrorDescription
                 sExplanationURL == rDesc.sExplanationURL &&
                 sRuleId == rDesc.sRuleId;
     }
+
+    css::uno::Sequence<css::uno::Any> toSequence() const
+    {
+        css::uno::Sequence<css::uno::Any> aEntries(9);
+        aEntries[0] <<= bIsGrammarError;
+        aEntries[1] <<= sErrorText;
+        aEntries[2] <<= sDialogTitle;
+        aEntries[3] <<= sExplanation;
+        aEntries[4] <<= sExplanationURL;
+        aEntries[5] <<= aLocale;
+        aEntries[6] <<= xGrammarChecker;
+        aEntries[7] <<= aSuggestions;
+        aEntries[8] <<= sRuleId;
+        return aEntries;
+    }
+
+    void fromSequence(const css::uno::Sequence<css::uno::Any>& rEntries)
+    {
+        rEntries[0] >>= bIsGrammarError;
+        rEntries[1] >>= sErrorText;
+        rEntries[2] >>= sDialogTitle;
+        rEntries[3] >>= sExplanation;
+        rEntries[4] >>= sExplanationURL;
+        rEntries[5] >>= aLocale;
+        rEntries[6] >>= xGrammarChecker;
+        rEntries[7] >>= aSuggestions;
+        rEntries[8] >>= sRuleId;
+    }
 };
 
-
-class SpellErrorAttrib : public TextAttrib
-{
-public:
-
-private:
-    SpellErrorDescription        m_aSpellErrorDescription;
-
-public:
-                            SpellErrorAttrib( const SpellErrorDescription& );
-
-    const SpellErrorDescription& GetErrorDescription() const { return m_aSpellErrorDescription; }
-
-
-    virtual void            SetFont( vcl::Font& rFont ) const override;
-    virtual std::unique_ptr<TextAttrib> Clone() const override;
-    virtual bool            operator==( const TextAttrib& rAttr ) const override;
-};
-
-
-class SpellLanguageAttrib : public TextAttrib
-{
-    LanguageType m_eLanguage;
-
-public:
-                            SpellLanguageAttrib(LanguageType eLanguage);
-
-    LanguageType            GetLanguage() const {return m_eLanguage;}
-
-    virtual void            SetFont( vcl::Font& rFont ) const override;
-    virtual std::unique_ptr<TextAttrib> Clone() const override;
-    virtual bool            operator==( const TextAttrib& rAttr ) const override;
-};
-
-
-class SpellBackgroundAttrib : public TextAttrib
-{
-    Color   m_aBackgroundColor;
-
-public:
-                            SpellBackgroundAttrib(const Color& rCol);
-
-    virtual void            SetFont( vcl::Font& rFont ) const override;
-    virtual std::unique_ptr<TextAttrib> Clone() const override;
-    virtual bool            operator==( const TextAttrib& rAttr ) const override;
-};
 }//namespace svx
 #endif
 

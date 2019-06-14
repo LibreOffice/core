@@ -337,6 +337,9 @@ class VCL_DLLPUBLIC Window : virtual public Container
 {
 protected:
     Link<Widget&, bool> m_aHelpRequestHdl;
+    Link<Widget&, void> m_aTopLevelFocusChangedHdl;
+
+    void signal_toplevel_focus_changed() { m_aTopLevelFocusChangedHdl.Call(*this); }
 
 public:
     virtual void set_title(const OUString& rTitle) = 0;
@@ -367,6 +370,10 @@ public:
     virtual css::uno::Reference<css::awt::XWindow> GetXWindow() = 0;
 
     void connect_help(const Link<Widget&, bool>& rLink) { m_aHelpRequestHdl = rLink; }
+    virtual void connect_toplevel_focus_changed(const Link<Widget&, void>& rLink)
+    {
+        m_aTopLevelFocusChangedHdl = rLink;
+    }
 
     virtual SystemEnvData get_system_data() const = 0;
 
@@ -1007,9 +1014,11 @@ public:
     virtual void insert_separator(int pos, const OUString& rId) = 0;
     void append_separator(const OUString& rId) { insert_separator(-1, rId); }
     virtual void remove_item(const OString& rId) = 0;
+    virtual void clear() = 0;
     virtual void set_item_sensitive(const OString& rIdent, bool bSensitive) = 0;
     virtual void set_item_active(const OString& rIdent, bool bActive) = 0;
     virtual void set_item_label(const OString& rIdent, const OUString& rLabel) = 0;
+    virtual OUString get_item_label(const OString& rIdent) const = 0;
     virtual void set_item_help_id(const OString& rIdent, const OString& rHelpId) = 0;
     virtual void set_item_visible(const OString& rIdent, bool bVisible) = 0;
     virtual OString get_item_help_id(const OString& rIdent) const = 0;
@@ -1096,6 +1105,7 @@ public:
     virtual void set_max_length(int nChars) = 0;
     // nEndPos can be -1 in order to select all text
     virtual void select_region(int nStartPos, int nEndPos) = 0;
+    // returns true if the selection has nonzero length
     virtual bool get_selection_bounds(int& rStartPos, int& rEndPos) = 0;
     virtual void replace_selection(const OUString& rText) = 0;
     // nCursorPos can be -1 to set to the end
