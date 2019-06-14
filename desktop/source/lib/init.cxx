@@ -5172,7 +5172,7 @@ static void lo_runLoop(LibreOfficeKit* /*pThis*/,
                        LibreOfficeKitWakeCallback pWakeCallback,
                        void* pData)
 {
-#ifdef IOS // Maybe ANDROID, too?
+#if defined(IOS) || defined(ANDROID)
     Application::GetSolarMutex().acquire();
 #endif
 
@@ -5183,7 +5183,7 @@ static void lo_runLoop(LibreOfficeKit* /*pThis*/,
         Application::UpdateMainThread();
         soffice_main();
     }
-#ifdef IOS // ANDROID, too?
+#if defined(IOS) || defined(ANDROID)
     vcl::lok::unregisterPollCallbacks();
     Application::ReleaseSolarMutex();
 #endif
