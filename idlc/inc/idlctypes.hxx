@@ -76,7 +76,7 @@ enum ParseState
     PS_ServiceBodySeen,     // Seen complete service body
     PS_ServiceMemberSeen,   // Seen a service member
     PS_ServiceIFHeadSeen,   // Seen an interface member header
-    PS_ServiceSHeadSeen,    // Seen an service member header
+    PS_ServiceSHeadSeen,    // Seen a service member header
 
     PS_SingletonSeen,       // Seen a SINGLETON keyword
     PS_SingletonIDSeen,     // Seen the singleton ID
