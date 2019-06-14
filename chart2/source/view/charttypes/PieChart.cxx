@@ -1107,7 +1107,7 @@ void PieChart::rearrangeLabelToAvoidOverlapIfRequested( const awt::Size& rPageSi
     if(!bMoveableFound)
         return;
 
-    double fPageDiagonaleLength = sqrt( double( rPageSize.Width*rPageSize.Width + rPageSize.Height*rPageSize.Height) );
+    double fPageDiagonaleLength = sqrt( double(rPageSize.Width)*double(rPageSize.Width) + double(rPageSize.Height)*double(rPageSize.Height) );
     if( fPageDiagonaleLength == 0.0 )
         return;
 
