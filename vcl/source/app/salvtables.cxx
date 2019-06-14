@@ -695,9 +695,9 @@ public:
 
 void SalInstanceWidget::HandleEventListener(VclWindowEvent& rEvent)
 {
-    if (rEvent.GetId() == VclEventId::WindowGetFocus || rEvent.GetId() == VclEventId::WindowActivate)
+    if (rEvent.GetId() == VclEventId::WindowGetFocus)
         m_aFocusInHdl.Call(*this);
-    else if (rEvent.GetId() == VclEventId::WindowLoseFocus || rEvent.GetId() == VclEventId::WindowDeactivate)
+    else if (rEvent.GetId() == VclEventId::WindowLoseFocus)
         m_aFocusOutHdl.Call(*this);
     else if (rEvent.GetId() == VclEventId::WindowResize)
         m_aSizeAllocateHdl.Call(m_xWidget->GetSizePixel());
@@ -1138,6 +1138,22 @@ public:
     virtual SystemEnvData get_system_data() const override
     {
         return *m_xWindow->GetSystemData();
+    }
+
+    virtual void connect_toplevel_focus_changed(const Link<weld::Widget&, void>& rLink) override
+    {
+        ensure_event_listener();
+        weld::Window::connect_toplevel_focus_changed(rLink);
+    }
+
+    virtual void HandleEventListener(VclWindowEvent& rEvent) override
+    {
+        if (rEvent.GetId() == VclEventId::WindowActivate || rEvent.GetId() == VclEventId::WindowDeactivate)
+        {
+            signal_toplevel_focus_changed();
+            return;
+        }
+        SalInstanceContainer::HandleEventListener(rEvent);
     }
 
     virtual ~SalInstanceWindow() override
@@ -1893,6 +1909,7 @@ public:
         m_xMenuButton->SetSelectHdl(LINK(this, SalInstanceMenuButton, MenuSelectHdl));
         if (PopupMenu* pMenu = m_xMenuButton->GetPopupMenu())
         {
+            pMenu->SetMenuFlags(MenuFlags::NoAutoMnemonics);
             const auto nCount = pMenu->GetItemCount();
             m_nLastId = nCount ? pMenu->GetItemId(nCount-1) : 0;
         }
@@ -1947,6 +1964,12 @@ public:
         pMenu->RemoveItem(pMenu->GetItemPos(pMenu->GetItemId(rId)));
     }
 
+    virtual void clear() override
+    {
+        PopupMenu* pMenu = m_xMenuButton->GetPopupMenu();
+        pMenu->Clear();
+    }
+
     virtual void set_item_active(const OString& rIdent, bool bActive) override
     {
         PopupMenu* pMenu = m_xMenuButton->GetPopupMenu();
@@ -1957,6 +1980,12 @@ public:
     {
         PopupMenu* pMenu = m_xMenuButton->GetPopupMenu();
         pMenu->SetItemText(pMenu->GetItemId(rIdent), rText);
+    }
+
+    virtual OUString get_item_label(const OString& rIdent) const override
+    {
+        PopupMenu* pMenu = m_xMenuButton->GetPopupMenu();
+        return pMenu->GetItemText(pMenu->GetItemId(rIdent));
     }
 
     virtual void set_item_visible(const OString& rIdent, bool bShow) override
