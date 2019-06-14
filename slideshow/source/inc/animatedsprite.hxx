@@ -150,7 +150,6 @@ namespace slideshow
             double                                                      mnAlpha;
             ::boost::optional< ::basegfx::B2DPoint >                    maPosPixel;
             ::boost::optional< ::basegfx::B2DPolyPolygon >              maClip;
-            ::boost::optional< ::basegfx::B2DHomMatrix >                maTransform;
 
             bool                                                        mbSpriteVisible;
         };

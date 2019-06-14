@@ -91,7 +91,6 @@ class SVX_DLLPUBLIC SvxRuler: public Ruler, public SfxListener
     std::unique_ptr<SvxLongULSpaceItem> mxULSpaceItem;    // upper and lower edge
     std::unique_ptr<SvxTabStopItem>     mxTabStopItem;    // tab stops
     std::unique_ptr<SvxLRSpaceItem>     mxParaItem;       // paragraphs
-    std::unique_ptr<SvxLRSpaceItem>     mxParaBorderItem; // border distance
     std::unique_ptr<SvxPagePosSizeItem> mxPagePosItem;    // page distance to the rule
     std::unique_ptr<SvxColumnItem>      mxColumnItem;     // columns
     std::unique_ptr<SvxObjectItem>      mxObjectItem;     // object
@@ -141,7 +140,7 @@ class SVX_DLLPUBLIC SvxRuler: public Ruler, public SfxListener
     // paragraph indentations
     void UpdatePara(const SvxLRSpaceItem* pItem);
     // Border distance
-    void UpdateParaBorder(const SvxLRSpaceItem* pItem);
+    void UpdateParaBorder();
     // Tabs
     void Update(const SvxTabStopItem* pItem);
     // page position and width

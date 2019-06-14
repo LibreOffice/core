@@ -62,7 +62,7 @@ void QProToSc::ReadSRD( ScSingleRefData& rSRD, sal_Int8 nPage, sal_Int8 nCol, sa
 }
 
 QProToSc::QProToSc( SvStream& rStream, svl::SharedStringPool& rSPool, const ScAddress& rRefPos ) :
-    ConverterBase(rSPool, 128),
+    ConverterBase(rSPool),
     maIn( rStream )
 {
     aEingPos = rRefPos;

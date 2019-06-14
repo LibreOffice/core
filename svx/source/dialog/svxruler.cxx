@@ -947,15 +947,11 @@ void SvxRuler::UpdatePara(const SvxLRSpaceItem *pItem) // new value of paragraph
     }
 }
 
-void SvxRuler::UpdateParaBorder(const SvxLRSpaceItem * pItem )
+void SvxRuler::UpdateParaBorder()
 {
     /* Border distance */
     if(bActive)
     {
-        if(pItem)
-            mxParaBorderItem.reset(new SvxLRSpaceItem(*pItem));
-        else
-            mxParaBorderItem.reset();
         StartListening_Impl();
     }
 }

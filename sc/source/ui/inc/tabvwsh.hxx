@@ -122,7 +122,6 @@ private:
     Point                   aWinPos;
 
     ScTabViewTarget         aTarget;
-    std::unique_ptr<ScArea>     pPivotSource;
     std::unique_ptr<ScDPObject> pDialogDPObject;
 
     std::unique_ptr<ScNavigatorSettings> pNavSettings;

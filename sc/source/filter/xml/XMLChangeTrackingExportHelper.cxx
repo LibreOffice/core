@@ -45,7 +45,6 @@ ScChangeTrackingExportHelper::ScChangeTrackingExportHelper(ScXMLExport& rTempExp
     pEditTextObj(nullptr)
 {
     pChangeTrack = rExport.GetDocument() ? rExport.GetDocument()->GetChangeTrack() : nullptr;
-    pDependings.reset( new ScChangeActionMap );
 }
 
 ScChangeTrackingExportHelper::~ScChangeTrackingExportHelper()

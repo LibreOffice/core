@@ -136,7 +136,6 @@ SfxModalDialog::~SfxModalDialog()
 void SfxModalDialog::dispose()
 {
     SetDialogData_Impl();
-    pOutputSet.reset();
 
     ModalDialog::dispose();
 }
@@ -154,8 +153,6 @@ void SfxModelessDialog::StateChanged( StateChangedType nStateChange )
             Point aPos = GetPosPixel();
             if ( !aPos.X() )
             {
-                aSize = GetSizePixel();
-
                 Size aParentSize = GetParent()->GetOutputSizePixel();
                 Size aDlgSize = GetSizePixel();
                 aPos.AdjustX(( aParentSize.Width() - aDlgSize.Width() ) / 2 );
@@ -223,8 +220,6 @@ IMPL_LINK_NOARG(SfxModelessDialog, TimerHdl, Timer *, void)
     pImpl->aMoveIdle.Stop();
     if ( pImpl->bConstructed && pImpl->pMgr )
     {
-        if ( !IsRollUp() )
-            aSize = GetSizePixel();
         WindowStateMask nMask = WindowStateMask::Pos | WindowStateMask::State;
         if ( GetStyle() & WB_SIZEABLE )
             nMask |= WindowStateMask::Width | WindowStateMask::Height;

@@ -181,14 +181,12 @@ void Shell::CopyDialogResources(
 }
 
 // OrganizeDialog
-OrganizeDialog::OrganizeDialog(weld::Window* pParent, sal_Int16 tabId,
-    EntryDescriptor const & rDesc )
+OrganizeDialog::OrganizeDialog(weld::Window* pParent, sal_Int16 tabId )
     : GenericDialogController(pParent, "modules/BasicIDE/ui/organizedialog.ui", "OrganizeDialog")
     , m_xTabCtrl(m_xBuilder->weld_notebook("tabcontrol"))
     , m_xModulePage(new ObjectPage(m_xTabCtrl->get_page("modules"), "ModulePage", BrowseMode::Modules, this))
     , m_xDialogPage(new ObjectPage(m_xTabCtrl->get_page("dialogs"), "DialogPage", BrowseMode::Dialogs, this))
     , m_xLibPage(new LibPage(m_xTabCtrl->get_page("libraries"), this))
-    , m_aCurEntry(rDesc)
 {
     m_xTabCtrl->connect_enter_page(LINK(this, OrganizeDialog, ActivatePageHdl));
 

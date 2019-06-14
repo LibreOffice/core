@@ -1932,11 +1932,6 @@ void SvxLightCtl3D::move( double fDeltaHor, double fDeltaVer )
     maLightControl->SetPosition(fHor, fVer);
     maHorScroller->SetThumbPos( sal_Int32(fHor * 100.0) );
     maVerScroller->SetThumbPos( 18000 - sal_Int32((fVer + 90.0) * 100.0) );
-
-    if(maUserInteractiveChangeCallback.IsSet())
-    {
-        maUserInteractiveChangeCallback.Call(this);
-    }
 }
 
 void SvxLightCtl3D::KeyInput( const KeyEvent& rKEvt )
@@ -2083,11 +2078,6 @@ IMPL_LINK_NOARG(SvxLightCtl3D, ScrollBarMove, ScrollBar*, void)
     maLightControl->SetPosition(
         static_cast<double>(nHor) / 100.0,
         static_cast<double>((18000 - nVer) - 9000) / 100.0);
-
-    if(maUserInteractiveChangeCallback.IsSet())
-    {
-        maUserInteractiveChangeCallback.Call(this);
-    }
 }
 
 IMPL_LINK_NOARG(SvxLightCtl3D, ButtonPress, Button*, void)
@@ -2109,11 +2099,6 @@ IMPL_LINK_NOARG(SvxLightCtl3D, InternalInteractiveChange, Svx3DLightControl*, vo
     maLightControl->GetPosition(fHor, fVer);
     maHorScroller->SetThumbPos( sal_Int32(fHor * 100.0) );
     maVerScroller->SetThumbPos( 18000 - sal_Int32((fVer + 90.0) * 100.0) );
-
-    if(maUserInteractiveChangeCallback.IsSet())
-    {
-        maUserInteractiveChangeCallback.Call(this);
-    }
 }
 
 IMPL_LINK_NOARG(SvxLightCtl3D, InternalSelectionChange, Svx3DLightControl*, void)

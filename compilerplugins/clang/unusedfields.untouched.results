@@ -10,6 +10,10 @@ avmedia/source/vlc/wrapper/Types.hxx:47
     libvlc_event_t u union (anonymous union at /media/noel/disk2/libo5/avmedia/source/vlc/wrapper/Types.hxx:41:5)
 avmedia/source/vlc/wrapper/Types.hxx:53
     libvlc_track_description_t psz_name char *
+basctl/source/basicide/moduldlg.hxx:113
+    basctl::OrganizePage m_xContainer std::unique_ptr<weld::Container>
+basctl/source/basicide/moduldlg.hxx:204
+    basctl::OrganizeDialog m_aCurEntry class basctl::EntryDescriptor
 basctl/source/inc/dlged.hxx:122
     basctl::DlgEditor pObjFac std::unique_ptr<DlgEdFactory, o3tl::default_delete<DlgEdFactory> >
 basic/qa/cppunit/basictest.hxx:27
@@ -160,11 +164,11 @@ include/oox/vml/vmlshapecontext.hxx:116
     oox::vml::ShapeTypeContext m_pShapeType std::shared_ptr<ShapeType>
 include/registry/registry.hxx:35
     Registry_Api acquire void (*)(RegHandle)
-include/sfx2/dinfdlg.hxx:478
+include/sfx2/dinfdlg.hxx:477
     CmisValue m_xFrame std::unique_ptr<weld::Frame>
-include/sfx2/dinfdlg.hxx:487
+include/sfx2/dinfdlg.hxx:486
     CmisDateTime m_xFrame std::unique_ptr<weld::Frame>
-include/sfx2/dinfdlg.hxx:497
+include/sfx2/dinfdlg.hxx:496
     CmisYesNo m_xFrame std::unique_ptr<weld::Frame>
 include/sfx2/mgetempl.hxx:63
     SfxManageStyleSheetPage m_xNameFt std::unique_ptr<weld::Label>
@@ -556,7 +560,7 @@ sdext/source/pdfimport/pdfparse/pdfparse.cxx:263
     PDFGrammar::definition value rule<ScannerT>
 sfx2/inc/autoredactdialog.hxx:105
     SfxAutoRedactDialog m_xDocShell class SfxObjectShellLock
-sfx2/inc/autoredactdialog.hxx:109
+sfx2/inc/autoredactdialog.hxx:110
     SfxAutoRedactDialog m_xRedactionTargetsLabel std::unique_ptr<weld::Label>
 sfx2/source/doc/doctempl.cxx:117
     DocTempl::DocTempl_EntryData_Impl mxObjShell const class SfxObjectShellLock
@@ -626,7 +630,7 @@ svx/source/unodialogs/textconversiondlgs/chinese_dictionarydialog.hxx:154
     textconversiondlgs::ChineseDictionaryDialog m_xFT_Mapping std::unique_ptr<weld::Label>
 svx/source/unodialogs/textconversiondlgs/chinese_dictionarydialog.hxx:157
     textconversiondlgs::ChineseDictionaryDialog m_xFT_Property std::unique_ptr<weld::Label>
-sw/qa/extras/layout/layout.cxx:2583
+sw/qa/extras/layout/layout.cxx:2608
       class SvtSysLocaleOptions &
 sw/source/core/crsr/crbm.cxx:66
     (anonymous namespace)::CursorStateHelper m_aSaveState const class SwCursorSaveState

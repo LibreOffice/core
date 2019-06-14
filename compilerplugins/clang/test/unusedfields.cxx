@@ -198,11 +198,11 @@ struct ReadOnlyAnalysis3
 // add elements.
 struct ReadOnlyAnalysis4
 // expected-error@-1 {{read m_readonly [loplugin:unusedfields]}}
-// expected-error@-2 {{write m_readwrite [loplugin:unusedfields]}}
+// expected-error@-2 {{write m_writeonly [loplugin:unusedfields]}}
 // expected-error@-3 {{read m_readonlyCss [loplugin:unusedfields]}}
 {
     std::vector<int> m_readonly;
-    std::vector<int> m_readwrite;
+    std::vector<int> m_writeonly;
     css::uno::Sequence<sal_Int32> m_readonlyCss;
 
     void func1()
@@ -211,7 +211,8 @@ struct ReadOnlyAnalysis4
         (void)x;
         *m_readonly.begin() = 1;
 
-        m_readwrite.push_back(0);
+        m_writeonly.push_back(0);
+        m_writeonly.clear();
 
         x = m_readonlyCss.getArray()[0];
     }
@@ -239,6 +240,22 @@ struct WriteOnlyAnalysis2
     {
         m_vclwriteonly.clear();
     }
+};
+
+namespace WriteOnlyAnalysis3
+{
+    void setFoo(int);
+    struct Foo1
+    // expected-error@-1 {{read m_field1 [loplugin:unusedfields]}}
+    // expected-error@-2 {{write m_field1 [loplugin:unusedfields]}}
+    {
+        int m_field1;
+        Foo1() : m_field1(1) {}
+        ~Foo1()
+        {
+            setFoo(m_field1);
+        }
+    };
 };
 
 #endif
