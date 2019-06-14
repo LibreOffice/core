@@ -173,7 +173,7 @@ uno::Reference< awt::XWindowPeer > createToolkitWindow( const uno::Reference< un
     aDescriptor.Bounds              =   awt::Rectangle(0,0,0,0);
     aDescriptor.WindowAttributes    =   0;
 
-    // create a awt window
+    // create an awt window
     uno::Reference< awt::XWindowPeer > xPeer = xToolkit->createWindow( aDescriptor );
 
     return xPeer;
