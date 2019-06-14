@@ -1923,7 +1923,7 @@ singleton_dcl :
     }
     singleton_dfn
     {
-        /* this singelton is finished, pop its scope from the stack */
+        /* this singleton is finished, pop its scope from the stack */
         idlc()->scopes()->pop();
     }
     ;
