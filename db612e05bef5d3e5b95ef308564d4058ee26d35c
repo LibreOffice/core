@@ -46,6 +46,30 @@
       "revId": "db612e05bef5d3e5b95ef308564d4058ee26d35c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_c102ebb4",
+        "filename": "vcl/qt5/Qt5Frame.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1134,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2019-06-14T12:01:59Z",
+      "side": 1,
+      "message": "Makes sense.",
+      "parentUuid": "3fa0c359_41701ba6",
+      "range": {
+        "startLine": 1131,
+        "startChar": 0,
+        "endLine": 1134,
+        "endChar": 78
+      },
+      "revId": "db612e05bef5d3e5b95ef308564d4058ee26d35c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
