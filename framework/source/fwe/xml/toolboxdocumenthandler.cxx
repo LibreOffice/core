@@ -206,7 +206,7 @@ void SAL_CALL OReadToolBoxDocumentHandler::startElement(
                 }
                 else
                 {
-                    // Check if we have a UI name set in our XML file
+                    // Check if we have an UI name set in our XML file
                     OUString aUIName;
                     for ( sal_Int16 n = 0; n < xAttribs->getLength(); n++ )
                     {
