@@ -326,7 +326,7 @@ void AddonsToolBarManager::FillToolbar( const Sequence< Sequence< PropertyValue 
                     }
                 }
 
-                // Request a item window from the toolbar controller and set it at the VCL toolbar
+                // Request an item window from the toolbar controller and set it at the VCL toolbar
                 Reference< XToolbarController > xTbxController( xController, UNO_QUERY );
                 if ( xTbxController.is() && xToolbarWindow.is() )
                 {
