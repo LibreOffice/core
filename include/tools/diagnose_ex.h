@@ -160,7 +160,7 @@ TOOLS_DLLPUBLIC OString exceptionToString(css::uno::Any const & caughtEx);
 #define TOOLS_INFO_EXCEPTION(area, stream) \
     do { \
         css::uno::Any tools_warn_exception( cppu::getCaughtException() ); \
-        SAL_WARN(area, stream << " " << exceptionToString(tools_warn_exception)); \
+        SAL_INFO(area, stream << " " << exceptionToString(tools_warn_exception)); \
     } while (false)
 
 #endif
