@@ -51,10 +51,12 @@
 #include <svl/visitem.hxx>
 #include <svl/whiter.hxx>
 #include <svx/svxids.hrc>
+#include <vcl/event.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/textview.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/xtextedt.hxx>
-#include <vcl/textview.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <cassert>
 #include <osl/diagnose.h>

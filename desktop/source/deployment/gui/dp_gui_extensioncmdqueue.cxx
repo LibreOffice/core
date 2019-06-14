@@ -62,6 +62,7 @@
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/anytostring.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 
