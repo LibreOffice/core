@@ -34,7 +34,7 @@ class TargetHelper
 
     public:
 
-        /** @short  its used at the following interfaces to classify
+        /** @short  it's used at the following interfaces to classify
                     target names.
          */
         enum class ESpecialTarget
