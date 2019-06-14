@@ -246,7 +246,7 @@ namespace basegfx
     /** convert color to black and white
 
         returns black when the luminance of the given color is less than
-        the given treshhold value in the range [0.0 .. 1.0], else white
+        the given threshold value in the range [0.0 .. 1.0], else white
     */
     class SAL_WARN_UNUSED BASEGFX_DLLPUBLIC BColorModifier_black_and_white : public BColorModifier
     {
