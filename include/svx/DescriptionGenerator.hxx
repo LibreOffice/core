@@ -134,14 +134,6 @@ public:
     */
     void AppendString (const OUString& sString);
 
-    /** Add properties that describe line and border attributes.
-    */
-    void AddLineProperties();
-
-    /** Add properties that describe how areas are filled.
-    */
-    void AddFillProperties();
-
 private:
     /// Reference to the shape from which the properties are extracted.
     css::uno::Reference< css::drawing::XShape> mxShape;

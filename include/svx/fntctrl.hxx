@@ -64,8 +64,6 @@ public:
 
     bool                IsTwoLines() const;
 
-    void                SetFontWidthScale( sal_uInt16 nScaleInPercent );
-
     virtual Size GetOptimalSize() const override;
 };
 

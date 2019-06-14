@@ -147,7 +147,6 @@ public:
     ObjectPage(weld::Container* pParent, const OString& rName, BrowseMode nMode, OrganizeDialog* pDialog);
     virtual ~ObjectPage() override;
 
-    void                SetCurrentEntry( EntryDescriptor const & rDesc );
     virtual void        ActivatePage() override;
 };
 

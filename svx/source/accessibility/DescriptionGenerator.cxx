@@ -183,24 +183,6 @@ void DescriptionGenerator::AppendString (const OUString& sString)
 }
 
 
-void DescriptionGenerator::AddLineProperties()
-{
-    AddProperty ("LineColor", DescriptionGenerator::PropertyType::Color, SIP_XA_LINECOLOR);
-    AddProperty ("LineDashName", DescriptionGenerator::PropertyType::String,
-                 SIP_XA_LINEDASH, XATTR_LINEDASH);
-    AddProperty ("LineWidth", DescriptionGenerator::PropertyType::Integer, SIP_XA_LINEWIDTH);
-}
-
-
-/** The fill style is described by the property "FillStyle".  Depending on
-    its value a hatch-, gradient-, or bitmap name is appended.
-*/
-void DescriptionGenerator::AddFillProperties()
-{
-    AddProperty ("FillStyle", DescriptionGenerator::PropertyType::FillStyle, SIP_XA_FILLSTYLE);
-}
-
-
 /** Search for the given color in the global color table.  If found append
     its name to the description.  Otherwise append its RGB tuple.
 */
