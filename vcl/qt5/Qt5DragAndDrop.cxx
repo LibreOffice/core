@@ -96,6 +96,7 @@ std::vector<css::datatransfer::DataFlavor> Qt5DnDTransferable::getTransferDataFl
 
 bool Qt5DragSource::m_bDropSuccessSet = false;
 bool Qt5DragSource::m_bDropSuccess = false;
+Qt5DragSource* Qt5DragSource::m_ActiveDragSource = nullptr;
 
 Qt5DragSource::~Qt5DragSource()
 {
