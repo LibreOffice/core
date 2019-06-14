@@ -135,7 +135,7 @@ private:
     css::uno::Reference< css::uno::XComponentContext >          context_;
 
     css::uno::Reference< css::configuration::XReadWriteAccess > access_;
-        // should really be an css.configuration.ReadOnlyAccess (with added
+        // should really be a css.configuration.ReadOnlyAccess (with added
         // css.beans.XHierarchicalPropertySetInfo), but then
         // configmgr::Access::asProperty() would report all properties as
         // READONLY, so isReadOnly() would not work
