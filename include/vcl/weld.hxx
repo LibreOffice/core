@@ -61,6 +61,7 @@ class SvNumberFormatter;
 class KeyEvent;
 class MouseEvent;
 class OutputDevice;
+class TextAttrib;
 class VirtualDevice;
 struct SystemEnvData;
 
@@ -1005,9 +1006,11 @@ public:
     virtual void insert_separator(int pos, const OUString& rId) = 0;
     void append_separator(const OUString& rId) { insert_separator(-1, rId); }
     virtual void remove_item(const OString& rId) = 0;
+    virtual void clear() = 0;
     virtual void set_item_sensitive(const OString& rIdent, bool bSensitive) = 0;
     virtual void set_item_active(const OString& rIdent, bool bActive) = 0;
     virtual void set_item_label(const OString& rIdent, const OUString& rLabel) = 0;
+    virtual OUString get_item_label(const OString& rIdent) const = 0;
     virtual void set_item_help_id(const OString& rIdent, const OString& rHelpId) = 0;
     virtual void set_item_visible(const OString& rIdent, bool bVisible) = 0;
     virtual OString get_item_help_id(const OString& rIdent) const = 0;
@@ -1619,6 +1622,12 @@ public:
     virtual int vadjustment_get_page_size() const = 0;
     virtual void vadjustment_set_value(int value) = 0;
     void connect_vadjustment_changed(const Link<TextView&, void>& rLink) { m_aVChangeHdl = rLink; }
+
+    virtual void paste_clipboard() = 0;
+
+    virtual void create_tag(const OString& rName, const TextAttrib& rTag) = 0;
+    virtual void apply_tag_by_name(const OString& rTagName, int start, int end) = 0;
+    virtual void remove_tag_by_name(const OString& rTagName, int start, int end) = 0;
 };
 
 class VCL_DLLPUBLIC Expander : virtual public Container

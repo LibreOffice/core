@@ -32,10 +32,10 @@ SpellDialogChildWindow::SpellDialogChildWindow (
     : SfxChildWindow (_pParent, nId)
 {
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    m_xAbstractSpellDialog = pFact->CreateSvxSpellDialog(_pParent,
+    m_xAbstractSpellDialog = pFact->CreateSvxSpellDialog(_pParent->GetFrameWeld(),
                                             pBindings,
                                             this );
-    SetWindow( m_xAbstractSpellDialog->GetWindow() );
+    SetController(m_xAbstractSpellDialog->GetController());
     SetHideNotDelete(true);
 }
 

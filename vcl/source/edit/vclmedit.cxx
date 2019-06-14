@@ -715,7 +715,7 @@ void TextWindow::KeyInput( const KeyEvent& rKEvent )
         {
             // to maintain the selection
             mbActivePopup = true;
-            OUString aChars = Edit::GetGetSpecialCharsFunction()( this, GetFont() );
+            OUString aChars = Edit::GetGetSpecialCharsFunction()(GetFrameWeld(), GetFont());
             if (!aChars.isEmpty())
             {
                 mpExtTextView->InsertText( aChars );
@@ -829,7 +829,7 @@ void TextWindow::Command( const CommandEvent& rCEvt )
         }
         else if (sCommand == "specialchar")
         {
-            OUString aChars = Edit::GetGetSpecialCharsFunction()( this, GetFont() );
+            OUString aChars = Edit::GetGetSpecialCharsFunction()(GetFrameWeld(), GetFont());
             if (!aChars.isEmpty())
             {
                 mpExtTextView->InsertText( aChars );
