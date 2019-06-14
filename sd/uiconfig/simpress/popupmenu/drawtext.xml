@@ -16,6 +16,7 @@
   <menu:menuitem menu:id=".uno:TextAttributes"/>
   <menu:menuitem menu:id=".uno:FontDialog"/>
   <menu:menuitem menu:id=".uno:ParagraphDialog"/>
+  <menu:menuitem menu:id=".uno:OutlineBullet"/>
   <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:OpenHyperlinkOnCursor"/>
   <menu:menuitem menu:id=".uno:ThesaurusFromContext"/>
