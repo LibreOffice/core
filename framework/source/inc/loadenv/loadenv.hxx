@@ -253,7 +253,7 @@ public:
 
         @throw  A LoadEnvException e.g. if another load operation is till in progress
                 or initialization of a new one fail by other reasons.
-                The real reason, a suitable message and ID will be given here immidiatly.
+                The real reason, a suitable message and ID will be given here immediately.
 
         @throw  A RuntimeException in case any internal process indicates, that
                 the whole runtime can't be used any longer.
@@ -280,7 +280,7 @@ public:
 
         @throw  A LoadEnvException if start of the load process failed (because
                 another is still in progress!).
-                The reason, a suitable message and ID will be given here immidiatly.
+                The reason, a suitable message and ID will be given here immediately.
 
         @throw  A RuntimeException in case any internal process indicates, that
                 the whole runtime can't be used any longer.
@@ -490,7 +490,7 @@ private:
     css::uno::Reference< css::frame::XFrame > impl_searchRecycleTarget();
 
     /** @short  because showing of a frame is needed more than once...
-                it's implemented as an separate method .-)
+                it's implemented as a separate method .-)
 
         @descr  Note: Showing of a frame is bound to a special feature...
                 a) If we recycle any existing frame, we must bring it to front.
