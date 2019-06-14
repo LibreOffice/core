@@ -275,9 +275,9 @@ bool ChartModelHelper::setIncludeHiddenCells( bool bIncludeHiddenCells, ChartMod
             xDiagramProperties->setPropertyValue( "IncludeHiddenCells", aNewValue);
         }
     }
-    catch (const uno::Exception& e)
+    catch (const uno::Exception&)
     {
-        SAL_WARN("chart2", "Exception caught. " << e);
+        TOOLS_WARN_EXCEPTION("chart2", "" );
     }
     return bChanged;
 }

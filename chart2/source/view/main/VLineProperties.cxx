@@ -21,6 +21,7 @@
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <sal/log.hxx>
+#include <tools/diagnose_ex.h>
 
 namespace chart
 {
@@ -48,9 +49,9 @@ void VLineProperties::initFromPropertySet( const uno::Reference< beans::XPropert
             Width = xProp->getPropertyValue( "LineWidth" );
             DashName = xProp->getPropertyValue( "LineDashName" );
         }
-        catch( const uno::Exception& e )
+        catch( const uno::Exception& )
         {
-            SAL_WARN("chart2", "Exception caught. " << e );
+            TOOLS_WARN_EXCEPTION("chart2", "" );
         }
     }
     else

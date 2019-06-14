@@ -27,6 +27,7 @@
 
 #include <rtl/math.hxx>
 #include <sal/log.hxx>
+#include <tools/diagnose_ex.h>
 #include <osl/diagnose.h>
 #include <svl/stritem.hxx>
 
@@ -185,9 +186,9 @@ void ErrorBarResources::SetChartDocumentForRangeChoosing(
             {
                 xProps->getPropertyValue("EnableDataTableDialog") >>= m_bEnableDataTableDialog;
             }
-            catch( const uno::Exception& e )
+            catch( const uno::Exception& )
             {
-                SAL_WARN("chart2", "Exception caught. " << e );
+                TOOLS_WARN_EXCEPTION("chart2", "" );
             }
         }
     }
