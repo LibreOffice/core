@@ -22,6 +22,7 @@ using namespace com::sun::star;
 
 bool Qt5DragSource::m_bDropSuccessSet = false;
 bool Qt5DragSource::m_bDropSuccess = false;
+Qt5DragSource* Qt5DragSource::m_ActiveDragSource = nullptr;
 
 Qt5DragSource::~Qt5DragSource() {}
 

@@ -1155,8 +1155,6 @@ void Qt5Frame::SetApplicationID(const OUString& rWMClass)
 
 // Drag'n'drop foo
 
-Qt5DragSource* Qt5DragSource::m_ActiveDragSource;
-
 void Qt5Frame::registerDragSource(Qt5DragSource* pDragSource)
 {
     assert(!m_pDragSource);
