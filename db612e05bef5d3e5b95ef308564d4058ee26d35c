@@ -22,6 +22,30 @@
       "revId": "db612e05bef5d3e5b95ef308564d4058ee26d35c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_41701ba6",
+        "filename": "vcl/qt5/Qt5Frame.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1134,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2019-06-14T10:30:23Z",
+      "side": 1,
+      "message": "That\u0027s what my original, non-working code did. I couldn\u0027t find a way to insert or copy the \u0027\\0\u0027 bytes. For \"normal\" (c)strings \u0027\\0\u0027 is just allowed at the end as the terminator and explicitly excluded from handling, everywhere. I even tried a OStringLiteral, but obviously it fails too, because \u0027\\0\u0027, by definition is an empty string, but now the literal is actually \"\\0\\0\".\n\nAnd as I wrote in the comment the WM_CLASS data is a concat of two \"complete\" cstrings. I already called the variable data, as it\u0027s no cstring per definition.",
+      "parentUuid": "3fa0c359_c659a15a",
+      "range": {
+        "startLine": 1131,
+        "startChar": 0,
+        "endLine": 1134,
+        "endChar": 78
+      },
+      "revId": "db612e05bef5d3e5b95ef308564d4058ee26d35c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
