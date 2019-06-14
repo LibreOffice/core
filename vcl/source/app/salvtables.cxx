@@ -57,13 +57,16 @@
 #include <vcl/svtabbx.hxx>
 #include <vcl/tabctrl.hxx>
 #include <vcl/tabpage.hxx>
+#include <vcl/textdata.hxx>
 #include <vcl/throbber.hxx>
 #include <vcl/treelistentry.hxx>
 #include <vcl/toolkit/unowrap.hxx>
+#include <vcl/txtattr.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/vclmedit.hxx>
 #include <vcl/viewdataentry.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/xtextedt.hxx>
 #include <bitmaps.hlst>
 
 SalFrame::SalFrame()
@@ -695,9 +698,9 @@ public:
 
 void SalInstanceWidget::HandleEventListener(VclWindowEvent& rEvent)
 {
-    if (rEvent.GetId() == VclEventId::WindowGetFocus || rEvent.GetId() == VclEventId::WindowActivate)
+    if (rEvent.GetId() == VclEventId::WindowGetFocus)
         m_aFocusInHdl.Call(*this);
-    else if (rEvent.GetId() == VclEventId::WindowLoseFocus || rEvent.GetId() == VclEventId::WindowDeactivate)
+    else if (rEvent.GetId() == VclEventId::WindowLoseFocus)
         m_aFocusOutHdl.Call(*this);
     else if (rEvent.GetId() == VclEventId::WindowResize)
         m_aSizeAllocateHdl.Call(m_xWidget->GetSizePixel());
@@ -1138,6 +1141,22 @@ public:
     virtual SystemEnvData get_system_data() const override
     {
         return *m_xWindow->GetSystemData();
+    }
+
+    virtual void connect_toplevel_focus_changed(const Link<weld::Widget&, void>& rLink) override
+    {
+        ensure_event_listener();
+        weld::Window::connect_toplevel_focus_changed(rLink);
+    }
+
+    virtual void HandleEventListener(VclWindowEvent& rEvent) override
+    {
+        if (rEvent.GetId() == VclEventId::WindowActivate || rEvent.GetId() == VclEventId::WindowDeactivate)
+        {
+            signal_toplevel_focus_changed();
+            return;
+        }
+        SalInstanceContainer::HandleEventListener(rEvent);
     }
 
     virtual ~SalInstanceWindow() override
@@ -1893,6 +1912,7 @@ public:
         m_xMenuButton->SetSelectHdl(LINK(this, SalInstanceMenuButton, MenuSelectHdl));
         if (PopupMenu* pMenu = m_xMenuButton->GetPopupMenu())
         {
+            pMenu->SetMenuFlags(MenuFlags::NoAutoMnemonics);
             const auto nCount = pMenu->GetItemCount();
             m_nLastId = nCount ? pMenu->GetItemId(nCount-1) : 0;
         }
@@ -1947,6 +1967,12 @@ public:
         pMenu->RemoveItem(pMenu->GetItemPos(pMenu->GetItemId(rId)));
     }
 
+    virtual void clear() override
+    {
+        PopupMenu* pMenu = m_xMenuButton->GetPopupMenu();
+        pMenu->Clear();
+    }
+
     virtual void set_item_active(const OString& rIdent, bool bActive) override
     {
         PopupMenu* pMenu = m_xMenuButton->GetPopupMenu();
@@ -1957,6 +1983,12 @@ public:
     {
         PopupMenu* pMenu = m_xMenuButton->GetPopupMenu();
         pMenu->SetItemText(pMenu->GetItemId(rIdent), rText);
+    }
+
+    virtual OUString get_item_label(const OString& rIdent) const override
+    {
+        PopupMenu* pMenu = m_xMenuButton->GetPopupMenu();
+        return pMenu->GetItemText(pMenu->GetItemId(rIdent));
     }
 
     virtual void set_item_visible(const OString& rIdent, bool bShow) override
@@ -4220,6 +4252,8 @@ private:
     VclPtr<VclMultiLineEdit> m_xTextView;
     Link<ScrollBar*,void> m_aOrigVScrollHdl;
 
+    std::map<OString, std::unique_ptr<TextAttrib>> m_aTagMap;
+
     DECL_LINK(ChangeHdl, Edit&, void);
     DECL_LINK(VscrollHdl, ScrollBar*, void);
     DECL_LINK(CursorListener, VclWindowEvent&, void);
@@ -4251,6 +4285,18 @@ public:
     virtual OUString get_text() const override
     {
         return m_xTextView->GetText();
+    }
+
+    virtual OUString get_text(int nStartPos, int nEndPos) const override
+    {
+        ExtTextEngine* pTextEngine = m_xTextView->GetTextEngine();
+        return pTextEngine->GetText(TextSelection(TextPaM(0, nStartPos), TextPaM(0, nEndPos)));
+    }
+
+    virtual int get_text_length() const override
+    {
+        ExtTextEngine* pTextEngine = m_xTextView->GetTextEngine();
+        return pTextEngine->GetTextLen();
     }
 
     bool get_selection_bounds(int& rStartPos, int &rEndPos) override
@@ -4322,6 +4368,29 @@ public:
     {
         ScrollBar& rVertScrollBar = m_xTextView->GetVScrollBar();
         return rVertScrollBar.GetVisibleSize();
+    }
+
+    virtual void paste_clipboard() override
+    {
+        m_xTextView->Paste();
+    }
+
+    virtual void create_tag(const OString& rName, const TextAttrib& rTag) override
+    {
+        m_aTagMap[rName] = rTag.Clone();
+    }
+
+    virtual void apply_tag_by_name(const OString& rTagName, int start, int end) override
+    {
+        ExtTextEngine* pTextEngine = m_xTextView->GetTextEngine();
+        pTextEngine->SetAttrib(*m_aTagMap[rTagName], 0, start, end);
+    }
+
+    virtual void remove_tag_by_name(const OString& rTagName, int start, int end) override
+    {
+        assert(start == 0 && end == get_text_length()); (void)start; (void)end;
+        ExtTextEngine* pTextEngine = m_xTextView->GetTextEngine();
+        pTextEngine->RemoveAttribs(0, m_aTagMap[rTagName]->Which());
     }
 
     virtual ~SalInstanceTextView() override
