@@ -41,6 +41,7 @@
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/mimeconfighelper.hxx>
 #include <sal/log.hxx>
+#include <tools/diagnose_ex.h>
 
 #include "olepersist.hxx"
 #include "ownview.hxx"
@@ -150,9 +151,9 @@ bool OwnView_Impl::CreateModelFromURL( const OUString& aFileURL )
                 }
             }
         }
-        catch (uno::Exception const& e)
+        catch (uno::Exception const&)
         {
-            SAL_WARN("embeddedobj.ole", "OwnView_Impl::CreateModelFromURL:" << e);
+            TOOLS_WARN_EXCEPTION("embeddedobj.ole", "OwnView_Impl::CreateModelFromURL:");
         }
     }
 

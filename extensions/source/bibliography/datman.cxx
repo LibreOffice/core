@@ -426,11 +426,9 @@ DBChangeDialog_Impl::DBChangeDialog_Impl(weld::Window* pParent, BibDataManager* 
             m_xSelectionLB->append_text(rSourceName);
         m_xSelectionLB->select_text(sActiveSource);
     }
-    catch (const Exception& e)
+    catch (const Exception&)
     {
-        SAL_WARN("extensions.biblio",
-            "Exception in BibDataManager::DBChangeDialog_Impl::DBChangeDialog_Impl "
-            << e);
+        TOOLS_WARN_EXCEPTION("extensions.biblio", "");
     }
 }
 
