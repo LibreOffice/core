@@ -45,7 +45,7 @@ static void data_write(char* file, char* name, sal_uInt8 *data, sal_Int32 len)
     fprintf(fp, " * Copyright(c) 1999 - 2000, Sun Microsystems, Inc.\n");
     fprintf(fp, " * All Rights Reserved.\n");
     fprintf(fp, " */\n\n");
-    fprintf(fp, "/* !!!The file is generated automatically. DONOT edit the file manually!!! */\n\n");
+    fprintf(fp, "/* !!!The file is generated automatically. DO NOT edit the file manually!!! */\n\n");
     fprintf(fp, "#include <sal/types.h>\n");
     fprintf(fp, "\nextern \"C\" {\n");
 
