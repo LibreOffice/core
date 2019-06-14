@@ -156,7 +156,7 @@ namespace comphelper
 
         <p>The class has two responsibilities:
         <ul><li>it locks the mutex of an OAccessibleContextHelper instance, as long as the guard lives</li>
-            <li>it checks if an given OAccessibleContextHelper instance is alive, else an exception is thrown
+            <li>it checks if a given OAccessibleContextHelper instance is alive, else an exception is thrown
                 our of the constructor of the guard</li>
         </ul>
         <br/>
