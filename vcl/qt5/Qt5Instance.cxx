@@ -514,7 +514,7 @@ void* Qt5Instance::CreateGStreamerSink(const SystemChildWindow* pWindow)
         SAL_WARN("vcl.qt5", "Couldn't initialize qwidget5videosink."
                             " Video playback might not work as expected."
                             " Please install Qt5 packages for QtGStreamer.");
-        // with no videosink explicitly set, GStreamer will open it's own (misplaced) window(s) to display video
+        // with no videosink explicitly set, GStreamer will open its own (misplaced) window(s) to display video
     }
 
     return pVideosink;
