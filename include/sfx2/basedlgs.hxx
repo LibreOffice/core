@@ -96,8 +96,7 @@ class SFX2_DLLPUBLIC SfxDialogController : public weld::GenericDialogController
 private:
     DECL_DLLPRIVATE_STATIC_LINK(SfxDialogController, InstallLOKNotifierHdl, void*, vcl::ILibreOfficeKitNotifier*);
 
-    DECL_DLLPRIVATE_LINK(FocusInHdl, weld::Widget&, void);
-    DECL_DLLPRIVATE_LINK(FocusOutHdl, weld::Widget&, void);
+    DECL_DLLPRIVATE_LINK(FocusChangeHdl, weld::Widget&, void);
 
 public:
     SfxDialogController(weld::Widget* pParent, const OUString& rUIFile, const OString& rDialogId);

@@ -1,14 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.19.0 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
-  <requires lib="LibreOffice" version="1.0"/>
+  <object class="GtkMenu" id="addmenu">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+  </object>
+  <object class="GtkTreeStore" id="liststore1">
+    <columns>
+      <!-- column-name text -->
+      <column type="gchararray"/>
+      <!-- column-name id -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
+  <object class="GtkListStore" id="liststore6">
+    <columns>
+      <!-- column-name text -->
+      <column type="gchararray"/>
+      <!-- column-name id -->
+      <column type="gchararray"/>
+      <!-- column-name image -->
+      <column type="GdkPixbuf"/>
+    </columns>
+  </object>
   <object class="GtkDialog" id="SpellingDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
     <property name="title" translatable="yes" context="spellingdialog|SpellingDialog">Spelling: $LANGUAGE ($LOCATION)</property>
     <property name="resizable">False</property>
+    <property name="default_width">0</property>
+    <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
+    <child>
+      <placeholder/>
+    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
@@ -95,10 +121,25 @@
             <property name="row_spacing">6</property>
             <property name="column_spacing">12</property>
             <child>
-              <object class="svxcorelo-SvxLanguageBox" id="languagelb">
+              <object class="GtkComboBox" id="languagelb">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">end</property>
+                <property name="model">liststore6</property>
+                <property name="entry_text_column">0</property>
+                <property name="id_column">1</property>
+                <child>
+                  <object class="GtkCellRendererText" id="cellrenderertext9"/>
+                  <attributes>
+                    <attribute name="text">0</attribute>
+                  </attributes>
+                </child>
+                <child>
+                  <object class="GtkCellRendererPixbuf" id="cellrenderertext6"/>
+                  <attributes>
+                    <attribute name="pixbuf">2</attribute>
+                  </attributes>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">1</property>
@@ -117,20 +158,6 @@
               <packing>
                 <property name="left_attach">2</property>
                 <property name="top_attach">3</property>
-              </packing>
-            </child>
-            <child>
-              <object class="cuilo-SentenceEditWindow" id="sentence">
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="hexpand">True</property>
-                <property name="vexpand">True</property>
-              </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">3</property>
-                <property name="width">2</property>
-                <property name="height">5</property>
               </packing>
             </child>
             <child>
@@ -298,24 +325,6 @@
               </packing>
             </child>
             <child>
-              <object class="GtkTreeView" id="suggestionslb">
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="hexpand">True</property>
-                <property name="vexpand">True</property>
-                <property name="show_expanders">False</property>
-                <child internal-child="selection">
-                  <object class="GtkTreeSelection" id="treeview-selection1"/>
-                </child>
-              </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">9</property>
-                <property name="width">2</property>
-                <property name="height">3</property>
-              </packing>
-            </child>
-            <child>
               <object class="GtkButton" id="add">
                 <property name="label" translatable="yes" context="spellingdialog|add">_Add to Dictionary</property>
                 <property name="visible">True</property>
@@ -330,13 +339,18 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="addmb:addmenu">
+              <object class="GtkMenuButton" id="addmb">
                 <property name="label" translatable="yes" context="spellingdialog|addmb">_Add to Dictionary</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="no_show_all">True</property>
                 <property name="valign">center</property>
                 <property name="use_underline">True</property>
+                <property name="popup">addmenu</property>
+                <property name="use_popover">False</property>
+                <child>
+                  <placeholder/>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">2</property>
@@ -383,7 +397,6 @@
                   <object class="GtkToolButton" id="paste">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="action_name">paste</property>
                     <property name="label" translatable="yes" context="spellingdialog|paste">Paste</property>
                     <property name="use_underline">True</property>
                     <property name="icon_name">cmd/sc_paste.png</property>
@@ -397,7 +410,6 @@
                   <object class="GtkToolButton" id="insert">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="action_name">insert</property>
                     <property name="label" translatable="yes" context="spellingdialog|insert">Special Character</property>
                     <property name="use_underline">True</property>
                     <property name="icon_name">cmd/sc_insertsymbol.png</property>
@@ -411,6 +423,73 @@
               <packing>
                 <property name="left_attach">1</property>
                 <property name="top_attach">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkScrolledWindow">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="border_width">0</property>
+                <property name="shadow_type">in</property>
+                <child>
+                  <object class="GtkViewport">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <child>
+                      <object class="GtkDrawingArea" id="sentence">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="events">GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK | GDK_STRUCTURE_MASK</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">3</property>
+                <property name="width">2</property>
+                <property name="height">5</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkScrolledWindow">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="hexpand">True</property>
+                <property name="vexpand">True</property>
+                <property name="shadow_type">in</property>
+                <child>
+                  <object class="GtkTreeView" id="suggestionslb">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="hexpand">True</property>
+                    <property name="vexpand">True</property>
+                    <property name="model">liststore1</property>
+                    <property name="headers_visible">False</property>
+                    <property name="show_expanders">False</property>
+                    <child internal-child="selection">
+                      <object class="GtkTreeSelection" id="treeview-selection1"/>
+                    </child>
+                    <child>
+                      <object class="GtkTreeViewColumn" id="treeviewcolumn2">
+                        <property name="spacing">6</property>
+                        <child>
+                          <object class="GtkCellRendererText" id="cellrenderertext2"/>
+                          <attributes>
+                            <attribute name="text">0</attribute>
+                          </attributes>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">9</property>
+                <property name="width">2</property>
+                <property name="height">3</property>
               </packing>
             </child>
             <child>
@@ -434,9 +513,5 @@
       <action-widget response="102">undo</action-widget>
       <action-widget response="-7">close</action-widget>
     </action-widgets>
-  </object>
-  <object class="GtkMenu" id="addmenu">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
   </object>
 </interface>
