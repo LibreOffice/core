@@ -11145,7 +11145,9 @@ then
     QT5_LIBS="-L$qt5_libdir -lQt5Core -lQt5Gui -lQt5Widgets -lQt5Network"
 
     if test "$USING_X11" = TRUE; then
-        QT5_LIBS="$QT5_LIBS -lQt5X11Extras"
+        PKG_CHECK_MODULES(QT5_XCB,[xcb],,[AC_MSG_ERROR([XCB not found, which is needed for correct app grouping in X11.])])
+        QT5_CFLAGS="$QT5_CFLAGS $QT5_XCB_CFLAGS"
+        QT5_LIBS="$QT5_LIBS $QT5_XCB_LIBS -lQt5X11Extras"
         QT5_USING_X11=1
         AC_DEFINE(QT5_USING_X11)
     fi
