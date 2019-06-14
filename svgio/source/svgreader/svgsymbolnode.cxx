@@ -61,12 +61,7 @@ namespace svgio
                 }
                 case SVGTokenViewBox:
                 {
-                    const basegfx::B2DRange aRange(readViewBox(aContent, *this));
-
-                    if(!aRange.isEmpty())
-                    {
-                        setViewBox(&aRange);
-                    }
+                    readViewBox(aContent, *this);
                     break;
                 }
                 case SVGTokenPreserveAspectRatio:

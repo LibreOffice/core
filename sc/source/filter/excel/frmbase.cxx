@@ -148,12 +148,10 @@ const ScRange* ScRangeListTabs::Next ()
     return &(*maItrCur);
 }
 
-ConverterBase::ConverterBase( svl::SharedStringPool& rSPool, sal_uInt16 nNewBuffer ) :
+ConverterBase::ConverterBase( svl::SharedStringPool& rSPool ) :
     aPool(rSPool),
     aEingPos( 0, 0, 0 )
 {
-    OSL_ENSURE( nNewBuffer > 0, "ConverterBase::ConverterBase - nNewBuffer == 0!" );
-    pBuffer.reset( new sal_Char[ nNewBuffer ] );
 }
 
 ConverterBase::~ConverterBase()
@@ -167,7 +165,7 @@ void ConverterBase::Reset()
 }
 
 ExcelConverterBase::ExcelConverterBase( svl::SharedStringPool& rSPool ) :
-    ConverterBase(rSPool, 512)
+    ConverterBase(rSPool)
 {
 }
 
@@ -188,7 +186,7 @@ void ExcelConverterBase::Reset()
 }
 
 LotusConverterBase::LotusConverterBase( SvStream &rStr, svl::SharedStringPool& rSPool  ) :
-    ConverterBase(rSPool, 128),
+    ConverterBase(rSPool),
     aIn( rStr ),
     nBytesLeft( 0 )
 {

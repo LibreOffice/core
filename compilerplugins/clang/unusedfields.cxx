@@ -607,9 +607,45 @@ void UnusedFields::checkIfReadFrom(const FieldDecl* fieldDecl, const Expr* membe
                 break;
             }
         }
+        else if (auto cxxMemberCallExpr = dyn_cast<CXXMemberCallExpr>(parent))
+        {
+            bool bWriteOnlyCall = false;
+            const CXXMethodDecl * callee = cxxMemberCallExpr->getMethodDecl();
+            if (callee)
+            {
+                const Expr* tmp = dyn_cast<Expr>(child);
+                if (tmp->isBoundMemberFunction(compiler.getASTContext())) {
+                    tmp = dyn_cast<MemberExpr>(tmp)->getBase();
+                }
+                if (cxxMemberCallExpr->getImplicitObjectArgument() == tmp)
+                {
+                    // FIXME perhaps a better solution here would be some kind of SAL_PARAM_WRITEONLY attribute
+                    // which we could scatter around.
+                    std::string name = callee->getNameAsString();
+                    std::transform(name.begin(), name.end(), name.begin(), easytolower);
+                    if (startswith(name, "emplace") || name == "insert"
+                        || name == "erase" || name == "remove" || name == "remove_if" || name == "sort"
+                        || name == "push_back" || name == "pop_back"
+                        || name == "push_front" || name == "pop_front"
+                        || name == "reserve"  || name == "resize" || name == "reset"
+                        || name == "clear" || name == "fill")
+                        // write-only modifications to collections
+                        bWriteOnlyCall = true;
+                    else if (name == "dispose" || name == "disposeAndClear" || name == "swap")
+                        // we're abusing the write-only analysis here to look for fields which don't have anything useful
+                        // being done to them, so we're ignoring things like std::vector::clear, std::vector::swap,
+                        // and VclPtr::disposeAndClear
+                        bWriteOnlyCall = true;
+                }
+            }
+            if (!bWriteOnlyCall)
+                bPotentiallyReadFrom = true;
+            break;
+        }
         else if (auto callExpr = dyn_cast<CallExpr>(parent))
         {
-            // check for calls to ReadXXX() type methods and the operator>>= methods on Any.
+            bool bWriteOnlyCall = false;
+            // check for calls to ReadXXX(foo) type methods, where foo is write-only
             auto callee = getCallee(callExpr);
             if (callee)
             {
@@ -619,24 +655,9 @@ void UnusedFields::checkIfReadFrom(const FieldDecl* fieldDecl, const Expr* membe
                 std::transform(name.begin(), name.end(), name.begin(), easytolower);
                 if (startswith(name, "read"))
                     // this is a write-only call
-                    ;
-                else if (startswith(name, "emplace") || name == "insert"
-                    || name == "erase" || name == "remove" || name == "remove_if" || name == "sort"
-                    || name == "push_back" || name == "pop_back"
-                    || name == "push_front" || name == "pop_front"
-                    || name == "reserve"  || name == "resize"
-                    || name == "clear" || name == "fill")
-                    // write-only modifications to collections
-                    ;
-                else if (name == "dispose" || name == "disposeAndClear" || name == "swap")
-                    // we're abusing the write-only analysis here to look for fields which don't have anything useful
-                    // being done to them, so we're ignoring things like std::vector::clear, std::vector::swap,
-                    // and VclPtr::disposeAndClear
-                    ;
-                else
-                    bPotentiallyReadFrom = true;
+                    bWriteOnlyCall = true;
             }
-            else
+            if (!bWriteOnlyCall)
                 bPotentiallyReadFrom = true;
             break;
         }

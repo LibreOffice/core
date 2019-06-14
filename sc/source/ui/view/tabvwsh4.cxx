@@ -1449,7 +1449,6 @@ void ScTabViewShell::Construct( TriState nForceDesignMode )
     SetWindow( GetActiveWin() );
 
     pCurFrameLine.reset( new ::editeng::SvxBorderLine(&aColBlack, 20, SvxBorderLineStyle::SOLID) );
-    pPivotSource.reset( new ScArea );
     StartListening(*GetViewData().GetDocShell(), DuplicateHandling::Prevent);
     StartListening(*GetViewFrame(), DuplicateHandling::Prevent);
     StartListening(*pSfxApp, DuplicateHandling::Prevent); // #i62045# #i62046# application is needed for Calc's own hints
@@ -1778,7 +1777,6 @@ ScTabViewShell::~ScTabViewShell()
     pAuditingShell.reset();
     pCurFrameLine.reset();
     mpInputHandler.reset();
-    pPivotSource.reset();
     pDialogDPObject.reset();
     pNavSettings.reset();
 

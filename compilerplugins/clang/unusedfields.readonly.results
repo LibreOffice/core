@@ -354,6 +354,8 @@ include/svtools/editsyntaxhighlighter.hxx:32
     MultiLineEditSyntaxHighlight m_aColorConfig const svtools::ColorConfig
 include/svx/dialcontrol.hxx:112
     svx::DialControl::DialControl_Impl mnLinkedFieldValueMultiplyer sal_Int32
+include/svx/dlgctl3d.hxx:250
+    SvxLightCtl3D maUserInteractiveChangeCallback Link<class SvxLightCtl3D *, void>
 include/svx/graphctl.hxx:53
     GraphCtrl xVD ScopedVclPtrInstance<class VirtualDevice>
 include/svx/sdr/overlay/overlayanimatedbitmapex.hxx:51
@@ -708,7 +710,7 @@ unotools/source/config/saveopt.cxx:76
     SvtSaveOptions_Impl bROUserAutoSave _Bool
 vcl/inc/BitmapFastScaleFilter.hxx:31
     BitmapFastScaleFilter maSize const class Size
-vcl/inc/printerinfomanager.hxx:75
+vcl/inc/printerinfomanager.hxx:74
     psp::PrinterInfoManager::SystemPrintQueue m_aComment class rtl::OUString
 vcl/inc/salwtype.hxx:157
     SalWheelMouseEvent mbDeltaIsPixel _Bool
@@ -722,9 +724,9 @@ vcl/inc/svdata.hxx:286
     ImplSVNWFData mbMenuBarDockingAreaCommonBG _Bool
 vcl/inc/toolbox.h:108
     vcl::ToolBoxLayoutData m_aLineItemIds std::vector<sal_uInt16>
-vcl/inc/unx/i18n_status.hxx:56
+vcl/inc/unx/i18n_status.hxx:54
     vcl::I18NStatus m_aCurrentIM const class rtl::OUString
-vcl/inc/unx/saldisp.hxx:285
+vcl/inc/unx/saldisp.hxx:282
     SalDisplay m_aInvalidScreenData const struct SalDisplay::ScreenData
 vcl/inc/WidgetThemeLibrary.hxx:21
     vcl::WidgetDrawStyle maFaceColor uint32_t

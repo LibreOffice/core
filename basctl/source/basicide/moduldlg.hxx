@@ -201,12 +201,11 @@ private:
     std::unique_ptr<ObjectPage> m_xModulePage;
     std::unique_ptr<ObjectPage> m_xDialogPage;
     std::unique_ptr<LibPage> m_xLibPage;
-    EntryDescriptor    m_aCurEntry;
 
     DECL_LINK(ActivatePageHdl, const OString&, void);
 
 public:
-    OrganizeDialog(weld::Window* pParent, sal_Int16 tabId, EntryDescriptor const & rDesc);
+    OrganizeDialog(weld::Window* pParent, sal_Int16 tabId);
     virtual ~OrganizeDialog() override;
 };
 

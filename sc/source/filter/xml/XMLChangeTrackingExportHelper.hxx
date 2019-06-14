@@ -35,15 +35,12 @@ class ScChangeActionDel;
 class ScBigRange;
 class ScEditEngineTextObj;
 
-typedef std::map<sal_uLong, ScChangeAction*> ScChangeActionMap;
-
 class ScChangeTrackingExportHelper
 {
     ScXMLExport&    rExport;
 
     ScChangeTrack*  pChangeTrack;
     ScEditEngineTextObj* pEditTextObj;
-    std::unique_ptr<ScChangeActionMap> pDependings;
     css::uno::Reference<css::text::XText> xText;
 
     static OUString GetChangeID(const sal_uInt32 nActionNumber);

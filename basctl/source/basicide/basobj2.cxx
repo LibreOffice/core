@@ -67,12 +67,7 @@ void Organize(weld::Window* pParent, sal_Int16 tabId)
 {
     EnsureIde();
 
-    EntryDescriptor aDesc;
-    if (Shell* pShell = GetShell())
-        if (BaseWindow* pCurWin = pShell->GetCurWindow())
-            aDesc = pCurWin->CreateEntryDescriptor();
-
-    auto xDlg(std::make_shared<OrganizeDialog>(pParent, tabId, aDesc));
+    auto xDlg(std::make_shared<OrganizeDialog>(pParent, tabId));
     weld::DialogController::runAsync(xDlg, [](int) {});
 }
 

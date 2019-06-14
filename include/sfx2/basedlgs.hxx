@@ -43,7 +43,6 @@ class Timer;
 class SFX2_DLLPUBLIC SfxModalDialog: public ModalDialog
 {
     OUString                aExtraData;
-    std::unique_ptr<SfxItemSet> pOutputSet;
 
 private:
     SfxModalDialog(SfxModalDialog const &) = delete;
@@ -66,7 +65,6 @@ class SfxModelessDialog_Impl;
 class SFX2_DLLPUBLIC SfxModelessDialog: public ModelessDialog
 {
     SfxBindings*            pBindings;
-    Size                    aSize;
     std::unique_ptr< SfxModelessDialog_Impl > pImpl;
 
     SfxModelessDialog(SfxModelessDialog const &) = delete;

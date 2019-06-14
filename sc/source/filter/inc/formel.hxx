@@ -79,10 +79,8 @@ protected:
     TokenPool           aPool;          // user token + predefined token
     TokenStack          aStack;
     ScAddress           aEingPos;
-    std::unique_ptr<sal_Char[]>
-                        pBuffer;        // universal buffer
 
-    ConverterBase( svl::SharedStringPool& rSPool, sal_uInt16 nNewBuffer );
+    ConverterBase( svl::SharedStringPool& rSPool );
     virtual             ~ConverterBase();
 
     void                Reset();

@@ -14,6 +14,8 @@ avmedia/source/vlc/wrapper/Types.hxx:47
     libvlc_event_t u union (anonymous union at /media/noel/disk2/libo5/avmedia/source/vlc/wrapper/Types.hxx:41:5)
 avmedia/source/vlc/wrapper/Types.hxx:53
     libvlc_track_description_t psz_name char *
+basctl/source/basicide/moduldlg.hxx:204
+    basctl::OrganizeDialog m_aCurEntry class basctl::EntryDescriptor
 basegfx/source/polygon/b2dtrapezoid.cxx:202
     basegfx::trapezoidhelper::PointBlockAllocator maFirstStackBlock class basegfx::B2DPoint [32]
 basic/qa/cppunit/basictest.hxx:27
@@ -353,7 +355,7 @@ include/vcl/commandevent.hxx:315
 include/vcl/font/Feature.hxx:102
     vcl::font::Feature m_eType const enum vcl::font::FeatureType
 include/vcl/svimpbox.hxx:127
-    SvImpLBox aFctSet class ImpLBSelEng
+    SvImpLBox m_aFctSet class ImpLBSelEng
 include/xmloff/shapeimport.hxx:140
     SdXML3DLightContext mbSpecular _Bool
 libreofficekit/qa/gtktiledviewer/gtv-application-window.cxx:35
@@ -728,7 +730,7 @@ sw/inc/unosett.hxx:145
     SwXNumberingRules m_pImpl ::sw::UnoImplPtr<Impl>
 sw/qa/core/test_ToxTextGenerator.cxx:139
     ToxTextGeneratorWithMockedChapterField mChapterFieldType class SwChapterFieldType
-sw/qa/extras/layout/layout.cxx:2583
+sw/qa/extras/layout/layout.cxx:2608
       class SvtSysLocaleOptions &
 sw/qa/extras/uiwriter/uiwriter.cxx:4078
     IdleTask maIdle class Idle
@@ -772,9 +774,9 @@ ucb/source/ucp/gio/gio_mount.hxx:80
     OOoMountOperationClass _gtk_reserved4 void (*)(void)
 vcl/headless/svpgdi.cxx:311
     (anonymous namespace)::SourceHelper aTmpBmp class SvpSalBitmap
-vcl/inc/canvasbitmap.hxx:44
+vcl/inc/canvasbitmap.hxx:42
     vcl::unotools::VclCanvasBitmap m_aAlpha ::Bitmap
-vcl/inc/graphic/Manager.hxx:44
+vcl/inc/graphic/Manager.hxx:40
     vcl::graphic::Manager maSwapOutTimer class Timer
 vcl/inc/opengl/RenderList.hxx:29
     Vertex color glm::vec4
@@ -788,8 +790,6 @@ vcl/inc/qt5/Qt5FilePicker.hxx:83
     Qt5FilePicker m_pFilterLabel class QLabel *
 vcl/inc/qt5/Qt5Graphics.hxx:61
     Qt5Graphics m_lastPopupRect class QRect
-vcl/inc/qt5/Qt5Object.hxx:39
-    Qt5Object m_pParent class Qt5Frame *
 vcl/inc/salmenu.hxx:42
     SalMenuButtonItem mnId sal_uInt16
 vcl/inc/salmenu.hxx:43
@@ -822,7 +822,7 @@ vcl/inc/WidgetThemeLibrary.hxx:106
     vcl::WidgetThemeLibrary_t nSize uint32_t
 vcl/source/app/salvtables.cxx:2430
     SalInstanceEntry m_aTextFilter class (anonymous namespace)::WeldTextFilter
-vcl/source/app/salvtables.cxx:4834
+vcl/source/app/salvtables.cxx:4861
     SalInstanceComboBoxWithEdit m_aTextFilter class (anonymous namespace)::WeldTextFilter
 vcl/source/gdi/jobset.cxx:36
     ImplOldJobSetupData cDeviceName char [32]

@@ -48,7 +48,6 @@ namespace slideshow
             mnAlpha(0.0),
             maPosPixel(),
             maClip(),
-            maTransform(),
             mbSpriteVisible( false )
         {
             ENSURE_OR_THROW( mpViewLayer, "AnimatedSprite::AnimatedSprite(): Invalid view layer" );
@@ -181,7 +180,6 @@ namespace slideshow
 
         void AnimatedSprite::transform( const ::basegfx::B2DHomMatrix& rTransform )
         {
-            maTransform.reset( rTransform );
             mpSprite->transform( rTransform );
         }
 

@@ -247,7 +247,6 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxLightCtl3D final : public Control
     VclPtr<PushButton>         maSwitcher;
 
     // callback for interactive changes
-    Link<SvxLightCtl3D*,void>  maUserInteractiveChangeCallback;
     Link<SvxLightCtl3D*,void>  maUserSelectionChangeCallback;
 
 public:
