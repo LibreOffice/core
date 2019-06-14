@@ -1135,10 +1135,9 @@ void BackendImpl::PackageImpl::exportTo(
                   OUString(), ucb::NameClash::OVERWRITE );
             bSuccess = true;
         }
-        catch (const css::ucb::ContentCreationException &e)
+        catch (const css::ucb::ContentCreationException &)
         {
-            SAL_WARN(
-                "desktop.deployment", "exception on overwriting manifest: " << e);
+            TOOLS_WARN_EXCEPTION("desktop.deployment", "exception on overwriting manifest");
         }
 
         if (!bSuccess)

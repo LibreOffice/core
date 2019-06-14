@@ -305,8 +305,8 @@ void SetRestartState() {
             comphelper::ConfigurationChanges::create());
         officecfg::Setup::Office::OfficeRestartInProgress::set(true, batch);
         batch->commit();
-    } catch (css::uno::Exception & e) {
-        SAL_WARN("desktop.app", "ignoring " << e);
+    } catch (css::uno::Exception) {
+        TOOLS_WARN_EXCEPTION("desktop.app", "ignoring");
     }
 }
 
@@ -323,9 +323,8 @@ void DoRestartActionsIfNecessary(bool quickstart) {
                     comphelper::getProcessComponentContext(),
                     shouldLaunchQuickstart());
             }
-        } catch (css::uno::Exception & e) {
-            SAL_WARN(
-                "desktop.app", "ignoring " << e);
+        } catch (css::uno::Exception &) {
+            TOOLS_WARN_EXCEPTION("desktop.app", "ignoring");
         }
     }
 }
@@ -2023,9 +2022,9 @@ void Desktop::OpenClients()
 
             xRecovery->dispatch(aCmd, css::uno::Sequence< css::beans::PropertyValue >());
         }
-        catch(const css::uno::Exception& e)
+        catch(const css::uno::Exception&)
         {
-            SAL_WARN( "desktop.app", "Could not disable AutoRecovery." << e);
+            TOOLS_WARN_EXCEPTION( "desktop.app", "Could not disable AutoRecovery.");
         }
     }
     else
@@ -2052,9 +2051,9 @@ void Desktop::OpenClients()
                     false          , // false => force recovery instead of emergency save
                     bExistsRecoveryData);
             }
-            catch(const css::uno::Exception& e)
+            catch(const css::uno::Exception&)
             {
-                SAL_WARN( "desktop.app", "Error during recovery" << e);
+                TOOLS_WARN_EXCEPTION( "desktop.app", "Error during recovery");
             }
         }
 
@@ -2066,9 +2065,9 @@ void Desktop::OpenClients()
             xSessionListener = SessionListener::createWithOnQuitFlag(
                     ::comphelper::getProcessComponentContext(), bUIOnSessionShutdownAllowed);
         }
-        catch(const css::uno::Exception& e)
+        catch(const css::uno::Exception&)
         {
-            SAL_WARN( "desktop.app", "Registration of session listener failed" << e);
+            TOOLS_WARN_EXCEPTION( "desktop.app", "Registration of session listener failed");
         }
 
         if ( !bExistsRecoveryData && xSessionListener.is() )
@@ -2078,9 +2077,9 @@ void Desktop::OpenClients()
             {
                 xSessionListener->doRestore();
             }
-            catch(const css::uno::Exception& e)
+            catch(const css::uno::Exception&)
             {
-                SAL_WARN( "desktop.app", "Error in session management" << e);
+                TOOLS_WARN_EXCEPTION( "desktop.app", "Error in session management");
             }
         }
     }

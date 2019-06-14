@@ -38,6 +38,7 @@
 #include <sal/types.h>
 #include <svl/languageoptions.hxx>
 #include <svtools/langhelp.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <app.hxx>
 
@@ -90,8 +91,8 @@ bool prepareLocale() {
                 officecfg::Office::Linguistic::General::UILocale::set(
                     "", batch);
                 batch->commit();
-            } catch (css::uno::Exception & e) {
-                SAL_WARN("desktop.app", "ignoring " << e);
+            } catch (const css::uno::Exception &) {
+                TOOLS_WARN_EXCEPTION("desktop.app", "ignoring");
             }
         }
     }
@@ -123,8 +124,8 @@ bool prepareLocale() {
                 comphelper::ConfigurationChanges::create());
             officecfg::Setup::L10N::ooLocale::set(locale, batch);
             batch->commit();
-        } catch (css::uno::Exception & e) {
-            SAL_WARN("desktop.app", "ignoring " << e);
+        } catch (const css::uno::Exception &) {
+            TOOLS_WARN_EXCEPTION("desktop.app", "ignoring");
         }
     }
     MsLangId::setConfiguredSystemUILanguage(tag.getLanguageType(false));
