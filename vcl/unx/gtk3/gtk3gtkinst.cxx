@@ -2499,6 +2499,12 @@ public:
         gtk_menu_item_set_label(m_aMap[rIdent], MapToGtkAccelerator(rText).getStr());
     }
 
+    OUString get_item_label(const OString& rIdent) const
+    {
+        const gchar* pText = gtk_menu_item_get_label(m_aMap.find(rIdent)->second);
+        return OUString(pText, pText ? strlen(pText) : 0, RTL_TEXTENCODING_UTF8);
+    }
+
     void set_item_help_id(const OString& rIdent, const OString& rHelpId)
     {
         set_help_id(GTK_WIDGET(m_aMap[rIdent]), rHelpId);
@@ -5216,6 +5222,11 @@ public:
         MenuHelper::remove_item(rId);
     }
 
+    virtual void clear() override
+    {
+        clear_items();
+    }
+
     virtual void set_item_active(const OString& rIdent, bool bActive) override
     {
         MenuHelper::set_item_active(rIdent, bActive);
@@ -5229,6 +5240,11 @@ public:
     virtual void set_item_label(const OString& rIdent, const OUString& rLabel) override
     {
         MenuHelper::set_item_label(rIdent, rLabel);
+    }
+
+    virtual OUString get_item_label(const OString& rIdent) const override
+    {
+        return MenuHelper::get_item_label(rIdent);
     }
 
     virtual void set_item_visible(const OString& rIdent, bool bVisible) override

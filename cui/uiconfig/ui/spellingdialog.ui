@@ -1,14 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.19.0 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
   <requires lib="LibreOffice" version="1.0"/>
+  <object class="GtkMenu" id="addmenu">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+  </object>
   <object class="GtkDialog" id="SpellingDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
     <property name="title" translatable="yes" context="spellingdialog|SpellingDialog">Spelling: $LANGUAGE ($LOCATION)</property>
     <property name="resizable">False</property>
     <property name="type_hint">dialog</property>
+    <child>
+      <placeholder/>
+    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
@@ -95,7 +102,7 @@
             <property name="row_spacing">6</property>
             <property name="column_spacing">12</property>
             <child>
-              <object class="svxcorelo-SvxLanguageBox" id="languagelb">
+              <object class="GtkComboBoxText" id="languagelb">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">end</property>
@@ -330,13 +337,18 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="addmb:addmenu">
+              <object class="GtkMenuButton" id="addmb">
                 <property name="label" translatable="yes" context="spellingdialog|addmb">_Add to Dictionary</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="no_show_all">True</property>
                 <property name="valign">center</property>
                 <property name="use_underline">True</property>
+                <property name="popup">addmenu</property>
+                <property name="use_popover">False</property>
+                <child>
+                  <placeholder/>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">2</property>
@@ -383,7 +395,6 @@
                   <object class="GtkToolButton" id="paste">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="action_name">paste</property>
                     <property name="label" translatable="yes" context="spellingdialog|paste">Paste</property>
                     <property name="use_underline">True</property>
                     <property name="icon_name">cmd/sc_paste.png</property>
@@ -397,7 +408,6 @@
                   <object class="GtkToolButton" id="insert">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="action_name">insert</property>
                     <property name="label" translatable="yes" context="spellingdialog|insert">Special Character</property>
                     <property name="use_underline">True</property>
                     <property name="icon_name">cmd/sc_insertsymbol.png</property>
@@ -434,9 +444,5 @@
       <action-widget response="102">undo</action-widget>
       <action-widget response="-7">close</action-widget>
     </action-widgets>
-  </object>
-  <object class="GtkMenu" id="addmenu">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
   </object>
 </interface>

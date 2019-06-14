@@ -1947,6 +1947,12 @@ public:
         pMenu->RemoveItem(pMenu->GetItemPos(pMenu->GetItemId(rId)));
     }
 
+    virtual void clear() override
+    {
+        PopupMenu* pMenu = m_xMenuButton->GetPopupMenu();
+        pMenu->Clear();
+    }
+
     virtual void set_item_active(const OString& rIdent, bool bActive) override
     {
         PopupMenu* pMenu = m_xMenuButton->GetPopupMenu();
@@ -1957,6 +1963,12 @@ public:
     {
         PopupMenu* pMenu = m_xMenuButton->GetPopupMenu();
         pMenu->SetItemText(pMenu->GetItemId(rIdent), rText);
+    }
+
+    virtual OUString get_item_label(const OString& rIdent) const override
+    {
+        PopupMenu* pMenu = m_xMenuButton->GetPopupMenu();
+        return pMenu->GetItemText(pMenu->GetItemId(rIdent));
     }
 
     virtual void set_item_visible(const OString& rIdent, bool bShow) override
