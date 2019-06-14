@@ -38,7 +38,7 @@ struct OEnumerationLock
         ::osl::Mutex m_aLock;
 };
 
-/** provides an com.sun.star.container::XEnumeration access based
+/** provides a com.sun.star.container::XEnumeration access based
     on an object implementing the com.sun.star.container::XNameAccess interface
 */
 class COMPHELPER_DLLPUBLIC OEnumerationByName : private OEnumerationLock
@@ -66,7 +66,7 @@ private:
     COMPHELPER_DLLPRIVATE void impl_stopDisposeListening();
 };
 
-/** provides an com.sun.star.container::XEnumeration access based
+/** provides a com.sun.star.container::XEnumeration access based
     on an object implementing the com.sun.star.container::XNameAccess interface
 */
 class COMPHELPER_DLLPUBLIC OEnumerationByIndex : private OEnumerationLock
@@ -95,7 +95,7 @@ private:
 class SAL_DLLPUBLIC_TEMPLATE OAnyEnumeration_BASE
     : public ::cppu::WeakImplHelper<css::container::XEnumeration> {};
 
-/** provides an com.sun.star.container::XEnumeration
+/** provides a com.sun.star.container::XEnumeration
     for an outside set vector of Any's.
 
 */
