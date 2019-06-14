@@ -26,7 +26,6 @@
 #include "createaddresslistdialog.hxx"
 #include "customizeaddresslistdialog.hxx"
 #include <mmconfigitem.hxx>
-#include <vcl/scrbar.hxx>
 #include <vcl/event.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/svapp.hxx>

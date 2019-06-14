@@ -31,14 +31,7 @@
 
 #include <svtools/ctrlbox.hxx>
 
-#include <vcl/edit.hxx>
-#include <vcl/field.hxx>
 #include <vcl/idle.hxx>
-#include <vcl/layout.hxx>
-#include <vcl/lstbox.hxx>
-#include <vcl/scrbar.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/ctrl.hxx>
 
 #include <sfx2/tabdlg.hxx>
 

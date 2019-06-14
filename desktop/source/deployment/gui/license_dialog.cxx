@@ -22,14 +22,12 @@
 #include <unotools/configmgr.hxx>
 #include <comphelper/unwrapargs.hxx>
 #include <i18nlangtag/mslangid.hxx>
-#include <vcl/event.hxx>
-#include <vcl/svapp.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <svl/lstner.hxx>
-#include <vcl/xtextedt.hxx>
-#include <vcl/textview.hxx>
-#include <vcl/scrbar.hxx>
+#include <vcl/event.hxx>
+#include <vcl/idle.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/threadex.hxx>
 #include <vcl/weld.hxx>
 

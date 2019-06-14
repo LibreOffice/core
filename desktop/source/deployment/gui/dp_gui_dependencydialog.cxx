@@ -24,11 +24,9 @@
 #include <vector>
 
 #include <rtl/ustring.hxx>
-#include <vcl/dialog.hxx>
+#include <vcl/weld.hxx>
 
 #include "dp_gui_dependencydialog.hxx"
-
-namespace vcl { class Window; }
 
 using dp_gui::DependencyDialog;
 

@@ -21,11 +21,8 @@
 #define INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_GUI_DP_GUI_EXTLISTBOX_HXX
 
 #include <rtl/ustring.hxx>
-#include <vcl/scrbar.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/fixedhyper.hxx>
-#include <vcl/dialog.hxx>
 #include <vcl/customweld.hxx>
+#include <vcl/image.hxx>
 #include <vcl/weld.hxx>
 
 #include <cppuhelper/implbase.hxx>

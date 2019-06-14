@@ -24,7 +24,6 @@
 #include <osl/file.hxx>
 #include <osl/conditn.hxx>
 #include <cppuhelper/exc_hlp.hxx>
-#include <vcl/dialog.hxx>
 #include <vcl/svapp.hxx>
 #include <cppuhelper/implbase.hxx>
 
@@ -66,8 +65,6 @@
 #include <comphelper/anytostring.hxx>
 
 #include <vector>
-
-namespace vcl { class Window; }
 
 namespace cssu = ::com::sun::star::uno;
 
