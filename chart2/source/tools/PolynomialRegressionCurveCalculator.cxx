@@ -186,7 +186,10 @@ void SAL_CALL PolynomialRegressionCurveCalculator::recalculateRegression(
     double aRSquared = 0.0;
     if(mForceIntercept)
     {
-        aRSquared = aSumYpred2 / (aSumError + aSumYpred2);
+        if (auto const div = aSumError + aSumYpred2)
+        {
+            aRSquared = aSumYpred2 / div;
+        }
     }
     else if (aSumTotal != 0.0)
     {
