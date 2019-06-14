@@ -40,6 +40,7 @@
 #include <edtwin.hxx>
 #include <DateFormFieldButton.hxx>
 #include <DropDownFormFieldButton.hxx>
+#include <svx/numfmtsh.hxx>
 
 using namespace ::sw::mark;
 using namespace ::com::sun::star;
@@ -554,12 +555,18 @@ namespace sw { namespace mark
     {
     }
 
+    void DateFieldmark::InitDoc(SwDoc* const io_pDoc, sw::mark::InsertMode eMode)
+    {
+        m_pNumberFormatter = io_pDoc->GetNumberFormatter();
+        NonTextFieldmark::InitDoc(io_pDoc, eMode);
+    }
+
     void DateFieldmark::ShowButton(SwEditWin* pEditWin)
     {
         if(pEditWin)
         {
             if(!m_pButton)
-                m_pButton = VclPtr<DateFormFieldButton>::Create(pEditWin, *this);
+                m_pButton = VclPtr<DateFormFieldButton>::Create(pEditWin, *this, m_pNumberFormatter);
             m_pButton->CalcPosAndSize(m_aPortionPaintArea);
             m_pButton->Show();
         }

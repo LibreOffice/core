@@ -37,6 +37,7 @@ class SwGlossaryHdl;
 class SwField;
 
 class SwAsciiOptions;
+class SwDoc;
 class SwDocShell;
 class SvStream;
 class SwWrtShell;
@@ -391,7 +392,7 @@ public:
         SwField* pField, bool bPrevButton, bool bNextButton) = 0;
     virtual VclPtr<VclAbstractDialog> CreateDropDownFormFieldDialog(weld::Widget* pParent, sw::mark::IFieldmark* pDropDownField) = 0;
 
-    virtual VclPtr<VclAbstractDialog> CreateDateFormFieldDialog(weld::Widget* pParent, sw::mark::IFieldmark* pDateField) = 0;
+    virtual VclPtr<VclAbstractDialog> CreateDateFormFieldDialog(weld::Widget* pParent, sw::mark::IFieldmark* pDateField, SwDoc* pDoc) = 0;
 
     virtual VclPtr<SfxAbstractTabDialog> CreateSwEnvDlg(weld::Window* pParent, const SfxItemSet& rSet, SwWrtShell* pWrtSh, Printer* pPrt, bool bInsert) = 0;
 
