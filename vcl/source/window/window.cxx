@@ -1760,6 +1760,11 @@ void Window::ImplNewInputContext()
     pFocusWin->ImplGetFrame()->SetInputContext( &aNewContext );
 }
 
+void Window::SetModalHierarchyHdl(const Link<bool, void>& rLink)
+{
+    ImplGetFrame()->SetModalHierarchyHdl(rLink);
+}
+
 void Window::doLazyDelete()
 {
     SystemWindow* pSysWin = dynamic_cast<SystemWindow*>(this);

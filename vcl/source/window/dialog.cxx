@@ -913,11 +913,13 @@ bool Dialog::ImplStartExecuteModal()
         pSVData->maWinData.mpCaptureWin->ReleaseMouse();
     EnableInput();
 
+
     if ( GetParent() )
     {
-        NotifyEvent aNEvt( MouseNotifyEvent::EXECUTEDIALOG, this );
-        GetParent()->CompatNotify( aNEvt );
+        SalFrame* pFrame = GetParent()->ImplGetFrame();
+        pFrame->NotifyModalHierarchy(true);
     }
+
     mbInExecute = true;
     // no real modality in LibreOfficeKit
     if (!bKitActive)
@@ -1119,8 +1121,8 @@ void Dialog::EndDialog( long nResult )
     Hide();
     if ( GetParent() )
     {
-        NotifyEvent aNEvt( MouseNotifyEvent::ENDEXECUTEDIALOG, this );
-        GetParent()->CompatNotify( aNEvt );
+        SalFrame* pFrame = GetParent()->ImplGetFrame();
+        pFrame->NotifyModalHierarchy(false);
     }
 
     mpDialogImpl->mnResult = nResult;
