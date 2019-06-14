@@ -305,7 +305,7 @@ class PresetHandler
 
         /** @short  try to find the specified locale inside list of possible ones.
 
-            @descr  The lits of possible locale values was e.g. retrieved from the system
+            @descr  The list of possible locale values was e.g. retrieved from the system
                     (configuration, directory listing etcpp). The locale normally represent
                     the current office locale. This method search for a suitable item by using
                     different algorithm.
