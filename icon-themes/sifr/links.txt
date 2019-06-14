@@ -1769,10 +1769,8 @@ cmd/sc_tableevents.png cmd/sc_animationeffects.png
 
 
 cmd/lc_macrosmenu.png cmd/lc_choosemacro.png
-cmd/lc_basicideappear.png cmd/lc_toolsmacroedit.png
 
 cmd/sc_macrosmenu.png cmd/sc_choosemacro.png
-cmd/sc_basicideappear.png cmd/sc_toolsmacroedit.png
 
 cmd/lc_donation.png cmd/lc_currencyfield.png
 cmd/sc_donation.png cmd/sc_currencyfield.png
