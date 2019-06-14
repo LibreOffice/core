@@ -18,25 +18,20 @@
  */
 
 #include <memory>
-#include <vcl/event.hxx>
-#include <vcl/weld.hxx>
-#include <vcl/wrkwin.hxx>
-#include <vcl/menu.hxx>
-#include <vcl/scrbar.hxx>
-#include <vcl/settings.hxx>
-#include <vcl/svapp.hxx>
 #include "SpellAttrib.hxx"
 #include <sfx2/dispatch.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/viewfrm.hxx>
+#include <svl/grabbagitem.hxx>
 #include <svl/undo.hxx>
 #include <unotools/lingucfg.hxx>
-#include <vcl/textdata.hxx>
-#include <vcl/textview.hxx>
-#include <vcl/graphicfilter.hxx>
-#include <editeng/unolingu.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/langitem.hxx>
 #include <editeng/splwrap.hxx>
+#include <editeng/unolingu.hxx>
+#include <editeng/wghtitem.hxx>
 #include <linguistic/lngprops.hxx>
 #include <linguistic/misc.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -48,8 +43,15 @@
 #include <com/sun/star/linguistic2/XSearchableDictionaryList.hpp>
 #include <com/sun/star/linguistic2/XSpellChecker1.hpp>
 #include <sfx2/app.hxx>
-#include <vcl/help.hxx>
+#include <vcl/cursor.hxx>
+#include <vcl/event.hxx>
 #include <vcl/graph.hxx>
+#include <vcl/help.hxx>
+#include <vcl/graphicfilter.hxx>
+#include <vcl/ptrstyle.hxx>
+#include <vcl/settings.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/weld.hxx>
 #include <osl/file.hxx>
 #include <editeng/optitems.hxx>
 #include <editeng/svxenum.hxx>
@@ -165,80 +167,72 @@ sal_uInt16 SpellUndoAction_Impl::GetId()const
 // class SvxSpellCheckDialog ---------------------------------------------
 
 SpellDialog::SpellDialog(SpellDialogChildWindow* pChildWindow,
-    vcl::Window * pParent, SfxBindings* _pBindings)
-    : SfxModelessDialog (_pBindings, pChildWindow,
-        pParent, "SpellingDialog", "cui/ui/spellingdialog.ui")
+    weld::Window * pParent, SfxBindings* _pBindings)
+    : SfxModelessDialogController (_pBindings, pChildWindow,
+        pParent, "cui/ui/spellingdialog.ui", "SpellingDialog")
     , aDialogUndoLink(LINK (this, SpellDialog, DialogUndoHdl))
     , bFocusLocked(true)
     , rParent(*pChildWindow)
     , pImpl( new SpellDialog_Impl )
+    , m_xAltTitle(m_xBuilder->weld_label("alttitleft"))
+    , m_xResumeFT(m_xBuilder->weld_label("resumeft"))
+    , m_xNoSuggestionsFT(m_xBuilder->weld_label("nosuggestionsft"))
+    , m_xLanguageFT(m_xBuilder->weld_label("languageft"))
+    , m_xLanguageLB(new LanguageBox(m_xBuilder->weld_combo_box("languagelb")))
+    , m_xExplainFT(m_xBuilder->weld_label("explain"))
+    , m_xExplainLink(m_xBuilder->weld_link_button("explainlink"))
+    , m_xNotInDictFT(m_xBuilder->weld_label("notindictft"))
+    , m_xSentenceED(new SentenceEditWindow_Impl)
+    , m_xSuggestionFT(m_xBuilder->weld_label("suggestionsft"))
+    , m_xSuggestionLB(m_xBuilder->weld_tree_view("suggestionslb"))
+    , m_xIgnorePB(m_xBuilder->weld_button("ignore"))
+    , m_xIgnoreAllPB(m_xBuilder->weld_button("ignoreall"))
+    , m_xIgnoreRulePB(m_xBuilder->weld_button("ignorerule"))
+    , m_xAddToDictPB(m_xBuilder->weld_button("add"))
+    , m_xAddToDictMB(m_xBuilder->weld_menu_button("addmb"))
+    , m_xChangePB(m_xBuilder->weld_button("change"))
+    , m_xChangeAllPB(m_xBuilder->weld_button("changeall"))
+    , m_xAutoCorrPB(m_xBuilder->weld_button("autocorrect"))
+    , m_xCheckGrammarCB(m_xBuilder->weld_check_button("checkgrammar"))
+    , m_xOptionsPB(m_xBuilder->weld_button("options"))
+    , m_xUndoPB(m_xBuilder->weld_button("undo"))
+    , m_xClosePB(m_xBuilder->weld_button("close"))
+    , m_xToolbar(m_xBuilder->weld_toolbar("toolbar"))
+    , m_xSentenceEDWeld(new weld::CustomWeld(*m_xBuilder, "sentence", *m_xSentenceED))
 {
-    m_sTitleSpellingGrammar = GetText();
-    m_sTitleSpelling = get<FixedText>("alttitleft")->GetText();
+    m_xSentenceED->SetSpellDialog(this);
+    m_xSentenceED->Init(m_xToolbar.get());
+
+    m_sTitleSpellingGrammar = m_xDialog->get_title();
+    m_sTitleSpelling = m_xAltTitle->get_label();
 
     // fdo#68794 set initial title for cases where no text has been processed
     // yet to show its language attributes
     OUString sTitle = rParent.HasGrammarChecking() ? m_sTitleSpellingGrammar : m_sTitleSpelling;
-    SetText(sTitle.replaceFirst("$LANGUAGE ($LOCATION)", ""));
+    m_xDialog->set_title(m_xDialog->strip_mnemonic(sTitle.replaceFirst("$LANGUAGE ($LOCATION)", "")));
 
-    m_sResumeST = get<FixedText>("resumeft")->GetText();
-    m_sNoSuggestionsST = get<FixedText>("nosuggestionsft")->GetText();
+    m_sResumeST = m_xResumeFT->get_label();
+    m_sNoSuggestionsST = m_xNoSuggestionsFT->strip_mnemonic(m_xNoSuggestionsFT->get_label());
 
-    get(m_pLanguageFT, "languageft");
-    get(m_pLanguageLB, "languagelb");
-    get(m_pExplainFT, "explain");
-    get(m_pExplainLink, "explainlink");
-    get(m_pNotInDictFT, "notindictft");
-    get(m_pSentenceED, "sentence");
-    Size aEdSize(LogicToPixel(Size(197, 48), MapMode(MapUnit::MapAppFont)));
-    m_pSentenceED->set_width_request(aEdSize.Width());
-    m_pSentenceED->set_height_request(aEdSize.Height());
-    get(m_pSuggestionFT, "suggestionsft");
-    get(m_pSuggestionLB, "suggestionslb");
-    m_pSuggestionLB->SetDropDownLineCount(5);
-    m_pSuggestionLB->set_width_request(aEdSize.Width());
-    get(m_pIgnorePB, "ignore");
-    m_sIgnoreOnceST = m_pIgnorePB->GetText();
-    get(m_pIgnoreAllPB, "ignoreall");
-    get(m_pIgnoreRulePB, "ignorerule");
-    get(m_pAddToDictPB, "add");
-    get(m_pAddToDictMB, "addmb");
-    m_pAddToDictMB->SetHelpId(m_pAddToDictPB->GetHelpId());
-    get(m_pChangePB, "change");
-    get(m_pChangeAllPB, "changeall");
-    get(m_pAutoCorrPB, "autocorrect");
-    get(m_pCheckGrammarCB, "checkgrammar");
-    get(m_pOptionsPB, "options");
-    get(m_pUndoPB, "undo");
-    get(m_pClosePB, "close");
-    get(m_pToolbar, "toolbar");
-    m_pSentenceED->Init(m_pToolbar);
+    Size aEdSize(m_xSuggestionLB->get_approximate_digit_width() * 60,
+                 m_xSuggestionLB->get_height_rows(6));
+    m_xSuggestionLB->set_size_request(aEdSize.Width(), -1);
+    m_sIgnoreOnceST = m_xIgnorePB->get_label();
+    m_xAddToDictMB->set_help_id(m_xAddToDictPB->get_help_id());
     xSpell = LinguMgr::GetSpellChecker();
-
-    const StyleSettings& rSettings = GetSettings().GetStyleSettings();
-    Color aCol = rSettings.GetHelpColor();
-    Wallpaper aWall( aCol );
-    m_pExplainLink->SetBackground( aWall );
-    m_pExplainFT->SetBackground( aWall );
 
     Init_Impl();
 
     // disable controls if service is missing
-    Enable(xSpell.is());
+    m_xDialog->set_sensitive(xSpell.is());
 
     //InitHdl wants to use virtual methods, so it
     //can't be called during the ctor, so init
     //it on next event cycle post-ctor
-    Application::PostUserEvent(
-        LINK( this, SpellDialog, InitHdl ), nullptr, true );
+    Application::PostUserEvent(LINK(this, SpellDialog, InitHdl));
 }
 
 SpellDialog::~SpellDialog()
-{
-    disposeOnce();
-}
-
-void SpellDialog::dispose()
 {
     if (pImpl)
     {
@@ -249,90 +243,69 @@ void SpellDialog::dispose()
 
         pImpl.reset();
     }
-    m_pLanguageFT.clear();
-    m_pLanguageLB.clear();
-    m_pExplainFT.clear();
-    m_pExplainLink.clear();
-    m_pNotInDictFT.clear();
-    m_pSentenceED.clear();
-    m_pSuggestionFT.clear();
-    m_pSuggestionLB.clear();
-    m_pIgnorePB.clear();
-    m_pIgnoreAllPB.clear();
-    m_pIgnoreRulePB.clear();
-    m_pAddToDictPB.clear();
-    m_pAddToDictMB.clear();
-    m_pChangePB.clear();
-    m_pChangeAllPB.clear();
-    m_pAutoCorrPB.clear();
-    m_pCheckGrammarCB.clear();
-    m_pOptionsPB.clear();
-    m_pUndoPB.clear();
-    m_pClosePB.clear();
-    m_pToolbar.clear();
-    SfxModelessDialog::dispose();
 }
 
 void SpellDialog::Init_Impl()
 {
     // initialize handler
-    m_pClosePB->SetClickHdl(LINK( this, SpellDialog, CancelHdl ) );
-    m_pChangePB->SetClickHdl(LINK( this, SpellDialog, ChangeHdl ) );
-    m_pChangeAllPB->SetClickHdl(LINK( this, SpellDialog, ChangeAllHdl ) );
-    m_pIgnorePB->SetClickHdl(LINK( this, SpellDialog, IgnoreHdl ) );
-    m_pIgnoreAllPB->SetClickHdl(LINK( this, SpellDialog, IgnoreAllHdl ) );
-    m_pIgnoreRulePB->SetClickHdl(LINK( this, SpellDialog, IgnoreAllHdl ) );
-    m_pUndoPB->SetClickHdl(LINK( this, SpellDialog, UndoHdl ) );
+    m_xClosePB->connect_clicked(LINK( this, SpellDialog, CancelHdl ) );
+    m_xChangePB->connect_clicked(LINK( this, SpellDialog, ChangeHdl ) );
+    m_xChangeAllPB->connect_clicked(LINK( this, SpellDialog, ChangeAllHdl ) );
+    m_xIgnorePB->connect_clicked(LINK( this, SpellDialog, IgnoreHdl ) );
+    m_xIgnoreAllPB->connect_clicked(LINK( this, SpellDialog, IgnoreAllHdl ) );
+    m_xIgnoreRulePB->connect_clicked(LINK( this, SpellDialog, IgnoreAllHdl ) );
+    m_xUndoPB->connect_clicked(LINK( this, SpellDialog, UndoHdl ) );
 
-    m_pAutoCorrPB->SetClickHdl( LINK( this, SpellDialog, ExtClickHdl ) );
-    m_pCheckGrammarCB->SetClickHdl( LINK( this, SpellDialog, CheckGrammarHdl ));
-    m_pOptionsPB->SetClickHdl( LINK( this, SpellDialog, ExtClickHdl ) );
+    m_xAutoCorrPB->connect_clicked( LINK( this, SpellDialog, ExtClickHdl ) );
+    m_xCheckGrammarCB->connect_clicked( LINK( this, SpellDialog, CheckGrammarHdl ));
+    m_xOptionsPB->connect_clicked( LINK( this, SpellDialog, ExtClickHdl ) );
 
-    m_pSuggestionLB->SetDoubleClickHdl( LINK( this, SpellDialog, DoubleClickChangeHdl ) );
+    m_xSuggestionLB->connect_row_activated( LINK( this, SpellDialog, DoubleClickChangeHdl ) );
 
-    m_pSentenceED->SetModifyHdl(LINK ( this, SpellDialog, ModifyHdl) );
+    m_xSentenceED->SetModifyHdl(LINK ( this, SpellDialog, ModifyHdl) );
 
-    m_pAddToDictMB->SetSelectHdl(LINK ( this, SpellDialog, AddToDictSelectHdl ) );
-    m_pAddToDictPB->SetClickHdl(LINK ( this, SpellDialog, AddToDictClickHdl ) );
+    m_xAddToDictMB->connect_selected(LINK ( this, SpellDialog, AddToDictSelectHdl ) );
+    m_xAddToDictPB->connect_clicked(LINK ( this, SpellDialog, AddToDictClickHdl ) );
 
-    m_pLanguageLB->SetSelectHdl(LINK( this, SpellDialog, LanguageSelectHdl ) );
+    m_xLanguageLB->connect_changed(LINK( this, SpellDialog, LanguageSelectHdl ) );
 
     // initialize language ListBox
-    m_pLanguageLB->SetLanguageList( SvxLanguageListFlags::SPELL_USED, false, true );
+    m_xLanguageLB->SetLanguageList(SvxLanguageListFlags::SPELL_USED, false, false, true);
 
-    m_pSentenceED->ClearModifyFlag();
+    m_xSentenceED->ClearModifyFlag();
     LinguMgr::GetChangeAllList()->clear();
 }
 
 void SpellDialog::UpdateBoxes_Impl(bool bCallFromSelectHdl)
 {
     sal_Int32 i;
-    m_pSuggestionLB->Clear();
+    m_xSuggestionLB->clear();
 
-    const SpellErrorDescription* pSpellErrorDescription = m_pSentenceED->GetAlternatives();
+    SpellErrorDescription aSpellErrorDescription;
+    bool bSpellErrorDescription = m_xSentenceED->GetAlternatives(aSpellErrorDescription);
 
     LanguageType nAltLanguage = LANGUAGE_NONE;
     Sequence< OUString > aNewWords;
     bool bIsGrammarError = false;
-    if( pSpellErrorDescription )
+    if( bSpellErrorDescription )
     {
-        nAltLanguage    = LanguageTag::convertToLanguageType( pSpellErrorDescription->aLocale );
-        aNewWords       = pSpellErrorDescription->aSuggestions;
-        bIsGrammarError = pSpellErrorDescription->bIsGrammarError;
-        m_pExplainLink->SetURL( pSpellErrorDescription->sExplanationURL );
-        m_pExplainFT->SetText( pSpellErrorDescription->sExplanation );
+        nAltLanguage    = LanguageTag::convertToLanguageType( aSpellErrorDescription.aLocale );
+        aNewWords       = aSpellErrorDescription.aSuggestions;
+        bIsGrammarError = aSpellErrorDescription.bIsGrammarError;
+        m_xExplainLink->set_uri( aSpellErrorDescription.sExplanationURL );
+        m_xExplainFT->set_label( aSpellErrorDescription.sExplanation );
     }
-    if( pSpellErrorDescription && !pSpellErrorDescription->sDialogTitle.isEmpty() )
+    if( bSpellErrorDescription && !aSpellErrorDescription.sDialogTitle.isEmpty() )
     {
         // use this function to apply the correct image to be used...
         SetTitle_Impl( nAltLanguage );
         // then change the title to the one to be actually used
-        SetText( pSpellErrorDescription->sDialogTitle );
+        m_xDialog->set_title(m_xDialog->strip_mnemonic(aSpellErrorDescription.sDialogTitle));
     }
     else
         SetTitle_Impl( nAltLanguage );
     if( !bCallFromSelectHdl )
-        m_pLanguageLB->SelectLanguage( nAltLanguage );
+        m_xLanguageLB->set_active_id( nAltLanguage );
     int nDicts = InitUserDicts();
 
     // enter alternatives
@@ -341,51 +314,47 @@ void SpellDialog::UpdateBoxes_Impl(bool bCallFromSelectHdl)
     for ( i = 0; i < nSize; ++i )
     {
         OUString aTmp( pNewWords[i] );
-        if ( LISTBOX_ENTRY_NOTFOUND == m_pSuggestionLB->GetEntryPos( aTmp ) )
-        {
-            m_pSuggestionLB->InsertEntry( aTmp );
-            m_pSuggestionLB->SetEntryFlags(m_pSuggestionLB->GetEntryCount() - 1, ListBoxEntryFlags::MultiLine);
-        }
+        if (m_xSuggestionLB->find_text(aTmp) == -1)
+            m_xSuggestionLB->append_text(aTmp);
     }
     if(!nSize)
-        m_pSuggestionLB->InsertEntry(m_sNoSuggestionsST);
-    m_pAutoCorrPB->Enable( nSize > 0 );
+        m_xSuggestionLB->append_text(m_sNoSuggestionsST);
+    m_xAutoCorrPB->set_sensitive( nSize > 0 );
 
-    m_pSuggestionFT->Enable(nSize > 0);
-    m_pSuggestionLB->Enable(nSize > 0);
+    m_xSuggestionFT->set_sensitive(nSize > 0);
+    m_xSuggestionLB->set_sensitive(nSize > 0);
     if( nSize )
     {
-        m_pSuggestionLB->SelectEntryPos(0);
+        m_xSuggestionLB->select(0);
     }
-    m_pChangePB->Enable( nSize > 0);
-    m_pChangeAllPB->Enable(nSize > 0);
+    m_xChangePB->set_sensitive( nSize > 0);
+    m_xChangeAllPB->set_sensitive(nSize > 0);
     bool bShowChangeAll = !bIsGrammarError;
-    m_pChangeAllPB->Show( bShowChangeAll );
-    m_pExplainFT->Show( !bShowChangeAll );
-    m_pLanguageLB->Enable( bShowChangeAll );
-    m_pIgnoreAllPB->Show( bShowChangeAll );
+    m_xChangeAllPB->set_visible( bShowChangeAll );
+    m_xExplainFT->set_visible( !bShowChangeAll );
+    m_xLanguageLB->set_sensitive( bShowChangeAll );
+    m_xIgnoreAllPB->set_visible( bShowChangeAll );
 
-    m_pAddToDictMB->Show( bShowChangeAll && nDicts > 1);
-    m_pAddToDictPB->Show( bShowChangeAll && nDicts <= 1);
-    m_pIgnoreRulePB->Show( !bShowChangeAll );
-    m_pIgnoreRulePB->Enable(pSpellErrorDescription && !pSpellErrorDescription->sRuleId.isEmpty());
-    m_pAutoCorrPB->Show( bShowChangeAll && rParent.HasAutoCorrection() );
+    m_xAddToDictMB->set_visible( bShowChangeAll && nDicts > 1);
+    m_xAddToDictPB->set_visible( bShowChangeAll && nDicts <= 1);
+    m_xIgnoreRulePB->set_visible( !bShowChangeAll );
+    m_xIgnoreRulePB->set_sensitive(bSpellErrorDescription && !aSpellErrorDescription.sRuleId.isEmpty());
+    m_xAutoCorrPB->set_visible( bShowChangeAll && rParent.HasAutoCorrection() );
 
-    bool bOldShowGrammar = m_pCheckGrammarCB->IsVisible();
-    bool bOldShowExplain = m_pExplainLink->IsVisible();
+    bool bOldShowGrammar = m_xCheckGrammarCB->get_visible();
+    bool bOldShowExplain = m_xExplainLink->get_visible();
 
-    m_pCheckGrammarCB->Show(rParent.HasGrammarChecking());
-    m_pExplainLink->Show(!m_pExplainLink->GetURL().isEmpty());
-    if (m_pExplainFT->GetText().isEmpty())
+    m_xCheckGrammarCB->set_visible(rParent.HasGrammarChecking());
+    m_xExplainLink->set_visible(!m_xExplainLink->get_uri().isEmpty());
+    if (m_xExplainFT->get_label().isEmpty())
     {
-        m_pExplainFT->Hide();
-        m_pExplainLink->Hide();
+        m_xExplainFT->hide();
+        m_xExplainLink->hide();
     }
 
-    if (bOldShowExplain != m_pExplainLink->IsVisible() || bOldShowGrammar != m_pCheckGrammarCB->IsVisible())
-        setOptimalLayoutSize();
+    if (bOldShowExplain != m_xExplainLink->get_visible() || bOldShowGrammar != m_xCheckGrammarCB->get_visible())
+        m_xDialog->resize_to_request();
 }
-
 
 void SpellDialog::SpellContinue_Impl(bool bUseSavedSentence, bool bIgnoreCurrentError )
 {
@@ -393,24 +362,25 @@ void SpellDialog::SpellContinue_Impl(bool bUseSavedSentence, bool bIgnoreCurrent
     //then GetNextSentence() has to be called followed again by MarkNextError()
     //MarkNextError is not initially called if the UndoEdit mode is active
     bool bNextSentence = false;
-    if((!m_pSentenceED->IsUndoEditMode() && m_pSentenceED->MarkNextError( bIgnoreCurrentError, xSpell )) ||
-            ( bNextSentence = GetNextSentence_Impl(bUseSavedSentence, m_pSentenceED->IsUndoEditMode()) && m_pSentenceED->MarkNextError( false, xSpell )))
+    if((!m_xSentenceED->IsUndoEditMode() && m_xSentenceED->MarkNextError( bIgnoreCurrentError, xSpell )) ||
+            ( bNextSentence = GetNextSentence_Impl(bUseSavedSentence, m_xSentenceED->IsUndoEditMode()) && m_xSentenceED->MarkNextError( false, xSpell )))
     {
-        const SpellErrorDescription* pSpellErrorDescription = m_pSentenceED->GetAlternatives();
-        if( pSpellErrorDescription )
+        SpellErrorDescription aSpellErrorDescription;
+        bool bSpellErrorDescription = m_xSentenceED->GetAlternatives(aSpellErrorDescription);
+        if (bSpellErrorDescription)
         {
             UpdateBoxes_Impl();
-            Control* aControls[] =
+            weld::Widget* aControls[] =
             {
-                m_pNotInDictFT,
-                m_pSentenceED,
-                m_pLanguageFT,
+                m_xNotInDictFT.get(),
+                m_xSentenceED->GetDrawingArea(),
+                m_xLanguageFT.get(),
                 nullptr
             };
             sal_Int32 nIdx = 0;
             do
             {
-                aControls[nIdx]->Enable();
+                aControls[nIdx]->set_sensitive(true);
             }
             while(aControls[++nIdx]);
 
@@ -418,8 +388,8 @@ void SpellDialog::SpellContinue_Impl(bool bUseSavedSentence, bool bIgnoreCurrent
         if( bNextSentence )
         {
             //remove undo if a new sentence is active
-            m_pSentenceED->ResetUndo();
-            m_pUndoPB->Enable(false);
+            m_xSentenceED->ResetUndo();
+            m_xUndoPB->set_sensitive(false);
         }
     }
 }
@@ -428,12 +398,12 @@ void SpellDialog::SpellContinue_Impl(bool bUseSavedSentence, bool bIgnoreCurrent
  */
 IMPL_LINK_NOARG( SpellDialog, InitHdl, void*, void)
 {
-    SetUpdateMode( false );
+    m_xDialog->freeze();
     //show or hide AutoCorrect depending on the modules abilities
-    m_pAutoCorrPB->Show(rParent.HasAutoCorrection());
+    m_xAutoCorrPB->set_visible(rParent.HasAutoCorrection());
     SpellContinue_Impl();
-    m_pSentenceED->ResetUndo();
-    m_pUndoPB->Enable(false);
+    m_xSentenceED->ResetUndo();
+    m_xUndoPB->set_sensitive(false);
 
     // get current language
     UpdateBoxes_Impl();
@@ -442,41 +412,40 @@ IMPL_LINK_NOARG( SpellDialog, InitHdl, void*, void)
     InitUserDicts();
 
     LockFocusChanges(true);
-    if( m_pChangePB->IsEnabled() )
-        m_pChangePB->GrabFocus();
-    else if( m_pIgnorePB->IsEnabled() )
-        m_pIgnorePB->GrabFocus();
-    else if( m_pClosePB->IsEnabled() )
-        m_pClosePB->GrabFocus();
+    if( m_xChangePB->get_sensitive() )
+        m_xChangePB->grab_focus();
+    else if( m_xIgnorePB->get_sensitive() )
+        m_xIgnorePB->grab_focus();
+    else if( m_xClosePB->get_sensitive() )
+        m_xClosePB->grab_focus();
     LockFocusChanges(false);
     //show grammar CheckBox depending on the modules abilities
-    m_pCheckGrammarCB->Check( rParent.IsGrammarChecking() );
-    SetUpdateMode( true );
-    Show();
+    m_xCheckGrammarCB->set_active(rParent.IsGrammarChecking());
+    m_xDialog->thaw();
 };
 
-
-IMPL_LINK( SpellDialog, ExtClickHdl, Button *, pBtn, void )
+IMPL_LINK( SpellDialog, ExtClickHdl, weld::Button&, rBtn, void )
 {
-    if (m_pOptionsPB == pBtn)
+    if (m_xOptionsPB.get() == &rBtn)
         StartSpellOptDlg_Impl();
-    else if (m_pAutoCorrPB == pBtn)
+    else if (m_xAutoCorrPB.get() == &rBtn)
     {
         //get the currently selected wrong word
-        OUString sCurrentErrorText = m_pSentenceED->GetErrorText();
+        OUString sCurrentErrorText = m_xSentenceED->GetErrorText();
         //get the wrong word from the XSpellAlternative
-        const SpellErrorDescription* pSpellErrorDescription = m_pSentenceED->GetAlternatives();
-        if( pSpellErrorDescription )
+        SpellErrorDescription aSpellErrorDescription;
+        bool bSpellErrorDescription = m_xSentenceED->GetAlternatives(aSpellErrorDescription);
+        if (bSpellErrorDescription)
         {
-            OUString sWrong(pSpellErrorDescription->sErrorText);
+            OUString sWrong(aSpellErrorDescription.sErrorText);
             //if the word has not been edited in the MultiLineEdit then
             //the current suggestion should be used
             //if it's not the 'no suggestions' entry
             if(sWrong == sCurrentErrorText &&
-                    m_pSuggestionLB->IsEnabled() && m_pSuggestionLB->GetSelectedEntryCount() > 0 &&
-                    m_sNoSuggestionsST != m_pSuggestionLB->GetSelectedEntry())
+                    m_xSuggestionLB->get_sensitive() && m_xSuggestionLB->get_selected_index() != -1 &&
+                    m_sNoSuggestionsST != m_xSuggestionLB->get_selected_text())
             {
-                sCurrentErrorText = m_pSuggestionLB->GetSelectedEntry();
+                sCurrentErrorText = m_xSuggestionLB->get_selected_text();
             }
             if(sWrong != sCurrentErrorText)
             {
@@ -488,16 +457,16 @@ IMPL_LINK( SpellDialog, ExtClickHdl, Button *, pBtn, void )
     }
 }
 
-IMPL_LINK( SpellDialog, CheckGrammarHdl, Button*, pBox, void )
+IMPL_LINK_NOARG(SpellDialog, CheckGrammarHdl, weld::Button&, void)
 {
-    rParent.SetGrammarChecking( static_cast<CheckBox*>(pBox)->IsChecked() );
+    rParent.SetGrammarChecking(m_xCheckGrammarCB->get_active());
     Impl_Restore(true);
 }
 
 void SpellDialog::StartSpellOptDlg_Impl()
 {
     SfxItemSet aSet( SfxGetpApp()->GetPool(), svl::Items<SID_AUTOSPELL_CHECK,SID_AUTOSPELL_CHECK>{});
-    SfxSingleTabDialogController aDlg(GetFrameWeld(), &aSet, "cui/ui/spelloptionsdialog.ui", "SpellOptionsDialog");
+    SfxSingleTabDialogController aDlg(m_xDialog.get(), &aSet, "cui/ui/spelloptionsdialog.ui", "SpellOptionsDialog");
 
     TabPageParent aParent(aDlg.get_content_area(), &aDlg);
     VclPtr<SfxTabPage> xPage = SvxLinguTabPage::Create(aParent, &aSet);
@@ -530,54 +499,51 @@ namespace
     }
 }
 
-
 OUString SpellDialog::getReplacementString() const
 {
-    OUString sOrigString = m_pSentenceED->GetErrorText();
+    OUString sOrigString = m_xSentenceED->GetErrorText();
 
     OUString sReplacement(sOrigString);
 
-    if(m_pSuggestionLB->IsEnabled() &&
-            m_pSuggestionLB->GetSelectedEntryCount()>0 &&
-            m_sNoSuggestionsST != m_pSuggestionLB->GetSelectedEntry())
-        sReplacement = m_pSuggestionLB->GetSelectedEntry();
+    if(m_xSuggestionLB->get_sensitive() &&
+            m_xSuggestionLB->get_selected_index() != -1 &&
+            m_sNoSuggestionsST != m_xSuggestionLB->get_selected_text())
+        sReplacement = m_xSuggestionLB->get_selected_text();
 
     return getDotReplacementString(sOrigString, sReplacement);
 }
 
-
-IMPL_LINK_NOARG(SpellDialog, DoubleClickChangeHdl, ListBox&, void)
+IMPL_LINK_NOARG(SpellDialog, DoubleClickChangeHdl, weld::TreeView&, void)
 {
-    ChangeHdl(nullptr);
+    ChangeHdl(*m_xChangePB);
 }
 
-IMPL_LINK_NOARG(SpellDialog, ChangeHdl, Button*, void)
+IMPL_LINK_NOARG(SpellDialog, ChangeHdl, weld::Button&, void)
 {
-    if(m_pSentenceED->IsUndoEditMode())
+    if (m_xSentenceED->IsUndoEditMode())
     {
         SpellContinue_Impl();
     }
     else
     {
-        m_pSentenceED->UndoActionStart( SPELLUNDO_CHANGE_GROUP );
+        m_xSentenceED->UndoActionStart( SPELLUNDO_CHANGE_GROUP );
         OUString aString = getReplacementString();
-        m_pSentenceED->ChangeMarkedWord(aString, GetSelectedLang_Impl());
+        m_xSentenceED->ChangeMarkedWord(aString, GetSelectedLang_Impl());
         SpellContinue_Impl();
-        m_pSentenceED->UndoActionEnd();
+        m_xSentenceED->UndoActionEnd();
     }
-    if(!m_pChangePB->IsEnabled())
-        m_pIgnorePB->GrabFocus();
+    if(!m_xChangePB->get_sensitive())
+        m_xIgnorePB->grab_focus();
 }
 
-
-IMPL_LINK_NOARG(SpellDialog, ChangeAllHdl, Button*, void)
+IMPL_LINK_NOARG(SpellDialog, ChangeAllHdl, weld::Button&, void)
 {
-    m_pSentenceED->UndoActionStart( SPELLUNDO_CHANGE_GROUP );
+    m_xSentenceED->UndoActionStart( SPELLUNDO_CHANGE_GROUP );
     OUString aString = getReplacementString();
     LanguageType eLang = GetSelectedLang_Impl();
 
     // add new word to ChangeAll list
-    OUString  aOldWord( m_pSentenceED->GetErrorText() );
+    OUString  aOldWord( m_xSentenceED->GetErrorText() );
     SvxPrepareAutoCorrect( aOldWord, aString );
     Reference<XDictionary> aXDictionary( LinguMgr::GetChangeAllList(), UNO_QUERY );
     DictionaryError nAdded = AddEntryToDic( aXDictionary,
@@ -590,31 +556,31 @@ IMPL_LINK_NOARG(SpellDialog, ChangeAllHdl, Button*, void)
                         SPELLUNDO_CHANGE_ADD_TO_DICTIONARY, aDialogUndoLink));
         pAction->SetDictionary(aXDictionary);
         pAction->SetAddedWord(aOldWord);
-        m_pSentenceED->AddUndoAction(std::move(pAction));
+        m_xSentenceED->AddUndoAction(std::move(pAction));
     }
 
-    m_pSentenceED->ChangeMarkedWord(aString, eLang);
+    m_xSentenceED->ChangeMarkedWord(aString, eLang);
     SpellContinue_Impl();
-    m_pSentenceED->UndoActionEnd();
+    m_xSentenceED->UndoActionEnd();
 }
 
-
-IMPL_LINK( SpellDialog, IgnoreAllHdl, Button *, pButton, void )
+IMPL_LINK( SpellDialog, IgnoreAllHdl, weld::Button&, rButton, void )
 {
-    m_pSentenceED->UndoActionStart( SPELLUNDO_CHANGE_GROUP );
+    m_xSentenceED->UndoActionStart( SPELLUNDO_CHANGE_GROUP );
     // add word to IgnoreAll list
     Reference< XDictionary > aXDictionary( LinguMgr::GetIgnoreAllList(), UNO_QUERY );
     //in case the error has been changed manually it has to be restored
-    m_pSentenceED->RestoreCurrentError();
-    if (pButton == m_pIgnoreRulePB)
+    m_xSentenceED->RestoreCurrentError();
+    if (&rButton == m_xIgnoreRulePB.get())
     {
-        const SpellErrorDescription* pSpellErrorDescription = m_pSentenceED->GetAlternatives();
+        SpellErrorDescription aSpellErrorDescription;
+        bool bSpellErrorDescription = m_xSentenceED->GetAlternatives(aSpellErrorDescription);
         try
         {
-            if( pSpellErrorDescription && pSpellErrorDescription->xGrammarChecker.is() )
+            if( bSpellErrorDescription && aSpellErrorDescription.xGrammarChecker.is() )
             {
-                pSpellErrorDescription->xGrammarChecker->ignoreRule( pSpellErrorDescription->sRuleId,
-                    pSpellErrorDescription->aLocale );
+                aSpellErrorDescription.xGrammarChecker->ignoreRule(aSpellErrorDescription.sRuleId,
+                    aSpellErrorDescription.aLocale);
                 // refresh the layout (workaround to launch a dictionary event)
                 aXDictionary->setActive(false);
                 aXDictionary->setActive(true);
@@ -626,30 +592,29 @@ IMPL_LINK( SpellDialog, IgnoreAllHdl, Button *, pButton, void )
     }
     else
     {
-        OUString sErrorText(m_pSentenceED->GetErrorText());
+        OUString sErrorText(m_xSentenceED->GetErrorText());
         DictionaryError nAdded = AddEntryToDic( aXDictionary,
             sErrorText, false,
             OUString() );
-        if(nAdded == DictionaryError::NONE)
+        if (nAdded == DictionaryError::NONE)
         {
             std::unique_ptr<SpellUndoAction_Impl> pAction(new SpellUndoAction_Impl(
                             SPELLUNDO_CHANGE_ADD_TO_DICTIONARY, aDialogUndoLink));
             pAction->SetDictionary(aXDictionary);
             pAction->SetAddedWord(sErrorText);
-            m_pSentenceED->AddUndoAction(std::move(pAction));
+            m_xSentenceED->AddUndoAction(std::move(pAction));
         }
     }
 
     SpellContinue_Impl();
-    m_pSentenceED->UndoActionEnd();
+    m_xSentenceED->UndoActionEnd();
 }
 
-
-IMPL_LINK_NOARG(SpellDialog, UndoHdl, Button*, void)
+IMPL_LINK_NOARG(SpellDialog, UndoHdl, weld::Button&, void)
 {
-    m_pSentenceED->Undo();
-    if(!m_pSentenceED->GetUndoActionCount())
-        m_pUndoPB->Enable(false);
+    m_xSentenceED->Undo();
+    if(!m_xSentenceED->GetUndoActionCount())
+        m_xUndoPB->set_sensitive(false);
 }
 
 
@@ -660,14 +625,14 @@ IMPL_LINK( SpellDialog, DialogUndoHdl, SpellUndoAction_Impl&, rAction, void )
         case SPELLUNDO_CHANGE_TEXTENGINE:
         {
             if(rAction.IsEnableChangePB())
-                m_pChangePB->Enable(false);
+                m_xChangePB->set_sensitive(false);
             if(rAction.IsEnableChangeAllPB())
-                m_pChangeAllPB->Enable(false);
+                m_xChangeAllPB->set_sensitive(false);
         }
         break;
         case SPELLUNDO_CHANGE_NEXTERROR:
         {
-            m_pSentenceED->MoveErrorMarkTo(static_cast<sal_Int32>(rAction.GetOldErrorStart()),
+            m_xSentenceED->MoveErrorMarkTo(static_cast<sal_Int32>(rAction.GetOldErrorStart()),
                                            static_cast<sal_Int32>(rAction.GetOldErrorEnd()),
                                            false);
             if(rAction.IsErrorLanguageSelected())
@@ -685,7 +650,7 @@ IMPL_LINK( SpellDialog, DialogUndoHdl, SpellUndoAction_Impl&, rAction, void )
         case SPELLUNDO_MOVE_ERROREND :
         {
             if(rAction.GetOffset() != 0)
-                m_pSentenceED->MoveErrorEnd(rAction.GetOffset());
+                m_xSentenceED->MoveErrorEnd(rAction.GetOffset());
         }
         break;
         case SPELLUNDO_UNDO_EDIT_MODE :
@@ -705,16 +670,16 @@ void SpellDialog::Impl_Restore(bool bUseSavedSentence)
     //clear the "ChangeAllList"
     LinguMgr::GetChangeAllList()->clear();
     //get a new sentence
-    m_pSentenceED->SetText(OUString());
-    m_pSentenceED->ResetModified();
+    m_xSentenceED->SetText(OUString());
+    m_xSentenceED->ResetModified();
     //Resolves: fdo#39348 refill the dialog with the currently spelled sentence
     SpellContinue_Impl(bUseSavedSentence);
-    m_pIgnorePB->SetText(m_sIgnoreOnceST);
+    m_xIgnorePB->set_label(m_sIgnoreOnceST);
 }
 
-IMPL_LINK_NOARG(SpellDialog, IgnoreHdl, Button*, void)
+IMPL_LINK_NOARG(SpellDialog, IgnoreHdl, weld::Button&, void)
 {
-    if (m_sResumeST == m_pIgnorePB->GetText())
+    if (m_sResumeST == m_xIgnorePB->get_label())
     {
         Impl_Restore(false);
     }
@@ -722,35 +687,35 @@ IMPL_LINK_NOARG(SpellDialog, IgnoreHdl, Button*, void)
     {
         //in case the error has been changed manually it has to be restored,
         // since the users choice now was to ignore the error
-        m_pSentenceED->RestoreCurrentError();
+        m_xSentenceED->RestoreCurrentError();
 
         // the word is being ignored
         SpellContinue_Impl( false, true );
     }
 }
 
-
-bool SpellDialog::Close()
+void SpellDialog::Close()
 {
+    if (IsClosing())
+        return;
+
     // We have to call ToggleChildWindow directly; calling SfxDispatcher's
     // Execute() does not work here when we are in a document with protected
     // section - in that case, the cursor can move from the editable field to
     // the protected area, and the slots get disabled because of
     // SfxDisableFlags::SwOnProtectedCursor (see FN_SPELL_GRAMMAR_DIALOG in .sdi).
-    SfxViewFrame::Current()->ToggleChildWindow(rParent.GetType());
-
-    return true;
+    SfxViewFrame* pViewFrame = SfxViewFrame::Current();
+    if (pViewFrame)
+        pViewFrame->ToggleChildWindow(rParent.GetType());
 }
-
 
 LanguageType SpellDialog::GetSelectedLang_Impl() const
 {
-    LanguageType nLang = m_pLanguageLB->GetSelectedLanguage();
+    LanguageType nLang = m_xLanguageLB->get_active_id();
     return nLang;
 }
 
-
-IMPL_LINK(SpellDialog, LanguageSelectHdl, ListBox&, rBox, void)
+IMPL_LINK_NOARG(SpellDialog, LanguageSelectHdl, weld::ComboBox&, void)
 {
     //If selected language changes, then add->list should be regenerated to
     //match
@@ -758,37 +723,36 @@ IMPL_LINK(SpellDialog, LanguageSelectHdl, ListBox&, rBox, void)
 
     //if currently an error is selected then search for alternatives for
     //this word and fill the alternatives ListBox accordingly
-    OUString sError = m_pSentenceED->GetErrorText();
-    m_pSuggestionLB->Clear();
-    if(!sError.isEmpty())
+    OUString sError = m_xSentenceED->GetErrorText();
+    m_xSuggestionLB->clear();
+    if (!sError.isEmpty())
     {
-        LanguageType eLanguage = static_cast<SvxLanguageBox*>(&rBox)->GetSelectedLanguage();
+        LanguageType eLanguage = m_xLanguageLB->get_active_id();
         Reference <XSpellAlternatives> xAlt = xSpell->spell( sError, static_cast<sal_uInt16>(eLanguage),
                                             Sequence< PropertyValue >() );
         if( xAlt.is() )
-            m_pSentenceED->SetAlternatives( xAlt );
+            m_xSentenceED->SetAlternatives( xAlt );
         else
         {
-            m_pSentenceED->ChangeMarkedWord( sError, eLanguage );
+            m_xSentenceED->ChangeMarkedWord( sError, eLanguage );
             SpellContinue_Impl();
         }
 
-        m_pSentenceED->AddUndoAction(std::make_unique<SpellUndoAction_Impl>(SPELLUNDO_CHANGE_LANGUAGE, aDialogUndoLink));
+        m_xSentenceED->AddUndoAction(std::make_unique<SpellUndoAction_Impl>(SPELLUNDO_CHANGE_LANGUAGE, aDialogUndoLink));
     }
     SpellDialog::UpdateBoxes_Impl(true);
 }
-
 
 void SpellDialog::SetTitle_Impl(LanguageType nLang)
 {
     OUString sTitle = rParent.HasGrammarChecking() ? m_sTitleSpellingGrammar : m_sTitleSpelling;
     sTitle = sTitle.replaceFirst( "$LANGUAGE ($LOCATION)", SvtLanguageTable::GetLanguageString(nLang) );
-    SetText( sTitle );
+    m_xDialog->set_title(m_xDialog->strip_mnemonic(sTitle));
 }
 
 int SpellDialog::InitUserDicts()
 {
-    const LanguageType nLang = m_pLanguageLB->GetSelectedLanguage();
+    const LanguageType nLang = m_xLanguageLB->get_active_id();
 
     const Reference< XDictionary >  *pDic = nullptr;
 
@@ -812,10 +776,7 @@ int SpellDialog::InitUserDicts()
     bool bEnable = false;
     const sal_Int32 nSize = pImpl->aDics.getLength();
     pDic = pImpl->aDics.getConstArray();
-    PopupMenu* pMenu = m_pAddToDictMB->GetPopupMenu();
-    assert(pMenu);
-    pMenu->Clear();
-    pMenu->SetMenuFlags(MenuFlags::NoAutoMnemonics);
+    m_xAddToDictMB->clear();
     sal_uInt16 nItemId = 1;     // menu items should be enumerated from 1 and not 0
     for (sal_Int32 i = 0; i < nSize; ++i)
     {
@@ -830,57 +791,51 @@ int SpellDialog::InitUserDicts()
             && (nLang == nActLanguage || LANGUAGE_NONE == nActLanguage )
             && (!xStor.is() || !xStor->isReadonly()) )
         {
-            pMenu->InsertItem( nItemId, xDicTmp->getName() );
             bEnable = true;
 
+            OUString aDictionaryImageUrl;
             uno::Reference< lang::XServiceInfo > xSvcInfo( xDicTmp, uno::UNO_QUERY );
             if (xSvcInfo.is())
             {
-                OUString aDictionaryImageUrl( aCfg.GetSpellAndGrammarContextDictionaryImage(
-                        xSvcInfo->getImplementationName()) );
-                if (!aDictionaryImageUrl.isEmpty())
-                {
-                    Image aImage( aDictionaryImageUrl );
-                    pMenu->SetItemImage( nItemId, aImage );
-                }
+                aDictionaryImageUrl = aCfg.GetSpellAndGrammarContextDictionaryImage(
+                        xSvcInfo->getImplementationName());
             }
+
+            m_xAddToDictMB->append_item(OUString::number(nItemId), xDicTmp->getName(), aDictionaryImageUrl);
 
             ++nItemId;
         }
     }
-    m_pAddToDictMB->Enable( bEnable );
-    m_pAddToDictPB->Enable( bEnable );
+    m_xAddToDictMB->set_sensitive( bEnable );
+    m_xAddToDictPB->set_sensitive( bEnable );
 
     int nDicts = nItemId-1;
 
-    m_pAddToDictMB->Show( nDicts > 1 );
-    m_pAddToDictPB->Show( nDicts <= 1 );
+    m_xAddToDictMB->set_visible( nDicts > 1 );
+    m_xAddToDictPB->set_visible( nDicts <= 1 );
 
     return nDicts;
 }
 
-
-IMPL_LINK_NOARG(SpellDialog, AddToDictClickHdl, Button*, void)
+IMPL_LINK_NOARG(SpellDialog, AddToDictClickHdl, weld::Button&, void)
 {
-    AddToDictionaryExecute(1, m_pAddToDictMB->GetPopupMenu());
+    AddToDictionaryExecute(OString::number(1));
 }
 
-
-IMPL_LINK(SpellDialog, AddToDictSelectHdl, MenuButton*, pButton, void )
+IMPL_LINK(SpellDialog, AddToDictSelectHdl, const OString&, rIdent, void)
 {
-    AddToDictionaryExecute(pButton->GetCurItemId(), pButton->GetPopupMenu());
+    AddToDictionaryExecute(rIdent);
 }
 
-
-void SpellDialog::AddToDictionaryExecute( sal_uInt16 nItemId, PopupMenu const *pMenu )
+void SpellDialog::AddToDictionaryExecute(const OString& rItemId)
 {
-    m_pSentenceED->UndoActionStart( SPELLUNDO_CHANGE_GROUP );
+    m_xSentenceED->UndoActionStart( SPELLUNDO_CHANGE_GROUP );
 
     //GetErrorText() returns the current error even if the text is already
     //manually changed
-    const OUString aNewWord = m_pSentenceED->GetErrorText();
+    const OUString aNewWord = m_xSentenceED->GetErrorText();
 
-    OUString aDicName ( pMenu->GetItemText( nItemId ) );
+    OUString aDicName(m_xAddToDictMB->get_item_label(rItemId));
 
     uno::Reference< linguistic2::XDictionary >      xDic;
     uno::Reference< linguistic2::XSearchableDictionaryList >  xDicList( LinguMgr::GetDictionaryList() );
@@ -902,7 +857,7 @@ void SpellDialog::AddToDictionaryExecute( sal_uInt16 nItemId, PopupMenu const *p
                             SPELLUNDO_CHANGE_ADD_TO_DICTIONARY, aDialogUndoLink));
             pAction->SetDictionary( xDic );
             pAction->SetAddedWord( aNewWord );
-            m_pSentenceED->AddUndoAction( std::move(pAction) );
+            m_xSentenceED->AddUndoAction( std::move(pAction) );
         }
         // failed because there is already an entry?
         if (DictionaryError::NONE != nAddRes && xDic->getEntry( aNewWord ).is())
@@ -910,48 +865,42 @@ void SpellDialog::AddToDictionaryExecute( sal_uInt16 nItemId, PopupMenu const *p
     }
     if (DictionaryError::NONE != nAddRes)
     {
-        SvxDicError(GetFrameWeld(), nAddRes);
+        SvxDicError(m_xDialog.get(), nAddRes);
         return; // don't continue
     }
 
     // go on
     SpellContinue_Impl();
-    m_pSentenceED->UndoActionEnd();
+    m_xSentenceED->UndoActionEnd();
 }
 
-
-IMPL_LINK(SpellDialog, ModifyHdl, Edit&, rEd, void)
+IMPL_LINK_NOARG(SpellDialog, ModifyHdl, LinkParamNone*, void)
 {
-    if (m_pSentenceED == &rEd)
+    m_xSuggestionLB->unselect_all();
+    m_xSuggestionLB->set_sensitive(false);
+    m_xAutoCorrPB->set_sensitive(false);
+    std::unique_ptr<SpellUndoAction_Impl> pSpellAction(new SpellUndoAction_Impl(SPELLUNDO_CHANGE_TEXTENGINE, aDialogUndoLink));
+    if(!m_xChangeAllPB->get_sensitive())
     {
-        m_pSuggestionLB->SetNoSelection();
-        m_pSuggestionLB->Disable();
-        m_pAutoCorrPB->Disable();
-        std::unique_ptr<SpellUndoAction_Impl> pSpellAction(new SpellUndoAction_Impl(SPELLUNDO_CHANGE_TEXTENGINE, aDialogUndoLink));
-        if(!m_pChangeAllPB->IsEnabled())
-        {
-            m_pChangeAllPB->Enable();
-            pSpellAction->SetEnableChangeAllPB();
-        }
-        if(!m_pChangePB->IsEnabled())
-        {
-            m_pChangePB->Enable();
-            pSpellAction->SetEnableChangePB();
-        }
-        m_pSentenceED->AddUndoAction(std::move(pSpellAction));
+        m_xChangeAllPB->set_sensitive(true);
+        pSpellAction->SetEnableChangeAllPB();
     }
-};
+    if(!m_xChangePB->get_sensitive())
+    {
+        m_xChangePB->set_sensitive(true);
+        pSpellAction->SetEnableChangePB();
+    }
+    m_xSentenceED->AddUndoAction(std::move(pSpellAction));
+}
 
-
-IMPL_LINK_NOARG(SpellDialog, CancelHdl, Button*, void)
+IMPL_LINK_NOARG(SpellDialog, CancelHdl, weld::Button&, void)
 {
     //apply changes and ignored text parts first - if there are any
-    rParent.ApplyChangedSentence(m_pSentenceED->CreateSpellPortions(), false);
+    rParent.ApplyChangedSentence(m_xSentenceED->CreateSpellPortions(), false);
     Close();
 }
 
-
-bool SpellDialog::EventNotify( NotifyEvent& rNEvt )
+void SpellDialog::ToplevelFocusChanged()
 {
     /* #i38338#
     *   FIXME: LoseFocus and GetFocus are signals from vcl that
@@ -962,55 +911,64 @@ bool SpellDialog::EventNotify( NotifyEvent& rNEvt )
     *   The only sensible thing would be to call the new Method differently,
     *   e.g. DialogGot/LostFocus or so.
     */
-    if( IsVisible() && !bFocusLocked )
+    if (m_xDialog->get_visible() && !bFocusLocked)
     {
-        if( rNEvt.GetType() ==  MouseNotifyEvent::GETFOCUS )
+        if (m_xDialog->has_toplevel_focus())
         {
             //notify the child window of the focus change
             rParent.GetFocus();
         }
-        else if( rNEvt.GetType() == MouseNotifyEvent::LOSEFOCUS )
+        else
         {
             //notify the child window of the focus change
             rParent.LoseFocus();
         }
     }
-    return SfxModelessDialog::EventNotify(rNEvt);
 }
 
+void SpellDialog::Activate()
+{
+    SfxModelessDialogController::Activate();
+    ToplevelFocusChanged();
+}
+
+void SpellDialog::Deactivate()
+{
+    SfxModelessDialogController::Activate();
+    ToplevelFocusChanged();
+}
 
 void SpellDialog::InvalidateDialog()
 {
     if( bFocusLocked )
         return;
-    m_pIgnorePB->SetText(m_sResumeST);
-    vcl::Window* aDisableArr[] =
+    m_xIgnorePB->set_label(m_sResumeST);
+    weld::Widget* aDisableArr[] =
     {
-        m_pNotInDictFT,
-        m_pSentenceED,
-        m_pSuggestionFT,
-        m_pSuggestionLB,
-        m_pLanguageFT,
-        m_pLanguageLB,
-        m_pIgnoreAllPB,
-        m_pIgnoreRulePB,
-        m_pAddToDictMB,
-        m_pAddToDictPB,
-        m_pChangePB,
-        m_pChangeAllPB,
-        m_pAutoCorrPB,
-        m_pUndoPB,
+        m_xNotInDictFT.get(),
+        m_xSentenceED->GetDrawingArea(),
+        m_xSuggestionFT.get(),
+        m_xSuggestionLB.get(),
+        m_xLanguageFT.get(),
+        m_xLanguageLB->get_widget(),
+        m_xIgnoreAllPB.get(),
+        m_xIgnoreRulePB.get(),
+        m_xAddToDictMB.get(),
+        m_xAddToDictPB.get(),
+        m_xChangePB.get(),
+        m_xChangeAllPB.get(),
+        m_xAutoCorrPB.get(),
+        m_xUndoPB.get(),
         nullptr
     };
     sal_Int16 i = 0;
     while(aDisableArr[i])
     {
-        aDisableArr[i]->Enable(false);
+        aDisableArr[i]->set_sensitive(false);
         i++;
     }
-    SfxModelessDialog::Deactivate();
+    SfxModelessDialogController::Deactivate();
 }
-
 
 bool SpellDialog::GetNextSentence_Impl(bool bUseSavedSentence, bool bRecheck)
 {
@@ -1018,10 +976,10 @@ bool SpellDialog::GetNextSentence_Impl(bool bUseSavedSentence, bool bRecheck)
     if(!bUseSavedSentence)
     {
         //apply changes and ignored text parts
-        rParent.ApplyChangedSentence(m_pSentenceED->CreateSpellPortions(), bRecheck);
+        rParent.ApplyChangedSentence(m_xSentenceED->CreateSpellPortions(), bRecheck);
     }
-    m_pSentenceED->ResetIgnoreErrorsAt();
-    m_pSentenceED->ResetModified();
+    m_xSentenceED->ResetIgnoreErrorsAt();
+    m_xSentenceED->ResetModified();
     SpellPortions aSentence = bUseSavedSentence ? m_aSavedSentence : rParent.GetNextWrongSentence( bRecheck );
     if(!bUseSavedSentence)
         m_aSavedSentence = aSentence;
@@ -1049,7 +1007,7 @@ bool SpellDialog::GetNextSentence_Impl(bool bUseSavedSentence, bool bRecheck)
             if(!elem.bIsHidden)
                 sText.append(elem.sText);
         }
-        m_pSentenceED->SetText(sText.makeStringAndClear());
+        m_xSentenceED->SetText(sText.makeStringAndClear());
         sal_Int32 nStartPosition = 0;
         sal_Int32 nEndPosition = 0;
 
@@ -1067,7 +1025,9 @@ bool SpellDialog::GetNextSentence_Impl(bool bUseSavedSentence, bool bRecheck)
                         sServiceName = xNamed->getName();
                     SpellErrorDescription aDesc( false, elem.xAlternatives->getWord(),
                                     elem.xAlternatives->getLocale(), elem.xAlternatives->getAlternatives(), nullptr);
-                    m_pSentenceED->SetAttrib( SpellErrorAttrib(aDesc), 0, nStartPosition, nEndPosition );
+                    SfxGrabBagItem aSpellErrorDescription(EE_CHAR_GRABBAG);
+                    aSpellErrorDescription.GetGrabBag()["SpellErrorDescription"] <<= aDesc.toSequence();
+                    m_xSentenceED->SetAttrib(aSpellErrorDescription, nStartPosition, nEndPosition);
                 }
                 else if(elem.bIsGrammarError )
                 {
@@ -1093,19 +1053,23 @@ bool SpellDialog::GetNextSentence_Impl(bool bUseSavedSentence, bool bRecheck)
                         &elem.aGrammarError.aFullComment,
                         &elem.aGrammarError.aRuleIdentifier,
                         &sFullCommentURL );
-                    m_pSentenceED->SetAttrib( SpellErrorAttrib(aDesc), 0, nStartPosition, nEndPosition );
+
+                    SfxGrabBagItem aSpellErrorDescriptionItem(EE_CHAR_GRABBAG);
+                    aSpellErrorDescriptionItem.GetGrabBag()["SpellErrorDescription"] <<= aDesc.toSequence();
+                    m_xSentenceED->SetAttrib(aSpellErrorDescriptionItem, nStartPosition, nEndPosition);
                 }
-                if(elem.bIsField)
-                    m_pSentenceED->SetAttrib( SpellBackgroundAttrib(COL_LIGHTGRAY), 0, nStartPosition, nEndPosition );
-                m_pSentenceED->SetAttrib( SpellLanguageAttrib(elem.eLanguage), 0, nStartPosition, nEndPosition );
+
+                if (elem.bIsField)
+                    m_xSentenceED->SetAttrib(SvxBackgroundColorItem(COL_LIGHTGRAY, EE_CHAR_BKGCOLOR), nStartPosition, nEndPosition);
+                m_xSentenceED->SetAttrib(SvxLanguageItem(elem.eLanguage, EE_CHAR_LANGUAGE), nStartPosition, nEndPosition);
                 nStartPosition = nEndPosition;
             }
         }
         //the edit field needs to be modified to apply the change from the ApplyChangeAllList
         if(!bHasReplaced)
-            m_pSentenceED->ClearModifyFlag();
-        m_pSentenceED->ResetUndo();
-        m_pUndoPB->Enable(false);
+            m_xSentenceED->ClearModifyFlag();
+        m_xSentenceED->ResetUndo();
+        m_xUndoPB->set_sensitive(false);
         bRet = nStartPosition > 0;
     }
     return bRet;
@@ -1145,26 +1109,149 @@ bool SpellDialog::ApplyChangeAllList_Impl(SpellPortions& rSentence, bool &bHasRe
     return bRet;
 }
 
-
-SentenceEditWindow_Impl::SentenceEditWindow_Impl(vcl::Window * pParent, WinBits nBits)
-    : VclMultiLineEdit(pParent, nBits)
-    , m_nErrorStart(0)
+SentenceEditWindow_Impl::SentenceEditWindow_Impl()
+    : m_nErrorStart(0)
     , m_nErrorEnd(0)
     , m_bIsUndoEditMode(false)
 {
-    DisableSelectionOnFocus();
+}
+
+void SentenceEditWindow_Impl::SetDrawingArea(weld::DrawingArea* pDrawingArea)
+{
+    Size aSize(pDrawingArea->get_approximate_digit_width() * 60,
+               pDrawingArea->get_text_height() * 6);
+
+    pDrawingArea->set_size_request(aSize.Width(), aSize.Height());
+    SetOutputSizePixel(aSize);
+
+    weld::CustomWidgetController::SetDrawingArea(pDrawingArea);
+
+    EnableRTL(false);
+
+    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+    Color aBgColor = rStyleSettings.GetWindowColor();
+
+    OutputDevice& rDevice = pDrawingArea->get_ref_device();
+
+    rDevice.SetMapMode(MapMode(MapUnit::MapTwip));
+    rDevice.SetBackground(aBgColor);
+
+    Size aOutputSize(rDevice.PixelToLogic(aSize));
+    aSize = aOutputSize;
+    aSize.setHeight( aSize.Height() * 4 );
+
+    m_xEditEngine.reset(new EditEngine(EditEngine::CreatePool()));
+    m_xEditEngine->SetPaperSize( aSize );
+    m_xEditEngine->SetRefDevice( &rDevice );
+
+    m_xEditEngine->SetControlWord(m_xEditEngine->GetControlWord() | EEControlBits::MARKFIELDS);
+
+    m_xEdView.reset(new EditView(m_xEditEngine.get(), nullptr));
+    m_xEdView->setEditViewCallbacks(this);
+    m_xEdView->SetOutputArea(tools::Rectangle(Point(0,0), aOutputSize));
+
+    m_xEdView->SetBackgroundColor(aBgColor);
+    m_xEditEngine->InsertView(m_xEdView.get());
+
+    pDrawingArea->set_cursor(PointerStyle::Text);
+}
+
+void SentenceEditWindow_Impl::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
+{
+    //note: ClassificationEditView::Paint is similar
+
+    rRenderContext.Push(PushFlags::ALL);
+    rRenderContext.SetClipRegion();
+
+    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+    Color aBgColor = rStyleSettings.GetWindowColor();
+
+    m_xEdView->SetBackgroundColor(aBgColor);
+
+    rRenderContext.SetBackground(aBgColor);
+
+    tools::Rectangle aLogicRect(rRenderContext.PixelToLogic(rRect));
+    m_xEdView->Paint(aLogicRect, &rRenderContext);
+
+    if (HasFocus())
+    {
+        m_xEdView->ShowCursor();
+        vcl::Cursor* pCursor = m_xEdView->GetCursor();
+        pCursor->DrawToDevice(rRenderContext);
+    }
+
+    std::vector<tools::Rectangle> aLogicRects;
+
+    // get logic selection
+    m_xEdView->GetSelectionRectangles(aLogicRects);
+
+    rRenderContext.SetLineColor();
+    rRenderContext.SetFillColor(COL_BLACK);
+    rRenderContext.SetRasterOp(RasterOp::Invert);
+
+    for (const auto &rSelectionRect : aLogicRects)
+        rRenderContext.DrawRect(rSelectionRect);
+
+    rRenderContext.Pop();
+}
+
+bool SentenceEditWindow_Impl::MouseMove(const MouseEvent& rMEvt)
+{
+    return m_xEdView->MouseMove(rMEvt);
+}
+
+bool SentenceEditWindow_Impl::MouseButtonDown(const MouseEvent& rMEvt)
+{
+    if (!HasFocus())
+        GrabFocus();
+
+    return m_xEdView->MouseButtonDown(rMEvt);
+}
+
+bool SentenceEditWindow_Impl::MouseButtonUp(const MouseEvent& rMEvt)
+{
+    return m_xEdView->MouseButtonUp(rMEvt);
+}
+
+void SentenceEditWindow_Impl::Resize()
+{
+    OutputDevice& rDevice = GetDrawingArea()->get_ref_device();
+    Size aOutputSize(rDevice.PixelToLogic(GetOutputSizePixel()));
+    Size aSize(aOutputSize);
+    aSize.setHeight( aSize.Height() * 4 );
+    m_xEditEngine->SetPaperSize(aSize);
+    m_xEdView->SetOutputArea(tools::Rectangle(Point(0,0), aOutputSize));
+    weld::CustomWidgetController::Resize();
 }
 
 SentenceEditWindow_Impl::~SentenceEditWindow_Impl()
 {
-    disposeOnce();
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT void makeSentenceEditWindow(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap &)
+namespace
 {
-    rRet = VclPtr<SentenceEditWindow_Impl>::Create(pParent, WB_BORDER|WB_VSCROLL|WB_IGNORETAB);
-}
+    const EECharAttrib* FindCharAttrib(int nStartPosition, int nEndPosition, sal_uInt16 nWhich, std::vector<EECharAttrib>& rAttribList)
+    {
+        for (const auto& rTextAtr : rAttribList)
+        {
+            if (rTextAtr.pAttr->Which() != nWhich)
+                continue;
+            if (rTextAtr.nStart <= nStartPosition && rTextAtr.nEnd >= nEndPosition)
+            {
+                return &rTextAtr;
+            }
+        }
 
+        return nullptr;
+    }
+
+    void ExtractErrorDescription(const EECharAttrib& rEECharAttrib, SpellErrorDescription& rSpellErrorDescription)
+    {
+        css::uno::Sequence<css::uno::Any> aSequence;
+        static_cast<const SfxGrabBagItem*>(rEECharAttrib.pAttr)->GetGrabBag().find("SpellErrorDescription")->second >>= aSequence;
+        rSpellErrorDescription.fromSequence(aSequence);
+    }
+}
 
 /*-------------------------------------------------------------------------
     The selection before inputting a key may have a range or not
@@ -1239,309 +1326,312 @@ extern "C" SAL_DLLPUBLIC_EXPORT void makeSentenceEditWindow(VclPtr<vcl::Window> 
 #define ACTION_SELECTFIELD 2
 #define ACTION_EXPAND      3
 
-bool SentenceEditWindow_Impl::PreNotify( NotifyEvent& rNEvt )
+bool SentenceEditWindow_Impl::KeyInput(const KeyEvent& rKeyEvt)
 {
-    bool bChange = false;
-    if(rNEvt.GetType() == MouseNotifyEvent::KEYINPUT)
+    if (rKeyEvt.GetKeyCode().GetCode() == KEY_TAB)
+        return false;
+
+    bool bConsumed = false;
+
+    bool bChange = TextEngine::DoesKeyChangeText( rKeyEvt );
+    if (bChange && !IsUndoEditMode())
     {
-        const KeyEvent& rKeyEvt = *rNEvt.GetKeyEvent();
-        bChange = TextEngine::DoesKeyChangeText( rKeyEvt );
-        if(bChange && !IsUndoEditMode() &&
-            rKeyEvt.GetKeyCode().GetCode() != KEY_TAB)
+        bConsumed = true;
+
+        ESelection aCurrentSelection(m_xEdView->GetSelection());
+        aCurrentSelection.Adjust();
+
+        //determine if the selection contains a field
+        bool bHasFieldLeft = false;
+        bool bHasErrorLeft = false;
+
+        bool bHasRange = aCurrentSelection.HasRange();
+        sal_uInt8 nSelectionType = 0; // invalid type!
+
+        std::vector<EECharAttrib> aAttribList;
+        m_xEditEngine->GetCharAttribs(0, aAttribList);
+
+        auto nCursor = aCurrentSelection.nStartPos;
+        const EECharAttrib* pBackAttr = FindCharAttrib(nCursor, nCursor, EE_CHAR_BKGCOLOR, aAttribList);
+        const EECharAttrib* pErrorAttr = FindCharAttrib(nCursor, nCursor, EE_CHAR_GRABBAG, aAttribList);
+        const EECharAttrib* pBackAttrLeft = nullptr;
+        const EECharAttrib* pErrorAttrLeft = nullptr;
+
+        bool bHasField = pBackAttr != nullptr && (bHasRange || pBackAttr->nEnd > nCursor);
+        bool bHasError = pErrorAttr != nullptr && (bHasRange || pErrorAttr->nEnd > nCursor);
+        if (bHasRange)
         {
-            TextEngine* pTextEngine = GetTextEngine();
-            TextView* pTextView = pTextEngine->GetActiveView();
-            TextSelection aCurrentSelection = pTextView->GetSelection();
-            aCurrentSelection.Justify();
-            //determine if the selection contains a field
-            bool bHasFieldLeft = false;
-            bool bHasErrorLeft = false;
-
-            bool bHasRange = aCurrentSelection.HasRange();
-            sal_uInt8 nSelectionType = 0; // invalid type!
-
-            TextPaM aCursor(aCurrentSelection.GetStart());
-            const TextCharAttrib* pBackAttr = pTextEngine->FindCharAttrib( aCursor, TEXTATTR_SPELL_BACKGROUND );
-            const TextCharAttrib* pErrorAttr = pTextEngine->FindCharAttrib( aCursor, TEXTATTR_SPELL_ERROR );
-            const TextCharAttrib* pBackAttrLeft = nullptr;
-            const TextCharAttrib* pErrorAttrLeft = nullptr;
-
-            bool bHasField = pBackAttr != nullptr && (bHasRange || pBackAttr->GetEnd() > aCursor.GetIndex());
-            bool bHasError = pErrorAttr != nullptr && (bHasRange || pErrorAttr->GetEnd() > aCursor.GetIndex());
-            if(bHasRange)
+            if (pBackAttr &&
+                    pBackAttr->nStart == aCurrentSelection.nStartPos &&
+                    pBackAttr->nEnd == aCurrentSelection.nEndPos)
             {
-                if(pBackAttr &&
-                        pBackAttr->GetStart() == aCurrentSelection.GetStart().GetIndex() &&
-                        pBackAttr->GetEnd() == aCurrentSelection.GetEnd().GetIndex())
-                {
-                    nSelectionType = FULL;
-                }
-                else if(pErrorAttr &&
-                        pErrorAttr->GetStart() <= aCurrentSelection.GetStart().GetIndex() &&
-                        pErrorAttr->GetEnd() >= aCurrentSelection.GetEnd().GetIndex())
-                {
-                    nSelectionType = INSIDE_YES;
-                }
-                else
-                {
-                    nSelectionType = bHasField||bHasError ? BRACE : OUTSIDE_NO;
-                    while(aCursor.GetIndex() < aCurrentSelection.GetEnd().GetIndex())
-                    {
-                        ++aCursor.GetIndex();
-                        const TextCharAttrib* pIntBackAttr = pTextEngine->FindCharAttrib( aCursor, TEXTATTR_SPELL_BACKGROUND );
-                        const TextCharAttrib* pIntErrorAttr = pTextEngine->FindCharAttrib( aCursor, TEXTATTR_SPELL_ERROR );
-                        //if any attr has been found then BRACE
-                        if(pIntBackAttr || pIntErrorAttr)
-                            nSelectionType = BRACE;
-                        //the field has to be selected
-                        if(pIntBackAttr && !pBackAttr)
-                            pBackAttr = pIntBackAttr;
-                        bHasField |= pIntBackAttr != nullptr;
-                    }
-                }
+                nSelectionType = FULL;
+            }
+            else if (pErrorAttr &&
+                     pErrorAttr->nStart <= aCurrentSelection.nStartPos &&
+                     pErrorAttr->nEnd >= aCurrentSelection.nEndPos)
+            {
+                nSelectionType = INSIDE_YES;
             }
             else
             {
-                //no range selection: then 1 2 3 and 8 are possible
-                const TextCharAttrib* pCurAttr = pBackAttr ? pBackAttr : pErrorAttr;
-                if(pCurAttr)
+                nSelectionType = bHasField||bHasError ? BRACE : OUTSIDE_NO;
+                while (nCursor < aCurrentSelection.nEndPos)
                 {
-                    nSelectionType = pCurAttr->GetStart() == aCurrentSelection.GetStart().GetIndex() ?
-                            LEFT_NO : pCurAttr->GetEnd() == aCurrentSelection.GetEnd().GetIndex() ? RIGHT_NO : INSIDE_NO;
-                }
-                else
-                    nSelectionType = OUTSIDE_NO;
-
-                bHasFieldLeft = pBackAttr && pBackAttr->GetEnd() == aCursor.GetIndex();
-                if(bHasFieldLeft)
-                {
-                    pBackAttrLeft = pBackAttr;
-                    pBackAttr = nullptr;
-                }
-                bHasErrorLeft = pErrorAttr && pErrorAttr->GetEnd() == aCursor.GetIndex();
-                if(bHasErrorLeft)
-                {
-                    pErrorAttrLeft = pErrorAttr;
-                    pErrorAttr = nullptr;
-                }
-
-                //check previous position if this exists
-                //that is a redundant in the case the attribute found above already is on the left cursor side
-                //but it's o.k. for two errors/fields side by side
-                if(aCursor.GetIndex())
-                {
-                    --aCursor.GetIndex();
-                    pBackAttrLeft = pTextEngine->FindCharAttrib( aCursor, TEXTATTR_SPELL_BACKGROUND );
-                    pErrorAttrLeft = pTextEngine->FindCharAttrib( aCursor, TEXTATTR_SPELL_ERROR );
-                    bHasFieldLeft = pBackAttrLeft !=nullptr;
-                    bHasErrorLeft = pErrorAttrLeft != nullptr;
-                    ++aCursor.GetIndex();
+                    ++nCursor;
+                    const EECharAttrib* pIntBackAttr = FindCharAttrib(nCursor, nCursor, EE_CHAR_BKGCOLOR, aAttribList);
+                    const EECharAttrib* pIntErrorAttr = FindCharAttrib(nCursor, nCursor, EE_CHAR_GRABBAG, aAttribList);
+                    //if any attr has been found then BRACE
+                    if (pIntBackAttr || pIntErrorAttr)
+                        nSelectionType = BRACE;
+                    //the field has to be selected
+                    if (pIntBackAttr && !pBackAttr)
+                        pBackAttr = pIntBackAttr;
+                    bHasField |= pIntBackAttr != nullptr;
                 }
             }
-            //Here we have to determine if the error found is the one currently active
-            bool bIsErrorActive = (pErrorAttr && pErrorAttr->GetStart() == m_nErrorStart) ||
-                    (pErrorAttrLeft && pErrorAttrLeft->GetStart() == m_nErrorStart);
-
-            SAL_WARN_IF(
-                nSelectionType == INVALID, "cui.dialogs",
-                "selection type not set");
-
-            const vcl::KeyCode& rKeyCode = rKeyEvt.GetKeyCode();
-            bool bDelete = rKeyCode.GetCode() == KEY_DELETE;
-            bool bBackspace = rKeyCode.GetCode() == KEY_BACKSPACE;
-
-            sal_Int8 nAction = ACTION_CONTINUE;
-            switch(nSelectionType)
-            {
-//    1 - backspace                   delete                      any other
-//        UE                          on field FS on error CO     on field FS on error CO
-                case LEFT_NO    :
-                    if(bBackspace)
-                    {
-                        nAction = bHasFieldLeft ? ACTION_SELECTFIELD : ACTION_UNDOEDIT;
-                        //to force the use of pBackAttrLeft
-                        pBackAttr = nullptr;
-                    }
-                    else if(bDelete)
-                        nAction = bHasField ? ACTION_SELECTFIELD : ACTION_CONTINUE;
-                    else
-                        nAction = bHasError && !aCursor.GetIndex() ? ACTION_CONTINUE :
-                            bHasError ? ACTION_EXPAND : bHasErrorLeft ? ACTION_CONTINUE : ACTION_UNDOEDIT;
-                break;
-//    2 - on field FS on error C
-                case INSIDE_NO  :
-                    nAction =  bHasField ? ACTION_SELECTFIELD :
-                        bIsErrorActive ? ACTION_CONTINUE : ACTION_UNDOEDIT;
-                break;
-//    3 - backspace                   delete                      any other
-//        on field FS on error CO     UE                          on field UE on error EX
-                case RIGHT_NO   :
-                    if(bBackspace)
-                        nAction = bHasFieldLeft ? ACTION_SELECTFIELD : ACTION_CONTINUE;
-                    else if(bDelete)
-                        nAction = bHasFieldLeft && bHasError ? ACTION_CONTINUE : ACTION_UNDOEDIT;
-                    else
-                        nAction = bHasFieldLeft && bHasError ? ACTION_EXPAND :
-                            bHasError ? ACTION_CONTINUE : bHasErrorLeft ? ACTION_EXPAND :ACTION_UNDOEDIT;
-                break;
-//    4 - on field UE and on error CO
-                case FULL       :
-                    nAction = ACTION_UNDOEDIT;
-                break;
-//    5 - on field FS and on error CO
-                case INSIDE_YES :
-                    nAction = bHasField ? ACTION_SELECTFIELD : ACTION_CONTINUE;
-                break;
-//    6 - on field FS and on error UE
-                case BRACE      :
-                    nAction = bHasField ? ACTION_SELECTFIELD : ACTION_UNDOEDIT;
-                break;
-//    7 - UE
-//    8 - UE
-                case OUTSIDE_NO :
-                case OUTSIDE_YES:
-                    nAction = ACTION_UNDOEDIT;
-                break;
-            }
-            //save the current paragraph
-            sal_Int32 nCurrentLen = GetText().getLength();
-            if(nAction != ACTION_SELECTFIELD)
-                pTextView->GetWindow()->KeyInput(rKeyEvt);
-            else
-            {
-                const TextCharAttrib* pCharAttr = pBackAttr ? pBackAttr : pBackAttrLeft;
-                if(pCharAttr)
-                {
-                    TextPaM aStart(0, pCharAttr->GetStart());
-                    TextPaM aEnd(0, pCharAttr->GetEnd());
-                    TextSelection aNewSel(aStart, aEnd);
-                    pTextView->SetSelection( aNewSel);
-                }
-            }
-            if(nAction == ACTION_EXPAND)
-            {
-                DBG_ASSERT(pErrorAttrLeft || pErrorAttr, "where is the error");
-                //text has been added on the right and only the 'error attribute has to be corrected
-                if(pErrorAttrLeft)
-                {
-                    std::unique_ptr<TextAttrib> pNewError(pErrorAttrLeft->GetAttr().Clone());
-                    const sal_Int32 nStart = pErrorAttrLeft->GetStart();
-                    sal_Int32 nEnd = pErrorAttrLeft->GetEnd();
-                    pTextEngine->RemoveAttrib( 0, *pErrorAttrLeft );
-                    SetAttrib( *pNewError, 0, nStart, ++nEnd );
-                    //only active errors move the mark
-                    if(bIsErrorActive)
-                    {
-                        bool bGrammar = static_cast<const SpellErrorAttrib&>(*pNewError).GetErrorDescription().bIsGrammarError;
-                        MoveErrorMarkTo(nStart, nEnd, bGrammar);
-                    }
-                }
-                //text has been added on the left then the error attribute has to be expanded and the
-                //field attribute on the right - if any - has to be contracted
-                else if(pErrorAttr)
-                {
-                    //determine the change
-                    sal_Int32 nAddedChars = GetText().getLength() - nCurrentLen;
-
-                    std::unique_ptr<TextAttrib> pNewError(pErrorAttr->GetAttr().Clone());
-                    sal_Int32 nStart = pErrorAttr->GetStart();
-                    sal_Int32 nEnd = pErrorAttr->GetEnd();
-                    pTextEngine->RemoveAttrib( 0, *pErrorAttr );
-                    nStart = nStart - nAddedChars;
-                    SetAttrib( *pNewError, 0, nStart - nAddedChars, nEnd );
-                    //only if the error is active the mark is moved here
-                    if(bIsErrorActive)
-                    {
-                        bool bGrammar = static_cast<const SpellErrorAttrib&>(*pNewError).GetErrorDescription().bIsGrammarError;
-                        MoveErrorMarkTo(nStart, nEnd, bGrammar);
-                    }
-                    pNewError.reset();
-
-                    if(pBackAttrLeft)
-                    {
-                        std::unique_ptr<TextAttrib> pNewBack(pBackAttrLeft->GetAttr().Clone());
-                        const sal_Int32 _nStart = pBackAttrLeft->GetStart();
-                        const sal_Int32 _nEnd = pBackAttrLeft->GetEnd();
-                        pTextEngine->RemoveAttrib( 0, *pBackAttrLeft );
-                        SetAttrib( *pNewBack, 0, _nStart, _nEnd - nAddedChars);
-                    }
-                }
-            }
-            else if(nAction == ACTION_UNDOEDIT)
-            {
-                SetUndoEditMode(true);
-            }
-            //make sure the error positions are correct after text changes
-            //the old attribute may have been deleted
-            //all changes inside of the current error leave the error attribute at the current
-            //start position
-            if(!IsUndoEditMode() && bIsErrorActive)
-            {
-                const TextCharAttrib* pFontColor = pTextEngine->FindCharAttrib( aCursor, TEXTATTR_FONTCOLOR );
-                const TextCharAttrib*  pErrorAttrib = pTextEngine->FindCharAttrib( TextPaM(0, m_nErrorStart), TEXTATTR_SPELL_ERROR );
-                if(pFontColor && pErrorAttrib )
-                {
-                    m_nErrorStart = pFontColor->GetStart();
-                    m_nErrorEnd = pFontColor->GetEnd();
-                    if(pErrorAttrib->GetStart() != m_nErrorStart || pErrorAttrib->GetEnd() != m_nErrorEnd)
-                    {
-                        std::unique_ptr<TextAttrib> pNewError(pErrorAttrib->GetAttr().Clone());
-                        pTextEngine->RemoveAttrib( 0, *pErrorAttr );
-                        SetAttrib( *pNewError, 0, m_nErrorStart, m_nErrorEnd );
-                    }
-                }
-            }
-            //this is not a modification anymore
-            if(nAction != ACTION_SELECTFIELD && !m_bIsUndoEditMode)
-                CallModifyLink();
         }
         else
-            bChange = false;
+        {
+            //no range selection: then 1 2 3 and 8 are possible
+            const EECharAttrib* pCurAttr = pBackAttr ? pBackAttr : pErrorAttr;
+            if (pCurAttr)
+            {
+                nSelectionType = pCurAttr->nStart == aCurrentSelection.nStartPos ?
+                        LEFT_NO : pCurAttr->nEnd == aCurrentSelection.nEndPos ? RIGHT_NO : INSIDE_NO;
+            }
+            else
+                nSelectionType = OUTSIDE_NO;
+
+            bHasFieldLeft = pBackAttr && pBackAttr->nEnd == nCursor;
+            if(bHasFieldLeft)
+            {
+                pBackAttrLeft = pBackAttr;
+                pBackAttr = nullptr;
+            }
+            bHasErrorLeft = pErrorAttr && pErrorAttr->nEnd == nCursor;
+            if(bHasErrorLeft)
+            {
+                pErrorAttrLeft = pErrorAttr;
+                pErrorAttr = nullptr;
+            }
+
+            //check previous position if this exists
+            //that is a redundant in the case the attribute found above already is on the left cursor side
+            //but it's o.k. for two errors/fields side by side
+            if (nCursor)
+            {
+                --nCursor;
+                pBackAttrLeft = FindCharAttrib(nCursor, nCursor, EE_CHAR_BKGCOLOR, aAttribList);
+                pErrorAttrLeft = FindCharAttrib(nCursor, nCursor, EE_CHAR_GRABBAG, aAttribList);
+                bHasFieldLeft = pBackAttrLeft !=nullptr;
+                bHasErrorLeft = pErrorAttrLeft != nullptr;
+                ++nCursor;
+            }
+        }
+        //Here we have to determine if the error found is the one currently active
+        bool bIsErrorActive = (pErrorAttr && pErrorAttr->nStart == m_nErrorStart) ||
+                (pErrorAttrLeft && pErrorAttrLeft->nStart == m_nErrorStart);
+
+        SAL_WARN_IF(
+            nSelectionType == INVALID, "cui.dialogs",
+            "selection type not set");
+
+        const vcl::KeyCode& rKeyCode = rKeyEvt.GetKeyCode();
+        bool bDelete = rKeyCode.GetCode() == KEY_DELETE;
+        bool bBackspace = rKeyCode.GetCode() == KEY_BACKSPACE;
+
+        sal_Int8 nAction = ACTION_CONTINUE;
+        switch(nSelectionType)
+        {
+//    1 - backspace                   delete                      any other
+//        UE                          on field FS on error CO     on field FS on error CO
+            case LEFT_NO    :
+                if(bBackspace)
+                {
+                    nAction = bHasFieldLeft ? ACTION_SELECTFIELD : ACTION_UNDOEDIT;
+                    //to force the use of pBackAttrLeft
+                    pBackAttr = nullptr;
+                }
+                else if(bDelete)
+                    nAction = bHasField ? ACTION_SELECTFIELD : ACTION_CONTINUE;
+                else
+                    nAction = bHasError && !nCursor ? ACTION_CONTINUE :
+                        bHasError ? ACTION_EXPAND : bHasErrorLeft ? ACTION_CONTINUE : ACTION_UNDOEDIT;
+            break;
+//    2 - on field FS on error C
+            case INSIDE_NO  :
+                nAction =  bHasField ? ACTION_SELECTFIELD :
+                    bIsErrorActive ? ACTION_CONTINUE : ACTION_UNDOEDIT;
+            break;
+//    3 - backspace                   delete                      any other
+//        on field FS on error CO     UE                          on field UE on error EX
+            case RIGHT_NO   :
+                if(bBackspace)
+                    nAction = bHasFieldLeft ? ACTION_SELECTFIELD : ACTION_CONTINUE;
+                else if(bDelete)
+                    nAction = bHasFieldLeft && bHasError ? ACTION_CONTINUE : ACTION_UNDOEDIT;
+                else
+                    nAction = bHasFieldLeft && bHasError ? ACTION_EXPAND :
+                        bHasError ? ACTION_CONTINUE : bHasErrorLeft ? ACTION_EXPAND :ACTION_UNDOEDIT;
+            break;
+//    4 - on field UE and on error CO
+            case FULL       :
+                nAction = ACTION_UNDOEDIT;
+            break;
+//    5 - on field FS and on error CO
+            case INSIDE_YES :
+                nAction = bHasField ? ACTION_SELECTFIELD : ACTION_CONTINUE;
+            break;
+//    6 - on field FS and on error UE
+            case BRACE      :
+                nAction = bHasField ? ACTION_SELECTFIELD : ACTION_UNDOEDIT;
+            break;
+//    7 - UE
+//    8 - UE
+            case OUTSIDE_NO :
+            case OUTSIDE_YES:
+                nAction = ACTION_UNDOEDIT;
+            break;
+        }
+        //save the current paragraph
+        sal_Int32 nCurrentLen = m_xEditEngine->GetText().getLength();
+        if (nAction != ACTION_SELECTFIELD)
+        {
+            m_xEdView->PostKeyEvent(rKeyEvt);
+        }
+        else
+        {
+            const EECharAttrib* pCharAttr = pBackAttr ? pBackAttr : pBackAttrLeft;
+            if (pCharAttr)
+                m_xEdView->SetSelection(ESelection(0, pCharAttr->nStart, 0, pCharAttr->nEnd));
+        }
+        if(nAction == ACTION_EXPAND)
+        {
+            DBG_ASSERT(pErrorAttrLeft || pErrorAttr, "where is the error");
+            //text has been added on the right and only the 'error attribute has to be corrected
+            if (pErrorAttrLeft)
+            {
+                SpellErrorDescription aSpellErrorDescription;
+                ExtractErrorDescription(*pErrorAttrLeft, aSpellErrorDescription);
+
+                std::unique_ptr<SfxPoolItem> xNewError(pErrorAttrLeft->pAttr->Clone());
+                sal_Int32 nStart = pErrorAttrLeft->nStart;
+                sal_Int32 nEnd = pErrorAttrLeft->nEnd + 1;
+                m_xEditEngine->RemoveAttribs(ESelection(0, nStart, 0, nEnd), false, EE_CHAR_GRABBAG);
+                SetAttrib(*xNewError, nStart, nEnd);
+                //only active errors move the mark
+                if (bIsErrorActive)
+                {
+                    bool bGrammar = aSpellErrorDescription.bIsGrammarError;
+                    MoveErrorMarkTo(nStart, nEnd, bGrammar);
+                }
+            }
+            //text has been added on the left then the error attribute has to be expanded and the
+            //field attribute on the right - if any - has to be contracted
+            else if (pErrorAttr)
+            {
+                SpellErrorDescription aSpellErrorDescription;
+                ExtractErrorDescription(*pErrorAttr, aSpellErrorDescription);
+
+                //determine the change
+                sal_Int32 nAddedChars = m_xEditEngine->GetText().getLength() - nCurrentLen;
+
+                std::unique_ptr<SfxPoolItem> xNewError(pErrorAttr->pAttr->Clone());
+                sal_Int32 nStart = pErrorAttr->nStart + nAddedChars;
+                sal_Int32 nEnd = pErrorAttr->nEnd + nAddedChars;
+                m_xEditEngine->RemoveAttribs(ESelection(0, nStart, 0, nEnd), false, EE_CHAR_GRABBAG);
+                nStart = pErrorAttr->nStart;
+                SetAttrib(*xNewError, nStart, nEnd);
+                //only if the error is active the mark is moved here
+                if (bIsErrorActive)
+                {
+                    bool bGrammar = aSpellErrorDescription.bIsGrammarError;
+                    MoveErrorMarkTo(nStart, nEnd, bGrammar);
+                }
+                xNewError.reset();
+
+                if (pBackAttrLeft)
+                {
+                    std::unique_ptr<SfxPoolItem> xNewBack(pBackAttrLeft->pAttr->Clone());
+                    sal_Int32 _nStart = pBackAttrLeft->nStart + nAddedChars;
+                    sal_Int32 _nEnd = pBackAttrLeft->nEnd + nAddedChars;
+                    m_xEditEngine->RemoveAttribs(ESelection(0, _nStart, 0, _nEnd), false, EE_CHAR_BKGCOLOR);
+                    _nStart = pBackAttrLeft->nStart;
+                    SetAttrib(*xNewBack, _nStart, _nEnd);
+                }
+            }
+        }
+        else if(nAction == ACTION_UNDOEDIT)
+        {
+            SetUndoEditMode(true);
+        }
+        //make sure the error positions are correct after text changes
+        //the old attribute may have been deleted
+        //all changes inside of the current error leave the error attribute at the current
+        //start position
+        if (!IsUndoEditMode() && bIsErrorActive)
+        {
+            const EECharAttrib* pFontColor = FindCharAttrib(nCursor, nCursor, EE_CHAR_COLOR, aAttribList);
+            const EECharAttrib* pErrorAttrib = FindCharAttrib(m_nErrorStart, m_nErrorStart, EE_CHAR_GRABBAG, aAttribList);
+            if (pFontColor && pErrorAttrib)
+            {
+                m_nErrorStart = pFontColor->nStart;
+                m_nErrorEnd = pFontColor->nEnd;
+                if (pErrorAttrib->nStart != m_nErrorStart || pErrorAttrib->nEnd != m_nErrorEnd)
+                {
+                    std::unique_ptr<SfxPoolItem> xNewError(pErrorAttrib->pAttr->Clone());
+                    m_xEditEngine->RemoveAttribs(ESelection(0, pErrorAttr->nStart, 0, pErrorAttr->nEnd), false, EE_CHAR_GRABBAG);
+                    SetAttrib(*xNewError, m_nErrorStart, m_nErrorEnd);
+                }
+            }
+        }
+        //this is not a modification anymore
+        if(nAction != ACTION_SELECTFIELD && !m_bIsUndoEditMode)
+            CallModifyLink();
     }
-    return bChange || VclMultiLineEdit::PreNotify(rNEvt);
+    else
+        bConsumed = m_xEdView->PostKeyEvent(rKeyEvt);
+
+    return bConsumed;
 }
 
-void SentenceEditWindow_Impl::Init(VclPtr<ToolBox> const &rToolbar)
+void SentenceEditWindow_Impl::Init(weld::Toolbar* pToolbar)
 {
-    m_xToolbar = rToolbar;
-    m_xToolbar->SetSelectHdl(LINK(this,SentenceEditWindow_Impl,ToolbarHdl));
+    m_pToolbar = pToolbar;
+    m_pToolbar->connect_clicked(LINK(this,SentenceEditWindow_Impl,ToolbarHdl));
 }
 
-IMPL_LINK_NOARG(SentenceEditWindow_Impl, ToolbarHdl, ToolBox *, void)
+IMPL_LINK(SentenceEditWindow_Impl, ToolbarHdl, const OString&, rCurItemId, void)
 {
-    const sal_uInt16 nCurItemId = m_xToolbar->GetCurItemId();
-    if (nCurItemId == m_xToolbar->GetItemId("paste"))
+    if (rCurItemId == "paste")
     {
-        Paste();
+        m_xEdView->Paste();
         CallModifyLink();
     }
-    else if (nCurItemId == m_xToolbar->GetItemId("insert"))
+    else if (rCurItemId == "insert")
     {
         if (Edit::GetGetSpecialCharsFunction())
         {
-            OUString aChars = Edit::GetGetSpecialCharsFunction()( this, GetFont() );
+            OUString aChars = Edit::GetGetSpecialCharsFunction()(GetDrawingArea(), m_xEditEngine->GetStandardFont(0));
             if (!aChars.isEmpty())
             {
-                ReplaceSelected(aChars);
+                ESelection aCurrentSelection(m_xEdView->GetSelection());
+                m_xEditEngine->QuickInsertText(aChars, aCurrentSelection);
                 CallModifyLink();
             }
         }
     }
-}
-
-void SentenceEditWindow_Impl::dispose()
-{
-    m_xToolbar.clear();
-    VclMultiLineEdit::dispose();
 }
 
 bool SentenceEditWindow_Impl::MarkNextError( bool bIgnoreCurrentError, const css::uno::Reference<css::linguistic2::XSpellChecker1>& xSpell )
 {
     if (bIgnoreCurrentError)
         m_aIgnoreErrorsAt.insert( m_nErrorStart );
-    ExtTextEngine* pTextEngine = GetTextEngine();
-    const sal_Int32 nTextLen = pTextEngine->GetTextLen(0);
-    if(m_nErrorEnd >= nTextLen - 1)
+
+    const sal_Int32 nTextLen = m_xEditEngine->GetTextLen(0);
+
+    if (m_nErrorEnd >= nTextLen - 1)
         return false;
     //if it's not already modified the modified flag has to be reset at the end of the marking
     bool bModified = IsModified();
@@ -1551,42 +1641,62 @@ bool SentenceEditWindow_Impl::MarkNextError( bool bIgnoreCurrentError, const css
 
     //create a cursor behind the end of the last error
     //- or at 0 at the start of the sentence
-    TextPaM aCursor(0, m_nErrorEnd ? m_nErrorEnd + 1 : 0);
-    //search for SpellErrorAttrib
+    int nCursor(m_nErrorEnd ? m_nErrorEnd + 1 : 0);
 
-    const TextCharAttrib* pNextError = nullptr;
+    //search for SpellErrorDescription
+    SpellErrorDescription aSpellErrorDescription;
+
+    std::vector<EECharAttrib> aAttribList;
+    m_xEditEngine->GetCharAttribs(0, aAttribList);
+
     //iterate over the text and search for the next error that maybe has
     //to be replace by a ChangeAllList replacement
     bool bGrammarError = false;
-    while(aCursor.GetIndex() < nTextLen)
+    while (nCursor < nTextLen)
     {
-        while(aCursor.GetIndex() < nTextLen &&
-                nullptr == (pNextError = pTextEngine->FindCharAttrib( aCursor, TEXTATTR_SPELL_ERROR)))
-        {
-            ++aCursor.GetIndex();
-        }
-        // maybe the error found here is already in the ChangeAllList and has to be replaced
+        const SpellErrorDescription* pSpellErrorDescription = nullptr;
+        const EECharAttrib* pEECharAttrib = nullptr;
 
+        sal_Int32 nMinPos = nTextLen + 1;
+        for (const auto& rTextAtr : aAttribList)
+        {
+            if (rTextAtr.pAttr->Which() != EE_CHAR_GRABBAG)
+                continue;
+            if (rTextAtr.nEnd > nCursor && rTextAtr.nStart < nMinPos)
+            {
+                nMinPos = rTextAtr.nStart;
+                pEECharAttrib = &rTextAtr;
+            }
+        }
+
+        if (pEECharAttrib)
+        {
+            ExtractErrorDescription(*pEECharAttrib, aSpellErrorDescription);
+
+            bGrammarError = aSpellErrorDescription.bIsGrammarError;
+            m_nErrorStart = pEECharAttrib->nStart;
+            m_nErrorEnd = pEECharAttrib->nEnd;
+
+            pSpellErrorDescription = &aSpellErrorDescription;
+        }
+
+        nCursor = nMinPos;
+
+        // maybe the error found here is already in the ChangeAllList and has to be replaced
         Reference<XDictionary> xChangeAll( LinguMgr::GetChangeAllList(), UNO_QUERY );
         Reference<XDictionaryEntry> xEntry;
 
-        const SpellErrorDescription* pSpellErrorDescription = nullptr;
-        if(pNextError)
-        {
-            pSpellErrorDescription = &static_cast<const SpellErrorAttrib&>(pNextError->GetAttr()).GetErrorDescription();
-            bGrammarError = pSpellErrorDescription->bIsGrammarError;
-            m_nErrorStart = pNextError->GetStart();
-            m_nErrorEnd = pNextError->GetEnd();
-        }
-        if(xChangeAll->getCount() && pSpellErrorDescription &&
+        if (xChangeAll->getCount() && pSpellErrorDescription &&
                 (xEntry = xChangeAll->getEntry( pSpellErrorDescription->sErrorText )).is())
         {
-
             OUString sReplacement(getDotReplacementString(GetErrorText(), xEntry->getReplacementText()));
 
-            ChangeMarkedWord(sReplacement, LanguageTag::convertToLanguageType( pSpellErrorDescription->aLocale ));
+            int nLenChange = ChangeMarkedWord(sReplacement, LanguageTag::convertToLanguageType(pSpellErrorDescription->aLocale));
 
-            aCursor.GetIndex() += sReplacement.getLength();
+            nCursor += sReplacement.getLength();
+
+            if (nLenChange)
+                m_xEditEngine->GetCharAttribs(0, aAttribList);
             // maybe the error found here is already added to the dictionary and has to be ignored
         }
         else if(pSpellErrorDescription && !bGrammarError &&
@@ -1594,26 +1704,30 @@ bool SentenceEditWindow_Impl::MarkNextError( bool bIgnoreCurrentError, const css
                                 static_cast<sal_uInt16>(LanguageTag::convertToLanguageType( pSpellErrorDescription->aLocale )),
                                 Sequence< PropertyValue >() ))
         {
-            ++aCursor.GetIndex();
+            ++nCursor;
         }
         else
             break;
     }
 
     //if an attrib has been found search for the end of the error string
-    if(aCursor.GetIndex() < nTextLen)
+    if (nCursor < nTextLen)
     {
-        MoveErrorMarkTo(aCursor.GetIndex(), pNextError->GetEnd(), bGrammarError);
+        MoveErrorMarkTo(nCursor, m_nErrorEnd, bGrammarError);
         bRet = true;
         //add an undo action
         std::unique_ptr<SpellUndoAction_Impl> pAction(new SpellUndoAction_Impl(
                 SPELLUNDO_CHANGE_NEXTERROR, GetSpellDialog()->aDialogUndoLink));
         pAction->SetErrorMove(nOldErrorStart, nOldErrorEnd);
-        const SpellErrorAttrib* pOldAttrib = static_cast<const SpellErrorAttrib*>(
-                pTextEngine->FindAttrib( TextPaM(0, nOldErrorStart), TEXTATTR_SPELL_ERROR ));
-        pAction->SetErrorLanguageSelected(pOldAttrib && pOldAttrib->GetErrorDescription().aSuggestions.hasElements() &&
-                LanguageTag( pOldAttrib->GetErrorDescription().aLocale).getLanguageType() ==
-                                        GetSpellDialog()->m_pLanguageLB->GetSelectedLanguage());
+
+        if (GetErrorDescription(aSpellErrorDescription, nOldErrorStart))
+        {
+            pAction->SetErrorLanguageSelected(aSpellErrorDescription.aSuggestions.hasElements() &&
+                LanguageTag(aSpellErrorDescription.aLocale).getLanguageType() == GetSpellDialog()->m_xLanguageLB->get_active_id());
+        }
+        else
+            pAction->SetErrorLanguageSelected(false);
+
         AddUndoAction(std::move(pAction));
     }
     else
@@ -1621,75 +1735,93 @@ bool SentenceEditWindow_Impl::MarkNextError( bool bIgnoreCurrentError, const css
     if( !bModified )
         ClearModifyFlag();
     SpellDialog* pSpellDialog = GetSpellDialog();
-    pSpellDialog->m_pIgnorePB->Enable(bRet);
-    pSpellDialog->m_pIgnoreAllPB->Enable(bRet);
-    pSpellDialog->m_pAutoCorrPB->Enable(bRet);
-    pSpellDialog->m_pAddToDictMB->Enable(bRet);
-    pSpellDialog->m_pAddToDictPB->Enable(bRet);
+    pSpellDialog->m_xIgnorePB->set_sensitive(bRet);
+    pSpellDialog->m_xIgnoreAllPB->set_sensitive(bRet);
+    pSpellDialog->m_xAutoCorrPB->set_sensitive(bRet);
+    pSpellDialog->m_xAddToDictMB->set_sensitive(bRet);
+    pSpellDialog->m_xAddToDictPB->set_sensitive(bRet);
     return bRet;
 }
 
-
 void SentenceEditWindow_Impl::MoveErrorMarkTo(sal_Int32 nStart, sal_Int32 nEnd, bool bGrammarError)
 {
-    TextEngine* pTextEngine = GetTextEngine();
-    pTextEngine->RemoveAttribs( 0, sal_uInt16(TEXTATTR_FONTCOLOR) );
-    pTextEngine->RemoveAttribs( 0, sal_uInt16(TEXTATTR_FONTWEIGHT) );
-    pTextEngine->SetAttrib( TextAttribFontWeight(WEIGHT_BOLD), 0, nStart, nEnd );
-    pTextEngine->SetAttrib( TextAttribFontColor(bGrammarError ? COL_LIGHTBLUE : COL_LIGHTRED), 0, nStart, nEnd );
+    ESelection aAll(0, 0, 0, EE_TEXTPOS_ALL);
+    m_xEditEngine->RemoveAttribs(aAll, false, EE_CHAR_COLOR);
+    m_xEditEngine->RemoveAttribs(aAll, false, EE_CHAR_WEIGHT);
+    m_xEditEngine->RemoveAttribs(aAll, false, EE_CHAR_WEIGHT_CJK);
+    m_xEditEngine->RemoveAttribs(aAll, false, EE_CHAR_WEIGHT_CTL);
+
+    SfxItemSet aSet(m_xEditEngine->GetEmptyItemSet());
+    aSet.Put(SvxColorItem(bGrammarError ? COL_LIGHTBLUE : COL_LIGHTRED, EE_CHAR_COLOR));
+    aSet.Put(SvxWeightItem(WEIGHT_BOLD, EE_CHAR_WEIGHT));
+    aSet.Put(SvxWeightItem(WEIGHT_BOLD, EE_CHAR_WEIGHT_CJK));
+    aSet.Put(SvxWeightItem(WEIGHT_BOLD, EE_CHAR_WEIGHT_CTL));
+
+    m_xEditEngine->QuickSetAttribs(aSet, ESelection(0, nStart, 0, nEnd));
+    // so the editview will autoscroll to make this visible
+    m_xEdView->SetSelection(ESelection(0, nStart));
+    Invalidate();
+
     m_nErrorStart = nStart;
     m_nErrorEnd = nEnd;
 }
 
-
-void SentenceEditWindow_Impl::ChangeMarkedWord(const OUString& rNewWord, LanguageType eLanguage)
+int SentenceEditWindow_Impl::ChangeMarkedWord(const OUString& rNewWord, LanguageType eLanguage)
 {
-    //calculate length changes
-    long nDiffLen = rNewWord.getLength() - m_nErrorEnd + m_nErrorStart;
-    TextSelection aSel(TextPaM(0, m_nErrorStart), TextPaM(0, m_nErrorEnd));
-    //Remove spell error attribute
-    ExtTextEngine* pTextEngine = GetTextEngine();
-    pTextEngine->UndoActionStart();
-    const TextCharAttrib*  pErrorAttrib = pTextEngine->FindCharAttrib( TextPaM(0, m_nErrorStart), TEXTATTR_SPELL_ERROR );
-    std::unique_ptr<TextCharAttrib> pReleasedErrorAttrib;
-    std::unique_ptr<TextCharAttrib> pReleasedLangAttrib;
-    std::unique_ptr<TextCharAttrib> pReleasedBackAttrib;
-    DBG_ASSERT(pErrorAttrib, "no error attribute found");
-    const SpellErrorDescription* pSpellErrorDescription = nullptr;
-    if(pErrorAttrib)
-    {
-        pReleasedErrorAttrib = pTextEngine->RemoveAttrib(0, *pErrorAttrib);
-        pSpellErrorDescription = &static_cast<const SpellErrorAttrib&>(pErrorAttrib->GetAttr()).GetErrorDescription();
-    }
-    const TextCharAttrib*  pBackAttrib = pTextEngine->FindCharAttrib( TextPaM(0, m_nErrorStart), TEXTATTR_SPELL_BACKGROUND );
-    pTextEngine->ReplaceText( aSel, rNewWord );
+    std::vector<EECharAttrib> aAttribList;
+    m_xEditEngine->GetCharAttribs(0, aAttribList);
 
-    if(!m_nErrorStart)
+    //calculate length changes
+    auto nDiffLen = rNewWord.getLength() - m_nErrorEnd + m_nErrorStart;
+    //Remove spell error attribute
+    m_xEditEngine->UndoActionStart(SPELLUNDO_MOVE_ERROREND);
+    const EECharAttrib* pErrorAttrib = FindCharAttrib(m_nErrorStart, m_nErrorStart, EE_CHAR_GRABBAG, aAttribList);
+    DBG_ASSERT(pErrorAttrib, "no error attribute found");
+    bool bSpellErrorDescription = false;
+    SpellErrorDescription aSpellErrorDescription;
+    if (pErrorAttrib)
+    {
+        ExtractErrorDescription(*pErrorAttrib, aSpellErrorDescription);
+        m_xEditEngine->RemoveAttribs(ESelection(0, pErrorAttrib->nStart, 0, pErrorAttrib->nEnd), false, EE_CHAR_GRABBAG);
+        bSpellErrorDescription = true;
+    }
+
+    const EECharAttrib* pBackAttrib = FindCharAttrib(m_nErrorStart, m_nErrorStart, EE_CHAR_BKGCOLOR, aAttribList);
+
+    ESelection aSel(0, m_nErrorStart, 0, m_nErrorEnd);
+    m_xEditEngine->QuickInsertText(rNewWord, aSel);
+
+    const sal_Int32 nTextLen = m_xEditEngine->GetTextLen(0);
+
+    if (nDiffLen)
+        m_xEditEngine->GetCharAttribs(0, aAttribList);
+
+    if (!m_nErrorStart)
     {
         //attributes following an error at the start of the text are not moved but expanded from the
         //text engine - this is done to keep full-paragraph-attributes
         //in the current case that handling is not desired
-        const TextCharAttrib*  pLangAttrib =
-                pTextEngine->FindCharAttrib(
-                    TextPaM(0, m_nErrorEnd), TEXTATTR_SPELL_LANGUAGE );
-        const sal_Int32 nTextLen = pTextEngine->GetTextLen( 0 );
-        if(pLangAttrib && !pLangAttrib->GetStart() && pLangAttrib->GetEnd() ==
-            nTextLen)
+        const EECharAttrib* pLangAttrib = FindCharAttrib(m_nErrorEnd, m_nErrorEnd, EE_CHAR_LANGUAGE, aAttribList);
+
+        if (pLangAttrib && !pLangAttrib->nStart && pLangAttrib->nEnd == nTextLen)
         {
-            SpellLanguageAttrib aNewLangAttrib( static_cast<const SpellLanguageAttrib&>(pLangAttrib->GetAttr()).GetLanguage());
-            pReleasedLangAttrib = pTextEngine->RemoveAttrib(0, *pLangAttrib);
-            pTextEngine->SetAttrib( aNewLangAttrib, 0, m_nErrorEnd + nDiffLen, nTextLen );
+            LanguageType eNewLanguage = static_cast<const SvxLanguageItem*>(pLangAttrib->pAttr)->GetLanguage();
+            m_xEditEngine->RemoveAttribs(ESelection(0, pLangAttrib->nStart, 0, pLangAttrib->nEnd), false, EE_CHAR_LANGUAGE);
+            SetAttrib(SvxLanguageItem(eNewLanguage, EE_CHAR_LANGUAGE), m_nErrorEnd + nDiffLen, nTextLen);
         }
     }
+
     // undo expanded attributes!
-    if( pBackAttrib && pBackAttrib->GetStart() < m_nErrorStart && pBackAttrib->GetEnd() == m_nErrorEnd + nDiffLen)
+    if (pBackAttrib && pBackAttrib->nStart < m_nErrorStart && pBackAttrib->nEnd == m_nErrorEnd + nDiffLen)
     {
-        std::unique_ptr<TextAttrib> pNewBackground(pBackAttrib->GetAttr().Clone());
-        const sal_Int32 nStart = pBackAttrib->GetStart();
-        pReleasedBackAttrib = pTextEngine->RemoveAttrib(0, *pBackAttrib);
-        pTextEngine->SetAttrib(*pNewBackground, 0, nStart, m_nErrorStart);
+        std::unique_ptr<SfxPoolItem> xNewBackground(pBackAttrib->pAttr->Clone());
+        const sal_Int32 nStart = pBackAttrib->nStart;
+
+        m_xEditEngine->RemoveAttribs(ESelection(0, pBackAttrib->nStart, 0, pBackAttrib->nEnd), false, EE_CHAR_BKGCOLOR);
+
+        SetAttrib(*xNewBackground, nStart, m_nErrorStart);
     }
-    pTextEngine->SetModified(true);
+    m_xEditEngine->SetModified();
 
     //adjust end position
     long nEndTemp = m_nErrorEnd;
@@ -1700,48 +1832,56 @@ void SentenceEditWindow_Impl::ChangeMarkedWord(const OUString& rNewWord, Languag
                     SPELLUNDO_MOVE_ERROREND, GetSpellDialog()->aDialogUndoLink));
     pAction->SetOffset(nDiffLen);
     AddUndoAction(std::move(pAction));
-    if(pSpellErrorDescription)
-        SetAttrib( SpellErrorAttrib(*pSpellErrorDescription), 0, m_nErrorStart, m_nErrorEnd );
-    SetAttrib( SpellLanguageAttrib(eLanguage), 0, m_nErrorStart, m_nErrorEnd );
-    pTextEngine->UndoActionEnd();
-}
+    if (bSpellErrorDescription)
+    {
+        SfxGrabBagItem aSpellErrorDescriptionItem(EE_CHAR_GRABBAG);
+        aSpellErrorDescriptionItem.GetGrabBag()["SpellErrorDescription"] <<= aSpellErrorDescription.toSequence();
+        SetAttrib(aSpellErrorDescriptionItem, m_nErrorStart, m_nErrorEnd);
+    }
+    SetAttrib(SvxLanguageItem(eLanguage, EE_CHAR_LANGUAGE), m_nErrorStart, m_nErrorEnd);
+    m_xEditEngine->UndoActionEnd();
 
+    Invalidate();
+
+    return nDiffLen;
+}
 
 OUString SentenceEditWindow_Impl::GetErrorText() const
 {
-    return GetTextEngine()->GetText(TextSelection(TextPaM(0, m_nErrorStart), TextPaM(0, m_nErrorEnd) ));
+    return m_xEditEngine->GetText(ESelection(0, m_nErrorStart, 0, m_nErrorEnd));
 }
 
-
-const SpellErrorDescription* SentenceEditWindow_Impl::GetAlternatives()
+bool SentenceEditWindow_Impl::GetErrorDescription(SpellErrorDescription& rSpellErrorDescription, sal_Int32 nPosition)
 {
-    TextPaM aCursor(0, m_nErrorStart);
-    const SpellErrorAttrib* pAttrib = static_cast<const SpellErrorAttrib*>(
-            GetTextEngine()->FindAttrib( aCursor, TEXTATTR_SPELL_ERROR));
-    return pAttrib ? &pAttrib->GetErrorDescription() : nullptr;
+    std::vector<EECharAttrib> aAttribList;
+    m_xEditEngine->GetCharAttribs(0, aAttribList);
+
+    if (const EECharAttrib* pEECharAttrib = FindCharAttrib(nPosition, nPosition, EE_CHAR_GRABBAG, aAttribList))
+    {
+        ExtractErrorDescription(*pEECharAttrib, rSpellErrorDescription);
+        return true;
+    }
+
+    return false;
 }
 
+bool SentenceEditWindow_Impl::GetAlternatives(SpellErrorDescription& rSpellErrorDescription)
+{
+    return GetErrorDescription(rSpellErrorDescription, m_nErrorStart);
+}
 
 void SentenceEditWindow_Impl::RestoreCurrentError()
 {
-    TextPaM aCursor(0, m_nErrorStart);
-    const SpellErrorAttrib* pAttrib = static_cast<const SpellErrorAttrib*>(
-            GetTextEngine()->FindAttrib( aCursor, TEXTATTR_SPELL_ERROR));
-    if( pAttrib )
+    SpellErrorDescription aSpellErrorDescription;
+    if (GetErrorDescription(aSpellErrorDescription, m_nErrorStart))
     {
-        const SpellErrorDescription& rDesc = pAttrib->GetErrorDescription();
-        if( rDesc.sErrorText != GetErrorText() )
-            ChangeMarkedWord(rDesc.sErrorText, LanguageTag::convertToLanguageType( rDesc.aLocale ));
+        if (aSpellErrorDescription.sErrorText != GetErrorText() )
+            ChangeMarkedWord(aSpellErrorDescription.sErrorText, LanguageTag::convertToLanguageType(aSpellErrorDescription.aLocale));
     }
 }
 
-
 void SentenceEditWindow_Impl::SetAlternatives( const Reference< XSpellAlternatives>& xAlt )
 {
-    TextPaM aCursor(0, m_nErrorStart);
-    DBG_ASSERT(static_cast<const SpellErrorAttrib*>(
-            GetTextEngine()->FindAttrib( aCursor, TEXTATTR_SPELL_ERROR)), "no error set?");
-
     OUString aWord;
     lang::Locale    aLocale;
     uno::Sequence< OUString >    aAlts;
@@ -1756,21 +1896,24 @@ void SentenceEditWindow_Impl::SetAlternatives( const Reference< XSpellAlternativ
             sServiceName = xNamed->getName();
     }
     SpellErrorDescription aDesc( false, aWord, aLocale, aAlts, nullptr);
-    GetTextEngine()->SetAttrib( SpellErrorAttrib(aDesc), 0, m_nErrorStart, m_nErrorEnd );
+    SfxGrabBagItem aSpellErrorDescription(EE_CHAR_GRABBAG);
+    aSpellErrorDescription.GetGrabBag()["SpellErrorDescription"] <<= aDesc.toSequence();
+    SetAttrib(aSpellErrorDescription, m_nErrorStart, m_nErrorEnd);
 }
 
-void SentenceEditWindow_Impl::SetAttrib( const TextAttrib& rAttr, sal_uInt32 nPara, sal_Int32 nStart, sal_Int32 nEnd )
+void SentenceEditWindow_Impl::SetAttrib(const SfxPoolItem& rItem, sal_Int32 nStart, sal_Int32 nEnd)
 {
-    GetTextEngine()->SetAttrib(rAttr, nPara, nStart, nEnd);
+    SfxItemSet aSet(m_xEditEngine->GetEmptyItemSet());
+    aSet.Put(rItem);
+    m_xEditEngine->QuickSetAttribs(aSet, ESelection(0, nStart, 0, nEnd));
+    Invalidate();
 }
-
 
 void SentenceEditWindow_Impl::SetText( const OUString& rStr )
 {
     m_nErrorStart = m_nErrorEnd = 0;
-    GetTextEngine()->SetText(rStr);
+    m_xEditEngine->SetText(rStr);
 }
-
 
 struct LanguagePosition_Impl
 {
@@ -1808,6 +1951,7 @@ static void lcl_InsertBreakPosition_Impl(
     }
     rBreakPositions.emplace_back(nInsert, eLanguage);
 }
+
 /*-------------------------------------------------------------------------
     Returns the text in spell portions. Each portion contains text with an
     equal language and attribute. The spell alternatives are empty.
@@ -1815,35 +1959,39 @@ static void lcl_InsertBreakPosition_Impl(
 svx::SpellPortions SentenceEditWindow_Impl::CreateSpellPortions() const
 {
     svx::SpellPortions aRet;
-    ExtTextEngine* pTextEngine = GetTextEngine();
-    const sal_Int32 nTextLen = pTextEngine->GetTextLen(0);
-    if(nTextLen)
+
+    const sal_Int32 nTextLen = m_xEditEngine->GetTextLen(0);
+
+    std::vector<EECharAttrib> aAttribList;
+    m_xEditEngine->GetCharAttribs(0, aAttribList);
+
+    if (nTextLen)
     {
-        TextPaM aCursor(0, 0);
+        int nCursor(0);
         LanguagePositions_Impl aBreakPositions;
-        const TextCharAttrib* pLastLang = nullptr;
-        const TextCharAttrib* pLastError = nullptr;
+        const EECharAttrib* pLastLang = nullptr;
+        const EECharAttrib* pLastError = nullptr;
         LanguageType eLang = LANGUAGE_DONTKNOW;
-        const TextCharAttrib* pError = nullptr;
-        while(aCursor.GetIndex() < nTextLen)
+        const EECharAttrib* pError = nullptr;
+        while (nCursor < nTextLen)
         {
-            const TextCharAttrib* pLang = pTextEngine->FindCharAttrib( aCursor, TEXTATTR_SPELL_LANGUAGE);
+            const EECharAttrib* pLang = FindCharAttrib(nCursor, nCursor, EE_CHAR_LANGUAGE, aAttribList);
             if(pLang && pLang != pLastLang)
             {
-                eLang = static_cast<const SpellLanguageAttrib&>(pLang->GetAttr()).GetLanguage();
-                lcl_InsertBreakPosition_Impl(aBreakPositions, pLang->GetStart(), eLang);
-                lcl_InsertBreakPosition_Impl(aBreakPositions, pLang->GetEnd(), eLang);
+                eLang = static_cast<const SvxLanguageItem*>(pLang->pAttr)->GetLanguage();
+                lcl_InsertBreakPosition_Impl(aBreakPositions, pLang->nStart, eLang);
+                lcl_InsertBreakPosition_Impl(aBreakPositions, pLang->nEnd, eLang);
                 pLastLang = pLang;
             }
-            pError = pTextEngine->FindCharAttrib( aCursor, TEXTATTR_SPELL_ERROR);
-            if(pError && pLastError != pError)
+            pError = FindCharAttrib(nCursor, nCursor, EE_CHAR_GRABBAG, aAttribList);
+            if (pError && pLastError != pError)
             {
-                lcl_InsertBreakPosition_Impl(aBreakPositions, pError->GetStart(), eLang);
-                lcl_InsertBreakPosition_Impl(aBreakPositions, pError->GetEnd(), eLang);
+                lcl_InsertBreakPosition_Impl(aBreakPositions, pError->nStart, eLang);
+                lcl_InsertBreakPosition_Impl(aBreakPositions, pError->nEnd, eLang);
                 pLastError = pError;
 
             }
-            ++aCursor.GetIndex();
+            ++nCursor;
         }
 
         if (aBreakPositions.empty())
@@ -1851,11 +1999,10 @@ svx::SpellPortions SentenceEditWindow_Impl::CreateSpellPortions() const
             //if all content has been overwritten the attributes may have been removed, too
             svx::SpellPortion aPortion1;
             aPortion1.eLanguage = GetSpellDialog()->GetSelectedLang_Impl();
-            aPortion1.sText = pTextEngine->GetText(
-                        TextSelection(TextPaM(0, 0), TextPaM(0, nTextLen)));
+
+            aPortion1.sText = m_xEditEngine->GetText(ESelection(0, 0, 0, nTextLen));
 
             aRet.push_back(aPortion1);
-
         }
         else
         {
@@ -1870,8 +2017,9 @@ svx::SpellPortions SentenceEditWindow_Impl::CreateSpellPortions() const
             {
                 svx::SpellPortion aPortion1;
                 aPortion1.eLanguage = eLang;
-                aPortion1.sText = pTextEngine->GetText(
-                            TextSelection(TextPaM(0, nStart), TextPaM(0, aStart->nPosition)));
+
+                aPortion1.sText = m_xEditEngine->GetText(ESelection(0, nStart, 0, aStart->nPosition));
+
                 bool bIsIgnoreError = m_aIgnoreErrorsAt.find( nStart ) != m_aIgnoreErrorsAt.end();
                 if( bIsIgnoreError )
                 {
@@ -1884,17 +2032,17 @@ svx::SpellPortions SentenceEditWindow_Impl::CreateSpellPortions() const
             }
         }
 
-        // quick partly fix of #i71318. Correct fix needs to patch the TextEngine itself...
+        // quick partly fix of #i71318. Correct fix needs to patch the EditEngine itself...
         // this one will only prevent text from disappearing. It may to not have the
         // correct language and will probably not spell checked...
-        const sal_uInt32 nPara = pTextEngine->GetParagraphCount();
+        const sal_uInt32 nPara = m_xEditEngine->GetParagraphCount();
         if (nPara > 1)
         {
             OUStringBuffer aLeftOverText;
             for (sal_uInt32 i = 1; i < nPara; ++i)
             {
                 aLeftOverText.append("\x0a");    // the manual line break...
-                aLeftOverText.append(pTextEngine->GetText(i));
+                aLeftOverText.append(m_xEditEngine->GetText(i));
             }
             if (pError)
             {   // we need to add a new portion containing the left-over text
@@ -1908,14 +2056,14 @@ svx::SpellPortions SentenceEditWindow_Impl::CreateSpellPortions() const
                 aRet[ aRet.size() - 1 ].sText += aLeftOverText;
             }
         }
-   }
+    }
+
     return aRet;
 }
 
-
 void SentenceEditWindow_Impl::Undo()
 {
-    SfxUndoManager& rUndoMgr = GetTextEngine()->GetUndoManager();
+    SfxUndoManager& rUndoMgr = m_xEditEngine->GetUndoManager();
     DBG_ASSERT(GetUndoActionCount(), "no undo actions available" );
     if(!GetUndoActionCount())
         return;
@@ -1932,38 +2080,33 @@ void SentenceEditWindow_Impl::Undo()
         GetSpellDialog()->UpdateBoxes_Impl();
 }
 
-
 void SentenceEditWindow_Impl::ResetUndo()
 {
-    GetTextEngine()->ResetUndo();
+    SfxUndoManager& rUndo = m_xEditEngine->GetUndoManager();
+    rUndo.Clear();
 }
-
 
 void SentenceEditWindow_Impl::AddUndoAction( std::unique_ptr<SfxUndoAction> pAction )
 {
-    SfxUndoManager& rUndoMgr = GetTextEngine()->GetUndoManager();
+    SfxUndoManager& rUndoMgr = m_xEditEngine->GetUndoManager();
     rUndoMgr.AddUndoAction(std::move(pAction));
-    GetSpellDialog()->m_pUndoPB->Enable();
+    GetSpellDialog()->m_xUndoPB->set_sensitive(true);
 }
-
 
 size_t SentenceEditWindow_Impl::GetUndoActionCount()
 {
-    return GetTextEngine()->GetUndoManager().GetUndoActionCount();
+    return m_xEditEngine->GetUndoManager().GetUndoActionCount();
 }
-
 
 void SentenceEditWindow_Impl::UndoActionStart( sal_uInt16 nId )
 {
-    GetTextEngine()->UndoActionStart(nId);
+    m_xEditEngine->UndoActionStart(nId);
 }
-
 
 void SentenceEditWindow_Impl::UndoActionEnd()
 {
-    GetTextEngine()->UndoActionEnd();
+    m_xEditEngine->UndoActionEnd();
 }
-
 
 void SentenceEditWindow_Impl::MoveErrorEnd(long nOffset)
 {
@@ -1975,44 +2118,47 @@ void SentenceEditWindow_Impl::MoveErrorEnd(long nOffset)
 }
 
 
-void  SentenceEditWindow_Impl::SetUndoEditMode(bool bSet)
+void SentenceEditWindow_Impl::SetUndoEditMode(bool bSet)
 {
     DBG_ASSERT(!bSet || m_bIsUndoEditMode != bSet, "SetUndoEditMode with equal values?");
     m_bIsUndoEditMode = bSet;
     //disable all buttons except the Change
     SpellDialog* pSpellDialog = GetSpellDialog();
-    Control* aControls[] =
+    weld::Widget* aControls[] =
     {
-        pSpellDialog->m_pChangeAllPB,
-        pSpellDialog->m_pExplainFT,
-        pSpellDialog->m_pIgnoreAllPB,
-        pSpellDialog->m_pIgnoreRulePB,
-        pSpellDialog->m_pIgnorePB,
-        pSpellDialog->m_pSuggestionLB,
-        pSpellDialog->m_pSuggestionFT,
-        pSpellDialog->m_pLanguageFT,
-        pSpellDialog->m_pLanguageLB,
-        pSpellDialog->m_pAddToDictMB,
-        pSpellDialog->m_pAddToDictPB,
-        pSpellDialog->m_pAutoCorrPB,
+        pSpellDialog->m_xChangeAllPB.get(),
+        pSpellDialog->m_xExplainFT.get(),
+        pSpellDialog->m_xIgnoreAllPB.get(),
+        pSpellDialog->m_xIgnoreRulePB.get(),
+        pSpellDialog->m_xIgnorePB.get(),
+        pSpellDialog->m_xSuggestionLB.get(),
+        pSpellDialog->m_xSuggestionFT.get(),
+        pSpellDialog->m_xLanguageFT.get(),
+        pSpellDialog->m_xLanguageLB->get_widget(),
+        pSpellDialog->m_xAddToDictMB.get(),
+        pSpellDialog->m_xAddToDictPB.get(),
+        pSpellDialog->m_xAutoCorrPB.get(),
         nullptr
     };
     sal_Int32 nIdx = 0;
     do
     {
-        aControls[nIdx]->Enable(false);
+        aControls[nIdx]->set_sensitive(false);
     }
     while(aControls[++nIdx]);
 
     //remove error marks
-    TextEngine* pTextEngine = GetTextEngine();
-    pTextEngine->RemoveAttribs( 0, sal_uInt16(TEXTATTR_FONTCOLOR) );
-    pTextEngine->RemoveAttribs( 0, sal_uInt16(TEXTATTR_FONTWEIGHT) );
+    ESelection aAll(0, 0, 0, EE_TEXTPOS_ALL);
+    m_xEditEngine->RemoveAttribs(aAll, false, EE_CHAR_COLOR);
+    m_xEditEngine->RemoveAttribs(aAll, false, EE_CHAR_WEIGHT);
+    m_xEditEngine->RemoveAttribs(aAll, false, EE_CHAR_WEIGHT_CJK);
+    m_xEditEngine->RemoveAttribs(aAll, false, EE_CHAR_WEIGHT_CTL);
+    Invalidate();
 
     //put the appropriate action on the Undo-stack
     AddUndoAction( std::make_unique<SpellUndoAction_Impl>(
                         SPELLUNDO_UNDO_EDIT_MODE, GetSpellDialog()->aDialogUndoLink) );
-    pSpellDialog->m_pChangePB->Enable();
+    pSpellDialog->m_xChangePB->set_sensitive(true);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

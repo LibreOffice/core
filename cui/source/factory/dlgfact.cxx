@@ -271,7 +271,15 @@ short AbstractLinksDialog_Impl::Execute()
     return m_xDlg->run();
 }
 
-IMPL_ABSTDLG_BASE(AbstractSpellDialog_Impl);
+short AbstractSpellDialog_Impl::Execute()
+{
+    return m_xDlg->run();
+}
+
+bool AbstractSpellDialog_Impl::StartExecuteAsync(AsyncContext &rCtx)
+{
+    return SfxDialogController::runAsync(m_xDlg, rCtx.maEndDialogFn);
+}
 
 short AbstractSvxPostItDialog_Impl::Execute()
 {
@@ -524,19 +532,19 @@ const SfxItemSet* AbstractSvxZoomDialog_Impl::GetOutputItemSet() const
     return m_xDlg->GetOutputItemSet();
 }
 
-void  AbstractSpellDialog_Impl::Invalidate()
+void AbstractSpellDialog_Impl::InvalidateDialog()
 {
-    pDlg->InvalidateDialog();
+    m_xDlg->InvalidateDialog();
 }
 
-vcl::Window*     AbstractSpellDialog_Impl::GetWindow()
+std::shared_ptr<SfxDialogController> AbstractSpellDialog_Impl::GetController()
 {
-    return pDlg;
+    return m_xDlg;
 }
 
 SfxBindings& AbstractSpellDialog_Impl::GetBindings()
 {
-    return pDlg->GetBindings();
+    return m_xDlg->GetBindings();
 }
 
 OUString AbstractTitleDialog_Impl::GetTitle() const
@@ -1050,12 +1058,11 @@ VclPtr<AbstractSvxZoomDialog> AbstractDialogFactory_Impl::CreateSvxZoomDialog(we
 }
 
 VclPtr<AbstractSpellDialog> AbstractDialogFactory_Impl::CreateSvxSpellDialog(
-                        vcl::Window* pParent,
+                        weld::Window* pParent,
                         SfxBindings* pBindings,
-                        svx::SpellDialogChildWindow* pSpellChildWindow )
+                        svx::SpellDialogChildWindow* pSpellChildWindow)
 {
-    VclPtrInstance<svx::SpellDialog> pDlg(pSpellChildWindow, pParent, pBindings);
-    return VclPtr<AbstractSpellDialog_Impl>::Create(pDlg);
+    return VclPtr<AbstractSpellDialog_Impl>::Create(std::make_unique<svx::SpellDialog>(pSpellChildWindow, pParent, pBindings));
 }
 
 VclPtr<VclAbstractDialog> AbstractDialogFactory_Impl::CreateActualizeProgressDialog(weld::Window* pParent,

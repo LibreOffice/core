@@ -28,6 +28,8 @@ class ScDocShell;
 class ScDocument;
 class SfxItemPool;
 
+namespace weld { class Window; }
+
 /** Base class for special type of edit engines, i.e. for spell checker and text conversion. */
 class ScConversionEngineBase : public ScEditEngineDefaulter
 {
@@ -119,7 +121,7 @@ protected:
 
 private:
     /** Returns the spelling dialog if it is open. */
-    vcl::Window*             GetDialogParent();
+    weld::Window*       GetDialogParent();
 };
 
 /** Edit engine for text conversion. */
