@@ -318,14 +318,14 @@ css::uno::Reference< css::container::XEnumeration > SAL_CALL ModuleManager::crea
 OUString ModuleManager::implts_identify(const css::uno::Reference< css::uno::XInterface >& xComponent)
 {
     // Search for an optional (!) interface XModule first.
-    // Its used to overrule an existing service name. Used e.g. by our database form designer
+    // It's used to overrule an existing service name. Used e.g. by our database form designer
     // which uses a writer module internally.
     css::uno::Reference< css::frame::XModule > xModule(xComponent, css::uno::UNO_QUERY);
     if (xModule.is())
         return xModule->getIdentifier();
 
-    // detect modules in a generic way ...
-    // comparing service names with configured entries ...
+    // detect modules in a generic way...
+    // comparing service names with configured entries...
     css::uno::Reference< css::lang::XServiceInfo > xInfo(xComponent, css::uno::UNO_QUERY);
     if (!xInfo.is())
         return OUString();
