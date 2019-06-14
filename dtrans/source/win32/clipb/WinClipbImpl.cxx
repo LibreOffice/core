@@ -147,7 +147,7 @@ void CWinClipbImpl::flushClipboard( )
     // FlushClipboard had to be synchron in order to prevent shutdown until all
     // clipboard-formats are rendered.
     // The request is needed to prevent flushing if we are not clipboard owner (it is
-    // not known what happens if we flush but aren't clipoard owner).
+    // not known what happens if we flush but aren't clipboard owner).
     // It may be possible to move the request to the clipboard STA thread by saving the
     // DataObject and call OleIsCurrentClipboard before flushing.
 
