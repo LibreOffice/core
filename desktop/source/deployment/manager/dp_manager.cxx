@@ -68,6 +68,7 @@
 #include <com/sun/star/task/XInteractionApprove.hpp>
 #include <com/sun/star/ucb/UnsupportedCommandException.hpp>
 #include <unotools/tempfile.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <dp_descriptioninfoset.hxx>
 #include "dp_commandenvironments.hxx"
@@ -1275,9 +1276,9 @@ bool PackageManagerImpl::synchronizeRemovedExtensions(
                 bModified = true;
             }
         }
-        catch( const uno::Exception & e )
+        catch( const uno::Exception & )
         {
-            SAL_WARN("desktop.deployment", e);
+            TOOLS_WARN_EXCEPTION("desktop.deployment", "");
         }
     }
     return bModified;
@@ -1412,10 +1413,10 @@ bool PackageManagerImpl::synchronizeAddedExtensions(
                 }
             }
         }
-        catch (const uno::Exception & e)
+        catch (const uno::Exception &)
         {
             // Looks like exceptions being caught here is not an uncommon case.
-            SAL_WARN("desktop.deployment", e);
+            TOOLS_WARN_EXCEPTION("desktop.deployment", "");
         }
     }
     return bModified;

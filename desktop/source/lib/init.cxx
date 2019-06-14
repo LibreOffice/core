@@ -113,6 +113,7 @@
 #include <vcl/svapp.hxx>
 #include <unotools/resmgr.hxx>
 #include <tools/fract.hxx>
+#include <tools/diagnose_ex.h>
 #include <svtools/ctrltool.hxx>
 #include <svtools/langtab.hxx>
 #include <vcl/floatwin.hxx>
@@ -1754,7 +1755,7 @@ static LibreOfficeKitDocument* lo_documentLoadWithOptions(LibreOfficeKit* pThis,
     catch (const uno::Exception& exception)
     {
         pLib->maLastExceptionMsg = exception.Message;
-        SAL_INFO("lok", "Document can't be loaded: " << exception);
+        TOOLS_INFO_EXCEPTION("lok", "Document can't be loaded");
     }
 
     return nullptr;
