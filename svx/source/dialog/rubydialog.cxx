@@ -280,9 +280,9 @@ void SvxRubyDialog::Close()
 {
     if (IsClosing())
         return;
-    SfxViewShell* pViewShell = SfxViewShell::Current();
-    if (pViewShell)
-        pViewShell->GetViewFrame()->ToggleChildWindow(SID_RUBY_DIALOG);
+    SfxViewFrame* pViewFrame = SfxViewFrame::Current();
+    if (pViewFrame)
+        pViewFrame->ToggleChildWindow(SID_RUBY_DIALOG);
 }
 
 void SvxRubyDialog::Activate()

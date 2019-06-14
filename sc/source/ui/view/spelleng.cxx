@@ -305,10 +305,10 @@ bool ScSpellingEngine::NeedsConversion()
 
 bool ScSpellingEngine::ShowTableWrapDialog()
 {
-    vcl::Window* pParent = GetDialogParent();
-    ScWaitCursorOff aWaitOff( pParent );
+    weld::Window* pParent = GetDialogParent();
+    weld::WaitObject aWaitOff(pParent);
 
-    std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pParent ? pParent->GetFrameWeld() : nullptr,
+    std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pParent,
                                               VclMessageType::Question, VclButtonsType::YesNo,
                                               ScResId(STR_SPELLING_BEGIN_TAB))); // "delete data?"
     xBox->set_title(ScResId(STR_MSSG_DOSUBTOTALS_0));
@@ -318,26 +318,37 @@ bool ScSpellingEngine::ShowTableWrapDialog()
 
 void ScSpellingEngine::ShowFinishDialog()
 {
-    vcl::Window* pParent = GetDialogParent();
-    ScWaitCursorOff aWaitOff( pParent );
-    std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pParent ? pParent->GetFrameWeld() : nullptr,
+    weld::Window* pParent = GetDialogParent();
+    weld::WaitObject aWaitOff(pParent);
+    std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pParent,
                                                   VclMessageType::Info, VclButtonsType::Ok,
                                                   ScResId(STR_SPELLING_STOP_OK)));
     xInfoBox->run();
 }
 
-vcl::Window* ScSpellingEngine::GetDialogParent()
+weld::Window* ScSpellingEngine::GetDialogParent()
 {
     sal_uInt16 nWinId = ScSpellDialogChildWindow::GetChildWindowId();
     SfxViewFrame* pViewFrm = mrViewData.GetViewShell()->GetViewFrame();
     if( pViewFrm->HasChildWindow( nWinId ) )
+    {
         if( SfxChildWindow* pChild = pViewFrm->GetChildWindow( nWinId ) )
-            if( vcl::Window* pWin = pChild->GetWindow() )
-                if( pWin->IsVisible() )
-                    return pWin;
+        {
+            auto xController = pChild->GetController();
+            if (xController)
+            {
+                if (weld::Window *pRet = xController->getDialog())
+                {
+                    if (pRet->get_visible())
+                        return pRet;
+                }
+            }
+        }
+    }
 
     // fall back to standard dialog parent
-    return ScDocShell::GetActiveDialogParent();
+    vcl::Window* pWin = ScDocShell::GetActiveDialogParent();
+    return pWin ? pWin->GetFrameWeld() : nullptr;
 }
 
 ScConversionParam::ScConversionParam( ScConversionType eConvType ) :
