@@ -2423,7 +2423,7 @@ public:
                      bool bCheck)
     {
         GtkWidget* pImage = nullptr;
-        if (pIconName)
+        if (pIconName && !pIconName->isEmpty())
         {
             GdkPixbuf* pixbuf = load_icon_by_name(*pIconName);
             if (!pixbuf)
@@ -2497,6 +2497,12 @@ public:
     void set_item_label(const OString& rIdent, const OUString& rText)
     {
         gtk_menu_item_set_label(m_aMap[rIdent], MapToGtkAccelerator(rText).getStr());
+    }
+
+    OUString get_item_label(const OString& rIdent) const
+    {
+        const gchar* pText = gtk_menu_item_get_label(m_aMap.find(rIdent)->second);
+        return OUString(pText, pText ? strlen(pText) : 0, RTL_TEXTENCODING_UTF8);
     }
 
     void set_item_help_id(const OString& rIdent, const OString& rHelpId)
@@ -2636,18 +2642,27 @@ class GtkInstanceWindow : public GtkInstanceContainer, public virtual weld::Wind
 private:
     GtkWindow* m_pWindow;
     rtl::Reference<SalGtkXWindow> m_xWindow; //uno api
+    gulong m_nToplevelFocusChangedSignalId;
 
     static void help_pressed(GtkAccelGroup*, GObject*, guint, GdkModifierType, gpointer widget)
     {
         GtkInstanceWindow* pThis = static_cast<GtkInstanceWindow*>(widget);
         pThis->help();
     }
+
+    static void signalToplevelFocusChanged(GtkWindow*, GParamSpec*, gpointer widget)
+    {
+        GtkInstanceWindow* pThis = static_cast<GtkInstanceWindow*>(widget);
+        pThis->signal_toplevel_focus_changed();
+    }
+
 protected:
     void help();
 public:
     GtkInstanceWindow(GtkWindow* pWindow, GtkInstanceBuilder* pBuilder, bool bTakeOwnership)
         : GtkInstanceContainer(GTK_CONTAINER(pWindow), pBuilder, bTakeOwnership)
         , m_pWindow(pWindow)
+        , m_nToplevelFocusChangedSignalId(0)
     {
         //hook up F1 to show help
         GtkAccelGroup *pGroup = gtk_accel_group_new();
@@ -2803,8 +2818,31 @@ public:
         return ImplWindowStateToStr(aData);
     }
 
+    virtual void connect_toplevel_focus_changed(const Link<weld::Widget&, void>& rLink) override
+    {
+        assert(!m_nToplevelFocusChangedSignalId);
+        m_nToplevelFocusChangedSignalId = g_signal_connect(m_pWindow, "notify::has-toplevel-focus", G_CALLBACK(signalToplevelFocusChanged), this);
+        weld::Window::connect_toplevel_focus_changed(rLink);
+    }
+
+    virtual void disable_notify_events() override
+    {
+        if (m_nToplevelFocusChangedSignalId)
+            g_signal_handler_block(m_pWidget, m_nToplevelFocusChangedSignalId);
+        GtkInstanceContainer::disable_notify_events();
+    }
+
+    virtual void enable_notify_events() override
+    {
+        GtkInstanceContainer::enable_notify_events();
+        if (m_nToplevelFocusChangedSignalId)
+            g_signal_handler_unblock(m_pWidget, m_nToplevelFocusChangedSignalId);
+    }
+
     virtual ~GtkInstanceWindow() override
     {
+        if (m_nToplevelFocusChangedSignalId)
+            g_signal_handler_disconnect(m_pWindow, m_nToplevelFocusChangedSignalId);
         if (m_xWindow.is())
             m_xWindow->clear();
     }
@@ -5216,6 +5254,11 @@ public:
         MenuHelper::remove_item(rId);
     }
 
+    virtual void clear() override
+    {
+        clear_items();
+    }
+
     virtual void set_item_active(const OString& rIdent, bool bActive) override
     {
         MenuHelper::set_item_active(rIdent, bActive);
@@ -5229,6 +5272,11 @@ public:
     virtual void set_item_label(const OString& rIdent, const OUString& rLabel) override
     {
         MenuHelper::set_item_label(rIdent, rLabel);
+    }
+
+    virtual OUString get_item_label(const OString& rIdent) const override
+    {
+        return MenuHelper::get_item_label(rIdent);
     }
 
     virtual void set_item_visible(const OString& rIdent, bool bVisible) override

@@ -135,7 +135,6 @@ $(eval $(call gb_Library_add_exception_objects,cui,\
     cui/source/dialogs/SignSignatureLineDialog \
     cui/source/dialogs/sdrcelldlg \
     cui/source/dialogs/showcols \
-    cui/source/dialogs/SpellAttrib \
     cui/source/dialogs/SpellDialog \
     cui/source/dialogs/splitcelldlg \
     cui/source/dialogs/srchxtra \
