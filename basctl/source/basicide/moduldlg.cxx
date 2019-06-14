@@ -569,11 +569,6 @@ ObjectPage::~ObjectPage()
 {
 }
 
-void ObjectPage::SetCurrentEntry (EntryDescriptor const & rDesc)
-{
-    m_xBasicBox->SetCurrentEntry( rDesc );
-}
-
 void ObjectPage::ActivatePage()
 {
     m_xBasicBox->UpdateEntries();

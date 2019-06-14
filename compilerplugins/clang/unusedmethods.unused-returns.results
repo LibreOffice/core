@@ -1,5 +1,3 @@
-basctl/source/inc/bastype2.hxx:310
-    _Bool basctl::SbTreeListBox::get_selected(class weld::TreeIter *) const
 connectivity/source/inc/java/lang/Object.hxx:117
     int connectivity::java_lang_Object::callIntMethodWithIntArg_ThrowRuntime(const char *,struct _jmethodID *&,int) const
 connectivity/source/inc/odbc/OConnection.hxx:78
@@ -218,11 +216,11 @@ include/vcl/menu.hxx:389
     _Bool Menu::HandleMenuDeActivateEvent(class Menu *) const
 include/vcl/texteng.hxx:276
     _Bool TextEngine::Read(class SvStream &,const class TextSelection *)
-include/vcl/toolbox.hxx:516
+include/vcl/toolbox.hxx:515
     _Bool ToolBox::ChangeHighlightUpDn(_Bool)
-include/vcl/weld.hxx:747
+include/vcl/weld.hxx:756
     _Bool weld::TreeView::iter_nth_child(class weld::TreeIter &,int) const
-include/vcl/weld.hxx:1576
+include/vcl/weld.hxx:1597
     _Bool weld::TextView::get_selection_bounds(int &,int &)
 lotuswordpro/inc/lwpsvstream.hxx:76
     class LwpSvStream & LwpSvStream::ReadUInt8(unsigned char &)
@@ -234,9 +232,9 @@ sc/inc/document.hxx:2145
     const struct ScDocumentThreadSpecific & ScDocument::CalculateInColumnInThread(struct ScInterpreterContext &,const class ScAddress &,unsigned long,unsigned int,unsigned int)
 sc/inc/orcusfilters.hxx:44
     _Bool ScOrcusFilters::importODS_Styles(class ScDocument &,class rtl::OUString &) const
-sc/source/core/opencl/formulagroupcl.cxx:1086
+sc/source/core/opencl/formulagroupcl.cxx:1084
     unsigned long sc::opencl::DynamicKernelSlidingArgument::GenReductionLoopHeader(class std::__cxx11::basic_stringstream<char> &,_Bool &)
-sc/source/core/opencl/formulagroupcl.cxx:1531
+sc/source/core/opencl/formulagroupcl.cxx:1529
     unsigned long sc::opencl::ParallelReductionVectorRef::GenReductionLoopHeader(class std::__cxx11::basic_stringstream<char> &,int,_Bool &)
 sc/source/filter/inc/workbookhelper.hxx:259
     _Bool oox::xls::WorkbookHelper::importOoxFragment(const class rtl::Reference<class oox::core::FragmentHandler> &,class oox::core::FastParser &)
@@ -290,6 +288,8 @@ sd/source/ui/inc/OutlineViewShell.hxx:115
     class ErrCode sd::OutlineViewShell::ReadRtf(class SvStream &)
 sd/source/ui/remotecontrol/IBluetoothSocket.hxx:37
     int sd::IBluetoothSocket::write(const void *,unsigned int)
+sfx2/inc/autoredactdialog.hxx:146
+    _Bool SfxAutoRedactDialog::moveTargets(class std::__debug::vector<struct std::pair<struct RedactionTarget *, class rtl::OUString>, class std::allocator<struct std::pair<struct RedactionTarget *, class rtl::OUString> > > &)
 svgio/source/svguno/xsvgparser.cxx:51
     _Bool svgio::svgreader::XSvgParser::parseSvgXML(const class com::sun::star::uno::Reference<class com::sun::star::io::XInputStream> &,const class com::sun::star::uno::Reference<class com::sun::star::xml::sax::XDocumentHandler> &)
 sw/inc/authfld.hxx:98
@@ -332,23 +332,23 @@ ucb/source/ucp/webdav-neon/NeonSession.hxx:240
     _Bool webdav_ucp::NeonSession::UNLOCK(struct ne_lock *)
 vcl/inc/font/FeatureCollector.hxx:47
     _Bool vcl::font::FeatureCollector::collect()
-vcl/inc/opengl/salbmp.hxx:101
+vcl/inc/opengl/salbmp.hxx:99
     _Bool OpenGLSalBitmap::ImplScaleFilter(const class rtl::Reference<class OpenGLContext> &,const double &,const double &,unsigned int)
-vcl/inc/opengl/salbmp.hxx:103
+vcl/inc/opengl/salbmp.hxx:101
     _Bool OpenGLSalBitmap::ImplScaleConvolution(const class rtl::Reference<class OpenGLContext> &,const double &,const double &,const class vcl::Kernel &)
-vcl/inc/opengl/salbmp.hxx:104
+vcl/inc/opengl/salbmp.hxx:102
     _Bool OpenGLSalBitmap::ImplScaleArea(const class rtl::Reference<class OpenGLContext> &,double,double)
 vcl/inc/opengl/texture.hxx:112
     _Bool OpenGLTexture::CopyData(int,int,int,int,const unsigned char *)
 vcl/inc/salframe.hxx:231
     _Bool SalFrame::SetPluginParent(struct SystemParentData *)
-vcl/inc/salgdi.hxx:213
+vcl/inc/salgdi.hxx:211
     class basegfx::B2DPoint SalGraphics::mirror(const class basegfx::B2DPoint &,const class OutputDevice *) const
-vcl/inc/salgdi.hxx:395
+vcl/inc/salgdi.hxx:393
     _Bool SalGraphics::BlendBitmap(const struct SalTwoRect &,const class SalBitmap &,const class OutputDevice *)
 vcl/inc/unx/gtk/gtkdata.hxx:165
     int GtkSalDisplay::CaptureMouse(class SalFrame *)
-vcl/inc/unx/saldisp.hxx:313
+vcl/inc/unx/saldisp.hxx:310
     _Bool SalDisplay::Dispatch(union _XEvent *)
 vcl/inc/WidgetDrawInterface.hxx:97
     _Bool vcl::WidgetDrawInterface::updateSettings(class AllSettings &)

@@ -218,9 +218,6 @@ public:
     void            ScanAllEntries();
     void            UpdateEntries();
 
-    void            SetMode( BrowseMode nM ) { nMode = nM; }
-    BrowseMode      GetMode() const { return nMode; }
-
     SvTreeListEntry*    FindRootEntry( const ScriptDocument& rDocument, LibraryLocation eLocation );
     SvTreeListEntry*    FindEntry( SvTreeListEntry* pParent, const OUString& rText, EntryType eType );
 

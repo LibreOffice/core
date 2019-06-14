@@ -809,12 +809,6 @@ bool SvxFontPrevWindow::IsTwoLines() const
     return pImpl->mbTwoLines;
 }
 
-void SvxFontPrevWindow::SetFontWidthScale( sal_uInt16 n )
-{
-    if (pImpl->SetFontWidthScale(n))
-        Invalidate();
-}
-
 static bool GetWhich (const SfxItemSet& rSet, sal_uInt16 nSlot, sal_uInt16& rWhich)
 {
     rWhich = rSet.GetPool()->GetWhich(nSlot);

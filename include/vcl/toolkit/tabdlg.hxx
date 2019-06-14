@@ -37,15 +37,11 @@ private:
     SAL_DLLPRIVATE void ImplPosControls();
 
 public:
-                        TabDialog( vcl::Window* pParent,
-                                   WinBits nStyle );
-                        TabDialog( vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription );
+                        TabDialog( vcl::Window* pParent, WinBits nStyle );
     virtual             ~TabDialog() override;
     virtual void        dispose() override;
 
     virtual void        StateChanged( StateChangedType nStateChange ) override;
-
-    vcl::Window*        GetViewWindow() const { return mpViewWindow; }
 
     // Screenshot interface
     virtual std::vector<OString> getAllPageUIXMLDescriptions() const override;

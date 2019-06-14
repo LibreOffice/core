@@ -234,59 +234,6 @@ ErrCode SwXMLTextBlocks::Rename( sal_uInt16 nIdx, const OUString& rNewShort, con
     return ERRCODE_NONE;
 }
 
-ErrCode SwXMLTextBlocks::CopyBlock( SwImpBlocks& rDestImp, OUString& rShort,
-                                                    const OUString& rLong)
-{
-    ErrCode nError = ERRCODE_NONE;
-    OpenFile();
-    rDestImp.OpenFile(false);
-    const OUString aGroup( rShort );
-    bool bTextOnly = IsOnlyTextBlock ( rShort ) ;//pImp->pBlkRoot->IsStream( aGroup );
-    sal_uInt16 nIndex = GetIndex ( rShort );
-    OUString sPackageName( GetPackageName (nIndex) );
-    OUString sDestShortName( sPackageName );
-    sal_uInt16 nIdx = 0;
-
-    OSL_ENSURE( xBlkRoot.is(), "No storage set" );
-    if(!xBlkRoot.is())
-        return ERR_SWG_WRITE_ERROR;
-
-    uno::Reference < container::XNameAccess > xAccess( static_cast<SwXMLTextBlocks&>(rDestImp).xBlkRoot, uno::UNO_QUERY );
-    while ( xAccess->hasByName( sDestShortName ) )
-    {
-        ++nIdx;
-        // If someone is that crazy ...
-        if(USHRT_MAX == nIdx)
-        {
-            CloseFile();
-            rDestImp.CloseFile();
-            return ERR_SWG_WRITE_ERROR;
-        }
-        sDestShortName = sPackageName + OUString::number( nIdx );
-    }
-
-    try
-    {
-        uno::Reference < embed::XStorage > rSourceRoot = xBlkRoot->openStorageElement( aGroup, embed::ElementModes::READ );
-        uno::Reference < embed::XStorage > rDestRoot = static_cast<SwXMLTextBlocks&>(rDestImp).xBlkRoot->openStorageElement( sDestShortName, embed::ElementModes::READWRITE );
-        rSourceRoot->copyToStorage( rDestRoot );
-    }
-    catch (const uno::Exception&)
-    {
-        nError = ERR_SWG_WRITE_ERROR;
-    }
-
-    if(!nError)
-    {
-        rShort = sDestShortName;
-        static_cast<SwXMLTextBlocks&>(rDestImp).AddName( rShort, rLong, bTextOnly );
-        static_cast<SwXMLTextBlocks&>(rDestImp).MakeBlockList();
-    }
-    CloseFile();
-    rDestImp.CloseFile();
-    return nError;
-}
-
 ErrCode SwXMLTextBlocks::StartPutBlock( const OUString& rShort, const OUString& rPackageName )
 {
     OSL_ENSURE( xBlkRoot.is(), "No storage set" );
