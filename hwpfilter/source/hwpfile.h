@@ -286,7 +286,7 @@ class DLLEXPORT HWPFile
         std::vector<std::unique_ptr<HWPPara>> plist;
         // floating box list
         std::vector<FBox*> blist;
-        // embedded picture list(tag datas)
+        // embedded picture list(tag data)
         std::vector<std::unique_ptr<EmPicture>> emblist;
         std::vector<std::unique_ptr<HyperText>> hyperlist;
         int currenthyper;
