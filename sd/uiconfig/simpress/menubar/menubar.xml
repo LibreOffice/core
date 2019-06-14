@@ -164,6 +164,7 @@
       <menu:menuitem menu:id=".uno:ViewSidebarStyles"/>
       <menu:menuitem menu:id=".uno:Gallery" menu:style="text"/>
       <menu:menuitem menu:id=".uno:Navigator" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:ColorControl"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:ZoomPanning"/>
       <menu:menu menu:id=".uno:ZoomMenu">
