@@ -34,6 +34,7 @@ $(eval $(call gb_Library_use_libraries,firebird_sdbc, \
     salhelper \
     utl \
     svt \
+    tl \
     vcl \
 ))
 

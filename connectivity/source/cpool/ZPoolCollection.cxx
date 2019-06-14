@@ -382,9 +382,9 @@ Any OPoolCollection::getNodeValue(const OUString& _rPath,const Reference<XInterf
             aReturn = xHierarchyAccess->getByHierarchicalName(_rPath);
         }
     }
-    catch(NoSuchElementException& e)
+    catch(const NoSuchElementException&)
     {
-        SAL_WARN("connectivity.cpool", e );
+        TOOLS_WARN_EXCEPTION("connectivity.cpool", "" );
     }
     return aReturn;
 }

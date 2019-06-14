@@ -961,10 +961,10 @@ try
                 {
                     xNewProps->setPropertyValue(pResult->Name, xOldProps->getPropertyValue(pResult->Name));
                 }
-                catch(IllegalArgumentException const & exc)
+                catch(IllegalArgumentException const &)
                 {
-                    SAL_WARN( "connectivity.commontools", "TransferFormComponentProperties : could not transfer the value for property \""
-                                << pResult->Name << "\" " << exc);
+                    TOOLS_WARN_EXCEPTION( "connectivity.commontools", "TransferFormComponentProperties : could not transfer the value for property \""
+                                << pResult->Name << "\"");
                 }
             }
         }

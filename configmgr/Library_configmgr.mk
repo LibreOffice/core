@@ -60,6 +60,7 @@ $(eval $(call gb_Library_use_libraries,configmgr, \
     cppuhelper \
     sal \
     salhelper \
+    tl \
     xmlreader \
     i18nlangtag \
 ))

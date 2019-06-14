@@ -32,6 +32,7 @@
 #include <unotools/pathoptions.hxx>
 #include <connectivity/dbexception.hxx>
 #include <cppuhelper/exc_hlp.hxx>
+#include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star;
 
@@ -137,8 +138,7 @@ uno::Reference<text::XTextDocument> const& OWriterConnection::acquireDoc()
             OSL_VERIFY(aLoaderException >>= aLoaderError);
 
             SAL_WARN("connectivity.writer",
-                     "empty m_xDoc, exception type: " << aLoaderException.getValueTypeName()
-                                                      << ", error message: " << aLoaderError);
+                     "empty m_xDoc, " << exceptionToString(aLoaderException));
         }
 
         const OUString sError(m_aResources.getResourceStringWithSubstitution(
