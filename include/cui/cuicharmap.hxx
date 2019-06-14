@@ -143,7 +143,7 @@ private:
     void selectCharByCode(Radix radix);
 
 public:
-    SvxCharacterMap(weld::Window* pParent, const SfxItemSet* pSet,
+    SvxCharacterMap(weld::Widget* pParent, const SfxItemSet* pSet,
                     const css::uno::Reference<css::frame::XFrame>& rFrame);
     virtual short run() override;
 

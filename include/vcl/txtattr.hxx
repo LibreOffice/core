@@ -33,7 +33,7 @@ namespace vcl { class Font; }
 
 #define TEXTATTR_USER_START 1000 //start id for user defined text attributes
 #define TEXTATTR_PROTECTED  4
-
+#define TEXTATTR_BACKGROUND 5
 
 class VCL_DLLPUBLIC TextAttrib
 {
@@ -100,6 +100,19 @@ public:
 
 };
 
+class VCL_DLLPUBLIC TextBackgroundAttrib : public TextAttrib
+{
+    Color   m_aBackgroundColor;
+
+public:
+                            TextBackgroundAttrib(const Color& rCol);
+
+    const Color&            GetColor() const { return m_aBackgroundColor; }
+
+    virtual void            SetFont( vcl::Font& rFont ) const override;
+    virtual std::unique_ptr<TextAttrib> Clone() const override;
+    virtual bool            operator==( const TextAttrib& rAttr ) const override;
+};
 
 class TextCharAttrib
 {

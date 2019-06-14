@@ -74,6 +74,7 @@ public:
 
 class VCL_DLLPUBLIC VclMultiLineEdit : public Edit
 {
+    friend class SalInstanceTextView;
     friend class VCLXAccessibleEdit;
 
 private:

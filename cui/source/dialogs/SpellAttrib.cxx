@@ -76,30 +76,4 @@ bool SpellLanguageAttrib::operator==( const TextAttrib& rAttr ) const
             m_eLanguage == static_cast<const SpellLanguageAttrib&>(rAttr).m_eLanguage;
 }
 
-
-SpellBackgroundAttrib::SpellBackgroundAttrib(const Color& rCol) :
-    TextAttrib(TEXTATTR_SPELL_BACKGROUND),
-    m_aBackgroundColor(rCol)
-{
-}
-
-
-void SpellBackgroundAttrib::SetFont( vcl::Font& rFont ) const
-{
-    rFont.SetFillColor(m_aBackgroundColor);
-}
-
-
-std::unique_ptr<TextAttrib> SpellBackgroundAttrib::Clone() const
-{
-    return std::unique_ptr<TextAttrib>(new SpellBackgroundAttrib(*this));
-}
-
-
-bool SpellBackgroundAttrib::operator==( const TextAttrib& rAttr ) const
-{
-    return Which() == rAttr.Which() &&
-            m_aBackgroundColor == static_cast<const SpellBackgroundAttrib&>(rAttr).m_aBackgroundColor;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

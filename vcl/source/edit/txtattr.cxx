@@ -90,4 +90,26 @@ bool TextAttribProtect::operator==( const TextAttrib& rAttr ) const
     return TextAttrib::operator==(rAttr );
 }
 
+TextBackgroundAttrib::TextBackgroundAttrib(const Color& rCol) :
+    TextAttrib(TEXTATTR_BACKGROUND),
+    m_aBackgroundColor(rCol)
+{
+}
+
+void TextBackgroundAttrib::SetFont( vcl::Font& rFont ) const
+{
+    rFont.SetFillColor(m_aBackgroundColor);
+}
+
+std::unique_ptr<TextAttrib> TextBackgroundAttrib::Clone() const
+{
+    return std::unique_ptr<TextAttrib>(new TextBackgroundAttrib(*this));
+}
+
+bool TextBackgroundAttrib::operator==( const TextAttrib& rAttr ) const
+{
+    return Which() == rAttr.Which() &&
+            m_aBackgroundColor == static_cast<const TextBackgroundAttrib&>(rAttr).m_aBackgroundColor;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

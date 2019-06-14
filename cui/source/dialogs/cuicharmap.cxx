@@ -51,7 +51,7 @@
 
 using namespace css;
 
-SvxCharacterMap::SvxCharacterMap(weld::Window* pParent, const SfxItemSet* pSet,
+SvxCharacterMap::SvxCharacterMap(weld::Widget* pParent, const SfxItemSet* pSet,
                                  const css::uno::Reference<css::frame::XFrame>& rFrame)
     : SfxDialogController(pParent, "cui/ui/specialcharacters.ui", "SpecialCharactersDialog")
     , m_xVirDev(VclPtr<VirtualDevice>::Create())

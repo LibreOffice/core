@@ -43,6 +43,7 @@
 #include <vcl/mnemonic.hxx>
 #include <vcl/pngwrite.hxx>
 #include <vcl/syswin.hxx>
+#include <vcl/txtattr.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/event.hxx>
@@ -2423,7 +2424,7 @@ public:
                      bool bCheck)
     {
         GtkWidget* pImage = nullptr;
-        if (pIconName)
+        if (pIconName && !pIconName->isEmpty())
         {
             GdkPixbuf* pixbuf = load_icon_by_name(*pIconName);
             if (!pixbuf)
@@ -2497,6 +2498,12 @@ public:
     void set_item_label(const OString& rIdent, const OUString& rText)
     {
         gtk_menu_item_set_label(m_aMap[rIdent], MapToGtkAccelerator(rText).getStr());
+    }
+
+    OUString get_item_label(const OString& rIdent) const
+    {
+        const gchar* pText = gtk_menu_item_get_label(m_aMap.find(rIdent)->second);
+        return OUString(pText, pText ? strlen(pText) : 0, RTL_TEXTENCODING_UTF8);
     }
 
     void set_item_help_id(const OString& rIdent, const OString& rHelpId)
@@ -5216,6 +5223,11 @@ public:
         MenuHelper::remove_item(rId);
     }
 
+    virtual void clear() override
+    {
+        clear_items();
+    }
+
     virtual void set_item_active(const OString& rIdent, bool bActive) override
     {
         MenuHelper::set_item_active(rIdent, bActive);
@@ -5229,6 +5241,11 @@ public:
     virtual void set_item_label(const OString& rIdent, const OUString& rLabel) override
     {
         MenuHelper::set_item_label(rIdent, rLabel);
+    }
+
+    virtual OUString get_item_label(const OString& rIdent) const override
+    {
+        return MenuHelper::get_item_label(rIdent);
     }
 
     virtual void set_item_visible(const OString& rIdent, bool bVisible) override
@@ -5922,6 +5939,35 @@ public:
 
 namespace
 {
+    PangoWeight VclToGtk(FontWeight eWeight)
+    {
+        switch (eWeight)
+        {
+            case WEIGHT_THIN:
+                return PANGO_WEIGHT_THIN;
+            case WEIGHT_ULTRALIGHT:
+                return PANGO_WEIGHT_ULTRALIGHT;
+            case WEIGHT_LIGHT:
+                return PANGO_WEIGHT_LIGHT;
+            case WEIGHT_SEMILIGHT:
+                return PANGO_WEIGHT_SEMILIGHT;
+            case WEIGHT_NORMAL:
+                return PANGO_WEIGHT_NORMAL;
+            case WEIGHT_MEDIUM:
+                return PANGO_WEIGHT_MEDIUM;
+            case WEIGHT_SEMIBOLD:
+                return PANGO_WEIGHT_SEMIBOLD;
+            case WEIGHT_BOLD:
+                return PANGO_WEIGHT_BOLD;
+            case WEIGHT_ULTRABOLD:
+                return PANGO_WEIGHT_ULTRABOLD;
+            case WEIGHT_BLACK:
+                return PANGO_WEIGHT_HEAVY;
+            default:
+                return static_cast<PangoWeight>(-1);
+        }
+    }
+
     PangoAttrList* create_attr_list(const vcl::Font& rFont)
     {
         PangoAttrList* pAttrList = pango_attr_list_new();
@@ -5941,26 +5987,11 @@ namespace
             default:
                 break;
         }
-        switch (rFont.GetWeight())
-        {
-            case WEIGHT_ULTRALIGHT:
-                pango_attr_list_insert(pAttrList, pango_attr_weight_new(PANGO_WEIGHT_ULTRALIGHT));
-                break;
-            case WEIGHT_LIGHT:
-                pango_attr_list_insert(pAttrList, pango_attr_weight_new(PANGO_WEIGHT_LIGHT));
-                break;
-            case WEIGHT_NORMAL:
-                pango_attr_list_insert(pAttrList, pango_attr_weight_new(PANGO_WEIGHT_NORMAL));
-                break;
-            case WEIGHT_BOLD:
-                pango_attr_list_insert(pAttrList, pango_attr_weight_new(PANGO_WEIGHT_BOLD));
-                break;
-            case WEIGHT_ULTRABOLD:
-                pango_attr_list_insert(pAttrList, pango_attr_weight_new(PANGO_WEIGHT_ULTRABOLD));
-                break;
-            default:
-                break;
-        }
+
+        PangoWeight eWeight = VclToGtk(rFont.GetWeight());
+        if (eWeight != -1)
+            pango_attr_list_insert(pAttrList, pango_attr_weight_new(eWeight));
+
         switch (rFont.GetWidthType())
         {
             case WIDTH_ULTRA_CONDENSED:
@@ -8580,18 +8611,16 @@ public:
     virtual void set_text(const OUString& rText) override
     {
         disable_notify_events();
-        GtkTextBuffer* pBuffer = gtk_text_view_get_buffer(m_pTextView);
         OString sText(OUStringToOString(rText, RTL_TEXTENCODING_UTF8));
-        gtk_text_buffer_set_text(pBuffer, sText.getStr(), sText.getLength());
+        gtk_text_buffer_set_text(m_pTextBuffer, sText.getStr(), sText.getLength());
         enable_notify_events();
     }
 
     virtual OUString get_text() const override
     {
-        GtkTextBuffer* pBuffer = gtk_text_view_get_buffer(m_pTextView);
         GtkTextIter start, end;
-        gtk_text_buffer_get_bounds(pBuffer, &start, &end);
-        char* pStr = gtk_text_buffer_get_text(pBuffer, &start, &end, true);
+        gtk_text_buffer_get_bounds(m_pTextBuffer, &start, &end);
+        char* pStr = gtk_text_buffer_get_text(m_pTextBuffer, &start, &end, true);
         OUString sRet = OUString(pStr, pStr ? strlen(pStr) : 0, RTL_TEXTENCODING_UTF8);
         g_free(pStr);
         return sRet;
@@ -8600,18 +8629,16 @@ public:
     virtual void replace_selection(const OUString& rText) override
     {
         disable_notify_events();
-        GtkTextBuffer* pBuffer = gtk_text_view_get_buffer(m_pTextView);
-        gtk_text_buffer_delete_selection(pBuffer, false, gtk_text_view_get_editable(m_pTextView));
+        gtk_text_buffer_delete_selection(m_pTextBuffer, false, gtk_text_view_get_editable(m_pTextView));
         OString sText(OUStringToOString(rText, RTL_TEXTENCODING_UTF8));
-        gtk_text_buffer_insert_at_cursor(pBuffer, sText.getStr(), sText.getLength());
+        gtk_text_buffer_insert_at_cursor(m_pTextBuffer, sText.getStr(), sText.getLength());
         enable_notify_events();
     }
 
     virtual bool get_selection_bounds(int& rStartPos, int& rEndPos) override
     {
-        GtkTextBuffer* pBuffer = gtk_text_view_get_buffer(m_pTextView);
         GtkTextIter start, end;
-        gtk_text_buffer_get_selection_bounds(pBuffer, &start, &end);
+        gtk_text_buffer_get_selection_bounds(m_pTextBuffer, &start, &end);
         rStartPos = gtk_text_iter_get_offset(&start);
         rEndPos = gtk_text_iter_get_offset(&end);
         return rStartPos != rEndPos;
@@ -8620,12 +8647,11 @@ public:
     virtual void select_region(int nStartPos, int nEndPos) override
     {
         disable_notify_events();
-        GtkTextBuffer* pBuffer = gtk_text_view_get_buffer(m_pTextView);
         GtkTextIter start, end;
-        gtk_text_buffer_get_iter_at_offset(pBuffer, &start, nStartPos);
-        gtk_text_buffer_get_iter_at_offset(pBuffer, &end, nEndPos);
-        gtk_text_buffer_select_range(pBuffer, &start, &end);
-        GtkTextMark* mark = gtk_text_buffer_create_mark(pBuffer, "scroll", &end, true);
+        gtk_text_buffer_get_iter_at_offset(m_pTextBuffer, &start, nStartPos);
+        gtk_text_buffer_get_iter_at_offset(m_pTextBuffer, &end, nEndPos);
+        gtk_text_buffer_select_range(m_pTextBuffer, &start, &end);
+        GtkTextMark* mark = gtk_text_buffer_create_mark(m_pTextBuffer, "scroll", &end, true);
         gtk_text_view_scroll_mark_onscreen(m_pTextView, mark);
         enable_notify_events();
     }
@@ -8697,6 +8723,59 @@ public:
         if (GTK_IS_SCROLLED_WINDOW(pParent))
             gtk_widget_hide(pParent);
         gtk_widget_hide(m_pWidget);
+    }
+
+    virtual void paste_clipboard() override
+    {
+        gtk_text_buffer_paste_clipboard(m_pTextBuffer, gtk_clipboard_get(GDK_SELECTION_CLIPBOARD), nullptr, true);
+    }
+
+    virtual void create_tag(const OString& rName, const TextAttrib& rTag) override
+    {
+        GtkTextTag* pTag = gtk_text_buffer_create_tag(m_pTextBuffer, rName.getStr(), nullptr);
+        switch (rTag.Which())
+        {
+            case TEXTATTR_FONTCOLOR:
+            {
+                auto rFontColorTag = static_cast<const TextAttribFontColor&>(rTag);
+                OString aBuffer = "#" + rFontColorTag.GetColor().AsRGBHexString().toUtf8();
+                g_object_set(G_OBJECT(pTag), "foreground", aBuffer.getStr(), nullptr);
+                break;
+            }
+            case TEXTATTR_FONTWEIGHT:
+            {
+                auto rFontWeightTag = static_cast<const TextAttribFontWeight&>(rTag);
+                g_object_set(G_OBJECT(pTag), "weight", VclToGtk(rFontWeightTag.getFontWeight()), nullptr);
+                break;
+            }
+            case TEXTATTR_BACKGROUND:
+            {
+                auto rBackColorTag = static_cast<const TextBackgroundAttrib&>(rTag);
+                OString aBuffer = "#" + rBackColorTag.GetColor().AsRGBHexString().toUtf8();
+                g_object_set(G_OBJECT(pTag), "background", aBuffer.getStr(), nullptr);
+                break;
+            }
+        }
+    }
+
+    virtual void apply_tag_by_name(const OString& tag, int nStartPos, int nEndPos) override
+    {
+        GtkTextIter start, end;
+        gtk_text_buffer_get_iter_at_offset(m_pTextBuffer, &start, nStartPos);
+        gtk_text_buffer_get_iter_at_offset(m_pTextBuffer, &end, nEndPos);
+
+        gtk_text_buffer_apply_tag_by_name(m_pTextBuffer, tag.getStr(), &start, &end);
+    }
+
+    virtual void remove_tag_by_name(const OString& tag, int nStartPos, int nEndPos) override
+    {
+        assert(nStartPos == 0 && nEndPos == get_text().getLength());
+
+        GtkTextIter start, end;
+        gtk_text_buffer_get_iter_at_offset(m_pTextBuffer, &start, nStartPos);
+        gtk_text_buffer_get_iter_at_offset(m_pTextBuffer, &end, nEndPos);
+
+        gtk_text_buffer_remove_tag_by_name(m_pTextBuffer, tag.getStr(), &start, &end);
     }
 
     virtual ~GtkInstanceTextView() override

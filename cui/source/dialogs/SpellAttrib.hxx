@@ -29,7 +29,6 @@
 
 #define TEXTATTR_SPELL_ERROR            (TEXTATTR_USER_START + 1)
 #define TEXTATTR_SPELL_LANGUAGE         (TEXTATTR_USER_START + 2)
-#define TEXTATTR_SPELL_BACKGROUND       (TEXTATTR_USER_START + 3)
 
 namespace svx{
 struct SpellErrorDescription
@@ -122,18 +121,6 @@ public:
     virtual bool            operator==( const TextAttrib& rAttr ) const override;
 };
 
-
-class SpellBackgroundAttrib : public TextAttrib
-{
-    Color   m_aBackgroundColor;
-
-public:
-                            SpellBackgroundAttrib(const Color& rCol);
-
-    virtual void            SetFont( vcl::Font& rFont ) const override;
-    virtual std::unique_ptr<TextAttrib> Clone() const override;
-    virtual bool            operator==( const TextAttrib& rAttr ) const override;
-};
 }//namespace svx
 #endif
 
