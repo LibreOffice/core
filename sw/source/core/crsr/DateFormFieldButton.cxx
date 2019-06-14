@@ -22,35 +22,57 @@
 #include <strings.hrc>
 #include <vcl/calendar.hxx>
 #include <tools/date.hxx>
+#include <svx/numfmtsh.hxx>
 
 class SwDatePickerDialog : public FloatingWindow
 {
 private:
     VclPtr<Calendar> m_pCalendar;
     sw::mark::IFieldmark* m_pFieldmark;
+    SvNumberFormatter* m_pNumberFormatter;
 
     DECL_LINK(ImplSelectHdl, Calendar*, void);
 
 public:
-    SwDatePickerDialog(SwEditWin* parent, sw::mark::IFieldmark* pFieldmark);
+    SwDatePickerDialog(SwEditWin* parent, sw::mark::IFieldmark* pFieldmark,
+                       SvNumberFormatter* pNumberFormatter);
     virtual ~SwDatePickerDialog() override;
     virtual void dispose() override;
 };
 
-SwDatePickerDialog::SwDatePickerDialog(SwEditWin* parent, sw::mark::IFieldmark* pFieldmark)
+SwDatePickerDialog::SwDatePickerDialog(SwEditWin* parent, sw::mark::IFieldmark* pFieldmark,
+                                       SvNumberFormatter* pNumberFormatter)
     : FloatingWindow(parent, WB_BORDER | WB_SYSTEMWINDOW | WB_NOSHADOW)
     , m_pCalendar(VclPtr<Calendar>::Create(this, WB_TABSTOP))
     , m_pFieldmark(pFieldmark)
+    , m_pNumberFormatter(pNumberFormatter)
 {
     if (m_pFieldmark != nullptr)
     {
         sw::mark::IFieldmark::parameter_map_t* pParameters = m_pFieldmark->GetParameters();
+
         auto pResult = pParameters->find(ODF_FORMDATE_CURRENTDATE);
         if (pResult != pParameters->end())
         {
-            sal_Int32 nCurrentDate = 0;
-            pResult->second >>= nCurrentDate;
-            m_pCalendar->SetCurDate(Date(nCurrentDate));
+            OUString sDateString;
+            pResult->second >>= sDateString;
+
+            double dCurrentDate = 0;
+            sal_uInt32 nFormat = m_pNumberFormatter->GetEntryKey(ODF_FORMDATE_CURRENTDATE_FORMAT,
+                                                                 ODF_FORMDATE_CURRENTDATE_LANGUAGE);
+            if (nFormat == NUMBERFORMAT_ENTRY_NOT_FOUND)
+            {
+                sal_Int32 nCheckPos = 0;
+                SvNumFormatType nType;
+                OUString sFormat = ODF_FORMDATE_CURRENTDATE_FORMAT;
+                m_pNumberFormatter->PutEntry(sFormat, nCheckPos, nType, nFormat,
+                                             ODF_FORMDATE_CURRENTDATE_LANGUAGE);
+            }
+
+            m_pNumberFormatter->IsNumberFormat(sDateString, nFormat, dCurrentDate);
+
+            const Date& rNullDate = m_pNumberFormatter->GetNullDate();
+            m_pCalendar->SetCurDate(rNullDate + sal_Int32(dCurrentDate));
         }
     }
     m_pCalendar->SetSelectHdl(LINK(this, SwDatePickerDialog, ImplSelectHdl));
@@ -73,16 +95,35 @@ IMPL_LINK(SwDatePickerDialog, ImplSelectHdl, Calendar*, pCalendar, void)
     {
         if (m_pFieldmark != nullptr)
         {
+            Color* pCol = nullptr;
+            OUString sOutput;
+            sal_uInt32 nFormat = m_pNumberFormatter->GetEntryKey(ODF_FORMDATE_CURRENTDATE_FORMAT,
+                                                                 ODF_FORMDATE_CURRENTDATE_LANGUAGE);
+            if (nFormat == NUMBERFORMAT_ENTRY_NOT_FOUND)
+            {
+                sal_Int32 nCheckPos = 0;
+                SvNumFormatType nType;
+                OUString sFormat = ODF_FORMDATE_CURRENTDATE_FORMAT;
+                m_pNumberFormatter->PutEntry(sFormat, nCheckPos, nType, nFormat,
+                                             ODF_FORMDATE_CURRENTDATE_LANGUAGE);
+            }
+
+            const Date& rNullDate = m_pNumberFormatter->GetNullDate();
+            double dDate = pCalendar->GetFirstSelectedDate() - rNullDate;
+
+            m_pNumberFormatter->GetOutputString(dDate, nFormat, sOutput, &pCol, false);
+
             sw::mark::IFieldmark::parameter_map_t* pParameters = m_pFieldmark->GetParameters();
-            (*pParameters)[ODF_FORMDATE_CURRENTDATE]
-                <<= pCalendar->GetFirstSelectedDate().GetDate();
+            (*pParameters)[ODF_FORMDATE_CURRENTDATE] <<= sOutput;
         }
         EndPopupMode();
     }
 }
 
-DateFormFieldButton::DateFormFieldButton(SwEditWin* pEditWin, sw::mark::DateFieldmark& rFieldmark)
+DateFormFieldButton::DateFormFieldButton(SwEditWin* pEditWin, sw::mark::DateFieldmark& rFieldmark,
+                                         SvNumberFormatter* pNumberFormatter)
     : FormFieldButton(pEditWin, rFieldmark)
+    , m_pNumberFormatter(pNumberFormatter)
 {
 }
 
@@ -90,8 +131,8 @@ DateFormFieldButton::~DateFormFieldButton() { disposeOnce(); }
 
 void DateFormFieldButton::InitPopup()
 {
-    m_pFieldPopup
-        = VclPtr<SwDatePickerDialog>::Create(static_cast<SwEditWin*>(GetParent()), &m_rFieldmark);
+    m_pFieldPopup = VclPtr<SwDatePickerDialog>::Create(static_cast<SwEditWin*>(GetParent()),
+                                                       &m_rFieldmark, m_pNumberFormatter);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
