@@ -41,7 +41,7 @@ namespace canvas
         WeakComponentImplHelperN templates with the appropriate
         interfaces. At least XCustomSprite and Sprite should be among
         them (why else would you use this template, then?). Base class
-        must have an Base( const Mutex& ) constructor (like the
+        must have a Base( const Mutex& ) constructor (like the
         WeakComponentImplHelperN templates have).
 
         @tpl SpriteHelper
