@@ -331,11 +331,11 @@ namespace basegfx
         // The return value describes if a change took place.
         BASEGFX_DLLPUBLIC bool setContinuityInPoint(B2DPolygon& rCandidate, sal_uInt32 nIndex, B2VectorContinuity eContinuity);
 
-        // test if polygon contains neutral points. A neutral point is one whos orientation is neutral
+        // test if polygon contains neutral points. A neutral point is one whose orientation is neutral
         // e.g. positioned on the edge of its predecessor and successor
         BASEGFX_DLLPUBLIC bool hasNeutralPoints(const B2DPolygon& rCandidate);
 
-        // remove neutral points. A neutral point is one whos orientation is neutral
+        // remove neutral points. A neutral point is one whose orientation is neutral
         // e.g. positioned on the edge of its predecessor and successor
         BASEGFX_DLLPUBLIC B2DPolygon removeNeutralPoints(const B2DPolygon& rCandidate);
 
