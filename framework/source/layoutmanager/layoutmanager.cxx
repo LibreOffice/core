@@ -2308,7 +2308,7 @@ bool LayoutManager::implts_doLayout( bool bForceRequestBorderSpace, bool bOuterR
                 bGotRequestedBorderSpace = implts_resizeContainerWindow( aRequestedSize, aComponentPos );
             }
 
-            // if we did not do an container window resize, or it failed, then use the DockingAcceptor as usual
+            // if we did not do a container window resize, or it failed, then use the DockingAcceptor as usual
             if ( !bGotRequestedBorderSpace )
                 bGotRequestedBorderSpace = xDockingAreaAcceptor->requestDockingAreaSpace( aBorderSpace );
 
