@@ -14,6 +14,9 @@
 #include "actctrl.hxx"
 #include "numfmtlb.hxx"
 
+class SvNumberFormatter;
+class SwDoc;
+
 namespace sw
 {
 namespace mark
@@ -29,6 +32,7 @@ class DateFormFieldDialog : public SvxStandardDialog
 {
 private:
     mark::IFieldmark* m_pDateField;
+    SvNumberFormatter* m_pNumberFormatter;
 
     VclPtr<NumFormatListBox> m_xFormatLB;
 
@@ -36,7 +40,7 @@ private:
     void InitControls();
 
 public:
-    DateFormFieldDialog(vcl::Window* pParent, mark::IFieldmark* pDateField);
+    DateFormFieldDialog(vcl::Window* pParent, mark::IFieldmark* pDateField, SwDoc* pDoc);
     virtual ~DateFormFieldDialog() override;
     virtual void dispose() override;
 };

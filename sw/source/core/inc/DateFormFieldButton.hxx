@@ -16,6 +16,7 @@
 
 class SwEditWin;
 class FloatingWindow;
+class SvNumberFormatter;
 namespace sw
 {
 namespace mark
@@ -31,10 +32,14 @@ class DateFieldmark;
 class DateFormFieldButton : public FormFieldButton
 {
 public:
-    DateFormFieldButton(SwEditWin* pEditWin, sw::mark::DateFieldmark& rFieldMark);
+    DateFormFieldButton(SwEditWin* pEditWin, sw::mark::DateFieldmark& rFieldMark,
+                        SvNumberFormatter* pNumberFormatter);
     virtual ~DateFormFieldButton() override;
 
     virtual void InitPopup() override;
+
+private:
+    SvNumberFormatter* m_pNumberFormatter;
 };
 
 #endif

@@ -1367,7 +1367,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
         else if ( pFieldBM && pFieldBM->GetFieldname() == ODF_FORMDATE )
         {
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateDateFormFieldDialog(pFieldBM));
+            ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateDateFormFieldDialog(pFieldBM, GetView().GetDocShell()->GetDoc()));
             if (pDlg->Execute() == RET_OK)
             {
                 pFieldBM->Invalidate();

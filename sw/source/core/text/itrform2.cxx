@@ -59,6 +59,7 @@
 #include <IDocumentSettingAccess.hxx>
 #include <IMark.hxx>
 #include <IDocumentMarkAccess.hxx>
+#include <svl/zforlist.hxx>
 
 #include <vector>
 
@@ -864,8 +865,66 @@ namespace sw { namespace mark {
         return OUString(vEnSpaces, ODF_FORMFIELD_DEFAULT_LENGTH);
     }
 
-    static OUString ExpandDateFieldmark(IFieldmark* /*pBM*/)
+    static OUString ExpandDateFieldmark(IFieldmark* pBM, SvNumberFormatter* pFormatter)
     {
+        OUString sDateFormat;
+        mark::IFieldmark::parameter_map_t* pParameters = pBM->GetParameters();
+        auto pResult = pParameters->find(ODF_FORMDATE_DATEFORMAT);
+        if (pResult != pParameters->end())
+        {
+            pResult->second >>= sDateFormat;
+        }
+
+        OUString sLang;
+        pResult = pParameters->find(ODF_FORMDATE_DATEFORMAT_LANGUAGE);
+        if (pResult != pParameters->end())
+        {
+            pResult->second >>= sLang;
+        }
+
+        double dCurrentDate = 0.0;
+        bool bHasCurrentDate = false;
+        pResult = pParameters->find(ODF_FORMDATE_CURRENTDATE);
+        if (pResult != pParameters->end())
+        {
+            OUString sFormattedDate;
+            pResult->second >>= sFormattedDate;
+
+            sal_uInt32 nFormat = pFormatter->GetEntryKey(ODF_FORMDATE_CURRENTDATE_FORMAT, ODF_FORMDATE_CURRENTDATE_LANGUAGE);            if (nFormat == NUMBERFORMAT_ENTRY_NOT_FOUND)
+            if (nFormat == NUMBERFORMAT_ENTRY_NOT_FOUND)
+            {
+                sal_Int32 nCheckPos = 0;
+                SvNumFormatType nType;
+                OUString sFormat = ODF_FORMDATE_CURRENTDATE_FORMAT;
+                pFormatter->PutEntry(sFormat,
+                                     nCheckPos,
+                                     nType,
+                                     nFormat,
+                                     ODF_FORMDATE_CURRENTDATE_LANGUAGE);
+            }
+            pFormatter->IsNumberFormat(sFormattedDate, nFormat, dCurrentDate);
+            bHasCurrentDate = true;
+        }
+
+        Color* pCol = nullptr;
+        if (!sDateFormat.isEmpty() && !sLang.isEmpty() && bHasCurrentDate)
+        {
+            OUString sOutput;
+            sal_uInt32 nFormat = pFormatter->GetEntryKey(sDateFormat, LanguageTag(sLang).getLanguageType());
+            if (nFormat == NUMBERFORMAT_ENTRY_NOT_FOUND)
+            {
+                sal_Int32 nCheckPos = 0;
+                SvNumFormatType nType;
+                pFormatter->PutEntry(sDateFormat,
+                                     nCheckPos,
+                                     nType,
+                                     nFormat,
+                                     LanguageTag(sLang).getLanguageType());
+            }
+            pFormatter->GetOutputString(dCurrentDate, nFormat, sOutput, &pCol, false);
+            return sOutput;
+        }
+
         sal_Unicode vEnSpaces[ODF_FORMFIELD_DEFAULT_LENGTH] = {8194, 8194, 8194, 8194, 8194};
         return OUString(vEnSpaces, ODF_FORMFIELD_DEFAULT_LENGTH);
     }
@@ -918,7 +977,8 @@ SwTextPortion *SwTextFormatter::WhichTextPor( SwTextFormatInfo &rInf ) const
                     }
                     else if (pBM->GetFieldname( ) == ODF_FORMDATE)
                     {
-                        pPor = new SwFieldFormDatePortion(pBM, sw::mark::ExpandDateFieldmark(pBM));
+                        SvNumberFormatter* pFormatter = const_cast<SvNumberFormatter*>(GetTextFrame()->GetDoc().GetNumberFormatter());
+                        pPor = new SwFieldFormDatePortion(pBM, sw::mark::ExpandDateFieldmark(pBM, pFormatter));
                     }
                     /* we need to check for ODF_FORMTEXT for scenario having FormFields inside FORMTEXT.
                      * Otherwise file will crash on open.
