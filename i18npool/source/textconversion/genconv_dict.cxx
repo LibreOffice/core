@@ -60,7 +60,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     fprintf(cfp, " * Copyright(c) 1999 - 2000, Sun Microsystems, Inc.\n");
     fprintf(cfp, " * All Rights Reserved.\n");
     fprintf(cfp, " */\n\n");
-    fprintf(cfp, "/* !!!The file is generated automatically. DONOT edit the file manually!!! */\n\n");
+    fprintf(cfp, "/* !!!The file is generated automatically. DO NOT edit the file manually!!! */\n\n");
     fprintf(cfp, "#include <sal/types.h>\n");
     fprintf(cfp, "#include <textconversion.hxx>\n");
     fprintf(cfp, "\nextern \"C\" {\n");
