@@ -91,4 +91,25 @@ OUString PresetGeometryTypeNames::GetFontworkType(const OUString& rMsoType)
     return OUString(pRetValue, strlen(pRetValue), RTL_TEXTENCODING_ASCII_US);
 }
 
+OUString PresetGeometryTypeNames::GetMsoName(const OUString& rFontworkType)
+{
+    static const PresetGeometryHashMap s_HashMapInv = []() {
+        PresetGeometryHashMap aHInv;
+        for (const auto& item : pPresetGeometryNameArray)
+            aHInv[item.pFontworkType] = item.pMsoName;
+        return aHInv;
+    }();
+    const char* pRetValue = "";
+    int i, nLen = rFontworkType.getLength();
+    std::unique_ptr<char[]> pBuf(new char[nLen + 1]);
+    for (i = 0; i < nLen; i++)
+        pBuf[i] = static_cast<char>(rFontworkType[i]);
+    pBuf[i] = 0;
+    PresetGeometryHashMap::const_iterator aHashIter(s_HashMapInv.find(pBuf.get()));
+    if (aHashIter != s_HashMapInv.end())
+        pRetValue = (*aHashIter).second;
+
+    return OUString(pRetValue, strlen(pRetValue), RTL_TEXTENCODING_ASCII_US);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
