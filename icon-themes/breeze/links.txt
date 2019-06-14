@@ -1772,13 +1772,10 @@ cmd/sc_convertmenu.png cmd/sc_bezierconvert.png
 
 # Macro
 cmd/32/macrosmenu.png cmd/32/choosemacro.png
-cmd/32/basicideappear.png cmd/32/toolsmacroedit.png
 
 cmd/lc_macrosmenu.png cmd/lc_choosemacro.png
-cmd/lc_basicideappear.png cmd/lc_toolsmacroedit.png
 
 cmd/sc_macrosmenu.png cmd/sc_choosemacro.png
-cmd/sc_basicideappear.png cmd/sc_toolsmacroedit.png
 
 cmd/sc_macrosmenu.png res/im30821.png
 cmd/sc_macrodialog.png cmd/sc_scriptorganizer.png
