@@ -117,6 +117,7 @@ private:
     // the VCL window corresponding to this frame
     VclPtr<vcl::Window>     m_pWindow;
     SALFRAMEPROC            m_pProc;
+    Link<bool, void>        m_aModalHierarchyHdl;
 protected:
     mutable std::unique_ptr<weld::Window> m_xFrameWeld;
 public:
@@ -286,6 +287,9 @@ public:
 
     // returns the instance set
     vcl::Window*            GetWindow() const { return m_pWindow; }
+
+    void SetModalHierarchyHdl(const Link<bool, void>& rLink) { m_aModalHierarchyHdl = rLink; }
+    void NotifyModalHierarchy(bool bModal) { m_aModalHierarchyHdl.Call(bModal); }
 
     // Call the callback set; this sometimes necessary for implementation classes
     // that should not know more than necessary about the SalFrame implementation
