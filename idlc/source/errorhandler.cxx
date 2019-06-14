@@ -172,7 +172,7 @@ static const sal_Char* parseStateToMessage(ParseState state)
     case PS_ServiceIFHeadSeen:
         return "Illegal syntax following header of an interface member";
     case PS_ServiceSHeadSeen:
-        return "Illegal syntax following header of an service member";
+        return "Illegal syntax following header of a service member";
     case PS_ModuleSeen:
         return "Missing module identifier following MODULE keyword";
     case PS_ModuleIDSeen:
