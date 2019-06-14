@@ -51,6 +51,7 @@
 #include <sal/log.hxx>
 #include <sal/types.h>
 #include <salhelper/thread.hxx>
+#include <tools/diagnose_ex.h>
 #include <comphelper/backupfilehelper.hxx>
 
 #include "additions.hxx"
@@ -184,9 +185,9 @@ void Components::WriteThread::execute() {
     try {
         try {
             writeModFile(components_, url_, data_);
-        } catch (css::uno::RuntimeException & e) {
+        } catch (css::uno::RuntimeException &) {
             // Ignore write errors, instead of aborting:
-            SAL_WARN("configmgr", "error writing modifications: " << e);
+            TOOLS_WARN_EXCEPTION("configmgr", "error writing modifications");
         }
     } catch (...) {
         reference_->clear();
@@ -395,10 +396,10 @@ void Components::insertModificationXcuFile(
     try {
         parseFileLeniently(
             &parseXcuFile, fileUri, Data::NO_LAYER, &part, modifications, nullptr);
-    } catch (css::container::NoSuchElementException & e) {
-        SAL_WARN(
+    } catch (const css::container::NoSuchElementException &) {
+        TOOLS_WARN_EXCEPTION(
             "configmgr",
-            "error inserting non-existing \"" << fileUri << "\": " << e);
+            "error inserting non-existing \"" << fileUri << "\"");
     }
 }
 
@@ -418,15 +419,15 @@ css::beans::Optional< css::uno::Any > Components::getExternalValue(
         try {
             service = context_->getServiceManager()->createInstanceWithContext(
                 name, context_);
-        } catch (css::uno::RuntimeException &) {
+        } catch (const css::uno::RuntimeException &) {
             // Assuming these exceptions are real errors:
             throw;
-        } catch (css::uno::Exception & e) {
+        } catch (const css::uno::Exception &)  {
             // Assuming these exceptions indicate that the service is not
             // installed:
-            SAL_WARN(
+            TOOLS_WARN_EXCEPTION(
                 "configmgr",
-                "createInstance(" << name << ") failed with " << e);
+                "createInstance(" << name << ") failed");
         }
         css::uno::Reference< css::beans::XPropertySet > propset;
         if (service.is()) {
@@ -650,14 +651,14 @@ void Components::parseFileLeniently(
     assert(parseFile != nullptr);
     try {
         (*parseFile)(url, layer, data_, partial, modifications, additions);
-    } catch (css::container::NoSuchElementException &) {
+    } catch (const css::container::NoSuchElementException &) {
         throw;
-    } catch (css::uno::Exception & e) { //TODO: more specific exception catching
+    } catch (const css::uno::Exception &) { //TODO: more specific exception catching
         // Ignore invalid XML files, instead of completely preventing OOo from
         // starting:
-        SAL_WARN(
+        TOOLS_WARN_EXCEPTION(
             "configmgr",
-            "error reading \"" << url << "\": " << e);
+            "error reading \"" << url << "\"");
     }
 }
 
@@ -729,8 +730,8 @@ void Components::parseFileList(
             }
             try {
                 parseFileLeniently(parseFile, url, layer, nullptr, nullptr, adds);
-            } catch (css::container::NoSuchElementException & e) {
-                SAL_WARN("configmgr", "file does not exist: " << e);
+            } catch (const css::container::NoSuchElementException &) {
+                TOOLS_WARN_EXCEPTION("configmgr", "file does not exist");
                 if (adds != nullptr) {
                     data_.removeExtensionXcuAdditions(url);
                 }
