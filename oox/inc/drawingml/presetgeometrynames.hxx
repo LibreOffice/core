@@ -16,6 +16,7 @@
 namespace PresetGeometryTypeNames
 {
 OOX_DLLPUBLIC OUString GetFontworkType(const OUString& rMsoType);
+OOX_DLLPUBLIC OUString GetMsoName(const OUString& rFontworkType);
 }
 
 #endif

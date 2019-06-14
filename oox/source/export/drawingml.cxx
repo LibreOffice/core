@@ -2544,6 +2544,7 @@ void DrawingML::WriteText( const Reference< XInterface >& rXIface, const OUStrin
         return;
 
     sal_Int32 nTextRotateAngle = 0;
+    bool bIsFontworkShape(presetWarp.startsWith("text") && (presetWarp != "textNoShape"));
 
 #define DEFLRINS 254
 #define DEFTBINS 127
@@ -2582,6 +2583,8 @@ void DrawingML::WriteText( const Reference< XInterface >& rXIface, const OUStrin
         }
     }
 
+    Sequence<drawing::EnhancedCustomShapeAdjustmentValue>aAdjustmentSeq;
+
     if (GetProperty(rXPropSet, "CustomShapeGeometry"))
     {
         Sequence< PropertyValue > aProps;
@@ -2601,8 +2604,11 @@ void DrawingML::WriteText( const Reference< XInterface >& rXIface, const OUStrin
                         sWritingMode = "vert270";
                         bVertical = true;
                     }
-                    break;
+                    if (!bIsFontworkShape)
+                        break;
                 }
+                else if (aProps[i].Name == "AdjustmentValues")
+                    aProps[i].Value >>= aAdjustmentSeq;
             }
         }
     }
@@ -2647,10 +2653,60 @@ void DrawingML::WriteText( const Reference< XInterface >& rXIface, const OUStrin
                                XML_anchorCtr, bHorizontalCenter ? "1" : nullptr,
                                XML_vert, sWritingMode,
                                XML_rot, (nTextRotateAngle != 0) ? oox::drawingml::calcRotationValue( nTextRotateAngle * 100 ).getStr() : nullptr );
-        if( !presetWarp.isEmpty())
+        if (bIsFontworkShape)
         {
-            mpFS->singleElementNS(XML_a, XML_prstTxWarp, XML_prst, presetWarp.toUtf8());
+            if (aAdjustmentSeq.getLength() > 0)
+            {
+                mpFS->startElementNS(XML_a, XML_prstTxWarp, XML_prst, presetWarp.toUtf8());
+                mpFS->startElementNS(XML_a, XML_avLst);
+                for (sal_Int32 i = 0, nElems = aAdjustmentSeq.getLength(); i < nElems; ++i )
+                {
+                    OString sName = OString("adj") + (( nElems > 1 ) ? OString::number(i + 1) : OString());
+                    double fValue(0.0);
+                    if (aAdjustmentSeq[i].Value.getValueTypeClass() == TypeClass_DOUBLE)
+                        aAdjustmentSeq[i].Value >>= fValue;
+                    else
+                    {
+                        sal_Int32 nNumber(0);
+                        aAdjustmentSeq[i].Value >>= nNumber;
+                        fValue = static_cast<double>(nNumber);
+                    }
+                    // Convert from binary coordinate system with viewBox "0 0 21600 21600" and simple degree
+                    // to DrawingML with coordinate range 0..100000 and angle in 1/60000 degree.
+                    // Reverse to conversion in lcl_createPresetShape in drawingml/shape.cxx on import.
+                    if (presetWarp == "textArchDown" || presetWarp == "textArchUp"
+                        || presetWarp == "textButton" || presetWarp == "textCircle"
+                        || ((i == 0) && (presetWarp == "textArchDownPour" || presetWarp == "textArchUpPour"
+                        || presetWarp == "textButtonPour" || presetWarp == "textCirclePour")))
+                    {
+                        fValue *= 60000.0;
+                    }
+                    else if ((i == 1) && (presetWarp == "textDoubleWave1" || presetWarp == "textWave1"
+                            || presetWarp == "textWave2" || presetWarp == "textWave4"))
+                    {
+                        fValue = fValue / 0.216 - 50000.0;
+                    }
+                    else if ((i == 1) && (presetWarp == "textArchDownPour" || presetWarp == "textArchUpPour"
+                        || presetWarp == "textButtonPour" || presetWarp == "textCirclePour"))
+                    {
+                        fValue /= 0.108;
+                    }
+                    else
+                    {
+                        fValue /= 0.216;
+                    }
+                    OString sFmla = OString("val ") + OString::number(std::lround(fValue));
+                    mpFS->singleElementNS(XML_a, XML_gd, XML_name, sName, XML_fmla, sFmla);
+                }
+                mpFS->endElementNS( XML_a, XML_avLst );
+                mpFS->endElementNS(XML_a, XML_prstTxWarp);
+            }
+            else
+            {
+                mpFS->singleElementNS(XML_a, XML_prstTxWarp, XML_prst, presetWarp.toUtf8());
+            }
         }
+
         if (GetDocumentType() == DOCUMENT_DOCX || GetDocumentType() == DOCUMENT_XLSX)
         {
             bool bTextAutoGrowHeight = false;
