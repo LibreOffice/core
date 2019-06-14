@@ -99,7 +99,7 @@ namespace canvas
 
         /**
          *
-         * Count the number of 1-bits of an n-bit value
+         * Count the number of 1-bits of a n-bit value
          *
          */
 
