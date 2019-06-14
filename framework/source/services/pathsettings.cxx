@@ -419,7 +419,7 @@ private:
     virtual void SAL_CALL getFastPropertyValue( css::uno::Any&  aValue,
             sal_Int32 nHandle ) const override;
     // Avoid:
-    // warning: ‘virtual css::uno::Any cppu::OPropertySetHelper::getFastPropertyValue(sal_Int32)’ was hidden [-Woverloaded-virtual]
+    // warning: 'virtual css::uno::Any cppu::OPropertySetHelper::getFastPropertyValue(sal_Int32)' was hidden [-Woverloaded-virtual]
     // warning:   by ‘virtual void {anonymous}::PathSettings::getFastPropertyValue(css::uno::Any&, sal_Int32) const’ [-Woverloaded-virtual]
     using cppu::OPropertySetHelper::getFastPropertyValue;
     virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
