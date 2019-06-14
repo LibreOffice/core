@@ -585,7 +585,7 @@ void ToolBarManager::impl_elementChanged(bool const isRemove,
                     if (( pIter->second.nImageInfo == 0 ) && ( pIter->second.nImageInfo == nImageInfo ))
                     {
                         // Special case: An image from the document image manager has been removed.
-                        // It is possible that we have a image at our module image manager. Before
+                        // It is possible that we have an image at our module image manager. Before
                         // we can remove our image we have to ask our module image manager.
                         Sequence< OUString > aCmdURLSeq( 1 );
                         Sequence< Reference< XGraphic > > aGraphicSeq;
@@ -841,7 +841,7 @@ void ToolBarManager::CreateControllers()
                 }
             }
 
-            // Request a item window from the toolbar controller and set it at the VCL toolbar
+            // Request an item window from the toolbar controller and set it at the VCL toolbar
             Reference< XToolbarController > xTbxController( xController, UNO_QUERY );
             if ( xTbxController.is() && xToolbarWindow.is() )
             {
