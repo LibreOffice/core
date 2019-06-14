@@ -1071,15 +1071,11 @@ public:
 
     virtual void set_modal(bool bModal) override
     {
-        if (::Dialog* pDialog = dynamic_cast<::Dialog*>(m_xWindow.get()))
-            return pDialog->SetModalInputMode(bModal);
-        return m_xWindow->ImplGetFrame()->SetModal(bModal);
+        m_xWindow->ImplGetFrame()->SetModal(bModal);
     }
 
     virtual bool get_modal() const override
     {
-        if (const ::Dialog* pDialog = dynamic_cast<const ::Dialog*>(m_xWindow.get()))
-            return pDialog->IsModalInputMode();
         return m_xWindow->ImplGetFrame()->GetModal();
     }
 
@@ -1329,6 +1325,18 @@ public:
 
         xButton->Show();
         m_xDialog->add_button(xButton, nResponse, true);
+    }
+
+    virtual void set_modal(bool bModal) override
+    {
+        if (get_modal() == bModal)
+            return;
+        m_xDialog->SetModalInputMode(bModal);
+    }
+
+    virtual bool get_modal() const override
+    {
+        return m_xDialog->IsModalInputMode();
     }
 
     virtual weld::Button* get_widget_for_response(int nResponse) override;

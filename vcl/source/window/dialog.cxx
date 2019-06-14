@@ -964,12 +964,6 @@ bool Dialog::ImplStartExecute()
         if ( pSVData->maWinData.mpCaptureWin )
             pSVData->maWinData.mpCaptureWin->ReleaseMouse();
         EnableInput();
-
-        if ( GetParent() )
-        {
-            SalFrame* pFrame = GetParent()->ImplGetFrame();
-            pFrame->NotifyModalHierarchy(true);
-        }
     }
 
     mbInExecute = true;
@@ -1159,12 +1153,6 @@ void Dialog::EndDialog( long nResult )
         }
     }
 
-    if (bModal && GetParent())
-    {
-        SalFrame* pFrame = GetParent()->ImplGetFrame();
-        pFrame->NotifyModalHierarchy(false);
-    }
-
     mpDialogImpl->mnResult = nResult;
 
     if ( mpDialogImpl->mbStartedModal )
@@ -1222,6 +1210,13 @@ void Dialog::SetModalInputMode( bool bModal )
         return;
 
     ImplGetFrame()->SetModal(bModal);
+
+    if (GetParent())
+    {
+        SalFrame* pFrame = GetParent()->ImplGetFrame();
+        pFrame->NotifyModalHierarchy(bModal);
+    }
+
     ImplSetModalInputMode(bModal);
 }
 
