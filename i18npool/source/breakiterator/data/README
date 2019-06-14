@@ -133,7 +133,7 @@ Date:   Tue Aug 28 11:46:34 2007 +0000
 
     INTEGRATION: CWS i18n36_SRC680 (1.21.2.1.2); FILE MERGED
     2007/08/22 20:02:28 khong 1.21.2.1.2.2: i80923 fix infinite loop problem
-    2007/08/22 17:11:44 khong 1.21.2.1.2.1: i80923 fix a infinite loop
+    2007/08/22 17:11:44 khong 1.21.2.1.2.1: i80923 fix an infinite loop
 
 commit 8a36b196925a5561eabde0a0ef293c73fcb5add3
 Author: Ivo Hinkelmann <ihi@openoffice.org>
