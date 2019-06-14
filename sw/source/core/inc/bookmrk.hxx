@@ -44,6 +44,7 @@ namespace com {
 class SwDoc;
 class SwEditWin;
 class SwServerObject;
+class SvNumberFormatter;
 
 namespace sw {
     namespace mark {
@@ -307,7 +308,12 @@ namespace sw {
             DateFieldmark(const SwPaM& rPaM);
             virtual ~DateFieldmark() override;
 
+            virtual void InitDoc(SwDoc* const io_pDoc, sw::mark::InsertMode eMode) override;
+
             virtual void ShowButton(SwEditWin* pEditWin) override;
+
+        private:
+            SvNumberFormatter* m_pNumberFormatter;
         };
     }
 }
