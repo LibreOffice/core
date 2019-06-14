@@ -1320,9 +1320,9 @@ void ThreeDHelper::getRoundedEdgesAndObjectLines(
                         , aPercentDiagonalPropertyName, uno::Any(nPercentDiagonal) ) )
                         bDifferentRoundedEdges = true;
                 }
-                catch( const uno::Exception& e )
+                catch( const uno::Exception& )
                 {
-                    SAL_WARN("chart2", "Exception caught. " << e );
+                    TOOLS_WARN_EXCEPTION("chart2", "" );
                     bDifferentRoundedEdges = true;
                 }
                 try
@@ -1333,9 +1333,9 @@ void ThreeDHelper::getRoundedEdgesAndObjectLines(
                         , aBorderStylePropertyName, uno::Any(aLineStyle) ) )
                         bDifferentObjectLines = true;
                 }
-                catch( const uno::Exception& e )
+                catch( const uno::Exception& )
                 {
-                    SAL_WARN("chart2", "Exception caught. " << e );
+                    TOOLS_WARN_EXCEPTION("chart2", "" );
                     bDifferentObjectLines = true;
                 }
             }
@@ -1375,9 +1375,9 @@ void ThreeDHelper::getRoundedEdgesAndObjectLines(
         else if( aLineStyle == drawing::LineStyle_SOLID )
             rnObjectLines = 1;
     }
-    catch( const uno::Exception& e )
+    catch( const uno::Exception& )
     {
-        SAL_WARN("chart2", "Exception caught. " << e );
+        TOOLS_WARN_EXCEPTION("chart2", "" );
     }
 }
 
