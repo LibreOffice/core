@@ -48,7 +48,7 @@ struct BaseStruct
     byte    m3;
     /// a type member
     type    m4;
-    /// a enum member, Error in module idlc::test
+    /// an enum member, Error in module idlc::test
     Error   m5;
     /// a typedef member, global Error (typedef short)
     ::Error m6;
@@ -56,7 +56,7 @@ struct BaseStruct
     ::idlc::Error   m7;
     /// a typedef member, Error in module idlc (typedef long)
     idlc::Error m8;
-    /// a enum member, Error in module idlc::test
+    /// an enum member, Error in module idlc::test
     test::Error m9;
 };
 
