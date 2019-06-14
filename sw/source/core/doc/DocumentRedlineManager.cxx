@@ -3046,6 +3046,8 @@ void DocumentRedlineManager::FinalizeImport()
                 // tdf#118699 remove numbering of the first deleted list item
                 const SwPaM aPam( *pStt, *pStt );
                 m_rDoc.DelNumRules( aPam );
+                // tdf#125916 copy style
+                pDelNode->ChgFormatColl( pTextNode->GetTextColl() );
             }
             else if ( pDelNode->GetNumRule() != pTextNode->GetNumRule() )
             {

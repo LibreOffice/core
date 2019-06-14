@@ -1268,6 +1268,23 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf125881_redline_list_level)
     CPPUNIT_ASSERT_EQUAL(sal_Int16(1), getProperty<sal_Int16>(getParagraph(8), "NumberingLevel"));
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf125916_redline_restart_numbering)
+{
+    load(DATA_DIRECTORY, "tdf125916.docx");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+    IDocumentRedlineAccess& rIDRA(pDoc->getIDocumentRedlineAccess());
+    rIDRA.AcceptAllRedline(true);
+
+    // check unnecessary numbering
+    uno::Reference<beans::XPropertySet> xProps(getParagraph(3), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_MESSAGE("first paragraph after the first deletion: erroneous numbering",
+                           !xProps->getPropertyValue("NumberingRules").hasValue());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf125310)
 {
     load(DATA_DIRECTORY, "tdf125310.fodt");
