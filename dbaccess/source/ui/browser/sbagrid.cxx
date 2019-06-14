@@ -60,6 +60,7 @@
 #include <svl/itempool.hxx>
 #include <svl/itemset.hxx>
 #include <svl/rngitem.hxx>
+#include <tools/diagnose_ex.h>
 #include <toolkit/helper/vclunohelper.hxx>
 
 #include <vcl/svapp.hxx>
@@ -936,9 +937,9 @@ Reference< XPropertySet >  SbaGridControl::getField(sal_uInt16 nModelPos)
         else
             OSL_FAIL("SbaGridControl::getField getColumns returns NULL or ModelPos is > than count!");
     }
-    catch (const Exception& e)
+    catch (const Exception&)
     {
-        SAL_WARN("dbaccess", "SbaGridControl::getField Exception occurred: " << e);
+        TOOLS_WARN_EXCEPTION("dbaccess", "SbaGridControl::getField Exception occurred");
     }
 
     return xEmptyReturn;
@@ -971,9 +972,9 @@ bool SbaGridControl::IsReadOnlyDB() const
             }
         }
     }
-    catch (const Exception& e)
+    catch (const Exception&)
     {
-        SAL_WARN("dbaccess", "SbaGridControl::IsReadOnlyDB Exception occurred: " << e);
+        TOOLS_WARN_EXCEPTION("dbaccess", "SbaGridControl::IsReadOnlyDB Exception occurred");
     }
 
     return bDBIsReadOnly;
