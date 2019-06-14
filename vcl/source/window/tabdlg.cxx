@@ -26,8 +26,6 @@
 void TabDialog::ImplInitTabDialogData()
 {
     mpFixedLine     = nullptr;
-    mpViewWindow    = nullptr;
-    meViewAlign     = WindowAlign::Left;
     mbPosControls   = true;
 }
 
@@ -44,7 +42,7 @@ void TabDialog::ImplPosControls()
     vcl::Window* pChild = GetWindow( GetWindowType::FirstChild );
     while ( pChild )
     {
-        if ( pChild->IsVisible() && (pChild != mpViewWindow) )
+        if ( pChild->IsVisible() )
         {
             if (pChild->GetType() == WindowType::TABCONTROL || isContainerWindow(*pChild))
                 pTabControl = pChild;
@@ -86,58 +84,6 @@ void TabDialog::ImplPosControls()
 
         Size    aDlgSize( aTabSize.Width() + IMPL_DIALOG_OFFSET*2,
                           aTabSize.Height() + IMPL_DIALOG_OFFSET*2 + nOffY );
-        long    nBtnEx = 0;
-
-        // consider preview window and adapt the sizes/offsets
-        if ( mpViewWindow && mpViewWindow->IsVisible() )
-        {
-            long    nViewOffX = 0;
-            long    nViewOffY = 0;
-            long    nViewWidth = 0;
-            long    nViewHeight = 0;
-            PosSizeFlags nViewPosFlags = PosSizeFlags::Pos;
-            Size    aViewSize = mpViewWindow->GetSizePixel();
-            if (  meViewAlign == WindowAlign::Top )
-            {
-                nViewOffX       = aTabOffset.X();
-                nViewOffY       = nOffY+IMPL_DIALOG_OFFSET;
-                nViewWidth      = aTabSize.Width();
-                nViewPosFlags  |= PosSizeFlags::Width;
-                aTabOffset.AdjustY(aViewSize.Height()+IMPL_DIALOG_OFFSET );
-                aDlgSize.AdjustHeight(aViewSize.Height()+IMPL_DIALOG_OFFSET );
-            }
-            else if (  meViewAlign == WindowAlign::Bottom )
-            {
-                nViewOffX       = aTabOffset.X();
-                nViewOffY       = aTabOffset.Y()+aTabSize.Height()+IMPL_DIALOG_OFFSET;
-                nViewWidth      = aTabSize.Width();
-                nViewPosFlags  |= PosSizeFlags::Width;
-                aDlgSize.AdjustHeight(aViewSize.Height()+IMPL_DIALOG_OFFSET );
-            }
-            else if (  meViewAlign == WindowAlign::Right )
-            {
-                nViewOffX       = aTabOffset.X()+aTabSize.Width()+IMPL_DIALOG_OFFSET;
-                nViewOffY       = aTabOffset.Y();
-                nViewHeight     = aTabSize.Height();
-                nViewPosFlags  |= PosSizeFlags::Height;
-                aDlgSize.AdjustWidth(aViewSize.Width()+IMPL_DIALOG_OFFSET );
-                nBtnEx          = aViewSize.Width()+IMPL_DIALOG_OFFSET;
-            }
-            else // meViewAlign == WindowAlign::Left
-            {
-                nViewOffX       = IMPL_DIALOG_OFFSET;
-                nViewOffY       = aTabOffset.Y();
-                nViewHeight     = aTabSize.Height();
-                nViewPosFlags  |= PosSizeFlags::Height;
-                aTabOffset.AdjustX(aViewSize.Width()+IMPL_DIALOG_OFFSET );
-                aDlgSize.AdjustWidth(aViewSize.Width()+IMPL_DIALOG_OFFSET );
-                nBtnEx          = aViewSize.Width()+IMPL_DIALOG_OFFSET;
-            }
-
-            mpViewWindow->setPosSizePixel( nViewOffX, nViewOffY,
-                                           nViewWidth, nViewHeight,
-                                           nViewPosFlags );
-        }
 
         // adapt positioning
         pTabControl->SetPosPixel( aTabOffset );
@@ -152,13 +98,13 @@ void TabDialog::ImplPosControls()
         // all buttons are right aligned under Windows 95
         nX = IMPL_DIALOG_OFFSET;
         long nCtrlBarWidth = ((aCtrlSize.Width()+IMPL_DIALOG_OFFSET)*nDownCtrl)-IMPL_DIALOG_OFFSET;
-        if ( nCtrlBarWidth <= (aTabSize.Width()+nBtnEx) )
-            nX = (aTabSize.Width()+nBtnEx) - nCtrlBarWidth + IMPL_DIALOG_OFFSET;
+        if ( nCtrlBarWidth <= aTabSize.Width() )
+            nX = aTabSize.Width() - nCtrlBarWidth + IMPL_DIALOG_OFFSET;
 
         vcl::Window* pChild2 = GetWindow( GetWindowType::FirstChild );
         while ( pChild2 )
         {
-            if ( pChild2->IsVisible() && (pChild2 != mpViewWindow) )
+            if ( pChild2->IsVisible() )
             {
                 if ( pChild2 == pTabControl )
                     bTabCtrl = true;
@@ -167,7 +113,7 @@ void TabDialog::ImplPosControls()
                     if ( !nLines )
                         nLines = 1;
 
-                    if ( nX+aCtrlSize.Width()-IMPL_DIALOG_OFFSET > (aTabSize.Width()+nBtnEx) )
+                    if ( nX+aCtrlSize.Width()-IMPL_DIALOG_OFFSET > aTabSize.Width() )
                     {
                         nY += aCtrlSize.Height()+IMPL_DIALOG_OFFSET;
                         nX  = IMPL_DIALOG_OFFSET;
@@ -221,7 +167,6 @@ TabDialog::~TabDialog()
 void TabDialog::dispose()
 {
     mpFixedLine.disposeAndClear();
-    mpViewWindow.clear();
     Dialog::dispose();
 }
 
