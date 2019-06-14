@@ -438,7 +438,7 @@ Qt5Instance::CreateClipboard(const css::uno::Sequence<css::uno::Any>& arguments)
     }
 
     // This could also use RunInMain, but SolarMutexGuard is enough
-    // since at this point we're not accessing the clipbord, just get the
+    // since at this point we're not accessing the clipboard, just get the
     // accessor to the clipboard.
     SolarMutexGuard aGuard;
 
