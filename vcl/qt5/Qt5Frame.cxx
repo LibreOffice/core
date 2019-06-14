@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_vclplug.h>
+
 #include <Qt5Frame.hxx>
 #include <Qt5Frame.moc>
 
@@ -27,6 +29,7 @@
 #include <Qt5MainWindow.hxx>
 #include <Qt5Menu.hxx>
 #include <Qt5SvpGraphics.hxx>
+#include <Qt5System.hxx>
 #include <Qt5Tools.hxx>
 #include <Qt5Transferable.hxx>
 #include <Qt5Widget.hxx>
@@ -54,6 +57,11 @@
 
 #include <cairo.h>
 #include <headless/svpgdi.hxx>
+
+#if QT5_USING_X11
+#include <QtX11Extras/QX11Info>
+#include <xcb/xproto.h>
+#endif
 
 static void SvpDamageHandler(void* handle, sal_Int32 nExtentsX, sal_Int32 nExtentsY,
                              sal_Int32 nExtentsWidth, sal_Int32 nExtentsHeight)
@@ -1108,9 +1116,29 @@ void Qt5Frame::SetScreenNumber(unsigned int nScreen)
     }
 }
 
-void Qt5Frame::SetApplicationID(const OUString&)
+void Qt5Frame::SetApplicationID(const OUString& rWMClass)
 {
-    // So the hope is that QGuiApplication deals with this properly..
+#if QT5_USING_X11
+    if (QGuiApplication::platformName() != "xcb" || !m_pTopLevel)
+        return;
+
+    OString aResClass = OUStringToOString(rWMClass, RTL_TEXTENCODING_ASCII_US);
+    const char* pResClass
+        = !aResClass.isEmpty() ? aResClass.getStr() : SalGenericSystem::getFrameClassName();
+    OString aResName = SalGenericSystem::getFrameResName();
+
+    // the WM_CLASS string consists of two concated strings, including the terminating '\0' chars
+    const uint32_t data_len = aResName.getLength() + 1 + strlen(pResClass) + 1;
+    char* data = new char[data_len];
+    memcpy(data, aResName.getStr(), aResName.getLength() + 1);
+    memcpy(data + aResName.getLength() + 1, pResClass, strlen(pResClass) + 1);
+
+    xcb_change_property(QX11Info::connection(), XCB_PROP_MODE_REPLACE, m_pTopLevel->winId(),
+                        XCB_ATOM_WM_CLASS, XCB_ATOM_STRING, 8, data_len, data);
+    delete[] data;
+#else
+    (void)rWMClass;
+#endif
 }
 
 // Drag'n'drop foo
