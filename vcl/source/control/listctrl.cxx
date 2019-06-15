@@ -161,9 +161,15 @@ bool ListControl::EventNotify( NotifyEvent& rNEvt )
     if (rNEvt.GetType() == MouseNotifyEvent::COMMAND)
     {
         const CommandEvent* pEvent = rNEvt.GetCommandEvent();
-        if (pEvent && pEvent->GetCommand() == CommandEventId::Wheel)
+        if (pEvent)
         {
-            HandleScrollCommand(*pEvent, nullptr, mpScrollBar.get());
+            CommandEventId nCommand = pEvent->GetCommand();
+
+            if (nCommand == CommandEventId::Wheel ||
+                nCommand == CommandEventId::Gesture)
+            {
+                HandleScrollCommand(*pEvent, nullptr, mpScrollBar.get());
+            }
         }
     }
     return true;
