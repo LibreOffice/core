@@ -32,6 +32,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <framework/interaction.hxx>
+#include <tools/diagnose_ex.h>
 #include <tools/urlobj.hxx>
 #include <comphelper/fileurl.hxx>
 #include <comphelper/processfactory.hxx>
@@ -448,10 +449,9 @@ OUString SAL_CALL TypeDetection::queryTypeByDescriptor(css::uno::Sequence< css::
     {
         throw;
     }
-    catch(const css::uno::Exception& e)
+    catch(const css::uno::Exception&)
     {
-        SAL_WARN("filter.config", "caught " << e
-                << " while querying type of " << sURL);
+        TOOLS_WARN_EXCEPTION("filter.config", "caught exception while querying type of " << sURL);
         sType.clear();
     }
 
