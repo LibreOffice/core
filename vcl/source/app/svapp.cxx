@@ -19,20 +19,16 @@
 
 #include <config_features.h>
 
-#include <osl/module.h>
 #include <osl/file.hxx>
 #include <osl/thread.hxx>
 #include <osl/module.hxx>
 
 #include <rtl/tencinfo.h>
-#include <rtl/instance.hxx>
 #include <sal/log.hxx>
 
 #include <tools/debug.hxx>
 #include <tools/time.hxx>
 #include <tools/stream.hxx>
-
-#include <i18nlangtag/mslangid.hxx>
 
 #include <unotools/configmgr.hxx>
 #include <unotools/syslocaleoptions.hxx>
@@ -51,12 +47,9 @@
 #include <vcl/toolkit/unowrap.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/scheduler.hxx>
-#include <vcl/unohelp.hxx>
-#include <vcl/lazydelete.hxx>
 #if HAVE_FEATURE_OPENGL
 #include <vcl/opengl/OpenGLWrapper.hxx>
 #endif
-#include <saltimer.hxx>
 
 #include <salinst.hxx>
 #include <salframe.hxx>
@@ -74,9 +67,6 @@
 
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/awt/XToolkit.hpp>
-#include <com/sun/star/uno/XNamingService.hpp>
-#include <com/sun/star/util/XModifiable.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/lok.hxx>
 #include <comphelper/solarmutex.hxx>
 #include <osl/process.h>

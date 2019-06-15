@@ -19,7 +19,6 @@
 
 #include <sal/config.h>
 #include <o3tl/underlyingenumvalue.hxx>
-#include <rtl/crc.h>
 #include <vcl/animate/AnimationBitmap.hxx>
 
 BitmapChecksum AnimationBitmap::GetChecksum() const

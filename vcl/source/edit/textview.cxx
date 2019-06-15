@@ -39,11 +39,9 @@
 
 #include <sal/log.hxx>
 #include <sot/formats.hxx>
-#include <svl/urlbmk.hxx>
 
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/queryinterface.hxx>
-#include <vcl/unohelp.hxx>
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
 #include <com/sun/star/i18n/WordType.hpp>
@@ -54,8 +52,6 @@
 #include <com/sun/star/datatransfer/dnd/DNDConstants.hpp>
 #include <com/sun/star/datatransfer/dnd/XDragGestureRecognizer.hpp>
 #include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/util/SearchOptions.hpp>
 #include <com/sun/star/util/SearchFlags.hpp>
 
 #include <vcl/edit.hxx>

@@ -32,7 +32,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 
-#include <strings.hrc>
 #include <svdata.hxx>
 
 #include <i18nutil/unicode.hxx>
