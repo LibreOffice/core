@@ -51,6 +51,7 @@
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequence.hxx>
+#include <tools/diagnose_ex.h>
 #include <tools/gen.hxx>
 #include <tools/globname.hxx>
 #include <tools/mapunit.hxx>
@@ -296,9 +297,9 @@ void Shape::addShape(
             }
         }
     }
-    catch( const Exception& e )
+    catch( const Exception& )
     {
-        SAL_WARN( "oox.drawingml", "Shape::addShape: " << e );
+        TOOLS_WARN_EXCEPTION( "oox.drawingml", "Shape::addShape" );
     }
 }
 
@@ -1500,9 +1501,9 @@ void Shape::keepDiagramCompatibilityInfo()
         } else
             xSet->setPropertyValue( aGrabBagPropName, Any( maDiagramDoms ) );
     }
-    catch( const Exception& e )
+    catch( const Exception& )
     {
-        SAL_WARN( "oox.drawingml", "Shape::keepDiagramCompatibilityInfo: " << e );
+        TOOLS_WARN_EXCEPTION( "oox.drawingml", "Shape::keepDiagramCompatibilityInfo" );
     }
 }
 
@@ -1523,9 +1524,9 @@ void Shape::convertSmartArtToMetafile(XmlFilterBase const & rFilterBase)
             xShapes->remove(Reference<XShape>(xShapes->getByIndex(0), UNO_QUERY_THROW));
         xShapes->add(xShape);
     }
-    catch (const Exception& e)
+    catch (const Exception&)
     {
-        SAL_WARN("oox.drawingml", "Shape::convertSmartArtToMetafile: " << e);
+        TOOLS_WARN_EXCEPTION("oox.drawingml", "Shape::convertSmartArtToMetafile");
     }
 }
 
@@ -1592,9 +1593,9 @@ Reference < XShape > Shape::renderDiagramToGraphic( XmlFilterBase const & rFilte
         xPropSet->setPropertyValue(  "SizeProtect", Any( true ) );
         xPropSet->setPropertyValue(  "Name", Any( OUString( "RenderedShapes" ) ) );
     }
-    catch( const Exception& e )
+    catch( const Exception& )
     {
-        SAL_WARN( "oox.drawingml", "Shape::renderDiagramToGraphic: " << e );
+        TOOLS_WARN_EXCEPTION( "oox.drawingml", "Shape::renderDiagramToGraphic" );
     }
 
     return xShape;

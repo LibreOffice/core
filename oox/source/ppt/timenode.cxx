@@ -42,6 +42,7 @@
 #include <oox/ppt/pptfilterhelpers.hxx>
 #include <oox/token/tokens.hxx>
 #include <sal/log.hxx>
+#include <tools/diagnose_ex.h>
 
 using namespace ::oox::core;
 using namespace ::com::sun::star::beans;
@@ -210,9 +211,9 @@ namespace oox { namespace ppt {
                 return;
             setNode(rFilter, xNode, pSlide, rxNode);
         }
-        catch( const Exception& e )
+        catch( const Exception& )
         {
-            SAL_INFO("oox.ppt","OOX: exception raised in TimeNode::addNode() - " << e );
+            TOOLS_INFO_EXCEPTION("oox.ppt","OOX: exception raised in TimeNode::addNode()" );
         }
     }
 
@@ -582,9 +583,9 @@ namespace oox { namespace ppt {
                 break;
             }
         }
-        catch( const Exception& e )
+        catch( const Exception& )
         {
-            SAL_INFO("oox.ppt","OOX: exception raised in TimeNode::setNode() - " << e );
+            TOOLS_INFO_EXCEPTION("oox.ppt","OOX: exception raised in TimeNode::setNode()");
         }
     }
 
@@ -600,9 +601,9 @@ namespace oox { namespace ppt {
             xParentContainer->appendChild( xNode );
             return xNode;
         }
-        catch( const Exception& e )
+        catch( const Exception& )
         {
-            SAL_INFO("oox.ppt", "OOX: exception raised in TimeNode::createAndInsert() trying to create a service " << rServiceName << " = " << e );
+            TOOLS_INFO_EXCEPTION("oox.ppt", "OOX: exception raised in TimeNode::createAndInsert() trying to create a service " << rServiceName);
         }
 
         return Reference< XAnimationNode >();

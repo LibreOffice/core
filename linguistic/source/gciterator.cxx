@@ -677,11 +677,9 @@ void GrammarCheckingIterator::DequeueAndCheck()
                         AddEntry( xFPIterator, xFlatParaNext, aCurDocId, 0, aFPEntryItem.m_bAutomatic );
                     }
                 }
-                catch (css::uno::Exception & e)
+                catch (css::uno::Exception &)
                 {
-                    SAL_WARN(
-                        "linguistic",
-                        "GrammarCheckingIterator::DequeueAndCheck ignoring " << e);
+                    TOOLS_WARN_EXCEPTION("linguistic", "GrammarCheckingIterator::DequeueAndCheck ignoring");
                 }
             }
 
