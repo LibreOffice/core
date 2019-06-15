@@ -33,6 +33,7 @@
 #include <sft.hxx>
 
 #include <com/sun/star/uno/Sequence.hxx>
+#include <comphelper/sequence.hxx>
 
 #include <vector>
 #include <set>
@@ -408,13 +409,10 @@ bool ImplFontMetricData::ShouldUseWinMetrics(const vcl::TTGlobalFontInfo& rInfo)
 
     css::uno::Sequence<OUString> rWinMetricFontList(
         officecfg::Office::Common::Misc::FontsUseWinMetrics::get());
-    for (int i = 0; i < rWinMetricFontList.getLength(); ++i)
+    if (comphelper::findValue(rWinMetricFontList, aFontIdentifier) != -1)
     {
-        if (aFontIdentifier == rWinMetricFontList[i])
-        {
-            SAL_INFO("vcl.gdi.fontmetric", "Using win metrics for: " << aFontIdentifier);
-            return true;
-        }
+        SAL_INFO("vcl.gdi.fontmetric", "Using win metrics for: " << aFontIdentifier);
+        return true;
     }
     return false;
 }

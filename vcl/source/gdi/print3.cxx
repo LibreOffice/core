@@ -881,26 +881,26 @@ PrinterController::PageSize vcl::ImplPrinterControllerData::modifyJobSetup( cons
     aPageSize.aSize = mxPrinter->GetPaperSize();
     css::awt::Size aSetSize, aIsSize;
     sal_Int32 nPaperBin = mnDefaultPaperBin;
-    for( sal_Int32 nProperty = 0, nPropertyCount = i_rProps.getLength(); nProperty < nPropertyCount; ++nProperty )
+    for( const auto& rProp : i_rProps )
     {
-        if ( i_rProps[ nProperty ].Name == "PreferredPageSize" )
+        if ( rProp.Name == "PreferredPageSize" )
         {
-            i_rProps[ nProperty ].Value >>= aSetSize;
+            rProp.Value >>= aSetSize;
         }
-        else if ( i_rProps[ nProperty ].Name == "PageSize" )
+        else if ( rProp.Name == "PageSize" )
         {
-            i_rProps[ nProperty ].Value >>= aIsSize;
+            rProp.Value >>= aIsSize;
         }
-        else if ( i_rProps[ nProperty ].Name == "PageIncludesNonprintableArea" )
+        else if ( rProp.Name == "PageIncludesNonprintableArea" )
         {
             bool bVal = false;
-            i_rProps[ nProperty ].Value >>= bVal;
+            rProp.Value >>= bVal;
             aPageSize.bFullPaper = bVal;
         }
-        else if ( i_rProps[ nProperty ].Name == "PrinterPaperTray" )
+        else if ( rProp.Name == "PrinterPaperTray" )
         {
             sal_Int32 nBin = -1;
-            i_rProps[ nProperty ].Value >>= nBin;
+            rProp.Value >>= nBin;
             if( nBin >= 0 && nBin < static_cast<sal_Int32>(mxPrinter->GetPaperBinCount()) )
                 nPaperBin = nBin;
         }
@@ -1423,12 +1423,11 @@ css::uno::Sequence< css::beans::PropertyValue > PrinterController::getJobPropert
 {
     std::unordered_set< OUString > aMergeSet;
     size_t nResultLen = size_t(i_rMergeList.getLength()) + mpImplData->maUIProperties.size() + 3;
-    for( int i = 0; i < i_rMergeList.getLength(); i++ )
-        aMergeSet.insert( i_rMergeList[i].Name );
+    for( const auto& rPropVal : i_rMergeList )
+        aMergeSet.insert( rPropVal.Name );
 
     css::uno::Sequence< css::beans::PropertyValue > aResult( nResultLen );
-    for( int i = 0; i < i_rMergeList.getLength(); i++ )
-        aResult[i] = i_rMergeList[i];
+    std::copy(i_rMergeList.begin(), i_rMergeList.end(), aResult.begin());
     int nCur = i_rMergeList.getLength();
     for(css::beans::PropertyValue & rPropVal : mpImplData->maUIProperties)
     {
@@ -1512,18 +1511,17 @@ void PrinterController::setUIOptions( const css::uno::Sequence< css::beans::Prop
 
     mpImplData->maUIOptions = i_rOptions;
 
-    for( int i = 0; i < i_rOptions.getLength(); i++ )
+    for( const auto& rOpt : i_rOptions )
     {
         css::uno::Sequence< css::beans::PropertyValue > aOptProp;
-        i_rOptions[i].Value >>= aOptProp;
+        rOpt.Value >>= aOptProp;
         bool bIsEnabled = true;
         bool bHaveProperty = false;
         OUString aPropName;
         vcl::ImplPrinterControllerData::ControlDependency aDep;
         css::uno::Sequence< sal_Bool > aChoicesDisabled;
-        for( int n = 0; n < aOptProp.getLength(); n++ )
+        for( const css::beans::PropertyValue& rEntry : aOptProp )
         {
-            const css::beans::PropertyValue& rEntry( aOptProp[ n ] );
             if ( rEntry.Name == "Property" )
             {
                 css::beans::PropertyValue aVal;
@@ -1827,24 +1825,15 @@ bool PrinterOptionsHelper::processProperties( const css::uno::Sequence< css::bea
 {
     bool bChanged = false;
 
-    sal_Int32 nElements = i_rNewProp.getLength();
-    const css::beans::PropertyValue* pVals = i_rNewProp.getConstArray();
-    for( sal_Int32 i = 0; i < nElements; i++ )
+    for( const auto& rVal : i_rNewProp )
     {
-        bool bElementChanged = false;
         std::unordered_map< OUString, css::uno::Any >::iterator it =
-            m_aPropertyMap.find( pVals[ i ].Name );
-        if( it != m_aPropertyMap.end() )
-        {
-            if( it->second != pVals[ i ].Value )
-                bElementChanged = true;
-        }
-        else
-            bElementChanged = true;
+            m_aPropertyMap.find( rVal.Name );
 
+        bool bElementChanged = (it == m_aPropertyMap.end()) || (it->second != rVal.Value);
         if( bElementChanged )
         {
-            m_aPropertyMap[ pVals[i].Name ] = pVals[i].Value;
+            m_aPropertyMap[ rVal.Name ] = rVal.Value;
             bChanged = true;
         }
     }

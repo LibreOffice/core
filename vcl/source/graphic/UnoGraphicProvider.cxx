@@ -231,10 +231,13 @@ uno::Reference< beans::XPropertySet > SAL_CALL GraphicProvider::queryGraphicDesc
     uno::Reference< io::XInputStream > xIStm;
     uno::Reference< awt::XBitmap >xBtm;
 
-    for( sal_Int32 i = 0; ( i < rMediaProperties.getLength() ) && !xRet.is(); ++i )
+    for( const auto& rMediaProperty : rMediaProperties )
     {
-        const OUString   aName( rMediaProperties[ i ].Name );
-        const uno::Any          aValue( rMediaProperties[ i ].Value );
+        if (xRet.is())
+            break;
+
+        const OUString   aName( rMediaProperty.Name );
+        const uno::Any          aValue( rMediaProperty.Value );
 
         if (aName == "URL")
         {
@@ -303,10 +306,13 @@ uno::Reference< ::graphic::XGraphic > SAL_CALL GraphicProvider::queryGraphic( co
     bool bLazyRead = false;
     bool bLoadAsLink = false;
 
-    for (sal_Int32 i = 0; ( i < rMediaProperties.getLength() ) && !xRet.is(); ++i)
+    for (const auto& rMediaProperty : rMediaProperties)
     {
-        const OUString   aName( rMediaProperties[ i ].Name );
-        const uno::Any          aValue( rMediaProperties[ i ].Value );
+        if (xRet.is())
+            break;
+
+        const OUString   aName( rMediaProperty.Name );
+        const uno::Any          aValue( rMediaProperty.Value );
 
         if (aName == "URL")
         {
@@ -340,10 +346,10 @@ uno::Reference< ::graphic::XGraphic > SAL_CALL GraphicProvider::queryGraphic( co
     sal_uInt16 nExtWidth = 0;
     sal_uInt16 nExtHeight = 0;
     sal_uInt16 nExtMapMode = 0;
-    for( sal_Int32 i = 0; i < aFilterData.getLength(); ++i )
+    for( const auto& rProp : aFilterData )
     {
-        const OUString   aName( aFilterData[ i ].Name );
-        const uno::Any          aValue( aFilterData[ i ].Value );
+        const OUString   aName( rProp.Name );
+        const uno::Any          aValue( rProp.Value );
 
         if (aName == "ExternalWidth")
         {
@@ -446,15 +452,13 @@ uno::Sequence< uno::Reference<graphic::XGraphic> > SAL_CALL GraphicProvider::que
         std::unique_ptr<SvStream> pStream;
         uno::Reference<io::XInputStream> xStream;
 
-        for (sal_Int32 i = 0; rMediaProperties.getLength(); ++i)
+        auto pProp = std::find_if(rMediaProperties.begin(), rMediaProperties.end(),
+            [](const beans::PropertyValue& rProp) { return rProp.Name == "InputStream"; });
+        if (pProp != rMediaProperties.end())
         {
-            if (rMediaProperties[i].Name == "InputStream")
-            {
-                rMediaProperties[i].Value >>= xStream;
-                if (xStream.is())
-                    pStream = utl::UcbStreamHelper::CreateStream(xStream);
-                break;
-            }
+            pProp->Value >>= xStream;
+            if (xStream.is())
+                pStream = utl::UcbStreamHelper::CreateStream(xStream);
         }
 
         aStreams.push_back(std::move(pStream));
@@ -577,10 +581,10 @@ void ImplApplyFilterData( ::Graphic& rGraphic, uno::Sequence< beans::PropertyVal
     text::GraphicCrop aCropLogic( 0, 0, 0, 0 );
     bool bRemoveCropArea = true;
 
-    for( sal_Int32 i = 0; i < rFilterData.getLength(); ++i )
+    for( const auto& rProp : rFilterData )
     {
-        const OUString   aName(  rFilterData[ i ].Name );
-        const uno::Any          aValue( rFilterData[ i ].Value );
+        const OUString   aName(  rProp.Name );
+        const uno::Any          aValue( rProp.Value );
 
         if (aName == "PixelWidth")
             aValue >>= nPixelWidth;
@@ -706,12 +710,11 @@ void SAL_CALL GraphicProvider::storeGraphic( const uno::Reference< ::graphic::XG
 
     std::unique_ptr<SvStream> pOStm;
     OUString    aPath;
-    sal_Int32   i;
 
-    for( i = 0; ( i < rMediaProperties.getLength() ) && !pOStm; ++i )
+    for( const auto& rMediaProperty : rMediaProperties )
     {
-        const OUString   aName( rMediaProperties[ i ].Name );
-        const uno::Any          aValue( rMediaProperties[ i ].Value );
+        const OUString   aName( rMediaProperty.Name );
+        const uno::Any          aValue( rMediaProperty.Value );
 
         if (aName == "URL")
         {
@@ -730,6 +733,9 @@ void SAL_CALL GraphicProvider::storeGraphic( const uno::Reference< ::graphic::XG
             if( xOStm.is() )
                 pOStm = ::utl::UcbStreamHelper::CreateStream( xOStm );
         }
+
+        if( pOStm )
+            break;
     }
 
     if( !pOStm )
@@ -738,10 +744,10 @@ void SAL_CALL GraphicProvider::storeGraphic( const uno::Reference< ::graphic::XG
     uno::Sequence< beans::PropertyValue >   aFilterDataSeq;
     const char*                             pFilterShortName = nullptr;
 
-    for( i = 0; i < rMediaProperties.getLength(); ++i )
+    for( const auto& rMediaProperty : rMediaProperties )
     {
-        const OUString   aName( rMediaProperties[ i ].Name );
-        const uno::Any          aValue( rMediaProperties[ i ].Value );
+        const OUString   aName( rMediaProperty.Name );
+        const uno::Any          aValue( rMediaProperty.Value );
 
         if (aName == "FilterData")
         {

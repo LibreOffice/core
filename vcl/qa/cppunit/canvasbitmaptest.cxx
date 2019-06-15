@@ -482,15 +482,13 @@ private:
     virtual uno::Sequence< rendering::RGBColor > SAL_CALL convertIntegerToRGB( const uno::Sequence< ::sal_Int8 >& deviceColor ) override
     {
         const uno::Sequence< rendering::ARGBColor > aTemp( convertIntegerToARGB(deviceColor) );
-        const std::size_t nLen(aTemp.getLength());
-        uno::Sequence< rendering::RGBColor > aRes( nLen );
-        rendering::RGBColor* pOut = aRes.getArray();
-        for( std::size_t i=0; i<nLen; ++i )
-        {
-            *pOut++ = rendering::RGBColor(aTemp[i].Red,
-                                          aTemp[i].Green,
-                                          aTemp[i].Blue);
-        }
+        uno::Sequence< rendering::RGBColor > aRes( aTemp.getLength() );
+        std::transform(aTemp.begin(), aTemp.end(), aRes.begin(),
+            [](const rendering::ARGBColor& rColor) {
+                return rendering::RGBColor(rColor.Red,
+                                           rColor.Green,
+                                           rColor.Blue);
+        });
 
         return aRes;
     }
@@ -507,13 +505,13 @@ private:
 
         if( getPalette().is() )
         {
-            for( std::size_t i=0; i<nLen; ++i )
+            for( const auto& rIn : deviceColor )
             {
                 *pOut++ = rendering::ARGBColor(
                     1.0,
-                    vcl::unotools::toDoubleColor(deviceColor[i]),
-                    vcl::unotools::toDoubleColor(deviceColor[i]),
-                    vcl::unotools::toDoubleColor(deviceColor[i]));
+                    vcl::unotools::toDoubleColor(rIn),
+                    vcl::unotools::toDoubleColor(rIn),
+                    vcl::unotools::toDoubleColor(rIn));
             }
         }
         else
@@ -544,13 +542,13 @@ private:
 
         if( getPalette().is() )
         {
-            for( std::size_t i=0; i<nLen; ++i )
+            for( const auto& rIn : deviceColor )
             {
                 *pOut++ = rendering::ARGBColor(
                     1.0,
-                    vcl::unotools::toDoubleColor(deviceColor[i]),
-                    vcl::unotools::toDoubleColor(deviceColor[i]),
-                    vcl::unotools::toDoubleColor(deviceColor[i]));
+                    vcl::unotools::toDoubleColor(rIn),
+                    vcl::unotools::toDoubleColor(rIn),
+                    vcl::unotools::toDoubleColor(rIn));
             }
         }
         else

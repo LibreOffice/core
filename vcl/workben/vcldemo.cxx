@@ -1222,12 +1222,12 @@ public:
             css::uno::Reference<css::container::XNameAccess> xRef(ImageTree::get().getNameAccess());
             css::uno::Sequence< OUString > aAllIcons = xRef->getElementNames();
 
-            for (sal_Int32 i = 0; i < aAllIcons.getLength(); i++)
+            for (const auto& rIcon : aAllIcons)
             {
-                if (aAllIcons[i].endsWithIgnoreAsciiCase("svg"))
+                if (rIcon.endsWithIgnoreAsciiCase("svg"))
                     continue; // too slow to load.
-                maIconNames.push_back(aAllIcons[i]);
-                maIcons.emplace_back(aAllIcons[i]);
+                maIconNames.push_back(rIcon);
+                maIcons.emplace_back(rIcon);
             }
         }
 

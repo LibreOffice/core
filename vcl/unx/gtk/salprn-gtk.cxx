@@ -407,10 +407,10 @@ GtkPrintDialog::impl_initCustomTab()
     GtkWidget* pCurTabPage = nullptr;
     GtkWidget* pCurSubGroup = nullptr;
     bool bIgnoreSubgroup = false;
-    for (int i = 0; i != rOptions.getLength(); i++)
+    for (const auto& rOption : rOptions)
     {
         uno::Sequence<beans::PropertyValue> aOptProp;
-        rOptions[i].Value >>= aOptProp;
+        rOption.Value >>= aOptProp;
 
         OUString aCtrlType;
         OUString aText;
@@ -432,9 +432,8 @@ GtkPrintDialog::impl_initCustomTab()
         if (!aOptProp.hasElements())
             continue;
 
-        for (int n = 0; n != aOptProp.getLength(); n++)
+        for (const beans::PropertyValue& rEntry : aOptProp)
         {
-            const beans::PropertyValue& rEntry(aOptProp[ n ]);
             if ( rEntry.Name == "Text" )
             {
                 OUString aValue;
@@ -472,8 +471,8 @@ GtkPrintDialog::impl_initCustomTab()
                 {
                     const int nLen = aHelpIds.getLength();
                     aHelpTexts.realloc(nLen);
-                    for (int j = 0; j != nLen; ++j)
-                        aHelpTexts[j] = pHelp->GetHelpText(aHelpIds[j], static_cast<weld::Widget*>(nullptr));
+                    std::transform(aHelpIds.begin(), aHelpIds.end(), aHelpTexts.begin(),
+                        [&pHelp](const OUString& rHelpId) { return pHelp->GetHelpText(rHelpId, static_cast<weld::Widget*>(nullptr)); });
                 }
                 else // fallback
                     aHelpTexts = aHelpIds;
@@ -609,10 +608,10 @@ GtkPrintDialog::impl_initCustomTab()
                 {
                    pWidget = lcl_combo_box_text_new();
 
-                   for (sal_Int32 m = 0; m != aChoices.getLength(); m++)
+                   for (const auto& rChoice : aChoices)
                    {
                        lcl_combo_box_text_append(pWidget,
-                           OUStringToOString(aChoices[m], RTL_TEXTENCODING_UTF8).getStr());
+                           OUStringToOString(rChoice, RTL_TEXTENCODING_UTF8).getStr());
                    }
 
                    sal_Int32 nSelectVal = 0;

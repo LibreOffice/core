@@ -345,8 +345,8 @@ public:
     void       getSubFilters( css::uno::Sequence< css::beans::StringPair >& _rSubFilterList );
 
     // helpers for iterating the sub filters
-    const css::beans::StringPair*   beginSubFilters() const { return m_aSubFilters.getConstArray(); }
-    const css::beans::StringPair*   endSubFilters() const { return m_aSubFilters.getConstArray() + m_aSubFilters.getLength(); }
+    const css::beans::StringPair*   beginSubFilters() const { return m_aSubFilters.begin(); }
+    const css::beans::StringPair*   endSubFilters() const { return m_aSubFilters.end(); }
 };
 
 bool FilterEntry::hasSubFilters() const
@@ -505,16 +505,9 @@ bool SalGtkFilePicker::FilterNameExists( const css::uno::Sequence< css::beans::S
 
     if( m_pFilterVector )
     {
-        const css::beans::StringPair* pStart = _rGroupedFilters.getConstArray();
-        const css::beans::StringPair* pEnd = pStart + _rGroupedFilters.getLength();
-        for( ; pStart != pEnd; ++pStart )
-            if( ::std::any_of(
-                        m_pFilterVector->begin(),
-                        m_pFilterVector->end(),
-                        FilterTitleMatch( pStart->First ) ) )
-                break;
-
-        bRet = pStart != pEnd;
+        bRet = std::any_of(_rGroupedFilters.begin(), _rGroupedFilters.end(),
+            [&](const css::beans::StringPair& rFilter) {
+                return ::std::any_of( m_pFilterVector->begin(), m_pFilterVector->end(), FilterTitleMatch( rFilter.First ) ); });
     }
 
     return bRet;
@@ -639,10 +632,8 @@ void SAL_CALL SalGtkFilePicker::appendFilterGroup( const OUString& /*sGroupTitle
     ensureFilterVector( sInitialCurrentFilter );
 
     // append the filter
-    const StringPair* pSubFilters   = aFilters.getConstArray();
-    const StringPair* pSubFiltersEnd = pSubFilters + aFilters.getLength();
-    for( ; pSubFilters != pSubFiltersEnd; ++pSubFilters )
-        m_pFilterVector->insert( m_pFilterVector->end(), FilterEntry( pSubFilters->First, pSubFilters->Second ) );
+    for( const auto& rSubFilter : aFilters )
+        m_pFilterVector->insert( m_pFilterVector->end(), FilterEntry( rSubFilter.First, rSubFilter.Second ) );
 
 }
 
@@ -1159,10 +1150,9 @@ void SalGtkFilePicker::HandleSetListValue(GtkComboBox *pWidget, sal_Int16 nContr
             {
                 Sequence< OUString > aStringList;
                 rValue >>= aStringList;
-                sal_Int32 nItemCount = aStringList.getLength();
-                for (sal_Int32 i = 0; i < nItemCount; ++i)
+                for (const auto& rString : aStringList)
                 {
-                    ComboBoxAppendText(pWidget,aStringList[i]);
+                    ComboBoxAppendText(pWidget, rString);
                     if (!bVersionWidthUnset)
                     {
                         HackWidthToFirst(pWidget);
@@ -1909,10 +1899,8 @@ void SalGtkFilePicker::implAddFilterGroup( const OUString& /*_rFilter*/, const S
 {
     // Gtk+ has no filter group concept I think so ...
     // implAddFilter( _rFilter, String() );
-    const StringPair* pSubFilters   = _rFilters.getConstArray();
-    const StringPair* pSubFiltersEnd = pSubFilters + _rFilters.getLength();
-    for( ; pSubFilters != pSubFiltersEnd; ++pSubFilters )
-        implAddFilter( pSubFilters->First, pSubFilters->Second );
+    for( const auto& rSubFilter : _rFilters )
+        implAddFilter( rSubFilter.First, rSubFilter.Second );
 }
 
 void SalGtkFilePicker::SetFilters()
@@ -1932,10 +1920,8 @@ void SalGtkFilePicker::SetFilters()
                 {   // it's a filter group
                     css::uno::Sequence< css::beans::StringPair > aSubFilters;
                     filter.getSubFilters( aSubFilters );
-                    const StringPair* pSubFilters   = aSubFilters.getConstArray();
-                    const StringPair* pSubFiltersEnd = pSubFilters + aSubFilters.getLength();
-                    for( ; pSubFilters != pSubFiltersEnd; ++pSubFilters )
-                        aAllFormats.insert(pSubFilters->Second);
+                    for( const auto& rSubFilter : aSubFilters )
+                        aAllFormats.insert(rSubFilter.Second);
                 }
                 else
                     aAllFormats.insert(filter.getFilter());
