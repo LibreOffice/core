@@ -120,6 +120,20 @@ public:
     /// Fill the search options based on the given redaction target
     static void fillSearchOptions(i18nutil::SearchOptions2& rSearchOpt,
                                   const RedactionTarget* pTarget);
+
+private:
+    static constexpr OUStringLiteral m_aPredefinedTargets[6] = {
+        "\\b(?:\\d[ -]*?){13,16}\\b", //Credit card numbers
+        "\\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,}\\b", //Email addresses
+        "\\b(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)"
+        "\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)"
+        "\\b", //IP addresses
+        "([12]\\d{3}[./-](0[1-9]|1[0-2])[./"
+        "-](0[1-9]|[12]\\d|3[01]))|((0[1-9]|[12]\\d|3[01])[./-](0[1-9]|1[0-2])[./"
+        "-][12]\\d{3})", //Dates (numerical)
+        "\\s*[a-zA-Z]{2}(?:\\s*\\d\\s*){6}[a-zA-Z]?\\s*", //National Insurance Number (UK)
+        "([1-9])(?!\\1{2}-\\1{2}-\\1{4})[1-9]{2}-[1-9]{2}-[1-9]{4}" //Social Security Number (US)
+    };
 };
 
 #endif // INCLUDED_CUI_SOURCE_INC_SFXREDACTIONHELPER_HXX
