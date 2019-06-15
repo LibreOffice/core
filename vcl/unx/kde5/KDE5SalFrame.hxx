@@ -42,6 +42,8 @@ public:
     virtual LanguageType GetInputLanguage() override { return LANGUAGE_SYSTEM; }
     virtual SalPointerState GetPointerState() override { return SalPointerState(); }
     virtual KeyIndicatorState GetIndicatorState() override { return KeyIndicatorState(); }
+
+    void SetApplicationID(const OUString& rWMClass) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
