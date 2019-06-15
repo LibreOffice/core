@@ -2895,15 +2895,20 @@ void SvImpLBox::PaintDDCursor(SvTreeListEntry* pEntry, bool bShow)
 
 void SvImpLBox::Command( const CommandEvent& rCEvt )
 {
-    CommandEventId   nCommand = rCEvt.GetCommand();
+    CommandEventId nCommand = rCEvt.GetCommand();
 
     if( nCommand == CommandEventId::ContextMenu )
         m_aEditIdle.Stop();
 
     // scroll mouse event?
-    if( ( ( nCommand == CommandEventId::Wheel ) || ( nCommand == CommandEventId::StartAutoScroll ) || ( nCommand == CommandEventId::AutoScroll ) )
-        && m_pView->HandleScrollCommand( rCEvt, m_aHorSBar.get(), m_aVerSBar.get() ) )
+    if (nCommand == CommandEventId::Wheel ||
+        nCommand == CommandEventId::StartAutoScroll ||
+        nCommand == CommandEventId::AutoScroll ||
+        nCommand == CommandEventId::Gesture)
+    {
+        if (m_pView->HandleScrollCommand(rCEvt, m_aHorSBar.get(), m_aVerSBar.get()))
             return;
+    }
 
     if( m_bContextMenuHandling && nCommand == CommandEventId::ContextMenu )
     {
