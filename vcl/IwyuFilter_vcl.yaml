@@ -25,3 +25,9 @@ blacklist:
     vcl/qa/cppunit/outdev.cxx:
     # Needed for direct member access
     - basegfx/matrix/b2dhommatrix.hxx
+    vcl/source/app/svdata.cxx:
+    # Needed on WIN32
+    - com/sun/star/accessibility/MSAAService.hpp
+    vcl/source/app/svmain.cxx:
+    # Needed on WIN32
+    - desktop/exithelper.h

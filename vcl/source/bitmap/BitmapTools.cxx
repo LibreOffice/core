@@ -23,7 +23,6 @@
 
 #include <com/sun/star/rendering/XIntegerReadOnlyBitmap.hpp>
 
-#include <unotools/resmgr.hxx>
 #include <vcl/dibtools.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
@@ -34,7 +33,6 @@
 #endif
 #include <tools/diagnose_ex.h>
 #include <tools/fract.hxx>
-#include <tools/helpers.hxx>
 #include <tools/stream.hxx>
 #include <bitmapwriteaccess.hxx>
 

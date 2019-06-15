@@ -17,14 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <vcl/decoview.hxx>
 #include <vcl/dockwin.hxx>
 #include <vcl/event.hxx>
 #include <vcl/floatwin.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/menubtn.hxx>
-#include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 
 void MenuButton::ImplInit( vcl::Window* pParent, WinBits nStyle )
