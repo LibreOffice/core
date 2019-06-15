@@ -170,7 +170,7 @@ VclPtr<vcl::Window> UnoWrapper::GetWindow(const css::uno::Reference<css::awt::XW
 
 void UnoWrapper::SetWindowInterface( vcl::Window* pWindow, css::uno::Reference< css::awt::XWindowPeer> xIFace )
 {
-    VCLXWindow* pVCLXWindow = VCLXWindow::getImplementation( xIFace );
+    VCLXWindow* pVCLXWindow = comphelper::getUnoTunnelImplementation<VCLXWindow>( xIFace );
 
     DBG_ASSERT( pVCLXWindow, "SetComponentInterface - unsupported type" );
     if ( pVCLXWindow )

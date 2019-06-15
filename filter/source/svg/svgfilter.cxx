@@ -213,7 +213,7 @@ bool SVGFilter::filterImpressOrDraw( const Sequence< PropertyValue >& rDescripto
             }
 
             // get that DrawPage's UNO API implementation
-            SvxDrawPage* pSvxDrawPage(SvxDrawPage::getImplementation(xDrawPage));
+            SvxDrawPage* pSvxDrawPage(comphelper::getUnoTunnelImplementation<SvxDrawPage>(xDrawPage));
 
             if(nullptr == pSvxDrawPage || nullptr == pSvxDrawPage->GetSdrPage())
             {

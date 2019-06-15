@@ -1840,7 +1840,7 @@ vcl::Window* SfxStoringHelper::GetModelWindow( const uno::Reference< frame::XMod
         uno::Reference<awt::XWindow> xWindow = GetModelXWindow(xModel);
         if ( xWindow.is() )
         {
-            VCLXWindow* pVCLWindow = VCLXWindow::getImplementation( xWindow );
+            VCLXWindow* pVCLWindow = comphelper::getUnoTunnelImplementation<VCLXWindow>( xWindow );
             if ( pVCLWindow )
                 pWin = pVCLWindow->GetWindow();
         }

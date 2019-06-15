@@ -439,7 +439,7 @@ static E3dScene* lcl_getE3dScene(uno::Reference<uno::XInterface> const & xInterf
 {
     E3dScene* pScene = nullptr;
 
-    SvxShape* pSvxShape = SvxShape::getImplementation(xInterface);
+    SvxShape* pSvxShape = comphelper::getUnoTunnelImplementation<SvxShape>(xInterface);
     if (pSvxShape)
     {
         SdrObject* pObject = pSvxShape->GetSdrObject();

@@ -3761,7 +3761,7 @@ OUString ChartExport::getNumberFormatCode(sal_Int32 nKey) const
 
     OUString aCode("General");  // init with fallback
     uno::Reference<util::XNumberFormatsSupplier> xNumberFormatsSupplier(mxChartModel, uno::UNO_QUERY_THROW);
-    SvNumberFormatsSupplierObj* pSupplierObj = SvNumberFormatsSupplierObj::getImplementation( xNumberFormatsSupplier);
+    SvNumberFormatsSupplierObj* pSupplierObj = comphelper::getUnoTunnelImplementation<SvNumberFormatsSupplierObj>( xNumberFormatsSupplier);
     if (!pSupplierObj)
         return aCode;
 

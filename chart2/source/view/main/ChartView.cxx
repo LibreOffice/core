@@ -1805,7 +1805,7 @@ awt::Rectangle ChartView::getRectangleOfObject( const OUString& rObjectCID, bool
         if( eObjectType == OBJECTTYPE_AXIS || eObjectType == OBJECTTYPE_DIAGRAM )
         {
             SolarMutexGuard aSolarGuard;
-            SvxShape* pRoot = SvxShape::getImplementation( xShape );
+            SvxShape* pRoot = comphelper::getUnoTunnelImplementation<SvxShape>( xShape );
             if( pRoot )
             {
                 SdrObject* pRootSdrObject = pRoot->GetSdrObject();
@@ -1831,7 +1831,7 @@ awt::Rectangle ChartView::getRectangleOfObject( const OUString& rObjectCID, bool
         if( bSnapRect )
         {
             //for rotated objects the shape size and position differs from the visible rectangle
-            SvxShape* pShape = SvxShape::getImplementation( xShape );
+            SvxShape* pShape = comphelper::getUnoTunnelImplementation<SvxShape>( xShape );
             if( pShape )
             {
                 SdrObject* pSdrObject = pShape->GetSdrObject();

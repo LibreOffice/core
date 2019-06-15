@@ -531,7 +531,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                         css::uno::Reference< css::uno::XInterface > xInterface;
                         const SfxUnoAnyItem* pUnoAny = pReq->GetArg<SfxUnoAnyItem>(FN_PARAM_2);
                         AsyncFunc* pAsyncFunc = pUnoAny && (pUnoAny->GetValue() >>= xInterface ) ?
-                            AsyncFunc::getImplementation(xInterface) : nullptr;
+                            comphelper::getUnoTunnelImplementation<AsyncFunc>(xInterface) : nullptr;
                         if (pAsyncFunc)
                             pAsyncFunc->Execute();
 

@@ -991,7 +991,7 @@ void SAL_CALL SmModel::render(
     if (!xRenderDevice.is())
         return;
 
-    VCLXDevice*   pDevice = VCLXDevice::getImplementation( xRenderDevice );
+    VCLXDevice*   pDevice = comphelper::getUnoTunnelImplementation<VCLXDevice>( xRenderDevice );
     VclPtr< OutputDevice> pOut = pDevice ? pDevice->GetOutputDevice()
                                          : VclPtr< OutputDevice >();
     if (!pOut)

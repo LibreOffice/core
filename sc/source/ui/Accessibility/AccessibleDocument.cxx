@@ -1087,7 +1087,7 @@ boost::optional<ScAddress> ScChildrenShapes::GetAnchor(const uno::Reference<draw
 {
     if (mpViewShell)
     {
-        SvxShape* pShapeImp = SvxShape::getImplementation(xShape);
+        SvxShape* pShapeImp = comphelper::getUnoTunnelImplementation<SvxShape>(xShape);
         uno::Reference<beans::XPropertySet> xShapeProp(xShape, uno::UNO_QUERY);
         if (pShapeImp && xShapeProp.is())
         {

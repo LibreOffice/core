@@ -668,7 +668,7 @@ void SAL_CALL ScStyleFamilyObj::insertByName( const OUString& aName, const uno::
     uno::Reference< uno::XInterface > xInterface(aElement, uno::UNO_QUERY);
     if ( xInterface.is() )
     {
-        ScStyleObj* pStyleObj = ScStyleObj::getImplementation( xInterface );
+        ScStyleObj* pStyleObj = comphelper::getUnoTunnelImplementation<ScStyleObj>( xInterface );
         if ( pStyleObj && pStyleObj->GetFamily() == eFamily &&
                 !pStyleObj->IsInserted() )  // not yet inserted?
         {

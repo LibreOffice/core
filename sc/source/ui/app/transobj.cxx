@@ -620,7 +620,7 @@ ScDocument* ScTransferObj::GetSourceDocument()
 
 ScDocShell* ScTransferObj::GetSourceDocShell()
 {
-    ScCellRangesBase* pRangesObj = ScCellRangesBase::getImplementation( m_xDragSourceRanges );
+    ScCellRangesBase* pRangesObj = comphelper::getUnoTunnelImplementation<ScCellRangesBase>( m_xDragSourceRanges );
     if (pRangesObj)
         return pRangesObj->GetDocShell();
 
@@ -630,7 +630,7 @@ ScDocShell* ScTransferObj::GetSourceDocShell()
 ScMarkData ScTransferObj::GetSourceMarkData()
 {
     ScMarkData aMarkData;
-    ScCellRangesBase* pRangesObj = ScCellRangesBase::getImplementation( m_xDragSourceRanges );
+    ScCellRangesBase* pRangesObj = comphelper::getUnoTunnelImplementation<ScCellRangesBase>( m_xDragSourceRanges );
     if (pRangesObj)
     {
         const ScRangeList& rRanges = pRangesObj->GetRangeList();

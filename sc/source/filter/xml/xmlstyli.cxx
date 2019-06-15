@@ -1026,7 +1026,7 @@ void ScCellTextStyleContext::FillPropertySet( const uno::Reference<beans::XPrope
 
     ScXMLImport& rXMLImport = GetScImport();
 
-    ScCellTextCursor* pCellImp = ScCellTextCursor::getImplementation( xPropSet );
+    ScCellTextCursor* pCellImp = comphelper::getUnoTunnelImplementation<ScCellTextCursor>( xPropSet );
     if (pCellImp)
     {
         ScAddress aPos = pCellImp->GetCellObj().GetPosition();
@@ -1042,7 +1042,7 @@ void ScCellTextStyleContext::FillPropertySet( const uno::Reference<beans::XPrope
     }
     else if ( rXMLImport.GetTables().GetCurrentSheet() != nLastSheet )
     {
-        ScDrawTextCursor* pDrawImp = ScDrawTextCursor::getImplementation( xPropSet );
+        ScDrawTextCursor* pDrawImp = comphelper::getUnoTunnelImplementation<ScDrawTextCursor>( xPropSet );
         if (pDrawImp)
         {
             XMLTableShapeImportHelper* pTableShapeImport = static_cast<XMLTableShapeImportHelper*>(GetScImport().GetShapeImport().get());

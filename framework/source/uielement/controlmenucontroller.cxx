@@ -193,8 +193,8 @@ void ControlMenuController::updateImagesPopupMenu( PopupMenu* pPopupMenu )
 // private function
 void ControlMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu > const & rPopupMenu )
 {
-    VCLXPopupMenu*                                     pPopupMenu        = static_cast<VCLXPopupMenu *>(VCLXMenu::getImplementation( rPopupMenu ));
-    PopupMenu*                                         pVCLPopupMenu     = nullptr;
+    VCLXPopupMenu* pPopupMenu        = static_cast<VCLXPopupMenu *>(comphelper::getUnoTunnelImplementation<VCLXMenu>( rPopupMenu ));
+    PopupMenu*     pVCLPopupMenu     = nullptr;
 
     SolarMutexGuard aSolarMutexGuard;
 
@@ -244,7 +244,7 @@ void SAL_CALL ControlMenuController::statusChanged( const FeatureStateEvent& Eve
 
     if (!sIdent.isEmpty() && m_xResPopupMenu)
     {
-        pPopupMenu = static_cast<VCLXPopupMenu *>(VCLXMenu::getImplementation( m_xPopupMenu ));
+        pPopupMenu = static_cast<VCLXPopupMenu *>(comphelper::getUnoTunnelImplementation<VCLXMenu>( m_xPopupMenu ));
         nMenuId = m_xResPopupMenu->GetItemId(sIdent);
     }
 
@@ -299,7 +299,7 @@ void SAL_CALL ControlMenuController::itemActivated( const css::awt::MenuEvent& )
         {
             m_bShowMenuImages   = bShowMenuImages;
 
-            VCLXPopupMenu* pPopupMenu = static_cast<VCLXPopupMenu *>(VCLXPopupMenu::getImplementation( m_xPopupMenu ));
+            VCLXPopupMenu* pPopupMenu = static_cast<VCLXPopupMenu *>(comphelper::getUnoTunnelImplementation<VCLXMenu>( m_xPopupMenu ));
             if ( pPopupMenu )
             {
                 PopupMenu* pVCLPopupMenu = static_cast<PopupMenu *>(pPopupMenu->GetMenu());

@@ -122,7 +122,7 @@ void SAL_CALL SvNumberFormatterServiceObj::attachNumberFormatsSupplier( const un
     {
         ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
 
-        SvNumberFormatsSupplierObj* pNew = SvNumberFormatsSupplierObj::getImplementation( _xSupplier );
+        SvNumberFormatsSupplierObj* pNew = comphelper::getUnoTunnelImplementation<SvNumberFormatsSupplierObj>( _xSupplier );
         if (!pNew)
             throw uno::RuntimeException(); // wrong object
 

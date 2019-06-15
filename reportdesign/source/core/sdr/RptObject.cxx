@@ -447,7 +447,7 @@ void OObjectBase::ensureSdrObjectOwnership( const uno::Reference< uno::XInterfac
     // which are removed from it, which is deadly for us. To prevent this,
     // we give the XShape implementation the ownership of the SdrObject, which
     // ensures the SvxDrawPage won't delete it.
-    SvxShape* pShape = SvxShape::getImplementation( _rxShape );
+    SvxShape* pShape = comphelper::getUnoTunnelImplementation<SvxShape>( _rxShape );
     OSL_ENSURE( pShape, "OObjectBase::ensureSdrObjectOwnership: can't access the SvxShape!" );
     if ( pShape )
     {

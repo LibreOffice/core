@@ -663,7 +663,7 @@ OUString SAL_CALL SvxUnoTextField::getPresentation( sal_Bool bShowCommand )
 // Interface text::XTextContent
 void SAL_CALL SvxUnoTextField::attach( const uno::Reference< text::XTextRange >& xTextRange )
 {
-    SvxUnoTextRangeBase* pRange = SvxUnoTextRange::getImplementation( xTextRange );
+    SvxUnoTextRangeBase* pRange = comphelper::getUnoTunnelImplementation<SvxUnoTextRange>( xTextRange );
     if(pRange == nullptr)
         throw lang::IllegalArgumentException();
 

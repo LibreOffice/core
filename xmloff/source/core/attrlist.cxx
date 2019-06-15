@@ -81,7 +81,7 @@ SvXMLAttributeList::SvXMLAttributeList( const uno::Reference<
 {
 
     SvXMLAttributeList* pImpl =
-        SvXMLAttributeList::getImplementation( rAttrList );
+        comphelper::getUnoTunnelImplementation<SvXMLAttributeList>( rAttrList );
 
     if( pImpl )
         *m_pImpl = *(pImpl->m_pImpl);

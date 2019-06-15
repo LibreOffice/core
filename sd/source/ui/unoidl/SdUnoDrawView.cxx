@@ -116,7 +116,7 @@ Reference<drawing::XLayer> SdUnoDrawView::getActiveLayer()
         // Get the corresponding XLayer object from the implementation
         // object of the layer manager.
         Reference<drawing::XLayerManager> xManager (pModel->getLayerManager(), uno::UNO_QUERY);
-        SdLayerManager* pManager = SdLayerManager::getImplementation (xManager);
+        SdLayerManager* pManager = comphelper::getUnoTunnelImplementation<SdLayerManager> (xManager);
         if (pManager != nullptr)
             xCurrentLayer = pManager->GetLayer (pLayer);
     }
@@ -131,7 +131,7 @@ void SdUnoDrawView::setActiveLayer (const Reference<drawing::XLayer>& rxLayer)
     if ( ! rxLayer.is())
         return;
 
-    SdLayer* pLayer = SdLayer::getImplementation (rxLayer);
+    SdLayer* pLayer = comphelper::getUnoTunnelImplementation<SdLayer> (rxLayer);
     if (pLayer == nullptr)
         return;
 
@@ -159,7 +159,7 @@ sal_Bool SAL_CALL SdUnoDrawView::select( const Any& aSelection )
 
     if(xShape.is())
     {
-        SvxShape* pShape = SvxShape::getImplementation( xShape );
+        SvxShape* pShape = comphelper::getUnoTunnelImplementation<SvxShape>( xShape );
         if( pShape && (pShape->GetSdrObject() != nullptr) )
         {
             SdrObject* pObj = pShape->GetSdrObject();
@@ -183,7 +183,7 @@ sal_Bool SAL_CALL SdUnoDrawView::select( const Any& aSelection )
                 xShapes->getByIndex(i) >>= xShape;
                 if( xShape.is() )
                 {
-                    SvxShape* pShape = SvxShape::getImplementation(xShape);
+                    SvxShape* pShape = comphelper::getUnoTunnelImplementation<SvxShape>(xShape);
                     if( (pShape == nullptr) || (pShape->GetSdrObject() == nullptr) )
                     {
                         bOk = false;
@@ -268,7 +268,7 @@ Any SAL_CALL SdUnoDrawView::getSelection()
                 if(!xPage.is())
                     continue;
 
-                SvxDrawPage* pDrawPage = SvxDrawPage::getImplementation( xPage );
+                SvxDrawPage* pDrawPage = comphelper::getUnoTunnelImplementation<SvxDrawPage>( xPage );
 
                 if(pDrawPage==nullptr)
                     continue;
@@ -403,7 +403,7 @@ Any SAL_CALL SdUnoDrawView::getFastPropertyValue (
 void SAL_CALL SdUnoDrawView::setCurrentPage (
     const Reference< drawing::XDrawPage >& xPage )
 {
-    SvxDrawPage* pDrawPage = SvxDrawPage::getImplementation( xPage );
+    SvxDrawPage* pDrawPage = comphelper::getUnoTunnelImplementation<SvxDrawPage>( xPage );
     SdrPage *pSdrPage = pDrawPage ? pDrawPage->GetSdrPage() : nullptr;
 
     if(pSdrPage)
@@ -513,7 +513,7 @@ SdXImpressDocument* SdUnoDrawView::GetModel() const throw()
     if (mrView.GetDocSh()!=nullptr)
     {
         Reference<frame::XModel> xModel (mrView.GetDocSh()->GetModel());
-        return SdXImpressDocument::getImplementation(xModel);
+        return comphelper::getUnoTunnelImplementation<SdXImpressDocument>(xModel);
     }
     else
         return nullptr;

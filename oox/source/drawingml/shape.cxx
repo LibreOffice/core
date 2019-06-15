@@ -558,7 +558,7 @@ static void lcl_createPresetShape(const uno::Reference<drawing::XShape>& xShape,
             if (pParagraph->getProperties().getParaAdjust())
                 eAdjust = pParagraph->getProperties().getParaAdjust().get();
             xSet->setPropertyValue( "ParaAdjust", uno::makeAny( eAdjust ) );
-            SvxShape* pShape = SvxShape::getImplementation( xShape );
+            SvxShape* pShape = comphelper::getUnoTunnelImplementation<SvxShape>( xShape );
             assert(pShape);
             SdrTextHorzAdjust eHorzAdjust = lcl_convertAdjust( eAdjust );
             pShape->GetSdrObject()->SetMergedItem( SdrTextHorzAdjustItem( eHorzAdjust ) );
@@ -567,7 +567,7 @@ static void lcl_createPresetShape(const uno::Reference<drawing::XShape>& xShape,
 
     // Apply vertical adjustment for text on arc
     // ToDo: The property is currently not evaluated.
-    SvxShape* pShape = SvxShape::getImplementation(xShape);
+    SvxShape* pShape = comphelper::getUnoTunnelImplementation<SvxShape>(xShape);
     assert(pShape);
     if (rClass == "fontwork-arch-up-curve")
         pShape->GetSdrObject()->SetMergedItem( SdrTextVertAdjustItem( SdrTextVertAdjust::SDRTEXTVERTADJUST_BOTTOM ) );

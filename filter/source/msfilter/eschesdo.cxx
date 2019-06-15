@@ -877,7 +877,7 @@ bool ImplEESdrWriter::ImplInitPage( const SdrPage& rPage )
         mpSolverContainer.reset( new EscherSolverContainer );
     }
     else
-        pSvxDrawPage = SvxDrawPage::getImplementation(mXDrawPage);
+        pSvxDrawPage = comphelper::getUnoTunnelImplementation<SvxDrawPage>(mXDrawPage);
 
     return pSvxDrawPage != nullptr;
 }
@@ -988,7 +988,7 @@ sal_uInt32 EscherEx::AddDummyShape()
 const SdrObject* EscherEx::GetSdrObject( const Reference< XShape >& rShape )
 {
     const SdrObject* pRet = nullptr;
-    const SvxShape* pSvxShape = SvxShape::getImplementation( rShape );
+    const SvxShape* pSvxShape = comphelper::getUnoTunnelImplementation<SvxShape>( rShape );
     DBG_ASSERT( pSvxShape, "EscherEx::GetSdrObject: no SvxShape" );
     if( pSvxShape )
     {

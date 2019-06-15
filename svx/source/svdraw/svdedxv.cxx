@@ -2385,7 +2385,7 @@ void SdrObjEditView::getTextSelection( css::uno::Any& rSelection )
                 css::uno::Reference< css::text::XText > xText( pObj->getUnoShape(), css::uno::UNO_QUERY );
                 if( xText.is() )
                 {
-                    SvxUnoTextBase* pRange = SvxUnoTextBase::getImplementation( xText );
+                    SvxUnoTextBase* pRange = comphelper::getUnoTunnelImplementation<SvxUnoTextBase>( xText );
                     if( pRange )
                     {
                         rSelection <<= pRange->createTextCursorBySelection( pOutlinerView->GetSelection() );

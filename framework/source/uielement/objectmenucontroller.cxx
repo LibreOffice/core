@@ -89,7 +89,7 @@ ObjectMenuController::ObjectMenuController( const css::uno::Reference< css::uno:
 void ObjectMenuController::fillPopupMenu( const Sequence< css::embed::VerbDescriptor >& rVerbCommandSeq, Reference< css::awt::XPopupMenu > const & rPopupMenu )
 {
     const css::embed::VerbDescriptor* pVerbCommandArray = rVerbCommandSeq.getConstArray();
-    VCLXPopupMenu*                    pPopupMenu        = static_cast<VCLXPopupMenu *>(VCLXMenu::getImplementation( rPopupMenu ));
+    VCLXPopupMenu*                    pPopupMenu        = static_cast<VCLXPopupMenu *>(comphelper::getUnoTunnelImplementation<VCLXMenu>( rPopupMenu ));
     PopupMenu*                        pVCLPopupMenu     = nullptr;
 
     SolarMutexGuard aSolarMutexGuard;
