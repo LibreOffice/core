@@ -533,7 +533,8 @@ void SfxRedactionHelper::fillSearchOptions(i18nutil::SearchOptions2& rSearchOpt,
         return;
     }
 
-    if (pTarget->sType == RedactionTargetType::REDACTION_TARGET_REGEX)
+    if (pTarget->sType == RedactionTargetType::REDACTION_TARGET_REGEX
+        || pTarget->sType == RedactionTargetType::REDACTION_TARGET_PREDEFINED)
     {
         rSearchOpt.algorithmType = util::SearchAlgorithms_REGEXP;
         rSearchOpt.AlgorithmType2 = util::SearchAlgorithms2::REGEXP;
@@ -545,10 +546,20 @@ void SfxRedactionHelper::fillSearchOptions(i18nutil::SearchOptions2& rSearchOpt,
     }
 
     rSearchOpt.Locale = GetAppLanguageTag().getLocale();
-    rSearchOpt.searchString = pTarget->sContent;
+    if (pTarget->sType == RedactionTargetType::REDACTION_TARGET_PREDEFINED)
+    {
+        sal_Int32 nPredefIndex = pTarget->sContent.getToken(0, ';').toInt32();
+        //sal_Int32 nPredefIndex = sContent.toInt32();
+
+        rSearchOpt.searchString = m_aPredefinedTargets[nPredefIndex];
+    }
+    else
+        rSearchOpt.searchString = pTarget->sContent;
+
     rSearchOpt.replaceString.clear();
 
-    if (!pTarget->bCaseSensitive && pTarget->sType != RedactionTargetType::REDACTION_TARGET_REGEX)
+    if (!pTarget->bCaseSensitive && pTarget->sType != RedactionTargetType::REDACTION_TARGET_REGEX
+        && pTarget->sType != RedactionTargetType::REDACTION_TARGET_PREDEFINED)
         rSearchOpt.transliterateFlags |= TransliterationFlags::IGNORE_CASE;
     if (pTarget->bWholeWords)
         rSearchOpt.searchFlag |= util::SearchFlags::NORM_WORD_ONLY;
