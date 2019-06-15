@@ -241,6 +241,12 @@ Qt5Instance::~Qt5Instance()
     m_pQApplication.reset();
 }
 
+void Qt5Instance::AfterAppInit()
+{
+    // sets the default application icon on Wayland
+    QGuiApplication::setDesktopFileName(QStringLiteral("libreoffice-startcenter.desktop"));
+}
+
 void Qt5Instance::deleteObjectLater(QObject* pObject) { pObject->deleteLater(); }
 
 SalFrame* Qt5Instance::CreateChildFrame(SystemParentData* /*pParent*/, SalFrameStyleFlags nStyle)
