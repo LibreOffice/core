@@ -123,15 +123,12 @@ JPEGWriter::JPEGWriter( SvStream& rStream, const css::uno::Sequence< css::beans:
 
     if ( pFilterData )
     {
-        int nArgs = pFilterData->getLength();
-        const css::beans::PropertyValue* pValues = pFilterData->getConstArray();
-        while( nArgs-- )
+        for( const auto& rValue : *pFilterData )
         {
-            if ( pValues->Name == "StatusIndicator" )
+            if ( rValue.Name == "StatusIndicator" )
             {
-                pValues->Value >>= mxStatusIndicator;
+                rValue.Value >>= mxStatusIndicator;
             }
-            pValues++;
         }
     }
 }

@@ -518,52 +518,46 @@ namespace vcl
                 }
                 virtual uno::Sequence< double > SAL_CALL convertFromRGB( const uno::Sequence< rendering::RGBColor >& rgbColor ) override
                 {
-                    const rendering::RGBColor* pIn( rgbColor.getConstArray() );
                     const std::size_t             nLen( rgbColor.getLength() );
 
                     uno::Sequence< double > aRes(nLen*4);
                     double* pColors=aRes.getArray();
-                    for( std::size_t i=0; i<nLen; ++i )
+                    for( const auto& rIn : rgbColor )
                     {
-                        *pColors++ = pIn->Red;
-                        *pColors++ = pIn->Green;
-                        *pColors++ = pIn->Blue;
+                        *pColors++ = rIn.Red;
+                        *pColors++ = rIn.Green;
+                        *pColors++ = rIn.Blue;
                         *pColors++ = 1.0;
-                        ++pIn;
                     }
                     return aRes;
                 }
                 virtual uno::Sequence< double > SAL_CALL convertFromARGB( const uno::Sequence< rendering::ARGBColor >& rgbColor ) override
                 {
-                    const rendering::ARGBColor* pIn( rgbColor.getConstArray() );
                     const std::size_t              nLen( rgbColor.getLength() );
 
                     uno::Sequence< double > aRes(nLen*4);
                     double* pColors=aRes.getArray();
-                    for( std::size_t i=0; i<nLen; ++i )
+                    for( const auto& rIn : rgbColor )
                     {
-                        *pColors++ = pIn->Red;
-                        *pColors++ = pIn->Green;
-                        *pColors++ = pIn->Blue;
-                        *pColors++ = pIn->Alpha;
-                        ++pIn;
+                        *pColors++ = rIn.Red;
+                        *pColors++ = rIn.Green;
+                        *pColors++ = rIn.Blue;
+                        *pColors++ = rIn.Alpha;
                     }
                     return aRes;
                 }
                 virtual uno::Sequence< double > SAL_CALL convertFromPARGB( const uno::Sequence< rendering::ARGBColor >& rgbColor ) override
                 {
-                    const rendering::ARGBColor* pIn( rgbColor.getConstArray() );
                     const std::size_t              nLen( rgbColor.getLength() );
 
                     uno::Sequence< double > aRes(nLen*4);
                     double* pColors=aRes.getArray();
-                    for( std::size_t i=0; i<nLen; ++i )
+                    for( const auto& rIn : rgbColor )
                     {
-                        *pColors++ = pIn->Red/pIn->Alpha;
-                        *pColors++ = pIn->Green/pIn->Alpha;
-                        *pColors++ = pIn->Blue/pIn->Alpha;
-                        *pColors++ = pIn->Alpha;
-                        ++pIn;
+                        *pColors++ = rIn.Red/rIn.Alpha;
+                        *pColors++ = rIn.Green/rIn.Alpha;
+                        *pColors++ = rIn.Blue/rIn.Alpha;
+                        *pColors++ = rIn.Alpha;
                     }
                     return aRes;
                 }

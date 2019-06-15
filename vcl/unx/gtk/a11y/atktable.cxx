@@ -20,6 +20,7 @@
 #include "atkwrapper.hxx"
 
 #include <com/sun/star/accessibility/XAccessibleTable.hpp>
+#include <comphelper/sequence.hxx>
 
 using namespace ::com::sun::star;
 
@@ -354,8 +355,7 @@ convertToGIntArray( const uno::Sequence< ::sal_Int32 >& aSequence, gint **pSelec
     {
         *pSelected = g_new( gint, aSequence.getLength() );
 
-        for( sal_Int32 i = 0; i < aSequence.getLength(); i++ )
-            (*pSelected) [i] = aSequence[i];
+        *pSelected = comphelper::sequenceToArray(*pSelected, aSequence);
     }
 
     return aSequence.getLength();
