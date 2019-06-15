@@ -22,3 +22,6 @@ blacklist:
     vcl/inc/unx/saldisp.hxx:
     # Don't replace with generated header
     - epoxy/glx.h
+    vcl/source/app/svdata.cxx:
+    # Needed on WIN
+    - com/sun/star/accessibility/MSAAService.hpp

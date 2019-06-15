@@ -20,14 +20,11 @@
 #include <vcl/decoview.hxx>
 #include <vcl/event.hxx>
 #include <vcl/fixed.hxx>
-#include <vcl/ImageTree.hxx>
-#include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 
 #include <comphelper/string.hxx>
 #include <sal/log.hxx>
 #include <controldata.hxx>
-#include <window.h>
 
 #define FIXEDLINE_TEXT_BORDER    4
 
