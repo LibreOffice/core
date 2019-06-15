@@ -65,6 +65,7 @@ class VCLPLUG_QT5_PUBLIC Qt5Instance : public QObject,
     bool m_bUpdateFonts;
 
     DECL_LINK(updateStyleHdl, Timer*, void);
+    void AfterAppInit() override;
 
 private Q_SLOTS:
     bool ImplYield(bool bWait, bool bHandleAllCurrentEvents);
