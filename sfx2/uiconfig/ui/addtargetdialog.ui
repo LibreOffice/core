@@ -24,8 +24,8 @@
           <object class="GtkButtonBox">
             <property name="can_focus">False</property>
             <child>
-              <object class="GtkButton" id="cancel">
-                <property name="label">gtk-cancel</property>
+              <object class="GtkButton" id="close">
+                <property name="label">gtk-ok</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -39,8 +39,8 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="close">
-                <property name="label">gtk-ok</property>
+              <object class="GtkButton" id="cancel">
+                <property name="label">gtk-cancel</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -145,6 +145,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="margin_left">2</property>
+                <property name="margin_bottom">2</property>
                 <property name="activates_default">True</property>
                 <accessibility>
                   <relation type="labelled-by" target="label_content"/>
@@ -159,6 +160,9 @@
               <object class="GtkComboBoxText" id="type">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="margin_left">2</property>
+                <property name="margin_bottom">2</property>
+                <property name="active">0</property>
                 <items>
                   <item id="text" translatable="yes" context="addtargetdialog|type">Text</item>
                   <item id="regex" translatable="yes" context="addtargetdialog|type">Regex</item>
@@ -171,6 +175,44 @@
               <packing>
                 <property name="left_attach">1</property>
                 <property name="top_attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="label_content_predef">
+                <property name="sensitive">False</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes" context="addtargetdialog|label_content_predef">Content:</property>
+                <property name="use_underline">True</property>
+                <accessibility>
+                  <relation type="label-for" target="content_predef"/>
+                </accessibility>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">3</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkComboBoxText" id="content_predef">
+                <property name="sensitive">False</property>
+                <property name="can_focus">False</property>
+                <property name="margin_left">2</property>
+                <property name="active">0</property>
+                <items>
+                  <item id="creditcard" translatable="yes" context="addtargetdialog|content_predef">Credit card numbers</item>
+                  <item id="email" translatable="yes" context="addtargetdialog|content_predef">Email addresses</item>
+                  <item id="ip" translatable="yes" context="addtargetdialog|content_predef">IP addresses</item>
+                  <item id="numdates" translatable="yes" context="addtargetdialog|content_predef">Dates (Numerical)</item>
+                  <item id="uknin" translatable="yes" context="addtargetdialog|content_predef">National Insurance Number (UK)</item>
+                  <item id="usssn" translatable="yes" context="addtargetdialog|content_predef">Social Security Number (US)</item>
+                </items>
+                <accessibility>
+                  <relation type="labelled-by" target="label_content_predef"/>
+                </accessibility>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">3</property>
               </packing>
             </child>
           </object>
@@ -227,8 +269,8 @@
       </object>
     </child>
     <action-widgets>
-      <action-widget response="-6">cancel</action-widget>
       <action-widget response="-5">close</action-widget>
+      <action-widget response="-6">cancel</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
   </object>
