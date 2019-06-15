@@ -20,12 +20,12 @@
 #ifndef INCLUDED_VCL_INC_IMPFONTCACHE_HXX
 #define INCLUDED_VCL_INC_IMPFONTCACHE_HXX
 
-#include <unordered_map>
 #include <boost/functional/hash.hpp>
 
+#include <rtl/ref.hxx>
 #include <o3tl/lru_map.hxx>
 #include <tools/gen.hxx>
-#include <vcl/vcllayout.hxx>
+#include <vcl/glyphitem.hxx>
 
 #include "fontselect.hxx"
 

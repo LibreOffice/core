@@ -14,12 +14,9 @@
 
 #include <vcl/IconThemeScanner.hxx>
 
-#include <config_folders.h>
 #include <osl/file.hxx>
-#include <rtl/bootstrap.hxx>
 #include <salhelper/linkhelper.hxx>
 #include <unotools/pathoptions.hxx>
-#include <vcl/svapp.hxx>
 #include <vcl/IconThemeInfo.hxx>
 
 namespace vcl {
