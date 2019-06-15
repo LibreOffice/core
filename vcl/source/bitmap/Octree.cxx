@@ -17,9 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <limits.h>
-
-#include <rtl/alloc.h>
 #include <vcl/bitmapaccess.hxx>
 
 #include <bitmap/Octree.hxx>

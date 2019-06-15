@@ -19,12 +19,11 @@
 
 #include <i18nutil/searchopt.hxx>
 #include <i18nlangtag/languagetag.hxx>
+#include <vcl/textdata.hxx>
 #include <vcl/xtextedt.hxx>
-#include <vcl/textview.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <unotools/textsearch.hxx>
-#include <com/sun/star/util/SearchOptions.hpp>
 #include <com/sun/star/util/SearchFlags.hpp>
 
 using namespace ::com::sun::star;

@@ -29,11 +29,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
-#include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/datatransfer/XTransferable.hpp>
-#include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
-#include <com/sun/star/datatransfer/clipboard/XClipboardEx.hpp>
-#include <com/sun/star/datatransfer/clipboard/XClipboardNotifier.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboardListener.hpp>
 #include <com/sun/star/datatransfer/clipboard/XSystemClipboard.hpp>
 #include <com/sun/star/datatransfer/dnd/XDragSource.hpp>

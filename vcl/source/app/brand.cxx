@@ -27,7 +27,6 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <vcl/pngread.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/vectorgraphicdata.hxx>
 
 namespace {
     bool loadPng( const OUString & rPath, BitmapEx &rBitmap)

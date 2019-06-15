@@ -21,9 +21,9 @@
 #define INCLUDED_VCL_SOURCE_EDIT_TEXTDAT2_HXX
 
 #include <vcl/seleng.hxx>
-#include <vcl/virdev.hxx>
 #include <vcl/cursor.hxx>
 #include <vcl/idle.hxx>
+#include <vcl/textdata.hxx>
 
 #include <cstddef>
 #include <limits>

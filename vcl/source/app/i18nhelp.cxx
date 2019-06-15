@@ -27,8 +27,6 @@
 
 #include <vcl/i18nhelp.hxx>
 
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-
 using namespace ::com::sun::star;
 
 vcl::I18nHelper::I18nHelper(  const css::uno::Reference< css::uno::XComponentContext >& rxContext, const LanguageTag& rLanguageTag )

@@ -19,7 +19,6 @@
 
 #include <memory>
 #include "textdoc.hxx"
-#include <stdlib.h>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
 

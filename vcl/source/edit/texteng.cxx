@@ -31,11 +31,9 @@
 #include <vcl/window.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/edit.hxx>
+#include <vcl/virdev.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
-
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/beans/PropertyValues.hpp>
 
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 
@@ -53,7 +51,6 @@
 #include <vcl/unohelp.hxx>
 
 #include <vcl/svapp.hxx>
-#include <vcl/metric.hxx>
 
 #include <unicode/ubidi.h>
 

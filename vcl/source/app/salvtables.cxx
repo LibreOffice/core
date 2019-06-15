@@ -2044,9 +2044,6 @@ public:
     }
 };
 
-#include <vcl/pngwrite.hxx>
-#include <tools/stream.hxx>
-
 IMPL_LINK(SalInstanceLinkButton, ClickHdl, FixedHyperlink&, rButton, void)
 {
     m_aOrigClickHdl.Call(rButton);
