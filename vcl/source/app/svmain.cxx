@@ -27,9 +27,6 @@
 
 #include <desktop/exithelper.h>
 
-#include <tools/debug.hxx>
-#include <unotools/resmgr.hxx>
-
 #include <comphelper/processfactory.hxx>
 #include <comphelper/asyncnotification.hxx>
 #include <i18nlangtag/mslangid.hxx>
@@ -43,7 +40,6 @@
 #include <vcl/ImageTree.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/toolkit/unowrap.hxx>
-#include <vcl/commandinfoprovider.hxx>
 #include <vcl/configsettings.hxx>
 #include <vcl/lazydelete.hxx>
 #include <vcl/embeddedfontshelper.hxx>
@@ -67,29 +63,22 @@
 #include <jni.h>
 #endif
 
+#include <impfontcache.hxx>
 #include <salinst.hxx>
-#include <salwtype.hxx>
 #include <svdata.hxx>
 #include <vcl/svmain.hxx>
 #include <dbggui.hxx>
 #include <accmgr.hxx>
-#include <outdev.h>
-#include <fontinstance.hxx>
 #include <PhysicalFontCollection.hxx>
 #include <print.h>
-#include <salgdi.hxx>
 #include <salsys.hxx>
 #include <saltimer.hxx>
 #include <salimestatus.hxx>
 #include <displayconnectiondispatch.hxx>
 
 #include <config_features.h>
-#if HAVE_FEATURE_OPENGL
-#include <vcl/opengl/OpenGLContext.hxx>
-#endif
 
 #include <osl/process.h>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 

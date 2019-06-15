@@ -21,7 +21,6 @@
 #include <vcl/window.hxx>
 #include <vcl/menu.hxx>
 
-#include <svdata.hxx>
 #include <vcleventlisteners.hxx>
 
 #include <com/sun/star/accessibility/XAccessible.hpp>

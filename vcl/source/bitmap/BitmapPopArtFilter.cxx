@@ -10,12 +10,9 @@
 
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
-#include <vcl/bitmapaccess.hxx>
 #include <vcl/BitmapPopArtFilter.hxx>
 
 #include <bitmapwriteaccess.hxx>
-
-#include <cstdlib>
 
 BitmapEx BitmapPopArtFilter::execute(BitmapEx const& rBitmapEx) const
 {

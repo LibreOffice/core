@@ -8,13 +8,12 @@
  */
 
 #include <vcl/layout.hxx>
-#include <vcl/tabctrl.hxx>
 #include <vcl/notebookbar.hxx>
+#include <vcl/syswin.hxx>
 #include <vcl/taskpanelist.hxx>
-#include <cppuhelper/queryinterface.hxx>
+#include <vcl/NotebookbarContextControl.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/processfactory.hxx>
-#include <vcl/vclevent.hxx>
 #include <rtl/bootstrap.hxx>
 #include <osl/file.hxx>
 #include <config_folders.h>
