@@ -2924,18 +2924,12 @@ void Edit::dragEnter( const css::datatransfer::dnd::DropTargetDragEnterEvent& rD
     }
     // search for string data type
     const Sequence< css::datatransfer::DataFlavor >& rFlavors( rDTDE.SupportedDataFlavors );
-    sal_Int32 nEle = rFlavors.getLength();
-    mpDDInfo->bIsStringSupported = false;
-    for( sal_Int32 i = 0; i < nEle; i++ )
-    {
-        sal_Int32 nIndex = 0;
-        const OUString aMimetype = rFlavors[i].MimeType.getToken( 0, ';', nIndex );
-        if ( aMimetype == "text/plain" )
-        {
-            mpDDInfo->bIsStringSupported = true;
-            break;
-        }
-    }
+    mpDDInfo->bIsStringSupported = std::any_of(rFlavors.begin(), rFlavors.end(),
+        [](const css::datatransfer::DataFlavor& rFlavor) {
+            sal_Int32 nIndex = 0;
+            const OUString aMimetype = rFlavor.MimeType.getToken( 0, ';', nIndex );
+            return aMimetype == "text/plain";
+        });
 }
 
 void Edit::dragExit( const css::datatransfer::dnd::DropTargetEvent& )

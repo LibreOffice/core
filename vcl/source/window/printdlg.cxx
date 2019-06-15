@@ -1332,12 +1332,12 @@ namespace
 void PrintDialog::setupOptionalUI()
 {
     const Sequence< PropertyValue >& rOptions( maPController->getUIOptions() );
-    for( int i = 0; i < rOptions.getLength(); i++ )
+    for( const auto& rOption : rOptions )
     {
-        if (rOptions[i].Name == "OptionsUIFile")
+        if (rOption.Name == "OptionsUIFile")
         {
             OUString sOptionsUIFile;
-            rOptions[i].Value >>= sOptionsUIFile;
+            rOption.Value >>= sOptionsUIFile;
 
             vcl::Window *pCustom = get<vcl::Window>("customcontents");
 
@@ -1348,7 +1348,7 @@ void PrintDialog::setupOptionalUI()
         }
 
         Sequence< beans::PropertyValue > aOptProp;
-        rOptions[i].Value >>= aOptProp;
+        rOption.Value >>= aOptProp;
 
         // extract ui element
         OUString aCtrlType;
@@ -1363,9 +1363,8 @@ void PrintDialog::setupOptionalUI()
         sal_Int64 nMinValue = 0, nMaxValue = 0;
         OUString aGroupingHint;
 
-        for( int n = 0; n < aOptProp.getLength(); n++ )
+        for( const beans::PropertyValue& rEntry : aOptProp )
         {
-            const beans::PropertyValue& rEntry( aOptProp[ n ] );
             if ( rEntry.Name == "ID" )
             {
                 rEntry.Value >>= aIDs;
@@ -1586,9 +1585,9 @@ void PrintDialog::setupOptionalUI()
                 continue;
 
             // iterate options
-            for( sal_Int32 m = 0; m < aChoices.getLength(); m++ )
+            for( const auto& rChoice : aChoices )
             {
-                pList->InsertEntry( aChoices[m] );
+                pList->InsertEntry( rChoice );
             }
             sal_Int32 nSelectVal = 0;
             PropertyValue* pVal = maPController->getValue( aPropertyName );

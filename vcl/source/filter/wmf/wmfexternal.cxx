@@ -50,23 +50,23 @@ bool WmfExternal::setSequence(const css::uno::Sequence< css::beans::PropertyValu
 {
     bool bRetval(false);
 
-    for (sal_Int32 i = 0; i < rSequence.getLength(); ++i)
+    for (const auto& rPropVal : rSequence)
     {
-        const OUString aName(rSequence[i].Name);
+        const OUString aName(rPropVal.Name);
 
         if (aName == "Width")
         {
-            rSequence[i].Value >>= xExt;
+            rPropVal.Value >>= xExt;
             bRetval = true;
         }
         else if (aName == "Height")
         {
-            rSequence[i].Value >>= yExt;
+            rPropVal.Value >>= yExt;
             bRetval = true;
         }
         else if (aName == "MapMode")
         {
-            rSequence[i].Value >>= mapMode;
+            rPropVal.Value >>= mapMode;
             bRetval = true;
         }
     }

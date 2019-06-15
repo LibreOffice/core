@@ -115,13 +115,13 @@ void SAL_CALL UIObjectUnoObj::executeAction(const OUString& rAction, const css::
 
         SolarMutexGuard aGuard;
         StringMap aMap;
-        for (sal_Int32 i = 0, n = mPropValues.getLength(); i < n; ++i)
+        for (const auto& rPropVal : mPropValues)
         {
             OUString aVal;
-            if (!(mPropValues[i].Value >>= aVal))
+            if (!(rPropVal.Value >>= aVal))
                 continue;
 
-            aMap[mPropValues[i].Name] = aVal;
+            aMap[rPropVal.Name] = aVal;
         }
         mpObj->execute(mAction, aMap);
     };

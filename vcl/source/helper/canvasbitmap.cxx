@@ -902,12 +902,12 @@ uno::Sequence< double > SAL_CALL VclCanvasBitmap::convertFromRGB( const uno::Seq
 
     if( m_bPalette )
     {
-        for( std::size_t i=0; i<nLen; ++i )
+        for( const auto& rIn : rgbColor )
         {
             pColors[m_nIndexIndex] = m_pBmpAcc->GetBestPaletteIndex(
-                    BitmapColor(toByteColor(rgbColor[i].Red),
-                                toByteColor(rgbColor[i].Green),
-                                toByteColor(rgbColor[i].Blue)));
+                    BitmapColor(toByteColor(rIn.Red),
+                                toByteColor(rIn.Green),
+                                toByteColor(rIn.Blue)));
             if( m_nAlphaIndex != -1 )
                 pColors[m_nAlphaIndex] = 1.0;
 
@@ -916,11 +916,11 @@ uno::Sequence< double > SAL_CALL VclCanvasBitmap::convertFromRGB( const uno::Seq
     }
     else
     {
-        for( std::size_t i=0; i<nLen; ++i )
+        for( const auto& rIn : rgbColor )
         {
-            pColors[m_nRedIndex]   = rgbColor[i].Red;
-            pColors[m_nGreenIndex] = rgbColor[i].Green;
-            pColors[m_nBlueIndex]  = rgbColor[i].Blue;
+            pColors[m_nRedIndex]   = rIn.Red;
+            pColors[m_nGreenIndex] = rIn.Green;
+            pColors[m_nBlueIndex]  = rIn.Blue;
             if( m_nAlphaIndex != -1 )
                 pColors[m_nAlphaIndex] = 1.0;
 
@@ -942,27 +942,27 @@ uno::Sequence< double > SAL_CALL VclCanvasBitmap::convertFromARGB( const uno::Se
 
     if( m_bPalette )
     {
-        for( std::size_t i=0; i<nLen; ++i )
+        for( const auto& rIn : rgbColor )
         {
             pColors[m_nIndexIndex] = m_pBmpAcc->GetBestPaletteIndex(
-                    BitmapColor(toByteColor(rgbColor[i].Red),
-                                toByteColor(rgbColor[i].Green),
-                                toByteColor(rgbColor[i].Blue)));
+                    BitmapColor(toByteColor(rIn.Red),
+                                toByteColor(rIn.Green),
+                                toByteColor(rIn.Blue)));
             if( m_nAlphaIndex != -1 )
-                pColors[m_nAlphaIndex] = rgbColor[i].Alpha;
+                pColors[m_nAlphaIndex] = rIn.Alpha;
 
             pColors += nComponentsPerPixel;
         }
     }
     else
     {
-        for( std::size_t i=0; i<nLen; ++i )
+        for( const auto& rIn : rgbColor )
         {
-            pColors[m_nRedIndex]   = rgbColor[i].Red;
-            pColors[m_nGreenIndex] = rgbColor[i].Green;
-            pColors[m_nBlueIndex]  = rgbColor[i].Blue;
+            pColors[m_nRedIndex]   = rIn.Red;
+            pColors[m_nGreenIndex] = rIn.Green;
+            pColors[m_nBlueIndex]  = rIn.Blue;
             if( m_nAlphaIndex != -1 )
-                pColors[m_nAlphaIndex] = rgbColor[i].Alpha;
+                pColors[m_nAlphaIndex] = rIn.Alpha;
 
             pColors += nComponentsPerPixel;
         }
@@ -982,13 +982,13 @@ uno::Sequence< double > SAL_CALL VclCanvasBitmap::convertFromPARGB( const uno::S
 
     if( m_bPalette )
     {
-        for( std::size_t i=0; i<nLen; ++i )
+        for( const auto& rIn : rgbColor )
         {
-            const double nAlpha( rgbColor[i].Alpha );
+            const double nAlpha( rIn.Alpha );
             pColors[m_nIndexIndex] = m_pBmpAcc->GetBestPaletteIndex(
-                    BitmapColor(toByteColor(rgbColor[i].Red / nAlpha),
-                                toByteColor(rgbColor[i].Green / nAlpha),
-                                toByteColor(rgbColor[i].Blue / nAlpha)));
+                    BitmapColor(toByteColor(rIn.Red / nAlpha),
+                                toByteColor(rIn.Green / nAlpha),
+                                toByteColor(rIn.Blue / nAlpha)));
             if( m_nAlphaIndex != -1 )
                 pColors[m_nAlphaIndex] = nAlpha;
 
@@ -997,12 +997,12 @@ uno::Sequence< double > SAL_CALL VclCanvasBitmap::convertFromPARGB( const uno::S
     }
     else
     {
-        for( std::size_t i=0; i<nLen; ++i )
+        for( const auto& rIn : rgbColor )
         {
-            const double nAlpha( rgbColor[i].Alpha );
-            pColors[m_nRedIndex]   = rgbColor[i].Red / nAlpha;
-            pColors[m_nGreenIndex] = rgbColor[i].Green / nAlpha;
-            pColors[m_nBlueIndex]  = rgbColor[i].Blue / nAlpha;
+            const double nAlpha( rIn.Alpha );
+            pColors[m_nRedIndex]   = rIn.Red / nAlpha;
+            pColors[m_nGreenIndex] = rIn.Green / nAlpha;
+            pColors[m_nBlueIndex]  = rIn.Blue / nAlpha;
             if( m_nAlphaIndex != -1 )
                 pColors[m_nAlphaIndex] = nAlpha;
 

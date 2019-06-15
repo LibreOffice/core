@@ -88,21 +88,17 @@ void SettingsConfigItem::getValues()
 
     Sequence< OUString > aNames( GetNodeNames( OUString() ) );
 
-    for( int j = 0; j < aNames.getLength(); j++ )
+    for( const auto& aKeyName : aNames )
     {
 #if OSL_DEBUG_LEVEL > 2
-        SAL_INFO( "vcl", "found settings data for " << aNames.getConstArray()[j] );
+        SAL_INFO( "vcl", "found settings data for " << aKeyName );
 #endif
-        OUString aKeyName( aNames.getConstArray()[j] );
         Sequence< OUString > aKeys( GetNodeNames( aKeyName ) );
         Sequence< OUString > aSettingsKeys( aKeys.getLength() );
-        const OUString* pFrom = aKeys.getConstArray();
-        OUString* pTo = aSettingsKeys.getArray();
-        for( int m = 0; m < aKeys.getLength(); m++ )
-        {
-            pTo[m] = aKeyName + "/" + pFrom[m];
-        }
+        std::transform(aKeys.begin(), aKeys.end(), aSettingsKeys.begin(),
+            [&aKeyName](const OUString& rKey) -> OUString { return aKeyName + "/" + rKey; });
         Sequence< Any > aValues( GetProperties( aSettingsKeys ) );
+        const OUString* pFrom = aKeys.getConstArray();
         const Any* pValue = aValues.getConstArray();
         for( int i = 0; i < aValues.getLength(); i++, pValue++ )
         {

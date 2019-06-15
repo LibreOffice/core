@@ -91,12 +91,11 @@ sal_Bool SAL_CALL X11Transferable::isDataFlavorSupported( const DataFlavor& aFla
     }
 
     Sequence< DataFlavor > aFlavors( getTransferDataFlavors() );
-    for( int i = 0; i < aFlavors.getLength(); i++ )
-        if( aFlavor.MimeType.equalsIgnoreAsciiCase( aFlavors.getConstArray()[i].MimeType ) &&
-            aFlavor.DataType == aFlavors.getConstArray()[i].DataType )
-            return true;
-
-    return false;
+    return std::any_of(aFlavors.begin(), aFlavors.end(),
+        [&aFlavor](const DataFlavor& rFlavor) {
+            return aFlavor.MimeType.equalsIgnoreAsciiCase( rFlavor.MimeType )
+                && aFlavor.DataType == rFlavor.DataType;
+        });
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

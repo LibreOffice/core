@@ -158,11 +158,9 @@ void FilterConfigCache::ImplInit()
     if ( xTypeAccess.is() && xFilterAccess.is() )
     {
         Sequence< OUString > lAllFilter = xFilterAccess->getElementNames();
-        sal_Int32 nAllFilterCount = lAllFilter.getLength();
 
-        for ( sal_Int32 i = 0; i < nAllFilterCount; i++ )
+        for ( const OUString& sInternalFilterName : lAllFilter )
         {
-            OUString sInternalFilterName = lAllFilter[ i ];
             Reference< XPropertySet > xFilterSet;
             xFilterAccess->getByName( sInternalFilterName ) >>= xFilterSet;
             if (!xFilterSet.is())

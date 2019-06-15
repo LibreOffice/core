@@ -33,14 +33,12 @@ bool UITest::executeCommandWithParameters(const OUString& rCommand,
         {{"SynchronMode", -1, css::uno::Any(true),
           css::beans::PropertyState_DIRECT_VALUE}};
 
-    sal_uInt32 nArgs = rArgs.getLength();
-    if ( nArgs > 0 )
+    if ( rArgs.hasElements() )
     {
         sal_uInt32 nIndex( lNewArgs.getLength() );
         lNewArgs.realloc( lNewArgs.getLength()+rArgs.getLength() );
 
-        for ( sal_uInt32 i = 0; i < nArgs; i++ )
-            lNewArgs[nIndex++] = rArgs[i];
+        std::copy(rArgs.begin(), rArgs.end(), std::next(lNewArgs.begin(), nIndex));
     }
     return comphelper::dispatchCommand(rCommand,lNewArgs);
 }

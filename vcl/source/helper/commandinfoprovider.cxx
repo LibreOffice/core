@@ -22,6 +22,7 @@
 #include <vcl/keycod.hxx>
 #include <vcl/mnemonic.hxx>
 #include <comphelper/string.hxx>
+#include <comphelper/sequence.hxx>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/weakref.hxx>
 
@@ -170,11 +171,8 @@ static bool ResourceHasKey(const OUString& rsResourceName, const OUString& rsCom
             if (xNameAccess->getByName(rsModuleName) >>= xUICommandLabels)
             {
                 xUICommandLabels->getByName(rsResourceName) >>= aSequence;
-                for ( sal_Int32 i = 0; i < aSequence.getLength(); i++ )
-                {
-                    if (aSequence[i] == rsCommandName)
-                        return true;
-                }
+                if (comphelper::findValue(aSequence, rsCommandName) != -1)
+                    return true;
             }
         }
     }
@@ -208,14 +206,13 @@ static Sequence<beans::PropertyValue> GetCommandProperties(const OUString& rsCom
 static OUString GetCommandProperty(const OUString& rsProperty, const OUString& rsCommandName, const OUString& rsModuleName)
 {
     const Sequence<beans::PropertyValue> aProperties (GetCommandProperties(rsCommandName, rsModuleName));
-    for (sal_Int32 nIndex=0; nIndex<aProperties.getLength(); ++nIndex)
+    auto pProp = std::find_if(aProperties.begin(), aProperties.end(),
+        [&rsProperty](const beans::PropertyValue& rProp) { return rProp.Name == rsProperty; });
+    if (pProp != aProperties.end())
     {
-        if (aProperties[nIndex].Name == rsProperty)
-        {
-            OUString sLabel;
-            aProperties[nIndex].Value >>= sLabel;
-            return sLabel;
-        }
+        OUString sLabel;
+        pProp->Value >>= sLabel;
+        return sLabel;
     }
     return OUString();
 }
@@ -373,17 +370,14 @@ sal_Int32 GetPropertiesForCommand (
     const OUString& rsCommandName,
     const OUString& rsModuleName)
 {
-
     sal_Int32 nValue = 0;
     const Sequence<beans::PropertyValue> aProperties (GetCommandProperties(rsCommandName, rsModuleName));
-    for (sal_Int32 nIndex=0; nIndex<aProperties.getLength(); ++nIndex)
-    {
-        if (aProperties[nIndex].Name == "Properties")
-        {
-            aProperties[nIndex].Value >>= nValue;
-            break;
-        }
-    }
+
+    auto pProp = std::find_if(aProperties.begin(), aProperties.end(),
+        [](const beans::PropertyValue& rProp) { return rProp.Name == "Properties"; });
+    if (pProp != aProperties.end())
+        pProp->Value >>= nValue;
+
     return nValue;
 }
 
@@ -409,13 +403,12 @@ bool IsExperimental(const OUString& rsCommandName, const OUString& rModuleName)
             if (xNameAccess->getByName( rModuleName ) >>= xUICommandLabels )
                 xUICommandLabels->getByName(rsCommandName) >>= aProperties;
 
-            for (sal_Int32 nIndex=0; nIndex<aProperties.getLength(); ++nIndex)
+            auto pProp = std::find_if(aProperties.begin(), aProperties.end(),
+                [](const beans::PropertyValue& rProp) { return rProp.Name == "IsExperimental"; });
+            if (pProp != aProperties.end())
             {
-                if (aProperties[nIndex].Name == "IsExperimental")
-                {
-                    bool bValue;
-                    return (aProperties[nIndex].Value >>= bValue) && bValue;
-                }
+                bool bValue;
+                return (pProp->Value >>= bValue) && bValue;
             }
         }
     }
