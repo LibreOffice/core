@@ -625,9 +625,11 @@ void ImpVclMEdit::Enable( bool bEnable )
 bool ImpVclMEdit::HandleCommand( const CommandEvent& rCEvt )
 {
     bool bDone = false;
-    if ( ( rCEvt.GetCommand() == CommandEventId::Wheel ) ||
-         ( rCEvt.GetCommand() == CommandEventId::StartAutoScroll ) ||
-         ( rCEvt.GetCommand() == CommandEventId::AutoScroll ) )
+    CommandEventId nCommand = rCEvt.GetCommand();
+    if (nCommand == CommandEventId::Wheel ||
+        nCommand == CommandEventId::StartAutoScroll ||
+        nCommand == CommandEventId::AutoScroll ||
+        nCommand == CommandEventId::Gesture)
     {
         ScrollBar* pHScrollBar = mpHScrollBar->IsVisible() ? mpHScrollBar.get() : nullptr;
         ScrollBar* pVScrollBar = mpVScrollBar->IsVisible() ? mpVScrollBar.get() : nullptr;
