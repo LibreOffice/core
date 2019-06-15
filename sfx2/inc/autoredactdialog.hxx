@@ -155,9 +155,14 @@ class SfxAddTargetDialog : public weld::GenericDialogController
 private:
     std::unique_ptr<weld::Entry> m_xName;
     std::unique_ptr<weld::ComboBox> m_xType;
+    std::unique_ptr<weld::Label> m_xLabelContent;
     std::unique_ptr<weld::Entry> m_xContent;
+    std::unique_ptr<weld::Label> m_xLabelPredefContent;
+    std::unique_ptr<weld::ComboBox> m_xPredefContent;
     std::unique_ptr<weld::CheckButton> m_xCaseSensitive;
     std::unique_ptr<weld::CheckButton> m_xWholeWords;
+
+    DECL_LINK(SelectTypeHdl, weld::ComboBox&, void);
 
 public:
     SfxAddTargetDialog(weld::Window* pWindow, const OUString& rName);
@@ -167,7 +172,7 @@ public:
 
     OUString getName() const { return m_xName->get_text(); }
     RedactionTargetType getType() const;
-    OUString getContent() const { return m_xContent->get_text(); }
+    OUString getContent() const;
     bool isCaseSensitive() const
     {
         return m_xCaseSensitive->get_state() == TriState::TRISTATE_TRUE;
