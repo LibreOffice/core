@@ -33,6 +33,7 @@
 #include <comphelper/sequence.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
+#include <tools/diagnose_ex.h>
 #include <vcl/svapp.hxx>
 
 namespace framework{
@@ -214,9 +215,9 @@ void Job::execute( /*IN*/ const css::uno::Sequence< css::beans::NamedValue >& lD
         }
     }
     #if OSL_DEBUG_LEVEL > 0
-    catch(const css::uno::Exception& ex)
+    catch(const css::uno::Exception&)
     {
-        SAL_INFO("fwk", "Job::execute(): Got exception during job execution. Original Message was: \"" << ex << "\"");
+        TOOLS_INFO_EXCEPTION("fwk", "Job::execute(): Got exception during job execution");
     }
     #else
     catch(const css::uno::Exception&)

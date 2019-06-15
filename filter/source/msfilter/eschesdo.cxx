@@ -30,6 +30,7 @@
 #include <vcl/bitmapex.hxx>
 #include <vcl/graph.hxx>
 #include <tools/debug.hxx>
+#include <tools/diagnose_ex.h>
 #include <svx/fmdpage.hxx>
 #include <com/sun/star/style/VerticalAlignment.hpp>
 #include <com/sun/star/awt/Gradient.hpp>
@@ -1219,9 +1220,9 @@ sal_uInt32 ImplEESdrObject::ImplGetText()
         {
             mnTextSize = xXText->getString().getLength();
         }
-        catch (const uno::RuntimeException& e)
+        catch (const uno::RuntimeException&)
         {
-            SAL_WARN("filter.ms", "ImplGetText: " << e);
+            TOOLS_WARN_EXCEPTION("filter.ms", "ImplGetText");
         }
     }
     return mnTextSize;
