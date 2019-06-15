@@ -21,15 +21,27 @@
 
 #include <qt5/Qt5Instance.hxx>
 
+#include <KWayland/Client/registry.h>
+
 class KDE5SalInstance final : public Qt5Instance
 {
+    Q_OBJECT
+
+    KWayland::Client::Registry m_aRegistry;
+    KWayland::Client::XdgShell* m_pXdgShell;
+
     Qt5FilePicker* createPicker(QFileDialog::FileMode) override;
 
     SalFrame* CreateFrame(SalFrame* pParent, SalFrameStyleFlags nStyle) override;
     bool hasNativeFileSelection() const override { return true; }
 
+private Q_SLOTS:
+    void xdgShellAnnounced(quint32, quint32);
+
 public:
     explicit KDE5SalInstance(std::unique_ptr<QApplication>& pQApp);
+
+    KWayland::Client::XdgShell* xdgShell() const { return m_pXdgShell; }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

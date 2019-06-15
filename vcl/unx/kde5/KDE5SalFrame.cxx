@@ -28,6 +28,11 @@
 #include <KConfigGroup>
 #include <KSharedConfig>
 
+#include <KWayland/Client/surface.h>
+#include <KWayland/Client/xdgshell.h>
+
+#include <Qt5MainWindow.hxx>
+#include "KDE5SalInstance.hxx"
 #include "KDE5SalFrame.hxx"
 
 #include <tools/color.hxx>
@@ -217,6 +222,31 @@ void KDE5SalFrame::ReleaseGraphics(SalGraphics* pSalGraph)
     (void)pSalGraph;
     assert(pSalGraph == m_pKDE5Graphics.get());
     m_bGraphicsInUse = false;
+}
+
+void KDE5SalFrame::SetApplicationID(const OUString& rWMClass)
+{
+    QWidget* pTopLevel = GetTopLevelWindow();
+    if (!pTopLevel)
+        return;
+    if (QGuiApplication::platformName() != "wayland")
+    {
+        Qt5Frame::SetApplicationID(rWMClass);
+        return;
+    }
+
+    auto* pSalInst(static_cast<KDE5SalInstance*>(GetSalData()->m_pInstance));
+    assert(pSalInst);
+
+    if (!pSalInst->xdgShell())
+        return;
+
+    KWayland::Client::Surface* pSurface
+        = KWayland::Client::Surface::fromWindow(pTopLevel->windowHandle());
+    KWayland::Client::XdgShellSurface* pShellSurface
+        = pSalInst->xdgShell()->createSurface(pSurface, this);
+    OString aResClass = OUStringToOString(rWMClass, RTL_TEXTENCODING_ASCII_US);
+    pShellSurface->setAppId(QByteArray(aResClass.getStr()));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

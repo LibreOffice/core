@@ -30,14 +30,36 @@
 #include "KDE5FilePicker.hxx"
 #include "KDE5SalFrame.hxx"
 #include "KDE5SalInstance.hxx"
+#include "KDE5SalInstance.moc"
+
+#include <wayland-client.h>
+#include <KWayland/Client/connection_thread.h>
 
 using namespace com::sun::star;
 
 KDE5SalInstance::KDE5SalInstance(std::unique_ptr<QApplication>& pQApp)
     : Qt5Instance(pQApp, true)
+    , m_pXdgShell(nullptr)
 {
     ImplSVData* pSVData = ImplGetSVData();
     pSVData->maAppData.mxToolkitName = OUString("kde5");
+
+    connect(&m_aRegistry, SIGNAL(xdgShellUnstableV5Announced(quint32, quint32)), this,
+            SLOT(xdgShellAnnounced(quint32, quint32)));
+
+    KWayland::Client::ConnectionThread* pConn
+        = KWayland::Client::ConnectionThread::fromApplication();
+    if (pConn)
+    {
+        m_aRegistry.create(pConn);
+        m_aRegistry.setup();
+        wl_display_flush(pConn->display());
+    }
+}
+
+void KDE5SalInstance::xdgShellAnnounced(quint32 name, quint32 version)
+{
+    m_pXdgShell = m_aRegistry.createXdgShell(name, version, this);
 }
 
 SalFrame* KDE5SalInstance::CreateFrame(SalFrame* pParent, SalFrameStyleFlags nState)
