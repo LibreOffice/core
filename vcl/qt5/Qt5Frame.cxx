@@ -1139,7 +1139,7 @@ void Qt5Frame::SetApplicationID(const OUString& rWMClass)
         = !aResClass.isEmpty() ? aResClass.getStr() : SalGenericSystem::getFrameClassName();
     OString aResName = SalGenericSystem::getFrameResName();
 
-    // the WM_CLASS data consists of two concated cstrings, including the terminating '\0' chars
+    // the WM_CLASS data consists of two concatenated cstrings, including the terminating '\0' chars
     const uint32_t data_len = aResName.getLength() + 1 + strlen(pResClass) + 1;
     char* data = new char[data_len];
     memcpy(data, aResName.getStr(), aResName.getLength() + 1);
