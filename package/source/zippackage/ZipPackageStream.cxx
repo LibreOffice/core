@@ -54,6 +54,7 @@
 #include <rtl/instance.hxx>
 #include <rtl/random.h>
 #include <sal/log.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <PackageConstants.hxx>
 
@@ -944,9 +945,9 @@ uno::Reference< io::XInputStream > SAL_CALL ZipPackageStream::getInputStream()
         OSL_FAIL( "ZipException thrown" );//rException.Message);
         return uno::Reference < io::XInputStream > ();
     }
-    catch ( Exception &ex )
+    catch ( const Exception & )
     {
-        SAL_WARN( "package", "Exception is thrown during stream wrapping!" << ex);
+        TOOLS_WARN_EXCEPTION( "package", "Exception is thrown during stream wrapping!");
         return uno::Reference < io::XInputStream > ();
     }
 }
