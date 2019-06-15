@@ -17,13 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <tools/lineend.hxx>
 #include <tools/poly.hxx>
 
 #include <vcl/image.hxx>
-#include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
-#include <vcl/builderfactory.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
@@ -42,7 +39,6 @@
 #include <svdata.hxx>
 #include <window.h>
 #include <controldata.hxx>
-#include <sal/log.hxx>
 #include <osl/diagnose.h>
 
 #include <comphelper/dispatchcommand.hxx>

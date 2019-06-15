@@ -9,7 +9,6 @@
 
 #include <vcl/IconThemeSelector.hxx>
 
-#include <vcl/IconThemeScanner.hxx>
 #include <vcl/IconThemeInfo.hxx>
 #include <config_mpl.h>
 

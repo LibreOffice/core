@@ -21,17 +21,12 @@
 
 #include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
-#include <rtl/process.h>
 #include <tools/diagnose_ex.h>
-#include <tools/gen.hxx>
 #include <unotools/resmgr.hxx>
-#include <uno/current_context.hxx>
 #include <sal/log.hxx>
 
-#include <vcl/button.hxx>
 #include <vcl/configsettings.hxx>
 #include <vcl/dockwin.hxx>
-#include <vcl/layout.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/print.hxx>
 #include <vcl/settings.hxx>
@@ -43,21 +38,15 @@
 #include <helpwin.hxx>
 #include <vcl/dialog.hxx>
 #include <salinst.hxx>
-#include <salframe.hxx>
 #include <salgdi.hxx>
 #include <svdata.hxx>
-#include <window.h>
 #include <salimestatus.hxx>
 #include <salsys.hxx>
-#include <strings.hrc>
 #include <units.hrc>
 #include <print.h>
 
 #include <com/sun/star/accessibility/MSAAService.hpp>
 
-#include <officecfg/Office/Common.hxx>
-
-#include <config_folders.h>
 #include <config_features.h>
 #if HAVE_FEATURE_OPENGL
 #include <vcl/opengl/OpenGLContext.hxx>

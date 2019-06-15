@@ -33,11 +33,7 @@
 
 #include <svdata.hxx>
 
-#include <i18nlangtag/mslangid.hxx>
-
-#include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/i18n/XCharacterClassification.hpp>
-#include <com/sun/star/i18n/KCharacterType.hpp>
 
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/calendarwrapper.hxx>

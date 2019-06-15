@@ -17,11 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <vcl/IDialogRenderable.hxx>
-#include <vcl/decoview.hxx>
 #include <vcl/event.hxx>
 #include <vcl/cursor.hxx>
-#include <vcl/virdev.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/weld.hxx>
@@ -38,10 +35,8 @@
 #include <com/sun/star/i18n/BreakIterator.hpp>
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
 #include <com/sun/star/i18n/WordType.hpp>
-#include <cppuhelper/weak.hxx>
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include <com/sun/star/datatransfer/dnd/DNDConstants.hpp>
 #include <com/sun/star/datatransfer/dnd/XDragGestureRecognizer.hpp>
@@ -50,7 +45,6 @@
 #include <com/sun/star/i18n/InputSequenceChecker.hpp>
 #include <com/sun/star/i18n/InputSequenceCheckMode.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
 
 #include <com/sun/star/uno/Any.hxx>
 
@@ -63,7 +57,6 @@
 #include <sal/log.hxx>
 
 #include <i18nlangtag/languagetag.hxx>
-#include <vcl/unohelp.hxx>
 #include <vcl/unohelp2.hxx>
 
 #include <officecfg/Office/Common.hxx>

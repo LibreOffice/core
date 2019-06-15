@@ -23,19 +23,14 @@
 #include <vcl/settings.hxx>
 #include <vcl/event.hxx>
 #include <vcl/scrbar.hxx>
-#include <vcl/help.hxx>
 #include <vcl/lstbox.hxx>
-#include <vcl/unohelp.hxx>
 #include <vcl/i18nhelp.hxx>
 
 #include <listbox.hxx>
 #include <controldata.hxx>
 #include <svdata.hxx>
 #include <window.h>
-#include <impglyphitem.hxx>
 
-#include <com/sun/star/i18n/XCollator.hpp>
-#include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 
 #include <rtl/instance.hxx>

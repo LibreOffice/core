@@ -16,8 +16,6 @@
 #include <bitmapwriteaccess.hxx>
 #include <bitmap/Octree.hxx>
 
-#include <cstdlib>
-
 BitmapEx BitmapSimpleColorQuantizationFilter::execute(BitmapEx const& aBitmapEx) const
 {
     Bitmap aBitmap = aBitmapEx.GetBitmap();
