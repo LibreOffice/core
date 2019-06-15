@@ -2850,10 +2850,12 @@ void SvImpLBox::Command(const CommandEvent& rCEvt)
         aEditIdle.Stop();
 
     // scroll mouse event?
-    if (((nCommand == CommandEventId::Wheel) || (nCommand == CommandEventId::StartAutoScroll)
-         || (nCommand == CommandEventId::AutoScroll))
-        && pView->HandleScrollCommand(rCEvt, aHorSBar.get(), aVerSBar.get()))
-        return;
+    if (nCommand == CommandEventId::Wheel || nCommand == CommandEventId::StartAutoScroll
+        || nCommand == CommandEventId::AutoScroll || nCommand == CommandEventId::Gesture)
+    {
+        if (pView->HandleScrollCommand(rCEvt, aHorSBar.get(), aVerSBar.get()))
+            return;
+    }
 
     if (bContextMenuHandling && nCommand == CommandEventId::ContextMenu)
     {
