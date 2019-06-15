@@ -795,7 +795,7 @@ template< typename... Ifc >
 ScCellRangesBase*
 ScVbaFormat< Ifc... >::getCellRangesBase()
 {
-    return ScCellRangesBase::getImplementation( mxPropertySet );
+    return comphelper::getUnoTunnelImplementation<ScCellRangesBase>( mxPropertySet );
 }
 
 template< typename... Ifc >

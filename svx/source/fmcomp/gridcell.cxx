@@ -1329,7 +1329,7 @@ void DbFormattedField::Init( vcl::Window& rParent, const Reference< XRowSet >& x
     SvNumberFormatter* pFormatterUsed = nullptr;
     if (m_xSupplier.is())
     {
-        SvNumberFormatsSupplierObj* pImplmentation = SvNumberFormatsSupplierObj::getImplementation(m_xSupplier);
+        SvNumberFormatsSupplierObj* pImplmentation = comphelper::getUnoTunnelImplementation<SvNumberFormatsSupplierObj>(m_xSupplier);
         if (pImplmentation)
             pFormatterUsed = pImplmentation->GetNumberFormatter();
         else
@@ -1914,7 +1914,7 @@ void DbNumericField::implAdjustGenericFieldSetting( const Reference< XPropertySe
     SvNumberFormatter* pFormatterUsed = nullptr;
     if ( xSupplier.is() )
     {
-        SvNumberFormatsSupplierObj* pImplmentation = SvNumberFormatsSupplierObj::getImplementation( xSupplier );
+        SvNumberFormatsSupplierObj* pImplmentation = comphelper::getUnoTunnelImplementation<SvNumberFormatsSupplierObj>( xSupplier );
         pFormatterUsed = pImplmentation ? pImplmentation->GetNumberFormatter() : nullptr;
     }
     if ( nullptr == pFormatterUsed )

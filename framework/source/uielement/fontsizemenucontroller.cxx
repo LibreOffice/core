@@ -124,8 +124,8 @@ void FontSizeMenuController::setCurHeight( long nHeight, Reference< css::awt::XP
 // private function
 void FontSizeMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu > const & rPopupMenu )
 {
-    VCLXPopupMenu*          pPopupMenu = static_cast<VCLXPopupMenu *>(VCLXMenu::getImplementation( rPopupMenu ));
-    PopupMenu*              pVCLPopupMenu = nullptr;
+    VCLXPopupMenu* pPopupMenu = static_cast<VCLXPopupMenu *>(comphelper::getUnoTunnelImplementation<VCLXMenu>( rPopupMenu ));
+    PopupMenu*     pVCLPopupMenu = nullptr;
 
     resetPopupMenu( rPopupMenu );
     if ( pPopupMenu )

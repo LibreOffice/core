@@ -554,7 +554,7 @@ void GraphicExporter::ParseSettings( const Sequence< PropertyValue >& aDescripto
                     pDataValues->Value >>= xPage;
                     if( xPage.is() )
                     {
-                        SvxDrawPage* pUnoPage = SvxDrawPage::getImplementation( xPage );
+                        SvxDrawPage* pUnoPage = comphelper::getUnoTunnelImplementation<SvxDrawPage>( xPage );
                         if( pUnoPage && pUnoPage->GetSdrPage() )
                             mpCurrentPage = pUnoPage->GetSdrPage();
                     }
@@ -1182,7 +1182,7 @@ void SAL_CALL GraphicExporter::setSourceDocument( const Reference< lang::XCompon
         if( !mxPage.is() )
             break;
 
-        mpUnoPage = SvxDrawPage::getImplementation( mxPage );
+        mpUnoPage = comphelper::getUnoTunnelImplementation<SvxDrawPage>( mxPage );
 
         if( nullptr == mpUnoPage || nullptr == mpUnoPage->GetSdrPage() )
             break;

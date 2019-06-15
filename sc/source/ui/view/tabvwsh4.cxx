@@ -1099,7 +1099,7 @@ static ScTabViewObj* lcl_GetViewObj( const ScTabViewShell& rShell )
         SfxFrame& rFrame = pViewFrame->GetFrame();
         uno::Reference<frame::XController> xController = rFrame.GetController();
         if (xController.is())
-            pRet = ScTabViewObj::getImplementation( xController );
+            pRet = comphelper::getUnoTunnelImplementation<ScTabViewObj>( xController );
     }
     return pRet;
 }

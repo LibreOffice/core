@@ -251,7 +251,7 @@ void SAL_CALL OGenericUnoController::initialize( const Sequence< Any >& aArgumen
             throw IllegalArgumentException("need a frame", *this, 1 );
 
         xParent = xFrame->getContainerWindow();
-        VCLXWindow* pParentComponent = VCLXWindow::getImplementation(xParent);
+        VCLXWindow* pParentComponent = comphelper::getUnoTunnelImplementation<VCLXWindow>(xParent);
         VclPtr< vcl::Window > pParentWin = pParentComponent ? pParentComponent->GetWindow() : VclPtr< vcl::Window >();
         if (!pParentWin)
         {

@@ -1066,7 +1066,7 @@ void SAL_CALL SvXMLImport::initialize( const uno::Sequence< uno::Any >& aArgumen
                     uno::Any aAny = mxImportInfo->getPropertyValue(sPropName);
                     aAny >>= xIfc;
 
-                    StyleMap *pSMap = StyleMap::getImplementation( xIfc );
+                    StyleMap *pSMap = comphelper::getUnoTunnelImplementation<StyleMap>( xIfc );
                     if( pSMap )
                     {
                         mpStyleMap = pSMap;

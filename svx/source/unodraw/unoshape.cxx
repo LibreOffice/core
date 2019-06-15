@@ -295,17 +295,6 @@ const css::uno::Sequence< sal_Int8 > & SvxShape::getUnoTunnelId() throw()
     return theSvxShapeUnoTunnelId::get().getSeq();
 }
 
-
-SvxShape* SvxShape::getImplementation( const uno::Reference< uno::XInterface >& xInt )
-{
-    uno::Reference< lang::XUnoTunnel > xUT( xInt, css::uno::UNO_QUERY );
-    if( xUT.is() )
-        return reinterpret_cast<SvxShape*>(sal::static_int_cast<sal_uIntPtr>(xUT->getSomething( SvxShape::getUnoTunnelId())));
-    else
-        return nullptr;
-}
-
-
 sal_Int64 SAL_CALL SvxShape::getSomething( const css::uno::Sequence< sal_Int8 >& rId )
 {
     if( rId.getLength() == 16 && 0 == memcmp( getUnoTunnelId().getConstArray(), rId.getConstArray(), 16 ) )
@@ -4100,14 +4089,14 @@ uno::Reference< drawing::XShape > GetXShapeForSdrObject( SdrObject* pObj ) throw
 /** returns the SdrObject from the given StarOffice API wrapper */
 SdrObject* GetSdrObjectFromXShape( const uno::Reference< drawing::XShape >& xShape ) throw()
 {
-    SvxShape* pShape = SvxShape::getImplementation( xShape );
+    SvxShape* pShape = comphelper::getUnoTunnelImplementation<SvxShape>( xShape );
     return pShape ? pShape->GetSdrObject() : nullptr;
 }
 
 
 SdrObject* SdrObject::getSdrObjectFromXShape( const css::uno::Reference< css::uno::XInterface >& xInt )
 {
-    SvxShape* pSvxShape = SvxShape::getImplementation( xInt );
+    SvxShape* pSvxShape = comphelper::getUnoTunnelImplementation<SvxShape>( xInt );
     return pSvxShape ? pSvxShape->GetSdrObject() : nullptr;
 }
 

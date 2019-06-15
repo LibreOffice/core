@@ -454,7 +454,7 @@ void SAL_CALL SdLayerManager::remove( const uno::Reference< drawing::XLayer >& x
     if( mpModel == nullptr )
         throw lang::DisposedException();
 
-    SdLayer* pSdLayer = SdLayer::getImplementation(xLayer);
+    SdLayer* pSdLayer = comphelper::getUnoTunnelImplementation<SdLayer>(xLayer);
 
     if(pSdLayer && GetView())
     {
@@ -474,12 +474,12 @@ void SAL_CALL SdLayerManager::attachShapeToLayer( const uno::Reference< drawing:
     if( mpModel == nullptr )
         throw lang::DisposedException();
 
-    SdLayer* pSdLayer = SdLayer::getImplementation(xLayer);
+    SdLayer* pSdLayer = comphelper::getUnoTunnelImplementation<SdLayer>(xLayer);
     SdrLayer* pSdrLayer = pSdLayer?pSdLayer->GetSdrLayer():nullptr;
     if(pSdrLayer==nullptr)
         return;
 
-    SvxShape* pShape = SvxShape::getImplementation( xShape );
+    SvxShape* pShape = comphelper::getUnoTunnelImplementation<SvxShape>( xShape );
     SdrObject* pSdrObject = pShape?pShape->GetSdrObject():nullptr;
 
     if(pSdrObject)
@@ -499,7 +499,7 @@ uno::Reference< drawing::XLayer > SAL_CALL SdLayerManager::getLayerForShape( con
 
     if(mpModel->mpDoc)
     {
-        SvxShape* pShape = SvxShape::getImplementation( xShape );
+        SvxShape* pShape = comphelper::getUnoTunnelImplementation<SvxShape>( xShape );
         SdrObject* pObj = pShape?pShape->GetSdrObject():nullptr;
         if(pObj)
         {
@@ -662,7 +662,7 @@ bool compare_layers (const uno::WeakReference<uno::XInterface>& xRef, void const
     uno::Reference<uno::XInterface> xLayer (xRef);
     if (xLayer.is())
     {
-        SdLayer* pSdLayer = SdLayer::getImplementation (xRef);
+        SdLayer* pSdLayer = comphelper::getUnoTunnelImplementation<SdLayer> (xRef);
         if (pSdLayer != nullptr)
         {
             SdrLayer* pSdrLayer = pSdLayer->GetSdrLayer ();

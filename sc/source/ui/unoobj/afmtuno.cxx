@@ -212,7 +212,7 @@ void SAL_CALL ScAutoFormatsObj::insertByName( const OUString& aName, const uno::
     uno::Reference< uno::XInterface > xInterface(aElement, uno::UNO_QUERY);
     if ( xInterface.is() )
     {
-        ScAutoFormatObj* pFormatObj = ScAutoFormatObj::getImplementation( xInterface );
+        ScAutoFormatObj* pFormatObj = comphelper::getUnoTunnelImplementation<ScAutoFormatObj>( xInterface );
         if ( pFormatObj && !pFormatObj->IsInserted() )
         {
             ScAutoFormat* pFormats = ScGlobal::GetOrCreateAutoFormat();

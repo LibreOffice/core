@@ -150,7 +150,7 @@ namespace drawinglayer
 
                                     if(xWindowPeer.is())
                                     {
-                                        VCLXWindow* pVCLXWindow = VCLXWindow::getImplementation(xWindowPeer);
+                                        VCLXWindow* pVCLXWindow = comphelper::getUnoTunnelImplementation<VCLXWindow>(xWindowPeer);
 
                                         if(pVCLXWindow)
                                         {

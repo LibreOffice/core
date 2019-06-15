@@ -359,7 +359,7 @@ namespace pcr
         // Maybe it is intended to only announce the frame to the controller, and the instance doing this
         // announcement is responsible for calling setComponent, too.
         Reference< XWindow > xContainerWindow = m_xFrame->getContainerWindow();
-        VCLXWindow* pContainerWindow = VCLXWindow::getImplementation(xContainerWindow);
+        VCLXWindow* pContainerWindow = comphelper::getUnoTunnelImplementation<VCLXWindow>(xContainerWindow);
         VclPtr<vcl::Window> pParentWin = pContainerWindow ? pContainerWindow->GetWindow() : VclPtr<vcl::Window>();
         if (!pParentWin)
             throw RuntimeException("The frame is invalid. Unable to extract the container window.",*this);

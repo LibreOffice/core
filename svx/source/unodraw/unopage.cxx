@@ -183,7 +183,7 @@ void SAL_CALL SvxDrawPage::add( const uno::Reference< drawing::XShape >& xShape 
     if ( ( mpModel == nullptr ) || ( mpPage == nullptr ) )
         throw lang::DisposedException();
 
-    SvxShape* pShape = SvxShape::getImplementation( xShape );
+    SvxShape* pShape = comphelper::getUnoTunnelImplementation<SvxShape>( xShape );
 
     if( nullptr == pShape )
         return;
@@ -254,7 +254,7 @@ void SAL_CALL SvxDrawPage::addBottom( const uno::Reference< drawing::XShape >& x
     if ( ( mpModel == nullptr ) || ( mpPage == nullptr ) )
         throw lang::DisposedException();
 
-    SvxShape* pShape = SvxShape::getImplementation( xShape );
+    SvxShape* pShape = comphelper::getUnoTunnelImplementation<SvxShape>( xShape );
 
     if( nullptr == pShape )
         return;
@@ -289,7 +289,7 @@ void SAL_CALL SvxDrawPage::remove( const Reference< drawing::XShape >& xShape )
     if( (mpModel == nullptr) || (mpPage == nullptr) )
         throw lang::DisposedException();
 
-    SvxShape* pShape = SvxShape::getImplementation( xShape );
+    SvxShape* pShape = comphelper::getUnoTunnelImplementation<SvxShape>( xShape );
 
     if (pShape)
     {
@@ -381,7 +381,7 @@ namespace
 {
     void lcl_markSdrObjectOfShape( const Reference< drawing::XShape >& _rxShape, SdrView& _rView, SdrPageView& _rPageView )
     {
-        SvxShape* pShape = SvxShape::getImplementation( _rxShape );
+        SvxShape* pShape = comphelper::getUnoTunnelImplementation<SvxShape>( _rxShape );
         if ( !pShape )
             return;
 
@@ -892,7 +892,7 @@ SdrPage* GetSdrPageFromXDrawPage( const uno::Reference< drawing::XDrawPage >& xD
 {
     if(xDrawPage.is())
     {
-        SvxDrawPage* pDrawPage = SvxDrawPage::getImplementation( xDrawPage );
+        SvxDrawPage* pDrawPage = comphelper::getUnoTunnelImplementation<SvxDrawPage>( xDrawPage );
 
         if(pDrawPage)
         {

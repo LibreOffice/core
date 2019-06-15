@@ -190,7 +190,7 @@ void SvxShapeGroup::addUnoShape( const uno::Reference< drawing::XShape >& xShape
         return;
     }
 
-    SvxShape* pShape = SvxShape::getImplementation( xShape );
+    SvxShape* pShape = comphelper::getUnoTunnelImplementation<SvxShape>( xShape );
     if (!pShape)
     {
         OSL_FAIL("could not add XShape to group shape!");
@@ -240,7 +240,7 @@ void SAL_CALL SvxShapeGroup::remove( const uno::Reference< drawing::XShape >& xS
     ::SolarMutexGuard aGuard;
 
     SdrObject* pSdrShape = nullptr;
-    SvxShape* pShape = SvxShape::getImplementation( xShape );
+    SvxShape* pShape = comphelper::getUnoTunnelImplementation<SvxShape>( xShape );
 
     if( pShape )
         pSdrShape = pShape->GetSdrObject();
@@ -438,7 +438,7 @@ void SAL_CALL SvxShapeConnector::connectStart( const uno::Reference< drawing::XC
     ::SolarMutexGuard aGuard;
 
     Reference< drawing::XShape > xRef( xShape, UNO_QUERY );
-    SvxShape* pShape = SvxShape::getImplementation( xRef );
+    SvxShape* pShape = comphelper::getUnoTunnelImplementation<SvxShape>( xRef );
 
     if( pShape )
         GetSdrObject()->ConnectToNode( true, pShape->GetSdrObject() );
@@ -452,7 +452,7 @@ void SAL_CALL SvxShapeConnector::connectEnd( const uno::Reference< drawing::XCon
     ::SolarMutexGuard aGuard;
 
     Reference< drawing::XShape > xRef( xShape, UNO_QUERY );
-    SvxShape* pShape = SvxShape::getImplementation( xRef );
+    SvxShape* pShape = comphelper::getUnoTunnelImplementation<SvxShape>( xRef );
 
     if( HasSdrObject() && pShape )
         GetSdrObject()->ConnectToNode( false, pShape->GetSdrObject() );

@@ -345,7 +345,7 @@ IMPL_LINK(NotebookbarTabControl, OpenNotebookbarPopupMenu, NotebookBar*, pNotebo
         return;
 
     xPopupController->setPopupMenu(xPopupMenu);
-    VCLXMenu* pAwtMenu = VCLXMenu::getImplementation(xPopupMenu);
+    VCLXMenu* pAwtMenu = comphelper::getUnoTunnelImplementation<VCLXMenu>(xPopupMenu);
     PopupMenu* pVCLMenu = static_cast<PopupMenu*>(pAwtMenu->GetMenu());
     Point aPos(pNotebookbar->GetSizePixel().getWidth(), NotebookbarTabControl::GetHeaderHeight() - ICON_SIZE + 10);
     pVCLMenu->Execute(pNotebookbar, tools::Rectangle(aPos, aPos),PopupMenuFlags::ExecuteDown|PopupMenuFlags::NoMouseUpClose);

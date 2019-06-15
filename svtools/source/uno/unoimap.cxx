@@ -561,7 +561,7 @@ SvUnoImageMapObject* SvUnoImageMap::getObject( const Any& aElement )
     Reference< XInterface > xObject;
     aElement >>= xObject;
 
-    SvUnoImageMapObject* pObject = SvUnoImageMapObject::getImplementation( xObject );
+    SvUnoImageMapObject* pObject = comphelper::getUnoTunnelImplementation<SvUnoImageMapObject>( xObject );
     if( nullptr == pObject )
         throw IllegalArgumentException();
 
@@ -708,7 +708,7 @@ Reference< XInterface > SvUnoImageMap_createInstance( const ImageMap& rMap, cons
 
 bool SvUnoImageMap_fillImageMap( const Reference< XInterface >& xImageMap, ImageMap& rMap )
 {
-    SvUnoImageMap* pUnoImageMap = SvUnoImageMap::getImplementation( xImageMap );
+    SvUnoImageMap* pUnoImageMap = comphelper::getUnoTunnelImplementation<SvUnoImageMap>( xImageMap );
     if( nullptr == pUnoImageMap )
         return false;
 

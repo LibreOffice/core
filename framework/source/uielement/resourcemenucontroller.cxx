@@ -205,7 +205,7 @@ void ResourceMenuController::updatePopupMenu()
 
     // Now fill the menu with the configuration data.
     css::uno::Reference< css::frame::XDispatchProvider > xDispatchProvider( m_xFrame, css::uno::UNO_QUERY );
-    framework::MenuBarManager::FillMenu( m_nNewMenuId, VCLXMenu::getImplementation( m_xPopupMenu )->GetMenu(), m_aModuleName, m_xMenuContainer, xDispatchProvider );
+    framework::MenuBarManager::FillMenu( m_nNewMenuId, comphelper::getUnoTunnelImplementation<VCLXMenu>( m_xPopupMenu )->GetMenu(), m_aModuleName, m_xMenuContainer, xDispatchProvider );
 
     // For context menus, add object verbs.
     if ( m_bContextMenu )
@@ -238,7 +238,7 @@ void ResourceMenuController::addVerbs( const css::uno::Sequence< css::embed::Ver
         xStorable.set( xController->getModel(), css::uno::UNO_QUERY );
 
     bool bReadOnly = xStorable.is() && xStorable->isReadonly();
-    VCLXMenu* pAwtMenu = VCLXMenu::getImplementation( m_xPopupMenu );
+    VCLXMenu* pAwtMenu = comphelper::getUnoTunnelImplementation<VCLXMenu>( m_xPopupMenu );
     Menu* pVCLMenu = pAwtMenu->GetMenu();
 
     for ( const auto& rVerb : rVerbs )
@@ -258,7 +258,7 @@ void ResourceMenuController::itemActivated( const css::awt::MenuEvent& /*rEvent*
     // Must initialize MenuBarManager here, because we want to let the app do context menu interception before.
     if ( !m_xMenuBarManager.is() )
     {
-        VCLXMenu* pAwtMenu = VCLXMenu::getImplementation( m_xPopupMenu );
+        VCLXMenu* pAwtMenu = comphelper::getUnoTunnelImplementation<VCLXMenu>( m_xPopupMenu );
         css::uno::Reference< css::frame::XDispatchProvider > xDispatchProvider( m_xFrame, css::uno::UNO_QUERY );
         m_xMenuBarManager.set( new framework::MenuBarManager(
             m_xContext, m_xFrame, m_xURLTransformer, xDispatchProvider, m_aModuleName, pAwtMenu->GetMenu(), false, !m_bContextMenu && !m_bInToolbar ) );
@@ -360,7 +360,7 @@ SaveAsMenuController::SaveAsMenuController( const css::uno::Reference< css::uno:
 
 void SaveAsMenuController::impl_setPopupMenu()
 {
-    VCLXMenu* pPopupMenu    = VCLXMenu::getImplementation( m_xPopupMenu );
+    VCLXMenu* pPopupMenu    = comphelper::getUnoTunnelImplementation<VCLXMenu>( m_xPopupMenu );
     Menu*     pVCLPopupMenu = nullptr;
 
     SolarMutexGuard aGuard;

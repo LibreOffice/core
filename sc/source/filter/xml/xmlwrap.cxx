@@ -672,7 +672,7 @@ bool ScXMLImportWrapper::ExportToComponent(const uno::Reference<uno::XComponentC
 
     if ( xFilter.is() )
     {
-        ScXMLExport* pExport = static_cast<ScXMLExport*>(SvXMLExport::getImplementation(xFilter));
+        ScXMLExport* pExport = static_cast<ScXMLExport*>(comphelper::getUnoTunnelImplementation<SvXMLExport>(xFilter));
         pExport->SetSharedData(std::move(pSharedData));
 
         // if there are sheets to copy, get the source stream
