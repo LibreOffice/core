@@ -32,7 +32,6 @@
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/awt/FontSlant.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
-#include <com/sun/star/lang/DisposedException.hpp>
 
 #include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/supportsservice.hxx>

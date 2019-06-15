@@ -33,8 +33,6 @@
 #include <vcl/lstbox.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/uitest/uiobject.hxx>
-#include <vcl/builderfactory.hxx>
-#include <strings.hrc>
 #include <bitmaps.hlst>
 
 #include <controldata.hxx>

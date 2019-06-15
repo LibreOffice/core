@@ -22,10 +22,8 @@
 #include <vcl/scrbar.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/vclevent.hxx>
 
-#include <svdata.hxx>
-
-#include <rtl/string.hxx>
 #include <sal/log.hxx>
 
 /*  #i77549#

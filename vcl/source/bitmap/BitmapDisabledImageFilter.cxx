@@ -8,8 +8,6 @@
  *
  */
 
-#include <basegfx/color/bcolortools.hxx>
-
 #include <vcl/bitmapaccess.hxx>
 
 #include <bitmapwriteaccess.hxx>

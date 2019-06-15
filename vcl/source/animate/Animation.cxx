@@ -24,8 +24,7 @@
 #include <sal/log.hxx>
 
 #include <vcl/animate/Animation.hxx>
-#include <vcl/virdev.hxx>
-#include <vcl/window.hxx>
+#include <vcl/outdev.hxx>
 #include <vcl/dibtools.hxx>
 #include <vcl/BitmapColorQuantizationFilter.hxx>
 

@@ -20,9 +20,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/event.hxx>
 #include <vcl/ctrl.hxx>
-#include <vcl/floatwin.hxx>
 #include <vcl/decoview.hxx>
-#include <vcl/salnativewidgets.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/uitest/logger.hxx>
 #include <sal/log.hxx>

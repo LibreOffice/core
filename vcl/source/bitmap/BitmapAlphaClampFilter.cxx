@@ -8,10 +8,8 @@
  *
  */
 
-#include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/BitmapAlphaClampFilter.hxx>
-#include <vcl/bitmapaccess.hxx>
 
 #include <bitmapwriteaccess.hxx>
 
