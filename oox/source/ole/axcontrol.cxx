@@ -178,9 +178,10 @@ bool lclExtractRangeFromName( CellRangeAddress& orRangeAddr, const Reference< XM
         orRangeAddr = xAddressable->getRangeAddress();
         return true;
     }
-    catch (const Exception& e)
+    catch (const Exception&)
     {
-        SAL_WARN("oox", e);
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_WARN("oox", exceptionToString(ex));
     }
     return false;
 }
@@ -211,9 +212,10 @@ void lclPrepareConverter( PropertySet& rConverter, const Reference< XModel >& rx
             OUString( "com.sun.star.table.CellAddressConversion" );
         rConverter.set( xModelFactory->createInstance( aServiceName ) );
     }
-    catch (const Exception& e)
+    catch (const Exception&)
     {
-        SAL_WARN("oox", e);
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_WARN("oox", exceptionToString(ex));
     }
     rConverter.setProperty( PROP_XLA1Representation, rAddressString );
     rConverter.setProperty( PROP_ReferenceSheet, nRefSheet );
@@ -355,9 +357,10 @@ void ControlConverter::bindToSources( const Reference< XControlModel >& rxCtrlMo
         Reference< XValueBinding > xBinding( xModelFactory->createInstanceWithArguments( "com.sun.star.table.CellValueBinding", aArgs ), UNO_QUERY_THROW );
         xBindable->setValueBinding( xBinding );
     }
-    catch (const Exception& e)
+    catch (const Exception&)
     {
-        SAL_WARN("oox", e);
+        css::uno::Any ex( cppu::getCaughtException() );
+        SAL_WARN("oox", exceptionToString(ex));
     }
 
     // list entry source
@@ -387,9 +390,9 @@ void ControlConverter::bindToSources( const Reference< XControlModel >& rxCtrlMo
         Reference< XListEntrySource > xEntrySource( xModelFactory->createInstanceWithArguments("com.sun.star.table.CellRangeListSource", aArgs ), UNO_QUERY_THROW );
         xEntrySink->setListEntrySource( xEntrySource );
     }
-    catch (const Exception& e)
+    catch (const Exception&)
     {
-        SAL_WARN("oox", e);
+        TOOLS_WARN_EXCEPTION("oox", "");
     }
 }
 
@@ -2694,9 +2697,9 @@ bool EmbeddedControl::convertProperties( const Reference< XControlModel >& rxCtr
         {
             aPropMap.setProperty( PROP_GenerateVbaEvents, true);
         }
-        catch (const Exception& e)
+        catch (const Exception&)
         {
-            SAL_WARN("oox", e);
+            TOOLS_WARN_EXCEPTION("oox", "");
         }
         mxModel->convertProperties( aPropMap, rConv );
         PropertySet aPropSet( rxCtrlModel );

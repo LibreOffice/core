@@ -130,9 +130,9 @@ void lclCreateTextFields( std::vector< Reference< XTextField > > & aFields,
             xProps->setPropertyValue( "IsDate", makeAny( bIsDate ) );
             xProps->setPropertyValue( "IsFixed", makeAny( false ) );
         }
-        catch(Exception & e)
+        catch(const Exception &)
         {
-            SAL_WARN("oox",  e );
+            TOOLS_WARN_EXCEPTION("oox", "");
         }
     }
     else if ( sType == "slidenum" )

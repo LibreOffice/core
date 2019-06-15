@@ -96,6 +96,7 @@
 #include <filter/msfilter/escherex.hxx>
 #include <svx/svdoashp.hxx>
 #include <svx/svdoole2.hxx>
+#include <tools/diagnose_ex.h>
 #include <editeng/svxenum.hxx>
 #include <svx/unoapi.hxx>
 #include <oox/export/chartexport.hxx>
@@ -287,9 +288,9 @@ static uno::Reference<io::XInputStream> lcl_StoreOwnAsOOXML(
     {
         xStorable->storeToURL("private:stream", args);
     }
-    catch (uno::Exception const& e)
+    catch (uno::Exception const&)
     {
-        SAL_WARN("oox.shape", "oox::GetOLEObjectStream: " << e);
+        TOOLS_WARN_EXCEPTION("oox.shape", "oox::GetOLEObjectStream");
         return nullptr;
     }
     xTempStream->getOutputStream()->closeOutput();
@@ -327,9 +328,9 @@ uno::Reference<io::XInputStream> GetOLEObjectStream(
                     o_rpProgID, o_rMediaType, o_rRelationType, o_rSuffix);
         }
     }
-    catch (uno::Exception const& e)
+    catch (uno::Exception const&)
     {
-        SAL_WARN("oox.shape", "oox::GetOLEObjectStream: " << e);
+        TOOLS_WARN_EXCEPTION("oox.shape", "oox::GetOLEObjectStream");
     }
     return xInStream;
 }
@@ -1951,9 +1952,9 @@ ShapeExport& ShapeExport::WriteOLE2Shape( const Reference< XShape >& xShape )
 
         entryName = uno::Reference<embed::XEmbedPersist>(xObj, uno::UNO_QUERY_THROW)->getEntryName();
     }
-    catch (uno::Exception const& e)
+    catch (uno::Exception const&)
     {
-        SAL_WARN("oox.shape", "ShapeExport::WriteOLE2Shape: " << e);
+        TOOLS_WARN_EXCEPTION("oox.shape", "ShapeExport::WriteOLE2Shape");
         return *this;
     }
 
@@ -2021,8 +2022,8 @@ ShapeExport& ShapeExport::WriteOLE2Shape( const Reference< XShape >& xShape )
 
     try {
         ::comphelper::OStorageHelper::CopyInputToOutput(xInStream, xOutStream);
-    } catch (uno::Exception const& e) {
-        SAL_WARN("oox.shape", "ShapeExport::WriteOLEObject: " << e);
+    } catch (uno::Exception const&) {
+        TOOLS_WARN_EXCEPTION("oox.shape", "ShapeExport::WriteOLEObject");
     }
 
     OUString const sRelId = mpFB->addRelation(
