@@ -460,7 +460,7 @@ void SfxRedactionHelper::searchInMetaFile(const RedactionTarget* pRedactionTarge
                 if (!aNewRect.IsEmpty())
                     aRedactionRectangles.push_back(aNewRect);
 
-                // Search for the next occurence
+                // Search for the next occurrence
                 nStart = nEnd;
                 nEnd = sText.getLength();
                 bFound = textSearch.SearchForward(sText, &nStart, &nEnd);
