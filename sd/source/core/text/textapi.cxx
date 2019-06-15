@@ -177,7 +177,7 @@ TextApiObject* TextApiObject::getImplementation( const css::uno::Reference< css:
     TextApiObject* pImpl = dynamic_cast< TextApiObject* >( xText.get() );
 
     if( !pImpl )
-        pImpl = dynamic_cast< TextApiObject* >(  SvxUnoTextBase::getImplementation( xText ) );
+        pImpl = dynamic_cast< TextApiObject* >(  comphelper::getUnoTunnelImplementation<SvxUnoTextBase>( xText ) );
 
     return pImpl;
 }

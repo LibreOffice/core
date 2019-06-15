@@ -527,7 +527,7 @@ void ScXMLExport::CollectSharedData(SCTAB& nTableCount, sal_Int32& nShapesCount)
 
             ++nShapesCount;
 
-            SvxShape* pShapeImp = SvxShape::getImplementation(xShape);
+            SvxShape* pShapeImp = comphelper::getUnoTunnelImplementation<SvxShape>(xShape);
             if (!pShapeImp)
                 continue;
 
@@ -2433,7 +2433,7 @@ void ScXMLExport::collectAutoStyles()
                         SdrCaptionObj* pDrawObj = pNote->GetOrCreateCaption( aPos );
                         uno::Reference<text::XSimpleText> xCellText(pDrawObj->getUnoShape(), uno::UNO_QUERY);
                         uno::Reference<beans::XPropertySet> xCursorProp(xCellText->createTextCursor(), uno::UNO_QUERY);
-                        ScDrawTextCursor* pCursor = ScDrawTextCursor::getImplementation( xCursorProp );
+                        ScDrawTextCursor* pCursor = comphelper::getUnoTunnelImplementation<ScDrawTextCursor>( xCursorProp );
                         if (pCursor)
                         {
                             pCursor->SetSelection( rNoteTextEntry.maSelection );
@@ -2474,7 +2474,7 @@ void ScXMLExport::collectAutoStyles()
                     uno::Reference<text::XSimpleText> xCellText(xCellRange->getCellByPosition(aPos.Col(), aPos.Row()), uno::UNO_QUERY);
                     xCursorProp.set(xCellText->createTextCursor(), uno::UNO_QUERY);
                 }
-                ScCellTextCursor* pCursor = ScCellTextCursor::getImplementation( xCursorProp );
+                ScCellTextCursor* pCursor = comphelper::getUnoTunnelImplementation<ScCellTextCursor>( xCursorProp );
                 if (!pCursor)
                     continue;
                 pCursor->SetSelection( rTextEntry.maSelection );
@@ -2681,7 +2681,7 @@ void ScXMLExport::ExportMasterStyles_()
 void ScXMLExport::CollectInternalShape( uno::Reference< drawing::XShape > const & xShape )
 {
     // detective objects and notes
-    if( SvxShape* pShapeImp = SvxShape::getImplementation( xShape ) )
+    if( SvxShape* pShapeImp = comphelper::getUnoTunnelImplementation<SvxShape>( xShape ) )
     {
         if( SdrObject* pObject = pShapeImp->GetSdrObject() )
         {

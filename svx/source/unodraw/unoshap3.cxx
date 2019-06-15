@@ -117,7 +117,7 @@ void SAL_CALL Svx3DSceneObject::add( const Reference< drawing::XShape >& xShape 
 {
     SolarMutexGuard aGuard;
 
-    SvxShape* pShape = SvxShape::getImplementation( xShape );
+    SvxShape* pShape = comphelper::getUnoTunnelImplementation<SvxShape>( xShape );
 
     if(!HasSdrObject() || !mxPage.is() || pShape == nullptr || nullptr != pShape->GetSdrObject() )
         throw uno::RuntimeException();
@@ -142,7 +142,7 @@ void SAL_CALL Svx3DSceneObject::remove( const Reference< drawing::XShape >& xSha
 {
     SolarMutexGuard aGuard;
 
-    SvxShape* pShape = SvxShape::getImplementation( xShape );
+    SvxShape* pShape = comphelper::getUnoTunnelImplementation<SvxShape>( xShape );
 
     if(!HasSdrObject() || pShape == nullptr)
         throw uno::RuntimeException();

@@ -1227,7 +1227,7 @@ void ScModelObj::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         if (xNumberAgg.is())
         {
             SvNumberFormatsSupplierObj* pNumFmt =
-                SvNumberFormatsSupplierObj::getImplementation(
+                comphelper::getUnoTunnelImplementation<SvNumberFormatsSupplierObj>(
                         uno::Reference<util::XNumberFormatsSupplier>(xNumberAgg, uno::UNO_QUERY) );
             if ( pNumFmt )
                 pNumFmt->SetNumberFormatter( nullptr );
@@ -1313,7 +1313,7 @@ static OutputDevice* lcl_GetRenderDevice( const uno::Sequence<beans::PropertyVal
             uno::Reference<awt::XDevice> xRenderDevice(rProp.Value, uno::UNO_QUERY);
             if ( xRenderDevice.is() )
             {
-                VCLXDevice* pDevice = VCLXDevice::getImplementation( xRenderDevice );
+                VCLXDevice* pDevice = comphelper::getUnoTunnelImplementation<VCLXDevice>( xRenderDevice );
                 if ( pDevice )
                 {
                     pRet = pDevice->GetOutputDevice().get();
@@ -1468,11 +1468,11 @@ bool ScModelObj::FillRenderMarkData( const uno::Any& aSelection,
     uno::Reference<uno::XInterface> xInterface(aSelection, uno::UNO_QUERY);
     if ( xInterface.is() )
     {
-        ScCellRangesBase* pSelObj = ScCellRangesBase::getImplementation( xInterface );
+        ScCellRangesBase* pSelObj = comphelper::getUnoTunnelImplementation<ScCellRangesBase>( xInterface );
         uno::Reference< drawing::XShapes > xShapes( xInterface, uno::UNO_QUERY );
         if ( pSelObj && pSelObj->GetDocShell() == pDocShell )
         {
-            bool bSheet = ( ScTableSheetObj::getImplementation( xInterface ) != nullptr );
+            bool bSheet = ( comphelper::getUnoTunnelImplementation<ScTableSheetObj>( xInterface ) != nullptr );
             bool bCursor = pSelObj->IsCursorOnly();
             const ScRangeList& rRanges = pSelObj->GetRangeList();
 
@@ -1514,7 +1514,7 @@ bool ScModelObj::FillRenderMarkData( const uno::Any& aSelection,
             {
                 // multi selection isn't supported yet
                 uno::Reference< drawing::XShape > xShape( xIndexAccess->getByIndex(0), uno::UNO_QUERY );
-                SvxShape* pShape = SvxShape::getImplementation( xShape );
+                SvxShape* pShape = comphelper::getUnoTunnelImplementation<SvxShape>( xShape );
                 if( pShape )
                 {
                     SdrObject *pSdrObj = pShape->GetSdrObject();
@@ -3331,7 +3331,7 @@ uno::Reference<drawing::XDrawPage> SAL_CALL ScDrawPagesObj::insertNewByIndex( sa
 void SAL_CALL ScDrawPagesObj::remove( const uno::Reference<drawing::XDrawPage>& xPage )
 {
     SolarMutexGuard aGuard;
-    SvxDrawPage* pImp = SvxDrawPage::getImplementation( xPage );
+    SvxDrawPage* pImp = comphelper::getUnoTunnelImplementation<SvxDrawPage>( xPage );
     if ( pDocShell && pImp )
     {
         SdrPage* pPage = pImp->GetSdrPage();
@@ -3487,7 +3487,7 @@ void SAL_CALL ScTableSheetsObj::insertByName( const OUString& aName, const uno::
         uno::Reference<uno::XInterface> xInterface(aElement, uno::UNO_QUERY);
         if ( xInterface.is() )
         {
-            ScTableSheetObj* pSheetObj = ScTableSheetObj::getImplementation( xInterface );
+            ScTableSheetObj* pSheetObj = comphelper::getUnoTunnelImplementation<ScTableSheetObj>( xInterface );
             if ( pSheetObj && !pSheetObj->GetDocShell() )   // not inserted yet?
             {
                 ScDocument& rDoc = pDocShell->GetDocument();
@@ -3533,7 +3533,7 @@ void SAL_CALL ScTableSheetsObj::replaceByName( const OUString& aName, const uno:
         uno::Reference<uno::XInterface> xInterface(aElement, uno::UNO_QUERY);
         if ( xInterface.is() )
         {
-            ScTableSheetObj* pSheetObj = ScTableSheetObj::getImplementation( xInterface );
+            ScTableSheetObj* pSheetObj = comphelper::getUnoTunnelImplementation<ScTableSheetObj>( xInterface );
             if ( pSheetObj && !pSheetObj->GetDocShell() )   // not inserted yet?
             {
                 SCTAB nPosition;

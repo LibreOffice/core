@@ -1269,7 +1269,7 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
 
         if (comphelper::LibreOfficeKit::isActive())
         {
-            PopupMenu* pPopupMenu = static_cast<PopupMenu*>(VCLXMenu::getImplementation(xPopupMenu)->GetMenu());
+            PopupMenu* pPopupMenu = static_cast<PopupMenu*>(comphelper::getUnoTunnelImplementation<VCLXMenu>(xPopupMenu)->GetMenu());
             pPopupMenu->SetLOKNotifier(SfxViewShell::Current());
 
             // the context menu expects a position related to the document window,

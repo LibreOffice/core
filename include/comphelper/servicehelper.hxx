@@ -22,6 +22,7 @@
 
 #include <rtl/uuid.h>
 #include <rtl/instance.hxx>
+#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 
 class UnoTunnelIdInit
@@ -36,12 +37,26 @@ public:
     const css::uno::Sequence< sal_Int8 >& getSeq() const { return m_aSeq; }
 };
 
+namespace comphelper {
+
+    template<class T>
+    T* getUnoTunnelImplementation( const css::uno::Reference< css::uno::XInterface >& xIface )
+    {
+        css::uno::Reference< css::lang::XUnoTunnel > xUT( xIface, css::uno::UNO_QUERY );
+        if (!xUT.is())
+            return nullptr;
+
+        return reinterpret_cast<T*>(sal::static_int_cast<sal_IntPtr>(xUT->getSomething( T::getUnoTunnelId() )));
+    }
+
+}
+
 /** the UNO3_GETIMPLEMENTATION_* macros  implement a static helper function
     that gives access to your implementation for a given interface reference,
     if possible.
 
     Example:
-        MyClass* pClass = MyClass::getImplementation( xRef );
+        MyClass* pClass = comphelper::getUnoTunnelImplementation<MyClass>( xRef );
 
     Usage:
         Put a UNO3_GETIMPLEMENTATION_DECL( classname ) inside your class
@@ -52,7 +67,6 @@ public:
 */
 #define UNO3_GETIMPLEMENTATION_DECL( classname ) \
     static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId() throw(); \
-    static classname* getImplementation( const css::uno::Reference< css::uno::XInterface >& xInt ); \
     virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
 
 #define UNO3_GETIMPLEMENTATION_BASE_IMPL( classname ) \
@@ -63,15 +77,6 @@ namespace \
 const css::uno::Sequence< sal_Int8 > & classname::getUnoTunnelId() throw() \
 { \
     return the##classname##UnoTunnelId::get().getSeq(); \
-} \
-\
-classname* classname::getImplementation( const css::uno::Reference< css::uno::XInterface >& xInt ) \
-{ \
-    css::uno::Reference< css::lang::XUnoTunnel > xUT( xInt, css::uno::UNO_QUERY ); \
-    if( xUT.is() ) \
-        return reinterpret_cast<classname*>(sal::static_int_cast<sal_IntPtr>(xUT->getSomething( classname::getUnoTunnelId() ))); \
-    else \
-        return nullptr; \
 }
 
 #define UNO3_GETIMPLEMENTATION_IMPL( classname )\

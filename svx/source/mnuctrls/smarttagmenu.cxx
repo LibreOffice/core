@@ -107,7 +107,7 @@ void SmartTagMenuController::FillMenu()
     sal_uInt16 nMenuId = 1;
     sal_uInt16 nSubMenuId = MN_ST_INSERT_START;
 
-    VCLXMenu* pAwtMenu = VCLXMenu::getImplementation( m_xPopupMenu );
+    VCLXMenu* pAwtMenu = comphelper::getUnoTunnelImplementation<VCLXMenu>( m_xPopupMenu );
     PopupMenu* pVCLMenu = static_cast< PopupMenu* >( pAwtMenu->GetMenu() );
 
     const css::uno::Sequence< css::uno::Sequence< css::uno::Reference< css::smarttags::XSmartTagAction > > >& rActionComponentsSequence = m_pSmartTagItem->GetActionComponentsSequence();

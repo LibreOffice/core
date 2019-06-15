@@ -388,7 +388,7 @@ void SdGenericDrawPage::UpdateModel()
     if( mpSdrModel )
     {
         uno::Reference< uno::XInterface > xModel( SvxFmDrawPage::mpModel->getUnoModel() );
-        mpDocModel = SdXImpressDocument::getImplementation( xModel );
+        mpDocModel = comphelper::getUnoTunnelImplementation<SdXImpressDocument>( xModel );
     }
     else
     {
@@ -1469,13 +1469,13 @@ Reference< drawing::XShape >  SdGenericDrawPage::CreateShape(SdrObject *pObj) co
             }
 
             if( !pShape )
-                pShape = SvxShape::getImplementation( xShape );
+                pShape = comphelper::getUnoTunnelImplementation<SvxShape>( xShape );
 
             if( pShape )
                 pShape->SetShapeType( aShapeType );
         }
 
-        SvxShape *pSdShape = SvxShape::getImplementation(xShape);
+        SvxShape *pSdShape = comphelper::getUnoTunnelImplementation<SvxShape>(xShape);
         if (pSdShape)
         {
             // SdXShape aggregates SvxShape
@@ -2335,7 +2335,7 @@ void SAL_CALL SdDrawPage::setMasterPage( const Reference< drawing::XDrawPage >& 
     if(!SvxFmDrawPage::mpPage)
         return;
 
-    SdMasterPage* pMasterPage = SdMasterPage::getImplementation( xMasterPage );
+    SdMasterPage* pMasterPage = comphelper::getUnoTunnelImplementation<SdMasterPage>( xMasterPage );
     if( !(pMasterPage && pMasterPage->isValid()) )
         return;
 
@@ -2415,7 +2415,7 @@ void SAL_CALL SdDrawPage::remove( const Reference< drawing::XShape >& xShape )
 
     throwIfDisposed();
 
-    SvxShape* pShape = SvxShape::getImplementation( xShape );
+    SvxShape* pShape = comphelper::getUnoTunnelImplementation<SvxShape>( xShape );
     if( pShape )
     {
         SdrObject* pObj = pShape->GetSdrObject();
@@ -2444,7 +2444,7 @@ void SdDrawPage::setBackground( const Any& rValue )
     }
 
     // is it our own implementation?
-    SdUnoPageBackground* pBack = SdUnoPageBackground::getImplementation( xSet );
+    SdUnoPageBackground* pBack = comphelper::getUnoTunnelImplementation<SdUnoPageBackground>( xSet );
 
     SfxItemSet aSet( GetModel()->GetDoc()->GetPool(), svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST>{} );
 
@@ -2816,7 +2816,7 @@ void SdMasterPage::setBackground( const Any& rValue )
         {
             // first fill an item set
             // is it our own implementation?
-            SdUnoPageBackground* pBack = SdUnoPageBackground::getImplementation( xInputSet );
+            SdUnoPageBackground* pBack = comphelper::getUnoTunnelImplementation<SdUnoPageBackground>( xInputSet );
 
             SfxItemSet aSet( GetModel()->GetDoc()->GetPool(), svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST>{} );
 
@@ -3024,7 +3024,7 @@ void SAL_CALL SdMasterPage::remove( const Reference< drawing::XShape >& xShape )
 
     throwIfDisposed();
 
-    SvxShape* pShape = SvxShape::getImplementation( xShape );
+    SvxShape* pShape = comphelper::getUnoTunnelImplementation<SvxShape>( xShape );
     if( pShape )
     {
         SdrObject* pObj = pShape->GetSdrObject();
@@ -3041,7 +3041,7 @@ Reference< uno::XInterface > createUnoPageImpl( SdPage* pPage )
 
     if( pPage )
     {
-        SdXImpressDocument* pModel = SdXImpressDocument::getImplementation( pPage->getSdrModelFromSdrPage().getUnoModel() );
+        SdXImpressDocument* pModel = comphelper::getUnoTunnelImplementation<SdXImpressDocument>( pPage->getSdrModelFromSdrPage().getUnoModel() );
         if( pModel )
         {
             if( pPage->IsMasterPage() )

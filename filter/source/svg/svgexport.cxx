@@ -582,7 +582,7 @@ bool SVGFilter::implExportImpressOrDraw( const Reference< XOutputStream >& rxOSt
 
                     if( mxDefaultPage.is() )
                     {
-                        SvxDrawPage* pSvxDrawPage = SvxDrawPage::getImplementation( mxDefaultPage );
+                        SvxDrawPage* pSvxDrawPage = comphelper::getUnoTunnelImplementation<SvxDrawPage>( mxDefaultPage );
 
                         if( pSvxDrawPage )
                         {
@@ -700,7 +700,7 @@ bool SVGFilter::implExportWriterTextGraphic( const Reference< view::XSelectionSu
         Size  aSize( OutputDevice::LogicToLogic(aGraphic.GetPrefSize(), aGraphic.GetPrefMapMode(), MapMode(MapUnit::Map100thMM)) );
 
         assert(mSelectedPages.size() == 1);
-        SvxDrawPage* pSvxDrawPage(SvxDrawPage::getImplementation(mSelectedPages[0]));
+        SvxDrawPage* pSvxDrawPage(comphelper::getUnoTunnelImplementation<SvxDrawPage>(mSelectedPages[0]));
         if(pSvxDrawPage == nullptr || pSvxDrawPage->GetSdrPage() == nullptr)
             return false;
 
@@ -1053,7 +1053,7 @@ void SVGFilter::implGenerateMetaData()
         // NOTE: at present pSdrModel->GetPageNumType() returns always css::style::NumberingType::ARABIC
         // so the following code fragment is pretty useless
         sal_Int32 nPageNumberingType = css::style::NumberingType::ARABIC;
-        SvxDrawPage* pSvxDrawPage = SvxDrawPage::getImplementation( mSelectedPages[0] );
+        SvxDrawPage* pSvxDrawPage = comphelper::getUnoTunnelImplementation<SvxDrawPage>( mSelectedPages[0] );
         if( pSvxDrawPage )
         {
             SdrPage* pSdrPage = pSvxDrawPage->GetSdrPage();
@@ -1518,7 +1518,7 @@ void SVGFilter::implGetPagePropSet( const Reference< css::drawing::XDrawPage > &
 
             if( mVisiblePagePropSet.bIsPageNumberFieldVisible )
             {
-                SvxDrawPage* pSvxDrawPage = SvxDrawPage::getImplementation( rxPage );
+                SvxDrawPage* pSvxDrawPage = comphelper::getUnoTunnelImplementation<SvxDrawPage>( rxPage );
                 if( pSvxDrawPage )
                 {
                     SdrPage* pSdrPage = pSvxDrawPage->GetSdrPage();

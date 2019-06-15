@@ -266,7 +266,7 @@ void BibliographyLoader::loadView(const Reference< XFrame > & rFrame,
     Reference< XForm > xForm = m_xDatMan->createDatabaseForm( aBibDesc );
 
     Reference< awt::XWindow >  aWindow = rFrame->getContainerWindow();
-    VCLXWindow* pParentComponent = VCLXWindow::getImplementation(aWindow);
+    VCLXWindow* pParentComponent = comphelper::getUnoTunnelImplementation<VCLXWindow>(aWindow);
     assert(pParentComponent);
 
     VclPtr<vcl::Window> pParent = VCLUnoHelper::GetWindow( aWindow );

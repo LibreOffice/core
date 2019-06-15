@@ -846,8 +846,8 @@ bool ScVbaEventsHelper::isSelectionChanged( const uno::Sequence< uno::Any >& rAr
 {
     uno::Reference< uno::XInterface > xOldSelection( maOldSelection, uno::UNO_QUERY );
     uno::Reference< uno::XInterface > xNewSelection = getXSomethingFromArgs< uno::XInterface >( rArgs, nIndex, false );
-    ScCellRangesBase* pOldCellRanges = ScCellRangesBase::getImplementation( xOldSelection );
-    ScCellRangesBase* pNewCellRanges = ScCellRangesBase::getImplementation( xNewSelection );
+    ScCellRangesBase* pOldCellRanges = comphelper::getUnoTunnelImplementation<ScCellRangesBase>( xOldSelection );
+    ScCellRangesBase* pNewCellRanges = comphelper::getUnoTunnelImplementation<ScCellRangesBase>( xNewSelection );
     bool bChanged = !pOldCellRanges || !pNewCellRanges || lclSelectionChanged( pOldCellRanges->GetRangeList(), pNewCellRanges->GetRangeList() );
     maOldSelection <<= xNewSelection;
     return bChanged;

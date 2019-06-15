@@ -1190,7 +1190,7 @@ public:
 
         if (aDev >>= xRenderDevice)
         {
-            VCLXDevice* pDevice = VCLXDevice::getImplementation(xRenderDevice);
+            VCLXDevice* pDevice = comphelper::getUnoTunnelImplementation<VCLXDevice>(xRenderDevice);
             VclPtr< OutputDevice > pOut = pDevice ? pDevice->GetOutputDevice()
                                                   : VclPtr< OutputDevice >();
             mpPrinter = dynamic_cast<Printer*>(pOut.get());

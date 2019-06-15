@@ -102,7 +102,7 @@ ScShapeObj::ScShapeObj( uno::Reference<drawing::XShape>& xShape ) :
 
         xShape.set(uno::Reference<drawing::XShape>( mxShapeAgg, uno::UNO_QUERY ));
 
-        bIsTextShape = ( SvxUnoTextBase::getImplementation( mxShapeAgg ) != nullptr );
+        bIsTextShape = ( comphelper::getUnoTunnelImplementation<SvxUnoTextBase>( mxShapeAgg ) != nullptr );
     }
 
     {
@@ -1093,7 +1093,7 @@ void SAL_CALL ScShapeObj::insertTextContent( const uno::Reference<text::XTextRan
 
     uno::Reference<text::XTextContent> xEffContent;
 
-    ScEditFieldObj* pCellField = ScEditFieldObj::getImplementation( xContent );
+    ScEditFieldObj* pCellField = comphelper::getUnoTunnelImplementation<ScEditFieldObj>( xContent );
     if ( pCellField )
     {
         //  createInstance("TextField.URL") from the document creates a ScCellFieldObj.
@@ -1136,7 +1136,7 @@ uno::Reference<text::XTextCursor> SAL_CALL ScShapeObj::createTextCursor()
     {
         //  ScDrawTextCursor must be used to ensure the ScShapeObj is returned by getText
 
-        SvxUnoTextBase* pText = SvxUnoTextBase::getImplementation( mxShapeAgg );
+        SvxUnoTextBase* pText = comphelper::getUnoTunnelImplementation<SvxUnoTextBase>( mxShapeAgg );
         if (pText)
             return new ScDrawTextCursor( this, *pText );
     }
@@ -1153,8 +1153,8 @@ uno::Reference<text::XTextCursor> SAL_CALL ScShapeObj::createTextCursorByRange(
     {
         //  ScDrawTextCursor must be used to ensure the ScShapeObj is returned by getText
 
-        SvxUnoTextBase* pText = SvxUnoTextBase::getImplementation( mxShapeAgg );
-        SvxUnoTextRangeBase* pRange = SvxUnoTextRangeBase::getImplementation( aTextPosition );
+        SvxUnoTextBase* pText = comphelper::getUnoTunnelImplementation<SvxUnoTextBase>( mxShapeAgg );
+        SvxUnoTextRangeBase* pRange = comphelper::getUnoTunnelImplementation<SvxUnoTextRangeBase>( aTextPosition );
         if ( pText && pRange )
         {
             SvxUnoTextCursor* pCursor = new ScDrawTextCursor( this, *pText );
@@ -1312,7 +1312,7 @@ SdrObject* ScShapeObj::GetSdrObject() const throw()
 {
     if(mxShapeAgg.is())
     {
-        SvxShape* pShape = SvxShape::getImplementation( mxShapeAgg );
+        SvxShape* pShape = comphelper::getUnoTunnelImplementation<SvxShape>( mxShapeAgg );
         if(pShape)
             return pShape->GetSdrObject();
     }

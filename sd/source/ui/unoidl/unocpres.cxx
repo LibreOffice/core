@@ -95,7 +95,7 @@ void SAL_CALL SdXCustomPresentation::insertByIndex( sal_Int32 Index, const uno::
     if(!xPage.is())
         throw lang::IllegalArgumentException();
 
-    SdDrawPage* pPage = SdDrawPage::getImplementation( xPage );
+    SdDrawPage* pPage = comphelper::getUnoTunnelImplementation<SdDrawPage>( xPage );
 
     if(pPage)
     {
@@ -127,7 +127,7 @@ void SAL_CALL SdXCustomPresentation::removeByIndex( sal_Int32 Index )
 
         if( xPage.is() )
         {
-            SvxDrawPage* pPage = SvxDrawPage::getImplementation( xPage );
+            SvxDrawPage* pPage = comphelper::getUnoTunnelImplementation<SvxDrawPage>( xPage );
             if(pPage)
             {
                 SdCustomShow::PageVec::iterator it = std::find(
@@ -320,7 +320,7 @@ void SAL_CALL SdXCustomPresentationAccess::insertByName( const OUString& aName, 
 
     uno::Reference< container::XIndexContainer > xContainer;
     if( (aElement >>= xContainer) && xContainer.is() )
-        pXShow = SdXCustomPresentation::getImplementation(xContainer);
+        pXShow = comphelper::getUnoTunnelImplementation<SdXCustomPresentation>(xContainer);
 
     if( nullptr == pXShow )
         throw lang::IllegalArgumentException();

@@ -194,7 +194,7 @@ void LayoutManager::implts_createMenuBar(const OUString& rMenuBarName)
 
                 if ( xMenuBar.is() )
                 {
-                    VCLXMenu* pAwtMenuBar = VCLXMenu::getImplementation( xMenuBar );
+                    VCLXMenu* pAwtMenuBar = comphelper::getUnoTunnelImplementation<VCLXMenu>( xMenuBar );
                     if ( pAwtMenuBar )
                     {
                         MenuBar* pMenuBar = static_cast<MenuBar*>(pAwtMenuBar->GetMenu());
@@ -246,7 +246,7 @@ void LayoutManager::impl_clearUpMenuBar()
                     }
                 }
 
-                VCLXMenu* pAwtMenuBar = VCLXMenu::getImplementation( xMenuBar );
+                VCLXMenu* pAwtMenuBar = comphelper::getUnoTunnelImplementation<VCLXMenu>( xMenuBar );
                 if ( pAwtMenuBar )
                     pSetMenuBar = static_cast<MenuBar*>(pAwtMenuBar->GetMenu());
             }

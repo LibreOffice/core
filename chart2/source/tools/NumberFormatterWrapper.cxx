@@ -56,7 +56,7 @@ NumberFormatterWrapper::NumberFormatterWrapper( const uno::Reference< util::XNum
     OUString sNullDate( "NullDate" );
     if ( xProp.is() && xProp->getPropertySetInfo()->hasPropertyByName(sNullDate) )
         m_aNullDate = xProp->getPropertyValue(sNullDate);
-    SvNumberFormatsSupplierObj* pSupplierObj = SvNumberFormatsSupplierObj::getImplementation( xSupplier );
+    SvNumberFormatsSupplierObj* pSupplierObj = comphelper::getUnoTunnelImplementation<SvNumberFormatsSupplierObj>( xSupplier );
     if( pSupplierObj )
         m_pNumberFormatter = pSupplierObj->GetNumberFormatter();
     SAL_WARN_IF(!m_pNumberFormatter,"chart2.tools","need a numberformatter");

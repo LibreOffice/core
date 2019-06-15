@@ -533,7 +533,7 @@ IMPL_LINK_NOARG( OFieldDescControl, FormatClickHdl, Button *, void )
     sal_Int32 nOldFormatKey(pActFieldDescr->GetFormatKey());
     SvxCellHorJustify rOldJustify = pActFieldDescr->GetHorJustify();
     Reference< XNumberFormatsSupplier >  xSupplier = GetFormatter()->getNumberFormatsSupplier();
-    SvNumberFormatsSupplierObj* pSupplierImpl = SvNumberFormatsSupplierObj::getImplementation( xSupplier );
+    SvNumberFormatsSupplierObj* pSupplierImpl = comphelper::getUnoTunnelImplementation<SvNumberFormatsSupplierObj>( xSupplier );
     if (!pSupplierImpl)
         return;
 

@@ -348,15 +348,6 @@ const css::uno::Sequence< sal_Int8 > & SdXImpressDocument::getUnoTunnelId() thro
     return theSdXImpressDocumentUnoTunnelId::get().getSeq();
 }
 
-SdXImpressDocument* SdXImpressDocument::getImplementation( const uno::Reference< uno::XInterface >& xInt )
-{
-    css::uno::Reference< css::lang::XUnoTunnel > xUT( xInt, uno::UNO_QUERY );
-    if( xUT.is() )
-        return reinterpret_cast<SdXImpressDocument*>(sal::static_int_cast<sal_IntPtr>(xUT->getSomething( SdXImpressDocument::getUnoTunnelId() )));
-    else
-        return nullptr;
-}
-
 sal_Int64 SAL_CALL SdXImpressDocument::getSomething( const css::uno::Sequence< sal_Int8 >& rIdentifier )
 {
     if( rIdentifier.getLength() == 16 )
@@ -683,7 +674,7 @@ uno::Reference< drawing::XDrawPage > SAL_CALL SdXImpressDocument::duplicate( con
         throw lang::DisposedException();
 
     // get pPage from xPage and determine the Id (nPos ) afterwards
-    SvxDrawPage* pSvxPage = SvxDrawPage::getImplementation( xPage );
+    SvxDrawPage* pSvxPage = comphelper::getUnoTunnelImplementation<SvxDrawPage>( xPage );
     if( pSvxPage )
     {
         SdPage* pPage = static_cast<SdPage*>( pSvxPage->GetSdrPage() );
@@ -1070,7 +1061,7 @@ css::uno::Reference<css::uno::XInterface> SdXImpressDocument::create(
     }
 
     uno::Reference< drawing::XShape > xShape( xRet, uno::UNO_QUERY );
-    SvxShape* pShape = xShape.is() ? SvxShape::getImplementation(xShape) : nullptr;
+    SvxShape* pShape = xShape.is() ? comphelper::getUnoTunnelImplementation<SvxShape>(xShape) : nullptr;
     if (pShape)
     {
         xRet.clear();
@@ -1906,7 +1897,7 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
     if( !(xRenderDevice.is() && nPageNumber && ( nPageNumber <= mpDoc->GetSdPageCount( ePageKind ) )) )
         return;
 
-    VCLXDevice* pDevice = VCLXDevice::getImplementation( xRenderDevice );
+    VCLXDevice* pDevice = comphelper::getUnoTunnelImplementation<VCLXDevice>( xRenderDevice );
     VclPtr< OutputDevice> pOut = pDevice ? pDevice->GetOutputDevice() : VclPtr< OutputDevice >();
 
     if( !pOut )
@@ -2200,7 +2191,7 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
 
                 if( xShape.is() )
                 {
-                    SvxShape* pShape = SvxShape::getImplementation( xShape );
+                    SvxShape* pShape = comphelper::getUnoTunnelImplementation<SvxShape>( xShape );
 
                     if( pShape )
                     {
@@ -2930,7 +2921,7 @@ void SAL_CALL SdDrawPagesAccess::remove( const uno::Reference< drawing::XDrawPag
     if( nPageCount > 1 )
     {
         // get pPage from xPage and determine the Id (nPos ) afterwards
-        SdDrawPage* pSvxPage = SdDrawPage::getImplementation( xPage );
+        SdDrawPage* pSvxPage = comphelper::getUnoTunnelImplementation<SdDrawPage>( xPage );
         if( pSvxPage )
         {
             SdPage* pPage = static_cast<SdPage*>(pSvxPage->GetSdrPage());
@@ -3180,7 +3171,7 @@ void SAL_CALL SdMasterPagesAccess::remove( const uno::Reference< drawing::XDrawP
     if( nullptr == mpModel || mpModel->mpDoc == nullptr )
         throw lang::DisposedException();
 
-    SdMasterPage* pSdPage = SdMasterPage::getImplementation( xPage );
+    SdMasterPage* pSdPage = comphelper::getUnoTunnelImplementation<SdMasterPage>( xPage );
     if(pSdPage == nullptr)
         return;
 

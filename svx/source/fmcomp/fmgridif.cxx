@@ -473,7 +473,7 @@ void SAL_CALL FmXGridControl::createPeer(const Reference< css::awt::XToolkit >& 
         vcl::Window* pParentWin = nullptr;
         if (rParentPeer.is())
         {
-            VCLXWindow* pParent = VCLXWindow::getImplementation(rParentPeer);
+            VCLXWindow* pParent = comphelper::getUnoTunnelImplementation<VCLXWindow>(rParentPeer);
             if (pParent)
                 pParentWin = pParent->GetWindow().get();
         }
@@ -496,7 +496,7 @@ void SAL_CALL FmXGridControl::createPeer(const Reference< css::awt::XToolkit >& 
 //      if (--m_nPeerCreationLevel == 0)
         {
             DBG_ASSERT(getPeer().is(), "FmXGridControl::createPeer : something went wrong ... no top level peer !");
-            pPeer = FmXGridPeer::getImplementation(getPeer());
+            pPeer = comphelper::getUnoTunnelImplementation<FmXGridPeer>(getPeer());
 
             setPosSize( maComponentInfos.nX, maComponentInfos.nY, maComponentInfos.nWidth, maComponentInfos.nHeight, css::awt::PosSize::POSSIZE );
 

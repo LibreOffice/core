@@ -257,7 +257,7 @@ void OReportSection::Paste(const uno::Sequence< beans::NamedValue >& _aAllreadyC
                     const uno::Reference<report::XReportComponent>* pCopiesEnd = pCopiesIter + aCopies.getLength();
                     for (;pCopiesIter != pCopiesEnd ; ++pCopiesIter)
                     {
-                        SvxShape* pShape = SvxShape::getImplementation( *pCopiesIter );
+                        SvxShape* pShape = comphelper::getUnoTunnelImplementation<SvxShape>( *pCopiesIter );
                         SdrObject* pObject = pShape ? pShape->GetSdrObject() : nullptr;
                         if ( pObject )
                         {
@@ -507,7 +507,7 @@ void OReportSection::impl_adjustObjectSizePosition(sal_Int32 i_nPaperWidth,sal_I
             uno::Reference< report::XReportComponent> xReportComponent(m_xSection->getByIndex(i),uno::UNO_QUERY_THROW);
             awt::Point aPos = xReportComponent->getPosition();
             awt::Size aSize = xReportComponent->getSize();
-            SvxShape* pShape = SvxShape::getImplementation( xReportComponent );
+            SvxShape* pShape = comphelper::getUnoTunnelImplementation<SvxShape>( xReportComponent );
             SdrObject* pObject = pShape ? pShape->GetSdrObject() : nullptr;
             if ( pObject )
             {

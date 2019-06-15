@@ -257,9 +257,9 @@ static uno::Reference< excel::XRange > lcl_makeXRangeFromSheetCellRanges( const 
 ScCellRangesBase* ScVbaRange::getCellRangesBase()
 {
     if( mxRanges.is() )
-        return ScCellRangesBase::getImplementation( mxRanges );
+        return comphelper::getUnoTunnelImplementation<ScCellRangesBase>( mxRanges );
     if( mxRange.is() )
-        return ScCellRangesBase::getImplementation( mxRange );
+        return comphelper::getUnoTunnelImplementation<ScCellRangesBase>( mxRange );
     throw uno::RuntimeException("General Error creating range - Unknown" );
 }
 
@@ -390,7 +390,7 @@ ScVbaRangeAreas::createCollectionObject( const uno::Any& aSource )
 static ScDocShell*
 getDocShellFromIf( const uno::Reference< uno::XInterface >& xIf )
 {
-    ScCellRangesBase* pUno = ScCellRangesBase::getImplementation( xIf );
+    ScCellRangesBase* pUno = comphelper::getUnoTunnelImplementation<ScCellRangesBase>( xIf );
     if ( !pUno )
             throw uno::RuntimeException("Failed to access underlying uno range object"  );
     return pUno->GetDocShell();
@@ -535,7 +535,7 @@ public:
     OUString getNumberFormatString()
     {
         uno::Reference< uno::XInterface > xIf( mxRangeProps, uno::UNO_QUERY_THROW );
-        ScCellRangesBase* pUnoCellRange = ScCellRangesBase::getImplementation( xIf );
+        ScCellRangesBase* pUnoCellRange = comphelper::getUnoTunnelImplementation<ScCellRangesBase>( xIf );
         if ( pUnoCellRange )
         {
 

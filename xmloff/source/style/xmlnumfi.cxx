@@ -1615,7 +1615,7 @@ sal_Int32 SvXMLNumFormatContext::CreateAndInsert( css::uno::Reference< css::util
     {
         SvNumberFormatter* pFormatter = nullptr;
         SvNumberFormatsSupplierObj* pObj =
-                        SvNumberFormatsSupplierObj::getImplementation( xFormatsSupplier );
+                        comphelper::getUnoTunnelImplementation<SvNumberFormatsSupplierObj>( xFormatsSupplier );
         if (pObj)
             pFormatter = pObj->GetNumberFormatter();
 
@@ -2257,7 +2257,7 @@ SvXMLNumFmtHelper::SvXMLNumFmtHelper(
 
     SvNumberFormatter* pFormatter = nullptr;
     SvNumberFormatsSupplierObj* pObj =
-                    SvNumberFormatsSupplierObj::getImplementation( rSupp );
+                    comphelper::getUnoTunnelImplementation<SvNumberFormatsSupplierObj>( rSupp );
     if (pObj)
         pFormatter = pObj->GetNumberFormatter();
 

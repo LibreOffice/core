@@ -1568,7 +1568,7 @@ void ScCellRangesBase::Notify( SfxBroadcaster&, const SfxHint& rHint )
         {
             if (  rRef.GetMode() == URM_INSDEL
                && aRanges.size() == 1
-               && ScTableSheetObj::getImplementation(xThis)
+               && comphelper::getUnoTunnelImplementation<ScTableSheetObj>(xThis)
                )
             {
                 // #101755#; the range size of a sheet does not change
@@ -2363,7 +2363,7 @@ void ScCellRangesBase::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pE
                         if ( !aRanges.empty() && xInterface.is() )  // empty = nothing to do
                         {
                             ScTableConditionalFormat* pFormat =
-                                    ScTableConditionalFormat::getImplementation( xInterface );
+                                    comphelper::getUnoTunnelImplementation<ScTableConditionalFormat>( xInterface );
                             if (pFormat)
                             {
                                 ScDocument& rDoc = pDocShell->GetDocument();
@@ -2410,7 +2410,7 @@ void ScCellRangesBase::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pE
                         if ( !aRanges.empty() && xInterface.is() )  // empty = nothing to do
                         {
                             ScTableValidationObj* pValidObj =
-                                    ScTableValidationObj::getImplementation( xInterface );
+                                    comphelper::getUnoTunnelImplementation<ScTableValidationObj>( xInterface );
                             if (pValidObj)
                             {
                                 ScDocument& rDoc = pDocShell->GetDocument();
@@ -3869,7 +3869,7 @@ uno::Reference<container::XIndexAccess> SAL_CALL ScCellRangesBase::findAll(
     uno::Reference<container::XIndexAccess> xRet;
     if ( pDocShell && xDesc.is() )
     {
-        ScCellSearchObj* pSearch = ScCellSearchObj::getImplementation( xDesc );
+        ScCellSearchObj* pSearch = comphelper::getUnoTunnelImplementation<ScCellSearchObj>( xDesc );
         if (pSearch)
         {
             SvxSearchItem* pSearchItem = pSearch->GetSearchItem();
@@ -3907,7 +3907,7 @@ uno::Reference<uno::XInterface> ScCellRangesBase::Find_Impl(
     uno::Reference<uno::XInterface> xRet;
     if ( pDocShell && xDesc.is() )
     {
-        ScCellSearchObj* pSearch = ScCellSearchObj::getImplementation( xDesc );
+        ScCellSearchObj* pSearch = comphelper::getUnoTunnelImplementation<ScCellSearchObj>( xDesc );
         if (pSearch)
         {
             SvxSearchItem* pSearchItem = pSearch->GetSearchItem();
@@ -3960,7 +3960,7 @@ uno::Reference<uno::XInterface> SAL_CALL ScCellRangesBase::findNext(
     SolarMutexGuard aGuard;
     if ( xStartAt.is() )
     {
-        ScCellRangesBase* pRangesImp = ScCellRangesBase::getImplementation( xStartAt );
+        ScCellRangesBase* pRangesImp = comphelper::getUnoTunnelImplementation<ScCellRangesBase>( xStartAt );
         if ( pRangesImp && pRangesImp->GetDocShell() == pDocShell )
         {
             const ScRangeList& rStartRanges = pRangesImp->GetRangeList();
@@ -3988,7 +3988,7 @@ sal_Int32 SAL_CALL ScCellRangesBase::replaceAll( const uno::Reference<util::XSea
     sal_Int32 nReplaced = 0;
     if ( pDocShell && xDesc.is() )
     {
-        ScCellSearchObj* pSearch = ScCellSearchObj::getImplementation( xDesc );
+        ScCellSearchObj* pSearch = comphelper::getUnoTunnelImplementation<ScCellSearchObj>( xDesc );
         if (pSearch)
         {
             SvxSearchItem* pSearchItem = pSearch->GetSearchItem();
@@ -4323,7 +4323,7 @@ void SAL_CALL ScCellRangesObj::insertByName( const OUString& aName, const uno::A
     uno::Reference<uno::XInterface> xInterface(aElement, uno::UNO_QUERY);
     if ( pDocSh && xInterface.is() )
     {
-        ScCellRangesBase* pRangesImp = ScCellRangesBase::getImplementation( xInterface );
+        ScCellRangesBase* pRangesImp = comphelper::getUnoTunnelImplementation<ScCellRangesBase>( xInterface );
         if ( pRangesImp && pRangesImp->GetDocShell() == pDocSh )
         {
             //  if explicit name is given and already existing, throw exception
@@ -4953,7 +4953,7 @@ void ScCellRangeObj::SetArrayFormula_Impl(const OUString& rFormula,
     {
         if ( !rFormula.isEmpty() )
         {
-            if ( ScTableSheetObj::getImplementation( static_cast<cppu::OWeakObject*>(this) ) )
+            if ( comphelper::getUnoTunnelImplementation<ScTableSheetObj>( static_cast<cppu::OWeakObject*>(this) ) )
             {
                 //  don't set array formula for sheet object
                 throw uno::RuntimeException();
@@ -5022,7 +5022,7 @@ void SAL_CALL ScCellRangeObj::setArrayTokens( const uno::Sequence<sheet::Formula
     {
         if ( rTokens.hasElements() )
         {
-            if ( ScTableSheetObj::getImplementation( static_cast<cppu::OWeakObject*>(this) ) )
+            if ( comphelper::getUnoTunnelImplementation<ScTableSheetObj>( static_cast<cppu::OWeakObject*>(this) ) )
             {
                 throw uno::RuntimeException();
             }
@@ -5053,7 +5053,7 @@ uno::Sequence< uno::Sequence<uno::Any> > SAL_CALL ScCellRangeObj::getDataArray()
 {
     SolarMutexGuard aGuard;
 
-    if ( ScTableSheetObj::getImplementation( static_cast<cppu::OWeakObject*>(this) ) )
+    if ( comphelper::getUnoTunnelImplementation<ScTableSheetObj>( static_cast<cppu::OWeakObject*>(this) ) )
     {
         //  don't create a data array for the sheet
         throw uno::RuntimeException();
@@ -5098,7 +5098,7 @@ uno::Sequence< uno::Sequence<OUString> > SAL_CALL ScCellRangeObj::getFormulaArra
 {
     SolarMutexGuard aGuard;
 
-    if ( ScTableSheetObj::getImplementation( static_cast<cppu::OWeakObject*>(this) ) )
+    if ( comphelper::getUnoTunnelImplementation<ScTableSheetObj>( static_cast<cppu::OWeakObject*>(this) ) )
     {
         //  don't create a data array for the sheet
         throw uno::RuntimeException();
@@ -5656,7 +5656,7 @@ void SAL_CALL ScCellRangeObj::applySubTotals(
 
     ScDocShell* pDocSh = GetDocShell();
     ScSubTotalDescriptorBase* pImp =
-        ScSubTotalDescriptorBase::getImplementation( xDescriptor );
+        comphelper::getUnoTunnelImplementation<ScSubTotalDescriptorBase>( xDescriptor );
 
     if (pDocSh && pImp)
     {
@@ -6090,12 +6090,12 @@ uno::Reference<text::XTextCursor> SAL_CALL ScCellObj::createTextCursorByRange(
     SvxUnoTextCursor* pCursor = new ScCellTextCursor( *this );
     uno::Reference<text::XTextCursor> xCursor(pCursor);
 
-    SvxUnoTextRangeBase* pRange = SvxUnoTextRangeBase::getImplementation( aTextPosition );
+    SvxUnoTextRangeBase* pRange = comphelper::getUnoTunnelImplementation<SvxUnoTextRangeBase>( aTextPosition );
     if(pRange)
         pCursor->SetSelection( pRange->GetSelection() );
     else
     {
-        ScCellTextCursor* pOther = ScCellTextCursor::getImplementation( aTextPosition );
+        ScCellTextCursor* pOther = comphelper::getUnoTunnelImplementation<ScCellTextCursor>( aTextPosition );
         if(!pOther)
             throw uno::RuntimeException();
 
@@ -6147,8 +6147,8 @@ void SAL_CALL ScCellObj::insertTextContent( const uno::Reference<text::XTextRang
     ScDocShell* pDocSh = GetDocShell();
     if ( pDocSh && xContent.is() )
     {
-        ScEditFieldObj* pCellField = ScEditFieldObj::getImplementation(xContent);
-        SvxUnoTextRangeBase* pTextRange = ScCellTextCursor::getImplementation( xRange );
+        ScEditFieldObj* pCellField = comphelper::getUnoTunnelImplementation<ScEditFieldObj>(xContent);
+        SvxUnoTextRangeBase* pTextRange = comphelper::getUnoTunnelImplementation<ScCellTextCursor>( xRange );
 
         if ( pCellField && !pCellField->IsInserted() && pTextRange )
         {
@@ -6197,7 +6197,7 @@ void SAL_CALL ScCellObj::removeTextContent( const uno::Reference<text::XTextCont
     SolarMutexGuard aGuard;
     if ( xContent.is() )
     {
-        ScEditFieldObj* pCellField = ScEditFieldObj::getImplementation(xContent);
+        ScEditFieldObj* pCellField = comphelper::getUnoTunnelImplementation<ScEditFieldObj>(xContent);
         if ( pCellField && pCellField->IsInserted() )
         {
             //! Check if field is in this cell
@@ -6829,7 +6829,7 @@ uno::Reference<sheet::XSheetCellCursor> SAL_CALL ScTableSheetObj::createCursorBy
     ScDocShell* pDocSh = GetDocShell();
     if ( pDocSh && xCellRange.is() )
     {
-        ScCellRangesBase* pRangesImp = ScCellRangesBase::getImplementation( xCellRange );
+        ScCellRangesBase* pRangesImp = comphelper::getUnoTunnelImplementation<ScCellRangesBase>( xCellRange );
         if (pRangesImp)
         {
             const ScRangeList& rRanges = pRangesImp->GetRangeList();
