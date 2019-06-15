@@ -33,6 +33,7 @@
 #include <rtl/tencinfo.h>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
+#include <tools/diagnose_ex.h>
 
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
@@ -985,8 +986,7 @@ ErrCode ScDocShell::DBaseExport( const OUString& rFullFileName, rtl_TextEncoding
     catch ( const sdbc::SQLException& aException )
     {
         sal_Int32 nError = aException.ErrorCode;
-        SAL_WARN("sc", "ScDocShell::DBaseExport: SQLException ErrorCode: " << nError << ", SQLState: " << aException.SQLState <<
-            ", Message: " << aException);
+        TOOLS_WARN_EXCEPTION("sc", "ScDocShell::DBaseExport");
 
         if (nError == 22018 || nError == 22001)
         {

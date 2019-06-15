@@ -34,6 +34,7 @@
 #include <sfx2/sfxsids.hrc>
 #include <vcl/font.hxx>
 #include <vcl/settings.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <editeng/editstat.hxx>
 #include <scitems.hxx>
@@ -151,9 +152,9 @@ XclRootData::XclRootData( XclBiff eBiff, SfxMedium& rMedium,
         mfScreenPixelX = (aDeviceInfo.PixelPerMeterX > 0) ? (100000.0 / aDeviceInfo.PixelPerMeterX) : 50.0;
         mfScreenPixelY = (aDeviceInfo.PixelPerMeterY > 0) ? (100000.0 / aDeviceInfo.PixelPerMeterY) : 50.0;
     }
-    catch( const Exception& e)
+    catch( const Exception&)
     {
-        SAL_WARN( "sc", "XclRootData::XclRootData - cannot get output device info: " << e );
+        TOOLS_WARN_EXCEPTION( "sc", "XclRootData::XclRootData - cannot get output device info");
     }
 }
 
