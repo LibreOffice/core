@@ -137,17 +137,16 @@ PNGWriterImpl::PNGWriterImpl( const BitmapEx& rBitmapEx,
 
         if (pFilterData)
         {
-            sal_Int32 i = 0;
-            for (i = 0; i < pFilterData->getLength(); i++)
+            for (const auto& rPropVal : *pFilterData)
             {
-                if ((*pFilterData)[i].Name == "Compression")
-                    (*pFilterData)[i].Value >>= mnCompLevel;
-                else if ((*pFilterData)[i].Name == "Interlaced")
-                    (*pFilterData)[i].Value >>= mnInterlaced;
-                else if ((*pFilterData)[i].Name == "MaxChunkSize")
+                if (rPropVal.Name == "Compression")
+                    rPropVal.Value >>= mnCompLevel;
+                else if (rPropVal.Name == "Interlaced")
+                    rPropVal.Value >>= mnInterlaced;
+                else if (rPropVal.Name == "MaxChunkSize")
                 {
                     sal_Int32 nVal = 0;
-                    if ((*pFilterData)[i].Value >>= nVal)
+                    if (rPropVal.Value >>= nVal)
                         mnMaxChunkSize = static_cast<sal_uInt32>(nVal);
                 }
             }

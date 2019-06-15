@@ -219,18 +219,11 @@ bool FilterConfigItem::ImplGetPropertyValue( Any& rAny, const Reference< XProper
 // otherwise the result is null
 PropertyValue* FilterConfigItem::GetPropertyValue( Sequence< PropertyValue >& rPropSeq, const OUString& rName )
 {
-    PropertyValue* pPropValue = nullptr;
-
-    sal_Int32 i, nCount;
-    for ( i = 0, nCount = rPropSeq.getLength(); i < nCount; i++ )
-    {
-        if ( rPropSeq[ i ].Name == rName )
-        {
-            pPropValue = &rPropSeq[ i ];
-            break;
-        }
-    }
-    return pPropValue;
+    auto pProp = std::find_if(rPropSeq.begin(), rPropSeq.end(),
+        [&rName](const PropertyValue& rProp) { return rProp.Name == rName; });
+    if (pProp != rPropSeq.end())
+        return pProp;
+    return nullptr;
 }
 
 /* if PropertySequence already includes a PropertyValue using the same name, the
@@ -242,12 +235,10 @@ bool FilterConfigItem::WritePropertyValue( Sequence< PropertyValue >& rPropSeq, 
     bool bRet = false;
     if ( !rPropValue.Name.isEmpty() )
     {
-        sal_Int32 i, nCount;
-        for ( i = 0, nCount = rPropSeq.getLength(); i < nCount; i++ )
-        {
-            if ( rPropSeq[ i ].Name == rPropValue.Name )
-                break;
-        }
+        auto pProp = std::find_if(rPropSeq.begin(), rPropSeq.end(),
+            [&rPropValue](const PropertyValue& rProp) { return rProp.Name == rPropValue.Name; });
+        sal_Int32 i = std::distance(rPropSeq.begin(), pProp);
+        sal_Int32 nCount = rPropSeq.getLength();
         if ( i == nCount )
             rPropSeq.realloc( ++nCount );
 
@@ -389,14 +380,12 @@ Reference< XStatusIndicator > FilterConfigItem::GetStatusIndicator() const
     Reference< XStatusIndicator > xStatusIndicator;
     const OUString sStatusIndicator( "StatusIndicator" );
 
-    sal_Int32 i, nCount = aFilterData.getLength();
-    for ( i = 0; i < nCount; i++ )
+    auto pPropVal = std::find_if(aFilterData.begin(), aFilterData.end(),
+        [&sStatusIndicator](const css::beans::PropertyValue& rPropVal) {
+            return rPropVal.Name == sStatusIndicator; });
+    if (pPropVal != aFilterData.end())
     {
-        if ( aFilterData[ i ].Name == sStatusIndicator )
-        {
-            aFilterData[ i ].Value >>= xStatusIndicator;
-            break;
-        }
+        pPropVal->Value >>= xStatusIndicator;
     }
     return xStatusIndicator;
 }

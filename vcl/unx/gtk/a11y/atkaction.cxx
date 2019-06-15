@@ -167,22 +167,22 @@ action_wrapper_get_name (AtkAction *action,
 static void
 appendKeyStrokes(OStringBuffer& rBuffer, const uno::Sequence< awt::KeyStroke >& rKeyStrokes)
 {
-    for( sal_Int32 i = 0; i < rKeyStrokes.getLength(); i++ )
+    for( const auto& rKeyStroke : rKeyStrokes )
     {
-        if( rKeyStrokes[i].Modifiers &  awt::KeyModifier::SHIFT )
+        if( rKeyStroke.Modifiers &  awt::KeyModifier::SHIFT )
             rBuffer.append("<Shift>");
-        if( rKeyStrokes[i].Modifiers &  awt::KeyModifier::MOD1 )
+        if( rKeyStroke.Modifiers &  awt::KeyModifier::MOD1 )
             rBuffer.append("<Control>");
-        if( rKeyStrokes[i].Modifiers &  awt::KeyModifier::MOD2 )
+        if( rKeyStroke.Modifiers &  awt::KeyModifier::MOD2 )
             rBuffer.append("<Alt>");
 
-        if( ( rKeyStrokes[i].KeyCode >= awt::Key::A ) && ( rKeyStrokes[i].KeyCode <= awt::Key::Z ) )
-            rBuffer.append( static_cast<sal_Char>( 'a' + ( rKeyStrokes[i].KeyCode - awt::Key::A ) ) );
+        if( ( rKeyStroke.KeyCode >= awt::Key::A ) && ( rKeyStroke.KeyCode <= awt::Key::Z ) )
+            rBuffer.append( static_cast<sal_Char>( 'a' + ( rKeyStroke.KeyCode - awt::Key::A ) ) );
         else
         {
             sal_Char c = '\0';
 
-            switch( rKeyStrokes[i].KeyCode )
+            switch( rKeyStroke.KeyCode )
             {
                 case awt::Key::TAB:      c = '\t'; break;
                 case awt::Key::SPACE:    c = ' '; break;
@@ -198,7 +198,7 @@ appendKeyStrokes(OStringBuffer& rBuffer, const uno::Sequence< awt::KeyStroke >& 
                 case 0:
                     break;
                 default:
-                    g_warning( "Unmapped KeyCode: %d", rKeyStrokes[i].KeyCode );
+                    g_warning( "Unmapped KeyCode: %d", rKeyStroke.KeyCode );
                     break;
             }
 
@@ -208,7 +208,7 @@ appendKeyStrokes(OStringBuffer& rBuffer, const uno::Sequence< awt::KeyStroke >& 
             {
                 // The KeyCode approach did not work, probably a non ascii character
                 // let's hope that there is a character given in KeyChar.
-                rBuffer.append( OUStringToGChar( OUString( rKeyStrokes[i].KeyChar ) ) );
+                rBuffer.append( OUStringToGChar( OUString( rKeyStroke.KeyChar ) ) );
             }
         }
     }

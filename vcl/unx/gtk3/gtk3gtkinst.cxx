@@ -579,10 +579,8 @@ std::vector<GtkTargetEntry> VclToGtkHelper::FormatsToGtk(const css::uno::Sequenc
     std::vector<GtkTargetEntry> aGtkTargets;
 
     bool bHaveText(false), bHaveUTF8(false);
-    for (int i = 0; i < rFormats.getLength(); ++i)
+    for (const css::datatransfer::DataFlavor& rFlavor : rFormats)
     {
-        const css::datatransfer::DataFlavor& rFlavor = rFormats[i];
-
         sal_Int32 nIndex(0);
         if (rFlavor.MimeType.getToken(0, ';', nIndex) == "text/plain")
         {

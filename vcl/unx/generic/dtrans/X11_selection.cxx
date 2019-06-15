@@ -797,15 +797,13 @@ void SelectionManager::getNativeTypeList( const Sequence< DataFlavor >& rTypes, 
     rOutTypeList.clear();
 
     int nFormat;
-    int nFlavors = rTypes.getLength();
-    const DataFlavor* pFlavors = rTypes.getConstArray();
     bool bHaveText = false;
-    for( int i = 0; i < nFlavors; i++ )
+    for( const auto& rFlavor : rTypes )
     {
-        if( pFlavors[i].MimeType.startsWith("text/plain"))
+        if( rFlavor.MimeType.startsWith("text/plain"))
             bHaveText = true;
         else
-            convertTypeToNative( pFlavors[i].MimeType, targetselection, nFormat, rOutTypeList );
+            convertTypeToNative( rFlavor.MimeType, targetselection, nFormat, rOutTypeList );
     }
     if( bHaveText )
     {
@@ -1333,19 +1331,16 @@ bool SelectionManager::getPasteDataTypes( Atom selection, Sequence< DataFlavor >
         bSuccess = rTypes.hasElements();
         if( bHaveText && ! bHaveUTF16 )
         {
-            int i = 0;
-
             int nNewFlavors = rTypes.getLength()+1;
+
             Sequence< DataFlavor > aTemp( nNewFlavors );
-            for( i = 0; i < nNewFlavors-1; i++ )
-                aTemp.getArray()[i+1] = rTypes.getConstArray()[i];
-            aTemp.getArray()[0].MimeType = "text/plain;charset=utf-16";
-            aTemp.getArray()[0].DataType = cppu::UnoType<OUString>::get();
+            std::copy(rTypes.begin(), rTypes.end(), std::next(aTemp.begin()));
+            aTemp[0].MimeType = "text/plain;charset=utf-16";
+            aTemp[0].DataType = cppu::UnoType<OUString>::get();
             rTypes = aTemp;
 
             std::vector< Atom > aNativeTemp( nNewFlavors );
-            for( i = 0; i < nNewFlavors-1; i++ )
-                aNativeTemp[ i + 1 ] = aNativeTypes[ i ];
+            std::copy(aNativeTypes.begin(), aNativeTypes.end(), std::next(aNativeTemp.begin()));
             aNativeTemp[0] = None;
             aNativeTypes = aNativeTemp;
         }
