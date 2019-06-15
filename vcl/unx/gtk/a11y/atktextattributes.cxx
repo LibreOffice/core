@@ -923,22 +923,20 @@ TabStopList2String( const uno::Any& rAny, bool default_tabs )
 
     if( rAny >>= theTabStops)
     {
-        sal_Int32 indexOfTab = 0;
-        sal_Int32 numberOfTabs = theTabStops.getLength();
         sal_Unicode lastFillChar = ' ';
 
-        for( ; indexOfTab < numberOfTabs; ++indexOfTab )
+        for( const auto& rTabStop : theTabStops )
         {
-            bool is_default_tab = (style::TabAlign_DEFAULT == theTabStops[indexOfTab].Alignment);
+            bool is_default_tab = (style::TabAlign_DEFAULT == rTabStop.Alignment);
 
             if( is_default_tab != default_tabs )
                 continue;
 
-            double fValue = theTabStops[indexOfTab].Position;
+            double fValue = rTabStop.Position;
             fValue = fValue * 0.01;
 
             const gchar * tab_align = "";
-            switch( theTabStops[indexOfTab].Alignment )
+            switch( rTabStop.Alignment )
             {
                 case style::TabAlign_LEFT :
                     tab_align = "left ";
@@ -958,9 +956,9 @@ TabStopList2String( const uno::Any& rAny, bool default_tabs )
 
             const gchar * lead_char = "";
 
-            if( theTabStops[indexOfTab].FillChar != lastFillChar )
+            if( rTabStop.FillChar != lastFillChar )
             {
-                lastFillChar = theTabStops[indexOfTab].FillChar;
+                lastFillChar = rTabStop.FillChar;
                 switch (lastFillChar)
                 {
                     case ' ':

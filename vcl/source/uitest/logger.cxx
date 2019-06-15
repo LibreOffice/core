@@ -43,15 +43,12 @@ void UITestLogger::logCommand(const OUString& rAction, const css::uno::Sequence<
         return;
 
     OUStringBuffer aBuffer(rAction);
-    sal_Int32 nCount = rArgs.getLength();
 
-    if (nCount > 0)
+    if (rArgs.hasElements())
     {
         aBuffer.append(" {");
-        for (sal_Int32 n = 0; n < nCount; n++)
+        for (const css::beans::PropertyValue& rProp : rArgs)
         {
-            const css::beans::PropertyValue& rProp = rArgs[n];
-
             OUString aTypeName = rProp.Value.getValueTypeName();
 
             if (aTypeName == "long" || aTypeName == "short")

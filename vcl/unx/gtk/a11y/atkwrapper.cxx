@@ -504,10 +504,9 @@ atk_object_wrapper_relation_new(const accessibility::AccessibleRelation& rRelati
 
     std::vector<AtkObject*> aTargets;
 
-    for (sal_uInt32 i = 0; i < nTargetCount; ++i)
+    for (const auto& rTarget : rRelation.TargetSet)
     {
-        uno::Reference< accessibility::XAccessible > xAccessible(
-                rRelation.TargetSet[i], uno::UNO_QUERY );
+        uno::Reference< accessibility::XAccessible > xAccessible( rTarget, uno::UNO_QUERY );
         aTargets.push_back(atk_object_wrapper_ref(xAccessible));
     }
 
@@ -571,12 +570,12 @@ wrapper_ref_state_set( AtkObject *atk_obj )
             {
                 uno::Sequence< sal_Int16 > aStates = xStateSet->getStates();
 
-                for( sal_Int32 n = 0; n < aStates.getLength(); n++ )
+                for( const auto nState : aStates )
                 {
                     // ATK_STATE_LAST_DEFINED is used to check if the state
                     // is unmapped, do not report it to Atk
-                    if ( mapAtkState( aStates[n] ) != ATK_STATE_LAST_DEFINED )
-                        atk_state_set_add_state( pSet, mapAtkState( aStates[n] ) );
+                    if ( mapAtkState( nState ) != ATK_STATE_LAST_DEFINED )
+                        atk_state_set_add_state( pSet, mapAtkState( nState ) );
                 }
 
                 // We need to emulate FOCUS state for menus, menu-items etc.

@@ -1440,13 +1440,12 @@ ErrCode GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPath, 
 
     if ( pFilterData )
     {
-        sal_Int32 i;
-        for ( i = 0; i < pFilterData->getLength(); i++ )
+        for ( const auto& rPropVal : *pFilterData )
         {
-            if ( (*pFilterData)[ i ].Name == "PreviewSizeHint" )
+            if ( rPropVal.Name == "PreviewSizeHint" )
             {
                 css::awt::Size aSize;
-                if ( (*pFilterData)[ i ].Value >>= aSize )
+                if ( rPropVal.Value >>= aSize )
                 {
                     aPreviewSizeHint = Size( aSize.Width, aSize.Height );
                     if ( aSize.Width || aSize.Height )
@@ -1455,13 +1454,13 @@ ErrCode GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPath, 
                         nImportFlags &=~GraphicFilterImportFlags::ForPreview;
                 }
             }
-            else if ( (*pFilterData)[ i ].Name == "AllowPartialStreamRead" )
+            else if ( rPropVal.Name == "AllowPartialStreamRead" )
             {
-                (*pFilterData)[ i ].Value >>= bAllowPartialStreamRead;
+                rPropVal.Value >>= bAllowPartialStreamRead;
             }
-            else if ( (*pFilterData)[ i ].Name == "CreateNativeLink" )
+            else if ( rPropVal.Name == "CreateNativeLink" )
             {
-                (*pFilterData)[ i ].Value >>= bCreateNativeLink;
+                rPropVal.Value >>= bCreateNativeLink;
             }
         }
     }
@@ -2050,26 +2049,25 @@ ErrCode GraphicFilter::ExportGraphic( const Graphic& rGraphic, const OUString& r
                 vcl::PNGWriter aPNGWriter( aGraphic.GetBitmapEx(), pFilterData );
                 if ( pFilterData )
                 {
-                    sal_Int32 k, j, i = 0;
-                    for ( i = 0; i < pFilterData->getLength(); i++ )
+                    for ( const auto& rPropVal : *pFilterData )
                     {
-                        if ( (*pFilterData)[ i ].Name == "AdditionalChunks" )
+                        if ( rPropVal.Name == "AdditionalChunks" )
                         {
                             css::uno::Sequence< css::beans::PropertyValue > aAdditionalChunkSequence;
-                            if ( (*pFilterData)[ i ].Value >>= aAdditionalChunkSequence )
+                            if ( rPropVal.Value >>= aAdditionalChunkSequence )
                             {
-                                for ( j = 0; j < aAdditionalChunkSequence.getLength(); j++ )
+                                for ( const auto& rAdditionalChunk : aAdditionalChunkSequence )
                                 {
-                                    if ( aAdditionalChunkSequence[ j ].Name.getLength() == 4 )
+                                    if ( rAdditionalChunk.Name.getLength() == 4 )
                                     {
                                         sal_uInt32 nChunkType = 0;
-                                        for ( k = 0; k < 4; k++ )
+                                        for ( sal_Int32 k = 0; k < 4; k++ )
                                         {
                                             nChunkType <<= 8;
-                                            nChunkType |= static_cast<sal_uInt8>(aAdditionalChunkSequence[ j ].Name[ k ]);
+                                            nChunkType |= static_cast<sal_uInt8>(rAdditionalChunk.Name[ k ]);
                                         }
                                         css::uno::Sequence< sal_Int8 > aByteSeq;
-                                        if ( aAdditionalChunkSequence[ j ].Value >>= aByteSeq )
+                                        if ( rAdditionalChunk.Value >>= aByteSeq )
                                         {
                                             std::vector< vcl::PNGWriter::ChunkData >& rChunkData = aPNGWriter.GetChunks();
                                             if ( !rChunkData.empty() )
