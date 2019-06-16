@@ -1005,9 +1005,9 @@ bool SdXMLFilter::Export()
                 mxStatusIndicator->end();
         }
     }
-    catch (const uno::Exception &e)
+    catch (const uno::Exception &)
     {
-        SAL_WARN( "sd.filter", "uno Exception caught while exporting:" << e);
+        TOOLS_WARN_EXCEPTION( "sd.filter", "uno Exception caught while exporting");
         bDocRet = false;
     }
     if ( !bLocked )

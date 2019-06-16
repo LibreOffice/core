@@ -23,6 +23,7 @@
 #include <comphelper/uno3.hxx>
 #include <comphelper/proparrhlp.hxx>
 #include <comphelper/propertycontainer.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <ooo/vba/XVBAToOOEventDescGen.hpp>
 
@@ -909,9 +910,9 @@ EventListener::firing_Impl(const ScriptEvent& evt, Any* pRet )
                             ooo::vba::executeMacro( mpShell, url, aArguments, aRet, aDummyCaller );
                         }
                     }
-                    catch ( uno::Exception& e )
+                    catch ( const uno::Exception& )
                     {
-                        SAL_WARN("scripting", "event script raised " << e );
+                        TOOLS_WARN_EXCEPTION("scripting", "event script raised" );
                     }
                }
            }

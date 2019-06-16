@@ -209,10 +209,10 @@ void MasterScriptProvider::createPkgProvider()
             xFac->createScriptProvider( location ), UNO_SET_THROW );
 
     }
-    catch ( const Exception& e )
+    catch ( const Exception& )
     {
-        SAL_WARN("scripting.provider", "Exception creating MasterScriptProvider for uno_packages in context "
-                << m_sCtxString << ": " << e );
+        TOOLS_WARN_EXCEPTION("scripting.provider", "Exception creating MasterScriptProvider for uno_packages in context "
+                << m_sCtxString );
     }
 }
 
@@ -470,9 +470,9 @@ template <typename Proc> bool FindProviderAndApply(ProviderCache& rCache, Proc p
                 if (bResult)
                     break;
             }
-            catch (Exception& e)
+            catch (const Exception&)
             {
-                SAL_INFO("scripting.provider", "ignoring " << e);
+                TOOLS_INFO_EXCEPTION("scripting.provider", "ignoring");
             }
         }
         return bResult;
