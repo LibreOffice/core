@@ -17,7 +17,6 @@
 #include <miscuno.hxx>
 #include <document.hxx>
 #include <unonames.hxx>
-#include <docsh.hxx>
 #include <scresid.hxx>
 #include <globstr.hrc>
 #include <strings.hrc>
@@ -32,6 +31,7 @@
 
 #include <com/sun/star/chart2/data/LabeledDataSequence.hpp>
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
+#include <com/sun/star/frame/XModel.hpp>
 
 #include <com/sun/star/sheet/XDataPilotResults.hpp>
 #include <com/sun/star/sheet/DataResultFlags.hpp>

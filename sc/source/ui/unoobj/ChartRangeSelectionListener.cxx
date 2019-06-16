@@ -21,7 +21,6 @@
 
 #include <com/sun/star/chart2/data/XRangeHighlighter.hpp>
 
-#include <sfx2/viewfrm.hxx>
 #include <tabvwsh.hxx>
 #include <unonames.hxx>
 #include <miscuno.hxx>

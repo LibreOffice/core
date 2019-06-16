@@ -21,6 +21,7 @@
 
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <comphelper/sequence.hxx>
+#include <formula/token.hxx>
 #include <svl/hint.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <vcl/svapp.hxx>
@@ -36,12 +37,10 @@
 #include <hints.hxx>
 #include <unonames.hxx>
 #include <rangeseq.hxx>
-#include <token.hxx>
 #include <scmatrix.hxx>
 #include <documentlinkmgr.hxx>
 
 #include <vector>
-#include <climits>
 
 using namespace com::sun::star;
 using namespace formula;

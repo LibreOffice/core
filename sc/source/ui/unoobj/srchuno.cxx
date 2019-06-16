@@ -21,13 +21,8 @@
 #include <svl/srchitem.hxx>
 #include <vcl/svapp.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <osl/diagnose.h>
 
 #include <srchuno.hxx>
-#include <docsh.hxx>
-#include <undoblk.hxx>
-#include <hints.hxx>
-#include <markdata.hxx>
 #include <miscuno.hxx>
 #include <unonames.hxx>
 

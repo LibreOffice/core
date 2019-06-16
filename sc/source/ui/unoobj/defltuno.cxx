@@ -21,12 +21,8 @@
 #include <editeng/langitem.hxx>
 #include <svl/hint.hxx>
 #include <svl/itemprop.hxx>
-#include <svx/unomid.hxx>
 #include <vcl/svapp.hxx>
 #include <i18nlangtag/languagetag.hxx>
-#include <osl/diagnose.h>
-
-#include <com/sun/star/beans/PropertyAttribute.hpp>
 
 #include <scitems.hxx>
 #include <defltuno.hxx>

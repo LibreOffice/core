@@ -13,16 +13,12 @@
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
 #include <com/sun/star/chart2/data/XDataReceiver.hpp>
-#include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 
 #include <tools/gen.hxx>
-#include <svx/svditer.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdundo.hxx>
-#include <svx/charthelper.hxx>
-#include <sfx2/app.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/classids.hxx>
@@ -40,8 +36,6 @@
 #include <miscuno.hxx>
 #include <docsh.hxx>
 #include <drwlayer.hxx>
-#include <undodat.hxx>
-#include <convuno.hxx>
 
 using namespace css;
 

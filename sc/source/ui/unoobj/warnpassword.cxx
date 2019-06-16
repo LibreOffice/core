@@ -19,13 +19,10 @@
 
 #include <warnpassword.hxx>
 #include <com/sun/star/task/XInteractionHandler.hpp>
-#include <svl/itemset.hxx>
 #include <sfx2/docfile.hxx>
-#include <sfx2/sfxsids.hrc>
 #include <ucbhelper/simpleinteractionrequest.hxx>
 #include <com/sun/star/task/InteractionClassification.hpp>
 #include <com/sun/star/ucb/InteractiveAppException.hpp>
-#include <com/sun/star/ucb/XContent.hpp>
 #include <svx/svxerr.hxx>
 #include <rtl/ref.hxx>
 

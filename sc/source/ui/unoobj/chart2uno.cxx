@@ -28,11 +28,9 @@
 #include <miscuno.hxx>
 #include <document.hxx>
 #include <formulacell.hxx>
-#include <chartpos.hxx>
 #include <unonames.hxx>
 #include <globstr.hrc>
 #include <scresid.hxx>
-#include <convuno.hxx>
 #include <rangeutl.hxx>
 #include <hints.hxx>
 #include <unoreflist.hxx>
@@ -40,7 +38,6 @@
 #include <reftokenhelper.hxx>
 #include <chartlis.hxx>
 #include <tokenuno.hxx>
-#include <docsh.hxx>
 #include <cellvalue.hxx>
 #include <tokenarray.hxx>
 #include <scmatrix.hxx>
@@ -55,10 +52,7 @@
 #include <com/sun/star/beans/UnknownPropertyException.hpp>
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
 #include <com/sun/star/chart2/data/LabeledDataSequence.hpp>
-#include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
-#include <com/sun/star/table/XCellRange.hpp>
-#include <com/sun/star/table/CellAddress.hpp>
-#include <com/sun/star/text/XText.hpp>
+#include <com/sun/star/frame/XModel.hpp>
 #include <comphelper/extract.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>

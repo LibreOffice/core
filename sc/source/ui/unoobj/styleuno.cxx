@@ -21,13 +21,10 @@
 #include <editeng/memberids.h>
 #include <svx/algitem.hxx>
 #include <editeng/boxitem.hxx>
-#include <editeng/eeitem.hxx>
 #include <editeng/justifyitem.hxx>
 #include <editeng/langitem.hxx>
-#include <editeng/lineitem.hxx>
 #include <editeng/numitem.hxx>
 #include <editeng/shaditem.hxx>
-#include <editeng/sizeitem.hxx>
 #include <svx/pageitem.hxx>
 #include <editeng/pbinitem.hxx>
 #include <svx/unomid.hxx>
@@ -35,8 +32,6 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/sfxsids.hrc>
-#include <svx/rotmodit.hxx>
-#include <svl/stritem.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/svapp.hxx>
 #include <svl/itempool.hxx>
@@ -47,7 +42,6 @@
 #include <osl/diagnose.h>
 
 #include <com/sun/star/table/BorderLine.hpp>
-#include <com/sun/star/table/CellVertJustify2.hpp>
 #include <com/sun/star/table/TableBorder.hpp>
 #include <com/sun/star/table/TableBorder2.hpp>
 #include <com/sun/star/table/ShadowFormat.hpp>
@@ -72,7 +66,6 @@
 #include <stlpool.hxx>
 #include <docpool.hxx>
 #include <miscuno.hxx>
-#include <convuno.hxx>
 #include <tablink.hxx>
 #include <unonames.hxx>
 #include <unowids.hxx>

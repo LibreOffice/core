@@ -30,7 +30,6 @@
 #include <convuno.hxx>
 #include <docsh.hxx>
 #include <tabvwsh.hxx>
-#include <pivot.hxx>
 #include <rangeutl.hxx>
 #include <dpobject.hxx>
 #include <dpshttab.hxx>
@@ -38,7 +37,6 @@
 #include <dpsave.hxx>
 #include <dbdocfun.hxx>
 #include <unonames.hxx>
-#include <dpgroup.hxx>
 #include <dpdimsave.hxx>
 #include <hints.hxx>
 #include <dputil.hxx>
@@ -46,14 +44,14 @@
 #include <scresid.hxx>
 #include <generalfunction.hxx>
 
+#include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/NullPointerException.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/sheet/XDimensionsSupplier.hpp>
-#include <com/sun/star/sheet/XHierarchiesSupplier.hpp>
 #include <com/sun/star/sheet/XLevelsSupplier.hpp>
-#include <com/sun/star/sheet/XMembersSupplier.hpp>
+#include <com/sun/star/sheet/XMembersAccess.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/sheet/DataImportMode.hpp>
 #include <com/sun/star/sheet/DataPilotFieldGroupBy.hpp>

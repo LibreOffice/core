@@ -32,12 +32,10 @@
 
 #include <svl/itemprop.hxx>
 #include <vcl/svapp.hxx>
-#include <osl/diagnose.h>
 
 #include <miscuno.hxx>
 #include <convuno.hxx>
 #include <unonames.hxx>
-#include <token.hxx>
 #include <compiler.hxx>
 #include <tokenarray.hxx>
 #include <docsh.hxx>

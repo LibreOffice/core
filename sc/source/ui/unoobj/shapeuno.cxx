@@ -27,17 +27,14 @@
 #include <sfx2/event.hxx>
 #include <svx/unoshape.hxx>
 #include <editeng/unofield.hxx>
-#include <svx/shapepropertynotifier.hxx>
 #include <toolkit/helper/convert.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 #include <com/sun/star/drawing/XShape.hpp>
-#include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/lang/NoSupportException.hpp>
 
 #include <shapeuno.hxx>
-#include <miscuno.hxx>
 #include <cellsuno.hxx>
 #include <textuno.hxx>
 #include <fielduno.hxx>

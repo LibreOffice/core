@@ -24,12 +24,8 @@
 
 #include <editsrc.hxx>
 
-#include <scitems.hxx>
-#include <editeng/eeitem.hxx>
 #include <editeng/unofored.hxx>
 #include <vcl/svapp.hxx>
-#include <svx/svdpage.hxx>
-#include <svx/svditer.hxx>
 #include <svx/svdocapt.hxx>
 #include <editeng/outlobj.hxx>
 #include <editeng/editobj.hxx>
@@ -37,11 +33,7 @@
 #include <textuno.hxx>
 #include <editutil.hxx>
 #include <docsh.hxx>
-#include <docfunc.hxx>
 #include <hints.hxx>
-#include <patattr.hxx>
-#include <drwlayer.hxx>
-#include <userdat.hxx>
 #include <postit.hxx>
 #include <AccessibleText.hxx>
 
