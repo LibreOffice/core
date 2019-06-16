@@ -977,7 +977,7 @@ void OPropertyArrayHelper::init( sal_Bool bSorted )
 
     for( i = 1; i < nElements; i++ )
     {
-        if(  pProperties[i-1].Name >= pProperties[i].Name )
+        if(  pProperties[i-1].Name > pProperties[i].Name )
         {
             if (bSorted) {
                 OSL_FAIL( "Property array is not sorted" );
@@ -985,11 +985,10 @@ void OPropertyArrayHelper::init( sal_Bool bSorted )
             // not sorted
             qsort( aInfos.getArray(), nElements, sizeof( Property ),
                     compare_Property_Impl );
+            pProperties = aInfos.getConstArray();
             break;
         }
     }
-    // may be that the array is resorted
-    pProperties = aInfos.getConstArray();
     for( i = 0; i < nElements; i++ )
         if( pProperties[i].Handle != i )
             return;
