@@ -183,15 +183,6 @@ public:
     vcl::Window*    get_widget_for_response(int nResponse);
 };
 
-class VCL_DLLPUBLIC ModelessDialog : public Dialog
-{
-                    ModelessDialog (const ModelessDialog &) = delete;
-                    ModelessDialog & operator= (const ModelessDialog &) = delete;
-
-protected:
-    explicit        ModelessDialog( vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription, Dialog::InitFlag eFlag = Dialog::InitFlag::Default );
-};
-
 class VCL_DLLPUBLIC ModalDialog : public Dialog
 {
 public:
