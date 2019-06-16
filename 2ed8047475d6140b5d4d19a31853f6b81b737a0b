@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_973ae195",
+        "filename": "bin/find-unneeded-includes",
+        "patchSetId": 1
+      },
+      "lineNbr": 217,
+      "author": {
+        "id": 1000446
+      },
+      "writtenOn": "2019-06-16T09:37:00Z",
+      "side": 1,
+      "message": "Maybe we should say WARNING here since the script will continue to check the input files after hitting this.",
+      "range": {
+        "startLine": 217,
+        "startChar": 23,
+        "endLine": 217,
+        "endChar": 28
+      },
+      "revId": "2ed8047475d6140b5d4d19a31853f6b81b737a0b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
