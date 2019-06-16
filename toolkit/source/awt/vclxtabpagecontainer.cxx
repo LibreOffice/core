@@ -190,7 +190,7 @@ void SAL_CALL VCLXTabPageContainer::elementInserted( const css::container::Conta
     pTabCtrl->SetHelpText(nPageID,xP->getToolTip());
     pTabCtrl->SetPageImage(nPageID,TkResMgr::getImageFromURL(xP->getImageURL()));
     pTabCtrl->SelectTabPage(nPageID);
-    pTabCtrl->EnablePage(nPageID,xP->getEnabled());
+    pTabCtrl->SetPageEnabled(nPageID,xP->getEnabled());
     m_aTabPages.push_back(xTabPage);
 
 }
