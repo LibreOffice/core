@@ -21,6 +21,7 @@
 # Syntax: language ANSI-Codepage LCID
 # comment lines begin with hash
 af    1252  1078   # Afrikaans
+am       0  1118   # Amharic
 ar    1256  1025
 ar-SA 1256  1025
 as       0  1101   # Assamese
