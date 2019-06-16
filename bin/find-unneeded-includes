@@ -153,8 +153,13 @@ def processIWYUOutput(iwyuOutput, moduleRules):
     inRemove = False
     toRemove = []
     currentFileName = None
+
     for line in iwyuOutput:
         line = line.strip()
+
+        # Bail out if IWYU gave an error due to non self-containedness
+        if re.match ("(.*): error: (.*)", line):
+            return -1
 
         if len(line) == 0:
             if inRemove:
@@ -208,7 +213,9 @@ def run_tool(task_queue, failed_files):
             print("[IWYU] " + invocation.split(' ')[-1])
             p = subprocess.Popen(invocation, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
             retcode = processIWYUOutput(p.communicate()[0].decode('utf-8').splitlines(), moduleRules)
-            if retcode != 0:
+            if retcode == -1:
+                print("ERROR: A file is probably not self contained, check this commands output:\n" + invocation)
+            elif retcode > 0:
                 print("ERROR: The following command found unused includes:\n" + invocation)
                 failed_files.append(invocation)
         task_queue.task_done()
