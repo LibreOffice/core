@@ -378,6 +378,10 @@ VclPtr<SfxTabPage> lcl_CreateFillStyleTabPage(sal_uInt16 nId, TabPageParent pPar
 
 IMPL_LINK(SvxAreaTabPage, SelectFillTypeHdl_Impl, weld::ToggleButton&, rButton, void)
 {
+    //tdf#124549 - If the button is already active do not toggle it back.
+    if(!rButton.get_active())
+        rButton.set_active(true);
+
     SelectFillType(rButton);
     m_bBtnClicked = true;
 }
