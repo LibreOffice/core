@@ -105,7 +105,7 @@ struct WidgetThemeLibrary_t
 {
     uint32_t nSize;
 
-    bool (*isNativeControlSupported)(ControlType eType, ControlPart ePart);
+    bool (*IsNativeControlSupported)(ControlType eType, ControlPart ePart);
     bool (*getRegion)(ControlType eType, ControlPart ePart, ControlState eState,
                       const rectangle_t& rBoundingControlRegion, rectangle_t& rNativeBoundingRegion,
                       rectangle_t& rNativeContentRegion);

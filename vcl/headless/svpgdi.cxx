@@ -1866,69 +1866,6 @@ bool SvpSalGraphics::drawEPS( long, long, long, long, void*, sal_uInt32 )
     return false;
 }
 
-/* Widget drawing */
-
-bool SvpSalGraphics::IsNativeControlSupported(ControlType eType, ControlPart ePart)
-{
-    if (hasWidgetDraw())
-        return m_pWidgetDraw->isNativeControlSupported(eType, ePart);
-
-    return false;
-}
-
-bool SvpSalGraphics::hitTestNativeControl(ControlType eType, ControlPart ePart,
-                                       const tools::Rectangle& rBoundingControlRegion,
-                                       const Point& rPosition, bool& rIsInside)
-{
-    if (hasWidgetDraw())
-    {
-        return m_pWidgetDraw->hitTestNativeControl(eType, ePart, rBoundingControlRegion, rPosition, rIsInside);
-    }
-
-    return false;
-}
-
-bool SvpSalGraphics::drawNativeControl(ControlType eType, ControlPart ePart,
-                                   const tools::Rectangle& rControlRegion,
-                                   ControlState eState, const ImplControlValue& aValue,
-                                   const OUString& aCaptions)
-{
-    if (hasWidgetDraw())
-    {
-        bool bReturn = m_pWidgetDraw->drawNativeControl(eType, ePart, rControlRegion,
-                                                        eState, aValue, aCaptions);
-        return bReturn;
-    }
-
-    return false;
-}
-
-bool SvpSalGraphics::getNativeControlRegion(ControlType eType, ControlPart ePart,
-                                         const tools::Rectangle& rBoundingControlRegion,
-                                         ControlState eState,
-                                         const ImplControlValue& aValue,
-                                         const OUString& aCaption,
-                                         tools::Rectangle& rNativeBoundingRegion,
-                                         tools::Rectangle& rNativeContentRegion)
-{
-    if (hasWidgetDraw())
-    {
-        return m_pWidgetDraw->getNativeControlRegion(eType, ePart, rBoundingControlRegion,
-                                                     eState, aValue, aCaption,
-                                                     rNativeBoundingRegion, rNativeContentRegion);
-    }
-
-    return false;
-}
-
-void SvpSalGraphics::updateSettings(AllSettings& rSettings)
-{
-    if (hasWidgetDraw())
-    {
-        m_pWidgetDraw->updateSettings(rSettings);
-    }
-}
-
 namespace
 {
     bool isCairoCompatible(const BitmapBuffer* pBuffer)
