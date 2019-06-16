@@ -662,9 +662,9 @@ BasicManager* SfxObjectShell::GetBasicManager() const
         if ( !pBasMgr )
             pBasMgr = SfxApplication::GetBasicManager();
     }
-    catch (const css::ucb::ContentCreationException& e)
+    catch (const css::ucb::ContentCreationException&)
     {
-        SAL_WARN("sfx.doc", "caught " << e);
+        TOOLS_WARN_EXCEPTION("sfx.doc", "");
     }
 #endif
     return pBasMgr;
@@ -729,9 +729,9 @@ Reference< XLibraryContainer > SfxObjectShell::GetDialogContainer()
         if ( pBasMgr )
             return pBasMgr->GetDialogLibraryContainer().get();
     }
-    catch (const css::ucb::ContentCreationException& e)
+    catch (const css::ucb::ContentCreationException&)
     {
-        SAL_WARN("sfx.doc", "caught " << e);
+        TOOLS_WARN_EXCEPTION("sfx.doc", "");
     }
 
     SAL_WARN("sfx.doc", "SfxObjectShell::GetDialogContainer: falling back to the application - is this really expected here?");
@@ -753,9 +753,9 @@ Reference< XLibraryContainer > SfxObjectShell::GetBasicContainer()
             if ( pBasMgr )
                 return pBasMgr->GetScriptLibraryContainer().get();
         }
-        catch (const css::ucb::ContentCreationException& e)
+        catch (const css::ucb::ContentCreationException&)
         {
-            SAL_WARN("sfx.doc", "caught " << e);
+            TOOLS_WARN_EXCEPTION("sfx.doc", "");
         }
     }
     SAL_WARN("sfx.doc", "SfxObjectShell::GetBasicContainer: falling back to the application - is this really expected here?");
@@ -816,9 +816,9 @@ void SfxObjectShell::InitBasicManager_Impl()
     {
         pImpl->aBasicManager.reset( BasicManagerRepository::getDocumentBasicManager( GetModel() ) );
     }
-    catch (const css::ucb::ContentCreationException& e)
+    catch (const css::ucb::ContentCreationException&)
     {
-        SAL_WARN("sfx.doc", "caught " << e);
+        TOOLS_WARN_EXCEPTION("sfx.doc", "");
     }
     DBG_ASSERT( pImpl->aBasicManager.isValid(), "SfxObjectShell::InitBasicManager_Impl: did not get a BasicManager!" );
     pImpl->bBasicInitialized = true;

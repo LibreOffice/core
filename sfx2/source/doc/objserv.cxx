@@ -44,6 +44,7 @@
 
 #include <com/sun/star/security/DocumentSignatureInformation.hpp>
 #include <com/sun/star/security/DocumentDigitalSignatures.hpp>
+#include <tools/diagnose_ex.h>
 #include <tools/urlobj.hxx>
 #include <svl/whiter.hxx>
 #include <svl/intitem.hxx>
@@ -861,8 +862,8 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             }
             catch( const task::ErrorCodeIOException& aErrorEx )
             {
+                TOOLS_WARN_EXCEPTION( "sfx.doc", "Fatal IO error during save");
                 nErrorCode = ErrCode(aErrorEx.ErrCode);
-                SAL_WARN( "sfx.doc", "Fatal IO error during save " << aErrorEx );
             }
             catch( Exception& )
             {
