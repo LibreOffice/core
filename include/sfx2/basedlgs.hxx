@@ -60,37 +60,6 @@ public:
     virtual void dispose() override;
 };
 
-// class SfxModelessDialog --------------------------------------------------
-class SfxModelessDialog_Impl;
-class SFX2_DLLPUBLIC SfxModelessDialog: public ModelessDialog
-{
-    SfxBindings*            pBindings;
-    std::unique_ptr< SfxModelessDialog_Impl > pImpl;
-
-    SfxModelessDialog(SfxModelessDialog const &) = delete;
-    SfxModelessDialog& operator =(SfxModelessDialog const &) = delete;
-
-    void Init(SfxBindings *pBindinx, SfxChildWindow *pCW);
-
-    DECL_DLLPRIVATE_STATIC_LINK(SfxModelessDialog, InstallLOKNotifierHdl, void*, vcl::ILibreOfficeKitNotifier*);
-protected:
-    SfxModelessDialog( SfxBindings*, SfxChildWindow*,
-        vcl::Window*, const OUString& rID, const OUString& rUIXMLDescription );
-    virtual ~SfxModelessDialog() override;
-    virtual void dispose() override;
-    virtual bool            Close() override;
-    virtual void            Resize() override;
-    virtual void            Move() override;
-    virtual void            StateChanged( StateChangedType nStateChange ) override;
-
-public:
-    virtual bool            EventNotify( NotifyEvent& rNEvt ) override;
-    SfxBindings&            GetBindings()
-                            { return *pBindings; }
-
-    DECL_LINK(TimerHdl, Timer *, void);
-};
-
 class SFX2_DLLPUBLIC SfxDialogController : public weld::GenericDialogController
 {
 private:
@@ -112,6 +81,7 @@ public:
 };
 
 class SfxModelessDialog_Impl;
+
 class SFX2_DLLPUBLIC SfxModelessDialogController : public SfxDialogController
 {
     SfxBindings* m_pBindings;
