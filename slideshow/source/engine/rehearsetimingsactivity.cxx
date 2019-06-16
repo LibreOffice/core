@@ -30,6 +30,7 @@
 #include <basegfx/range/b2drange.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
+#include <tools/diagnose_ex.h>
 
 #include <cppuhelper/exc_hlp.hxx>
 
@@ -180,9 +181,9 @@ RehearseTimingsActivity::~RehearseTimingsActivity()
     {
         stop();
     }
-    catch (const uno::Exception& e)
+    catch (const uno::Exception&)
     {
-        SAL_WARN("slideshow", e);
+        TOOLS_WARN_EXCEPTION("slideshow", "");
     }
 }
 

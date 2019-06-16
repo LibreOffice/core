@@ -17,6 +17,7 @@ $(eval $(call gb_Library_use_libraries,desktopbe1,\
 	cppu \
 	cppuhelper \
 	sal \
+	tl \
 	vcl \
 ))
 
