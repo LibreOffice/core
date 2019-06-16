@@ -13,7 +13,9 @@
 
 #include <config_cairo_canvas.h>
 
+#include <Qt5Data.hxx>
 #include <Qt5Frame.hxx>
+#include <Qt5Graphics_Controls.hxx>
 #include <Qt5SvpGraphics.hxx>
 #include <Qt5SvpSurface.hxx>
 #include <Qt5Tools.hxx>
@@ -26,6 +28,8 @@ Qt5SvpGraphics::Qt5SvpGraphics(Qt5Frame* pFrame)
     : SvpSalGraphics()
     , m_pFrame(pFrame)
 {
+    if (!Qt5Data::noNativeControls())
+        m_pWidgetDraw.reset(new Qt5Graphics_Controls());
 }
 
 Qt5SvpGraphics::~Qt5SvpGraphics() {}
@@ -57,35 +61,32 @@ cairo::SurfaceSharedPtr Qt5SvpGraphics::CreateSurface(const OutputDevice& /*rRef
 
 #endif
 
-static void QImage2BitmapBuffer(QImage* pImg, BitmapBuffer* pBuf)
+static void QImage2BitmapBuffer(QImage& rImg, BitmapBuffer& rBuf)
 {
-    if (pImg->width() != 0 && pImg->height() != 0)
-    {
-        pBuf->mnWidth = pImg->width();
-        pBuf->mnHeight = pImg->height();
-        pBuf->mnBitCount = getFormatBits(pImg->format());
-        pBuf->mpBits = pImg->bits();
-        pBuf->mnScanlineSize = pImg->bytesPerLine();
-    }
+    assert(rImg.width());
+    assert(rImg.height());
+
+    rBuf.mnWidth = rImg.width();
+    rBuf.mnHeight = rImg.height();
+    rBuf.mnBitCount = getFormatBits(rImg.format());
+    rBuf.mpBits = rImg.bits();
+    rBuf.mnScanlineSize = rImg.bytesPerLine();
 }
 
-bool Qt5SvpGraphics::drawNativeControl(ControlType nType, ControlPart nPart,
-                                       const tools::Rectangle& rControlRegion, ControlState nState,
-                                       const ImplControlValue& aValue, const OUString& aCaption)
+void Qt5SvpGraphics::handleDamage(const tools::Rectangle& rDamagedRegion)
 {
-    bool bHandled
-        = m_aControl.drawNativeControl(nType, nPart, rControlRegion, nState, aValue, aCaption);
-    if (bHandled)
-    {
-        QImage* pImage = &m_aControl.getImage();
-        BitmapBuffer* pBuffer = new BitmapBuffer;
-        QImage2BitmapBuffer(pImage, pBuffer);
-        SalTwoRect aTR(0, 0, pImage->width(), pImage->height(), rControlRegion.getX(),
-                       rControlRegion.getY(), rControlRegion.GetWidth(),
-                       rControlRegion.GetHeight());
-        drawBitmap(aTR, pBuffer, CAIRO_OPERATOR_OVER);
-    }
-    return bHandled;
+    assert(m_pWidgetDraw);
+    assert(dynamic_cast<Qt5Graphics_Controls*>(m_pWidgetDraw.get()));
+    assert(!rDamagedRegion.IsEmpty());
+
+    QImage* pImage = static_cast<Qt5Graphics_Controls*>(m_pWidgetDraw.get())->getImage();
+    assert(pImage);
+    BitmapBuffer* pBuffer = new BitmapBuffer;
+
+    QImage2BitmapBuffer(*pImage, *pBuffer);
+    SalTwoRect aTR(0, 0, pImage->width(), pImage->height(), rDamagedRegion.getX(),
+                   rDamagedRegion.getY(), rDamagedRegion.GetWidth(), rDamagedRegion.GetHeight());
+    drawBitmap(aTR, pBuffer, CAIRO_OPERATOR_OVER);
 }
 
 void Qt5SvpGraphics::GetResolution(sal_Int32& rDPIX, sal_Int32& rDPIY)

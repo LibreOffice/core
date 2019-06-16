@@ -51,10 +51,10 @@ CustomWidgetDraw::CustomWidgetDraw(SvpSalGraphics& rGraphics)
 
 CustomWidgetDraw::~CustomWidgetDraw() {}
 
-bool CustomWidgetDraw::isNativeControlSupported(ControlType eType, ControlPart ePart)
+bool CustomWidgetDraw::IsNativeControlSupported(ControlType eType, ControlPart ePart)
 {
     return s_pWidgetImplementation
-           && s_pWidgetImplementation->isNativeControlSupported(eType, ePart);
+           && s_pWidgetImplementation->IsNativeControlSupported(eType, ePart);
 }
 
 bool CustomWidgetDraw::hitTestNativeControl(ControlType /*eType*/, ControlPart /*ePart*/,

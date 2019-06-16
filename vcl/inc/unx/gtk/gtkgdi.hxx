@@ -101,12 +101,13 @@ typedef void (*gtk_widget_path_iter_set_object_nameFunc)(GtkWidgetPath *, guint,
 class GtkSalGraphics : public SvpSalGraphics
 {
     GtkSalFrame * const mpFrame;
-public:
-    GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow );
+
+protected:
     virtual bool        drawNativeControl( ControlType nType, ControlPart nPart,
                                                const tools::Rectangle& rControlRegion,
                                                ControlState nState, const ImplControlValue& aValue,
                                                const OUString& rCaption ) override;
+    void handleDamage(const tools::Rectangle&) override;
     virtual bool        IsNativeControlSupported( ControlType nType, ControlPart nPart ) override;
     virtual bool        getNativeControlRegion( ControlType nType, ControlPart nPart,
                                                     const tools::Rectangle& rControlRegion,
@@ -116,7 +117,10 @@ public:
                                                     tools::Rectangle &rNativeBoundingRegion,
                                                     tools::Rectangle &rNativeContentRegion ) override;
 
-    virtual void updateSettings(AllSettings& rSettings) override;
+    virtual bool updateSettings(AllSettings& rSettings) override;
+
+public:
+    GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow );
 
 #if ENABLE_CAIRO_CANVAS
 
@@ -279,7 +283,7 @@ public:
                                                 tools::Rectangle &rNativeBoundingRegion, tools::Rectangle &rNativeContentRegion ) override;
 
     //helper methods for frame's UpdateSettings
-    void updateSettings( AllSettings& rSettings );
+    bool updateSettings( AllSettings& rSettings ) override;
     static void refreshFontconfig( GtkSettings *pSettings );
     static void signalSettingsNotify( GObject*, GParamSpec *pSpec, gpointer );
 

@@ -34,7 +34,7 @@ public:
 
     bool isActive() { return m_bIsActive; }
 
-    bool isNativeControlSupported(ControlType eType, ControlPart ePart) override;
+    bool IsNativeControlSupported(ControlType eType, ControlPart ePart) override;
 
     bool hitTestNativeControl(ControlType eType, ControlPart ePart,
                               const tools::Rectangle& rBoundingControlRegion, const Point& aPos,

@@ -194,6 +194,7 @@ public:
                                            sal_uInt8 nTransparency ) override;
 
     virtual SystemGraphicsData GetGraphicsData() const override;
+    bool IsNativeControlSupported(ControlType, ControlPart) override { return false; }
 
 #if ENABLE_CAIRO_CANVAS
     virtual bool            SupportsCairo() const override;

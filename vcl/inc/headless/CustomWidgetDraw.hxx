@@ -29,7 +29,7 @@ public:
     CustomWidgetDraw(SvpSalGraphics& rGraphics);
     ~CustomWidgetDraw() override;
 
-    bool isNativeControlSupported(ControlType eType, ControlPart ePart) override;
+    bool IsNativeControlSupported(ControlType eType, ControlPart ePart) override;
 
     bool hitTestNativeControl(ControlType eType, ControlPart ePart,
                               const tools::Rectangle& rBoundingControlRegion, const Point& aPos,

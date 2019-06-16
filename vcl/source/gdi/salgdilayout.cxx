@@ -764,22 +764,6 @@ bool SalGraphics::DrawEPS( long nX, long nY, long nWidth, long nHeight, void* pP
     return drawEPS( nX, nY, nWidth, nHeight,  pPtr, nSize );
 }
 
-bool SalGraphics::IsSupported(ControlType eType, ControlPart ePart)
-{
-    if (m_pWidgetDraw)
-        return m_pWidgetDraw->isNativeControlSupported(eType, ePart);
-    else
-        return IsNativeControlSupported(eType, ePart);
-}
-
-bool SalGraphics::callHitTestNativeControl(ControlType eType, ControlPart nPart, const tools::Rectangle& rControlRegion, const Point& aPos, bool& rIsInside)
-{
-    if (m_pWidgetDraw)
-        return m_pWidgetDraw->hitTestNativeControl(eType, nPart, rControlRegion, aPos, rIsInside);
-    else
-        return hitTestNativeControl(eType, nPart, rControlRegion, aPos, rIsInside);
-}
-
 bool SalGraphics::HitTestNativeScrollbar( ControlPart nPart, const tools::Rectangle& rControlRegion,
                                                 const Point& aPos, bool& rIsInside, const OutputDevice *pOutDev )
 {
@@ -789,10 +773,10 @@ bool SalGraphics::HitTestNativeScrollbar( ControlPart nPart, const tools::Rectan
         tools::Rectangle rgn( rControlRegion );
         pt.setX( mirror2( pt.X(), pOutDev ) );
         mirror( rgn, pOutDev );
-        return callHitTestNativeControl( ControlType::Scrollbar, nPart, rgn, pt, rIsInside );
+        return forWidget()->hitTestNativeControl( ControlType::Scrollbar, nPart, rgn, pt, rIsInside );
     }
     else
-        return callHitTestNativeControl( ControlType::Scrollbar, nPart, rControlRegion, aPos, rIsInside );
+        return forWidget()->hitTestNativeControl( ControlType::Scrollbar, nPart, rControlRegion, aPos, rIsInside );
 }
 
 void SalGraphics::mirror( ImplControlValue& rVal, const OutputDevice* pOutDev ) const
@@ -831,38 +815,28 @@ void SalGraphics::mirror( ImplControlValue& rVal, const OutputDevice* pOutDev ) 
     }
 }
 
-bool SalGraphics::callDrawNativeControl(ControlType nType, ControlPart nPart, const tools::Rectangle& rControlRegion, ControlState nState, const ImplControlValue& aValue, const OUString& rCaption)
-{
-    if (m_pWidgetDraw)
-        return m_pWidgetDraw->drawNativeControl(nType, nPart, rControlRegion, nState, aValue, rCaption);
-    else
-        return drawNativeControl(nType, nPart, rControlRegion, nState, aValue, rCaption);
-}
-
 bool SalGraphics::DrawNativeControl( ControlType nType, ControlPart nPart, const tools::Rectangle& rControlRegion,
                                                 ControlState nState, const ImplControlValue& aValue,
                                                 const OUString& aCaption, const OutputDevice *pOutDev)
 {
+    bool bRet = false;
+    tools::Rectangle aControlRegion(rControlRegion);
+    if (aControlRegion.IsEmpty())
+        return bRet;
+
     if( (m_nLayout & SalLayoutFlags::BiDiRtl) || (pOutDev && pOutDev->IsRTLEnabled()) )
     {
-        tools::Rectangle rgn( rControlRegion );
-        if (rgn != tools::Rectangle())
-            mirror(rgn, pOutDev);
+        mirror(aControlRegion, pOutDev);
         std::unique_ptr< ImplControlValue > mirrorValue( aValue.clone());
         mirror( *mirrorValue, pOutDev );
-        bool bRet = callDrawNativeControl(nType, nPart, rgn, nState, *mirrorValue, aCaption);
-        return bRet;
+        bRet = forWidget()->drawNativeControl(nType, nPart, aControlRegion, nState, *mirrorValue, aCaption);
     }
     else
-        return callDrawNativeControl(nType, nPart, rControlRegion, nState, aValue, aCaption);
-}
+        bRet = forWidget()->drawNativeControl(nType, nPart, aControlRegion, nState, aValue, aCaption);
 
-bool SalGraphics::callGetNativeControlRegion(ControlType nType, ControlPart nPart, const tools::Rectangle& rControlRegion, ControlState nState, const ImplControlValue& aValue, tools::Rectangle &rNativeBoundingRegion, tools::Rectangle &rNativeContentRegion)
-{
-    if (m_pWidgetDraw)
-        return m_pWidgetDraw->getNativeControlRegion(nType, nPart, rControlRegion, nState, aValue, OUString(), rNativeBoundingRegion, rNativeContentRegion);
-    else
-        return getNativeControlRegion(nType, nPart, rControlRegion, nState, aValue, OUString(), rNativeBoundingRegion, rNativeContentRegion);
+    if (bRet && m_pWidgetDraw)
+        handleDamage(aControlRegion);
+    return bRet;
 }
 
 bool SalGraphics::GetNativeControlRegion( ControlType nType, ControlPart nPart, const tools::Rectangle& rControlRegion, ControlState nState,
@@ -875,7 +849,7 @@ bool SalGraphics::GetNativeControlRegion( ControlType nType, ControlPart nPart, 
         mirror( rgn, pOutDev );
         std::unique_ptr< ImplControlValue > mirrorValue( aValue.clone());
         mirror( *mirrorValue, pOutDev );
-        if (callGetNativeControlRegion(nType, nPart, rgn, nState, *mirrorValue, rNativeBoundingRegion, rNativeContentRegion))
+        if (forWidget()->getNativeControlRegion(nType, nPart, rgn, nState, *mirrorValue, OUString(), rNativeBoundingRegion, rNativeContentRegion))
         {
             mirror( rNativeBoundingRegion, pOutDev, true );
             mirror( rNativeContentRegion, pOutDev, true );
@@ -884,7 +858,7 @@ bool SalGraphics::GetNativeControlRegion( ControlType nType, ControlPart nPart, 
         return false;
     }
     else
-        return callGetNativeControlRegion(nType, nPart, rControlRegion, nState, aValue, rNativeBoundingRegion, rNativeContentRegion);
+        return forWidget()->getNativeControlRegion(nType, nPart, rControlRegion, nState, aValue, OUString(), rNativeBoundingRegion, rNativeContentRegion);
 }
 
 bool SalGraphics::BlendBitmap( const SalTwoRect& rPosAry,
