@@ -77,6 +77,7 @@
 #include <breakit.hxx>
 #include <fmtclds.hxx>
 #include <pagedesc.hxx>
+#include <poolfmt.hxx>
 #include <SwStyleNameMapper.hxx>
 
 #include "ww8scan.hxx"

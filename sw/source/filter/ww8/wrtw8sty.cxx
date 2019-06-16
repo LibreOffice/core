@@ -57,6 +57,7 @@
 #include <lineinfo.hxx>
 #include <fmtline.hxx>
 #include <swtable.hxx>
+#include <redline.hxx>
 #include <msfilter.hxx>
 #include <swmodule.hxx>
 

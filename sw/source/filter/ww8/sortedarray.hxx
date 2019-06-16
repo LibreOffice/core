@@ -21,7 +21,6 @@
 #define INCLUDED_SW_SOURCE_FILTER_WW8_SORTEDARRAY_HXX
 
 #include <osl/diagnose.h>
-#include <sal/log.hxx>
 #include <algorithm>
 
 //simple template that manages a static [] array by sorting at construction

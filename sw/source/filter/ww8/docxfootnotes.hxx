@@ -20,6 +20,8 @@
 #ifndef INCLUDED_SW_SOURCE_FILTER_WW8_DOCXFOOTNOTES_HXX
 #define INCLUDED_SW_SOURCE_FILTER_WW8_DOCXFOOTNOTES_HXX
 
+#include <sal/types.h>
+
 #include <vector>
 
 class SwFormatFootnote;

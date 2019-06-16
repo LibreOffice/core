@@ -23,17 +23,13 @@
 #include <sal/config.h>
 
 #include <cstddef>
-#include <set>
 #include <map>
 #include <vector>
 #include <memory>
 #include <swtypes.hxx>
 #include "wwstyles.hxx"
 #include <rtl/textenc.h>
-#include <tools/gen.hxx>
-#include <filter/msfilter/util.hxx>
 #include "fltshell.hxx"
-#include <redline.hxx>
 #include <shellio.hxx>
 #include <svl/zforlist.hxx>
 

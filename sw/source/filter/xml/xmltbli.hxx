@@ -22,6 +22,8 @@
 
 #include <xmloff/XMLTextTableContext.hxx>
 
+#include "xmlimp.hxx"
+
 #include <memory>
 #include <unordered_map>
 #include <vector>

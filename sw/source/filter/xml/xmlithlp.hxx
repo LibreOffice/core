@@ -22,7 +22,6 @@
 
 #include <sal/types.h>
 #include <xmloff/xmlement.hxx>
-#include <hintids.hxx>
 #include <editeng/brushitem.hxx>
 
 namespace editeng { class SvxBorderLine; }

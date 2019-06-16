@@ -19,9 +19,10 @@
 #ifndef INCLUDED_SW_SOURCE_FILTER_XML_WRTXML_HXX
 #define INCLUDED_SW_SOURCE_FILTER_XML_WRTXML_HXX
 
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <shellio.hxx>
 

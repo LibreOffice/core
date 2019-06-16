@@ -434,3 +434,9 @@ blacklist:
     sw/qa/extras/ww8import/ww8import.cxx:
     # Needed for for-loop range
     - com/sun/star/graphic/XGraphic.hpp
+    include/sal/types.h:
+    # Ignore warning during checking source/filter/ww8/types.hxx
+    - sal/typesizes.h
+    sw/source/filter/ww8/ww8scan.hxx:
+    # OSL_BIGENDIAN is being checked
+    - osl/endian.h

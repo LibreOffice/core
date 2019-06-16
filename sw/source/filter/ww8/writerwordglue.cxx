@@ -43,6 +43,7 @@
 #include <fmtclds.hxx>
 #include <hfspacingitem.hxx>
 #include <fmtfsize.hxx>
+#include <poolfmt.hxx>
 #include <swrect.hxx>
 #include <fmthdft.hxx>
 #include <frmatr.hxx>
