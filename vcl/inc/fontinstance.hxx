@@ -64,7 +64,7 @@ public: // TODO: make data members private
     void            IgnoreFallbackForUnicode( sal_UCS4, FontWeight eWeight, const OUString& rFontName );
 
     inline hb_font_t* GetHbFont();
-    void SetAverageWidthFactor(double nFactor) { m_nAveWidthFactor = nFactor; }
+    void SetAverageWidthFactor(double nFactor) { m_nAveWidthFactor = std::abs(nFactor); }
     double GetAverageWidthFactor() const { return m_nAveWidthFactor; }
     const FontSelectPattern& GetFontSelectPattern() const { return m_aFontSelData; }
 
