@@ -47,6 +47,7 @@
 
 #include <editeng/outlobj.hxx>
 #include <editeng/brushitem.hxx>
+#include <editeng/formatbreakitem.hxx>
 #include <editeng/tstpitem.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/langitem.hxx>
@@ -82,6 +83,7 @@
 #include <ndtxt.hxx>
 #include <pagedesc.hxx>
 #include <paratr.hxx>
+#include <poolfmt.hxx>
 #include <fmtclbl.hxx>
 #include <section.hxx>
 #include <docsh.hxx>

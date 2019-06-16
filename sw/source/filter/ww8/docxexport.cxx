@@ -64,6 +64,7 @@
 #include <section.hxx>
 #include <ftninfo.hxx>
 #include <pagedesc.hxx>
+#include <poolfmt.hxx>
 #include <swdbdata.hxx>
 
 #include <editeng/unoprnms.hxx>

@@ -24,6 +24,7 @@
 #include <swerror.h>
 #include <ndtxt.hxx>
 #include <pam.hxx>
+#include <poolfmt.hxx>
 #include <shellio.hxx>
 #include <docsh.hxx>
 #include <fmtanchr.hxx>

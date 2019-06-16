@@ -26,6 +26,7 @@
 #include "fields.hxx"
 #include <IMark.hxx>
 #include "docxexport.hxx"
+#include <wrtswtbl.hxx>
 
 #include <editeng/boxitem.hxx>
 #include <sax/fshelper.hxx>

@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/style/NumberingType.hpp>
 #include <hintids.hxx>
 #include <svtools/htmltokn.h>

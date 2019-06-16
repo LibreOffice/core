@@ -19,7 +19,6 @@
 #ifndef INCLUDED_SW_SOURCE_FILTER_INC_WRTSWTBL_HXX
 #define INCLUDED_SW_SOURCE_FILTER_INC_WRTSWTBL_HXX
 
-#include <tools/solar.h>
 #include <tools/color.hxx>
 #include <o3tl/sorted_vector.hxx>
 

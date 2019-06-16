@@ -22,7 +22,12 @@
 
 #include <vector>
 #include <stack>
+
+#include <filter/msfilter/msdffimp.hxx>
+#include <svx/svdpage.hxx>
+
 #include "writerhelper.hxx"
+#include "ww8struc.hxx"
 
 struct EscherShape
 {

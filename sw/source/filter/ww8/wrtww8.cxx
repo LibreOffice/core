@@ -71,6 +71,7 @@
 #include <shellio.hxx>
 #include <docstat.hxx>
 #include <pagedesc.hxx>
+#include <poolfmt.hxx>
 #include <IMark.hxx>
 #include <swtable.hxx>
 #include "wrtww8.hxx"

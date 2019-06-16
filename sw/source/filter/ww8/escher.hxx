@@ -21,6 +21,8 @@
 #define INCLUDED_SW_SOURCE_FILTER_WW8_ESCHER_HXX
 
 #include <filter/msfilter/escherex.hxx>
+#include <svx/svdtrans.hxx>
+#include "wrtww8.hxx"
 
 const sal_uInt32 nInlineHack = 0x00010001;
 class SwFrameFormat;

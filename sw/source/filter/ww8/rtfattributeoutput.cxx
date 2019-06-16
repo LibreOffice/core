@@ -82,6 +82,7 @@
 #include <grfatr.hxx>
 #include <ndole.hxx>
 #include <lineinfo.hxx>
+#include <redline.hxx>
 #include <rtf.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <vcl/cvtgrf.hxx>

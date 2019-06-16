@@ -20,6 +20,11 @@
 #ifndef INCLUDED_SW_SOURCE_FILTER_HTML_PARCSS1_HXX
 #define INCLUDED_SW_SOURCE_FILTER_HTML_PARCSS1_HXX
 
+#include <rtl/ustring.hxx>
+#include <tools/color.hxx>
+
+#include <memory>
+
 // tokens of the CSS1 parser
 enum CSS1Token
 {

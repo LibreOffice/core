@@ -70,6 +70,7 @@
 #include <i18nlangtag/mslangid.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xflclit.hxx>
+#include "sortedarray.hxx"
 #include "sprmids.hxx"
 #include <fmtpdsc.hxx>
 #include <node.hxx>

@@ -20,10 +20,6 @@
 #ifndef INCLUDED_SW_SOURCE_FILTER_WW8_WW8SCAN_HXX
 #define INCLUDED_SW_SOURCE_FILTER_WW8_WW8SCAN_HXX
 
-#ifndef LONG_MAX
-#include <limits.h>
-#endif
-#include <algorithm>
 #include <cassert>
 #include <cstddef>
 #include <deque>
@@ -36,12 +32,9 @@
 #include <tools/solar.h>
 #include <tools/stream.hxx>
 #include <rtl/ustring.hxx>
-#include "sortedarray.hxx"
 
 #include "ww8struc.hxx"
 #include "types.hxx"
-
-#include <unomid.h>
 
 class SvStream;
 

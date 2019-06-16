@@ -27,7 +27,6 @@
 #include <editeng/svxenum.hxx>
 #include <rtl/ref.hxx>
 #include <fltshell.hxx>
-#include <fmtornt.hxx>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/form/XFormComponent.hpp>
 

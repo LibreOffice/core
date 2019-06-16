@@ -104,6 +104,7 @@
 #include <flddat.hxx>
 #include <ndtxt.hxx>
 #include <swrect.hxx>
+#include <redline.hxx>
 #include <reffld.hxx>
 #include <ftninfo.hxx>
 #include <charfmt.hxx>

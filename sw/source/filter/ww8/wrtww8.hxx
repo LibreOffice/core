@@ -26,7 +26,6 @@
 #include <editeng/editdata.hxx>
 
 #include <shellio.hxx>
-#include <wrt_fn.hxx>
 
 #include "ww8struc.hxx"
 #include "ww8scan.hxx"
