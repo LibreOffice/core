@@ -64,8 +64,10 @@ protected:
     using Control::ImplInitSettings;
     SAL_DLLPRIVATE void         ImplInitSettings( bool bBackground );
     SAL_DLLPRIVATE ImplTabItem* ImplGetItem( sal_uInt16 nId ) const;
+    SAL_DLLPRIVATE ImplTabItem* ImplGetItem(const Point& rPt) const;
     SAL_DLLPRIVATE Size         ImplGetItemSize( ImplTabItem* pItem, long nMaxWidth );
     SAL_DLLPRIVATE tools::Rectangle    ImplGetTabRect( sal_uInt16 nPos, long nWidth = -1, long nHeight = -1 );
+    SAL_DLLPRIVATE tools::Rectangle ImplGetTabRect(const ImplTabItem*, long nWidth = -1, long nHeight = -1);
     SAL_DLLPRIVATE void         ImplChangeTabPage( sal_uInt16 nId, sal_uInt16 nOldId );
     SAL_DLLPRIVATE bool         ImplPosCurTabPage();
     virtual void                ImplActivateTabPage( bool bNext );
@@ -85,9 +87,8 @@ protected:
     virtual void                FillLayoutData() const override;
     virtual const vcl::Font&    GetCanonicalFont( const StyleSettings& _rStyle ) const override;
     virtual const Color&        GetCanonicalTextColor( const StyleSettings& _rStyle ) const override;
-    SAL_DLLPRIVATE tools::Rectangle*   ImplFindPartRect( const Point& rPt );
     virtual bool                ImplPlaceTabs( long nWidth );
-    virtual void                ImplPaint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect);
+    SAL_DLLPRIVATE Size ImplCalculateRequisition(sal_uInt16& nHeaderHeight) const;
 
 public:
                         TabControl( vcl::Window* pParent,
@@ -124,21 +125,23 @@ public:
                                     sal_uInt16 nPos = TAB_APPEND );
     void                RemovePage( sal_uInt16 nPageId );
     void                Clear();
-    void                EnablePage( sal_uInt16 nPageId, bool bEnable = true );
+
+    void SetPageEnabled(sal_uInt16 nPageId, bool bEnable = true);
+    void SetPageVisible(sal_uInt16 nPageId, bool bVisible = true);
 
     sal_uInt16          GetPagePos( sal_uInt16 nPageId ) const;
     sal_uInt16          GetPageCount() const;
     sal_uInt16          GetPageId( sal_uInt16 nPos ) const;
-    virtual sal_uInt16  GetPageId( const Point& rPos ) const;
+    sal_uInt16 GetPageId(const Point& rPos) const;
     sal_uInt16          GetPageId( const TabPage& rPage ) const;
     sal_uInt16          GetPageId( const OString& rName ) const;
 
-    virtual void        SetCurPageId( sal_uInt16 nPageId );
+    void SetCurPageId(sal_uInt16 nPageId);
     sal_uInt16          GetCurPageId() const;
 
-    virtual void        SelectTabPage( sal_uInt16 nPageId );
+    void                SelectTabPage( sal_uInt16 nPageId );
 
-    void                SetTabPage( sal_uInt16 nPageId, TabPage* pPage );
+    void SetTabPage(sal_uInt16 nPageId, TabPage* pPage);
     TabPage*            GetTabPage( sal_uInt16 nPageId ) const;
 
     void                SetPageText( sal_uInt16 nPageId, const OUString& rText );
@@ -203,15 +206,11 @@ public:
     ToolBox* GetToolBox() { return m_pShortcuts; }
     PushButton* GetOpenMenu() { return m_pOpenMenu; }
 
-    virtual sal_uInt16  GetPageId( const Point& rPos ) const override;
-    virtual void        SelectTabPage( sal_uInt16 nPageId ) override;
-    virtual void        SetCurPageId( sal_uInt16 nPageId ) override;
     virtual Size        calculateRequisition() const override;
     static sal_uInt16   GetHeaderHeight();
 
 protected:
     virtual bool ImplPlaceTabs( long nWidth ) override;
-    virtual void ImplPaint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
     virtual void ImplActivateTabPage( bool bNext ) override;
 
 private:
