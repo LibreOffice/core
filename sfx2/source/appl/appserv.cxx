@@ -190,9 +190,9 @@ namespace
             // and the bibliography is assumed to work
             return css::sdbc::DriverManager::create(comphelper::getProcessComponentContext()).is();
         }
-        catch (Exception & e)
+        catch (const Exception &)
         {
-            SAL_INFO("sfx.appl", "assuming Base to be missing; caught " << e);
+            TOOLS_INFO_EXCEPTION("sfx.appl", "assuming Base to be missing");
             return false;
         }
     }
@@ -213,11 +213,9 @@ namespace
                 SolarMutexGuard aGuard;
                 executeRestartDialog(comphelper::getProcessComponentContext(), nullptr, RESTART_REASON_BIBLIOGRAPHY_INSTALL);
             }
-            catch (const Exception & e)
+            catch (const Exception &)
             {
-                SAL_INFO(
-                    "sfx.appl",
-                    "trying to install LibreOffice Base, caught " << e);
+                TOOLS_INFO_EXCEPTION("sfx.appl", "trying to install LibreOffice Base");
             }
             return;
         }
@@ -230,10 +228,9 @@ namespace
             SfxViewFrame::Current()->GetDispatcher()->ExecuteList(SID_OPENDOC,
                 SfxCallMode::ASYNCHRON, { &aURL, &aRef, &aTarget });
         }
-        catch (const Exception & e)
+        catch (const Exception &)
         {
-            SAL_INFO( "sfx.appl",
-                      "trying to load bibliography database, caught " << e);
+            TOOLS_INFO_EXCEPTION( "sfx.appl", "trying to load bibliography database");
         }
     }
 }

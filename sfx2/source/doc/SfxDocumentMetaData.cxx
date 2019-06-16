@@ -67,6 +67,7 @@
 #include <rtl/ref.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <tools/datetime.hxx>
+#include <tools/diagnose_ex.h>
 #include <osl/mutex.hxx>
 #include <comphelper/fileformat.h>
 #include <cppuhelper/basemutex.hxx>
@@ -2046,9 +2047,9 @@ void SAL_CALL SfxDocumentMetaData::setModified( sal_Bool bModified )
                 event);
         } catch (const css::uno::RuntimeException &) {
             throw;
-        } catch (const css::uno::Exception & e) {
+        } catch (const css::uno::Exception &) {
             // ignore
-            SAL_WARN("sfx.doc", "setModified: " << e);
+            TOOLS_WARN_EXCEPTION("sfx.doc", "setModified");
         }
     } else {
         if (xMB.is()) {

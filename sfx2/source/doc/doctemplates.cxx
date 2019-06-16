@@ -432,9 +432,8 @@ void SfxDocTplService_Impl::init_Impl()
         try {
             m_xDocProps.set(document::DocumentProperties::create(
                         ::comphelper::getProcessComponentContext()));
-        } catch (uno::RuntimeException const& e) {
-            SAL_WARN("sfx.doc", "SfxDocTplService_Impl::init_Impl: "
-                "cannot create DocumentProperties service:" << e);
+        } catch (uno::RuntimeException const&) {
+            TOOLS_WARN_EXCEPTION("sfx.doc", "SfxDocTplService_Impl::init_Impl: cannot create DocumentProperties service:");
         }
 
         OUString const aService = SERVICENAME_TYPEDETECTION;

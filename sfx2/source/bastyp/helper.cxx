@@ -109,9 +109,9 @@ std::vector<OUString> SfxContentHelper::GetResultSet( const OUString& rURL )
             }
         }
     }
-    catch( const uno::Exception& e )
+    catch( const uno::Exception& )
     {
-        SAL_WARN( "sfx.bastyp", "GetResultSet: " << e );
+        TOOLS_WARN_EXCEPTION( "sfx.bastyp", "GetResultSet");
     }
 
     return aList;
