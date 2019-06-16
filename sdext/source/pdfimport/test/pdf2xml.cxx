@@ -32,6 +32,7 @@
 #include <unotest/bootstrapfixturebase.hxx>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/bootstrap.hxx>
+#include <tools/diagnose_ex.h>
 
 using namespace ::pdfi;
 using namespace ::com::sun::star;
@@ -80,9 +81,9 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         xAdaptor->setTreeVisitorFactory(pTreeFactory);
         nRet = xAdaptor->odfConvert(aSrcURL, new OutputWrap(aDstURL), nullptr) ? 0 : 1;
     }
-    catch (const uno::Exception& e)
+    catch (const uno::Exception&)
     {
-        SAL_WARN("vcl.app", "Fatal: " << e);
+        TOOLS_WARN_EXCEPTION("vcl.app", "Fatal");
         return 1;
     }
     catch (const std::exception& e)

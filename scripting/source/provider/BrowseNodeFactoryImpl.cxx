@@ -282,9 +282,9 @@ std::vector< Reference< browse::XBrowseNode > > getAllBrowseNodes( const Referen
         locnBNs[ mspIndex++ ].set( xFac->createScriptProvider( makeAny( OUString("share") ) ), UNO_QUERY_THROW );
     }
     // TODO proper exception handling, should throw
-    catch( const Exception& e )
+    catch( const Exception& )
     {
-        SAL_WARN("scripting", "Caught " << e );
+        TOOLS_WARN_EXCEPTION("scripting", "Caught" );
         locnBNs.resize( mspIndex );
         return locnBNs;
     }
