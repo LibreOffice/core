@@ -3739,7 +3739,7 @@ void GtkSalGraphics::refreshFontconfig( GtkSettings *pSettings )
     }
 }
 
-void GtkSalGraphics::updateSettings( AllSettings& rSettings )
+bool GtkSalGraphics::updateSettings( AllSettings& rSettings )
 {
     gtk_widget_ensure_style( m_pWindow );
     GtkStyle* pStyle = gtk_widget_get_style( m_pWindow );
@@ -4057,6 +4057,8 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
 
     // finally update the collected settings
     rSettings.SetStyleSettings( aStyleSet );
+
+    return true;
 }
 
 /************************************************************************

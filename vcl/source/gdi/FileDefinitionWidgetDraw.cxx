@@ -114,7 +114,7 @@ FileDefinitionWidgetDraw::FileDefinitionWidgetDraw(SalGraphics& rGraphics)
     }
 }
 
-bool FileDefinitionWidgetDraw::isNativeControlSupported(ControlType eType, ControlPart ePart)
+bool FileDefinitionWidgetDraw::IsNativeControlSupported(ControlType eType, ControlPart ePart)
 {
     switch (eType)
     {
