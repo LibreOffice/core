@@ -45,6 +45,7 @@
 #include <osl/diagnose.h>
 #include <osl/file.hxx>
 #include <sal/log.hxx>
+#include <tools/diagnose_ex.h>
 #include <tools/ref.hxx>
 #include <tools/debug.hxx>
 #include <unotools/streamwrap.hxx>
@@ -756,9 +757,9 @@ void UCBStorageStream_Impl::ReadSourceWriteTemporary()
                 m_pStream->WriteBytes(aData.getArray(), aReaded);
             } while( aReaded == 32000 );
         }
-        catch (const Exception &e)
+        catch (const Exception &)
         {
-            SAL_WARN( "sot", e );
+            TOOLS_WARN_EXCEPTION("sot", "");
         }
     }
 
@@ -791,9 +792,9 @@ sal_uInt64 UCBStorageStream_Impl::ReadSourceWriteTemporary(sal_uInt64 aLength)
             if( aResult < aLength )
                 m_bSourceRead = false;
         }
-        catch( const Exception & e )
+        catch( const Exception & )
         {
-            SAL_WARN( "sot", e );
+            TOOLS_WARN_EXCEPTION("sot", "");
         }
     }
 
@@ -839,9 +840,9 @@ std::size_t UCBStorageStream_Impl::GetData(void* pData, std::size_t const nSize)
             aResult += m_pStream->WriteBytes(static_cast<void*>(aData.getArray()), aReaded);
             memcpy( pData, aData.getArray(), aReaded );
         }
-        catch (const Exception &e)
+        catch (const Exception &)
         {
-            SAL_WARN( "sot", e );
+            TOOLS_WARN_EXCEPTION("sot", "");
         }
 
         if( aResult < nSize )

@@ -31,6 +31,7 @@
 #include <sot/formats.hxx>
 #include <sot/exchange.hxx>
 #include <unotools/ucbstreamhelper.hxx>
+#include <tools/diagnose_ex.h>
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/ucbhelper.hxx>
@@ -760,9 +761,9 @@ SotClipboardFormatId SotStorage::GetFormatID( const css::uno::Reference < css::e
     {
         xProps->getPropertyValue("MediaType") >>= aMediaType;
     }
-    catch (uno::Exception const& e)
+    catch (uno::Exception const&)
     {
-        SAL_INFO("sot", "SotStorage::GetFormatID: exception: " << e);
+        TOOLS_INFO_EXCEPTION("sot", "SotStorage::GetFormatID");
     }
 
     if ( !aMediaType.isEmpty() )

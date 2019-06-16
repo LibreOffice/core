@@ -28,6 +28,7 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <cppcanvas/basegfxfactory.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <activity.hxx>
 #include <slideshowcontext.hxx>
@@ -480,9 +481,9 @@ namespace slideshow
                 mrMultiplexer.removeViewHandler( mpHandler );
                 mpHandler->dispose();
             }
-            catch (const uno::Exception& e)
+            catch (const uno::Exception&)
             {
-                SAL_WARN("slideshow", e);
+                TOOLS_WARN_EXCEPTION("slideshow", "");
             }
         }
     }

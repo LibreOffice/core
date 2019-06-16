@@ -103,9 +103,9 @@ namespace slideshow
             {
                 endApplet();
             }
-            catch (const uno::Exception &e)
+            catch (const uno::Exception &)
             {
-                SAL_WARN("slideshow", e);
+                TOOLS_WARN_EXCEPTION("slideshow", "");
             }
         }
 
