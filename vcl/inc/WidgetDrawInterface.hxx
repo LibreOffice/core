@@ -29,7 +29,7 @@ public:
      * @param [in] ePart The part of the widget.
      * @return true if the platform supports native drawing of the widget type defined by part.
      */
-    virtual bool isNativeControlSupported(ControlType eType, ControlPart ePart) = 0;
+    virtual inline bool isNativeControlSupported(ControlType eType, ControlPart ePart);
 
     /**
      * Query if a position is inside the native widget part.
@@ -44,10 +44,9 @@ public:
      * @param [out] rIsInside true, if \a aPos was inside the native widget.
      * @return true, if the query was successful.
      */
-    virtual bool hitTestNativeControl(ControlType eType, ControlPart ePart,
-                                      const tools::Rectangle& rBoundingControlRegion,
-                                      const Point& aPos, bool& rIsInside)
-        = 0;
+    virtual inline bool hitTestNativeControl(ControlType eType, ControlPart ePart,
+                                             const tools::Rectangle& rBoundingControlRegion,
+                                             const Point& aPos, bool& rIsInside);
 
     /**
      * Draw the requested control.
@@ -61,11 +60,10 @@ public:
      * @param [in] aCaption  A caption or title string (like button text etc.).
      * @return true, if the control could be drawn.
      */
-    virtual bool drawNativeControl(ControlType eType, ControlPart ePart,
-                                   const tools::Rectangle& rBoundingControlRegion,
-                                   ControlState eState, const ImplControlValue& aValue,
-                                   const OUString& aCaptions)
-        = 0;
+    virtual inline bool drawNativeControl(ControlType eType, ControlPart ePart,
+                                          const tools::Rectangle& rBoundingControlRegion,
+                                          ControlState eState, const ImplControlValue& aValue,
+                                          const OUString& aCaptions);
 
     /**
      * Get the native control regions for the control part.
@@ -86,16 +84,39 @@ public:
      * @param [out] rNativeContentRegion The region within the control that can be safely drawn into.
      * @return true, if the regions are filled.
      */
-    virtual bool getNativeControlRegion(ControlType eType, ControlPart ePart,
-                                        const tools::Rectangle& rBoundingControlRegion,
-                                        ControlState eState, const ImplControlValue& aValue,
-                                        const OUString& aCaption,
-                                        tools::Rectangle& rNativeBoundingRegion,
-                                        tools::Rectangle& rNativeContentRegion)
-        = 0;
+    virtual inline bool getNativeControlRegion(ControlType eType, ControlPart ePart,
+                                               const tools::Rectangle& rBoundingControlRegion,
+                                               ControlState eState, const ImplControlValue& aValue,
+                                               const OUString& aCaption,
+                                               tools::Rectangle& rNativeBoundingRegion,
+                                               tools::Rectangle& rNativeContentRegion);
 
-    virtual bool updateSettings(AllSettings& rSettings) = 0;
+    virtual inline bool updateSettings(AllSettings& rSettings);
 };
+
+bool WidgetDrawInterface::isNativeControlSupported(ControlType, ControlPart) { return false; }
+
+bool WidgetDrawInterface::hitTestNativeControl(ControlType, ControlPart, const tools::Rectangle&,
+                                               const Point&, bool&)
+{
+    return false;
+}
+
+bool WidgetDrawInterface::drawNativeControl(ControlType, ControlPart, const tools::Rectangle&,
+                                            ControlState, const ImplControlValue&, const OUString&)
+{
+    return false;
+}
+
+bool WidgetDrawInterface::getNativeControlRegion(ControlType, ControlPart, const tools::Rectangle&,
+                                                 ControlState, const ImplControlValue&,
+                                                 const OUString&, tools::Rectangle&,
+                                                 tools::Rectangle&)
+{
+    return false;
+}
+
+bool WidgetDrawInterface::updateSettings(AllSettings&) { return false; }
 }
 
 #endif

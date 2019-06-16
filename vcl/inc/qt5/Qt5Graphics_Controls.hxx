@@ -20,7 +20,7 @@
 #pragma once
 
 #include <vclpluginapi.h>
-#include <salgdi.hxx>
+#include <WidgetDrawInterface.hxx>
 
 #include <memory>
 
@@ -29,8 +29,7 @@
 #include <QtGui/QRegion>
 #include <QtWidgets/QPushButton>
 
-// Native control support
-class VCLPLUG_QT5_PUBLIC Qt5Graphics_Controls
+class VCLPLUG_QT5_PUBLIC Qt5Graphics_Controls final : public vcl::WidgetDrawInterface
 {
     std::unique_ptr<QPushButton> m_focusedButton;
     std::unique_ptr<QImage> m_image;
@@ -41,20 +40,20 @@ class VCLPLUG_QT5_PUBLIC Qt5Graphics_Controls
 public:
     Qt5Graphics_Controls();
 
-    QImage& getImage() { return *m_image; }
+    QImage* getImage() { return m_image.get(); }
 
-    static bool IsNativeControlSupported(ControlType nType, ControlPart nPart);
-    static bool hitTestNativeControl(ControlType nType, ControlPart nPart,
-                                     const tools::Rectangle& rControlRegion, const Point& aPos,
-                                     bool& rIsInside);
+    bool isNativeControlSupported(ControlType nType, ControlPart nPart) override;
+    bool hitTestNativeControl(ControlType nType, ControlPart nPart,
+                              const tools::Rectangle& rControlRegion, const Point& aPos,
+                              bool& rIsInside) override;
     bool drawNativeControl(ControlType nType, ControlPart nPart,
                            const tools::Rectangle& rControlRegion, ControlState nState,
-                           const ImplControlValue& aValue, const OUString& aCaption);
-    static bool getNativeControlRegion(ControlType nType, ControlPart nPart,
-                                       const tools::Rectangle& rControlRegion, ControlState nState,
-                                       const ImplControlValue& aValue, const OUString& aCaption,
-                                       tools::Rectangle& rNativeBoundingRegion,
-                                       tools::Rectangle& rNativeContentRegion);
+                           const ImplControlValue& aValue, const OUString& aCaption) override;
+    bool getNativeControlRegion(ControlType nType, ControlPart nPart,
+                                const tools::Rectangle& rControlRegion, ControlState nState,
+                                const ImplControlValue& aValue, const OUString& aCaption,
+                                tools::Rectangle& rNativeBoundingRegion,
+                                tools::Rectangle& rNativeContentRegion) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

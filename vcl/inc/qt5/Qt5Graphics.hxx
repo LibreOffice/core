@@ -28,7 +28,6 @@
 #include <QtGui/QRegion>
 
 #include "Qt5Data.hxx"
-#include "Qt5Graphics_Controls.hxx"
 
 class PhysicalFontCollection;
 class QImage;
@@ -42,8 +41,6 @@ class Qt5Graphics : public SalGraphics
 {
     friend class Qt5Bitmap;
     friend class Qt5Painter;
-
-    Qt5Graphics_Controls m_aControl;
 
     Qt5Frame* m_pFrame;
     QImage* m_pQImage;
@@ -63,6 +60,9 @@ class Qt5Graphics : public SalGraphics
     Qt5Graphics(Qt5Frame* pFrame, QImage* pQImage);
 
     void drawScaledImage(const SalTwoRect& rPosAry, const QImage& rImage);
+
+protected:
+    void handleDamage(const tools::Rectangle&) override;
 
 public:
     Qt5Graphics(Qt5Frame* pFrame)
@@ -197,49 +197,6 @@ public:
 
     virtual std::unique_ptr<GenericSalLayout> GetTextLayout(int nFallbackLevel) override;
     virtual void DrawTextLayout(const GenericSalLayout&) override;
-
-    // Native control support
-
-    virtual bool IsNativeControlSupported(ControlType nType, ControlPart nPart) override;
-    virtual bool hitTestNativeControl(ControlType nType, ControlPart nPart,
-                                      const tools::Rectangle& rControlRegion, const Point& aPos,
-                                      bool& rIsInside) override;
-    virtual bool drawNativeControl(ControlType nType, ControlPart nPart,
-                                   const tools::Rectangle& rControlRegion, ControlState nState,
-                                   const ImplControlValue& aValue,
-                                   const OUString& aCaption) override;
-    virtual bool getNativeControlRegion(ControlType nType, ControlPart nPart,
-                                        const tools::Rectangle& rControlRegion, ControlState nState,
-                                        const ImplControlValue& aValue, const OUString& aCaption,
-                                        tools::Rectangle& rNativeBoundingRegion,
-                                        tools::Rectangle& rNativeContentRegion) override;
 };
-
-inline bool Qt5Graphics::IsNativeControlSupported(ControlType nType, ControlPart nPart)
-{
-    if (Qt5Data::noNativeControls())
-        return false;
-    return Qt5Graphics_Controls::IsNativeControlSupported(nType, nPart);
-}
-
-inline bool Qt5Graphics::hitTestNativeControl(ControlType nType, ControlPart nPart,
-                                              const tools::Rectangle& rControlRegion,
-                                              const Point& aPos, bool& rIsInside)
-{
-    return Qt5Graphics_Controls::hitTestNativeControl(nType, nPart, rControlRegion, aPos,
-                                                      rIsInside);
-}
-
-inline bool Qt5Graphics::getNativeControlRegion(ControlType nType, ControlPart nPart,
-                                                const tools::Rectangle& rControlRegion,
-                                                ControlState nState, const ImplControlValue& aValue,
-                                                const OUString& aCaption,
-                                                tools::Rectangle& rNativeBoundingRegion,
-                                                tools::Rectangle& rNativeContentRegion)
-{
-    return Qt5Graphics_Controls::getNativeControlRegion(nType, nPart, rControlRegion, nState,
-                                                        aValue, aCaption, rNativeBoundingRegion,
-                                                        rNativeContentRegion);
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

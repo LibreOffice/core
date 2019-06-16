@@ -226,7 +226,7 @@ static HTHEME getThemeHandle( HWND hWnd, LPCWSTR name )
     return hTheme;
 }
 
-bool WinSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nPart )
+bool WinSalGraphics::isNativeControlSupported( ControlType nType, ControlPart nPart )
 {
     HTHEME hTheme = nullptr;
 

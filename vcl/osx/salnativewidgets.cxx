@@ -116,7 +116,7 @@ static bool AquaGetScrollRect( /* TODO: int nScreen, */  ControlPart nPart,
     return bRetVal;
 }
 
-bool AquaSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nPart )
+bool AquaSalGraphics::isNativeControlSupported( ControlType nType, ControlPart nPart )
 {
     // Native controls are now defaults
     // If you want to disable experimental native controls code,

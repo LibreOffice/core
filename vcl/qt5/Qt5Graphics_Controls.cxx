@@ -67,7 +67,7 @@ static QStyle::State vclStateValue2StateFlag(ControlState nControlState,
 
 Qt5Graphics_Controls::Qt5Graphics_Controls() { initStyles(); }
 
-bool Qt5Graphics_Controls::IsNativeControlSupported(ControlType type, ControlPart part)
+bool Qt5Graphics_Controls::isNativeControlSupported(ControlType type, ControlPart part)
 {
     switch (type)
     {
@@ -170,7 +170,7 @@ bool Qt5Graphics_Controls::drawNativeControl(ControlType type, ControlPart part,
                                              ControlState nControlState,
                                              const ImplControlValue& value, const OUString&)
 {
-    bool nativeSupport = IsNativeControlSupported(type, part);
+    bool nativeSupport = isNativeControlSupported(type, part);
     if (!nativeSupport)
     {
         assert(!nativeSupport && "drawNativeControl called without native support!");
