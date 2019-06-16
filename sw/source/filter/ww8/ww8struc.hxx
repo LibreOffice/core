@@ -22,13 +22,15 @@
 
 #include <sal/config.h>
 
-#include <osl/endian.h>
 #include <rtl/ustring.hxx>
 
-#include <editeng/borderline.hxx>
 #include <filter/msfilter/util.hxx>
 #include <i18nlangtag/lang.h>
 #include <tools/color.hxx>
+#include <tools/solar.h>
+#include <tools/stream.hxx>
+
+#include <vector>
 
 #ifdef _WIN32
 #   pragma pack(push, 2)

@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <com/sun/star/text/HoriOrientation.hpp>
+#include <com/sun/star/text/VertOrientation.hpp>
+
 #include <hintids.hxx>
 #include <svl/itemiter.hxx>
 #include <editeng/lrspitem.hxx>

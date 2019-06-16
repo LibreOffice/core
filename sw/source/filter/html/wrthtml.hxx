@@ -26,13 +26,13 @@
 
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/form/XForm.hpp>
-#include <vcl/field.hxx>
 #include <i18nlangtag/lang.h>
 #include <comphelper/stl_types.hxx>
 #include <o3tl/sorted_vector.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <rtl/ref.hxx>
 #include <svtools/htmlout.hxx>
+#include <tools/fldunit.hxx>
 
 #include <shellio.hxx>
 #include <wrt_fn.hxx>

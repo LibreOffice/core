@@ -23,7 +23,6 @@
 #include <memory>
 #include <vector>
 
-#include <tools/solar.h>
 #include <rtl/ustring.hxx>
 #include <IDocumentExternalData.hxx>
 

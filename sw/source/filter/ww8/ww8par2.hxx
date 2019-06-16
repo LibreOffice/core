@@ -20,11 +20,7 @@
 #ifndef INCLUDED_SW_SOURCE_FILTER_WW8_WW8PAR2_HXX
 #define INCLUDED_SW_SOURCE_FILTER_WW8_WW8PAR2_HXX
 
-#include <swtypes.hxx>
 #include <fmtfsize.hxx>
-#include <fmtornt.hxx>
-#include <fmtsrnd.hxx>
-#include <editeng/lrspitem.hxx>
 #include <svl/itemset.hxx>
 #include <svx/swframetypes.hxx>
 #include <swtable.hxx>

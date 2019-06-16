@@ -31,12 +31,9 @@
 
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 #include <swtypes.hxx>
-#include <wrtswtbl.hxx>
 #include <fldbas.hxx>
 #include <IDocumentRedlineAccess.hxx>
 #include <unotools/saveopt.hxx>
-
-#include <vector>
 
 class Point;
 class SvxCaseMapItem;

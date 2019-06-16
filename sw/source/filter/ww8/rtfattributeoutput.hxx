@@ -26,6 +26,8 @@
 #include "attributeoutputbase.hxx"
 #include "rtfstringbuffer.hxx"
 
+#include <wrtswtbl.hxx>
+
 #include <rtl/strbuf.hxx>
 
 #include <boost/optional.hpp>

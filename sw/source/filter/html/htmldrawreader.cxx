@@ -49,6 +49,7 @@
 #include <drawdoc.hxx>
 #include <frmfmt.hxx>
 #include <fmtanchr.hxx>
+#include <fmtornt.hxx>
 #include <fmtsrnd.hxx>
 #include <ndtxt.hxx>
 #include <doc.hxx>

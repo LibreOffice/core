@@ -21,7 +21,6 @@
 #define INCLUDED_SW_SOURCE_FILTER_WW8_WRITERWORDGLUE_HXX
 
 #include "needed_cast.hxx"
-#include "types.hxx"
 
 class SwFrameFormat;
 class SfxItemSet;

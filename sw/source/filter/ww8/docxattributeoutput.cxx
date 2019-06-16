@@ -117,6 +117,7 @@
 #include <ndtxt.hxx>
 #include <pagedesc.hxx>
 #include <paratr.hxx>
+#include <poolfmt.hxx>
 #include <charatr.hxx>
 #include <swmodule.hxx>
 #include <swtable.hxx>

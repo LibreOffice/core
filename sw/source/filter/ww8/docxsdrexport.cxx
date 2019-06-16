@@ -29,6 +29,7 @@
 #include <fmtanchr.hxx>
 #include <fmtsrnd.hxx>
 #include <fmtcntnt.hxx>
+#include <fmtornt.hxx>
 #include <ndtxt.hxx>
 #include <txatbase.hxx>
 #include <fmtfsize.hxx>

@@ -23,13 +23,10 @@
 #include "wrtww8.hxx"
 
 #include <sax/fshelper.hxx>
-#include <sax/fastattribs.hxx>
 #include <rtl/ustring.hxx>
 
 #include <cstdio>
 #include <memory>
-#include <vector>
-#include <boost/optional.hpp>
 #include <ndole.hxx>
 
 class DocxAttributeOutput;

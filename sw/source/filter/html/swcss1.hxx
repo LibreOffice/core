@@ -20,6 +20,9 @@
 #ifndef INCLUDED_SW_SOURCE_FILTER_HTML_SWCSS1_HXX
 #define INCLUDED_SW_SOURCE_FILTER_HTML_SWCSS1_HXX
 
+#include <svtools/htmltokn.h>
+#include <tools/solar.h>
+
 #include <poolfmt.hxx>
 
 #include "svxcss1.hxx"

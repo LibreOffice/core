@@ -48,6 +48,8 @@
 #include <docary.hxx>
 #include <charfmt.hxx>
 #include <fchrfmt.hxx>
+#include <redline.hxx>
+#include "types.hxx"
 #include <unotools/streamwrap.hxx>
 #include <svtools/embedhlp.hxx>
 #include <numrule.hxx>

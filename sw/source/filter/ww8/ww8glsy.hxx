@@ -22,6 +22,8 @@
 
 #include <memory>
 #include <sot/storage.hxx>
+
+#include <doc.hxx>
 #include "ww8scan.hxx"
 
 class SwTextBlocks;

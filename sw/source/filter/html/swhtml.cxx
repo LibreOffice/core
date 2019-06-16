@@ -83,6 +83,7 @@
 #include <fchrfmt.hxx>
 #include <fmtinfmt.hxx>
 #include <fmtfollowtextflow.hxx>
+#include <fmtornt.hxx>
 #include <docary.hxx>
 #include <docstat.hxx>
 #include <doc.hxx>

@@ -43,6 +43,8 @@
 #include <editeng/boxitem.hxx>
 #include <editeng/shaditem.hxx>
 #include <lineinfo.hxx>
+#include <poolfmt.hxx>
+#include <redline.hxx>
 #include <swmodule.hxx>
 #include <IDocumentLayoutAccess.hxx>
 #include <IDocumentStylePoolAccess.hxx>
@@ -50,6 +52,7 @@
 #include <svtools/rtfkeywd.hxx>
 #include <filter/msfilter/rtfutil.hxx>
 #include <unotools/docinfohelper.hxx>
+#include <osl/diagnose.h>
 #include <rtl/tencinfo.h>
 #include <sal/log.hxx>
 #if OSL_DEBUG_LEVEL > 1

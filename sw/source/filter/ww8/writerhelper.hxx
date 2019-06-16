@@ -26,7 +26,6 @@
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 
 #include <sfx2/objsh.hxx>
-#include "types.hxx"
 #include <svl/itempool.hxx>
 #include <svl/itemset.hxx>
 #include <svx/svdtypes.hxx>

@@ -29,6 +29,7 @@
 #include <ndtxt.hxx>
 #include <dbgoutsw.hxx>
 #include <sal/log.hxx>
+#include <osl/diagnose.h>
 
 namespace ww8
 {

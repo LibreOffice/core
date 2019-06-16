@@ -20,9 +20,6 @@
 #ifndef INCLUDED_SW_SOURCE_FILTER_XML_XMLBRSHE_HXX
 #define INCLUDED_SW_SOURCE_FILTER_XML_XMLBRSHE_HXX
 
-#include <rtl/ustring.hxx>
-#include <xmloff/attrlist.hxx>
-
 class SvxBrushItem;
 class SwXMLExport;
 

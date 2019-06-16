@@ -26,8 +26,6 @@
 
 #include <com/sun/star/document/XDocumentProperties.hpp>
 
-#include <sot/storage.hxx>
-
 #include <xmloff/xmlictxt.hxx>
 #include <xmloff/xmlimp.hxx>
 

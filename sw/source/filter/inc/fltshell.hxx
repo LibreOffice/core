@@ -20,11 +20,7 @@
 #define INCLUDED_SW_SOURCE_FILTER_INC_FLTSHELL_HXX
 
 #include <hintids.hxx>
-#include <vcl/keycod.hxx>
 #include <tools/datetime.hxx>
-#include <editeng/formatbreakitem.hxx>
-#include <poolfmt.hxx>
-#include <fmtornt.hxx>
 #include <mdiexp.hxx>
 #include <ndindex.hxx>
 #include <pam.hxx>
@@ -34,7 +30,6 @@
 #include <cstddef>
 #include <limits>
 #include <memory>
-#include <deque>
 
 class SwTOXBase;
 class SwField;
