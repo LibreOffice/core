@@ -612,7 +612,7 @@ void GtkSalGraphics::copyBits( const SalTwoRect& rPosAry,
     X11SalGraphics::copyBits( rPosAry, pSrcGraphics );
 }
 
-bool GtkSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nPart )
+bool GtkSalGraphics::isNativeControlSupported( ControlType nType, ControlPart nPart )
 {
     switch(nType)
     {
@@ -806,7 +806,7 @@ bool GtkSalGraphics::hitTestNativeControl( ControlType        nType,
         return true;
     }
 
-    if( IsNativeControlSupported(nType, nPart) )
+    if( isNativeControlSupported(nType, nPart) )
     {
         rIsInside = rControlRegion.IsInside( aPos );
         return true;
@@ -3739,7 +3739,7 @@ void GtkSalGraphics::refreshFontconfig( GtkSettings *pSettings )
     }
 }
 
-void GtkSalGraphics::updateSettings( AllSettings& rSettings )
+bool GtkSalGraphics::updateSettings( AllSettings& rSettings )
 {
     gtk_widget_ensure_style( m_pWindow );
     GtkStyle* pStyle = gtk_widget_get_style( m_pWindow );
@@ -4057,6 +4057,8 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
 
     // finally update the collected settings
     rSettings.SetStyleSettings( aStyleSet );
+
+    return true;
 }
 
 /************************************************************************

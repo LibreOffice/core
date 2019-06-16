@@ -22,14 +22,14 @@
 #include <vclpluginapi.h>
 #include <headless/svpgdi.hxx>
 
-#include "Qt5Graphics_Controls.hxx"
-
 class Qt5Frame;
 
 class VCLPLUG_QT5_PUBLIC Qt5SvpGraphics : public SvpSalGraphics
 {
-    Qt5Graphics_Controls m_aControl;
     Qt5Frame* const m_pFrame;
+
+protected:
+    void handleDamage(const tools::Rectangle&) override;
 
 public:
     Qt5SvpGraphics(Qt5Frame* pFrame);
@@ -45,42 +45,7 @@ public:
                                           int height) const override;
 #endif // ENABLE_CAIRO_CANVAS
 
-    virtual bool IsNativeControlSupported(ControlType, ControlPart) override;
-
-    virtual bool hitTestNativeControl(ControlType, ControlPart, const tools::Rectangle&,
-                                      const Point&, bool&) override;
-
-    virtual bool drawNativeControl(ControlType, ControlPart, const tools::Rectangle&, ControlState,
-                                   const ImplControlValue&, const OUString&) override;
-
-    virtual bool getNativeControlRegion(ControlType, ControlPart, const tools::Rectangle&,
-                                        ControlState, const ImplControlValue&, const OUString&,
-                                        tools::Rectangle&, tools::Rectangle&) override;
-
     virtual void GetResolution(sal_Int32& rDPIX, sal_Int32& rDPIY) override;
 };
-
-inline bool Qt5SvpGraphics::IsNativeControlSupported(ControlType nType, ControlPart nPart)
-{
-    return Qt5Graphics_Controls::IsNativeControlSupported(nType, nPart);
-}
-
-inline bool Qt5SvpGraphics::hitTestNativeControl(ControlType nType, ControlPart nPart,
-                                                 const tools::Rectangle& rControlRegion,
-                                                 const Point& aPos, bool& rIsInside)
-{
-    return Qt5Graphics_Controls::hitTestNativeControl(nType, nPart, rControlRegion, aPos,
-                                                      rIsInside);
-}
-
-inline bool Qt5SvpGraphics::getNativeControlRegion(
-    ControlType nType, ControlPart nPart, const tools::Rectangle& rControlRegion,
-    ControlState nState, const ImplControlValue& aValue, const OUString& aCaption,
-    tools::Rectangle& rNativeBoundingRegion, tools::Rectangle& rNativeContentRegion)
-{
-    return Qt5Graphics_Controls::getNativeControlRegion(nType, nPart, rControlRegion, nState,
-                                                        aValue, aCaption, rNativeBoundingRegion,
-                                                        rNativeContentRegion);
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
