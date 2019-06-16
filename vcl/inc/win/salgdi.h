@@ -264,6 +264,8 @@ protected:
     virtual bool        drawEPS( long nX, long nY, long nWidth, long nHeight, void* pPtr, sal_uInt32 nSize ) override;
 
     // native widget rendering methods that require mirroring
+protected:
+    virtual bool        isNativeControlSupported( ControlType nType, ControlPart nPart ) override;
     virtual bool        hitTestNativeControl( ControlType nType, ControlPart nPart, const tools::Rectangle& rControlRegion,
                                               const Point& aPos, bool& rIsInside ) override;
     virtual bool        drawNativeControl( ControlType nType, ControlPart nPart, const tools::Rectangle& rControlRegion,
@@ -273,6 +275,7 @@ protected:
                                                 const ImplControlValue& aValue, const OUString& aCaption,
                                                 tools::Rectangle &rNativeBoundingRegion, tools::Rectangle &rNativeContentRegion ) override;
 
+public:
     virtual bool        blendBitmap( const SalTwoRect&,
                                      const SalBitmap& rBitmap ) override;
 
@@ -378,8 +381,6 @@ public:
     virtual void            DrawTextLayout( const GenericSalLayout& ) override;
 
     virtual bool            supportsOperation( OutDevSupportType ) const override;
-    // Query the platform layer for control support
-    virtual bool            IsNativeControlSupported( ControlType nType, ControlPart nPart ) override;
 
     virtual SystemGraphicsData GetGraphicsData() const override;
 

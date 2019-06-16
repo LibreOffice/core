@@ -261,27 +261,6 @@ public:
 
     virtual SystemGraphicsData GetGraphicsData() const override;
 
-    // Native Widget Drawing interface
-    bool IsNativeControlSupported(ControlType eType, ControlPart ePart) override;
-
-    bool hitTestNativeControl(ControlType eType, ControlPart ePart,
-                               const tools::Rectangle& rBoundingControlRegion,
-                               const Point& rPosition, bool& rIsInside) override;
-
-    bool drawNativeControl(ControlType eType, ControlPart ePart,
-                           const tools::Rectangle& rBoundingControlRegion,
-                           ControlState eState, const ImplControlValue& aValue,
-                           const OUString& aCaptions) override;
-
-    bool getNativeControlRegion(ControlType eType, ControlPart ePart,
-                                 const tools::Rectangle& rBoundingControlRegion,
-                                 ControlState eState,
-                                 const ImplControlValue& aValue,
-                                 const OUString& aCaption,
-                                 tools::Rectangle& rNativeBoundingRegion,
-                                 tools::Rectangle& rNativeContentRegion) override;
-
-    virtual void updateSettings(AllSettings& rSettings);
 
 #if ENABLE_CAIRO_CANVAS
     virtual bool            SupportsCairo() const override;

@@ -2219,7 +2219,7 @@ void GtkSalFrame::UpdateSettings( AllSettings& rSettings )
         bFreeGraphics = true;
     }
 
-    pGraphics->updateSettings( rSettings );
+    pGraphics->UpdateSettings( rSettings );
 
     if( bFreeGraphics )
         ReleaseGraphics( pGraphics );

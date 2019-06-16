@@ -21,6 +21,7 @@
 
 #include <Qt5Font.hxx>
 #include <Qt5Frame.hxx>
+#include <Qt5Graphics_Controls.hxx>
 #include <Qt5Painter.hxx>
 
 #include <QtGui/QImage>
@@ -39,6 +40,8 @@ Qt5Graphics::Qt5Graphics( Qt5Frame *pFrame, QImage *pQImage )
     , m_aTextColor( 0x00, 0x00, 0x00 )
 {
     ResetClipRegion();
+    if (!Qt5Data::noNativeControls())
+        m_pWidgetDraw.reset(new Qt5Graphics_Controls());
 }
 
 Qt5Graphics::~Qt5Graphics()
@@ -110,20 +113,16 @@ SystemFontData Qt5Graphics::GetSysFontData(int /*nFallbacklevel*/) const
 
 #endif
 
-bool Qt5Graphics::drawNativeControl(ControlType nType, ControlPart nPart,
-                                    const tools::Rectangle& rControlRegion, ControlState nState,
-                                    const ImplControlValue& aValue, const OUString& aCaption)
+void Qt5Graphics::handleDamage(const tools::Rectangle& rDamagedRegion)
 {
-    bool bHandled
-        = m_aControl.drawNativeControl(nType, nPart, rControlRegion, nState, aValue, aCaption);
-    if (bHandled)
-    {
-        Qt5Painter aPainter(*this);
-        aPainter.drawImage(QPoint(rControlRegion.getX(), rControlRegion.getY()),
-                           m_aControl.getImage());
-        aPainter.update(toQRect(rControlRegion));
-    }
-    return bHandled;
+    assert(m_pWidgetDraw);
+    assert(dynamic_cast<Qt5Graphics_Controls*>(m_pWidgetDraw.get()));
+    assert(!rDamagedRegion.IsEmpty());
+
+    QImage* pImage = static_cast<Qt5Graphics_Controls*>(m_pWidgetDraw.get())->getImage();
+    Qt5Painter aPainter(*this);
+    aPainter.drawImage(QPoint(rDamagedRegion.getX(), rDamagedRegion.getY()), *pImage);
+    aPainter.update(toQRect(rDamagedRegion));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
