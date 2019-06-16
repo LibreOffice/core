@@ -14,7 +14,6 @@
 #include <conditio.hxx>
 #include <colorscale.hxx>
 #include <docsh.hxx>
-#include <miscuno.hxx>
 #include <compiler.hxx>
 #include <tokenarray.hxx>
 

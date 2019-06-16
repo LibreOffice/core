@@ -18,11 +18,7 @@
 
 #include <miscuno.hxx>
 #include <document.hxx>
-#include <docsh.hxx>
-#include <hints.hxx>
 #include <unonames.hxx>
-
-#include <com/sun/star/chart/ChartDataChangeEvent.hpp>
 
 using namespace css;
 

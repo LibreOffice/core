@@ -32,12 +32,10 @@
 #include <svx/svdoole2.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdundo.hxx>
-#include <sfx2/app.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <comphelper/classids.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/globname.hxx>
-#include <svx/charthelper.hxx>
 #include <svtools/embedhlp.hxx>
 #include <vcl/svapp.hxx>
 
@@ -47,7 +45,6 @@
 #include <docsh.hxx>
 #include <drwlayer.hxx>
 #include <undodat.hxx>
-#include <chartarr.hxx>
 #include <chartlis.hxx>
 #include <chart2uno.hxx>
 #include <convuno.hxx>

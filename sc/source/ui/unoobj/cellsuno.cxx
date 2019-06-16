@@ -31,7 +31,6 @@
 #include <editeng/justifyitem.hxx>
 #include <editeng/editobj.hxx>
 #include <editeng/unoipset.hxx>
-#include <svx/fmdpage.hxx>
 #include <editeng/langitem.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <svl/srchitem.hxx>
@@ -50,11 +49,9 @@
 #include <com/sun/star/util/CellProtection.hpp>
 #include <com/sun/star/table/CellHoriJustify.hpp>
 #include <com/sun/star/table/CellOrientation.hpp>
-#include <com/sun/star/table/CellVertJustify2.hpp>
 #include <com/sun/star/table/ShadowFormat.hpp>
 #include <com/sun/star/table/TableBorder.hpp>
 #include <com/sun/star/table/TableBorder2.hpp>
-#include <com/sun/star/table/BorderLineStyle.hpp>
 #include <com/sun/star/sheet/CellFlags.hpp>
 #include <com/sun/star/sheet/FormulaResult.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -96,7 +93,6 @@
 #include <olinefun.hxx>
 #include <hints.hxx>
 #include <formulacell.hxx>
-#include <undocell.hxx>
 #include <undotab.hxx>
 #include <undoblk.hxx>
 #include <stlsheet.hxx>
@@ -113,7 +109,6 @@
 #include <conditio.hxx>
 #include <validat.hxx>
 #include <sc.hrc>
-#include <brdcst.hxx>
 #include <cellform.hxx>
 #include <globstr.hrc>
 #include <scresid.hxx>
@@ -139,7 +134,6 @@
 #include <refundo.hxx>
 #include <columnspanset.hxx>
 
-#include <list>
 #include <memory>
 
 using namespace com::sun::star;

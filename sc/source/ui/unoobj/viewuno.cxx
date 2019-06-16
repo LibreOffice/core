@@ -25,10 +25,8 @@
 #include <com/sun/star/view/DocumentZoomType.hpp>
 
 #include <editeng/outliner.hxx>
-#include <svx/fmdpage.hxx>
 #include <svx/svditer.hxx>
 #include <svx/svdmark.hxx>
-#include <svx/svdouno.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdview.hxx>
@@ -36,11 +34,11 @@
 #include <svx/fmshell.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
-#include <sfx2/printer.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <comphelper/profilezone.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/sequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <toolkit/helper/convert.hxx>
 #include <vcl/svapp.hxx>
@@ -65,7 +63,6 @@
 #include <gridwin.hxx>
 #include <sheetevents.hxx>
 #include <markdata.hxx>
-#include <AccessibilityHints.hxx>
 #include <scextopt.hxx>
 #include <preview.hxx>
 #include <svx/sdrhittesthelper.hxx>

@@ -20,7 +20,6 @@
 #include <i18nlangtag/languagetag.hxx>
 
 #include <convuno.hxx>
-#include <global.hxx>
 
 using namespace com::sun::star;
 

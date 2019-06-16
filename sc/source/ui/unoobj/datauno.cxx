@@ -60,7 +60,6 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <svx/dataaccessdescriptor.hxx>
 
-#include <limits>
 #include <memory>
 
 using namespace com::sun::star;

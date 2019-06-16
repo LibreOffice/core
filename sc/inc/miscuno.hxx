@@ -29,6 +29,7 @@
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <osl/diagnose.h>
 #include "scdllapi.h"
 
 #define SC_SIMPLE_SERVICE_INFO( ClassName, ClassNameAscii, ServiceAscii )            \

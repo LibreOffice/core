@@ -21,11 +21,11 @@
 
 #include <vcl/svapp.hxx>
 #include <svl/hint.hxx>
+#include <editeng/unoipset.hxx>
 #include <editeng/unotext.hxx>
 #include <editeng/unoprnms.hxx>
 #include <svx/svdpool.hxx>
 #include <svx/svdobj.hxx>
-#include <svx/unoshape.hxx>
 #include <svx/svdocapt.hxx>
 
 #include <postit.hxx>

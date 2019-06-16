@@ -25,7 +25,6 @@
 #include <osl/diagnose.h>
 #include <vcl/svapp.hxx>
 
-#include <scitems.hxx>
 #include <funcuno.hxx>
 #include <miscuno.hxx>
 #include <cellsuno.hxx>
@@ -39,13 +38,11 @@
 #include <formulacell.hxx>
 #include <docoptio.hxx>
 #include <optuno.hxx>
-#include <docuno.hxx>
 #include <markdata.hxx>
 #include <patattr.hxx>
 #include <docpool.hxx>
 #include <attrib.hxx>
 #include <clipparam.hxx>
-#include <dociter.hxx>
 #include <stringutil.hxx>
 #include <tokenarray.hxx>
 #include <memory>

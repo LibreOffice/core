@@ -22,16 +22,15 @@
 #include <boost/property_tree/json_parser.hpp>
 
 #include <scitems.hxx>
+#include <comphelper/sequence.hxx>
 #include <editeng/editview.hxx>
 #include <editeng/outliner.hxx>
 #include <o3tl/any.hxx>
-#include <svx/fmdpage.hxx>
 #include <svx/fmview.hxx>
 #include <svx/svditer.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svxids.hrc>
 #include <svx/unoshape.hxx>
-#include <tools/diagnose_ex.h>
 
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <comphelper/propertysequence.hxx>
@@ -40,24 +39,20 @@
 #include <svl/numuno.hxx>
 #include <svl/hint.hxx>
 #include <unotools/moduleoptions.hxx>
-#include <sfx2/printer.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <vcl/commandevent.hxx>
+#include <svx/unopage.hxx>
 #include <vcl/pdfextoutdevdata.hxx>
+#include <vcl/print.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/waitobj.hxx>
-#include <unotools/charclass.hxx>
 #include <tools/multisel.hxx>
 #include <toolkit/awt/vclxdevice.hxx>
 #include <unotools/saveopt.hxx>
-#include <sal/log.hxx>
 
 #include <float.h>
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#include <com/sun/star/datatransfer/UnsupportedFlavorException.hpp>
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/sheet/XNamedRanges.hpp>
 #include <com/sun/star/sheet/XLabelRanges.hpp>
@@ -88,13 +83,11 @@
 #include <convuno.hxx>
 #include <datauno.hxx>
 #include <docfunc.hxx>
-#include <dociter.hxx>
 #include <docoptio.hxx>
 #include <docsh.hxx>
 #include <docuno.hxx>
 #include <drwlayer.hxx>
 #include <forbiuno.hxx>
-#include <formulacell.hxx>
 #include <formulagroup.hxx>
 #include <gridwin.hxx>
 #include <hints.hxx>
@@ -121,7 +114,6 @@
 #include <targuno.hxx>
 #include <unonames.hxx>
 #include <ViewSettingsSequenceDefines.hxx>
-#include <viewuno.hxx>
 #include <editsh.hxx>
 #include <drawsh.hxx>
 #include <drtxtob.hxx>

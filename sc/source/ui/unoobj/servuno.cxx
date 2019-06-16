@@ -24,7 +24,6 @@
 #include <svtools/unoimap.hxx>
 #include <svx/unofill.hxx>
 #include <vcl/svapp.hxx>
-#include <editeng/unonrule.hxx>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/text/textfield/Type.hpp>
@@ -53,8 +52,6 @@
 // Support creation of GraphicStorageHandler and EmbeddedObjectResolver
 #include <svx/xmleohlp.hxx>
 #include <svx/xmlgrhlp.hxx>
-#include <sfx2/docfile.hxx>
-#include <sfx2/docfilt.hxx>
 #include <com/sun/star/script/vba/XVBAEventProcessor.hpp>
 #include <com/sun/star/document/XCodeNameQuery.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
@@ -66,7 +63,6 @@
 #include <basic/basmgr.hxx>
 #include <sfx2/app.hxx>
 
-#include <cppuhelper/component_context.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/script/vba/XVBACompatibility.hpp>
 

@@ -29,28 +29,21 @@
 #include <editeng/editobj.hxx>
 #include <editeng/flditem.hxx>
 #include <editeng/fhgtitem.hxx>
-#include <svx/unomid.hxx>
 #include <editeng/unoprnms.hxx>
 #include <editeng/unofored.hxx>
-#include <vcl/virdev.hxx>
 #include <vcl/svapp.hxx>
-#include <com/sun/star/awt/FontSlant.hpp>
 
-#include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <editeng/unoipset.hxx>
 #include <textuno.hxx>
 #include <fielduno.hxx>
-#include <servuno.hxx>
 #include <editsrc.hxx>
 #include <docsh.hxx>
 #include <editutil.hxx>
 #include <miscuno.hxx>
 #include <cellsuno.hxx>
-#include <hints.hxx>
 #include <cellvalue.hxx>
 #include <cellform.hxx>
 #include <patattr.hxx>
-#include <formulacell.hxx>
 #include <docfunc.hxx>
 #include <scmod.hxx>
 

@@ -26,16 +26,12 @@
 #include <vcl/svapp.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/sfxmodelfactory.hxx>
-#include <afmtuno.hxx>
-#include <funcuno.hxx>
-#include <filtuno.hxx>
 #include <miscuno.hxx>
 #include <scmod.hxx>
 #include <appoptio.hxx>
 #include <inputopt.hxx>
 #include <printopt.hxx>
 #include <userlist.hxx>
-#include <sc.hrc>
 #include <scdll.hxx>
 #include <unonames.hxx>
 #include <funcdesc.hxx>

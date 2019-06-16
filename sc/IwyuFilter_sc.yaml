@@ -873,4 +873,15 @@ blacklist:
     sc/source/ui/undo/undoolk.cxx:
     # Avoid loplugin:unreffun error
     - undoolk.hxx
-
+    sc/source/ui/unoobj/cellsuno.cxx:
+    # Needed for direct member access
+    - refundo.hxx
+    sc/source/ui/unoobj/confuno.cxx:
+    # Used with function template
+    - docpool.hxx
+    sc/source/ui/unoobj/notesuno.cxx:
+    # Needed for macro defines
+    - editeng/unoprnms.hxx
+    sc/source/ui/unoobj/textuno.cxx:
+    # Needed for macro defines
+    - editeng/unoprnms.hxx

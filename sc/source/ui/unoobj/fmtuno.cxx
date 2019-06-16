@@ -20,6 +20,7 @@
 #include <sal/config.h>
 
 #include <osl/diagnose.h>
+#include <svl/style.hxx>
 #include <vcl/svapp.hxx>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/sheet/ConditionOperator2.hpp>
@@ -32,7 +33,6 @@
 #include <validat.hxx>
 #include <document.hxx>
 #include <unonames.hxx>
-#include <styleuno.hxx>
 #include <tokenarray.hxx>
 #include <tokenuno.hxx>
 #include <stylehelper.hxx>

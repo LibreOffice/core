@@ -12,7 +12,6 @@
 #include <sal/config.h>
 
 #include <miscuno.hxx>
-#include <docsh.hxx>
 
 #include <comphelper/sequence.hxx>
 #include <vcl/svapp.hxx>

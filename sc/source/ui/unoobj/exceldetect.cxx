@@ -10,19 +10,13 @@
 #include "exceldetect.hxx"
 
 #include <com/sun/star/io/XInputStream.hpp>
-#include <com/sun/star/ucb/XContent.hpp>
 #include <com/sun/star/ucb/ContentCreationException.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/supportsservice.hxx>
 
-#include <svl/itemset.hxx>
-#include <svl/eitem.hxx>
-#include <sfx2/app.hxx>
 #include <sfx2/docfile.hxx>
-#include <sfx2/sfxsids.hrc>
 #include <unotools/mediadescriptor.hxx>
 #include <sot/storage.hxx>
-#include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
 
 using namespace com::sun::star;

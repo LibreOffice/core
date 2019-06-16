@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <osl/diagnose.h>
 #include <scitems.hxx>
 #include <editeng/memberids.h>
 #include <osl/diagnose.h>
@@ -27,32 +26,11 @@
 #include <svx/unomid.hxx>
 #include <unowids.hxx>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
-#include <com/sun/star/table/BorderLine.hpp>
-#include <com/sun/star/table/CellVertJustify2.hpp>
-#include <com/sun/star/table/ShadowLocation.hpp>
 #include <com/sun/star/table/TableBorder.hpp>
-#include <com/sun/star/table/ShadowFormat.hpp>
-#include <com/sun/star/table/CellRangeAddress.hpp>
-#include <com/sun/star/table/CellContentType.hpp>
-#include <com/sun/star/table/TableOrientation.hpp>
 #include <com/sun/star/table/CellHoriJustify.hpp>
-#include <com/sun/star/util/SortField.hpp>
-#include <com/sun/star/util/SortFieldType.hpp>
 #include <com/sun/star/table/CellOrientation.hpp>
-#include <com/sun/star/table/CellAddress.hpp>
 #include <com/sun/star/table/TableBorder2.hpp>
-#include <com/sun/star/awt/SimpleFontMetric.hpp>
-#include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/awt/FontSlant.hpp>
-#include <com/sun/star/awt/CharSet.hpp>
-#include <com/sun/star/awt/FontDescriptor.hpp>
-#include <com/sun/star/awt/FontWidth.hpp>
-#include <com/sun/star/awt/XFont.hpp>
-#include <com/sun/star/awt/FontType.hpp>
-#include <com/sun/star/awt/FontUnderline.hpp>
-#include <com/sun/star/awt/FontStrikeout.hpp>
-#include <com/sun/star/awt/FontFamily.hpp>
-#include <com/sun/star/awt/FontPitch.hpp>
 
 #include <afmtuno.hxx>
 #include <miscuno.hxx>

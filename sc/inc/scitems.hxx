@@ -50,6 +50,10 @@ class SvxVerJustifyItem;
 class SvxBrushItem;
 class SvxBoxItem;
 class ScCondFormatItem;
+class SvxLineItem;
+class SvxRotateModeItem;
+class SfxStringItem;
+class SvxSizeItem;
 
 //  EditEngine is not allowed to define its own ITEMID's
 #define INCLUDED_EDITENG_EEITEMID_HXX
