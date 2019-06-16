@@ -300,7 +300,6 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/gdi/salgdiimpl \
     vcl/source/gdi/sallayout \
     vcl/source/gdi/salmisc \
-    vcl/source/gdi/salnativewidgets-none \
     vcl/source/gdi/vectorgraphicdata \
     vcl/source/gdi/textlayout \
     vcl/source/gdi/virdev \

@@ -295,6 +295,9 @@ public:
 
     // native widget rendering methods that require mirroring
 #ifdef MACOSX
+protected:
+    virtual bool            isNativeControlSupported( ControlType nType, ControlPart nPart ) override;
+
     virtual bool            hitTestNativeControl( ControlType nType, ControlPart nPart, const tools::Rectangle& rControlRegion,
                                                   const Point& aPos, bool& rIsInside ) override;
     virtual bool            drawNativeControl( ControlType nType, ControlPart nPart, const tools::Rectangle& rControlRegion,
@@ -303,6 +306,8 @@ public:
     virtual bool            getNativeControlRegion( ControlType nType, ControlPart nPart, const tools::Rectangle& rControlRegion, ControlState nState,
                                                     const ImplControlValue& aValue, const OUString& aCaption,
                                                     tools::Rectangle &rNativeBoundingRegion, tools::Rectangle &rNativeContentRegion ) override;
+
+public:
 #endif
 
     // get device resolution
@@ -382,11 +387,6 @@ public:
                             GetTextLayout(int nFallbackLevel) override;
     virtual void            DrawTextLayout( const GenericSalLayout& ) override;
     virtual bool            supportsOperation( OutDevSupportType ) const override;
-
-#ifdef MACOSX
-    // Query the platform layer for control support
-    virtual bool            IsNativeControlSupported( ControlType nType, ControlPart nPart ) override;
-#endif
 
     virtual SystemGraphicsData
                             GetGraphicsData() const override;
