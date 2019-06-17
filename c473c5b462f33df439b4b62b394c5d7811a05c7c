@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_b776fd05",
+        "filename": "cui/source/customize/CustomNotebookbarGenerator.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-06-17T00:33:19Z",
+      "side": 1,
+      "message": "I can\u0027t understand why all the dance with string buffer is introduced here. Besides adding extra code lines, it also doesn\u0027t help efficiency here:\n\n    OUString sAppName, sNotebookbarUIFileName;\n    CustomNotebookbarGenerator::getFileNameAndAppName(sAppName, sNotebookbarUIFileName);\n    return customizedUIPathBuffer() + \"modules/s\" + sAppName.toAsciiLowerCase() + \"/ui/\" + sNotebookbarUIFileName;\n\nAnd likewise in other similar places.",
+      "range": {
+        "startLine": 106,
+        "startChar": 4,
+        "endLine": 106,
+        "endChar": 43
+      },
+      "revId": "c473c5b462f33df439b4b62b394c5d7811a05c7c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
