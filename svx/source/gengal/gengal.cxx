@@ -34,6 +34,7 @@
 #include <rtl/bootstrap.hxx>
 #include <sfx2/app.hxx>
 #include <sal/types.h>
+#include <tools/diagnose_ex.h>
 #include <vcl/svapp.hxx>
 
 #include <svx/galtheme.hxx>
@@ -297,9 +298,9 @@ int GalApp::Main()
 
         createTheme( aName, aPath, aDestDir, aFiles, mbRelativeURLs );
     }
-    catch (const uno::Exception& e)
+    catch (const uno::Exception&)
     {
-        SAL_WARN("svx", "Fatal: " << e);
+        TOOLS_WARN_EXCEPTION("svx", "Fatal");
         return EXIT_FAILURE;
     }
     catch (const std::exception &e)

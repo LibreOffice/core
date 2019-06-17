@@ -3562,9 +3562,9 @@ void FmXTextCell::PaintFieldToCell(OutputDevice& rDev,
         else
             rDev.DrawText(rRect, aText, nStyle);
     }
-    catch (const Exception& e)
+    catch (const Exception&)
     {
-        SAL_WARN("svx.fmcomp", "PaintFieldToCell: caught " << e);
+        TOOLS_WARN_EXCEPTION("svx.fmcomp", "PaintFieldToCell");
     }
 }
 
