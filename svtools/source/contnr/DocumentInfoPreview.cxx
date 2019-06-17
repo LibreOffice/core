@@ -38,6 +38,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/builderfactory.hxx>
 #include <tools/datetime.hxx>
+#include <tools/diagnose_ex.h>
 #include <tools/urlobj.hxx>
 #include <unotools/ucbhelper.hxx>
 #include <unotools/localedatawrapper.hxx>
@@ -113,8 +114,8 @@ void ODocumentInfoPreview::fill(
         try {
             value = conv->convertToSimpleType(aAny, css::uno::TypeClass_STRING).
                 get< OUString >();
-        } catch (css::script::CannotConvertException & e) {
-            SAL_INFO("svtools.contnr", "ignored " << e);
+        } catch (css::script::CannotConvertException &) {
+            TOOLS_INFO_EXCEPTION("svtools.contnr", "ignored");
         }
         if (!value.isEmpty()) {
             insertEntry(name, value);
