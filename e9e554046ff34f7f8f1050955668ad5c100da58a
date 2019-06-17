@@ -16,6 +16,24 @@
       "revId": "e9e554046ff34f7f8f1050955668ad5c100da58a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_b22e0ba3",
+        "filename": "vcl/inc/WidgetThemeLibrary.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2019-06-17T16:15:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3fa0c359_f24a5325",
+      "revId": "e9e554046ff34f7f8f1050955668ad5c100da58a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
