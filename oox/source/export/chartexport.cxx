@@ -2423,6 +2423,8 @@ void ChartExport::exportAxis(const AxisIdPair& rAxisIdPair)
                 nAxisType = XML_valAx;
             else if( eChartType == chart::TYPEID_STOCK )
                 nAxisType = XML_dateAx;
+            else if( eChartType == chart::TYPEID_BAR )
+                nAxisType = XML_serAx;
             // FIXME: axPos, need to check axis direction
             sAxPos = "b";
             break;

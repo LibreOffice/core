@@ -128,6 +128,7 @@ public:
     void testChartTitlePropertiesBitmapFillPPTX();
     void testxAxisLabelsRotation();
     void testTdf116163();
+    void testTdf111824();
     void testTdf119029();
     void testTdf108022();
     void testTdf121744();
@@ -224,6 +225,7 @@ public:
     CPPUNIT_TEST(testChartTitlePropertiesBitmapFillPPTX);
     CPPUNIT_TEST(testxAxisLabelsRotation);
     CPPUNIT_TEST(testTdf116163);
+    CPPUNIT_TEST(testTdf111824);
     CPPUNIT_TEST(testTdf119029);
     CPPUNIT_TEST(testTdf108022);
     CPPUNIT_TEST(testTdf121744);
@@ -2079,6 +2081,18 @@ void Chart2ExportTest::testTdf116163()
     CPPUNIT_ASSERT(pXmlDoc);
 
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:catAx/c:txPr/a:bodyPr", "rot", "-5400000");
+}
+
+void Chart2ExportTest::testTdf111824()
+{
+    load("/chart2/qa/extras/data/xlsx/", "tdf111824.xlsx");
+    xmlDocPtr pXmlDoc = parseExport("xl/charts/chart", "Calc Office Open XML");
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // Collect 3D barchart Z axID
+    OUString zAxisIdOf3DBarchart = getXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:bar3DChart/c:axId[3]", "val");
+    // 3D barchart Z axis properties should be in a serAx OOXML tag instead of catAx
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:serAx/c:axId", "val", zAxisIdOf3DBarchart);
 }
 
 void Chart2ExportTest::testTdf119029()
