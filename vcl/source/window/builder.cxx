@@ -185,7 +185,9 @@ namespace weld
 
     IMPL_LINK(MetricSpinButton, spin_button_output, SpinButton&, rSpinButton, void)
     {
-        rSpinButton.set_text(format_number(rSpinButton.get_value()));
+        OUString sNewText(format_number(rSpinButton.get_value()));
+        if (sNewText != rSpinButton.get_text())
+            rSpinButton.set_text(sNewText);
     }
 
     void MetricSpinButton::update_width_chars()
