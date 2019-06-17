@@ -366,7 +366,7 @@ public:
     void    FindChanged();
     void    SetPagebreakMode( ScPageBreakData* pPageData );
     /// Draws reference mark and returns its properties
-    ReferenceMark DrawRefMark( SCCOL nRefStartX, SCROW nRefStartY,
+    void    DrawRefMark( SCCOL nRefStartX, SCROW nRefStartY,
                          SCCOL nRefEndX, SCROW nRefEndY,
                          const Color& rColor, bool bHandle );
     ReferenceMark FillReferenceMark( SCCOL nRefStartX, SCROW nRefStartY,

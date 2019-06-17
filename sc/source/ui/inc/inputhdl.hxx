@@ -30,6 +30,7 @@
 #include <tools/link.hxx>
 #include <vcl/vclptr.hxx>
 #include <editeng/svxenum.hxx>
+#include "viewdata.hxx"
 
 #include <set>
 #include <memory>
@@ -282,6 +283,10 @@ public:
     void SetDocumentDisposing( bool b );
 
     static void     SetAutoComplete(bool bSet)  { bAutoComplete = bSet; }
+
+    static ReferenceMark GetReferenceMark( ScViewData& rViewData, ScDocShell* pDocSh,
+                                    long nX1, long nX2, long nY1, long nY2,
+                                    long nTab, const Color& rColor );
 };
 
 //  ScInputHdlState
