@@ -38,6 +38,7 @@
 #include <com/sun/star/text/GraphicCrop.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <comphelper/fileformat.h>
+#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <sal/log.hxx>
@@ -805,7 +806,7 @@ void SAL_CALL GraphicProvider::storeGraphic( const uno::Reference< ::graphic::XG
 
     {
         const uno::Reference< XInterface >  xIFace( rxGraphic, uno::UNO_QUERY );
-        const ::Graphic*                    pGraphic = ::unographic::Graphic::getImplementation( xIFace );
+        const ::Graphic*                    pGraphic = comphelper::getUnoTunnelImplementation<::Graphic>( xIFace );
 
         if( pGraphic && ( pGraphic->GetType() != GraphicType::NONE ) )
         {

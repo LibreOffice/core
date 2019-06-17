@@ -181,13 +181,6 @@ uno::Sequence<sal_Int8> SAL_CALL Graphic::getMaskDIB()
     }
 }
 
-const ::Graphic* Graphic::getImplementation( const uno::Reference< uno::XInterface >& rxIFace )
-    throw()
-{
-    uno::Reference< lang::XUnoTunnel > xTunnel( rxIFace, uno::UNO_QUERY );
-    return( xTunnel.is() ? reinterpret_cast< ::Graphic* >( xTunnel->getSomething( ::Graphic::getUnoTunnelId() ) ) : nullptr );
-}
-
 sal_Int64 SAL_CALL Graphic::getSomething( const uno::Sequence< sal_Int8 >& rId )
 {
     return( ( rId.getLength() == 16 && 0 == memcmp( ::Graphic::getUnoTunnelId().getConstArray(), rId.getConstArray(), 16 ) ) ?
