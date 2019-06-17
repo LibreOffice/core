@@ -926,8 +926,7 @@ IMPL_LINK(SpellDialog, ModifyHdl, Edit&, rEd, void)
     {
         m_pSuggestionLB->SetNoSelection();
         m_pSuggestionLB->Disable();
-        OUString sNewText( m_pSentenceED->GetText() );
-        m_pAutoCorrPB->Enable( sNewText != m_pSentenceED->GetText() );
+        m_pAutoCorrPB->Disable();
         std::unique_ptr<SpellUndoAction_Impl> pSpellAction(new SpellUndoAction_Impl(SPELLUNDO_CHANGE_TEXTENGINE, aDialogUndoLink));
         if(!m_pChangeAllPB->IsEnabled())
         {
