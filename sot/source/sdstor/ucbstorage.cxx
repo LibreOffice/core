@@ -1007,7 +1007,7 @@ BaseStorage* UCBStorageStream_Impl::CreateStorage()
     UCBStorageStream* pNewStorageStream = new UCBStorageStream( this );
     Storage *pStorage = new Storage( *pNewStorageStream, m_bDirect );
 
-    // GetError() call cleares error code for OLE storages, must be changed in future
+    // GetError() call clears error code for OLE storages, must be changed in future
     const ErrCode nTmpErr = pStorage->GetError();
     pStorage->SetError( nTmpErr );
 
