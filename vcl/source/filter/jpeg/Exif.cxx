@@ -215,8 +215,8 @@ bool Exif::processExif(SvStream& rStream, sal_uInt16 aSectionLength, bool bSetVa
 
     TiffHeader* aTiffHeader = reinterpret_cast<TiffHeader*>(&aExifData[0]);
 
-    bool bIntel = aTiffHeader->byteOrder == 0x4949;      //big-endian
-    bool bMotorola = aTiffHeader->byteOrder == 0x4D4D;   //little-endian
+    bool bIntel = aTiffHeader->byteOrder == 0x4949;      //little-endian
+    bool bMotorola = aTiffHeader->byteOrder == 0x4D4D;   //big-endian
 
     if (!bIntel && !bMotorola)
     {
