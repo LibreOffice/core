@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_b2028bb3",
+        "filename": "vcl/unx/gtk3/gtk3salnativewidgets-gtk.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2269,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2019-06-17T11:02:03Z",
+      "side": 0,
+      "message": "If m_pWidgetDraw is set it should have precedence over the native GTK3 drawing. Doesn\u0027t this change remove this?",
+      "revId": "adcb7bacb452dccde70b20a902f5c1f23f37913f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

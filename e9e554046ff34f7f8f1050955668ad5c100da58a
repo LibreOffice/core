@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_f24a5325",
+        "filename": "vcl/inc/WidgetThemeLibrary.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2019-06-17T11:02:03Z",
+      "side": 1,
+      "message": "It is not a good idea to change this.",
+      "revId": "e9e554046ff34f7f8f1050955668ad5c100da58a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
