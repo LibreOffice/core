@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_1237bfe5",
+        "filename": "xmloff/source/text/XMLTextCharStyleNamesElementExport.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2019-06-17T08:05:28Z",
+      "side": 1,
+      "message": "if bAllStyles is not set, then nCount starts as len of anames, lets assume nCount \u003d\u003d 2",
+      "revId": "96be3821f7dad19004a43696555eaa4fa2e1aef5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_b235abdc",
+        "filename": "xmloff/source/text/XMLTextCharStyleNamesElementExport.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2019-06-17T08:05:28Z",
+      "side": 1,
+      "message": "so i starts as 2",
+      "revId": "96be3821f7dad19004a43696555eaa4fa2e1aef5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_b24a8b52",
+        "filename": "xmloff/source/text/XMLTextCharStyleNamesElementExport.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2019-06-17T08:05:28Z",
+      "side": 1,
+      "message": "first enter of loop, i is predecremented to 1, so its while (1)\n\nsecond enter of loop, i is predecremented to 0, so its while (0)\n\nso with bAllStyles not set there is one less exported than number of entries in aNames\n\ndtor logic follows same scheme, so with range iteration thing there was one more StartElement than EndElement\n\nno idea why things are this way, presumably there is a good reason. presumably knocking off the last entry of the sequence and using range over the truncated sequence would dtrt also",
+      "revId": "96be3821f7dad19004a43696555eaa4fa2e1aef5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
