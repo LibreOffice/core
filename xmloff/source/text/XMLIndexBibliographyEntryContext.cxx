@@ -111,8 +111,8 @@ void XMLIndexBibliographyEntryContext::StartElement(
         {
             if ( IsXMLToken( sLocalName, XML_STYLE_NAME ) )
             {
-                sCharStyleName = xAttrList->getValueByIndex(nAttr);
-                bCharStyleNameOK = true;
+                m_sCharStyleName = xAttrList->getValueByIndex(nAttr);
+                m_bCharStyleNameOK = true;
             }
             else if ( IsXMLToken( sLocalName, XML_BIBLIOGRAPHY_DATA_FIELD ) )
             {
@@ -129,13 +129,13 @@ void XMLIndexBibliographyEntryContext::StartElement(
     }
 
     // if we have a style name, set it!
-    if (bCharStyleNameOK)
+    if (m_bCharStyleNameOK)
     {
-        nValues++;
+        m_nValues++;
     }
 
     // always bibliography; else element is not valid
-    nValues++;
+    m_nValues++;
 }
 
 void XMLIndexBibliographyEntryContext::EndElement()
@@ -154,7 +154,7 @@ void XMLIndexBibliographyEntryContext::FillPropertyValues(
     XMLIndexSimpleEntryContext::FillPropertyValues(rValues);
 
     // bibliography data field
-    sal_Int32 nIndex = bCharStyleNameOK ? 2 : 1;
+    sal_Int32 nIndex = m_bCharStyleNameOK ? 2 : 1;
     rValues[nIndex].Name = "BibliographyDataField";
     rValues[nIndex].Value <<= nBibliographyInfo;
 }
