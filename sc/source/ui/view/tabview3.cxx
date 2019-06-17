@@ -62,6 +62,7 @@
 #include <formula/FormulaCompiler.hxx>
 #include <comphelper/lok.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <output.hxx>
 
 #include <com/sun/star/chart2/data/HighlightedRange.hpp>
 
@@ -2531,6 +2532,9 @@ void ScTabView::DoChartSelection(
 {
     ClearHighlightRanges();
     const sal_Unicode sep = ::formula::FormulaCompiler::GetNativeSymbolChar(ocSep);
+    size_t nSize = 0;
+    size_t nIndex = 0;
+    std::vector<ReferenceMark> aReferenceMarks( nSize );
 
     for (chart2::data::HighlightedRange const & rHighlightedRange : rHilightRanges)
     {
@@ -2541,16 +2545,44 @@ void ScTabView::DoChartSelection(
                 aRangeList, rHighlightedRange.RangeRepresentation, &rDoc, rDoc.GetAddressConvention(), sep ))
         {
             size_t nListSize = aRangeList.size();
+            nSize += nListSize;
+            aReferenceMarks.resize(nSize);
+
             for ( size_t j = 0; j < nListSize; ++j )
             {
-                ScRange const & r = aRangeList[j];
+                ScRange& p = aRangeList[j];
+                ScRange aTargetRange;
                 if( rHighlightedRange.Index == - 1 )
-                    AddHighlightRange( r, aSelColor );
+                {
+                    aTargetRange = p;
+                    AddHighlightRange( aTargetRange, aSelColor );
+                }
                 else
-                    AddHighlightRange( lcl_getSubRangeByIndex( r, rHighlightedRange.Index ), aSelColor );
+                {
+                    aTargetRange = lcl_getSubRangeByIndex( p, rHighlightedRange.Index );
+                    AddHighlightRange( aTargetRange, aSelColor );
+                }
+
+                if ( comphelper::LibreOfficeKit::isActive() && aViewData.GetViewShell() )
+                {
+                    aTargetRange.PutInOrder();
+
+                    long nX1 = aTargetRange.aStart.Col();
+                    long nX2 = aTargetRange.aEnd.Col();
+                    long nY1 = aTargetRange.aStart.Row();
+                    long nY2 = aTargetRange.aEnd.Row();
+                    long nTab = aTargetRange.aStart.Tab();
+
+                    aReferenceMarks[nIndex++] = ScInputHandler::GetReferenceMark( aViewData, aViewData.GetDocShell(),
+                                                                            nX1, nX2, nY1, nY2,
+                                                                            nTab, aSelColor );
+                }
             }
         }
     }
+
+    if ( comphelper::LibreOfficeKit::isActive() && aViewData.GetViewShell() )
+        ScInputHandler::SendReferenceMarks( aViewData.GetViewShell(), aReferenceMarks );
 }
 
 void ScTabView::DoDPFieldPopup(OUString const & rPivotTableName, sal_Int32 nDimensionIndex, Point aPoint, Size aSize)
