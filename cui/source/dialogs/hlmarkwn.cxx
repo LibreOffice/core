@@ -20,6 +20,7 @@
 #include <dialmgr.hxx>
 #include <sfx2/docfile.hxx>
 #include <unotools/viewoptions.hxx>
+#include <vcl/graph.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/wrkwin.hxx>
@@ -38,7 +39,6 @@
 #include <com/sun/star/io/IOException.hpp>
 
 #include <toolkit/helper/vclunohelper.hxx>
-#include <vcl/treelistentry.hxx>
 
 #include <strings.hrc>
 #include <hlmarkwn.hxx>
@@ -60,98 +60,50 @@ struct TargetData
     }
 };
 
-// Tree-Window
-SvxHlmarkTreeLBox::SvxHlmarkTreeLBox(vcl::Window* pParent, WinBits nStyle)
-    : SvTreeListBox(pParent, nStyle)
-    , mpParentWnd(nullptr)
-{
-    SetNodeDefaultImages();
-}
-
-SvxHlmarkTreeLBox::~SvxHlmarkTreeLBox()
-{
-    disposeOnce();
-}
-
-void SvxHlmarkTreeLBox::dispose()
-{
-    mpParentWnd.clear();
-    SvTreeListBox::dispose();
-}
-
-VCL_BUILDER_FACTORY_CONSTRUCTOR(SvxHlmarkTreeLBox, WB_TABSTOP)
-
-Size SvxHlmarkTreeLBox::GetOptimalSize() const
-{
-    return LogicToPixel(Size(103, 162), MapMode(MapUnit::MapAppFont));
-}
-
-void SvxHlmarkTreeLBox::Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle& rRect)
-{
-    if (!mpParentWnd || mpParentWnd->mnError == LERR_NOERROR)
-    {
-        SvTreeListBox::Paint(rRenderContext, rRect);
-    }
-    else
-    {
-        Erase(rRenderContext);
-
-        ::tools::Rectangle aDrawRect(Point( 0, 0 ), GetSizePixel());
-
-        OUString aStrMessage;
-
-        switch (mpParentWnd->mnError)
-        {
-        case LERR_NOENTRIES :
-            aStrMessage = CuiResId( RID_SVXSTR_HYPDLG_ERR_LERR_NOENTRIES );
-            break;
-        case LERR_DOCNOTOPEN :
-            aStrMessage = CuiResId( RID_SVXSTR_HYPDLG_ERR_LERR_DOCNOTOPEN );
-            break;
-        }
-
-        rRenderContext.DrawText(aDrawRect, aStrMessage, DrawTextFlags::Left
-                | DrawTextFlags::MultiLine | DrawTextFlags::WordBreak);
-    }
-}
-
-
 //*** Window-Class ***
 // Constructor / Destructor
-SvxHlinkDlgMarkWnd::SvxHlinkDlgMarkWnd( SvxHyperlinkTabPageBase *pParent )
-    : FloatingWindow(pParent, "HyperlinkMark", "cui/ui/hyperlinkmarkdialog.ui")
-    , mbUserMoved(false)
-    , mpParent(pParent)
+SvxHlinkDlgMarkWnd::SvxHlinkDlgMarkWnd(weld::Window* pParentDialog, SvxHyperlinkTabPageBase *pParentPage)
+    : GenericDialogController(pParentDialog, "cui/ui/hyperlinkmarkdialog.ui", "HyperlinkMark")
+    , mpParent(pParentPage)
     , mnError(LERR_NOERROR)
+    , mxBtApply(m_xBuilder->weld_button("ok"))
+    , mxBtClose(m_xBuilder->weld_button("close"))
+    , mxLbTree(m_xBuilder->weld_tree_view("TreeListBox"))
+    , mxError(m_xBuilder->weld_label("error"))
 {
-    get(mpBtApply, "apply");
-    get(mpBtClose, "close");
-    get(mpLbTree, "TreeListBox");
-    mpLbTree->SetParentWnd(this);
-
-    mpBtApply->SetClickHdl          ( LINK ( this, SvxHlinkDlgMarkWnd, ClickApplyHdl_Impl ) );
-    mpBtClose->SetClickHdl       ( LINK ( this, SvxHlinkDlgMarkWnd, ClickCloseHdl_Impl ) );
-    mpLbTree->SetDoubleClickHdl  ( LINK ( this, SvxHlinkDlgMarkWnd, DoubleClickApplyHdl_Impl ) );
-
-    // add lines to the Tree-ListBox
-    mpLbTree->SetStyle( mpLbTree->GetStyle() | WB_TABSTOP | WB_BORDER | WB_HASLINES |
-                            WB_HASBUTTONS |  //WB_HASLINESATROOT |
-                            WB_HSCROLL | WB_HASBUTTONSATROOT );
+    mxLbTree->set_size_request(mxLbTree->get_approximate_digit_width() * 25,
+                               mxLbTree->get_height_rows(12));
+    mxBtApply->connect_clicked( LINK ( this, SvxHlinkDlgMarkWnd, ClickApplyHdl_Impl ) );
+    mxBtClose->connect_clicked( LINK ( this, SvxHlinkDlgMarkWnd, ClickCloseHdl_Impl ) );
+    mxLbTree->connect_row_activated( LINK ( this, SvxHlinkDlgMarkWnd, DoubleClickApplyHdl_Impl ) );
 }
 
 SvxHlinkDlgMarkWnd::~SvxHlinkDlgMarkWnd()
 {
-    disposeOnce();
+    ClearTree();
 }
 
-void SvxHlinkDlgMarkWnd::dispose()
+void SvxHlinkDlgMarkWnd::ErrorChanged()
 {
-    ClearTree();
-    mpBtApply.clear();
-    mpBtClose.clear();
-    mpLbTree.clear();
-    mpParent.clear();
-    FloatingWindow::dispose();
+    if (mnError == LERR_NOENTRIES)
+    {
+        OUString aStrMessage = CuiResId( RID_SVXSTR_HYPDLG_ERR_LERR_NOENTRIES );
+        mxError->set_label(aStrMessage);
+        mxError->show();
+        mxLbTree->hide();
+    }
+    else if (mnError == LERR_DOCNOTOPEN)
+    {
+        OUString aStrMessage = CuiResId( RID_SVXSTR_HYPDLG_ERR_LERR_DOCNOTOPEN );
+        mxError->set_label(aStrMessage);
+        mxError->show();
+        mxLbTree->hide();
+    }
+    else
+    {
+        mxLbTree->show();
+        mxError->hide();
+    }
 }
 
 // Set an errorstatus
@@ -163,44 +115,20 @@ sal_uInt16 SvxHlinkDlgMarkWnd::SetError( sal_uInt16 nError)
     if( mnError != LERR_NOERROR )
         ClearTree();
 
-    mpLbTree->Invalidate();
+    ErrorChanged();
 
     return nOldError;
 }
 
 // Move window
-bool SvxHlinkDlgMarkWnd::MoveTo ( Point aNewPos )
+void SvxHlinkDlgMarkWnd::MoveTo(const Point& rNewPos)
 {
-    if ( !mbUserMoved )
-    {
-        bool bOldStatus = mbUserMoved;
-        SetPosPixel ( aNewPos );
-        mbUserMoved = bOldStatus;
-    }
-
-    return mbUserMoved;
-}
-
-void SvxHlinkDlgMarkWnd::Move ()
-{
-    Window::Move();
-
-    if ( IsReallyVisible() )
-        mbUserMoved = true;
-}
-
-bool SvxHlinkDlgMarkWnd::ConnectToDialog()
-{
-    bool bOldStatus = mbUserMoved;
-
-    mbUserMoved = true;
-
-    return bOldStatus;
+    m_xDialog->window_move(rNewPos.X(), rNewPos.Y());
 }
 
 namespace
 {
-    void SelectPath(SvTreeListEntry *pEntry, SvxHlmarkTreeLBox &rLbTree,
+    void SelectPath(weld::TreeIter* pEntry, weld::TreeView& rLbTree,
         std::deque<OUString> &rLastSelectedPath)
     {
         OUString sTitle(rLastSelectedPath.front());
@@ -209,18 +137,21 @@ namespace
             return;
         while (pEntry)
         {
-            if (sTitle == rLbTree.GetEntryText(pEntry))
+            if (sTitle == rLbTree.get_text(*pEntry))
             {
-                rLbTree.Select(pEntry);
-                rLbTree.MakeVisible(pEntry);
+                rLbTree.select(*pEntry);
+                rLbTree.scroll_to_row(*pEntry);
                 if (!rLastSelectedPath.empty())
                 {
-                    rLbTree.Expand(pEntry);
-                    SelectPath(rLbTree.FirstChild(pEntry), rLbTree, rLastSelectedPath);
+                    rLbTree.expand_row(*pEntry);
+                    if (!rLbTree.iter_children(*pEntry))
+                        pEntry = nullptr;
+                    SelectPath(pEntry, rLbTree, rLastSelectedPath);
                 }
                 break;
             }
-            pEntry = pEntry->NextSibling();
+            if (!rLbTree.iter_next_sibling(*pEntry))
+                pEntry = nullptr;
         }
     }
 }
@@ -255,7 +186,10 @@ void SvxHlinkDlgMarkWnd::RestoreLastSelection()
     if (!bSelectedEntry && !aLastSelectedPath.empty())
     {
         std::deque<OUString> aTmpSelectedPath(aLastSelectedPath);
-        SelectPath(mpLbTree->First(), *mpLbTree, aTmpSelectedPath);
+        std::unique_ptr<weld::TreeIter> xEntry(mxLbTree->make_iterator());
+        if (!mxLbTree->get_iter_first(*xEntry))
+            xEntry.reset();
+        SelectPath(xEntry.get(), *mxLbTree, aTmpSelectedPath);
     }
 }
 
@@ -264,7 +198,7 @@ void SvxHlinkDlgMarkWnd::RefreshTree (const OUString& aStrURL)
 {
     OUString aUStrURL;
 
-    EnterWait();
+    weld::WaitObject aWait(m_xDialog.get());
 
     ClearTree();
 
@@ -274,7 +208,7 @@ void SvxHlinkDlgMarkWnd::RefreshTree (const OUString& aStrURL)
         aUStrURL = aStrURL;
 
     if (!RefreshFromDoc(aUStrURL))
-        mpLbTree->Invalidate();
+        ErrorChanged();
 
     bool bSelectedEntry = false;
 
@@ -286,8 +220,6 @@ void SvxHlinkDlgMarkWnd::RefreshTree (const OUString& aStrURL)
 
     if (!bSelectedEntry)
         RestoreLastSelection();
-
-    LeaveWait();
 }
 
 // get links from document
@@ -351,7 +283,7 @@ bool SvxHlinkDlgMarkWnd::RefreshFromDoc(const OUString& aURL)
 }
 
 // Fill Tree-Control
-int SvxHlinkDlgMarkWnd::FillTree( const uno::Reference< container::XNameAccess >& xLinks, SvTreeListEntry* pParentEntry )
+int SvxHlinkDlgMarkWnd::FillTree( const uno::Reference< container::XNameAccess >& xLinks, weld::TreeIter* pParentEntry )
 {
     int nEntries=0;
     const uno::Sequence< OUString > aNames( xLinks->getElementNames() );
@@ -398,48 +330,32 @@ int SvxHlinkDlgMarkWnd::FillTree( const uno::Reference< container::XNameAccess >
 
                 // create userdata
                 TargetData *pData = new TargetData ( aLink, bIsTarget );
+                OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pData)));
 
-                SvTreeListEntry* pEntry;
+                std::unique_ptr<weld::TreeIter> xEntry(mxLbTree->make_iterator());
+                mxLbTree->insert(pParentEntry, -1, &aStrDisplayname, &sId, nullptr, nullptr, nullptr, false, xEntry.get());
 
                 try
                 {
                     // get bitmap for the tree-entry
                     uno::Reference< awt::XBitmap >
                         aXBitmap( xTarget->getPropertyValue( aProp_LinkDisplayBitmap ), uno::UNO_QUERY );
-                    if( aXBitmap.is() )
+                    if (aXBitmap.is())
                     {
-                        Image aBmp(BitmapEx(VCLUnoHelper::GetBitmap(aXBitmap).GetBitmap(), /*mask*/COL_LIGHTMAGENTA));
+                        Graphic aBmp(Graphic(VCLUnoHelper::GetBitmap(aXBitmap)));
                         // insert Displayname into treelist with bitmaps
-                        pEntry = mpLbTree->InsertEntry ( aStrDisplayname,
-                                                        aBmp, aBmp,
-                                                        pParentEntry,
-                                                        false, TREELIST_APPEND,
-                                                        static_cast<void*>(pData) );
-                        nEntries++;
-                    }
-                    else
-                    {
-                        // insert Displayname into treelist without bitmaps
-                        pEntry = mpLbTree->InsertEntry ( aStrDisplayname,
-                                                        pParentEntry,
-                                                        false, TREELIST_APPEND,
-                                                        static_cast<void*>(pData) );
-                        nEntries++;
+                        mxLbTree->set_image(*xEntry, aBmp.GetXGraphic(), -1);
                     }
                 }
                 catch(const css::uno::Exception&)
                 {
-                    // insert Displayname into treelist without bitmaps
-                    pEntry = mpLbTree->InsertEntry ( aStrDisplayname,
-                                                    pParentEntry,
-                                                    false, TREELIST_APPEND,
-                                                    static_cast<void*>(pData) );
-                    nEntries++;
                 }
+
+                nEntries++;
 
                 uno::Reference< document::XLinkTargetSupplier > xLTS( xTarget, uno::UNO_QUERY );
                 if( xLTS.is() )
-                    nEntries += FillTree( xLTS->getLinks(), pEntry );
+                    nEntries += FillTree( xLTS->getLinks(), xEntry.get() );
             }
             catch(const css::uno::Exception&)
             {
@@ -453,64 +369,67 @@ int SvxHlinkDlgMarkWnd::FillTree( const uno::Reference< container::XNameAccess >
 // Clear Tree
 void SvxHlinkDlgMarkWnd::ClearTree()
 {
-    SvTreeListEntry* pEntry = mpLbTree->First();
+    std::unique_ptr<weld::TreeIter> xEntry = mxLbTree->make_iterator();
+    bool bEntry = mxLbTree->get_iter_first(*xEntry);
 
-    while ( pEntry )
+    while (bEntry)
     {
-        TargetData* pUserData = static_cast<TargetData *>(pEntry->GetUserData());
+        TargetData* pUserData = reinterpret_cast<TargetData*>(mxLbTree->get_id(*xEntry).toInt64());
         delete pUserData;
 
-        pEntry = mpLbTree->Next( pEntry );
+        bEntry = mxLbTree->iter_next(*xEntry);
     }
 
-    mpLbTree->Clear();
+    mxLbTree->clear();
 }
 
 // Find Entry for String
-SvTreeListEntry* SvxHlinkDlgMarkWnd::FindEntry (const OUString& aStrName)
+std::unique_ptr<weld::TreeIter> SvxHlinkDlgMarkWnd::FindEntry (const OUString& aStrName)
 {
     bool bFound=false;
-    SvTreeListEntry* pEntry = mpLbTree->First();
+    std::unique_ptr<weld::TreeIter> xEntry = mxLbTree->make_iterator();
+    bool bEntry = mxLbTree->get_iter_first(*xEntry);
 
-    while ( pEntry && !bFound )
+    while (bEntry && !bFound)
     {
-        TargetData* pUserData = static_cast<TargetData *>(pEntry->GetUserData ());
+        TargetData* pUserData = reinterpret_cast<TargetData*>(mxLbTree->get_id(*xEntry).toInt64());
         if (aStrName == pUserData->aUStrLinkname)
             bFound = true;
         else
-            pEntry = mpLbTree->Next( pEntry );
+            bEntry = mxLbTree->iter_next(*xEntry);
     }
 
-    return pEntry;
+    if (!bFound)
+        xEntry.reset();
+
+    return xEntry;
 }
 
 // Select Entry
 bool SvxHlinkDlgMarkWnd::SelectEntry(const OUString& aStrMark)
 {
-    SvTreeListEntry* pEntry = FindEntry(aStrMark);
-    if (!pEntry)
+    std::unique_ptr<weld::TreeIter> xEntry = FindEntry(aStrMark);
+    if (!xEntry)
         return false;
-    mpLbTree->Select(pEntry);
-    mpLbTree->MakeVisible (pEntry);
+    mxLbTree->select(*xEntry);
+    mxLbTree->scroll_to_row(*xEntry);
     return true;
 }
 
 // Click on Apply-Button / Double-click on item in tree
-IMPL_LINK_NOARG(SvxHlinkDlgMarkWnd, DoubleClickApplyHdl_Impl, SvTreeListBox*, bool)
+IMPL_LINK_NOARG(SvxHlinkDlgMarkWnd, DoubleClickApplyHdl_Impl, weld::TreeView&, void)
 {
-    ClickApplyHdl_Impl(nullptr);
-    return false;
+    ClickApplyHdl_Impl(*mxBtApply);
 }
 
-IMPL_LINK_NOARG(SvxHlinkDlgMarkWnd, ClickApplyHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SvxHlinkDlgMarkWnd, ClickApplyHdl_Impl, weld::Button&, void)
 {
-    SvTreeListEntry* pEntry = mpLbTree->GetCurEntry();
-
-    if ( pEntry )
+    std::unique_ptr<weld::TreeIter> xEntry(mxLbTree->make_iterator());
+    bool bEntry = mxLbTree->get_cursor(xEntry.get());
+    if (bEntry)
     {
-        TargetData *pData = static_cast<TargetData *>(pEntry->GetUserData());
-
-        if ( pData->bIsTarget )
+        TargetData* pData = reinterpret_cast<TargetData*>(mxLbTree->get_id(*xEntry).toInt64());
+        if (pData->bIsTarget)
         {
             mpParent->SetMarkStr(pData->aUStrLinkname);
         }
@@ -518,26 +437,24 @@ IMPL_LINK_NOARG(SvxHlinkDlgMarkWnd, ClickApplyHdl_Impl, Button*, void)
 }
 
 // Click on Close-Button
-IMPL_LINK_NOARG(SvxHlinkDlgMarkWnd, ClickCloseHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SvxHlinkDlgMarkWnd, ClickCloseHdl_Impl, weld::Button&, void)
 {
-    SvTreeListEntry* pEntry = mpLbTree->GetCurEntry();
-    if ( pEntry )
+    std::unique_ptr<weld::TreeIter> xEntry(mxLbTree->make_iterator());
+    bool bEntry = mxLbTree->get_cursor(xEntry.get());
+    if (bEntry)
     {
-        TargetData* pUserData = static_cast<TargetData *>(pEntry->GetUserData());
+        TargetData* pUserData = reinterpret_cast<TargetData*>(mxLbTree->get_id(*xEntry).toInt64());
         OUString sLastSelectedMark = pUserData->aUStrLinkname;
 
         std::deque<OUString> aLastSelectedPath;
-        if (pEntry)
+        //If the bottommost entry is expanded but nothing
+        //underneath it is selected leave a dummy entry
+        if (mxLbTree->get_row_expanded(*xEntry))
+            aLastSelectedPath.push_front(OUString());
+        while (bEntry)
         {
-            //If the bottommost entry is expanded but nothing
-            //underneath it is selected leave a dummy entry
-            if (mpLbTree->IsExpanded(pEntry))
-                aLastSelectedPath.push_front(OUString());
-            while (pEntry)
-            {
-                aLastSelectedPath.push_front(mpLbTree->GetEntryText(pEntry));
-                pEntry = mpLbTree->GetParent(pEntry);
-            }
+            aLastSelectedPath.push_front(mxLbTree->get_text(*xEntry));
+            bEntry = mxLbTree->iter_parent(*xEntry);
         }
 
         uno::Sequence< beans::NamedValue > aSettings
@@ -551,7 +468,7 @@ IMPL_LINK_NOARG(SvxHlinkDlgMarkWnd, ClickCloseHdl_Impl, Button*, void)
         aViewSettings.SetUserData( aSettings );
     }
 
-    Close();
+    m_xDialog->response(RET_CANCEL);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
