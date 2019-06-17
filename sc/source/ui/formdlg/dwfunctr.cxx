@@ -25,7 +25,7 @@
 
 #include <global.hxx>
 #include <scmod.hxx>
-#include <inputhdl.hxx>
+#include "inputhdl.hxx"
 #include <tabvwsh.hxx>
 #include <funcdesc.hxx>
 

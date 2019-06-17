@@ -35,7 +35,7 @@
 #include <impex.hxx>
 #include <editsh.hxx>
 #include <dociter.hxx>
-#include <inputhdl.hxx>
+#include "inputhdl.hxx"
 #include <svx/srchdlg.hxx>
 #include <document.hxx>
 #include <gridwin.hxx>

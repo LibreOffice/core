@@ -80,7 +80,7 @@
 #include <strings.hrc>
 #include <editutil.hxx>
 #include <scresid.hxx>
-#include <inputhdl.hxx>
+#include "inputhdl.hxx"
 #include <uiitems.hxx>
 #include <formulacell.hxx>
 #include <patattr.hxx>
