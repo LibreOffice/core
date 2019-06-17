@@ -425,9 +425,9 @@ handle_r1c1:
     }
 }
 
-static ReferenceMark lcl_GetReferenceMark( const ScViewData& rViewData, ScDocShell* pDocSh,
-                                           long nX1, long nX2, long nY1, long nY2,
-                                           long nTab, const Color& rColor )
+ReferenceMark ScInputHandler::GetReferenceMark( ScViewData& rViewData, ScDocShell* pDocSh,
+                                    long nX1, long nX2, long nY1, long nY2,
+                                    long nTab, const Color& rColor )
 {
     ScSplitPos eWhich = rViewData.GetActivePart();
 
@@ -486,7 +486,7 @@ void ScInputHandler::UpdateLokReferenceMarks()
         PutInOrder(nX1, nX2);
         PutInOrder(nY1, nY2);
 
-        aReferenceMarks[0] = lcl_GetReferenceMark( rViewData, pDocSh,
+        aReferenceMarks[0] = ScInputHandler::GetReferenceMark( rViewData, pDocSh,
                                                    nX1, nX2, nY1, nY2,
                                                    nTab, aRefColor );
     }
@@ -510,8 +510,9 @@ void ScInputHandler::UpdateLokReferenceMarks()
             long nY2 = aRef.aEnd.Row();
             long nTab = aRef.aStart.Tab();
 
-            aReferenceMarks[i + nAdditionalMarks] = lcl_GetReferenceMark(
-                rViewData, pDocSh, nX1, nX2, nY1, nY2, nTab, rData.nColor );
+            aReferenceMarks[i + nAdditionalMarks] = ScInputHandler::GetReferenceMark( rViewData, pDocSh,
+                                                                          nX1, nX2, nY1, nY2,
+                                                                          nTab, rData.nColor );
 
             ScInputHandler::SendReferenceMarks( pActiveViewSh, aReferenceMarks );
         }
