@@ -1,11 +1,1 @@
-<svg viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg">
-  <path
-     d="M 0,0 V 18 H 18 V 0 Z"
-     style="fill:#ffffff" />
-  <path
-     d="M 2,2 H 16 V 14 H 2 Z"
-     style="opacity:0.4;fill:#808080" />
-  <path
-     style="fill:#eac282;fill-opacity:1"
-     d="M 0 14 L 0 18 L 18 18 L 18 14 L 0 14 z M 1 15 L 17 15 L 17 17 L 1 17 L 1 15 z " />
-</svg>
+<svg viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg"><path d="m0 0v18h18v-18z" fill="#fff"/><path d="m2 2h14v12h-14z" fill="#808080" opacity=".4"/><path d="m0 14v4h18v-4zm1 1h16v2h-16z" fill="#eac282"/></svg>
