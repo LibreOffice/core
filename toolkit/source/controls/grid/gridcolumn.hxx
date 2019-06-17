@@ -88,7 +88,6 @@ public:
     // XUnoTunnel and friends
     virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& i_identifier ) override;
     static css::uno::Sequence< sal_Int8 > getUnoTunnelId() throw();
-    static GridColumn* getImplementation( const css::uno::Reference< css::uno::XInterface >& i_component );
 
     // attribute access
     void setIndex( sal_Int32 const i_index );

@@ -28,6 +28,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <comphelper/sequence.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <comphelper/componentguard.hxx>
 #include <comphelper/interfacecontainer2.hxx>
 #include <cppuhelper/basemutex.hxx>
@@ -115,7 +116,7 @@ private:
                 Reference< css::util::XCloneable > const xCloneable( *col, UNO_QUERY_THROW );
                 Reference< XGridColumn > const xClone( xCloneable->createClone(), UNO_QUERY_THROW );
 
-                GridColumn* const pGridColumn = GridColumn::getImplementation( xClone );
+                GridColumn* const pGridColumn = comphelper::getUnoTunnelImplementation<GridColumn>( xClone );
                 if ( pGridColumn == nullptr )
                     throw RuntimeException( "invalid clone source implementation", *this );
                     // that's indeed a RuntimeException, not an IllegalArgumentException or some such:
@@ -151,7 +152,7 @@ private:
     {
         ::comphelper::ComponentGuard aGuard( *this, rBHelper );
 
-        GridColumn* const pGridColumn = GridColumn::getImplementation( i_column );
+        GridColumn* const pGridColumn = comphelper::getUnoTunnelImplementation<GridColumn>( i_column );
         if ( pGridColumn == nullptr )
             throw css::lang::IllegalArgumentException( "invalid column implementation", *this, 1 );
 
@@ -190,7 +191,7 @@ private:
                 ++updatePos, ++columnIndex
             )
         {
-            GridColumn* pColumnImpl = GridColumn::getImplementation( *updatePos );
+            GridColumn* pColumnImpl = comphelper::getUnoTunnelImplementation<GridColumn>( *updatePos );
             if ( !pColumnImpl )
             {
                 SAL_WARN( "toolkit.controls", "DefaultGridColumnModel::removeColumn: invalid column implementation!" );
