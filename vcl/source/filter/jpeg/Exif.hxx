@@ -49,13 +49,13 @@ private:
 
     bool processJpeg(SvStream& rStream, bool bSetValue);
     bool processExif(SvStream& rStream, sal_uInt16 aLength, bool bSetValue);
-    void processIFD(sal_uInt8* pExifData, sal_uInt16 aLength, sal_uInt16 aOffset, sal_uInt16 aNumberOfTags, bool bSetValue, bool bMoto);
+    void processIFD(sal_uInt8* pExifData, sal_uInt16 aLength, sal_uInt16 aOffset, sal_uInt16 aNumberOfTags, bool bSetValue, bool bLittleEndian);
 
     struct ExifIFD {
-        sal_uInt16 tag;
-        sal_uInt16 type;
-        sal_uInt32 count;
-        sal_uInt32 offset;
+        sal_uInt8 tag[2];
+        sal_uInt8 type[2];
+        sal_uInt8 count[4];
+        sal_uInt8 offset[4];
     };
 
     struct TiffHeader {
