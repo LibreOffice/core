@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_f76c8537",
+        "filename": "cui/source/tabpages/tparea.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 382,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-06-17T00:13:16Z",
+      "side": 1,
+      "message": "The variable has a number of issues, mentioning which here is aimed to help you improve style:\n\n1. Its name is not telling at all. It isn\u0027t helping to understand what information is saved in it.\n2. It\u0027s not made const, despite it is never modified after definition. It\u0027s good style to use const values wherever applicable, even though it might all mean nothing to compiler (of course, the compiler could easily deduce that the value indeed never changes, and optimize for that) - but it\u0027s good for reading the code and for avoiding mistakes.\n3. The most important here imo is that this is unnecessary variable. Moving the rButton.get_active() into the if() condition doesn\u0027t impair clarity of the code (and in this case, with poor name of the variable, it would even improve readability).\n\nAlso note that the braces are set not according to our style conventions (I don\u0027t see why they are needed at all for this one-line expression under if(), but if used, the opening brace after if() should be on an own line). Even if the  clang-format plugin isn\u0027t enforced on a file, doesn\u0027t mean that one shouldn\u0027t try to follow the style *writing new lines of code* there. It helps to avoid potential unnecessary commit noise in the future if the file gets finally re-formatted according the style.",
+      "range": {
+        "startLine": 382,
+        "startChar": 4,
+        "endLine": 382,
+        "endChar": 13
+      },
+      "revId": "973210454f052bcb57dc3fcf7c9f639e34c8af2c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
