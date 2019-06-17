@@ -1910,7 +1910,14 @@ void ImplListBoxWindow::ImplDoPaint(vcl::RenderContext& rRenderContext, const to
 
 void ImplListBoxWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
 {
-    ImplDoPaint(rRenderContext, rRect);
+    if (SupportsDoubleBuffering())
+    {
+        // This widget is explicitly double-buffered, so avoid partial paints.
+        tools::Rectangle aRect(Point(0, 0), GetOutputSizePixel());
+        ImplDoPaint(rRenderContext, aRect);
+    }
+    else
+        ImplDoPaint(rRenderContext, rRect);
 }
 
 sal_uInt16 ImplListBoxWindow::GetDisplayLineCount() const
