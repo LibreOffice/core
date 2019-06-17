@@ -272,8 +272,6 @@ cmd/32/id/numberformatincdecimals.png cmd/32/de/numberformatincdecimals.png
 cmd/32/id/numberformatthousands.png cmd/32/de/numberformatthousands.png
 cmd/32/it/bold.png cmd/32/fr/bold.png
 cmd/32/it/italic.png cmd/32/ca/italic.png
-cmd/32/it/bold.png cmd/32/fr/bold.png
-cmd/32/it/italic.png cmd/32/ca/italic.png
 cmd/32/it/underline.png cmd/32/ca/underline.png
 cmd/32/it/underlinedouble.png cmd/32/ca/underlinedouble.png
 cmd/32/it/underlinesimple.png cmd/32/ca/underline.png
@@ -1016,8 +1014,6 @@ cmd/lc_zoommenu.png cmd/lc_zoom.png
 cmd/lc_zoomminus.png cmd/lc_zoomout.png
 cmd/lc_zoomplus.png cmd/lc_zoomin.png
 cmd/lc_zoomtoolbox.png cmd/lc_zoom.png
-cmd/nl/lc_underlinesimple.png cmd/nl/lc_underline.png
-cmd/nl/sc_underlinesimple.png cmd/nl/sc_underline.png
 cmd/sc_acceptchanges.png cmd/sc_accepttrackedchanges.png
 cmd/sc_accepttracedchange.png cmd/sc_accepttrackedchange.png
 cmd/sc_adddatefield.png cmd/sc_datefield.png
