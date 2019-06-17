@@ -10813,7 +10813,7 @@ void* GtkInstance::CreateGStreamerSink(const SystemChildWindow *pWindow)
 
     return pVideosink;
 #else
-    (void*)pWindow;
+    (void)pWindow;
     return nullptr;
 #endif
 }
