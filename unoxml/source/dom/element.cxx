@@ -29,6 +29,7 @@
 #include <com/sun/star/xml/sax/FastToken.hpp>
 
 #include <comphelper/attributelist.hxx>
+#include <comphelper/servicehelper.hxx>
 
 #include <node.hxx>
 #include "attr.hxx"
@@ -472,7 +473,7 @@ namespace DOM
         }
 
         ::rtl::Reference<CNode> const pCNode(
-            CNode::GetImplementation(Reference<XNode>(oldAttr.get())));
+            comphelper::getUnoTunnelImplementation<CNode>(Reference<XNode>(oldAttr.get())));
         if (!pCNode.is()) { throw RuntimeException(); }
 
         xmlNodePtr const pNode = pCNode->GetNodePtr();
@@ -532,7 +533,7 @@ namespace DOM
 
         // get the implementation
         CAttr *const pCAttr = dynamic_cast<CAttr*>(
-                CNode::GetImplementation(xNewAttr));
+                comphelper::getUnoTunnelImplementation<CNode>(xNewAttr));
         if (!pCAttr) { throw RuntimeException(); }
         xmlAttrPtr const pAttr =
             reinterpret_cast<xmlAttrPtr>(pCAttr->GetNodePtr());

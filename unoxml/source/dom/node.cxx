@@ -168,15 +168,9 @@ namespace DOM
         }
     }
 
-    CNode *
-    CNode::GetImplementation(uno::Reference<uno::XInterface> const& xNode)
+    const css::uno::Sequence< sal_Int8 > & CNode::getUnoTunnelId() throw()
     {
-        uno::Reference<lang::XUnoTunnel> const xUnoTunnel(xNode, UNO_QUERY);
-        if (!xUnoTunnel.is()) { return nullptr; }
-        CNode *const pCNode( reinterpret_cast< CNode* >(
-                        ::sal::static_int_cast< sal_IntPtr >(
-                            xUnoTunnel->getSomething(theCNodeUnoTunnelId::get().getSeq()))));
-        return pCNode;
+        return theCNodeUnoTunnelId::get().getSeq();
     }
 
     CDocument & CNode::GetOwnerDocument()
@@ -290,7 +284,7 @@ namespace DOM
 
         if (nullptr == m_aNodePtr) { return nullptr; }
 
-        CNode *const pNewChild(CNode::GetImplementation(xNewChild));
+        CNode *const pNewChild(comphelper::getUnoTunnelImplementation<CNode>(xNewChild));
         if (!pNewChild) { throw RuntimeException(); }
         xmlNodePtr const cur = pNewChild->GetNodePtr();
         if (!cur) { throw RuntimeException(); }
@@ -645,8 +639,8 @@ namespace DOM
 
         ::osl::ClearableMutexGuard guard(m_rMutex);
 
-        CNode *const pNewNode(CNode::GetImplementation(newChild));
-        CNode *const pRefNode(CNode::GetImplementation(refChild));
+        CNode *const pNewNode(comphelper::getUnoTunnelImplementation<CNode>(newChild));
+        CNode *const pRefNode(comphelper::getUnoTunnelImplementation<CNode>(refChild));
         if (!pNewNode || !pRefNode) { throw RuntimeException(); }
         xmlNodePtr const pNewChild(pNewNode->GetNodePtr());
         xmlNodePtr const pRefChild(pRefNode->GetNodePtr());
@@ -753,7 +747,7 @@ namespace DOM
 
         Reference<XNode> xReturn( xOldChild );
 
-        ::rtl::Reference<CNode> const pOld(CNode::GetImplementation(xOldChild));
+        ::rtl::Reference<CNode> const pOld(comphelper::getUnoTunnelImplementation<CNode>(xOldChild));
         if (!pOld.is()) { throw RuntimeException(); }
         xmlNodePtr const old = pOld->GetNodePtr();
         if (!old) { throw RuntimeException(); }
@@ -825,9 +819,9 @@ namespace DOM
         ::osl::ClearableMutexGuard guard(m_rMutex);
 
         ::rtl::Reference<CNode> const pOldNode(
-                CNode::GetImplementation(xOldChild));
+                comphelper::getUnoTunnelImplementation<CNode>(xOldChild));
         ::rtl::Reference<CNode> const pNewNode(
-                CNode::GetImplementation(xNewChild));
+                comphelper::getUnoTunnelImplementation<CNode>(xNewChild));
         if (!pOldNode.is() || !pNewNode.is()) { throw RuntimeException(); }
         xmlNodePtr const pOld = pOldNode->GetNodePtr();
         xmlNodePtr const pNew = pNewNode->GetNodePtr();
@@ -1000,7 +994,7 @@ namespace DOM
     CNode::getSomething(Sequence< ::sal_Int8 > const& rId)
     {
         if ((rId.getLength() == 16) &&
-            (0 == memcmp(theCNodeUnoTunnelId::get().getSeq().getConstArray(),
+            (0 == memcmp(getUnoTunnelId().getConstArray(),
                                     rId.getConstArray(), 16)))
         {
             return ::sal::static_int_cast< sal_Int64 >(

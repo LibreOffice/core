@@ -119,8 +119,7 @@ namespace DOM
 
         virtual ~CNode() override;
 
-        static CNode * GetImplementation(css::uno::Reference<
-                css::uno::XInterface> const& xNode);
+        static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId() throw();
 
         xmlNodePtr GetNodePtr() { return m_aNodePtr; }
 
