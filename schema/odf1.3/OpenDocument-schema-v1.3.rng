@@ -3,34 +3,16 @@
         Open Document Format for Office Applications (OpenDocument) Version 1.3
         OASIS Standard, In progress
 	Relax-NG Schema
-        Source: https://tools.oasis-open.org/version-control/svn/office/
-        Copyright (c) OASIS Open 2002-2015. All Rights Reserved.
 
-	All capitalized terms in the following text have the meanings assigned to them
-	in the OASIS Intellectual Property Rights Policy (the "OASIS IPR Policy"). The
-	full Policy may be found at the OASIS website.
+        Copyright © OASIS Open [2002-2018]. All Rights Reserved.
+        Distributed under the terms of the OASIS IPR Policy, [http://www.oasis-open.org/policies-guidelines/ipr],
+        AS-IS, WITHOUT ANY IMPLIED OR EXPRESS WARRANTY; there is no warranty of MERCHANTABILITY,
+        FITNESS FOR A PARTICULAR PURPOSE or NONINFRINGEMENT of the rights of others.
 
-	This document and translations of it may be copied and furnished to others, and
-	derivative works that comment on or otherwise explain it or assist in its
-	implementation may be prepared, copied, published, and distributed, in whole or
-	in part, without restriction of any kind, provided that the above copyright
-	notice and this section are included on all such copies and derivative works.
-	However, this document itself may not be modified in any way, including by
-	removing the copyright notice or references to OASIS, except as needed for the
-	purpose of developing any document or deliverable produced by an OASIS
-	Technical Committee (in which case the rules applicable to copyrights, as set
-	forth in the OASIS IPR Policy, must be followed) or as required to translate it
-	into languages other than English.
-
-	The limited permissions granted above are perpetual and will not be revoked by
-	OASIS or its successors or assigns.
-
-	This document and the information contained herein is provided on an "AS IS"
-	basis and OASIS DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING BUT NOT
-	LIMITED TO ANY WARRANTY THAT THE USE OF THE INFORMATION HEREIN WILL NOT
-	INFRINGE ANY OWNERSHIP RIGHTS OR ANY IMPLIED WARRANTIES OF MERCHANTABILITY OR
-	FITNESS FOR A PARTICULAR PURPOSE. 
 -->
+
+<!-- https://issues.oasis-open.org/browse/OFFICE-2153 -->
+
 <rng:grammar xmlns:anim="urn:oasis:names:tc:opendocument:xmlns:animation:1.0" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0" xmlns:db="urn:oasis:names:tc:opendocument:xmlns:database:1.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:grddl="http://www.w3.org/2003/g/data-view#" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:presentation="urn:oasis:names:tc:opendocument:xmlns:presentation:1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:smil="urn:oasis:names:tc:opendocument:xmlns:smil-compatible:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:xforms="http://www.w3.org/2002/xforms" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:xlink="http://www.w3.org/1999/xlink" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
   <rng:start>
     <rng:choice>
@@ -1528,8 +1510,8 @@
       <rng:attribute name="number:min-decimal-places">
         <rng:ref name="integer"/>
       </rng:attribute>
-      <!-- OFFICE-3860 -->
     </rng:optional>
+<!-- https://issues.oasis-open.org/browse/OFFICE-3860  added number:min-decimal-places -->
   </rng:define>
   <rng:define name="common-delay-for-repeat">
     <rng:optional>
@@ -4986,6 +4968,7 @@
   <rng:define name="draw-fill-image">
     <rng:element name="draw:fill-image">
       <rng:ref name="draw-fill-image-attlist"/>
+      <!-- XLink duplicate declaration removed. see common-draw-data-attlist -->
       <rng:choice>
         <rng:group>
           <rng:ref name="common-draw-data-attlist"/>
@@ -7206,6 +7189,12 @@
           <rng:ref name="integer"/>
         </rng:attribute>
       </rng:optional>
+      <rng:optional>
+        <rng:attribute name="number:max-denominator-value">
+          <rng:ref name="positiveInteger"/>
+        </rng:attribute>
+      </rng:optional>
+      <!-- https://issues.oasis-open.org/browse/OFFICE-3695 max-denominator-value -->
     </rng:interleave>
   </rng:define>
   <rng:define name="number-hours">
@@ -7359,17 +7348,25 @@
     </rng:element>
   </rng:define>
   <rng:define name="number-scientific-number-attlist">
-    <rng:optional>
-      <rng:attribute name="number:min-exponent-digits">
-        <rng:ref name="integer"/>
-      </rng:attribute>
-    </rng:optional>
-    <rng:optional>
-      <rng:attribute name="number:forced-exponent-sign">
-        <rng:ref name="boolean"/>
-      </rng:attribute>
-      <!-- OFFICE-3860 -->
-    </rng:optional>
+    <rng:interleave>
+      <rng:optional>
+        <rng:attribute name="number:min-exponent-digits">
+          <rng:ref name="integer"/>
+        </rng:attribute>
+      </rng:optional>
+      <rng:optional>
+        <rng:attribute name="number:exponent-interval">
+          <rng:ref name="positiveInteger"/>
+        </rng:attribute>
+      </rng:optional>
+<!-- https://issues.oasis-open.org/browse/OFFICE-1828 exponent-interval -->
+      <rng:optional>
+        <rng:attribute name="number:forced-exponent-sign">
+          <rng:ref name="boolean"/>
+        </rng:attribute>
+<!-- https://issues.oasis-open.org/browse/OFFICE-3860 added number:forced-exponent-sign -->
+      </rng:optional>
+    </rng:interleave>
   </rng:define>
   <rng:define name="number-seconds">
     <rng:element name="number:seconds">
@@ -8075,6 +8072,7 @@
     <rng:ref name="table-decls"/>
     <rng:ref name="presentation-decls"/>
   </rng:define>
+<!-- removed from text as well
   <rng:define name="office-process-content">
     <rng:optional>
       <rng:attribute name="office:process-content">
@@ -8082,6 +8080,7 @@
       </rng:attribute>
     </rng:optional>
   </rng:define>
+-->
   <rng:define name="office-script">
     <rng:element name="office:script">
       <rng:ref name="office-script-attlist"/>
@@ -8549,26 +8548,7 @@
         <rng:ref name="common-field-description-attlist"/>
         <rng:text/>
       </rng:element>
-      <rng:element name="text:drop-down">
-        <rng:attribute name="text:name">
-          <rng:ref name="string"/>
-        </rng:attribute>
-        <rng:zeroOrMore>
-          <rng:element name="text:label">
-            <rng:optional>
-              <rng:attribute name="text:value">
-                <rng:ref name="string"/>
-              </rng:attribute>
-            </rng:optional>
-            <rng:optional>
-              <rng:attribute name="text:current-selected">
-                <rng:ref name="boolean"/>
-              </rng:attribute>
-            </rng:optional>
-          </rng:element>
-        </rng:zeroOrMore>
-        <rng:text/>
-      </rng:element>
+      <rng:ref name="text-drop-down"/>
       <!-- OFFICE-3881 -->
       <rng:element name="text:initial-creator">
         <rng:ref name="common-field-fixed-attlist"/>
@@ -10081,6 +10061,7 @@
             <rng:value>none</rng:value>
             <rng:value>linear</rng:value>
             <rng:value>logarithmic</rng:value>
+            <rng:value>moving-average</rng:value>
             <rng:value>exponential</rng:value>
             <rng:value>power</rng:value>
             <rng:value>polynomial</rng:value>
@@ -10108,6 +10089,21 @@
         </rng:attribute>
       </rng:optional>
       <!-- https://issues.oasis-open.org/browse/OFFICE-3958 -->
+      <rng:optional>
+          <rng:attribute name="chart:regression-period">
+          <rng:ref name="positiveInteger"/>
+        </rng:attribute>
+      </rng:optional>
+      <rng:optional>
+          <rng:attribute name="chart:regression-moving-type">
+            <rng:choice>
+              <rng:value>prior</rng:value>
+              <rng:value>central</rng:value>
+              <rng:value>averaged-abscissa</rng:value>
+            </rng:choice>
+        </rng:attribute>
+      </rng:optional>
+      <!-- https://issues.oasis-open.org/browse/OFFICE-3959 -->
       <rng:optional>
         <rng:attribute name="chart:axis-position">
           <rng:choice>
@@ -12154,7 +12150,6 @@
         </rng:attribute>
       </rng:optional>
       <rng:choice>
-	<!-- https://issues.oasis-open.org/browse/OFFICE-3857 -->
         <rng:optional>
           <rng:attribute name="style:scale-to">
             <rng:ref name="percent"/>
@@ -12178,6 +12173,7 @@
           </rng:optional>
         </rng:group>
       </rng:choice>
+      <!-- https://issues.oasis-open.org/browse/OFFICE-3857 -->
       <rng:optional>
         <rng:attribute name="style:table-centering">
           <rng:choice>
@@ -16794,6 +16790,28 @@
     <rng:optional>
       <rng:ref name="text-alphabetical-index-auto-mark-file"/>
     </rng:optional>
+  </rng:define>
+  <rng:define name="text-drop-down">
+    <rng:element name="text:drop-down">
+      <rng:attribute name="text:name">
+        <rng:ref name="string"/>
+      </rng:attribute>
+      <rng:zeroOrMore>
+        <rng:element name="text:label">
+          <rng:optional>
+            <rng:attribute name="text:value">
+              <rng:ref name="string"/>
+            </rng:attribute>
+          </rng:optional>
+          <rng:optional>
+            <rng:attribute name="text:current-selected">
+              <rng:ref name="boolean"/>
+            </rng:attribute>
+          </rng:optional>
+        </rng:element>
+      </rng:zeroOrMore>
+      <rng:text/>
+    </rng:element>
   </rng:define>
   <rng:define name="text-file-name-attlist">
     <rng:interleave>
