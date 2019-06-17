@@ -24,6 +24,7 @@
 #include <svx/sxctitm.hxx>
 #include <svx/sxcecitm.hxx>
 #include <svx/anchorid.hxx>
+#include <vcl/image.hxx>
 
 class SdrView;
 

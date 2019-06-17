@@ -199,9 +199,6 @@
       </properties>
     </glade-widget-class>
 
-    <glade-widget-class title="Hyperlink Tree Box" name="cuilo-SvxHlmarkTreeLBox"
-                        generic-name="Hyperlink Tree Box" parent="vcllo-SvTreeListBox"
-                        icon-name="widget-gtk-treeview"/>
     <glade-widget-class title="Content List Box" name="sfxlo-ContentListBox"
                         generic-name="Content List Box" parent="vcllo-SvTreeListBox"
                         icon-name="widget-gtk-treeview"/>

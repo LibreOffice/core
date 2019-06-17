@@ -109,18 +109,17 @@ SvxHyperlinkTabPageBase::SvxHyperlinkTabPageBase ( vcl::Window *pParent,
                                                    const OString& rID,
                                                    const OUString& rUIXMLDescription,
                                                    const SfxItemSet* pItemSet )
-:   IconChoicePage          ( pParent, rID, rUIXMLDescription, pItemSet ),
-    mpCbbFrame              ( nullptr ),
-    mpLbForm                ( nullptr ),
-    mpEdIndication          ( nullptr ),
-    mpEdText                ( nullptr ),
-    mpBtScript              ( nullptr ),
-    mbIsCloseDisabled       ( false ),
-    mpDialog                ( pDlg ),
-    mbStdControlsInit       ( false )
+  : IconChoicePage( pParent, rID, rUIXMLDescription, pItemSet )
+  , mpCbbFrame( nullptr )
+  , mpLbForm( nullptr )
+  , mpEdIndication( nullptr )
+  , mpEdText( nullptr )
+  , mpBtScript( nullptr )
+  , mbIsCloseDisabled( false )
+  , mpDialog( pDlg )
+  , mbStdControlsInit( false )
 {
     // create bookmark-window
-    mpMarkWnd = VclPtr<SvxHlinkDlgMarkWnd>::Create( this );
 }
 
 SvxHyperlinkTabPageBase::~SvxHyperlinkTabPageBase()
@@ -132,7 +131,7 @@ void SvxHyperlinkTabPageBase::dispose()
 {
     maTimer.Stop();
 
-    mpMarkWnd.disposeAndClear();
+    HideMarkWnd();
 
     mpCbbFrame.clear();
     mpLbForm.clear();
@@ -187,20 +186,21 @@ void SvxHyperlinkTabPageBase::InitStdControls ()
 }
 
 // Move Extra-Window
-bool SvxHyperlinkTabPageBase::MoveToExtraWnd( Point aNewPos, bool bDisConnectDlg )
+void SvxHyperlinkTabPageBase::MoveToExtraWnd( Point aNewPos )
 {
-    bool bReturn =  mpMarkWnd->MoveTo ( aNewPos );
-
-    if( bDisConnectDlg )
-        mpMarkWnd->ConnectToDialog();
-
-    return ( !bReturn && IsMarkWndVisible() );
+    mxMarkWnd->MoveTo(aNewPos);
 }
 
 // Show Extra-Window
-void SvxHyperlinkTabPageBase::ShowMarkWnd ()
+void SvxHyperlinkTabPageBase::ShowMarkWnd()
 {
-    static_cast<vcl::Window*>(mpMarkWnd)->Show();
+    if (mxMarkWnd)
+    {
+        mxMarkWnd->getDialog()->present();
+        return;
+    }
+
+    mxMarkWnd = std::make_unique<SvxHlinkDlgMarkWnd>(GetFrameWeld(), this);
 
     // Size of dialog-window in screen pixels
     ::tools::Rectangle aDlgRect( mpDialog->GetWindowExtentsRelative( nullptr ) );
@@ -211,16 +211,15 @@ void SvxHyperlinkTabPageBase::ShowMarkWnd ()
     ::tools::Rectangle aScreen( mpDialog->GetDesktopRectPixel() );
 
     // Size of Extrawindow
-    Size aExtraWndSize( mpMarkWnd->GetSizePixel () );
+    Size aExtraWndSize(mxMarkWnd->getDialog()->get_preferred_size());
 
-    // mpMarkWnd is a child of mpDialog, so coordinates for positioning must be relative to mpDialog
+    // mxMarkWnd is a child of mpDialog, so coordinates for positioning must be relative to mpDialog
     if( aDlgPos.X()+(1.05*aDlgSize.Width())+aExtraWndSize.Width() > aScreen.Right() )
     {
         if( aDlgPos.X() - ( 0.05*aDlgSize.Width() ) - aExtraWndSize.Width() < 0 )
         {
             // Pos Extrawindow anywhere
             MoveToExtraWnd( Point(10,10) );  // very unlikely
-            mpMarkWnd->ConnectToDialog();
         }
         else
         {
@@ -235,7 +234,18 @@ void SvxHyperlinkTabPageBase::ShowMarkWnd ()
     }
 
     // Set size of Extra-Window
-    mpMarkWnd->SetSizePixel( Size( aExtraWndSize.Width(), aDlgSize.Height() ) );
+    mxMarkWnd->getDialog()->set_size_request(aExtraWndSize.Width(), aDlgSize.Height());
+
+    weld::DialogController::runAsync(mxMarkWnd, [this](sal_Int32 /*nResult*/) { mxMarkWnd.reset(); } );
+}
+
+void SvxHyperlinkTabPageBase::HideMarkWnd()
+{
+    if (mxMarkWnd)
+    {
+        mxMarkWnd->response(RET_CANCEL);
+        mxMarkWnd.reset();
+    }
 }
 
 // Fill Dialogfields

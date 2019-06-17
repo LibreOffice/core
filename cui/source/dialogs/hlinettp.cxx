@@ -381,9 +381,9 @@ void SvxHyperlinkInternetTp::RefreshMarkWindow()
         EnterWait();
         OUString aStrURL( CreateAbsoluteURL() );
         if ( !aStrURL.isEmpty() )
-            mpMarkWnd->RefreshTree ( aStrURL );
+            mxMarkWnd->RefreshTree ( aStrURL );
         else
-            mpMarkWnd->SetError( LERR_DOCNOTOPEN );
+            mxMarkWnd->SetError( LERR_DOCNOTOPEN );
         LeaveWait();
     }
 
