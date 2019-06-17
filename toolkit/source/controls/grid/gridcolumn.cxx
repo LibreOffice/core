@@ -298,15 +298,6 @@ namespace toolkit
         static ::cppu::OImplementationId const aId;
         return aId.getImplementationId();
     }
-
-
-    GridColumn* GridColumn::getImplementation( const Reference< XInterface >& i_component )
-    {
-        Reference< XUnoTunnel > const xTunnel( i_component, UNO_QUERY );
-        if ( xTunnel.is() )
-            return reinterpret_cast< GridColumn* >( ::sal::static_int_cast< sal_IntPtr >( xTunnel->getSomething( getUnoTunnelId() ) ) );
-        return nullptr;
-    }
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
