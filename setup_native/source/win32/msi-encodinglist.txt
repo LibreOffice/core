@@ -1,5 +1,5 @@
 # *************************************************************
-#  
+#
 #  Licensed to the Apache Software Foundation (ASF) under one
 #  or more contributor license agreements.  See the NOTICE file
 #  distributed with this work for additional information
@@ -7,17 +7,20 @@
 #  to you under the Apache License, Version 2.0 (the
 #  "License"); you may not use this file except in compliance
 #  with the License.  You may obtain a copy of the License at
-#  
+#
 #    http://www.apache.org/licenses/LICENSE-2.0
-#  
+#
 #  Unless required by applicable law or agreed to in writing,
 #  software distributed under the License is distributed on an
 #  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
 #  KIND, either express or implied.  See the License for the
 #  specific language governing permissions and limitations
 #  under the License.
-#  
+#
 # *************************************************************
+
+
+
 # Syntax: language ANSI-Codepage LCID
 # comment lines begin with hash
 af    1252  1078   # Afrikaans
@@ -32,26 +35,26 @@ bg    1251  1026   # Bulgarian
 bn       0  2117   # Bengali
 bn-BD    0  2117   # Bengali Bangladesh
 bn-IN    0  1093   # Bengali India
-bo       0  2121   
+bo       0  2121
 br    1252  1150   # Breton
 brx      0  1603   # Bodo (India)
-bs       0  5146   # bosnian
+bs       0  5146   # Bosnian
 ca    1252  1027   # Catalan
-ca-XR   1252  32772  # Catalan Valencian RACV
-ca-XV   1252  32771  # Catalan Valencian AVL
+ca-XR 1252  32772  # Catalan Valencian RACV
+ca-XV 1252  32771  # Catalan Valencian AVL
 cs    1250  1029   # Czech
 cy    1252  1106   # Welsh
-da    1252  1030
-de    1252  1031
+da    1252  1030   # Danish
+de    1252  1031   # German
 dgo      0  1604   # Dogri (India)
-dz       0  2129   # Dzongkha (same ID as tibetan bhutan (s. i40713))
+dz       0  2129   # Dzongkha (same ID as tibetan bhutan (see i40713))
 el    1253  1032
 en-GB 1252  2057
 en-US 1252  1033
 en-ZA 1252  7177
 eo       0  1553   # Esperanto
 es    1252  1034
-et    1257  1061
+et    1257  1061   # Estonian
 eu    1252  1069   # Basque
 fa       0  1065   # Farsi
 fi    1252  1035
@@ -72,7 +75,7 @@ hu    1250  1038
 hy       0  1067   # Armenian
 id    1252  1057   # Indonesian
 is    1252  1039   # Icelandic
-it    1252  1040
+it    1252  1040   # Italian
 ja     932  1041
 jbo      0  1624
 ka       0  1079   # Georgian
@@ -82,7 +85,7 @@ kk       0  1087
 km       0  1107   # Khmer
 kn       0  1099   # Kannada
 kn-IN    0  1099   # Kannada
-ko     949  1042
+ko     949  1042   # Korean
 kok      0  1111   # Konkani
 ks       0  1120   # Kashmiri
 ku       0  1574
@@ -115,7 +118,7 @@ om       0  2162
 or       0  1096   # Oriya
 or-IN    0  1096
 pa-IN    0  1094   # Punjabi
-pap      0  2171 
+pap      0  2171
 pl    1250  1045
 ps       0  2171
 pt    1252  2070
@@ -139,10 +142,10 @@ sr    1251  3098   # Serbian Cyrillic
 sr-SP 1251  3098   # Serbian Cyrillic
 ss       0  1579   # Swazi
 st       0  1072   # Southern Sotho, Sutu
-sv    1252  1053
+sv    1252  1053   # Swedish
 sw    1252  1089   # Swahili
 sw-TZ 1252  1089   # Swahili
-so       0  1143  
+so       0  1143
 ta       0  1097   # Tamil
 ta-IN    0  1097   # Tamil
 te       0  1098
