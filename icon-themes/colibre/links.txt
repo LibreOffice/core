@@ -455,11 +455,9 @@ cmd/sc_dbqueryrename.png cmd/sc_addfield.png
 cmd/sc_dbformrename.png cmd/sc_addfield.png
 
 # Edit
-cmd/lc_switchcontroldesignmode.png cmd/lc_editdoc.png
 cmd/lc_quickedit.png cmd/lc_editdoc.png
 cmd/lc_renamemasterpage.png cmd/lc_slidemasterpage.png
 cmd/lc_dsbeditdoc.png cmd/lc_editdoc.png
-cmd/sc_switchcontroldesignmode.png cmd/sc_editdoc.png
 cmd/sc_solidcreate.png cmd/sc_editdoc.png
 cmd/sc_renamemasterpage.png cmd/sc_slidemasterpage.png
 cmd/sc_quickedit.png cmd/sc_editdoc.png
@@ -1683,7 +1681,7 @@ sw/res/sr20011.png sw/res/nc20000.png
 sw/res/sr20012.png cmd/sc_insertreferencefield.png
 sw/res/sr20013.png cmd/sc_insertfootnote.png
 sw/res/sr20014.png dbaccess/res/exwarning.png
-sw/res/sr20015.png cmd/sc_insertbookmark.png
+sw/res/sr20015.png cmd/sc_showannotations.png
 sw/res/sr20016.png cmd/sc_recsearch.png
 sw/res/sr20017.png cmd/sc_insertindexesentry.png
 sw/res/sr20018.png cmd/sc_inserttable.png
