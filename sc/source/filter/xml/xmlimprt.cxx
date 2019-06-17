@@ -1064,7 +1064,7 @@ void ScXMLImport::SetViewSettings(const uno::Sequence<beans::PropertyValue>& aVi
     }
     if (nHeight && nWidth && GetModel().is())
     {
-        ScModelObj* pDocObj(ScModelObj::getImplementation( GetModel() ));
+        ScModelObj* pDocObj(comphelper::getUnoTunnelImplementation<ScModelObj>( GetModel() ));
         if (pDocObj)
         {
             SfxObjectShell* pEmbeddedObj = pDocObj->GetEmbeddedObject();
@@ -1364,7 +1364,7 @@ void ScXMLImport::SetStyleToRanges()
                 sal_uInt64 nKey = 0;
                 if ((aAny >>= nKey) && nKey)
                 {
-                    ScFormatSaveData* pFormatSaveData = ScModelObj::getImplementation(GetModel())->GetFormatSaveData();
+                    ScFormatSaveData* pFormatSaveData = comphelper::getUnoTunnelImplementation<ScModelObj>(GetModel())->GetFormatSaveData();
                     pFormatSaveData->maIDToName.insert(std::pair<sal_uInt64, OUString>(nKey, sPrevStyleName));
                 }
 
@@ -1376,7 +1376,7 @@ void ScXMLImport::SetStyleToRanges()
                     const table::CellRangeAddress& rRange = aAddresses[0];
                     if ( rRange.Sheet != pStyle->GetLastSheet() )
                     {
-                        ScSheetSaveData* pSheetData = ScModelObj::getImplementation(GetModel())->GetSheetSaveData();
+                        ScSheetSaveData* pSheetData = comphelper::getUnoTunnelImplementation<ScModelObj>(GetModel())->GetSheetSaveData();
                         pSheetData->AddCellStyle( sPrevStyleName,
                             ScAddress( static_cast<SCCOL>(rRange.StartColumn), static_cast<SCROW>(rRange.StartRow), static_cast<SCTAB>(rRange.Sheet) ) );
                         pStyle->SetLastSheet(rRange.Sheet);
@@ -1502,7 +1502,7 @@ void SAL_CALL ScXMLImport::startDocument()
     SvXMLImport::startDocument();
     if (pDoc && !pDoc->IsImportingXML())
     {
-        ScModelObj::getImplementation(GetModel())->BeforeXMLLoading();
+        comphelper::getUnoTunnelImplementation<ScModelObj>(GetModel())->BeforeXMLLoading();
         bSelfImportingXMLSet = true;
     }
 
@@ -1517,7 +1517,7 @@ void SAL_CALL ScXMLImport::startDocument()
         if (GetModel().is())
         {
             // store initial namespaces, to find the ones that were added from the file later
-            ScSheetSaveData* pSheetData = ScModelObj::getImplementation(GetModel())->GetSheetSaveData();
+            ScSheetSaveData* pSheetData = comphelper::getUnoTunnelImplementation<ScModelObj>(GetModel())->GetSheetSaveData();
             const SvXMLNamespaceMap& rNamespaces = GetNamespaceMap();
             pSheetData->StoreInitialNamespaces(rNamespaces);
         }
@@ -1768,7 +1768,7 @@ void SAL_CALL ScXMLImport::endDocument()
         {
             // set "valid stream" flags after loading (before UpdateRowHeights, so changed formula results
             // in UpdateRowHeights can already clear the flags again)
-            ScSheetSaveData* pSheetData = ScModelObj::getImplementation(GetModel())->GetSheetSaveData();
+            ScSheetSaveData* pSheetData = comphelper::getUnoTunnelImplementation<ScModelObj>(GetModel())->GetSheetSaveData();
 
             SCTAB nTabCount = pDoc->GetTableCount();
             for (SCTAB nTab=0; nTab<nTabCount; ++nTab)
@@ -1814,7 +1814,7 @@ void SAL_CALL ScXMLImport::endDocument()
     }
 
     if(pDoc && bSelfImportingXMLSet)
-        ScModelObj::getImplementation(GetModel())->AfterXMLLoading();
+        comphelper::getUnoTunnelImplementation<ScModelObj>(GetModel())->AfterXMLLoading();
 }
 
 // XEventListener

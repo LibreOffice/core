@@ -20,6 +20,7 @@
 #include <scitems.hxx>
 #include <comphelper/fileformat.h>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <tools/urlobj.hxx>
 #include <editeng/editobj.hxx>
 #include <editeng/frmdiritem.hxx>
@@ -708,7 +709,7 @@ void ScDocument::RepaintRange( const ScRange& rRange )
 {
     if ( bIsVisible && mpShell )
     {
-        ScModelObj* pModel = ScModelObj::getImplementation( mpShell->GetModel() );
+        ScModelObj* pModel = comphelper::getUnoTunnelImplementation<ScModelObj>( mpShell->GetModel() );
         if ( pModel )
             pModel->RepaintRange( rRange );     // locked repaints are checked there
     }
@@ -718,7 +719,7 @@ void ScDocument::RepaintRange( const ScRangeList& rRange )
 {
     if ( bIsVisible && mpShell )
     {
-        ScModelObj* pModel = ScModelObj::getImplementation( mpShell->GetModel() );
+        ScModelObj* pModel = comphelper::getUnoTunnelImplementation<ScModelObj>( mpShell->GetModel() );
         if ( pModel )
             pModel->RepaintRange( rRange );     // locked repaints are checked there
     }

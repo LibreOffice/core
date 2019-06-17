@@ -20,6 +20,7 @@
 #include "XMLConverter.hxx"
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/sheet/GeneralFunction2.hpp>
+#include <comphelper/servicehelper.hxx>
 #include <tools/datetime.hxx>
 #include <sax/tools/converter.hxx>
 #include <xmloff/xmltoken.hxx>
@@ -34,7 +35,7 @@ ScDocument* ScXMLConverter::GetScDocument( const uno::Reference< frame::XModel >
 {
     if (xModel.is())
     {
-        ScModelObj* pDocObj = ScModelObj::getImplementation( xModel );
+        ScModelObj* pDocObj = comphelper::getUnoTunnelImplementation<ScModelObj>( xModel );
         return pDocObj ? pDocObj->GetDocument() : nullptr;
     }
     return nullptr;

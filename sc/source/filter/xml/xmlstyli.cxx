@@ -1034,7 +1034,7 @@ void ScCellTextStyleContext::FillPropertySet( const uno::Reference<beans::XPrope
         {
             ESelection aSel = pCellImp->GetSelection();
 
-            ScSheetSaveData* pSheetData = ScModelObj::getImplementation(GetImport().GetModel())->GetSheetSaveData();
+            ScSheetSaveData* pSheetData = comphelper::getUnoTunnelImplementation<ScModelObj>(GetImport().GetModel())->GetSheetSaveData();
             pSheetData->AddTextStyle( GetName(), aPos, aSel );
 
             nLastSheet = aPos.Tab();

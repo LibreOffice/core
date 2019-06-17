@@ -687,7 +687,7 @@ bool ScXMLImportWrapper::ExportToComponent(const uno::Reference<uno::XComponentC
 
             // #i108978# If an embedded object is saved and no events are notified, don't use the stream
             // because without the ...DONE events, stream positions aren't updated.
-            ScSheetSaveData* pSheetData = ScModelObj::getImplementation(xModel)->GetSheetSaveData();
+            ScSheetSaveData* pSheetData = comphelper::getUnoTunnelImplementation<ScModelObj>(xModel)->GetSheetSaveData();
             if (pSheetData && pSheetData->IsInSupportedSave())
             {
                 try

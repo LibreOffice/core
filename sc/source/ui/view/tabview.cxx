@@ -2546,7 +2546,7 @@ OUString ScTabView::getRowColumnHeaders(const tools::Rectangle& rRectangle)
     if (nEndRow > aViewData.GetMaxTiledRow() - nVisibleRows)
     {
         ScDocShell* pDocSh = aViewData.GetDocShell();
-        ScModelObj* pModelObj = pDocSh ? ScModelObj::getImplementation( pDocSh->GetModel() ) : nullptr;
+        ScModelObj* pModelObj = pDocSh ? comphelper::getUnoTunnelImplementation<ScModelObj>( pDocSh->GetModel() ) : nullptr;
         Size aOldSize(0, 0);
         if (pModelObj)
             aOldSize = pModelObj->getDocumentSize();
@@ -2688,7 +2688,7 @@ OUString ScTabView::getRowColumnHeaders(const tools::Rectangle& rRectangle)
     if (nEndCol > aViewData.GetMaxTiledCol() - nVisibleCols)
     {
         ScDocShell* pDocSh = aViewData.GetDocShell();
-        ScModelObj* pModelObj = pDocSh ? ScModelObj::getImplementation( pDocSh->GetModel() ) : nullptr;
+        ScModelObj* pModelObj = pDocSh ? comphelper::getUnoTunnelImplementation<ScModelObj>( pDocSh->GetModel() ) : nullptr;
         Size aOldSize(0, 0);
         if (pModelObj)
             aOldSize = pModelObj->getDocumentSize();

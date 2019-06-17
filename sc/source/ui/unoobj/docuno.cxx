@@ -1539,7 +1539,7 @@ bool ScModelObj::FillRenderMarkData( const uno::Any& aSelection,
                 }
             }
         }
-        else if ( ScModelObj::getImplementation( xInterface ) == this )
+        else if ( comphelper::getUnoTunnelImplementation<ScModelObj>( xInterface ) == this )
         {
             //  render the whole document
             //  -> no selection, all sheets
@@ -2925,15 +2925,6 @@ const uno::Sequence<sal_Int8>& ScModelObj::getUnoTunnelId()
     return theScModelObjUnoTunnelId::get().getSeq();
 }
 
-ScModelObj* ScModelObj::getImplementation(const uno::Reference<uno::XInterface>& rObj)
-{
-    ScModelObj* pRet = nullptr;
-    uno::Reference<lang::XUnoTunnel> xUT(rObj, uno::UNO_QUERY);
-    if (xUT.is())
-        pRet = reinterpret_cast<ScModelObj*>(sal::static_int_cast<sal_IntPtr>(xUT->getSomething(getUnoTunnelId())));
-    return pRet;
-}
-
 // XChangesNotifier
 
 void ScModelObj::addChangesListener( const uno::Reference< util::XChangesListener >& aListener )
@@ -3595,7 +3586,7 @@ sal_Int32 ScTableSheetsObj::importSheet(
     // Source document docShell
     if ( !xDocSrc.is() )
         throw uno::RuntimeException();
-    ScModelObj* pObj = ScModelObj::getImplementation(xDocSrc);
+    ScModelObj* pObj = comphelper::getUnoTunnelImplementation<ScModelObj>(xDocSrc);
     ScDocShell* pDocShellSrc = static_cast<ScDocShell*>(pObj->GetEmbeddedObject());
 
     // SourceSheet Position and does srcName exists ?

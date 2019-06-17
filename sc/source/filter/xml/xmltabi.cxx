@@ -43,6 +43,7 @@
 
 #include <tools/urlobj.hxx>
 #include <sax/fastattribs.hxx>
+#include <comphelper/servicehelper.hxx>
 
 using namespace com::sun::star;
 using namespace xmloff::token;
@@ -418,7 +419,7 @@ void SAL_CALL ScXMLTableContext::endFastElement(sal_Int32 /*nElement*/)
     // store stream positions
     if (!pExternalRefInfo && nStartOffset >= 0 /* && nEndOffset >= 0 */)
     {
-        ScSheetSaveData* pSheetData = ScModelObj::getImplementation(rImport.GetModel())->GetSheetSaveData();
+        ScSheetSaveData* pSheetData = comphelper::getUnoTunnelImplementation<ScModelObj>(rImport.GetModel())->GetSheetSaveData();
         SCTAB nTab = rTables.GetCurrentSheet();
         // pSheetData->AddStreamPos( nTab, nStartOffset, nEndOffset );
         pSheetData->StartStreamPos( nTab, nStartOffset );
