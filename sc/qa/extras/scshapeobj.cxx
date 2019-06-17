@@ -8,6 +8,7 @@
  */
 
 #include <test/calc_unoapi_test.hxx>
+#include <test/drawing/xshapedescriptor.hxx>
 #include <test/lang/xcomponent.hxx>
 #include <test/sheet/shape.hxx>
 
@@ -29,7 +30,10 @@ using namespace css;
 
 namespace sc_apitest
 {
-class ScShapeObj : public CalcUnoApiTest, public apitest::Shape, public apitest::XComponent
+class ScShapeObj : public CalcUnoApiTest,
+                   public apitest::Shape,
+                   public apitest::XComponent,
+                   public apitest::XShapeDescriptor
 {
 public:
     ScShapeObj();
@@ -51,6 +55,9 @@ public:
     CPPUNIT_TEST(testDispose);
     CPPUNIT_TEST(testRemoveEventListener);
 
+    // XShapeDescriptor
+    CPPUNIT_TEST(testGetShapeType);
+
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -59,6 +66,7 @@ private:
 
 ScShapeObj::ScShapeObj()
     : CalcUnoApiTest("/sc/qa/extras/testdocuments")
+    , XShapeDescriptor("com.sun.star.drawing.RectangleShape")
 {
 }
 
