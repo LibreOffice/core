@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_785aa54f",
+        "filename": "instsetoo_native/inc_openoffice/windows/msi_templates/Control.idt",
+        "patchSetId": 2
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-06-17T23:50:35Z",
+      "side": 0,
+      "message": "Please keep this",
+      "range": {
+        "startLine": 3,
+        "startChar": 0,
+        "endLine": 3,
+        "endChar": 6
+      },
+      "revId": "41dee8c55275c458317ce711478ff00b9a976451",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_98553120",
+        "filename": "instsetoo_native/inc_openoffice/windows/msi_templates/Control.idt",
+        "patchSetId": 2
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-06-17T23:50:35Z",
+      "side": 0,
+      "message": "And most important: these identifiers - that allow localization - *must* be restored.",
+      "range": {
+        "startLine": 6,
+        "startChar": 53,
+        "endLine": 6,
+        "endChar": 66
+      },
+      "revId": "41dee8c55275c458317ce711478ff00b9a976451",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
