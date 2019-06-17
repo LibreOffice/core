@@ -731,7 +731,7 @@ void bubbleSortVersion(vector<rtl::Reference<VendorBase> >& vec)
             }
             if(nCmp == 1) // cur > next
             {
-                std::swap(vec.at(j-1), vec.at(j));
+                std::swap(cur, next);
             }
         }
         ++cIter;
