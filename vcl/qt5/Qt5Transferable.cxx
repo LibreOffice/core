@@ -284,8 +284,8 @@ QVariant Qt5MimeData::retrieveData(const QString& mimeType, QVariant::Type) cons
     aFlavor.MimeType = toOUString(mimeType);
     aFlavor.DataType = cppu::UnoType<css::uno::Sequence<sal_Int8>>::get();
 
-    bool bWantNoCharset = false, bWantUTF8 = false, bWantUTF16 = false;
-    if (lcl_textMimeInfo(aFlavor.MimeType, bWantNoCharset, bWantUTF8, bWantUTF16))
+    bool bWantNoCharset = false, bWantUTF16 = false, bWantUTF8 = false;
+    if (lcl_textMimeInfo(aFlavor.MimeType, bWantNoCharset, bWantUTF16, bWantUTF8))
     {
         if ((bWantNoCharset && !m_bHaveNoCharset) || (bWantUTF8 && !m_bHaveUTF8))
         {
