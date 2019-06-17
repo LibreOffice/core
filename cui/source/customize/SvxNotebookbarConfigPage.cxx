@@ -304,24 +304,19 @@ void SvxNotebookbarConfigPage::searchNodeandAttribute(std::vector<NotebookbarEnt
 
 void SvxNotebookbarConfigPage::FillFunctionsList(std::vector<NotebookbarEntries>& aEntries)
 {
+    xmlDocPtr pDoc;
+    xmlNodePtr pNodePtr;
     OUString sUIFilePath = CustomNotebookbarGenerator::getCustomizedUIPath();
-    sal_uInt32 nflag = osl_File_OpenFlag_Read | osl_File_OpenFlag_Write;
-    osl::File aFile(sUIFilePath);
-    if (aFile.open(nflag) == osl::FileBase::E_None)
+    char* cUIFileUIPath = CustomNotebookbarGenerator::convertToCharPointer(sUIFilePath);
+    pDoc = xmlParseFile(cUIFileUIPath);
+    pNodePtr = xmlDocGetRootElement(pDoc);
+    int aRightPos = 0;
+    searchNodeandAttribute(aEntries, pNodePtr, aRightPos);
+    if (pDoc != nullptr)
     {
-        xmlDocPtr pDoc;
-        xmlNodePtr pNodePtr;
-        char* cUIFileUIPath = CustomNotebookbarGenerator::convertToCharPointer(sUIFilePath);
-        pDoc = xmlParseFile(cUIFileUIPath);
-        pNodePtr = xmlDocGetRootElement(pDoc);
-        int aRightPos = 0;
-        searchNodeandAttribute(aEntries, pNodePtr, aRightPos);
-        if (pDoc != nullptr)
-        {
-            xmlFreeDoc(pDoc);
-        }
-        delete[] cUIFileUIPath;
+        xmlFreeDoc(pDoc);
     }
+    delete[] cUIFileUIPath;
 }
 
 void SvxNotebookbarConfigPage::SelectElement()

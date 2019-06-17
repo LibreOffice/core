@@ -18,6 +18,7 @@
  */
 
 #include <rtl/bootstrap.hxx>
+#include <config_folders.h>
 #include <CustomNotebookbarGenerator.hxx>
 #include <osl/file.hxx>
 #include <vcl/dialog.hxx>
@@ -96,7 +97,8 @@ static OUString getAppNameRegistryPath()
 
 static OUString customizedUIPathBuffer()
 {
-    OUString sDirPath("$BRAND_BASE_DIR/user/config/soffice.cfg/");
+    OUString sDirPath("${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE(
+        "bootstrap") ":UserInstallation}/user/config/soffice.cfg/");
     rtl::Bootstrap::expandMacros(sDirPath);
     return sDirPath;
 }
