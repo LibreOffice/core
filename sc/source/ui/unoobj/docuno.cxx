@@ -91,7 +91,7 @@
 #include <formulagroup.hxx>
 #include <gridwin.hxx>
 #include <hints.hxx>
-#include <inputhdl.hxx>
+#include "inputhdl.hxx"
 #include <inputopt.hxx>
 #include <interpre.hxx>
 #include <linkuno.hxx>

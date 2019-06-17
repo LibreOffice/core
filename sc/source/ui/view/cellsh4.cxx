@@ -23,7 +23,7 @@
 #include <tabvwsh.hxx>
 #include <global.hxx>
 #include <scmod.hxx>
-#include <inputhdl.hxx>
+#include "inputhdl.hxx"
 #include <inputwin.hxx>
 #include <document.hxx>
 #include <sc.hrc>

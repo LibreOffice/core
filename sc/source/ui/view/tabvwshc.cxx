@@ -21,7 +21,7 @@
 #include <sfx2/childwin.hxx>
 #include <sfx2/dispatch.hxx>
 #include <editeng/editview.hxx>
-#include <inputhdl.hxx>
+#include "inputhdl.hxx"
 
 #include <tabvwsh.hxx>
 #include <sc.hrc>

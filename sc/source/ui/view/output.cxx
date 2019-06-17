@@ -1970,12 +1970,10 @@ ReferenceMark ScOutputData::FillReferenceMark( SCCOL nRefStartX, SCROW nRefStart
     return aResult;
 }
 
-ReferenceMark ScOutputData::DrawRefMark( SCCOL nRefStartX, SCROW nRefStartY,
+void ScOutputData::DrawRefMark( SCCOL nRefStartX, SCROW nRefStartY,
                                 SCCOL nRefEndX, SCROW nRefEndY,
                                 const Color& rColor, bool bHandle )
 {
-    ReferenceMark aResult;
-
     PutInOrder( nRefStartX, nRefEndX );
     PutInOrder( nRefStartY, nRefEndY );
 
@@ -2098,8 +2096,6 @@ ReferenceMark ScOutputData::DrawRefMark( SCCOL nRefStartX, SCROW nRefStartY,
             }
         }
     }
-
-    return aResult;
 }
 
 void ScOutputData::DrawOneChange( SCCOL nRefStartX, SCROW nRefStartY,

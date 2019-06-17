@@ -59,7 +59,7 @@
 #include <redcom.hxx>
 #include <inputopt.hxx>
 #include <drwlayer.hxx>
-#include <inputhdl.hxx>
+#include "inputhdl.hxx"
 #include <conflictsdlg.hxx>
 #include <globstr.hrc>
 #include <scresid.hxx>
