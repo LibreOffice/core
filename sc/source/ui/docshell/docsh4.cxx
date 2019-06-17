@@ -79,7 +79,7 @@ using namespace ::com::sun::star;
 #include <impex.hxx>
 #include <undodat.hxx>
 #include <undocell.hxx>
-#include <inputhdl.hxx>
+#include "inputhdl.hxx"
 #include <dbdata.hxx>
 #include <servobj.hxx>
 #include <rangenam.hxx>

@@ -59,7 +59,7 @@
 #include <editutil.hxx>
 #include <formulacell.hxx>
 #include <scresid.hxx>
-#include <inputhdl.hxx>
+#include "inputhdl.hxx"
 #include <scmod.hxx>
 #include <inputopt.hxx>
 #include <compiler.hxx>

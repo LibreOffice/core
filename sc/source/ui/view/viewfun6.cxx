@@ -39,7 +39,7 @@
 #include <externalrefmgr.hxx>
 #include <markdata.hxx>
 #include <drawview.hxx>
-#include <inputhdl.hxx>
+#include "inputhdl.hxx"
 #include <tabvwsh.hxx>
 #include <scmod.hxx>
 #include <postit.hxx>

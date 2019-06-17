@@ -72,7 +72,7 @@
 #include <undotab.hxx>
 #include <sizedev.hxx>
 #include <scmod.hxx>
-#include <inputhdl.hxx>
+#include "inputhdl.hxx"
 #include <editable.hxx>
 #include <compiler.hxx>
 #include <scui_def.hxx>

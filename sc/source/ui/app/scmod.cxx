@@ -78,7 +78,7 @@
 #include <globstr.hrc>
 #include <scresid.hxx>
 #include <bitmaps.hlst>
-#include <inputhdl.hxx>
+#include "inputhdl.hxx"
 #include <inputwin.hxx>
 #include <msgpool.hxx>
 #include <formdata.hxx>
