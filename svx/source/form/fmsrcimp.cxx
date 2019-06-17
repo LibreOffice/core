@@ -214,14 +214,9 @@ bool FmSearchEngine::MoveCursor()
             else
                 m_xSearchCursor.previous();
     }
-    catch(css::sdbc::SQLException const& e)
+    catch(Exception const&)
     {
-        SAL_WARN( "svx", "FmSearchEngine::MoveCursor: caught " << e << " sqlstate=" << e.SQLState );
-        bSuccess = false;
-    }
-    catch(Exception const& e)
-    {
-        SAL_WARN( "svx", "FmSearchEngine::MoveCursor: caught " << e);
+        TOOLS_WARN_EXCEPTION( "svx", "FmSearchEngine::MoveCursor");
         bSuccess = false;
     }
     catch(...)
