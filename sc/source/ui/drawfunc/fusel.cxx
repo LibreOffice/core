@@ -512,7 +512,7 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
     if ( bCopy && pDocument && pPage )
     {
         ScDocShell* pDocShell = rViewData.GetDocShell();
-        ScModelObj* pModelObj = ( pDocShell ? ScModelObj::getImplementation( pDocShell->GetModel() ) : nullptr );
+        ScModelObj* pModelObj = ( pDocShell ? comphelper::getUnoTunnelImplementation<ScModelObj>( pDocShell->GetModel() ) : nullptr );
         if ( pModelObj )
         {
             SCTAB nTab = rViewData.GetTabNo();

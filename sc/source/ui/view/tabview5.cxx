@@ -323,7 +323,7 @@ void ScTabView::TabChanged( bool bSameTabButMoved )
     if (comphelper::LibreOfficeKit::isActive())
     {
         ScDocShell* pDocSh = GetViewData().GetDocShell();
-        ScModelObj* pModelObj = pDocSh ? ScModelObj::getImplementation( pDocSh->GetModel()) : nullptr;
+        ScModelObj* pModelObj = pDocSh ? comphelper::getUnoTunnelImplementation<ScModelObj>( pDocSh->GetModel()) : nullptr;
 
         if (pModelObj)
         {

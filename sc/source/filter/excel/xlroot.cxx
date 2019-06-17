@@ -25,6 +25,7 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <sot/storage.hxx>
 #include <vcl/svapp.hxx>
 #include <svl/stritem.hxx>
@@ -291,7 +292,7 @@ SfxObjectShell* XclRoot::GetDocShell() const
 ScModelObj* XclRoot::GetDocModelObj() const
 {
     SfxObjectShell* pDocShell = GetDocShell();
-    return pDocShell ? ScModelObj::getImplementation( pDocShell->GetModel() ) : nullptr;
+    return pDocShell ? comphelper::getUnoTunnelImplementation<ScModelObj>( pDocShell->GetModel() ) : nullptr;
 }
 
 OutputDevice* XclRoot::GetPrinter() const

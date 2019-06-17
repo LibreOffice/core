@@ -33,6 +33,7 @@
 #include <osl/diagnose.h>
 
 #include <comphelper/base64.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
@@ -153,7 +154,7 @@ void ScMyTables::SetTableStyle(const OUString& sStyleName)
                     {
                         pStyle->FillPropertySet(xProperties);
 
-                        ScSheetSaveData* pSheetData = ScModelObj::getImplementation(rImport.GetModel())->GetSheetSaveData();
+                        ScSheetSaveData* pSheetData = comphelper::getUnoTunnelImplementation<ScModelObj>(rImport.GetModel())->GetSheetSaveData();
                         pSheetData->AddTableStyle( sStyleName, ScAddress( 0, 0, maCurrentCellPos.Tab() ) );
                     }
                 }

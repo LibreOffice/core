@@ -35,6 +35,7 @@
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/table/XColumnRowRange.hpp>
 #include <com/sun/star/sheet/XPrintAreas.hpp>
+#include <comphelper/servicehelper.hxx>
 #include <osl/diagnose.h>
 
 #define SC_ISFILTERED "IsFiltered"
@@ -173,7 +174,7 @@ void SAL_CALL ScXMLTableRowContext::endFastElement(sal_Int32 /*nElement*/)
 
                                 if ( nSheet != pStyle->GetLastSheet() )
                                 {
-                                    ScSheetSaveData* pSheetData = ScModelObj::getImplementation(rXMLImport.GetModel())->GetSheetSaveData();
+                                    ScSheetSaveData* pSheetData = comphelper::getUnoTunnelImplementation<ScModelObj>(rXMLImport.GetModel())->GetSheetSaveData();
                                     pSheetData->AddRowStyle( sStyleName, ScAddress( 0, static_cast<SCROW>(nFirstRow), nSheet ) );
                                     pStyle->SetLastSheet(nSheet);
                                 }

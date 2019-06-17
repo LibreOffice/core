@@ -444,7 +444,7 @@ void ScXMLExport::SetSourceStream( const uno::Reference<io::XInputStream>& xNewS
             // keep track of the bytes already read
             nSourceStreamPos = nRead;
 
-            const ScSheetSaveData* pSheetData = ScModelObj::getImplementation(GetModel())->GetSheetSaveData();
+            const ScSheetSaveData* pSheetData = comphelper::getUnoTunnelImplementation<ScModelObj>(GetModel())->GetSheetSaveData();
             if (pSheetData)
             {
                 // add the loaded namespaces to the name space map
@@ -1838,7 +1838,7 @@ const ScXMLEditAttributeMap& ScXMLExport::GetEditAttributeMap() const
 
 void ScXMLExport::RegisterDefinedStyleNames( const uno::Reference< css::sheet::XSpreadsheetDocument > & xSpreadDoc )
 {
-    ScFormatSaveData* pFormatData = ScModelObj::getImplementation(xSpreadDoc)->GetFormatSaveData();
+    ScFormatSaveData* pFormatData = comphelper::getUnoTunnelImplementation<ScModelObj>(xSpreadDoc)->GetFormatSaveData();
     auto xAutoStylePool = GetAutoStylePool();
     for (const auto& rFormatInfo : pFormatData->maIDToName)
     {
@@ -1866,7 +1866,7 @@ void ScXMLExport::ExportContent_()
     if ( !xSpreadDoc.is() )
         return;
 
-    ScSheetSaveData* pSheetData = ScModelObj::getImplementation(xSpreadDoc)->GetSheetSaveData();
+    ScSheetSaveData* pSheetData = comphelper::getUnoTunnelImplementation<ScModelObj>(xSpreadDoc)->GetSheetSaveData();
     if (pSheetData)
         pSheetData->ResetSaveEntries();
 
@@ -2088,7 +2088,7 @@ void ScXMLExport::AddStyleFromCells(const uno::Reference<beans::XPropertySet>& x
                 if (nKey)
                 {
                     uno::Reference <sheet::XSpreadsheetDocument> xSpreadDoc( GetModel(), uno::UNO_QUERY );
-                    ScFormatSaveData* pFormatData = ScModelObj::getImplementation(xSpreadDoc)->GetFormatSaveData();
+                    ScFormatSaveData* pFormatData = comphelper::getUnoTunnelImplementation<ScModelObj>(xSpreadDoc)->GetFormatSaveData();
                     auto itr = pFormatData->maIDToName.find(nKey);
                     if (itr != pFormatData->maIDToName.end())
                     {
@@ -2254,7 +2254,7 @@ void ScXMLExport::collectAutoStyles()
         RegisterDefinedStyleNames( xSpreadDoc);
 
         //  re-create automatic styles with old names from stored data
-        ScSheetSaveData* pSheetData = ScModelObj::getImplementation(xSpreadDoc)->GetSheetSaveData();
+        ScSheetSaveData* pSheetData = comphelper::getUnoTunnelImplementation<ScModelObj>(xSpreadDoc)->GetSheetSaveData();
         if (pSheetData && pDoc)
         {
             // formulas have to be calculated now, to detect changed results
@@ -5097,7 +5097,7 @@ void ScXMLExport::GetViewSettings(uno::Sequence<beans::PropertyValue>& rProps)
     {
         rProps.realloc(4);
         beans::PropertyValue* pProps(rProps.getArray());
-        ScModelObj* pDocObj(ScModelObj::getImplementation( GetModel() ));
+        ScModelObj* pDocObj(comphelper::getUnoTunnelImplementation<ScModelObj>( GetModel() ));
         if (pDocObj)
         {
             SfxObjectShell* pEmbeddedObj = pDocObj->GetEmbeddedObject();

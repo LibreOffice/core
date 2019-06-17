@@ -25,6 +25,7 @@
 #include <sfx2/sfxmodelfactory.hxx>
 #include <sfx2/viewsh.hxx>
 #include <o3tl/deleter.hxx>
+#include <comphelper/servicehelper.hxx>
 
 #include <scdllapi.h>
 #include <document.hxx>
@@ -467,7 +468,7 @@ namespace HelperNotifyChanges
 {
     inline ScModelObj* getMustPropagateChangesModel(const ScDocShell &rDocShell)
     {
-        ScModelObj* pModelObj = ScModelObj::getImplementation(rDocShell.GetModel());
+        ScModelObj* pModelObj = comphelper::getUnoTunnelImplementation<ScModelObj>(rDocShell.GetModel());
         if (pModelObj && pModelObj->HasChangesListeners())
             return pModelObj;
         return nullptr;

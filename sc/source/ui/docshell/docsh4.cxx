@@ -1017,7 +1017,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
 
                                 // check if shared flag is set in shared file
                                 bool bShared = false;
-                                ScModelObj* pDocObj = ScModelObj::getImplementation( xModel );
+                                ScModelObj* pDocObj = comphelper::getUnoTunnelImplementation<ScModelObj>( xModel );
                                 if ( pDocObj )
                                 {
                                     ScDocShell* pDocShell = dynamic_cast< ScDocShell* >( pDocObj->GetEmbeddedObject() );

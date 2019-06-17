@@ -32,6 +32,7 @@
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/table/XColumnRowRange.hpp>
 #include <com/sun/star/sheet/XPrintAreas.hpp>
+#include <comphelper/servicehelper.hxx>
 
 using namespace com::sun::star;
 using namespace xmloff::token;
@@ -116,7 +117,7 @@ void SAL_CALL ScXMLTableColContext::endFastElement( sal_Int32 /*nElement*/ )
 
                             if ( nSheet != pStyle->GetLastSheet() )
                             {
-                                ScSheetSaveData* pSheetData = ScModelObj::getImplementation(rXMLImport.GetModel())->GetSheetSaveData();
+                                ScSheetSaveData* pSheetData = comphelper::getUnoTunnelImplementation<ScModelObj>(rXMLImport.GetModel())->GetSheetSaveData();
                                 pSheetData->AddColumnStyle( sStyleName, ScAddress( static_cast<SCCOL>(nCurrentColumn), 0, nSheet ) );
                                 pStyle->SetLastSheet(nSheet);
                             }

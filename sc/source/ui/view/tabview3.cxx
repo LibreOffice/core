@@ -389,7 +389,7 @@ void ScTabView::SetCursor( SCCOL nPosX, SCROW nPosY, bool bNew )
             if (nPosX > aViewData.GetMaxTiledCol() - 10 || nPosY > aViewData.GetMaxTiledRow() - 25)
             {
                 ScDocShell* pDocSh = aViewData.GetDocShell();
-                ScModelObj* pModelObj = pDocSh ? ScModelObj::getImplementation( pDocSh->GetModel() ) : nullptr;
+                ScModelObj* pModelObj = pDocSh ? comphelper::getUnoTunnelImplementation<ScModelObj>( pDocSh->GetModel() ) : nullptr;
                 Size aOldSize(0, 0);
                 if (pModelObj)
                     aOldSize = pModelObj->getDocumentSize();
