@@ -46,6 +46,30 @@
       "revId": "c473c5b462f33df439b4b62b394c5d7811a05c7c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_527307b2",
+        "filename": "cui/source/customize/CustomNotebookbarGenerator.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1001943
+      },
+      "writtenOn": "2019-06-17T08:15:00Z",
+      "side": 1,
+      "message": "I guess, I was fascinated by OUStringBuffer :P . Thanks for the review , would soon refactor the code.",
+      "parentUuid": "3fa0c359_375c2d7d",
+      "range": {
+        "startLine": 106,
+        "startChar": 4,
+        "endLine": 106,
+        "endChar": 43
+      },
+      "revId": "c473c5b462f33df439b4b62b394c5d7811a05c7c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
