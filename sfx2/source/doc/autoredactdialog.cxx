@@ -557,6 +557,7 @@ SfxAutoRedactDialog::SfxAutoRedactDialog(weld::Window* pParent)
     OUString sExtraData;
     SvtViewOptions aDlgOpt(EViewType::Dialog,
                            OStringToOUString(m_xDialog->get_help_id(), RTL_TEXTENCODING_UTF8));
+
     if (aDlgOpt.Exists())
     {
         css::uno::Any aUserItem = aDlgOpt.GetUserItem("UserItem");
@@ -564,12 +565,39 @@ SfxAutoRedactDialog::SfxAutoRedactDialog(weld::Window* pParent)
     }
 
     // update the targets configuration if necessary
+    if (!sExtraData.isEmpty())
     {
         weld::WaitObject aWaitCursor(m_xDialog.get());
-        //m_aTargets.Update();
-    }
 
-    // TODO: fill the targets box
+        // Init the targets vector first
+        std::vector<std::pair<RedactionTarget*, OUString>>* p_aTableTargets
+            = reinterpret_cast<std::vector<std::pair<RedactionTarget*, OUString>>*>(
+                sExtraData.toInt64());
+
+        if (p_aTableTargets && !p_aTableTargets->empty())
+        {
+            try
+            {
+                m_aTableTargets.insert(m_aTableTargets.end(),
+                                       std::make_move_iterator(p_aTableTargets->begin()),
+                                       std::make_move_iterator(p_aTableTargets->end()));
+                p_aTableTargets->clear();
+                //delete p_aTableTargets;
+
+                // Now insert into the list box
+                for (const auto& pair : m_aTableTargets)
+                {
+                    m_xTargetsBox->InsertTarget(pair.first);
+                }
+            }
+            catch (const css::uno::Exception& e)
+            {
+                SAL_WARN("sfx.doc",
+                         "Exception caught while initializing redaction targets: " << e.Message);
+                m_bIsValidState = false;
+            }
+        }
+    }
 
     // Handler connections
     m_xLoadBtn->connect_clicked(LINK(this, SfxAutoRedactDialog, Load));
@@ -581,9 +609,19 @@ SfxAutoRedactDialog::SfxAutoRedactDialog(weld::Window* pParent)
 
 SfxAutoRedactDialog::~SfxAutoRedactDialog()
 {
-    // Store the view options
-    /*SvtViewOptions aDlgOpt(EViewType::Dialog, OStringToOUString(m_xDialog->get_help_id(), RTL_TEXTENCODING_UTF8));
-    aDlgOpt.SetUserItem("UserItem", css::uno::makeAny(m_xMoreBt->get_expanded() ? OUString("Y") : OUString("N")));*/
+    if (m_aTableTargets.empty())
+        return;
+
+    // Copy the targets vector
+    std::vector<std::pair<RedactionTarget*, OUString>>* p_aTableTargets
+        = new std::vector<std::pair<RedactionTarget*, OUString>>(m_aTableTargets.size());
+    *p_aTableTargets = m_aTableTargets;
+
+    // Store the dialog data
+    SvtViewOptions aDlgOpt(EViewType::Dialog,
+                           OStringToOUString(m_xDialog->get_help_id(), RTL_TEXTENCODING_UTF8));
+    aDlgOpt.SetUserItem("UserItem", css::uno::makeAny(OUString::number(
+                                        reinterpret_cast<sal_Int64>(p_aTableTargets))));
 }
 
 bool SfxAutoRedactDialog::hasTargets() const
