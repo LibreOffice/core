@@ -223,7 +223,7 @@ SwIndexReg::SwIndexReg()
 
 SwIndexReg::~SwIndexReg()
 {
-//    assert(!m_pFirst && !m_pLast && "There are still indices registered");
+    assert(!m_pFirst && !m_pLast && "There are still indices registered");
 }
 
 void SwIndexReg::Update(
