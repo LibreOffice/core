@@ -557,6 +557,7 @@ SfxAutoRedactDialog::SfxAutoRedactDialog(weld::Window* pParent)
     OUString sExtraData;
     SvtViewOptions aDlgOpt(EViewType::Dialog,
                            OStringToOUString(m_xDialog->get_help_id(), RTL_TEXTENCODING_UTF8));
+
     if (aDlgOpt.Exists())
     {
         css::uno::Any aUserItem = aDlgOpt.GetUserItem("UserItem");
@@ -564,12 +565,34 @@ SfxAutoRedactDialog::SfxAutoRedactDialog(weld::Window* pParent)
     }
 
     // update the targets configuration if necessary
+    if (!sExtraData.isEmpty())
     {
         weld::WaitObject aWaitCursor(m_xDialog.get());
-        //m_aTargets.Update();
-    }
 
-    // TODO: fill the targets box
+        try
+        {
+            // Create path string, and read JSON from file
+            boost::property_tree::ptree aTargetsJSON;
+            std::stringstream aStream(std::string(sExtraData.toUtf8()));
+
+            boost::property_tree::read_json(aStream, aTargetsJSON);
+
+            // Recreate & add the targets to the dialog
+            for (const boost::property_tree::ptree::value_type& rValue :
+                 aTargetsJSON.get_child("RedactionTargets"))
+            {
+                RedactionTarget* pTarget = JSONtoRedactionTarget(rValue);
+                addTarget(pTarget);
+            }
+        }
+        catch (css::uno::Exception& e)
+        {
+            SAL_WARN("sfx.doc",
+                     "Exception caught while trying to load the last dialog state: " << e.Message);
+            return;
+            //TODO: Warn the user with a message box
+        }
+    }
 
     // Handler connections
     m_xLoadBtn->connect_clicked(LINK(this, SfxAutoRedactDialog, Load));
@@ -581,9 +604,47 @@ SfxAutoRedactDialog::SfxAutoRedactDialog(weld::Window* pParent)
 
 SfxAutoRedactDialog::~SfxAutoRedactDialog()
 {
-    // Store the view options
-    /*SvtViewOptions aDlgOpt(EViewType::Dialog, OStringToOUString(m_xDialog->get_help_id(), RTL_TEXTENCODING_UTF8));
-    aDlgOpt.SetUserItem("UserItem", css::uno::makeAny(m_xMoreBt->get_expanded() ? OUString("Y") : OUString("N")));*/
+    if (m_aTableTargets.empty())
+    {
+        // Clear the dialog data
+        SvtViewOptions aDlgOpt(EViewType::Dialog,
+                               OStringToOUString(m_xDialog->get_help_id(), RTL_TEXTENCODING_UTF8));
+        aDlgOpt.Delete();
+        return;
+    }
+
+    try
+    {
+        // Put the targets into a JSON array
+        boost::property_tree::ptree aTargetsArray;
+        for (const auto& targetPair : m_aTableTargets)
+        {
+            aTargetsArray.push_back(std::make_pair("", redactionTargetToJSON(targetPair.first)));
+        }
+
+        // Build the JSON tree
+        boost::property_tree::ptree aTargetsTree;
+        aTargetsTree.add_child("RedactionTargets", aTargetsArray);
+        std::stringstream aStream;
+
+        boost::property_tree::write_json(aStream, aTargetsTree, false);
+
+        OUString sUserDataStr(OUString::fromUtf8(aStream.str().c_str()));
+
+        // Store the dialog data
+        SvtViewOptions aDlgOpt(EViewType::Dialog,
+                               OStringToOUString(m_xDialog->get_help_id(), RTL_TEXTENCODING_UTF8));
+        aDlgOpt.SetUserItem("UserItem", css::uno::makeAny(sUserDataStr));
+
+        clearTargets();
+    }
+    catch (css::uno::Exception& e)
+    {
+        SAL_WARN("sfx.doc",
+                 "Exception caught while trying to store the dialog state: " << e.Message);
+        return;
+        //TODO: Warn the user with a message box
+    }
 }
 
 bool SfxAutoRedactDialog::hasTargets() const
