@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_3228bb32",
+        "filename": "librelogo/source/LibreLogo/LibreLogo.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 482,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-06-17T11:04:54Z",
+      "side": 1,
+      "message": "this is a little incomplete; the SwTextNodes may also occur in:\n* headers/footers\n* table cells\n* text-frames\n* footnotes\n* redlines that have been set to Hidden (note: this would need a macro after loading in LO 6.2 or later, but possible in \u003c\u003d 6.1)\n\nwhich this code doesn\u0027t enumerate...",
+      "revId": "1b63fa32bbd4a5b89d2ee3a53b28de4250c8dad3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
