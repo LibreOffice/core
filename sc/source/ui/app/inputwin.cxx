@@ -999,9 +999,9 @@ ScTextWndGroup::ScTextWndGroup(vcl::Window* pParent, ScTabViewShell* pViewSh)
       maTextWnd(VclPtr<ScTextWnd>::Create(this, pViewSh)),
       maScrollBar(VclPtr<ScrollBar>::Create(this, WB_TABSTOP | WB_VERT | WB_DRAG))
 {
-    maTextWnd->SetPosPixel(Point(gnBorderWidth, gnBorderHeight));
+    maTextWnd->SetPosPixel(Point(2 * gnBorderWidth, gnBorderHeight));
     Size aSize = GetSizePixel();
-    maTextWnd->SetSizePixel(Size(aSize.Width() - 2 * gnBorderWidth, aSize.Height() - 2 * gnBorderHeight));
+    maTextWnd->SetSizePixel(Size(aSize.Width() - 4 * gnBorderWidth, aSize.Height() - 2 * gnBorderHeight));
     maTextWnd->Show();
     maTextWnd->SetQuickHelpText(ScResId(SCSTR_QHELP_INPUTWND));
     maTextWnd->SetHelpId(HID_INSWIN_INPUT);
@@ -1111,13 +1111,13 @@ void ScTextWndGroup::Resize()
         maScrollBar->SetLineSize(maTextWnd->GetTextHeight());
         maScrollBar->Resize();
         maScrollBar->Show();
-        maTextWnd->SetSizePixel(Size(aSize.Width() - aScrollBarSize.Width() - gnBorderWidth - 1,
+        maTextWnd->SetSizePixel(Size(aSize.Width() - aScrollBarSize.Width() - 3 * gnBorderWidth - 1,
                                      aSize.Height() - 2 * gnBorderHeight));
     }
     else
     {
         maScrollBar->Hide();
-        maTextWnd->SetSizePixel(Size(aSize.Width() - 2 * gnBorderWidth, aSize.Height() - 2 * gnBorderHeight));
+        maTextWnd->SetSizePixel(Size(aSize.Width() - 4 * gnBorderWidth, aSize.Height() - 2 * gnBorderHeight));
     }
     maTextWnd->Resize();
     Invalidate();
