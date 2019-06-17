@@ -311,7 +311,7 @@
             <child>
               <object class="GtkMenuButton" id="buttonBTN_FILE">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="has_tooltip">True</property>
                 <property name="tooltip_text" translatable="yes" context="headerfootercontent|buttonBTN_FILE|tooltip_text">Title</property>
