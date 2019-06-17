@@ -45,10 +45,10 @@ XMLIndexSimpleEntryContext::XMLIndexSimpleEntryContext(
     sal_uInt16 nPrfx,
     const OUString& rLocalName )
 :   SvXMLImportContext(rImport, nPrfx, rLocalName)
-,   rEntryType(rEntry)
-,   bCharStyleNameOK(false)
-,   rTemplateContext(rTemplate)
-,   nValues(1)
+,   m_rEntryType(rEntry)
+,   m_bCharStyleNameOK(false)
+,   m_rTemplateContext(rTemplate)
+,   m_nValues(1)
 {
 }
 
@@ -70,33 +70,33 @@ void XMLIndexSimpleEntryContext::StartElement(
         if ( (XML_NAMESPACE_TEXT == nPrefix) &&
              IsXMLToken(sLocalName, XML_STYLE_NAME) )
         {
-            sCharStyleName = xAttrList->getValueByIndex(nAttr);
+            m_sCharStyleName = xAttrList->getValueByIndex(nAttr);
             OUString sDisplayStyleName = GetImport().GetStyleDisplayName(
-                XML_STYLE_FAMILY_TEXT_TEXT, sCharStyleName );
+                XML_STYLE_FAMILY_TEXT_TEXT, m_sCharStyleName );
             // #142494#: Check if style exists
             const Reference < css::container::XNameContainer > & rStyles =
                 GetImport().GetTextImport()->GetTextStyles();
             if( rStyles.is() && rStyles->hasByName( sDisplayStyleName ) )
-                bCharStyleNameOK = true;
+                m_bCharStyleNameOK = true;
             else
-                bCharStyleNameOK = false;
+                m_bCharStyleNameOK = false;
         }
     }
 
     // if we have a style name, set it!
-    if (bCharStyleNameOK)
+    if (m_bCharStyleNameOK)
     {
-        nValues++;
+        m_nValues++;
     }
 
 }
 
 void XMLIndexSimpleEntryContext::EndElement()
 {
-    Sequence<PropertyValue> aValues(nValues);
+    Sequence<PropertyValue> aValues(m_nValues);
 
     FillPropertyValues(aValues);
-    rTemplateContext.addTemplateEntry(aValues);
+    m_rTemplateContext.addTemplateEntry(aValues);
 }
 
 void XMLIndexSimpleEntryContext::FillPropertyValues(
@@ -110,15 +110,15 @@ void XMLIndexSimpleEntryContext::FillPropertyValues(
 
     // token type
     rValues[0].Name = "TokenType";
-    rValues[0].Value <<= rEntryType;
+    rValues[0].Value <<= m_rEntryType;
 
     // char style
-    if (bCharStyleNameOK)
+    if (m_bCharStyleNameOK)
     {
         rValues[1].Name = "CharacterStyleName";
         aAny <<= GetImport().GetStyleDisplayName(
                                     XML_STYLE_FAMILY_TEXT_TEXT,
-                                    sCharStyleName );
+                                    m_sCharStyleName );
         rValues[1].Value = aAny;
     }
 

@@ -111,7 +111,7 @@ void XMLIndexTabStopEntryContext::StartElement(
     }
 
     // how many entries? #i21237#
-    nValues += 2 + (bTabPositionOK ? 1 : 0) + (bLeaderCharOK ? 1 : 0);
+    m_nValues += 2 + (bTabPositionOK ? 1 : 0) + (bLeaderCharOK ? 1 : 0);
 
     // now try parent class (for character style)
     XMLIndexSimpleEntryContext::StartElement( xAttrList );
@@ -124,7 +124,7 @@ void XMLIndexTabStopEntryContext::FillPropertyValues(
     XMLIndexSimpleEntryContext::FillPropertyValues(rValues);
 
     // get values array and next entry to be written;
-    sal_Int32 nNextEntry = bCharStyleNameOK ? 2 : 1;
+    sal_Int32 nNextEntry = m_bCharStyleNameOK ? 2 : 1;
     PropertyValue* pValues = rValues.getArray();
 
     // right aligned?

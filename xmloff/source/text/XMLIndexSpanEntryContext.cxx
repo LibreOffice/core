@@ -36,7 +36,7 @@ XMLIndexSpanEntryContext::XMLIndexSpanEntryContext(
         XMLIndexSimpleEntryContext(rImport, "TokenText",
                                    rTemplate, nPrfx, rLocalName)
 {
-    nValues++;  // one more for the text string
+    m_nValues++;  // one more for the text string
 }
 
 XMLIndexSpanEntryContext::~XMLIndexSpanEntryContext()
@@ -57,8 +57,8 @@ void XMLIndexSpanEntryContext::FillPropertyValues(
     // content
     Any aAny;
     aAny <<= sContent.makeStringAndClear();
-    rValues[nValues-1].Name = "Text";
-    rValues[nValues-1].Value = aAny;
+    rValues[m_nValues-1].Name = "Text";
+    rValues[m_nValues-1].Value = aAny;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
