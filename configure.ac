@@ -767,7 +767,6 @@ linux-android*)
     enable_odk=no
     enable_postgresql_sdbc=no
     enable_python=no
-    with_theme="tango"
     test_cups=no
     test_dbus=no
     test_fontconfig=no
