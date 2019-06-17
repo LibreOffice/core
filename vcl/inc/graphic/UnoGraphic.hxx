@@ -44,8 +44,6 @@ public:
     using ::unographic::GraphicDescriptor::init;
     void init( const ::Graphic& rGraphic ) throw();
 
-    static const ::Graphic* getImplementation( const css::uno::Reference< css::uno::XInterface >& rxIFace ) throw();
-
 protected:
 
     // XInterface
