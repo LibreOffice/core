@@ -8,6 +8,7 @@
  */
 
 #include <test/calc_unoapi_test.hxx>
+#include <test/drawing/xgluepointssupplier.hxx>
 #include <test/drawing/xshapedescriptor.hxx>
 #include <test/lang/xcomponent.hxx>
 #include <test/sheet/shape.hxx>
@@ -33,6 +34,7 @@ namespace sc_apitest
 class ScShapeObj : public CalcUnoApiTest,
                    public apitest::Shape,
                    public apitest::XComponent,
+                   public apitest::XGluePointsSupplier,
                    public apitest::XShapeDescriptor
 {
 public:
@@ -54,6 +56,9 @@ public:
     CPPUNIT_TEST(testAddEventListener);
     CPPUNIT_TEST(testDispose);
     CPPUNIT_TEST(testRemoveEventListener);
+
+    // XGluePointsSupplier
+    CPPUNIT_TEST(testGetGluePoints);
 
     // XShapeDescriptor
     CPPUNIT_TEST(testGetShapeType);

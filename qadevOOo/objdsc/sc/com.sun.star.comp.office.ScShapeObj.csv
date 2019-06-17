@@ -9,7 +9,6 @@
 "ScShapeObj";"com::sun::star::drawing::Shape";"Transformation#optional"
 "ScShapeObj";"com::sun::star::drawing::Shape";"ShapeUserDefinedAttributes#optional"
 "ScShapeObj";"com::sun::star::drawing::Shape";"InteropGrabBag#optional"
-"ScShapeObj";"com::sun::star::drawing::XGluePointsSupplier#optional";"getGluePoints()"
 "ScShapeObj";"com::sun::star::beans::XPropertySet";"getPropertySetInfo()"
 "ScShapeObj";"com::sun::star::beans::XPropertySet";"setPropertyValue()"
 "ScShapeObj";"com::sun::star::beans::XPropertySet";"getPropertyValue()"
