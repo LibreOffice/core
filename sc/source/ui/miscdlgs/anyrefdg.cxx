@@ -27,7 +27,7 @@
 
 #include <anyrefdg.hxx>
 #include <sc.hrc>
-#include <inputhdl.hxx>
+#include "inputhdl.hxx"
 #include <scmod.hxx>
 #include <inputwin.hxx>
 #include <tabvwsh.hxx>

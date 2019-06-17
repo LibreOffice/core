@@ -53,7 +53,7 @@
 #include <bitmaps.hlst>
 #include <reffact.hxx>
 #include <editutil.hxx>
-#include <inputhdl.hxx>
+#include "inputhdl.hxx"
 #include <tabvwsh.hxx>
 #include <document.hxx>
 #include <docsh.hxx>

@@ -55,7 +55,7 @@
 #include <tabvwsh.hxx>
 #include <uiitems.hxx>
 #include <reffact.hxx>
-#include <inputhdl.hxx>
+#include "inputhdl.hxx"
 #include <transobj.hxx>
 #include <drwtrans.hxx>
 #include <docfunc.hxx>

@@ -48,7 +48,7 @@
 #include <notemark.hxx>
 #include <dbfunc.hxx>
 #include <scmod.hxx>
-#include <inputhdl.hxx>
+#include "inputhdl.hxx"
 #include <rfindlst.hxx>
 #include <hiranges.hxx>
 #include <pagedata.hxx>

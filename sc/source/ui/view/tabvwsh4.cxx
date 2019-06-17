@@ -50,7 +50,7 @@
 #include <pivotsh.hxx>
 #include <auditsh.hxx>
 #include <drtxtob.hxx>
-#include <inputhdl.hxx>
+#include "inputhdl.hxx"
 #include <editutil.hxx>
 #include <inputopt.hxx>
 #include <inputwin.hxx>

@@ -29,7 +29,7 @@
 #include <scresid.hxx>
 #include <formulacell.hxx>
 #include <dociter.hxx>
-#include <inputhdl.hxx>
+#include "inputhdl.hxx"
 
 // ---  Referenz-Eingabe / Fill-Cursor
 
