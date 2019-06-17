@@ -77,7 +77,7 @@ protected:
 
     Timer               maTimer;
 
-    VclPtr<SvxHlinkDlgMarkWnd> mpMarkWnd;
+    std::shared_ptr<SvxHlinkDlgMarkWnd> mxMarkWnd;
 
     void InitStdControls ();
     void FillStandardDlgFields ( const SvxHyperlinkItem* pHyperlinkItem );
@@ -122,9 +122,9 @@ public:
     virtual void ActivatePage( const SfxItemSet& rItemSet ) override;
     virtual DeactivateRC DeactivatePage( SfxItemSet* pSet ) override;
 
-    bool IsMarkWndVisible ()      { return static_cast<vcl::Window*>(mpMarkWnd)->IsVisible(); }
-    Size GetSizeExtraWnd ()       { return mpMarkWnd->GetSizePixel(); }
-    bool MoveToExtraWnd ( Point aNewPos, bool bDisConnectDlg = false );
+    bool IsMarkWndVisible() const { return static_cast<bool>(mxMarkWnd); }
+    Size GetSizeExtraWnd()       { return mxMarkWnd->getDialog()->get_size(); }
+    void MoveToExtraWnd ( Point aNewPos );
 
     using TabPage::ActivatePage;
     using TabPage::DeactivatePage;
@@ -134,8 +134,8 @@ protected:
     virtual bool ShouldOpenMarkWnd();
     virtual void SetMarkWndShouldOpen(bool bOpen);
 
-    void ShowMarkWnd ();
-    void HideMarkWnd ()           { static_cast<vcl::Window*>(mpMarkWnd)->Hide(); }
+    void ShowMarkWnd();
+    void HideMarkWnd();
 
     SfxDispatcher* GetDispatcher() const;
 
