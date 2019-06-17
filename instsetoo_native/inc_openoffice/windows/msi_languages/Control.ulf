@@ -26,7 +26,7 @@ en-US = "&Look in:"
 en-US = "Browse to the destination folder."
 
 [OOO_CONTROL_7]
-en-US = "{&MSSansBold8}Change Current Destination Folder"
+en-US = "{&DialogDefaultBold}Change Current Destination Folder"
 
 [OOO_CONTROL_9]
 en-US = "Create new folder|"
@@ -74,7 +74,7 @@ en-US = "Cancel"
 en-US = "&Next >"
 
 [OOO_CONTROL_27]
-en-US = "{&TahomaBold10}Welcome to the Installation Wizard for [ProductName]"
+en-US = "{&DialogDefaultBold}Welcome to the Installation Wizard for [ProductName]"
 
 [OOO_CONTROL_28]
 en-US = "The Installation Wizard will create a server image of [ProductName] at a specified network location. To continue, click Next."
@@ -95,7 +95,7 @@ en-US = "< &Back"
 en-US = "Cancel"
 
 [OOO_CONTROL_36]
-en-US = "{\Tahoma8}{80}"
+en-US = "{\DialogDefault}{80}"
 
 [OOO_CONTROL_37]
 en-US = "&Organization:"
@@ -107,10 +107,10 @@ en-US = "Please enter your information."
 en-US = "Install this application for:"
 
 [OOO_CONTROL_40]
-en-US = "{&MSSansBold8}User Information"
+en-US = "{&DialogDefaultBold}User Information"
 
 [OOO_CONTROL_41]
-en-US = "{\Tahoma8}{50}"
+en-US = "{\DialogDefault}{50}"
 
 [OOO_CONTROL_42]
 en-US = "&User Name:"
@@ -137,7 +137,7 @@ en-US = "Select the program features you want installed."
 en-US = "Click on an icon in the list below to change how a feature is installed."
 
 [OOO_CONTROL_54]
-en-US = "{&MSSansBold8}Custom Setup"
+en-US = "{&DialogDefaultBold}Custom Setup"
 
 [OOO_CONTROL_55]
 en-US = "Feature Description:"
@@ -164,7 +164,7 @@ en-US = "Feature size"
 en-US = "Custom Setup allows you to selectively install program features."
 
 [OOO_CONTROL_65]
-en-US = "{&MSSansBold8}Custom Setup Tips"
+en-US = "{&DialogDefaultBold}Custom Setup Tips"
 
 [OOO_CONTROL_66]
 en-US = "Will not be installed."
@@ -203,7 +203,7 @@ en-US = "&Change..."
 en-US = "Click Next to install to this folder, or click Change to install to a different folder."
 
 [OOO_CONTROL_90]
-en-US = "{&MSSansBold8}Destination Folder"
+en-US = "{&DialogDefaultBold}Destination Folder"
 
 [OOO_CONTROL_91]
 en-US = "[INSTALLDIR]"
@@ -221,7 +221,7 @@ en-US = "The disk space required for the installation of the selected features."
 en-US = "The highlighted volumes do not have enough disk space available for the currently selected features. You can remove files from the highlighted volumes, choose to install less features onto local drives, or select different destination drives."
 
 [OOO_CONTROL_98]
-en-US = "{&MSSansBold8}Disk Space Requirements"
+en-US = "{&DialogDefaultBold}Disk Space Requirements"
 
 [OOO_CONTROL_100]
 en-US = "OK"
@@ -233,7 +233,7 @@ en-US = "Some files that need to be updated are currently in use."
 en-US = "The following applications are using files that need to be updated by this setup. Close these applications and click Retry to continue."
 
 [OOO_CONTROL_105]
-en-US = "{&MSSansBold8}Files in Use"
+en-US = "{&DialogDefaultBold}Files in Use"
 
 [OOO_CONTROL_106]
 en-US = "&Exit"
@@ -254,7 +254,7 @@ en-US = "&Look in:"
 en-US = "Browse to the destination folder."
 
 [OOO_CONTROL_115]
-en-US = "{&MSSansBold8}Change Current Destination Folder"
+en-US = "{&DialogDefaultBold}Change Current Destination Folder"
 
 [OOO_CONTROL_117]
 en-US = "Create New Folder|"
@@ -281,7 +281,7 @@ en-US = "Build contributed in collaboration with the community by [Manufacturer]
 en-US = "&Next >"
 
 [OOO_CONTROL_126]
-en-US = "{&TahomaBold10}Welcome to the Installation Wizard for [ProductName]"
+en-US = "{&DialogHeading}Welcome to the Installation Wizard for [ProductName]"
 
 [OOO_CONTROL_127]
 en-US = "The Installation Wizard will install [ProductName] on your computer. To continue, click Next."
@@ -296,7 +296,7 @@ en-US = "Cancel"
 en-US = "Please read the following license agreement carefully."
 
 [OOO_CONTROL_133]
-en-US = "{&MSSansBold8}License Agreement"
+en-US = "{&DialogDefaultBold}License Agreement"
 
 [OOO_CONTROL_134]
 en-US = "&Next >"
@@ -311,7 +311,7 @@ en-US = "Cancel"
 en-US = "Modify, repair, or remove the program."
 
 [OOO_CONTROL_140]
-en-US = "{&MSSansBold8}Program Maintenance"
+en-US = "{&DialogDefaultBold}Program Maintenance"
 
 [OOO_CONTROL_141]
 en-US = "&Next >"
@@ -335,7 +335,7 @@ en-US = "Cancel"
 en-US = "&Next >"
 
 [OOO_CONTROL_149]
-en-US = "{&TahomaBold10}Welcome to the Installation Wizard for [ProductName]"
+en-US = "{&DialogDefaultBold}Welcome to the Installation Wizard for [ProductName]"
 
 [OOO_CONTROL_150]
 en-US = "The Installation Wizard will allow you to modify, repair, or remove [ProductName]. To continue, click Next."
@@ -347,7 +347,7 @@ en-US = "Disk space required for the installation exceeds available disk space."
 en-US = "The highlighted volumes do not have enough disk space available for the currently selected features. You can remove files from the highlighted volumes, choose to install less features onto local drives, or select different destination drives."
 
 [OOO_CONTROL_155]
-en-US = "{&MSSansBold8}Out of Disk Space"
+en-US = "{&DialogDefaultBold}Out of Disk Space"
 
 [OOO_CONTROL_156]
 en-US = "{120}{70}{70}{70}{70}"
@@ -365,7 +365,7 @@ en-US = "Cancel"
 en-US = "&Update >"
 
 [OOO_CONTROL_161]
-en-US = "{&TahomaBold10}Welcome to the Patch for [ProductName]"
+en-US = "{&DialogHeading}Welcome to the Patch for [ProductName]"
 
 [OOO_CONTROL_162]
 en-US = "The Installation Wizard will install the Patch for [ProductName] on your computer. To continue, click Update."
@@ -386,13 +386,13 @@ en-US = "Click Install to begin the installation."
 en-US = "If you want to review or change any of your installation settings, click Back. Click Cancel to exit the wizard."
 
 [OOO_CONTROL_170]
-en-US = "{&MSSansBold8}Ready to Modify the Program"
+en-US = "{&DialogDefaultBold}Ready to Modify the Program"
 
 [OOO_CONTROL_171]
-en-US = "{&MSSansBold8}Ready to Repair the Program"
+en-US = "{&DialogDefaultBold}Ready to Repair the Program"
 
 [OOO_CONTROL_172]
-en-US = "{&MSSansBold8}Ready to Install the Program"
+en-US = "{&DialogDefaultBold}Ready to Install the Program"
 
 [OOO_CONTROL_173]
 en-US = "&Install"
@@ -413,7 +413,7 @@ en-US = "Click Remove to remove [ProductName] from your computer. After removal,
 en-US = "If you want to review or change any settings, click Back."
 
 [OOO_CONTROL_181]
-en-US = "{&MSSansBold8}Remove the Program"
+en-US = "{&DialogDefaultBold}Remove the Program"
 
 [OOO_CONTROL_182]
 en-US = "&Remove"
@@ -440,7 +440,7 @@ en-US = "You can either keep any existing installed elements on your system to c
 en-US = "Click Restore or Continue Later to exit the wizard."
 
 [OOO_CONTROL_190]
-en-US = "{&TahomaBold10}Installation Wizard Completed"
+en-US = "{&DialogHeading}Installation Wizard Completed"
 
 [OOO_CONTROL_191]
 en-US = "The wizard was interrupted before [ProductName] could be completely installed."
@@ -455,7 +455,7 @@ en-US = "Cancel"
 en-US = "&Finish"
 
 [OOO_CONTROL_198]
-en-US = "{&TahomaBold10}Installation Wizard Completed"
+en-US = "{&DialogHeading}Installation Wizard Completed"
 
 [OOO_CONTROL_199]
 en-US = "The Installation Wizard has successfully installed [ProductName]. Click Finish to exit the wizard."
@@ -497,7 +497,7 @@ en-US = "Cancel"
 en-US = "&Next >"
 
 [OOO_CONTROL_217]
-en-US = "{&TahomaBold10}Welcome to the Installation Wizard for [ProductName]"
+en-US = "{&DialogHeading}Welcome to the Installation Wizard for [ProductName]"
 
 [OOO_CONTROL_218]
 en-US = "[ProductName] Setup is preparing the Installation Wizard which will guide you through the program setup process. Please wait."
@@ -524,7 +524,7 @@ en-US = "You can either keep any existing installed elements on your system to c
 en-US = "Click Restore or Continue Later to exit the wizard."
 
 [OOO_CONTROL_226]
-en-US = "{&TahomaBold10}Installation Wizard Completed"
+en-US = "{&DialogHeading}Installation Wizard Completed"
 
 [OOO_CONTROL_227]
 en-US = "The wizard was interrupted before [ProductName] could be completely installed."
@@ -551,10 +551,10 @@ en-US = "Please wait while the Installation Wizard installs [ProductName]. This 
 en-US = "Please wait while the Installation Wizard uninstalls [ProductName]. This may take several minutes."
 
 [OOO_CONTROL_238]
-en-US = "{&MSSansBold8}Installing [ProductName]"
+en-US = "{&DialogDefaultBold}Installing [ProductName]"
 
 [OOO_CONTROL_239]
-en-US = "{&MSSansBold8}Uninstalling [ProductName]"
+en-US = "{&DialogDefaultBold}Uninstalling [ProductName]"
 
 [OOO_CONTROL_240]
 en-US = "Sec."
@@ -584,7 +584,7 @@ en-US = "The Installation Wizard will complete the installation of [ProductName]
 en-US = "The Installation Wizard will complete the suspended installation of [ProductName] on your computer. To continue, click Next."
 
 [OOO_CONTROL_250]
-en-US = "{&TahomaBold10}Resuming the Installation Wizard for [ProductName]"
+en-US = "{&DialogHeading}Resuming the Installation Wizard for [ProductName]"
 
 [OOO_CONTROL_251]
 en-US = "< &Back"
@@ -605,7 +605,7 @@ en-US = "Choose the setup type that best suits your needs."
 en-US = "Please select a setup type."
 
 [OOO_CONTROL_259]
-en-US = "{&MSSansBold8}Setup Type"
+en-US = "{&DialogDefaultBold}Setup Type"
 
 [OOO_CONTROL_260]
 en-US = "&Next >"
@@ -641,7 +641,7 @@ en-US = "Set [DEFINEDPRODUCT] to be the default application for Microsoft Office
 en-US = "[ProductName] can be set as the default application to open Microsoft Office file types. This means, for instance, that if you double click on one of these files, [ProductName] will open it, not the program that opens it now."
 
 [OOO_CONTROL_278]
-en-US = "{&MSSansBold8}File Type"
+en-US = "{&DialogDefaultBold}File Type"
 
 [OOO_CONTROL_300]
 en-US = "A version of [DEFINEDPRODUCT] [DEFINEDVERSION] was found by the [ProductName] Installation Wizard. This version will be updated."
@@ -692,7 +692,7 @@ en-US = "Some files that need to be updated are currently in use."
 en-US = "The following applications are using files that need to be updated by this setup. You can let Installation Wizard close them and attempt to restart them or reboot the machine later."
 
 [OOO_CONTROL_324]
-en-US = "{&MSSansBold8}Files in Use"
+en-US = "{&DialogDefaultBold}Files in Use"
 
 [OOO_CONTROL_325]
 en-US = "Cancel"
