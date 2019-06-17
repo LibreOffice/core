@@ -22,6 +22,30 @@
       "revId": "c473c5b462f33df439b4b62b394c5d7811a05c7c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_375c2d7d",
+        "filename": "cui/source/customize/CustomNotebookbarGenerator.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-06-17T01:06:06Z",
+      "side": 1,
+      "message": "Specifically in this case, let\u0027s see how the merged code compares to what I wrote above, counting allocations and copy operations.\n\nBoth pieces of code include calls to sAppName and sNotebookbarUIFileName default ctors, CustomNotebookbarGenerator::getFileNameAndAppName, customizedUIPathBuffer(), and sAppName.toAsciiLowerCase().\n\nCurrent code has also:\n\n* a default ctor for aCustomizedUIPathBuffer (allocating buffer of size 16);\n* aCustomizedUIPathBuffer.append (which needs to reallocate, because customizedUIPathBuffer() returns string longer than 16: the constant part of it is already 25 character long, plus $BRAND_BASE_DIR, plus 0) - and in this process, it will either get capacity of 34 or equal to new string length, and will copy the content;\n* a ctor for sUIFilePath, taking a concat, allocating for its length, and copying the content;\n* aCustomizedUIPathBuffer.append, again reallocating (because it will not be able to hold new content - see capacity allocated above), and copying content already copied above.\n\nCf to the code above, only calling one ctor for a returned temporary, taking a concat and allocating the total required buffer once, and copying once.",
+      "parentUuid": "3fa0c359_b776fd05",
+      "range": {
+        "startLine": 106,
+        "startChar": 4,
+        "endLine": 106,
+        "endChar": 43
+      },
+      "revId": "c473c5b462f33df439b4b62b394c5d7811a05c7c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
