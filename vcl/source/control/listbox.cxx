@@ -119,6 +119,8 @@ void ListBox::ImplInit( vcl::Window* pParent, WinBits nStyle )
         }
 
         mpFloatWin = VclPtr<ImplListBoxFloatingWindow>::Create( this );
+        if (!IsNativeControlSupported(ControlType::Pushbutton, ControlPart::Focus))
+            mpFloatWin->RequestDoubleBuffering(true);
         mpFloatWin->SetAutoWidth( true );
         mpFloatWin->SetPopupModeEndHdl( LINK( this, ListBox, ImplPopupModeEndHdl ) );
         mpFloatWin->GetDropTarget()->addDropTargetListener(xDrop);
