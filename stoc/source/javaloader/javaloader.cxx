@@ -26,6 +26,7 @@
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <cppuhelper/exc_hlp.hxx>
+#include <tools/diagnose_ex.h>
 
 #ifdef LINUX
 #undef minor
@@ -343,10 +344,8 @@ static css::uno::Reference<XInterface> JavaComponentLoader_CreateInstance(const 
         static css::uno::Reference< XInterface > xStaticRef = *new JavaComponentLoader(xCtx);
         xRet = xStaticRef;
     }
-    catch(const RuntimeException & runtimeException) {
-        SAL_INFO(
-            "stoc",
-            "could not init javaloader due to " << runtimeException);
+    catch(const RuntimeException &) {
+        TOOLS_INFO_EXCEPTION("stoc", "could not init javaloader");
         throw;
     }
 

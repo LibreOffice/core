@@ -31,6 +31,7 @@
 #include <com/sun/star/xml/sax/InputSource.hpp>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <svgdocumenthandler.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <svgvisitor.hxx>
 
@@ -135,9 +136,9 @@ namespace svgio
                 // be processable from all our processors
                 xParser->parseStream(myInputSource);
             }
-            catch(const uno::Exception& e)
+            catch(const uno::Exception&)
             {
-                SAL_INFO( "svg", "Parse error: " << e);
+                TOOLS_INFO_EXCEPTION( "svg", "Parse error");
                 return false;
             }
 

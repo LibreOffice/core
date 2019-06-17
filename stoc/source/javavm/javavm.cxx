@@ -60,6 +60,7 @@
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 #include <sal/log.hxx>
+#include <tools/diagnose_ex.h>
 #include <uno/current_context.hxx>
 #include <jvmfwk/framework.hxx>
 #include <i18nlangtag/languagetag.hxx>
@@ -527,23 +528,23 @@ void initVMConfiguration(
     try {
         getINetPropsFromConfig(&jvm, xSMgr, xCtx);
     }
-    catch(const css::uno::Exception & exception) {
-        SAL_INFO("stoc", "can not get INETProps because of " << exception);
+    catch(const css::uno::Exception &) {
+        TOOLS_INFO_EXCEPTION("stoc", "can not get INETProps");
     }
 
     try {
         getDefaultLocaleFromConfig(&jvm, xSMgr,xCtx);
     }
-    catch(const css::uno::Exception & exception) {
-        SAL_INFO("stoc", "can not get locale because of " << exception);
+    catch(const css::uno::Exception &) {
+        TOOLS_INFO_EXCEPTION("stoc", "can not get locale");
     }
 
     try
     {
         getJavaPropsFromSafetySettings(&jvm, xSMgr, xCtx);
     }
-    catch(const css::uno::Exception & exception) {
-        SAL_INFO("stoc", "couldn't get safety settings because of " << exception);
+    catch(const css::uno::Exception &) {
+        TOOLS_INFO_EXCEPTION("stoc", "couldn't get safety settings");
     }
 
     *pjvm= jvm;
@@ -1330,9 +1331,9 @@ void JavaVirtualMachine::registerConfigChangesListener()
             if (m_xJavaConfiguration.is())
                 m_xJavaConfiguration->addContainerListener(this);
         }
-    }catch(const css::uno::Exception & e)
+    }catch(const css::uno::Exception &)
     {
-        SAL_INFO("stoc", "could not set up listener for Configuration because of >" << e << "<");
+        TOOLS_INFO_EXCEPTION("stoc", "could not set up listener for Configuration");
     }
 }
 

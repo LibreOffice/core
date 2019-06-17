@@ -24,6 +24,7 @@
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/weakref.hxx>
@@ -619,9 +620,9 @@ void OServiceManager::disposing()
             if( xComp.is() )
                 xComp->dispose();
         }
-        catch (const RuntimeException & exc)
+        catch (const RuntimeException &)
         {
-            SAL_INFO("stoc", "RuntimeException occurred upon disposing factory: " << exc);
+            TOOLS_INFO_EXCEPTION("stoc", "RuntimeException occurred upon disposing factory:");
         }
     }
 
@@ -807,9 +808,9 @@ Reference< XInterface > OServiceManager::createInstanceWithContext(
                 }
             }
         }
-        catch (const lang::DisposedException & exc)
+        catch (const lang::DisposedException &)
         {
-            SAL_INFO("stoc", "DisposedException occurred: " << exc);
+            TOOLS_INFO_EXCEPTION("stoc", "");
         }
     }
 
@@ -861,9 +862,9 @@ Reference< XInterface > OServiceManager::createInstanceWithArgumentsAndContext(
                 }
             }
         }
-        catch (const lang::DisposedException & exc)
+        catch (const lang::DisposedException &)
         {
-            SAL_INFO("stoc", "DisposedException occurred: " << exc);
+            TOOLS_INFO_EXCEPTION("stoc", "DisposedException occurred:");
         }
     }
 
