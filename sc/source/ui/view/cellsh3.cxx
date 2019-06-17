@@ -38,7 +38,7 @@
 #include <uiitems.hxx>
 #include <autoform.hxx>
 #include <cellsh.hxx>
-#include <inputhdl.hxx>
+#include "inputhdl.hxx"
 #include <editable.hxx>
 #include <markdata.hxx>
 #include <scabstdlg.hxx>

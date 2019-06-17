@@ -27,7 +27,7 @@
 #include <stlpool.hxx>
 #include <printfun.hxx>
 #include <scmod.hxx>
-#include <inputhdl.hxx>
+#include "inputhdl.hxx"
 #include <globstr.hrc>
 #include <scresid.hxx>
 

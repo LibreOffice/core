@@ -48,7 +48,7 @@
 #include <document.hxx>
 #include <formulacell.hxx>
 #include <globstr.hrc>
-#include <inputhdl.hxx>
+#include "inputhdl.hxx"
 #include <inputwin.hxx>
 #include <markdata.hxx>
 #include <patattr.hxx>

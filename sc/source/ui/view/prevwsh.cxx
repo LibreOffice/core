@@ -45,7 +45,7 @@
 #include <preview.hxx>
 #include <printfun.hxx>
 #include <scmod.hxx>
-#include <inputhdl.hxx>
+#include "inputhdl.hxx"
 #include <docsh.hxx>
 #include <tabvwsh.hxx>
 #include <stlpool.hxx>

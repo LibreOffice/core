@@ -37,7 +37,7 @@
 #include <document.hxx>
 #include <simpleformulacalc.hxx>
 #include <scmod.hxx>
-#include <inputhdl.hxx>
+#include "inputhdl.hxx"
 #include <tabvwsh.hxx>
 #include <docsh.hxx>
 #include <funcdesc.hxx>
