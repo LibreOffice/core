@@ -990,13 +990,6 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="DonationD1">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:Donation</property>
-      </object>
-    </child>
-    <child>
       <object class="GtkSeparatorMenuItem" id="separator33">
         <property name="visible">True</property>
         <property name="can_focus">False</property>

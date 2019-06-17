@@ -17,7 +17,6 @@
   <menu:menuitem menu:id=".uno:OptionsTreeDialog"/>
   <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:HelpIndex"/>
-  <menu:menuitem menu:id=".uno:Donation"/>
   <menu:menuitem menu:id=".uno:About"/>
   <menu:menuseparator/>
 </menu:menupopup>
