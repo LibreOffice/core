@@ -18,6 +18,7 @@
  */
 
 #include <svtools/imagemgr.hxx>
+#include <tools/diagnose_ex.h>
 #include <tools/urlobj.hxx>
 #include <tools/debug.hxx>
 #include <sal/log.hxx>
@@ -392,9 +393,9 @@ static SvImageId GetImageId_Impl( const INetURLObject& rObject, bool bDetectFold
                         nId = SvImageId::MathTemplate;
                 }
             }
-            catch (const css::ucb::ContentCreationException& e)
+            catch (const css::ucb::ContentCreationException&)
             {
-                SAL_WARN("svtools.misc", "GetImageId_Impl: Caught " << e);
+                TOOLS_WARN_EXCEPTION("svtools.misc", "GetImageId_Impl");
             }
 
             return nId;

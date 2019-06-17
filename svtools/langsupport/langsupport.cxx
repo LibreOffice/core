@@ -15,6 +15,7 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <sal/main.h>
 #include <svtools/langtab.hxx>
+#include <tools/diagnose_ex.h>
 #include <tools/extendapplicationenvironment.hxx>
 #include <vcl/svapp.hxx>
 #include <iostream>
@@ -65,9 +66,9 @@ SAL_IMPLEMENT_MAIN()
 
         uno::Reference< lang::XComponent >(xContext, uno::UNO_QUERY_THROW)->dispose();
     }
-    catch (const uno::Exception& e)
+    catch (const uno::Exception&)
     {
-        SAL_WARN("vcl.app", "Fatal: " << e);
+        TOOLS_WARN_EXCEPTION("vcl.app", "Fatal");
         return 1;
     }
     catch (const std::exception &e)
