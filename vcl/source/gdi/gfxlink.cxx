@@ -272,10 +272,22 @@ std::shared_ptr<sal_uInt8> GfxLink::GetSwapInData() const
     SvFileStream aFileStream(mpSwapOutData->maURL, StreamMode::STD_READ);
     pData = o3tl::make_shared_array<sal_uInt8>(mnSwapInDataSize);
     aFileStream.ReadBytes(pData.get(), mnSwapInDataSize);
-    bool bError = (ERRCODE_NONE != aFileStream.GetError());
-    sal_uInt64 const nActReadSize = aFileStream.Tell();
-    if (nActReadSize != mnSwapInDataSize)
+    bool bError = false;
+    auto const e = aFileStream.GetError();
+    if (e != ERRCODE_NONE) {
+        SAL_WARN("vcl", "reading <" << mpSwapOutData->maURL << "> failed with " << e);
         bError = true;
+    }
+    if (!bError) {
+        sal_uInt64 const nActReadSize = aFileStream.Tell();
+        if (nActReadSize != mnSwapInDataSize) {
+            SAL_WARN(
+                "vcl",
+                "reading <" << mpSwapOutData->maURL << "> produced " << nActReadSize
+                    << " instead of " << mnSwapInDataSize << " bytes");
+            bError = true;
+        }
+    }
     if (bError)
         pData.reset();
     return pData;
