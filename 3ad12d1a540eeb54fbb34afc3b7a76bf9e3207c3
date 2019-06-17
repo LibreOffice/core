@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_5851e90d",
+        "filename": "vcl/source/filter/jpeg/Exif.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 182,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-06-17T17:02:56Z",
+      "side": 1,
+      "message": "Any reason to not swap ifd-\u003etype and ifd-\u003ecount?",
+      "revId": "3ad12d1a540eeb54fbb34afc3b7a76bf9e3207c3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_384e5d6f",
+        "filename": "vcl/source/filter/jpeg/Exif.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-06-17T17:02:56Z",
+      "side": 1,
+      "message": "This should presumably have been OSL_SWAPDWORD, as ExifIFD::offset is of type sal_uInt32?",
+      "range": {
+        "startLine": 183,
+        "startChar": 34,
+        "endLine": 183,
+        "endChar": 46
+      },
+      "revId": "3ad12d1a540eeb54fbb34afc3b7a76bf9e3207c3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_f8579501",
+        "filename": "vcl/source/filter/jpeg/Exif.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-06-17T17:02:56Z",
+      "side": 1,
+      "message": "same as above",
+      "range": {
+        "startLine": 190,
+        "startChar": 33,
+        "endLine": 190,
+        "endChar": 45
+      },
+      "revId": "3ad12d1a540eeb54fbb34afc3b7a76bf9e3207c3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
