@@ -20,7 +20,6 @@
 #ifndef INCLUDED_COMPHELPER_SCOPEGUARD_HXX
 #define INCLUDED_COMPHELPER_SCOPEGUARD_HXX
 
-#include <comphelper/comphelperdllapi.h>
 #include <sal/log.hxx>
 #include <com/sun/star/uno/Exception.hpp>
 

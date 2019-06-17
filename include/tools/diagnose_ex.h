@@ -25,6 +25,7 @@
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 
+#include <sal/log.hxx>
 #include <tools/toolsdllapi.h>
 #include <cppuhelper/exc_hlp.hxx>
 

@@ -25,6 +25,7 @@
 #include <cstddef>
 
 #include <sal/types.h>
+#include <rtl/string.h>
 #include <xmlreader/detail/xmlreaderdllapi.hxx>
 
 namespace rtl { class OUString; }

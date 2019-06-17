@@ -28,7 +28,6 @@
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 
-#include <algorithm>
 #include <new>
 
 namespace typereg {

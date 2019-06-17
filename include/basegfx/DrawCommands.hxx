@@ -11,6 +11,11 @@
 #define INCLUDED_BASEGFX_DRAWCOMMANDS_H
 
 #include <memory>
+#include <vector>
+
+#include <basegfx/color/bcolor.hxx>
+#include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <basegfx/range/b2drange.hxx>
 
 namespace gfx
 {
