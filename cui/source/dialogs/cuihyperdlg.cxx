@@ -228,30 +228,26 @@ void SvxHpLinkDlg::Move()
         // Size of Extrawindow
         Size aExtraWndSize( pCurrentPage->GetSizeExtraWnd() );
 
-        bool bDoInvalid ;
         if( aDlgPos.X()+(1.02*aDlgSize.Width())+aExtraWndSize.Width() > aWindowSize.Width() )
         {
             if( aDlgPos.X() - ( 0.02*aDlgSize.Width() ) - aExtraWndSize.Width() < 0 )
             {
                 // Pos Extrawindow anywhere
-                bDoInvalid = pCurrentPage->MoveToExtraWnd( Point( 1, long(1.1*aDlgPos.Y()) ), true );
+                pCurrentPage->MoveToExtraWnd( Point( 1, long(1.1*aDlgPos.Y()) ) );
             }
             else
             {
                 // Pos Extrawindow on the left side of Dialog
-                bDoInvalid = pCurrentPage->MoveToExtraWnd( aDlgPos -
-                                                           Point( long(0.02*aDlgSize.Width()), 0 ) -
-                                                           Point( aExtraWndSize.Width(), 0 ) );
+                pCurrentPage->MoveToExtraWnd( aDlgPos -
+                                              Point( long(0.02*aDlgSize.Width()), 0 ) -
+                                              Point( aExtraWndSize.Width(), 0 ) );
             }
         }
         else
         {
             // Pos Extrawindow on the right side of Dialog
-            bDoInvalid = pCurrentPage->MoveToExtraWnd ( aDlgPos + Point( long(1.02*aDlgSize.Width()), 0 ) );
+            pCurrentPage->MoveToExtraWnd ( aDlgPos + Point( long(1.02*aDlgSize.Width()), 0 ) );
         }
-
-        if ( bDoInvalid )
-            Invalidate(InvalidateFlags::Transparent);
     }
 
     Window::Move();

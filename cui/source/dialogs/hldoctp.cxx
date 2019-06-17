@@ -229,26 +229,26 @@ IMPL_LINK_NOARG(SvxHyperlinkDocTp, ClickFileopenHdl_Impl, Button*, void)
 
 IMPL_LINK_NOARG(SvxHyperlinkDocTp, ClickTargetHdl_Impl, Button*, void)
 {
+    ShowMarkWnd();
+
     if ( GetPathType ( maStrURL ) == EPathType::ExistsFile  ||
          maStrURL.isEmpty() ||
          maStrURL.equalsIgnoreAsciiCase( sFileScheme ) ||
          maStrURL.startsWith( sHash ) )
     {
-        mpMarkWnd->SetError( LERR_NOERROR );
+        mxMarkWnd->SetError( LERR_NOERROR );
 
         EnterWait();
 
         if ( maStrURL.equalsIgnoreAsciiCase( sFileScheme ) )
-            mpMarkWnd->RefreshTree ( "" );
+            mxMarkWnd->RefreshTree ( "" );
         else
-            mpMarkWnd->RefreshTree ( maStrURL );
+            mxMarkWnd->RefreshTree ( maStrURL );
 
         LeaveWait();
     }
     else
-        mpMarkWnd->SetError( LERR_DOCNOTOPEN );
-
-    ShowMarkWnd ();
+        mxMarkWnd->SetError( LERR_DOCNOTOPEN );
 }
 
 /*************************************************************************
@@ -282,9 +282,9 @@ IMPL_LINK_NOARG(SvxHyperlinkDocTp, TimeoutHdl_Impl, Timer *, void)
         EnterWait();
 
         if ( maStrURL.equalsIgnoreAsciiCase( sFileScheme ) )
-            mpMarkWnd->RefreshTree ( "" );
+            mxMarkWnd->RefreshTree ( "" );
         else
-            mpMarkWnd->RefreshTree ( maStrURL );
+            mxMarkWnd->RefreshTree ( maStrURL );
 
         LeaveWait();
     }
@@ -301,7 +301,7 @@ IMPL_LINK_NOARG(SvxHyperlinkDocTp, ModifiedTargetHdl_Impl, Edit&, void)
     maStrURL = GetCurrentURL();
 
     if ( IsMarkWndVisible() )
-        mpMarkWnd->SelectEntry ( m_pEdTarget->GetText() );
+        mxMarkWnd->SelectEntry ( m_pEdTarget->GetText() );
 
     m_pFtFullURL->SetText( maStrURL );
 }

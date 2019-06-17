@@ -21,87 +21,52 @@
 #define INCLUDED_CUI_SOURCE_INC_HLMARKWN_HXX
 
 #include <com/sun/star/container/XNameAccess.hpp>
-#include <vcl/button.hxx>
-#include <vcl/floatwin.hxx>
-#include <vcl/treelistbox.hxx>
+#include <vcl/weld.hxx>
 
 #include "hlmarkwn_def.hxx"
 class SvxHyperlinkTabPageBase;
 
-
-//#                                                                      #
-//# Tree-Window                                                          #
-//#                                                                      #
-
-
-class SvxHlinkDlgMarkWnd;
-
-class SvxHlmarkTreeLBox : public SvTreeListBox
-{
-private:
-    VclPtr<SvxHlinkDlgMarkWnd> mpParentWnd;
-
-public:
-    SvxHlmarkTreeLBox(vcl::Window* pParent, WinBits nStyle);
-    virtual ~SvxHlmarkTreeLBox() override;
-    virtual void dispose() override;
-
-    void SetParentWnd(SvxHlinkDlgMarkWnd* pParent)
-    {
-        mpParentWnd = pParent;
-    }
-
-    virtual void Paint( vcl::RenderContext& rRenderContext, const ::tools::Rectangle& rRect ) override;
-    virtual Size GetOptimalSize() const override;
-};
-
-
 //#                                                                      #
 //# Window-Class                                                         #
 //#                                                                      #
-class SvxHlinkDlgMarkWnd : public FloatingWindow //FloatingWindow
+class SvxHlinkDlgMarkWnd : public weld::GenericDialogController
 {
 private:
     friend class SvxHlmarkTreeLBox;
-
-    VclPtr<PushButton>       mpBtApply;
-    VclPtr<PushButton>       mpBtClose;
-    VclPtr<SvxHlmarkTreeLBox>  mpLbTree;
-
-    bool            mbUserMoved;
 
     VclPtr<SvxHyperlinkTabPageBase> mpParent;
 
     sal_uInt16          mnError;
 
+    std::unique_ptr<weld::Button> mxBtApply;
+    std::unique_ptr<weld::Button> mxBtClose;
+    std::unique_ptr<weld::TreeView> mxLbTree;
+    std::unique_ptr<weld::Label> mxError;
+
+    void ErrorChanged();
+
 protected:
     bool RefreshFromDoc( const OUString& aURL );
     void RestoreLastSelection();
 
-    SvTreeListEntry* FindEntry(const OUString& aStrName);
+    std::unique_ptr<weld::TreeIter> FindEntry(const OUString& aStrName);
     void ClearTree();
-    int FillTree( const css::uno::Reference< css::container::XNameAccess >& xLinks, SvTreeListEntry* pParentEntry =nullptr );
+    int FillTree( const css::uno::Reference< css::container::XNameAccess >& xLinks, weld::TreeIter* pParentEntry =nullptr );
 
-    virtual void Move () override;
-
-    DECL_LINK( ClickApplyHdl_Impl, Button*, void );
-    DECL_LINK( DoubleClickApplyHdl_Impl, SvTreeListBox*, bool );
-    DECL_LINK( ClickCloseHdl_Impl, Button*, void );
+    DECL_LINK( ClickApplyHdl_Impl, weld::Button&, void );
+    DECL_LINK( DoubleClickApplyHdl_Impl, weld::TreeView&, void );
+    DECL_LINK( ClickCloseHdl_Impl, weld::Button&, void );
 
 public:
-    SvxHlinkDlgMarkWnd (SvxHyperlinkTabPageBase *pParent);
+    SvxHlinkDlgMarkWnd(weld::Window* pParentDialog, SvxHyperlinkTabPageBase *pParentPage);
     virtual ~SvxHlinkDlgMarkWnd() override;
-    virtual void dispose() override;
 
-    bool MoveTo ( Point aNewPos );
+    void MoveTo(const Point& rNewPos);
     void RefreshTree(const OUString& aStrURL);
     bool SelectEntry(const OUString& aStrMark);
 
-    bool ConnectToDialog();
-
     sal_uInt16 SetError( sal_uInt16 nError);
 };
-
 
 #endif // INCLUDED_CUI_SOURCE_INC_HLMARKWN_HXX
 
