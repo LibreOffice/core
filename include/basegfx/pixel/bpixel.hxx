@@ -22,7 +22,6 @@
 
 #include <sal/types.h>
 #include <basegfx/color/bcolor.hxx>
-#include <basegfx/basegfxdllapi.h>
 
 namespace basegfx
 {

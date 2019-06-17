@@ -19,7 +19,6 @@
 #ifndef INCLUDED_TOOLS_GENERICTYPESERIALIZER_HXX
 #define INCLUDED_TOOLS_GENERICTYPESERIALIZER_HXX
 
-#include <sal/types.h>
 #include <tools/toolsdllapi.h>
 #include <tools/color.hxx>
 #include <tools/stream.hxx>

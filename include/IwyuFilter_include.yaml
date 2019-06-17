@@ -227,6 +227,9 @@ blacklist:
     - com/sun/star/lang/IllegalArgumentException.hpp
     - com/sun/star/uno/RuntimeException.hpp
     - rtl/ustring.hxx
+    include/tools/fldunit.hxx:
+    # Needed for enum type
+    - sal/types.h
     include/tools/svlibrary.h:
     # Used behind #ifndef
     - osl/module.h
