@@ -133,7 +133,7 @@ public:
 
     static const auto& categories() { return m_aCategories; }
     static size_t categoriesSize() { return m_aCategoriesSize; }
-    OString elementSetId() const { return msCurrentSetId; }
+    const OString& elementSetId() const { return msCurrentSetId; }
     void setElementSetId(const char* pSetId);
 
     void setVerticalMode(bool bVertical);

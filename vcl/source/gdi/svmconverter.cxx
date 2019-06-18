@@ -245,7 +245,7 @@ namespace
 
 #define LF_FACESIZE 32
 
-void static lcl_error( SvStream& rIStm, const SvStreamEndian& nOldFormat, const sal_uLong& nPos)
+void static lcl_error( SvStream& rIStm, const SvStreamEndian& nOldFormat, sal_uLong nPos)
 {
     rIStm.SetError(SVSTREAM_FILEFORMAT_ERROR);
     rIStm.SetEndian(nOldFormat);

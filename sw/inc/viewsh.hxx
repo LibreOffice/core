@@ -252,7 +252,7 @@ public:
     const SwRect& VisArea() const;
 
     /// The visible area in the client (set by setClientVisibleArea).
-    const tools::Rectangle getLOKVisibleArea() const { return maLOKVisibleArea; }
+    const tools::Rectangle & getLOKVisibleArea() const { return maLOKVisibleArea; }
     void setLOKVisibleArea(const tools::Rectangle& rArea) { maLOKVisibleArea = rArea; }
 
     // If necessary scroll until passed Rect is situated in visible sector.

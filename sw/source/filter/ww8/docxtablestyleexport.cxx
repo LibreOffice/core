@@ -43,7 +43,7 @@ public:
         m_pSerializer = std::move(pSerializer);
     }
 
-    sax_fastparser::FSHelperPtr getSerializer() const { return m_pSerializer; }
+    const sax_fastparser::FSHelperPtr& getSerializer() const { return m_pSerializer; }
 
     SwDoc* getDoc() const { return m_pDoc; }
 

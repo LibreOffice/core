@@ -63,7 +63,7 @@ class TextLinesHelper
 public:
     TextLinesHelper(const CanvasSharedPtr& rCanvas, const OutDevState& rState);
 
-    ::basegfx::B2DSize getOverallSize() const { return maOverallSize; }
+    ::basegfx::B2DSize const& getOverallSize() const { return maOverallSize; }
 
     /** Init textlines with specified linewidth and TextLineInfo.
      */

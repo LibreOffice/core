@@ -82,13 +82,13 @@ public:
     void SetDescription(const OUString& rDesc) { maDescription = rDesc; }
     const OUString& GetDescription() const { return maDescription; }
 
-    void SetVisibleODF(const bool& rVisibleODF) { mbVisibleODF = rVisibleODF; }
+    void SetVisibleODF(bool bVisibleODF) { mbVisibleODF = bVisibleODF; }
     bool IsVisibleODF() const { return mbVisibleODF; }
 
-    void SetPrintableODF(const bool& rPrintableODF) { mbPrintableODF = rPrintableODF; }
+    void SetPrintableODF(bool bPrintableODF) { mbPrintableODF = bPrintableODF; }
     bool IsPrintableODF() const { return mbPrintableODF; }
 
-    void SetLockedODF(const bool& rLockedODF) { mbLockedODF = rLockedODF; }
+    void SetLockedODF(bool bLockedODF) { mbLockedODF = bLockedODF; }
     bool IsLockedODF() const { return mbLockedODF; }
 
     SdrLayerID    GetID() const                               { return nID; }

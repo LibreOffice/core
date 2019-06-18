@@ -164,8 +164,8 @@ public:
     {
         o3tl::sorted_vector<SfxPoolItem*>::const_iterator m_begin;
         o3tl::sorted_vector<SfxPoolItem*>::const_iterator m_end;
-        o3tl::sorted_vector<SfxPoolItem*>::const_iterator begin() { return m_begin; }
-        o3tl::sorted_vector<SfxPoolItem*>::const_iterator end() { return m_end; }
+        o3tl::sorted_vector<SfxPoolItem*>::const_iterator const & begin() const { return m_begin; }
+        o3tl::sorted_vector<SfxPoolItem*>::const_iterator const & end() const { return m_end; }
     };
     const SfxPoolItem *             GetItem2Default(sal_uInt16 nWhich) const;
     template<class T> const T*      GetItem2Default( TypedWhichId<T> nWhich ) const

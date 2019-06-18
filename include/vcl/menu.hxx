@@ -263,7 +263,7 @@ public:
     OString GetItemIdent(sal_uInt16 nItemId) const;
     MenuItemType GetItemType( sal_uInt16 nPos ) const;
     sal_uInt16 GetCurItemId() const { return nSelectedId;}
-    OString GetCurItemIdent() const { return sSelectedIdent; }
+    OString const & GetCurItemIdent() const { return sSelectedIdent; }
     void SetItemBits( sal_uInt16 nItemId, MenuItemBits nBits );
     MenuItemBits GetItemBits( sal_uInt16 nItemId ) const;
 

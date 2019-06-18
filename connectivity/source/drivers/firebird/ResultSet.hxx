@@ -121,7 +121,7 @@ namespace connectivity
             OResultSet(Connection* pConnection,
                        ::osl::Mutex& rMutex,
                        const css::uno::Reference< css::uno::XInterface >& xStatement,
-                       const isc_stmt_handle& aStatementHandle,
+                       isc_stmt_handle aStatementHandle,
                        XSQLDA* aSqlda
                       );
 

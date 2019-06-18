@@ -51,9 +51,9 @@ public:
     /// get size in co-ordinates not scaled for HiDPI
     Size getSizePixel();
     /// Legacy - the original bitmap
-    BitmapEx getBitmapEx(bool bDisabled = false);
+    BitmapEx const & getBitmapEx(bool bDisabled = false);
     /// Taking account of HiDPI scaling
-    BitmapEx getBitmapExForHiDPI(bool bDisabled = false);
+    BitmapEx const & getBitmapExForHiDPI(bool bDisabled = false);
 
     bool isEqual(const ImplImage &ref) const;
     bool isSizeEmpty() const

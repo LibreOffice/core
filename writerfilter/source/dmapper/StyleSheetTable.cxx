@@ -1237,7 +1237,7 @@ const StyleSheetEntryPtr StyleSheetTable::FindDefaultParaStyle()
     return FindStyleSheetByISTD( m_pImpl->m_sDefaultParaStyleName );
 }
 
-const StyleSheetEntryPtr StyleSheetTable::GetCurrentEntry()
+const StyleSheetEntryPtr & StyleSheetTable::GetCurrentEntry()
 {
     return m_pImpl->m_pCurrentEntry;
 }

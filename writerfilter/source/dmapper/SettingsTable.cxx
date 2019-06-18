@@ -637,7 +637,7 @@ css::uno::Sequence<css::beans::PropertyValue> SettingsTable::GetDocumentProtecti
     return m_pImpl->m_DocumentProtection.toSequence();
 }
 
-OUString SettingsTable::GetCurrentDatabaseDataSource() const
+const OUString & SettingsTable::GetCurrentDatabaseDataSource() const
 {
     return m_pImpl->m_sCurrentDatabaseDataSource;
 }

@@ -271,6 +271,18 @@ void PassStuffByRef::checkReturnValue(const FunctionDecl * functionDecl, const C
         .GlobalNamespace()) {
         return;
     }
+    // hides a constructor
+    if (dc.Function("createNonOwningCopy").Class("SortedAutoCompleteStrings").Namespace("editeng")
+        .GlobalNamespace()) {
+        return;
+    }
+    // template function
+    if (dc.Function("convertItems").Class("ValueParser").Namespace("configmgr").GlobalNamespace()
+        || dc.Function("parseListValue").AnonymousNamespace().Namespace("configmgr").GlobalNamespace()
+        || dc.Function("parseSingleValue").AnonymousNamespace().Namespace("configmgr").GlobalNamespace()
+        || dc.Function("Create").Class("HandlerComponentBase").Namespace("pcr").GlobalNamespace()) {
+        return;
+    }
     if (startswith(type.getAsString(), "struct o3tl::strong_int")) {
         return;
     }

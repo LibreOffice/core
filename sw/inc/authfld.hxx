@@ -165,7 +165,7 @@ public:
     SwAuthorityField(SwAuthorityFieldType* pType, SwAuthEntry* pAuthEntry);
     virtual ~SwAuthorityField() override;
 
-    OUString            GetFieldText(ToxAuthorityField eField) const;
+    const OUString &    GetFieldText(ToxAuthorityField eField) const;
 
     virtual void        SetPar1(const OUString& rStr) override;
     virtual SwFieldType* ChgTyp( SwFieldType* ) override;

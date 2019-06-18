@@ -75,7 +75,7 @@ OUString const & lclGetNameForElementId(sal_uInt32 aId)
     return aIdMap.find(aId)->second;
 }
 
-OUString lclGetGrabBagName(sal_uInt32 aId)
+OUString const & lclGetGrabBagName(sal_uInt32 aId)
 {
     static std::map<sal_uInt32, OUString> const aGrabBagNameMap
     {
