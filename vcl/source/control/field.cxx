@@ -201,6 +201,29 @@ bool ImplNumericGetValue( const OUString& rStr, sal_Int64& rValue,
         aStr1.append(std::u16string_view(aStr).substr(0, nDecPos));
         aStr2.append(std::u16string_view(aStr).substr(nDecPos+1));
     }
+    else if (nDecDigits > 0 && aStr.getLength() > nDecDigits)
+    {
+        // We expect a decimal point and a certain number of decimal digits,
+        // but seems the user has deleted the decimal point, so we restore it.
+        // Otherwise, they end up with unexpectedly (to them) large numbers.
+
+        // Find the first digit from the right.
+        sal_Int32 nVirtualDecPos = aStr.getLength();
+        while (--nVirtualDecPos > 0)
+        {
+            if ((aStr[nVirtualDecPos] >= '0') && (aStr[nVirtualDecPos] <= '9'))
+                break;
+        }
+
+        if (nVirtualDecPos >= nDecDigits)
+        {
+            nVirtualDecPos -= nDecDigits - 1; // nVirtualDecPos is already on a digit (so discount it).
+            aStr1.append(aStr.getStr(), nVirtualDecPos);
+            aStr2.append(aStr.getStr() + nVirtualDecPos);
+        }
+        else
+            aStr1 = aStr;
+    }
     else
         aStr1 = aStr;
 
@@ -540,7 +563,7 @@ void NumericFormatter::ImplInit()
     mnFieldValue        = 0;
     mnLastValue         = 0;
     mnMin               = 0;
-    mnMax               = SAL_MAX_INT32;
+    mnMax               = 100000000; // A user-friendly round number.
         // a "large" value substantially smaller than SAL_MAX_INT64, to avoid
         // overflow in computations using this "dummy" value
     mnDecimalDigits     = 2;
