@@ -207,7 +207,6 @@ void Exif::processIFD(sal_uInt8* pExifData, sal_uInt16 aLength, sal_uInt16 aOffs
         {
             if(bSetValue)
             {
-                write16(ORIENTATION, ifd->tag, littleEndian);
                 write16(3, ifd->type, littleEndian);
                 write32(1, ifd->count, littleEndian);
                 write32(maOrientation, ifd->offset, littleEndian);
