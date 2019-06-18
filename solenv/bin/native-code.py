@@ -225,11 +225,16 @@ core_constructor_list = [
     "com_sun_star_graphic_GraphicObject_get_implementation",
     "com_sun_star_comp_graphic_GraphicProvider_get_implementation",
 # svx/util/svx.component
+    "com_sun_star_comp_svx_NumberingToolBoxControl_get_implementation",
     "com_sun_star_drawing_EnhancedCustomShapeEngine_get_implementation",
     "com_sun_star_drawing_SvxShapeCollection_get_implementation",
+    "com_sun_star_svx_FontHeightToolBoxController_get_implementation",
+    "org_apache_openoffice_comp_svx_sidebar_PanelFactory_get_implementation",
 # svx/util/svxcore.component
     "com_sun_star_comp_graphic_PrimitiveFactory2D_get_implementation",
     "com_sun_star_comp_Draw_GraphicExporter_get_implementation",
+    "com_sun_star_comp_svx_ColorToolBoxControl_get_implementation",
+    "com_sun_star_comp_svx_FontNameToolBoxControl_get_implementation",
     "com_sun_star_comp_Svx_GraphicExportHelper_get_implementation",
     "com_sun_star_comp_Svx_GraphicImportHelper_get_implementation",
 # toolkit/util/tk.component
@@ -305,6 +310,7 @@ edit_factory_list = [
 edit_constructor_list = [
 # framework/util/fwk.component
     "com_sun_star_comp_framework_GlobalAcceleratorConfiguration_get_implementation",
+    "com_sun_star_comp_framework_UICommandDescription_get_implementation",
 # i18npool/util/i18npool.component
     "com_sun_star_i18n_InputSequenceChecker_get_implementation",
     "com_sun_star_i18n_OrdinalSuffix_get_implementation",
