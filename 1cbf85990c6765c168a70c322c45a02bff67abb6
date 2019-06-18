@@ -22,6 +22,30 @@
       "revId": "1cbf85990c6765c168a70c322c45a02bff67abb6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_5b66c353",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/GenericCommands.xcu",
+        "patchSetId": 2
+      },
+      "lineNbr": 7020,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2019-06-18T11:55:56Z",
+      "side": 1,
+      "message": "Any suggestion?",
+      "parentUuid": "3fa0c359_db689322",
+      "range": {
+        "startLine": 7020,
+        "startChar": 24,
+        "endLine": 7020,
+        "endChar": 34
+      },
+      "revId": "1cbf85990c6765c168a70c322c45a02bff67abb6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }

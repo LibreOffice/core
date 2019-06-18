@@ -22,6 +22,30 @@
       "revId": "906eaf8a44f1ba8d08d5f8f74019c22fef4e5a05",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_3b63b744",
+        "filename": "sd/source/ui/view/drviews2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1158,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2019-06-18T11:55:56Z",
+      "side": 0,
+      "message": "Yes the \"Clear formatting\" no longer removes they hyperlink. Will update the commit msg to include this.",
+      "parentUuid": "3fa0c359_7b77ff03",
+      "range": {
+        "startLine": 1154,
+        "startChar": 16,
+        "endLine": 1158,
+        "endChar": 17
+      },
+      "revId": "906eaf8a44f1ba8d08d5f8f74019c22fef4e5a05",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
