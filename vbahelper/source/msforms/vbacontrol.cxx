@@ -728,7 +728,7 @@ void ScVbaControl::setBackColor( sal_Int32 nBackColor )
     m_xProps->setPropertyValue( "BackgroundColor" , uno::makeAny( XLRGBToOORGB( nBackColor ) ) );
 }
 
-bool ScVbaControl::getAutoSize()
+bool ScVbaControl::getAutoSize() const
 {
     bool bIsResizeEnabled = false;
     uno::Reference< uno::XInterface > xIf( m_xControl, uno::UNO_SET_THROW );

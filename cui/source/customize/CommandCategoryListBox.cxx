@@ -482,7 +482,7 @@ void CommandCategoryListBox::SetStylesInfo(SfxStylesInfo_Impl* pStyles)
 }
 
 void CommandCategoryListBox::addChildren(
-    weld::TreeIter* parentEntry, const css::uno::Reference< css::script::browse::XBrowseNode > &parentNode,
+    const weld::TreeIter* parentEntry, const css::uno::Reference< css::script::browse::XBrowseNode > &parentNode,
     CuiConfigFunctionListBox* pFunctionListBox, const OUString& filterTerm , SaveInData *pCurrentSaveInData,
     std::vector<std::unique_ptr<weld::TreeIter>> &rNodesToExpand)
 {

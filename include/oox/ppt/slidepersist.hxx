@@ -96,7 +96,7 @@ public:
     bool isNotesPage() const { return mbNotes; }
 
     void setLayoutValueToken( sal_Int32 nLayoutValueToken ) { mnLayoutValueToken = nLayoutValueToken; }
-    sal_Int16 getLayoutFromValueToken();
+    sal_Int16 getLayoutFromValueToken() const;
 
 
     const oox::drawingml::TextListStylePtr& getDefaultTextStyle() const { return maDefaultTextStylePtr; }
@@ -105,7 +105,7 @@ public:
     const oox::drawingml::TextListStylePtr& getNotesTextStyle() const { return maNotesTextStylePtr; }
     const oox::drawingml::TextListStylePtr& getOtherTextStyle() const { return maOtherTextStylePtr; }
 
-    const oox::drawingml::ShapePtr& getShapes() { return maShapesPtr; }
+    const oox::drawingml::ShapePtr& getShapes() const { return maShapesPtr; }
     void hideShapesAsMasterShapes();
     ::std::vector< std::shared_ptr< TimeNode > >& getTimeNodeList() { return maTimeNodeList; }
     oox::ppt::HeaderFooter& getHeaderFooter(){ return maHeaderFooter; };

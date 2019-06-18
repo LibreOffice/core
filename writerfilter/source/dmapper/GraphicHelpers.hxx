@@ -53,7 +53,7 @@ public:
     WrapHandler( );
     virtual ~WrapHandler( ) override;
 
-    css::text::WrapTextMode getWrapMode( );
+    css::text::WrapTextMode getWrapMode( ) const;
 
  private:
     virtual void lcl_attribute( Id aName, Value& rVal ) override;

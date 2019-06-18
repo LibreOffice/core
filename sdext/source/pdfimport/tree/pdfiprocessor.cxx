@@ -217,7 +217,7 @@ void PDFIProcessor::processGlyphLine()
     if (spaceDetectBoundary == 0.0)
     {
         double avgGlyphWidth = 0.0;
-        for (CharGlyph & i : m_GlyphsList)
+        for (const CharGlyph & i : m_GlyphsList)
             avgGlyphWidth += i.getWidth();
         avgGlyphWidth /= m_GlyphsList.size();
         spaceDetectBoundary = avgGlyphWidth * 0.2;

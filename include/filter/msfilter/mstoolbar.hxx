@@ -58,7 +58,7 @@ public:
 
     void setMSOCommandMap( MSOCommandConvertor* pCnvtr ) { pMSOCmdConvertor.reset( pCnvtr ); }
     css::uno::Reference< css::ui::XUIConfigurationManager > getCfgManager();
-    const css::uno::Reference< css::ui::XUIConfigurationManager >& getAppCfgManager() { return m_xAppCfgMgr;}
+    const css::uno::Reference< css::ui::XUIConfigurationManager >& getAppCfgManager() const { return m_xAppCfgMgr;}
 
 
     static css::uno::Any createCommandFromMacro( const OUString& sCmd );
@@ -93,7 +93,7 @@ public:
 #ifdef DEBUG_FILTER_MSTOOLBAR
     virtual void Print( FILE* ) {} // #FIXME remove this an implement the debug routines in all the classes below to enable some sort of readable output
 #endif
-    sal_uInt32 GetOffset() { return nOffSet; }
+    sal_uInt32 GetOffset() const { return nOffSet; }
 };
 
 class Indent
@@ -117,7 +117,7 @@ class MSFILTER_DLLPUBLIC WString : public TBBase
 public:
     WString(){};
     bool Read(SvStream &rS) override;
-    const OUString& getString(){ return sString; }
+    const OUString& getString() const { return sString; }
 };
 
 class MSFILTER_DLLPUBLIC TBCExtraInfo : public TBBase
@@ -138,7 +138,7 @@ public:
 #ifdef DEBUG_FILTER_MSTOOLBAR
     virtual void Print( FILE* ) override;
 #endif
-    OUString const & getOnAction();
+    OUString const & getOnAction() const;
 };
 
 class MSFILTER_DLLPUBLIC TBCGeneralInfo  : public TBBase
@@ -267,13 +267,13 @@ public:
 
     sal_uInt8 getTct() const { return tct; }
     sal_uInt16 getTcID() const { return tcid; }
-    bool isVisible() { return !( bFlagsTCR & 0x1 ); }
-    bool isBeginGroup() { return ( bFlagsTCR & 0x2 ) != 0; }
+    bool isVisible() const { return !( bFlagsTCR & 0x1 ); }
+    bool isBeginGroup() const { return ( bFlagsTCR & 0x2 ) != 0; }
     bool Read(SvStream &rS) override;
 #ifdef DEBUG_FILTER_MSTOOLBAR
     virtual void Print( FILE* ) override;
 #endif
-    sal_uInt32 getTbct() { return tbct; };
+    sal_uInt32 getTbct() const { return tbct; };
 };
 
 class MSFILTER_DLLPUBLIC TBCData : public TBBase
@@ -310,10 +310,10 @@ public:
 #ifdef DEBUG_FILTER_MSTOOLBAR
     virtual void Print( FILE* ) override;
 #endif
-    sal_Int16 getcCL(){ return cCL; }
+    sal_Int16 getcCL() const { return cCL; }
     WString& getName(){ return name; }
-    bool IsEnabled();
-    bool IsMenuToolbar(){ return ( ( ltbtr & 0x2000000 ) == 0x2000000 ); }
+    bool IsEnabled() const;
+    bool IsMenuToolbar() const { return ( ( ltbtr & 0x2000000 ) == 0x2000000 ); }
 };
 
 class MSFILTER_DLLPUBLIC SRECT : public TBBase

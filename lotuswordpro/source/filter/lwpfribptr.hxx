@@ -77,7 +77,7 @@ private:
     LwpFrib* m_pFribs;
     XFParagraph* m_pXFPara;//Current XFPara used for frib parsing
     LwpPara* m_pPara;//for get foundry
-    static void ProcessDropcap(LwpStory* pStory,LwpFrib* pFrib,sal_uInt32 nLen);
+    static void ProcessDropcap(LwpStory* pStory, const LwpFrib* pFrib,sal_uInt32 nLen);
 public:
     void XFConvert();
     void SetXFPara(XFParagraph* Para){m_pXFPara = Para;}

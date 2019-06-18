@@ -205,7 +205,7 @@ namespace bib
         return mpBibView->getControlContainer();
     }
 
-    Reference< awt::XControlContainer > BibView::getControlContainer()
+    Reference< awt::XControlContainer > BibView::getControlContainer() const
     {
         Reference< awt::XControlContainer > xReturn;
         if ( m_pGeneralPage )

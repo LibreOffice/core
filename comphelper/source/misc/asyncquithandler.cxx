@@ -44,7 +44,7 @@ void AsyncQuitHandler::QuitApplication()
 
 void AsyncQuitHandler::SetForceQuit() { mbForceQuit = true; }
 
-bool AsyncQuitHandler::IsForceQuit() { return mbForceQuit; }
+bool AsyncQuitHandler::IsForceQuit() const { return mbForceQuit; }
 
 IMPL_STATIC_LINK_NOARG(AsyncQuitHandler, OnAsyncQuit, void*, void) { QuitApplication(); }
 

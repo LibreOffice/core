@@ -459,7 +459,7 @@ namespace dbaui
         return aTableFilter;
     }
 
-    std::unique_ptr<weld::TreeIter> OTableSubscriptionPage::implNextSibling(weld::TreeIter* pEntry) const
+    std::unique_ptr<weld::TreeIter> OTableSubscriptionPage::implNextSibling(const weld::TreeIter* pEntry) const
     {
         std::unique_ptr<weld::TreeIter> xReturn;
         if (pEntry)

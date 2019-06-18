@@ -69,7 +69,7 @@ namespace dbaui
         void set_sensitive(bool bSensitive) { m_xControl->set_sensitive(bSensitive); }
         bool get_sensitive() const { return m_xControl->get_sensitive(); }
         void grab_focus() { m_xControl->grab_focus(); }
-        int get_count() { return m_xControl->get_count(); }
+        int get_count() const { return m_xControl->get_count(); }
         void set_active(int nPos) { m_xControl->set_active(nPos); }
         void connect_changed(const Link<weld::ComboBox&, void>& rLink) { m_xControl->connect_changed(rLink); }
 

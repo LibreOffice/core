@@ -1028,7 +1028,7 @@ public:
     OUString& GetDDEApplication()   { return sDDEApplication; }
     OUString& GetDDEItem()          { return sDDEItem; }
     OUString& GetDDETopic()         { return sDDETopic; }
-    bool GetIsAutomaticUpdate() { return bIsAutomaticUpdate; }
+    bool GetIsAutomaticUpdate() const { return bIsAutomaticUpdate; }
 };
 
 

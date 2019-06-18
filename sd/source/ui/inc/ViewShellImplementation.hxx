@@ -133,7 +133,7 @@ public:
         configuration that has in the center pane a view shell of the same
         type as mrViewShell.
     */
-    SfxInterfaceId GetViewId();
+    SfxInterfaceId GetViewId() const;
 
     /** Return a pointer to the image map dialog that is displayed in some
         child window.

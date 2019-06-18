@@ -157,7 +157,7 @@ public:
         @return
             When the object has already been disposed then <FALSE/> is returned.
     */
-    bool IsValid();
+    bool IsValid() const;
 
     /** Return a pointer to the view shell that is displayed in the
         specified pane.  See GetView() for a variant that returns a

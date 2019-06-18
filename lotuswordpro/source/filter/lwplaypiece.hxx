@@ -83,11 +83,11 @@ class LwpLayoutGeometry final : public LwpVirtualPiece
 public:
     LwpLayoutGeometry(LwpObjectHeader const & objHdr, LwpSvStream* pStrm);
     virtual void Parse(IXFStream* pOutputStream) override;
-    sal_Int32 GetWidth() { return m_nWidth; }
-    sal_Int32 GetHeight() { return m_nHeight; }
-    const LwpPoint& GetOrigin() { return m_Origin; }
-    const LwpPoint& GetAbsoluteOrigin() { return m_AbsoluteOrigin; }
-    sal_uInt8 GetContentOrientation(){ return m_ContentOrientation;}
+    sal_Int32 GetWidth() const { return m_nWidth; }
+    sal_Int32 GetHeight() const { return m_nHeight; }
+    const LwpPoint& GetOrigin() const { return m_Origin; }
+    const LwpPoint& GetAbsoluteOrigin() const { return m_AbsoluteOrigin; }
+    sal_uInt8 GetContentOrientation() const { return m_ContentOrientation;}
 
 private:
     virtual void Read() override;
@@ -110,11 +110,11 @@ public:
     enum    {CENTERED = 1, TILED = 2};
     LwpLayoutScale(LwpObjectHeader const & objHdr, LwpSvStream* pStrm);
     virtual void Parse(IXFStream* pOutputStream) override;
-    sal_uInt16 GetScaleMode(){return m_nScaleMode;}
-    sal_uInt32 GetScalePercentage(){return m_nScalePercentage;}
-    sal_Int32 GetScaleWidth(){return m_nScaleWidth;}
-    sal_Int32 GetScaleHeight(){return m_nScaleHeight;}
-    sal_uInt16 GetPlacement(){return m_nPlacement;}
+    sal_uInt16 GetScaleMode() const {return m_nScaleMode;}
+    sal_uInt32 GetScalePercentage() const {return m_nScalePercentage;}
+    sal_Int32 GetScaleWidth() const {return m_nScaleWidth;}
+    sal_Int32 GetScaleHeight() const {return m_nScaleHeight;}
+    sal_uInt16 GetPlacement() const {return m_nPlacement;}
     LwpPoint& GetOffset() {return m_Offset;}
 private:
     virtual void Read() override;
@@ -214,7 +214,7 @@ class LwpLayoutColumns final : public LwpVirtualPiece
 public:
     LwpLayoutColumns(LwpObjectHeader const & objHdr, LwpSvStream* pStrm);
     virtual void Parse(IXFStream* pOutputStream) override;
-    sal_uInt16 GetNumCols(){return m_nNumCols;}
+    sal_uInt16 GetNumCols() const {return m_nNumCols;}
     double GetColGap(sal_uInt16 nIndex);
 private:
     virtual void Read() override;
@@ -313,7 +313,7 @@ class LwpLayoutRelativityGuts
 public:
     LwpLayoutRelativityGuts();
     void Read(LwpObjectStream *pStrm);
-    sal_uInt8 GetRelativeType(){ return m_nRelType;}
+    sal_uInt8 GetRelativeType() const { return m_nRelType;}
     enum RelativeType
     {
         LAY_PARENT_RELATIVE = 1,

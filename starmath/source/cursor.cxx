@@ -40,7 +40,7 @@ void SmCursor::Move(OutputDevice* pDev, SmMovementDirection direction, bool bMov
                             best_line,  //Best approximated line found so far
                             curr_line;  //Current line
                 long dbp_sq = 0;        //Distance squared to best line
-                for(auto &pEntry : *mpGraph)
+                for(const auto &pEntry : *mpGraph)
                 {
                     //Reject it if it's the current position
                     if(pEntry->CaretPos == mpPosition->CaretPos) continue;
@@ -84,7 +84,7 @@ void SmCursor::MoveTo(OutputDevice* pDev, const Point& pos, bool bMoveAnchor)
     SmCaretPosGraphEntry* NewPos = nullptr;
     long dp_sq = 0,     //Distance to current line squared
          dbp_sq = 1;    //Distance to best line squared
-    for(auto &pEntry : *mpGraph)
+    for(const auto &pEntry : *mpGraph)
     {
         OSL_ENSURE(pEntry->CaretPos.IsValid(), "The caret position graph may not have invalid positions!");
         //Compute current line

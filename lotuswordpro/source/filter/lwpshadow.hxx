@@ -80,7 +80,7 @@ public:
 
     double  GetOffsetY();
 
-    const LwpColor& GetColor();
+    const LwpColor& GetColor() const;
 
 private:
     LwpColor        m_aColor;
@@ -99,7 +99,7 @@ inline double   LwpShadow::GetOffsetY()
     return LwpTools::ConvertFromUnitsToMetric(m_nDirY);
 }
 
-inline const LwpColor& LwpShadow::GetColor()
+inline const LwpColor& LwpShadow::GetColor() const
 {
     return m_aColor;
 }

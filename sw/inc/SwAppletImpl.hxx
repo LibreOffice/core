@@ -56,7 +56,7 @@ public:
     void AppendParam( const OUString& rName, const OUString& rValue );
 #endif
     void FinishApplet();
-    const css::uno::Reference < css::embed::XEmbeddedObject >& GetApplet() { return xApplet; }
+    const css::uno::Reference < css::embed::XEmbeddedObject >& GetApplet() const { return xApplet; }
     SfxItemSet& GetItemSet() { return aItemSet; }
     const OUString& GetAltText() const { return sAlt; }
     void SetAltText( const OUString& rAlt ) {sAlt = rAlt;}

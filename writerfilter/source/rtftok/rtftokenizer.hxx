@@ -55,7 +55,7 @@ public:
     /// To be invoked by the popState() callback to signal when the importer leaves a group.
     void popGroup();
     OUString getPosition();
-    std::size_t getGroupStart() { return m_nGroupStart; }
+    std::size_t getGroupStart() const { return m_nGroupStart; }
     /// To look up additional properties of a math symbol.
     static bool lookupMathKeyword(RTFMathSymbol& rSymbol);
 

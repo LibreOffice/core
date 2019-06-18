@@ -80,11 +80,11 @@ public:
 
 protected:
     /// @throws css::uno::RuntimeException
-    css::uno::Reference< css::frame::XController > getController();
+    css::uno::Reference< css::frame::XController > getController() const;
     /// @throws css::uno::RuntimeException
-    css::uno::Reference< css::awt::XWindow > getWindow();
+    css::uno::Reference< css::awt::XWindow > getWindow() const;
     /// @throws css::uno::RuntimeException
-    css::uno::Reference< css::awt::XWindow2 > getWindow2();
+    css::uno::Reference< css::awt::XWindow2 > getWindow2() const;
 
     css::uno::Reference< css::frame::XModel > m_xModel;
 

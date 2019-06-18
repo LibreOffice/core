@@ -75,13 +75,13 @@ namespace pcr
 
         // XPropertyControl
         /// @throws css::uno::RuntimeException
-        ::sal_Int16 getControlType() { return m_nControlType; }
+        ::sal_Int16 getControlType() const { return m_nControlType; }
         /// @throws css::uno::RuntimeException
-        const css::uno::Reference< css::inspection::XPropertyControlContext >& getControlContext() { return m_xContext; }
+        const css::uno::Reference< css::inspection::XPropertyControlContext >& getControlContext() const { return m_xContext; }
         /// @throws css::uno::RuntimeException
         void setControlContext( const css::uno::Reference< css::inspection::XPropertyControlContext >& _controlcontext );
         /// @throws css::uno::RuntimeException
-        bool isModified(  ) { return m_bModified; }
+        bool isModified(  ) const { return m_bModified; }
         /// @throws css::uno::RuntimeException
         void notifyModifiedValue(  );
 

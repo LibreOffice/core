@@ -406,7 +406,7 @@ void LwpFrib::ConvertChars(XFContentContainer* pXFPara,const OUString& text)
     }
 }
 
-void LwpFrib::ConvertHyperLink(XFContentContainer* pXFPara,LwpHyperlinkMgr* pHyperlink,const OUString& text)
+void LwpFrib::ConvertHyperLink(XFContentContainer* pXFPara, const LwpHyperlinkMgr* pHyperlink,const OUString& text)
 {
     XFHyperlink* pHyper = new XFHyperlink;
     pHyper->SetHRef(pHyperlink->GetHyperlink());

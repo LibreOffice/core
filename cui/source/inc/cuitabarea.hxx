@@ -62,7 +62,7 @@ class ButtonBox
             maButtonList.push_back(pButton);
             maButtonToPos.insert( std::make_pair(pButton, maButtonList.size() - 1) );
         }
-        sal_Int32 GetCurrentButtonPos() { return mnCurrentButton; }
+        sal_Int32 GetCurrentButtonPos() const { return mnCurrentButton; }
         sal_Int32 GetButtonPos(weld::ToggleButton* pButton)
         {
             std::map<weld::ToggleButton*, sal_Int32>::const_iterator aBtnPos = maButtonToPos.find(pButton);
@@ -251,7 +251,7 @@ protected:
     void SelectFillType( weld::ToggleButton& rButton, const SfxItemSet* _pSet = nullptr );
     SfxTabPage* GetFillTabPage() { return m_pFillTabPage; }
 
-    bool IsBtnClicked() { return m_bBtnClicked; }
+    bool IsBtnClicked() const { return m_bBtnClicked; }
 
 private:
     DECL_LINK(SelectFillTypeHdl_Impl, weld::ToggleButton&, void);
@@ -762,7 +762,7 @@ public:
 
     void    SetColorChgd( ChangeType* pIn ) { pnColorListState = pIn; }
 
-    void    SetCtlPreviewOld( SfxItemSet& rAttrs ) { m_aCtlPreviewOld.SetAttributes( rAttrs ); }
+    void    SetCtlPreviewOld( const SfxItemSet& rAttrs ) { m_aCtlPreviewOld.SetAttributes( rAttrs ); }
 
     virtual void FillUserData() override;
 };

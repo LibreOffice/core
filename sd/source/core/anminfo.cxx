@@ -108,7 +108,7 @@ void SdAnimationInfo::SetBookmark( const OUString& rBookmark )
     }
 }
 
-OUString SdAnimationInfo::GetBookmark()
+OUString SdAnimationInfo::GetBookmark() const
 {
     OUString sBookmark;
 

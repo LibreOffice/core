@@ -77,12 +77,12 @@ public:
     /**
      * @descr   Get font name.
      */
-    const OUString& GetFontName() { return m_strFontName;}
+    const OUString& GetFontName() const { return m_strFontName;}
 
     /**
      * @descr   Get font family.
      */
-    const OUString& GetFontFamily() { return m_strFontFamily;}
+    const OUString& GetFontFamily() const { return m_strFontFamily;}
 
 private:
     OUString   m_strFontName;

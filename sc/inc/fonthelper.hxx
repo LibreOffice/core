@@ -36,7 +36,7 @@ struct SC_DLLPUBLIC ScDxfFont
     boost::optional<Color> aColor;
     boost::optional<LanguageType> eLang;
 
-    bool isEmpty()
+    bool isEmpty() const
     {
         return !(pFontAttr || nFontHeight ||
             eWeight || eItalic || eUnder ||

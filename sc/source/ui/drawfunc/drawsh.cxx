@@ -384,7 +384,7 @@ void ScDrawShell::ExecuteMacroAssign(SdrObject* pObj, weld::Window* pWin)
     }
 }
 
-void ScDrawShell::ExecuteLineDlg( SfxRequest& rReq )
+void ScDrawShell::ExecuteLineDlg( const SfxRequest& rReq )
 {
     ScDrawView*         pView       = pViewData->GetScDrawView();
     bool                bHasMarked  = pView->AreObjectsMarked();
@@ -423,7 +423,7 @@ void ScDrawShell::ExecuteLineDlg( SfxRequest& rReq )
     });
 }
 
-void ScDrawShell::ExecuteAreaDlg( SfxRequest& rReq )
+void ScDrawShell::ExecuteAreaDlg( const SfxRequest& rReq )
 {
     ScDrawView* pView       = pViewData->GetScDrawView();
     bool        bHasMarked  = pView->AreObjectsMarked();

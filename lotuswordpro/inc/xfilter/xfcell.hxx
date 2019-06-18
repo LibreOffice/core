@@ -134,7 +134,7 @@ public:
     /**
      * @descr   return cell column span property.
      */
-    sal_Int32   GetColSpaned();
+    sal_Int32   GetColSpaned() const;
 
     /**
      * @descr   Output cell as xml element.
@@ -186,7 +186,7 @@ inline void XFCell::SetOwnerRow(XFRow *pRow)
     m_pOwnerRow = pRow;
 }
 
-inline sal_Int32 XFCell::GetColSpaned()
+inline sal_Int32 XFCell::GetColSpaned() const
 {
     return m_nColSpaned;
 }

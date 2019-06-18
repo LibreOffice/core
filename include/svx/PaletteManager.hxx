@@ -60,13 +60,13 @@ public:
     void        ReloadRecentColorSet(ColorValueSet& rColorSet);
     std::vector<OUString> GetPaletteList();
     void        SetPalette( sal_Int32 nPos );
-    sal_Int32   GetPalette();
-    sal_Int32   GetPaletteCount() { return mnNumOfPalettes; }
+    sal_Int32   GetPalette() const;
+    sal_Int32   GetPaletteCount() const { return mnNumOfPalettes; }
     OUString    GetPaletteName();
     OUString    GetSelectedPalettePath();
 
-    long        GetColorCount();
-    long        GetRecentColorCount();
+    long        GetColorCount() const;
+    long        GetRecentColorCount() const;
     void        AddRecentColor(const Color& rRecentColor, const OUString& rColorName, bool bFront = true);
 
     void        SetBtnUpdater(svx::ToolboxButtonColorUpdater* pBtnUpdater);

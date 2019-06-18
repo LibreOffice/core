@@ -116,7 +116,7 @@ static void TextAttrDelete( SwDoc & rDoc, SwTextAttr * const pAttr )
     SwTextAttr::Destroy( pAttr, rDoc.GetAttrPool() );
 }
 
-static bool TextAttrContains(const sal_Int32 nPos, SwTextAttrEnd * const pAttr)
+static bool TextAttrContains(const sal_Int32 nPos, const SwTextAttrEnd * const pAttr)
 {
     return (pAttr->GetStart() < nPos) && (nPos < *pAttr->End());
 }
