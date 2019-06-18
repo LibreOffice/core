@@ -105,7 +105,7 @@ namespace oox { namespace ppt {
             {
             }
 
-        Any get()
+        Any get() const
             {
                 sal_Int32 nColor;
                 Sequence< double > aHSL( 3 );

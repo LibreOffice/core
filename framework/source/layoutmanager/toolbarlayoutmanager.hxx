@@ -87,7 +87,7 @@ class ToolbarLayoutManager : public ::cppu::WeakImplHelper< css::awt::XDockableW
         bool isPreviewFrame();
 
         // layouting
-        bool isLayoutDirty() { return m_bLayoutDirty;}
+        bool isLayoutDirty() const { return m_bLayoutDirty;}
         void doLayout(const ::Size& aContainerSize);
 
         // creation/destruction

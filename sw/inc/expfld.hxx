@@ -162,7 +162,7 @@ public:
     inline sal_uInt16       GetType() const;
 
     void                    SetSeqFormat(sal_uLong nFormat);
-    sal_uLong               GetSeqFormat();
+    sal_uLong               GetSeqFormat() const;
 
     bool                IsDeleted() const       { return m_bDeleted; }
     void                    SetDeleted( bool b )    { m_bDeleted = b; }

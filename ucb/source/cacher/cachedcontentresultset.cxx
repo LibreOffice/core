@@ -162,7 +162,7 @@ bool CachedContentResultSet::CCRS_Cache
 }
 
 sal_Int32 CachedContentResultSet::CCRS_Cache
-    ::getMaxRow()
+    ::getMaxRow() const
 {
     if( !m_pResult )
         return 0;
@@ -174,7 +174,7 @@ sal_Int32 CachedContentResultSet::CCRS_Cache
 }
 
 bool CachedContentResultSet::CCRS_Cache
-    ::hasKnownLast()
+    ::hasKnownLast() const
 {
     if( !m_pResult )
         return false;

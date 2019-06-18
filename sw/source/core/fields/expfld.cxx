@@ -561,7 +561,7 @@ void SwSetExpFieldType::SetSeqFormat(sal_uLong nFormat)
         pFormatField->GetField()->ChangeFormat( nFormat );
 }
 
-sal_uLong SwSetExpFieldType::GetSeqFormat()
+sal_uLong SwSetExpFieldType::GetSeqFormat() const
 {
     if( !HasWriterListeners() )
         return SVX_NUM_ARABIC;

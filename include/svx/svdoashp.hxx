@@ -247,7 +247,7 @@ public:
 
     using SdrTextObj::NbcSetOutlinerParaObject;
 
-    OUString GetCustomShapeName();
+    OUString GetCustomShapeName() const;
 };
 
 #endif // INCLUDED_SVX_SVDOASHP_HXX

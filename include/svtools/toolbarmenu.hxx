@@ -70,7 +70,7 @@ public:
     virtual void dispose() override;
 
 protected:
-    bool IsInPopupMode();
+    bool IsInPopupMode() const;
     void EndPopupMode();
 
 private:

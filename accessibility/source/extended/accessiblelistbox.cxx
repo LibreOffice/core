@@ -361,7 +361,7 @@ namespace accessibility
         return m_xParent;
     }
 
-    sal_Int32 AccessibleListBox::GetRoleType()
+    sal_Int32 AccessibleListBox::GetRoleType() const
     {
         sal_Int32 nCase = 0;
         SvTreeListEntry* pEntry = getListBox()->GetEntry(0);

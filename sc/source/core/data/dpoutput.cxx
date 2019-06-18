@@ -1152,7 +1152,7 @@ bool ScDPOutput::HasError()
     return bSizeOverflow || bResultsError;
 }
 
-long ScDPOutput::GetHeaderRows()
+long ScDPOutput::GetHeaderRows() const
 {
     return pPageFields.size() + ( bDoFilter ? 1 : 0 );
 }

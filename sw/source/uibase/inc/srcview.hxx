@@ -65,7 +65,7 @@ public:
     void                SaveContent(const OUString& rTmpFile);
     void                SaveContentTo(SfxMedium& rMed);
 
-    bool                IsModified() {return aEditWin->IsModified();}
+    bool                IsModified() const {return aEditWin->IsModified();}
 
     void            Execute(SfxRequest&);
     void            GetState(SfxItemSet&);

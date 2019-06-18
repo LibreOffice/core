@@ -128,7 +128,7 @@ void SfxEmojiControl::ConvertLabelToUnicode(sal_uInt16 nPageId)
     mpTabControl->SetPageText(nPageId, sHexText.toString());
 }
 
-FILTER_CATEGORY SfxEmojiControl::getCurrentFilter()
+FILTER_CATEGORY SfxEmojiControl::getCurrentFilter() const
 {
     const sal_uInt16 nCurPageId = mpTabControl->GetCurPageId();
 

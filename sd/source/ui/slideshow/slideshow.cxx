@@ -914,7 +914,7 @@ OutputDevice* SlideShow::getShowWindow()
     return mxController.is() ? mxController->mpShowWindow.get() : nullptr;
 }
 
-int SlideShow::getAnimationMode()
+int SlideShow::getAnimationMode() const
 {
     return mxController.is() ? mxController->meAnimationMode : ANIMATIONMODE_SHOW;
 }
@@ -931,7 +931,7 @@ void SlideShow::jumpToPageNumber( sal_Int32 nPageNumber )
         mxController->displaySlideNumber( nPageNumber );
 }
 
-sal_Int32 SlideShow::getCurrentPageNumber()
+sal_Int32 SlideShow::getCurrentPageNumber() const
 {
     return mxController.is() ? mxController->getCurrentSlideNumber() : 0;
 }
@@ -942,7 +942,7 @@ void SlideShow::jumpToBookmark( const OUString& sBookmark )
         mxController->jumpToBookmark( sBookmark );
 }
 
-bool SlideShow::isFullScreen()
+bool SlideShow::isFullScreen() const
 {
     return mxController.is() && mxController->maPresSettings.mbFullScreen;
 }

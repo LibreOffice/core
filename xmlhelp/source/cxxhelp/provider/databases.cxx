@@ -175,7 +175,7 @@ Databases::~Databases()
     m_aKeywordInfo.clear();
 }
 
-OString Databases::getImageTheme()
+OString Databases::getImageTheme() const
 {
     uno::Reference< lang::XMultiServiceFactory > xConfigProvider =
         configuration::theDefaultProvider::get(m_xContext);

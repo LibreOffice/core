@@ -162,9 +162,9 @@ public:
 
     tools::Rectangle GetDeckDragArea() const;
 
-    css::uno::Reference<css::frame::XFrame> getXFrame() {return mxFrame;}
+    css::uno::Reference<css::frame::XFrame> getXFrame() const {return mxFrame;}
 
-    sal_Int32 getMaximumWidth() { return mnMaximumSidebarWidth; }
+    sal_Int32 getMaximumWidth() const { return mnMaximumSidebarWidth; }
     void setMaximumWidth(sal_Int32 nMaximumWidth) { mnMaximumSidebarWidth = nMaximumWidth; }
 
 private:

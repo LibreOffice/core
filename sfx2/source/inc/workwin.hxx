@@ -223,7 +223,7 @@ class SfxWorkWindow final
     void                    Sort_Impl();
     SfxChild_Impl*          FindChild_Impl( const vcl::Window& rWindow ) const;
     bool                    RequestTopToolSpacePixel_Impl( SvBorder aBorder );
-    tools::Rectangle               GetTopRect_Impl();
+    tools::Rectangle        GetTopRect_Impl() const;
     SvBorder                Arrange_Impl();
     void                    SaveStatus_Impl(SfxChildWindow*, const SfxChildWinInfo&);
     static bool             IsPluginMode( SfxObjectShell const * pObjShell );
@@ -272,7 +272,7 @@ public:
     void                    UpdateObjectBars_Impl2();
     void                    ResetObjectBars_Impl();
     void                    SetObjectBar_Impl(sal_uInt16 nPos, SfxVisibilityFlags nFlags, ToolbarId eId);
-    bool                    IsVisible_Impl();
+    bool                    IsVisible_Impl() const;
     void                    MakeVisible_Impl( bool );
     void                    Lock_Impl( bool );
 

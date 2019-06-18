@@ -522,7 +522,7 @@ void SvxTextAnimationPage::SelectDirection( SdrTextAniDirection nValue )
     m_xBtnDown->set_active( nValue == SdrTextAniDirection::Down );
 }
 
-sal_uInt16 SvxTextAnimationPage::GetSelectedDirection()
+sal_uInt16 SvxTextAnimationPage::GetSelectedDirection() const
 {
     SdrTextAniDirection nValue = SdrTextAniDirection::Left;
 

@@ -45,7 +45,7 @@ public:
     RequestFilterOptions( css::uno::Reference< css::frame::XModel > const & rModel,
                               const css::uno::Sequence< css::beans::PropertyValue >& rProperties );
 
-    bool    isAbort() { return m_xAbort->wasSelected(); }
+    bool    isAbort() const { return m_xAbort->wasSelected(); }
 
     css::uno::Sequence< css::beans::PropertyValue > getFilterOptions()
     {

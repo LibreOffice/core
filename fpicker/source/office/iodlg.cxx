@@ -2628,7 +2628,7 @@ void SvtFileDialog::setCurrentFileText( const OUString& _rText, bool _bSelectAll
 }
 
 
-bool SvtFileDialog::isAutoExtensionEnabled()
+bool SvtFileDialog::isAutoExtensionEnabled() const
 {
     return pImpl->_pCbAutoExtension && pImpl->_pCbAutoExtension->IsChecked();
 }

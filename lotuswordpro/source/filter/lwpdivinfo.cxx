@@ -154,7 +154,7 @@ void LwpDivInfo::GetNumberOfPages(sal_uInt16 & nPageno)
     }
 }
 
-sal_uInt16 LwpDivInfo::GetMaxNumberOfPages()
+sal_uInt16 LwpDivInfo::GetMaxNumberOfPages() const
 {
     LwpDocument* pDiv = dynamic_cast<LwpDocument*>(m_ParentID.obj().get());
     if(!pDiv)

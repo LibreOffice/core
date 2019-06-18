@@ -314,12 +314,12 @@ void SAL_CALL OGroupManager::elementReplaced(const ContainerEvent& Event)
 }
 
 // Other functions
-Sequence<Reference<XControlModel> > OGroupManager::getControlModels()
+Sequence<Reference<XControlModel> > OGroupManager::getControlModels() const
 {
     return m_pCompGroup->GetControlModels();
 }
 
-sal_Int32 OGroupManager::getGroupCount()
+sal_Int32 OGroupManager::getGroupCount() const
 {
     return m_aActiveGroupMap.size();
 }

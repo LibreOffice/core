@@ -203,7 +203,7 @@ public:
                             const OUString& rListName);
     bool                    HasSelectedChildren( const OUString& rName );
     bool                    SelectEntry( const OUString& rName );
-    OUString                GetSelectedEntry();
+    OUString                GetSelectedEntry() const;
 
     //Mark Current Entry
     void                    SetSdNavigator(SdNavigatorWin* pNavigator);

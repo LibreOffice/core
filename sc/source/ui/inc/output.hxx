@@ -229,7 +229,7 @@ private:
     void SetSyntaxColor( vcl::Font* pFont, const ScRefCellValue& rCell );
     void SetEditSyntaxColor( EditEngine& rEngine, const ScRefCellValue& rCell );
 
-    double          GetStretch();
+    double          GetStretch() const;
 
     void            DrawRotatedFrame(vcl::RenderContext& rRenderContext);       // pixel
 

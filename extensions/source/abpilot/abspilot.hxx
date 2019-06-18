@@ -47,7 +47,7 @@ namespace abp
 
         /// get the service factory which was used to create the dialog
         const css::uno::Reference< css::uno::XComponentContext >&
-                                getORB() { return m_xORB; }
+                                getORB() const { return m_xORB; }
         AddressSettings&        getSettings() { return m_aSettings; }
         const AddressSettings&  getSettings() const { return m_aSettings; }
 

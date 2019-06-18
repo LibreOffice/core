@@ -90,7 +90,7 @@ ScVbaChartObjects::removeByName(const OUString& _sChartName)
 }
 
 uno::Sequence< OUString >
-ScVbaChartObjects::getChartObjectNames()
+ScVbaChartObjects::getChartObjectNames() const
 {
     uno::Sequence< OUString > sChartNames;
     try

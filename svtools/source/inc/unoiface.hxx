@@ -188,19 +188,19 @@ protected:
     void    setFormatKey(sal_Int32 nKey);
 
     void    SetValue(const css::uno::Any& rValue);
-    css::uno::Any  GetValue();
+    css::uno::Any  GetValue() const;
 
     void    SetTreatAsNumber(bool bSet);
-    bool    GetTreatAsNumber();
+    bool    GetTreatAsNumber() const;
 
     void    SetDefaultValue(const css::uno::Any& rValue);
-    css::uno::Any  GetDefaultValue();
+    css::uno::Any  GetDefaultValue() const;
 
     void    SetMinValue(const css::uno::Any& rValue);
-    css::uno::Any  GetMinValue();
+    css::uno::Any  GetMinValue() const;
 
     void    SetMaxValue(const css::uno::Any& rValue);
-    css::uno::Any  GetMaxValue();
+    css::uno::Any  GetMaxValue() const;
 
     void    NotifyTextListeners();
     css::uno::Any  convertEffectiveValue(const css::uno::Any& rValue);

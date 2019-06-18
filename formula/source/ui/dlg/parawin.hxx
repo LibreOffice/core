@@ -118,17 +118,17 @@ public:
         void            UpdateParas();
         void            ClearAll();
 
-        sal_uInt16      GetActiveLine() { return nActiveLine;}
+        sal_uInt16      GetActiveLine() const { return nActiveLine;}
         void            SetActiveLine(sal_uInt16 no);
         RefEdit*    GetActiveEdit();
-        OUString        GetActiveArgName();
+        OUString        GetActiveArgName() const;
 
         OUString        GetArgument(sal_uInt16 no);
         void            SetArgument(sal_uInt16 no, const OUString& aString);
         void            SetArgumentFonts(const vcl::Font& aBoldFont,const vcl::Font& aLightFont);
 
         void            SetEdFocus(); // visible edit lines
-        sal_uInt16      GetSliderPos();
+        sal_uInt16      GetSliderPos() const;
         void            SetSliderPos(sal_uInt16 nSliderPos);
 
         void            SetArgModifiedHdl( const Link<ParaWin&,void>& rLink ) { aArgModifiedLink = rLink; }

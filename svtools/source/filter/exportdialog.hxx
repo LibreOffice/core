@@ -165,7 +165,7 @@ private:
 
     css::awt::Size GetOriginalSize();
 
-    sal_Int32 GetDefaultUnit();
+    sal_Int32 GetDefaultUnit() const;
 
 public:
     ExportDialog( FltCallDialogParameter& rPara,

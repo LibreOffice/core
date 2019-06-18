@@ -112,7 +112,7 @@ public:
     // XFormControllerContext
     virtual void SAL_CALL makeVisible( const css::uno::Reference< css::awt::XControl >& Control ) override;
 
-    const ::std::vector< css::uno::Reference< css::form::runtime::XFormController > >& GetList() {return m_aControllerList;}
+    const ::std::vector< css::uno::Reference< css::form::runtime::XFormController > >& GetList() const {return m_aControllerList;}
 
 private:
     virtual ~FormViewPageWindowAdapter() override;

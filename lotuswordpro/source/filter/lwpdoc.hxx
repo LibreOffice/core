@@ -128,8 +128,8 @@ public:
     void Parse(IXFStream* pOutputStream) override;
     void RegisterStyle() override;
 
-    inline bool IsChildDoc();
-    inline bool GetHonorProtection();
+    inline bool IsChildDoc() const;
+    inline bool GetHonorProtection() const;
     inline LwpObjectID& GetDocData();
     inline LwpObjectID& GetSocket();
 
@@ -177,11 +177,11 @@ private:
     bool IsSkippedDivision();
 };
 
-inline bool LwpDocument::IsChildDoc()
+inline bool LwpDocument::IsChildDoc() const
 {
     return (m_nPersistentFlags & DOC_CHILDDOC) != 0;
 }
-inline bool LwpDocument::GetHonorProtection()
+inline bool LwpDocument::GetHonorProtection() const
 {
     return (m_nPersistentFlags & DOC_PROTECTED) != 0;
 }

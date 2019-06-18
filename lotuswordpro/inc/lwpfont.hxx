@@ -80,7 +80,7 @@ public:
     LwpFontTableEntry(){}
 public:
     void Read(LwpObjectStream *pStrm);
-    OUString const & GetFaceName();
+    OUString const & GetFaceName() const;
 private:
     LwpAtomHolder m_WindowsFaceName;    //font face name under windows
     LwpAtomHolder m_FaceName;           //font face name
@@ -117,11 +117,11 @@ public:
         {}
 public:
     void Read(LwpObjectStream *pStrm);
-    sal_uInt16 GetFaceID(){return m_nFaceName;}
-    sal_uInt16 GetAltFaceID(){return m_nAltFaceName;}
+    sal_uInt16 GetFaceID() const {return m_nFaceName;}
+    sal_uInt16 GetAltFaceID() const {return m_nAltFaceName;}
     void Override(rtl::Reference<XFFont> const & pFont);
-    inline bool IsFaceNameOverridden();
-    inline bool IsAltFaceNameOverridden();
+    inline bool IsFaceNameOverridden() const;
+    inline bool IsAltFaceNameOverridden() const;
 private:
     //Data of CFontDescriptionOverrideBase
     sal_uInt8 m_nOverrideBits;
@@ -148,9 +148,9 @@ private:
                             | TIGHTNESS | FACENAME | BKCOLOR)
     };
 
-    inline bool IsPointSizeOverridden();
-    inline bool IsColorOverridden();
-    inline bool IsBackgroundColorOverridden();
+    inline bool IsPointSizeOverridden() const;
+    inline bool IsColorOverridden() const;
+    inline bool IsBackgroundColorOverridden() const;
 //TODO
 //    inline sal_Bool IsTightnessOverridden();
 //    inline sal_Bool IsAnythingOverridden();
@@ -230,14 +230,14 @@ private:
         ALL_ATTRS2          = CASE | UNDER
     };
     bool Is(sal_uInt16 Attr);
-    bool IsBoldOverridden();
-    bool IsItalicOverridden();
-    bool IsStrikeThruOverridden();
-    bool IsSmallCapsOverridden();
-    bool IsSuperOverridden();
-    bool IsSubOverridden();
-    bool IsUnderlineOverridden();
-    bool IsCaseOverridden();
+    bool IsBoldOverridden() const;
+    bool IsItalicOverridden() const;
+    bool IsStrikeThruOverridden() const;
+    bool IsSmallCapsOverridden() const;
+    bool IsSuperOverridden() const;
+    bool IsSubOverridden() const;
+    bool IsUnderlineOverridden() const;
+    bool IsCaseOverridden() const;
 
 };
 

@@ -49,7 +49,7 @@ namespace oglcanvas
         // BitmapCanvasHelper functionality
         // ================================
 
-        const css::geometry::IntegerSize2D& getSize() { return maSize; }
+        const css::geometry::IntegerSize2D& getSize() const { return maSize; }
 
         css::uno::Reference< css::rendering::XBitmap >
             getScaledBitmap( const css::geometry::RealSize2D&  newSize,
@@ -63,7 +63,7 @@ namespace oglcanvas
             getPixel( css::rendering::IntegerBitmapLayout& bitmapLayout,
                       const css::geometry::IntegerPoint2D& pos );
 
-        css::rendering::IntegerBitmapLayout getMemoryLayout();
+        css::rendering::IntegerBitmapLayout getMemoryLayout() const;
 
     private:
         css::geometry::IntegerSize2D maSize;

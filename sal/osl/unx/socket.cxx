@@ -582,7 +582,7 @@ struct oslAddrInfo
             freeaddrinfo(pAddrInfoList);
     }
 
-    const char* getHostName()
+    const char* getHostName() const
     {
         assert(pAddrInfoList);
         return pAddrInfoList->ai_canonname;

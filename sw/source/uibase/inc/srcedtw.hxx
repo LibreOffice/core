@@ -136,7 +136,7 @@ public:
                         { return m_pTextEngine->IsModified();}
 
     void            SetReadonly(bool bSet){m_bReadonly = bSet;}
-    bool            IsReadonly(){return m_bReadonly;}
+    bool            IsReadonly() const {return m_bReadonly;}
 
     void            SetStartLine(sal_uInt16 nLine){m_nStartLine = nLine;}
 

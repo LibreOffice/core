@@ -39,7 +39,7 @@ void CRC32::reset()
 {
     nCRC=0;
 }
-sal_Int32 CRC32::getValue()
+sal_Int32 CRC32::getValue() const
 {
     return nCRC;
 }

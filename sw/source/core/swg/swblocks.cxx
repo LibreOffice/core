@@ -249,7 +249,7 @@ SwTextBlocks::~SwTextBlocks()
 {
 }
 
-OUString SwTextBlocks::GetName()
+OUString SwTextBlocks::GetName() const
 {
     return pImp ? pImp->m_aName : OUString();
 }

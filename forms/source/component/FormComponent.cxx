@@ -209,7 +209,7 @@ sal_Bool SAL_CALL OControl::supportsService(const OUString& _rsServiceName)
     return cppu::supportsService(this, _rsServiceName);
 }
 
-Sequence< OUString > OControl::getAggregateServiceNames()
+Sequence< OUString > OControl::getAggregateServiceNames() const
 {
     Sequence< OUString > aAggServices;
     Reference< XServiceInfo > xInfo;
@@ -663,7 +663,7 @@ sal_Bool SAL_CALL OControlModel::supportsService(const OUString& _rServiceName)
     return cppu::supportsService(this, _rServiceName);
 }
 
-Sequence< OUString > OControlModel::getAggregateServiceNames()
+Sequence< OUString > OControlModel::getAggregateServiceNames() const
 {
     Sequence< OUString > aAggServices;
     Reference< XServiceInfo > xInfo;

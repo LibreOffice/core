@@ -335,7 +335,7 @@ void EditTextObject::ChangeStyleSheetName(
     mpImpl->ChangeStyleSheetName(eFamily, rOldName, rNewName);
 }
 
-editeng::FieldUpdater EditTextObject::GetFieldUpdater()
+editeng::FieldUpdater EditTextObject::GetFieldUpdater() const
 {
     return mpImpl->GetFieldUpdater();
 }

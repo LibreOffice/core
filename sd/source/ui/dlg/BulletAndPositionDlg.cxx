@@ -314,8 +314,8 @@ SfxItemSet* SvxBulletAndPositionDlg::GetOutputItemSet(SfxItemSet* pSet)
     return pSet;
 };
 
-bool SvxBulletAndPositionDlg::IsApplyToMaster() { return bApplyToMaster; }
-bool SvxBulletAndPositionDlg::IsSlideScope() { return m_xSlideRB->get_active(); }
+bool SvxBulletAndPositionDlg::IsApplyToMaster() const { return bApplyToMaster; }
+bool SvxBulletAndPositionDlg::IsSlideScope() const { return m_xSlideRB->get_active(); }
 
 void SvxBulletAndPositionDlg::Reset(const SfxItemSet* rSet)
 {

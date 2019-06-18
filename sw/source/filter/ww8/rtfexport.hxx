@@ -200,7 +200,7 @@ public:
     void InsStyle(sal_uInt16 nId, const OString& rStyle);
     OString* GetStyle(sal_uInt16 nId);
 
-    const SfxItemSet* GetFirstPageItemSet() { return m_pFirstPageItemSet; }
+    const SfxItemSet* GetFirstPageItemSet() const { return m_pFirstPageItemSet; }
 
 private:
     void WriteFonts();

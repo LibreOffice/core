@@ -37,7 +37,7 @@ struct ImageAryData
     ImageAryData( const ImageAryData& rData );
     ~ImageAryData();
 
-    bool IsLoadable() { return maBitmapEx.IsEmpty() && !maName.isEmpty(); }
+    bool IsLoadable() const { return maBitmapEx.IsEmpty() && !maName.isEmpty(); }
     void Load(const OUString &rPrefix);
 
     ImageAryData&   operator=( const ImageAryData& rData );

@@ -1796,7 +1796,7 @@ void SectionPropertyMap::ApplyProperties_( const uno::Reference< beans::XPropert
     }
 }
 
-sal_Int32 SectionPropertyMap::GetPageWidth()
+sal_Int32 SectionPropertyMap::GetPageWidth() const
 {
     return getProperty( PROP_WIDTH )->second.get<sal_Int32>();
 }

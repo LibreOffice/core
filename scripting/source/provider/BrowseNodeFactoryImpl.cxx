@@ -613,7 +613,7 @@ BrowseNodeFactoryImpl::createView( sal_Int16 viewType )
 }
 
 Reference< browse::XBrowseNode >
-BrowseNodeFactoryImpl::getOrganizerHierarchy()
+BrowseNodeFactoryImpl::getOrganizerHierarchy() const
 {
     Reference< browse::XBrowseNode > xRet = new  DefaultRootBrowseNode( m_xComponentContext );
     return xRet;

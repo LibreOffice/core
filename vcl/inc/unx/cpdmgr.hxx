@@ -99,7 +99,7 @@ public:
     GDBusProxy* getProxy(const std::string& target);
     void addBackend( std::pair< std::string, GDBusProxy * > pair );
     void addTempBackend(const std::pair<std::string, gchar*>& pair);
-    std::vector<std::pair<std::string, gchar*>> const & getTempBackends();
+    std::vector<std::pair<std::string, gchar*>> const & getTempBackends() const;
     void addNewPrinter( const OUString&, const OUString&, CPDPrinter * );
 #endif
 

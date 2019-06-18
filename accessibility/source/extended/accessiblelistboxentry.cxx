@@ -360,7 +360,7 @@ namespace accessibility
         return m_aEntryPath.empty() ? -1 : m_aEntryPath.back();
     }
 
-    sal_Int32 AccessibleListBoxEntry::GetRoleType()
+    sal_Int32 AccessibleListBoxEntry::GetRoleType() const
     {
         sal_Int32 nCase = 0;
         SvTreeListEntry* pEntry = getListBox()->GetEntry(0);

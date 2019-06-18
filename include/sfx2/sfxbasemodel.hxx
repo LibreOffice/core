@@ -705,7 +705,7 @@ private:
     css::uno::Reference< css::ui::XUIConfigurationManager2 > getUIConfigurationManager2();
     void impl_getPrintHelper();
     SAL_DLLPRIVATE void ListenForStorage_Impl( const css::uno::Reference< css::embed::XStorage >& xStorage );
-    SAL_DLLPRIVATE OUString GetMediumFilterName_Impl();
+    SAL_DLLPRIVATE OUString GetMediumFilterName_Impl() const;
 
     SAL_DLLPRIVATE void postEvent_Impl( const OUString& aName, const css::uno::Reference< css::frame::XController2 >& xController = css::uno::Reference< css::frame::XController2 >() );
 

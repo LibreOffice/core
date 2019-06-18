@@ -105,7 +105,7 @@ namespace pcr
         m_pPropBox->SetSizePixel(aSize);
     }
 
-    css::awt::Size OPropertyBrowserView::getMinimumSize()
+    css::awt::Size OPropertyBrowserView::getMinimumSize() const
     {
         Size aSize = GetOutputSizePixel();
         if( m_pPropBox )

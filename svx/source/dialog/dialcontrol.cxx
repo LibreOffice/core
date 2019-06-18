@@ -635,7 +635,7 @@ void SvxDialControl::SaveValue()
     mpImpl->mnInitialAngle = mpImpl->mnAngle;
 }
 
-bool SvxDialControl::IsValueModified()
+bool SvxDialControl::IsValueModified() const
 {
     return mpImpl->mnInitialAngle != mpImpl->mnAngle;
 }

@@ -820,7 +820,7 @@ bool ScDrawStringsVars::HasEditCharacters() const
     return false;
 }
 
-double ScOutputData::GetStretch()
+double ScOutputData::GetStretch() const
 {
     if ( mpRefDevice->IsMapModeEnabled() )
     {

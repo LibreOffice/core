@@ -74,7 +74,7 @@ class CGMChart final
         void                    InsertTextEntry( std::unique_ptr<TextEntry> );
 
         void                    ResetAnnotation();
-        bool                    IsAnnotation();
+        bool                    IsAnnotation() const;
 };
 
 #endif

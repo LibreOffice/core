@@ -84,9 +84,9 @@ public:
         css::uno::Reference< css::sdbcx::XColumnsSupplier> const & xColumnsSupplier,
         const SwDBData& rDBData);
 
-    css::uno::Reference< css::sdbc::XDataSource> const & GetSource();
+    css::uno::Reference< css::sdbc::XDataSource> const & GetSource() const;
 
-    SharedConnection const & GetConnection();
+    SharedConnection const & GetConnection() const;
 
     css::uno::Reference< css::sdbcx::XColumnsSupplier> const & GetColumnsSupplier();
 

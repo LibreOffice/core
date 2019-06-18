@@ -104,7 +104,7 @@ public:
 
     const OUString& GetBulletStyleName() const;
 
-    OUString const & GetBulletChar();
+    OUString const & GetBulletChar() const;
 
     static OUString GetPrefix() { return OUString(); }
 
@@ -124,7 +124,7 @@ public:
 
     OUString GetDivisionName();
 
-    OUString GetSectionName();
+    OUString GetSectionName() const;
 
 private:
     sal_uInt16      m_nFlags;

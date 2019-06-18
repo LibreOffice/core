@@ -55,7 +55,7 @@ class ScVbaWorksheet : public WorksheetImpl_BASE
     /// @throws css::uno::RuntimeException
     css::uno::Reference< ov::excel::XRange > getSheetRange();
 
-    css::uno::Reference< css::container::XNameAccess > getFormControls();
+    css::uno::Reference< css::container::XNameAccess > getFormControls() const;
     css::uno::Any getControlShape( const OUString& sName );
 
     css::uno::Any getButtons( const css::uno::Any &rIndex, bool bOptionButtons );
@@ -72,9 +72,9 @@ public:
 
     virtual ~ScVbaWorksheet() override;
 
-    const css::uno::Reference< css::frame::XModel >& getModel()
+    const css::uno::Reference< css::frame::XModel >& getModel() const
     { return mxModel; }
-    const css::uno::Reference< css::sheet::XSpreadsheet >& getSheet()
+    const css::uno::Reference< css::sheet::XSpreadsheet >& getSheet() const
     { return mxSheet; }
     static const css::uno::Sequence<sal_Int8>& getUnoTunnelId();
     css::uno::Reference< ov::excel::XWorksheet > createSheetCopyInNewDoc( const OUString& );
@@ -155,7 +155,7 @@ public:
     // CodeName
     virtual OUString SAL_CALL getCodeName() override;
     /// @throws css::uno::RuntimeException
-    sal_Int16 getSheetID();
+    sal_Int16 getSheetID() const;
 
     virtual void SAL_CALL PrintOut( const css::uno::Any& From, const css::uno::Any& To, const css::uno::Any& Copies, const css::uno::Any& Preview, const css::uno::Any& ActivePrinter, const css::uno::Any& PrintToFile, const css::uno::Any& Collate, const css::uno::Any& PrToFileName, const css::uno::Any& IgnorePrintAreas ) override;
     // XHelperInterface

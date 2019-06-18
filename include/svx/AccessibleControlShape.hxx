@@ -77,7 +77,7 @@ public:
         const AccessibleShapeTreeInfo& rShapeTreeInfo);
     virtual ~AccessibleControlShape( ) override;
 
-    const css::uno::Reference< css::beans::XPropertySet >&  GetControlModel( ) { return m_xControlModel;} ;
+    const css::uno::Reference< css::beans::XPropertySet >&  GetControlModel( ) const { return m_xControlModel;}
     AccessibleControlShape* GetLabeledByControlShape();
 
 private:

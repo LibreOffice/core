@@ -126,16 +126,16 @@ public:
 
     void UpdateMapMode();
 
-    double  GetVisibleX();          // interface for ScrollBars
-    double  GetVisibleY();
+    double  GetVisibleX() const;          // interface for ScrollBars
+    double  GetVisibleY() const;
     void    SetVisibleXY(double fX, double fY);
-    double  GetVisibleWidth();
-    double  GetVisibleHeight();
+    double  GetVisibleWidth() const;
+    double  GetVisibleHeight() const;
     Point   GetVisibleCenter();
-    double  GetScrlLineWidth();
-    double  GetScrlLineHeight();
-    double  GetScrlPageWidth();
-    double  GetScrlPageHeight();
+    double  GetScrlLineWidth() const;
+    double  GetScrlLineHeight() const;
+    double  GetScrlPageWidth() const;
+    double  GetScrlPageHeight() const;
     void GrabFocus();
     virtual void DataChanged( const DataChangedEvent& rDCEvt ) override;
 

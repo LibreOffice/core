@@ -162,7 +162,7 @@ RedactionTarget* TargetsTable::GetTargetByName(const OUString& sName)
     return reinterpret_cast<RedactionTarget*>(m_xControl->get_id(nEntry).toInt64());
 }
 
-OUString TargetsTable::GetNameProposal()
+OUString TargetsTable::GetNameProposal() const
 {
     //TODO: Define a translatable string
     OUString sDefaultTargetName("Target");

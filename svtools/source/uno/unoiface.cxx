@@ -1123,7 +1123,7 @@ void SVTXFormattedField::SetMinValue(const css::uno::Any& rValue)
 }
 
 
-css::uno::Any SVTXFormattedField::GetMinValue()
+css::uno::Any SVTXFormattedField::GetMinValue() const
 {
     VclPtr<FormattedField> pField = GetAs< FormattedField >();
     if (!pField || !pField->HasMinValue())
@@ -1163,7 +1163,7 @@ void SVTXFormattedField::SetMaxValue(const css::uno::Any& rValue)
 }
 
 
-css::uno::Any SVTXFormattedField::GetMaxValue()
+css::uno::Any SVTXFormattedField::GetMaxValue() const
 {
     VclPtr<FormattedField> pField = GetAs< FormattedField >();
     if (!pField || !pField->HasMaxValue())
@@ -1208,7 +1208,7 @@ void SVTXFormattedField::SetDefaultValue(const css::uno::Any& rValue)
 }
 
 
-css::uno::Any SVTXFormattedField::GetDefaultValue()
+css::uno::Any SVTXFormattedField::GetDefaultValue() const
 {
     VclPtr<FormattedField> pField = GetAs< FormattedField >();
     if (!pField || pField->IsEmptyFieldEnabled())
@@ -1223,7 +1223,7 @@ css::uno::Any SVTXFormattedField::GetDefaultValue()
 }
 
 
-bool SVTXFormattedField::GetTreatAsNumber()
+bool SVTXFormattedField::GetTreatAsNumber() const
 {
     VclPtr<FormattedField> pField = GetAs< FormattedField >();
     if (pField)
@@ -1241,7 +1241,7 @@ void SVTXFormattedField::SetTreatAsNumber(bool bSet)
 }
 
 
-css::uno::Any SVTXFormattedField::GetValue()
+css::uno::Any SVTXFormattedField::GetValue() const
 {
     VclPtr<FormattedField> pField = GetAs< FormattedField >();
     if (!pField)

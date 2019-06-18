@@ -37,9 +37,9 @@ class Renderable :
     osl::Mutex              maMutex;
     std::vector<sal_Int32>  maValidPages;
 
-    VclPtr<Printer> getPrinter();
-    bool isPrintOddPages();
-    bool isPrintEvenPages();
+    VclPtr<Printer> getPrinter() const;
+    bool isPrintOddPages() const;
+    bool isPrintEvenPages() const;
     static bool isOnEvenPage( sal_Int32 nPage ) { return nPage % 2 == 0; };
 public:
     explicit Renderable (BaseWindow*);

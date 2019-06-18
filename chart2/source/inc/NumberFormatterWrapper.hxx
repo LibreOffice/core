@@ -38,7 +38,7 @@ public:
 
     SvNumberFormatter* getSvNumberFormatter() const { return m_pNumberFormatter;}
     const css::uno::Reference< css::util::XNumberFormatsSupplier >&
-                getNumberFormatsSupplier() { return m_xNumberFormatsSupplier; };
+                getNumberFormatsSupplier() const { return m_xNumberFormatsSupplier; };
 
     OUString getFormattedString( sal_Int32 nNumberFormatKey, double fValue, Color& rLabelColor, bool& rbColorChanged ) const;
     Date    getNullDate() const;

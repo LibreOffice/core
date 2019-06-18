@@ -173,7 +173,7 @@ void SwDrawTextShell::SetAttrToMarked(const SfxItemSet& rAttr)
     }
 }
 
-bool SwDrawTextShell::IsTextEdit()
+bool SwDrawTextShell::IsTextEdit() const
 {
     return pSdrView->IsTextEdit();
 }

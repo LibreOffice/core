@@ -60,7 +60,7 @@ public:
 
     virtual void    Close() override;
     void            SliderMoved();
-    size_t          GetSliderPos();
+    size_t          GetSliderPos() const;
     void            RefreshEditRow( size_t nOffset );
 
 private:

@@ -310,7 +310,7 @@ bool SbxDecimal::neg()
     return false;
 }
 
-bool SbxDecimal::isZero()
+bool SbxDecimal::isZero() const
 {
     return false;
 }

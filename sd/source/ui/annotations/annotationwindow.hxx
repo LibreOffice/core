@@ -113,7 +113,7 @@ class AnnotationWindow : public FloatingWindow
 
         void            Rescale();
 
-        bool            IsProtected() { return mbProtected; }
+        bool            IsProtected() const { return mbProtected; }
 
         void            SetLanguage(const SvxLanguageItem &aNewItem);
 

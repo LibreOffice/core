@@ -130,11 +130,11 @@ public:
     virtual css::uno::Reference< css::resource::XStringResourceResolver >
         SAL_CALL getStringResource(  ) override;
 
-    const OUString& getName()
+    const OUString& getName() const
         { return m_aName; }
 
     const css::uno::Reference< css::resource::XStringResourcePersistence >&
-        getStringResourcePersistence()
+        getStringResourcePersistence() const
     {
         return m_xStringResourcePersistence;
     }

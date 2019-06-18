@@ -564,7 +564,7 @@ void SvxSearchDialog::ApplyTransliterationFlags_Impl( TransliterationFlags nSett
 }
 
 
-bool SvxSearchDialog::IsOtherOptionsExpanded()
+bool SvxSearchDialog::IsOtherOptionsExpanded() const
 {
     return m_xReplaceBackwardsCB->get_active() ||
            m_xSelectionBtn->get_active() ||

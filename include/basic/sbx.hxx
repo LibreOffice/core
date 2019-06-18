@@ -178,7 +178,7 @@ public:
     void   AddDim32( sal_Int32, sal_Int32 );
     void   unoAddDim32( sal_Int32, sal_Int32 );
     bool   GetDim32( sal_Int32, sal_Int32&, sal_Int32& ) const;
-    bool hasFixedSize() { return mbHasFixedSize; };
+    bool hasFixedSize() const { return mbHasFixedSize; };
     void setHasFixedSize( bool bHasFixedSize ) {mbHasFixedSize = bHasFixedSize; };
 };
 

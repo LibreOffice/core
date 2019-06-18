@@ -69,8 +69,8 @@ public:
                     SFEntry( const css::uno::Reference< css::script::browse::XBrowseNode >& entryNodes ,
                              const css::uno::Reference< css::frame::XModel >& entryModel) { nodes = entryNodes; loaded=false; model = entryModel; }
                     SFEntry( const SFEntry& r ) { nodes = r.nodes; loaded = r.loaded; }
-    const css::uno::Reference< css::script::browse::XBrowseNode >& GetNode() { return nodes ;}
-    const css::uno::Reference< css::frame::XModel >& GetModel() { return model ;};
+    const css::uno::Reference< css::script::browse::XBrowseNode >& GetNode() const { return nodes ;}
+    const css::uno::Reference< css::frame::XModel >& GetModel() const { return model ;};
     bool            isLoaded() const                    { return loaded; }
     void            setLoaded()                         { loaded=true; }
 };

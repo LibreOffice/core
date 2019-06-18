@@ -49,7 +49,7 @@ private:
     using CellValueGetter = const OUString&(size_t, size_t);
     using CellWriter = void(const OUString&, size_t, size_t);
 
-    size_t GetRegressionTypeIndex();
+    size_t GetRegressionTypeIndex() const;
     ScRange GetDataRange(const ScRange& rRange);
     OUString GetVariableNameFormula(bool bXVar, size_t nIndex, bool bWithLog);
     OUString GetXVariableNameFormula(size_t nIndex, bool bWithLog);

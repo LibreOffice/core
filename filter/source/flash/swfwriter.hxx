@@ -145,7 +145,7 @@ public:
     void write( SvStream& out );
 
     sal_uInt16 getID() const { return mnId; }
-    const vcl::Font& getFont() { return maFont; }
+    const vcl::Font& getFont() const { return maFont; }
 
 private:
     const vcl::Font maFont;

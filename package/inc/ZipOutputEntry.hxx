@@ -57,7 +57,7 @@ public:
 
     ZipEntry* getZipEntry() { return m_pCurrentEntry; }
     ZipPackageStream* getZipPackageStream() { return m_pCurrentStream; }
-    bool isEncrypt() { return m_bEncryptCurrentEntry; }
+    bool isEncrypt() const { return m_bEncryptCurrentEntry; }
 
     void closeEntry();
 

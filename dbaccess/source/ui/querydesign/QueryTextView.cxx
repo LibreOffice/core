@@ -68,7 +68,7 @@ void OQueryTextView::Resize()
     m_pEdit->SetSizePixel( GetOutputSizePixel() );
 }
 
-OUString OQueryTextView::getStatement()
+OUString OQueryTextView::getStatement() const
 {
     return m_pEdit->GetText();
 }
@@ -94,7 +94,7 @@ void OQueryTextView::copy()
         m_pEdit->Copy();
 }
 
-bool OQueryTextView::isCutAllowed()
+bool OQueryTextView::isCutAllowed() const
 {
     return !m_pEdit->GetSelected().isEmpty();
 }

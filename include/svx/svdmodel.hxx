@@ -536,7 +536,7 @@ public:
     void SetStyleSheetPool(SfxStyleSheetBasePool* pPool)     { mxStyleSheetPool=pPool; }
 
     void    SetStarDrawPreviewMode(bool bPreview);
-    bool    IsStarDrawPreviewMode() { return bStarDrawPreviewMode; }
+    bool    IsStarDrawPreviewMode() const { return bStarDrawPreviewMode; }
 
     bool GetDisableTextEditUsesCommonUndoManager() const { return mbDisableTextEditUsesCommonUndoManager; }
     void SetDisableTextEditUsesCommonUndoManager(bool bNew) { mbDisableTextEditUsesCommonUndoManager = bNew; }

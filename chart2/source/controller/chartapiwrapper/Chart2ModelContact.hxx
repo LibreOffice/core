@@ -65,7 +65,7 @@ public:
     css::uno::Reference< css::chart2::XChartDocument > getChart2Document() const;
     css::uno::Reference< css::chart2::XDiagram > getChart2Diagram() const;
 
-    css::uno::Reference< css::drawing::XDrawPage > getDrawPage();
+    css::uno::Reference< css::drawing::XDrawPage > getDrawPage() const;
 
     /** get the current values calculated for an axis in the current view in
         case properties are 'auto'.

@@ -82,7 +82,7 @@ namespace connectivity
             ODbaseTable*    m_pTable;
             bool        m_bUseCollector : 1;            // Use the Garbage Collector
 
-            OUString getCompletePath();
+            OUString getCompletePath() const;
             void closeImpl();
             // Closes and kills the index file and throws an error
             void impl_killFileAndthrowError_throw(const char* pErrorId, const OUString& _sFile);
@@ -106,7 +106,7 @@ namespace connectivity
             void SetRootPos(sal_uInt32 nPos)        {m_nRootPage = nPos;}
             void SetPageCount(sal_uInt32 nCount)    {m_nPageCount = nCount;}
 
-            sal_uInt32 GetPageCount()               {return m_nPageCount;}
+            sal_uInt32 GetPageCount() const         {return m_nPageCount;}
 
             sal_uInt16 GetMaxNodes() const          {return m_aHeader.db_maxkeys;}
 

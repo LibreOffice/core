@@ -64,7 +64,7 @@ public:
     void setParticle( const OUString& rCooSysParticle );
 
     void setTransformationSceneToScreen( const css::drawing::HomogenMatrix& rMatrix );
-    const css::drawing::HomogenMatrix& getTransformationSceneToScreen() { return m_aMatrixSceneToScreen;}
+    const css::drawing::HomogenMatrix& getTransformationSceneToScreen() const { return m_aMatrixSceneToScreen;}
 
     //better performance for big data
     virtual css::uno::Sequence< sal_Int32 > getCoordinateSystemResolution( const css::awt::Size& rPageSize

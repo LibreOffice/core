@@ -213,10 +213,10 @@ public:
     void    SetBackColorTransparent();
 
     //getter:
-    enumXFTransform GetTransform();
+    enumXFTransform GetTransform() const;
 
-    sal_Int16 GetFontSize();
-    const XFColor& GetColor();
+    sal_Int16 GetFontSize() const;
+    const XFColor& GetColor() const;
 
     void    ToXml(IXFStream *pStrm);
 
@@ -397,17 +397,17 @@ inline void XFFont::SetBackColorTransparent()
     m_nFlag |= XFFONT_FLAG_BGCOLOR;
 }
 
-inline enumXFTransform XFFont::GetTransform()
+inline enumXFTransform XFFont::GetTransform() const
 {
     return m_eTransform;
 }
 
-inline sal_Int16 XFFont::GetFontSize()
+inline sal_Int16 XFFont::GetFontSize() const
 {
     return m_nFontSize;
 }
 
-inline const XFColor& XFFont::GetColor()
+inline const XFColor& XFFont::GetColor() const
 {
     return m_aColor;
 }

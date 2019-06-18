@@ -518,7 +518,7 @@ void AccessibleContextBase::ThrowIfDisposed()
 }
 
 
-bool AccessibleContextBase::IsDisposed()
+bool AccessibleContextBase::IsDisposed() const
 {
     return (rBHelper.bDisposed || rBHelper.bInDispose);
 }

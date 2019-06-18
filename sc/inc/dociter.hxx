@@ -232,7 +232,7 @@ public:
     const ScAddress& GetPos() const { return maCurPos; }
 
     CellType getType() const { return maCurCell.meType;}
-    OUString getString();
+    OUString getString() const;
     const EditTextObject* getEditText() const { return maCurCell.mpEditText;}
     ScFormulaCell* getFormulaCell() { return maCurCell.mpFormula;}
     const ScFormulaCell* getFormulaCell() const { return maCurCell.mpFormula;}
@@ -303,8 +303,8 @@ public:
                                         // (bIsString)
     bool GetFirst();
     bool GetNext();
-    SCCOL           GetCol() { return nCol; }
-    SCROW           GetRow() { return nRow; }
+    SCCOL           GetCol() const { return nCol; }
+    SCROW           GetRow() const { return nRow; }
 
                     // increments all Entry.nField, if column
                     // changes, for ScInterpreter ScHLookup()

@@ -80,7 +80,7 @@ public:
     void SetPixel(long nY, long nX, BitmapColor nColor) = delete;
     long Height() { return maSize.Height(); }
     long Width() { return maSize.Width(); }
-    sal_uInt8 GetBitCount() { return mnBitCount; }
+    sal_uInt8 GetBitCount() const { return mnBitCount; }
 };
 
 BitmapEx VCL_DLLPUBLIC loadFromName(const OUString& rFileName, const ImageLoadFlags eFlags = ImageLoadFlags::NONE);

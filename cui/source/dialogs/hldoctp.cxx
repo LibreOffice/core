@@ -112,7 +112,7 @@ void SvxHyperlinkDocTp::FillDlgFields(const OUString& rStrURL)
 |*
 |************************************************************************/
 
-OUString SvxHyperlinkDocTp::GetCurrentURL ()
+OUString SvxHyperlinkDocTp::GetCurrentURL () const
 {
     // get data from dialog-controls
     OUString aStrURL;

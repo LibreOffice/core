@@ -291,7 +291,7 @@ void SfxTemplateManagerDlg::setDocumentModel(const uno::Reference<frame::XModel>
     m_xModel = rModel;
 }
 
-FILTER_APPLICATION SfxTemplateManagerDlg::getCurrentApplicationFilter()
+FILTER_APPLICATION SfxTemplateManagerDlg::getCurrentApplicationFilter() const
 {
     const sal_Int16 nCurAppId = mxCBApp->get_active();
 

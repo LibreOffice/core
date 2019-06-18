@@ -596,22 +596,22 @@ SfxClassificationHelper::SfxClassificationHelper(const uno::Reference<document::
 
 SfxClassificationHelper::~SfxClassificationHelper() = default;
 
-std::vector<OUString> const & SfxClassificationHelper::GetMarkings()
+std::vector<OUString> const & SfxClassificationHelper::GetMarkings() const
 {
     return m_pImpl->m_aMarkings;
 }
 
-std::vector<OUString> const & SfxClassificationHelper::GetIntellectualPropertyParts()
+std::vector<OUString> const & SfxClassificationHelper::GetIntellectualPropertyParts() const
 {
     return m_pImpl->m_aIPParts;
 }
 
-std::vector<OUString> const & SfxClassificationHelper::GetIntellectualPropertyPartNumbers()
+std::vector<OUString> const & SfxClassificationHelper::GetIntellectualPropertyPartNumbers() const
 {
     return m_pImpl->m_aIPPartNumbers;
 }
 
-const OUString& SfxClassificationHelper::GetBACName(SfxClassificationPolicyType eType)
+const OUString& SfxClassificationHelper::GetBACName(SfxClassificationPolicyType eType) const
 {
     return m_pImpl->m_aCategory[eType].m_aName;
 }

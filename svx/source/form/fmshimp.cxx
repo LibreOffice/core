@@ -1389,7 +1389,7 @@ void FmXFormShell::LoopGrids_Lock(LoopGridsSync nSync, LoopGridsFlags nFlags)
 }
 
 
-Reference< XControlContainer > FmXFormShell::getControlContainerForView_Lock()
+Reference< XControlContainer > FmXFormShell::getControlContainerForView_Lock() const
 {
     if (impl_checkDisposed_Lock())
         return nullptr;

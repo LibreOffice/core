@@ -103,7 +103,7 @@ private:
     LwpObjectID m_TableRange;
 public:
     void Read(LwpObjectStream *pStrm);
-    const LwpObjectID& GetTableRangeID(){ return m_TableRange;}
+    const LwpObjectID& GetTableRangeID() const { return m_TableRange;}
 };
 
 class LwpBulletManager

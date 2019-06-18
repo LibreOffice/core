@@ -43,9 +43,9 @@ namespace dbaui
         OQueryViewSwitch(OQueryContainerWindow* pParent, OQueryController& _rController,const css::uno::Reference< css::uno::XComponentContext >& );
         ~OQueryViewSwitch();
 
-        bool isCutAllowed();
-        bool isPasteAllowed();
-        bool isCopyAllowed();
+        bool isCutAllowed() const;
+        bool isPasteAllowed() const;
+        bool isCopyAllowed() const;
         void copy();
         void cut();
         void paste();

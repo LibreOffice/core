@@ -556,11 +556,11 @@ public:
     bool                     IsCellInChangeTrack(const ScAddress &cell,Color *pColCellBorder);
     void                     GetCellChangeTrackNote(const ScAddress &cell, OUString &strTrackText, bool &pbLeftEdge);
 
-    bool IsEmbedFonts() { return mbEmbedFonts; }
-    bool IsEmbedUsedFontsOnly() { return mbEmbedUsedFontsOnly; }
-    bool IsEmbedFontScriptLatin() { return mbEmbedFontScriptLatin; }
-    bool IsEmbedFontScriptAsian() { return mbEmbedFontScriptAsian; }
-    bool IsEmbedFontScriptComplex() { return mbEmbedFontScriptComplex; }
+    bool IsEmbedFonts() const { return mbEmbedFonts; }
+    bool IsEmbedUsedFontsOnly() const { return mbEmbedUsedFontsOnly; }
+    bool IsEmbedFontScriptLatin() const { return mbEmbedFontScriptLatin; }
+    bool IsEmbedFontScriptAsian() const { return mbEmbedFontScriptAsian; }
+    bool IsEmbedFontScriptComplex() const { return mbEmbedFontScriptComplex; }
 
     void SetEmbedFonts(bool bUse) { mbEmbedFonts = bUse; }
     void SetEmbedUsedFontsOnly(bool bUse) { mbEmbedUsedFontsOnly = bUse; }
@@ -781,7 +781,7 @@ public:
      */
     bool InsertNewRangeName( SCTAB nTab, const OUString& rName, const ScAddress& rPos, const OUString& rExpr );
 
-    SCTAB GetMaxTableNumber() { return static_cast<SCTAB>(maTabs.size()) - 1; }
+    SCTAB GetMaxTableNumber() const { return static_cast<SCTAB>(maTabs.size()) - 1; }
 
     ScRangePairList*    GetColNameRanges() { return xColNameRanges.get(); }
     ScRangePairList*    GetRowNameRanges() { return xRowNameRanges.get(); }
@@ -1331,7 +1331,7 @@ public:
     void            SetForcedFormulaPending( bool bNew ) { bForcedFormulaPending = bNew; }
     bool            IsForcedFormulaPending() const { return bForcedFormulaPending; }
                     // if CalcFormulaTree() is currently running
-    bool            IsCalculatingFormulaTree() { return bCalculatingFormulaTree; }
+    bool            IsCalculatingFormulaTree() const { return bCalculatingFormulaTree; }
     /// If set, joining cells into shared formula groups will be delayed until reset again
     /// (RegroupFormulaCells() will be called as needed).
     void            DelayFormulaGrouping( bool delay );
@@ -2109,7 +2109,7 @@ public:
     ScChangeViewSettings* GetChangeViewSettings() const     { return pChangeViewSettings.get(); }
     SC_DLLPUBLIC void     SetChangeViewSettings(const ScChangeViewSettings& rNew);
 
-    const std::shared_ptr<SvxForbiddenCharactersTable>& GetForbiddenCharacters();
+    const std::shared_ptr<SvxForbiddenCharactersTable>& GetForbiddenCharacters() const;
     void            SetForbiddenCharacters(const std::shared_ptr<SvxForbiddenCharactersTable>& rNew);
 
     CharCompressType GetAsianCompression() const;
@@ -2255,7 +2255,7 @@ public:
     bool                IsFinalTrackFormulas() const { return mbFinalTrackFormulas; }
     bool                IsInFormulaTree( const ScFormulaCell* pCell ) const;
     bool                IsInFormulaTrack( const ScFormulaCell* pCell ) const;
-    HardRecalcState     GetHardRecalcState() { return eHardRecalcState; }
+    HardRecalcState     GetHardRecalcState() const { return eHardRecalcState; }
     void                SetHardRecalcState( HardRecalcState eVal ) { eHardRecalcState = eVal; }
     void                StartAllListeners();
     void                StartNeededListeners();
@@ -2279,7 +2279,7 @@ public:
                                 if ( nInterpretLevel )
                                     nInterpretLevel--;
                             }
-    sal_uInt16          GetMacroInterpretLevel() { return nMacroInterpretLevel; }
+    sal_uInt16          GetMacroInterpretLevel() const { return nMacroInterpretLevel; }
     void                IncMacroInterpretLevel()
                             {
                                 assert(!IsThreadedGroupCalcInProgress());

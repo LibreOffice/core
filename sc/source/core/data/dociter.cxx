@@ -969,7 +969,7 @@ bool ScCellIterator::getCurrent()
     return false;
 }
 
-OUString ScCellIterator::getString()
+OUString ScCellIterator::getString() const
 {
     return maCurCell.getString(mpDoc);
 }

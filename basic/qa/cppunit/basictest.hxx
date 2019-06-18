@@ -45,7 +45,7 @@ public:
 
     DECL_LINK( BasicErrorHdl, StarBASIC *, bool );
 
-    bool HasError();
+    bool HasError() const;
 };
 
 #endif

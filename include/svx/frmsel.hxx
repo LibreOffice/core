@@ -155,9 +155,9 @@ public:
 
     // accessibility
 
-    css::uno::Reference<css::accessibility::XAccessible> getAccessibleParent() { return GetDrawingArea()->get_accessible_parent(); }
+    css::uno::Reference<css::accessibility::XAccessible> getAccessibleParent() const { return GetDrawingArea()->get_accessible_parent(); }
     virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() override;
-    a11yrelationset get_accessible_relation_set() { return GetDrawingArea()->get_accessible_relation_set(); }
+    a11yrelationset get_accessible_relation_set() const { return GetDrawingArea()->get_accessible_relation_set(); }
 
     /** Returns the accessibility child object of the specified frame border (if enabled). */
     rtl::Reference< a11y::AccFrameSelectorChild >

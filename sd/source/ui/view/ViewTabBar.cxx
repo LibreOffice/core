@@ -376,7 +376,7 @@ bool ViewTabBar::ActivatePage()
     return false;
 }
 
-int ViewTabBar::GetHeight()
+int ViewTabBar::GetHeight() const
 {
     int nHeight (0);
 

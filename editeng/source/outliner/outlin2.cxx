@@ -313,7 +313,7 @@ void Outliner::InsertUndo( std::unique_ptr<EditUndo> pUndo )
     pEditEngine->GetUndoManager().AddUndoAction( std::move(pUndo) );
 }
 
-bool Outliner::IsInUndo()
+bool Outliner::IsInUndo() const
 {
     return pEditEngine->IsInUndo();
 }

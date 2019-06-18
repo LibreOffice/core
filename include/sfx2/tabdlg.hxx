@@ -211,7 +211,7 @@ public:
     virtual DeactivateRC    DeactivatePage( SfxItemSet* pSet );
     void                    SetUserData(const OUString& rString)
                               { aUserString = rString; }
-    const OUString&         GetUserData() { return aUserString; }
+    const OUString&         GetUserData() const { return aUserString; }
     virtual void            FillUserData();
     virtual bool            IsReadOnly() const;
     virtual void PageCreated (const SfxAllItemSet& aSet);
@@ -223,7 +223,7 @@ public:
     }
 
     void SetFrame(const css::uno::Reference< css::frame::XFrame >& xFrame);
-    css::uno::Reference< css::frame::XFrame > GetFrame();
+    css::uno::Reference< css::frame::XFrame > GetFrame() const;
 
     const SfxItemSet* GetDialogExampleSet() const;
 

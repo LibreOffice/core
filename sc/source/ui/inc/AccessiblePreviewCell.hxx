@@ -91,7 +91,7 @@ private:
         const css::uno::Reference<css::accessibility::XAccessibleStateSet>& rxParentStates);
     virtual bool IsEditable(
         const css::uno::Reference<css::accessibility::XAccessibleStateSet>& rxParentStates) override;
-    bool IsOpaque();
+    bool IsOpaque() const;
 
     void CreateTextHelper();
 

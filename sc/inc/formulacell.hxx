@@ -336,7 +336,7 @@ public:
     void            GetResultDimensions( SCSIZE& rCols, SCSIZE& rRows );
     sc::MatrixEdge  GetMatrixEdge( ScAddress& rOrgPos ) const;
     FormulaError    GetErrCode();   // interpret first if necessary
-    FormulaError    GetRawError();  // don't interpret, just return code or result error
+    FormulaError    GetRawError() const;  // don't interpret, just return code or result error
     bool            GetErrorOrValue( FormulaError& rErr, double& rVal );
     sc::FormulaResultValue GetResult();
     sc::FormulaResultValue GetResult() const;
@@ -482,7 +482,7 @@ public:
     bool IsPostponedDirty() const { return mbPostponedDirty;}
 
     void SetIsExtRef() { mbIsExtRef = true; }
-    bool GetSeenInPath() { return mbSeenInPath; }
+    bool GetSeenInPath() const { return mbSeenInPath; }
     void SetSeenInPath(bool bSet) { mbSeenInPath = bSet; }
 
 #if DUMP_COLUMN_STORAGE

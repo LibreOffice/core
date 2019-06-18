@@ -42,7 +42,7 @@ public:
     virtual ~SvxPostItDialog() override;
 
     static const sal_uInt16*      GetRanges();
-    const SfxItemSet*   GetOutputItemSet() { return m_xOutSet.get(); }
+    const SfxItemSet*   GetOutputItemSet() const { return m_xOutSet.get(); }
 
     void                SetPrevHdl( const Link<SvxPostItDialog&,void>& rLink )
                             { m_aPrevHdlLink = rLink; }
@@ -71,7 +71,7 @@ public:
     {
         m_xDialog->set_title(rTitle);
     }
-    std::shared_ptr<weld::Dialog> const & GetDialog()
+    std::shared_ptr<weld::Dialog> const & GetDialog() const
     {
         return m_xDialog;
     }

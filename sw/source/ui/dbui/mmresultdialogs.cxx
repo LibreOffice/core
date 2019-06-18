@@ -206,10 +206,10 @@ public:
     {
     }
 
-    OUString GetCC() {return m_xCCED->get_text();}
+    OUString GetCC() const {return m_xCCED->get_text();}
     void SetCC(const OUString& rSet) {m_xCCED->set_text(rSet);}
 
-    OUString GetBCC() {return m_xBCCED->get_text();}
+    OUString GetBCC() const {return m_xBCCED->get_text();}
     void SetBCC(const OUString& rSet) {m_xBCCED->set_text(rSet);}
 };
 

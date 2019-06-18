@@ -59,9 +59,9 @@ public:
   virtual ~BootstrapFixtureBase() override;
 
   const css::uno::Reference<css::uno::XComponentContext>&
-              getComponentContext() { return m_xContext; }
+              getComponentContext() const { return m_xContext; }
   const css::uno::Reference<css::lang::XMultiServiceFactory>&
-              getMultiServiceFactory() { return m_xSFactory; }
+              getMultiServiceFactory() const { return m_xSFactory; }
 
   virtual void setUp() override;
   virtual void tearDown() override;

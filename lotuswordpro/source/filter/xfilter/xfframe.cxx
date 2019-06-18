@@ -104,7 +104,7 @@ void    XFFrame::SetZIndex(sal_uInt32 zIndex)
     AdjustZIndex();
 }
 
-enumXFFrameType XFFrame::GetFrameType()
+enumXFFrameType XFFrame::GetFrameType() const
 {
     return m_eType;
 }

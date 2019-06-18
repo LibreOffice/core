@@ -141,7 +141,7 @@ private:
     bool                LoadLinkedGraphic_Impl();
     void                RaiseLoadError_Impl();
     void                SetGraphicPosition_Impl( SvxGraphicPosition ePos );
-    SvxGraphicPosition  GetGraphicPosition_Impl();
+    SvxGraphicPosition  GetGraphicPosition_Impl() const;
     void                FillControls_Impl(const SvxBrushItem& rBgdAttr,
                                           const OUString& rUserData);
 

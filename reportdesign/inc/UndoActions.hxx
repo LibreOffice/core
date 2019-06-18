@@ -64,7 +64,7 @@ namespace rptui
         }
         css::uno::Reference< css::report::XSection >   getHeader() { return m_xGroup->getHeader(); }
         css::uno::Reference< css::report::XSection >   getFooter() { return m_xGroup->getFooter(); }
-        const css::uno::Reference< css::report::XGroup >&     getGroup() { return m_xGroup; }
+        const css::uno::Reference< css::report::XGroup >&     getGroup() const { return m_xGroup; }
 
         bool getHeaderOn() { return m_xGroup->getHeaderOn(); }
         bool getFooterOn() { return m_xGroup->getFooterOn(); }

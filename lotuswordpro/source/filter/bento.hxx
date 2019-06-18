@@ -145,7 +145,7 @@ public: // Internal methods
     CBenIDListElmt(BenObjectID ID, CUtListElmt * pPrev) : CUtListElmt(pPrev)
       { cID = ID; }
     explicit CBenIDListElmt(BenObjectID ID) { cID = ID; }
-    BenObjectID GetID() { return cID; }
+    BenObjectID GetID() const { return cID; }
 
 private: // Data
     BenObjectID cID;
@@ -177,7 +177,7 @@ public:
 public: // Overridden methods
 
     /* added by  */
-    sal_uLong GetSize() { return m_ulValueLength; };
+    sal_uLong GetSize() const { return m_ulValueLength; };
 protected: // Overridden methods
 
     virtual std::size_t GetData(void* pData, std::size_t nSize) override;
@@ -316,9 +316,9 @@ public: // Internal methods
       unsigned short Size) : CUtListElmt(&pValue->GetValueSegments())
       { cImmediate = true;
         std::memcpy(cImmData, pImmData, Size); cSize = Size; }
-    bool IsImmediate() { return cImmediate; }
-    BenContainerPos GetPosition() { return cPos; }
-    size_t GetSize() { return cSize; }
+    bool IsImmediate() const { return cImmediate; }
+    BenContainerPos GetPosition() const { return cPos; }
+    size_t GetSize() const { return cSize; }
     BenByte * GetImmediateData() { return cImmData; }
 
 private: // Data
@@ -346,7 +346,7 @@ public: // Internal methods
     CUtListElmt * pPrevObject, const OString& rName,
     CUtListElmt * pPrevNamedObjectListElmt);
 
-    const OString& GetName() { return csName; }
+    const OString& GetName() const { return csName; }
 
 private: // Data
     OString csName;

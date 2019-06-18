@@ -91,7 +91,7 @@ public:
 
     void addUndo();
 
-    double getDuration();
+    double getDuration() const;
     void updatePathFromMotionPathTag( const rtl::Reference< MotionPathTag >& xTag );
 
 private:

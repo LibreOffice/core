@@ -58,7 +58,7 @@ namespace bib
                     getControlContainer() override;
         public:
             css::uno::Reference< css::frame::XDispatchProviderInterception >
-                    getDispatchProviderInterception();
+                    getDispatchProviderInterception() const;
 
             BibBeamer(vcl::Window* pParent,BibDataManager* pDatMan );
             virtual ~BibBeamer() override;

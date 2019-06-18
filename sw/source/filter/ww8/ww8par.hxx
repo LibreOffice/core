@@ -548,8 +548,8 @@ namespace sw
             explicit Position(const SwPosition &rPos);
             Position(const Position &rPos);
             operator SwPosition() const;
-            const SwNodeIndex& GetPtNode() { return maPtNode; };
-            sal_Int32 GetPtContent() { return mnPtContent; };
+            const SwNodeIndex& GetPtNode() const { return maPtNode; };
+            sal_Int32 GetPtContent() const { return mnPtContent; };
         };
     }
 }
@@ -571,11 +571,11 @@ class WW8FieldEntry
         WW8FieldEntry &operator=(const WW8FieldEntry &rOther) throw();
         void Swap(WW8FieldEntry &rOther) throw();
 
-        SwNodeIndex GetPtNode() { return maStartPos.GetPtNode(); };
-        sal_Int32 GetPtContent() { return maStartPos.GetPtContent(); };
+        SwNodeIndex GetPtNode() const { return maStartPos.GetPtNode(); };
+        sal_Int32 GetPtContent() const { return maStartPos.GetPtContent(); };
 
-        const OUString& GetBookmarkName() { return msBookmarkName;}
-        const OUString& GetBookmarkCode() { return msMarkCode;}
+        const OUString& GetBookmarkName() const { return msBookmarkName;}
+        const OUString& GetBookmarkCode() const { return msMarkCode;}
         void SetBookmarkName(const OUString& bookmarkName);
         void SetBookmarkType(const OUString& bookmarkType);
         void SetBookmarkCode(const OUString& bookmarkCode);
@@ -1489,8 +1489,8 @@ private:
     void SetAttributesAtGrfNode(SvxMSDffImportRec const* pRecord,
             SwFrameFormat const *pFlyFormat, WW8_FSPA const *pF);
 
-    bool IsDropCap();
-    bool IsListOrDropcap() { return (!m_xCurrentItemSet  || m_bDropCap); };
+    bool IsDropCap() const;
+    bool IsListOrDropcap() const { return (!m_xCurrentItemSet  || m_bDropCap); };
 
     //Apo == Absolutely Positioned Object, MSWord's old-style frames
     std::unique_ptr<WW8FlyPara> ConstructApo(const ApoTestResults &rApo,

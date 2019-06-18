@@ -276,7 +276,7 @@ OUString ParaWin::GetArgument(sal_uInt16 no)
     return aStr;
 }
 
-OUString  ParaWin::GetActiveArgName()
+OUString  ParaWin::GetActiveArgName() const
 {
     OUString aStr;
     if(nArgs>0 && nEdFocus!=NOT_FOUND)
@@ -448,7 +448,7 @@ void ParaWin::UpdateParas()
 }
 
 
-sal_uInt16 ParaWin::GetSliderPos()
+sal_uInt16 ParaWin::GetSliderPos() const
 {
     return static_cast<sal_uInt16>(m_xSlider->vadjustment_get_value());
 }

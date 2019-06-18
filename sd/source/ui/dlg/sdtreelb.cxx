@@ -703,7 +703,7 @@ bool SdPageObjsTLB::IsEqualToDoc( const SdDrawDocument* pInDoc )
 /**
  * @return selected string
  */
-OUString SdPageObjsTLB::GetSelectedEntry()
+OUString SdPageObjsTLB::GetSelectedEntry() const
 {
     return GetEntryText( GetCurEntry() );
 }

@@ -83,17 +83,17 @@ public:
     /**
        Return start handle of the cell.
      */
-    const css::uno::Reference<css::text::XTextRange>& getStart() { return mStart; }
+    const css::uno::Reference<css::text::XTextRange>& getStart() const { return mStart; }
 
     /**
        Return end handle of the cell.
     */
-    const css::uno::Reference<css::text::XTextRange>& getEnd() { return mEnd; }
+    const css::uno::Reference<css::text::XTextRange>& getEnd() const { return mEnd; }
 
     /**
        Return properties of the cell.
      */
-    const TablePropertyMapPtr& getProperties() { return mpProps; }
+    const TablePropertyMapPtr& getProperties() const { return mpProps; }
 
     bool isOpen() const { return mbOpen; }
 };
@@ -177,7 +177,7 @@ public:
     /**
        Return number of cells in the row.
     */
-    unsigned int getCellCount()
+    unsigned int getCellCount() const
     {
         return mCells.size();
     }
@@ -215,7 +215,7 @@ public:
     /**
        Return properties of the row.
      */
-    const TablePropertyMapPtr& getProperties()
+    const TablePropertyMapPtr& getProperties() const
     {
         return mpProperties;
     }
@@ -312,7 +312,7 @@ public:
     /**
        Return number of rows in the table.
      */
-    unsigned int getRowCount()
+    unsigned int getRowCount() const
     {
         return mRows.size();
     }
@@ -320,7 +320,7 @@ public:
     /**
        Return depth of table in surrounding table hierarchy.
     */
-    unsigned int getDepth()
+    unsigned int getDepth() const
     {
         return mnDepth;
     }

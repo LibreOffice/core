@@ -398,7 +398,7 @@ public:
     void ProgressBarIncrement();
 
     void SetNewCondFormatData() { mbHasNewCondFormatData = true; }
-    bool HasNewCondFormatData() { return mbHasNewCondFormatData; }
+    bool HasNewCondFormatData() const { return mbHasNewCondFormatData; }
 
 private:
     void AddStyleRange(const css::table::CellRangeAddress& rCellRange);
@@ -437,7 +437,7 @@ public:
     void LockSolarMutex();
     void UnlockSolarMutex();
 
-    sal_Int32 GetByteOffset();
+    sal_Int32 GetByteOffset() const;
 
     void SetRangeOverflowType(ErrCode nType);
 

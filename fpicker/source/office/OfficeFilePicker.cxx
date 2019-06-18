@@ -224,7 +224,7 @@ void SvtFilePicker::DialogClosedHdl(sal_Int32 nResult)
 }
 
 // SvtFilePicker
-PickerFlags SvtFilePicker::getPickerFlags()
+PickerFlags SvtFilePicker::getPickerFlags() const
 {
     // set the winbits for creating the filedialog
     PickerFlags nBits = PickerFlags::NONE;

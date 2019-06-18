@@ -1488,7 +1488,7 @@ DrawViewWrapper* ChartController::GetDrawViewWrapper()
 }
 
 
-VclPtr<ChartWindow> ChartController::GetChartWindow()
+VclPtr<ChartWindow> ChartController::GetChartWindow() const
 {
     // clients getting the naked VCL Window from UNO should always have the
     // solar mutex (and keep it over the lifetime of this ptr), as VCL might
@@ -1508,7 +1508,7 @@ weld::Window* ChartController::GetChartFrame()
     return Application::GetFrameWeld(m_xViewWindow);
 }
 
-bool ChartController::isAdditionalShapeSelected()
+bool ChartController::isAdditionalShapeSelected() const
 {
     return m_aSelection.isAdditionalShapeSelected();
 }

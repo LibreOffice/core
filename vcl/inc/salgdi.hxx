@@ -681,7 +681,7 @@ protected:
     // native controls
     bool initWidgetDrawBackends(bool bForce = false);
 
-    bool hasWidgetDraw()
+    bool hasWidgetDraw() const
     {
         return bool(m_pWidgetDraw);
     }

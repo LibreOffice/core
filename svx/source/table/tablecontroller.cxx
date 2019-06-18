@@ -1359,7 +1359,7 @@ void SvxTableController::DistributeRows(const bool bOptimize, const bool bMinimi
         rModel.EndUndo();
 }
 
-bool SvxTableController::HasMarked()
+bool SvxTableController::HasMarked() const
 {
     return mbCellSelectionMode && mxTable.is();
 }

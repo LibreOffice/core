@@ -49,7 +49,7 @@ private:
     const FormulaToken* GetFunctionEntry(weld::TreeIter* pEntry);
 
     void            SetActiveFlag(bool bFlag);
-    bool            GetActiveFlag() { return bActiveFlag;}
+    bool            GetActiveFlag() const { return bActiveFlag;}
 
 public:
 
@@ -68,7 +68,7 @@ public:
 
     weld::TreeView&  GetTlbStruct() const { return *m_xTlbStruct; }
 
-    bool            IsVisible() { return m_xContainer->get_visible(); }
+    bool            IsVisible() const { return m_xContainer->get_visible(); }
 };
 
 } // formula

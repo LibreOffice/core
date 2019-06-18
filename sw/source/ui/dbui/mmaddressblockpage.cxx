@@ -622,7 +622,7 @@ IMPL_LINK(SwCustomizeAddressBlockDialog, ImageButtonHdl_Impl, Button*, pButton, 
     UpdateImageButtons_Impl();
 }
 
-sal_Int32 SwCustomizeAddressBlockDialog::GetSelectedItem_Impl()
+sal_Int32 SwCustomizeAddressBlockDialog::GetSelectedItem_Impl() const
 {
     sal_Int32 nRet = USER_DATA_NONE;
     const OUString sSelected = m_pDragED->GetCurrentItem();
@@ -753,7 +753,7 @@ void SwCustomizeAddressBlockDialog::SetAddress(const OUString& rAddress)
     m_pDragED->Modify();
 }
 
-OUString SwCustomizeAddressBlockDialog::GetAddress()
+OUString SwCustomizeAddressBlockDialog::GetAddress() const
 {
     OUString sAddress(m_pDragED->GetAddress());
     //remove placeholders by the actual content
@@ -1350,7 +1350,7 @@ void AddressMultiLineEdit::MoveCurrentItem(MoveItemFlags nMove)
 
 }
 
-MoveItemFlags  AddressMultiLineEdit::IsCurrentItemMoveable()
+MoveItemFlags  AddressMultiLineEdit::IsCurrentItemMoveable() const
 {
     MoveItemFlags nRet = MoveItemFlags::NONE;
     ExtTextEngine* pTextEngine = GetTextEngine();
@@ -1371,7 +1371,7 @@ MoveItemFlags  AddressMultiLineEdit::IsCurrentItemMoveable()
     return nRet;
 }
 
-bool AddressMultiLineEdit::HasCurrentItem()
+bool AddressMultiLineEdit::HasCurrentItem() const
 {
     ExtTextEngine* pTextEngine = GetTextEngine();
     TextView* pTextView = GetTextView();
@@ -1382,7 +1382,7 @@ bool AddressMultiLineEdit::HasCurrentItem()
                             && pBeginAttrib->GetEnd() >= rSelection.GetEnd().GetIndex()));
 }
 
-OUString AddressMultiLineEdit::GetCurrentItem()
+OUString AddressMultiLineEdit::GetCurrentItem() const
 {
     ExtTextEngine* pTextEngine = GetTextEngine();
     TextView* pTextView = GetTextView();
@@ -1416,7 +1416,7 @@ void AddressMultiLineEdit::SelectCurrentItem()
     }
 }
 
-OUString AddressMultiLineEdit::GetAddress()
+OUString AddressMultiLineEdit::GetAddress() const
 {
     OUString sRet;
     ExtTextEngine* pTextEngine = GetTextEngine();

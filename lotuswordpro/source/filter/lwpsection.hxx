@@ -92,7 +92,7 @@ public:
     virtual ~LwpSection() override;
     inline LwpPageLayout* GetPageLayout();
     void Parse(IXFStream* pOutputStream) override;
-    OUString const & GetSectionName(){return m_AtomHolder.str();}
+    OUString const & GetSectionName() const {return m_AtomHolder.str();}
 
 protected:
     void Read() override;
@@ -118,8 +118,8 @@ class LwpIndexSection : public LwpSection
 public:
     LwpIndexSection(LwpObjectHeader const &objHdr, LwpSvStream* pStrm);
     virtual ~LwpIndexSection() override;
-    bool IsFormatRunin();
-    bool IsFormatSeparator();
+    bool IsFormatRunin() const;
+    bool IsFormatSeparator() const;
 protected:
     void Read() override;
 private:

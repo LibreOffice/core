@@ -31,7 +31,7 @@ public:
     void visit(svgio::svgreader::SvgNode const& rNode) override;
     void goToChildren(svgio::svgreader::SvgNode const& rNode);
 
-    std::shared_ptr<gfx::DrawRoot> const& getDrawRoot() { return mpDrawRoot; }
+    std::shared_ptr<gfx::DrawRoot> const& getDrawRoot() const { return mpDrawRoot; }
 };
 }
 }

@@ -54,7 +54,7 @@ VCLXAccessibleCheckBox::VCLXAccessibleCheckBox( VCLXWindow* pVCLWindow )
 }
 
 
-bool VCLXAccessibleCheckBox::IsChecked()
+bool VCLXAccessibleCheckBox::IsChecked() const
 {
     bool bChecked = false;
 
@@ -66,7 +66,7 @@ bool VCLXAccessibleCheckBox::IsChecked()
 }
 
 
-bool VCLXAccessibleCheckBox::IsIndeterminate()
+bool VCLXAccessibleCheckBox::IsIndeterminate() const
 {
     bool bIndeterminate = false;
 

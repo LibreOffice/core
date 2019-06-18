@@ -200,7 +200,7 @@ public:
     bool IsInEndAction() const { return mbInEndAction; }
 
     void SetEndActionByVirDev( bool b ) { mbEndActionByVirDev = b; }
-    bool IsEndActionByVirDev()          { return mbEndActionByVirDev; }
+    bool IsEndActionByVirDev() const    { return mbEndActionByVirDev; }
 
     // The ActionCount for all Shells is temporarily set to zero and then
     // restored at the RootFrame via UNO.
@@ -264,7 +264,7 @@ public:
 
     Point GetPagePos( sal_uInt16 nPageNum ) const;
 
-    sal_uInt16 GetNumPages();   // Ask count of current pages from layout.
+    sal_uInt16 GetNumPages() const;   // Ask count of current pages from layout.
     bool   IsDummyPage( sal_uInt16 nPageNum ) const;  // An empty page?
 
     // Invalidate first visible page for all Shells in ring.
@@ -565,7 +565,7 @@ public:
     bool IsHeaderFooterEdit() const { return mbHeaderFooterEdit; }
     bool IsShowHeaderFooterSeparator( FrameControlType eControl ) { return (eControl == Header)? mbShowHeaderSeparator: mbShowFooterSeparator; }
     virtual void SetShowHeaderFooterSeparator( FrameControlType eControl, bool bShow );
-    bool IsSelectAll() { return mbSelectAll; }
+    bool IsSelectAll() const { return mbSelectAll; }
 
     void setOutputToWindow(bool bOutputToWindow);
     bool isOutputToWindow() const;

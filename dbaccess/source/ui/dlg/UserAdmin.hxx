@@ -62,7 +62,7 @@ public:
 
     virtual ~OUserAdmin() override;
     virtual void dispose() override;
-    OUString GetUser();
+    OUString GetUser() const;
 
     // subclasses must override this, but it isn't pure virtual
     virtual void implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) override;

@@ -75,7 +75,7 @@ namespace dbaui
         void    showStatus( const OUString& _rStatus );
         void    hideStatus();
 
-        const css::uno::Reference< css::awt::XControlContainer >& getContainer() { return m_xMe; }
+        const css::uno::Reference< css::awt::XControlContainer >& getContainer() const { return m_xMe; }
 
     private:
         virtual bool PreNotify( NotifyEvent& rNEvt ) override;

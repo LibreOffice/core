@@ -101,7 +101,7 @@ public:
     void CopyPositionInto(SwPosition& rPos, SwDoc & rDoc);
     SwDoc* GetDoc();
 
-    bool IsValid();
+    bool IsValid() const;
 };
 
 XTextRangeOrNodeIndexPosition::XTextRangeOrNodeIndexPosition()
@@ -171,7 +171,7 @@ SwDoc* XTextRangeOrNodeIndexPosition::GetDoc()
     return (nullptr != pIndex) ? pIndex->GetNodes().GetDoc() : lcl_GetDocViaTunnel(xRange);
 }
 
-bool XTextRangeOrNodeIndexPosition::IsValid()
+bool XTextRangeOrNodeIndexPosition::IsValid() const
 {
     return ( xRange.is() || (pIndex != nullptr) );
 }

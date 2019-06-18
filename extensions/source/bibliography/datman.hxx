@@ -124,23 +124,23 @@ public:
 
         css::uno::Reference< css::awt::XControlModel >            updateGridModel();
 
-        css::uno::Sequence< OUString>           getDataSources();
+        css::uno::Sequence< OUString>           getDataSources() const;
 
-        const OUString&             getActiveDataSource() {return aDataSourceURL;}
+        const OUString&             getActiveDataSource() const {return aDataSourceURL;}
         void                        setActiveDataSource(const OUString& rURL);
 
-        const OUString&             getActiveDataTable() { return aActiveDataTable;}
+        const OUString&             getActiveDataTable() const { return aActiveDataTable;}
         void                        setActiveDataTable(const OUString& rTable);
 
         void                        setFilter(const OUString& rQuery);
-        OUString                    getFilter();
+        OUString                    getFilter() const;
 
-        css::uno::Sequence< OUString> getQueryFields();
-        OUString                    getQueryField();
+        css::uno::Sequence< OUString> getQueryFields() const;
+        OUString                    getQueryField() const;
         void                        startQueryWith(const OUString& rQuery);
 
-        const css::uno::Reference< css::sdb::XSingleSelectQueryComposer >&    getParser() { return m_xParser; }
-        const css::uno::Reference< css::form::XForm >&                        getForm()   { return m_xForm; }
+        const css::uno::Reference< css::sdb::XSingleSelectQueryComposer >&    getParser() const { return m_xParser; }
+        const css::uno::Reference< css::form::XForm >&                        getForm() const   { return m_xForm; }
 
 
         static OUString             getControlName(sal_Int32 nFormatKey );
@@ -163,7 +163,7 @@ public:
         css::uno::Reference< css::form::runtime::XFormController > const & GetFormController();
         void                        RegisterInterceptor( ::bib::BibBeamer* pBibBeamer);
 
-        bool                        HasActiveConnection();
+        bool                        HasActiveConnection() const;
 };
 
 

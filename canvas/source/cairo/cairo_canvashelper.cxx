@@ -1260,7 +1260,7 @@ namespace cairocanvas
     }
 
 
-    geometry::IntegerSize2D CanvasHelper::getSize()
+    geometry::IntegerSize2D CanvasHelper::getSize() const
     {
         if( !mpSurfaceProvider )
             return geometry::IntegerSize2D(1, 1); // we're disposed

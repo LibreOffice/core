@@ -90,7 +90,7 @@ void SwView::ExecDlgExt(SfxRequest const &rReq)
     }
 }
 
-bool SwView::isSignatureLineSelected()
+bool SwView::isSignatureLineSelected() const
 {
     SwWrtShell& rSh = GetWrtShell();
     SdrView* pSdrView = rSh.GetDrawView();
@@ -111,7 +111,7 @@ bool SwView::isSignatureLineSelected()
     return pGraphic->isSignatureLine();
 }
 
-bool SwView::isSignatureLineSigned()
+bool SwView::isSignatureLineSigned() const
 {
     SwWrtShell& rSh = GetWrtShell();
     SdrView* pSdrView = rSh.GetDrawView();

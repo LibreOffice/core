@@ -96,7 +96,7 @@ public:
     const VectorGraphicDataArray& getVectorGraphicDataArray() const { return maVectorGraphicDataArray; }
     sal_uInt32 getVectorGraphicDataArrayLength() const { return maVectorGraphicDataArray.getLength(); }
     enum class State { UNPARSED, PARSED };
-    std::pair<State, size_t> getSizeBytes();
+    std::pair<State, size_t> getSizeBytes() const;
     const OUString& getPath() const { return maPath; }
     const VectorGraphicDataType& getVectorGraphicDataType() const { return meVectorGraphicDataType; }
 

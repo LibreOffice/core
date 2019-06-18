@@ -147,8 +147,8 @@ public:
     virtual ~SvxBulletAndPositionDlg() override;
 
     SfxItemSet* GetOutputItemSet(SfxItemSet* rSet);
-    bool IsApplyToMaster();
-    bool IsSlideScope();
+    bool IsApplyToMaster() const;
+    bool IsSlideScope() const;
     void Reset(const SfxItemSet* rSet);
 
     void SetCharFmts(const OUString& rNumName, const OUString& rBulletName)

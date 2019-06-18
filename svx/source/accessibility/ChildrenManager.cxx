@@ -100,7 +100,7 @@ void ChildrenManager::UpdateSelection()
     mpImpl->UpdateSelection ();
 }
 
-bool ChildrenManager::HasFocus()
+bool ChildrenManager::HasFocus() const
 {
     return mpImpl->HasFocus ();
 }

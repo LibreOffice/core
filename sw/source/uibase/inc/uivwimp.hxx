@@ -125,7 +125,7 @@ public:
     SwXTextView*                    GetUNOObject_Impl();
     void                            Invalidate();
 
-    ShellMode                       GetShellMode() {return eShellMode;}
+    ShellMode                       GetShellMode() const {return eShellMode;}
 
     void                            ExecuteScan(SfxRequest& rReq);
     SwScannerEventListener&         GetScannerEventListener();
@@ -138,7 +138,7 @@ public:
     {
         xConfigItem = rItem;
     }
-    std::shared_ptr<SwMailMergeConfigItem> const & GetMailMergeConfigItem() {return xConfigItem;}
+    std::shared_ptr<SwMailMergeConfigItem> const & GetMailMergeConfigItem() const {return xConfigItem;}
 
     //#i33307# restore editing position
     void                    SetRestorePosition(const Point& rCursorPos, bool bSelectObj)

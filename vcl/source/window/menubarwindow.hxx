@@ -47,7 +47,7 @@ public:
     void    SetImages( long nMaxHeight, bool bForce = false );
 
     void    calcMinSize();
-    const Size& getMinSize() { return maMinSize;}
+    const Size& getMinSize() const { return maMinSize;}
 
     Image   maImage;
 };

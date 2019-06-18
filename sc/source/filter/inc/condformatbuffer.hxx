@@ -279,8 +279,8 @@ public:
                     std::vector<sal_Int32>* pPriorities = nullptr);
     ~ExtCfCondFormat();
 
-    const ScRangeList& getRange();
-    const std::vector< std::unique_ptr<ScFormatEntry> >& getEntries();
+    const ScRangeList& getRange() const;
+    const std::vector< std::unique_ptr<ScFormatEntry> >& getEntries() const;
     const std::vector<sal_Int32>& getPriorities() const { return maPriorities; }
 
 private:

@@ -159,7 +159,7 @@ void SfxStylesInfo_Impl::getLabel4Style(SfxStyleInfo_Impl& aStyle)
     }
 }
 
-std::vector< SfxStyleInfo_Impl > SfxStylesInfo_Impl::getStyleFamilies()
+std::vector< SfxStyleInfo_Impl > SfxStylesInfo_Impl::getStyleFamilies() const
 {
     // It's an optional interface!
     css::uno::Reference< css::style::XStyleFamiliesSupplier > xModel(m_xDoc, css::uno::UNO_QUERY);
@@ -265,7 +265,7 @@ OUString CuiConfigFunctionListBox::GetHelpText( bool bConsiderParent )
     return OUString();
 }
 
-OUString CuiConfigFunctionListBox::GetCurCommand()
+OUString CuiConfigFunctionListBox::GetCurCommand() const
 {
     SfxGroupInfo_Impl *pData = reinterpret_cast<SfxGroupInfo_Impl*>(get_selected_id().toInt64());
     if (!pData)
@@ -273,7 +273,7 @@ OUString CuiConfigFunctionListBox::GetCurCommand()
     return pData->sCommand;
 }
 
-OUString CuiConfigFunctionListBox::GetCurLabel()
+OUString CuiConfigFunctionListBox::GetCurLabel() const
 {
     SfxGroupInfo_Impl *pData = reinterpret_cast<SfxGroupInfo_Impl*>(get_selected_id().toInt64());
     if (!pData)
@@ -327,7 +327,7 @@ void CuiConfigFunctionListBox::ClearAll()
     m_xTreeView->clear();
 }
 
-OUString CuiConfigFunctionListBox::GetSelectedScriptURI()
+OUString CuiConfigFunctionListBox::GetSelectedScriptURI() const
 {
     SfxGroupInfo_Impl *pData = reinterpret_cast<SfxGroupInfo_Impl*>(get_selected_id().toInt64());
     if (pData && pData->nKind == SfxCfgKind::FUNCTION_SCRIPT)

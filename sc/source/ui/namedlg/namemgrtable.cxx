@@ -35,7 +35,7 @@ void ScRangeManagerTable::DeleteSelectedEntries()
         m_xTreeView->remove(*it);
 }
 
-bool ScRangeManagerTable::IsMultiSelection()
+bool ScRangeManagerTable::IsMultiSelection() const
 {
     return m_xTreeView->count_selected_rows() > 1;
 }

@@ -77,7 +77,7 @@ public:
 
     virtual void        Execute( OutputDevice* pOut );
 
-    oslInterlockedCount GetRefCount() { return m_nCount; }
+    oslInterlockedCount GetRefCount() const { return m_nCount; }
 
     virtual rtl::Reference<MetaAction> Clone();
 

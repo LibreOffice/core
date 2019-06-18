@@ -1328,7 +1328,7 @@ int TextObj::GetInstance() const
     return mpImplTextObj->mnInstance;
 }
 
-bool TextObj::HasExtendedBullets()
+bool TextObj::HasExtendedBullets() const
 {
     return mpImplTextObj->mbHasExtendedBullets;
 }

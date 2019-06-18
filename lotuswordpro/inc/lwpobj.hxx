@@ -133,7 +133,7 @@ public:
     LwpFoundry* GetFoundry(){return m_pFoundry;}
     void SetFoundry(LwpFoundry* pFoundry){m_pFoundry = pFoundry;}
     LwpObjectID& GetObjectID(){ return m_ObjHdr.GetID();}
-    sal_uInt32 GetTag() { return m_ObjHdr.GetTag();}
+    sal_uInt32 GetTag() const { return m_ObjHdr.GetTag();}
 };
 #endif
 

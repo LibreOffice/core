@@ -47,7 +47,7 @@ public:
     sal_Int32 doInflateSegment( css::uno::Sequence< sal_Int8 >& rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength );
     void end(  );
 
-    sal_Int32 getLastInflateError() { return nLastInflateError; }
+    sal_Int32 getLastInflateError() const { return nLastInflateError; }
 };
 
 }

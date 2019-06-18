@@ -167,13 +167,13 @@ public:
     void Abort();                               // with current error code
 
     void    Stop();
-    ErrCode const & GetErr()                { return nErr; }
-    const OUString& GetErrorMsg()           { return aErrorMsg; }
-    sal_Int32 GetErl()             { return nErl; }
+    ErrCode const & GetErr() const       { return nErr; }
+    const OUString& GetErrorMsg() const  { return aErrorMsg; }
+    sal_Int32 GetErl() const             { return nErl; }
     void    EnableReschedule( bool bEnable ) { bReschedule = bEnable; }
-    bool    IsReschedule() { return bReschedule; }
+    bool    IsReschedule() const { return bReschedule; }
     void    EnableCompatibility( bool bEnable ) { bCompatibility = bEnable; }
-    bool    IsCompatibility() { return bCompatibility; }
+    bool    IsCompatibility() const { return bCompatibility; }
 
     ComponentVector_t& getComponentVector()  { return ComponentVector; }
 
@@ -343,7 +343,7 @@ class SbiRuntime
 public:
     void          SetVBAEnabled( bool bEnabled );
     bool          IsImageFlag( SbiImageFlags n ) const;
-    sal_uInt16      GetBase();
+    sal_uInt16      GetBase() const;
     sal_Int32  nLine,nCol1,nCol2;
     SbiRuntime* pNext;               // Stack-Chain
 
@@ -359,7 +359,7 @@ public:
     void block()     { bBlocked = true; }
     void unblock()   { bBlocked = false; }
     SbModule* GetModule()  { return pMod;    }
-    BasicDebugFlags GetDebugFlags() { return nFlags;  }
+    BasicDebugFlags GetDebugFlags() const { return nFlags;  }
     void SetDebugFlags( BasicDebugFlags nFl ) { nFlags = nFl;  }
     SbMethod* GetCaller() { return pMeth;}
     SbxVariable* GetExternalCaller(){ return mpExtCaller; }

@@ -156,7 +156,7 @@ void VbaCommandBarHelper::ApplyTempChange( const OUString& sResourceUrl, const c
     }
 }
 
-uno::Reference< frame::XLayoutManager > VbaCommandBarHelper::getLayoutManager()
+uno::Reference< frame::XLayoutManager > VbaCommandBarHelper::getLayoutManager() const
 {
     uno::Reference< frame::XFrame > xFrame( getModel()->getCurrentController()->getFrame(), uno::UNO_SET_THROW );
     uno::Reference< beans::XPropertySet > xPropertySet( xFrame, uno::UNO_QUERY_THROW );

@@ -1126,7 +1126,7 @@ void SdrGrafObj::SetGrafAnimationAllowed(bool bNew)
     }
 }
 
-Reference< XInputStream > SdrGrafObj::getInputStream()
+Reference< XInputStream > SdrGrafObj::getInputStream() const
 {
     Reference< XInputStream > xStream;
 

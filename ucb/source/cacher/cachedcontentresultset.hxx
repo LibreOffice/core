@@ -87,10 +87,10 @@ class CachedContentResultSet
         hasCausedException( sal_Int32 nRow );
 
         sal_Int32
-        getMaxRow();
+        getMaxRow() const;
 
         bool
-        hasKnownLast();
+        hasKnownLast() const;
 
         /// @throws css::sdbc::SQLException
         /// @throws css::uno::RuntimeException

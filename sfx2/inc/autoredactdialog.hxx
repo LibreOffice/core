@@ -70,7 +70,7 @@ public:
     void InsertTarget(RedactionTarget* pTarget);
     void SelectByName(const OUString& sName);
     RedactionTarget* GetTargetByName(const OUString& sName);
-    OUString GetNameProposal();
+    OUString GetNameProposal() const;
 
     void unselect_all() { m_xControl->unselect_all(); }
     bool has_focus() const { return m_xControl->has_focus(); }

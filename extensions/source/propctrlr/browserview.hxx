@@ -55,7 +55,7 @@ namespace pcr
 
         void    setPageActivationHandler(const Link<LinkParamNone*,void>& _rHdl) { m_aPageActivationHandler = _rHdl; }
 
-        css::awt::Size getMinimumSize();
+        css::awt::Size getMinimumSize() const;
 
     private:
         DECL_LINK(OnPageActivation, LinkParamNone*, void);

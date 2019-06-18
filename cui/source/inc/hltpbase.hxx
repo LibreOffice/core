@@ -123,7 +123,7 @@ public:
     virtual DeactivateRC DeactivatePage( SfxItemSet* pSet ) override;
 
     bool IsMarkWndVisible() const { return static_cast<bool>(mxMarkWnd); }
-    Size GetSizeExtraWnd()       { return mxMarkWnd->getDialog()->get_size(); }
+    Size GetSizeExtraWnd() const  { return mxMarkWnd->getDialog()->get_size(); }
     void MoveToExtraWnd ( Point aNewPos );
 
     using TabPage::ActivatePage;
@@ -139,7 +139,7 @@ protected:
 
     SfxDispatcher* GetDispatcher() const;
 
-    HyperDialogEvent   GetMacroEvents();
+    HyperDialogEvent   GetMacroEvents() const;
     SvxMacroTableDtor* GetMacroTable();
 };
 

@@ -101,21 +101,21 @@ void OQueryViewSwitch::copy()
         m_pDesignView->copy();
 }
 
-bool OQueryViewSwitch::isCutAllowed()
+bool OQueryViewSwitch::isCutAllowed() const
 {
     if(m_pTextView->IsVisible())
         return m_pTextView->isCutAllowed();
     return m_pDesignView->isCutAllowed();
 }
 
-bool OQueryViewSwitch::isCopyAllowed()
+bool OQueryViewSwitch::isCopyAllowed() const
 {
     if(m_pTextView->IsVisible())
         return true;
     return m_pDesignView->isCopyAllowed();
 }
 
-bool OQueryViewSwitch::isPasteAllowed()
+bool OQueryViewSwitch::isPasteAllowed() const
 {
     if(m_pTextView->IsVisible())
         return true;

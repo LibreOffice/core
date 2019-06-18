@@ -122,7 +122,7 @@ public:
     OUString GetSelectedString( OUString const & token );
     css::uno::Reference< css::frame::XDispatch >& GetStatusDispatcher() { return mxStatusDispatcher; };
     css::uno::Reference< css::frame::XFrame>& GetFrame() { return mxFrame; };
-    const css::uno::Reference< css::uno::XComponentContext >& GetComponentContext() { return UnoDialog::mxContext; };
+    const css::uno::Reference< css::uno::XComponentContext >& GetComponentContext() const { return UnoDialog::mxContext; };
 };
 
 

@@ -221,7 +221,7 @@ bool SwGlossaryHdl::DelGroup(const OUString &rGrpName)
 }
 
 // ask for number of autotexts
-sal_uInt16 SwGlossaryHdl::GetGlossaryCnt()
+sal_uInt16 SwGlossaryHdl::GetGlossaryCnt() const
 {
     return pCurGrp ? pCurGrp->GetCount() : 0;
 }

@@ -87,7 +87,7 @@ namespace pcr
         sal_uInt16                  AppendPage( const OUString& r, const OString& _rHelpId );
         void                        SetPage( sal_uInt16 );
         void                        RemovePage(sal_uInt16 nID);
-        sal_uInt16                  GetCurPage();
+        sal_uInt16                  GetCurPage() const;
         void                        ClearAll();
 
         void                        SetPropertyValue(const OUString& _rEntryName, const css::uno::Any& _rValue, bool _bUnknownValue );
@@ -105,8 +105,8 @@ namespace pcr
 
         void                        setPageActivationHandler(const Link<LinkParamNone*,void>& _rHdl) { m_aPageActivationHandler = _rHdl; }
 
-        sal_Int32                   getMinimumWidth();
-        sal_Int32                   getMinimumHeight();
+        sal_Int32                   getMinimumWidth() const;
+        sal_Int32                   getMinimumHeight() const;
 
         void                        CommitModified();
 

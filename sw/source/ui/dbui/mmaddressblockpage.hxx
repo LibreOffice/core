@@ -164,16 +164,16 @@ public:
     void            SetSelectionChangedHdl( const Link<AddressMultiLineEdit&,void>& rLink ) {m_aSelectionLink = rLink;}
 
     void            SetText( const OUString& rStr ) override;
-    OUString        GetAddress();
+    OUString        GetAddress() const;
 
     void            InsertNewEntry( const OUString& rStr );
     void            InsertNewEntryAtPosition( const OUString& rStr, sal_uLong nPara, sal_uInt16 nIndex );
     void            RemoveCurrentEntry();
 
     void            MoveCurrentItem(MoveItemFlags nMove);
-    MoveItemFlags   IsCurrentItemMoveable();
-    bool            HasCurrentItem();
-    OUString        GetCurrentItem();
+    MoveItemFlags   IsCurrentItemMoveable() const;
+    bool            HasCurrentItem() const;
+    OUString        GetCurrentItem() const;
     void            SelectCurrentItem();
 };
 
@@ -230,7 +230,7 @@ private:
     DECL_LINK(FieldChangeComboBoxHdl_Impl, ComboBox&, void);
 
     bool            HasItem_Impl(sal_Int32 nUserData);
-    sal_Int32       GetSelectedItem_Impl();
+    sal_Int32       GetSelectedItem_Impl() const;
     void            UpdateImageButtons_Impl();
 
 public:
@@ -239,7 +239,7 @@ public:
     virtual void dispose() override;
 
     void            SetAddress(const OUString& rAddress);
-    OUString GetAddress();
+    OUString GetAddress() const;
 };
 
 class SwAssignFieldsControl;

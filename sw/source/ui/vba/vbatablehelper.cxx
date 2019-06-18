@@ -114,7 +114,7 @@ OUString SwVbaTableHelper::getColumnStr( sal_Int32 nCol )
     return sRet;
 }
 
-sal_Int32 SwVbaTableHelper::getTableWidth( )
+sal_Int32 SwVbaTableHelper::getTableWidth( ) const
 {
     sal_Int32 nWidth = 0;
     bool isWidthRelatvie = false;

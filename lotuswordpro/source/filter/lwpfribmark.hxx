@@ -87,8 +87,8 @@ class LwpFribBookMark : public LwpFrib
 public:
     explicit LwpFribBookMark( LwpPara* pPara );
     void Read(LwpObjectStream* pObjStrm, sal_uInt16 len) override;
-    const LwpObjectID& GetMarkerID(){return m_objMarker;}
-    sal_uInt8 GetType(){return m_nType;}
+    const LwpObjectID& GetMarkerID() const {return m_objMarker;}
+    sal_uInt8 GetType() const {return m_nType;}
     enum{MARKER_START=1,MARKER_END,MARKER_NONE};
     void XFConvert(XFContentContainer* pXFPara);
     void RegisterStyle(LwpFoundry* pFoundry) override;
@@ -105,7 +105,7 @@ public:
     explicit LwpFribField( LwpPara* pPara );
     void Read(LwpObjectStream* pObjStrm, sal_uInt16 len) override;
     LwpFieldMark* GetMarker();
-    sal_uInt8 GetType(){return m_nType;}
+    sal_uInt8 GetType() const {return m_nType;}
     enum{MARKER_START=1,MARKER_END,MARKER_NONE};
     void XFConvert(XFContentContainer* pXFPara);
     void RegisterStyle(LwpFoundry* pFoundry) override;

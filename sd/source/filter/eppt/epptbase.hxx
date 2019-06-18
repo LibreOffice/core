@@ -395,7 +395,7 @@ public:
     sal_uInt32 GetMasterIndex( PageType ePageType );
     void SetCurrentStyleSheet( sal_uInt32 nPageNum );
 
-    bool GetPresObj() { return mbPresObj; }
+    bool GetPresObj() const { return mbPresObj; }
 
     static PHLayout const & GetLayout( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet );
     static PHLayout const & GetLayout( sal_Int32 nOffset );

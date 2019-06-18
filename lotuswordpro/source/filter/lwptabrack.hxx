@@ -95,10 +95,10 @@ public:
     };
 public:
     void    Read(LwpObjectStream *pStrm);
-    inline sal_uInt32 GetPosition();
-    inline TabType GetTabType();
-    inline LeaderType GetLeaderType();
-    inline sal_uInt16 GetAlignChar();
+    inline sal_uInt32 GetPosition() const;
+    inline TabType GetTabType() const;
+    inline LeaderType GetLeaderType() const;
+    inline sal_uInt16 GetAlignChar() const;
 
 private:
     sal_uInt32      m_nX;
@@ -108,22 +108,22 @@ private:
     sal_uInt16      m_nAlignChar;       //be careful
 };
 
-inline sal_uInt32 LwpTab::GetPosition()
+inline sal_uInt32 LwpTab::GetPosition() const
 {
     return m_nX;
 }
 
-inline LwpTab::TabType LwpTab::GetTabType()
+inline LwpTab::TabType LwpTab::GetTabType() const
 {
     return static_cast<LwpTab::TabType>(m_nType);
 }
 
-inline LwpTab::LeaderType LwpTab::GetLeaderType()
+inline LwpTab::LeaderType LwpTab::GetLeaderType() const
 {
     return static_cast<LwpTab::LeaderType>(m_nLeader);
 }
 
-inline sal_uInt16 LwpTab::GetAlignChar()
+inline sal_uInt16 LwpTab::GetAlignChar() const
 {
     return m_nAlignChar;
 }

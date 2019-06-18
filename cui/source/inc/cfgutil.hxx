@@ -69,7 +69,7 @@ public:
         static bool parseStyleCommand(SfxStyleInfo_Impl& aStyle);
         void getLabel4Style(SfxStyleInfo_Impl& aStyle);
 
-        std::vector< SfxStyleInfo_Impl > getStyleFamilies();
+        std::vector< SfxStyleInfo_Impl > getStyleFamilies() const;
         std::vector< SfxStyleInfo_Impl > getStyles(const OUString& sFamily);
 
         static OUString generateCommand(const OUString& sFamily, const OUString& sStyle);
@@ -172,10 +172,10 @@ public:
     ~CuiConfigFunctionListBox();
 
     void          ClearAll();
-    OUString      GetSelectedScriptURI();
+    OUString      GetSelectedScriptURI() const;
     OUString      GetHelpText( bool bConsiderParent = true );
-    OUString      GetCurCommand();
-    OUString      GetCurLabel();
+    OUString      GetCurCommand() const;
+    OUString      GetCurLabel() const;
 };
 
 struct SvxConfigGroupBoxResource_Impl;

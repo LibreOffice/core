@@ -1445,7 +1445,7 @@ void SdOutliner::EnterEditMode (bool bGrabFocus)
     mbFoundObject = true;
 }
 
-ESelection SdOutliner::GetSearchStartPosition()
+ESelection SdOutliner::GetSearchStartPosition() const
 {
     ESelection aPosition;
     if (mbDirectionIsForward)
@@ -1691,7 +1691,7 @@ bool SdOutliner::ConvertNextDocument()
     return !mbEndOfSearch;
 }
 
-VclPtr<vcl::Window> SdOutliner::GetMessageBoxParent()
+VclPtr<vcl::Window> SdOutliner::GetMessageBoxParent() const
 {
     // We assume that the parent of the given message box is NULL, i.e. it is
     // modal with respect to the top application window. However, this

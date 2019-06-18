@@ -533,7 +533,7 @@ void DlgEdFunc::checkMovementAllowed(const MouseEvent& rMEvt)
         m_pParent->getSectionWindow()->getViewsWindow()->EndAction();
 }
 
-bool DlgEdFunc::isOnlyCustomShapeMarked()
+bool DlgEdFunc::isOnlyCustomShapeMarked() const
 {
     bool bReturn = true;
     const SdrMarkList& rMarkList = m_rView.GetMarkedObjectList();

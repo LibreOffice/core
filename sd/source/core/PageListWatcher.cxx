@@ -161,7 +161,7 @@ sal_uInt32 ImpPageListWatcher::GetSdPageCount(PageKind ePgKind)
     return nRetval;
 }
 
-sal_uInt32 ImpPageListWatcher::GetVisibleSdPageCount()
+sal_uInt32 ImpPageListWatcher::GetVisibleSdPageCount() const
 {
     sal_uInt32 nVisiblePageCount = 0;
 

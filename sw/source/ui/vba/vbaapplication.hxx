@@ -58,7 +58,7 @@ public:
     void RemoveSink( sal_uInt32 nNumber );
 
     SwVbaWindow* getActiveSwVbaWindow();
-    css::uno::Reference< css::uno::XComponentContext > const & getContext();
+    css::uno::Reference< css::uno::XComponentContext > const & getContext() const;
 
     // XApplication
     virtual OUString SAL_CALL getName() override;

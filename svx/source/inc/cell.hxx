@@ -61,8 +61,8 @@ public:
     SVX_DLLPRIVATE void dispose();
 
     // SdrTextShape proxy
-    bool IsActiveCell();
-    bool IsTextEditActive();
+    bool IsActiveCell() const;
+    bool IsTextEditActive() const;
     SVX_DLLPRIVATE bool hasText() const;
 
     SVX_DLLPRIVATE void cloneFrom( const CellRef& rCell );
@@ -81,7 +81,7 @@ public:
     void SetMergedItem(const SfxPoolItem& rItem);
 
     SVX_DLLPRIVATE sal_Int32 calcPreferredWidth( const Size aSize );
-    SVX_DLLPRIVATE sal_Int32 getMinimumWidth();
+    SVX_DLLPRIVATE sal_Int32 getMinimumWidth() const;
     SVX_DLLPRIVATE sal_Int32 getMinimumHeight();
 
     SVX_DLLPRIVATE long GetTextLeftDistance() const;

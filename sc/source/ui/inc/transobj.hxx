@@ -91,7 +91,7 @@ public:
     bool                GetUseInApi() const     { return m_bUseInApi; }
     ScDocShell*         GetSourceDocShell();
     ScDocument*         GetSourceDocument();
-    ScMarkData          GetSourceMarkData();
+    ScMarkData          GetSourceMarkData() const;
 
     void                SetDrawPersist( const SfxObjectShellRef& rRef );
     void                SetDragHandlePos( SCCOL nX, SCROW nY );

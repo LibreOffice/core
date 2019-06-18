@@ -95,7 +95,7 @@ public:
     ~ClassificationControl() override;
     void dispose() override;
     void Resize() override;
-    const VclPtr<ListBox>& getCategory()
+    const VclPtr<ListBox>& getCategory() const
     {
         return m_pCategory;
     }

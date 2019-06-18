@@ -299,8 +299,8 @@ public:
     bool            Merge( const SwMergeDescriptor& rMergeDesc );
     void            MergeCancel();
 
-    bool     IsMergeOk()     { return MergeStatus::Ok     == m_aMergeStatus; };
-    bool     IsMergeError()  { return MergeStatus::Error  <= m_aMergeStatus; };
+    bool     IsMergeOk() const     { return MergeStatus::Ok     == m_aMergeStatus; };
+    bool     IsMergeError() const  { return MergeStatus::Error  <= m_aMergeStatus; };
 
     static std::shared_ptr<SwMailMergeConfigItem> PerformMailMerge(SwView const * pView);
 

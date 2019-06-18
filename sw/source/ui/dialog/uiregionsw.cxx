@@ -179,7 +179,7 @@ public:
     void                SetFilter(OUString const& rFilter);
     void                SetSubRegion(OUString const& rSubRegion);
 
-    bool                IsContent() { return m_bContent; }
+    bool                IsContent() const { return m_bContent; }
     void                SetContent(bool const bValue) { m_bContent = bValue; }
 
     void                SetSelected() { m_bSelected = true; }

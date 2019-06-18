@@ -100,7 +100,7 @@ namespace accessibility
         virtual ~AccessibleTextHelper_Impl() override;
 
         // XAccessibleContext child handling methods
-        sal_Int32 getAccessibleChildCount();
+        sal_Int32 getAccessibleChildCount() const;
         uno::Reference< XAccessible > getAccessibleChild( sal_Int32 i );
 
         // XAccessibleEventBroadcaster child related methods
@@ -997,18 +997,18 @@ namespace accessibility
             @return number of changed paragraphs, -1 for
             "every paragraph changed"
         */
-        sal_Int32 GetNumberOfParasChanged() { return mnParasChanged; }
+        sal_Int32 GetNumberOfParasChanged() const { return mnParasChanged; }
         /** Query index of last added/removed paragraph
 
             @return index of lastly added paragraphs, -1 for none
             added so far.
         */
-        sal_Int32 GetParaIndex() { return mnParaIndex; }
+        sal_Int32 GetParaIndex() const { return mnParaIndex; }
         /** Query hint id of last interesting event
 
             @return hint id of last interesting event (REMOVED/INSERTED).
         */
-        SfxHintId GetHintId() { return mnHintId; }
+        SfxHintId GetHintId() const { return mnHintId; }
 
     private:
         /** number of paragraphs changed during queue processing. -1 for
@@ -1429,7 +1429,7 @@ namespace accessibility
     }
 
     // XAccessibleContext
-    sal_Int32 AccessibleTextHelper_Impl::getAccessibleChildCount()
+    sal_Int32 AccessibleTextHelper_Impl::getAccessibleChildCount() const
     {
         return mnLastVisibleChild - mnFirstVisibleChild + 1;
     }
@@ -1696,7 +1696,7 @@ namespace accessibility
     }
 
     // XAccessibleContext
-    sal_Int32 AccessibleTextHelper::GetChildCount()
+    sal_Int32 AccessibleTextHelper::GetChildCount() const
     {
         SolarMutexGuard aGuard;
 

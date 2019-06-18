@@ -82,10 +82,10 @@ private:
 
     void Compress(SvStream& aStream);
 
-    double GetViewWidthInch();
-    double GetViewHeightInch();
+    double GetViewWidthInch() const;
+    double GetViewHeightInch() const;
 
-    BmpScaleFlag GetSelectedInterpolationType();
+    BmpScaleFlag GetSelectedInterpolationType() const;
 
 public:
     CompressGraphicsDialog( weld::Window* pParent, SdrGrafObj* pGraphicObj, SfxBindings& rBindings );
@@ -95,7 +95,7 @@ public:
     SdrGrafObj* GetCompressedSdrGrafObj();
     Graphic GetCompressedGraphic();
 
-    tools::Rectangle GetScaledCropRectangle();
+    tools::Rectangle GetScaledCropRectangle() const;
 };
 
 #endif

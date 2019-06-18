@@ -49,7 +49,7 @@ public:
     void connect_changed(const Link<weld::ComboBox&, void>& rLink) { m_xWidget->connect_changed(rLink); }
 
     void          Reload(SwInsertNumTypes nTypeFlags);
-    SvxNumType    GetSelectedNumberingType();
+    SvxNumType    GetSelectedNumberingType() const;
     bool          SelectNumberingType(SvxNumType nType);
     void          SetNoSelection() { m_xWidget->set_active(-1); }
     void          set_sensitive(bool bEnable) { m_xWidget->set_sensitive(bEnable); }

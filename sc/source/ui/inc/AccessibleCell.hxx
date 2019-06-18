@@ -145,7 +145,7 @@ private:
         const css::uno::Reference<css::accessibility::XAccessibleStateSet>& rxParentStates);
     virtual bool IsEditable(
         const css::uno::Reference<css::accessibility::XAccessibleStateSet>& rxParentStates) override;
-    bool IsOpaque();
+    bool IsOpaque() const;
     bool IsSelected();
 
     static ScDocument* GetDocument(ScTabViewShell* mpViewShell);
@@ -161,7 +161,7 @@ private:
         const sal_uInt16 aRelationType,
         ::utl::AccessibleRelationSetHelper* pRelationSet);
     bool IsFormulaMode();
-    bool IsDropdown();
+    bool IsDropdown() const;
 };
 
 #endif

@@ -110,12 +110,12 @@ void EditEngine::EnableUndo( bool bEnable )
     pImpEditEngine->EnableUndo( bEnable );
 }
 
-bool EditEngine::IsUndoEnabled()
+bool EditEngine::IsUndoEnabled() const
 {
     return pImpEditEngine->IsUndoEnabled();
 }
 
-bool EditEngine::IsInUndo()
+bool EditEngine::IsInUndo() const
 {
     return pImpEditEngine->IsInUndo();
 }
@@ -169,7 +169,7 @@ void EditEngine::SetRefMapMode( const MapMode& rMapMode )
     pImpEditEngine->SetRefMapMode( rMapMode );
 }
 
-MapMode const & EditEngine::GetRefMapMode()
+MapMode const & EditEngine::GetRefMapMode() const
 {
     return pImpEditEngine->GetRefMapMode();
 }

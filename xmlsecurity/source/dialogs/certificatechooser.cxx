@@ -269,7 +269,7 @@ uno::Sequence<uno::Reference< css::security::XCertificate > > CertificateChooser
     return comphelper::containerToSequence(aRet);
 }
 
-uno::Reference<xml::crypto::XXMLSecurityContext> CertificateChooser::GetSelectedSecurityContext()
+uno::Reference<xml::crypto::XXMLSecurityContext> CertificateChooser::GetSelectedSecurityContext() const
 {
     int nSel = m_xCertLB->get_selected_index();
     if (nSel == -1)
@@ -280,7 +280,7 @@ uno::Reference<xml::crypto::XXMLSecurityContext> CertificateChooser::GetSelected
     return xCert;
 }
 
-OUString CertificateChooser::GetDescription()
+OUString CertificateChooser::GetDescription() const
 {
     return m_xDescriptionED->get_text();
 }

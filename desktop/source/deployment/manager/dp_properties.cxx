@@ -122,7 +122,7 @@ void ExtensionProperties::write()
     contentProps.writeStream( xData, true /* replace existing */ );
 }
 
-bool ExtensionProperties::isSuppressedLicense()
+bool ExtensionProperties::isSuppressedLicense() const
 {
     bool ret = false;
     if (m_prop_suppress_license)
@@ -133,7 +133,7 @@ bool ExtensionProperties::isSuppressedLicense()
     return ret;
 }
 
-bool ExtensionProperties::isExtensionUpdate()
+bool ExtensionProperties::isExtensionUpdate() const
 {
     bool ret = false;
     if (m_prop_extension_update)

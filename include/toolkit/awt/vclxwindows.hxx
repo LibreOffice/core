@@ -608,7 +608,7 @@ public:
     /// @throws css::uno::RuntimeException
     void setMinimum( sal_Int32 n );
     /// @throws css::uno::RuntimeException
-    sal_Int32 getMinimum(  );
+    sal_Int32 getMinimum(  ) const;
 
     // css::awt::VclWindowPeer
     void SAL_CALL setProperty( const OUString& PropertyName, const css::uno::Any& Value ) override;
@@ -889,7 +889,7 @@ public:
     void            SetFormatter( FormatterBase* pFormatter ) { mpFormatter = pFormatter; }
 
     void            setStrictFormat( bool bStrict );
-    bool        isStrictFormat();
+    bool            isStrictFormat() const;
 
     // css::awt::VclWindowPeer
     void SAL_CALL setProperty( const OUString& PropertyName, const css::uno::Any& Value ) override;

@@ -873,7 +873,7 @@ ErrCode GraphicFilter::ImplSetError( ErrCode nError, const SvStream* pStm )
     return nError;
 }
 
-sal_uInt16 GraphicFilter::GetImportFormatCount()
+sal_uInt16 GraphicFilter::GetImportFormatCount() const
 {
     return pConfig->GetImportFormatCount();
 }
@@ -920,7 +920,7 @@ OUString GraphicFilter::GetImportWildcard( sal_uInt16 nFormat, sal_Int32 nEntry 
     return pConfig->GetImportWildcard( nFormat, nEntry );
 }
 
-sal_uInt16 GraphicFilter::GetExportFormatCount()
+sal_uInt16 GraphicFilter::GetExportFormatCount() const
 {
     return pConfig->GetExportFormatCount();
 }

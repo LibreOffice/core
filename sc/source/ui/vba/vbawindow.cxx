@@ -221,19 +221,19 @@ ScVbaWindow::init()
 }
 
 uno::Reference< beans::XPropertySet >
-ScVbaWindow::getControllerProps()
+ScVbaWindow::getControllerProps() const
 {
     return uno::Reference< beans::XPropertySet >( getController(), uno::UNO_QUERY_THROW );
 }
 
 uno::Reference< beans::XPropertySet >
-ScVbaWindow::getFrameProps()
+ScVbaWindow::getFrameProps() const
 {
     return uno::Reference< beans::XPropertySet >( getController()->getFrame(), uno::UNO_QUERY_THROW );
 }
 
 uno::Reference< awt::XDevice >
-ScVbaWindow::getDevice()
+ScVbaWindow::getDevice() const
 {
     return uno::Reference< awt::XDevice >( getWindow(), uno::UNO_QUERY_THROW );
 }

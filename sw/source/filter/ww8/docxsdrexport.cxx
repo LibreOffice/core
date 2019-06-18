@@ -197,7 +197,7 @@ public:
         m_pSerializer = pSerializer;
     }
 
-    const sax_fastparser::FSHelperPtr& getSerializer() { return m_pSerializer; }
+    const sax_fastparser::FSHelperPtr& getSerializer() const { return m_pSerializer; }
 
     void setFlyFrameSize(const Size* pFlyFrameSize) { m_pFlyFrameSize = pFlyFrameSize; }
 
@@ -236,11 +236,11 @@ public:
 
     void setFrameBtLr(bool bFrameBtLr) { m_bFrameBtLr = bFrameBtLr; }
 
-    bool getFrameBtLr() { return m_bFrameBtLr; }
+    bool getFrameBtLr() const { return m_bFrameBtLr; }
 
     void setDrawingOpen(bool bDrawingOpen) { m_bDrawingOpen = bDrawingOpen; }
 
-    bool getDrawingOpen() { return m_bDrawingOpen; }
+    bool getDrawingOpen() const { return m_bDrawingOpen; }
 
     void setParagraphSdtOpen(bool bParagraphSdtOpen) { m_bParagraphSdtOpen = bParagraphSdtOpen; }
 
@@ -313,11 +313,11 @@ void DocxSdrExport::setSerializer(const sax_fastparser::FSHelperPtr& pSerializer
     m_pImpl->setSerializer(pSerializer);
 }
 
-const Size* DocxSdrExport::getFlyFrameSize() { return m_pImpl->getFlyFrameSize(); }
+const Size* DocxSdrExport::getFlyFrameSize() const { return m_pImpl->getFlyFrameSize(); }
 
-bool DocxSdrExport::getTextFrameSyntax() { return m_pImpl->getTextFrameSyntax(); }
+bool DocxSdrExport::getTextFrameSyntax() const { return m_pImpl->getTextFrameSyntax(); }
 
-bool DocxSdrExport::getDMLTextFrameSyntax() { return m_pImpl->getDMLTextFrameSyntax(); }
+bool DocxSdrExport::getDMLTextFrameSyntax() const { return m_pImpl->getDMLTextFrameSyntax(); }
 
 rtl::Reference<sax_fastparser::FastAttributeList>& DocxSdrExport::getFlyAttrList()
 {
@@ -331,18 +331,18 @@ rtl::Reference<sax_fastparser::FastAttributeList>& DocxSdrExport::getTextboxAttr
 
 OStringBuffer& DocxSdrExport::getTextFrameStyle() { return m_pImpl->getTextFrameStyle(); }
 
-bool DocxSdrExport::getFrameBtLr() { return m_pImpl->getFrameBtLr(); }
+bool DocxSdrExport::getFrameBtLr() const { return m_pImpl->getFrameBtLr(); }
 
-bool DocxSdrExport::IsDrawingOpen() { return m_pImpl->getDrawingOpen(); }
+bool DocxSdrExport::IsDrawingOpen() const { return m_pImpl->getDrawingOpen(); }
 
 void DocxSdrExport::setParagraphSdtOpen(bool bParagraphSdtOpen)
 {
     m_pImpl->setParagraphSdtOpen(bParagraphSdtOpen);
 }
 
-bool DocxSdrExport::IsDMLAndVMLDrawingOpen() { return m_pImpl->getDMLAndVMLDrawingOpen(); }
+bool DocxSdrExport::IsDMLAndVMLDrawingOpen() const { return m_pImpl->getDMLAndVMLDrawingOpen(); }
 
-bool DocxSdrExport::IsParagraphHasDrawing() { return m_pImpl->getParagraphHasDrawing(); }
+bool DocxSdrExport::IsParagraphHasDrawing() const { return m_pImpl->getParagraphHasDrawing(); }
 
 void DocxSdrExport::setParagraphHasDrawing(bool bParagraphHasDrawing)
 {

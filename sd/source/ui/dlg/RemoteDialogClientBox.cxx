@@ -167,7 +167,7 @@ void ClientBox::CalcActiveHeight()
     return ::tools::Rectangle( aPos, aSize );
 }
 
-long ClientBox::GetActiveEntryIndex()
+long ClientBox::GetActiveEntryIndex() const
 {
     if ( m_bHasActive )
         return m_nActive;
@@ -519,7 +519,7 @@ long ClientBox::PointToPos( const Point& rPos )
     return nPos;
 }
 
-OUString ClientBox::getPin()
+OUString ClientBox::getPin() const
 {
     return OUString::number( m_aPinBox->GetValue() );
 }

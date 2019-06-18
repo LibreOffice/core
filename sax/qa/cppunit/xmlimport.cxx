@@ -86,7 +86,7 @@ private:
 
 public:
     TestDocumentHandler() {}
-    const OUString & getString() { return m_aStr; }
+    const OUString & getString() const { return m_aStr; }
 
     // XDocumentHandler
     virtual void SAL_CALL startDocument() override;

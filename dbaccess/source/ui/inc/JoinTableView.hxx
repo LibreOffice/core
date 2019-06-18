@@ -164,7 +164,7 @@ namespace dbaui
         void addConnection(OTableConnection* _pConnection,bool _bAddData = true);
 
         bool ScrollPane( long nDelta, bool bHoriz, bool bPaintScrollBars );
-        sal_uLong GetTabWinCount();
+        sal_uLong GetTabWinCount() const;
         const Point& GetScrollOffset() const { return m_aScrollOffset; }
 
         OJoinDesignView* getDesignView() const { return m_pView; }

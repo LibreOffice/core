@@ -2333,7 +2333,7 @@ void BrowseBox::GetFocus()
 }
 
 
-sal_uInt16 BrowseBox::GetVisibleRows()
+sal_uInt16 BrowseBox::GetVisibleRows() const
 {
     return static_cast<sal_uInt16>((pDataWin->GetOutputSizePixel().Height() - 1 )/ GetDataRowHeight() + 1);
 }

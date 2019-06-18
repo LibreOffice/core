@@ -30,7 +30,7 @@ public:
     ScMergeCellsDialog(weld::Window* pParent);
     virtual ~ScMergeCellsDialog() override;
 
-    ScMergeCellsOption GetMergeCellsOption();
+    ScMergeCellsOption GetMergeCellsOption() const;
 };
 
 

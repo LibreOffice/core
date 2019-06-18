@@ -75,7 +75,7 @@ RecoveryCore::~RecoveryCore()
 }
 
 
-const css::uno::Reference< css::uno::XComponentContext >& RecoveryCore::getComponentContext()
+const css::uno::Reference< css::uno::XComponentContext >& RecoveryCore::getComponentContext() const
 {
     return m_xContext;
 }
@@ -1065,12 +1065,12 @@ void BrokenRecoveryDialog::impl_refresh()
     m_xOkBtn->grab_focus();
 }
 
-bool BrokenRecoveryDialog::isExecutionNeeded()
+bool BrokenRecoveryDialog::isExecutionNeeded() const
 {
     return m_bExecutionNeeded;
 }
 
-const OUString& BrokenRecoveryDialog::getSaveDirURL()
+const OUString& BrokenRecoveryDialog::getSaveDirURL() const
 {
     return m_sSavePath;
 }

@@ -189,7 +189,7 @@ public:
         events from various sources.  This method must not be called before
         LateInit() has terminated.
     */
-    std::shared_ptr<tools::EventMultiplexer> const & GetEventMultiplexer();
+    std::shared_ptr<tools::EventMultiplexer> const & GetEventMultiplexer() const;
 
     /** returns the complete area of the current view relative to the frame
         window
@@ -235,7 +235,7 @@ private:
         we check that the right type is active and change again if that is
         not the case because something went wrong.
     */
-    OUString GetInitialViewShellType();
+    OUString GetInitialViewShellType() const;
 };
 
 } // end of namespace sd

@@ -326,7 +326,7 @@ bool XclExpHyperlinkHelper::HasLinkRecord() const
     return !mbMultipleUrls && mxLinkRec;
 }
 
-XclExpHyperlinkHelper::XclExpHyperlinkRef XclExpHyperlinkHelper::GetLinkRecord()
+XclExpHyperlinkHelper::XclExpHyperlinkRef XclExpHyperlinkHelper::GetLinkRecord() const
 {
     if( HasLinkRecord() )
         return mxLinkRec;

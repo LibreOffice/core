@@ -156,11 +156,11 @@ public:
     /** synchronously mbEnableVisible
     */
     void    setEnableVisible( bool bEnableVisible ) { mbEnableVisible = bEnableVisible; }
-    bool    isEnableVisible() { return mbEnableVisible; }
+    bool    isEnableVisible() const { return mbEnableVisible; }
     /** synchronously mbDirectVisible;
     */
     void    setDirectVisible( bool bDirectVisible ) { mbDirectVisible = bDirectVisible; }
-    bool    isDirectVisible() { return mbDirectVisible; }
+    bool    isDirectVisible() const { return mbDirectVisible; }
 
     /** impl-version of VCLXWindow::ImplExecuteAsyncWithoutSolarLock
     */

@@ -75,7 +75,7 @@ private:
     void ExecuteGlobal( SfxRequest &rReq );         // called by Execute for all objects
     static void GetGlobalClipState( SfxItemSet& rSet );
     void ExecutePasteContents( SfxRequest &rReq );
-    bool IsNoteEdit();
+    bool IsNoteEdit() const;
 };
 
 #endif

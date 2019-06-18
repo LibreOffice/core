@@ -1387,7 +1387,7 @@ uno::Reference<graphic::XGraphic> SvXMLImport::loadGraphicFromBase64(uno::Refere
     return xGraphic;
 }
 
-Reference< XOutputStream > SvXMLImport::GetStreamForGraphicObjectURLFromBase64()
+Reference< XOutputStream > SvXMLImport::GetStreamForGraphicObjectURLFromBase64() const
 {
     Reference< XOutputStream > xOStm;
     Reference< document::XBinaryStreamResolver > xStmResolver(mxGraphicStorageHandler, UNO_QUERY);
@@ -1422,13 +1422,13 @@ OUString SvXMLImport::ResolveEmbeddedObjectURL(
     return sRet;
 }
 
-Reference< embed::XStorage > const & SvXMLImport::GetSourceStorage()
+Reference< embed::XStorage > const & SvXMLImport::GetSourceStorage() const
 {
     return mpImpl->mxSourceStorage;
 }
 
 Reference < XOutputStream >
-        SvXMLImport::GetStreamForEmbeddedObjectURLFromBase64()
+        SvXMLImport::GetStreamForEmbeddedObjectURLFromBase64() const
 {
     Reference < XOutputStream > xOLEStream;
 

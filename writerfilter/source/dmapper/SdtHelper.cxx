@@ -210,12 +210,12 @@ uno::Sequence<beans::PropertyValue> SdtHelper::getInteropGrabBagAndClear()
     return aRet;
 }
 
-bool SdtHelper::isInteropGrabBagEmpty()
+bool SdtHelper::isInteropGrabBagEmpty() const
 {
     return m_aGrabBag.empty();
 }
 
-sal_Int32 SdtHelper::getInteropGrabBagSize()
+sal_Int32 SdtHelper::getInteropGrabBagSize() const
 {
     return m_aGrabBag.size();
 }

@@ -37,7 +37,7 @@
 
 // The only common SalFrame method
 
-SalFrameGeometry SalFrame::GetGeometry()
+SalFrameGeometry SalFrame::GetGeometry() const
 {
     // mirror frame coordinates at parent
     SalFrame *pParent = GetParent();

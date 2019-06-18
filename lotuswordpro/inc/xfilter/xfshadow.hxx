@@ -81,7 +81,7 @@ public:
     /**
      * @descr   return shadow position.
      */
-    enumXFShadowPos GetPosition();
+    enumXFShadowPos GetPosition() const;
 
     /**
      * @descr   Set shadow offset from owner object.
@@ -91,7 +91,7 @@ public:
     /**
      * @descr   return shadow offset.
      */
-    double  GetOffset();
+    double  GetOffset() const;
 
     /**
      * @descr   Set shadow color.
@@ -101,7 +101,7 @@ public:
     /**
      * @descr   return shadow color.
      */
-    const XFColor& GetColor();
+    const XFColor& GetColor() const;
 
     OUString   ToString();
 
@@ -120,7 +120,7 @@ inline void XFShadow::SetPosition(enumXFShadowPos pos)
     m_ePosition = pos;
 }
 
-inline enumXFShadowPos XFShadow::GetPosition()
+inline enumXFShadowPos XFShadow::GetPosition() const
 {
     return m_ePosition;
 }
@@ -130,7 +130,7 @@ inline void XFShadow::SetOffset(double offset)
     m_fOffset = offset;
 }
 
-inline double   XFShadow::GetOffset()
+inline double   XFShadow::GetOffset() const
 {
     return m_fOffset;
 }
@@ -140,7 +140,7 @@ inline void XFShadow::SetColor(const XFColor& color)
     m_aColor = color;
 }
 
-inline const XFColor& XFShadow::GetColor()
+inline const XFColor& XFShadow::GetColor() const
 {
     return m_aColor;
 }

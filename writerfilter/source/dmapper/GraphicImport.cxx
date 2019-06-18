@@ -165,7 +165,7 @@ struct GraphicBorderLine
         ,bHasShadow(false)
         {}
 
-    bool isEmpty()
+    bool isEmpty() const
     {
         return nLineWidth == 0 && !bHasShadow;
     }

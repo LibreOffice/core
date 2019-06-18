@@ -40,7 +40,7 @@ public:
         return ClipRectangleList.get(); }
     void        ResetClipRegion()   {
         numClipRectangles = 0;      }
-    int         GetRectangleCount() {
+    int         GetRectangleCount() const {
         return numClipRectangles;   }
 
 private:

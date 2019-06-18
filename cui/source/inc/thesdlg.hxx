@@ -74,7 +74,7 @@ public:
                        css::uno::Reference< css::linguistic2::XThesaurus > const & xThesaurus,
                        const OUString &rWord, LanguageType nLanguage);
     void            SetWindowTitle( LanguageType nLanguage );
-    OUString        GetWord();
+    OUString        GetWord() const;
 };
 
 #endif

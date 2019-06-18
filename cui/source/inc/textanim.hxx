@@ -75,7 +75,7 @@ private:
     DECL_LINK( ClickDirectionHdl_Impl, weld::Button&, void );
 
     void SelectDirection( SdrTextAniDirection nValue );
-    sal_uInt16 GetSelectedDirection();
+    sal_uInt16 GetSelectedDirection() const;
 
 public:
     SvxTextAnimationPage(TabPageParent pPage, const SfxItemSet& rInAttrs);

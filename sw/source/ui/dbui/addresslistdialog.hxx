@@ -84,15 +84,15 @@ public:
     virtual ~SwAddressListDialog() override;
 
     css::uno::Reference< css::sdbc::XDataSource>
-                        GetSource();
+                        GetSource() const;
 
-    SharedConnection    GetConnection();
+    SharedConnection    GetConnection() const;
 
     css::uno::Reference< css::sdbcx::XColumnsSupplier>
-                        GetColumnsSupplier();
+                        GetColumnsSupplier() const;
 
     const SwDBData&     GetDBData() const       {return m_aDBData;}
-    OUString     GetFilter();
+    OUString     GetFilter() const;
 };
 #endif
 

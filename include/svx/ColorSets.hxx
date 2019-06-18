@@ -51,7 +51,7 @@ public:
     ~ColorSets();
 
     void init();
-    const std::vector<ColorSet>& getColorSets()
+    const std::vector<ColorSet>& getColorSets() const
     {
         return maColorSets;
     }

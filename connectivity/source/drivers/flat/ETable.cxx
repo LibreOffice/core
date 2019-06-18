@@ -449,7 +449,7 @@ void OFlatTable::construct()
     }
 }
 
-OUString OFlatTable::getEntry()
+OUString OFlatTable::getEntry() const
 {
     OUString sURL;
     try

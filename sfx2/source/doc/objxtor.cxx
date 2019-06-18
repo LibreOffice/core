@@ -872,7 +872,7 @@ void SfxObjectShell::SetAutoStyleFilterIndex(sal_uInt16 nSet)
     pImpl->nStyleFilter = nSet;
 }
 
-sal_uInt16 SfxObjectShell::GetAutoStyleFilterIndex()
+sal_uInt16 SfxObjectShell::GetAutoStyleFilterIndex() const
 {
     return pImpl->nStyleFilter;
 }

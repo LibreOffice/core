@@ -23,7 +23,7 @@ ScMergeCellsDialog::~ScMergeCellsDialog()
 {
 }
 
-ScMergeCellsOption ScMergeCellsDialog::GetMergeCellsOption()
+ScMergeCellsOption ScMergeCellsDialog::GetMergeCellsOption() const
 {
     if ( m_xRBMoveContent->get_active() )
         return MoveContentHiddenCells;

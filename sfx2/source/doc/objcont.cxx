@@ -149,7 +149,7 @@ SfxObjectShell::CreatePreviewMetaFile_Impl( bool bFullContent ) const
     else
     {
         nAspect = ASPECT_THUMBNAIL;
-        aTmpSize = const_cast<SfxObjectShell*>(this)->GetFirstPageSize();
+        aTmpSize = GetFirstPageSize();
     }
 
     xFile->SetPrefSize( aTmpSize );
@@ -667,7 +667,7 @@ void SfxObjectShell::SetModifyPasswordEntered( bool bEntered )
     pImpl->m_bModifyPasswordEntered = bEntered;
 }
 
-bool SfxObjectShell::IsModifyPasswordEntered()
+bool SfxObjectShell::IsModifyPasswordEntered() const
 {
     return pImpl->m_bModifyPasswordEntered;
 }

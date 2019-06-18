@@ -206,7 +206,7 @@ public:
     virtual void    SetReadOnly (bool bReadOnly);
     virtual bool    IsReadOnly();
 
-    int GetStatus() { return nStatus; }
+    int GetStatus() const { return nStatus; }
     void SetStatus(int n) { nStatus = n; }
     void AddStatus(int n) { nStatus |= n; }
     void ClearStatus(int n) { nStatus &= ~n; }

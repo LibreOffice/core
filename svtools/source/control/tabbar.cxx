@@ -250,7 +250,7 @@ public:
         return static_cast<TabBar*>(Window::GetParent());
     }
 
-    bool isModKeyPressed()
+    bool isModKeyPressed() const
     {
         return mbModKey;
     }
@@ -483,7 +483,7 @@ struct TabBar_Impl
 
     vcl::AccessibleFactoryAccess  maAccessibleFactory;
 
-    sal_uInt16 getItemSize()
+    sal_uInt16 getItemSize() const
     {
         return static_cast<sal_uInt16>(mpItemList.size());
     }

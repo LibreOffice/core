@@ -56,7 +56,7 @@ public:
     SfxClassificationHelper(const css::uno::Reference<css::document::XDocumentProperties>& xDocumentProperties, bool bUseLocalizedPolicy = true);
     ~SfxClassificationHelper();
     /// Get the currently selected category for eType.
-    const OUString& GetBACName(SfxClassificationPolicyType eType);
+    const OUString& GetBACName(SfxClassificationPolicyType eType) const;
     /// Return all possible valid category names, based on the policy.
     std::vector<OUString> GetBACNames();
     /// Return all possible valid category identifiers, based on the policy.
@@ -85,9 +85,9 @@ public:
     bool HasDocumentFooter();
     void UpdateInfobar(SfxViewFrame& rViewFrame);
 
-    std::vector<OUString> const & GetMarkings();
-    std::vector<OUString> const & GetIntellectualPropertyParts();
-    std::vector<OUString> const & GetIntellectualPropertyPartNumbers();
+    std::vector<OUString> const & GetMarkings() const;
+    std::vector<OUString> const & GetIntellectualPropertyParts() const;
+    std::vector<OUString> const & GetIntellectualPropertyPartNumbers() const;
 
     /// Does a best-effort conversion of rType to SfxClassificationPolicyType.
     static SfxClassificationPolicyType stringToPolicyType(const OUString& rType);

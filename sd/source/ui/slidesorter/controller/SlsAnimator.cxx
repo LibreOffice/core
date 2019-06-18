@@ -46,7 +46,7 @@ public:
         animation is marked as expired to prevent another run.
     */
     void Expire();
-    bool IsExpired() { return mbIsExpired;}
+    bool IsExpired() const { return mbIsExpired;}
 
     Animator::AnimationFunctor const maAnimation;
     Animator::FinishFunctor const maFinishFunctor;

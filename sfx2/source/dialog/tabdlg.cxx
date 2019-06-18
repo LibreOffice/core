@@ -131,7 +131,7 @@ void SfxTabPage::SetFrame(const css::uno::Reference< css::frame::XFrame >& xFram
         pImpl->mxFrame = xFrame;
 }
 
-css::uno::Reference< css::frame::XFrame > SfxTabPage::GetFrame()
+css::uno::Reference< css::frame::XFrame > SfxTabPage::GetFrame() const
 {
     if (pImpl)
         return pImpl->mxFrame;

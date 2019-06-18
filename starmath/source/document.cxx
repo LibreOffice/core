@@ -468,7 +468,7 @@ SmCursor& SmDocShell::GetCursor(){
     return *mpCursor;
 }
 
-bool SmDocShell::HasCursor() { return mpCursor != nullptr; }
+bool SmDocShell::HasCursor() const { return mpCursor != nullptr; }
 
 SmPrinterAccess::SmPrinterAccess( SmDocShell &rDocShell )
 {

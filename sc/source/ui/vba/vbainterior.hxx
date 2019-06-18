@@ -40,7 +40,7 @@ class ScVbaInterior final :  public ScVbaInterior_BASE
     Color m_aPattColor;
     sal_Int32 m_nPattern;
 
-    css::uno::Reference< css::container::XIndexAccess > getPalette();
+    css::uno::Reference< css::container::XIndexAccess > getPalette() const;
     css::uno::Reference< css::container::XNameContainer > GetAttributeContainer();
     static css::uno::Any SetAttributeData( sal_Int32 nValue );
     static sal_Int32 GetAttributeData( css::uno::Any const & aValue );

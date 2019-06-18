@@ -77,7 +77,7 @@ namespace
     virtual void Notify( const css::uno::Sequence< OUString >& aPropertyNames ) override;
         SaveODFItem();
         //See group ODF in Common.xcs
-        bool isLessODF1_2()
+        bool isLessODF1_2() const
         {
             return m_nODF < 3;
         }

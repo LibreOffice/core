@@ -1096,7 +1096,7 @@ void SfxInPlaceClient::ResetObject()
     {}
 }
 
-bool SfxInPlaceClient::IsUIActive()
+bool SfxInPlaceClient::IsUIActive() const
 {
     return m_xImp->m_bUIActive;
 }

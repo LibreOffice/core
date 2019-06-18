@@ -42,7 +42,7 @@ SbiCodeGen::SbiCodeGen( SbModule& r, SbiParser* p, short nInc )
     nForLevel = 0;
 }
 
-sal_uInt32 SbiCodeGen::GetPC()
+sal_uInt32 SbiCodeGen::GetPC() const
 {
     return aCode.GetSize();
 }

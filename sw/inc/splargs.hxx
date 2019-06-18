@@ -136,7 +136,7 @@ public:
     {
         xHyphWord = rxHW;
     }
-    const css::uno::Reference< css::linguistic2::XHyphenatedWord >& GetHyphWord()
+    const css::uno::Reference< css::linguistic2::XHyphenatedWord >& GetHyphWord() const
     {
         return xHyphWord;
     }

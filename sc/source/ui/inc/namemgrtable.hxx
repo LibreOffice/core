@@ -68,7 +68,7 @@ public:
     void SetEntry( const ScRangeNameLine& rLine );
 
     void GetCurrentLine(ScRangeNameLine& rLine);
-    bool IsMultiSelection();
+    bool IsMultiSelection() const;
     std::vector<ScRangeNameLine> GetSelectedEntries();
 };
 

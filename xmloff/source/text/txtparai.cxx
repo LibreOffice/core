@@ -87,7 +87,7 @@ public:
         m_Hints.push_back(std::move(pHint));
     }
 
-    std::vector<std::unique_ptr<XMLHint_Impl>> const& GetHints()
+    std::vector<std::unique_ptr<XMLHint_Impl>> const& GetHints() const
     {
         return m_Hints;
     }

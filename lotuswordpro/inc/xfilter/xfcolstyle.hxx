@@ -82,7 +82,7 @@ public:
     /**
      * @descr   return column width.
      */
-    double  GetWidth();
+    double  GetWidth() const;
 
     virtual enumXFStyle GetStyleFamily() override;
 
@@ -100,7 +100,7 @@ inline void XFColStyle::SetWidth(double width)
     m_fWidth = width;
 }
 
-inline double XFColStyle::GetWidth()
+inline double XFColStyle::GetWidth() const
 {
     return m_fWidth;
 }

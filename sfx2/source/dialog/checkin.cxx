@@ -22,12 +22,12 @@ SfxCheckinDialog::~SfxCheckinDialog()
 {
 }
 
-OUString SfxCheckinDialog::GetComment( )
+OUString SfxCheckinDialog::GetComment( ) const
 {
     return m_xCommentED->get_text();
 }
 
-bool SfxCheckinDialog::IsMajor( )
+bool SfxCheckinDialog::IsMajor( ) const
 {
     return m_xMajorCB->get_active();
 }
