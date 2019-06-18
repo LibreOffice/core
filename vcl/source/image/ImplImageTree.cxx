@@ -258,6 +258,12 @@ OUString ImplImageTree::fallbackStyle(const OUString& rsStyle)
 {
     OUString sResult;
 
+#ifdef ANDROID
+    if (rsStyle == "colibre")
+        return "";
+    else
+        return "colibre";
+#else
     if (rsStyle == "galaxy")
         sResult = "";
     else if (rsStyle == "industrial" || rsStyle == "tango" || rsStyle == "breeze")
@@ -272,6 +278,7 @@ OUString ImplImageTree::fallbackStyle(const OUString& rsStyle)
         sResult = "tango";
 
     return sResult;
+#endif
 }
 
 bool ImplImageTree::loadImage(OUString const & rName, OUString const & rStyle, BitmapEx & rBitmap, bool localized,
