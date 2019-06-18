@@ -216,8 +216,8 @@ cmd/lc_hscrollbar.png cmd/lc_insertformhscroll.png
 cmd/sc_hscrollbar.png cmd/sc_insertformhscroll.png
 
 # Annotations
-cmd/sc_insertannotation.png cmd/sc_showannotations.png
-cmd/lc_insertannotation.png cmd/lc_showannotations.png
+cmd/sc_insertannotation.png cmd/sc_shownote.png
+cmd/lc_insertannotation.png cmd/lc_shownote.png
 cmd/sc_deletenote.png cmd/sc_deleteannotation.png
 cmd/lc_deletenote.png cmd/lc_deleteannotation.png
 cmd/sc_showchanges.png cmd/sc_addwatch.png
@@ -231,6 +231,8 @@ cmd/lc_commentchange.png cmd/lc_commentchangetracking.png
 cmd/sc_deleteallnotes.png cmd/sc_deleteallannotation.png
 cmd/lc_deleteallnotes.png cmd/lc_deleteallannotation.png
 cmd/sc_formatallnotes.png cmd/sc_editannotation.png
+cmd/lc_showallnotes.png cmd/lc_showannotations.png
+cmd/sc_showallnotes.png cmd/sc_showannotations.png
 
 # Animation
 cmd/lc_customanimation.png cmd/lc_animationobjects.png
@@ -621,7 +623,7 @@ cmd/sc_datapilotmenu.png cmd/sc_datadatapilotrun.png
 cmd/sc_functiondialog.png cmd/sc_dbviewfunctions.png
 cmd/lc_functiondialog.png cmd/lc_dbviewfunctions.png
 cmd/sc_functionbox.png cmd/sc_dbviewfunctions.png
-cmd/sc_sheetcommentmenu.png cmd/sc_showannotations.png
+cmd/sc_sheetcommentmenu.png cmd/sc_shownote.png
 cmd/sc_cellcontentsmenu.png cmd/sc_calculate.png
 
 # calc tabs
@@ -1339,7 +1341,7 @@ sc/res/nc02.png cmd/sc_dataranges.png
 sc/res/nc03.png cmd/sc_viewdatasourcebrowser.png
 sc/res/nc04.png cmd/sc_gallery.png
 sc/res/nc05.png cmd/sc_insertobject.png
-sc/res/nc06.png cmd/sc_showannotations.png
+sc/res/nc06.png cmd/sc_shownote.png
 sc/res/nc07.png cmd/sc_insertbookmark.png
 sc/res/nc08.png cmd/sc_gallery.png
 sc/res/sc26047.png cmd/sc_dbviewfunctions.png
@@ -1390,7 +1392,7 @@ sd/res/nv010.png cmd/sc_inserthyperlink.png
 sd/res/graphic.png cmd/sc_graphic.png
 
 sd/res/breakplayingblue_16.png cmd/sc_mediapause.png
-sd/res/comments_indicator.png cmd/sc_showannotations.png
+sd/res/comments_indicator.png cmd/sc_shownote.png
 sd/res/get1obj.png cmd/sc_selectobject.png
 sd/res/getallob.png cmd/sc_selectall.png
 sd/res/group.png cmd/sc_formatgroup.png
@@ -1627,7 +1629,7 @@ sw/res/nc20006.png cmd/sc_insertsection.png
 sw/res/nc20007.png cmd/sc_inserthyperlink.png
 sw/res/nc20008.png cmd/sc_insertreferencefield.png
 sw/res/nc20009.png cmd/sc_insertindexesentry.png
-sw/res/nc20010.png cmd/sc_showannotations.png
+sw/res/nc20010.png cmd/sc_shownote.png
 sw/res/nc20011.png cmd/sc_toggleobjectbeziermode.png
 sw/res/sc20234.png cmd/sc_datafilterstandardfilter.png
 sw/res/sc20244.png cmd/sc_datafilterstandardfilter.png
@@ -1681,7 +1683,7 @@ sw/res/sr20011.png sw/res/nc20000.png
 sw/res/sr20012.png cmd/sc_insertreferencefield.png
 sw/res/sr20013.png cmd/sc_insertfootnote.png
 sw/res/sr20014.png dbaccess/res/exwarning.png
-sw/res/sr20015.png cmd/sc_showannotations.png
+sw/res/sr20015.png cmd/sc_shownote.png
 sw/res/sr20016.png cmd/sc_recsearch.png
 sw/res/sr20017.png cmd/sc_insertindexesentry.png
 sw/res/sr20018.png cmd/sc_inserttable.png
@@ -1817,8 +1819,8 @@ cmd/lc_heading2cellstyles.png cmd/lc_heading2parastyle.png
 cmd/sc_heading2cellstyles.png cmd/sc_heading2parastyle.png
 cmd/lc_footnotecellstyles.png cmd/lc_insertfootnote.png
 cmd/sc_footnotecellstyles.png cmd/sc_insertfootnote.png
-cmd/lc_notecellstyles.png cmd/lc_showannotations.png
-cmd/sc_notecellstyles.png cmd/sc_showannotations.png
+cmd/lc_notecellstyles.png cmd/lc_shownote.png
+cmd/sc_notecellstyles.png cmd/sc_shownote.png
 
 # menubar icons
 cmd/sc_focustofindbar.png cmd/sc_recsearch.png
