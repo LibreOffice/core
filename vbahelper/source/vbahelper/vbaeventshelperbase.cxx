@@ -158,9 +158,8 @@ void SAL_CALL VbaEventsHelperBase::changesOccurred( const util::ChangesEvent& rE
         return;
 
     // process all changed modules
-    for( sal_Int32 nIndex = 0, nLength = rEvent.Changes.getLength(); nIndex < nLength; ++nIndex )
+    for( const util::ElementChange& rChange : rEvent.Changes )
     {
-        const util::ElementChange& rChange = rEvent.Changes[ nIndex ];
         OUString aModuleName;
         if( (rChange.Accessor >>= aModuleName) && !aModuleName.isEmpty() ) try
         {

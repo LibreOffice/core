@@ -186,15 +186,13 @@ OUString VbaCommandBarHelper::findToolbarByName( const css::uno::Reference< css:
         return sResourceUrl;
 
     uno::Sequence< OUString > allNames = xNameAccess->getElementNames();
-    for( sal_Int32 i = 0; i < allNames.getLength(); i++ )
-    {
-        sResourceUrl = allNames[i];
-        if(sResourceUrl.startsWith( ITEM_TOOLBAR_URL ) )
-        {
-            if( hasToolbar( sResourceUrl, sName ) )
-                return sResourceUrl;
-        }
-    }
+    auto pName = std::find_if(allNames.begin(), allNames.end(),
+        [this, &sName](const OUString& rName) {
+            return rName.startsWith( ITEM_TOOLBAR_URL )
+                && hasToolbar( rName, sName );
+        });
+    if (pName != allNames.end())
+        return *pName;
 
     // the customize toolbars creating during importing, should found there.
     sResourceUrl = "private:resource/toolbar/custom_" + sName;
