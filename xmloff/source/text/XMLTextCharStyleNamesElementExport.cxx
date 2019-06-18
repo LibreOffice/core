@@ -54,9 +54,8 @@ XMLTextCharStyleNamesElementExport::XMLTextCharStyleNamesElementExport(
             {
                 aName = rExport.GetNamespaceMap().GetQNameByKey(
                                 XML_NAMESPACE_TEXT, GetXMLToken(XML_SPAN) );
-                sal_Int32 i = nCount;
                 const OUString *pName = aNames.getConstArray();
-                while( --i )
+                for( sal_Int32 i = 0; i < nCount - 1; ++i )
                 {
                     rExport.AddAttribute( XML_NAMESPACE_TEXT, XML_STYLE_NAME,
                                           rExport.EncodeStyleName( *pName ) );
@@ -72,8 +71,7 @@ XMLTextCharStyleNamesElementExport::~XMLTextCharStyleNamesElementExport()
 {
     if( nCount > 1 )
     {
-        sal_Int32 i = nCount;
-        while( --i )
+        for( sal_Int32 i = 0; i < nCount - 1; ++i )
             rExport.EndElement( aName, false );
     }
 }
