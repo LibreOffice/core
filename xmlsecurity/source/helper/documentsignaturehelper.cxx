@@ -39,6 +39,7 @@
 #include <rtl/uri.hxx>
 #include <sal/log.hxx>
 #include <svx/xoutbmp.hxx>
+#include <tools/diagnose_ex.h>
 #include <xmloff/attrlist.hxx>
 
 #include <xsecctl.hxx>
@@ -379,9 +380,9 @@ SignatureStreamHelper DocumentSignatureHelper::OpenSignatureStream(
             aHelper.xSignatureStorage = rxStore->openStorageElement("_xmlsignatures", nSubStorageOpenMode);
             aHelper.nStorageFormat = embed::StorageFormats::OFOPXML;
         }
-        catch (const io::IOException& rException)
+        catch (const io::IOException&)
         {
-            SAL_WARN_IF(nOpenMode != css::embed::ElementModes::READ, "xmlsecurity.helper", "DocumentSignatureHelper::OpenSignatureStream: " << rException);
+            TOOLS_WARN_EXCEPTION_IF(nOpenMode != css::embed::ElementModes::READ, "xmlsecurity.helper", "DocumentSignatureHelper::OpenSignatureStream:");
         }
     }
 

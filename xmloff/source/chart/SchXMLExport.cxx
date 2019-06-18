@@ -853,9 +853,9 @@ lcl_TableData lcl_getDataForLocalTable(
                 rTarget[i] <<= rSource[i];
         }
     }
-    catch( const uno::Exception & rEx )
+    catch( const uno::Exception & )
     {
-        SAL_INFO("xmloff.chart", "something went wrong during table data collection: " << rEx);
+        TOOLS_INFO_EXCEPTION("xmloff.chart", "something went wrong during table data collection");
     }
 
     return aResult;
@@ -899,9 +899,9 @@ void lcl_exportNumberFormat( const OUString& rPropertyName, const Reference< bea
                 }
             }
         }
-        catch( const uno::Exception & rEx )
+        catch( const uno::Exception & )
         {
-            SAL_INFO("xmloff.chart", "chart:exporting error bar ranges: " << rEx );
+            TOOLS_INFO_EXCEPTION("xmloff.chart", "chart:exporting error bar ranges" );
         }
     }
 
@@ -1433,9 +1433,9 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument > 
                 Any aShapesAny = xDocPropSet->getPropertyValue("AdditionalShapes");
                 aShapesAny >>= mxAdditionalShapes;
             }
-            catch( const uno::Exception & rEx )
+            catch( const uno::Exception & )
             {
-                SAL_INFO("xmloff.chart", "AdditionalShapes not found: " << rEx );
+                TOOLS_INFO_EXCEPTION("xmloff.chart", "AdditionalShapes not found" );
             }
 
             if( mxAdditionalShapes.is())
@@ -1882,9 +1882,9 @@ void SchXMLExportHelper_Impl::exportPlotArea(
                         rShapeExport->export3DSceneAttributes( xPropSet );
                 }
             }
-            catch( const uno::Exception & rEx )
+            catch( const uno::Exception & )
             {
-                SAL_INFO("xmloff.chart", "chart:exportPlotAreaException caught: " << rEx);
+                TOOLS_INFO_EXCEPTION("xmloff.chart", "chart:exportPlotAreaException caught");
             }
         }
 
@@ -2571,9 +2571,9 @@ void SchXMLExportHelper_Impl::exportSeries(
                                 xPropSet = SchXMLSeriesHelper::createOldAPISeriesPropertySet(
                                     aSeriesSeq[nSeriesIdx], mrExport.GetModel() );
                             }
-                            catch( const uno::Exception & rEx )
+                            catch( const uno::Exception & )
                             {
-                                SAL_INFO("xmloff.chart", "Series not found or no XPropertySet: " << rEx );
+                                TOOLS_INFO_EXCEPTION("xmloff.chart", "Series not found or no XPropertySet" );
                                 continue;
                             }
                             if( xPropSet.is())
@@ -2587,9 +2587,9 @@ void SchXMLExportHelper_Impl::exportSeries(
                                     aAny = xPropSet->getPropertyValue( "MeanValue" );
                                     aAny >>= bHasMeanValueLine;
                                 }
-                                catch( const beans::UnknownPropertyException & rEx )
+                                catch( const beans::UnknownPropertyException & )
                                 {
-                                    SAL_INFO("xmloff.chart", "Required property not found in DataRowProperties: " << rEx );
+                                    TOOLS_INFO_EXCEPTION("xmloff.chart", "Required property not found in DataRowProperties" );
                                 }
 
                                 const SvtSaveOptions::ODFDefaultVersion nCurrentODFVersion( SvtSaveOptions().GetODFDefaultVersion() );
@@ -2756,9 +2756,9 @@ void SchXMLExportHelper_Impl::exportSeries(
                             Any aPropAny( xPropSet->getPropertyValue( "DataMeanValueProperties" ));
                             aPropAny >>= xStatProp;
                         }
-                        catch( const uno::Exception & rEx )
+                        catch( const uno::Exception & )
                         {
-                            SAL_INFO("xmloff.chart", "Exception caught during Export of series - optional DataMeanValueProperties not available: " << rEx );
+                            TOOLS_INFO_EXCEPTION("xmloff.chart", "Exception caught during Export of series - optional DataMeanValueProperties not available" );
                         }
 
                         if( xStatProp.is() )
@@ -2994,9 +2994,9 @@ void SchXMLExportHelper_Impl::exportErrorBar( const Reference<beans::XPropertySe
                 aAny >>= nErrorBarStyle;
             }
         }
-        catch( const beans::UnknownPropertyException & rEx )
+        catch( const beans::UnknownPropertyException & )
         {
-            SAL_INFO("xmloff.chart", "Required property not found in DataRowProperties: " << rEx );
+            TOOLS_INFO_EXCEPTION("xmloff.chart", "Required property not found in DataRowProperties" );
         }
 
         if( nErrorBarStyle != chart::ErrorBarStyle::NONE && (bNegative || bPositive))
@@ -3213,9 +3213,9 @@ void SchXMLExportHelper_Impl::exportDataPoints(
                                 xSeries, nElement, mrExport.GetModel() );
                     bExportNumFmt = true;
                 }
-                catch( const uno::Exception & rEx )
+                catch( const uno::Exception & )
                 {
-                    SAL_INFO("xmloff.chart", "Exception caught during Export of data point: " << rEx );
+                    TOOLS_INFO_EXCEPTION("xmloff.chart", "Exception caught during Export of data point" );
                 }
             }
             else
@@ -3281,9 +3281,9 @@ void SchXMLExportHelper_Impl::exportDataPoints(
                 xPropSet = SchXMLSeriesHelper::createOldAPIDataPointPropertySet(
                                 xSeries, nCurrIndex, mrExport.GetModel() );
             }
-            catch( const uno::Exception & rEx )
+            catch( const uno::Exception & )
             {
-                SAL_INFO("xmloff.chart", "Exception caught during Export of data point: " << rEx );
+                TOOLS_INFO_EXCEPTION("xmloff.chart", "Exception caught during Export of data point" );
             }
             if( xPropSet.is())
             {

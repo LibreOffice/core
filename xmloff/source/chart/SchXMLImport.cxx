@@ -611,9 +611,9 @@ void SAL_CALL SchXMLImport::setTargetDocument(const uno::Reference<lang::XCompon
             }
         }
     }
-    catch (const uno::Exception & rEx)
+    catch (const uno::Exception &)
     {
-        SAL_INFO("xmloff.chart", "SchXMLChartContext::StartElement(): Exception caught: " << rEx);
+        TOOLS_INFO_EXCEPTION("xmloff.chart", "SchXMLChartContext::StartElement(): Exception caught");
     }
 }
 

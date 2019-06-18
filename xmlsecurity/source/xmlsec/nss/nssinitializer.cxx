@@ -31,6 +31,7 @@
 #include <osl/file.hxx>
 #include <osl/thread.h>
 #include <sal/log.hxx>
+#include <tools/diagnose_ex.h>
 #include <unotools/tempfile.hxx>
 #include <salhelper/singletonref.hxx>
 
@@ -260,9 +261,9 @@ OString getMozillaCurrentProfile( const css::uno::Reference< css::uno::XComponen
             return OUStringToOString(sUserSetCertPath, osl_getThreadTextEncoding());
         }
     }
-    catch (const uno::Exception &e)
+    catch (const uno::Exception &)
     {
-        SAL_WARN("xmlsecurity.xmlsec", "getMozillaCurrentProfile: caught " << e);
+        TOOLS_WARN_EXCEPTION("xmlsecurity.xmlsec", "getMozillaCurrentProfile:");
     }
 
     // third, dig around to see if there's one available
