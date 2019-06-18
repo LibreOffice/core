@@ -19,6 +19,7 @@
 #include <vbahelper/vbaglobalbase.hxx>
 #include <sal/macros.h>
 
+#include <comphelper/sequence.hxx>
 #include <cppuhelper/component_context.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -103,18 +104,17 @@ VbaGlobalsBase::~VbaGlobalsBase()
 void
 VbaGlobalsBase::init(  const uno::Sequence< beans::PropertyValue >& aInitArgs )
 {
-    sal_Int32 nLen = aInitArgs.getLength();
-    for ( sal_Int32 nIndex = 0; nIndex < nLen; ++nIndex )
+    for ( const auto& rInitArg : aInitArgs )
     {
         uno::Reference< container::XNameContainer > xNameContainer( mxContext, uno::UNO_QUERY_THROW );
-        if ( aInitArgs[ nIndex ].Name == gsApplication )
+        if ( rInitArg.Name == gsApplication )
         {
-            xNameContainer->replaceByName( gsApplication, aInitArgs[ nIndex ].Value );
-            uno::Reference< XHelperInterface > xParent( aInitArgs[ nIndex ].Value, uno::UNO_QUERY );
+            xNameContainer->replaceByName( gsApplication, rInitArg.Value );
+            uno::Reference< XHelperInterface > xParent( rInitArg.Value, uno::UNO_QUERY );
             mxParent = xParent;
         }
         else
-            xNameContainer->replaceByName( aInitArgs[ nIndex ].Name, aInitArgs[ nIndex ].Value );
+            xNameContainer->replaceByName( rInitArg.Name, rInitArg.Value );
     }
 }
 
@@ -160,13 +160,7 @@ bool
 VbaGlobalsBase::hasServiceName( const OUString& serviceName )
 {
     uno::Sequence< OUString > sServiceNames( getAvailableServiceNames() );
-    sal_Int32 nLen = sServiceNames.getLength();
-    for ( sal_Int32 index = 0; index < nLen; ++index )
-    {
-        if ( sServiceNames[ index ] == serviceName )
-            return true;
-    }
-    return false;
+    return comphelper::findValue(sServiceNames, serviceName) != -1;
 }
 
 

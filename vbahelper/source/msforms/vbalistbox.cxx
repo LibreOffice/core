@@ -20,6 +20,7 @@
 #include "vbalistbox.hxx"
 #include "vbanewfont.hxx"
 #include <com/sun/star/form/validation/XValidatableFormComponent.hpp>
+#include <comphelper/sequence.hxx>
 #include <ooo/vba/msforms/fmMultiSelect.hpp>
 
 using namespace com::sun::star;
@@ -77,17 +78,7 @@ ScVbaListBox::setValue( const uno::Any& _value )
     OUString sValue = getAnyAsString( _value );
     uno::Sequence< OUString > sList;
     m_xProps->getPropertyValue( "StringItemList" ) >>= sList;
-    sal_Int16 nLength = static_cast<sal_Int16>( sList.getLength() );
-    sal_Int16 nValue = -1;
-    sal_Int16 i = 0;
-    for( i = 0; i < nLength; i++ )
-    {
-        if( sList[i] == sValue )
-        {
-            nValue = i;
-            break;
-        }
-    }
+    sal_Int16 nValue = static_cast<sal_Int16>(comphelper::findValue(sList, sValue));
     if( nValue == -1 )
         throw uno::RuntimeException( "Attribute use invalid." );
 
@@ -164,7 +155,7 @@ void SAL_CALL
 ScVbaListBox::AddItem( const uno::Any& pvargItem, const uno::Any& pvargIndex )
 {
     mpListHelper->AddItem( pvargItem, pvargIndex );
-        }
+}
 
 void SAL_CALL
 ScVbaListBox::removeItem( const uno::Any& index )
@@ -196,9 +187,7 @@ ScVbaListBox::setValueEvent( const uno::Any& value )
     {
         if( nList[i] == nIndex )
         {
-            if( bValue )
-                return;
-            else
+            if( !bValue )
             {
                 for( ; i < nLength - 1; i++ )
                 {
@@ -208,8 +197,8 @@ ScVbaListBox::setValueEvent( const uno::Any& value )
                 //m_xProps->setPropertyValue( sSourceName, uno::makeAny( nList ) );
                 fireClickEvent();
                 m_xProps->setPropertyValue( "SelectedItems", uno::makeAny( nList ) );
-                return;
             }
+            return;
         }
     }
     if( bValue )
@@ -239,16 +228,10 @@ ScVbaListBox::getValueEvent()
 {
     uno::Sequence< sal_Int16 > nList;
     m_xProps->getPropertyValue( "SelectedItems" ) >>= nList;
-    sal_Int32 nLength = nList.getLength();
     sal_Int32 nIndex = m_nIndex;
+    bool bRet = std::find(nList.begin(), nList.end(), nIndex) != nList.end();
 
-    for( sal_Int32 i = 0; i < nLength; i++ )
-    {
-        if( nList[i] == nIndex )
-            return uno::makeAny( true );
-    }
-
-    return uno::makeAny( false );
+    return uno::makeAny( bRet );
 }
 
 void SAL_CALL

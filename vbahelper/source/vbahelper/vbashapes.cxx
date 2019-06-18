@@ -144,20 +144,19 @@ ScVbaShapes::getShapesByArrayIndices( const uno::Any& Index  )
     uno::Sequence< uno::Any > sIndices;
     aConverted >>= sIndices;
     XNamedObjectCollectionHelper< drawing::XShape >::XNamedVec aShapes;
-    sal_Int32 nElems = sIndices.getLength();
-    for( sal_Int32 index = 0; index < nElems; ++index )
+    for( const auto& rIndex : sIndices )
     {
         uno::Reference< drawing::XShape > xShape;
-        if ( sIndices[ index ].getValueTypeClass() == uno::TypeClass_STRING )
+        if ( rIndex.getValueTypeClass() == uno::TypeClass_STRING )
         {
             OUString sName;
-            sIndices[ index ] >>= sName;
+            rIndex >>= sName;
             xShape.set( m_xNameAccess->getByName( sName ), uno::UNO_QUERY );
         }
         else
         {
             sal_Int32 nIndex = 0;
-            sIndices[ index ] >>= nIndex;
+            rIndex >>= nIndex;
             // adjust for 1 based mso indexing
             xShape.set( m_xIndexAccess->getByIndex( nIndex - 1 ), uno::UNO_QUERY );
 
