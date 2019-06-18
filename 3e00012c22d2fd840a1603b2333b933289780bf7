@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_3eeac50e",
+        "filename": "bin/pack-debug",
+        "patchSetId": 1
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2019-06-18T14:23:14Z",
+      "side": 1,
+      "message": "would this work with newer LO versions?",
+      "range": {
+        "startLine": 249,
+        "startChar": 49,
+        "endLine": 249,
+        "endChar": 52
+      },
+      "revId": "3e00012c22d2fd840a1603b2333b933289780bf7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_9e8d197d",
+        "filename": "bin/pack-debug",
+        "patchSetId": 1
+      },
+      "lineNbr": 316,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2019-06-18T14:23:14Z",
+      "side": 1,
+      "message": "this needs adjusting for the master branch.",
+      "range": {
+        "startLine": 316,
+        "startChar": 48,
+        "endLine": 316,
+        "endChar": 63
+      },
+      "revId": "3e00012c22d2fd840a1603b2333b933289780bf7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
