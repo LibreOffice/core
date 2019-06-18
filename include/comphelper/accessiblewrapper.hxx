@@ -361,7 +361,7 @@ namespace comphelper
         /// invalidates (i.e. empties) the map
         void    invalidateAll( );
 
-        /** disposes (i.e. cleares) the manager
+        /** disposes (i.e. clears) the manager
 
             <p>Note that the XAccessibleContext's of the mapped XAccessible objects are disposed, too.</p>
         */

@@ -284,7 +284,7 @@ public:
     /** Returns true, if the entry represents a table. */
     ScHTMLTableId GetTableId() const { return nTab; }
 
-    /** Sets or cleares the import always state. */
+    /** Sets or clears the import always state. */
     void         SetImportAlways() { mbImportAlways = true; }
     /** Sets start point of the entry selection to the start of the import info object. */
     void                AdjustStart( const HtmlImportInfo& rInfo );
