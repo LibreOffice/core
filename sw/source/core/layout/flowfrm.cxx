@@ -45,6 +45,7 @@
 #include <txtfrm.hxx>
 #include <notxtfrm.hxx>
 #include <tabfrm.hxx>
+#include <rowfrm.hxx>
 #include <pagedesc.hxx>
 #include <layact.hxx>
 #include <flyfrms.hxx>
@@ -2518,7 +2519,28 @@ bool SwFlowFrame::MoveBwd( bool &rbReformat )
             pSect->ColLock();
             bFollow = pSect->HasFollow();
         }
-        pNewUpper->Calc(m_rThis.getRootFrame()->GetCurrShell()->GetOut());
+
+        {
+            auto const pOld = m_rThis.GetUpper();
+            ::boost::optional<SwFrameDeleteGuard> g;
+            if (m_rThis.GetUpper()->IsCellFrame())
+            {
+                // note: IsFollowFlowRow() is never set for new-style tables
+                SwTabFrame const*const pTabFrame(m_rThis.FindTabFrame());
+                if (   pTabFrame->IsFollow()
+                    && static_cast<SwTabFrame const*>(pTabFrame->GetPrecede())->HasFollowFlowLine()
+                    && pTabFrame->GetFirstNonHeadlineRow() == m_rThis.GetUpper()->GetUpper())
+                {
+                    // lock follow-flow-row (similar to sections above)
+                    g.emplace(m_rThis.GetUpper()->GetUpper());
+                    assert(m_rThis.GetUpper()->GetUpper()->IsDeleteForbidden());
+                }
+            }
+            pNewUpper->Calc(m_rThis.getRootFrame()->GetCurrShell()->GetOut());
+            SAL_WARN_IF(pOld != m_rThis.GetUpper(), "sw.core",
+                    "MoveBwd(): pNewUpper->Calc() moved this frame?");
+        }
+
         m_rThis.Cut();
 
         // optimization: format section, if its size is invalidated and if it's
