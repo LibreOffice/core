@@ -182,7 +182,7 @@ OUString TargetsTable::GetNameProposal()
     return sDefaultTargetName + " " + OUString::number(nHighestTargetId + 1);
 }
 
-void TargetsTable::setRowData(const int& nRowIndex, const RedactionTarget* pTarget)
+void TargetsTable::setRowData(int nRowIndex, const RedactionTarget* pTarget)
 {
     OUString sContent = pTarget->sContent;
 
@@ -675,8 +675,8 @@ SfxAddTargetDialog::SfxAddTargetDialog(weld::Window* pParent, const OUString& rN
 
 SfxAddTargetDialog::SfxAddTargetDialog(weld::Window* pParent, const OUString& sName,
                                        const RedactionTargetType& eTargetType,
-                                       const OUString& sContent, const bool& bCaseSensitive,
-                                       const bool& bWholeWords)
+                                       const OUString& sContent, bool bCaseSensitive,
+                                       bool bWholeWords)
     : GenericDialogController(pParent, "sfx/ui/addtargetdialog.ui", "AddTargetDialog")
     , m_xName(m_xBuilder->weld_entry("name"))
     , m_xType(m_xBuilder->weld_combo_box("type"))

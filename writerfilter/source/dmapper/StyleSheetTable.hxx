@@ -106,7 +106,7 @@ public:
     /// Returns the default character properties.
     PropertyMapPtr const & GetDefaultCharProps();
 
-    const StyleSheetEntryPtr GetCurrentEntry();
+    const StyleSheetEntryPtr & GetCurrentEntry();
 
 private:
     // Properties

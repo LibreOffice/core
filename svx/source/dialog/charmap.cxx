@@ -851,7 +851,7 @@ sal_Int32 SvxShowCharSet::getMaxCharCount() const
     return mxFontCharMap->GetCharCount();
 }
 
-FontCharMapRef SvxShowCharSet::GetFontCharMap()
+FontCharMapRef const & SvxShowCharSet::GetFontCharMap()
 {
     RecalculateFont(*mxVirDev);
     return mxFontCharMap;

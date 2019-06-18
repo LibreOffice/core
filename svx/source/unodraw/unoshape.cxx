@@ -805,7 +805,7 @@ uno::Sequence< uno::Type > SAL_CALL SvxShape::getTypes()
 }
 
 
-uno::Sequence< uno::Type > SvxShape::_getTypes()
+uno::Sequence< uno::Type > const & SvxShape::_getTypes()
 {
     switch( mpImpl->mnObjId )
     {

@@ -108,7 +108,7 @@ public:
     CreateChildContext(const OUString& rName,
                        const css::uno::Reference<css::xml::sax::XAttributeList>& xAttribs) override;
 
-    OUString GetName() const { return maName; }
+    OUString const& GetName() const { return maName; }
 
 private:
     OUString maName;

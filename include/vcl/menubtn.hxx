@@ -79,7 +79,7 @@ public:
     void            SetPopover(Window* pWindow);
 
     sal_uInt16      GetCurItemId() const { return mnCurItemId; }
-    OString         GetCurItemIdent() const { return msCurItemIdent; }
+    OString const & GetCurItemIdent() const { return msCurItemIdent; }
 
     void            SetActivateHdl( const Link<MenuButton *, void>& rLink ) { maActivateHdl = rLink; }
     void            SetSelectHdl( const Link<MenuButton *, void>& rLink ) { maSelectHdl = rLink; }

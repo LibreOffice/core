@@ -420,9 +420,9 @@ public:
     }
 
     void setPropName(const OUString& rPropName) { m_aPropName = rPropName; }
-    OUString getPropName() const { return m_aPropName; }
+    OUString const& getPropName() const { return m_aPropName; }
     void setPropType(const css::uno::Type& rPropType) { m_aPropType = rPropType; }
-    css::uno::Type getPropType() const { return m_aPropType; }
+    css::uno::Type const& getPropType() const { return m_aPropType; }
     void setTableRowWidthAfter(int nTableRowWidthAfter)
     {
         m_nTableRowWidthAfter = nTableRowWidthAfter;

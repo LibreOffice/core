@@ -60,24 +60,24 @@ public:
      * Returns the value of the given string param as an OUString
      * Returns empty OUString if no param
      * */
-    static OUString getStringParam(const SfxRequest& rReq, const sal_uInt16& nParamId);
+    static OUString getStringParam(const SfxRequest& rReq, sal_uInt16 nParamId);
     /*
      * Creates metafiles from the pages of the given document,
      * and pushes into the given vector.
      * */
     static void getPageMetaFilesFromDoc(std::vector<GDIMetaFile>& aMetaFiles,
-                                        std::vector<::Size>& aPageSizes, const sal_Int32& nPages,
+                                        std::vector<::Size>& aPageSizes, sal_Int32 nPages,
                                         DocumentToGraphicRenderer& aRenderer);
     /*
      * Creates one shape and one draw page for each gdimetafile,
      * and inserts the shapes into the newly created draw pages.
      * */
     static void
-    addPagesToDraw(uno::Reference<XComponent>& xComponent, const sal_Int32& nPages,
+    addPagesToDraw(uno::Reference<XComponent>& xComponent, sal_Int32 nPages,
                    const std::vector<GDIMetaFile>& aMetaFiles,
                    const std::vector<::Size>& aPageSizes, const PageMargins& aPageMargins,
                    const std::vector<std::pair<RedactionTarget*, OUString>>& r_aTableTargets,
-                   const bool& bIsAutoRedact);
+                   bool bIsAutoRedact);
     /*
      * Makes the Redaction toolbar visible to the user.
      * Meant to be called after converting a document to a Draw doc

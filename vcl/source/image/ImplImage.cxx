@@ -93,7 +93,7 @@ Size ImplImage::getSizePixel()
 }
 
 /// non-HiDPI compatibility method.
-BitmapEx ImplImage::getBitmapEx(bool bDisabled)
+BitmapEx const & ImplImage::getBitmapEx(bool bDisabled)
 {
     getSizePixel(); // force load, and at unity scale.
     if (bDisabled)
@@ -123,7 +123,7 @@ bool ImplImage::isEqual(const ImplImage &ref) const
         return maBitmapEx == ref.maBitmapEx;
 }
 
-BitmapEx ImplImage::getBitmapExForHiDPI(bool bDisabled)
+BitmapEx const & ImplImage::getBitmapExForHiDPI(bool bDisabled)
 {
     if (isStock())
     {   // check we have the right bitmap cached.
