@@ -1668,6 +1668,7 @@ compilerplugins/clang/commaoperator.cxx
 compilerplugins/clang/comparisonwithconstant.cxx
 compilerplugins/clang/compat.hxx
 compilerplugins/clang/constantparam.cxx
+compilerplugins/clang/constmethod.cxx
 compilerplugins/clang/constparams.cxx
 compilerplugins/clang/conststringvar.cxx
 compilerplugins/clang/countusersofdefaultparams.cxx
@@ -1741,7 +1742,6 @@ compilerplugins/clang/store/cascadingcondop.cxx
 compilerplugins/clang/store/cascadingcondop.hxx
 compilerplugins/clang/store/changefunctioncalls.cxx
 compilerplugins/clang/store/constantfunction.cxx
-compilerplugins/clang/store/constmethod.cxx
 compilerplugins/clang/store/deadclass.cxx
 compilerplugins/clang/store/defaultparams.cxx
 compilerplugins/clang/store/deletedspecial.cxx

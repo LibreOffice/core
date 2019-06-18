@@ -30,38 +30,13 @@
 namespace
 {
 
-static bool startswith(const std::string& rStr, const char* pSubStr) {
-    return rStr.compare(0, strlen(pSubStr), pSubStr) == 0;
-}
-
 class ConstMethod:
     public loplugin::FunctionAddress<ConstMethod>
 {
 public:
-    explicit ConstMethod(InstantiationData const & data): loplugin::FunctionAddress<ConstMethod>(data) {}
+    explicit ConstMethod(loplugin::InstantiationData const & data): loplugin::FunctionAddress<ConstMethod>(data) {}
 
     virtual void run() override {
-        std::string fn( compiler.getSourceManager().getFileEntryForID(
-                        compiler.getSourceManager().getMainFileID())->getName() );
-        normalizeDotDotInFilePath(fn);
-        if (fn.find("/qa/") != std::string::npos)
-            return;
-        // the rest of the stuff in these folders is technically const, but not logically const (IMO)
-        if (startswith(fn, SRCDIR "/unotools/"))
-            return;
-        if (startswith(fn, SRCDIR "/svl/"))
-            return;
-        if (startswith(fn, SRCDIR "/binaryurp/"))
-            return;
-        if (startswith(fn, SRCDIR "/cpputools/"))
-            return;
-        if (startswith(fn, SRCDIR "/opencl/"))
-            return;
-        if (startswith(fn, SRCDIR "/helpcompiler/"))
-            return;
-        // very little in here can usefully be made const. Could tighten this up a little and only exclude stuff declared in .cxx files
-        if (startswith(fn, SRCDIR "/vcl/"))
-            return;
         TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
 
         for (const CXXMethodDecl *pMethodDecl : interestingMethodSet) {
@@ -71,22 +46,21 @@ public:
             if (getFunctionsWithAddressTaken().find((FunctionDecl const *)canonicalDecl)
                     != getFunctionsWithAddressTaken().end())
                 continue;
-            StringRef aFileName = compiler.getSourceManager().getFilename(compiler.getSourceManager().getSpellingLoc(canonicalDecl->getLocStart()));
+            StringRef aFileName = compiler.getSourceManager().getFilename(compiler.getSourceManager().getSpellingLoc(compat::getBeginLoc(canonicalDecl)));
             if (loplugin::isSamePathname(aFileName, SRCDIR "/include/LibreOfficeKit/LibreOfficeKit.hxx"))
                 continue;
             report(
                 DiagnosticsEngine::Warning,
                 "this method can be const",
-                pMethodDecl->getLocStart())
+                compat::getBeginLoc(pMethodDecl))
                 << pMethodDecl->getSourceRange();
             if (canonicalDecl->getLocation() != pMethodDecl->getLocation()) {
                 report(
                     DiagnosticsEngine::Note,
                     "canonical method declaration here",
-                    canonicalDecl->getLocStart())
+                    compat::getBeginLoc(canonicalDecl))
                     << canonicalDecl->getSourceRange();
             }
-            //pMethodDecl->dump();
         }
     }
 
@@ -160,12 +134,27 @@ bool ConstMethod::VisitCXXMethodDecl(const CXXMethodDecl * cxxMethodDecl)
 
     if (!cxxMethodDecl->getIdentifier())
         return true;
+    if (cxxMethodDecl->getNumParams() > 0)
+        return true;
+    // returning pointers or refs to non-const stuff, and then having the whole method
+    // be const doesn't seem like a good idea
+    auto tc = loplugin::TypeCheck(cxxMethodDecl->getReturnType());
+    if (tc.Pointer().NonConst())
+        return true;
+    if (tc.LvalueReference().NonConst())
+        return true;
+    // a Get method that returns void is probably doing something that has side-effects
+    if (tc.Void())
+        return true;
 
     StringRef name = cxxMethodDecl->getName();
-    if (name == "PAGE") // otherwise we have two methods that only differ in their return type
+    if (!name.startswith("get") && !name.startswith("Get")
+        && !name.startswith("is") && !name.startswith("Is")
+        && !name.startswith("has") && !name.startswith("Has"))
         return true;
-    // stuff in comphelper I'm  not sure about
-    if (name == "CommitImageSubStorage" || name == "CloseEmbeddedObjects" || name == "flush")
+
+    // something lacking in my analysis here
+    if (loplugin::DeclCheck(cxxMethodDecl).Function("GetDescr").Class("SwRangeRedline").GlobalNamespace())
         return true;
 
     interestingMethodSet.insert(cxxMethodDecl);
@@ -180,7 +169,7 @@ bool ConstMethod::VisitCXXThisExpr( const CXXThisExpr* cxxThisExpr )
     if (ignoreLocation(cxxThisExpr))
         return true;
     // ignore stuff that forms part of the stable URE interface
-    if (isInUnoIncludeFile(cxxThisExpr->getLocStart()))
+    if (isInUnoIncludeFile(compat::getBeginLoc(cxxThisExpr)))
         return true;
     if (interestingMethodSet.find(currCXXMethodDecl) == interestingMethodSet.end())
         return true;
@@ -208,7 +197,7 @@ bool ConstMethod::checkIfCanBeConst(const Stmt* stmt, const CXXMethodDecl* cxxMe
             report(
                  DiagnosticsEngine::Warning,
                  "no parent?",
-                  stmt->getLocStart())
+                  compat::getBeginLoc(stmt))
                   << stmt->getSourceRange();
             return false;
         }
@@ -447,7 +436,7 @@ bool ConstMethod::checkIfCanBeConst(const Stmt* stmt, const CXXMethodDecl* cxxMe
         return checkIfCanBeConst(parent, cxxMethodDecl);
 //    } else if (isa<UnaryExprOrTypeTraitExpr>(parent)) {
 //        return false; // ???
-    } else if (auto cxxNewExpr = dyn_cast<CXXNewExpr>(parent)) {
+    } else if (isa<CXXNewExpr>(parent)) {
 //        for (auto pa : cxxNewExpr->placement_arguments())
 //            if (pa == stmt)
 //                return false;
@@ -491,7 +480,7 @@ bool ConstMethod::checkIfCanBeConst(const Stmt* stmt, const CXXMethodDecl* cxxMe
     report(
          DiagnosticsEngine::Warning,
          "oh dear, what can the matter be?",
-          parent->getLocStart())
+          compat::getBeginLoc(parent))
           << parent->getSourceRange();
     return false;
 }
@@ -516,7 +505,7 @@ bool ConstMethod::isPointerOrReferenceToNonConst(const QualType& qt) {
     return false;
 }
 
-loplugin::Plugin::Registration< ConstMethod > X("constmethod", true);
+loplugin::Plugin::Registration< ConstMethod > X("constmethod", false);
 
 }
 

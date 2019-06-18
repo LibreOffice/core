@@ -76,7 +76,7 @@ namespace dbaui
         */
         sal_uInt16 getColumnIdent( sal_uInt16 _nColId ) const;
     public:
-        explicit ORelationControl(css::uno::Reference<css::awt::XWindow>& rParent);
+        explicit ORelationControl(const css::uno::Reference<css::awt::XWindow>& rParent);
         void SetController(OTableListBoxControl* pController)
         {
             m_pBoxControl = pController;
@@ -126,7 +126,7 @@ namespace dbaui
     };
 
     // class ORelationControl
-    ORelationControl::ORelationControl(css::uno::Reference<css::awt::XWindow>& rParent)
+    ORelationControl::ORelationControl(const css::uno::Reference<css::awt::XWindow>& rParent)
         : EditBrowseBox(VCLUnoHelper::GetWindow(rParent),
             EditBrowseBoxFlags::SMART_TAB_TRAVEL | EditBrowseBoxFlags::NO_HANDLE_COLUMN_CONTENT,
             WB_TABSTOP | WB_BORDER,
