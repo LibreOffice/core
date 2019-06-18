@@ -40,6 +40,8 @@
 #include <unotextrange.hxx>
 #include <sfx2/docfile.hxx>
 #include <sal/log.hxx>
+#include <tools/diagnose_ex.h>
+
 #define AUTOTEXT_GALLERY "autoTxt"
 
 using namespace css;
@@ -90,9 +92,9 @@ ErrCode SwDOCXReader::Read(SwDoc& rDoc, const OUString& /* rBaseURL */, SwPaM& r
     {
         xFilter->filter(aDescriptor);
     }
-    catch (uno::Exception const& e)
+    catch (uno::Exception const&)
     {
-        SAL_WARN("sw.docx", "SwDOCXReader::Read(): " << e);
+        TOOLS_WARN_EXCEPTION("sw.docx", "SwDOCXReader::Read()");
         ret = ERR_SWG_READ_ERROR;
     }
     pDocShell->SetLoading(SfxLoadedFlags::ALL);
