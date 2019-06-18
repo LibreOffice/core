@@ -155,7 +155,7 @@ public:
                            ~SvxAutocorrWordList();
     void                   DeleteAndDestroyAll();
     const SvxAutocorrWord* Insert(SvxAutocorrWord aWord) const;
-    boost::optional<SvxAutocorrWord> FindAndRemove(SvxAutocorrWord *pWord);
+    boost::optional<SvxAutocorrWord> FindAndRemove(const SvxAutocorrWord *pWord);
     void                   LoadEntry(const OUString& sWrong, const OUString& sRight, bool bOnlyTxt);
     bool                   empty() const;
 

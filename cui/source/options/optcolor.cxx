@@ -176,7 +176,7 @@ public:
                   Link<weld::Widget&,void> const&);
     void Update(EditableColorConfig const*, EditableExtendedColorConfig const*);
     void ClickHdl(EditableColorConfig*, weld::ToggleButton&);
-    void ColorHdl(EditableColorConfig*, EditableExtendedColorConfig*, ColorListBox*);
+    void ColorHdl(EditableColorConfig*, EditableExtendedColorConfig*, const ColorListBox*);
 
     weld::Widget& GetWidget1()
     {
@@ -226,8 +226,8 @@ private:
         void ColorChanged (ColorConfigValue&);
         void ColorChanged (ExtendedColorConfigValue&);
     public:
-        bool Is(weld::ToggleButton* pBox) const { return m_xText.get() == pBox; }
-        bool Is(ColorListBox* pBox) const { return m_xColorList.get() == pBox; }
+        bool Is(const weld::ToggleButton* pBox) const { return m_xText.get() == pBox; }
+        bool Is(const ColorListBox* pBox) const { return m_xColorList.get() == pBox; }
     private:
         // checkbox (CheckBox) or simple text (FixedText)
         std::unique_ptr<weld::Widget> m_xText;
@@ -513,7 +513,7 @@ void ColorConfigWindow_Impl::ClickHdl(EditableColorConfig* pConfig, weld::Toggle
 // ColorHdl()
 void ColorConfigWindow_Impl::ColorHdl(
     EditableColorConfig* pConfig, EditableExtendedColorConfig* pExtConfig,
-    ColorListBox* pBox)
+    const ColorListBox* pBox)
 {
     unsigned i = 0;
 

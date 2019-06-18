@@ -40,7 +40,7 @@ namespace chelp {
         {
         }
 
-        OUString getHash()
+        OUString getHash() const
         {
             if( m_ptr )
             {
@@ -54,7 +54,7 @@ namespace chelp {
         }
 
 
-        OUString getFile()
+        OUString getFile() const
         {
             if( ! m_ptr )
                 return OUString();
@@ -69,7 +69,7 @@ namespace chelp {
         }
 
 
-        OUString getDatabase()
+        OUString getDatabase() const
         {
             if( ! m_ptr )
                 return OUString();
@@ -79,7 +79,7 @@ namespace chelp {
         }
 
 
-        OUString getTitle()
+        OUString getTitle() const
         {
             if( ! m_ptr )
                 return OUString();

@@ -2508,7 +2508,7 @@ bool SvxAutoCorrectLanguageLists::MakeCombinedChanges( std::vector<SvxAutocorrWo
             }
         }
 
-        for (SvxAutocorrWord & aNewEntrie : aNewEntries)
+        for (const SvxAutocorrWord & aNewEntrie : aNewEntries)
         {
             SvxAutocorrWord aWordToAdd(aNewEntrie.GetShort(), aNewEntrie.GetLong(), true );
             boost::optional<SvxAutocorrWord> xRemoved = pAutocorr_List->FindAndRemove( &aWordToAdd );
@@ -2692,7 +2692,7 @@ bool SvxAutocorrWordList::empty() const
     return mpImpl->maHash.empty() && mpImpl->maSortedVector.empty();
 }
 
-boost::optional<SvxAutocorrWord> SvxAutocorrWordList::FindAndRemove(SvxAutocorrWord *pWord)
+boost::optional<SvxAutocorrWord> SvxAutocorrWordList::FindAndRemove(const SvxAutocorrWord *pWord)
 {
 
     if ( mpImpl->maSortedVector.empty() ) // use the hash

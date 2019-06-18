@@ -141,7 +141,7 @@ namespace chelp {
 
         ~Databases();
 
-        OString getImageTheme();
+        OString getImageTheme() const;
 
         OUString getInstallPathAsURL();
 
