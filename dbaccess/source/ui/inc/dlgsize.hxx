@@ -38,7 +38,7 @@ namespace dbaui
     public:
         DlgSize(weld::Window * pParent, sal_Int32 nVal, bool bRow, sal_Int32 _nAlternativeStandard = -1);
         virtual ~DlgSize() override;
-        sal_Int32 GetValue();
+        sal_Int32 GetValue() const;
     };
 }   // namespace dbaui
 

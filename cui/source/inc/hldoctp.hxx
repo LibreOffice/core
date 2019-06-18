@@ -58,7 +58,7 @@ private:
                              SvxLinkInsertMode& eMode ) override;
     virtual bool   ShouldOpenMarkWnd () override {return m_bMarkWndOpen;}
     virtual void   SetMarkWndShouldOpen (bool bOpen) override {m_bMarkWndOpen=bOpen;}
-    OUString GetCurrentURL    ();
+    OUString GetCurrentURL() const;
 
 public:
     SvxHyperlinkDocTp(weld::Container* pParent, SvxHpLinkDlg* pDlg, const SfxItemSet* pItemSet);

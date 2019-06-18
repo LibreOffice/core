@@ -277,7 +277,7 @@ namespace svt
     }
 
 
-    Sequence< OUString > OControlAccess::getSupportedControls(  )
+    Sequence< OUString > OControlAccess::getSupportedControls(  ) const
     {
         Sequence< OUString > aControls( s_nControlCount );
         OUString* pControls = aControls.getArray();

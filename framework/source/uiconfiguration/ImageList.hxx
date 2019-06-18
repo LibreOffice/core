@@ -31,7 +31,7 @@ struct ImageAryData
     sal_uInt16              mnId;
     BitmapEx                maBitmapEx;
 
-    bool IsLoadable() { return maBitmapEx.IsEmpty() && !maName.isEmpty(); }
+    bool IsLoadable() const { return maBitmapEx.IsEmpty() && !maName.isEmpty(); }
 };
 
 

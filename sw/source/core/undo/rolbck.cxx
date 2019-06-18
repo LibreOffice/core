@@ -251,7 +251,7 @@ void SwHistorySetText::SetInDoc( SwDoc* pDoc, bool )
     }
 }
 
-SwHistorySetTextField::SwHistorySetTextField( SwTextField* pTextField, sal_uLong nNodePos )
+SwHistorySetTextField::SwHistorySetTextField( const SwTextField* pTextField, sal_uLong nNodePos )
     : SwHistoryHint( HSTRY_SETTXTFLDHNT )
     , m_pField( new SwFormatField( *pTextField->GetFormatField().GetField() ) )
 {
@@ -309,7 +309,7 @@ void SwHistorySetTextField::SetInDoc( SwDoc* pDoc, bool )
     }
 }
 
-SwHistorySetRefMark::SwHistorySetRefMark( SwTextRefMark* pTextHt, sal_uLong nNodePos )
+SwHistorySetRefMark::SwHistorySetRefMark( const SwTextRefMark* pTextHt, sal_uLong nNodePos )
     : SwHistoryHint( HSTRY_SETREFMARKHNT )
     , m_RefName( pTextHt->GetRefMark().GetRefName() )
     , m_nNodeIndex( nNodePos )
@@ -336,7 +336,7 @@ void SwHistorySetRefMark::SetInDoc( SwDoc* pDoc, bool )
     }
 }
 
-SwHistorySetTOXMark::SwHistorySetTOXMark( SwTextTOXMark* pTextHt, sal_uLong nNodePos )
+SwHistorySetTOXMark::SwHistorySetTOXMark( const SwTextTOXMark* pTextHt, sal_uLong nNodePos )
     : SwHistoryHint( HSTRY_SETTOXMARKHNT )
     , m_TOXMark( pTextHt->GetTOXMark() )
     , m_TOXName( m_TOXMark.GetTOXType()->GetTypeName() )

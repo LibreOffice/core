@@ -241,7 +241,7 @@ void SvxXConnectionPreview::SetAttributes( const SfxItemSet& rInAttrs )
 
 // Get number of lines which are offset based on the preview object
 
-sal_uInt16 SvxXConnectionPreview::GetLineDeltaCount()
+sal_uInt16 SvxXConnectionPreview::GetLineDeltaCount() const
 {
     const SfxItemSet& rSet = pEdgeObj->GetMergedItemSet();
     sal_uInt16 nCount(0);

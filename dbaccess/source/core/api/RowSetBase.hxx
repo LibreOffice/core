@@ -332,7 +332,7 @@ namespace dbaccess
         bool    isModification( const GrantNotifierAccess& ) { return isModification(); }
         bool    isModified( const GrantNotifierAccess& ) { return isModified(); }
         bool    isNew( const GrantNotifierAccess& ) { return isNew(); }
-        bool    isInsertRow() { return m_bIsInsertRow; } // isNew() || isModified(); }
+        bool    isInsertRow() const { return m_bIsInsertRow; } // isNew() || isModified(); }
         void        fireProperty( sal_Int32 _nProperty, bool _bNew, bool _bOld, const GrantNotifierAccess& )
         {
             fireProperty( _nProperty, _bNew, _bOld );

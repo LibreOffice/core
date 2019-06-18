@@ -862,7 +862,7 @@ public:
         Point   maPos;      // mouse position in output coordinates
     };
     PointerState                        GetPointerState();
-    bool                                IsMouseOver();
+    bool                                IsMouseOver() const;
 
     void                                SetInputContext( const InputContext& rInputContext );
     const InputContext&                 GetInputContext() const;
@@ -1080,7 +1080,7 @@ public:
     bool                                HasFocus() const;
     bool                                HasChildPathFocus( bool bSystemWindow = false ) const;
     bool                                IsActive() const;
-    bool                                HasActiveChildFrame();
+    bool                                HasActiveChildFrame() const;
     GetFocusFlags                       GetGetFocusFlags() const;
     void                                GrabFocusToDocument();
 

@@ -1076,31 +1076,31 @@ public:
         m_xCellRange.set(rCellRange, uno::UNO_QUERY_THROW);
     }
     /// @throws uno::RuntimeException
-    uno::Reference< sheet::XSheetCellRange > getSheetCellRange()
+    uno::Reference< sheet::XSheetCellRange > getSheetCellRange() const
     {
         return uno::Reference< sheet::XSheetCellRange >(m_xCellRange, uno::UNO_QUERY_THROW);
     }
     /// @throws uno::RuntimeException
-    uno::Reference< sheet::XSpreadsheet >  getSpreadSheet()
+    uno::Reference< sheet::XSpreadsheet >  getSpreadSheet() const
     {
         return getSheetCellRange()->getSpreadsheet();
     }
 
     /// @throws uno::RuntimeException
-    uno::Reference< table::XCellRange > getCellRangeFromSheet()
+    uno::Reference< table::XCellRange > getCellRangeFromSheet() const
     {
         return uno::Reference< table::XCellRange >(getSpreadSheet(), uno::UNO_QUERY_THROW );
     }
 
     /// @throws uno::RuntimeException
-    uno::Reference< sheet::XCellRangeAddressable >  getCellRangeAddressable()
+    uno::Reference< sheet::XCellRangeAddressable >  getCellRangeAddressable() const
     {
         return uno::Reference< sheet::XCellRangeAddressable >(m_xCellRange, ::uno::UNO_QUERY_THROW);
 
     }
 
     /// @throws uno::RuntimeException
-    uno::Reference< sheet::XSheetCellCursor > getSheetCellCursor()
+    uno::Reference< sheet::XSheetCellCursor > getSheetCellCursor() const
     {
         return  uno::Reference< sheet::XSheetCellCursor >( getSpreadSheet()->createCursorByRange( getSheetCellRange() ), uno::UNO_SET_THROW );
     }
@@ -3588,7 +3588,7 @@ ScVbaRange::End( ::sal_Int32 Direction )
 }
 
 bool
-ScVbaRange::isSingleCellRange()
+ScVbaRange::isSingleCellRange() const
 {
     uno::Reference< sheet::XCellRangeAddressable > xAddressable( mxRange, uno::UNO_QUERY );
     if ( xAddressable.is() )
@@ -4045,7 +4045,7 @@ ScVbaRange::getHeight()
 }
 
 awt::Point
-ScVbaRange::getPosition()
+ScVbaRange::getPosition() const
 {
     awt::Point aPoint;
     uno::Reference< beans::XPropertySet > xProps;

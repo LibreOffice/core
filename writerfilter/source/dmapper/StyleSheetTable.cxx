@@ -141,7 +141,7 @@ PropertyMapPtr TableStyleSheetEntry::GetProperties( sal_Int32 nMask )
     return pProps;
 }
 
-beans::PropertyValues StyleSheetEntry::GetInteropGrabBagSeq()
+beans::PropertyValues StyleSheetEntry::GetInteropGrabBagSeq() const
 {
     return comphelper::containerToSequence(m_aInteropGrabBag);
 }
@@ -395,12 +395,12 @@ StyleSheetTable::~StyleSheetTable()
 {
 }
 
-PropertyMapPtr const & StyleSheetTable::GetDefaultParaProps()
+PropertyMapPtr const & StyleSheetTable::GetDefaultParaProps() const
 {
     return m_pImpl->m_pDefaultParaProps;
 }
 
-PropertyMapPtr const & StyleSheetTable::GetDefaultCharProps()
+PropertyMapPtr const & StyleSheetTable::GetDefaultCharProps() const
 {
     return m_pImpl->m_pDefaultCharProps;
 }
@@ -1237,7 +1237,7 @@ const StyleSheetEntryPtr StyleSheetTable::FindDefaultParaStyle()
     return FindStyleSheetByISTD( m_pImpl->m_sDefaultParaStyleName );
 }
 
-const StyleSheetEntryPtr & StyleSheetTable::GetCurrentEntry()
+const StyleSheetEntryPtr & StyleSheetTable::GetCurrentEntry() const
 {
     return m_pImpl->m_pCurrentEntry;
 }

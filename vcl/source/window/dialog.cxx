@@ -1487,7 +1487,7 @@ vcl::Window* Dialog::get_widget_for_response(int response)
     return nullptr;
 }
 
-int Dialog::get_default_response()
+int Dialog::get_default_response() const
 {
     //copy explicit responses
     std::map<VclPtr<vcl::Window>, short> aResponses(mpDialogImpl->maResponses);

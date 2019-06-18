@@ -294,7 +294,7 @@ void SwView::SetRedlineAuthor(const OUString& rAuthor)
     m_pViewImpl->m_sRedlineAuthor = rAuthor;
 }
 
-const OUString& SwView::GetRedlineAuthor()
+const OUString& SwView::GetRedlineAuthor() const
 {
     return m_pViewImpl->m_sRedlineAuthor;
 }

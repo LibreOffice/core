@@ -570,7 +570,7 @@ public:
     void addFieldParam( const OUString& name, const OUString& value );
     void setCurrentFieldParamsTo(css::uno::Reference< css::text::XFormField> const &xFormField);
     OUString getCurrentFieldType();
-    bool hasCurrentFieldCtx();
+    bool hasCurrentFieldCtx() const;
 
 
     /// insert new footnote ID.
@@ -681,7 +681,7 @@ public:
         const css::uno::Sequence<sal_Int8> & rProtectionKey );
 
     /// get the last open redline ID
-    OUString const & GetOpenRedlineId();
+    OUString const & GetOpenRedlineId() const;
     /// modify the last open redline ID
     void SetOpenRedlineId( OUString const & rId);
     /// reset the last open redline ID
@@ -705,7 +705,7 @@ public:
     void PopListContext();
 
     void SetCellParaStyleDefault(OUString const& rNewValue);
-    OUString const& GetCellParaStyleDefault();
+    OUString const& GetCellParaStyleDefault() const;
 
     void AddCrossRefHeadingMapping(OUString const& rFrom, OUString const& rTo);
     void MapCrossRefHeadingFieldsHorribly();

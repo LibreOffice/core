@@ -59,9 +59,9 @@ public:
             // Progress Bar the same position as before
             void ChangeReference(sal_Int32 nNewReference);
 
-            sal_Int32 GetReference() { return nReference; }
-            sal_Int32 GetValue() { return nValue; }
-            bool GetRepeat() { return bRepeat; }
+            sal_Int32 GetReference() const { return nReference; }
+            sal_Int32 GetValue() const { return nValue; }
+            bool GetRepeat() const { return bRepeat; }
 };
 
 #endif

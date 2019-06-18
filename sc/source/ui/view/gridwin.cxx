@@ -6527,7 +6527,7 @@ void ScGridWindow::UpdateShrinkOverlay()
 }
 
 // #i70788# central method to get the OverlayManager safely
-rtl::Reference<sdr::overlay::OverlayManager> ScGridWindow::getOverlayManager()
+rtl::Reference<sdr::overlay::OverlayManager> ScGridWindow::getOverlayManager() const
 {
     SdrPageView* pPV = pViewData->GetView()->GetScDrawView()->GetSdrPageView();
 

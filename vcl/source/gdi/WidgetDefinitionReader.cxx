@@ -184,8 +184,8 @@ WidgetDefinitionReader::WidgetDefinitionReader(OUString const& rDefinitionFile,
 {
 }
 
-void WidgetDefinitionReader::readDrawingDefinition(tools::XmlWalker& rWalker,
-                                                   std::shared_ptr<WidgetDefinitionState>& rpState)
+void WidgetDefinitionReader::readDrawingDefinition(
+    tools::XmlWalker& rWalker, const std::shared_ptr<WidgetDefinitionState>& rpState)
 {
     rWalker.children();
     while (rWalker.isValid())

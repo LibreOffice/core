@@ -58,7 +58,7 @@ public:
     virtual void SAL_CALL disposing() override;
 
     css::uno::Reference<css::uno::XComponentContext> const&
-        GetComponentContext() { return mxComponentContext; }
+        GetComponentContext() const { return mxComponentContext; }
 
     void SetVisible (const bool bIsVisible);
 

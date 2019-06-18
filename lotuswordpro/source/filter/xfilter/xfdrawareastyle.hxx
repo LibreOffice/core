@@ -82,9 +82,9 @@ public:
 
     void    SetLineSpace(double space);
 
-    enumXFAreaStyle GetAreaStyle();
+    enumXFAreaStyle GetAreaStyle() const;
 
-    const XFColor& GetBackColor();
+    const XFColor& GetBackColor() const;
 
     virtual enumXFStyle GetStyleFamily() override;
 
@@ -129,12 +129,12 @@ inline void XFDrawAreaStyle::SetLineSpace(double space)
     m_fSpace = space;
 }
 
-inline enumXFAreaStyle  XFDrawAreaStyle::GetAreaStyle()
+inline enumXFAreaStyle  XFDrawAreaStyle::GetAreaStyle() const
 {
     return m_eAreaStyle;
 }
 
-inline const XFColor& XFDrawAreaStyle::GetBackColor()
+inline const XFColor& XFDrawAreaStyle::GetBackColor() const
 {
     return m_aBackColor;
 }

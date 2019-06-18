@@ -1025,7 +1025,7 @@ void DrawingML::WriteOutline( const Reference<XPropertySet>& rXPropSet, Referenc
     mpFS->endElementNS( XML_a, XML_ln );
 }
 
-const char* DrawingML::GetComponentDir()
+const char* DrawingML::GetComponentDir() const
 {
     switch ( meDocumentType )
     {
@@ -1037,7 +1037,7 @@ const char* DrawingML::GetComponentDir()
     return "unknown";
 }
 
-const char* DrawingML::GetRelationCompPrefix()
+const char* DrawingML::GetRelationCompPrefix() const
 {
     switch ( meDocumentType )
     {

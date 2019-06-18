@@ -236,7 +236,7 @@ namespace bib
         return xReturn;
     }
 
-    Reference< frame::XDispatchProviderInterception > BibBeamer::getDispatchProviderInterception()
+    Reference< frame::XDispatchProviderInterception > BibBeamer::getDispatchProviderInterception() const
     {
         Reference< frame::XDispatchProviderInterception > xReturn;
         if ( pGridWin )

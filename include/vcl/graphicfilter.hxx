@@ -233,7 +233,7 @@ public:
                     GraphicFilter( bool bUseConfig = true );
                     ~GraphicFilter();
 
-    sal_uInt16      GetImportFormatCount();
+    sal_uInt16      GetImportFormatCount() const;
     sal_uInt16      GetImportFormatNumber( const OUString& rFormatName );
     sal_uInt16      GetImportFormatNumberForShortName( const OUString& rShortName );
     sal_uInt16      GetImportFormatNumberForTypeName( const OUString& rType );
@@ -245,7 +245,7 @@ public:
     OUString        GetImportFormatShortName( sal_uInt16 nFormat );
     OUString        GetImportWildcard( sal_uInt16 nFormat, sal_Int32 nEntry );
 
-    sal_uInt16      GetExportFormatCount();
+    sal_uInt16      GetExportFormatCount() const;
     sal_uInt16      GetExportFormatNumber( const OUString& rFormatName );
     sal_uInt16      GetExportFormatNumberForMediaType( const OUString& rShortName );
     sal_uInt16      GetExportFormatNumberForShortName( const OUString& rShortName );
@@ -295,7 +295,7 @@ public:
                                    WmfExternal const *pExtHeader = nullptr );
 
     // Setting sizeLimit limits how much will be read from the stream.
-    Graphic ImportUnloadedGraphic(SvStream& rIStream, sal_uInt64 sizeLimit = 0, Size* pSizeHint = nullptr);
+    Graphic ImportUnloadedGraphic(SvStream& rIStream, sal_uInt64 sizeLimit = 0, const Size* pSizeHint = nullptr);
 
     const FilterErrorEx&    GetLastError() const { return *pErrorEx;}
     void                    ResetLastError();

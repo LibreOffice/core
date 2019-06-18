@@ -404,7 +404,7 @@ public:
 
     // Areas
     inline void SetMark();
-    inline bool HasMark();
+    inline bool HasMark() const;
 
     void ClearMark();
 
@@ -832,7 +832,7 @@ public:
     {
         m_bMacroExecAllowed = _bMacroExecAllowed;
     }
-    bool IsMacroExecAllowed()
+    bool IsMacroExecAllowed() const
     {
         return m_bMacroExecAllowed;
     }
@@ -872,7 +872,7 @@ inline SwPaM* SwCursorShell::GetStackCursor() const { return m_pStackCursor; }
 
 inline void SwCursorShell::SetMark() { m_pCurrentCursor->SetMark(); }
 
-inline bool SwCursorShell::HasMark() { return m_pCurrentCursor->HasMark(); }
+inline bool SwCursorShell::HasMark() const { return m_pCurrentCursor->HasMark(); }
 
 inline bool SwCursorShell::IsSelection() const
 {

@@ -1953,13 +1953,13 @@ bool SfxViewShell::HandleNotifyEvent_Impl( NotifyEvent const & rEvent )
     return false;
 }
 
-bool SfxViewShell::HasKeyListeners_Impl()
+bool SfxViewShell::HasKeyListeners_Impl() const
 {
     return (pImpl->m_pController.is())
         && pImpl->m_pController->HasKeyListeners_Impl();
 }
 
-bool SfxViewShell::HasMouseClickListeners_Impl()
+bool SfxViewShell::HasMouseClickListeners_Impl() const
 {
     return (pImpl->m_pController.is())
         && pImpl->m_pController->HasMouseClickListeners_Impl();
@@ -1988,7 +1988,7 @@ void SfxViewShell::notifyWindow(vcl::LOKWindowId nDialogId, const OUString& rAct
     SfxLokHelper::notifyWindow(this, nDialogId, rAction, rPayload);
 }
 
-uno::Reference< datatransfer::clipboard::XClipboardNotifier > SfxViewShell::GetClipboardNotifier()
+uno::Reference< datatransfer::clipboard::XClipboardNotifier > SfxViewShell::GetClipboardNotifier() const
 {
     uno::Reference< datatransfer::clipboard::XClipboardNotifier > xClipboardNotifier;
     if ( GetViewFrame() )

@@ -296,7 +296,7 @@ private:
                                    sal_uInt32 nLineWidth );
 
     // Determines if conversion of a given floating table is wanted or not.
-    bool FloatingTableConversion( DomainMapper_Impl& rDM_Impl, FloatingTableInfo& rInfo );
+    bool FloatingTableConversion( const DomainMapper_Impl& rDM_Impl, FloatingTableInfo& rInfo );
 
     /// Increases paragraph spacing according to Word 2013+ needs if necessary.
     void HandleIncreasedAnchoredObjectSpacing(DomainMapper_Impl& rDM_Impl);
@@ -311,7 +311,7 @@ public:
 
     explicit SectionPropertyMap( bool bIsFirstSection );
 
-    bool IsFirstSection() { return m_bIsFirstSection; }
+    bool IsFirstSection() const { return m_bIsFirstSection; }
 
     void SetStart( const css::uno::Reference< css::text::XTextRange >& xRange ) { m_xStartingRange = xRange; }
 
@@ -351,17 +351,17 @@ public:
     void SetPageNumberType( sal_Int32 nSet ) { m_nPageNumberType = nSet; }
     void SetBreakType( sal_Int32 nSet )      { m_nBreakType = nSet; }
     // GetBreakType returns -1 if the breakType has not yet been identified for the section
-    sal_Int32 GetBreakType()                 { return m_nBreakType; }
+    sal_Int32 GetBreakType() const           { return m_nBreakType; }
 
     void SetLeftMargin( sal_Int32 nSet )   { m_nLeftMargin = nSet; }
-    sal_Int32 GetLeftMargin()              { return m_nLeftMargin; }
+    sal_Int32 GetLeftMargin() const        { return m_nLeftMargin; }
     void SetRightMargin( sal_Int32 nSet )  { m_nRightMargin = nSet; }
-    sal_Int32 GetRightMargin()             { return m_nRightMargin; }
+    sal_Int32 GetRightMargin() const       { return m_nRightMargin; }
     void SetTopMargin( sal_Int32 nSet )    { m_nTopMargin = nSet; }
     void SetBottomMargin( sal_Int32 nSet ) { m_nBottomMargin = nSet; }
     void SetHeaderTop( sal_Int32 nSet )    { m_nHeaderTop = nSet; }
     void SetHeaderBottom( sal_Int32 nSet ) { m_nHeaderBottom = nSet; }
-    sal_Int32 GetPageWidth();
+    sal_Int32 GetPageWidth() const;
 
     void SetGridType( sal_Int32 nSet )      { m_nGridType = nSet; }
     void SetGridLinePitch( sal_Int32 nSet ) { m_nGridLinePitch = nSet; }

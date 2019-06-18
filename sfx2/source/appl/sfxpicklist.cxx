@@ -76,14 +76,14 @@ class SfxPickListImpl : public SfxListener
        certain requirements, e.g. being writable. Check implementation for requirement
        details.
      */
-    static void         AddDocumentToPickList( SfxObjectShell* pDocShell );
+    static void         AddDocumentToPickList( const SfxObjectShell* pDocShell );
 
 public:
     SfxPickListImpl(SfxApplication& rApp);
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 };
 
-void SfxPickListImpl::AddDocumentToPickList( SfxObjectShell* pDocSh )
+void SfxPickListImpl::AddDocumentToPickList( const SfxObjectShell* pDocSh )
 {
     if (pDocSh->IsAvoidRecentDocs() || comphelper::LibreOfficeKit::isActive())
         return;

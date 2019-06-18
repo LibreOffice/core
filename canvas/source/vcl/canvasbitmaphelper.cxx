@@ -74,7 +74,7 @@ namespace vclcanvas
         CanvasHelper::disposing();
     }
 
-    geometry::IntegerSize2D CanvasBitmapHelper::getSize()
+    geometry::IntegerSize2D CanvasBitmapHelper::getSize() const
     {
         if( !mpBackBuffer )
             return geometry::IntegerSize2D();
@@ -162,7 +162,7 @@ namespace vclcanvas
         return aRes;
     }
 
-    rendering::IntegerBitmapLayout CanvasBitmapHelper::getMemoryLayout()
+    rendering::IntegerBitmapLayout CanvasBitmapHelper::getMemoryLayout() const
     {
         if( !mpOutDevProvider.get() )
             return rendering::IntegerBitmapLayout(); // we're disposed

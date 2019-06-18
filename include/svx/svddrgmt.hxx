@@ -193,7 +193,7 @@ public:
 
     void Show();
     void Hide();
-    bool IsShiftPressed() { return mbShiftPressed; }
+    bool IsShiftPressed() const { return mbShiftPressed; }
     void SetShiftPressed(bool bShiftPressed) { mbShiftPressed = bShiftPressed; }
     virtual void TakeSdrDragComment(OUString& rStr) const=0;
     virtual bool BeginSdrDrag()=0;

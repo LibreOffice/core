@@ -333,7 +333,7 @@ public:
     void            UpdateAnchorHandles();
 
     ScPageBreakData* GetPageBreakData()     { return pPageBreakData.get(); }
-    const std::vector<ScHighlightEntry>& GetHighlightRanges()   { return maHighlightRanges; }
+    const std::vector<ScHighlightEntry>& GetHighlightRanges() const { return maHighlightRanges; }
 
     void            UpdatePageBreakData( bool bForcePaint = false );
 
@@ -399,7 +399,7 @@ public:
     void            InvertHorizontal( ScVSplitPos eWhich, long nDragPos );
     void            InvertVertical( ScHSplitPos eWhich, long nDragPos );
 
-    Point           GetInsertPos();
+    Point           GetInsertPos() const;
 
     Point           GetChartInsertPos( const Size& rSize, const ScRange& rCellRange );
     Point           GetChartDialogPos( const Size& rDialogSize, const tools::Rectangle& rLogicChart );
@@ -607,10 +607,10 @@ public:
     OUString getRowColumnHeaders(const tools::Rectangle& rRectangle);
     static void OnLOKNoteStateChanged(const ScPostIt* pNote);
 
-    SCROW GetLOKStartHeaderRow() { return mnLOKStartHeaderRow; }
-    SCROW GetLOKEndHeaderRow() { return mnLOKEndHeaderRow; }
-    SCCOL GetLOKStartHeaderCol() { return mnLOKStartHeaderCol; }
-    SCCOL GetLOKEndHeaderCol() { return mnLOKEndHeaderCol; }
+    SCROW GetLOKStartHeaderRow() const { return mnLOKStartHeaderRow; }
+    SCROW GetLOKEndHeaderRow() const { return mnLOKEndHeaderRow; }
+    SCCOL GetLOKStartHeaderCol() const { return mnLOKStartHeaderCol; }
+    SCCOL GetLOKEndHeaderCol() const { return mnLOKEndHeaderCol; }
 };
 
 #endif

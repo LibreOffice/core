@@ -253,7 +253,7 @@ public:
     void        CollapseAll();
 
     void        SetBackgroundColor( const Color& rColor );
-    Color const & GetBackgroundColor();
+    Color const & GetBackgroundColor() const;
 
     /// Informs this edit view about which view shell contains it.
     void RegisterViewShell(OutlinerViewShell* pViewShell);
@@ -286,7 +286,7 @@ public:
 
     void            TransliterateText( TransliterationFlags nTransliterationMode );
 
-    ESelection      GetSelection();
+    ESelection      GetSelection() const;
 
     SvtScriptType   GetSelectedScriptType() const;
 
@@ -719,7 +719,7 @@ public:
     void            UndoActionStart( sal_uInt16 nId );
     void            UndoActionEnd();
     void            InsertUndo( std::unique_ptr<EditUndo> pUndo );
-    bool            IsInUndo();
+    bool            IsInUndo() const;
 
     void            ClearModifyFlag();
     bool            IsModified() const;

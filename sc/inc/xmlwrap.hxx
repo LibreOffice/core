@@ -63,7 +63,7 @@ class ScXMLImportWrapper
     SfxMedium*      pMedium;
     css::uno::Reference< css::embed::XStorage > xStorage;
 
-    css::uno::Reference< css::task::XStatusIndicator> GetStatusIndicator();
+    css::uno::Reference< css::task::XStatusIndicator> GetStatusIndicator() const;
 
     ErrCode ImportFromComponent(const css::uno::Reference<css::uno::XComponentContext>& xContext,
         const css::uno::Reference<css::frame::XModel>& xModel,

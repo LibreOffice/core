@@ -248,7 +248,7 @@ bool ScAccessiblePreviewCell::IsEditable(
     return false;
 }
 
-bool ScAccessiblePreviewCell::IsOpaque()
+bool ScAccessiblePreviewCell::IsOpaque() const
 {
     // test whether there is a background color
     //! could be moved to ScAccessibleCellBase

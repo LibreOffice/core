@@ -139,8 +139,8 @@ class LwpFormulaCellAddr:public LwpFormulaArg
 public:
     LwpFormulaCellAddr(sal_Int16 aCol, sal_Int16 aRow);
 
-    sal_Int16 GetCol(){return m_aCol;}
-    sal_Int16 GetRow(){return m_aRow;}
+    sal_Int16 GetCol() const {return m_aCol;}
+    sal_Int16 GetRow() const {return m_aRow;}
 
     virtual OUString ToString(LwpTableLayout* pCellsMap) override;
 private:

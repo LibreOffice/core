@@ -78,8 +78,8 @@ public:
     void    SetTop(double top);
     void    SetBottom(double bottom);
 
-    double  GetLeft();
-    double  GetTop();
+    double  GetLeft() const;
+    double  GetTop() const;
 
     void    ToXml(IXFStream *pStrm);
 
@@ -117,12 +117,12 @@ inline void XFMargins::SetBottom(double bottom)
     m_nFlag |= XFMARGINS_FLAG_BOTTOM;
 }
 
-inline double   XFMargins::GetLeft()
+inline double   XFMargins::GetLeft() const
 {
     return m_fLeft;
 }
 
-inline double   XFMargins::GetTop()
+inline double   XFMargins::GetTop() const
 {
     return m_fTop;
 }

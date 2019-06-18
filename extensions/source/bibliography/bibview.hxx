@@ -74,7 +74,7 @@ namespace bib
         virtual void        dispose() override;
 
         void                UpdatePages();
-        css::uno::Reference< css::awt::XControlContainer > getControlContainer();
+        css::uno::Reference< css::awt::XControlContainer > getControlContainer() const;
 
         virtual void        GetFocus() override;
 

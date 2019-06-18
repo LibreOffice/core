@@ -77,7 +77,7 @@ public:
         to obtain a pointer to the wrapped ViewShell object for a given
         XView object.
     */
-    const ::std::shared_ptr<ViewShell>& GetViewShell() { return mpViewShell;}
+    const ::std::shared_ptr<ViewShell>& GetViewShell() const { return mpViewShell;}
 
     // XUnoTunnel
 

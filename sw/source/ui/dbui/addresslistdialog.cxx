@@ -531,7 +531,7 @@ IMPL_LINK(SwAddressListDialog, TableSelectHdl_Impl, weld::Button&, rButton, void
     TableSelectHdl(&rButton);
 }
 
-void SwAddressListDialog::TableSelectHdl(weld::Button* pButton)
+void SwAddressListDialog::TableSelectHdl(const weld::Button* pButton)
 {
     weld::WaitObject aWait(m_xDialog.get());
 
@@ -554,7 +554,7 @@ IMPL_LINK_NOARG(SwAddressListDialog, OKHdl_Impl, weld::Button&, void)
     m_xDialog->response(RET_OK);
 }
 
-uno::Reference< XDataSource>  SwAddressListDialog::GetSource()
+uno::Reference< XDataSource>  SwAddressListDialog::GetSource() const
 {
     uno::Reference< XDataSource>  xRet;
     int nSelect = m_xListLB->get_selected_index();
@@ -567,7 +567,7 @@ uno::Reference< XDataSource>  SwAddressListDialog::GetSource()
 
 }
 
-SharedConnection    SwAddressListDialog::GetConnection()
+SharedConnection    SwAddressListDialog::GetConnection() const
 {
     SharedConnection xRet;
     int nSelect = m_xListLB->get_selected_index();
@@ -579,7 +579,7 @@ SharedConnection    SwAddressListDialog::GetConnection()
     return xRet;
 }
 
-uno::Reference< XColumnsSupplier> SwAddressListDialog::GetColumnsSupplier()
+uno::Reference< XColumnsSupplier> SwAddressListDialog::GetColumnsSupplier() const
 {
     uno::Reference< XColumnsSupplier> xRet;
     int nSelect = m_xListLB->get_selected_index();
@@ -591,7 +591,7 @@ uno::Reference< XColumnsSupplier> SwAddressListDialog::GetColumnsSupplier()
     return xRet;
 }
 
-OUString SwAddressListDialog::GetFilter()
+OUString SwAddressListDialog::GetFilter() const
 {
     int nSelect = m_xListLB->get_selected_index();
     if (nSelect != -1)

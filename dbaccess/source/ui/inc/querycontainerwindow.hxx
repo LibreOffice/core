@@ -66,9 +66,9 @@ namespace dbaui
 
         OQueryDesignView*   getDesignView() { return m_pViewSwitch->getDesignView(); }
 
-        bool isCutAllowed()     { return m_pViewSwitch->isCutAllowed(); }
-        bool isPasteAllowed()   { return m_pViewSwitch->isPasteAllowed(); }
-        bool isCopyAllowed()    { return m_pViewSwitch->isCopyAllowed(); }
+        bool isCutAllowed() const   { return m_pViewSwitch->isCutAllowed(); }
+        bool isPasteAllowed() const { return m_pViewSwitch->isPasteAllowed(); }
+        bool isCopyAllowed() const  { return m_pViewSwitch->isCopyAllowed(); }
         void copy()                 { m_pViewSwitch->copy(); }
         void cut()                  { m_pViewSwitch->cut(); }
         void paste()                { m_pViewSwitch->paste(); }

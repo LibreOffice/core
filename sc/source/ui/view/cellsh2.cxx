@@ -217,7 +217,7 @@ namespace
     {
         std::shared_ptr<SfxDialogController> m_xDlg;
     public:
-        ScValidationRegisteredDlg(weld::Window* pParent, std::shared_ptr<SfxDialogController>& rDlg)
+        ScValidationRegisteredDlg(weld::Window* pParent, const std::shared_ptr<SfxDialogController>& rDlg)
             : m_xDlg(rDlg)
         {
             SC_MOD()->RegisterRefController(static_cast<sal_uInt16>(ScValidationDlg::SLOTID), m_xDlg, pParent);

@@ -143,11 +143,11 @@ public:
     std::vector< ShapePtr >&        getChildren() { return maChildren; }
 
     void                            setName( const OUString& rName ) { msName = rName; }
-    const OUString&                 getName( ) { return msName; }
+    const OUString&                 getName( ) const { return msName; }
     void                            setInternalName( const OUString& rInternalName ) { msInternalName = rInternalName; }
     const OUString&                 getInternalName() const { return msInternalName; }
     void                            setId( const OUString& rId ) { msId = rId; }
-    const OUString&                 getId() { return msId; }
+    const OUString&                 getId() const { return msId; }
     void                            setDescription( const OUString& rDescr ) { msDescription = rDescr; }
     void                            setHidden( bool bHidden ) { mbHidden = bHidden; }
     void                            setHiddenMasterShape( bool bHiddenMasterShape ) { mbHiddenMasterShape = bHiddenMasterShape; }
@@ -166,7 +166,7 @@ public:
     void                            setTableType();
 
     void                setTextBody(const TextBodyPtr & pTextBody);
-    const TextBodyPtr&   getTextBody() { return mpTextBody;}
+    const TextBodyPtr&  getTextBody() const { return mpTextBody;}
     void                setMasterTextListStyle( const TextListStylePtr& pMasterTextListStyle );
     const TextListStylePtr&  getMasterTextListStyle() const { return mpMasterTextListStyle; }
 
@@ -189,25 +189,25 @@ public:
 
     void                applyShapeReference( const Shape& rReferencedShape, bool bUseText = true );
     const ::std::vector<OUString>&
-                        getExtDrawings() { return maExtDrawings; }
+                        getExtDrawings() const { return maExtDrawings; }
     void                addExtDrawingRelId( const OUString &rRelId ) { maExtDrawings.push_back( rRelId ); }
     // Set font color only for extdrawings.
     void                setFontRefColorForNodes(const Color& rColor) { maFontRefColorForNodes = rColor; }
     const Color&        getFontRefColorForNodes() const { return maFontRefColorForNodes; }
     void                setLockedCanvas(bool bLockedCanvas);
-    bool                getLockedCanvas() { return mbLockedCanvas;}
+    bool                getLockedCanvas() const { return mbLockedCanvas;}
     void                setWps(bool bWps);
-    bool                getWps() { return mbWps;}
+    bool                getWps() const { return mbWps;}
     void                setTextBox(bool bTextBox);
     const css::uno::Sequence<css::beans::PropertyValue> &
-                        getDiagramDoms() { return maDiagramDoms; }
+                        getDiagramDoms() const { return maDiagramDoms; }
     void                setDiagramDoms(const css::uno::Sequence<css::beans::PropertyValue>& rDiagramDoms) { maDiagramDoms = rDiagramDoms; }
     css::uno::Sequence< css::uno::Sequence< css::uno::Any > >resolveRelationshipsOfTypeFromOfficeDoc(
                                                                           core::XmlFilterBase& rFilter, const OUString& sFragment, const OUString& sType );
     void                setLinkedTxbxAttributes(const LinkedTxbxAttr& rhs){ maLinkedTxbxAttr = rhs; };
     void                setTxbxHasLinkedTxtBox( const bool rhs){ mbHasLinkedTxbx = rhs; };
-    const LinkedTxbxAttr&     getLinkedTxbxAttributes() { return maLinkedTxbxAttr; };
-    bool                isLinkedTxbx() { return mbHasLinkedTxbx; };
+    const LinkedTxbxAttr&     getLinkedTxbxAttributes() const { return maLinkedTxbxAttr; };
+    bool                isLinkedTxbx() const { return mbHasLinkedTxbx; };
 
     void setZOrder(sal_Int32 nZOrder) { mnZOrder = nZOrder; }
 

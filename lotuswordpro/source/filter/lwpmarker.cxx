@@ -140,7 +140,7 @@ void LwpCHBlkMarker::Read()
     }
 }
 
-OUString LwpCHBlkMarker::GetPromptText()
+OUString LwpCHBlkMarker::GetPromptText() const
 {
     LwpStory* pStory = nullptr;
     if (m_objPromptStory.obj().is())
@@ -286,12 +286,12 @@ void LwpCHBlkMarker::ProcessKeylist(XFContentContainer* pXFPara,sal_uInt8 nType)
     }
 }
 
-bool LwpCHBlkMarker::IsHasFilled()
+bool LwpCHBlkMarker::IsHasFilled() const
 {
     return (CHB_PROMPT & m_nFlag) == 0;
 }
 
-bool LwpCHBlkMarker::IsBubbleHelp()
+bool LwpCHBlkMarker::IsBubbleHelp() const
 {
     return (CHB_HELP & m_nFlag) != 0;
 }
@@ -411,7 +411,7 @@ void LwpFieldMark::ParseTOC(OUString& sLevel,OUString& sText)
         sText.clear();
 }
 
-bool LwpFieldMark::IsFormulaInsert()
+bool LwpFieldMark::IsFormulaInsert() const
 {
     return (m_nFlag & FF_FORMULAINSERTED) != 0;
 }

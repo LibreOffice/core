@@ -17,30 +17,43 @@ struct Class1
     struct Impl {
         void foo_notconst();
         void foo_const() const;
-        int & foo_both();
-        int const & foo_both() const;
+        int & foo_int_ref() const;
+        int const & foo_const_int_ref() const;
+        int * foo_int_ptr() const;
+        int const * foo_const_int_ptr() const;
     };
     std::unique_ptr<Impl> pImpl;
     int* m_pint;
     VclPtr<OutputDevice> m_pvcl;
 
-    void foo1() {
+    void GetFoo1() {
         pImpl->foo_notconst();
     }
-    void foo2() { // expected-error {{this method can be const [loplugin:constmethod]}}
+    void GetFoo2() {
         pImpl->foo_const();
     }
-    // TODO this should trigger a warning, but doesn't
-    void foo3() {
-        pImpl->foo_both();
+    int& GetFoo3() {
+        return pImpl->foo_int_ref();
     }
-    Impl* foo4() {
+    int const & GetFoo3a() { // expected-error {{this method can be const [loplugin:constmethod]}}
+        return pImpl->foo_const_int_ref();
+    }
+    int* GetFoo3b() {
+        return pImpl->foo_int_ptr();
+    }
+    int const * GetFoo3c() { // expected-error {{this method can be const [loplugin:constmethod]}}
+        return pImpl->foo_const_int_ptr();
+    }
+    Impl* GetFoo4() {
         return pImpl.get(); // no warning expected
     }
-    int* foo5() {
+    int* GetFoo5() {
         return m_pint; // no warning expected
     }
-    OutputDevice* foo6() {
+    int& GetFoo6() {
+        return *m_pint; // no warning expected
+    }
+    OutputDevice* GetFoo7() {
         return m_pvcl; // no warning expected
     }
 };

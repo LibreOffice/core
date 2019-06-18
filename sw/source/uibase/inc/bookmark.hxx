@@ -36,7 +36,7 @@ public:
     void                InsertBookmark(sw::mark::IMark* pMark);
     void                SelectByName(const OUString& sName);
     sw::mark::IMark*    GetBookmarkByName(const OUString& sName);
-    OUString            GetNameProposal();
+    OUString            GetNameProposal() const;
 
     void                unselect_all() { m_xControl->unselect_all(); }
     bool                has_focus() const { return m_xControl->has_focus(); }

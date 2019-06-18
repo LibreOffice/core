@@ -205,7 +205,7 @@ public:
     OutputDevice*   GetRefDevice() const;
 
     void            SetRefMapMode( const MapMode& rMapMode );
-    MapMode const & GetRefMapMode();
+    MapMode const & GetRefMapMode() const;
 
     void            SetUpdateMode( bool bUpdate );
     bool            GetUpdateMode() const;
@@ -334,10 +334,10 @@ public:
     void            UndoActionStart( sal_uInt16 nId );
     void            UndoActionStart(sal_uInt16 nId, const ESelection& rSel);
     void            UndoActionEnd();
-    bool            IsInUndo();
+    bool            IsInUndo() const;
 
     void            EnableUndo( bool bEnable );
-    bool            IsUndoEnabled();
+    bool            IsUndoEnabled() const;
 
     /** returns the value last used for bTryMerge while calling ImpEditEngine::InsertUndo
         This is currently used in a bad but needed hack to get undo actions merged in the

@@ -120,12 +120,12 @@ private:
         const css::uno::Reference<css::accessibility::XAccessibleStateSet>& rxParentStates);
 protected:
     /// @throw css::uno::RuntimeException
-    OUString GetNote();
+    OUString GetNote() const;
 
     /// @throw css::uno::RuntimeException
-    OUString GetAllDisplayNote();
+    OUString GetAllDisplayNote() const;
     /// @throw css::uno::RuntimeException
-    OUString getShadowAttrs();
+    OUString getShadowAttrs() const;
     /// @throw css::uno::RuntimeException
     OUString getBorderAttrs();
 public:

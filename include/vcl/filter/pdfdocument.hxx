@@ -131,9 +131,9 @@ public:
     /// Access to the stream of the object, if it has any.
     PDFStreamElement* GetStream() const;
     void SetArrayOffset(sal_uInt64 nArrayOffset);
-    sal_uInt64 GetArrayOffset();
+    sal_uInt64 GetArrayOffset() const;
     void SetArrayLength(sal_uInt64 nArrayLength);
-    sal_uInt64 GetArrayLength();
+    sal_uInt64 GetArrayLength() const;
     PDFArrayElement* GetArray() const;
     /// Parse objects stored in this object stream.
     void ParseStoredObjects();
@@ -154,7 +154,7 @@ public:
     PDFArrayElement(PDFObjectElement* pObject);
     bool Read(SvStream& rStream) override;
     void PushBack(PDFElement* pElement);
-    const std::vector<PDFElement*>& GetElements();
+    const std::vector<PDFElement*>& GetElements() const;
 };
 
 /// Reference object: something with a unique ID.
@@ -397,7 +397,7 @@ public:
     /// Instead of all whitespace, just skip CR and NL characters.
     static void SkipLineBreaks(SvStream& rStream);
     size_t GetObjectOffset(size_t nIndex) const;
-    const std::vector<std::unique_ptr<PDFElement>>& GetElements();
+    const std::vector<std::unique_ptr<PDFElement>>& GetElements() const;
     std::vector<PDFObjectElement*> GetPages();
     /// Remember the end location of an EOF token.
     void PushBackEOF(size_t nOffset);

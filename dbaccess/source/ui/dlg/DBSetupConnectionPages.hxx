@@ -205,7 +205,7 @@ namespace dbaui
         virtual void dispose() override;
 
         static VclPtr<OMySQLIntroPageSetup> CreateMySQLIntroTabPage( vcl::Window* _pParent, const SfxItemSet& _rAttrSet );
-        ConnectionType      getMySQLMode();
+        ConnectionType      getMySQLMode() const;
         void                SetClickHdl( const Link<OMySQLIntroPageSetup *, void>& rLink ) { maClickHdl = rLink; }
 
     protected:
@@ -256,9 +256,9 @@ namespace dbaui
         OFinalDBPageSetup(vcl::Window* pParent, const SfxItemSet& _rCoreAttrs);
         virtual ~OFinalDBPageSetup() override;
         virtual void dispose() override;
-        bool IsDatabaseDocumentToBeRegistered();
-        bool IsDatabaseDocumentToBeOpened();
-        bool IsTableWizardToBeStarted();
+        bool IsDatabaseDocumentToBeRegistered() const;
+        bool IsDatabaseDocumentToBeOpened() const;
+        bool IsTableWizardToBeStarted() const;
         void enableTableWizardCheckBox( bool _bSupportsTableCreation);
 
         DECL_LINK(OnOpenSelected, Button*, void);

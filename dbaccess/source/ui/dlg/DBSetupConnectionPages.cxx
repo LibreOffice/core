@@ -311,7 +311,7 @@ using namespace ::com::sun::star;
         return true;
     }
 
-    OMySQLIntroPageSetup::ConnectionType OMySQLIntroPageSetup::getMySQLMode()
+    OMySQLIntroPageSetup::ConnectionType OMySQLIntroPageSetup::getMySQLMode() const
     {
         if (m_pJDBCDatabase->IsChecked())
             return VIA_JDBC;
@@ -840,17 +840,17 @@ using namespace ::com::sun::star;
         OGenericAdministrationPage::dispose();
     }
 
-    bool OFinalDBPageSetup::IsDatabaseDocumentToBeRegistered()
+    bool OFinalDBPageSetup::IsDatabaseDocumentToBeRegistered() const
     {
         return m_pRBRegisterDataSource->IsChecked() && m_pRBRegisterDataSource->IsEnabled();
     }
 
-    bool OFinalDBPageSetup::IsDatabaseDocumentToBeOpened()
+    bool OFinalDBPageSetup::IsDatabaseDocumentToBeOpened() const
     {
         return m_pCBOpenAfterwards->IsChecked() && m_pCBOpenAfterwards->IsEnabled();
     }
 
-    bool OFinalDBPageSetup::IsTableWizardToBeStarted()
+    bool OFinalDBPageSetup::IsTableWizardToBeStarted() const
     {
         return m_pCBStartTableWizard->IsChecked() && m_pCBStartTableWizard->IsEnabled();
     }

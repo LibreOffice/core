@@ -148,7 +148,7 @@ private:
 
     DECL_LINK(ViewCertHdl, weld::Button&, void);
     DECL_LINK(CertSelectHdl, weld::TreeView&, void);
-    void                InsertCert(weld::TreeIter* pParent, const OUString& _rName,
+    void                InsertCert(const weld::TreeIter* pParent, const OUString& _rName,
                                    const css::uno::Reference< css::security::XCertificate >& rxCert,
                                    bool bValid);
 

@@ -344,7 +344,7 @@ private:
 
 public:
     SdDesignNameDlg(weld::Window* pWindow, const OUString& aName );
-    OUString GetDesignName();
+    OUString GetDesignName() const;
     DECL_LINK(ModifyHdl, weld::Entry&, void);
 };
 
@@ -1483,7 +1483,7 @@ SdDesignNameDlg::SdDesignNameDlg(weld::Window* pWindow, const OUString& rName)
     m_xBtnOK->set_sensitive(!rName.isEmpty());
 }
 
-OUString SdDesignNameDlg::GetDesignName()
+OUString SdDesignNameDlg::GetDesignName() const
 {
     return m_xEdit->get_text();
 }

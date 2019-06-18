@@ -241,7 +241,7 @@ void ScTabViewShell::BroadcastAccessibility( const SfxHint &rHint )
         pAccessibilityBroadcaster->Broadcast( rHint );
 }
 
-bool ScTabViewShell::HasAccessibilityObjects()
+bool ScTabViewShell::HasAccessibilityObjects() const
 {
     return pAccessibilityBroadcaster != nullptr;
 }

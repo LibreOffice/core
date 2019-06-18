@@ -195,7 +195,7 @@ namespace cairocanvas
         // BitmapCanvasHelper functionality
         // ================================
 
-        css::geometry::IntegerSize2D getSize();
+        css::geometry::IntegerSize2D getSize() const;
 
         css::uno::Reference< css::rendering::XBitmap >
             getScaledBitmap( const css::geometry::RealSize2D&  newSize,

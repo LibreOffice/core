@@ -2854,7 +2854,7 @@ bool SfxBaseModel::impl_isDisposed() const
 //  private impl.
 
 
-OUString SfxBaseModel::GetMediumFilterName_Impl()
+OUString SfxBaseModel::GetMediumFilterName_Impl() const
 {
     std::shared_ptr<const SfxFilter> pFilter;
     SfxMedium* pMedium = m_pData->m_pObjectShell->GetMedium();

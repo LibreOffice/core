@@ -116,13 +116,13 @@ public:
     double GetWidth() {return LwpTools::ConvertFromUnitsToMetric(m_nWidth);}
     double GetHeight() {return LwpTools::ConvertFromUnitsToMetric(m_nHeight);}
     LwpObjectID& GetDefaultCellStyle() {return m_DefaultCellStyle;}
-    sal_uInt16 GetRow() {return m_nRow;}
-    sal_uInt16 GetColumn() {return m_nColumn;}
+    sal_uInt16 GetRow() const {return m_nRow;}
+    sal_uInt16 GetColumn() const {return m_nColumn;}
     rtl::Reference<LwpTableLayout> GetTableLayout()
     {
         return rtl::Reference<LwpTableLayout>(dynamic_cast<LwpTableLayout*>(GetLayout(nullptr).get()));
     }
-    bool IsNumberDown();
+    bool IsNumberDown() const;
     virtual bool IsTable() override { return true;}
     LwpSuperTableLayout* GetSuperTableLayout();
 protected:
@@ -182,7 +182,7 @@ public:
     virtual ~LwpGlossary() override;
 private:
     void Read() override;
-    sal_uInt16 GetNumIndexRows();
+    sal_uInt16 GetNumIndexRows() const;
 };
 
 #endif

@@ -153,7 +153,7 @@ ErrCode XMLAutoTextEventExport::exportDoc( enum XMLTokenEnum )
     return ERRCODE_NONE;
 }
 
-bool XMLAutoTextEventExport::hasEvents()
+bool XMLAutoTextEventExport::hasEvents() const
 {
     // TODO: provide full implementation that check for presence of events
     return xEvents.is();

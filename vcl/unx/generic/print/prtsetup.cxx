@@ -378,7 +378,7 @@ RTSDevicePage::~RTSDevicePage()
 {
 }
 
-sal_uLong RTSDevicePage::getDepth()
+sal_uLong RTSDevicePage::getDepth() const
 {
     sal_uInt16 nSelectPos = m_xDepthBox->get_active();
     if (nSelectPos == 0)
@@ -387,7 +387,7 @@ sal_uLong RTSDevicePage::getDepth()
         return 24;
 }
 
-sal_uLong RTSDevicePage::getColorDevice()
+sal_uLong RTSDevicePage::getColorDevice() const
 {
     sal_uInt16 nSelectPos = m_xSpaceBox->get_active();
     switch (nSelectPos)
@@ -402,7 +402,7 @@ sal_uLong RTSDevicePage::getColorDevice()
     return 0;
 }
 
-sal_uLong RTSDevicePage::getLevel()
+sal_uLong RTSDevicePage::getLevel() const
 {
     auto nLevel = m_xLevelBox->get_active_id().toInt32();
     if (nLevel == 0)
@@ -410,7 +410,7 @@ sal_uLong RTSDevicePage::getLevel()
     return nLevel < 10 ? nLevel-1 : 0;
 }
 
-sal_uLong RTSDevicePage::getPDFDevice()
+sal_uLong RTSDevicePage::getPDFDevice() const
 {
     auto nLevel = m_xLevelBox->get_active_id().toInt32();
     if (nLevel > 9)

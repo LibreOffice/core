@@ -136,7 +136,7 @@ public:
     void       SetDefinedAs()   { bAs = true;       }
     void       SetGlobal(bool b){ bGlobal = b;  }
     void       SetDefaultId( sal_uInt16 n ) { nDefaultId = n; }
-    sal_uInt16 GetDefaultId() { return nDefaultId; }
+    sal_uInt16 GetDefaultId() const { return nDefaultId; }
     bool       IsOptional() const{ return bOpt;     }
     bool       IsParamArray() const{ return bParamArray; }
     bool       IsWithEvents() const{ return bWithEvents; }
@@ -188,9 +188,9 @@ public:
     sal_uInt16 GetLine1() const     { return nLine1;   }
     void SetLine2( sal_uInt16 n )   { nLine2 = n;      }
     sal_uInt16 GetLine2() const     { return nLine2;   }
-    PropertyMode getPropertyMode()  { return mePropMode; }
+    PropertyMode getPropertyMode() const { return mePropMode; }
     void setPropertyMode( PropertyMode ePropMode );
-    const OUString& GetPropName()     { return maPropName; }
+    const OUString& GetPropName() const { return maPropName; }
 
     // Match with a forward-declaration. The parameter names are
     // compared and the forward declaration is replaced by this
@@ -211,8 +211,8 @@ public:
     virtual SbiConstDef* GetConstDef() override;
     void Set( double, SbxDataType );
     void Set( const OUString& );
-    double GetValue()           { return nVal; }
-    const OUString& GetString() { return aVal; }
+    double GetValue() const { return nVal; }
+    const OUString& GetString() const { return aVal; }
 };
 
 

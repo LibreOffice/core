@@ -549,7 +549,7 @@ namespace
 {
 
 /// Copies all user-defined properties from pSource to pDestination.
-void lcl_copyUserDefinedProperties(SfxObjectShell* pSource, SfxObjectShell* pDestination)
+void lcl_copyUserDefinedProperties(const SfxObjectShell* pSource, const SfxObjectShell* pDestination)
 {
     if (!pSource || !pDestination)
         return;

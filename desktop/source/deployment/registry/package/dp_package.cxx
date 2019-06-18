@@ -148,7 +148,7 @@ class BackendImpl : public ImplBaseT
             const Reference< ucb::XCommandEnvironment >& xCmdEnv,
             const OUString& licenseUrl);
 
-        DescriptionInfoset getDescriptionInfoset();
+        DescriptionInfoset getDescriptionInfoset() const;
 
         // Package
         virtual beans::Optional< beans::Ambiguous<sal_Bool> > isRegistered_(
@@ -561,7 +561,7 @@ OUString BackendImpl::PackageImpl::getTextFromURL(
 
 }
 
-DescriptionInfoset BackendImpl::PackageImpl::getDescriptionInfoset()
+DescriptionInfoset BackendImpl::PackageImpl::getDescriptionInfoset() const
 {
     return dp_misc::getDescriptionInfoset(m_url_expanded);
 }

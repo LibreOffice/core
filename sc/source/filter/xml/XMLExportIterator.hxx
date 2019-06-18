@@ -86,7 +86,7 @@ public:
 
                                 using ScMyIteratorBase::UpdateAddress;
     void                        AddNewShape(const ScMyShape& aShape);
-    bool                        HasShapes() { return !aShapeList.empty(); }
+    bool                        HasShapes() const { return !aShapeList.empty(); }
     const ScMyShapeList&        GetShapes() const { return aShapeList; }
     virtual void                SetCellData( ScMyCell& rMyCell ) override;
     virtual void                Sort() override;

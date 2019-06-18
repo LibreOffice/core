@@ -919,7 +919,7 @@ void SvxBackgroundTabPage::SetGraphicPosition_Impl( SvxGraphicPosition ePos )
     m_xWndPosition->Invalidate();
 }
 
-SvxGraphicPosition SvxBackgroundTabPage::GetGraphicPosition_Impl()
+SvxGraphicPosition SvxBackgroundTabPage::GetGraphicPosition_Impl() const
 {
     if (m_xBtnTile->get_active())
         return GPOS_TILED;

@@ -44,7 +44,7 @@ public:
     virtual ~SchXMLExportHelper() override;
 
     /// returns the string corresponding to the current FileFormat CLSID for Chart
-    const OUString& getChartCLSID();
+    const OUString& getChartCLSID() const;
 
     void SetSourceShellID( const OUString& rShellID );
     void SetDestinationShellID( const OUString& rShellID );

@@ -127,7 +127,7 @@ public:
 
     void SetDocWin(vcl::Window* pDocWin);
     void SetSrchFlag( bool bSuccess ) { mbSuccess = bSuccess; }
-    bool GetSrchFlag() { return mbSuccess; }
+    bool GetSrchFlag() const { return mbSuccess; }
     void            SetSaveToModule(bool b);
 
     void SetSearchLabel(const OUString& rStr);
@@ -254,7 +254,7 @@ private:
     SVX_DLLPRIVATE void SaveToModule_Impl();
 
     SVX_DLLPRIVATE void ApplyTransliterationFlags_Impl( TransliterationFlags nSettings );
-    SVX_DLLPRIVATE bool IsOtherOptionsExpanded();
+    SVX_DLLPRIVATE bool IsOtherOptionsExpanded() const;
 
     SVX_DLLPRIVATE short executeSubDialog(VclAbstractDialog * dialog);
 };

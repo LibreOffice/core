@@ -119,7 +119,7 @@ void ScCTB::Print( FILE* fp )
 }
 #endif
 
-bool ScCTB::IsMenuToolbar()
+bool ScCTB::IsMenuToolbar() const
 {
     return tb.IsMenuToolbar();
 }

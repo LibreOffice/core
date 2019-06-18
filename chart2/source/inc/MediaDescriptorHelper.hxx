@@ -48,7 +48,7 @@ class OOO_DLLPUBLIC_CHARTTOOLS MediaDescriptorHelper final
 public:
     MediaDescriptorHelper( const css::uno::Sequence< css::beans::PropertyValue > & rMediaDescriptor );
 
-    const css::uno::Sequence< css::beans::PropertyValue >& getReducedForModel() { return m_aModelProperties;}
+    const css::uno::Sequence< css::beans::PropertyValue >& getReducedForModel() const { return m_aModelProperties;}
 
     //all properties given in the constructor are stored in the following three sequences
 

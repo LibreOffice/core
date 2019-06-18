@@ -164,7 +164,7 @@ namespace param
         virtual css::uno::Any SAL_CALL getByIndex(sal_Int32 _rIndex) override;
 
     public:
-        const Parameters& getParameters() { return m_aParameters; }
+        const Parameters& getParameters() const { return m_aParameters; }
 
         const ::connectivity::ORowSetValue& operator[]( size_t _index ) const { return m_aParameters[ _index ]->Value(); }
               ::connectivity::ORowSetValue& operator[]( size_t _index )       { return m_aParameters[ _index ]->Value(); }

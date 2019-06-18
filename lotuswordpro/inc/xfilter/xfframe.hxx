@@ -154,7 +154,7 @@ public:
     /**
      * @descr   Get the frame type. image, drawing or text-box.
      */
-    enumXFFrameType GetFrameType();
+    enumXFFrameType GetFrameType() const;
 
     /**
      * @descr   Get content type, enumXFContentFrame.

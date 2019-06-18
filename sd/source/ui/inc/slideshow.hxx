@@ -152,10 +152,10 @@ public:
     bool longpress(const CommandLongPressData& rLongPressData);
 
     // settings
-    bool isFullScreen();                                // a.k.a. FuSlideShow::IsFullScreen()
+    bool isFullScreen() const;                          // a.k.a. FuSlideShow::IsFullScreen()
     OutputDevice* getShowWindow();                      // a.k.a. FuSlideShow::GetShowWindow()
-    int getAnimationMode();                             // a.k.a. FuSlideShow::GetAnimationMode()
-    sal_Int32 getCurrentPageNumber();                   // a.k.a. FuSlideShow::GetCurrentPage()
+    int getAnimationMode() const;                       // a.k.a. FuSlideShow::GetAnimationMode()
+    sal_Int32 getCurrentPageNumber() const;             // a.k.a. FuSlideShow::GetCurrentPage()
 
     // events
     void resize( const Size &rSize );

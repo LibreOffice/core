@@ -263,12 +263,12 @@ public:
     void                UndoActionStart( sal_uInt16 nId = 0 );
     void                UndoActionEnd();
     void                InsertUndo( std::unique_ptr<TextUndo> pUndo, bool bTryMerge = false );
-    bool                IsInUndo()                  { return mbIsInUndo; }
+    bool                IsInUndo() const            { return mbIsInUndo; }
     void                SetIsInUndo( bool bInUndo ) { mbIsInUndo = bInUndo; }
     void                ResetUndo();
 
     void                EnableUndo( bool bEnable );
-    bool                IsUndoEnabled()             { return mbUndoEnabled; }
+    bool                IsUndoEnabled() const           { return mbUndoEnabled; }
 
     void                SetModified( bool bModified )   { mbModified = bModified; }
     bool                IsModified() const              { return mbModified; }

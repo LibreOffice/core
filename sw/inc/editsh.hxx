@@ -362,7 +362,7 @@ public:
     void ApplyAdvancedClassification(std::vector<svx::ClassificationResult> const & rResult);
     std::vector<svx::ClassificationResult> CollectAdvancedClassification();
 
-    SfxWatermarkItem GetWatermark();
+    SfxWatermarkItem GetWatermark() const;
     void SetWatermark(const SfxWatermarkItem& rText);
 
     /// Sign the paragraph at the cursor.
@@ -685,7 +685,7 @@ public:
     /// Update content of all charts for table with given name.
     void UpdateCharts( const OUString &rName );
 
-    OUString GetCurWord();
+    OUString GetCurWord() const;
 
     /** Glossary from glossary document in current document.
      Styles only if not already existent. */

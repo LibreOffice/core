@@ -450,7 +450,7 @@ namespace x11 {
         void dropComplete( bool success, ::Window aDropXLIB_Window );
 
         // for XDragSourceContext
-        sal_Int32 getCurrentCursor() { return m_aCurrentCursor;}
+        sal_Int32 getCurrentCursor() const { return m_aCurrentCursor;}
         void setCursor( sal_Int32 cursor, ::Window aDropXLIB_Window );
         void transferablesFlavorsChanged();
 

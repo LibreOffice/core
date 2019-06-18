@@ -56,7 +56,7 @@ public:
     css::uno::TypeClass getTypeClass() const;
 
     void* getInst();
-    bool isEmpty() { return (mnPos == -1); }
+    bool isEmpty() const { return (mnPos == -1); }
 
     css::uno::Any getValue();
     void setValue( const css::uno::Any& );
@@ -79,10 +79,10 @@ class SbUnoStructRefObject: public SbxObject
     void implCreateDbgProperties();
     void initMemberCache();
     OUString Impl_DumpProperties();
-    OUString getDbgObjectName();
+    OUString getDbgObjectName() const;
 public:
     StructRefInfo getStructMember( const OUString& rMember );
-    const StructRefInfo& getStructInfo() { return maMemberInfo; }
+    const StructRefInfo& getStructInfo() const { return maMemberInfo; }
     SbUnoStructRefObject( const OUString& aName_, const StructRefInfo& rMemberInfo );
     virtual ~SbUnoStructRefObject() override;
 
@@ -133,12 +133,12 @@ public:
 
     // give out value
     css::uno::Any getUnoAny();
-    const css::uno::Reference< css::beans::XIntrospectionAccess >& getIntrospectionAccess()    { return mxUnoAccess; }
-    const css::uno::Reference< css::script::XInvocation >& getInvocation()         { return mxInvocation; }
+    const css::uno::Reference< css::beans::XIntrospectionAccess >& getIntrospectionAccess() const { return mxUnoAccess; }
+    const css::uno::Reference< css::script::XInvocation >& getInvocation() const { return mxInvocation; }
 
     void Notify( SfxBroadcaster&, const SfxHint& rHint ) override;
 
-    bool isNativeCOMObject()
+    bool isNativeCOMObject() const
         { return bNativeCOMObject; }
 };
 typedef tools::SvRef<SbUnoObject> SbUnoObjectRef;
@@ -171,7 +171,7 @@ public:
 
     const css::uno::Sequence< css::reflection::ParamInfo >& getParamInfos();
 
-    bool isInvocationBased()
+    bool isInvocationBased() const
         { return mbInvocation; }
 };
 
@@ -195,10 +195,10 @@ public:
     SbUnoProperty( const OUString& aName_, SbxDataType eSbxType, SbxDataType eRealSbxType,
         const css::beans::Property& aUnoProp_, sal_Int32 nId_, bool bInvocation, bool bUnoStruct );
 
-    bool isUnoStruct() { return mbUnoStruct; }
-    bool isInvocationBased()
+    bool isUnoStruct() const { return mbUnoStruct; }
+    bool isInvocationBased() const
         { return mbInvocation; }
-    SbxDataType getRealType() { return mRealType; }
+    SbxDataType getRealType() const { return mRealType; }
 };
 
 // factory class to create uno-structs per DIM AS NEW
@@ -227,7 +227,7 @@ public:
     virtual SbxVariable* Find( const OUString&, SbxClassType ) override;
 
 
-    const css::uno::Reference< css::reflection::XIdlClass >& getUnoClass() { return m_xClass; }
+    const css::uno::Reference< css::reflection::XIdlClass >& getUnoClass() const { return m_xClass; }
 
 };
 
@@ -271,7 +271,7 @@ public:
     virtual ~SbUnoServiceCtor() override;
     virtual SbxInfo* GetInfo() override;
 
-    const css::uno::Reference< css::reflection::XServiceConstructorDescription >& getServiceCtorDesc()
+    const css::uno::Reference< css::reflection::XServiceConstructorDescription >& getServiceCtorDesc() const
         { return m_xServiceCtorDesc; }
 };
 
@@ -299,7 +299,7 @@ public:
         , mVal( rVal )
     {}
 
-    const css::uno::Any& getValue()
+    const css::uno::Any& getValue() const
         { return mVal; }
 
 };

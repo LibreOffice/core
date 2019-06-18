@@ -56,7 +56,7 @@ public:
     void            ChangeRoadmapItemID( ItemId _nID, ItemId NewID  );
 
     void            SetRoadmapInteractive( bool _bInteractive );
-    bool            IsRoadmapInteractive();
+    bool            IsRoadmapInteractive() const;
 
     void            SetRoadmapComplete( bool _bComplete );
     bool            IsRoadmapComplete() const;

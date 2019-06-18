@@ -63,11 +63,11 @@ public:
                                         const OUString& rOptions, const OUString& rSource,
                                         sal_uLong nRefresh );
 
-    OUString       GetURL();
-    OUString       GetFilter();        // may be empty
-    OUString       GetOptions();       // filter options
-    OUString       GetSource();        // separated by ";"
-    sal_uLong      GetRefresh();       // 0 if disabled
+    OUString       GetURL() const;
+    OUString       GetFilter() const;        // may be empty
+    OUString       GetOptions() const;       // filter options
+    OUString       GetSource() const;        // separated by ";"
+    sal_uLong      GetRefresh() const;       // 0 if disabled
 };
 
 #endif

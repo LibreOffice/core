@@ -1125,7 +1125,7 @@ void SectionPropertyMap::HandleMarginsHeaderFooter( bool bFirstPage, DomainMappe
     PrepareHeaderFooterProperties( bFirstPage );
 }
 
-bool SectionPropertyMap::FloatingTableConversion( DomainMapper_Impl& rDM_Impl, FloatingTableInfo& rInfo )
+bool SectionPropertyMap::FloatingTableConversion( const DomainMapper_Impl& rDM_Impl, FloatingTableInfo& rInfo )
 {
     // This is OOXML version of the code deciding if the table needs to be
     // in a floating frame.
@@ -1796,7 +1796,7 @@ void SectionPropertyMap::ApplyProperties_( const uno::Reference< beans::XPropert
     }
 }
 
-sal_Int32 SectionPropertyMap::GetPageWidth()
+sal_Int32 SectionPropertyMap::GetPageWidth() const
 {
     return getProperty( PROP_WIDTH )->second.get<sal_Int32>();
 }

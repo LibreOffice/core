@@ -218,7 +218,7 @@ public:
     // Access to GrafAnimationAllowed flag
     void SetGrafAnimationAllowed(bool bNew);
 
-    css::uno::Reference< css::io::XInputStream > getInputStream();
+    css::uno::Reference< css::io::XInputStream > getInputStream() const;
 
     // #i103116# FullDrag support
     virtual SdrObject* getFullDragClone() const override;

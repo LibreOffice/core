@@ -168,7 +168,7 @@ class ScHTMLExport : public ScExportBase
     Size        MMToPixel( const Size& r100thMMSize );
     void        IncIndent( short nVal );
 
-    const sal_Char* GetIndentStr()
+    const sal_Char* GetIndentStr() const
     {
         return sIndent;
     }

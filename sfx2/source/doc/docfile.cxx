@@ -333,7 +333,7 @@ public:
     SfxMedium_Impl(const SfxMedium_Impl&) = delete;
     SfxMedium_Impl& operator=(const SfxMedium_Impl&) = delete;
 
-    OUString getFilterMimeType()
+    OUString getFilterMimeType() const
         { return !m_pFilter ? OUString() : m_pFilter->GetMimeType(); }
 };
 
@@ -388,7 +388,7 @@ void SfxMedium::ResetError()
         pImpl->m_pOutStream->ResetError();
 }
 
-ErrCode const & SfxMedium::GetLastStorageCreationState()
+ErrCode const & SfxMedium::GetLastStorageCreationState() const
 {
     return pImpl->nLastStorageError;
 }
@@ -553,7 +553,7 @@ OUString SfxMedium::GetBaseURL( bool bForSaving )
     return aBaseURL;
 }
 
-bool SfxMedium::IsSkipImages()
+bool SfxMedium::IsSkipImages() const
 {
     const SfxStringItem* pSkipImagesItem = GetItemSet()->GetItem<SfxStringItem>(SID_FILE_FILTEROPTIONS);
     return pSkipImagesItem && pSkipImagesItem->GetValue() == "SkipImages";
@@ -784,7 +784,7 @@ bool SfxMedium::IsStorage()
 }
 
 
-bool SfxMedium::IsPreview_Impl()
+bool SfxMedium::IsPreview_Impl() const
 {
     bool bPreview = false;
     const SfxBoolItem* pPreview = SfxItemSet::GetItem<SfxBoolItem>(GetItemSet(), SID_PREVIEW, false);
@@ -4069,7 +4069,7 @@ bool SfxMedium::SignContents_Impl(weld::Window* pDialogParent,
 }
 
 
-SignatureState SfxMedium::GetCachedSignatureState_Impl()
+SignatureState SfxMedium::GetCachedSignatureState_Impl() const
 {
     return pImpl->m_nSignatureState;
 }
@@ -4295,7 +4295,7 @@ void SfxMedium::SetInCheckIn( bool bInCheckIn )
     pImpl->m_bInCheckIn = bInCheckIn;
 }
 
-bool SfxMedium::IsInCheckIn( )
+bool SfxMedium::IsInCheckIn( ) const
 {
     return pImpl->m_bInCheckIn;
 }

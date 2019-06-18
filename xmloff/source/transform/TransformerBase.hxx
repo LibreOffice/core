@@ -106,9 +106,9 @@ public:
     virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
 
     // C++
-    const css::uno::Reference< css::xml::sax::XDocumentHandler > & GetDocHandler() { return m_xHandler; }
+    const css::uno::Reference< css::xml::sax::XDocumentHandler > & GetDocHandler() const { return m_xHandler; }
 
-    const css::uno::Reference< css::beans::XPropertySet > & GetPropertySet() { return m_xPropSet; }
+    const css::uno::Reference< css::beans::XPropertySet > & GetPropertySet() const { return m_xPropSet; }
 
 
     SvXMLNamespaceMap& GetNamespaceMap() { return *m_pNamespaceMap; }

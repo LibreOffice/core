@@ -74,7 +74,7 @@ namespace dbaui
 
         IController& getCommandController() const { return *m_xController.get(); }
 
-        const css::uno::Reference< css::uno::XComponentContext >& getORB() { return m_xContext;}
+        const css::uno::Reference< css::uno::XComponentContext >& getORB() const { return m_xContext;}
 
         // the default implementation simply calls resizeAll( GetSizePixel() )
         virtual void Resize() override;

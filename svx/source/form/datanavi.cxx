@@ -2322,7 +2322,7 @@ namespace svxform
         Check(&rBox);
     }
 
-    void AddDataItemDialog::Check(weld::ToggleButton* pBox)
+    void AddDataItemDialog::Check(const weld::ToggleButton* pBox)
     {
         // Condition buttons are only enable if their check box is checked
         m_xReadonlyBtn->set_sensitive( m_xReadonlyCB->get_active() );

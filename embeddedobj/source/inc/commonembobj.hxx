@@ -252,7 +252,7 @@ public:
     // not a real listener and should not be
     void PostEvent_Impl( const OUString& aEventName );
 
-    OUString const & getContainerName() { return m_aContainerName; }
+    OUString const & getContainerName() const { return m_aContainerName; }
 // XInterface
 
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& rType ) override ;

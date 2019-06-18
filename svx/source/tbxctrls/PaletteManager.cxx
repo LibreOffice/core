@@ -274,7 +274,7 @@ void PaletteManager::SetPalette( sal_Int32 nPos )
     }
 }
 
-sal_Int32 PaletteManager::GetPalette()
+sal_Int32 PaletteManager::GetPalette() const
 {
     return mnCurrentPalette;
 }
@@ -303,12 +303,12 @@ OUString PaletteManager::GetSelectedPalettePath()
         return OUString();
 }
 
-long PaletteManager::GetColorCount()
+long PaletteManager::GetColorCount() const
 {
     return mnColorCount;
 }
 
-long PaletteManager::GetRecentColorCount()
+long PaletteManager::GetRecentColorCount() const
 {
     return maRecentColors.size();
 }

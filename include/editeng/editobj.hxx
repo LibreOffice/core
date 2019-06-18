@@ -123,7 +123,7 @@ public:
         const OUString& rOldName, SfxStyleFamily eOldFamily, const OUString& rNewName, SfxStyleFamily eNewFamily);
     void ChangeStyleSheetName(SfxStyleFamily eFamily, const OUString& rOldName, const OUString& rNewName);
 
-    editeng::FieldUpdater GetFieldUpdater();
+    editeng::FieldUpdater GetFieldUpdater() const;
 
     bool operator==( const EditTextObject& rCompare ) const;
 

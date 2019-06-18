@@ -370,7 +370,7 @@ IMPL_LINK_NOARG(SvxHyperlinkTabPageBase, ClickScriptHdl_Impl, weld::Button&, voi
 }
 
 // Get Macro-Infos
-HyperDialogEvent SvxHyperlinkTabPageBase::GetMacroEvents()
+HyperDialogEvent SvxHyperlinkTabPageBase::GetMacroEvents() const
 {
     const SvxHyperlinkItem *pHyperlinkItem = static_cast<const SvxHyperlinkItem *>(
                                        GetItemSet().GetItem (SID_HYPERLINK_GETLINK));

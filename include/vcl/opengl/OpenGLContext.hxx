@@ -129,14 +129,14 @@ public:
     SystemChildWindow* getChildWindow();
     const SystemChildWindow* getChildWindow() const;
 
-    bool isInitialized()
+    bool isInitialized() const
     {
         return mbInitialized;
     }
 
     /// VCL promiscuously re-uses its own contexts:
     void setVCLOnly() { mbVCLOnly = true; }
-    bool isVCLOnly() { return mbVCLOnly; }
+    bool isVCLOnly() const { return mbVCLOnly; }
 
     virtual SystemWindowData generateWinData(vcl::Window* pParent, bool bRequestLegacyContext);
 

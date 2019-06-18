@@ -31,10 +31,10 @@ public:
     void SetUrl(const  OUString& aUrl ) { maUrl.SetURL( aUrl ); }
 
     OUString& GetName( ) { return msName; }
-    OUString GetUrl( ) { return maUrl.GetMainURL( INetURLObject::DecodeMechanism::NONE ); }
+    OUString GetUrl( ) const { return maUrl.GetMainURL( INetURLObject::DecodeMechanism::NONE ); }
     INetURLObject& GetUrlObject( ) { return maUrl; }
-    bool  IsLocal( ) { return maUrl.GetProtocol() == INetProtocol::File; }
-    bool  IsEditable( ) { return mbEditable; }
+    bool  IsLocal( ) const { return maUrl.GetProtocol() == INetProtocol::File; }
+    bool  IsEditable( ) const { return mbEditable; }
 };
 
 #endif // INCLUDED_SVTOOLS_PLACE_HXX

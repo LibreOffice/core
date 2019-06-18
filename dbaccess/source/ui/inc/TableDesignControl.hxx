@@ -50,7 +50,7 @@ namespace dbaui
 
         virtual OTableDesignView* GetView() const = 0;
 
-        sal_uInt16 GetCurUndoActId(){ return m_nCurUndoActId; }
+        sal_uInt16 GetCurUndoActId() const { return m_nCurUndoActId; }
 
         // IClipboardTest
         virtual void cut() override;

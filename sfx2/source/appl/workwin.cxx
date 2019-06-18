@@ -1484,7 +1484,7 @@ void SfxWorkWindow::MakeVisible_Impl( bool bVis )
         nUpdateMode = nOrigMode;
 }
 
-bool SfxWorkWindow::IsVisible_Impl()
+bool SfxWorkWindow::IsVisible_Impl() const
 {
     return nOrigMode != SfxVisibilityFlags::Invisible;
 }
@@ -2095,7 +2095,7 @@ void SfxWorkWindow::ResetChildWindows_Impl()
 // returns the size of the area (client area) of the
 // parent windows, in which the ChildWindow can be fitted.
 
-tools::Rectangle SfxWorkWindow::GetTopRect_Impl()
+tools::Rectangle SfxWorkWindow::GetTopRect_Impl() const
 {
     return pMasterFrame->GetTopOuterRectPixel_Impl();
 }

@@ -644,7 +644,7 @@ void loadDiagram(ShapePtr const& pShape,
     pDiagram->addTo(pShape);
 }
 
-void reloadDiagram(css::uno::Reference<css::drawing::XShape>& rXShape,
+void reloadDiagram(const css::uno::Reference<css::drawing::XShape>& rXShape,
                    core::XmlFilterBase& rFilter)
 {
     uno::Reference<beans::XPropertySet> xPropSet(rXShape, uno::UNO_QUERY_THROW);

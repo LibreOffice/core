@@ -294,7 +294,7 @@ public:
 
     void            SetFormShellAtTop( bool bSet );
 
-    ObjectSelectionType GetCurObjectSelectionType() { return eCurOST; }
+    ObjectSelectionType GetCurObjectSelectionType() const { return eCurOST; }
 
     virtual ErrCode DoVerb(long nVerb) override;
 
@@ -363,7 +363,7 @@ public:
     void    AddAccessibilityObject( SfxListener& rObject );
     void    RemoveAccessibilityObject( SfxListener& rObject );
     void    BroadcastAccessibility( const SfxHint &rHint );
-    bool    HasAccessibilityObjects();
+    bool    HasAccessibilityObjects() const;
 
     bool    ExecuteRetypePassDlg(ScPasswordHash eDesiredHash);
 

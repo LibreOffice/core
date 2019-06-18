@@ -149,17 +149,17 @@ public:
     OleFormCtrlExportHelper( const css::uno::Reference< css::uno::XComponentContext >& rxCtx, const css::uno::Reference< css::frame::XModel >& xDocModel, const css::uno::Reference< css::awt::XControlModel >& xModel );
     ~OleFormCtrlExportHelper();
 
-    OUString getGUID()
+    OUString getGUID() const
     {
         OUString sResult;
         if ( maGUID.getLength() > 2 )
             sResult = maGUID.copy(1, maGUID.getLength() - 2 );
         return sResult;
     }
-    const OUString& getFullName() { return maFullName; }
-    const OUString& getTypeName() { return maTypeName; }
-    const OUString& getName() { return maName; }
-    bool isValid() { return mpModel != nullptr; }
+    const OUString& getFullName() const { return maFullName; }
+    const OUString& getTypeName() const { return maTypeName; }
+    const OUString& getName() const { return maName; }
+    bool isValid() const { return mpModel != nullptr; }
     void exportName( const css::uno::Reference< css::io::XOutputStream >& rxOut );
     void exportCompObj( const css::uno::Reference< css::io::XOutputStream >& rxOut );
     void exportControl( const css::uno::Reference< css::io::XOutputStream >& rxOut, const css::awt::Size& rSize, bool bAutoClose = false );

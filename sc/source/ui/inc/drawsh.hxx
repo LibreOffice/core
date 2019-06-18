@@ -83,8 +83,8 @@ public:
     void    StateFormatPaintbrush(SfxItemSet& rSet);
 
     void    ExecuteMacroAssign(SdrObject* pObj, weld::Window* pWin);
-    void    ExecuteLineDlg( SfxRequest& rReq );
-    void    ExecuteAreaDlg( SfxRequest& rReq );
+    void    ExecuteLineDlg( const SfxRequest& rReq );
+    void    ExecuteAreaDlg( const SfxRequest& rReq );
     void    ExecuteTextAttrDlg( SfxRequest& rReq );
     void    ExecuteMeasureDlg( SfxRequest& rReq );
 

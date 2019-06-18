@@ -60,7 +60,7 @@ public:
     SwCTB();
     virtual ~SwCTB() override;
     bool Read(SvStream &rS) override;
-    bool IsMenuToolbar();
+    bool IsMenuToolbar() const;
     bool ImportCustomToolBar( SwCTBWrapper&, CustomToolBarImportHelper& );
     bool ImportMenuTB( SwCTBWrapper&, const css::uno::Reference< css::container::XIndexContainer >&, CustomToolBarImportHelper& );
     OUString const & GetName() { return tb.getName().getString(); }

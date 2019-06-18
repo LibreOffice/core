@@ -458,7 +458,7 @@ private:
             The position mentioned above in form of a selection with start
             equals end.
     */
-    ESelection GetSearchStartPosition();
+    ESelection GetSearchStartPosition() const;
 
     /** Detect whether there exists a previous match.  Note that only the
         absence of such a match can be detected reliably.  An existing match

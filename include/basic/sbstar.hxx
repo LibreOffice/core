@@ -139,14 +139,14 @@ public:
     static SbMethod* GetActiveMethod( sal_uInt16 nLevel = 0 );
     static SbModule* GetActiveModule();
     void SetVBAEnabled( bool bEnabled );
-    bool isVBAEnabled();
+    bool isVBAEnabled() const;
 
-    const SbxObjectRef& getRTL() { return pRtl; }
-    bool IsDocBasic() { return bDocBasic; }
+    const SbxObjectRef& getRTL() const { return pRtl; }
+    bool IsDocBasic() const { return bDocBasic; }
     SbxVariable* VBAFind( const OUString& rName, SbxClassType t );
     bool GetUNOConstant( const OUString& rName, css::uno::Any& aOut );
     void QuitAndExitApplication();
-    bool IsQuitApplication() { return bQuit; };
+    bool IsQuitApplication() const { return bQuit; };
 
     SbxObject* getVBAGlobals( );
 

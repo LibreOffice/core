@@ -297,7 +297,7 @@ bool Convert::hasType( const css::uno::Type& rType )
     return maMap.find( rType ) != maMap.end();
 }
 
-css::uno::Sequence<css::uno::Type> Convert::getTypes()
+css::uno::Sequence<css::uno::Type> Convert::getTypes() const
 {
     return comphelper::mapKeysToSequence( maMap );
 }

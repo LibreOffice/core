@@ -253,7 +253,7 @@ public:
         pNew->mpRef = static_cast<void *>(static_cast<vcl::Window *>(pNew->mxRef));
         return pNew;
     }
-    const VclPtr<vcl::Window>& getRef() { return mxRef; }
+    const VclPtr<vcl::Window>& getRef() const { return mxRef; }
     void disposeAndClear()
     {
         mxRef.disposeAndClear();

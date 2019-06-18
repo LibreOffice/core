@@ -198,7 +198,7 @@ public:
     void AddColor( Color nColor );
 
     /// determine whether number format uses the system language
-    bool IsSystemLanguage();
+    bool IsSystemLanguage() const;
 };
 
 #endif

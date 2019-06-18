@@ -328,7 +328,7 @@ bool ScAccessibleCell::IsEditable(
     return bEditable;
 }
 
-bool ScAccessibleCell::IsOpaque()
+bool ScAccessibleCell::IsOpaque() const
 {
     // test whether there is a background color
     bool bOpaque(true);
@@ -547,7 +547,7 @@ bool ScAccessibleCell::IsFormulaMode()
     return false;
 }
 
-bool ScAccessibleCell::IsDropdown()
+bool ScAccessibleCell::IsDropdown() const
 {
     sal_uInt16 nPosX = maCellAddress.Col();
     sal_uInt16 nPosY = sal_uInt16(maCellAddress.Row());

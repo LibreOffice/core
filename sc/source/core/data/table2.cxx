@@ -1326,7 +1326,7 @@ void ScTable::InvalidatePageBreaks()
     mbPageBreaksValid = false;
 }
 
-void ScTable::CopyScenarioTo( ScTable* pDestTab ) const
+void ScTable::CopyScenarioTo( const ScTable* pDestTab ) const
 {
     OSL_ENSURE( bScenario, "bScenario == FALSE" );
 

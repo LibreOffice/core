@@ -158,7 +158,7 @@ private:
     bool                IsPrinterRangeOverflow(weld::MetricSpinButton& rField, long nFirstMargin,
                                                long nLastMargin, MarginPosition nPos);
     void                CheckMarginEdits( bool _bClear );
-    bool                IsMarginOutOfRange();
+    bool                IsMarginOutOfRange() const;
 
     SvxPageDescPage(TabPageParent pParent, const SfxItemSet& rSet);
 

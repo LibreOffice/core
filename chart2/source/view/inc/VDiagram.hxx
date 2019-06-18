@@ -58,7 +58,7 @@ public: //methods
                         , const css::awt::Size& rSize );
 
     css::uno::Reference< css::drawing::XShapes >
-            getCoordinateRegion() { return css::uno::Reference<css::drawing::XShapes>( m_xCoordinateRegionShape, css::uno::UNO_QUERY );}
+            getCoordinateRegion() const { return css::uno::Reference<css::drawing::XShapes>( m_xCoordinateRegionShape, css::uno::UNO_QUERY );}
 
     /**
      * Get current bounding rectangle for the diagram without axes.

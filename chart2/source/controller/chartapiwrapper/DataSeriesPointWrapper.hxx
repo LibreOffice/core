@@ -68,7 +68,7 @@ public:
     virtual ~DataSeriesPointWrapper() override;
 
     bool isSupportingAreaProperties();
-    bool isLinesForbidden() { return !m_bLinesAllowed;}
+    bool isLinesForbidden() const { return !m_bLinesAllowed;}
 
     /// XServiceInfo declarations
     virtual OUString SAL_CALL getImplementationName() override;

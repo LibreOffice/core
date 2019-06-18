@@ -57,7 +57,7 @@ private:
 public:
 
     Bool UseContext()       { return mbUseable; }
-    bool IsPreeditMode()    { return maClientData.eState == PreeditStatus::Active; }
+    bool IsPreeditMode() const { return maClientData.eState == PreeditStatus::Active; }
     XIC  GetContext()       { return maContext; }
 
     void ExtendEventMask(  ::Window aFocusWindow );

@@ -186,9 +186,9 @@ namespace dbaui
 
         // when resize is called
         void                CheckScrollBars();
-        bool                isCutAllowed();
-        bool                isCopyAllowed();
-        bool                isPasteAllowed();
+        bool                isCutAllowed() const;
+        bool                isCopyAllowed() const;
+        bool                isPasteAllowed() const;
 
         void                cut();
         void                copy();

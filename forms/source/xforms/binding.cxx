@@ -214,7 +214,7 @@ void Binding::deferNotifications( bool bDefer )
                 "deferred modifications not delivered?" );
 }
 
-bool Binding::isValid()
+bool Binding::isValid() const
 {
     // TODO: determine whether node is suitable, not just whether it exists
     return maBindingExpression.getNode().is() &&
@@ -225,7 +225,7 @@ bool Binding::isValid()
                !maBindingExpression.getString().isEmpty() ) );
 }
 
-bool Binding::isUseful()
+bool Binding::isUseful() const
 {
     // we are useful, if
     // 0) we don't have a model
@@ -744,7 +744,7 @@ MIP Binding::getLocalMIP() const
     return aMIP;
 }
 
-css::uno::Reference<css::xsd::XDataType> Binding::getDataType()
+css::uno::Reference<css::xsd::XDataType> Binding::getDataType() const
 {
     OSL_ENSURE( getModel().is(), "need model" );
     OSL_ENSURE( getModel()->getDataTypeRepository().is(), "need types" );
@@ -758,7 +758,7 @@ css::uno::Reference<css::xsd::XDataType> Binding::getDataType()
         : Reference<XDataType>( nullptr );
 }
 
-bool Binding::isValid_DataType()
+bool Binding::isValid_DataType() const
 {
     Reference<XDataType> xDataType = getDataType();
     return !xDataType.is()

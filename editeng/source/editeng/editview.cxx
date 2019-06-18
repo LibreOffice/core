@@ -596,7 +596,7 @@ void EditView::Cut()
     pImpEditView->CutCopy( aClipBoard, true );
 }
 
-css::uno::Reference< css::datatransfer::XTransferable > EditView::GetTransferable()
+css::uno::Reference< css::datatransfer::XTransferable > EditView::GetTransferable() const
 {
     uno::Reference< datatransfer::XTransferable > xData =
         GetEditEngine()->CreateTransferable( pImpEditView->GetEditSelection() );
@@ -632,7 +632,7 @@ void EditView::SetSelectionMode( EESelectionMode eMode )
     pImpEditView->SetSelectionMode( eMode );
 }
 
-OUString EditView::GetSelected()
+OUString EditView::GetSelected() const
 {
     return pImpEditView->pEditEngine->pImpEditEngine->GetSelected( pImpEditView->GetEditSelection() );
 }

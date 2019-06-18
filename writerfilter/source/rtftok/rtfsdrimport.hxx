@@ -84,8 +84,8 @@ public:
     void pushParent(css::uno::Reference<css::drawing::XShapes> const& xParent);
     /// Pop the current group shape from the parent stack.
     void popParent();
-    css::uno::Reference<css::drawing::XShape> const& getCurrentShape() { return m_xShape; }
-    bool isFakePict() { return m_bFakePict; }
+    css::uno::Reference<css::drawing::XShape> const& getCurrentShape() const { return m_xShape; }
+    bool isFakePict() const { return m_bFakePict; }
 
 private:
     void createShape(const OUString& rService, css::uno::Reference<css::drawing::XShape>& xShape,

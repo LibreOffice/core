@@ -3480,7 +3480,7 @@ void Window::ImplNotifyIconifiedState( bool bIconified )
         mpWindowImpl->mpFrameWindow->mpWindowImpl->mpClientWindow->CallEventListeners( bIconified ? VclEventId::WindowMinimize : VclEventId::WindowNormalize );
 }
 
-bool Window::HasActiveChildFrame()
+bool Window::HasActiveChildFrame() const
 {
     bool bRet = false;
     vcl::Window *pFrameWin = ImplGetSVData()->maWinData.mpFirstFrame;

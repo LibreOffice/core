@@ -401,7 +401,7 @@ EBookQuery *OCommonStatement::whereAnalysis( const OSQLParseNode* parseTree )
     return pResult;
 }
 
-OUString OCommonStatement::getTableName()
+OUString OCommonStatement::getTableName() const
 {
     OUString aTableName;
 

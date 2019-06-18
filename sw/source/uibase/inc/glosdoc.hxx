@@ -116,7 +116,7 @@ public:
     SwDocShellRef   EditGroupDoc(const OUString &rGrpName, const OUString& rShortName, bool bShow = true );
     void            UpdateGlosPath(bool bFull);
     void            ShowError();
-    bool            IsGlosPathErr() { return m_bError; }
+    bool            IsGlosPathErr() const { return m_bError; }
     std::vector<OUString> const& GetPathArray() const { return m_PathArr; }
 };
 

@@ -202,7 +202,7 @@ public:
 
     const OUString*         GetNewCharStyleNames() const {return m_sNewCharStyleNames;}
     const OUString*         GetBulletFontNames() const {return m_sNewBulletFontNames;}
-    const SwNumRule*        GetNumRule() {return m_pNumRule;}
+    const SwNumRule*        GetNumRule() const {return m_pNumRule;}
 
     static bool             isInvalidStyle(const OUString &rName);
     void    Invalidate()    {m_pDocShell = nullptr;}

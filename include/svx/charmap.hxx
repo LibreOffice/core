@@ -99,7 +99,7 @@ public:
     virtual void Show() override { mxScrollArea->show(); }
     virtual void Hide() override { mxScrollArea->hide(); }
 
-    uno::Reference<css::accessibility::XAccessible> getAccessibleParent() { return GetDrawingArea()->get_accessible_parent(); }
+    uno::Reference<css::accessibility::XAccessible> getAccessibleParent() const { return GetDrawingArea()->get_accessible_parent(); }
 
 private:
     virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;

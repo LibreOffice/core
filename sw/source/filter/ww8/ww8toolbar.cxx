@@ -387,7 +387,7 @@ SwCTB::~SwCTB()
 {
 }
 
-bool SwCTB::IsMenuToolbar()
+bool SwCTB::IsMenuToolbar() const
 {
     return tb.IsMenuToolbar();
 }

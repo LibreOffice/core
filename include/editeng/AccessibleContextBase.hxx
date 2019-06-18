@@ -288,7 +288,7 @@ protected:
         @return TRUE, if the object is disposed or in the course
         of being disposed. Otherwise, FALSE is returned.
     */
-    bool IsDisposed();
+    bool IsDisposed() const;
 
     /** sets the role as returned by XaccessibleContext::getAccessibleRole
 

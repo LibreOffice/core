@@ -47,8 +47,8 @@ public:
     void setSkipUnknown(bool bSkipUnknown) override;
     void finishSubstream() override;
     bool isSubstream() const override;
-    bool hasTable() { return m_bHasTable; }
-    bool hasColumns() { return m_bHasColumns; }
+    bool hasTable() const { return m_bHasTable; }
+    bool hasColumns() const { return m_bHasColumns; }
 
 private:
     tools::SvRef<RTFTokenizer> m_pTokenizer;

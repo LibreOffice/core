@@ -203,7 +203,7 @@ public:
     void            SetLastTime(const tools::Time &aTime);
 
     void            SetDateMode(sal_uInt16 nMode);
-    SvxRedlinDateMode GetDateMode();
+    SvxRedlinDateMode GetDateMode() const;
 
     void            ClearAuthors();
     void            InsertAuthor( const OUString& rString );
@@ -220,11 +220,11 @@ public:
     void            SetFocusToRange();
     // } Methods for Calc
 
-    bool            IsDate();
-    bool            IsAuthor();
-    bool            IsRange();
-    bool            IsAction();
-    bool            IsComment();
+    bool            IsDate() const;
+    bool            IsAuthor() const;
+    bool            IsRange() const;
+    bool            IsAction() const;
+    bool            IsComment() const;
 
     void            ShowAction(bool bShow=true);
 

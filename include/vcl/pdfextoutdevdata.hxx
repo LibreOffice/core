@@ -141,7 +141,7 @@ public:
     void        SetDocumentLocale( const css::lang::Locale& rLoc );
 
     std::vector< PDFExtOutDevBookmarkEntry >& GetBookmarks() { return maBookmarks;}
-    const std::vector<OUString>& GetChapterNames() { return maChapterNames; }
+    const std::vector<OUString>& GetChapterNames() const { return maChapterNames; }
 
     const Graphic& GetCurrentGraphic() const;
 
@@ -387,7 +387,7 @@ public:
     @returns
     the id of the current structure element
     */
-    sal_Int32 GetCurrentStructureElement();
+    sal_Int32 GetCurrentStructureElement() const;
 
     /** set a structure attribute on the current structural element
 

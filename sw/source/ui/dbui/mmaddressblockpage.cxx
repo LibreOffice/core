@@ -606,7 +606,7 @@ IMPL_LINK(SwCustomizeAddressBlockDialog, ImageButtonHdl_Impl, weld::Button&, rBu
     UpdateImageButtons_Impl();
 }
 
-sal_Int32 SwCustomizeAddressBlockDialog::GetSelectedItem_Impl()
+sal_Int32 SwCustomizeAddressBlockDialog::GetSelectedItem_Impl() const
 {
     sal_Int32 nRet = USER_DATA_NONE;
     const OUString sSelected = m_xDragED->GetCurrentItem();
@@ -743,7 +743,7 @@ void SwCustomizeAddressBlockDialog::SetAddress(const OUString& rAddress)
     EditModifyHdl_Impl(*m_xDragED);
 }
 
-OUString SwCustomizeAddressBlockDialog::GetAddress()
+OUString SwCustomizeAddressBlockDialog::GetAddress() const
 {
     OUString sAddress(m_xDragED->GetAddress());
     //remove placeholders by the actual content
@@ -1301,7 +1301,7 @@ void AddressMultiLineEdit::MoveCurrentItem(MoveItemFlags nMove)
     m_aModifyLink.Call(*this);
 }
 
-MoveItemFlags AddressMultiLineEdit::IsCurrentItemMoveable()
+MoveItemFlags AddressMultiLineEdit::IsCurrentItemMoveable() const
 {
     MoveItemFlags nRet = MoveItemFlags::NONE;
     ESelection aSelection = m_xEditView->GetSelection();
@@ -1324,7 +1324,7 @@ MoveItemFlags AddressMultiLineEdit::IsCurrentItemMoveable()
     return nRet;
 }
 
-bool AddressMultiLineEdit::HasCurrentItem()
+bool AddressMultiLineEdit::HasCurrentItem() const
 {
     ESelection aSelection = m_xEditView->GetSelection();
 
@@ -1337,7 +1337,7 @@ bool AddressMultiLineEdit::HasCurrentItem()
                             && pBeginAttrib->nEnd >= aSelection.nEndPos));
 }
 
-OUString AddressMultiLineEdit::GetCurrentItem()
+OUString AddressMultiLineEdit::GetCurrentItem() const
 {
     ESelection aSelection = m_xEditView->GetSelection();
 
@@ -1375,7 +1375,7 @@ void AddressMultiLineEdit::SelectCurrentItem()
     }
 }
 
-OUString AddressMultiLineEdit::GetAddress()
+OUString AddressMultiLineEdit::GetAddress() const
 {
     OUString sRet;
     const sal_uInt32 nParaCount = m_xEditEngine->GetParagraphCount();

@@ -266,7 +266,7 @@ public:
     virtual size_t GetSectionList( SfxMedium& rMedium,
                                    std::vector<OUString>& rStrings) const;
 
-    const tools::SvRef<SotStorage>& getSotStorageRef() { return m_pStorage; };
+    const tools::SvRef<SotStorage>& getSotStorageRef() const { return m_pStorage; };
     void setSotStorageRef(const tools::SvRef<SotStorage>& pStgRef) { m_pStorage = pStgRef; };
 
 private:
@@ -291,7 +291,7 @@ class SW_DLLPUBLIC StgReader : public Reader
 
 public:
     virtual SwReaderType GetReaderType() override;
-    const OUString& GetFltName() { return aFltName; }
+    const OUString& GetFltName() const { return aFltName; }
     virtual void SetFltName( const OUString& r ) override;
 };
 
@@ -311,7 +311,7 @@ public:
 
     SwDoc* GetDoc();
     void   ClearDoc();                  // Delete Doc-contents.
-    OUString GetName();
+    OUString GetName() const;
     void   SetName( const OUString& );
     ErrCode const & GetError() const { return nErr; }
 

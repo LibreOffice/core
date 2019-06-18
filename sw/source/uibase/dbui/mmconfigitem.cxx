@@ -802,12 +802,12 @@ void SwMailMergeConfigItem::SetCurrentConnection(
         m_pImpl->SetModified();
 }
 
-Reference< XDataSource> const & SwMailMergeConfigItem::GetSource()
+Reference< XDataSource> const & SwMailMergeConfigItem::GetSource() const
 {
     return m_pImpl->m_xSource;
 }
 
-SharedConnection const & SwMailMergeConfigItem::GetConnection()
+SharedConnection const & SwMailMergeConfigItem::GetConnection() const
 {
     return m_pImpl->m_xConnection;
 }

@@ -220,7 +220,7 @@ void LayoutMenu::Dispose()
     GetParent()->RemoveEventListener(aWindowEventHandlerLink);
 }
 
-AutoLayout LayoutMenu::GetSelectedAutoLayout()
+AutoLayout LayoutMenu::GetSelectedAutoLayout() const
 {
     AutoLayout aResult = AUTOLAYOUT_NONE;
 

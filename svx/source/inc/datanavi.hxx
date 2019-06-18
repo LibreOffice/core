@@ -416,7 +416,7 @@ namespace svxform
         std::unique_ptr<weld::Button> m_xCalculateBtn;
         std::unique_ptr<weld::Button> m_xOKBtn;
 
-        void Check(weld::ToggleButton* pBox);
+        void Check(const weld::ToggleButton* pBox);
         DECL_LINK(CheckHdl, weld::ToggleButton&, void);
         DECL_LINK(ConditionHdl, weld::Button&, void);
         DECL_LINK(OKHdl, weld::Button&, void);

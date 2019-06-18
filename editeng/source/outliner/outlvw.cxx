@@ -1266,7 +1266,7 @@ void OutlinerView::TransliterateText( TransliterationFlags nTransliterationMode 
     pEditView->TransliterateText( nTransliterationMode );
 }
 
-ESelection OutlinerView::GetSelection()
+ESelection OutlinerView::GetSelection() const
 {
     return pEditView->GetSelection();
 }
@@ -1381,7 +1381,7 @@ void OutlinerView::RegisterViewShell(OutlinerViewShell* pViewShell)
     pEditView->RegisterViewShell(pViewShell);
 }
 
-Color const & OutlinerView::GetBackgroundColor()
+Color const & OutlinerView::GetBackgroundColor() const
 {
     return pEditView->GetBackgroundColor();
 }

@@ -1234,7 +1234,7 @@ public:
 
     /** Return the number of pages that are to be printed.
     */
-    sal_Int32 GetPrintPageCount()
+    sal_Int32 GetPrintPageCount() const
     {
         OSL_ASSERT(!mbIsDisposed);
         if (mbIsDisposed)
@@ -1246,7 +1246,7 @@ public:
     /** Return a sequence of properties that can be returned by the
         XRenderable::getRenderer() method.
     */
-    css::uno::Sequence<css::beans::PropertyValue> GetProperties ()
+    css::uno::Sequence<css::beans::PropertyValue> GetProperties () const
     {
         css::uno::Sequence<css::beans::PropertyValue> aProperties (3);
 

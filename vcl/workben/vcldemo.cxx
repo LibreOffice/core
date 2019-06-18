@@ -164,7 +164,7 @@ public:
     void     selectRenderer(const OUString &rName);
     int      selectNextRenderer();
     void     setIterCount(sal_Int32 iterCount);
-    sal_Int32 getIterCount();
+    sal_Int32 getIterCount() const;
     void     addTime(int i, double t);
 
     Size maSize;
@@ -1674,7 +1674,7 @@ void DemoRenderer::setIterCount(sal_Int32 i)
     iterCount = i;
 }
 
-sal_Int32 DemoRenderer::getIterCount()
+sal_Int32 DemoRenderer::getIterCount() const
 {
     return iterCount;
 }

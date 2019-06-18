@@ -199,8 +199,8 @@ public:
     virtual void    KeyInput(const KeyEvent &rKEvt) override;
     void            UpdatePointer(const Point &, sal_uInt16 nButtons = 0);
 
-    bool            IsDrawSelMode();
-    bool            IsDrawAction()                  { return m_bInsDraw; }
+    bool            IsDrawSelMode() const;
+    bool            IsDrawAction() const            { return m_bInsDraw; }
     void            SetDrawAction(bool bFlag)       { m_bInsDraw = bFlag; }
 
     void            SetObjectSelect( bool bVal )    { m_bObjectSelect = bVal; }

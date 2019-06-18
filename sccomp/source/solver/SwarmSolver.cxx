@@ -273,7 +273,7 @@ private:
 
 public:
     double calculateFitness(std::vector<double> const& rVariables);
-    size_t getDimensionality();
+    size_t getDimensionality() const;
     void initializeVariables(std::vector<double>& rVariables, std::mt19937& rGenerator);
     double clampVariable(size_t nVarIndex, double fValue);
     double boundVariable(size_t nVarIndex, double fValue);
@@ -396,7 +396,7 @@ double SwarmSolver::boundVariable(size_t nVarIndex, double fValue)
     return fResult;
 }
 
-size_t SwarmSolver::getDimensionality() { return maVariables.getLength(); }
+size_t SwarmSolver::getDimensionality() const { return maVariables.getLength(); }
 
 bool SwarmSolver::doesViolateConstraints()
 {

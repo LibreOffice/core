@@ -109,7 +109,7 @@ public:
     void SetEndCP(sal_Int32 nCP) {mnEndCP = nCP;}
     sal_Int32 GetStartCP() const {return mnStartCP;}
     sal_Int32 GetEndCP() const {return mnEndCP;}
-    bool IsParaEnd(){ return bIsParaEnd;}
+    bool IsParaEnd() const { return bIsParaEnd;}
     void SetIsParaEnd(bool bArg){ bIsParaEnd = bArg;}
 };
 
@@ -284,7 +284,7 @@ public:
     // "purely virtual methods" of SfxPoolItem
     virtual bool operator==(const SfxPoolItem&) const override;
     virtual SfxPoolItem* Clone(SfxItemPool* = nullptr) const override;
-    const SwTOXBase& GetBase() { return *m_xTOXBase; }
+    const SwTOXBase& GetBase() const { return *m_xTOXBase; }
     void SetHadBreakItem(    bool bVal ) { bHadBreakItem    = bVal; }
     void SetHadPageDescItem( bool bVal ) { bHadPageDescItem = bVal; }
     bool HadBreakItem()    const { return bHadBreakItem; }

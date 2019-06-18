@@ -1508,7 +1508,7 @@ void SvxPageDescPage::CheckMarginEdits( bool _bClear )
         m_nPos |= MARGIN_BOTTOM;
 }
 
-bool SvxPageDescPage::IsMarginOutOfRange()
+bool SvxPageDescPage::IsMarginOutOfRange() const
 {
     bool bRet = ( ( ( !( m_nPos & MARGIN_LEFT ) &&
                       m_xLeftMarginEdit->get_value_changed_from_saved() ) &&

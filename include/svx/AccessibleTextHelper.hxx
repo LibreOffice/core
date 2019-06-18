@@ -322,7 +322,7 @@ namespace accessibility
             @attention Don't call with locked mutexes. You may hold
             the solar mutex, but this method acquires it anyway.
         */
-        sal_Int32 GetChildCount();
+        sal_Int32 GetChildCount() const;
         /** Implements getAccessibleChild
 
             @attention Don't call with locked mutexes. You may hold

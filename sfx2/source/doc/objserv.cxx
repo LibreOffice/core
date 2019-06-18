@@ -158,7 +158,7 @@ class SfxClosePreventer_Impl : public ::cppu::WeakImplHelper< css::util::XCloseL
 public:
     SfxClosePreventer_Impl();
 
-    bool HasOwnership() { return m_bGotOwnership; }
+    bool HasOwnership() const { return m_bGotOwnership; }
 
     void SetPreventClose( bool bPrevent ) { m_bPreventClose = bPrevent; }
 
@@ -395,7 +395,7 @@ void SfxObjectShell::CheckIn( )
     }
 }
 
-uno::Sequence< document::CmisVersion > SfxObjectShell::GetCmisVersions( )
+uno::Sequence< document::CmisVersion > SfxObjectShell::GetCmisVersions( ) const
 {
     try
     {
@@ -1812,7 +1812,7 @@ bool SfxObjectShell::CheckIsReadonly(bool bSignScriptingContent)
     return false;
 }
 
-bool SfxObjectShell::HasValidSignatures()
+bool SfxObjectShell::HasValidSignatures() const
 {
     return pImpl->nDocumentSignatureState == SignatureState::OK
            || pImpl->nDocumentSignatureState == SignatureState::NOTVALIDATED

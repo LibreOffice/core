@@ -971,7 +971,7 @@ public:
     void SetSerializer( ::sax_fastparser::FSHelperPtr const & pSerializer );
 
     /// Occasionally need to use this serializer from the outside
-    const ::sax_fastparser::FSHelperPtr& GetSerializer( ) { return m_pSerializer; }
+    const ::sax_fastparser::FSHelperPtr& GetSerializer( ) const { return m_pSerializer; }
 
     /// Do we have any footnotes?
     bool HasFootnotes() const;
@@ -1000,11 +1000,11 @@ public:
     void BulletDefinition(int nId, const Graphic& rGraphic, Size aSize) override;
 
     void SetWritingHeaderFooter( bool bWritingHeaderFooter )    {   m_bWritingHeaderFooter = bWritingHeaderFooter;   }
-    bool GetWritingHeaderFooter( )  {   return m_bWritingHeaderFooter;  }
+    bool GetWritingHeaderFooter( ) const  {   return m_bWritingHeaderFooter;  }
     void SetAlternateContentChoiceOpen( bool bAltContentChoiceOpen ) { m_bAlternateContentChoiceOpen = bAltContentChoiceOpen; }
-    bool IsAlternateContentChoiceOpen( ) { return m_bAlternateContentChoiceOpen; }
+    bool IsAlternateContentChoiceOpen( ) const { return m_bAlternateContentChoiceOpen; }
     void GetSdtEndBefore(const SdrObject* pSdrObj);
-    bool IsFirstParagraph() { return m_bIsFirstParagraph; }
+    bool IsFirstParagraph() const { return m_bIsFirstParagraph; }
 
     /// Stores the table export state to the passed context and resets own state.
     void pushToTableExportContext(DocxTableExportContext& rContext);

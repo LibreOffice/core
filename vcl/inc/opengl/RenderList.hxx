@@ -56,17 +56,17 @@ struct RenderEntry
 
     std::unordered_map<GLuint, RenderTextureParameters> maTextureParametersMap;
 
-    bool hasTriangles()
+    bool hasTriangles() const
     {
         return !maTriangleParameters.maVertices.empty();
     }
 
-    bool hasLines()
+    bool hasLines() const
     {
         return !maLineParameters.maVertices.empty();
     }
 
-    bool hasTextures()
+    bool hasTextures() const
     {
         return !maTextureParametersMap.empty();
     }

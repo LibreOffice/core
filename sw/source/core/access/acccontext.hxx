@@ -346,7 +346,7 @@ public:
 
     //This method is used to updated the selected state and fire the selected state changed event.
     virtual bool SetSelectedState(bool bSeleted);
-    bool  IsSeletedInDoc() { return m_isSelectedInDoc; }
+    bool  IsSeletedInDoc() const { return m_isSelectedInDoc; }
 
     static OUString GetResource(const char* pResId,
                                 const OUString *pArg1 = nullptr,

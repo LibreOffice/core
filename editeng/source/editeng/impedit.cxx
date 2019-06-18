@@ -1278,14 +1278,14 @@ Pair ImpEditView::Scroll( long ndX, long ndY, ScrollRangeCheck nRangeCheck )
     return Pair( nRealDiffX, nRealDiffY );
 }
 
-Reference<css::datatransfer::clipboard::XClipboard> ImpEditView::GetClipboard()
+Reference<css::datatransfer::clipboard::XClipboard> ImpEditView::GetClipboard() const
 {
     if (vcl::Window* pWindow = GetWindow())
         return pWindow->GetClipboard();
     return GetSystemClipboard();
 }
 
-Reference<css::datatransfer::clipboard::XClipboard> ImpEditView::GetSelection()
+Reference<css::datatransfer::clipboard::XClipboard> ImpEditView::GetSelection() const
 {
     if (vcl::Window* pWindow = GetWindow())
         return pWindow->GetPrimarySelection();

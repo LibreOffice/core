@@ -587,7 +587,7 @@ void FuDraw::ForcePointer(const MouseEvent* pMEvt)
  *
  * @return True when pointer was set
  */
-bool FuDraw::SetPointer(SdrObject* pObj, const Point& rPos)
+bool FuDraw::SetPointer(const SdrObject* pObj, const Point& rPos)
 {
     bool bImageMapInfo = SdDrawDocument::GetIMapInfo(pObj) != nullptr;
 
@@ -733,7 +733,7 @@ bool FuDraw::RequestHelp(const HelpEvent& rHEvt)
     return bReturn;
 }
 
-bool FuDraw::SetHelpText(SdrObject* pObj, const Point& rPosPixel, const SdrViewEvent& rVEvt)
+bool FuDraw::SetHelpText(const SdrObject* pObj, const Point& rPosPixel, const SdrViewEvent& rVEvt)
 {
     OUString aHelpText;
     Point aPos(mpWindow->PixelToLogic(mpWindow->ScreenToOutputPixel(rPosPixel)));

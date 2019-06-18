@@ -126,7 +126,7 @@ private:
     getParentXWindow() const;
 
     css::uno::Reference< css::task::XInteractionHandler2 >
-    getInteractionHandler();
+    getInteractionHandler() const;
 
     bool    handleTypedHandlerImplementations(
                 css::uno::Reference< css::task::XInteractionRequest > const &  rRequest

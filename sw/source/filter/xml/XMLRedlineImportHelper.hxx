@@ -117,7 +117,7 @@ public:
 
 private:
 
-    static inline bool IsReady(RedlineInfo* pRedline);
+    static inline bool IsReady(const RedlineInfo* pRedline);
 
     void InsertIntoDocument(RedlineInfo* pRedline);
 

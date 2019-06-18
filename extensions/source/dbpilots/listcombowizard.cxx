@@ -215,7 +215,7 @@ namespace dbp
         return true;
     }
 
-    Reference< XNameAccess > OLCPage::getTables()
+    Reference< XNameAccess > OLCPage::getTables() const
     {
         Reference< XConnection > xConn = getFormConnection();
         DBG_ASSERT(xConn.is(), "OLCPage::getTables: should have an active connection when reaching this page!");

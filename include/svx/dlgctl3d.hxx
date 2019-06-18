@@ -144,7 +144,7 @@ public:
 
     // selection checks
     bool IsSelectionValid();
-    bool IsGeometrySelected() { return mbGeometrySelected; }
+    bool IsGeometrySelected() const { return mbGeometrySelected; }
 
     // get/set position of selected lamp in polar coordinates, Hor:[0..360.0[ and Ver:[-90..90] degrees
     void GetPosition(double& rHor, double& rVer);
@@ -156,7 +156,7 @@ public:
 
     void SelectLight(sal_uInt32 nLightNumber);
     virtual void Set3DAttributes(const SfxItemSet& rAttr) override;
-    sal_uInt32 GetSelectedLight() { return maSelectedLight; }
+    sal_uInt32 GetSelectedLight() const { return maSelectedLight; }
 
     // light data access
     bool GetLightOnOff(sal_uInt32 nNum) const;
@@ -218,7 +218,7 @@ public:
 
     // selection checks
     bool IsSelectionValid();
-    bool IsGeometrySelected() { return mbGeometrySelected; }
+    bool IsGeometrySelected() const { return mbGeometrySelected; }
 
     // get/set position of selected lamp in polar coordinates, Hor:[0..360.0[ and Ver:[-90..90] degrees
     void GetPosition(double& rHor, double& rVer);
@@ -230,7 +230,7 @@ public:
 
     void SelectLight(sal_uInt32 nLightNumber);
     virtual void Set3DAttributes(const SfxItemSet& rAttr) override;
-    sal_uInt32 GetSelectedLight() { return maSelectedLight; }
+    sal_uInt32 GetSelectedLight() const { return maSelectedLight; }
 
     // light data access
     bool GetLightOnOff(sal_uInt32 nNum) const;

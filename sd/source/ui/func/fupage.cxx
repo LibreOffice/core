@@ -193,7 +193,7 @@ void MergePageBackgroundFilling(SdPage *pPage, SdStyleSheet *pStyleSheet, bool b
     }
 }
 
-const SfxItemSet* FuPage::ExecuteDialog(weld::Window* pParent, SfxRequest& rReq)
+const SfxItemSet* FuPage::ExecuteDialog(weld::Window* pParent, const SfxRequest& rReq)
 {
     if (!mpDrawViewShell)
         return nullptr;

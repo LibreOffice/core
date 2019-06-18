@@ -1639,7 +1639,7 @@ void SlideshowImpl::jumpToBookmark( const OUString& sBookmark )
         displaySlideNumber( nSlideNumber );
 }
 
-sal_Int32 SlideshowImpl::getCurrentSlideNumber()
+sal_Int32 SlideshowImpl::getCurrentSlideNumber() const
 {
     return mpSlideController.get() ? mpSlideController->getCurrentSlideNumber() : -1;
 }

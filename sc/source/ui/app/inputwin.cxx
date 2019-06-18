@@ -1038,12 +1038,12 @@ EditView* ScTextWndGroup::GetEditView()
     return maTextWnd->GetEditView();
 }
 
-long ScTextWndGroup::GetLastNumExpandedLines()
+long ScTextWndGroup::GetLastNumExpandedLines() const
 {
     return maTextWnd->GetLastNumExpandedLines();
 }
 
-long ScTextWndGroup::GetNumLines()
+long ScTextWndGroup::GetNumLines() const
 {
     return maTextWnd->GetNumLines();
 }
@@ -1230,7 +1230,7 @@ void ScTextWnd::Resize()
     SetScrollBarRange();
 }
 
-long ScTextWnd::GetEditEngTxtHeight()
+long ScTextWnd::GetEditEngTxtHeight() const
 {
     return mpEditView ? mpEditView->GetEditEngine()->GetTextHeight() : 0;
 }

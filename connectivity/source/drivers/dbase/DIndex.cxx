@@ -379,7 +379,7 @@ SvStream& connectivity::dbase::WriteODbaseIndex(SvStream &rStream, ODbaseIndex& 
     return rStream;
 }
 
-OUString ODbaseIndex::getCompletePath()
+OUString ODbaseIndex::getCompletePath() const
 {
     OUString sDir = m_pTable->getConnection()->getURL() +
         OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DELIMITER) +

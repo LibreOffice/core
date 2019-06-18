@@ -701,7 +701,7 @@ public:
 
     sal_uInt16 GetRowsToRepeat() const;
     void SetRowsToRepeat( sal_uInt16 nNumOfRows );
-    sal_uInt16 GetVirtPageNum();
+    sal_uInt16 GetVirtPageNum() const;
 
     /** @return the number of table rows currently selected
     if the selection start at the top of the table. */
@@ -733,7 +733,7 @@ public:
 
     /** Phy: real page count.
      Virt: consider offset that may have been set by user. */
-    sal_uInt16  GetPhyPageNum();
+    sal_uInt16  GetPhyPageNum() const;
 
     void SetNewPageOffset( sal_uInt16 nOffset );
     void SetPageOffset( sal_uInt16 nOffset );   ///< Changes last page offset.

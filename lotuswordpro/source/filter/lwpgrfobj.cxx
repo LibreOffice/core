@@ -237,7 +237,7 @@ void LwpGraphicObject::XFConvert (XFContentContainer* pCont)
  *  these formats by Word Pro.
  * @return  sal_True if yes sal_False if not.
  */
-bool LwpGraphicObject::IsGrafFormatValid()
+bool LwpGraphicObject::IsGrafFormatValid() const
 {
     return (m_sServerContextFormat[1]=='b'&& m_sServerContextFormat[2]=='m' && m_sServerContextFormat[3]=='p')
     || (m_sServerContextFormat[1]=='j' && m_sServerContextFormat[2]=='p' && m_sServerContextFormat[3]=='g')

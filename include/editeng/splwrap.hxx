@@ -90,15 +90,15 @@ public:
     static void         ShowLanguageErrors();
 
     void            SpellDocument();        // Perform Spell Checking
-    bool     IsStartDone(){ return bStartDone; }
-    bool     IsEndDone(){ return bEndDone; }
-    bool     IsHyphen(){ return bHyphen; } // Split instead of Spell check
+    bool     IsStartDone() const { return bStartDone; }
+    bool     IsEndDone() const { return bEndDone; }
+    bool     IsHyphen() const { return bHyphen; } // Split instead of Spell check
     void     SetHyphen() { bHyphen = true; }
-    bool     IsAllRight()        { return bAllRight; }
+    bool     IsAllRight() const { return bAllRight; }
 
 protected:
     const css::uno::Reference< css::uno::XInterface >&
-                     GetLast()      { return xLast; }
+                     GetLast() const { return xLast; }
     void             SetLast(const css::uno::Reference< css::uno::XInterface >  &xNewLast)
                             { xLast = xNewLast; }
     virtual bool SpellMore();               // examine further documents?

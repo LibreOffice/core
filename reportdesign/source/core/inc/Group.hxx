@@ -160,7 +160,7 @@ namespace reportdesign
             cppu::WeakComponentImplHelperBase::removeEventListener(aListener);
         }
 
-        const css::uno::Reference< css::uno::XComponentContext >& getContext(){ return m_xContext; }
+        const css::uno::Reference< css::uno::XComponentContext >& getContext() const { return m_xContext; }
     };
 
 } // namespace reportdesign

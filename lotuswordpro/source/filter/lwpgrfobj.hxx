@@ -107,7 +107,7 @@ private:
 
     void XFConvertEquation(XFContentContainer* pCont);
 
-    bool IsGrafFormatValid();
+    bool IsGrafFormatValid() const;
     std::vector< rtl::Reference<XFFrame> > m_vXFDrawObjects;
 
 public:
@@ -123,8 +123,8 @@ public:
     void GetGrafOrgSize(long& rWidth, long& rHeight) { rWidth = m_Cache.Width; rHeight = m_Cache.Height; }
     void GetGrafOrgSize(double& rWidth, double& rHeight) override;
 
-    sal_Int16 IsLinked(){ return m_bIsLinked;}
-    const OUString& GetLinkedFilePath(){ return m_LinkedFilePath;}
+    sal_Int16 IsLinked() const { return m_bIsLinked;}
+    const OUString& GetLinkedFilePath() const { return m_LinkedFilePath;}
 };
 
 #endif

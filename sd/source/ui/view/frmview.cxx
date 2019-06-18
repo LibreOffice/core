@@ -334,7 +334,7 @@ void FrameView::SetViewShEditMode(EditMode eMode)
 /**
  * Return EditMode (Page or MasterPage) of working mode
  */
-EditMode FrameView::GetViewShEditMode()
+EditMode FrameView::GetViewShEditMode() const
 {
     return mePageEditMode;
 }

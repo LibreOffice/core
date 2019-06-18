@@ -164,7 +164,7 @@ class SwFramePage: public SfxTabPage
     static sal_Int32 GetMapPos(const FrameMap *pMap, const weld::ComboBox& rAlignLB);
     static sal_Int16 GetAlignment(FrameMap const *pMap, sal_Int32 nMapPos, const weld::ComboBox& rRelationLB);
     static sal_Int16 GetRelation(const weld::ComboBox& rRelationLB);
-    RndStdIds       GetAnchor();
+    RndStdIds       GetAnchor() const;
 
     void setOptimalFrameWidth();
     void setOptimalRelWidth();
@@ -191,7 +191,7 @@ public:
     void            SetNewFrame(bool bNewFrame) { m_bNew      = bNewFrame; }
     void            SetFormatUsed(bool bFormat);
     void            SetFrameType(const OUString &rType) { m_sDlgType  = rType; }
-    bool     IsInGraficMode() { return m_sDlgType == "PictureDialog" || m_sDlgType == "ObjectDialog"; }
+    bool            IsInGraficMode() const { return m_sDlgType == "PictureDialog" || m_sDlgType == "ObjectDialog"; }
     void            EnableVerticalPositioning( bool bEnable );
 };
 

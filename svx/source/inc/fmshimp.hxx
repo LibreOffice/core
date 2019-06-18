@@ -287,7 +287,7 @@ private:
 
 public:
     SAL_DLLPRIVATE void EnableTrackProperties_Lock(bool bEnable) { m_bTrackProperties = bEnable; }
-    SAL_DLLPRIVATE bool IsTrackPropertiesEnabled_Lock() { return m_bTrackProperties; }
+    SAL_DLLPRIVATE bool IsTrackPropertiesEnabled_Lock() const { return m_bTrackProperties; }
 
     // activation handling
     SAL_DLLPRIVATE void        viewActivated_Lock(FmFormView& _rCurrentView, bool _bSyncAction = false);
@@ -444,7 +444,7 @@ public:
 
     // Setting the curObject/selObject/curForm is delayed (SetSelectionDelayed). With the
     // following functions this can be inquired/enforced.
-    SAL_DLLPRIVATE inline bool IsSelectionUpdatePending_Lock();
+    SAL_DLLPRIVATE inline bool IsSelectionUpdatePending_Lock() const;
     SAL_DLLPRIVATE void        ForceUpdateSelection_Lock();
 
     SAL_DLLPRIVATE css::uno::Reference< css::frame::XModel>          getContextDocument_Lock() const;
@@ -483,7 +483,7 @@ private:
     SAL_DLLPRIVATE void implAdjustConfigCache_Lock();
 
     SAL_DLLPRIVATE css::uno::Reference< css::awt::XControlContainer >
-            getControlContainerForView_Lock();
+            getControlContainerForView_Lock() const;
 
     /** finds and sets a default for m_xCurrentForm, if it is currently NULL
     */
@@ -529,7 +529,7 @@ private:
 };
 
 
-inline bool FmXFormShell::IsSelectionUpdatePending_Lock()
+inline bool FmXFormShell::IsSelectionUpdatePending_Lock() const
 {
     return m_aMarkTimer.IsActive();
 }

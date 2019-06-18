@@ -41,7 +41,7 @@ TblStylePrHandler::~TblStylePrHandler( )
 {
 }
 
-OUString TblStylePrHandler::getTypeString()
+OUString TblStylePrHandler::getTypeString() const
 {
     switch (m_nType)
     {

@@ -3073,7 +3073,7 @@ void SdrObjCustomShape::impl_setUnoShape(const uno::Reference<uno::XInterface>& 
     mxCustomShapeEngine.set(nullptr);
 }
 
-OUString SdrObjCustomShape::GetCustomShapeName()
+OUString SdrObjCustomShape::GetCustomShapeName() const
 {
     OUString sShapeName;
     OUString aEngine( GetMergedItem( SDRATTR_CUSTOMSHAPE_ENGINE ).GetValue() );

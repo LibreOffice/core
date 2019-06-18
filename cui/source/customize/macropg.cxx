@@ -397,7 +397,7 @@ IMPL_LINK_NOARG( SvxMacroTabPage_, DoubleClickHdl_Impl, weld::TreeView&, void)
 }
 
 // handler for double click on the listbox, and for the assign/delete buttons
-void SvxMacroTabPage_::GenericHandler_Impl(SvxMacroTabPage_* pThis, weld::Button* pBtn)
+void SvxMacroTabPage_::GenericHandler_Impl(SvxMacroTabPage_* pThis, const weld::Button* pBtn)
 {
     SvxMacroTabPage_Impl*    pImpl = pThis->mpImpl.get();
     weld::TreeView& rListBox = *pImpl->xEventLB;

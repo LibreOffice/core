@@ -167,7 +167,7 @@ void ArgInput::SetArgName(const OUString &aArg)
 }
 
 // Returns the Name for the Argument
-OUString ArgInput::GetArgName()
+OUString ArgInput::GetArgName() const
 {
     OUString aPrivArgName;
     if (pFtArg)
@@ -197,7 +197,7 @@ void ArgInput::SetArgVal(const OUString &rVal)
 }
 
 //Returns the Value for the Argument
-OUString ArgInput::GetArgVal()
+OUString ArgInput::GetArgVal() const
 {
     OUString aResult;
     if (pEdArg)

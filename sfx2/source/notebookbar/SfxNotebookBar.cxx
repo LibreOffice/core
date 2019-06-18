@@ -560,7 +560,7 @@ void SfxNotebookBar::ToggleMenubar()
     }
 }
 
-void SfxNotebookBar::ReloadNotebookBar(OUString& sUIPath)
+void SfxNotebookBar::ReloadNotebookBar(const OUString& sUIPath)
 {
     if (SfxNotebookBar::IsActive())
     {

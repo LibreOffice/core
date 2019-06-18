@@ -412,7 +412,7 @@ void AccessibleSlideSorterObject::ThrowIfDisposed()
     }
 }
 
-bool AccessibleSlideSorterObject::IsDisposed()
+bool AccessibleSlideSorterObject::IsDisposed() const
 {
     return (rBHelper.bDisposed || rBHelper.bInDispose);
 }

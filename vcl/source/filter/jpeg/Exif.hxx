@@ -66,10 +66,10 @@ public:
     Exif();
     ~Exif();
 
-    bool hasExif() { return mbExifPresent;}
+    bool hasExif() const { return mbExifPresent;}
 
-    Orientation getOrientation() { return maOrientation;}
-    sal_Int32 getRotation();
+    Orientation getOrientation() const { return maOrientation;}
+    sal_Int32 getRotation() const;
 
     void setOrientation(Orientation orientation);
 

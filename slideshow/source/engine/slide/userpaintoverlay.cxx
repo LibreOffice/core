@@ -222,7 +222,7 @@ namespace slideshow
             }
 
             //Retrieve all registered polygons.
-            const PolyPolygonVector& getPolygons()
+            const PolyPolygonVector& getPolygons() const
             {
                 return maPolygons;
             }
@@ -462,7 +462,7 @@ namespace slideshow
             mrMultiplexer.addUserPaintHandler(mpHandler);
         }
 
-        PolyPolygonVector const & UserPaintOverlay::getPolygons()
+        PolyPolygonVector const & UserPaintOverlay::getPolygons() const
         {
             return mpHandler->getPolygons();
         }

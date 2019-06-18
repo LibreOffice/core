@@ -4675,7 +4675,7 @@ void SwXTextCellStyle::SetPhysical()
         SAL_WARN("sw.uno", "calling SetPhysical on a physical SwXTextCellStyle");
 }
 
-bool SwXTextCellStyle::IsPhysical()
+bool SwXTextCellStyle::IsPhysical() const
 {
     return m_bPhysical;
 }

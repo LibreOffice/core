@@ -63,7 +63,7 @@ VCLXAccessibleTabPage::~VCLXAccessibleTabPage()
 }
 
 
-bool VCLXAccessibleTabPage::IsFocused()
+bool VCLXAccessibleTabPage::IsFocused() const
 {
     bool bFocused = false;
 
@@ -74,7 +74,7 @@ bool VCLXAccessibleTabPage::IsFocused()
 }
 
 
-bool VCLXAccessibleTabPage::IsSelected()
+bool VCLXAccessibleTabPage::IsSelected() const
 {
     bool bSelected = false;
 

@@ -285,7 +285,7 @@ public:
     const std::shared_ptr< vcl::PrinterController >& GetPrinterController() const;
 
     void                        AddRemoveClipboardListener( const css::uno::Reference < css::datatransfer::clipboard::XClipboardListener>&, bool );
-    css::uno::Reference< css::datatransfer::clipboard::XClipboardNotifier > GetClipboardNotifier();
+    css::uno::Reference< css::datatransfer::clipboard::XClipboardNotifier > GetClipboardNotifier() const;
 
     SAL_DLLPRIVATE SfxInPlaceClient* GetUIActiveIPClient_Impl() const;
     SAL_DLLPRIVATE void AddContextMenuInterceptor_Impl( const css::uno::Reference < css::ui::XContextMenuInterceptor >& xInterceptor );
@@ -299,8 +299,8 @@ public:
     SAL_DLLPRIVATE void SetPrinter_Impl( VclPtr<SfxPrinter>& pNewPrinter );
 
     SAL_DLLPRIVATE bool HandleNotifyEvent_Impl( NotifyEvent const & rEvent );
-    SAL_DLLPRIVATE bool HasKeyListeners_Impl();
-    SAL_DLLPRIVATE bool HasMouseClickListeners_Impl();
+    SAL_DLLPRIVATE bool HasKeyListeners_Impl() const;
+    SAL_DLLPRIVATE bool HasMouseClickListeners_Impl() const;
 
     SAL_DLLPRIVATE SfxBaseController*   GetBaseController_Impl() const;
 

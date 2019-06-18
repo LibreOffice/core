@@ -38,7 +38,7 @@ public:
     bool SyncYOffset();
     long& GetCurYOffset() { return m_nCurYOffset;}
 
-    int GetWidth() { return m_nWidth;}
+    int GetWidth() const { return m_nWidth;}
 };
 
 } // namespace basctl

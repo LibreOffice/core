@@ -143,12 +143,12 @@ class SvxBulletAndPositionDlg : public weld::GenericDialogController
     void SetAlignmentHdl_Impl(SvxAdjust);
 
 public:
-    SvxBulletAndPositionDlg(weld::Window* pWindow, const SfxItemSet& rSet, ::sd::View* pView);
+    SvxBulletAndPositionDlg(weld::Window* pWindow, const SfxItemSet& rSet, const ::sd::View* pView);
     virtual ~SvxBulletAndPositionDlg() override;
 
     SfxItemSet* GetOutputItemSet(SfxItemSet* rSet);
-    bool IsApplyToMaster();
-    bool IsSlideScope();
+    bool IsApplyToMaster() const;
+    bool IsSlideScope() const;
     void Reset(const SfxItemSet* rSet);
 
     void SetCharFmts(const OUString& rNumName, const OUString& rBulletName)

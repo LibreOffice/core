@@ -82,9 +82,9 @@ public:
 
     void        Apply(XFParaStyle *pStrm);
     static void ApplyParaBorder(XFParaStyle* pParaStyle, LwpParaBorderOverride* pBorder);
-    static void ApplyBreaks(XFParaStyle* pParaStyle, LwpBreaksOverride* pBreaks);
-    static void ApplyAlignment(XFParaStyle* pParaStyle, LwpAlignmentOverride* pAlign);
-    static void ApplyIndent(LwpPara* pPara, XFParaStyle* pParaStyle, LwpIndentOverride* pIndent);
+    static void ApplyBreaks(XFParaStyle* pParaStyle, const LwpBreaksOverride* pBreaks);
+    static void ApplyAlignment(XFParaStyle* pParaStyle, const LwpAlignmentOverride* pAlign);
+    static void ApplyIndent(LwpPara* pPara, XFParaStyle* pParaStyle, const LwpIndentOverride* pIndent);
     static void ApplySpacing(LwpPara* pPara, XFParaStyle* pParaStyle, LwpSpacingOverride* pSpacing);
 
     static void ApplyTab(XFParaStyle* pParaStyle, LwpTabOverride* pTab);

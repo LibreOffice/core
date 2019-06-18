@@ -101,7 +101,7 @@ namespace
         , aPosition ( rPosition )
         {
         }
-        sal_Int32 getIndex ()
+        sal_Int32 getIndex () const
         {
             return aPosition.nContent.GetIndex();
         }
@@ -236,7 +236,7 @@ namespace
         {
         }
 
-        sal_Int32 getIndex ()
+        sal_Int32 getIndex () const
         {
             return maPosition.nContent.GetIndex();
         }
@@ -691,7 +691,7 @@ struct SwXRedlinePortion_Impl
     {
     }
 
-    sal_Int32 getRealIndex ()
+    sal_Int32 getRealIndex () const
     {
         return m_bStart ? m_pRedline->Start()->nContent.GetIndex()
                         : m_pRedline->End()  ->nContent.GetIndex();

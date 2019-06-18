@@ -105,7 +105,7 @@ public:
     void                        SetMenu( Menu* pMenu ) { mpVCLMenu = pMenu; }
     Menu*                       GetMenu() { return mpVCLMenu; }
     void                        SetMenuModel(GMenuModel* pMenuModel);
-    unsigned                    GetItemCount() { return maItems.size(); }
+    unsigned                    GetItemCount() const { return maItems.size(); }
     GtkSalMenuItem*             GetItemAtPos( unsigned nPos ) { return maItems[ nPos ]; }
     void                        SetActionGroup( GActionGroup* pActionGroup ) { mpActionGroup = pActionGroup; }
     bool                        IsItemVisible( unsigned nPos );

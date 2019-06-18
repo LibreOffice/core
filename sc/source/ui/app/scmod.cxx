@@ -2164,7 +2164,7 @@ void ScModule::RegisterRefController(sal_uInt16 nSlotId, std::shared_ptr<SfxDial
     }
 }
 
-void  ScModule::UnregisterRefController(sal_uInt16 nSlotId, std::shared_ptr<SfxDialogController>& rWnd)
+void  ScModule::UnregisterRefController(sal_uInt16 nSlotId, const std::shared_ptr<SfxDialogController>& rWnd)
 {
     auto iSlot = m_mapRefController.find( nSlotId );
 
@@ -2188,7 +2188,7 @@ void  ScModule::UnregisterRefController(sal_uInt16 nSlotId, std::shared_ptr<SfxD
         m_mapRefController.erase( nSlotId );
 }
 
-std::shared_ptr<SfxDialogController> ScModule::Find1RefWindow(sal_uInt16 nSlotId, weld::Window *pWndAncestor)
+std::shared_ptr<SfxDialogController> ScModule::Find1RefWindow(sal_uInt16 nSlotId, const weld::Window *pWndAncestor)
 {
     if (!pWndAncestor)
         return nullptr;

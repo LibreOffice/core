@@ -72,7 +72,7 @@ public:
     LocalizationMgr(Shell*, ScriptDocument const&, OUString const& aLibName,
         const css::uno::Reference < css::resource::XStringResourceManager >& xStringResourceManager );
 
-    const css::uno::Reference< css::resource::XStringResourceManager >& getStringResourceManager()
+    const css::uno::Reference< css::resource::XStringResourceManager >& getStringResourceManager() const
     {
         return m_xStringResourceManager;
     }

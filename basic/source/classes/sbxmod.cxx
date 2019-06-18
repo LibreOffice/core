@@ -1659,7 +1659,7 @@ public:
         StarBASIC::SetGlobalErrorHdl(mErrHandler);
     }
     DECL_LINK( BasicErrorHdl, StarBASIC *, bool );
-    bool HasError() { return mbError; }
+    bool HasError() const { return mbError; }
 };
 
 IMPL_LINK( ErrorHdlResetter, BasicErrorHdl, StarBASIC *, /*pBasic*/, bool)

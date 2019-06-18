@@ -51,7 +51,7 @@ public:
         virtual ~ShadowOverlayObject() override;
 
         void SetShadowState(ShadowState aState);
-        ShadowState GetShadowState() {return mShadowState;}
+        ShadowState GetShadowState() const {return mShadowState;}
 
         void SetPosition( const basegfx::B2DPoint& rPoint1,
                           const basegfx::B2DPoint& rPoint2 );

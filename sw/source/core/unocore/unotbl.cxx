@@ -1986,7 +1986,7 @@ public:
         StartListening(m_pFrameFormat->GetNotifier());
     }
 
-    bool IsDescriptor() { return m_pTableProps != nullptr; }
+    bool IsDescriptor() const { return m_pTableProps != nullptr; }
 
     // note: lock mutex before calling this to avoid concurrent update
     static std::pair<sal_uInt16, sal_uInt16> ThrowIfComplex(SwXTextTable &rThis)
@@ -3203,8 +3203,8 @@ public:
     void SetLabelDescriptions(SwXCellRange & rThis,
             const css::uno::Sequence<OUString>& rDesc, bool bRow);
 
-    sal_Int32 GetRowCount();
-    sal_Int32 GetColumnCount();
+    sal_Int32 GetRowCount() const;
+    sal_Int32 GetColumnCount() const;
 
     virtual void Notify(const SfxHint& ) override;
 
@@ -3856,12 +3856,12 @@ void SAL_CALL SwXCellRange::sort(const uno::Sequence< beans::PropertyValue >& rD
     }
 }
 
-sal_Int32 SwXCellRange::Impl::GetColumnCount()
+sal_Int32 SwXCellRange::Impl::GetColumnCount() const
 {
     return m_RangeDescriptor.nRight - m_RangeDescriptor.nLeft + 1;
 }
 
-sal_Int32 SwXCellRange::Impl::GetRowCount()
+sal_Int32 SwXCellRange::Impl::GetRowCount() const
 {
     return m_RangeDescriptor.nBottom - m_RangeDescriptor.nTop + 1;
 }

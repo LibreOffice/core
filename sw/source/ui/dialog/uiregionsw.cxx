@@ -180,7 +180,7 @@ public:
     void                SetFilter(OUString const& rFilter);
     void                SetSubRegion(OUString const& rSubRegion);
 
-    bool                IsContent() { return m_bContent; }
+    bool                IsContent() const { return m_bContent; }
     void                SetContent(bool const bValue) { m_bContent = bValue; }
 
     void                SetSelected() { m_bSelected = true; }
@@ -448,7 +448,7 @@ bool SwEditRegionDlg::CheckPasswd(weld::ToggleButton* pBox)
 }
 
 // recursively look for child-sections
-void SwEditRegionDlg::RecurseList(const SwSectionFormat* pFormat, weld::TreeIter* pEntry)
+void SwEditRegionDlg::RecurseList(const SwSectionFormat* pFormat, const weld::TreeIter* pEntry)
 {
     std::unique_ptr<weld::TreeIter> xIter(m_xTree->make_iterator());
     if (!pFormat)

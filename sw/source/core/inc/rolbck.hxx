@@ -139,7 +139,7 @@ class SwHistorySetTextField : public SwHistoryHint
     SwFieldIds m_nFieldWhich;
 
 public:
-    SwHistorySetTextField( SwTextField* pTextField, sal_uLong nNode );
+    SwHistorySetTextField( const SwTextField* pTextField, sal_uLong nNode );
     virtual ~SwHistorySetTextField() override;
     virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet ) override;
 
@@ -155,7 +155,7 @@ class SwHistorySetRefMark : public SwHistoryHint
     const sal_Int32 m_nEnd;
 
 public:
-    SwHistorySetRefMark( SwTextRefMark* pTextHt, sal_uLong nNode );
+    SwHistorySetRefMark( const SwTextRefMark* pTextHt, sal_uLong nNode );
     virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet ) override;
 
 };
@@ -170,7 +170,7 @@ class SwHistorySetTOXMark : public SwHistoryHint
     const sal_Int32 m_nEnd;
 
 public:
-    SwHistorySetTOXMark( SwTextTOXMark* pTextHt, sal_uLong nNode );
+    SwHistorySetTOXMark( const SwTextTOXMark* pTextHt, sal_uLong nNode );
     virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet ) override;
     bool IsEqual( const SwTOXMark& rCmp ) const;
 

@@ -336,8 +336,8 @@ public:
     sal_uInt16      GetRightMargin() const{return nRightMargin;}
     sal_uInt16      GetTopMargin() const{return nTopMargin;}
     sal_uInt16      GetBottomMargin() const{return nBottomMargin;}
-    const ScPrintHFParam& GetHeader(){return aHdr;}
-    const ScPrintHFParam& GetFooter(){return aFtr;}
+    const ScPrintHFParam& GetHeader() const {return aHdr;}
+    const ScPrintHFParam& GetFooter() const {return aFtr;}
 
     bool HasPrintRange() const { return mbHasPrintRange;}
 

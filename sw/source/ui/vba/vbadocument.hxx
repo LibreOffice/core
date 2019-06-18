@@ -40,7 +40,7 @@ private:
 
     void Initialize();
     css::uno::Any getControlShape( const OUString& sName );
-    css::uno::Reference< css::container::XNameAccess > getFormControls();
+    css::uno::Reference< css::container::XNameAccess > getFormControls() const;
 
 public:
     SwVbaDocument( const css::uno::Reference< ooo::vba::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& m_xContext, css::uno::Reference< css::frame::XModel > const & xModel );

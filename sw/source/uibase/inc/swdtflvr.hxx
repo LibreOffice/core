@@ -195,7 +195,7 @@ public:
      * @param rSh
      * @param rFormatUsed
      */
-    static void PrePasteSpecial( SwWrtShell& rSh, TransferableDataHelper&, VclPtr<SfxAbstractPasteDialog>& pDlg );
+    static void PrePasteSpecial( const SwWrtShell& rSh, TransferableDataHelper&, const VclPtr<SfxAbstractPasteDialog>& pDlg );
     static bool PasteFormat( SwWrtShell& rSh, TransferableDataHelper& rData,
                              SotClipboardFormatId nFormat );
 

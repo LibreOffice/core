@@ -108,7 +108,7 @@ private:
     SwLabItem   aItem;
     bool const  bIsLabel;
 
-    css::uno::Sequence<OUString> GetPropertyNames();
+    css::uno::Sequence<OUString> GetPropertyNames() const;
 
     virtual void ImplCommit() override;
 

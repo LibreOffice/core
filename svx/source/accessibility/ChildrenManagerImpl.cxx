@@ -958,7 +958,7 @@ void ChildrenManagerImpl::UpdateSelection()
 }
 
 
-bool ChildrenManagerImpl::HasFocus()
+bool ChildrenManagerImpl::HasFocus() const
 {
     return mpFocusedShape != nullptr;
 }

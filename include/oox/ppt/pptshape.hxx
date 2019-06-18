@@ -62,7 +62,7 @@ public:
     // addShape is creating and inserting the corresponding XShape.
     void addShape(
             oox::core::XmlFilterBase& rFilterBase,
-            SlidePersist& rPersist,
+            const SlidePersist& rPersist,
             const oox::drawingml::Theme* pTheme,
             const css::uno::Reference< css::drawing::XShapes >& rxShapes,
             basegfx::B2DHomMatrix& aTransformation,

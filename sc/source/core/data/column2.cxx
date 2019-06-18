@@ -577,7 +577,7 @@ class MaxStrLenFinder
     OUString maMaxLenStr;
     sal_Int32 mnMaxLen;
 
-    void checkLength(ScRefCellValue& rCell)
+    void checkLength(const ScRefCellValue& rCell)
     {
         Color* pColor;
         OUString aValStr;

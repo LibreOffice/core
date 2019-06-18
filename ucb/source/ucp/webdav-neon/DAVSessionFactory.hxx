@@ -67,7 +67,7 @@ public:
                           const ::uno::Sequence< css::beans::NamedValue >& rFlags,
                           const ::uno::Reference< ::uno::XComponentContext >& rxContext );
 
-    const ::uno::Reference< ::uno::XComponentContext >& getComponentContext() {  return m_xContext; }
+    const ::uno::Reference< ::uno::XComponentContext >& getComponentContext() const { return m_xContext; }
 private:
     typedef std::map< OUString, DAVSession * > Map;
 

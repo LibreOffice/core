@@ -245,7 +245,7 @@ const ::avmedia::MediaItem& SdrMediaObj::getMediaProperties() const
     return m_xImpl->m_MediaProperties;
 }
 
-uno::Reference<io::XInputStream> SdrMediaObj::GetInputStream()
+uno::Reference<io::XInputStream> SdrMediaObj::GetInputStream() const
 {
     if (!m_xImpl->m_pTempFile)
     {

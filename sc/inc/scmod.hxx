@@ -250,8 +250,8 @@ public:
     bool                IsInSharedDocSaving() const         { return m_bIsInSharedDocSaving; }
 
     SC_DLLPUBLIC void   RegisterRefController(sal_uInt16 nSlotId, std::shared_ptr<SfxDialogController>& rWnd, weld::Window* pWndAncestor);
-    SC_DLLPUBLIC void   UnregisterRefController(sal_uInt16 nSlotId, std::shared_ptr<SfxDialogController>& rWnd);
-    SC_DLLPUBLIC std::shared_ptr<SfxDialogController> Find1RefWindow(sal_uInt16 nSlotId, weld::Window *pWndAncestor);
+    SC_DLLPUBLIC void   UnregisterRefController(sal_uInt16 nSlotId, const std::shared_ptr<SfxDialogController>& rWnd);
+    SC_DLLPUBLIC std::shared_ptr<SfxDialogController> Find1RefWindow(sal_uInt16 nSlotId, const weld::Window *pWndAncestor);
 
     SC_DLLPUBLIC void RegisterAutomationApplicationEventsCaller(css::uno::Reference< ooo::vba::XSinkCaller > const& xCaller);
     SC_DLLPUBLIC void CallAutomationApplicationEventSinks(const OUString& Method, css::uno::Sequence< css::uno::Any >& Arguments);

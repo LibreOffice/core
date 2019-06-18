@@ -98,7 +98,7 @@ protected:
 public:
     virtual        ~DdeTransaction();
 
-    bool            IsBusy() { return bBusy; }
+    bool            IsBusy() const { return bBusy; }
     const OUString GetName() const;
 
     void            Execute();
@@ -112,7 +112,7 @@ public:
     void                 SetFormat( SotClipboardFormatId nFmt ) { aDdeData.SetFormat( nFmt );  }
     SotClipboardFormatId GetFormat() const       { return aDdeData.GetFormat(); }
 
-    long            GetError();
+    long            GetError() const;
 
 private:
     friend class    DdeInternal;
@@ -179,14 +179,14 @@ public:
                     DdeConnection( SAL_UNUSED_PARAMETER const OUString&, SAL_UNUSED_PARAMETER const OUString& );
                     ~DdeConnection();
 
-    long            GetError();
+    long            GetError() const;
 
     static const std::vector<DdeConnection*>& GetConnections();
 
     bool            IsConnected();
 
-    const OUString  GetServiceName();
-    const OUString  GetTopicName();
+    const OUString  GetServiceName() const;
+    const OUString  GetTopicName() const;
 
 private:
                             DdeConnection( const DdeConnection& ) = delete;
@@ -265,7 +265,7 @@ public:
     void            InsertItem( DdeItem* );     // For own superclasses
     DdeItem*        AddItem( const DdeItem& );  // Will be cloned
     void            RemoveItem( const DdeItem& );
-    const OUString& GetCurItem() { return aItem;  }
+    const OUString& GetCurItem() const { return aItem;  }
     const std::vector<DdeItem*>& GetItems() const  { return aItems; }
 
 private:
@@ -303,7 +303,7 @@ public:
     DdeService&     operator= ( const DdeService& ) = delete;
 
     const OUString  GetName() const;
-    short           GetError()              { return nStatus; }
+    short           GetError() const { return nStatus; }
 
     static DdeServices& GetServices();
     std::vector<DdeTopic*>& GetTopics() { return aTopics; }
@@ -317,7 +317,7 @@ public:
 };
 
 
-inline long DdeTransaction::GetError()
+inline long DdeTransaction::GetError() const
 {
     return rDde.GetError();
 }

@@ -627,7 +627,7 @@ ScDocShell* ScTransferObj::GetSourceDocShell()
     return nullptr;    // none set
 }
 
-ScMarkData ScTransferObj::GetSourceMarkData()
+ScMarkData ScTransferObj::GetSourceMarkData() const
 {
     ScMarkData aMarkData;
     ScCellRangesBase* pRangesObj = comphelper::getUnoTunnelImplementation<ScCellRangesBase>( m_xDragSourceRanges );

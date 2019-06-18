@@ -46,8 +46,8 @@ public:
     bool recordsLeft();
     void SetEof( bool bValue ){ mbEndOfFile = bValue; }
     bool nextRecord();
-    sal_uInt16 getId() { return mnId; }
-    sal_uInt16 getLength() { return mnLength; }
+    sal_uInt16 getId() const { return mnId; }
+    sal_uInt16 getLength() const { return mnLength; }
     OUString readString(sal_uInt16 nLength);
 
     ErrCode parse( ScDocument *pDoc );

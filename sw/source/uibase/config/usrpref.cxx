@@ -82,7 +82,7 @@ SwMasterUsrPref::~SwMasterUsrPref()
 {
 }
 
-Sequence<OUString> SwContentViewConfig::GetPropertyNames()
+Sequence<OUString> SwContentViewConfig::GetPropertyNames() const
 {
     static const char* aPropNames[] =
     {
@@ -224,7 +224,7 @@ void SwContentViewConfig::Load()
     }
 }
 
-Sequence<OUString> SwLayoutViewConfig::GetPropertyNames()
+Sequence<OUString> SwLayoutViewConfig::GetPropertyNames() const
 {
     static const char* aPropNames[] =
     {

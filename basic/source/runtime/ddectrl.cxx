@@ -47,7 +47,7 @@ static const ErrCode nDdeErrMap[] =
     /* DMLERR_UNFOUND_QUEUE_ID    */  ErrCode(0x4011), ERRCODE_BASIC_DDE_NO_CHANNEL
 };
 
-ErrCode SbiDdeControl::GetLastErr( DdeConnection* pConv )
+ErrCode SbiDdeControl::GetLastErr( const DdeConnection* pConv )
 {
     if( !pConv )
     {

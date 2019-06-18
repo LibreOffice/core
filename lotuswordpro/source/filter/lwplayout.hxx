@@ -106,7 +106,7 @@ public:
     virtual bool IsAutoGrowRight(){ return false;}
     bool IsFitGraphic();
     bool IsAutoGrowWidth();
-    bool IsInlineToMargin();
+    bool IsInlineToMargin() const;
     virtual sal_uInt8 GetContentOrientation(){ return TEXT_ORIENT_LRTB;}
     bool GetHonorProtection()
     {
@@ -171,8 +171,8 @@ public:
         m_bGettingExtMarginsValue = false;
         return fRet;
     }
-    const OUString& GetStyleName(){ return m_StyleName;}
-    bool IsComplex();
+    const OUString& GetStyleName() const { return m_StyleName;}
+    bool IsComplex() const;
     virtual bool IsAnchorPage(){ return false;}
     virtual bool IsAnchorFrame(){ return false;}
     virtual bool IsAnchorCell(){ return false;}
@@ -192,7 +192,7 @@ public:
     virtual bool IsUseOnAllOddPages(){ return false;}
     virtual bool IsUseOnPage(){ return false;}
     virtual sal_Int32 GetPageNumber(sal_uInt16 /*nLayoutNumber*/) { return -1;}
-    bool IsMinimumHeight();
+    bool IsMinimumHeight() const;
     virtual bool IsForWaterMark(){ return false;}
     virtual LwpPara* GetLastParaOfPreviousStory() { return nullptr; }
     rtl::Reference<LwpVirtualLayout> GetParentLayout();
@@ -200,7 +200,7 @@ public:
     void RegisterChildStyle();
     bool NoContentReference();
     bool IsStyleLayout();
-    enumXFAlignType GetVerticalAlignmentType()
+    enumXFAlignType GetVerticalAlignmentType() const
     {
         if (m_nAttributes & STYLE_CENTEREDVERTICALLY)
         {
@@ -401,7 +401,7 @@ protected:
     };
 
     LwpObjectID m_Content;
-    rtl::Reference<LwpObject> GetBasedOnStyle();
+    rtl::Reference<LwpObject> GetBasedOnStyle() const;
     LwpObjectID     m_TabPiece;
     LwpLayoutStyle  m_aStyleStuff;
     LwpLayoutMisc   m_aMiscStuff;
@@ -482,7 +482,7 @@ public:
      * @descr:   Get font style for setting position of frame
      *
      */
-    const rtl::Reference<XFFont>& GetFont() { return m_pFont; }
+    const rtl::Reference<XFFont>& GetFont() const { return m_pFont; }
     void SetFont(rtl::Reference<XFFont> const & pFont);
     enum WrapType
     {

@@ -122,9 +122,9 @@ namespace dbaui
         Size                        CalcOptimalSize( const Size& _rAvailable );
 
         // can the current content be cut
-        bool                        isPasteAllowed();
-        bool                        isCutAllowed();
-        bool                        isCopyAllowed();
+        bool                        isPasteAllowed() const;
+        bool                        isCutAllowed() const;
+        bool                        isCopyAllowed() const;
         void                        cut();
         void                        paste();
         void                        copy();

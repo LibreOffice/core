@@ -302,7 +302,7 @@ IMPL_LINK_NOARG(SdModifyFieldDlg, LanguageChangeHdl, weld::ComboBox&, void)
     FillFormatList();
 }
 
-SfxItemSet SdModifyFieldDlg::GetItemSet()
+SfxItemSet SdModifyFieldDlg::GetItemSet() const
 {
     SfxItemSet aOutput( *m_aInputSet.GetPool(), svl::Items<EE_CHAR_LANGUAGE, EE_CHAR_LANGUAGE_CTL>{} );
 

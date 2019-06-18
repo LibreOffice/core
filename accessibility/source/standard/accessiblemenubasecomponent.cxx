@@ -301,7 +301,7 @@ void OAccessibleMenuBaseComponent::UpdateItemText( sal_Int32 i )
 }
 
 
-sal_Int32 OAccessibleMenuBaseComponent::GetChildCount()
+sal_Int32 OAccessibleMenuBaseComponent::GetChildCount() const
 {
     return m_aAccessibleChildren.size();
 }

@@ -114,10 +114,10 @@ namespace vcl
         virtual ~PrintDialog() override;
         virtual void dispose() override;
 
-        bool isPrintToFile();
-        bool isCollate();
+        bool isPrintToFile() const;
+        bool isCollate() const;
         bool isSingleJobs() const { return mbSingleJobs; };
-        bool hasPreview();
+        bool hasPreview() const;
 
         void setPaperSizes();
         void previewForward();

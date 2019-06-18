@@ -99,7 +99,7 @@ void StarBASIC::SetVBAEnabled( bool bEnabled )
     }
 }
 
-bool StarBASIC::isVBAEnabled()
+bool StarBASIC::isVBAEnabled() const
 {
     if ( bDocBasic )
     {
@@ -1262,7 +1262,7 @@ bool SbiRuntime::IsImageFlag( SbiImageFlags n ) const
     return pImg->IsFlag( n );
 }
 
-sal_uInt16 SbiRuntime::GetBase()
+sal_uInt16 SbiRuntime::GetBase() const
 {
     return pImg->GetBase();
 }

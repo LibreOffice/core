@@ -179,8 +179,8 @@ public:
     // either the _Impl name should vanish or there should be an "official" API
     SfxViewShell* GetViewShell_Impl() const;
     SAL_DLLPRIVATE bool HandleEvent_Impl( NotifyEvent const & rEvent );
-    SAL_DLLPRIVATE bool HasKeyListeners_Impl();
-    SAL_DLLPRIVATE bool HasMouseClickListeners_Impl();
+    SAL_DLLPRIVATE bool HasKeyListeners_Impl() const;
+    SAL_DLLPRIVATE bool HasMouseClickListeners_Impl() const;
     SAL_DLLPRIVATE void SetCreationArguments_Impl( const css::uno::Sequence< css::beans::PropertyValue >& i_rCreationArgs );
     SAL_DLLPRIVATE css::uno::Reference< css::frame::XTitle > impl_getTitleHelper ();
 private:

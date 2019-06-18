@@ -119,7 +119,7 @@ public:
     DocxExportFilter& GetFilter() { return *m_pFilter; };
     const DocxExportFilter& GetFilter() const { return *m_pFilter; };
 
-    const ww8::Frame* GetFloatingTableFrame() { return m_pFloatingTableFrame; }
+    const ww8::Frame* GetFloatingTableFrame() const { return m_pFloatingTableFrame; }
 
     /// Access to the attribute output class.
     virtual AttributeOutputBase& AttrOutput() const override;
@@ -286,7 +286,7 @@ public:
     /// Set the document default tab stop.
     void setDefaultTabStop( int stop ) { m_aSettings.defaultTabStop = stop; }
 
-    const ::sax_fastparser::FSHelperPtr& GetFS() { return mpFS; }
+    const ::sax_fastparser::FSHelperPtr& GetFS() const { return mpFS; }
 
     void SetFS(::sax_fastparser::FSHelperPtr const & mpFS);
 

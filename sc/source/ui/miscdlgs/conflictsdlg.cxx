@@ -402,7 +402,7 @@ OUString ScConflictsDlg::GetConflictString( const ScConflictsListEntry& rConflic
     return aString;
 }
 
-void ScConflictsDlg::SetActionString(const ScChangeAction* pAction, ScDocument* pDoc, weld::TreeIter& rEntry)
+void ScConflictsDlg::SetActionString(const ScChangeAction* pAction, ScDocument* pDoc, const weld::TreeIter& rEntry)
 {
     OSL_ENSURE( pAction, "ScConflictsDlg::GetActionString(): pAction is null!" );
     OSL_ENSURE( pDoc, "ScConflictsDlg::GetActionString(): pDoc is null!" );

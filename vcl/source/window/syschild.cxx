@@ -165,7 +165,7 @@ void SystemChildWindow::SetForwardKey( bool bEnable )
         mpWindowImpl->mpSysObj->SetForwardKey( bEnable );
 }
 
-sal_IntPtr SystemChildWindow::GetParentWindowHandle()
+sal_IntPtr SystemChildWindow::GetParentWindowHandle() const
 {
     sal_IntPtr nRet = 0;
 

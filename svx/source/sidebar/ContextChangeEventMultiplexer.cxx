@@ -61,7 +61,7 @@ void ContextChangeEventMultiplexer::NotifyContextChange (
 
 
 void ContextChangeEventMultiplexer::NotifyContextChange (
-    SfxViewShell* pViewShell,
+    const SfxViewShell* pViewShell,
     const vcl::EnumContext::Context eContext)
 {
     if (pViewShell != nullptr)

@@ -388,7 +388,7 @@ public:
         DOCTYPE_MSWORD              // This doc model comes from MS Word
         };
     DocumentType    meDocType;
-    DocumentType    GetDocumentType(){ return meDocType; }
+    DocumentType    GetDocumentType() const { return meDocType; }
     void            SetDocumentType( DocumentType eDocType ) { meDocType = eDocType; }
 
     // Life cycle
@@ -1344,7 +1344,7 @@ public:
     /** in case during copying of embedded object a new shell is created,
      it should be set here and cleaned later */
     void SetTmpDocShell( SfxObjectShellLock rLock )    { mxTmpDocShell = rLock; }
-    const SfxObjectShellLock& GetTmpDocShell()    { return mxTmpDocShell; }
+    const SfxObjectShellLock& GetTmpDocShell() const   { return mxTmpDocShell; }
 
     // For Autotexts? (text modules) They have only one SVPersist at their disposal.
     SfxObjectShell* GetPersist() const;
@@ -1605,7 +1605,7 @@ public:
 
     css::uno::Reference< css::script::vba::XVBAEventProcessor > const & GetVbaEventProcessor();
     void SetVBATemplateToProjectCache( css::uno::Reference< css::container::XNameContainer > const & xCache ) { m_xTemplateToProjectCache = xCache; };
-    const css::uno::Reference< css::container::XNameContainer >& GetVBATemplateToProjectCache() { return m_xTemplateToProjectCache; };
+    const css::uno::Reference< css::container::XNameContainer >& GetVBATemplateToProjectCache() const { return m_xTemplateToProjectCache; };
     ::sfx2::IXmlIdRegistry& GetXmlIdRegistry();
     ::sw::MetaFieldManager & GetMetaFieldManager();
     ::sw::UndoManager      & GetUndoManager();
@@ -1644,7 +1644,7 @@ public:
     /// Use to notify if the dictionary can be found for a single content portion (has to be called for all portions)
     void SetMissingDictionaries( bool bIsMissing );
     /// Returns true if no dictionary can be found for any content
-    bool IsDictionaryMissing() { return meDictionaryMissing == MissingDictionary::True; }
+    bool IsDictionaryMissing() const { return meDictionaryMissing == MissingDictionary::True; }
 
 private:
     // Copies master header to left / first one, if necessary - used by ChgPageDesc().

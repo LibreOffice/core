@@ -144,7 +144,7 @@ namespace dbaui
 
         std::vector< std::shared_ptr<OTableRow> >* GetRowList(){ return m_pRowList; }
 
-        const std::shared_ptr<OTableRow>& GetActRow(){ return pActRow; }
+        const std::shared_ptr<OTableRow>& GetActRow() const { return pActRow; }
         void CellModified( long nRow, sal_uInt16 nColId );
         void SetReadOnly( bool bRead );
 
@@ -153,8 +153,8 @@ namespace dbaui
 
         bool IsCutAllowed();
         bool IsCopyAllowed();
-        bool IsPasteAllowed();
-        bool IsReadOnly() { return bReadOnly;}
+        bool IsPasteAllowed() const;
+        bool IsReadOnly() const { return bReadOnly;}
         OFieldDescription* GetFieldDescr( long nRow );
 
         // Window overrides

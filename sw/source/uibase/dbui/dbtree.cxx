@@ -393,7 +393,7 @@ void SwDBTreeList::SetWrtShell(SwWrtShell& rSh)
 
 namespace
 {
-    void GotoRootLevelParent(weld::TreeView& rTreeView, weld::TreeIter& rEntry)
+    void GotoRootLevelParent(const weld::TreeView& rTreeView, weld::TreeIter& rEntry)
     {
         while (rTreeView.get_iter_depth(rEntry))
             rTreeView.iter_parent(rEntry);

@@ -58,7 +58,7 @@ public:
     OUString const &        GetDetectedFilter() const;
     void                    SetDetectedFilter(const OUString&);
 
-    css::uno::Reference<css::ui::dialogs::XFilePickerControlAccess> const & GetFilePickerControlAccess();
+    css::uno::Reference<css::ui::dialogs::XFilePickerControlAccess> const & GetFilePickerControlAccess() const;
 
 private:
     SvxOpenGraphicDialog    (const SvxOpenGraphicDialog&) = delete;

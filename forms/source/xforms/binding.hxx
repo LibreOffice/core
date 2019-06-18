@@ -246,11 +246,11 @@ public:
     void deferNotifications( bool );
 
     /// is this binding valid? (are constraint, type and required MIPs ok?)
-    bool isValid();
+    bool isValid() const;
 
     /// determine whether this binding currently performs a useful
     /// function, r whether is may be discarded
-    bool isUseful();
+    bool isUseful() const;
 
     /// explain why binding is invalid
     OUString explainInvalid();
@@ -294,10 +294,10 @@ private:
     MIP getLocalMIP() const;
 
     /// get the data type that applies to this binding
-    css::uno::Reference<css::xsd::XDataType> getDataType();
+    css::uno::Reference<css::xsd::XDataType> getDataType() const;
 
     /// determine whether binding is valid according to the given data type
-    bool isValid_DataType();
+    bool isValid_DataType() const;
 
     /// explain validity of binding with respect to the given data type
     OUString explainInvalid_DataType();

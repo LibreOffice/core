@@ -1149,13 +1149,13 @@ void ImageManagerImpl::storeToStorage( const uno::Reference< XStorage >& Storage
     }
 }
 
-bool ImageManagerImpl::isModified()
+bool ImageManagerImpl::isModified() const
 {
     SolarMutexGuard g;
     return m_bModified;
 }
 
-bool ImageManagerImpl::isReadOnly()
+bool ImageManagerImpl::isReadOnly() const
 {
     SolarMutexGuard g;
     return m_bReadOnly;

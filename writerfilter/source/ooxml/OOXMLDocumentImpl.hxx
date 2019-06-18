@@ -136,9 +136,9 @@ public:
     virtual css::uno::Sequence<css::beans::PropertyValue >  getEmbeddingsList() override;
 
     void incrementProgress();
-    bool IsSkipImages() { return mbSkipImages; };
-    OUString const& GetDocumentBaseURL() { return m_rBaseURL; };
-    const css::uno::Sequence<css::beans::PropertyValue>& getMediaDescriptor();
+    bool IsSkipImages() const { return mbSkipImages; };
+    OUString const& GetDocumentBaseURL() const { return m_rBaseURL; };
+    const css::uno::Sequence<css::beans::PropertyValue>& getMediaDescriptor() const;
 };
 }}
 #endif // OOXML_DOCUMENT_IMPL_HXX

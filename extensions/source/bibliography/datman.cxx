@@ -443,7 +443,7 @@ OUString  DBChangeDialog_Impl::GetCurrentURL()const
 }
 
 // XDispatchProvider
-BibInterceptorHelper::BibInterceptorHelper( ::bib::BibBeamer* pBibBeamer, css::uno::Reference< css::frame::XDispatch > const & xDispatch)
+BibInterceptorHelper::BibInterceptorHelper( const ::bib::BibBeamer* pBibBeamer, css::uno::Reference< css::frame::XDispatch > const & xDispatch)
 {
     if( pBibBeamer )
     {
@@ -750,7 +750,7 @@ Reference< XForm >  BibDataManager::createDatabaseForm(BibDBDescriptor& rDesc)
     return xResult;
 }
 
-Sequence< OUString > BibDataManager::getDataSources()
+Sequence< OUString > BibDataManager::getDataSources() const
 {
     Sequence< OUString > aTableNameSeq;
 
@@ -793,7 +793,7 @@ void BibDataManager::setFilter(const OUString& rQuery)
 
 }
 
-OUString BibDataManager::getFilter()
+OUString BibDataManager::getFilter() const
 {
 
     OUString aQueryString;
@@ -812,7 +812,7 @@ OUString BibDataManager::getFilter()
 
 }
 
-Sequence< OUString > BibDataManager::getQueryFields()
+Sequence< OUString > BibDataManager::getQueryFields() const
 {
     Sequence< OUString > aFieldSeq;
     Reference< XNameAccess >  xFields = getColumns( m_xForm );
@@ -821,7 +821,7 @@ Sequence< OUString > BibDataManager::getQueryFields()
     return aFieldSeq;
 }
 
-OUString BibDataManager::getQueryField()
+OUString BibDataManager::getQueryField() const
 {
     BibConfig* pConfig = BibModul::GetConfig();
     OUString aFieldString = pConfig->getQueryField();
@@ -1372,7 +1372,7 @@ uno::Reference< form::runtime::XFormController > const & BibDataManager::GetForm
     return m_xFormCtrl;
 }
 
-void BibDataManager::RegisterInterceptor( ::bib::BibBeamer* pBibBeamer)
+void BibDataManager::RegisterInterceptor( const ::bib::BibBeamer* pBibBeamer)
 {
     DBG_ASSERT( !m_xInterceptorHelper.is(), "BibDataManager::RegisterInterceptor: called twice!" );
 
@@ -1381,7 +1381,7 @@ void BibDataManager::RegisterInterceptor( ::bib::BibBeamer* pBibBeamer)
 }
 
 
-bool BibDataManager::HasActiveConnection()
+bool BibDataManager::HasActiveConnection() const
 {
     return getConnection( m_xForm ).is();
 }

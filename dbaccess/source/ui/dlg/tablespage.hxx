@@ -66,7 +66,7 @@ namespace dbaui
         void implCheckTables(const css::uno::Sequence< OUString >& _rTables);
 
         /// returns the next sibling, if not available, the next sibling of the parent, a.s.o.
-        std::unique_ptr<weld::TreeIter> implNextSibling(weld::TreeIter* pEntry) const;
+        std::unique_ptr<weld::TreeIter> implNextSibling(const weld::TreeIter* pEntry) const;
 
         /** return the current selection in <member>m_aTablesList</member>
         */

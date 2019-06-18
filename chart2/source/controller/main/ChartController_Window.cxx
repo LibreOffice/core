@@ -2036,7 +2036,7 @@ void ChartController::impl_SetMousePointer( const MouseEvent & rEvent )
         pChartWindow->SetPointer( PointerStyle::Arrow );
 }
 
-css::uno::Reference<css::uno::XInterface> const & ChartController::getChartView()
+css::uno::Reference<css::uno::XInterface> const & ChartController::getChartView() const
 {
     return m_xChartView;
 }

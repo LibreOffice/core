@@ -106,7 +106,7 @@ public:
         const double nClipTop,
         const double nClipBottom);
 
-    double GetTotalTextHeight();
+    double GetTotalTextHeight() const;
 
     void SetCharacterOffset (const sal_Int32 nCharacterOffset);
     sal_Int32 GetCharacterCount() const;
@@ -138,7 +138,7 @@ public:
     void SetCaretPosition (const sal_Int32 nPosition) const;
     void SetOrigin (const double nXOrigin, const double nYOrigin);
     css::awt::Point GetRelativeLocation() const;
-    css::awt::Size GetSize();
+    css::awt::Size GetSize() const;
 
 private:
     OUString msParagraphText;

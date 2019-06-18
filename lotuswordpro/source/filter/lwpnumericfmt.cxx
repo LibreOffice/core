@@ -103,7 +103,7 @@ void LwpNumericFormatSubset::QuickRead(LwpObjectStream* pStrm)
 
     pStrm->SkipExtra();
 }
-LwpColor LwpNumericFormatSubset::GetColor()
+LwpColor LwpNumericFormatSubset::GetColor() const
 {
     if (cSubFlags&0x04)
     {

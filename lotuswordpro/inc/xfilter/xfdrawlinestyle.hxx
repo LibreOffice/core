@@ -121,13 +121,13 @@ public:
     /**
      * @descr   decide whether it's a solid line.
      */
-    bool    IsSolid();
+    bool    IsSolid() const;
 
-    double  GetWidth();
+    double  GetWidth() const;
 
     const XFColor& GetColor() const;
 
-    sal_Int32   GetTransparency();
+    sal_Int32   GetTransparency() const;
 
     virtual enumXFStyle GetStyleFamily() override;
 
@@ -190,12 +190,12 @@ inline void XFDrawLineStyle::SetSpace(double space)
     m_fSpace = space;
 }
 
-inline bool XFDrawLineStyle::IsSolid()
+inline bool XFDrawLineStyle::IsSolid() const
 {
     return (m_eLineStyle==enumXFLineSolid);
 }
 
-inline double XFDrawLineStyle::GetWidth()
+inline double XFDrawLineStyle::GetWidth() const
 {
     return m_fWidth;
 }
@@ -205,7 +205,7 @@ inline const XFColor& XFDrawLineStyle::GetColor() const
     return m_aColor;
 }
 
-inline sal_Int32 XFDrawLineStyle::GetTransparency()
+inline sal_Int32 XFDrawLineStyle::GetTransparency() const
 {
     return m_nTransparency;
 }

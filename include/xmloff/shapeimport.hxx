@@ -147,9 +147,9 @@ public:
         const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList);
     virtual ~SdXML3DLightContext() override;
 
-    sal_Int32 GetDiffuseColor() { return maDiffuseColor; }
-    const ::basegfx::B3DVector& GetDirection() { return maDirection; }
-    bool GetEnabled() { return mbEnabled; }
+    sal_Int32 GetDiffuseColor() const { return maDiffuseColor; }
+    const ::basegfx::B3DVector& GetDirection() const { return maDirection; }
+    bool GetEnabled() const { return mbEnabled; }
 };
 
 
@@ -353,7 +353,7 @@ public:
     bool IsHandleProgressBarEnabled() const;
 
     /** queries the capability of the current model to create presentation shapes */
-    bool IsPresentationShapesSupported();
+    bool IsPresentationShapesSupported() const;
 
     XMLSdPropHdlFactory* GetSdPropHdlFactory() const { return mpSdPropHdlFactory.get(); }
 

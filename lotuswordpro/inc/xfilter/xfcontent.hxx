@@ -91,7 +91,7 @@ public:
     /**
      * @short:  return the style name.
      */
-    const OUString& GetStyleName() {return m_strStyleName;}
+    const OUString& GetStyleName() const {return m_strStyleName;}
 
     void DoToXml(IXFStream* stream)
     {

@@ -17,7 +17,7 @@ class EDITENG_DLLPUBLIC URLFieldHelper
 {
 public:
     static void RemoveURLField(Outliner* pOutl, OutlinerView* pOLV);
-    static bool IsCursorAtURLField(OutlinerView* pOLV);
+    static bool IsCursorAtURLField(const OutlinerView* pOLV);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

@@ -133,7 +133,7 @@ class CGM
                             ~CGM();
 
                             CGM(css::uno::Reference< css::frame::XModel > const & rModel);
-        sal_uInt32          GetBackGroundColor();
+        sal_uInt32          GetBackGroundColor() const;
         bool                IsValid() const { return mbStatus; };
         bool                IsFinished() const { return mbIsFinished; };
         bool                Write( SvStream& rIStm );

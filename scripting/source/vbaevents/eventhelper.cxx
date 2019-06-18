@@ -293,7 +293,7 @@ public:
     explicit ScriptEventHelper( const OUString& sCntrlServiceName );
     ~ScriptEventHelper();
     Sequence< ScriptEventDescriptor > createEvents( const OUString& sCodeName );
-    Sequence< OUString > getEventListeners();
+    Sequence< OUString > getEventListeners() const;
 private:
     Reference< XComponentContext > m_xCtx;
     Reference< XInterface > m_xControl;
@@ -372,7 +372,7 @@ ScriptEventHelper::~ScriptEventHelper()
 }
 
 Sequence< OUString >
-ScriptEventHelper::getEventListeners()
+ScriptEventHelper::getEventListeners() const
 {
     std::list< OUString > eventMethods;
 

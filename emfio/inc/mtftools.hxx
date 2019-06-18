@@ -583,13 +583,13 @@ namespace emfio
 
         void                DeleteObject(sal_Int32 nIndex);
         void                SelectObject(sal_Int32 nIndex);
-        rtl_TextEncoding    GetCharSet() { return maFont.GetCharSet(); };
+        rtl_TextEncoding    GetCharSet() const { return maFont.GetCharSet(); };
         const vcl::Font&    GetFont() const { return maFont; }
         void                SetTextLayoutMode(ComplexTextLayoutFlags nLayoutMode);
 
         void                ClearPath() { maPathObj.Init(); };
         void                ClosePath() { maPathObj.ClosePath(); };
-        const tools::PolyPolygon& GetPathObj() { return maPathObj; };
+        const tools::PolyPolygon& GetPathObj() const { return maPathObj; };
 
         void                MoveTo(const Point& rPoint, bool bRecordPath = false);
         void                LineTo(const Point& rPoint, bool bRecordPath = false);

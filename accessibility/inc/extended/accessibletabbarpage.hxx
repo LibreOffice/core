@@ -57,8 +57,8 @@ namespace accessibility
         css::uno::Reference< css::accessibility::XAccessible >        m_xParent;
 
         bool                    IsEnabled();
-        bool                    IsShowing();
-        bool                    IsSelected();
+        bool                    IsShowing() const;
+        bool                    IsSelected() const;
 
         void                    SetShowing( bool bShowing );
         void                    SetSelected( bool bSelected );

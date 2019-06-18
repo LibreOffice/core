@@ -143,10 +143,10 @@ namespace cairocanvas
                               const css::rendering::ViewState&   viewState,
                               const css::rendering::RenderState& renderState ) override;
 
-        ::cairo::SurfaceSharedPtr const & getWindowSurface();
-        ::cairo::SurfaceSharedPtr const & getBufferSurface();
+        ::cairo::SurfaceSharedPtr const & getWindowSurface() const;
+        ::cairo::SurfaceSharedPtr const & getBufferSurface() const;
 
-        const ::basegfx::B2ISize& getSizePixel();
+        const ::basegfx::B2ISize& getSizePixel() const;
         void setSizePixel( const ::basegfx::B2ISize& rSize );
         void flush();
 

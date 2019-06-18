@@ -1206,7 +1206,7 @@ void FuSelection::SetEditMode(sal_uInt16 nMode)
 /**
  * Execute ImageMap interaction
  */
-bool FuSelection::HandleImageMapClick(SdrObject* pObj, const Point& rPos)
+bool FuSelection::HandleImageMapClick(const SdrObject* pObj, const Point& rPos)
 {
     bool bClosed = pObj->IsClosedObj();
     bool bFilled = false;

@@ -168,7 +168,7 @@ bool SfxObjectShell::IsAbortingImport() const
 
 
 uno::Reference<document::XDocumentProperties>
-SfxObjectShell::getDocProperties()
+SfxObjectShell::getDocProperties() const
 {
     uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
         GetModel(), uno::UNO_QUERY_THROW);
@@ -243,7 +243,7 @@ bool SfxObjectShell::IsEnableSetModified() const
 }
 
 
-bool SfxObjectShell::IsModified()
+bool SfxObjectShell::IsModified() const
 {
     if ( pImpl->m_bIsModified )
         return true;
@@ -630,7 +630,7 @@ OUString SfxObjectShell::GetSharedFileURL() const
 #endif
 }
 
-Size SfxObjectShell::GetFirstPageSize()
+Size SfxObjectShell::GetFirstPageSize() const
 {
     return GetVisArea(ASPECT_THUMBNAIL).GetSize();
 }
@@ -1656,7 +1656,7 @@ void SfxObjectShell::SetCreateMode_Impl( SfxObjectCreateMode nMode )
     eCreateMode = nMode;
 }
 
-bool SfxObjectShell::IsInPlaceActive()
+bool SfxObjectShell::IsInPlaceActive() const
 {
     if ( eCreateMode != SfxObjectCreateMode::EMBEDDED )
         return false;
@@ -1665,7 +1665,7 @@ bool SfxObjectShell::IsInPlaceActive()
     return pFrame && pFrame->GetFrame().IsInPlace();
 }
 
-bool SfxObjectShell::IsUIActive()
+bool SfxObjectShell::IsUIActive() const
 {
     if ( eCreateMode != SfxObjectCreateMode::EMBEDDED )
         return false;

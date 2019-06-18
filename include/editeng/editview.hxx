@@ -177,7 +177,7 @@ public:
     bool            IsInsertMode() const;
     void            SetInsertMode( bool bInsert );
 
-    OUString        GetSelected();
+    OUString        GetSelected() const;
     void            DeleteSelected();
 
     SvtScriptType       GetSelectedScriptType() const;
@@ -244,7 +244,7 @@ public:
     void            InsertText( const EditTextObject& rTextObject );
     void            InsertText( css::uno::Reference< css::datatransfer::XTransferable > const & xDataObj, const OUString& rBaseURL, bool bUseSpecial );
 
-    css::uno::Reference< css::datatransfer::XTransferable > GetTransferable();
+    css::uno::Reference< css::datatransfer::XTransferable > GetTransferable() const;
 
     // An EditView, so that when TRUE the update will be free from flickering:
     void            SetEditEngineUpdateMode( bool bUpdate );

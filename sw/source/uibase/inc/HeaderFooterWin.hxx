@@ -58,8 +58,8 @@ public:
     virtual void ShowAll( bool bShow ) override;
     virtual bool Contains( const Point &rDocPt ) const override;
 
-    bool IsHeader() { return m_bIsHeader; };
-    bool IsEmptyHeaderFooter( );
+    bool IsHeader() const { return m_bIsHeader; };
+    bool IsEmptyHeaderFooter( ) const;
 
     void ExecuteCommand(const OString &rIdent);
 

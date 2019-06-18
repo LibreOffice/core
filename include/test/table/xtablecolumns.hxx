@@ -25,7 +25,7 @@ class OOO_DLLPUBLIC_TEST XTableColumns
 public:
     virtual css::uno::Reference<css::uno::XInterface> init() = 0;
 
-    void setXSpreadsheet(css::uno::Reference<css::sheet::XSpreadsheet>& r_xSheet)
+    void setXSpreadsheet(const css::uno::Reference<css::sheet::XSpreadsheet>& r_xSheet)
     {
         m_xSheet = r_xSheet;
     }

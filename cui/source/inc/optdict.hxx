@@ -50,7 +50,7 @@ private:
 public:
     SvxNewDictionaryDialog(weld::Window* pParent);
 
-    const css::uno::Reference<css::linguistic2::XDictionary>& GetNewDictionary() { return m_xNewDic; }
+    const css::uno::Reference<css::linguistic2::XDictionary>& GetNewDictionary() const { return m_xNewDic; }
 };
 
 // class SvxEditDictionaryDialog -----------------------------------------

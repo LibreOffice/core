@@ -58,7 +58,7 @@ class SvxMacroTabPage_ : public SfxTabPage
     DECL_LINK( AssignDeleteHdl_Impl, weld::Button&, void );
     DECL_LINK( DoubleClickHdl_Impl, weld::TreeView&, void );
 
-    static void GenericHandler_Impl( SvxMacroTabPage_* pThis, weld::Button* pBtn );
+    static void GenericHandler_Impl( SvxMacroTabPage_* pThis, const weld::Button* pBtn );
 
     css::uno::Reference< css::container::XNameReplace > m_xAppEvents;
 protected:

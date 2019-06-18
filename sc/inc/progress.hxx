@@ -107,7 +107,7 @@ public:
                                             nGlobalRange) > nGlobalPercent )
                                         SetStateCountDown( nVal );
                                 }
-            sal_uLong           GetState()
+            sal_uLong           GetState() const
                                 {
                                     if ( pProgress )
                                         return pProgress->GetState();

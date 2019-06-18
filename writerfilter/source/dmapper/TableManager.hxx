@@ -116,7 +116,7 @@ class TableManager : public virtual SvRefBase
             mpCellProps = pProps;
         }
 
-        const TablePropertyMapPtr& getCellProps()
+        const TablePropertyMapPtr& getCellProps() const
         {
             return mpCellProps;
         }
@@ -131,7 +131,7 @@ class TableManager : public virtual SvRefBase
             mpRowProps = pProps;
         }
 
-        const TablePropertyMapPtr& getRowProps()
+        const TablePropertyMapPtr& getRowProps() const
         {
             return mpRowProps;
         }
@@ -197,13 +197,13 @@ class TableManager : public virtual SvRefBase
     TableManagerState mState;
 
 protected:
-    TablePropertyMapPtr const & getCellProps()
+    TablePropertyMapPtr const & getCellProps() const
     {
         return mState.getCellProps();
     }
 
 public:
-    TablePropertyMapPtr const & getRowProps()
+    TablePropertyMapPtr const & getRowProps() const
     {
         return mState.getRowProps();
     }
@@ -239,7 +239,7 @@ protected:
         return mState.getTableProps();
     }
 
-    const css::uno::Reference<css::text::XTextRange>& getHandle()
+    const css::uno::Reference<css::text::XTextRange>& getHandle() const
     {
         return mCurHandle;
     }
@@ -327,7 +327,7 @@ protected:
     /**
        Return the current table difference, i.e. 1 if we are in the first cell of a new table, etc.
      */
-    sal_uInt32 getTableDepthDifference() { return mnTableDepthNew - mnTableDepth; }
+    sal_uInt32 getTableDepthDifference() const { return mnTableDepthNew - mnTableDepth; }
 
     /**
        Action to be carried out at the end of the last paragraph of a
@@ -468,7 +468,7 @@ public:
 
     void setTableStartsAtCellStart(bool bTableStartsAtCellStart);
     void setCellLastParaAfterAutospacing(bool bIsAfterAutospacing);
-    bool isCellLastParaAfterAutospacing() {return m_bCellLastParaAfterAutospacing;}
+    bool isCellLastParaAfterAutospacing() const {return m_bCellLastParaAfterAutospacing;}
 };
 
 }

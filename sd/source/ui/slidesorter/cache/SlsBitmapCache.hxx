@@ -80,7 +80,7 @@ public:
     /** Return the memory size that is occupied by all non-precious bitmaps
         in the cache.
     */
-    sal_Int32 GetSize() { return mnNormalCacheSize;}
+    sal_Int32 GetSize() const { return mnNormalCacheSize;}
 
     /** Return <TRUE/> when a preview bitmap exists for the given key.
     */

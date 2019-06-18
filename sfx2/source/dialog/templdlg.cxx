@@ -521,8 +521,8 @@ public:
     StyleTree_Impl(const OUString &rName, const OUString &rParent):
         aName(rName), aParent(rParent), pChildren(0) {}
 
-    const OUString& getName() { return aName; }
-    const OUString& getParent() { return aParent; }
+    const OUString& getName() const { return aName; }
+    const OUString& getParent() const { return aParent; }
     StyleTreeArr_Impl& getChildren() { return pChildren; }
 };
 

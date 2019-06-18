@@ -116,8 +116,8 @@ public:
     virtual void    MouseButtonUp(const MouseEvent& rMEvt, ::sd::Window* pWin) override;
     virtual void    MouseButtonDown(const MouseEvent& rMEvt, ::sd::Window* pWin) override;
     virtual void    Command(const CommandEvent& rCEvt, ::sd::Window* pWin) override;
-    bool            IsMouseButtonDown() { return mbMouseButtonDown; }
-    bool            IsMouseSelecting() { return mbMouseSelecting; }
+    bool            IsMouseButtonDown() const { return mbMouseButtonDown; }
+    bool            IsMouseSelecting() const { return mbMouseSelecting; }
 
     virtual void    Resize() override;
 
@@ -231,9 +231,9 @@ public:
 
     virtual bool    PrepareClose( bool bUI = true ) override;
 
-    PageKind        GetPageKind() { return mePageKind; }
+    PageKind        GetPageKind() const { return mePageKind; }
     void            SetPageKind( PageKind ePageKind ) { mePageKind = ePageKind; }
-    const Point&    GetMousePos() { return maMousePos; }
+    const Point&    GetMousePos() const { return maMousePos; }
     void            SetMousePosFreezed( bool bIn ) { mbMousePosFreezed = bIn; }
 
     EditMode        GetEditMode() const { return meEditMode; }
@@ -270,7 +270,7 @@ public:
     virtual bool    ActivateObject(SdrOle2Obj* pObj, long nVerb) override;
 
     void            SetZoomOnPage( bool bZoom ) { mbZoomOnPage = bZoom; }
-    bool            IsZoomOnPage() { return mbZoomOnPage; }
+    bool            IsZoomOnPage() const { return mbZoomOnPage; }
     static void     CheckLineTo (SfxRequest& rReq);
     void            SetChildWindowState( SfxItemSet& rSet );
 
@@ -280,7 +280,7 @@ public:
     void            UnlockInput();
     bool            IsInputLocked() const { return mnLockCount > 0; }
 
-    sal_uInt16      GetCurPagePos() { return maTabControl->GetCurPagePos(); }
+    sal_uInt16      GetCurPagePos() const { return maTabControl->GetCurPagePos(); }
 
     /** Show controls of the UI or hide them, depending on the given flag.
         Do not call this method directly.  Call the method at ViewShellBase
@@ -374,7 +374,7 @@ public:
 
     OUString const & GetSidebarContextName() const;
 
-    bool IsInSwitchPage() { return mbIsInSwitchPage; }
+    bool IsInSwitchPage() const { return mbIsInSwitchPage; }
 
     //move this method to ViewShell.
     //void  NotifyAccUpdate();

@@ -133,7 +133,7 @@ struct OStorage_Impl
 
     /// Count of registered modification listeners
     oslInterlockedCount         m_nModifiedListenerCount;
-    bool                        HasModifiedListener()
+    bool                        HasModifiedListener() const
     {
         return m_nModifiedListenerCount > 0 && m_pAntiImpl != nullptr;
     }
@@ -321,7 +321,7 @@ public:
 
     void ChildIsDisposed( const css::uno::Reference< css::uno::XInterface >& xChild );
 
-    sal_Int32 GetRefCount_Impl() { return m_refCount; }
+    sal_Int32 GetRefCount_Impl() const { return m_refCount; }
 
     //  XInterface
 

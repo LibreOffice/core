@@ -129,7 +129,7 @@ void SwFrameShell::ExecMove(SfxRequest& rReq)
     }
 }
 
-void SwFrameShell::ExecField(SfxRequest& rReq)
+void SwFrameShell::ExecField(const SfxRequest& rReq)
 {
     SwWrtShell& rSh = GetShell();
     sal_uInt16 nSlot = rReq.GetSlot();

@@ -1871,7 +1871,7 @@ void SwWrtShell::SetShowHeaderFooterSeparator( FrameControlType eControl, bool b
         GetView().GetEditWin().GetFrameControlsManager().HideControls( eControl );
 }
 
-void SwWrtShell::InsertPostIt(SwFieldMgr& rFieldMgr, SfxRequest& rReq)
+void SwWrtShell::InsertPostIt(SwFieldMgr& rFieldMgr, const SfxRequest& rReq)
 {
     SwPostItField* pPostIt = dynamic_cast<SwPostItField*>(rFieldMgr.GetCurField());
     bool bNew = !(pPostIt && pPostIt->GetTyp()->Which() == SwFieldIds::Postit);

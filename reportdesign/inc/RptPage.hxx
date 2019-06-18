@@ -71,7 +71,7 @@ public:
     void removeSdrObject(const css::uno::Reference< css::report::XReportComponent >& _xObject);
 
     void setSpecialMode() {m_bSpecialInsertMode = true;}
-    bool getSpecialMode() {return m_bSpecialInsertMode;}
+    bool getSpecialMode() const {return m_bSpecialInsertMode;}
     // all temporary objects will remove and destroy
     void resetSpecialMode();
 

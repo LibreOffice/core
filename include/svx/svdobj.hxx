@@ -447,7 +447,7 @@ public:
     // @return
     //     If no navigation position has been explicitly defined then the
     //     result of GetOrdNum() is returned.
-    sal_uInt32 GetNavigationPosition();
+    sal_uInt32 GetNavigationPosition() const;
 
     // To make clearer that this method may trigger RecalcBoundRect and thus may be
     // expensive and sometimes problematic (inside a bigger object change You will get

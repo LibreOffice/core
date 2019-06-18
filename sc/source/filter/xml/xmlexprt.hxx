@@ -187,7 +187,7 @@ class ScXMLExport : public SvXMLExport
     void SetRepeatAttribute(sal_Int32 nEqualCellCount, bool bIncProgress);
 
     static bool IsEditCell(const ScMyCell& rCell);
-    bool IsCellEqual(ScMyCell& aCell1, ScMyCell& aCell2);
+    bool IsCellEqual(const ScMyCell& aCell1, const ScMyCell& aCell2);
 
     void WriteCalculationSettings(const css::uno::Reference <css::sheet::XSpreadsheetDocument>& xSpreadDoc);
     void WriteTableSource();
@@ -242,8 +242,8 @@ public:
     bool IsMatrix (const ScAddress& aCell,
         ScRange& aCellAddress, bool& bIsFirst) const;
 
-    const rtl::Reference < XMLPropertySetMapper >& GetCellStylesPropertySetMapper() { return xCellStylesPropertySetMapper; }
-    const rtl::Reference < XMLPropertySetMapper >& GetTableStylesPropertySetMapper() { return xTableStylesPropertySetMapper; }
+    const rtl::Reference < XMLPropertySetMapper >& GetCellStylesPropertySetMapper() const { return xCellStylesPropertySetMapper; }
+    const rtl::Reference < XMLPropertySetMapper >& GetTableStylesPropertySetMapper() const { return xTableStylesPropertySetMapper; }
 
     void SetSourceStream( const css::uno::Reference<css::io::XInputStream>& xNewStream );
 

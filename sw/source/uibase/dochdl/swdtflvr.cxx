@@ -3125,7 +3125,7 @@ bool SwTransferable::PasteUnformatted( SwWrtShell& rSh, TransferableDataHelper& 
     return SwTransferable::PasteFormat( rSh, rData, SotClipboardFormatId::STRING );
 }
 
-void SwTransferable::PrePasteSpecial( SwWrtShell& rSh, TransferableDataHelper& rData, VclPtr<SfxAbstractPasteDialog>& pDlg )
+void SwTransferable::PrePasteSpecial( const SwWrtShell& rSh, TransferableDataHelper& rData, const VclPtr<SfxAbstractPasteDialog>& pDlg )
 {
     DataFlavorExVector aFormats( rData.GetDataFlavorExVector() );
     TransferableObjectDescriptor aDesc;

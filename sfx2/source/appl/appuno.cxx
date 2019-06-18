@@ -1667,7 +1667,7 @@ class RequestPackageReparation_Impl : public ::cppu::WeakImplHelper< task::XInte
 
 public:
     explicit RequestPackageReparation_Impl( const OUString& aName );
-    bool    isApproved();
+    bool    isApproved() const;
     virtual uno::Any SAL_CALL getRequest() override;
     virtual uno::Sequence< uno::Reference< task::XInteractionContinuation > > SAL_CALL getContinuations() override;
 };
@@ -1681,7 +1681,7 @@ RequestPackageReparation_Impl::RequestPackageReparation_Impl( const OUString& aN
     m_xDisapprove = new comphelper::OInteractionDisapprove;
 }
 
-bool RequestPackageReparation_Impl::isApproved()
+bool RequestPackageReparation_Impl::isApproved() const
 {
     return m_xApprove->wasSelected();
 }
@@ -1706,7 +1706,7 @@ RequestPackageReparation::~RequestPackageReparation()
 {
 }
 
-bool RequestPackageReparation::isApproved()
+bool RequestPackageReparation::isApproved() const
 {
     return mxImpl->isApproved();
 }

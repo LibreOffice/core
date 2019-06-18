@@ -1340,7 +1340,7 @@ CustomPropertiesWindow::~CustomPropertiesWindow()
     m_pCurrentLine = nullptr;
 }
 
-void CustomPropertyLine::DoTypeHdl(weld::ComboBox& rBox)
+void CustomPropertyLine::DoTypeHdl(const weld::ComboBox& rBox)
 {
     auto nType = rBox.get_active_id().toInt32();
     m_xValueEdit->set_visible( (CUSTOM_TYPE_TEXT == nType) || (CUSTOM_TYPE_NUMBER  == nType) );
@@ -1357,7 +1357,7 @@ IMPL_LINK(CustomPropertyLine, TypeHdl, weld::ComboBox&, rBox, void)
     DoTypeHdl(rBox);
 }
 
-void CustomPropertiesWindow::Remove(CustomPropertyLine* pLine)
+void CustomPropertiesWindow::Remove(const CustomPropertyLine* pLine)
 {
     StoreCustomProperties();
 

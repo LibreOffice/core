@@ -1162,7 +1162,7 @@ void ScPreviewShell::BroadcastAccessibility( const SfxHint &rHint )
         pAccessibilityBroadcaster->Broadcast( rHint );
 }
 
-bool ScPreviewShell::HasAccessibilityObjects()
+bool ScPreviewShell::HasAccessibilityObjects() const
 {
     return pAccessibilityBroadcaster && pAccessibilityBroadcaster->HasListeners();
 }

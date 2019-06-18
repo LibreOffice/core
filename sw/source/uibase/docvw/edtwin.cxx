@@ -233,7 +233,7 @@ public:
     const Point& GetLastPos() const { return aLastPos; }
     void SetLastPos( const Point& rNew ) { aLastPos = rNew; }
     void SetPos( const Point& rNew ) { pHdl->SetPos( rNew ); }
-    const Point& GetHdlPos() { return aHdlPos; }
+    const Point& GetHdlPos() const { return aHdlPos; }
     SdrHdl* GetHdl() const { return pHdl; }
     void ChgHdl( SdrHdl* pNew )
     {
@@ -5135,7 +5135,7 @@ bool SwEditWin::EnterDrawMode(const MouseEvent& rMEvt, const Point& aDocPos)
     return false;
 }
 
-bool SwEditWin::IsDrawSelMode()
+bool SwEditWin::IsDrawSelMode() const
 {
     return IsObjectSelect();
 }

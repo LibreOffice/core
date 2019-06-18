@@ -64,7 +64,7 @@ public:
 private:
     /// @throws css::uno::RuntimeException
     css::uno::Reference< css::script::browse::XBrowseNode >
-        getOrganizerHierarchy();
+        getOrganizerHierarchy() const;
 };
 
 

@@ -120,7 +120,7 @@ public:
     virtual void SAL_CALL deselectAccessibleChild( sal_Int32 nSelectedChildIndex ) override;
 
     virtual css::awt::Point SAL_CALL getLocationOnScreen(  ) override;
-    bool    IsInDropDown();
+    bool    IsInDropDown() const;
     void        HandleDropOpen();
     void ProcessWindowEvent (const VclWindowEvent& rVclWindowEvent, bool b_IsDropDownList);
     void UpdateSelection_Acc (const OUString& sTextOfSelectedItem, bool b_IsDropDownList);

@@ -1161,7 +1161,7 @@ void SlotManager::ChangeSlideExclusionState (
     mrSlideSorter.GetModel().GetDocument()->SetChanged();
 }
 
-sal_Int32 SlotManager::GetInsertionPosition()
+sal_Int32 SlotManager::GetInsertionPosition() const
 {
     PageSelector& rSelector (mrSlideSorter.GetController().GetPageSelector());
 

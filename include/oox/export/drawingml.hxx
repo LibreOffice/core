@@ -161,8 +161,8 @@ protected:
 
     void WriteStyleProperties( sal_Int32 nTokenId, const css::uno::Sequence< css::beans::PropertyValue >& aProperties );
 
-    const char* GetComponentDir();
-    const char* GetRelationCompPrefix();
+    const char* GetComponentDir() const;
+    const char* GetRelationCompPrefix() const;
 
     static bool EqualGradients( css::awt::Gradient aGradient1, css::awt::Gradient aGradient2 );
 
@@ -170,9 +170,9 @@ public:
     DrawingML( ::sax_fastparser::FSHelperPtr pFS, ::oox::core::XmlFilterBase* pFB, DocumentType eDocumentType = DOCUMENT_PPTX, DMLTextExport* pTextExport = nullptr )
         : meDocumentType( eDocumentType ), mpTextExport(pTextExport), mpFS( pFS ), mpFB( pFB ), mbIsBackgroundDark( false ) {}
     void SetFS( ::sax_fastparser::FSHelperPtr pFS ) { mpFS = pFS; }
-    const ::sax_fastparser::FSHelperPtr& GetFS() { return mpFS; }
+    const ::sax_fastparser::FSHelperPtr& GetFS() const { return mpFS; }
     ::oox::core::XmlFilterBase* GetFB() { return mpFB; }
-    DocumentType GetDocumentType() { return meDocumentType; }
+    DocumentType GetDocumentType() const { return meDocumentType; }
     /// The application-specific text exporter callback, if there is one.
     DMLTextExport* GetTextExport() { return mpTextExport; }
 

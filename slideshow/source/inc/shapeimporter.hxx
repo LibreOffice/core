@@ -90,9 +90,9 @@ public:
         importShape() call.
     */
     bool isImportDone() const;
-    const PolyPolygonVector& getPolygons();
+    const PolyPolygonVector& getPolygons() const;
 
-    double getImportedShapesCount() { return mnAscendingPrio; }
+    double getImportedShapesCount() const{ return mnAscendingPrio; }
 private:
     bool isSkip( css::uno::Reference<css::beans::XPropertySet> const& xPropSet,
                  OUString const& shapeType,

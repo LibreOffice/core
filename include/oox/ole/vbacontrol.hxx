@@ -86,8 +86,8 @@ public:
                             const ControlConverter& rConv,
                             ApiControlType eCtrlType,
                             sal_Int32 nCtrlIndex ) const;
-    const OUString& getControlSource() { return  maControlSource; }
-    const OUString& getRowSource() { return  maRowSource; }
+    const OUString& getControlSource() const { return  maControlSource; }
+    const OUString& getRowSource() const { return  maRowSource; }
 private:
     OUString     maName;             ///< Name of the control.
     OUString     maTag;              ///< User defined tag.

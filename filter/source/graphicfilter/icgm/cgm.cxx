@@ -75,7 +75,7 @@ CGM::~CGM()
     maDefRepSizeList.clear();
 };
 
-sal_uInt32 CGM::GetBackGroundColor()
+sal_uInt32 CGM::GetBackGroundColor() const
 {
     return pElement ? pElement->aColorTable[ 0 ] : 0;
 }

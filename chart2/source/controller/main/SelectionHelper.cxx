@@ -59,17 +59,17 @@ void impl_selectObject( SdrObject* pObjectToSelect, DrawViewWrapper& rDrawViewWr
 
 }//anonymous namespace
 
-bool Selection::hasSelection()
+bool Selection::hasSelection() const
 {
     return m_aSelectedOID.isValid();
 }
 
-OUString const & Selection::getSelectedCID()
+OUString const & Selection::getSelectedCID() const
 {
     return m_aSelectedOID.getObjectCID();
 }
 
-uno::Reference< drawing::XShape > const & Selection::getSelectedAdditionalShape()
+uno::Reference< drawing::XShape > const & Selection::getSelectedAdditionalShape() const
 {
     return m_aSelectedOID.getAdditionalShape();
 }

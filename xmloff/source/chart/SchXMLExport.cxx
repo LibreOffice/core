@@ -951,7 +951,7 @@ SchXMLExportHelper::~SchXMLExportHelper()
 {
 }
 
-const OUString& SchXMLExportHelper::getChartCLSID()
+const OUString& SchXMLExportHelper::getChartCLSID() const
 {
     return m_pImpl->msCLSID;
 }

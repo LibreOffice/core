@@ -115,7 +115,7 @@ public:
 
     void LockBackMove()     { mbBackMoveLocked = true; }
     void UnlockBackMove()   { mbBackMoveLocked = false;}
-    bool IsBackMoveLocked() { return mbBackMoveLocked; }
+    bool IsBackMoveLocked() const { return mbBackMoveLocked; }
 
     // prevents that the last content deletes the SwFootnoteFrame as well (Cut())
     void ColLock()       { mbColLocked = true; }
@@ -130,7 +130,7 @@ public:
     {
         mbUnlockPosOfLowerObjs = false;
     }
-    bool IsUnlockPosOfLowerObjs()
+    bool IsUnlockPosOfLowerObjs() const
     {
         return mbUnlockPosOfLowerObjs;
     }

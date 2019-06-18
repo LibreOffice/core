@@ -1154,12 +1154,12 @@ bool SfxBaseController::HandleEvent_Impl( NotifyEvent const & rEvent )
     return m_pData->m_aUserInputInterception.handleNotifyEvent( rEvent );
 }
 
-bool SfxBaseController::HasKeyListeners_Impl()
+bool SfxBaseController::HasKeyListeners_Impl() const
 {
     return m_pData->m_aUserInputInterception.hasKeyHandlers();
 }
 
-bool SfxBaseController::HasMouseClickListeners_Impl()
+bool SfxBaseController::HasMouseClickListeners_Impl() const
 {
     return m_pData->m_aUserInputInterception.hasMouseClickListeners();
 }

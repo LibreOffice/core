@@ -524,7 +524,7 @@ public:
     // don't use outside vcl. Some of these are exported for
     // the benefit of vcl's plugins.
     // Still: DO NOT USE OUTSIDE VCL
-                      int               getFilteredPageCount();
+                      int               getFilteredPageCount() const;
     VCL_DLLPRIVATE    PageSize          getPageFile( int i_inUnfilteredPage, GDIMetaFile& rMtf,
                                             bool i_bMayUseCache = false );
                       PageSize          getFilteredPageFile( int i_nFilteredPage, GDIMetaFile& o_rMtf,

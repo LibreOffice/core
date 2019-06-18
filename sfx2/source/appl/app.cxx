@@ -520,7 +520,7 @@ SfxApplication::ChooseScript(weld::Window *pParent)
     return aScriptURL;
 }
 
-void SfxApplication::MacroOrganizer(weld::Window* pParent, sal_Int16 nTabId)
+void SfxApplication::MacroOrganizer(const weld::Window* pParent, sal_Int16 nTabId)
 {
 #if !HAVE_FEATURE_SCRIPTING
     (void) pParent;

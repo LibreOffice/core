@@ -28,7 +28,7 @@ struct Node
     explicit Node(int nWidth, int nHeight);
     explicit Node(tools::Rectangle const & aRectangle);
 
-    bool isLeaf();
+    bool isLeaf() const;
     Node* insert(int nWidth, int nHeight, int nPadding);
 };
 
@@ -46,7 +46,7 @@ Node::Node(tools::Rectangle const & aRectangle)
     , mOccupied(false)
 {}
 
-bool Node::isLeaf() { return mLeftNode == nullptr && mRightNode == nullptr; }
+bool Node::isLeaf() const { return mLeftNode == nullptr && mRightNode == nullptr; }
 
 Node* Node::insert(int nWidth, int nHeight, int nPadding)
 {

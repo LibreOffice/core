@@ -56,7 +56,7 @@ public:
     //no visible flash
     void                    SetLeaveEnterBackgrounds(const css::uno::Sequence<css::uno::Any>& rLeaveArgs, const css::uno::Sequence<css::uno::Any>& rEnterArgs);
     // return the platform specific handle/id of this window;
-    sal_IntPtr              GetParentWindowHandle();
+    sal_IntPtr              GetParentWindowHandle() const;
 
     void*                   CreateGStreamerSink();
 };

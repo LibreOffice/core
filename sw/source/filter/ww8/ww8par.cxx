@@ -367,7 +367,7 @@ public:
         mxCtx = comphelper::getProcessComponentContext();
     }
     bool import( const uno::Reference< io::XInputStream >& rxIn );
-    OUString getProjectName();
+    OUString getProjectName() const;
 };
 
 bool BasicProjImportHelper::import( const uno::Reference< io::XInputStream >& rxIn )
@@ -390,7 +390,7 @@ bool BasicProjImportHelper::import( const uno::Reference< io::XInputStream >& rx
     return bRet;
 }
 
-OUString BasicProjImportHelper::getProjectName()
+OUString BasicProjImportHelper::getProjectName() const
 {
     OUString sProjName( "Standard" );
     uno::Reference< beans::XPropertySet > xProps( mrDocShell.GetModel(), uno::UNO_QUERY );

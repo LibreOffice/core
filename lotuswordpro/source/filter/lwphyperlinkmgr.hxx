@@ -69,9 +69,9 @@ public:
     LwpHyperlinkMgr();
     ~LwpHyperlinkMgr();
     void SetHyperlinkFlag(bool bFlag){m_bIsHyperlink = bFlag;}
-    bool GetHyperlinkFlag(){return m_bIsHyperlink;}
+    bool GetHyperlinkFlag() const {return m_bIsHyperlink;}
     void SetHyperlink(const OUString& hyperlink);
-    const OUString& GetHyperlink() { return m_Hyperlink;}
+    const OUString& GetHyperlink() const { return m_Hyperlink;}
 private:
     OUString m_Hyperlink;
     bool m_bIsHyperlink;

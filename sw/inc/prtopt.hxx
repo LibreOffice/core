@@ -27,7 +27,7 @@ class SwPrintOptions : public SwPrintData, public utl::ConfigItem
 private:
     bool const            bIsWeb;
 
-    css::uno::Sequence<OUString> GetPropertyNames();
+    css::uno::Sequence<OUString> GetPropertyNames() const;
 
     virtual void ImplCommit() override;
 

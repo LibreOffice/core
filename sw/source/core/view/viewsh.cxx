@@ -629,7 +629,7 @@ Point SwViewShell::GetPagePos( sal_uInt16 nPageNum ) const
     return GetLayout()->GetPagePos( nPageNum );
 }
 
-sal_uInt16 SwViewShell::GetNumPages()
+sal_uInt16 SwViewShell::GetNumPages() const
 {
     //It is possible that no layout exists when the method from
     //root-Ctor is called.

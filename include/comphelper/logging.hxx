@@ -124,7 +124,7 @@ namespace comphelper
                 impl_log(_nLogLevel, nullptr, nullptr, rMessage);
         }
 
-        const css::uno::Reference<css::logging::XLogger> & getLogger();
+        const css::uno::Reference<css::logging::XLogger> & getLogger() const;
 
         /** logs a given message, replacing a placeholder in the message with an argument
 

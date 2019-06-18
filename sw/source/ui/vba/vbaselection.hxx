@@ -51,9 +51,9 @@ private:
     /// @throws css::uno::RuntimeException
     void GetSelectedCellRange( OUString& sTLName, OUString& sBRName );
     /// @throws css::uno::RuntimeException
-    css::uno::Reference< css::text::XTextTable > GetXTextTable();
+    css::uno::Reference< css::text::XTextTable > GetXTextTable() const;
     /// @throws css::uno::RuntimeException
-    bool IsInTable();
+    bool IsInTable() const;
     /// @throws css::uno::RuntimeException
     bool HasSelection();
 

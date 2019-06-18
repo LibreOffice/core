@@ -73,7 +73,7 @@ public:
     void AddNewShape(const ScMyShape& aMyShape);
     void SortShapesContainer();
     ScMyShapesContainer* GetShapesContainer() { return pShapesContainer.get(); }
-    bool HasShapes();
+    bool HasShapes() const;
     void AddTableShape(const sal_Int32 nTable, const css::uno::Reference<css::drawing::XShape>& xShape);
     ScMyTableShapes* GetTableShapes() { return pTableShapes.get(); }
     ScMyDetectiveObjContainer* GetDetectiveObjContainer() { return pDetectiveObjContainer.get(); }

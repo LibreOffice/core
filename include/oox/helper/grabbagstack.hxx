@@ -42,7 +42,7 @@ public:
     GrabBagStack(const OUString& aElementName);
     ~GrabBagStack();
 
-    const OUString& getCurrentName() { return mCurrentElement.maElementName;}
+    const OUString& getCurrentName() const { return mCurrentElement.maElementName;}
 
     css::beans::PropertyValue getRootProperty();
 
@@ -51,7 +51,7 @@ public:
     void pop();
     void addInt32(const OUString& aElementName, sal_Int32 aIntValue);
     void addString(const OUString& aElementName, const OUString& aStringValue);
-    bool isStackEmpty();
+    bool isStackEmpty() const;
 };
 
 } // namespace oox

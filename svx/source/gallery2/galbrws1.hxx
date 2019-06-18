@@ -122,7 +122,7 @@ public:
     virtual void            dispose() override;
 
     void                    SelectTheme( sal_uInt16 nThemePos ) { mpThemes->SelectEntryPos( nThemePos ); SelectThemeHdl( *mpThemes ); }
-    OUString                GetSelectedTheme() { return mpThemes->GetEntryCount() ? mpThemes->GetSelectedEntry() : OUString(); }
+    OUString                GetSelectedTheme() const { return mpThemes->GetEntryCount() ? mpThemes->GetSelectedEntry() : OUString(); }
 
     void                    ShowContextMenu();
     bool                    KeyInput( const KeyEvent& rKEvt, vcl::Window* pWindow );

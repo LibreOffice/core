@@ -675,11 +675,11 @@ class WW8Ruby
 
 public:
     WW8Ruby(const SwTextNode& rNode, const SwFormatRuby& rRuby, const MSWordExportBase& rExport );
-    sal_Int32   GetJC() { return m_nJC; }
-    sal_Char    GetDirective() { return m_cDirective; }
-    sal_uInt32   GetRubyHeight() { return m_nRubyHeight; }
-    sal_uInt32   GetBaseHeight() { return m_nBaseHeight; }
-    OUString const & GetFontFamily() { return m_sFontFamily; }
+    sal_Int32   GetJC() const { return m_nJC; }
+    sal_Char    GetDirective() const { return m_cDirective; }
+    sal_uInt32   GetRubyHeight() const { return m_nRubyHeight; }
+    sal_uInt32   GetBaseHeight() const { return m_nBaseHeight; }
+    OUString const & GetFontFamily() const { return m_sFontFamily; }
 };
 #endif // INCLUDED_SW_SOURCE_FILTER_WW8_ATTRIBUTEOUTPUTBASE_HXX
 

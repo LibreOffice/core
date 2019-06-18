@@ -3491,7 +3491,7 @@ public:
     void SetFrame( SwFrame* pHold );
     SwFrame* GetFrame() { return pFrame; }
     void Reset();
-    bool IsSet() { return bSet; }
+    bool IsSet() const { return bSet; }
 };
 
 void SwFrameHolder::SetFrame( SwFrame* pHold )
@@ -3730,7 +3730,7 @@ SwDeletionChecker::SwDeletionChecker(const SwFrame* pFrame)
 }
 
 /// Can be used to check if a frame has been deleted
-bool SwDeletionChecker::HasBeenDeleted()
+bool SwDeletionChecker::HasBeenDeleted() const
 {
     if ( !mpFrame || !mpRegIn )
         return false;
