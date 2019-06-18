@@ -180,9 +180,9 @@ uno::Reference< beans::XPropertySet > SchXMLSeriesHelper::createOldAPISeriesProp
                 }
             }
         }
-        catch( const uno::Exception & rEx )
+        catch( const uno::Exception & )
         {
-            SAL_INFO("xmloff.chart", "Exception caught SchXMLSeriesHelper::createOldAPISeriesPropertySet: " << rEx );
+            TOOLS_INFO_EXCEPTION("xmloff.chart", "Exception caught SchXMLSeriesHelper::createOldAPISeriesPropertySet" );
         }
     }
 
@@ -215,9 +215,9 @@ uno::Reference< beans::XPropertySet > SchXMLSeriesHelper::createOldAPIDataPointP
                 }
             }
         }
-        catch( const uno::Exception & rEx )
+        catch( const uno::Exception & )
         {
-            SAL_INFO("xmloff.chart", "Exception caught SchXMLSeriesHelper::createOldAPIDataPointPropertySet: " << rEx );
+            TOOLS_INFO_EXCEPTION("xmloff.chart", "Exception caught SchXMLSeriesHelper::createOldAPIDataPointPropertySet" );
         }
     }
 

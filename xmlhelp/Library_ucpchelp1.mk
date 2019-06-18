@@ -36,6 +36,7 @@ $(eval $(call gb_Library_use_libraries,ucpchelp1,\
 	cppuhelper \
 	helplinker \
 	sal \
+	tl \
 	ucbhelper \
 	utl \
 	i18nlangtag \

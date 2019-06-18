@@ -28,6 +28,7 @@
 #include <vcl/embeddedfontshelper.hxx>
 #include <osl/file.hxx>
 #include <sal/log.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
@@ -649,9 +650,9 @@ OUString XMLFontAutoStylePool::embedFontFile(OUString const & fileUrl, OUString 
                 return sInternalName;
             }
         }
-    } catch( const Exception& e )
+    } catch( const Exception& )
     {
-        SAL_WARN( "xmloff", "Exception when embedding a font file:" << e );
+        TOOLS_WARN_EXCEPTION( "xmloff", "Exception when embedding a font file" );
     }
     return OUString();
 }
