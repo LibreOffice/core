@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_bb41073c",
+        "filename": "include/tools/diagnose_ex.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000446
+      },
+      "writtenOn": "2019-06-18T06:19:45Z",
+      "side": 1,
+      "message": "For the record: this is needed for the new TOOLS_WARN_EXCEPTION* macros.",
+      "range": {
+        "startLine": 28,
+        "startChar": 0,
+        "endLine": 28,
+        "endChar": 22
+      },
+      "revId": "25b1b366e3735e989290c1b3f1be07617661be0b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
