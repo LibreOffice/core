@@ -35,6 +35,7 @@ public:
     virtual ~SwFrameShell() override;
 
     void    Execute(SfxRequest &);
+    void    ExecField(SfxRequest& rReq);
     void    GetState(SfxItemSet &);
     void    ExecFrameStyle(SfxRequest const & rReq);
     void    GetLineStyleState(SfxItemSet &rSet);

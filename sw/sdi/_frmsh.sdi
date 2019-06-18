@@ -400,5 +400,10 @@ interface BaseTextFrame
         ExecMethod = Execute ;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
+    FN_POSTIT
+    [
+        ExecMethod = ExecField ;
+        StateMethod = NoState ;
+    ]
 }
 

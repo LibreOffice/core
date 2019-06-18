@@ -24,6 +24,10 @@
 #include <xmloff/odffields.hxx>
 #include <com/sun/star/frame/DispatchHelper.hpp>
 #include <fmtornt.hxx>
+#include <sfx2/viewfrm.hxx>
+#include <sfx2/dispatch.hxx>
+#include <view.hxx>
+#include <cmdid.h>
 
 namespace
 {
@@ -45,6 +49,7 @@ public:
     void testDropDownFormFieldInsertion();
     void testMixedFormFieldInsertion();
     void testTdf122942();
+    void testImageComment();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest2);
     CPPUNIT_TEST(testTdf101534);
@@ -57,6 +62,7 @@ public:
     CPPUNIT_TEST(testDropDownFormFieldInsertion);
     CPPUNIT_TEST(testMixedFormFieldInsertion);
     CPPUNIT_TEST(testTdf122942);
+    CPPUNIT_TEST(testImageComment);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -475,6 +481,34 @@ void SwUiWriterTest2::testTdf122942()
     CPPUNIT_ASSERT(rOutRect2.Top() > rOutRect1.Top() && rOutRect2.Top() < rOutRect1.Bottom());
 #endif
 #endif
+}
+
+void SwUiWriterTest2::testImageComment()
+{
+    // Load a document with an as-char image in it.
+    SwDoc* pDoc = createDoc("image-comment.odt");
+    SwView* pView = pDoc->GetDocShell()->GetView();
+
+    // Select the image.
+    pView->GetViewFrame()->GetDispatcher()->Execute(FN_CNTNT_TO_NEXT_FRAME, SfxCallMode::SYNCHRON);
+
+    // Insert a comment while the image is selected.
+    pView->GetViewFrame()->GetDispatcher()->Execute(FN_POSTIT, SfxCallMode::SYNCHRON);
+
+    // Verify that the comment is around the image.
+    // Without the accompanying fix in place, this test would have failed, as FN_POSTIT was disabled
+    // in the frame shell.
+    uno::Reference<text::XTextRange> xPara = getParagraph(1);
+    CPPUNIT_ASSERT_EQUAL(OUString("Text"),
+                         getProperty<OUString>(getRun(xPara, 1), "TextPortionType"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Annotation"),
+                         getProperty<OUString>(getRun(xPara, 2), "TextPortionType"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Frame"),
+                         getProperty<OUString>(getRun(xPara, 3), "TextPortionType"));
+    CPPUNIT_ASSERT_EQUAL(OUString("AnnotationEnd"),
+                         getProperty<OUString>(getRun(xPara, 4), "TextPortionType"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Text"),
+                         getProperty<OUString>(getRun(xPara, 5), "TextPortionType"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest2);

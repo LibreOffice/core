@@ -89,6 +89,7 @@
 #include <IMark.hxx>
 #include <sfx2/bindings.hxx>
 #include <svx/dialmgr.hxx>
+#include <flyfrm.hxx>
 
 // -> #111827#
 #include <SwRewriter.hxx>
@@ -1879,6 +1880,27 @@ void SwWrtShell::InsertPostIt(SwFieldMgr& rFieldMgr, SfxRequest& rReq)
         GetView().GetEditWin().StopQuickHelp();
 
         SwInsertField_Data aData(TYP_POSTITFLD, 0, sAuthor, sText, 0);
+
+        if (IsSelFrameMode())
+        {
+            SwFlyFrame* pFly = GetSelectedFlyFrame();
+
+            // A frame is selected, end frame selection.
+            EnterStdMode();
+            GetView().AttrChangedNotify(this);
+
+            // Set up text selection, so the anchor of the frame will be the anchor of the
+            // comment.
+            if (pFly)
+            {
+                SwFrameFormat* pFormat = pFly->GetFormat();
+                if (pFormat && pFormat->GetAnchor().GetAnchorId() == RndStdIds::FLY_AS_CHAR)
+                {
+                    Right(CRSR_SKIP_CELLS, /*bSelect=*/true, 1, /*bBasicCall=*/false, /*bVisual=*/true);
+                }
+            }
+        }
+
         rFieldMgr.InsertField( aData );
 
         Push();
