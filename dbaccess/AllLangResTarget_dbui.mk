@@ -126,7 +126,7 @@ $(WORKDIR)/inc/dbaccess/AutoControls.hrc : $(SRCDIR)/dbaccess/source/ui/dlg/Auto
 	$(call gb_Helper_abbreviate_dirs_native, \
 		$(gb_SrsPartMergeTarget_TRANSEXCOMMAND) \
 		-p svx \
-		 -i $< -o $@ -m $(gb_SrsPartMergeTarget_SDFLOCATION)/dbaccess/inc/localize.sdf -l all)
+		 -i $< -o $@ -m $(gb_SrsPartMergeTarget_SDFLOCATION)/dbaccess/source/ui/dlg/localize.sdf -l all)
 
 $(WORKDIR)/inc/dbaccess/toolbox.hrc : $(SRCDIR)/dbaccess/source/ui/inc/toolbox_tmpl.hrc $(gb_SrsPartMergeTarget_SDFLOCATION)/svx/inc/localize.sdf
 	echo merging $@
@@ -136,7 +136,7 @@ $(WORKDIR)/inc/dbaccess/toolbox.hrc : $(SRCDIR)/dbaccess/source/ui/inc/toolbox_t
 	$(call gb_Helper_abbreviate_dirs_native, \
 		$(gb_SrsPartMergeTarget_TRANSEXCOMMAND) \
 		-p svx \
-		 -i $< -o $@ -m $(gb_SrsPartMergeTarget_SDFLOCATION)/dbaccess/inc/localize.sdf -l all)
+		 -i $< -o $@ -m $(gb_SrsPartMergeTarget_SDFLOCATION)/dbaccess/source/ui/inc/localize.sdf -l all)
 
 endif
 

@@ -27,7 +27,7 @@ gb_SrsPartMergeTarget_TRANSEXTARGET := $(call gb_Executable_get_target,transex3)
 # gb_SrsPartMergeTarget_TRANSEXPRECOMMAND is set by the platforms
 
 gb_SrsPartMergeTarget_TRANSEXCOMMAND := $(gb_SrsPartMergeTarget_TRANSEXPRECOMMAND) $(gb_SrsPartMergeTarget_TRANSEXTARGET)
-gb_SrsPartMergeTarget_SDFLOCATION := $(LOCDIR)/l10n/$(INPATH)/misc/sdf/
+gb_SrsPartMergeTarget_SDFLOCATION := $(LOCDIR)/l10n/$(INPATH)/misc/sdf
 gb_SrsPartMergeTarget_REPOS := $(gb_REPOS)
 
 define gb_SrsPartMergeTarget__command
@@ -102,8 +102,8 @@ $(call gb_SrsPartTarget_get_target,$(1)) : MERGEDFILE :=
 else
 $(call gb_SrsPartTarget_get_target,$(1)) : MERGEDFILE := $(call gb_SrsPartMergeTarget_get_target,$(1))
 $(call gb_SrsPartTarget_get_target,$(1)) : $(call gb_SrsPartMergeTarget_get_target,$(1))
-$(call gb_SrsPartMergeTarget_get_target,$(1)) : SDF := $(realpath $(gb_SrsPartMergeTarget_SDFLOCATION)$(dir $(1))localize.sdf)
-$(call gb_SrsPartMergeTarget_get_target,$(1)) : $(realpath $(gb_SrsPartMergeTarget_SDFLOCATION)$(dir $(1))localize.sdf)
+$(call gb_SrsPartMergeTarget_get_target,$(1)) : SDF := $(realpath $(gb_SrsPartMergeTarget_SDFLOCATION)/$(dir $(1))localize.sdf)
+$(call gb_SrsPartMergeTarget_get_target,$(1)) : $(realpath $(gb_SrsPartMergeTarget_SDFLOCATION)/$(dir $(1))localize.sdf)
 endif
 
 endef
