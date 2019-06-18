@@ -16,6 +16,24 @@
       "revId": "1b63fa32bbd4a5b89d2ee3a53b28de4250c8dad3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_7b55bfc5",
+        "filename": "librelogo/source/LibreLogo/LibreLogo.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 482,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2019-06-18T08:40:57Z",
+      "side": 1,
+      "message": "I was afraid that, so I\u0027m very glad of Caolán\u0027s fix (https://cgit.freedesktop.org/libreoffice/core/commit/?id\u003dcb0024e3668979dfdef44db5aa15ddfaf035e695) I don\u0027t know, it\u0027s worth to extend it, related to Caolán\u0027s fix, but at least it would be useful, as an example for PyUNO. Thanks for your review and comment!",
+      "parentUuid": "3fa0c359_3228bb32",
+      "revId": "1b63fa32bbd4a5b89d2ee3a53b28de4250c8dad3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
