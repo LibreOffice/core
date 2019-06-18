@@ -24,6 +24,7 @@
 #include <sfx2/docfile.hxx>
 #include <svl/urihelper.hxx>
 #include <vcl/graphicfilter.hxx>
+#include <tools/diagnose_ex.h>
 #include <editeng/fontitem.hxx>
 #include <editeng/eeitem.hxx>
 #include <sal/log.hxx>
@@ -251,9 +252,9 @@ ErrCode Writer::Write( SwPaM& rPaM, SvStream& rStrm, const OUString* pFName )
             if ( nResult == ERRCODE_NONE )
                 aRef->Commit();
         }
-        catch (const css::ucb::ContentCreationException &e)
+        catch (const css::ucb::ContentCreationException &)
         {
-            SAL_WARN("sw", "Writer::Write caught " << e);
+            TOOLS_WARN_EXCEPTION("sw", "Writer::Write caught");
         }
         return nResult;
     }

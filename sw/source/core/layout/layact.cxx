@@ -63,6 +63,7 @@
 #include <objectformatter.hxx>
 #include <fntcache.hxx>
 #include <vector>
+#include <tools/diagnose_ex.h>
 
 // Save some typing work to avoid accessing destroyed pages.
 #define XCHECKPAGE \
@@ -1968,9 +1969,9 @@ bool SwLayIdle::DoIdleJob_( const SwContentFrame *pCnt, IdleJobType eJob )
                     bPageValid = bPageValid && !pTextNode->IsSmartTagDirty();
                     if ( aRepaint.HasArea() )
                         pImp->GetShell()->InvalidateWindows( aRepaint );
-                } catch( const css::uno::RuntimeException& e) {
+                } catch( const css::uno::RuntimeException&) {
                     // handle smarttag problems gracefully and provide diagnostics
-                    SAL_WARN( "sw.core", "SMART_TAGS: " << e);
+                    TOOLS_WARN_EXCEPTION( "sw.core", "SMART_TAGS");
                 }
                 if (Application::AnyInput(VCL_INPUT_ANY & VclInputFlags(~VclInputFlags::TIMER)))
                     return true;

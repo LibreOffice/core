@@ -35,6 +35,7 @@
 #include <svl/ctloptions.hxx>
 #include <svtools/colorcfg.hxx>
 #include <svtools/accessibilityoptions.hxx>
+#include <tools/diagnose_ex.h>
 #include <unotools/useroptions.hxx>
 #include <com/sun/star/document/UpdateDocMode.hpp>
 #include <sfx2/docfile.hxx>
@@ -394,11 +395,10 @@ bool lcl_hasAllComponentsAvailable()
     {
         return css::sdb::TextConnectionSettings::create(comphelper::getProcessComponentContext()).is();
     }
-    catch (css::uno::Exception & e)
+    catch (const css::uno::Exception &)
     {
-        SAL_INFO(
-            "sw.core",
-            "assuming Base to be missing; caught " << e);
+        TOOLS_INFO_EXCEPTION(
+            "sw.core", "assuming Base to be missing; caught ");
         return false;
     }
 }
@@ -417,11 +417,11 @@ void SwMailMergeWizardExecutor::ExecuteMailMergeWizard( const SfxItemSet * pArgs
             SolarMutexGuard aGuard;
             executeRestartDialog(comphelper::getProcessComponentContext(), nullptr, RESTART_REASON_MAILMERGE_INSTALL);
         }
-        catch (const css::uno::Exception & e)
+        catch (const css::uno::Exception &)
         {
-            SAL_INFO(
+            TOOLS_INFO_EXCEPTION(
                 "sw.core",
-                "trying to install LibreOffice Base, caught " << e);
+                "trying to install LibreOffice Base, caught");
             auto xRestartManager
                 = css::task::OfficeRestartManager::get(comphelper::getProcessComponentContext());
             if (!xRestartManager->isRestartRequested(false))

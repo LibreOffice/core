@@ -1794,9 +1794,9 @@ sal_uLong SwDBManager::GetColumnFormat( const OUString& rDBName,
             {
                 xCols = xColsSupp->getColumns();
             }
-            catch (const uno::Exception& e)
+            catch (const uno::Exception&)
             {
-                SAL_WARN("sw.mailmerge", "Exception in getColumns(): " << e);
+                TOOLS_WARN_EXCEPTION("sw.mailmerge", "Exception in getColumns()");
             }
             if(!xCols.is() || !xCols->hasByName(rColNm))
                 return nRet;
@@ -1886,9 +1886,9 @@ sal_uLong SwDBManager::GetColumnFormat( uno::Reference< sdbc::XDataSource> const
                         nRet = nFormat;
                         bUseDefault = false;
                     }
-                    catch (const uno::Exception& e)
+                    catch (const uno::Exception&)
                     {
-                        SAL_WARN("sw.mailmerge", "illegal number format key: " << e);
+                        TOOLS_WARN_EXCEPTION("sw.mailmerge", "illegal number format key");
                     }
                 }
             }
@@ -2010,9 +2010,9 @@ uno::Reference< sdbcx::XColumnsSupplier> SwDBManager::GetColumnSupplier(uno::Ref
         xRowSet->execute();
         xRet.set( xRowSet, uno::UNO_QUERY );
     }
-    catch (const uno::Exception& e)
+    catch (const uno::Exception&)
     {
-        SAL_WARN("sw.mailmerge", "Exception in SwDBManager::GetColumnSupplier: " << e);
+        TOOLS_WARN_EXCEPTION("sw.mailmerge", "Exception in SwDBManager::GetColumnSupplier");
     }
 
     return xRet;
@@ -2332,13 +2332,13 @@ static bool lcl_ToNextRecord( SwDSParam* pParam, const SwDBNextRecord action )
         ++pParam->nSelectionIndex;
         bRet = !pParam->bEndOfDB;
     }
-    catch( const uno::Exception &e )
+    catch( const uno::Exception & )
     {
+        // we allow merging with empty databases, so don't warn on init
+        TOOLS_WARN_EXCEPTION_IF(action == SwDBNextRecord::NEXT,
+                    "sw.mailmerge", "exception in ToNextRecord()");
         pParam->bEndOfDB = true;
         bRet = false;
-        // we allow merging with empty databases, so don't warn on init
-        SAL_WARN_IF(action == SwDBNextRecord::NEXT,
-                    "sw.mailmerge", "exception in ToNextRecord(): " << e);
     }
     return bRet;
 }

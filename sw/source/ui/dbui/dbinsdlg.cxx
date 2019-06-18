@@ -45,6 +45,7 @@
 #include <editeng/langitem.hxx>
 #include <svl/numuno.hxx>
 #include <svl/stritem.hxx>
+#include <tools/diagnose_ex.h>
 #include <vcl/svapp.hxx>
 #include <vcl/mnemonic.hxx>
 #include <svl/style.hxx>
@@ -1118,9 +1119,9 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
                         }
                     }
                 }
-                catch (const Exception& rExcept)
+                catch (const Exception&)
                 {
-                    SAL_WARN("sw", rExcept);
+                    TOOLS_WARN_EXCEPTION("sw", "");
                 }
             }
 

@@ -430,9 +430,9 @@ OString DocxExport::WriteOLEObject(SwOLEObj& rObject, OUString & io_rProgID)
     {
         ::comphelper::OStorageHelper::CopyInputToOutput(xInStream, xOutStream);
     }
-    catch (uno::Exception const& e)
+    catch (uno::Exception const&)
     {
-        SAL_WARN("sw.ww8", "DocxExport::WriteOLEObject: " << e);
+        TOOLS_WARN_EXCEPTION("sw.ww8", "DocxExport::WriteOLEObject");
         return OString();
     }
 
