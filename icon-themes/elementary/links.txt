@@ -902,8 +902,8 @@ cmd/32/mergecellsmenu.png cmd/32/mergecells.png
 cmd/32/navigatemenu.png cmd/32/navigator.png
 cmd/32/printrangesmenu.png cmd/32/defineprintarea.png
 cmd/32/recalcpivottable.png cmd/32/dataarearefresh.png
-cmd/32/sheetcommentmenu.png cmd/32/showannotations.png
-cmd/32/shownote.png cmd/32/showannotations.png
+cmd/32/sheetcommentmenu.png cmd/32/shownote.png
+cmd/32/showannotations.png cmd/32/showallnotes.png
 cmd/32/toggleformula.png cmd/32/dbviewfunctions.png
 
 cmd/lc_cellcontentsmenu.png cmd/lc_calculate.png
@@ -920,8 +920,8 @@ cmd/lc_mergecellsmenu.png cmd/lc_mergecells.png
 cmd/lc_navigatemenu.png cmd/lc_navigator.png
 cmd/lc_printrangesmenu.png cmd/lc_defineprintarea.png
 cmd/lc_recalcpivottable.png cmd/lc_dataarearefresh.png
-cmd/lc_sheetcommentmenu.png cmd/lc_showannotations.png
-cmd/lc_shownote.png cmd/lc_showannotations.png
+cmd/lc_sheetcommentmenu.png cmd/lc_shownote.png
+cmd/lc_showannotations.png cmd/lc_showallnotes.png
 cmd/lc_toggleformula.png cmd/lc_dbviewfunctions.png
 
 cmd/sc_cellcontentsmenu.png cmd/sc_calculate.png
@@ -938,8 +938,8 @@ cmd/sc_mergecellsmenu.png cmd/sc_mergecells.png
 cmd/sc_navigatemenu.png cmd/sc_navigator.png
 cmd/sc_printrangesmenu.png cmd/sc_defineprintarea.png
 cmd/sc_recalcpivottable.png cmd/sc_dataarearefresh.png
-cmd/sc_sheetcommentmenu.png cmd/sc_showannotations.png
-cmd/sc_shownote.png cmd/sc_showannotations.png
+cmd/sc_sheetcommentmenu.png cmd/sc_shownote.png
+cmd/sc_showannotations.png cmd/sc_showallnotes.png
 cmd/sc_toggleformula.png cmd/sc_dbviewfunctions.png
 
 # Draw & Impress menu entries
@@ -1797,7 +1797,7 @@ sc/res/na011.png cmd/lc_ok.png
 sc/res/nc02.png cmd/sc_label.png
 sc/res/nc03.png cmd/sc_viewdatasourcebrowser.png
 sc/res/nc04.png cmd/sc_gallery.png
-sc/res/nc06.png cmd/sc_showannotations.png
+sc/res/nc06.png cmd/sc_shownote.png
 sc/res/nc07.png sc/res/droplink.png
 sc/res/nc08.png cmd/sc_gallery.png
 sc/res/sc26047.png cmd/sc_dbviewfunctions.png
@@ -1828,7 +1828,7 @@ sd/res/nv08.png cmd/sc_copy.png
 sd/res/nv09.png sc/res/droplink.png
 
 sd/res/breakplayingblue_16.png cmd/sc_mediapause.png
-sd/res/comments_indicator.png cmd/sc_showannotations.png
+sd/res/comments_indicator.png cmd/sc_shownote.png
 sd/res/graphic.png cmd/sc_graphic.png
 sd/res/group.png cmd/sc_formatgroup.png
 sd/res/objects.png cmd/sc_choosepolygon.png
@@ -2144,7 +2144,7 @@ svx/res/notcertificate_16.png xmlsecurity/res/notcertificate_16.png
 
 svx/res/nu01.png cmd/sc_ok.png
 svx/res/nu02.png cmd/sc_cancel.png
-svx/res/nu03.png cmd/sc_showannotations.png
+svx/res/nu03.png cmd/sc_shownote.png
 
 svx/res/ole.png sc/res/nc05.png
 svx/res/persp3d.png svx/res/perspective_16.png
@@ -2179,7 +2179,7 @@ sw/res/nc20006.png cmd/sc_insertsection.png
 sw/res/nc20007.png sd/res/nv010.png
 sw/res/nc20008.png cmd/sc_insertreferencefield.png
 sw/res/nc20009.png cmd/sc_insertindexesentry.png
-sw/res/nc20010.png cmd/sc_showannotations.png
+sw/res/nc20010.png cmd/sc_shownote.png
 sw/res/nc20011.png cmd/sc_insertdraw.png
 
 sw/res/re01.png cmd/lc_unsetcellsreadonly.png
@@ -2227,7 +2227,7 @@ sw/res/sr20010.png sc/res/nc05.png
 sw/res/sr20011.png sw/res/nc20000.png
 sw/res/sr20013.png cmd/sc_insertfootnote.png
 sw/res/sr20014.png sw/res/sc20183.png
-sw/res/sr20015.png cmd/sc_showannotations.png
+sw/res/sr20015.png cmd/sc_shownote.png
 sw/res/sr20016.png cmd/sc_recsearch.png
 sw/res/sr20017.png cmd/sc_insertindexesentry.png
 
@@ -2512,7 +2512,7 @@ cmd/32/goodcellstyles.png cmd/32/goodcellstyle.png
 cmd/32/heading1cellstyles.png cmd/32/heading1parastyle.png
 cmd/32/heading2cellstyles.png cmd/32/heading2parastyle.png
 cmd/32/neutralcellstyles.png cmd/32/neutralcellstyle.png
-cmd/32/notecellstyles.png cmd/32/showannotations.png
+cmd/32/notecellstyles.png cmd/32/shownote.png
 cmd/lc_badcellstyles.png cmd/lc_badcellstyle.png
 cmd/lc_defaultcellstyles.png cmd/lc_defaultcharstyle.png
 cmd/lc_footnotecellstyles.png cmd/lc_insertfootnote.png
@@ -2520,7 +2520,7 @@ cmd/lc_goodcellstyles.png cmd/lc_goodcellstyle.png
 cmd/lc_heading1cellstyles.png cmd/lc_heading1parastyle.png
 cmd/lc_heading2cellstyles.png cmd/lc_heading2parastyle.png
 cmd/lc_neutralcellstyles.png cmd/lc_neutralcellstyle.png
-cmd/lc_notecellstyles.png cmd/lc_showannotations.png
+cmd/lc_notecellstyles.png cmd/lc_shownote.png
 cmd/sc_badcellstyles.png cmd/sc_badcellstyle.png
 cmd/sc_defaultcellstyles.png cmd/sc_defaultcharstyle.png
 cmd/sc_footnotecellstyles.png cmd/sc_insertfootnote.png
@@ -2528,7 +2528,7 @@ cmd/sc_goodcellstyles.png cmd/sc_goodcellstyle.png
 cmd/sc_heading1cellstyles.png cmd/sc_heading1parastyle.png
 cmd/sc_heading2cellstyles.png cmd/sc_heading2parastyle.png
 cmd/sc_neutralcellstyles.png cmd/sc_neutralcellstyle.png
-cmd/sc_notecellstyles.png cmd/sc_showannotations.png
+cmd/sc_notecellstyles.png cmd/sc_shownote.png
 
 # Other
 cmd/32/questionanswers.png cmd/32/browseview.png

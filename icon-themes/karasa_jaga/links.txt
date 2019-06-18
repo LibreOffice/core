@@ -312,7 +312,7 @@ cmd/32/navigatemenu.png cmd/32/navigator.png
 cmd/32/neutralcellstyles.png cmd/32/neutralcellstyle.png
 cmd/32/newglobaldoc.png res/odm_32_8.png
 cmd/32/no.png cmd/32/cancel.png
-cmd/32/notecellstyles.png cmd/32/showannotations.png
+cmd/32/notecellstyles.png cmd/32/shownote.png
 cmd/32/numberformatcurrency.png cmd/32/currencyfield.png
 cmd/32/numberformatcurrencysimple.png cmd/32/currencyfield.png
 cmd/32/numberformatmenu.png cmd/32/numberformatstandard.png
@@ -400,8 +400,8 @@ cmd/32/shapesmenu.png cmd/32/basicshapes.rectangle.png
 cmd/32/sheetcommentmenu.png cmd/32/insertannotation.png
 cmd/32/sheetlefttoright.png cmd/32/paralefttoright.png
 cmd/32/sheetrighttoleft.png cmd/32/pararighttoleft.png
+cmd/32/showannotations.png cmd/32/showallnotes.png
 cmd/32/showgraphics.png cmd/32/graphic.png
-cmd/32/shownote.png cmd/32/showannotations.png
 cmd/32/showpropbrowser.png cmd/32/showbrowser.png
 cmd/32/showruler.png cmd/32/ruler.png
 cmd/32/sidebarmenu.png cmd/32/sidebar.png
@@ -834,7 +834,7 @@ cmd/lc_namegroup.png cmd/lc_renameobject.png
 cmd/lc_navigatemenu.png cmd/lc_navigator.png
 cmd/lc_neutralcellstyles.png cmd/lc_neutralcellstyle.png
 cmd/lc_no.png cmd/lc_cancel.png
-cmd/lc_notecellstyles.png cmd/lc_showannotations.png
+cmd/lc_notecellstyles.png cmd/lc_shownote.png
 cmd/lc_numberformatcurrency.png cmd/lc_currencyfield.png
 cmd/lc_numberformatcurrencysimple.png cmd/lc_currencyfield.png
 cmd/lc_numberformatmenu.png cmd/lc_numberformatstandard.png
@@ -909,8 +909,8 @@ cmd/lc_shapesmenu.png cmd/lc_basicshapes.rectangle.png
 cmd/lc_sheetcommentmenu.png cmd/lc_insertannotation.png
 cmd/lc_sheetlefttoright.png cmd/lc_paralefttoright.png
 cmd/lc_sheetrighttoleft.png cmd/lc_pararighttoleft.png
+cmd/lc_showannotations.png cmd/lc_showallnotes.png
 cmd/lc_showgraphics.png cmd/lc_graphic.png
-cmd/lc_shownote.png cmd/lc_showannotations.png
 cmd/lc_showpropbrowser.png cmd/lc_showbrowser.png
 cmd/lc_showruler.png cmd/lc_ruler.png
 cmd/lc_sidebarmenu.png cmd/lc_sidebar.png
@@ -1221,7 +1221,7 @@ cmd/sc_navigatemenu.png cmd/sc_navigator.png
 cmd/sc_neutralcellstyles.png cmd/sc_neutralcellstyle.png
 cmd/sc_newglobaldoc.png res/odm_16_8.png
 cmd/sc_no.png cmd/sc_cancel.png
-cmd/sc_notecellstyles.png cmd/sc_showannotations.png
+cmd/sc_notecellstyles.png cmd/sc_shownote.png
 cmd/sc_numberformatcurrency.png cmd/sc_currencyfield.png
 cmd/sc_numberformatcurrencysimple.png cmd/sc_currencyfield.png
 cmd/sc_numberformatmenu.png cmd/sc_numberformatstandard.png
@@ -1296,8 +1296,8 @@ cmd/sc_shapesmenu.png cmd/sc_basicshapes.rectangle.png
 cmd/sc_sheetcommentmenu.png cmd/sc_insertannotation.png
 cmd/sc_sheetlefttoright.png cmd/sc_paralefttoright.png
 cmd/sc_sheetrighttoleft.png cmd/sc_pararighttoleft.png
+cmd/sc_showannotations.png cmd/sc_showallnotes.png
 cmd/sc_showgraphics.png cmd/sc_graphic.png
-cmd/sc_shownote.png cmd/sc_showannotations.png
 cmd/sc_showpropbrowser.png cmd/sc_showbrowser.png
 cmd/sc_showruler.png cmd/sc_ruler.png
 cmd/sc_sidebarmenu.png cmd/sc_sidebar.png
@@ -1653,7 +1653,7 @@ sc/res/na06.png cmd/sc_downsearch.png
 sc/res/nc03.png cmd/sc_changedatabasefield.png
 sc/res/nc04.png cmd/sc_graphic.png
 sc/res/nc05.png cmd/sc_insertobject.png
-sc/res/nc06.png cmd/sc_showannotations.png
+sc/res/nc06.png cmd/sc_shownote.png
 sc/res/nc08.png cmd/sc_graphic.png
 sc/res/nc07.png sc/res/droplink.png
 sc/res/page.png cmd/sc_insertpagenumberfield.png
@@ -1669,7 +1669,7 @@ sc/res/time.png cmd/sc_timefield.png
 sch/res/lc30514.png cmd/lc_viewdatasourcebrowser.png
 sch/res/sc30514.png cmd/sc_viewdatasourcebrowser.png
 sch/res/sc30528.png cmd/sc_diagramtype.png
-sd/res/comments_indicator.png cmd/sc_showannotations.png
+sd/res/comments_indicator.png cmd/sc_shownote.png
 sd/res/docclose.png cmd/lc_closedoc.png
 sd/res/docopen.png cmd/lc_open.png
 sd/res/graphic.png cmd/sc_graphic.png
@@ -1821,7 +1821,7 @@ svx/res/lngcheck.png cmd/sc_spelling.png
 svx/res/luminanc.png cmd/sc_colorview.png
 svx/res/nu01.png cmd/sc_ok.png
 svx/res/nu02.png reportdesign/res/sc30770.png
-svx/res/nu03.png cmd/sc_showannotations.png
+svx/res/nu03.png cmd/sc_shownote.png
 svx/res/objects.png cmd/sc_objectcatalog.png
 svx/res/ole.png cmd/sc_insertobject.png
 svx/res/para_numbullet_rtl01.png cmd/ar/sc_defaultbullet.png
@@ -1865,7 +1865,7 @@ sw/res/nc20006.png cmd/sc_insertsection.png
 sw/res/nc20007.png cmd/sc_inserthyperlinkcontrol.png
 sw/res/nc20008.png cmd/sc_insertreferencefield.png
 sw/res/nc20009.png cmd/sc_insertindexesentry.png
-sw/res/nc20010.png cmd/sc_showannotations.png
+sw/res/nc20010.png cmd/sc_shownote.png
 sw/res/nc20011.png cmd/sc_insertdraw.png
 sw/res/one_left.png dbaccess/res/one_left.png
 sw/res/one_right.png dbaccess/res/one_right.png
@@ -1894,7 +1894,7 @@ sw/res/sr20010.png cmd/sc_insertobject.png
 sw/res/sr20011.png sw/res/nc20000.png
 sw/res/sr20013.png cmd/sc_insertfootnote.png
 sw/res/sr20014.png sw/res/sc20183.png
-sw/res/sr20015.png cmd/sc_showannotations.png
+sw/res/sr20015.png cmd/sc_shownote.png
 sw/res/sr20017.png cmd/sc_insertindexesentry.png
 sw/res/styfamnu.png sw/res/sf05.png
 sw/res/sx01.png cmd/sc_changedatabasefield.png
