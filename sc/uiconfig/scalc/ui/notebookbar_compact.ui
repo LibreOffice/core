@@ -14986,7 +14986,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Tools-Section-Form-Wizzard">
+                      <object class="sfxlo-OptionalBox" id="Tools-Section-Form-Wizard">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
