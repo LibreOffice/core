@@ -79,7 +79,7 @@ css::uno::Sequence<css::datatransfer::DataFlavor> SAL_CALL Qt5Transferable::getT
             continue;
 
         // LO doesn't like 'text/plain', so we have to provide UTF-16
-        bool bIsNoCharset = false, bIsUTF8 = false, bIsUTF16 = false;
+        bool bIsNoCharset = false, bIsUTF16 = false, bIsUTF8 = false;
         if (lcl_textMimeInfo(toOUString(rMimeType), bIsNoCharset, bIsUTF16, bIsUTF8))
         {
             bHaveNoCharset |= bIsNoCharset;
@@ -252,7 +252,7 @@ QStringList Qt5MimeData::formats() const
     css::uno::Sequence<css::datatransfer::DataFlavor> aFormats
         = m_aContents->getTransferDataFlavors();
     QStringList aList;
-    bool bHaveUTF16;
+    bool bHaveUTF16 = false;
 
     for (const auto& rFlavor : aFormats)
     {
