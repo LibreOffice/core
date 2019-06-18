@@ -46,6 +46,8 @@ class SvxAutoCorrect;
 class NaviContentBookmark;
 struct SwCallMouseEvent;
 class SfxStringListItem;
+class SwFieldMgr;
+class SfxRequest;
 
 namespace i18nutil {
     struct SearchOptions2;
@@ -475,6 +477,9 @@ typedef bool (SwWrtShell:: *FNSimpleMove)();
 
     void ChangeHeaderOrFooter(const OUString& rStyleName, bool bHeader, bool bOn, bool bShowWarning);
     virtual void SetShowHeaderFooterSeparator( FrameControlType eControl, bool bShow ) override;
+
+    /// Inserts a new annotation/comment at the current cursor position / selection.
+    void InsertPostIt(SwFieldMgr& rFieldMgr, SfxRequest& rReq);
 
 private:
 
