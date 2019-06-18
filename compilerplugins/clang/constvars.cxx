@@ -546,7 +546,7 @@ llvm::Optional<CalleeWrapper> ConstVars::getCallee(CallExpr const* callExpr)
 }
 
 /** off by default because it is very expensive, it walks up the AST a lot */
-loplugin::Plugin::Registration<ConstVars> X("constvars", false);
+loplugin::Plugin::Registration<ConstVars> X("constvars", true);
 }
 
 #endif

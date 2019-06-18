@@ -155,7 +155,7 @@ public:
     void ShowViewTabBar (bool bShow);
 
     void SetUserWantsTabBar(bool inValue);
-    bool GetUserWantsTabBar() { return mbUserWantsTabBar; }
+    bool GetUserWantsTabBar() const { return mbUserWantsTabBar; }
 
     /** Common code of ViewShellBase::OuterResizePixel() and
         ViewShellBase::InnerResizePixel().
@@ -859,7 +859,7 @@ void ViewShellBase::ShowUIControls (bool bVisible)
         Rearrange();
 }
 
-OUString ViewShellBase::GetInitialViewShellType()
+OUString ViewShellBase::GetInitialViewShellType() const
 {
     OUString sRequestedView (FrameworkHelper::msImpressViewURL);
 
@@ -918,7 +918,7 @@ OUString ViewShellBase::GetInitialViewShellType()
     return sRequestedView;
 }
 
-std::shared_ptr<tools::EventMultiplexer> const & ViewShellBase::GetEventMultiplexer()
+std::shared_ptr<tools::EventMultiplexer> const & ViewShellBase::GetEventMultiplexer() const
 {
     OSL_ASSERT(mpImpl != nullptr);
     OSL_ASSERT(mpImpl->mpEventMultiplexer != nullptr);

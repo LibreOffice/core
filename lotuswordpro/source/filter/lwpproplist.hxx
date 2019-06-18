@@ -72,8 +72,8 @@ public:
     void Read() override;
     bool IsNamed(const OUString& name);
     LwpPropListElement* GetNext();
-    const LwpAtomHolder& GetValue(){return m_Value;}
-    const LwpAtomHolder& GetName(){return m_Name;}
+    const LwpAtomHolder& GetValue() const {return m_Value;}
+    const LwpAtomHolder& GetName() const {return m_Name;}
 private:
     virtual ~LwpPropListElement() override {}
 

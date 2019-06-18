@@ -274,7 +274,7 @@ public:
     /// Makes sure that all requested page-bound Flys find a Page
     void SetAssertFlyPages() { mbAssertFlyPages = true; }
     void AssertFlyPages();
-    bool IsAssertFlyPages()  { return mbAssertFlyPages; }
+    bool IsAssertFlyPages() const { return mbAssertFlyPages; }
 
     /**
      * Makes sure that, starting from the passed Page, all page-bound Frames
@@ -344,7 +344,7 @@ public:
     bool IsTurboAllowed() const { return mbTurboAllowed; }
     void SetTurbo( const SwContentFrame *pContent ) { mpTurbo = pContent; }
     void ResetTurbo() { mpTurbo = nullptr; }
-    const SwContentFrame *GetTurbo() { return mpTurbo; }
+    const SwContentFrame *GetTurbo() const { return mpTurbo; }
 
     /// Update the footnote numbers of all Pages
     void UpdateFootnoteNums(); // Only for page by page numbering!

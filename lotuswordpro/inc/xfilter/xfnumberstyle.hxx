@@ -75,7 +75,7 @@ public:
     void    SetGroup();
 
     void    SetColor(const XFColor& color);
-    const XFColor& GetColor() {return m_aColor;}
+    const XFColor& GetColor() const {return m_aColor;}
 
     void    SetPrefix(const OUString& prefix);
 

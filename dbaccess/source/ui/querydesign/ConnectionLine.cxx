@@ -145,7 +145,7 @@ OConnectionLine& OConnectionLine::operator=( const OConnectionLine& rLine )
     return *this;
 }
 
-tools::Rectangle OConnectionLine::GetBoundingRect()
+tools::Rectangle OConnectionLine::GetBoundingRect() const
 {
     // determine surrounding rectangle
     tools::Rectangle aBoundingRect( Point(0,0), Point(0,0) );

@@ -102,7 +102,7 @@ public:
     void                Dispose();
     void                SetText( OutlinerParaObject const & rText );
     std::unique_ptr<OutlinerParaObject> CreateText();
-    OUString            GetText();
+    OUString            GetText() const;
     SdDrawDocument*     GetDoc() { return m_xImpl->mpDoc; }
 };
 
@@ -167,7 +167,7 @@ void TextApiObject::SetText( OutlinerParaObject const & rText )
     maSelection.nStartPara = EE_PARA_MAX_COUNT;
 }
 
-OUString TextApiObject::GetText()
+OUString TextApiObject::GetText() const
 {
     return mpSource->GetText();
 }
@@ -257,7 +257,7 @@ std::unique_ptr<OutlinerParaObject> TextAPIEditSource::CreateText()
         return nullptr;
 }
 
-OUString TextAPIEditSource::GetText()
+OUString TextAPIEditSource::GetText() const
 {
     if (m_xImpl->mpDoc && m_xImpl->mpOutliner)
         return m_xImpl->mpOutliner->GetEditEngine().GetText();

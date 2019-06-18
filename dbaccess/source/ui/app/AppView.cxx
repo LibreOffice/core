@@ -368,13 +368,13 @@ ElementType OApplicationView::getElementType() const
     return getDetailView()->HasChildPathFocus() ? getDetailView()->getElementType() : getPanel()->getElementType();
 }
 
-sal_Int32 OApplicationView::getSelectionCount()
+sal_Int32 OApplicationView::getSelectionCount() const
 {
     OSL_ENSURE(m_pWin && getDetailView(),"Detail view is NULL! -> GPF");
     return getDetailView()->getSelectionCount();
 }
 
-sal_Int32 OApplicationView::getElementCount()
+sal_Int32 OApplicationView::getElementCount() const
 {
     OSL_ENSURE(m_pWin && getDetailView(),"Detail view is NULL! -> GPF");
     return getDetailView()->getElementCount();
@@ -444,13 +444,13 @@ SvTreeListEntry* OApplicationView::getEntry( const Point& _aPosPixel ) const
     return getDetailView()->getEntry(_aPosPixel);
 }
 
-PreviewMode OApplicationView::getPreviewMode()
+PreviewMode OApplicationView::getPreviewMode() const
 {
     OSL_ENSURE(m_pWin && getDetailView(),"Detail view is NULL! -> GPF");
     return getDetailView()->getPreviewMode();
 }
 
-bool OApplicationView::isPreviewEnabled()
+bool OApplicationView::isPreviewEnabled() const
 {
     OSL_ENSURE(m_pWin && getDetailView(),"Detail view is NULL! -> GPF");
     return getDetailView()->isPreviewEnabled();

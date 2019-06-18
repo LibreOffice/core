@@ -42,7 +42,7 @@ public:
     // client itself that explicitly requests a quit (see VbaApplicationBase::Quit()), we do quit.
     // The flag can only be set to true, not back to false.
     void SetForceQuit();
-    bool IsForceQuit();
+    bool IsForceQuit() const;
 
     DECL_STATIC_LINK(AsyncQuitHandler, OnAsyncQuit, void*, void);
 };

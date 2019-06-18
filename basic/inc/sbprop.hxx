@@ -52,7 +52,7 @@ public:
             , mbSet( false )
     {}
 
-    bool isSet()
+    bool isSet() const
         { return mbSet; }
     void setSet( bool bSet )
         { mbSet = bSet; }

@@ -1193,7 +1193,7 @@ bool EnhancedCustomShape2d::GetHandlePosition( const sal_uInt32 nIndex, Point& r
     return bRetValue;
 }
 
-static double lcl_getXAdjustmentValue(OUString& rShapeType, const sal_uInt32 nHandleIndex,
+static double lcl_getXAdjustmentValue(const OUString& rShapeType, const sal_uInt32 nHandleIndex,
                                       const double fX, const double fW, const double fH)
 {
     // degenerated shapes are not worth to calculate special case for each shape type
@@ -1300,7 +1300,7 @@ static double lcl_getXAdjustmentValue(OUString& rShapeType, const sal_uInt32 nHa
     return fX; // method is unknown
 }
 
-static double lcl_getYAdjustmentValue(OUString& rShapeType, const sal_uInt32 nHandleIndex,
+static double lcl_getYAdjustmentValue(const OUString& rShapeType, const sal_uInt32 nHandleIndex,
                                       const double fY, const double fW, const double fH)
 {
     // degenerated shapes are not worth to calculate a special case for each shape type

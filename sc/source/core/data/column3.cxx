@@ -3128,7 +3128,7 @@ class MaxStringLenHandler
     rtl_TextEncoding const meCharSet;
     bool const mbOctetEncoding;
 
-    void processCell(size_t nRow, ScRefCellValue& rCell)
+    void processCell(size_t nRow, const ScRefCellValue& rCell)
     {
         Color* pColor;
         OUString aString;

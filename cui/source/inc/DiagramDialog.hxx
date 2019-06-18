@@ -28,7 +28,7 @@ private:
     std::unique_ptr<weld::Button> mpBtnCancel;
     std::unique_ptr<weld::TreeView> mpTreeDiagram;
 
-    void populateTree(weld::TreeIter* pParent, const OUString& rParentId);
+    void populateTree(const weld::TreeIter* pParent, const OUString& rParentId);
 };
 
 #endif // INCLUDED_CUI_SOURCE_INC_DIAGRAMDIALOG_HXX

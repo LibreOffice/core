@@ -49,12 +49,12 @@ public:
     /**
      * @return A vector of schema definition SQL strings in Firebird dialect.
      */
-    const SqlStatementVector& getCreateStatements() { return m_sCreateStatements; }
+    const SqlStatementVector& getCreateStatements() const { return m_sCreateStatements; }
 
     /**
      * @return A vector of alter SQL strings in Firebird dialect.
      */
-    const SqlStatementVector& getAlterStatements() { return m_sAlterStatements; }
+    const SqlStatementVector& getAlterStatements() const { return m_sAlterStatements; }
 
     /**
      * Returns the column types of a table. It should not be called before

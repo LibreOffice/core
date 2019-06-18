@@ -44,7 +44,7 @@ public:
 
     // helpers
 private:
-    std::shared_ptr<utl::TempFile> exportToPdf(uno::Reference<frame::XModel>& xModel,
+    std::shared_ptr<utl::TempFile> exportToPdf(const uno::Reference<frame::XModel>& xModel,
                                                const ScRange& range);
 
     static bool hasFontInPdf(const std::shared_ptr<utl::TempFile>& pXPathFile,
@@ -142,8 +142,8 @@ bool ScPDFExportTest::hasFontInPdf(const std::shared_ptr<utl::TempFile>& pXPathF
     return (nRead == nFileSize);
 }
 
-std::shared_ptr<utl::TempFile> ScPDFExportTest::exportToPdf(uno::Reference<frame::XModel>& xModel,
-                                                            const ScRange& range)
+std::shared_ptr<utl::TempFile>
+ScPDFExportTest::exportToPdf(const uno::Reference<frame::XModel>& xModel, const ScRange& range)
 {
     // create temp file name
     std::shared_ptr<utl::TempFile> pTempFile(new utl::TempFile());

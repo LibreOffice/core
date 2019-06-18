@@ -98,8 +98,8 @@ public:
         m_bConvertCell = false;
         return aRet;
     }
-    sal_uInt16 GetRowID(){return crowid;}
-    sal_uInt8 GetColID(){return ccolid;}
+    sal_uInt16 GetRowID() const {return crowid;}
+    sal_uInt8 GetColID() const {return ccolid;}
     void RegisterStyle() override;
     LwpObjectID& GetNumericsObject() {return cLayNumerics;}
     LwpObjectID * GetPreviousCellStory();
@@ -107,7 +107,7 @@ public:
     LwpTableLayout * GetTableLayout();
     virtual void SetCellMap();
     double GetActualWidth();
-    const OUString& GetNumfmtName(){return m_NumfmtName;}
+    const OUString& GetNumfmtName() const {return m_NumfmtName;}
 protected:
     void Read() override;
     LwpTable * GetTable();
@@ -176,8 +176,8 @@ public:
     virtual ~LwpConnectedCellLayout() override;
     virtual LWP_LAYOUT_TYPE GetLayoutType () override { return LWP_CONNECTED_CELL_LAYOUT;}
     virtual void Parse(IXFStream* pOutputStream) override;
-    sal_uInt16 GetNumrows(){return m_nRealrowspan;}
-    sal_uInt8 GetNumcols(){return m_nRealcolspan;}
+    sal_uInt16 GetNumrows() const {return m_nRealrowspan;}
+    sal_uInt8 GetNumcols() const {return m_nRealcolspan;}
     virtual void SetCellMap() override;
     void SetNumrows(sal_uInt16 nVal){m_nRealrowspan = nVal;}
 protected:

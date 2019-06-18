@@ -383,7 +383,7 @@ public:
 
     // Get document handler. This methods are not const, because the
     // reference allows modifications through the handler.
-    const css::uno::Reference< css::xml::sax::XDocumentHandler > & GetDocHandler() { return mxHandler; }
+    const css::uno::Reference< css::xml::sax::XDocumentHandler > & GetDocHandler() const { return mxHandler; }
 
     // Get original URL.
     const OUString& GetOrigFileName() const { return msOrigFileName; }
@@ -443,12 +443,12 @@ public:
 
     // get Formlayer Export
     inline rtl::Reference< xmloff::OFormLayerXMLExport > const & GetFormExport();
-    inline bool HasFormExport();
+    inline bool HasFormExport() const;
 
     // get XPropertySet with export information
     const css::uno::Reference< css::beans::XPropertySet >& getExportInfo() const { return mxExportInfo; }
 
-    const css::uno::Reference< css::task::XStatusIndicator >& GetStatusIndicator() { return mxStatusIndicator; }
+    const css::uno::Reference< css::task::XStatusIndicator >& GetStatusIndicator() const { return mxStatusIndicator; }
 
     /// get Event export, with handlers for script types "None" and
     /// "StarBasic" already registered; other handlers may be registered, too.
@@ -470,7 +470,7 @@ public:
                                      bool *pEncoded=nullptr ) const;
 
     // save linked sections?
-    bool IsSaveLinkedSections() { return mbSaveLinkedSections; }
+    bool IsSaveLinkedSections() const { return mbSaveLinkedSections; }
 
     // get export flags
     SvXMLExportFlags getExportFlags() const { return mnExportFlags; }
@@ -517,7 +517,7 @@ public:
 
     ::comphelper::UnoInterfaceToUniqueIdentifierMapper& getInterfaceToIdentifierMapper();
 
-    const css::uno::Reference< css::uno::XComponentContext >& getComponentContext() { return m_xContext;}
+    const css::uno::Reference< css::uno::XComponentContext >& getComponentContext() const { return m_xContext;}
 
     // Shapes in Writer cannot be named via context menu (#i51726#)
     SvtModuleOptions::EFactory GetModelType() const
@@ -528,7 +528,7 @@ public:
     // Written OpenDocument file format doesn't fit to the created text document (#i69627#)
     bool writeOutlineStyleAsNormalListStyle() const;
 
-    css::uno::Reference< css::embed::XStorage > const & GetTargetStorage();
+    css::uno::Reference< css::embed::XStorage > const & GetTargetStorage() const;
 
     /// returns the currently configured default version for odf export
     SvtSaveOptions::ODFDefaultVersion getDefaultVersion() const;
@@ -613,7 +613,7 @@ inline rtl::Reference< xmloff::OFormLayerXMLExport > const & SvXMLExport::GetFor
     return mxFormExport;
 }
 
-inline bool SvXMLExport::HasFormExport()
+inline bool SvXMLExport::HasFormExport() const
 {
     return mxFormExport.is();
 }

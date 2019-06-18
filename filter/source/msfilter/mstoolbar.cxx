@@ -437,7 +437,7 @@ TBCExtraInfo::Print( FILE* fp )
 #endif
 
 OUString const &
-TBCExtraInfo::getOnAction()
+TBCExtraInfo::getOnAction() const
 {
     return wstrOnAction.getString();
 }
@@ -764,7 +764,7 @@ bool TB::Read(SvStream &rS)
 
 }
 
-bool TB::IsEnabled()
+bool TB::IsEnabled() const
 {
     return ( bFlags & 0x01 ) != 0x01;
 }

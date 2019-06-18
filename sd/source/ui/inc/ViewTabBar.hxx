@@ -121,7 +121,7 @@ public:
         To be on the safe side wait for this control to become visible and
         the call this method again.
     */
-    int GetHeight();
+    int GetHeight() const;
 
     void AddTabBarButton (
         const css::drawing::framework::TabBarButton& rButton,

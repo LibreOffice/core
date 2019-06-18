@@ -946,7 +946,7 @@ UUIInteractionHelper::getParentXWindow() const
 }
 
 uno::Reference< task::XInteractionHandler2 >
-UUIInteractionHelper::getInteractionHandler()
+UUIInteractionHelper::getInteractionHandler() const
 {
     return InteractionHandler::createWithParentAndContext(
         m_xContext, m_xWindowParam,

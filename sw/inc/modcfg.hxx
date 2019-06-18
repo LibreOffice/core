@@ -130,7 +130,7 @@ class SAL_DLLPUBLIC_RTTI SwInsertConfig : public utl::ConfigItem
     SwInsertTableOptions    m_aInsTableOpts;
     bool const            m_bIsWeb;
 
-    const css::uno::Sequence<OUString>& GetPropertyNames();
+    const css::uno::Sequence<OUString>& GetPropertyNames() const;
 
     virtual void    ImplCommit() override;
 

@@ -120,7 +120,7 @@ public:
     bool PreprocessDataRange( const ScMatrixRef& rMatX, const ScMatrixRef& rMatY, int nSmplInPrd,
                               bool bDataCompletion, int nAggregation, const ScMatrixRef& rTMat,
                               ScETSType eETSType );
-    FormulaError GetError() { return mnErrorValue; };
+    FormulaError GetError() const { return mnErrorValue; };
     void GetForecastRange( const ScMatrixRef& rTMat, const ScMatrixRef& rFcMat );
     void GetStatisticValue( const ScMatrixRef& rTypeMat, const ScMatrixRef& rStatMat );
     void GetSamplesInPeriod( double& rVal );

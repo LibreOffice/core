@@ -45,7 +45,7 @@ public:
     {
     }
 
-    DrawCommandType getType() { return meType; }
+    DrawCommandType getType() const { return meType; }
 };
 
 class DrawRoot : public DrawBase

@@ -205,8 +205,8 @@ namespace pdfi
                  m_Width(width), m_PrevSpaceWidth(prevSpaceWidth), m_rGlyphs(rGlyphs) {};
 
             OUString& getGlyph(){ return m_rGlyphs; }
-            double getWidth(){ return m_Width; }
-            double getPrevSpaceWidth(){ return m_PrevSpaceWidth; }
+            double getWidth() const { return m_Width; }
+            double getPrevSpaceWidth() const { return m_PrevSpaceWidth; }
             GraphicsContext&  getGC(){ return m_rCurrentContext; }
             Element*  getCurElement(){ return m_pCurElement; }
 

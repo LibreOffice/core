@@ -524,7 +524,7 @@ void ViewShell::SetCursorMm100Position(const Point& rPosition, bool bPoint, bool
     }
 }
 
-uno::Reference<datatransfer::XTransferable> ViewShell::GetSelectionTransferrable()
+uno::Reference<datatransfer::XTransferable> ViewShell::GetSelectionTransferrable() const
 {
     SdrView* pSdrView = GetView();
     if (!pSdrView)

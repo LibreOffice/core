@@ -223,7 +223,7 @@ public:
     bool IsInSwFntCache() const     { return m_bInSwFntCache;  }
 
     void CheckCaching( const sal_uInt16 nWhich );
-    bool HasOnlyOneListener() { return m_pWriterListeners && m_pWriterListeners->IsLast(); }
+    bool HasOnlyOneListener() const { return m_pWriterListeners && m_pWriterListeners->IsLast(); }
 };
 
 template<typename TElementType, typename TSource, sw::IteratorMode eMode> class SwIterator;

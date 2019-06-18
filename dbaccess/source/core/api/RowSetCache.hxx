@@ -146,7 +146,7 @@ namespace dbaccess
         void deregisterOldRow(const TORowSetOldRowHelperRef& _rRow);
 
     // css::sdbc::XResultSetMetaDataSupplier
-        const css::uno::Reference< css::sdbc::XResultSetMetaData >& getMetaData(  ) { return m_xMetaData;}
+        const css::uno::Reference< css::sdbc::XResultSetMetaData >& getMetaData(  ) const { return m_xMetaData;}
 
     // css::sdbcx::XRowLocate
         css::uno::Any getBookmark(  );
@@ -170,13 +170,13 @@ namespace dbaccess
         bool next(  );
         bool isBeforeFirst(  ) const { return m_bBeforeFirst;}
         bool isAfterLast(  ) const { return m_bAfterLast;}
-        bool isFirst(  );
-        bool isLast(  );
+        bool isFirst(  ) const;
+        bool isLast(  ) const;
         void beforeFirst(  );
         void afterLast(  );
         bool first(  );
         bool last(  );
-        sal_Int32 getRow(  );
+        sal_Int32 getRow(  ) const;
         bool absolute( sal_Int32 row );
         bool relative( sal_Int32 rows );
         bool previous(  );

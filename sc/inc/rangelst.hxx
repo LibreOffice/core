@@ -45,7 +45,7 @@ public:
                            formula::FormulaGrammar::AddressConvention eConv = formula::FormulaGrammar::CONV_OOO,
                            SCTAB nDefaultTab = 0, sal_Unicode cDelimiter = 0 );
 
-    void            Format( OUString&, ScRefFlags nFlags, ScDocument*,
+    void            Format( OUString&, ScRefFlags nFlags, const ScDocument*,
                             formula::FormulaGrammar::AddressConvention eConv = formula::FormulaGrammar::CONV_OOO,
                             sal_Unicode cDelimiter = 0, bool bFullAddressNotation = false ) const;
 

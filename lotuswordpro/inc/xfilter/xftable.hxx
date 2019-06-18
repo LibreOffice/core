@@ -94,7 +94,7 @@ public:
 
     sal_Int32   GetColumnCount();
 
-    bool    IsSubTable();
+    bool    IsSubTable() const;
 
     enumXFContent   GetContentType() override;
 
@@ -128,7 +128,7 @@ inline void XFTable::SetOwnerCell(XFCell *pCell)
     m_bSubTable = (pCell!=nullptr);
 }
 
-inline bool XFTable::IsSubTable()
+inline bool XFTable::IsSubTable() const
 {
     return m_bSubTable;
 }

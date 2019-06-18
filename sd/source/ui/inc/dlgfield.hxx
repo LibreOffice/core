@@ -51,7 +51,7 @@ public:
     virtual ~SdModifyFieldDlg() override;
 
     SvxFieldData*       GetField();
-    SfxItemSet          GetItemSet();
+    SfxItemSet          GetItemSet() const;
 };
 
 #endif // INCLUDED_SD_SOURCE_UI_INC_DLGFIELD_HXX

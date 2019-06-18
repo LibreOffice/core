@@ -317,7 +317,7 @@ LwpDocument* LwpFootnote::GetEndnoteDivision(LwpDocument* pPossible)
 /**
  * @descr  Get footnote table class name
  */
-OUString LwpFootnote::GetTableClass()
+OUString LwpFootnote::GetTableClass() const
 {
     OUString strClassName;
     switch (GetType() & FN_MASK_BASE)
@@ -528,7 +528,7 @@ void LwpFootnoteOptions::RegisterEndnoteStyle()
 /**
  * @descr  Get continue on message
  */
-OUString LwpFootnoteOptions::GetContinuedOnMessage()
+OUString LwpFootnoteOptions::GetContinuedOnMessage() const
 {
     if(m_ContinuedOnMessage.HasValue())
     {
@@ -541,7 +541,7 @@ OUString LwpFootnoteOptions::GetContinuedOnMessage()
 /**
  * @descr  Get continue from message
  */
-OUString LwpFootnoteOptions::GetContinuedFromMessage()
+OUString LwpFootnoteOptions::GetContinuedFromMessage() const
 {
     if(m_ContinuedFromMessage.HasValue())
     {

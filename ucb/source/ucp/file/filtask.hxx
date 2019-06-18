@@ -128,12 +128,12 @@ namespace fileaccess
                 m_nMinorCode = nMinorCode;
             }
 
-            sal_Int32 getInstalledError()
+            sal_Int32 getInstalledError() const
             {
                 return m_nErrorCode;
             }
 
-            sal_Int32 getMinorErrorCode()
+            sal_Int32 getMinorErrorCode() const
             {
                 return m_nMinorCode;
             }
@@ -148,7 +148,7 @@ namespace fileaccess
             }
 
             const css::uno::Reference< css::ucb::XCommandEnvironment >&
-            getCommandEnvironment()
+            getCommandEnvironment() const
             {
                 return m_xCommandEnvironment;
             }

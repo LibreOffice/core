@@ -114,7 +114,7 @@ class ScVbaRange : public ScVbaRange_BASE
      /// @throws css::script::BasicErrorException
      css::uno::Reference< ov::excel::XRange > SpecialCellsImpl( sal_Int32 nType, const css::uno::Any& _oValue);
     /// @throws css::uno::RuntimeException
-    css::awt::Point getPosition();
+    css::awt::Point getPosition() const;
 
     /** Fires a Worksheet_Change event for this range or range list. */
     void fireChangeEvent();
@@ -153,7 +153,7 @@ public:
 
     virtual ~ScVbaRange() override;
      virtual css::uno::Reference< ov::XHelperInterface > thisHelperIface() override { return this; }
-    bool isSingleCellRange();
+    bool isSingleCellRange() const;
 
     /// @throws css::uno::RuntimeException
     static css::uno::Reference< ov::excel::XRange > getRangeObjectForName(

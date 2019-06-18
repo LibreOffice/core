@@ -39,7 +39,7 @@ private:
     /// @throws css::uno::RuntimeException
     css::uno::Reference< css::sheet::XSheetAnnotation > getAnnotation();
     /// @throws css::uno::RuntimeException
-    css::uno::Reference< css::sheet::XSheetAnnotations > getAnnotations();
+    css::uno::Reference< css::sheet::XSheetAnnotations > getAnnotations() const;
     /// @throws css::uno::RuntimeException
     sal_Int32 getAnnotationIndex();
     /// @throws css::uno::RuntimeException
