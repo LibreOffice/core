@@ -50,15 +50,10 @@ public:
             || loplugin::hasPathnamePrefix(fn, SRCDIR "/sfx2/source/doc/syspath.cxx")
             // ignore this for now
             || loplugin::hasPathnamePrefix(fn, SRCDIR "/libreofficekit")
-            // I end up with a
-            //    CXXMemberCallExpr
-            // to a
-            //    BuiltinType '<bound member function type>'
-            // and the AST gives me no further useful information.
-            || loplugin::hasPathnamePrefix(fn, SRCDIR "/sw/source/core/doc/docfly.cxx")
-            || loplugin::hasPathnamePrefix(fn, SRCDIR "/sw/source/core/doc/DocumentContentOperationsManager.cxx")
-            || loplugin::hasPathnamePrefix(fn, SRCDIR "/sw/source/core/fields/cellfml.cxx")
-            || loplugin::hasPathnamePrefix(fn, SRCDIR "/sw/source/filter/ww8/ww8par6.cxx")
+            // FunctionAddress not working well enough here
+            || loplugin::hasPathnamePrefix(fn, SRCDIR "/pyuno/source/module/pyuno_struct.cxx")
+            || loplugin::hasPathnamePrefix(fn, SRCDIR "/pyuno/source/module/pyuno.cxx")
+            || loplugin::hasPathnamePrefix(fn, SRCDIR "/sw/source/filter/ascii/ascatr.cxx")
             )
             return;
 
@@ -201,6 +196,8 @@ bool ConstParams::CheckTraverseFunctionDecl(FunctionDecl * functionDecl)
             || name == "GlobalBasicErrorHdl_Impl"
             // template
             || name == "extract_throw" || name == "readProp"
+            // callbacks
+            || name == "signalDragDropReceived" || name == "signal_column_clicked" || name == "signal_key_press"
             )
             return false;
 

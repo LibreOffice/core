@@ -425,7 +425,7 @@ handle_r1c1:
     }
 }
 
-static ReferenceMark lcl_GetReferenceMark( ScViewData& rViewData, ScDocShell* pDocSh,
+static ReferenceMark lcl_GetReferenceMark( const ScViewData& rViewData, ScDocShell* pDocSh,
                                            long nX1, long nX2, long nY1, long nY2,
                                            long nTab, const Color& rColor )
 {

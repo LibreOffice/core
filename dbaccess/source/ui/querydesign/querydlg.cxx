@@ -41,7 +41,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::sdbc;
 
-DlgQryJoin::DlgQryJoin(OQueryTableView* pParent,
+DlgQryJoin::DlgQryJoin(const OQueryTableView* pParent,
                        const TTableConnectionData::value_type& _pData,
                        const OJoinTableView::OTableWindowMap* _pTableMap,
                        const Reference< XConnection >& _xConnection,

@@ -54,7 +54,7 @@ namespace dbaui
         */
         void setJoinType(EJoinType _eNewJoinType);
     public:
-        DlgQryJoin( OQueryTableView * pParent,
+        DlgQryJoin( const OQueryTableView * pParent,
                     const TTableConnectionData::value_type& pData,
                     const OJoinTableView::OTableWindowMap*    _pTableMap,
                     const css::uno::Reference< css::sdbc::XConnection >& _xConnection,

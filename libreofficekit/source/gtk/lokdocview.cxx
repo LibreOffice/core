@@ -1363,7 +1363,7 @@ callback (gpointer pData)
 
         priv->m_aReferenceMarks.clear();
 
-        for(auto& rMark : aTree.get_child("marks"))
+        for(const auto& rMark : aTree.get_child("marks"))
         {
             sal_uInt32 nColor = std::stoi(rMark.second.get<std::string>("color"), nullptr, 16);
             std::string sRect = rMark.second.get<std::string>("rectangle");
@@ -1849,7 +1849,7 @@ renderOverlay(LOKDocView* pDocView, cairo_t* pCairo)
     }
 
     // Draw reference marks.
-    for (auto& rPair : priv->m_aReferenceMarks)
+    for (const auto& rPair : priv->m_aReferenceMarks)
     {
         const ViewRectangle& rMark = rPair.first;
         if (rMark.m_nPart != priv->m_nPartId)
