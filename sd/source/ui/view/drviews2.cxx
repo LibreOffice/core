@@ -1145,18 +1145,24 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         rReq.Done ();
         break;
 
+        case SID_REMOVE_HYPERLINK:
+        {
+            if (mpDrawView->IsTextEdit())
+            {
+                Outliner* pOutl = mpDrawView->GetTextEditOutliner();
+                if (pOutl)
+                {
+                    pOutl->RemoveFields(checkSvxFieldData<SvxURLField>);
+                }
+            }
+        }
+        break;
         case SID_SET_DEFAULT:
         {
             std::unique_ptr<SfxItemSet> pSet;
 
             if (mpDrawView->IsTextEdit())
             {
-                ::Outliner* pOutl = mpDrawView->GetTextEditOutliner();
-                if (pOutl)
-                {
-                    pOutl->RemoveFields(checkSvxFieldData<SvxURLField>);
-                }
-
                 pSet.reset(new SfxItemSet( GetPool(), svl::Items<EE_ITEMS_START, EE_ITEMS_END>{} ));
                 mpDrawView->SetAttributes( *pSet, true );
             }
@@ -1213,7 +1219,6 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                                 if( nLevel == 1 )
                                     // text frame listens on StyleSheet of level1
                                     pObj->NbcSetStyleSheet(pSheet, false);
-
                             }
                         }
                     }

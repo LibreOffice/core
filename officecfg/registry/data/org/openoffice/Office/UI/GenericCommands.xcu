@@ -7013,6 +7013,14 @@
           <value xml:lang="en-US">Regenerate Diagram</value>
         </prop>
       </node>
+      <node oor:name=".uno:RemoveHyperlink" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">~Remove Hyperlink</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
     </node>
   </node>
 </oor:component-data>
