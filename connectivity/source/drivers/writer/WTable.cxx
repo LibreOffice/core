@@ -23,7 +23,6 @@
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
-#include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <writer/WConnection.hxx>

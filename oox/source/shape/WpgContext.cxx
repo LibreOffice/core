@@ -9,9 +9,7 @@
 
 
 #include "WpgContext.hxx"
-#include "WpsContext.hxx"
 #include <sal/log.hxx>
-#include <com/sun/star/drawing/XShape.hpp>
 #include <drawingml/shapepropertiescontext.hxx>
 #include <oox/drawingml/shapegroupcontext.hxx>
 #include <oox/drawingml/graphicshapecontext.hxx>

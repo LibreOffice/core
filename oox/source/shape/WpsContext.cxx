@@ -12,8 +12,6 @@
 #include <basegfx/tuple/b2dtuple.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <drawingml/customshapeproperties.hxx>
-#include <drawingml/shapepropertiescontext.hxx>
-#include <drawingml/shapestylecontext.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/drawing/HomogenMatrix3.hpp>
@@ -25,7 +23,6 @@
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
 #include <oox/drawingml/shape.hxx>
-#include <sal/log.hxx>
 
 #include <boost/optional.hpp>
 
