@@ -26,6 +26,7 @@
 #include <ucbhelper/content.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <tools/fract.hxx>
+#include <unotools/configmgr.hxx>
 #include <unotools/resmgr.hxx>
 #include <tools/stream.hxx>
 #include <tools/urlobj.hxx>
@@ -1770,7 +1771,7 @@ ErrCode GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPath, 
                 if( nFormat != GRFILTER_FORMAT_DONTKNOW )
                 {
                     aShortName = GetImportFormatShortName( nFormat ).toAsciiUpperCase();
-                    if (aShortName == "PCD")
+                    if (aShortName == "PCD" && !utl::ConfigManager::IsFuzzing())
                     {
                         OUString aFilterConfigPath( "Office.Common/Filter/Graphic/Import/PCD" );
                         pFilterConfigItem = std::make_unique<FilterConfigItem>( aFilterConfigPath );
