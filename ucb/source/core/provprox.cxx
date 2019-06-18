@@ -21,6 +21,7 @@
 #include <osl/thread.h>
 #include <rtl/strbuf.hxx>
 #include <sal/log.hxx>
+#include <tools/diagnose_ex.h>
 #include "provprox.hxx"
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/ucb/IllegalIdentifierException.hpp>
@@ -311,9 +312,9 @@ UcbContentProviderProxy::getContentProvider()
         {
             throw;
         }
-        catch ( Exception const & e)
+        catch ( Exception const & )
         {
-            SAL_INFO( "ucb.core", "Exception when getting content provider: " << e );
+            TOOLS_INFO_EXCEPTION( "ucb.core", "Exception getting content provider");
         }
 
         // registerInstance called at proxy, but not yet at original?
