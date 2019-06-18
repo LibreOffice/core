@@ -28,6 +28,7 @@
 #include <com/sun/star/datatransfer/dnd/DNDConstants.hpp>
 #include <com/sun/star/datatransfer/dnd/XDragGestureRecognizer.hpp>
 #include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>
+#include <com/sun/star/datatransfer/clipboard/SystemClipboard.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 #include <com/sun/star/datatransfer/clipboard/XFlushableClipboard.hpp>
 #include <editeng/flditem.hxx>
@@ -38,8 +39,9 @@
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
-#include <comphelper/string.hxx>
 #include <comphelper/lok.hxx>
+#include <comphelper/processfactory.hxx>
+#include <comphelper/string.hxx>
 #include <sfx2/lokhelper.hxx>
 
 using namespace ::com::sun::star;
@@ -1268,6 +1270,13 @@ Pair ImpEditView::Scroll( long ndX, long ndY, ScrollRangeCheck nRangeCheck )
     return Pair( nRealDiffX, nRealDiffY );
 }
 
+Reference<css::datatransfer::clipboard::XClipboard> ImpEditView::GetClipboard()
+{
+    if (vcl::Window* pWindow = GetWindow())
+        return pWindow->GetClipboard();
+    return css::datatransfer::clipboard::SystemClipboard::create(comphelper::getProcessComponentContext());
+}
+
 bool ImpEditView::PostKeyEvent( const KeyEvent& rKeyEvent, vcl::Window const * pFrameWin )
 {
     bool bDone = false;
@@ -1281,7 +1290,7 @@ bool ImpEditView::PostKeyEvent( const KeyEvent& rKeyEvent, vcl::Window const * p
             {
                 if ( !bReadOnly )
                 {
-                    Reference<css::datatransfer::clipboard::XClipboard> aClipBoard(GetWindow()->GetClipboard());
+                    Reference<css::datatransfer::clipboard::XClipboard> aClipBoard(GetClipboard());
                     CutCopy( aClipBoard, true );
                     bDone = true;
                 }
@@ -1289,7 +1298,7 @@ bool ImpEditView::PostKeyEvent( const KeyEvent& rKeyEvent, vcl::Window const * p
             break;
             case KeyFuncType::COPY:
             {
-                Reference<css::datatransfer::clipboard::XClipboard> aClipBoard(GetWindow()->GetClipboard());
+                Reference<css::datatransfer::clipboard::XClipboard> aClipBoard(GetClipboard());
                 CutCopy( aClipBoard, false );
                 bDone = true;
             }
@@ -1299,7 +1308,7 @@ bool ImpEditView::PostKeyEvent( const KeyEvent& rKeyEvent, vcl::Window const * p
                 if ( !bReadOnly && IsPasteEnabled() )
                 {
                     pEditEngine->pImpEditEngine->UndoActionStart( EDITUNDO_PASTE );
-                    Reference<css::datatransfer::clipboard::XClipboard> aClipBoard(GetWindow()->GetClipboard());
+                    Reference<css::datatransfer::clipboard::XClipboard> aClipBoard(GetClipboard());
                     Paste( aClipBoard, pEditEngine->pImpEditEngine->GetStatus().AllowPasteSpecial() );
                     pEditEngine->pImpEditEngine->UndoActionEnd();
                     bDone = true;
@@ -1329,12 +1338,12 @@ bool ImpEditView::MouseButtonUp( const MouseEvent& rMouseEvent )
         if ( rMouseEvent.IsMiddle() && !bReadOnly &&
              ( pWindow->GetSettings().GetMouseSettings().GetMiddleButtonAction() == MouseMiddleButtonAction::PasteSelection ) )
         {
-            Reference<css::datatransfer::clipboard::XClipboard> aClipBoard(pWindow->GetPrimarySelection());
+            Reference<css::datatransfer::clipboard::XClipboard> aClipBoard(GetClipboard());
             Paste( aClipBoard );
         }
         else if ( rMouseEvent.IsLeft() && GetEditSelection().HasRange() )
         {
-            Reference<css::datatransfer::clipboard::XClipboard> aClipBoard(pWindow->GetPrimarySelection());
+            Reference<css::datatransfer::clipboard::XClipboard> aClipBoard(GetClipboard());
             CutCopy( aClipBoard, false );
         }
     }
