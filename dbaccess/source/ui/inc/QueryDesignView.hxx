@@ -77,9 +77,9 @@ namespace dbaui
         virtual ~OQueryDesignView() override;
         virtual void dispose() override;
 
-        bool isCutAllowed();
-        bool isPasteAllowed();
-        bool isCopyAllowed();
+        bool isCutAllowed() const;
+        bool isPasteAllowed() const;
+        bool isCopyAllowed() const;
         void copy();
         void cut();
         void paste();

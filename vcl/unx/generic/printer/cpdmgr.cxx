@@ -189,7 +189,7 @@ void CPDManager::addTempBackend(const std::pair<std::string, gchar*>& pair)
     m_tBackends.push_back(pair);
 }
 
-std::vector<std::pair<std::string, gchar*>> const & CPDManager::getTempBackends() {
+std::vector<std::pair<std::string, gchar*>> const & CPDManager::getTempBackends() const {
     return m_tBackends;
 }
 

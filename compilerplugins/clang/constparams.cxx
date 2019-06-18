@@ -201,6 +201,8 @@ bool ConstParams::CheckTraverseFunctionDecl(FunctionDecl * functionDecl)
             || name == "GlobalBasicErrorHdl_Impl"
             // template
             || name == "extract_throw" || name == "readProp"
+            // callbacks
+            || name == "signalDragDropReceived" || name == "signal_column_clicked" || name == "signal_key_press"
             )
             return false;
 
@@ -585,7 +587,7 @@ bool ConstParams::isPointerOrReferenceToNonConst(const QualType& qt) {
     return false;
 }
 
-loplugin::Plugin::Registration< ConstParams > X("constparams", false);
+loplugin::Plugin::Registration< ConstParams > X("constparams", true);
 
 }
 

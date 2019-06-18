@@ -51,9 +51,9 @@ public:
 
     void write();
 
-    bool isSuppressedLicense();
+    bool isSuppressedLicense() const;
 
-    bool isExtensionUpdate();
+    bool isExtensionUpdate() const;
 };
 }
 

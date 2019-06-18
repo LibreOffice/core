@@ -603,7 +603,7 @@ SwVbaDocument::hasProperty( const OUString& aName )
 }
 
 uno::Reference< container::XNameAccess >
-SwVbaDocument::getFormControls()
+SwVbaDocument::getFormControls() const
 {
     uno::Reference< container::XNameAccess > xFormControls;
     try

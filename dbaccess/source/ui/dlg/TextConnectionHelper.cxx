@@ -357,7 +357,7 @@ namespace dbaui
         }
     }
 
-    OUString OTextConnectionHelper::GetExtension()
+    OUString OTextConnectionHelper::GetExtension() const
     {
         OUString sExtension;
         if (m_xAccessTextFiles->get_active())

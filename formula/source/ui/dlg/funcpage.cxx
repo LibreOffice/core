@@ -240,17 +240,17 @@ void FuncPage::SetFocus()
     m_xLbFunction->grab_focus();
 }
 
-sal_Int32 FuncPage::GetCategory()
+sal_Int32 FuncPage::GetCategory() const
 {
     return m_xLbCategory->get_active();
 }
 
-sal_Int32 FuncPage::GetFunction()
+sal_Int32 FuncPage::GetFunction() const
 {
     return m_xLbFunction->get_selected_index();
 }
 
-sal_Int32 FuncPage::GetFunctionEntryCount()
+sal_Int32 FuncPage::GetFunctionEntryCount() const
 {
     return m_xLbFunction->n_children();
 }

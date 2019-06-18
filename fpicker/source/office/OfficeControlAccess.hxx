@@ -73,7 +73,7 @@ namespace svt
         css::uno::Any  getControlProperty( const OUString& _rControlName, const OUString& _rControlProperty );
 
         // XControlInformation implementation
-        css::uno::Sequence< OUString >  getSupportedControls(  );
+        css::uno::Sequence< OUString >  getSupportedControls(  ) const;
         css::uno::Sequence< OUString >  getSupportedControlProperties( const OUString& _rControlName );
         static bool                     isControlSupported( const OUString& _rControlName );
         bool                            isControlPropertySupported( const OUString& _rControlName, const OUString& _rControlProperty );

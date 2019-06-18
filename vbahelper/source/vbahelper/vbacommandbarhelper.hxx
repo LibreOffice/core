@@ -81,7 +81,7 @@ public:
     void ApplyTempChange( const OUString& sResourceUrl, const css::uno::Reference< css::container::XIndexAccess >& xSettings);
 
     /// @throws css::uno::RuntimeException
-    css::uno::Reference< css::frame::XLayoutManager > getLayoutManager();
+    css::uno::Reference< css::frame::XLayoutManager > getLayoutManager() const;
 
     const OUString& getModuleId() const { return maModuleId; }
     /// @throws css::uno::RuntimeException

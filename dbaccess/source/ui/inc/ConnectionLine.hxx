@@ -52,7 +52,7 @@ namespace dbaui
 
         OConnectionLine& operator=( const OConnectionLine& rLine );
 
-        tools::Rectangle           GetBoundingRect();
+        tools::Rectangle           GetBoundingRect() const;
         bool                RecalcLine();
         void                Draw( OutputDevice* pOutDev );
         bool                CheckHit( const Point& rMousePos ) const;

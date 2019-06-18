@@ -231,7 +231,7 @@ public:
 
     void            FillList();
     void            Update( const css::awt::FontDescriptor* pFontDesc );
-    sal_uInt16      GetListCount() { return nFtCount; }
+    sal_uInt16      GetListCount() const { return nFtCount; }
     void            Clear() { FontNameBox::Clear(); nFtCount = 0; }
     void            Fill( const FontList* pList )
                         { FontNameBox::Fill( pList );
@@ -2957,7 +2957,7 @@ void SAL_CALL SvxStyleToolBoxControl::update()
     }
 }
 
-SfxStyleFamily SvxStyleToolBoxControl::GetActFamily()
+SfxStyleFamily SvxStyleToolBoxControl::GetActFamily() const
 {
     switch ( nActFamily-1 + SID_STYLE_FAMILY_START )
     {

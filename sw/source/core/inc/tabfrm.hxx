@@ -142,7 +142,7 @@ public:
     const SwTable *GetTable() const { return m_pTable; }
           SwTable *GetTable()       { return m_pTable; }
 
-    bool IsComplete()  { return m_bComplete; }
+    bool IsComplete() const { return m_bComplete; }
     void SetComplete() { m_bComplete = true; }
     void ResetComplete() { m_bComplete = false; }
 

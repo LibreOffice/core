@@ -791,7 +791,7 @@ public:
     void SetConfig (EditableColorConfig& rConfig) { pColorConfig = &rConfig; }
     void SetExtendedConfig (EditableExtendedColorConfig& rConfig) { pExtColorConfig = &rConfig; }
     void Update ();
-    long GetScrollPosition ()
+    long GetScrollPosition () const
     {
         return m_pVScroll->GetThumbPos();
     }

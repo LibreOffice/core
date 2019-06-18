@@ -617,7 +617,7 @@ void Window::UpdateMapMode()
  * @returns X position of the visible area as fraction (< 1) of the whole
  * working area.
  */
-double Window::GetVisibleX()
+double Window::GetVisibleX() const
 {
     return (static_cast<double>(maWinPos.X()) / maViewSize.Width());
 }
@@ -626,7 +626,7 @@ double Window::GetVisibleX()
  * @returns Y position of the visible area as fraction (< 1) of the whole
  * working area.
  */
-double Window::GetVisibleY()
+double Window::GetVisibleY() const
 {
     return (static_cast<double>(maWinPos.Y()) / maViewSize.Height());
 }
@@ -653,7 +653,7 @@ void Window::SetVisibleXY(double fX, double fY)
  * @returns width of the visible area in proportion to the width of the whole
  * working area.
  */
-double Window::GetVisibleWidth()
+double Window::GetVisibleWidth() const
 {
     Size aWinSize = PixelToLogic(GetOutputSizePixel());
     if ( aWinSize.Width() > maViewSize.Width() )
@@ -665,7 +665,7 @@ double Window::GetVisibleWidth()
  * @returns height of the visible area in proportion to the height of the whole
  * working area.
  */
-double Window::GetVisibleHeight()
+double Window::GetVisibleHeight() const
 {
     Size aWinSize = PixelToLogic(GetOutputSizePixel());
     if ( aWinSize.Height() > maViewSize.Height() )
@@ -690,7 +690,7 @@ Point Window::GetVisibleCenter()
  * @returns width of a scroll column in proportion to the width of the whole
  * working area.
  */
-double Window::GetScrlLineWidth()
+double Window::GetScrlLineWidth() const
 {
     return (GetVisibleWidth() * SCROLL_LINE_FACT);
 }
@@ -699,7 +699,7 @@ double Window::GetScrlLineWidth()
  * @returns height of a scroll column in proportion to the height of the whole
  * working area.
  */
-double Window::GetScrlLineHeight()
+double Window::GetScrlLineHeight() const
 {
     return (GetVisibleHeight() * SCROLL_LINE_FACT);
 }
@@ -708,7 +708,7 @@ double Window::GetScrlLineHeight()
  * @returns width of a scroll page in proportion to the width of the whole
  * working area.
  */
-double Window::GetScrlPageWidth()
+double Window::GetScrlPageWidth() const
 {
     return (GetVisibleWidth() * SCROLL_PAGE_FACT);
 }
@@ -717,7 +717,7 @@ double Window::GetScrlPageWidth()
  * @returns height of a scroll page in proportion to the height of the whole
  * working area.
  */
-double Window::GetScrlPageHeight()
+double Window::GetScrlPageHeight() const
 {
     return (GetVisibleHeight() * SCROLL_PAGE_FACT);
 }

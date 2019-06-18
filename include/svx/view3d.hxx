@@ -75,7 +75,7 @@ public:
 
     // Get/Set Event
     void SetMouseEvent(const MouseEvent& rNew) { aMouseEvent = rNew; }
-    const MouseEvent& GetMouseEvent() { return aMouseEvent; }
+    const MouseEvent& GetMouseEvent() const { return aMouseEvent; }
 
     // Override getting the model, as we need to supply a Scene together with individual 3D Objects.
     virtual std::unique_ptr<SdrModel> CreateMarkedObjModel() const override;

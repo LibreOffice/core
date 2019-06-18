@@ -60,7 +60,7 @@ public:
     virtual void Print( FILE* ) override;
 #endif
     bool Read(SvStream &rS) override;
-    bool IsMenuToolbar();
+    bool IsMenuToolbar() const;
     bool ImportCustomToolBar( ScCTBWrapper&, CustomToolBarImportHelper& );
     bool ImportMenuTB( ScCTBWrapper&, const css::uno::Reference< css::container::XIndexContainer >&, CustomToolBarImportHelper& );
     const OUString& GetName() { return tb.getName().getString(); }

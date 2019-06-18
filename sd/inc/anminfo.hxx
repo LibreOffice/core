@@ -56,7 +56,7 @@ public:
     SdrObject&                  mrObject;
 
     void           SetBookmark( const OUString& rBookmark );
-    OUString       GetBookmark();
+    OUString       GetBookmark() const;
 public:
                             SAL_DLLPRIVATE SdAnimationInfo(SdrObject& rObject);
                             SAL_DLLPRIVATE SdAnimationInfo(const SdAnimationInfo& rAnmInfo, SdrObject& rObject);

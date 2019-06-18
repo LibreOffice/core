@@ -761,8 +761,8 @@ public:
     /** Writes all COLINFO records of this buffer. */
     virtual void        Save( XclExpStream& rStrm ) override;
     virtual void        SaveXml( XclExpXmlStream& rStrm ) override;
-    sal_uInt8           GetHighestOutlineLevel() { return mnHighestOutlineLevel; }
-    double              GetDefColWidth() { return maDefcolwidth.GetValue(); }
+    sal_uInt8           GetHighestOutlineLevel() const { return mnHighestOutlineLevel; }
+    double              GetDefColWidth() const { return maDefcolwidth.GetValue(); }
 
 private:
     typedef XclExpRecordList< XclExpColinfo >   XclExpColinfoList;
@@ -923,7 +923,7 @@ public:
     virtual void        SaveXml( XclExpXmlStream& rStrm ) override;
 
     XclExpDimensions&   GetDimensions() { return maDimensions; }
-    sal_uInt8           GetHighestOutlineLevel() { return mnHighestOutlineLevel; }
+    sal_uInt8           GetHighestOutlineLevel() const { return mnHighestOutlineLevel; }
 
 private:
     /** Returns access to the specified ROW record. Inserts preceding missing ROW records.

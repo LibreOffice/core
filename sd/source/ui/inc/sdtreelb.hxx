@@ -203,7 +203,7 @@ public:
                             const OUString& rListName);
     bool                    HasSelectedChildren( const OUString& rName );
     bool                    SelectEntry( const OUString& rName );
-    OUString                GetSelectedEntry();
+    OUString                GetSelectedEntry() const;
 
     //Mark Current Entry
     void                    SetSdNavigator(SdNavigatorWin* pNavigator);
@@ -434,7 +434,7 @@ public:
         SdrObject* pShape,
         const OUString& rsName,
         const bool bIsExcluded,
-        weld::TreeIter* pParentEntry);
+        const weld::TreeIter* pParentEntry);
 
     /** return selected entries
           nDepth == 0 -> pages
@@ -451,7 +451,7 @@ public:
         m_xTreeView->insert(nullptr, -1, &rName, nullptr, nullptr, nullptr, &rExpander, false, nullptr);
     }
 
-    void InsertEntry(weld::TreeIter* pParent, const OUString& rId, const OUString &rName, const OUString &rExpander, weld::TreeIter* pEntry = nullptr)
+    void InsertEntry(const weld::TreeIter* pParent, const OUString& rId, const OUString &rName, const OUString &rExpander, weld::TreeIter* pEntry = nullptr)
     {
         m_xTreeView->insert(pParent, -1, &rName, &rId, nullptr, nullptr, &rExpander, false, pEntry);
     }

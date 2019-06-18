@@ -71,7 +71,7 @@ class LwpFribFrame : public LwpFrib
 public:
     explicit LwpFribFrame( LwpPara* pPara) : LwpFrib(pPara){}
     void Read(LwpObjectStream* pObjStrm, sal_uInt16 len) override;
-    rtl::Reference<LwpObject> GetLayout();
+    rtl::Reference<LwpObject> GetLayout() const;
     void RegisterStyle(LwpFoundry* pFoundry) override;
     void SetParaDropcap(LwpPara* pPara);
     void XFConvert(XFContentContainer* pCont);

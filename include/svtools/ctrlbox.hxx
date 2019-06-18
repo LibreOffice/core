@@ -91,8 +91,8 @@ public:
     }
 
     /** Returns the minimum width in twips */
-    long   GetMinWidth( ) { return m_nMinWidth;}
-    SvxBorderLineStyle GetStyle( ) { return m_nStyle;}
+    long   GetMinWidth( ) const { return m_nMinWidth;}
+    SvxBorderLineStyle GetStyle( ) const { return m_nStyle;}
 };
 
 enum class SvxBorderLineStyle : sal_Int16;

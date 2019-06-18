@@ -2726,7 +2726,7 @@ long Ruler::GetMargin2() const
 }
 
 
-bool Ruler::GetTextRTL()
+bool Ruler::GetTextRTL() const
 {
     return mpData->bTextRTL;
 }

@@ -221,7 +221,7 @@ class DLLEXPORT HWPFile
         ColumnDef* GetColumnDef(int);
           int GetPageMasterNum(int page);
 
-          int getCurrentPage(){ return m_nCurrentPage;}
+        int getCurrentPage() const{ return m_nCurrentPage;}
         HWPInfo& GetHWPInfo(void) { return _hwpInfo; }
         HWPFont& GetHWPFont(void) { return _hwpFont; }
         HWPStyle& GetHWPStyle(void) { return _hwpStyle; }
@@ -238,16 +238,16 @@ class DLLEXPORT HWPFile
         ShowPageNum *getPageNumber(int);
           Table *getTable(int);
 
-        int getParaShapeCount(){ return pslist.size(); }
-        int getCharShapeCount(){ return cslist.size(); }
-        int getFBoxStyleCount(){ return fbslist.size(); }
-        int getDateFormatCount(){ return datecodes.size(); }
-        int getHeaderFooterCount(){ return headerfooters.size(); }
-        int getPageNumberCount(){ return pagenumbers.size(); }
-        int getTableCount(){ return tables.size(); }
-        int getColumnCount(){ return columnlist.size(); }
+        int getParaShapeCount() const{ return pslist.size(); }
+        int getCharShapeCount() const{ return cslist.size(); }
+        int getFBoxStyleCount() const{ return fbslist.size(); }
+        int getDateFormatCount() const{ return datecodes.size(); }
+        int getHeaderFooterCount() const{ return headerfooters.size(); }
+        int getPageNumberCount() const{ return pagenumbers.size(); }
+        int getTableCount() const{ return tables.size(); }
+        int getColumnCount() const{ return columnlist.size(); }
 
-          int getMaxSettedPage(){ return m_nMaxSettedPage; }
+          int getMaxSettedPage() const{ return m_nMaxSettedPage; }
           void setMaxSettedPage(){ m_nMaxSettedPage = m_nCurrentPage; }
 
         void push_hpara_type(unsigned char scflag) { element_import_stack.push_back(scflag); }

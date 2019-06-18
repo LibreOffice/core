@@ -142,13 +142,13 @@ void LwpIndexSection::Read()
     m_pObjStrm->SkipExtra();
 }
 
-bool LwpIndexSection::IsFormatRunin()
+bool LwpIndexSection::IsFormatRunin() const
 {
     return (m_nFlags & RUN_IN) != 0;
 
 }
 
-bool LwpIndexSection::IsFormatSeparator()
+bool LwpIndexSection::IsFormatSeparator() const
 {
     return (m_nFlags & SEPARATORS) != 0;
 

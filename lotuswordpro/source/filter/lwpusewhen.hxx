@@ -92,18 +92,18 @@ public:
 
     inline void Read(LwpObjectStream* pStrm);
 
-    inline bool IsUseOnAllPages();
-    inline bool IsUseOnAllEvenPages();
-    inline bool IsUseOnAllOddPages();
-    inline bool IsUseOnPage();
+    inline bool IsUseOnAllPages() const;
+    inline bool IsUseOnAllEvenPages() const;
+    inline bool IsUseOnAllOddPages() const;
+    inline bool IsUseOnPage() const;
 
-    inline bool IsStartOnThisPage();
-    inline bool IsStartOnNextPage();
-    inline bool IsStartOnNextEvenPage();
-    inline bool IsStartOnNextOddPage();
-    inline bool IsStartOnThisHF();
+    inline bool IsStartOnThisPage() const;
+    inline bool IsStartOnNextPage() const;
+    inline bool IsStartOnNextEvenPage() const;
+    inline bool IsStartOnNextOddPage() const;
+    inline bool IsStartOnThisHF() const;
 
-    inline sal_uInt16 GetUsePage();
+    inline sal_uInt16 GetUsePage() const;
 private:
     sal_uInt16  m_nFlags;
     sal_uInt16  m_nUsePage;
@@ -115,50 +115,50 @@ inline void LwpUseWhen::Read(LwpObjectStream* pStrm)
     m_nUsePage = pStrm->QuickReaduInt16();
     pStrm->SkipExtra();
 }
-inline bool LwpUseWhen::IsUseOnAllPages()
+inline bool LwpUseWhen::IsUseOnAllPages() const
 {
     return ((m_nFlags & STYLE_USEONALLPAGES) != 0);
 }
-inline bool LwpUseWhen::IsUseOnAllEvenPages()
+inline bool LwpUseWhen::IsUseOnAllEvenPages() const
 {
     return ((m_nFlags & STYLE_USEONALLEVENPAGES) != 0);
 }
-inline bool LwpUseWhen::IsUseOnAllOddPages()
+inline bool LwpUseWhen::IsUseOnAllOddPages() const
 {
     return ((m_nFlags & STYLE_USEONALLODDPAGES) != 0);
 }
 
-inline bool LwpUseWhen::IsUseOnPage()
+inline bool LwpUseWhen::IsUseOnPage() const
 {
     return ((m_nFlags & STYLE_USEONTHISPAGE) != 0);
 }
 
-inline bool LwpUseWhen::IsStartOnThisPage()
+inline bool LwpUseWhen::IsStartOnThisPage() const
 {
     return ((m_nFlags & STYLE_STARTONTHISPAGE) != 0);
 }
 
-inline bool LwpUseWhen::IsStartOnNextPage()
+inline bool LwpUseWhen::IsStartOnNextPage() const
 {
     return ((m_nFlags & STYLE_STARTONMASK) == 0);
 }
 
-inline bool LwpUseWhen::IsStartOnNextOddPage()
+inline bool LwpUseWhen::IsStartOnNextOddPage() const
 {
     return ((m_nFlags & STYLE_STARTONNEXTODD) != 0);
 }
 
-inline bool LwpUseWhen::IsStartOnNextEvenPage()
+inline bool LwpUseWhen::IsStartOnNextEvenPage() const
 {
     return ((m_nFlags & STYLE_STARTONNEXTEVEN) != 0);
 }
 
-inline bool LwpUseWhen::IsStartOnThisHF()
+inline bool LwpUseWhen::IsStartOnThisHF() const
 {
     return ((m_nFlags & STYLE_STARTONTHISHF) != 0);
 }
 
-inline sal_uInt16 LwpUseWhen::GetUsePage()
+inline sal_uInt16 LwpUseWhen::GetUsePage() const
 {
     return m_nUsePage;
 }

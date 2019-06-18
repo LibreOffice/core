@@ -46,10 +46,10 @@ private:
 
     DECL_LINK(SelectHdl, weld::TreeView&, void);
 
-    const FormulaToken* GetFunctionEntry(weld::TreeIter* pEntry);
+    const FormulaToken* GetFunctionEntry(const weld::TreeIter* pEntry);
 
     void            SetActiveFlag(bool bFlag);
-    bool            GetActiveFlag() { return bActiveFlag;}
+    bool            GetActiveFlag() const { return bActiveFlag;}
 
 public:
 
@@ -57,18 +57,18 @@ public:
     ~StructPage();
 
     void            ClearStruct();
-    bool InsertEntry(const OUString& rText, weld::TreeIter* pParent,
+    bool InsertEntry(const OUString& rText, const weld::TreeIter* pParent,
                      sal_uInt16 nFlag, int nPos,
                      const FormulaToken* pIFormulaToken,
                      weld::TreeIter& rRet);
 
-    OUString        GetEntryText(weld::TreeIter* pEntry) const;
+    OUString        GetEntryText(const weld::TreeIter* pEntry) const;
 
     void            SetSelectionHdl( const Link<StructPage&,void>& rLink ) { aSelLink = rLink; }
 
     weld::TreeView&  GetTlbStruct() const { return *m_xTlbStruct; }
 
-    bool            IsVisible() { return m_xContainer->get_visible(); }
+    bool            IsVisible() const { return m_xContainer->get_visible(); }
 };
 
 } // formula

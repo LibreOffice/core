@@ -48,7 +48,7 @@ public:
     virtual void SelectionHasChanged() override;
 
     void    SetEditMode(sal_uInt16 nMode);
-    sal_uInt16  GetEditMode() { return nEditMode; }
+    sal_uInt16  GetEditMode() const { return nEditMode; }
 
     /** is called when the current function should be aborted. <p>
         This is used when a function gets a KEY_ESCAPE but can also

@@ -554,7 +554,7 @@ void SwModule::GetFormatAuthorAttr( std::size_t nAuthor, SfxItemSet &rSet )
     lcl_FillAuthorAttr( nAuthor, rSet, m_pModuleConfig->GetFormatAuthorAttr() );
 }
 
-sal_uInt16 SwModule::GetRedlineMarkPos()
+sal_uInt16 SwModule::GetRedlineMarkPos() const
 {
     return m_pModuleConfig->GetMarkAlignMode();
 }
@@ -584,7 +584,7 @@ void SwModule::SetSplitVerticalByDefault(bool bHTML, bool value)
     m_pModuleConfig->SetSplitVerticalByDefault(bHTML, value);
 }
 
-const Color &SwModule::GetRedlineMarkColor()
+const Color &SwModule::GetRedlineMarkColor() const
 {
     return m_pModuleConfig->GetMarkAlignColor();
 }

@@ -67,7 +67,7 @@ public:
     SwSequenceOptionDialog(weld::Window *pParent, SwView &rV, const OUString& rSeqFieldType);
     void Apply();
 
-    bool IsApplyBorderAndShadow() { return m_xApplyBorderAndShadowCB->get_active(); }
+    bool IsApplyBorderAndShadow() const { return m_xApplyBorderAndShadowCB->get_active(); }
     void SetApplyBorderAndShadow( bool bSet )  { m_xApplyBorderAndShadowCB->set_active(bSet); }
 
     //#i61007# order of captions

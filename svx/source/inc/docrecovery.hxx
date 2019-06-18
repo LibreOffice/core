@@ -221,7 +221,7 @@ class RecoveryCore : public ::cppu::WeakImplHelper< css::frame::XStatusListener 
 
 
         /** @short  TODO */
-        const css::uno::Reference< css::uno::XComponentContext >& getComponentContext();
+        const css::uno::Reference< css::uno::XComponentContext >& getComponentContext() const;
 
 
         /** @short  TODO */
@@ -471,11 +471,11 @@ public:
     virtual ~BrokenRecoveryDialog() override;
 
     /** @short TODO */
-    bool isExecutionNeeded();
+    bool isExecutionNeeded() const;
 
 
     /** @short TODO */
-    const OUString& getSaveDirURL();
+    const OUString& getSaveDirURL() const;
 
 
 // helper

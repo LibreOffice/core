@@ -689,7 +689,7 @@ The following structure describes the permissions used in PDF security
      * this should enable the producer to give feedback about
      * any anomalies that might have occurred
      */
-    std::set< ErrorCode > const & GetErrors();
+    std::set< ErrorCode > const & GetErrors() const;
 
     // uses 128bit encryption
     static css::uno::Reference< css::beans::XMaterialHolder >

@@ -218,17 +218,17 @@ void CompressGraphicsDialog::UpdateResolutionLB()
     m_xResolutionLB->set_entry_text( OUString::number( static_cast<sal_Int32>(m_dResolution) ) );
 }
 
-double CompressGraphicsDialog::GetViewWidthInch()
+double CompressGraphicsDialog::GetViewWidthInch() const
 {
     return static_cast<double>(MetricField::ConvertValue(m_aViewSize100mm.Width(),  2, MapUnit::Map100thMM, FieldUnit::INCH)) / 100.0;
 }
 
-double CompressGraphicsDialog::GetViewHeightInch()
+double CompressGraphicsDialog::GetViewHeightInch() const
 {
     return static_cast<double>(MetricField::ConvertValue(m_aViewSize100mm.Height(),  2, MapUnit::Map100thMM, FieldUnit::INCH)) / 100.0;
 }
 
-BmpScaleFlag CompressGraphicsDialog::GetSelectedInterpolationType()
+BmpScaleFlag CompressGraphicsDialog::GetSelectedInterpolationType() const
 {
     OUString aSelectionText = m_xInterpolationCombo->get_active_text();
 
@@ -366,7 +366,7 @@ IMPL_LINK_NOARG( CompressGraphicsDialog, CalculateClickHdl, weld::Button&, void 
     }
 }
 
-tools::Rectangle CompressGraphicsDialog::GetScaledCropRectangle()
+tools::Rectangle CompressGraphicsDialog::GetScaledCropRectangle() const
 {
     if ( m_xReduceResolutionCB->get_active() )
     {

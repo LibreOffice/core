@@ -93,7 +93,7 @@ public:
     void CheckChild();
     void SelectChild( bool bSelect);
     void ChangePixelColorOrBG(bool bPixelColorOrBG){ m_bPixelColorOrBG = bPixelColorOrBG ;}
-    OUString GetName();
+    OUString GetName() const;
 
 private:
     virtual ~SvxPixelCtlAccessibleChild() override;

@@ -74,7 +74,7 @@ void LwpFribFrame::Read(LwpObjectStream* pObjStrm, sal_uInt16 /*len*/)
 *  @descr:  Get the layout object which the frib points to
 *
 */
-rtl::Reference<LwpObject> LwpFribFrame::GetLayout()
+rtl::Reference<LwpObject> LwpFribFrame::GetLayout() const
 {
     return m_objLayout.obj();
 }

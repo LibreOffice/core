@@ -38,7 +38,7 @@ using namespace com::sun::star;
 namespace {
 
 ScOrcusXMLTreeParam::EntryData& setUserDataToEntry(weld::TreeView& rControl,
-    weld::TreeIter& rEntry, ScOrcusXMLTreeParam::UserDataStoreType& rStore, ScOrcusXMLTreeParam::EntryType eType)
+    const weld::TreeIter& rEntry, ScOrcusXMLTreeParam::UserDataStoreType& rStore, ScOrcusXMLTreeParam::EntryType eType)
 {
     rStore.push_back(std::make_unique<ScOrcusXMLTreeParam::EntryData>(eType));
     rControl.set_id(rEntry, OUString::number(reinterpret_cast<sal_Int64>(rStore.back().get())));
@@ -69,7 +69,7 @@ OUString toString(const orcus::xml_structure_tree::entity_name& entity, const or
 void populateTree(
    weld::TreeView& rTreeCtrl, orcus::xml_structure_tree::walker& rWalker,
    const orcus::xml_structure_tree::entity_name& rElemName, bool bRepeat,
-   weld::TreeIter* pParent, ScOrcusXMLTreeParam& rParam)
+   const weld::TreeIter* pParent, ScOrcusXMLTreeParam& rParam)
 {
     OUString sEntry(toString(rElemName, rWalker));
     std::unique_ptr<weld::TreeIter> xEntry(rTreeCtrl.make_iterator());

@@ -163,7 +163,7 @@ bool SvLBoxButtonData::HasDefaultImages() const
     return pImpl->bDefaultImages;
 }
 
-bool SvLBoxButtonData::IsRadio() {
+bool SvLBoxButtonData::IsRadio() const {
     return pImpl->bShowRadioButton;
 }
 

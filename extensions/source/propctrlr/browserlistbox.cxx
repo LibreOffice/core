@@ -735,7 +735,7 @@ namespace pcr
     }
 
 
-    sal_Int32 OBrowserListBox::GetMinimumWidth()
+    sal_Int32 OBrowserListBox::GetMinimumWidth() const
     {
         return m_nTheNameSize + 2 * FRAME_OFFSET + (m_nRowHeight - 4) * 8;
     }

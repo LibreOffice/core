@@ -152,8 +152,8 @@ public:
     LwpColor* GetFillColor();
     std::unique_ptr<XFBGImage> GetFillPattern();
 
-    bool IsTransparent() { return (m_nID == BACK_TRANSPARENT); }
-    bool IsPatternFill() { return (m_nID > 2 && m_nID < 72); }
+    bool IsTransparent() const { return (m_nID == BACK_TRANSPARENT); }
+    bool IsPatternFill() const { return (m_nID > 2 && m_nID < 72); }
 
     friend class LwpBackgroundOverride;
 private:

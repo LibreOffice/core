@@ -51,7 +51,7 @@ ScViewFunctionSet::ScViewFunctionSet( ScViewData* pNewViewData ) :
     OSL_ENSURE(pViewData, "ViewData==0 at FunctionSet");
 }
 
-ScSplitPos ScViewFunctionSet::GetWhich()
+ScSplitPos ScViewFunctionSet::GetWhich() const
 {
     if (pEngine)
         return pEngine->GetWhich();

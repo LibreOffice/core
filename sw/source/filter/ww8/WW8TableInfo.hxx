@@ -101,11 +101,11 @@ public:
 
     const SwNode * getNode() const;
 
-    TableBoxVectorPtr getTableBoxesOfRow();
-    WidthsPtr getWidthsOfRow();
-    WidthsPtr getColumnWidthsBasedOnAllRows();
+    TableBoxVectorPtr getTableBoxesOfRow() const;
+    WidthsPtr getWidthsOfRow() const;
+    WidthsPtr getColumnWidthsBasedOnAllRows() const;
     GridColsPtr getGridColsOfRow(AttributeOutputBase & rBase, bool calculateColumnsFromAllRows = false);
-    RowSpansPtr getRowSpansOfRow();
+    RowSpansPtr getRowSpansOfRow() const;
 
 #ifdef DBG_UTIL
     std::string toString() const;

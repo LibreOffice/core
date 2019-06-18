@@ -47,7 +47,7 @@ public:
 
     virtual void DoubleClick(const MouseEvent& rMEvt);
 
-    bool    SetHelpText(SdrObject* pObj, const Point& rPos, const SdrViewEvent& rVEvt);
+    bool    SetHelpText(const SdrObject* pObj, const Point& rPos, const SdrViewEvent& rVEvt);
 
     void    SetPermanent(bool bSet) { bPermanent = bSet; }
 

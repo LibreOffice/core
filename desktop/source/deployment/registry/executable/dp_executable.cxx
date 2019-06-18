@@ -61,7 +61,7 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
             Reference<XCommandEnvironment> const & xCmdEnv ) override;
 
         bool getFileAttributes(sal_uInt64& out_Attributes);
-        bool isUrlTargetInExtension();
+        bool isUrlTargetInExtension() const;
 
     public:
         ExecutablePackageImpl(
@@ -260,7 +260,7 @@ void BackendImpl::ExecutablePackageImpl::processPackage_(
 //But we can check if we are within $UNO_USER_PACKAGES_CACHE etc.
 //Done for security reasons. For example an extension manifest could contain a path to
 //an executable outside the extension.
-bool BackendImpl::ExecutablePackageImpl::isUrlTargetInExtension()
+bool BackendImpl::ExecutablePackageImpl::isUrlTargetInExtension() const
 {
     bool bSuccess = false;
     OUString sExtensionDir;

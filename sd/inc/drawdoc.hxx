@@ -438,7 +438,7 @@ public:
             scope="css::document::PrinterIndependentLayout">DISABLED</const>
             when formatting depends on the current printer metrics.
     */
-    SAL_DLLPRIVATE sal_Int32 GetPrinterIndependentLayout() { return mnPrinterIndependentLayout;}
+    SAL_DLLPRIVATE sal_Int32 GetPrinterIndependentLayout() const { return mnPrinterIndependentLayout;}
 
     SAL_DLLPRIVATE void                SetOnlineSpell( bool bIn );
     SAL_DLLPRIVATE bool                GetOnlineSpell() const { return mbOnlineSpell; }
@@ -450,7 +450,7 @@ public:
     SAL_DLLPRIVATE void                InsertObject(SdrObject* pObj);
     SAL_DLLPRIVATE void                RemoveObject(SdrObject* pObj);
 
-    SAL_DLLPRIVATE sal_uLong           GetLinkCount();
+    SAL_DLLPRIVATE sal_uLong           GetLinkCount() const;
 
     SAL_DLLPRIVATE std::vector<std::unique_ptr<sd::FrameView>>& GetFrameViewList() { return maFrameViewList; }
     SdCustomShowList* GetCustomShowList(bool bCreate = false);
@@ -621,11 +621,11 @@ public:
 
     SAL_DLLPRIVATE sal_uInt16 GetAnnotationAuthorIndex( const OUString& rAuthor );
 
-    SAL_DLLPRIVATE bool IsEmbedFonts() { return mbEmbedFonts; }
-    SAL_DLLPRIVATE bool IsEmbedUsedFontsOnly() { return mbEmbedUsedFontsOnly; }
-    SAL_DLLPRIVATE bool IsEmbedFontScriptLatin() { return mbEmbedFontScriptLatin; }
-    SAL_DLLPRIVATE bool IsEmbedFontScriptAsian() { return mbEmbedFontScriptAsian; }
-    SAL_DLLPRIVATE bool IsEmbedFontScriptComplex() { return mbEmbedFontScriptComplex; }
+    SAL_DLLPRIVATE bool IsEmbedFonts() const { return mbEmbedFonts; }
+    SAL_DLLPRIVATE bool IsEmbedUsedFontsOnly() const { return mbEmbedUsedFontsOnly; }
+    SAL_DLLPRIVATE bool IsEmbedFontScriptLatin() const { return mbEmbedFontScriptLatin; }
+    SAL_DLLPRIVATE bool IsEmbedFontScriptAsian() const { return mbEmbedFontScriptAsian; }
+    SAL_DLLPRIVATE bool IsEmbedFontScriptComplex() const { return mbEmbedFontScriptComplex; }
 
     SAL_DLLPRIVATE void SetEmbedFonts(bool bUse) { mbEmbedFonts = bUse; }
     SAL_DLLPRIVATE void SetEmbedUsedFontsOnly(bool bUse) { mbEmbedUsedFontsOnly = bUse; }

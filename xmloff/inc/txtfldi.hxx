@@ -153,7 +153,7 @@ protected:
     /// get helper
     XMLTextImportHelper& GetImportHelper() { return rTextImportHelper; }
 
-    const OUString& GetServiceName() { return sServiceName; }
+    const OUString& GetServiceName() const { return sServiceName; }
     void SetServiceName(const OUString& sStr) { sServiceName = sStr; }
 
     OUString const & GetContent();

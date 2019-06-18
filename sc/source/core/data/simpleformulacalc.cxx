@@ -134,7 +134,7 @@ svl::SharedString ScSimpleFormulaCalculator::GetString()
     return svl::SharedString::getEmptyString();
 }
 
-bool ScSimpleFormulaCalculator::HasColRowName()
+bool ScSimpleFormulaCalculator::HasColRowName() const
 {
     return formula::FormulaTokenArrayPlainIterator(*mpCode).GetNextColRowName() != nullptr;
 }

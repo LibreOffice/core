@@ -657,7 +657,7 @@ awt::Point PresenterTextParagraph::GetRelativeLocation() const
         sal_Int32(mnYOrigin + mnVerticalOffset));
 }
 
-awt::Size PresenterTextParagraph::GetSize()
+awt::Size PresenterTextParagraph::GetSize() const
 {
     return awt::Size(
         sal_Int32(mnWidth),
@@ -725,7 +725,7 @@ void PresenterTextParagraph::AddLine (
     rCurrentLine.startPos = rCurrentLine.endPos;
 }
 
-double PresenterTextParagraph::GetTotalTextHeight()
+double PresenterTextParagraph::GetTotalTextHeight() const
 {
     return maLines.size() * mnLineHeight;
 }

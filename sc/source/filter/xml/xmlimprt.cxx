@@ -1866,7 +1866,7 @@ void ScXMLImport::UnlockSolarMutex()
     }
 }
 
-sal_Int32 ScXMLImport::GetByteOffset()
+sal_Int32 ScXMLImport::GetByteOffset() const
 {
     sal_Int32 nOffset = -1;
     uno::Reference<xml::sax::XLocator> xLocator = GetLocator();

@@ -468,7 +468,7 @@ void LwpRowLayout::SetCellSplit(sal_uInt16 nEffectRows)
 /**
  * @short   check if the row has merge cell
  */
-bool LwpRowLayout::GetMergeCellFlag()
+bool LwpRowLayout::GetMergeCellFlag() const
 {
     return !m_ConnCellList.empty();
 }

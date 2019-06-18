@@ -580,7 +580,7 @@ void Cell::notifyModified()
 // SdrTextShape proxy
 
 
-bool Cell::IsActiveCell()
+bool Cell::IsActiveCell() const
 {
     bool isActive = false;
     SdrTableObj& rTableObj = dynamic_cast< SdrTableObj& >( GetObject() );
@@ -590,7 +590,7 @@ bool Cell::IsActiveCell()
     return isActive;
 }
 
-bool Cell::IsTextEditActive()
+bool Cell::IsTextEditActive() const
 {
     bool isActive = false;
     SdrTableObj& rTableObj = dynamic_cast< SdrTableObj& >( GetObject() );
@@ -728,7 +728,7 @@ sal_Int32 Cell::calcPreferredWidth( const Size aSize )
     return GetTextLeftDistance() + GetTextRightDistance() + nPreferredWidth;
 }
 
-sal_Int32 Cell::getMinimumWidth()
+sal_Int32 Cell::getMinimumWidth() const
 {
     return GetTextLeftDistance() + GetTextRightDistance() + 100;
 }

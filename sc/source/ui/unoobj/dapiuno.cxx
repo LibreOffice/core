@@ -2191,7 +2191,7 @@ void ScDataPilotFieldObj::setUseCurrentPage( bool bUse )
     }
 }
 
-const DataPilotFieldAutoShowInfo* ScDataPilotFieldObj::getAutoShowInfo()
+const DataPilotFieldAutoShowInfo* ScDataPilotFieldObj::getAutoShowInfo() const
 {
     SolarMutexGuard aGuard;
     ScDPSaveDimension* pDim = GetDPDimension();
@@ -2209,7 +2209,7 @@ void ScDataPilotFieldObj::setAutoShowInfo( const DataPilotFieldAutoShowInfo* pIn
     }
 }
 
-const DataPilotFieldLayoutInfo* ScDataPilotFieldObj::getLayoutInfo()
+const DataPilotFieldLayoutInfo* ScDataPilotFieldObj::getLayoutInfo() const
 {
     SolarMutexGuard aGuard;
     ScDPSaveDimension* pDim = GetDPDimension();
@@ -2227,7 +2227,7 @@ void ScDataPilotFieldObj::setLayoutInfo( const DataPilotFieldLayoutInfo* pInfo )
     }
 }
 
-const DataPilotFieldReference* ScDataPilotFieldObj::getReference()
+const DataPilotFieldReference* ScDataPilotFieldObj::getReference() const
 {
     SolarMutexGuard aGuard;
     ScDPSaveDimension* pDim = GetDPDimension();
@@ -2245,7 +2245,7 @@ void ScDataPilotFieldObj::setReference( const DataPilotFieldReference* pInfo )
     }
 }
 
-const DataPilotFieldSortInfo* ScDataPilotFieldObj::getSortInfo()
+const DataPilotFieldSortInfo* ScDataPilotFieldObj::getSortInfo() const
 {
     SolarMutexGuard aGuard;
     ScDPSaveDimension* pDim = GetDPDimension();
@@ -2299,7 +2299,7 @@ void ScDataPilotFieldObj::setRepeatItemLabels( bool bShow )
     }
 }
 
-bool ScDataPilotFieldObj::hasGroupInfo()
+bool ScDataPilotFieldObj::hasGroupInfo() const
 {
     SolarMutexGuard aGuard;
     ScDPObject* pDPObj = nullptr;

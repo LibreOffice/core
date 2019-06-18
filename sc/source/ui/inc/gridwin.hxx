@@ -310,7 +310,7 @@ public:
 
     virtual void    KeyInput(const KeyEvent& rKEvt) override;
     // #i70788# flush and get overlay
-    rtl::Reference<sdr::overlay::OverlayManager> getOverlayManager();
+    rtl::Reference<sdr::overlay::OverlayManager> getOverlayManager() const;
     void flushOverlayManager();
 
     virtual void    Command( const CommandEvent& rCEvt ) override;

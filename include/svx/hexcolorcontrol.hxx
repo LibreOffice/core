@@ -47,7 +47,7 @@ public:
     void connect_changed(const Link<weld::Entry&, void>& rLink) { m_aModifyHdl = rLink; }
 
     void SetColor( ::Color nColor );
-    ::Color GetColor();
+    ::Color GetColor() const;
 };
 
 }

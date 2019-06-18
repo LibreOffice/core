@@ -485,7 +485,7 @@ typedef bool (SwWrtShell:: *FNSimpleMove)();
     virtual void SetShowHeaderFooterSeparator( FrameControlType eControl, bool bShow ) override;
 
     /// Inserts a new annotation/comment at the current cursor position / selection.
-    void InsertPostIt(SwFieldMgr& rFieldMgr, SfxRequest& rReq);
+    void InsertPostIt(SwFieldMgr& rFieldMgr, const SfxRequest& rReq);
 
 private:
 

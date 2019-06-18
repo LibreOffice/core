@@ -424,7 +424,7 @@ private:
     formula::StackVar GetStackType();
     // peek StackType of Parameter, Parameter 1 == TOS, 2 == TOS-1, ...
     formula::StackVar GetStackType( sal_uInt8 nParam );
-    sal_uInt8 GetByte() { return cPar; }
+    sal_uInt8 GetByte() const { return cPar; }
     // reverse order of stack
     void ReverseStack( sal_uInt8 nParamCount );
     // generates a position-dependent SingleRef out of a DoubleRef
@@ -432,7 +432,7 @@ private:
     double GetDoubleFromMatrix(const ScMatrixRef& pMat);
     double GetDouble();
     double GetDoubleWithDefault(double nDefault);
-    bool IsMissing();
+    bool IsMissing() const;
     sal_Int32 double_to_int32(double fVal);
     /** if GetDouble() not within int32 limits sets nGlobalError and returns SAL_MAX_INT32 */
     sal_Int32 GetInt32();

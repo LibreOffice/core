@@ -108,7 +108,7 @@ public:
 
     virtual short Execute() override;
     void UpdateScanArea( bool );
-    bool getDoScan() { return doScan;}
+    bool getDoScan() const { return doScan;}
 };
 
 

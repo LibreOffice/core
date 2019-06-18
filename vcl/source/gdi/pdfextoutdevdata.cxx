@@ -755,7 +755,7 @@ bool PDFExtOutDevData::SetCurrentStructureElement( sal_Int32 nStructId )
     }
     return bSuccess;
 }
-sal_Int32 PDFExtOutDevData::GetCurrentStructureElement()
+sal_Int32 PDFExtOutDevData::GetCurrentStructureElement() const
 {
     return mpGlobalSyncData->mCurrentStructElement;
 }

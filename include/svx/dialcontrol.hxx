@@ -177,7 +177,7 @@ public:
     void                SaveValue();
 
     /** Compare value with the saved value */
-    bool                IsValueModified();
+    bool                IsValueModified() const;
 
     const OUString&     GetText() const { return mpImpl->maText; }
     void                SetText(const OUString& rText) { mpImpl->maText = rText; }

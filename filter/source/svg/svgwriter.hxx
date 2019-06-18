@@ -265,7 +265,7 @@ class SVGTextWriter final
     bool nextParagraph();
     bool nextTextPortion();
 
-    bool isTextShapeStarted() { return mbIsTextShapeStarted; }
+    bool isTextShapeStarted() const { return mbIsTextShapeStarted; }
     void startTextShape();
     void endTextShape();
     void startTextParagraph();

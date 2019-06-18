@@ -719,7 +719,7 @@ rtl::Reference<FuPoor> SlideSorterController::CreateSelectionFunction (SfxReques
     return xFunc;
 }
 
-::rtl::Reference<SelectionFunction> SlideSorterController::GetCurrentSelectionFunction()
+::rtl::Reference<SelectionFunction> SlideSorterController::GetCurrentSelectionFunction() const
 {
     rtl::Reference<FuPoor> pFunction (mrSlideSorter.GetViewShell()->GetCurrentFunction());
     return ::rtl::Reference<SelectionFunction>(dynamic_cast<SelectionFunction*>(pFunction.get()));

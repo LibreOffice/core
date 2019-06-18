@@ -24,7 +24,7 @@ public:
     virtual css::uno::Reference< css::uno::XInterface > init() = 0;
 
     void setCellRange(css::table::CellRangeAddress aCellRange) { m_aCellRange = aCellRange; }
-    const css::table::CellRangeAddress & getCellRange() { return m_aCellRange; }
+    const css::table::CellRangeAddress & getCellRange() const { return m_aCellRange; }
     void testGetReferredCells();
 
 protected:

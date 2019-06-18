@@ -78,7 +78,7 @@ SlidePersist::~SlidePersist()
 {
 }
 
-sal_Int16 SlidePersist::getLayoutFromValueToken()
+sal_Int16 SlidePersist::getLayoutFromValueToken() const
 {
     sal_Int16 nLayout = 20;     // 20 == blanc (so many magic numbers :-( the description at com.sun.star.presentation.DrawPage.Layout does not help)
     switch( mnLayoutValueToken )

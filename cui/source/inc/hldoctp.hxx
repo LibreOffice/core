@@ -60,7 +60,7 @@ private:
                              SvxLinkInsertMode& eMode ) override;
     virtual bool   ShouldOpenMarkWnd () override {return mbMarkWndOpen;}
     virtual void   SetMarkWndShouldOpen (bool bOpen) override {mbMarkWndOpen=bOpen;}
-    OUString GetCurrentURL    ();
+    OUString GetCurrentURL() const;
 
 public:
     SvxHyperlinkDocTp ( vcl::Window *pParent, IconChoiceDialog* pDlg, const SfxItemSet* pItemSet);

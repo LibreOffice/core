@@ -88,7 +88,7 @@ public:
         m_Hints.push_back(std::move(pHint));
     }
 
-    std::vector<std::unique_ptr<XMLHint_Impl>> const& GetHints()
+    std::vector<std::unique_ptr<XMLHint_Impl>> const& GetHints() const
     {
         return m_Hints;
     }
@@ -268,7 +268,7 @@ public:
         SvXMLImport& rImport,
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
-        XMLHints_Impl& rHints,
+        const XMLHints_Impl& rHints,
         const Reference<xml::sax::XAttributeList> & xAttrList);
 };
 
@@ -277,7 +277,7 @@ XMLEndReferenceContext_Impl::XMLEndReferenceContext_Impl(
     SvXMLImport& rImport,
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
-    XMLHints_Impl& rHints,
+    const XMLHints_Impl& rHints,
     const Reference<xml::sax::XAttributeList> & xAttrList) :
         SvXMLImportContext(rImport, nPrefix, rLocalName)
 {

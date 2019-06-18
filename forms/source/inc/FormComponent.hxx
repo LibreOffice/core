@@ -248,7 +248,7 @@ protected:
     virtual css::uno::Sequence< css::uno::Type>   _getTypes();
         // overwrite this and call the base class if you have additional types
 
-    css::uno::Sequence< OUString > getAggregateServiceNames();
+    css::uno::Sequence< OUString > getAggregateServiceNames() const;
 
 private:
     void    impl_resetStateGuard_nothrow();
@@ -375,7 +375,7 @@ protected:
     void    doSetDelegator();
     void    doResetDelegator();
 
-    css::uno::Sequence< OUString > getAggregateServiceNames();
+    css::uno::Sequence< OUString > getAggregateServiceNames() const;
 
 public:
     DECLARE_UNO3_AGG_DEFAULTS(OControl, OComponentHelper)

@@ -106,7 +106,7 @@ private:
     bool canAddRemove();
 
 public:
-    DigitalSignaturesDialog(weld::Window* pParent, css::uno::Reference<
+    DigitalSignaturesDialog(weld::Window* pParent, const css::uno::Reference<
         css::uno::XComponentContext >& rxCtx, DocumentSignatureMode eMode,
         bool bReadOnly, const OUString& sODFVersion, bool bHasDocumentSignature);
     virtual ~DigitalSignaturesDialog() override;

@@ -1059,7 +1059,7 @@ void Millimeter::setInPoints(double points)
     m_nMillimeter = points * factor / 100.0;
 }
 
-double Millimeter::getInHundredthsOfOneMillimeter()
+double Millimeter::getInHundredthsOfOneMillimeter() const
 {
     return m_nMillimeter * 100;
 }

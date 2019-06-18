@@ -96,7 +96,7 @@ public:
         return m_sLocale;
     }
     /// If createControlShape() was ever called.
-    bool hasElements()
+    bool hasElements() const
     {
         return m_bHasElements;
     }
@@ -106,7 +106,7 @@ public:
         m_bOutsideAParagraph = bOutsideAParagraph;
     }
 
-    bool isOutsideAParagraph()
+    bool isOutsideAParagraph() const
     {
         return m_bOutsideAParagraph;
     }
@@ -118,9 +118,9 @@ public:
 
     void appendToInteropGrabBag(const css::beans::PropertyValue& rValue);
     css::uno::Sequence<css::beans::PropertyValue> getInteropGrabBagAndClear();
-    bool isInteropGrabBagEmpty();
+    bool isInteropGrabBagEmpty() const;
     bool containedInInteropGrabBag(const OUString& rValueName);
-    sal_Int32 getInteropGrabBagSize();
+    sal_Int32 getInteropGrabBagSize() const;
 };
 
 } // namespace dmapper

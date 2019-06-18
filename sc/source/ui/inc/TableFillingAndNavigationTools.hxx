@@ -100,7 +100,7 @@ public:
     DataCellIterator(const ScRange& aInputRange, bool aByColumn);
     ~DataCellIterator();
 
-    bool hasNext();
+    bool hasNext() const;
     ScAddress get();
     void next();
     ScAddress getRelative(int aDelta);

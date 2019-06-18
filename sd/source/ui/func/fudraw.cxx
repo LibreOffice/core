@@ -656,7 +656,7 @@ bool FuDraw::RequestHelp(const HelpEvent& rHEvt)
     return bReturn;
 }
 
-bool FuDraw::SetHelpText(SdrObject* pObj, const Point& rPosPixel, const SdrViewEvent& rVEvt)
+bool FuDraw::SetHelpText(const SdrObject* pObj, const Point& rPosPixel, const SdrViewEvent& rVEvt)
 {
     bool bSet = false;
     OUString aHelpText;

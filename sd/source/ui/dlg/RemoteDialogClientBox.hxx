@@ -105,7 +105,7 @@ public:
     bool EventNotify( NotifyEvent& rNEvt ) override;
 
     TClientBoxEntry const & GetEntryData( long nPos ) { return m_vEntries[ nPos ]; }
-    long GetActiveEntryIndex();
+    long GetActiveEntryIndex() const;
     ::tools::Rectangle GetEntryRect( const long nPos ) const;
     long PointToPos( const Point& rPos );
     void DoScroll( long nDelta );
@@ -115,7 +115,7 @@ public:
     void addEntry(const std::shared_ptr<ClientInfo>& pClientInfo);
     void clearEntries();
 
-    OUString getPin();
+    OUString getPin() const;
     void populateEntries();
 };
 

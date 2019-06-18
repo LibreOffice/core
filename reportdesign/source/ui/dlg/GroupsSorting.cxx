@@ -121,7 +121,7 @@ public:
 
     void        fillColumns(const uno::Reference< container::XNameAccess>& _xColumns);
     void        lateInit();
-    bool    IsDeleteAllowed( );
+    bool    IsDeleteAllowed( ) const;
     void        DeleteRows();
 
     sal_Int32   getGroupPosition(sal_Int32 _nRow) const { return _nRow != BROWSER_ENDOFSELECTION ? m_aGroupPositions[_nRow] : sal_Int32(NO_GROUP); }
@@ -658,7 +658,7 @@ void OFieldExpressionControl::elementRemoved(const container::ContainerEvent& ev
     }
 }
 
-bool OFieldExpressionControl::IsDeleteAllowed( )
+bool OFieldExpressionControl::IsDeleteAllowed( ) const
 {
     return !m_pParent->isReadOnly() && GetSelectRowCount() > 0;
 }

@@ -66,7 +66,7 @@ void HexColorControl::SetColor(Color nColor)
     m_xEntry->set_text(sColor);
 }
 
-Color HexColorControl::GetColor()
+Color HexColorControl::GetColor() const
 {
     sal_Int32 nColor = -1;
 

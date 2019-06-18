@@ -61,7 +61,7 @@ public:
     // check from outside if we are inside a callback for ending text edit. This
     // is needed to detect inside end text edit if it is a regular one or triggered
     // by a last undo during text edit
-    bool isEndTextEditTriggeredFromUndo() { return mbEndTextEditTriggeredFromUndo; }
+    bool isEndTextEditTriggeredFromUndo() const { return mbEndTextEditTriggeredFromUndo; }
     void SetDocShell(SfxObjectShell* pDocShell);
 };
 

@@ -1118,7 +1118,7 @@ void VbaExport::exportVBA(SotStorage* pRootStorage)
     pRootStorage->Commit();
 }
 
-css::uno::Reference<css::script::XLibraryContainer> VbaExport::getLibraryContainer()
+css::uno::Reference<css::script::XLibraryContainer> VbaExport::getLibraryContainer() const
 {
     oox::PropertySet aDocProp(mxModel);
     css::uno::Reference<css::script::XLibraryContainer> xLibContainer(aDocProp.getAnyProperty(oox::PROP_BasicLibraries), css::uno::UNO_QUERY);
@@ -1126,7 +1126,7 @@ css::uno::Reference<css::script::XLibraryContainer> VbaExport::getLibraryContain
     return xLibContainer;
 }
 
-css::uno::Reference<css::container::XNameContainer> VbaExport::getBasicLibrary()
+css::uno::Reference<css::container::XNameContainer> VbaExport::getBasicLibrary() const
 {
     css::uno::Reference<css::container::XNameContainer> xLibrary;
     try
@@ -1157,7 +1157,7 @@ bool VbaExport::containsVBAProject()
     return bVBACompatibilty;
 }
 
-OUString VbaExport::getProjectName()
+OUString VbaExport::getProjectName() const
 {
     css::uno::Reference<css::script::vba::XVBACompatibility> xVbaCompatibility(getLibraryContainer(), css::uno::UNO_QUERY);
     if (xVbaCompatibility.is())

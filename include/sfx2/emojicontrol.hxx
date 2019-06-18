@@ -37,7 +37,7 @@ private:
     void ConvertLabelToUnicode(sal_uInt16 nPageId);
 
     /// Return filter according to the currently selected tab page.
-    FILTER_CATEGORY getCurrentFilter();
+    FILTER_CATEGORY getCurrentFilter() const;
 
     DECL_LINK(ActivatePageHdl, TabControl*, void);
     DECL_STATIC_LINK(SfxEmojiControl, InsertHdl, ThumbnailViewItem*, void);

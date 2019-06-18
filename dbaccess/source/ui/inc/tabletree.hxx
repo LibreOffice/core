@@ -197,9 +197,9 @@ public:
     /** determine if the given entry is 'wildcard checked'
         @see checkWildcard
     */
-    bool            isWildcardChecked(weld::TreeIter& rEntry);
+    bool            isWildcardChecked(const weld::TreeIter& rEntry);
 
-    std::unique_ptr<weld::TreeIter> GetEntryPosByName(const OUString& aName, weld::TreeIter* pStart = nullptr, const IEntryFilter* _pFilter = nullptr) const;
+    std::unique_ptr<weld::TreeIter> GetEntryPosByName(const OUString& aName, const weld::TreeIter* pStart = nullptr, const IEntryFilter* _pFilter = nullptr) const;
 
     void            CheckButtons();     // make the button states consistent (bottom-up)
 

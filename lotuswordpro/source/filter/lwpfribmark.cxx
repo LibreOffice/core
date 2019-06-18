@@ -361,7 +361,7 @@ void LwpFribField::RegisterStyle(LwpFoundry* pFoundry)
     }
 }
 
-void LwpFribField::RegisterTimeField(LwpFieldMark* pFieldMark)
+void LwpFribField::RegisterTimeField(const LwpFieldMark* pFieldMark)
 {
     OUString sFormula = pFieldMark->GetFormula();//now bookmark maybe not all register to bookmarkmgr,
     if (sFormula == "TotalEditingTime")//so check field type now is not correct.
@@ -1228,7 +1228,7 @@ void LwpFribField::ConvertDocFieldStart(XFContentContainer* pXFPara,LwpFieldMark
     }
 }
 
-void LwpFribField::ConvertDocFieldEnd(XFContentContainer* pXFPara,LwpFieldMark* pFieldMark)
+void LwpFribField::ConvertDocFieldEnd(XFContentContainer* pXFPara, const LwpFieldMark* pFieldMark)
 {
     XFContent* pContent = nullptr;
     switch(m_nDocPowerType)
@@ -1315,7 +1315,7 @@ void LwpFribField::ConvertDateTimeStart(XFContentContainer* pXFPara,LwpFieldMark
 
 }
 
-void LwpFribField::ConvertDateTimeEnd(XFContentContainer* pXFPara,LwpFieldMark* pFieldMark)
+void LwpFribField::ConvertDateTimeEnd(XFContentContainer* pXFPara, const LwpFieldMark* pFieldMark)
 {
     XFContent* pContent = nullptr;
     switch(m_nDateTimeType)
@@ -1372,7 +1372,7 @@ void LwpFribField::ConvertCrossRefStart(XFContentContainer* pXFPara,LwpFieldMark
         pXFPara->Add(pRef);
 }
 
-void LwpFribField::ConvertCrossRefEnd(XFContentContainer* pXFPara,LwpFieldMark* pFieldMark)
+void LwpFribField::ConvertCrossRefEnd(XFContentContainer* pXFPara, const LwpFieldMark* pFieldMark)
 {
     XFCrossRefEnd* pRef = new XFCrossRefEnd;
     if (pFieldMark->GetStyleFlag())

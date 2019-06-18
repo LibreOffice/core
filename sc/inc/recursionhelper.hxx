@@ -70,7 +70,7 @@ public:
     sal_uInt16  GetRecursionCount() const       { return nRecursionCount; }
     void    IncRecursionCount()             { ++nRecursionCount; }
     void    DecRecursionCount()             { --nRecursionCount; }
-    sal_uInt16 GetDepComputeLevel()         { return nDependencyComputationLevel; }
+    sal_uInt16 GetDepComputeLevel() const   { return nDependencyComputationLevel; }
     void    IncDepComputeLevel()            { ++nDependencyComputationLevel; }
     void    DecDepComputeLevel()            { --nDependencyComputationLevel; }
     /// A pure recursion return, no iteration.
@@ -92,7 +92,7 @@ public:
     void IncIteration();
     void EndIteration();
 
-    const ScFormulaRecursionList::iterator& GetLastIterationStart() { return aLastIterationStart; }
+    const ScFormulaRecursionList::iterator& GetLastIterationStart() const { return aLastIterationStart; }
     ScFormulaRecursionList::iterator GetIterationStart();
     ScFormulaRecursionList::iterator GetIterationEnd();
     /** Any return, recursion or iteration, iteration is always coupled with

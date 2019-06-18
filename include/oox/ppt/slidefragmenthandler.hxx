@@ -44,7 +44,7 @@ public:
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs ) override;
     virtual void onCharacters( const OUString& rChars ) override;
 
-    const ::std::vector< OUString>& getCharVector() { return maCharVector; }
+    const ::std::vector< OUString>& getCharVector() const { return maCharVector; }
 
 protected:
     SlidePersistPtr     mpSlidePersistPtr;

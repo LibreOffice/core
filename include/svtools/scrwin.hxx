@@ -56,7 +56,7 @@ public:
     MapMode GetMapMode() const;
 
     void            SetTotalSize( const Size& rNewSize );
-    Size            GetTotalSize() { return PixelToLogic( aTotPixSz ); }
+    Size            GetTotalSize() const { return PixelToLogic( aTotPixSz ); }
 
     using Window::Scroll;
     virtual void    Scroll( long nDeltaX, long nDeltaY, ScrollFlags nFlags = ScrollFlags::NONE ) override;

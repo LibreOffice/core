@@ -262,7 +262,7 @@ void SdOpenSoundFileDialog::SetPath( const OUString& rPath )
 }
 
 // WIP, please don't remove, dear Clang plugins
-bool SdOpenSoundFileDialog::IsInsertAsLinkSelected()
+bool SdOpenSoundFileDialog::IsInsertAsLinkSelected() const
 {
     bool bInsertAsLinkSelected = false;
     css::uno::Reference<css::ui::dialogs::XFilePicker3> const xFilePicker(mpImpl->GetFilePicker());

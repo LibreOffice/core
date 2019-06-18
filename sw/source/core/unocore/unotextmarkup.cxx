@@ -81,7 +81,7 @@ void SwXTextMarkup::ClearTextNode()
     m_pImpl->EndListeningAll();
 }
 
-const ModelToViewHelper& SwXTextMarkup::GetConversionMap()
+const ModelToViewHelper& SwXTextMarkup::GetConversionMap() const
 {
     return m_pImpl->m_ConversionMap;
 }

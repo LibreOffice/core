@@ -462,7 +462,7 @@ public:
 
     bool isDataFromSpreadsheet();
 
-    bool isDataFromPivotTable();
+    bool isDataFromPivotTable() const;
 
     void removeDataProviders();
 

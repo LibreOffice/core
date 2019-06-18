@@ -156,7 +156,7 @@ namespace connectivity
             bool IsRoot() const;
             bool IsLeaf() const;
             bool IsModified() const;
-            bool HasParent();
+            bool HasParent() const;
 
             bool IsFull() const;
 
@@ -164,7 +164,7 @@ namespace connectivity
             ONDXPagePtr& GetChild(ODbaseIndex const * pIndex = nullptr);
 
             // Parent does not need to be reloaded
-            const ONDXPagePtr& GetParent();
+            const ONDXPagePtr& GetParent() const;
             ODbaseIndex& GetIndex() {return rIndex;}
             const ODbaseIndex& GetIndex() const {return rIndex;}
 
@@ -212,8 +212,8 @@ namespace connectivity
         inline bool ONDXPage::IsRoot() const {return !aParent.Is();}
         inline bool ONDXPage::IsLeaf() const {return !aChild.HasPage();}
         inline bool ONDXPage::IsModified() const {return bModified;}
-        inline bool ONDXPage::HasParent() {return aParent.Is();}
-        inline const ONDXPagePtr& ONDXPage::GetParent() {return aParent;}
+        inline bool ONDXPage::HasParent() const {return aParent.Is();}
+        inline const ONDXPagePtr& ONDXPage::GetParent() const {return aParent;}
 
         inline void ONDXPage::SetParent(ONDXPagePtr aPa = ONDXPagePtr())
         {

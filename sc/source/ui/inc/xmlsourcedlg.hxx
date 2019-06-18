@@ -93,9 +93,9 @@ private:
      * not checked; its parent is the first one to be checked, then all its
      * parents get checked all the way to the root.
      */
-    bool IsParentDirty(weld::TreeIter* pEntry) const;
+    bool IsParentDirty(const weld::TreeIter* pEntry) const;
 
-    bool IsChildrenDirty(weld::TreeIter* pEntry) const;
+    bool IsChildrenDirty(const weld::TreeIter* pEntry) const;
 
     void OkPressed();
     void CancelPressed();

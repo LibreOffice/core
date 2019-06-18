@@ -70,7 +70,7 @@ public:
     }
 
     /// @throws uno::RuntimeException
-    uno::Reference<container::XIndexAccess> getRowColContainer()
+    uno::Reference<container::XIndexAccess> getRowColContainer() const
     {
         uno::Reference< table::XColumnRowRange > xColumnRowRange( mxSheetPageBreak, uno::UNO_QUERY_THROW );
         uno::Reference<container::XIndexAccess> xIndexAccess;

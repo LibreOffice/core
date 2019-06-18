@@ -211,7 +211,7 @@ namespace accessibility
 
         css::uno::Reference< css::accessibility::XAccessible > implGetParentAccessible( ) const;
         SvTreeListEntry* GetRealChild(sal_Int32 nIndex);
-        sal_Int32 GetRoleType();
+        sal_Int32 GetRoleType() const;
     };
 
 

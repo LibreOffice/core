@@ -39,7 +39,7 @@ public:
     void readFromResources( TitleDialogData& rOutput );
 
     void connect_changed( const Link<weld::Entry&,void>& rLink );
-    bool get_value_changed_from_saved();
+    bool get_value_changed_from_saved() const;
     void save_value();
 
 private:

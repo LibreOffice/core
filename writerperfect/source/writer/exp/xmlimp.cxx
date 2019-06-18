@@ -376,9 +376,12 @@ XMLImport::XMLImport(const uno::Reference<uno::XComponentContext>& xContext,
     mxUriReferenceFactory = uri::UriReferenceFactory::create(mxContext);
 }
 
-const librevenge::RVNGPropertyListVector& XMLImport::GetCoverImages() { return maCoverImages; }
+const librevenge::RVNGPropertyListVector& XMLImport::GetCoverImages() const
+{
+    return maCoverImages;
+}
 
-const librevenge::RVNGPropertyList& XMLImport::GetMetaData() { return maMetaData; }
+const librevenge::RVNGPropertyList& XMLImport::GetMetaData() const { return maMetaData; }
 
 namespace
 {

@@ -566,7 +566,7 @@ void SlideSorterView::RequestRepaint (const vcl::Region& rRepaintRegion)
     }
 }
 
-::tools::Rectangle SlideSorterView::GetModelArea()
+::tools::Rectangle SlideSorterView::GetModelArea() const
 {
     return mpLayouter->GetTotalBoundingBox();
 }

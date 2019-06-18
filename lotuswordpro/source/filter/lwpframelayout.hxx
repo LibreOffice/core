@@ -189,7 +189,7 @@ public:
     virtual LWP_LAYOUT_TYPE GetLayoutType () override { return LWP_DROPCAP_LAYOUT;}
     virtual void Parse(IXFStream* pOutputStream) override;
     virtual void XFConvert(XFContentContainer* pCont) override;
-    sal_uInt16 GetLines(){return m_nLines;}
+    sal_uInt16 GetLines() const {return m_nLines;}
     void SetChars(sal_uInt32 nChars){ m_nChars += nChars;}
     sal_uInt32 GetChars() const {return m_nChars;}
     void RegisterStyle(LwpFoundry* pFoundry);

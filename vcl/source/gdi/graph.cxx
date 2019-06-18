@@ -505,7 +505,7 @@ void Graphic::SetDummyContext( bool value )
     mxImpGraphic->ImplSetDummyContext( value );
 }
 
-bool Graphic::IsDummyContext()
+bool Graphic::IsDummyContext() const
 {
     return mxImpGraphic->ImplIsDummyContext();
 }

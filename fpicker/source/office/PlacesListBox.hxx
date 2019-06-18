@@ -56,9 +56,9 @@ class PlacesListBox : public Control
         void AppendPlace( const PlacePtr& pPlace );
         void RemovePlace( sal_uInt16 nPos );
         void RemoveSelectedPlace();
-        sal_Int32 GetNbEditablePlaces() { return mnNbEditables;}
+        sal_Int32 GetNbEditablePlaces() const { return mnNbEditables;}
         bool IsUpdated();
-        const std::vector<PlacePtr>& GetPlaces() { return maPlaces;}
+        const std::vector<PlacePtr>& GetPlaces() const { return maPlaces;}
 
         void SetAddHdl( const Link<Button*,void>& rHdl );
         void SetDelHdl( const Link<Button*,void>& rHdl );

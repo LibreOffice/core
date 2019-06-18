@@ -73,7 +73,7 @@ namespace sdr
             virtual void Invoke() override;
 
             // get time
-            SAL_DLLPRIVATE sal_uInt32 GetTime() {  return mnTime; }
+            SAL_DLLPRIVATE sal_uInt32 GetTime() const {  return mnTime; }
 
             // #i38135#
             SAL_DLLPRIVATE void SetTime(sal_uInt32 nTime);

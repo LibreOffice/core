@@ -471,7 +471,7 @@ const cairo_font_options_t* GtkInstance::GetCairoFontOptions()
     return pCairoFontOptions;
 }
 
-const cairo_font_options_t* GtkInstance::GetLastSeenCairoFontOptions()
+const cairo_font_options_t* GtkInstance::GetLastSeenCairoFontOptions() const
 {
     return m_pLastCairoFontOptions;
 }

@@ -410,7 +410,7 @@ void SwAnnotationWin::UpdateText(const OUString& aText)
     UpdateData();
 }
 
-SvxLanguageItem SwAnnotationWin::GetLanguage()
+SvxLanguageItem SwAnnotationWin::GetLanguage() const
 {
     // set initial language for outliner
     SvtScriptType nScriptType = SvtLanguageOptions::GetScriptTypeOfLanguage( mpField->GetLanguage() );
@@ -425,24 +425,24 @@ SvxLanguageItem SwAnnotationWin::GetLanguage()
     return SvxLanguageItem(mpField->GetLanguage(),nLangWhichId);
 }
 
-bool SwAnnotationWin::IsProtected()
+bool SwAnnotationWin::IsProtected() const
 {
     return mbReadonly ||
            GetLayoutStatus() == SwPostItHelper::DELETED ||
            ( mpFormatField && mpFormatField->IsProtect() );
 }
 
-OUString SwAnnotationWin::GetAuthor()
+OUString SwAnnotationWin::GetAuthor() const
 {
     return mpField->GetPar1();
 }
 
-Date SwAnnotationWin::GetDate()
+Date SwAnnotationWin::GetDate() const
 {
     return mpField->GetDate();
 }
 
-tools::Time SwAnnotationWin::GetTime()
+tools::Time SwAnnotationWin::GetTime() const
 {
     return mpField->GetTime();
 }

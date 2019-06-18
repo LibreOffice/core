@@ -69,14 +69,14 @@ public:
     SbiScanner( const OUString&, StarBASIC* = nullptr );
 
     void  EnableErrors()            { bError = false; }
-    bool  IsHash()                  { return bHash;   }
-    bool  IsCompatible()            { return bCompatible; }
+    bool  IsHash() const            { return bHash;   }
+    bool  IsCompatible() const      { return bCompatible; }
     void  SetCompatible( bool b )   { bCompatible = b; }        // #118206
-    bool  IsVBASupportOn()          { return bVBASupportOn; }
+    bool  IsVBASupportOn() const    { return bVBASupportOn; }
     bool  WhiteSpace()              { return bSpaces; }
-    sal_Int32 GetErrors()           { return nErrors; }
-    sal_Int32 GetLine()             { return nLine;   }
-    sal_Int32 GetCol1()             { return nCol1;   }
+    sal_Int32 GetErrors() const     { return nErrors; }
+    sal_Int32 GetLine() const       { return nLine;   }
+    sal_Int32 GetCol1() const       { return nCol1;   }
     void  SetCol1( sal_Int32 n )    { nCol1 = n;      }
     StarBASIC* GetBasic()           { return pBasic;  }
     void  SaveLine()                { nSaveLineIdx = nLineIdx; }
@@ -86,9 +86,9 @@ public:
     bool  DoesColonFollow();
 
     bool NextSym();
-    const OUString& GetSym() { return aSym;  }
-    SbxDataType GetType()           { return eScanType; }
-    double    GetDbl()              { return nVal;  }
+    const OUString& GetSym() const  { return aSym;  }
+    SbxDataType GetType() const     { return eScanType; }
+    double    GetDbl() const        { return nVal;  }
 };
 
 #endif

@@ -187,7 +187,7 @@ public:
             Returns <true/> when there is a shape that has the focus and
             <false/> when there is no such shape.
     */
-    bool HasFocus();
+    bool HasFocus() const;
 
     /** When there is a shape that currently has the focus,
         i.e. <member>HasFocus()</member> returns <true/> then remove the

@@ -1281,7 +1281,7 @@ private:
     std::unique_ptr<weld::ComboBox> mxLbEntryType;
 
 public:
-    ScIconSetFrmtDataEntry(weld::Container* pParent, ScIconSetType eType, ScDocument* pDoc,
+    ScIconSetFrmtDataEntry(weld::Container* pParent, ScIconSetType eType, const ScDocument* pDoc,
             sal_Int32 i, const ScColorScaleEntry* pEntry = nullptr);
     void Show() { mxGrid->show(); }
     void Hide() { mxGrid->hide(); }
@@ -1296,7 +1296,7 @@ public:
     void SetFirstEntry();
 };
 
-ScIconSetFrmtDataEntry::ScIconSetFrmtDataEntry(weld::Container* pParent, ScIconSetType eType, ScDocument* pDoc, sal_Int32 i, const ScColorScaleEntry* pEntry)
+ScIconSetFrmtDataEntry::ScIconSetFrmtDataEntry(weld::Container* pParent, ScIconSetType eType, const ScDocument* pDoc, sal_Int32 i, const ScColorScaleEntry* pEntry)
     : mxBuilder(Application::CreateBuilder(pParent, "modules/scalc/ui/conditionaliconset.ui"))
     , mxGrid(mxBuilder->weld_container("ConditionalIconSet"))
     , mxImgIcon(mxBuilder->weld_image("icon"))

@@ -72,7 +72,7 @@ class SwExtraPainter
     sal_uLong m_nLineNr;
     sal_uInt16 m_nDivider;
     bool m_bGoLeft;
-    bool IsClipChg() { return m_aClip.IsChg(); }
+    bool IsClipChg() const { return m_aClip.IsChg(); }
 
     SwExtraPainter(const SwExtraPainter&) = delete;
     SwExtraPainter& operator=(const SwExtraPainter&) = delete;
@@ -83,8 +83,8 @@ public:
         sal_Int16 eHor, bool bLnNm );
     SwFont* GetFont() const { return m_pFnt.get(); }
     void IncLineNr() { ++m_nLineNr; }
-    bool HasNumber() { return !( m_nLineNr % m_rLineInf.GetCountBy() ); }
-    bool HasDivider() {
+    bool HasNumber() const { return !( m_nLineNr % m_rLineInf.GetCountBy() ); }
+    bool HasDivider() const {
         if( !m_nDivider ) return false;
         return !(m_nLineNr % m_rLineInf.GetDividerCountBy());
     }

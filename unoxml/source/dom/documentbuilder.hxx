@@ -127,7 +127,7 @@ namespace DOM
         the XML document to be parsed.
         */
 
-        const css::uno::Reference< css::xml::sax::XErrorHandler >& getErrorHandler()
+        const css::uno::Reference< css::xml::sax::XErrorHandler >& getErrorHandler() const
         {
             return m_xErrorHandler;
         }

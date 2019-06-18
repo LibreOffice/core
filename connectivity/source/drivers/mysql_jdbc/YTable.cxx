@@ -306,7 +306,7 @@ void OMySQLTable::dropDefaultValue(const OUString& _rColName)
     executeStatement(sSql);
 }
 
-OUString OMySQLTable::getAlterTableColumnPart()
+OUString OMySQLTable::getAlterTableColumnPart() const
 {
     OUString sSql("ALTER TABLE ");
 

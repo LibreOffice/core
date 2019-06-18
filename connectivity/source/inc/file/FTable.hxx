@@ -85,7 +85,7 @@ namespace connectivity
 
             OUString SAL_CALL getName() override { return m_Name; }
 
-            const OUString& getSchema() { return m_SchemaName; }
+            const OUString& getSchema() const { return m_SchemaName; }
             bool isReadOnly() const { return !m_bWriteable; }
                 // m_pFileStream && !m_pFileStream->IsWritable(); }
             // css::lang::XUnoTunnel

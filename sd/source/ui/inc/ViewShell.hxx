@@ -187,7 +187,7 @@ public:
 
     const SfxPoolItem* GetNumBulletItem(SfxItemSet& aNewAttr, sal_uInt16& nNumItemId);
 
-    bool HasRuler() { return mbHasRulers;}
+    bool HasRuler() const { return mbHasRulers;}
     void SetRuler(bool bRuler);
     // Hides horizontal, vertical scrollbar as well as scrollbox
     void SetScrollBarsVisible(bool bVisible);
@@ -248,7 +248,7 @@ public:
     bool HasOldFunction() const { return mxOldFunction.is(); }
     const rtl::Reference<FuPoor>& GetCurrentFunction() const { return mxCurrentFunction; }
     bool HasCurrentFunction( sal_uInt16 nSID ) { return mxCurrentFunction.is() && (mxCurrentFunction->GetSlotID() == nSID ); }
-    bool HasCurrentFunction() { return mxCurrentFunction.is(); }
+    bool HasCurrentFunction() const { return mxCurrentFunction.is(); }
 
     void SetCurrentFunction(const rtl::Reference<FuPoor>& xFunction);
     void SetOldFunction(const rtl::Reference<FuPoor>& xFunction);
@@ -413,7 +413,7 @@ public:
     /// Allows adjusting the point or mark of the selection to a document coordinate.
     void SetCursorMm100Position(const Point& rPosition, bool bPoint, bool bClearMark);
     /// Gets the current selection
-    css::uno::Reference<css::datatransfer::XTransferable> GetSelectionTransferrable();
+    css::uno::Reference<css::datatransfer::XTransferable> GetSelectionTransferrable() const;
     /// Allows starting or ending a graphic move or resize action.
     void SetGraphicMm100Position(bool bStart, const Point& rPosition);
 

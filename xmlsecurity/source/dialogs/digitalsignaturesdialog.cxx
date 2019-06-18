@@ -77,7 +77,7 @@ namespace
     virtual void Notify( const css::uno::Sequence< OUString >& aPropertyNames ) override;
         SaveODFItem();
         //See group ODF in Common.xcs
-        bool isLessODF1_2()
+        bool isLessODF1_2() const
         {
             return m_nODF < 3;
         }
@@ -107,7 +107,7 @@ namespace
 
 DigitalSignaturesDialog::DigitalSignaturesDialog(
     weld::Window* pParent,
-    uno::Reference< uno::XComponentContext >& rxCtx, DocumentSignatureMode eMode,
+    const uno::Reference< uno::XComponentContext >& rxCtx, DocumentSignatureMode eMode,
     bool bReadOnly, const OUString& sODFVersion, bool bHasDocumentSignature)
     : GenericDialogController(pParent, "xmlsec/ui/digitalsignaturesdialog.ui", "DigitalSignaturesDialog")
     , maSignatureManager(rxCtx, eMode)

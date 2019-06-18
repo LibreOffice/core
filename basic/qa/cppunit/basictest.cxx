@@ -109,7 +109,7 @@ bool MacroSnippet::Compile()
     return !mbError;
 }
 
-bool MacroSnippet::HasError() { return mbError; }
+bool MacroSnippet::HasError() const { return mbError; }
 
 IMPL_LINK( MacroSnippet, BasicErrorHdl, StarBASIC *, /*pBasic*/, bool)
 {

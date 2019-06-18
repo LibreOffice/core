@@ -462,7 +462,7 @@ awt::Rectangle SvxPixelCtlAccessibleChild::implGetBounds()
     return AWTRectangle(maBoundingBox);
 }
 
-OUString SvxPixelCtlAccessibleChild::GetName()
+OUString SvxPixelCtlAccessibleChild::GetName() const
 {
     sal_Int32 nXIndex = mnIndexInParent % SvxPixelCtl::GetLineCount();
     sal_Int32 nYIndex = mnIndexInParent / SvxPixelCtl::GetLineCount();

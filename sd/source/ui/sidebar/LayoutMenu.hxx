@@ -69,7 +69,7 @@ public:
     /** Return a numerical value representing the currently selected
         layout.
     */
-    AutoLayout GetSelectedAutoLayout();
+    AutoLayout GetSelectedAutoLayout() const;
 
     // From ILayoutableWindow
     virtual css::ui::LayoutSize GetHeightForWidth (const sal_Int32 nWidth) override;

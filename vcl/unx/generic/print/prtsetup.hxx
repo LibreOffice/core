@@ -126,10 +126,10 @@ public:
     RTSDevicePage(weld::Widget* pPage, RTSDialog* pDialog);
     ~RTSDevicePage();
 
-    sal_uLong getLevel();
-    sal_uLong getPDFDevice();
-    sal_uLong getDepth();
-    sal_uLong getColorDevice();
+    sal_uLong getLevel() const;
+    sal_uLong getPDFDevice() const;
+    sal_uLong getDepth() const;
+    sal_uLong getColorDevice() const;
 };
 
 int SetupPrinterDriver(weld::Window* pParent, ::psp::PrinterInfo& rJobData);

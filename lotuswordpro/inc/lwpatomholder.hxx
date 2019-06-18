@@ -76,9 +76,9 @@ public:
     void ReadPathAtom(LwpObjectStream *pStrm);
     void Skip(LwpObjectStream *pStrm);
     const OUString& str() const {return m_String;}
-    inline bool HasValue();
+    inline bool HasValue() const;
 };
-inline bool LwpAtomHolder::HasValue()
+inline bool LwpAtomHolder::HasValue() const
 {
     return (m_nAtom != BAD_ATOM);
 }

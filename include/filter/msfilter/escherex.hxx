@@ -600,7 +600,7 @@ public:
     bool        GetPrefSize( const sal_uInt32 nBlibId, Size& rSize, MapMode& rMapMode );
 
     void        SetBaseURI( const OUString& rBaseURI ) { maBaseURI = rBaseURI; };
-    const OUString& GetBaseURI() { return maBaseURI; };
+    const OUString& GetBaseURI() const { return maBaseURI; };
 
     EscherGraphicProvider( EscherGraphicProviderFlags nFlags  = EscherGraphicProviderFlags::NONE );
     virtual ~EscherGraphicProvider();
@@ -922,7 +922,7 @@ public:
     {
         mpHyperlinkRecord.reset( pStream );
     }
-    const std::unique_ptr< SvMemoryStream >&  getHyperlinkRecord() { return mpHyperlinkRecord; }
+    const std::unique_ptr< SvMemoryStream >&  getHyperlinkRecord() const { return mpHyperlinkRecord; }
 };
 
 class EscherExHostAppData
@@ -1125,7 +1125,7 @@ public:
     void            InsertAtPersistOffset( sal_uInt32 nKey, sal_uInt32 nValue );   // nValue is being inserted into the Stream where it's appropriate (overwrite mode), without that the
                                                                                     // current StreamPosition changes
     void            SetEditAs( const OUString& rEditAs );
-    const OUString& GetEditAs() { return mEditAs; }
+    const OUString& GetEditAs() const { return mEditAs; }
     SvStream&       GetStream() const   { return *mpOutStrm; }
     sal_uLong       GetStreamPos() const    { return mpOutStrm->Tell(); }
 

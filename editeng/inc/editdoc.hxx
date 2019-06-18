@@ -764,7 +764,7 @@ public:
     void            SetModifyHdl( const Link<LinkParamNone*,void>& rLink ) { aModifyHdl = rLink; }
 
     void            CreateDefFont( bool bUseStyles );
-    const SvxFont&  GetDefFont() { return aDefFont; }
+    const SvxFont&  GetDefFont() const { return aDefFont; }
 
     void            SetDefTab( sal_uInt16 nTab )    { nDefTab = nTab ? nTab : DEFTAB; }
     sal_uInt16      GetDefTab() const           { return nDefTab; }

@@ -64,8 +64,8 @@ public:
     {
     }
 
-    bool    HasName() { return bName; }
-    bool    IsActive() { return bActive; }
+    bool    HasName() const { return bName; }
+    bool    IsActive() const { return bActive; }
 
     void    SetName( bool bOn ) { bName = bOn; }
     void    SetActive( bool bOn ) { bActive = bOn; }
@@ -102,7 +102,7 @@ public:
     bool                        InsertFile(const OUString& rFileName);
 
     NavigatorDragType           GetNavigatorDragType();
-    VclPtr<SdPageObjsTLB> const & GetObjects();
+    VclPtr<SdPageObjsTLB> const & GetObjects() const;
 
 protected:
     virtual bool                EventNotify(NotifyEvent& rNEvt) override;

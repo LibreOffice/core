@@ -26,7 +26,7 @@ GrabBagStack::GrabBagStack(const OUString& aElementName)
 GrabBagStack::~GrabBagStack()
 {}
 
-bool GrabBagStack::isStackEmpty()
+bool GrabBagStack::isStackEmpty() const
 {
     return mStack.empty();
 }

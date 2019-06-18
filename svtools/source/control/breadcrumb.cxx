@@ -82,7 +82,7 @@ void Breadcrumb::SetClickHdl( const Link<Breadcrumb*,void>& rLink )
     m_aClickHdl = rLink;
 }
 
-const OUString& Breadcrumb::GetHdlURL()
+const OUString& Breadcrumb::GetHdlURL() const
 {
     return m_sClickedURL;
 }

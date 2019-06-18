@@ -2336,7 +2336,7 @@ sal_uInt32 OSelectionBrowseBox::GetTotalCellWidth(long nRowId, sal_uInt16 nColId
     return GetDataWindow().LogicToPixel(Size(GetDataWindow().GetTextWidth(strText),0)).Width();
 }
 
-bool OSelectionBrowseBox::isCutAllowed()
+bool OSelectionBrowseBox::isCutAllowed() const
 {
     bool bCutAllowed = false;
     long nRow = GetRealRow(GetCurRow());
@@ -2393,7 +2393,7 @@ void OSelectionBrowseBox::paste()
     invalidateUndoRedo();
 }
 
-bool OSelectionBrowseBox::isPasteAllowed()
+bool OSelectionBrowseBox::isPasteAllowed() const
 {
     bool bPasteAllowed = true;
     long nRow = GetRealRow(GetCurRow());
@@ -2409,7 +2409,7 @@ bool OSelectionBrowseBox::isPasteAllowed()
     return bPasteAllowed;
 }
 
-bool OSelectionBrowseBox::isCopyAllowed()
+bool OSelectionBrowseBox::isCopyAllowed() const
 {
     return isCutAllowed();
 }

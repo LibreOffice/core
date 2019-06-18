@@ -83,7 +83,7 @@ public:
     const SmCaretPos& GetPosition() const { return mpPosition->CaretPos; }
 
     /** True, if the cursor has a selection */
-    bool HasSelection() { return mpAnchor != mpPosition; }
+    bool HasSelection() const { return mpAnchor != mpPosition; }
 
     /** Move the position of this cursor */
     void Move(OutputDevice* pDev, SmMovementDirection direction, bool bMoveAnchor = true);

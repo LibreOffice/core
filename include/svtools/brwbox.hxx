@@ -349,8 +349,8 @@ protected:
     virtual void    VisibleRowsChanged( long nNewTopRow, sal_uInt16 nNumRows);
 
     // number of visible rows in the window (incl. "truncated" rows)
-    sal_uInt16      GetVisibleRows();
-    long            GetTopRow() { return nTopRow; }
+    sal_uInt16      GetVisibleRows() const;
+    long            GetTopRow() const { return nTopRow; }
     sal_uInt16      GetFirstVisibleColNumber() const { return nFirstCol; }
 
     // Focus-Rect enable / disable

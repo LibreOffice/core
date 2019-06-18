@@ -33,7 +33,7 @@ private:
     SwMasterUsrPref&        rParent;
     bool const              bWeb;
 
-    css::uno::Sequence<OUString> GetPropertyNames();
+    css::uno::Sequence<OUString> GetPropertyNames() const;
 
     virtual void    ImplCommit() override;
 
@@ -54,7 +54,7 @@ private:
     SwMasterUsrPref&    rParent;
     bool const          bWeb;
 
-    css::uno::Sequence<OUString> GetPropertyNames();
+    css::uno::Sequence<OUString> GetPropertyNames() const;
 
     virtual void        ImplCommit() override;
 

@@ -914,7 +914,7 @@ IMPL_LINK_NOARG(ScTPValidationValue, ClickHdl, formula::RefButton&, void)
     SetupRefDlg();
 }
 
-bool ScValidationDlg::IsChildFocus()
+bool ScValidationDlg::IsChildFocus() const
 {
     return m_xDialog->has_toplevel_focus();
 }

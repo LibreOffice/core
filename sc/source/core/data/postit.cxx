@@ -74,7 +74,7 @@ public:
     /** Stores the cell position of the note in the user data area of the caption. */
     static void         SetCaptionUserData( SdrCaptionObj& rCaption, const ScAddress& rPos );
     /** Sets all default formatting attributes to the caption object. */
-    static void         SetDefaultItems( SdrCaptionObj& rCaption, ScDocument& rDoc, SfxItemSet* pExtraItemSet );
+    static void         SetDefaultItems( SdrCaptionObj& rCaption, ScDocument& rDoc, const SfxItemSet* pExtraItemSet );
 };
 
 void ScCaptionUtil::SetCaptionLayer( SdrCaptionObj& rCaption, bool bShown )
@@ -100,7 +100,7 @@ void ScCaptionUtil::SetCaptionUserData( SdrCaptionObj& rCaption, const ScAddress
     pObjData->meType = ScDrawObjData::CellNote;
 }
 
-void ScCaptionUtil::SetDefaultItems( SdrCaptionObj& rCaption, ScDocument& rDoc, SfxItemSet* pExtraItemSet )
+void ScCaptionUtil::SetDefaultItems( SdrCaptionObj& rCaption, ScDocument& rDoc, const SfxItemSet* pExtraItemSet )
 {
     SfxItemSet aItemSet = rCaption.GetMergedItemSet();
 

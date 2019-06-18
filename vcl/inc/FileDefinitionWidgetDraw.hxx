@@ -32,7 +32,7 @@ private:
 public:
     FileDefinitionWidgetDraw(SalGraphics& rGraphics);
 
-    bool isActive() { return m_bIsActive; }
+    bool isActive() const { return m_bIsActive; }
 
     bool isNativeControlSupported(ControlType eType, ControlPart ePart) override;
 

@@ -246,7 +246,7 @@ public:
     void                PrevTOXMark(bool bSame=false);
 
     // get current TOXmarks
-    sal_uInt16              GetTOXMarkCount();
+    sal_uInt16              GetTOXMarkCount() const;
     SwTOXMark*          GetTOXMark(sal_uInt16 nId);
     SwTOXMark*          GetCurTOXMark();
     void                SetCurTOXMark(sal_uInt16 nId);
@@ -260,7 +260,7 @@ public:
 };
 
 // inlines
-inline sal_uInt16 SwTOXMgr::GetTOXMarkCount()
+inline sal_uInt16 SwTOXMgr::GetTOXMarkCount() const
     {   return aCurMarks.size();   }
 
 inline SwTOXMark* SwTOXMgr::GetCurTOXMark()

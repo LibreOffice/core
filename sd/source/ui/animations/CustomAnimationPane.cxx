@@ -1947,7 +1947,7 @@ void CustomAnimationPane::onChangeSpeed()
     }
 }
 
-double CustomAnimationPane::getDuration()
+double CustomAnimationPane::getDuration() const
 {
     double fDuration = 0;
 

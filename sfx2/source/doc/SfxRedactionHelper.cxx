@@ -113,7 +113,7 @@ void fixMetaFile(GDIMetaFile& tmpMtf)
 /*
  * Sets page margins for a Draw page. Negative values are considered erroneous
  * */
-void setPageMargins(uno::Reference<beans::XPropertySet>& xPageProperySet,
+void setPageMargins(const uno::Reference<beans::XPropertySet>& xPageProperySet,
                     const PageMargins& aPageMargins)
 {
     if (aPageMargins.nTop < 0 || aPageMargins.nBottom < 0 || aPageMargins.nLeft < 0
@@ -218,7 +218,7 @@ void SfxRedactionHelper::getPageMetaFilesFromDoc(std::vector<GDIMetaFile>& aMeta
 }
 
 void SfxRedactionHelper::addPagesToDraw(
-    uno::Reference<XComponent>& xComponent, sal_Int32 nPages,
+    const uno::Reference<XComponent>& xComponent, sal_Int32 nPages,
     const std::vector<GDIMetaFile>& aMetaFiles, const std::vector<::Size>& aPageSizes,
     const PageMargins& aPageMargins,
     const std::vector<std::pair<RedactionTarget*, OUString>>& r_aTableTargets, bool bIsAutoRedact)
@@ -275,7 +275,7 @@ void SfxRedactionHelper::addPagesToDraw(
     xDrawPages->remove(xPage);
 }
 
-void SfxRedactionHelper::showRedactionToolbar(SfxViewFrame* pViewFrame)
+void SfxRedactionHelper::showRedactionToolbar(const SfxViewFrame* pViewFrame)
 {
     if (!pViewFrame)
         return;
@@ -305,7 +305,7 @@ void SfxRedactionHelper::showRedactionToolbar(SfxViewFrame* pViewFrame)
 }
 
 PageMargins
-SfxRedactionHelper::getPageMarginsForWriter(css::uno::Reference<css::frame::XModel>& xModel)
+SfxRedactionHelper::getPageMarginsForWriter(const css::uno::Reference<css::frame::XModel>& xModel)
 {
     PageMargins aPageMargins = { -1, -1, -1, -1 };
 
@@ -362,7 +362,7 @@ SfxRedactionHelper::getPageMarginsForWriter(css::uno::Reference<css::frame::XMod
 }
 
 PageMargins
-SfxRedactionHelper::getPageMarginsForCalc(css::uno::Reference<css::frame::XModel>& xModel)
+SfxRedactionHelper::getPageMarginsForCalc(const css::uno::Reference<css::frame::XModel>& xModel)
 {
     PageMargins aPageMargins = { -1, -1, -1, -1 };
     OUString sPageStyleName("Default");
@@ -421,7 +421,7 @@ SfxRedactionHelper::getPageMarginsForCalc(css::uno::Reference<css::frame::XModel
 void SfxRedactionHelper::searchInMetaFile(const RedactionTarget* pRedactionTarget,
                                           const GDIMetaFile& rMtf,
                                           std::vector<::tools::Rectangle>& aRedactionRectangles,
-                                          uno::Reference<XComponent>& xComponent)
+                                          const uno::Reference<XComponent>& xComponent)
 {
     // Initialize search
     i18nutil::SearchOptions2 aSearchOptions;
@@ -468,7 +468,7 @@ void SfxRedactionHelper::searchInMetaFile(const RedactionTarget* pRedactionTarge
 }
 
 void SfxRedactionHelper::addRedactionRectToPage(
-    uno::Reference<XComponent>& xComponent, uno::Reference<drawing::XDrawPage>& xPage,
+    const uno::Reference<XComponent>& xComponent, const uno::Reference<drawing::XDrawPage>& xPage,
     const std::vector<::tools::Rectangle>& aNewRectangles)
 {
     if (!xComponent.is() || !xPage.is())
@@ -502,8 +502,8 @@ void SfxRedactionHelper::addRedactionRectToPage(
 
 void SfxRedactionHelper::autoRedactPage(const RedactionTarget* pRedactionTarget,
                                         const GDIMetaFile& rGDIMetaFile,
-                                        uno::Reference<drawing::XDrawPage>& xPage,
-                                        uno::Reference<XComponent>& xComponent)
+                                        const uno::Reference<drawing::XDrawPage>& xPage,
+                                        const uno::Reference<XComponent>& xComponent)
 {
     if (pRedactionTarget == nullptr || pRedactionTarget->sContent.isEmpty())
         return;

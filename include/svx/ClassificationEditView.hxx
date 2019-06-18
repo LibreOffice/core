@@ -47,7 +47,7 @@ public:
     std::unique_ptr<ClassificationEditEngine> pEdEngine;
     std::unique_ptr<EditView> pEdView;
 
-    const ClassificationEditEngine& getEditEngine()
+    const ClassificationEditEngine& getEditEngine() const
     {
         return *pEdEngine;
     }

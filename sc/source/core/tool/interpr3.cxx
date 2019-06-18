@@ -5343,7 +5343,7 @@ public:
         mbPolar(bPolar)
     {}
 
-    ScMatrixRef Compute(std::function<ScMatrixGenerator>& rMatGenFunc);
+    ScMatrixRef Compute(const std::function<ScMatrixGenerator>& rMatGenFunc);
 
 private:
     ScMatrixRef& mpInputMat;
@@ -5353,7 +5353,7 @@ private:
     bool mbPolar:1;
 };
 
-ScMatrixRef ScFFT::Compute(std::function<ScMatrixGenerator>& rMatGenFunc)
+ScMatrixRef ScFFT::Compute(const std::function<ScMatrixGenerator>& rMatGenFunc)
 {
     std::vector<double> aArray;
     mpInputMat->GetDoubleArray(aArray);

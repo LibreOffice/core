@@ -253,7 +253,7 @@ namespace
         return false;
     }
 
-    bool lcl_MarkEqualByStart( ::sw::mark::IMark* pFirst,
+    bool lcl_MarkEqualByStart( const ::sw::mark::IMark* pFirst,
                               const ::sw::mark::IMark* pSecond)
     {
         return !lcl_MarkOrderingByStart(pFirst, pSecond) &&

@@ -412,7 +412,7 @@ void SwEditShell::SetTableName( SwFrameFormat& rTableFormat, const OUString &rNe
 }
 
 /// request current word
-OUString SwEditShell::GetCurWord()
+OUString SwEditShell::GetCurWord() const
 {
     const SwPaM& rPaM = *GetCursor();
     const SwTextNode* pNd = rPaM.GetNode().GetTextNode();

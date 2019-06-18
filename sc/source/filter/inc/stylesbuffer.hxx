@@ -863,7 +863,7 @@ public:
 
     /** Writes the cell formatting attributes of the specified XF to the passed property set. */
     void                writeCellXfToDoc( ScDocumentImport& rDoc, const ScRange& rRange, sal_Int32 nXfId ) const;
-    const RefVector< Dxf >& getExtDxfs() { return maExtDxfs; }
+    const RefVector< Dxf >& getExtDxfs() const { return maExtDxfs; }
 
 private:
     typedef RefVector< Font >                           FontVector;

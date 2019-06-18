@@ -141,7 +141,7 @@ public:
     void                convertFromModel(
                             const css::uno::Reference< css::drawing::XShape >& rxShape,
                             double fRotationAngle );
-    bool getAutoLayout(){return mrModel.mbAutoLayout;}
+    bool getAutoLayout() const {return mrModel.mbAutoLayout;}
 };
 
 

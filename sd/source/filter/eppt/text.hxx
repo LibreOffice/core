@@ -249,7 +249,7 @@ public:
     sal_uInt32      ParagraphCount() const;
     sal_uInt32      Count() const;
     int             GetInstance() const;
-    bool            HasExtendedBullets();
+    bool            HasExtendedBullets() const;
 };
 
 #endif

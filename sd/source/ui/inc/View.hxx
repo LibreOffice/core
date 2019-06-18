@@ -218,7 +218,7 @@ public:
     SdPage* GetPage();
     SdrObject* GetSelectedSingleObject(SdPage const * pPage);
     void SetAuthor(const OUString& rAuthor) { m_sAuthor = rAuthor; }
-    const OUString& GetAuthor() { return m_sAuthor; }
+    const OUString& GetAuthor() const { return m_sAuthor; }
 
 protected:
     DECL_LINK( OnParagraphInsertedHdl, ::Outliner::ParagraphHdlParam, void );

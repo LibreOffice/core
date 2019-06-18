@@ -76,11 +76,11 @@ public:
     // Returns a place instance with given information
     std::shared_ptr<Place> GetPlace();
 
-    OUString GetServerName() { return m_xEDServerName->get_text(); }
+    OUString GetServerName() const { return m_xEDServerName->get_text(); }
     OUString GetServerUrl();
-    OUString GetPassword() { return m_xEDPassword->get_text(); };
-    OUString GetUser() { return m_xEDUsername->get_text(); };
-    bool     IsRememberChecked() { return m_xCBPassword->get_active(); }
+    OUString GetPassword() const { return m_xEDPassword->get_text(); };
+    OUString GetUser() const { return m_xEDUsername->get_text(); };
+    bool     IsRememberChecked() const { return m_xCBPassword->get_active(); }
 
     void ShowPasswordControl() { m_bShowPassword = true; }
 

@@ -103,7 +103,7 @@ namespace pcr
     }
 
 
-    sal_Int32 OPropertyEditor::getMinimumHeight()
+    sal_Int32 OPropertyEditor::getMinimumHeight() const
     {
         sal_Int32 nMinHeight( LAYOUT_BORDER_TOP + LAYOUT_BORDER_BOTTOM );
 
@@ -127,7 +127,7 @@ namespace pcr
     }
 
 
-    sal_Int32 OPropertyEditor::getMinimumWidth()
+    sal_Int32 OPropertyEditor::getMinimumWidth() const
     {
         sal_uInt16 nCount = m_aTabControl->GetPageCount();
         sal_Int32 nPageMinWidth = 0;
@@ -262,7 +262,7 @@ namespace pcr
     }
 
 
-    sal_uInt16 OPropertyEditor::GetCurPage()
+    sal_uInt16 OPropertyEditor::GetCurPage() const
     {
         if(m_aTabControl->GetPageCount()>0)
             return m_aTabControl->GetCurPageId();

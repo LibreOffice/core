@@ -830,7 +830,7 @@ uno::Reference<drawing::XDrawPage> OOXMLDocumentImpl::getDrawPage()
     return mxDrawPage;
 }
 
-const uno::Sequence<beans::PropertyValue>& OOXMLDocumentImpl::getMediaDescriptor()
+const uno::Sequence<beans::PropertyValue>& OOXMLDocumentImpl::getMediaDescriptor() const
 {
     return maMediaDescriptor;
 }

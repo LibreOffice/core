@@ -377,7 +377,7 @@ public:
 
     virtual sal_uInt16      SetPrinter( SfxPrinter* pNew,
                                         SfxPrinterChangeFlags nDiff = SFX_PRINTER_ALL) override;
-    ShellMode               GetShellMode();
+    ShellMode               GetShellMode() const;
 
     css::view::XSelectionSupplier*       GetUNOObject();
 
@@ -513,9 +513,9 @@ public:
     SwDrawBase*     GetDrawFuncPtr() const  { return m_pDrawActual.get(); }
     void            GetDrawState(SfxItemSet &rSet);
     void            ExitDraw();
-    bool     IsDrawRotate()      { return m_bDrawRotate; }
+    bool     IsDrawRotate() const      { return m_bDrawRotate; }
     void     FlipDrawRotate()    { m_bDrawRotate = !m_bDrawRotate; }
-    bool     IsDrawSelMode()     { return m_bDrawSelMode; }
+    bool     IsDrawSelMode() const     { return m_bDrawSelMode; }
     void            SetSelDrawSlot();
     void     FlipDrawSelMode()   { m_bDrawSelMode = !m_bDrawSelMode; }
     void            NoRotate();     // turn off rotate mode
@@ -523,15 +523,15 @@ public:
     /// Same as EnterDrawTextMode(), but takes an SdrObject instead of guessing it by document position.
     bool EnterShapeDrawTextMode(SdrObject* pObject);
     void            LeaveDrawCreate()   { m_nDrawSfxId = m_nFormSfxId = USHRT_MAX; m_sDrawCustom.clear();}
-    bool            IsDrawMode()        { return (m_nDrawSfxId != USHRT_MAX || m_nFormSfxId != USHRT_MAX); }
+    bool            IsDrawMode() const  { return (m_nDrawSfxId != USHRT_MAX || m_nFormSfxId != USHRT_MAX); }
     bool            IsFormMode() const;
-    bool            IsBezierEditMode();
+    bool            IsBezierEditMode() const;
     bool            AreOnlyFormsSelected() const;
     bool            HasOnlyObj(SdrObject const *pSdrObj, SdrInventor eObjInventor) const;
     bool            BeginTextEdit(  SdrObject* pObj, SdrPageView* pPV=nullptr,
                                     vcl::Window* pWin=nullptr, bool bIsNewObj=false, bool bSetSelectionToStart=false );
-    bool isSignatureLineSelected();
-    bool isSignatureLineSigned();
+    bool isSignatureLineSelected() const;
+    bool isSignatureLineSigned() const;
 
     void            StateTabWin(SfxItemSet&);
 
@@ -637,7 +637,7 @@ public:
     /// See SfxViewShell::dumpAsXml().
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;
     void SetRedlineAuthor(const OUString& rAuthor);
-    const OUString& GetRedlineAuthor();
+    const OUString& GetRedlineAuthor() const;
     /// See SfxViewShell::NotifyCursor().
     void NotifyCursor(SfxViewShell* pViewShell) const override;
     void ShowUIElement(const OUString& sElementURL) const;

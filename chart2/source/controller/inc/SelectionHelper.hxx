@@ -32,10 +32,10 @@ namespace chart
 class Selection
 {
 public: //methods
-    bool hasSelection();
+    bool hasSelection() const;
 
-    OUString const & getSelectedCID();
-    css::uno::Reference< css::drawing::XShape > const & getSelectedAdditionalShape();
+    OUString const & getSelectedCID() const;
+    css::uno::Reference< css::drawing::XShape > const & getSelectedAdditionalShape() const;
     const ObjectIdentifier& getSelectedOID() const { return m_aSelectedOID;}
 
     bool isResizeableObjectSelected() const;

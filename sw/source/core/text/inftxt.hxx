@@ -663,7 +663,7 @@ public:
     TextFrameIndex ScanPortionEnd(TextFrameIndex nStart, TextFrameIndex nEnd);
 
     void SetTabOverflow( bool bOverflow ) { m_bTabOverflow = bOverflow; }
-    bool IsTabOverflow() { return m_bTabOverflow; }
+    bool IsTabOverflow() const { return m_bTabOverflow; }
 
 };
 

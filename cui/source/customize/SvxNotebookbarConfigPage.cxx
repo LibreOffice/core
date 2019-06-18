@@ -212,8 +212,9 @@ short SvxNotebookbarConfigPage::QueryReset()
     return nValue;
 }
 
-void SvxConfigPage::InsertEntryIntoNotebookbarTabUI(OUString& sUIItemID, OUString& sUIItemCommand,
-                                                    int nPos, int nStartCol, int nSpace)
+void SvxConfigPage::InsertEntryIntoNotebookbarTabUI(const OUString& sUIItemID,
+                                                    const OUString& sUIItemCommand, int nPos,
+                                                    int nStartCol, int nSpace)
 {
     auto xImage = GetSaveInData()->GetImage(sUIItemCommand);
     if (xImage.is())
@@ -371,8 +372,8 @@ static OUString getUIItemID(OUString sString)
     return sUIItemID.makeStringAndClear();
 }
 
-static void EditRegistryFile(OUString& sUIItemID, OUString& sSetEntry,
-                             OUString& sNotebookbarInterface)
+static void EditRegistryFile(const OUString& sUIItemID, const OUString& sSetEntry,
+                             const OUString& sNotebookbarInterface)
 {
     int nFlag = 0;
     Sequence<OUString> aOldEntries

@@ -74,9 +74,9 @@ public:
     explicit OLEHandler(DomainMapper& rDomainMapper);
     virtual ~OLEHandler() override;
 
-    const css::uno::Reference<css::drawing::XShape>& getShape() { return m_xShape; };
+    const css::uno::Reference<css::drawing::XShape>& getShape() const { return m_xShape; };
 
-    bool isOLEObject() { return m_xInputStream.is(); }
+    bool isOLEObject() const { return m_xInputStream.is(); }
 
     /// In case of a valid CLSID, import the native data to the previously created empty OLE object.
     void importStream(const css::uno::Reference<css::uno::XComponentContext>& xComponentContext,

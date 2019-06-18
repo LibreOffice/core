@@ -193,7 +193,7 @@ public:
                                                     const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList ) override;
 
     void CreateTextPContext(bool bIsNewParagraph);
-    bool IsEditCell() { return mpEditTextObj.is(); }
+    bool IsEditCell() const { return mpEditTextObj.is(); }
     void SetText(const OUString& sTempText) { sText = sTempText; }
 
     virtual void SAL_CALL endFastElement( sal_Int32 nElement ) override;

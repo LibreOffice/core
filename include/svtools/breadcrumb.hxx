@@ -55,7 +55,7 @@ class SVT_DLLPUBLIC Breadcrumb : public VclHBox
         void EnableFields( bool bEnable );
 
         void SetClickHdl( const Link<Breadcrumb*,void>& rLink );
-        const OUString& GetHdlURL();
+        const OUString& GetHdlURL() const;
 
         void SetRootName( const OUString& rURL );
         void SetURL( const OUString& rURL );

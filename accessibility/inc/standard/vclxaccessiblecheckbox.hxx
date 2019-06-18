@@ -46,8 +46,8 @@ private:
 
     sal_Int32 implGetMaximumValue();
 
-    bool    IsChecked();
-    bool    IsIndeterminate();
+    bool    IsChecked() const;
+    bool    IsIndeterminate() const;
 
     void    SetChecked( bool bChecked );
     void    SetIndeterminate( bool bIndeterminate );

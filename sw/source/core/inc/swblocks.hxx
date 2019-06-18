@@ -100,7 +100,7 @@ public:
     const OUString& GetFileName() const {return m_aFile;}      /// Return physical file name
     void SetName( const OUString& rName )             /// Logic name
         { m_aName = rName; m_bInfoChanged = true; }
-    const OUString& GetName()
+    const OUString& GetName() const
         { return m_aName; }
 
     const OUString&     GetBaseURL() const { return m_sBaseURL;}

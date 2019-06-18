@@ -111,7 +111,7 @@ public:
     /// @throws css::uno::RuntimeException
     void setBackColor( sal_Int32 nBackColor );
     /// @throws css::uno::RuntimeException
-    bool getAutoSize();
+    bool getAutoSize() const;
     /// @throws css::uno::RuntimeException
     void setAutoSize( bool bAutoSize );
     /// @throws css::uno::RuntimeException

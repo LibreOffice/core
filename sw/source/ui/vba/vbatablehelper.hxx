@@ -51,7 +51,7 @@ public:
     /// @throws css::uno::RuntimeException
     sal_Int32 getTabColIndex( const OUString& sCellName );
     /// @throws css::uno::RuntimeException
-    sal_Int32 getTableWidth( );
+    sal_Int32 getTableWidth( ) const;
 
     /// @throws css::uno::RuntimeException
     sal_Int32 GetColWidth( sal_Int32 nCol, sal_Int32 nRow = 0 );

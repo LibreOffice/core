@@ -74,7 +74,7 @@ class SwAddressListDialog : public SfxDialogController
     DECL_LINK(ListBoxSelectHdl_Impl, weld::TreeView&, void);
     DECL_LINK(EditHdl_Impl, weld::Button&, void);
     DECL_LINK(TableSelectHdl_Impl, weld::Button&, void);
-    void TableSelectHdl(weld::Button* pButton);
+    void TableSelectHdl(const weld::Button* pButton);
     DECL_LINK(OKHdl_Impl, weld::Button&, void);
 
     DECL_LINK(StaticListBoxSelectHdl_Impl, void*, void);
@@ -84,15 +84,15 @@ public:
     virtual ~SwAddressListDialog() override;
 
     css::uno::Reference< css::sdbc::XDataSource>
-                        GetSource();
+                        GetSource() const;
 
-    SharedConnection    GetConnection();
+    SharedConnection    GetConnection() const;
 
     css::uno::Reference< css::sdbcx::XColumnsSupplier>
-                        GetColumnsSupplier();
+                        GetColumnsSupplier() const;
 
     const SwDBData&     GetDBData() const       {return m_aDBData;}
-    OUString     GetFilter();
+    OUString     GetFilter() const;
 };
 #endif
 

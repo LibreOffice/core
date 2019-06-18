@@ -143,7 +143,7 @@ public:
 
     void        SetPatternSimple( const ScPatternAttr* pNew, const SfxItemSet* pSet );
 
-    bool SetText( ScRefCellValue& rCell );   // TRUE -> drop pOldPattern
+    bool SetText( const ScRefCellValue& rCell );   // TRUE -> drop pOldPattern
     void        SetHashText();
     void SetTextToWidthOrHash( ScRefCellValue& rCell, long nWidth );
     void        SetAutoText( const OUString& rAutoText );
@@ -492,7 +492,7 @@ static bool SameValue( const ScRefCellValue& rCell, const ScRefCellValue& rOldCe
         rCell.mfValue == rOldCell.mfValue;
 }
 
-bool ScDrawStringsVars::SetText( ScRefCellValue& rCell )
+bool ScDrawStringsVars::SetText( const ScRefCellValue& rCell )
 {
     bool bChanged = false;
 
@@ -820,7 +820,7 @@ bool ScDrawStringsVars::HasEditCharacters() const
     return false;
 }
 
-double ScOutputData::GetStretch()
+double ScOutputData::GetStretch() const
 {
     if ( mpRefDevice->IsMapModeEnabled() )
     {

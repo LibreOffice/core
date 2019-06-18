@@ -2662,7 +2662,7 @@ OUString XMLTextImportHelper::getCurrentFieldType()
     }
 }
 
-bool XMLTextImportHelper::hasCurrentFieldCtx()
+bool XMLTextImportHelper::hasCurrentFieldCtx() const
 {
     return !m_xImpl->m_FieldStack.empty();
 }
@@ -2861,7 +2861,7 @@ void XMLTextImportHelper::SetChangesProtectionKey(const Sequence<sal_Int8> &)
 }
 
 
-OUString const & XMLTextImportHelper::GetOpenRedlineId()
+OUString const & XMLTextImportHelper::GetOpenRedlineId() const
 {
     return m_xImpl->m_sOpenRedlineIdentifier;
 }
@@ -2882,7 +2882,7 @@ XMLTextImportHelper::SetCellParaStyleDefault(OUString const& rNewValue)
     m_xImpl->m_sCellParaStyleDefault = rNewValue;
 }
 
-OUString const& XMLTextImportHelper::GetCellParaStyleDefault()
+OUString const& XMLTextImportHelper::GetCellParaStyleDefault() const
 {
     return m_xImpl->m_sCellParaStyleDefault;
 }

@@ -106,9 +106,9 @@ protected:
 public:
     inline LwpAssociatedLayouts& GetLayoutsWithMe();
     rtl::Reference<LwpVirtualLayout> GetLayout(LwpVirtualLayout const * pStartLayout);
-    inline bool IsActive();
+    inline bool IsActive() const;
     virtual bool IsTable();
-    inline OUString const & GetClassName();
+    inline OUString const & GetClassName() const;
     inline LwpContent* GetNextEnumerated();
     bool HasNonEmbeddedLayouts();
     bool IsStyleContent();
@@ -119,7 +119,7 @@ LwpAssociatedLayouts& LwpContent::GetLayoutsWithMe()
     return m_LayoutsWithMe;
 }
 
-inline bool LwpContent::IsActive()
+inline bool LwpContent::IsActive() const
 {
     return !(m_nFlags & CF_DEACTIVATED);
 }
@@ -129,7 +129,7 @@ inline bool LwpContent::IsTable()
     return false;
 }
 
-inline OUString const & LwpContent::GetClassName()
+inline OUString const & LwpContent::GetClassName() const
 {
     return m_ClassName.str();
 }

@@ -35,8 +35,8 @@ class MorkDriver:
 public:
     explicit MorkDriver(const css::uno::Reference< css::uno::XComponentContext >& context);
 
-    const css::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& getFactory(){return m_xFactory;}
-    const OUString& getProfilePath() {return m_sProfilePath;}
+    const css::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& getFactory() const {return m_xFactory;}
+    const OUString& getProfilePath() const {return m_sProfilePath;}
 private:
 
     MorkDriver(const MorkDriver&) = delete;

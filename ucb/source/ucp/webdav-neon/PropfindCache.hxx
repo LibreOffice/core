@@ -48,7 +48,7 @@ namespace webdav_ucp
 
         OUString& getURL() { return m_sURL; };
 
-        const std::vector< DAVResourceInfo >& getPropertiesNames() { return m_aPropertiesNames; };
+        const std::vector< DAVResourceInfo >& getPropertiesNames() const { return m_aPropertiesNames; };
         void setPropertiesNames( const std::vector< DAVResourceInfo >& aPropertiesNames ) { m_aPropertiesNames = aPropertiesNames; };
     };
 

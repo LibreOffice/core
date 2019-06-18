@@ -161,17 +161,17 @@ void SbiExprNode::ConvertToIntConstIfPossible()
     }
 }
 
-bool SbiExprNode::IsNumber()
+bool SbiExprNode::IsNumber() const
 {
     return eNodeType == SbxNUMVAL;
 }
 
-bool SbiExprNode::IsVariable()
+bool SbiExprNode::IsVariable() const
 {
     return eNodeType == SbxVARVAL;
 }
 
-bool SbiExprNode::IsLvalue()
+bool SbiExprNode::IsLvalue() const
 {
     return IsVariable();
 }

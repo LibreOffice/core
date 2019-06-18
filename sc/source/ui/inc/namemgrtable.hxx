@@ -45,7 +45,7 @@ private:
 
     int m_nId;
 
-    void GetLine(ScRangeNameLine& aLine, weld::TreeIter& rEntry);
+    void GetLine(ScRangeNameLine& aLine, const weld::TreeIter& rEntry);
     void Init();
     const ScRangeData* findRangeData(const ScRangeNameLine& rLine);
 
@@ -68,7 +68,7 @@ public:
     void SetEntry( const ScRangeNameLine& rLine );
 
     void GetCurrentLine(ScRangeNameLine& rLine);
-    bool IsMultiSelection();
+    bool IsMultiSelection() const;
     std::vector<ScRangeNameLine> GetSelectedEntries();
 };
 

@@ -42,7 +42,7 @@ class FuPage
     virtual void Activate() override;
     virtual void Deactivate() override;
 
-    const SfxItemSet* ExecuteDialog(weld::Window* pParent, SfxRequest& rReq);
+    const SfxItemSet* ExecuteDialog(weld::Window* pParent, const SfxRequest& rReq);
 
 protected:
     virtual ~FuPage() override;

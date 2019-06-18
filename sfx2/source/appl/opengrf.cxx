@@ -285,7 +285,7 @@ void SvxOpenGraphicDialog::SetDetectedFilter(const OUString& rStr)
     mpImpl->sDetectedFilter = rStr;
 }
 
-Reference<ui::dialogs::XFilePickerControlAccess> const & SvxOpenGraphicDialog::GetFilePickerControlAccess()
+Reference<ui::dialogs::XFilePickerControlAccess> const & SvxOpenGraphicDialog::GetFilePickerControlAccess() const
 {
     return mpImpl->xCtrlAcc;
 }

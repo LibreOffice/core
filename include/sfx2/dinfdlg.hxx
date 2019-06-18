@@ -339,7 +339,7 @@ struct CustomPropertyLine
     DECL_LINK(EditLoseFocusHdl, weld::Widget&, void);
     DECL_LINK(BoxLoseFocusHdl, weld::Widget&, void);
 
-    void DoTypeHdl(weld::ComboBox& rBox);
+    void DoTypeHdl(const weld::ComboBox& rBox);
 
     void Clear();
     void Hide();
@@ -400,7 +400,7 @@ public:
 
     void                BoxLoseFocus(CustomPropertyLine* pLine);
     void                EditLoseFocus(CustomPropertyLine* pLine);
-    void                Remove(CustomPropertyLine* pLine);
+    void                Remove(const CustomPropertyLine* pLine);
 };
 
 // class CustomPropertiesControl -----------------------------------------

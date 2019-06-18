@@ -49,7 +49,7 @@ public:
     svl::SharedString GetString();
     SvNumFormatType GetFormatType() const { return mnFormatType; }
 
-    bool HasColRowName();
+    bool HasColRowName() const;
 
     ScTokenArray* GetCode();
 

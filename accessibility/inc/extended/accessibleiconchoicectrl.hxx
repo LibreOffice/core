@@ -50,7 +50,7 @@ namespace accessibility
         virtual void    ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent ) override;
         virtual void    FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet ) override;
 
-        VclPtr< SvtIconChoiceCtrl > getCtrl();
+        VclPtr< SvtIconChoiceCtrl > getCtrl() const;
 
     public:
         /** OAccessibleBase needs a valid view

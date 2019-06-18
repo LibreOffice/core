@@ -47,7 +47,7 @@ namespace connectivity
             explicit OConnection(MorkDriver* const driver);
             virtual ~OConnection() override;
 
-            const rtl::Reference<MorkDriver>& getDriver() {return m_xDriver;};
+            const rtl::Reference<MorkDriver>& getDriver() const {return m_xDriver;};
             MorkParser* getMorkParser(const OString& t) {return t == "CollectedAddressBook" ? m_pHistory.get() : m_pBook.get();};
 
             // OComponentHelper

@@ -353,7 +353,7 @@ IMPL_LINK_NOARG(CertificateViewerCertPathTP, CertSelectHdl, weld::TreeView&, voi
     mxViewCertPB->set_sensitive(bSensitive);
 }
 
-void CertificateViewerCertPathTP::InsertCert(weld::TreeIter* pParent, const OUString& rName,
+void CertificateViewerCertPathTP::InsertCert(const weld::TreeIter* pParent, const OUString& rName,
                                              const css::uno::Reference< css::security::XCertificate >& rxCert,
                                              bool bValid)
 {

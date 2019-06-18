@@ -4070,7 +4070,7 @@ void SwUiWriterTest::testDde()
 class IdleTask
 {
     public:
-    bool GetFlag();
+    bool GetFlag() const;
     IdleTask();
     DECL_LINK( FlipFlag, Timer *, void );
     private:
@@ -4090,7 +4090,7 @@ IdleTask::IdleTask() : flag( false )
 }
 
 //GetFlag() of IdleTask Class
-bool IdleTask::GetFlag()
+bool IdleTask::GetFlag() const
 {
     //returning the status of current flag
     return flag;
@@ -5008,7 +5008,7 @@ void SwUiWriterTest::testTdf88453Table()
 namespace
 {
 
-int checkShells(SwDocShell* pSource, SwDocShell* pDestination)
+int checkShells(const SwDocShell* pSource, const SwDocShell* pDestination)
 {
     return int(SfxClassificationHelper::CheckPaste(pSource->getDocProperties(), pDestination->getDocProperties()));
 }

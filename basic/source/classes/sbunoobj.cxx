@@ -4881,7 +4881,7 @@ StructRefInfo SbUnoStructRefObject::getStructMember( const OUString& rMemberName
     return aRet;
 }
 
-OUString SbUnoStructRefObject::getDbgObjectName()
+OUString SbUnoStructRefObject::getDbgObjectName() const
 {
     OUString aName = GetClassName();
     if( aName.isEmpty() )

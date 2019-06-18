@@ -319,7 +319,7 @@ public:
     bool iter_parent(weld::TreeIter& rIter) const { return m_xControl->iter_parent(rIter); }
     int get_iter_depth(const weld::TreeIter& rIter) const { return m_xControl->get_iter_depth(rIter); }
     bool get_row_expanded(const weld::TreeIter& rIter) const { return m_xControl->get_row_expanded(rIter); }
-    void expand_row(weld::TreeIter& rIter) { m_xControl->expand_row(rIter); }
+    void expand_row(const weld::TreeIter& rIter) { m_xControl->expand_row(rIter); }
     void set_size_request(int nWidth, int nHeight) { m_xControl->set_size_request(nWidth, nHeight); }
     float get_approximate_digit_width() const { return m_xControl->get_approximate_digit_width(); }
     int get_height_rows(int nRows) const { return m_xControl->get_height_rows(nRows); }

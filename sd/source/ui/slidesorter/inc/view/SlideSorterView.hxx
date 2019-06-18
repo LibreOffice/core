@@ -79,7 +79,7 @@ public:
     void RequestRepaint (const ::tools::Rectangle& rRepaintBox);
     void RequestRepaint (const vcl::Region& rRepaintRegion);
 
-    ::tools::Rectangle GetModelArea();
+    ::tools::Rectangle GetModelArea() const;
 
     /** Return the index of the page that is rendered at the given position.
         @param rPosition

@@ -105,7 +105,7 @@ class SwNoteProps: public utl::ConfigItem
                     pValues[0]>>=m_bIsShowAnchor;
         }
 
-        bool IsShowAnchor()
+        bool IsShowAnchor() const
         {
             return m_bIsShowAnchor;
         }
@@ -192,7 +192,7 @@ class SAL_DLLPUBLIC_RTTI SwPostItMgr: public SfxListener
         bool ShowScrollbar(const unsigned long aPage) const;
         bool HasNotes() const ;
         bool ShowNotes() const;
-        bool IsShowAnchor() { return mbIsShowAnchor;}
+        bool IsShowAnchor() const { return mbIsShowAnchor;}
         unsigned long GetSidebarWidth(bool bPx = false) const;
         unsigned long GetSidebarBorderWidth(bool bPx = false) const;
 
@@ -253,7 +253,7 @@ class SAL_DLLPUBLIC_RTTI SwPostItMgr: public SfxListener
         void                RegisterAnswer(OutlinerParaObject* pAnswer) { mpAnswer = pAnswer;}
         OutlinerParaObject* IsAnswer() {return mpAnswer;}
         void                RegisterAnswerText(const OUString& aAnswerText) { maAnswerText = aAnswerText; }
-        const OUString&     GetAnswerText() { return maAnswerText; }
+        const OUString&     GetAnswerText() const { return maAnswerText; }
         void CheckMetaText();
 
         sal_uInt16 Replace(SvxSearchItem const * pItem);

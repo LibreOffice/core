@@ -162,7 +162,7 @@ RedactionTarget* TargetsTable::GetTargetByName(const OUString& sName)
     return reinterpret_cast<RedactionTarget*>(m_xControl->get_id(nEntry).toInt64());
 }
 
-OUString TargetsTable::GetNameProposal()
+OUString TargetsTable::GetNameProposal() const
 {
     //TODO: Define a translatable string
     OUString sDefaultTargetName("Target");
@@ -367,7 +367,7 @@ IMPL_LINK_NOARG(SfxAutoRedactDialog, DeleteHdl, weld::Button&, void)
 
 namespace
 {
-boost::property_tree::ptree redactionTargetToJSON(RedactionTarget* pTarget)
+boost::property_tree::ptree redactionTargetToJSON(const RedactionTarget* pTarget)
 {
     boost::property_tree::ptree aNode;
     aNode.put("sName", pTarget->sName.toUtf8().getStr());

@@ -243,7 +243,7 @@ protected:
     SdrUndoObjList(SdrObject& rNewObj, bool bOrdNumDirect);
     virtual ~SdrUndoObjList() override;
 
-    bool IsOwner() { return bOwner; }
+    bool IsOwner() const { return bOwner; }
     void SetOwner(bool bNew);
 };
 
@@ -341,10 +341,10 @@ public:
     virtual void Undo() override;
     virtual void Redo() override;
 
-    bool IsNewOwner() { return bNewOwner; }
+    bool IsNewOwner() const { return bNewOwner; }
     void SetNewOwner(bool bNew);
 
-    bool IsOldOwner() { return bOldOwner; }
+    bool IsOldOwner() const { return bOldOwner; }
     void SetOldOwner(bool bNew);
 };
 

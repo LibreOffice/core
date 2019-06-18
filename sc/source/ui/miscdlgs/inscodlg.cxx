@@ -132,7 +132,7 @@ InsertDeleteFlags ScInsertContentsDlg::GetInsContentsCmdBits() const
                 : ScInsertContentsDlg::nPreviousChecks );
 }
 
-InsCellCmd ScInsertContentsDlg::GetMoveMode()
+InsCellCmd ScInsertContentsDlg::GetMoveMode() const
 {
     if (bUsedShortCut)
         return INS_NONE;

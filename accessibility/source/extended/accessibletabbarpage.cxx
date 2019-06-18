@@ -71,7 +71,7 @@ namespace accessibility
     }
 
 
-    bool AccessibleTabBarPage::IsShowing()
+    bool AccessibleTabBarPage::IsShowing() const
     {
         bool bShowing = false;
 
@@ -82,7 +82,7 @@ namespace accessibility
     }
 
 
-    bool AccessibleTabBarPage::IsSelected()
+    bool AccessibleTabBarPage::IsSelected() const
     {
         bool bSelected = false;
 

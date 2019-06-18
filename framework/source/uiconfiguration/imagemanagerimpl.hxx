@@ -140,9 +140,9 @@ namespace framework
             /// @throws css::uno::RuntimeException
             void storeToStorage( const css::uno::Reference< css::embed::XStorage >& Storage );
             /// @throws css::uno::RuntimeException
-            bool isModified();
+            bool isModified() const;
             /// @throws css::uno::RuntimeException
-            bool isReadOnly();
+            bool isReadOnly() const;
 
             void clear();
 

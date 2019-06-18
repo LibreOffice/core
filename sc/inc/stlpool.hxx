@@ -49,7 +49,7 @@ public:
     void                CopyStyleFrom( ScStyleSheetPool* pSrcPool,
                                        const OUString& rName, SfxStyleFamily eFamily );
 
-    bool                HasStandardStyles() { return bHasStandardStyles; }
+    bool                HasStandardStyles() const { return bHasStandardStyles; }
 
     ScStyleSheet*       FindCaseIns( const OUString& rName, SfxStyleFamily eFam );
 

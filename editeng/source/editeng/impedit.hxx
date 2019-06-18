@@ -282,7 +282,7 @@ private:
 
     void InvalidateAtWindow(const tools::Rectangle& rRect);
 
-    css::uno::Reference<css::datatransfer::clipboard::XClipboard> GetClipboard();
+    css::uno::Reference<css::datatransfer::clipboard::XClipboard> GetClipboard() const;
 
 protected:
 
@@ -341,7 +341,7 @@ public:
     long            GetVisDocBottom() const { return aVisDocStartPos.Y() + ( !IsVertical() ? aOutArea.GetHeight() : aOutArea.GetWidth() ); }
     tools::Rectangle       GetVisDocArea() const;
 
-    const EditSelection&  GetEditSelection()          { return aEditSelection; }
+    const EditSelection&  GetEditSelection() const { return aEditSelection; }
     void            SetEditSelection( const EditSelection& rEditSelection );
     bool            HasSelection() const { return aEditSelection.HasRange(); }
 
@@ -790,9 +790,9 @@ public:
     void                    UpdateSelections();
 
     void                EnableUndo( bool bEnable );
-    bool                IsUndoEnabled()         { return bUndoEnabled; }
+    bool                IsUndoEnabled() const   { return bUndoEnabled; }
     void                SetUndoMode( bool b )   { bIsInUndo = b; }
-    bool                IsInUndo()              { return bIsInUndo; }
+    bool                IsInUndo() const        { return bIsInUndo; }
 
     void                SetCallParaInsertedOrDeleted( bool b ) { bCallParaInsertedOrDeleted = b; }
     bool                IsCallParaInsertedOrDeleted() const { return bCallParaInsertedOrDeleted; }
@@ -863,7 +863,7 @@ public:
     void            SetModifyHdl( const Link<LinkParamNone*,void>& rLink ) { aModifyHdl = rLink; }
     const Link<LinkParamNone*,void>& GetModifyHdl() const { return aModifyHdl; }
 
-    bool            IsInSelectionMode() { return bInSelection; }
+    bool            IsInSelectionMode() const { return bInSelection; }
 
 //  For Undo/Redo
     void            Undo( EditView* pView );
@@ -907,7 +907,7 @@ public:
     OutputDevice*       GetRefDevice() const { return pRefDev.get(); }
     void                SetRefDevice( OutputDevice* pRefDef );
 
-    const MapMode&      GetRefMapMode() { return pRefDev->GetMapMode(); }
+    const MapMode&      GetRefMapMode() const { return pRefDev->GetMapMode(); }
     void                SetRefMapMode( const MapMode& rMapMode );
 
     InternalEditStatus& GetStatus() { return aStatus; }

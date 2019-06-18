@@ -127,7 +127,7 @@ public:
     virtual             ~VMLExport() override;
 
     const ::sax_fastparser::FSHelperPtr&
-                        GetFS() { return m_pSerializer; }
+                        GetFS() const { return m_pSerializer; }
 
     void SetFS(const ::sax_fastparser::FSHelperPtr& pSerializer);
 

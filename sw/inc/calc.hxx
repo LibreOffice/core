@@ -113,10 +113,10 @@ public:
     double GetDouble() const;
     SwSbxValue& MakeDouble();
 
-    bool IsVoidValue() {return m_bVoid;}
+    bool IsVoidValue() const {return m_bVoid;}
     void SetVoidValue(bool bSet) {m_bVoid = bSet;}
 
-    bool IsDBvalue() {return m_bDBvalue;}
+    bool IsDBvalue() const {return m_bDBvalue;}
     void SetDBvalue(bool bSet) {m_bDBvalue = bSet;}
 };
 

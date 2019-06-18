@@ -188,7 +188,7 @@ void ZipOutputStream::finish()
     }
 }
 
-const css::uno::Reference< css::io::XOutputStream >& ZipOutputStream::getStream()
+const css::uno::Reference< css::io::XOutputStream >& ZipOutputStream::getStream() const
 {
     return m_xStream;
 }
