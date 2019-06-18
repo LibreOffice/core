@@ -120,7 +120,7 @@ Reference< XIndexAccess > ItemContainer::deepCopyContainer( const Reference< XIn
     Reference< XIndexAccess > xReturn;
     if ( rSubContainer.is() )
     {
-        ConstItemContainer* pSource = ConstItemContainer::GetImplementation( rSubContainer );
+        ConstItemContainer* pSource = comphelper::getUnoTunnelImplementation<ConstItemContainer>( rSubContainer );
         ItemContainer* pSubContainer( nullptr );
         if ( pSource )
             pSubContainer = new ItemContainer( *pSource, rMutex );
@@ -137,16 +137,9 @@ namespace
     class theItemContainerUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theItemContainerUnoTunnelId > {};
 }
 
-const Sequence< sal_Int8 >& ItemContainer::GetUnoTunnelId() throw()
+const Sequence< sal_Int8 >& ItemContainer::getUnoTunnelId() throw()
 {
     return theItemContainerUnoTunnelId::get().getSeq();
-}
-
-ItemContainer* ItemContainer::GetImplementation( const css::uno::Reference< css::uno::XInterface >& rxIFace ) throw()
-{
-    css::uno::Reference< css::lang::XUnoTunnel > xUT( rxIFace, css::uno::UNO_QUERY );
-    return xUT.is() ? reinterpret_cast< ItemContainer* >(sal::static_int_cast< sal_IntPtr >(
-                          xUT->getSomething( ItemContainer::GetUnoTunnelId() ))) : nullptr;
 }
 
 // XElementAccess
