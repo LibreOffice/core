@@ -23,6 +23,7 @@
 #include "util.hxx"
 
 #include <sal/log.hxx>
+#include <tools/diagnose_ex.h>
 
 namespace writerfilter
 {
@@ -304,9 +305,9 @@ void TableManager::resolveCurrentTable()
 
             mpTableDataHandler->endTable(mTableDataStack.size() - 1, m_bTableStartsAtCellStart);
         }
-        catch (css::uno::Exception const& e)
+        catch (css::uno::Exception const&)
         {
-            SAL_WARN("writerfilter", "resolving of current table failed with: " << e);
+            TOOLS_WARN_EXCEPTION("writerfilter", "resolving of current table failed");
         }
     }
     mState.resetTableProps();

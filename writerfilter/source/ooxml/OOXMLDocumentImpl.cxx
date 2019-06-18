@@ -83,10 +83,10 @@ void OOXMLDocumentImpl::resolveFastSubStream(Stream & rStreamHandler,
     {
         pStream = OOXMLDocumentFactory::createStream(mpStream, nType);
     }
-    catch (uno::Exception const& e)
+    catch (uno::Exception const&)
     {
-        SAL_INFO("writerfilter.ooxml", "resolveFastSubStream: exception while "
-                "resolving stream " << nType << " : " << e);
+        TOOLS_INFO_EXCEPTION("writerfilter.ooxml", "resolveFastSubStream: exception while "
+                "resolving stream " << nType);
         return;
     }
     OOXMLStream::Pointer_t savedStream = mpStream;
@@ -137,10 +137,10 @@ uno::Reference<xml::dom::XDocument> OOXMLDocumentImpl::importSubStream(OOXMLStre
     {
         pStream = OOXMLDocumentFactory::createStream(mpStream, nType);
     }
-    catch (uno::Exception const& e)
+    catch (uno::Exception const&)
     {
-        SAL_INFO("writerfilter.ooxml", "importSubStream: exception while "
-                "importing stream " << nType << " : " << e);
+        TOOLS_INFO_EXCEPTION("writerfilter.ooxml", "importSubStream: exception while "
+                "importing stream " << nType);
         return xRet;
     }
 
@@ -153,10 +153,10 @@ uno::Reference<xml::dom::XDocument> OOXMLDocumentImpl::importSubStream(OOXMLStre
             uno::Reference<xml::dom::XDocumentBuilder> xDomBuilder(xml::dom::DocumentBuilder::create(xContext));
             xRet = xDomBuilder->parse(xInputStream);
         }
-        catch (uno::Exception const& e)
+        catch (uno::Exception const&)
         {
-            SAL_INFO("writerfilter.ooxml", "importSubStream: exception while "
-                     "parsing stream " << nType << " : " << e);
+            TOOLS_INFO_EXCEPTION("writerfilter.ooxml", "importSubStream: exception while "
+                     "parsing stream " << nType);
             return xRet;
         }
     }
@@ -614,10 +614,10 @@ void OOXMLDocumentImpl::resolveGlossaryStream(Stream & /*rStream*/)
     {
         pStream = OOXMLDocumentFactory::createStream(mpStream, OOXMLStream::GLOSSARY);
     }
-    catch (uno::Exception const& e)
+    catch (uno::Exception const&)
     {
-        SAL_INFO("writerfilter.ooxml", "resolveGlossaryStream: exception while "
-                 "createStream for glossary" << OOXMLStream::GLOSSARY << " : " << e);
+        TOOLS_INFO_EXCEPTION("writerfilter.ooxml", "resolveGlossaryStream: exception while "
+                 "createStream for glossary" << OOXMLStream::GLOSSARY);
         return;
     }
     uno::Reference<embed::XRelationshipAccess> xRelationshipAccess;
@@ -685,10 +685,10 @@ void OOXMLDocumentImpl::resolveGlossaryStream(Stream & /*rStream*/)
                       uno::Reference<xml::dom::XDocumentBuilder> xDomBuilder(xml::dom::DocumentBuilder::create(xContext));
                       xDom = xDomBuilder->parse(xInputStream);
                   }
-                  catch (uno::Exception const& e)
+                  catch (uno::Exception const&)
                   {
-                      SAL_INFO("writerfilter.ooxml", "importSubStream: exception while "
-                      "parsing stream of Type" << nType << " : " << e);
+                      TOOLS_INFO_EXCEPTION("writerfilter.ooxml", "importSubStream: exception while "
+                                 "parsing stream of Type" << nType);
                       return;
                   }
 
@@ -767,10 +767,10 @@ void OOXMLDocumentImpl::resolveEmbeddingsStream(const OOXMLStream::Pointer_t& pS
                         if (Stream)
                             resolveEmbeddingsStream(Stream);
                     }
-                    catch (uno::Exception const& e)
+                    catch (uno::Exception const&)
                     {
-                        SAL_INFO("writerfilter.ooxml", "resolveEmbeddingsStream: can't find header/footer whilst "
-                               "resolving stream " << streamType << " : " << e);
+                        TOOLS_INFO_EXCEPTION("writerfilter.ooxml", "resolveEmbeddingsStream: can't find header/footer whilst "
+                               "resolving stream " << streamType);
                         return;
                     }
                 }

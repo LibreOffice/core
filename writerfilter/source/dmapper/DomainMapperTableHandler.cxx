@@ -35,6 +35,7 @@
 #include "util.hxx"
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
+#include <tools/diagnose_ex.h>
 #include <comphelper/sequence.hxx>
 
 #ifdef DBG_UTIL
@@ -915,9 +916,9 @@ static bool lcl_emptyRow(std::vector<RowSequence_t>& rTableRanges, sal_Int32 nRo
         if (bRangesAreNotEqual)
             return false;
     }
-    catch (const lang::IllegalArgumentException& e)
+    catch (const lang::IllegalArgumentException&)
     {
-        SAL_WARN( "writerfilter.dmapper", "compareRegionStarts() failed: " << e);
+        TOOLS_WARN_EXCEPTION( "writerfilter.dmapper", "compareRegionStarts() failed");
         return false;
     }
     return true;
@@ -1102,18 +1103,16 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel, bool bTab
                 }
             }
         }
-        catch ( const lang::IllegalArgumentException &e )
+        catch ( const lang::IllegalArgumentException & )
         {
-            SAL_INFO("writerfilter.dmapper",
-                    "Conversion to table error: " << e);
+            TOOLS_INFO_EXCEPTION("writerfilter.dmapper", "Conversion to table error");
 #ifdef DBG_UTIL
             TagLogger::getInstance().chars(std::string("failed to import table!"));
 #endif
         }
-        catch ( const uno::Exception &e )
+        catch ( const uno::Exception & )
         {
-            SAL_INFO("writerfilter.dmapper",
-                    "Exception during table creation: " << e);
+            TOOLS_INFO_EXCEPTION("writerfilter.dmapper", "Exception during table creation");
         }
 
         // If we have a table with a start and an end position, we should make it a floating one.

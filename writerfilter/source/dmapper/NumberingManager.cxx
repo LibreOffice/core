@@ -39,6 +39,7 @@
 #include <osl/diagnose.h>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
+#include <tools/diagnose_ex.h>
 #include <comphelper/sequence.hxx>
 #include <comphelper/propertyvalue.hxx>
 
@@ -624,19 +625,19 @@ void ListDef::CreateNumberingRules( DomainMapper& rDMapper,
             OUString sNumRulesName = getPropertyName( PROP_NUMBERING_RULES );
             xStyle->setPropertyValue( sNumRulesName, uno::makeAny( m_xNumRules ) );
         }
-        catch( const lang::IllegalArgumentException& e )
+        catch( const lang::IllegalArgumentException& )
         {
-            SAL_WARN( "writerfilter", e );
+            TOOLS_WARN_EXCEPTION( "writerfilter", "" );
             assert( !"Incorrect argument to UNO call" );
         }
-        catch( const uno::RuntimeException& e )
+        catch( const uno::RuntimeException& )
         {
-            SAL_WARN( "writerfilter", e );
+            TOOLS_WARN_EXCEPTION( "writerfilter", "" );
             assert( !"Incorrect argument to UNO call" );
         }
-        catch( const uno::Exception& e )
+        catch( const uno::Exception& )
         {
-            SAL_WARN( "writerfilter", e );
+            TOOLS_WARN_EXCEPTION( "writerfilter", "" );
         }
     }
 

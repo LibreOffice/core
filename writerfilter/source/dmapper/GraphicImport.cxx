@@ -49,6 +49,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <rtl/math.hxx>
+#include <tools/diagnose_ex.h>
 #include <comphelper/string.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/sequence.hxx>
@@ -377,9 +378,9 @@ public:
             xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_TITLE ),
                 uno::makeAny( title ));
         }
-        catch( const uno::Exception& e )
+        catch( const uno::Exception& )
         {
-            SAL_WARN("writerfilter", "failed. Message :" << e);
+            TOOLS_WARN_EXCEPTION("writerfilter", "failed");
         }
     }
 
@@ -1387,9 +1388,9 @@ uno::Reference<text::XTextContent> GraphicImport::createGraphicObject(uno::Refer
             }
         }
     }
-    catch( const uno::Exception& e )
+    catch( const uno::Exception& )
     {
-        SAL_WARN("writerfilter", "failed. Message :" << e);
+        TOOLS_WARN_EXCEPTION("writerfilter", "");
     }
     return xGraphicObject;
 }

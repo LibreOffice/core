@@ -841,9 +841,9 @@ void SectionPropertyMap::CopyHeaderFooterTextProperty( const uno::Reference< bea
 
         xTxt->copyText( xPrevTxt );
     }
-    catch ( const uno::Exception& e )
+    catch ( const uno::Exception& )
     {
-        SAL_INFO( "writerfilter", "An exception occurred in SectionPropertyMap::CopyHeaderFooterTextProperty( ) - " << e );
+        TOOLS_INFO_EXCEPTION( "writerfilter", "An exception occurred in SectionPropertyMap::CopyHeaderFooterTextProperty( )" );
     }
 }
 
