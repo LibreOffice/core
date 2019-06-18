@@ -40,6 +40,7 @@
 #include <editsh.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
+#include <svl/intitem.hxx>
 #include <sal/log.hxx>
 
 using namespace com::sun::star;
@@ -1933,7 +1934,39 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
                         SwTextNode* pDelNode = pStt->nNode.GetNode().GetTextNode();
                         SwTextNode* pTextNode = pEnd->nNode.GetNode().GetTextNode();
                         if (pDelNode != nullptr && pTextNode != nullptr && pDelNode != pTextNode)
-                            pDelNode->ChgFormatColl( pTextNode->GetTextColl() );
+                        {
+                            const SwPaM aPam(*pDelNode);
+                            // using Undo, apply paragraph style
+                            m_rDoc.SetTextFormatColl(aPam, pTextNode->GetTextColl());
+
+                            // using Undo, remove direct paragraph formatting of the first deleted paragraph,
+                            // and apply direct paragraph formatting of the next remaining paragraph
+                            SfxItemSet aTmp(
+                                m_rDoc.GetAttrPool(),
+                                svl::Items<
+                                    RES_PARATR_LINESPACING, RES_PARATR_OUTLINELEVEL,
+                                    RES_PARATR_LIST_BEGIN, RES_PARATR_LIST_END - 1>{});
+
+                            SfxItemSet aTmp2(
+                                m_rDoc.GetAttrPool(),
+                                svl::Items<
+                                    RES_PARATR_LINESPACING, RES_PARATR_OUTLINELEVEL,
+                                    RES_PARATR_LIST_BEGIN, RES_PARATR_LIST_END - 1>{});
+
+                            pDelNode->GetParaAttr(aTmp, 0, 0);
+                            pTextNode->GetParaAttr(aTmp2, 0, 0);
+
+                            for( sal_uInt16 nItem = 0; nItem < aTmp.TotalCount(); ++nItem)
+                            {
+                                sal_uInt16 nWhich = aTmp.GetWhichByPos(nItem);
+                                if( SfxItemState::SET == aTmp.GetItemState( nWhich, false ) &&
+                                    SfxItemState::SET != aTmp2.GetItemState( nWhich, false ) )
+                                        aTmp2.Put( aTmp.GetPool()->GetDefaultItem(nWhich), nWhich );
+                            }
+
+                            if (aTmp2.Count())
+                                m_rDoc.getIDocumentContentOperations().InsertItemSet(aPam, aTmp2);
+                        }
                     }
                     else
                     {
