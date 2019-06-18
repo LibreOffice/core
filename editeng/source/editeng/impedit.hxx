@@ -282,6 +282,8 @@ private:
 
     void InvalidateAtWindow(const tools::Rectangle& rRect);
 
+    css::uno::Reference<css::datatransfer::clipboard::XClipboard> GetClipboard();
+
 protected:
 
     // DragAndDropClient
