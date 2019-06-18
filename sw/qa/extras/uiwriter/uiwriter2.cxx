@@ -27,8 +27,12 @@
 #include <itabenum.hxx>
 #include <fmtfsize.hxx>
 #include <xmloff/odffields.hxx>
+#include <sfx2/viewfrm.hxx>
+#include <sfx2/dispatch.hxx>
 #include <txtfrm.hxx>
 #include <redline.hxx>
+#include <view.hxx>
+#include <cmdid.h>
 #include <com/sun/star/style/BreakType.hpp>
 
 namespace
@@ -1355,6 +1359,34 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf125310b)
 
     // losing the page break, as without redlining
     CPPUNIT_ASSERT_EQUAL(1, getPages());
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testImageComment)
+{
+    // Load a document with an as-char image in it.
+    SwDoc* pDoc = createDoc("image-comment.odt");
+    SwView* pView = pDoc->GetDocShell()->GetView();
+
+    // Select the image.
+    pView->GetViewFrame()->GetDispatcher()->Execute(FN_CNTNT_TO_NEXT_FRAME, SfxCallMode::SYNCHRON);
+
+    // Insert a comment while the image is selected.
+    pView->GetViewFrame()->GetDispatcher()->Execute(FN_POSTIT, SfxCallMode::SYNCHRON);
+
+    // Verify that the comment is around the image.
+    // Without the accompanying fix in place, this test would have failed, as FN_POSTIT was disabled
+    // in the frame shell.
+    uno::Reference<text::XTextRange> xPara = getParagraph(1);
+    CPPUNIT_ASSERT_EQUAL(OUString("Text"),
+                         getProperty<OUString>(getRun(xPara, 1), "TextPortionType"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Annotation"),
+                         getProperty<OUString>(getRun(xPara, 2), "TextPortionType"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Frame"),
+                         getProperty<OUString>(getRun(xPara, 3), "TextPortionType"));
+    CPPUNIT_ASSERT_EQUAL(OUString("AnnotationEnd"),
+                         getProperty<OUString>(getRun(xPara, 4), "TextPortionType"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Text"),
+                         getProperty<OUString>(getRun(xPara, 5), "TextPortionType"));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
