@@ -500,7 +500,15 @@ void TypeGroupConverter::convertMarker( PropertySet& rPropSet, sal_Int32 nOoxSym
         {
             Color aFillColor = xShapeProps->getFillProperties().maFillColor;
             aSymbol.FillColor = sal_Int32(aFillColor.getColor(getFilter().getGraphicHelper()));
-            rPropSet.setProperty(PROP_Color, aSymbol.FillColor);
+            // tdf#124817: if there is no fill color, use line color of the symbol
+            if( aSymbol.FillColor < 0 )
+            {
+                Color aLineColor = xShapeProps->getLineProperties().maLineFill.maFillColor;
+                aSymbol.BorderColor = sal_Int32(aLineColor.getColor(getFilter().getGraphicHelper()));
+                rPropSet.setProperty(PROP_Color, aSymbol.BorderColor);
+            }
+            else
+                rPropSet.setProperty(PROP_Color, aSymbol.FillColor);
         }
 
         // set the property

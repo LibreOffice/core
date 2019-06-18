@@ -23,6 +23,8 @@
 #include <com/sun/star/chart/XAxisXSupplier.hpp>
 #include <com/sun/star/chart/MissingValueTreatment.hpp>
 #include <com/sun/star/chart2/TickmarkStyle.hpp>
+#include <com/sun/star/chart2/SymbolStyle.hpp>
+#include <com/sun/star/chart2/Symbol.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/chart2/data/XTextualDataSequence.hpp>
 #include <com/sun/star/chart/DataLabelPlacement.hpp>
@@ -71,6 +73,7 @@ public:
     void testTdf106217();
     void testTdf108021();
     void testTdf100084();
+    void testTdf124817();
     void testAutoBackgroundXLSX();
     void testAutoChartAreaBorderPropXLSX();
     void testChartAreaStyleBackgroundXLSX();
@@ -163,6 +166,7 @@ public:
     CPPUNIT_TEST(testTdf106217);
     CPPUNIT_TEST(testTdf108021);
     CPPUNIT_TEST(testTdf100084);
+    CPPUNIT_TEST(testTdf124817);
     CPPUNIT_TEST(testAutoBackgroundXLSX);
     CPPUNIT_TEST(testAutoChartAreaBorderPropXLSX);
     CPPUNIT_TEST(testChartAreaStyleBackgroundXLSX);
@@ -899,6 +903,34 @@ void Chart2ImportTest::testTdf100084()
     CPPUNIT_ASSERT_MESSAGE("failed to load chart", xChartDoc.is());
     Reference<beans::XPropertySet> xDiagram(xChartDoc->getFirstDiagram(), UNO_QUERY);
     CPPUNIT_ASSERT_MESSAGE("There should be a Diagram.", xDiagram.is());
+}
+
+void Chart2ImportTest::testTdf124817()
+{
+    load("/chart2/qa/extras/data/xlsx/", "tdf124817.xlsx");
+    Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
+    CPPUNIT_ASSERT_MESSAGE("failed to load chart", xChartDoc.is());
+
+    uno::Reference<chart2::XDataSeries> xDataSeries;
+    chart2::Symbol aSymblProp;
+
+    // Check the symbol of data series 1 (marker style none)
+    xDataSeries = getDataSeriesFromDoc(xChartDoc, 0);
+    CPPUNIT_ASSERT(xDataSeries.is());
+    uno::Reference<beans::XPropertySet> xPropSet_0(xDataSeries, uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT((xPropSet_0->getPropertyValue("Symbol") >>= aSymblProp) && (aSymblProp.Style == chart2::SymbolStyle_NONE));
+
+    // Check the symbol of data series 2 (marker style square)
+    xDataSeries = getDataSeriesFromDoc(xChartDoc, 1);
+    CPPUNIT_ASSERT(xDataSeries.is());
+    uno::Reference<beans::XPropertySet> xPropSet_1(xDataSeries, uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT((xPropSet_1->getPropertyValue("Symbol") >>= aSymblProp) && (aSymblProp.FillColor == static_cast<sal_Int32>(0xED7D31)));
+
+    // Check the symbol of data series 3 (marker style diagonal cross)
+    xDataSeries = getDataSeriesFromDoc(xChartDoc, 2);
+    CPPUNIT_ASSERT(xDataSeries.is());
+    uno::Reference<beans::XPropertySet> xPropSet_2(xDataSeries, uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT((xPropSet_2->getPropertyValue("Symbol") >>= aSymblProp) && (aSymblProp.BorderColor == static_cast<sal_Int32>(0xFF0000)));
 }
 
 void Chart2ImportTest::testTransparentBackground(OUString const & filename)
