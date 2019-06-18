@@ -497,6 +497,7 @@ class SvxSetItem;
 #define SID_GROUP                                       ( SID_SVX_START + 454 )
 #define SID_UNGROUP                                     ( SID_SVX_START + 455 )
 #define SID_SET_DEFAULT                                 ( SID_SVX_START + 456 )
+#define SID_REMOVE_HYPERLINK                            ( SID_SVX_START + 457 )
 
 // CAUTION! Range <457 .. 457> used by EditEngine (!)
 
