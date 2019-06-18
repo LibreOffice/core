@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_db689322",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/GenericCommands.xcu",
+        "patchSetId": 2
+      },
+      "lineNbr": 7020,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-06-18T11:53:54Z",
+      "side": 1,
+      "message": "An accelerator would be nice, though it wasn\u0027t there before.",
+      "range": {
+        "startLine": 7020,
+        "startChar": 24,
+        "endLine": 7020,
+        "endChar": 34
+      },
+      "revId": "1cbf85990c6765c168a70c322c45a02bff67abb6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
