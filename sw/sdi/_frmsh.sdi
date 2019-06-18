@@ -411,5 +411,10 @@ interface BaseTextFrame
         ExecMethod = ExecMove ;
         StateMethod = NoState ;
     ]
+    FN_POSTIT
+    [
+        ExecMethod = ExecField ;
+        StateMethod = NoState ;
+    ]
 }
 

@@ -87,6 +87,7 @@
 #include <sfx2/msg.hxx>
 #include <swslots.hxx>
 #include <grfatr.hxx>
+#include <fldmgr.hxx>
 
 using ::editeng::SvxBorderLine;
 using namespace ::com::sun::star;
@@ -124,6 +125,19 @@ void SwFrameShell::ExecMove(SfxRequest& rReq)
         case SID_SELECTALL:
             rSh.SelAll();
             rReq.Done();
+            break;
+    }
+}
+
+void SwFrameShell::ExecField(SfxRequest& rReq)
+{
+    SwWrtShell& rSh = GetShell();
+    sal_uInt16 nSlot = rReq.GetSlot();
+    switch (nSlot)
+    {
+        case FN_POSTIT:
+            SwFieldMgr aFieldMgr(&rSh);
+            rSh.InsertPostIt(aFieldMgr, rReq);
             break;
     }
 }
