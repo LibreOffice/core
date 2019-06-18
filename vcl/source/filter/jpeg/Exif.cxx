@@ -150,7 +150,7 @@ bool Exif::processJpeg(SvStream& rStream, bool bSetValue)
 
 namespace {
 
-sal_uInt16 read16(sal_uInt8 const * data, bool littleEndian) {
+sal_uInt16 read16(sal_uInt8 const (& data)[2], bool littleEndian) {
     if (littleEndian) {
         return data[0] | (sal_uInt16(data[1]) << 8);
     } else {
@@ -158,7 +158,7 @@ sal_uInt16 read16(sal_uInt8 const * data, bool littleEndian) {
     }
 }
 
-void write16(sal_uInt16 value, sal_uInt8 * data, bool littleEndian) {
+void write16(sal_uInt16 value, sal_uInt8 (& data)[2], bool littleEndian) {
     if (littleEndian) {
         data[0] = value & 0xFF;
         data[1] = value >> 8;
@@ -168,7 +168,7 @@ void write16(sal_uInt16 value, sal_uInt8 * data, bool littleEndian) {
     }
 }
 
-sal_uInt32 read32(sal_uInt8 const * data, bool littleEndian) {
+sal_uInt32 read32(sal_uInt8 const (& data)[4], bool littleEndian) {
     if (littleEndian) {
         return data[0] | (sal_uInt32(data[1]) << 8)
             | (sal_uInt32(data[2]) << 16) | (sal_uInt32(data[3]) << 24);
@@ -178,7 +178,7 @@ sal_uInt32 read32(sal_uInt8 const * data, bool littleEndian) {
     }
 }
 
-void write32(sal_uInt32 value, sal_uInt8 * data, bool littleEndian) {
+void write32(sal_uInt32 value, sal_uInt8 (& data)[4], bool littleEndian) {
     if (littleEndian) {
         data[0] = value & 0xFF;
         data[1] = (value >> 8) & 0xFF;
