@@ -147,6 +147,7 @@ public:
 
     //calls Ok without closing dialog
     bool Apply();
+    void Applied() { m_xExampleSet->Put(*GetInputSetImpl()); }
 };
 
 enum class DeactivateRC {

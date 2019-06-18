@@ -317,7 +317,10 @@ void AbstractTabController_Impl::SetText( const OUString& rStr )
 IMPL_LINK_NOARG(AbstractApplyTabController_Impl, ApplyHdl, weld::Button&, void)
 {
     if (m_xDlg->Apply())
+    {
         m_aHandler.Call(nullptr);
+        m_xDlg->Applied();
+    }
 }
 
 void AbstractApplyTabController_Impl::SetApplyHdl( const Link<LinkParamNone*,void>& rLink )
