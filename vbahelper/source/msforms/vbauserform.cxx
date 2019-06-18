@@ -234,12 +234,10 @@ ScVbaUserForm::nestedSearch( const OUString& aPropertyName, uno::Reference< awt:
     if ( !xControl.is() )
     {
         uno::Sequence< uno::Reference< awt::XControl > > aControls = xContainer->getControls();
-        const uno::Reference< awt::XControl >* pCtrl = aControls.getConstArray();
-        const uno::Reference< awt::XControl >* pCtrlsEnd = pCtrl + aControls.getLength();
 
-        for ( ; pCtrl < pCtrlsEnd; ++pCtrl )
+        for ( const auto& rCtrl : aControls )
         {
-            uno::Reference< awt::XControlContainer > xC( *pCtrl, uno::UNO_QUERY );
+            uno::Reference< awt::XControlContainer > xC( rCtrl, uno::UNO_QUERY );
             if ( xC.is() )
             {
                 xControl.set( nestedSearch( aPropertyName, xC ) );
