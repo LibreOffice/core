@@ -1769,6 +1769,26 @@
       </object>
     </child>
     <child>
+      <object class="GtkSeparatorMenuItem" id="MenuTools-separator">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="MenuTools-GoalSeekDialog">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:GoalSeekDialog</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="MenuTools-SolverDialog">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:SolverDialog</property>
+      </object>
+    </child>
+    <child>
       <object class="GtkSeparatorMenuItem" id="MenuTools-separator1">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
@@ -1789,10 +1809,30 @@
       </object>
     </child>
     <child>
+      <object class="GtkSeparatorMenuItem" id="MenuTools-separator4">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+      </object>
+    </child>
+    <child>
       <object class="GtkMenuItem" id="MenuTools-ClearArrows">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:ClearArrows</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="MenuTools-ClearArrowPrecedents">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:ClearArrowPrecedents</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="MenuTools-ClearArrowDependents">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:ClearArrowDependents</property>
       </object>
     </child>
     <child>
@@ -1802,21 +1842,48 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuTools-GoalSeekDialog">
+      <object class="GtkMenuItem" id="MenuTools-ShowErrors">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:GoalSeekDialog</property>
+        <property name="action_name">.uno:ShowErrors</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuTools-SolverDialog">
+      <object class="GtkMenuItem" id="MenuTools-RefreshArrows">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:SolverDialog</property>
+        <property name="action_name">.uno:RefreshArrows</property>
       </object>
     </child>
     <child>
       <object class="GtkSeparatorMenuItem" id="MenuTools-separator3">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="MenuTools-AuditingFillMode">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:AuditingFillMode</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="MenuTools-AutoRefreshArrows">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:AutoRefreshArrows</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="MenuTools-ShowInvalid">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:ShowInvalid</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkSeparatorMenuItem" id="MenuTools-separator5">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
@@ -1829,7 +1896,7 @@
       </object>
     </child>
     <child>
-      <object class="GtkSeparatorMenuItem" id="MenuTools-separator4">
+      <object class="GtkSeparatorMenuItem" id="MenuTools-separator6">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
