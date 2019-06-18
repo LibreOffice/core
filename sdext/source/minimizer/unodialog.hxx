@@ -98,7 +98,7 @@ public:
     void reschedule() const { mxReschedule->reschedule(); }
     bool endStatus() const { return mbStatus; }
     css::uno::Reference<css::awt::XControl> getControl(const OUString& rControlName) const { return mxDialog->getControl(rControlName); }
-    css::uno::Reference<css::frame::XController> controller() const { return mxController; }
+    const css::uno::Reference<css::frame::XController>& controller() const { return mxController; }
     void setPropertyValues(const css::uno::Sequence<OUString>& rNameSeq, const css::uno::Sequence<css::uno::Any>& rValueSeq)
         { mxDialogModelMultiPropertySet->setPropertyValues(rNameSeq, rValueSeq); }
 

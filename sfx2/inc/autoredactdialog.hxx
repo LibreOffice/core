@@ -83,7 +83,7 @@ public:
     OUString get_id(int nRow) const { return m_xControl->get_id(nRow); }
 
     // Sync data on the targets box with the data on the target
-    void setRowData(const int& nRowIndex, const RedactionTarget* pTarget);
+    void setRowData(int nRowIndex, const RedactionTarget* pTarget);
 
     //void connect_changed(const Link<weld::TreeView&, void>& rLink) { m_xControl->connect_changed(rLink); }
     //void connect_row_activated(const Link<weld::TreeView&, void>& rLink) { m_xControl->connect_row_activated(rLink); }
@@ -168,7 +168,7 @@ public:
     SfxAddTargetDialog(weld::Window* pWindow, const OUString& rName);
     SfxAddTargetDialog(weld::Window* pWindow, const OUString& sName,
                        const RedactionTargetType& eTargetType, const OUString& sContent,
-                       const bool& bCaseSensitive, const bool& bWholeWords);
+                       bool bCaseSensitive, bool bWholeWords);
 
     OUString getName() const { return m_xName->get_text(); }
     RedactionTargetType getType() const;

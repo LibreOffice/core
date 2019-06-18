@@ -291,7 +291,7 @@ TEXT_TRANSFORM_TYPE TextTransformation::getTextTransformationType() const
     return maType;
 }
 
-std::set<SCCOL> TextTransformation::getColumns() const
+const std::set<SCCOL>& TextTransformation::getColumns() const
 {
     return mnCol;
 }
@@ -398,7 +398,7 @@ AGGREGATE_FUNCTION AggregateFunction::getAggregateType() const
      return maType;
 }
 
-std::set<SCCOL> AggregateFunction::getColumns() const
+const std::set<SCCOL>& AggregateFunction::getColumns() const
 {
      return maColumns;
 }
@@ -656,7 +656,7 @@ int NumberTransformation::getPrecision() const
     return maPrecision;
 }
 
-std::set<SCCOL> NumberTransformation::getColumn() const
+const std::set<SCCOL>& NumberTransformation::getColumn() const
 {
     return mnCol;
 }
@@ -696,12 +696,12 @@ void ReplaceNullTransformation::Transform(ScDocument& rDoc) const
 
 }
 
-std::set<SCCOL> ReplaceNullTransformation::getColumn() const
+const std::set<SCCOL>& ReplaceNullTransformation::getColumn() const
 {
     return mnCol;
 }
 
-OUString ReplaceNullTransformation::getReplaceString() const
+const OUString& ReplaceNullTransformation::getReplaceString() const
 {
     return msReplaceWith;
 }
@@ -1166,7 +1166,7 @@ DATETIME_TRANSFORMATION_TYPE DateTimeTransformation::getDateTimeTransfromationTy
     return maType;
 }
 
-std::set<SCCOL>DateTimeTransformation::getColumn() const
+const std::set<SCCOL>& DateTimeTransformation::getColumn() const
 {
     return mnCol;
 }

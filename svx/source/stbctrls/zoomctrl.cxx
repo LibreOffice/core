@@ -49,7 +49,7 @@ public:
     ZoomPopup_Impl( sal_uInt16 nZ, SvxZoomEnableFlags nValueSet );
 
     sal_uInt16 GetZoom();
-    OString    GetCurItemIdent() const { return m_xMenu->GetCurItemIdent(); }
+    OString const & GetCurItemIdent() const { return m_xMenu->GetCurItemIdent(); }
 
     sal_uInt16 Execute(vcl::Window* pWindow, const Point& rPopupPos)
     {

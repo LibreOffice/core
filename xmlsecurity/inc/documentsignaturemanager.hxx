@@ -125,7 +125,7 @@ public:
     {
         mxSignatureStream = xSignatureStream;
     }
-    css::uno::Reference<css::embed::XStorage> getStore() { return mxStore; }
+    const css::uno::Reference<css::embed::XStorage>& getStore() { return mxStore; }
     DocumentSignatureMode getSignatureMode() const { return meSignatureMode; }
     SignatureInformations& getCurrentSignatureInformations()
     {

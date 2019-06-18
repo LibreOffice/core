@@ -259,7 +259,7 @@ public:
     css::uno::Sequence< OUString > _getSupportedServiceNames();
 
     /// @throws css::uno::RuntimeException
-    css::uno::Sequence< css::uno::Type > _getTypes(  );
+    css::uno::Sequence< css::uno::Type > const & _getTypes(  );
 
     void setMaster( SvxShapeMaster* pMaster );
 

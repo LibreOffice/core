@@ -143,7 +143,7 @@ Qt5FontFace::CreateFontInstance(const FontSelectPattern& rFSD) const
     return new Qt5Font(*this, rFSD);
 }
 
-const FontCharMapRef Qt5FontFace::GetFontCharMap() const
+const FontCharMapRef& Qt5FontFace::GetFontCharMap() const
 {
     if (m_xCharMap.is())
         return m_xCharMap;

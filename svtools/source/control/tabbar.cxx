@@ -229,7 +229,7 @@ struct ImplTabBarItem
         return mbSelect || (pCurItem == this);
     }
 
-    OUString GetRenderText() const
+    OUString const & GetRenderText() const
     {
         return maText;
     }

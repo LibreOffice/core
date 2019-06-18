@@ -75,7 +75,7 @@ bool SfxRedactionHelper::isRedactMode(const SfxRequest& rReq)
     return false;
 }
 
-OUString SfxRedactionHelper::getStringParam(const SfxRequest& rReq, const sal_uInt16& nParamId)
+OUString SfxRedactionHelper::getStringParam(const SfxRequest& rReq, sal_uInt16 nParamId)
 {
     OUString sStringParam;
 
@@ -128,7 +128,7 @@ void setPageMargins(uno::Reference<beans::XPropertySet>& xPageProperySet,
 
 // #i10613# Extracted from ImplCheckRect::ImplCreate
 tools::Rectangle ImplCalcActionBounds(const MetaAction& rAct, const OutputDevice& rOut,
-                                      const sal_Int32& nStrStartPos, const sal_Int32& nStrEndPos)
+                                      sal_Int32 nStrStartPos, sal_Int32 nStrEndPos)
 {
     tools::Rectangle aActionBounds;
 
@@ -185,8 +185,7 @@ tools::Rectangle ImplCalcActionBounds(const MetaAction& rAct, const OutputDevice
 } // End of anon namespace
 
 void SfxRedactionHelper::getPageMetaFilesFromDoc(std::vector<GDIMetaFile>& aMetaFiles,
-                                                 std::vector<::Size>& aPageSizes,
-                                                 const sal_Int32& nPages,
+                                                 std::vector<::Size>& aPageSizes, sal_Int32 nPages,
                                                  DocumentToGraphicRenderer& aRenderer)
 {
     for (sal_Int32 nPage = 1; nPage <= nPages; ++nPage)
@@ -219,11 +218,10 @@ void SfxRedactionHelper::getPageMetaFilesFromDoc(std::vector<GDIMetaFile>& aMeta
 }
 
 void SfxRedactionHelper::addPagesToDraw(
-    uno::Reference<XComponent>& xComponent, const sal_Int32& nPages,
+    uno::Reference<XComponent>& xComponent, sal_Int32 nPages,
     const std::vector<GDIMetaFile>& aMetaFiles, const std::vector<::Size>& aPageSizes,
     const PageMargins& aPageMargins,
-    const std::vector<std::pair<RedactionTarget*, OUString>>& r_aTableTargets,
-    const bool& bIsAutoRedact)
+    const std::vector<std::pair<RedactionTarget*, OUString>>& r_aTableTargets, bool bIsAutoRedact)
 {
     // Access the draw pages
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(xComponent, uno::UNO_QUERY);

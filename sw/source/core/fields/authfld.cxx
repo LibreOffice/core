@@ -542,7 +542,7 @@ std::unique_ptr<SwField> SwAuthorityField::Copy() const
     return std::make_unique<SwAuthorityField>(pAuthType, m_xAuthEntry.get());
 }
 
-OUString SwAuthorityField::GetFieldText(ToxAuthorityField eField) const
+const OUString & SwAuthorityField::GetFieldText(ToxAuthorityField eField) const
 {
     return m_xAuthEntry->GetAuthorField( eField );
 }

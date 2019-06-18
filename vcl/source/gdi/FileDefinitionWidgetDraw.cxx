@@ -71,7 +71,7 @@ std::shared_ptr<WidgetDefinition> getWidgetDefinition(OUString const& rDefinitio
     return std::shared_ptr<WidgetDefinition>();
 }
 
-std::shared_ptr<WidgetDefinition> getWidgetDefinitionForTheme(OUString const& rThemenName)
+std::shared_ptr<WidgetDefinition> const& getWidgetDefinitionForTheme(OUString const& rThemenName)
 {
     static std::shared_ptr<WidgetDefinition> spDefinition;
     if (!spDefinition)
