@@ -82,7 +82,7 @@ public:
 
     inline sal_uInt16 GetLevel() const;
     inline sal_uInt16 GetPosition() const;
-    inline bool IsHeading();
+    inline bool IsHeading() const;
 
     void OverrideLevel(sal_uInt16 nNewLv);
 
@@ -104,7 +104,7 @@ inline sal_uInt16 LwpNumberingOverride::GetPosition() const
     return m_nPosition;
 }
 
-inline bool LwpNumberingOverride::IsHeading()
+inline bool LwpNumberingOverride::IsHeading() const
 {
     return (m_nValues & HEADING) != 0;
 }

@@ -12,7 +12,7 @@
 #include <editeng/flditem.hxx>
 #include <editeng/editview.hxx>
 
-void URLFieldHelper::RemoveURLField(Outliner* pOutl, OutlinerView* pOLV)
+void URLFieldHelper::RemoveURLField(Outliner* pOutl, const OutlinerView* pOLV)
 {
     if (!pOutl || !pOLV)
         return;
@@ -26,7 +26,7 @@ void URLFieldHelper::RemoveURLField(Outliner* pOutl, OutlinerView* pOLV)
     }
 }
 
-bool URLFieldHelper::IsCursorAtURLField(OutlinerView* pOLV)
+bool URLFieldHelper::IsCursorAtURLField(const OutlinerView* pOLV)
 {
     if (!pOLV)
         return false;

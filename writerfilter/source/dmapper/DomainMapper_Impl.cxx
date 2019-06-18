@@ -508,7 +508,7 @@ void DomainMapper_Impl::SetIsFirstParagraphInSection( bool bIsFirst )
     m_bIsFirstParaInSection = bIsFirst;
 }
 
-bool DomainMapper_Impl::GetIsFirstParagraphInSection()
+bool DomainMapper_Impl::GetIsFirstParagraphInSection() const
 {
     // Anchored objects may include multiple paragraphs,
     // and none of them should be considered the first para in section.
@@ -870,7 +870,7 @@ void DomainMapper_Impl::setSdtEndDeferred(bool bSdtEndDeferred)
     m_bSdtEndDeferred = bSdtEndDeferred;
 }
 
-bool DomainMapper_Impl::isSdtEndDeferred()
+bool DomainMapper_Impl::isSdtEndDeferred() const
 {
     return m_bSdtEndDeferred;
 }
@@ -880,7 +880,7 @@ void DomainMapper_Impl::setParaSdtEndDeferred(bool bParaSdtEndDeferred)
     m_bParaSdtEndDeferred = bParaSdtEndDeferred;
 }
 
-bool DomainMapper_Impl::isParaSdtEndDeferred()
+bool DomainMapper_Impl::isParaSdtEndDeferred() const
 {
     return m_bParaSdtEndDeferred;
 }
@@ -2613,7 +2613,7 @@ bool DomainMapper_Impl::IsSdtEndBefore()
     return bIsSdtEndBefore;
 }
 
-bool DomainMapper_Impl::IsDiscardHeaderFooter()
+bool DomainMapper_Impl::IsDiscardHeaderFooter() const
 {
     return m_bDiscardHeaderFooter;
 }
@@ -3260,7 +3260,7 @@ HeaderFooterContext::HeaderFooterContext(bool bTextInserted)
 {
 }
 
-bool HeaderFooterContext::getTextInserted()
+bool HeaderFooterContext::getTextInserted() const
 {
     return m_bTextInserted;
 }
@@ -5860,7 +5860,7 @@ void DomainMapper_Impl::SetCurrentRedlineIsRead()
     m_currentRedline.clear();
 }
 
-sal_Int32 DomainMapper_Impl::GetCurrentRedlineToken(  )
+sal_Int32 DomainMapper_Impl::GetCurrentRedlineToken(  ) const
 {
     sal_Int32 nToken = 0;
     assert( m_currentRedline.get());
@@ -6193,7 +6193,7 @@ void DomainMapper_Impl::disableInteropGrabBag()
     m_aSubInteropGrabBag.clear();
 }
 
-bool DomainMapper_Impl::isInteropGrabBagEnabled()
+bool DomainMapper_Impl::isInteropGrabBagEnabled() const
 {
     return !(m_aInteropGrabBagName.isEmpty());
 }

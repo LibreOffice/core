@@ -74,10 +74,10 @@ private: //data member
 public:
     static sal_uInt16 m_nFileRevision;
     void Read(LwpSvStream *pStrm);
-    sal_uInt32 GetRootIndexOffset();
+    sal_uInt32 GetRootIndexOffset() const;
     LwpObjectID& GetDocID();
 };
-inline sal_uInt32 LwpFileHeader::GetRootIndexOffset()
+inline sal_uInt32 LwpFileHeader::GetRootIndexOffset() const
 {
     return m_nRootIndexOffset;
 }

@@ -95,7 +95,7 @@ public:
         return m_rThis.GetDoc() ? m_pFormatFootnote : nullptr;
     }
 
-    SwFormatFootnote const& GetFootnoteFormatOrThrow() {
+    SwFormatFootnote const& GetFootnoteFormatOrThrow() const {
         SwFormatFootnote const*const pFootnote( GetFootnoteFormat() );
         if (!pFootnote) {
             throw uno::RuntimeException("SwXFootnote: disposed or invalid", nullptr);

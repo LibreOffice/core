@@ -916,7 +916,7 @@ ScVbaWorksheet::hasMethod( const OUString& /*aName*/ )
 }
 
 uno::Reference< container::XNameAccess >
-ScVbaWorksheet::getFormControls()
+ScVbaWorksheet::getFormControls() const
 {
     uno::Reference< container::XNameAccess > xFormControls;
     try
@@ -1017,7 +1017,7 @@ ScVbaWorksheet::getCodeName()
 }
 
 sal_Int16
-ScVbaWorksheet::getSheetID()
+ScVbaWorksheet::getSheetID() const
 {
     uno::Reference< sheet::XCellRangeAddressable > xAddressable( mxSheet, uno::UNO_QUERY_THROW ); // if ActiveSheet, mxSheet is null.
     return xAddressable->getRangeAddress().Sheet;

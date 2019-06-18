@@ -233,7 +233,7 @@ public:
     ~SwLayNotify();
 
     void SetLowersComplete( bool b ) { m_bLowersComplete = b; }
-    bool IsLowersComplete()          { return m_bLowersComplete; }
+    bool IsLowersComplete() const    { return m_bLowersComplete; }
 };
 
 class SwFlyNotify : public SwLayNotify
@@ -575,7 +575,7 @@ public:
      *    true if mpFrame != 0 and mpFrame is not client of pRegIn
      *    false otherwise
      */
-    bool HasBeenDeleted();
+    bool HasBeenDeleted() const;
 };
 
 #endif

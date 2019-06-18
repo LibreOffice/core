@@ -364,7 +364,7 @@ public:
     ScGridWindow*   GetActiveWin();             // from View
     const ScGridWindow* GetActiveWin() const;
     ScDrawView*     GetScDrawView();            // from View
-    bool            IsMinimized();              // from View
+    bool            IsMinimized() const;        // from View
 
     void            UpdateInputHandler( bool bForce = false );
 
@@ -478,7 +478,7 @@ public:
     bool            SimpleColMarked();
     bool            SimpleRowMarked();
 
-    bool            IsMultiMarked();
+    bool            IsMultiMarked() const;
 
                     /** Disallow cell fill (Paste,Fill,...) on Ctrl+A all
                         selected or another high amount of selected cells.
@@ -494,9 +494,9 @@ public:
     void            GetFillData( SCCOL& rStartCol, SCROW& rStartRow,
                                  SCCOL& rEndCol, SCROW& rEndRow );
     void            ResetFillMode();
-    bool            IsAnyFillMode()             { return nFillMode != ScFillMode::NONE; }
-    bool            IsFillMode()                { return nFillMode == ScFillMode::FILL; }
-    ScFillMode      GetFillMode()               { return nFillMode; }
+    bool            IsAnyFillMode() const       { return nFillMode != ScFillMode::NONE; }
+    bool            IsFillMode() const          { return nFillMode == ScFillMode::FILL; }
+    ScFillMode      GetFillMode() const         { return nFillMode; }
 
     SvxAdjust       GetEditAdjust() const {return eEditAdjust; }
     void            SetEditAdjust( SvxAdjust eNewEditAdjust ) { eEditAdjust = eNewEditAdjust; }
@@ -553,7 +553,7 @@ public:
 
     /// Force page size for PgUp/PgDown to overwrite the computation based on m_aVisArea.
     void ForcePageUpDownOffset(long nTwips) { m_nLOKPageUpDownOffset = nTwips; }
-    long GetPageUpDownOffset() { return m_nLOKPageUpDownOffset; }
+    long GetPageUpDownOffset() const { return m_nLOKPageUpDownOffset; }
 
     void            KillEditView();
     void            ResetEditView();
@@ -608,7 +608,7 @@ public:
     SCCOL           PrevCellsX( ScHSplitPos eWhichX ) const;        // Cells on the preceding page
     SCROW           PrevCellsY( ScVSplitPos eWhichY ) const;
 
-    bool            IsOle();
+    bool            IsOle() const;
     void            SetScreen( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 );
     void            SetScreen( const tools::Rectangle& rVisArea );
     void            SetScreenPos( const Point& rVisAreaStart );
@@ -639,7 +639,7 @@ public:
     const Size&     GetScenButSize() const              { return aScenButSize; }
     void            SetScenButSize(const Size& rNew)    { aScenButSize = rNew; }
 
-    bool            IsSelCtrlMouseClick() { return bSelCtrlMouseClick; }
+    bool            IsSelCtrlMouseClick() const { return bSelCtrlMouseClick; }
 
     static inline long ToPixel( sal_uInt16 nTwips, double nFactor );
 

@@ -96,14 +96,14 @@ public:
 
     OUStringBuffer& getLocale() { return m_sLocale; }
     /// If createControlShape() was ever called.
-    bool hasElements() { return m_bHasElements; }
+    bool hasElements() const { return m_bHasElements; }
 
     void setOutsideAParagraph(bool bOutsideAParagraph)
     {
         m_bOutsideAParagraph = bOutsideAParagraph;
     }
 
-    bool isOutsideAParagraph() { return m_bOutsideAParagraph; }
+    bool isOutsideAParagraph() const { return m_bOutsideAParagraph; }
 
     bool isInsideDropDownControl() const { return m_bInsideDropDownControl; }
     void setInsideDropDownControl(bool bInside) { m_bInsideDropDownControl = bInside; }
@@ -115,9 +115,9 @@ public:
 
     void appendToInteropGrabBag(const css::beans::PropertyValue& rValue);
     css::uno::Sequence<css::beans::PropertyValue> getInteropGrabBagAndClear();
-    bool isInteropGrabBagEmpty();
+    bool isInteropGrabBagEmpty() const;
     bool containedInInteropGrabBag(const OUString& rValueName);
-    sal_Int32 getInteropGrabBagSize();
+    sal_Int32 getInteropGrabBagSize() const;
 };
 
 } // namespace dmapper

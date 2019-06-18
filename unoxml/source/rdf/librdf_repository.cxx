@@ -377,7 +377,7 @@ public:
 //        throw (uno::RuntimeException, lang::IllegalArgumentException,
 //            container::NoSuchElementException, rdf::RepositoryException);
 
-    const librdf_TypeConverter& getTypeConverter() { return m_TypeConverter; };
+    const librdf_TypeConverter& getTypeConverter() const { return m_TypeConverter; };
 
 private:
 

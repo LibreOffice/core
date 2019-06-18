@@ -90,7 +90,7 @@ class SW_DLLPUBLIC SwNode
 public:
     /// sw_redlinehide: redline node merge state
     enum class Merge { None, First, NonFirst, Hidden };
-    bool IsCreateFrameWhenHidingRedlines() {
+    bool IsCreateFrameWhenHidingRedlines() const {
         return m_eMerge == Merge::None || m_eMerge == Merge::First;
     }
     void SetRedlineMergeFlag(Merge const eMerge) { m_eMerge = eMerge; }

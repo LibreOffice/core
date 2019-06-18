@@ -17,12 +17,12 @@
 #include <docsh.hxx>
 #include <view.hxx>
 
-weld::Window* GetFrameWeld(SfxFrame* pFrame)
+weld::Window* GetFrameWeld(const SfxFrame* pFrame)
 {
     return pFrame ? pFrame->GetWindow().GetFrameWeld() : nullptr;
 }
 
-weld::Window* GetFrameWeld(SfxMedium* pMedium)
+weld::Window* GetFrameWeld(const SfxMedium* pMedium)
 {
     return GetFrameWeld(pMedium ? pMedium->GetLoadTargetFrame() : nullptr);
 }

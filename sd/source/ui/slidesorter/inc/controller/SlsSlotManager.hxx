@@ -92,7 +92,7 @@ private:
     /** Use one of several ways to determine where to insert a new page.
         This can be the current selection or the insertion indicator.
     */
-    sal_Int32 GetInsertionPosition();
+    sal_Int32 GetInsertionPosition() const;
 };
 
 } } } // end of namespace ::sd::slidesorter::controller

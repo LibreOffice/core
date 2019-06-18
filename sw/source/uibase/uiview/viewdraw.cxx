@@ -624,7 +624,7 @@ SdrView* SwView::GetDrawView() const
     return GetWrtShell().GetDrawView();
 }
 
-bool SwView::IsBezierEditMode()
+bool SwView::IsBezierEditMode() const
 {
     return (!IsDrawSelMode() && GetWrtShell().GetDrawView()->HasMarkablePoints());
 }

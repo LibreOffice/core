@@ -52,7 +52,7 @@ public:
     OUString GetPath() const;
     void SetPath( const OUString& rPath );
     // WIP, please don't remove, dear Clang plugins
-    bool IsInsertAsLinkSelected();
+    bool IsInsertAsLinkSelected() const;
 };
 
 #endif // INCLUDED_SD_SOURCE_UI_INC_FILEDLG_HXX

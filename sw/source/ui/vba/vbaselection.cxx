@@ -942,7 +942,7 @@ uno::Any SAL_CALL SwVbaSelection::Columns( const uno::Any& index )
     return uno::makeAny( xCol );
 }
 
-uno::Reference< text::XTextTable > SwVbaSelection::GetXTextTable()
+uno::Reference< text::XTextTable > SwVbaSelection::GetXTextTable() const
 {
     uno::Reference< beans::XPropertySet > xCursorProps( mxTextViewCursor, uno::UNO_QUERY_THROW );
     uno::Reference< text::XTextTable > xTextTable;
@@ -950,7 +950,7 @@ uno::Reference< text::XTextTable > SwVbaSelection::GetXTextTable()
     return xTextTable;
 }
 
-bool SwVbaSelection::IsInTable()
+bool SwVbaSelection::IsInTable() const
 {
     uno::Reference< text::XTextTable > xTextTable = GetXTextTable();
     return xTextTable.is();

@@ -37,7 +37,7 @@ public:
     bool            IsSkipEmptyCells() const;
     bool            IsTranspose() const;
     bool            IsLink() const;
-    InsCellCmd      GetMoveMode();
+    InsCellCmd      GetMoveMode() const;
 
     void    SetOtherDoc( bool bSet );
     void    SetFillMode( bool bSet );

@@ -164,7 +164,7 @@ void LwpTextAttributeOverride::Read(LwpObjectStream* pStrm)
     pStrm->SkipExtra();
 }
 
-bool LwpTextAttributeOverride::IsHighlight()
+bool LwpTextAttributeOverride::IsHighlight() const
 {
     return (m_nValues & TAO_HIGHLIGHT) != 0;
 }
@@ -497,7 +497,7 @@ void LwpIndentOverride::Override(LwpIndentOverride* other)
         other->OverrideRelative(GetRelative());
 }
 
-sal_uInt16 LwpIndentOverride::GetRelative()
+sal_uInt16 LwpIndentOverride::GetRelative() const
 {
     if ((m_nOverride & IO_REL_FLAGS) == IO_REL_FIRST)
         return RELATIVE_FIRST;
@@ -506,7 +506,7 @@ sal_uInt16 LwpIndentOverride::GetRelative()
     return RELATIVE_REST;
 }
 
-bool LwpIndentOverride::IsUseRelative()
+bool LwpIndentOverride::IsUseRelative() const
 {
     return (m_nValues & IO_USE_RELATIVE) != 0;
 }

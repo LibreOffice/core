@@ -82,7 +82,7 @@ class ToolBarMerger
                                                    OUString& rControlType,
                                                    sal_uInt16& rWidth );
 
-        static ReferenceToolbarPathInfo FindReferencePoint( ToolBox* pToolbar,
+        static ReferenceToolbarPathInfo FindReferencePoint( const ToolBox* pToolbar,
                                                             const OUString& rReferencePoint );
 
         static bool       ProcessMergeOperation( ToolBox*                  pToolbar,

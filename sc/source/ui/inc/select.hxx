@@ -48,7 +48,7 @@ private:
     bool            bStarted;
     ScAddress       aAnchorPos;
 
-    ScSplitPos      GetWhich();
+    ScSplitPos      GetWhich() const;
 
     sal_uLong           CalcUpdateInterval( const Size& rWinSize, const Point& rEffPos,
                                         bool bLeftScroll, bool bTopScroll, bool bRightScroll, bool bBottomScroll );

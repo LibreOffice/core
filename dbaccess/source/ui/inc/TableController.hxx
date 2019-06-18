@@ -85,7 +85,7 @@ namespace dbaui
     public:
         OTableController(const css::uno::Reference< css::uno::XComponentContext >& _rM);
 
-        const css::uno::Reference< css::beans::XPropertySet >&  getTable() { return m_xTable;}
+        const css::uno::Reference< css::beans::XPropertySet >&  getTable() const { return m_xTable;}
 
         bool     isAddAllowed()     const;
         bool     isDropAllowed()    const;

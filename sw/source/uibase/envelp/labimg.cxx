@@ -184,7 +184,7 @@ SfxPoolItem* SwLabItem::Clone(SfxItemPool*) const
     return new SwLabItem(*this);
 }
 
-Sequence<OUString> SwLabCfgItem::GetPropertyNames()
+Sequence<OUString> SwLabCfgItem::GetPropertyNames() const
 {
     static const char* aLabelPropNames[] =
     {

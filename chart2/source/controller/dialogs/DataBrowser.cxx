@@ -767,7 +767,7 @@ bool DataBrowser::ShowQueryBox()
     return xQueryBox->run() == RET_YES;
 }
 
-bool DataBrowser::IsDataValid()
+bool DataBrowser::IsDataValid() const
 {
     bool bValid = true;
     const sal_Int32 nCol = lcl_getColumnInData( GetCurColumnId());

@@ -375,7 +375,7 @@ public:
     const sd::AnnotationVector& getAnnotations() const { return maAnnotations; }
     bool Equals(const SdPage&) const;
     virtual void dumpAsXml(xmlTextWriterPtr pWriter) const override;
-    sal_uInt16 getPageId() { return mnPageId; }
+    sal_uInt16 getPageId() const { return mnPageId; }
 
     static sal_uInt16 mnLastPageId;
 

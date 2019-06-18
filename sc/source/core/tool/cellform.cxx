@@ -150,7 +150,7 @@ void ScCellFormat::GetInputString(
     }
 }
 
-OUString ScCellFormat::GetOutputString( ScDocument& rDoc, const ScAddress& rPos, ScRefCellValue& rCell )
+OUString ScCellFormat::GetOutputString( ScDocument& rDoc, const ScAddress& rPos, const ScRefCellValue& rCell )
 {
     if (rCell.isEmpty())
         return EMPTY_OUSTRING;

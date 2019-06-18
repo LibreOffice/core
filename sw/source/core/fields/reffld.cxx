@@ -1273,7 +1273,7 @@ public:
 
     void Check( SwDoc& rDoc, SwDoc& rDestDoc, SwGetRefField& rField, bool bField );
 
-    const OUString& GetName() { return aName; }
+    const OUString& GetName() const { return aName; }
 };
 
 /// Get a sorted list of the field IDs from a document.

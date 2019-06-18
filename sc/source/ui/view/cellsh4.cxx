@@ -28,7 +28,7 @@
 #include <document.hxx>
 #include <sc.hrc>
 
-const VclPtr<vcl::Window>& ScCellShell::GetFrameWin()
+const VclPtr<vcl::Window>& ScCellShell::GetFrameWin() const
 {
     return pFrameWin;
 }

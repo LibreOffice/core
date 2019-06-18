@@ -83,7 +83,7 @@ public:
 
     virtual void Parse(IXFStream* pOutputStream) override;
     LwpObjectID const & GetNextID(){return GetNext();}
-    sal_uInt8 GetColumnID(){return cColumn;}
+    sal_uInt8 GetColumnID() const {return cColumn;}
 
     virtual void Convert(XFCell * pCell, LwpTableLayout* pCellsMap=nullptr);
 protected:
@@ -107,7 +107,7 @@ public:
     void Parse(IXFStream* pOutputStream) override;
     LwpObjectID const & GetChildHeadID(){return cChild.GetHead();}
     LwpObjectID const & GetNextID(){return GetNext();}
-    sal_uInt16 GetRowID(){return cRowID;}
+    sal_uInt16 GetRowID() const {return cRowID;}
 private:
     void Read() override;
     virtual ~LwpRowList() override;
@@ -125,7 +125,7 @@ class LwpNumericValue final : public LwpObject
 public:
     LwpNumericValue(LwpObjectHeader const &objHdr, LwpSvStream* pStrm);
 
-    double GetValue(){return cNumber;}
+    double GetValue() const {return cNumber;}
     void Parse(IXFStream* pOutputStream) override;
 private:
     void Read() override;
@@ -144,8 +144,8 @@ public:
     LwpTableRange(LwpObjectHeader const &objHdr, LwpSvStream* pStrm);
 
     void Parse(IXFStream* pOutputStream) override;
-    const LwpObjectID& GetCellRangeID(){return cpCellRange;}
-    const LwpObjectID& GetTableID(){ return cqTable;}
+    const LwpObjectID& GetCellRangeID() const {return cpCellRange;}
+    const LwpObjectID& GetTableID() const { return cqTable;}
     LwpTableRange* GetNext() { return dynamic_cast<LwpTableRange*>(LwpDLVList::GetNext().obj().get());}
 private:
     void Read() override;
@@ -164,7 +164,7 @@ public:
     LwpCellRange(LwpObjectHeader const &objHdr, LwpSvStream* pStrm);
 
     void Parse(IXFStream* pOutputStream) override;
-    const LwpObjectID& GetFolderID(){return cpFolder;}
+    const LwpObjectID& GetFolderID() const {return cpFolder;}
 private:
     void Read() override;
     virtual ~LwpCellRange() override;
@@ -227,11 +227,11 @@ class LwpRowColumnQualifier
 public:
     LwpRowColumnQualifier();
 
-    bool IsAbsolute();
+    bool IsAbsolute() const;
 
-    bool IsAfter();
+    bool IsAfter() const;
 
-    bool IsBad();
+    bool IsBad() const;
 
     void QuickRead(LwpObjectStream *pStrm);
 
@@ -252,19 +252,19 @@ LwpRowColumnQualifier::LwpRowColumnQualifier()
 }
 
 inline bool
-LwpRowColumnQualifier::IsAfter()
+LwpRowColumnQualifier::IsAfter() const
 {
     return (cFlags & REF_AFTER) != 0;
 }
 
 inline bool
-LwpRowColumnQualifier::IsBad()
+LwpRowColumnQualifier::IsBad() const
 {
     return (cFlags & REF_BAD) != 0;
 }
 
 inline bool
-LwpRowColumnQualifier::IsAbsolute()
+LwpRowColumnQualifier::IsAbsolute() const
 {
     return (cFlags & REF_ABSOLUTE) != 0;
 }

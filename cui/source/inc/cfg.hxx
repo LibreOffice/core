@@ -121,26 +121,26 @@ public:
         const css::uno::Reference< css::uno::XInterface >& xManager );
 
     void SetModified( bool bValue = true ) { bModified = bValue; }
-    bool IsModified( ) { return bModified; }
+    bool IsModified( ) const { return bModified; }
 
-    bool IsReadOnly( ) { return bReadOnly; }
-    bool IsDocConfig( ) { return bDocConfig; }
-
-    const css::uno::Reference
-        < css::ui::XUIConfigurationManager >&
-            GetConfigManager() { return m_xCfgMgr; };
+    bool IsReadOnly( ) const { return bReadOnly; }
+    bool IsDocConfig( ) const { return bDocConfig; }
 
     const css::uno::Reference
         < css::ui::XUIConfigurationManager >&
-            GetParentConfigManager() { return m_xParentCfgMgr; };
+            GetConfigManager() const { return m_xCfgMgr; };
+
+    const css::uno::Reference
+        < css::ui::XUIConfigurationManager >&
+            GetParentConfigManager() const { return m_xParentCfgMgr; };
 
     const css::uno::Reference
         < css::ui::XImageManager >&
-            GetImageManager() { return m_xImgMgr; };
+            GetImageManager() const { return m_xImgMgr; };
 
     const css::uno::Reference
         < css::ui::XImageManager >&
-            GetParentImageManager() { return m_xParentImgMgr; };
+            GetParentImageManager() const { return m_xParentImgMgr; };
 
     css::uno::Reference
         < css::container::XNameAccess > m_xCommandToLabelMap;
@@ -288,17 +288,17 @@ public:
     void    SetEntries( std::unique_ptr<SvxEntries> entries ) { mpEntries = std::move(entries); }
 
     void    SetMain() { bIsMain = true; }
-    bool    IsMain() { return bIsMain; }
+    bool    IsMain() const { return bIsMain; }
 
     void    SetParentData( bool bValue = true ) { bIsParentData = bValue; }
-    bool    IsParentData() { return bIsParentData; }
+    bool    IsParentData() const { return bIsParentData; }
 
     void    SetModified( bool bValue = true ) { bIsModified = bValue; }
-    bool    IsModified() { return bIsModified; }
+    bool    IsModified() const { return bIsModified; }
 
-    bool    IsMovable();
-    bool    IsDeletable();
-    bool    IsRenamable();
+    bool    IsMovable() const;
+    bool    IsDeletable() const;
+    bool    IsRenamable() const;
 
     void    SetVisible( bool b ) { bIsVisible = b; }
     bool    IsVisible() const { return bIsVisible; }
@@ -306,7 +306,7 @@ public:
     void    SetBackupGraphic( css::uno::Reference< css::graphic::XGraphic > const & graphic )
                 { xBackupGraphic = graphic; }
 
-    const css::uno::Reference< css::graphic::XGraphic >& GetBackupGraphic()
+    const css::uno::Reference< css::graphic::XGraphic >& GetBackupGraphic() const
                 { return xBackupGraphic; }
 
     sal_Int32   GetStyle() const { return nStyle; }
@@ -435,7 +435,7 @@ protected:
 
     void                InsertEntryIntoUI(SvxConfigEntry* pNewEntryData,
                                           int nPos, int nStartCol);
-    void InsertEntryIntoNotebookbarTabUI(OUString& sClassId ,OUString& sUIItemId, OUString& sUIItemCommand, int nPos,
+    void InsertEntryIntoNotebookbarTabUI(const OUString& sClassId, const OUString& sUIItemId, const OUString& sUIItemCommand, int nPos,
                                          int nStartCol);
 
     SvxEntries*     FindParentForChild( SvxEntries* pParentEntries,
@@ -483,7 +483,7 @@ public:
         GetFrameWithDefaultAndIdentify( css::uno::Reference< css::frame::XFrame >& _inout_rxFrame );
 
     OUString    GetScriptURL() const;
-    OUString    GetSelectedDisplayName();
+    OUString    GetSelectedDisplayName() const;
 };
 
 class SvxMainMenuOrganizerDialog : public weld::GenericDialogController
@@ -576,7 +576,7 @@ public:
     SvxNewToolbarDialog(weld::Window* pWindow, const OUString& rName);
     virtual ~SvxNewToolbarDialog() override;
 
-    OUString GetName()
+    OUString GetName() const
     {
         return m_xEdtName->get_text();
     }

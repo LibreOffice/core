@@ -50,7 +50,7 @@ public:
     virtual ~XMLIndexBodyContext() override;
 
     /// return whether any content elements were encountered
-    inline bool HasContent();
+    inline bool HasContent() const;
 
 protected:
 
@@ -60,7 +60,7 @@ protected:
         const css::uno::Reference<css::xml::sax::XAttributeList> & xAttrList ) override;
 };
 
-inline bool XMLIndexBodyContext::HasContent()
+inline bool XMLIndexBodyContext::HasContent() const
 {
     return bHasContent;
 }

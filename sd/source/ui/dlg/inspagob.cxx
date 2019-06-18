@@ -101,7 +101,7 @@ std::vector<OUString> SdInsertPagesObjsDlg::GetList( const sal_uInt16 nType )
 /**
  *  is link checked
  */
-bool SdInsertPagesObjsDlg::IsLink()
+bool SdInsertPagesObjsDlg::IsLink() const
 {
     return m_xCbxLink->get_active();
 }

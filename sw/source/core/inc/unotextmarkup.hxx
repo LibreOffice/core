@@ -75,7 +75,7 @@ private:
 protected:
     SwTextNode* GetTextNode();
     void ClearTextNode();
-    const ModelToViewHelper& GetConversionMap();
+    const ModelToViewHelper& GetConversionMap() const;
 };
 
 /** Implementation of the css::container::XStringKeyMap interface

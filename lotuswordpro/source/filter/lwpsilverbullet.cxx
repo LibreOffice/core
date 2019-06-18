@@ -215,7 +215,7 @@ OUString LwpSilverBullet::GetBulletFontName()
  * @descr:
  * @return:  An UChar32 bullet character.
  */
-OUString const & LwpSilverBullet::GetBulletChar()
+OUString const & LwpSilverBullet::GetBulletChar() const
 {
     return m_xBulletPara->GetBulletChar();
 }
@@ -428,7 +428,7 @@ OUString LwpSilverBullet::GetDivisionName()
     return aRet;
 }
 
-OUString LwpSilverBullet::GetSectionName()
+OUString LwpSilverBullet::GetSectionName() const
 {
     LwpStory* pStory = dynamic_cast<LwpStory*>(m_aStory.obj(VO_STORY).get());
     if (!pStory)

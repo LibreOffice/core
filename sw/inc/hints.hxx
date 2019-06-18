@@ -268,9 +268,9 @@ class SwVirtPageNumInfo: public SwMsgPoolItem
 public:
     SwVirtPageNumInfo( const SwPageFrame *pPg );
 
-    const SwPageFrame *GetPage()          { return m_pPage;    }
-    const SwPageFrame *GetOrigPage()      { return m_pOrigPage;}
-    const SwFrame *GetFrame()               { return m_pFrame; }
+    const SwPageFrame *GetPage() const          { return m_pPage;    }
+    const SwPageFrame *GetOrigPage() const      { return m_pOrigPage;}
+    const SwFrame *GetFrame() const             { return m_pFrame; }
     void  SetInfo( const SwPageFrame *pPg,
                    const SwFrame *pF )    { m_pFrame = pF; m_pPage = pPg; }
 };

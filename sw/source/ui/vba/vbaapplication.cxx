@@ -184,7 +184,7 @@ SwVbaApplication::getActiveSwVbaWindow()
 }
 
 uno::Reference< css::uno::XComponentContext > const &
-SwVbaApplication::getContext()
+SwVbaApplication::getContext() const
 {
     return mxContext;
 }

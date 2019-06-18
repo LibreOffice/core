@@ -73,7 +73,7 @@ protected:
         returns true, as long as only customshapes in the marked list,
         custom shapes can drop every where
     */
-    bool    isOnlyCustomShapeMarked();
+    bool    isOnlyCustomShapeMarked() const;
 
     /** activate object if it is of type OBJ_OLE2
     */

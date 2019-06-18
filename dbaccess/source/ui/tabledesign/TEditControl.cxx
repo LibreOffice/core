@@ -1138,7 +1138,7 @@ bool OTableEditorCtrl::IsCopyAllowed()
     return bIsCopyAllowed;
 }
 
-bool OTableEditorCtrl::IsPasteAllowed()
+bool OTableEditorCtrl::IsPasteAllowed() const
 {
     bool bAllowed = GetView()->getController().isAddAllowed();
     if ( bAllowed )

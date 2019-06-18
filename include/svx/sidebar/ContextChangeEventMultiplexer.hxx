@@ -52,7 +52,7 @@ public:
             The activated context.
     */
     static void NotifyContextChange (
-        SfxViewShell* pViewShell,
+        const SfxViewShell* pViewShell,
         const vcl::EnumContext::Context eContext);
 
 private:

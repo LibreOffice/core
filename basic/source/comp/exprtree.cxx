@@ -110,7 +110,7 @@ static bool DoParametersFollow( SbiParser* p, SbiExprType eCurExpr, SbiToken eTo
 // definition of a new symbol
 
 static SbiSymDef* AddSym ( SbiToken eTok, SbiSymPool& rPool, SbiExprType eCurExpr,
-                           const OUString& rName, SbxDataType eType, SbiExprList* pPar )
+                           const OUString& rName, SbxDataType eType, const SbiExprList* pPar )
 {
     SbiSymDef* pDef;
     // A= is not a procedure

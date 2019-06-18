@@ -42,7 +42,7 @@ public:
 
     std::unique_ptr<OutlinerParaObject> CreateText();
     void                SetText( OutlinerParaObject const & rText );
-    OUString            GetText();
+    OUString            GetText() const;
 
     static TextApiObject* getImplementation( const css::uno::Reference< css::text::XText >& );
 

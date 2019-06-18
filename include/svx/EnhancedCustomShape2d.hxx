@@ -181,9 +181,9 @@ class SVX_DLLPUBLIC EnhancedCustomShape2d : public SfxItemSet
             }
         };
 
-        SAL_DLLPRIVATE bool     IsFlipVert() { return bFlipV; };
-        SAL_DLLPRIVATE bool     IsFlipHorz() { return bFlipH; };
-        SAL_DLLPRIVATE sal_Int32 GetRotateAngle() { return nRotateAngle; };
+        SAL_DLLPRIVATE bool     IsFlipVert() const { return bFlipV; };
+        SAL_DLLPRIVATE bool     IsFlipHorz() const { return bFlipH; };
+        SAL_DLLPRIVATE sal_Int32 GetRotateAngle() const { return nRotateAngle; };
 
         SdrObject*              CreateLineGeometry();
         SdrObject*              CreateObject( bool bLineGeometryNeededOnly );

@@ -208,8 +208,8 @@ public:
     void                GetDeletedAuthorAttr(std::size_t nAuthor, SfxItemSet &rSet);
     void                GetFormatAuthorAttr(std::size_t nAuthor, SfxItemSet &rSet);
 
-    sal_uInt16              GetRedlineMarkPos();
-    const Color&            GetRedlineMarkColor();
+    sal_uInt16              GetRedlineMarkPos() const;
+    const Color&            GetRedlineMarkColor() const;
 
     SwCompareMode      GetCompareMode() const;
     bool            IsUseRsid() const;

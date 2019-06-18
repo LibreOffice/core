@@ -108,17 +108,17 @@ private:
 
 public:
     bool Read(LwpSvStream &pStrm);
-    inline sal_uInt32 GetTag();
-    inline sal_uInt32 GetSize();
+    inline sal_uInt32 GetTag() const;
+    inline sal_uInt32 GetSize() const;
     inline LwpObjectID& GetID();
-    inline bool IsCompressed();
+    inline bool IsCompressed() const;
 };
 
-inline sal_uInt32 LwpObjectHeader::GetTag()
+inline sal_uInt32 LwpObjectHeader::GetTag() const
 {
     return m_nTag;
 }
-inline sal_uInt32 LwpObjectHeader::GetSize()
+inline sal_uInt32 LwpObjectHeader::GetSize() const
 {
     return m_nSize;
 }
@@ -126,7 +126,7 @@ inline LwpObjectID& LwpObjectHeader::GetID()
 {
     return m_ID;
 }
-inline bool LwpObjectHeader::IsCompressed()
+inline bool LwpObjectHeader::IsCompressed() const
 {
     return m_bCompressed;
 }

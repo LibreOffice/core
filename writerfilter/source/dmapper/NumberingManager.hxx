@@ -75,8 +75,8 @@ public:
     void SetParaStyle( const tools::SvRef< StyleSheetEntry >& pStyle );
 
     // Getters
-    const OUString& GetBulletChar( ) { return m_sBulletChar; };
-    const tools::SvRef< StyleSheetEntry >& GetParaStyle( ) { return m_pParaStyle; };
+    const OUString& GetBulletChar( ) const { return m_sBulletChar; };
+    const tools::SvRef< StyleSheetEntry >& GetParaStyle( ) const { return m_pParaStyle; };
     bool isOutlineNumbering() const { return m_outline; }
     /// Determines if SetValue() was called at least once.
     bool HasValues() const;
@@ -106,9 +106,9 @@ public:
     ~NumPicBullet() override;
 
     void SetId(sal_Int32 nId);
-    sal_Int32 GetId() { return m_nId;}
+    sal_Int32 GetId() const { return m_nId;}
     void SetShape(css::uno::Reference<css::drawing::XShape> const& xShape);
-    const css::uno::Reference<css::drawing::XShape>& GetShape() { return m_xShape; }
+    const css::uno::Reference<css::drawing::XShape>& GetShape() const { return m_xShape; }
 private:
     sal_Int32 m_nId;
     css::uno::Reference<css::drawing::XShape> m_xShape;
@@ -142,18 +142,18 @@ public:
     static void SetValue( sal_uInt32 nSprmId );
 
     // Accessors
-    sal_Int32             GetId( ) { return m_nId; };
+    sal_Int32             GetId( ) const { return m_nId; };
 
     sal_Int16             Size( ) { return sal_Int16( m_aLevels.size( ) ); };
     ListLevel::Pointer    GetLevel( sal_uInt16 nLvl );
     void                  AddLevel( );
 
-    const ListLevel::Pointer&  GetCurrentLevel( ) { return m_pCurrentLevel; };
+    const ListLevel::Pointer&  GetCurrentLevel( ) const { return m_pCurrentLevel; };
 
     css::uno::Sequence< css::uno::Sequence<css::beans::PropertyValue> > GetPropertyValues(bool bDefaults);
 
     void                  SetNumStyleLink(const OUString& sValue) { m_sNumStyleLink = sValue; };
-    const OUString&       GetNumStyleLink() { return m_sNumStyleLink; };
+    const OUString&       GetNumStyleLink() const { return m_sNumStyleLink; };
 };
 
 class ListDef : public AbstractListDef
@@ -173,7 +173,7 @@ public:
 
     // Accessors
     void SetAbstractDefinition( AbstractListDef::Pointer pAbstract ) { m_pAbstractDef = pAbstract; };
-    const AbstractListDef::Pointer& GetAbstractDefinition( ) { return m_pAbstractDef; };
+    const AbstractListDef::Pointer& GetAbstractDefinition( ) const { return m_pAbstractDef; };
 
     // Mapping functions
     static OUString GetStyleName( sal_Int32 nId );
@@ -182,7 +182,7 @@ public:
 
     void CreateNumberingRules(DomainMapper& rDMapper, css::uno::Reference<css::lang::XMultiServiceFactory> const& xFactory);
 
-    const css::uno::Reference<css::container::XIndexReplace>& GetNumberingRules() { return m_xNumRules; }
+    const css::uno::Reference<css::container::XIndexReplace>& GetNumberingRules() const { return m_xNumRules; }
 
 };
 

@@ -91,8 +91,8 @@ public:
                                         GetCurrentXDrawPage();
     css::uno::Reference< css::drawing::XShapes > const &
                                         GetCurrentXShapes();
-    bool                                HasDrawPage();
-    bool                                HasXShapes();
+    bool                                HasDrawPage() const;
+    bool                                HasXShapes() const;
     void                                AddOLE(const css::uno::Reference <css::drawing::XShape>& rShape,
                                                const OUString &rRangeList);
 

@@ -469,7 +469,7 @@ void BookmarkTable::SelectByName(const OUString& sName)
     select(*xEntry);
 }
 
-OUString BookmarkTable::GetNameProposal()
+OUString BookmarkTable::GetNameProposal() const
 {
     OUString sDefaultBookmarkName = SwResId(STR_BOOKMARK_DEF_NAME);
     sal_Int32 nHighestBookmarkId = 0;

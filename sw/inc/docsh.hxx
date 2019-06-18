@@ -305,7 +305,7 @@ public:
                                 GetController();
 
     SfxInPlaceClient* GetIPClient( const ::svt::EmbeddedObjectRef& xObjRef );
-    SAL_DLLPRIVATE bool IsTemplate() { return m_IsATemplate; }
+    SAL_DLLPRIVATE bool IsTemplate() const { return m_IsATemplate; }
     SAL_DLLPRIVATE void SetIsTemplate( bool bValue ) { m_IsATemplate = bValue; }
 
     virtual const ::sfx2::IXmlIdRegistry* GetXmlIdRegistry() const override;

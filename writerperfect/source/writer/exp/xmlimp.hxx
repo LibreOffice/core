@@ -128,8 +128,8 @@ public:
     std::map<OUString, librevenge::RVNGPropertyList>& GetGraphicStyles();
     std::map<OUString, librevenge::RVNGPropertyList>& GetPageLayouts();
     std::map<OUString, librevenge::RVNGPropertyList>& GetMasterStyles();
-    const librevenge::RVNGPropertyListVector& GetCoverImages();
-    const librevenge::RVNGPropertyList& GetMetaData();
+    const librevenge::RVNGPropertyListVector& GetCoverImages() const;
+    const librevenge::RVNGPropertyList& GetMetaData() const;
     PopupState FillPopupData(const OUString& rURL, librevenge::RVNGPropertyList& rPropList);
     const std::vector<FixedLayoutPage>& GetPageMetafiles() const;
     const css::uno::Reference<css::uno::XComponentContext>& GetComponentContext() const;

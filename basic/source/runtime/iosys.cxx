@@ -69,7 +69,7 @@ class SbiInputDialog : public weld::GenericDialogController
     DECL_LINK(Cancel, weld::Button&, void);
 public:
     SbiInputDialog(weld::Window*, const OUString&);
-    const OUString& GetInput() { return m_aText; }
+    const OUString& GetInput() const { return m_aText; }
 };
 
 SbiInputDialog::SbiInputDialog(weld::Window* pParent, const OUString& rPrompt)

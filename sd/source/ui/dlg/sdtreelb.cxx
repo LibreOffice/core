@@ -702,7 +702,7 @@ bool SdPageObjsTLB::IsEqualToDoc( const SdDrawDocument* pInDoc )
 /**
  * @return selected string
  */
-OUString SdPageObjsTLB::GetSelectedEntry()
+OUString SdPageObjsTLB::GetSelectedEntry() const
 {
     return GetEntryText( GetCurEntry() );
 }
@@ -1623,7 +1623,7 @@ void SdPageObjsTLV::AddShapeList (
     SdrObject* pShape,
     const OUString& rsName,
     const bool bIsExcluded,
-    weld::TreeIter* pParentEntry)
+    const weld::TreeIter* pParentEntry)
 {
     OUString aIcon(BMP_PAGE);
     if (bIsExcluded)

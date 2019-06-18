@@ -134,7 +134,7 @@ class UpdateInformationProvider :
                                     lang::XServiceInfo >
 {
     OUString getUserAgent(bool bExtended);
-    bool isUserAgentExtended();
+    bool isUserAgentExtended() const;
 public:
     static uno::Reference< uno::XInterface > createInstance(const uno::Reference<uno::XComponentContext>& xContext);
 
@@ -325,7 +325,7 @@ UpdateInformationProvider::UpdateInformationProvider(
 }
 
 bool
-UpdateInformationProvider::isUserAgentExtended()
+UpdateInformationProvider::isUserAgentExtended() const
 {
     bool bExtendedUserAgent = false;
     try {

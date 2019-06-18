@@ -390,7 +390,7 @@ void FrameworkHelper::Dispose()
     mxConfigurationController = nullptr;
 }
 
-bool FrameworkHelper::IsValid()
+bool FrameworkHelper::IsValid() const
 {
     return mxConfigurationController.is();
 }

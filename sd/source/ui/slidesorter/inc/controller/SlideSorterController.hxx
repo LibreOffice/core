@@ -188,7 +188,7 @@ public:
         selection function then return a reference to it.  Otherwise return
         an empty reference.
     */
-    ::rtl::Reference<SelectionFunction> GetCurrentSelectionFunction();
+    ::rtl::Reference<SelectionFunction> GetCurrentSelectionFunction() const;
 
     /** Prepare for a change of the edit mode.  Depending on the current
         edit mode we may save the selection so that it can be restored when

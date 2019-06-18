@@ -195,7 +195,7 @@ namespace pcr
     }
 
 
-    bool OBrowserLine::IsVisible()
+    bool OBrowserLine::IsVisible() const
     {
         return m_aFtTitle->IsVisible();
     }

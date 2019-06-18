@@ -312,7 +312,7 @@ namespace dbaui
         void        applyParserFilter(const OUString& _rOldFilter, bool _bOldFilterApplied,const ::OUString& _sOldHaving,const css::uno::Reference< css::sdb::XSingleSelectQueryComposer >& _xParser);
         void        applyParserOrder(const OUString& _rOldOrder,const css::uno::Reference< css::sdb::XSingleSelectQueryComposer >& _xParser);
 
-        sal_Int16   getCurrentColumnPosition();
+        sal_Int16   getCurrentColumnPosition() const;
         void        setCurrentColumnPosition( sal_Int16 _nPos );
         void        addColumnListeners(const css::uno::Reference< css::awt::XControlModel > & _xGridControlModel);
 

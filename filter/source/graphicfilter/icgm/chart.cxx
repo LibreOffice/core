@@ -50,7 +50,7 @@ void CGMChart::ResetAnnotation()
     mDataNode[ 0 ].nZoneEnum = 0;
 }
 
-bool CGMChart::IsAnnotation()
+bool CGMChart::IsAnnotation() const
 {
     return ( mDataNode[ 0 ].nZoneEnum == 0 );
 }
