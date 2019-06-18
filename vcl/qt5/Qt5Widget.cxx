@@ -47,6 +47,7 @@
 #include <vcl/commandevent.hxx>
 #include <vcl/event.hxx>
 #include <window.h>
+#include <tools/diagnose_ex.h>
 
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #include <com/sun/star/accessibility/XAccessibleEditableText.hpp>
@@ -613,9 +614,9 @@ static bool lcl_retrieveSurrounding(sal_Int32& rPosition, sal_Int32& rAnchor, QS
         if (xAccessible.is())
             xText = FindFocusedEditableText(xAccessible->getAccessibleContext());
     }
-    catch (const uno::Exception& e)
+    catch (const uno::Exception&)
     {
-        SAL_WARN("vcl.qt5", "Exception in getting input method surrounding text: " << e);
+        TOOLS_WARN_EXCEPTION("vcl.qt5", "Exception in getting input method surrounding text");
     }
 
     bool result = false;

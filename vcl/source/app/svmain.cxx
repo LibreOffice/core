@@ -102,6 +102,7 @@
 #include <opengl/watchdog.hxx>
 
 #include <basegfx/utils/systemdependentdata.hxx>
+#include <tools/diagnose_ex.h>
 
 #if OSL_DEBUG_LEVEL > 0
 #include <typeinfo>
@@ -344,9 +345,9 @@ bool InitVCL()
             osl_setEnvironment(envVar.pData, aLocaleString.pData);
         }
     }
-    catch (const uno::Exception &e)
+    catch (const uno::Exception &)
     {
-        SAL_INFO("vcl.app", "Unable to get ui language: '" << e);
+        TOOLS_INFO_EXCEPTION("vcl.app", "Unable to get ui language:");
     }
 
     pSVData->mpDefInst->AfterAppInit();
