@@ -36,6 +36,7 @@
 #include <rtl/bootstrap.hxx>
 #include <rtl/process.h>
 #include <sal/log.hxx>
+#include <tools/diagnose_ex.h>
 #include <vcl/floatwin.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
@@ -4083,7 +4084,7 @@ static uno::Reference<accessibility::XAccessibleEditableText> lcl_GetxText(vcl::
     }
     catch(const uno::Exception& e)
     {
-        SAL_WARN( "vcl.gtk3", "Exception in getting input method surrounding text: " << e);
+        TOOLS_WARN_EXCEPTION( "vcl.gtk3", "Exception in getting input method surrounding text");
     }
     return xText;
 }

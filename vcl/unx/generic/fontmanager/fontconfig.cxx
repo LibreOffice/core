@@ -32,6 +32,7 @@
 #include <i18nutil/unicode.hxx>
 #include <rtl/strbuf.hxx>
 #include <sal/log.hxx>
+#include <tools/diagnose_ex.h>
 #include <unicode/uchar.h>
 #include <unicode/uscript.h>
 #include <officecfg/Office/Common.hxx>
@@ -863,9 +864,9 @@ IMPL_LINK_NOARG(PrintFontManager, autoInstallFontLangSupport, Timer *, void)
         css::uno::Reference<XSyncDbusSessionHelper> xSyncDbusSessionHelper(SyncDbusSessionHelper::create(comphelper::getProcessComponentContext()));
         xSyncDbusSessionHelper->InstallFontconfigResources(comphelper::containerToSequence(m_aCurrentRequests), "hide-finished");
     }
-    catch (const css::uno::Exception& e)
+    catch (const css::uno::Exception&)
     {
-        SAL_INFO("vcl.fonts", "InstallFontconfigResources problem, caught " << e);
+        TOOLS_INFO_EXCEPTION("vcl.fonts", "InstallFontconfigResources problem");
         // Disable this method from now on. It's simply not available on some systems
         // and leads to an error dialog being shown each time this is called tdf#104883
         std::shared_ptr<comphelper::ConfigurationChanges> batch( comphelper::ConfigurationChanges::create() );

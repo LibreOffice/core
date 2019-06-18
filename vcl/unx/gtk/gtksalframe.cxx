@@ -34,6 +34,7 @@
 #include <rtl/bootstrap.hxx>
 #include <rtl/process.h>
 #include <sal/log.hxx>
+#include <tools/diagnose_ex.h>
 #include <vcl/floatwin.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
@@ -3509,9 +3510,9 @@ static uno::Reference<accessibility::XAccessibleEditableText> lcl_GetxText(vcl::
         if (xAccessible.is())
             xText = FindFocusedEditableText(xAccessible->getAccessibleContext());
     }
-    catch(const uno::Exception& e)
+    catch(const uno::Exception&)
     {
-        SAL_WARN( "vcl.gtk", "Exception in getting input method surrounding text: " << e);
+        TOOLS_WARN_EXCEPTION( "vcl.gtk", "Exception in getting input method surrounding text");
     }
     return xText;
 }
