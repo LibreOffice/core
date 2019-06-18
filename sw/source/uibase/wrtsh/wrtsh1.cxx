@@ -102,10 +102,16 @@
 
 #include <PostItMgr.hxx>
 #include <FrameControlsManager.hxx>
+#include <fldmgr.hxx>
+#include <docufld.hxx>
+#include <IDocumentFieldsAccess.hxx>
+#include <fmtfld.hxx>
 
 #include <sfx2/msgpool.hxx>
 #include <sfx2/msg.hxx>
 #include <svtools/embedhlp.hxx>
+#include <svx/postattr.hxx>
+#include <comphelper/lok.hxx>
 #include <memory>
 
 using namespace sw::mark;
@@ -1860,6 +1866,74 @@ void SwWrtShell::SetShowHeaderFooterSeparator( FrameControlType eControl, bool b
     SwViewShell::SetShowHeaderFooterSeparator( eControl, bShow );
     if ( !bShow )
         GetView().GetEditWin().GetFrameControlsManager().HideControls( eControl );
+}
+
+void SwWrtShell::InsertPostIt(SwFieldMgr& rFieldMgr, SfxRequest& rReq)
+{
+    SwPostItField* pPostIt = dynamic_cast<SwPostItField*>(rFieldMgr.GetCurField());
+    bool bNew = !(pPostIt && pPostIt->GetTyp()->Which() == SwFieldIds::Postit);
+    if (bNew || GetView().GetPostItMgr()->IsAnswer())
+    {
+        const SvxPostItAuthorItem* pAuthorItem = rReq.GetArg<SvxPostItAuthorItem>(SID_ATTR_POSTIT_AUTHOR);
+        OUString sAuthor;
+        if ( pAuthorItem )
+            sAuthor = pAuthorItem->GetValue();
+        else
+        {
+            std::size_t nAuthor = SW_MOD()->GetRedlineAuthor();
+            sAuthor = SW_MOD()->GetRedlineAuthor(nAuthor);
+        }
+
+        const SvxPostItTextItem* pTextItem = rReq.GetArg<SvxPostItTextItem>(SID_ATTR_POSTIT_TEXT);
+        OUString sText;
+        if ( pTextItem )
+            sText = pTextItem->GetValue();
+
+        // If we have a text already registered for answer, use that
+        if (GetView().GetPostItMgr()->IsAnswer() && !GetView().GetPostItMgr()->GetAnswerText().isEmpty())
+        {
+            sText = GetView().GetPostItMgr()->GetAnswerText();
+            GetView().GetPostItMgr()->RegisterAnswerText(OUString());
+        }
+
+        if ( HasSelection() && !IsTableMode() )
+        {
+            KillPams();
+        }
+
+        // #i120513# Inserting a comment into an autocompletion crashes
+        // --> suggestion has to be removed before
+        GetView().GetEditWin().StopQuickHelp();
+
+        SwInsertField_Data aData(TYP_POSTITFLD, 0, sAuthor, sText, 0);
+        rFieldMgr.InsertField( aData );
+
+        Push();
+        SwCursorShell::Left(1, CRSR_SKIP_CHARS);
+        pPostIt = static_cast<SwPostItField*>(rFieldMgr.GetCurField());
+        Pop(SwCursorShell::PopMode::DeleteCurrent); // Restore cursor position
+    }
+
+    // Client has disabled annotations rendering, no need to
+    // focus the postit field
+    if (comphelper::LibreOfficeKit::isActive() && !comphelper::LibreOfficeKit::isTiledAnnotations())
+        return;
+
+    if (pPostIt)
+    {
+        SwFieldType* pType = GetDoc()->getIDocumentFieldsAccess().GetFieldType(SwFieldIds::Postit, OUString(), false);
+        SwIterator<SwFormatField,SwFieldType> aIter( *pType );
+        SwFormatField* pSwFormatField = aIter.First();
+        while( pSwFormatField )
+        {
+            if ( pSwFormatField->GetField() == pPostIt )
+            {
+                pSwFormatField->Broadcast( SwFormatFieldHint( nullptr, SwFormatFieldHintWhich::FOCUS, &GetView() ) );
+                break;
+            }
+            pSwFormatField = aIter.Next();
+        }
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
