@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_deaac1d0",
+        "filename": "vcl/qt5/Qt5Transferable.cxx",
+        "patchSetId": 19
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-06-18T14:06:27Z",
+      "side": 1,
+      "message": "In an ASan/UBSan build with SAL_USE_VCLPLUGIN\u003dqt5 I happened to once get here with (apparently) m_bHaveNoCharset false and bHaveUTF16 left uninitialized, so it issued an error about reading that uninitialized bHaveUTF16.",
+      "revId": "bcca1cf28cbd6c961d59bd8b8a8e58184dfc3823",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
