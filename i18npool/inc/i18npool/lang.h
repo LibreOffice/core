@@ -110,6 +110,7 @@ typedef unsigned short LanguageType;
 #define LANGUAGE_AFRIKAANS                  0x0436
 #define LANGUAGE_ALBANIAN                   0x041C
 #define LANGUAGE_ALSATIAN_FRANCE            0x0484
+#define LANGUAGE_AMHARIC                    0x005E
 #define LANGUAGE_AMHARIC_ETHIOPIA           0x045E
 #define LANGUAGE_ARABIC_ALGERIA             0x1401
 #define LANGUAGE_ARABIC_BAHRAIN             0x3C01

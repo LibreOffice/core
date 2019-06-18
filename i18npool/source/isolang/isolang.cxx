@@ -86,10 +86,10 @@ struct IsoLangOtherEntry
 // language, see code. A call with "en-ZZ" (not in table) would still result in
 // LANGUAGE_ENGLISH.
 
-/* erAck: 2007-07-05T20:01+0200  TODO: The entire suite's "primary language
+/* erAck: 2007-07-05T20:01+0200 TODO: The entire suite's "primary language
  * only" usage and locale fall back should be cleaned up and made consistent. I
  * strongly doubt that most callers exactly expect the behavior described.
- * Currently these primary LangIDs are used literally in OOo code:
+ * Currently these primary LangIDs are used literally in AOO code:
  * LANGUAGE_ENGLISH LANGUAGE_CHINESE LANGUAGE_MALAY
  * LANGUAGE_AZERI LANGUAGE_URDU LANGUAGE_KASHMIRI
  */
@@ -335,6 +335,7 @@ static MsLangId::IsoLangEntry const aImplIsoLangEntries[] =
     { LANGUAGE_UIGHUR_CHINA,                "ug", "CN" },
     { LANGUAGE_TIGRIGNA_ETHIOPIA,           "ti", "ET" },
     { LANGUAGE_TIGRIGNA_ERITREA,            "ti", "ER" },
+    { LANGUAGE_AMHARIC,                     "am", ""   },
     { LANGUAGE_AMHARIC_ETHIOPIA,            "am", "ET" },
     { LANGUAGE_GUARANI_PARAGUAY,           "gug", "PY" },
     { LANGUAGE_HAWAIIAN_UNITED_STATES,     "haw", "US" },
@@ -933,8 +934,8 @@ LanguageType MsLangId::convertIsoNamesToLanguage( const rtl::OUString& rLang,
     if ( pFirstLang )
         return pFirstLang->mnLang;
 
-    //  if only the country is set, look for any entry matching the country
-    //  (to allow reading country and language in separate steps, in any order)
+    // if only the country is set, look for any entry matching the country
+    // (to allow reading country and language in separate steps, in any order)
     if ( rCountry.getLength() && !rLang.getLength() )
     {
         const IsoLangEntry* pEntry2 = aImplIsoLangEntries;
