@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_9bc52b5e",
+        "filename": "sc/source/ui/view/gridwin.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 5250,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2019-06-18T10:04:34Z",
+      "side": 1,
+      "message": "There is a regression here, because it\u0027s not guaranteed, that the content is numeric. For example, write the formula \"\u003dA7\" in the A11 cell of the test document. The A7 is a string, getValue() return with a 0, and the hyperlink works only on the first letter of the text.",
+      "range": {
+        "startLine": 5250,
+        "startChar": 31,
+        "endLine": 5250,
+        "endChar": 65
+      },
+      "revId": "866dfb929562b36a930f14fd92bc0af73eb45593",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
