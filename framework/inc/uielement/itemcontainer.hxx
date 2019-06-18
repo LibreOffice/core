@@ -48,8 +48,7 @@ class FWI_DLLPUBLIC ItemContainer :   public ::cppu::WeakImplHelper< css::contai
         //  XInterface, XTypeProvider
 
         // XUnoTunnel
-        static const css::uno::Sequence< sal_Int8 >&   GetUnoTunnelId() throw();
-        static ItemContainer*                                       GetImplementation( const css::uno::Reference< css::uno::XInterface >& rxIFace ) throw();
+        static const css::uno::Sequence< sal_Int8 >&   getUnoTunnelId() throw();
 
         // XIndexContainer
         virtual void SAL_CALL insertByIndex( sal_Int32 Index, const css::uno::Any& Element ) override;
