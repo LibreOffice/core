@@ -216,10 +216,11 @@ void SvxAreaTabPage::ActivatePage( const SfxItemSet& rSet )
         }
         case drawing::FillStyle_BITMAP:
         {
-            XFillBitmapItem aItem(static_cast<const XFillBitmapItem&>( rSet.Get( GetWhich( XATTR_FILLBITMAP ) ) ));
+            const bool bPattern
+                = rSet.Get(TypedWhichId<XFillBitmapItem>(GetWhich(XATTR_FILLBITMAP))).isPattern();
             // pass full item set here, bitmap fill has many attributes (tiling, size, offset etc.)
             m_rXFSet.Put( rSet );
-            if(!aItem.isPattern())
+            if (!bPattern)
                 SelectFillType(*m_xBtnBitmap);
             else
                 SelectFillType(*m_xBtnPattern);
