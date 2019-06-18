@@ -144,7 +144,7 @@ void ScDocShell::SetVisAreaOrSize( const tools::Rectangle& rVisArea )
     }
 }
 
-bool ScDocShell::IsOle()
+bool ScDocShell::IsOle() const
 {
     return (GetCreateMode() == SfxObjectCreateMode::EMBEDDED);
 }

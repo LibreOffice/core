@@ -147,7 +147,7 @@ bool ScTpSubTotalGroup::DoReset( sal_uInt16             nGroupNo,
 
 namespace
 {
-    int GetCheckedEntryCount(weld::TreeView& rTreeView)
+    int GetCheckedEntryCount(const weld::TreeView& rTreeView)
     {
         int nRet = 0;
         for (sal_Int32 i=0, nEntryCount = rTreeView.n_children(); i < nEntryCount; ++i)

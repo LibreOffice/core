@@ -112,7 +112,7 @@ oox::drawingml::TextListStylePtr PPTShape::getSubTypeTextListStyle( const SlideP
 
 void PPTShape::addShape(
         oox::core::XmlFilterBase& rFilterBase,
-        SlidePersist& rSlidePersist,
+        const SlidePersist& rSlidePersist,
         const oox::drawingml::Theme* pTheme,
         const Reference< XShapes >& rxShapes,
         basegfx::B2DHomMatrix& aTransformation,

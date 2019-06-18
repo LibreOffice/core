@@ -1305,7 +1305,7 @@ OUString SvxConfigPage::GetScriptURL() const
     return result;
 }
 
-OUString SvxConfigPage::GetSelectedDisplayName()
+OUString SvxConfigPage::GetSelectedDisplayName() const
 {
     return m_xFunctions->get_selected_text();
 }
@@ -1873,17 +1873,17 @@ SvxConfigEntry::~SvxConfigEntry()
     }
 }
 
-bool SvxConfigEntry::IsMovable()
+bool SvxConfigEntry::IsMovable() const
 {
     return !IsPopup() || IsMain();
 }
 
-bool SvxConfigEntry::IsDeletable()
+bool SvxConfigEntry::IsDeletable() const
 {
     return !IsMain() || IsUserDefined();
 }
 
-bool SvxConfigEntry::IsRenamable()
+bool SvxConfigEntry::IsRenamable() const
 {
     return !IsMain() || IsUserDefined();
 }

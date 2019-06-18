@@ -132,7 +132,7 @@ sheet::DataPilotFieldOrientation ScDPSource::GetOrientation(long nColumn)
     return sheet::DataPilotFieldOrientation_HIDDEN;
 }
 
-long ScDPSource::GetDataDimensionCount()
+long ScDPSource::GetDataDimensionCount() const
 {
     return maDataDims.size();
 }

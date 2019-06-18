@@ -448,20 +448,20 @@ public:
     void setSubtotals(const std::vector< ScGeneralFunction >& rFunctions);
     void setCurrentPage(const OUString& sPage);
     void setUseCurrentPage(bool bUse);
-    const css::sheet::DataPilotFieldAutoShowInfo* getAutoShowInfo();
+    const css::sheet::DataPilotFieldAutoShowInfo* getAutoShowInfo() const;
     void setAutoShowInfo(const css::sheet::DataPilotFieldAutoShowInfo* pInfo);
-    const css::sheet::DataPilotFieldLayoutInfo* getLayoutInfo();
+    const css::sheet::DataPilotFieldLayoutInfo* getLayoutInfo() const;
     void setLayoutInfo(const css::sheet::DataPilotFieldLayoutInfo* pInfo);
-    const css::sheet::DataPilotFieldReference* getReference();
+    const css::sheet::DataPilotFieldReference* getReference() const;
     void setReference(const css::sheet::DataPilotFieldReference* pInfo);
-    const css::sheet::DataPilotFieldSortInfo* getSortInfo();
+    const css::sheet::DataPilotFieldSortInfo* getSortInfo() const;
     void setSortInfo(const css::sheet::DataPilotFieldSortInfo* pInfo);
     bool getShowEmpty() const;
     void setShowEmpty(bool bShow);
     bool getRepeatItemLabels() const;
     void setRepeatItemLabels(bool bShow);
 
-    bool hasGroupInfo();
+    bool hasGroupInfo() const;
     css::sheet::DataPilotFieldGroupInfo getGroupInfo();
     void setGroupInfo(const css::sheet::DataPilotFieldGroupInfo* pInfo);
 

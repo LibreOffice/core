@@ -363,7 +363,7 @@ void SAL_CALL Qt5FilePicker::appendFilterGroup(const OUString& rGroupTitle,
     }
 }
 
-uno::Any Qt5FilePicker::handleGetListValue(QComboBox* pWidget, sal_Int16 nControlAction)
+uno::Any Qt5FilePicker::handleGetListValue(const QComboBox* pWidget, sal_Int16 nControlAction)
 {
     uno::Any aAny;
     switch (nControlAction)

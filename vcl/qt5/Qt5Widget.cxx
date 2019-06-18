@@ -120,7 +120,7 @@ void Qt5Widget::resizeEvent(QResizeEvent* pEvent)
     m_rFrame.CallCallback(SalEvent::Resize, nullptr);
 }
 
-void Qt5Widget::handleMouseButtonEvent(const Qt5Frame& rFrame, QMouseEvent* pEvent,
+void Qt5Widget::handleMouseButtonEvent(const Qt5Frame& rFrame, const QMouseEvent* pEvent,
                                        const ButtonKeyState eState)
 {
     SalMouseEvent aEvent;

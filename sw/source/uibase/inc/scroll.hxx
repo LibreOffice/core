@@ -46,7 +46,7 @@ public:
     bool    IsHoriScroll() const { return bHori; }
 
     void    SetAuto(bool bSet);
-    bool    IsAuto() { return bAuto;}
+    bool    IsAuto() const { return bAuto;}
 
     SwScrollbar(vcl::Window *pParent, bool bHori );
     virtual ~SwScrollbar() override;

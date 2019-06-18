@@ -1647,7 +1647,7 @@ sal_Int32 SwFramePage::GetMapPos(const FrameMap *pMap, const weld::ComboBox& rAl
     return nMapPos;
 }
 
-RndStdIds SwFramePage::GetAnchor()
+RndStdIds SwFramePage::GetAnchor() const
 {
     RndStdIds nRet = RndStdIds::FLY_AT_PAGE;
     if (m_xAnchorAtParaRB->get_active())

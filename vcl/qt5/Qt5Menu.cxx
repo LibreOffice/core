@@ -287,7 +287,7 @@ void Qt5Menu::ResetAllActionGroups()
     }
 }
 
-void Qt5Menu::UpdateActionGroupItem(Qt5MenuItem* pSalMenuItem)
+void Qt5Menu::UpdateActionGroupItem(const Qt5MenuItem* pSalMenuItem)
 {
     QAction* pAction = pSalMenuItem->getAction();
     if (!pAction)

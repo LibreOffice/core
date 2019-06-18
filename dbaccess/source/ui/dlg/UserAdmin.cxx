@@ -276,7 +276,7 @@ IMPL_LINK_NOARG( OUserAdmin, ListDblClickHdl, ListBox&, void )
     m_TableCtrl->ActivateCell(m_TableCtrl->GetCurRow(),m_TableCtrl->GetCurColumnId());
 }
 
-OUString OUserAdmin::GetUser()
+OUString OUserAdmin::GetUser() const
 {
     return m_pUSER->GetSelectedEntry();
 }

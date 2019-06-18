@@ -66,7 +66,7 @@ public:
     ~FontFeaturesDialog() override;
     virtual short run() override;
 
-    OUString const& getResultFontName() { return m_sResultFontName; }
+    OUString const& getResultFontName() const { return m_sResultFontName; }
 
     void updateFontPreview();
 };

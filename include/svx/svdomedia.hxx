@@ -67,7 +67,7 @@ public:
         css::uno::Reference< css::graphic::XGraphic > const &
                                     getSnapshot() const;
         css::uno::Reference< css::io::XInputStream>
-                                    GetInputStream();
+                                    GetInputStream() const;
         void                        SetInputStream(css::uno::Reference<css::io::XInputStream> const&);
 
         virtual bool shouldKeepAspectRatio() const override { return true; }

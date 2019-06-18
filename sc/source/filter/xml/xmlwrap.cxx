@@ -87,7 +87,7 @@ ScXMLImportWrapper::ScXMLImportWrapper( ScDocShell& rDocSh, SfxMedium* pM, const
     OSL_ENSURE( pMedium || xStorage.is(), "ScXMLImportWrapper: Medium or Storage must be set" );
 }
 
-uno::Reference <task::XStatusIndicator> ScXMLImportWrapper::GetStatusIndicator()
+uno::Reference <task::XStatusIndicator> ScXMLImportWrapper::GetStatusIndicator() const
 {
     uno::Reference<task::XStatusIndicator> xStatusIndicator;
     if (pMedium)

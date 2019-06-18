@@ -137,7 +137,7 @@ static Reference< chart::XAxis > lcl_getChartAxis(const SchXMLAxis& rCurrentAxis
 /* returns a shape for the current axis's title. The property
    "Has...AxisTitle" is set to "True" to get the shape
  */
-Reference< drawing::XShape > SchXMLAxisContext::getTitleShape()
+Reference< drawing::XShape > SchXMLAxisContext::getTitleShape() const
 {
     Reference< drawing::XShape > xResult;
     Reference< beans::XPropertySet > xDiaProp( m_rImportHelper.GetChartDocument()->getDiagram(), uno::UNO_QUERY );

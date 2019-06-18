@@ -77,7 +77,7 @@ public:
     CuiAboutConfigValueDialog(weld::Window* pWindow, const OUString& rValue , int limit);
     virtual ~CuiAboutConfigValueDialog() override;
 
-    OUString getValue()
+    OUString getValue() const
     {
         return m_xEDValue->get_text();
     }

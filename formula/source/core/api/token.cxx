@@ -888,7 +888,7 @@ void FormulaTokenArray::AddRecalcMode( ScRecalcMode nBits )
 }
 
 
-bool FormulaTokenArray::HasMatrixDoubleRefOps()
+bool FormulaTokenArray::HasMatrixDoubleRefOps() const
 {
     if ( pRPN && nRPN )
     {

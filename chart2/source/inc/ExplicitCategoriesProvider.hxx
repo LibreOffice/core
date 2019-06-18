@@ -84,7 +84,7 @@ public:
     sal_Int32 getCategoryLevelCount() const;
 
     const css::uno::Sequence< css::uno::Reference<
-        css::chart2::data::XLabeledDataSequence> >& getSplitCategoriesList() { return m_aSplitCategoriesList;}
+        css::chart2::data::XLabeledDataSequence> >& getSplitCategoriesList() const { return m_aSplitCategoriesList;}
 
     bool isDateAxis();
     const std::vector< double >&  getDateCategories();

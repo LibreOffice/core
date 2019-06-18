@@ -187,12 +187,12 @@ public:
     /** Returns true, if a single HLINK record has been created. */
     bool                HasLinkRecord() const;
     /** Returns the created single HLINk record, or an empty reference. */
-    XclExpHyperlinkRef  GetLinkRecord();
+    XclExpHyperlinkRef  GetLinkRecord() const;
 
     /** Returns true, if multiple URLs have been processed. */
     bool         HasMultipleUrls() const { return mbMultipleUrls; }
     /** Returns a string containing all processed URLs. */
-    const OUString& GetUrlList() { return maUrlList; }
+    const OUString& GetUrlList() const { return maUrlList; }
 
 private:
     XclExpHyperlinkRef  mxLinkRec;          /// Created HLINK record.

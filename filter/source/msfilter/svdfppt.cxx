@@ -5456,7 +5456,7 @@ PPTPortionObj::~PPTPortionObj()
 {
 }
 
-bool PPTPortionObj::HasTabulator()
+bool PPTPortionObj::HasTabulator() const
 {
     bool bRetValue =    false;
     sal_Int32           nCount;

@@ -70,7 +70,7 @@ public:
 
     // Adds children of the given macro group to the functions list
     void addChildren(
-        weld::TreeIter* parentEntry, const css::uno::Reference<com::sun::star::script::browse::XBrowseNode> &parentNode,
+        const weld::TreeIter* parentEntry, const css::uno::Reference<com::sun::star::script::browse::XBrowseNode> &parentNode,
         CuiConfigFunctionListBox* pFunctionListBox, const OUString &filterTerm , SaveInData *pCurrentSaveInData,
         std::vector<std::unique_ptr<weld::TreeIter>> &rNodesToExpand);
 };

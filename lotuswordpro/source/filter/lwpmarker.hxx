@@ -113,7 +113,7 @@ class LwpCHBlkMarker : public LwpStoryMarker
 public:
     LwpCHBlkMarker(LwpObjectHeader const &objHdr, LwpSvStream *pStrm);
     void Read() override;
-    sal_uInt16 GetAction(){return m_nAction;}
+    sal_uInt16 GetAction() const {return m_nAction;}
     void ConvertCHBlock(XFContentContainer* pXFPara,sal_uInt8 nType);
     enum{
         CLICKHERE_CHBEHAVIORTEXT=1,
@@ -136,9 +136,9 @@ private:
     void ProcessPlaceHolder(XFContentContainer* pXFPara,sal_uInt16 nAction,sal_uInt8 nType);
     void ProcessOtherCHB(XFContentContainer* pXFPara,sal_uInt8 nType);
     void ProcessKeylist(XFContentContainer* pXFPara,sal_uInt8 nType);
-    bool IsHasFilled();
-    bool IsBubbleHelp();
-    OUString GetPromptText();
+    bool IsHasFilled() const;
+    bool IsBubbleHelp() const;
+    OUString GetPromptText() const;
     void EnumAllKeywords();
 private:
     enum{
@@ -189,19 +189,19 @@ public:
     void Read() override;
     void ParseIndex(OUString& sKey1,OUString& sKey2);
     void ParseTOC(OUString& sLevel,OUString& sText);
-    sal_uInt16 GetFieldType(){return m_nFieldType;}
-    bool IsFormulaInsert();
+    sal_uInt16 GetFieldType() const {return m_nFieldType;}
+    bool IsFormulaInsert() const;
     bool IsDateTimeField(sal_uInt8& type,OUString& formula);
     bool IsCrossRefField(sal_uInt8& nType, OUString& sMarkName);
     bool IsDocPowerField(sal_uInt8& nType,OUString& sFormula);
-    OUString const & GetFormula(){return m_Formula.str();}
+    OUString const & GetFormula() const {return m_Formula.str();}
     void SetStyleFlag(bool bFalg){m_bHasStyle = bFalg;}
-    bool GetStyleFlag(){return m_bHasStyle;}
-    bool GetStart(){return m_bHasStart;}
+    bool GetStyleFlag() const {return m_bHasStyle;}
+    bool GetStart() const {return m_bHasStart;}
     void SetStart(bool bFlag){m_bHasStart = bFlag;}
     LwpFrib* GetStartFrib(){return m_pFrib;}
     void SetStartFrib(LwpFrib* pFrib){m_pFrib = pFrib;}
-    bool GetRevisionFlag(){return m_bRevisionFlag;}
+    bool GetRevisionFlag() const {return m_bRevisionFlag;}
     void SetRevisionFlag(bool bFlag){m_bRevisionFlag = bFlag;}
 
     enum{
@@ -250,11 +250,11 @@ class LwpRubyMarker : public LwpStoryMarker
 public:
     LwpRubyMarker(LwpObjectHeader const &objHdr, LwpSvStream *pStrm);
     void Read() override;
-    const OUString& GetRubyText(){return m_strRubyText;}
+    const OUString& GetRubyText() const {return m_strRubyText;}
     void SetRubyText(const OUString& sText){m_strRubyText = sText;}
-    const OUString& GetTextStyleName(){return m_TextStyle;}
+    const OUString& GetTextStyleName() const {return m_TextStyle;}
     void SetTextStyleName(const OUString& sName){m_TextStyle = sName;}
-    const OUString& GetRubyStyleName(){return m_RubyStyle;}
+    const OUString& GetRubyStyleName() const {return m_RubyStyle;}
     void SetRubyStyleName(const OUString& sName){m_RubyStyle = sName;}
 private:
     LwpObjectID m_objLayout;

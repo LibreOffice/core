@@ -455,7 +455,7 @@ void SwUndoDelLayFormat::RedoForRollback()
     DelFly( m_pFrameFormat->GetDoc() );
 }
 
-SwUndoSetFlyFormat::SwUndoSetFlyFormat( SwFrameFormat& rFlyFormat, SwFrameFormat& rNewFrameFormat )
+SwUndoSetFlyFormat::SwUndoSetFlyFormat( SwFrameFormat& rFlyFormat, const SwFrameFormat& rNewFrameFormat )
     : SwUndo( SwUndoId::SETFLYFRMFMT, rFlyFormat.GetDoc() ), SwClient( &rFlyFormat ), m_pFrameFormat( &rFlyFormat ),
     m_DerivedFromFormatName( rFlyFormat.IsDefault() ? "" : rFlyFormat.DerivedFrom()->GetName() ),
     m_NewFormatName( rNewFrameFormat.GetName() ),

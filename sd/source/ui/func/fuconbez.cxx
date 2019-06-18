@@ -74,7 +74,7 @@ namespace{
 
 /// Checks to see if the request has a parameter of IsSticky:bool=true
 /// It means that the selected command/button will stay selected after use
-bool isSticky(SfxRequest& rReq)
+bool isSticky(const SfxRequest& rReq)
 {
     const SfxItemSet *pArgs = rReq.GetArgs ();
     if (pArgs)

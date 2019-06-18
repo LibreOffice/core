@@ -313,7 +313,7 @@ void    XFStyleManager::ToXml(IXFStream *pStrm)
     pStrm->StartElement( "office:font-decls" );
 
     //font declarations:
-    for (auto & fontDecl : s_aFontDecls)
+    for (const auto & fontDecl : s_aFontDecls)
     {
         pAttrList->Clear();
         pAttrList->AddAttribute( "style:name", fontDecl.GetFontName() );

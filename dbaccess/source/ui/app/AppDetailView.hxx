@@ -246,7 +246,7 @@ namespace dbaui
         void clearPages(bool _bTaskAlso = true);
 
         /// returns the count of entries
-        sal_Int32 getElementCount();
+        sal_Int32 getElementCount() const;
 
         /// returns the count of selected entries
         sal_Int32 getSelectionCount();
@@ -319,10 +319,10 @@ namespace dbaui
                             ,const OUString& _rName );
 
         /// returns the preview mode
-        PreviewMode getPreviewMode();
+        PreviewMode getPreviewMode() const;
 
         /// <TRUE/> if the preview is enabled
-        bool isPreviewEnabled();
+        bool isPreviewEnabled() const;
 
         /** switches to the given preview mode
             @param  _eMode

@@ -48,7 +48,7 @@ public:
         const ScDocument* pDoc );
 
     static OUString GetOutputString(
-        ScDocument& rDoc, const ScAddress& rPos, ScRefCellValue& rCell );
+        ScDocument& rDoc, const ScAddress& rPos, const ScRefCellValue& rCell );
 };
 
 #endif

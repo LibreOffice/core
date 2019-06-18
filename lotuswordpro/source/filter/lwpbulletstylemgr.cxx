@@ -93,7 +93,7 @@ LwpBulletStyleMgr::~LwpBulletStyleMgr()
  * @param   pBullOver pointer to the bulletoverride of current paragraph.
  * @param   pIndent pointer to the indentoverride of current paragraph.
  */
-OUString LwpBulletStyleMgr::RegisterBulletStyle(LwpPara* pPara, LwpBulletOverride* pBullOver,
+OUString LwpBulletStyleMgr::RegisterBulletStyle(LwpPara* pPara, const LwpBulletOverride* pBullOver,
     LwpIndentOverride const * pIndent)
 {
     if(!pPara || !pIndent || !pBullOver)

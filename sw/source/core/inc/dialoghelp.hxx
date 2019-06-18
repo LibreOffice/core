@@ -20,8 +20,8 @@ namespace weld
 class Window;
 }
 
-weld::Window* GetFrameWeld(SfxFrame* pFrame);
-weld::Window* GetFrameWeld(SfxMedium* pMedium);
+weld::Window* GetFrameWeld(const SfxFrame* pFrame);
+weld::Window* GetFrameWeld(const SfxMedium* pMedium);
 weld::Window* GetFrameWeld(SwDocShell* pDocSh);
 weld::Window* GetFrameWeld(SwDoc* pDoc);
 

@@ -176,7 +176,7 @@ static void searchNodeAndAttribute(xmlNode* pNodePtr, char* pUIItemID, char* pPr
     }
 }
 
-static xmlDocPtr notebookbarXMLParser(char* pDocName, char* pUIItemID, char* pProperty,
+static xmlDocPtr notebookbarXMLParser(const char* pDocName, char* pUIItemID, char* pProperty,
                                       char* pValue)
 {
     xmlDocPtr pDocPtr;

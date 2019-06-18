@@ -169,7 +169,7 @@ public:
         m_xOutplaceInterceptor = xOutplaceInterceptor;
     }
 
-    const css::uno::Reference< css::util::XCloseable >& GetComponent() { return m_xComponent; }
+    const css::uno::Reference< css::util::XCloseable >& GetComponent() const { return m_xComponent; }
 
 // XEventListener
     virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;

@@ -673,12 +673,12 @@ bool ORowSetCache::next(  )
 }
 
 
-bool ORowSetCache::isFirst(  )
+bool ORowSetCache::isFirst(  ) const
 {
     return m_nPosition == 1; // ask resultset for
 }
 
-bool ORowSetCache::isLast(  )
+bool ORowSetCache::isLast(  ) const
 {
     return m_nPosition == m_nRowCount;
 }
@@ -1123,7 +1123,7 @@ bool ORowSetCache::last(  )
     return bRet;
 }
 
-sal_Int32 ORowSetCache::getRow(  )
+sal_Int32 ORowSetCache::getRow(  ) const
 {
     return (isBeforeFirst() || isAfterLast()) ? 0 : m_nPosition;
 }

@@ -118,7 +118,7 @@ void SwNumberingTypeListBox::Reload(SwInsertNumTypes nTypeFlags)
     }
 }
 
-SvxNumType SwNumberingTypeListBox::GetSelectedNumberingType()
+SvxNumType SwNumberingTypeListBox::GetSelectedNumberingType() const
 {
     SvxNumType nRet = SVX_NUM_CHARS_UPPER_LETTER;
     int nSelPos = m_xWidget->get_active();

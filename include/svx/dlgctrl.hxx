@@ -128,9 +128,9 @@ public:
     tools::Rectangle           CalculateFocusRectangle() const;
     tools::Rectangle           CalculateFocusRectangle( RectPoint eRectPoint ) const;
 
-    css::uno::Reference<css::accessibility::XAccessible> getAccessibleParent() { return GetDrawingArea()->get_accessible_parent(); }
+    css::uno::Reference<css::accessibility::XAccessible> getAccessibleParent() const { return GetDrawingArea()->get_accessible_parent(); }
     virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() override;
-    a11yrelationset get_accessible_relation_set() { return GetDrawingArea()->get_accessible_relation_set(); }
+    a11yrelationset get_accessible_relation_set() const { return GetDrawingArea()->get_accessible_relation_set(); }
 
     RectPoint          GetApproxRPFromPixPt( const css::awt::Point& rPixelPoint ) const;
 
@@ -191,9 +191,9 @@ public:
     void    SetPaintable( bool bTmp ) { bPaintable = bTmp; }
     void    Reset();
 
-    css::uno::Reference<css::accessibility::XAccessible> getAccessibleParent() { return GetDrawingArea()->get_accessible_parent(); }
+    css::uno::Reference<css::accessibility::XAccessible> getAccessibleParent() const { return GetDrawingArea()->get_accessible_parent(); }
     virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() override;
-    a11yrelationset get_accessible_relation_set() { return GetDrawingArea()->get_accessible_relation_set(); }
+    a11yrelationset get_accessible_relation_set() const { return GetDrawingArea()->get_accessible_relation_set(); }
 
     static long GetSquares() { return nSquares ; }
     long GetWidth() const { return aRectSize.getWidth() ; }

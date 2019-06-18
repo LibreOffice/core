@@ -291,7 +291,7 @@ ScVbaWorksheets::Delete()
 }
 
 bool
-ScVbaWorksheets::isSelectedSheets()
+ScVbaWorksheets::isSelectedSheets() const
 {
     return !m_xSheets.is();
 }

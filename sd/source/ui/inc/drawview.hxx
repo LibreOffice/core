@@ -44,7 +44,7 @@ public:
     void CompleteRedraw(OutputDevice* pOutDev, const vcl::Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector = nullptr) override;
 
     virtual bool SetAttributes(const SfxItemSet& rSet, bool bReplaceAll = false, bool bSlide = false, bool bMaster = false) override;
-    void SetMasterAttributes(SdrObject* pObject, SdPage& rPage, SfxItemSet rSet, SfxStyleSheetBasePool* pStShPool, bool& bOk, bool bMaster, bool bSlide);
+    void SetMasterAttributes(SdrObject* pObject, const SdPage& rPage, SfxItemSet rSet, SfxStyleSheetBasePool* pStShPool, bool& bOk, bool bMaster, bool bSlide);
 
     virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override;
 

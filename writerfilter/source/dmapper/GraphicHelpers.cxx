@@ -223,7 +223,7 @@ void WrapHandler::lcl_sprm( Sprm& )
 {
 }
 
-text::WrapTextMode WrapHandler::getWrapMode( )
+text::WrapTextMode WrapHandler::getWrapMode( ) const
 {
     // The wrap values do not map directly to our wrap mode,
     // e.g. none in .docx actually means through in LO.

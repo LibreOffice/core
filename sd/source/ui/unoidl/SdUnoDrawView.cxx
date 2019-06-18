@@ -92,7 +92,7 @@ void SdUnoDrawView::setLayerMode (bool bLayerMode) throw()
     }
 }
 
-Reference<drawing::XLayer> SdUnoDrawView::getActiveLayer()
+Reference<drawing::XLayer> SdUnoDrawView::getActiveLayer() const
 {
     Reference<drawing::XLayer> xCurrentLayer;
 

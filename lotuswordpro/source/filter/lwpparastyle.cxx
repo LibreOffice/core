@@ -359,7 +359,7 @@ void LwpParaStyle::ApplyParaBorder(XFParaStyle* pParaStyle, LwpParaBorderOverrid
     }
 }
 
-void LwpParaStyle::ApplyBreaks(XFParaStyle* pParaStyle, LwpBreaksOverride* pBreaks)
+void LwpParaStyle::ApplyBreaks(XFParaStyle* pParaStyle, const LwpBreaksOverride* pBreaks)
 {
     if (pBreaks->IsKeepWithNext())
     {
@@ -383,7 +383,7 @@ void LwpParaStyle::ApplyBreaks(XFParaStyle* pParaStyle, LwpBreaksOverride* pBrea
     }
 }
 
-void LwpParaStyle::ApplyAlignment(XFParaStyle* pParaStyle, LwpAlignmentOverride* pAlign)
+void LwpParaStyle::ApplyAlignment(XFParaStyle* pParaStyle, const LwpAlignmentOverride* pAlign)
 {
     enumXFAlignType alignType = enumXFAlignStart;
     LwpAlignmentOverride::AlignType type;
@@ -418,7 +418,7 @@ void LwpParaStyle::ApplyAlignment(XFParaStyle* pParaStyle, LwpAlignmentOverride*
     pParaStyle->SetAlignType(alignType);
 }
 
-void LwpParaStyle::ApplyIndent(LwpPara* pPara, XFParaStyle* pParaStyle, LwpIndentOverride* pIndent)
+void LwpParaStyle::ApplyIndent(LwpPara* pPara, XFParaStyle* pParaStyle, const LwpIndentOverride* pIndent)
 {
     LwpPara* pParentPara;
     if (pPara)

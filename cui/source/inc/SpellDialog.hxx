@@ -109,7 +109,7 @@ public:
     void            ResetUndo();
     void            Undo();
     void            AddUndoAction( std::unique_ptr<SfxUndoAction> pAction );
-    size_t          GetUndoActionCount();
+    size_t          GetUndoActionCount() const;
     void            UndoActionStart( sal_uInt16 nId );
     void            UndoActionEnd();
 

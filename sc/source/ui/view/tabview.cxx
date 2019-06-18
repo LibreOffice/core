@@ -1684,7 +1684,7 @@ void ScTabView::DoVSplit(long nSplitPos)
     }
 }
 
-Point ScTabView::GetInsertPos()
+Point ScTabView::GetInsertPos() const
 {
     ScDocument* pDoc = aViewData.GetDocument();
     SCCOL nCol = aViewData.GetCurX();

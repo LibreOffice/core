@@ -44,7 +44,7 @@ namespace abp
         OAddressBookSourcePilot* getDialog();
         const OAddressBookSourcePilot* getDialog() const;
         const css::uno::Reference< css::uno::XComponentContext > &
-                                getORB();
+                                getORB() const;
         AddressSettings&        getSettings();
         const AddressSettings&  getSettings() const;
 

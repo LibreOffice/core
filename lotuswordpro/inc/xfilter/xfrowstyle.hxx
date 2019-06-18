@@ -73,7 +73,7 @@ public:
 public:
     void    SetRowHeight(double height);
 
-    double  GetRowHeight();
+    double  GetRowHeight() const;
 
     void    SetMinRowHeight(double height);
 
@@ -97,7 +97,7 @@ inline void XFRowStyle::SetMinRowHeight(double height)
     m_fMinHeight = height;
 }
 
-inline double XFRowStyle::GetRowHeight()
+inline double XFRowStyle::GetRowHeight() const
 {
     if (m_fMinHeight > FLOAT_MIN)
     {

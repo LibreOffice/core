@@ -1527,7 +1527,7 @@ void OFieldDescControl::LoseFocus()
     TabPage::LoseFocus();
 }
 
-bool OFieldDescControl::isCopyAllowed()
+bool OFieldDescControl::isCopyAllowed() const
 {
     bool bAllowed = (m_pActFocusWindow != nullptr) &&
                         (m_pActFocusWindow == pDefault || m_pActFocusWindow == pFormatSample    ||
@@ -1539,7 +1539,7 @@ bool OFieldDescControl::isCopyAllowed()
     return bAllowed;
 }
 
-bool OFieldDescControl::isCutAllowed()
+bool OFieldDescControl::isCutAllowed() const
 {
     bool bAllowed = (m_pActFocusWindow != nullptr) &&
                         (m_pActFocusWindow == pDefault || m_pActFocusWindow == pFormatSample    ||
@@ -1550,7 +1550,7 @@ bool OFieldDescControl::isCutAllowed()
     return bAllowed;
 }
 
-bool OFieldDescControl::isPasteAllowed()
+bool OFieldDescControl::isPasteAllowed() const
 {
     bool bAllowed = (m_pActFocusWindow != nullptr) &&
                         (m_pActFocusWindow == pDefault || m_pActFocusWindow == pFormatSample    ||

@@ -220,7 +220,7 @@ public:
 
     void SetURLTranslator(const std::shared_ptr<URLTransformer>& pTransformer);
 
-    const css::uno::Reference< css::frame::XModel >& getModel(){ return mxChartModel; }
+    const css::uno::Reference< css::frame::XModel >& getModel() const { return mxChartModel; }
 
     void WriteChartObj( const css::uno::Reference< css::drawing::XShape >& xShape, sal_Int32 nID, sal_Int32 nChartCount );
 

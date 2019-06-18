@@ -116,7 +116,7 @@ public:
     {
         xDlg = pNaviDlg;
     }
-    SCCOL   GetCol() { return nCol; }
+    SCCOL   GetCol() const { return nCol; }
     void    SetCol( SCCOL nColNo );
 
 protected:
@@ -148,7 +148,7 @@ public:
     {
         xDlg = pNaviDlg;
     }
-    SCROW   GetRow() { return static_cast<SCROW>(GetValue()); }
+    SCROW   GetRow() const { return static_cast<SCROW>(GetValue()); }
     void    SetRow(SCROW nRow) { SetValue(nRow); }
 
 protected:

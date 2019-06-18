@@ -173,9 +173,9 @@ public:
     virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
 
     TEntry_Impl const & GetEntryData( long nPos ) { return m_vEntries[ nPos ]; }
-    long            GetEntryCount() { return static_cast<long>(m_vEntries.size()); }
+    long            GetEntryCount() const { return static_cast<long>(m_vEntries.size()); }
     tools::Rectangle       GetEntryRect( const long nPos ) const;
-    bool            HasActive() { return m_bHasActive; }
+    bool            HasActive() const { return m_bHasActive; }
     long            PointToPos( const Point& rPos );
     virtual void    RecalcAll();
     void            RemoveUnlocked();

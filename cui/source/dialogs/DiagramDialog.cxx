@@ -29,7 +29,7 @@ DiagramDialog::DiagramDialog(weld::Window* pWindow,
     });
 }
 
-void DiagramDialog::populateTree(weld::TreeIter* pParent, const OUString& rParentId)
+void DiagramDialog::populateTree(const weld::TreeIter* pParent, const OUString& rParentId)
 {
     auto aItems = mpDiagramData->getChildren(rParentId);
     for (auto& aItem : aItems)
