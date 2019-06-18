@@ -106,6 +106,7 @@ class SFX2_DLLPUBLIC SfxAutoRedactDialog : public SfxDialogController
     std::vector<std::pair<RedactionTarget*, OUString>> m_aTableTargets;
     std::unique_ptr<sfx2::FileDialogHelper> m_pFileDlg;
     bool m_bIsValidState;
+    bool m_bTargetsCopied;
 
     std::unique_ptr<weld::Label> m_xRedactionTargetsLabel;
     std::unique_ptr<TargetsTable> m_xTargetsBox;
@@ -138,16 +139,11 @@ public:
     bool hasTargets() const;
     /// Check if the dialog is in a valid state.
     bool isValidState() const { return m_bIsValidState; }
-    /** Literally moves targets into the given vector.
-     *  At the end of the operation, m_aTableTargets vector becomes empty.
-     *  The contents of the given vector will be erased before being filled in.
+    /** Copies targets vector
+     *  Does a shallow copy.
      *  Returns true if successful.
      */
-    bool moveTargets(std::vector<std::pair<RedactionTarget*, OUString>>& r_aTargets);
-
-    // TODO: Some method(s) to check emptiness/validity
-    // TODO: Some method(s) to get the search params/objects
-    // TODO: Some method(s) to load/save redaction target sets
+    bool getTargets(std::vector<std::pair<RedactionTarget*, OUString>>& r_aTargets);
 };
 
 class SfxAddTargetDialog : public weld::GenericDialogController
