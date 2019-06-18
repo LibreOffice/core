@@ -3697,6 +3697,24 @@ bool DocumentContentOperationsManager::DeleteAndJoinWithRedlineImpl( SwPaM & rPa
         return false; // do not add empty redlines
     }
 
+    SwTextNode* pDelNode = rPam.Start()->nNode.GetNode().GetTextNode();
+    SwTextNode* pTextNode = rPam.End()->nNode.GetNode().GetTextNode();
+
+    // tdf#54819 copy paragraph formatting to the first, wholly deleted paragraph with Undo
+    if (pDelNode != nullptr && pTextNode != nullptr && pDelNode != pTextNode && rPam.Start()->nContent == 0)
+    {
+        SfxItemSet aTmp(
+            m_rDoc.GetAttrPool(),
+            svl::Items<
+                RES_PARATR_LINESPACING, RES_PARATR_OUTLINELEVEL,
+                RES_PARATR_LIST_BEGIN, RES_PARATR_LIST_END - 1,
+                RES_FRMATR_STYLE_NAME, RES_FRMATR_CONDITIONAL_STYLE_NAME>{});
+        const sal_Int32 nEnd(rPam.End()->nContent.GetIndex());
+        pTextNode->GetParaAttr(aTmp, nEnd, nEnd);
+        const SwPaM aPam(*pDelNode, *pDelNode);
+        InsertItemSet(aPam, aTmp);
+    }
+
     std::vector<SwRangeRedline*> redlines;
     {
         auto pRedline(std::make_unique<SwRangeRedline>(RedlineType::Delete, rPam));
