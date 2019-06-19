@@ -212,6 +212,7 @@ class SAL_DLLPUBLIC_RTTI SwAnnotationWin : public vcl::Window
         DECL_LINK(ModifyHdl, LinkParamNone*, void);
         DECL_LINK(ScrollHdl, ScrollBar*, void);
         DECL_LINK(DeleteHdl, void*, void);
+        DECL_LINK(ResolveHdl, void*, void);
 
         sal_uInt32 CountFollowing();
 
