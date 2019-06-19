@@ -592,7 +592,7 @@ ErrCode EditView::Read( SvStream& rInput, EETextFormat eFormat, SvKeyValueIterat
 
 void EditView::Cut()
 {
-    Reference<css::datatransfer::clipboard::XClipboard> aClipBoard(GetWindow()->GetClipboard());
+    Reference<css::datatransfer::clipboard::XClipboard> aClipBoard(pImpEditView->GetClipboard());
     pImpEditView->CutCopy( aClipBoard, true );
 }
 
@@ -605,19 +605,19 @@ css::uno::Reference< css::datatransfer::XTransferable > EditView::GetTransferabl
 
 void EditView::Copy()
 {
-    Reference<css::datatransfer::clipboard::XClipboard> aClipBoard(GetWindow()->GetClipboard());
+    Reference<css::datatransfer::clipboard::XClipboard> aClipBoard(pImpEditView->GetClipboard());
     pImpEditView->CutCopy( aClipBoard, false );
 }
 
 void EditView::Paste()
 {
-    Reference<css::datatransfer::clipboard::XClipboard> aClipBoard(GetWindow()->GetClipboard());
+    Reference<css::datatransfer::clipboard::XClipboard> aClipBoard(pImpEditView->GetClipboard());
     pImpEditView->Paste( aClipBoard );
 }
 
 void EditView::PasteSpecial()
 {
-    Reference<css::datatransfer::clipboard::XClipboard> aClipBoard(GetWindow()->GetClipboard());
+    Reference<css::datatransfer::clipboard::XClipboard> aClipBoard(pImpEditView->GetClipboard());
     pImpEditView->Paste(aClipBoard, true );
 }
 
