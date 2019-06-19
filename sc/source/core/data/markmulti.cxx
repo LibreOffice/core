@@ -277,10 +277,10 @@ void ScMultiSel::Set( ScRangeList const & rList )
                 auto & rMarkEntries = aMarkEntriesPerCol[nCol];
                 int nEntries = rMarkEntries.size();
                 if (nEntries > 1 && nStartRow >= rMarkEntries[nEntries-2].nRow+1
-                   && nStartRow <= rMarkEntries[nEntries-1].nRow)
+                   && nStartRow <= rMarkEntries[nEntries-1].nRow+1)
                 {
-                    // overlaps previous range
-                    rMarkEntries.back().nRow = nEndRow;
+                    // overlaps or directly adjacent previous range
+                    rMarkEntries.back().nRow = std::max(nEndRow, rMarkEntries.back().nRow);
                 }
                 else
                 {
@@ -298,7 +298,10 @@ void ScMultiSel::Set( ScRangeList const & rList )
     aMultiSelContainer.resize(nMaxCol+1);
     for (SCCOL nCol = 0; nCol<=nMaxCol; ++nCol)
         if (!aMarkEntriesPerCol[nCol].empty())
+        {
             aMultiSelContainer[nCol].Set( aMarkEntriesPerCol[nCol] );
+            aMarkEntriesPerCol[nCol].clear(); // reduce peak memory usage
+        }
 }
 
 bool ScMultiSel::IsRowMarked( SCROW nRow ) const
