@@ -39,12 +39,12 @@ CalendarWrapper::~CalendarWrapper()
 {
 }
 
-void CalendarWrapper::loadDefaultCalendar( const css::lang::Locale& rLocale )
+void CalendarWrapper::loadDefaultCalendar( const css::lang::Locale& rLocale, bool bTimeZoneUTC )
 {
     try
     {
         if ( xC.is() )
-            xC->loadDefaultCalendar( rLocale );
+            xC->loadDefaultCalendarTZ( rLocale, (bTimeZoneUTC ? "UTC" : OUString()));
     }
     catch (const Exception&)
     {
@@ -52,12 +52,12 @@ void CalendarWrapper::loadDefaultCalendar( const css::lang::Locale& rLocale )
     }
 }
 
-void CalendarWrapper::loadCalendar( const OUString& rUniqueID, const css::lang::Locale& rLocale )
+void CalendarWrapper::loadCalendar( const OUString& rUniqueID, const css::lang::Locale& rLocale, bool bTimeZoneUTC )
 {
     try
     {
         if ( xC.is() )
-            xC->loadCalendar( rUniqueID, rLocale );
+            xC->loadCalendarTZ( rUniqueID, rLocale, (bTimeZoneUTC ? "UTC" : OUString()));
     }
     catch (const Exception&)
     {

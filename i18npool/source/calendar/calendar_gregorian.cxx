@@ -167,6 +167,11 @@ Calendar_gregorian::init(const Era *_eraArray)
      * */
     icu::Locale aIcuLocale( "", nullptr, nullptr, "calendar=gregorian");
 
+    /* XXX: not specifying a timezone when creating a calendar assigns the
+     * system's timezone with all DST quirks, invalid times when switching
+     * to/from DST and so on. The XCalendar* interfaces are defined to support
+     * local time and UTC time so we can not override that here.
+     */
     UErrorCode status = U_ZERO_ERROR;
     body.reset( icu::Calendar::createInstance( aIcuLocale, status) );
     if (!body || !U_SUCCESS(status)) throw ERROR;
@@ -367,6 +372,22 @@ Calendar_gregorian::getLocalDateTime()
     int32_t nDSTOffset = body->get( UCAL_DST_OFFSET, status );
     if ( !U_SUCCESS(status) ) throw ERROR;
     return (fTime + (nZoneOffset + nDSTOffset)) / U_MILLIS_PER_DAY;
+}
+
+bool Calendar_gregorian::setTimeZone( const OUString& rTimeZone )
+{
+    if (fieldSet)
+    {
+        setValue();
+        getValue();
+    }
+    const icu::UnicodeString aID( reinterpret_cast<const UChar*>(rTimeZone.getStr()), rTimeZone.getLength());
+    const std::unique_ptr<const icu::TimeZone> pTZ( icu::TimeZone::createTimeZone(aID));
+    if (!pTZ)
+        return false;
+
+    body->setTimeZone(*pTZ);
+    return true;
 }
 
 // map field value from gregorian calendar to other calendar, it can be overwritten by derived class.
