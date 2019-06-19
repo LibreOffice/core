@@ -49,6 +49,14 @@ class protectSheet(UITestCase):
         enter_text_to_cell(gridwin, "B2", "A")
         self.assertEqual(get_cell_by_position(document, 0, 1, 1).getString(), "A")
 
+        # test cancel button
+        self.ui_test.execute_dialog_through_command(".uno:Protect")
+        xDialog = self.xUITest.getTopFocusWindow()
+        xCancelBtn = xDialog.getChild("cancel")
+        self.ui_test.close_dialog_through_button(xCancelBtn)
+        enter_text_to_cell(gridwin, "B2", "B")
+        self.assertEqual(get_cell_by_position(document, 0, 1, 1).getString(), "B")
+
         self.ui_test.close_doc()
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

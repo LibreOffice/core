@@ -284,4 +284,28 @@ class clearCells(UITestCase):
         self.assertEqual(get_cell_by_position(document, 0, 0, 1).getString() , "")
 
         self.ui_test.close_doc()
+
+    def test_cancel_clear_cells_all(self):
+        calc_doc = self.ui_test.create_doc_in_start_center("calc")
+        xCalcDoc = self.xUITest.getTopFocusWindow()
+        gridwin = xCalcDoc.getChild("grid_window")
+        document = self.ui_test.get_component()
+        enter_text_to_cell(gridwin, "A1", "aa")
+        enter_text_to_cell(gridwin, "A2", "1")
+
+        gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:A2"}))
+        self.ui_test.execute_dialog_through_command(".uno:Delete")
+        xDialog = self.xUITest.getTopFocusWindow()
+        xdeleteall = xDialog.getChild("deleteall")
+
+        if (get_state_as_dict(xdeleteall)["Selected"]) == "false":
+            xdeleteall.executeAction("CLICK", tuple())
+
+        xCancelBtn = xDialog.getChild("cancel")
+        self.ui_test.close_dialog_through_button(xCancelBtn)
+        #Verify
+        self.assertEqual(get_cell_by_position(document, 0, 0, 0).getString() , "aa")
+        self.assertEqual(get_cell_by_position(document, 0, 0, 1).getString() , "1")
+
+        self.ui_test.close_doc()
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

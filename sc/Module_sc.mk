@@ -253,6 +253,7 @@ $(eval $(call gb_Module_add_uicheck_targets,sc,\
 	UITest_chart \
 	UITest_pageFormat \
 	UITest_calc_tests8 \
+	UITest_dialogs \
 ))
 endif
 

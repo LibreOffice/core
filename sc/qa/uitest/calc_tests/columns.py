@@ -63,8 +63,8 @@ class CalcColumns(UITestCase):
         xDialog = self.xUITest.getTopFocusWindow()
         xvalue = xDialog.getChild("value")
         self.assertEqual(get_state_as_dict(xvalue)["Text"], "1.00 cm")
-        xOK = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOK)
+        xCancel = xDialog.getChild("cancel")
+        self.ui_test.close_dialog_through_button(xCancel)
 
         self.ui_test.close_doc()
 

@@ -52,6 +52,16 @@ class moveCopySheet(UITestCase):
         self.assertEqual(document.Sheets.getByIndex(0).Name, "Sheet1")
         self.assertEqual(document.Sheets.getByIndex(1).Name, "moveName")
 
+        #verify that the cancel button does not do anything
+        self.ui_test.execute_dialog_through_command(".uno:Move")
+        xDialog = self.xUITest.getTopFocusWindow()
+        xCancelBtn = xDialog.getChild("cancel")
+        self.ui_test.close_dialog_through_button(xCancelBtn)
+
+        self.assertEqual(document.Sheets.getCount(), 2)
+        self.assertEqual(document.Sheets.getByIndex(0).Name, "Sheet1")
+        self.assertEqual(document.Sheets.getByIndex(1).Name, "moveName")
+
         self.ui_test.close_doc()
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

@@ -38,8 +38,8 @@ class protectSpreadsheet(UITestCase):
 
         xpass1ed.executeAction("TYPE", mkPropertyValues({"TEXT":"aa"}))
 
-        xOKBtn = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOKBtn)
+        xCancelBtn = xDialog.getChild("cancel")
+        self.ui_test.close_dialog_through_button(xCancelBtn)
 
         self.ui_test.close_doc()
 
