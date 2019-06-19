@@ -16,6 +16,8 @@
 #include <chartview/ExplicitValueProvider.hxx>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 
+#include <comphelper/servicehelper.hxx>
+
 #include <vcl/svapp.hxx>
 
 #include <algorithm>
@@ -173,7 +175,7 @@ std::set<OUString> ChartWindowUIObject::get_children() const
     css::uno::Reference< css::chart2::XChartDocument > xChartDoc( pController->getModel(), css::uno::UNO_QUERY );
 
     css::uno::Reference<css::uno::XInterface> xChartView = pController->getChartView();
-    chart::ExplicitValueProvider* pValueProvider = chart::ExplicitValueProvider::getExplicitValueProvider( xChartView );
+    chart::ExplicitValueProvider* pValueProvider = comphelper::getUnoTunnelImplementation<chart::ExplicitValueProvider>( xChartView );
     chart::ObjectHierarchy aHierarchy(xChartDoc, pValueProvider, true);
     chart::ObjectIdentifier aIdentifier = chart::ObjectHierarchy::getRootNodeOID();
     aChildren.insert(aIdentifier.getObjectCID());

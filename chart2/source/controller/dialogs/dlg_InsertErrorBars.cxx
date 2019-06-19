@@ -27,6 +27,8 @@
 #include <AxisHelper.hxx>
 #include <ObjectNameProvider.hxx>
 
+#include <comphelper/servicehelper.hxx>
+
 using ::com::sun::star::uno::Reference;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
@@ -67,7 +69,7 @@ double InsertErrorBarsDialog::getAxisMinorStepWidthForErrorBarDecimals(
 {
     double fStepWidth = 0.001;
 
-    ExplicitValueProvider* pExplicitValueProvider( ExplicitValueProvider::getExplicitValueProvider(xChartView) );
+    ExplicitValueProvider* pExplicitValueProvider( comphelper::getUnoTunnelImplementation<ExplicitValueProvider>(xChartView) );
     if( pExplicitValueProvider )
     {
         Reference< XAxis > xAxis;

@@ -1466,7 +1466,7 @@ DrawModelWrapper* ChartController::GetDrawModelWrapper()
 {
     if( !m_pDrawModelWrapper.get() )
     {
-        ExplicitValueProvider* pProvider = ExplicitValueProvider::getExplicitValueProvider( m_xChartView );
+        ExplicitValueProvider* pProvider = comphelper::getUnoTunnelImplementation<ExplicitValueProvider>( m_xChartView );
         if( pProvider )
             m_pDrawModelWrapper = pProvider->getDrawModelWrapper();
         if ( m_pDrawModelWrapper.get() )
