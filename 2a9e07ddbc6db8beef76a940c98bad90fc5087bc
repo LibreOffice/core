@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_21af0895",
+        "filename": "sc/source/ui/view/gridwin.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 5251,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2019-06-19T07:44:17Z",
+      "side": 1,
+      "message": "could we prefer the string value here, if it exists? For example, a numeric cell content formatted as currency is longer etc.",
+      "range": {
+        "startLine": 5251,
+        "startChar": 16,
+        "endLine": 5251,
+        "endChar": 34
+      },
+      "revId": "2a9e07ddbc6db8beef76a940c98bad90fc5087bc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
