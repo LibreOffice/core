@@ -15,6 +15,7 @@
 #include <sal/log.hxx>
 #include <assert.h>
 #include <time.h>
+#include <mutex>
 #include <random>
 #include <stdexcept>
 #if defined HAVE_VALGRIND_HEADERS
@@ -39,6 +40,7 @@ namespace rng
 
 struct RandomNumberGenerator
 {
+    std::mutex mutex;
     STD_RNG_ALGO global_rng;
     RandomNumberGenerator()
     {
@@ -79,21 +81,27 @@ class theRandomNumberGenerator : public rtl::Static<RandomNumberGenerator, theRa
 int uniform_int_distribution(int a, int b)
 {
     std::uniform_int_distribution<int> dist(a, b);
-    return dist(theRandomNumberGenerator::get().global_rng);
+    auto & gen = theRandomNumberGenerator::get();
+    std::scoped_lock<std::mutex> g(gen.mutex);
+    return dist(gen.global_rng);
 }
 
 // uniform ints [a,b] distribution
 unsigned int uniform_uint_distribution(unsigned int a, unsigned int b)
 {
     std::uniform_int_distribution<unsigned int> dist(a, b);
-    return dist(theRandomNumberGenerator::get().global_rng);
+    auto & gen = theRandomNumberGenerator::get();
+    std::scoped_lock<std::mutex> g(gen.mutex);
+    return dist(gen.global_rng);
 }
 
 // uniform size_t [a,b] distribution
 size_t uniform_size_distribution(size_t a, size_t b)
 {
     std::uniform_int_distribution<size_t> dist(a, b);
-    return dist(theRandomNumberGenerator::get().global_rng);
+    auto & gen = theRandomNumberGenerator::get();
+    std::scoped_lock<std::mutex> g(gen.mutex);
+    return dist(gen.global_rng);
 }
 
 // uniform size_t [a,b) distribution
@@ -101,7 +109,9 @@ double uniform_real_distribution(double a, double b)
 {
     assert(a < b);
     std::uniform_real_distribution<double> dist(a, b);
-    return dist(theRandomNumberGenerator::get().global_rng);
+    auto & gen = theRandomNumberGenerator::get();
+    std::scoped_lock<std::mutex> g(gen.mutex);
+    return dist(gen.global_rng);
 }
 
 } // namespace
