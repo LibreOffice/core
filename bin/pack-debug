@@ -37,7 +37,7 @@ echo create debug packages >$BUILD_LOG
 eval $(grep ^INSTALLDIRNAME config.log)
 eval $(grep ^PRODUCTVERSION config.log)
 
-# set package base name, eg. collaboraoffice6.0
+# set package base name, eg. collaboraoffice6.2
 DEBUGSRC_PACKAGENAME=$INSTALLDIRNAME$PRODUCTVERSION
 
 #################################
@@ -245,24 +245,24 @@ do
  then
 	echo ================ $i ================
 	TARGET_NAME=$INSTALLDIRNAME"$(echo $(basename $i) | awk '
-	/epm_gid_Module_Optional_Firebird.lst/{print"basis6.0-firebird"}
-	/epm_gid_Module_Optional_Gnome.lst/{print"basis6.0-gnome-integration"}
-	/epm_gid_Module_Optional_Grfflt.lst/{print"basis6.0-graphicfilter"}
-	/epm_gid_Module_Optional_Kde.lst/{print"basis6.0-kde-integration"}
-	/epm_gid_Module_Optional_OGLTrans.lst/{print"basis6.0-ogltrans"}
-	/epm_gid_Module_Optional_PostgresqlSdbc.lst/{print"basis6.0-postgresql-sdbc"}
-	/epm_gid_Module_Pdfimport.lst/{print"basis6.0-extension-pdf-import"}
-	/epm_gid_Module_Prg_Base_Bin.lst/{print"basis6.0-base"}
-	/epm_gid_Module_Prg_Calc_Bin.lst/{print"basis6.0-calc"}
-	/epm_gid_Module_Prg_Impress_Bin.lst/{print"basis6.0-impress"}
-	/epm_gid_Module_Prg_Math_Bin.lst/{print"basis6.0-math"}
-	/epm_gid_Module_Prg_Wrt_Bin.lst/{print"basis6.0-writer"}
-	/epm_gid_Module_Pyuno.lst/{print"basis6.0-pyuno"}
-	/epm_gid_Module_Reportbuilder.lst/{print"basis6.0-extension-report-builder"}
-	/epm_gid_Module_Root_Brand.lst/{print"6.0"}
-	/epm_gid_Module_Root.lst/{print"basis6.0-core"}
-	/epm_gid_Module_Root_Ure_Hidden.lst/{print"6.0-ure"}
-	' | sed s/6.0/$PRODUCTVERSION/g)"
+	/epm_gid_Module_Optional_Firebird.lst/{print"basis6.2-firebird"}
+	/epm_gid_Module_Optional_Gnome.lst/{print"basis6.2-gnome-integration"}
+	/epm_gid_Module_Optional_Grfflt.lst/{print"basis6.2-graphicfilter"}
+	/epm_gid_Module_Optional_Kde.lst/{print"basis6.2-kde-integration"}
+	/epm_gid_Module_Optional_OGLTrans.lst/{print"basis6.2-ogltrans"}
+	/epm_gid_Module_Optional_PostgresqlSdbc.lst/{print"basis6.2-postgresql-sdbc"}
+	/epm_gid_Module_Pdfimport.lst/{print"basis6.2-extension-pdf-import"}
+	/epm_gid_Module_Prg_Base_Bin.lst/{print"basis6.2-base"}
+	/epm_gid_Module_Prg_Calc_Bin.lst/{print"basis6.2-calc"}
+	/epm_gid_Module_Prg_Impress_Bin.lst/{print"basis6.2-impress"}
+	/epm_gid_Module_Prg_Math_Bin.lst/{print"basis6.2-math"}
+	/epm_gid_Module_Prg_Wrt_Bin.lst/{print"basis6.2-writer"}
+	/epm_gid_Module_Pyuno.lst/{print"basis6.2-pyuno"}
+	/epm_gid_Module_Reportbuilder.lst/{print"basis6.2-extension-report-builder"}
+	/epm_gid_Module_Root_Brand.lst/{print"6.2"}
+	/epm_gid_Module_Root.lst/{print"basis6.2-core"}
+	/epm_gid_Module_Root_Ure_Hidden.lst/{print"6.2-ure"}
+	' | sed s/6.2/$PRODUCTVERSION/g)"
 	echo TARGET NAME: $TARGET_NAME
 
 	# create stripped libraries and linked debug info files
