@@ -108,7 +108,7 @@ public:
         while (true)
         {
             // only let one thread read at any given time
-            std::lock_guard<std::mutex> lock(m_mutex);
+            std::scoped_lock<std::mutex> lock(m_mutex);
 
             // check if we need to read (and potentially wait) a response ID
             if (m_incomingResponse == 0)
