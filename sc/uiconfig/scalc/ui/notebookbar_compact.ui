@@ -1428,13 +1428,6 @@
         <property name="action_name">.uno:OpenHyperlinkOnCursor</property>
       </object>
     </child>
-    <child>
-      <object class="GtkMenuItem" id="MenuMedia-AssignMacro">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:AssignMacro</property>
-      </object>
-    </child>
   </object>
   <object class="GtkMenu" id="MenuPage">
     <property name="visible">True</property>
