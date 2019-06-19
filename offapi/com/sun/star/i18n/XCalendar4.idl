@@ -49,6 +49,30 @@ interface XCalendar4 : com::sun::star::i18n::XCalendar3
      */
     double  getLocalDateTime();
 
+    /** Load the default calendar for the given locale with a given time zone.
+
+        @param  TimeZone
+                If empty, the system's time zone is used.
+                Else specified as "Region/City" name like "Europe/Berlin",
+                or a custom time zone ID such as "UTC" or "GMT-8:00".
+
+        @since LibreOffice 6.3
+     */
+    void    loadDefaultCalendarTZ( [in] ::com::sun::star::lang::Locale rLocale, [in] string TimeZone );
+
+    /** Load a specific calendar for the given locale with a given time zone.
+
+        @param  TimeZone
+                If empty, the system's time zone is used.
+                Else specified as "Region/City" name like "Europe/Berlin",
+                or a custom time zone ID such as "UTC" or "GMT-8:00".
+
+        @since LibreOffice 6.3
+     */
+    void    loadCalendarTZ( [in] string uniqueID,
+                            [in] ::com::sun::star::lang::Locale rLocale,
+                            [in] string TimeZone );
+
 };
 
 }; }; }; };
