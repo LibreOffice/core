@@ -54,6 +54,7 @@ public:
     Calendar_gregorian();
     Calendar_gregorian(const Era *_eraArray);
     void init(const Era *_eraArray);
+    bool setTimeZone( const OUString& rTimeZone );
 
     /**
     * Destructor
