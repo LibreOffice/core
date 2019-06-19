@@ -113,7 +113,7 @@ static Model* lcl_getModel( const Reference<XUnoTunnel>& xTunnel )
     Model* pModel = nullptr;
     if( xTunnel.is() )
         pModel = reinterpret_cast<Model*>(
-            xTunnel->getSomething( Model::getUnoTunnelID() ) );
+            xTunnel->getSomething( Model::getUnoTunnelId() ) );
     return pModel;
 }
 
@@ -144,7 +144,7 @@ EvaluationContext Model::getEvaluationContext()
 }
 
 
-css::uno::Sequence<sal_Int8> Model::getUnoTunnelID()
+css::uno::Sequence<sal_Int8> Model::getUnoTunnelId()
 {
     static cppu::OImplementationId aImplementationId;
     return aImplementationId.getImplementationId();
@@ -604,7 +604,7 @@ void Model::update()
 
 sal_Int64 Model::getSomething( const css::uno::Sequence<sal_Int8>& xId )
 {
-    return reinterpret_cast<sal_Int64>( ( xId == getUnoTunnelID() ) ? this : nullptr );
+    return reinterpret_cast<sal_Int64>( ( xId == getUnoTunnelId() ) ? this : nullptr );
 }
 
 Sequence<sal_Int8> Model::getImplementationId()
