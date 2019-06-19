@@ -61,6 +61,7 @@
 #include <com/sun/star/awt/FontDescriptor.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
+#include <com/sun/star/drawing/EnhancedCustomShapeAdjustmentValue.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
@@ -183,6 +184,7 @@ public:
     void testTdf115005_FallBack_Images_Off();
     void testTdf118806();
     void testTdf111789();
+    void testTdf100348_convert_Fontwork2TextWarp();
     /// SmartArt animated elements
     void testTdf104792();
     void testTdf90627();
@@ -272,6 +274,7 @@ public:
     CPPUNIT_TEST(testTdf115005_FallBack_Images_Off);
     CPPUNIT_TEST(testTdf118806);
     CPPUNIT_TEST(testTdf111789);
+    CPPUNIT_TEST(testTdf100348_convert_Fontwork2TextWarp);
     CPPUNIT_TEST(testTdf104792);
     CPPUNIT_TEST(testTdf90627);
     CPPUNIT_TEST(testTdf104786);
@@ -2334,6 +2337,62 @@ void SdOOXMLExportTest2::testTdf125551()
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(576), xShapeBg->getPosition().Y);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(10815), xShapeBg->getSize().Width);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(8587), xShapeBg->getSize().Height);
+}
+
+void SdOOXMLExportTest2::testTdf100348_convert_Fontwork2TextWarp()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL(
+        m_directories.getURLFromSrc("/sd/qa/unit/data/odp/tdf100348_Fontwork2TextWarp.odp"), ODP);
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+
+    // Resulting pptx has to contain the TextWarp shape
+    xmlDocPtr pXmlDocContent = parseExport(tempFile, "ppt/slides/slide1.xml");
+    const OString sPathStart("/p:sld/p:cSld/p:spTree/p:sp[1]/p:txBody/a:bodyPr/a:prstTxWarp");
+    assertXPath(pXmlDocContent, sPathStart + "[@prst='textWave1']");
+    const OString sPathAdj(sPathStart + "/a:avLst/a:gd");
+    assertXPath(pXmlDocContent, sPathAdj + "[@name='adj1' and  @fmla='val 18750']");
+    assertXPath(pXmlDocContent, sPathAdj + "[@name='adj2' and  @fmla='val -7500']");
+
+    // Reloading has to get the Fontwork shape back
+    // TextPath makes a custom shape to a Fontwork shape, so must exist
+    uno::Reference<beans::XPropertySet> xShapeWavePropSet(getShapeFromPage(0, 0, xDocShRef));
+    auto aGeomPropSeq = xShapeWavePropSet->getPropertyValue("CustomShapeGeometry")
+                            .get<uno::Sequence<beans::PropertyValue>>();
+    auto aGeomPropVec
+        = comphelper::sequenceToContainer<std::vector<beans::PropertyValue>>(aGeomPropSeq);
+    OUString sName = "TextPath";
+    auto aIterator = std::find_if(
+        aGeomPropVec.begin(), aGeomPropVec.end(),
+        [sName](const beans::PropertyValue& rValue) { return rValue.Name == sName; });
+    CPPUNIT_ASSERT_MESSAGE("No TextPath", aIterator != aGeomPropVec.end());
+
+    // Type has to be same as in original document on roundtrip.
+    sName = "Type";
+    auto aIterator2 = std::find_if(
+        aGeomPropVec.begin(), aGeomPropVec.end(),
+        [sName](const beans::PropertyValue& rValue) { return rValue.Name == sName; });
+    CPPUNIT_ASSERT_MESSAGE("No Type", aIterator2 != aGeomPropVec.end());
+    OUString sOwnName;
+    aIterator2->Value >>= sOwnName;
+    CPPUNIT_ASSERT_EQUAL(OUString("fontwork-wave"), sOwnName);
+
+    // Adjustmentvalues need to be the same.
+    sName = "AdjustmentValues";
+    auto aIterator3 = std::find_if(
+        aGeomPropVec.begin(), aGeomPropVec.end(),
+        [sName](const beans::PropertyValue& rValue) { return rValue.Name == sName; });
+    CPPUNIT_ASSERT_MESSAGE("No AdjustmentValues", aIterator3 != aGeomPropVec.end());
+    uno::Sequence<drawing::EnhancedCustomShapeAdjustmentValue> aAdjValueSeq;
+    aIterator3->Value >>= aAdjValueSeq;
+    double fAdj1;
+    aAdjValueSeq[0].Value >>= fAdj1;
+    double fAdj2;
+    aAdjValueSeq[1].Value >>= fAdj2;
+    CPPUNIT_ASSERT_EQUAL(4050.0, fAdj1); // odp values, not pptx values
+    CPPUNIT_ASSERT_EQUAL(9180.0, fAdj2);
+
+    xDocShRef->DoClose();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdOOXMLExportTest2);
