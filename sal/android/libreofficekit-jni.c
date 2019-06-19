@@ -75,7 +75,8 @@ jboolean libreofficekit_initialize(JNIEnv* env,
     const char *cacheDirPath;
     const char *apkFilePath;
 
-    const char *fontsConf = "/etc/fonts/fonts.conf";
+    size_t data_dir_len;
+    const char fontsConf[] = "/etc/fonts/fonts.conf";
     char *fontsConfPath;
 
     setenv("OOO_DISABLE_RECOVERY", "1", 1);
@@ -93,9 +94,10 @@ jboolean libreofficekit_initialize(JNIEnv* env,
     // TMPDIR is used by osl_getTempDirURL()
     setenv("TMPDIR", cache_dir, 1);
 
-    fontsConfPath = malloc(strlen(data_dir) + sizeof(fontsConf));
-    strcpy(fontsConfPath, data_dir);
-    strcat(fontsConfPath, fontsConf);
+    data_dir_len = strlen(data_dir);
+    fontsConfPath = malloc(data_dir_len + sizeof(fontsConf));
+    strncpy(fontsConfPath, data_dir, data_dir_len);
+    strncpy(fontsConfPath + data_dir_len, fontsConf, sizeof(fontsConf));
 
     fd = open(fontsConfPath, O_RDONLY);
     if (fd != -1) {
