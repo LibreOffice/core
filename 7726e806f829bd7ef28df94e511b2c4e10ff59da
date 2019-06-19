@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_0123eca9",
+        "filename": "xmloff/source/text/XMLTextCharStyleNamesElementExport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-06-19T02:11:16Z",
+      "side": 1,
+      "message": "imo,\n\n    for (sal_Int32 i \u003d 1; i \u003c nCount; ++i)\n\nlooks clearer and closer to original ;-)",
+      "range": {
+        "startLine": 58,
+        "startChar": 16,
+        "endLine": 58,
+        "endChar": 59
+      },
+      "revId": "7726e806f829bd7ef28df94e511b2c4e10ff59da",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
