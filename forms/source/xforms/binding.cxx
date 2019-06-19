@@ -53,6 +53,7 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 
 #include <unotools/textsearch.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/typeprovider.hxx>
 
 using namespace com::sun::star::xml::xpath;
@@ -454,17 +455,7 @@ bool Binding::isLive() const
 
 Model* Binding::getModelImpl() const
 {
-    return getModelImpl( mxModel );
-}
-
-Model* Binding::getModelImpl( const css::uno::Reference<css::xforms::XModel>& xModel )
-{
-    Reference<XUnoTunnel> xTunnel( xModel, UNO_QUERY );
-    Model* pModel = xTunnel.is()
-        ? reinterpret_cast<Model*>(
-            xTunnel->getSomething( Model::getUnoTunnelId() ) )
-        : nullptr;
-    return pModel;
+    return comphelper::getUnoTunnelImplementation<Model>( mxModel );
 }
 
 static void lcl_addListenerToNode( const Reference<XNode>& xNode,
