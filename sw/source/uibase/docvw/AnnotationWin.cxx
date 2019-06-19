@@ -88,6 +88,7 @@ SwAnnotationWin::SwAnnotationWin( SwEditWin& rEditWin,
     , mAnchorRect()
     , mPageBorder(0)
     , mbAnchorRectChanged(false)
+    , mbResolvedStateUpdated(false)
     , mbMouseOver(false)
     , mLayoutStatus(SwPostItHelper::INVISIBLE)
     , mbReadonly(false)
@@ -220,9 +221,42 @@ void SwAnnotationWin::SetPostItText()
     Invalidate();
 }
 
+void SwAnnotationWin::SetResolved(bool resolved)
+{
+    static_cast<SwPostItField*>(mpFormatField->GetField())->SetResolved(resolved);
+    mrSidebarItem.bShow = !IsResolved();
+
+    mbResolvedStateUpdated = true;
+    UpdateData();
+    Invalidate();
+}
+
+void SwAnnotationWin::ToggleResolved()
+{
+    SetResolved(!IsResolved());
+}
+
+void SwAnnotationWin::ToggleResolvedForThread()
+{
+    GetTopReplyNote()->ToggleResolved();
+    mrMgr.UpdateResolvedStatus(GetTopReplyNote());
+    mrMgr.LayoutPostIts();
+}
+
+bool SwAnnotationWin::IsResolved() const
+{
+    return static_cast<SwPostItField*>(mpFormatField->GetField())->GetResolved();
+}
+
+bool SwAnnotationWin::IsThreadResolved()
+{
+    // Not const because GetTopReplyNote isn't.
+    return GetTopReplyNote()->IsResolved();
+}
+
 void SwAnnotationWin::UpdateData()
 {
-    if ( mpOutliner->IsModified() )
+    if ( mpOutliner->IsModified() || mbResolvedStateUpdated)
     {
         IDocumentUndoRedo & rUndoRedo(
             mrView.GetDocShell()->GetDoc()->GetIDocumentUndoRedo());
@@ -249,6 +283,7 @@ void SwAnnotationWin::UpdateData()
     }
     mpOutliner->ClearModifyFlag();
     mpOutliner->GetUndoManager().Clear();
+    mbResolvedStateUpdated = false;
 }
 
 void SwAnnotationWin::Delete()
