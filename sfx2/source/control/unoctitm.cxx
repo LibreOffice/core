@@ -1059,6 +1059,7 @@ static void InterceptLOKStateChangeEvent(const SfxViewFrame* pViewFrame, const c
              aEvent.FeatureURL.Path == "SelectAll" ||
              aEvent.FeatureURL.Path == "InsertAnnotation" ||
              aEvent.FeatureURL.Path == "DeleteAnnotation" ||
+             aEvent.FeatureURL.Path == "ResolveAnnotation" ||
              aEvent.FeatureURL.Path == "InsertRowsBefore" ||
              aEvent.FeatureURL.Path == "InsertRowsAfter" ||
              aEvent.FeatureURL.Path == "InsertColumnsBefore" ||
