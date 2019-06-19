@@ -18,6 +18,7 @@
  */
 
 #include <calendarImpl.hxx>
+#include <calendar_gregorian.hxx>
 #include <localedata.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
@@ -40,12 +41,12 @@ CalendarImpl::~CalendarImpl()
 }
 
 void SAL_CALL
-CalendarImpl::loadDefaultCalendar( const Locale& rLocale )
+CalendarImpl::loadDefaultCalendarTZ( const Locale& rLocale, const OUString& rTimeZone )
 {
     Sequence< Calendar2 > xC = LocaleDataImpl::get()->getAllCalendars2(rLocale);
     for (sal_Int32 i = 0; i < xC.getLength(); i++) {
         if (xC[i].Default) {
-            loadCalendar(xC[i].Name, rLocale);
+            loadCalendarTZ(xC[i].Name, rLocale, rTimeZone);
             return;
         }
     }
@@ -53,14 +54,16 @@ CalendarImpl::loadDefaultCalendar( const Locale& rLocale )
 }
 
 void SAL_CALL
-CalendarImpl::loadCalendar(const OUString& uniqueID, const Locale& rLocale )
+CalendarImpl::loadCalendarTZ( const OUString& uniqueID, const Locale& rLocale, const OUString& rTimeZone )
 {
     Reference < XCalendar4 > xOldCalendar( xCalendar );  // backup
+    const OUString aCacheID( uniqueID + "_" + rTimeZone);
+    bool bTimeZone = true;
     sal_Int32 i;
 
     for (i = 0; i < sal::static_int_cast<sal_Int32>(lookupTable.size()); i++) {
         lookupTableItem &listItem = lookupTable[i];
-        if (uniqueID == listItem.uniqueID) {
+        if (aCacheID == listItem.m_aCacheID) {
             xCalendar = listItem.xCalendar;
             break;
         }
@@ -85,7 +88,16 @@ CalendarImpl::loadCalendar(const OUString& uniqueID, const Locale& rLocale )
             throw ERROR;
         xCalendar.set(xI, UNO_QUERY);
 
-        lookupTable.emplace_back( uniqueID, xCalendar );
+        if (!rTimeZone.isEmpty())
+        {
+            /* XXX NOTE: currently (2019-06-19) calendar implementations derive
+             * from Calendar_gregorian, even Hijri and Jewish. If that should
+             * change in future this should be adapted. */
+            Calendar_gregorian* pCal = dynamic_cast<Calendar_gregorian*>(xCalendar.get());
+            bTimeZone = (pCal && pCal->setTimeZone(rTimeZone));
+        }
+
+        lookupTable.emplace_back( aCacheID, xCalendar );
     }
 
     if ( !xCalendar.is() )
@@ -103,6 +115,10 @@ CalendarImpl::loadCalendar(const OUString& uniqueID, const Locale& rLocale )
         xCalendar = xOldCalendar;
         throw;
     }
+
+    if (!bTimeZone)
+        // The calendar is usable but is not in the expected time zone.
+        throw ERROR;
 }
 
 Calendar2 SAL_CALL
@@ -162,6 +178,16 @@ CalendarImpl::getLocalDateTime()
     if (!xCalendar.is())
         throw ERROR;
     return xCalendar->getLocalDateTime();
+}
+
+void SAL_CALL CalendarImpl::loadDefaultCalendar( const css::lang::Locale& rLocale )
+{
+    loadDefaultCalendarTZ( rLocale, OUString());
+}
+
+void SAL_CALL CalendarImpl::loadCalendar( const OUString& uniqueID, const css::lang::Locale& rLocale )
+{
+    loadCalendarTZ( uniqueID, rLocale, OUString());
 }
 
 OUString SAL_CALL
