@@ -59,6 +59,7 @@ $(eval $(call gb_Library_add_exception_objects,subsequenttest,\
 	test/source/drawing/xgluepointssupplier \
 	test/source/drawing/xshapedescriptor \
 	test/source/drawing/xshapegrouper \
+	test/source/drawing/xshape \
 	test/source/drawing/xshapes \
 	test/source/lang/xserviceinfo \
 	test/source/lang/xcomponent \

@@ -15,8 +15,4 @@
 "ScShapeObj";"com::sun::star::beans::XPropertySet";"addPropertyChangeListener()"
 "ScShapeObj";"com::sun::star::beans::XPropertySet";"removePropertyChangeListener()"
 "ScShapeObj";"com::sun::star::beans::XPropertySet";"addVetoableChangeListener()"
-"ScShapeObj";"com::sun::star::beans::XPropertySet";"removeVetoableChangeListener()"
-"ScShapeObj";"com::sun::star::drawing::XShape";"getPosition()"
-"ScShapeObj";"com::sun::star::drawing::XShape";"setPosition()"
-"ScShapeObj";"com::sun::star::drawing::XShape";"getSize()"
 "ScShapeObj";"com::sun::star::drawing::XShape";"setSize()"
