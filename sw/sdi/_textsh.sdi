@@ -957,6 +957,11 @@ interface BaseText
         ExecMethod = ExecField ;
         StateMethod = StateField;
     ]
+    FN_RESOLVE_NOTE
+    [
+        ExecMethod = ExecField ;
+        StateMethod = StateField;
+    ]
     FN_DELETE_NOTE_AUTHOR
     [
         ExecMethod = ExecField ;
