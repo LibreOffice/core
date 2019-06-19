@@ -31,8 +31,8 @@ class sheetRename(UITestCase):
         xDialog = self.xUITest.getTopFocusWindow()
         xname_entry = xDialog.getChild("name_entry")
         self.assertEqual(get_state_as_dict(xname_entry)["Text"], "NewName")
-        xOKBtn = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOKBtn)
+        xCancelBtn = xDialog.getChild("cancel")
+        self.ui_test.close_dialog_through_button(xCancelBtn)
 
         self.ui_test.close_doc()
 

@@ -49,8 +49,8 @@ class printRange(UITestCase):
         self.assertEqual(get_state_as_dict(xedprintarea)["Text"], "$A$1:$F$20")
         self.assertEqual(get_state_as_dict(xedrepeatrow)["Text"], "$1")
         self.assertEqual(get_state_as_dict(xedrepeatcol)["Text"], "$A")
-        xOK = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOK)
+        xCancel = xDialog.getChild("cancel")
+        self.ui_test.close_dialog_through_button(xCancel)
 
         #delete print ranges
         self.xUITest.executeCommand(".uno:DeletePrintArea")
