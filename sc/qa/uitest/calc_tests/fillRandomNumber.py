@@ -54,5 +54,12 @@ class fillRandomNumber(UITestCase):
         self.xUITest.executeCommand(".uno:Undo")
         self.assertEqual(bool(get_cell_by_position(document, 0, 0, 0).getString() ), False)
         self.assertEqual(bool(get_cell_by_position(document, 0, 0, 1).getString() ), False)
+        #close dialog without doing anything
+        self.ui_test.execute_modeless_dialog_through_command(".uno:RandomNumberGeneratorDialog")
+        xDialog = self.xUITest.getTopFocusWindow()
+        xCloseBtn = xDialog.getChild("close")
+        self.ui_test.close_dialog_through_button(xCloseBtn)
+        self.assertEqual(bool(get_cell_by_position(document, 0, 0, 0).getString() ), False)
+        self.assertEqual(bool(get_cell_by_position(document, 0, 0, 1).getString() ), False)
         self.ui_test.close_doc()
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

@@ -45,6 +45,13 @@ class Subtotals(UITestCase):
         self.ui_test.close_dialog_through_button(xOKBtn)
         self.assertEqual(get_cell_by_position(document, 0, 0, 7).getValue(), 1)
         self.assertEqual(get_cell_by_position(document, 0, 0, 8).getString(), "")
+
+        # check cancel button
+        self.ui_test.execute_dialog_through_command(".uno:DataSubTotals")
+        xDialog = self.xUITest.getTopFocusWindow()
+        xCancelBtn = xDialog.getChild("cancel")
+        self.ui_test.close_dialog_through_button(xCancelBtn)
+
         self.ui_test.close_doc()
 
     def test_tdf88792(self):

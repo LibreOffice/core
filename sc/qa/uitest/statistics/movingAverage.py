@@ -103,6 +103,12 @@ class movingAverage(UITestCase):
         self.xUITest.executeCommand(".uno:Undo")
         self.assertEqual(get_cell_by_position(document, 0, 5, 0).getString(), "")
 
+        # test cancel button
+        self.ui_test.execute_modeless_dialog_through_command(".uno:MovingAverageDialog")
+        xDialog = self.xUITest.getTopFocusWindow()
+        xCancelBtn = xDialog.getChild("cancel")
+        self.ui_test.close_dialog_through_button(xCancelBtn)
+
         self.ui_test.close_doc()
 
     def test_moving_average_row(self):
