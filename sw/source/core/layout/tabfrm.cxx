@@ -438,7 +438,7 @@ static void lcl_MoveRowContent( SwRowFrame& rSourceLine, SwRowFrame& rDestLine )
                     while ( pTmpDestRow->GetNext() )
                         pTmpDestRow = static_cast<SwRowFrame*>(pTmpDestRow->GetNext());
 
-                    OSL_ENSURE( pTmpDestRow->GetFollowRow() == pTmpSourceRow, "Table contains node" );
+                    assert(pTmpDestRow->GetFollowRow() == pTmpSourceRow);
 
                     lcl_MoveRowContent( *pTmpSourceRow, *pTmpDestRow );
                     pTmpDestRow->SetFollowRow( pTmpSourceRow->GetFollowRow() );
