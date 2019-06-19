@@ -1564,6 +1564,32 @@ void SwPostItMgr::Delete(sal_uInt32 nPostItId)
     LayoutPostIts();
 }
 
+void SwPostItMgr::ToggleResolvedForThread(sal_uInt32 nPostItId)
+{
+    mpWrtShell->StartAllAction();
+
+    SwRewriter aRewriter;
+    aRewriter.AddRule(UndoArg1, SwResId(STR_CONTENT_TYPE_SINGLE_POSTIT));
+
+    // We have no undo ID at the moment.
+
+    IsPostitFieldWithPostitId aFilter(nPostItId);
+    FieldDocWatchingStack aStack(mvPostItFields, *mpView->GetDocShell(), aFilter);
+    const SwFormatField* pField = aStack.pop();
+    // pField now contains our AnnotationWin object
+    if (pField) {
+        SwAnnotationWin* pWin = GetSidebarWin(pField);
+        pWin->ToggleResolvedForThread();
+    }
+
+    PrepareView();
+    mpWrtShell->EndAllAction();
+    mbLayout = true;
+    CalcRects();
+    LayoutPostIts();
+}
+
+
 void SwPostItMgr::Delete()
 {
     mpWrtShell->StartAllAction();
@@ -2403,6 +2429,22 @@ void SwPostItMgr::GetAllSidebarWinForFrame( const SwFrame& rFrame,
     if ( mpFrameSidebarWinContainer != nullptr )
     {
         mpFrameSidebarWinContainer->getAll( rFrame, pChildren );
+    }
+}
+
+void SwPostItMgr::UpdateResolvedStatus(sw::annotation::SwAnnotationWin* topNote) {
+    // Given the topmost note as an argument, scans over all notes and sets the
+    // 'resolved' state of each descendant of the top notes to the resolved state
+    // of the top note.
+    bool resolved = topNote->IsResolved();
+    for (auto const& pPage : mPages)
+    {
+        for(auto b = pPage->mvSidebarItems.begin(); b!= pPage->mvSidebarItems.end(); ++b)
+        {
+            if((*b)->pPostIt->GetTopReplyNote() == topNote) {
+               (*b)->pPostIt->SetResolved(resolved);
+            }
+        }
     }
 }
 
