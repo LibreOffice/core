@@ -148,4 +148,36 @@ void SwUndoRenameBookmark::RedoImpl(::sw::UndoRedoContext & rContext)
     Rename(rContext, m_sOldName, m_sNewName);
 }
 
+SwUndoInsNoTextFieldmark::SwUndoInsNoTextFieldmark(const ::sw::mark::IFieldmark& rFieldmark)
+    : SwUndo(SwUndoId::INSERT, rFieldmark.GetMarkPos().GetDoc())
+    , m_pHistoryNoTextFieldmark(new SwHistoryNoTextFieldmark(rFieldmark))
+{
+}
+
+void SwUndoInsNoTextFieldmark::UndoImpl(::sw::UndoRedoContext & rContext)
+{
+    m_pHistoryNoTextFieldmark->ResetInDoc(&rContext.GetDoc());
+}
+
+void SwUndoInsNoTextFieldmark::RedoImpl(::sw::UndoRedoContext & rContext)
+{
+    m_pHistoryNoTextFieldmark->SetInDoc(&rContext.GetDoc(), false);
+}
+
+SwUndoInsTextFieldmark::SwUndoInsTextFieldmark(const ::sw::mark::IFieldmark& rFieldmark)
+    : SwUndo(SwUndoId::INSERT, rFieldmark.GetMarkPos().GetDoc())
+    , m_pHistoryTextFieldmark(new SwHistoryTextFieldmark(rFieldmark))
+{
+}
+
+void SwUndoInsTextFieldmark::UndoImpl(::sw::UndoRedoContext & rContext)
+{
+    m_pHistoryTextFieldmark->ResetInDoc(&rContext.GetDoc());
+}
+
+void SwUndoInsTextFieldmark::RedoImpl(::sw::UndoRedoContext & rContext)
+{
+    m_pHistoryTextFieldmark->SetInDoc(&rContext.GetDoc(), false);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -254,6 +254,8 @@ class IDocumentMarkAccess
         virtual ::sw::mark::IFieldmark* getDropDownFor(const SwPosition& pos) const=0;
         virtual std::vector< ::sw::mark::IFieldmark* > getDropDownsFor(const SwPaM &rPaM) const=0;
 
+        virtual void deleteFieldmarkAt(const SwPosition& rPos) = 0;
+
         // Annotation Marks
         virtual const_iterator_t getAnnotationMarksBegin() const = 0;
         virtual const_iterator_t getAnnotationMarksEnd() const = 0;

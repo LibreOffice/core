@@ -162,7 +162,9 @@ enum class SwUndoId
     UI_DELETE_PAGE_BREAK,              // 131
     UI_TEXT_CORRECTION,                // 132
     UI_TABLE_DELETE,                   // 133
-    CONFLICT                           // 134
+    CONFLICT,                          // 134
+
+    INSERT_FORM_FIELD                  // 135
 };
 
 OUString GetUndoComment(SwUndoId eId);

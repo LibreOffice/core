@@ -72,6 +72,8 @@ enum HISTORY_HINT {
     HSTRY_CHGFLYANCHOR,
     HSTRY_CHGFLYCHAIN,
     HSTRY_CHGCHARFMT,
+    HSTRY_NOTEXTFIELDMARK,
+    HSTRY_TEXTFIELDMARK,
 };
 
 class SwHistoryHint
@@ -258,6 +260,33 @@ class SwHistoryBookmark : public SwHistoryHint
         const bool m_bHadOtherPos;
         const IDocumentMarkAccess::MarkType m_eBkmkType;
         std::shared_ptr< ::sfx2::MetadatableUndo > m_pMetadataUndo;
+};
+
+class SwHistoryNoTextFieldmark : public SwHistoryHint
+{
+    public:
+        SwHistoryNoTextFieldmark(const ::sw::mark::IFieldmark& rFieldMark);
+        virtual void SetInDoc(SwDoc* pDoc, bool) override;
+        void ResetInDoc(SwDoc* pDoc);
+
+    private:
+        const OUString m_sType;
+        const sal_uLong m_nNode;
+        const sal_Int32 m_nContent;
+};
+
+class SwHistoryTextFieldmark : public SwHistoryHint
+{
+    public:
+        SwHistoryTextFieldmark(const ::sw::mark::IFieldmark& rFieldMark);
+        virtual void SetInDoc(SwDoc* pDoc, bool) override;
+        void ResetInDoc(SwDoc* pDoc);
+
+    private:
+        const OUString m_sName;
+        const OUString m_sType;
+        const sal_uLong m_nNode;
+        const sal_Int32 m_nContent;
 };
 
 class SwHistorySetAttrSet : public SwHistoryHint

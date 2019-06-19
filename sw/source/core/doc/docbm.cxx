@@ -492,12 +492,22 @@ namespace sw { namespace mark
         const OUString& rName,
         const OUString& rType )
     {
+        // Disable undo, because we handle it using SwUndoInsTextFieldmark
+        bool bUndoIsEnabled = m_pDoc->GetIDocumentUndoRedo().DoesUndo();
+        m_pDoc->GetIDocumentUndoRedo().DoUndo(false);
+
         sw::mark::IMark* pMark = makeMark( rPaM, rName,
                 IDocumentMarkAccess::MarkType::TEXT_FIELDMARK,
                 sw::mark::InsertMode::New);
         sw::mark::IFieldmark* pFieldMark = dynamic_cast<sw::mark::IFieldmark*>( pMark );
         if (pFieldMark)
             pFieldMark->SetFieldname( rType );
+
+        if (bUndoIsEnabled)
+        {
+            m_pDoc->GetIDocumentUndoRedo().DoUndo(bUndoIsEnabled);
+            m_pDoc->GetIDocumentUndoRedo().AppendUndo(std::make_unique<SwUndoInsTextFieldmark>(*pFieldMark));
+        }
 
         return pFieldMark;
     }
@@ -507,6 +517,10 @@ namespace sw { namespace mark
         const OUString& rName,
         const OUString& rType)
     {
+        // Disable undo, because we handle it using SwUndoInsNoTextFieldmark
+        bool bUndoIsEnabled = m_pDoc->GetIDocumentUndoRedo().DoesUndo();
+        m_pDoc->GetIDocumentUndoRedo().DoUndo(false);
+
         bool bEnableSetModified = m_pDoc->getIDocumentState().IsEnableSetModified();
         m_pDoc->getIDocumentState().SetEnableSetModified(false);
 
@@ -516,6 +530,12 @@ namespace sw { namespace mark
         sw::mark::IFieldmark* pFieldMark = dynamic_cast<sw::mark::IFieldmark*>( pMark );
         if (pFieldMark)
             pFieldMark->SetFieldname( rType );
+
+        if (bUndoIsEnabled)
+        {
+            m_pDoc->GetIDocumentUndoRedo().DoUndo(bUndoIsEnabled);
+            m_pDoc->GetIDocumentUndoRedo().AppendUndo(std::make_unique<SwUndoInsNoTextFieldmark>(*pFieldMark));
+        }
 
         m_pDoc->getIDocumentState().SetEnableSetModified(bEnableSetModified);
         m_pDoc->getIDocumentState().SetModified();
@@ -1051,6 +1071,18 @@ namespace sw { namespace mark
         if(pFieldmark == m_vFieldmarks.end()) return nullptr;
         return dynamic_cast<IFieldmark*>(pFieldmark->get());
     }
+
+    void MarkManager::deleteFieldmarkAt(const SwPosition& rPos)
+    {
+        const_iterator_t pFieldmark = find_if(
+            m_vFieldmarks.begin(),
+            m_vFieldmarks.end(),
+            [&rPos] (pMark_t const& rpMark) { return rpMark->IsCoveringPosition(rPos); } );
+        if(pFieldmark == m_vFieldmarks.end()) return;
+
+        deleteMark(lcl_FindMark(m_vAllMarks, *pFieldmark));
+    }
+
 
     IFieldmark* MarkManager::getDropDownFor(const SwPosition& rPos) const
     {
