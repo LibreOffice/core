@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_a150f8d5",
+        "filename": "framework/source/fwe/xml/toolboxdocumenthandler.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-06-19T06:18:16Z",
+      "side": 1,
+      "message": "Are you sure?  From what I know about English, I would say \"a\" is fine here as \"UI\" is typically pronounced something like \"you-eye\", not starting with a vowel sound.",
+      "range": {
+        "startLine": 209,
+        "startChar": 41,
+        "endLine": 209,
+        "endChar": 42
+      },
+      "revId": "693e8d1eb28c916ea8bb91667ed5511ff0907d2b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
