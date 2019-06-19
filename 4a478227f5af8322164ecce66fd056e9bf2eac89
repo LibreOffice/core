@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_2174e898",
+        "filename": "vcl/inc/salgdi.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 603,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-06-19T04:54:59Z",
+      "side": 1,
+      "message": "\"inline\"? why not just write the \"{}\" here inline, and not mention the \"inline\" keyword in the same line with \"virtual\", which looks strange.\n\n    virtual void handleDamage(const tools::Rectangle\u0026 rDamagedRegion) {}",
+      "range": {
+        "startLine": 603,
+        "startChar": 12,
+        "endLine": 603,
+        "endChar": 18
+      },
+      "revId": "4a478227f5af8322164ecce66fd056e9bf2eac89",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
