@@ -379,7 +379,7 @@ css::uno::Reference< ::css::beans::XPropertySet > Model::cloneBindingAsGhost( co
 
 void Model::removeBindingIfUseless( const css::uno::Reference< ::css::beans::XPropertySet >& xBinding )
 {
-    Binding* pBinding = Binding::getBinding( xBinding );
+    Binding* pBinding = comphelper::getUnoTunnelImplementation<Binding>( xBinding );
     if( pBinding != nullptr )
     {
         if( ! pBinding->isUseful() )
@@ -651,7 +651,7 @@ css::uno::Reference<css::xml::dom::XNode> Model::renameNode( const css::uno::Ref
             getDefaultBindingExpressionForNode( xNew );
         for( sal_Int32 n = 0; n < mxBindings->countItems(); n++ )
         {
-            Binding* pBinding = Binding::getBinding(
+            Binding* pBinding = comphelper::getUnoTunnelImplementation<Binding>(
                 mxBindings->Collection<XPropertySet_t>::getItem( n ) );
 
             if( pBinding->getBindingExpression()
@@ -678,7 +678,7 @@ css::uno::Reference< ::css::beans::XPropertySet > Model::getBindingForNode( cons
 
     for( sal_Int32 n = 0; n < mxBindings->countItems(); n++ )
     {
-        Binding* pBinding = Binding::getBinding(
+        Binding* pBinding = comphelper::getUnoTunnelImplementation<Binding>(
             mxBindings->Collection<XPropertySet_t>::getItem( n ) );
 
         OSL_ENSURE( pBinding != nullptr, "no binding?" );
@@ -861,7 +861,7 @@ OUString Model::getResultForExpression(
     sal_Bool bIsBindingExpression,
     const OUString& sExpression )
 {
-    Binding* pBinding = Binding::getBinding( xBinding );
+    Binding* pBinding = comphelper::getUnoTunnelImplementation<Binding>( xBinding );
     if( pBinding == nullptr )
         throw RuntimeException();
 
