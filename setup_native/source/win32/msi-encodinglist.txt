@@ -18,9 +18,6 @@
 #  under the License.
 #
 # *************************************************************
-
-
-
 # Syntax: language ANSI-Codepage LCID
 # comment lines begin with hash
 af    1252  1078   # Afrikaans
