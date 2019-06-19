@@ -50,6 +50,7 @@
 #include <comphelper/propertysetinfo.hxx>
 #include <comphelper/interaction.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <memory>
 
 using com::sun::star::util::VetoException;
@@ -204,7 +205,7 @@ bool Submission::doSubmit( const Reference< XInteractionHandler >& xHandler )
     ComputedExpression aExpression;
     if( !msBind.isEmpty() )
     {
-        Binding* pBinding = Binding::getBinding( mxModel->getBinding(msBind) );
+        Binding* pBinding = comphelper::getUnoTunnelImplementation<Binding>( mxModel->getBinding(msBind) );
         if( pBinding != nullptr )
         {
             aExpression.setExpression( pBinding->getBindingExpression() );

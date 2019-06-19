@@ -245,7 +245,7 @@ void Model::rebind()
     sal_Int32 nCount = mxBindings->countItems();
     for( sal_Int32 i = 0; i < nCount; i++ )
     {
-        Binding* pBind = Binding::getBinding( mxBindings->Collection<XPropertySet_t>::getItem( i ) );
+        Binding* pBind = comphelper::getUnoTunnelImplementation<Binding>( mxBindings->Collection<XPropertySet_t>::getItem( i ) );
         OSL_ENSURE( pBind != nullptr, "binding?" );
         pBind->update();
     }
@@ -258,7 +258,7 @@ void Model::deferNotifications( bool bDefer )
     sal_Int32 nCount = mxBindings->countItems();
     for( sal_Int32 i = 0; i < nCount; i++ )
     {
-        Binding* pBind = Binding::getBinding( mxBindings->Collection<XPropertySet_t>::getItem( i ) );
+        Binding* pBind = comphelper::getUnoTunnelImplementation<Binding>( mxBindings->Collection<XPropertySet_t>::getItem( i ) );
         OSL_ENSURE( pBind != nullptr, "binding?" );
         pBind->deferNotifications( bDefer );
     }
@@ -381,7 +381,7 @@ bool Model::isValid() const
     sal_Int32 nCount = mxBindings->countItems();
     for( sal_Int32 i = 0; bValid && i < nCount; i++ )
     {
-        Binding* pBind = Binding::getBinding( mxBindings->Collection<XPropertySet_t>::getItem( i ) );
+        Binding* pBind = comphelper::getUnoTunnelImplementation<Binding>( mxBindings->Collection<XPropertySet_t>::getItem( i ) );
         OSL_ENSURE( pBind != nullptr, "binding?" );
         bValid = pBind->isValid();
     }
