@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "1f9dbf25_db3a33cc",
+        "filename": "vcl/qt5/Qt5FilePicker.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 268,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-06-19T14:13:28Z",
+      "side": 1,
+      "message": "It\u0027s the \"so\", which confuses me, because it implies that the second half of the sentence logically flows from the first half :-)\n\nThe condition that we never see non-utf-8 data is enforced by the QFileDialog action of filtering out such non-utf-8 data.\n\nThe condition that QUrl contains the raw pathname bytes, is I suppose, enforced by a combination of QUrl and QFileDialog, but I don\u0027t see it documented anywhere.",
+      "parentUuid": "1f9dbf25_1b089b26",
+      "revId": "9adaf1698170210b633c968734553479b8ecf485",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3fa0c359_ac18ef74",
         "filename": "vcl/qt5/Qt5FilePicker.cxx",
         "patchSetId": 2
