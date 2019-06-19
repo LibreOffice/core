@@ -1172,14 +1172,23 @@ void SwRedlineAcceptDlg::Initialize(OUString& rExtraString)
                     aEndPos.push_back(aStr.toInt32());
                 }
 
+                bool bUseless = false;
+
                 std::vector<int> aWidths;
                 for (int i = 1; i < nCount; ++i)
+                {
                     aWidths.push_back(aEndPos[i] - aEndPos[i - 1]);
+                    if (aWidths.back() <= 0)
+                        bUseless = true;
+                }
 
-                // turn column end points back to column widths, ignoring the small
-                // value used for the expander column
-                weld::TreeView& rTreeView = m_pTable->GetWidget();
-                rTreeView.set_column_fixed_widths(aWidths);
+                if (!bUseless)
+                {
+                    // turn column end points back to column widths, ignoring the small
+                    // value used for the expander column
+                    weld::TreeView& rTreeView = m_pTable->GetWidget();
+                    rTreeView.set_column_fixed_widths(aWidths);
+                }
             }
         }
     }
@@ -1203,7 +1212,11 @@ void SwRedlineAcceptDlg::FillInfo(OUString &rExtraData) const
     // expander column
     aWidths.push_back(rTreeView.get_checkbox_column_width());
     for (int i = 0; i < nTabCount - 1; ++i)
-        aWidths.push_back(aWidths.back() + rTreeView.get_column_width(i));
+    {
+        int nWidth = rTreeView.get_column_width(i);
+        assert(nWidth > 0 && "suspicious to get a value like this");
+        aWidths.push_back(aWidths.back() + nWidth);
+    }
 
     for (auto a : aWidths)
     {
