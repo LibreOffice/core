@@ -2186,7 +2186,7 @@ setGraphicSelectionInThread(gpointer data)
     LOKDocViewPrivate& priv = getPrivate(pDocView);
     LOEvent* pLOEvent = static_cast<LOEvent*>(g_task_get_task_data(task));
 
-    std::lock_guard<std::mutex> aGuard(g_aLOKMutex);
+    std::scoped_lock<std::mutex> aGuard(g_aLOKMutex);
     std::stringstream ss;
     ss << "lok::Document::setView(" << priv->m_nViewId << ")";
     g_info("%s", ss.str().c_str());
@@ -2210,7 +2210,7 @@ setClientZoomInThread(gpointer data)
     LOKDocViewPrivate& priv = getPrivate(pDocView);
     LOEvent* pLOEvent = static_cast<LOEvent*>(g_task_get_task_data(task));
 
-    std::lock_guard<std::mutex> aGuard(g_aLOKMutex);
+    std::scoped_lock<std::mutex> aGuard(g_aLOKMutex);
     priv->m_pDocument->pClass->setClientZoom(priv->m_pDocument,
                                              pLOEvent->m_nTilePixelWidth,
                                              pLOEvent->m_nTilePixelHeight,
@@ -2226,7 +2226,7 @@ postMouseEventInThread(gpointer data)
     LOKDocViewPrivate& priv = getPrivate(pDocView);
     LOEvent* pLOEvent = static_cast<LOEvent*>(g_task_get_task_data(task));
 
-    std::lock_guard<std::mutex> aGuard(g_aLOKMutex);
+    std::scoped_lock<std::mutex> aGuard(g_aLOKMutex);
     std::stringstream ss;
     ss << "lok::Document::setView(" << priv->m_nViewId << ")";
     g_info("%s", ss.str().c_str());
@@ -2255,7 +2255,7 @@ openDocumentInThread (gpointer data)
     LOKDocView* pDocView = LOK_DOC_VIEW(g_task_get_source_object(task));
     LOKDocViewPrivate& priv = getPrivate(pDocView);
 
-    std::lock_guard<std::mutex> aGuard(g_aLOKMutex);
+    std::scoped_lock<std::mutex> aGuard(g_aLOKMutex);
     if ( priv->m_pDocument )
     {
         priv->m_pDocument->pClass->destroy( priv->m_pDocument );
@@ -2306,7 +2306,7 @@ setPartmodeInThread(gpointer data)
     LOEvent* pLOEvent = static_cast<LOEvent*>(g_task_get_task_data(task));
     int nPartMode = pLOEvent->m_nPartMode;
 
-    std::lock_guard<std::mutex> aGuard(g_aLOKMutex);
+    std::scoped_lock<std::mutex> aGuard(g_aLOKMutex);
     std::stringstream ss;
     ss << "lok::Document::setView(" << priv->m_nViewId << ")";
     g_info("%s", ss.str().c_str());
@@ -2329,7 +2329,7 @@ setEditInThread(gpointer data)
     else if (priv->m_bEdit && !bEdit)
     {
         g_info("lok_doc_view_set_edit: leaving edit mode");
-        std::lock_guard<std::mutex> aGuard(g_aLOKMutex);
+        std::scoped_lock<std::mutex> aGuard(g_aLOKMutex);
         std::stringstream ss;
         ss << "lok::Document::setView(" << priv->m_nViewId << ")";
         g_info("%s", ss.str().c_str());
@@ -2349,7 +2349,7 @@ postCommandInThread (gpointer data)
     LOEvent* pLOEvent = static_cast<LOEvent*>(g_task_get_task_data(task));
     LOKDocViewPrivate& priv = getPrivate(pDocView);
 
-    std::lock_guard<std::mutex> aGuard(g_aLOKMutex);
+    std::scoped_lock<std::mutex> aGuard(g_aLOKMutex);
     std::stringstream ss;
     ss << "lok::Document::setView(" << priv->m_nViewId << ")";
     g_info("%s", ss.str().c_str());

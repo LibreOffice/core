@@ -28,7 +28,7 @@ UIObjectUnoObj::UIObjectUnoObj(std::unique_ptr<UIObject> pObj):
 UIObjectUnoObj::~UIObjectUnoObj()
 {
     {
-        std::lock_guard<std::mutex> lk3(mMutex);
+        std::scoped_lock<std::mutex> lk3(mMutex);
     }
     SolarMutexGuard aGuard;
     mpObj.reset();
@@ -46,7 +46,7 @@ css::uno::Reference<css::ui::test::XUIObject> SAL_CALL UIObjectUnoObj::getChild(
 
 IMPL_LINK_NOARG(UIObjectUnoObj, NotifyHdl, Timer*, void)
 {
-    std::lock_guard<std::mutex> lk(mMutex);
+    std::scoped_lock<std::mutex> lk(mMutex);
     mReady = true;
     cv.notify_all();
 }
