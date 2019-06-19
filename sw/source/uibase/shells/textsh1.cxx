@@ -121,6 +121,7 @@
 #include <memory>
 #include <xmloff/odffields.hxx>
 #include <swabstdlg.hxx>
+#include <bookmrk.hxx>
 
 using namespace ::com::sun::star;
 using namespace com::sun::star::beans;
@@ -1354,10 +1355,14 @@ void SwTextShell::Execute(SfxRequest &rReq)
         {
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateDropDownFormFieldDialog(rWrtSh.GetView().GetFrameWeld(), pFieldBM));
-            pDlg->Execute();
-            pFieldBM->Invalidate();
-            rWrtSh.InvalidateWindows( rWrtSh.GetView().GetVisArea() );
-            rWrtSh.UpdateCursor(); // cursor position might be invalid
+            if (pDlg->Execute() == RET_OK)
+            {
+                pFieldBM->Invalidate();
+                rWrtSh.InvalidateWindows( rWrtSh.GetView().GetVisArea() );
+                rWrtSh.UpdateCursor(); // cursor position might be invalid
+                // Hide the button here and make it visible later, to make transparent background work with SAL_USE_VCLPLUGIN=gen
+                dynamic_cast<::sw::mark::DropDownFieldmark*>(pFieldBM)->HideButton();
+            }
         }
         else
         {
