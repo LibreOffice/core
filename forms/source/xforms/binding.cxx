@@ -462,7 +462,7 @@ Model* Binding::getModelImpl( const css::uno::Reference<css::xforms::XModel>& xM
     Reference<XUnoTunnel> xTunnel( xModel, UNO_QUERY );
     Model* pModel = xTunnel.is()
         ? reinterpret_cast<Model*>(
-            xTunnel->getSomething( Model::getUnoTunnelID() ) )
+            xTunnel->getSomething( Model::getUnoTunnelId() ) )
         : nullptr;
     return pModel;
 }
