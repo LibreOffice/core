@@ -917,10 +917,6 @@ SwTextPortion *SwTextFormatter::WhichTextPor( SwTextFormatInfo &rInf ) const
                     {
                         pPor = new SwFieldMarkPortion();
                     }
-                    else
-                    {
-                        assert( false );        // unknown type...
-                    }
                 }
             }
             if( !pPor )
