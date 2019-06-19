@@ -54,8 +54,8 @@ class validity(UITestCase):
         self.assertEqual(get_state_as_dict(xdata)["SelectEntryText"], "valid range")
         self.assertEqual(get_state_as_dict(xmin)["Text"], "1")
         self.assertEqual(get_state_as_dict(xmax)["Text"], "2")
-        xOKBtn = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOKBtn)
+        xCancelBtn = xDialog.getChild("cancel")
+        self.ui_test.close_dialog_through_button(xCancelBtn)
 
         self.ui_test.close_doc()
 

@@ -104,5 +104,12 @@ class sampling(UITestCase):
         self.assertEqual(get_cell_by_position(document, 0, 7, 1).getValue() , 0)
         self.assertEqual(get_cell_by_position(document, 0, 7, 2).getValue() , 0)
         self.assertEqual(get_cell_by_position(document, 0, 7, 3).getValue() , 0)
+
+        # test cancel button
+        self.ui_test.execute_modeless_dialog_through_command(".uno:SamplingDialog")
+        xDialog = self.xUITest.getTopFocusWindow()
+        xCancelBtn = xDialog.getChild("cancel")
+        self.ui_test.close_dialog_through_button(xCancelBtn)
+
         self.ui_test.close_doc()
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

@@ -109,4 +109,13 @@ class regression(UITestCase):
         xOKBtn = xDialog.getChild("ok")
         self.ui_test.close_dialog_through_button(xOKBtn)
 
+    def test_regression_cancel(self):
+        calc_doc = self.ui_test.create_doc_in_start_center("calc")
+        self.ui_test.execute_modeless_dialog_through_command(".uno:RegressionDialog")
+        xDialog = self.xUITest.getTopFocusWindow()
+        xCancelBtn = xDialog.getChild("cancel")
+        self.ui_test.close_dialog_through_button(xCancelBtn)
+
+        self.ui_test.close_doc()
+
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
