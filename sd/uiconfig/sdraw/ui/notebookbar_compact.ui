@@ -1167,10 +1167,10 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuMedia-NameGroup">
+      <object class="GtkMenuItem" id="MenuMedia-RenameObject">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:NameGroup</property>
+        <property name="action_name">.uno:RenameObject</property>
       </object>
     </child>
     <child>
@@ -1178,6 +1178,33 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:ObjectTitleDescription</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkSeparatorMenuItem" id="MenuMedia-separator2">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="MenuMedia-EditShapeHyperlink">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:EditShapeHyperlink</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="MenuMedia-DeleteShapeHyperlink">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:DeleteShapeHyperlink</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="MenuMedia-OpenHyperlinkOnCursor">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:OpenHyperlinkOnCursor</property>
       </object>
     </child>
   </object>

@@ -4,152 +4,6 @@
   <requires lib="gtk+" version="3.18"/>
   <requires lib="LibreOffice" version="1.0"/>
   <!-- interface-local-resource-path ../../../icon-themes/colibre/cmd/ -->
-  <object class="GtkMenu" id="MenuAlign">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <child>
-      <object class="GtkMenuItem" id="ObjectAlignLeftD1">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:ObjectAlignLeft</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="AlignCenterD1">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:AlignCenter</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="ObjectAlignRightD1">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:ObjectAlignRight</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkSeparatorMenuItem" id="separator143">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="AlignUpD1">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:AlignUp</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="AlignMiddleD1">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:AlignMiddle</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="AlignDownD1">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:AlignDown</property>
-      </object>
-    </child>
-  </object>
-  <object class="GtkMenu" id="MenuArrange">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <child>
-      <object class="GtkMenuItem" id="WrapOffD2">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:WrapOff</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="WrapOnD2">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:WrapOn</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="WrapIdealD2">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:WrapIdeal</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="WrapLeftD">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:WrapLeft</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="WrapRightD">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:WrapRight</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="WrapThroughD2">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:WrapThrough</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="WrapThroughTransparentD">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:WrapThroughTransparent</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="WrapContourD2">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:WrapContour</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="WrapAnchorOnlyD2">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:WrapAnchorOnly</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="TextWrapD2">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:TextWrap</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkSeparatorMenuItem" id="separator107">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="SetObjectToForegroundD1">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:SetObjectToForeground</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="SetObjectToBackgroundD1">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:SetObjectToBackground</property>
-      </object>
-    </child>
-  </object>
   <object class="GtkMenu" id="MenuDraw">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -1274,6 +1128,64 @@
       </object>
     </child>
   </object>
+  <object class="GtkMenu" id="MenuMedia">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <child>
+      <object class="GtkMenuItem" id="MenuMedia-AVMediaPlayer">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:AVMediaPlayer</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkSeparatorMenuItem" id="MenuMedia-separator1">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="MenuMedia-RenameObject">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:RenameObject</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="MenuMedia-ObjectTitleDescription">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:ObjectTitleDescription</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkSeparatorMenuItem" id="MenuMedia-separator2">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="MenuMedia-EditShapeHyperlink">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:EditShapeHyperlink</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="MenuMedia-DeleteShapeHyperlink">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:DeleteShapeHyperlink</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="MenuMedia-OpenHyperlinkOnCursor">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:OpenHyperlinkOnCursor</property>
+      </object>
+    </child>
+  </object>
   <object class="GtkMenu" id="MenuObject">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -2243,99 +2155,6 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:FullScreen</property>
-      </object>
-    </child>
-  </object>
-  <object class="GtkMenu" id="MenuWrap">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <child>
-      <object class="GtkMenuItem" id="WrapOffD1">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:WrapOff</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="WrapOnD1">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:WrapOn</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="WrapIdealD1">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:WrapIdeal</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="WrapLeftD1">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:WrapLeft</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="WrapRightD1">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:WrapRight</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkSeparatorMenuItem" id="separator203">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="WrapThroughD1">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:WrapThrough</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="WrapThroughTransparentD1">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:WrapThroughTransparent</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="WrapContourD1">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:WrapContour</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="ContourDialog">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:ContourDialog</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="WrapAnchorOnlyD1">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:WrapAnchorOnly</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkSeparatorMenuItem" id="separator142">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="TextWrapD1">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:TextWrap</property>
       </object>
     </child>
   </object>
@@ -14727,7 +14546,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="svtlo-ManagedMenuButton" id="media:MenuArrange">
+                      <object class="svtlo-ManagedMenuButton" id="media:MenuMedia">
                         <property name="label" translatable="yes" context="notebookbar_compact|MediaButton">_Media</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
