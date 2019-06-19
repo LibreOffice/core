@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_c113c45b",
+        "filename": "instsetoo_native/inc_openoffice/windows/msi_templates/Control.idt",
+        "patchSetId": 3
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-06-19T02:05:46Z",
+      "side": 1,
+      "message": "Missed this",
+      "range": {
+        "startLine": 13,
+        "startChar": 79,
+        "endLine": 13,
+        "endChar": 97
+      },
+      "revId": "d7e314c4a26ed967f97a8603012ca4e6c5d12279",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_e10e0031",
+        "filename": "instsetoo_native/inc_openoffice/windows/msi_templates/Control.idt",
+        "patchSetId": 3
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-06-19T02:05:46Z",
+      "side": 1,
+      "message": "And this",
+      "range": {
+        "startLine": 17,
+        "startChar": 70,
+        "endLine": 17,
+        "endChar": 83
+      },
+      "revId": "d7e314c4a26ed967f97a8603012ca4e6c5d12279",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_811dbc67",
+        "filename": "instsetoo_native/inc_openoffice/windows/msi_templates/Control.idt",
+        "patchSetId": 3
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-06-19T02:05:46Z",
+      "side": 1,
+      "message": "and this",
+      "range": {
+        "startLine": 132,
+        "startChar": 81,
+        "endLine": 132,
+        "endChar": 99
+      },
+      "revId": "d7e314c4a26ed967f97a8603012ca4e6c5d12279",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_a118f874",
+        "filename": "instsetoo_native/inc_openoffice/windows/msi_templates/Control.idt",
+        "patchSetId": 3
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-06-19T02:05:46Z",
+      "side": 1,
+      "message": "here too",
+      "range": {
+        "startLine": 136,
+        "startChar": 72,
+        "endLine": 136,
+        "endChar": 85
+      },
+      "revId": "d7e314c4a26ed967f97a8603012ca4e6c5d12279",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_4129f487",
+        "filename": "instsetoo_native/inc_openoffice/windows/msi_templates/Dialog.idt",
+        "patchSetId": 3
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-06-19T02:05:46Z",
+      "side": 1,
+      "message": "Please remove this line\u0027s difference",
+      "range": {
+        "startLine": 3,
+        "startChar": 13,
+        "endLine": 3,
+        "endChar": 21
+      },
+      "revId": "d7e314c4a26ed967f97a8603012ca4e6c5d12279",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
