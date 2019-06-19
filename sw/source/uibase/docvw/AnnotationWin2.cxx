@@ -153,7 +153,7 @@ namespace sw { namespace annotation {
 #define METABUTTON_WIDTH        16
 #define METABUTTON_HEIGHT       18
 #define METABUTTON_AREA_WIDTH   30
-#define POSTIT_META_HEIGHT  sal_Int32(30)
+#define POSTIT_META_FIELD_HEIGHT  sal_Int32(15)
 #define POSTIT_MINIMUMSIZE_WITHOUT_META     50
 
 
@@ -173,11 +173,13 @@ void SwAnnotationWin::Paint(vcl::RenderContext& rRenderContext, const tools::Rec
             rRenderContext.SetFillColor(mColorDark);
         }
 
+        sal_uInt32 boxHeight = mpMetadataAuthor->GetSizePixel().Height() + mpMetadataDate->GetSizePixel().Height();
+        boxHeight += IsThreadResolved() ? mpMetadataResolved->GetSizePixel().Height() : 0;
+
         rRenderContext.SetLineColor();
         tools::Rectangle aRectangle(Point(mpMetadataAuthor->GetPosPixel().X() + mpMetadataAuthor->GetSizePixel().Width(),
                                    mpMetadataAuthor->GetPosPixel().Y()),
-                             Size(GetMetaButtonAreaWidth(),
-                                  mpMetadataAuthor->GetSizePixel().Height() + mpMetadataDate->GetSizePixel().Height()));
+                             Size(GetMetaButtonAreaWidth(), boxHeight));
 
         if (comphelper::LibreOfficeKit::isActive())
             aRectangle = rRect;
@@ -485,6 +487,26 @@ void SwAnnotationWin::InitControls()
         mpMetadataDate->SetSettings(aSettings);
     }
 
+    mpMetadataResolved = VclPtr<Edit>::Create( this, 0 );
+    mpMetadataResolved->SetAccessibleName( SwResId( STR_ACCESS_ANNOTATION_RESOLVED_NAME ) );
+    mpMetadataResolved->EnableRTL(AllSettings::GetLayoutRTL());
+    mpMetadataResolved->SetReadOnly();
+    mpMetadataResolved->AlwaysDisableInput(true);
+    mpMetadataResolved->SetCallHandlersOnInputDisabled(true);
+    mpMetadataResolved->AddEventListener( LINK( this, SwAnnotationWin, WindowEventListener ) );
+    // we should leave this setting alone, but for this we need a better layout algo
+    // with variable meta size height
+    {
+        AllSettings aSettings = mpMetadataResolved->GetSettings();
+        StyleSettings aStyleSettings = aSettings.GetStyleSettings();
+        vcl::Font aFont = aStyleSettings.GetFieldFont();
+        aFont.SetFontHeight(8);
+        aStyleSettings.SetFieldFont(aFont);
+        aSettings.SetStyleSettings(aStyleSettings);
+        mpMetadataResolved->SetSettings(aSettings);
+        mpMetadataResolved->SetText( SwResId( STR_ACCESS_ANNOTATION_RESOLVED_NAME ) );
+    }
+
     SwDocShell* aShell = mrView.GetDocShell();
     mpOutliner.reset(new Outliner(&aShell->GetPool(),OutlinerMode::TextObject));
     aShell->GetDoc()->SetCalcFieldValueHdl( mpOutliner.get() );
@@ -544,6 +566,7 @@ void SwAnnotationWin::InitControls()
     mpSidebarTextControl->Show();
     mpMetadataAuthor->Show();
     mpMetadataDate->Show();
+    if(IsThreadResolved()) { mpMetadataResolved->Show(); }
     mpVScrollbar->Show();
 }
 
@@ -605,6 +628,13 @@ void SwAnnotationWin::Rescale()
         sal_Int32 nHeight = long(aFont.GetFontHeight() * rFraction);
         aFont.SetFontHeight( nHeight );
         mpMetadataDate->SetControlFont( aFont );
+    }
+    if ( mpMetadataResolved )
+    {
+        vcl::Font aFont( mpMetadataResolved->GetSettings().GetStyleSettings().GetFieldFont() );
+        sal_Int32 nHeight = long(aFont.GetFontHeight() * rFraction);
+        aFont.SetFontHeight( nHeight );
+        mpMetadataResolved->SetControlFont( aFont );
     }
 }
 
@@ -850,9 +880,10 @@ void SwAnnotationWin::DoResize()
 
     aHeight -= GetMetaHeight();
     mpMetadataAuthor->Show();
+    if(IsThreadResolved()) { mpMetadataResolved->Show(); }
     mpMetadataDate->Show();
     mpSidebarTextControl->SetQuickHelpText(OUString());
-
+    unsigned int numFields = GetNumFields();
     if (aTextHeight > aHeight)
     {   // we need vertical scrollbars and have to reduce the width
         aWidth -= GetScrollbarWidth();
@@ -865,7 +896,7 @@ void SwAnnotationWin::DoResize()
 
     {
         const Size aSizeOfMetadataControls( GetSizePixel().Width() - GetMetaButtonAreaWidth(),
-                                            GetMetaHeight()/2 );
+                                            GetMetaHeight()/numFields );
         mpMetadataAuthor->setPosSizePixel( 0,
                                            aHeight,
                                            aSizeOfMetadataControls.Width(),
@@ -874,6 +905,12 @@ void SwAnnotationWin::DoResize()
                                          aHeight + aSizeOfMetadataControls.Height(),
                                          aSizeOfMetadataControls.Width(),
                                          aSizeOfMetadataControls.Height() );
+        if(IsThreadResolved()) {
+            mpMetadataResolved->setPosSizePixel( 0,
+                                                 aHeight + aSizeOfMetadataControls.Height()*2,
+                                                 aSizeOfMetadataControls.Width(),
+                                                 aSizeOfMetadataControls.Height() );
+        }
     }
 
     mpOutliner->SetPaperSize( PixelToLogic( Size(aWidth,aHeight) ) ) ;
@@ -991,6 +1028,15 @@ void SwAnnotationWin::SetColor(Color aColorDark,Color aColorLight, Color aColorA
             aStyleSettings.SetFieldTextColor(aColorAnchor);
             aSettings.SetStyleSettings(aStyleSettings);
             mpMetadataDate->SetSettings(aSettings);
+        }
+
+        {
+            mpMetadataResolved->SetControlBackground(mColorDark);
+            AllSettings aSettings = mpMetadataResolved->GetSettings();
+            StyleSettings aStyleSettings = aSettings.GetStyleSettings();
+            aStyleSettings.SetFieldTextColor(aColorAnchor);
+            aSettings.SetStyleSettings(aStyleSettings);
+            mpMetadataResolved->SetSettings(aSettings);
         }
 
         AllSettings aSettings2 = mpVScrollbar->GetSettings();
@@ -1309,7 +1355,13 @@ sal_Int32 SwAnnotationWin::GetMetaButtonAreaWidth()
 sal_Int32 SwAnnotationWin::GetMetaHeight()
 {
     const Fraction& f(mrView.GetWrtShellPtr()->GetOut()->GetMapMode().GetScaleY());
-    return long(POSTIT_META_HEIGHT * f);
+    const int fields = GetNumFields();
+    return long(fields*POSTIT_META_FIELD_HEIGHT*f);
+}
+
+sal_Int32 SwAnnotationWin::GetNumFields()
+{
+    return IsThreadResolved() ? 3 : 2;
 }
 
 sal_Int32 SwAnnotationWin::GetMinimumSizeWithMeta()
