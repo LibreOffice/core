@@ -204,6 +204,8 @@ class SAL_DLLPUBLIC_RTTI SwPostItMgr: public SfxListener
         void Delete(const OUString& aAuthor);
         void Delete(sal_uInt32 nPostItId);
         void Delete();
+        void ToggleResolved(sal_uInt32 nPostItId);
+        void ToggleResolvedForThread(sal_uInt32 nPostItId);
 
         void ExecuteFormatAllDialog(SwView& rView);
         void FormatAll(const SfxItemSet &rNewAttr);
@@ -211,6 +213,7 @@ class SAL_DLLPUBLIC_RTTI SwPostItMgr: public SfxListener
         void Hide( const OUString& rAuthor );
         void Hide();
         void Show();
+        void UpdateResolvedStatus(sw::annotation::SwAnnotationWin* topNote);
 
         void Rescale();
 

@@ -189,6 +189,15 @@ class SAL_DLLPUBLIC_RTTI SwAnnotationWin : public vcl::Window
         /// Allows adjusting the point or mark of the selection to a document coordinate.
         void SetCursorLogicPosition(const Point& rPosition, bool bPoint, bool bClearMark);
 
+        // Various access functions for 'resolved' status
+        void SetResolved(bool resolved);
+        void ToggleResolved();
+        void ToggleResolvedForThread();
+        bool IsResolved() const;
+        bool IsThreadResolved();
+
+        SwAnnotationWin*   GetTopReplyNote();
+
     private:
         VclPtr<MenuButton> CreateMenuButton();
         virtual void    LoseFocus() override;
@@ -203,7 +212,6 @@ class SAL_DLLPUBLIC_RTTI SwAnnotationWin : public vcl::Window
         DECL_LINK(DeleteHdl, void*, void);
 
         sal_uInt32 CountFollowing();
-        SwAnnotationWin*   GetTopReplyNote();
         SvxLanguageItem GetLanguage();
 
         VclBuilder      maBuilder;
@@ -236,6 +244,8 @@ class SAL_DLLPUBLIC_RTTI SwAnnotationWin : public vcl::Window
         SwRect          mAnchorRect;
         long            mPageBorder;
         bool            mbAnchorRectChanged;
+
+        bool            mbResolvedStateUpdated;
 
         std::vector<basegfx::B2DRange> maAnnotationTextRanges;
 
