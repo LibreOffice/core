@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff6b8bd7_ba5f310d",
+        "filename": "configure.ac",
+        "patchSetId": 9
+      },
+      "lineNbr": 9934,
+      "author": {
+        "id": 1000130
+      },
+      "writtenOn": "2019-06-19T16:24:55Z",
+      "side": 1,
+      "message": "no need for this and the if check. there\u0027s no .pc file and thus no pkg-config support in this library upstream anyway.",
+      "revId": "496f0190b33ea2c9af14a9025174fabb6984a35a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff6b8bd7_9a626dd8",
+        "filename": "configure.ac",
+        "patchSetId": 9
+      },
+      "lineNbr": 9936,
+      "author": {
+        "id": 1000130
+      },
+      "writtenOn": "2019-06-19T16:24:55Z",
+      "side": 1,
+      "message": "what I didn\u0027t notice here is that you\na) miss qrcodegen here (since you remove the -I it\u0027s not automatically found)\nb) the actual header is QrCode.hpp(!), not QrCode.hxx",
+      "revId": "496f0190b33ea2c9af14a9025174fabb6984a35a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
