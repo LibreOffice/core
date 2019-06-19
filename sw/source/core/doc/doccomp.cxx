@@ -1799,6 +1799,11 @@ namespace
                     continue;
                 if (!pSrcNode || !pDestNode)
                     break;
+                if (pSrcIdx->GetNodes()[pSrcIdx->GetIndex() + 1]->IsNoTextNode()
+                    || pDestIdx->GetNodes()[pDestIdx->GetIndex() + 1]->IsNoTextNode())
+                {
+                    continue; // tdf#125660 don't redline GrfNode/OLENode
+                }
                 aComparisons.emplace_back(CompareDataPtr(new CompareFrameFormatText(rSrcDoc, *pSrcIdx)),
                                           CompareDataPtr(new CompareFrameFormatText(rDestDoc, *pDestIdx)));
             }
