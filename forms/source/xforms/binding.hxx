@@ -273,7 +273,6 @@ private:
 
     /// get the model implementation
     xforms::Model* getModelImpl() const;
-    static xforms::Model* getModelImpl( const css::uno::Reference<css::xforms::XModel>& xModel );
 
     /// get MIP evaluation contexts
     /// (only valid if control has already been bound)
