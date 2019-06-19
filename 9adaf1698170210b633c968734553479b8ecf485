@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1f9dbf25_1b089b26",
+        "filename": "vcl/qt5/Qt5FilePicker.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 268,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-06-19T14:04:02Z",
+      "side": 1,
+      "message": "I guess I don\u0027t understand your question.  A pathname like /.../\\x80 (with a last filename segment containing just the non--UTF-8 byte 0x80) is just not displayed at all by QFileDialog, and QFileDialog::selectedUrls will thus never return a QUrl representing it.",
+      "parentUuid": "3fa0c359_cc13fb5b",
+      "revId": "9adaf1698170210b633c968734553479b8ecf485",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3fa0c359_ac18ef74",
         "filename": "vcl/qt5/Qt5FilePicker.cxx",
         "patchSetId": 2
@@ -30,6 +48,24 @@
       "writtenOn": "2019-06-19T13:49:48Z",
       "side": 1,
       "message": "surely this message should be \n\n    \"cannot convert ... from utf-8 encoding to internal encoding\"\n\nsince toEncoded() always returns utf-8 ?",
+      "revId": "9adaf1698170210b633c968734553479b8ecf485",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f9dbf25_3b0d5737",
+        "filename": "vcl/qt5/Qt5FilePicker.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 278,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-06-19T14:04:02Z",
+      "side": 1,
+      "message": "No.  As the comment explains (or at least tries to), the payload bytes of aURL are the raw pathname bytes, what LO considers the \"external URL\" or \"locale encoding\".  (While the \"internal URL\" is UTF-8 encoded.)",
+      "parentUuid": "3fa0c359_ac18ef74",
       "revId": "9adaf1698170210b633c968734553479b8ecf485",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
