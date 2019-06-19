@@ -2047,7 +2047,7 @@ void SAL_CALL OWriteStream::closeInput(  )
     if ( !m_bInitOnDemand && ( m_bInStreamDisconnected || !m_xInStream.is() ) )
         throw io::NotConnectedException();
 
-    // the input part of the stream stays open for internal purposes ( to allow reading during copiing )
+    // the input part of the stream stays open for internal purposes (to allow reading during copying)
     // since it can not be reopened until output part is closed, it will be closed with output part.
     m_bInStreamDisconnected = true;
     // m_xInStream->closeInput();
