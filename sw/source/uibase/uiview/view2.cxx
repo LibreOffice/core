@@ -650,11 +650,6 @@ void SwView::Execute(SfxRequest &rReq)
             if( pArgs &&
                 SfxItemState::SET == pArgs->GetItemState(nSlot, false, &pItem))
             {
-                RedlineFlags nMode = ( ~RedlineFlags(RedlineFlags::ShowInsert | RedlineFlags::ShowDelete)
-                        & m_pWrtShell->GetRedlineFlags() ) | RedlineFlags::ShowInsert;
-                if( static_cast<const SfxBoolItem*>(pItem)->GetValue() )
-                    nMode |= RedlineFlags::ShowDelete;
-
                 // tdf#125754 avoid recursive layout
                 // because all views share the layout, have to use AllAction
                 m_pWrtShell->StartAllAction();
