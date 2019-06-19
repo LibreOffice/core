@@ -673,7 +673,7 @@ void ImpEditEngine::SetText(const OUString& rText)
             tools::Rectangle aTmpRect( pView->GetOutputArea().TopLeft(),
                                 Size( aPaperSize.Width(), nCurTextHeight ) );
             aTmpRect.Intersection( pView->GetOutputArea() );
-            pView->GetWindow()->Invalidate( aTmpRect );
+            pView->InvalidateWindow( aTmpRect );
         }
     }
     if (rText.isEmpty()) {    // otherwise it must be invalidated later, !bFormatted is enough.
