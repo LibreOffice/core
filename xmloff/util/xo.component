@@ -142,7 +142,8 @@
     constructor="com_sun_star_comp_Draw_XMLOasisSettingsImporter_get_implementation">
     <service name="com.sun.star.comp.Draw.XMLOasisSettingsImporter"/>
   </implementation>
-  <implementation name="XMLImpressSettingsImportOasis">
+  <implementation name="XMLImpressSettingsImportOasis"
+    constructor="com_sun_star_comp_Impress_XMLOasisSettingsImporter_get_implementation">
     <service name="com.sun.star.comp.Impress.XMLOasisSettingsImporter"/>
   </implementation>
   <implementation name="XMLImpressStylesExportOOO">

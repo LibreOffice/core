@@ -330,7 +330,13 @@ SERVICE( XMLImpressContentImportOasis, "com.sun.star.comp.Impress.XMLOasisConten
 
 SERVICE( XMLImpressMetaImportOasis, "com.sun.star.comp.Impress.XMLOasisMetaImporter", "XMLImpressMetaImportOasis", false, SvXMLImportFlags::META )
 
-SERVICE( XMLImpressSettingsImportOasis, "com.sun.star.comp.Impress.XMLOasisSettingsImporter", "XMLImpressSettingsImportOasis", false, SvXMLImportFlags::SETTINGS )
+extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
+com_sun_star_comp_Impress_XMLOasisSettingsImporter_get_implementation(
+    uno::XComponentContext* pCtx, uno::Sequence<uno::Any> const& /*rSeq*/)
+{
+    return cppu::acquire(
+        new SdXMLImport(pCtx, "XMLImpressSettingsImportOasis", false, SvXMLImportFlags::SETTINGS));
+}
 
 SdXMLImport::SdXMLImport(
     const css::uno::Reference< css::uno::XComponentContext >& xContext,
