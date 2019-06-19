@@ -69,3 +69,4 @@ sfx/ui/floatingrecord.ui
 sfx/ui/helpcontrol.ui
 sfx/ui/startcenter.ui
 sfx/ui/cmisline.ui
+sfx/ui/autoredactdialog.ui
