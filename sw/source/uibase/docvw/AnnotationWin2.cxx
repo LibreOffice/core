@@ -1243,9 +1243,15 @@ void SwAnnotationWin::ExecuteCommand(sal_uInt16 nSlot)
             break;
         }
         case FN_DELETE_COMMENT:
-
             //Delete(); // do not kill the parent of our open popup menu
             mnEventId = Application::PostUserEvent( LINK( this, SwAnnotationWin, DeleteHdl), nullptr, true );
+            break;
+        case FN_RESOLVE_NOTE:
+            GetTopReplyNote()->ToggleResolved();
+            mrMgr.UpdateResolvedStatus(GetTopReplyNote());
+            DoResize();
+            Invalidate();
+            mrMgr.LayoutPostIts();
             break;
         case FN_FORMAT_ALL_NOTES:
         case FN_DELETE_ALL_NOTES:

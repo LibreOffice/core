@@ -71,6 +71,8 @@ void AnnotationMenuButton::Select()
     OString sIdent = GetCurItemIdent();
     if (sIdent == "reply")
         mrSidebarWin.ExecuteCommand(FN_REPLY);
+    if (sIdent == "resolve")
+        mrSidebarWin.ExecuteCommand(FN_RESOLVE_NOTE);
     else if (sIdent == "delete")
         mrSidebarWin.ExecuteCommand(FN_DELETE_COMMENT);
     else if (sIdent == "deleteby")
@@ -87,6 +89,7 @@ void AnnotationMenuButton::MouseButtonDown( const MouseEvent& rMEvt )
     if (mrSidebarWin.IsReadOnly())
     {
         pButtonPopup->EnableItem(pButtonPopup->GetItemId("reply"), false);
+        pButtonPopup->EnableItem(pButtonPopup->GetItemId("resolve"), false);
         pButtonPopup->EnableItem(pButtonPopup->GetItemId("delete"), false );
         pButtonPopup->EnableItem(pButtonPopup->GetItemId("deleteby"), false );
         pButtonPopup->EnableItem(pButtonPopup->GetItemId("deleteall"), false );
@@ -94,6 +97,7 @@ void AnnotationMenuButton::MouseButtonDown( const MouseEvent& rMEvt )
     }
     else
     {
+        pButtonPopup->EnableItem(pButtonPopup->GetItemId("resolve"));
         pButtonPopup->EnableItem(pButtonPopup->GetItemId("delete"), !mrSidebarWin.IsProtected());
         pButtonPopup->EnableItem(pButtonPopup->GetItemId("deleteby"));
         pButtonPopup->EnableItem(pButtonPopup->GetItemId("deleteall"));

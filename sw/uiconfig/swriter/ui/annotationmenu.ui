@@ -20,6 +20,14 @@
       </object>
     </child>
     <child>
+      <object class="GtkMenuItem" id="resolve">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes" context="annotationmenu|resolve">Toggle Resolved</property>
+        <property name="use_underline">True</property>
+      </object>
+    </child>
+    <child>
       <object class="GtkMenuItem" id="delete">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
