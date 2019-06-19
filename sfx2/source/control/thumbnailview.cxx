@@ -2066,12 +2066,16 @@ void SfxThumbnailView::RemoveItem( sal_uInt16 nItemId )
 
     if ( nPos < mFilteredItemList.size() ) {
 
+        // keep it alive until after we have deleted it from the filter item list
+        std::unique_ptr<ThumbnailViewItem> xKeepAliveViewItem;
+
         // delete item from the thumbnail list
-        for (size_t i = 0, n = mItemList.size(); i < n; ++i)
+        for (auto it = mItemList.begin(); it != mItemList.end(); ++it)
         {
-            if (mItemList[i]->mnId == nItemId)
+            if ((*it)->mnId == nItemId)
             {
-                mItemList.erase(mItemList.begin()+i);
+                xKeepAliveViewItem = std::move(*it);
+                mItemList.erase(it);
                 break;
             }
         }
@@ -2086,7 +2090,6 @@ void SfxThumbnailView::RemoveItem( sal_uInt16 nItemId )
             maItemStateHdl.Call(*it);
         }
 
-        delete *it;
         mFilteredItemList.erase( it );
         mpStartSelRange = mFilteredItemList.end();
     }
