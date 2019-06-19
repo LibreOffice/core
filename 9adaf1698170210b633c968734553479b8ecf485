@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_cc13fb5b",
+        "filename": "vcl/qt5/Qt5FilePicker.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 268,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-06-19T13:49:48Z",
+      "side": 1,
+      "message": "part of this comment doesn\u0027t make sense if \"pathnames containing byte sequences that are not valid UTF-8 are apparently filtered out and not even displayed by QFileDialog\", then how can QUrl ever contain the pathnames byte sequence if that pathname is not utf-8?",
+      "revId": "9adaf1698170210b633c968734553479b8ecf485",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_ac18ef74",
+        "filename": "vcl/qt5/Qt5FilePicker.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 278,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-06-19T13:49:48Z",
+      "side": 1,
+      "message": "surely this message should be \n\n    \"cannot convert ... from utf-8 encoding to internal encoding\"\n\nsince toEncoded() always returns utf-8 ?",
+      "revId": "9adaf1698170210b633c968734553479b8ecf485",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
