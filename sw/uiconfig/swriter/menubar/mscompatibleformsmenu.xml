@@ -21,7 +21,6 @@
           <menu:menuitem menu:id=".uno:RadioButton"/>
           <menu:menuitem menu:id=".uno:ListBox"/>
           <menu:menuitem menu:id=".uno:Pushbutton"/>
-          <menu:menuitem menu:id=".uno:DateField"/>
         </menu:menupopup>
       </menu:menu>
       <menu:menu menu:id=".uno:MSCompatLegacyControls">
@@ -29,6 +28,11 @@
           <menu:menuitem menu:id=".uno:TextFormField"/>
           <menu:menuitem menu:id=".uno:CheckBoxFormField"/>
           <menu:menuitem menu:id=".uno:DropDownFormField"/>
+        </menu:menupopup>
+      </menu:menu>
+      <menu:menu menu:id=".uno:MSCompatContentControls">
+        <menu:menupopup>
+          <menu:menuitem menu:id=".uno:DateField"/>
         </menu:menupopup>
       </menu:menu>
     </menu:menupopup>
