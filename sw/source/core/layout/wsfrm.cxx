@@ -4499,6 +4499,7 @@ void SwRootFrame::SetHideRedlines(bool const bHideRedlines)
         return;
     }
     mbHideRedlines = bHideRedlines;
+    assert(GetCurrShell()->ActionPend()); // tdf#125754 avoid recursive layout
     SwDoc & rDoc(*GetFormat()->GetDoc());
     // don't do early return if there are no redlines:
     // Show->Hide must init hidden number trees

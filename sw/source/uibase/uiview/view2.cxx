@@ -655,8 +655,12 @@ void SwView::Execute(SfxRequest &rReq)
                 if( static_cast<const SfxBoolItem*>(pItem)->GetValue() )
                     nMode |= RedlineFlags::ShowDelete;
 
+                // tdf#125754 avoid recursive layout
+                // because all views share the layout, have to use AllAction
+                m_pWrtShell->StartAllAction();
                 m_pWrtShell->GetLayout()->SetHideRedlines(
                     !static_cast<const SfxBoolItem*>(pItem)->GetValue());
+                m_pWrtShell->EndAllAction();
                 if (m_pWrtShell->IsRedlineOn())
                     m_pWrtShell->SetInsMode();
             }
