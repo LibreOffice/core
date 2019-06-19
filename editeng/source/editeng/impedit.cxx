@@ -1144,13 +1144,12 @@ Pair ImpEditView::Scroll( long ndX, long ndY, ScrollRangeCheck nRangeCheck )
     if ( !ndX && !ndY )
         return Pair( 0, 0 );
 
-    if (!pOutWin)
-        return Pair( 0, 0 );
+    const OutputDevice& rOutDev = getEditViewCallbacks() ? getEditViewCallbacks()->EditViewOutputDevice() : *GetWindow();
 
 #ifdef DBG_UTIL
     tools::Rectangle aR( aOutArea );
-    aR = pOutWin->LogicToPixel( aR );
-    aR = pOutWin->PixelToLogic( aR );
+    aR = rOutDev.LogicToPixel( aR );
+    aR = rOutDev.PixelToLogic( aR );
     SAL_WARN_IF( aR != aOutArea, "editeng", "OutArea before Scroll not aligned" );
 #endif
 
@@ -1216,8 +1215,8 @@ Pair ImpEditView::Scroll( long ndX, long ndY, ScrollRangeCheck nRangeCheck )
     long nDiffY = !IsVertical() ? ( GetVisDocTop() - aNewVisArea.Top() ) : (IsTopToBottom() ? (GetVisDocLeft() - aNewVisArea.Left()) : -(GetVisDocTop() - aNewVisArea.Top()));
 
     Size aDiffs( nDiffX, nDiffY );
-    aDiffs = pOutWin->LogicToPixel( aDiffs );
-    aDiffs = pOutWin->PixelToLogic( aDiffs );
+    aDiffs = rOutDev.LogicToPixel( aDiffs );
+    aDiffs = rOutDev.PixelToLogic( aDiffs );
 
     long nRealDiffX = aDiffs.Width();
     long nRealDiffY = aDiffs.Height();
@@ -1228,7 +1227,8 @@ Pair ImpEditView::Scroll( long ndX, long ndY, ScrollRangeCheck nRangeCheck )
         vcl::Cursor* pCrsr = GetCursor();
         bool bVisCursor = pCrsr->IsVisible();
         pCrsr->Hide();
-        pOutWin->Update();
+        if (pOutWin)
+            pOutWin->Update();
         if ( !IsVertical() )
             aVisDocStartPos.Move( -nRealDiffX, -nRealDiffY );
         else
@@ -1240,18 +1240,23 @@ Pair ImpEditView::Scroll( long ndX, long ndY, ScrollRangeCheck nRangeCheck )
         }
         // Move by aligned value does not necessarily result in aligned
         // rectangle ...
-        aVisDocStartPos = pOutWin->LogicToPixel( aVisDocStartPos );
-        aVisDocStartPos = pOutWin->PixelToLogic( aVisDocStartPos );
+        aVisDocStartPos = rOutDev.LogicToPixel( aVisDocStartPos );
+        aVisDocStartPos = rOutDev.PixelToLogic( aVisDocStartPos );
         tools::Rectangle aRect( aOutArea );
-        pOutWin->Scroll( nRealDiffX, nRealDiffY, aRect, ScrollFlags::Clip );
 
-        if (comphelper::LibreOfficeKit::isActive())
+        if (pOutWin)
+        {
+            pOutWin->Scroll( nRealDiffX, nRealDiffY, aRect, ScrollFlags::Clip );
+        }
+
+        if (comphelper::LibreOfficeKit::isActive() || getEditViewCallbacks())
         {
             // Need to invalidate the window, otherwise no tile will be re-painted.
             pEditView->Invalidate();
         }
 
-        pOutWin->Update();
+        if (pOutWin)
+            pOutWin->Update();
         pCrsr->SetPos( pCrsr->GetPos() + Point( nRealDiffX, nRealDiffY ) );
         if ( bVisCursor )
         {
