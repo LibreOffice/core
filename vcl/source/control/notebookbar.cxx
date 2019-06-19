@@ -17,12 +17,14 @@
 #include <vcl/vclevent.hxx>
 #include <rtl/bootstrap.hxx>
 #include <osl/file.hxx>
+#include <config_folders.h>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/ui/ContextChangeEventMultiplexer.hpp>
 
 static OUString getCustomizedUIRootDir()
 {
-    OUString sShareLayer("$BRAND_BASE_DIR/user/config/soffice.cfg/");
+    OUString sShareLayer("${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE(
+        "bootstrap") ":UserInstallation}/user/config/soffice.cfg/");
     rtl::Bootstrap::expandMacros(sShareLayer);
     return sShareLayer;
 }
