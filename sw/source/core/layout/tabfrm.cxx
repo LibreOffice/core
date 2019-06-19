@@ -2888,7 +2888,7 @@ void SwTabFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderA
 
         // The width possibly is a percentage value. If the table is inside
         // something else, the value refers to the environment. If it's in the
-        // body then in in the BrowseView the value refers to the screen width.
+        // body then in the BrowseView the value refers to the screen width.
         const SwFormatFrameSize &rSz = GetFormat()->GetFrameSize();
         // OD 14.03.2003 #i9040# - adjust variable name.
         const SwTwips nWishedTableWidth = CalcRel( rSz );
