@@ -34,6 +34,7 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <comphelper/servicehelper.hxx>
 
 namespace xforms
 {
@@ -56,20 +57,22 @@ public:
 
     virtual bool isValid( const T& t ) const override
     {
-        return Binding::getBinding( t ) != nullptr;
+        return comphelper::getUnoTunnelImplementation<Binding>( t ) != nullptr;
     }
 
 protected:
     virtual void _insert( const T& t ) override
     {
-        OSL_ENSURE( Binding::getBinding( t ) != nullptr, "invalid item?" );
-        Binding::getBinding( t )->_setModel( css::uno::Reference<css::xforms::XModel>( mpModel ) );
+        auto pBinding = comphelper::getUnoTunnelImplementation<Binding>( t );
+        OSL_ENSURE( pBinding != nullptr, "invalid item?" );
+        pBinding->_setModel( css::uno::Reference<css::xforms::XModel>( mpModel ) );
     }
 
     virtual void _remove( const T& t ) override
     {
-        OSL_ENSURE( Binding::getBinding( t ) != nullptr, "invalid item?" );
-        Binding::getBinding( t )->_setModel( css::uno::Reference<css::xforms::XModel>() );
+        auto pBinding = comphelper::getUnoTunnelImplementation<Binding>( t );
+        OSL_ENSURE( pBinding != nullptr, "invalid item?" );
+        pBinding->_setModel( css::uno::Reference<css::xforms::XModel>() );
     }
 };
 

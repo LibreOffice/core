@@ -304,18 +304,10 @@ EvaluationContext Binding::getEvaluationContext() const
 }
 
 
-css::uno::Sequence<sal_Int8> Binding::getUnoTunnelID()
+css::uno::Sequence<sal_Int8> Binding::getUnoTunnelId()
 {
     static cppu::OImplementationId aImplementationId;
     return aImplementationId.getImplementationId();
-}
-
-Binding* Binding::getBinding( const Reference<XPropertySet>& xPropertySet )
-{
-    Reference<XUnoTunnel> xTunnel( xPropertySet, UNO_QUERY );
-    return xTunnel.is()
-        ? reinterpret_cast<Binding*>( xTunnel->getSomething(getUnoTunnelID()))
-        : nullptr;
 }
 
 
@@ -1194,7 +1186,7 @@ void Binding::handleEvent( const css::uno::Reference<css::xml::dom::events::XEve
 
 sal_Int64 Binding::getSomething( const css::uno::Sequence<sal_Int8>& xId )
 {
-    return reinterpret_cast<sal_Int64>( ( xId == getUnoTunnelID() ) ? this : nullptr );
+    return reinterpret_cast<sal_Int64>( ( xId == getUnoTunnelId() ) ? this : nullptr );
 }
 
 
