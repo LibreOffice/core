@@ -1047,20 +1047,6 @@ const uno::Sequence<sal_Int8>& ExplicitValueProvider::getUnoTunnelId()
     return theExplicitValueProviderUnoTunnelId::get().getSeq();
 }
 
-ExplicitValueProvider* ExplicitValueProvider::getExplicitValueProvider(
-        const Reference< uno::XInterface >& xChartView )
-{
-    ExplicitValueProvider* pExplicitValueProvider=nullptr;
-
-    Reference< lang::XUnoTunnel > xTunnel( xChartView, uno::UNO_QUERY );
-    if( xTunnel.is() )
-    {
-        pExplicitValueProvider = reinterpret_cast<ExplicitValueProvider*>(xTunnel->getSomething(
-            ExplicitValueProvider::getUnoTunnelId() ));
-    }
-    return pExplicitValueProvider;
-}
-
 ChartView::ChartView(
         uno::Reference<uno::XComponentContext> const & xContext,
         ChartModel& rModel)
@@ -1977,7 +1963,7 @@ awt::Rectangle ExplicitValueProvider::AddSubtractAxisTitleSizes(
     uno::Reference< chart2::XTitle > xSecondTitle_Width( TitleHelper::getTitle( TitleHelper::SECONDARY_Y_AXIS_TITLE, rModel ) );
     if( xTitle_Height.is() || xTitle_Width.is() || xSecondTitle_Height.is() || xSecondTitle_Width.is() )
     {
-        ExplicitValueProvider* pExplicitValueProvider = ExplicitValueProvider::getExplicitValueProvider(xChartView);
+        ExplicitValueProvider* pExplicitValueProvider = comphelper::getUnoTunnelImplementation<ExplicitValueProvider>(xChartView);
         if( pExplicitValueProvider )
         {
             //detect whether x axis points into x direction or not

@@ -30,6 +30,8 @@
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 
+#include <comphelper/servicehelper.hxx>
+
 #include <rtl/ustring.hxx>
 #include <vcl/window.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
@@ -296,7 +298,7 @@ void SAL_CALL AccessibleChartView::initialize( const Sequence< Any >& rArguments
             Reference< chart2::XChartDocument > xChartDoc( xChartModel, uno::UNO_QUERY );
             if( xChartDoc.is())
                 m_spObjectHierarchy.reset(
-                    new ObjectHierarchy( xChartDoc, ExplicitValueProvider::getExplicitValueProvider(m_xChartView) ));
+                    new ObjectHierarchy( xChartDoc, comphelper::getUnoTunnelImplementation<ExplicitValueProvider>(m_xChartView) ));
             else
                 m_spObjectHierarchy.reset();
         }

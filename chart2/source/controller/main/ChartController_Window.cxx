@@ -1355,7 +1355,7 @@ bool ChartController::execute_KeyInput( const KeyEvent& rKEvt )
     {
         // Navigation (Tab/F3/Home/End)
         uno::Reference< XChartDocument > xChartDoc( getModel(), uno::UNO_QUERY );
-        ObjectKeyNavigation aObjNav( m_aSelection.getSelectedOID(), xChartDoc, ExplicitValueProvider::getExplicitValueProvider( m_xChartView ));
+        ObjectKeyNavigation aObjNav( m_aSelection.getSelectedOID(), xChartDoc, comphelper::getUnoTunnelImplementation<ExplicitValueProvider>( m_xChartView ));
         awt::KeyEvent aKeyEvent( ::svt::AcceleratorExecute::st_VCLKey2AWTKey( aKeyCode ));
         bReturn = aObjNav.handleKeyEvent( aKeyEvent );
         if( bReturn )
@@ -1601,7 +1601,7 @@ bool ChartController::requestQuickHelp(
 
         // set rectangle
         ExplicitValueProvider * pValueProvider(
-            ExplicitValueProvider::getExplicitValueProvider( m_xChartView ));
+            comphelper::getUnoTunnelImplementation<ExplicitValueProvider>( m_xChartView ));
         if( pValueProvider )
             rOutEqualRect = pValueProvider->getRectangleOfObject( aCID, true );
     }
@@ -1769,7 +1769,7 @@ bool ChartController::impl_moveOrResizeObject(
             ( aRefSize.Width > 0 && aRefSize.Height > 0 ) )
         {
             ExplicitValueProvider * pValueProvider(
-                ExplicitValueProvider::getExplicitValueProvider( m_xChartView ));
+                comphelper::getUnoTunnelImplementation<ExplicitValueProvider>( m_xChartView ));
             if( pValueProvider )
             {
                 awt::Rectangle aRect( pValueProvider->getRectangleOfObject( rCID ));

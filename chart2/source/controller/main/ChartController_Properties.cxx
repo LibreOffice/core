@@ -53,6 +53,7 @@
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/util/CloseVetoException.hpp>
 #include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
+#include <comphelper/servicehelper.hxx>
 
 #include <memory>
 
@@ -740,7 +741,7 @@ bool ChartController::executeDlg_ObjectProperties_withoutUndoGuard(
         std::unique_ptr<wrapper::ItemConverter> pItemConverter(
             createItemConverter( rObjectCID, getModel(), m_xCC,
                                  m_pDrawModelWrapper->getSdrModel(),
-                                 ExplicitValueProvider::getExplicitValueProvider(m_xChartView),
+                                 comphelper::getUnoTunnelImplementation<ExplicitValueProvider>(m_xChartView),
                                  pRefSizeProv.get()));
 
         if (!pItemConverter)

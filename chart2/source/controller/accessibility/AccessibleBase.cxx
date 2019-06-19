@@ -34,6 +34,7 @@
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <sal/log.hxx>
 #include <vcl/svapp.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <vcl/unohelp.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
@@ -631,7 +632,7 @@ Reference< XAccessible > SAL_CALL AccessibleBase::getAccessibleAtPoint( const aw
 awt::Rectangle SAL_CALL AccessibleBase::getBounds()
 {
     ExplicitValueProvider *pExplicitValueProvider(
-        ExplicitValueProvider::getExplicitValueProvider( m_aAccInfo.m_xView ));
+        comphelper::getUnoTunnelImplementation<ExplicitValueProvider>( m_aAccInfo.m_xView ));
     if( pExplicitValueProvider )
     {
         VclPtr<vcl::Window> pWindow( VCLUnoHelper::GetWindow( m_aAccInfo.m_xWindow ));

@@ -31,6 +31,7 @@
 #include <CommonConverters.hxx>
 #include <svx/ActionDescriptionProvider.hxx>
 
+#include <comphelper/servicehelper.hxx>
 #include <sal/log.hxx>
 #include <svx/svxids.hrc>
 #include <svx/rectenum.hxx>
@@ -116,7 +117,7 @@ void ChartController::executeDispatch_PositionAndSize(const ::css::uno::Sequence
         return;
 
     awt::Size aSelectedSize;
-    ExplicitValueProvider* pProvider( ExplicitValueProvider::getExplicitValueProvider( m_xChartView ) );
+    ExplicitValueProvider* pProvider( comphelper::getUnoTunnelImplementation<ExplicitValueProvider>( m_xChartView ) );
     if( pProvider )
         aSelectedSize = ToSize( pProvider->getRectangleOfObject( aCID ) );
 

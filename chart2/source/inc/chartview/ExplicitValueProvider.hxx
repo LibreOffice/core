@@ -69,7 +69,6 @@ public:
     virtual std::shared_ptr< DrawModelWrapper > getDrawModelWrapper() = 0;
 
     static const css::uno::Sequence<sal_Int8>& getUnoTunnelId();
-    static ExplicitValueProvider* getExplicitValueProvider( const css::uno::Reference< css::uno::XInterface >& xChartView );
 
     static css::awt::Rectangle
         AddSubtractAxisTitleSizes(
