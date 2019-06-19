@@ -158,8 +158,7 @@ public:
     bool doSubmit( const css::uno::Reference< css::task::XInteractionHandler >& aHandler );
 
     // helpers for UNO tunnel
-    static css::uno::Sequence<sal_Int8> getUnoTunnelID();
-    static Submission* getSubmission( const css::uno::Reference<css::beans::XPropertySet>& );
+    static css::uno::Sequence<sal_Int8> getUnoTunnelId();
 
 private:
 

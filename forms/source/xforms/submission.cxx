@@ -263,20 +263,10 @@ bool Submission::doSubmit( const Reference< XInteractionHandler >& xHandler )
     return ( aResult == CSubmission::SUCCESS );
 }
 
-Sequence<sal_Int8> Submission::getUnoTunnelID()
+Sequence<sal_Int8> Submission::getUnoTunnelId()
 {
     static cppu::OImplementationId aImplementationId;
     return aImplementationId.getImplementationId();
-}
-
-Submission* Submission::getSubmission(
-    const Reference<XPropertySet>& xPropertySet )
-{
-    Reference<XUnoTunnel> xTunnel( xPropertySet, UNO_QUERY );
-    return xTunnel.is()
-        ? reinterpret_cast<Submission*>(
-            xTunnel->getSomething( getUnoTunnelID() ) )
-        : nullptr;
 }
 
 
@@ -386,7 +376,7 @@ void SAL_CALL Submission::setName( const OUString& sID )
 sal_Int64 SAL_CALL Submission::getSomething(
     const Sequence<sal_Int8>& aId )
 {
-    return ( aId == getUnoTunnelID() ) ? reinterpret_cast<sal_Int64>(this) : 0;
+    return ( aId == getUnoTunnelId() ) ? reinterpret_cast<sal_Int64>(this) : 0;
 }
 
 

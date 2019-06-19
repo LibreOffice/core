@@ -449,7 +449,7 @@ void SAL_CALL Model::submitWithInteraction(
     if( mxSubmissions->hasItem( sID ) )
     {
         Submission* pSubmission =
-            Submission::getSubmission( mxSubmissions->getItem( sID ) );
+            comphelper::getUnoTunnelImplementation<Submission>( mxSubmissions->getItem( sID ) );
         OSL_ENSURE( pSubmission != nullptr, "no submission?" );
         OSL_ENSURE( pSubmission->getModel() == Reference<XModel>( this ),
                     "wrong model" );
