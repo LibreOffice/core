@@ -50,13 +50,15 @@ SalFrame* KDE5SalInstance::CreateFrame(SalFrame* pParent, SalFrameStyleFlags nSt
     return pRet;
 }
 
-Qt5FilePicker* KDE5SalInstance::createPicker(QFileDialog::FileMode eMode)
+Qt5FilePicker*
+KDE5SalInstance::createPicker(css::uno::Reference<css::uno::XComponentContext> const& context,
+                              QFileDialog::FileMode eMode)
 {
     if (!IsMainThread())
     {
         SolarMutexGuard g;
         Qt5FilePicker* pPicker;
-        RunInMainThread(std::function([&, this]() { pPicker = createPicker(eMode); }));
+        RunInMainThread(std::function([&, this]() { pPicker = createPicker(context, eMode); }));
         assert(pPicker);
         return pPicker;
     }
@@ -65,8 +67,8 @@ Qt5FilePicker* KDE5SalInstance::createPicker(QFileDialog::FileMode eMode)
     // being used in the native file picker, which is only the case for KDE Plasma.
     // Therefore, return the plain qt5 one in order to not lose custom controls.
     if (Application::GetDesktopEnvironment() == "KDE5")
-        return new KDE5FilePicker(eMode);
-    return Qt5Instance::createPicker(eMode);
+        return new KDE5FilePicker(context, eMode);
+    return Qt5Instance::createPicker(context, eMode);
 }
 
 extern "C" {

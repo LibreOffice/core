@@ -23,7 +23,8 @@
 
 class KDE5SalInstance final : public Qt5Instance
 {
-    Qt5FilePicker* createPicker(QFileDialog::FileMode) override;
+    Qt5FilePicker* createPicker(css::uno::Reference<css::uno::XComponentContext> const& context,
+                                QFileDialog::FileMode) override;
 
     SalFrame* CreateFrame(SalFrame* pParent, SalFrameStyleFlags nStyle) override;
     bool hasNativeFileSelection() const override { return true; }

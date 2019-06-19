@@ -33,6 +33,7 @@
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
+#include <com/sun/star/uri/ExternalUriReferenceTranslator.hpp>
 #include <cppuhelper/interfacecontainer.h>
 #include <cppuhelper/supportsservice.hxx>
 #include <sal/log.hxx>
@@ -77,9 +78,11 @@ uno::Sequence<OUString> FilePicker_getSupportedServiceNames()
 }
 }
 
-Qt5FilePicker::Qt5FilePicker(QFileDialog::FileMode eMode, bool bShowFileExtensionInFilterTitle,
+Qt5FilePicker::Qt5FilePicker(css::uno::Reference<css::uno::XComponentContext> const& context,
+                             QFileDialog::FileMode eMode, bool bShowFileExtensionInFilterTitle,
                              bool bUseNativeDialog)
     : Qt5FilePicker_Base(m_aHelperMutex)
+    , m_context(context)
     , m_bShowFileExtensionInFilterTitle(bShowFileExtensionInFilterTitle)
     , m_pFileDialog(new QFileDialog(nullptr, {}, QDir::homePath()))
     , m_bIsFolderPicker(eMode == QFileDialog::Directory)
@@ -254,9 +257,29 @@ uno::Sequence<OUString> SAL_CALL Qt5FilePicker::getSelectedFiles()
 
     uno::Sequence<OUString> seq(urls.size());
 
+    auto const trans = css::uri::ExternalUriReferenceTranslator::create(m_context);
     size_t i = 0;
     for (const QUrl& aURL : urls)
-        seq[i++] = toOUString(aURL.toString());
+    {
+        // Unlike LO, QFileDialog (<https://doc.qt.io/qt-5/qfiledialog.html>) apparently always
+        // treats file-system pathnames as UTF-8--encoded, regardless of LANG/LC_CTYPE locale
+        // setting.  And pathnames containing byte sequences that are not valid UTF-8 are apparently
+        // filtered out and not even displayed by QFileDialog, so aURL will always have a "payload"
+        // that matches the pathname's byte sequence.  So the pathname's byte sequence (which
+        // happens to also be aURL's payload) in the LANG/LC_CTYPE encoding needs to be converted
+        // into LO's internal UTF-8 file URL encoding via
+        // XExternalUriReferenceTranslator::translateToInternal (which looks somewhat paradoxical as
+        // aURL.toEncoded() nominally already has a UTF-8 payload):
+        auto const extUrl = toOUString(aURL.toEncoded());
+        auto intUrl = trans->translateToInternal(extUrl);
+        if (intUrl.isEmpty())
+        {
+            // If translation failed, fall back to original URL:
+            SAL_WARN("vcl.qt5", "cannot convert <" << extUrl << "> from locale encoding to UTF-8");
+            intUrl = extUrl;
+        }
+        seq[i++] = intUrl;
+    }
 
     return seq;
 }
