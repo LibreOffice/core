@@ -157,6 +157,7 @@ class SAL_DLLPUBLIC_RTTI SwAnnotationWin : public vcl::Window
         sal_Int32   GetMinimumSizeWithoutMeta();
         sal_Int32   GetMetaButtonAreaWidth();
         sal_Int32   GetScrollbarWidth();
+        sal_Int32   GetNumFields();
 
         void    SetSpellChecking();
 
@@ -230,6 +231,7 @@ class SAL_DLLPUBLIC_RTTI SwAnnotationWin : public vcl::Window
         VclPtr<ScrollBar>      mpVScrollbar;
         VclPtr<Edit>           mpMetadataAuthor;
         VclPtr<Edit>           mpMetadataDate;
+        VclPtr<Edit>           mpMetadataResolved;
         VclPtr<MenuButton>     mpMenuButton;
 
         std::unique_ptr<sw::sidebarwindows::AnchorOverlayObject> mpAnchor;
