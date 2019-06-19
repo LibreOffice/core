@@ -347,6 +347,15 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                 }
             }
             break;
+            case FN_RESOLVE_NOTE:
+            {
+                const SvxPostItIdItem* pIdItem = rReq.GetArg<SvxPostItIdItem>(SID_ATTR_POSTIT_ID);
+                if (pIdItem && !pIdItem->GetValue().isEmpty() && GetView().GetPostItMgr())
+                {
+                    GetView().GetPostItMgr()->ToggleResolvedForThread(pIdItem->GetValue().toUInt32());
+                }
+            }
+            break;
             case FN_DELETE_ALL_NOTES:
                 if ( GetView().GetPostItMgr() )
                     GetView().GetPostItMgr()->Delete();
