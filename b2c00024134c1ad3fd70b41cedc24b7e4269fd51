@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_6132f0a9",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-06-19T06:59:39Z",
+      "side": 1,
+      "message": "It could be a result of me being not a native English speaker, but the wording here is unclear to me. Is each line a separate sentence ending with full stop, or should e.g. I read \"and try that also for every dialog ...\"?",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 48
+      },
+      "revId": "b2c00024134c1ad3fd70b41cedc24b7e4269fd51",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
