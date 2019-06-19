@@ -113,13 +113,10 @@ public:
     Model();
     virtual ~Model() throw() override;
 
-    // get Model implementation from API object
-    static Model* getModel( const css::uno::Reference<css::xforms::XModel>& );
-
     xforms::EvaluationContext getEvaluationContext();
 
 
-    static css::uno::Sequence<sal_Int8> getUnoTunnelID();
+    static css::uno::Sequence<sal_Int8> getUnoTunnelId();
 
 
     // get/set that part of the schema, that we can't interpret as data types

@@ -50,6 +50,7 @@
 #include <comphelper/propertysetinfo.hxx>
 #include <comphelper/interaction.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <memory>
 
 using com::sun::star::util::VetoException;
@@ -215,12 +216,12 @@ bool Submission::doSubmit( const Reference< XInteractionHandler >& xHandler )
     else if( !maRef.getExpression().isEmpty() )
     {
         aExpression.setExpression( maRef.getExpression() );
-        aEvalContext = Model::getModel( mxModel )->getEvaluationContext();
+        aEvalContext = comphelper::getUnoTunnelImplementation<Model>( mxModel )->getEvaluationContext();
     }
     else
     {
         aExpression.setExpression( "/" );
-        aEvalContext = Model::getModel( mxModel )->getEvaluationContext();
+        aEvalContext = comphelper::getUnoTunnelImplementation<Model>( mxModel )->getEvaluationContext();
     }
     aExpression.evaluate( aEvalContext );
     Reference<XXPathObject> xResult = aExpression.getXPath();
@@ -292,7 +293,7 @@ Model* Submission::getModelImpl() const
 {
     Model* pModel = nullptr;
     if( mxModel.is() )
-        pModel = Model::getModel( mxModel );
+        pModel = comphelper::getUnoTunnelImplementation<Model>( mxModel );
     return pModel;
 }
 
@@ -410,7 +411,7 @@ void SAL_CALL Submission::submitWithInteraction(
                 *this
               );
 
-    Model* pModel = Model::getModel( xModel );
+    Model* pModel = comphelper::getUnoTunnelImplementation<Model>( xModel );
     OSL_ENSURE( pModel != nullptr, "illegal model?" );
 
     // #i36765# #i47248# warning on submission of illegal data

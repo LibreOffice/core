@@ -108,20 +108,6 @@ Model::~Model() throw()
 {
 }
 
-static Model* lcl_getModel( const Reference<XUnoTunnel>& xTunnel )
-{
-    Model* pModel = nullptr;
-    if( xTunnel.is() )
-        pModel = reinterpret_cast<Model*>(
-            xTunnel->getSomething( Model::getUnoTunnelID() ) );
-    return pModel;
-}
-
-Model* Model::getModel( const Reference<XModel>& xModel )
-{
-    return lcl_getModel( Reference<XUnoTunnel>( xModel, UNO_QUERY ) );
-}
-
 EvaluationContext Model::getEvaluationContext()
 {
     // the default context is the top-level element node. A default
@@ -144,7 +130,7 @@ EvaluationContext Model::getEvaluationContext()
 }
 
 
-css::uno::Sequence<sal_Int8> Model::getUnoTunnelID()
+css::uno::Sequence<sal_Int8> Model::getUnoTunnelId()
 {
     static cppu::OImplementationId aImplementationId;
     return aImplementationId.getImplementationId();
@@ -604,7 +590,7 @@ void Model::update()
 
 sal_Int64 Model::getSomething( const css::uno::Sequence<sal_Int8>& xId )
 {
-    return reinterpret_cast<sal_Int64>( ( xId == getUnoTunnelID() ) ? this : nullptr );
+    return reinterpret_cast<sal_Int64>( ( xId == getUnoTunnelId() ) ? this : nullptr );
 }
 
 Sequence<sal_Int8> Model::getImplementationId()
