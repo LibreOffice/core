@@ -78,5 +78,11 @@ class tdf119954(UITestCase):
         self.assertEqual(get_cell_by_position(document, 0, 1, 2).getFormula(), "")
         self.assertEqual(get_cell_by_position(document, 0, 1, 1).getFormula(), "")
 
+        # check cancel button
+        self.ui_test.execute_modeless_dialog_through_command(".uno:DefineDBName")
+        xDefineNameDlg = self.xUITest.getTopFocusWindow()
+        xCancelBtn = xDefineNameDlg.getChild("cancel")
+        self.ui_test.close_dialog_through_button(xCancelBtn)
+
         self.ui_test.close_doc()
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
