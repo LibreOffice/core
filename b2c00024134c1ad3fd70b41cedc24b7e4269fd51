@@ -22,6 +22,23 @@
       "revId": "b2c00024134c1ad3fd70b41cedc24b7e4269fd51",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_212ce845",
+        "filename": "sc/qa/uitest/calc_tests/openDialogs.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-06-19T07:02:16Z",
+      "side": 1,
+      "message": "Just a random nitpicking remark:  It is hard to tell whether the above comment pertains to the preceding or the following line.  To aid understanding, I use the following subtle scheme:  If a comment precedes the commented code, make it into a sentence (starting with an uppercase letter) ending with a colon.  If a comment follows the commented code, indent it one level further than the code and make it into only part of a sentence (don\u0027t start it with an uppercase letter, except of course in cases like \"OK\" here).",
+      "revId": "b2c00024134c1ad3fd70b41cedc24b7e4269fd51",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
