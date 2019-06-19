@@ -34,7 +34,8 @@ protected:
     bool allowRemoteUrls;
 
 public:
-    explicit KDE5FilePicker(QFileDialog::FileMode);
+    explicit KDE5FilePicker(css::uno::Reference<css::uno::XComponentContext> const& context,
+                            QFileDialog::FileMode);
 
     // XExecutableDialog functions
     virtual sal_Int16 SAL_CALL execute() override;
