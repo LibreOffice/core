@@ -22,6 +22,30 @@
       "revId": "4a478227f5af8322164ecce66fd056e9bf2eac89",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff6b8bd7_fac7e944",
+        "filename": "vcl/inc/salgdi.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 603,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2019-06-19T22:28:58Z",
+      "side": 1,
+      "message": "AFAIK you need the explicit inline, as the compiler otherwise assumes there is a function in the compiled unit, due to the split. You can drop the inline, if you you add the implementation to the declaration by adding {}. As it turned out to be empty in the end. feel free to patch that.",
+      "parentUuid": "3fa0c359_2174e898",
+      "range": {
+        "startLine": 603,
+        "startChar": 12,
+        "endLine": 603,
+        "endChar": 18
+      },
+      "revId": "4a478227f5af8322164ecce66fd056e9bf2eac89",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
