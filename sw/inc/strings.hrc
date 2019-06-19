@@ -565,6 +565,7 @@
 #define STR_ACCESS_PAGE_DESC                    NC_("STR_ACCESS_PAGE_DESC", "Page: $(ARG1)")
 #define STR_ACCESS_ANNOTATION_AUTHOR_NAME       NC_("STR_ACCESS_ANNOTATION_AUTHOR_NAME", "Author")
 #define STR_ACCESS_ANNOTATION_DATE_NAME         NC_("STR_ACCESS_ANNOTATION_DATE_NAME", "Date")
+#define STR_ACCESS_ANNOTATION_RESOLVED_NAME     NC_("STR_ACCESS_ANNOTATION_RESOLVED_NAME", "Resolved")
 #define STR_ACCESS_ANNOTATION_BUTTON_NAME       NC_("STR_ACCESS_ANNOTATION_BUTTON_NAME", "Actions")
 #define STR_ACCESS_ANNOTATION_BUTTON_DESC       NC_("STR_ACCESS_ANNOTATION_BUTTON_DESC", "Activate this button to open a list of actions which can be performed on this comment and other comments")
 #define STR_ACCESS_PREVIEW_DOC_NAME             NC_("STR_ACCESS_PREVIEW_DOC_NAME", "Document preview")
