@@ -89,7 +89,6 @@ bool SvxCharView::KeyInput(const KeyEvent& rKEvt)
     switch (aCode.GetCode())
     {
         case KEY_SPACE:
-        case KEY_RETURN:
             InsertCharToDoc();
             bRet = true;
             break;
