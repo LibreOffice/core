@@ -147,6 +147,12 @@ void SwAnnotationWin::dispose()
     }
     mpMetadataAuthor.disposeAndClear();
 
+    if (mpMetadataResolved)
+    {
+        mpMetadataResolved->RemoveEventListener( LINK( this, SwAnnotationWin, WindowEventListener ) );
+    }
+    mpMetadataResolved.disposeAndClear();
+
     if (mpMetadataDate)
     {
         mpMetadataDate->RemoveEventListener( LINK( this, SwAnnotationWin, WindowEventListener ) );
@@ -215,6 +221,11 @@ void SwAnnotationWin::SetResolved(bool resolved)
 {
     static_cast<SwPostItField*>(mpFormatField->GetField())->SetResolved(resolved);
     mrSidebarItem.bShow = !IsResolved();
+
+    if(IsResolved())
+        mpMetadataResolved->Show();
+    else
+        mpMetadataResolved->Hide();
 
     mbResolvedStateUpdated = true;
     UpdateData();
