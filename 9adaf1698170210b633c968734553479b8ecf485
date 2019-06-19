@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "ff6b8bd7_9a1b4d72",
+        "filename": "vcl/qt5/Qt5FilePicker.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 268,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-06-19T14:41:57Z",
+      "side": 1,
+      "message": "QUrl::toEncoded is documented (at \u003chttps://doc.qt.io/qt-5/qurl.html#toEncoded\u003e) as: \"The user info, path and fragment are all converted to UTF-8\".  Together with the stated observation that \"QFileDialog [...] apparently always treats file-system pathnames as UTF-8--encoded\", that should imply that, for a pathname with valid UTF-8 bytes, aURL.toEncoded() will have those pathname bytes as payload.\n\nWhich leaves the question what aURL.toEncoded() would return for pathnames with invalid UTF-8 bytes.  That\u0027s where the second observation (\"pathnames containing byte sequences that are not valid UTF-8 are apparently filtered out\") comes in.\n\nAnd together, those two points imply \"so aURL will always have a \u0027payload\u0027 that matches the pathname\u0027s byte sequence.\"",
+      "parentUuid": "1f9dbf25_db3a33cc",
+      "revId": "9adaf1698170210b633c968734553479b8ecf485",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3fa0c359_ac18ef74",
         "filename": "vcl/qt5/Qt5FilePicker.cxx",
         "patchSetId": 2
