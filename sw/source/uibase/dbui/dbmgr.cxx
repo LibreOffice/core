@@ -1379,7 +1379,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                     INetURLObject aEntry( sPrefix );
                     sLeading = aEntry.GetBase();
                     aEntry.removeSegment();
-                    sPrefix = aEntry.GetMainURL( INetURLObject::DecodeMechanism::NONE );
+                    sPrefix = aEntry.GetMainURL( INetURLObject::DecodeMechanism::NO_DECODE );
                 }
 
                 OUString sExt(comphelper::string::stripStart(pStoreToFilter->GetDefaultExtension(), '*'));
