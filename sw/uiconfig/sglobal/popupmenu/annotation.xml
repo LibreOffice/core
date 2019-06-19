@@ -19,6 +19,7 @@
   </menu:menu>
   <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:ReplyComment"/>
+  <menu:menuitem menu:id=".uno:ResolveComment"/>
   <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:DeleteComment"/>
   <menu:menuitem menu:id=".uno:DeleteAuthor"/>
