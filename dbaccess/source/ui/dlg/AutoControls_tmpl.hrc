@@ -21,7 +21,6 @@
 
 
 
-
 #ifndef _DBAUI_AUTOCONTROLS_HRC_
 #define _DBAUI_AUTOCONTROLS_HRC_
 
@@ -92,7 +91,7 @@
          Size = MAP_APPFONT ( BUTTON_WIDTH , BUTTON_HEIGHT ) ;                                      \
           HelpId = AUTO_HID2;                                                                   \
         TabStop = TRUE ;                                                                            \
-         Text[ en-US ]  = "Browse";                                                                  \
+         Text[ en-US ]  = "Browse...";                                                                  \
     };
 
 // --------------------------------------------------------------------------------------------------
