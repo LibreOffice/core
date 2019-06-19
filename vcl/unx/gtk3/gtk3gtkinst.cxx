@@ -6867,7 +6867,14 @@ public:
     {
         GtkTreeViewColumn* pColumn = GTK_TREE_VIEW_COLUMN(g_list_nth_data(m_pColumns, nColumn));
         assert(pColumn && "wrong count");
-        return gtk_tree_view_column_get_width(pColumn);
+        int nWidth = gtk_tree_view_column_get_width(pColumn);
+        // https://github.com/exaile/exaile/issues/580
+        // after setting fixed_width on a column and requesting width before
+        // gtk has a chance to do its layout of the column means that the width
+        // request hasn't come into effect
+        if (!nWidth)
+            nWidth = gtk_tree_view_column_get_fixed_width(pColumn);
+        return nWidth;
     }
 
     virtual OUString get_column_title(int nColumn) const override
