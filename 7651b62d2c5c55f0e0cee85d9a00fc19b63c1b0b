@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df7087c5_99d91b24",
+        "filename": "configure.ac",
+        "patchSetId": 10
+      },
+      "lineNbr": 9938,
+      "author": {
+        "id": 1000130
+      },
+      "writtenOn": "2019-06-20T08:05:16Z",
+      "side": 1,
+      "message": "You didn\u0027t merge the lib part of my patch do this results in nothing and a empty QRCODEGEN_LIBS. sent a patch for a reason...",
+      "revId": "7651b62d2c5c55f0e0cee85d9a00fc19b63c1b0b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
