@@ -181,6 +181,9 @@ enum class ControlPart
 // hardcoded 2 pixel overlap between adjacent tabs
     TabsDrawRtl             = 3000,
 
+// Qt doesn't have a separate header to draw
+    TabPaneWithHeader       = 3001,
+
 // For themes that do not want to have the focus
 // rectangle part drawn by VCL but take care of the
 // whole inner control part by themselves
@@ -338,6 +341,29 @@ class VCL_DLLPUBLIC SliderValue : public ImplControlValue
         SliderValue(SliderValue &&) = default;
         SliderValue & operator =(SliderValue const &) = delete; // due to ImplControlValue
         SliderValue & operator =(SliderValue &&) = delete; // due to ImplControlValue
+};
+
+class VCL_DLLPUBLIC TabPaneValue : public ImplControlValue
+{
+public:
+    tools::Rectangle m_aTabHeaderRect;
+    tools::Rectangle m_aSelectedTabRect;
+    // increased tab size, so it'll overlab the frame rect when draing
+    // static value, as there is currently no sane way to return additional data
+    static int m_nOverlap;
+
+    TabPaneValue(const tools::Rectangle &rTabHeaderRect, const tools::Rectangle &rSelectedTabRect)
+        : ImplControlValue(ControlType::TabPane, 0)
+        , m_aTabHeaderRect(rTabHeaderRect)
+        , m_aSelectedTabRect(rSelectedTabRect)
+    {
+    }
+    TabPaneValue* clone() const override;
+
+    TabPaneValue(TabPaneValue const &) = default;
+    TabPaneValue(TabPaneValue &&) = default;
+    TabPaneValue & operator =(TabPaneValue const &) = delete;
+    TabPaneValue & operator =(TabPaneValue &&) = delete;
 };
 
 /* TabitemValue:
