@@ -1658,40 +1658,51 @@ void ScViewFunc::FillCrossDblClick()
 
     if ( nEndY < MAXROW )
     {
-        if ( nStartX > 0 )
+        const bool bDataLeft = (nStartX > 0);
+        if (bDataLeft || nEndX < MAXCOL)
         {
-            SCCOL nMovX = nStartX - 1;
+            // Check that there is
+            // 1) data immediately left (preferred) or right of start (row) of selection
+            // 2) data there below
+            // 3) no data immediately below selection
+
+            SCCOL nMovX = (bDataLeft ? nStartX - 1 : nEndX + 1);
             SCROW nMovY = nStartY;
-
-            if ( pDoc->HasData( nMovX, nStartY, nTab ) &&
-                 pDoc->HasData( nMovX, nStartY + 1, nTab ) )
+            bool bDataFound = (pDoc->HasData( nMovX, nStartY, nTab) && pDoc->HasData( nMovX, nStartY + 1, nTab));
+            if (!bDataFound && bDataLeft && nEndX < MAXCOL)
             {
-                pDoc->FindAreaPos( nMovX, nMovY, nTab, SC_MOVE_DOWN );
-
-                if ( nMovY > nEndY )
-                {
-                    FillAuto( FILL_TO_BOTTOM, nStartX, nStartY, nEndX, nEndY,
-                              nMovY - nEndY );
-                    return;
-                }
+                nMovX = nEndX + 1;  // check right
+                bDataFound = (pDoc->HasData( nMovX, nStartY, nTab) && pDoc->HasData( nMovX, nStartY + 1, nTab));
             }
-        }
 
-        if ( nEndX < MAXCOL )
-        {
-            SCCOL nMovX = nEndX + 1;
-            SCROW nMovY = nStartY;
-
-            if ( pDoc->HasData( nMovX, nStartY, nTab ) &&
-                 pDoc->HasData( nMovX, nStartY + 1, nTab ) )
+            if (bDataFound && pDoc->IsBlockEmpty( nTab, nStartX, nEndY + 1, nEndX, nEndY + 1, true))
             {
-                pDoc->FindAreaPos( nMovX, nMovY, nTab, SC_MOVE_DOWN );
-
-                if ( nMovY > nEndY )
+                // Get end of data left or right.
+                pDoc->FindAreaPos( nMovX, nMovY, nTab, SC_MOVE_DOWN);
+                // Find minimum end row of below empty area and data right.
+                for (SCCOL nX = nStartX; nX <= nEndX; ++nX)
                 {
-                    FillAuto( FILL_TO_BOTTOM, nStartX, nStartY, nEndX, nEndY,
-                              nMovY - nEndY );
-                    return;
+                    SCROW nY = nEndY + 1;
+                    // Get next row with data in this column.
+                    pDoc->FindAreaPos( nX, nY, nTab, SC_MOVE_DOWN);
+                    if (nMovY == MAXROW && nY == MAXROW)
+                    {
+                        // FindAreaPos() returns MAXROW also if there is no
+                        // data at all from the start, so check if that
+                        // contains data if the nearby (left or right) data
+                        // ends there and increment if no data here, pretending
+                        // the next data would be thereafter so nMovY will not
+                        // be decremented.
+                        if (!pDoc->HasData( nX, nY, nTab))
+                            ++nY;
+                    }
+                    if (nMovY > nY - 1)
+                        nMovY = nY - 1;
+                }
+
+                if (nMovY > nEndY)
+                {
+                    FillAuto( FILL_TO_BOTTOM, nStartX, nStartY, nEndX, nEndY, nMovY - nEndY);
                 }
             }
         }
