@@ -2352,7 +2352,7 @@ void ImpEditEngine::DoOnlineSpelling( ContentNode* pThisNodeOnly, bool bSpellAtC
                             {
                                 // convert to window coordinates ....
                                 aClipRect.SetPos( pView->pImpEditView->GetWindowPos( aClipRect.TopLeft() ) );
-                                pView->pImpEditView->GetWindow()->Invalidate(aClipRect);
+                                pView->pImpEditView->InvalidateAtWindow(aClipRect);
                             }
                         }
                     }
