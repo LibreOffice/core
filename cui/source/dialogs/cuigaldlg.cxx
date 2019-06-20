@@ -162,7 +162,7 @@ void SearchThread::ImplSearch( const INetURLObject& rStartURL,
                               != rFormats.end() ) ||
                             std::find( rFormats.begin(),
                                          rFormats.end(),
-                                         aFoundURL.GetExtension().toAsciiLowerCase() )
+                                         aFoundURL.GetFileExtension().toAsciiLowerCase())
                             != rFormats.end() )
                         {
                             SolarMutexGuard aGuard;

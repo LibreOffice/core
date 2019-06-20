@@ -50,7 +50,7 @@ RecentDocsViewItem::RecentDocsViewItem(sfx2::RecentDocsView &rView, const OUStri
         m_sHelpText = aURLObj.GetURLNoPass();
 
     if (aTitle.isEmpty())
-        aTitle = aURLObj.GetName(INetURLObject::DecodeMechanism::WithCharset);
+        aTitle = aURLObj.GetLastName(INetURLObject::DecodeMechanism::WithCharset);
 
     BitmapEx aThumbnail(rThumbnail);
     //fdo#74834: only load thumbnail if the corresponding option is not disabled in the configuration

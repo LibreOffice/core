@@ -51,7 +51,7 @@ static OUString createRelativeURL( const OUString& rFilterName, const OUString& 
         !rURL.startsWith("ftp:") )
     {
         INetURLObject aURL( rURL );
-        OUString aName( aURL.GetName() );
+        OUString aName(aURL.GetLastName());
         if( aName.isEmpty() )
         {
             sal_Int32 nPos = rURL.lastIndexOf( '/' );

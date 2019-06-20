@@ -72,7 +72,7 @@ void LockFileCommon::SetURL(const OUString& aURL)
 OUString LockFileCommon::GenerateOwnLockFileURL(const OUString& aOrigURL, const OUString& aPrefix)
 {
     INetURLObject aURL = ResolveLinks(INetURLObject(aOrigURL));
-    aURL.SetName(aPrefix + aURL.GetName() + "%23" /*'#'*/);
+    aURL.SetName(aPrefix + aURL.GetLastName() + "%23" /*'#'*/);
     return aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE);
 }
 
