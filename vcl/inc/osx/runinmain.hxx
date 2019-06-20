@@ -72,7 +72,7 @@ union RuninmainResult
         DBG_TESTSOLARMUTEX(); \
         SalYieldMutex *aMutex = static_cast<SalYieldMutex*>(instance->GetYieldMutex()); \
         { \
-            std::unique_lock<std::mutex> g(aMutex->m_runInMainMutex); \
+            std::scoped_lock<std::mutex> g(aMutex->m_runInMainMutex); \
             assert( !aMutex->m_aCodeBlock ); \
             aMutex->m_aCodeBlock = Block_copy(^{ \
                 command; \
@@ -98,7 +98,7 @@ union RuninmainResult
         DBG_TESTSOLARMUTEX(); \
         SalYieldMutex *aMutex = static_cast<SalYieldMutex*>(instance->GetYieldMutex()); \
         { \
-            std::unique_lock<std::mutex> g(aMutex->m_runInMainMutex); \
+            std::scoped_lock<std::mutex> g(aMutex->m_runInMainMutex); \
             assert( !aMutex->m_aCodeBlock ); \
             aMutex->m_aCodeBlock = Block_copy(^{ \
                 aMutex->m_aResult.pointer = static_cast<void*>( command ); \
@@ -124,7 +124,7 @@ union RuninmainResult
         DBG_TESTSOLARMUTEX(); \
         SalYieldMutex *aMutex = static_cast<SalYieldMutex*>(instance->GetYieldMutex()); \
         { \
-            std::unique_lock<std::mutex> g(aMutex->m_runInMainMutex); \
+            std::scoped_lock<std::mutex> g(aMutex->m_runInMainMutex); \
             assert( !aMutex->m_aCodeBlock ); \
             aMutex->m_aCodeBlock = Block_copy(^{ \
                 aMutex->m_aResult.member = command; \

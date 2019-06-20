@@ -82,7 +82,7 @@ private:
     }
 
     void notifyDone() {
-        std::unique_lock<std::mutex> g(m_mutex);
+        std::scoped_lock<std::mutex> g(m_mutex);
         m_bDone = true;
         m_cond.notify_all();
     }

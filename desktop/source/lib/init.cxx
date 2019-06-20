@@ -1434,7 +1434,7 @@ void CallbackFlushHandler::Invoke()
 
     if (m_pCallback && !m_bEventLatch)
     {
-        std::unique_lock<std::mutex> lock(m_mutex);
+        std::scoped_lock<std::mutex> lock(m_mutex);
 
         SAL_INFO("lok", "Flushing " << m_queue.size() << " elements.");
         for (const auto& rCallbackData : m_queue)
