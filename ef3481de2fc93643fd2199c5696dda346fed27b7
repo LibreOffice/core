@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df7087c5_5cc61119",
+        "filename": "xmloff/source/token/tokens.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 3114,
+      "author": {
+        "id": 1002156
+      },
+      "writtenOn": "2019-06-20T18:12:49Z",
+      "side": 1,
+      "message": "This is not part of the OpenDocument format and cannot be used as is.",
+      "range": {
+        "startLine": 3114,
+        "startChar": 0,
+        "endLine": 3114,
+        "endChar": 8
+      },
+      "revId": "ef3481de2fc93643fd2199c5696dda346fed27b7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
