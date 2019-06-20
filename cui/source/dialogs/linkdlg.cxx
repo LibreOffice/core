@@ -303,7 +303,7 @@ IMPL_LINK_NOARG(SvBaseLinksDlg, ChangeSourceClickHdl, weld::Button&, void)
             if(aUrl.GetProtocol() == INetProtocol::File)
             {
                 OUString sOldPath(aUrl.PathToFileName());
-                sal_Int32 nLen = aUrl.GetName().getLength();
+                sal_Int32 nLen = aUrl.GetLastName().getLength();
                 sOldPath = sOldPath.copy(0, sOldPath.getLength() - nLen);
                 xFolderPicker->setDisplayDirectory(sOldPath);
             }

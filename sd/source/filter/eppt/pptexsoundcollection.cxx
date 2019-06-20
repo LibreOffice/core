@@ -51,13 +51,13 @@ ExSoundEntry::ExSoundEntry(const OUString& rString)
 OUString ExSoundEntry::ImplGetName() const
 {
     INetURLObject aTmp( aSoundURL );
-    return aTmp.GetName();
+    return aTmp.GetLastName();
 }
 
 OUString ExSoundEntry::ImplGetExtension() const
 {
     INetURLObject aTmp( aSoundURL );
-    OUString aExtension( aTmp.GetExtension() );
+    OUString aExtension(aTmp.GetFileExtension());
     if ( !aExtension.isEmpty() )
     {
         aExtension = "." + aExtension;
