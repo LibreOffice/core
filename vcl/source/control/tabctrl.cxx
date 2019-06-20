@@ -865,6 +865,7 @@ void TabControl::ImplDrawItem(vcl::RenderContext& rRenderContext, ImplTabItem co
             tiValue.mnAlignment |= TabitemFlags::LastInGroup;
 
         tools::Rectangle aCtrlRegion( pItem->maRect );
+        aCtrlRegion.AdjustBottom(TabPaneValue::m_nOverlap);
         bNativeOK = rRenderContext.DrawNativeControl(ControlType::TabItem, ControlPart::Entire,
                                                      aCtrlRegion, nState, tiValue, OUString() );
     }
@@ -1098,7 +1099,22 @@ void TabControl::Paint( vcl::RenderContext& rRenderContext, const tools::Rectang
 
     if (rRenderContext.IsNativeControlSupported(ControlType::TabPane, ControlPart::Entire))
     {
-        const ImplControlValue aControlValue;
+        const bool bPaneWithHeader = rRenderContext.IsNativeControlSupported(ControlType::TabPane, ControlPart::TabPaneWithHeader);
+        tools::Rectangle aHeaderRect(aRect.Left(), 0, aRect.Right(), aRect.Top());
+        if (bPaneWithHeader)
+        {
+            aRect.SetTop(0);
+            if (mpTabCtrlData->maItemList.size())
+            {
+                long nRight = 0;
+                for (auto &item : mpTabCtrlData->maItemList)
+                    if (item.m_bVisible)
+                        nRight = item.maRect.Right();
+                assert(nRight);
+                aHeaderRect.SetRight(nRight);
+            }
+        }
+        const TabPaneValue aTabPaneValue(aHeaderRect, pCurItem ? pCurItem->maRect : tools::Rectangle());
 
         ControlState nState = ControlState::ENABLED;
         if (!IsEnabled())
@@ -1108,15 +1124,12 @@ void TabControl::Paint( vcl::RenderContext& rRenderContext, const tools::Rectang
 
         if (lcl_canPaint(rRenderContext, rRect, aRect))
             rRenderContext.DrawNativeControl(ControlType::TabPane, ControlPart::Entire,
-                                             aRect, nState, aControlValue, OUString());
+                                             aRect, nState, aTabPaneValue, OUString());
 
-        if (rRenderContext.IsNativeControlSupported(ControlType::TabHeader, ControlPart::Entire))
-        {
-            tools::Rectangle aHeaderRect(aRect.Left(), 0, aRect.Right(), aRect.Top());
-            if (lcl_canPaint(rRenderContext, rRect, aHeaderRect))
-                rRenderContext.DrawNativeControl(ControlType::TabHeader, ControlPart::Entire,
-                                                 aHeaderRect, nState, aControlValue, OUString());
-        }
+        if (!bPaneWithHeader && rRenderContext.IsNativeControlSupported(ControlType::TabHeader, ControlPart::Entire)
+                && lcl_canPaint(rRenderContext, rRect, aHeaderRect))
+            rRenderContext.DrawNativeControl(ControlType::TabHeader, ControlPart::Entire,
+                                             aHeaderRect, nState, aTabPaneValue, OUString());
     }
     else
     {
