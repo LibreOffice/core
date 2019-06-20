@@ -593,6 +593,9 @@ public:
 
     static void convertLineInfoToExtLineInfo( const LineInfo& rIn, PDFWriter::ExtLineInfo& rOut );
 
+protected:
+    void DrawHatchLine_DrawLine(const Point& rStartPoint, const Point& rEndPoint) override;
+
 private:
     MapMode                             m_aMapMode; // PDFWriterImpl scaled units
     std::vector< PDFPage >              m_aPages;
