@@ -172,8 +172,6 @@ private:
 
     css::uno::Reference< css::beans::XPropertySet>  createColumnById(sal_Int32 nTypeId) const;
 
-    static OGridColumn* getColumnImplementation(const css::uno::Reference<css::uno::XInterface>& _rxIFace);
-
     virtual ElementDescription* createElementMetaData( ) override;
 
     virtual void implRemoved(const css::uno::Reference<css::uno::XInterface>& _rxObject) override;

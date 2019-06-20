@@ -30,6 +30,7 @@
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <comphelper/basicio.hxx>
 #include <comphelper/property.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <comphelper/types.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <vcl/unohelp.hxx>
@@ -688,15 +689,6 @@ Any OGridControlModel::getPropertyDefaultByHandle( sal_Int32 nHandle ) const
     return aReturn;
 }
 
-OGridColumn* OGridControlModel::getColumnImplementation(const css::uno::Reference<css::uno::XInterface>& _rxIFace)
-{
-    OGridColumn* pImplementation = nullptr;
-    Reference< XUnoTunnel > xUnoTunnel( _rxIFace, UNO_QUERY );
-    if ( xUnoTunnel.is() )
-        pImplementation = reinterpret_cast<OGridColumn*>(xUnoTunnel->getSomething(OGridColumn::getUnoTunnelImplementationId()));
-    return pImplementation;
-}
-
 void OGridControlModel::gotColumn( const Reference< XInterface >& _rxColumn )
 {
     Reference< XSQLErrorBroadcaster > xBroadcaster( _rxColumn, UNO_QUERY );
@@ -753,7 +745,7 @@ ElementDescription* OGridControlModel::createElementMetaData( )
 
 void OGridControlModel::approveNewElement( const Reference< XPropertySet >& _rxObject, ElementDescription* _pElement )
 {
-    OGridColumn* pCol = getColumnImplementation( _rxObject );
+    OGridColumn* pCol = comphelper::getUnoTunnelImplementation<OGridColumn>( _rxObject );
     if ( !pCol )
         throw IllegalArgumentException();
     OInterfaceContainer::approveNewElement( _rxObject, _pElement );
@@ -777,7 +769,7 @@ void OGridControlModel::write(const Reference<XObjectOutputStream>& _rxOutStream
     for (sal_Int32 i = 0; i < nLen; i++)
     {
         // first the service name for the underlying model
-        OGridColumn* pCol = getColumnImplementation(m_aItems[i]);
+        OGridColumn* pCol = comphelper::getUnoTunnelImplementation<OGridColumn>(m_aItems[i]);
         DBG_ASSERT(pCol != nullptr, "OGridControlModel::write : such items should never reach it into my container !");
         _rxOutStream << pCol->getModelName();
         // then the object itself
@@ -881,7 +873,7 @@ void OGridControlModel::read(const Reference<XObjectInputStream>& _rxInStream)
                 sal_Int32 nMark = xMark->createMark();
                 if (xCol.is())
                 {
-                    OGridColumn* pCol = getColumnImplementation(xCol);
+                    OGridColumn* pCol = comphelper::getUnoTunnelImplementation<OGridColumn>(xCol);
                     pCol->read(_rxInStream);
                 }
                 xMark->jumpToMark(nMark);
