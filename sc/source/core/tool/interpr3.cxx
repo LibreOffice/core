@@ -5360,8 +5360,12 @@ ScMatrixRef ScFFT::Compute(std::function<ScMatrixGenerator>& rMatGenFunc)
     SCSIZE nPoints = mbReal ? aArray.size() : (aArray.size()/2);
     if (nPoints == 1)
     {
-        mpInputMat->Resize(2, 1, 0.0);
-        return mpInputMat;
+        std::vector<double> aOutArray(2);
+        aOutArray[0] = aArray[0];
+        aOutArray[1] = mbReal ? 0.0 : aArray[1];
+        if (mbPolar)
+            lcl_convertToPolar(aOutArray, mfMinMag);
+        return rMatGenFunc(2, 1, aOutArray);
     }
 
     if (mbReal && (nPoints % 2) == 0)
