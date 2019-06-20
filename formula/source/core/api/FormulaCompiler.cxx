@@ -535,8 +535,8 @@ uno::Sequence< sheet::FormulaOpCodeMapEntry > FormulaCompiler::OpCodeMap::create
                 {
                     // AND and OR in fact are functions but for legacy reasons
                     // are sorted into binary operators for compiler interna.
-                    case SC_OPCODE_AND :
-                    case SC_OPCODE_OR :
+                    case ocAnd :
+                    case ocOr :
                         break;   // nothing,
                     default:
                         lclPushOpCodeMapEntry( aVec, mpTable.get(), nOp );
@@ -553,12 +553,14 @@ uno::Sequence< sheet::FormulaOpCodeMapEntry > FormulaCompiler::OpCodeMap::create
                     ::std::min< sal_uInt16 >( SC_OPCODE_STOP_1_PAR, mnSymbols ) );
             // Additional functions not within range of functions.
             static const sal_uInt16 aOpCodes[] = {
-                SC_OPCODE_IF,
-                SC_OPCODE_IF_ERROR,
-                SC_OPCODE_IF_NA,
-                SC_OPCODE_CHOOSE,
-                SC_OPCODE_AND,
-                SC_OPCODE_OR
+                ocIf,
+                ocIfError,
+                ocIfNA,
+                ocChoose,
+                ocIfs_MS,
+                ocSwitch_MS,
+                ocAnd,
+                ocOr
             };
             lclPushOpCodeMapEntries( aVec, mpTable.get(), aOpCodes, SAL_N_ELEMENTS(aOpCodes) );
             // functions with 2 or more parameters.
@@ -714,7 +716,9 @@ FormulaCompiler::FormulaCompiler( FormulaTokenArray& rArr, bool bComputeII, bool
         mbJumpCommandReorder(true),
         mbStopOnError(true),
         mbComputeII(bComputeII),
-        mbMatrixFlag(bMatrixFlag)
+        mbMatrixFlag(bMatrixFlag),
+        mbIsIfs(false),
+        mnArgCounter(0)
 {
 }
 
@@ -739,7 +743,9 @@ FormulaCompiler::FormulaCompiler(bool bComputeII, bool bMatrixFlag)
         mbJumpCommandReorder(true),
         mbStopOnError(true),
         mbComputeII(bComputeII),
-        mbMatrixFlag(bMatrixFlag)
+        mbMatrixFlag(bMatrixFlag),
+        mbIsIfs(false),
+        mnArgCounter(0)
 {
 }
 
@@ -1006,10 +1012,12 @@ bool FormulaCompiler::IsOpCodeJumpCommand( OpCode eOp )
 {
     switch (eOp)
     {
+        case ocIfs_MS:
         case ocIf:
         case ocIfError:
         case ocIfNA:
         case ocChoose:
+        case ocSwitch_MS:
             return true;
         default:
             ;
@@ -1352,7 +1360,6 @@ bool FormulaCompiler::GetToken()
 }
 
 
-// RPN creation by recursion
 void FormulaCompiler::Factor()
 {
     if (pArr->GetCodeError() != FormulaError::NONE && mbStopOnError)
@@ -1361,6 +1368,17 @@ void FormulaCompiler::Factor()
     CurrentFactor pFacToken( this );
 
     OpCode eOp = mpToken->GetOpCode();
+    SAL_WARN_IF( true, "FormulaCompiler::Factor()", ": " << __LINE__ << " new call; mbIsIfs=" <<
+                 mbIsIfs << ", mnArgCntr=" << mnArgCounter << ", eop = " << eOp );
+    if (eOp == ocIfs_MS || eOp == ocSwitch_MS )
+    {
+        mbIsIfs = true;
+        mnArgCounter = 0;
+        mnIfInserts = 0;
+    }
+    else if ( mbIsIfs )
+        mnArgCounter++;
+
     if (eOp == ocPush || eOp == ocColRowNameAuto || eOp == ocMatRef || eOp == ocDBArea
         || eOp == ocTableRef
         || (!mbJumpCommandReorder && ((eOp == ocName) || (eOp == ocColRowName) || (eOp == ocBad)))
@@ -1552,7 +1570,9 @@ void FormulaCompiler::Factor()
                     // Current index is nSepPos+3 if expression stops, or
                     // nSepPos+4 if expression continues after the call because
                     // we just called NextToken() to move away from it.
-                    if (pc >= 2 && (maArrIterator.GetIndex() == nSepPos + 3 || maArrIterator.GetIndex() == nSepPos + 4) &&
+                    if (pc >= 2 &&
+                            (maArrIterator.GetIndex() == nSepPos + 3 ||
+                             maArrIterator.GetIndex() == nSepPos + 4) &&
                             pArr->TokenAt(nSepPos+1)->GetType() == svDouble &&
                             pArr->TokenAt(nSepPos+1)->GetDouble() != 1.0 &&
                             pArr->TokenAt(nSepPos+2)->GetOpCode() == ocClose &&
@@ -1700,6 +1720,10 @@ void FormulaCompiler::Factor()
                 case ocIfNA:
                     pFacToken->GetJump()[ 0 ] = 2;  // if, behind
                     break;
+                case ocIfs_MS:
+                case ocSwitch_MS:
+                    pFacToken->GetJump()[ 0 ] = FORMULA_MAXJUMPCOUNT_MS + 1;
+                    break;
                 default:
                     SAL_WARN("formula.core","Jump OpCode: " << +eOp);
                     assert(!"FormulaCompiler::Factor: someone forgot to add a jump count case");
@@ -1713,7 +1737,16 @@ void FormulaCompiler::Factor()
             }
             else
                 SetError( FormulaError::PairExpected);
-            PutCode( pFacToken );
+            if ( mbIsIfs )
+            {
+                SAL_WARN_IF( true, "FormulaCompiler::Factor()", ": opcode should be ocIf (6)" );
+                FormulaTokenRef pIf( new FormulaByteToken( ocIf));
+                PutCode( pIf );
+            }
+            else
+            {
+                PutCode( pFacToken );
+            }
             // During AutoCorrect (since pArr->GetCodeError() is
             // ignored) an unlimited ocIf would crash because
             // ScRawToken::Clone() allocates the JumpBuffer according to
@@ -1732,6 +1765,10 @@ void FormulaCompiler::Factor()
                 case ocIfNA:
                     nJumpMax = 2;
                     break;
+                case ocIfs_MS:
+                case ocSwitch_MS:
+                    nJumpMax = FORMULA_MAXJUMPCOUNT_MS;
+                    break;
                 default:
                     nJumpMax = 0;
                     SAL_WARN("formula.core","Jump OpCode: " << +eFacOpCode);
@@ -1747,7 +1784,17 @@ void FormulaCompiler::Factor()
                 CheckSetForceArrayParameter( mpToken, nJumpCount - 1);
                 eOp = Expression();
                 // ocSep or ocClose terminate the subexpression
-                PutCode( mpToken );
+                if ( mbIsIfs && mnArgCounter % 2 != 0 )
+                {
+                    SAL_WARN_IF( true, "FormulaCompiler::Factor()", ": insert opcode ocIf (6)" );
+                    FormulaTokenRef pIf( new FormulaByteToken( ocIf));
+                    PutCode( pIf );
+                    ++mnIfInserts;
+                }
+                else
+                {
+                    PutCode( mpToken );
+                }
             }
             if (eOp != ocClose)
                 SetError( FormulaError::PairExpected);
@@ -1771,6 +1818,10 @@ void FormulaCompiler::Factor()
                     case ocIfNA:
                         bLimitOk = (nJumpCount <= 2);
                         break;
+                    case ocIfs_MS:
+                    case ocSwitch_MS:
+                        bLimitOk = (nJumpCount < FORMULA_MAXJUMPCOUNT_MS);
+                        break;
                     default:
                         bLimitOk = false;
                         SAL_WARN("formula.core","Jump OpCode: " << +eFacOpCode);
@@ -1780,6 +1831,14 @@ void FormulaCompiler::Factor()
                     pFacToken->GetJump()[ 0 ] = nJumpCount;
                 else
                     SetError( FormulaError::IllegalParameter);
+                if ( pArr->GetCodeError() == FormulaError::NONE  )
+                {
+                    SAL_WARN_IF( true, "FormulaCompiler::Factor()",
+                                 ": opcode occlose inserted (" << mnIfInserts << ") times" );
+                    FormulaTokenRef pClose( new FormulaByteToken( ocClose ) );
+                    for ( int i = 0; i < mnIfInserts; i++ )
+                        PutCode( pClose );
+                }
             }
         }
         else if ( eOp == ocMissing )
@@ -2141,7 +2200,20 @@ bool FormulaCompiler::CompileTokenArray()
     }
     if( nNumFmt == SvNumFormatType::UNDEFINED )
         nNumFmt = SvNumFormatType::NUMBER;
+
+    for ( int i = 0; i < pArr->GetLen(); i++ )
+        SAL_WARN_IF( true, "FormulaCompiler::CompileTokenArray()", " end, array opcode[" <<
+                     i << "] = " << pArr->GetArray()[i]->GetOpCode() );
+    for ( int i = 0; i < pArr->GetCodeLen(); i++ )
+        SAL_WARN_IF( true, "FormulaCompiler::CompileTokenArray()", " end, RPN opcode[" <<
+                     i << "] = " << pArr->GetCode()[i]->GetOpCode() );
+
     return glSubTotal;
+}
+
+void FormulaCompiler::CheckConvertIfsFormula()
+{
+    return;
 }
 
 void FormulaCompiler::PopTokenArray()
@@ -2213,7 +2285,9 @@ void FormulaCompiler::CreateStringFromTokenArray( OUStringBuffer& rBuffer )
         rBuffer.append( '=');
     const FormulaToken* t = maArrIterator.First();
     while( t )
+    {
         t = CreateStringFromToken( rBuffer, t, true );
+    }
 
     if (pSaveArr != pArr)
     {

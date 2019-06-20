@@ -962,12 +962,14 @@ inline bool MissingConventionODF::isRewriteNeeded( OpCode eOp ) const
 {
     switch (eOp)
     {
+        case ocIfs_MS:
         case ocGammaDist:
         case ocPoissonDist:
         case ocAddress:
         case ocLogInv:
         case ocLogNormDist:
         case ocNormDist:
+        case ocSwitch_MS:
             return true;
         case ocMissing:
         case ocLog:
@@ -991,6 +993,7 @@ inline bool MissingConventionOOXML::isRewriteNeeded( OpCode eOp )
 {
     switch (eOp)
     {
+        case ocIfs_MS:
         case ocIf:
 
         case ocExternal:
@@ -1016,6 +1019,7 @@ inline bool MissingConventionOOXML::isRewriteNeeded( OpCode eOp )
 
         case ocDBCount:
         case ocDBCount2:
+        case ocSwitch_MS:
             return true;
 
         default:
@@ -1452,7 +1456,9 @@ FormulaTokenArray * FormulaTokenArray::RewriteMissing( const MissingConvention &
                 pNewArr->Add( pToken );
             }
             else
+            {
                 pNewArr->AddToken( *pCur );
+            }
         }
     }
 
@@ -1515,6 +1521,14 @@ FormulaToken* FormulaTokenArray::AddOpCode( OpCode eOp )
                     nJump[ 0 ] = FORMULA_MAXJUMPCOUNT + 1;
                 else
                     nJump[ 0 ] = 2;
+                pRet = new FormulaJumpToken( eOp, nJump );
+            }
+            break;
+        case ocIfs_MS:
+        case ocSwitch_MS:
+            {
+                short nJump[FORMULA_MAXJUMPCOUNT_MS + 1];
+                nJump[ 0 ] = FORMULA_MAXJUMPCOUNT_MS + 1;
                 pRet = new FormulaJumpToken( eOp, nJump );
             }
             break;

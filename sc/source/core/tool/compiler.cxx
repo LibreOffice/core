@@ -4440,6 +4440,7 @@ std::unique_ptr<ScTokenArray> ScCompiler::CompileString( const OUString& rFormul
         aCorrectedSymbol.clear();
     }
     sal_uInt8 nForced = 0;   // ==formula forces recalc even if cell is not visible
+// TODO : waarom staat onderstaande if-statement dubbel?
     if( nSrcPos < aFormula.getLength() && aFormula[nSrcPos] == '=' )
     {
         nSrcPos++;

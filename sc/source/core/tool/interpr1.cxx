@@ -86,6 +86,12 @@ using ::std::unique_ptr;
 void ScInterpreter::ScIfJump()
 {
     const short* pJump = pCur->GetJump();
+    if ( !pJump )
+    {
+        SetError( FormulaError::UnknownStackVariable );
+        assert(!"ScInterpreter::ScIfJump(), pCur->getJump() returns 0x0 !!!" );
+        return;
+    }
     short nJumpCount = pJump[ 0 ];
     MatrixJumpConditionToMatrix();
     switch ( GetStackType() )

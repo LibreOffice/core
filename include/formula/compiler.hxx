@@ -32,34 +32,36 @@
 #define SC_OPCODE_IF                  6     /* jump commands */
 #define SC_OPCODE_IF_ERROR            7
 #define SC_OPCODE_IF_NA               8
-#define SC_OPCODE_CHOOSE              9
-#define SC_OPCODE_OPEN               10     /* parentheses and separators */
-#define SC_OPCODE_CLOSE              11
-#define SC_OPCODE_SEP                12
-#define SC_OPCODE_MISSING            13     /* special OpCodes */
-#define SC_OPCODE_BAD                14
-#define SC_OPCODE_STRINGXML          15
-#define SC_OPCODE_SPACES             16
-#define SC_OPCODE_MAT_REF            17
-#define SC_OPCODE_DB_AREA            18     /* additional access operators */
-#define SC_OPCODE_TABLE_REF          19
-#define SC_OPCODE_MACRO              20
-#define SC_OPCODE_COL_ROW_NAME       21
-#define SC_OPCODE_COL_ROW_NAME_AUTO  22
-#define SC_OPCODE_PERCENT_SIGN       23     /* operator _follows_ value */
-#define SC_OPCODE_ARRAY_OPEN         24
-#define SC_OPCODE_ARRAY_CLOSE        25
-#define SC_OPCODE_ARRAY_ROW_SEP      26
-#define SC_OPCODE_ARRAY_COL_SEP      27     /* some convs use sep != col_sep */
-#define SC_OPCODE_TABLE_REF_OPEN     28
-#define SC_OPCODE_TABLE_REF_CLOSE    29
-#define SC_OPCODE_TABLE_REF_ITEM_ALL      30
-#define SC_OPCODE_TABLE_REF_ITEM_HEADERS  31
-#define SC_OPCODE_TABLE_REF_ITEM_DATA     32
-#define SC_OPCODE_TABLE_REF_ITEM_TOTALS   33
-#define SC_OPCODE_TABLE_REF_ITEM_THIS_ROW 34
-#define SC_OPCODE_STOP_DIV           35
-#define SC_OPCODE_SKIP               36     /* used to skip raw tokens during string compilation */
+#define SC_OPCODE_IFS_MS              9
+#define SC_OPCODE_SWITCH_MS          10
+#define SC_OPCODE_CHOOSE             11
+#define SC_OPCODE_OPEN               12     /* parentheses and separators */
+#define SC_OPCODE_CLOSE              13
+#define SC_OPCODE_SEP                14
+#define SC_OPCODE_MISSING            15     /* special OpCodes */
+#define SC_OPCODE_BAD                16
+#define SC_OPCODE_STRINGXML          17
+#define SC_OPCODE_SPACES             18
+#define SC_OPCODE_MAT_REF            19
+#define SC_OPCODE_DB_AREA            20     /* additional access operators */
+#define SC_OPCODE_TABLE_REF          21
+#define SC_OPCODE_MACRO              22
+#define SC_OPCODE_COL_ROW_NAME       23
+#define SC_OPCODE_COL_ROW_NAME_AUTO  24
+#define SC_OPCODE_PERCENT_SIGN       25     /* operator _follows_ value */
+#define SC_OPCODE_ARRAY_OPEN         26
+#define SC_OPCODE_ARRAY_CLOSE        27
+#define SC_OPCODE_ARRAY_ROW_SEP      28
+#define SC_OPCODE_ARRAY_COL_SEP      29     /* some convs use sep != col_sep */
+#define SC_OPCODE_TABLE_REF_OPEN     30
+#define SC_OPCODE_TABLE_REF_CLOSE    31
+#define SC_OPCODE_TABLE_REF_ITEM_ALL      32
+#define SC_OPCODE_TABLE_REF_ITEM_HEADERS  33
+#define SC_OPCODE_TABLE_REF_ITEM_DATA     34
+#define SC_OPCODE_TABLE_REF_ITEM_TOTALS   35
+#define SC_OPCODE_TABLE_REF_ITEM_THIS_ROW 36
+#define SC_OPCODE_STOP_DIV           37
+#define SC_OPCODE_SKIP               38     /* used to skip raw tokens during string compilation */
 
 /*** error constants #... ***/
 #define SC_OPCODE_START_ERRORS       40
@@ -497,17 +499,15 @@
 #define SC_OPCODE_FORECAST_LIN      486
 #define SC_OPCODE_CONCAT_MS         487
 #define SC_OPCODE_TEXTJOIN_MS       488
-#define SC_OPCODE_IFS_MS            489
-#define SC_OPCODE_SWITCH_MS         490
-#define SC_OPCODE_MINIFS_MS         491
-#define SC_OPCODE_MAXIFS_MS         492
-#define SC_OPCODE_ROUNDSIG          493
-#define SC_OPCODE_REPLACEB          494
-#define SC_OPCODE_FINDB             495
-#define SC_OPCODE_SEARCHB           496
-#define SC_OPCODE_REGEX             497
-#define SC_OPCODE_FOURIER           498
-#define SC_OPCODE_STOP_2_PAR        499     /* last function with two or more parameters' OpCode + 1 */
+#define SC_OPCODE_MINIFS_MS         489
+#define SC_OPCODE_MAXIFS_MS         490
+#define SC_OPCODE_ROUNDSIG          491
+#define SC_OPCODE_REPLACEB          492
+#define SC_OPCODE_FINDB             493
+#define SC_OPCODE_SEARCHB           494
+#define SC_OPCODE_REGEX             495
+#define SC_OPCODE_FOURIER           496
+#define SC_OPCODE_STOP_2_PAR        497     /* last function with two or more parameters' OpCode + 1 */
 
 #define SC_OPCODE_STOP_FUNCTION     SC_OPCODE_STOP_2_PAR            /* last function's OpCode + 1 */
 #define SC_OPCODE_LAST_OPCODE_ID    (SC_OPCODE_STOP_FUNCTION - 1)   /* last OpCode */

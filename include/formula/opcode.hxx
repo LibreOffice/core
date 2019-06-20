@@ -38,6 +38,8 @@ enum OpCode : sal_uInt16
         ocIfError           = SC_OPCODE_IF_ERROR,
         ocIfNA              = SC_OPCODE_IF_NA,
         ocChoose            = SC_OPCODE_CHOOSE,
+        ocIfs_MS            = SC_OPCODE_IFS_MS,
+        ocSwitch_MS         = SC_OPCODE_SWITCH_MS,
     // Parentheses and separators
         ocOpen              = SC_OPCODE_OPEN,
         ocClose             = SC_OPCODE_CLOSE,
@@ -283,8 +285,6 @@ enum OpCode : sal_uInt16
         ocNominal           = SC_OPCODE_NOMINAL,
         ocSubTotal          = SC_OPCODE_SUB_TOTAL,
         ocRawSubtract       = SC_OPCODE_RAWSUBTRACT,
-        ocIfs_MS            = SC_OPCODE_IFS_MS,
-        ocSwitch_MS         = SC_OPCODE_SWITCH_MS,
         ocMinIfs_MS         = SC_OPCODE_MINIFS_MS,
         ocMaxIfs_MS         = SC_OPCODE_MAXIFS_MS,
         ocRoundSig          = SC_OPCODE_ROUNDSIG,

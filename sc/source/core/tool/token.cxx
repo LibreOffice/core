@@ -227,6 +227,11 @@ void ScRawToken::SetOpCode( OpCode e )
             eType = svJump;
             nJump[ 0 ] = FORMULA_MAXJUMPCOUNT + 1;
             break;
+        case ocIfs_MS:
+        case ocSwitch_MS:
+            eType = svJump;
+            nJump[ 0 ] = FORMULA_MAXJUMPCOUNT_MS + 1;
+            break;
         case ocMissing:
             eType = svMissing;
             break;
@@ -1664,10 +1669,12 @@ void ScTokenArray::CheckToken( const FormulaToken& r )
             case ocErrNum:
             case ocErrNA:
             break;
+            case ocIfs_MS:
             case ocIf:
             case ocIfError:
             case ocIfNA:
             case ocChoose:
+            case ocSwitch_MS:
                 // Jump commands are now supported.
             break;
         }

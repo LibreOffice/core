@@ -36,10 +36,11 @@
 #include <sal/types.h>
 #include <tools/debug.hxx>
 
-#define FORMULA_MAXJUMPCOUNT    32  /* maximum number of jumps (ocChoose) */
-#define FORMULA_MAXTOKENS     8192  /* maximum number of tokens in formula */
-#define FORMULA_MAXPARAMS      255  /* maximum number of parameters per function (byte) */
-#define FORMULA_MAXPARAMSII      8  /* maximum number of parameters for functions that have implicit intersection ranges */
+#define FORMULA_MAXJUMPCOUNT     32  /* maximum number of jumps (ocChoose) */
+#define FORMULA_MAXJUMPCOUNT_MS 254  /* maximum number of jumps (ocIfs_MS and ocSwitch_MS) */
+#define FORMULA_MAXTOKENS      8192  /* maximum number of tokens in formula */
+#define FORMULA_MAXPARAMS       255  /* maximum number of parameters per function (byte) */
+#define FORMULA_MAXPARAMSII       8  /* maximum number of parameters for functions that have implicit intersection ranges */
 
 
 namespace com { namespace sun { namespace star {
@@ -324,6 +325,7 @@ protected:
     OpCode Expression();
     void PopTokenArray();
     void PushTokenArray( FormulaTokenArray*, bool );
+    void CheckConvertIfsFormula();
 
     bool MergeRangeReference( FormulaToken * * const pCode1, FormulaToken * const * const pCode2 );
 
@@ -367,6 +369,10 @@ protected:
 
     bool mbComputeII;  // whether to attempt computing implicit intersection ranges while building the RPN array.
     bool mbMatrixFlag; // whether the formula is a matrix formula (needed for II computation)
+
+    bool mbIsIfs;
+    int  mnArgCounter;
+    int  mnIfInserts;
 
 private:
     void InitSymbolsNative() const;    /// only SymbolsNative, on first document creation
