@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df7087c5_dc0c6144",
+        "filename": "sw/source/uibase/docvw/AnnotationWin.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 253,
+      "author": {
+        "id": 1000447
+      },
+      "writtenOn": "2019-06-20T21:18:53Z",
+      "side": 1,
+      "message": "The meaning of the variable is not clear to me. Its identifier sounds like \"\u0027Resolved\u0027 state has been updated\". But from line #280, that cannot be.",
+      "range": {
+        "startLine": 253,
+        "startChar": 37,
+        "endLine": 253,
+        "endChar": 59
+      },
+      "revId": "f05e6206a758c1b79c6b75a87dbf8966a89dc2d2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
