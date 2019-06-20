@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df7087c5_bc696d8c",
+        "filename": "configure.ac",
+        "patchSetId": 12
+      },
+      "lineNbr": 9947,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-06-20T14:08:52Z",
+      "side": 1,
+      "message": "remove the \"lib\", just \"-lqrcodegen\" should work...\n\n(yes i have a workdir/LinkTarget/StaticLibrary/liblibpng.a ...)",
+      "revId": "eb22c93cb6e9aced8e0888aa07cf12b5d945e31d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
