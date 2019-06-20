@@ -622,6 +622,17 @@ WinSalGraphics::WinSalGraphics(WinSalGraphics::Type eType, bool bScreen, HWND hW
         mpImpl.reset(new WinOpenGLSalGraphicsImpl(*this, pProvider));
     else
         mpImpl.reset(new WinSalGraphicsImpl(*this));
+
+    HRESULT hr = S_OK;
+    hr = DWriteCreateFactory(DWRITE_FACTORY_TYPE_SHARED, __uuidof(IDWriteFactory), reinterpret_cast<IUnknown**>(&mpDWriteFactory));
+    if (SUCCEEDED(hr))
+    {
+        hr = mpDWriteFactory->GetGdiInterop(&mpDWriteGdiInterop);
+        if (FAILED(hr))
+            mpDWriteGdiInterop = nullptr;
+    }
+    else
+        mpDWriteFactory = nullptr;
 }
 
 WinSalGraphics::~WinSalGraphics()
@@ -637,6 +648,11 @@ WinSalGraphics::~WinSalGraphics()
 
     // delete cache data
     delete [] reinterpret_cast<BYTE*>(mpStdClipRgnData);
+
+    if (mpDWriteGdiInterop)
+        mpDWriteGdiInterop->Release();
+    if (mpDWriteFactory)
+        mpDWriteFactory->Release();
 }
 
 SalGraphicsImpl* WinSalGraphics::GetImpl() const
