@@ -44,9 +44,11 @@
 #include <unordered_map>
 #include <vector>
 
-struct ImplTabItem
+class ImplTabItem final
 {
-    sal_uInt16          mnId;
+    sal_uInt16 m_nId;
+
+public:
     VclPtr<TabPage>     mpTabPage;
     OUString            maText;
     OUString            maFormatText;
@@ -60,13 +62,19 @@ struct ImplTabItem
     bool                m_bVisible; ///< the tab / page can be visible
     Image               maTabImage;
 
-    ImplTabItem()
-    : mnId( 0 ), mpTabPage( nullptr ),
-      mnLine( 0 ), mbFullVisible( false )
-        , m_bEnabled(true)
-        , m_bVisible(true)
-    {}
+    ImplTabItem(sal_uInt16 nId);
+
+    sal_uInt16 id() const { return m_nId; }
 };
+
+ImplTabItem::ImplTabItem(sal_uInt16 nId)
+    : m_nId(nId)
+    , mnLine(0)
+    , mbFullVisible(false)
+    , m_bEnabled(true)
+    , m_bVisible(true)
+{
+}
 
 struct ImplTabCtrlData
 {
@@ -209,7 +217,7 @@ ImplTabItem* TabControl::ImplGetItem( sal_uInt16 nId ) const
 {
     for (auto & item : mpTabCtrlData->maItemList)
     {
-        if( item.mnId == nId )
+        if (item.id() == nId)
             return &item;
     }
 
@@ -437,7 +445,7 @@ bool TabControl::ImplPlaceTabs( long nWidth )
         nLineWidthAry[nLines] += aSize.Width();
         nX += aSize.Width();
 
-        if ( item.mnId == mnCurPageId )
+        if (item.id() == mnCurPageId)
             nCurLine = nLines;
 
         ++nPos;
@@ -797,7 +805,7 @@ void TabControl::ImplDrawItem(vcl::RenderContext& rRenderContext, ImplTabItem co
         nOff = 0;
 
     // if this is the active Page, we have to draw a little more
-    if (pItem->mnId == mnCurPageId)
+    if (pItem->id() == mnCurPageId)
     {
         nOff2 = 2;
         if (!ImplGetSVData()->maNWFData.mbNoActiveTabTextRaise)
@@ -827,7 +835,7 @@ void TabControl::ImplDrawItem(vcl::RenderContext& rRenderContext, ImplTabItem co
 
     ControlState nState = ControlState::NONE;
 
-    if (pItem->mnId == mnCurPageId)
+    if (pItem->id() == mnCurPageId)
     {
         nState |= ControlState::SELECTED;
         // only the selected item can be focused
@@ -1023,7 +1031,7 @@ void TabControl::MouseButtonDown( const MouseEvent& rMEvt )
 
     ImplTabItem *pItem = ImplGetItem(rMEvt.GetPosPixel());
     if (pItem && pItem->m_bEnabled)
-        SelectTabPage(pItem->mnId);
+        SelectTabPage(pItem->id());
 }
 
 void TabControl::KeyInput( const KeyEvent& rKEvt )
@@ -1069,7 +1077,7 @@ void TabControl::Paint( vcl::RenderContext& rRenderContext, const tools::Rectang
     ImplTabItem* pCurItem = nullptr;
     for (auto & item : mpTabCtrlData->maItemList)
     {
-        if (item.mnId == mnCurPageId)
+        if (item.id() == mnCurPageId)
         {
             pCurItem = &item;
             break;
@@ -1434,10 +1442,10 @@ void TabControl::Command( const CommandEvent& rCEvt )
             ScopedVclPtrInstance<PopupMenu> aMenu;
             for (auto const& item : mpTabCtrlData->maItemList)
             {
-                aMenu->InsertItem( item.mnId, item.maText, MenuItemBits::CHECKABLE | MenuItemBits::RADIOCHECK );
-                if ( item.mnId == mnCurPageId )
-                    aMenu->CheckItem( item.mnId );
-                aMenu->SetHelpId( item.mnId, item.maHelpId );
+                aMenu->InsertItem(item.id(), item.maText, MenuItemBits::CHECKABLE | MenuItemBits::RADIOCHECK);
+                if (item.id() == mnCurPageId)
+                    aMenu->CheckItem(item.id());
+                aMenu->SetHelpId(item.id(), item.maHelpId);
             }
 
             sal_uInt16 nId = aMenu->Execute( this, aMenuPos );
@@ -1614,7 +1622,7 @@ void TabControl::InsertPage( sal_uInt16 nPageId, const OUString& rText,
     ImplTabItem* pItem = nullptr;
     if( nPos == TAB_APPEND || size_t(nPos) >= mpTabCtrlData->maItemList.size() )
     {
-        mpTabCtrlData->maItemList.emplace_back( );
+        mpTabCtrlData->maItemList.emplace_back(nPageId);
         pItem = &mpTabCtrlData->maItemList.back();
         if( mpTabCtrlData->mpListBox )
             mpTabCtrlData->mpListBox->InsertEntry( rText );
@@ -1622,7 +1630,7 @@ void TabControl::InsertPage( sal_uInt16 nPageId, const OUString& rText,
     else
     {
         std::vector< ImplTabItem >::iterator new_it =
-            mpTabCtrlData->maItemList.insert( mpTabCtrlData->maItemList.begin() + nPos, ImplTabItem() );
+            mpTabCtrlData->maItemList.emplace(mpTabCtrlData->maItemList.begin() + nPos, nPageId);
         pItem = &(*new_it);
         if( mpTabCtrlData->mpListBox )
             mpTabCtrlData->mpListBox->InsertEntry( rText, nPos);
@@ -1639,8 +1647,6 @@ void TabControl::InsertPage( sal_uInt16 nPageId, const OUString& rText,
         mnCurPageId = nPageId;
 
     // init new page item
-    pItem->mnId             = nPageId;
-    pItem->mpTabPage        = nullptr;
     pItem->maText           = rText;
     pItem->mbFullVisible    = false;
 
@@ -1664,7 +1670,7 @@ void TabControl::RemovePage( sal_uInt16 nPageId )
     {
         //remove page item
         std::vector< ImplTabItem >::iterator it = mpTabCtrlData->maItemList.begin() + nPos;
-        bool bIsCurrentPage = (it->mnId == mnCurPageId);
+        bool bIsCurrentPage = (it->id() == mnCurPageId);
         mpTabCtrlData->maItemList.erase( it );
         if( mpTabCtrlData->mpListBox )
         {
@@ -1679,7 +1685,7 @@ void TabControl::RemovePage( sal_uInt16 nPageId )
 
             if( ! mpTabCtrlData->maItemList.empty() )
             {
-                // don't do this by simply setting mnCurPageId to pFirstItem->mnId
+                // don't do this by simply setting mnCurPageId to pFirstItem->id()
                 // this leaves a lot of stuff (such trivia as _showing_ the new current page) undone
                 // instead, call SetCurPageId
                 // without this, the next (outside) call to SetCurPageId with the id of the first page
@@ -1687,7 +1693,7 @@ void TabControl::RemovePage( sal_uInt16 nPageId )
                 // will never be shown.
                 // 86875 - 05/11/2001 - frank.schoenheit@germany.sun.com
 
-                SetCurPageId( mpTabCtrlData->maItemList[0].mnId );
+                SetCurPageId(mpTabCtrlData->maItemList[0].id());
             }
         }
 
@@ -1734,7 +1740,7 @@ void TabControl::SetPageEnabled( sal_uInt16 i_nPageId, bool i_bEnable )
                                                      i_bEnable ? ListBoxEntryFlags::NONE : (ListBoxEntryFlags::DisableSelection | ListBoxEntryFlags::DrawDisabled) );
 
         // SetCurPageId will change to a valid page
-        if (pItem->mnId == mnCurPageId)
+        if (pItem->id() == mnCurPageId)
             SetCurPageId( mnCurPageId );
         else if ( IsUpdateMode() )
             Invalidate();
@@ -1752,7 +1758,7 @@ void TabControl::SetPageVisible( sal_uInt16 nPageId, bool bVisible )
     mbFormat = true;
 
     // SetCurPageId will change to a valid page
-    if (pItem->mnId == mnCurPageId)
+    if (pItem->id() == mnCurPageId)
         SetCurPageId(mnCurPageId);
     else if (IsUpdateMode())
         Invalidate();
@@ -1766,7 +1772,7 @@ sal_uInt16 TabControl::GetPageCount() const
 sal_uInt16 TabControl::GetPageId( sal_uInt16 nPos ) const
 {
     if( size_t(nPos) < mpTabCtrlData->maItemList.size() )
-        return mpTabCtrlData->maItemList[ nPos ].mnId;
+        return mpTabCtrlData->maItemList[nPos].id();
     return 0;
 }
 
@@ -1775,7 +1781,7 @@ sal_uInt16 TabControl::GetPagePos( sal_uInt16 nPageId ) const
     sal_uInt16 nPos = 0;
     for (auto const& item : mpTabCtrlData->maItemList)
     {
-        if ( item.mnId == nPageId )
+        if (item.id() == nPageId)
             return nPos;
         ++nPos;
     }
@@ -1788,7 +1794,7 @@ sal_uInt16 TabControl::GetPageId( const Point& rPos ) const
     const auto &rList = mpTabCtrlData->maItemList;
     const auto it = std::find_if(rList.begin(), rList.end(), [&rPos, this](const auto &item) {
         return const_cast<TabControl*>(this)->ImplGetTabRect(&item).IsInside(rPos); });
-    return (it != rList.end()) ? it->mnId : 0;
+    return (it != rList.end()) ? it->id() : 0;
 }
 
 sal_uInt16 TabControl::GetPageId( const TabPage& rPage ) const
@@ -1796,7 +1802,7 @@ sal_uInt16 TabControl::GetPageId( const TabPage& rPage ) const
     const auto &rList = mpTabCtrlData->maItemList;
     const auto it = std::find_if(rList.begin(), rList.end(), [&rPage](const auto &item) {
         return item.mpTabPage == &rPage; });
-    return (it != rList.end()) ? it->mnId : 0;
+    return (it != rList.end()) ? it->id() : 0;
 }
 
 sal_uInt16 TabControl::GetPageId( const OString& rName ) const
@@ -1804,7 +1810,7 @@ sal_uInt16 TabControl::GetPageId( const OString& rName ) const
     const auto &rList = mpTabCtrlData->maItemList;
     const auto it = std::find_if(rList.begin(), rList.end(), [&rName](const auto &item) {
         return item.maTabName == rName; });
-    return (it != rList.end()) ? it->mnId : 0;
+    return (it != rList.end()) ? it->id() : 0;
 }
 
 void TabControl::SetCurPageId( sal_uInt16 nPageId )
@@ -1815,13 +1821,13 @@ void TabControl::SetCurPageId( sal_uInt16 nPageId )
         nPos++;
         if( size_t(nPos) >= mpTabCtrlData->maItemList.size() )
             nPos = 0;
-        if( mpTabCtrlData->maItemList[nPos].mnId == nPageId )
+        if (mpTabCtrlData->maItemList[nPos].id() == nPageId)
             break;
     }
 
     if( nPos != TAB_PAGE_NOTFOUND )
     {
-        nPageId = mpTabCtrlData->maItemList[nPos].mnId;
+        nPageId = mpTabCtrlData->maItemList[nPos].id();
         if ( nPageId == mnCurPageId )
         {
             if ( mnActPageId )
@@ -1885,8 +1891,9 @@ void TabControl::SetTabPage( sal_uInt16 nPageId, TabPage* pTabPage )
             // only set here, so that Resize does not reposition TabPage
             pItem->mpTabPage = pTabPage;
             queue_resize();
-            if ( pItem->mnId == mnCurPageId )
-                ImplChangeTabPage( pItem->mnId, 0 );
+
+            if (pItem->id() == mnCurPageId)
+                ImplChangeTabPage(pItem->id(), 0);
         }
         else
         {
@@ -2096,7 +2103,7 @@ Size TabControl::ImplCalculateRequisition(sal_uInt16& nHeaderHeight) const
         if (!pPage)
         {
             TabControl *pThis = const_cast<TabControl*>(this);
-            pThis->SetCurPageId(item.mnId);
+            pThis->SetCurPageId(item.id());
             pThis->ActivatePage();
             pPage = item.mpTabPage;
         }
@@ -2170,7 +2177,7 @@ std::vector<sal_uInt16> TabControl::GetPageIDs() const
     std::vector<sal_uInt16> aIDs;
     for (auto const& item : mpTabCtrlData->maItemList)
     {
-        aIDs.push_back(item.mnId);
+        aIDs.push_back(item.id());
     }
 
     return aIDs;
