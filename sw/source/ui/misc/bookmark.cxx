@@ -152,7 +152,7 @@ IMPL_LINK_NOARG(SwInsertBookmarkDlg, SelectionChangedHdl, weld::TreeView&, void)
         sw::mark::IMark* pBookmark = reinterpret_cast<sw::mark::IMark*>(m_xBookmarksBox->get_id(nRow).toInt64());
         const OUString& sEntryName = pBookmark->GetName();
         sEditBoxText.append(sEntryName);
-        if (nRow > 1)
+        if (i > 1)
             sEditBoxText.append(";");
     }
     if (!aSelectedRows.empty())
