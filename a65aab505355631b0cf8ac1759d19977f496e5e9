@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df7087c5_9c1b4972",
+        "filename": "configure.ac",
+        "patchSetId": 11
+      },
+      "lineNbr": 9947,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-06-20T11:04:14Z",
+      "side": 1,
+      "message": "probably it\u0027s called libqrcodegen.a on unixes\n\ntry similar to this instead:\n -L${WORKDIR}/LinkTarget/StaticLibrary -llibpng",
+      "revId": "a65aab505355631b0cf8ac1759d19977f496e5e9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
