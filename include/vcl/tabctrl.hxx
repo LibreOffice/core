@@ -27,7 +27,7 @@
 #include <vcl/EnumContext.hxx>
 #include <vcl/NotebookbarContextControl.hxx>
 
-struct ImplTabItem;
+class ImplTabItem;
 struct ImplTabCtrlData;
 class TabPage;
 class ListBox;
