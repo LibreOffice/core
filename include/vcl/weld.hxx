@@ -877,6 +877,8 @@ public:
 
     virtual void set_selection_mode(SelectionMode eMode) = 0;
     virtual int count_selected_rows() const = 0;
+    // remove the selected nodes
+    virtual void remove_selection() = 0;
 
     void set_toggle_columns_as_radio(const std::vector<int>& rCols) { m_aRadioIndexes = rCols; }
 
