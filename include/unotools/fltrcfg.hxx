@@ -91,6 +91,9 @@ public:
     void SetCharBackground2Highlighting();
     void SetCharBackground2Shading();
 
+    bool IsMSOLockFileCreationIsEnabled() const;
+    void EnableMSOLockFileCreation(bool bEnable);
+
     static SvtFilterOptions& Get();
 };
 

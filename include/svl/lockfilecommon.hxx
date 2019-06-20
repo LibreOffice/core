@@ -68,7 +68,7 @@ public:
     static OUString GetCurrentLocalTime();
     static LockFileEntry GenerateOwnEntry();
 
-    INetURLObject ResolveLinks( const INetURLObject& aDocURL ) const;
+    static INetURLObject ResolveLinks( const INetURLObject& aDocURL );
 };
 
 }
