@@ -394,18 +394,15 @@ void OutputDevice::DrawHatchLine( const tools::Line& rLine, const tools::PolyPol
         else
         {
             for( long i = 0; i < nPCounter; i += 2 )
-            {
-                if (GetOutDevType() == OUTDEV_PDF)
-                    static_cast<vcl::PDFWriterImpl*>(this)->drawLine(pPtBuffer[ i ], pPtBuffer[ i+1 ]);
-                else
-                {
-                    const Point aPt1( ImplLogicToDevicePixel( pPtBuffer[ i ] ) );
-                    const Point aPt2( ImplLogicToDevicePixel( pPtBuffer[ i + 1 ] ) );
-                    mpGraphics->DrawLine( aPt1.X(), aPt1.Y(), aPt2.X(), aPt2.Y(), this );
-                }
-            }
+                DrawHatchLine_DrawLine(pPtBuffer[i], pPtBuffer[i+1]);
         }
     }
+}
+
+void OutputDevice::DrawHatchLine_DrawLine(const Point& rStartPoint, const Point& rEndPoint)
+{
+    Point aPt1{ImplLogicToDevicePixel(rStartPoint)}, aPt2{ImplLogicToDevicePixel(rEndPoint)};
+    mpGraphics->DrawLine(aPt1.X(), aPt1.Y(), aPt2.X(), aPt2.Y(), this);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

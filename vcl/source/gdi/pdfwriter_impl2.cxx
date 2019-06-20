@@ -2001,6 +2001,11 @@ void PDFWriterImpl::writeG4Stream( BitmapReadAccess const * i_pBitmap )
     }
 }
 
+void PDFWriterImpl::DrawHatchLine_DrawLine(const Point& rStartPoint, const Point& rEndPoint)
+{
+    drawLine(rStartPoint, rEndPoint);
+}
+
 static bool lcl_canUsePDFAxialShading(const Gradient& rGradient) {
     switch (rGradient.GetStyle())
     {
