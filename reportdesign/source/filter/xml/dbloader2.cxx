@@ -54,7 +54,7 @@ OUString SAL_CALL ORptTypeDetection::detect( Sequence< css::beans::PropertyValue
     if ( !sTemp.isEmpty() )
     {
         INetURLObject aURL(sTemp);
-        if ( aURL.GetExtension().equalsIgnoreAsciiCase("orp") )
+        if ( aURL.GetFileExtension().equalsIgnoreAsciiCase("orp") )
             return OUString("StarBaseReport");
         else
         {

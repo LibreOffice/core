@@ -2366,7 +2366,7 @@ void SvxAutoCorrectLanguageLists::MakeUserStorage_Impl()
             ::ucbhelper::Content aNewContent( sMain, uno::Reference< XCommandEnvironment >(), comphelper::getProcessComponentContext() );
             TransferInfo aInfo;
             aInfo.NameClash = NameClash::OVERWRITE;
-            aInfo.NewTitle  = aDest.GetName();
+            aInfo.NewTitle = aDest.GetLastName();
             aInfo.SourceURL = aSource.GetMainURL( INetURLObject::DecodeMechanism::ToIUri );
             aInfo.MoveData  = false;
             aNewContent.executeCommand( "transfer", Any(aInfo));

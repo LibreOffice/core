@@ -966,7 +966,7 @@ void SfxDocumentPage::Reset( const SfxItemSet* rSet )
 
     // determine name
     INetURLObject aURL(aFile);
-    OUString aName = aURL.GetName( INetURLObject::DecodeMechanism::WithCharset );
+    OUString aName = aURL.GetLastName(INetURLObject::DecodeMechanism::WithCharset);
     if ( aName.isEmpty() || aURL.GetProtocol() == INetProtocol::PrivSoffice )
         aName = SfxResId( STR_NONAME );
     m_xNameED->set_label( aName );

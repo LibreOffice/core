@@ -5551,7 +5551,8 @@ namespace
                 {
                     ::comphelper::DocPasswordRequest* pRequest = new ::comphelper::DocPasswordRequest(
                         ::comphelper::DocPasswordRequestType::MS, task::PasswordRequestMode_PASSWORD_ENTER,
-                        INetURLObject( rMedium.GetOrigURL() ).GetName( INetURLObject::DecodeMechanism::WithCharset ) );
+                        INetURLObject(rMedium.GetOrigURL())
+                            .GetLastName(INetURLObject::DecodeMechanism::WithCharset));
                     uno::Reference< task::XInteractionRequest > xRequest( pRequest );
 
                     xHandler->handle( xRequest );

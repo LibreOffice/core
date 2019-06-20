@@ -999,7 +999,7 @@ bool ModelData_Impl::OutputFileDialog( sal_Int16 nStoreMode,
     // get the path from the dialog
     INetURLObject aURL( pFileDlg->GetPath() );
     // the path should be provided outside since it might be used for further calls to the dialog
-    aSuggestedName = aURL.GetName( INetURLObject::DecodeMechanism::WithCharset );
+    aSuggestedName = aURL.GetLastName(INetURLObject::DecodeMechanism::WithCharset);
     aSuggestedDir = pFileDlg->GetDisplayDirectory();
 
     // old filter options should be cleared in case different filter is used
@@ -1213,7 +1213,8 @@ OUString ModelData_Impl::GetRecommendedName( const OUString& aSuggestedName, con
     if ( !aSuggestedName.isEmpty() )
         return aSuggestedName;
 
-    OUString aRecommendedName {INetURLObject( GetStorable()->getLocation() ).GetName( INetURLObject::DecodeMechanism::WithCharset )};
+    OUString aRecommendedName{ INetURLObject(GetStorable()->getLocation())
+                                   .GetLastName(INetURLObject::DecodeMechanism::WithCharset) };
     if ( aRecommendedName.isEmpty() )
     {
         try {
@@ -1237,7 +1238,7 @@ OUString ModelData_Impl::GetRecommendedName( const OUString& aSuggestedName, con
             if ( !aExtension.isEmpty() )
                 aObj.SetExtension( aExtension );
 
-            aRecommendedName = aObj.GetName( INetURLObject::DecodeMechanism::WithCharset );
+            aRecommendedName = aObj.GetLastName(INetURLObject::DecodeMechanism::WithCharset);
         }
     }
 
