@@ -147,6 +147,31 @@ DECLARE_OOXMLEXPORT_TEST(testTdf125324, "tdf125324.docx")
     assertXPath(pXmlDoc, "/root/page/body/txt[2]/anchored/fly/tab/infos/bounds", "top", "4193");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTbrlFrameVml, "tbrl-frame-vml.docx")
+{
+    uno::Reference<beans::XPropertySet> xTextFrame(getShape(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xTextFrame.is());
+
+    if (mbExported)
+    {
+        // DML import: creates a TextBox.
+
+        comphelper::SequenceAsHashMap aGeometry(xTextFrame->getPropertyValue("CustomShapeGeometry"));
+        // Without the accompanying fix in place, this test would have failed with 'Expected: -90;
+        // Actual: 0', i.e. the tblr writing mode was lost during DML export of a TextFrame.
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(-90), aGeometry["TextPreRotateAngle"].get<sal_Int32>());
+    }
+    else
+    {
+        // VML import: creates a TextFrame.
+
+        auto nActual = getProperty<sal_Int16>(xTextFrame, "WritingMode");
+        // Without the accompanying fix in place, this test would have failed with 'Expected: 2; Actual:
+        // 4', i.e. writing direction was inherited from page, instead of explicit tbrl.
+        CPPUNIT_ASSERT_EQUAL(text::WritingMode2::TB_RL, nActual);
+    }
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf116371, "tdf116371.odt")
 {
     // Make sure the rotation is exported correctly, and size not distorted
