@@ -1331,16 +1331,19 @@ bool SelectionManager::getPasteDataTypes( Atom selection, Sequence< DataFlavor >
         bSuccess = rTypes.hasElements();
         if( bHaveText && ! bHaveUTF16 )
         {
-            int nNewFlavors = rTypes.getLength()+1;
+            int i = 0;
 
+            int nNewFlavors = rTypes.getLength()+1;
             Sequence< DataFlavor > aTemp( nNewFlavors );
-            std::copy(rTypes.begin(), rTypes.end(), std::next(aTemp.begin()));
-            aTemp[0].MimeType = "text/plain;charset=utf-16";
-            aTemp[0].DataType = cppu::UnoType<OUString>::get();
+            for( i = 0; i < nNewFlavors-1; i++ )
+                aTemp.getArray()[i+1] = rTypes.getConstArray()[i];
+            aTemp.getArray()[0].MimeType = "text/plain;charset=utf-16";
+            aTemp.getArray()[0].DataType = cppu::UnoType<OUString>::get();
             rTypes = aTemp;
 
             std::vector< Atom > aNativeTemp( nNewFlavors );
-            std::copy(aNativeTypes.begin(), aNativeTypes.end(), std::next(aNativeTemp.begin()));
+            for( i = 0; i < nNewFlavors-1; i++ )
+                aNativeTemp[ i + 1 ] = aNativeTypes[ i ];
             aNativeTemp[0] = None;
             aNativeTypes = aNativeTemp;
         }
