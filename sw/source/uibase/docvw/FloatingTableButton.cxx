@@ -48,7 +48,7 @@ FloatingTableButton::FloatingTableButton(SwEditWin* pEditWin, const SwFrame* pFr
 
 FloatingTableButton::~FloatingTableButton() { disposeOnce(); }
 
-void FloatingTableButton::SetOffset(Point aBottomRightPixel)
+void FloatingTableButton::SetOffset(Point aTopRightPixel)
 {
     // Compute the text size and get the box position & size from it
     tools::Rectangle aTextRect;
@@ -58,12 +58,11 @@ void FloatingTableButton::SetOffset(Point aBottomRightPixel)
     Size aBoxSize(aTextPxRect.GetWidth() + BUTTON_WIDTH + TEXT_PADDING * 2,
                   aFontMetric.GetLineHeight() + TEXT_PADDING * 2);
 
-    Point aBoxPos(aBottomRightPixel.X() - aBoxSize.Width() - BOX_DISTANCE,
-                  aBottomRightPixel.Y() - aBoxSize.Height());
+    Point aBoxPos(aTopRightPixel.X() - aBoxSize.Width() - BOX_DISTANCE, aTopRightPixel.Y());
 
     if (AllSettings::GetLayoutRTL())
     {
-        aBoxPos.setX(aBottomRightPixel.X() + BOX_DISTANCE);
+        aBoxPos.setX(aTopRightPixel.X() + BOX_DISTANCE);
     }
 
     // Set the position & Size of the window
@@ -162,7 +161,7 @@ void FloatingTableButton::Paint(vcl::RenderContext& rRenderContext, const tools:
         ::tools::Rectangle(Point(0, 0), rRenderContext.PixelToLogic(GetSizePixel())));
 
     // Create button
-    SwFrameButtonPainter::PaintButton(aSeq, aRect, false);
+    SwFrameButtonPainter::PaintButton(aSeq, aRect, true);
 
     // Create the text primitive
     basegfx::BColor aLineColor = SwViewOption::GetHeaderFooterMarkColor().getBColor();

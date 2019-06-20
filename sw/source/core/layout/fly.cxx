@@ -1867,8 +1867,9 @@ void SwFlyFrame::UpdateUnfloatButton(SwWrtShell* pWrtSh, bool bShow) const
 
     SwEditWin& rEditWin = pWrtSh->GetView().GetEditWin();
     SwFrameControlsManager& rMngr = rEditWin.GetFrameControlsManager();
-    Point aBottomRightPixel = rEditWin.LogicToPixel( getFrameArea().BottomRight() );
-    rMngr.SetFloatingTableButton(this, bShow,  aBottomRightPixel);
+
+    Point aTopRightPixel = rEditWin.LogicToPixel( getFrameArea().TopRight() );
+    rMngr.SetFloatingTableButton(this, bShow,  aTopRightPixel);
 }
 
 SwTwips SwFlyFrame::Grow_( SwTwips nDist, bool bTst )
