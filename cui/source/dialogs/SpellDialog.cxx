@@ -18,15 +18,6 @@
  */
 
 #include <memory>
-#include <vcl/cursor.hxx>
-#include <vcl/event.hxx>
-#include <vcl/weld.hxx>
-#include <vcl/wrkwin.hxx>
-#include <vcl/menu.hxx>
-#include <vcl/ptrstyle.hxx>
-#include <vcl/scrbar.hxx>
-#include <vcl/settings.hxx>
-#include <vcl/svapp.hxx>
 #include "SpellAttrib.hxx"
 #include <sfx2/dispatch.hxx>
 #include <sfx2/bindings.hxx>
@@ -35,9 +26,6 @@
 #include <svl/grabbagitem.hxx>
 #include <svl/undo.hxx>
 #include <unotools/lingucfg.hxx>
-#include <vcl/textdata.hxx>
-#include <vcl/textview.hxx>
-#include <vcl/graphicfilter.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/langitem.hxx>
@@ -55,8 +43,15 @@
 #include <com/sun/star/linguistic2/XSearchableDictionaryList.hpp>
 #include <com/sun/star/linguistic2/XSpellChecker1.hpp>
 #include <sfx2/app.hxx>
-#include <vcl/help.hxx>
+#include <vcl/cursor.hxx>
+#include <vcl/event.hxx>
 #include <vcl/graph.hxx>
+#include <vcl/help.hxx>
+#include <vcl/graphicfilter.hxx>
+#include <vcl/ptrstyle.hxx>
+#include <vcl/settings.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/weld.hxx>
 #include <osl/file.hxx>
 #include <editeng/optitems.hxx>
 #include <editeng/svxenum.hxx>
@@ -1636,7 +1631,7 @@ bool SentenceEditWindow_Impl::MarkNextError( bool bIgnoreCurrentError, const css
 
     //create a cursor behind the end of the last error
     //- or at 0 at the start of the sentence
-    TextPaM aCursor(0, m_nErrorEnd ? m_nErrorEnd + 1 : 0);
+    int nCursor(m_nErrorEnd ? m_nErrorEnd + 1 : 0);
 
     //search for SpellErrorDescription
     SpellErrorDescription aSpellErrorDescription;
@@ -1647,7 +1642,7 @@ bool SentenceEditWindow_Impl::MarkNextError( bool bIgnoreCurrentError, const css
     //iterate over the text and search for the next error that maybe has
     //to be replace by a ChangeAllList replacement
     bool bGrammarError = false;
-    while (aCursor.GetIndex() < nTextLen)
+    while (nCursor < nTextLen)
     {
         const SpellErrorDescription* pSpellErrorDescription = nullptr;
         const EECharAttrib* pEECharAttrib = nullptr;
@@ -1657,7 +1652,7 @@ bool SentenceEditWindow_Impl::MarkNextError( bool bIgnoreCurrentError, const css
         {
             if (rTextAtr.pAttr->Which() != EE_CHAR_GRABBAG)
                 continue;
-            if (rTextAtr.nEnd > aCursor.GetIndex() && rTextAtr.nStart < nMinPos)
+            if (rTextAtr.nEnd > nCursor && rTextAtr.nStart < nMinPos)
             {
                 nMinPos = rTextAtr.nStart;
                 pEECharAttrib = &rTextAtr;
@@ -1675,7 +1670,7 @@ bool SentenceEditWindow_Impl::MarkNextError( bool bIgnoreCurrentError, const css
             pSpellErrorDescription = &aSpellErrorDescription;
         }
 
-        aCursor.GetIndex() = nMinPos;
+        nCursor = nMinPos;
 
         // maybe the error found here is already in the ChangeAllList and has to be replaced
         Reference<XDictionary> xChangeAll( LinguMgr::GetChangeAllList(), UNO_QUERY );
@@ -1688,7 +1683,7 @@ bool SentenceEditWindow_Impl::MarkNextError( bool bIgnoreCurrentError, const css
 
             ChangeMarkedWord(sReplacement, LanguageTag::convertToLanguageType( pSpellErrorDescription->aLocale ));
 
-            aCursor.GetIndex() += xEntry->getReplacementText().getLength();
+            nCursor += xEntry->getReplacementText().getLength();
         // maybe the error found here is already added to the dictionary and has to be ignored
         }
         else if(pSpellErrorDescription && !bGrammarError &&
@@ -1696,16 +1691,16 @@ bool SentenceEditWindow_Impl::MarkNextError( bool bIgnoreCurrentError, const css
                                 static_cast<sal_uInt16>(LanguageTag::convertToLanguageType( pSpellErrorDescription->aLocale )),
                                 Sequence< PropertyValue >() ))
         {
-            ++aCursor.GetIndex();
+            ++nCursor;
         }
         else
             break;
     }
 
     //if an attrib has been found search for the end of the error string
-    if (aCursor.GetIndex() < nTextLen)
+    if (nCursor < nTextLen)
     {
-        MoveErrorMarkTo(aCursor.GetIndex(), m_nErrorEnd, bGrammarError);
+        MoveErrorMarkTo(nCursor, m_nErrorEnd, bGrammarError);
         bRet = true;
         //add an undo action
         std::unique_ptr<SpellUndoAction_Impl> pAction(new SpellUndoAction_Impl(
@@ -1955,15 +1950,15 @@ svx::SpellPortions SentenceEditWindow_Impl::CreateSpellPortions() const
 
     if (nTextLen)
     {
-        TextPaM aCursor(0, 0);
+        int nCursor(0);
         LanguagePositions_Impl aBreakPositions;
         const EECharAttrib* pLastLang = nullptr;
         const EECharAttrib* pLastError = nullptr;
         LanguageType eLang = LANGUAGE_DONTKNOW;
         const EECharAttrib* pError = nullptr;
-        while (aCursor.GetIndex() < nTextLen)
+        while (nCursor < nTextLen)
         {
-            const EECharAttrib* pLang = FindCharAttrib(aCursor.GetIndex(), aCursor.GetIndex(), EE_CHAR_LANGUAGE, aAttribList);
+            const EECharAttrib* pLang = FindCharAttrib(nCursor, nCursor, EE_CHAR_LANGUAGE, aAttribList);
             if(pLang && pLang != pLastLang)
             {
                 eLang = static_cast<const SvxLanguageItem*>(pLang->pAttr)->GetLanguage();
@@ -1971,7 +1966,7 @@ svx::SpellPortions SentenceEditWindow_Impl::CreateSpellPortions() const
                 lcl_InsertBreakPosition_Impl(aBreakPositions, pLang->nEnd, eLang);
                 pLastLang = pLang;
             }
-            pError = FindCharAttrib(aCursor.GetIndex(), aCursor.GetIndex(), EE_CHAR_GRABBAG, aAttribList);
+            pError = FindCharAttrib(nCursor, nCursor, EE_CHAR_GRABBAG, aAttribList);
             if (pError && pLastError != pError)
             {
                 lcl_InsertBreakPosition_Impl(aBreakPositions, pError->nStart, eLang);
@@ -1979,7 +1974,7 @@ svx::SpellPortions SentenceEditWindow_Impl::CreateSpellPortions() const
                 pLastError = pError;
 
             }
-            ++aCursor.GetIndex();
+            ++nCursor;
         }
 
         if (aBreakPositions.empty())
