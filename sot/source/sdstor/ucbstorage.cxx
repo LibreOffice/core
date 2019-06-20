@@ -1050,7 +1050,7 @@ sal_Int16 UCBStorageStream_Impl::Commit()
                 m_aTempURL.clear();
 
                 INetURLObject aObj( m_aURL );
-                aObj.SetName( m_aName );
+                aObj.setName( m_aName );
                 m_aURL = aObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
                 m_bModified = false;
                 m_bSourceRead = true;
