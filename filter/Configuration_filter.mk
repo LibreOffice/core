@@ -802,11 +802,13 @@ $(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_writergraphics
 # fcfg_calcgraphics
 $(eval $(call filter_Configuration_add_types,fcfg_langpack,fcfg_calcgraphics_types.xcu,filter/source/config/fragments/types,\
 	png_Portable_Network_Graphic \
+	svg_Scalable_Vector_Graphics \
 ))
 
 $(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_calcgraphics_filters.xcu,filter/source/config/fragments/filters,\
 	calc_jpg_Export \
 	calc_png_Export \
+	calc_svg_Export \
 ))
 
 # fcfg_internalgraphics

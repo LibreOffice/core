@@ -88,7 +88,7 @@ SVGFilter::SVGFilter( const Reference< XComponentContext >& rxCtx ) :
     mbExportShapeSelection(false),
     maFilterData(),
     mxDefaultPage(),
-    mbWriterFilter(false),
+    mbWriterOrCalcFilter(false),
     mpDefaultSdrPage( nullptr ),
     mpSdrModel( nullptr ),
     mbPresentation( false ),
@@ -107,10 +107,10 @@ SVGFilter::~SVGFilter()
 
 sal_Bool SAL_CALL SVGFilter::filter( const Sequence< PropertyValue >& rDescriptor )
 {
-    mbWriterFilter = false;
+    mbWriterOrCalcFilter = false;
 
     if(mxDstDoc.is()) // Import works for Impress / draw only
-        return filterImpressDraw(rDescriptor);
+        return filterImpressOrDraw(rDescriptor);
 
     if(mxSrcDoc.is())
     {
@@ -120,20 +120,20 @@ sal_Bool SAL_CALL SVGFilter::filter( const Sequence< PropertyValue >& rDescripto
             {
                 OUString sFilterName;
                 rDescriptor[nInd].Value >>= sFilterName;
-                if(sFilterName == "writer_svg_Export")
+                if(sFilterName != "impress_svg_Export")
                 {
-                    mbWriterFilter = true;
-                    return filterWriter(rDescriptor);
+                    mbWriterOrCalcFilter = true;
+                    return filterWriterOrCalc(rDescriptor);
                 }
                 break;
             }
         }
-        return filterImpressDraw(rDescriptor);
+        return filterImpressOrDraw(rDescriptor);
     }
     return false;
 }
 
-sal_Bool SVGFilter::filterImpressDraw( const Sequence< PropertyValue >& rDescriptor )
+sal_Bool SVGFilter::filterImpressOrDraw( const Sequence< PropertyValue >& rDescriptor )
 {
     SolarMutexGuard aGuard;
     vcl::Window* pFocusWindow(Application::GetFocusWindow());
@@ -536,7 +536,7 @@ sal_Bool SVGFilter::filterImpressDraw( const Sequence< PropertyValue >& rDescrip
     return bRet;
 }
 
-sal_Bool SVGFilter::filterWriter( const Sequence< PropertyValue >& rDescriptor )
+sal_Bool SVGFilter::filterWriterOrCalc( const Sequence< PropertyValue >& rDescriptor )
 {
     bool bSelectionOnly = false;
 
