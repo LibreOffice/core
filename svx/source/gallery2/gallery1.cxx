@@ -376,7 +376,7 @@ void Gallery::ImplLoadSubDirs( const INetURLObject& rBaseURL, bool& rbDirIsReadO
                 {
                     INetURLObject aThmURL( xContentAccess->queryContentIdentifierString() );
 
-                    if(aThmURL.GetExtension().equalsIgnoreAsciiCase("thm"))
+                    if (aThmURL.GetFileExtension().equalsIgnoreAsciiCase("thm"))
                     {
                         INetURLObject   aSdgURL( aThmURL); aSdgURL.SetExtension( "sdg" );
                         INetURLObject   aSdvURL( aThmURL ); aSdvURL.SetExtension( "sdv" );

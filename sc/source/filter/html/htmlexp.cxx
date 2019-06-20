@@ -1276,7 +1276,7 @@ void ScHTMLExport::CopyLocalFileToINet( OUString& rFileNm,
 
         OUString aSrc = rFileNm;
         OUString aDest = aTargetUrl.GetPartBeforeLastName();
-        aDest += aFileUrl.GetName();
+        aDest += aFileUrl.GetLastName();
 
         SfxMedium aMedium( aDest, StreamMode::WRITE | StreamMode::SHARE_DENYNONE );
 

@@ -42,8 +42,9 @@
             bool bOk = aOriginalURL.setFSysPath(sOriginalFileName, FSysStyle::Detect);             \
             if (!bOk)                                                                              \
                 aOriginalURL = INetURLObject(sOriginalFileName);                                   \
-            OUString sFileName                                                                     \
-                = aOriginalURL.GetName().isEmpty() ? sOriginalFileName : aOriginalURL.GetName();   \
+            OUString sFileName = aOriginalURL.GetLastName().isEmpty()                              \
+                                     ? sOriginalFileName                                           \
+                                     : aOriginalURL.GetLastName();                                 \
                                                                                                    \
             /* Get temp path */                                                                    \
             OUString sTempDir = utl::TempFile::CreateTempName();                                   \

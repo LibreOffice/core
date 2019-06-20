@@ -2622,7 +2622,7 @@ namespace  sw
 {
 DBConnURIType GetDBunoType(const INetURLObject &rURL)
 {
-    OUString sExt(rURL.GetExtension());
+    OUString sExt(rURL.GetFileExtension());
     DBConnURIType type = DBConnURIType::UNKNOWN;
 
     if (sExt == "odb")
@@ -2754,7 +2754,7 @@ Optionally add a prefix to the registered DB name.
 OUString LoadAndRegisterDataSource_Impl(DBConnURIType type, const uno::Reference< beans::XPropertySet > *pSettings,
     const INetURLObject &rURL, const OUString *pDestDir, SfxObjectShell* pDocShell)
 {
-    OUString sExt(rURL.GetExtension());
+    OUString sExt(rURL.GetFileExtension());
     uno::Any aTableFilterAny;
     uno::Any aSuppressVersionsAny;
     uno::Any aInfoAny;

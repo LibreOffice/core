@@ -45,7 +45,7 @@ OUString GenerateMSOLockFileURL(const OUString& aOrigURL)
     INetURLObject aURL = LockFileCommon::ResolveLinks(INetURLObject(aOrigURL));
 
     // For text documents MSO Word cuts some of the first characters of the file name
-    OUString sFileName = aURL.GetName();
+    OUString sFileName = aURL.GetLastName();
     const OUString sExt = aURL.GetFileExtension();
 
     if (isWordFormat(sExt))

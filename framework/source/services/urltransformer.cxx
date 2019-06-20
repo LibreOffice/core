@@ -92,7 +92,7 @@ void lcl_ParserHelper(INetURLObject& _rParser, css::util::URL& _rURL,bool _bUseI
     else
     {
         _rURL.Path       = _rParser.GetURLPath( INetURLObject::DecodeMechanism::NONE           );
-        _rURL.Name      = _rParser.GetName  (                                    );
+        _rURL.Name = _rParser.GetLastName();
     }
 
     _rURL.Arguments  = _rParser.GetParam();
