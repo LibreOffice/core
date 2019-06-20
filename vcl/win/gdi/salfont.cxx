@@ -559,16 +559,10 @@ static FontAttributes WinFont2DevFontAttributes( const ENUMLOGFONTEXW& rEnumFont
 
 
 static rtl::Reference<WinFontFace> ImplLogMetricToDevFontDataW( const ENUMLOGFONTEXW* pLogFont,
-                                         const NEWTEXTMETRICW* pMetric,
-                                         DWORD nFontType )
+                                         const NEWTEXTMETRICW* pMetric)
 {
-    int nHeight = 0;
-    if ( nFontType & RASTER_FONTTYPE )
-        nHeight = pMetric->tmHeight - pMetric->tmInternalLeading;
-
     rtl::Reference<WinFontFace> pData = new WinFontFace(
         WinFont2DevFontAttributes(*pLogFont, *pMetric),
-        nHeight,
         pLogFont->elfLogFont.lfCharSet,
         pMetric->tmPitchAndFamily );
 
@@ -613,7 +607,7 @@ void ImplSalLogFontToFontW( HDC hDC, const LOGFONTW& rLogFont, Font& rFont )
 }
 
 WinFontFace::WinFontFace( const FontAttributes& rDFS,
-    int nHeight, BYTE eWinCharSet, BYTE nPitchAndFamily )
+    BYTE eWinCharSet, BYTE nPitchAndFamily )
 :   PhysicalFontFace( rDFS ),
     mnId( 0 ),
     mbFontCapabilitiesRead( false ),
@@ -622,8 +616,6 @@ WinFontFace::WinFontFace( const FontAttributes& rDFS,
     mbAliasSymbolsHigh( false ),
     mbAliasSymbolsLow( false )
 {
-    SetBitmapSize( 0, nHeight );
-
     if( eWinCharSet == SYMBOL_CHARSET )
     {
         if( (nPitchAndFamily & TMPF_TRUETYPE) != 0 )
@@ -1052,7 +1044,7 @@ static int CALLBACK SalEnumFontsProcExW( const LOGFONTW* lpelfe,
             return 1;
         }
 
-        rtl::Reference<WinFontFace> pData = ImplLogMetricToDevFontDataW( pLogFont, &(pMetric->ntmTm), nFontType );
+        rtl::Reference<WinFontFace> pData = ImplLogMetricToDevFontDataW(pLogFont, &(pMetric->ntmTm));
         pData->SetFontId( sal_IntPtr( pInfo->mnFontCount++ ) );
 
         pInfo->mpList->Add( pData.get() );
@@ -1222,7 +1214,7 @@ bool WinSalGraphics::AddTempDevFont( PhysicalFontCollection* pFontCollection,
         aDFS.maMapName = aFontName;
     */
 
-    rtl::Reference<WinFontFace> pFontData = new WinFontFace( aDFA, 0,
+    rtl::Reference<WinFontFace> pFontData = new WinFontFace(aDFA,
         sal::static_int_cast<BYTE>(DEFAULT_CHARSET),
         sal::static_int_cast<BYTE>(TMPF_VECTOR|TMPF_TRUETYPE) );
     pFontData->SetFontId( reinterpret_cast<sal_IntPtr>(pFontData.get()) );

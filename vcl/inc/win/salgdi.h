@@ -59,7 +59,7 @@ class WinFontFace : public PhysicalFontFace
 {
 public:
     explicit                WinFontFace( const FontAttributes&,
-                                int nFontHeight, BYTE eWinCharSet,
+                                BYTE eWinCharSet,
                                 BYTE nPitchAndFamily  );
     virtual                 ~WinFontFace() override;
 
