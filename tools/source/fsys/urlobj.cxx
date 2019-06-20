@@ -3999,7 +3999,8 @@ OUString INetURLObject::getName(sal_Int32 nIndex, bool bIgnoreFinalSlash,
     return decode(pSegBegin, p, eMechanism, eCharset);
 }
 
-bool INetURLObject::setName(OUString const & rTheName)
+bool INetURLObject::setName(OUString const& rTheName, EncodeMechanism eMechanism,
+                            rtl_TextEncoding eCharset)
 {
     SubString aSegment(getSegment(LAST_SEGMENT, true));
     if (!aSegment.isPresent())
@@ -4020,8 +4021,7 @@ bool INetURLObject::setName(OUString const & rTheName)
 
     OUStringBuffer aNewPath;
     aNewPath.append(pPathBegin, pSegBegin - pPathBegin);
-    aNewPath.append(encodeText(rTheName, PART_PCHAR,
-        EncodeMechanism::WasEncoded, RTL_TEXTENCODING_UTF8, true));
+    aNewPath.append(encodeText(rTheName, PART_PCHAR, eMechanism, eCharset, true));
     aNewPath.append(p, pPathEnd - p);
 
     return setPath(aNewPath.makeStringAndClear(), EncodeMechanism::NotCanonical,
@@ -4917,17 +4917,6 @@ void INetURLObject::SetBase(OUString const & rTheBase)
 OUString INetURLObject::GetBase() const
 {
     return getBase(LAST_SEGMENT, true, DecodeMechanism::WithCharset);
-}
-
-void INetURLObject::SetName(OUString const & rTheName,
-                            EncodeMechanism eMechanism,
-                            rtl_TextEncoding eCharset)
-{
-    INetURLObject aTemp(*this);
-    if (aTemp.removeSegment()
-        && aTemp.insertName(rTheName, false, LAST_SEGMENT, eMechanism,
-                            eCharset))
-        *this = aTemp;
 }
 
 void INetURLObject::SetExtension(OUString const & rTheExtension)

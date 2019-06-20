@@ -1779,7 +1779,7 @@ OUString SvtURLBox::GetURL()
 
             if( success && aTitle != "/" && aTitle != "." )
             {
-                    aObj.SetName( aTitle );
+                    aObj.setName( aTitle );
                     if ( bSlash )
                         aObj.setFinalSlash();
             }
@@ -2214,7 +2214,7 @@ OUString URLBox::GetURL()
 
             if( success && aTitle != "/" && aTitle != "." )
             {
-                    aObj.SetName( aTitle );
+                    aObj.setName( aTitle );
                     if ( bSlash )
                         aObj.setFinalSlash();
             }

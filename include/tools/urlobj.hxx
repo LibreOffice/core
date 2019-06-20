@@ -574,12 +574,18 @@ public:
 
         @param rTheName  The new name.
 
+        @param eMechanism  See the general discussion for get-methods.
+
+        @param eCharset  See the general discussion for get-methods.
+
         @return  True if the name has successfully been modified (and the
         resulting URI is still valid).  If the path is not hierarchical, or
         the specified segment does not exist, false is returned.  If false is
         returned, the object is not modified.
      */
-    bool setName(OUString const & rTheName);
+    bool setName(OUString const& rTheName,
+                 EncodeMechanism eMechanism = EncodeMechanism::WasEncoded,
+                 rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8);
 
     /** Get the base of the name of a segment.
 
@@ -925,10 +931,6 @@ public:
     void SetBase(OUString const & rTheBase);
 
     OUString GetBase() const;
-
-    void SetName(OUString const & rTheName,
-                 EncodeMechanism eMechanism = EncodeMechanism::WasEncoded,
-                 rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8);
 
     void SetExtension(OUString const & rTheExtension);
 
