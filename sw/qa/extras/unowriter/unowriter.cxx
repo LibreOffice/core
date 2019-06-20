@@ -123,6 +123,22 @@ DECLARE_UNOAPI_TEST_FILE(testRenderablePagePosition, "renderable-page-position.o
     CPPUNIT_ASSERT_GREATER(aPosition1.Y, aPosition2.Y);
 }
 
+DECLARE_UNOAPI_TEST(testImageCommentAtChar)
+{
+    // Load a document with an at-char image in it (and a comment on the image).
+    load(mpTestDocumentPath, "image-comment-at-char.odt");
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+
+    // Verify that we have an annotation mark (comment with a text range) in the document.
+    // Without the accompanying fix in place, this test would have failed, as comments lost their
+    // ranges on load when their range only covered the placeholder character of the comment (which
+    // is also the anchor position of the image).
+    IDocumentMarkAccess* pMarks = pDoc->getIDocumentMarkAccess();
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), pMarks->getAnnotationMarksCount());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
