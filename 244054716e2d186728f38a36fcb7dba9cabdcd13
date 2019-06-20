@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df7087c5_7f03c70e",
+        "filename": "sw/inc/strings.hrc",
+        "patchSetId": 1
+      },
+      "lineNbr": 566,
+      "author": {
+        "id": 1000447
+      },
+      "writtenOn": "2019-06-20T21:37:12Z",
+      "side": 1,
+      "message": "STR_ACCESS_ANNOTATION_DATE_NAME  should be STR_ACCESS_ANNOTATION_RESOLVED_NAME",
+      "range": {
+        "startLine": 566,
+        "startChar": 53,
+        "endLine": 566,
+        "endChar": 84
+      },
+      "revId": "244054716e2d186728f38a36fcb7dba9cabdcd13",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
