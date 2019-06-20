@@ -607,7 +607,7 @@ OUString SwTemplNameFieldType::Expand(sal_uLong nFormat) const
             {
                 INetURLObject aPathName( xDocProps->getTemplateURL() );
                 if( FF_NAME == nFormat )
-                    aRet = aPathName.GetName(URL_DECODE);
+                    aRet = aPathName.GetLastName(URL_DECODE);
                 else if( FF_NAME_NOEXT == nFormat )
                     aRet = aPathName.GetBase();
                 else

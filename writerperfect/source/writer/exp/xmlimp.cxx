@@ -97,7 +97,7 @@ OUString FindCoverImage(const OUString& rDocumentBaseURL, OUString& rMimeType,
     if (!aRet.isEmpty())
     {
         INetURLObject aRetURL(aRet);
-        rMimeType = GetMimeType(aRetURL.GetExtension());
+        rMimeType = GetMimeType(aRetURL.GetFileExtension());
         return aRet;
     }
 
@@ -429,7 +429,7 @@ PopupState XMLImport::FillPopupData(const OUString& rURL, librevenge::RVNGProper
     rPropList.insert("office:binary-data", aBinaryData);
 
     INetURLObject aAbsURL(aAbs);
-    OUString aMimeType = GetMimeType(aAbsURL.GetExtension());
+    OUString aMimeType = GetMimeType(aAbsURL.GetFileExtension());
     rPropList.insert("librevenge:mime-type", aMimeType.toUtf8().getStr());
 
     return PopupState::Consumed;

@@ -90,7 +90,7 @@ OUString readLockFile(const OUString& aSource)
 OUString GetLockFileName(const svt::GenDocumentLockFile& rLockFile)
 {
     INetURLObject aDocURL = svt::LockFileCommon::ResolveLinks(INetURLObject(rLockFile.GetURL()));
-    return aDocURL.GetName();
+    return aDocURL.GetLastName();
 }
 
 OUString LockfileTest::generateTestURL(const OUString& sFileName) const

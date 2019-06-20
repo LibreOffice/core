@@ -207,7 +207,7 @@ IMPL_LINK_NOARG(AreaPropertyPanelBase, ClickImportBitmapHdl, Button*, void)
         {
             XBitmapListRef pList = SfxObjectShell::Current()->GetItem(SID_BITMAP_LIST)->GetBitmapList();
             INetURLObject   aURL( aDlg.GetPath() );
-            OUString aFileName =  aURL.GetName().getToken( 0, '.' );
+            OUString aFileName = aURL.GetLastName().getToken(0, '.');
             OUString aName = aFileName;
             long j = 1;
             bool bValidBitmapName = false;

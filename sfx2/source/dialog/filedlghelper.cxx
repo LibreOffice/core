@@ -1270,7 +1270,8 @@ void FileDialogHelper_Impl::implInitializeFileName( )
             if ( bAutoExtChecked )
             {   // cut the extension
                 aObj.removeExtension( );
-                mxFileDlg->setDefaultName( aObj.GetName( INetURLObject::DecodeMechanism::WithCharset ) );
+                mxFileDlg->setDefaultName(
+                    aObj.GetLastName(INetURLObject::DecodeMechanism::WithCharset));
             }
         }
     }
@@ -2564,7 +2565,7 @@ void FileDialogHelper::SetDisplayDirectory( const OUString& _rPath )
 
     INetURLObject aObj( _rPath );
 
-    OUString sFileName = aObj.GetName( INetURLObject::DecodeMechanism::WithCharset );
+    OUString sFileName = aObj.GetLastName(INetURLObject::DecodeMechanism::WithCharset);
     aObj.removeSegment();
     OUString sPath = aObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
 

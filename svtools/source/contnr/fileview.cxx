@@ -656,7 +656,8 @@ void ViewTabListBox_Impl::DeleteEntries()
         if ( eResult != svtools::QUERYDELETE_ALL )
         {
             INetURLObject aObj( aURL );
-            svtools::QueryDeleteDlg_Impl aDlg(GetFrameWeld(), aObj.GetName(INetURLObject::DecodeMechanism::WithCharset));
+            svtools::QueryDeleteDlg_Impl aDlg(
+                GetFrameWeld(), aObj.GetLastName(INetURLObject::DecodeMechanism::WithCharset));
 
             if ( GetSelectionCount() > 1 )
                 aDlg.EnableAllButton();
