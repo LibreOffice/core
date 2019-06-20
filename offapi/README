@@ -6,7 +6,7 @@ An artificial (?) separation.
 The reference offapi/type_reference/offapi.idl and
 udkapi/type_reference/udkapi.idl (formerly combined into a single
 offapi/type_reference/types.rdb) are used to detect inadvertent incompatible
-changes.  They are plain-text .idl files (not stricly lexicographically sorted,
+changes.  They are plain-text .idl files (not strictly lexicographically sorted,
 though, so they satisfy the .idl file requirements for no forward dependencies),
 so in cases where we deliberately /do/ become incompatible they can be modified
 manually.
