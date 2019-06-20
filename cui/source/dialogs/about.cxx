@@ -153,7 +153,8 @@ IMPL_LINK( AboutDialog, HandleClick, Button*, pButton, void )
 
 void AboutDialog::SetBuildIdLink()
 {
-    const OUString buildId = GetBuildId();
+    OUString sDefault;
+    OUString buildId(utl::Bootstrap::getBuildIdData(sDefault));
 
     if (IsStringValidGitHash(buildId))
     {
