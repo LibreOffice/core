@@ -1088,7 +1088,7 @@ void ScPrintFunc::InitParam( const ScPrintOptions* pOptions )
     const INetURLObject& rURLObj = pDocShell->GetMedium()->GetURLObject();
     aFieldData.aLongDocName = rURLObj.GetMainURL( INetURLObject::DecodeMechanism::Unambiguous );
     if ( !aFieldData.aLongDocName.isEmpty() )
-        aFieldData.aShortDocName = rURLObj.GetName( INetURLObject::DecodeMechanism::Unambiguous );
+        aFieldData.aShortDocName = rURLObj.GetLastName(INetURLObject::DecodeMechanism::Unambiguous);
     else
         aFieldData.aShortDocName = aFieldData.aLongDocName = aFieldData.aTitle;
 

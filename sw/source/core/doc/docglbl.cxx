@@ -411,7 +411,7 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const OUString& rPath, bool bOutline,
 
                 default:
                     {
-                        const OUString sNm( INetURLObject( sFileName ).GetName() );
+                        const OUString sNm(INetURLObject(sFileName).GetLastName());
                         SwSectionData aSectData( FILE_LINK_SECTION,
                                         GetUniqueSectionName( &sNm ));
                         SwSectionFormat* pFormat = MakeSectionFormat();

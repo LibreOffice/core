@@ -1224,7 +1224,7 @@ OUString GalleryBrowser2::GetFilterName() const
             GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
             INetURLObject       aURL;
             mpCurTheme->GetURL( mnCurActionPos, aURL );
-            sal_uInt16          nFilter = rFilter.GetImportFormatNumberForShortName( aURL.GetExtension() );
+            sal_uInt16 nFilter = rFilter.GetImportFormatNumberForShortName(aURL.GetFileExtension());
 
             if( GRFILTER_FORMAT_DONTKNOW != nFilter )
                 aFilterName = rFilter.GetImportFormatName( nFilter );

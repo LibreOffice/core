@@ -124,7 +124,7 @@ namespace abp
         rSettings.sDataSourceName = aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE );
         m_pLocationController->setURL( rSettings.sDataSourceName );
         OUString sName = aURL.getName( );
-        sal_Int32 nPos = sName.indexOf(aURL.GetExtension());
+        sal_Int32 nPos = sName.indexOf(aURL.GetFileExtension());
         if ( nPos != -1 )
         {
             sName = sName.replaceAt(nPos-1, 4, "");

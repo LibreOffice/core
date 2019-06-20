@@ -447,13 +447,13 @@ bool XMLFilterSettingsDialog::insertOrEdit( filter_info_impl* pNewInfo, const fi
         if( !pFilterEntry->maImportTemplate.matchIgnoreAsciiCase( m_sTemplatePath ) )
         {
             INetURLObject aSourceURL( pFilterEntry->maImportTemplate );
-            if( !aSourceURL.GetName().isEmpty() )
+            if (!aSourceURL.GetLastName().isEmpty())
             {
                 OUString aDestURL( m_sTemplatePath );
                 aDestURL += pFilterEntry->maFilterName + "/";
                 if( createDirectory( aDestURL ) )
                 {
-                    aDestURL += aSourceURL.GetName();
+                    aDestURL += aSourceURL.GetLastName();
 
                     SvFileStream aInputStream(pFilterEntry->maImportTemplate, StreamMode::READ );
                     Reference< XInputStream > xIS( new utl::OInputStreamWrapper( aInputStream ) );
@@ -870,13 +870,13 @@ void XMLFilterSettingsDialog::onSave()
         {
             aMsg = XsltResId(STR_FILTERS_HAVE_BEEN_SAVED);
             aMsg = aMsg.replaceFirst( sPlaceholder, OUString::number( nFilters ) );
-            aMsg = aMsg.replaceFirst( sPlaceholder, aURL.GetName() );
+            aMsg = aMsg.replaceFirst(sPlaceholder, aURL.GetLastName());
         }
         else
         {
             aMsg = XsltResId(STR_FILTER_HAS_BEEN_SAVED);
             aMsg = aMsg.replaceFirst( sPlaceholder, (*aFilters.begin())->maFilterName );
-            aMsg = aMsg.replaceFirst( sPlaceholder, aURL.GetName() );
+            aMsg = aMsg.replaceFirst(sPlaceholder, aURL.GetLastName());
         }
 
         std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(m_xDialog.get(),
@@ -929,7 +929,7 @@ void XMLFilterSettingsDialog::onOpen()
         {
             INetURLObject aURLObj( aURL );
             aMsg = XsltResId(STR_NO_FILTERS_FOUND);
-            aMsg = aMsg.replaceFirst( sPlaceholder, aURLObj.GetName() );
+            aMsg = aMsg.replaceFirst(sPlaceholder, aURLObj.GetLastName());
         }
         else if( nFilters == 1 )
         {

@@ -80,7 +80,7 @@ bool UCB_MoveFile( const OUString& rURL, const OUString& rNewURL )
     try
     {
         INetURLObject aURL( rNewURL );
-        const OUString sName( aURL.GetName() );
+        const OUString sName(aURL.GetLastName());
         aURL.removeSegment();
         const OUString sMainURL( aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE) );
 
