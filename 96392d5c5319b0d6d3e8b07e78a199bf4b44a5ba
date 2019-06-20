@@ -16,6 +16,24 @@
       "revId": "96392d5c5319b0d6d3e8b07e78a199bf4b44a5ba",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df7087c5_9c06e920",
+        "filename": "distro-configs/LibreOfficeLinux.conf",
+        "patchSetId": 2
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2019-06-20T21:27:57Z",
+      "side": 1,
+      "message": "Can you be more specific which x86 builds are affected that use the distro config?\nI thought there were currently no more x86 TDF builds for LibreOffice versions that contain this commit anyway?\nIs this about the box that Luke is setting up or something else?",
+      "parentUuid": "df7087c5_7c675527",
+      "revId": "96392d5c5319b0d6d3e8b07e78a199bf4b44a5ba",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
