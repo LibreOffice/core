@@ -298,7 +298,7 @@ namespace XSLT
             xsltTransformContextPtr tcontext = xsltNewTransformContext(
                 styleSheet, doc);
             {
-                std::unique_lock<std::mutex> g(m_mutex);
+                std::scoped_lock<std::mutex> g(m_mutex);
                 m_tcontext = tcontext;
             }
             oh->registercontext(m_tcontext);
@@ -334,7 +334,7 @@ namespace XSLT
         xsltFreeStylesheet(styleSheet);
         xsltTransformContextPtr tcontext = nullptr;
         {
-            std::unique_lock<std::mutex> g(m_mutex);
+            std::scoped_lock<std::mutex> g(m_mutex);
             std::swap(m_tcontext, tcontext);
         }
         xsltFreeTransformContext(tcontext);
@@ -360,7 +360,7 @@ namespace XSLT
 
     void Reader::forceStateStopped()
     {
-        std::unique_lock<std::mutex> g(m_mutex);
+        std::scoped_lock<std::mutex> g(m_mutex);
         if (!m_tcontext)
             return;
         //tdf#100057 If we force a cancel, libxslt will of course just keep on going unless something

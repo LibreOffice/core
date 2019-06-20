@@ -132,7 +132,7 @@ void Qt5YieldMutex::doAcquire(sal_uInt32 nLockCount)
             m_bNoYieldLock = true; // execute closure with borrowed SolarMutex
             func();
             m_bNoYieldLock = false;
-            std::unique_lock<std::mutex> g(m_RunInMainMutex);
+            std::scoped_lock<std::mutex> g(m_RunInMainMutex);
             assert(!m_isResultReady);
             m_isResultReady = true;
             m_ResultCondition.notify_all(); // unblock other thread
@@ -150,7 +150,7 @@ sal_uInt32 Qt5YieldMutex::doRelease(bool const bUnlockAll)
         return 1; // dummy value
     }
 
-    std::unique_lock<std::mutex> g(m_RunInMainMutex);
+    std::scoped_lock<std::mutex> g(m_RunInMainMutex);
     // read m_nCount before doRelease (it's guarded by m_aMutex)
     bool const isReleased(bUnlockAll || m_nCount == 1);
     sal_uInt32 nCount = SalYieldMutex::doRelease(bUnlockAll);
@@ -177,7 +177,7 @@ void Qt5Instance::RunInMainThread(std::function<void()> func)
 
     Qt5YieldMutex* const pMutex(static_cast<Qt5YieldMutex*>(GetYieldMutex()));
     {
-        std::unique_lock<std::mutex> g(pMutex->m_RunInMainMutex);
+        std::scoped_lock<std::mutex> g(pMutex->m_RunInMainMutex);
         assert(!pMutex->m_Closure);
         pMutex->m_Closure = func;
         // unblock main thread in case it is blocked on condition

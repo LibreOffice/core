@@ -684,7 +684,7 @@ postKeyEventInThread(gpointer data)
     LOKDocViewPrivate& priv = getPrivate(pDocView);
     LOEvent* pLOEvent = static_cast<LOEvent*>(g_task_get_task_data(task));
 
-    std::unique_lock<std::mutex> aGuard(g_aLOKMutex);
+    std::scoped_lock<std::mutex> aGuard(g_aLOKMutex);
     std::stringstream ss;
     ss << "lok::Document::setView(" << priv->m_nViewId << ")";
     g_info("%s", ss.str().c_str());
@@ -3608,7 +3608,7 @@ lok_doc_view_get_parts (LOKDocView* pDocView)
     if (!priv->m_pDocument)
         return -1;
 
-    std::unique_lock<std::mutex> aGuard(g_aLOKMutex);
+    std::scoped_lock<std::mutex> aGuard(g_aLOKMutex);
     std::stringstream ss;
     ss << "lok::Document::setView(" << priv->m_nViewId << ")";
     g_info("%s", ss.str().c_str());
@@ -3623,7 +3623,7 @@ lok_doc_view_get_part (LOKDocView* pDocView)
     if (!priv->m_pDocument)
         return -1;
 
-    std::unique_lock<std::mutex> aGuard(g_aLOKMutex);
+    std::scoped_lock<std::mutex> aGuard(g_aLOKMutex);
     std::stringstream ss;
     ss << "lok::Document::setView(" << priv->m_nViewId << ")";
     g_info("%s", ss.str().c_str());
@@ -3668,7 +3668,7 @@ lok_doc_view_get_part_name (LOKDocView* pDocView, int nPart)
     if (!priv->m_pDocument)
         return nullptr;
 
-    std::unique_lock<std::mutex> aGuard(g_aLOKMutex);
+    std::scoped_lock<std::mutex> aGuard(g_aLOKMutex);
     std::stringstream ss;
     ss << "lok::Document::setView(" << priv->m_nViewId << ")";
     g_info("%s", ss.str().c_str());

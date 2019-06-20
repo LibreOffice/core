@@ -189,7 +189,7 @@ void ThreadPool::shutdownLocked(std::unique_lock<std::mutex>& aGuard)
 
 void ThreadPool::pushTask( std::unique_ptr<ThreadTask> pTask )
 {
-    std::unique_lock< std::mutex > aGuard( maMutex );
+    std::scoped_lock< std::mutex > aGuard( maMutex );
 
     mbTerminate = false;
 
@@ -296,14 +296,14 @@ ThreadTaskTag::ThreadTaskTag() : mnTasksWorking(0)
 
 void ThreadTaskTag::onTaskPushed()
 {
-    std::unique_lock< std::mutex > aGuard( maMutex );
+    std::scoped_lock< std::mutex > aGuard( maMutex );
     mnTasksWorking++;
     assert( mnTasksWorking < 65536 ); // sanity checking
 }
 
 void ThreadTaskTag::onTaskWorkerDone()
 {
-    std::unique_lock< std::mutex > aGuard( maMutex );
+    std::scoped_lock< std::mutex > aGuard( maMutex );
     mnTasksWorking--;
     assert(mnTasksWorking >= 0);
     if (mnTasksWorking == 0)
@@ -312,7 +312,7 @@ void ThreadTaskTag::onTaskWorkerDone()
 
 bool ThreadTaskTag::isDone()
 {
-    std::unique_lock< std::mutex > aGuard( maMutex );
+    std::scoped_lock< std::mutex > aGuard( maMutex );
     return mnTasksWorking == 0;
 }
 

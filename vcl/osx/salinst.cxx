@@ -232,7 +232,7 @@ void SalYieldMutex::doAcquire( sal_uInt32 nLockCount )
                 block();
                 pInst->mbNoYieldLock = false;
                 Block_release( block );
-                std::unique_lock<std::mutex> g(m_runInMainMutex);
+                std::scoped_lock<std::mutex> g(m_runInMainMutex);
                 assert(!m_resultReady);
                 m_resultReady = true;
                 m_aResultCondition.notify_all();
@@ -255,7 +255,7 @@ sal_uInt32 SalYieldMutex::doRelease( const bool bUnlockAll )
         return 1;
     sal_uInt32 nCount;
     {
-        std::unique_lock<std::mutex> g(m_runInMainMutex);
+        std::scoped_lock<std::mutex> g(m_runInMainMutex);
         // read m_nCount before doRelease
         bool const isReleased(bUnlockAll || m_nCount == 1);
         nCount = comphelper::SolarMutex::doRelease( bUnlockAll );

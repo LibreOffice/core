@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <mutex>
+
 #include <unistd.h>
 #include <errno.h>
 #include <fcntl.h>
@@ -173,7 +177,7 @@ void SvpSalInstance::Wakeup(SvpRequest const request)
         pSVData->mpWakeCallback(pSVData->mpPollClosure);
 
     SvpSalYieldMutex *const pMutex(static_cast<SvpSalYieldMutex*>(GetYieldMutex()));
-    std::unique_lock<std::mutex> g(pMutex->m_WakeUpMainMutex);
+    std::scoped_lock<std::mutex> g(pMutex->m_WakeUpMainMutex);
     if (request != SvpRequest::NONE)
         pMutex->m_Request = request;
     pMutex->m_wakeUpMain = true;
@@ -373,7 +377,7 @@ sal_uInt32 SvpSalYieldMutex::doRelease(bool const bUnlockAll)
             }
             else
             {
-                std::unique_lock<std::mutex> g(m_WakeUpMainMutex);
+                std::scoped_lock<std::mutex> g(m_WakeUpMainMutex);
                 m_wakeUpMain = true;
                 m_WakeUpMainCond.notify_one();
             }

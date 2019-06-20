@@ -125,7 +125,7 @@ const Buffer& XBufferedThreadedStream::getNextBlock()
 
 void XBufferedThreadedStream::setTerminateThread()
 {
-    std::unique_lock<std::mutex> aGuard( maBufferProtector );
+    std::scoped_lock<std::mutex> aGuard( maBufferProtector );
     mbTerminateThread = true;
     maBufferProduceResume.notify_one();
     maBufferConsumeResume.notify_one();
