@@ -341,6 +341,31 @@ DECLARE_OOXMLIMPORT_TEST(testTdf121784, "tdf121784.docx")
     CPPUNIT_ASSERT_EQUAL( OUString( "i" ), getRun( getParagraph( 2 ), 3 )->getString());
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTbrlFrameVml, "tbrl-frame-vml.docx")
+{
+    uno::Reference<beans::XPropertySet> xTextFrame(getShape(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xTextFrame.is());
+
+    if (mbExported)
+    {
+        // DML import: creates a TextBox.
+
+        comphelper::SequenceAsHashMap aGeometry(xTextFrame->getPropertyValue("CustomShapeGeometry"));
+        // Without the accompanying fix in place, this test would have failed with 'Expected: -90;
+        // Actual: 0', i.e. the tblr writing mode was lost during DML export of a TextFrame.
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(-90), aGeometry["TextPreRotateAngle"].get<sal_Int32>());
+    }
+    else
+    {
+        // VML import: creates a TextFrame.
+
+        auto nActual = getProperty<sal_Int16>(xTextFrame, "WritingMode");
+        // Without the accompanying fix in place, this test would have failed with 'Expected: 2; Actual:
+        // 4', i.e. writing direction was inherited from page, instead of explicit tbrl.
+        CPPUNIT_ASSERT_EQUAL(text::WritingMode2::TB_RL, nActual);
+    }
+}
+
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf125657, "tdf125657.docx")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");

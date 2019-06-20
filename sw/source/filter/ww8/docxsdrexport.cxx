@@ -1146,8 +1146,6 @@ void DocxSdrExport::writeOnlyTextOfFrame(ww8::Frame const* pParentFrame)
     ExportDataSaveRestore aDataGuard(m_pImpl->getExport(), nStt, nEnd, pParentFrame);
 
     m_pImpl->setBodyPrAttrList(sax_fastparser::FastSerializerHelper::createAttrList());
-    m_pImpl->setFrameBtLr(
-        m_pImpl->checkFrameBtlr(m_pImpl->getExport().m_pDoc->GetNodes()[nStt], /*bDML=*/true));
     m_pImpl->setFlyFrameGraphic(true);
     m_pImpl->getExport().WriteText();
     m_pImpl->setFlyFrameGraphic(false);
@@ -1403,6 +1401,10 @@ void DocxSdrExport::writeDMLTextFrame(ww8::Frame const* pParentFrame, int nAncho
             pFS->startElementNS(XML_wps, XML_txbx); //text box is not linked, therefore no id.
 
         pFS->startElementNS(XML_w, XML_txbxContent);
+
+        const SvxFrameDirectionItem& rDirection = rFrameFormat.GetFrameDir();
+        if (rDirection.GetValue() == SvxFrameDirection::Vertical_RL_TB)
+            m_pImpl->getBodyPrAttrList()->add(XML_vert, "vert");
 
         m_pImpl->setFrameBtLr(
             m_pImpl->checkFrameBtlr(m_pImpl->getExport().m_pDoc->GetNodes()[nStt], /*bDML=*/true));
