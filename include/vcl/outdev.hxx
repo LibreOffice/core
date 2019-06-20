@@ -729,6 +729,9 @@ public:
     void                        DrawLine( const Point& rStartPt, const Point& rEndPt,
                                           const LineInfo& rLineInfo );
 
+protected:
+    virtual void DrawHatchLine_DrawLine(const Point& rStartPoint, const Point& rEndPoint);
+
 private:
 
     /** Helper for line geometry paint with support for graphic expansion (pattern and fat_to_area)

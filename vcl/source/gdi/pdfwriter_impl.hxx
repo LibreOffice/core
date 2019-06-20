@@ -596,6 +596,7 @@ public:
 protected:
     void ImplClearFontData(bool bNewFontLists) override;
     void ClipRegionIntersectRectangle(vcl::Region&) override;
+    void DrawHatchLine_DrawLine(const Point& rStartPoint, const Point& rEndPoint) override;
 
 private:
     MapMode                             m_aMapMode; // PDFWriterImpl scaled units
