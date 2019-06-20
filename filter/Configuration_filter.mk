@@ -790,11 +790,13 @@ $(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_impressgraphic
 $(eval $(call filter_Configuration_add_types,fcfg_langpack,fcfg_writergraphics_types.xcu,filter/source/config/fragments/types,\
 	jpg_JPEG \
 	png_Portable_Network_Graphic \
+	svg_Scalable_Vector_Graphics \
 ))
 
 $(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_writergraphics_filters.xcu,filter/source/config/fragments/filters,\
 	writer_jpg_Export \
 	writer_png_Export \
+	writer_svg_Export \
 ))
 
 # fcfg_calcgraphics
