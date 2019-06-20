@@ -642,6 +642,8 @@ void BarChart::createShapes()
                     //collect data point information (logic coordinates, style ):
                     double fUnscaledLogicX = pSeries->getXValue( nPointIndex );
                     fUnscaledLogicX = DateHelper::RasterizeDateValue( fUnscaledLogicX, m_aNullDate, m_nTimeResolution );
+                    if(rtl::math::isNan(fUnscaledLogicX))
+                        continue;//point not visible
                     if(fUnscaledLogicX<pPosHelper->getLogicMinX())
                         continue;//point not visible
                     if(fUnscaledLogicX>pPosHelper->getLogicMaxX())
