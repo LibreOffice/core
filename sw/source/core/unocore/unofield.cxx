@@ -2046,9 +2046,9 @@ void SAL_CALL SwXTextField::attach(
         if ( !::sw::XTextRangeToSwPaM( aIntPam, xTextRange ) )
             throw lang::IllegalArgumentException();
 
-        // nothing to do, if the text range only covers the former annotation field
-        if ( aIntPam.Start()->nNode != aIntPam.End()->nNode
-             || aIntPam.Start()->nContent.GetIndex() != aIntPam.End()->nContent.GetIndex()-1 )
+        // Nothing to do, if the text range has a separate start and end, but they have the same
+        // value.
+        if (!aIntPam.HasMark() || *aIntPam.Start() != *aIntPam.End())
         {
             UnoActionContext aCont( m_pImpl->m_pDoc );
             // insert copy of annotation at new text range
