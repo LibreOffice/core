@@ -141,7 +141,7 @@ void ToolbarModeMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >
         // Allow Notebookbar only in experimental mode
         if ( isExperimental && !aMiscOptions.IsExperimentalMode() )
             continue;
-        if ( !isExperimental )
+        if(aLabel == "Sidebar" || aLabel == "Standard Toolbar" || aLabel == "Single Toolbar")
             nCountToolbar++;
 
         m_xPopupMenu->insertItem( nReadIndex+1, aLabel, css::awt::MenuItemStyle::RADIOCHECK, nPosition );
