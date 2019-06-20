@@ -196,6 +196,7 @@
                     <property name="resizable">True</property>
                     <property name="spacing">6</property>
                     <property name="title" translatable="yes" context="insertbookmark|page">Page</property>
+                    <property name="clickable">True</property>
                     <child>
                       <object class="GtkCellRendererText" id="cellrenderer0"/>
                       <attributes>
@@ -209,6 +210,7 @@
                     <property name="resizable">True</property>
                     <property name="spacing">6</property>
                     <property name="title" translatable="yes" context="insertbookmark|name">Name</property>
+                    <property name="clickable">True</property>
                     <child>
                       <object class="GtkCellRendererText" id="cellrenderer1"/>
                       <attributes>
@@ -222,6 +224,7 @@
                     <property name="resizable">True</property>
                     <property name="spacing">6</property>
                     <property name="title" translatable="yes" context="insertbookmark|text">Text</property>
+                    <property name="clickable">True</property>
                     <child>
                       <object class="GtkCellRendererText" id="cellrenderer2"/>
                       <attributes>
@@ -235,6 +238,7 @@
                     <property name="resizable">True</property>
                     <property name="spacing">6</property>
                     <property name="title" translatable="yes" context="insertbookmark|hidden">Hidden</property>
+                    <property name="clickable">True</property>
                     <child>
                       <object class="GtkCellRendererText" id="cellrenderer3"/>
                       <attributes>
@@ -248,6 +252,7 @@
                     <property name="resizable">True</property>
                     <property name="spacing">6</property>
                     <property name="title" translatable="yes" context="insertbookmark|condition">Condition</property>
+                    <property name="clickable">True</property>
                     <child>
                       <object class="GtkCellRendererText" id="cellrenderer4"/>
                       <attributes>
