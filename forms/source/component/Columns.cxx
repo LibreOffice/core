@@ -115,7 +115,7 @@ namespace
     class theOGridColumnImplementationId : public rtl::Static< UnoTunnelIdInit, theOGridColumnImplementationId > {};
 }
 
-const Sequence<sal_Int8>& OGridColumn::getUnoTunnelImplementationId()
+const Sequence<sal_Int8>& OGridColumn::getUnoTunnelId()
 {
     return theOGridColumnImplementationId::get().getSeq();
 }
@@ -126,7 +126,7 @@ sal_Int64 SAL_CALL OGridColumn::getSomething( const Sequence<sal_Int8>& _rIdenti
     sal_Int64 nReturn(0);
 
     if  (   (_rIdentifier.getLength() == 16)
-        &&  (0 == memcmp( getUnoTunnelImplementationId().getConstArray(), _rIdentifier.getConstArray(), 16 ))
+        &&  (0 == memcmp( getUnoTunnelId().getConstArray(), _rIdentifier.getConstArray(), 16 ))
         )
     {
         nReturn = reinterpret_cast<sal_Int64>(this);

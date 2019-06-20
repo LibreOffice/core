@@ -70,7 +70,7 @@ public:
     DECLARE_UNO3_AGG_DEFAULTS(OGridControlModel, OGridColumn_BASE)
     virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type& _rType ) override;
 
-    static const css::uno::Sequence<sal_Int8>& getUnoTunnelImplementationId();
+    static const css::uno::Sequence<sal_Int8>& getUnoTunnelId();
     // XUnoTunnel
     virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence<sal_Int8>& _rIdentifier) override;
 
