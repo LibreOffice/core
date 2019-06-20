@@ -571,24 +571,12 @@ sal_Bool SAL_CALL OSection::hasForms()
 
 sal_Int64 OSection::getSomething( const uno::Sequence< sal_Int8 > & rId )
 {
-    if (rId.getLength() == 16 && 0 == memcmp(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
+    if (rId.getLength() == 16 && 0 == memcmp(getUnoTunnelId().getConstArray(),  rId.getConstArray(), 16 ) )
         return reinterpret_cast<sal_Int64>(this);
     return (m_xDrawPage_Tunnel.is()) ? m_xDrawPage_Tunnel->getSomething(rId) : 0;
 }
 
-
-OSection* OSection::getImplementation( const uno::Reference< uno::XInterface >& _rxComponent )
-{
-    OSection* pContent( nullptr );
-
-    uno::Reference< lang::XUnoTunnel > xUnoTunnel( _rxComponent, uno::UNO_QUERY );
-    if ( xUnoTunnel.is() )
-        pContent = reinterpret_cast< OSection* >( xUnoTunnel->getSomething( getUnoTunnelImplementationId() ) );
-
-    return pContent;
-}
-
-uno::Sequence< sal_Int8 > OSection::getUnoTunnelImplementationId()
+uno::Sequence< sal_Int8 > OSection::getUnoTunnelId()
 {
     static ::cppu::OImplementationId implId;
 
