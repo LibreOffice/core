@@ -335,16 +335,6 @@ bool WinGlyphFallbackSubstititution::FindFontSubstitute(FontSelectPattern& rFont
     return bFound;
 }
 
-struct ImplEnumInfo
-{
-    HDC                 mhDC;
-    PhysicalFontCollection* mpList;
-    OUString*           mpName;
-    LOGFONTW*           mpLogFont;
-    bool                mbPrinter;
-    int                 mnFontCount;
-};
-
 static rtl_TextEncoding ImplCharSetToSal( BYTE nCharSet )
 {
     rtl_TextEncoding eTextEncoding;
@@ -517,12 +507,10 @@ static BYTE ImplPitchToWin( FontPitch ePitch )
         return DEFAULT_PITCH;
 }
 
-static FontAttributes WinFont2DevFontAttributes( const ENUMLOGFONTEXW& rEnumFont,
-    const NEWTEXTMETRICW& rMetric)
+static FontAttributes DWFont2DevFontAttributes(IDWriteFont* pDWriteFont,
+    const LOGFONTW rLogFont, const LanguageTag& rLanguageTag)
 {
     FontAttributes aDFA;
-
-    const LOGFONTW rLogFont = rEnumFont.elfLogFont;
 
     // get font face attributes
     aDFA.SetFamilyType(ImplFamilyToSal( rLogFont.lfPitchAndFamily ));
@@ -535,36 +523,66 @@ static FontAttributes WinFont2DevFontAttributes( const ENUMLOGFONTEXW& rEnumFont
     // get the font face name
     aDFA.SetFamilyName(o3tl::toU(rLogFont.lfFaceName));
 
-    // use the face's style name only if it looks reasonable
-    const wchar_t* pStyleName = rEnumFont.elfStyle;
-    const wchar_t* pEnd = pStyleName + sizeof(rEnumFont.elfStyle)/sizeof(*rEnumFont.elfStyle);
-    const wchar_t* p = pStyleName;
-    for(; *p && (p < pEnd); ++p )
-        if( *p < 0x0020 )
-            break;
-    if( p < pEnd )
-        aDFA.SetStyleName(o3tl::toU(pStyleName));
+    // get the style name
+    HRESULT hr = S_OK;
+    IDWriteLocalizedStrings *pNames;
+    BOOL bExists = false;
+    // using WIN32 names instead of TYPOGRAPHIC for compatibility with GDI 4-member families, should be revised.
+    hr = pDWriteFont->GetInformationalStrings(DWRITE_INFORMATIONAL_STRING_WIN32_SUBFAMILY_NAMES, &pNames, &bExists);
+    if (SUCCEEDED(hr) && bExists)
+    {
+        UINT32 nIdx = 0;
+        // find string matching UI language
+        hr = pNames->FindLocaleName(o3tl::toW(rLanguageTag.getBcp47().getStr()), &nIdx, &bExists);
+        // fallback to English if not found
+        if (SUCCEEDED(hr) && !bExists)
+            hr = pNames->FindLocaleName(L"en-US", &nIdx, &bExists);
+        // or use the first if that is not found either
+        if (SUCCEEDED(hr) && !bExists)
+            nIdx = 0;
 
-    // heuristics for font quality
-    // -   opentypeTT > truetype
-    aDFA.SetQuality( 0 );
-    if( rMetric.tmPitchAndFamily & TMPF_TRUETYPE )
-        aDFA.IncreaseQualityBy( 50 );
-    if( 0 != (rMetric.ntmFlags & (NTM_TT_OPENTYPE | NTM_PS_OPENTYPE)) )
-        aDFA.IncreaseQualityBy( 10 );
+        wchar_t rStyleName[256];
+        hr = pNames->GetString(nIdx, rStyleName, 256);
+        if (SUCCEEDED(hr))
+            aDFA.SetStyleName(o3tl::toU(rStyleName));
 
-    // TODO: add alias names
+        pNames->Release();
+    }
+
+    // add alias names
+    hr = pDWriteFont->GetInformationalStrings(DWRITE_INFORMATIONAL_STRING_WIN32_FAMILY_NAMES, &pNames, &bExists);
+    if (SUCCEEDED(hr) && bExists)
+    {
+        wchar_t rFamilyName[256];
+        INT32 nNames = pNames->GetCount();
+        for (INT32 nIdx = 0; nIdx < nNames; nIdx++)
+        {
+            hr = pNames->GetString(nIdx, rFamilyName, 256);
+            if (SUCCEEDED(hr))
+            {
+                OUString rName(o3tl::toU(rFamilyName));
+                // add any family name not matching the default one
+                if (aDFA.GetFamilyName() != rName)
+                    aDFA.AddMapName(rName);
+            }
+        }
+        pNames->Release();
+    }
+
+    // all fonts are created equal
+    aDFA.SetQuality(0);
+
     return aDFA;
 }
 
 
-static rtl::Reference<WinFontFace> ImplLogMetricToDevFontDataW( const ENUMLOGFONTEXW* pLogFont,
-                                         const NEWTEXTMETRICW* pMetric)
+static rtl::Reference<WinFontFace> ImplDWFontToDevFontDataW(IDWriteFont* pDWriteFont,
+    const LOGFONTW rLogFont, const LanguageTag& rLanguageTag)
 {
     rtl::Reference<WinFontFace> pData = new WinFontFace(
-        WinFont2DevFontAttributes(*pLogFont, *pMetric),
-        pLogFont->elfLogFont.lfCharSet,
-        pMetric->tmPitchAndFamily );
+        DWFont2DevFontAttributes(pDWriteFont, rLogFont, rLanguageTag),
+        rLogFont.lfCharSet,
+        rLogFont.lfPitchAndFamily);
 
     return pData;
 }
@@ -618,23 +636,8 @@ WinFontFace::WinFontFace( const FontAttributes& rDFS,
 {
     if( eWinCharSet == SYMBOL_CHARSET )
     {
-        if( (nPitchAndFamily & TMPF_TRUETYPE) != 0 )
-        {
-            // truetype fonts need their symbols as U+F0xx
-            mbAliasSymbolsHigh = true;
-        }
-        else if( (nPitchAndFamily & (TMPF_VECTOR|TMPF_DEVICE))
-                                 == (TMPF_VECTOR|TMPF_DEVICE) )
-        {
-            // scalable device fonts (e.g. builtin printer fonts)
-            // need their symbols as U+00xx
-            mbAliasSymbolsLow  = true;
-        }
-        else if( (nPitchAndFamily & (TMPF_VECTOR|TMPF_TRUETYPE)) == 0 )
-        {
-            // bitmap fonts need their symbols as U+F0xx
-            mbAliasSymbolsHigh = true;
-        }
+        // truetype fonts need their symbols as U+F0xx
+        mbAliasSymbolsHigh = true;
     }
 }
 
@@ -999,61 +1002,6 @@ bool WinSalGraphics::GetFontCapabilities(vcl::FontCapabilities &rFontCapabilitie
     return mpWinFontEntry[0]->GetFontFace()->GetFontCapabilities(rFontCapabilities);
 }
 
-static int CALLBACK SalEnumFontsProcExW( const LOGFONTW* lpelfe,
-                                  const TEXTMETRICW* lpntme,
-                                  DWORD nFontType, LPARAM lParam )
-{
-    ENUMLOGFONTEXW const * pLogFont
-        = reinterpret_cast<ENUMLOGFONTEXW const *>(lpelfe);
-    NEWTEXTMETRICEXW const * pMetric
-        = reinterpret_cast<NEWTEXTMETRICEXW const *>(lpntme);
-    ImplEnumInfo* pInfo = reinterpret_cast<ImplEnumInfo*>(lParam);
-    if ( !pInfo->mpName )
-    {
-        // Ignore vertical fonts
-        if ( pLogFont->elfLogFont.lfFaceName[0] != '@' )
-        {
-            OUString aName = o3tl::toU(pLogFont->elfLogFont.lfFaceName);
-            pInfo->mpName = &aName;
-            memcpy(pInfo->mpLogFont->lfFaceName, pLogFont->elfLogFont.lfFaceName, (aName.getLength()+1)*sizeof(wchar_t));
-            pInfo->mpLogFont->lfCharSet = pLogFont->elfLogFont.lfCharSet;
-            EnumFontFamiliesExW(pInfo->mhDC, pInfo->mpLogFont, SalEnumFontsProcExW,
-                                reinterpret_cast<LPARAM>(pInfo), 0);
-            pInfo->mpLogFont->lfFaceName[0] = '\0';
-            pInfo->mpLogFont->lfCharSet = DEFAULT_CHARSET;
-            pInfo->mpName = nullptr;
-        }
-    }
-    else
-    {
-        // Ignore non-device fonts on printers.
-        if (pInfo->mbPrinter)
-        {
-            if ((nFontType & RASTER_FONTTYPE) && !(nFontType & DEVICE_FONTTYPE))
-            {
-                SAL_INFO("vcl.fonts", "Unsupported printer font ignored: " << OUString(o3tl::toU(pLogFont->elfLogFont.lfFaceName)));
-                return 1;
-            }
-        }
-        // Only SFNT fonts are supported, ignore anything else.
-        else if (!(nFontType & TRUETYPE_FONTTYPE) &&
-                 !(pMetric->ntmTm.ntmFlags & NTM_PS_OPENTYPE) &&
-                 !(pMetric->ntmTm.ntmFlags & NTM_TT_OPENTYPE))
-        {
-            SAL_INFO("vcl.fonts", "Unsupported font ignored: " << OUString(o3tl::toU(pLogFont->elfLogFont.lfFaceName)));
-            return 1;
-        }
-
-        rtl::Reference<WinFontFace> pData = ImplLogMetricToDevFontDataW(pLogFont, &(pMetric->ntmTm));
-        pData->SetFontId( sal_IntPtr( pInfo->mnFontCount++ ) );
-
-        pInfo->mpList->Add( pData.get() );
-        SAL_INFO("vcl.fonts", "SalEnumFontsProcExW: font added: " << pData->GetFamilyName() << " " << pData->GetStyleName());
-    }
-
-    return 1;
-}
-
 struct TempFontItem
 {
     OUString maFontResourcePath;
@@ -1256,19 +1204,51 @@ void WinSalGraphics::GetDevFontList( PhysicalFontCollection* pFontCollection )
         }
     }
 
-    ImplEnumInfo aInfo;
-    aInfo.mhDC          = getHDC();
-    aInfo.mpList        = pFontCollection;
-    aInfo.mpName        = nullptr;
-    aInfo.mbPrinter     = mbPrinter;
-    aInfo.mnFontCount   = 0;
+    int nFontCount = 0;
+    if (mpDWriteFactory && mpDWriteGdiInterop)
+    {
+        HRESULT hr = S_OK;
+        IDWriteFontCollection *pDWriteFontCollection;
+        hr = mpDWriteFactory->GetSystemFontCollection(&pDWriteFontCollection);
+        if (SUCCEEDED(hr))
+        {
+            LanguageTag aLanguageTag = Application::GetSettings().GetUILanguageTag();
 
-    LOGFONTW aLogFont;
-    memset( &aLogFont, 0, sizeof( aLogFont ) );
-    aLogFont.lfCharSet = DEFAULT_CHARSET;
-    aInfo.mpLogFont = &aLogFont;
-    EnumFontFamiliesExW( getHDC(), &aLogFont,
-        SalEnumFontsProcExW, reinterpret_cast<LPARAM>(&aInfo), 0 );
+            UINT32 nFamilyCount = pDWriteFontCollection->GetFontFamilyCount();
+            for (UINT32 nFamilyIdx = 0; nFamilyIdx < nFamilyCount; ++nFamilyIdx)
+            {
+                IDWriteFontFamily *pDWriteFamily;
+                hr = pDWriteFontCollection->GetFontFamily(nFamilyIdx, &pDWriteFamily);
+                if (SUCCEEDED(hr))
+                {
+                    UINT32 nFontCount = pDWriteFamily->GetFontCount();
+                    for (UINT32 nFontIdx = 0; nFontIdx < nFontCount; nFontIdx++)
+                    {
+                        IDWriteFont *pDWriteFont;
+                        hr = pDWriteFamily->GetFont(nFontIdx, &pDWriteFont);
+                        if (SUCCEEDED(hr))
+                        {
+                            LOGFONTW rLogFont;
+                            BOOL bSystemFont;
+                            mpDWriteGdiInterop->ConvertFontToLOGFONT(pDWriteFont, &rLogFont, &bSystemFont);
+
+                            rtl::Reference<WinFontFace> pData = ImplDWFontToDevFontDataW(pDWriteFont, rLogFont, aLanguageTag);
+                            pData->SetFontId(sal_IntPtr(nFontCount++));
+                            pFontCollection->Add(pData.get());
+                            SAL_INFO("vcl.fonts", "WinSalGraphics::GetDevFontList: font added: "
+                                    << pData->GetFamilyName() << " " << pData->GetStyleName()
+                                    << (pData->GetMapNames().isEmpty() ? "" : OUString(";" + pData->GetMapNames()))
+                                    );
+
+                            pDWriteFont->Release();
+                        }
+                    }
+                    pDWriteFamily->Release();
+                }
+            }
+            pDWriteFontCollection->Release();
+        }
+    }
 
     // set glyph fallback hook
     static WinGlyphFallbackSubstititution aSubstFallback;

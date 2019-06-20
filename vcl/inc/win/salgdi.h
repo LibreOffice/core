@@ -168,6 +168,9 @@ private:
     RGNDATA*                mpStdClipRgnData;   // Cache Standard-ClipRegion-Data
     int                     mnPenWidth;         // line width
 
+    IDWriteFactory*         mpDWriteFactory;
+    IDWriteGdiInterop*      mpDWriteGdiInterop;
+
     bool CacheGlyphs(const GenericSalLayout& rLayout);
     bool DrawCachedGlyphs(const GenericSalLayout& rLayout);
 
