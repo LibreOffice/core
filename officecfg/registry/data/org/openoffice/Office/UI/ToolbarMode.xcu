@@ -195,7 +195,7 @@
             <value>true</value>
           </prop>
           <prop oor:name="IsExperimental">
-            <value>true</value>
+            <value>false</value>
           </prop>
           <prop oor:name="MenuPosition">
             <value>7</value>
@@ -264,7 +264,7 @@
             <value>true</value>
           </prop>
           <prop oor:name="IsExperimental">
-            <value>true</value>
+            <value>false</value>
           </prop>
           <prop oor:name="MenuPosition">
             <value>8</value>
@@ -480,7 +480,7 @@
             <value>true</value>
           </prop>
           <prop oor:name="IsExperimental">
-            <value>true</value>
+            <value>false</value>
           </prop>
           <prop oor:name="MenuPosition">
             <value>6</value>
@@ -513,7 +513,7 @@
             <value>true</value>
           </prop>
           <prop oor:name="IsExperimental">
-            <value>true</value>
+            <value>false</value>
           </prop>
           <prop oor:name="MenuPosition">
             <value>8</value>
@@ -671,7 +671,7 @@
             <value>true</value>
           </prop>
           <prop oor:name="IsExperimental">
-            <value>true</value>
+            <value>false</value>
           </prop>
           <prop oor:name="MenuPosition">
             <value>6</value>
@@ -704,7 +704,7 @@
             <value>true</value>
           </prop>
           <prop oor:name="IsExperimental">
-            <value>true</value>
+            <value>false</value>
           </prop>
           <prop oor:name="MenuPosition">
             <value>8</value>
@@ -873,7 +873,7 @@
             <value>true</value>
           </prop>
           <prop oor:name="IsExperimental">
-            <value>true</value>
+            <value>false</value>
           </prop>
           <prop oor:name="MenuPosition">
             <value>7</value>
