@@ -105,6 +105,10 @@ bool Qt5Graphics_Controls::isNativeControlSupported(ControlType type, ControlPar
         case ControlType::Slider:
             return (part == ControlPart::TrackHorzArea || part == ControlPart::TrackVertArea);
 
+        case ControlType::TabItem:
+        case ControlType::TabPane:
+            return ((part == ControlPart::Entire) || part == ControlPart::TabPaneWithHeader);
+
         default:
             break;
     }
@@ -112,7 +116,6 @@ bool Qt5Graphics_Controls::isNativeControlSupported(ControlType type, ControlPar
     return false;
 }
 
-/// helper drawing methods
 namespace
 {
 void draw(QStyle::ControlElement element, QStyleOption* option, QImage* image,
@@ -162,6 +165,27 @@ void lcl_drawFrame(QStyle::PrimitiveElement element, QImage* image, QStyle::Stat
     if (bClip)
         painter.setClipRegion(QRegion(aRect).subtracted(aRect.adjusted(fw, fw, -fw, -fw)));
     QApplication::style()->drawPrimitive(element, &option, &painter);
+}
+
+void lcl_fillQStyleOptionTab(const ImplControlValue& value, QStyleOptionTab& sot)
+{
+    const TabitemValue& rValue = static_cast<const TabitemValue&>(value);
+    if (rValue.isFirst())
+        sot.position = rValue.isLast() ? QStyleOptionTab::OnlyOneTab : QStyleOptionTab::Beginning;
+    else if (rValue.isLast())
+        sot.position = rValue.isFirst() ? QStyleOptionTab::OnlyOneTab : QStyleOptionTab::End;
+    else
+        sot.position = QStyleOptionTab::Middle;
+}
+
+void lcl_fullQStyleOptionTabWidgetFrame(QStyleOptionTabWidgetFrame& option)
+{
+    option.state = QStyle::State_Enabled;
+    option.rightCornerWidgetSize = QSize(0, 0);
+    option.leftCornerWidgetSize = QSize(0, 0);
+    option.lineWidth = QApplication::style()->pixelMetric(QStyle::PM_DefaultFrameWidth);
+    option.midLineWidth = 0;
+    option.shape = QTabBar::RoundedNorth;
 }
 }
 
@@ -609,6 +633,34 @@ bool Qt5Graphics_Controls::drawNativeControl(ControlType type, ControlPart part,
         draw(QStyle::CE_ProgressBar, &option, m_image.get(),
              vclStateValue2StateFlag(nControlState, value));
     }
+    else if (type == ControlType::TabItem && part == ControlPart::Entire)
+    {
+        QStyleOptionTab sot;
+        lcl_fillQStyleOptionTab(value, sot);
+        draw(QStyle::CE_TabBarTabShape, &sot, m_image.get(),
+             vclStateValue2StateFlag(nControlState, value));
+    }
+    else if (type == ControlType::TabPane && part == ControlPart::Entire)
+    {
+        const TabPaneValue& rValue = static_cast<const TabPaneValue&>(value);
+
+        // get the overlap size for the tabs, so they will overlap the frame
+        QStyleOptionTab tabOverlap;
+        tabOverlap.shape = QTabBar::RoundedNorth;
+        TabPaneValue::m_nOverlap
+            = QApplication::style()->pixelMetric(QStyle::PM_TabBarBaseOverlap, &tabOverlap);
+
+        QStyleOptionTabWidgetFrame option;
+        lcl_fullQStyleOptionTabWidgetFrame(option);
+        option.tabBarRect = toQRect(rValue.m_aTabHeaderRect);
+        option.selectedTabRect
+            = rValue.m_aSelectedTabRect.IsEmpty() ? QRect() : toQRect(rValue.m_aSelectedTabRect);
+        option.tabBarSize = toQSize(rValue.m_aTabHeaderRect.GetSize());
+        option.rect = m_image->rect();
+        QRect aRect = QApplication::style()->subElementRect(QStyle::SE_TabWidgetTabPane, &option);
+        draw(QStyle::PE_FrameTabWidget, &option, m_image.get(),
+             vclStateValue2StateFlag(nControlState, value), aRect);
+    }
     else
     {
         returnVal = false;
@@ -818,7 +870,7 @@ bool Qt5Graphics_Controls::getNativeControlRegion(ControlType type, ControlPart 
                 auto nStyle = static_cast<DrawFrameFlags>(val.getNumericVal() & 0xFFF0);
                 if (nStyle & DrawFrameFlags::NoDraw)
                 {
-                    int nFrameWidth
+                    const int nFrameWidth
                         = QApplication::style()->pixelMetric(QStyle::PM_DefaultFrameWidth);
                     contentRect.adjust(nFrameWidth, nFrameWidth, -nFrameWidth, -nFrameWidth);
                 }
@@ -910,6 +962,31 @@ bool Qt5Graphics_Controls::getNativeControlRegion(ControlType type, ControlPart 
                 contentRect = boundingRect = rect;
                 retVal = true;
             }
+            break;
+        }
+        case ControlType::TabItem:
+        {
+            QStyleOptionTab sot;
+            lcl_fillQStyleOptionTab(val, sot);
+            QSize aMinSize = QApplication::style()->sizeFromContents(QStyle::CT_TabBarTab, &sot,
+                                                                     contentRect.size());
+            contentRect.setSize(aMinSize);
+            boundingRect = contentRect;
+            retVal = true;
+            break;
+        }
+        case ControlType::TabPane:
+        {
+            const TabPaneValue& rValue = static_cast<const TabPaneValue&>(val);
+            QStyleOptionTabWidgetFrame sotwf;
+            lcl_fullQStyleOptionTabWidgetFrame(sotwf);
+            QSize aMinSize = QApplication::style()->sizeFromContents(
+                QStyle::CT_TabWidget, &sotwf,
+                QSize(std::max(rValue.m_aTabHeaderRect.GetWidth(), controlRegion.GetWidth()),
+                      rValue.m_aTabHeaderRect.GetHeight() + controlRegion.GetHeight()));
+            contentRect.setSize(aMinSize);
+            boundingRect = contentRect;
+            retVal = true;
             break;
         }
         default:

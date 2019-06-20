@@ -95,6 +95,14 @@ SliderValue* SliderValue::clone() const
     return new SliderValue( *this );
 }
 
+int TabPaneValue::m_nOverlap = 0;
+
+TabPaneValue* TabPaneValue::clone() const
+{
+    assert(typeid(const TabPaneValue) == typeid(*this));
+    return new TabPaneValue(*this);
+}
+
 TabitemValue::~TabitemValue()
 {
 }
@@ -229,6 +237,15 @@ static std::shared_ptr< ImplControlValue > TransformControlValue( const ImplCont
             pNew->maGripRect = rDev.ImplLogicToDevicePixel( pTVal->maGripRect );
         }
         break;
+    case ControlType::TabPane:
+        {
+            const TabPaneValue* pTIVal = static_cast<const TabPaneValue*>(&rVal);
+            TabPaneValue* pNew = new TabPaneValue(*pTIVal);
+            pNew->m_aTabHeaderRect = rDev.ImplLogicToDevicePixel(pTIVal->m_aTabHeaderRect);
+            pNew->m_aSelectedTabRect = rDev.ImplLogicToDevicePixel(pTIVal->m_aSelectedTabRect);
+            aResult.reset(pNew);
+        }
+        break;
     case ControlType::TabItem:
         {
             const TabitemValue* pTIVal = static_cast<const TabitemValue*>(&rVal);
@@ -263,7 +280,7 @@ static std::shared_ptr< ImplControlValue > TransformControlValue( const ImplCont
         }
         break;
     default:
-        OSL_FAIL( "unknown ImplControlValue type !" );
+        std::abort();
         break;
     }
     return aResult;
