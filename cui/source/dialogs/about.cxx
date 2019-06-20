@@ -140,7 +140,8 @@ IMPL_LINK(AboutDialog, HandleClick, weld::Button&, rButton, void)
 
 void AboutDialog::SetBuildIdLink()
 {
-    const OUString buildId = GetBuildId();
+    OUString sDefault;
+    OUString buildId(utl::Bootstrap::getBuildIdData(sDefault));
 
     if (IsStringValidGitHash(buildId))
     {
