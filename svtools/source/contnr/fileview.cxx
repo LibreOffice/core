@@ -1846,7 +1846,7 @@ void SvtFileView_Impl::EntryRenamed( OUString& rURL,
             (*aFoundElem)->maDisplayText = aDisplayText.replaceAt( 0, nIndex, rTitle );
 
         INetURLObject aURLObj( rURL );
-        aURLObj.SetName( rTitle, INetURLObject::EncodeMechanism::All );
+        aURLObj.setName( rTitle, INetURLObject::EncodeMechanism::All );
 
         rURL = aURLObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
 
