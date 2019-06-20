@@ -2581,6 +2581,17 @@ XclExpCellTable::XclExpCellTable( const XclExpRoot& rRoot ) :
 
             case CELLTYPE_FORMULA:
             {
+                if (pPattern)
+                {
+                    OUString aUrl = pPattern->GetItemSet().Get(ATTR_HYPERLINK).GetValue();
+                    if (!aUrl.isEmpty())
+                    {
+                        std::shared_ptr<XclExpHyperlink> aLink;
+                        aLink.reset(new XclExpHyperlink(GetRoot(), SvxURLField(aUrl, aUrl), aScPos));
+                        mxHyperlinkList->AppendRecord(aLink);
+                    }
+                }
+
                 xCell.reset(new XclExpFormulaCell(
                     GetRoot(), aXclPos, pPattern, nMergeBaseXFId,
                     *rScCell.mpFormula, maArrayBfr, maShrfmlaBfr, maTableopBfr));
