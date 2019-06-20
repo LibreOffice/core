@@ -94,16 +94,12 @@ IMPL_LINK_NOARG(SwInsertBookmarkDlg, DeleteHdl, weld::Button&, void)
 {
     if (!ValidateBookmarks())
         return;
-    std::vector<int> aSelectedRows(m_xBookmarksBox->get_selected_rows());
-    if (aSelectedRows.empty())
-        return;
-    std::sort(aSelectedRows.begin(), aSelectedRows.end());
 
-    for (size_t i = aSelectedRows.size(); i; --i)
-    {
-        int nRow = aSelectedRows[i-1];
+    int nSelectedRows(0);
+
+    m_xBookmarksBox->selected_foreach([this, &nSelectedRows](weld::TreeIter& rEntry){
         // remove from model
-        sw::mark::IMark* pBookmark = reinterpret_cast<sw::mark::IMark*>(m_xBookmarksBox->get_id(nRow).toInt64());
+        sw::mark::IMark* pBookmark = reinterpret_cast<sw::mark::IMark*>(m_xBookmarksBox->get_id(rEntry).toInt64());
         OUString sRemoved = pBookmark->GetName();
         IDocumentMarkAccess* const pMarkAccess = rSh.getIDocumentMarkAccess();
         pMarkAccess->deleteMark(pMarkAccess->findMark(sRemoved));
@@ -112,11 +108,20 @@ IMPL_LINK_NOARG(SwInsertBookmarkDlg, DeleteHdl, weld::Button&, void)
         aReq.Done();
         aTableBookmarks.erase(std::remove(aTableBookmarks.begin(), aTableBookmarks.end(),
                               std::make_pair(pBookmark, sRemoved)), aTableBookmarks.end());
-        // remove from BookmarkTable
-        m_xBookmarksBox->remove(nRow);
-    }
-    m_xBookmarksBox->unselect_all();
-    m_xEditBox->set_text("");
+
+        ++nSelectedRows;
+
+        return false;
+    });
+
+    if (!nSelectedRows)
+        return;
+
+    // remove from BookmarkTable
+    m_xBookmarksBox->remove_selection();
+
+    ValidateBookmarks();
+
     m_xDeleteBtn->set_sensitive(false);
     m_xGotoBtn->set_sensitive(false);
     m_xRenameBtn->set_sensitive(false);
@@ -143,23 +148,21 @@ IMPL_LINK_NOARG(SwInsertBookmarkDlg, SelectionChangedHdl, weld::TreeView&, void)
         return;
 
     OUStringBuffer sEditBoxText;
-
-    std::vector<int> aSelectedRows(m_xBookmarksBox->get_selected_rows());
-    std::sort(aSelectedRows.begin(), aSelectedRows.end());
-    for (size_t i = aSelectedRows.size(); i; --i)
-    {
-        int nRow = aSelectedRows[i-1];
-        sw::mark::IMark* pBookmark = reinterpret_cast<sw::mark::IMark*>(m_xBookmarksBox->get_id(nRow).toInt64());
+    int nSelectedRows = 0;
+    m_xBookmarksBox->selected_foreach([this, &sEditBoxText, &nSelectedRows](weld::TreeIter& rEntry){
+        sw::mark::IMark* pBookmark = reinterpret_cast<sw::mark::IMark*>(m_xBookmarksBox->get_id(rEntry).toInt64());
         const OUString& sEntryName = pBookmark->GetName();
-        sEditBoxText.append(sEntryName);
-        if (i > 1)
+        if (!sEditBoxText.isEmpty())
             sEditBoxText.append(";");
-    }
-    if (!aSelectedRows.empty())
+        sEditBoxText.append(sEntryName);
+        ++nSelectedRows;
+        return false;
+    });
+    if (nSelectedRows)
     {
         m_xInsertBtn->set_sensitive(false);
-        m_xGotoBtn->set_sensitive(aSelectedRows.size() == 1);
-        m_xRenameBtn->set_sensitive(aSelectedRows.size() == 1);
+        m_xGotoBtn->set_sensitive(nSelectedRows == 1);
+        m_xRenameBtn->set_sensitive(nSelectedRows == 1);
         m_xDeleteBtn->set_sensitive(true);
         m_xEditBox->set_text(sEditBoxText.makeStringAndClear());
     }
@@ -176,11 +179,11 @@ IMPL_LINK_NOARG(SwInsertBookmarkDlg, RenameHdl, weld::Button&, void)
 {
     if (!ValidateBookmarks())
         return;
-    int nSelected = m_xBookmarksBox->get_selected_index();
-    if (nSelected == -1)
+    auto xSelected = m_xBookmarksBox->get_selected();
+    if (!xSelected)
         return;
 
-    sw::mark::IMark* pBookmark = reinterpret_cast<sw::mark::IMark*>(m_xBookmarksBox->get_id(nSelected).toInt64());
+    sw::mark::IMark* pBookmark = reinterpret_cast<sw::mark::IMark*>(m_xBookmarksBox->get_id(*xSelected).toInt64());
     uno::Reference<frame::XModel> xModel = rSh.GetView().GetDocShell()->GetBaseModel();
     uno::Reference<text::XBookmarksSupplier> xBkms(xModel, uno::UNO_QUERY);
     uno::Reference<container::XNameAccess> xNameAccess = xBkms->getBookmarks();
@@ -228,11 +231,11 @@ void SwInsertBookmarkDlg::GotoSelectedBookmark()
         return;
     // if no entries selected we can't jump anywhere
     // shouldn't be needed as we disable GoTo button when jump is not possible
-    int nSelected = m_xBookmarksBox->get_selected_index();
-    if (nSelected == -1)
+    auto xSelected = m_xBookmarksBox->get_selected();
+    if (!xSelected)
         return;
 
-    sw::mark::IMark* pBookmark = reinterpret_cast<sw::mark::IMark*>(m_xBookmarksBox->get_id(nSelected).toInt64());
+    sw::mark::IMark* pBookmark = reinterpret_cast<sw::mark::IMark*>(m_xBookmarksBox->get_id(*xSelected).toInt64());
 
     rSh.EnterStdMode();
     rSh.GotoMark(pBookmark);
@@ -297,6 +300,7 @@ SwInsertBookmarkDlg::SwInsertBookmarkDlg(weld::Window* pParent, SwWrtShell& rS, 
     , rSh(rS)
     , rReq(rRequest)
     , m_nLastBookmarksCount(0)
+    , m_bSorted(false)
     , m_xEditBox(m_xBuilder->weld_entry("name"))
     , m_xInsertBtn(m_xBuilder->weld_button("insert"))
     , m_xDeleteBtn(m_xBuilder->weld_button("delete"))
@@ -309,6 +313,7 @@ SwInsertBookmarkDlg::SwInsertBookmarkDlg(weld::Window* pParent, SwWrtShell& rS, 
 {
     m_xBookmarksBox->connect_changed(LINK(this, SwInsertBookmarkDlg, SelectionChangedHdl));
     m_xBookmarksBox->connect_row_activated(LINK(this, SwInsertBookmarkDlg, DoubleClickHdl));
+    m_xBookmarksBox->connect_column_clicked(LINK(this, SwInsertBookmarkDlg, HeaderBarClick));
     m_xEditBox->connect_changed(LINK(this, SwInsertBookmarkDlg, ModifyHdl));
     m_xInsertBtn->connect_clicked(LINK(this, SwInsertBookmarkDlg, InsertHdl));
     m_xDeleteBtn->connect_clicked(LINK(this, SwInsertBookmarkDlg, DeleteHdl));
@@ -328,6 +333,35 @@ SwInsertBookmarkDlg::SwInsertBookmarkDlg(weld::Window* pParent, SwWrtShell& rS, 
     sRemoveWarning = SwResId(STR_REMOVE_WARNING);
 }
 
+IMPL_LINK(SwInsertBookmarkDlg, HeaderBarClick, int, nColumn, void)
+{
+    if (!m_bSorted)
+    {
+        m_xBookmarksBox->make_sorted();
+        m_bSorted = true;
+    }
+
+    bool bSortAtoZ = m_xBookmarksBox->get_sort_order();
+
+    //set new arrow positions in headerbar
+    if (nColumn == m_xBookmarksBox->get_sort_column())
+    {
+        bSortAtoZ = !bSortAtoZ;
+        m_xBookmarksBox->set_sort_order(bSortAtoZ);
+    }
+    else
+    {
+        m_xBookmarksBox->set_sort_indicator(TRISTATE_INDET, m_xBookmarksBox->get_sort_column());
+        m_xBookmarksBox->set_sort_column(nColumn);
+    }
+
+    if (nColumn != -1)
+    {
+        //sort lists
+        m_xBookmarksBox->set_sort_indicator(bSortAtoZ ? TRISTATE_TRUE : TRISTATE_FALSE, nColumn);
+    }
+}
+
 SwInsertBookmarkDlg::~SwInsertBookmarkDlg()
 {
 }
@@ -343,6 +377,14 @@ BookmarkTable::BookmarkTable(std::unique_ptr<weld::TreeView> xControl)
     aWidths.push_back(60);
     m_xControl->set_column_fixed_widths(aWidths);
     m_xControl->set_selection_mode(SelectionMode::Multiple);
+}
+
+std::unique_ptr<weld::TreeIter> BookmarkTable::get_selected() const
+{
+    std::unique_ptr<weld::TreeIter> xIter(m_xControl->make_iterator());
+    if (!m_xControl->get_selected(xIter.get()))
+        xIter.reset();
+    return xIter;
 }
 
 void BookmarkTable::InsertBookmark(sw::mark::IMark* pMark)
@@ -393,34 +435,36 @@ void BookmarkTable::InsertBookmark(sw::mark::IMark* pMark)
     m_xControl->set_text(nRow, sHideCondition, 4);
 }
 
-int BookmarkTable::GetRowByBookmarkName(const OUString& sName)
+std::unique_ptr<weld::TreeIter> BookmarkTable::GetRowByBookmarkName(const OUString& sName)
 {
-    for (int i = 0, nCount = m_xControl->n_children(); i < nCount; ++i)
-    {
-        sw::mark::IMark* pBookmark = reinterpret_cast<sw::mark::IMark*>(m_xControl->get_id(i).toInt64());
+    std::unique_ptr<weld::TreeIter> xRet;
+    m_xControl->all_foreach([this, &sName, &xRet](weld::TreeIter& rEntry){
+        sw::mark::IMark* pBookmark = reinterpret_cast<sw::mark::IMark*>(m_xControl->get_id(rEntry).toInt64());
         if (pBookmark->GetName() == sName)
         {
-            return i;
+            xRet = m_xControl->make_iterator(&rEntry);
+            return true;
         }
-    }
-    return -1;
+        return false;
+    });
+    return xRet;
 }
 
 sw::mark::IMark* BookmarkTable::GetBookmarkByName(const OUString& sName)
 {
-    int nEntry = GetRowByBookmarkName(sName);
-    if (nEntry == -1)
+    auto xEntry = GetRowByBookmarkName(sName);
+    if (!xEntry)
         return nullptr;
 
-    return reinterpret_cast<sw::mark::IMark*>(m_xControl->get_id(nEntry).toInt64());
+    return reinterpret_cast<sw::mark::IMark*>(m_xControl->get_id(*xEntry).toInt64());
 }
 
 void BookmarkTable::SelectByName(const OUString& sName)
 {
-    int nEntry = GetRowByBookmarkName(sName);
-    if (nEntry == -1)
+    auto xEntry = GetRowByBookmarkName(sName);
+    if (!xEntry)
         return;
-    select(nEntry);
+    select(*xEntry);
 }
 
 OUString BookmarkTable::GetNameProposal()

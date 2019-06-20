@@ -7704,6 +7704,27 @@ public:
         enable_notify_events();
     }
 
+    virtual void remove_selection() override
+    {
+        disable_notify_events();
+
+        std::vector<GtkTreeIter> aIters;
+        GtkTreeModel* pModel;
+        GList* pList = gtk_tree_selection_get_selected_rows(gtk_tree_view_get_selection(m_pTreeView), &pModel);
+        for (GList* pItem = g_list_first(pList); pItem; pItem = g_list_next(pItem))
+        {
+            GtkTreePath* path = static_cast<GtkTreePath*>(pItem->data);
+            aIters.emplace_back();
+            gtk_tree_model_get_iter(pModel, &aIters.back(), path);
+        }
+        g_list_free_full(pList, reinterpret_cast<GDestroyNotify>(gtk_tree_path_free));
+
+        for (auto& iter : aIters)
+            gtk_tree_store_remove(m_pTreeStore, &iter);
+
+        enable_notify_events();
+    }
+
     virtual void select(const weld::TreeIter& rIter) override
     {
         assert(gtk_tree_view_get_model(m_pTreeView) && "don't select when frozen");
