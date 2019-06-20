@@ -32,7 +32,6 @@
 #include <salframe.hxx>
 #include <svdata.hxx>
 #include <comphelper/lok.hxx>
-#include <comphelper/profilezone.hxx>
 #if HAVE_FEATURE_OPENGL
 #include <vcl/opengl/OpenGLHelper.hxx>
 #endif
@@ -641,8 +640,6 @@ void Window::ImplCallOverlapPaint()
 
 IMPL_LINK_NOARG(Window, ImplHandlePaintHdl, Idle *, void)
 {
-    comphelper::ProfileZone aZone("VCL idle re-paint");
-
     // save paint events until layout is done
     if (IsSystemWindow() && static_cast<const SystemWindow*>(this)->hasPendingLayout())
     {
@@ -664,8 +661,6 @@ IMPL_LINK_NOARG(Window, ImplHandlePaintHdl, Idle *, void)
 
 IMPL_LINK_NOARG(Window, ImplHandleResizeTimerHdl, Idle *, void)
 {
-    comphelper::ProfileZone aZone("VCL idle resize");
-
     if( mpWindowImpl->mbReallyVisible )
     {
         ImplCallResize();
