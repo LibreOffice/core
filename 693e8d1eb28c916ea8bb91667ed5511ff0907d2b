@@ -46,6 +46,30 @@
       "revId": "693e8d1eb28c916ea8bb91667ed5511ff0907d2b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df7087c5_59bb83e4",
+        "filename": "framework/source/fwe/xml/toolboxdocumenthandler.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-06-20T06:58:35Z",
+      "side": 1,
+      "message": "seen fixed with \u003chttps://gerrit.libreoffice.org/plugins/gitiles/core/+/1fcbab24c610d6308a51649e2fa814cdf8636e26%5E%21\u003e \"Revert \u0027Fix typo\u0027\"",
+      "parentUuid": "3fa0c359_616430ba",
+      "range": {
+        "startLine": 209,
+        "startChar": 41,
+        "endLine": 209,
+        "endChar": 42
+      },
+      "revId": "693e8d1eb28c916ea8bb91667ed5511ff0907d2b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
