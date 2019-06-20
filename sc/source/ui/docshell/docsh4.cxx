@@ -1862,8 +1862,8 @@ void ScDocShell::ExecutePageStyle( const SfxViewShell& rCaller,
 
                                 SetDocumentModified();
                                 xRequest->Done();
-                                pDlg->disposeOnce();
                             }
+                            pDlg->disposeOnce();
                         });
                     }
                 }
