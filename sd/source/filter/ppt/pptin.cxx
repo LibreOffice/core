@@ -1913,7 +1913,7 @@ OUString ImplSdPPTImport::ReadSound(sal_uInt32 nSoundRef) const
                     {
                         INetURLObject   aURL( aSoundList[ n ] );
 
-                        if( aURL.GetName() == aRetval )
+                        if (aURL.GetLastName() == aRetval)
                         {
                             aRetval = aSoundList[ n ];
                             bSoundExists = true;

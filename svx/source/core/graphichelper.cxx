@@ -199,12 +199,12 @@ OUString GraphicHelper::ExportGraphic(weld::Window* pParent, const Graphic& rGra
     aDialogHelper.SetDisplayDirectory( aPath.GetMainURL(INetURLObject::DecodeMechanism::ToIUri) );
     INetURLObject aURL;
     aURL.SetSmartURL( rGraphicName );
-    aDialogHelper.SetFileName( aURL.GetName() );
+    aDialogHelper.SetFileName(aURL.GetLastName());
 
     GraphicFilter& rGraphicFilter = GraphicFilter::GetGraphicFilter();
     const sal_uInt16 nCount = rGraphicFilter.GetExportFormatCount();
 
-    OUString aExtension( aURL.GetExtension() );
+    OUString aExtension(aURL.GetFileExtension());
     if( aExtension.isEmpty() )
     {
         GetPreferredExtension( aExtension, rGraphic );

@@ -930,15 +930,7 @@ public:
                  EncodeMechanism eMechanism = EncodeMechanism::WasEncoded,
                  rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8);
 
-    OUString GetName(DecodeMechanism eMechanism = DecodeMechanism::ToIUri,
-                             rtl_TextEncoding eCharset
-                                 = RTL_TEXTENCODING_UTF8) const
-    { return GetLastName(eMechanism, eCharset); }
-
     void SetExtension(OUString const & rTheExtension);
-
-    OUString GetExtension() const
-    { return GetFileExtension(); }
 
     OUString CutExtension();
 
