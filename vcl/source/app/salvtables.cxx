@@ -3590,6 +3590,19 @@ public:
         m_xTreeView->SetScrolledHdl(LINK(this, SalInstanceTreeView, VisibleRangeChangedHdl));
     }
 
+    virtual void remove_selection() override
+    {
+        disable_notify_events();
+        SvTreeListEntry* pSelected = m_xTreeView->FirstSelected();
+        while (pSelected)
+        {
+            SvTreeListEntry* pNextSelected = m_xTreeView->NextSelected(pSelected);
+            m_xTreeView->RemoveEntry(pSelected);
+            pSelected = pNextSelected;
+        }
+        enable_notify_events();
+    }
+
     virtual bool is_selected(const weld::TreeIter& rIter) const override
     {
         const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
