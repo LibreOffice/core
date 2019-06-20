@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "df7087c5_dca1c197",
+        "filename": "RepositoryExternal.mk",
+        "patchSetId": 13
+      },
+      "lineNbr": 4178,
+      "author": {
+        "id": 1000130
+      },
+      "writtenOn": "2019-06-20T15:23:03Z",
+      "side": 1,
+      "message": "And _use_static_libraries us wrong anyway, we should link dynamically if possible in Debians packages - but \"in emergency\" I can just patch it locally...",
+      "parentUuid": "df7087c5_1c83b906",
+      "revId": "05b68af029dddf3bede9152926361222fcce873e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "df7087c5_3c88fd1d",
         "filename": "RepositoryExternal.mk",
         "patchSetId": 13
