@@ -882,11 +882,6 @@ bool SwTabFrame::RemoveFollowFlowLine()
             pFollowFlowLine &&
             pLastLine, "There should be a flowline in the follow" );
 
-    // We have to reset the flag here, because lcl_MoveRowContent
-    // calls a GrowFrame(), which has a different behavior if
-    // this flag is set.
-    SetFollowFlowLine( false );
-
     // #140081# Make code robust.
     if ( !pFollowFlowLine || !pLastLine )
         return true;
@@ -895,6 +890,11 @@ bool SwTabFrame::RemoveFollowFlowLine()
         SAL_WARN("sw.layout", "Cannot remove in-use Follow Flow Line");
         return false;
     }
+
+    // We have to reset the flag here, because lcl_MoveRowContent
+    // calls a GrowFrame(), which has a different behavior if
+    // this flag is set.
+    SetFollowFlowLine( false );
 
     // Move content
     lcl_MoveRowContent( *pFollowFlowLine, *static_cast<SwRowFrame*>(pLastLine) );
