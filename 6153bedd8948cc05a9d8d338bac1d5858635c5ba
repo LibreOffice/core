@@ -34,6 +34,24 @@
       "revId": "6153bedd8948cc05a9d8d338bac1d5858635c5ba",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df7087c5_bf44ffb8",
+        "filename": "include/tools/urlobj.hxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 941,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-06-21T07:24:33Z",
+      "side": 0,
+      "message": "But here that IMO just adds confusion, with GetFileExtension vs. SetExtension.  (And this is not only for the file URL schema, so I would avoid the \"file\" notion here to avoid confusion about that.)",
+      "parentUuid": "df7087c5_dff8d37d",
+      "revId": "6153bedd8948cc05a9d8d338bac1d5858635c5ba",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
