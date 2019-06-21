@@ -304,6 +304,44 @@ namespace tools_urlobj
                 !INetURLObject("vnd.sun.star.pkg://example.org").isAnyKnownWebDAVScheme());
         }
 
+        void testSetName() {
+            {
+                INetURLObject obj("file:///");
+                bool ok = obj.setName("foo");
+                CPPUNIT_ASSERT(!ok);
+            }
+            {
+                INetURLObject obj("file:///foo");
+                bool ok = obj.setName("bar");
+                CPPUNIT_ASSERT(ok);
+                CPPUNIT_ASSERT_EQUAL(
+                    OUString("file:///bar"), obj.GetMainURL(INetURLObject::DecodeMechanism::NONE));
+            }
+            {
+                INetURLObject obj("file:///foo/");
+                bool ok = obj.setName("bar");
+                CPPUNIT_ASSERT(ok);
+                CPPUNIT_ASSERT_EQUAL(
+                    OUString("file:///bar/"), obj.GetMainURL(INetURLObject::DecodeMechanism::NONE));
+            }
+            {
+                INetURLObject obj("file:///foo/bar");
+                bool ok = obj.setName("baz");
+                CPPUNIT_ASSERT(ok);
+                CPPUNIT_ASSERT_EQUAL(
+                    OUString("file:///foo/baz"),
+                    obj.GetMainURL(INetURLObject::DecodeMechanism::NONE));
+            }
+            {
+                INetURLObject obj("file:///foo/bar/");
+                bool ok = obj.setName("baz");
+                CPPUNIT_ASSERT(ok);
+                CPPUNIT_ASSERT_EQUAL(
+                    OUString("file:///foo/baz/"),
+                    obj.GetMainURL(INetURLObject::DecodeMechanism::NONE));
+            }
+        }
+
         void testSetExtension() {
             INetURLObject obj("file:///foo/bar.baz/");
             bool ok = obj.setExtension(
@@ -330,6 +368,7 @@ namespace tools_urlobj
         CPPUNIT_TEST( urlobjTest_data );
         CPPUNIT_TEST( urlobjTest_isSchemeEqualTo );
         CPPUNIT_TEST( urlobjTest_isAnyKnownWebDAVScheme );
+        CPPUNIT_TEST( testSetName );
         CPPUNIT_TEST( testSetExtension );
         CPPUNIT_TEST_SUITE_END(  );
     };                          // class createPool
