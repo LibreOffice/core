@@ -75,23 +75,26 @@ void Qt5Widget::paintEvent(QPaintEvent* pEvent)
 
 void Qt5Widget::resizeEvent(QResizeEvent* pEvent)
 {
+    const int nWidth = pEvent->size().width();
+    const int nHeight = pEvent->size().height();
+
+    m_rFrame.maGeometry.nWidth = nWidth;
+    m_rFrame.maGeometry.nHeight = nHeight;
+
     if (m_rFrame.m_bUseCairo)
     {
-        int width = size().width();
-        int height = size().height();
-
         if (m_rFrame.m_pSvpGraphics)
         {
             cairo_surface_t* pSurface
-                = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, width, height);
+                = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, nWidth, nHeight);
             cairo_surface_set_user_data(pSurface, SvpSalGraphics::getDamageKey(),
                                         &m_rFrame.m_aDamageHandler, nullptr);
-            m_rFrame.m_pSvpGraphics->setSurface(pSurface, basegfx::B2IVector(width, height));
+            m_rFrame.m_pSvpGraphics->setSurface(pSurface, basegfx::B2IVector(nWidth, nHeight));
             UniqueCairoSurface old_surface(m_rFrame.m_pSurface.release());
             m_rFrame.m_pSurface.reset(pSurface);
 
-            int min_width = qMin(pEvent->oldSize().width(), pEvent->size().width());
-            int min_height = qMin(pEvent->oldSize().height(), pEvent->size().height());
+            int min_width = qMin(pEvent->oldSize().width(), nWidth);
+            int min_height = qMin(pEvent->oldSize().height(), nHeight);
 
             SalTwoRect rect(0, 0, min_width, min_height, 0, 0, min_width, min_height);
 
@@ -103,20 +106,16 @@ void Qt5Widget::resizeEvent(QResizeEvent* pEvent)
         QImage* pImage = nullptr;
 
         if (m_rFrame.m_pQImage)
-            pImage = new QImage(
-                m_rFrame.m_pQImage->copy(0, 0, pEvent->size().width(), pEvent->size().height()));
+            pImage = new QImage(m_rFrame.m_pQImage->copy(0, 0, nWidth, nHeight));
         else
         {
-            pImage = new QImage(size(), Qt5_DefaultFormat32);
+            pImage = new QImage(nWidth, nHeight, Qt5_DefaultFormat32);
             pImage->fill(Qt::transparent);
         }
 
         m_rFrame.m_pQt5Graphics->ChangeQImage(pImage);
         m_rFrame.m_pQImage.reset(pImage);
     }
-
-    m_rFrame.maGeometry.nWidth = size().width();
-    m_rFrame.maGeometry.nHeight = size().height();
 
     m_rFrame.CallCallback(SalEvent::Resize, nullptr);
 }
@@ -252,7 +251,15 @@ void Qt5Widget::dropEvent(QDropEvent* event)
     QWidget::dropEvent(event);
 }
 
-void Qt5Widget::moveEvent(QMoveEvent*) { m_rFrame.CallCallback(SalEvent::Move, nullptr); }
+void Qt5Widget::moveEvent(QMoveEvent* event)
+{
+    if (m_rFrame.m_pTopLevel)
+        return;
+
+    m_rFrame.maGeometry.nX = event->pos().x();
+    m_rFrame.maGeometry.nY = event->pos().y();
+    m_rFrame.CallCallback(SalEvent::Move, nullptr);
+}
 
 void Qt5Widget::showEvent(QShowEvent*)
 {

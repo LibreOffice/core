@@ -124,7 +124,7 @@ public:
                             SalFrame();
     virtual                 ~SalFrame() override;
 
-    SalFrameGeometry        maGeometry;
+    SalFrameGeometry        maGeometry; ///< absolute, unmirrored values
 
     // SalGeometryProvider
     virtual long GetWidth() const override { return maGeometry.nWidth; }
@@ -165,6 +165,7 @@ public:
     const SalFrameGeometry& GetUnmirroredGeometry() const { return maGeometry; }
 
     virtual void            SetWindowState( const SalFrameState* pState ) = 0;
+    // return the absolute, unmirrored system frame state
     // if this returns false the structure is uninitialised
     [[nodiscard]]
     virtual bool            GetWindowState( SalFrameState* pState ) = 0;
