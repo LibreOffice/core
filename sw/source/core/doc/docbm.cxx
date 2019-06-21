@@ -1279,17 +1279,17 @@ namespace sw { namespace mark
         bool bActualChange = false;
         if(rNewType == ODF_FORMDROPDOWN)
         {
-            if (dynamic_cast<::sw::mark::CheckboxFieldmark*>(pFieldmark))
+            if (!dynamic_cast<::sw::mark::DropDownFieldmark*>(pFieldmark))
                 bActualChange = true;
         }
         else if(rNewType == ODF_FORMCHECKBOX)
         {
-            if (dynamic_cast<::sw::mark::DropDownFieldmark*>(pFieldmark))
+            if (!dynamic_cast<::sw::mark::CheckboxFieldmark*>(pFieldmark))
                 bActualChange = true;
         }
         else if(rNewType == ODF_FORMDATE)
         {
-            if (dynamic_cast<::sw::mark::DateFieldmark*>(pFieldmark))
+            if (!dynamic_cast<::sw::mark::DateFieldmark*>(pFieldmark))
                 bActualChange = true;
         }
 
