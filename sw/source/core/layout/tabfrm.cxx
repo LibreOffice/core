@@ -1661,6 +1661,7 @@ static void lcl_RecalcRow( SwRowFrame* pRow, long nBottom )
             if (!bRowStillExists)
             {
                 SAL_WARN("sw.layout", "no row anymore at " << pRow);
+                assert(!"this should no longer happen after 1e6dec4b4313212a3bdc6bb06155fd65e795368b");
                 return;
             }
 
