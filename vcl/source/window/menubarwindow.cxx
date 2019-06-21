@@ -630,7 +630,7 @@ void MenuBarWindow::HighlightItem(vcl::RenderContext& rRenderContext, sal_uInt16
             if (pData->eType != MenuItemType::SEPARATOR)
             {
                 // #107747# give menuitems the height of the menubar
-                tools::Rectangle aRect = tools::Rectangle(Point(nX, 1), Size(pData->aSz.Width(), aOutputSize.Height() - 2));
+                tools::Rectangle aRect(Point(nX, 1), Size(pData->aSz.Width(), aOutputSize.Height() - 2));
                 rRenderContext.Push(PushFlags::CLIPREGION);
                 rRenderContext.IntersectClipRegion(aRect);
                 bool bRollover, bHighlight;

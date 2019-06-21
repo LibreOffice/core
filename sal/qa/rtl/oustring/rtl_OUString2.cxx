@@ -645,7 +645,7 @@ public:
     void lastIndexOf_test_oustring_008()
         {
             // search for earth, not found (-1)
-            OUString aStr = OUString();
+            OUString aStr;
             OUString aSearchStr("earth");
             lastIndexOf_oustring(aStr, aSearchStr, -1);
         }
@@ -653,8 +653,8 @@ public:
     void lastIndexOf_test_oustring_009()
         {
             // search for earth, not found (-1)
-            OUString aStr = OUString();
-            OUString aSearchStr = OUString();
+            OUString aStr;
+            OUString aSearchStr;
             lastIndexOf_oustring(aStr, aSearchStr, -1);
 
         }

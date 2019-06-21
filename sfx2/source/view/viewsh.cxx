@@ -1516,7 +1516,7 @@ vcl::Window* SfxViewShell::GetEditWindowForActiveOLEObj() const
 
 void SfxViewShell::SetLOKLanguageTag(const OUString& rBcp47LanguageTag)
 {
-    LanguageTag aTag = LanguageTag(rBcp47LanguageTag, true);
+    LanguageTag aTag(rBcp47LanguageTag, true);
 
     css::uno::Sequence<OUString> inst(officecfg::Setup::Office::InstalledLocales::get()->getElementNames());
     LanguageTag aFallbackTag = LanguageTag(getInstalledLocaleForSystemUILanguage(inst, /* bRequestInstallIfMissing */ false, rBcp47LanguageTag), true).makeFallback();

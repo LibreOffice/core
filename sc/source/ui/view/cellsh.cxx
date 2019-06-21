@@ -1189,7 +1189,7 @@ void ScCellShell::GetState(SfxItemSet &rSet)
 
             case FID_DEFINE_CURRENT_NAME:
             {
-                ScAddress aCurrentAddress = ScAddress( nPosX, nPosY, nTab );
+                ScAddress aCurrentAddress( nPosX, nPosY, nTab );
 
                 if ( pDoc &&
                      !pDoc->IsAddressInRangeName( RangeNameScope::GLOBAL, aCurrentAddress ) &&

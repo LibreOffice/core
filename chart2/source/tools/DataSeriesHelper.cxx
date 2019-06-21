@@ -660,8 +660,7 @@ bool lcl_SequenceHasUnhiddenData( const uno::Reference< chart2::data::XDataSeque
 
 bool hasUnhiddenData( const uno::Reference< chart2::XDataSeries >& xSeries )
 {
-    uno::Reference< chart2::data::XDataSource > xDataSource =
-        uno::Reference< chart2::data::XDataSource >( xSeries, uno::UNO_QUERY );
+    uno::Reference< chart2::data::XDataSource > xDataSource( xSeries, uno::UNO_QUERY );
 
     uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > > aDataSequences = xDataSource->getDataSequences();
 

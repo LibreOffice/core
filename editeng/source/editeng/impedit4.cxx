@@ -1634,7 +1634,7 @@ void ImpEditEngine::ImpConvert( OUString &rConvTxt, LanguageType &rConvTxtLang,
     LanguageType nResLang = LANGUAGE_NONE;
 
     EditPaM aPos( CreateEditPaM( pConvInfo->aConvContinue ) );
-    EditSelection aCurSel = EditSelection( aPos, aPos );
+    EditSelection aCurSel( aPos, aPos );
 
     OUString aWord;
 
@@ -1936,7 +1936,7 @@ bool ImpEditEngine::SpellSentence(EditView const & rEditView,
         //search for all errors in the rest of the sentence and add all the portions
         do
         {
-            EditSelection aNextSel = EditSelection(aCurSel.Max(), aSentencePaM.Max());
+            EditSelection aNextSel(aCurSel.Max(), aSentencePaM.Max());
             xAlt = ImpFindNextError(aNextSel);
             if(xAlt.is())
             {

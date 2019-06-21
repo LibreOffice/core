@@ -477,8 +477,8 @@ protected:
                 pXpathStrResult);
         }
 
-        OUString aRet = OUString(reinterpret_cast<char*>(pXpathStrResult),
-            xmlStrlen(pXpathStrResult), RTL_TEXTENCODING_UTF8);
+        OUString aRet(reinterpret_cast<char*>(pXpathStrResult),
+                      xmlStrlen(pXpathStrResult), RTL_TEXTENCODING_UTF8);
         xmlFree(pXpathStrResult);
         xmlFree(pXmlXpathObj);
         xmlFree(pXmlXpathCtx);

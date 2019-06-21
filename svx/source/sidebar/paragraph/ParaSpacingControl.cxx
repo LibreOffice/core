@@ -178,7 +178,7 @@ void SAL_CALL ParaLRSpacingControl::notifyContextChangeEvent(const css::ui::Cont
 
     if(pWindow)
     {
-        vcl::EnumContext eContext = vcl::EnumContext(
+        vcl::EnumContext eContext(
                 vcl::EnumContext::GetApplicationEnum(rEvent.ApplicationName),
                 vcl::EnumContext::GetContextEnum(rEvent.ContextName));
         pWindow->SetContext(eContext);

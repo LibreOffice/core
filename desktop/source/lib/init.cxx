@@ -1347,7 +1347,7 @@ void CallbackFlushHandler::queue(const int type, const char* data)
                         long nLeft, nTop, nWidth, nHeight;
                         char nComma;
                         aRectStream >> nLeft >> nComma >> nTop >> nComma >> nWidth >> nComma >> nHeight;
-                        tools::Rectangle aNewRect = tools::Rectangle(nLeft, nTop, nLeft + nWidth, nTop + nHeight);
+                        tools::Rectangle aNewRect(nLeft, nTop, nLeft + nWidth, nTop + nHeight);
                         bool currentIsRedundant = false;
                         removeAll([&aNewRect, &nLOKWindowId, &currentIsRedundant] (const queue_type::value_type& elem) {
                                 if (elem.Type != LOK_CALLBACK_WINDOW)

@@ -1022,7 +1022,7 @@ void OViewsWindow::BegDragObj(const Point& _aPnt, SdrHdl* _pHdl,const OSectionVi
 
     int nViewCount = 0;
     Point aNewObjPos(0,0);
-    Point aLeftTop = Point(SAL_MAX_INT32, SAL_MAX_INT32);
+    Point aLeftTop(SAL_MAX_INT32, SAL_MAX_INT32);
     for (const auto& rxSection : m_aSections)
     {
         OReportSection& rReportSection = rxSection->getReportSection();

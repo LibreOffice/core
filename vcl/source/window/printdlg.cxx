@@ -1984,7 +1984,7 @@ IMPL_LINK( PrintDialog, SelectHdl, ListBox&, rBox, void )
         else
             aPrt->SetPaper( mePaper );
 
-        Size aPaperSize = Size( aInfo.getWidth(), aInfo.getHeight() );
+        Size aPaperSize( aInfo.getWidth(), aInfo.getHeight() );
         checkPaperSize( aPaperSize );
         maPController->setPaperSizeFromUser( aPaperSize );
 

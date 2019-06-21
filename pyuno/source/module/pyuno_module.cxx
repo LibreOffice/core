@@ -347,7 +347,7 @@ static PyObject* initTestEnvironment(
             css::uno::UNO_QUERY_THROW);
         char *const testlib = getenv("TEST_LIB");
         if (!testlib) { abort(); }
-        OString const libname = OString(testlib, strlen(testlib))
+        OString const libname(testlib, strlen(testlib))
 #ifdef _WIN32
             .replaceAll(OString('/'), OString('\\'))
 #endif

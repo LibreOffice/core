@@ -300,7 +300,7 @@ Sequence< sal_Int8 > DummyTokenHandler::getUTF8Identifier( sal_Int32 nToken )
         if ( nElementToken < SAL_N_ELEMENTS(tokens) )
             aUtf8Token = tokens[ nElementToken ];
     }
-    Sequence< sal_Int8 > aSeq = Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >(
+    Sequence< sal_Int8 > aSeq( reinterpret_cast< const sal_Int8* >(
                 aUtf8Token.getStr() ), aUtf8Token.getLength() );
     return aSeq;
 }

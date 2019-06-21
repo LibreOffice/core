@@ -50,7 +50,7 @@ ShareControlFile::ShareControlFile( const OUString& aOrigURL )
     if ( !m_xStream.is() && !GetURL().isEmpty() )
     {
         uno::Reference< ucb::XCommandEnvironment > xDummyEnv;
-        ::ucbhelper::Content aContent = ::ucbhelper::Content( GetURL(), xDummyEnv, comphelper::getProcessComponentContext() );
+        ::ucbhelper::Content aContent( GetURL(), xDummyEnv, comphelper::getProcessComponentContext() );
 
         uno::Reference< ucb::XContentIdentifier > xContId( aContent.get().is() ? aContent.get()->getIdentifier() : nullptr );
         if ( !xContId.is() || xContId->getContentProviderScheme() != "file" )

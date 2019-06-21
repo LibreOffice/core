@@ -1975,7 +1975,7 @@ long ScPrintFunc::PrintNotes( long nPageNo, long nNoteStart, bool bDoPrint, ScPr
 
     //      adjust aPageRect for left/right page
 
-    tools::Rectangle aTempRect = tools::Rectangle( Point(), aPageSize );
+    tools::Rectangle aTempRect( Point(), aPageSize );
     if (IsMirror(nPageNo))
     {
         aPageRect.SetLeft( ( aTempRect.Left()  + nRightMargin ) * 100 / nZoom );
@@ -2044,7 +2044,7 @@ void ScPrintFunc::PrintPage( long nPageNo, SCCOL nX1, SCROW nY1, SCCOL nX2, SCRO
 
     //      adjust aPageRect for left/right page
 
-    tools::Rectangle aTempRect = tools::Rectangle( Point(), aPageSize );
+    tools::Rectangle aTempRect( Point(), aPageSize );
     if (IsMirror(nPageNo))
     {
         aPageRect.SetLeft( ( aTempRect.Left()  + nRightMargin ) * 100 / nZoom );

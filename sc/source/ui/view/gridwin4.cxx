@@ -666,7 +666,7 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
         MapMode aCurrentMapMode(pContentDev->GetMapMode());
         pContentDev->SetMapMode(MapMode(MapUnit::MapPixel));
 
-        tools::Rectangle aPixRect = tools::Rectangle( Point(), GetOutputSizePixel() );
+        tools::Rectangle aPixRect( Point(), GetOutputSizePixel() );
         pContentDev->SetFillColor( rColorCfg.GetColorValue(svtools::APPBACKGROUND).nColor );
         pContentDev->SetLineColor();
         if ( nX2==MAXCOL )

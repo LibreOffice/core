@@ -1223,9 +1223,9 @@ void PivotTable::finalizeImport()
                 Reference< XDataPilotTables > xDPTables( xDPTablesSupp->getDataPilotTables(), UNO_SET_THROW );
                 mxDPDescriptor.set( xDPTables->createDataPilotDescriptor(), UNO_SET_THROW );
                 ScRange aRange = mpPivotCache->getSourceRange();
-                CellRangeAddress aCellRangeAddress = CellRangeAddress( aRange.aStart.Tab(),
-                                                      aRange.aStart.Col(), aRange.aStart.Row(),
-                                                      aRange.aEnd.Col(), aRange.aEnd.Row() );
+                CellRangeAddress aCellRangeAddress( aRange.aStart.Tab(),
+                                                    aRange.aStart.Col(), aRange.aStart.Row(),
+                                                    aRange.aEnd.Col(), aRange.aEnd.Row() );
                 mxDPDescriptor->setSourceRange( aCellRangeAddress );
                 mxDPDescriptor->setTag( maDefModel.maTag );
 
