@@ -17,7 +17,7 @@
 
 Qt5MainWindow::Qt5MainWindow(Qt5Frame& rFrame, QWidget* parent, Qt::WindowFlags f)
     : QMainWindow(parent, f)
-    , m_pFrame(&rFrame)
+    , m_rFrame(rFrame)
 {
     QAccessible::installFactory(Qt5AccessibleWidget::customFactory);
 }
@@ -25,7 +25,7 @@ Qt5MainWindow::Qt5MainWindow(Qt5Frame& rFrame, QWidget* parent, Qt::WindowFlags 
 void Qt5MainWindow::closeEvent(QCloseEvent* pEvent)
 {
     bool bRet = false;
-    bRet = m_pFrame->CallCallback(SalEvent::Close, nullptr);
+    bRet = m_rFrame.CallCallback(SalEvent::Close, nullptr);
 
     if (bRet)
         pEvent->accept();
@@ -34,4 +34,11 @@ void Qt5MainWindow::closeEvent(QCloseEvent* pEvent)
     // We shouldn't process the event in such case
     else
         pEvent->ignore();
+}
+
+void Qt5MainWindow::moveEvent(QMoveEvent* pEvent)
+{
+    m_rFrame.maGeometry.nX = pEvent->pos().x();
+    m_rFrame.maGeometry.nY = pEvent->pos().y();
+    m_rFrame.CallCallback(SalEvent::Move, nullptr);
 }
