@@ -173,9 +173,9 @@ void Shell::ExecuteSearch( SfxRequest& rReq )
                         {
                             SfxViewFrame* pViewFrame = GetViewFrame();
                             SfxChildWindow* pChildWin = pViewFrame ? pViewFrame->GetChildWindow( SID_SEARCH_DLG ) : nullptr;
-                            vcl::Window* pParent = pChildWin ? pChildWin->GetWindow() : nullptr;
+                            auto xParent = pChildWin ? pChildWin->GetController() : nullptr;
 
-                            std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(pParent ? pParent->GetFrameWeld() : nullptr,
+                            std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(xParent ? xParent->getDialog() : nullptr,
                                                                            VclMessageType::Question, VclButtonsType::YesNo,
                                                                            IDEResId(RID_STR_SEARCHFROMSTART)));
                             xQueryBox->set_default_response(RET_YES);
