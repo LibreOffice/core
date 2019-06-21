@@ -50,6 +50,7 @@ public:
     void testTextFormField();
     void testCheckBoxFormField();
     void testDropDownFormField();
+    void testDateFormField();
 
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testEmbeddedGraphicRoundtrip);
@@ -68,6 +69,7 @@ public:
     CPPUNIT_TEST(testTextFormField);
     CPPUNIT_TEST(testCheckBoxFormField);
     CPPUNIT_TEST(testDropDownFormField);
+    CPPUNIT_TEST(testDateFormField);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -1234,6 +1236,101 @@ void Test::testDropDownFormField()
             ++nIndex;
         }
         CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), int(2), nIndex);
+    }
+}
+
+void Test::testDateFormField()
+{
+    const OUString aFilterNames[] = {
+        "writer8",
+        //"MS Word 97",
+        //"Office Open XML Text",
+    };
+
+    for (const OUString& rFilterName : aFilterNames)
+    {
+        if (mxComponent.is())
+            mxComponent->dispose();
+        mxComponent = loadFromDesktop(m_directories.getURLFromSrc("/sw/qa/extras/globalfilter/data/date_form_field.odt"), "com.sun.star.text.TextDocument");
+
+        const OString sFailedMessage = OString("Failed on filter: ") + rFilterName.toUtf8();
+
+        // Export the document and import again for a check
+        uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+        utl::MediaDescriptor aMediaDescriptor;
+        aMediaDescriptor["FilterName"] <<= rFilterName;
+        utl::TempFile aTempFile;
+        aTempFile.EnableKillingFile();
+        xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+        uno::Reference< lang::XComponent > xComponent(xStorable, uno::UNO_QUERY);
+        xComponent->dispose();
+        mxComponent = loadFromDesktop(aTempFile.GetURL(), "com.sun.star.text.TextDocument");
+
+        // Check the document after round trip
+        SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
+        CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), pTextDoc);
+        SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+        IDocumentMarkAccess* pMarkAccess = pDoc->getIDocumentMarkAccess();
+
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), sal_Int32(3), pMarkAccess->getAllMarksCount());
+
+        int nIndex = 0;
+        for(auto aIter = pMarkAccess->getAllMarksBegin(); aIter != pMarkAccess->getAllMarksEnd(); ++aIter)
+        {
+            ::sw::mark::IFieldmark* pFieldmark = dynamic_cast<::sw::mark::IFieldmark*>(*aIter);
+
+            if(!pFieldmark)
+                continue;
+
+            CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), pFieldmark);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), OUString(ODF_FORMDATE), pFieldmark->GetFieldname());
+
+            // Check date form field's parameters.
+            const sw::mark::IFieldmark::parameter_map_t* const pParameters = pFieldmark->GetParameters();
+            OUString sDateFormat;
+            auto pResult = pParameters->find(ODF_FORMDATE_DATEFORMAT);
+            if (pResult != pParameters->end())
+            {
+                pResult->second >>= sDateFormat;
+            }
+
+            OUString sLang;
+            pResult = pParameters->find(ODF_FORMDATE_DATEFORMAT_LANGUAGE);
+            if (pResult != pParameters->end())
+            {
+                pResult->second >>= sLang;
+            }
+
+            OUString sCurrentDate;
+            pResult = pParameters->find(ODF_FORMDATE_CURRENTDATE);
+            if (pResult != pParameters->end())
+            {
+                pResult->second >>= sCurrentDate;
+            }
+
+            // The first one is empty
+            if(nIndex == 0)
+            {
+
+                CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), OUString("MM/DD/YY"), sDateFormat);
+                CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), OUString("en-US"), sLang);
+                CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), OUString(""), sCurrentDate);
+            }
+            else if (nIndex == 1) // The second has the default format
+            {
+                CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), OUString("MM/DD/YY"), sDateFormat);
+                CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), OUString("en-US"), sLang);
+                CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), OUString("2019-06-12"), sCurrentDate);
+            }
+            else // The third one has special format
+            {
+                CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), OUString("[NatNum12 MMMM=abbreviation]YYYY\". \"MMMM D."), sDateFormat);
+                CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), OUString("hu-HU"), sLang);
+                CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), OUString("2019-06-11"), sCurrentDate);
+            }
+            ++nIndex;
+        }
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), int(3), nIndex);
     }
 }
 
