@@ -33,8 +33,6 @@ class Qt5Object : public QObject, public SalObject
 {
     Q_OBJECT
 
-    friend class Qt5OpenGLContext;
-
     SystemEnvData m_aSystemData;
     Qt5Frame* m_pParent;
     QWidget* m_pQWidget; // main widget, container
@@ -43,6 +41,7 @@ class Qt5Object : public QObject, public SalObject
 
 public:
     Qt5Object(Qt5Frame* pParent, bool bShow);
+    ~Qt5Object() override;
 
     Qt5Frame* frame() const { return m_pParent; }
     QWidget* widget() const { return m_pQWidget; }
