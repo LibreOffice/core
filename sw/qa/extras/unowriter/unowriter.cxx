@@ -20,6 +20,9 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <wrtsh.hxx>
 #include <ndtxt.hxx>
+#include <PostItMgr.hxx>
+#include <postithelper.hxx>
+#include <AnnotationWin.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -151,6 +154,19 @@ DECLARE_UNOAPI_TEST(testImageCommentAtChar)
                          getProperty<OUString>(getRun(xPara, 4), "TextPortionType"));
     CPPUNIT_ASSERT_EQUAL(OUString("Text"),
                          getProperty<OUString>(getRun(xPara, 5), "TextPortionType"));
+
+    // Without the accompanying fix in place, this test would have failed with 'Expected:
+    // 5892; Actual: 1738', i.e. the anchor pos was between the "aaa" and "bbb" portions, not at the
+    // center of the page (horizontally) where the image is.  On macOS, though, with the fix in
+    // place the actual value consistently is even greater with 6283 now instead of 5892, for
+    // whatever reason.
+    SwView* pView = pDoc->GetDocShell()->GetView();
+    SwPostItMgr* pPostItMgr = pView->GetPostItMgr();
+    for (const auto& pItem : *pPostItMgr)
+    {
+        const SwRect& rAnchor = pItem->pPostIt->GetAnchorRect();
+        CPPUNIT_ASSERT_GREATEREQUAL(static_cast<long>(5892), rAnchor.Left());
+    }
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
