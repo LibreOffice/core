@@ -569,7 +569,7 @@ public:
                       rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8)
         const;
 
-    /** Set the name of a segment (preserving any parameters and any query or
+    /** Set the name of the last segment (preserving any parameters and any query or
         fragment part).
 
         @param rTheName  The new name.
@@ -580,7 +580,7 @@ public:
 
         @return  True if the name has successfully been modified (and the
         resulting URI is still valid).  If the path is not hierarchical, or
-        the specified segment does not exist, false is returned.  If false is
+        a last segment does not exist, false is returned.  If false is
         returned, the object is not modified.
      */
     bool setName(OUString const& rTheName,
