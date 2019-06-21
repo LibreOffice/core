@@ -1363,6 +1363,9 @@ uno::Reference< beans::XPropertySet > SAL_CALL
 SwXTextField::getTextFieldMaster()
 {
     SolarMutexGuard aGuard;
+    if(!m_pImpl->m_pDoc)
+        throw uno::RuntimeException();
+
     SwFieldType* pType = m_pImpl->GetFieldType();
     uno::Reference<beans::XPropertySet> const xRet(
             SwXFieldMaster::CreateXFieldMaster(m_pImpl->m_pDoc, pType));
