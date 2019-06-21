@@ -1241,7 +1241,7 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
 
     if ( pDoc && bCalcAll )
     {
-        WaitObject aWait( ScDocShell::GetActiveDialogParent() );
+        weld::WaitObject aWait( ScDocShell::GetActiveDialogParent() );
         pDoc->CalcAll();
         if ( pViewSh )
             pViewSh->UpdateCharts( true );
@@ -1568,13 +1568,6 @@ bool ScModule::IsModalMode(SfxObjectShell* pDocSh)
         SfxChildWindow* pChildWnd = lcl_GetChildWinFromCurrentView( m_nCurRefDlgId );
         if ( pChildWnd )
         {
-            if (pChildWnd->GetWindow())
-            {
-                IAnyRefDialog* pRefDlg = dynamic_cast<IAnyRefDialog*>(pChildWnd->GetWindow());
-                assert(pRefDlg);
-                bIsModal = pChildWnd->IsVisible() && pRefDlg &&
-                    !( pRefDlg->IsRefInputMode() && pRefDlg->IsDocAllowed(pDocSh) );
-            }
             if (pChildWnd->GetController())
             {
                 IAnyRefDialog* pRefDlg = dynamic_cast<IAnyRefDialog*>(pChildWnd->GetController().get());
@@ -1606,13 +1599,6 @@ bool ScModule::IsTableLocked()
         SfxChildWindow* pChildWnd = lcl_GetChildWinFromAnyView( m_nCurRefDlgId );
         if ( pChildWnd )
         {
-            if (pChildWnd->GetWindow())
-            {
-                IAnyRefDialog* pRefDlg(dynamic_cast<IAnyRefDialog*>(pChildWnd->GetWindow()));
-                assert(pRefDlg);
-                if (pRefDlg)
-                    bLocked = pRefDlg->IsTableLocked();
-            }
             if (pChildWnd->GetController())
             {
                 IAnyRefDialog* pRefDlg = dynamic_cast<IAnyRefDialog*>(pChildWnd->GetController().get());
@@ -1664,12 +1650,6 @@ bool ScModule::IsFormulaMode()
         SfxChildWindow* pChildWnd = lcl_GetChildWinFromCurrentView( m_nCurRefDlgId );
         if ( pChildWnd )
         {
-            if (pChildWnd->GetWindow())
-            {
-                IAnyRefDialog* pRefDlg = dynamic_cast<IAnyRefDialog*>(pChildWnd->GetWindow());
-                assert(pRefDlg);
-                bIsFormula = pChildWnd->IsVisible() && pRefDlg && pRefDlg->IsRefInputMode();
-            }
             if (pChildWnd->GetController())
             {
                 IAnyRefDialog* pRefDlg = dynamic_cast<IAnyRefDialog*>(pChildWnd->GetController().get());
@@ -1725,18 +1705,6 @@ void ScModule::SetReference( const ScRange& rRef, ScDocument* pDoc,
                 aNew.aEnd.SetTab(nEndTab);
             }
 
-            if (pChildWnd->GetWindow())
-            {
-                IAnyRefDialog* pRefDlg = dynamic_cast<IAnyRefDialog*>(pChildWnd->GetWindow());
-                assert(pRefDlg);
-                if(pRefDlg)
-                {
-                    // hide the (color) selection now instead of later from LoseFocus,
-                    // don't abort the ref input that causes this call (bDoneRefMode = sal_False)
-                    pRefDlg->HideReference( false );
-                    pRefDlg->SetReference( aNew, pDoc );
-                }
-            }
             if (pChildWnd->GetController())
             {
                 IAnyRefDialog* pRefDlg = dynamic_cast<IAnyRefDialog*>(pChildWnd->GetController().get());
@@ -1776,15 +1744,6 @@ void ScModule::AddRefEntry()
         OSL_ENSURE( pChildWnd, "NoChildWin" );
         if ( pChildWnd )
         {
-            if (pChildWnd->GetWindow())
-            {
-                IAnyRefDialog* pRefDlg = dynamic_cast<IAnyRefDialog*>(pChildWnd->GetWindow());
-                assert(pRefDlg);
-                if (pRefDlg)
-                {
-                    pRefDlg->AddRefEntry();
-                }
-            }
             if (pChildWnd->GetController())
             {
                 IAnyRefDialog* pRefDlg = dynamic_cast<IAnyRefDialog*>(pChildWnd->GetController().get());
@@ -1818,15 +1777,6 @@ void ScModule::EndReference()
         OSL_ENSURE( pChildWnd, "NoChildWin" );
         if ( pChildWnd )
         {
-            if (pChildWnd->GetWindow())
-            {
-                IAnyRefDialog* pRefDlg = dynamic_cast<IAnyRefDialog*>(pChildWnd->GetWindow());
-                assert(pRefDlg);
-                if(pRefDlg)
-                {
-                    pRefDlg->SetActive();
-                }
-            }
             if (pChildWnd->GetController())
             {
                 IAnyRefDialog* pRefDlg = dynamic_cast<IAnyRefDialog*>(pChildWnd->GetController().get());

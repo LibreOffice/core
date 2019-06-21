@@ -33,7 +33,7 @@
 //!         parent window for dialogs
 //!         Problem: OLE Server!
 
-vcl::Window* ScTabViewShell::GetDialogParent()
+weld::Window* ScTabViewShell::GetDialogParent()
 {
     //  if a ref-input dialog is open, use it as parent
     //  (necessary when a slot is executed from the dialog's OK handler)
@@ -45,13 +45,32 @@ vcl::Window* ScTabViewShell::GetDialogParent()
             SfxChildWindow* pChild = pViewFrm->GetChildWindow(nCurRefDlgId);
             if (pChild)
             {
-                vcl::Window* pWin = pChild->GetWindow();
-                if (pWin && pWin->IsVisible())
-                    return pWin;
+                auto xController = pChild->GetController();
+                weld::Window* pRet = xController ? xController->getDialog() : nullptr;
+                if (pRet && pRet->get_visible())
+                    return pRet;
             }
         }
     }
 
+    ScDocShell* pDocSh = GetViewData().GetDocShell();
+    if ( pDocSh->IsOle() )
+    {
+        // TODO/LATER: how to GetEditWindow in embedded document?!
+        // It should be OK to return the ViewShell Window!
+        vcl::Window* pWin = GetWindow();
+        return pWin ? pWin->GetFrameWeld() : nullptr;
+        // SvInPlaceEnvironment* pEnv = pDocSh->GetIPEnv();
+        // if (pEnv)
+        //    return pEnv->GetEditWin();
+    }
+
+    vcl::Window* pWin = GetActiveWin();      // for normal views, too
+    return pWin ? pWin->GetFrameWeld() : nullptr;
+}
+
+vcl::Window* ScTabViewShell::GetLegacyDialogParent()
+{
     ScDocShell* pDocSh = GetViewData().GetDocShell();
     if ( pDocSh->IsOle() )
     {

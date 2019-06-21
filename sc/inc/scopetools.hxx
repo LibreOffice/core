@@ -57,14 +57,6 @@ public:
     ~IdleSwitch();
 };
 
-class WaitPointerSwitch
-{
-    VclPtr<vcl::Window> mpFrameWin;
-public:
-    WaitPointerSwitch(vcl::Window* pWin);
-    ~WaitPointerSwitch();
-};
-
 /// Wrapper for ScDocument::DelayFormulaGrouping()
 class SC_DLLPUBLIC DelayFormulaGroupingSwitch
 {

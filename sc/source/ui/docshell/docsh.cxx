@@ -505,9 +505,7 @@ bool ScDocShell::LoadXML( SfxMedium* pLoadMedium, const css::uno::Reference< css
         {
             // Generator is not LibreOffice.  Ask if the user wants to perform
             // full re-calculation.
-            vcl::Window* pWin = GetActiveDialogParent();
-
-            MessageWithCheck aQueryBox(pWin ? pWin->GetFrameWeld() : nullptr,
+            MessageWithCheck aQueryBox(GetActiveDialogParent(),
                     "modules/scalc/ui/recalcquerydialog.ui", "RecalcQueryDialog");
             aQueryBox.set_primary_text(ScResId(STR_QUERY_FORMULA_RECALC_ONLOAD_ODS));
             aQueryBox.set_default_response(RET_YES);
@@ -729,9 +727,7 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                         ScAppOptions aAppOptions = SC_MOD()->GetAppOptions();
                         if ( aAppOptions.GetShowSharedDocumentWarning() )
                         {
-                            vcl::Window* pWin = ScDocShell::GetActiveDialogParent();
-
-                            MessageWithCheck aWarningBox(pWin ? pWin->GetFrameWeld() : nullptr,
+                            MessageWithCheck aWarningBox(ScDocShell::GetActiveDialogParent(),
                                     "modules/scalc/ui/sharedwarningdialog.ui", "SharedWarningDialog");
                             aWarningBox.run();
 
@@ -858,8 +854,7 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                                             OUString aMessage( ScResId( STR_FILE_LOCKED_SAVE_LATER ) );
                                             aMessage = aMessage.replaceFirst( "%1", aUserName );
 
-                                            vcl::Window* pWin = GetActiveDialogParent();
-                                            std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
+                                            std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(GetActiveDialogParent(),
                                                                                        VclMessageType::Warning, VclButtonsType::NONE,
                                                                                        aMessage));
                                             xWarn->add_button(Button::GetStandardText(StandardButtonType::Retry), RET_RETRY);
@@ -939,8 +934,7 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                                     }
                                     else
                                     {
-                                        vcl::Window* pWin = GetActiveDialogParent();
-                                        std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
+                                        std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(GetActiveDialogParent(),
                                                                                    VclMessageType::Warning, VclButtonsType::Ok,
                                                                                    ScResId(STR_DOC_NOLONGERSHARED)));
                                         xWarn->run();
@@ -982,8 +976,7 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                 {
                     if ( GetDocument().GetExternalRefManager()->containsUnsavedReferences() )
                     {
-                        vcl::Window* pWin = GetActiveDialogParent();
-                        std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
+                        std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(GetActiveDialogParent(),
                                                                    VclMessageType::Warning, VclButtonsType::YesNo,
                                                                    ScResId(STR_UNSAVED_EXT_REF)));
                         if (RET_NO == xWarn->run())
@@ -1082,7 +1075,7 @@ bool ScDocShell::LoadFrom( SfxMedium& rMedium )
     LoadMediumGuard aLoadGuard(&m_aDocument);
     ScRefreshTimerProtector aProt( m_aDocument.GetRefreshTimerControlAddress() );
 
-    WaitObject aWait( GetActiveDialogParent() );
+    weld::WaitObject aWait( GetActiveDialogParent() );
 
     bool bRet = false;
 
@@ -2325,7 +2318,7 @@ bool ScDocShell::ConvertTo( SfxMedium &rMed )
              aFltName == pFilterExcel97 || aFltName == pFilterEx5Temp ||
              aFltName == pFilterEx95Temp || aFltName == pFilterEx97Temp)
     {
-        WaitObject aWait( GetActiveDialogParent() );
+        weld::WaitObject aWait( GetActiveDialogParent() );
 
         bool bDoSave = true;
         if( ScTabViewShell* pViewShell = GetBestViewShell() )
@@ -2403,7 +2396,7 @@ bool ScDocShell::ConvertTo( SfxMedium &rMed )
                 sItStr = aDefOptions.BuildString();
             }
 
-            WaitObject aWait( GetActiveDialogParent() );
+            weld::WaitObject aWait( GetActiveDialogParent() );
             ScImportOptions aOptions( sItStr );
             AsciiSave( *pStream, aOptions );
             bRet = true;
@@ -2432,7 +2425,7 @@ bool ScDocShell::ConvertTo( SfxMedium &rMed )
             sCharSet = ScGlobal::GetCharsetString( RTL_TEXTENCODING_IBM_850 );
         }
 
-        WaitObject aWait( GetActiveDialogParent() );
+        weld::WaitObject aWait( GetActiveDialogParent() );
         // FIXME:  Hack so that the Sba opened TempFile can be overwritten
         rMed.CloseOutStream();
         bool bHasMemo = false;
@@ -2504,7 +2497,7 @@ bool ScDocShell::ConvertTo( SfxMedium &rMed )
                 sItStr = ScGlobal::GetCharsetString( RTL_TEXTENCODING_MS_1252 );
             }
 
-            WaitObject aWait( GetActiveDialogParent() );
+            weld::WaitObject aWait( GetActiveDialogParent() );
             ScFormatFilter::Get().ScExportDif( *pStream, &m_aDocument, ScAddress(0,0,0),
                 ScGlobal::GetCharsetValue(sItStr) );
             bRet = true;
@@ -2519,7 +2512,7 @@ bool ScDocShell::ConvertTo( SfxMedium &rMed )
         SvStream* pStream = rMed.GetOutStream();
         if ( pStream )
         {
-            WaitObject aWait( GetActiveDialogParent() );
+            weld::WaitObject aWait( GetActiveDialogParent() );
 
             SCCOL nEndCol;
             SCROW nEndRow;
@@ -2543,7 +2536,7 @@ bool ScDocShell::ConvertTo( SfxMedium &rMed )
             if (pSet->GetItemState(SID_FILE_FILTEROPTIONS, true, &pItem) == SfxItemState::SET)
                 sFilterOptions = static_cast<const SfxStringItem*>(pItem)->GetValue();
 
-            WaitObject aWait(GetActiveDialogParent());
+            weld::WaitObject aWait(GetActiveDialogParent());
             ScImportExport aImExport(&m_aDocument);
             aImExport.SetStreamPath(rMed.GetName());
             aImExport.SetFilterOptions(sFilterOptions);
@@ -2930,13 +2923,13 @@ std::unique_ptr<SfxDocumentInfoDialog> ScDocShell::CreateDocumentInfoDialog(weld
     return xDlg;
 }
 
-vcl::Window* ScDocShell::GetActiveDialogParent()
+weld::Window* ScDocShell::GetActiveDialogParent()
 {
     ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell();
     if ( pViewSh )
         return pViewSh->GetDialogParent();
-    else
-        return Application::GetDefDialogParent();
+    vcl::Window* pRet = Application::GetDefDialogParent();
+    return pRet ? pRet->GetFrameWeld() : nullptr;
 }
 
 void ScDocShell::SetSolverSaveData( std::unique_ptr<ScOptSolverSave> pData )

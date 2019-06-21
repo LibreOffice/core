@@ -74,7 +74,7 @@ void ScClipUtil::PasteFromClipboard( ScViewData* pViewData, ScTabViewShell* pTab
     else
     {
         // normal paste
-        WaitObject aWait( pViewData->GetDialogParent() );
+        weld::WaitObject aWait( pViewData->GetDialogParent() );
         if (!pOwnClip)
             pTabViewShell->PasteFromSystem();
         else

@@ -1201,11 +1201,11 @@ bool ScDocShell::MergeSharedDocument( ScDocShell* pSharedDocShell )
                 while ( bLoop )
                 {
                     bLoop = false;
-                    vcl::Window* pWin = GetActiveDialogParent();
-                    ScConflictsDlg aDlg(pWin ? pWin->GetFrameWeld() : nullptr, GetViewData(), &rSharedDoc, aConflictsList);
+                    weld::Window* pWin = GetActiveDialogParent();
+                    ScConflictsDlg aDlg(pWin, GetViewData(), &rSharedDoc, aConflictsList);
                     if (aDlg.run() == RET_CANCEL)
                     {
-                        std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
+                        std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(pWin,
                                                                        VclMessageType::Question, VclButtonsType::YesNo,
                                                                        ScResId(STR_DOC_WILLNOTBESAVED)));
                         xQueryBox->set_default_response(RET_YES);
@@ -1321,8 +1321,7 @@ bool ScDocShell::MergeSharedDocument( ScDocShell* pSharedDocShell )
         PostPaintExtras();
         PostPaintGridAll();
 
-        vcl::Window* pWin = GetActiveDialogParent();
-        std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
+        std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(GetActiveDialogParent(),
                                                       VclMessageType::Info, VclButtonsType::Ok,
                                                       ScResId(STR_DOC_UPDATED)));
         xInfoBox->run();

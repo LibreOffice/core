@@ -222,7 +222,8 @@ public:
 
     virtual         ~ScTabViewShell() override;
 
-    vcl::Window*    GetDialogParent();
+    weld::Window*   GetDialogParent();
+    vcl::Window*    GetLegacyDialogParent();
 
     bool            IsRefInputMode() const;
     void            ExecuteInputDirect();

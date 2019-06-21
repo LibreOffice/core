@@ -270,7 +270,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
         case SID_PASTE_SPECIAL:
             {
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                ScopedVclPtr<SfxAbstractPasteDialog> pDlg(pFact->CreatePasteDialog(pViewData->GetFrameWeld()));
+                ScopedVclPtr<SfxAbstractPasteDialog> pDlg(pFact->CreatePasteDialog(pViewData->GetDialogParent()));
                 SotClipboardFormatId nFormat = SotClipboardFormatId::NONE;
                 pDlg->Insert( SotClipboardFormatId::STRING, EMPTY_OUSTRING );
                 pDlg->Insert( SotClipboardFormatId::RTF,    EMPTY_OUSTRING );
@@ -468,7 +468,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
             {
                 ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
 
-                ScopedVclPtr<AbstractScNamePasteDlg> pDlg(pFact->CreateScNamePasteDlg(pViewData->GetFrameWeld(), pViewData->GetDocShell()));
+                ScopedVclPtr<AbstractScNamePasteDlg> pDlg(pFact->CreateScNamePasteDlg(pViewData->GetDialogParent(), pViewData->GetDocShell()));
                 short nRet = pDlg->Execute();
                 // pDlg is needed below
 
@@ -508,7 +508,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
                 ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
 
                 ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateScCharDlg(
-                    pViewData->GetFrameWeld(), &aAttrs, pObjSh));
+                    pViewData->GetDialogParent(), &aAttrs, pObjSh));
                 if (nSlot == SID_CHAR_DLG_EFFECT)
                 {
                     pDlg->SetCurPageId("fonteffects");

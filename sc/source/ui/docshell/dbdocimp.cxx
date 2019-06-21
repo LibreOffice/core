@@ -136,9 +136,7 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
         return false;
     }
 
-    vcl::Window* pWaitWin = ScDocShell::GetActiveDialogParent();
-    if (pWaitWin)
-        pWaitWin->EnterWait();
+    std::unique_ptr<weld::WaitObject> xWaitWin(new weld::WaitObject(ScDocShell::GetActiveDialogParent()));
     ScDocShellModificator aModificator( rDocShell );
 
     bool bSuccess = false;
@@ -596,16 +594,14 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
         ScDBRangeRefreshedHint aHint( rParam );
         rDoc.BroadcastUno( aHint );
 
-        if (pWaitWin)
-            pWaitWin->LeaveWait();
+        xWaitWin.reset();
 
         if ( bTruncated )          // show warning
             ErrorHandler::HandleError(SCWARN_IMPORT_RANGE_OVERFLOW);
     }
     else
     {
-        if (pWaitWin)
-            pWaitWin->LeaveWait();
+        xWaitWin.reset();
 
         if (aErrorMessage.isEmpty())
         {
@@ -613,8 +609,8 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
                 pErrStringId = STR_MSSG_IMPORTDATA_0;
             aErrorMessage = ScResId(pErrStringId);
         }
-        vcl::Window* pWin = ScDocShell::GetActiveDialogParent();
-        std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
+
+        std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(ScDocShell::GetActiveDialogParent(),
                                                       VclMessageType::Info, VclButtonsType::Ok,
                                                       aErrorMessage));
         xInfoBox->run();

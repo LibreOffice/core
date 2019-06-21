@@ -361,9 +361,7 @@ bool ScDocFunc::DetectiveMarkInvalid(SCTAB nTab)
     bool bUndo (rDoc.IsUndoEnabled());
     ScDrawLayer* pModel = rDoc.GetDrawLayer();
 
-    vcl::Window* pWaitWin = ScDocShell::GetActiveDialogParent();
-    if (pWaitWin)
-        pWaitWin->EnterWait();
+    std::unique_ptr<weld::WaitObject> xWaitWin(new weld::WaitObject(ScDocShell::GetActiveDialogParent()));
     if (bUndo)
         pModel->BeginCalcUndo(false);
     bool bOverflow;
@@ -371,8 +369,7 @@ bool ScDocFunc::DetectiveMarkInvalid(SCTAB nTab)
     std::unique_ptr<SdrUndoGroup> pUndo;
     if (bUndo)
         pUndo = pModel->GetCalcUndo();
-    if (pWaitWin)
-        pWaitWin->LeaveWait();
+    xWaitWin.reset();
     if (bDone)
     {
         if (pUndo && bUndo)
@@ -1849,7 +1846,7 @@ bool ScDocFunc::InsertCells( const ScRange& rRange, const ScMarkData* pTabMark, 
         return false;
     }
 
-    WaitObject aWait( ScDocShell::GetActiveDialogParent() );      // important due to TrackFormulas at UpdateReference
+    weld::WaitObject aWait( ScDocShell::GetActiveDialogParent() );      // important due to TrackFormulas at UpdateReference
 
     ScDocumentUniquePtr pRefUndoDoc;
     std::unique_ptr<ScRefUndoData> pUndoData;
@@ -2504,7 +2501,7 @@ bool ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark, 
 
     //     do it
 
-    WaitObject aWait( ScDocShell::GetActiveDialogParent() );      // important because of TrackFormulas in UpdateReference
+    weld::WaitObject aWait( ScDocShell::GetActiveDialogParent() );      // important because of TrackFormulas in UpdateReference
 
     ScDocumentUniquePtr pUndoDoc;
     std::unique_ptr<ScDocument> pRefUndoDoc;
@@ -3201,7 +3198,7 @@ void VBA_DeleteModule( ScDocShell& rDocSh, const OUString& sModuleName )
 bool ScDocFunc::InsertTable( SCTAB nTab, const OUString& rName, bool bRecord, bool bApi )
 {
     bool bSuccess = false;
-    WaitObject aWait( ScDocShell::GetActiveDialogParent() );
+    weld::WaitObject aWait( ScDocShell::GetActiveDialogParent() );
 
     ScDocShellModificator aModificator( rDocShell );
 
@@ -3252,7 +3249,7 @@ bool ScDocFunc::InsertTable( SCTAB nTab, const OUString& rName, bool bRecord, bo
 
 bool ScDocFunc::DeleteTable( SCTAB nTab, bool bRecord )
 {
-    WaitObject aWait( ScDocShell::GetActiveDialogParent() );
+    weld::WaitObject aWait( ScDocShell::GetActiveDialogParent() );
 
     ScDocShellModificator aModificator( rDocShell );
 
@@ -3977,8 +3974,7 @@ bool ScDocFunc::Unprotect( SCTAB nTab, const OUString& rPassword, bool bApi )
         {
             if (!bApi)
             {
-                vcl::Window* pWin = ScDocShell::GetActiveDialogParent();
-                std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
+                std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(ScDocShell::GetActiveDialogParent(),
                                                               VclMessageType::Info, VclButtonsType::Ok,
                                                               ScResId(SCSTR_WRONGPASSWORD)));
                 xInfoBox->run();
@@ -4010,8 +4006,7 @@ bool ScDocFunc::Unprotect( SCTAB nTab, const OUString& rPassword, bool bApi )
         {
             if (!bApi)
             {
-                vcl::Window* pWin = ScDocShell::GetActiveDialogParent();
-                std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
+                std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(ScDocShell::GetActiveDialogParent(),
                                                               VclMessageType::Info, VclButtonsType::Ok,
                                                               ScResId(SCSTR_WRONGPASSWORD)));
                 xInfoBox->run();
@@ -4182,7 +4177,7 @@ bool ScDocFunc::AutoFormat( const ScRange& rRange, const ScMarkData* pTabMark,
     ScEditableTester aTester( &rDoc, nStartCol,nStartRow, nEndCol,nEndRow, aMark );
     if ( nFormatNo < pAutoFormat->size() && aTester.IsEditable() )
     {
-        WaitObject aWait( ScDocShell::GetActiveDialogParent() );
+        weld::WaitObject aWait( ScDocShell::GetActiveDialogParent() );
 
         bool bSize = pAutoFormat->findByIndex(nFormatNo)->GetIncludeWidthHeight();
 
@@ -4295,7 +4290,7 @@ bool ScDocFunc::EnterMatrix( const ScRange& rRange, const ScMarkData* pTabMark,
     ScEditableTester aTester( &rDoc, nStartCol,nStartRow, nEndCol,nEndRow, aMark );
     if ( aTester.IsEditable() )
     {
-        WaitObject aWait( ScDocShell::GetActiveDialogParent() );
+        weld::WaitObject aWait( ScDocShell::GetActiveDialogParent() );
 
         ScDocumentUniquePtr pUndoDoc;
 
@@ -4382,7 +4377,7 @@ bool ScDocFunc::TabOp( const ScRange& rRange, const ScMarkData* pTabMark,
     ScEditableTester aTester( &rDoc, nStartCol,nStartRow, nEndCol,nEndRow, aMark );
     if ( aTester.IsEditable() )
     {
-        WaitObject aWait( ScDocShell::GetActiveDialogParent() );
+        weld::WaitObject aWait( ScDocShell::GetActiveDialogParent() );
         rDoc.SetDirty( rRange, false );
         if ( bRecord )
         {
@@ -4526,7 +4521,7 @@ bool ScDocFunc::FillSimple( const ScRange& rRange, const ScMarkData* pTabMark,
     ScEditableTester aTester( &rDoc, nStartCol,nStartRow, nEndCol,nEndRow, aMark );
     if ( aTester.IsEditable() )
     {
-        WaitObject aWait( ScDocShell::GetActiveDialogParent() );
+        weld::WaitObject aWait( ScDocShell::GetActiveDialogParent() );
 
         ScRange aSourceArea = aRange;
         ScRange aDestArea   = aRange;
@@ -4639,7 +4634,7 @@ bool ScDocFunc::FillSeries( const ScRange& rRange, const ScMarkData* pTabMark,
     ScEditableTester aTester( &rDoc, nStartCol,nStartRow, nEndCol,nEndRow, aMark );
     if ( aTester.IsEditable() )
     {
-        WaitObject aWait( ScDocShell::GetActiveDialogParent() );
+        weld::WaitObject aWait( ScDocShell::GetActiveDialogParent() );
 
         ScRange aSourceArea = rRange;
         ScRange aDestArea   = rRange;
@@ -4826,7 +4821,7 @@ bool ScDocFunc::FillAuto( ScRange& rRange, const ScMarkData* pTabMark, FillDir e
     if (ScViewData::SelectionFillDOOM( aDestArea))
         return false;
 
-    WaitObject aWait( ScDocShell::GetActiveDialogParent() );
+    weld::WaitObject aWait( ScDocShell::GetActiveDialogParent() );
 
     ScDocumentUniquePtr pUndoDoc;
     if ( bRecord )
@@ -5185,8 +5180,7 @@ void ScDocFunc::CreateOneName( ScRangeName& rList,
                         OUString aTemplate = ScResId( STR_CREATENAME_REPLACE );
                         OUString aMessage = aTemplate.getToken( 0, '#' ) + aName + aTemplate.getToken( 1, '#' );
 
-                        vcl::Window* pWin = ScDocShell::GetActiveDialogParent();
-                        std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
+                        std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(ScDocShell::GetActiveDialogParent(),
                                                                        VclMessageType::Question, VclButtonsType::YesNo,
                                                                        aMessage));
                         xQueryBox->add_button(Button::GetStandardText(StandardButtonType::Cancel), RET_CANCEL);

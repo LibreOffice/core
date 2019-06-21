@@ -418,13 +418,13 @@ void ScDBFunc::DoSubTotals( const ScSubTotalParam& rParam, bool bRecord,
         return;
     }
 
-    weld::WaitObject aWait(GetViewData().GetFrameWeld());
+    weld::WaitObject aWait(GetViewData().GetDialogParent());
     bool bOk = true;
     if (rParam.bReplace)
     {
         if (rDoc.TestRemoveSubTotals( nTab, rParam ))
         {
-            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetViewData().GetFrameWeld(),
+            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetViewData().GetDialogParent(),
                                                       VclMessageType::Question, VclButtonsType::YesNo,
                                                       ScResId(STR_MSSG_DOSUBTOTALS_1))); // "delete data?"
             xBox->set_title(ScResId(STR_MSSG_DOSUBTOTALS_0)); // "StarCalc"

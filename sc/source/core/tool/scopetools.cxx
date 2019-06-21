@@ -57,19 +57,6 @@ IdleSwitch::~IdleSwitch()
     mrDoc.EnableIdle(mbOldValue);
 }
 
-WaitPointerSwitch::WaitPointerSwitch(vcl::Window* pWin) :
-    mpFrameWin(pWin)
-{
-    if (mpFrameWin)
-        mpFrameWin->EnterWait();
-}
-
-WaitPointerSwitch::~WaitPointerSwitch()
-{
-    if (mpFrameWin)
-        mpFrameWin->LeaveWait();
-}
-
 DelayFormulaGroupingSwitch::DelayFormulaGroupingSwitch(ScDocument& rDoc, bool delay) :
     mrDoc(rDoc), mbOldValue(rDoc.IsDelayedFormulaGrouping())
 {

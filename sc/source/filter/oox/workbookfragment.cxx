@@ -543,9 +543,7 @@ void WorkbookFragment::recalcFormulaCells()
         if (rDoc.IsUserInteractionEnabled())
         {
             // Ask the user if full re-calculation is desired.
-            vcl::Window* pWin = ScDocShell::GetActiveDialogParent();
-
-            MessageWithCheck aQueryBox(pWin ? pWin->GetFrameWeld() : nullptr, "modules/scalc/ui/recalcquerydialog.ui", "RecalcQueryDialog");
+            MessageWithCheck aQueryBox(ScDocShell::GetActiveDialogParent(), "modules/scalc/ui/recalcquerydialog.ui", "RecalcQueryDialog");
             aQueryBox.set_primary_text(ScResId(STR_QUERY_FORMULA_RECALC_ONLOAD_XLS));
             aQueryBox.set_default_response(RET_YES);
 

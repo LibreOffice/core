@@ -1263,7 +1263,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
         case SID_COPY:              // for graphs in DrawShell
             {
-                WaitObject aWait( GetViewData()->GetDialogParent() );
+                weld::WaitObject aWait( GetViewData()->GetDialogParent() );
                 pTabViewShell->CopyToClip( nullptr, false, false, true );
                 rReq.Done();
                 GetViewData()->SetPasteMode( ScPasteFlags::Mode | ScPasteFlags::Border );
@@ -1274,7 +1274,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
         case SID_CUT:               // for graphs in DrawShell
             {
-                WaitObject aWait( GetViewData()->GetDialogParent() );
+                weld::WaitObject aWait( GetViewData()->GetDialogParent() );
                 pTabViewShell->CutToClip();
                 rReq.Done();
                 GetViewData()->SetPasteMode( ScPasteFlags::Mode | ScPasteFlags::Border );
@@ -1292,7 +1292,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
         case SID_CLIPBOARD_FORMAT_ITEMS:
             {
-                WaitObject aWait( GetViewData()->GetDialogParent() );
+                weld::WaitObject aWait( GetViewData()->GetDialogParent() );
 
                 SotClipboardFormatId nFormat = SotClipboardFormatId::NONE;
                 const SfxPoolItem* pItem;
@@ -1455,7 +1455,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     if( nFlags != InsertDeleteFlags::NONE )
                     {
                         {
-                            WaitObject aWait( GetViewData()->GetDialogParent() );
+                            weld::WaitObject aWait( GetViewData()->GetDialogParent() );
                             if ( bAsLink && bOtherDoc )
                                 pTabViewShell->PasteFromSystem(SotClipboardFormatId::LINK);  // DDE insert
                             else
@@ -1522,7 +1522,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     SotClipboardFormatId nFormat = static_cast<SotClipboardFormatId>(static_cast<const SfxUInt32Item*>(pItem)->GetValue());
                     bool bRet=true;
                     {
-                        WaitObject aWait( GetViewData()->GetDialogParent() );
+                        weld::WaitObject aWait( GetViewData()->GetDialogParent() );
                         bool bDraw = ( ScDrawTransferObj::GetOwnClipboard(xTransferable) != nullptr );
                         if ( bDraw && nFormat == SotClipboardFormatId::EMBED_SOURCE )
                             pTabViewShell->PasteDraw();
@@ -1576,7 +1576,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                             if (nFormat != SotClipboardFormatId::NONE)
                             {
                                 {
-                                    WaitObject aWait( GetViewData()->GetDialogParent() );
+                                    weld::WaitObject aWait( GetViewData()->GetDialogParent() );
                                     if ( bDraw && nFormat == SotClipboardFormatId::EMBED_SOURCE )
                                         pTabViewShell->PasteDraw();
                                     else
@@ -1604,7 +1604,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             // differentiate between own cell data and draw objects/external data
             // this makes FID_INS_CELL_CONTENTS superfluous
             {
-                WaitObject aWait( GetViewData()->GetDialogParent() );
+                weld::WaitObject aWait( GetViewData()->GetDialogParent() );
 
                 // we should differentiate between SotClipboardFormatId::STRING and SotClipboardFormatId::STRING_TSVC,
                 // and paste the SotClipboardFormatId::STRING_TSVC if it is available.

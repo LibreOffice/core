@@ -262,7 +262,7 @@ public:
     void            NotifyStyle( const SfxStyleSheetHint& rHint );
     void            DoAutoStyle( const ScRange& rRange, const OUString& rStyle );
 
-    static vcl::Window*  GetActiveDialogParent();
+    static weld::Window*  GetActiveDialogParent();
     void            ErrorMessage(const char* pGlobStrId);
     bool            IsEditable() const;
 
