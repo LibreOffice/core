@@ -707,6 +707,8 @@ private:
     /// Closes a currently open SDT block.
     void EndSdtBlock();
 
+    void WriteFormDate(const OUString& sCurrentDate, const OUString& sDateFormat, const OUString& sLang);
+
     void StartField_Impl( const SwTextNode* pNode, sal_Int32 nPos, FieldInfos const & rInfos, bool bWriteRun = false );
     void DoWriteCmd( const OUString& rCmd );
     void CmdField_Impl( const SwTextNode* pNode, sal_Int32 nPos, FieldInfos const & rInfos, bool bWriteRun );
