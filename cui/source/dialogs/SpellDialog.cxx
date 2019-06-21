@@ -1586,8 +1586,8 @@ bool SentenceEditWindow_Impl::MarkNextError( bool bIgnoreCurrentError, const css
 
             ChangeMarkedWord(sReplacement, LanguageTag::convertToLanguageType( pSpellErrorDescription->aLocale ));
 
-            aCursor.GetIndex() += xEntry->getReplacementText().getLength();
-        // maybe the error found here is already added to the dictionary and has to be ignored
+            aCursor.GetIndex() += sReplacement.getLength();
+            // maybe the error found here is already added to the dictionary and has to be ignored
         }
         else if(pSpellErrorDescription && !bGrammarError &&
                 xSpell->isValid(GetErrorText(),
