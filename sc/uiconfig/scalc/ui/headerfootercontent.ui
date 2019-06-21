@@ -318,6 +318,7 @@
                 <property name="image">imageBTN_FILE</property>
                 <property name="draw_indicator">True</property>
                 <property name="popup">popup</property>
+                <property name="direction">up</property>
                 <property name="use_popover">False</property>
               </object>
               <packing>
