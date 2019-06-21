@@ -559,7 +559,7 @@ bool SwPostItMgr::CalcRects()
                         SwPostItHelper::getLayoutInfos(
                             pItem->maLayoutInfo,
                             pItem->GetAnchorPosition(),
-                            &pAnnotationMark->GetMarkStart() );
+                            pAnnotationMark );
                 }
                 else
                 {

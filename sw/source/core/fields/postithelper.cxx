@@ -36,14 +36,77 @@
 #include <scriptinfo.hxx>
 #include <editeng/charhiddenitem.hxx>
 #include <calbck.hxx>
+#include <IMark.hxx>
+#include <sortedobjs.hxx>
+#include <anchoredobject.hxx>
+#include <fmtanchr.hxx>
 #include <tools/solar.h>
 
 class Point;
 
+namespace
+{
+/// Checks if pAnnotationMark covers exactly rAnchorPos (the comment anchor).
+bool AnnotationMarkCoversCommentAnchor(const sw::mark::IMark* pAnnotationMark,
+                                       const SwPosition& rAnchorPos)
+{
+    if (!pAnnotationMark)
+    {
+        return false;
+    }
+
+    const SwPosition& rMarkStart = pAnnotationMark->GetMarkStart();
+    const SwPosition& rMarkEnd = pAnnotationMark->GetMarkEnd();
+
+    if (rMarkStart != rAnchorPos)
+    {
+        return false;
+    }
+
+    if (rMarkStart.nNode != rMarkEnd.nNode)
+    {
+        return false;
+    }
+
+    return rMarkEnd.nContent.GetIndex() == rMarkStart.nContent.GetIndex() + 1;
+}
+
+/**
+ * Finds the first draw object of rTextFrame which has the same anchor position as the start of
+ * rAnnotationMark.
+ */
+SwAnchoredObject* GetAnchoredObjectOfAnnotationMark(const sw::mark::IMark& rAnnotationMark,
+                                                    const SwTextFrame& rTextFrame)
+{
+    const SwSortedObjs* pAnchored = rTextFrame.GetDrawObjs();
+    if (!pAnchored)
+    {
+        return nullptr;
+    }
+
+    for (SwAnchoredObject* pObject : *pAnchored)
+    {
+        SwFrameFormat& rFrameFormat = pObject->GetFrameFormat();
+        const SwPosition* pFrameAnchor = rFrameFormat.GetAnchor().GetContentAnchor();
+        if (!pFrameAnchor)
+        {
+            continue;
+        }
+
+        if (rAnnotationMark.GetMarkStart() == *pFrameAnchor)
+        {
+            return pObject;
+        }
+    }
+
+    return nullptr;
+}
+}
+
 SwPostItHelper::SwLayoutStatus SwPostItHelper::getLayoutInfos(
     SwLayoutInfo& o_rInfo,
     const SwPosition& rAnchorPos,
-    const SwPosition* pAnnotationStartPos )
+    const sw::mark::IMark* pAnnotationMark )
 {
     SwLayoutStatus aRet = INVISIBLE;
     SwTextNode* pTextNode = rAnchorPos.nNode.GetNode().GetTextNode();
@@ -64,12 +127,27 @@ SwPostItHelper::SwLayoutStatus SwPostItHelper::getLayoutInfos(
                 o_rInfo.mpAnchorFrame = pTextFrame;
                 {
                     DisableCallbackAction a(*pTextFrame->getRootFrame());
-                    pTextFrame->GetCharRect(o_rInfo.mPosition, rAnchorPos, nullptr, false);
+                    bool bPositionFromCommentAnchor = true;
+                    if (AnnotationMarkCoversCommentAnchor(pAnnotationMark, rAnchorPos))
+                    {
+                        SwAnchoredObject* pFrame
+                            = GetAnchoredObjectOfAnnotationMark(*pAnnotationMark, *pTextFrame);
+                        if (pFrame)
+                        {
+                            o_rInfo.mPosition = pFrame->GetObjRect();
+                            bPositionFromCommentAnchor = false;
+                        }
+                    }
+                    if (bPositionFromCommentAnchor)
+                    {
+                        pTextFrame->GetCharRect(o_rInfo.mPosition, rAnchorPos, nullptr, false);
+                    }
                 }
-                if ( pAnnotationStartPos != nullptr )
+                if (pAnnotationMark != nullptr)
                 {
-                    o_rInfo.mnStartNodeIdx = pAnnotationStartPos->nNode.GetIndex();
-                    o_rInfo.mnStartContent = pAnnotationStartPos->nContent.GetIndex();
+                    const SwPosition& rAnnotationStartPos = pAnnotationMark->GetMarkStart();
+                    o_rInfo.mnStartNodeIdx = rAnnotationStartPos.nNode.GetIndex();
+                    o_rInfo.mnStartContent = rAnnotationStartPos.nContent.GetIndex();
                 }
                 else
                 {
