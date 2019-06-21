@@ -3142,13 +3142,6 @@ bool INetURLObject::checkHierarchical() const {
     }
 }
 
-bool INetURLObject::Append(OUString const & rTheSegment,
-                           EncodeMechanism eMechanism,
-                           rtl_TextEncoding eCharset)
-{
-    return insertName(rTheSegment, false, LAST_SEGMENT, eMechanism, eCharset);
-}
-
 INetURLObject::SubString INetURLObject::getSegment(sal_Int32 nIndex,
                                                    bool bIgnoreFinalSlash)
     const
@@ -4858,17 +4851,6 @@ OUString INetURLObject::GetPartBeforeLastName()
     return aTemp.GetMainURL(DecodeMechanism::ToIUri);
 }
 
-OUString INetURLObject::GetLastName(DecodeMechanism eMechanism,
-                                     rtl_TextEncoding eCharset) const
-{
-    return getName(LAST_SEGMENT, true, eMechanism, eCharset);
-}
-
-OUString INetURLObject::GetFileExtension() const
-{
-    return getExtension(LAST_SEGMENT, false);
-}
-
 void INetURLObject::CutLastName()
 {
     INetURLObject aTemp(*this);
@@ -4907,21 +4889,6 @@ OUString INetURLObject::GetPath() const
     aTemp.removeSegment();
     aTemp.removeFinalSlash();
     return aTemp.PathToFileName();
-}
-
-void INetURLObject::SetBase(OUString const & rTheBase)
-{
-    setBase(rTheBase, LAST_SEGMENT, EncodeMechanism::All);
-}
-
-OUString INetURLObject::GetBase() const
-{
-    return getBase(LAST_SEGMENT, true, DecodeMechanism::WithCharset);
-}
-
-void INetURLObject::SetExtension(OUString const & rTheExtension)
-{
-    setExtension(rTheExtension, LAST_SEGMENT, false);
 }
 
 OUString INetURLObject::CutExtension()

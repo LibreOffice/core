@@ -902,8 +902,10 @@ public:
         the URL is not hierarchical, an empty string is returned.
      */
     OUString GetLastName(DecodeMechanism eMechanism = DecodeMechanism::ToIUri,
-                          rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8)
-        const;
+                         rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8) const
+    {
+        return getName(LAST_SEGMENT, true, eMechanism, eCharset);
+    }
 
     /** Get the 'extension' of the last segment in the path.
 
@@ -912,11 +914,14 @@ public:
         be empty.  If the URL is not hierarchical, or if the last segment does
         not contain an unencoded '.', an empty string is returned.
      */
-    OUString GetFileExtension() const;
+    OUString GetFileExtension() const { return getExtension(LAST_SEGMENT, false); }
 
     bool Append(OUString const & rTheSegment,
                        EncodeMechanism eMechanism = EncodeMechanism::WasEncoded,
-                       rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8);
+                       rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8)
+    {
+        return insertName(rTheSegment, false, LAST_SEGMENT, eMechanism, eCharset);
+    }
 
     void CutLastName();
 
@@ -928,11 +933,17 @@ public:
 
     OUString GetPath() const;
 
-    void SetBase(OUString const & rTheBase);
+    void SetBase(OUString const& rTheBase)
+    {
+        setBase(rTheBase, LAST_SEGMENT, EncodeMechanism::All);
+    }
 
-    OUString GetBase() const;
+    OUString GetBase() const { return getBase(LAST_SEGMENT, true, DecodeMechanism::WithCharset); }
 
-    void SetExtension(OUString const & rTheExtension);
+    void SetExtension(OUString const& rTheExtension)
+    {
+        setExtension(rTheExtension, LAST_SEGMENT, false);
+    }
 
     OUString CutExtension();
 
