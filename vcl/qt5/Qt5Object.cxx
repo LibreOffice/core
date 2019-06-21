@@ -36,6 +36,7 @@ Qt5Object::Qt5Object(Qt5Frame* pParent, bool bShow)
     m_pQWindow = new Qt5ObjectWindow(*this);
     m_pQWidget = QWidget::createWindowContainer(m_pQWindow, pParent->GetQWidget());
     m_pQWidget->setAttribute(Qt::WA_NoSystemBackground);
+    connect(m_pQWidget, &QObject::destroyed, this, [this]() { m_pQWidget = nullptr; });
 
     if (bShow)
         m_pQWidget->show();
@@ -62,6 +63,15 @@ Qt5Object::Qt5Object(Qt5Frame* pParent, bool bShow)
         // m_aSystemData.pDisplay = native->nativeResourceForWindow("display", nullptr);
         // m_aSystemData.aWindow = reinterpret_cast<unsigned long>(
         //     native->nativeResourceForWindow("surface", m_pQWidget->windowHandle()));
+    }
+}
+
+Qt5Object::~Qt5Object()
+{
+    if (m_pQWidget)
+    {
+        m_pQWidget->setParent(nullptr);
+        delete m_pQWidget;
     }
 }
 
