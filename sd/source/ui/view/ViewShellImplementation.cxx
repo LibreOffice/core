@@ -319,7 +319,7 @@ SvxIMapDlg* ViewShell::Implementation::GetImageMapDialog()
     SfxChildWindow* pChildWindow = SfxViewFrame::Current()->GetChildWindow(
         SvxIMapDlgChildWindow::GetChildWindowId());
     if (pChildWindow != nullptr)
-        pDialog = dynamic_cast<SvxIMapDlg*>(pChildWindow->GetWindow());
+        pDialog = dynamic_cast<SvxIMapDlg*>(pChildWindow->GetController().get());
     return pDialog;
 }
 
