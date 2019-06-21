@@ -23,6 +23,9 @@
 
 #include <math.h>
 #include <algorithm>
+#include <cassert>
+#include <cmath>
+#include <limits>
 
 #include <lcms2.h>
 
@@ -6075,13 +6078,26 @@ void PDFWriterImpl::drawHorizontalGlyphs(
             const Point aPrevPos = aMat.transform( rGlyphs[nPos-1].m_aPos );
             double fAdvance = aThisPos.X() - aPrevPos.X();
             fAdvance *= 1000.0 / nPixelFontHeight;
-            const sal_Int32 nAdjustment = static_cast<sal_Int32>(rGlyphs[nPos-1].m_nNativeWidth - fAdvance + 0.5);
+            const double nAdjustment = std::round(rGlyphs[nPos-1].m_nNativeWidth - fAdvance);
             if( nAdjustment != 0 )
             {
                 // apply individual glyph positioning
                 bNeedKern = true;
                 aKernedLine.append( ">" );
-                aKernedLine.append( nAdjustment );
+                // Print as an integer, which PDF consumers will convert to a real if it exceeds
+                // their implementation-dependent integer limits (and which will generate an error
+                // in the consumer if it exceeds their implementation-dependent real limits); we
+                // need to make sure not to generate "NaN" (which cannot happen here) or "INF" (for
+                // which, as a hack, we print the largest representable double value, which will
+                // probably exceed the consumer's implementation-dependent real limits and thus
+                // generate an error in the consumer, anyway):
+                assert(!rtl::math::isNan(nAdjustment));
+                rtl::math::doubleToStringBuffer(
+                    aKernedLine,
+                    rtl::math::isInf(nAdjustment)
+                        ? std::copysign(std::numeric_limits<double>::max(), nAdjustment)
+                        : nAdjustment,
+                    rtl_math_StringFormat_F, 0, '\0', nullptr, '\0');
                 aKernedLine.append( "<" );
             }
             appendHex( rGlyphs[nPos].m_nMappedGlyphId, aKernedLine );
