@@ -133,7 +133,7 @@ namespace dbaccess
 
         // css::lang::XTypeProvider
         virtual css::uno::Sequence<sal_Int8> SAL_CALL getImplementationId(  ) override;
-        static css::uno::Sequence< sal_Int8 >  getUnoTunnelImplementationId();
+
         // css::lang::XServiceInfo
         virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
         virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
@@ -163,7 +163,7 @@ namespace dbaccess
 
         // css::lang::XUnoTunnel
         virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
-        static OContentHelper* getImplementation( const css::uno::Reference< css::uno::XInterface >& _rxComponent );
+        static css::uno::Sequence< sal_Int8 >  getUnoTunnelId();
 
         // css::container::XChild
         virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getParent(  ) override;

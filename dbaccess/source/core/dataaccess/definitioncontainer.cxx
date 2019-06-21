@@ -34,6 +34,7 @@
 #include <com/sun/star/ucb/CommandInfo.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sdb/ErrorCondition.hpp>
+#include <comphelper/servicehelper.hxx>
 #include <comphelper/types.hxx>
 #include <ucbhelper/contentidentifier.hxx>
 
@@ -530,7 +531,7 @@ void ODefinitionContainer::implAppend(const OUString& _rName, const Reference< X
             // #i44786#
             lcl_ensureName( _rxNewObject, _rName );
 
-            ::rtl::Reference< OContentHelper > pContent = OContentHelper::getImplementation( _rxNewObject );
+            ::rtl::Reference< OContentHelper > pContent = comphelper::getUnoTunnelImplementation<OContentHelper>( _rxNewObject );
             if ( pContent.is() )
             {
                 TContentPtr pImpl = pContent->getImpl();
@@ -589,7 +590,7 @@ void ODefinitionContainer::approveNewObject(const OUString& _sName,const Referen
             DBA_RES( RID_STR_NAME_ALREADY_USED ),
             *this );
 
-    ::rtl::Reference< OContentHelper > pContent( OContentHelper::getImplementation( _rxObject ) );
+    ::rtl::Reference< OContentHelper > pContent( comphelper::getUnoTunnelImplementation<OContentHelper>( _rxObject ) );
     if ( !pContent.is() )
         throw IllegalArgumentException(
             DBA_RES( RID_STR_OBJECT_CONTAINER_MISMATCH ),

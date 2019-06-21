@@ -83,7 +83,7 @@ void SAL_CALL OContentHelper::disposing()
 
 IMPLEMENT_SERVICE_INFO1(OContentHelper,"com.sun.star.comp.sdb.Content","com.sun.star.ucb.Content");
 
-css::uno::Sequence<sal_Int8> OContentHelper::getUnoTunnelImplementationId()
+css::uno::Sequence<sal_Int8> OContentHelper::getUnoTunnelId()
 {
     static cppu::OImplementationId aId;
     return aId.getImplementationId();
@@ -541,21 +541,10 @@ void OContentHelper::notifyPropertiesChange( const Sequence< PropertyChangeEvent
 // css::lang::XUnoTunnel
 sal_Int64 OContentHelper::getSomething( const Sequence< sal_Int8 > & rId )
 {
-    if (rId.getLength() == 16 && 0 == memcmp(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
+    if (rId.getLength() == 16 && 0 == memcmp(getUnoTunnelId().getConstArray(),  rId.getConstArray(), 16 ) )
         return reinterpret_cast<sal_Int64>(this);
 
     return 0;
-}
-
-OContentHelper* OContentHelper::getImplementation( const Reference< XInterface >& _rxComponent )
-{
-    OContentHelper* pContent( nullptr );
-
-    Reference< XUnoTunnel > xUnoTunnel( _rxComponent, UNO_QUERY );
-    if ( xUnoTunnel.is() )
-        pContent = reinterpret_cast< OContentHelper* >( xUnoTunnel->getSomething( getUnoTunnelImplementationId() ) );
-
-    return pContent;
 }
 
 Reference< XInterface > SAL_CALL OContentHelper::getParent(  )

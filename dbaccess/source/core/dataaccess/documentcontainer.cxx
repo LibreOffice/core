@@ -37,6 +37,7 @@
 #include <strings.hrc>
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/propertysequence.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 
 #include <vcl/svapp.hxx>
@@ -633,9 +634,7 @@ OUString SAL_CALL ODocumentContainer::composeHierarchicalName( const OUString& i
     ::rtl::Reference<OContentHelper> pContent;
     try
     {
-        Reference<XUnoTunnel> xUnoTunnel(const_cast<ODocumentContainer*>(this)->implGetByName( _sName, true ), UNO_QUERY );
-        if ( xUnoTunnel.is() )
-            pContent = reinterpret_cast<OContentHelper*>(xUnoTunnel->getSomething(OContentHelper::getUnoTunnelImplementationId()));
+        pContent = comphelper::getUnoTunnelImplementation<OContentHelper>(const_cast<ODocumentContainer*>(this)->implGetByName( _sName, true ));
     }
     catch(const Exception&)
     {
