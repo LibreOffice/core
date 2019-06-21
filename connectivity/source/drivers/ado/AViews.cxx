@@ -59,8 +59,8 @@ Reference< XPropertySet > OViews::createDescriptor()
 // XAppend
 sdbcx::ObjectType OViews::appendObject( const OUString& _rForName, const Reference< XPropertySet >& descriptor )
 {
-    OAdoView* pView = nullptr;
-    if ( !getImplementation( pView, descriptor ) || pView == nullptr )
+    OAdoView* pView = getImplementation<OAdoView>( descriptor );
+    if ( pView == nullptr )
         m_pCatalog->getConnection()->throwGenericSQLException( STR_INVALID_VIEW_DESCRIPTOR_ERROR,static_cast<XTypeProvider*>(this) );
 
     WpADOCommand aCommand;

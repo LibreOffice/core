@@ -59,9 +59,9 @@ Reference< XPropertySet > OColumns::createDescriptor()
 // XAppend
 sdbcx::ObjectType OColumns::appendObject( const OUString&, const Reference< XPropertySet >& descriptor )
 {
-    OAdoColumn* pColumn = nullptr;
+    OAdoColumn* pColumn = getImplementation<OAdoColumn>( descriptor );
     Reference< XPropertySet > xColumn;
-    if ( !getImplementation( pColumn, descriptor ) || pColumn == nullptr )
+    if ( pColumn == nullptr )
     {
         // m_pConnection->throwGenericSQLException( STR_INVALID_COLUMN_DESCRIPTOR_ERROR,static_cast<XTypeProvider*>(this) );
         pColumn = new OAdoColumn(isCaseSensitive(),m_pConnection);
