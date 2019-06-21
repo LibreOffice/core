@@ -50,12 +50,6 @@ void OutputDevice::DrawGradient( const tools::PolyPolygon& rPolyPoly,
 {
     assert(!is_double_buffered_window());
 
-    if (mbInitClipRegion)
-        InitClipRegion();
-
-    if (mbOutputClipped && !mpMetaFile)
-        return;
-
     if ( rPolyPoly.Count() && rPolyPoly[ 0 ].GetSize() )
     {
         if ( mnDrawMode & ( DrawModeFlags::BlackGradient | DrawModeFlags::WhiteGradient | DrawModeFlags::SettingsGradient) )
@@ -100,23 +94,20 @@ void OutputDevice::DrawGradient( const tools::PolyPolygon& rPolyPoly,
                 if( !mpGraphics && !AcquireGraphics() )
                     return;
 
-                // secure clip region
-                Push( PushFlags::CLIPREGION );
-                IntersectClipRegion( aBoundRect );
-
                 if( mbInitClipRegion )
                     InitClipRegion();
 
                 if (mbOutputClipped)
-                {
-                    Pop();
                     return;
-                }
+
+                // secure clip region
+                Push( PushFlags::CLIPREGION );
+                IntersectClipRegion( aBoundRect );
 
                 // try to draw gradient natively
                 bDrawn = mpGraphics->DrawGradient( aClixPolyPoly, aGradient );
 
-                if( !bDrawn && !mbOutputClipped )
+                if (!bDrawn)
                 {
                     // draw gradients without border
                     if( mbLineColor || mbInitLineColor )
