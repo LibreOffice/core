@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df7087c5_9fe33ba5",
+        "filename": "test/source/bootstrapfixture.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-06-21T09:26:23Z",
+      "side": 1,
+      "message": "is it possible for multiple JVMs to coexist in the process? the dbaccess tests tend to start their own JVM",
+      "revId": "a22fecf205b412a36083305e9ad558d1452151a4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
