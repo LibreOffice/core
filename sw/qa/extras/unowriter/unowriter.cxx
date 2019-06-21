@@ -547,6 +547,20 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testImageCommentAtChar)
     // is also the anchor position of the image).
     IDocumentMarkAccess* pMarks = pDoc->getIDocumentMarkAccess();
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), pMarks->getAnnotationMarksCount());
+
+    uno::Reference<text::XTextRange> xPara = getParagraph(1);
+    CPPUNIT_ASSERT_EQUAL(OUString("Text"),
+                         getProperty<OUString>(getRun(xPara, 1), "TextPortionType"));
+    // Without the accompanying fix in place, this test would have failed with 'Expected:
+    // Annotation; Actual: Frame', i.e. the comment-start portion was after the commented image.
+    CPPUNIT_ASSERT_EQUAL(OUString("Annotation"),
+                         getProperty<OUString>(getRun(xPara, 2), "TextPortionType"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Frame"),
+                         getProperty<OUString>(getRun(xPara, 3), "TextPortionType"));
+    CPPUNIT_ASSERT_EQUAL(OUString("AnnotationEnd"),
+                         getProperty<OUString>(getRun(xPara, 4), "TextPortionType"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Text"),
+                         getProperty<OUString>(getRun(xPara, 5), "TextPortionType"));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
