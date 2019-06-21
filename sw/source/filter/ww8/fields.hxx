@@ -124,7 +124,8 @@ namespace ww
         // NOTE: values > 95 / 0x5F do not correspond to documented WW8 fields
         // and thus need special handling in WW8Export::OutputField()!
         eBIBLIOGRPAHY=96,
-        eCITATION = 97
+        eCITATION = 97,
+        eFORMDATE = 98,
     };
 
     /** Find the English Field Name from a winword index
