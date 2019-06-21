@@ -26,6 +26,10 @@ $(eval $(call gb_Library_use_externals,test,\
 	valgrind \
 ))
 
+$(eval $(call gb_Library_add_libs,test,\
+	-l/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.212.b04-0.fc29.x86_64/jre/lib/amd64/server/libjvm.so \
+))
+
 $(eval $(call gb_Library_use_libraries,test,\
     basegfx \
     comphelper \
