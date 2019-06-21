@@ -795,7 +795,7 @@ void Writer::Impl_writeImage( const BitmapEx& rBmpEx, const Point& rPt, const Si
     {
         BitmapEx bmpSource( rBmpEx );
 
-        tools::Rectangle originalPixelRect = tools::Rectangle(Point(), bmpSource.GetSizePixel());
+        tools::Rectangle originalPixelRect(Point(), bmpSource.GetSizePixel());
 
         Point srcPt( map(rPt) );
         Size srcSize( map(rSz) );
@@ -816,7 +816,7 @@ void Writer::Impl_writeImage( const BitmapEx& rBmpEx, const Point& rPt, const Si
             //  clipping rectangle to get mapped.  However, sometimes there are multiple layers
             //  of mapping which eventually do cause the clipping rect to be mapped.
             Size clipSize( bNeedToMapClipRect ? map(rClipRect.GetSize()) : rClipRect.GetSize() );
-            tools::Rectangle clipRect = tools::Rectangle(Point(), clipSize);
+            tools::Rectangle clipRect(Point(), clipSize);
             destRect.Intersection( clipRect );
 
             tools::Rectangle cropRect(destRect);

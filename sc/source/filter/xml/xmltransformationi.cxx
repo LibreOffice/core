@@ -260,7 +260,7 @@ ScXMLColumnTextContext::ScXMLColumnTextContext(
     : ScXMLImportContext(rImport)
     , maType(sc::TEXT_TRANSFORM_TYPE::TO_LOWER)
 {
-    OUString aType = OUString();
+    OUString aType;
 
     if (rAttrList.is())
     {
@@ -339,7 +339,7 @@ ScXMLColumnAggregateContext::ScXMLColumnAggregateContext(
     : ScXMLImportContext(rImport)
     , maType(sc::AGGREGATE_FUNCTION::SUM)
 {
-    OUString aType = OUString();
+    OUString aType;
 
     if (rAttrList.is())
     {

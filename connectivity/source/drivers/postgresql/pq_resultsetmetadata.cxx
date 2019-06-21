@@ -202,8 +202,7 @@ void ResultSetMetaData::checkTable()
             if( ! tables.is() )
             {
 
-                Reference< XTablesSupplier > supplier =
-                    Reference< XTablesSupplier > (
+                Reference< XTablesSupplier > supplier(
                         extractConnectionFromStatement( m_origin->getStatement() ), UNO_QUERY);
                 if( supplier.is() )
                     tables = supplier->getTables();

@@ -121,8 +121,8 @@ void LineBuilder::appendBevelJoint(glm::vec2 const& point, const glm::vec2& prev
     // All the magic is done by the fact that we draw triangle strips, so we
     // cover the joins correctly.
 
-    glm::vec2 prevNormal = glm::vec2(-prevLineVector.y, prevLineVector.x);
-    glm::vec2 nextNormal = glm::vec2(-nextLineVector.y, nextLineVector.x);
+    glm::vec2 prevNormal(-prevLineVector.y, prevLineVector.x);
+    glm::vec2 nextNormal(-nextLineVector.y, nextLineVector.x);
 
     appendAndConnectLinePoint(point, prevNormal, 1.0f);
     appendAndConnectLinePoint(point, nextNormal, 1.0f);
@@ -139,8 +139,8 @@ void LineBuilder::appendRoundJoint(glm::vec2 const& point, const glm::vec2& prev
     // line joins look round. Ideally the number of vectors could be
     // calculated.
 
-    glm::vec2 prevNormal = glm::vec2(-prevLineVector.y, prevLineVector.x);
-    glm::vec2 nextNormal = glm::vec2(-nextLineVector.y, nextLineVector.x);
+    glm::vec2 prevNormal(-prevLineVector.y, prevLineVector.x);
+    glm::vec2 nextNormal(-nextLineVector.y, nextLineVector.x);
 
     glm::vec2 middle = vcl::vertex::normalize(prevNormal + nextNormal);
     glm::vec2 middleLeft  = vcl::vertex::normalize(prevNormal + middle);
@@ -158,7 +158,7 @@ void LineBuilder::appendRoundLineCapVertices(const glm::vec2& rPoint1, const glm
     constexpr int nRoundCapIteration = 12;
 
     glm::vec2 lineVector = vcl::vertex::normalize(rPoint2 - rPoint1);
-    glm::vec2 normal = glm::vec2(-lineVector.y, lineVector.x);
+    glm::vec2 normal(-lineVector.y, lineVector.x);
     glm::vec2 previousRoundNormal = normal;
 
     for (int nFactor = 1; nFactor <= nRoundCapIteration; nFactor++)
@@ -176,7 +176,7 @@ void LineBuilder::appendRoundLineCapVertices(const glm::vec2& rPoint1, const glm
 void LineBuilder::appendSquareLineCapVertices(const glm::vec2& rPoint1, const glm::vec2& rPoint2)
 {
     glm::vec2 lineVector = vcl::vertex::normalize(rPoint2 - rPoint1);
-    glm::vec2 normal = glm::vec2(-lineVector.y, lineVector.x);
+    glm::vec2 normal(-lineVector.y, lineVector.x);
 
     glm::vec2 extrudedPoint = rPoint1 + -lineVector * (mfLineWidth / 2.0f);
 

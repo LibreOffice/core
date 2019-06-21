@@ -611,7 +611,7 @@ void SAL_CALL ChartModel::close( sal_Bool bDeliverOwnership )
     //the listeners have had no veto
     //check whether we self can close
     {
-        util::CloseVetoException aVetoException = util::CloseVetoException(
+        util::CloseVetoException aVetoException(
                         "the model itself could not be closed",
                         static_cast< ::cppu::OWeakObject* >(this) );
 

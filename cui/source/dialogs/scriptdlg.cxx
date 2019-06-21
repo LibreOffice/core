@@ -435,9 +435,7 @@ short SvxScriptOrgDialog::run()
     // force load of MSPs for all documents
     while ( pDoc )
     {
-        Reference< provider::XScriptProviderSupplier > xSPS =
-            Reference< provider::XScriptProviderSupplier >
-                                        ( pDoc->GetModel(), UNO_QUERY );
+        Reference< provider::XScriptProviderSupplier > xSPS( pDoc->GetModel(), UNO_QUERY );
         if ( xSPS.is() )
         {
             xSPS->getScriptProvider();

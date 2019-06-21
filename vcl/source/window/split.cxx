@@ -511,7 +511,7 @@ void Splitter::ImplRestoreSplitter()
     // set splitter in the center of the ref window
     StartSplit();
     Size aSize = mpRefWin->GetOutputSize();
-    Point aPos = Point( aSize.Width()/2 , aSize.Height()/2);
+    Point aPos( aSize.Width()/2 , aSize.Height()/2);
     if ( mnLastSplitPos != mnSplitPos && mnLastSplitPos > 5 )
     {
         // restore last pos if it was a useful position (>5)

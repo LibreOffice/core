@@ -326,7 +326,7 @@ void OpenGLProgram::SetTransform(
 void OpenGLProgram::SetIdentityTransform(const OString& rName)
 {
     GLuint nUniform = GetUniformLocation(rName);
-    glm::mat4 aMatrix = glm::mat4();
+    glm::mat4 aMatrix {};
     glUniformMatrix4fv(nUniform, 1, GL_FALSE, glm::value_ptr( aMatrix ) );
     CHECK_GL_ERROR();
 }

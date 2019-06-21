@@ -222,8 +222,7 @@ void Table::alterColumnByName(
     const OUString& colName,
     const Reference< XPropertySet >& descriptor )
 {
-    Reference< css::container::XNameAccess > columns =
-        Reference< css::container::XNameAccess > ( getColumns(), UNO_QUERY );
+    Reference< css::container::XNameAccess > columns( getColumns(), UNO_QUERY );
 
     OUString newName = extractStringProperty(descriptor, getStatics().NAME );
     ::pq_sdbc_driver::alterColumnByDescriptor(
@@ -245,8 +244,7 @@ void Table::alterColumnByIndex(
     sal_Int32 index,
     const css::uno::Reference< css::beans::XPropertySet >& descriptor )
 {
-    Reference< css::container::XIndexAccess > columns =
-        Reference< css::container::XIndexAccess>( getColumns(), UNO_QUERY );
+    Reference< css::container::XIndexAccess > columns( getColumns(), UNO_QUERY );
     Reference< css::beans::XPropertySet> column(columns->getByIndex( index ), UNO_QUERY );
     ::pq_sdbc_driver::alterColumnByDescriptor(
         extractStringProperty( this, getStatics().SCHEMA_NAME ),

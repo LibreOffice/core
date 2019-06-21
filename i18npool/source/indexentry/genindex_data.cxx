@@ -61,7 +61,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             continue;
 
         // input file is in UTF-8 encoding
-        OUString Ostr = OUString(str, len, RTL_TEXTENCODING_UTF8);
+        OUString Ostr(str, len, RTL_TEXTENCODING_UTF8);
         len = Ostr.getLength();
         if (len == 0)
             continue; // skip empty line.

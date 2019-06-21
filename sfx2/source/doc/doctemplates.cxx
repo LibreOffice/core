@@ -2278,7 +2278,7 @@ void SAL_CALL SfxDocTplService::update()
 
 WaitWindow_Impl::WaitWindow_Impl() : WorkWindow(nullptr, WB_BORDER | WB_3DLOOK)
 {
-    tools::Rectangle aRect = tools::Rectangle(0, 0, 300, 30000);
+    tools::Rectangle aRect(0, 0, 300, 30000);
     maText = SfxResId(RID_CNT_STR_WAITING);
     maRect = GetTextRect(aRect, maText, gnTextStyle);
     aRect = maRect;

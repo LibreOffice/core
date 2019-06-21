@@ -9,6 +9,7 @@
 
 #include <memory>
 #include <rtl/ref.hxx>
+#include <tools/gen.hxx>
 
 namespace test1
 {
@@ -75,4 +76,13 @@ struct Foo
 void f(Foo* f) { auto x = rtl::Reference(f); }
 }
 
+namespace test5
+{
+void f()
+{
+    // expected-error@+1 {{simplify [loplugin:simplifyconstruct]}}
+    tools::Rectangle x = tools::Rectangle(10, 10, 10, 10);
+    (void)x;
+}
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

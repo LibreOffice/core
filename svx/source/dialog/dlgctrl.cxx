@@ -1201,7 +1201,7 @@ void SvxXLinePreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rec
     if ( mbWithSymbol && mpGraphic )
     {
         const Size aOutputSize(GetOutputSize());
-        Point aPos = Point( aOutputSize.Width() / 3, aOutputSize.Height() / 2 );
+        Point aPos( aOutputSize.Width() / 3, aOutputSize.Height() / 2 );
         aPos.AdjustX( -(maSymbolSize.Width() / 2) );
         aPos.AdjustY( -(maSymbolSize.Height() / 2) );
         mpGraphic->Draw(&getBufferDevice(), aPos, maSymbolSize);

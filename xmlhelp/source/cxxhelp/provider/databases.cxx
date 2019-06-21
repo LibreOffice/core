@@ -1057,7 +1057,7 @@ void Databases::setActiveText( const OUString& Module,
             if( pData[i] == '%' || pData[i] == '$' )
             {
                 // need of replacement
-                OUString temp = OUString( pData, nSize, RTL_TEXTENCODING_UTF8 );
+                OUString temp( pData, nSize, RTL_TEXTENCODING_UTF8 );
                 replaceName( temp );
                 tmp = OString( temp.getStr(),
                                     temp.getLength(),

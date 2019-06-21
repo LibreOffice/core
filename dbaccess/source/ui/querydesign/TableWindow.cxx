@@ -193,7 +193,7 @@ void OTableWindow::FillListBox()
     }
 
     // mark all primary keys with special image
-    Image aPrimKeyImage = Image(StockImage::Yes, BMP_PRIMARY_KEY);
+    Image aPrimKeyImage(StockImage::Yes, BMP_PRIMARY_KEY);
 
     if (GetData()->IsShowAll())
     {
@@ -333,7 +333,7 @@ void OTableWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectan
 
 tools::Rectangle OTableWindow::getSizingRect(const Point& _rPos,const Size& _rOutputSize) const
 {
-    tools::Rectangle aSizingRect = tools::Rectangle( GetPosPixel(), GetSizePixel() );
+    tools::Rectangle aSizingRect( GetPosPixel(), GetSizePixel() );
 
     if( m_nSizingFlags & SizingFlags::Top )
     {

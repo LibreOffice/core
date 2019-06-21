@@ -1193,7 +1193,7 @@ tools::Rectangle GtkSalGraphics::NWGetComboBoxButtonRect(ControlType nType,
     gint nButtonWidth = nArrowWidth + padding.left + padding.right;
     if( nPart == ControlPart::ButtonDown )
     {
-        Point aPos = Point(aAreaRect.Left() + aAreaRect.GetWidth() - nButtonWidth, aAreaRect.Top());
+        Point aPos(aAreaRect.Left() + aAreaRect.GetWidth() - nButtonWidth, aAreaRect.Top());
         if (AllSettings::GetLayoutRTL())
             aPos.setX( aAreaRect.Left() );
         aButtonRect.SetSize( Size( nButtonWidth, aAreaRect.GetHeight() ) );

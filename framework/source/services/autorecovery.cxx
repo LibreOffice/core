@@ -4163,7 +4163,7 @@ void AutoRecovery::st_impl_removeFile(const OUString& sURL)
 
     try
     {
-        ::ucbhelper::Content aContent = ::ucbhelper::Content(sURL, css::uno::Reference< css::ucb::XCommandEnvironment >(), m_xContext);
+        ::ucbhelper::Content aContent(sURL, css::uno::Reference< css::ucb::XCommandEnvironment >(), m_xContext);
         aContent.executeCommand("delete", css::uno::makeAny(true));
     }
     catch(const css::uno::Exception&)

@@ -352,8 +352,7 @@ void CloseableLifeTimeManager::impl_doClose()
 
     if(xCloseable.is())
     {
-        uno::Reference< lang::XComponent > xComponent =
-            uno::Reference< lang::XComponent >( xCloseable, uno::UNO_QUERY );
+        uno::Reference< lang::XComponent > xComponent( xCloseable, uno::UNO_QUERY );
         if(xComponent.is())
         {
             OSL_ENSURE( m_bClosed, "a not closed component will be disposed " );

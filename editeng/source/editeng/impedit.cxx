@@ -430,7 +430,7 @@ void ImpEditView::DrawSelectionXOR( EditSelection aTmpSel, vcl::Region* pRegion,
                 if (!aRectangles.empty())
                 {
                     tools::Rectangle& rStart = aRectangles.front();
-                    tools::Rectangle aStart = tools::Rectangle(rStart.Left(), rStart.Top(), rStart.Left() + 1, rStart.Bottom());
+                    tools::Rectangle aStart(rStart.Left(), rStart.Top(), rStart.Left() + 1, rStart.Bottom());
                     if (bMm100ToTwip)
                         aStart = OutputDevice::LogicToLogic(aStart, MapMode(MapUnit::Map100thMM), MapMode(MapUnit::MapTwip));
                     aStart.Move(aOrigin.getX(), aOrigin.getY());
@@ -438,7 +438,7 @@ void ImpEditView::DrawSelectionXOR( EditSelection aTmpSel, vcl::Region* pRegion,
                     mpViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION_START, aStart.toString().getStr());
 
                     tools::Rectangle& rEnd = aRectangles.back();
-                    tools::Rectangle aEnd = tools::Rectangle(rEnd.Right() - 1, rEnd.Top(), rEnd.Right(), rEnd.Bottom());
+                    tools::Rectangle aEnd(rEnd.Right() - 1, rEnd.Top(), rEnd.Right(), rEnd.Bottom());
                     if (bMm100ToTwip)
                         aEnd = OutputDevice::LogicToLogic(aEnd, MapMode(MapUnit::Map100thMM), MapMode(MapUnit::MapTwip));
                     aEnd.Move(aOrigin.getX(), aOrigin.getY());

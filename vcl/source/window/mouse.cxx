@@ -687,8 +687,8 @@ Reference< css::datatransfer::dnd::XDropTarget > Window::GetDropTarget()
                         mpWindowImpl->mpFrameData->mxDropTarget->addDropTargetListener( mpWindowImpl->mpFrameData->mxDropTargetListener );
 
                         // register also as drag gesture listener if directly supported by drag source
-                        Reference< css::datatransfer::dnd::XDragGestureRecognizer > xDragGestureRecognizer =
-                            Reference< css::datatransfer::dnd::XDragGestureRecognizer > (mpWindowImpl->mpFrameData->mxDragSource, UNO_QUERY);
+                        Reference< css::datatransfer::dnd::XDragGestureRecognizer > xDragGestureRecognizer(
+                            mpWindowImpl->mpFrameData->mxDragSource, UNO_QUERY);
 
                         if( xDragGestureRecognizer.is() )
                         {

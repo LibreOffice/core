@@ -204,8 +204,7 @@ Sequence<sal_Int32> SAL_CALL OStatement::executeBatch()
     MutexGuard aGuard(m_aMutex);
     checkDisposed(rBHelper.bDisposed);
 
-    Sequence<sal_Int32> aRet = Sequence<sal_Int32>();
-    return aRet;
+    return Sequence<sal_Int32>();
 }
 
 sal_Int32 SAL_CALL OCommonStatement::executeUpdate(const OUString& sql)

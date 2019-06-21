@@ -180,7 +180,7 @@ void Test::testGetColorError()
 
 void Test::testInvert()
 {
-    Color aColor = Color(0xFF, 0x00, 0x88);
+    Color aColor(0xFF, 0x00, 0x88);
     aColor.Invert();
     CPPUNIT_ASSERT_EQUAL(Color(0x00, 0xFF, 0x77).AsRGBHexString(), aColor.AsRGBHexString());
 

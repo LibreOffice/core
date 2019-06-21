@@ -542,7 +542,7 @@ void XclExpNameManagerImpl::SaveXml( XclExpXmlStream& rStrm )
 
 sal_uInt16 XclExpNameManagerImpl::FindNamedExp( SCTAB nTab, OUString sName )
 {
-    NamedExpMap::key_type key = NamedExpMap::key_type(nTab, sName);
+    NamedExpMap::key_type key(nTab, sName);
     NamedExpMap::const_iterator itr = maNamedExpMap.find(key);
     return (itr == maNamedExpMap.end()) ? 0 : itr->second;
 }
@@ -617,7 +617,7 @@ sal_uInt16 XclExpNameManagerImpl::CreateName( SCTAB nTab, const ScRangeData& rRa
         xName->SetLocalTab(nTab);
     sal_uInt16 nNameIdx = Append( xName );
     // store the index of the NAME record in the lookup map
-    NamedExpMap::key_type key = NamedExpMap::key_type(nTab, rRangeData.GetName());
+    NamedExpMap::key_type key(nTab, rRangeData.GetName());
     maNamedExpMap[key] = nNameIdx;
 
     /*  Create the definition formula.

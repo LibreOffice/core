@@ -2734,8 +2734,8 @@ bool ScXMLExport::GetMerged (const table::CellRangeAddress* pCellAddress,
                 uno::Reference<sheet::XCellRangeAddressable> xCellAddress (xCursor, uno::UNO_QUERY);
                 xCursor->collapseToMergedArea();
                 table::CellRangeAddress aCellAddress2(xCellAddress->getRangeAddress());
-                ScRange aScRange = ScRange( aCellAddress2.StartColumn, aCellAddress2.StartRow, aCellAddress2.Sheet,
-                                            aCellAddress2.EndColumn, aCellAddress2.EndRow, aCellAddress2.Sheet );
+                ScRange aScRange( aCellAddress2.StartColumn, aCellAddress2.StartRow, aCellAddress2.Sheet,
+                                  aCellAddress2.EndColumn, aCellAddress2.EndRow, aCellAddress2.Sheet );
 
                 if ((aScRange.aEnd.Row() > nRow ||
                     aScRange.aEnd.Col() > nCol) &&

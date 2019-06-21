@@ -2005,9 +2005,9 @@ void SplitWindow::Tracking( const TrackingEvent& rTEvt )
                 // We need a mouseevent with a position inside the button for the
                 // ImplStartSplit function!
                 MouseEvent aOrgMEvt = rTEvt.GetMouseEvent();
-                MouseEvent aNewMEvt = MouseEvent( aTestRect.Center(), aOrgMEvt.GetClicks(),
-                                                  aOrgMEvt.GetMode(), aOrgMEvt.GetButtons(),
-                                                  aOrgMEvt.GetModifier() );
+                MouseEvent aNewMEvt( aTestRect.Center(), aOrgMEvt.GetClicks(),
+                                     aOrgMEvt.GetMode(), aOrgMEvt.GetButtons(),
+                                     aOrgMEvt.GetModifier() );
 
                 ImplStartSplit( aNewMEvt );
                 mbFadeOutDown = false;

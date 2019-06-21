@@ -877,8 +877,8 @@ void lcl_AddErrorBottomLine( const drawing::Position3D& rPosition, ::basegfx::B2
             , const drawing::Position3D& rUnscaledLogicPosition
             , bool bYError )
 {
-    ::basegfx::B2DVector aMainDirection = ::basegfx::B2DVector( rStart.PositionX - rBottomEnd.PositionX
-                                              , rStart.PositionY - rBottomEnd.PositionY );
+    ::basegfx::B2DVector aMainDirection( rStart.PositionX - rBottomEnd.PositionX
+                                         , rStart.PositionY - rBottomEnd.PositionY );
     if( !aMainDirection.getLength() )
     {
         //get logic clip values:

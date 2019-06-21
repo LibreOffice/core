@@ -293,8 +293,7 @@ static std::vector< OUString > lookupKeys(
     else if( -1 == table.indexOf( '.' ) )
     {
         // it wasn't a fully qualified name. Now need to skip through all tables.
-        Reference< XEnumerationAccess > enumerationAccess =
-            Reference< XEnumerationAccess > ( tables, UNO_QUERY );
+        Reference< XEnumerationAccess > enumerationAccess( tables, UNO_QUERY );
 
         Reference< css::container::XEnumeration > enumeration =
             enumerationAccess->createEnumeration();
@@ -362,8 +361,7 @@ static std::vector< OUString > lookupKeys(
                 keyType == css::sdbcx::KeyType::PRIMARY )
             {
                 Reference< XColumnsSupplier > columns( set, UNO_QUERY );
-                Reference< XIndexAccess > indexAccess =
-                    Reference< XIndexAccess > ( columns->getColumns(), UNO_QUERY );
+                Reference< XIndexAccess > indexAccess( columns->getColumns(), UNO_QUERY );
 
                 int length = indexAccess->getCount();
                 ret.resize( length );

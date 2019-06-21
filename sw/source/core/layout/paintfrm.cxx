@@ -5716,7 +5716,7 @@ static void lcl_paintBitmapExToRect(vcl::RenderContext *pOut, const Point& aPoin
     long iterX = eArea != RIGHT && eArea != LEFT ? BORDER_TILE_SIZE : 0;
     long iterY = eArea == RIGHT || eArea == LEFT ? BORDER_TILE_SIZE : 0;
 
-    for (tools::Rectangle aTile = tools::Rectangle(aPoint, aTileSize); true; aTile.Move(iterX, iterY))
+    for (tools::Rectangle aTile(aPoint, aTileSize); true; aTile.Move(iterX, iterY))
     {
         tools::Rectangle aRender = aComplete.GetIntersection(aTile);
         if (aRender.IsEmpty())

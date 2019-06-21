@@ -2193,9 +2193,7 @@ awt::Point SAL_CALL SwXShape::getPosition()
         {
             // #i34750# - get attribute position of top group
             // shape and add offset between top group object and group member
-            uno::Reference< drawing::XShape > xGroupShape =
-                    uno::Reference< drawing::XShape >( pTopGroupObj->getUnoShape(),
-                                                       uno::UNO_QUERY );
+            uno::Reference< drawing::XShape > xGroupShape( pTopGroupObj->getUnoShape(), uno::UNO_QUERY );
             aPos = xGroupShape->getPosition();
             // add offset between top group object and group member
             // to the determined attribute position
@@ -2275,9 +2273,7 @@ void SAL_CALL SwXShape::setPosition( const awt::Point& aPosition )
         }
         // Convert given absolute position in horizontal left-to-right
         // layout into relative position in horizontal left-to-right layout.
-        uno::Reference< drawing::XShape > xGroupShape =
-                uno::Reference< drawing::XShape >( pTopGroupObj->getUnoShape(),
-                                                   uno::UNO_QUERY );
+        uno::Reference< drawing::XShape > xGroupShape( pTopGroupObj->getUnoShape(), uno::UNO_QUERY );
         {
             // #i34750#
             // use method <xGroupShape->getPosition()> to get the correct

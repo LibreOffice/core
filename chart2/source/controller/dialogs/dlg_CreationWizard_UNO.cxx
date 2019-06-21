@@ -267,7 +267,7 @@ void SAL_CALL CreationWizardUnoDlg::setPropertyValue( const OUString& rPropertyN
             m_pDialog->SetPosPixel( Point(0,0) );
             tools::Rectangle aRect( m_pDialog->GetWindowExtentsRelative( nullptr ) );
 
-            Point aNewOuterPos = Point( aPos.X - aRect.Left(), aPos.Y - aRect.Top() );
+            Point aNewOuterPos( aPos.X - aRect.Left(), aPos.Y - aRect.Top() );
             m_pDialog->SetPosPixel( aNewOuterPos );
         }
     }

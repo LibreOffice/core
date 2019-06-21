@@ -1387,7 +1387,7 @@ void Window::ImplPaintToDevice( OutputDevice* i_pTargetOutDev, const Point& i_rP
         pDevice->SetTextAlign(GetTextAlign());
         pDevice->SetRasterOp(GetRasterOp());
 
-        tools::Rectangle aPaintRect = tools::Rectangle(Point(), GetOutputSizePixel());
+        tools::Rectangle aPaintRect(Point(), GetOutputSizePixel());
 
         vcl::Region aClipRegion(GetClipRegion());
         pDevice->SetClipRegion();

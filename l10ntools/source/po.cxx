@@ -174,7 +174,7 @@ void GenPoEntry::readFromFile(std::ifstream& rIFStream)
     }
     while(!rIFStream.eof())
     {
-        OString sLine = OString(sTemp.data(),sTemp.length());
+        OString sLine(sTemp.data(),sTemp.length());
         if (sLine.startsWith("#. "))
         {
             if( !m_sExtractCom.isEmpty() )
@@ -580,7 +580,7 @@ void PoIfstream::open( const OString& rFileName, OString& rPoHeader )
     while( !sTemp.empty() && !m_aInPut.eof() )
     {
         std::getline(m_aInPut,sTemp);
-        OString sLine = OString(sTemp.data(),sTemp.length());
+        OString sLine(sTemp.data(),sTemp.length());
         if (sLine.startsWith("\"PO-Revision-Date"))
             rPoHeader += "PO-Revision-Date: " + lcl_GetTime() + "\n";
         else if (sLine.startsWith("\"X-Generator"))

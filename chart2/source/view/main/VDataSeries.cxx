@@ -174,8 +174,7 @@ VDataSeries::VDataSeries( const uno::Reference< XDataSeries >& xDataSeries )
     ::rtl::math::setNan( & m_fXMeanValue );
     ::rtl::math::setNan( & m_fYMeanValue );
 
-    uno::Reference<data::XDataSource> xDataSource =
-            uno::Reference<data::XDataSource>( xDataSeries, uno::UNO_QUERY );
+    uno::Reference<data::XDataSource> xDataSource( xDataSeries, uno::UNO_QUERY );
 
     uno::Sequence< uno::Reference<
         chart2::data::XLabeledDataSequence > > aDataSequences =

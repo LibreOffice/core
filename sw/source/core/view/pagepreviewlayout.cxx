@@ -823,7 +823,7 @@ void SwPagePreviewLayout::CalcStartValuesForSelectedPageMove(
     }
 
     sal_uInt16 nNewStartPage = mnPaintPhyStartPageNum;
-    Point aNewStartPos = Point(0,0);
+    Point aNewStartPos(0,0);
 
     const sal_uInt16 nNewAbsSelectedPageNum = ConvertRelativeToAbsolutePageNum( nNewRelSelectedPageNum );
     if ( !IsPageVisible( nNewAbsSelectedPageNum ) )

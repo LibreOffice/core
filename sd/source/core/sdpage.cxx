@@ -1856,8 +1856,8 @@ void SdPage::ScaleObjects(const Size& rNewPageSize, const ::tools::Rectangle& rN
     long nOldWidth  = GetWidth() - GetLeftBorder() - GetRightBorder();
     long nOldHeight = GetHeight() - GetUpperBorder() - GetLowerBorder();
 
-    Fraction aFractX = Fraction(aNewPageSize.Width(), nOldWidth);
-    Fraction aFractY = Fraction(aNewPageSize.Height(), nOldHeight);
+    Fraction aFractX(aNewPageSize.Width(), nOldWidth);
+    Fraction aFractY(aNewPageSize.Height(), nOldHeight);
 
     const size_t nObjCnt = (mbScaleObjects ? GetObjCount() : 0);
 

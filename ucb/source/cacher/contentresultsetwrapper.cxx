@@ -64,8 +64,7 @@ void ContentResultSetWrapper::impl_init_xRowOrigin()
             return;
     }
 
-    Reference< XRow > xOrgig =
-        Reference< XRow >( m_xResultSetOrigin, UNO_QUERY );
+    Reference< XRow > xOrgig( m_xResultSetOrigin, UNO_QUERY );
 
     {
         osl::Guard< osl::Mutex > aGuard( m_aMutex );
@@ -82,8 +81,7 @@ void ContentResultSetWrapper::impl_init_xContentAccessOrigin()
             return;
     }
 
-    Reference< XContentAccess > xOrgig =
-        Reference< XContentAccess >( m_xResultSetOrigin, UNO_QUERY );
+    Reference< XContentAccess > xOrgig( m_xResultSetOrigin, UNO_QUERY );
 
     {
         osl::Guard< osl::Mutex > aGuard( m_aMutex );
@@ -101,8 +99,7 @@ void ContentResultSetWrapper::impl_init_xPropertySetOrigin()
             return;
     }
 
-    Reference< XPropertySet > xOrig =
-        Reference< XPropertySet >( m_xResultSetOrigin, UNO_QUERY );
+    Reference< XPropertySet > xOrig( m_xResultSetOrigin, UNO_QUERY );
 
     {
         osl::Guard< osl::Mutex > aGuard( m_aMutex );

@@ -953,7 +953,7 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::disposing(const css::lang::Event
 
 void XCUBasedAcceleratorConfiguration::impl_ts_load( bool bPreferred, const css::uno::Reference< css::container::XNameAccess >& xCfg )
 {
-    AcceleratorCache aReadCache = AcceleratorCache();
+    AcceleratorCache aReadCache;
     css::uno::Reference< css::container::XNameAccess > xAccess;
     if ( m_sGlobalOrModules == "Global" )
         xCfg->getByName(CFG_ENTRY_GLOBAL) >>= xAccess;

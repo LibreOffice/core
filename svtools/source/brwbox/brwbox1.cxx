@@ -1883,7 +1883,7 @@ void BrowseBox::MakeFieldVisible
     // calculate column position, field rectangle and painting area
     sal_uInt16 nColPos = GetColumnPos( nColId );
     tools::Rectangle aFieldRect = GetFieldRectPixel( nRow, nColId, false );
-    tools::Rectangle aDataRect = tools::Rectangle( Point(0, 0), pDataWin->GetSizePixel() );
+    tools::Rectangle aDataRect( Point(0, 0), pDataWin->GetSizePixel() );
 
     // positioned outside on the left?
     if ( nColPos >= FrozenColCount() && nColPos < nFirstCol )

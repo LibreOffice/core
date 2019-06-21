@@ -1208,7 +1208,7 @@ double SdrTextObj::GetFontScaleY() const
 
     SdrOutliner& rOutliner = ImpGetDrawOutliner();
     const Size aShapeSize = GetSnapRect().GetSize();
-    const Size aSize = Size(aShapeSize.Width() - GetTextLeftDistance() - GetTextRightDistance(),
+    const Size aSize(aShapeSize.Width() - GetTextLeftDistance() - GetTextRightDistance(),
         aShapeSize.Height() - GetTextUpperDistance() - GetTextLowerDistance());
 
     rOutliner.SetPaperSize(aSize);

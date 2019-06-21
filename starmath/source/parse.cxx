@@ -1045,7 +1045,7 @@ std::unique_ptr<SmNode> SmParser::DoLine()
     //positions, in visual formula editor.
     if(ExpressionArray.empty())
     {
-        SmToken aTok = SmToken();
+        SmToken aTok;
         aTok.eType = TNEWLINE;
         ExpressionArray.emplace_back(std::unique_ptr<SmNode>(new SmExpressionNode(aTok)));
     }

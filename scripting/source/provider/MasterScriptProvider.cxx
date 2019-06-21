@@ -714,14 +714,7 @@ static Reference< XInterface > urihelper_create(
 
 static Sequence< OUString > urihelper_getSupportedServiceNames( )
 {
-    OUString serviceNameList[] = {
-        OUString(
-            "com.sun.star.script.provider.ScriptURIHelper" ) };
-
-    Sequence< OUString > serviceNames = Sequence <
-        OUString > ( serviceNameList, 1 );
-
-    return serviceNames;
+    return { "com.sun.star.script.provider.ScriptURIHelper" };
 }
 
 static OUString urihelper_getImplementationName( )

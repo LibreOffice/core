@@ -110,7 +110,7 @@ void XNamedRange::testSetReferencePosition()
 {
     uno::Reference< sheet::XNamedRange > xNamedRange = getNamedRange("initial1");
 
-    table::CellAddress aBaseAddress = table::CellAddress(1,2,3);
+    table::CellAddress aBaseAddress(1,2,3);
 
     xNamedRange->setReferencePosition(aBaseAddress);
 

@@ -1058,7 +1058,7 @@ OUString SwNavigationPI::CreateDropFileName( TransferableDataHelper& rData )
                 rData.HasFormat( nFormat = SotClipboardFormatId::FILEGRPDESCRIPTOR ) ||
                 rData.HasFormat( nFormat = SotClipboardFormatId::UNIFORMRESOURCELOCATOR ))
     {
-        INetBookmark aBkmk = INetBookmark(OUString(), OUString());
+        INetBookmark aBkmk { OUString(), OUString() };
         if (rData.GetINetBookmark(nFormat, aBkmk))
             sFileName = aBkmk.GetURL();
     }

@@ -512,7 +512,7 @@ void SwGlossaries::InvalidateUNOOjects()
         if ( xGroup.is() )
             static_cast< SwXAutoTextGroup* >( xGroup.get() )->Invalidate();
     }
-    UnoAutoTextGroups aTmpg = UnoAutoTextGroups();
+    UnoAutoTextGroups aTmpg;
     m_aGlossaryGroups.swap( aTmpg );
 
     // invalidate all the AutoTextEntry-objects
@@ -527,7 +527,7 @@ void SwGlossaries::InvalidateUNOOjects()
         if ( pEntry )
             pEntry->Invalidate();
     }
-    UnoAutoTextEntries aTmpe = UnoAutoTextEntries();
+    UnoAutoTextEntries aTmpe;
     m_aGlossaryEntries.swap( aTmpe );
 }
 

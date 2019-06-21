@@ -483,13 +483,13 @@ void Test::ParseAndCompare(const char *formula1, const char *formula2, const cha
     OUString sOutput1, sOutput2;
 
     // parse formula1
-    OUString sInput1 = OUString(formula1, strlen(formula1), RTL_TEXTENCODING_UTF8);
+    OUString sInput1(formula1, strlen(formula1), RTL_TEXTENCODING_UTF8);
     auto pNode1 = SmParser().ParseExpression(sInput1);
     pNode1->Prepare(xDocShRef->GetFormat(), *xDocShRef, 0);
     SmNodeToTextVisitor(pNode1.get(), sOutput1);
 
     // parse formula2
-    OUString sInput2 = OUString(formula2, strlen(formula2), RTL_TEXTENCODING_UTF8);
+    OUString sInput2(formula2, strlen(formula2), RTL_TEXTENCODING_UTF8);
     auto pNode2 = SmParser().ParseExpression(sInput2);
     pNode2->Prepare(xDocShRef->GetFormat(), *xDocShRef, 0);
     SmNodeToTextVisitor(pNode2.get(), sOutput2);

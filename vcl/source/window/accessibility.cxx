@@ -652,8 +652,7 @@ FindFocusedEditableText(uno::Reference<accessibility::XAccessibleContext> const&
     {
         if (xState->contains(accessibility::AccessibleStateType::FOCUSED))
         {
-            uno::Reference<accessibility::XAccessibleEditableText> xText
-                = uno::Reference<accessibility::XAccessibleEditableText>(xContext, uno::UNO_QUERY);
+            uno::Reference<accessibility::XAccessibleEditableText> xText(xContext, uno::UNO_QUERY);
             if (xText.is())
                 return xText;
             if (xState->contains(accessibility::AccessibleStateType::MANAGES_DESCENDANTS))

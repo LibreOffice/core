@@ -432,7 +432,7 @@ void SharedFormulaUtil::startListeningAsGroup( sc::StartListeningContext& rCxt, 
                 ScAddress aPos1 = rRef1.toAbs(rTopCell.aPos);
                 ScAddress aPos2 = rRef2.toAbs(rTopCell.aPos);
 
-                ScRange aOrigRange = ScRange(aPos1, aPos2);
+                ScRange aOrigRange(aPos1, aPos2);
                 ScRange aListenedRange = aOrigRange;
                 if (rRef2.IsRowRel())
                     aListenedRange.aEnd.IncRow(xGroup->mnLength-1);

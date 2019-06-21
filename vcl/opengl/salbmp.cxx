@@ -684,7 +684,7 @@ bool OpenGLSalBitmap::calcChecksumGL(OpenGLTexture& rInputTexture, BitmapChecksu
     int nNewWidth = ceil( nWidth / 4.0 );
     int nNewHeight = ceil( nHeight / 4.0 );
 
-    OpenGLTexture aFirstPassTexture = OpenGLTexture(nNewWidth, nNewHeight);
+    OpenGLTexture aFirstPassTexture(nNewWidth, nNewHeight);
     OpenGLFramebuffer* pFramebuffer = xContext->AcquireFramebuffer(aFirstPassTexture);
 
     pProgram->SetUniform1f( "xstep", 1.0 / mnWidth );
@@ -711,7 +711,7 @@ bool OpenGLSalBitmap::calcChecksumGL(OpenGLTexture& rInputTexture, BitmapChecksu
     nNewWidth = ceil( nWidth / 4.0 );
     nNewHeight = ceil( nHeight / 4.0 );
 
-    OpenGLTexture aSecondPassTexture = OpenGLTexture(nNewWidth, nNewHeight);
+    OpenGLTexture aSecondPassTexture(nNewWidth, nNewHeight);
     pFramebuffer = xContext->AcquireFramebuffer(aSecondPassTexture);
 
     pProgram->SetUniform1f( "xstep", 1.0 / mnWidth );
@@ -912,7 +912,7 @@ bool OpenGLSalBitmap::Replace( const Color& rSearchColor, const Color& rReplaceC
     if( !pProgram )
         return false;
 
-    OpenGLTexture aNewTex = OpenGLTexture( mnWidth, mnHeight );
+    OpenGLTexture aNewTex( mnWidth, mnHeight );
     pFramebuffer = xContext->AcquireFramebuffer( aNewTex );
 
     pProgram->SetTexture( "sampler", maTexture );

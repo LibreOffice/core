@@ -1930,8 +1930,8 @@ void SwViewShell::PaintTile(VirtualDevice &rDevice, int contextWidth, int contex
         GetWin()->EnableMapMode(false);
     }
 
-    tools::Rectangle aOutRect = tools::Rectangle(Point(tilePosX, tilePosY),
-                                   rDevice.PixelToLogic(Size(contextWidth, contextHeight)));
+    tools::Rectangle aOutRect(Point(tilePosX, tilePosY),
+                              rDevice.PixelToLogic(Size(contextWidth, contextHeight)));
 
     // Make the requested area visible -- we can't use MakeVisible as that will
     // only scroll the contents, but won't zoom/resize if needed.

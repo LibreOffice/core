@@ -628,7 +628,7 @@ ImageType ToolBox::GetImageSize() const
     OutputDevice *pDefault = Application::GetDefaultDevice();
     float fScaleFactor = pDefault ? pDefault->GetDPIScaleFactor() : 1.0;
 
-    Size aUnscaledSize = Size(16, 16);
+    Size aUnscaledSize(16, 16);
 
     if (eToolBoxButtonSize == ToolBoxButtonSize::Large)
     {

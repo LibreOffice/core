@@ -1313,20 +1313,20 @@ namespace emfio
                     if (maLatestFillStyle.aType != WinMtfFillStyleType::Pattern)
                         mpGDIMetaFile->AddAction( new MetaPolygonAction( rPolygon ) );
                     else {
-                        SvtGraphicFill aFill = SvtGraphicFill( tools::PolyPolygon( rPolygon ),
-                                                               Color(),
-                                                               0.0,
-                                                               SvtGraphicFill::fillNonZero,
-                                                               SvtGraphicFill::fillTexture,
-                                                               SvtGraphicFill::Transform(),
-                                                               true,
-                                                               SvtGraphicFill::hatchSingle,
-                                                               Color(),
-                                                               SvtGraphicFill::GradientType::Linear,
-                                                               Color(),
-                                                               Color(),
-                                                               0,
-                                                               Graphic (maLatestFillStyle.aBmp) );
+                        SvtGraphicFill aFill( tools::PolyPolygon( rPolygon ),
+                                              Color(),
+                                              0.0,
+                                              SvtGraphicFill::fillNonZero,
+                                              SvtGraphicFill::fillTexture,
+                                              SvtGraphicFill::Transform(),
+                                              true,
+                                              SvtGraphicFill::hatchSingle,
+                                              Color(),
+                                              SvtGraphicFill::GradientType::Linear,
+                                              Color(),
+                                              Color(),
+                                              0,
+                                              Graphic (maLatestFillStyle.aBmp) );
 
                         SvMemoryStream  aMemStm;
 

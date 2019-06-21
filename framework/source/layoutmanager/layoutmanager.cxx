@@ -2456,8 +2456,8 @@ void LayoutManager::implts_setDockingAreaWindowSizes()
     // Convert relative size to output size.
     awt::Rectangle  aRectangle           = xContainerWindow->getPosSize();
     awt::DeviceInfo aInfo                = xDevice->getInfo();
-    awt::Size       aContainerClientSize = awt::Size( aRectangle.Width - aInfo.LeftInset - aInfo.RightInset,
-                                                      aRectangle.Height - aInfo.TopInset  - aInfo.BottomInset );
+    awt::Size       aContainerClientSize( aRectangle.Width - aInfo.LeftInset - aInfo.RightInset,
+                                          aRectangle.Height - aInfo.TopInset  - aInfo.BottomInset );
     ::Size          aStatusBarSize       = implts_getStatusBarSize();
 
     // Position the status bar

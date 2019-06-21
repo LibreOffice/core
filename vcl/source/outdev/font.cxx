@@ -1267,7 +1267,7 @@ void OutputDevice::ImplDrawEmphasisMarks( SalLayout& rSalLayout )
         SetFillColor( GetTextColor() );
     }
 
-    Point aOffset = Point(0,0);
+    Point aOffset(0,0);
 
     if ( nEmphasisMark & FontEmphasisMark::PosBelow )
         aOffset.AdjustY(mpFontInstance->mxFontMetric->GetDescent() + nEmphasisYOff );

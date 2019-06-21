@@ -581,7 +581,7 @@ FlyProcessingState SwWW8AttrIter::OutFlys(sal_Int32 nSwPos)
             xPropertySetInfo = xPropertySet->getPropertySetInfo();
         if( xPropertySetInfo.is() )
         {
-            MSWordExportBase::LinkedTextboxInfo aLinkedTextboxInfo = MSWordExportBase::LinkedTextboxInfo();
+            MSWordExportBase::LinkedTextboxInfo aLinkedTextboxInfo;
 
             if( xPropertySetInfo->hasPropertyByName("LinkDisplayName") )
                 xPropertySet->getPropertyValue("LinkDisplayName") >>= sLinkChainName;

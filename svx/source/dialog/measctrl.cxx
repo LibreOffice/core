@@ -56,9 +56,9 @@ void SvxXMeasurePreview::ResizeImpl(const Size& rSize)
     rRefDevice.SetMapMode(m_aMapMode);
 
     Size aSize = rRefDevice.PixelToLogic(rSize);
-    Point aPt1 = Point(aSize.Width() / 5, static_cast<long>(aSize.Height() / 2));
+    Point aPt1(aSize.Width() / 5, static_cast<long>(aSize.Height() / 2));
     pMeasureObj->SetPoint(aPt1, 0);
-    Point aPt2 = Point(aSize.Width() * 4 / 5, static_cast<long>(aSize.Height() / 2));
+    Point aPt2(aSize.Width() * 4 / 5, static_cast<long>(aSize.Height() / 2));
     pMeasureObj->SetPoint(aPt2, 1);
 
     rRefDevice.Pop();
