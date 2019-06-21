@@ -2669,16 +2669,10 @@ const ScMarkData& ScViewData::GetMarkData() const
     return *mpMarkData;
 }
 
-vcl::Window* ScViewData::GetDialogParent()
+weld::Window* ScViewData::GetDialogParent()
 {
     assert(pViewShell && "GetDialogParent() without ViewShell");
     return pViewShell->GetDialogParent();
-}
-
-weld::Window* ScViewData::GetFrameWeld()
-{
-    assert(pViewShell && "GetDialogParent() without ViewShell");
-    return pViewShell->GetFrameWeld();
 }
 
 ScGridWindow* ScViewData::GetActiveWin()

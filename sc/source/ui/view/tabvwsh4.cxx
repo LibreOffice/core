@@ -131,7 +131,7 @@ void ScTabViewShell::Activate(bool bMDI)
             SfxChildWindow* pChild = pThisFrame->GetChildWindow(FID_INPUTLINE_STATUS);
             if (pChild)
             {
-                ScInputWindow* pWin = static_cast<ScInputWindow*>(pChild->GetWindow());
+                ScInputWindow* pWin = static_cast<ScInputWindow*>(pChild->GetVclWindow());
                 if (pWin && pWin->IsVisible())
                 {
 
@@ -200,13 +200,6 @@ void ScTabViewShell::Activate(bool bMDI)
             SfxChildWindow* pChildWnd = pThisFrame->GetChildWindow( nModRefDlgId );
             if ( pChildWnd )
             {
-                if (pChildWnd->GetWindow())
-                {
-                    IAnyRefDialog* pRefDlg = dynamic_cast<IAnyRefDialog*>(pChildWnd->GetWindow());
-                    assert(pRefDlg);
-                    if (pRefDlg)
-                        pRefDlg->ViewShellChanged();
-                }
                 if (auto pController = pChildWnd->GetController())
                 {
                     IAnyRefDialog* pRefDlg = dynamic_cast<IAnyRefDialog*>(pController.get());

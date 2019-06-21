@@ -160,8 +160,7 @@ bool ExcelFilter::importDocument()
                          * detailed information other than returning true or
                          * false at this point? */
 
-                        vcl::Window* pWin = ScDocShell::GetActiveDialogParent();
-                        std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
+                        std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(ScDocShell::GetActiveDialogParent(),
                                                                    VclMessageType::Warning, VclButtonsType::Ok,
                                                                    aWarning));
                         xWarn->run();

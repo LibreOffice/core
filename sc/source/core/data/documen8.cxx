@@ -805,7 +805,7 @@ bool ScDocument::IsInLinkUpdate() const
     return bInLinkUpdate || IsInDdeLinkUpdate();
 }
 
-void ScDocument::UpdateExternalRefLinks(vcl::Window* pWin)
+void ScDocument::UpdateExternalRefLinks(weld::Window* pWin)
 {
     if (!pExternalRefMgr)
         return;
@@ -829,7 +829,7 @@ void ScDocument::UpdateExternalRefLinks(vcl::Window* pWin)
             aRefLinks.push_back(pRefLink);
     }
 
-    sc::WaitPointerSwitch aWaitSwitch(pWin);
+    weld::WaitObject aWaitSwitch(pWin);
 
     pExternalRefMgr->enableDocTimer(false);
     ScProgress aProgress(GetDocumentShell(), ScResId(SCSTR_UPDATE_EXTDOCS), aRefLinks.size(), true);
@@ -856,7 +856,7 @@ void ScDocument::UpdateExternalRefLinks(vcl::Window* pWin)
         aBuf.append(ScResId(SCSTR_EXTDOC_NOT_LOADED));
         aBuf.append("\n\n");
         aBuf.append(aFile);
-        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
+        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pWin,
                                                   VclMessageType::Warning, VclButtonsType::Ok,
                                                   aBuf.makeStringAndClear()));
         xBox->run();

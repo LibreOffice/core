@@ -42,7 +42,7 @@ bool ScDrawTextObjectBar::ExecuteCharDlg( const SfxItemSet& rArgs,
 {
     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
     ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateScCharDlg(
-        pViewData->GetFrameWeld(), &rArgs,
+        pViewData->GetDialogParent(), &rArgs,
         pViewData->GetSfxDocShell()));
     if (nSlot == SID_CHAR_DLG_EFFECT)
     {
@@ -84,7 +84,7 @@ bool ScDrawTextObjectBar::ExecuteParaDlg( const SfxItemSet& rArgs,
     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
 
     ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateScParagraphDlg(
-        pViewData->GetFrameWeld(), &aNewAttr));
+        pViewData->GetDialogParent(), &aNewAttr));
     bool bRet = ( pDlg->Execute() == RET_OK );
 
     if ( bRet )
@@ -102,7 +102,7 @@ void ScDrawTextObjectBar::ExecutePasteContents( SfxRequest & /* rReq */ )
     SdrView* pView = pViewData->GetScDrawView();
     OutlinerView* pOutView = pView->GetTextEditOutlinerView();
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    ScopedVclPtr<SfxAbstractPasteDialog> pDlg(pFact->CreatePasteDialog(pViewData->GetFrameWeld()));
+    ScopedVclPtr<SfxAbstractPasteDialog> pDlg(pFact->CreatePasteDialog(pViewData->GetDialogParent()));
 
     pDlg->Insert( SotClipboardFormatId::STRING, EMPTY_OUSTRING );
     pDlg->Insert( SotClipboardFormatId::RTF,    EMPTY_OUSTRING );

@@ -225,6 +225,12 @@ namespace com { namespace sun { namespace star {
     }
 } } }
 
+namespace weld {
+
+class Window;
+
+}
+
 #define SC_DOC_NEW          0xFFFF
 
 #define SC_MACROCALL_ALLOWED        0
@@ -977,7 +983,7 @@ public:
     ScFormulaParserPool& GetFormulaParserPool() const;
 
     bool            HasAreaLinks() const;
-    void            UpdateExternalRefLinks(vcl::Window* pWin);
+    void            UpdateExternalRefLinks(weld::Window* pWin);
     void            UpdateAreaLinks();
 
                     // originating DDE links

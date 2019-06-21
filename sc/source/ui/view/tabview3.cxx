@@ -2015,12 +2015,6 @@ void ScTabView::SetTabNo( SCTAB nTab, bool bNew, bool bExtendSelection, bool bSa
             SfxChildWindow* pChildWnd = pViewFrm->GetChildWindow( nCurRefDlgId );
             if (pChildWnd)
             {
-                if (pChildWnd->GetWindow())
-                {
-                    IAnyRefDialog* pRefDlg = dynamic_cast<IAnyRefDialog*>(pChildWnd->GetWindow());
-                    if (pRefDlg)
-                        pRefDlg->ViewShellChanged();
-                }
                 if (pChildWnd->GetController())
                 {
                     IAnyRefDialog* pRefDlg = dynamic_cast<IAnyRefDialog*>(pChildWnd->GetController().get());

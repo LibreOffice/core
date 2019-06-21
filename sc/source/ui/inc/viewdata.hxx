@@ -360,8 +360,7 @@ public:
     ScMarkData&     GetMarkData();
     const ScMarkData& GetMarkData() const;
 
-    vcl::Window*    GetDialogParent();          // forwarded from tabvwsh
-    weld::Window*   GetFrameWeld();             // forwarded from tabvwsh
+    weld::Window*   GetDialogParent();          // forwarded from tabvwsh
     ScGridWindow*   GetActiveWin();             // from View
     const ScGridWindow* GetActiveWin() const;
     ScDrawView*     GetScDrawView();            // from View
