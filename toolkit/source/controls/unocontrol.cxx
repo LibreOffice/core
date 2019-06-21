@@ -1436,8 +1436,7 @@ sal_Bool UnoControl::supportsService( const OUString& rServiceName )
 
 Sequence< OUString > UnoControl::getSupportedServiceNames(  )
 {
-    OUString sName( "com.sun.star.awt.UnoControl" );
-    return Sequence< OUString >( &sName, 1 );
+    return { "com.sun.star.awt.UnoControl" };
 }
 
 

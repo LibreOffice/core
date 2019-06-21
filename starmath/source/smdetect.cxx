@@ -136,7 +136,7 @@ sal_Bool SAL_CALL SmFilterDetect::supportsService( const OUString& sServiceName 
 /* XServiceInfo */
 Sequence< OUString > SAL_CALL SmFilterDetect::getSupportedServiceNames()
 {
-    return Sequence< OUString >{ "com.sun.star.frame.ExtendedTypeDetection" };
+    return { "com.sun.star.frame.ExtendedTypeDetection" };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*

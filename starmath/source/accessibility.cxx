@@ -731,7 +731,7 @@ sal_Bool SAL_CALL SmGraphicAccessible::supportsService(
 
 Sequence< OUString > SAL_CALL SmGraphicAccessible::getSupportedServiceNames()
 {
-    return Sequence< OUString >{
+    return {
         "css::accessibility::Accessible",
         "css::accessibility::AccessibleComponent",
         "css::accessibility::AccessibleContext",
@@ -1774,7 +1774,7 @@ sal_Bool SAL_CALL SmEditAccessible::supportsService(
 
 Sequence< OUString > SAL_CALL SmEditAccessible::getSupportedServiceNames()
 {
-    return Sequence< OUString >{
+    return {
         "css::accessibility::Accessible",
         "css::accessibility::AccessibleComponent",
         "css::accessibility::AccessibleContext"

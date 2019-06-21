@@ -313,7 +313,7 @@ sal_Bool SAL_CALL SvtRulerAccessible::supportsService( const OUString& sServiceN
 
 Sequence< OUString > SAL_CALL SvtRulerAccessible::getSupportedServiceNames()
 {
-    return Sequence< OUString > { OUString("com.sun.star.accessibility.AccessibleContext") };
+    return { "com.sun.star.accessibility.AccessibleContext" };
 }
 
 //=====  XTypeProvider  =======================================================

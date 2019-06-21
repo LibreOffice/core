@@ -234,8 +234,7 @@ OUString PresenterProtocolHandler::getImplementationName_static()
 
 Sequence<OUString> PresenterProtocolHandler::getSupportedServiceNames_static()
 {
-    static const OUString sServiceName("com.sun.star.frame.ProtocolHandler");
-    return Sequence<OUString>(&sServiceName, 1);
+    return { "com.sun.star.frame.ProtocolHandler" };
 }
 
 Reference<XInterface> PresenterProtocolHandler::Create (

@@ -92,8 +92,7 @@ sal_Bool SAL_CALL StarOfficePresentationImportFilter::supportsService(const OUSt
 
 Sequence<OUString> SAL_CALL StarOfficePresentationImportFilter::getSupportedServiceNames()
 {
-    return Sequence<OUString>{ "com.sun.star.document.ImportFilter",
-                               "com.sun.star.document.ExtendedTypeDetection" };
+    return { "com.sun.star.document.ImportFilter", "com.sun.star.document.ExtendedTypeDetection" };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*

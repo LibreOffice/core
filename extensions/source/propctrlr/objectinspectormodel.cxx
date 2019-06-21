@@ -165,8 +165,7 @@ namespace pcr
 
     Sequence< OUString > ObjectInspectorModel::getSupportedServiceNames_static(  )
     {
-        OUString sService( "com.sun.star.inspection.ObjectInspectorModel" );
-        return Sequence< OUString >( &sService, 1 );
+        return { "com.sun.star.inspection.ObjectInspectorModel" };
     }
 
 

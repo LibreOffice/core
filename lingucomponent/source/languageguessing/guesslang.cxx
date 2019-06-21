@@ -328,8 +328,7 @@ Sequence<OUString> SAL_CALL LangGuess_Impl::getSupportedServiceNames(  )
 
 Sequence<OUString> LangGuess_Impl::getSupportedServiceNames_Static(  )
 {
-    OUString aName( SERVICENAME );
-    return Sequence< OUString >( &aName, 1 );
+    return { SERVICENAME };
 }
 
 /**

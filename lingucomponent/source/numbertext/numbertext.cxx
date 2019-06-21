@@ -170,11 +170,7 @@ Sequence<OUString> SAL_CALL NumberText_Impl::getSupportedServiceNames()
     return getSupportedServiceNames_Static();
 }
 
-Sequence<OUString> NumberText_Impl::getSupportedServiceNames_Static()
-{
-    OUString aName(SERVICENAME);
-    return Sequence<OUString>(&aName, 1);
-}
+Sequence<OUString> NumberText_Impl::getSupportedServiceNames_Static() { return { SERVICENAME }; }
 
 /**
  * Function to create a new component instance; is needed by factory helper implementation.
