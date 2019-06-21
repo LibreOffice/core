@@ -75,9 +75,9 @@ void SwEnvPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectan
 
     Color aBack = rSettings.GetWindowColor();
     Color aFront = SwViewOption::GetFontColor();
-    Color aMedium = Color((aBack.GetRed() + aFront.GetRed()) / 2,
-                          (aBack.GetGreen() + aFront.GetGreen()) / 2,
-                          (aBack.GetBlue() + aFront.GetBlue()) / 2);
+    Color aMedium((aBack.GetRed() + aFront.GetRed()) / 2,
+                  (aBack.GetGreen() + aFront.GetGreen()) / 2,
+                  (aBack.GetBlue() + aFront.GetBlue()) / 2);
 
     rRenderContext.SetLineColor(aFront);
 

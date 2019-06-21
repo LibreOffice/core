@@ -2308,7 +2308,7 @@ void lcl_createButtons(const uno::Reference<drawing::XShapes>& xPageShapes,
         {
             std::unique_ptr<VButton> pButton(new VButton);
             pButton->init(xPageShapes, xShapeFactory);
-            awt::Point aNewPosition = awt::Point(rRemainingSpace.X + x + 100, rRemainingSpace.Y + 100);
+            awt::Point aNewPosition(rRemainingSpace.X + x + 100, rRemainingSpace.Y + 100);
             sal_Int32 nDimensionIndex = rPageFieldEntry.DimensionIndex;
             OUString aFieldOutputDescription = xPivotTableDataProvider->getFieldOutputDescription(nDimensionIndex);
             pButton->setLabel(rPageFieldEntry.Name + " | " + aFieldOutputDescription);
@@ -2335,8 +2335,8 @@ void lcl_createButtons(const uno::Reference<drawing::XShapes>& xPageShapes,
 
             std::unique_ptr<VButton> pButton(new VButton);
             pButton->init(xPageShapes, xShapeFactory);
-            awt::Point aNewPosition = awt::Point(rRemainingSpace.X + x + 100,
-                                                 rRemainingSpace.Y + rRemainingSpace.Height - aSize.Height - 100);
+            awt::Point aNewPosition(rRemainingSpace.X + x + 100,
+                                    rRemainingSpace.Y + rRemainingSpace.Height - aSize.Height - 100);
             pButton->setLabel(rRowFieldEntry.Name);
             pButton->setCID("FieldButton.Row." + OUString::number(rRowFieldEntry.DimensionIndex));
             pButton->setPosition(aNewPosition);

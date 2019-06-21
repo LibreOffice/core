@@ -87,18 +87,14 @@ bool SimplifyConstruct::VisitVarDecl(VarDecl const* varDecl)
     if (isa<AutoType>(varDecl->getType()))
         return true;
 
-    auto init = varDecl->getInit()->IgnoreImplicit();
-    auto functionalCast = dyn_cast<CXXFunctionalCastExpr>(init);
-    if (!functionalCast)
+    auto init = varDecl->getInit();
+    if (!isa<CXXFunctionalCastExpr>(init->IgnoreImplicit()) && !isa<CXXTemporaryObjectExpr>(init)
+        && !isa<CXXTemporaryObjectExpr>(init->IgnoreImplicit()))
         return true;
 
     // e.g. the LANGUAGE_DONTKNOW defines
     if (compiler.getSourceManager().isMacroBodyExpansion(compat::getBeginLoc(init)))
         return true;
-
-    //    varDecl->getInit()->IgnoreImplicit()->dump();
-    //    varDecl->getType()->dump();
-    //    varDecl->getType()->getUnqualifiedDesugaredType()->dump();
 
     report(DiagnosticsEngine::Warning, "simplify", varDecl->getLocation())
         << varDecl->getSourceRange();

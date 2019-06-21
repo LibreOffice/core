@@ -2313,7 +2313,7 @@ Size SfxTemplateDialog_Impl::GetMinOutputSizePixel()
     {
         Size aSizeATL=m_pFloat->PixelToLogic(m_aActionTbL->CalcWindowSizePixel());
         Size aSizeATR=m_pFloat->PixelToLogic(m_aActionTbR->CalcWindowSizePixel());
-        Size aMinSize=Size(
+        Size aMinSize(
             aSizeATL.Width()+aSizeATR.Width()+
                 2*SFX_TEMPLDLG_HFRAME + SFX_TEMPLDLG_MIDHSPACE,
             4*aSizeATL.Height()+2*SFX_TEMPLDLG_MIDVSPACE);

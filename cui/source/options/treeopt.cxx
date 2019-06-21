@@ -2154,7 +2154,7 @@ void ExtensionsTabPage::ActivatePage()
 
         if ( m_xPage.is() )
         {
-            Point aPos = Point();
+            Point aPos;
             Size aSize = GetParent()->get_preferred_size();
             m_xPage->setPosSize( aPos.X() + 1, aPos.Y() + 1,
                                  aSize.Width() - 2, aSize.Height() - 2, awt::PosSize::POSSIZE );

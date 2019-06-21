@@ -6522,12 +6522,12 @@ void SwUiWriterTest::testTdf115065()
     pWrtShell->GotoTable("Table2");
     SwRect aRect = pWrtShell->GetCurrFrame()->getFrameArea();
     // Destination point is the middle of the first cell of second table
-    Point ptTo = Point(aRect.Left() + aRect.Width() / 2, aRect.Top() + aRect.Height() / 2);
+    Point ptTo(aRect.Left() + aRect.Width() / 2, aRect.Top() + aRect.Height() / 2);
 
     pWrtShell->GotoTable("Table1");
     aRect = pWrtShell->GetCurrFrame()->getFrameArea();
     // Source point is the middle of the first cell of first table
-    Point ptFrom = Point(aRect.Left() + aRect.Width() / 2, aRect.Top() + aRect.Height() / 2);
+    Point ptFrom(aRect.Left() + aRect.Width() / 2, aRect.Top() + aRect.Height() / 2);
 
     pWrtShell->SelTableCol();
     // The copy operation (or closing document after that) segfaulted

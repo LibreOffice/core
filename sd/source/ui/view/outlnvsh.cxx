@@ -273,9 +273,9 @@ void OutlineViewShell::ArrangeGUIElements ()
 
     ::tools::Rectangle aVis = pOutlinerView->GetVisArea();
 
-    ::tools::Rectangle aText = ::tools::Rectangle(Point(0,0),
-        Size(pOlView->GetPaperWidth(),
-            pOlView->GetOutliner().GetTextHeight()));
+    ::tools::Rectangle aText(Point(0,0),
+                             Size(pOlView->GetPaperWidth(),
+                                  pOlView->GetOutliner().GetTextHeight()));
     if (aWin.GetHeight() > aText.Bottom())
         aText.SetBottom( aWin.GetHeight() );
 

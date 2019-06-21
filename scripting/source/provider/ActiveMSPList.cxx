@@ -242,8 +242,7 @@ ActiveMSPList::addActiveMSP( const Reference< uno::XInterface >& xComponent,
         // should probably throw from this method!!, reexamine
         try
         {
-            Reference< lang::XComponent > xBroadcaster =
-                Reference< lang::XComponent >( xComponent, UNO_QUERY_THROW );
+            Reference< lang::XComponent > xBroadcaster( xComponent, UNO_QUERY_THROW );
             xBroadcaster->addEventListener( this );
         }
         catch ( const Exception& )

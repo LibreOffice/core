@@ -1925,7 +1925,7 @@ void ScColumn::UpdateDrawObjectsForRow( std::vector<SdrObject*>& pObjects, SCCOL
 {
     for (auto &pObject : pObjects)
     {
-        ScAddress aNewAddress = ScAddress(nTargetCol, nTargetRow, nTab);
+        ScAddress aNewAddress(nTargetCol, nTargetRow, nTab);
 
         // Update draw object according to new anchor
         ScDrawLayer* pDrawLayer = GetDoc()->GetDrawLayer();

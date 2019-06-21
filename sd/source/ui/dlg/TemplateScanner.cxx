@@ -173,7 +173,7 @@ TemplateScanner::State TemplateScanner::ScanEntry()
             OUString sContentType (xRow->getString (3));
 
             OUString aId = xContentAccess->queryContentIdentifierString();
-            ::ucbhelper::Content  aContent = ::ucbhelper::Content (aId, mxEntryEnvironment, comphelper::getProcessComponentContext());
+            ::ucbhelper::Content aContent(aId, mxEntryEnvironment, comphelper::getProcessComponentContext());
             if (aContent.isDocument ())
             {
                 //  Check whether the entry is an impress template.  If so

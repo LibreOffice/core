@@ -2055,8 +2055,7 @@ void FilterCache::impl_readOldFormat()
     try
     {
         css::uno::Reference< css::uno::XInterface > xInt = impl_openConfig(E_PROVIDER_OLD);
-        css::uno::Reference< css::container::XNameAccess > xCfg =
-            css::uno::Reference< css::container::XNameAccess >(xInt, css::uno::UNO_QUERY_THROW);
+        css::uno::Reference< css::container::XNameAccess > xCfg(xInt, css::uno::UNO_QUERY_THROW);
 
         OUString TYPES_SET("Types");
 

@@ -2315,7 +2315,7 @@ void SfxMedium::Transfer_Impl()
                         // <http://tools.ietf.org/html/rfc4918#section-7.3>
                         // If the WebDAV resource is already locked by this LO instance, nothing will
                         // happen, e.g. the LOCK method will not be sent to the server.
-                        ::ucbhelper::Content aLockContent = ::ucbhelper::Content( GetURLObject().GetMainURL( INetURLObject::DecodeMechanism::NONE ), xComEnv, comphelper::getProcessComponentContext() );
+                        ::ucbhelper::Content aLockContent( GetURLObject().GetMainURL( INetURLObject::DecodeMechanism::NONE ), xComEnv, comphelper::getProcessComponentContext() );
                         aLockContent.lock();
                     }
                 }

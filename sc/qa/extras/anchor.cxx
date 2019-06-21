@@ -170,7 +170,7 @@ void ScAnchorTest::testTdf76183()
     SdrPage* pPage = pDrawLayer->GetPage(0);
 
     // Add a circle somewhere below first row.
-    const tools::Rectangle aOrigRect = tools::Rectangle(1000, 1000, 1200, 1200);
+    const tools::Rectangle aOrigRect(1000, 1000, 1200, 1200);
     SdrCircObj* pObj = new SdrCircObj(*pDrawLayer, OBJ_CIRC, aOrigRect);
     pPage->InsertObject(pObj);
     // Anchor to cell

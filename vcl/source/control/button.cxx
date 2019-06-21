@@ -264,7 +264,7 @@ void Button::ImplDrawAlignedImage(OutputDevice* pDev, Point& rPos,
     Size aMax;
     Point aImagePos = rPos;
     Point aTextPos = rPos;
-    tools::Rectangle aUnion = tools::Rectangle(aImagePos, aImageSize);
+    tools::Rectangle aUnion(aImagePos, aImageSize);
     tools::Rectangle aSymbol;
     long nSymbolHeight = 0;
 
@@ -273,7 +273,7 @@ void Button::ImplDrawAlignedImage(OutputDevice* pDev, Point& rPos,
         // Get the size of the text output area ( the symbol will be drawn in
         // this area as well, so the symbol rectangle will be calculated here, too )
 
-        tools::Rectangle aRect = tools::Rectangle(Point(), rSize);
+        tools::Rectangle aRect(Point(), rSize);
         Size aTSSize;
 
         if (bHasSymbol)
@@ -442,7 +442,7 @@ void Button::ImplDrawAlignedImage(OutputDevice* pDev, Point& rPos,
     {
         if (mpButtonData->meSymbolAlign == SymbolAlign::RIGHT)
         {
-            Point aRightPos = Point(aTextPos.X() + aTextSize.Width() + aSymbolSize.Width() / 2, aTextPos.Y());
+            Point aRightPos(aTextPos.X() + aTextSize.Width() + aSymbolSize.Width() / 2, aTextPos.Y());
             *pSymbolRect = tools::Rectangle(aRightPos, aSymbolSize);
         }
         else
@@ -484,7 +484,7 @@ void Button::ImplDrawAlignedImage(OutputDevice* pDev, Point& rPos,
 void Button::ImplSetFocusRect(const tools::Rectangle &rFocusRect)
 {
     tools::Rectangle aFocusRect = rFocusRect;
-    tools::Rectangle aOutputRect = tools::Rectangle(Point(), GetOutputSizePixel());
+    tools::Rectangle aOutputRect(Point(), GetOutputSizePixel());
 
     if (!aFocusRect.IsEmpty())
     {

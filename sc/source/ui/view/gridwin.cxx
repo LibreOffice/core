@@ -5674,8 +5674,8 @@ bool ScGridWindow::InsideVisibleRange( SCCOL nPosX, SCROW nPosY )
 OString ScGridWindow::getCellCursor( int nOutputWidth, int nOutputHeight,
                                      long nTileWidth, long nTileHeight )
 {
-    Fraction zoomX = Fraction(long(nOutputWidth * TWIPS_PER_PIXEL), nTileWidth);
-    Fraction zoomY = Fraction(long(nOutputHeight * TWIPS_PER_PIXEL), nTileHeight);
+    Fraction zoomX(long(nOutputWidth * TWIPS_PER_PIXEL), nTileWidth);
+    Fraction zoomY(long(nOutputHeight * TWIPS_PER_PIXEL), nTileHeight);
     return getCellCursor(zoomX, zoomY);
 }
 

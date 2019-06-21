@@ -2388,7 +2388,7 @@ void SwRootFrame::CalcFrameRects(SwShellCursor &rCursor)
                 }
             }
 
-            SwRect aTmp = SwRect( aTmpSt, aTmpEnd );
+            SwRect aTmp( aTmpSt, aTmpEnd );
             // Bug 34888: If content is selected which doesn't take space
             //            away (i.e. PostIts, RefMarks, TOXMarks), then at
             //            least set the width of the Cursor.

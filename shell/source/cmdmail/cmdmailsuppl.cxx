@@ -168,8 +168,7 @@ void SAL_CALL CmdMailSuppl::sendSimpleMailMessage( const Reference< XSimpleMailM
         Sequence< Any > aArgumentList( 1 );
         aArgumentList[0] <<= aProperty;
 
-        Reference< XNameAccess > xNameAccess =
-            Reference< XNameAccess > (
+        Reference< XNameAccess > xNameAccess(
                 m_xConfigurationProvider->createInstanceWithArguments(
                     "com.sun.star.configuration.ConfigurationAccess",
                     aArgumentList ),

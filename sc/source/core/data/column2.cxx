@@ -397,7 +397,7 @@ long ScColumn::GetNeededSize(
             pEngine->SetHyphenator( xXHyphenator );
         }
 
-        Size aPaper = Size( 1000000, 1000000 );
+        Size aPaper( 1000000, 1000000 );
         if ( eOrient==SvxCellOrientation::Stacked && !bAsianVertical )
             aPaper.setWidth( 1 );
         else if (bBreak)
