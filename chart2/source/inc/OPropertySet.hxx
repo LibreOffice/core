@@ -27,15 +27,24 @@
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/beans/XMultiPropertyStates.hpp>
 #include <com/sun/star/style/XStyleSupplier.hpp>
+#include <com/sun/star/chart2/XChartStyles.hpp>
 #include "charttoolsdllapi.hxx"
 
 #include <memory>
+#include <map>
 
 namespace property
 {
 
 namespace impl
 { class ImplOPropertySet; }
+
+namespace impl
+{
+    typedef
+        std::map< sal_Int32, css::uno::Any >
+        tPropertyMap;
+}
 
 class OOO_DLLPUBLIC_CHARTTOOLS OPropertySet :
     public ::cppu::OBroadcastHelper,
@@ -46,7 +55,8 @@ class OOO_DLLPUBLIC_CHARTTOOLS OPropertySet :
     public css::lang::XTypeProvider,
     public css::beans::XPropertyState,
     public css::beans::XMultiPropertyStates,
-    public css::style::XStyleSupplier
+    public css::style::XStyleSupplier,
+    public css::chart2::XChartStyles
 {
 public:
     OPropertySet( ::osl::Mutex & rMutex );
@@ -190,6 +200,14 @@ protected:
 
     // Note: it is assumed that the base class implements setPropertyValue by
     // using setFastPropertyValue
+
+    // ____ XChartStyles _____
+    virtual void SAL_CALL setDefaultStyle( const sal_Int16 nValue ) override;
+    virtual void SAL_CALL setChartStyle( const sal_Int16 nValue ) = 0;
+    virtual void SAL_CALL createStyle() = 0;
+    virtual void SAL_CALL deleteStyle( const sal_Int16 nValue ) override;
+
+    const impl::tPropertyMap& getAllDirectProperties();
 
 private:
     /// reference to mutex of class deriving from here

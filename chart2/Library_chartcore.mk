@@ -225,6 +225,7 @@ $(eval $(call gb_Library_add_exception_objects,chartcore,\
     chart2/source/tools/Scaling \
     chart2/source/tools/SceneProperties \
     chart2/source/tools/StatisticsHelper \
+	chart2/source/tools/StyleHandler \
     chart2/source/tools/ThreeDHelper \
     chart2/source/tools/TitleHelper \
     chart2/source/tools/TrueGuard \

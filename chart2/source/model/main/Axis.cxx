@@ -28,6 +28,7 @@
 #include <EventListenerHelper.hxx>
 #include <ModifyListenerHelper.hxx>
 #include <unonames.hxx>
+#include <StyleHandler.hxx>
 
 #include <com/sun/star/chart/ChartAxisArrangeOrderType.hpp>
 #include <com/sun/star/chart/ChartAxisLabelPosition.hpp>
@@ -306,6 +307,19 @@ void lcl_CloneSubGrids(
     OSL_ASSERT( pDestIt == pDestEnd );
 }
 
+struct StaticStyles_Initializer
+{
+    ::chart::StyleHandler* operator()()
+    {
+        ::chart::StyleHandler Styles( ::chart::StyleType::STYLETYPE_BASE_COORD );
+        return &Styles;
+    }
+};
+
+struct StaticStyles : public rtl::StaticAggregate< ::chart::StyleHandler, StaticStyles_Initializer >
+{
+};
+
 } // anonymous namespace
 
 namespace chart
@@ -570,6 +584,9 @@ void Axis::fireModifyEvent()
 // ____ OPropertySet ____
 uno::Any Axis::GetDefaultValue( sal_Int32 nHandle ) const
 {
+
+    StyleHandler& rChartStyles = *StaticStyles::get();
+
     const tPropertyValueMap& rStaticDefaults = *StaticAxisDefaults::get();
     tPropertyValueMap::const_iterator aFound( rStaticDefaults.find( nHandle ) );
     if( aFound == rStaticDefaults.end() )
@@ -586,6 +603,20 @@ uno::Any Axis::GetDefaultValue( sal_Int32 nHandle ) const
 Reference< beans::XPropertySetInfo > SAL_CALL Axis::getPropertySetInfo()
 {
     return *StaticAxisInfo::get();
+}
+
+// ____ XChartStyles ____
+void Axis::setChartStyle( const sal_Int16 nValue )
+{
+    StyleHandler& rChartStyles = *StaticStyles::get();
+    rChartStyles.setLocalStyle( nValue );
+    setAllPropertiesToDefault();
+}
+
+void Axis::createStyle()
+{
+    StyleHandler& rChartStyles = *StaticStyles::get();
+    rChartStyles.createStyle( getAllDirectProperties(), STYLETYPE_AXIS );
 }
 
 using impl::Axis_Base;

@@ -19,6 +19,7 @@
 
 #include <OPropertySet.hxx>
 #include "ImplOPropertySet.hxx"
+#include <StyleHandler.hxx>
 #include <cppuhelper/queryinterface.hxx>
 
 #include <vector>
@@ -331,6 +332,11 @@ void SAL_CALL OPropertySet::getFastPropertyValue
     }
 }
 
+const impl::tPropertyMap& OPropertySet::getAllDirectProperties()
+{
+    return m_pImplProperties->exportPropertyMap();
+}
+
 void OPropertySet::firePropertyChangeEvent()
 {
     // nothing in base class
@@ -366,6 +372,17 @@ void SAL_CALL OPropertySet::setFastPropertyValue( sal_Int32 nHandle, const Any& 
     ::cppu::OPropertySetHelper::setFastPropertyValue( nHandle, rValue );
 
     firePropertyChangeEvent();
+}
+
+// ____ XChartStyles ____
+void SAL_CALL OPropertySet::setDefaultStyle( const sal_Int16 nValue )
+{
+    chart::StyleHandler::setDefaultStyle( nValue );
+}
+
+void SAL_CALL OPropertySet::deleteStyle( const sal_Int16 nValue )
+{
+    chart::StyleHandler::deleteStyle( nValue );
 }
 
 } //  namespace property

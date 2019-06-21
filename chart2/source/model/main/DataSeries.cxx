@@ -27,6 +27,7 @@
 #include <CloneHelper.hxx>
 #include <ModifyListenerHelper.hxx>
 #include <EventListenerHelper.hxx>
+#include <StyleHandler.hxx>
 #include <com/sun/star/container/NoSuchElementException.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <cppuhelper/supportsservice.hxx>
@@ -119,6 +120,20 @@ void lcl_CloneAttributedDataPoints(
         }
     }
 }
+
+struct StaticStyles_Initializer
+{
+    ::chart::StyleHandler* operator()()
+    {
+        ::chart::StyleHandler Styles( ::chart::StyleType::STYLETYPE_DATA_SERIES );
+        return &Styles;
+    }
+};
+
+struct StaticStyles : public rtl::StaticAggregate< ::chart::StyleHandler, StaticStyles_Initializer >
+{
+};
+
 
 } // anonymous namespace
 
@@ -233,6 +248,9 @@ uno::Reference< util::XCloneable > SAL_CALL DataSeries::createClone()
 // ____ OPropertySet ____
 uno::Any DataSeries::GetDefaultValue( sal_Int32 nHandle ) const
 {
+
+    StyleHandler& rChartStyles = *StaticStyles::get();
+
     const tPropertyValueMap& rStaticDefaults = StaticDataSeriesDefaults::get();
     tPropertyValueMap::const_iterator aFound( rStaticDefaults.find( nHandle ) );
     if( aFound == rStaticDefaults.end() )
@@ -526,6 +544,20 @@ void DataSeries::firePropertyChangeEvent()
 void DataSeries::fireModifyEvent()
 {
     m_xModifyEventForwarder->modified( lang::EventObject( static_cast< uno::XWeak* >( this )));
+}
+
+// ____ XChartStyles ____
+void DataSeries::setChartStyle( const sal_Int16 nValue )
+{
+    StyleHandler& rChartStyles = *StaticStyles::get();
+    rChartStyles.setLocalStyle( nValue );
+    setAllPropertiesToDefault();
+}
+
+void DataSeries::createStyle()
+{
+    StyleHandler& rChartStyles = *StaticStyles::get();
+    rChartStyles.createStyle( getAllDirectProperties(), STYLETYPE_DATA_SERIES );
 }
 
 using impl::DataSeries_Base;
