@@ -28,9 +28,10 @@ class Qt5MainWindow : public QMainWindow
 {
     Q_OBJECT
 
-    Qt5Frame* m_pFrame;
+    Qt5Frame& m_rFrame;
 
     virtual void closeEvent(QCloseEvent* pEvent) override;
+    void moveEvent(QMoveEvent*) override;
 
 public:
     Qt5MainWindow(Qt5Frame& rFrame, QWidget* parent = Q_NULLPTR,

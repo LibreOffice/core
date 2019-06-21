@@ -171,8 +171,8 @@ Qt5Frame::Qt5Frame(Qt5Frame* pParent, SalFrameStyleFlags nStyle, bool bUseCairo)
     {
         maGeometry.nDisplayScreenNumber = 0;
         Size aDefSize = CalcDefaultSize();
-        maGeometry.nX = -1;
-        maGeometry.nY = -1;
+        maGeometry.nX = 0;
+        maGeometry.nY = 0;
         maGeometry.nWidth = aDefSize.Width();
         maGeometry.nHeight = aDefSize.Height();
         maGeometry.nTopDecoration = 0;
@@ -372,8 +372,7 @@ void Qt5Frame::Show(bool bVisible, bool /*bNoActivate*/)
 {
     assert(m_pQWidget);
 
-    if (m_bDefaultSize)
-        SetDefaultSize();
+    SetDefaultSize();
 
     auto* pSalInst(static_cast<Qt5Instance*>(GetSalData()->m_pInstance));
     assert(pSalInst);
@@ -431,9 +430,13 @@ Size Qt5Frame::CalcDefaultSize()
 
 void Qt5Frame::SetDefaultSize()
 {
+    if (!m_bDefaultSize)
+        return;
+
     Size aDefSize = CalcDefaultSize();
     SetPosSize(0, 0, aDefSize.Width(), aDefSize.Height(),
                SAL_FRAME_POSSIZE_WIDTH | SAL_FRAME_POSSIZE_HEIGHT);
+    assert(!m_bDefaultSize);
 }
 
 void Qt5Frame::SetPosSize(long nX, long nY, long nWidth, long nHeight, sal_uInt16 nFlags)
@@ -441,38 +444,57 @@ void Qt5Frame::SetPosSize(long nX, long nY, long nWidth, long nHeight, sal_uInt1
     if (!isWindow() || isChild(true, false))
         return;
 
-    if ((nFlags & (SAL_FRAME_POSSIZE_WIDTH | SAL_FRAME_POSSIZE_HEIGHT))
-        && (nWidth > 0 && nHeight > 0) // sometimes stupid things happen
-    )
+    if (nFlags & (SAL_FRAME_POSSIZE_WIDTH | SAL_FRAME_POSSIZE_HEIGHT))
     {
         m_bDefaultSize = false;
         if (isChild(false) || !m_pQWidget->isMaximized())
         {
-            if (m_nStyle & SalFrameStyleFlags::SIZEABLE)
-                asChild()->resize(nWidth, nHeight);
-            else
-                asChild()->setFixedSize(nWidth, nHeight);
+            if (!(nFlags & SAL_FRAME_POSSIZE_WIDTH))
+                nWidth = maGeometry.nWidth;
+            else if (!(nFlags & SAL_FRAME_POSSIZE_HEIGHT))
+                nHeight = maGeometry.nHeight;
+            assert(nWidth > 0 && nHeight > 0);
+
+            if (nWidth > 0 && nHeight > 0)
+            {
+                if (m_nStyle & SalFrameStyleFlags::SIZEABLE)
+                    asChild()->resize(nWidth, nHeight);
+                else
+                    asChild()->setFixedSize(nWidth, nHeight);
+
+                // assume the resize happened
+                // needed for calculations and will eventuall be corrected by events
+                maGeometry.nWidth = nWidth;
+                maGeometry.nHeight = nHeight;
+            }
         }
     }
-    else if (m_bDefaultSize)
+    else
         SetDefaultSize();
-
-    m_bDefaultSize = false;
 
     if (nFlags & (SAL_FRAME_POSSIZE_X | SAL_FRAME_POSSIZE_Y))
     {
         if (m_pParent)
         {
-            QRect aRect;
-            if (m_pParent->GetTopLevelWindow())
-                aRect = m_pParent->GetTopLevelWindow()->geometry();
+            const SalFrameGeometry& aParentGeometry = m_pParent->maGeometry;
+            if (QGuiApplication::isRightToLeft())
+                nX = aParentGeometry.nX + aParentGeometry.nWidth - nX - maGeometry.nWidth - 1;
             else
-                aRect = m_pParent->GetQWidget()->geometry();
+                nX += aParentGeometry.nX;
+            nY += aParentGeometry.nY;
 
-            nX += aRect.x();
-            nY += aRect.y();
+            Qt5MainWindow* pTopLevel = m_pParent->GetTopLevelWindow();
+            if (pTopLevel && pTopLevel->menuBar() && pTopLevel->menuBar()->isVisible())
+                nY += pTopLevel->menuBar()->geometry().height();
         }
 
+        if (!(nFlags & SAL_FRAME_POSSIZE_X))
+            nX = maGeometry.nX;
+        else if (!(nFlags & SAL_FRAME_POSSIZE_Y))
+            nY = maGeometry.nY;
+
+        // assume the reposition happened
+        // needed for calculations and will eventually be corrected by events later
         maGeometry.nX = nX;
         maGeometry.nY = nY;
 
@@ -553,25 +575,15 @@ void Qt5Frame::SetWindowState(const SalFrameState* pState)
                 | WindowStateMask::Height))
     {
         sal_uInt16 nPosSizeFlags = 0;
-        QPoint aPos = m_pQWidget->pos();
-        QPoint aParentPos;
-        if (m_pParent)
-            aParentPos = m_pParent->GetQWidget()->window()->pos();
-        long nX = pState->mnX - aParentPos.x();
-        long nY = pState->mnY - aParentPos.y();
         if (pState->mnMask & WindowStateMask::X)
             nPosSizeFlags |= SAL_FRAME_POSSIZE_X;
-        else
-            nX = aPos.x() - aParentPos.x();
         if (pState->mnMask & WindowStateMask::Y)
             nPosSizeFlags |= SAL_FRAME_POSSIZE_Y;
-        else
-            nY = aPos.y() - aParentPos.y();
         if (pState->mnMask & WindowStateMask::Width)
             nPosSizeFlags |= SAL_FRAME_POSSIZE_WIDTH;
         if (pState->mnMask & WindowStateMask::Height)
             nPosSizeFlags |= SAL_FRAME_POSSIZE_HEIGHT;
-        SetPosSize(nX, nY, pState->mnWidth, pState->mnHeight, nPosSizeFlags);
+        SetPosSize(pState->mnX, pState->mnY, pState->mnWidth, pState->mnHeight, nPosSizeFlags);
     }
     else if (pState->mnMask & WindowStateMask::State && !isChild())
     {
@@ -596,11 +608,18 @@ bool Qt5Frame::GetWindowState(SalFrameState* pState)
     }
     else
     {
+        // geometry() is the drawable area, which is wanted here
         QRect rect = asChild()->geometry();
         pState->mnX = rect.x();
         pState->mnY = rect.y();
         pState->mnWidth = rect.width();
         pState->mnHeight = rect.height();
+        // the menubar is drawn natively, adjust for that
+        if (maGeometry.nTopDecoration)
+        {
+            pState->mnY += maGeometry.nTopDecoration;
+            pState->mnHeight -= maGeometry.nTopDecoration;
+        }
         pState->mnMask |= WindowStateMask::X | WindowStateMask::Y | WindowStateMask::Width
                           | WindowStateMask::Height;
     }
@@ -729,8 +748,6 @@ bool Qt5Frame::ShowTooltip(const OUString& rText, const tools::Rectangle& /*rHel
     emit tooltipRequest(rText);
     return true;
 }
-
-// do we even need it? void Qt5Frame::Flush(const tools::Rectangle& /*rRect*/) {}
 
 void Qt5Frame::SetInputContext(SalInputContext* pContext)
 {
