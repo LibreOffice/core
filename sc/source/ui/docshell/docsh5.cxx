@@ -73,9 +73,9 @@ void ScDocShell::ErrorMessage(const char* pGlobStrId)
 {
     //! StopMarking at the (active) view?
 
-    vcl::Window* pParent = GetActiveDialogParent();
-    ScWaitCursorOff aWaitOff( pParent );
-    bool bFocus = pParent && pParent->HasFocus();
+    weld::Window* pParent = GetActiveDialogParent();
+    weld::WaitObject aWaitOff( pParent );
+    bool bFocus = pParent && pParent->has_focus();
 
     if (pGlobStrId && strcmp(pGlobStrId, STR_PROTECTIONERR) == 0)
     {
@@ -85,13 +85,13 @@ void ScDocShell::ErrorMessage(const char* pGlobStrId)
         }
     }
 
-    std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pParent ? pParent->GetFrameWeld() : nullptr,
+    std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pParent,
                                                   VclMessageType::Info, VclButtonsType::Ok,
                                                   ScResId(pGlobStrId)));
     xInfoBox->run();
 
     if (bFocus)
-        pParent->GrabFocus();
+        pParent->grab_focus();
 }
 
 bool ScDocShell::IsEditable() const
@@ -522,8 +522,7 @@ void ScDocShell::DoConsolidate( const ScConsolidateParam& rParam, bool bRecord )
 
     if (bErr)
     {
-        vcl::Window* pWin = GetActiveDialogParent();
-        std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
+        std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(GetActiveDialogParent(),
                                                       VclMessageType::Info, VclButtonsType::Ok,
                                                       ScResId(STR_CONSOLIDATE_ERR1)));
         xInfoBox->run();
@@ -532,7 +531,7 @@ void ScDocShell::DoConsolidate( const ScConsolidateParam& rParam, bool bRecord )
 
     //      execute
 
-    WaitObject aWait( GetActiveDialogParent() );
+    weld::WaitObject aWait( GetActiveDialogParent() );
     ScDocShellModificator aModificator( *this );
 
     ScRange aOldDest;
@@ -734,8 +733,7 @@ void ScDocShell::UseScenario( SCTAB nTab, const OUString& rName, bool bRecord )
             }
             else
             {
-                vcl::Window* pWin = GetActiveDialogParent();
-                std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
+                std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(GetActiveDialogParent(),
                                                               VclMessageType::Info, VclButtonsType::Ok,
                                                               ScResId(STR_PROTECTIONERR)));
                 xInfoBox->run();
@@ -743,8 +741,7 @@ void ScDocShell::UseScenario( SCTAB nTab, const OUString& rName, bool bRecord )
         }
         else
         {
-            vcl::Window* pWin = GetActiveDialogParent();
-            std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
+            std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(GetActiveDialogParent(),
                                                           VclMessageType::Info, VclButtonsType::Ok,
                                                           ScResId(STR_SCENARIO_NOTFOUND)));
             xInfoBox->run();

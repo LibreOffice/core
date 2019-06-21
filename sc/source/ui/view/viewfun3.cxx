@@ -1062,7 +1062,7 @@ bool ScViewFunc::PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
             ScWaitCursorOff aWaitOff( GetFrameWin() );
             OUString aMessage = ScResId( STR_PASTE_BIGGER );
 
-            std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(GetViewData().GetFrameWeld(),
+            std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(GetViewData().GetDialogParent(),
                                                            VclMessageType::Question, VclButtonsType::YesNo,
                                                            aMessage));
             xQueryBox->set_default_response(RET_NO);
@@ -1150,7 +1150,7 @@ bool ScViewFunc::PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
         if ( bAskIfNotEmpty )
         {
             ScRangeList aTestRanges(aUserRange);
-            if (!checkDestRangeForOverwrite(aTestRanges, pDoc, aFilteredMark, GetViewData().GetFrameWeld()))
+            if (!checkDestRangeForOverwrite(aTestRanges, pDoc, aFilteredMark, GetViewData().GetDialogParent()))
                 return false;
         }
     }
@@ -1517,7 +1517,7 @@ bool ScViewFunc::PasteMultiRangesFromClip(
     if (bAskIfNotEmpty)
     {
         ScRangeList aTestRanges(aMarkedRange);
-        if (!checkDestRangeForOverwrite(aTestRanges, pDoc, aMark, GetViewData().GetFrameWeld()))
+        if (!checkDestRangeForOverwrite(aTestRanges, pDoc, aMark, GetViewData().GetDialogParent()))
             return false;
     }
 
@@ -1679,7 +1679,7 @@ bool ScViewFunc::PasteFromClipToMultiRanges(
 
     if (bAskIfNotEmpty)
     {
-        if (!checkDestRangeForOverwrite(aRanges, pDoc, aMark, GetViewData().GetFrameWeld()))
+        if (!checkDestRangeForOverwrite(aRanges, pDoc, aMark, GetViewData().GetDialogParent()))
             return false;
     }
 

@@ -347,8 +347,7 @@ weld::Window* ScSpellingEngine::GetDialogParent()
     }
 
     // fall back to standard dialog parent
-    vcl::Window* pWin = ScDocShell::GetActiveDialogParent();
-    return pWin ? pWin->GetFrameWeld() : nullptr;
+    return ScDocShell::GetActiveDialogParent();
 }
 
 ScConversionParam::ScConversionParam( ScConversionType eConvType ) :

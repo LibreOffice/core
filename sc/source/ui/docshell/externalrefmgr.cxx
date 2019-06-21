@@ -3144,8 +3144,7 @@ void ScExternalRefManager::Notify( SfxBroadcaster&, const SfxHint& rHint )
         {
             case SfxEventHintId::PrepareCloseDoc:
                 {
-                    vcl::Window* pWin = ScDocShell::GetActiveDialogParent();
-                    std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
+                    std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(ScDocShell::GetActiveDialogParent(),
                                                                VclMessageType::Warning, VclButtonsType::Ok,
                                                                ScResId(STR_CLOSE_WITH_UNSAVED_REFS)));
                     xWarn->run();

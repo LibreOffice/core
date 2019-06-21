@@ -342,7 +342,7 @@ void ScDBFunc::ToggleAutoFilter()
         {
             if (!bHeader)
             {
-                std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetViewData().GetFrameWeld(),
+                std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetViewData().GetDialogParent(),
                                                           VclMessageType::Question,
                                                           VclButtonsType::YesNo, ScResId(STR_MSSG_MAKEAUTOFILTER_0))); // header from first row?
                 xBox->set_title(ScResId(STR_MSSG_DOSUBTOTALS_0)); // "StarCalc"
@@ -371,7 +371,7 @@ void ScDBFunc::ToggleAutoFilter()
         }
         else
         {
-            std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(GetViewData().GetFrameWeld(),
+            std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(GetViewData().GetDialogParent(),
                                                            VclMessageType::Warning, VclButtonsType::Ok,
                                                            ScResId(STR_ERR_AUTOFILTER)));
             xErrorBox->run();

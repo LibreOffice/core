@@ -2289,7 +2289,7 @@ sheet::GoalResult SAL_CALL ScModelObj::seekGoal(
     aResult.Divergence = DBL_MAX;       // not found
     if (pDocShell)
     {
-        WaitObject aWait( ScDocShell::GetActiveDialogParent() );
+        weld::WaitObject aWait( ScDocShell::GetActiveDialogParent() );
         ScDocument& rDoc = pDocShell->GetDocument();
         double fValue = 0.0;
         bool bFound = rDoc.Solver(

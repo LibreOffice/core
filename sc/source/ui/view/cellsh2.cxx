@@ -800,7 +800,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
             std::shared_ptr<ScDocument> xDoc(new ScDocument, o3tl::default_delete<ScDocument>());
             xDoc->InsertTab(0, "test");
             ScDocument* pDoc = GetViewData()->GetDocument();
-            ScopedVclPtrInstance< ScDataProviderDlg > aDialog( pTabViewShell->GetDialogParent(), xDoc, pDoc);
+            ScopedVclPtrInstance< ScDataProviderDlg > aDialog( pTabViewShell->GetLegacyDialogParent(), xDoc, pDoc);
             if (aDialog->Execute() == RET_OK)
             {
                 aDialog->import(pDoc);
