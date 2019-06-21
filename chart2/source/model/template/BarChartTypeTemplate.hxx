@@ -85,6 +85,10 @@ protected:
     virtual StackMode getStackMode( sal_Int32 nChartTypeIndex ) const override;
     virtual bool isSwapXAndY() const override;
 
+    // ____ XChartStyles ____
+    virtual void setChartStyle( const sal_Int16 nValue ) override{};
+    virtual void createStyle() override{};
+
     virtual void createCoordinateSystems(
         const css::uno::Reference< css::chart2::XCoordinateSystemContainer > & xCooSysCnt ) override;
 

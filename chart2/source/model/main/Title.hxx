@@ -100,6 +100,10 @@ private:
     virtual void firePropertyChangeEvent() override;
     using OPropertySet::disposing;
 
+    // ____ XChartStyles ____
+    virtual void setChartStyle( const sal_Int16 nValue ) override;
+    virtual void createStyle() override;
+
     void fireModifyEvent();
 
     css::uno::Sequence< css::uno::Reference< css::chart2::XFormattedString > > m_aStrings;

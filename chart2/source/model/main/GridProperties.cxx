@@ -22,6 +22,7 @@
 #include <UserDefinedProperties.hxx>
 #include <PropertyHelper.hxx>
 #include <ModifyListenerHelper.hxx>
+#include <StyleHandler.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -121,6 +122,19 @@ struct StaticGridInfo : public rtl::StaticAggregate< uno::Reference< beans::XPro
 {
 };
 
+struct StaticStyles_Initializer
+{
+    ::chart::StyleHandler* operator()()
+    {
+        ::chart::StyleHandler Styles( ::chart::StyleType::STYLETYPE_GRID );
+        return &Styles;
+    }
+};
+
+struct StaticStyles : public rtl::StaticAggregate< ::chart::StyleHandler, StaticStyles_Initializer >
+{
+};
+
 } // anonymous namespace
 
 namespace chart
@@ -144,6 +158,9 @@ GridProperties::~GridProperties()
 // ____ OPropertySet ____
 uno::Any GridProperties::GetDefaultValue( sal_Int32 nHandle ) const
 {
+
+    StyleHandler& rChartStyles = *StaticStyles::get();
+
     const tPropertyValueMap& rStaticDefaults = *StaticGridDefaults::get();
     tPropertyValueMap::const_iterator aFound( rStaticDefaults.find( nHandle ) );
     if( aFound == rStaticDefaults.end() )
@@ -211,6 +228,20 @@ void SAL_CALL GridProperties::disposing( const lang::EventObject& /* Source */ )
 void GridProperties::firePropertyChangeEvent()
 {
     m_xModifyEventForwarder->modified( lang::EventObject( static_cast< uno::XWeak* >( this )));
+}
+
+// ____ XChartStyles ____
+void GridProperties::setChartStyle( const sal_Int16 nValue )
+{
+    StyleHandler& rChartStyles = *StaticStyles::get();
+    rChartStyles.setLocalStyle( nValue );
+    setAllPropertiesToDefault();
+}
+
+void GridProperties::createStyle()
+{
+    StyleHandler& rChartStyles = *StaticStyles::get();
+    rChartStyles.createStyle( getAllDirectProperties(), STYLETYPE_GRID );
 }
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static

@@ -28,6 +28,7 @@
 #include <CloneHelper.hxx>
 #include <SceneProperties.hxx>
 #include <unonames.hxx>
+#include <StyleHandler.hxx>
 
 #include <basegfx/numeric/ftools.hxx>
 #include <rtl/instance.hxx>
@@ -273,6 +274,19 @@ void lcl_CloneCoordinateSystems(
             rDestination.push_back( i );
     }
 }
+
+struct StaticStyles_Initializer
+{
+    ::chart::StyleHandler* operator()()
+    {
+        ::chart::StyleHandler Styles( ::chart::StyleType::STYLETYPE_DIAGRAM );
+        return &Styles;
+    }
+};
+
+struct StaticStyles : public rtl::StaticAggregate< ::chart::StyleHandler, StaticStyles_Initializer >
+{
+};
 
 } // anonymous namespace
 
@@ -595,6 +609,9 @@ void Diagram::fireModifyEvent()
 // ____ OPropertySet ____
 uno::Any Diagram::GetDefaultValue( sal_Int32 nHandle ) const
 {
+
+    StyleHandler& rChartStyles = *StaticStyles::get();
+
     const tPropertyValueMap& rStaticDefaults = *StaticDiagramDefaults::get();
     tPropertyValueMap::const_iterator aFound( rStaticDefaults.find( nHandle ) );
     if( aFound == rStaticDefaults.end() )
@@ -666,6 +683,20 @@ void SAL_CALL Diagram::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) co
     }
     else
         ::property::OPropertySet::getFastPropertyValue( rValue,nHandle );
+}
+
+// ____ XChartStyles ____
+void Diagram::setChartStyle( const sal_Int16 nValue )
+{
+    StyleHandler& rChartStyles = *StaticStyles::get();
+    rChartStyles.setLocalStyle( nValue );
+    setAllPropertiesToDefault();
+}
+
+void Diagram::createStyle()
+{
+    StyleHandler& rChartStyles = *StaticStyles::get();
+    rChartStyles.createStyle( getAllDirectProperties(), STYLETYPE_DIAGRAM );
 }
 
 using impl::Diagram_Base;

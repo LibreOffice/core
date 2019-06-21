@@ -160,6 +160,11 @@ bool ImplOPropertySet::GetPropertyValueByHandle(
     return bResult;
 }
 
+const ImplOPropertySet::tPropertyMap& ImplOPropertySet::exportPropertyMap()
+{
+    return m_aProperties;
+}
+
 void ImplOPropertySet::SetPropertyValueByHandle(
     sal_Int32 nHandle, const Any & rValue )
 {
