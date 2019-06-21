@@ -50,6 +50,12 @@ void OutputDevice::DrawGradient( const tools::PolyPolygon& rPolyPoly,
 {
     assert(!is_double_buffered_window());
 
+    if (mbInitClipRegion)
+        InitClipRegion();
+
+    if (mbOutputClipped && !mpMetaFile)
+        return;
+
     if ( rPolyPoly.Count() && rPolyPoly[ 0 ].GetSize() )
     {
         if ( mnDrawMode & ( DrawModeFlags::BlackGradient | DrawModeFlags::WhiteGradient | DrawModeFlags::SettingsGradient) )
