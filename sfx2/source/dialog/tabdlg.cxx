@@ -1106,7 +1106,6 @@ void SfxTabDialogController::RemoveResetButton()
 void SfxTabDialogController::RemoveStandardButton()
 {
     m_xBaseFmtBtn->hide();
-    m_pImpl->bHideResetBtn = true;
 }
 
 SfxTabPage* SfxTabDialogController::GetTabPage(const OString& rPageId) const
