@@ -1495,6 +1495,10 @@ void ScAccessibleDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 if (mpTempAccEdit)
                 {
                     mpTempAccEdit->LostFocus();
+                }
+                RemoveChild(mxTempAcc, true);
+                if (mpTempAccEdit)
+                {
                     // tdf#125982 a11y use-after-free of editengine by
                     // ScAccessibleEditObjectTextData living past the
                     // the editengine of the editview passed in above
@@ -1502,7 +1506,6 @@ void ScAccessibleDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                     mpTempAccEdit->dispose();
                     mpTempAccEdit = nullptr;
                 }
-                RemoveChild(mxTempAcc, true);
                 if (mpAccessibleSpreadsheet.is() && mpViewShell && mpViewShell->IsActive())
                     mpAccessibleSpreadsheet->GotFocus();
                 else if( mpViewShell && mpViewShell->IsActive())
