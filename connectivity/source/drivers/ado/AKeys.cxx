@@ -57,8 +57,8 @@ Reference< XPropertySet > OKeys::createDescriptor()
 // XAppend
 sdbcx::ObjectType OKeys::appendObject( const OUString&, const Reference< XPropertySet >& descriptor )
 {
-    OAdoKey* pKey = nullptr;
-    if ( !getImplementation( pKey, descriptor ) || pKey == nullptr)
+    OAdoKey* pKey = getImplementation<OAdoKey>( descriptor );
+    if ( pKey == nullptr)
         m_pConnection->throwGenericSQLException( STR_INVALID_KEY_DESCRIPTOR_ERROR,static_cast<XTypeProvider*>(this) );
 
     // To pass as column parameter to Key's Append method

@@ -52,14 +52,13 @@ namespace comphelper
     }
 
     template <class TYPE>
-    bool getImplementation(TYPE*& _pObject, const css::uno::Reference< css::uno::XInterface >& _rxIFace)
+    TYPE* getImplementation(const css::uno::Reference< css::uno::XInterface >& _rxIFace)
     {
-        _pObject = nullptr;
         css::uno::Reference< css::lang::XUnoTunnel > xTunnel(_rxIFace, css::uno::UNO_QUERY);
         if (xTunnel.is())
-            _pObject = reinterpret_cast< TYPE* >(xTunnel->getSomething(TYPE::getUnoTunnelImplementationId()));
+            return reinterpret_cast< TYPE* >(xTunnel->getSomething(TYPE::getUnoTunnelImplementationId()));
 
-        return (_pObject != nullptr);
+        return nullptr;
     }
 
 

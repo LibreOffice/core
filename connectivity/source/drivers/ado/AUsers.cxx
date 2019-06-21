@@ -55,8 +55,8 @@ Reference< XPropertySet > OUsers::createDescriptor()
 // XAppend
 sdbcx::ObjectType OUsers::appendObject( const OUString& _rForName, const Reference< XPropertySet >& descriptor )
 {
-    OUserExtend* pUser = nullptr;
-    if ( !getImplementation( pUser, descriptor ) || pUser == nullptr )
+    OUserExtend* pUser = getImplementation<OUserExtend>( descriptor );
+    if ( pUser == nullptr )
         m_pCatalog->getConnection()->throwGenericSQLException( STR_INVALID_USER_DESCRIPTOR_ERROR,static_cast<XTypeProvider*>(this) );
 
     ADOUsers* pUsers = static_cast<ADOUsers*>(m_aCollection);
