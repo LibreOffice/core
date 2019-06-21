@@ -1161,12 +1161,25 @@ static void lcl_ExportBkmAndRedline(
         lcl_ExportSoftPageBreak(rPortions, xParent, pUnoCursor, rBreakArr, nIndex);
 }
 
+/**
+ * Exports all start annotation marks from rAnnotationStartArr into rPortions that have the same
+ * start position as nIndex.
+ *
+ * @param rAnnotationStartArr the array of annotation marks. Consumed entries are removed.
+ *
+ * @param rFramePositions the list of positions where there is an at-char anchored frame.
+ *
+ * @param bOnlyFrame If true: export only the start of annotation marks which cover an at-char
+ * anchored frame. If false: export everything else.
+ */
 static void lcl_ExportAnnotationStarts(
     TextRangeList_t & rPortions,
     Reference<XText> const & xParent,
     const SwUnoCursor * const pUnoCursor,
     SwAnnotationStartPortion_ImplList& rAnnotationStartArr,
-    const sal_Int32 nIndex)
+    const sal_Int32 nIndex,
+    const std::set<sal_Int32>& rFramePositions,
+    bool bOnlyFrame)
 {
     for ( SwAnnotationStartPortion_ImplList::iterator aIter = rAnnotationStartArr.begin(), aEnd = rAnnotationStartArr.end();
           aIter != aEnd; )
@@ -1182,12 +1195,18 @@ static void lcl_ExportAnnotationStarts(
             break;
         }
 
-        SwXTextPortion* pPortion =
-            new SwXTextPortion( pUnoCursor, xParent, PORTION_ANNOTATION );
-        pPortion->SetTextField( pPtr->mxAnnotationField );
-        rPortions.emplace_back(pPortion);
+        bool bFrameStart = rFramePositions.find(nIndex) != rFramePositions.end();
+        if (bFrameStart || !bOnlyFrame)
+        {
+            SwXTextPortion* pPortion =
+                new SwXTextPortion( pUnoCursor, xParent, PORTION_ANNOTATION );
+            pPortion->SetTextField( pPtr->mxAnnotationField );
+            rPortions.emplace_back(pPortion);
 
-        aIter = rAnnotationStartArr.erase(aIter);
+            aIter = rAnnotationStartArr.erase(aIter);
+        }
+        else
+            ++aIter;
     }
 }
 
@@ -1356,6 +1375,15 @@ static void lcl_CreatePortions(
         lcl_ExportBkmAndRedline( *PortionStack.top().first, i_xParentText,
             pUnoCursor, Bookmarks, Redlines, SoftPageBreaks, nCurrentIndex, aFramePositions, /*bOnlyFrameBookmarkStarts=*/true );
 
+        lcl_ExportAnnotationStarts(
+            *PortionStack.top().first,
+            i_xParentText,
+            pUnoCursor,
+            AnnotationStarts,
+            nCurrentIndex,
+            aFramePositions,
+            /*bOnlyFrame=*/true );
+
         const sal_Int32 nFirstFrameIndex =
             lcl_ExportFrames( *PortionStack.top().first,
                 i_xParentText, pUnoCursor, i_rFrames, nCurrentIndex);
@@ -1370,7 +1398,9 @@ static void lcl_CreatePortions(
             i_xParentText,
             pUnoCursor,
             AnnotationStarts,
-            nCurrentIndex );
+            nCurrentIndex,
+            aFramePositions,
+            /*bOnlyFrame=*/false );
 
         bool bCursorMoved( false );
         sal_Int32 nNextAttrIndex = -1;
