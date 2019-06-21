@@ -23,6 +23,7 @@
 #include <UserDefinedProperties.hxx>
 #include <PropertyHelper.hxx>
 #include <ModifyListenerHelper.hxx>
+#include <StyleHandler.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -77,6 +78,19 @@ struct StaticDataPointInfo_Initializer
 };
 
 struct StaticDataPointInfo : public rtl::StaticAggregate< uno::Reference< beans::XPropertySetInfo >, StaticDataPointInfo_Initializer >
+{
+};
+
+struct StaticStyles_Initializer
+{
+    ::chart::StyleHandler* operator()()
+    {
+        ::chart::StyleHandler Styles( ::chart::StyleType::STYLETYPE_DATA_POINT );
+        return &Styles;
+    }
+};
+
+struct StaticStyles : public rtl::StaticAggregate< ::chart::StyleHandler, StaticStyles_Initializer >
 {
 };
 
@@ -167,6 +181,9 @@ void SAL_CALL DataPoint::setParent(
 // ____ OPropertySet ____
 uno::Any DataPoint::GetDefaultValue( sal_Int32 nHandle ) const
 {
+
+    StyleHandler& rChartStyles = *StaticStyles::get();
+
     // the value set at the data series is the default
     uno::Reference< beans::XFastPropertySet > xFast( m_xParentProperties.get(), uno::UNO_QUERY );
     if( !xFast.is())
@@ -260,6 +277,20 @@ void SAL_CALL DataPoint::disposing( const lang::EventObject& )
 void DataPoint::firePropertyChangeEvent()
 {
     m_xModifyEventForwarder->modified( lang::EventObject( static_cast< uno::XWeak* >( this )));
+}
+
+// ____ XChartStyles ____
+void DataPoint::setChartStyle( const sal_Int16 nValue )
+{
+    StyleHandler& rChartStyles = *StaticStyles::get();
+    rChartStyles.setLocalStyle( nValue );
+    setAllPropertiesToDefault();
+}
+
+void DataPoint::createStyle()
+{
+    StyleHandler& rChartStyles = *StaticStyles::get();
+    rChartStyles.createStyle( getAllDirectProperties(), STYLETYPE_DATA_POINT );
 }
 
 // needed by MSC compiler

@@ -73,6 +73,7 @@ public:
         std::map< sal_Int32, css::uno::Any >
         tPropertyMap;
 
+    const tPropertyMap& exportPropertyMap();
 private:
     tPropertyMap    m_aProperties;
     css::uno::Reference< css::style::XStyle >

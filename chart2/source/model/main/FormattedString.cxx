@@ -22,6 +22,7 @@
 #include <CharacterProperties.hxx>
 #include <PropertyHelper.hxx>
 #include <ModifyListenerHelper.hxx>
+#include <StyleHandler.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <tools/diagnose_ex.h>
 
@@ -87,6 +88,19 @@ struct StaticFormattedStringInfo_Initializer
 };
 
 struct StaticFormattedStringInfo : public rtl::StaticAggregate< uno::Reference< beans::XPropertySetInfo >, StaticFormattedStringInfo_Initializer >
+{
+};
+
+struct StaticStyles_Initializer
+{
+    ::chart::StyleHandler* operator()()
+    {
+        ::chart::StyleHandler Styles( ::chart::StyleType::STYLETYPE_FORMATTED );
+        return &Styles;
+    }
+};
+
+struct StaticStyles : public rtl::StaticAggregate< ::chart::StyleHandler, StaticStyles_Initializer >
 {
 };
 
@@ -244,6 +258,20 @@ uno::Any FormattedString::GetDefaultValue( sal_Int32 nHandle ) const
 uno::Reference< beans::XPropertySetInfo > SAL_CALL FormattedString::getPropertySetInfo()
 {
     return *StaticFormattedStringInfo::get();
+}
+
+// ____ XChartStyles ____
+void FormattedString::setChartStyle( const sal_Int16 nValue )
+{
+    StyleHandler& rChartStyles = *StaticStyles::get();
+    rChartStyles.setLocalStyle( nValue );
+    setAllPropertiesToDefault();
+}
+
+void FormattedString::createStyle()
+{
+    StyleHandler& rChartStyles = *StaticStyles::get();
+    rChartStyles.createStyle( getAllDirectProperties(), STYLETYPE_FORMATTED );
 }
 
 using impl::FormattedString_Base;
