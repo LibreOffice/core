@@ -2973,7 +2973,7 @@ void DomainMapper_Impl::ChainTextFrames()
             uno::Sequence<beans::PropertyValue> aGrabBag;
             uno::Reference<lang::XServiceInfo> xServiceInfo(xPropertySet, uno::UNO_QUERY);
 
-            TextFramesForChaining aChainStruct = TextFramesForChaining();
+            TextFramesForChaining aChainStruct;
             OUString sShapeName;
             OUString sLinkChainName;
 
@@ -3661,9 +3661,7 @@ void DomainMapper_Impl::handleAuthor
     }
     if (m_xTextFactory.is())
         xFieldInterface = m_xTextFactory->createInstance(sServiceName);
-    uno::Reference<beans::XPropertySet> xFieldProperties =
-        uno::Reference< beans::XPropertySet >( xFieldInterface,
-            uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xFieldProperties( xFieldInterface, uno::UNO_QUERY_THROW);
     if( bIsCustomField )
     {
         xFieldProperties->setPropertyValue(
@@ -5466,7 +5464,7 @@ void DomainMapper_Impl::startOrEndPermissionRange(sal_Int32 permissinId)
 
                 // add new bookmark
                 const bool bAbsorb = !xCursor->isCollapsed();
-                uno::Reference< text::XTextRange > xCurrent = uno::Reference< text::XTextRange >(xCursor, uno::UNO_QUERY_THROW);
+                uno::Reference< text::XTextRange > xCurrent(xCursor, uno::UNO_QUERY_THROW);
                 xTextAppend->insertTextContent(xCurrent, xPerm, bAbsorb);
             }
 

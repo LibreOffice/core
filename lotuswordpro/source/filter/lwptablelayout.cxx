@@ -1206,7 +1206,7 @@ void LwpTableLayout::PostProcessParagraph(XFCell *pCell, sal_uInt16 nRowID, sal_
         XFParagraph * pXFPara = static_cast<XFParagraph*>(first.get());
         if (!pXFPara)
             return;
-        XFColor aNullColor = XFColor();
+        XFColor aNullColor;
 
         OUString sNumfmt = pCellLayout->GetNumfmtName();
         bool bColorMod = false;

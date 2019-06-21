@@ -6750,7 +6750,7 @@ private:
         gtk_tree_model_get_iter(pModel, &aGtkIter.iter, tree_path);
         gtk_tree_path_free(tree_path);
 
-        OUString sText = OUString(pNewText, pNewText ? strlen(pNewText) : 0, RTL_TEXTENCODING_UTF8);
+        OUString sText(pNewText, pNewText ? strlen(pNewText) : 0, RTL_TEXTENCODING_UTF8);
         if (signal_editing_done(std::pair<const weld::TreeIter&, OUString>(aGtkIter, sText)))
         {
             void* pData = g_object_get_data(G_OBJECT(pCell), "g-lo-CellIndex");
@@ -6939,7 +6939,7 @@ public:
         GtkTreeViewColumn* pColumn = GTK_TREE_VIEW_COLUMN(g_list_nth_data(m_pColumns, nColumn));
         assert(pColumn && "wrong count");
         const gchar* pTitle = gtk_tree_view_column_get_title(pColumn);
-        OUString sRet = OUString(pTitle, pTitle ? strlen(pTitle) : 0, RTL_TEXTENCODING_UTF8);
+        OUString sRet(pTitle, pTitle ? strlen(pTitle) : 0, RTL_TEXTENCODING_UTF8);
         return sRet;
     }
 
@@ -8675,7 +8675,7 @@ public:
         GtkTextIter start, end;
         gtk_text_buffer_get_bounds(pBuffer, &start, &end);
         char* pStr = gtk_text_buffer_get_text(pBuffer, &start, &end, true);
-        OUString sRet = OUString(pStr, pStr ? strlen(pStr) : 0, RTL_TEXTENCODING_UTF8);
+        OUString sRet(pStr, pStr ? strlen(pStr) : 0, RTL_TEXTENCODING_UTF8);
         g_free(pStr);
         return sRet;
     }
@@ -10326,7 +10326,7 @@ private:
                 int nTextLen = pTextStr ? strlen(pTextStr) : 0;
                 if (nTextLen)
                 {
-                    OUString sOldText = OUString(pTextStr, nTextLen, RTL_TEXTENCODING_UTF8);
+                    OUString sOldText(pTextStr, nTextLen, RTL_TEXTENCODING_UTF8);
                     OString sText(OUStringToOString((*m_pStringReplace)(sOldText), RTL_TEXTENCODING_UTF8));
                     gtk_text_buffer_set_text(pBuffer, sText.getStr(), sText.getLength());
                 }

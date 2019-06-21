@@ -63,8 +63,7 @@ void OOXMLBinaryObjectReference::resolve(BinaryObj & rHandler)
     if (! mbRead)
         read();
 
-    writerfilter::Reference<Properties>::Pointer_t pRef =
-        writerfilter::Reference<Properties>::Pointer_t();
+    writerfilter::Reference<Properties>::Pointer_t pRef;
 
     rHandler.data(reinterpret_cast<sal_uInt8 *>(mSequence.data()),
                   mSequence.size(), pRef);

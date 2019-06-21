@@ -732,7 +732,7 @@ static drawing::PolyPolygonBezierCoords getCircularArcBezierCoords(
     //at least one polygon is created using two normal and two control points
     //if the angle is larger it is separated into multiple sub angles
 
-    drawing::PolyPolygonBezierCoords aReturn = drawing::PolyPolygonBezierCoords();
+    drawing::PolyPolygonBezierCoords aReturn;
     sal_Int32 nSegmentCount = static_cast< sal_Int32 >( fWidthAngleRadian/fAngleSubdivisionRadian );
     if( fWidthAngleRadian > fAngleSubdivisionRadian*nSegmentCount )
         nSegmentCount++;
@@ -842,7 +842,7 @@ static drawing::PolyPolygonBezierCoords getRingBezierCoords(
             , const ::basegfx::B2DHomMatrix& aTransformationFromUnitCircle
             , const double fAngleSubdivisionRadian )
 {
-    drawing::PolyPolygonBezierCoords aReturn = drawing::PolyPolygonBezierCoords();
+    drawing::PolyPolygonBezierCoords aReturn;
 
     aReturn.Coordinates = drawing::PointSequenceSequence(1);
     aReturn.Flags       = drawing::FlagSequenceSequence(1);
@@ -1776,8 +1776,7 @@ uno::Reference< drawing::XShapes >
         }
 
         //return
-        uno::Reference< drawing::XShapes > xShapes =
-            uno::Reference<drawing::XShapes>( xShape, uno::UNO_QUERY );
+        uno::Reference< drawing::XShapes > xShapes( xShape, uno::UNO_QUERY );
         return xShapes;
     }
     catch( const uno::Exception& )
@@ -1829,8 +1828,7 @@ uno::Reference< drawing::XShapes >
             setShapeName( xShape , aName );
 
         //return
-        uno::Reference< drawing::XShapes > xShapes =
-                uno::Reference<drawing::XShapes>( xShape, uno::UNO_QUERY );
+        uno::Reference< drawing::XShapes > xShapes( xShape, uno::UNO_QUERY );
         return xShapes;
     }
     catch( const uno::Exception& )

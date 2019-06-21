@@ -347,11 +347,12 @@ static PyObject* initTestEnvironment(
             css::uno::UNO_QUERY_THROW);
         char *const testlib = getenv("TEST_LIB");
         if (!testlib) { abort(); }
-        OString const libname = OString(testlib, strlen(testlib))
 #ifdef _WIN32
-            .replaceAll(OString('/'), OString('\\'))
+        OString const libname = OString(testlib, strlen(testlib))
+            .replaceAll(OString('/'), OString('\\'));
+#else
+        OString const libname(testlib, strlen(testlib));
 #endif
-            ;
 
         osl::Module &mod = runtime.getImpl()->cargo->testModule;
         mod.load(OStringToOUString(libname, osl_getThreadTextEncoding()),

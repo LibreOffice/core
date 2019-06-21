@@ -1790,9 +1790,9 @@ void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject const * pSdrObj,
     {
         SwFormatFrameSize aSize = rFlySet.Get(RES_FRM_SIZE);
 
-        SwFormatFrameSize aNewSize = SwFormatFrameSize(bFixSize ? ATT_FIX_SIZE : ATT_VAR_SIZE,
-            aSize.GetWidth()  + 2*nOutside,
-            aSize.GetHeight() + 2*nOutside);
+        SwFormatFrameSize aNewSize(bFixSize ? ATT_FIX_SIZE : ATT_VAR_SIZE,
+                                   aSize.GetWidth()  + 2*nOutside,
+                                   aSize.GetHeight() + 2*nOutside);
         aNewSize.SetWidthSizeType(aSize.GetWidthSizeType());
         rFlySet.Put( aNewSize );
     }

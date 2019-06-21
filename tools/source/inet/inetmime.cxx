@@ -586,9 +586,7 @@ sal_Unicode const * scanParameters(sal_Unicode const * pBegin,
         }
         if (p == pAttributeBegin)
             break;
-        OString aAttribute = OString(
-            pAttributeBegin, p - pAttributeBegin,
-            RTL_TEXTENCODING_ASCII_US);
+        OString aAttribute(pAttributeBegin, p - pAttributeBegin, RTL_TEXTENCODING_ASCII_US);
         if (bDowncaseAttribute)
             aAttribute = aAttribute.toAsciiLowerCase();
 

@@ -3075,7 +3075,7 @@ void VclBuilder::handleRow(xmlreader::XmlReader &reader, const OString &rID)
                 reader.nextItem(
                     xmlreader::XmlReader::Text::Raw, &name, &nsId);
 
-                OString sValue = OString(name.begin, name.length);
+                OString sValue(name.begin, name.length);
                 OUString sFinalValue;
                 if (bTranslated)
                 {
@@ -3236,7 +3236,7 @@ std::vector<ComboBoxTextItem> VclBuilder::handleItems(xmlreader::XmlReader &read
                 reader.nextItem(
                     xmlreader::XmlReader::Text::Raw, &name, &nsId);
 
-                OString sValue = OString(name.begin, name.length);
+                OString sValue(name.begin, name.length);
                 OUString sFinalValue;
                 if (bTranslated)
                 {
@@ -3448,7 +3448,7 @@ void VclBuilder::handleSizeGroup(xmlreader::XmlReader &reader)
                     if (name.equals("name"))
                     {
                         name = reader.getAttributeValue(false);
-                        OString sWidget = OString(name.begin, name.length);
+                        OString sWidget(name.begin, name.length);
                         sal_Int32 nDelim = sWidget.indexOf(':');
                         if (nDelim != -1)
                             sWidget = sWidget.copy(0, nDelim);
@@ -3914,13 +3914,13 @@ std::vector<vcl::EnumContext::Context> VclBuilder::handleStyle(xmlreader::XmlRea
                 if (classStyle.startsWith("context-"))
                 {
                     OString sContext = classStyle.copy(classStyle.indexOf('-') + 1);
-                    OUString sContext2 = OUString(sContext.getStr(), sContext.getLength(), RTL_TEXTENCODING_UTF8);
+                    OUString sContext2(sContext.getStr(), sContext.getLength(), RTL_TEXTENCODING_UTF8);
                     aContext.push_back(vcl::EnumContext::GetContextEnum(sContext2));
                 }
                 else if (classStyle.startsWith("priority-"))
                 {
                     OString aPriority = classStyle.copy(classStyle.indexOf('-') + 1);
-                    OUString aPriority2 = OUString(aPriority.getStr(), aPriority.getLength(), RTL_TEXTENCODING_UTF8);
+                    OUString aPriority2(aPriority.getStr(), aPriority.getLength(), RTL_TEXTENCODING_UTF8);
                     nPriority = aPriority2.toInt32();
                 }
                 else
@@ -3988,7 +3988,7 @@ void VclBuilder::collectProperty(xmlreader::XmlReader &reader, stringmap &rMap) 
     }
 
     reader.nextItem(xmlreader::XmlReader::Text::Raw, &name, &nsId);
-    OString sValue = OString(name.begin, name.length);
+    OString sValue(name.begin, name.length);
     OUString sFinalValue;
     if (bTranslated)
     {
@@ -4025,7 +4025,7 @@ void VclBuilder::handleActionWidget(xmlreader::XmlReader &reader)
     }
 
     reader.nextItem(xmlreader::XmlReader::Text::Raw, &name, &nsId);
-    OString sID = OString(name.begin, name.length);
+    OString sID(name.begin, name.length);
     sal_Int32 nDelim = sID.indexOf(':');
     if (nDelim != -1)
         sID = sID.copy(0, nDelim);

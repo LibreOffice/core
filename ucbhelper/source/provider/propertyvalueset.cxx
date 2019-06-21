@@ -137,7 +137,7 @@ class PropertyValues : public std::vector< ucbhelper_impl::PropertyValue > {};
                                                                   \
     osl::MutexGuard aGuard( m_aMutex );                           \
                                                                   \
-    _type_ aValue = _type_();   /* default ctor */                \
+    _type_ aValue {};   /* default ctor */                \
                                                                   \
     m_bWasNull = true;                                            \
                                                                   \

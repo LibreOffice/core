@@ -952,7 +952,7 @@ void OfaAutocorrReplacePage::NewEntry(const OUString& sShort, const OUString& sL
         }
     }
 
-    DoubleString aNewString = DoubleString();
+    DoubleString aNewString;
     aNewString.sShort = sShort;
     aNewString.sLong = sLong;
     rNewArray.push_back(aNewString);
@@ -982,7 +982,7 @@ void OfaAutocorrReplacePage::DeleteEntry(const OUString& sShort, const OUString&
         }
     }
 
-    DoubleString aDeletedString = DoubleString();
+    DoubleString aDeletedString;
     aDeletedString.sShort = sShort;
     aDeletedString.sLong = sLong;
     rDeletedArray.push_back(aDeletedString);

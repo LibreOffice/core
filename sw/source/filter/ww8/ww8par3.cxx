@@ -2533,8 +2533,7 @@ bool SwMSConvertControls::InsertControl(
     if( !xCreate.is() )
         return false;
 
-    uno::Reference< drawing::XShape > xShape =
-        uno::Reference< drawing::XShape >(xCreate, uno::UNO_QUERY);
+    uno::Reference< drawing::XShape > xShape(xCreate, uno::UNO_QUERY);
 
     OSL_ENSURE(xShape.is(), "Did not get XShape");
     xShape->setSize(rSize);

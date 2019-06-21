@@ -815,7 +815,7 @@ void GDIMetaFile::Rotate( long nAngle10 )
     const double    fAngle = F_PI1800 * nAngle10;
     const double    fSin = sin( fAngle );
     const double    fCos = cos( fAngle );
-    tools::Rectangle       aRect=tools::Rectangle( Point(), GetPrefSize() );
+    tools::Rectangle aRect( Point(), GetPrefSize() );
     tools::Polygon aPoly( aRect );
 
     aPoly.Rotate( Point(), fSin, fCos );

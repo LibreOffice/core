@@ -196,8 +196,7 @@ uno::Reference< beans::XPropertySet > createMenuBarUI(
         throw uno::RuntimeException(
             "UpdateCheckJob: unable to obtain service manager from component context", uno::Reference< uno::XInterface > () );
 
-    uno::Reference< beans::XPropertySet > xMenuBarUI =
-        uno::Reference< beans::XPropertySet > (
+    uno::Reference< beans::XPropertySet > xMenuBarUI(
             xServiceManager->createInstanceWithContext( "com.sun.star.setup.UpdateCheckUI", xContext ),
             uno::UNO_QUERY_THROW);
 

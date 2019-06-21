@@ -493,7 +493,7 @@ namespace emfplushelper
 
             // EMF Alpha (1 byte): An 8-bit unsigned integer that specifies the transparency of the background,
             // ranging from 0 for completely transparent to 0xFF for completely opaque.
-            const Color color = Color(0xff - (brushIndexOrColor >> 24), (brushIndexOrColor >> 16) & 0xff, (brushIndexOrColor >> 8) & 0xff, brushIndexOrColor & 0xff);
+            const Color color(0xff - (brushIndexOrColor >> 24), (brushIndexOrColor >> 16) & 0xff, (brushIndexOrColor >> 8) & 0xff, brushIndexOrColor & 0xff);
             if (color.GetTransparency() < 255)
             {
                 if (color.GetTransparency() == 0)

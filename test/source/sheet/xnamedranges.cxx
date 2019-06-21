@@ -43,7 +43,7 @@ void XNamedRanges::testAddNewByName()
     uno::Reference<container::XNameAccess> xNamedRangesNameAccess(getXNamedRanges(1),
                                                                   UNO_QUERY_THROW);
 
-    table::CellAddress aBaseAddress = table::CellAddress(0, 0, 0);
+    table::CellAddress aBaseAddress(0, 0, 0);
 
     sal_Int32 nType = 0;
     OUString const aContent1("D1");
@@ -87,7 +87,7 @@ void XNamedRanges::testAddNewFromTitles()
     uno::Reference<container::XIndexAccess> xNamedRangesIndex(xNamedRanges, UNO_QUERY_THROW);
     uno::Reference<container::XNameAccess> xNamedRangesNameAccess(xNamedRanges, UNO_QUERY_THROW);
 
-    table::CellRangeAddress aCellRangeAddress = table::CellRangeAddress(1, 0, 0, 3, 3);
+    table::CellRangeAddress aCellRangeAddress(1, 0, 0, 3, 3);
 
     OUString aString;
     uno::Reference<table::XCell> xCell;
@@ -173,7 +173,7 @@ void XNamedRanges::testRemoveByName()
 
 void XNamedRanges::testOutputList()
 {
-    table::CellAddress aCellAddress = table::CellAddress(0, 2, 0);
+    table::CellAddress aCellAddress(0, 2, 0);
     uno::Reference<sheet::XNamedRanges> xNamedRanges(init(), UNO_QUERY_THROW);
     uno::Reference<container::XIndexAccess> xNamedRangesIndex(init(), UNO_QUERY_THROW);
     sal_Int32 nElementsCount = xNamedRangesIndex->getCount();

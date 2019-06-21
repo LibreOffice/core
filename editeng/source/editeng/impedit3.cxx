@@ -725,7 +725,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
 
     EditLine* pLine = &pParaPortion->GetLines()[nLine];
 
-    static tools::Rectangle aZeroArea = tools::Rectangle( Point(), Point() );
+    static tools::Rectangle aZeroArea { Point(), Point() };
     tools::Rectangle aBulletArea( aZeroArea );
     if ( !nLine )
     {
@@ -1674,7 +1674,7 @@ void ImpEditEngine::CreateAndInsertEmptyLine( ParaPortion* pParaPortion )
     const SvxLineSpacingItem& rLSItem = pParaPortion->GetNode()->GetContentAttribs().GetItem( EE_PARA_SBL );
     long nStartX = GetXValue( rLRItem.GetTextLeft() + rLRItem.GetTextFirstLineOfst() + nSpaceBefore );
 
-    tools::Rectangle aBulletArea = tools::Rectangle( Point(), Point() );
+    tools::Rectangle aBulletArea { Point(), Point() };
     if ( bLineBreak )
     {
         nStartX = GetXValue( rLRItem.GetTextLeft() + rLRItem.GetTextFirstLineOfst() + nSpaceBeforeAndMinLabelWidth );

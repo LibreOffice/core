@@ -1910,7 +1910,7 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
         return;
 
     std::unique_ptr<::sd::ClientView> pView( new ::sd::ClientView( mpDocShell, pOut ) );
-    ::tools::Rectangle                         aVisArea = ::tools::Rectangle( Point(), mpDoc->GetSdPage( static_cast<sal_uInt16>(nPageNumber) - 1, ePageKind )->GetSize() );
+    ::tools::Rectangle aVisArea( Point(), mpDoc->GetSdPage( static_cast<sal_uInt16>(nPageNumber) - 1, ePageKind )->GetSize() );
     vcl::Region                       aRegion( aVisArea );
 
     ::sd::ViewShell* pOldViewSh = mpDocShell->GetViewShell();

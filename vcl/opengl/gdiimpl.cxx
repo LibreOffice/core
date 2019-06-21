@@ -548,7 +548,7 @@ void OpenGLSalGraphicsImpl::CheckOffscreenTexture()
         SalTwoRect aPosAry(0, 0, fWidth, fHeight, 0,0, fWidth, fHeight);
 
         // TODO: lfrb: User GL_ARB_copy_image?
-        OpenGLTexture aNewTex = OpenGLTexture( GetWidth(), GetHeight() );
+        OpenGLTexture aNewTex( GetWidth(), GetHeight() );
 
         mpContext->state().scissor().disable();
         mpContext->state().stencil().disable();
@@ -670,7 +670,7 @@ void OpenGLSalGraphicsImpl::DrawLineSegment(float x1, float y1, float x2, float 
     glm::vec2 aPoint2(x2, y2);
 
     glm::vec2 aLineVector = vcl::vertex::normalize(aPoint2 - aPoint1);
-    glm::vec2 aNormal = glm::vec2(-aLineVector.y, aLineVector.x);
+    glm::vec2 aNormal(-aLineVector.y, aLineVector.x);
 
     vcl::vertex::addLineSegmentVertices(aVertices, aExtrusionVectors,
                                         aPoint1, aNormal, 1.0f,

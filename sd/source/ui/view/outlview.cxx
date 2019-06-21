@@ -734,9 +734,9 @@ IMPL_LINK_NOARG(OutlineView, StatusEventHdl, EditStatus&, void)
     ::sd::Window*   pWin = mrOutlineViewShell.GetActiveWindow();
     OutlinerView*   pOutlinerView = GetViewByWindow(pWin);
     ::tools::Rectangle       aVis          = pOutlinerView->GetVisArea();
-    ::tools::Rectangle       aText = ::tools::Rectangle(Point(0,0),
-                                      Size(mnPaperWidth,
-                                      mrOutliner.GetTextHeight()));
+    ::tools::Rectangle       aText(Point(0,0),
+                                   Size(mnPaperWidth,
+                                   mrOutliner.GetTextHeight()));
     ::tools::Rectangle aWin(Point(0,0), pWin->GetOutputSizePixel());
     aWin = pWin->PixelToLogic(aWin);
 

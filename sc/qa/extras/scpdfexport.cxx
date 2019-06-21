@@ -84,8 +84,7 @@ void ScPDFExportTest::setUp()
         xTargetFrame = xDesktop->findFrame("_blank", 0);
         CPPUNIT_ASSERT(xTargetFrame.is());
 
-        uno::Reference<frame::XModel> xModel
-            = uno::Reference<frame::XModel>(mxComponent, uno::UNO_QUERY);
+        uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
         uno::Reference<frame::XModel2> xModel2(xModel, UNO_QUERY);
         CPPUNIT_ASSERT(xModel2.is());
 
@@ -222,8 +221,7 @@ void ScPDFExportTest::setFont(ScFieldEditEngine& rEE, sal_Int32 nStart, sal_Int3
 void ScPDFExportTest::testExportRange_Tdf120161()
 {
     // create test document
-    uno::Reference<frame::XModel> xModel
-        = uno::Reference<frame::XModel>(mxComponent, uno::UNO_QUERY);
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(xModel, uno::UNO_QUERY_THROW);
     uno::Reference<sheet::XSpreadsheets> xSheets(xDoc->getSheets(), UNO_SET_THROW);
     uno::Reference<container::XIndexAccess> xIndex(xSheets, uno::UNO_QUERY_THROW);
