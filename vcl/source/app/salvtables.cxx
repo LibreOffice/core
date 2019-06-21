@@ -1218,6 +1218,9 @@ public:
         VclAbstractDialog::AsyncContext aCtx;
         aCtx.mxOwnerDialogController = aOwner;
         aCtx.maEndDialogFn = rEndDialogFn;
+        VclButtonBox* pActionArea = m_xDialog->get_action_area();
+        if (pActionArea)
+           pActionArea->sort_native_button_order();
         return m_xDialog->StartExecuteAsync(aCtx);
     }
 
@@ -1229,6 +1232,9 @@ public:
         // which is that rxSelf enforces.
         aCtx.mxOwnerSelf = rxSelf;
         aCtx.maEndDialogFn = rEndDialogFn;
+        VclButtonBox* pActionArea = m_xDialog->get_action_area();
+        if (pActionArea)
+           pActionArea->sort_native_button_order();
         return m_xDialog->StartExecuteAsync(aCtx);
     }
 
