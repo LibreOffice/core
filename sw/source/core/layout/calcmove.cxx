@@ -394,6 +394,29 @@ void SwFrame::PrepareCursor()
     StackHack aHack;
     if( GetUpper() && !GetUpper()->IsSctFrame() )
     {
+        const bool bCnt = IsContentFrame();
+        const bool bTab = IsTabFrame();
+        bool bNoSect = IsInSct();
+
+        boost::optional<FlowFrameJoinLockGuard> tabGuard;
+        boost::optional<SwFrameDeleteGuard> rowGuard;
+        SwFlowFrame* pThis = bCnt ? static_cast<SwContentFrame*>(this) : nullptr;
+
+        if ( bTab )
+        {
+            tabGuard.emplace(static_cast<SwTabFrame*>(this)); // tdf#125741
+            pThis = static_cast<SwTabFrame*>(this);
+        }
+        else if (IsRowFrame())
+        {
+            rowGuard.emplace(this); // tdf#125741 keep this alive
+        }
+        else if( IsSctFrame() )
+        {
+            pThis = static_cast<SwSectionFrame*>(this);
+            bNoSect = false;
+        }
+
         GetUpper()->PrepareCursor();
         GetUpper()->Calc(getRootFrame()->GetCurrShell() ? getRootFrame()->GetCurrShell()->GetOut() : nullptr);
 
@@ -401,25 +424,7 @@ void SwFrame::PrepareCursor()
         if ( !GetUpper() )
             return;
 
-        const bool bCnt = IsContentFrame();
-        const bool bTab = IsTabFrame();
-        bool bNoSect = IsInSct();
-
-        bool bOldTabLock = false, bFoll;
-        SwFlowFrame* pThis = bCnt ? static_cast<SwContentFrame*>(this) : nullptr;
-
-        if ( bTab )
-        {
-            bOldTabLock = static_cast<SwTabFrame*>(this)->IsJoinLocked();
-            ::PrepareLock( static_cast<SwTabFrame*>(this) );
-            pThis = static_cast<SwTabFrame*>(this);
-        }
-        else if( IsSctFrame() )
-        {
-            pThis = static_cast<SwSectionFrame*>(this);
-            bNoSect = false;
-        }
-        bFoll = pThis && pThis->IsFollow();
+        bool const bFoll = pThis && pThis->IsFollow();
 
         SwFrame *pFrame = GetUpper()->Lower();
         while ( pFrame != this )
@@ -474,9 +479,6 @@ void SwFrame::PrepareCursor()
         GetUpper()->Calc(getRootFrame()->GetCurrShell()->GetOut());
 
         OSL_ENSURE( GetUpper(), "Layout unstable (Upper gone III)." );
-
-        if ( bTab && !bOldTabLock )
-            ::PrepareUnlock( static_cast<SwTabFrame*>(this) );
     }
     Calc(getRootFrame()->GetCurrShell() ? getRootFrame()->GetCurrShell()->GetOut() : nullptr);
 }
