@@ -52,8 +52,7 @@ sal_Bool SAL_CALL ZMFImportFilter::supportsService(const OUString& rServiceName)
 
 Sequence<OUString> SAL_CALL ZMFImportFilter::getSupportedServiceNames()
 {
-    return Sequence<OUString>{ "com.sun.star.document.ImportFilter",
-                               "com.sun.star.document.ExtendedTypeDetection" };
+    return { "com.sun.star.document.ImportFilter", "com.sun.star.document.ExtendedTypeDetection" };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*

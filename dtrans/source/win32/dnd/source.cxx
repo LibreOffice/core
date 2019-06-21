@@ -288,9 +288,7 @@ sal_Bool SAL_CALL DragSource::supportsService( const OUString& ServiceName )
 
 Sequence< OUString > SAL_CALL DragSource::getSupportedServiceNames(  )
 {
-    OUString names[1]= {OUString(DNDSOURCE_SERVICE_NAME)};
-
-    return Sequence<OUString>(names, 1);
+    return { DNDSOURCE_SERVICE_NAME };
 }
 
 /** This function is called as extra thread from

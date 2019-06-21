@@ -304,8 +304,7 @@ Sequence<OUString> SAL_CALL EventAttacherImpl::getSupportedServiceNames(  )
 
 Sequence<OUString> EventAttacherImpl::getSupportedServiceNames_Static(  )
 {
-    OUString aStr(  SERVICENAME  );
-    return Sequence< OUString >( &aStr, 1 );
+    return { SERVICENAME };
 }
 
 void SAL_CALL EventAttacherImpl::initialize(const Sequence< Any >& Arguments)

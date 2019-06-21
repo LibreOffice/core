@@ -258,8 +258,7 @@ sal_Bool SAL_CALL DropTarget::supportsService( const OUString& ServiceName )
 
 Sequence< OUString > SAL_CALL DropTarget::getSupportedServiceNames(  )
 {
-    OUString names[1]= {OUString(DNDTARGET_SERVICE_NAME)};
-    return Sequence<OUString>(names, 1);
+    return { DNDTARGET_SERVICE_NAME };
 }
 
 // XDropTarget

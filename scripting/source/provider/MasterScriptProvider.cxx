@@ -668,13 +668,10 @@ sal_Bool SAL_CALL MasterScriptProvider::supportsService( const OUString& service
 
 Sequence< OUString > SAL_CALL MasterScriptProvider::getSupportedServiceNames( )
 {
-    OUString names[3];
-
-    names[0] = "com.sun.star.script.provider.MasterScriptProvider";
-    names[1] = "com.sun.star.script.browse.BrowseNode";
-    names[2] = "com.sun.star.script.provider.ScriptProvider";
-
-    return Sequence< OUString >( names, 3 );
+    return {
+        "com.sun.star.script.provider.MasterScriptProvider",
+        "com.sun.star.script.browse.BrowseNode",
+        "com.sun.star.script.provider.ScriptProvider" };
 }
 
 } // namespace func_provider

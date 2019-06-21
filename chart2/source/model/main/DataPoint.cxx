@@ -280,7 +280,7 @@ sal_Bool SAL_CALL DataPoint::supportsService( const OUString& rServiceName )
 
 css::uno::Sequence< OUString > SAL_CALL DataPoint::getSupportedServiceNames()
 {
-    return Sequence< OUString >{
+    return {
         "com.sun.star.drawing.FillProperties",
         "com.sun.star.chart2.DataPoint",
         "com.sun.star.chart2.DataPointProperties",

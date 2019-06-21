@@ -1050,8 +1050,7 @@ sal_Bool UnoControlModel::supportsService( const OUString& rServiceName )
 
 css::uno::Sequence< OUString > UnoControlModel::getSupportedServiceNames(  )
 {
-    OUString sName( "com.sun.star.awt.UnoControlModel" );
-    return Sequence< OUString >( &sName, 1 );
+    return { "com.sun.star.awt.UnoControlModel" };
 }
 
 sal_Bool UnoControlModel::convertFastPropertyValue( Any & rConvertedValue, Any & rOldValue, sal_Int32 nPropId, const Any& rValue )

@@ -301,8 +301,7 @@ sal_Bool SAL_CALL AccessibleBrowseBoxBase::supportsService(
 
 Sequence< OUString > SAL_CALL AccessibleBrowseBoxBase::getSupportedServiceNames()
 {
-    const OUString aServiceName( "com.sun.star.accessibility.AccessibleContext" );
-    return Sequence< OUString >( &aServiceName, 1 );
+    return { "com.sun.star.accessibility.AccessibleContext" };
 }
 
 // other public methods

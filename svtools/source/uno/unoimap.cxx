@@ -660,8 +660,7 @@ sal_Bool SAL_CALL SvUnoImageMap::supportsService( const OUString& ServiceName )
 
 Sequence< OUString > SAL_CALL SvUnoImageMap::getSupportedServiceNames(  )
 {
-    const OUString aSN( "com.sun.star.image.ImageMap" );
-    return Sequence< OUString >( &aSN, 1 );
+    return { "com.sun.star.image.ImageMap" };
 }
 
 void SvUnoImageMap::fillImageMap( ImageMap& rMap ) const

@@ -646,7 +646,7 @@ OUString desktop::splash::getImplementationName() {
 
 css::uno::Sequence< OUString > desktop::splash::getSupportedServiceNames()
 {
-    return Sequence< OUString > { "com.sun.star.office.SplashScreen" };
+    return { "com.sun.star.office.SplashScreen" };
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
