@@ -6100,7 +6100,12 @@ void PDFWriterImpl::drawHorizontalGlyphs(
             const Point aPrevPos = aMat.transform( rGlyphs[nPos-1].m_aPos );
             double fAdvance = aThisPos.X() - aPrevPos.X();
             fAdvance *= 1000.0 / nPixelFontHeight;
-            const sal_Int32 nAdjustment = static_cast<sal_Int32>(rGlyphs[nPos-1].m_nNativeWidth - fAdvance + 0.5);
+            const double fAdjustment = rGlyphs[nPos-1].m_nNativeWidth - fAdvance + 0.5;
+            SAL_WARN_IF(
+                fAdjustment < SAL_MIN_INT32 || fAdjustment > SAL_MAX_INT32, "vcl.pdfwriter",
+                "adjustment " << fAdjustment << " outside 32-bit int");
+            const sal_Int32 nAdjustment = static_cast<sal_Int32>(
+                std::clamp(fAdjustment, double(SAL_MIN_INT32), double(SAL_MAX_INT32)));
             if( nAdjustment != 0 )
             {
                 // apply individual glyph positioning
