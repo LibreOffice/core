@@ -220,7 +220,7 @@ using namespace css;
    segment = *(pchar / ";")
  */
 
-inline sal_Int32 INetURLObject::SubString::clear()
+sal_Int32 INetURLObject::SubString::clear()
 {
     sal_Int32 nDelta = -m_nLength;
     m_nBegin = -1;
@@ -228,8 +228,7 @@ inline sal_Int32 INetURLObject::SubString::clear()
     return nDelta;
 }
 
-inline sal_Int32 INetURLObject::SubString::set(OUStringBuffer & rString,
-                                       OUString const & rSubString)
+sal_Int32 INetURLObject::SubString::set(OUStringBuffer & rString, OUString const& rSubString)
 {
     OUString sTemp(rString.makeStringAndClear());
     sal_Int32 nDelta = set(sTemp, rSubString);
@@ -237,8 +236,7 @@ inline sal_Int32 INetURLObject::SubString::set(OUStringBuffer & rString,
     return nDelta;
 }
 
-inline sal_Int32 INetURLObject::SubString::set(OUString & rString,
-                                       OUString const & rSubString)
+sal_Int32 INetURLObject::SubString::set(OUString & rString, OUString const& rSubString)
 {
     sal_Int32 nDelta = rSubString.getLength() - m_nLength;
 
@@ -248,15 +246,14 @@ inline sal_Int32 INetURLObject::SubString::set(OUString & rString,
     return nDelta;
 }
 
-inline sal_Int32 INetURLObject::SubString::set(OUStringBuffer & rString,
-                                       OUString const & rSubString,
-                                               sal_Int32 nTheBegin)
+sal_Int32 INetURLObject::SubString::set(OUStringBuffer & rString, OUString const& rSubString,
+                                        sal_Int32 nTheBegin)
 {
     m_nBegin = nTheBegin;
     return set(rString, rSubString);
 }
 
-inline void INetURLObject::SubString::operator +=(sal_Int32 nDelta)
+void INetURLObject::SubString::operator+=(sal_Int32 nDelta)
 {
     if (isPresent())
         m_nBegin = m_nBegin + nDelta;
@@ -309,7 +306,7 @@ struct INetURLObject::PrefixInfo
 };
 
 // static
-inline INetURLObject::SchemeInfo const &
+INetURLObject::SchemeInfo const &
 INetURLObject::getSchemeInfo(INetProtocol eTheScheme)
 {
     static o3tl::enumarray<INetProtocol, SchemeInfo> const map = {
@@ -401,10 +398,6 @@ INetURLObject::getSchemeInfo(INetProtocol eTheScheme)
     return map[eTheScheme];
 };
 
-inline INetURLObject::SchemeInfo const & INetURLObject::getSchemeInfo() const
-{
-    return getSchemeInfo(m_eScheme);
-}
 
 namespace {
 
@@ -420,8 +413,7 @@ sal_Unicode getHexDigit(sal_uInt32 nWeight)
 }
 
 // static
-inline void INetURLObject::appendEscape(OUStringBuffer & rTheText,
-                                        sal_uInt32 nOctet)
+void INetURLObject::appendEscape(OUStringBuffer& rTheText, sal_uInt32 nOctet)
 {
     rTheText.append( '%' );
     rTheText.append( getHexDigit(nOctet >> 4) );
@@ -3142,13 +3134,6 @@ bool INetURLObject::checkHierarchical() const {
     }
 }
 
-bool INetURLObject::Append(OUString const & rTheSegment,
-                           EncodeMechanism eMechanism,
-                           rtl_TextEncoding eCharset)
-{
-    return insertName(rTheSegment, false, LAST_SEGMENT, eMechanism, eCharset);
-}
-
 INetURLObject::SubString INetURLObject::getSegment(sal_Int32 nIndex,
                                                    bool bIgnoreFinalSlash)
     const
@@ -3428,22 +3413,6 @@ OUString INetURLObject::decode(sal_Unicode const * pBegin,
         }
     }
     return aResult.makeStringAndClear();
-}
-
-OUString INetURLObject::GetURLNoPass(DecodeMechanism eMechanism,
-                                      rtl_TextEncoding eCharset) const
-{
-    INetURLObject aTemp(*this);
-    aTemp.clearPassword();
-    return aTemp.GetMainURL(eMechanism, eCharset);
-}
-
-OUString INetURLObject::GetURLNoMark(DecodeMechanism eMechanism,
-                                      rtl_TextEncoding eCharset) const
-{
-    INetURLObject aTemp(*this);
-    aTemp.clearFragment();
-    return aTemp.GetMainURL(eMechanism, eCharset);
 }
 
 OUString
@@ -3838,14 +3807,6 @@ OUString INetURLObject::GetAbsURL(OUString const & rTheBaseURIRef,
            || eCharset != RTL_TEXTENCODING_UTF8 ?
                aTheAbsURIRef.GetMainURL(eDecodeMechanism, eCharset) :
                rTheRelURIRef;
-}
-
-OUString INetURLObject::getExternalURL() const
-{
-    OUString aTheExtURIRef;
-    translateToExternal(
-        m_aAbsURIRef.toString(), aTheExtURIRef);
-    return aTheExtURIRef;
 }
 
 bool INetURLObject::isSchemeEqualTo(std::u16string_view scheme) const {
@@ -4845,40 +4806,6 @@ bool INetURLObject::scanIPv6reference(sal_Unicode const *& rBegin,
     return false;
 }
 
-OUString INetURLObject::GetPartBeforeLastName()
-    const
-{
-    if (!checkHierarchical())
-        return OUString();
-    INetURLObject aTemp(*this);
-    aTemp.clearFragment();
-    aTemp.clearQuery();
-    aTemp.removeSegment(LAST_SEGMENT, false);
-    aTemp.setFinalSlash();
-    return aTemp.GetMainURL(DecodeMechanism::ToIUri);
-}
-
-OUString INetURLObject::GetLastName(DecodeMechanism eMechanism,
-                                     rtl_TextEncoding eCharset) const
-{
-    return getName(LAST_SEGMENT, true, eMechanism, eCharset);
-}
-
-OUString INetURLObject::GetFileExtension() const
-{
-    return getExtension(LAST_SEGMENT, false);
-}
-
-void INetURLObject::CutLastName()
-{
-    INetURLObject aTemp(*this);
-    aTemp.clearFragment();
-    aTemp.clearQuery();
-    if (!aTemp.removeSegment(LAST_SEGMENT, false))
-        return;
-    *this = aTemp;
-}
-
 OUString INetURLObject::PathToFileName() const
 {
     if (m_eScheme != INetProtocol::File)
@@ -4892,43 +4819,6 @@ OUString INetURLObject::PathToFileName() const
             != osl::FileBase::E_None)
         return OUString();
     return aSystemPath;
-}
-
-OUString INetURLObject::GetFull() const
-{
-    INetURLObject aTemp(*this);
-    aTemp.removeFinalSlash();
-    return aTemp.PathToFileName();
-}
-
-OUString INetURLObject::GetPath() const
-{
-    INetURLObject aTemp(*this);
-    aTemp.removeSegment();
-    aTemp.removeFinalSlash();
-    return aTemp.PathToFileName();
-}
-
-void INetURLObject::SetBase(OUString const & rTheBase)
-{
-    setBase(rTheBase, LAST_SEGMENT, EncodeMechanism::All);
-}
-
-OUString INetURLObject::GetBase() const
-{
-    return getBase(LAST_SEGMENT, true, DecodeMechanism::WithCharset);
-}
-
-void INetURLObject::SetExtension(OUString const & rTheExtension)
-{
-    setExtension(rTheExtension, LAST_SEGMENT, false);
-}
-
-OUString INetURLObject::CutExtension()
-{
-    OUString aTheExtension(getExtension(LAST_SEGMENT, false));
-    return removeExtension(LAST_SEGMENT, false)
-        ? aTheExtension : OUString();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
