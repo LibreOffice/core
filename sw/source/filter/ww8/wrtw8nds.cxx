@@ -128,6 +128,8 @@ static OUString lcl_getFieldCode( const IFieldmark* pFieldmark )
         return OUString(" FORMDROPDOWN ");
     if ( pFieldmark->GetFieldname( ) == ODF_FORMCHECKBOX )
         return OUString(" FORMCHECKBOX ");
+    if ( pFieldmark->GetFieldname( ) == ODF_FORMDATE )
+        return OUString(" ODFFORMDATE ");
     if ( pFieldmark->GetFieldname( ) == ODF_TOC )
         return OUString(" TOC ");
     if ( pFieldmark->GetFieldname( ) == ODF_HYPERLINK )
@@ -147,6 +149,8 @@ static ww::eField lcl_getFieldId( const IFieldmark* pFieldmark ) {
         return ww::eFORMDROPDOWN;
     if ( pFieldmark->GetFieldname( ) == ODF_FORMCHECKBOX )
         return ww::eFORMCHECKBOX;
+    if ( pFieldmark->GetFieldname( ) == ODF_FORMDATE )
+        return ww::eFORMDATE;
     if ( pFieldmark->GetFieldname( ) == ODF_TOC )
         return ww::eTOC;
     if ( pFieldmark->GetFieldname( ) == ODF_HYPERLINK )
@@ -2406,21 +2410,31 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                 {
                     SwPosition aPosition( rNode, SwIndex( &rNode, nCurrentPos ) );
                     ::sw::mark::IFieldmark const * const pFieldmark = pMarkAccess->getFieldmarkFor( aPosition );
-                    OSL_ENSURE( pFieldmark, "Looks like this doc is broken...; where is the Fieldmark for the FIELDSTART??" );
 
-                    bool isDropdownOrCheckbox = pFieldmark && (pFieldmark->GetFieldname( ) == ODF_FORMDROPDOWN ||
-                            pFieldmark->GetFieldname( ) == ODF_FORMCHECKBOX );
-
-                    if ( isDropdownOrCheckbox )
-                        AppendBookmark( pFieldmark->GetName() );
-                    OutputField( nullptr, lcl_getFieldId( pFieldmark ),
-                            lcl_getFieldCode( pFieldmark ),
-                            FieldFlags::Start | FieldFlags::CmdStart );
-                    if ( isDropdownOrCheckbox )
+                    // Date field is exported as content control, not as a simple field
+                    if(pFieldmark && pFieldmark->GetFieldname( ) == ODF_FORMDATE &&
+                       GetExportFormat() == MSWordExportBase::ExportFormat::DOCX) // supported by DOCX only
+                    {
+                        OutputField( nullptr, lcl_getFieldId( pFieldmark ),
+                                lcl_getFieldCode( pFieldmark ),
+                                FieldFlags::Start | FieldFlags::CmdStart );
                         WriteFormData( *pFieldmark );
-                    OutputField( nullptr, lcl_getFieldId( pFieldmark ), OUString(), FieldFlags::Close );
-                    if ( isDropdownOrCheckbox )
-                        AppendBookmark( pFieldmark->GetName() );
+                    }
+                    else
+                    {
+                        bool isDropdownOrCheckbox = pFieldmark && (pFieldmark->GetFieldname( ) == ODF_FORMDROPDOWN ||
+                                                                    pFieldmark->GetFieldname( ) == ODF_FORMCHECKBOX );
+                        if ( isDropdownOrCheckbox )
+                            AppendBookmark( pFieldmark->GetName() );
+                        OutputField( nullptr, lcl_getFieldId( pFieldmark ),
+                                lcl_getFieldCode( pFieldmark ),
+                                FieldFlags::Start | FieldFlags::CmdStart );
+                        if ( isDropdownOrCheckbox )
+                            WriteFormData( *pFieldmark );
+                        OutputField( nullptr, lcl_getFieldId( pFieldmark ), OUString(), FieldFlags::Close );
+                        if ( isDropdownOrCheckbox )
+                            AppendBookmark( pFieldmark->GetName() );
+                    }
                 }
                 nLen -= ofs;
 
