@@ -353,8 +353,8 @@ namespace dbmm
             bool bEqual = true;
             try
             {
-                ::ucbhelper::Content aContentLHS = ::ucbhelper::Content( _lhs, Reference< XCommandEnvironment >(), context );
-                ::ucbhelper::Content aContentRHS = ::ucbhelper::Content( _rhs, Reference< XCommandEnvironment >(), context );
+                ::ucbhelper::Content aContentLHS( _lhs, Reference< XCommandEnvironment >(), context );
+                ::ucbhelper::Content aContentRHS( _rhs, Reference< XCommandEnvironment >(), context );
                 Reference< XContent > xContentLHS( aContentLHS.get(), UNO_SET_THROW );
                 Reference< XContent > xContentRHS( aContentRHS.get(), UNO_SET_THROW );
                 Reference< XContentIdentifier > xID1( xContentLHS->getIdentifier(), UNO_SET_THROW );

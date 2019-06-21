@@ -111,7 +111,7 @@ void PrinterGfx::DrawGlyph(const Point& rPoint,
         nDescend = nDescend * nTextHeight / 1000;
         nAscend = nAscend * nTextHeight / 1000;
 
-        Point aRotPoint = Point( -nDescend*nTextWidth/nTextHeight, nAscend*nTextWidth/nTextHeight );
+        Point aRotPoint( -nDescend*nTextWidth/nTextHeight, nAscend*nTextWidth/nTextHeight );
 
         // transform matrix to new individual direction
         PSGSave ();

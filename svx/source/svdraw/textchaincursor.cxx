@@ -84,7 +84,7 @@ void TextChainCursorManager::impDetectEvent(const KeyEvent& rKEvt,
     OUString aLastParaText = pOutl->GetText(pOutl->GetParagraph(nLastPara));
     sal_Int32 nLastParaLen = aLastParaText.getLength();
 
-    ESelection aEndSel = ESelection(nLastPara, nLastParaLen);
+    ESelection aEndSel(nLastPara, nLastParaLen);
     bool bAtEndOfTextContent = aCurSel == aEndSel;
 
     // Possibility: Are we "pushing" at the end of the object?
@@ -106,7 +106,7 @@ void TextChainCursorManager::impDetectEvent(const KeyEvent& rKEvt,
         return;
     }
 
-    ESelection aStartSel = ESelection(0, 0);
+    ESelection aStartSel(0, 0);
     bool bAtStartOfTextContent = aCurSel == aStartSel;
 
     // Possibility: Are we "pushing" at the start of the object?

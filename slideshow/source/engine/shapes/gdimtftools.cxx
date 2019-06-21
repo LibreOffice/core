@@ -312,8 +312,7 @@ bool getAnimationFromGraphic( VectorOfMtfAnimationFrames&   o_rFrames,
                 }
                 else
                 {
-                    BitmapEx aTmpMask = BitmapEx(aMask,
-                                                 aMask);
+                    BitmapEx aTmpMask(aMask, aMask);
                     pVDevMask->DrawBitmapEx(rAnimationBitmap.maPositionPixel,
                                             aTmpMask );
                 }

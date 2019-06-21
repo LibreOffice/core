@@ -1320,9 +1320,8 @@ uno::Reference< io::XStream > OWriteStream_Impl::GetStream_Impl( sal_Int32 nStre
         else
             m_pAntiImpl = new OWriteStream( this, xStream, bHierarchyAccess );
 
-        uno::Reference< io::XStream > xWriteStream =
-                                uno::Reference< io::XStream >( static_cast< ::cppu::OWeakObject* >( m_pAntiImpl ),
-                                                                uno::UNO_QUERY );
+        uno::Reference< io::XStream > xWriteStream( static_cast< ::cppu::OWeakObject* >( m_pAntiImpl ),
+                                                    uno::UNO_QUERY );
 
         SAL_WARN_IF( !xWriteStream.is(), "package.xstor", "OWriteStream MUST implement XStream && XComponent interfaces!" );
 

@@ -254,8 +254,7 @@ template <> OUString OPreparedResultSet::retrieveValue(sal_Int32 column)
         return getRowSetValue(column);
     const char* sStr = static_cast<const char*>(m_aData[column - 1].buffer);
 
-    OUString sReturn = OUString(sStr, *m_aData[column - 1].length, m_encoding);
-    return sReturn;
+    return OUString(sStr, *m_aData[column - 1].length, m_encoding);
 }
 
 ORowSetValue OPreparedResultSet::getRowSetValue(sal_Int32 nColumnIndex)
@@ -414,7 +413,7 @@ Any SAL_CALL OPreparedResultSet::getObject(sal_Int32 column,
     checkDisposed(OPreparedResultSet_BASE::rBHelper.bDisposed);
     checkColumnIndex(column);
 
-    Any aRet = Any();
+    Any aRet;
 
     mysqlc_sdbc_driver::throwFeatureNotImplementedException("OPreparedResultSet::getObject", *this);
     return aRet;
@@ -696,11 +695,7 @@ void SAL_CALL OPreparedResultSet::cancel()
 
 void SAL_CALL OPreparedResultSet::clearWarnings() {}
 
-Any SAL_CALL OPreparedResultSet::getWarnings()
-{
-    Any aRet = Any();
-    return aRet;
-}
+Any SAL_CALL OPreparedResultSet::getWarnings() { return Any(); }
 
 void SAL_CALL OPreparedResultSet::insertRow()
 {
@@ -921,13 +916,12 @@ Any SAL_CALL OPreparedResultSet::getBookmark()
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OPreparedResultSet_BASE::rBHelper.bDisposed);
-    Any aRet = Any();
 
     // if you don't want to support bookmark you must remove the XRowLocate interface
     mysqlc_sdbc_driver::throwFeatureNotImplementedException("OPreparedResultSet::getBookmark",
                                                             *this);
 
-    return aRet;
+    return Any();
 }
 
 sal_Bool SAL_CALL OPreparedResultSet::moveToBookmark(const Any& /* bookmark */)
@@ -975,11 +969,10 @@ uno::Sequence<sal_Int32>
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OPreparedResultSet_BASE::rBHelper.bDisposed);
-    uno::Sequence<sal_Int32> aRet = uno::Sequence<sal_Int32>();
 
     mysqlc_sdbc_driver::throwFeatureNotImplementedException("OPreparedResultSet::deleteRows",
                                                             *this);
-    return aRet;
+    return uno::Sequence<sal_Int32>();
 }
 
 IPropertyArrayHelper* OPreparedResultSet::createArrayHelper() const

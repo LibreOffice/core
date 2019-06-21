@@ -435,10 +435,8 @@ Any SAL_CALL OResultSet::getObject(sal_Int32 column,
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
     checkBordersAndEnsureFetched(column);
 
-    Any aRet = Any();
-
     mysqlc_sdbc_driver::throwFeatureNotImplementedException("OResultSet::getObject", *this);
-    return aRet;
+    return Any();
 }
 
 sal_Int16 SAL_CALL OResultSet::getShort(sal_Int32 column)
@@ -734,11 +732,7 @@ void SAL_CALL OResultSet::cancel()
 
 void SAL_CALL OResultSet::clearWarnings() {}
 
-Any SAL_CALL OResultSet::getWarnings()
-{
-    Any aRet = Any();
-    return aRet;
-}
+Any SAL_CALL OResultSet::getWarnings() { return Any(); }
 
 void SAL_CALL OResultSet::insertRow()
 {
@@ -959,12 +953,11 @@ Any SAL_CALL OResultSet::getBookmark()
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-    Any aRet = Any();
 
     // if you don't want to support bookmark you must remove the XRowLocate interface
     mysqlc_sdbc_driver::throwFeatureNotImplementedException("OResultSet::getBookmark", *this);
 
-    return aRet;
+    return Any();
 }
 
 sal_Bool SAL_CALL OResultSet::moveToBookmark(const Any& /* bookmark */)
@@ -1009,10 +1002,9 @@ uno::Sequence<sal_Int32> SAL_CALL OResultSet::deleteRows(const uno::Sequence<Any
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-    uno::Sequence<sal_Int32> aRet = uno::Sequence<sal_Int32>();
 
     mysqlc_sdbc_driver::throwFeatureNotImplementedException("OResultSet::deleteRows", *this);
-    return aRet;
+    return uno::Sequence<sal_Int32>();
 }
 
 IPropertyArrayHelper* OResultSet::createArrayHelper() const

@@ -419,7 +419,7 @@ void SAL_CALL OConnection::close()
 // XWarningsSupplier
 Any SAL_CALL OConnection::getWarnings()
 {
-    Any x = Any();
+    Any x;
     // when you collected some warnings -> return it
     return x;
 }

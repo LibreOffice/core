@@ -164,7 +164,7 @@ DESKTOP_DETECTOR_PUBLIC DesktopType get_desktop_environment()
     const char *pDesktop = getenv( "XDG_CURRENT_DESKTOP" );
     if ( pDesktop )
     {
-        OString aCurrentDesktop = OString( pDesktop, strlen( pDesktop ) );
+        OString aCurrentDesktop( pDesktop, strlen( pDesktop ) );
 
         //it may be separated by colon ( e.g. unity:unity7:ubuntu )
         std::vector<OUString> aSplitCurrentDesktop = comphelper::string::split(

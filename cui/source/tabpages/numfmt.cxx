@@ -174,7 +174,7 @@ void SvxNumberPreview::Paint(vcl::RenderContext& rRenderContext, const ::tools::
         nX = nLeadSpace;
     }
 
-    Point aPosText = Point(nX, (aSzWnd.Height() - GetTextHeight()) / 2);
+    Point aPosText(nX, (aSzWnd.Height() - GetTextHeight()) / 2);
     rRenderContext.DrawText(aPosText, aTmpStr);
     rRenderContext.Pop();
 }

@@ -441,9 +441,9 @@ void RehearseTimingsActivity::paint( cppcanvas::CanvasSharedPtr const & canvas )
     blackHole->EnableOutput(false);
     blackHole->SetMapMode(MapMode(MapUnit::MapPixel));
     blackHole->SetFont( maFont );
-    tools::Rectangle rect = tools::Rectangle( 0,0,
-                                maSpriteSizePixel.getX(),
-                                maSpriteSizePixel.getY());
+    tools::Rectangle rect( 0,0,
+                           maSpriteSizePixel.getX(),
+                           maSpriteSizePixel.getY());
     if (mbDrawPressed)
     {
         blackHole->SetTextColor( COL_BLACK );

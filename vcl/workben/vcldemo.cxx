@@ -864,9 +864,9 @@ public:
             aRight.Crop(tools::Rectangle(Point((nSlice * 3) + 3, (nSlice * 2) + 1),
                                   Size(nSlice, 1)));
             AlphaMask aAlphaMask(aRight.GetBitmap());
-            Bitmap aBlockColor = Bitmap(aAlphaMask.GetSizePixel(), 24);
+            Bitmap aBlockColor(aAlphaMask.GetSizePixel(), 24);
             aBlockColor.Erase(COL_RED);
-            BitmapEx aShadowStretch = BitmapEx(aBlockColor, aAlphaMask);
+            BitmapEx aShadowStretch(aBlockColor, aAlphaMask);
 
             Point aRenderPt(r.TopLeft());
 

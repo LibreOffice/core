@@ -155,8 +155,7 @@ void IconTestApp::Init()
         cppu::defaultBootstrap_InitialComponentContext();
     uno::Reference<lang::XMultiComponentFactory> xFactory =
         xContext->getServiceManager();
-    uno::Reference<lang::XMultiServiceFactory> xSFactory =
-        uno::Reference<lang::XMultiServiceFactory> (xFactory, uno::UNO_QUERY_THROW);
+    uno::Reference<lang::XMultiServiceFactory> xSFactory(xFactory, uno::UNO_QUERY_THROW);
     comphelper::setProcessServiceFactory(xSFactory);
 
     // Create UCB (for backwards compatibility, in case some code still uses

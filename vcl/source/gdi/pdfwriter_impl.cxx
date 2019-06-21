@@ -6513,7 +6513,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
     }
     writeBuffer( aLine.getStr(), aLine.getLength() );
 
-    Point aOffset = Point(0,0);
+    Point aOffset(0,0);
 
     if ( nEmphMark & FontEmphasisMark::PosBelow )
         aOffset.AdjustY(GetFontInstance()->mxFontMetric->GetDescent() + nEmphYOff );

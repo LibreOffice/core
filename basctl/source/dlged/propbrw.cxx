@@ -158,7 +158,7 @@ void PropBrw::ImplReCreateController()
             }
         }
 
-        Point aPropWinPos = Point( WIN_BORDER, WIN_BORDER );
+        Point aPropWinPos( WIN_BORDER, WIN_BORDER );
         Size  aPropWinSize(STD_WIN_SIZE_X,STD_WIN_SIZE_Y);
         aPropWinSize.AdjustWidth( -(2*WIN_BORDER) );
         aPropWinSize.AdjustHeight( -(2*WIN_BORDER) );
