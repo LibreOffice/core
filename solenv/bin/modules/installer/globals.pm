@@ -171,8 +171,8 @@ BEGIN
     $programmenufolder = "ProgramMenuFolder";
     $systemfolder = "SystemFolder";
     $encodinglistname = "msi-encodinglist.txt";
-    $msiencoding = "";  # hash reference for msi encodings
-    $msilanguage = "";  # hash reference for msi languages LCID
+    $msiencoding = ""; # hash reference for msi encodings
+    $msilanguage = ""; # hash reference for msi languages LCID
     $sofficeiconadded = 0;
     $temppath = "";
     $globaltempdirname = "ooopackaging";
@@ -236,7 +236,7 @@ BEGIN
     $strip = 1;
 
     $globallogging = 0;
-    $logfilename = "logfile.log";   # the default logfile name for global errors
+    $logfilename = "logfile.log"; # the default logfile name for global errors
 #   @logfileinfo = ();
 #   @errorlogfileinfo = ();
 #   @globallogfileinfo = ();
@@ -297,7 +297,7 @@ BEGIN
     $productxpdfile = "setup.xpd";
     $xpd_files_prepared = 0;
     $defaultlanguage = "";
-    # @emptyxpdparents = ();
+#   @emptyxpdparents = ();
     @createdxpdfiles = ();
     @allxpdfiles = ();
     $isxpdplatform = 0;
@@ -407,7 +407,7 @@ BEGIN
 
     $fix_number_of_cab_files = 1;
     $cabfilecompressionlevel = 2;
-    $number_of_cabfiles = 1;    # only for $fix_number_of_cab_files = 1
+    $number_of_cabfiles = 1; # only for $fix_number_of_cab_files = 1
     $include_cab_in_msi = 0;
     $msidatabasename = "";
     $prepare_winpatch = 0;
@@ -418,9 +418,9 @@ BEGIN
     %newfilescollector = ();
 
     $saveinstalldir = "";
-    $csp_installdir = "";       # global installdir of createsimplepackage() in simplepackage.pm
-    $csp_installlogdir = "";    # global installlogdir of createsimplepackage() in simplepackage.pm
-    $csp_languagestring = "";   # global languagestring of createsimplepackage() in simplepackage.pm
+    $csp_installdir = ""; # global installdir of createsimplepackage() in simplepackage.pm
+    $csp_installlogdir = ""; # global installlogdir of createsimplepackage() in simplepackage.pm
+    $csp_languagestring = ""; # global languagestring of createsimplepackage() in simplepackage.pm
     $localunpackdir = "";
     $localinstalldirset = 0;
     $localinstalldir = "";
@@ -478,7 +478,7 @@ BEGIN
 
     if ( $plat =~ /cygwin/i )
     {
-        $zippath = "zip";                   # Has to be in the path: /usr/bin/zip
+        $zippath = "zip"; # Has to be in the path: /usr/bin/zip
         $checksumfile = "so_checksum";
         $unopkgfile = "unopkg.exe";
         $separator = "/";
@@ -491,7 +491,7 @@ BEGIN
     elsif ( $plat =~ /os2/i )
     {
         print "Setup OS/2 platform\n";
-        $zippath = "zip";                   # Has to be in the path: /usr/bin/zip
+        $zippath = "zip"; # Has to be in the path: /usr/bin/zip
         $checksumfile = "so_checksum";
         $unopkgfile = "unopkg.bin";
         $separator = "/";
@@ -504,7 +504,7 @@ BEGIN
     }
     else
     {
-        $zippath = "zip";                   # Has to be in the path: /usr/bin/zip
+        $zippath = "zip"; # Has to be in the path: /usr/bin/zip
         $checksumfile = "so_checksum";
         $unopkgfile = "unopkg";
         $separator = "/";
@@ -533,7 +533,7 @@ BEGIN
 
     # ToDo: Needs to be expanded for additional platforms
 
-    $is_release = 0;  # Is changed in parameter.pm when the -release option is given.
+    $is_release = 0; # Is changed in parameter.pm when the -release option is given.
     $source_version = undef;
     $target_version = undef;
     $source_msi = undef;
