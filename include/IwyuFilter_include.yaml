@@ -1041,3 +1041,9 @@ blacklist:
     - com/sun/star/drawing/CameraGeometry.hpp
     - com/sun/star/text/WritingMode.hpp
     - com/sun/star/graphic/XGraphic.hpp
+    include/svx/xdef.hxx:
+    # Needed for macro defines
+    - svl/typedwhich.hxx
+    include/svx/svdtext.hxx:
+    # TODO too many replacements would be needed
+    - tools/weakbase.hxx

@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SVX_XGRAD_HXX
 #define INCLUDED_SVX_XGRAD_HXX
 
-#include <svx/xenum.hxx>
 #include <tools/color.hxx>
 #include <svx/svxdllapi.h>
 #include <com/sun/star/awt/GradientStyle.hpp>
