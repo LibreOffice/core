@@ -20,7 +20,8 @@ namespace apitest
 class OOO_DLLPUBLIC_TEST XShape
 {
 public:
-    XShape(bool bObjSupportsPosition = true)
+    XShape() = default;
+    XShape(bool bObjSupportsPosition)
         : m_bObjSupportsPosition(bObjSupportsPosition)
     {
     }
@@ -33,7 +34,7 @@ protected:
     ~XShape() {}
 
 private:
-    bool const m_bObjSupportsPosition;
+    bool const m_bObjSupportsPosition{ true };
 };
 
 } // namespace apitest
