@@ -26,7 +26,6 @@
 #include <sfx2/childwin.hxx>
 #include <svx/svxdllapi.h>
 #include <tools/poly.hxx>
-#include <vcl/vclptr.hxx>
 #include <vcl/window.hxx>
 
 class SfxBindings;

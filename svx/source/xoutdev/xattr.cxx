@@ -46,7 +46,9 @@
 #include <svl/itemset.hxx>
 #include <svx/strings.hrc>
 #include <svx/xfillit0.hxx>
+#include <svx/xflasit.hxx>
 #include <svx/xlineit0.hxx>
+#include <svx/xlnasit.hxx>
 #include <svx/xtextit0.hxx>
 #include <svx/xtable.hxx>
 #include <svx/dialmgr.hxx>

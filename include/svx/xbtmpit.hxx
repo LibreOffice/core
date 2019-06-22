@@ -21,9 +21,9 @@
 #define INCLUDED_SVX_XBTMPIT_HXX
 
 #include <svx/svxdllapi.h>
+#include <svx/xdef.hxx>
 #include <svx/xit.hxx>
 #include <vcl/GraphicObject.hxx>
-#include <array>
 
 class SdrModel;
 

@@ -21,6 +21,7 @@
 
 #include <sfx2/childwin.hxx>
 #include <sfx2/basedlgs.hxx>
+#include <svl/poolitem.hxx>
 #include <svl/srchdefs.hxx>
 #include <svx/svxdllapi.h>
 #include <memory>

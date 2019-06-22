@@ -43,6 +43,7 @@
 #include <vcl/metaact.hxx>
 #include <tools/zcodec.hxx>
 
+#include <vcl/GraphicObject.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <svx/xmlgrhlp.hxx>
 #include <svx/xmleohlp.hxx>
