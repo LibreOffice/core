@@ -88,7 +88,11 @@ gb_PrecompiledHeader_get_enableflags = \
 gb_PrecompiledHeader_EXT := .gch
 endif
 
-# Clang and gcc do not need any extra .o file for PCH
+# Clang supports building extra object file where it puts code that would be shared by all users of the PCH.
+# Unlike with MSVC it is built as a separate step.
+gb_PrecompiledHeader_pch_with_obj = $(BUILDING_PCH_WITH_OBJ)
+
+# This is for MSVC's object file built directly as a side-effect of building the PCH.
 gb_PrecompiledHeader_get_objectfile =
 
 define gb_PrecompiledHeader__command
@@ -105,6 +109,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(if $(VISIBILITY),,$(gb_VISIBILITY_FLAGS)) \
 		$(if $(EXTERNAL_CODE),$(gb_CXXFLAGS_Wundef),$(gb_DEFS_INTERNAL)) \
 		$(gb_NO_PCH_TIMESTAMP) \
+		$(gb_PrecompiledHeader_pch_with_obj) \
 		$(6) \
 		$(call gb_cxx_dep_generation_options,$(1),$(call gb_PrecompiledHeader_get_dep_target_tmp,$(2),$(7))) \
 		-c $(patsubst %.cxx,%.hxx,$(3)) \

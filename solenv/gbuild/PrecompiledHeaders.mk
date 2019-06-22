@@ -29,7 +29,7 @@ gb_PrecompiledHeader__get_debugdir = $(if $(call gb_LinkTarget__symbols_enabled,
 # for $(1)'s and things that are constant.
 # The defines are needed to get the right version of gb_PrecompiledHeader__get_debugdir.
 
-# $(call gb_PrecompiledHeader_generate_rules,pchtarget,linktarget,linktargetmakefilename)
+# $(call gb_PrecompiledHeader_generate_rules,pchtarget,linktarget,linktargetmakefilename,pchcxxfile)
 define gb_PrecompiledHeader_generate_rules
 
 $(call gb_PrecompiledHeader_get_dep_target,$(1),$(3)) :
