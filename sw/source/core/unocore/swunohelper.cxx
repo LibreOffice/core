@@ -37,6 +37,7 @@
 #include <ucbhelper/contentidentifier.hxx>
 #include <ucbhelper/content.hxx>
 #include <swunohelper.hxx>
+#include <svx/xdef.hxx>
 #include <svx/xfillit0.hxx>
 #include <editeng/memberids.h>
 #include <svl/itemset.hxx>

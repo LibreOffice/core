@@ -21,6 +21,7 @@
 
 #include <sdmod.hxx>
 #include <sdiocmpt.hxx>
+#include <svx/xdef.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xlineit0.hxx>
 #include <svx/svdobj.hxx>

@@ -24,7 +24,6 @@
 #include <sal/types.h>
 #include <svx/svxdllapi.h>
 #include <vcl/svlbitm.hxx>
-#include <tools/color.hxx>
 #include <tools/date.hxx>
 #include <tools/datetime.hxx>
 #include <tools/link.hxx>

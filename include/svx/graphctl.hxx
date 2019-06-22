@@ -19,7 +19,6 @@
 #ifndef INCLUDED_SVX_GRAPHCTL_HXX
 #define INCLUDED_SVX_GRAPHCTL_HXX
 
-#include <vcl/ctrl.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/customweld.hxx>
 #include <svx/svxdllapi.h>

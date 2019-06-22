@@ -23,6 +23,7 @@
 #include <vcl/field.hxx>
 #include <vcl/layout.hxx>
 #include <memory>
+#include <svl/poolitem.hxx>
 #include <svx/sidebar/PanelLayout.hxx>
 #include <svx/xtable.hxx>
 #include <svx/sidebar/LineWidthPopup.hxx>

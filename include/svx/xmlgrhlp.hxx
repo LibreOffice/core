@@ -22,10 +22,9 @@
 
 #include <cppuhelper/compbase.hxx>
 #include <osl/mutex.hxx>
-#include <vcl/GraphicObject.hxx>
+#include <vcl/graph.hxx>
 #include <rtl/ref.hxx>
 #include <vector>
-#include <set>
 #include <unordered_map>
 #include <utility>
 #include <com/sun/star/document/XGraphicObjectResolver.hpp>

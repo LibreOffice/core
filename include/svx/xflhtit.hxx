@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SVX_XFLHTIT_HXX
 #define INCLUDED_SVX_XFLHTIT_HXX
 
+#include <svx/xdef.hxx>
 #include <svx/xit.hxx>
 #include <svx/xhatch.hxx>
 #include <svx/svxdllapi.h>
