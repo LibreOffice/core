@@ -64,6 +64,7 @@
 #include <linkdlg.hxx>
 #include <SignatureLineDialog.hxx>
 #include <SignSignatureLineDialog.hxx>
+#include <QrCodeGenDialog.hxx>
 #include <SpellDialog.hxx>
 #include <cfg.hxx>
 #include <numpages.hxx>
@@ -295,6 +296,11 @@ short AbstractSignatureLineDialog_Impl::Execute()
 }
 
 short AbstractSignSignatureLineDialog_Impl::Execute()
+{
+    return m_xDlg->run();
+}
+
+short AbstractQrCodeGenDialog_Impl::Execute()
 {
     return m_xDlg->run();
 }
@@ -1594,6 +1600,13 @@ AbstractDialogFactory_Impl::CreateSignSignatureLineDialog(weld::Window* pParent,
 {
     return VclPtr<AbstractSignSignatureLineDialog_Impl>::Create(
         std::make_unique<SignSignatureLineDialog>(pParent, xModel));
+}
+
+VclPtr<AbstractQrCodeGenDialog> AbstractDialogFactory_Impl::CreateQrCodeGenDialog(
+    weld::Window* pParent, const Reference<XModel> xModel, bool bEditExisting)
+{
+    return VclPtr<AbstractQrCodeGenDialog_Impl>::Create(
+        std::make_unique<QrCodeGenDialog>(pParent, xModel, bEditExisting));
 }
 
 VclPtr<AbstractTipOfTheDayDialog>

@@ -119,6 +119,12 @@ protected:
     virtual ~AbstractSignSignatureLineDialog() override = default;
 };
 
+class VCL_DLLPUBLIC AbstractQrCodeGenDialog : public VclAbstractDialog
+{
+protected:
+    virtual ~AbstractQrCodeGenDialog() override = default;
+};
+
 class VCL_DLLPUBLIC AbstractTipOfTheDayDialog : public VclAbstractDialog
 {
 protected:
@@ -147,6 +153,13 @@ public:
     virtual VclPtr<AbstractSignSignatureLineDialog>
     CreateSignSignatureLineDialog(weld::Window* pParent,
                                   const css::uno::Reference<css::frame::XModel> xModel)
+        = 0;
+
+    // creates instance of QrCodeDialog from cui
+    virtual VclPtr<AbstractQrCodeGenDialog>
+    CreateQrCodeGenDialog(weld::Window* pParent,
+                              const css::uno::Reference<css::frame::XModel> xModel,
+                              bool bEditExisting)
         = 0;
 
     // creates instance of ScreenshotAnnotationDlg from cui
