@@ -133,9 +133,6 @@ class VCLPLUG_QT5_PUBLIC Qt5Frame : public QObject, public SalFrame
     void TriggerPaintEvent();
     void TriggerPaintEvent(QRect aRect);
 
-Q_SIGNALS:
-    void tooltipRequest(const OUString& rTooltip);
-
 public:
     Qt5Frame(Qt5Frame* pParent, SalFrameStyleFlags nSalFrameStyle, bool bUseCairo);
     virtual ~Qt5Frame() override;

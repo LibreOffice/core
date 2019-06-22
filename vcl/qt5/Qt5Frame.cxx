@@ -155,9 +155,6 @@ Qt5Frame::Qt5Frame(Qt5Frame* pParent, SalFrameStyleFlags nStyle, bool bUseCairo)
     else
         m_pQWidget = new Qt5Widget(*this, aWinFlags);
 
-    connect(this, &Qt5Frame::tooltipRequest, static_cast<Qt5Widget*>(m_pQWidget),
-            &Qt5Widget::showTooltip);
-
     if (pParent && !(pParent->m_nStyle & SalFrameStyleFlags::PLUG))
     {
         QWindow* pParentWindow = pParent->GetQWidget()->window()->windowHandle();
@@ -743,9 +740,12 @@ void Qt5Frame::Flush()
     // destroyed, so that state should be safely flushed.
 }
 
-bool Qt5Frame::ShowTooltip(const OUString& rText, const tools::Rectangle& /*rHelpArea*/)
+bool Qt5Frame::ShowTooltip(const OUString& rText, const tools::Rectangle& rHelpArea)
 {
-    emit tooltipRequest(rText);
+    QRect aHelpArea(toQRect(rHelpArea));
+    if (QGuiApplication::isRightToLeft())
+        aHelpArea.moveLeft(maGeometry.nWidth - aHelpArea.width() - aHelpArea.left() - 1);
+    QToolTip::showText(QCursor::pos(), toQString(rText), m_pQWidget, aHelpArea);
     return true;
 }
 
