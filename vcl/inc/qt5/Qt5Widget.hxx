@@ -70,9 +70,6 @@ class Qt5Widget : public QWidget
     void inputMethodEvent(QInputMethodEvent*) override;
     QVariant inputMethodQuery(Qt::InputMethodQuery) const override;
 
-public slots:
-    static void showTooltip(const OUString& rTip);
-
 public:
     Qt5Widget(Qt5Frame& rFrame, Qt::WindowFlags f = Qt::WindowFlags());
 

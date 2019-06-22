@@ -40,7 +40,6 @@
 #include <QtGui/QTextCharFormat>
 #include <QtGui/QWheelEvent>
 #include <QtWidgets/QMainWindow>
-#include <QtWidgets/QToolTip>
 #include <QtWidgets/QWidget>
 
 #include <cairo.h>
@@ -501,12 +500,6 @@ void Qt5Widget::focusOutEvent(QFocusEvent*)
 {
     endExtTextInput();
     m_rFrame.CallCallback(SalEvent::LoseFocus, nullptr);
-}
-
-void Qt5Widget::showTooltip(const OUString& rTooltip)
-{
-    QPoint pt = QCursor::pos();
-    QToolTip::showText(pt, toQString(rTooltip));
 }
 
 Qt5Widget::Qt5Widget(Qt5Frame& rFrame, Qt::WindowFlags f)
