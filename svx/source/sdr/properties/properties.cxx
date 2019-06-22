@@ -22,6 +22,7 @@
 #include <svl/itemset.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/svditer.hxx>
+#include <svx/xdef.hxx>
 #include <svx/xfillit0.hxx>
 #include <vcl/outdev.hxx>
 #include <svx/svdmodel.hxx>

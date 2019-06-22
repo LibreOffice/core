@@ -21,7 +21,6 @@
 #define INCLUDED_SVX_XPOOL_HXX
 
 #include <svl/itempool.hxx>
-#include <svx/xdef.hxx>
 #include <svx/svxdllapi.h>
 #include <memory>
 

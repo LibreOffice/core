@@ -21,7 +21,6 @@
 #define INCLUDED_SVX_XPROPERTYTABLE_HXX
 
 #include <com/sun/star/uno/XInterface.hpp>
-#include <svx/svxdllapi.h>
 #include <svx/xtable.hxx>
 
 // FIXME: should have a single factory method with an enumeration here [!]
