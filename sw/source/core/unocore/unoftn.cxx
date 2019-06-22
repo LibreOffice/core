@@ -199,9 +199,9 @@ uno::Sequence< OUString > SAL_CALL
 SwXFootnote::getSupportedServiceNames()
 {
     SolarMutexGuard g;
-    return ::sw::GetSupportedServiceNamesImpl(
-            (m_pImpl->m_bIsEndnote) ? g_nServicesEndnote : g_nServicesFootnote,
-            g_ServicesFootnote);
+    return comphelper::arrayToSequence<OUString>(
+            g_ServicesFootnote,
+            (m_pImpl->m_bIsEndnote) ? g_nServicesEndnote : g_nServicesFootnote);
 }
 
 uno::Sequence< uno::Type > SAL_CALL
