@@ -2744,22 +2744,18 @@ void Window::setPosSizePixel( long nX, long nY,
                 OutputDevice *pParentOutDev = pWinParent->GetOutDev();
                 if( pParentOutDev->HasMirroredGraphics() )
                 {
+                    const SalFrameGeometry& aSysGeometry = mpWindowImpl->mpFrame->GetUnmirroredGeometry();
+                    const SalFrameGeometry& aParentSysGeometry =
+                        pWinParent->mpWindowImpl->mpFrame->GetUnmirroredGeometry();
                     long myWidth = nOldWidth;
                     if( !myWidth )
-                        myWidth = mpWindowImpl->mpFrame->GetUnmirroredGeometry().nWidth;
+                        myWidth = aSysGeometry.nWidth;
                     if( !myWidth )
                         myWidth = nWidth;
                     nFlags |= PosSizeFlags::X;
                     nSysFlags |= SAL_FRAME_POSSIZE_X;
-                    nX = pWinParent->mpWindowImpl->mpFrame->GetUnmirroredGeometry().nX - mpWindowImpl->mpFrame->GetUnmirroredGeometry().nLeftDecoration +
-                        pWinParent->mpWindowImpl->mpFrame->GetUnmirroredGeometry().nWidth - myWidth - 1 - mpWindowImpl->mpFrame->GetUnmirroredGeometry().nX;
-                    if(!(nFlags & PosSizeFlags::Y))
-                    {
-                        nFlags |= PosSizeFlags::Y;
-                        nSysFlags |= SAL_FRAME_POSSIZE_Y;
-                        nY = mpWindowImpl->mpFrame->GetUnmirroredGeometry().nY - pWinParent->mpWindowImpl->mpFrame->GetUnmirroredGeometry().nY -
-                            mpWindowImpl->mpFrame->GetUnmirroredGeometry().nTopDecoration;
-                    }
+                    nX = aParentSysGeometry.nX - aSysGeometry.nLeftDecoration + aParentSysGeometry.nWidth
+                        - myWidth - 1 - aSysGeometry.nX;
                 }
             }
         }
