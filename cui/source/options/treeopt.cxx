@@ -490,6 +490,9 @@ struct OptionsGroupInfo
 
 void OfaTreeOptionsDialog::InitWidgets()
 {
+    VclButtonBox *pButtonBox = get_action_area();
+    pButtonBox->sort_native_button_order();
+
     get(pOkPB, "ok");
     get(pApplyPB, "apply");
     get(pBackPB, "revert");
