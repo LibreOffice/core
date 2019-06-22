@@ -28,6 +28,7 @@
 
 #include <svl/itemset.hxx>
 
+#include <svx/xdef.hxx>
 #include <svx/xfillit0.hxx>
 
 SdBackgroundObjUndoAction::SdBackgroundObjUndoAction(

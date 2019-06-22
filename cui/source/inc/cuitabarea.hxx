@@ -22,6 +22,7 @@
 #include <svtools/valueset.hxx>
 #include <svx/dlgctrl.hxx>
 #include <svx/xfillit0.hxx>
+#include <svx/xflasit.hxx>
 #include <svx/tabarea.hxx>
 #include <svx/hexcolorcontrol.hxx>
 #include <svx/SvxColorValueSet.hxx>

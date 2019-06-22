@@ -22,12 +22,13 @@
 
 #include <cppuhelper/compbase.hxx>
 #include <osl/mutex.hxx>
-#include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/document/XEmbeddedObjectResolver.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
+#include <com/sun/star/embed/XStorage.hpp>
 #include <svx/svxdllapi.h>
 #include <rtl/ref.hxx>
+#include <tools/stream.hxx>
 #include <map>
 #include <memory>
 

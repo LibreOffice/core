@@ -21,15 +21,11 @@
 
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
-#include <svx/xpoly.hxx>
 #include <svx/xdash.hxx>
 #include <svx/xhatch.hxx>
 #include <svx/xgrad.hxx>
-#include <svx/xflasit.hxx>
-#include <svx/xlnasit.hxx>
 
 #include <tools/color.hxx>
-#include <tools/contnr.hxx>
 
 #include <cppuhelper/weak.hxx>
 

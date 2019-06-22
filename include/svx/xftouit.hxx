@@ -20,7 +20,8 @@
 #ifndef INCLUDED_SVX_XFTOUIT_HXX
 #define INCLUDED_SVX_XFTOUIT_HXX
 
-#include <svl/intitem.hxx>
+#include <svl/eitem.hxx>
+#include <svl/poolitem.hxx>
 #include <svx/svxdllapi.h>
 
 /*************************************************************************

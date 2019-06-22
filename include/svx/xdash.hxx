@@ -24,7 +24,6 @@
 // class XDash
 
 
-#include <svx/xenum.hxx>
 #include <svx/svxdllapi.h>
 #include <com/sun/star/drawing/DashStyle.hpp>
 

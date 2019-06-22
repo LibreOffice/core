@@ -22,9 +22,7 @@
 
 #include <memory>
 #include <tools/color.hxx>
-#include <vcl/bitmap.hxx>
 #include <vcl/GraphicObject.hxx>
-#include <svx/xenum.hxx>
 #include <svx/svxdllapi.h>
 
 class SVX_DLLPUBLIC XOBitmap

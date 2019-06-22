@@ -22,8 +22,6 @@
 
 #include <svl/eitem.hxx>
 
-#include <svx/xdef.hxx>
-#include <svx/xenum.hxx>
 #include <svx/svxdllapi.h>
 #include <com/sun/star/drawing/FillStyle.hpp>
 

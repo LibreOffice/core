@@ -21,6 +21,7 @@
 #include <sdr/contact/viewcontactofmasterpagedescriptor.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdobj.hxx>
+#include <svx/xdef.hxx>
 #include <svx/xfillit0.hxx>
 #include <svl/itemset.hxx>
 

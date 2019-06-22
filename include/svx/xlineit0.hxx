@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SVX_XLINEIT0_HXX
 #define INCLUDED_SVX_XLINEIT0_HXX
 
-#include <svx/xenum.hxx>
 #include <svl/eitem.hxx>
 
 // class LineStyleItem

@@ -23,6 +23,7 @@
 #include <svl/itemset.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdpool.hxx>
+#include <svx/xdef.hxx>
 #include <vcl/outdev.hxx>
 #include <tools/debug.hxx>
 

@@ -19,6 +19,7 @@
 #ifndef INCLUDED_SVX_STRARRAY_HXX
 #define INCLUDED_SVX_STRARRAY_HXX
 
+#include <rtl/ustring.hxx>
 #include <tools/fldunit.hxx>
 #include <svx/svxdllapi.h>
 
