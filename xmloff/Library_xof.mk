@@ -30,7 +30,7 @@ $(eval $(call gb_Library_use_custom_headers,xof,\
 	xmloff/generated \
 ))
 
-$(eval $(call gb_Library_set_precompiled_header,xof,$(SRCDIR)/xmloff/inc/pch/precompiled_xof))
+$(eval $(call gb_Library_set_precompiled_header,xof,xmloff/inc/pch/precompiled_xof))
 
 $(eval $(call gb_Library_use_external,xof,boost_headers))
 

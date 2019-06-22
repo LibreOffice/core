@@ -33,7 +33,7 @@ $(eval $(call gb_Library_use_sdk_api,fwe))
 
 $(eval $(call gb_Library_use_external,fwe,boost_headers))
 
-$(eval $(call gb_Library_set_precompiled_header,fwe,$(SRCDIR)/framework/inc/pch/precompiled_fwe))
+$(eval $(call gb_Library_set_precompiled_header,fwe,framework/inc/pch/precompiled_fwe))
 
 $(eval $(call gb_Library_use_libraries,fwe,\
     comphelper \

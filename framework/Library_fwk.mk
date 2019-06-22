@@ -27,7 +27,7 @@ $(eval $(call gb_Library_set_include,fwk,\
     $$(INCLUDE) \
 ))
 
-$(eval $(call gb_Library_set_precompiled_header,fwk,$(SRCDIR)/framework/inc/pch/precompiled_fwk))
+$(eval $(call gb_Library_set_precompiled_header,fwk,framework/inc/pch/precompiled_fwk))
 
 $(eval $(call gb_Library_use_external,fwk,boost_headers))
 

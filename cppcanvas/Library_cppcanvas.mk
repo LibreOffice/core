@@ -29,7 +29,7 @@ $(eval $(call gb_Library_add_defs,cppcanvas,\
 	-DCPPCANVAS_DLLIMPLEMENTATION \
 ))
 
-$(eval $(call gb_Library_set_precompiled_header,cppcanvas,$(SRCDIR)/cppcanvas/inc/pch/precompiled_cppcanvas))
+$(eval $(call gb_Library_set_precompiled_header,cppcanvas,cppcanvas/inc/pch/precompiled_cppcanvas))
 
 $(eval $(call gb_Library_use_external,cppcanvas,boost_headers))
 

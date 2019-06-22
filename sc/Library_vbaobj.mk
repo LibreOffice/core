@@ -17,7 +17,7 @@ $(eval $(call gb_Library_set_include,vbaobj,\
 	$$(INCLUDE) \
 ))
 
-$(eval $(call gb_Library_set_precompiled_header,vbaobj,$(SRCDIR)/sc/inc/pch/precompiled_vbaobj))
+$(eval $(call gb_Library_set_precompiled_header,vbaobj,sc/inc/pch/precompiled_vbaobj))
 
 $(eval $(call gb_Library_set_componentfile,vbaobj,sc/util/vbaobj))
 

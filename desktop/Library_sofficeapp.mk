@@ -53,7 +53,7 @@ $(eval $(call gb_Library_add_defs,sofficeapp,\
     $(if $(filter MACOSX,$(OS)),-DENABLE_QUICKSTART_APPLET) \
 ))
 
-$(eval $(call gb_Library_set_precompiled_header,sofficeapp,$(SRCDIR)/desktop/inc/pch/precompiled_sofficeapp))
+$(eval $(call gb_Library_set_precompiled_header,sofficeapp,desktop/inc/pch/precompiled_sofficeapp))
 
 $(eval $(call gb_Library_use_libraries,sofficeapp,\
     comphelper \

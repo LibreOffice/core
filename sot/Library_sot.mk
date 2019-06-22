@@ -29,7 +29,7 @@ $(eval $(call gb_Library_add_defs,sot,\
     -DSOT_DLLIMPLEMENTATION \
 ))
 
-$(eval $(call gb_Library_set_precompiled_header,sot,$(SRCDIR)/sot/inc/pch/precompiled_sot))
+$(eval $(call gb_Library_set_precompiled_header,sot,sot/inc/pch/precompiled_sot))
 
 $(eval $(call gb_Library_set_include,sot,\
     -I$(SRCDIR)/sot/inc \

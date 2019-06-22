@@ -11,7 +11,7 @@ $(eval $(call gb_Library_Library,basegfx))
 
 $(eval $(call gb_Library_use_external,basegfx,boost_headers))
 
-$(eval $(call gb_Library_set_precompiled_header,basegfx,$(SRCDIR)/basegfx/inc/pch/precompiled_basegfx))
+$(eval $(call gb_Library_set_precompiled_header,basegfx,basegfx/inc/pch/precompiled_basegfx))
 
 $(eval $(call gb_Library_use_sdk_api,basegfx))
 

@@ -38,7 +38,7 @@ $(eval $(call gb_Library_add_defs,svx,\
     -DBOOST_SPIRIT_USE_OLD_NAMESPACE \
 ))
 
-$(eval $(call gb_Library_set_precompiled_header,svx,$(SRCDIR)/svx/inc/pch/precompiled_svx))
+$(eval $(call gb_Library_set_precompiled_header,svx,svx/inc/pch/precompiled_svx))
 
 $(eval $(call gb_Library_use_libraries,svx,\
     $(call gb_Helper_optional,AVMEDIA,avmedia) \

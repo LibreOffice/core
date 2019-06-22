@@ -15,7 +15,7 @@ $(eval $(call gb_Library_set_include,acc,\
     -I$(SRCDIR)/accessibility/source/inc \
 ))
 
-$(eval $(call gb_Library_set_precompiled_header,acc,$(SRCDIR)/accessibility/inc/pch/precompiled_acc))
+$(eval $(call gb_Library_set_precompiled_header,acc,accessibility/inc/pch/precompiled_acc))
 
 $(eval $(call gb_Library_use_external,acc,boost_headers))
 

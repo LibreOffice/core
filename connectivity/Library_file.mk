@@ -14,7 +14,7 @@ $(eval $(call gb_Library_add_defs,file,\
 	-DOOO_DLLIMPLEMENTATION_FILE \
 ))
 
-$(eval $(call gb_Library_set_precompiled_header,file,$(SRCDIR)/connectivity/inc/pch/precompiled_file))
+$(eval $(call gb_Library_set_precompiled_header,file,connectivity/inc/pch/precompiled_file))
 
 $(eval $(call gb_Library_set_include,file,\
 	$$(INCLUDE) \

@@ -19,7 +19,7 @@ $(eval $(call gb_Library_use_externals,dbahsql,\
 	boost_date_time \
 ))
 
-$(eval $(call gb_Library_set_precompiled_header,dbahsql,$(SRCDIR)/dbaccess/inc/pch/precompiled_dbahsql))
+$(eval $(call gb_Library_set_precompiled_header,dbahsql,dbaccess/inc/pch/precompiled_dbahsql))
 
 $(eval $(call gb_Library_use_sdk_api,dbahsql))
 

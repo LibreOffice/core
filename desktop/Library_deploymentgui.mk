@@ -18,7 +18,7 @@ $(eval $(call gb_Library_set_include,deploymentgui,\
 
 $(eval $(call gb_Library_use_external,deploymentgui,boost_headers))
 
-$(eval $(call gb_Library_set_precompiled_header,deploymentgui,$(SRCDIR)/desktop/inc/pch/precompiled_deploymentgui))
+$(eval $(call gb_Library_set_precompiled_header,deploymentgui,desktop/inc/pch/precompiled_deploymentgui))
 
 $(eval $(call gb_Library_use_custom_headers,deploymentgui,\
     officecfg/registry \

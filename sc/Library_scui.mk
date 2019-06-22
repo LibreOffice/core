@@ -22,7 +22,7 @@ $(eval $(call gb_Library_use_custom_headers,scui,\
 	officecfg/registry \
 )) \
 
-$(eval $(call gb_Library_set_precompiled_header,scui,$(SRCDIR)/sc/inc/pch/precompiled_scui))
+$(eval $(call gb_Library_set_precompiled_header,scui,sc/inc/pch/precompiled_scui))
 
 $(eval $(call gb_Library_use_custom_headers,scui,\
     officecfg/registry \

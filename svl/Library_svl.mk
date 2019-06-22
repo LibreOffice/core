@@ -40,7 +40,7 @@ $(eval $(call gb_Library_use_custom_headers,svl,\
 	officecfg/registry \
 ))
 
-$(eval $(call gb_Library_set_precompiled_header,svl,$(SRCDIR)/svl/inc/pch/precompiled_svl))
+$(eval $(call gb_Library_set_precompiled_header,svl,svl/inc/pch/precompiled_svl))
 
 $(eval $(call gb_Library_use_sdk_api,svl))
 

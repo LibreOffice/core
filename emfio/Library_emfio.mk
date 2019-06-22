@@ -35,7 +35,7 @@ $(eval $(call gb_Library_use_custom_headers,emfio,\
 
 $(eval $(call gb_Library_use_external,emfio,boost_headers))
 
-$(eval $(call gb_Library_set_precompiled_header,emfio,$(SRCDIR)/emfio/inc/pch/precompiled_emfio))
+$(eval $(call gb_Library_set_precompiled_header,emfio,emfio/inc/pch/precompiled_emfio))
 
 $(eval $(call gb_Library_use_sdk_api,emfio))
 

@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Library_Library,oox))
 
-$(eval $(call gb_Library_set_precompiled_header,oox,$(SRCDIR)/oox/inc/pch/precompiled_oox))
+$(eval $(call gb_Library_set_precompiled_header,oox,oox/inc/pch/precompiled_oox))
 
 $(eval $(call gb_Library_use_custom_headers,oox,oox/generated))
 

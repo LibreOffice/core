@@ -27,7 +27,7 @@ $(eval $(call gb_Library_set_include,sb,\
 	-I$(SRCDIR)/basic/source/inc \
 ))
 
-$(eval $(call gb_Library_set_precompiled_header,sb,$(SRCDIR)/basic/inc/pch/precompiled_sb))
+$(eval $(call gb_Library_set_precompiled_header,sb,basic/inc/pch/precompiled_sb))
 
 $(eval $(call gb_Library_use_external,sb,boost_headers))
 

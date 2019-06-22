@@ -25,7 +25,7 @@ $(eval $(call gb_Library_use_externals,hwp,\
 	zlib \
 ))
 
-$(eval $(call gb_Library_set_precompiled_header,hwp,$(SRCDIR)/hwpfilter/inc/pch/precompiled_hwp))
+$(eval $(call gb_Library_set_precompiled_header,hwp,hwpfilter/inc/pch/precompiled_hwp))
 
 ifeq ($(OS),WNT)
 

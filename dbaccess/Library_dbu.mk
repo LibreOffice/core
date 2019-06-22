@@ -17,7 +17,7 @@ $(eval $(call gb_Library_set_include,dbu,\
 	-I$(WORKDIR)/YaccTarget/connectivity/source/parse \
 ))
 
-$(eval $(call gb_Library_set_precompiled_header,dbu,$(SRCDIR)/dbaccess/inc/pch/precompiled_dbu))
+$(eval $(call gb_Library_set_precompiled_header,dbu,dbaccess/inc/pch/precompiled_dbu))
 
 $(eval $(call gb_Library_use_custom_headers,dbu,\
 	officecfg/registry \

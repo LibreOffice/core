@@ -11,7 +11,7 @@ $(eval $(call gb_Library_Library,PresentationMinimizer))
 
 $(eval $(call gb_Library_set_componentfile,PresentationMinimizer,sdext/source/minimizer/minimizer))
 
-$(eval $(call gb_Library_set_precompiled_header,PresentationMinimizer,$(SRCDIR)/sdext/inc/pch/precompiled_PresentationMinimizer))
+$(eval $(call gb_Library_set_precompiled_header,PresentationMinimizer,sdext/inc/pch/precompiled_PresentationMinimizer))
 
 $(eval $(call gb_Library_use_externals,PresentationMinimizer,\
 	boost_headers \
