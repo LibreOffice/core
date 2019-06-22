@@ -1,5 +1,3 @@
-"ScTabViewObj";"com::sun::star::container::XIndexAccess";"getCount()"
-"ScTabViewObj";"com::sun::star::container::XIndexAccess";"getByIndex()"
 "ScTabViewObj";"com::sun::star::lang::XComponent";"dispose()"
 "ScTabViewObj";"com::sun::star::lang::XComponent";"addEventListener()"
 "ScTabViewObj";"com::sun::star::lang::XComponent";"removeEventListener()"
