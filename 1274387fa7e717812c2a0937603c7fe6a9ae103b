@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df7087c5_28cbd3a5",
+        "filename": "vcl/inc/qt5/Qt5FilePicker.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2019-06-22T17:09:13Z",
+      "side": 1,
+      "message": "same include already above",
+      "range": {
+        "startLine": 33,
+        "startChar": 0,
+        "endLine": 33,
+        "endChar": 52
+      },
+      "revId": "1274387fa7e717812c2a0937603c7fe6a9ae103b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
