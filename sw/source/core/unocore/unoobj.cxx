@@ -835,20 +835,6 @@ OUString SwXTextCursor::getImplementationName()
     return OUString("SwXTextCursor");
 }
 
-static char const*const g_ServicesTextCursor[] =
-{
-    "com.sun.star.text.TextCursor",
-    "com.sun.star.style.CharacterProperties",
-    "com.sun.star.style.CharacterPropertiesAsian",
-    "com.sun.star.style.CharacterPropertiesComplex",
-    "com.sun.star.style.ParagraphProperties",
-    "com.sun.star.style.ParagraphPropertiesAsian",
-    "com.sun.star.style.ParagraphPropertiesComplex",
-    "com.sun.star.text.TextSortable",
-};
-
-static const size_t g_nServicesTextCursor(SAL_N_ELEMENTS(g_ServicesTextCursor));
-
 sal_Bool SAL_CALL SwXTextCursor::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
@@ -857,8 +843,16 @@ sal_Bool SAL_CALL SwXTextCursor::supportsService(const OUString& rServiceName)
 uno::Sequence< OUString > SAL_CALL
 SwXTextCursor::getSupportedServiceNames()
 {
-    return ::sw::GetSupportedServiceNamesImpl(
-            g_nServicesTextCursor, g_ServicesTextCursor);
+    return {
+        "com.sun.star.text.TextCursor",
+        "com.sun.star.style.CharacterProperties",
+        "com.sun.star.style.CharacterPropertiesAsian",
+        "com.sun.star.style.CharacterPropertiesComplex",
+        "com.sun.star.style.ParagraphProperties",
+        "com.sun.star.style.ParagraphPropertiesAsian",
+        "com.sun.star.style.ParagraphPropertiesComplex",
+        "com.sun.star.text.TextSortable"
+    };
 }
 
 namespace

@@ -361,14 +361,6 @@ SwXBookmark::getImplementationName()
     return OUString("SwXBookmark");
 }
 
-static char const*const g_ServicesBookmark[] =
-{
-    "com.sun.star.text.TextContent",
-    "com.sun.star.text.Bookmark",
-    "com.sun.star.document.LinkTarget",
-};
-static const size_t g_nServicesBookmark(SAL_N_ELEMENTS(g_ServicesBookmark));
-
 sal_Bool SAL_CALL SwXBookmark::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
@@ -377,8 +369,11 @@ sal_Bool SAL_CALL SwXBookmark::supportsService(const OUString& rServiceName)
 uno::Sequence< OUString > SAL_CALL
 SwXBookmark::getSupportedServiceNames()
 {
-    return ::sw::GetSupportedServiceNamesImpl(
-            g_nServicesBookmark, g_ServicesBookmark);
+    return {
+        "com.sun.star.text.TextContent",
+        "com.sun.star.text.Bookmark",
+        "com.sun.star.document.LinkTarget"
+    };
 }
 
 // MetadatableMixin

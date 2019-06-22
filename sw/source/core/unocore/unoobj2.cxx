@@ -117,22 +117,6 @@ using namespace ::com::sun::star;
 
 namespace sw {
 
-uno::Sequence< OUString >
-GetSupportedServiceNamesImpl(
-        size_t const nServices, char const*const pServices[])
-{
-    uno::Sequence< OUString > ret(nServices);
-    for (size_t i = 0; i < nServices; ++i)
-    {
-        ret[i] = OUString::createFromAscii(pServices[i]);
-    }
-    return ret;
-}
-
-} // namespace sw
-
-namespace sw {
-
 void DeepCopyPaM(SwPaM const & rSource, SwPaM & rTarget)
 {
     rTarget = rSource;
@@ -882,19 +866,6 @@ SwXTextRange::getImplementationName()
     return OUString("SwXTextRange");
 }
 
-static char const*const g_ServicesTextRange[] =
-{
-    "com.sun.star.text.TextRange",
-    "com.sun.star.style.CharacterProperties",
-    "com.sun.star.style.CharacterPropertiesAsian",
-    "com.sun.star.style.CharacterPropertiesComplex",
-    "com.sun.star.style.ParagraphProperties",
-    "com.sun.star.style.ParagraphPropertiesAsian",
-    "com.sun.star.style.ParagraphPropertiesComplex",
-};
-
-static const size_t g_nServicesTextRange(SAL_N_ELEMENTS(g_ServicesTextRange));
-
 sal_Bool SAL_CALL SwXTextRange::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
@@ -903,8 +874,15 @@ sal_Bool SAL_CALL SwXTextRange::supportsService(const OUString& rServiceName)
 uno::Sequence< OUString > SAL_CALL
 SwXTextRange::getSupportedServiceNames()
 {
-    return ::sw::GetSupportedServiceNamesImpl(
-            g_nServicesTextRange, g_ServicesTextRange);
+    return {
+        "com.sun.star.text.TextRange",
+        "com.sun.star.style.CharacterProperties",
+        "com.sun.star.style.CharacterPropertiesAsian",
+        "com.sun.star.style.CharacterPropertiesComplex",
+        "com.sun.star.style.ParagraphProperties",
+        "com.sun.star.style.ParagraphPropertiesAsian",
+        "com.sun.star.style.ParagraphPropertiesComplex"
+    };
 }
 
 uno::Reference< text::XText > SAL_CALL

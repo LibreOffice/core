@@ -47,6 +47,22 @@
 
 using namespace ::com::sun::star;
 
+namespace {
+
+uno::Sequence< OUString >
+GetSupportedServiceNamesImpl(
+        size_t const nServices, char const*const pServices[])
+{
+    uno::Sequence< OUString > ret(static_cast<sal_Int32>(nServices));
+
+    std::transform(pServices, pServices + nServices, ret.begin(),
+        [](const char* pService) -> OUString { return OUString::createFromAscii(pService); });
+
+    return ret;
+}
+
+}
+
 class SwXFootnote::Impl
     : public SvtListener
 {
@@ -199,7 +215,7 @@ uno::Sequence< OUString > SAL_CALL
 SwXFootnote::getSupportedServiceNames()
 {
     SolarMutexGuard g;
-    return ::sw::GetSupportedServiceNamesImpl(
+    return GetSupportedServiceNamesImpl(
             (m_pImpl->m_bIsEndnote) ? g_nServicesEndnote : g_nServicesFootnote,
             g_ServicesFootnote);
 }
