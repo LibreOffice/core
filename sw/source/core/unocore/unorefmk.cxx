@@ -172,14 +172,6 @@ OUString SAL_CALL SwXReferenceMark::getImplementationName()
     return OUString("SwXReferenceMark");
 }
 
-static char const*const g_ServicesReferenceMark[] =
-{
-    "com.sun.star.text.TextContent",
-    "com.sun.star.text.ReferenceMark",
-};
-
-static const size_t g_nServicesReferenceMark(SAL_N_ELEMENTS(g_ServicesReferenceMark));
-
 sal_Bool SAL_CALL
 SwXReferenceMark::supportsService(const OUString& rServiceName)
 {
@@ -189,8 +181,10 @@ SwXReferenceMark::supportsService(const OUString& rServiceName)
 uno::Sequence< OUString > SAL_CALL
 SwXReferenceMark::getSupportedServiceNames()
 {
-    return ::sw::GetSupportedServiceNamesImpl(
-            g_nServicesReferenceMark, g_ServicesReferenceMark);
+    return {
+        "com.sun.star.text.TextContent",
+        "com.sun.star.text.ReferenceMark"
+    };
 }
 
 template<typename T> struct NotContainedIn
@@ -869,14 +863,6 @@ SwXMeta::getImplementationName()
     return OUString("SwXMeta");
 }
 
-static char const*const g_ServicesMeta[] =
-{
-    "com.sun.star.text.TextContent",
-    "com.sun.star.text.InContentMetadata",
-};
-
-static const size_t g_nServicesMeta(SAL_N_ELEMENTS(g_ServicesMeta));
-
 sal_Bool SAL_CALL
 SwXMeta::supportsService(const OUString& rServiceName)
 {
@@ -886,7 +872,10 @@ SwXMeta::supportsService(const OUString& rServiceName)
 uno::Sequence< OUString > SAL_CALL
 SwXMeta::getSupportedServiceNames()
 {
-    return ::sw::GetSupportedServiceNamesImpl(g_nServicesMeta, g_ServicesMeta);
+    return {
+        "com.sun.star.text.TextContent",
+        "com.sun.star.text.InContentMetadata"
+    };
 }
 
 // XComponent
@@ -1280,15 +1269,6 @@ SwXMetaField::getImplementationName()
     return OUString("SwXMetaField");
 }
 
-static char const*const g_ServicesMetaField[] =
-{
-    "com.sun.star.text.TextContent",
-    "com.sun.star.text.TextField",
-    "com.sun.star.text.textfield.MetadataField",
-};
-
-static const size_t g_nServicesMetaField(SAL_N_ELEMENTS(g_ServicesMetaField));
-
 sal_Bool SAL_CALL
 SwXMetaField::supportsService(const OUString& rServiceName)
 {
@@ -1298,8 +1278,11 @@ SwXMetaField::supportsService(const OUString& rServiceName)
 uno::Sequence< OUString > SAL_CALL
 SwXMetaField::getSupportedServiceNames()
 {
-    return ::sw::GetSupportedServiceNamesImpl(
-            g_nServicesMetaField, g_ServicesMetaField);
+    return {
+        "com.sun.star.text.TextContent",
+        "com.sun.star.text.TextField",
+        "com.sun.star.text.textfield.MetadataField"
+    };
 }
 
 // XComponent
