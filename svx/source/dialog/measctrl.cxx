@@ -77,6 +77,9 @@ SvxXMeasurePreview::~SvxXMeasurePreview()
 
 void SvxXMeasurePreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
+    rRenderContext.SetBackground(rRenderContext.GetSettings().GetStyleSettings().GetWindowColor());
+    rRenderContext.Erase();
+
     rRenderContext.Push(PushFlags::MAPMODE);
     rRenderContext.SetMapMode(m_aMapMode);
 
