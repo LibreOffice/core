@@ -3540,10 +3540,13 @@ static int doc_getSelection(LibreOfficeKitDocument* pThis,
     *pOutStreams = static_cast<char **>(malloc(*pOutCount * sizeof(char *)));
     for (size_t i = 0; i < aMimeTypes.size(); ++i)
     {
-        (*pOutMimeTypes)[i] = strdup(aMimeTypes[i].getStr());
+        if (aMimeTypes[i] == "text/plain;charset=utf-16")
+            (*pOutMimeTypes)[i] = strdup("text/plain;charset=utf-8");
+        else
+            (*pOutMimeTypes)[i] = strdup(aMimeTypes[i].getStr());
 
         OString aRet;
-        bool bSuccess = getFromTransferrable(xTransferable, aMimeTypes[i], aRet);
+        bool bSuccess = getFromTransferrable(xTransferable, (*pOutMimeTypes)[i], aRet);
         if (!bSuccess || aRet.getLength() < 1)
         {
             (*pOutSizes)[i] = 0;
