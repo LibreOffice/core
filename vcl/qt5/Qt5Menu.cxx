@@ -568,6 +568,8 @@ void Qt5Menu::slotMenuTriggered(Qt5MenuItem* pQItem)
         Menu* pMenu = pSalMenu->GetMenu();
         auto mnId = pQItem->mnId;
 
+        if (pQItem->mpAction->isCheckable() && !pQItem->mpActionGroup)
+            pQItem->mpAction->setChecked(!pQItem->mpAction->isChecked());
         pTopLevel->GetMenu()->HandleMenuCommandEvent(pMenu, mnId);
     }
 }
