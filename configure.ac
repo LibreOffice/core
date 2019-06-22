@@ -5187,6 +5187,21 @@ if test -n "$ENABLE_PCH" -a -n "$CCACHE_DEPEND_MODE" -a "$GCC" = "yes" -a "$COM_
     fi
 fi
 
+BUILDING_PCH_WITH_OBJ=
+if test -n "$ENABLE_PCH"; then
+    AC_MSG_CHECKING([whether $CC supports -Xclang -building-pch-with-obj])
+    save_CFLAGS=$CFLAGS
+    CFLAGS="$CFLAGS -Werror -Xclang -building-pch-with-obj"
+    AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[]], [[ return 0; ]])],[ BUILDING_PCH_WITH_OBJ="-Xclang -building-pch-with-obj" ],[])
+    CFLAGS=$save_CFLAGS
+    if test -n "$BUILDING_PCH_WITH_OBJ"; then
+        AC_MSG_RESULT(yes)
+    else
+        AC_MSG_RESULT(no)
+    fi
+fi
+AC_SUBST(BUILDING_PCH_WITH_OBJ)
+
 TAB=`printf '\t'`
 
 AC_MSG_CHECKING([the GNU Make version])
