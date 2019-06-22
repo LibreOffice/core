@@ -267,7 +267,7 @@ bool ImplReadDIBInfoHeader(SvStream& rIStm, DIBV5Header& rHeader, bool& bTopDown
         bTopDown = false;
     }
 
-    if ( rHeader.nWidth < 0 )
+    if ( rHeader.nWidth < 0 || rHeader.nXPelsPerMeter < 0 || rHeader.nYPelsPerMeter < 0 )
     {
         rIStm.SetError( SVSTREAM_FILEFORMAT_ERROR );
     }
