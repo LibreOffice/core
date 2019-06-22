@@ -13,4 +13,6 @@ gb_COMPILEROPTFLAGS := -Os
 
 include $(GBUILDDIR)/platform/linux.mk
 
+gb_LinkTarget_LDFLAGS += -latomic
+
 # vim: set noet sw=4:
