@@ -30,7 +30,7 @@ public:
 
 protected:
     css::uno::Reference<css::frame::XModel> m_xModel;
-    virtual void Apply() = 0;
+    void Apply();
 
 private:
     std::unique_ptr<weld::Entry> m_xEdittext;
