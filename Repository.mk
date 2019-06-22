@@ -542,6 +542,7 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_NONE, \
 	scqahelper \
 	unowinreg \
 	wpftqahelper \
+	precompiled_system \
 	$(if $(filter MSC,$(COM)),cli_cppuhelper) \
 	$(if $(filter $(OS),ANDROID),lo-bootstrap) \
 	$(if $(filter $(OS),MACOSX),OOoSpotlightImporter) \
