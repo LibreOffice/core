@@ -89,8 +89,22 @@ gb_PrecompiledHeader_EXT := .gch
 endif
 
 # Clang supports building extra object file where it puts code that would be shared by all users of the PCH.
-# Unlike with MSVC it is built as a separate step.
+# Unlike with MSVC it is built as a separate step. The relevant options are used only when generating the PCH
+# and when creating the PCH's object file, normal compilations using the PCH do not need extra options.
 gb_PrecompiledHeader_pch_with_obj = $(BUILDING_PCH_WITH_OBJ)
+ifneq ($(BUILDING_PCH_WITH_OBJ),)
+# If using Clang's PCH extra object, we may need to strip unused sections, otherwise inline and template functions
+# emitted in that object may in some cases cause unresolved references to private symbols in other libraries.
+gb_LinkTarget_LDFLAGS += -Wl,--gc-sections
+gb_PrecompiledHeader_pch_with_obj += -ffunction-sections -fdata-sections
+# Enable generating more shared code and debuginfo in the PCH object file.
+gb_PrecompiledHeader_pch_with_obj += $(PCH_MODULES_DEBUGINFO)
+ifeq ($(ENABLE_OPTIMIZED),)
+# -fmodules-codegen appears to be worth it only if not optimizing, otherwise optimizing all the functions emitted
+# in the PCH object file may take way too long, especially given that many of those may get thrown away
+gb_PrecompiledHeader_pch_with_obj += $(PCH_MODULES_CODEGEN)
+endif
+endif
 
 # This is for MSVC's object file built directly as a side-effect of building the PCH.
 gb_PrecompiledHeader_get_objectfile =
