@@ -1697,13 +1697,6 @@ SwXTextSection::getImplementationName()
     return OUString("SwXTextSection");
 }
 
-static char const*const g_ServicesTextSection[] =
-{
-    "com.sun.star.text.TextContent",
-    "com.sun.star.text.TextSection",
-    "com.sun.star.document.LinkTarget",
-};
-
 sal_Bool SAL_CALL SwXTextSection::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
@@ -1712,9 +1705,11 @@ sal_Bool SAL_CALL SwXTextSection::supportsService(const OUString& rServiceName)
 uno::Sequence< OUString > SAL_CALL
 SwXTextSection::getSupportedServiceNames()
 {
-    return ::sw::GetSupportedServiceNamesImpl(
-                SAL_N_ELEMENTS(g_ServicesTextSection),
-                g_ServicesTextSection);
+    return {
+        "com.sun.star.text.TextContent",
+        "com.sun.star.text.TextSection",
+        "com.sun.star.document.LinkTarget"
+    };
 }
 
 // MetadatableMixin

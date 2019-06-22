@@ -124,10 +124,6 @@ namespace sw {
         return 0;
     }
 
-    css::uno::Sequence< OUString >
-    GetSupportedServiceNamesImpl(
-            size_t const nServices, char const*const pServices[]);
-
 } // namespace sw
 
 #endif // INCLUDED_SW_INC_UNOBASECLASS_HXX

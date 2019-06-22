@@ -199,9 +199,13 @@ uno::Sequence< OUString > SAL_CALL
 SwXFootnote::getSupportedServiceNames()
 {
     SolarMutexGuard g;
-    return ::sw::GetSupportedServiceNamesImpl(
-            (m_pImpl->m_bIsEndnote) ? g_nServicesEndnote : g_nServicesFootnote,
-            g_ServicesFootnote);
+    size_t nServices = (m_pImpl->m_bIsEndnote) ? g_nServicesEndnote : g_nServicesFootnote;
+    uno::Sequence< OUString > aServiceNames(static_cast<sal_Int32>(nServices));
+
+    std::transform(g_ServicesFootnote, g_ServicesFootnote + nServices, aServiceNames.begin(),
+        [](const char* pService) -> OUString { return OUString::createFromAscii(pService); });
+
+    return aServiceNames;
 }
 
 uno::Sequence< uno::Type > SAL_CALL

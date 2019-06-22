@@ -2357,11 +2357,6 @@ SwXDocumentIndexes::getImplementationName()
     return OUString("SwXDocumentIndexes");
 }
 
-static char const*const g_ServicesDocumentIndexes[] =
-{
-    "com.sun.star.text.DocumentIndexes",
-};
-
 sal_Bool SAL_CALL SwXDocumentIndexes::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
@@ -2370,8 +2365,7 @@ sal_Bool SAL_CALL SwXDocumentIndexes::supportsService(const OUString& rServiceNa
 uno::Sequence< OUString > SAL_CALL
 SwXDocumentIndexes::getSupportedServiceNames()
 {
-    return ::sw::GetSupportedServiceNamesImpl(
-        SAL_N_ELEMENTS(g_ServicesDocumentIndexes), g_ServicesDocumentIndexes);
+    return { "com.sun.star.text.DocumentIndexes" };
 }
 
 sal_Int32 SAL_CALL
@@ -2542,11 +2536,6 @@ SwXDocumentIndex::StyleAccess_Impl::getImplementationName()
     return OUString("SwXDocumentIndex::StyleAccess_Impl");
 }
 
-static char const*const g_ServicesIndexStyleAccess[] =
-{
-    "com.sun.star.text.DocumentIndexParagraphStyles",
-};
-
 sal_Bool SAL_CALL
 SwXDocumentIndex::StyleAccess_Impl::supportsService(const OUString& rServiceName)
 {
@@ -2556,9 +2545,7 @@ SwXDocumentIndex::StyleAccess_Impl::supportsService(const OUString& rServiceName
 uno::Sequence< OUString > SAL_CALL
 SwXDocumentIndex::StyleAccess_Impl::getSupportedServiceNames()
 {
-    return ::sw::GetSupportedServiceNamesImpl(
-        SAL_N_ELEMENTS(g_ServicesIndexStyleAccess),
-        g_ServicesIndexStyleAccess);
+    return { "com.sun.star.text.DocumentIndexParagraphStyles" };
 }
 
 void SAL_CALL
@@ -2662,11 +2649,6 @@ SwXDocumentIndex::TokenAccess_Impl::getImplementationName()
     return OUString("SwXDocumentIndex::TokenAccess_Impl");
 }
 
-static char const*const g_ServicesIndexTokenAccess[] =
-{
-    "com.sun.star.text.DocumentIndexLevelFormat",
-};
-
 sal_Bool SAL_CALL SwXDocumentIndex::TokenAccess_Impl::supportsService(
         const OUString& rServiceName)
 {
@@ -2676,9 +2658,7 @@ sal_Bool SAL_CALL SwXDocumentIndex::TokenAccess_Impl::supportsService(
 uno::Sequence< OUString > SAL_CALL
 SwXDocumentIndex::TokenAccess_Impl::getSupportedServiceNames()
 {
-    return ::sw::GetSupportedServiceNamesImpl(
-            SAL_N_ELEMENTS(g_ServicesIndexTokenAccess),
-            g_ServicesIndexTokenAccess);
+    return { "com.sun.star.text.DocumentIndexLevelFormat" };
 }
 
 struct TokenType_ {
