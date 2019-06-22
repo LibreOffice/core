@@ -43,7 +43,7 @@ private:
     VclPtr<Menu> mpVCLMenu;
     Qt5Menu* mpParentSalMenu;
     Qt5Frame* mpFrame;
-    bool mbMenuBar;
+    const bool m_bMenuBar;
     QMenuBar* mpQMenuBar;
     // self-created QMenu that this Qt5Menu represents, if applicable (s. comment for class)
     std::unique_ptr<QMenu> mpOwnedQMenu;
@@ -87,6 +87,7 @@ public:
                                 const vcl::KeyCode& rKeyCode, const OUString& rKeyName) override;
     virtual void GetSystemMenuData(SystemMenuData* pData) override;
     virtual void ShowCloseButton(bool bShow) override;
+    int GetMenuBarHeight() const override;
 
     void SetMenu(Menu* pMenu) { mpVCLMenu = pMenu; }
     Menu* GetMenu() { return mpVCLMenu; }

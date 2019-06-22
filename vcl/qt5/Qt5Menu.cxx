@@ -31,14 +31,16 @@ Qt5Menu::Qt5Menu(bool bMenuBar)
     : mpVCLMenu(nullptr)
     , mpParentSalMenu(nullptr)
     , mpFrame(nullptr)
-    , mbMenuBar(bMenuBar)
+    , m_bMenuBar(bMenuBar)
     , mpQMenuBar(nullptr)
     , mpQMenu(nullptr)
     , mpCloseButton(nullptr)
 {
 }
 
-bool Qt5Menu::VisibleMenuBar() { return true; }
+bool Qt5Menu::VisibleMenuBar() { return m_bMenuBar && mpQMenuBar; }
+
+int Qt5Menu::GetMenuBarHeight() const { return mpQMenuBar ? mpQMenuBar->size().height() : 0; }
 
 void Qt5Menu::InsertMenuItem(Qt5MenuItem* pSalMenuItem, unsigned nPos)
 {
@@ -50,7 +52,7 @@ void Qt5Menu::InsertMenuItem(Qt5MenuItem* pSalMenuItem, unsigned nPos)
     pSalMenuItem->mpAction.reset();
     pSalMenuItem->mpMenu.reset();
 
-    if (mbMenuBar)
+    if (m_bMenuBar)
     {
         // top-level menu
         if (mpQMenuBar)
@@ -395,7 +397,7 @@ void Qt5Menu::SetSubMenu(SalMenuItem* pSalMenuItem, SalMenu* pSubMenu, unsigned 
     // If submenu is not present and it's a menu, convert it to action.
     // It may be fine to proceed in any case, but by skipping other cases
     // amount of unneeded actions taken should be reduced.
-    if (pItem->mpParentMenu->mbMenuBar || (pQSubMenu && pItem->mpMenu)
+    if (pItem->mpParentMenu->m_bMenuBar || (pQSubMenu && pItem->mpMenu)
         || ((!pQSubMenu) && pItem->mpAction))
     {
         return;
@@ -415,7 +417,7 @@ void Qt5Menu::SetFrame(const SalFrame* pFrame)
     }
 
     SolarMutexGuard aGuard;
-    assert(mbMenuBar);
+    assert(m_bMenuBar);
     mpFrame = const_cast<Qt5Frame*>(static_cast<const Qt5Frame*>(pFrame));
 
     mpFrame->SetMenu(this);

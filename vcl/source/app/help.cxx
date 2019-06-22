@@ -670,6 +670,9 @@ void ImplSetHelpWindowPos( vcl::Window* pHelpWin, sal_uInt16 nHelpWinStyle, Quic
     }
 
     vcl::Window* pWindow = pHelpWin->GetParent()->ImplGetFrameWindow();
+    SystemWindow* pSysWin = pHelpWin->GetParent()->GetSystemWindow();
+    MenuBar* pMenuBar = pSysWin ? pSysWin->GetMenuBar() : nullptr;
+    aPos.AdjustY(pMenuBar ? pMenuBar->GetMenuBarHeight() : 0);
     aPos = pWindow->AbsoluteScreenToOutputPixel( aPos );
     pHelpWin->SetPosPixel( aPos );
 }

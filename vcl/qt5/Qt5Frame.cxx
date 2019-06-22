@@ -559,10 +559,6 @@ void Qt5Frame::SetPosSize(tools::Long nX, tools::Long nY, tools::Long nWidth, to
         else
             nX += aParentGeometry.nX;
         nY += aParentGeometry.nY;
-
-        Qt5MainWindow* pTopLevel = m_pParent->GetTopLevelWindow();
-        if (pTopLevel && pTopLevel->menuBar() && pTopLevel->menuBar()->isVisible())
-            nY += round(pTopLevel->menuBar()->geometry().height() * devicePixelRatioF());
     }
 
     if (!(nFlags & SAL_FRAME_POSSIZE_X))
