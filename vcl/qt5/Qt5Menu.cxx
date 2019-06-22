@@ -568,6 +568,11 @@ void Qt5Menu::slotMenuTriggered(Qt5MenuItem* pQItem)
         Menu* pMenu = pSalMenu->GetMenu();
         auto mnId = pQItem->mnId;
 
+        // HACK to allow HandleMenuCommandEvent to "not-set" the checked button
+        // LO expects a signal before an item state change, so reset the check item
+        if (pQItem->mpAction->isCheckable()
+            && (!pQItem->mpActionGroup || pQItem->mpActionGroup->actions().size() <= 1))
+            pQItem->mpAction->setChecked(!pQItem->mpAction->isChecked());
         pTopLevel->GetMenu()->HandleMenuCommandEvent(pMenu, mnId);
     }
 }
