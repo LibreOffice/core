@@ -9,6 +9,7 @@
 
 #include <test/calc_unoapi_test.hxx>
 #include <test/container/xenumerationaccess.hxx>
+#include <test/container/xindexaccess.hxx>
 #include <test/sheet/spreadsheetviewsettings.hxx>
 #include <test/sheet/xactivationbroadcaster.hxx>
 #include <test/sheet/xcellrangereferrer.hxx>
@@ -35,6 +36,7 @@ class ScTabViewObj : public CalcUnoApiTest,
                      public apitest::XActivationBroadcaster,
                      public apitest::XCellRangeReferrer,
                      public apitest::XEnumerationAccess,
+                     public apitest::XIndexAccess,
                      public apitest::XSpreadsheetView,
                      public apitest::XViewFreezable,
                      public apitest::XViewSplitable
@@ -63,6 +65,10 @@ public:
     // XEnumerationAccess
     CPPUNIT_TEST(testCreateEnumeration);
 
+    // XIndexAccess
+    CPPUNIT_TEST(testGetByIndex);
+    CPPUNIT_TEST(testGetCount);
+
     // XSpreadsheetView
     CPPUNIT_TEST(testGetSetActiveSheet);
 
@@ -80,6 +86,7 @@ private:
 
 ScTabViewObj::ScTabViewObj()
     : CalcUnoApiTest("/sc/qa/extras/testdocuments")
+    , XIndexAccess(1)
 {
 }
 
