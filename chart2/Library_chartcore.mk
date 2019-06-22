@@ -23,7 +23,7 @@ $(eval $(call gb_Library_add_defs,chartcore,\
     -DOOO_DLLIMPLEMENTATION_CHARTVIEW \
 ))
 
-$(eval $(call gb_Library_set_precompiled_header,chartcore,$(SRCDIR)/chart2/inc/pch/precompiled_chartcore))
+$(eval $(call gb_Library_set_precompiled_header,chartcore,chart2/inc/pch/precompiled_chartcore))
 
 $(eval $(call gb_Library_use_externals,chartcore,\
 	boost_headers \

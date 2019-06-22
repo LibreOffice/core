@@ -21,7 +21,7 @@ $(eval $(call gb_Library_set_include,ado,\
 
 $(eval $(call gb_Library_use_external,ado,boost_headers))
 
-$(eval $(call gb_Library_set_precompiled_header,ado,$(SRCDIR)/connectivity/inc/pch/precompiled_ado))
+$(eval $(call gb_Library_set_precompiled_header,ado,connectivity/inc/pch/precompiled_ado))
 
 $(eval $(call gb_Library_use_sdk_api,ado))
 

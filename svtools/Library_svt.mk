@@ -19,7 +19,7 @@
 
 $(eval $(call gb_Library_Library,svt))
 
-$(eval $(call gb_Library_set_precompiled_header,svt,$(SRCDIR)/svtools/inc/pch/precompiled_svt))
+$(eval $(call gb_Library_set_precompiled_header,svt,svtools/inc/pch/precompiled_svt))
 
 $(eval $(call gb_Library_set_componentfile,svt,svtools/util/svt))
 

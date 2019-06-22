@@ -35,7 +35,7 @@ else
 $(eval $(call gb_Library_set_componentfile,vcl,vcl/vcl.unx))
 endif
 
-$(eval $(call gb_Library_set_precompiled_header,vcl,$(SRCDIR)/vcl/inc/pch/precompiled_vcl))
+$(eval $(call gb_Library_set_precompiled_header,vcl,vcl/inc/pch/precompiled_vcl))
 
 $(eval $(call gb_Library_set_include,vcl,\
     $$(INCLUDE) \

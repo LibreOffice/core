@@ -17,7 +17,7 @@ $(eval $(call gb_Library_set_include,rptxml,\
 
 $(eval $(call gb_Library_use_external,rptxml,boost_headers))
 
-$(eval $(call gb_Library_set_precompiled_header,rptxml,$(SRCDIR)/reportdesign/inc/pch/precompiled_rptxml))
+$(eval $(call gb_Library_set_precompiled_header,rptxml,reportdesign/inc/pch/precompiled_rptxml))
 
 $(eval $(call gb_Library_use_sdk_api,rptxml))
 

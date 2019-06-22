@@ -18,7 +18,7 @@ $(eval $(call gb_Library_add_defs,drawinglayer,\
     -DDRAWINGLAYER_DLLIMPLEMENTATION \
 ))
 
-$(eval $(call gb_Library_set_precompiled_header,drawinglayer,$(SRCDIR)/drawinglayer/inc/pch/precompiled_drawinglayer))
+$(eval $(call gb_Library_set_precompiled_header,drawinglayer,drawinglayer/inc/pch/precompiled_drawinglayer))
 
 $(eval $(call gb_Library_set_componentfile,drawinglayer,drawinglayer/drawinglayer))
 

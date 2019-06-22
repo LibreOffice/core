@@ -27,7 +27,7 @@ $(eval $(call gb_Library_add_defs,odbc,\
 		-DSQL_WCHART_CONVERT) \
 ))
 
-$(eval $(call gb_Library_set_precompiled_header,odbc,$(SRCDIR)/connectivity/inc/pch/precompiled_odbc))
+$(eval $(call gb_Library_set_precompiled_header,odbc,connectivity/inc/pch/precompiled_odbc))
 
 $(eval $(call gb_Library_use_externals,odbc,\
 	boost_headers \

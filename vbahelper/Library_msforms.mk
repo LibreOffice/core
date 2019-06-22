@@ -28,7 +28,7 @@ $(eval $(call gb_Library_set_componentfile,msforms,vbahelper/util/msforms))
 
 $(eval $(call gb_Library_use_external,msforms,boost_headers))
 
-$(eval $(call gb_Library_set_precompiled_header,msforms,$(SRCDIR)/vbahelper/inc/pch/precompiled_msforms))
+$(eval $(call gb_Library_set_precompiled_header,msforms,vbahelper/inc/pch/precompiled_msforms))
 
 $(eval $(call gb_Library_use_api,msforms,\
 	udkapi \

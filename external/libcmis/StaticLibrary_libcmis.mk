@@ -11,7 +11,7 @@ $(eval $(call gb_StaticLibrary_StaticLibrary,libcmis))
 
 $(eval $(call gb_StaticLibrary_set_warnings_disabled,libcmis))
 
-$(eval $(call gb_StaticLibrary_set_precompiled_header,libcmis,$(SRCDIR)/external/libcmis/inc/pch/precompiled_libcmis))
+$(eval $(call gb_StaticLibrary_set_precompiled_header,libcmis,external/libcmis/inc/pch/precompiled_libcmis))
 
 ifeq ($(COM_IS_CLANG),TRUE)
 # Avoid narrowing conversion error (even though the option is technically a warning)
