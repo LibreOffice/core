@@ -135,9 +135,6 @@ class VCLPLUG_QT5_PUBLIC Qt5Frame : public QObject, public SalFrame
 private:
     void setVisible(bool);
 
-Q_SIGNALS:
-    void tooltipRequest(const OUString& rTooltip);
-
 public:
     Qt5Frame(Qt5Frame* pParent, SalFrameStyleFlags nSalFrameStyle, bool bUseCairo);
     virtual ~Qt5Frame() override;
