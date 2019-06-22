@@ -152,7 +152,7 @@ AsianCompressionFlags GetCharTypeForCompression( sal_Unicode cChar )
 
 static void lcl_DrawRedLines( OutputDevice* pOutDev,
                               long nFontHeight,
-                              const Point& rPnt,
+                              const Point& rPoint,
                               size_t nIndex,
                               size_t nMaxEnd,
                               const long* pDXArray,
@@ -163,67 +163,73 @@ static void lcl_DrawRedLines( OutputDevice* pOutDev,
                               bool bIsRightToLeft )
 {
     // But only if font is not too small...
-    long nHght = pOutDev->LogicToPixel( Size( 0, nFontHeight ) ).Height();
-    if( WRONG_SHOW_MIN < nHght )
-    {
-        size_t nEnd, nStart = nIndex;
-        bool bWrong = pWrongs->NextWrong( nStart, nEnd );
-        while ( bWrong )
-        {
-            if ( nStart >= nMaxEnd )
-                break;
+    long nHeight = pOutDev->LogicToPixel(Size(0, nFontHeight)).Height();
+    if (WRONG_SHOW_MIN >= nHeight)
+        return;
 
-            if ( nStart < nIndex )  // Corrected
-                nStart = nIndex;
-            if ( nEnd > nMaxEnd )
-                nEnd = nMaxEnd;
-            Point aPnt1( rPnt );
-            if ( bVertical )
+    size_t nEnd, nStart = nIndex;
+    bool bWrong = pWrongs->NextWrong(nStart, nEnd);
+
+    while (bWrong)
+    {
+        if (nStart >= nMaxEnd)
+            break;
+
+        if (nStart < nIndex)  // Corrected
+            nStart = nIndex;
+
+        if (nEnd > nMaxEnd)
+            nEnd = nMaxEnd;
+
+        Point aPoint1(rPoint);
+        if (bVertical)
+        {
+            // VCL doesn't know that the text is vertical, and is manipulating
+            // the positions a little bit in y direction...
+            long nOnePixel = pOutDev->PixelToLogic(Size(0, 1)).Height();
+            long nCorrect = 2 * nOnePixel;
+            aPoint1.AdjustY(-nCorrect);
+            aPoint1.AdjustX(-nCorrect);
+        }
+        if (nStart > nIndex)
+        {
+            if (!bVertical)
             {
-                // VCL doesn't know that the text is vertical, and is manipulating
-                // the positions a little bit in y direction...
-                long nOnePixel = pOutDev->PixelToLogic( Size( 0, 1 ) ).Height();
-                long nCorrect = 2*nOnePixel;
-                aPnt1.AdjustY( -nCorrect );
-                aPnt1.AdjustX( -nCorrect );
-            }
-            if ( nStart > nIndex )
-            {
-                if ( !bVertical )
-                {
-                    // since for RTL portions rPnt is on the visual right end of the portion
-                    // (i.e. at the start of the first RTL char) we need to subtract the offset
-                    // for RTL portions...
-                    aPnt1.AdjustX((bIsRightToLeft ? -1 : 1) * pDXArray[ nStart - nIndex - 1 ] );
-                }
-                else
-                    aPnt1.AdjustY(pDXArray[ nStart - nIndex - 1 ] );
-            }
-            Point aPnt2( rPnt );
-            DBG_ASSERT( nEnd > nIndex, "RedLine: aPnt2?" );
-            if ( !bVertical )
-            {
-                // since for RTL portions rPnt is on the visual right end of the portion
+                // since for RTL portions rPoint is on the visual right end of the portion
                 // (i.e. at the start of the first RTL char) we need to subtract the offset
                 // for RTL portions...
-                aPnt2.AdjustX((bIsRightToLeft ? -1 : 1) * pDXArray[ nEnd - nIndex - 1 ] );
+                aPoint1.AdjustX((bIsRightToLeft ? -1 : 1) * pDXArray[nStart - nIndex - 1]);
             }
             else
-                aPnt2.AdjustY(pDXArray[ nEnd - nIndex - 1 ] );
-            if ( nOrientation )
-            {
-                aPnt1 = Rotate( aPnt1, nOrientation, rOrigin );
-                aPnt2 = Rotate( aPnt2, nOrientation, rOrigin );
-            }
-
-            pOutDev->DrawWaveLine( aPnt1, aPnt2 );
-
-            nStart = nEnd+1;
-            if ( nEnd < nMaxEnd )
-                bWrong = pWrongs->NextWrong( nStart, nEnd );
-            else
-                bWrong = false;
+                aPoint1.AdjustY(pDXArray[nStart - nIndex - 1]);
         }
+        Point aPoint2(rPoint);
+        DBG_ASSERT(nEnd > nIndex, "RedLine: aPnt2?");
+        if (!bVertical)
+        {
+            // since for RTL portions rPoint is on the visual right end of the portion
+            // (i.e. at the start of the first RTL char) we need to subtract the offset
+            // for RTL portions...
+            aPoint2.AdjustX((bIsRightToLeft ? -1 : 1) * pDXArray[nEnd - nIndex - 1]);
+        }
+        else
+        {
+            aPoint2.AdjustY(pDXArray[nEnd - nIndex - 1]);
+        }
+
+        if (nOrientation)
+        {
+            aPoint1 = Rotate(aPoint1, nOrientation, rOrigin);
+            aPoint2 = Rotate(aPoint2, nOrientation, rOrigin);
+        }
+
+        pOutDev->DrawWaveLine(aPoint1, aPoint2);
+
+        nStart = nEnd + 1;
+        if (nEnd < nMaxEnd)
+            bWrong = pWrongs->NextWrong(nStart, nEnd);
+        else
+            bWrong = false;
     }
 }
 
