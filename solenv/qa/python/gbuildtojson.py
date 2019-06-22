@@ -117,6 +117,7 @@ class CheckGbuildToJsonModules(unittest.TestCase):
         shutil.copyfile(os.path.join(self.srcdirnative, 'RepositoryFixes.mk'), os.path.join(self.tempsrc, 'RepositoryFixes.mk'))
         #print('copytree from _%s_ to _%s_' % (os.path.join(self.srcdirnative, 'solenv').replace('\\', '#').replace('/', '!'), os.path.join(self.tempsrc, 'solenv').replace('\\', '#').replace('/', '!')))
         shutil.copytree(os.path.join(self.srcdirnative, 'solenv'),  os.path.join(self.tempsrc, 'solenv'))
+        shutil.copytree(os.path.join(self.srcdirnative, 'pch'),  os.path.join(self.tempsrc, 'pch'))
 
     def tearDown(self):
         shutil.rmtree(self.tempsrc)
