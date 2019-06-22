@@ -3971,7 +3971,11 @@ if test "$enable_ld" != "no"; then
                 check_use_ld gold
             fi
         else
+            # For gcc first try gold, new versions also support lld.
             check_use_ld gold
+            if test $? -ne 0; then
+                check_use_ld lld
+            fi
         fi
         ld_output=$(echo 'int main() { return 0; }' | $CC -Wl,-v -x c -o conftest.out - $CFLAGS $LDFLAGS 2>/dev/null)
         rm conftest.out
@@ -3983,13 +3987,8 @@ if test "$enable_ld" != "no"; then
         AC_MSG_RESULT([$ld_used])
         if test -n "$ENABLE_DEBUG$ENABLE_DBGUTIL"; then
             if echo "$ld_used" | grep -q "^GNU ld"; then
-                if test -n "$COM_IS_CLANG"; then
-                    AC_MSG_WARN([The default GNU linker is slow, consider using the LLD or the GNU gold linker.])
-                    add_warning "The default GNU linker is slow, consider using the LLD or the GNU gold linker."
-                else
-                    AC_MSG_WARN([The default GNU linker is slow, consider using the GNU gold linker.])
-                    add_warning "The default GNU linker is slow, consider using the GNU gold linker."
-                fi
+                AC_MSG_WARN([The default GNU linker is slow, consider using the LLD or the GNU gold linker.])
+                add_warning "The default GNU linker is slow, consider using the LLD or the GNU gold linker."
             fi
         fi
     else
