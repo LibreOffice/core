@@ -33,6 +33,7 @@
 #include <svx/xlntrit.hxx>
 #include <svx/xfltrit.hxx>
 #include <svx/xgrscit.hxx>
+#include <svx/xflasit.hxx>
 #include <svx/xflbmtit.hxx>
 #include <svx/xflbmpit.hxx>
 #include <svx/xflbmsxy.hxx>
@@ -43,6 +44,7 @@
 #include <svx/xlncapit.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xtextit0.hxx>
+#include <svx/xlnasit.hxx>
 #include <svx/xlndsit.hxx>
 #include <svx/xlnwtit.hxx>
 #include <svx/xlnclit.hxx>

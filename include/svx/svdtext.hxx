@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVX_SVDTEXT_HXX
 #define INCLUDED_SVX_SVDTEXT_HXX
 
-#include <sal/types.h>
+#include <svx/sdr/properties/defaultproperties.hxx>
 #include <svx/svxdllapi.h>
 #include <tools/weakbase.hxx>
 #include <memory>
