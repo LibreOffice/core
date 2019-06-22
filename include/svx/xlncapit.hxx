@@ -22,7 +22,6 @@
 
 #include <svx/svxdllapi.h>
 #include <svl/eitem.hxx>
-#include <svx/xenum.hxx>
 #include <com/sun/star/drawing/LineCap.hpp>
 
 

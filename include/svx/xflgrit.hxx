@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SVX_XFLGRIT_HXX
 #define INCLUDED_SVX_XFLGRIT_HXX
 
+#include <svx/xdef.hxx>
 #include <svx/xit.hxx>
 #include <svx/xgrad.hxx>
 #include <svx/svxdllapi.h>

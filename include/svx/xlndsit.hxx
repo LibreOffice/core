@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SVX_XLNDSIT_HXX
 #define INCLUDED_SVX_XLNDSIT_HXX
 
+#include <svx/xdef.hxx>
 #include <svx/xit.hxx>
 
 #include <svx/xdash.hxx>

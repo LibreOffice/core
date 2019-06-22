@@ -24,6 +24,7 @@
 #include <svx/svdpage.hxx>
 #include <svx/tabline.hxx>
 #include <svx/tabarea.hxx>
+#include <svx/xlnasit.hxx>
 
 enum class PageType;
 class ColorListBox;

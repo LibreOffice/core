@@ -21,6 +21,8 @@
 #define INCLUDED_SVX_TRANSFRMHELPER_HXX
 
 #include <basegfx/range/b2drange.hxx>
+#include <svx/svxdllapi.h>
+#include <tools/fract.hxx>
 #include <tools/fldunit.hxx>
 #include <tools/mapunit.hxx>
 #include <vcl/field.hxx>
