@@ -749,7 +749,7 @@ private:
                 points to an information structure, where
                 e.g. the document, its modified state, the count
                 of autosave-retries etcpp. exists.
-                Its used also to return the new temp file name
+                It's used also to return the new temp file name
                 and some other state values!
 
         @threadsafe
@@ -2844,7 +2844,7 @@ AutoRecovery::ETimerType AutoRecovery::implts_saveDocs(       bool        bAllow
 
     // This list will be filled with every document
     // which should be saved as last one. E.g. if it was used
-    // already for an UI save operation => crashed ... and
+    // already for a UI save operation => crashed ... and
     // now we try to save it again ... which can fail again ( of course .-) ).
     ::std::vector< AutoRecovery::TDocumentList::iterator > lDangerousDocs;
 
@@ -3016,7 +3016,7 @@ void AutoRecovery::implts_saveOneDoc(const OUString&                            
 
     // try to save this document as a new temp file every time.
     // Mark AutoSave state as "INCOMPLETE" if it failed.
-    // Because the last temp file is to old and does not include all changes.
+    // Because the last temp file is too old and does not include all changes.
     Reference< XDocumentRecovery > xDocRecover(rInfo.Document, css::uno::UNO_QUERY_THROW);
 
     // safe the state about "trying to save"
@@ -3155,7 +3155,7 @@ AutoRecovery::ETimerType AutoRecovery::implts_openDocs(const DispatchParams& aPa
 
         utl::MediaDescriptor lDescriptor;
 
-        // it's an UI feature - so the "USER" itself must be set as referer
+        // it's a UI feature - so the "USER" itself must be set as referrer
         lDescriptor[utl::MediaDescriptor::PROP_REFERRER()] <<= OUString(REFERRER_USER);
         lDescriptor[utl::MediaDescriptor::PROP_SALVAGEDFILE()] <<= OUString();
 
