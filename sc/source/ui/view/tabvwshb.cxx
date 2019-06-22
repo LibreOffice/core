@@ -370,6 +370,18 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
                 break;
             }
 
+        case SID_INSERT_QRCODE:
+        case SID_EDIT_QRCODE:
+            {
+                const uno::Reference<frame::XModel> xModel( GetViewData().GetDocShell()->GetBaseModel() );
+
+                VclAbstractDialogFactory* pFact = VclAbstractDialogFactory::Create();
+                ScopedVclPtr<AbstractQrCodeGenDialog> pDialog(pFact->CreateQrCodeGenDialog(
+                    pWin->GetFrameWeld(), xModel, rReq.GetSlot() == SID_EDIT_QRCODE));
+                pDialog->Execute();
+                break;
+            }
+
         case SID_OBJECTRESIZE:
             {
                 //         the server would like to change the client size
@@ -521,6 +533,12 @@ void ScTabViewShell::GetDrawInsState(SfxItemSet &rSet)
             case SID_SIGN_SIGNATURELINE:
                 if (!IsSignatureLineSelected() || IsSignatureLineSigned())
                     rSet.DisableItem(nWhich);
+                break;
+
+            case SID_INSERT_QRCODE:
+            case SID_EDIT_QRCODE:
+                if ( bTabProt || bShared || (pSdrView && pSdrView->GetMarkedObjectCount() != 0))
+                    rSet.DisableItem( nWhich );
                 break;
 
             case SID_INSERT_GRAPHIC:

@@ -60,6 +60,9 @@ interface BaseSelection
     SID_EDIT_SIGNATURELINE      [ ExecMethod = ExecDrawIns; StateMethod = GetDrawInsState; ]
     SID_SIGN_SIGNATURELINE      [ ExecMethod = ExecDrawIns; StateMethod = GetDrawInsState; ]
 
+    SID_INSERT_QRCODE           [ ExecMethod = ExecDrawIns; StateMethod = GetDrawInsState; ]
+    SID_EDIT_QRCODE             [ ExecMethod = ExecDrawIns; StateMethod = GetDrawInsState; ]
+
     SID_IMAP                    [ ExecMethod = ExecImageMap; StateMethod = GetImageMapState; ]
     SID_IMAP_EXEC               [ ExecMethod = ExecImageMap; StateMethod = GetImageMapState; ]
 
