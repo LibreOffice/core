@@ -348,7 +348,7 @@ class VCL_DLLPUBLIC TabPaneValue : public ImplControlValue
 public:
     tools::Rectangle m_aTabHeaderRect;
     tools::Rectangle m_aSelectedTabRect;
-    // increased tab size, so it'll overlab the frame rect when draing
+    // increased tab size, so it'll overlab the frame rect when drawing
     // static value, as there is currently no sane way to return additional data
     static int m_nOverlap;
 
