@@ -6973,7 +6973,6 @@ include/svtools/imgdef.hxx
 include/svtools/indexentryres.hxx
 include/svtools/inettbc.hxx
 include/svtools/insdlg.hxx
-include/svtools/ivctrl.hxx
 include/svtools/javacontext.hxx
 include/svtools/javainteractionhandler.hxx
 include/svtools/langhelp.hxx
@@ -7867,6 +7866,7 @@ include/vcl/inetimg.hxx
 include/vcl/inputctx.hxx
 include/vcl/inputtypes.hxx
 include/vcl/introwin.hxx
+include/vcl/ivctrl.hxx
 include/vcl/jobdata.hxx
 include/vcl/jobset.hxx
 include/vcl/keycod.hxx
@@ -13723,10 +13723,6 @@ svtools/source/contnr/fileview.cxx
 svtools/source/contnr/foldertree.cxx
 svtools/source/contnr/iconview.cxx
 svtools/source/contnr/iconviewimpl.cxx
-svtools/source/contnr/imivctl.hxx
-svtools/source/contnr/imivctl1.cxx
-svtools/source/contnr/imivctl2.cxx
-svtools/source/contnr/ivctrl.cxx
 svtools/source/contnr/simptabl.cxx
 svtools/source/contnr/templwin.cxx
 svtools/source/contnr/templwin.hxx
@@ -17788,7 +17784,11 @@ vcl/source/control/fixed.cxx
 vcl/source/control/fixedhyper.cxx
 vcl/source/control/fmtfield.cxx
 vcl/source/control/imgctrl.cxx
+vcl/source/control/imivctl.hxx
+vcl/source/control/imivctl1.cxx
+vcl/source/control/imivctl2.cxx
 vcl/source/control/imp_listbox.cxx
+vcl/source/control/ivctrl.cxx
 vcl/source/control/listbox.cxx
 vcl/source/control/listctrl.cxx
 vcl/source/control/longcurr.cxx
