@@ -17,11 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVTOOLS_IVCTRL_HXX
-#define INCLUDED_SVTOOLS_IVCTRL_HXX
+#ifndef INCLUDED_VCL_IVCTRL_HXX
+#define INCLUDED_VCL_IVCTRL_HXX
 
 #include <memory>
-#include <svtools/svtdllapi.h>
+#include <vcl/dllapi.h>
 #include <vcl/ctrl.hxx>
 #include <tools/link.hxx>
 #include <vcl/image.hxx>
@@ -111,7 +111,7 @@ public:
     const Image&            GetImage () const { return aImage; }
     void                    SetText ( const OUString& rText ) { aText = rText; }
     const OUString&         GetText () const { return aText; }
-    OUString SVT_DLLPUBLIC  GetDisplayText() const;
+    OUString VCL_DLLPUBLIC  GetDisplayText() const;
     void                    SetQuickHelpText( const OUString& rText ) { aQuickHelpText = rText; }
     const OUString&         GetQuickHelpText() const { return aQuickHelpText; }
     void                    SetUserData ( void* _pUserData ) { pUserData = _pUserData; }
@@ -174,7 +174,7 @@ public:
 
 class MnemonicGenerator;
 
-class SVT_DLLPUBLIC SvtIconChoiceCtrl : public Control
+class VCL_DLLPUBLIC SvtIconChoiceCtrl : public Control
 {
     friend class SvxIconChoiceCtrl_Impl;
 
@@ -276,6 +276,6 @@ public:
     virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessible() override;
 };
 
-#endif // INCLUDED_SVTOOLS_IVCTRL_HXX
+#endif // INCLUDED_VCL_IVCTRL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
