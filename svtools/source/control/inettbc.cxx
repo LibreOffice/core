@@ -579,7 +579,7 @@ IMPL_LINK_NOARG( MatchContext_Impl, Select_Impl, void*, void )
     }
 
     // insert all completed strings into the listbox
-    pBox->Clear();
+    pBox->clear();
 
     for (auto const& completion : aCompletions)
     {

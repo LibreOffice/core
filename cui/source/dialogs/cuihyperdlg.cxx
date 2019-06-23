@@ -52,6 +52,7 @@ SvxHlinkCtrl::SvxHlinkCtrl( sal_uInt16 _nId, SfxBindings & rBindings, SvxHpLinkD
 
 void SvxHlinkCtrl::dispose()
 {
+    pParent = nullptr;
     aRdOnlyForwarder.dispose();
     ::SfxControllerItem::dispose();
 }
@@ -59,7 +60,7 @@ void SvxHlinkCtrl::dispose()
 void SvxHlinkCtrl::StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                  const SfxPoolItem* pState )
 {
-    if ( eState == SfxItemState::DEFAULT && !pParent->IsDisposed() )
+    if (eState == SfxItemState::DEFAULT && pParent)
     {
         switch ( nSID )
         {
@@ -81,28 +82,22 @@ void SvxHlinkCtrl::StateChanged( sal_uInt16 nSID, SfxItemState eState,
 //# Hyperlink - Dialog                                                   #
 //#                                                                      #
 
-SvxHpLinkDlg::SvxHpLinkDlg (vcl::Window* pParent, SfxBindings* pBindings)
-    : SfxModalDialog(pParent, "HyperlinkDialog", "cui/ui/hyperlinkdialog.ui")
-    , mnCurrentPageId(HyperLinkPageType::NONE)
+SvxHpLinkDlg::SvxHpLinkDlg(weld::Window* pParent, SfxBindings* pBindings)
+    : SfxDialogController(pParent, "cui/ui/hyperlinkdialog.ui", "HyperlinkDialog")
     , pSet            ( nullptr )
     , pExampleSet     ( nullptr )
     , maCtrl          ( SID_HYPERLINK_GETLINK, *pBindings, this )
     , mpBindings      ( pBindings )
     , mbIsHTMLDoc     ( false )
+    , m_xIconCtrl(m_xBuilder->weld_notebook("icon_control"))
+    , m_xOKBtn(m_xBuilder->weld_button("ok"))
+    , m_xApplyBtn(m_xBuilder->weld_button("apply"))
+    , m_xCancelBtn(m_xBuilder->weld_button("cancel"))
+    , m_xHelpBtn(m_xBuilder->weld_button("help"))
+    , m_xResetBtn(m_xBuilder->weld_button("reset"))
 {
-    get(m_pOKBtn, "ok");
-    get(m_pApplyBtn, "apply");
-    get(m_pCancelBtn, "cancel");
-    get(m_pHelpBtn, "help");
-    get(m_pResetBtn, "reset");
-    get(m_pIconCtrl, "icon_control");
-    get(m_pTabContainer, "tab");
-
-    SetCtrlStyle();
-    m_pIconCtrl->SetClickHdl ( LINK ( this, SvxHpLinkDlg, ChosePageHdl_Impl ) );
-    m_pIconCtrl->Show();
-    m_pIconCtrl->SetChoiceWithCursor();
-    m_pIconCtrl->SetSelectionMode( SelectionMode::Single );
+    m_xIconCtrl->connect_enter_page( LINK ( this, SvxHpLinkDlg, ChosePageHdl_Impl ) );
+    m_xIconCtrl->show();
 
     // ItemSet
     if ( pSet )
@@ -112,38 +107,19 @@ SvxHpLinkDlg::SvxHpLinkDlg (vcl::Window* pParent, SfxBindings* pBindings)
     }
 
     // Buttons
-    m_pOKBtn->SetClickHdl   ( LINK( this, SvxHpLinkDlg, OkHdl ) );
-    m_pApplyBtn->SetClickHdl   ( LINK( this, SvxHpLinkDlg, ApplyHdl ) );
-    m_pResetBtn->SetClickHdl( LINK( this, SvxHpLinkDlg, ResetHdl ) );
-    m_pOKBtn->Show();
-    m_pApplyBtn->Show();
-    m_pCancelBtn->Show();
-    m_pHelpBtn->Show();
-    m_pResetBtn->Show();
+    m_xOKBtn->connect_clicked( LINK( this, SvxHpLinkDlg, OkHdl ) );
+    m_xApplyBtn->connect_clicked( LINK( this, SvxHpLinkDlg, ApplyHdl ) );
+    m_xResetBtn->connect_clicked( LINK( this, SvxHpLinkDlg, ResetHdl ) );
+    m_xOKBtn->show();
+    m_xApplyBtn->show();
+    m_xCancelBtn->show();
+    m_xHelpBtn->show();
+    m_xResetBtn->show();
 
     mbGrabFocus = true;
-    // insert pages
-    OUString aStrTitle;
-    SvxIconChoiceCtrlEntry *pEntry;
-
-    aStrTitle = CuiResId( RID_SVXSTR_HYPERDLG_HLINETTP );
-    pEntry = AddTabPage ( HyperLinkPageType::Internet, aStrTitle, Image(StockImage::Yes, RID_SVXBMP_HLINETTP), SvxHyperlinkInternetTp::Create );
-    pEntry->SetQuickHelpText( CuiResId( RID_SVXSTR_HYPERDLG_HLINETTP_HELP ) );
-    aStrTitle = CuiResId( RID_SVXSTR_HYPERDLG_HLMAILTP );
-    pEntry = AddTabPage ( HyperLinkPageType::Mail, aStrTitle, Image(StockImage::Yes, RID_SVXBMP_HLMAILTP), SvxHyperlinkMailTp::Create );
-    pEntry->SetQuickHelpText( CuiResId( RID_SVXSTR_HYPERDLG_HLMAILTP_HELP ) );
-    if (!comphelper::LibreOfficeKit::isActive())
-    {
-        aStrTitle = CuiResId( RID_SVXSTR_HYPERDLG_HLDOCTP );
-        pEntry = AddTabPage ( HyperLinkPageType::Document, aStrTitle, Image(StockImage::Yes, RID_SVXBMP_HLDOCTP), SvxHyperlinkDocTp::Create );
-        pEntry->SetQuickHelpText( CuiResId( RID_SVXSTR_HYPERDLG_HLDOCTP_HELP ) );
-        aStrTitle = CuiResId( RID_SVXSTR_HYPERDLG_HLDOCNTP );
-        pEntry = AddTabPage ( HyperLinkPageType::NewDocument, aStrTitle, Image(StockImage::Yes, RID_SVXBMP_HLDOCNTP), SvxHyperlinkNewDocTp::Create );
-        pEntry->SetQuickHelpText( CuiResId( RID_SVXSTR_HYPERDLG_HLDOCNTP_HELP ) );
-    }
 
     // set OK/Cancel - button
-    GetCancelButton().SetText ( CuiResId(RID_SVXSTR_HYPDLG_CLOSEBUT) );
+    GetCancelButton().set_label(CuiResId(RID_SVXSTR_HYPDLG_CLOSEBUT));
 
     // create itemset for tabpages
     mpItemSet = std::make_unique<SfxItemSet>( SfxGetpApp()->GetPool(), svl::Items<SID_HYPERLINK_GETLINK,
@@ -154,6 +130,16 @@ SvxHpLinkDlg::SvxHpLinkDlg (vcl::Window* pParent, SfxBindings* pBindings)
 
     SetInputSet (mpItemSet.get());
 
+    // insert pages
+    AddTabPage("internet", SvxHyperlinkInternetTp::Create);
+    AddTabPage("mail", SvxHyperlinkMailTp::Create);
+    if (!comphelper::LibreOfficeKit::isActive())
+    {
+        AddTabPage("document", SvxHyperlinkDocTp::Create);
+        AddTabPage("newdocument", SvxHyperlinkNewDocTp::Create);
+    }
+
+#if 0
     //loop through the pages and get their max bounds and lock that down
     ShowPage(HyperLinkPageType::NewDocument);
     VclBox *pBox = get_content_area();
@@ -172,25 +158,21 @@ SvxHpLinkDlg::SvxHpLinkDlg (vcl::Window* pParent, SfxBindings* pBindings)
     aMaxPrefSize.setHeight( std::max(aMaxPrefSize.Height(), aSize.Height()) );
     pBox->set_width_request(aMaxPrefSize.Width());
     pBox->set_height_request(aMaxPrefSize.Height());
+#endif
 
-    SetCurPageId(HyperLinkPageType::Internet);
+    SetCurPageId("internet");
 
     // Init Dialog
     Start();
 
     pBindings->Update( SID_READONLY_MODE );
 
-    GetOKButton().SetClickHdl    ( LINK ( this, SvxHpLinkDlg, ClickOkHdl_Impl ) );
-    GetApplyButton().SetClickHdl ( LINK ( this, SvxHpLinkDlg, ClickApplyHdl_Impl ) );
-    GetCancelButton().SetClickHdl( LINK ( this, SvxHpLinkDlg, ClickCloseHdl_Impl ) );
+    GetOKButton().connect_clicked    ( LINK ( this, SvxHpLinkDlg, ClickOkHdl_Impl ) );
+    GetApplyButton().connect_clicked ( LINK ( this, SvxHpLinkDlg, ClickApplyHdl_Impl ) );
+    GetCancelButton().connect_clicked( LINK ( this, SvxHpLinkDlg, ClickCloseHdl_Impl ) );
 }
 
-SvxHpLinkDlg::~SvxHpLinkDlg ()
-{
-    disposeOnce();
-}
-
-void SvxHpLinkDlg::dispose()
+SvxHpLinkDlg::~SvxHpLinkDlg()
 {
     // delete config item, so the base class (SfxModalDialog) can not load it on the next start
     SvtViewOptions aViewOpt( EViewType::TabDialog, OUString::number(SID_HYPERLINK_DIALOG) );
@@ -200,30 +182,10 @@ void SvxHpLinkDlg::dispose()
 
     maCtrl.dispose();
 
-    // save configuration at INI-Manager
-    // and remove pages
-    //SvtViewOptions aTabDlgOpt( EViewType::TabDialog, rId );
-    //aTabDlgOpt.SetWindowState(OStringToOUString(GetWindowState((WindowStateMask::X | WindowStateMask::Y | WindowStateMask::State | WindowStateMask::Minimized)), RTL_TEXTENCODING_ASCII_US));
-    //aTabDlgOpt.SetPageID( mnCurrentPageId );
-
-    for (std::unique_ptr<IconChoicePageData> & pData : maPageList)
-    {
-        if ( pData->pPage )
-            pData->pPage.disposeAndClear();
-    }
     maPageList.clear();
 
     pRanges.reset();
     pOutSet.reset();
-
-    m_pIconCtrl.clear();
-    m_pOKBtn.clear();
-    m_pApplyBtn.clear();
-    m_pCancelBtn.clear();
-    m_pHelpBtn.clear();
-    m_pResetBtn.clear();
-    m_pTabContainer.clear();
-    SfxModalDialog::dispose();
 }
 
 /*************************************************************************
@@ -231,13 +193,11 @@ void SvxHpLinkDlg::dispose()
 |* Close Dialog-Window
 |*
 |************************************************************************/
-
-bool SvxHpLinkDlg::Close()
+void SvxHpLinkDlg::Close()
 {
     GetDispatcher()->Execute( SID_HYPERLINK_DIALOG,
                               SfxCallMode::ASYNCHRON |
                               SfxCallMode::RECORD);
-    return true;
 }
 
 void SvxHpLinkDlg::Apply()
@@ -261,57 +221,8 @@ void SvxHpLinkDlg::Apply()
     }
 }
 
-/*************************************************************************
-|*
-|* When extra window is visible and its never moved by user, then move that
-|* window, too.
-|*
-|************************************************************************/
-
-void SvxHpLinkDlg::Move()
-{
-    SvxHyperlinkTabPageBase* pCurrentPage = static_cast<SvxHyperlinkTabPageBase*>(
-                                              GetTabPage ( GetCurPageId() ) );
-
-    if( pCurrentPage->IsMarkWndVisible () )
-    {
-        // Pos&Size of this dialog-window
-        Point aDlgPos ( GetPosPixel () );
-        Size aDlgSize ( GetSizePixel () );
-
-        // Size of Office-Main-Window
-        Size aWindowSize( SfxGetpApp()->GetTopWindow()->GetSizePixel() );
-
-        // Size of Extrawindow
-        Size aExtraWndSize( pCurrentPage->GetSizeExtraWnd() );
-
-        if( aDlgPos.X()+(1.02*aDlgSize.Width())+aExtraWndSize.Width() > aWindowSize.Width() )
-        {
-            if( aDlgPos.X() - ( 0.02*aDlgSize.Width() ) - aExtraWndSize.Width() < 0 )
-            {
-                // Pos Extrawindow anywhere
-                pCurrentPage->MoveToExtraWnd( Point( 1, long(1.1*aDlgPos.Y()) ) );
-            }
-            else
-            {
-                // Pos Extrawindow on the left side of Dialog
-                pCurrentPage->MoveToExtraWnd( aDlgPos -
-                                              Point( long(0.02*aDlgSize.Width()), 0 ) -
-                                              Point( aExtraWndSize.Width(), 0 ) );
-            }
-        }
-        else
-        {
-            // Pos Extrawindow on the right side of Dialog
-            pCurrentPage->MoveToExtraWnd ( aDlgPos + Point( long(1.02*aDlgSize.Width()), 0 ) );
-        }
-    }
-
-    Window::Move();
-}
-
 /// Click on OK button
-IMPL_LINK_NOARG(SvxHpLinkDlg, ClickOkHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SvxHpLinkDlg, ClickOkHdl_Impl, weld::Button&, void)
 {
     Apply();
     Close();
@@ -322,8 +233,7 @@ IMPL_LINK_NOARG(SvxHpLinkDlg, ClickOkHdl_Impl, Button*, void)
 |* Click on Apply-button
 |*
 |************************************************************************/
-
-IMPL_LINK_NOARG(SvxHpLinkDlg, ClickApplyHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SvxHpLinkDlg, ClickApplyHdl_Impl, weld::Button&, void)
 {
     Apply();
 }
@@ -333,9 +243,9 @@ IMPL_LINK_NOARG(SvxHpLinkDlg, ClickApplyHdl_Impl, Button*, void)
 |* Click on Close-button
 |*
 |************************************************************************/
-
-IMPL_LINK_NOARG(SvxHpLinkDlg, ClickCloseHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SvxHpLinkDlg, ClickCloseHdl_Impl, weld::Button&, void)
 {
+    //TODO
     Close();
 }
 
@@ -344,10 +254,9 @@ IMPL_LINK_NOARG(SvxHpLinkDlg, ClickCloseHdl_Impl, Button*, void)
 |* Set Page
 |*
 |************************************************************************/
-
 void SvxHpLinkDlg::SetPage ( SvxHyperlinkItem const * pItem )
 {
-    HyperLinkPageType nPageId = HyperLinkPageType::Internet;
+    OString sPageId("internet");
 
     OUString aStrURL(pItem->GetURL());
     INetURLObject aURL(aStrURL);
@@ -357,32 +266,32 @@ void SvxHpLinkDlg::SetPage ( SvxHyperlinkItem const * pItem )
     {
         case INetProtocol::Http :
         case INetProtocol::Ftp :
-            nPageId = HyperLinkPageType::Internet;
+            sPageId = "internet";
             break;
         case INetProtocol::File :
-            nPageId = HyperLinkPageType::Document;
+            sPageId = "document";
             break;
         case INetProtocol::Mailto :
-            nPageId = HyperLinkPageType::Mail;
+            sPageId = "mail";
             break;
         default :
             if (aStrURL.startsWith("#"))
-                nPageId = HyperLinkPageType::Document;
+                sPageId = "document";
             else
             {
                 // not valid
-                nPageId = GetCurPageId();
+                sPageId = GetCurPageId();
             }
             break;
     }
 
-    ShowPage (nPageId);
+    ShowPage (sPageId);
 
-    SvxHyperlinkTabPageBase* pCurrentPage = static_cast<SvxHyperlinkTabPageBase*>(GetTabPage( nPageId ));
+    SvxHyperlinkTabPageBase* pCurrentPage = static_cast<SvxHyperlinkTabPageBase*>(GetTabPage( sPageId ));
 
     mbIsHTMLDoc = (pItem->GetInsertMode() & HLINK_HTMLMODE) != 0;
 
-    IconChoicePage* pPage = GetTabPage (nPageId);
+    IconChoicePage* pPage = GetTabPage (sPageId);
     if(pPage)
     {
         SfxItemSet& aPageSet = const_cast<SfxItemSet&>(pPage->GetItemSet ());
@@ -405,10 +314,7 @@ void SvxHpLinkDlg::SetPage ( SvxHyperlinkItem const * pItem )
 
 void SvxHpLinkDlg::SetReadOnlyMode( bool bRdOnly )
 {
-    if ( bRdOnly )
-        GetOKButton().Disable();
-    else
-        GetOKButton().Enable();
+    GetOKButton().set_sensitive(!bRdOnly);
 }
 
 /*************************************************************************
@@ -417,7 +323,7 @@ void SvxHpLinkDlg::SetReadOnlyMode( bool bRdOnly )
 |*
 |************************************************************************/
 
-void SvxHpLinkDlg::PageCreated( HyperLinkPageType /*nId*/, IconChoicePage& rPage )
+void SvxHpLinkDlg::PageCreated(const OString& /*rId*/, IconChoicePage& rPage)
 {
     SvxHyperlinkTabPageBase& rHyperlinkPage = dynamic_cast< SvxHyperlinkTabPageBase& >( rPage );
     Reference< XFrame > xDocumentFrame;

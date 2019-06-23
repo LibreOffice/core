@@ -32,62 +32,45 @@ sal_Char const sFTPScheme[]    = INET_FTP_SCHEME;
 |* Constructor / Destructor
 |*
 |************************************************************************/
-
-SvxHyperlinkInternetTp::SvxHyperlinkInternetTp ( vcl::Window *pParent,
-                                                 SvxHpLinkDlg* pDlg,
-                                                 const SfxItemSet* pItemSet)
-:   SvxHyperlinkTabPageBase ( pParent, pDlg, "HyperlinkInternetPage", "cui/ui/hyperlinkinternetpage.ui",
-                              pItemSet ) ,
-    mbMarkWndOpen           ( false )
+SvxHyperlinkInternetTp::SvxHyperlinkInternetTp(weld::Container* pParent,
+                                               SvxHpLinkDlg* pDlg,
+                                               const SfxItemSet* pItemSet)
+    : SvxHyperlinkTabPageBase(pParent, pDlg, "cui/ui/hyperlinkinternetpage.ui", "HyperlinkInternetPage",
+                              pItemSet)
+    , m_bMarkWndOpen(false)
+    , m_xRbtLinktypInternet(xBuilder->weld_radio_button("linktyp_internet"))
+    , m_xRbtLinktypFTP(xBuilder->weld_radio_button("linktyp_ftp"))
+    , m_xCbbTarget(new SvxHyperURLBox(xBuilder->weld_combo_box("target")))
+    , m_xFtLogin(xBuilder->weld_label("login_label"))
+    , m_xEdLogin(xBuilder->weld_entry("login"))
+    , m_xFtPassword(xBuilder->weld_label("password_label"))
+    , m_xEdPassword(xBuilder->weld_entry("password"))
+    , m_xCbAnonymous(xBuilder->weld_check_button("anonymous"))
 {
-    get(m_pRbtLinktypInternet, "linktyp_internet");
-    get(m_pRbtLinktypFTP, "linktyp_ftp");
-    get(m_pCbbTarget, "target");
-    m_pCbbTarget->SetSmartProtocol(INetProtocol::Http);
-    get(m_pFtLogin, "login_label");
-    get(m_pEdLogin, "login");
-    get(m_pFtPassword, "password_label");
-    get(m_pEdPassword, "password");
-    get(m_pCbAnonymous, "anonymous");
+    m_xCbbTarget->SetSmartProtocol(INetProtocol::Http);
 
     InitStdControls();
 
-    m_pCbbTarget->Show();
+    m_xCbbTarget->show();
 
     SetExchangeSupport ();
 
-
     // set defaults
-    m_pRbtLinktypInternet->Check ();
-
+    m_xRbtLinktypInternet->set_active(true);
 
     // set handlers
-    Link<Button*, void> aLink( LINK ( this, SvxHyperlinkInternetTp, Click_SmartProtocol_Impl ) );
-    m_pRbtLinktypInternet->SetClickHdl( aLink );
-    m_pRbtLinktypFTP->SetClickHdl     ( aLink );
-    m_pCbAnonymous->SetClickHdl       ( LINK ( this, SvxHyperlinkInternetTp, ClickAnonymousHdl_Impl ) );
-    m_pEdLogin->SetModifyHdl          ( LINK ( this, SvxHyperlinkInternetTp, ModifiedLoginHdl_Impl ) );
-    m_pCbbTarget->SetLoseFocusHdl     ( LINK ( this, SvxHyperlinkInternetTp, LostFocusTargetHdl_Impl ) );
-    m_pCbbTarget->SetModifyHdl        ( LINK ( this, SvxHyperlinkInternetTp, ModifiedTargetHdl_Impl ) );
-    maTimer.SetInvokeHandler          ( LINK ( this, SvxHyperlinkInternetTp, TimeoutHdl_Impl ) );
+    Link<weld::Button&, void> aLink( LINK ( this, SvxHyperlinkInternetTp, Click_SmartProtocol_Impl ) );
+    m_xRbtLinktypInternet->connect_clicked( aLink );
+    m_xRbtLinktypFTP->connect_clicked( aLink );
+    m_xCbAnonymous->connect_clicked( LINK ( this, SvxHyperlinkInternetTp, ClickAnonymousHdl_Impl ) );
+    m_xEdLogin->connect_changed( LINK ( this, SvxHyperlinkInternetTp, ModifiedLoginHdl_Impl ) );
+    m_xCbbTarget->connect_focus_out( LINK ( this, SvxHyperlinkInternetTp, LostFocusTargetHdl_Impl ) );
+    m_xCbbTarget->connect_changed( LINK ( this, SvxHyperlinkInternetTp, ModifiedTargetHdl_Impl ) );
+    maTimer.SetInvokeHandler ( LINK ( this, SvxHyperlinkInternetTp, TimeoutHdl_Impl ) );
 }
 
 SvxHyperlinkInternetTp::~SvxHyperlinkInternetTp()
 {
-    disposeOnce();
-}
-
-void SvxHyperlinkInternetTp::dispose()
-{
-    m_pRbtLinktypInternet.clear();
-    m_pRbtLinktypFTP.clear();
-    m_pCbbTarget.clear();
-    m_pFtLogin.clear();
-    m_pEdLogin.clear();
-    m_pFtPassword.clear();
-    m_pEdPassword.clear();
-    m_pCbAnonymous.clear();
-    SvxHyperlinkTabPageBase::dispose();
 }
 
 /*************************************************************************
@@ -95,7 +78,6 @@ void SvxHyperlinkInternetTp::dispose()
 |* Fill the all dialog-controls except controls in groupbox "more..."
 |*
 |************************************************************************/
-
 void SvxHyperlinkInternetTp::FillDlgFields(const OUString& rStrURL)
 {
     INetURLObject aURL(rStrURL);
@@ -117,36 +99,36 @@ void SvxHyperlinkInternetTp::FillDlgFields(const OUString& rStrURL)
     // set URL-field
     // Show the scheme, #72740
     if ( aURL.GetProtocol() != INetProtocol::NotValid )
-        m_pCbbTarget->SetText( aURL.GetMainURL( INetURLObject::DecodeMechanism::Unambiguous ) );
+        m_xCbbTarget->set_entry_text( aURL.GetMainURL( INetURLObject::DecodeMechanism::Unambiguous ) );
     else
-        m_pCbbTarget->SetText(rStrURL);
+        m_xCbbTarget->set_entry_text(rStrURL);
 
     SetScheme(aStrScheme);
 }
 
 void SvxHyperlinkInternetTp::setAnonymousFTPUser()
 {
-    m_pEdLogin->SetText(sAnonymous);
-    SvAddressParser aAddress( SvtUserOptions().GetEmail() );
-    m_pEdPassword->SetText( aAddress.Count() ? aAddress.GetEmailAddress(0) : OUString() );
+    m_xEdLogin->set_text(sAnonymous);
+    SvAddressParser aAddress(SvtUserOptions().GetEmail());
+    m_xEdPassword->set_text(aAddress.Count() ? aAddress.GetEmailAddress(0) : OUString());
 
-    m_pFtLogin->Disable ();
-    m_pFtPassword->Disable ();
-    m_pEdLogin->Disable ();
-    m_pEdPassword->Disable ();
-    m_pCbAnonymous->Check();
+    m_xFtLogin->set_sensitive(false);
+    m_xFtPassword->set_sensitive(false);
+    m_xEdLogin->set_sensitive(false);
+    m_xEdPassword->set_sensitive(false);
+    m_xCbAnonymous->set_active(true);
 }
 
 void SvxHyperlinkInternetTp::setFTPUser(const OUString& rUser, const OUString& rPassword)
 {
-    m_pEdLogin->SetText ( rUser );
-    m_pEdPassword->SetText ( rPassword );
+    m_xEdLogin->set_text(rUser);
+    m_xEdPassword->set_text(rPassword);
 
-    m_pFtLogin->Enable ();
-    m_pFtPassword->Enable ();
-    m_pEdLogin->Enable ();
-    m_pEdPassword->Enable ();
-    m_pCbAnonymous->Check(false);
+    m_xFtLogin->set_sensitive(true);
+    m_xFtPassword->set_sensitive(true);
+    m_xEdLogin->set_sensitive(true);
+    m_xEdPassword->set_sensitive(true);
+    m_xCbAnonymous->set_active(false);
 }
 
 /*************************************************************************
@@ -166,7 +148,7 @@ void SvxHyperlinkInternetTp::GetCurentItemData ( OUString& rStrURL, OUString& aS
 OUString SvxHyperlinkInternetTp::CreateAbsoluteURL() const
 {
     // erase leading and trailing whitespaces
-    OUString aStrURL( m_pCbbTarget->GetText().trim() );
+    OUString aStrURL(m_xCbbTarget->get_active_text().trim());
 
     INetURLObject aURL(aStrURL);
 
@@ -177,8 +159,8 @@ OUString SvxHyperlinkInternetTp::CreateAbsoluteURL() const
     }
 
     // username and password for ftp-url
-    if( aURL.GetProtocol() == INetProtocol::Ftp && !m_pEdLogin->GetText().isEmpty() )
-        aURL.SetUserAndPass ( m_pEdLogin->GetText(), m_pEdPassword->GetText() );
+    if( aURL.GetProtocol() == INetProtocol::Ftp && !m_xEdLogin->get_text().isEmpty() )
+        aURL.SetUserAndPass ( m_xEdLogin->get_text(), m_xEdPassword->get_text() );
 
     if ( aURL.GetProtocol() != INetProtocol::NotValid )
         return aURL.GetMainURL( INetURLObject::DecodeMechanism::ToIUri );
@@ -192,9 +174,9 @@ OUString SvxHyperlinkInternetTp::CreateAbsoluteURL() const
 |*
 |************************************************************************/
 
-VclPtr<IconChoicePage> SvxHyperlinkInternetTp::Create( vcl::Window* pWindow, SvxHpLinkDlg* pDlg, const SfxItemSet* pItemSet )
+std::unique_ptr<IconChoicePage> SvxHyperlinkInternetTp::Create(weld::Container* pWindow, SvxHpLinkDlg* pDlg, const SfxItemSet* pItemSet)
 {
-    return VclPtr<SvxHyperlinkInternetTp>::Create( pWindow, pDlg, pItemSet );
+    return std::make_unique<SvxHyperlinkInternetTp>(pWindow, pDlg, pItemSet);
 }
 
 /*************************************************************************
@@ -202,10 +184,9 @@ VclPtr<IconChoicePage> SvxHyperlinkInternetTp::Create( vcl::Window* pWindow, Svx
 |* Set initial focus
 |*
 |************************************************************************/
-
 void SvxHyperlinkInternetTp::SetInitFocus()
 {
-    m_pCbbTarget->GrabFocus();
+    m_xCbbTarget->grab_focus();
 }
 
 /*************************************************************************
@@ -213,10 +194,9 @@ void SvxHyperlinkInternetTp::SetInitFocus()
 |* Contents of editfield "Target" modified
 |*
 |************************************************************************/
-
-IMPL_LINK_NOARG(SvxHyperlinkInternetTp, ModifiedTargetHdl_Impl, Edit&, void)
+IMPL_LINK_NOARG(SvxHyperlinkInternetTp, ModifiedTargetHdl_Impl, weld::ComboBox&, void)
 {
-    OUString aScheme = GetSchemeFromURL( m_pCbbTarget->GetText() );
+    OUString aScheme = GetSchemeFromURL( m_xCbbTarget->get_active_text() );
     if( !aScheme.isEmpty() )
         SetScheme( aScheme );
 
@@ -230,7 +210,6 @@ IMPL_LINK_NOARG(SvxHyperlinkInternetTp, ModifiedTargetHdl_Impl, Edit&, void)
 |* If target-field was modify, to browse the new doc after timeout
 |*
 |************************************************************************/
-
 IMPL_LINK_NOARG(SvxHyperlinkInternetTp, TimeoutHdl_Impl, Timer *, void)
 {
     RefreshMarkWindow();
@@ -241,14 +220,13 @@ IMPL_LINK_NOARG(SvxHyperlinkInternetTp, TimeoutHdl_Impl, Timer *, void)
 |* Contents of editfield "Login" modified
 |*
 |************************************************************************/
-
-IMPL_LINK_NOARG(SvxHyperlinkInternetTp, ModifiedLoginHdl_Impl, Edit&, void)
+IMPL_LINK_NOARG(SvxHyperlinkInternetTp, ModifiedLoginHdl_Impl, weld::Entry&, void)
 {
-    OUString aStrLogin ( m_pEdLogin->GetText() );
+    OUString aStrLogin ( m_xEdLogin->get_text() );
     if ( aStrLogin.equalsIgnoreAsciiCase( sAnonymous ) )
     {
-        m_pCbAnonymous->Check();
-        ClickAnonymousHdl_Impl(nullptr);
+        m_xCbAnonymous->set_active(true);
+        ClickAnonymousHdl_Impl(*m_xCbAnonymous);
     }
 }
 
@@ -259,30 +237,30 @@ void SvxHyperlinkInternetTp::SetScheme(const OUString& rScheme)
     bool bInternet = !bFTP;
 
     //update protocol button selection:
-    m_pRbtLinktypFTP->Check(bFTP);
-    m_pRbtLinktypInternet->Check(bInternet);
+    m_xRbtLinktypFTP->set_active(bFTP);
+    m_xRbtLinktypInternet->set_active(bInternet);
 
     //update target:
     RemoveImproperProtocol(rScheme);
-    m_pCbbTarget->SetSmartProtocol( GetSmartProtocolFromButtons() );
+    m_xCbbTarget->SetSmartProtocol( GetSmartProtocolFromButtons() );
 
     //show/hide  special fields for FTP:
-    m_pFtLogin->Show( bFTP );
-    m_pFtPassword->Show( bFTP );
-    m_pEdLogin->Show( bFTP );
-    m_pEdPassword->Show( bFTP );
-    m_pCbAnonymous->Show( bFTP );
+    m_xFtLogin->set_visible( bFTP );
+    m_xFtPassword->set_visible( bFTP );
+    m_xEdLogin->set_visible( bFTP );
+    m_xEdPassword->set_visible( bFTP );
+    m_xCbAnonymous->set_visible( bFTP );
 
     //update 'link target in document'-window and opening-button
     if (rScheme.startsWith(INET_HTTP_SCHEME) || rScheme.isEmpty())
     {
-        if ( mbMarkWndOpen )
+        if ( m_bMarkWndOpen )
             ShowMarkWnd ();
     }
     else
     {
         //disable for https and ftp
-        if ( mbMarkWndOpen )
+        if ( m_bMarkWndOpen )
             HideMarkWnd ();
     }
 }
@@ -295,28 +273,28 @@ void SvxHyperlinkInternetTp::SetScheme(const OUString& rScheme)
 
 void SvxHyperlinkInternetTp::RemoveImproperProtocol(const OUString& aProperScheme)
 {
-    OUString aStrURL ( m_pCbbTarget->GetText() );
+    OUString aStrURL ( m_xCbbTarget->get_active_text() );
     if ( !aStrURL.isEmpty() )
     {
         OUString aStrScheme(GetSchemeFromURL(aStrURL));
         if ( !aStrScheme.isEmpty() && aStrScheme != aProperScheme )
         {
             aStrURL = aStrURL.copy( aStrScheme.getLength() );
-            m_pCbbTarget->SetText ( aStrURL );
+            m_xCbbTarget->set_entry_text( aStrURL );
         }
     }
 }
 
 OUString SvxHyperlinkInternetTp::GetSchemeFromButtons() const
 {
-    if( m_pRbtLinktypFTP->IsChecked() )
+    if( m_xRbtLinktypFTP->get_active() )
         return OUString(INET_FTP_SCHEME);
     return OUString(INET_HTTP_SCHEME);
 }
 
 INetProtocol SvxHyperlinkInternetTp::GetSmartProtocolFromButtons() const
 {
-    if( m_pRbtLinktypFTP->IsChecked() )
+    if( m_xRbtLinktypFTP->get_active() )
     {
         return INetProtocol::Ftp;
     }
@@ -328,8 +306,7 @@ INetProtocol SvxHyperlinkInternetTp::GetSmartProtocolFromButtons() const
 |* Click on Radiobutton : Internet or FTP
 |*
 |************************************************************************/
-
-IMPL_LINK_NOARG(SvxHyperlinkInternetTp, Click_SmartProtocol_Impl, Button*, void)
+IMPL_LINK_NOARG(SvxHyperlinkInternetTp, Click_SmartProtocol_Impl, weld::Button&, void)
 {
     OUString aScheme = GetSchemeFromButtons();
     SetScheme(aScheme);
@@ -340,21 +317,20 @@ IMPL_LINK_NOARG(SvxHyperlinkInternetTp, Click_SmartProtocol_Impl, Button*, void)
 |* Click on Checkbox : Anonymous user
 |*
 |************************************************************************/
-
-IMPL_LINK_NOARG(SvxHyperlinkInternetTp, ClickAnonymousHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SvxHyperlinkInternetTp, ClickAnonymousHdl_Impl, weld::Button&, void)
 {
     // disable login-editfields if checked
-    if ( m_pCbAnonymous->IsChecked() )
+    if ( m_xCbAnonymous->get_active() )
     {
-        if ( m_pEdLogin->GetText().toAsciiLowerCase().startsWith( sAnonymous ) )
+        if ( m_xEdLogin->get_text().toAsciiLowerCase().startsWith( sAnonymous ) )
         {
             maStrOldUser.clear();
             maStrOldPassword.clear();
         }
         else
         {
-            maStrOldUser = m_pEdLogin->GetText();
-            maStrOldPassword = m_pEdPassword->GetText();
+            maStrOldUser = m_xEdLogin->get_text();
+            maStrOldPassword = m_xEdPassword->get_text();
         }
 
         setAnonymousFTPUser();
@@ -368,25 +344,22 @@ IMPL_LINK_NOARG(SvxHyperlinkInternetTp, ClickAnonymousHdl_Impl, Button*, void)
 |* Combobox Target lost the focus
 |*
 |************************************************************************/
-
-IMPL_LINK_NOARG(SvxHyperlinkInternetTp, LostFocusTargetHdl_Impl, Control&, void)
+IMPL_LINK_NOARG(SvxHyperlinkInternetTp, LostFocusTargetHdl_Impl, weld::Widget&, void)
 {
     RefreshMarkWindow();
 }
 
 void SvxHyperlinkInternetTp::RefreshMarkWindow()
 {
-    if ( m_pRbtLinktypInternet->IsChecked() && IsMarkWndVisible() )
+    if (m_xRbtLinktypInternet->get_active() && IsMarkWndVisible())
     {
-        EnterWait();
+        weld::WaitObject aWait(mpDialog->getDialog());
         OUString aStrURL( CreateAbsoluteURL() );
         if ( !aStrURL.isEmpty() )
             mxMarkWnd->RefreshTree ( aStrURL );
         else
             mxMarkWnd->SetError( LERR_DOCNOTOPEN );
-        LeaveWait();
     }
-
 }
 
 /*************************************************************************
@@ -394,10 +367,9 @@ void SvxHyperlinkInternetTp::RefreshMarkWindow()
 |* Get String from Bookmark-Wnd
 |*
 |************************************************************************/
-
 void SvxHyperlinkInternetTp::SetMarkStr ( const OUString& aStrMark )
 {
-    OUString aStrURL ( m_pCbbTarget->GetText() );
+    OUString aStrURL(m_xCbbTarget->get_active_text());
 
     const sal_Unicode sUHash = '#';
     sal_Int32 nPos = aStrURL.lastIndexOf( sUHash );
@@ -407,7 +379,7 @@ void SvxHyperlinkInternetTp::SetMarkStr ( const OUString& aStrMark )
 
     aStrURL += OUStringLiteral1(sUHash) + aStrMark;
 
-    m_pCbbTarget->SetText ( aStrURL );
+    m_xCbbTarget->set_entry_text(aStrURL);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

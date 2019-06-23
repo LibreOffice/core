@@ -42,26 +42,27 @@
 #include "iconcdlg.hxx"
 
 /// ComboBox-Control for URL's with History and Autocompletion
-class SvxHyperURLBox : public SvtURLBox, public DropTargetHelper
+class SvxHyperURLBox : public URLBox, public DropTargetHelper
 {
 protected:
     virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt ) override;
     virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt ) override;
 
 public:
-    SvxHyperURLBox( vcl::Window* pParent, INetProtocol eSmart );
-
+    SvxHyperURLBox(std::unique_ptr<weld::ComboBox> xWidget);
 };
 
 /// Tabpage : Basisclass
 class SvxHyperlinkTabPageBase : public IconChoicePage
 {
 private:
-    VclPtr<ComboBox>            mpCbbFrame;
-    VclPtr<ListBox>             mpLbForm;
-    VclPtr<Edit>                mpEdIndication;
-    VclPtr<Edit>                mpEdText;
-    VclPtr<PushButton>          mpBtScript;
+    std::unique_ptr<weld::ComboBox> mxCbbFrame;
+    std::unique_ptr<weld::ComboBox> mxLbForm;
+    std::unique_ptr<weld::Entry> mxEdIndication;
+    std::unique_ptr<weld::Entry> mxEdText;
+    std::unique_ptr<weld::Button> mxBtScript;
+    std::unique_ptr<weld::Label> mxFormLabel;
+    std::unique_ptr<weld::Label> mxFrameLabel;
 
     bool                        mbIsCloseDisabled;
 
@@ -69,7 +70,7 @@ private:
                                 mxDocumentFrame;
 
 protected:
-    VclPtr<vcl::Window> mpDialog;
+    SvxHpLinkDlg* mpDialog;
 
     bool                mbStdControlsInit;
 
@@ -90,7 +91,7 @@ protected:
                                           OUString& aStrIntName, OUString& aStrFrame,
                                           SvxLinkInsertMode& eMode );
 
-    DECL_LINK (ClickScriptHdl_Impl, Button*, void ); ///< Button : Script
+    DECL_LINK (ClickScriptHdl_Impl, weld::Button&, void ); ///< Button : Script
 
     static OUString GetSchemeFromURL( const OUString& rStrURL );
 
@@ -98,14 +99,13 @@ protected:
 
 public:
     SvxHyperlinkTabPageBase (
-        vcl::Window *pParent,
+        weld::Container* pParent,
         SvxHpLinkDlg* pDlg,
-        const OString& rID,
         const OUString& rUIXMLDescription,
+        const OString& rID,
         const SfxItemSet* pItemSet
     );
     virtual ~SvxHyperlinkTabPageBase () override;
-    virtual void dispose() override;
 
     void    SetDocumentFrame(
         const css::uno::Reference< css::frame::XFrame >& rxDocumentFrame )
@@ -126,8 +126,6 @@ public:
     Size GetSizeExtraWnd()       { return mxMarkWnd->getDialog()->get_size(); }
     void MoveToExtraWnd ( Point aNewPos );
 
-    using TabPage::ActivatePage;
-    using TabPage::DeactivatePage;
     virtual bool        QueryClose() override;
 
 protected:

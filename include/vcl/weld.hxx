@@ -351,6 +351,7 @@ public:
     virtual bool get_resizable() const = 0;
     virtual Size get_size() const = 0;
     virtual Point get_position() const = 0;
+    virtual tools::Rectangle get_monitor_workarea() const = 0;
     // center window on is parent
     //
     // bTrackGeometryRequests set to true tries to ensure the window will end
