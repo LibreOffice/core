@@ -39,27 +39,29 @@ class SfxItemSet;
 enum class HyperLinkPageType;
 
 // Create-Function
-typedef VclPtr<IconChoicePage> (*CreatePage)(vcl::Window *pParent, SvxHpLinkDlg* pDlg, const SfxItemSet* pAttrSet);
+typedef std::unique_ptr<IconChoicePage> (*CreatePage)(weld::Container* pParent, SvxHpLinkDlg* pDlg, const SfxItemSet* pAttrSet);
 
 /// Data-structure for pages in dialog
 struct IconChoicePageData
 {
-    HyperLinkPageType nId;
-    CreatePage fnCreatePage;    ///< pointer to the factory
-    VclPtr<IconChoicePage> pPage;      ///< the TabPage itself
+    OString sId;
+    std::unique_ptr<IconChoicePage> xPage;      ///< the TabPage itself
     bool bRefresh;          ///< Flag: page has to be newly initialized
 
     // constructor
-    IconChoicePageData( HyperLinkPageType Id, CreatePage fnPage )
-        : nId           ( Id ),
-          fnCreatePage  ( fnPage ),
-          pPage         ( nullptr ),
-          bRefresh      ( false )
+    IconChoicePageData(const OString& rId, std::unique_ptr<IconChoicePage> xInPage)
+        : sId(rId)
+        , xPage(std::move(xInPage))
+        , bRefresh(false)
     {}
 };
 
-class IconChoicePage : public TabPage
+class IconChoicePage
 {
+protected:
+    std::unique_ptr<weld::Builder> xBuilder;
+    std::unique_ptr<weld::Container> xContainer;
+
 private:
     const SfxItemSet*   pSet;
     bool                bHasExchangeSupport;
@@ -67,13 +69,13 @@ private:
     void                ImplInitSettings();
 
 protected:
-    using TabPage::ActivatePage;
-    using TabPage::DeactivatePage;
 
-    IconChoicePage( vcl::Window *pParent, const OString& rID, const OUString& rUIXMLDescription, const SfxItemSet* pItemSet );
+    IconChoicePage(weld::Container* pParent, const OUString& rUIXMLDescription, const OString& rID, const SfxItemSet* pItemSet);
 
 public:
-    virtual ~IconChoicePage() override;
+    virtual ~IconChoicePage();
+
+    OString GetHelpId() const { return xContainer->get_help_id(); }
 
     const SfxItemSet&   GetItemSet() const { return *pSet; }
 
@@ -86,9 +88,6 @@ public:
     virtual void        ActivatePage( const SfxItemSet& );
     virtual DeactivateRC DeactivatePage( SfxItemSet* pSet );
     virtual bool        QueryClose();
-
-    void                StateChanged( StateChangedType nType ) override;
-    void                DataChanged( const DataChangedEvent& rDCEvt ) override;
 };
 
 #endif // INCLUDED_CUI_SOURCE_INC_ICONCDLG_HXX

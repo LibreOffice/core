@@ -100,7 +100,8 @@ enum class WindowType : sal_uInt16
     RULER                , // 70 (374)
     CALCINPUTLINE        ,
     HEADERBAR            ,
-    LAST                 = HEADERBAR,
+    VERTICALTABCONTROL   ,
+    LAST                 = VERTICALTABCONTROL,
     // only used in vclxtoolkit.cxx
     TOOLKIT_FRAMEWINDOW        = 0x1000,
     TOOLKIT_SYSTEMCHILDWINDOW  = 0x1001,

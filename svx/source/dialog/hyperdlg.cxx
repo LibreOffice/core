@@ -41,16 +41,18 @@ SvxHlinkDlgWrapper::SvxHlinkDlgWrapper( vcl::Window* _pParent, sal_uInt16 nId,
 
 {
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    mpDlg = pFact->CreateSvxHpLinkDlg(_pParent, pBindings);
-    SetWindow( mpDlg->GetWindow() );
+    mpDlg = pFact->CreateSvxHpLinkDlg(this, pBindings, _pParent->GetFrameWeld());
+    SetController( mpDlg->GetController() );
     SetVisible_Impl(false);
 
     vcl::Window* pTopWindow = nullptr;
     if ( pInfo->aSize.Width() != 0 && pInfo->aSize.Height() != 0 &&
             (nullptr != (pTopWindow = SfxGetpApp()->GetTopWindow())))
     {
+        weld::Dialog* pDialog = GetController()->getDialog();
+
         Size aParentSize( pTopWindow->GetSizePixel() );
-        Size aDlgSize ( GetSizePixel () );
+        Size aDlgSize(pDialog->get_size());
 
         if( aParentSize.Width() < pInfo->aPos.X() )
             pInfo->aPos.setX( aParentSize.Width()-aDlgSize.Width() < long(0.1*aParentSize.Width()) ?
@@ -59,7 +61,7 @@ SvxHlinkDlgWrapper::SvxHlinkDlgWrapper( vcl::Window* _pParent, sal_uInt16 nId,
             pInfo->aPos.setY( aParentSize.Height()-aDlgSize.Height() < long(0.1*aParentSize.Height()) ?
                               long(0.1*aParentSize.Height()) : aParentSize.Height()-aDlgSize.Height() );
 
-        GetWindow()->SetPosPixel( pInfo->aPos );
+        pDialog->window_move(pInfo->aPos.X(), pInfo->aPos.Y());
     }
 
     SetHideNotDelete( true );

@@ -36,20 +36,18 @@
 |
 \**********************************************************************/
 
-IconChoicePage::IconChoicePage( vcl::Window *pParent, const OString& rID,
-                                const OUString& rUIXMLDescription,
-                                const SfxItemSet* pItemSet )
-:   TabPage                   ( pParent, rID, rUIXMLDescription ),
-    pSet                      ( pItemSet ),
-    bHasExchangeSupport       ( false )
+IconChoicePage::IconChoicePage(weld::Container* pParent,
+                               const OUString& rUIXMLDescription, const OString& rID,
+                               const SfxItemSet* pItemSet)
+    : xBuilder(Application::CreateBuilder(pParent, rUIXMLDescription))
+    , xContainer(xBuilder->weld_container(rID))
+    , pSet(pItemSet)
+    , bHasExchangeSupport(false)
 {
-    SetStyle ( GetStyle()  | WB_DIALOGCONTROL | WB_HIDE );
 }
-
 
 IconChoicePage::~IconChoicePage()
 {
-    disposeOnce();
 }
 
 /**********************************************************************
@@ -75,95 +73,15 @@ bool IconChoicePage::QueryClose()
 
 /**********************************************************************
 |
-| window-methods
-|
-\**********************************************************************/
-
-void IconChoicePage::ImplInitSettings()
-{
-    vcl::Window* pParent = GetParent();
-    if ( pParent->IsChildTransparentModeEnabled() && !IsControlBackground() )
-    {
-        EnableChildTransparentMode();
-        SetParentClipMode( ParentClipMode::NoClip );
-        SetPaintTransparent( true );
-        SetBackground();
-    }
-    else
-    {
-        EnableChildTransparentMode( false );
-        SetParentClipMode();
-        SetPaintTransparent( false );
-
-        if ( IsControlBackground() )
-            SetBackground( GetControlBackground() );
-        else
-            SetBackground( pParent->GetBackground() );
-    }
-}
-
-
-void IconChoicePage::StateChanged( StateChangedType nType )
-{
-    Window::StateChanged( nType );
-
-    if ( nType == StateChangedType::ControlBackground )
-    {
-        ImplInitSettings();
-        Invalidate();
-    }
-}
-
-
-void IconChoicePage::DataChanged( const DataChangedEvent& rDCEvt )
-{
-    Window::DataChanged( rDCEvt );
-
-    if ( (rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
-         (rDCEvt.GetFlags() & AllSettingsFlags::STYLE) )
-    {
-        ImplInitSettings();
-        Invalidate();
-    }
-}
-
-
-/**********************************************************************
-|
-| Ctor / Dtor
-|
-\**********************************************************************/
-
-VCL_BUILDER_FACTORY_ARGS(SvtIconChoiceCtrl,
-                         WB_3DLOOK | WB_ICON | WB_BORDER |
-                         WB_NOCOLUMNHEADER | WB_HIGHLIGHTFRAME |
-                         WB_NODRAGSELECTION | WB_TABSTOP);
-
-/**********************************************************************
-|
 | add new page
 |
 \**********************************************************************/
-
-SvxIconChoiceCtrlEntry* SvxHpLinkDlg::AddTabPage(
-    HyperLinkPageType nId,
-    const OUString&   rIconText,
-    const Image&    rChoiceIcon,
-    CreatePage      pCreateFunc /* != 0 */
-)
+void SvxHpLinkDlg::AddTabPage(const OString& rId, CreatePage pCreateFunc /* != 0 */)
 {
-    maPageList.emplace_back( new IconChoicePageData ( nId, pCreateFunc ) );
-
-    SvxIconChoiceCtrlEntry* pEntry = m_pIconCtrl->InsertEntry( rIconText, rChoiceIcon );
-    pEntry->SetUserData ( reinterpret_cast<void*>(nId) );
-    return pEntry;
-}
-
-void SvxHpLinkDlg::SetCtrlStyle()
-{
-    WinBits const aWinBits = WB_3DLOOK | WB_ICON | WB_BORDER | WB_NOCOLUMNHEADER | WB_HIGHLIGHTFRAME | WB_NODRAGSELECTION | WB_TABSTOP | WB_CLIPCHILDREN | WB_ALIGN_LEFT | WB_NOHSCROLL;
-    m_pIconCtrl->SetStyle(aWinBits);
-    m_pIconCtrl->ArrangeIcons();
+    weld::Container* pPage = m_xIconCtrl->get_page(rId);
+    maPageList.emplace_back(new IconChoicePageData(rId, pCreateFunc(pPage, this, pSet)));
+    maPageList.back()->xPage->Reset(*pSet);
+    PageCreated(rId, *maPageList.back()->xPage);
 }
 
 /**********************************************************************
@@ -171,40 +89,20 @@ void SvxHpLinkDlg::SetCtrlStyle()
 | Show / Hide page or button
 |
 \**********************************************************************/
-
-void SvxHpLinkDlg::ShowPageImpl ( IconChoicePageData const * pData )
+void SvxHpLinkDlg::ShowPage(const OString& rId)
 {
-    if ( pData->pPage )
-        pData->pPage->Show();
-}
-
-
-void SvxHpLinkDlg::HidePageImpl ( IconChoicePageData const * pData )
-{
-    if ( pData->pPage )
-        pData->pPage->Hide();
-}
-
-void SvxHpLinkDlg::ShowPage(HyperLinkPageType nId)
-{
-    HyperLinkPageType nOldPageId = GetCurPageId();
-    bool bInvalidate = nOldPageId != nId;
+    OString sOldPageId = GetCurPageId();
+    bool bInvalidate = sOldPageId != rId;
     if (bInvalidate)
     {
-        IconChoicePageData* pOldData = GetPageData(nOldPageId);
-        if (pOldData && pOldData->pPage)
+        IconChoicePageData* pOldData = GetPageData(sOldPageId);
+        if (pOldData && pOldData->xPage)
         {
             DeActivatePageImpl();
-            HidePageImpl(pOldData);
         }
-
-        Invalidate();
     }
-    SetCurPageId(nId);
+    SetCurPageId(rId);
     ActivatePageImpl();
-    IconChoicePageData* pNewData = GetPageData(nId);
-    if (pNewData && pNewData->pPage)
-        ShowPageImpl(pNewData);
 }
 
 /**********************************************************************
@@ -212,17 +110,11 @@ void SvxHpLinkDlg::ShowPage(HyperLinkPageType nId)
 | select a page
 |
 \**********************************************************************/
-IMPL_LINK_NOARG(SvxHpLinkDlg, ChosePageHdl_Impl, SvtIconChoiceCtrl*, void)
+IMPL_LINK(SvxHpLinkDlg, ChosePageHdl_Impl, const OString&, rId, void)
 {
-    SvxIconChoiceCtrlEntry *pEntry = m_pIconCtrl->GetSelectedEntry();
-    if ( !pEntry )
-        pEntry = m_pIconCtrl->GetCursor( );
-
-    HyperLinkPageType nId = static_cast<HyperLinkPageType>(reinterpret_cast<sal_uIntPtr>(pEntry->GetUserData()));
-
-    if( nId != mnCurrentPageId )
+    if (rId != msCurrentPageId)
     {
-        ShowPage(nId);
+        ShowPage(rId);
     }
 }
 
@@ -231,40 +123,14 @@ IMPL_LINK_NOARG(SvxHpLinkDlg, ChosePageHdl_Impl, SvtIconChoiceCtrl*, void)
 | Button-handler
 |
 \**********************************************************************/
-
-IMPL_LINK_NOARG(SvxHpLinkDlg, OkHdl, Button*, void)
-{
-    if ( OK_Impl() )
-    {
-        Ok();
-        Close();
-    }
-}
-
-
-IMPL_LINK_NOARG(SvxHpLinkDlg, ApplyHdl, Button*, void)
-{
-    if ( OK_Impl() )
-    {
-        Ok();
-        Close();
-    }
-}
-
-IMPL_LINK_NOARG(SvxHpLinkDlg, ResetHdl, Button*, void)
+IMPL_LINK_NOARG(SvxHpLinkDlg, ResetHdl, weld::Button&, void)
 {
     ResetPageImpl ();
 
-    IconChoicePageData* pData = GetPageData ( mnCurrentPageId );
+    IconChoicePageData* pData = GetPageData ( msCurrentPageId );
     DBG_ASSERT( pData, "ID not known" );
 
-    pData->pPage->Reset( *pSet );
-}
-
-
-IMPL_LINK_NOARG(SvxHpLinkDlg, CancelHdl, Button*, void)
-{
-    Close();
+    pData->xPage->Reset( *pSet );
 }
 
 /**********************************************************************
@@ -272,45 +138,36 @@ IMPL_LINK_NOARG(SvxHpLinkDlg, CancelHdl, Button*, void)
 | call page
 |
 \**********************************************************************/
-
-void SvxHpLinkDlg::ActivatePageImpl ()
+void SvxHpLinkDlg::ActivatePageImpl()
 {
     DBG_ASSERT( !maPageList.empty(), "no Pages registered" );
-    IconChoicePageData* pData = GetPageData ( mnCurrentPageId );
+    IconChoicePageData* pData = GetPageData ( msCurrentPageId );
     DBG_ASSERT( pData, "ID not known" );
     if ( pData )
     {
-        if ( !pData->pPage )
+        if ( pData->bRefresh )
         {
-            pData->pPage = (pData->fnCreatePage)( m_pTabContainer, this, pSet );
-            pData->pPage->Reset( *pSet );
-            PageCreated( mnCurrentPageId, *pData->pPage );
+            pData->xPage->Reset( *pSet );
+            pData->bRefresh = false;
         }
-        else if ( pData->bRefresh )
-        {
-            pData->pPage->Reset( *pSet );
-        }
-
-        pData->bRefresh = false;
 
         if ( pExampleSet )
-            pData->pPage->ActivatePage( *pExampleSet );
-        SetHelpId( pData->pPage->GetHelpId() );
+            pData->xPage->ActivatePage( *pExampleSet );
+        m_xDialog->set_help_id(pData->xPage->GetHelpId());
     }
 
-    m_pResetBtn->Show();
+    m_xResetBtn->show();
 }
-
 
 void SvxHpLinkDlg::DeActivatePageImpl ()
 {
-    IconChoicePageData *pData = GetPageData ( mnCurrentPageId );
+    IconChoicePageData *pData = GetPageData ( msCurrentPageId );
 
     DeactivateRC nRet = DeactivateRC::LeavePage;
 
     if ( pData )
     {
-        IconChoicePage * pPage = pData->pPage;
+        IconChoicePage * pPage = pData->xPage.get();
 
         if ( !pExampleSet && pPage->HasExchangeSupport() && pSet )
             pExampleSet = new SfxItemSet( *pSet->GetPool(), pSet->GetRanges() );
@@ -352,7 +209,7 @@ void SvxHpLinkDlg::DeActivatePageImpl ()
             // flag all pages to be newly initialized
             for (auto & pObj : maPageList)
             {
-                if ( pObj->pPage.get() != pPage )
+                if ( pObj->xPage.get() != pPage )
                     pObj->bRefresh = true;
                 else
                     pObj->bRefresh = false;
@@ -364,11 +221,11 @@ void SvxHpLinkDlg::DeActivatePageImpl ()
 
 void SvxHpLinkDlg::ResetPageImpl ()
 {
-    IconChoicePageData *pData = GetPageData ( mnCurrentPageId );
+    IconChoicePageData *pData = GetPageData ( msCurrentPageId );
 
     DBG_ASSERT( pData, "ID not known" );
 
-    pData->pPage->Reset( *pSet );
+    pData->xPage->Reset( *pSet );
 }
 
 /**********************************************************************
@@ -408,38 +265,17 @@ void SvxHpLinkDlg::SetInputSet( const SfxItemSet* pInSet )
     }
 }
 
-
-/**********************************************************************
-|
-| start dialog
-|
-\**********************************************************************/
-
-short SvxHpLinkDlg::Execute()
-{
-    if ( maPageList.empty() )
-        return RET_CANCEL;
-
-    Start_Impl();
-
-    return Dialog::Execute();
-}
-
-
 void SvxHpLinkDlg::Start()
 {
-    m_pCancelBtn->SetClickHdl( LINK( this, SvxHpLinkDlg, CancelHdl ) );
-
     Start_Impl();
 }
-
 
 bool SvxHpLinkDlg::QueryClose()
 {
     bool bRet = true;
     for (auto & pData : maPageList)
     {
-        if ( pData->pPage && !pData->pPage->QueryClose() )
+        if ( pData->xPage && !pData->xPage->QueryClose() )
         {
             bRet = false;
             break;
@@ -450,7 +286,7 @@ bool SvxHpLinkDlg::QueryClose()
 
 void SvxHpLinkDlg::Start_Impl()
 {
-    FocusOnIcon( mnCurrentPageId );
+    SwitchPage(msCurrentPageId);
     ActivatePageImpl();
 }
 
@@ -460,12 +296,12 @@ void SvxHpLinkDlg::Start_Impl()
 |
 \**********************************************************************/
 
-IconChoicePageData* SvxHpLinkDlg::GetPageData ( HyperLinkPageType nId )
+IconChoicePageData* SvxHpLinkDlg::GetPageData ( const OString& rId )
 {
     IconChoicePageData *pRet = nullptr;
     for (auto & pData : maPageList)
     {
-        if ( pData->nId == nId )
+        if ( pData->sId == rId )
         {
             pRet = pData.get();
             break;
@@ -482,7 +318,7 @@ IconChoicePageData* SvxHpLinkDlg::GetPageData ( HyperLinkPageType nId )
 
 bool SvxHpLinkDlg::OK_Impl()
 {
-    IconChoicePage* pPage = GetPageData ( mnCurrentPageId )->pPage;
+    IconChoicePage* pPage = GetPageData ( msCurrentPageId )->xPage.get();
 
     bool bEnd = !pPage;
     if ( pPage )
@@ -523,9 +359,9 @@ void SvxHpLinkDlg::Ok()
 
     for ( size_t i = 0, nCount = maPageList.size(); i < nCount; ++i )
     {
-        IconChoicePageData* pData = GetPageData ( maPageList[i]->nId );
+        IconChoicePageData* pData = GetPageData ( maPageList[i]->sId );
 
-        IconChoicePage* pPage = pData->pPage;
+        IconChoicePage* pPage = pData->xPage.get();
 
         if ( pPage )
         {
@@ -544,21 +380,9 @@ void SvxHpLinkDlg::Ok()
     }
 }
 
-void SvxHpLinkDlg::FocusOnIcon( HyperLinkPageType nId )
+void SvxHpLinkDlg::SwitchPage( const OString& rId )
 {
-    // set focus to icon for the current visible page
-    for ( sal_Int32 i=0; i<m_pIconCtrl->GetEntryCount(); i++)
-    {
-        SvxIconChoiceCtrlEntry* pEntry = m_pIconCtrl->GetEntry ( i );
-        HyperLinkPageType nUserData = static_cast<HyperLinkPageType>(reinterpret_cast<sal_uIntPtr>(pEntry->GetUserData()));
-
-        if ( nUserData == nId )
-        {
-            m_pIconCtrl->SetCursor( pEntry );
-            break;
-        }
-    }
+    m_xIconCtrl->set_current_page(rId);
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
