@@ -52,7 +52,7 @@ class SvxHpLinkDlg;
 class SvxHlinkCtrl : public SfxControllerItem
 {
 private:
-    VclPtr<SvxHpLinkDlg> pParent;
+    SvxHpLinkDlg* pParent;
 
     SfxStatusForwarder aRdOnlyForwarder;
 
@@ -71,59 +71,47 @@ public:
 |*
 \************************************************************************/
 
-class SvxHpLinkDlg : public SfxModalDialog
+class SvxHpLinkDlg : public SfxModelessDialogController
 {
 private:
     friend class IconChoicePage;
 
     std::vector< std::unique_ptr<IconChoicePageData> > maPageList;
 
-    VclPtr<SvtIconChoiceCtrl>       m_pIconCtrl;
+    OString msCurrentPageId;
 
-    HyperLinkPageType               mnCurrentPageId;
-
-    // Buttons
-    VclPtr<OKButton>                m_pOKBtn;
-    VclPtr<PushButton>              m_pApplyBtn;
-    VclPtr<CancelButton>            m_pCancelBtn;
-    VclPtr<HelpButton>              m_pHelpBtn;
-    VclPtr<PushButton>              m_pResetBtn;
-
-    VclPtr<VclVBox>                 m_pTabContainer;
     const SfxItemSet*       pSet;
     std::unique_ptr<SfxItemSet>     pOutSet;
     SfxItemSet*             pExampleSet;
     std::unique_ptr<sal_uInt16[]>   pRanges;
 
-    DECL_LINK( ChosePageHdl_Impl, SvtIconChoiceCtrl*, void );
-    DECL_LINK( OkHdl, Button*, void );
-    DECL_LINK( ApplyHdl, Button*, void) ;
-    DECL_LINK( ResetHdl, Button*, void) ;
-    DECL_LINK( CancelHdl, Button*, void );
-
-    IconChoicePageData*     GetPageData ( HyperLinkPageType nId );
-    void                    Start_Impl();
-    bool                    OK_Impl();
-
-    void                    FocusOnIcon ( HyperLinkPageType nId );
-
-
     SvxHlinkCtrl        maCtrl;         ///< Controller
-    SfxBindings*        mpBindings;
     std::unique_ptr<SfxItemSet> mpItemSet;
 
     bool            mbGrabFocus : 1;
     bool            mbIsHTMLDoc : 1;
 
-    DECL_LINK (ClickOkHdl_Impl, Button *, void );
-    DECL_LINK (ClickApplyHdl_Impl, Button *, void );
-    DECL_LINK (ClickCloseHdl_Impl, Button *, void );
+    std::unique_ptr<weld::Notebook> m_xIconCtrl;
+    std::unique_ptr<weld::Button> m_xOKBtn;
+    std::unique_ptr<weld::Button> m_xApplyBtn;
+    std::unique_ptr<weld::Button> m_xCancelBtn;
+    std::unique_ptr<weld::Button> m_xHelpBtn;
+    std::unique_ptr<weld::Button> m_xResetBtn;
 
-    static void             ShowPageImpl ( IconChoicePageData const * pData );
-    static void             HidePageImpl ( IconChoicePageData const * pData );
+    DECL_LINK( ChosePageHdl_Impl, const OString&, void );
 
-    IconChoicePage*         GetTabPage( HyperLinkPageType nPageId )
-                                { return ( GetPageData (nPageId)->pPage ? GetPageData (nPageId)->pPage.get() : nullptr); }
+    IconChoicePageData*     GetPageData ( const OString& rId );
+    void                    Start_Impl();
+    bool                    OK_Impl();
+
+    void                    SwitchPage( const OString& rId );
+
+    DECL_LINK( ResetHdl, weld::Button&, void) ;
+    DECL_LINK (ClickOkHdl_Impl, weld::Button&, void );
+    DECL_LINK (ClickApplyHdl_Impl, weld::Button&, void );
+
+    IconChoicePage*         GetTabPage( const OString& rPageId )
+                                { return GetPageData(rPageId)->xPage.get(); }
 
     void                    ActivatePageImpl ();
     void                    DeActivatePageImpl ();
@@ -131,45 +119,38 @@ private:
 
     void                    Ok();
 
-    virtual bool            Close() override;
-    virtual void            Move() override;
+    virtual void Close() override;
     void Apply();
 
 public:
-    SvxHpLinkDlg (vcl::Window* pParent, SfxBindings* pBindings );
+    SvxHpLinkDlg(SfxBindings* pBindings, SfxChildWindow* pChild, weld::Window* pParent);
     virtual ~SvxHpLinkDlg () override;
-    virtual void dispose() override;
 
     // interface
-    SvxIconChoiceCtrlEntry* AddTabPage(
-        HyperLinkPageType nId, const OUString& rIconText, const Image& rChoiceIcon,
-        CreatePage pCreateFunc /* != NULL */ );
+    void AddTabPage(const OString &rId, CreatePage pCreateFunc /* != NULL */);
 
-    void                SetCurPageId( HyperLinkPageType nId ) { mnCurrentPageId = nId; FocusOnIcon( nId ); }
-    HyperLinkPageType   GetCurPageId() const       { return mnCurrentPageId; }
-    void                ShowPage( HyperLinkPageType nId );
+    void                SetCurPageId( const OString& rId ) { msCurrentPageId = rId; SwitchPage(rId ); }
+    OString             GetCurPageId() const       { return msCurrentPageId; }
+    void                ShowPage( const OString& rId );
 
     /// gives via map converted local slots if applicable
     const sal_uInt16*   GetInputRanges( const SfxItemPool& );
     void                SetInputSet( const SfxItemSet* pInSet );
 
-    OKButton&           GetOKButton() { return *m_pOKBtn; }
-    PushButton&         GetApplyButton() { return *m_pApplyBtn; }
-    CancelButton&       GetCancelButton() { return *m_pCancelBtn; }
+    weld::Button&       GetOKButton() { return *m_xOKBtn; }
+    weld::Button&       GetApplyButton() { return *m_xApplyBtn; }
+    weld::Button&       GetCancelButton() { return *m_xCancelBtn; }
 
-    short               Execute() override;
     void                Start();
     bool                QueryClose();
 
-    void                SetCtrlStyle();
-
-    void                PageCreated( HyperLinkPageType nId, IconChoicePage& rPage );
+    void                PageCreated(const OString& rId, IconChoicePage& rPage);
 
     void                SetPage( SvxHyperlinkItem const * pItem );
     void                SetReadOnlyMode( bool bReadOnly );
-    bool             IsHTMLDoc() const { return mbIsHTMLDoc; }
+    bool                IsHTMLDoc() const { return mbIsHTMLDoc; }
 
-    SfxDispatcher*   GetDispatcher() const { return mpBindings->GetDispatcher(); }
+    SfxDispatcher*   GetDispatcher() const { return GetBindings().GetDispatcher(); }
 };
 
 

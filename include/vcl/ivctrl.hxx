@@ -23,6 +23,7 @@
 #include <memory>
 #include <vcl/dllapi.h>
 #include <vcl/ctrl.hxx>
+#include <vcl/layout.hxx>
 #include <tools/link.hxx>
 #include <vcl/image.hxx>
 #include <o3tl/deleter.hxx>
@@ -232,6 +233,8 @@ public:
     SvxIconChoiceCtrlEntry* InsertEntry( const OUString& rText,
                                          const Image& rImage);
 
+    void RemoveEntry(sal_Int32 nEntryListPos);
+
     /** creates automatic mnemonics for all icon texts in the control
 
     @param _rUsedMnemonics
@@ -274,6 +277,52 @@ public:
 
     /** Creates and returns the accessible object of the Box. */
     virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessible() override;
+};
+
+struct VerticalTabPageData;
+
+class VerticalTabControl : public VclHBox
+{
+    VclPtr<SvtIconChoiceCtrl> m_xChooser;
+    VclPtr<VclVBox> m_xBox;
+
+    std::vector<std::unique_ptr<VerticalTabPageData>> maPageList;
+    OString m_sCurrentPageId;
+
+    Link<VerticalTabControl*,void> m_aActivateHdl;
+    Link<VerticalTabControl*,bool> m_aDeactivateHdl;
+
+    DECL_LINK(ChosePageHdl_Impl, SvtIconChoiceCtrl*, void);
+
+    void ActivatePage();
+    bool DeactivatePage();
+
+    VerticalTabPageData* GetPageData(const OString& rId) const;
+    VerticalTabPageData* GetPageData(const SvxIconChoiceCtrlEntry* pEntry) const;
+
+public:
+    VerticalTabControl(vcl::Window* pParent);
+    virtual ~VerticalTabControl() override;
+    virtual void dispose() override;
+
+    sal_uInt16 GetPageCount() const { return m_xChooser->GetEntryCount(); }
+
+    OString GetCurPageId() const { return m_sCurrentPageId; }
+    void SetCurPageId(const OString& rId);
+
+    sal_uInt16 GetPagePos(const OString& rPageId) const;
+    OString GetPageId(sal_uInt16 nIndex) const;
+    VclPtr<vcl::Window> GetPage(const OString& rPageId);
+
+    void RemovePage(const OString& rPageId);
+    void InsertPage(const OString& rPageId, const OUString& rLabel, const Image& rImage, const OUString& rTooltip, VclPtr<vcl::Window> xPage);
+
+    void SetActivatePageHdl( const Link<VerticalTabControl*,void>& rLink ) { m_aActivateHdl = rLink; }
+    void SetDeactivatePageHdl( const Link<VerticalTabControl*, bool>& rLink ) { m_aDeactivateHdl = rLink; }
+
+    OUString GetPageText(const OString& rPageId) const;
+
+    vcl::Window* GetPageParent() { return m_xBox.get(); }
 };
 
 #endif // INCLUDED_VCL_IVCTRL_HXX

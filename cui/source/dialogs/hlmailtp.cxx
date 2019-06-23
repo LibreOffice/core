@@ -36,48 +36,32 @@ using namespace ::com::sun::star;
 |* Constructor / Destructor
 |*
 |************************************************************************/
-
-SvxHyperlinkMailTp::SvxHyperlinkMailTp ( vcl::Window *pParent, SvxHpLinkDlg* pDlg, const SfxItemSet* pItemSet)
-:   SvxHyperlinkTabPageBase ( pParent, pDlg, "HyperlinkMailPage", "cui/ui/hyperlinkmailpage.ui",
-                              pItemSet )
+SvxHyperlinkMailTp::SvxHyperlinkMailTp(weld::Container* pParent, SvxHpLinkDlg* pDlg, const SfxItemSet* pItemSet)
+    : SvxHyperlinkTabPageBase(pParent, pDlg, "cui/ui/hyperlinkmailpage.ui", "HyperlinkMailPage", pItemSet)
+    , m_xCbbReceiver(new SvxHyperURLBox(xBuilder->weld_combo_box("receiver")))
+    , m_xBtAdrBook(xBuilder->weld_button("adressbook"))
+    , m_xFtSubject(xBuilder->weld_label("subject_label"))
+    , m_xEdSubject(xBuilder->weld_entry("subject"))
 {
-    get(m_pCbbReceiver, "receiver");
-    m_pCbbReceiver->SetSmartProtocol(INetProtocol::Mailto);
-    get(m_pBtAdrBook, "adressbook");
-    m_pBtAdrBook->SetModeImage(Image(StockImage::Yes, RID_SVXBMP_ADRESSBOOK));
-    get(m_pFtSubject, "subject_label");
-    get(m_pEdSubject, "subject");
-
-    // Disable display of bitmap names.
-    m_pBtAdrBook->EnableTextDisplay (false);
+    m_xCbbReceiver->SetSmartProtocol(INetProtocol::Mailto);
 
     InitStdControls();
 
-    m_pCbbReceiver->Show();
+    m_xCbbReceiver->show();
 
     SetExchangeSupport ();
 
     // set handlers
-    m_pBtAdrBook->SetClickHdl      ( LINK ( this, SvxHyperlinkMailTp, ClickAdrBookHdl_Impl ) );
-    m_pCbbReceiver->SetModifyHdl   ( LINK ( this, SvxHyperlinkMailTp, ModifiedReceiverHdl_Impl) );
+    m_xBtAdrBook->connect_clicked( LINK ( this, SvxHyperlinkMailTp, ClickAdrBookHdl_Impl ) );
+    m_xCbbReceiver->connect_changed( LINK ( this, SvxHyperlinkMailTp, ModifiedReceiverHdl_Impl) );
 
     if ( !SvtModuleOptions().IsModuleInstalled( SvtModuleOptions::EModule::DATABASE ) ||
          comphelper::LibreOfficeKit::isActive() )
-        m_pBtAdrBook->Hide();
+        m_xBtAdrBook->hide();
 }
 
 SvxHyperlinkMailTp::~SvxHyperlinkMailTp()
 {
-    disposeOnce();
-}
-
-void SvxHyperlinkMailTp::dispose()
-{
-    m_pCbbReceiver.clear();
-    m_pBtAdrBook.clear();
-    m_pFtSubject.clear();
-    m_pEdSubject.clear();
-    SvxHyperlinkTabPageBase::dispose();
 }
 
 /*************************************************************************
@@ -111,14 +95,14 @@ void SvxHyperlinkMailTp::FillDlgFields(const OUString& rStrURL)
         if ( nPos != -1 )
             aStrURLc = aStrURLc.copy( 0, nPos );
 
-        m_pEdSubject->SetText ( aStrSubject );
+        m_xEdSubject->set_text( aStrSubject );
     }
     else
     {
-        m_pEdSubject->SetText ("");
+        m_xEdSubject->set_text("");
     }
 
-    m_pCbbReceiver->SetText ( aStrURLc );
+    m_xCbbReceiver->set_entry_text(aStrURLc);
 
     SetScheme( aStrScheme );
 }
@@ -128,7 +112,6 @@ void SvxHyperlinkMailTp::FillDlgFields(const OUString& rStrURL)
 |* retrieve and prepare data from dialog-fields
 |*
 |************************************************************************/
-
 void SvxHyperlinkMailTp::GetCurentItemData ( OUString& rStrURL, OUString& aStrName,
                                              OUString& aStrIntName, OUString& aStrFrame,
                                              SvxLinkInsertMode& eMode )
@@ -139,7 +122,7 @@ void SvxHyperlinkMailTp::GetCurentItemData ( OUString& rStrURL, OUString& aStrNa
 
 OUString SvxHyperlinkMailTp::CreateAbsoluteURL() const
 {
-    OUString aStrURL = m_pCbbReceiver->GetText();
+    OUString aStrURL = m_xCbbReceiver->get_active_text();
     INetURLObject aURL(aStrURL);
 
     if( aURL.GetProtocol() == INetProtocol::NotValid )
@@ -151,9 +134,9 @@ OUString SvxHyperlinkMailTp::CreateAbsoluteURL() const
     // subject for EMail-url
     if( aURL.GetProtocol() == INetProtocol::Mailto )
     {
-        if ( !m_pEdSubject->GetText().isEmpty() )
+        if (!m_xEdSubject->get_text().isEmpty())
         {
-            OUString aQuery = "subject=" + m_pEdSubject->GetText();
+            OUString aQuery = "subject=" + m_xEdSubject->get_text();
             aURL.SetParam(aQuery);
         }
     }
@@ -170,9 +153,9 @@ OUString SvxHyperlinkMailTp::CreateAbsoluteURL() const
 |*
 |************************************************************************/
 
-VclPtr<IconChoicePage> SvxHyperlinkMailTp::Create( vcl::Window* pWindow, SvxHpLinkDlg* pDlg, const SfxItemSet* pItemSet )
+std::unique_ptr<IconChoicePage> SvxHyperlinkMailTp::Create(weld::Container* pWindow, SvxHpLinkDlg* pDlg, const SfxItemSet* pItemSet)
 {
-    return VclPtr<SvxHyperlinkMailTp>::Create( pWindow, pDlg, pItemSet );
+    return std::make_unique<SvxHyperlinkMailTp>(pWindow, pDlg, pItemSet);
 }
 
 /*************************************************************************
@@ -180,24 +163,22 @@ VclPtr<IconChoicePage> SvxHyperlinkMailTp::Create( vcl::Window* pWindow, SvxHpLi
 |* Set initial focus
 |*
 |************************************************************************/
-
 void SvxHyperlinkMailTp::SetInitFocus()
 {
-    m_pCbbReceiver->GrabFocus();
+    m_xCbbReceiver->grab_focus();
 }
 
 /*************************************************************************
 |************************************************************************/
-
 void SvxHyperlinkMailTp::SetScheme(const OUString& rScheme)
 {
     //update target:
     RemoveImproperProtocol(rScheme);
-    m_pCbbReceiver->SetSmartProtocol( INetProtocol::Mailto );
+    m_xCbbReceiver->SetSmartProtocol( INetProtocol::Mailto );
 
     //show/hide  special fields for MAIL:
-    m_pBtAdrBook->Enable();
-    m_pEdSubject->Enable();
+    m_xBtAdrBook->set_sensitive(true);
+    m_xEdSubject->set_sensitive(true);
 }
 
 /*************************************************************************
@@ -205,17 +186,16 @@ void SvxHyperlinkMailTp::SetScheme(const OUString& rScheme)
 |* Remove protocol if it does not fit to the current button selection
 |*
 |************************************************************************/
-
 void SvxHyperlinkMailTp::RemoveImproperProtocol(const OUString& aProperScheme)
 {
-    OUString aStrURL ( m_pCbbReceiver->GetText() );
+    OUString aStrURL(m_xCbbReceiver->get_active_text());
     if ( !aStrURL.isEmpty() )
     {
         OUString aStrScheme = GetSchemeFromURL( aStrURL );
         if ( !aStrScheme.isEmpty() && aStrScheme != aProperScheme )
         {
             aStrURL = aStrURL.copy( aStrScheme.getLength() );
-            m_pCbbReceiver->SetText ( aStrURL );
+            m_xCbbReceiver->set_entry_text(aStrURL);
         }
     }
 }
@@ -225,10 +205,9 @@ void SvxHyperlinkMailTp::RemoveImproperProtocol(const OUString& aProperScheme)
 |* Contents of editfield "receiver" modified
 |*
 |************************************************************************/
-
-IMPL_LINK_NOARG(SvxHyperlinkMailTp, ModifiedReceiverHdl_Impl, Edit&, void)
+IMPL_LINK_NOARG(SvxHyperlinkMailTp, ModifiedReceiverHdl_Impl, weld::ComboBox&, void)
 {
-    OUString aScheme = GetSchemeFromURL( m_pCbbReceiver->GetText() );
+    OUString aScheme = GetSchemeFromURL( m_xCbbReceiver->get_active_text() );
     if(!aScheme.isEmpty())
         SetScheme( aScheme );
 }
@@ -238,8 +217,7 @@ IMPL_LINK_NOARG(SvxHyperlinkMailTp, ModifiedReceiverHdl_Impl, Edit&, void)
 |* Click on imagebutton : addressbook
 |*
 |************************************************************************/
-
-IMPL_STATIC_LINK_NOARG(SvxHyperlinkMailTp, ClickAdrBookHdl_Impl, Button*, void)
+IMPL_STATIC_LINK_NOARG(SvxHyperlinkMailTp, ClickAdrBookHdl_Impl, weld::Button&, void)
 {
     SfxViewFrame* pViewFrame = SfxViewFrame::Current();
     if( pViewFrame )
@@ -249,6 +227,5 @@ IMPL_STATIC_LINK_NOARG(SvxHyperlinkMailTp, ClickAdrBookHdl_Impl, Button*, void)
         pViewFrame->ExecuteSlot( aReq, true );
     }
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
