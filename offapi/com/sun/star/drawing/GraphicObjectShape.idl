@@ -156,6 +156,7 @@ published service GraphicObjectShape
     /// Whether the signature line is signed using a digital signature
     [optional, property] boolean SignatureLineIsSigned;
 
+    /// @since LibreOffice 6.4
     [optional, property] com::sun::star::drawing::QrCode QrCodeShape;
 };
 
