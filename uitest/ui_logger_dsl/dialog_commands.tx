@@ -1,0 +1,14 @@
+//this file for the Dialog commands
+
+DialogCommand:
+  OpenDialog | CloseDialog
+;
+
+OpenDialog:
+  'Open' dialog_name=ID
+;
+
+CloseDialog:
+  'Close Dialog'
+;
+
