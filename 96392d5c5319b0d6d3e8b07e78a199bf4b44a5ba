@@ -34,6 +34,24 @@
       "revId": "96392d5c5319b0d6d3e8b07e78a199bf4b44a5ba",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df7087c5_e802bb3e",
+        "filename": "distro-configs/LibreOfficeLinux.conf",
+        "patchSetId": 2
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2019-06-23T00:23:46Z",
+      "side": 1,
+      "message": "Yes, talking about hypothetical builds - _if_ someone would want to do a distro build for x86 on CentOS.\n\nComment was mostly meant for putting that information somewhere.",
+      "parentUuid": "df7087c5_9c06e920",
+      "revId": "96392d5c5319b0d6d3e8b07e78a199bf4b44a5ba",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
