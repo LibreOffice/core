@@ -104,7 +104,7 @@ bool SvxHyperlinkNewDocTp::ImplGetURLObject( const OUString& rPath, const OUStri
 |*
 |************************************************************************/
 
-SvxHyperlinkNewDocTp::SvxHyperlinkNewDocTp ( vcl::Window *pParent, IconChoiceDialog* pDlg, const SfxItemSet* pItemSet)
+SvxHyperlinkNewDocTp::SvxHyperlinkNewDocTp ( vcl::Window *pParent, SvxHpLinkDlg* pDlg, const SfxItemSet* pItemSet)
 :   SvxHyperlinkTabPageBase ( pParent, pDlg, "HyperlinkNewDocPage", "cui/ui/hyperlinknewdocpage.ui", pItemSet )
 {
     get(m_pRbtEditNow, "editnow");
@@ -245,7 +245,7 @@ void SvxHyperlinkNewDocTp::GetCurentItemData ( OUString& rStrURL, OUString& aStr
 |*
 |************************************************************************/
 
-VclPtr<IconChoicePage> SvxHyperlinkNewDocTp::Create( vcl::Window* pWindow, IconChoiceDialog* pDlg, const SfxItemSet* pItemSet )
+VclPtr<IconChoicePage> SvxHyperlinkNewDocTp::Create( vcl::Window* pWindow, SvxHpLinkDlg* pDlg, const SfxItemSet* pItemSet )
 {
     return VclPtr<SvxHyperlinkNewDocTp>::Create( pWindow, pDlg, pItemSet );
 }

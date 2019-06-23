@@ -82,11 +82,45 @@ void SvxHlinkCtrl::StateChanged( sal_uInt16 nSID, SfxItemState eState,
 //#                                                                      #
 
 SvxHpLinkDlg::SvxHpLinkDlg (vcl::Window* pParent, SfxBindings* pBindings)
-:   IconChoiceDialog( pParent, "HyperlinkDialog", "cui/ui/hyperlinkdialog.ui" ),
-    maCtrl          ( SID_HYPERLINK_GETLINK, *pBindings, this ),
-    mpBindings      ( pBindings ),
-    mbIsHTMLDoc     ( false )
+    : SfxModalDialog(pParent, "HyperlinkDialog", "cui/ui/hyperlinkdialog.ui")
+    , mnCurrentPageId(HyperLinkPageType::NONE)
+    , pSet            ( nullptr )
+    , pExampleSet     ( nullptr )
+    , maCtrl          ( SID_HYPERLINK_GETLINK, *pBindings, this )
+    , mpBindings      ( pBindings )
+    , mbIsHTMLDoc     ( false )
 {
+    get(m_pOKBtn, "ok");
+    get(m_pApplyBtn, "apply");
+    get(m_pCancelBtn, "cancel");
+    get(m_pHelpBtn, "help");
+    get(m_pResetBtn, "reset");
+    get(m_pIconCtrl, "icon_control");
+    get(m_pTabContainer, "tab");
+
+    SetCtrlStyle();
+    m_pIconCtrl->SetClickHdl ( LINK ( this, SvxHpLinkDlg, ChosePageHdl_Impl ) );
+    m_pIconCtrl->Show();
+    m_pIconCtrl->SetChoiceWithCursor();
+    m_pIconCtrl->SetSelectionMode( SelectionMode::Single );
+
+    // ItemSet
+    if ( pSet )
+    {
+        pExampleSet = new SfxItemSet( *pSet );
+        pOutSet.reset(new SfxItemSet( *pSet->GetPool(), pSet->GetRanges() ));
+    }
+
+    // Buttons
+    m_pOKBtn->SetClickHdl   ( LINK( this, SvxHpLinkDlg, OkHdl ) );
+    m_pApplyBtn->SetClickHdl   ( LINK( this, SvxHpLinkDlg, ApplyHdl ) );
+    m_pResetBtn->SetClickHdl( LINK( this, SvxHpLinkDlg, ResetHdl ) );
+    m_pOKBtn->Show();
+    m_pApplyBtn->Show();
+    m_pCancelBtn->Show();
+    m_pHelpBtn->Show();
+    m_pResetBtn->Show();
+
     mbGrabFocus = true;
     // insert pages
     OUString aStrTitle;
@@ -158,7 +192,7 @@ SvxHpLinkDlg::~SvxHpLinkDlg ()
 
 void SvxHpLinkDlg::dispose()
 {
-    // delete config item, so the base class (IconChoiceDialog) can not load it on the next start
+    // delete config item, so the base class (SfxModalDialog) can not load it on the next start
     SvtViewOptions aViewOpt( EViewType::TabDialog, OUString::number(SID_HYPERLINK_DIALOG) );
     aViewOpt.Delete();
 
@@ -166,7 +200,30 @@ void SvxHpLinkDlg::dispose()
 
     maCtrl.dispose();
 
-    IconChoiceDialog::dispose();
+    // save configuration at INI-Manager
+    // and remove pages
+    //SvtViewOptions aTabDlgOpt( EViewType::TabDialog, rId );
+    //aTabDlgOpt.SetWindowState(OStringToOUString(GetWindowState((WindowStateMask::X | WindowStateMask::Y | WindowStateMask::State | WindowStateMask::Minimized)), RTL_TEXTENCODING_ASCII_US));
+    //aTabDlgOpt.SetPageID( mnCurrentPageId );
+
+    for (std::unique_ptr<IconChoicePageData> & pData : maPageList)
+    {
+        if ( pData->pPage )
+            pData->pPage.disposeAndClear();
+    }
+    maPageList.clear();
+
+    pRanges.reset();
+    pOutSet.reset();
+
+    m_pIconCtrl.clear();
+    m_pOKBtn.clear();
+    m_pApplyBtn.clear();
+    m_pCancelBtn.clear();
+    m_pHelpBtn.clear();
+    m_pResetBtn.clear();
+    m_pTabContainer.clear();
+    SfxModalDialog::dispose();
 }
 
 /*************************************************************************

@@ -105,7 +105,7 @@ sal_Int8 SvxHyperURLBox::ExecuteDrop( const ExecuteDropEvent& rEvt )
 //# Hyperlink-Dialog: Tabpages-Baseclass                                 #
 
 SvxHyperlinkTabPageBase::SvxHyperlinkTabPageBase ( vcl::Window *pParent,
-                                                   IconChoiceDialog* pDlg,
+                                                   SvxHpLinkDlg* pDlg,
                                                    const OString& rID,
                                                    const OUString& rUIXMLDescription,
                                                    const SfxItemSet* pItemSet )

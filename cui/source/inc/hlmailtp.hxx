@@ -51,11 +51,11 @@ protected:
                                      SvxLinkInsertMode& eMode ) override;
 
 public:
-    SvxHyperlinkMailTp ( vcl::Window *pParent, IconChoiceDialog* pDlg, const SfxItemSet* pItemSet);
+    SvxHyperlinkMailTp ( vcl::Window *pParent, SvxHpLinkDlg* pDlg, const SfxItemSet* pItemSet);
     virtual ~SvxHyperlinkMailTp() override;
     virtual void dispose() override;
 
-    static VclPtr<IconChoicePage> Create( vcl::Window* pWindow, IconChoiceDialog* pDlg, const SfxItemSet* pItemSet );
+    static VclPtr<IconChoicePage> Create( vcl::Window* pWindow, SvxHpLinkDlg* pDlg, const SfxItemSet* pItemSet );
 
     virtual void        SetInitFocus() override;
 };
