@@ -7,4 +7,3 @@ char:
 KeyCode:
     '{' '"KEYCODE":' input_key_code=STRING '}'
 ;
-
