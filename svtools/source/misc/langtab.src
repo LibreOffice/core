@@ -21,7 +21,7 @@
 
 
 
- // include ---------------------------------------------------------------
+// include ---------------------------------------------------------------
 #include <svtools/svtools.hrc>
 
 #define RSC_RESOURCE_USAGE 1
@@ -29,7 +29,7 @@
 
 #define PairedList ItemList
 
- // STR_ARR_SVT_LANGUAGE_TABLE ----------------------------------------------------
+// STR_ARR_SVT_LANGUAGE_TABLE ----------------------------------------------------
 StringArray STR_ARR_SVT_LANGUAGE_TABLE
 {
     PairedList [ en-US ] =
