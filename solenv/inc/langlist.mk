@@ -22,6 +22,7 @@
 
 
 completelangiso=af \
+am \
 ar \
 as \
 as-IN \
