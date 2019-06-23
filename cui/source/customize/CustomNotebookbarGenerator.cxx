@@ -105,27 +105,18 @@ static OUString customizedUIPathBuffer()
 
 OUString CustomNotebookbarGenerator::getCustomizedUIPath()
 {
-    OUStringBuffer aCustomizedUIPathBuffer;
-    aCustomizedUIPathBuffer.append(customizedUIPathBuffer());
     OUString sAppName, sNotebookbarUIFileName;
     CustomNotebookbarGenerator::getFileNameAndAppName(sAppName, sNotebookbarUIFileName);
-    OUString sUIFilePath
-        = "modules/s" + sAppName.toAsciiLowerCase() + "/ui/" + sNotebookbarUIFileName;
-    aCustomizedUIPathBuffer.append(sUIFilePath);
-    OUString sCustomizedUIPath = aCustomizedUIPathBuffer.makeStringAndClear();
-    return sCustomizedUIPath;
+    return customizedUIPathBuffer() + "modules/s" + sAppName.toAsciiLowerCase() + "/ui/"
+           + sNotebookbarUIFileName;
 }
 
 OUString CustomNotebookbarGenerator::getOriginalUIPath()
 {
-    OUStringBuffer aOriginalUIPathBuffer = VclBuilderContainer::getUIRootDir();
     OUString sAppName, sNotebookbarUIFileName;
     CustomNotebookbarGenerator::getFileNameAndAppName(sAppName, sNotebookbarUIFileName);
-    OUString sUIFilePath
-        = "modules/s" + sAppName.toAsciiLowerCase() + "/ui/" + sNotebookbarUIFileName;
-    aOriginalUIPathBuffer.append(sUIFilePath);
-    OUString sOriginalUIPath = aOriginalUIPathBuffer.makeStringAndClear();
-    return sOriginalUIPath;
+    return VclBuilderContainer::getUIRootDir() + "modules/s" + sAppName.toAsciiLowerCase() + "/ui/"
+           + sNotebookbarUIFileName;
 }
 
 static OUString getUIDirPath()
