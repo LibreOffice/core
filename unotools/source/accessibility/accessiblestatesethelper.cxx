@@ -188,16 +188,8 @@ sal_Bool SAL_CALL AccessibleStateSetHelper::containsAll
     (const uno::Sequence<sal_Int16>& rStateSet)
 {
     osl::MutexGuard aGuard (maMutex);
-    sal_Int32 nCount(rStateSet.getLength());
-    const sal_Int16* pStates = rStateSet.getConstArray();
-    sal_Int32 i = 0;
-    bool bFound(true);
-    while (i < nCount)
-    {
-        bFound = mpHelperImpl->Contains(pStates[i]);
-        i++;
-    }
-    return bFound;
+    return std::all_of(rStateSet.begin(), rStateSet.end(),
+        [this](const sal_Int16 nState) { return mpHelperImpl->Contains(nState); });
 }
 
 uno::Sequence<sal_Int16> SAL_CALL AccessibleStateSetHelper::getStates()
