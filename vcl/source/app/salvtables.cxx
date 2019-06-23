@@ -1094,6 +1094,11 @@ public:
         return m_xWindow->GetPosPixel();
     }
 
+    virtual tools::Rectangle get_monitor_workarea() const override
+    {
+        return m_xWindow->GetDesktopRectPixel();
+    }
+
     virtual void set_centered_on_parent(bool /*bTrackGeometryRequests*/) override
     {
         if (vcl::Window* pParent = m_xWidget->GetParent())

@@ -33,6 +33,7 @@
 #include <vcl/fixedhyper.hxx>
 #include <vcl/headbar.hxx>
 #include <vcl/IPrioritable.hxx>
+#include <vcl/ivctrl.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/menubtn.hxx>
@@ -923,6 +924,19 @@ namespace
         if (aFind != rMap.end())
         {
             bVertical = aFind->second.equalsIgnoreAsciiCase("vertical");
+            rMap.erase(aFind);
+        }
+        return bVertical;
+    }
+
+    bool extractVerticalTabPos(VclBuilder::stringmap &rMap)
+    {
+        bool bVertical = false;
+        VclBuilder::stringmap::iterator aFind = rMap.find("tab-pos");
+        if (aFind != rMap.end())
+        {
+            bVertical = aFind->second.equalsIgnoreAsciiCase("left") ||
+                        aFind->second.equalsIgnoreAsciiCase("right");
             rMap.erase(aFind);
         }
         return bVertical;
@@ -2091,7 +2105,13 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
     }
     else if (name == "GtkNotebook")
     {
-        xWindow = VclPtr<TabControl>::Create(pParent, WB_STDTABCONTROL|WB_3DLOOK);
+        if (!extractVerticalTabPos(rMap))
+            xWindow = VclPtr<TabControl>::Create(pParent, WB_STDTABCONTROL|WB_3DLOOK);
+        else
+            xWindow = VclPtr<SvtIconChoiceCtrl>::Create(pParent, WB_3DLOOK | WB_ICON | WB_BORDER |
+                                                                 WB_NOCOLUMNHEADER | WB_HIGHLIGHTFRAME |
+                                                                 WB_NODRAGSELECTION | WB_TABSTOP | WB_CLIPCHILDREN |
+                                                                 WB_ALIGN_LEFT | WB_NOHSCROLL);
     }
     else if (name == "GtkDrawingArea")
     {

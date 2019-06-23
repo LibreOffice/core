@@ -1,13 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
-  <requires lib="LibreOffice" version="1.0"/>
+  <object class="GtkImage" id="image1">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="icon_name">res/adrbook.png</property>
+  </object>
   <object class="GtkBox" id="HyperlinkMailPage">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="hexpand">True</property>
     <property name="vexpand">True</property>
+    <property name="border_width">6</property>
     <property name="orientation">vertical</property>
     <property name="spacing">24</property>
     <child>
@@ -35,10 +40,10 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
-                    <property name="xalign">0</property>
                     <property name="label" translatable="yes" context="hyperlinkmailpage|receiver_label">Re_cipient:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">receiver</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -46,23 +51,13 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="cuilo-SvxHyperURLBox" id="receiver">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="hexpand">True</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">1</property>
-                  </packing>
-                </child>
-                <child>
                   <object class="GtkButton" id="adressbook">
-                    <property name="label" translatable="yes" context="hyperlinkmailpage|adressbook">Data Sources…</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="tooltip_text" translatable="yes" context="hyperlinkmailpage|adressbook|tooltip_text">Data Sources...</property>
+                    <property name="image">image1</property>
+                    <property name="always_show_image">True</property>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
@@ -74,11 +69,11 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
-                    <property name="xalign">0</property>
                     <property name="ypad">1</property>
                     <property name="label" translatable="yes" context="hyperlinkmailpage|subject_label">_Subject:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">subject</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -95,6 +90,26 @@
                     <property name="left_attach">1</property>
                     <property name="top_attach">2</property>
                   </packing>
+                </child>
+                <child>
+                  <object class="GtkComboBoxText" id="receiver">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="hexpand">True</property>
+                    <property name="has_entry">True</property>
+                    <child internal-child="entry">
+                      <object class="GtkEntry">
+                        <property name="can_focus">False</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <placeholder/>
                 </child>
                 <child>
                   <placeholder/>
@@ -151,10 +166,10 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
-                    <property name="xalign">0</property>
                     <property name="label" translatable="yes" context="hyperlinkmailpage|frame_label">F_rame:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">frame</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -166,10 +181,10 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
-                    <property name="xalign">0</property>
                     <property name="label" translatable="yes" context="hyperlinkmailpage|indication_label">Te_xt:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">indication</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -181,10 +196,10 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
-                    <property name="xalign">0</property>
                     <property name="label" translatable="yes" context="hyperlinkmailpage|name_label">N_ame:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">name</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -222,10 +237,10 @@
                       <object class="GtkLabel" id="form_label">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
                         <property name="label" translatable="yes" context="hyperlinkmailpage|form_label">F_orm:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">form</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -233,7 +248,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkComboBox" id="form">
+                      <object class="GtkComboBoxText" id="form">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="hexpand">True</property>
@@ -249,6 +264,7 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="tooltip_text" translatable="yes" context="hyperlinkmailpage|script|tooltip_text">Events</property>
+                        <property name="always_show_image">True</property>
                       </object>
                       <packing>
                         <property name="left_attach">3</property>
@@ -256,7 +272,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkComboBox" id="frame">
+                      <object class="GtkComboBoxText" id="frame">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="hexpand">True</property>
