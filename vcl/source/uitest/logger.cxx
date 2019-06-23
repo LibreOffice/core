@@ -291,7 +291,7 @@ void UITestLogger::logEvent(const EventDescription& rDescription)
             aLogLine = "GOTO page number " + GetValueInMapWithIndex(rDescription.aParameters,0);
         }
         else if(rDescription.aAction=="SET"){
-            aLogLine =  "Set Zoom to be "  + GetValueInMapWithIndex(rDescription.aParameters,0);
+            aLogLine =  "Set Zoom to "  + GetValueInMapWithIndex(rDescription.aParameters,0);
         }
         else if(rDescription.aAction=="SELECT"){
             OUString to = GetValueInMapWithIndex(rDescription.aParameters,0);

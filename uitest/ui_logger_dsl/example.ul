@@ -15,7 +15,7 @@ Click on "ok" from CharacterPropertiesDialog
 Close Dialog
 Type on writer {"TEXT": "s"}
 Select from Pos 5 to Pos 7
-Set Zoom to be 100
+Set Zoom to 100
 GOTO page number 1
 Open QuerySaveDialog
 Click on "ok" from QuerySaveDialog
