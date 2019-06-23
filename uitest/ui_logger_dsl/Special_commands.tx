@@ -27,7 +27,7 @@ Select_command:
   'Select from Pos' from=INT 'to Pos' to=INT 
 ;
 setZoom_command:
-  'Set Zoom to be' zoom_value=INT 
+  'Set Zoom to ' zoom_value=INT 
 ;
 GOTO_command:
   'GOTO page number' page_num=INT
