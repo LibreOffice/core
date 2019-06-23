@@ -78,7 +78,7 @@ void OConnectionURLEdit::SetText(const OUString& _rStr, const Selection& /*_rNew
 
 OUString OConnectionURLEdit::GetText() const
 {
-    return m_xForcedPrefix->get_label() + m_xEntry->get_text();
+    return m_xForcedPrefix->strip_mnemonic(m_xForcedPrefix->get_label()) + m_xEntry->get_text();
 }
 
 void OConnectionURLEdit::ShowPrefix(bool _bShowPrefix)
