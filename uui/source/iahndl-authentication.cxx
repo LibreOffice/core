@@ -137,9 +137,9 @@ void getRememberModes(
         bool bHasRememberModeSession = false;
         bool bHasRememberModePersistent = false;
 
-        for (sal_Int32 i = 0; i < nCount; ++i)
+        for (const auto& rRememberMode : rRememberModes)
         {
-            switch ( rRememberModes[i] )
+            switch ( rRememberMode )
             {
             case ucb::RememberAuthentication_NO:
                 break;
@@ -150,7 +150,7 @@ void getRememberModes(
                 bHasRememberModePersistent = true;
                 break;
             default:
-                SAL_WARN( "uui", "Unsupported RememberAuthentication value" << static_cast<sal_Int32>(rRememberModes[i]) );
+                SAL_WARN( "uui", "Unsupported RememberAuthentication value" << static_cast<sal_Int32>(rRememberMode) );
                 break;
             }
         }
