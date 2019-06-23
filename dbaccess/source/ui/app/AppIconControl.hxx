@@ -19,7 +19,7 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_UI_APP_APPICONCONTROL_HXX
 #define INCLUDED_DBACCESS_SOURCE_UI_APP_APPICONCONTROL_HXX
 
-#include <svtools/ivctrl.hxx>
+#include <vcl/ivctrl.hxx>
 #include <vcl/transfer.hxx>
 
 namespace dbaui
