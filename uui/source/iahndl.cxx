@@ -884,20 +884,18 @@ UUIInteractionHelper::getInteractionHandlerList(
         uno::Reference< container::XNameAccess > xNameAccess(
             xInterface, uno::UNO_QUERY_THROW );
         uno::Sequence< OUString > aElems = xNameAccess->getElementNames();
-        const OUString* pElems = aElems.getConstArray();
-        sal_Int32 nCount = aElems.getLength();
 
-        if ( nCount > 0 )
+        if ( aElems.hasElements() )
         {
             uno::Reference< container::XHierarchicalNameAccess >
                                 xHierNameAccess( xInterface, uno::UNO_QUERY_THROW );
 
             // Iterate over children.
-            for ( sal_Int32 n = 0; n < nCount; ++n )
+            for ( const auto& rElem : aElems )
             {
                 OUStringBuffer aElemBuffer;
                 aElemBuffer.append( "['" );
-                aElemBuffer.append( pElems[ n ] );
+                aElemBuffer.append( rElem );
 
                 try
                 {
