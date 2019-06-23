@@ -1128,6 +1128,10 @@ void ScTable::CopyToTable(
     {
         InsertDeleteFlags nTempFlags( nFlags &
                 ~InsertDeleteFlags( InsertDeleteFlags::NOTE | InsertDeleteFlags::ADDNOTES));
+        // tdf#102364 - in some pathological cases CopyToTable() replacing cells with new cells
+        // can lead to repetitive splitting and rejoining of the same formula group, which can get
+        // quadratically expensive with large groups. So do the grouping just once at the end.
+        sc::DelayFormulaGroupingSwitch delayGrouping( *pDestTab->pDocument, true );
         for (SCCOL i = nCol1; i <= ClampToAllocatedColumns(nCol2); i++)
             aCol[i].CopyToColumn(rCxt, nRow1, nRow2, bIsUndoDoc ? nFlags : nTempFlags, bMarked,
                                  pDestTab->CreateColumnIfNotExists(i), pMarkData, bAsLink, bGlobalNamesToLocal);
