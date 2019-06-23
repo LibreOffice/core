@@ -1668,6 +1668,11 @@ public:
     }
 
     virtual void help_hierarchy_foreach(const std::function<bool(const OString&)>& func) override;
+
+    virtual OUString strip_mnemonic(const OUString &rLabel) const override
+    {
+        return rLabel.replaceFirst("_", "");
+    }
 };
 
 namespace
