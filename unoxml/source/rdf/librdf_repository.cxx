@@ -1407,12 +1407,10 @@ void SAL_CALL librdf_Repository::setStatementRDFa(
             "librdf_Repository::setStatementRDFa: no Predicates",
             *this, 1);
     }
-    for (sal_Int32 i = 0; i < i_rPredicates.getLength(); ++i) {
-        if (!i_rPredicates[i].is()) {
-            throw lang::IllegalArgumentException(
-                    "librdf_Repository::setStatementRDFa: Predicate is null",
-                *this, 1);
-        }
+    if (std::any_of(i_rPredicates.begin(), i_rPredicates.end(),
+            [](const uno::Reference< rdf::XURI >& rPredicate) { return !rPredicate.is(); })) {
+        throw lang::IllegalArgumentException(
+            "librdf_Repository::setStatementRDFa: Predicate is null", *this, 1);
     }
     if (!i_xObject.is()) {
         throw lang::IllegalArgumentException(
