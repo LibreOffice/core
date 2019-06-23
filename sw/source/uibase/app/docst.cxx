@@ -86,6 +86,7 @@
 #include <paratr.hxx>
 #include <tblafmt.hxx>
 #include <sfx2/watermarkitem.hxx>
+#include <strings.hrc>
 
 using namespace ::com::sun::star;
 
@@ -641,6 +642,71 @@ IMPL_LINK_NOARG(ApplyStyle, ApplyHdl, LinkParamNone*, void)
     pWrtShell->EndAllAction();
 }
 
+namespace
+{
+/// Checks if there is an Endnote page style in use, and makes sure it has the same orientation
+/// with the Default (Standard) page style.
+void syncEndnoteOrientation(const uno::Reference< style::XStyleFamiliesSupplier >& xStyleFamSupp)
+{
+    if (!xStyleFamSupp.is())
+    {
+        SAL_WARN("sw.ui", "Ref to XStyleFamiliesSupplier is null.");
+        return;
+    }
+    uno::Reference<container::XNameAccess> xStyleFamilies(
+        xStyleFamSupp->getStyleFamilies(), uno::UNO_QUERY);
+
+    if (!xStyleFamilies.is())
+        return;
+
+    uno::Reference<container::XNameAccess> xPageStyles(xStyleFamilies->getByName("PageStyles"),
+                                                       uno::UNO_QUERY);
+
+    if (!xPageStyles.is())
+        return;
+
+    uno::Reference<css::style::XStyle> xEndnotePageStyle(xPageStyles->getByName("Endnote"),
+                                                  uno::UNO_QUERY);
+
+    if (!xEndnotePageStyle.is())
+        return;
+
+    // Language-independent name of the "Default Style" is "Standard"
+    uno::Reference<css::style::XStyle> xDefaultPageStyle(xPageStyles->getByName("Standard"),
+                                                  uno::UNO_QUERY);
+    if (!xDefaultPageStyle.is())
+        return;
+
+    if (xEndnotePageStyle->isUserDefined() || !xEndnotePageStyle->isInUse())
+        return;
+
+    uno::Reference<beans::XPropertySet> xEndnotePagePropSet(xPageStyles->getByName("Endnote"), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xDefaultPagePropSet(xPageStyles->getByName("Standard"), uno::UNO_QUERY);
+
+    if (!xEndnotePagePropSet.is() || !xDefaultPagePropSet.is())
+    {
+        SAL_WARN("sw.ui", "xEndnotePagePropSet or xDefaultPagePropSet is null.");
+        return;
+    }
+
+    sal_Int32 nWidth, nHeight;
+    bool bIsDefLandScape, bIsEndLandScape;
+
+    xDefaultPagePropSet->getPropertyValue("IsLandscape") >>= bIsDefLandScape;
+    xEndnotePagePropSet->getPropertyValue("IsLandscape") >>= bIsEndLandScape;
+
+    if (bIsDefLandScape == bIsEndLandScape)
+        return;
+
+    xEndnotePagePropSet->getPropertyValue("Width") >>= nWidth;
+    xEndnotePagePropSet->getPropertyValue("Height") >>= nHeight;
+
+    xEndnotePagePropSet->setPropertyValue("IsLandscape", css::uno::toAny(bIsDefLandScape));
+    xEndnotePagePropSet->setPropertyValue("Width", css::uno::toAny(nHeight));
+    xEndnotePagePropSet->setPropertyValue("Height", css::uno::toAny(nWidth));
+}
+}
+
 void SwDocShell::Edit(
     const OUString &rName,
     const OUString &rParent,
@@ -830,7 +896,12 @@ void SwDocShell::Edit(
             pReq->Ignore(); // the 'old' request is not relevant any more
         }
 
-        pDlg->StartExecuteAsync([bModified, bNew, nFamily, nSlot, nNewStyleUndoId, pApplyStyleHelper, pRequest, xTmp, this](sal_Int32 nResult){
+        bool bIsDefaultPage = nFamily == SfxStyleFamily::Page
+                                    && rName == SwResId(STR_POOLPAGE_STANDARD)
+                                    && pStyle->IsUsed()
+                                    && !pStyle->IsUserDefined();
+
+        pDlg->StartExecuteAsync([bIsDefaultPage, bModified, bNew, nFamily, nSlot, nNewStyleUndoId, pApplyStyleHelper, pRequest, xTmp, this](sal_Int32 nResult){
             if (RET_OK == nResult)
                 pApplyStyleHelper->apply();
 
@@ -865,6 +936,19 @@ void SwDocShell::Edit(
 
             if (pRequest)
                 pRequest->Done();
+
+            if (bIsDefaultPage && bModified)
+            {
+                uno::Reference< style::XStyleFamiliesSupplier > xStyleFamSupp(GetModel(), uno::UNO_QUERY);
+
+                if (!xStyleFamSupp.is())
+                {
+                    SAL_WARN("sw.ui", "Ref to XStyleFamiliesSupplier is null.");
+                    return;
+                }
+
+                syncEndnoteOrientation(xStyleFamSupp);
+            }
         });
     }
     else
