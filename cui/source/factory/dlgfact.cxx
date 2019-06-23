@@ -234,7 +234,10 @@ short AbstractSvxPathSelectDialog_Impl::Execute()
     return m_xDlg->run();
 }
 
-IMPL_ABSTDLG_BASE(AbstractSvxHpLinkDlg_Impl);
+short AbstractSvxHpLinkDlg_Impl::Execute()
+{
+    return m_xDlg->run();
+}
 
 short AbstractFmSearchDialog_Impl::Execute()
 {
@@ -783,14 +786,14 @@ void AbstractSvxPathSelectDialog_Impl::SetTitle( const OUString& rNewTitle )
     m_xDlg->SetTitle(rNewTitle);
 }
 
-vcl::Window * AbstractSvxHpLinkDlg_Impl::GetWindow()
+std::shared_ptr<SfxDialogController> AbstractSvxHpLinkDlg_Impl::GetController()
 {
-    return static_cast<vcl::Window *>(pDlg);
+    return m_xDlg;
 }
 
 bool AbstractSvxHpLinkDlg_Impl::QueryClose()
 {
-    return pDlg->QueryClose();
+    return m_xDlg->QueryClose();
 }
 
 void AbstractFmSearchDialog_Impl::SetFoundHandler(const Link<FmFoundRecordInformation&,void>& lnk)
@@ -1231,11 +1234,9 @@ VclPtr<AbstractSvxMultiPathDialog> AbstractDialogFactory_Impl::CreateSvxPathSele
     return VclPtr<AbstractSvxPathSelectDialog_Impl>::Create(std::make_unique<SvxPathSelectDialog>(pParent));
 }
 
-VclPtr<AbstractSvxHpLinkDlg> AbstractDialogFactory_Impl::CreateSvxHpLinkDlg (vcl::Window* pParent,
-                                            SfxBindings* pBindings)
+VclPtr<AbstractSvxHpLinkDlg> AbstractDialogFactory_Impl::CreateSvxHpLinkDlg(SfxChildWindow* pChild, SfxBindings* pBindings, weld::Window* pParent)
 {
-    VclPtrInstance<SvxHpLinkDlg> pDlg( pParent, pBindings );
-    return VclPtr<AbstractSvxHpLinkDlg_Impl>::Create(pDlg);
+    return VclPtr<AbstractSvxHpLinkDlg_Impl>::Create(std::make_unique<SvxHpLinkDlg>(pBindings, pChild, pParent));
 }
 
 VclPtr<AbstractFmSearchDialog> AbstractDialogFactory_Impl::CreateFmSearchDialog(weld::Window* pParent,

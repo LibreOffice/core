@@ -19,7 +19,6 @@
 
 #include <i18nutil/unicode.hxx>
 #include <vcl/event.hxx>
-#include <vcl/field.hxx>
 #include <vcl/keycodes.hxx>
 #include <vcl/settings.hxx>
 #include <sot/exchange.hxx>

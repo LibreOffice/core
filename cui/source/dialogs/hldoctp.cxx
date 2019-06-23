@@ -35,54 +35,37 @@ sal_Char const sFileScheme[]    = INET_FILE_SCHEME;
 |*
 |************************************************************************/
 
-SvxHyperlinkDocTp::SvxHyperlinkDocTp ( vcl::Window *pParent, SvxHpLinkDlg* pDlg, const SfxItemSet* pItemSet)
-    : SvxHyperlinkTabPageBase ( pParent, pDlg, "HyperlinkDocPage", "cui/ui/hyperlinkdocpage.ui", pItemSet ),
-    mbMarkWndOpen   ( false )
+SvxHyperlinkDocTp::SvxHyperlinkDocTp(weld::Container* pParent, SvxHpLinkDlg* pDlg, const SfxItemSet* pItemSet)
+    : SvxHyperlinkTabPageBase(pParent, pDlg, "cui/ui/hyperlinkdocpage.ui", "HyperlinkDocPage", pItemSet)
+    , m_xCbbPath(new SvxHyperURLBox(xBuilder->weld_combo_box("path")))
+    , m_xBtFileopen(xBuilder->weld_button("fileopen"))
+    , m_xEdTarget(xBuilder->weld_entry("target"))
+    , m_xFtFullURL(xBuilder->weld_label("url"))
+    , m_xBtBrowse(xBuilder->weld_button("browse"))
+    , m_bMarkWndOpen(false)
 {
-    get(m_pCbbPath, "path");
-    m_pCbbPath->SetSmartProtocol(INetProtocol::File);
-    get(m_pBtFileopen, "fileopen");
-    m_pBtFileopen->SetModeImage(Image(StockImage::Yes, RID_SVXBMP_FILEOPEN));
-    get(m_pEdTarget, "target");
-    get(m_pFtFullURL, "url");
-    get(m_pBtBrowse, "browse");
-    m_pBtBrowse->SetModeImage(Image(StockImage::Yes, RID_SVXBMP_TARGET));
-
-    // Disable display of bitmap names.
-    m_pBtBrowse->EnableTextDisplay (false);
-    m_pBtFileopen->EnableTextDisplay (false);
+    m_xCbbPath->SetSmartProtocol(INetProtocol::File);
 
     InitStdControls();
 
-    m_pCbbPath->Show();
-    m_pCbbPath->SetBaseURL(INET_FILE_SCHEME);
+    m_xCbbPath->show();
+    m_xCbbPath->SetBaseURL(INET_FILE_SCHEME);
 
-    SetExchangeSupport ();
+    SetExchangeSupport();
 
     // set handlers
-    m_pBtFileopen->SetClickHdl ( LINK ( this, SvxHyperlinkDocTp, ClickFileopenHdl_Impl ) );
-    m_pBtBrowse->SetClickHdl   ( LINK ( this, SvxHyperlinkDocTp, ClickTargetHdl_Impl ) );
-    m_pCbbPath->SetModifyHdl   ( LINK ( this, SvxHyperlinkDocTp, ModifiedPathHdl_Impl ) );
-    m_pEdTarget->SetModifyHdl  ( LINK ( this, SvxHyperlinkDocTp, ModifiedTargetHdl_Impl ) );
+    m_xBtFileopen->connect_clicked( LINK ( this, SvxHyperlinkDocTp, ClickFileopenHdl_Impl ) );
+    m_xBtBrowse->connect_clicked( LINK ( this, SvxHyperlinkDocTp, ClickTargetHdl_Impl ) );
+    m_xCbbPath->connect_changed( LINK ( this, SvxHyperlinkDocTp, ModifiedPathHdl_Impl ) );
+    m_xEdTarget->connect_changed( LINK ( this, SvxHyperlinkDocTp, ModifiedTargetHdl_Impl ) );
 
-    m_pCbbPath->SetLoseFocusHdl( LINK ( this, SvxHyperlinkDocTp, LostFocusPathHdl_Impl ) );
+    m_xCbbPath->connect_focus_out( LINK ( this, SvxHyperlinkDocTp, LostFocusPathHdl_Impl ) );
 
     maTimer.SetInvokeHandler ( LINK ( this, SvxHyperlinkDocTp, TimeoutHdl_Impl ) );
 }
 
 SvxHyperlinkDocTp::~SvxHyperlinkDocTp()
 {
-    disposeOnce();
-}
-
-void SvxHyperlinkDocTp::dispose()
-{
-    m_pCbbPath.clear();
-    m_pBtFileopen.clear();
-    m_pEdTarget.clear();
-    m_pFtFullURL.clear();
-    m_pBtBrowse.clear();
-    SvxHyperlinkTabPageBase::dispose();
 }
 
 /*************************************************************************
@@ -90,20 +73,19 @@ void SvxHyperlinkDocTp::dispose()
 |* Fill all dialog-controls except controls in groupbox "more..."
 |*
 |************************************************************************/
-
 void SvxHyperlinkDocTp::FillDlgFields(const OUString& rStrURL)
 {
     sal_Int32 nPos = rStrURL.indexOf(sHash);
     // path
-    m_pCbbPath->SetText ( rStrURL.copy( 0, ( nPos == -1 ? rStrURL.getLength() : nPos ) ) );
+    m_xCbbPath->set_entry_text( rStrURL.copy( 0, ( nPos == -1 ? rStrURL.getLength() : nPos ) ) );
 
     // set target in document at editfield
     OUString aStrMark;
     if ( nPos != -1 && nPos < rStrURL.getLength()-1 )
         aStrMark = rStrURL.copy( nPos+1 );
-    m_pEdTarget->SetText ( aStrMark );
+    m_xEdTarget->set_text( aStrMark );
 
-    ModifiedPathHdl_Impl ( *m_pCbbPath );
+    ModifiedPathHdl_Impl(*m_xCbbPath->getWidget());
 }
 
 /*************************************************************************
@@ -111,13 +93,12 @@ void SvxHyperlinkDocTp::FillDlgFields(const OUString& rStrURL)
 |* retrieve current url-string
 |*
 |************************************************************************/
-
 OUString SvxHyperlinkDocTp::GetCurrentURL ()
 {
     // get data from dialog-controls
     OUString aStrURL;
-    OUString aStrPath ( m_pCbbPath->GetText() );
-    OUString aStrMark( m_pEdTarget->GetText() );
+    OUString aStrPath( m_xCbbPath->get_active_text() );
+    OUString aStrMark( m_xEdTarget->get_text() );
 
     if ( !aStrPath.isEmpty() )
     {
@@ -146,7 +127,6 @@ OUString SvxHyperlinkDocTp::GetCurrentURL ()
 |* retrieve and prepare data from dialog-fields
 |*
 |************************************************************************/
-
 void SvxHyperlinkDocTp::GetCurentItemData ( OUString& rStrURL, OUString& aStrName,
                                             OUString& aStrIntName, OUString& aStrFrame,
                                             SvxLinkInsertMode& eMode )
@@ -165,10 +145,9 @@ void SvxHyperlinkDocTp::GetCurentItemData ( OUString& rStrURL, OUString& aStrNam
 |* static method to create Tabpage
 |*
 |************************************************************************/
-
-VclPtr<IconChoicePage> SvxHyperlinkDocTp::Create( vcl::Window* pWindow, SvxHpLinkDlg* pDlg, const SfxItemSet* pItemSet )
+std::unique_ptr<IconChoicePage> SvxHyperlinkDocTp::Create(weld::Container* pWindow, SvxHpLinkDlg* pDlg, const SfxItemSet* pItemSet)
 {
-    return VclPtr<SvxHyperlinkDocTp>::Create( pWindow, pDlg, pItemSet );
+    return std::make_unique<SvxHyperlinkDocTp>(pWindow, pDlg, pItemSet);
 }
 
 /*************************************************************************
@@ -176,10 +155,9 @@ VclPtr<IconChoicePage> SvxHyperlinkDocTp::Create( vcl::Window* pWindow, SvxHpLin
 |* Set initial focus
 |*
 |************************************************************************/
-
 void SvxHyperlinkDocTp::SetInitFocus()
 {
-    m_pCbbPath->GrabFocus();
+    m_xCbbPath->grab_focus();
 }
 
 /*************************************************************************
@@ -187,13 +165,13 @@ void SvxHyperlinkDocTp::SetInitFocus()
 |* Click on imagebutton : fileopen
 |*
 |************************************************************************/
-
-IMPL_LINK_NOARG(SvxHyperlinkDocTp, ClickFileopenHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SvxHyperlinkDocTp, ClickFileopenHdl_Impl, weld::Button&, void)
 {
+    DisableClose( true );
     // Open Fileopen-Dialog
     sfx2::FileDialogHelper aDlg(
         css::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, FileDialogFlags::NONE,
-        GetFrameWeld() );
+        mpDialog->getDialog() );
     OUString aOldURL( GetCurrentURL() );
     if( aOldURL.startsWithIgnoreAsciiCase( sFileScheme ) )
     {
@@ -202,7 +180,6 @@ IMPL_LINK_NOARG(SvxHyperlinkDocTp, ClickFileopenHdl_Impl, Button*, void)
         aDlg.SetDisplayFolder( aPath );
     }
 
-    DisableClose( true );
     ErrCode nError = aDlg.Execute();
     DisableClose( false );
 
@@ -213,11 +190,11 @@ IMPL_LINK_NOARG(SvxHyperlinkDocTp, ClickFileopenHdl_Impl, Button*, void)
 
         osl::FileBase::getSystemPathFromFileURL(aURL, aPath);
 
-        m_pCbbPath->SetBaseURL( aURL );
-        m_pCbbPath->SetText( aPath );
+        m_xCbbPath->SetBaseURL( aURL );
+        m_xCbbPath->set_entry_text(aPath);
 
         if ( aOldURL != GetCurrentURL() )
-            ModifiedPathHdl_Impl(*m_pCbbPath);
+            ModifiedPathHdl_Impl(*m_xCbbPath->getWidget());
     }
 }
 
@@ -226,8 +203,7 @@ IMPL_LINK_NOARG(SvxHyperlinkDocTp, ClickFileopenHdl_Impl, Button*, void)
 |* Click on imagebutton : target
 |*
 |************************************************************************/
-
-IMPL_LINK_NOARG(SvxHyperlinkDocTp, ClickTargetHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SvxHyperlinkDocTp, ClickTargetHdl_Impl, weld::Button&, void)
 {
     ShowMarkWnd();
 
@@ -238,14 +214,12 @@ IMPL_LINK_NOARG(SvxHyperlinkDocTp, ClickTargetHdl_Impl, Button*, void)
     {
         mxMarkWnd->SetError( LERR_NOERROR );
 
-        EnterWait();
+        weld::WaitObject aWait(mpDialog->getDialog());
 
         if ( maStrURL.equalsIgnoreAsciiCase( sFileScheme ) )
             mxMarkWnd->RefreshTree ( "" );
         else
             mxMarkWnd->RefreshTree ( maStrURL );
-
-        LeaveWait();
     }
     else
         mxMarkWnd->SetError( LERR_DOCNOTOPEN );
@@ -256,15 +230,14 @@ IMPL_LINK_NOARG(SvxHyperlinkDocTp, ClickTargetHdl_Impl, Button*, void)
 |* Contents of combobox "Path" modified
 |*
 |************************************************************************/
-
-IMPL_LINK_NOARG(SvxHyperlinkDocTp, ModifiedPathHdl_Impl, Edit&, void)
+IMPL_LINK_NOARG(SvxHyperlinkDocTp, ModifiedPathHdl_Impl, weld::ComboBox&, void)
 {
     maStrURL = GetCurrentURL();
 
     maTimer.SetTimeout( 2500 );
     maTimer.Start();
 
-    m_pFtFullURL->SetText( maStrURL );
+    m_xFtFullURL->set_label( maStrURL );
 }
 
 /*************************************************************************
@@ -272,21 +245,18 @@ IMPL_LINK_NOARG(SvxHyperlinkDocTp, ModifiedPathHdl_Impl, Edit&, void)
 |* If path-field was modify, to browse the new doc after timeout
 |*
 |************************************************************************/
-
 IMPL_LINK_NOARG(SvxHyperlinkDocTp, TimeoutHdl_Impl, Timer *, void)
 {
     if ( IsMarkWndVisible() && ( GetPathType( maStrURL )== EPathType::ExistsFile ||
                                   maStrURL.isEmpty() ||
                                   maStrURL.equalsIgnoreAsciiCase( sFileScheme ) ) )
     {
-        EnterWait();
+        weld::WaitObject aWait(mpDialog->getDialog());
 
         if ( maStrURL.equalsIgnoreAsciiCase( sFileScheme ) )
             mxMarkWnd->RefreshTree ( "" );
         else
             mxMarkWnd->RefreshTree ( maStrURL );
-
-        LeaveWait();
     }
 }
 
@@ -295,15 +265,14 @@ IMPL_LINK_NOARG(SvxHyperlinkDocTp, TimeoutHdl_Impl, Timer *, void)
 |* Contents of editfield "Target" modified
 |*
 |************************************************************************/
-
-IMPL_LINK_NOARG(SvxHyperlinkDocTp, ModifiedTargetHdl_Impl, Edit&, void)
+IMPL_LINK_NOARG(SvxHyperlinkDocTp, ModifiedTargetHdl_Impl, weld::Entry&, void)
 {
     maStrURL = GetCurrentURL();
 
-    if ( IsMarkWndVisible() )
-        mxMarkWnd->SelectEntry ( m_pEdTarget->GetText() );
+    if (IsMarkWndVisible())
+        mxMarkWnd->SelectEntry(m_xEdTarget->get_text());
 
-    m_pFtFullURL->SetText( maStrURL );
+    m_xFtFullURL->set_label( maStrURL );
 }
 
 /*************************************************************************
@@ -311,12 +280,11 @@ IMPL_LINK_NOARG(SvxHyperlinkDocTp, ModifiedTargetHdl_Impl, Edit&, void)
 |* editfield "Target" lost focus
 |*
 |************************************************************************/
-
-IMPL_LINK_NOARG(SvxHyperlinkDocTp, LostFocusPathHdl_Impl, Control&, void)
+IMPL_LINK_NOARG(SvxHyperlinkDocTp, LostFocusPathHdl_Impl, weld::Widget&, void)
 {
     maStrURL = GetCurrentURL();
 
-    m_pFtFullURL->SetText( maStrURL );
+    m_xFtFullURL->set_label( maStrURL );
 }
 
 /*************************************************************************
@@ -324,12 +292,11 @@ IMPL_LINK_NOARG(SvxHyperlinkDocTp, LostFocusPathHdl_Impl, Control&, void)
 |* Get String from Bookmark-Wnd
 |*
 |************************************************************************/
-
 void SvxHyperlinkDocTp::SetMarkStr ( const OUString& aStrMark )
 {
-    m_pEdTarget->SetText ( aStrMark );
+    m_xEdTarget->set_text(aStrMark);
 
-    ModifiedTargetHdl_Impl ( *m_pEdTarget );
+    ModifiedTargetHdl_Impl ( *m_xEdTarget );
 }
 
 /*************************************************************************
@@ -337,7 +304,6 @@ void SvxHyperlinkDocTp::SetMarkStr ( const OUString& aStrMark )
 |* retrieve kind of pathstr
 |*
 |************************************************************************/
-
 SvxHyperlinkDocTp::EPathType SvxHyperlinkDocTp::GetPathType ( const OUString& rStrPath )
 {
     INetURLObject aURL( rStrPath, INetProtocol::File );

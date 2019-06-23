@@ -26,9 +26,7 @@
 #include <tools/link.hxx>
 #include <com/sun/star/frame/XFrame.hpp>
 
-class SfxModalDialog;
 class SfxSingleTabDialogController;
-class Dialog;
 class SfxItemPool;
 class FmShowColsDialog;
 class SvxZoomDialog;
@@ -487,10 +485,17 @@ public:
 };
 
 class SvxHpLinkDlg;
-class AbstractSvxHpLinkDlg_Impl :public AbstractSvxHpLinkDlg
+class AbstractSvxHpLinkDlg_Impl : public AbstractSvxHpLinkDlg
 {
-    DECL_ABSTDLG_BASE(AbstractSvxHpLinkDlg_Impl,SvxHpLinkDlg)
-    virtual vcl::Window*     GetWindow() override;
+protected:
+    std::shared_ptr<SvxHpLinkDlg> m_xDlg;
+public:
+    explicit AbstractSvxHpLinkDlg_Impl(std::unique_ptr<SvxHpLinkDlg> p)
+        : m_xDlg(std::move(p))
+    {
+    }
+    virtual short Execute() override;
+    virtual std::shared_ptr<SfxDialogController> GetController() override;
     virtual bool        QueryClose() override;
 };
 
@@ -793,8 +798,8 @@ public:
     virtual VclPtr<AbstractSvxObjectTitleDescDialog> CreateSvxObjectTitleDescDialog(weld::Window* pParent, const OUString& rTitle, const OUString& rDescription) override;
     virtual VclPtr<AbstractSvxMultiPathDialog>    CreateSvxMultiPathDialog(weld::Window* pParent) override;
     virtual VclPtr<AbstractSvxMultiPathDialog>    CreateSvxPathSelectDialog(weld::Window* pParent) override;
-    virtual VclPtr<AbstractSvxHpLinkDlg>          CreateSvxHpLinkDlg(vcl::Window* pParent, SfxBindings* pBindings) override;
-    virtual VclPtr<AbstractFmSearchDialog>         CreateFmSearchDialog(weld::Window* pParent,
+    virtual VclPtr<AbstractSvxHpLinkDlg>          CreateSvxHpLinkDlg(SfxChildWindow* pChild, SfxBindings* pBindings, weld::Window* pParent) override;
+    virtual VclPtr<AbstractFmSearchDialog>        CreateFmSearchDialog(weld::Window* pParent,
                                                         const OUString& strInitialText,
                                                         const std::vector< OUString >& _rContexts,
                                                         sal_Int16 nInitialContext,

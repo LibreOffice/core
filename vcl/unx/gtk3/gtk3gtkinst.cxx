@@ -2731,6 +2731,15 @@ public:
         return Point(current_x, current_y);
     }
 
+    virtual tools::Rectangle get_monitor_workarea() const override
+    {
+        GdkScreen* pScreen = gtk_widget_get_screen(GTK_WIDGET(m_pWindow));
+        gint nMonitor = gdk_screen_get_monitor_at_window(pScreen, gtk_widget_get_window(GTK_WIDGET(m_pWindow)));
+        GdkRectangle aRect;
+        gdk_screen_get_monitor_workarea(pScreen, nMonitor, &aRect);
+        return tools::Rectangle(aRect.x, aRect.y, aRect.x + aRect.width, aRect.y + aRect.height);
+    }
+
     virtual void set_centered_on_parent(bool bTrackGeometryRequests) override
     {
         if (bTrackGeometryRequests)

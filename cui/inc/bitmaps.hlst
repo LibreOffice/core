@@ -66,15 +66,7 @@
 #define RID_CUIBMP_COLLAPSED            "res/plus.png"
 #define RID_CUIBMP_EXPANDED             "res/minus.png"
 
-#define RID_SVXBMP_HLINETTP             "res/hlinettp.png"
-#define RID_SVXBMP_HLMAILTP             "res/hlmailtp.png"
-#define RID_SVXBMP_HLDOCTP              "res/hldoctp.png"
-#define RID_SVXBMP_HLDOCNTP             "res/hldocntp.png"
 #define RID_SVXBMP_SCRIPT               "res/script.png"
-#define RID_SVXBMP_ADRESSBOOK           "res/adrbook.png"
-#define RID_SVXBMP_FILEOPEN             "res/fileopen.png"
-#define RID_SVXBMP_TARGET               "res/target.png"
-#define RID_SVXBMP_NEWDOC               "res/newdoc.png"
 
 #define RID_SVXBMP_COLLAPSEDNODE        "res/sx18002.png"
 #define RID_SVXBMP_EXPANDEDNODE         "res/sx18003.png"

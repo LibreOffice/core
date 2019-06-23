@@ -244,10 +244,6 @@
                         generic-name="LanguageBox" parent="VclComboBoxText"
                         icon-name="widget-gtk-combobox"/>
 
-    <glade-widget-class title="URL Entry" name="cuilo-SvxHyperURLBox"
-                        generic-name="URL Entry" parent="GtkEntry"
-                        icon-name="widget-gtk-textentry"/>
-
     <glade-widget-class title="Another NoSpace Edit" name="cuilo-SvxNoSpaceEdit"
                         generic-name="Another NoSpace Edit" parent="GtkEntry"
                         icon-name="widget-gtk-textentry">
@@ -329,10 +325,6 @@
     <glade-widget-class title="TypeSelectList" name="dbulo-OWizTypeSelectList"
                         generic-name="TypeSelectList" parent="GtkTreeView"
                         icon-name="widget-gtk-treeview"/>
-
-    <glade-widget-class title="Icon Choice Control" name="cuilo-SvtIconChoiceCtrl"
-                        generic-name="Icon Choice Control" parent="GtkIconView"
-                        icon-name="widget-gtk-iconview"/>
 
     <glade-widget-class title="Recent Documents View" name="sfxlo-RecentDocsView"
                         generic-name="Icon View" parent="GtkIconView"

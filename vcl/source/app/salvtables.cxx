@@ -46,6 +46,7 @@
 #include <vcl/fixedhyper.hxx>
 #include <vcl/fmtfield.hxx>
 #include <vcl/headbar.hxx>
+#include <vcl/ivctrl.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/menubtn.hxx>
 #include <vcl/prgsbar.hxx>
@@ -1094,6 +1095,11 @@ public:
         return m_xWindow->GetPosPixel();
     }
 
+    virtual tools::Rectangle get_monitor_workarea() const override
+    {
+        return m_xWindow->GetDesktopRectPixel();
+    }
+
     virtual void set_centered_on_parent(bool /*bTrackGeometryRequests*/) override
     {
         if (vcl::Window* pParent = m_xWidget->GetParent())
@@ -1809,6 +1815,97 @@ IMPL_LINK_NOARG(SalInstanceNotebook, DeactivatePageHdl, TabControl*, bool)
 }
 
 IMPL_LINK_NOARG(SalInstanceNotebook, ActivatePageHdl, TabControl*, void)
+{
+    m_aEnterPageHdl.Call(get_current_page_ident());
+}
+
+class SalInstanceVerticalNotebook : public SalInstanceContainer, public virtual weld::Notebook
+{
+private:
+    VclPtr<VerticalTabControl> m_xNotebook;
+    mutable std::vector<std::unique_ptr<SalInstanceContainer>> m_aPages;
+
+    DECL_LINK(DeactivatePageHdl, VerticalTabControl*, bool);
+    DECL_LINK(ActivatePageHdl, VerticalTabControl*, void);
+
+public:
+    SalInstanceVerticalNotebook(VerticalTabControl* pNotebook, SalInstanceBuilder* pBuilder, bool bTakeOwnership)
+        : SalInstanceContainer(pNotebook, pBuilder, bTakeOwnership)
+        , m_xNotebook(pNotebook)
+    {
+        m_xNotebook->SetActivatePageHdl(LINK(this, SalInstanceVerticalNotebook, ActivatePageHdl));
+        m_xNotebook->SetDeactivatePageHdl(LINK(this, SalInstanceVerticalNotebook, DeactivatePageHdl));
+    }
+
+    virtual int get_current_page() const override
+    {
+        return m_xNotebook->GetPagePos(m_xNotebook->GetCurPageId());
+    }
+
+    virtual OString get_current_page_ident() const override
+    {
+        return m_xNotebook->GetCurPageId();
+    }
+
+    virtual weld::Container* get_page(const OString& rIdent) const override
+    {
+        sal_uInt16 nPageIndex = m_xNotebook->GetPagePos(rIdent);
+        if (nPageIndex == TAB_PAGE_NOTFOUND)
+            return nullptr;
+        auto pChild = m_xNotebook->GetPage(rIdent);
+        if (m_aPages.size() < nPageIndex + 1U)
+            m_aPages.resize(nPageIndex + 1U);
+        if (!m_aPages[nPageIndex])
+            m_aPages[nPageIndex].reset(new SalInstanceContainer(pChild, m_pBuilder, false));
+        return m_aPages[nPageIndex].get();
+    }
+
+    virtual void set_current_page(int nPage) override
+    {
+        m_xNotebook->SetCurPageId(m_xNotebook->GetPageId(nPage));
+    }
+
+    virtual void set_current_page(const OString& rIdent) override
+    {
+        m_xNotebook->SetCurPageId(rIdent);
+    }
+
+    virtual void remove_page(const OString& rIdent) override
+    {
+        m_xNotebook->RemovePage(rIdent);
+    }
+
+    virtual void append_page(const OString& rIdent, const OUString& rLabel) override
+    {
+        VclPtrInstance<VclGrid> xGrid(m_xNotebook->GetPageParent());
+        xGrid->set_hexpand(true);
+        xGrid->set_vexpand(true);
+        m_xNotebook->InsertPage(rIdent, rLabel, Image(), "", xGrid);
+    }
+
+    virtual int get_n_pages() const override
+    {
+        return m_xNotebook->GetPageCount();
+    }
+
+    virtual OUString get_tab_label_text(const OString& rIdent) const override
+    {
+        return m_xNotebook->GetPageText(rIdent);
+    }
+
+    virtual ~SalInstanceVerticalNotebook() override
+    {
+        m_xNotebook->SetActivatePageHdl(Link<VerticalTabControl*,void>());
+        m_xNotebook->SetDeactivatePageHdl(Link<VerticalTabControl*,bool>());
+    }
+};
+
+IMPL_LINK_NOARG(SalInstanceVerticalNotebook, DeactivatePageHdl, VerticalTabControl*, bool)
+{
+    return !m_aLeavePageHdl.IsSet() || m_aLeavePageHdl.Call(get_current_page_ident());
+}
+
+IMPL_LINK_NOARG(SalInstanceVerticalNotebook, ActivatePageHdl, VerticalTabControl*, void)
 {
     m_aEnterPageHdl.Call(get_current_page_ident());
 }
@@ -5228,8 +5325,12 @@ public:
 
     virtual std::unique_ptr<weld::Notebook> weld_notebook(const OString &id, bool bTakeOwnership) override
     {
-        TabControl* pNotebook = m_xBuilder->get<TabControl>(id);
-        return pNotebook ? std::make_unique<SalInstanceNotebook>(pNotebook, this, bTakeOwnership) : nullptr;
+        vcl::Window* pNotebook = m_xBuilder->get<vcl::Window>(id);
+        if (pNotebook->GetType() == WindowType::TABCONTROL)
+            return std::make_unique<SalInstanceNotebook>(static_cast<TabControl*>(pNotebook), this, bTakeOwnership);
+        if (pNotebook->GetType() == WindowType::VERTICALTABCONTROL)
+            return std::make_unique<SalInstanceVerticalNotebook>(static_cast<VerticalTabControl*>(pNotebook), this, bTakeOwnership);
+        return nullptr;
     }
 
     virtual std::unique_ptr<weld::Button> weld_button(const OString &id, bool bTakeOwnership) override
