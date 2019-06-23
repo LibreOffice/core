@@ -35,7 +35,7 @@ sal_Char const sFileScheme[]    = INET_FILE_SCHEME;
 |*
 |************************************************************************/
 
-SvxHyperlinkDocTp::SvxHyperlinkDocTp ( vcl::Window *pParent, IconChoiceDialog* pDlg, const SfxItemSet* pItemSet)
+SvxHyperlinkDocTp::SvxHyperlinkDocTp ( vcl::Window *pParent, SvxHpLinkDlg* pDlg, const SfxItemSet* pItemSet)
     : SvxHyperlinkTabPageBase ( pParent, pDlg, "HyperlinkDocPage", "cui/ui/hyperlinkdocpage.ui", pItemSet ),
     mbMarkWndOpen   ( false )
 {
@@ -166,7 +166,7 @@ void SvxHyperlinkDocTp::GetCurentItemData ( OUString& rStrURL, OUString& aStrNam
 |*
 |************************************************************************/
 
-VclPtr<IconChoicePage> SvxHyperlinkDocTp::Create( vcl::Window* pWindow, IconChoiceDialog* pDlg, const SfxItemSet* pItemSet )
+VclPtr<IconChoicePage> SvxHyperlinkDocTp::Create( vcl::Window* pWindow, SvxHpLinkDlg* pDlg, const SfxItemSet* pItemSet )
 {
     return VclPtr<SvxHyperlinkDocTp>::Create( pWindow, pDlg, pItemSet );
 }

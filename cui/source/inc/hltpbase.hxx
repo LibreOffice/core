@@ -99,7 +99,7 @@ protected:
 public:
     SvxHyperlinkTabPageBase (
         vcl::Window *pParent,
-        IconChoiceDialog* pDlg,
+        SvxHpLinkDlg* pDlg,
         const OString& rID,
         const OUString& rUIXMLDescription,
         const SfxItemSet* pItemSet
