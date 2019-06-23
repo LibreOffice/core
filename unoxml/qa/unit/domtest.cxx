@@ -181,7 +181,7 @@ struct TokenHandler
 {
     virtual ::sal_Int32 SAL_CALL getTokenFromUTF8( const uno::Sequence< ::sal_Int8 >& Identifier ) override
     {
-        return Identifier.getLength() ? Identifier[0] : 0;
+        return Identifier.hasElements() ? Identifier[0] : 0;
     }
 
     virtual uno::Sequence< ::sal_Int8 > SAL_CALL getUTF8Identifier( ::sal_Int32 ) override
