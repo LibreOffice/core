@@ -2110,11 +2110,6 @@ void ScDocument::CopyToDocument(const ScRange& rRange,
 
     sc::AutoCalcSwitch aACSwitch(rDestDoc, false); // avoid multiple calculations
 
-    // tdf#102364 - in some pathological cases CopyToDocument() replacing cells with new cells
-    // can lead to repetitive splitting and rejoining of the same formula group, which can get
-    // quadratically expensive with large groups. So do the grouping just once at the end.
-    sc::DelayFormulaGroupingSwitch delayGrouping( rDestDoc, true );
-
     sc::CopyToDocContext aCxt(rDestDoc);
     aCxt.setStartListening(false);
 
@@ -2132,7 +2127,6 @@ void ScDocument::CopyToDocument(const ScRange& rRange,
             /*bGlobalNamesToLocal*/false, /*bCopyCaptions*/true);
     }
 
-    delayGrouping.reset(); // groups need to be updated before setting up listeners
     rDestDoc.StartAllListeners(aNewRange);
 }
 
