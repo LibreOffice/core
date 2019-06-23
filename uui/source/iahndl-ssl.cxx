@@ -82,9 +82,7 @@ bool
 isDomainMatch(
               const OUString& hostName, const uno::Sequence< OUString >& certHostNames)
 {
-    for ( int i = 0; i < certHostNames.getLength(); i++){
-       OUString element = certHostNames[i];
-
+    for ( const OUString& element : certHostNames){
        if (element.isEmpty())
            continue;
 
@@ -260,15 +258,14 @@ handleCertificateValidationRequest_(
 
     uno::Sequence< uno::Reference< security::XCertificateExtension > > extensions = rRequest.Certificate->getExtensions();
     uno::Reference< security::XSanExtension > sanExtension;
-    for (sal_Int32 i = 0 ; i < extensions.getLength(); ++i)
+    auto pExtension = std::find_if(extensions.begin(), extensions.end(),
+        [](const uno::Reference< security::XCertificateExtension >& element) {
+            OString aId ( reinterpret_cast<const char *>(element->getExtensionId().getConstArray()), element->getExtensionId().getLength());
+            return aId == OID_SUBJECT_ALTERNATIVE_NAME;
+        });
+    if (pExtension != extensions.end())
     {
-        uno::Reference< security::XCertificateExtension >element = extensions[i];
-        OString aId ( reinterpret_cast<const char *>(element->getExtensionId().getConstArray()), element->getExtensionId().getLength());
-        if (aId == OID_SUBJECT_ALTERNATIVE_NAME)
-        {
-           sanExtension = uno::Reference<security::XSanExtension>(element, uno::UNO_QUERY);
-           break;
-        }
+       sanExtension = uno::Reference<security::XSanExtension>(*pExtension, uno::UNO_QUERY);
     }
 
     std::vector<security::CertAltNameEntry> altNames;

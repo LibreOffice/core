@@ -50,11 +50,11 @@ void getContinuations(
     css::uno::Reference< t1 > * pContinuation1,
     css::uno::Reference< t2 > * pContinuation2)
 {
-    for (sal_Int32 i = 0; i < rContinuations.getLength(); ++i)
+    for (const auto& rContinuation : rContinuations)
     {
-        if (setContinuation(rContinuations[i], pContinuation1))
+        if (setContinuation(rContinuation, pContinuation1))
             continue;
-        if (setContinuation(rContinuations[i], pContinuation2))
+        if (setContinuation(rContinuation, pContinuation2))
             continue;
     }
 }
@@ -67,13 +67,13 @@ void getContinuations(
     css::uno::Reference< t2 > * pContinuation2,
     css::uno::Reference< t3 > * pContinuation3)
 {
-    for (sal_Int32 i = 0; i < rContinuations.getLength(); ++i)
+    for (const auto& rContinuation : rContinuations)
     {
-        if (setContinuation(rContinuations[i], pContinuation1))
+        if (setContinuation(rContinuation, pContinuation1))
             continue;
-        if (setContinuation(rContinuations[i], pContinuation2))
+        if (setContinuation(rContinuation, pContinuation2))
             continue;
-        if (setContinuation(rContinuations[i], pContinuation3))
+        if (setContinuation(rContinuation, pContinuation3))
             continue;
     }
 }
@@ -87,15 +87,15 @@ void getContinuations(
     css::uno::Reference< t3 > * pContinuation3,
     css::uno::Reference< t4 > * pContinuation4)
 {
-    for (sal_Int32 i = 0; i < rContinuations.getLength(); ++i)
+    for (const auto& rContinuation : rContinuations)
     {
-        if (setContinuation(rContinuations[i], pContinuation1))
+        if (setContinuation(rContinuation, pContinuation1))
             continue;
-        if (setContinuation(rContinuations[i], pContinuation2))
+        if (setContinuation(rContinuation, pContinuation2))
             continue;
-        if (setContinuation(rContinuations[i], pContinuation3))
+        if (setContinuation(rContinuation, pContinuation3))
             continue;
-        if (setContinuation(rContinuations[i], pContinuation4))
+        if (setContinuation(rContinuation, pContinuation4))
             continue;
     }
 }

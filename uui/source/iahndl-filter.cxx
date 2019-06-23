@@ -205,68 +205,62 @@ handleFilterOptionsRequest_(
         try
         {
             OUString aFilterName;
-            sal_Int32 nPropCount = rRequest.rProperties.getLength();
-            for( sal_Int32 ind = 0; ind < nPropCount; ++ind )
+            auto pProperty = std::find_if(rRequest.rProperties.begin(), rRequest.rProperties.end(),
+                [](const beans::PropertyValue& rProp) { return rProp.Name == "FilterName"; });
+            if (pProperty != rRequest.rProperties.end())
             {
-                if( rRequest.rProperties[ind].Name == "FilterName" )
-                {
-                    rRequest.rProperties[ind].Value >>= aFilterName;
-                    break;
-                }
+                pProperty->Value >>= aFilterName;
             }
 
             uno::Sequence < beans::PropertyValue > aProps;
             if ( xFilterCFG->getByName( aFilterName ) >>= aProps )
             {
-                sal_Int32 nPropertyCount = aProps.getLength();
-                for( sal_Int32 nProperty=0;
-                     nProperty < nPropertyCount;
-                     ++nProperty )
-                    if( aProps[nProperty].Name == "UIComponent" )
+                auto pProp = std::find_if(aProps.begin(), aProps.end(),
+                    [](const beans::PropertyValue& rProp) { return rProp.Name == "UIComponent"; });
+                if (pProp != aProps.end())
+                {
+                    OUString aServiceName;
+                    pProp->Value >>= aServiceName;
+                    if( !aServiceName.isEmpty() )
                     {
-                        OUString aServiceName;
-                        aProps[nProperty].Value >>= aServiceName;
-                        if( !aServiceName.isEmpty() )
+                        uno::Sequence<uno::Any> aDialogArgs(comphelper::InitAnyPropertySequence(
                         {
-                            uno::Sequence<uno::Any> aDialogArgs(comphelper::InitAnyPropertySequence(
-                            {
-                                {"ParentWindow", uno::Any(rWindow)},
-                            }));
+                            {"ParentWindow", uno::Any(rWindow)},
+                        }));
 
+                        uno::Reference<
+                            ui::dialogs::XExecutableDialog > xFilterDialog(
+                                xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
+                                    aServiceName, aDialogArgs, xContext ),
+                                uno::UNO_QUERY );
+
+                        uno::Reference< beans::XPropertyAccess >
+                            xFilterProperties( xFilterDialog,
+                                               uno::UNO_QUERY );
+
+                        if( xFilterDialog.is() && xFilterProperties.is() )
+                        {
                             uno::Reference<
-                                ui::dialogs::XExecutableDialog > xFilterDialog(
-                                    xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
-                                        aServiceName, aDialogArgs, xContext ),
-                                    uno::UNO_QUERY );
+                                document::XImporter > xImporter(
+                                    xFilterDialog, uno::UNO_QUERY );
+                            if( xImporter.is() )
+                                xImporter->setTargetDocument(
+                                    uno::Reference< lang::XComponent >(
+                                        rRequest.rModel, uno::UNO_QUERY ) );
 
-                            uno::Reference< beans::XPropertyAccess >
-                                xFilterProperties( xFilterDialog,
-                                                   uno::UNO_QUERY );
+                            xFilterProperties->setPropertyValues(
+                                rRequest.rProperties );
 
-                            if( xFilterDialog.is() && xFilterProperties.is() )
+                            if( xFilterDialog->execute() )
                             {
-                                uno::Reference<
-                                    document::XImporter > xImporter(
-                                        xFilterDialog, uno::UNO_QUERY );
-                                if( xImporter.is() )
-                                    xImporter->setTargetDocument(
-                                        uno::Reference< lang::XComponent >(
-                                            rRequest.rModel, uno::UNO_QUERY ) );
-
-                                xFilterProperties->setPropertyValues(
-                                    rRequest.rProperties );
-
-                                if( xFilterDialog->execute() )
-                                {
-                                    xFilterOptions->setFilterOptions(
-                                        xFilterProperties->getPropertyValues() );
-                                    xFilterOptions->select();
-                                    return;
-                                }
+                                xFilterOptions->setFilterOptions(
+                                    xFilterProperties->getPropertyValues() );
+                                xFilterOptions->select();
+                                return;
                             }
                         }
-                        break;
                     }
+                }
             }
         }
         catch( container::NoSuchElementException& )

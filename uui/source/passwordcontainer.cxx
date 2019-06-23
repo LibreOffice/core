@@ -370,9 +370,9 @@ PasswordContainerInteractionHandler::handleInteractionRequest(
     uno::Reference< ucb::XInteractionSupplyAuthentication >
         xSupplyAuthentication;
 
-    for ( sal_Int32 i = 0; i < rContinuations.getLength(); ++i )
+    for ( const auto& rContinuation : rContinuations )
     {
-        xSupplyAuthentication.set( rContinuations[i], uno::UNO_QUERY );
+        xSupplyAuthentication.set( rContinuation, uno::UNO_QUERY );
         if( xSupplyAuthentication.is() )
             break;
     }
