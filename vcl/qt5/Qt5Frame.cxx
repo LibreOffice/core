@@ -460,7 +460,7 @@ void Qt5Frame::SetPosSize(long nX, long nY, long nWidth, long nHeight, sal_uInt1
                     asChild()->setFixedSize(nWidth, nHeight);
 
                 // assume the resize happened
-                // needed for calculations and will eventuall be corrected by events
+                // needed for calculations and will eventually be corrected by events
                 maGeometry.nWidth = nWidth;
                 maGeometry.nHeight = nHeight;
             }
