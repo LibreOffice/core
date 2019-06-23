@@ -965,12 +965,10 @@ namespace DOM
         // add new namespaces to root node
         xmlNodePtr const pRoot = lcl_getDocumentRootPtr(m_aDocPtr);
         if (nullptr != pRoot) {
-            const beans::StringPair * pSeq = i_rNamespaces.getConstArray();
-            for (const beans::StringPair *pNsDef = pSeq;
-                 pNsDef < pSeq + i_rNamespaces.getLength(); ++pNsDef) {
-                OString prefix = OUStringToOString(pNsDef->First,
+            for (const beans::StringPair& rNsDef : i_rNamespaces) {
+                OString prefix = OUStringToOString(rNsDef.First,
                                     RTL_TEXTENCODING_UTF8);
-                OString href   = OUStringToOString(pNsDef->Second,
+                OString href   = OUStringToOString(rNsDef.Second,
                                     RTL_TEXTENCODING_UTF8);
                 // this will only add the ns if it does not exist already
                 xmlNewNs(pRoot, reinterpret_cast<const xmlChar*>(href.getStr()),
@@ -993,12 +991,10 @@ namespace DOM
         // add new namespaces to root node
         xmlNodePtr const pRoot = lcl_getDocumentRootPtr(m_aDocPtr);
         if (nullptr != pRoot) {
-            const beans::StringPair * pSeq = i_rNamespaces.getConstArray();
-            for (const beans::StringPair *pNsDef = pSeq;
-                 pNsDef < pSeq + i_rNamespaces.getLength(); ++pNsDef) {
-                OString prefix = OUStringToOString(pNsDef->First,
+            for (const beans::StringPair& rNsDef : i_rNamespaces) {
+                OString prefix = OUStringToOString(rNsDef.First,
                                     RTL_TEXTENCODING_UTF8);
-                OString href   = OUStringToOString(pNsDef->Second,
+                OString href   = OUStringToOString(rNsDef.Second,
                                     RTL_TEXTENCODING_UTF8);
                 // this will only add the ns if it does not exist already
                 xmlNewNs(pRoot, reinterpret_cast<const xmlChar*>(href.getStr()),
@@ -1012,13 +1008,11 @@ namespace DOM
                          i_xTokenHandler);
 
         // register namespace ids
-        const beans::Pair<OUString,sal_Int32>* pSeq = i_rRegisterNamespaces.getConstArray();
-        for (const beans::Pair<OUString,sal_Int32>* pNs = pSeq;
-             pNs < pSeq + i_rRegisterNamespaces.getLength(); ++pNs)
+        for (const beans::Pair<OUString,sal_Int32>& rNs : i_rRegisterNamespaces)
         {
-            OSL_ENSURE(pNs->Second >= FastToken::NAMESPACE,
+            OSL_ENSURE(rNs.Second >= FastToken::NAMESPACE,
                        "CDocument::fastSerialize(): invalid NS token id");
-            aContext.maNamespaceMap[ pNs->First ] = pNs->Second;
+            aContext.maNamespaceMap[ rNs.First ] = rNs.Second;
         }
 
         fastSaxify(aContext);

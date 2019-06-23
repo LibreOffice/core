@@ -254,12 +254,11 @@ namespace DOM
         {
             setElementFastAttributes(aElement, xAttribs);
             Sequence< css::xml::Attribute > unknownAttribs = xAttribs->getUnknownAttributes();
-            sal_Int32 len = unknownAttribs.getLength();
-            for ( sal_Int32 i = 0; i < len; i++ )
+            for ( const auto& rUnknownAttrib : unknownAttribs )
             {
-                const OUString& rAttrValue = unknownAttribs[i].Value;
-                const OUString& rAttrName = unknownAttribs[i].Name;
-                const OUString& rAttrNamespace = unknownAttribs[i].NamespaceURL;
+                const OUString& rAttrValue = rUnknownAttrib.Value;
+                const OUString& rAttrName = rUnknownAttrib.Name;
+                const OUString& rAttrNamespace = rUnknownAttrib.NamespaceURL;
                 if ( !rAttrNamespace.isEmpty() )
                     aElement->setAttributeNS( rAttrNamespace, rAttrName, rAttrValue );
                 else
