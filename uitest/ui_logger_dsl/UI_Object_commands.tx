@@ -69,4 +69,3 @@ Clear:
 increase_or_ecrease:
   'Increase' | 'Decrease'
 ;
-

@@ -7,4 +7,3 @@ parameter:
 data:
     key=STRING ':' value=ID ','
 ;
-
