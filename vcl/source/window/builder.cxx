@@ -33,6 +33,7 @@
 #include <vcl/fixedhyper.hxx>
 #include <vcl/headbar.hxx>
 #include <vcl/IPrioritable.hxx>
+#include <vcl/ivctrl.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/menubtn.hxx>
@@ -928,6 +929,19 @@ namespace
         return bVertical;
     }
 
+    bool extractVerticalTabPos(VclBuilder::stringmap &rMap)
+    {
+        bool bVertical = false;
+        VclBuilder::stringmap::iterator aFind = rMap.find("tab-pos");
+        if (aFind != rMap.end())
+        {
+            bVertical = aFind->second.equalsIgnoreAsciiCase("left") ||
+                        aFind->second.equalsIgnoreAsciiCase("right");
+            rMap.erase(aFind);
+        }
+        return bVertical;
+    }
+
     bool extractInconsistent(VclBuilder::stringmap &rMap)
     {
         bool bInconsistent = false;
@@ -1611,35 +1625,46 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
     bool bIsPlaceHolder = name.isEmpty();
     bool bVertical = false;
 
-    if (pParent && pParent->GetType() == WindowType::TABCONTROL)
+    if (pParent && (pParent->GetType() == WindowType::TABCONTROL ||
+                    pParent->GetType() == WindowType::VERTICALTABCONTROL))
     {
         bool bTopLevel(name == "GtkDialog" || name == "GtkMessageDialog" ||
                        name == "GtkWindow" || name == "GtkPopover");
         if (!bTopLevel)
         {
-            //We have to add a page
-            //make default pageid == position
-            TabControl *pTabControl = static_cast<TabControl*>(pParent);
-            sal_uInt16 nNewPageCount = pTabControl->GetPageCount()+1;
-            sal_uInt16 nNewPageId = nNewPageCount;
-            pTabControl->InsertPage(nNewPageId, OUString());
-            pTabControl->SetCurPageId(nNewPageId);
-            SAL_WARN_IF(bIsPlaceHolder, "vcl.layout", "we should have no placeholders for tabpages");
-            if (!bIsPlaceHolder)
+            if (pParent->GetType() == WindowType::TABCONTROL)
             {
-                VclPtrInstance<TabPage> pPage(pTabControl);
-                pPage->Show();
+                //We have to add a page
+                //make default pageid == position
+                TabControl *pTabControl = static_cast<TabControl*>(pParent);
+                sal_uInt16 nNewPageCount = pTabControl->GetPageCount()+1;
+                sal_uInt16 nNewPageId = nNewPageCount;
+                pTabControl->InsertPage(nNewPageId, OUString());
+                pTabControl->SetCurPageId(nNewPageId);
+                SAL_WARN_IF(bIsPlaceHolder, "vcl.layout", "we should have no placeholders for tabpages");
+                if (!bIsPlaceHolder)
+                {
+                    VclPtrInstance<TabPage> pPage(pTabControl);
+                    pPage->Show();
 
-                //Make up a name for it
-                OString sTabPageId = get_by_window(pParent) +
-                    OString("-page") +
-                    OString::number(nNewPageCount);
-                m_aChildren.emplace_back(sTabPageId, pPage, false);
-                pPage->SetHelpId(m_sHelpRoot + sTabPageId);
+                    //Make up a name for it
+                    OString sTabPageId = get_by_window(pParent) +
+                        OString("-page") +
+                        OString::number(nNewPageCount);
+                    m_aChildren.emplace_back(sTabPageId, pPage, false);
+                    pPage->SetHelpId(m_sHelpRoot + sTabPageId);
 
-                pParent = pPage;
+                    pParent = pPage;
 
-                pTabControl->SetTabPage(nNewPageId, pPage);
+                    pTabControl->SetTabPage(nNewPageId, pPage);
+                }
+            }
+            else
+            {
+                VerticalTabControl *pTabControl = static_cast<VerticalTabControl*>(pParent);
+                SAL_WARN_IF(bIsPlaceHolder, "vcl.layout", "we should have no placeholders for tabpages");
+                if (!bIsPlaceHolder)
+                    pParent = pTabControl->GetPageParent();
             }
         }
     }
@@ -2091,7 +2116,10 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
     }
     else if (name == "GtkNotebook")
     {
-        xWindow = VclPtr<TabControl>::Create(pParent, WB_STDTABCONTROL|WB_3DLOOK);
+        if (!extractVerticalTabPos(rMap))
+            xWindow = VclPtr<TabControl>::Create(pParent, WB_STDTABCONTROL|WB_3DLOOK);
+        else
+            xWindow = VclPtr<VerticalTabControl>::Create(pParent);
     }
     else if (name == "GtkDrawingArea")
     {
@@ -2627,7 +2655,7 @@ VclPtr<vcl::Window> VclBuilder::insertObject(vcl::Window *pParent, const OString
 
 void VclBuilder::handleTabChild(vcl::Window *pParent, xmlreader::XmlReader &reader)
 {
-    OString sID;
+    std::vector<OString> sIDs;
 
     int nLevel = 1;
     stringmap aProperties;
@@ -2651,7 +2679,7 @@ void VclBuilder::handleTabChild(vcl::Window *pParent, xmlreader::XmlReader &read
                     if (name.equals("id"))
                     {
                         name = reader.getAttributeValue(false);
-                        sID = OString(name.begin, name.length);
+                        OString sID = OString(name.begin, name.length);
                         sal_Int32 nDelim = sID.indexOf(':');
                         if (nDelim != -1)
                         {
@@ -2659,6 +2687,7 @@ void VclBuilder::handleTabChild(vcl::Window *pParent, xmlreader::XmlReader &read
                             aProperties[OString("customproperty")] = OUString::fromUtf8(sPattern);
                             sID = sID.copy(0, nDelim);
                         }
+                        sIDs.push_back(sID);
                     }
                 }
             }
@@ -2685,21 +2714,39 @@ void VclBuilder::handleTabChild(vcl::Window *pParent, xmlreader::XmlReader &read
     if (!pParent)
         return;
 
-    TabControl *pTabControl = static_cast<TabControl*>(pParent);
+    TabControl *pTabControl = pParent->GetType() == WindowType::TABCONTROL ?
+        static_cast<TabControl*>(pParent) : nullptr;
+    VerticalTabControl *pVerticalTabControl = pParent->GetType() == WindowType::VERTICALTABCONTROL ?
+        static_cast<VerticalTabControl*>(pParent) : nullptr;
+    assert(pTabControl || pVerticalTabControl);
     VclBuilder::stringmap::iterator aFind = aProperties.find(OString("label"));
     if (aFind != aProperties.end())
     {
-        sal_uInt16 nPageId = pTabControl->GetCurPageId();
-        pTabControl->SetPageText(nPageId, aFind->second);
-        pTabControl->SetPageName(nPageId, sID);
-        if (!context.empty())
+        if (pTabControl)
         {
-            TabPage* pPage = pTabControl->GetTabPage(nPageId);
-            pPage->SetContext(context);
+            sal_uInt16 nPageId = pTabControl->GetCurPageId();
+            pTabControl->SetPageText(nPageId, aFind->second);
+            pTabControl->SetPageName(nPageId, sIDs.back());
+            if (!context.empty())
+            {
+                TabPage* pPage = pTabControl->GetTabPage(nPageId);
+                pPage->SetContext(context);
+            }
+        }
+        else
+        {
+            OUString sLabel(aFind->second);
+            OUString sIconName(extractIconName(aProperties));
+            OUString sTooltip(extractTooltipText(aProperties));
+            pVerticalTabControl->InsertPage(sIDs.front(), sLabel, FixedImage::loadThemeImage(sIconName), sTooltip,
+                                            pVerticalTabControl->GetPageParent()->GetWindow(GetWindowType::LastChild));
         }
     }
     else
-        pTabControl->RemovePage(pTabControl->GetCurPageId());
+    {
+        if (pTabControl)
+            pTabControl->RemovePage(pTabControl->GetCurPageId());
+    }
 }
 
 //so that tabbing between controls goes in a visually sensible sequence

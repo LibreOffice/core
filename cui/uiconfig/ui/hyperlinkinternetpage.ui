@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
-  <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkBox" id="HyperlinkInternetPage">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="hexpand">True</property>
     <property name="vexpand">True</property>
+    <property name="border_width">6</property>
     <property name="orientation">vertical</property>
     <property name="spacing">24</property>
     <child>
@@ -92,17 +92,6 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="cuilo-SvxHyperURLBox" id="target">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="hexpand">True</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">1</property>
-                  </packing>
-                </child>
-                <child>
                   <object class="GtkLabel" id="login_label">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
@@ -167,6 +156,23 @@
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="top_attach">4</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkComboBoxText" id="target">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="hexpand">True</property>
+                    <property name="has_entry">True</property>
+                    <child internal-child="entry">
+                      <object class="GtkEntry">
+                        <property name="can_focus">False</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">1</property>
                   </packing>
                 </child>
                 <child>
@@ -303,7 +309,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkComboBox" id="form">
+                      <object class="GtkComboBoxText" id="form">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="hexpand">True</property>
@@ -319,6 +325,7 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="tooltip_text" translatable="yes" context="hyperlinkinternetpage|script|tooltip_text">Events</property>
+                        <property name="always_show_image">True</property>
                       </object>
                       <packing>
                         <property name="left_attach">3</property>
@@ -326,7 +333,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkComboBox" id="frame">
+                      <object class="GtkComboBoxText" id="frame">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="hexpand">True</property>

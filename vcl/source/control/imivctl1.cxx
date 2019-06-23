@@ -246,6 +246,13 @@ void SvxIconChoiceCtrl_Impl::InsertEntry( std::unique_ptr<SvxIconChoiceCtrlEntry
         InvalidateBoundingRect( pEntry->aRect );
 }
 
+void SvxIconChoiceCtrl_Impl::RemoveEntry(size_t nPos)
+{
+    pImpCursor->Clear();
+    maEntries.erase(maEntries.begin() + nPos);
+    RecalcAllBoundingRectsSmart();
+}
+
 void SvxIconChoiceCtrl_Impl::CreateAutoMnemonics( MnemonicGenerator* _pGenerator )
 {
     std::unique_ptr< MnemonicGenerator > pAutoDeleteOwnGenerator;

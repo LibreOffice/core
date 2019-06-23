@@ -107,7 +107,7 @@ public:
     virtual void            Deactivate() override;
     virtual void            ChildWinDispose() override;
     virtual void            FillInfo(SfxChildWinInfo&) const;
-    SfxBindings&            GetBindings() { return *m_pBindings; }
+    SfxBindings&            GetBindings() const { return *m_pBindings; }
 };
 
 // class SfxFloatingWindow --------------------------------------------------

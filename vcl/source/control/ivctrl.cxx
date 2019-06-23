@@ -22,10 +22,11 @@
 #include "imivctl.hxx"
 #include <vcl/accessiblefactory.hxx>
 #include <vcl/bitmapex.hxx>
+#include <vcl/commandevent.hxx>
 #include <vcl/controllayout.hxx>
 #include <vcl/mnemonic.hxx>
 #include <vcl/settings.hxx>
-#include <vcl/commandevent.hxx>
+#include <vcl/tabctrl.hxx>
 #include <vcl/vclevent.hxx>
 
 using namespace ::com::sun::star::accessibility;
@@ -102,6 +103,11 @@ SvxIconChoiceCtrlEntry* SvtIconChoiceCtrl::InsertEntry( const OUString& rText, c
     _pImpl->InsertEntry(std::unique_ptr<SvxIconChoiceCtrlEntry>(pEntry), _pImpl->GetEntryCount());
 
     return pEntry;
+}
+
+void SvtIconChoiceCtrl::RemoveEntry(sal_Int32 nIndex)
+{
+    _pImpl->RemoveEntry(nIndex);
 }
 
 void SvtIconChoiceCtrl::DrawEntryImage( SvxIconChoiceCtrlEntry const * pEntry, const Point& rPos, OutputDevice& rDev )
@@ -430,6 +436,185 @@ css::uno::Reference< XAccessible > SvtIconChoiceCtrl::CreateAccessible()
         }
     }
     return xAccessible;
+}
+
+struct VerticalTabPageData
+{
+    OString sId;
+    SvxIconChoiceCtrlEntry* pEntry;
+    VclPtr<vcl::Window> xPage;      ///< the TabPage itself
+};
+
+VerticalTabControl::VerticalTabControl(vcl::Window* pParent)
+    : VclHBox(pParent)
+    , m_xChooser(VclPtr<SvtIconChoiceCtrl>::Create(this, WB_3DLOOK | WB_ICON | WB_BORDER |
+                                                         WB_NOCOLUMNHEADER | WB_HIGHLIGHTFRAME |
+                                                         WB_NODRAGSELECTION | WB_TABSTOP | WB_CLIPCHILDREN |
+                                                         WB_ALIGN_LEFT | WB_NOHSCROLL))
+    , m_xBox(VclPtr<VclVBox>::Create(this))
+{
+    SetType(WindowType::VERTICALTABCONTROL);
+    m_xChooser->SetClickHdl(LINK(this, VerticalTabControl, ChosePageHdl_Impl));
+    m_xChooser->set_width_request(110);
+    m_xChooser->set_height_request(400);
+    m_xChooser->SetSizePixel(Size(110, 400));
+    m_xBox->set_vexpand(true);
+    m_xBox->set_hexpand(true);
+    m_xBox->set_expand(true);
+    m_xBox->Show();
+    m_xChooser->Show();
+}
+
+VerticalTabControl::~VerticalTabControl()
+{
+    disposeOnce();
+}
+
+void VerticalTabControl::dispose()
+{
+    m_xChooser.disposeAndClear();
+    m_xBox.disposeAndClear();
+    VclHBox::dispose();
+}
+
+IMPL_LINK_NOARG(VerticalTabControl, ChosePageHdl_Impl, SvtIconChoiceCtrl*, void)
+{
+    SvxIconChoiceCtrlEntry *pEntry = m_xChooser->GetSelectedEntry();
+    if (!pEntry)
+        pEntry = m_xChooser->GetCursor();
+
+    VerticalTabPageData* pData = GetPageData(pEntry);
+
+    if (pData->sId != m_sCurrentPageId)
+        SetCurPageId(pData->sId);
+}
+
+void VerticalTabControl::ActivatePage()
+{
+    m_aActivateHdl.Call( this );
+}
+
+bool VerticalTabControl::DeactivatePage()
+{
+    return !m_aDeactivateHdl.IsSet() || m_aDeactivateHdl.Call(this);
+}
+
+VerticalTabPageData* VerticalTabControl::GetPageData(const SvxIconChoiceCtrlEntry* pEntry) const
+{
+    VerticalTabPageData* pRet = nullptr;
+    for (auto & pData : maPageList)
+    {
+        if (pData->pEntry == pEntry)
+        {
+            pRet = pData.get();
+            break;
+        }
+    }
+    return pRet;
+}
+
+VerticalTabPageData* VerticalTabControl::GetPageData(const OString& rId) const
+{
+    VerticalTabPageData* pRet = nullptr;
+    for (auto & pData : maPageList)
+    {
+        if (pData->sId == rId)
+        {
+            pRet = pData.get();
+            break;
+        }
+    }
+    return pRet;
+}
+
+void VerticalTabControl::SetCurPageId(const OString& rId)
+{
+    OString sOldPageId = GetCurPageId();
+    if (sOldPageId == rId)
+        return;
+
+    VerticalTabPageData* pOldData = GetPageData(sOldPageId);
+    if (pOldData && pOldData->xPage)
+    {
+        if (!DeactivatePage())
+            return;
+        pOldData->xPage->Hide();
+    }
+
+    m_sCurrentPageId = "";
+
+    VerticalTabPageData* pNewData = GetPageData(rId);
+    if (pNewData && pNewData->xPage)
+    {
+        m_sCurrentPageId = rId;
+        m_xChooser->SetCursor(pNewData->pEntry);
+
+        ActivatePage();
+        pNewData->xPage->Show();
+    }
+}
+
+OString VerticalTabControl::GetPageId(sal_uInt16 nIndex) const
+{
+    return maPageList[nIndex]->sId;
+}
+
+void VerticalTabControl::InsertPage(const rtl::OString &rIdent, const rtl::OUString& rLabel, const Image& rImage,
+                                    const rtl::OUString& rTooltip, VclPtr<vcl::Window> xPage)
+{
+    SvxIconChoiceCtrlEntry* pEntry = m_xChooser->InsertEntry(rLabel, rImage);
+    pEntry->SetQuickHelpText(rTooltip);
+    m_xChooser->ArrangeIcons();
+    maPageList.emplace_back(new VerticalTabPageData);
+    VerticalTabPageData* pNew = maPageList.back().get();
+    pNew->sId = rIdent;
+    pNew->pEntry = pEntry;
+    pNew->xPage = xPage;
+    Size aOrigPrefSize(m_xBox->get_preferred_size());
+    Size aPagePrefSize(xPage->get_preferred_size());
+    m_xBox->set_width_request(std::max(aOrigPrefSize.Width(), aPagePrefSize.Width()));
+    m_xBox->set_height_request(std::max(aOrigPrefSize.Height(), aPagePrefSize.Height()));
+    pNew->xPage->Hide();
+}
+
+void VerticalTabControl::RemovePage(const rtl::OString &rPageId)
+{
+    for (auto it = maPageList.begin(), end = maPageList.end(); it != end; ++it)
+    {
+        VerticalTabPageData* pData = it->get();
+        if (pData->sId == rPageId)
+        {
+            sal_Int32 nEntryListPos = m_xChooser->GetEntryListPos(pData->pEntry);
+            m_xChooser->RemoveEntry(nEntryListPos);
+            m_xChooser->ArrangeIcons();
+            maPageList.erase(it);
+            break;
+        }
+    }
+}
+
+sal_uInt16 VerticalTabControl::GetPagePos(const OString& rPageId) const
+{
+    VerticalTabPageData* pData = GetPageData(rPageId);
+    if (!pData)
+        return TAB_PAGE_NOTFOUND;
+    return m_xChooser->GetEntryListPos(pData->pEntry);
+}
+
+VclPtr<vcl::Window> VerticalTabControl::GetPage(const OString& rPageId)
+{
+    VerticalTabPageData* pData = GetPageData(rPageId);
+    if (!pData)
+        return nullptr;
+    return pData->xPage;
+}
+
+OUString VerticalTabControl::GetPageText(const OString& rPageId) const
+{
+    VerticalTabPageData* pData = GetPageData(rPageId);
+    if (!pData)
+        return OUString();
+    return pData->pEntry->GetText();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

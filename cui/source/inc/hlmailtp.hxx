@@ -30,14 +30,14 @@
 class SvxHyperlinkMailTp : public SvxHyperlinkTabPageBase
 {
 private:
-    VclPtr<SvxHyperURLBox>      m_pCbbReceiver;
-    VclPtr<PushButton>          m_pBtAdrBook;
-    VclPtr<FixedText>           m_pFtSubject;
-    VclPtr<Edit>                m_pEdSubject;
+    std::unique_ptr<SvxHyperURLBox> m_xCbbReceiver;
+    std::unique_ptr<weld::Button> m_xBtAdrBook;
+    std::unique_ptr<weld::Label> m_xFtSubject;
+    std::unique_ptr<weld::Entry> m_xEdSubject;
 
-    DECL_STATIC_LINK(SvxHyperlinkMailTp, ClickAdrBookHdl_Impl, Button*, void);
+    DECL_STATIC_LINK(SvxHyperlinkMailTp, ClickAdrBookHdl_Impl, weld::Button&, void);
         ///< Button : Address book
-    DECL_LINK (ModifiedReceiverHdl_Impl, Edit&, void ); ///< Combobox "receiver" modified
+    DECL_LINK (ModifiedReceiverHdl_Impl, weld::ComboBox&, void ); ///< Combobox "receiver" modified
 
     void    SetScheme(const OUString& rScheme);
     void    RemoveImproperProtocol(const OUString& aProperScheme);
@@ -51,11 +51,10 @@ protected:
                                      SvxLinkInsertMode& eMode ) override;
 
 public:
-    SvxHyperlinkMailTp ( vcl::Window *pParent, SvxHpLinkDlg* pDlg, const SfxItemSet* pItemSet);
+    SvxHyperlinkMailTp(weld::Container* pParent, SvxHpLinkDlg* pDlg, const SfxItemSet* pItemSet);
     virtual ~SvxHyperlinkMailTp() override;
-    virtual void dispose() override;
 
-    static VclPtr<IconChoicePage> Create( vcl::Window* pWindow, SvxHpLinkDlg* pDlg, const SfxItemSet* pItemSet );
+    static std::unique_ptr<IconChoicePage> Create(weld::Container* pWindow, SvxHpLinkDlg* pDlg, const SfxItemSet* pItemSet);
 
     virtual void        SetInitFocus() override;
 };
