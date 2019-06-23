@@ -65,7 +65,20 @@
 #include <sfx2/notebookbar/SfxNotebookBar.hxx>
 #include <unotools/configmgr.hxx>
 
-#define sTopLevelListBoxID "sTopLevelListBoxID"
+static bool isCategoryAvailable(OUString& sClassId, OUString& sUIItemID, OUString& sActiveCategory,
+                                bool& isCategory)
+{
+    if (sClassId == "GtkMenu" && sUIItemID != sActiveCategory)
+    {
+        isCategory = false;
+        return false;
+    }
+    else if (sActiveCategory == "All Commands")
+        return true;
+    else if (sUIItemID == sActiveCategory)
+        return true;
+    return false;
+}
 
 static OUString charToString(const char* cString)
 {
@@ -156,8 +169,7 @@ void SvxNotebookbarConfigPage::Init()
     m_xContentsListBox->clear();
     m_xSaveInListBox->clear();
     CustomNotebookbarGenerator::createCustomizedUIFile();
-    OUString sAppName;
-    OUString sFileName;
+    OUString sAppName, sFileName;
     CustomNotebookbarGenerator::getFileNameAndAppName(sAppName, sFileName);
     OUString sNotebookbarInterface = getFileName(sFileName);
 
@@ -168,8 +180,8 @@ void SvxNotebookbarConfigPage::Init()
     m_xSaveInListBox->append(sSaveInListBoxID, sScopeName);
     m_xSaveInListBox->set_active_id(sSaveInListBoxID);
 
-    m_xTopLevelListBox->append(sTopLevelListBoxID, "All Commands");
-    m_xTopLevelListBox->set_active_id(sTopLevelListBoxID);
+    m_xTopLevelListBox->append("All Commands", "All Commands");
+    m_xTopLevelListBox->set_active_id("All Commands");
     SelectElement();
 }
 
@@ -200,8 +212,7 @@ short SvxNotebookbarConfigPage::QueryReset()
         OUString sOriginalUIPath = CustomNotebookbarGenerator::getOriginalUIPath();
         OUString sCustomizedUIPath = CustomNotebookbarGenerator::getCustomizedUIPath();
         osl::File::copy(sOriginalUIPath, sCustomizedUIPath);
-        OUString sAppName;
-        OUString sFileName;
+        OUString sAppName, sFileName;
         CustomNotebookbarGenerator::getFileNameAndAppName(sAppName, sFileName);
         OUString sNotebookbarInterface = getFileName(sFileName);
         Sequence<OUString> sSequenceEntries;
@@ -257,7 +268,9 @@ void SvxNotebookbarConfigPage::getNodeValue(xmlNode* pNodePtr, NotebookbarEntrie
 }
 
 void SvxNotebookbarConfigPage::searchNodeandAttribute(std::vector<NotebookbarEntries>& aEntries,
-                                                      xmlNode* pNodePtr, int nPos)
+                                                      std::vector<OUString>& aCategoryList,
+                                                      OUString& sActiveCategory, xmlNode* pNodePtr,
+                                                      int nPos, bool isCategory)
 {
     pNodePtr = pNodePtr->xmlChildrenNode;
     while (pNodePtr)
@@ -279,30 +292,45 @@ void SvxNotebookbarConfigPage::searchNodeandAttribute(std::vector<NotebookbarEnt
                 xmlFree(UriValue);
 
                 NotebookbarEntries nodeEntries;
+                if (sClassId == "sfxlo-PriorityHBox" || sClassId == "GtkMenu")
+                    aCategoryList.push_back(sUIItemID);
 
-                if (sClassId == "GtkMenuItem" || sClassId == "GtkToolButton")
+                if (isCategoryAvailable(sClassId, sUIItemID, sActiveCategory, isCategory)
+                    || isCategory)
                 {
-                    nodeEntries.sUIItemID = sUIItemID;
-                    nodeEntries.nPos = nPos;
-                    getNodeValue(pNodePtr, nodeEntries);
-                    aEntries.push_back(nodeEntries);
-                }
-                else
-                {
-                    nodeEntries.sUIItemID = sUIItemID;
-                    nodeEntries.nPos = nPos;
-                    nodeEntries.sVisibleValue = "Null";
-                    nodeEntries.sActionName = "Null";
-                    aEntries.push_back(nodeEntries);
+                    isCategory = true;
+                    if (sClassId == "GtkMenuItem" || sClassId == "GtkToolButton"
+                        || sClassId == "GtkMenuToolButton")
+                    {
+                        nodeEntries.sUIItemID = sUIItemID;
+                        nodeEntries.nPos = nPos;
+                        getNodeValue(pNodePtr, nodeEntries);
+                        aEntries.push_back(nodeEntries);
+                    }
+                    else
+                    {
+                        nodeEntries.sUIItemID = sUIItemID;
+                        nodeEntries.nPos = nPos;
+                        nodeEntries.sVisibleValue = "Null";
+                        nodeEntries.sActionName = "Null";
+                        aEntries.push_back(nodeEntries);
+                    }
                 }
             }
-            searchNodeandAttribute(aEntries, pNodePtr, nPos + 1);
+            if (isCategory)
+                searchNodeandAttribute(aEntries, aCategoryList, sActiveCategory, pNodePtr, nPos + 1,
+                                       isCategory);
+            else
+                searchNodeandAttribute(aEntries, aCategoryList, sActiveCategory, pNodePtr, nPos,
+                                       isCategory);
         }
         pNodePtr = pNodePtr->next;
     }
 }
 
-void SvxNotebookbarConfigPage::FillFunctionsList(std::vector<NotebookbarEntries>& aEntries)
+void SvxNotebookbarConfigPage::FillFunctionsList(std::vector<NotebookbarEntries>& aEntries,
+                                                 std::vector<OUString>& aCategoryList,
+                                                 OUString& sActiveCategory)
 {
     xmlDocPtr pDoc;
     xmlNodePtr pNodePtr;
@@ -311,7 +339,7 @@ void SvxNotebookbarConfigPage::FillFunctionsList(std::vector<NotebookbarEntries>
     pDoc = xmlParseFile(cUIFileUIPath);
     pNodePtr = xmlDocGetRootElement(pDoc);
     int aRightPos = 0;
-    searchNodeandAttribute(aEntries, pNodePtr, aRightPos);
+    searchNodeandAttribute(aEntries, aCategoryList, sActiveCategory, pNodePtr, aRightPos, false);
     if (pDoc != nullptr)
     {
         xmlFreeDoc(pDoc);
@@ -323,7 +351,13 @@ void SvxNotebookbarConfigPage::SelectElement()
 {
     m_xContentsListBox->clear();
     std::vector<NotebookbarEntries> aEntries;
-    FillFunctionsList(aEntries);
+    std::vector<OUString> aCategoryList;
+    OUString sActiveCategory = m_xTopLevelListBox->get_active_id();
+    FillFunctionsList(aEntries, aCategoryList, sActiveCategory);
+
+    if (m_xTopLevelListBox->get_count() == 1)
+        for (unsigned long nIdx = 0; nIdx < aCategoryList.size(); nIdx++)
+            m_xTopLevelListBox->append(aCategoryList[nIdx], aCategoryList[nIdx]);
 
     sal_Int64 nId = 0;
     for (unsigned long nIdx = 0; nIdx < aEntries.size(); nIdx++)

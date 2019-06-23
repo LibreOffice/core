@@ -335,10 +335,9 @@ bool SfxNotebookBar::StateMethod(SystemWindow* pSysWindow,
 
             OUStringBuffer aBuf(rUIFile);
             aBuf.append( sFile );
-            OUString aVal = aBuf.makeStringAndClear();
 
             // setup if necessary
-            pSysWindow->SetNotebookBar(aVal, xFrame, bReloadNotebookbar);
+            pSysWindow->SetNotebookBar(aBuf.makeStringAndClear(), xFrame, bReloadNotebookbar);
             pNotebookBar = pSysWindow->GetNotebookBar();
             pNotebookBar->Show();
             pNotebookBar->GetParent()->Resize();
