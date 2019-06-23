@@ -465,12 +465,12 @@ void IcnCursor_Impl::SetDeltas()
     if( !nDeltaHeight )
     {
         nDeltaHeight = 1;
-        SAL_INFO("svtools", "SetDeltas:Bad height");
+        SAL_INFO("vcl", "SetDeltas:Bad height");
     }
     if( !nDeltaWidth )
     {
         nDeltaWidth = 1;
-        SAL_INFO("svtools", "SetDeltas:Bad width");
+        SAL_INFO("vcl", "SetDeltas:Bad width");
     }
 }
 

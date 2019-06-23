@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SVTOOLS_SOURCE_CONTNR_IMIVCTL_HXX
 #define INCLUDED_SVTOOLS_SOURCE_CONTNR_IMIVCTL_HXX
 
+#include <vcl/ivctrl.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/scrbar.hxx>
 #include <vcl/timer.hxx>
@@ -31,7 +32,6 @@
 
 #include <limits.h>
 
-#include <svtools/ivctrl.hxx>
 
 #include <memory>
 #include <map>

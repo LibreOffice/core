@@ -190,6 +190,9 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/control/fixedhyper \
     vcl/source/control/fmtfield \
     vcl/source/control/imgctrl \
+    vcl/source/control/imivctl1 \
+    vcl/source/control/imivctl2 \
+    vcl/source/control/ivctrl \
     vcl/source/control/listctrl \
     vcl/source/control/longcurr \
     vcl/source/control/imp_listbox \
