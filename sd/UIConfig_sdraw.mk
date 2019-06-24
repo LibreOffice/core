@@ -113,8 +113,8 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/sdraw,\
 	sd/uiconfig/sdraw/ui/insertslidesdialog \
 	sd/uiconfig/sdraw/ui/namedesign \
 	sd/uiconfig/sdraw/ui/notebookbar \
-	sw/uiconfig/swriter/ui/notebookbar_compact \
-	sw/uiconfig/swriter/ui/notebookbar_single \
+	sd/uiconfig/sdraw/ui/notebookbar_compact \
+	sd/uiconfig/sdraw/ui/notebookbar_single \
 	sd/uiconfig/sdraw/ui/notebookbar_groupedbar_compact \
 	sd/uiconfig/sdraw/ui/notebookbar_groupedbar_full \
 	sd/uiconfig/sdraw/ui/paranumberingtab \
