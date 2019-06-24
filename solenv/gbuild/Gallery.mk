@@ -146,7 +146,7 @@ $(call gb_Gallery_get_clean_target,$(1)) : $(call gb_Package_get_clean_target,$(
 $(call gb_Gallery_get_target,$(1)) :| $(dir $(call gb_Gallery_get_target,$(1))).dir \
 	$(call gb_Gallery_get_workdir,$(1))/.dir
 
-$$(eval $$(call gb_Module_register_target,$(call gb_Gallery__get_final_target,$(1)),$(call gb_Gallery_get_clean_target,$(1))))
+$$(eval $$(call gb_Module_register_target,Gallery_$(1),$(call gb_Gallery__get_final_target,$(1)),$(call gb_Gallery_get_clean_target,$(1))))
 $(call gb_Helper_make_userfriendly_targets,$(1),Gallery,$(call gb_Gallery__get_final_target,$(1)))
 
 endef

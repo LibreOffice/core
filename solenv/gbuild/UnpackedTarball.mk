@@ -212,7 +212,7 @@ endef
 define gb_UnpackedTarball_UnpackedTarball
 $(call gb_UnpackedTarball_UnpackedTarball_internal,$(1))
 
-$$(eval $$(call gb_Module_register_target,$(call gb_UnpackedTarball_get_final_target,$(1)),$(call gb_UnpackedTarball_get_clean_target,$(1))))
+$$(eval $$(call gb_Module_register_target,UnpackedTarball_$(1),$(call gb_UnpackedTarball_get_final_target,$(1)),$(call gb_UnpackedTarball_get_clean_target,$(1))))
 $(call gb_Helper_make_userfriendly_targets,$(1),UnpackedTarball,$(call gb_UnpackedTarball_get_final_target,$(1)))
 
 endef
