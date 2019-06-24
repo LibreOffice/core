@@ -4,7 +4,7 @@ import type_options
 */
 
 SpecialCommand:
-  writer_command | calc_command 
+  writer_command | calc_command | impress_command | math_command
 ;
 
 /*
@@ -25,9 +25,6 @@ Type_command:
 ;
 Select_command:
   'Select from Pos' from=INT 'to Pos' to=INT 
-;
-setZoom_command:
-  'Set Zoom to ' zoom_value=INT 
 ;
 GOTO_command:
   'GOTO page number' page_num=INT
@@ -68,4 +65,38 @@ one_cell:
     '{' '"CELL":' input_cell=STRING '}'
 ;
 //=================================================================//
+/*
+  This part for all the impress log statments:
+   
+    1)  Type 
+    3)  Set zoom
+
+  then we can add whatever we need in the future
+*/
+impress_command:
+    impress_Type_command 
+;
+impress_Type_command:
+    'Type on impress ' what_to_type=Type_options
+;
+//=================================================================//
+/*
+  This part for all the math log statments:
+   
+    1)  element selector 
+    2) Type
+
+  then we can add whatever we need in the future
+*/
+math_command:
+    element_selector | math_Type_command
+;
+element_selector:
+    'Select element no ' element_no=INT ' From ' place=ID
+;
+math_Type_command:
+    'Type on math ' what_to_type=Type_options
+;
+
+
 
