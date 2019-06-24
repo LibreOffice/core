@@ -597,13 +597,15 @@ static void lcl_createPresetShape(const uno::Reference<drawing::XShape>& xShape,
     lcl_resetPropertyValue( aGeomPropVec, sPath );
     lcl_resetPropertyValue( aGeomPropVec, sAdjustmentValues);
 
-    // Some shapes don't need scaling
-    bool bScale = true;
-    if ( rPresetType == "textRingInside"
-        || rPresetType == "textRingOutside"
-        || rPresetType == "textCirclePour" )
+    bool bFromWordArt(false);
+    pTextBody->getTextProperties().maPropertyMap.getProperty(PROP_FromWordArt) >>= bFromWordArt;
+
+    bool bScaleX(false);
+    if (!bFromWordArt
+        && (rPresetType == "textArchDown" || rPresetType == "textArchUp"
+            || rPresetType == "textCircle" || rPresetType == "textButton"))
     {
-        bScale = false;
+        bScaleX = true;
     }
 
     // Apply geometry properties
@@ -612,7 +614,7 @@ static void lcl_createPresetShape(const uno::Reference<drawing::XShape>& xShape,
             { { sTextPath, uno::makeAny( true ) },
                 { "TextPathMode",
                 uno::Any( drawing::EnhancedCustomShapeTextPathMode_PATH ) },
-                { "ScaleX", uno::Any( bScale ) } } ) );
+                { "ScaleX", uno::Any(bScaleX) } } ) );
 
     lcl_setPropertyValue( aGeomPropVec, sTextPath,
         comphelper::makePropertyValue( sTextPath, aPropertyValues ) );

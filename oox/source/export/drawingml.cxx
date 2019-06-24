@@ -2584,7 +2584,9 @@ void DrawingML::WriteText( const Reference< XInterface >& rXIface, const OUStrin
         }
     }
 
-    Sequence<drawing::EnhancedCustomShapeAdjustmentValue>aAdjustmentSeq;
+    Sequence<drawing::EnhancedCustomShapeAdjustmentValue> aAdjustmentSeq;
+    uno::Sequence<beans::PropertyValue> aTextPathSeq;
+    bool bScaleX(false);
 
     if (GetProperty(rXPropSet, "CustomShapeGeometry"))
     {
@@ -2610,9 +2612,22 @@ void DrawingML::WriteText( const Reference< XInterface >& rXIface, const OUStrin
                 }
                 else if (aProps[i].Name == "AdjustmentValues")
                     aProps[i].Value >>= aAdjustmentSeq;
+                else if (aProps[i].Name == "TextPath")
+                {
+                    aProps[i].Value >>= aTextPathSeq;
+                    for (int k = 0; k < aTextPathSeq.getLength(); k++)
+                    {
+                        if (aTextPathSeq[k].Name == "ScaleX")
+                            aTextPathSeq[k].Value >>= bScaleX;
+                    }
+                }
             }
         }
     }
+
+    bool bFromWordArt = !bScaleX
+                        && ( presetWarp == "textArchDown" || presetWarp == "textArchUp"
+                            || presetWarp == "textButton" || presetWarp == "textCircle");
 
     TextHorizontalAdjust eHorizontalAlignment( TextHorizontalAdjust_CENTER );
     bool bHorizontalCenter = false;
@@ -2646,6 +2661,7 @@ void DrawingML::WriteText( const Reference< XInterface >& rXIface, const OUStrin
         }
         mpFS->startElementNS( (nXmlNamespace ? nXmlNamespace : XML_a), XML_bodyPr,
                                XML_wrap, pWrap,
+                               XML_fromWordArt, bFromWordArt ? "1" : nullptr,
                                XML_lIns, (nLeft != DEFLRINS) ? OString::number(oox::drawingml::convertHmmToEmu(nLeft)).getStr() : nullptr,
                                XML_rIns, (nRight != DEFLRINS) ? OString::number(oox::drawingml::convertHmmToEmu(nRight)).getStr() : nullptr,
                                XML_tIns, (nTop != DEFTBINS) ? OString::number(oox::drawingml::convertHmmToEmu(nTop)).getStr() : nullptr,

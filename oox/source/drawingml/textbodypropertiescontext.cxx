@@ -82,7 +82,8 @@ TextBodyPropertiesContext::TextBodyPropertiesContext( ContextHandler2Helper cons
 
 //   bool bCompatLineSpacing = rAttribs.getBool( XML_compatLnSpc, false );
 //   bool bForceAA = rAttribs.getBool( XML_forceAA, false );
-//   bool bFromWordArt = rAttribs.getBool( XML_fromWordArt, false );
+    bool bFromWordArt = rAttribs.getBool(XML_fromWordArt, false);
+    mrTextBodyProp.maPropertyMap.setProperty(PROP_FromWordArt, bFromWordArt);
 
   // ST_TextHorzOverflowType
 //   sal_Int32 nHorzOverflow = rAttribs.getToken( XML_horzOverflow, XML_overflow );

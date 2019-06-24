@@ -24,6 +24,7 @@
 #include <editeng/lrspitem.hxx>
 #include <editeng/postitem.hxx>
 #include <editeng/bulletitem.hxx>
+#include <editeng/unoprnms.hxx>
 
 #include <oox/drawingml/drawingmltypes.hxx>
 
@@ -59,6 +60,7 @@
 #include <com/sun/star/awt/Gradient.hpp>
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/awt/FontDescriptor.hpp>
+#include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeAdjustmentValue.hpp>
@@ -185,6 +187,7 @@ public:
     void testTdf118806();
     void testTdf111789();
     void testTdf100348_convert_Fontwork2TextWarp();
+    void testTdf1225573_FontWorkScaleX();
     /// SmartArt animated elements
     void testTdf104792();
     void testTdf90627();
@@ -275,6 +278,7 @@ public:
     CPPUNIT_TEST(testTdf118806);
     CPPUNIT_TEST(testTdf111789);
     CPPUNIT_TEST(testTdf100348_convert_Fontwork2TextWarp);
+    CPPUNIT_TEST(testTdf1225573_FontWorkScaleX);
     CPPUNIT_TEST(testTdf104792);
     CPPUNIT_TEST(testTdf90627);
     CPPUNIT_TEST(testTdf104786);
@@ -2391,6 +2395,36 @@ void SdOOXMLExportTest2::testTdf100348_convert_Fontwork2TextWarp()
     aAdjValueSeq[1].Value >>= fAdj2;
     CPPUNIT_ASSERT_EQUAL(4050.0, fAdj1); // odp values, not pptx values
     CPPUNIT_ASSERT_EQUAL(9180.0, fAdj2);
+
+    xDocShRef->DoClose();
+}
+
+void SdOOXMLExportTest2::testTdf1225573_FontWorkScaleX()
+{
+    const OUString sPath("/sd/qa/unit/data/pptx/tdf125573_FontWorkScaleX.pptx");
+    ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc(sPath), PPTX);
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+
+    // Error was, that attribute 'fromWordArt' was ignored
+    // ensure, resulting pptx has fromWordArt="1" on textArchDown shape
+    xmlDocPtr pXmlDocContent = parseExport(tempFile, "ppt/slides/slide1.xml");
+    const OString sPathStart("/p:sld/p:cSld/p:spTree/p:sp[1]/p:txBody/a:bodyPr");
+    assertXPath(pXmlDocContent, sPathStart + "[@fromWordArt='1']");
+
+    // Error was, that text in legacy shapes of category "Follow Path" was not scaled to the path.
+    uno::Reference<beans::XPropertySet> xShapeArchProps(getShapeFromPage(0, 0, xDocShRef));
+    awt::Rectangle aBoundRectArch;
+    xShapeArchProps->getPropertyValue(UNO_NAME_MISC_OBJ_BOUNDRECT) >>= aBoundRectArch;
+    // difference should be zero, but allow some range for stroke thickness
+    CPPUNIT_ASSERT_LESS(static_cast<long>(50), labs(aBoundRectArch.Width - 13081));
+
+    // Error was, that text in shapes of category "Warp" was not scaled to the path.
+    uno::Reference<beans::XPropertySet> xShapeWaveProps(getShapeFromPage(0, 1, xDocShRef));
+    awt::Rectangle aBoundRectWave;
+    xShapeWaveProps->getPropertyValue(UNO_NAME_MISC_OBJ_BOUNDRECT) >>= aBoundRectWave;
+    // difference should be zero, but allow some range for stroke thickness
+    CPPUNIT_ASSERT_LESS(static_cast<long>(50), labs(aBoundRectWave.Width - 11514));
 
     xDocShRef->DoClose();
 }
