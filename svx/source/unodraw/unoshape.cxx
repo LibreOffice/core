@@ -611,7 +611,7 @@ static void SvxItemPropertySet_ObtainSettingsFromPropertySet(const SvxItemProper
             const sal_uInt16 nWID = rSrcProp.nWID;
             if(SfxItemPool::IsWhich(nWID)
                     && (nWID < OWN_ATTR_VALUE_START || nWID > OWN_ATTR_VALUE_END)
-                    && rPropSet.GetUsrAnyForID(nWID))
+                    && rPropSet.GetUsrAnyForID(rSrcProp))
                 rSet.Put(rSet.GetPool()->GetDefaultItem(nWID));
         }
 
@@ -619,7 +619,7 @@ static void SvxItemPropertySet_ObtainSettingsFromPropertySet(const SvxItemProper
         {
             if(rSrcProp.nWID)
             {
-                uno::Any* pUsrAny = rPropSet.GetUsrAnyForID(rSrcProp.nWID);
+                uno::Any* pUsrAny = rPropSet.GetUsrAnyForID(rSrcProp);
                 if(pUsrAny)
                 {
                     // search for equivalent entry in pDst
