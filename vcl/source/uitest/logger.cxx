@@ -224,6 +224,12 @@ void UITestLogger::logKeyInput(VclPtr<vcl::Window> const & xUIElement, const Key
     else if(pUIObject->get_type()=="ScGridWinUIObject" && rID=="grid_window"){
         aContent = "Type on current cell " + aKeyCode ;
     }
+    else if(pUIObject->get_type()=="ImpressWindowUIObject" && rID=="impress_win"){
+        aContent = "Type on impress " + aKeyCode ;
+    }
+    else if(pUIObject->get_type()=="WindowUIObject" && rID=="math_edit"){
+        aContent = "Type on math " + aKeyCode ;
+    }
     else{
         aContent= pUIObject->get_type() + " Action:TYPE Id:" +
                 rID + " Parent:"+ aParentID +" " + aKeyCode;
@@ -284,14 +290,20 @@ void UITestLogger::logEvent(const EventDescription& rDescription)
 
     //here we will customize our statments depending on the caller of this function
     OUString aLogLine ;
-
-    if(rDescription.aID=="writer_edit"){
+    //first check on general commands
+    if(rDescription.aAction=="SET"){
+        aLogLine =  "Set Zoom to be "  + GetValueInMapWithIndex(rDescription.aParameters,0);
+    }
+    else if(rDescription.aAction=="SIDEBAR"){
+        aLogLine = "From SIDEBAR Choose " + aParameterString;
+    }
+    else if(rDescription.aAction=="SELECT" && rDescription.aID==""){
+        aLogLine = "Select " + aParameterString;
+    }
+    else if(rDescription.aID=="writer_edit"){
 
         if(rDescription.aAction=="GOTO"){
             aLogLine = "GOTO page number " + GetValueInMapWithIndex(rDescription.aParameters,0);
-        }
-        else if(rDescription.aAction=="SET"){
-            aLogLine =  "Set Zoom to "  + GetValueInMapWithIndex(rDescription.aParameters,0);
         }
         else if(rDescription.aAction=="SELECT"){
             OUString to = GetValueInMapWithIndex(rDescription.aParameters,0);
@@ -316,6 +328,10 @@ void UITestLogger::logEvent(const EventDescription& rDescription)
             GetValueInMapWithIndex(rDescription.aParameters,2) +
             " and Row " + GetValueInMapWithIndex(rDescription.aParameters,1);
         }
+    }
+    else if(rDescription.aParent=="element_selector"){
+        aLogLine ="Select element no " + rDescription.aID +
+            " From " + rDescription.aParent;
     }
     else{
         aLogLine = rDescription.aKeyWord + " Action:" +
