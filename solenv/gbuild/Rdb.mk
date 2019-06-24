@@ -35,7 +35,7 @@ $(call gb_Rdb_get_clean_target,%) :
 define gb_Rdb__Rdb_impl
 $(call gb_Rdb_get_target,$(1)) : COMPONENTS :=
 $(call gb_Rdb_get_target,$(1)) : $(gb_Module_CURRENTMAKEFILE)
-$$(eval $$(call gb_Module_register_target,$(2),$(call gb_Rdb_get_clean_target,$(1))))
+$$(eval $$(call gb_Module_register_target,Rdb_$(1),$(2),$(call gb_Rdb_get_clean_target,$(1))))
 $(call gb_Helper_make_userfriendly_targets,$(1),Rdb,$(2))
 
 endef

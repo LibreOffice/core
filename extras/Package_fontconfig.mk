@@ -7,12 +7,12 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Package_Package,postprocess_fontconfig,$(call gb_CustomTarget_get_workdir,postprocess/fontconfig)))
+$(eval $(call gb_Package_Package,extras_fontconfig,$(call gb_CustomTarget_get_workdir,extras/fontconfig)))
 
-$(eval $(call gb_Package_add_files,postprocess_fontconfig,$(LIBO_SHARE_FOLDER)/fonts/truetype, \
+$(eval $(call gb_Package_add_files,extras_fontconfig,$(LIBO_SHARE_FOLDER)/fonts/truetype, \
     fc_local.conf \
 ))
 
-$(eval $(call gb_Package_use_custom_target,postprocess_fontconfig,postprocess/fontconfig))
+$(eval $(call gb_Package_use_custom_target,extras_fontconfig,extras/fontconfig))
 
 # vim: set noet sw=4 ts=4:
