@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "df7087c5_8e99c720",
+        "filename": "cui/source/options/optgdlg.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 310,
+      "author": {
+        "id": 1000821
+      },
+      "writtenOn": "2019-06-24T13:52:30Z",
+      "side": 1,
+      "message": "I skipped this comment. I think what I really want is to enable this feature when UI language is traditional Chinese. Depend on system-locale is ok but depend on a cell locale isn\u0027t ok. I don\u0027t expect this feature turn on if non traditional-Chinese user got this document and try to edit it in a non traditional-Chinese environment. But I\u0027m not sure if it\u0027s ok to evaluate UI language setting in svl/number.",
+      "parentUuid": "df7087c5_2e83db06",
+      "range": {
+        "startLine": 310,
+        "startChar": 48,
+        "endLine": 310,
+        "endChar": 64
+      },
+      "revId": "9106291246191750e0732665b22e755caeb12fcb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "df7087c5_ee7c0322",
         "filename": "officecfg/registry/schema/org/openoffice/Office/Common.xcs",
         "patchSetId": 7
