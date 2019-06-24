@@ -173,6 +173,7 @@ endif
 include $(GBUILDDIR)/ExternalExecutable.mk
 include $(GBUILDDIR)/TargetLocations.mk
 include $(GBUILDDIR)/Tempfile.mk
+include $(GBUILDDIR)/TestHelpers.mk
 
 $(eval $(call gb_Helper_init_registries))
 include $(SRCDIR)/Repository.mk

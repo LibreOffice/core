@@ -20,6 +20,12 @@ $(eval $(call gb_Module_add_targets,libreoffice,\
 ))
 endif
 
+# These have to be included before the others for more_fonts dependencies
+$(eval $(call gb_Module_add_moduledirs,libreoffice,\
+	external \
+	extras \
+))
+
 $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 	accessibility \
 	android \
@@ -54,8 +60,6 @@ $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 	embedserv \
 	eventattacher \
 	extensions \
-	external \
-	extras \
 	filter \
 	$(call gb_Helper_optional,DBCONNECTIVITY,forms) \
 	formula \

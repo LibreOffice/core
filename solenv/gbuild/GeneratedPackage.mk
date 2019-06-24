@@ -61,7 +61,7 @@ $(call gb_GeneratedPackage_get_clean_target,$(1)) : PACKAGE_DIRS :=
 $(call gb_GeneratedPackage_get_target,$(1)) : $(gb_Module_CURRENTMAKEFILE)
 $(call gb_GeneratedPackage_get_target,$(1)) :| $(dir $(call gb_GeneratedPackage_get_target,$(1))).dir
 
-$$(eval $$(call gb_Module_register_target,$(call gb_GeneratedPackage_get_target,$(1)),$(call gb_GeneratedPackage_get_clean_target,$(1))))
+$$(eval $$(call gb_Module_register_target,GeneratedPackage_$(1),$(call gb_GeneratedPackage_get_target,$(1)),$(call gb_GeneratedPackage_get_clean_target,$(1))))
 $(call gb_Helper_make_userfriendly_targets,$(1),GeneratedPackage)
 
 endef

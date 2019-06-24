@@ -91,7 +91,7 @@ $(call gb_Library_get_clean_target,$(1)) : $(call gb_LinkTarget_get_clean_target
 $(call gb_Library_get_clean_target,$(1)) : AUXTARGETS :=
 $(call gb_Library_Library_platform,$(1),$(2),$(call gb_Library_get_ilib_target,$(1)))
 
-$$(eval $$(call gb_Module_register_target,$(call gb_Library_get_exports_target,$(1)),$(call gb_Library_get_clean_target,$(1))))
+$$(eval $$(call gb_Module_register_target,Library_$(1),$(call gb_Library_get_exports_target,$(1)),$(call gb_Library_get_clean_target,$(1))))
 
 $(call gb_Helper_make_userfriendly_targets,$(1),Library,$(call gb_Library_get_exports_target,$(1)))
 
