@@ -37,6 +37,7 @@ using namespace ::com::sun::star;
 struct SvxIDPropertyCombine
 {
     sal_uInt16  nWID;
+    sal_uInt8   memberId;
     uno::Any    aAny;
 };
 
@@ -54,21 +55,23 @@ SvxItemPropertySet::~SvxItemPropertySet()
 }
 
 
-uno::Any* SvxItemPropertySet::GetUsrAnyForID(sal_uInt16 nWID) const
+uno::Any* SvxItemPropertySet::GetUsrAnyForID(SfxItemPropertySimpleEntry const & entry) const
 {
     for (auto const & pActual : aCombineList)
     {
-        if( pActual->nWID == nWID )
+        if( pActual->nWID == entry.nWID && pActual->memberId == entry.nMemberId )
             return &pActual->aAny;
     }
     return nullptr;
 }
 
 
-void SvxItemPropertySet::AddUsrAnyForID(const uno::Any& rAny, sal_uInt16 nWID)
+void SvxItemPropertySet::AddUsrAnyForID(
+    const uno::Any& rAny, SfxItemPropertySimpleEntry const & entry)
 {
     std::unique_ptr<SvxIDPropertyCombine> pNew(new SvxIDPropertyCombine);
-    pNew->nWID = nWID;
+    pNew->nWID = entry.nWID;
+    pNew->memberId = entry.nMemberId;
     pNew->aAny = rAny;
     aCombineList.push_back( std::move(pNew) );
 }
@@ -187,7 +190,7 @@ void SvxItemPropertySet::setPropertyValue( const SfxItemPropertySimpleEntry* pMa
 uno::Any SvxItemPropertySet::getPropertyValue( const SfxItemPropertySimpleEntry* pMap ) const
 {
     // Already entered a value? Then finish quickly
-    uno::Any* pUsrAny = GetUsrAnyForID(pMap->nWID);
+    uno::Any* pUsrAny = GetUsrAnyForID(*pMap);
     if(pUsrAny)
         return *pUsrAny;
 
@@ -213,7 +216,7 @@ uno::Any SvxItemPropertySet::getPropertyValue( const SfxItemPropertySimpleEntry*
         if(eState >= SfxItemState::DEFAULT && pItem)
         {
             pItem->QueryValue( aVal, nMemberId );
-            const_cast<SvxItemPropertySet*>(this)->AddUsrAnyForID(aVal, pMap->nWID);
+            const_cast<SvxItemPropertySet*>(this)->AddUsrAnyForID(aVal, *pMap);
         }
     }
 
@@ -238,9 +241,9 @@ uno::Any SvxItemPropertySet::getPropertyValue( const SfxItemPropertySimpleEntry*
 
 void SvxItemPropertySet::setPropertyValue( const SfxItemPropertySimpleEntry* pMap, const uno::Any& rVal ) const
 {
-    uno::Any* pUsrAny = GetUsrAnyForID(pMap->nWID);
+    uno::Any* pUsrAny = GetUsrAnyForID(*pMap);
     if(!pUsrAny)
-        const_cast<SvxItemPropertySet*>(this)->AddUsrAnyForID(rVal, pMap->nWID);
+        const_cast<SvxItemPropertySet*>(this)->AddUsrAnyForID(rVal, *pMap);
     else
         *pUsrAny = rVal;
 }

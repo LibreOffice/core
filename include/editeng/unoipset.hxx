@@ -53,8 +53,8 @@ public:
     void setPropertyValue( const SfxItemPropertySimpleEntry* pMap, const css::uno::Any& rVal ) const;
 
     bool AreThereOwnUsrAnys() const { return ! aCombineList.empty(); }
-    css::uno::Any* GetUsrAnyForID(sal_uInt16 nWID) const;
-    void AddUsrAnyForID(const css::uno::Any& rAny, sal_uInt16 nWID);
+    css::uno::Any* GetUsrAnyForID(SfxItemPropertySimpleEntry const & entry) const;
+    void AddUsrAnyForID(const css::uno::Any& rAny, SfxItemPropertySimpleEntry const & entry);
     void ClearAllUsrAny();
 
     css::uno::Reference< css::beans::XPropertySetInfo > const & getPropertySetInfo() const;

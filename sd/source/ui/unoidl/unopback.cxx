@@ -105,7 +105,7 @@ void SdUnoPageBackground::fillItemSet( SdDrawDocument* pDoc, SfxItemSet& rSet ) 
 
             for( const auto& rProp : aProperties )
             {
-                uno::Any* pAny = mpPropSet->GetUsrAnyForID( rProp.nWID );
+                uno::Any* pAny = mpPropSet->GetUsrAnyForID( rProp );
                 if( pAny )
                 {
                     OUString aPropertyName( rProp.sName );
@@ -343,7 +343,7 @@ beans::PropertyState SAL_CALL SdUnoPageBackground::getPropertyState( const OUStr
     }
     else
     {
-        if( nullptr == mpPropSet->GetUsrAnyForID(pEntry->nWID) )
+        if( nullptr == mpPropSet->GetUsrAnyForID(*pEntry) )
             return beans::PropertyState_DEFAULT_VALUE;
         else
             return beans::PropertyState_DIRECT_VALUE;
