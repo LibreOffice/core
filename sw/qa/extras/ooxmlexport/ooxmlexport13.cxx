@@ -398,6 +398,22 @@ DECLARE_OOXMLEXPORT_TEST(testTdf125324, "tdf125324.docx")
     assertXPath(pXmlDoc, "/root/page/body/txt[2]/anchored/fly/tab/infos/bounds", "top", "4193");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf78657, "tdf78657_picture_hyperlink.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+    xmlDocPtr pXmlRels = parseExport("word/_rels/document.xml.rels");
+    if (!pXmlRels)
+        return;
+
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/w:drawing/wp:inline/wp:docPr/a:hlinkClick", 1);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/w:drawing/wp:inline/a:graphic/a:graphicData/pic:pic/pic:nvPicPr/pic:cNvPr/a:hlinkClick", 1);
+    OUString rId = getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/w:drawing/wp:inline/wp:docPr/a:hlinkClick", "r:id");
+    assertXPath(pXmlRels, "/Relationships/Relationship[@Id=rId]", "Target", "http://www.google.com/");
+    assertXPath(pXmlRels, "/Relationships/Relationship[@Id=rId]", "TargetMode", "External");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
