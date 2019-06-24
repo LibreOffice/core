@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df7087c5_f38710b6",
+        "filename": "offapi/com/sun/star/drawing/GraphicObjectShape.idl",
+        "patchSetId": 9
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2019-06-24T05:30:22Z",
+      "side": 1,
+      "message": "why is this necessary?",
+      "range": {
+        "startLine": 173,
+        "startChar": 59,
+        "endLine": 173,
+        "endChar": 78
+      },
+      "revId": "e2a9509c582c5fa35cd5c17dee51e9cc4fa8e30d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df7087c5_d38e8ccf",
+        "filename": "oox/source/export/vmlexport.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 684,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2019-06-24T05:30:22Z",
+      "side": 1,
+      "message": "this file is for OOXML export. Can you please check if OOXML format has any specifications for this?\nWe can\u0027t arbitrarily add elements here.",
+      "revId": "e2a9509c582c5fa35cd5c17dee51e9cc4fa8e30d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
