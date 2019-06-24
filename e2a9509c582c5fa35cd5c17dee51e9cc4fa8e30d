@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "df7087c5_aee5ab3a",
+        "filename": "offapi/com/sun/star/drawing/GraphicObjectShape.idl",
+        "patchSetId": 9
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1002063
+      },
+      "writtenOn": "2019-06-24T08:04:02Z",
+      "side": 1,
+      "message": "Hi Stephen, I will be happy to bundle the new optional properties of QR code together.\nBut, currently I am planning to make qrcode Dialog Work, will definitely try your suggestion in recent future.\n\nAbout \"@since tag\". Yes, will do it too.\n\nThanks",
+      "parentUuid": "df7087c5_aeb7eb3a",
+      "revId": "e2a9509c582c5fa35cd5c17dee51e9cc4fa8e30d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "df7087c5_ceb49f38",
         "filename": "offapi/com/sun/star/drawing/GraphicObjectShape.idl",
         "patchSetId": 9
@@ -30,6 +48,24 @@
       "writtenOn": "2019-06-24T07:27:22Z",
       "side": 1,
       "message": "Do you rather mean \"Border surrounding the QR code\"?",
+      "revId": "e2a9509c582c5fa35cd5c17dee51e9cc4fa8e30d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df7087c5_2e7d1b6e",
+        "filename": "offapi/com/sun/star/drawing/GraphicObjectShape.idl",
+        "patchSetId": 9
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1002063
+      },
+      "writtenOn": "2019-06-24T08:04:02Z",
+      "side": 1,
+      "message": "Yes.",
+      "parentUuid": "df7087c5_ceb49f38",
       "revId": "e2a9509c582c5fa35cd5c17dee51e9cc4fa8e30d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -59,6 +95,30 @@
     },
     {
       "key": {
+        "uuid": "df7087c5_2ef2fb07",
+        "filename": "offapi/com/sun/star/drawing/GraphicObjectShape.idl",
+        "patchSetId": 9
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1002063
+      },
+      "writtenOn": "2019-06-24T08:04:02Z",
+      "side": 1,
+      "message": "No, it isn\u0027t. Resolved in IRC.",
+      "parentUuid": "df7087c5_f38710b6",
+      "range": {
+        "startLine": 173,
+        "startChar": 59,
+        "endLine": 173,
+        "endChar": 78
+      },
+      "revId": "e2a9509c582c5fa35cd5c17dee51e9cc4fa8e30d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "df7087c5_0eab77d6",
         "filename": "offapi/type_reference/offapi.idl",
         "patchSetId": 9
@@ -76,6 +136,24 @@
     },
     {
       "key": {
+        "uuid": "df7087c5_8e3b079b",
+        "filename": "offapi/type_reference/offapi.idl",
+        "patchSetId": 9
+      },
+      "lineNbr": 5657,
+      "author": {
+        "id": 1002063
+      },
+      "writtenOn": "2019-06-24T08:04:02Z",
+      "side": 1,
+      "message": "ok. Will look for it.",
+      "parentUuid": "df7087c5_0eab77d6",
+      "revId": "e2a9509c582c5fa35cd5c17dee51e9cc4fa8e30d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "df7087c5_d38e8ccf",
         "filename": "oox/source/export/vmlexport.cxx",
         "patchSetId": 9
@@ -87,6 +165,24 @@
       "writtenOn": "2019-06-24T05:30:22Z",
       "side": 1,
       "message": "this file is for OOXML export. Can you please check if OOXML format has any specifications for this?\nWe can\u0027t arbitrarily add elements here.",
+      "revId": "e2a9509c582c5fa35cd5c17dee51e9cc4fa8e30d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df7087c5_eec40395",
+        "filename": "oox/source/export/vmlexport.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 684,
+      "author": {
+        "id": 1002063
+      },
+      "writtenOn": "2019-06-24T08:04:02Z",
+      "side": 1,
+      "message": "Ok, will check :)",
+      "parentUuid": "df7087c5_d38e8ccf",
       "revId": "e2a9509c582c5fa35cd5c17dee51e9cc4fa8e30d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
