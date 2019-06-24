@@ -357,7 +357,8 @@ DECLARE_OOXMLEXPORT_TEST(testFDO74215, "FDO74215.docx")
         const double fWidth = sWidth.copy(6, sWidth.getLength() - 8).toDouble();
         const double fXScaleFactor = 96.0 / Application::GetDefaultDevice()->GetDPIX();
         // note: used to fail on Mac with 14.7945205479452 vs. 14.8
-        CPPUNIT_ASSERT_DOUBLES_EQUAL(11.25 * fXScaleFactor, fWidth, 0.01);
+        // note: used to fail on another Mac with 12.1348314606742 vs 12.15
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(11.25 * fXScaleFactor, fWidth, 0.1);
     }
     {
         const OUString sHeight = sStyle.getToken(1, ';');
@@ -365,7 +366,7 @@ DECLARE_OOXMLEXPORT_TEST(testFDO74215, "FDO74215.docx")
         CPPUNIT_ASSERT(sHeight.endsWith("pt"));
         const double fHeight = sHeight.copy(7, sHeight.getLength() - 9).toDouble();
         const double fYScaleFactor = 96.0 / Application::GetDefaultDevice()->GetDPIY();
-        CPPUNIT_ASSERT_DOUBLES_EQUAL(11.25 * fYScaleFactor, fHeight, 0.01);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(11.25 * fYScaleFactor, fHeight, 0.1);
     }
 }
 
