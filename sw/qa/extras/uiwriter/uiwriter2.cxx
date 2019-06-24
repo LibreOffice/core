@@ -368,6 +368,92 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf54819_keep_numbering_with_Undo)
     CPPUNIT_ASSERT_MESSAGE("Not a bulleted list item", sNumName != "Outline");
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf119571_keep_numbering_with_Undo)
+{
+    // as the previous test, but with partial paragraph deletion
+    load(DATA_DIRECTORY, "tdf54819b.odt");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    // heading
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Heading 1"),
+                         getProperty<OUString>(getParagraph(2), "ParaStyleName"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Outline"),
+                         getProperty<OUString>(getParagraph(2), "NumberingStyleName"));
+
+    // next paragraph: bulleted list item
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Standard"),
+                         getProperty<OUString>(getParagraph(3), "ParaStyleName"));
+    OUString sNumName = getProperty<OUString>(getParagraph(3), "NumberingStyleName");
+    CPPUNIT_ASSERT_MESSAGE("Missing numbering style", !sNumName.isEmpty());
+    CPPUNIT_ASSERT_MESSAGE("Not a bulleted list item", sNumName != "Outline");
+
+    //turn on red-lining and show changes
+    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+    pDoc->getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::On | RedlineFlags::ShowDelete
+                                                      | RedlineFlags::ShowInsert);
+    pDoc->getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::On);
+    CPPUNIT_ASSERT_MESSAGE("redlining should be on",
+                           pDoc->getIDocumentRedlineAccess().IsRedlineOn());
+    CPPUNIT_ASSERT_MESSAGE("redlines shouldn't be visible",
+                           !IDocumentRedlineAccess::IsShowChanges(
+                               pDoc->getIDocumentRedlineAccess().GetRedlineFlags()));
+
+    // remove only end part of the heading with paragraph break
+    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+
+    pWrtShell->Down(/*bSelect=*/false);
+    pWrtShell->Down(/*bSelect=*/false);
+    pWrtShell->Down(/*bSelect=*/false);
+    pWrtShell->Down(/*bSelect=*/false);
+    pWrtShell->Down(/*bSelect=*/false);
+    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+    pWrtShell->EndPara(/*bSelect=*/true);
+    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/true, 1, /*bBasicCall=*/false);
+    rtl::Reference<SwTransferable> pTransfer = new SwTransferable(*pWrtShell);
+    pTransfer->Cut();
+
+    // solved problem: changing paragraph style after deletion
+    CPPUNIT_ASSERT_EQUAL(OUString("Heading 1"),
+                         getProperty<OUString>(getParagraph(2), "ParaStyleName"));
+
+    // solved problem: apply numbering
+    CPPUNIT_ASSERT_EQUAL(OUString("Outline"),
+                         getProperty<OUString>(getParagraph(2), "NumberingStyleName"));
+
+    // accept deletion, remaining (now second) paragraph: it is still heading
+    IDocumentRedlineAccess& rIDRA(pDoc->getIDocumentRedlineAccess());
+    rIDRA.AcceptAllRedline(true);
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Heading 1"),
+                         getProperty<OUString>(getParagraph(2), "ParaStyleName"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Outline"),
+                         getProperty<OUString>(getParagraph(2), "NumberingStyleName"));
+
+    // solved problem: Undo with the workaround
+    sw::UndoManager& rUndoManager = pDoc->GetUndoManager();
+    rUndoManager.Undo();
+    rUndoManager.Undo();
+
+    // heading
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Heading 1"),
+                         getProperty<OUString>(getParagraph(2), "ParaStyleName"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Outline"),
+                         getProperty<OUString>(getParagraph(2), "NumberingStyleName"));
+
+    // next paragraph: bulleted list item
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Standard"),
+                         getProperty<OUString>(getParagraph(3), "ParaStyleName"));
+    sNumName = getProperty<OUString>(getParagraph(3), "NumberingStyleName");
+    CPPUNIT_ASSERT_MESSAGE("Missing numbering style", !sNumName.isEmpty());
+    CPPUNIT_ASSERT_MESSAGE("Not a bulleted list item", sNumName != "Outline");
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf109376_redline)
 {
     SwDoc* pDoc = createDoc();

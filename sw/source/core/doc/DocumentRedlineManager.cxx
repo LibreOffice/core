@@ -774,6 +774,47 @@ namespace
         }
     }
 
+    void lcl_CopyStyle( const SwPosition & rFrom, const SwPosition & rTo )
+    {
+        SwTextNode* pToNode = rTo.nNode.GetNode().GetTextNode();
+        SwTextNode* pFromNode = rFrom.nNode.GetNode().GetTextNode();
+        if (pToNode != nullptr && pFromNode != nullptr && pToNode != pFromNode)
+        {
+            const SwPaM aPam(*pToNode);
+            SwDoc* pDoc = aPam.GetDoc();
+            // using Undo, copy paragraph style
+            pDoc->SetTextFormatColl(aPam, pFromNode->GetTextColl());
+
+            // using Undo, remove direct paragraph formatting of the "To" paragraph,
+            // and apply here direct paragraph formatting of the "From" paragraph
+            SfxItemSet aTmp(
+                pDoc->GetAttrPool(),
+                svl::Items<
+                    RES_PARATR_LINESPACING, RES_PARATR_OUTLINELEVEL,
+                    RES_PARATR_LIST_BEGIN, RES_PARATR_LIST_END - 1>{});
+
+            SfxItemSet aTmp2(
+                pDoc->GetAttrPool(),
+                svl::Items<
+                    RES_PARATR_LINESPACING, RES_PARATR_OUTLINELEVEL,
+                    RES_PARATR_LIST_BEGIN, RES_PARATR_LIST_END - 1>{});
+
+            pToNode->GetParaAttr(aTmp, 0, 0);
+            pFromNode->GetParaAttr(aTmp2, 0, 0);
+
+            for( sal_uInt16 nItem = 0; nItem < aTmp.TotalCount(); ++nItem)
+            {
+                sal_uInt16 nWhich = aTmp.GetWhichByPos(nItem);
+                if( SfxItemState::SET == aTmp.GetItemState( nWhich, false ) &&
+                    SfxItemState::SET != aTmp2.GetItemState( nWhich, false ) )
+                        aTmp2.Put( aTmp.GetPool()->GetDefaultItem(nWhich), nWhich );
+            }
+
+            if (aTmp2.Count())
+                pDoc->getIDocumentContentOperations().InsertItemSet(aPam, aTmp2);
+        }
+    }
+
     /// in case some text is deleted, ensure that the not-yet-inserted
     /// SwRangeRedline has its positions corrected not to point to deleted node
     class TemporaryRedlineUpdater
@@ -1931,64 +1972,15 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
                         // after the fully deleted paragraphs (normal behaviour
                         // of editing without change tracking), we copy its style
                         // to the first removed paragraph.
-                        SwTextNode* pDelNode = pStt->nNode.GetNode().GetTextNode();
-                        SwTextNode* pTextNode = pEnd->nNode.GetNode().GetTextNode();
-                        if (pDelNode != nullptr && pTextNode != nullptr && pDelNode != pTextNode)
-                        {
-                            const SwPaM aPam(*pDelNode);
-                            // using Undo, apply paragraph style
-                            m_rDoc.SetTextFormatColl(aPam, pTextNode->GetTextColl());
-
-                            // using Undo, remove direct paragraph formatting of the first deleted paragraph,
-                            // and apply direct paragraph formatting of the next remaining paragraph
-                            SfxItemSet aTmp(
-                                m_rDoc.GetAttrPool(),
-                                svl::Items<
-                                    RES_PARATR_LINESPACING, RES_PARATR_OUTLINELEVEL,
-                                    RES_PARATR_LIST_BEGIN, RES_PARATR_LIST_END - 1>{});
-
-                            SfxItemSet aTmp2(
-                                m_rDoc.GetAttrPool(),
-                                svl::Items<
-                                    RES_PARATR_LINESPACING, RES_PARATR_OUTLINELEVEL,
-                                    RES_PARATR_LIST_BEGIN, RES_PARATR_LIST_END - 1>{});
-
-                            pDelNode->GetParaAttr(aTmp, 0, 0);
-                            pTextNode->GetParaAttr(aTmp2, 0, 0);
-
-                            for( sal_uInt16 nItem = 0; nItem < aTmp.TotalCount(); ++nItem)
-                            {
-                                sal_uInt16 nWhich = aTmp.GetWhichByPos(nItem);
-                                if( SfxItemState::SET == aTmp.GetItemState( nWhich, false ) &&
-                                    SfxItemState::SET != aTmp2.GetItemState( nWhich, false ) )
-                                        aTmp2.Put( aTmp.GetPool()->GetDefaultItem(nWhich), nWhich );
-                            }
-
-                            if (aTmp2.Count())
-                                m_rDoc.getIDocumentContentOperations().InsertItemSet(aPam, aTmp2);
-                        }
+                        lcl_CopyStyle(*pEnd, *pStt);
                     }
                     else
                     {
                         // tdf#119571 update the style of the joined paragraph
                         // after a partially deleted paragraph to show its correct style
-                        // in "Show changes" mode, too. All removed paragraphs
-                        // get the style of the first (partially deleted) paragraph
-                        // to avoid text insertion with bad style in the deleted
-                        // area later.
-                        SwContentNode* pDelNd = pStt->nNode.GetNode().GetContentNode();
-                        SwContentNode* pTextNd = pEnd->nNode.GetNode().GetContentNode();
-                        SwTextNode* pDelNode = pStt->nNode.GetNode().GetTextNode();
-                        SwTextNode* pTextNode;
-                        SwNodeIndex aIdx( pEnd->nNode.GetNode() );
-
-                        while (pDelNode != nullptr && pTextNd != nullptr && pDelNd->GetIndex() < pTextNd->GetIndex())
-                        {
-                            pTextNode = pTextNd->GetTextNode();
-                            if (pTextNode && pDelNode != pTextNode )
-                                pTextNode->ChgFormatColl( pDelNode->GetTextColl() );
-                            pTextNd = SwNodes::GoPrevious( &aIdx );
-                        }
+                        // in "Show changes" mode, too. The paragraph after the deletion
+                        // gets the style of the first (partially deleted) paragraph.
+                        lcl_CopyStyle(*pStt, *pEnd);
                     }
                 }
                 bool const ret = mpRedlineTable->Insert( pNewRedl );
