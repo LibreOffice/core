@@ -22,6 +22,30 @@
       "revId": "1fc79b4e68bc6123897eba05a9f84c91cb57be00",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df7087c5_b32d18aa",
+        "filename": "sc/source/ui/view/tabvwshb.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 379,
+      "author": {
+        "id": 1002063
+      },
+      "writtenOn": "2019-06-24T06:16:08Z",
+      "side": 1,
+      "message": "I have not implemented. SID_EDIT part.\nWill be done after making Qr Dialog Box Usable.\nThanks for pointing out, would help me remember to issue to be completed.",
+      "parentUuid": "df7087c5_53bcbc68",
+      "range": {
+        "startLine": 379,
+        "startChar": 68,
+        "endLine": 379,
+        "endChar": 90
+      },
+      "revId": "1fc79b4e68bc6123897eba05a9f84c91cb57be00",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
