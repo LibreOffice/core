@@ -233,7 +233,6 @@ LayoutNodeContext::onCreateContext( ::sal_Int32 aElement,
         // CT_Algorithm
         AlgAtomPtr pAtom( new AlgAtom(mpNode->getLayoutNode()) );
         LayoutAtom::connect(mpNode, pAtom);
-        mpNode->getLayoutNode().setAlgAtom(pAtom);
         return new AlgorithmContext( *this, rAttribs, pAtom );
     }
     case DGM_TOKEN( choose ):

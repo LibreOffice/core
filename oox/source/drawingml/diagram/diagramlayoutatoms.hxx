@@ -271,10 +271,6 @@ public:
 
     const LayoutNode* getParentLayoutNode() const;
 
-    void setAlgAtom(AlgAtomPtr pAlgAtom) { mpAlgAtom = pAlgAtom; }
-
-    AlgAtomPtr getAlgAtom() const { return mpAlgAtom.lock(); }
-
 private:
     const Diagram&               mrDgm;
     VarMap                       mVariables;
@@ -283,7 +279,6 @@ private:
     ShapePtr                     mpExistingShape;
     ShapeLevelMap                mpNodeShapes;
     sal_Int32                    mnChildOrder;
-    std::weak_ptr<AlgAtom>       mpAlgAtom;
 };
 
 typedef std::shared_ptr< LayoutNode > LayoutNodePtr;
