@@ -29,14 +29,15 @@ class SvStream;
 
 class SAL_WARN_UNUSED TOOLS_DLLPUBLIC Fraction final
 {
-    struct Impl;
-
-    std::unique_ptr<Impl> mpImpl;
+    /// these two fields form a boost::rational, but I didn't want to put more boost headers into the global space
+    sal_Int32       mnNumerator = 0;
+    sal_Int32       mnDenominator = 1;
+    bool            mbValid = true;
 
 public:
-                    Fraction();
-                    Fraction( const Fraction & rFrac );
-                    Fraction( Fraction && rFrac );
+                    Fraction() = default;
+                    Fraction( const Fraction & rFrac ) = default;
+                    Fraction( Fraction && rFrac ) = default;
     explicit        Fraction( double dVal );
                     Fraction( double nNum, double nDen );
                     Fraction( sal_Int64 nNum, sal_Int64 nDen );
@@ -45,9 +46,8 @@ public:
                         T1 nNum, T2 nDen,
                         typename std::enable_if<std::is_integral<T1>::value && std::is_integral<T2>::value, int>::type = 0)
                         : Fraction( sal_Int64(nNum), sal_Int64(nDen) ) {}
-                    ~Fraction();
 
-    bool            IsValid() const;
+    bool            IsValid() const { return mbValid; }
 
     sal_Int32       GetNumerator() const;
     sal_Int32       GetDenominator() const;
@@ -58,8 +58,8 @@ public:
 #endif
     explicit operator double() const;
 
-    Fraction&       operator=( const Fraction& rfrFrac );
-    Fraction&       operator=( Fraction&& rfrFrac );
+    Fraction&       operator=( const Fraction& rfrFrac ) = default;
+    Fraction&       operator=( Fraction&& rfrFrac ) = default;
     Fraction&       operator=( double v ) { return operator=(Fraction(v)); }
 
     Fraction&       operator+=( const Fraction& rfrFrac );
@@ -85,7 +85,7 @@ public:
     TOOLS_DLLPUBLIC friend bool operator<=( const Fraction& rVal1, const Fraction& rVal2 );
     TOOLS_DLLPUBLIC friend bool operator>=( const Fraction& rVal1, const Fraction& rVal2 );
 
-    TOOLS_DLLPUBLIC friend SvStream& ReadFraction( SvStream& rIStream, Fraction const & rFract );
+    TOOLS_DLLPUBLIC friend SvStream& ReadFraction( SvStream& rIStream, Fraction & rFract );
     TOOLS_DLLPUBLIC friend SvStream& WriteFraction( SvStream& rOStream, const Fraction& rFract );
 };
 
