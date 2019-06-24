@@ -356,7 +356,7 @@ public:
      *
      * @return an element of the LibreOfficeKitSelectionType enum.
      */
-    int getSelectionType(LibreOfficeKitDocument* pThis)
+    int getSelectionType(LibreOfficeKitDocument* /*pThis*/)
     {
         return mpDoc->pClass->getSelectionType(mpDoc);
     }
