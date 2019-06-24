@@ -5,14 +5,14 @@ import starter_commands
 import uno_commands
 import UI_Object_commands
 import Special_commands
-
+import General_commands
 
 UILogger:
     commands*=Command    
 ;
 
 Command:
-  UNOCommand | StarterCommand | UIObjectCommand | DialogCommand  | SpecialCommand
+  UNOCommand | StarterCommand | UIObjectCommand | DialogCommand  | SpecialCommand | GeneralCommand
 ;
 
 Comment:

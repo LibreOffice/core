@@ -1,0 +1,21 @@
+/*
+    This file for the log statments that is general for all application
+    we can use it as general commands then relate it to its application 
+    as we have starter command
+    //====================================
+    also I make set zoom to be general as it will be better
+*/
+
+SpecialCommand:
+    SideBar | setZoom_command | Select_command
+;
+
+SideBar:
+    'From SIDEBAR ' 'Choose ' '{"PANEL":' name=STRING '}'
+;
+setZoom_command:
+    'Set Zoom to ' zoom_value=INT 
+;
+Select_command:
+    'Select ' '{"OBJECT":' name=STRING '}'
+;
