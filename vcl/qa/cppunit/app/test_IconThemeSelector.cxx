@@ -19,42 +19,20 @@
 class IconThemeSelectorTest : public CppUnit::TestFixture
 {
 #ifndef _WIN32 //default theme on Windows is Colibre independently from any desktop environment
-    void
-    BreezeIsReturnedForKde5Desktop();
-
-    void
-    ElementaryIsReturnedForGnomeDesktop();
-
-    void
-    ThemeIsOverriddenByPreferredTheme();
-
-    void
-    ThemeIsOverriddenByHighContrastMode();
-
-    void
-    NotInstalledThemeDoesNotOverride();
-
-    void
-    InstalledThemeIsFound();
-
-    void
-    FirstThemeIsReturnedIfRequestedThemeIsNotFound();
-
-    void
-    FallbackThemeIsReturnedForEmptyInput();
-
-    void
-    DifferentPreferredThemesAreInequal();
-
-    void
-    DifferentHighContrastModesAreInequal();
-
-    static std::vector<vcl::IconThemeInfo>
-    GetFakeInstalledThemes();
+    void BreezeIsReturnedForKde5Desktop();
+    void ElementaryIsReturnedForGnomeDesktop();
+    void ThemeIsOverriddenByPreferredTheme();
+    void ThemeIsOverriddenByHighContrastMode();
+    void NotInstalledThemeDoesNotOverride();
+    void InstalledThemeIsFound();
+    void FirstThemeIsReturnedIfRequestedThemeIsNotFound();
+    void FallbackThemeIsReturnedForEmptyInput();
+    void DifferentPreferredThemesAreInequal();
+    void DifferentHighContrastModesAreInequal();
+    static std::vector<vcl::IconThemeInfo> GetFakeInstalledThemes();
 #endif
 
     // Adds code needed to register the test suite
-
     CPPUNIT_TEST_SUITE(IconThemeSelectorTest);
 
 #ifndef _WIN32
@@ -71,7 +49,6 @@ class IconThemeSelectorTest : public CppUnit::TestFixture
 #endif
 
     // End of test suite definition
-
     CPPUNIT_TEST_SUITE_END();
 };
 
