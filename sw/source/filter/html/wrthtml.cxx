@@ -55,6 +55,7 @@
 #include <docary.hxx>
 #include <pam.hxx>
 #include <doc.hxx>
+#include <ndgrf.hxx>
 #include <ndtxt.hxx>
 #include <mdiexp.hxx>
 #include <fltini.hxx>
