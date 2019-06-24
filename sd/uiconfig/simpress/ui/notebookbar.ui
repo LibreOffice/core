@@ -4165,7 +4165,7 @@
                                     <property name="toolbar_style">icons</property>
                                     <property name="show_arrow">False</property>
                                     <child>
-                                      <object class="GtkToolButton" id="Home-DefaultBullet1">
+                                      <object class="GtkToolButton" id="Home-DefaultBullet">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="action_name">.uno:DefaultBullet</property>
@@ -4176,8 +4176,18 @@
                                       </packing>
                                     </child>
                                     <child>
-                                      <object class="GtkToolButton" id="Home-SetOutline1">
+                                      <object class="GtkToolButton" id="Home-DefaultNumbering">
                                         <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="action_name">.uno:DefaultNumbering</property>
+                                      </object>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="homogeneous">True</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkToolButton" id="Home-SetOutline">
                                         <property name="can_focus">False</property>
                                         <property name="action_name">.uno:SetOutline</property>
                                       </object>
@@ -4925,6 +4935,7 @@
                   <class name="context-any"/>
                   <class name="context-Text"/>
                   <class name="context-DrawText"/>
+                  <class name="context-TextObject"/>
                 </style>
               </object>
               <packing>
