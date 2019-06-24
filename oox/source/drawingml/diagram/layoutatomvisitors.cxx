@@ -43,7 +43,7 @@ void ShapeCreationVisitor::visit(ConstraintAtom& /*rAtom*/)
 
 void ShapeCreationVisitor::visit(AlgAtom& rAtom)
 {
-    defaultVisit(rAtom);
+    mpParentShape->setAspectRatio(rAtom.getAspectRatio());
 }
 
 void ShapeCreationVisitor::visit(ForEachAtom& rAtom)
@@ -140,8 +140,6 @@ void ShapeCreationVisitor::visit(LayoutNode& rAtom)
         if (rAtom.setupShape(pShape, pNewNode))
         {
             pShape->setInternalName(rAtom.getName());
-            if (AlgAtomPtr pAlgAtom = rAtom.getAlgAtom())
-                pShape->setAspectRatio(pAlgAtom->getAspectRatio());
             rAtom.addNodeShape(pShape, mnCurrLevel);
         }
     }
@@ -161,8 +159,6 @@ void ShapeCreationVisitor::visit(LayoutNode& rAtom)
             if (rAtom.setupShape(pShape, pNewNode))
             {
                 pShape->setInternalName(rAtom.getName());
-                if (AlgAtomPtr pAlgAtom = rAtom.getAlgAtom())
-                    pShape->setAspectRatio(pAlgAtom->getAspectRatio());
                 pCurrParent->addChild(pShape);
                 pCurrParent = pShape;
                 rAtom.addNodeShape(pShape, mnCurrLevel);
