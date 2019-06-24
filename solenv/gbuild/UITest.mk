@@ -94,6 +94,11 @@ endif
 define gb_UITest_UITest
 $(call gb_UITest_get_target,$(1)) : PYPATH := $(SRCDIR)/uitest$$(gb_CLASSPATHSEP)$(SRCDIR)/unotest/source/python$$(gb_CLASSPATHSEP)$(INSTROOT)/$(LIBO_LIB_PYUNO_FOLDER)$(if $(filter-out $(LIBO_LIB_PYUNO_FOLDER),$(LIBO_LIB_FOLDER)),$(gb_CLASSPATHSEP)$(INSTROOT)/$(LIBO_LIB_FOLDER))
 $(call gb_UITest_get_target,$(1)) : MODULES :=
+ifneq ($(filter MORE_FONTS,$(BUILD_TYPE)),)
+$(call gb_UITest_get_target,$(1)) : \
+    $(foreach font,$(gb_Package_MODULE_ooo_fonts), \
+        $(foreach file,$(shell cat $(call gb_Package_get_target,$(font))),$(file)))
+endif
 
 $(eval $(call gb_Module_register_target,$(call gb_UITest_get_target,$(1)),$(call gb_UITest_get_clean_target,$(1))))
 $(call gb_Helper_make_userfriendly_targets,$(1),UITest)

@@ -108,7 +108,6 @@ public:
     void testTdf99680_2();
     void testTdf108963();
     void testTdf118244_radioButtonGroup();
-#if HAVE_MORE_FONTS
     /// Test writing ToUnicode CMAP for LTR ligatures.
     void testTdf115117_1();
     /// Text extracting LTR text with ligatures.
@@ -123,7 +122,6 @@ public:
     void testTdf66597_2();
     /// Test writing ActualText for LTR many to one glyph to Unicode mapping.
     void testTdf66597_3();
-#endif
     void testTdf109143();
     void testTdf105954();
     void testTdf106702();
@@ -136,14 +134,18 @@ public:
     CPPUNIT_TEST_SUITE(PdfExportTest);
     CPPUNIT_TEST(testTdf106059);
     CPPUNIT_TEST(testTdf105461);
+    // No need to run these on Windows, since they would use GDI printing,
+    // and not trigger PDF export, which is the intent of these tests.
+#if !defined _WIN32
     CPPUNIT_TEST(testTdf107868);
+    CPPUNIT_TEST(testSofthyphenPos);
+#endif
     CPPUNIT_TEST(testTdf105093);
     CPPUNIT_TEST(testTdf106206);
     CPPUNIT_TEST(testTdf106693);
     CPPUNIT_TEST(testForcePoint71);
     CPPUNIT_TEST(testTdf106972);
     CPPUNIT_TEST(testTdf106972Pdf17);
-    CPPUNIT_TEST(testSofthyphenPos);
     CPPUNIT_TEST(testTdf107013);
     CPPUNIT_TEST(testTdf107018);
     CPPUNIT_TEST(testTdf107089);
@@ -366,10 +368,6 @@ void PdfExportTest::testTdf105461()
 
 void PdfExportTest::testTdf107868()
 {
-    // No need to run it on Windows, since it would use GDI printing, and not trigger PDF export
-    // which is the intent of the test.
-    // FIXME: Why does this fail on macOS?
-#if !defined MACOSX && !defined _WIN32
     // Import the bugdoc and print to PDF.
     OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf107868.odt";
     mxComponent = loadFromDesktop(aURL);
@@ -417,7 +415,6 @@ void PdfExportTest::testTdf107868()
 
     // This was 4, the page contained 4 white paths at problematic positions.
     CPPUNIT_ASSERT_EQUAL(0, nWhitePathCount);
-#endif
 }
 
 void PdfExportTest::testTdf105093()
@@ -620,10 +617,6 @@ void PdfExportTest::testTdf106972Pdf17()
 
 void PdfExportTest::testSofthyphenPos()
 {
-    // No need to run it on Windows, since it would use GDI printing, and not
-    // trigger PDF export which is the intent of the test.
-    // FIXME: Why does this fail on macOS?
-#if !defined MACOSX && !defined _WIN32
     // Import the bugdoc and print to PDF.
     OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "softhyphen_pdf.odt";
     mxComponent = loadFromDesktop(aURL);
@@ -673,7 +666,6 @@ void PdfExportTest::testSofthyphenPos()
     }
 
     CPPUNIT_ASSERT(haveText);
-#endif
 }
 
 void PdfExportTest::testTdf107013()
@@ -886,8 +878,6 @@ void PdfExportTest::testTdf108963()
     PageHolder pPdfPage(FPDF_LoadPage(pPdfDocument.get(), /*page_index=*/0));
     CPPUNIT_ASSERT(pPdfPage.get());
 
-    // FIXME: strangely this fails on some Win systems after a pdfium update, expected: 793.7; actual: 793
-#if !defined _WIN32
     // Test page size (28x15.75 cm, was 1/100th mm off, tdf#112690)
     // bad: MediaBox[0 0 793.672440944882 446.428346456693]
     // good: MediaBox[0 0 793.700787401575 446.456692913386]
@@ -953,7 +943,6 @@ void PdfExportTest::testTdf108963()
     }
 
     CPPUNIT_ASSERT_EQUAL(1, nYellowPathCount);
-#endif
 }
 
 void PdfExportTest::testTdf118244_radioButtonGroup()
@@ -993,13 +982,10 @@ void PdfExportTest::testTdf118244_radioButtonGroup()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("# of radio groups", sal_uInt32(3), nRadioGroups);
 }
 
-#if HAVE_MORE_FONTS
 // This requires Carlito font, if it is missing the test will most likely
 // fail.
 void PdfExportTest::testTdf115117_1()
 {
-// keeps failing on the windows tinderboxen
-#if !defined _WIN32
     vcl::filter::PDFDocument aDocument;
     load("tdf115117-1.odt", aDocument);
 
@@ -1055,7 +1041,6 @@ void PdfExportTest::testTdf115117_1()
     const char* pEnd = pStart + aObjectStream.GetSize();
     auto it = std::search(pStart, pEnd, aCmap.getStr(), aCmap.getStr() + aCmap.getLength());
     CPPUNIT_ASSERT(it != pEnd);
-#endif // if !defined _WIN32
 }
 
 // This requires DejaVu Sans font, if it is missing the test will most likely
@@ -1190,11 +1175,9 @@ void PdfExportTest::testTdf115117_2a()
     CPPUNIT_ASSERT_EQUAL(aExpectedText, aActualText);
 }
 
-// This requires Amiri font, if it is missing the test will fail.
 void PdfExportTest::testTdf66597_1()
 {
-    // FIXME: Fallback font is used on Windows for some reason.
-#if !defined _WIN32
+    // This requires Amiri font, if it is missing the test will fail.
     vcl::filter::PDFDocument aDocument;
     load("tdf66597-1.odt", aDocument);
 
@@ -1278,14 +1261,11 @@ void PdfExportTest::testTdf66597_1()
         nPos = aData.find(aActualText);
         CPPUNIT_ASSERT_MESSAGE("ActualText not found!", nPos != std::string::npos);
     }
-#endif
 }
 
 // This requires Reem Kufi font, if it is missing the test will fail.
 void PdfExportTest::testTdf66597_2()
 {
-    // FIXME: Fallback font is used on Windows for some reason.
-#if !defined _WIN32
     vcl::filter::PDFDocument aDocument;
     load("tdf66597-2.odt", aDocument);
 
@@ -1375,14 +1355,11 @@ void PdfExportTest::testTdf66597_2()
             CPPUNIT_ASSERT_MESSAGE("ActualText not found for " + aCode, nPos != std::string::npos);
         }
     }
-#endif
 }
 
 // This requires Gentium Basic font, if it is missing the test will fail.
 void PdfExportTest::testTdf66597_3()
 {
-    // fails on some of the windows tinderboxes
-#if !defined _WIN32
     vcl::filter::PDFDocument aDocument;
     load("tdf66597-3.odt", aDocument);
 
@@ -1458,9 +1435,7 @@ void PdfExportTest::testTdf66597_3()
         }
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Number of ActualText entries does not match!", static_cast<size_t>(4), nCount);
     }
-#endif // __WIN32
 }
-#endif
 
 void PdfExportTest::testTdf105954()
 {
