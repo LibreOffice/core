@@ -4733,6 +4733,8 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size
     SAL_INFO("sw.ww8", "TODO DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size& rSize, const SwFlyFrameFormat* pOLEFrameFormat, SwOLENode* pOLENode, const SdrObject* pSdrObj  ) - some stuff still missing" );
 
     GetSdtEndBefore(pSdrObj);
+    uno::Reference< drawing::XShape > xShape( const_cast<SdrObject*>(pSdrObj)->getUnoShape(), uno::UNO_QUERY );
+    uno::Reference< beans::XPropertySet > xPropSet( xShape, uno::UNO_QUERY );
 
     // detect mis-use of the API
     assert(pGrfNode || (pOLEFrameFormat && pOLENode));
@@ -4821,10 +4823,19 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size
         docPrattrList->add( XML_title, OUStringToOString( pGrfNode ? pGrfNode->GetTitle() : pOLEFrameFormat->GetObjTitle(), RTL_TEXTENCODING_UTF8 ).getStr());
     XFastAttributeListRef docPrAttrListRef( docPrattrList );
     m_pSerializer->startElementNS( XML_wp, XML_docPr, docPrAttrListRef );
-    // TODO hyperlink
-    // m_pSerializer->singleElementNS( XML_a, XML_hlinkClick,
-    //         FSNS( XML_xmlns, XML_a ), "http://schemas.openxmlformats.org/drawingml/2006/main",
-    //         FSNS( XML_r, XML_id ), "rId4");
+
+    //TODO: internal hyperlink
+    OUString sURL, sRelId;
+    xPropSet->getPropertyValue("HyperLinkURL") >>= sURL;
+    if(!sURL.isEmpty())
+    {
+        sRelId = GetExport().GetFilter().addRelation( m_pSerializer->getOutputStream(),
+                        oox::getRelationship(Relationship::HYPERLINK),
+                        sURL, true );
+        m_pSerializer->singleElementNS( XML_a, XML_hlinkClick,
+            FSNS( XML_xmlns, XML_a ), "http://schemas.openxmlformats.org/drawingml/2006/main",
+            FSNS( XML_r, XML_id ), sRelId.toUtf8());
+    }
     m_pSerializer->endElementNS( XML_wp, XML_docPr );
 
     m_pSerializer->startElementNS(XML_wp, XML_cNvGraphicFramePr);
@@ -4845,10 +4856,9 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size
     m_pSerializer->startElementNS(XML_pic, XML_nvPicPr);
     // It seems pic:cNvpr and wp:docPr are pretty much the same thing with the same attributes
     m_pSerializer->startElementNS(XML_pic, XML_cNvPr, docPrAttrListRef);
-
-    // TODO hyperlink
-    // m_pSerializer->singleElementNS( XML_a, XML_hlinkClick,
-    //     FSNS( XML_r, XML_id ), "rId4");
+    if(!sURL.isEmpty())
+        m_pSerializer->singleElementNS( XML_a, XML_hlinkClick,
+            FSNS( XML_r, XML_id ), sRelId.toUtf8());
     m_pSerializer->endElementNS( XML_pic, XML_cNvPr );
 
     m_pSerializer->startElementNS(XML_pic, XML_cNvPicPr);
