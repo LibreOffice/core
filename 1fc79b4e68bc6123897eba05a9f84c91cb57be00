@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df7087c5_53bcbc68",
+        "filename": "sc/source/ui/view/tabvwshb.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 379,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2019-06-24T05:33:00Z",
+      "side": 1,
+      "message": "sure?",
+      "range": {
+        "startLine": 379,
+        "startChar": 68,
+        "endLine": 379,
+        "endChar": 90
+      },
+      "revId": "1fc79b4e68bc6123897eba05a9f84c91cb57be00",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
