@@ -2806,7 +2806,7 @@ void DomainMapper::processDeferredCharacterProperties( const std::map< sal_Int32
         break; // only for use by other properties, ignore here
         case NS_ooxml::LN_EG_RPrBase_position:
         {
-            sal_Int16 nEscapement = 0;
+            double nEscapement = 0;
             sal_Int8 nProp  = 100;
             if(nIntValue == 0)
                 nProp = 0;
@@ -2851,7 +2851,7 @@ void DomainMapper::processDeferredCharacterProperties( const std::map< sal_Int32
                 nEscapement = -MAX_ESC_POS;
             }
 
-            rContext->Insert(PROP_CHAR_ESCAPEMENT,         uno::makeAny( nEscapement ) );
+            rContext->Insert(PROP_CHAR_ESCAPEMENT,         uno::makeAny( sal_Int16(nEscapement) ) );
             rContext->Insert(PROP_CHAR_ESCAPEMENT_HEIGHT,  uno::makeAny( nProp ) );
         }
         break;
