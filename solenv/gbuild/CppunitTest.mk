@@ -192,7 +192,7 @@ $(call gb_CppunitTest_get_target,$(1)) : UNO_SERVICES :=
 $(call gb_CppunitTest_get_target,$(1)) : UNO_TYPES :=
 $(call gb_CppunitTest_get_target,$(1)) : HEADLESS := --headless
 $(call gb_CppunitTest_get_target,$(1)) : EXTRA_ENV_VARS :=
-$$(eval $$(call gb_Module_register_target,$(call gb_CppunitTest_get_target,$(1)),$(call gb_CppunitTest_get_clean_target,$(1))))
+$$(eval $$(call gb_Module_register_target,CppunitTest_$(1),$(call gb_CppunitTest_get_target,$(1)),$(call gb_CppunitTest_get_clean_target,$(1))))
 $(call gb_Helper_make_userfriendly_targets,$(1),CppunitTest)
 
 endef
@@ -368,13 +368,7 @@ $(call gb_CppunitTest_get_target,$(1)) : $(call gb_Executable_get_target,$(2))
 
 endef
 
-define gb_CppunitTest_use_more_fonts
-ifneq ($(filter MORE_FONTS,$(BUILD_TYPE)),)
-$(call gb_CppunitTest_get_target,$(1)) : \
-    $(foreach font,$(gb_Package_MODULE_ooo_fonts),$(call gb_Package_get_target,$(font)))
-endif
-
-endef
+gb_CppunitTest_use_more_fonts = $(call gb_TestHelpers_use_more_fonts,$(call gb_CppunitTest_get_target,$(1)))
 
 define gb_CppunitTest_use_java_ure
 $(call gb_CppunitTest_get_target,$(1)) : JAVA_URE := $(true)

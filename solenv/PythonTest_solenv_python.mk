@@ -15,4 +15,6 @@ $(eval $(call gb_PythonTest_add_modules,solenv_python,$(SRCDIR)/solenv/qa/python
 
 $(call gb_PythonTest_get_target,solenv_python): $(call gb_CustomTarget_get_target,solenv/gbuildtesttools)
 
+$(eval $(call gb_PythonTest_use_more_fonts,solenv_python))
+
 # vim: set noet sw=4 ts=4:

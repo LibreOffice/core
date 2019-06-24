@@ -67,7 +67,7 @@ $(call gb_JavaClassSet_JavaClassSet,$(call gb_JunitTest_get_classsetname,$(1)))
 $(call gb_JavaClassSet_use_system_jar,$(call gb_JunitTest_get_classsetname,$(1)),$(OOO_JUNIT_JAR))
 $(if $(HAMCREST_JAR),$(call gb_JavaClassSet_use_system_jar,$(call gb_JunitTest_get_classsetname,$(1)),$(HAMCREST_JAR)))
 $(call gb_JunitTest_get_target,$(1)) : $(call gb_JavaClassSet_get_target,$(call gb_JunitTest_get_classsetname,$(1)))
-$(eval $(call gb_Module_register_target,$(call gb_JunitTest_get_target,$(1)),$(call gb_JunitTest_get_clean_target,$(1))))
+$(eval $(call gb_Module_register_target,JunitTest_$(1),$(call gb_JunitTest_get_target,$(1)),$(call gb_JunitTest_get_clean_target,$(1))))
 $(call gb_Helper_make_userfriendly_targets,$(1),JunitTest)
 
 endef
@@ -204,7 +204,7 @@ endif
 	@true
 
 define gb_JunitTest_JunitTest
-$(eval $(call gb_Module_register_target,$(call gb_JunitTest_get_target,$(1)),$(call gb_JunitTest_get_clean_target,$(1))))
+$(eval $(call gb_Module_register_target,JunitTest_$(1),$(call gb_JunitTest_get_target,$(1)),$(call gb_JunitTest_get_clean_target,$(1))))
 $(call gb_Helper_make_userfriendly_targets,$(1),JunitTest)
 
 endef

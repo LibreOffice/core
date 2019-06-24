@@ -76,7 +76,7 @@ $(call gb_Executable_get_clean_target,$(1)) : $(call gb_LinkTarget_get_clean_tar
 $(call gb_Executable_get_clean_target,$(1)) : AUXTARGETS :=
 $(call gb_Executable_Executable_platform,$(1),$(2),$(gb_Executable_BINDIR)/$(1).lib)
 
-$$(eval $$(call gb_Module_register_target,$(call gb_Executable_get_target,$(1)),$(call gb_Executable_get_clean_target,$(1))))
+$$(eval $$(call gb_Module_register_target,Executable_$(1),$(call gb_Executable_get_target,$(1)),$(call gb_Executable_get_clean_target,$(1))))
 $(call gb_Helper_make_userfriendly_targets,$(1),Executable)
 
 endef

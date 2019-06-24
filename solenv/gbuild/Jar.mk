@@ -105,7 +105,7 @@ $(call gb_Jar_get_target,$(1)) : PACKAGEFILES :=
 $(call gb_Jar_get_target,$(1)) : \
 	$(call gb_JavaClassSet_get_target,$(call gb_Jar_get_classsetname,$(1)))
 $(call gb_JavaClassSet_JavaClassSet,$(call gb_Jar_get_classsetname,$(1)))
-$(eval $(call gb_Module_register_target,$(call gb_Jar_get_target,$(1)),$(call gb_Jar_get_clean_target,$(1))))
+$(eval $(call gb_Module_register_target,Jar_$(1),$(call gb_Jar_get_target,$(1)),$(call gb_Jar_get_clean_target,$(1))))
 $(call gb_Helper_make_userfriendly_targets,$(1),Jar,$(call gb_Jar_get_target,$(1)))
 
 # installed jars need a rule to build!

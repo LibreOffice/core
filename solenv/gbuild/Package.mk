@@ -81,15 +81,15 @@ $(call gb_Package_get_target,%) :
 	$(call gb_Output_announce,$*,$(true),PKG,2)
 	$(if $(PACKAGE_DEFINED),,$(call gb_Output_error,Something depends on package $* which does not exist.))
 	rm -f $@ && \
-	mv $(call var2file,$@.tmp,100,$(sort $(FILES))) $@
+	mv $(call var2file,$@.tmp,100,$(sort $(call gb_Package_get_files,$*))) $@
 
 # for other targets that want to create Packages, does not register at Module
 define gb_Package_Package_internal
 gb_Package_SOURCEDIR_$(1) := $(2)
 gb_Package_OUTDIR_$(1) := $(INSTROOT)
 $(call gb_Package_get_target,$(1)) : PACKAGE_DEFINED := $(true)
-$(call gb_Package_get_target,$(1)) : FILES :=
-$(call gb_Package_get_clean_target,$(1)) : FILES := $(call gb_Package_get_target,$(1)) $(call gb_Package_get_preparation_target,$(1))
+gb_Package_$(1)_FILES :=
+$(call gb_Package_get_clean_target,$(1)) : override FILES := $(call gb_Package_get_target,$(1)) $(call gb_Package_get_preparation_target,$(1))
 $(call gb_Package_get_target,$(1)) : $(call gb_Package_get_preparation_target,$(1))
 $(call gb_Package_get_target,$(1)) : $(gb_Module_CURRENTMAKEFILE)
 $(call gb_Package_get_target,$(1)) :| $(dir $(call gb_Package_get_target,$(1))).dir
@@ -105,7 +105,7 @@ $$(eval $$(call gb_Output_info,Currently known packages are: $(sort $(gb_Package
 $$(eval $$(call gb_Output_error,Package $(1) must be registered in Repository.mk or RepositoryExternal.mk))
 endif
 $(call gb_Package_Package_internal,$(1),$(2))
-$$(eval $$(call gb_Module_register_target,$(call gb_Package_get_target,$(1)),$(call gb_Package_get_clean_target,$(1))))
+$$(eval $$(call gb_Module_register_target,Package_$(1),$(call gb_Package_get_target,$(1)),$(call gb_Package_get_clean_target,$(1))))
 $(call gb_Helper_make_userfriendly_targets,$(1),Package)
 
 endef
@@ -136,7 +136,7 @@ $(call gb_Package_get_target,$(1)) : $$(gb_Package_OUTDIR_$(1))/$(2)
 $$(gb_Package_OUTDIR_$(1))/$(2) :| $$(dir $$(gb_Package_OUTDIR_$(1))/$(2)).dir
 	rm -f $$@ && ln -s $(3) $$@
 
-$(call gb_Package_get_target,$(1)) : FILES += $$(gb_Package_OUTDIR_$(1))/$(2)
+gb_Package_$(1)_FILES += $$(gb_Package_OUTDIR_$(1))/$(2)
 $(call gb_Package_get_clean_target,$(1)) : FILES += $$(gb_Package_OUTDIR_$(1))/$(2)
 
 endef
@@ -145,11 +145,14 @@ define gb_Package_add_file
 $(call gb_Package__check,$(1))
 $(if $(strip $(3)),,$(call gb_Output_error,gb_Package_add_file requires 3 arguments))
 $(call gb_Package_get_target,$(1)) : $$(gb_Package_OUTDIR_$(1))/$(2)
-$(call gb_Package_get_target,$(1)) : FILES += $$(gb_Package_OUTDIR_$(1))/$(2)
+gb_Package_$(1)_FILES += $$(gb_Package_OUTDIR_$(1))/$(2)
 $(call gb_Package_get_clean_target,$(1)) : FILES += $$(gb_Package_OUTDIR_$(1))/$(2)
 $(call gb_PackagePart_PackagePart,$(2),$$(gb_Package_SOURCEDIR_$(1))/$(3),$(call gb_Package_get_preparation_target,$(1)),$$(gb_Package_OUTDIR_$(1)))
 
 endef
+
+# Returns the list of files of a package
+gb_Package_get_files = $(gb_Package_$(1)_FILES)
 
 # Adds several files at once.
 #
