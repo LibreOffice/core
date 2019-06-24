@@ -1926,6 +1926,11 @@ AC_ARG_WITH(system-glm,
         [Use glm already on system.]),,
     [with_system_glm="$with_system_headers"])
 
+AC_ARG_WITH(system-skia,
+    AS_HELP_STRING([--with-system-skia],
+        [Use skia already on system.]),,
+    [with_system_skia="$with_system_headers"])
+
 AC_ARG_WITH(system-hunspell,
     AS_HELP_STRING([--with-system-hunspell],
         [Use libhunspell already on system.]),,
@@ -9333,6 +9338,24 @@ else
 fi
 AC_SUBST([GLM_CFLAGS])
 AC_SUBST([SYSTEM_GLM])
+
+dnl ===================================================================
+dnl Check for system skia
+dnl ===================================================================
+AC_MSG_CHECKING([which skia to use])
+if test "$with_system_skia" = "yes"; then
+    AC_MSG_RESULT([external])
+    SYSTEM_SKIA=TRUE
+    AC_LANG_PUSH([C++])
+    AC_CHECK_HEADER(skia/SkCanvas.h, [],
+       [AC_MSG_ERROR(skia/SkCanvas.h not found. install skia)], [])
+    AC_LANG_POP([C++])
+else
+    AC_MSG_RESULT([internal])
+    BUILD_TYPE="$BUILD_TYPE SKIA"
+    SYSTEM_SKIA=
+fi
+AC_SUBST(SYSTEM_SKIA)
 
 dnl ===================================================================
 dnl Check for system odbc
