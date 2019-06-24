@@ -542,14 +542,14 @@ void ScPatternAttr::FillToEditItemSet( SfxItemSet& rEditSet, const SfxItemSet& r
 {
     //  Read Items
 
-    std::shared_ptr<SvxColorItem> aColorItem(std::make_shared<SvxColorItem>(EE_CHAR_COLOR));              // use item as-is
-    std::shared_ptr<SvxFontItem> aFontItem(std::make_shared<SvxFontItem>(EE_CHAR_FONTINFO));            // use item as-is
-    std::shared_ptr<SvxFontItem> aCjkFontItem(std::make_shared<SvxFontItem>(EE_CHAR_FONTINFO_CJK));            // use item as-is
-    std::shared_ptr<SvxFontItem> aCtlFontItem(std::make_shared<SvxFontItem>(EE_CHAR_FONTINFO_CTL));            // use item as-is
+    std::unique_ptr<SvxColorItem> aColorItem(std::make_unique<SvxColorItem>(EE_CHAR_COLOR));              // use item as-is
+    std::unique_ptr<SvxFontItem> aFontItem(std::make_unique<SvxFontItem>(EE_CHAR_FONTINFO));            // use item as-is
+    std::unique_ptr<SvxFontItem> aCjkFontItem(std::make_unique<SvxFontItem>(EE_CHAR_FONTINFO_CJK));            // use item as-is
+    std::unique_ptr<SvxFontItem> aCtlFontItem(std::make_unique<SvxFontItem>(EE_CHAR_FONTINFO_CTL));            // use item as-is
     long            nTHeight, nCjkTHeight, nCtlTHeight;     // Twips
     FontWeight      eWeight, eCjkWeight, eCtlWeight;
-    std::shared_ptr<SvxUnderlineItem> aUnderlineItem(std::make_shared<SvxUnderlineItem>(LINESTYLE_NONE, EE_CHAR_UNDERLINE));
-    std::shared_ptr<SvxOverlineItem> aOverlineItem(std::make_shared<SvxOverlineItem>(LINESTYLE_NONE, EE_CHAR_OVERLINE));
+    std::unique_ptr<SvxUnderlineItem> aUnderlineItem(std::make_unique<SvxUnderlineItem>(LINESTYLE_NONE, EE_CHAR_UNDERLINE));
+    std::unique_ptr<SvxOverlineItem> aOverlineItem(std::make_unique<SvxOverlineItem>(LINESTYLE_NONE, EE_CHAR_OVERLINE));
     bool            bWordLine;
     FontStrikeout   eStrike;
     FontItalic      eItalic, eCjkItalic, eCtlItalic;
