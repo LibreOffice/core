@@ -33,7 +33,7 @@ $(call gb_CustomTarget_get_clean_target,%) :
 		rm -f $(call gb_CustomTarget_get_target,$*))
 
 define gb_CustomTarget_CustomTarget
-$(eval $(call gb_Module_register_target,$(call gb_CustomTarget_get_target,$(1)),$(call gb_CustomTarget_get_clean_target,$(1))))
+$(eval $(call gb_Module_register_target,CustomTarget_$(1),$(call gb_CustomTarget_get_target,$(1)),$(call gb_CustomTarget_get_clean_target,$(1))))
 $(call gb_Helper_make_userfriendly_targets,$(1),CustomTarget)
 $(call gb_CustomTarget_get_target,$(1)) :| $(dir $(call gb_CustomTarget_get_target,$(1))).dir
 

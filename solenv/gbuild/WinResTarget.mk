@@ -23,7 +23,7 @@ gb_WinResTarget_DEFAULTDEFS := $(gb_RCDEFS)
 
 define gb_WinResTarget_WinResTarget
 $(call gb_WinResTarget_WinResTarget_init,$(1))
-$$(eval $$(call gb_Module_register_target,$(call gb_WinResTarget_get_target,$(1)),$(call gb_WinResTarget_get_clean_target,$(1))))
+$$(eval $$(call gb_Module_register_target,WinResTarget_$(1),$(call gb_WinResTarget_get_target,$(1)),$(call gb_WinResTarget_get_clean_target,$(1))))
 $(call gb_Helper_make_userfriendly_targets,$(1),WinResTarget)
 
 endef
