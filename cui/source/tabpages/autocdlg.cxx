@@ -793,16 +793,14 @@ void OfaAutocorrReplacePage::RefillReplaceBox(bool bFromReset,
             pArray = &aDoubleStringTable[eOldLanguage]; // create new array
         }
 
-        sal_uInt32 nListBoxCount = m_xReplaceTLB->n_children();
-        sal_uInt32 i;
-        for(i = 0; i < nListBoxCount; i++)
-        {
+        m_xReplaceTLB->all_foreach([this, &pArray](weld::TreeIter& rIter) {
             pArray->push_back(DoubleString());
-            DoubleString& rDouble = (*pArray)[pArray->size() - 1];
-            rDouble.sShort = m_xReplaceTLB->get_text(i, 0);
-            rDouble.sLong = m_xReplaceTLB->get_text(i, 1);
-            rDouble.pUserData = reinterpret_cast<void*>(m_xReplaceTLB->get_id(i).toInt64());
-        }
+            DoubleString& rDouble = pArray->back();
+            rDouble.sShort = m_xReplaceTLB->get_text(rIter, 0);
+            rDouble.sLong = m_xReplaceTLB->get_text(rIter, 1);
+            rDouble.pUserData = reinterpret_cast<void*>(m_xReplaceTLB->get_id(rIter).toInt64());
+            return false;
+        });
     }
 
     if( !bSWriter )
