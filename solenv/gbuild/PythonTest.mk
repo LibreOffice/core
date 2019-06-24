@@ -72,7 +72,7 @@ define gb_PythonTest_PythonTest
 $(call gb_PythonTest_get_target,$(1)) : PYPATH := $(SRCDIR)/unotest/source/python$$(gb_CLASSPATHSEP)$(INSTROOT)/$(LIBO_LIB_PYUNO_FOLDER)$(if $(filter-out $(LIBO_LIB_PYUNO_FOLDER),$(LIBO_LIB_FOLDER)),$(gb_CLASSPATHSEP)$(INSTROOT)/$(LIBO_LIB_FOLDER))
 $(call gb_PythonTest_get_target,$(1)) : MODULES :=
 
-$(eval $(call gb_Module_register_target,$(call gb_PythonTest_get_target,$(1)),$(call gb_PythonTest_get_clean_target,$(1))))
+$(eval $(call gb_Module_register_target,PythonTest_$(1),$(call gb_PythonTest_get_target,$(1)),$(call gb_PythonTest_get_clean_target,$(1))))
 $(call gb_Helper_make_userfriendly_targets,$(1),PythonTest)
 
 endef
@@ -110,7 +110,7 @@ endif
 	@true
 
 define gb_PythonTest_PythonTest
-$(eval $(call gb_Module_register_target,$(call gb_PythonTest_get_target,$(1)),$(call gb_PythonTest_get_clean_target,$(1))))
+$(eval $(call gb_Module_register_target,PythonTest_$(1),$(call gb_PythonTest_get_target,$(1)),$(call gb_PythonTest_get_clean_target,$(1))))
 $(call gb_Helper_make_userfriendly_targets,$(1),PythonTest)
 
 endef

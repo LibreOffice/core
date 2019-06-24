@@ -91,7 +91,7 @@ define gb_Zip_Zip
 $(call gb_Zip_Zip_internal,$(1),$(2))
 $(call gb_Zip_get_target,$(1)) : $(gb_Module_CURRENTMAKEFILE)
 
-$(eval $(call gb_Module_register_target,$(call gb_Zip_get_target,$(1)),$(call gb_Zip_get_clean_target,$(1))))
+$(eval $(call gb_Module_register_target,Zip_$(1),$(call gb_Zip_get_target,$(1)),$(call gb_Zip_get_clean_target,$(1))))
 $(call gb_Helper_make_userfriendly_targets,$(1),Zip,$(call gb_Zip_get_target,$(1)))
 
 endef
