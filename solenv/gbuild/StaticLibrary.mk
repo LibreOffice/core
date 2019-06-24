@@ -45,7 +45,7 @@ $(call gb_LinkTarget_set_targettype,$(2),StaticLibrary)
 $(call gb_StaticLibrary_get_clean_target,$(1)) : $(call gb_LinkTarget_get_clean_target,$(2))
 $(call gb_StaticLibrary_get_clean_target,$(1)) : AUXTARGETS :=
 $(call gb_StaticLibrary_StaticLibrary_platform,$(1),$(2))
-$$(eval $$(call gb_Module_register_target,$(call gb_StaticLibrary_get_target,$(1)),$(call gb_StaticLibrary_get_clean_target,$(1))))
+$$(eval $$(call gb_Module_register_target,StaticLibrary_$(1),$(call gb_StaticLibrary_get_target,$(1)),$(call gb_StaticLibrary_get_clean_target,$(1))))
 $(call gb_Helper_make_userfriendly_targets,$(1),StaticLibrary)
 
 endef

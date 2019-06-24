@@ -50,7 +50,7 @@ $(call gb_AutoInstall_get_clean_target,%) :
 define gb_AutoInstall_AutoInstall
 $(call gb_AutoInstall_get_target,all) :| $(dir $(call gb_AutoInstall_get_target,all)).dir
 
-$$(eval $$(call gb_Module_register_target,$(call gb_AutoInstall_get_target,all),$(call gb_AutoInstall_get_clean_target,all)))
+$$(eval $$(call gb_Module_register_target,AutoInstall_$(1),$(call gb_AutoInstall_get_target,all),$(call gb_AutoInstall_get_clean_target,all)))
 $(call gb_Helper_make_userfriendly_targets,all,AutoInstall)
 
 endef

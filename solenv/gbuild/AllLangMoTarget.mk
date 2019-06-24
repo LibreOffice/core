@@ -91,7 +91,7 @@ $(call gb_Helper_install,$(call gb_AllLangMoTarget_get_target,$(1)), \
 	$(call gb_MoTarget_get_install_target,$(shell $(SRCDIR)/solenv/bin/localestr $(lang))/LC_MESSAGES/$(1)), \
 	$(call gb_MoTarget_get_target,$(1)$(lang))))
 
-$$(eval $$(call gb_Module_register_target,$(call gb_AllLangMoTarget_get_target,$(1)),$(call gb_AllLangMoTarget_get_clean_target,$(1))))
+$$(eval $$(call gb_Module_register_target,AllLangMoTarget_$(1),$(call gb_AllLangMoTarget_get_target,$(1)),$(call gb_AllLangMoTarget_get_clean_target,$(1))))
 $(call gb_Helper_make_userfriendly_targets,$(1),AllLangMoTarget)
 $(call gb_Postprocess_register_target,AllResources,AllLangMoTarget,$(1))
 
