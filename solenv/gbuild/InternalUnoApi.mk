@@ -31,7 +31,7 @@ $(call gb_InternalUnoApi_get_target,$(1)) : $(call gb_UnoApiTarget_get_target,$(
 $(call gb_InternalUnoApi_get_target,$(1)) :| $(dir $(call gb_InternalUnoApi_get_target,$(1))).dir
 $(call gb_InternalUnoApi_get_clean_target,$(1)) : $(call gb_UnoApiHeadersTarget_get_clean_target,$(1))
 
-$$(eval $$(call gb_Module_register_target,$(call gb_InternalUnoApi_get_target,$(1)),$(call gb_InternalUnoApi_get_clean_target,$(1))))
+$$(eval $$(call gb_Module_register_target,InternalUnoApi_$(1),$(call gb_InternalUnoApi_get_target,$(1)),$(call gb_InternalUnoApi_get_clean_target,$(1))))
 $(call gb_Helper_make_userfriendly_targets,$(1),InternalUnoApi)
 
 endef

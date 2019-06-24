@@ -11,6 +11,13 @@
 
 $(eval $(call gb_Module_Module,libreoffice))
 
+# These have to be included before the others for more_fonts dependencies
+$(eval $(call gb_Module_add_moduledirs,libreoffice,\
+	$(call gb_Helper_optional,MORE_FONTS,external/more_fonts) \
+	extras \
+))
+
+
 # This makefile needs to be read first because some variables like T_LIBS
 # for libmerged are cleared there and then later we append stuff to it
 # through e.g. gb_Library_use_external for various libraries in libmerged.
@@ -55,7 +62,6 @@ $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 	eventattacher \
 	extensions \
 	external \
-	extras \
 	filter \
 	$(call gb_Helper_optional,DBCONNECTIVITY,forms) \
 	formula \

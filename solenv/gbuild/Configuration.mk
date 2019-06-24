@@ -311,7 +311,7 @@ $(call gb_Configuration_get_preparation_target,%) :
 define gb_Configuration_Configuration
 $(eval gb_Configuration_NODELIVER_$(1) := $(2))
 
-$$(eval $$(call gb_Module_register_target,$(call gb_Configuration_get_target,$(1)),$(call gb_Configuration_get_clean_target,$(1))))
+$$(eval $$(call gb_Module_register_target,Configuration_$(1),$(call gb_Configuration_get_target,$(1)),$(call gb_Configuration_get_clean_target,$(1))))
 $(call gb_Helper_make_userfriendly_targets,$(1),Configuration)
 
 endef
