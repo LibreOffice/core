@@ -163,21 +163,6 @@ Qt5Frame::Qt5Frame(Qt5Frame* pParent, SalFrameStyleFlags nStyle, bool bUseCairo)
             pChildWindow->setTransientParent(pParentWindow);
     }
 
-    // fake an initial geometry, gets updated via configure event or SetPosSize
-    if (m_bDefaultPos || m_bDefaultSize)
-    {
-        maGeometry.nDisplayScreenNumber = 0;
-        Size aDefSize = CalcDefaultSize();
-        maGeometry.nX = 0;
-        maGeometry.nY = 0;
-        maGeometry.nWidth = aDefSize.Width();
-        maGeometry.nHeight = aDefSize.Height();
-        maGeometry.nTopDecoration = 0;
-        maGeometry.nBottomDecoration = 0;
-        maGeometry.nLeftDecoration = 0;
-        maGeometry.nRightDecoration = 0;
-    }
-
     m_aSystemData.nSize = sizeof(SystemEnvData);
 
     // Calling 'QWidget::winId()' implicitly enables native windows to be used
@@ -370,6 +355,7 @@ void Qt5Frame::Show(bool bVisible, bool /*bNoActivate*/)
     assert(m_pQWidget);
 
     SetDefaultSize();
+    SetDefaultPos();
 
     auto* pSalInst(static_cast<Qt5Instance*>(GetSalData()->m_pInstance));
     assert(pSalInst);
@@ -388,15 +374,22 @@ void Qt5Frame::SetMaxClientSize(long nWidth, long nHeight)
         asChild()->setMaximumSize(nWidth, nHeight);
 }
 
-void Qt5Frame::Center()
+void Qt5Frame::SetDefaultPos()
 {
+    if (!m_bDefaultPos)
+        return;
+
+    // center on parent
     if (m_pParent)
     {
-        QWidget* pWindow = m_pParent->GetQWidget()->window();
+        QWidget* const pWindow = m_pParent->GetQWidget()->window();
         QWidget* const pWidget = asChild();
-        pWidget->move(pWindow->frameGeometry().topLeft() + pWindow->rect().center()
-                      - pWidget->rect().center());
+        QPoint aPos = pWindow->rect().center() - pWidget->rect().center();
+        SetPosSize(aPos.x(), aPos.y(), 0, 0, SAL_FRAME_POSSIZE_X | SAL_FRAME_POSSIZE_Y);
+        assert(!m_bDefaultPos);
     }
+    else
+        m_bDefaultPos = false;
 }
 
 Size Qt5Frame::CalcDefaultSize()
@@ -443,31 +436,30 @@ void Qt5Frame::SetPosSize(long nX, long nY, long nWidth, long nHeight, sal_uInt1
 
     if (nFlags & (SAL_FRAME_POSSIZE_WIDTH | SAL_FRAME_POSSIZE_HEIGHT))
     {
-        m_bDefaultSize = false;
         if (isChild(false) || !m_pQWidget->isMaximized())
         {
             if (!(nFlags & SAL_FRAME_POSSIZE_WIDTH))
                 nWidth = maGeometry.nWidth;
             else if (!(nFlags & SAL_FRAME_POSSIZE_HEIGHT))
                 nHeight = maGeometry.nHeight;
-            assert(nWidth > 0 && nHeight > 0);
 
             if (nWidth > 0 && nHeight > 0)
             {
+                m_bDefaultSize = false;
                 if (m_nStyle & SalFrameStyleFlags::SIZEABLE)
                     asChild()->resize(nWidth, nHeight);
                 else
                     asChild()->setFixedSize(nWidth, nHeight);
-
-                // assume the resize happened
-                // needed for calculations and will eventually be corrected by events
-                maGeometry.nWidth = nWidth;
-                maGeometry.nHeight = nHeight;
             }
+
+            // assume the resize happened
+            // needed for calculations and will eventually be corrected by events
+            if (nWidth > 0)
+                maGeometry.nWidth = nWidth;
+            if (nHeight > 0)
+                maGeometry.nHeight = nHeight;
         }
     }
-    else
-        SetDefaultSize();
 
     if (nFlags & (SAL_FRAME_POSSIZE_X | SAL_FRAME_POSSIZE_Y))
     {
@@ -498,10 +490,6 @@ void Qt5Frame::SetPosSize(long nX, long nY, long nWidth, long nHeight, sal_uInt1
         m_bDefaultPos = false;
         asChild()->move(nX, nY);
     }
-    else if (m_bDefaultPos)
-        Center();
-
-    m_bDefaultPos = false;
 }
 
 void Qt5Frame::GetClientSize(long& rWidth, long& rHeight)
