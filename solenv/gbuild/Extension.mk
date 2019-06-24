@@ -140,7 +140,7 @@ endif
 $(foreach lang,$(gb_Extension_ALL_LANGS), \
     $(call gb_Extension__compile_help_onelang,$(1),$(lang)))
 
-$$(eval $$(call gb_Module_register_target,$(call gb_Extension__get_final_target,$(1)),$(call gb_Extension_get_clean_target,$(1))))
+$$(eval $$(call gb_Module_register_target,Extension_$(1),$(call gb_Extension__get_final_target,$(1)),$(call gb_Extension_get_clean_target,$(1))))
 $(call gb_Helper_make_userfriendly_targets,$(1),Extension,$(call gb_Extension__get_final_target,$(1)))
 
 endef

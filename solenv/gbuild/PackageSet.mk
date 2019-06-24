@@ -36,7 +36,7 @@ $(call gb_PackageSet_get_clean_target,%) :
 define gb_PackageSet_PackageSet
 $(call gb_PackageSet_PackageSet_internal,$(1))
 
-$$(eval $$(call gb_Module_register_target,$(call gb_PackageSet_get_target,$(1)),$(call gb_PackageSet_get_clean_target,$(1))))
+$$(eval $$(call gb_Module_register_target,PackageSet_$(1),$(call gb_PackageSet_get_target,$(1)),$(call gb_PackageSet_get_clean_target,$(1))))
 $(call gb_Helper_make_userfriendly_targets,$(1),PackageSet)
 
 endef

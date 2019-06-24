@@ -20,7 +20,7 @@ $(call gb_LinkTarget_get_target,$(2)): COMPILER_TEST := $(true)
 $(call gb_LinkTarget_get_target,$(2)): ENABLE_WERROR := $(true)
 $(call gb_CompilerTest_get_target,$(1)): $(call gb_LinkTarget_get_target,$(2))
 $(call gb_CompilerTest_get_clean_target,$(1)): $(call gb_LinkTarget_get_clean_target,$(2))
-$$(eval $$(call gb_Module_register_target,$(call gb_CompilerTest_get_target,$(1)),$(call gb_CompilerTest_get_clean_target,$(1))))
+$$(eval $$(call gb_Module_register_target,CompilerTest_$(1),$(call gb_CompilerTest_get_target,$(1)),$(call gb_CompilerTest_get_clean_target,$(1))))
 $(call gb_Helper_make_userfriendly_targets,$(1),CompilerTest)
 
 endef

@@ -39,6 +39,7 @@ class CheckGbuildToJson(unittest.TestCase):
     def setUp(self):
         getgbuildtesttools(self)
         clearmakevars()
+        os.environ["gb_IGNORE_MORE_FONTS"] = "1"
         self.tempwork = tempfile.mkdtemp(prefix='gbuild')
 
     def tearDown(self):
