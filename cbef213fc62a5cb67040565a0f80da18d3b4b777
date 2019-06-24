@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df7087c5_8e678726",
+        "filename": "cui/source/customize/CustomNotebookbarGenerator.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2019-06-24T14:18:42Z",
+      "side": 1,
+      "message": "nice, reused - better :)",
+      "revId": "cbef213fc62a5cb67040565a0f80da18d3b4b777",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df7087c5_0eae172e",
+        "filename": "cui/source/customize/SvxNotebookbarConfigPage.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2019-06-24T14:18:42Z",
+      "side": 1,
+      "message": "must be translated if visible in UI, we need some resource string here",
+      "revId": "cbef213fc62a5cb67040565a0f80da18d3b4b777",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
