@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df7087c5_8ec227e9",
+        "filename": "vcl/source/outdev/gradient.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2019-06-24T14:27:25Z",
+      "side": 0,
+      "message": "I don\u0027t have a 6.2 build, but master doesn\u0027t have this line. I just tested master. And 6.3 also lost this check because of\n\ncommit b8b79633021488a7f3400026357a66c4cdadb4b6\nAuthor: Noel Grandin \u003cnoel.grandin@collabora.co.uk\u003e\nDate:   Fri Nov 23 16:45:55 2018 +0200\n\n    remove unused DrawModeFlags enum values\n\nI just know it crashes for master without the patch. I know it crashes because InitClipRegion uses mpGraphics on master, and that code is the same on master, but there were some changes to set the default OutputDevice size to 1x1, which may have introduced the problem - or something else.\n\nThe report claimed it crashes since 6.0.7.2. Maybe it was fixed and broken again.\n\nI don\u0027t understand why the current state would work, but you say it does, so I\u0027ll abandon the patch.",
+      "revId": "12cf9256fba688df367a2be7db17e0ed3d24c73c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
