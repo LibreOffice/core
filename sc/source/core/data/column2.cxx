@@ -363,9 +363,8 @@ long ScColumn::GetNeededSize(
         MapMode aHMMMode( MapUnit::Map100thMM, Point(), rZoomX, rZoomY );
 
         // save in document ?
-        std::unique_ptr<ScFieldEditEngine> pEngine = pDocument->CreateFieldEditEngine();
+        std::unique_ptr<ScFieldEditEngine> pEngine = pDocument->CreateFieldEditEngine(/*bUpdateMode*/false);
 
-        pEngine->SetUpdateMode( false );
         bool bTextWysiwyg = ( pDev->GetOutDevType() == OUTDEV_PRINTER );
         EEControlBits nCtrl = pEngine->GetControlWord();
         if ( bTextWysiwyg )
@@ -456,7 +455,6 @@ long ScColumn::GetNeededSize(
 
         bool bEngineVertical = pEngine->IsVertical();
         pEngine->SetVertical( bAsianVertical );
-        pEngine->SetUpdateMode( true );
 
         bool bEdWidth = bWidth;
         if ( eOrient != SvxCellOrientation::Standard && eOrient != SvxCellOrientation::Stacked )
