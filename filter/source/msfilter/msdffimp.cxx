@@ -4309,7 +4309,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
             double fo = ( ( o - rGlobalChildRect.Top()  ) * fYScale ) + rClientRect.Top();
             double fWidth = nWidth * fXScale;
             double fHeight = nHeight * fYScale;
-            aObjData.aChildAnchor = tools::Rectangle( Point( static_cast<sal_Int32>(fl), static_cast<sal_Int32>(fo) ), Size( static_cast<sal_Int32>( fWidth + 1 ), static_cast<sal_Int32>( fHeight + 1 ) ) );
+            aObjData.aChildAnchor = tools::Rectangle( Point( fl, fo ), Size( fWidth + 1, fHeight + 1 ) );
         }
     }
 
