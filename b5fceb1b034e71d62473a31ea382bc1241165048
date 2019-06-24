@@ -22,6 +22,30 @@
       "revId": "b5fceb1b034e71d62473a31ea382bc1241165048",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df7087c5_ae34cbdf",
+        "filename": "cui/source/inc/QrCodeGenDialogBase.hxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1002063
+      },
+      "writtenOn": "2019-06-24T08:04:02Z",
+      "side": 1,
+      "message": "Ok, I will try to make all in one class, in the recent patch update. :)",
+      "parentUuid": "df7087c5_13ae442e",
+      "range": {
+        "startLine": 17,
+        "startChar": 6,
+        "endLine": 17,
+        "endChar": 25
+      },
+      "revId": "b5fceb1b034e71d62473a31ea382bc1241165048",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
