@@ -1,0 +1,107 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df7087c5_2e83db06",
+        "filename": "cui/source/options/optgdlg.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 310,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2019-06-24T11:35:00Z",
+      "side": 1,
+      "message": "This should not depend on the UI language but the current locale instead, so\n\n Application::GetSettings().GetLanguageTag().getLanguageType()\n\nHowever, hiding the button here if the current locale is not zh-TW may also be wrong, because the actual evaluation happens not only for the default locale but in any case where the context is zh-TW, which for example may also be if a cell is formatted to zh-TW different from the default locale.",
+      "range": {
+        "startLine": 310,
+        "startChar": 48,
+        "endLine": 310,
+        "endChar": 64
+      },
+      "revId": "9106291246191750e0732665b22e755caeb12fcb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df7087c5_ee7c0322",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Common.xcs",
+        "patchSetId": 7
+      },
+      "lineNbr": 3784,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2019-06-24T11:35:00Z",
+      "side": 1,
+      "message": "Typo: digits",
+      "range": {
+        "startLine": 3784,
+        "startChar": 36,
+        "endLine": 3784,
+        "endChar": 40
+      },
+      "revId": "9106291246191750e0732665b22e755caeb12fcb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df7087c5_4e9def57",
+        "filename": "sc/inc/docoptio.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2019-06-24T11:35:00Z",
+      "side": 1,
+      "message": "Why make the setting also part of ScDocOptions if it is a global SfxMiscCfg setting?",
+      "revId": "9106291246191750e0732665b22e755caeb12fcb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df7087c5_ae760b3e",
+        "filename": "sc/source/core/data/poolhelp.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2019-06-24T11:35:00Z",
+      "side": 1,
+      "message": "I wonder if the number formatter shouldn\u0027t determine the setting itself from the misc options, instead of having to cater for it on all instantiations. Any reason to do it this way?\n\nIf the number formatter did it, it would also automatically work in Writer and Chart, for example.",
+      "revId": "9106291246191750e0732665b22e755caeb12fcb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df7087c5_0e7a9723",
+        "filename": "svl/source/numbers/zforfind.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1065,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2019-06-24T11:35:00Z",
+      "side": 1,
+      "message": "Only nIndex \u003d\u003d 0? Though the short and medium zh-TW date formats are in YMD order, I don\u0027t know adhoc whether there can be other constellations , but such hard coded restrictions tend to give problems later..\n\nAlso, it shouldn\u0027t affect both the ROC calendar and the Gregorian calendar, which IMHO it currently does (didn\u0027t try).",
+      "range": {
+        "startLine": 1065,
+        "startChar": 12,
+        "endLine": 1065,
+        "endChar": 23
+      },
+      "revId": "9106291246191750e0732665b22e755caeb12fcb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
