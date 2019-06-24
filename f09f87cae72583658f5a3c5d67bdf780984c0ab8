@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df7087c5_ae9dab67",
+        "filename": "vcl/source/gdi/pdfwriter_impl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 6100,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2019-06-24T09:59:32Z",
+      "side": 1,
+      "message": "Hmm. I\u0027d consider it massively unlikely that a kerning offset not representable by 32bit ints makes any sense.\n\nCan we for the moment just assert this case?",
+      "revId": "f09f87cae72583658f5a3c5d67bdf780984c0ab8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
