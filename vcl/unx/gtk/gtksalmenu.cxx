@@ -1224,10 +1224,10 @@ void GtkSalMenu::DispatchCommand(const gchar *pCommand)
     {
         // tdf#125803 spacebar will toggle radios and checkbuttons without automatically
         // closing the menu. To handle this properly I imagine we need to set groups for the
-        // radiobuttons so the others visually untoggle when the active one is togged and
+        // radiobuttons so the others visually untoggle when the active one is toggled and
         // we would further need to teach vcl that the state can change more than once.
         //
-        // or we could unconditonally deactivate the menus if regardless of what particular
+        // or we could unconditionally deactivate the menus if regardless of what particular
         // type of menu item got activated
         gtk_menu_shell_deactivate(GTK_MENU_SHELL(pTopLevel->mpMenuBarWidget));
     }
