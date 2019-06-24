@@ -145,7 +145,6 @@ $(eval $(call gb_Module_add_uicheck_targets,sw,\
 	UITest_writer_tests \
 	UITest_writer_tests2 \
 	UITest_writer_tests3 \
-	UITest_writer_tests4 \
 	UITest_writer_tests5 \
 	UITest_writer_tests6 \
 	UITest_table \

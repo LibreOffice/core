@@ -371,7 +371,8 @@ endef
 define gb_CppunitTest_use_more_fonts
 ifneq ($(filter MORE_FONTS,$(BUILD_TYPE)),)
 $(call gb_CppunitTest_get_target,$(1)) : \
-    $(foreach font,$(gb_Package_MODULE_ooo_fonts),$(call gb_Package_get_target,$(font)))
+    $(foreach font,$(gb_Package_MODULE_ooo_fonts), \
+        $(foreach file,$(shell cat $(call gb_Package_get_target,$(font))),$(file)))
 endif
 
 endef
