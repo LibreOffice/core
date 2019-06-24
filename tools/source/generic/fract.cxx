@@ -39,40 +39,16 @@ static boost::rational<sal_Int32> rational_FromDouble(double dVal);
 
 static void rational_ReduceInaccurate(boost::rational<sal_Int32>& rRational, unsigned nSignificantBits);
 
-struct Fraction::Impl
+static boost::rational<sal_Int32> toRational(sal_Int32 n, sal_Int32 d)
 {
-    bool                        valid;
-    boost::rational<sal_Int32>  value;
-
-    Impl()
-        : valid(false)
-    {
-    }
-    Impl(const Impl&) = delete;
-    Impl& operator=(const Impl&) = delete;
-};
-
-Fraction::Fraction() : mpImpl(new Impl)
-{
-    mpImpl->valid = true;
-}
-
-Fraction::Fraction( const Fraction& rFrac ) : mpImpl(new Impl)
-{
-    mpImpl->valid = rFrac.mpImpl->valid;
-    if (mpImpl->valid)
-        mpImpl->value.assign( rFrac.mpImpl->value.numerator(), rFrac.mpImpl->value.denominator() );
-}
-
-Fraction::Fraction( Fraction&& rFrac ) : mpImpl(std::move(rFrac.mpImpl))
-{
+    return boost::rational<sal_Int32>(n, d);
 }
 
 // Initialized by setting nNum as nominator and nDen as denominator
 // Negative values in the denominator are invalid and cause the
 // inversion of both nominator and denominator signs
 // in order to return the correct value.
-Fraction::Fraction( sal_Int64 nNum, sal_Int64 nDen ) : mpImpl(new Impl)
+Fraction::Fraction( sal_Int64 nNum, sal_Int64 nDen ) : mnNumerator(nNum), mnDenominator(nDen)
 {
     assert( nNum >= std::numeric_limits<sal_Int32>::min() );
     assert( nNum <= std::numeric_limits<sal_Int32>::max( ));
@@ -80,18 +56,16 @@ Fraction::Fraction( sal_Int64 nNum, sal_Int64 nDen ) : mpImpl(new Impl)
     assert( nDen <= std::numeric_limits<sal_Int32>::max( ));
     if ( nDen == 0 )
     {
-        mpImpl->valid = false;
+        mbValid = false;
         SAL_WARN( "tools.fraction", "'Fraction(" << nNum << ",0)' invalid fraction created" );
         return;
     }
-    mpImpl->value.assign( nNum, nDen);
-    mpImpl->valid = true;
 }
 
 /**
  * only here to prevent passing of NaN
  */
-Fraction::Fraction( double nNum, double nDen ) : mpImpl(new Impl)
+Fraction::Fraction( double nNum, double nDen ) : mnNumerator(sal_Int64(nNum)), mnDenominator(sal_Int64(nDen))
 {
     assert( !std::isnan(nNum) );
     assert( !std::isnan(nDen) );
@@ -101,41 +75,36 @@ Fraction::Fraction( double nNum, double nDen ) : mpImpl(new Impl)
     assert( nDen <= std::numeric_limits<sal_Int32>::max( ));
     if ( nDen == 0 )
     {
-        mpImpl->valid = false;
+        mbValid = false;
         SAL_WARN( "tools.fraction", "'Fraction(" << nNum << ",0)' invalid fraction created" );
         return;
     }
-    mpImpl->value.assign( sal_Int64(nNum), sal_Int64(nDen));
-    mpImpl->valid = true;
 }
 
-Fraction::Fraction( double dVal ) : mpImpl(new Impl)
+Fraction::Fraction( double dVal )
 {
     try
     {
-        mpImpl->value = rational_FromDouble( dVal );
-        mpImpl->valid = true;
+        boost::rational<sal_Int32> v = rational_FromDouble( dVal );
+        mnNumerator = v.numerator();
+        mnDenominator = v.denominator();
     }
     catch (const boost::bad_rational&)
     {
-        mpImpl->valid = false;
+        mbValid = false;
         SAL_WARN( "tools.fraction", "'Fraction(" << dVal << ")' invalid fraction created" );
     }
 }
 
-Fraction::~Fraction()
-{
-}
-
 Fraction::operator double() const
 {
-    if (!mpImpl->valid)
+    if (!mbValid)
     {
         SAL_WARN( "tools.fraction", "'double()' on invalid fraction" );
         return 0.0;
     }
 
-    return boost::rational_cast<double>(mpImpl->value);
+    return boost::rational_cast<double>(toRational(mnNumerator, mnDenominator));
 }
 
 // This methods first validates both values.
@@ -144,32 +113,38 @@ Fraction::operator double() const
 // which cause the operation to be marked as invalid
 Fraction& Fraction::operator += ( const Fraction& rVal )
 {
-    if ( !rVal.mpImpl->valid )
-        mpImpl->valid = false;
+    if ( !rVal.mbValid )
+        mbValid = false;
 
-    if ( !mpImpl->valid )
+    if ( !mbValid )
     {
         SAL_WARN( "tools.fraction", "'operator +=' with invalid fraction" );
         return *this;
     }
 
-    mpImpl->value += rVal.mpImpl->value;
+    boost::rational<sal_Int32> a = toRational(mnNumerator, mnDenominator);
+    a += toRational(rVal.mnNumerator, rVal.mnDenominator);
+    mnNumerator = a.numerator();
+    mnDenominator = a.denominator();
 
     return *this;
 }
 
 Fraction& Fraction::operator -= ( const Fraction& rVal )
 {
-    if ( !rVal.mpImpl->valid )
-        mpImpl->valid = false;
+    if ( !rVal.mbValid )
+        mbValid = false;
 
-    if ( !mpImpl->valid )
+    if ( !mbValid )
     {
         SAL_WARN( "tools.fraction", "'operator -=' with invalid fraction" );
         return *this;
     }
 
-    mpImpl->value -= rVal.mpImpl->value;
+    boost::rational<sal_Int32> a = toRational(mnNumerator, mnDenominator);
+    a -= toRational(rVal.mnNumerator, rVal.mnDenominator);
+    mnNumerator = a.numerator();
+    mnDenominator = a.denominator();
 
     return *this;
 }
@@ -204,20 +179,24 @@ namespace
 
 Fraction& Fraction::operator *= ( const Fraction& rVal )
 {
-    if ( !rVal.mpImpl->valid )
-        mpImpl->valid = false;
+    if ( !rVal.mbValid )
+        mbValid = false;
 
-    if ( !mpImpl->valid )
+    if ( !mbValid )
     {
         SAL_WARN( "tools.fraction", "'operator *=' with invalid fraction" );
         return *this;
     }
 
-    bool bFail = checked_multiply_by(mpImpl->value, rVal.mpImpl->value);
+    boost::rational<sal_Int32> a = toRational(mnNumerator, mnDenominator);
+    boost::rational<sal_Int32> b = toRational(rVal.mnNumerator, rVal.mnDenominator);
+    bool bFail = checked_multiply_by(a, b);
+    mnNumerator = a.numerator();
+    mnDenominator = a.denominator();
 
     if (bFail)
     {
-        mpImpl->valid = false;
+        mbValid = false;
     }
 
     return *this;
@@ -225,16 +204,19 @@ Fraction& Fraction::operator *= ( const Fraction& rVal )
 
 Fraction& Fraction::operator /= ( const Fraction& rVal )
 {
-    if ( !rVal.mpImpl->valid )
-        mpImpl->valid = false;
+    if ( !rVal.mbValid )
+        mbValid = false;
 
-    if ( !mpImpl->valid )
+    if ( !mbValid )
     {
         SAL_WARN( "tools.fraction", "'operator /=' with invalid fraction" );
         return *this;
     }
 
-    mpImpl->value /= rVal.mpImpl->value;
+    boost::rational<sal_Int32> a = toRational(mnNumerator, mnDenominator);
+    a /= toRational(rVal.mnNumerator, rVal.mnDenominator);
+    mnNumerator = a.numerator();
+    mnDenominator = a.denominator();
 
     return *this;
 }
@@ -259,67 +241,49 @@ Fraction& Fraction::operator /= ( const Fraction& rVal )
 */
 void Fraction::ReduceInaccurate( unsigned nSignificantBits )
 {
-    if ( !mpImpl->valid )
+    if ( !mbValid )
     {
         SAL_WARN( "tools.fraction", "'ReduceInaccurate' on invalid fraction" );
         return;
     }
 
-    if ( !mpImpl->value.numerator() )
+    if ( !mnNumerator )
         return;
 
-    rational_ReduceInaccurate(mpImpl->value, nSignificantBits);
+    auto a = toRational(mnNumerator, mnDenominator);
+    rational_ReduceInaccurate(a, nSignificantBits);
+    mnNumerator = a.numerator();
+    mnDenominator = a.denominator();
 }
 
 sal_Int32 Fraction::GetNumerator() const
 {
-    if ( !mpImpl->valid )
+    if ( !mbValid )
     {
         SAL_WARN( "tools.fraction", "'GetNumerator()' on invalid fraction" );
         return 0;
     }
-    return mpImpl->value.numerator();
+    return mnNumerator;
 }
 
 sal_Int32 Fraction::GetDenominator() const
 {
-    if ( !mpImpl->valid )
+    if ( !mbValid )
     {
         SAL_WARN( "tools.fraction", "'GetDenominator()' on invalid fraction" );
         return -1;
     }
-    return mpImpl->value.denominator();
-}
-
-Fraction& Fraction::operator=( const Fraction& rFrac )
-{
-    if (this == &rFrac)
-        return *this;
-
-    Fraction tmp(rFrac);
-    std::swap(mpImpl, tmp.mpImpl);
-    return *this;
-}
-
-Fraction& Fraction::operator=( Fraction&& rFrac )
-{
-    mpImpl = std::move(rFrac.mpImpl);
-    return *this;
-}
-
-bool Fraction::IsValid() const
-{
-    return mpImpl->valid;
+    return mnDenominator;
 }
 
 Fraction::operator sal_Int32() const
 {
-    if ( !mpImpl->valid )
+    if ( !mbValid )
     {
         SAL_WARN( "tools.fraction", "'operator sal_Int32()' on invalid fraction" );
         return 0;
     }
-    return boost::rational_cast<sal_Int32>(mpImpl->value);
+    return boost::rational_cast<sal_Int32>(toRational(mnNumerator, mnDenominator));
 }
 
 Fraction operator+( const Fraction& rVal1, const Fraction& rVal2 )
@@ -367,38 +331,38 @@ bool operator >=( const Fraction& rVal1, const Fraction& rVal2 )
 
 bool operator == ( const Fraction& rVal1, const Fraction& rVal2 )
 {
-    if ( !rVal1.mpImpl->valid || !rVal2.mpImpl->valid )
+    if ( !rVal1.mbValid || !rVal2.mbValid )
     {
         SAL_WARN( "tools.fraction", "'operator ==' with an invalid fraction" );
         return false;
     }
 
-    return rVal1.mpImpl->value == rVal2.mpImpl->value;
+    return toRational(rVal1.mnNumerator, rVal1.mnDenominator) == toRational(rVal2.mnNumerator, rVal2.mnDenominator);
 }
 
 bool operator < ( const Fraction& rVal1, const Fraction& rVal2 )
 {
-    if ( !rVal1.mpImpl->valid || !rVal2.mpImpl->valid )
+    if ( !rVal1.mbValid || !rVal2.mbValid )
     {
         SAL_WARN( "tools.fraction", "'operator <' with an invalid fraction" );
         return false;
     }
 
-    return rVal1.mpImpl->value < rVal2.mpImpl->value;
+    return toRational(rVal1.mnNumerator, rVal1.mnDenominator) < toRational(rVal2.mnNumerator, rVal2.mnDenominator);
 }
 
 bool operator > ( const Fraction& rVal1, const Fraction& rVal2 )
 {
-    if ( !rVal1.mpImpl->valid || !rVal2.mpImpl->valid )
+    if ( !rVal1.mbValid || !rVal2.mbValid )
     {
         SAL_WARN( "tools.fraction", "'operator >' with an invalid fraction" );
         return false;
     }
 
-    return rVal1.mpImpl->value > rVal2.mpImpl->value;
+    return toRational(rVal1.mnNumerator, rVal1.mnDenominator) > toRational(rVal2.mnNumerator, rVal2.mnDenominator);
 }
 
-SvStream& ReadFraction( SvStream& rIStream, Fraction const & rFract )
+SvStream& ReadFraction( SvStream& rIStream, Fraction & rFract )
 {
     sal_Int32 num(0), den(0);
     rIStream.ReadInt32( num );
@@ -406,26 +370,27 @@ SvStream& ReadFraction( SvStream& rIStream, Fraction const & rFract )
     if ( den <= 0 )
     {
         SAL_WARN( "tools.fraction", "'ReadFraction()' read an invalid fraction" );
-        rFract.mpImpl->valid = false;
+        rFract.mbValid = false;
     }
     else
     {
-        rFract.mpImpl->value.assign( num, den );
-        rFract.mpImpl->valid = true;
+        rFract.mnNumerator = num;
+        rFract.mnDenominator = den;
+        rFract.mbValid = true;
     }
     return rIStream;
 }
 
 SvStream& WriteFraction( SvStream& rOStream, const Fraction& rFract )
 {
-    if ( !rFract.mpImpl->valid )
+    if ( !rFract.mbValid )
     {
         SAL_WARN( "tools.fraction", "'WriteFraction()' write an invalid fraction" );
         rOStream.WriteInt32( 0 );
         rOStream.WriteInt32( -1 );
     } else {
-        rOStream.WriteInt32( rFract.mpImpl->value.numerator() );
-        rOStream.WriteInt32( rFract.mpImpl->value.denominator() );
+        rOStream.WriteInt32( rFract.mnNumerator );
+        rOStream.WriteInt32( rFract.mnDenominator );
     }
     return rOStream;
 }
