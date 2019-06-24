@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df7087c5_e28df77b",
+        "filename": "vcl/qt5/Qt5Menu.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 571,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2019-06-24T17:48:02Z",
+      "side": 1,
+      "message": "I added the mpActionGroup check after I found it broke radio buttons and didn\u0027t re-test the original bug. Works for me with :\n\nif (pQItem-\u003empAction-\u003eisCheckable()\n    \u0026\u0026 (!pQItem-\u003empActionGroup || pQItem-\u003empActionGroup-\u003eactions().size() \u003c\u003d 1))\n\nI didn\u0027t check why checkboxes have an empty group, but size is 0 for the test?!",
+      "revId": "2238edb346badf45c336345ecd62c0f80cd94aa8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
