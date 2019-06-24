@@ -35,16 +35,13 @@ public:
 
 void FontFeatureTest::testGetFontFeatures()
 {
-// "Linux Libertine G" is a font bundled with LO, but sometimes the
-// bundled fonts aren't available so we need to disable test in that case
 #if HAVE_MORE_FONTS
     ScopedVclPtrInstance<VirtualDevice> aVDev(*Application::GetDefaultDevice(),
                                               DeviceFormat::DEFAULT, DeviceFormat::DEFAULT);
     aVDev->SetOutputSizePixel(Size(10, 10));
 
     OUString aFontName("Linux Libertine G");
-    if (aVDev->IsFontAvailable(aFontName))
-        return; // Can't test this because the font is not available, so exit
+    CPPUNIT_ASSERT(aVDev->IsFontAvailable(aFontName));
 
     vcl::Font aFont = aVDev->GetFont();
     aFont.SetFamilyName(aFontName);
