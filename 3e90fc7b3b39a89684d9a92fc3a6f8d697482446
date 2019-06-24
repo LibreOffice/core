@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df7087c5_8e2f87f5",
+        "filename": "RepositoryExternal.mk",
+        "patchSetId": 14
+      },
+      "lineNbr": 4199,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-06-24T12:39:06Z",
+      "side": 1,
+      "message": "there is no ExternalProject, so just remove this line",
+      "revId": "3e90fc7b3b39a89684d9a92fc3a6f8d697482446",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df7087c5_2e343b4a",
+        "filename": "RepositoryExternal.mk",
+        "patchSetId": 14
+      },
+      "lineNbr": 4205,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-06-24T12:39:06Z",
+      "side": 1,
+      "message": "this should be ExternalProject_use_static_libraries",
+      "revId": "3e90fc7b3b39a89684d9a92fc3a6f8d697482446",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df7087c5_ae47ebbc",
+        "filename": "external/qrcodegen/UnpackedTarball_qrcodegen.mk",
+        "patchSetId": 14
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-06-24T12:39:06Z",
+      "side": 1,
+      "message": "the project apparently does not use autoconf, so this looks pointless...",
+      "revId": "3e90fc7b3b39a89684d9a92fc3a6f8d697482446",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df7087c5_0e3b7738",
+        "filename": "external/qrcodegen/UnpackedTarball_qrcodegen.mk",
+        "patchSetId": 14
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-06-24T12:39:06Z",
+      "side": 1,
+      "message": "what\u0027s the point of this? i dont see any #include config.h in the source code...",
+      "revId": "3e90fc7b3b39a89684d9a92fc3a6f8d697482446",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
