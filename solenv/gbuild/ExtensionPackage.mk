@@ -46,7 +46,7 @@ $(call gb_ExtensionPackage_ExtensionPackage_internal,$(1),$(2))
 $(2) : $(call gb_ExtensionPackage_get_preparation_target,$(1))
 	touch $$@
 
-$$(eval $$(call gb_Module_register_target,$(call gb_ExtensionPackage_get_target,$(1)),$(call gb_ExtensionPackage_get_clean_target,$(1))))
+$$(eval $$(call gb_Module_register_target,ExtensionPackage_$(1),$(call gb_ExtensionPackage_get_target,$(1)),$(call gb_ExtensionPackage_get_clean_target,$(1))))
 $(call gb_Helper_make_userfriendly_targets,$(1),ExtensionPackage)
 
 endef
@@ -73,7 +73,7 @@ $(call gb_ExtensionPackageSet_get_target,%) :
 
 # call gb_ExtensionPackageSet_ExtensionPackageSet,set
 define gb_ExtensionPackageSet_ExtensionPackageSet
-$$(eval $$(call gb_Module_register_target,$(call gb_ExtensionPackageSet_get_target,$(1)),$(call gb_ExtensionPackageSet_get_clean_target,$(1))))
+$$(eval $$(call gb_Module_register_target,ExtensionPackage_$(1),$(call gb_ExtensionPackageSet_get_target,$(1)),$(call gb_ExtensionPackageSet_get_clean_target,$(1))))
 $(call gb_Helper_make_userfriendly_targets,$(1),ExtensionPackageSet)
 
 endef

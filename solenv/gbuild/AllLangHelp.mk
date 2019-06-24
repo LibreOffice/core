@@ -72,7 +72,7 @@ $(foreach lang,$(gb_HELP_LANGS),\
 
 $(call gb_AllLangHelp_get_target,$(1)) :| $(dir $(call gb_AllLangHelp_get_target,$(1))).dir
 
-$$(eval $$(call gb_Module_register_target,$(call gb_AllLangHelp_get_target,$(1)),$(call gb_AllLangHelp_get_clean_target,$(1))))
+$$(eval $$(call gb_Module_register_target,AllLangHelp_$(1),$(call gb_AllLangHelp_get_target,$(1)),$(call gb_AllLangHelp_get_clean_target,$(1))))
 $(call gb_Helper_make_userfriendly_targets,$(1),AllLangHelp)
 
 endef

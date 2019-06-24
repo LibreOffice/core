@@ -37,7 +37,7 @@ $(call gb_Pagein_get_target,%) :
 define gb_Pagein_Pagein
 $(call gb_Pagein_get_target,$(1)) : OBJECTS :=
 $(call gb_Pagein_get_target,$(1)) : $(gb_Module_CURRENTMAKEFILE)
-$$(eval $$(call gb_Module_register_target,$(call gb_Pagein__get_install_target,$(1)),$(call gb_Pagein_get_clean_target,$(1))))
+$$(eval $$(call gb_Module_register_target,Pagein_$(1),$(call gb_Pagein__get_install_target,$(1)),$(call gb_Pagein_get_clean_target,$(1))))
 $(call gb_Helper_make_userfriendly_targets,$(1),Pagein,$(call gb_Pagein_get_target,$(1)))
 
 $(call gb_Helper_install_final, \
