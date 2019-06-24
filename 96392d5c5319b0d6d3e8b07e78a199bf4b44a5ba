@@ -52,6 +52,24 @@
       "revId": "96392d5c5319b0d6d3e8b07e78a199bf4b44a5ba",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df7087c5_33458871",
+        "filename": "distro-configs/LibreOfficeLinux.conf",
+        "patchSetId": 2
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2019-06-24T05:48:29Z",
+      "side": 1,
+      "message": "Thanks for clarifying. What should work is to override those options by using \u0027--with-distro\u003dLibreOfficeLinux --disable-gtk3-kde5 --disable-kde5\u0027 in this case.",
+      "parentUuid": "df7087c5_e802bb3e",
+      "revId": "96392d5c5319b0d6d3e8b07e78a199bf4b44a5ba",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
