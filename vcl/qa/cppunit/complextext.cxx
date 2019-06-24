@@ -11,9 +11,6 @@
 
 #include <ostream>
 #include <vector>
-#if !defined(_WIN32) && HAVE_MORE_FONTS
-static std::ostream& operator<<(std::ostream& rStream, const std::vector<long>& rVec);
-#endif
 
 #include <test/bootstrapfixture.hxx>
 
@@ -23,7 +20,6 @@ static std::ostream& operator<<(std::ostream& rStream, const std::vector<long>& 
 #include <sallayout.hxx>
 #include <salgdi.hxx>
 
-#if !defined(_WIN32) && HAVE_MORE_FONTS
 static std::ostream& operator<<(std::ostream& rStream, const std::vector<long>& rVec)
 {
     rStream << "{ ";
@@ -33,34 +29,26 @@ static std::ostream& operator<<(std::ostream& rStream, const std::vector<long>& 
     rStream << " }";
     return rStream;
 }
-#endif
 
 class VclComplexTextTest : public test::BootstrapFixture
 {
 public:
     VclComplexTextTest() : BootstrapFixture(true, false) {}
 
-#if HAVE_MORE_FONTS
     /// Play with font measuring etc.
     void testArabic();
     void testKashida();
-#endif
-#if defined(_WIN32)
     void testTdf95650(); // Windows-only issue
-#endif
 
     CPPUNIT_TEST_SUITE(VclComplexTextTest);
 #if HAVE_MORE_FONTS
     CPPUNIT_TEST(testArabic);
     CPPUNIT_TEST(testKashida);
 #endif
-#if defined(_WIN32)
     CPPUNIT_TEST(testTdf95650);
-#endif
     CPPUNIT_TEST_SUITE_END();
 };
 
-#if HAVE_MORE_FONTS
 void VclComplexTextTest::testArabic()
 {
     const unsigned char pOneTwoThreeUTF8[] = {
@@ -82,8 +70,6 @@ void VclComplexTextTest::testArabic()
     pOutDev->SetFont( aFont );
 
     // absolute character widths AKA text array.
-#if !defined(_WIN32)
-    // FIXME: fails on some windows tinderboxes
     std::vector<long> aRefCharWidths {6,  9,  16, 16, 22, 22, 26, 29, 32, 32,
                                       36, 40, 49, 53, 56, 63, 63, 66, 72, 72};
     std::vector<long> aCharWidths(aOneTwoThree.getLength(), 0);
@@ -99,14 +85,13 @@ void VclComplexTextTest::testArabic()
     CPPUNIT_ASSERT_EQUAL(14L, pOutDev->GetTextHeight());
 
     // exact bounding rectangle, not essentially the same as text width/height
-#if defined(MACOSX)
-    // FIXME: fails on some Linux tinderboxes, might be a FreeType issue.
     tools::Rectangle aBoundRect, aTestRect( 0, 1, 71, 15 );
     pOutDev->GetTextBoundRect(aBoundRect, aOneTwoThree);
     CPPUNIT_ASSERT_EQUAL(aTestRect, aBoundRect);
-#endif
 
-#endif
+#if 0
+    // FIXME: This seems to be wishful thinking, GetTextRect() does not take
+    // rotation into account.
 
     // normal orientation
     tools::Rectangle aInput;
@@ -119,16 +104,11 @@ void VclComplexTextTest::testArabic()
     tools::Rectangle aRectRot = pOutDev->GetTextRect( aInput, aOneTwoThree );
 
     // Check that we did do the rotation ...
-#if 0
-    // FIXME: This seems to be wishful thinking, GetTextRect() does not take
-    // rotation into account.
     fprintf( stderr, "%ld %ld %ld %ld\n",
              aRect.GetWidth(), aRect.GetHeight(),
              aRectRot.GetWidth(), aRectRot.GetHeight() );
     CPPUNIT_ASSERT( aRectRot.GetWidth() == aRect.GetHeight() );
     CPPUNIT_ASSERT( aRectRot.GetHeight() == aRect.GetWidth() );
-#else
-    (void)aRect; (void)aRectRot;
 #endif
 }
 
@@ -156,9 +136,7 @@ void VclComplexTextTest::testKashida()
     // The kashida justification flag was lost when going via the glyph cache.
     CPPUNIT_ASSERT(aLayoutArgs.mnFlags & SalLayoutFlags::KashidaJustification);
 }
-#endif
 
-#if defined(_WIN32)
 void VclComplexTextTest::testTdf95650()
 {
     const sal_Unicode pTxt[] = {
@@ -176,7 +154,6 @@ void VclComplexTextTest::testTdf95650()
     // Check that the following executes without failing assertion
     pOutDev->ImplLayout(aTxt, 9, 1, Point(), 0, nullptr, SalLayoutFlags::BiDiRtl);
 }
-#endif
 
 CPPUNIT_TEST_SUITE_REGISTRATION(VclComplexTextTest);
 

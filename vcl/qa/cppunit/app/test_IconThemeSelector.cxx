@@ -18,46 +18,22 @@
 
 class IconThemeSelectorTest : public CppUnit::TestFixture
 {
-#ifndef _WIN32 //default theme on Windows is Colibre independently from any desktop environment
-    void
-    BreezeIsReturnedForKde5Desktop();
-
-    void
-    ElementaryIsReturnedForGnomeDesktop();
-
-    void
-    ThemeIsOverriddenByPreferredTheme();
-
-    void
-    ThemeIsOverriddenByHighContrastMode();
-
-    void
-    NotInstalledThemeDoesNotOverride();
-
-    void
-    InstalledThemeIsFound();
-
-    void
-    FirstThemeIsReturnedIfRequestedThemeIsNotFound();
-
-    void
-    FallbackThemeIsReturnedForEmptyInput();
-
-    void
-    DifferentPreferredThemesAreInequal();
-
-    void
-    DifferentHighContrastModesAreInequal();
-
-    static std::vector<vcl::IconThemeInfo>
-    GetFakeInstalledThemes();
-#endif
+    void BreezeIsReturnedForKde5Desktop();
+    void ElementaryIsReturnedForGnomeDesktop();
+    void ThemeIsOverriddenByPreferredTheme();
+    void ThemeIsOverriddenByHighContrastMode();
+    void NotInstalledThemeDoesNotOverride();
+    void InstalledThemeIsFound();
+    void FirstThemeIsReturnedIfRequestedThemeIsNotFound();
+    void FallbackThemeIsReturnedForEmptyInput();
+    void DifferentPreferredThemesAreInequal();
+    void DifferentHighContrastModesAreInequal();
+    static std::vector<vcl::IconThemeInfo> GetFakeInstalledThemes();
 
     // Adds code needed to register the test suite
-
     CPPUNIT_TEST_SUITE(IconThemeSelectorTest);
 
-#ifndef _WIN32
+#ifndef _WIN32 //default theme on Windows is Colibre independently from any desktop environment
     CPPUNIT_TEST(BreezeIsReturnedForKde5Desktop);
     CPPUNIT_TEST(ElementaryIsReturnedForGnomeDesktop);
     CPPUNIT_TEST(ThemeIsOverriddenByPreferredTheme);
@@ -71,11 +47,8 @@ class IconThemeSelectorTest : public CppUnit::TestFixture
 #endif
 
     // End of test suite definition
-
     CPPUNIT_TEST_SUITE_END();
 };
-
-#ifndef _WIN32
 
 /*static*/ std::vector<vcl::IconThemeInfo>
 IconThemeSelectorTest::GetFakeInstalledThemes()
@@ -195,8 +168,6 @@ IconThemeSelectorTest::DifferentPreferredThemesAreInequal()
     bool equal = (s1 == s2);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Different preferred themes are detected as inequal", false, equal);
 }
-
-#endif
 
 // Put the test suite in the registry
 CPPUNIT_TEST_SUITE_REGISTRATION(IconThemeSelectorTest);
