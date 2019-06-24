@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df7087c5_0ec85753",
+        "filename": "sc/source/filter/oox/worksheethelper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1254,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2019-06-24T11:51:05Z",
+      "side": 1,
+      "message": "I have some doubts about this; rows can be manually hidden, which doesn\u0027t necessarily mean they are filtered.",
+      "revId": "cc5f998a83ffb98f547f8276aeebd7f6b939c2f5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
