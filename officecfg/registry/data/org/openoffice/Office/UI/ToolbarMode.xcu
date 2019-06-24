@@ -483,7 +483,7 @@
             <value>true</value>
           </prop>
           <prop oor:name="MenuPosition">
-            <value>6</value>
+            <value>7</value>
           </prop>
           <prop oor:name="CommandArg">
             <value>notebookbar_groupedbar_full.ui</value>
@@ -613,10 +613,38 @@
             <value>false</value>
           </prop>
           <prop oor:name="MenuPosition">
-            <value>4</value>
+            <value>3</value>
           </prop>
           <prop oor:name="CommandArg">
             <value>notebookbar.ui</value>
+          </prop>
+          <prop oor:name="Toolbars">
+            <value>
+            </value>
+          </prop>
+          <prop oor:name="UserToolbars">
+            <value>
+            </value>
+          </prop>
+          <prop oor:name="Sidebar">
+            <value>Arrow</value>
+          </prop>
+        </node>
+        <node oor:name="TabbedCompact" oor:op="replace">
+          <prop oor:name="Label">
+            <value xml:lang="en-US">Tabbed Compact</value>
+          </prop>
+          <prop oor:name="HasNotebookbar">
+            <value>true</value>
+          </prop>
+          <prop oor:name="IsExperimental">
+            <value>false</value>
+          </prop>
+          <prop oor:name="MenuPosition">
+            <value>4</value>
+          </prop>
+          <prop oor:name="CommandArg">
+            <value>notebookbar_compact.ui</value>
           </prop>
           <prop oor:name="Toolbars">
             <value>
@@ -674,7 +702,7 @@
             <value>true</value>
           </prop>
           <prop oor:name="MenuPosition">
-            <value>6</value>
+            <value>7</value>
           </prop>
           <prop oor:name="CommandArg">
             <value>notebookbar_groupedbar_full.ui</value>
@@ -776,7 +804,7 @@
             <value>false</value>
           </prop>
           <prop oor:name="MenuPosition">
-            <value>4</value>
+            <value>3</value>
           </prop>
           <prop oor:name="CommandArg">
             <value>notebookbar.ui</value>
