@@ -35,16 +35,13 @@ public:
 
 void FontFeatureTest::testGetFontFeatures()
 {
-// "Linux Libertine G" is a font bundled with LO, but sometimes the
-// bundled fonts aren't available so we need to disable test in that case
 #if HAVE_MORE_FONTS
     ScopedVclPtrInstance<VirtualDevice> aVDev(*Application::GetDefaultDevice(),
                                               DeviceFormat::DEFAULT, DeviceFormat::DEFAULT);
     aVDev->SetOutputSizePixel(Size(10, 10));
 
     OUString aFontName("Linux Libertine G");
-    if (aVDev->IsFontAvailable(aFontName))
-        return; // Can't test this because the font is not available, so exit
+    CPPUNIT_ASSERT(aVDev->IsFontAvailable(aFontName));
 
     vcl::Font aFont = aVDev->GetFont();
     aFont.SetFamilyName(aFontName);
@@ -69,8 +66,6 @@ void FontFeatureTest::testGetFontFeatures()
         }
     }
 
-#if !defined(_WIN32)
-    // periodically fails on windows tinderbox like tb77 with a value of 27
     CPPUNIT_ASSERT_EQUAL(size_t(53), rDefaultFontFeatures.size());
 
     OUString aExpectedFeaturesString = "c2sc case dlig fina frac hlig liga lnum "
@@ -81,15 +76,10 @@ void FontFeatureTest::testGetFontFeatures()
                                        "frsp grkn hang lng minu nfsp name quot "
                                        "texm thou vari caps ligc ";
 
-    // periodically fails on windows tinderbox like tb72 with a missing "ss02"
     CPPUNIT_ASSERT_EQUAL(aExpectedFeaturesString, aFeaturesString);
 
     // Check C2SC feature
     {
-        // periodically fails on the Windows tb72 tinderbox with
-        // equality assertion failed
-        //- Expected: 1664250723
-        //- Actual  : 1684826471
         vcl::font::Feature& rFeature = rDefaultFontFeatures[0];
         CPPUNIT_ASSERT_EQUAL(vcl::font::featureCode("c2sc"), rFeature.m_aID.m_aFeatureCode);
 
@@ -101,7 +91,6 @@ void FontFeatureTest::testGetFontFeatures()
 
         CPPUNIT_ASSERT_EQUAL(size_t(0), rFracFeatureDefinition.getEnumParameters().size());
     }
-#endif
 
     // Check FRAC feature
     {
@@ -131,7 +120,7 @@ void FontFeatureTest::testGetFontFeatures()
         CPPUNIT_ASSERT_EQUAL(uint32_t(2), rParameter3.getCode());
         CPPUNIT_ASSERT(!rParameter2.getDescription().isEmpty());
     }
-#endif // HAVE_MORE_FONTS
+#endif
 }
 
 void FontFeatureTest::testParseFeature()
