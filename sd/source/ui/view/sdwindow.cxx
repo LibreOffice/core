@@ -265,6 +265,16 @@ void Window::Command(const CommandEvent& rCEvt)
     //pass at least alt press/release to parent impl
     if (rCEvt.GetCommand() == CommandEventId::ModKeyChange)
         vcl::Window::Command(rCEvt);
+    //show the text edit outliner view cursor
+    else if (!HasFocus() && rCEvt.GetCommand() == CommandEventId::CursorPos)
+    {
+        OutlinerView* pOLV = mpViewShell->GetView()->GetTextEditOutlinerView();
+        if (pOLV && this == pOLV->GetWindow())
+        {
+            GrabFocus();
+            pOLV->ShowCursor();
+        }
+    }
 }
 
 bool Window::EventNotify( NotifyEvent& rNEvt )
