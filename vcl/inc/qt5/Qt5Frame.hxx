@@ -109,7 +109,7 @@ class VCLPLUG_QT5_PUBLIC Qt5Frame : public QObject, public SalFrame
     ScreenSaverInhibitor m_ScreenSaverInhibitor;
 #endif
 
-    void Center();
+    void SetDefaultPos();
     Size CalcDefaultSize();
     void SetDefaultSize();
 
