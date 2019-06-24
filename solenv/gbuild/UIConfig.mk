@@ -180,7 +180,7 @@ $(call gb_UIConfig_get_a11yerrors_target,$(1)) : UI_A11YFALSE := $(SRCDIR)/solen
 $(call gb_UIConfig_get_target,$(1)) : $(call gb_PackageSet_get_target,$(call gb_UIConfig_get_packagesetname,$(1)))
 $(call gb_UIConfig_get_clean_target,$(1)) : $(call gb_PackageSet_get_clean_target,$(call gb_UIConfig_get_packagesetname,$(1)))
 
-$$(eval $$(call gb_Module_register_target,$(call gb_UIConfig_get_target,$(1)),$(call gb_UIConfig_get_clean_target,$(1))))
+$$(eval $$(call gb_Module_register_target,UIConfig_$(1),$(call gb_UIConfig_get_target,$(1)),$(call gb_UIConfig_get_clean_target,$(1))))
 $(call gb_Helper_make_userfriendly_targets,$(1),UIConfig)
 $(call gb_Postprocess_register_target,AllUIConfigs,UIConfig,$(1))
 

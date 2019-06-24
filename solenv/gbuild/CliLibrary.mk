@@ -73,7 +73,7 @@ $(call gb_CliLibrary_get_target,$(1)) :| $(call gb_CliAssembly_get_target,$(1))
 $(call gb_CliLibrary_get_target,$(1)) :| $(dir $(call gb_CliLibrary_get_target,$(1))).dir
 $(call gb_CliLibrary_get_clean_target,$(1)) : $(call gb_CliAssembly_get_clean_target,$(1))
 
-$$(eval $$(call gb_Module_register_target,$(call gb_CliLibrary_get_target,$(1)),$(call gb_CliLibrary_get_clean_target,$(1))))
+$$(eval $$(call gb_Module_register_target,CliLibrary_$(1),$(call gb_CliLibrary_get_target,$(1)),$(call gb_CliLibrary_get_clean_target,$(1))))
 $(call gb_Helper_make_userfriendly_targets,$(1),CliLibrary)
 
 $(call gb_CliLibrary_get_target,$(1)) :

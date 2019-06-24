@@ -258,6 +258,7 @@ gb_Module_PERFCHECKTARGETSTACK := $(call gb_Module_get_perfcheck_target,$(1)) $(
 gb_Module_CLEANTARGETSTACK := $(call gb_Module_get_clean_target,$(1)) $(gb_Module_CLEANTARGETSTACK)
 gb_Module_CURRENTMODULE_SYMBOLS_ENABLED := $(call gb_Module__symbols_enabled,$(1))
 gb_Module_CURRENTMODULE_NAME := $(1)
+gb_Module_$(1)_CLASSNAMES :=
 $(call gb_Helper_make_userfriendly_targets,$(1),Module)
 $(if $(filter-out libreoffice instsetoo_native android ios,$(1)),\
     $(call gb_Postprocess_register_target,AllModulesButInstsetNative,Module,$(1)))
@@ -274,13 +275,15 @@ endef
 # should never be inlined ($(call )) as the calls defining it might be sourced
 # before gb_Module.
 define gb_Module_register_target
-gb_Module_CURRENTTARGET := $(1)
-gb_Module_CURRENTCLEANTARGET := $(2)
+gb_Module_CURRENTCLASSNAME := $(1)
+gb_Module_CURRENTTARGET := $(2)
+gb_Module_CURRENTCLEANTARGET := $(3)
 
 endef
 
 # Here we include the file (in it there will be a call to gb_Module_register_target)
 define gb_Module__read_targetfile
+gb_Module_CURRENTCLASSNAME :=
 gb_Module_CURRENTTARGET :=
 gb_Module_CURRENTCLEANTARGET :=
 gb_Module_CURRENTMAKEFILE := $(patsubst $(1):%,%,$(filter $(1):%,$(gb_Module_MODULELOCATIONS)))$(2).mk
@@ -296,10 +299,13 @@ define gb_Module_add_target
 $(if $(filter AllLang% Dictionary% Package_registry,$(2)),$(warning target $(2) should be a l10n target))
 $(call gb_Module__read_targetfile,$(1),$(2),target)
 
+gb_Module_$(1)_CLASSNAMES += $$(gb_Module_CURRENTCLASSNAME)
 $(call gb_Module_get_nonl10n_target,$(1)) : $$(gb_Module_CURRENTTARGET)
 $(call gb_Module_get_clean_target,$(1)) : $$(gb_Module_CURRENTCLEANTARGET)
 
 endef
+
+gb_Module_get_classnames = $(gb_Module_$(1)_CLASSNAMES)
 
 define gb_Module_add_l10n_target
 $(if $(filter AllLang% CustomTarget_autotextshare Dictionary% Package_registry,$(2)),,$(warning target $(2) should not be a l10n target))
@@ -383,11 +389,12 @@ $(call gb_Module_get_clean_target,$(1)) : $$(gb_Module_CURRENTCLEANTARGET)
 endef
 
 define gb_Module__modulefile
-$(patsubst $(1):%,%,$(filter $(1):%,$(gb_Module_MODULELOCATIONS)))/$(2)/Module_$(2).mk
+$(patsubst $(1):%,%,$(filter $(1):%,$(gb_Module_MODULELOCATIONS)))$(2)/Module_$(notdir $(2)).mk
 endef
 
 define gb_Module_add_moduledir
 $(if $(wildcard $(call gb_Module__modulefile,$(1),$(2))),,$(call gb_Output_error,Module does not exist: $(call gb_Module__modulefile,$(1),$(2))))
+ifeq (,$(filter $(call gb_Module__modulefile,$(1),$(2)),$(MAKEFILE_LIST)))
 include $(call gb_Module__modulefile,$(1),$(2))
 $(call gb_Module_get_target,$(1)) : $$(firstword $$(gb_Module_TARGETSTACK))
 $(call gb_Module_get_l10n_target,$(1)) : $$(firstword $$(gb_Module_L10NTARGETSTACK))
@@ -409,6 +416,7 @@ gb_Module_STAGINGCHECKTARGETSTACK := $$(wordlist 2,$$(words $$(gb_Module_STAGING
 gb_Module_PERFCHECKTARGETSTACK := $$(wordlist 2,$$(words $$(gb_Module_PERFCHECKTARGETSTACK)),$$(gb_Module_PERFCHECKTARGETSTACK))
 gb_Module_UICHECKTARGETSTACK := $$(wordlist 2,$$(words $$(gb_Module_UICHECKTARGETSTACK)),$$(gb_Module_UICHECKTARGETSTACK))
 gb_Module_CLEANTARGETSTACK := $$(wordlist 2,$$(words $$(gb_Module_CLEANTARGETSTACK)),$$(gb_Module_CLEANTARGETSTACK))
+endif
 
 endef
 
