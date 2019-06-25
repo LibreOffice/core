@@ -51,6 +51,10 @@ void MenuButton::ExecuteMenu()
         Point aPos(0, 1);
         tools::Rectangle aRect(aPos, aSize );
         mpMenu->Execute(this, aRect, PopupMenuFlags::ExecuteDown);
+
+        if (IsDisposed())
+            return;
+
         mnCurItemId = mpMenu->GetCurItemId();
         msCurItemIdent = mpMenu->GetCurItemIdent();
     }
