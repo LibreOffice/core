@@ -74,6 +74,7 @@ public:
     void testTdf108021();
     void testTdf100084();
     void testTdf124817();
+    void testTdf126033();
     void testAutoBackgroundXLSX();
     void testAutoChartAreaBorderPropXLSX();
     void testChartAreaStyleBackgroundXLSX();
@@ -167,6 +168,7 @@ public:
     CPPUNIT_TEST(testTdf108021);
     CPPUNIT_TEST(testTdf100084);
     CPPUNIT_TEST(testTdf124817);
+    CPPUNIT_TEST(testTdf126033);
     CPPUNIT_TEST(testAutoBackgroundXLSX);
     CPPUNIT_TEST(testAutoChartAreaBorderPropXLSX);
     CPPUNIT_TEST(testChartAreaStyleBackgroundXLSX);
@@ -931,6 +933,23 @@ void Chart2ImportTest::testTdf124817()
     CPPUNIT_ASSERT(xDataSeries.is());
     uno::Reference<beans::XPropertySet> xPropSet_2(xDataSeries, uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT((xPropSet_2->getPropertyValue("Symbol") >>= aSymblProp) && (aSymblProp.BorderColor == static_cast<sal_Int32>(0xFF0000)));
+}
+
+void Chart2ImportTest::testTdf126033()
+{
+    load("/chart2/qa/extras/data/xlsx/", "tdf126033.xlsx");
+    Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
+    CPPUNIT_ASSERT_MESSAGE("failed to load chart", xChartDoc.is());
+
+    // Check the symbol size of datapoints
+    chart2::Symbol aSymblProp;
+    uno::Reference<chart2::XDataSeries> xDataSeries(getDataSeriesFromDoc(xChartDoc, 0));
+    CPPUNIT_ASSERT(xDataSeries.is());
+    uno::Reference<beans::XPropertySet> xPropertySet(xDataSeries->getDataPointByIndex(0), uno::UNO_SET_THROW);
+    CPPUNIT_ASSERT(xPropertySet->getPropertyValue("Symbol") >>= aSymblProp);
+    CPPUNIT_ASSERT(aSymblProp.Style == chart2::SymbolStyle_NONE);
+    /*CPPUNIT_ASSERT(aSymblProp.Size.Width == static_cast<sal_Int32>(0));
+    CPPUNIT_ASSERT(aSymblProp.Size.Height == static_cast<sal_Int32>(0));*/
 }
 
 void Chart2ImportTest::testTransparentBackground(OUString const & filename)
