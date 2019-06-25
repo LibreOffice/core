@@ -143,9 +143,6 @@
     <glade-widget-class title="MultiLine Edit" name="svtlo-MultiLineEditSyntaxHighlight"
                         generic-name="MultiLineEdit" parent="GtkTextView"
                         icon-name="widget-gtk-textview"/>
-    <glade-widget-class title="Address MultiLine Edit" name="swuilo-AddressMultiLineEdit"
-                        generic-name="AddressMultiLineEdit" parent="GtkTextView"
-                        icon-name="widget-gtk-textview"/>
     <glade-widget-class title="SvtValueSet" name="svtlo-ValueSet"
                         generic-name="Set of Value Options" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>
@@ -198,9 +195,6 @@
 
     <glade-widget-class title="Content List Box" name="sfxlo-ContentListBox"
                         generic-name="Content List Box" parent="vcllo-SvTreeListBox"
-                        icon-name="widget-gtk-treeview"/>
-    <glade-widget-class title="DD ListBox" name="swuilo-DDListBox"
-                        generic-name="DD ListBox" parent="vcllo-SvTreeListBox"
                         icon-name="widget-gtk-treeview"/>
     <glade-widget-class title="Animation ListBox" name="sdlo-CustomAnimationList"
                         generic-name="Animation ListBox" parent="vcllo-SvTreeListBox"
