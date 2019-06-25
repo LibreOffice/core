@@ -22,6 +22,8 @@
 #include <swdllapi.h>
 #include <fmtclds.hxx>
 
+#include <climits>
+
 SW_DLLPUBLIC void FitToActualSize(SwFormatCol& rCol, sal_uInt16 nWidth);
 
 class SW_DLLPUBLIC SwColMgr

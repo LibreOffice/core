@@ -20,7 +20,12 @@
 #define INCLUDED_SW_SOURCE_UIBASE_INC_GRFSH_HXX
 
 #include <memory>
-#include "frmsh.hxx"
+#include <vector>
+
+#include "basesh.hxx"
+#include <shellid.hxx>
+
+#include <sfx2/shell.hxx>
 
 class SwGrfShell: public SwBaseShell
 {

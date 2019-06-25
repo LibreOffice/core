@@ -24,6 +24,8 @@
 #include <tools/datetime.hxx>
 #include <vcl/timer.hxx>
 
+#include <vector>
+
 class SwGlossaries;
 class vector;
 

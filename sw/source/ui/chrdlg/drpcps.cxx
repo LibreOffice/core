@@ -35,8 +35,10 @@
 #include <sfx2/dialoghelper.hxx>
 #include <sfx2/htmlmode.hxx>
 #include <sfx2/objsh.hxx>
+#include <sfx2/printer.hxx>
 #include <svtools/unitconv.hxx>
 #include <vcl/print.hxx>
+#include <com/sun/star/i18n/BreakIterator.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <editeng/scripttypeitem.hxx>
 #include <comphelper/processfactory.hxx>

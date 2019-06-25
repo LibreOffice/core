@@ -20,19 +20,13 @@
 #define INCLUDED_SW_SOURCE_UIBASE_INC_GLOSSARY_HXX
 
 #include <vcl/edit.hxx>
-#include <vcl/treelistbox.hxx>
 #include <vcl/customweld.hxx>
 #include <vcl/weld.hxx>
 
-#include <vcl/button.hxx>
-#include <vcl/fixed.hxx>
-
-#include <vcl/menubtn.hxx>
 #include <com/sun/star/text/XAutoTextContainer2.hpp>
 
 #include <rtl/ustring.hxx>
-
-#include "actctrl.hxx"
+#include <sfx2/basedlgs.hxx>
 
 struct GroupUserData;
 class SwGlossaryHdl;
