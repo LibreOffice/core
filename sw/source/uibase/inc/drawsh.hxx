@@ -21,6 +21,8 @@
 
 #include "drwbassh.hxx"
 
+#include <svx/svdobj.hxx>
+
 class SwDrawBaseShell;
 
 class SwDrawShell: public SwDrawBaseShell

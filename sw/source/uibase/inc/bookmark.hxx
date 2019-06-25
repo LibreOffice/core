@@ -19,10 +19,8 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_BOOKMARK_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_BOOKMARK_HXX
 
-#include <svtools/simptabl.hxx>
+#include <sfx2/basedlgs.hxx>
 #include <vcl/weld.hxx>
-#include <ndtxt.hxx>
-#include <pam.hxx>
 #include <IMark.hxx>
 #include "condedit.hxx"
 

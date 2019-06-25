@@ -57,6 +57,10 @@
 #include <editeng/eeitem.hxx>
 #include <editeng/scripttypeitem.hxx>
 #include <editeng/fontitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/opaqitem.hxx>
+#include <editeng/protitem.hxx>
+#include <editeng/ulspitem.hxx>
 #include <editeng/wghtitem.hxx>
 #include <editeng/rsiditem.hxx>
 #include <i18nutil/transliteration.hxx>
@@ -71,6 +75,7 @@
 #include <unofldmid.h>
 #include <UndoManager.hxx>
 #include <textsh.hxx>
+#include <frmatr.hxx>
 #include <frmmgr.hxx>
 #include <tblafmt.hxx>
 

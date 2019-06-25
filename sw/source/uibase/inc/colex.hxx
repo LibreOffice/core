@@ -24,7 +24,6 @@
 #include <swdllapi.h>
 #include <tgrditem.hxx>
 #include <fmtclds.hxx>
-#include <frmatr.hxx>
 
 class SwColMgr;
 class SfxItemSet;

@@ -27,6 +27,7 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
 #include <svl/urihelper.hxx>
+#include <svx/langbox.hxx>
 #include <unotools/transliterationwrapper.hxx>
 #include <poolfmt.hxx>
 #include <fmtcol.hxx>

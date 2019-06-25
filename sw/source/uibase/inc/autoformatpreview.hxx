@@ -24,12 +24,7 @@
 #include <svx/framelinkarray.hxx>
 #include <svl/zforlist.hxx>
 #include <tools/gen.hxx>
-#include <tools/link.hxx>
 #include <rtl/ustring.hxx>
-#include <vcl/outdev.hxx>
-#include <vcl/vclptr.hxx>
-#include <vcl/virdev.hxx>
-#include <vcl/weld.hxx>
 #include <vcl/customweld.hxx>
 #include <vcl/font.hxx>
 

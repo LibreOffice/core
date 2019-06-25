@@ -35,6 +35,7 @@
 #include <editeng/lrspitem.hxx>
 #include <editeng/sizeitem.hxx>
 #include <editeng/frmdiritem.hxx>
+#include <editeng/ulspitem.hxx>
 #include <svl/ctloptions.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -52,7 +53,9 @@
 #include <uitool.hxx>
 #include <cmdid.h>
 #include <viewopt.hxx>
+#include <fmtclbl.hxx>
 #include <format.hxx>
+#include <frmatr.hxx>
 #include <frmmgr.hxx>
 #include <frmdlg.hxx>
 #include <colmgr.hxx>

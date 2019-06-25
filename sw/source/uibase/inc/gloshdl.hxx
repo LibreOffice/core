@@ -21,6 +21,8 @@
 
 #include <memory>
 #include <rtl/ustring.hxx>
+#include <vcl/weld.hxx>
+
 #include <swdllapi.h>
 
 class SwWrtShell;

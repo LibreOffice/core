@@ -20,14 +20,12 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_COLUMN_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_COLUMN_HXX
 
-#include <vcl/timer.hxx>
 #include <svtools/ctrlbox.hxx>
 #include <svtools/valueset.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <sfx2/tabdlg.hxx>
 #include <svx/colorbox.hxx>
 #include <svx/frmdirlbox.hxx>
-#include <fmtclbl.hxx>
 #include "colex.hxx"
 #include "prcntfld.hxx"
 

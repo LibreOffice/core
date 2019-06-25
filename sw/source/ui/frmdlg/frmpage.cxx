@@ -35,6 +35,7 @@
 #include <editeng/brushitem.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/frmdiritem.hxx>
+#include <svx/swframeposstrings.hxx>
 #include <svx/swframevalidation.hxx>
 #include <comphelper/classids.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -42,6 +43,7 @@
 #include <fmturl.hxx>
 #include <fmteiro.hxx>
 #include <fmtcnct.hxx>
+#include <fmtsrnd.hxx>
 #include <view.hxx>
 #include <wrtsh.hxx>
 #include <swmodule.hxx>

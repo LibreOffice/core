@@ -19,12 +19,12 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_DRPCPS_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_DRPCPS_HXX
 
-#include <com/sun/star/i18n/BreakIterator.hpp>
+#include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <editeng/svxfont.hxx>
 #include <sfx2/basedlgs.hxx>
-#include <sfx2/printer.hxx>
 #include <sfx2/tabdlg.hxx>
 #include <vcl/customweld.hxx>
+#include <vcl/print.hxx>
 
 class SwWrtShell;
 
