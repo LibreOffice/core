@@ -29,7 +29,7 @@ namespace basegfx
 class b2dpolygon : public CppUnit::TestFixture
 {
 public:
-    void testBasics()
+    void testCubicBezier()
     {
         B2DPolygon aPoly;
 
@@ -78,12 +78,29 @@ public:
                                      aPoly.getB2DPoint(1));
     }
 
+    void testQuadraticBezier()
+    {
+        B2DPolygon aPoly;
+
+        aPoly.appendQuadraticBezierSegment(B2DPoint(0, 0), B2DPoint(3, 3));
+
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("polygon size is wrong", sal_uInt32(1), aPoly.count());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("first polygon point wrong", B2DPoint(3, 3),
+                                     aPoly.getB2DPoint(0));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("first control point wrong", B2DPoint(1, 1),
+                                     aPoly.getPrevControlPoint(0));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("second control point wrong", B2DPoint(3, 3),
+                                     aPoly.getNextControlPoint(0));
+        CPPUNIT_ASSERT_MESSAGE("next control point not used", !aPoly.isNextControlPointUsed(0));
+    }
+
     // Change the following lines only, if you add, remove or rename
     // member functions of the current class,
     // because these macros are need by auto register mechanism.
 
     CPPUNIT_TEST_SUITE(b2dpolygon);
-    CPPUNIT_TEST(testBasics);
+    CPPUNIT_TEST(testCubicBezier);
+    CPPUNIT_TEST(testQuadraticBezier);
     CPPUNIT_TEST_SUITE_END();
 }; // class b2dpolygon
 

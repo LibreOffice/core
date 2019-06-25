@@ -1330,6 +1330,28 @@ namespace basegfx
         }
     }
 
+    void B2DPolygon::appendQuadraticBezierSegment(const B2DPoint& rControlPoint, const B2DPoint& rPoint)
+    {
+        if (mpPolygon->count() == 0)
+        {
+            mpPolygon->append(rPoint);
+            const double nX((rControlPoint.getX() * 2.0 + rPoint.getX()) / 3.0);
+            const double nY((rControlPoint.getY() * 2.0 + rPoint.getY()) / 3.0);
+            setPrevControlPoint(0, B2DPoint(nX, nY));
+        }
+        else
+        {
+            const B2DPoint aPreviousPoint(mpPolygon->getPoint(mpPolygon->count() - 1));
+
+            const double nX1((rControlPoint.getX() * 2.0 + aPreviousPoint.getX()) / 3.0);
+            const double nY1((rControlPoint.getY() * 2.0 + aPreviousPoint.getY()) / 3.0);
+            const double nX2((rControlPoint.getX() * 2.0 + rPoint.getX()) / 3.0);
+            const double nY2((rControlPoint.getY() * 2.0 + rPoint.getY()) / 3.0);
+
+            appendBezierSegment(B2DPoint(nX1, nY1), B2DPoint(nX2, nY2), rPoint);
+        }
+    }
+
     bool B2DPolygon::areControlPointsUsed() const
     {
         return mpPolygon->areControlPointsUsed();
