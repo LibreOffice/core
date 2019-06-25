@@ -207,7 +207,7 @@ namespace sfx2
         Boundary aBoundary = xBreak->getWordBoundary(
             rSearchString, nStartPos, aLocale, WordType::ANYWORD_IGNOREWHITESPACES, true );
 
-        while ( aBoundary.startPos != aBoundary.endPos )
+        while ( aBoundary.startPos < aBoundary.endPos )
         {
             nStartPos = aBoundary.endPos;
             OUString sSearchToken( rSearchString.copy(
