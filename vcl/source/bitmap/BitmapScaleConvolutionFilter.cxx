@@ -38,7 +38,7 @@ void ImplCalculateContributions(
     const long aSourceSize,
     const long aDestinationSize,
     long& aNumberOfContributions,
-    std::vector<double>& rWeights,
+    std::vector<sal_Int16>& rWeights,
     std::vector<sal_Int32>& rPixels,
     std::vector<sal_Int32>& rCounts,
     const Kernel& aKernel)
@@ -76,7 +76,8 @@ void ImplCalculateContributions(
             const long aPixelIndex(MinMax(j, 0, aSourceSize - 1));
             const long nIndex(aIndex + aCurrentCount);
 
-            rWeights[nIndex] = aWeight;
+            // scale the weight by 255 since we're converting from float to int
+            rWeights[nIndex] = aWeight * 255;
             rPixels[nIndex] = aPixelIndex;
 
             aCurrentCount++;
@@ -102,7 +103,7 @@ bool ImplScaleConvolutionHor(Bitmap& rSource, Bitmap& rTarget, const double& rSc
 
     if(pReadAcc)
     {
-        std::vector<double> aWeights;
+        std::vector<sal_Int16> aWeights;
         std::vector<sal_Int32> aPixels;
         std::vector<sal_Int32> aCounts;
         long aNumberOfContributions(0);
@@ -122,15 +123,15 @@ bool ImplScaleConvolutionHor(Bitmap& rSource, Bitmap& rTarget, const double& rSc
                 for(long x(0); x < nNewWidth; x++)
                 {
                     const long aBaseIndex(x * aNumberOfContributions);
-                    double aSum(0.0);
-                    double aValueRed(0.0);
-                    double aValueGreen(0.0);
-                    double aValueBlue(0.0);
+                    sal_Int32 aSum(0);
+                    sal_Int32 aValueRed(0);
+                    sal_Int32 aValueGreen(0);
+                    sal_Int32 aValueBlue(0);
 
                     for(long j(0); j < aCounts[x]; j++)
                     {
                         const long aIndex(aBaseIndex + j);
-                        const double aWeight(aWeights[aIndex]);
+                        const sal_Int16 aWeight(aWeights[aIndex]);
                         BitmapColor aColor;
 
                         aSum += aWeight;
@@ -190,7 +191,7 @@ bool ImplScaleConvolutionVer(Bitmap& rSource, Bitmap& rTarget, const double& rSc
 
     if(pReadAcc)
     {
-        std::vector<double> aWeights;
+        std::vector<sal_Int16> aWeights;
         std::vector<sal_Int32> aPixels;
         std::vector<sal_Int32> aCounts;
         long aNumberOfContributions(0);
@@ -214,15 +215,15 @@ bool ImplScaleConvolutionVer(Bitmap& rSource, Bitmap& rTarget, const double& rSc
                 for(long y(0); y < nNewHeight; y++)
                 {
                     const long aBaseIndex(y * aNumberOfContributions);
-                    double aSum(0.0);
-                    double aValueRed(0.0);
-                    double aValueGreen(0.0);
-                    double aValueBlue(0.0);
+                    sal_Int32 aSum(0);
+                    sal_Int32 aValueRed(0);
+                    sal_Int32 aValueGreen(0);
+                    sal_Int32 aValueBlue(0);
 
                     for(long j(0); j < aCounts[y]; j++)
                     {
                         const long aIndex(aBaseIndex + j);
-                        const double aWeight(aWeights[aIndex]);
+                        const sal_Int16 aWeight(aWeights[aIndex]);
                         aSum += aWeight;
                         const BitmapColor & aColor = aScanline[aPixels[aIndex]];
                         aValueRed += aWeight * aColor.GetRed();
