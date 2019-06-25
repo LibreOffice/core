@@ -24,8 +24,6 @@
 #include <svx/dialcontrol.hxx>
 #include <svx/frmdirlbox.hxx>
 #include <svx/swframeexample.hxx>
-#include <svx/swframeposstrings.hxx>
-#include <globals.hrc>
 #include <swtypes.hxx>
 #include "bmpwin.hxx"
 #include "prcntfld.hxx"

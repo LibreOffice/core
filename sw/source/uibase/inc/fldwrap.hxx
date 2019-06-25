@@ -19,6 +19,10 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_FLDWRAP_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_FLDWRAP_HXX
 
+#include <vcl/vclptr.hxx>
+
+#include <swabstdlg.hxx>
+
 #include "chldwrap.hxx"
 class AbstractSwFieldDlg;
 

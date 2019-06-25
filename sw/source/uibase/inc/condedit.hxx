@@ -19,7 +19,6 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_CONDEDIT_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_CONDEDIT_HXX
 
-#include <vcl/edit.hxx>
 #include <vcl/transfer.hxx>
 #include <vcl/weld.hxx>
 #include <swdllapi.h>

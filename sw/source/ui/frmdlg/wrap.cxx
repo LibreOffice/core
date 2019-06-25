@@ -37,6 +37,7 @@
 #include <wrtsh.hxx>
 #include <swmodule.hxx>
 #include <viewopt.hxx>
+#include <fmtsrnd.hxx>
 #include <frmatr.hxx>
 #include <frmmgr.hxx>
 #include <globals.hrc>

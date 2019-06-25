@@ -18,8 +18,10 @@
  */
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_FLDEDT_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_FLDEDT_HXX
+
+#include <fldbas.hxx>
+
 #include <sfx2/basedlgs.hxx>
-#include <vcl/button.hxx>
 
 class SwView;
 class SwWrtShell;

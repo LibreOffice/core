@@ -19,11 +19,10 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_FLDMGR_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_FLDMGR_HXX
 
+#include <fldbas.hxx>
 #include <swdllapi.h>
-#include <swtypes.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Any.h>
-#include <vcl/vclptr.hxx>
 #include <memory>
 #include <vector>
 

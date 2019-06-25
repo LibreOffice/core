@@ -51,6 +51,7 @@
 #include <navicont.hxx>
 #include <edtwin.hxx>
 #include <uitool.hxx>
+#include <toxmgr.hxx>
 
 #include <cmdid.h>
 #include <helpids.h>

@@ -94,6 +94,7 @@
 #include <fmtinfmt.hxx>
 #include <mdiexp.hxx>
 #include <drawbase.hxx>
+#include <frmatr.hxx>
 #include <frmmgr.hxx>
 #include <pagedesc.hxx>
 #include <section.hxx>

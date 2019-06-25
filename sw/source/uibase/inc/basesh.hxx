@@ -22,10 +22,8 @@
 #include <shellid.hxx>
 
 #include <tools/link.hxx>
-#include <vcl/timer.hxx>
 #include <sfx2/module.hxx>
 #include <sfx2/shell.hxx>
-#include <viewopt.hxx>
 
 #include <mdiexp.hxx>
 #include <set>

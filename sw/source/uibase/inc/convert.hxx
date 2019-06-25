@@ -20,6 +20,7 @@
 #define INCLUDED_SW_SOURCE_UIBASE_INC_CONVERT_HXX
 
 #include <sfx2/basedlgs.hxx>
+#include <tblafmt.hxx>
 
 class VclContainer;
 class SwTableAutoFormat;

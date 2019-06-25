@@ -21,6 +21,8 @@
 
 #include <vcl/weld.hxx>
 
+#include <swdllapi.h>
+
 class SW_DLLPUBLIC PrintMonitor: public weld::GenericDialogController
 {
 public:

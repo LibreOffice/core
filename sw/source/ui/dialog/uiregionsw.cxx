@@ -48,6 +48,7 @@
 #include <swundo.hxx>
 #include <column.hxx>
 #include <fmtfsize.hxx>
+#include <frmatr.hxx>
 #include <shellio.hxx>
 
 #include <cmdid.h>

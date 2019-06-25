@@ -22,6 +22,7 @@
 
 #include <com/sun/star/mail/XMailMessage.hpp>
 #include <salhelper/simplereferenceobject.hxx>
+#include <rtl/ref.hxx>
 
 class MailDispatcher;
 

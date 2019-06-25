@@ -9,7 +9,6 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_DASHEDLINE_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_DASHEDLINE_HXX
 
-#include <basegfx/color/bcolor.hxx>
 #include <vcl/fixed.hxx>
 
 /** Class for displaying a dashed line in the Writer GUI.

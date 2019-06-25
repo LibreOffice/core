@@ -77,6 +77,7 @@
 #include <docstat.hxx>
 #include <usrfld.hxx>
 #include <expfld.hxx>
+#include <fmtsrnd.hxx>
 #include <fldmgr.hxx>
 #include <frmmgr.hxx>
 #include <tablemgr.hxx>

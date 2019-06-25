@@ -18,9 +18,7 @@
  */
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_ASCFLDLG_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_ASCFLDLG_HXX
-#include <vcl/fixed.hxx>
 
-#include <vcl/button.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <svx/txencbox.hxx>
 #include <svx/langbox.hxx>

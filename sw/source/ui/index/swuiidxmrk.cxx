@@ -41,6 +41,7 @@
 #include <editeng/unolingu.hxx>
 #include <swtypes.hxx>
 #include <idxmrk.hxx>
+#include <toxmgr.hxx>
 #include <txttxmrk.hxx>
 #include <wrtsh.hxx>
 #include <view.hxx>

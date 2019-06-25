@@ -20,6 +20,7 @@
 #define INCLUDED_SW_SOURCE_UIBASE_INC_DRAWBASE_HXX
 
 #include <tools/gen.hxx>
+#include <vcl/vclptr.hxx>
 
 class SwView;
 class SwWrtShell;

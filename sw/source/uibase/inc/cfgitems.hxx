@@ -19,7 +19,6 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_CFGITEMS_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_CFGITEMS_HXX
 
-#include <tools/color.hxx>
 #include <svl/poolitem.hxx>
 #include <swdllapi.h>
 #include <printdata.hxx>

@@ -20,7 +20,6 @@
 #define INCLUDED_SW_SOURCE_UIBASE_INC_CPTION_HXX
 
 #include <sfx2/basedlgs.hxx>
-#include "actctrl.hxx"
 
 #include <com/sun/star/container/XNameAccess.hpp>
 
