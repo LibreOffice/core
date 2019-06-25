@@ -586,7 +586,9 @@ bool SwDoc::DeleteTOX( const SwTOXBase& rTOXBase, bool bDelNodes )
         /* Move cursors contained in TOX to the above calculated point. */
         PaMCorrAbs(aPam, *aSearchPam.GetPoint());
 
+#if 1
         if( !bDelNodes )
+#endif
         {
             SwSections aArr( 0 );
             pFormat->GetChildSections( aArr, SectionSort::Not, false );
@@ -594,7 +596,7 @@ bool SwDoc::DeleteTOX( const SwTOXBase& rTOXBase, bool bDelNodes )
             {
                 if( TOX_HEADER_SECTION == pSect->GetType() )
                 {
-                    DelSectionFormat( pSect->GetFormat(), bDelNodes );
+                    DelSectionFormat( pSect->GetFormat(), /*bDelNodes*/ false );
                 }
             }
         }

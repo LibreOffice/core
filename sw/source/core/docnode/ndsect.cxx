@@ -528,10 +528,24 @@ void SwDoc::DelSectionFormat( SwSectionFormat *pFormat, bool bDelNodes )
                             RES_END_AT_TXTEND, true, &pFootnoteEndAtTextEnd ))
             pFootnoteEndAtTextEnd = nullptr;
 
+#if 1
         const SwSectionNode* pSectNd;
+#else
+        assert(pIdx); // if that doesn't exist we have some problem; the UndoDelSection would already always deref it...
+        assert(&pIdx->GetNodes() == &GetNodes());
+        const SwSectionNode* pSectNd(pIdx->GetNode().GetSectionNode());
+        assert(pSectNd);
+        SwPaM aPaM(SwNodeIndex(const_cast<SwNodes&>(pSectNd->GetNodes()),
+                pSectNd->EndOfSectionIndex()), *pIdx, -1, +1); // content inside
+        if (aPaM.GetMark()->nNode < aPaM.GetPoint()->nNode)
+        {
+            bDelNodes = false; // nothing to delete; is this possible?
+        }
+#endif
 
         if( GetIDocumentUndoRedo().DoesUndo() )
         {
+#if 1
             if( bDelNodes && pIdx && &GetNodes() == &pIdx->GetNodes() &&
                 nullptr != (pSectNd = pIdx->GetNode().GetSectionNode() ))
             {
@@ -545,8 +559,10 @@ void SwDoc::DelSectionFormat( SwSectionFormat *pFormat, bool bDelNodes )
                 GetIDocumentUndoRedo().EndUndo(SwUndoId::DELSECTION, nullptr);
                 return ;
             }
+#endif
             GetIDocumentUndoRedo().AppendUndo( MakeUndoDelSection( *pFormat ) );
         }
+#if 1
         else if( bDelNodes && pIdx && &GetNodes() == &pIdx->GetNodes() &&
                 nullptr != (pSectNd = pIdx->GetNode().GetSectionNode() ))
         {
@@ -559,6 +575,7 @@ void SwDoc::DelSectionFormat( SwSectionFormat *pFormat, bool bDelNodes )
             GetIDocumentUndoRedo().EndUndo(SwUndoId::DELSECTION, nullptr);
             return ;
         }
+#endif
 
         {
             SwPtrMsgPoolItem aMsgHint( RES_REMOVE_UNO_OBJECT, pFormat );
@@ -583,6 +600,13 @@ void SwDoc::DelSectionFormat( SwSectionFormat *pFormat, bool bDelNodes )
 //FEATURE::CONDCOLL
 
         delete pFormat;
+
+#if 0
+        if (bDelNodes)
+        {
+            getIDocumentContentOperations().DelFullPara(aPaM);
+        }
+#endif
 
         if( nSttNd && pFootnoteEndAtTextEnd )
         {
