@@ -27,10 +27,13 @@
 #include <com/sun/star/document/XScriptInvocationContext.hpp>
 
 #include <basic/sbmeth.hxx>
+#include <comphelper/processfactory.hxx>
+#include <comphelper/string.hxx>
 #include <framework/documentundoguard.hxx>
 #include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
 #include <unotools/moduleoptions.hxx>
+#include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 
@@ -90,7 +93,10 @@ bool IsValidSbxName( const OUString& rName )
 
 static bool StringCompareLessThan( const OUString& rStr1, const OUString& rStr2 )
 {
-    return rStr1.compareToIgnoreAsciiCase( rStr2 ) < 0;
+    auto const sort = comphelper::string::NaturalStringSorter(
+        comphelper::getProcessComponentContext(),
+        Application::GetSettings().GetUILanguageTag().getLocale());
+    return sort.compare(rStr1, rStr2) < 0;
 }
 
 Sequence< OUString > GetMergedLibraryNames( const Reference< script::XLibraryContainer >& xModLibContainer, const Reference< script::XLibraryContainer >& xDlgLibContainer )

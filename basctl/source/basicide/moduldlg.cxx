@@ -818,6 +818,7 @@ void ObjectPage::NewDialog()
                             m_xBasicBox->AddEntry(aDlgName, RID_BMP_DIALOG, xSubRootEntry.get(), false,
                                                std::make_unique<Entry>(OBJ_TYPE_DIALOG), xIter.get());
                             assert(xIter.get() && "Insert entry failed!");
+                            m_xBasicBox->make_sorted();
                         }
                         m_xBasicBox->set_cursor(*xIter);
                         m_xBasicBox->select(*xIter);
@@ -976,6 +977,7 @@ SbModule* createModImpl(weld::Window* pWin, const ScriptDocument& rDocument,
                     {
                         rBasicBox.AddEntry(aModName, RID_BMP_MODULE, xSubRootEntry.get(), false,
                                            std::make_unique<Entry>(OBJ_TYPE_MODULE), xEntry.get());
+                        rBasicBox.make_sorted();
                     }
                     rBasicBox.set_cursor(*xEntry);
                     rBasicBox.select(*xEntry);

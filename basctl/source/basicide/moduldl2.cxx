@@ -651,6 +651,8 @@ void LibPage::InsertLib()
             const int nRow = rView.n_children() - 1;
             rView.set_toggle(nRow, TRISTATE_TRUE, 0);
             rView.set_text(nRow, aLibName, 1);
+            rView.make_sorted();
+            rView.set_cursor(rView.find_text(aLibName));
         }
     }
 
@@ -1328,7 +1330,8 @@ void createLibImpl(weld::Window* pWin, const ScriptDocument& rDocument,
                 if( pLibBox )
                 {
                     pLibBox->append_text(aLibName);
-                    pLibBox->set_cursor(pLibBox->n_children() - 1);
+                    pLibBox->make_sorted();
+                    pLibBox->set_cursor(pLibBox->find_text(aLibName));
                 }
 
                 // create a module
