@@ -16,6 +16,24 @@
       "revId": "fc120541150d9702aac5c7a3e7db02691c3c8c49",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df7087c5_020d8b3d",
+        "filename": "offapi/com/sun/star/drawing/GraphicObjectShape.idl",
+        "patchSetId": 11
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-06-25T07:06:44Z",
+      "side": 1,
+      "message": "\u003e Also, can you look into bundling them into a struct if possible, as\n \u003e Stephan suggested?\n\nNote that this may or may not actually be a good idea, I really don\u0027t know.  (I just would like to make sure we arrive at a clean final result, before this API shows up in a released LO version and is then effectively set in stone.)",
+      "parentUuid": "df7087c5_a235bff9",
+      "revId": "fc120541150d9702aac5c7a3e7db02691c3c8c49",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
