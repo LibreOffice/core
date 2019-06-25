@@ -1288,7 +1288,6 @@ DECLARE_WW8EXPORT_TEST(testCommentExport, "comment-export.odt")
     }
 }
 
-#if !defined(MACOSX) && !defined(_WIN32)
 #if HAVE_MORE_FONTS
 DECLARE_WW8EXPORT_TEST(testTableKeep, "tdf91083.odt")
 {
@@ -1296,7 +1295,6 @@ DECLARE_WW8EXPORT_TEST(testTableKeep, "tdf91083.odt")
     CPPUNIT_ASSERT_EQUAL( OUString("Row 1"), parseDump("/root/page[3]/body/tab[1]/row[2]/cell[1]/txt[1]") );
     CPPUNIT_ASSERT_EQUAL( OUString("Row 1"), parseDump("/root/page[6]/body/tab[1]/row[2]/cell[1]/txt[1]") );
 }
-#endif
 #endif
 
 DECLARE_WW8EXPORT_TEST(testTdf76349_textboxMargins, "tdf76349_textboxMargins.doc")

@@ -24,8 +24,6 @@
 #include <com/sun/star/style/BreakType.hpp>
 #include <ftninfo.hxx>
 
-#if !defined(_WIN32)
-
 class Test : public SwModelTestBase
 {
 public:
@@ -978,8 +976,6 @@ DECLARE_OOXMLEXPORT_TEST(testFileOpenInputOutputError,"floatingtbl_with_formula.
     // let's also assert that the formula was exported properly
     assertXPathContent(pXmlDoc, "//w:tbl/w:tr/w:tc[2]/w:p/m:oMath/m:sSubSup/m:e/m:r/m:t", u"\u03C3");
 }
-
-#endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
