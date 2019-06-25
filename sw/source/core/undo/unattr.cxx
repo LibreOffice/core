@@ -128,6 +128,8 @@ SwUndoFormatAttr::SwUndoFormatAttr( const SfxPoolItem& rItem, SwFormat& rChgForm
 
 void SwUndoFormatAttr::Init()
 {
+    // tdf#126017 never save SwNodeIndex, it will go stale
+    m_pOldSet->ClearItem(RES_CNTNT);
     // treat change of anchor specially
     if ( SfxItemState::SET == m_pOldSet->GetItemState( RES_ANCHOR, false )) {
         SaveFlyAnchor( m_bSaveDrawPt );
@@ -353,6 +355,10 @@ SwRewriter SwUndoFormatAttr::GetRewriter() const
 
 void SwUndoFormatAttr::PutAttr( const SfxPoolItem& rItem )
 {
+    if (RES_CNTNT == rItem.Which())
+    {
+        return; // tdf#126017 never save SwNodeIndex, it will go stale
+    }
     m_pOldSet->Put( rItem );
     if ( RES_ANCHOR == rItem.Which() ) {
         SaveFlyAnchor( m_bSaveDrawPt );
