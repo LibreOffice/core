@@ -427,7 +427,7 @@ void ClassificationDialog::readIn(std::vector<ClassificationResult> const & rInp
         {
             case svx::ClassificationType::TEXT:
             {
-                m_xEditWindow->pEdView->InsertText(rClassificationResult.msName);
+                m_xEditWindow->getEditView().InsertText(rClassificationResult.msName);
             }
             break;
 
@@ -469,13 +469,15 @@ void ClassificationDialog::readIn(std::vector<ClassificationResult> const & rInp
                 nParagraph++;
 
                 if (nParagraph != 0)
-                    m_xEditWindow->pEdView->InsertParaBreak();
+                    m_xEditWindow->getEditView().InsertParaBreak();
 
                 // Set paragraph font weight
                 FontWeight eWeight = (rClassificationResult.msName == "BOLD") ? WEIGHT_BOLD : WEIGHT_NORMAL;
-                std::unique_ptr<SfxItemSet> pSet(new SfxItemSet(m_xEditWindow->pEdEngine->GetParaAttribs(nParagraph)));
+
+                ClassificationEditEngine& rEdEngine = m_xEditWindow->getEditEngine();
+                std::unique_ptr<SfxItemSet> pSet(new SfxItemSet(rEdEngine.GetParaAttribs(nParagraph)));
                 pSet->Put(SvxWeightItem(eWeight, EE_CHAR_WEIGHT));
-                m_xEditWindow->pEdEngine->SetParaAttribs(nParagraph, *pSet);
+                rEdEngine.SetParaAttribs(nParagraph, *pSet);
             }
             break;
 
@@ -518,7 +520,8 @@ std::vector<ClassificationResult> ClassificationDialog::getResult()
 {
     std::vector<ClassificationResult> aClassificationResults;
 
-    std::unique_ptr<EditTextObject> pEditText(m_xEditWindow->pEdEngine->CreateTextObject());
+    ClassificationEditEngine& rEdEngine = m_xEditWindow->getEditEngine();
+    std::unique_ptr<EditTextObject> pEditText(rEdEngine.CreateTextObject());
 
     sal_Int32 nCurrentParagraph = -1;
 
@@ -532,7 +535,7 @@ std::vector<ClassificationResult> ClassificationDialog::getResult()
 
             // Get Weight of current paragraph
             FontWeight eFontWeight = WEIGHT_NORMAL;
-            SfxItemSet aItemSet(m_xEditWindow->pEdEngine->GetParaAttribs(nCurrentParagraph));
+            SfxItemSet aItemSet(rEdEngine.GetParaAttribs(nCurrentParagraph));
             if (const SfxPoolItem* pItem = aItemSet.GetItem(EE_CHAR_WEIGHT, false))
             {
                 const SvxWeightItem* pWeightItem = dynamic_cast<const SvxWeightItem*>(pItem);
@@ -551,7 +554,7 @@ std::vector<ClassificationResult> ClassificationDialog::getResult()
         const SvxFieldItem* pFieldItem = findField(rSection);
 
         ESelection aSelection(rSection.mnParagraph, rSection.mnStart, rSection.mnParagraph, rSection.mnEnd);
-        const OUString sDisplayString = m_xEditWindow->pEdEngine->GetText(aSelection);
+        const OUString sDisplayString = rEdEngine.GetText(aSelection);
         if (!sDisplayString.isEmpty())
         {
             const ClassificationField* pClassificationField = pFieldItem ? dynamic_cast<const ClassificationField*>(pFieldItem->GetField()) : nullptr;
@@ -577,7 +580,7 @@ IMPL_LINK(ClassificationDialog, SelectClassificationHdl, weld::ComboBox&, rBox, 
     if (nSelected < 0 || m_nCurrentSelectedCategory == nSelected)
         return;
 
-    std::unique_ptr<EditTextObject> pEditText(m_xEditWindow->pEdEngine->CreateTextObject());
+    std::unique_ptr<EditTextObject> pEditText(m_xEditWindow->getEditEngine().CreateTextObject());
     std::vector<editeng::Section> aSections;
     pEditText->GetAllSections(aSections);
 
@@ -602,7 +605,7 @@ IMPL_LINK(ClassificationDialog, SelectClassificationHdl, weld::ComboBox&, rBox, 
     }
 
     if (bReplaceExisting)
-        m_xEditWindow->pEdView->SetSelection(aExistingFieldSelection);
+        m_xEditWindow->getEditView().SetSelection(aExistingFieldSelection);
 
     insertCategoryField(nSelected);
 
@@ -638,7 +641,7 @@ IMPL_LINK(ClassificationDialog, SelectRecentlyUsedHdl, weld::ComboBox&, rBox, vo
     sal_Int32 nSelected = rBox.get_active();
     if (nSelected >= 0)
     {
-        m_xEditWindow->pEdEngine->Clear();
+        m_xEditWindow->getEditEngine().Clear();
         readIn(m_aRecentlyUsedValuesCollection[nSelected]);
     }
 }

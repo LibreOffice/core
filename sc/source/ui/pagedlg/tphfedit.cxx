@@ -68,49 +68,30 @@ ScEditWindow::ScEditWindow(ScEditWindowLocation eLoc, weld::Window* pDialog)
 {
 }
 
+void ScEditWindow::makeEditEngine()
+{
+    m_xEditEngine.reset(new ScHeaderEditEngine(EditEngine::CreatePool()));
+}
+
+ScHeaderEditEngine* ScEditWindow::GetEditEngine() const
+{
+    return static_cast<ScHeaderEditEngine*>(m_xEditEngine.get());
+}
+
 void ScEditWindow::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 {
     OutputDevice& rDevice = pDrawingArea->get_ref_device();
-
     Size aSize = rDevice.LogicToPixel(Size(80, 120), MapMode(MapUnit::MapAppFont));
     pDrawingArea->set_size_request(aSize.Width(), aSize.Height());
-    SetOutputSizePixel(aSize);
 
-    weld::CustomWidgetController::SetDrawingArea(pDrawingArea);
-
-    EnableRTL(false);
-
-    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
-    Color aBgColor = rStyleSettings.GetWindowColor();
-
-    rDevice.SetMapMode(MapMode(MapUnit::MapTwip));
-    rDevice.SetBackground(aBgColor);
-
-    Size aOutputSize(rDevice.PixelToLogic(aSize));
-    aSize = aOutputSize;
-    aSize.setHeight( aSize.Height() * 4 );
-
-    pEdEngine.reset( new ScHeaderEditEngine( EditEngine::CreatePool() ) );
-    pEdEngine->SetPaperSize( aSize );
-    pEdEngine->SetRefDevice( &rDevice );
+    WeldEditView::SetDrawingArea(pDrawingArea);
 
     ScHeaderFieldData aData;
-    lcl_GetFieldData( aData );
-
+    lcl_GetFieldData(aData);
     // fields
-    pEdEngine->SetData( aData );
-    pEdEngine->SetControlWord( pEdEngine->GetControlWord() | EEControlBits::MARKFIELDS );
+    GetEditEngine()->SetData(aData);
     if (mbRTL)
-        pEdEngine->SetDefaultHorizontalTextDirection(EEHorizontalTextDirection::R2L);
-
-    pEdView.reset(new EditView(pEdEngine.get(), nullptr));
-    pEdView->setEditViewCallbacks(this);
-    pEdView->SetOutputArea(tools::Rectangle(Point(0,0), aOutputSize));
-
-    pEdView->SetBackgroundColor( aBgColor );
-    pEdEngine->InsertView( pEdView.get() );
-
-    pDrawingArea->set_cursor(PointerStyle::Text);
+        m_xEditEngine->SetDefaultHorizontalTextDirection(EEHorizontalTextDirection::R2L);
 
     if (pAcc)
     {
@@ -128,20 +109,9 @@ void ScEditWindow::SetDrawingArea(weld::DrawingArea* pDrawingArea)
                 break;
         }
 
-        pAcc->InitAcc(nullptr, pEdView.get(), nullptr,
+        pAcc->InitAcc(nullptr, m_xEditView.get(), nullptr,
                       sName, pDrawingArea->get_tooltip_text());
     }
-}
-
-void ScEditWindow::Resize()
-{
-    OutputDevice& rDevice = GetDrawingArea()->get_ref_device();
-    Size aOutputSize(rDevice.PixelToLogic(GetOutputSizePixel()));
-    Size aSize(aOutputSize);
-    aSize.setHeight( aSize.Height() * 4 );
-    pEdEngine->SetPaperSize(aSize);
-    pEdView->SetOutputArea(tools::Rectangle(Point(0,0), aOutputSize));
-    weld::CustomWidgetController::Resize();
 }
 
 ScEditWindow::~ScEditWindow()
@@ -153,14 +123,13 @@ ScEditWindow::~ScEditWindow()
         if (xTemp.is())
             pAcc->dispose();
     }
-    pEdEngine.reset();
-    pEdView.reset();
 }
 
 void ScEditWindow::SetNumType(SvxNumType eNumType)
 {
-    pEdEngine->SetNumType(eNumType);
-    pEdEngine->UpdateFields();
+    ScHeaderEditEngine* pEditEngine = GetEditEngine();
+    pEditEngine->SetNumType(eNumType);
+    pEditEngine->UpdateFields();
 }
 
 std::unique_ptr<EditTextObject> ScEditWindow::CreateTextObject()
@@ -168,17 +137,17 @@ std::unique_ptr<EditTextObject> ScEditWindow::CreateTextObject()
     //  reset paragraph attributes
     //  (GetAttribs at creation of format dialog always returns the set items)
 
-    const SfxItemSet& rEmpty = pEdEngine->GetEmptyItemSet();
-    sal_Int32 nParCnt = pEdEngine->GetParagraphCount();
+    const SfxItemSet& rEmpty = m_xEditEngine->GetEmptyItemSet();
+    sal_Int32 nParCnt = m_xEditEngine->GetParagraphCount();
     for (sal_Int32 i=0; i<nParCnt; i++)
-        pEdEngine->SetParaAttribs( i, rEmpty );
+        m_xEditEngine->SetParaAttribs( i, rEmpty );
 
-    return pEdEngine->CreateTextObject();
+    return m_xEditEngine->CreateTextObject();
 }
 
 void ScEditWindow::SetFont( const ScPatternAttr& rPattern )
 {
-    auto pSet = std::make_unique<SfxItemSet>( pEdEngine->GetEmptyItemSet() );
+    auto pSet = std::make_unique<SfxItemSet>( m_xEditEngine->GetEmptyItemSet() );
     rPattern.FillEditItemSet( pSet.get() );
     //  FillEditItemSet adjusts font height to 1/100th mm,
     //  but for header/footer twips is needed, as in the PatternAttr:
@@ -187,17 +156,17 @@ void ScEditWindow::SetFont( const ScPatternAttr& rPattern )
     pSet->Put( rPattern.GetItem(ATTR_CTL_FONT_HEIGHT).CloneSetWhich(EE_CHAR_FONTHEIGHT_CTL) );
     if (mbRTL)
         pSet->Put( SvxAdjustItem( SvxAdjust::Right, EE_PARA_JUST ) );
-    pEdEngine->SetDefaults( std::move(pSet) );
+    GetEditEngine()->SetDefaults( std::move(pSet) );
 }
 
 void ScEditWindow::SetText( const EditTextObject& rTextObject )
 {
-    pEdEngine->SetText( rTextObject );
+    m_xEditEngine->SetText( rTextObject );
 }
 
 void ScEditWindow::InsertField( const SvxFieldItem& rFld )
 {
-    pEdView->InsertField( rFld );
+    m_xEditView->InsertField( rFld );
 }
 
 void ScEditWindow::SetCharAttributes()
@@ -215,7 +184,7 @@ void ScEditWindow::SetCharAttributes()
     {
         if(pTabViewSh!=nullptr) pTabViewSh->SetInFormatDialog(true);
 
-        SfxItemSet aSet( pEdView->GetAttribs() );
+        SfxItemSet aSet( m_xEditView->GetAttribs() );
 
         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
 
@@ -226,68 +195,11 @@ void ScEditWindow::SetCharAttributes()
         {
             aSet.ClearItem();
             aSet.Put( *pDlg->GetOutputItemSet() );
-            pEdView->SetAttribs( aSet );
+            m_xEditView->SetAttribs( aSet );
         }
 
         if(pTabViewSh!=nullptr) pTabViewSh->SetInFormatDialog(false);
     }
-}
-
-void ScEditWindow::Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect )
-{
-    //note: ClassificationEditView::Paint is similar
-
-    rRenderContext.Push(PushFlags::ALL);
-    rRenderContext.SetClipRegion();
-
-    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
-    Color aBgColor = rStyleSettings.GetWindowColor();
-
-    pEdView->SetBackgroundColor( aBgColor );
-
-    rRenderContext.SetBackground( aBgColor );
-
-    tools::Rectangle aLogicRect(rRenderContext.PixelToLogic(rRect));
-    pEdView->Paint(aLogicRect, &rRenderContext);
-
-    if (HasFocus())
-    {
-        pEdView->ShowCursor();
-        vcl::Cursor* pCursor = pEdView->GetCursor();
-        pCursor->DrawToDevice(rRenderContext);
-    }
-
-    std::vector<tools::Rectangle> aLogicRects;
-
-    // get logic selection
-    pEdView->GetSelectionRectangles(aLogicRects);
-
-    rRenderContext.SetLineColor();
-    rRenderContext.SetFillColor(COL_BLACK);
-    rRenderContext.SetRasterOp(RasterOp::Invert);
-
-    for (const auto &rSelectionRect : aLogicRects)
-        rRenderContext.DrawRect(rSelectionRect);
-
-    rRenderContext.Pop();
-}
-
-bool ScEditWindow::MouseMove( const MouseEvent& rMEvt )
-{
-    return pEdView->MouseMove( rMEvt );
-}
-
-bool ScEditWindow::MouseButtonDown( const MouseEvent& rMEvt )
-{
-    if ( !HasFocus() )
-        GrabFocus();
-
-    return pEdView->MouseButtonDown( rMEvt );
-}
-
-bool ScEditWindow::MouseButtonUp( const MouseEvent& rMEvt )
-{
-    return pEdView->MouseButtonUp( rMEvt );
 }
 
 bool ScEditWindow::KeyInput( const KeyEvent& rKEvt )
@@ -299,7 +211,7 @@ bool ScEditWindow::KeyInput( const KeyEvent& rKEvt )
     {
         return false;
     }
-    else if ( !pEdView->PostKeyEvent( rKEvt ) )
+    else if ( !m_xEditView->PostKeyEvent( rKEvt ) )
     {
         return false;
     }
@@ -314,8 +226,6 @@ bool ScEditWindow::KeyInput( const KeyEvent& rKEvt )
 
 void ScEditWindow::GetFocus()
 {
-    pEdView->ShowCursor();
-
     assert(m_GetFocusLink);
     m_GetFocusLink(*this);
 
@@ -327,7 +237,7 @@ void ScEditWindow::GetFocus()
     else
         pAcc = nullptr;
 
-    weld::CustomWidgetController::GetFocus();
+    WeldEditView::GetFocus();
 }
 
 void ScEditWindow::LoseFocus()
@@ -339,8 +249,7 @@ void ScEditWindow::LoseFocus()
     }
     else
         pAcc = nullptr;
-    weld::CustomWidgetController::LoseFocus();
-    Invalidate(); // redraw without cursor
+    WeldEditView::LoseFocus();
 }
 
 css::uno::Reference< css::accessibility::XAccessible > ScEditWindow::CreateAccessible()

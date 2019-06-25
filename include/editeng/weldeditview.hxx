@@ -25,17 +25,19 @@ public:
     virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
     virtual ~WeldEditView() override;
 
-    std::unique_ptr<EditEngine> m_xEdEngine;
-    std::unique_ptr<EditView> m_xEdView;
-
 protected:
-    virtual Size GetPreferredSize() const;
+    std::unique_ptr<EditEngine> m_xEditEngine;
+    std::unique_ptr<EditView> m_xEditView;
+
+    virtual void makeEditEngine();
+
     virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
     virtual bool MouseMove(const MouseEvent& rMEvt) override;
     virtual bool MouseButtonDown(const MouseEvent& rMEvt) override;
     virtual bool MouseButtonUp(const MouseEvent& rMEvt) override;
     virtual bool KeyInput(const KeyEvent& rKEvt) override;
     virtual void GetFocus() override;
+    virtual void LoseFocus() override;
     virtual void Resize() override;
 
     virtual void EditViewInvalidate(const tools::Rectangle& rRect) const override
