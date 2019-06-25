@@ -15,12 +15,22 @@
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 
-Size WeldEditView::GetPreferredSize() const { return Size(500, 100); }
+WeldEditView::WeldEditView() {}
+
+void WeldEditView::makeEditEngine()
+{
+    m_xEditEngine.reset(new EditEngine(EditEngine::CreatePool()));
+}
 
 void WeldEditView::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 {
-    Size aSize(GetPreferredSize());
+    Size aSize(pDrawingArea->get_size_request());
+    if (aSize.Width() == -1)
+        aSize.setWidth(500);
+    if (aSize.Height() == -1)
+        aSize.setHeight(100);
     pDrawingArea->set_size_request(aSize.Width(), aSize.Height());
+
     SetOutputSizePixel(aSize);
 
     weld::CustomWidgetController::SetDrawingArea(pDrawingArea);
@@ -39,18 +49,18 @@ void WeldEditView::SetDrawingArea(weld::DrawingArea* pDrawingArea)
     aSize = aOutputSize;
     aSize.setHeight(aSize.Height());
 
-    m_xEdEngine.reset(new EditEngine(EditEngine::CreatePool()));
-    m_xEdEngine->SetPaperSize(aSize);
-    m_xEdEngine->SetRefDevice(&rDevice);
+    makeEditEngine();
+    m_xEditEngine->SetPaperSize(aSize);
+    m_xEditEngine->SetRefDevice(&rDevice);
 
-    m_xEdEngine->SetControlWord(m_xEdEngine->GetControlWord() | EEControlBits::MARKFIELDS);
+    m_xEditEngine->SetControlWord(m_xEditEngine->GetControlWord() | EEControlBits::MARKFIELDS);
 
-    m_xEdView.reset(new EditView(m_xEdEngine.get(), nullptr));
-    m_xEdView->setEditViewCallbacks(this);
-    m_xEdView->SetOutputArea(tools::Rectangle(Point(0, 0), aOutputSize));
+    m_xEditView.reset(new EditView(m_xEditEngine.get(), nullptr));
+    m_xEditView->setEditViewCallbacks(this);
+    m_xEditView->SetOutputArea(tools::Rectangle(Point(0, 0), aOutputSize));
 
-    m_xEdView->SetBackgroundColor(aBgColor);
-    m_xEdEngine->InsertView(m_xEdView.get());
+    m_xEditView->SetBackgroundColor(aBgColor);
+    m_xEditEngine->InsertView(m_xEditView.get());
 
     pDrawingArea->set_cursor(PointerStyle::Text);
 }
@@ -62,8 +72,8 @@ void WeldEditView::Resize()
     OutputDevice& rDevice = GetDrawingArea()->get_ref_device();
     Size aOutputSize(rDevice.PixelToLogic(GetOutputSizePixel()));
     Size aSize(aOutputSize);
-    m_xEdEngine->SetPaperSize(aSize);
-    m_xEdView->SetOutputArea(tools::Rectangle(Point(0, 0), aOutputSize));
+    m_xEditEngine->SetPaperSize(aSize);
+    m_xEditView->SetOutputArea(tools::Rectangle(Point(0, 0), aOutputSize));
     weld::CustomWidgetController::Resize();
 }
 
@@ -77,24 +87,24 @@ void WeldEditView::Paint(vcl::RenderContext& rRenderContext, const tools::Rectan
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
     Color aBgColor = rStyleSettings.GetWindowColor();
 
-    m_xEdView->SetBackgroundColor(aBgColor);
+    m_xEditView->SetBackgroundColor(aBgColor);
 
     rRenderContext.SetBackground(aBgColor);
 
     tools::Rectangle aLogicRect(rRenderContext.PixelToLogic(rRect));
-    m_xEdView->Paint(aLogicRect, &rRenderContext);
+    m_xEditView->Paint(aLogicRect, &rRenderContext);
 
     if (HasFocus())
     {
-        m_xEdView->ShowCursor();
-        vcl::Cursor* pCursor = m_xEdView->GetCursor();
+        m_xEditView->ShowCursor();
+        vcl::Cursor* pCursor = m_xEditView->GetCursor();
         pCursor->DrawToDevice(rRenderContext);
     }
 
     std::vector<tools::Rectangle> aLogicRects;
 
     // get logic selection
-    m_xEdView->GetSelectionRectangles(aLogicRects);
+    m_xEditView->GetSelectionRectangles(aLogicRects);
 
     rRenderContext.SetLineColor();
     rRenderContext.SetFillColor(COL_BLACK);
@@ -106,19 +116,19 @@ void WeldEditView::Paint(vcl::RenderContext& rRenderContext, const tools::Rectan
     rRenderContext.Pop();
 }
 
-bool WeldEditView::MouseMove(const MouseEvent& rMEvt) { return m_xEdView->MouseMove(rMEvt); }
+bool WeldEditView::MouseMove(const MouseEvent& rMEvt) { return m_xEditView->MouseMove(rMEvt); }
 
 bool WeldEditView::MouseButtonDown(const MouseEvent& rMEvt)
 {
     if (!HasFocus())
         GrabFocus();
 
-    return m_xEdView->MouseButtonDown(rMEvt);
+    return m_xEditView->MouseButtonDown(rMEvt);
 }
 
 bool WeldEditView::MouseButtonUp(const MouseEvent& rMEvt)
 {
-    return m_xEdView->MouseButtonUp(rMEvt);
+    return m_xEditView->MouseButtonUp(rMEvt);
 }
 
 bool WeldEditView::KeyInput(const KeyEvent& rKEvt)
@@ -129,7 +139,7 @@ bool WeldEditView::KeyInput(const KeyEvent& rKEvt)
     {
         return false;
     }
-    else if (!m_xEdView->PostKeyEvent(rKEvt))
+    else if (!m_xEditView->PostKeyEvent(rKEvt))
     {
         return false;
     }
@@ -139,9 +149,15 @@ bool WeldEditView::KeyInput(const KeyEvent& rKEvt)
 
 void WeldEditView::GetFocus()
 {
-    m_xEdView->ShowCursor();
+    m_xEditView->ShowCursor();
 
     weld::CustomWidgetController::GetFocus();
+}
+
+void WeldEditView::LoseFocus()
+{
+    weld::CustomWidgetController::LoseFocus();
+    Invalidate(); // redraw without cursor
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
