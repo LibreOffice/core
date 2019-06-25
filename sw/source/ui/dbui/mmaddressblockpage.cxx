@@ -21,6 +21,9 @@
 #include <mailmergewizard.hxx>
 #include <swtypes.hxx>
 #include "addresslistdialog.hxx"
+#include <editeng/eeitem.hxx>
+#include <svl/grabbagitem.hxx>
+#include <svl/itemset.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/txtattr.hxx>
@@ -31,6 +34,7 @@
 #include <vcl/treelistentry.hxx>
 #include <mmconfigitem.hxx>
 #include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>
 #include <com/sun/star/sdbc/SQLException.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/sdb/XColumn.hpp>
@@ -403,7 +407,7 @@ OUString SwSelectAddressBlockDialog::GetCountry() const
 
 IMPL_LINK(SwSelectAddressBlockDialog, DeleteHdl_Impl, weld::Button&, rButton, void)
 {
-    if(m_aAddressBlocks.getLength())
+    if (m_aAddressBlocks.getLength())
     {
         const sal_Int32 nSelected = static_cast<sal_Int32>(m_xPreview->GetSelectedAddress());
         OUString* pAddressBlocks = m_aAddressBlocks.getArray();
@@ -427,16 +431,15 @@ IMPL_LINK(SwSelectAddressBlockDialog, NewCustomizeHdl_Impl, weld::Button&, rButt
     SwCustomizeAddressBlockDialog::DialogType nType = bCustomize ?
         SwCustomizeAddressBlockDialog::ADDRESSBLOCK_EDIT :
         SwCustomizeAddressBlockDialog::ADDRESSBLOCK_NEW;
-    ScopedVclPtr<SwCustomizeAddressBlockDialog> pDlg(
-        VclPtr<SwCustomizeAddressBlockDialog>::Create(
-            nullptr /*TODO*/,m_rConfig,nType));
+    std::unique_ptr<SwCustomizeAddressBlockDialog> xDlg(new SwCustomizeAddressBlockDialog(&rButton,
+            m_rConfig, nType));
     if(bCustomize)
     {
-        pDlg->SetAddress(m_aAddressBlocks[m_xPreview->GetSelectedAddress()]);
+        xDlg->SetAddress(m_aAddressBlocks[m_xPreview->GetSelectedAddress()]);
     }
-    if(RET_OK == pDlg->Execute())
+    if (RET_OK == xDlg->run())
     {
-        const OUString sNew = pDlg->GetAddress();
+        const OUString sNew = xDlg->GetAddress();
         if(bCustomize)
         {
             m_xPreview->ReplaceSelectedAddress(sNew);
@@ -464,160 +467,156 @@ IMPL_LINK_NOARG(SwSelectAddressBlockDialog, IncludeHdl_Impl, weld::ToggleButton&
 #define USER_DATA_TEXT              -3
 #define USER_DATA_NONE              -4
 
+IMPL_LINK(SwCustomizeAddressBlockDialog, TextFilterHdl, OUString&, rTest, bool)
+{
+    rTest = m_aTextFilter.filter(rTest);
+    return true;
+}
+
 SwCustomizeAddressBlockDialog::SwCustomizeAddressBlockDialog(
-        vcl::Window* pParent, SwMailMergeConfigItem& rConfig, DialogType eType)
-    : SfxModalDialog(pParent, "AddressBlockDialog",
-        "modules/swriter/ui/addressblockdialog.ui")
+        weld::Widget* pParent, SwMailMergeConfigItem& rConfig, DialogType eType)
+    : SfxDialogController(pParent, "modules/swriter/ui/addressblockdialog.ui",
+                          "AddressBlockDialog")
     , m_aTextFilter("<>")
     , m_rConfigItem(rConfig)
     , m_eType(eType)
+    , m_xAddressElementsFT(m_xBuilder->weld_label("addressesft"))
+    , m_xAddressElementsLB(m_xBuilder->weld_tree_view("addresses"))
+    , m_xInsertFieldIB(m_xBuilder->weld_button("toaddr"))
+    , m_xRemoveFieldIB(m_xBuilder->weld_button("fromaddr"))
+    , m_xDragFT(m_xBuilder->weld_label("addressdestft"))
+    , m_xUpIB(m_xBuilder->weld_button("up"))
+    , m_xLeftIB(m_xBuilder->weld_button("left"))
+    , m_xRightIB(m_xBuilder->weld_button("right"))
+    , m_xDownIB(m_xBuilder->weld_button("down"))
+    , m_xFieldFT(m_xBuilder->weld_label("customft"))
+    , m_xFieldCB(m_xBuilder->weld_combo_box("custom"))
+    , m_xOK(m_xBuilder->weld_button("ok"))
+    , m_xPreview(new AddressPreview(m_xBuilder->weld_scrolled_window("previewwin")))
+    , m_xPreviewWIN(new weld::CustomWeld(*m_xBuilder, "addrpreview", *m_xPreview))
+    , m_xDragED(new AddressMultiLineEdit(this))
+    , m_xDragWIN(new weld::CustomWeld(*m_xBuilder, "addressdest", *m_xDragED))
 {
-    get(m_pOK, "ok");
-    get(m_pPreviewWIN, "addrpreview");
-    get(m_pFieldCB, "custom");
-    m_pFieldCB->SetTextFilter(&m_aTextFilter);
-    get(m_pFieldFT, "customft");
-    get(m_pDownIB, "down");
-    get(m_pRightIB, "right");
-    get(m_pLeftIB, "left");
-    get(m_pUpIB, "up");
-    get(m_pDragED, "addressdest");
-    m_pDragED->SetAddressDialog(this);
-    get(m_pDragFT, "addressdestft");
-    get(m_pRemoveFieldIB, "fromaddr");
-    get(m_pInsertFieldIB, "toaddr");
-    get(m_pAddressElementsLB, "addresses");
-    m_pAddressElementsLB->set_height_request(16 * m_pAddressElementsLB->GetTextHeight());
-    m_pAddressElementsLB->SetAddressDialog(this);
-    get(m_pAddressElementsFT, "addressesft");
+    m_aSelectionChangedIdle.SetInvokeHandler( LINK( this, SwCustomizeAddressBlockDialog, SelectionChangedIdleHdl ) );
+
+    Size aSize(m_xDragED->GetDrawingArea()->get_size_request());
+    m_xPreview->set_size_request(aSize.Width(), aSize.Height());
+
+    m_xFieldCB->connect_entry_insert_text(LINK(this, SwCustomizeAddressBlockDialog, TextFilterHdl));
+    m_xAddressElementsLB->set_size_request(-1, m_xAddressElementsLB->get_height_rows(16));
 
     if( eType >= GREETING_FEMALE )
     {
-        m_pFieldFT->Show();
-        m_pFieldCB->Show();
-        SvTreeListEntry* pEntry = m_pAddressElementsLB->InsertEntry(SwResId(ST_SALUTATION));
-        pEntry->SetUserData(reinterpret_cast<void*>(sal_Int32(USER_DATA_SALUTATION)) );
-        pEntry = m_pAddressElementsLB->InsertEntry(SwResId(ST_PUNCTUATION));
-        pEntry->SetUserData(reinterpret_cast<void*>(sal_Int32(USER_DATA_PUNCTUATION)) );
-        pEntry = m_pAddressElementsLB->InsertEntry(SwResId(ST_TEXT));
-        pEntry->SetUserData(reinterpret_cast<void*>(sal_Int32(USER_DATA_TEXT))       );
+        m_xFieldFT->show();
+        m_xFieldCB->show();
+        m_xAddressElementsLB->append(OUString::number(USER_DATA_SALUTATION), SwResId(ST_SALUTATION));
+        m_xAddressElementsLB->append(OUString::number(USER_DATA_PUNCTUATION), SwResId(ST_PUNCTUATION));
+        m_xAddressElementsLB->append(OUString::number(USER_DATA_TEXT), SwResId(ST_TEXT));
         for (size_t i = 0; i < SAL_N_ELEMENTS(RA_SALUTATION); ++i)
             m_aSalutations.push_back(SwResId(RA_SALUTATION[i]));
         for (size_t i = 0; i < SAL_N_ELEMENTS(RA_PUNCTUATION); ++i)
             m_aPunctuations.push_back(SwResId(RA_PUNCTUATION[i]));
-        m_pDragED->SetText("            ");
-        SetText(SwResId(eType == GREETING_MALE ? ST_TITLE_MALE : ST_TITLE_FEMALE));
-        m_pAddressElementsFT->SetText(SwResId(ST_SALUTATIONELEMENTS));
-        m_pInsertFieldIB->SetQuickHelpText(SwResId(ST_INSERTSALUTATIONFIELD));
-        m_pRemoveFieldIB->SetQuickHelpText(SwResId(ST_REMOVESALUTATIONFIELD));
-        m_pDragFT->SetText(SwResId(ST_DRAGSALUTATION));
+        m_xDragED->SetText("            ");
+        m_xDialog->set_title(SwResId(eType == GREETING_MALE ? ST_TITLE_MALE : ST_TITLE_FEMALE));
+        m_xAddressElementsFT->set_label(SwResId(ST_SALUTATIONELEMENTS));
+        m_xInsertFieldIB->set_tooltip_text(SwResId(ST_INSERTSALUTATIONFIELD));
+        m_xRemoveFieldIB->set_tooltip_text(SwResId(ST_REMOVESALUTATIONFIELD));
+        m_xDragFT->set_label(SwResId(ST_DRAGSALUTATION));
     }
     else
     {
-        if(eType == ADDRESSBLOCK_EDIT)
-            SetText(SwResId(ST_TITLE_EDIT));
-        m_pDragED->SetText("\n\n\n\n\n");
+        if (eType == ADDRESSBLOCK_EDIT)
+            m_xDialog->set_title(SwResId(ST_TITLE_EDIT));
+        m_xDragED->SetText("\n\n\n\n\n");
         /* Set custom HIDs for swriter/01/mm_newaddblo.xhp */
-        m_pAddressElementsLB->SetHelpId( HID_MM_ADDBLOCK_ELEMENTS );
-        m_pInsertFieldIB->SetHelpId( HID_MM_ADDBLOCK_INSERT );
-        m_pRemoveFieldIB->SetHelpId( HID_MM_ADDBLOCK_REMOVE );
-        m_pDragED->SetHelpId( HID_MM_ADDBLOCK_DRAG );
-        m_pPreviewWIN->SetHelpId( HID_MM_ADDBLOCK_PREVIEW );
-        m_pRightIB->SetHelpId( HID_MM_ADDBLOCK_MOVEBUTTONS );
-        m_pLeftIB->SetHelpId( HID_MM_ADDBLOCK_MOVEBUTTONS );
-        m_pDownIB->SetHelpId( HID_MM_ADDBLOCK_MOVEBUTTONS );
-        m_pUpIB->SetHelpId( HID_MM_ADDBLOCK_MOVEBUTTONS );
+        m_xAddressElementsLB->set_help_id( HID_MM_ADDBLOCK_ELEMENTS );
+        m_xInsertFieldIB->set_help_id( HID_MM_ADDBLOCK_INSERT );
+        m_xRemoveFieldIB->set_help_id( HID_MM_ADDBLOCK_REMOVE );
+        m_xDragWIN->set_help_id( HID_MM_ADDBLOCK_DRAG );
+        m_xPreviewWIN->set_help_id( HID_MM_ADDBLOCK_PREVIEW );
+        m_xRightIB->set_help_id( HID_MM_ADDBLOCK_MOVEBUTTONS );
+        m_xLeftIB->set_help_id( HID_MM_ADDBLOCK_MOVEBUTTONS );
+        m_xDownIB->set_help_id( HID_MM_ADDBLOCK_MOVEBUTTONS );
+        m_xUpIB->set_help_id( HID_MM_ADDBLOCK_MOVEBUTTONS );
     }
 
     const std::vector<std::pair<OUString, int>>& rHeaders = m_rConfigItem.GetDefaultAddressHeaders();
     for (size_t i = 0; i < rHeaders.size(); ++i)
-    {
-        SvTreeListEntry* pEntry = m_pAddressElementsLB->InsertEntry(rHeaders[i].first);
-        pEntry->SetUserData(reinterpret_cast<void*>(static_cast<sal_IntPtr>(i)));
-    }
-    m_pOK->SetClickHdl(LINK(this, SwCustomizeAddressBlockDialog, OKHdl_Impl));
-    m_pAddressElementsLB->SetSelectHdl(LINK(this, SwCustomizeAddressBlockDialog, ListBoxSelectHdl_Impl ));
-    m_pDragED->SetModifyHdl(LINK(this, SwCustomizeAddressBlockDialog, EditModifyHdl_Impl));
-    m_pDragED->SetSelectionChangedHdl( LINK( this, SwCustomizeAddressBlockDialog, SelectionChangedHdl_Impl));
-    Link<Edit&,void> aFieldsLink = LINK(this, SwCustomizeAddressBlockDialog, FieldChangeHdl_Impl);
-    m_pFieldCB->SetModifyHdl(aFieldsLink);
-    m_pFieldCB->SetSelectHdl(LINK(this, SwCustomizeAddressBlockDialog, FieldChangeComboBoxHdl_Impl));
-    Link<Button*,void> aImgButtonHdl = LINK(this, SwCustomizeAddressBlockDialog, ImageButtonHdl_Impl);
-    m_pInsertFieldIB->SetClickHdl(aImgButtonHdl);
-    m_pRemoveFieldIB->SetClickHdl(aImgButtonHdl);
-    m_pUpIB->SetClickHdl(aImgButtonHdl);
-    m_pLeftIB->SetClickHdl(aImgButtonHdl);
-    m_pRightIB->SetClickHdl(aImgButtonHdl);
-    m_pDownIB->SetClickHdl(aImgButtonHdl);
+        m_xAddressElementsLB->append(OUString::number(i), rHeaders[i].first);
+    m_xOK->connect_clicked(LINK(this, SwCustomizeAddressBlockDialog, OKHdl_Impl));
+    m_xAddressElementsLB->connect_changed(LINK(this, SwCustomizeAddressBlockDialog, ListBoxSelectHdl_Impl));
+    if (m_xAddressElementsLB->n_children())
+        m_xAddressElementsLB->select(0);
+    m_xDragED->SetModifyHdl(LINK(this, SwCustomizeAddressBlockDialog, EditModifyHdl_Impl));
+    m_xDragED->SetSelectionChangedHdl( LINK( this, SwCustomizeAddressBlockDialog, SelectionChangedHdl_Impl));
+    m_xFieldCB->connect_changed(LINK(this, SwCustomizeAddressBlockDialog, FieldChangeComboBoxHdl_Impl));
+    Link<weld::Button&,void> aImgButtonHdl = LINK(this, SwCustomizeAddressBlockDialog, ImageButtonHdl_Impl);
+    m_xInsertFieldIB->connect_clicked(aImgButtonHdl);
+    m_xRemoveFieldIB->connect_clicked(aImgButtonHdl);
+    m_xUpIB->connect_clicked(aImgButtonHdl);
+    m_xLeftIB->connect_clicked(aImgButtonHdl);
+    m_xRightIB->connect_clicked(aImgButtonHdl);
+    m_xDownIB->connect_clicked(aImgButtonHdl);
     UpdateImageButtons_Impl();
+}
+
+bool SwCustomizeAddressBlockDialog::SetCursorLogicPosition(const Point& rPosition)
+{
+    return m_xDragED->SetCursorLogicPosition(rPosition);
+}
+
+void SwCustomizeAddressBlockDialog::UpdateFields()
+{
+    m_xDragED->UpdateFields();
 }
 
 SwCustomizeAddressBlockDialog::~SwCustomizeAddressBlockDialog()
 {
-    disposeOnce();
+    m_xDragED->EndDropTarget();
 }
 
-void SwCustomizeAddressBlockDialog::dispose()
+IMPL_LINK_NOARG(SwCustomizeAddressBlockDialog, OKHdl_Impl, weld::Button&, void)
 {
-    m_pAddressElementsFT.clear();
-    m_pAddressElementsLB.clear();
-    m_pInsertFieldIB.clear();
-    m_pRemoveFieldIB.clear();
-    m_pDragFT.clear();
-    m_pDragED.clear();
-    m_pUpIB.clear();
-    m_pLeftIB.clear();
-    m_pRightIB.clear();
-    m_pDownIB.clear();
-    m_pFieldFT.clear();
-    m_pFieldCB.clear();
-    m_pPreviewWIN.clear();
-    m_pOK.clear();
-    SfxModalDialog::dispose();
+    m_xDialog->response(RET_OK);
 }
 
-IMPL_LINK_NOARG(SwCustomizeAddressBlockDialog, OKHdl_Impl, Button*, void)
+IMPL_LINK(SwCustomizeAddressBlockDialog, ListBoxSelectHdl_Impl, weld::TreeView&, rBox, void)
 {
-    EndDialog(RET_OK);
-}
-
-IMPL_LINK(SwCustomizeAddressBlockDialog, ListBoxSelectHdl_Impl, SvTreeListBox*, pBox, void)
-{
-    sal_Int32 nUserData = static_cast<sal_Int32>(reinterpret_cast<sal_IntPtr>(pBox->FirstSelected()->GetUserData()));
+    sal_Int32 nUserData = rBox.get_selected_id().toInt32();
     // Check if the selected entry is already in the address and then forbid inserting
-    m_pInsertFieldIB->Enable(nUserData >= 0 || !HasItem_Impl(nUserData));
+    m_xInsertFieldIB->set_sensitive(nUserData >= 0 || !HasItem(nUserData));
 }
 
-IMPL_LINK_NOARG(SwCustomizeAddressBlockDialog, EditModifyHdl_Impl, Edit&, void)
+IMPL_LINK_NOARG(SwCustomizeAddressBlockDialog, EditModifyHdl_Impl, AddressMultiLineEdit&, void)
 {
-    m_pPreviewWIN->SetAddress(SwAddressPreview::FillData(GetAddress(), m_rConfigItem));
+    m_xPreview->SetAddress(SwAddressPreview::FillData(GetAddress(), m_rConfigItem));
     UpdateImageButtons_Impl();
 }
 
-IMPL_LINK(SwCustomizeAddressBlockDialog, ImageButtonHdl_Impl, Button*, pButton, void)
+IMPL_LINK(SwCustomizeAddressBlockDialog, ImageButtonHdl_Impl, weld::Button&, rButton, void)
 {
-    if (m_pInsertFieldIB == pButton)
+    if (m_xInsertFieldIB.get() == &rButton)
     {
-        SvTreeListEntry* pEntry = m_pAddressElementsLB->GetCurEntry();
-        if(pEntry)
+        int nEntry = m_xAddressElementsLB->get_selected_index();
+        if (nEntry != -1)
         {
-            m_pDragED->InsertNewEntry("<" + m_pAddressElementsLB->GetEntryText(pEntry) + ">");
+            m_xDragED->InsertNewEntry("<" + m_xAddressElementsLB->get_text(nEntry) + ">");
         }
     }
-    else if (m_pRemoveFieldIB == pButton)
+    else if (m_xRemoveFieldIB.get() == &rButton)
     {
-        m_pDragED->RemoveCurrentEntry();
+        m_xDragED->RemoveCurrentEntry();
     }
     else
     {
         MoveItemFlags nMove = MoveItemFlags::Down;
-        if (m_pUpIB == pButton)
+        if (m_xUpIB.get() == &rButton)
             nMove = MoveItemFlags::Up;
-        else if (m_pLeftIB == pButton)
+        else if (m_xLeftIB.get() == &rButton)
             nMove = MoveItemFlags::Left;
-        else if (m_pRightIB == pButton)
+        else if (m_xRightIB.get() == &rButton)
             nMove = MoveItemFlags::Right;
-        m_pDragED->MoveCurrentItem(nMove);
+        m_xDragED->MoveCurrentItem(nMove);
     }
     UpdateImageButtons_Impl();
 }
@@ -625,53 +624,52 @@ IMPL_LINK(SwCustomizeAddressBlockDialog, ImageButtonHdl_Impl, Button*, pButton, 
 sal_Int32 SwCustomizeAddressBlockDialog::GetSelectedItem_Impl()
 {
     sal_Int32 nRet = USER_DATA_NONE;
-    const OUString sSelected = m_pDragED->GetCurrentItem();
+    const OUString sSelected = m_xDragED->GetCurrentItem();
     if(!sSelected.isEmpty())
-        for(sal_uLong i = 0; i < m_pAddressElementsLB->GetEntryCount();  ++i)
+    {
+        for (int i = 0, nEntryCount = m_xAddressElementsLB->n_children(); i < nEntryCount; ++i)
         {
-            SvTreeListEntry* pEntry = m_pAddressElementsLB->GetEntry(i);
-            const OUString sEntry = m_pAddressElementsLB->GetEntryText(pEntry);
+            const OUString sEntry = m_xAddressElementsLB->get_text(i);
             if( sEntry == sSelected.copy( 1, sSelected.getLength() - 2 ) )
             {
-                nRet = static_cast<sal_Int32>(reinterpret_cast<sal_IntPtr>(pEntry->GetUserData()));
+                nRet = m_xAddressElementsLB->get_id(i).toInt32();
                 break;
             }
         }
+    }
     return nRet;
 }
 
-bool   SwCustomizeAddressBlockDialog::HasItem_Impl(sal_Int32 nUserData)
+bool SwCustomizeAddressBlockDialog::HasItem(sal_Int32 nUserData)
 {
     //get the entry from the ListBox
     OUString sEntry;
-    for(sal_uLong i = 0; i < m_pAddressElementsLB->GetEntryCount();  ++i)
+    for (int i = 0, nEntryCount = m_xAddressElementsLB->n_children(); i < nEntryCount; ++i)
     {
-        SvTreeListEntry* pEntry = m_pAddressElementsLB->GetEntry(i);
-        if(static_cast<sal_Int32>(reinterpret_cast<sal_IntPtr>(pEntry->GetUserData())) == nUserData)
+        if (m_xAddressElementsLB->get_id(i).toInt32() == nUserData)
         {
-            sEntry = m_pAddressElementsLB->GetEntryText(pEntry);
+            sEntry = m_xAddressElementsLB->get_text(i);
             break;
         }
     }
     //search for this entry in the content
-    return m_pDragED->GetText().indexOf("<" + sEntry + ">") >= 0;
+    return m_xDragED->GetText().indexOf("<" + sEntry + ">") >= 0;
 }
 
-IMPL_LINK(SwCustomizeAddressBlockDialog, SelectionChangedHdl_Impl, AddressMultiLineEdit&, rEdit, void)
+IMPL_LINK_NOARG(SwCustomizeAddressBlockDialog, SelectionChangedIdleHdl, Timer*, void)
 {
     // called in case the selection of the edit field changes.
     // determine selection - if it's one of the editable fields then
     // enable the related ComboBox and fill it
-    static bool bOnEntry = false;
-    if(bOnEntry)
-        return;
 
-    bOnEntry = true;
+    // don't trigger outself again
+    m_xDragED->SetSelectionChangedHdl(Link<bool, void>());
+
     sal_Int32 nSelected = GetSelectedItem_Impl();
-    if(USER_DATA_NONE != nSelected)
-        rEdit.SelectCurrentItem();
+    if (USER_DATA_NONE != nSelected)
+        m_xDragED->SelectCurrentItem();
 
-    if(m_pFieldCB->IsVisible() && (USER_DATA_NONE != nSelected) && (nSelected < 0))
+    if(m_xFieldCB->get_visible() && (USER_DATA_NONE != nSelected) && (nSelected < 0))
     {
         //search in ListBox if it's one of the first entries
         OUString sSelect;
@@ -689,34 +687,41 @@ IMPL_LINK(SwCustomizeAddressBlockDialog, SelectionChangedHdl_Impl, AddressMultiL
                 sSelect =  m_sCurrentText;
                 break;
         }
-        m_pFieldCB->Clear();
+        m_xFieldCB->clear();
         if(pVector) {
             for (const auto& rItem : *pVector)
-                m_pFieldCB->InsertEntry(rItem);
+                m_xFieldCB->append_text(rItem);
         }
-        m_pFieldCB->SetText(sSelect);
-        m_pFieldCB->Enable();
-        m_pFieldFT->Enable();
+        m_xFieldCB->set_entry_text(sSelect);
+        m_xFieldCB->set_sensitive(true);
+        m_xFieldFT->set_sensitive(true);
     }
     else
     {
-        m_pFieldCB->Enable(false);
-        m_pFieldFT->Enable(false);
+        m_xFieldCB->set_sensitive(false);
+        m_xFieldFT->set_sensitive(false);
     }
 
     UpdateImageButtons_Impl();
-    bOnEntry = false;
+    m_xDragED->SetSelectionChangedHdl( LINK( this, SwCustomizeAddressBlockDialog, SelectionChangedHdl_Impl));
 }
 
-IMPL_LINK_NOARG(SwCustomizeAddressBlockDialog, FieldChangeComboBoxHdl_Impl, ComboBox&, void)
+IMPL_LINK(SwCustomizeAddressBlockDialog, SelectionChangedHdl_Impl, bool, bIdle, void)
 {
-    FieldChangeHdl_Impl(*m_pFieldCB);
+    if (bIdle)
+        m_aSelectionChangedIdle.Start();
+    else
+    {
+        m_aSelectionChangedIdle.Stop();
+        SelectionChangedIdleHdl(nullptr);
+    }
 }
-IMPL_LINK_NOARG(SwCustomizeAddressBlockDialog, FieldChangeHdl_Impl, Edit&, void)
+
+IMPL_LINK_NOARG(SwCustomizeAddressBlockDialog, FieldChangeComboBoxHdl_Impl, weld::ComboBox&, void)
 {
     //changing the field content changes the related members, too
     sal_Int32 nSelected = GetSelectedItem_Impl();
-    const OUString sContent = m_pFieldCB->GetText();
+    const OUString sContent = m_xFieldCB->get_active_text();
     switch(nSelected) {
         case USER_DATA_SALUTATION:
             m_sCurrentSalutation = sContent;
@@ -729,41 +734,40 @@ IMPL_LINK_NOARG(SwCustomizeAddressBlockDialog, FieldChangeHdl_Impl, Edit&, void)
             break;
     }
     UpdateImageButtons_Impl();
-    m_pPreviewWIN->SetAddress(GetAddress());
-    m_pDragED->Modify();
+    m_xPreview->SetAddress(GetAddress());
+    EditModifyHdl_Impl(*m_xDragED);
 }
 
 void SwCustomizeAddressBlockDialog::UpdateImageButtons_Impl()
 {
-    MoveItemFlags nMove = m_pDragED->IsCurrentItemMoveable();
-    m_pUpIB->Enable( bool(nMove & MoveItemFlags::Up) );
-    m_pLeftIB->Enable( bool(nMove & MoveItemFlags::Left) );
-    m_pRightIB->Enable( bool(nMove & MoveItemFlags::Right) );
-    m_pDownIB->Enable( bool(nMove & MoveItemFlags::Down) );
-    m_pRemoveFieldIB->Enable(m_pDragED->HasCurrentItem());
-    SvTreeListEntry* pEntry = m_pAddressElementsLB->GetCurEntry();
-    m_pInsertFieldIB->Enable( pEntry &&
-            (0 < static_cast<sal_Int32>(reinterpret_cast<sal_IntPtr>(pEntry->GetUserData())) || !m_pFieldCB->GetText().isEmpty()));
+    MoveItemFlags nMove = m_xDragED->IsCurrentItemMoveable();
+    m_xUpIB->set_sensitive( bool(nMove & MoveItemFlags::Up) );
+    m_xLeftIB->set_sensitive( bool(nMove & MoveItemFlags::Left) );
+    m_xRightIB->set_sensitive( bool(nMove & MoveItemFlags::Right) );
+    m_xDownIB->set_sensitive( bool(nMove & MoveItemFlags::Down) );
+    m_xRemoveFieldIB->set_sensitive(m_xDragED->HasCurrentItem());
+    int nEntry = m_xAddressElementsLB->get_selected_index();
+    m_xInsertFieldIB->set_sensitive( nEntry != -1 &&
+            (m_xAddressElementsLB->get_id(nEntry).toInt32() >= 0 || !m_xFieldCB->get_active_text().isEmpty()));
 }
 
 void SwCustomizeAddressBlockDialog::SetAddress(const OUString& rAddress)
 {
-    m_pDragED->SetText( rAddress );
+    m_xDragED->SetText(rAddress);
     UpdateImageButtons_Impl();
-    m_pDragED->Modify();
+    EditModifyHdl_Impl(*m_xDragED);
 }
 
 OUString SwCustomizeAddressBlockDialog::GetAddress()
 {
-    OUString sAddress(m_pDragED->GetAddress());
+    OUString sAddress(m_xDragED->GetAddress());
     //remove placeholders by the actual content
-    if(m_pFieldFT->IsVisible())
+    if (m_xFieldFT->get_visible())
     {
-        for(sal_uLong i = 0; i < m_pAddressElementsLB->GetEntryCount();  ++i)
+        for (int i = 0, nEntryCount = m_xAddressElementsLB->n_children(); i < nEntryCount; ++i)
         {
-            SvTreeListEntry* pEntry = m_pAddressElementsLB->GetEntry(i);
-            const OUString sEntry = "<" + m_pAddressElementsLB->GetEntryText(pEntry) + ">";
-            sal_Int32 nUserData = static_cast<sal_Int32>(reinterpret_cast<sal_IntPtr>(pEntry->GetUserData()));
+            const OUString sEntry = "<" + m_xAddressElementsLB->get_text(i) + ">";
+            sal_Int32 nUserData = m_xAddressElementsLB->get_id(i).toInt32();
             switch(nUserData)
             {
                 case USER_DATA_SALUTATION:
@@ -1055,141 +1059,90 @@ void SwAssignFieldsDialog::ConnectSizeGroups(int nLabelWidth, int nComboBoxWidth
     m_xPreviewTitle->set_size_request(nPreviewWidth, -1);
 }
 
-DDListBox::DDListBox(vcl::Window* pParent, WinBits nStyle)
-    : SvTreeListBox(pParent, nStyle)
-    , m_pParentDialog(nullptr)
+namespace
 {
-    SetStyle( GetStyle() | /*WB_HASBUTTONS|WB_HASBUTTONSATROOT|*/
-                            WB_CLIPCHILDREN );
-    SetSelectionMode( SelectionMode::Single );
-    SetDragDropMode( DragDropMode::CTRL_COPY );
-    EnableAsyncDrag(true);
-    // expand selection to the complete width of the ListBox
-    SetHighlightRange();
-    Show();
-
-}
-
-DDListBox::~DDListBox()
-{
-    disposeOnce();
-}
-
-void DDListBox::dispose()
-{
-    m_pParentDialog.clear();
-    SvTreeListBox::dispose();
-}
-
-VCL_BUILDER_FACTORY_CONSTRUCTOR(DDListBox, WB_TABSTOP)
-
-void DDListBox::SetAddressDialog(SwCustomizeAddressBlockDialog *pParent)
-{
-    m_pParentDialog = pParent;
-}
-
-void  DDListBox::StartDrag( sal_Int8 /*nAction*/, const Point& /*rPosPixel*/ )
-{
-    SvTreeListEntry* pEntry = GetCurEntry();
-    if(pEntry)
+    const EECharAttrib* FindCharAttrib(int nStartPosition, std::vector<EECharAttrib>& rAttribList)
     {
-        ReleaseMouse();
-
-        rtl::Reference<TransferDataContainer> pContainer = new TransferDataContainer;
-
-        sal_Int32 nUserData = static_cast<sal_Int32>(reinterpret_cast<sal_IntPtr>(pEntry->GetUserData()));
-        //special entries can only be once in the address / greeting
-        if(nUserData >= 0 || !m_pParentDialog->HasItem_Impl(nUserData))
+        for (auto it = rAttribList.rbegin(); it != rAttribList.rend(); ++it)
         {
-            pContainer->CopyString( "<" + GetEntryText(pEntry) + ">" );
-            pContainer->StartDrag( this, DND_ACTION_COPY, GetDragFinishedHdl() );
+            const auto& rTextAtr = *it;
+            if (rTextAtr.pAttr->Which() != EE_CHAR_GRABBAG)
+                continue;
+            if (rTextAtr.nStart <= nStartPosition && rTextAtr.nEnd >= nStartPosition)
+            {
+                return &rTextAtr;
+            }
         }
+
+        return nullptr;
     }
 }
 
-AddressMultiLineEdit::AddressMultiLineEdit(vcl::Window* pParent, WinBits nBits)
-    : VclMultiLineEdit(pParent, nBits)
-    , m_pParentDialog(nullptr)
+AddressMultiLineEdit::AddressMultiLineEdit(SwCustomizeAddressBlockDialog *pParent)
+    : m_pParentDialog(pParent)
 {
-    GetTextView()->SupportProtectAttribute(true);
-    StartListening(*GetTextEngine());
-    EnableFocusSelectionHide(false);
+}
+
+void AddressMultiLineEdit::EndDropTarget()
+{
+    if (m_xDropTarget.is())
+    {
+        auto xRealDropTarget = GetDrawingArea()->get_drop_target();
+        uno::Reference<css::datatransfer::dnd::XDropTargetListener> xListener(m_xDropTarget, uno::UNO_QUERY);
+        xRealDropTarget->removeDropTargetListener(xListener);
+        m_xDropTarget.clear();
+    }
 }
 
 AddressMultiLineEdit::~AddressMultiLineEdit()
 {
-    disposeOnce();
+    assert(!m_xDropTarget.is());
 }
 
-void AddressMultiLineEdit::dispose()
+void AddressMultiLineEdit::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 {
-    EndListening(*GetTextEngine());
-    m_pParentDialog.clear();
-    VclMultiLineEdit::dispose();
+    Size aSize(pDrawingArea->get_ref_device().LogicToPixel(Size(160, 60), MapMode(MapUnit::MapAppFont)));
+    pDrawingArea->set_size_request(aSize.Width(), aSize.Height());
+    WeldEditView::SetDrawingArea(pDrawingArea);
 }
 
-
-Size AddressMultiLineEdit::GetOptimalSize() const
+bool AddressMultiLineEdit::KeyInput(const KeyEvent& rKEvt)
 {
-    return LogicToPixel(Size(160, 60), MapMode(MapUnit::MapAppFont));
+    if (rKEvt.GetKeyCode().GetCode() == KEY_ESCAPE)
+        return false; // we want default esc behaviour
+    if (rKEvt.GetCharCode())
+        return true; // handled
+    return WeldEditView::KeyInput(rKEvt);
 }
 
-
-VCL_BUILDER_FACTORY_CONSTRUCTOR(AddressMultiLineEdit, WB_LEFT|WB_TABSTOP)
-
-void AddressMultiLineEdit::SetAddressDialog(SwCustomizeAddressBlockDialog *pParent)
+bool AddressMultiLineEdit::MouseButtonDown(const MouseEvent& rMEvt)
 {
-    m_pParentDialog = pParent;
+    if (rMEvt.GetClicks() >= 2)
+        return true; // handled
+    return WeldEditView::MouseButtonDown(rMEvt);
 }
 
-void AddressMultiLineEdit::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& rHint)
+OUString AddressMultiLineEdit::GetText() const
 {
-    if (m_aSelectionLink.IsSet() && dynamic_cast<const TextHint*>(&rHint))
-    {
-        const TextHint& rTextHint = static_cast<const TextHint&>(rHint);
-        if (rTextHint.GetId() == SfxHintId::TextViewSelectionChanged ||
-            rTextHint.GetId() == SfxHintId::TextViewCaretChanged)
-        {
-            m_aSelectionLink.Call(*this);
-        }
-    }
-}
-
-bool AddressMultiLineEdit::PreNotify( NotifyEvent& rNEvt )
-{
-    bool bHandled = false;
-    if( MouseNotifyEvent::KEYINPUT == rNEvt.GetType()  &&
-        rNEvt.GetKeyEvent()->GetCharCode())
-    {
-        bHandled = true;
-    }
-    else if(MouseNotifyEvent::MOUSEBUTTONDOWN == rNEvt.GetType()) {
-        const MouseEvent *pMEvt = rNEvt.GetMouseEvent();
-        if(pMEvt->GetClicks() >= 2)
-            bHandled = true;
-    }
-    if(!bHandled)
-        bHandled = VclMultiLineEdit::PreNotify( rNEvt );
-    return bHandled;
-
+    return m_xEditEngine->GetText();
 }
 
 void AddressMultiLineEdit::SetText( const OUString& rStr )
 {
-    VclMultiLineEdit::SetText(rStr);
+    m_xEditEngine->SetText(rStr);
     //set attributes to all address tokens
 
-    ExtTextEngine* pTextEngine = GetTextEngine();
-    TextAttribProtect aProtectAttr;
-    const sal_uInt32 nParaCount = pTextEngine->GetParagraphCount();
+    sal_Int32 nSequence(0);
+    SfxGrabBagItem aProtectAttr(EE_CHAR_GRABBAG);
+    const sal_uInt32 nParaCount = m_xEditEngine->GetParagraphCount();
     for(sal_uInt32 nPara = 0; nPara < nParaCount; ++nPara)
     {
         sal_Int32 nIndex = 0;
-        const OUString sPara = pTextEngine->GetText( nPara );
-        if(!sPara.isEmpty() && !sPara.endsWith(" "))
+        const OUString sPara = m_xEditEngine->GetText( nPara );
+        if (!sPara.isEmpty() && !sPara.endsWith(" "))
         {
-            TextPaM aPaM(nPara, sPara.getLength());
-            pTextEngine->ReplaceText(TextSelection( aPaM ), " ");
+            ESelection aPaM(nPara, sPara.getLength(), nPara, sPara.getLength());
+            m_xEditEngine->QuickInsertText(" ", aPaM);
         }
         for(;;)
         {
@@ -1200,7 +1153,12 @@ void AddressMultiLineEdit::SetText( const OUString& rStr )
             if (nEnd < 0)
                 break;
             nIndex = nEnd;
-            pTextEngine->SetAttrib( aProtectAttr, nPara, nStart, nEnd + 1, false );
+            SfxItemSet aSet(m_xEditEngine->GetEmptyItemSet());
+            // make each one different, so they are not collapsed together
+            // as one attribute
+            aProtectAttr.GetGrabBag()["Index"] <<= nSequence++;
+            aSet.Put(aProtectAttr);
+            m_xEditEngine->QuickSetAttribs(aSet, ESelection(nPara, nStart, nPara, nEnd + 1));
         }
 
     }
@@ -1208,99 +1166,107 @@ void AddressMultiLineEdit::SetText( const OUString& rStr )
     if(m_pParentDialog->m_eType == SwCustomizeAddressBlockDialog::ADDRESSBLOCK_NEW ||
             m_pParentDialog->m_eType == SwCustomizeAddressBlockDialog::ADDRESSBLOCK_EDIT)
     {
-        sal_Int32 nLastLen = pTextEngine->GetText(nParaCount - 1).getLength();
+        sal_Int32 nLastLen = m_xEditEngine->GetText(nParaCount - 1).getLength();
         if(nLastLen)
         {
-            TextPaM aPaM(nParaCount ? nParaCount - 1 : 0, nLastLen);
-            pTextEngine->ReplaceText(TextSelection( aPaM ), "\n \n ");
+            int nPara = nParaCount ? nParaCount - 1 : 0;
+            ESelection aPaM(nPara, nLastLen, nPara, nLastLen);
+            m_xEditEngine->QuickInsertText("\n \n ", aPaM);
         }
     }
+
+    m_xEditView->SetSelection(ESelection(0, 0, 0, 0));
 }
 
 // Insert the new entry in front of the entry at the beginning of the selection
 void AddressMultiLineEdit::InsertNewEntry( const OUString& rStr )
 {
     // insert new entry after current selected one.
-    TextView* pTextView = GetTextView();
-    const TextSelection& rSelection = pTextView->GetSelection();
-    const sal_uInt32 nPara = rSelection.GetStart().GetPara();
-    sal_Int32 nIndex = rSelection.GetEnd().GetIndex();
-    ExtTextEngine *pTextEngine = GetTextEngine();
-    const TextCharAttrib *pAttrib;
-    if(nullptr != (pAttrib = pTextEngine->FindCharAttrib( rSelection.GetStart(), TEXTATTR_PROTECTED )))
-        nIndex = pAttrib->GetEnd();
+    ESelection aSelection = m_xEditView->GetSelection();
+    const sal_uInt32 nPara = aSelection.nStartPara;
+
+    std::vector<EECharAttrib> aAttribList;
+    m_xEditEngine->GetCharAttribs(nPara, aAttribList);
+
+    sal_Int32 nIndex = aSelection.nEndPara;
+    const EECharAttrib* pAttrib;
+    if(nullptr != (pAttrib = FindCharAttrib(aSelection.nStartPos, aAttribList)))
+        nIndex = pAttrib->nEnd;
     InsertNewEntryAtPosition( rStr, nPara, nIndex );
 
     // select the new entry
-    pAttrib = pTextEngine->FindCharAttrib(TextPaM(nPara, nIndex),TEXTATTR_PROTECTED);
-    const sal_Int32 nEnd = pAttrib ? pAttrib->GetEnd() : nIndex;
-    TextSelection aEntrySel(TextPaM(nPara, nIndex), TextPaM(nPara, nEnd));
-    pTextView->SetSelection(aEntrySel);
+    m_xEditEngine->GetCharAttribs(nPara, aAttribList);
+    pAttrib = FindCharAttrib(nIndex, aAttribList);
+    const sal_Int32 nEnd = pAttrib ? pAttrib->nEnd : nIndex;
+    ESelection aEntrySel(nPara, nIndex, nPara, nEnd);
+    m_xEditView->SetSelection(aEntrySel);
     Invalidate();
-    Modify();
+    m_aModifyLink.Call(*this);
 }
 
 void AddressMultiLineEdit::InsertNewEntryAtPosition( const OUString& rStr, sal_uLong nPara, sal_uInt16 nIndex )
 {
-    ExtTextEngine* pTextEngine = GetTextEngine();
-    TextPaM aInsertPos( nPara, nIndex );
-
-    pTextEngine->ReplaceText( aInsertPos, rStr );
+    ESelection aInsertPos(nPara, nIndex, nPara, nIndex);
+    m_xEditEngine->QuickInsertText(rStr, aInsertPos);
 
     //restore the attributes
     SetText( GetAddress() );
+
     //select the newly inserted/moved element
-    TextSelection aEntrySel(aInsertPos);
-    TextView* pTextView = GetTextView();
-    pTextView->SetSelection(aEntrySel);
-    m_aSelectionLink.Call(*this);
+    m_xEditView->SetSelection(aInsertPos);
+    m_aSelectionLink.Call(false);
 }
 
 void AddressMultiLineEdit::RemoveCurrentEntry()
 {
-    ExtTextEngine* pTextEngine = GetTextEngine();
-    TextView* pTextView = GetTextView();
-    const TextSelection& rSelection = pTextView->GetSelection();
-    const TextCharAttrib* pBeginAttrib = pTextEngine->FindCharAttrib( rSelection.GetStart(), TEXTATTR_PROTECTED );
+    ESelection aSelection = m_xEditView->GetSelection();
+
+    std::vector<EECharAttrib> aAttribList;
+    m_xEditEngine->GetCharAttribs(aSelection.nStartPara, aAttribList);
+
+    const EECharAttrib* pBeginAttrib = FindCharAttrib(aSelection.nStartPos, aAttribList);
     if(pBeginAttrib &&
-            (pBeginAttrib->GetStart() <= rSelection.GetStart().GetIndex()
-                            && pBeginAttrib->GetEnd() >= rSelection.GetEnd().GetIndex()))
+            (pBeginAttrib->nStart <= aSelection.nStartPos
+                            && pBeginAttrib->nEnd >= aSelection.nEndPos))
     {
-        const sal_uInt32 nPara = rSelection.GetStart().GetPara();
-        TextSelection aEntrySel(TextPaM( nPara, pBeginAttrib->GetStart()), TextPaM(nPara, pBeginAttrib->GetEnd()));
-        pTextEngine->ReplaceText(aEntrySel, OUString());
+        const sal_uInt32 nPara = aSelection.nStartPara;
+        ESelection aEntrySel(nPara, pBeginAttrib->nStart, nPara, pBeginAttrib->nEnd);
+        m_xEditEngine->QuickInsertText(OUString(), aEntrySel);
         //restore the attributes
         SetText( GetAddress() );
-        Modify();
+        m_aModifyLink.Call(*this);
     }
 }
 
 void AddressMultiLineEdit::MoveCurrentItem(MoveItemFlags nMove)
 {
-    ExtTextEngine* pTextEngine = GetTextEngine();
-    TextView* pTextView = GetTextView();
-    const TextSelection& rSelection = pTextView->GetSelection();
-    const TextCharAttrib* pBeginAttrib = pTextEngine->FindCharAttrib( rSelection.GetStart(), TEXTATTR_PROTECTED );
+    ESelection aSelection = m_xEditView->GetSelection();
+
+    std::vector<EECharAttrib> aAttribList;
+    m_xEditEngine->GetCharAttribs(aSelection.nStartPara, aAttribList);
+
+    const EECharAttrib* pBeginAttrib = FindCharAttrib(aSelection.nStartPos, aAttribList);
     if(!pBeginAttrib ||
-       !(pBeginAttrib->GetStart() <= rSelection.GetStart().GetIndex() &&
-         pBeginAttrib->GetEnd() >= rSelection.GetEnd().GetIndex()))
+       !(pBeginAttrib->nStart <= aSelection.nStartPos &&
+         pBeginAttrib->nEnd >= aSelection.nEndPos))
         return;
 
     //current item has been found
-    sal_uInt32 nPara = rSelection.GetStart().GetPara();
-    sal_Int32 nIndex = pBeginAttrib->GetStart();
-    TextSelection aEntrySel(TextPaM( nPara, pBeginAttrib->GetStart()), TextPaM(nPara, pBeginAttrib->GetEnd()));
-    const OUString sCurrentItem = pTextEngine->GetText(aEntrySel);
-    pTextEngine->RemoveAttrib( nPara, *pBeginAttrib );
-    pTextEngine->ReplaceText(aEntrySel, OUString());
-    switch(nMove)
+    sal_Int32 nPara = aSelection.nStartPara;
+    sal_Int32 nIndex = pBeginAttrib->nStart;
+    ESelection aEntrySel(nPara, pBeginAttrib->nStart, nPara, pBeginAttrib->nEnd);
+    const OUString sCurrentItem = m_xEditEngine->GetText(aEntrySel);
+    m_xEditEngine->RemoveAttribs(aEntrySel, false, EE_CHAR_GRABBAG);
+    m_xEditEngine->QuickInsertText(OUString(), aEntrySel);
+    m_xEditEngine->GetCharAttribs(nPara, aAttribList);
+    switch (nMove)
     {
         case MoveItemFlags::Left :
             if(nIndex)
             {
                 //go left to find a predecessor or simple text
                 --nIndex;
-                const OUString sPara = pTextEngine->GetText( nPara );
+                const OUString sPara = m_xEditEngine->GetText( nPara );
                 sal_Int32 nSearchIndex = sPara.lastIndexOf( '>', nIndex+1 );
                 if( nSearchIndex != -1 && nSearchIndex == nIndex )
                 {
@@ -1314,10 +1280,10 @@ void AddressMultiLineEdit::MoveCurrentItem(MoveItemFlags nMove)
         {
             //go right to find a successor or simple text
             ++nIndex;
-            const TextCharAttrib* pEndAttrib = pTextEngine->FindCharAttrib( rSelection.GetStart(), TEXTATTR_PROTECTED );
-            if(pEndAttrib && pEndAttrib->GetEnd() >= nIndex)
+            const EECharAttrib* pEndAttrib = FindCharAttrib(aSelection.nStartPos, aAttribList);
+            if(pEndAttrib && pEndAttrib->nEnd >= nIndex)
             {
-                nIndex = pEndAttrib->GetEnd();
+                nIndex = pEndAttrib->nEnd;
             }
         }
         break;
@@ -1332,40 +1298,43 @@ void AddressMultiLineEdit::MoveCurrentItem(MoveItemFlags nMove)
         default: break;
     }
     //add a new paragraph if there is none yet
-    if(nPara >= pTextEngine->GetParagraphCount())
+    if (nPara >= m_xEditEngine->GetParagraphCount())
     {
-
-        TextPaM aTemp(nPara - 1, pTextEngine->GetTextLen( nPara - 1 ));
-        pTextEngine->ReplaceText(aTemp, "\n");
+        auto nInsPara = nPara - 1;
+        auto nInsPos = m_xEditEngine->GetTextLen( nPara - 1 );
+        ESelection aTemp(nInsPara, nInsPos, nInsPara, nInsPos);
+        m_xEditEngine->QuickInsertText("\n", aTemp);
     }
     InsertNewEntryAtPosition( sCurrentItem, nPara, nIndex );
 
     // select the new entry [#i40817]
-    const TextCharAttrib *pAttrib = pTextEngine->FindCharAttrib(TextPaM(nPara, nIndex),TEXTATTR_PROTECTED);
+    m_xEditEngine->GetCharAttribs(nPara, aAttribList);
+    const EECharAttrib* pAttrib = FindCharAttrib(nIndex, aAttribList);
     if (pAttrib)
-        aEntrySel = TextSelection(TextPaM(nPara, nIndex), TextPaM(nPara, pAttrib->GetEnd()));
-    pTextView->SetSelection(aEntrySel);
+        aEntrySel = ESelection(nPara, nIndex, nPara, pAttrib->nEnd);
+    m_xEditView->SetSelection(aEntrySel);
     Invalidate();
-    Modify();
-
+    m_aModifyLink.Call(*this);
 }
 
-MoveItemFlags  AddressMultiLineEdit::IsCurrentItemMoveable()
+MoveItemFlags AddressMultiLineEdit::IsCurrentItemMoveable()
 {
     MoveItemFlags nRet = MoveItemFlags::NONE;
-    ExtTextEngine* pTextEngine = GetTextEngine();
-    TextView* pTextView = GetTextView();
-    const TextSelection& rSelection = pTextView->GetSelection();
-    const TextCharAttrib* pBeginAttrib = pTextEngine->FindCharAttrib( rSelection.GetStart(), TEXTATTR_PROTECTED );
-    if(pBeginAttrib &&
-            (pBeginAttrib->GetStart() <= rSelection.GetStart().GetIndex()
-                            && pBeginAttrib->GetEnd() >= rSelection.GetEnd().GetIndex()))
+    ESelection aSelection = m_xEditView->GetSelection();
+
+    std::vector<EECharAttrib> aAttribList;
+    m_xEditEngine->GetCharAttribs(aSelection.nStartPara, aAttribList);
+
+    const EECharAttrib* pBeginAttrib = FindCharAttrib(aSelection.nStartPos, aAttribList);
+    if (pBeginAttrib &&
+            (pBeginAttrib->nStart <= aSelection.nStartPos
+                            && pBeginAttrib->nEnd >= aSelection.nEndPos))
     {
-        if(pBeginAttrib->GetStart())
+        if (pBeginAttrib->nStart)
             nRet |= MoveItemFlags::Left;
         //if there is an entry it can always be move to the right and down
         nRet |= MoveItemFlags::Right | MoveItemFlags::Down;
-        if(rSelection.GetStart().GetPara() > 0)
+        if (aSelection.nStartPara > 0)
             nRet |= MoveItemFlags::Up;
     }
     return nRet;
@@ -1373,45 +1342,51 @@ MoveItemFlags  AddressMultiLineEdit::IsCurrentItemMoveable()
 
 bool AddressMultiLineEdit::HasCurrentItem()
 {
-    ExtTextEngine* pTextEngine = GetTextEngine();
-    TextView* pTextView = GetTextView();
-    const TextSelection& rSelection = pTextView->GetSelection();
-    const TextCharAttrib* pBeginAttrib = pTextEngine->FindCharAttrib( rSelection.GetStart(), TEXTATTR_PROTECTED );
+    ESelection aSelection = m_xEditView->GetSelection();
+
+    std::vector<EECharAttrib> aAttribList;
+    m_xEditEngine->GetCharAttribs(aSelection.nStartPara, aAttribList);
+
+    const EECharAttrib* pBeginAttrib = FindCharAttrib(aSelection.nStartPos, aAttribList);
     return (pBeginAttrib &&
-            (pBeginAttrib->GetStart() <= rSelection.GetStart().GetIndex()
-                            && pBeginAttrib->GetEnd() >= rSelection.GetEnd().GetIndex()));
+            (pBeginAttrib->nStart <= aSelection.nStartPos
+                            && pBeginAttrib->nEnd >= aSelection.nEndPos));
 }
 
 OUString AddressMultiLineEdit::GetCurrentItem()
 {
-    ExtTextEngine* pTextEngine = GetTextEngine();
-    TextView* pTextView = GetTextView();
-    const TextSelection& rSelection = pTextView->GetSelection();
-    const TextCharAttrib* pBeginAttrib = pTextEngine->FindCharAttrib( rSelection.GetStart(), TEXTATTR_PROTECTED );
-    if(pBeginAttrib &&
-            (pBeginAttrib->GetStart() <= rSelection.GetStart().GetIndex()
-                            && pBeginAttrib->GetEnd() >= rSelection.GetEnd().GetIndex()))
+    ESelection aSelection = m_xEditView->GetSelection();
+
+    std::vector<EECharAttrib> aAttribList;
+    m_xEditEngine->GetCharAttribs(aSelection.nStartPara, aAttribList);
+
+    const EECharAttrib* pBeginAttrib = FindCharAttrib(aSelection.nStartPos, aAttribList);
+    if (pBeginAttrib &&
+            (pBeginAttrib->nStart <= aSelection.nStartPos
+                            && pBeginAttrib->nEnd >= aSelection.nEndPos))
     {
-        const sal_uInt32 nPara = rSelection.GetStart().GetPara();
-        TextSelection aEntrySel(TextPaM( nPara, pBeginAttrib->GetStart()), TextPaM(nPara, pBeginAttrib->GetEnd()));
-        return pTextEngine->GetText( aEntrySel );
+        const sal_uInt32 nPara = aSelection.nStartPara;
+        ESelection aEntrySel(nPara, pBeginAttrib->nStart, nPara, pBeginAttrib->nEnd);
+        return m_xEditEngine->GetText( aEntrySel );
     }
     return OUString();
 }
 
 void AddressMultiLineEdit::SelectCurrentItem()
 {
-    ExtTextEngine* pTextEngine = GetTextEngine();
-    TextView* pTextView = GetTextView();
-    const TextSelection& rSelection = pTextView->GetSelection();
-    const TextCharAttrib* pBeginAttrib = pTextEngine->FindCharAttrib( rSelection.GetStart(), TEXTATTR_PROTECTED );
-    if(pBeginAttrib &&
-            (pBeginAttrib->GetStart() <= rSelection.GetStart().GetIndex()
-                            && pBeginAttrib->GetEnd() >= rSelection.GetEnd().GetIndex()))
+    ESelection aSelection = m_xEditView->GetSelection();
+
+    std::vector<EECharAttrib> aAttribList;
+    m_xEditEngine->GetCharAttribs(aSelection.nStartPara, aAttribList);
+
+    const EECharAttrib* pBeginAttrib = FindCharAttrib(aSelection.nStartPos, aAttribList);
+    if (pBeginAttrib &&
+            (pBeginAttrib->nStart <= aSelection.nStartPos
+                            && pBeginAttrib->nEnd >= aSelection.nEndPos))
     {
-        const sal_uInt32 nPara = rSelection.GetStart().GetPara();
-        TextSelection aEntrySel(TextPaM( nPara, pBeginAttrib->GetStart()), TextPaM(nPara, pBeginAttrib->GetEnd()));
-        pTextView->SetSelection(aEntrySel);
+        const sal_uInt32 nPara = aSelection.nStartPara;
+        ESelection aEntrySel(nPara, pBeginAttrib->nStart, nPara, pBeginAttrib->nEnd);
+        m_xEditView->SetSelection(aEntrySel);
         Invalidate();
     }
 }
@@ -1419,11 +1394,10 @@ void AddressMultiLineEdit::SelectCurrentItem()
 OUString AddressMultiLineEdit::GetAddress()
 {
     OUString sRet;
-    ExtTextEngine* pTextEngine = GetTextEngine();
-    const sal_uInt32 nParaCount = pTextEngine->GetParagraphCount();
+    const sal_uInt32 nParaCount = m_xEditEngine->GetParagraphCount();
     for(sal_uInt32 nPara = nParaCount; nPara; --nPara)
     {
-        const OUString sPara = comphelper::string::stripEnd(pTextEngine->GetText(nPara - 1), ' ');
+        const OUString sPara = comphelper::string::stripEnd(m_xEditEngine->GetText(nPara - 1), ' ');
         //don't add empty trailing paragraphs
         if(!sRet.isEmpty() || !sPara.isEmpty())
         {
@@ -1434,6 +1408,180 @@ OUString AddressMultiLineEdit::GetAddress()
         }
     }
     return sRet;
+}
+
+void AddressMultiLineEdit::UpdateFields()
+{
+    ESelection aSelection = m_xEditView->GetSelection();
+
+    //restore the attributes
+    SetText( GetAddress() );
+
+    //reselect the element
+    m_xEditView->SetSelection(aSelection);
+    m_aSelectionLink.Call(false);
+}
+
+void AddressMultiLineEdit::EditViewSelectionChange() const
+{
+    WeldEditView::EditViewSelectionChange();
+    m_aSelectionLink.Call(true);
+}
+
+namespace
+{
+    // sit between the tree as drag source and the editview as drop target and translate
+    // the tree dnd data to the simple string the editview wants
+    class DropTargetListener : public cppu::WeakImplHelper< css::datatransfer::dnd::XDropTargetListener,
+                                                            css::datatransfer::dnd::XDropTarget >
+    {
+    private:
+        css::uno::Reference<css::datatransfer::dnd::XDropTarget> m_xRealDropTarget;
+        std::vector<css::uno::Reference<css::datatransfer::dnd::XDropTargetListener>> m_aListeners;
+        SwCustomizeAddressBlockDialog* m_pParentDialog;
+
+        // XEventListener
+        virtual void SAL_CALL disposing( const css::lang::EventObject& ) override
+        {
+            m_xRealDropTarget.clear();
+            m_aListeners.clear();
+        }
+
+        // XDropTargetListener
+        virtual void SAL_CALL drop( const css::datatransfer::dnd::DropTargetDropEvent& dtde ) override
+        {
+            SolarMutexGuard aGuard;
+
+            auto aReplacement(dtde);
+
+            Point aMousePos(dtde.LocationX, dtde.LocationY);
+            bool bAllowed = m_pParentDialog->SetCursorLogicPosition(aMousePos);
+            if (bAllowed)
+            {
+                if (weld::TreeView* pTree = m_pParentDialog->get_drag_source())
+                {
+                    int nEntry = pTree->get_selected_index();
+                    if (nEntry != -1)
+                    {
+                        sal_Int32 nUserData = pTree->get_id(nEntry).toInt32();
+                        //special entries can only be once in the address / greeting
+                        if (nUserData >= 0 || !m_pParentDialog->HasItem(nUserData))
+                        {
+                            rtl::Reference<TransferDataContainer> xContainer = new TransferDataContainer;
+                            xContainer->CopyString( "<" + pTree->get_text(nEntry) + ">" );
+
+                            // replace what the treeview is offering with what ImpEditView::drop wants
+                            aReplacement.Transferable = xContainer.get();
+                        }
+                    }
+                }
+            }
+
+            std::vector<css::uno::Reference<css::datatransfer::dnd::XDropTargetListener>> aListeners(m_aListeners);
+            for (auto const& listener : aListeners)
+                listener->drop(aReplacement);
+
+            if (bAllowed)
+                m_pParentDialog->UpdateFields();
+        }
+
+        virtual void SAL_CALL dragEnter( const css::datatransfer::dnd::DropTargetDragEnterEvent& dtdee ) override
+        {
+            auto aReplacement(dtdee);
+            // replace what the treeview is offering with what ImpEditView::dragEnter wants
+            aReplacement.SupportedDataFlavors.realloc(1);
+            SotExchange::GetFormatDataFlavor(SotClipboardFormatId::STRING, aReplacement.SupportedDataFlavors[0]);
+
+            std::vector<css::uno::Reference<css::datatransfer::dnd::XDropTargetListener>> aListeners(m_aListeners);
+            for (auto const& listener : aListeners)
+                listener->dragEnter(aReplacement);
+        }
+
+        virtual void SAL_CALL dragExit( const css::datatransfer::dnd::DropTargetEvent& dte ) override
+        {
+            std::vector<css::uno::Reference<css::datatransfer::dnd::XDropTargetListener>> aListeners(m_aListeners);
+            for (auto const& listener : aListeners)
+                listener->dragExit( dte );
+        }
+
+        virtual void SAL_CALL dragOver( const css::datatransfer::dnd::DropTargetDragEvent& dtde ) override
+        {
+            std::vector<css::uno::Reference<css::datatransfer::dnd::XDropTargetListener>> aListeners(m_aListeners);
+            for (auto const& listener : aListeners)
+                listener->dragOver( dtde );
+        }
+
+        virtual void SAL_CALL dropActionChanged( const css::datatransfer::dnd::DropTargetDragEvent& dtde ) override
+        {
+            std::vector<css::uno::Reference<css::datatransfer::dnd::XDropTargetListener>> aListeners(m_aListeners);
+            for (auto const& listener : aListeners)
+                listener->dropActionChanged( dtde );
+        }
+
+        // XDropTarget
+        virtual void SAL_CALL addDropTargetListener(const css::uno::Reference<css::datatransfer::dnd::XDropTargetListener>& xListener) override
+        {
+            m_aListeners.push_back(xListener);
+        }
+
+        virtual void SAL_CALL removeDropTargetListener(const css::uno::Reference<css::datatransfer::dnd::XDropTargetListener>& xListener) override
+        {
+            m_aListeners.erase(std::remove(m_aListeners.begin(), m_aListeners.end(), xListener), m_aListeners.end());
+        }
+
+        virtual sal_Bool SAL_CALL isActive() override
+        {
+            return m_xRealDropTarget->isActive();
+        }
+
+        virtual void SAL_CALL setActive(sal_Bool active) override
+        {
+            m_xRealDropTarget->setActive(active);
+        }
+
+        virtual sal_Int8 SAL_CALL getDefaultActions() override
+        {
+            return m_xRealDropTarget->getDefaultActions();
+        }
+
+        virtual void SAL_CALL setDefaultActions(sal_Int8 actions) override
+        {
+            m_xRealDropTarget->setDefaultActions(actions);
+        }
+
+    public:
+        DropTargetListener(css::uno::Reference<css::datatransfer::dnd::XDropTarget> xRealDropTarget,
+                           SwCustomizeAddressBlockDialog* pParentDialog)
+            : m_xRealDropTarget(xRealDropTarget)
+            , m_pParentDialog(pParentDialog)
+        {
+        }
+    };
+}
+
+css::uno::Reference<css::datatransfer::dnd::XDropTarget> AddressMultiLineEdit::GetDropTarget() const
+{
+    if (!m_xDropTarget.is())
+    {
+        auto xRealDropTarget = GetDrawingArea()->get_drop_target();
+        DropTargetListener* pProxy = new DropTargetListener(xRealDropTarget, m_pParentDialog);
+        uno::Reference<css::datatransfer::dnd::XDropTargetListener> xListener(pProxy);
+        xRealDropTarget->addDropTargetListener(xListener);
+        const_cast<AddressMultiLineEdit*>(this)->m_xDropTarget = uno::Reference<css::datatransfer::dnd::XDropTarget>(pProxy);
+    }
+    return m_xDropTarget;
+}
+
+bool AddressMultiLineEdit::SetCursorLogicPosition(const Point& rPosition)
+{
+    Point aMousePos(rPosition);
+    aMousePos = EditViewOutputDevice().PixelToLogic(aMousePos);
+    m_xEditView->SetCursorLogicPosition(aMousePos, false, true);
+
+    ESelection aSelection = m_xEditView->GetSelection();
+    std::vector<EECharAttrib> aAttribList;
+    m_xEditEngine->GetCharAttribs(aSelection.nStartPara, aAttribList);
+    return FindCharAttrib(aSelection.nStartPos, aAttribList) == nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

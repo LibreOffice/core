@@ -700,7 +700,7 @@ VclBuilder::VclBuilder(vcl::Window *pParent, const OUString& sUIDir, const OUStr
     for (auto const& elem : m_pParserState->m_aStockMap)
     {
         FixedImage *pImage = get<FixedImage>(elem.first);
-        SAL_WARN_IF(!pImage, "vcl", "missing elements of image/stock");
+        SAL_WARN_IF(!pImage, "vcl", "missing elements of image/stock: " << elem.first);
         if (!pImage)
             continue;
 
