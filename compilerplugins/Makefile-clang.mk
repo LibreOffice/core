@@ -208,6 +208,12 @@ CLANGTOOLLIBS = -lclangTooling -lclangDriver -lclangFrontend -lclangParse -lclan
         -lclangAST -lclangLex -lclangSerialization -lclangBasic $(shell $(LLVMCONFIG) --ldflags --libs --system-libs)
 # Path to the clang system headers (no idea if there's a better way to get it).
 CLANGTOOLDEFS = -DCLANGSYSINCLUDE=$(shell $(LLVMCONFIG) --libdir)/clang/$(shell $(LLVMCONFIG) --version | sed 's/svn//')/include
+ifneq ($(OS),WNT)
+ifneq ($(CLANGDIR),/usr)
+# Help the generator find Clang shared libs, if Clang is built so and installed in a non-standard prefix.
+CLANGTOOLLIBS += -Wl,--rpath,$(shell $(LLVMCONFIG) --libdir)
+endif
+endif
 
 $(CLANGOUTDIR)/sharedvisitor/generator$(CLANG_EXE_EXT): $(CLANGINDIR)/sharedvisitor/generator.cxx \
         | $(CLANGOUTDIR)/sharedvisitor
