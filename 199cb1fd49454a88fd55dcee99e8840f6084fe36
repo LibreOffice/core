@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df7087c5_257a1924",
+        "filename": "solenv/gbuild/CppunitTest.mk",
+        "patchSetId": 9
+      },
+      "lineNbr": 375,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-06-25T11:43:05Z",
+      "side": 1,
+      "message": "how does that \"$(shell cat\" work when there\u0027s no file yet because the package hasn\u0027t been built yet?",
+      "revId": "199cb1fd49454a88fd55dcee99e8840f6084fe36",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
