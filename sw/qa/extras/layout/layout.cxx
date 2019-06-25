@@ -2865,7 +2865,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testBtlrCell)
     // doc model).
     assertXPath(pXmlDoc, "//font[1]", "orientation", "900");
 
-#if !defined(MACOSX) && !defined(_WIN32) // macOS fails with actual == 2662 for some reason.
+#ifndef MACOSX // macOS fails with x == 2662 for some reason.
     // Without the accompanying fix in place, this test would have failed with 'Expected: 1915;
     // Actual  : 1756', i.e. the AAA1 text was too close to the left cell border due to an ascent vs
     // descent mismatch when calculating the baseline offset of the text portion.
