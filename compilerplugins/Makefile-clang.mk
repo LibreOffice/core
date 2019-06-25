@@ -8,8 +8,10 @@
 
 # Make sure variables in this Makefile do not conflict with other variables (e.g. from gbuild).
 
-# Compile flags ('make CLANGCXXFLAGS=-g' if you need to debug the plugin); you
-# may occasionally want to override these:
+# Set to 1 if you need to debug the plugin).
+CLANGDEBUG=
+
+# Compile flags, you may occasionally want to override these:
 ifeq ($(OS),WNT)
 # See LLVM's cmake/modules/AddLLVM.cmake and LLVM build's
 # tools/llvm-config/BuildVariables.inc:
@@ -17,9 +19,19 @@ ifeq ($(OS),WNT)
 #   "LLVM_ATTRIBUTE_ALWAYS_INLINE inline" in various LLVM include files.
 # * Ignore "warning C4577: 'noexcept' used with no exception handling mode
 #   specified; termination on exception is not guaranteed. Specify /EHsc".
-CLANGCXXFLAGS=/nologo /D_HAS_EXCEPTIONS=0 /wd4141 /wd4577 /O2 /Oi /EHs-c- /GR-
+CLANGCXXFLAGS=/nologo /D_HAS_EXCEPTIONS=0 /wd4141 /wd4577 /EHs-c- /GR-
+ifeq ($(CLANGDEBUG),)
+CLANGCXXFLAGS+=/O2 /Oi
 else
-CLANGCXXFLAGS=-O2 -Wall -Wextra -Wundef -g
+CLANGCXXFLAGS+=/DEBUG
+endif
+else # WNT
+CLANGCXXFLAGS=-Wall -Wextra -Wundef
+ifeq ($(CLANGDEBUG),)
+CLANGCXXFLAGS+=-O2
+else
+CLANGCXXFLAGS+=-g
+endif
 endif
 
 # Whether to make plugins use one shared ASTRecursiveVisitor (plugins run faster).
@@ -73,8 +85,10 @@ ifdef LO_CLANG_SHARED_PLUGINS
 CLANGCXXFLAGS+=-DLO_CLANG_SHARED_PLUGINS
 endif
 
+ifneq ($(CLANGDEBUG),)
 ifeq ($(HAVE_GCC_SPLIT_DWARF),TRUE)
 CLANGCXXFLAGS+=-gsplit-dwarf
+endif
 endif
 
 QUIET=$(if $(verbose),,@)
