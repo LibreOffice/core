@@ -98,6 +98,7 @@ $(eval $(call gb_Library_add_exception_objects,editeng,\
     editeng/source/misc/swafopt \
     editeng/source/misc/txtrange \
     editeng/source/misc/unolingu \
+    editeng/source/misc/weldeditview \
     editeng/source/outliner/outleeng \
     editeng/source/outliner/outlin2 \
     editeng/source/outliner/outliner \
