@@ -19,6 +19,7 @@
 
 #include <fontcfg.hxx>
 #include <i18nlangtag/mslangid.hxx>
+#include <osl/diagnose.h>
 #include <vcl/outdev.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/lingucfg.hxx>

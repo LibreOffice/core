@@ -32,6 +32,7 @@
 #include <bookmark.hxx>
 #include <docsh.hxx>
 #include <globals.hrc>
+#include <ndtxt.hxx>
 #include <strings.hrc>
 
 using namespace ::com::sun::star;

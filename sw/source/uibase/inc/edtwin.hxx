@@ -24,7 +24,6 @@
 #include <svx/svdobj.hxx>
 #include <tools/link.hxx>
 #include <vcl/timer.hxx>
-#include <vcl/idle.hxx>
 #include <vcl/window.hxx>
 #include <vcl/transfer.hxx>
 #include <swevent.hxx>

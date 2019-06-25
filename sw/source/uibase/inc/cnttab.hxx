@@ -19,11 +19,9 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_CNTTAB_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_CNTTAB_HXX
 
-#include <sfx2/tabdlg.hxx>
+#include <sal/types.h>
 
-#include <tox.hxx>
-#include "toxmgr.hxx"
-#include <svx/langbox.hxx>
+#include <toxe.hxx>
 
 #define TOX_PAGE_SELECT 1
 #define TOX_PAGE_ENTRY  2

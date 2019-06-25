@@ -20,11 +20,10 @@
 #define INCLUDED_SW_SOURCE_UIBASE_INC_FRMMGR_HXX
 
 #include <swtypes.hxx>
-#include <frmatr.hxx>
-#include <editeng/svxenum.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/shaditem.hxx>
 #include <tools/gen.hxx>
 #include <fmtfsize.hxx>
-#include <fmtsrnd.hxx>
 #include <fmtornt.hxx>
 #include <fmtanchr.hxx>
 #include <swdllapi.h>

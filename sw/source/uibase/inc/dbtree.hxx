@@ -23,7 +23,6 @@
 #include <vcl/weld.hxx>
 
 #include <swdllapi.h>
-#include <swtypes.hxx>
 
 class SwDBTreeList_Impl;
 class SwWrtShell;
