@@ -211,8 +211,11 @@ private:
     static const sal_uInt16         SFX_WHICH_MAX = 4999;
 
     // I2TM Transfer phase: deliver ModelSpecificItemValues for this SfxItemPool/Model
+private:
+    // instance
+    Item::ModelSpecificItemValues::SharedPtr m_aModelSpecificItemValues;
 public:
-    virtual Item::ModelSpecificItemValues::SharedPtr getModelSpecificIValues() const;
+    Item::ModelSpecificItemValues::SharedPtr getModelSpecificIValues() const;
     // ~I2TM
 };
 

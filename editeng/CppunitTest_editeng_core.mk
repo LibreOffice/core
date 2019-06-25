@@ -40,6 +40,7 @@ $(eval $(call gb_CppunitTest_use_libraries,editeng_core, \
     utl \
     vcl \
     xo \
+    item \
 ))
 
 $(eval $(call gb_CppunitTest_use_externals,editeng_core,\

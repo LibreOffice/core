@@ -284,6 +284,18 @@ namespace Item
             IState aIState(IState::DEFAULT);
             const ItemBase* pItem(implGetStateAndItem(T::GetStaticItemControlBlock(), aIState, bSearchParent));
 
+            // SfxItemState::DEFAULT
+            // SfxItemState::DONTCARE || SfxItemState::DISABLED -> should already be
+            //  solved from ImplInvalidateItem/ImplDisableItem, but to have the
+            //  fallback here additionally is never wrong
+            // in short: no specific ItemBase -> use default
+            if(nullptr == pItem)
+            {
+                return StateAndItem<T>(
+                    aIState,
+                    Item::getDefault<T>());
+            }
+
             // SfxItemState::SET
             return StateAndItem<T>(
                 aIState,

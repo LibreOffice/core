@@ -545,18 +545,29 @@ void SvxPageDescPage::Reset( const SfxItemSet* rSet )
         m_xRegisterLB->save_value();
     }
 
-    SfxItemState eState = rSet->GetItemState( GetWhich( SID_ATTR_FRAMEDIRECTION ),
-                                                true, &pItem );
-    if( SfxItemState::UNKNOWN != eState )
-    {
-        SvxFrameDirection nVal  = SfxItemState::SET == eState
-                                ? static_cast<const SvxFrameDirectionItem*>(pItem)->GetValue()
-                                : SvxFrameDirection::Horizontal_LR_TB;
-        m_xTextFlowBox->set_active_id(nVal);
+    // I2TM will now always be != SfxItemState::UNKNOWN
+    SvxFrameDirection nVal(SvxFrameDirection::Horizontal_LR_TB);
 
-        m_xTextFlowBox->save_value();
-        m_aBspWin.SetFrameDirection(nVal);
+    if(const auto Item(rSet->itemSet().getStateAndItem<Item::FrameDirection>()); Item.isSet())
+    {
+        nVal = Item.getItem().getValue();
     }
+
+    m_xTextFlowBox->set_active_id(nVal);
+    m_xTextFlowBox->save_value();
+    m_aBspWin.SetFrameDirection(nVal);
+    // SfxItemState eState = rSet->GetItemState( GetWhich( SID_ATTR_FRAMEDIRECTION ),
+    //                                             true, &pItem );
+    // if( SfxItemState::UNKNOWN != eState )
+    // {
+    //     SvxFrameDirection nVal  = SfxItemState::SET == eState
+    //                             ? static_cast<const SvxFrameDirectionItem*>(pItem)->GetValue()
+    //                             : SvxFrameDirection::Horizontal_LR_TB;
+    //     m_xTextFlowBox->set_active_id(nVal);
+
+    //     m_xTextFlowBox->save_value();
+    //     m_aBspWin.SetFrameDirection(nVal);
+    // }
 }
 
 void SvxPageDescPage::FillUserData()

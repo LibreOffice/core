@@ -193,7 +193,9 @@ SfxItemPool::SfxItemPool
                                            but no transfer of ownership */
 ) :
     pItemInfos(pInfo),
-    pImpl( new SfxItemPool_Impl( this, rName, nStartWhich, nEndWhich ) )
+    pImpl( new SfxItemPool_Impl( this, rName, nStartWhich, nEndWhich ) ),
+    // I2TM
+    m_aModelSpecificItemValues()
 {
     pImpl->eDefMetric = MapUnit::MapTwip;
 
@@ -217,7 +219,9 @@ SfxItemPool::SfxItemPool
                                                     Take over static Defaults */
 ) :
     pItemInfos(rPool.pItemInfos),
-    pImpl( new SfxItemPool_Impl( this, rPool.pImpl->aName, rPool.pImpl->mnStart, rPool.pImpl->mnEnd ) )
+    pImpl( new SfxItemPool_Impl( this, rPool.pImpl->aName, rPool.pImpl->mnStart, rPool.pImpl->mnEnd ) ),
+    // I2TM
+    m_aModelSpecificItemValues()
 {
     pImpl->eDefMetric = rPool.pImpl->eDefMetric;
 
@@ -953,15 +957,12 @@ void SfxItemPool::dumpAsXml(xmlTextWriterPtr pWriter) const
 // I2TM Transfer phase: deliver ModelSpecificItemValues for this SfxItemPool/Model
 Item::ModelSpecificItemValues::SharedPtr SfxItemPool::getModelSpecificIValues() const
 {
-    // global static instance fallback for all SfxItemPool(s)
-    static Item::ModelSpecificItemValues::SharedPtr aGlobalDefault;
-
-    if(!aGlobalDefault)
+    if(!m_aModelSpecificItemValues)
     {
-        aGlobalDefault = Item::ModelSpecificItemValues::create();
+        const_cast<SfxItemPool*>(this)->m_aModelSpecificItemValues = Item::ModelSpecificItemValues::create();
     }
 
-    return aGlobalDefault;
+    return m_aModelSpecificItemValues;
 }
 // ~I2TM
 

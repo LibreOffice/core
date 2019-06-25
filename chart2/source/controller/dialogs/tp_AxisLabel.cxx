@@ -129,7 +129,11 @@ bool SchAxisLabelTabPage::FillItemSet( SfxItemSet* rOutAttrs )
         rOutAttrs->Put( SfxBoolItem( SCHATTR_AXIS_SHOWDESCR, m_xCbShowDescription->get_active() ) );
 
     if (m_xLbTextDirection->get_active() != -1)
-        rOutAttrs->Put( SvxFrameDirectionItem( m_xLbTextDirection->get_active_id(), EE_PARA_WRITINGDIR ) );
+    {
+        // I2TM
+        rOutAttrs->itemSet().setItem(Item::FrameDirection(m_xLbTextDirection->get_active_id()));
+        // rOutAttrs->Put( SvxFrameDirectionItem( m_xLbTextDirection->get_active_id(), EE_PARA_WRITINGDIR ) );
+    }
 
     return true;
 }
@@ -182,8 +186,13 @@ void SchAxisLabelTabPage::Reset( const SfxItemSet* rInAttrs )
         m_xCbStacked->set_state(TRISTATE_INDET);
     StackedToggleHdl(*m_xCbStacked);
 
-    if( rInAttrs->GetItemState( EE_PARA_WRITINGDIR, true, &pPoolItem ) == SfxItemState::SET )
-        m_xLbTextDirection->set_active_id( static_cast<const SvxFrameDirectionItem*>(pPoolItem)->GetValue() );
+    // I2TM
+    if(const auto Item(rInAttrs->itemSet().getStateAndItem<Item::FrameDirection>()); Item.isSet())
+    {
+        m_xLbTextDirection->set_active_id(Item.getItem().getValue());
+    }
+    // if( rInAttrs->GetItemState( EE_PARA_WRITINGDIR, true, &pPoolItem ) == SfxItemState::SET )
+    //     m_xLbTextDirection->set_active_id( static_cast<const SvxFrameDirectionItem*>(pPoolItem)->GetValue() );
 
     // Text overlap ----------
     aState = rInAttrs->GetItemState( SCHATTR_AXIS_LABEL_OVERLAP, false, &pPoolItem );

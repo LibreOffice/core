@@ -37,6 +37,7 @@ $(eval $(call gb_Library_add_exception_objects,item,\
     item/source/base/ItemBuffered \
     item/source/base/ItemControlBlock \
     item/source/simple/CntInt16 \
+    item/source/simple/CntEnum \
     item/source/simple/CntOUString \
 ))
 

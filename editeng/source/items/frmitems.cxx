@@ -3300,6 +3300,141 @@ void SvxBrushItem::dumpAsXml(xmlTextWriterPtr pWriter) const
     xmlTextWriterEndElement(pWriter);
 }
 
+const char* getFrmDirResId(size_t nIndex)
+{
+    const char* const RID_SVXITEMS_FRMDIR[] =
+    {
+        RID_SVXITEMS_FRMDIR_HORI_LEFT_TOP,
+        RID_SVXITEMS_FRMDIR_HORI_RIGHT_TOP,
+        RID_SVXITEMS_FRMDIR_VERT_TOP_RIGHT,
+        RID_SVXITEMS_FRMDIR_VERT_TOP_LEFT,
+        RID_SVXITEMS_FRMDIR_ENVIRONMENT
+    };
+    return RID_SVXITEMS_FRMDIR[nIndex];
+}
+
+///////////////////////////////////////////////////////////////////////////////
+#include <item/base/ItemControlBlock.hxx>
+
+namespace Item
+{
+    ItemControlBlock& FrameDirection::GetStaticItemControlBlock()
+    {
+        static ItemControlBlock aItemControlBlock(
+            [](){ return new FrameDirection(SvxFrameDirection::Horizontal_LR_TB); },
+            [](const ItemBase& rRef){ return new FrameDirection(static_cast<const FrameDirection&>(rRef)); },
+            "FrameDirection");
+
+        return aItemControlBlock;
+    }
+
+    FrameDirection::FrameDirection(SvxFrameDirection nValue)
+    :   CntEnum<SvxFrameDirection>(
+            FrameDirection::GetStaticItemControlBlock(),
+            nValue)
+    {
+    }
+
+    bool FrameDirection::getPresentation(
+        SfxItemPresentation,
+        MapUnit,
+        MapUnit,
+        rtl::OUString& rText,
+        const IntlWrapper&) const
+    {
+        rText = EditResId(getFrmDirResId(getEnumValueAsSalUInt16()));
+        return true;
+    }
+
+    bool FrameDirection::queryValue(css::uno::Any& rVal, sal_uInt8) const
+    {
+        // translate SvxFrameDirection into WritingDirection2
+        sal_Int16 nVal(0);
+        bool bRet(true);
+
+        switch(getValue())
+        {
+            case SvxFrameDirection::Horizontal_LR_TB:
+                nVal = text::WritingMode2::LR_TB;
+                break;
+            case SvxFrameDirection::Horizontal_RL_TB:
+                nVal = text::WritingMode2::RL_TB;
+                break;
+            case SvxFrameDirection::Vertical_RL_TB:
+                nVal = text::WritingMode2::TB_RL;
+                break;
+            case SvxFrameDirection::Vertical_LR_TB:
+                nVal = text::WritingMode2::TB_LR;
+                break;
+            case SvxFrameDirection::Vertical_LR_BT:
+                nVal = text::WritingMode2::BT_LR;
+                break;
+            case SvxFrameDirection::Environment:
+                nVal = text::WritingMode2::PAGE;
+                break;
+            default:
+                OSL_FAIL("Unknown SvxFrameDirection value!");
+                bRet = false;
+                break;
+        }
+
+        // return value + error state
+        if(bRet)
+        {
+            rVal <<= nVal;
+        }
+
+        return bRet;
+    }
+
+    bool FrameDirection::putAnyValue(const css::uno::Any& rVal, sal_uInt8 nMemberId)
+    {
+        sal_Int16 nVal(-1);
+        bool bRet(rVal >>= nVal);
+
+        if(bRet)
+        {
+            // translate WritingDirection2 constants into SvxFrameDirection
+            switch( nVal )
+            {
+                case text::WritingMode2::LR_TB:
+                    setValue( SvxFrameDirection::Horizontal_LR_TB );
+                    break;
+                case text::WritingMode2::RL_TB:
+                    setValue( SvxFrameDirection::Horizontal_RL_TB );
+                    break;
+                case text::WritingMode2::TB_RL:
+                    setValue( SvxFrameDirection::Vertical_RL_TB );
+                    break;
+                case text::WritingMode2::TB_LR:
+                    setValue( SvxFrameDirection::Vertical_LR_TB );
+                    break;
+                case text::WritingMode2::BT_LR:
+                    setValue( SvxFrameDirection::Vertical_LR_BT );
+                    break;
+                case text::WritingMode2::PAGE:
+                    setValue( SvxFrameDirection::Environment );
+                    break;
+                default:
+                    bRet = false;
+                    break;
+            }
+        }
+
+        return bRet;
+    }
+
+    void FrameDirection::dumpAsXml(xmlTextWriterPtr pWriter) const
+    {
+        xmlTextWriterStartElement(pWriter, BAD_CAST("Item::FrameDirection"));
+        xmlTextWriterWriteAttribute(
+            pWriter, BAD_CAST("m_nValue"),
+            BAD_CAST(OString::number(getEnumValueAsSalUInt16()).getStr()));
+        xmlTextWriterEndElement(pWriter);
+    }
+} // end of namespace Item
+
+///////////////////////////////////////////////////////////////////////////////
 
 SvxFrameDirectionItem::SvxFrameDirectionItem( SvxFrameDirection nValue ,
                                             sal_uInt16 _nWhich )
@@ -3318,19 +3453,6 @@ SfxPoolItem* SvxFrameDirectionItem::Clone( SfxItemPool * ) const
     return new SvxFrameDirectionItem( *this );
 }
 
-
-const char* getFrmDirResId(size_t nIndex)
-{
-    const char* const RID_SVXITEMS_FRMDIR[] =
-    {
-        RID_SVXITEMS_FRMDIR_HORI_LEFT_TOP,
-        RID_SVXITEMS_FRMDIR_HORI_RIGHT_TOP,
-        RID_SVXITEMS_FRMDIR_VERT_TOP_RIGHT,
-        RID_SVXITEMS_FRMDIR_VERT_TOP_LEFT,
-        RID_SVXITEMS_FRMDIR_ENVIRONMENT
-    };
-    return RID_SVXITEMS_FRMDIR[nIndex];
-}
 
 bool SvxFrameDirectionItem::GetPresentation(
     SfxItemPresentation /*ePres*/,

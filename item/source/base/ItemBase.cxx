@@ -84,6 +84,87 @@ using the SfxItemPool::Put call, only their RefCount keeps them alive.
 Nonetheless these SlotItems STILL depend on the SfxItem-RANGES defined in the SfxItemSet
 -> SLOT ITEMS do NOT get POOLED (IsItemPoolable/IsPooledItem/...)
 -> SLOT ITEMS can be put in *any* ItemPool - due to not using the pooling mechanism
+
+///////////////////////////////////////////////////////////////////////////////
+What to do next? May try to replace all items from EditEngineItemPool and
+then rempve that one completely -> much problems out of the way...
+Items involved woul be (see DefItems::DefItems()):
+
+    rDefItems[0]  = new SvxFrameDirectionItem( SvxFrameDirection::Horizontal_LR_TB, EE_PARA_WRITINGDIR );
+195 results in 94 files -> lot of stuff
+SvxFrameDirectionItem(EE_PARA_WRITINGDIR) -> Item::FrameDirection
+cui: SID_ATTR_FRAMEDIRECTION, uses GetWhich()
+sc: ATTR_WRITINGDIR
+sw: RES_FRAMEDIR, FN_TABLE_BOX_TEXTORIENTATION
+
+    rDefItems[1]  = new SvXMLAttrContainerItem( EE_PARA_XMLATTRIBS );
+    rDefItems[2]  = new SvxHangingPunctuationItem(false, EE_PARA_HANGINGPUNCTUATION);
+    rDefItems[3]  = new SvxForbiddenRuleItem(true, EE_PARA_FORBIDDENRULES);
+    rDefItems[4]  = new SvxScriptSpaceItem( true, EE_PARA_ASIANCJKSPACING );
+    SvxNumRule aDefaultNumRule( SvxNumRuleFlags::NONE, 0, false );
+    rDefItems[5]  = new SvxNumBulletItem( aDefaultNumRule, EE_PARA_NUMBULLET );
+    rDefItems[6]  = new SfxBoolItem( EE_PARA_HYPHENATE, false );
+    rDefItems[7]  = new SfxBoolItem( EE_PARA_BULLETSTATE, true );
+    rDefItems[8]  = new SvxLRSpaceItem( EE_PARA_OUTLLRSPACE );
+    rDefItems[9]  = new SfxInt16Item( EE_PARA_OUTLLEVEL, -1 );
+    rDefItems[10] = new SvxBulletItem( EE_PARA_BULLET );
+    rDefItems[11] = new SvxLRSpaceItem( EE_PARA_LRSPACE );
+    rDefItems[12] = new SvxULSpaceItem( EE_PARA_ULSPACE );
+    rDefItems[13] = new SvxLineSpacingItem( 0, EE_PARA_SBL );
+    rDefItems[14] = new SvxAdjustItem( SvxAdjust::Left, EE_PARA_JUST );
+    rDefItems[15] = new SvxTabStopItem( 0, 0, SvxTabAdjust::Left, EE_PARA_TABS );
+    rDefItems[16] = new SvxJustifyMethodItem( SvxCellJustifyMethod::Auto, EE_PARA_JUST_METHOD );
+    rDefItems[17] = new SvxVerJustifyItem( SvxCellVerJustify::Standard, EE_PARA_VER_JUST );
+
+    // Character attributes:
+    rDefItems[18] = new SvxColorItem( COL_AUTO, EE_CHAR_COLOR );
+    rDefItems[19] = new SvxFontItem( EE_CHAR_FONTINFO );
+    rDefItems[20] = new SvxFontHeightItem( 240, 100, EE_CHAR_FONTHEIGHT );
+    rDefItems[21] = new SvxCharScaleWidthItem( 100, EE_CHAR_FONTWIDTH );
+    rDefItems[22] = new SvxWeightItem( WEIGHT_NORMAL, EE_CHAR_WEIGHT );
+    rDefItems[23] = new SvxUnderlineItem( LINESTYLE_NONE, EE_CHAR_UNDERLINE );
+    rDefItems[24] = new SvxCrossedOutItem( STRIKEOUT_NONE, EE_CHAR_STRIKEOUT );
+    rDefItems[25] = new SvxPostureItem( ITALIC_NONE, EE_CHAR_ITALIC );
+    rDefItems[26] = new SvxContourItem( false, EE_CHAR_OUTLINE );
+    rDefItems[27] = new SvxShadowedItem( false, EE_CHAR_SHADOW );
+    rDefItems[28] = new SvxEscapementItem( 0, 100, EE_CHAR_ESCAPEMENT );
+    rDefItems[29] = new SvxAutoKernItem( false, EE_CHAR_PAIRKERNING );
+    rDefItems[30] = new SvxKerningItem( 0, EE_CHAR_KERNING );
+    rDefItems[31] = new SvxWordLineModeItem( false, EE_CHAR_WLM );
+    rDefItems[32] = new SvxLanguageItem( LANGUAGE_DONTKNOW, EE_CHAR_LANGUAGE );
+    rDefItems[33] = new SvxLanguageItem( LANGUAGE_DONTKNOW, EE_CHAR_LANGUAGE_CJK );
+    rDefItems[34] = new SvxLanguageItem( LANGUAGE_DONTKNOW, EE_CHAR_LANGUAGE_CTL );
+    rDefItems[35] = new SvxFontItem( EE_CHAR_FONTINFO_CJK );
+    rDefItems[36] = new SvxFontItem( EE_CHAR_FONTINFO_CTL );
+    rDefItems[37] = new SvxFontHeightItem( 240, 100, EE_CHAR_FONTHEIGHT_CJK );
+    rDefItems[38] = new SvxFontHeightItem( 240, 100, EE_CHAR_FONTHEIGHT_CTL );
+    rDefItems[39] = new SvxWeightItem( WEIGHT_NORMAL, EE_CHAR_WEIGHT_CJK );
+    rDefItems[40] = new SvxWeightItem( WEIGHT_NORMAL, EE_CHAR_WEIGHT_CTL );
+    rDefItems[41] = new SvxPostureItem( ITALIC_NONE, EE_CHAR_ITALIC_CJK );
+    rDefItems[42] = new SvxPostureItem( ITALIC_NONE, EE_CHAR_ITALIC_CTL );
+    rDefItems[43] = new SvxEmphasisMarkItem( FontEmphasisMark::NONE, EE_CHAR_EMPHASISMARK );
+    rDefItems[44] = new SvxCharReliefItem( FontRelief::NONE, EE_CHAR_RELIEF );
+    rDefItems[45] = new SfxVoidItem( EE_CHAR_RUBI_DUMMY );
+    rDefItems[46] = new SvXMLAttrContainerItem( EE_CHAR_XMLATTRIBS );
+    rDefItems[47] = new SvxOverlineItem( LINESTYLE_NONE, EE_CHAR_OVERLINE );
+    rDefItems[48] = new SvxCaseMapItem( SvxCaseMap::NotMapped, EE_CHAR_CASEMAP );
+    rDefItems[49] = new SfxGrabBagItem( EE_CHAR_GRABBAG );
+    rDefItems[50] = new SvxBackgroundColorItem( COL_AUTO, EE_CHAR_BKGCOLOR );
+    // Features
+    rDefItems[51] = new SfxVoidItem( EE_FEATURE_TAB );
+    rDefItems[52] = new SfxVoidItem( EE_FEATURE_LINEBR );
+    rDefItems[53] = new SvxColorItem( COL_RED, EE_FEATURE_NOTCONV );
+    rDefItems[54] = new SvxFieldItem( SvxFieldData(), EE_FEATURE_FIELD );
+
+    assert(EDITITEMCOUNT == 55 && "ITEMCOUNT changed, adjust DefItems!");
+
+    // Init DefFonts:
+    GetDefaultFonts( *static_cast<SvxFontItem*>(rDefItems[EE_CHAR_FONTINFO - EE_ITEMS_START]),
+                     *static_cast<SvxFontItem*>(rDefItems[EE_CHAR_FONTINFO_CJK - EE_ITEMS_START]),
+                     *static_cast<SvxFontItem*>(rDefItems[EE_CHAR_FONTINFO_CTL - EE_ITEMS_START]) );
+
+
+
 */
 ///////////////////////////////////////////////////////////////////////////////
 

@@ -100,8 +100,10 @@ bool SchAlignmentTabPage::FillItemSet(SfxItemSet* rOutAttrs)
     sal_Int32 nDegrees = bStacked ? 0 : m_aCtrlDial.GetRotation();
     rOutAttrs->Put( SfxInt32Item( SCHATTR_TEXT_DEGREES, nDegrees ) );
 
-    SvxFrameDirection aDirection( m_xLbTextDirection->get_active_id() );
-    rOutAttrs->Put( SvxFrameDirectionItem( aDirection, EE_PARA_WRITINGDIR ) );
+    // I2TM
+    rOutAttrs->itemSet().setItem(Item::FrameDirection(m_xLbTextDirection->get_active_id()));
+    // SvxFrameDirection aDirection( m_xLbTextDirection->get_active_id() );
+    // rOutAttrs->Put( SvxFrameDirectionItem( aDirection, EE_PARA_WRITINGDIR ) );
 
     return true;
 }
@@ -118,8 +120,13 @@ void SchAlignmentTabPage::Reset(const SfxItemSet* rInAttrs)
     m_xCbStacked->set_active(bStacked);
     StackedToggleHdl(*m_xCbStacked);
 
-    if( rInAttrs->GetItemState(EE_PARA_WRITINGDIR, true, &pItem) == SfxItemState::SET)
-        m_xLbTextDirection->set_active_id(static_cast<const SvxFrameDirectionItem*>(pItem)->GetValue());
+    // I2TM
+    if(const auto Item(rInAttrs->itemSet().getStateAndItem<Item::FrameDirection>()); Item.isSet())
+    {
+        m_xLbTextDirection->set_active_id(Item.getItem().getValue());
+    }
+    // if( rInAttrs->GetItemState(EE_PARA_WRITINGDIR, true, &pItem) == SfxItemState::SET)
+    //     m_xLbTextDirection->set_active_id(static_cast<const SvxFrameDirectionItem*>(pItem)->GetValue());
 }
 
 } //namespace chart

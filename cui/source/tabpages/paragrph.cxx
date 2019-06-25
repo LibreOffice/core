@@ -633,19 +633,29 @@ void SvxStdParagraphTabPage::ActivatePage( const SfxItemSet& rSet )
         SvxAdjust eAdjust = rAdj.GetAdjust();
         if ( eAdjust == SvxAdjust::Center || eAdjust == SvxAdjust::Block )
         {
-            _nWhich = GetWhich( SID_ATTR_FRAMEDIRECTION );
-            eItemState = rSet.GetItemState( _nWhich );
-
-            if ( eItemState >= SfxItemState::DEFAULT )
+            // I2TM >= SfxItemState::DEFAULT means SET or DEFAULT
+            if(const auto Item(rSet.itemSet().getStateAndItem<Item::FrameDirection>()); Item.isSet() || Item.isDefault())
             {
-                const SvxFrameDirectionItem& rFrameDirItem = static_cast<const SvxFrameDirectionItem&>( rSet.Get( _nWhich ) );
-                SvxFrameDirection eFrameDirection = rFrameDirItem.GetValue();
+                m_aExampleWin.EnableRTL(SvxFrameDirection::Horizontal_RL_TB == Item.getItem().getValue());
 
-                m_aExampleWin.EnableRTL( SvxFrameDirection::Horizontal_RL_TB == eFrameDirection );
-
-                if ( eAdjust == SvxAdjust::Block )
-                    m_aExampleWin.SetLastLine( rAdj.GetLastBlock() );
+                if(SvxAdjust::Block == eAdjust)
+                {
+                    m_aExampleWin.SetLastLine(rAdj.GetLastBlock());
+                }
             }
+            // _nWhich = GetWhich( SID_ATTR_FRAMEDIRECTION );
+            // eItemState = rSet.GetItemState( _nWhich );
+
+            // if ( eItemState >= SfxItemState::DEFAULT )
+            // {
+            //     const SvxFrameDirectionItem& rFrameDirItem = static_cast<const SvxFrameDirectionItem&>( rSet.Get( _nWhich ) );
+            //     SvxFrameDirection eFrameDirection = rFrameDirItem.GetValue();
+
+            //     m_aExampleWin.EnableRTL( SvxFrameDirection::Horizontal_RL_TB == eFrameDirection );
+
+            //     if ( eAdjust == SvxAdjust::Block )
+            //         m_aExampleWin.SetLastLine( rAdj.GetLastBlock() );
+            // }
         }
         else
         {
@@ -1124,8 +1134,10 @@ bool SvxParaAlignTabPage::FillItemSet( SfxItemSet* rOutSet )
     {
         if (m_xTextDirectionLB->get_value_changed_from_saved())
         {
-            SvxFrameDirection eDir = m_xTextDirectionLB->get_active_id();
-            rOutSet->Put( SvxFrameDirectionItem( eDir, GetWhich( SID_ATTR_FRAMEDIRECTION ) ) );
+            // I2TM
+            rOutSet->itemSet().setItem(Item::FrameDirection(m_xTextDirectionLB->get_active_id()));
+            // SvxFrameDirection eDir = m_xTextDirectionLB->get_active_id();
+            // rOutSet->Put( SvxFrameDirectionItem( eDir, GetWhich( SID_ATTR_FRAMEDIRECTION ) ) );
             bModified = true;
         }
     }
@@ -1214,14 +1226,20 @@ void SvxParaAlignTabPage::Reset( const SfxItemSet* rSet )
         m_xVertAlignLB->set_active(static_cast<sal_Int32>(rAlign.GetValue()));
     }
 
-    _nWhich = GetWhich( SID_ATTR_FRAMEDIRECTION );
+    // _nWhich = GetWhich( SID_ATTR_FRAMEDIRECTION );
     //text direction
-    if( SfxItemState::DEFAULT <= rSet->GetItemState( _nWhich ) )
+    // I2TM >= SfxItemState::DEFAULT means SET or DEFAULT
+    if(const auto Item(rSet->itemSet().getStateAndItem<Item::FrameDirection>()); Item.isSet() || Item.isDefault())
     {
-        const SvxFrameDirectionItem& rFrameDirItem = static_cast<const SvxFrameDirectionItem&>( rSet->Get( _nWhich ) );
-        m_xTextDirectionLB->set_active_id(rFrameDirItem.GetValue());
+        m_xTextDirectionLB->set_active_id(Item.getItem().getValue());
         m_xTextDirectionLB->save_value();
     }
+    // if( SfxItemState::DEFAULT <= rSet->GetItemState( _nWhich ) )
+    // {
+    //     const SvxFrameDirectionItem& rFrameDirItem = static_cast<const SvxFrameDirectionItem&>( rSet->Get( _nWhich ) );
+    //     m_xTextDirectionLB->set_active_id(rFrameDirItem.GetValue());
+    //     m_xTextDirectionLB->save_value();
+    // }
 
     m_xSnapToGridCB->save_state();
     m_xVertAlignLB->save_value();

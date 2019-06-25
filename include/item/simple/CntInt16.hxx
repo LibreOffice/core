@@ -50,7 +50,7 @@ namespace Item
 
     public:
         CntInt16() = delete;
-        virtual bool operator==(const ItemBase&) const;
+        virtual bool operator==(const ItemBase&) const override;
 
         sal_Int16 getValue() const { return m_nValue; }
         void setValue(sal_Int16 nNew) { m_nValue = nNew; }

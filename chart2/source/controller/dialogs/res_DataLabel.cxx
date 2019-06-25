@@ -291,7 +291,11 @@ void DataLabelResources::FillItemSet( SfxItemSet* rOutAttrs ) const
     }
 
     if (m_xLB_TextDirection->get_active() != -1)
-        rOutAttrs->Put( SvxFrameDirectionItem( m_xLB_TextDirection->get_active_id(), EE_PARA_WRITINGDIR ) );
+    {
+        // I2TM
+        rOutAttrs->itemSet().setItem(Item::FrameDirection(m_xLB_TextDirection->get_active_id()));
+        // rOutAttrs->Put( SvxFrameDirectionItem( m_xLB_TextDirection->get_active_id(), EE_PARA_WRITINGDIR ) );
+    }
 
     if( m_aDC_Dial.IsVisible() )
     {
@@ -339,8 +343,13 @@ void DataLabelResources::Reset(const SfxItemSet& rInAttrs)
     else
         m_xLB_LabelPlacement->set_active(-1);
 
-    if( rInAttrs.GetItemState(EE_PARA_WRITINGDIR, true, &pPoolItem ) == SfxItemState::SET )
-        m_xLB_TextDirection->set_active_id( static_cast<const SvxFrameDirectionItem*>(pPoolItem)->GetValue() );
+    // I2TM
+    if(const auto Item(rInAttrs.itemSet().getStateAndItem<Item::FrameDirection>()); Item.isSet())
+    {
+        m_xLB_TextDirection->set_active_id(Item.getItem().getValue());
+    }
+    // if( rInAttrs.GetItemState(EE_PARA_WRITINGDIR, true, &pPoolItem ) == SfxItemState::SET )
+    //     m_xLB_TextDirection->set_active_id( static_cast<const SvxFrameDirectionItem*>(pPoolItem)->GetValue() );
 
     if( rInAttrs.GetItemState( SCHATTR_TEXT_DEGREES, true, &pPoolItem ) == SfxItemState::SET )
     {

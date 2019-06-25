@@ -55,7 +55,11 @@ bool SchLegendPosTabPage::FillItemSet(SfxItemSet* rOutAttrs)
     m_aLegendPositionResources.writeToItemSet(*rOutAttrs);
 
     if (m_xLbTextDirection->get_active() != -1)
-        rOutAttrs->Put(SvxFrameDirectionItem(m_xLbTextDirection->get_active_id(), EE_PARA_WRITINGDIR));
+    {
+        // I2TM
+        rOutAttrs->itemSet().setItem(Item::FrameDirection(m_xLbTextDirection->get_active_id()));
+        // rOutAttrs->Put(SvxFrameDirectionItem(m_xLbTextDirection->get_active_id(), EE_PARA_WRITINGDIR));
+    }
 
     return true;
 }
@@ -64,9 +68,14 @@ void SchLegendPosTabPage::Reset(const SfxItemSet* rInAttrs)
 {
     m_aLegendPositionResources.initFromItemSet(*rInAttrs);
 
-    const SfxPoolItem* pPoolItem = nullptr;
-    if( rInAttrs->GetItemState( EE_PARA_WRITINGDIR, true, &pPoolItem ) == SfxItemState::SET )
-        m_xLbTextDirection->set_active_id( static_cast<const SvxFrameDirectionItem*>(pPoolItem)->GetValue() );
+    // I2TM
+    if(const auto Item(rInAttrs->itemSet().getStateAndItem<Item::FrameDirection>()); Item.isSet())
+    {
+        m_xLbTextDirection->set_active_id(Item.getItem().getValue());
+    }
+    // const SfxPoolItem* pPoolItem = nullptr;
+    // if( rInAttrs->GetItemState( EE_PARA_WRITINGDIR, true, &pPoolItem ) == SfxItemState::SET )
+    //     m_xLbTextDirection->set_active_id( static_cast<const SvxFrameDirectionItem*>(pPoolItem)->GetValue() );
 }
 
 } //namespace chart

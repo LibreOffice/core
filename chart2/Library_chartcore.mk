@@ -60,6 +60,7 @@ $(eval $(call gb_Library_use_libraries,chartcore,\
     ucbhelper \
     utl \
     vcl \
+    item \
 ))
 
 $(eval $(call gb_Library_set_componentfile,chartcore,chart2/source/chartcore))

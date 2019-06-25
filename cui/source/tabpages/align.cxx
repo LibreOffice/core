@@ -298,8 +298,10 @@ bool AlignmentTabPage::FillItemSet( SfxItemSet* rSet )
     {
         if (m_xLbFrameDir->get_value_changed_from_saved())
         {
-            SvxFrameDirection eDir = m_xLbFrameDir->get_active_id();
-            rSet->Put(SvxFrameDirectionItem(eDir, GetWhich(SID_ATTR_FRAMEDIRECTION)));
+            // I2TM
+            rSet->itemSet().setItem(Item::FrameDirection(m_xLbFrameDir->get_active_id()));
+            // SvxFrameDirection eDir = m_xLbFrameDir->get_active_id();
+            // rSet->Put(SvxFrameDirectionItem(eDir, GetWhich(SID_ATTR_FRAMEDIRECTION)));
             bChanged = true;
         }
     }
@@ -531,28 +533,50 @@ void AlignmentTabPage::Reset(const SfxItemSet* pCoreAttrs)
     m_aVsRefEdge.SaveValue();
 
     //text direction
-    nWhich = GetWhich(SID_ATTR_FRAMEDIRECTION);
-    eState = pCoreAttrs->GetItemState(nWhich);
-    switch (eState)
+    // I2TM
+    if(const auto Item(pCoreAttrs->itemSet().getStateAndItem<Item::FrameDirection>()); Item.isSet() || Item.isDefault())
     {
-        case SfxItemState::UNKNOWN:
-            m_xLbFrameDir->hide();
-            break;
-        case SfxItemState::DISABLED:
-        case SfxItemState::READONLY:
-            m_xLbFrameDir->set_sensitive(false);
-            break;
-        case SfxItemState::DONTCARE:
-            m_xLbFrameDir->set_active(-1);
-            break;
-        case SfxItemState::DEFAULT:
-        case SfxItemState::SET:
-        {
-            const SvxFrameDirectionItem& rFrameDirItem = static_cast<const SvxFrameDirectionItem&>(pCoreAttrs->Get(nWhich));
-            m_xLbFrameDir->set_active_id(rFrameDirItem.GetValue());
-            break;
-        }
+        m_xLbFrameDir->set_active_id(Item.getItem().getValue());
     }
+    else if(Item.isDontCare())
+    {
+        m_xLbFrameDir->set_active(-1);
+    }
+    else if(Item.isDisabled())
+    {
+        m_xLbFrameDir->set_sensitive(false);
+    }
+    // I2TM There is a single 'AddTabPage("alignment", RID_SVXPAGE_ALIGNMENT);' call, so *can*
+    // another ItemSet where Item::FrameDirection is *not* defined come in at all? Probably not,
+    // so this should not be needed.
+    // Checked that the SfxItemSet is the same as handed in at ::Create and at costructor.
+    // else // SfxItemState::UNKNOWN does not exist anymore - is this used?
+    // {
+    //     m_xLbFrameDir->hide();
+    // }
+
+    // nWhich = GetWhich(SID_ATTR_FRAMEDIRECTION);
+    // eState = pCoreAttrs->GetItemState(nWhich);
+    // switch (eState)
+    // {
+    //     case SfxItemState::UNKNOWN:
+    //         m_xLbFrameDir->hide();
+    //         break;
+    //     case SfxItemState::DISABLED:
+    //     case SfxItemState::READONLY:
+    //         m_xLbFrameDir->set_sensitive(false);
+    //         break;
+    //     case SfxItemState::DONTCARE:
+    //         m_xLbFrameDir->set_active(-1);
+    //         break;
+    //     case SfxItemState::DEFAULT:
+    //     case SfxItemState::SET:
+    //     {
+    //         const SvxFrameDirectionItem& rFrameDirItem = static_cast<const SvxFrameDirectionItem&>(pCoreAttrs->Get(nWhich));
+    //         m_xLbFrameDir->set_active_id(rFrameDirItem.GetValue());
+    //         break;
+    //     }
+    // }
 
 
     // Special treatment for distributed alignment; we need to set the justify

@@ -28,6 +28,33 @@
     layout text for Western, CJK and CTL languages.
 */
 
+///////////////////////////////////////////////////////////////////////////////
+#include <item/simple/CntEnum.hxx>
+
+namespace Item
+{
+    class EDITENG_DLLPUBLIC FrameDirection : public CntEnum<SvxFrameDirection>
+    {
+    public:
+        static ItemControlBlock& GetStaticItemControlBlock();
+
+    public:
+        FrameDirection(SvxFrameDirection nValue);
+
+        virtual bool getPresentation(
+            SfxItemPresentation,
+            MapUnit,
+            MapUnit,
+            rtl::OUString&,
+            const IntlWrapper&) const override;
+        virtual bool queryValue(css::uno::Any& rVal, sal_uInt8 nMemberId = 0) const override;
+        virtual bool putAnyValue(const css::uno::Any& rVal, sal_uInt8 nMemberId) override;
+        virtual void dumpAsXml(xmlTextWriterPtr pWriter) const override;
+    };
+} // end of namespace Item
+
+///////////////////////////////////////////////////////////////////////////////
+
 class EDITENG_DLLPUBLIC SvxFrameDirectionItem : public SfxEnumItem<SvxFrameDirection>
 {
 public:
