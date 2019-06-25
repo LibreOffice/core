@@ -2679,7 +2679,7 @@ void VclBuilder::handleTabChild(vcl::Window *pParent, xmlreader::XmlReader &read
                     if (name.equals("id"))
                     {
                         name = reader.getAttributeValue(false);
-                        OString sID = OString(name.begin, name.length);
+                        OString sID(name.begin, name.length);
                         sal_Int32 nDelim = sID.indexOf(':');
                         if (nDelim != -1)
                         {
