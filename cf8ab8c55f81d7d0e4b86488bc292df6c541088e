@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df7087c5_782758b8",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 4736,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2019-06-25T15:46:22Z",
+      "side": 1,
+      "message": "As you can see in GetSdtEndBefore, and later in this function, pSdrObj can be a nullptr, too, so\n\n    uno::Reference\u003c drawing::XShape \u003e xShape;\n    if (pSdrObj)\n        xShape.set(const_cast\u003cSdrObject*\u003e(pSdrObj)-\u003egetUnoShape(), uno::UNO_QUERY);",
+      "range": {
+        "startLine": 4736,
+        "startChar": 4,
+        "endLine": 4736,
+        "endChar": 111
+      },
+      "revId": "cf8ab8c55f81d7d0e4b86488bc292df6c541088e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
