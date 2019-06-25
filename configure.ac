@@ -6839,7 +6839,7 @@ if test "$COM_IS_CLANG" = "TRUE"; then
         dnl The prefix where Clang resides, override to where Clang resides if
         dnl using a source build:
         if test -z "$CLANGDIR"; then
-            CLANGDIR=/usr
+            CLANGDIR=$(dirname $(dirname $($CXX -print-prog-name=$(basename $CXX))))
         fi
         AC_LANG_PUSH([C++])
         save_CPPFLAGS=$CPPFLAGS
