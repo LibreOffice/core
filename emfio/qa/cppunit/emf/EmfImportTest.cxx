@@ -8,6 +8,7 @@
  */
 
 #include <sal/config.h>
+#include <config_features.h>
 
 #include <test/bootstrapfixture.hxx>
 #include <test/xmltesttools.hxx>
@@ -95,6 +96,7 @@ void Test::testWorking()
 
 void Test::TestDrawString()
 {
+#if HAVE_MORE_FONTS
     // This unit checks for a correct import of an EMF+ file with only one DrawString Record
     // Since the text is undecorated the optimal choice is a simpletextportion primitive
 
@@ -112,10 +114,12 @@ void Test::TestDrawString()
     assertXPath(pDocument, "/primitive2D/metafile/transform/transform/textsimpleportion", "text", "TEST");
     assertXPath(pDocument, "/primitive2D/metafile/transform/transform/textsimpleportion", "fontcolor", "#000000");
     assertXPath(pDocument, "/primitive2D/metafile/transform/transform/textsimpleportion", "familyname", "CALIBRI");
+#endif
 }
 
 void Test::TestDrawStringTransparent()
 {
+#if HAVE_MORE_FONTS
     // This unit checks for a correct import of an EMF+ file with one DrawString Record with transparency
 
     // first, get the sequence of primitives and dump it
@@ -133,6 +137,7 @@ void Test::TestDrawStringTransparent()
     assertXPath(pDocument, "/primitive2D/metafile/transform/mask/transform/unifiedtransparence/textsimpleportion", "text", "Transparent Text");
     assertXPath(pDocument, "/primitive2D/metafile/transform/mask/transform/unifiedtransparence/textsimpleportion", "fontcolor", "#0000ff");
     assertXPath(pDocument, "/primitive2D/metafile/transform/mask/transform/unifiedtransparence/textsimpleportion", "familyname", "ARIAL");
+#endif
 }
 
 void Test::TestDrawLine()
