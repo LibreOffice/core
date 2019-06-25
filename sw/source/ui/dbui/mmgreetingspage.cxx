@@ -82,15 +82,14 @@ IMPL_LINK_NOARG(SwGreetingsHandler, IndividualHdl_Impl, weld::ToggleButton&, voi
 
 IMPL_LINK(SwGreetingsHandler, GreetingHdl_Impl, weld::Button&, rButton, void)
 {
-    ScopedVclPtr<SwCustomizeAddressBlockDialog> pDlg(
-            VclPtr<SwCustomizeAddressBlockDialog>::Create(nullptr /*TODO*/, m_rConfigItem,
+    std::unique_ptr<SwCustomizeAddressBlockDialog> xDlg(new SwCustomizeAddressBlockDialog(&rButton, m_rConfigItem,
                         &rButton == m_xMalePB.get() ?
                         SwCustomizeAddressBlockDialog::GREETING_MALE :
                         SwCustomizeAddressBlockDialog::GREETING_FEMALE ));
-    if (RET_OK == pDlg->Execute())
+    if (RET_OK == xDlg->run())
     {
         weld::ComboBox* pToInsert = &rButton == m_xMalePB.get() ? m_xMaleLB.get() : m_xFemaleLB.get();
-        pToInsert->append_text(pDlg->GetAddress());
+        pToInsert->append_text(xDlg->GetAddress());
         pToInsert->set_active(pToInsert->get_count() - 1);
         if(m_bIsTabPage)
         {

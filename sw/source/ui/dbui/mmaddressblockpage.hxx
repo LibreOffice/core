@@ -119,7 +119,7 @@ public:
 class SwCustomizeAddressBlockDialog;
 class DDListBox : public SvTreeListBox
 {
-    VclPtr<SwCustomizeAddressBlockDialog>   m_pParentDialog;
+    SwCustomizeAddressBlockDialog*   m_pParentDialog;
 public:
     DDListBox(vcl::Window* pParent, const WinBits nStyle);
     virtual ~DDListBox() override;
@@ -144,7 +144,7 @@ namespace o3tl {
 class AddressMultiLineEdit : public VclMultiLineEdit, public SfxListener
 {
     Link<AddressMultiLineEdit&,void>       m_aSelectionLink;
-    VclPtr<SwCustomizeAddressBlockDialog>  m_pParentDialog;
+    SwCustomizeAddressBlockDialog*  m_pParentDialog;
 
     using VclMultiLineEdit::SetText;
 
@@ -177,7 +177,7 @@ public:
     void            SelectCurrentItem();
 };
 
-class SwCustomizeAddressBlockDialog : public SfxModalDialog
+class SwCustomizeAddressBlockDialog : public SfxDialogController
 {
     friend class DDListBox;
     friend class AddressMultiLineEdit;
@@ -190,26 +190,7 @@ public:
         GREETING_MALE
     };
 private:
-    VclPtr<FixedText>              m_pAddressElementsFT;
-    VclPtr<DDListBox>              m_pAddressElementsLB;
-
-    VclPtr<PushButton>             m_pInsertFieldIB;
-    VclPtr<PushButton>             m_pRemoveFieldIB;
-
-    VclPtr<FixedText>              m_pDragFT;
-    VclPtr<AddressMultiLineEdit>   m_pDragED;
-    VclPtr<PushButton>             m_pUpIB;
-    VclPtr<PushButton>             m_pLeftIB;
-    VclPtr<PushButton>             m_pRightIB;
-    VclPtr<PushButton>             m_pDownIB;
-
-    VclPtr<FixedText>              m_pFieldFT;
-    VclPtr<ComboBox>               m_pFieldCB;
     TextFilter              m_aTextFilter;
-
-    VclPtr<SwAddressPreview>       m_pPreviewWIN;
-
-    VclPtr<OKButton>               m_pOK;
 
     std::vector<OUString>     m_aSalutations;
     std::vector<OUString>     m_aPunctuations;
@@ -221,24 +202,39 @@ private:
     SwMailMergeConfigItem&  m_rConfigItem;
     DialogType const        m_eType;
 
-    DECL_LINK(OKHdl_Impl, Button*, void);
-    DECL_LINK(ListBoxSelectHdl_Impl, SvTreeListBox*, void);
-    DECL_LINK(EditModifyHdl_Impl, Edit&, void);
-    DECL_LINK(ImageButtonHdl_Impl, Button*, void);
-    DECL_LINK(SelectionChangedHdl_Impl, AddressMultiLineEdit&, void);
-    DECL_LINK(FieldChangeHdl_Impl, Edit&, void);
-    DECL_LINK(FieldChangeComboBoxHdl_Impl, ComboBox&, void);
+    std::unique_ptr<weld::Label> m_xAddressElementsFT;
+    std::unique_ptr<weld::TreeView> m_xAddressElementsLB;
+    std::unique_ptr<weld::Button> m_xInsertFieldIB;
+    std::unique_ptr<weld::Button> m_xRemoveFieldIB;
+    std::unique_ptr<weld::Label> m_xDragFT;
+    std::unique_ptr<weld::TextView> m_xDragED;
+    std::unique_ptr<weld::Button> m_xUpIB;
+    std::unique_ptr<weld::Button> m_xLeftIB;
+    std::unique_ptr<weld::Button> m_xRightIB;
+    std::unique_ptr<weld::Button> m_xDownIB;
+    std::unique_ptr<weld::Label> m_xFieldFT;
+    std::unique_ptr<weld::ComboBox> m_xFieldCB;
+    std::unique_ptr<weld::Button> m_xOK;
+    std::unique_ptr<AddressPreview> m_xPreview;
+    std::unique_ptr<weld::CustomWeld> m_xPreviewWIN;
+
+    DECL_LINK(OKHdl_Impl, weld::Button&, void);
+    DECL_LINK(ListBoxSelectHdl_Impl, weld::TreeView&, void);
+    DECL_LINK(EditModifyHdl_Impl, weld::TextView&, void);
+    DECL_LINK(ImageButtonHdl_Impl, weld::Button&, void);
+    DECL_LINK(SelectionChangedHdl_Impl, weld::TextView&, void);
+    DECL_LINK(FieldChangeComboBoxHdl_Impl, weld::ComboBox&, void);
+    DECL_LINK(TextFilterHdl, OUString&, bool);
 
     bool            HasItem_Impl(sal_Int32 nUserData);
     sal_Int32       GetSelectedItem_Impl();
     void            UpdateImageButtons_Impl();
 
 public:
-    SwCustomizeAddressBlockDialog(vcl::Window* pParent, SwMailMergeConfigItem& rConfig, DialogType);
+    SwCustomizeAddressBlockDialog(weld::Widget* pParent, SwMailMergeConfigItem& rConfig, DialogType);
     virtual ~SwCustomizeAddressBlockDialog() override;
-    virtual void dispose() override;
 
-    void            SetAddress(const OUString& rAddress);
+    void SetAddress(const OUString& rAddress);
     OUString GetAddress();
 };
 
