@@ -1318,8 +1318,7 @@ void SwFrameShell::ExecDrawDlgTextFrame(SfxRequest const & rReq)
 
             if(rSh.IsFrameSelected())
             {
-                SdrView* pView = rSh.GetDrawView();
-                SdrModel* pDoc = pView->GetModel();
+                SdrModel* pDoc = rSh.GetDrawView()->GetModel();
                 SfxItemSet aNewAttr(pDoc->GetItemPool());
 
                 // get attributes from FlyFrame
@@ -1327,17 +1326,18 @@ void SwFrameShell::ExecDrawDlgTextFrame(SfxRequest const & rReq)
 
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 assert(pFact);
-                ScopedVclPtr<AbstractSvxAreaTabDialog> pDlg(pFact->CreateSvxAreaTabDialog(
-                    nullptr,
+                VclPtr<AbstractSvxAreaTabDialog> pDlg(pFact->CreateSvxAreaTabDialog(
+                    &GetView().GetViewFrame()->GetWindow(),
                     &aNewAttr,
                     pDoc,
                     false));
                 assert(pDlg);
 
-                if(RET_OK == pDlg->Execute())
+                pDlg->StartExecuteAsync([=](sal_Int32 nResult){
+                if(RET_OK == nResult)
                 {
                     // set attributes at FlyFrame
-                    rSh.SetFlyFrameAttr(const_cast< SfxItemSet& >(*pDlg->GetOutputItemSet()));
+                    GetShell().SetFlyFrameAttr(const_cast< SfxItemSet& >(*pDlg->GetOutputItemSet()));
 
                     static sal_uInt16 aInval[] =
                     {
@@ -1356,6 +1356,7 @@ void SwFrameShell::ExecDrawDlgTextFrame(SfxRequest const & rReq)
                     rBnd.Update(SID_ATTR_FILL_TRANSPARENCE);
                     rBnd.Update(SID_ATTR_FILL_FLOATTRANSPARENCE);
                 }
+                });
             }
 
             break;
