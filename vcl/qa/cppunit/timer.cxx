@@ -55,9 +55,7 @@ public:
     TimerTest() : BootstrapFixture(true, false) {}
 
     void testIdle();
-#ifndef _WIN32
     void testIdleMainloop();
-#endif
 #ifdef TEST_WATCHDOG
     void testWatchdog();
 #endif
@@ -76,9 +74,7 @@ public:
 
     CPPUNIT_TEST_SUITE(TimerTest);
     CPPUNIT_TEST(testIdle);
-#ifndef _WIN32
     CPPUNIT_TEST(testIdleMainloop);
-#endif
 #ifdef TEST_WATCHDOG
     CPPUNIT_TEST(testWatchdog);
 #endif
@@ -133,8 +129,6 @@ void TimerTest::testIdle()
     CPPUNIT_ASSERT_MESSAGE("idle triggered", bTriggered);
 }
 
-#ifndef _WIN32
-// tdf#91727
 void TimerTest::testIdleMainloop()
 {
     bool bTriggered = false;
@@ -152,7 +146,6 @@ void TimerTest::testIdleMainloop()
     }
     CPPUNIT_ASSERT_MESSAGE("mainloop idle triggered", bTriggered);
 }
-#endif
 
 class TimerBool : public Timer
 {

@@ -583,7 +583,6 @@ DECLARE_ODFIMPORT_TEST(testFdo37606, "fdo37606.odt")
         CPPUNIT_ASSERT(!pContentNode->FindTableNode());
     }
 }
-#if !defined(_WIN32)
 DECLARE_ODFIMPORT_TEST(testFdo37606Copy, "fdo37606.odt")
 {
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
@@ -608,11 +607,9 @@ DECLARE_ODFIMPORT_TEST(testFdo37606Copy, "fdo37606.odt")
     // Previously copy&paste failed to copy the table in case it was the document-starting one.
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
-#if !defined(MACOSX) && !defined(LIBO_HEADLESS) // FIXME
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xTables->getCount());
-#endif
 }
-#endif //WNT
+
 DECLARE_ODFIMPORT_TEST(testFdo69862, "fdo69862.odt")
 {
     // The test doc is special in that it starts with a table and it also has a footnote.
