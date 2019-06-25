@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df7087c5_85bbe5e3",
+        "filename": "readlicense_oo/license/license.xml",
+        "patchSetId": 16
+      },
+      "lineNbr": 1803,
+      "author": {
+        "id": 1000028
+      },
+      "writtenOn": "2019-06-25T10:53:37Z",
+      "side": 1,
+      "message": "\u003cdiv class\u003d\"QRCODEGEN\"\u003e",
+      "revId": "f3b272aceb9e60b130e02873f2c8085eb200c093",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df7087c5_a5c06952",
+        "filename": "readlicense_oo/license/license.xml",
+        "patchSetId": 16
+      },
+      "lineNbr": 1826,
+      "author": {
+        "id": 1000028
+      },
+      "writtenOn": "2019-06-25T10:53:37Z",
+      "side": 1,
+      "message": "\u003c/div\u003e",
+      "revId": "f3b272aceb9e60b130e02873f2c8085eb200c093",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
