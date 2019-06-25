@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df7087c5_85d1a55a",
+        "filename": "sw/source/core/unocore/unofield.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1177,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-06-25T09:14:35Z",
+      "side": 1,
+      "message": "this is wrong: it\u0027s a descriptor if it has no m_pFormatField but it has m_pDoc; if it has m_pFormatField and no m_pDoc, then it\u0027s Disposed",
+      "revId": "b33dd6df67223309a32ec10ca93837f2bb5540a4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df7087c5_45cb8da4",
+        "filename": "sw/source/core/unocore/unofield.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1366,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-06-25T09:14:35Z",
+      "side": 1,
+      "message": "this check used to be in the definition of GetFieldType; i suggest to either move it there again, or add an assert(m_pImpl-\u003em_pDoc) in GetFieldType to document that the caller is responsible for checking.",
+      "revId": "b33dd6df67223309a32ec10ca93837f2bb5540a4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
