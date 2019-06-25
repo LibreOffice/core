@@ -65,10 +65,10 @@
                     "type": "shell"
                 },
                 {
-                    "url": "https://dev-www.libreoffice.org/src/pdfium-3730.tar.bz2",
-                    "sha256": "dfaaae78f1d371378c6b715862f9b3b67f9a6857c7864bfaebfd88a962d03bca",
+                    "url": "https://dev-www.libreoffice.org/src/pdfium-3794.tar.bz2",
+                    "sha256": "e3faddcf741336c64ca2e6f72b23e9e60979969b2cf67c878c9a5bc38328cfc4",
                     "type": "file",
-                    "dest-filename": "external/tarballs/pdfium-3730.tar.bz2"
+                    "dest-filename": "external/tarballs/pdfium-3794.tar.bz2"
                 },
                 {
                     "url": "https://dev-www.libreoffice.org/src/0168229624cfac409e766913506961a8-ucpp-1.3.2.tar.gz",
@@ -77,10 +77,10 @@
                     "dest-filename": "external/tarballs/0168229624cfac409e766913506961a8-ucpp-1.3.2.tar.gz"
                 },
                 {
-                    "url": "https://dev-www.libreoffice.org/src/xmlsec1-1.2.27.tar.gz",
-                    "sha256": "97d756bad8e92588e6997d2227797eaa900d05e34a426829b149f65d87118eb6",
+                    "url": "https://dev-www.libreoffice.org/src/xmlsec1-1.2.28.tar.gz",
+                    "sha256": "13eec4811ea30e3f0e16a734d1dbf7f9d246a71d540b48d143a07b489f6222d4",
                     "type": "file",
-                    "dest-filename": "external/tarballs/xmlsec1-1.2.27.tar.gz"
+                    "dest-filename": "external/tarballs/xmlsec1-1.2.28.tar.gz"
                 },
                 {
                     "url": "https://dev-www.libreoffice.org/src/368f114c078f94214a308a74c7e991bc-crosextrafonts-20130214.tar.gz",
