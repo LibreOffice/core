@@ -11,20 +11,26 @@
 #include <unotest/macros_test.hxx>
 #include <test/bootstrapfixture.hxx>
 
-#include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/util/SearchAlgorithms2.hpp>
+#include <com/sun/star/container/XIndexContainer.hpp>
+#include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/document/XEmbeddedScripts.hpp>
+#include <com/sun/star/drawing/XControlShape.hpp>
+#include <com/sun/star/drawing/XDrawPageSupplier.hpp>
+#include <com/sun/star/drawing/XShapeGrouper.hpp>
+#include <com/sun/star/drawing/XShape.hpp>
+#include <com/sun/star/drawing/XShapes.hpp>
+#include <com/sun/star/form/XForm.hpp>
+#include <com/sun/star/form/XFormsSupplier.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
-#include <com/sun/star/document/XEmbeddedScripts.hpp>
+#include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/script/XLibraryContainer.hpp>
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
-#include <com/sun/star/drawing/XDrawPageSupplier.hpp>
-#include <com/sun/star/drawing/XShapes.hpp>
-#include <com/sun/star/drawing/XShape.hpp>
-#include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
+#include <com/sun/star/text/XTextDocument.hpp>
+#include <com/sun/star/util/SearchAlgorithms2.hpp>
 
 #include <i18nutil/searchopt.hxx>
 #include <comphelper/processfactory.hxx>
@@ -60,36 +66,24 @@ public:
     virtual void setUp() override;
     virtual void tearDown() override;
 
-    //void testStarBasic();
-#if !defined(MACOSX) && !defined(_WIN32)
     void testVba();
-#endif
     void testBookmarkDeleteAndJoin();
     void testBookmarkDeleteTdf90816();
-#if 0
     void testControlShapeGrouping();
-#endif
     void testFdo55289();
     void testFdo68983();
     void testFdo87530();
     void testFindReplace();
+
     CPPUNIT_TEST_SUITE(SwMacrosTest);
-#if !defined(MACOSX) && !defined(_WIN32)
-    //enable this test if you want to play with star basic macros in unit tests
-    //works but does nothing useful yet
-    //CPPUNIT_TEST(testStarBasic);
     CPPUNIT_TEST(testVba);
-#endif
     CPPUNIT_TEST(testBookmarkDeleteAndJoin);
     CPPUNIT_TEST(testBookmarkDeleteTdf90816);
-#if 0
     CPPUNIT_TEST(testControlShapeGrouping);
-#endif
     CPPUNIT_TEST(testFdo55289);
     CPPUNIT_TEST(testFdo68983);
     CPPUNIT_TEST(testFdo87530);
     CPPUNIT_TEST(testFindReplace);
-
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -106,36 +100,6 @@ void SwMacrosTest::createFileURL(const OUString& aFileBase, const OUString& aFil
     rFilePath = aBuffer.makeStringAndClear();
 }
 
-#if 0
-
-void SwMacrosTest::testStarBasic()
-{
-    const OUString aFileNameBase("StarBasic.");
-    OUString aFileExtension(aFileFormats[0].pName, strlen(aFileFormats[0].pName), RTL_TEXTENCODING_UTF8 );
-    OUString aFileName;
-    createFileURL(aFileNameBase, aFileExtension, aFileName);
-    uno::Reference< css::lang::XComponent > xComponent = loadFromDesktop(aFileName, "com.sun.star.text.TextDocument");
-
-    CPPUNIT_ASSERT_MESSAGE("Failed to load StarBasic.ods", xComponent.is());
-
-    OUString aURL("vnd.sun.Star.script:Standard.Module1.Macro1?language=Basic&location=document");
-    String sUrl = aURL;
-    Any aRet;
-    Sequence< sal_Int16 > aOutParamIndex;
-    Sequence< Any > aOutParam;
-    Sequence< uno::Any > aParams;
-
-    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
-
-    CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
-
-    pFoundShell->CallXScript(xComponent, sUrl, aParams, aRet, aOutParamIndex,aOutParam);
-    pFoundShell->DoClose();
-}
-
-#endif
-
-#if !defined(MACOSX) && !defined(_WIN32)
 void SwMacrosTest::testVba()
 {
     TestMacroInfo testInfo[] = {
@@ -165,12 +129,10 @@ void SwMacrosTest::testVba()
         SfxObjectShell::CallXScript(xComponent, sUrl, aParams, aRet, aOutParamIndex,aOutParam);
         OUString aStringRes;
         aRet >>= aStringRes;
-        std::cout << "value of Ret " << aStringRes << std::endl;
-        //CPPUNIT_ASSERT_MESSAGE( "script reported failure",aStringRes == "OK" );
+        // CPPUNIT_ASSERT_EQUAL(OUString("OK"), aStringRes);
         pFoundShell->DoClose();
     }
 }
-#endif
 
 void SwMacrosTest::testBookmarkDeleteAndJoin()
 {
@@ -242,7 +204,6 @@ void SwMacrosTest::testBookmarkDeleteTdf90816()
     CPPUNIT_ASSERT_EQUAL((*iter)->GetOtherMarkPos(), *aPaM.End());
 }
 
-#if 0
 void SwMacrosTest::testControlShapeGrouping()
 {
     OUString aFileName;
@@ -309,10 +270,11 @@ void SwMacrosTest::testControlShapeGrouping()
     uno::Reference<container::XIndexAccess> xGroupIC(xGroup, UNO_QUERY);
     CPPUNIT_ASSERT(xGroup.is());
 
+#if 0
     CPPUNIT_ASSERT(xDateShape->getControl().is());
-    CPPUNIT_ASSERT(xDateShape->getControl() == xDateControlModel);
+    CPPUNIT_ASSERT_EQUAL(xDateShape->getControl(), xDateControlModel);
     CPPUNIT_ASSERT(xTimeShape->getControl().is());
-    CPPUNIT_ASSERT(xTimeShape->getControl() == xTimeControlModel);
+    CPPUNIT_ASSERT_EQUAL(xTimeShape->getControl(), xTimeControlModel);
 
     {
         uno::Reference< uno::XInterface > xDI;
@@ -320,14 +282,14 @@ void SwMacrosTest::testControlShapeGrouping()
         CPPUNIT_ASSERT(xDI.is());
         uno::Reference< drawing::XControlShape > xDS(xDI, UNO_QUERY);
         CPPUNIT_ASSERT(xDS.is());
-        CPPUNIT_ASSERT(xDS->getControl() == xDateControlModel);
+        CPPUNIT_ASSERT_EQUAL(xDS->getControl(), xDateControlModel);
 
         uno::Reference< uno::XInterface > xTI;
         xGroupIC->getByIndex(1) >>= xTI;
         CPPUNIT_ASSERT(xTI.is());
         uno::Reference< drawing::XControlShape > xTS(xTI, UNO_QUERY);
         CPPUNIT_ASSERT(xTS.is());
-        CPPUNIT_ASSERT(xTS->getControl() == xTimeControlModel);
+        CPPUNIT_ASSERT_EQUAL(xTS->getControl(), xTimeControlModel);
     }
     {
         uno::Reference< uno::XInterface > xDI;
@@ -335,17 +297,21 @@ void SwMacrosTest::testControlShapeGrouping()
         CPPUNIT_ASSERT(xDI.is());
         uno::Reference< drawing::XControlShape > xDS(xDI, UNO_QUERY);
         CPPUNIT_ASSERT(xDS.is());
-        CPPUNIT_ASSERT(xDS->getControl() == xDateControlModel);
+        CPPUNIT_ASSERT_EQUAL(xDS->getControl(), xDateControlModel);
 
         uno::Reference< uno::XInterface > xTI;
         xShapesIC->getByIndex(1) >>= xTI;
         CPPUNIT_ASSERT(xTI.is());
         uno::Reference< drawing::XControlShape > xTS(xTI, UNO_QUERY);
         CPPUNIT_ASSERT(xTS.is());
-        CPPUNIT_ASSERT(xTS->getControl() == xTimeControlModel);
+        CPPUNIT_ASSERT_EQUAL(xTS->getControl(), xTimeControlModel);
     }
-}
 #endif
+
+    // close
+    Reference<util::XCloseable> xDocCloseable(xComponent, UNO_QUERY_THROW);
+    xDocCloseable->close(false);
+}
 
 void SwMacrosTest::testFdo55289()
 {
