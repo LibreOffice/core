@@ -249,9 +249,7 @@ public:
     void testUnicodeNotationToggle();
     void testTextTableCellNames();
     void testShapeAnchorUndo();
-#if HAVE_FEATURE_UI
     void testDde();
-#endif
     void testDocModState();
     void testTdf94804();
     void testTdf34957();
@@ -259,9 +257,7 @@ public:
     void testTdf89720();
     void testTdf88986();
     void testTdf87922();
-#if HAVE_MORE_FONTS
     void testTdf77014();
-#endif
     void testTdf92648();
     void testTdf103978_backgroundTextShape();
     void testTdf96515();
@@ -297,9 +293,7 @@ public:
     void testTdf104425();
     void testTdf104814();
     void testTdf66405();
-#if HAVE_MORE_FONTS
     void testTdf35021_tabOverMarginDemo();
-#endif
     void testTdf106701_tabOverMarginAutotab();
     void testTdf104492();
     void testTdf107025();
@@ -320,7 +314,6 @@ public:
     void testCreateDocxAnnotation();
     void testTdf107976();
     void testTdf108524();
-#if HAVE_MORE_FONTS
     void testTableInSection();
     void testTableInNestedSection();
     void testTableInSectionInTable();
@@ -335,7 +328,6 @@ public:
     void testTdf113287();
     void testTdf113445();
     void testTdf113686();
-#endif
     void testFontEmbedding();
     void testLinesInSectionInTable();
     void testParagraphOfTextRange();
@@ -457,9 +449,7 @@ public:
     CPPUNIT_TEST(testUnicodeNotationToggle);
     CPPUNIT_TEST(testTextTableCellNames);
     CPPUNIT_TEST(testShapeAnchorUndo);
-#if HAVE_FEATURE_UI
     CPPUNIT_TEST(testDde);
-#endif
     CPPUNIT_TEST(testDocModState);
     CPPUNIT_TEST(testTdf94804);
     CPPUNIT_TEST(testTdf34957);
@@ -467,9 +457,7 @@ public:
     CPPUNIT_TEST(testTdf89720);
     CPPUNIT_TEST(testTdf88986);
     CPPUNIT_TEST(testTdf87922);
-#if HAVE_MORE_FONTS
     CPPUNIT_TEST(testTdf77014);
-#endif
     CPPUNIT_TEST(testTdf92648);
     CPPUNIT_TEST(testTdf103978_backgroundTextShape);
     CPPUNIT_TEST(testTdf96515);
@@ -505,9 +493,7 @@ public:
     CPPUNIT_TEST(testTdf104425);
     CPPUNIT_TEST(testTdf104814);
     CPPUNIT_TEST(testTdf66405);
-#if HAVE_MORE_FONTS
     CPPUNIT_TEST(testTdf35021_tabOverMarginDemo);
-#endif
     CPPUNIT_TEST(testTdf106701_tabOverMarginAutotab);
     CPPUNIT_TEST(testTdf104492);
     CPPUNIT_TEST(testTdf107025);
@@ -528,7 +514,6 @@ public:
     CPPUNIT_TEST(testCreateDocxAnnotation);
     CPPUNIT_TEST(testTdf107976);
     CPPUNIT_TEST(testTdf108524);
-#if HAVE_MORE_FONTS
     CPPUNIT_TEST(testTableInSection);
     CPPUNIT_TEST(testTableInNestedSection);
     CPPUNIT_TEST(testTableInSectionInTable);
@@ -544,7 +529,6 @@ public:
     CPPUNIT_TEST(testTdf113445);
     CPPUNIT_TEST(testTdf113686);
     CPPUNIT_TEST(testFontEmbedding);
-#endif
     CPPUNIT_TEST(testLinesInSectionInTable);
     CPPUNIT_TEST(testParagraphOfTextRange);
     CPPUNIT_TEST(testTdf99689TableOfContents);
@@ -4041,9 +4025,10 @@ static void lcl_dispatchCommand(const uno::Reference<lang::XComponent>& xCompone
 
     xDispatchHelper->executeDispatch(xFrame, rCommand, OUString(), 0, rPropertyValues);
 }
-#if HAVE_FEATURE_UI
+
 void SwUiWriterTest::testDde()
 {
+#if HAVE_FEATURE_UI
     // Type asdf and copy it.
     SwDoc* pDoc = createDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
@@ -4064,8 +4049,9 @@ void SwUiWriterTest::testDde()
     const uno::Reference< text::XTextRange > xField = getRun(getParagraph(1), 1);
     CPPUNIT_ASSERT_EQUAL(OUString("TextField"), getProperty<OUString>(xField, "TextPortionType"));
     CPPUNIT_ASSERT(xField->getString().endsWith("asdf"));
-}
 #endif
+}
+
 //IdleTask class to add a low priority Idle task
 class IdleTask
 {
@@ -4209,7 +4195,6 @@ void SwUiWriterTest::testTdf89954()
 
 void SwUiWriterTest::testTdf89720()
 {
-#ifndef MACOSX
     SwDoc* pDoc = createDoc("tdf89720.odt");
     SwView* pView = pDoc->GetDocShell()->GetView();
     SwPostItMgr* pPostItMgr = pView->GetPostItMgr();
@@ -4220,7 +4205,6 @@ void SwUiWriterTest::testTdf89720()
             // resulting in unexpected dark color.
             CPPUNIT_ASSERT(!pItem->pPostIt->TextRange());
     }
-#endif
 }
 
 void SwUiWriterTest::testTdf88986()
@@ -4321,9 +4305,11 @@ class PortionHandler : public SwPortionHandler
         mPortionItems.emplace_back("finish", 0, PortionType::NONE);
     }
 };
+#endif
 
 void SwUiWriterTest::testTdf77014()
 {
+#if HAVE_MORE_FONTS
     // The problem described in the bug tdf#77014 is that the input
     // field text ("ThisIsAllOneWord") is broken up on linebreak, but
     // it should be in one piece (like normal text).
@@ -4467,8 +4453,8 @@ void SwUiWriterTest::testTdf77014()
         rPortionItem = aHandler.mPortionItems[7];
         CPPUNIT_ASSERT_EQUAL(OUString("finish"), rPortionItem.msItemType);
     }
-}
 #endif
+}
 
 void SwUiWriterTest::testTdf92648()
 {
@@ -5560,9 +5546,9 @@ void SwUiWriterTest::testTdf66405()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nBottomMargin);
 }
 
-#if HAVE_MORE_FONTS
 void SwUiWriterTest::testTdf35021_tabOverMarginDemo()
 {
+#if HAVE_MORE_FONTS
     createDoc("tdf35021_tabOverMarginDemo.doc");
     calcLayout();
     xmlDocPtr pXmlDoc = parseLayoutDump();
@@ -5580,8 +5566,8 @@ void SwUiWriterTest::testTdf35021_tabOverMarginDemo()
     // decimal tab was 266
     nWidth = getXPath(pXmlDoc, "//Text[@nType='PortionType::TabDecimal']", "nWidth").toInt32();
     CPPUNIT_ASSERT_MESSAGE("Decimal Tab width is ~4096", nMargin < nWidth);
-}
 #endif
+}
 
 void SwUiWriterTest::testTdf106701_tabOverMarginAutotab()
 {
@@ -6069,10 +6055,9 @@ void SwUiWriterTest::testLinesInSectionInTable()
     assertXPath(pXmlDoc, "/root/page[2]/body/tab/row/cell/section", 1);
 }
 
-#if HAVE_MORE_FONTS
 void SwUiWriterTest::testLinesMoveBackwardsInSectionInTable()
 {
-#ifndef MACOSX
+#if HAVE_MORE_FONTS
     // Assert that paragraph "4" is on page 1 and "5" is on page 2.
     SwDoc* pDoc = createDoc("lines-in-section-in-table.odt");
     xmlDocPtr pXmlDoc = parseLayoutDump();
@@ -6101,6 +6086,7 @@ void SwUiWriterTest::testLinesMoveBackwardsInSectionInTable()
 
 void SwUiWriterTest::testTableInSection()
 {
+#if HAVE_MORE_FONTS
     // The document has a section, containing a table that spans over 2 pages.
     createDoc("table-in-sect.odt");
     xmlDocPtr pXmlDoc = parseLayoutDump();
@@ -6110,10 +6096,12 @@ void SwUiWriterTest::testTableInSection()
     // Assert that on both pages the section contains 2 cells.
     assertXPath(pXmlDoc, "/root/page[1]/body/section/tab/row/cell", 2);
     assertXPath(pXmlDoc, "/root/page[2]/body/section/tab/row/cell", 2);
+#endif
 }
 
 void SwUiWriterTest::testTableInNestedSection()
 {
+#if HAVE_MORE_FONTS
     // The document has a nested section, containing a table that spans over 2 pages.
     // This crashed the layout.
     createDoc("rhbz739252-3.odt");
@@ -6121,10 +6109,12 @@ void SwUiWriterTest::testTableInNestedSection()
     // Make sure the table is inside a section and spans over 2 pages.
     assertXPath(pXmlDoc, "//page[1]//section/tab", 1);
     assertXPath(pXmlDoc, "//page[2]//section/tab", 1);
+#endif
 }
 
 void SwUiWriterTest::testTdf112741()
 {
+#if HAVE_MORE_FONTS
     createDoc("tdf112741.fodt");
     xmlDocPtr pXmlDoc = parseLayoutDump();
     // This was 5 pages.
@@ -6134,18 +6124,22 @@ void SwUiWriterTest::testTdf112741()
     // This failed, 3rd page contained no sections.
     assertXPath(pXmlDoc, "//page[3]/body/tab/row/cell/tab/row/cell/section", 1);
     assertXPath(pXmlDoc, "//page[4]/body/tab/row/cell/tab/row/cell/section", 1);
+#endif
 }
 
 void SwUiWriterTest::testTdf112860()
 {
+#if HAVE_MORE_FONTS
     // The document has a split section inside a nested table, and also a table
     // in the footer.
     // This crashed the layout.
     createDoc("tdf112860.fodt");
+#endif
 }
 
 void SwUiWriterTest::testTdf113287()
 {
+#if HAVE_MORE_FONTS
     createDoc("tdf113287.fodt");
     xmlDocPtr pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "//page", 2);
@@ -6154,10 +6148,12 @@ void SwUiWriterTest::testTdf113287()
     // Make sure section frame is inside the cell frame.
     // Expected greater than 4593, was only 3714.
     CPPUNIT_ASSERT_GREATER(nCellTop, nSectionTop);
+#endif
 }
 
 void SwUiWriterTest::testTdf113445()
 {
+#if HAVE_MORE_FONTS
     // Force multiple-page view.
     SwDoc* pDoc = createDoc("tdf113445.fodt");
     SwDocShell* pDocShell = pDoc->GetDocShell();
@@ -6189,10 +6185,12 @@ void SwUiWriterTest::testTdf113445()
     // Also check if the two cells in the same row have the same top position.
     // This was 4818, expected only 1672.
     CPPUNIT_ASSERT_EQUAL(nCell3Top, nCell4Top);
+#endif
 }
 
 void SwUiWriterTest::testTdf113686()
 {
+#if HAVE_MORE_FONTS
     SwDoc* pDoc = createDoc("tdf113686.fodt");
     xmlDocPtr pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "/root/page", 2);
@@ -6215,26 +6213,32 @@ void SwUiWriterTest::testTdf113686()
     pXmlDoc = parseLayoutDump();
     // This was still 2, content from 2nd page was not moved.
     assertXPath(pXmlDoc, "/root/page", 1);
+#endif
 }
 
 void SwUiWriterTest::testTableInSectionInTable()
 {
+#if HAVE_MORE_FONTS
     // The document has a table, containing a section, containing a nested
     // table.
     // This crashed the layout.
     createDoc("i95698.odt");
+#endif
 }
 
 void SwUiWriterTest::testSectionInTableInTable()
 {
+#if HAVE_MORE_FONTS
     // The document has a nested table, containing a multi-line section at a
     // page boundary.
     // This crashed the layout later in SwFrame::IsFootnoteAllowed().
     createDoc("tdf112109.fodt");
+#endif
 }
 
 void SwUiWriterTest::testSectionInTableInTable2()
 {
+#if HAVE_MORE_FONTS
     createDoc("split-section-in-nested-table.fodt");
     xmlDocPtr pXmlDoc = parseLayoutDump();
     sal_uInt32 nSection1 = getXPath(pXmlDoc, "//page[1]//body/tab/row/cell/tab/row/cell/section", "id").toUInt32();
@@ -6246,10 +6250,12 @@ void SwUiWriterTest::testSectionInTableInTable2()
     // Make sure that the first's follow and the second's precede is correct.
     CPPUNIT_ASSERT_EQUAL(nSection2, nSection1Follow);
     CPPUNIT_ASSERT_EQUAL(nSection1, nSection2Precede);
+#endif
 }
 
 void SwUiWriterTest::testSectionInTableInTable3()
 {
+#if HAVE_MORE_FONTS
     createDoc("tdf113153.fodt");
 
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
@@ -6278,10 +6284,12 @@ void SwUiWriterTest::testSectionInTableInTable3()
     CPPUNIT_ASSERT_EQUAL(nTable1, nTable2Precede);
     CPPUNIT_ASSERT_EQUAL(nTable3, nTable2Follow);
     CPPUNIT_ASSERT_EQUAL(nTable2, nTable3Precede);
+#endif
 }
 
 void SwUiWriterTest::testSectionInTableInTable4()
 {
+#if HAVE_MORE_FONTS
     SwDoc* pDoc = createDoc("tdf113520.fodt");
     xmlDocPtr pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "/root/page", 3);
@@ -6313,10 +6321,12 @@ void SwUiWriterTest::testSectionInTableInTable4()
     sal_uInt32 nTable2Precede = getXPath(pXmlDoc, "//page[2]//body/tab", "precede").toUInt32();
     CPPUNIT_ASSERT_EQUAL(nTable2, nTable1Follow);
     CPPUNIT_ASSERT_EQUAL(nTable1, nTable2Precede);
+#endif
 }
 
 void SwUiWriterTest::testTdf112160()
 {
+#if HAVE_MORE_FONTS
     // Assert that the A2 cell is on page 1.
     SwDoc* pDoc = createDoc("tdf112160.fodt");
     xmlDocPtr pXmlDoc = parseLayoutDump();
@@ -6336,8 +6346,8 @@ void SwUiWriterTest::testTdf112160()
     sal_uInt32 nD2CellNode = getXPath(pXmlDoc, "/root/page[1]/body/tab/row[2]/cell[last()]/section/txt[last()]", "txtNodeIndex").toUInt32();
     // This was Table1.C2, Table1.D2 was moved to the next page, unexpected.
     CPPUNIT_ASSERT_EQUAL(OUString("Table1.D2"), pDoc->GetNodes()[nD2CellNode]->GetTextNode()->GetText());
-}
 #endif
+}
 
 void SwUiWriterTest::testTdf114536()
 {
