@@ -165,18 +165,14 @@ public:
 
     void testCustomXml();
 
-#if !defined _WIN32
     void testRelativePathsODS();
-#endif
     void testSheetProtectionODS();
 
     void testSwappedOutImageExport();
     void testLinkedGraphicRT();
     void testImageWithSpecialID();
 
-#if !defined _WIN32
     void testSupBookVirtualPathXLS();
-#endif
     void testAbsNamedRangeHTML();
     void testSheetLocalRangeNameXLS();
     void testRelativeNamedExpressionsXLS();
@@ -298,13 +294,9 @@ public:
     CPPUNIT_TEST(testCeilingFloorXLS);
     CPPUNIT_TEST(testCeilingFloorODS);
     CPPUNIT_TEST(testCustomXml);
-#if !defined(_WIN32)
     CPPUNIT_TEST(testRelativePathsODS);
-#endif
     CPPUNIT_TEST(testSheetProtectionODS);
-#if !defined(_WIN32)
     CPPUNIT_TEST(testSupBookVirtualPathXLS);
-#endif
     CPPUNIT_TEST(testSwappedOutImageExport);
     CPPUNIT_TEST(testLinkedGraphicRT);
     CPPUNIT_TEST(testImageWithSpecialID);
@@ -3081,7 +3073,6 @@ void ScExportTest::testCustomXml()
     CPPUNIT_ASSERT(pStream);
 }
 
-#if !defined _WIN32
 void ScExportTest::testRelativePathsODS()
 {
     ScDocShellRef xDocSh = loadDoc("fdo79305.", FORMAT_ODS);
@@ -3094,7 +3085,6 @@ void ScExportTest::testRelativePathsODS()
     // make sure that the URL is relative
     CPPUNIT_ASSERT(aURL.startsWith(".."));
 }
-#endif
 
 namespace {
 
@@ -3222,7 +3212,6 @@ void ScExportTest::tearDown()
     test::BootstrapFixture::tearDown();
 }
 
-#if !defined _WIN32
 void ScExportTest::testSupBookVirtualPathXLS()
 {
     ScDocShellRef xShell = loadDoc("external-ref.", FORMAT_XLS);
@@ -3234,11 +3223,13 @@ void ScExportTest::testSupBookVirtualPathXLS()
 
     ScDocument& rDoc = xDocSh->GetDocument();
 
+#ifdef _WIN32
+    ASSERT_FORMULA_EQUAL(rDoc, ScAddress(0,0,0), "'file:///C:/home/timar/Documents/external.xls'#$Sheet1.A1", "Wrong SupBook VirtualPath URL");
+#else
     ASSERT_FORMULA_EQUAL(rDoc, ScAddress(0,0,0), "'file:///home/timar/Documents/external.xls'#$Sheet1.A1", "Wrong SupBook VirtualPath URL");
-
+#endif
     xDocSh->DoClose();
 }
-#endif
 
 void ScExportTest::testLinkedGraphicRT()
 {

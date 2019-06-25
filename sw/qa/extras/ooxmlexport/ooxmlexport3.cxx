@@ -24,8 +24,6 @@
 #include <com/sun/star/style/BreakType.hpp>
 #include <ftninfo.hxx>
 
-#if !defined(_WIN32)
-
 class Test : public SwModelTestBase
 {
 public:
@@ -697,8 +695,6 @@ DECLARE_OOXMLEXPORT_TEST(testParaAutoSpacing, "para-auto-spacing.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testGIFImageCrop, "test_GIF_ImageCrop.docx")
 {
-    // FIXME why does this fail on Mac?
-#if !defined(MACOSX)
     uno::Reference<drawing::XShape> image = getShape(1);
     uno::Reference<beans::XPropertySet> imageProperties(image, uno::UNO_QUERY);
     css::text::GraphicCrop aGraphicCropStruct;
@@ -709,13 +705,10 @@ DECLARE_OOXMLEXPORT_TEST(testGIFImageCrop, "test_GIF_ImageCrop.docx")
     CPPUNIT_ASSERT_EQUAL( sal_Int32( 3651 ), aGraphicCropStruct.Right );
     CPPUNIT_ASSERT_EQUAL( sal_Int32( 953 ), aGraphicCropStruct.Top );
     CPPUNIT_ASSERT_EQUAL( sal_Int32( 1244 ), aGraphicCropStruct.Bottom );
-#endif
 }
 
 DECLARE_OOXMLEXPORT_TEST(testPNGImageCrop, "test_PNG_ImageCrop.docx")
 {
-    // FIXME why does this fail on Mac?
-#if !defined(MACOSX)
     /* The problem was image cropping information was not getting saved
      * after roundtrip.
      * Check for presence of cropping parameters in exported file.
@@ -730,7 +723,6 @@ DECLARE_OOXMLEXPORT_TEST(testPNGImageCrop, "test_PNG_ImageCrop.docx")
     CPPUNIT_ASSERT_EQUAL( sal_Int32( 1111 ), aGraphicCropStruct.Right );
     CPPUNIT_ASSERT_EQUAL( sal_Int32( 1164 ), aGraphicCropStruct.Top );
     CPPUNIT_ASSERT_EQUAL( sal_Int32( 635 ), aGraphicCropStruct.Bottom );
-#endif
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf41542_imagePadding, "tdf41542_imagePadding.odt")
@@ -978,8 +970,6 @@ DECLARE_OOXMLEXPORT_TEST(testFileOpenInputOutputError,"floatingtbl_with_formula.
     // let's also assert that the formula was exported properly
     assertXPathContent(pXmlDoc, "//w:tbl/w:tr/w:tc[2]/w:p/m:oMath/m:sSubSup/m:e/m:r/m:t", u"\u03C3");
 }
-
-#endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 

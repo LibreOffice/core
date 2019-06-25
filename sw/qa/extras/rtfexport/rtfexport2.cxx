@@ -616,8 +616,6 @@ DECLARE_RTFEXPORT_TEST(testCopyPastePageStyle, "copypaste-pagestyle.rtf")
                          getProperty<sal_Int32>(xPropertySet, "Width")); // Was letter, i.e. 21590
 }
 
-#if !defined(_WIN32)
-
 DECLARE_RTFEXPORT_TEST(testCopyPasteFootnote, "copypaste-footnote.rtf")
 {
     // The RTF import did not handle the case when the position wasn't the main document XText, but something different, e.g. a footnote.
@@ -644,8 +642,6 @@ DECLARE_RTFEXPORT_TEST(testFdo63428, "hello.rtf")
     CPPUNIT_ASSERT_EQUAL(OUString("AnnotationEnd"),
                          getProperty<OUString>(getRun(getParagraph(1), 4), "TextPortionType"));
 }
-
-#endif
 
 DECLARE_RTFEXPORT_TEST(testFdo69384, "fdo69384-paste.rtf")
 {
