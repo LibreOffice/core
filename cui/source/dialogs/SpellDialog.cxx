@@ -1120,108 +1120,8 @@ void SentenceEditWindow_Impl::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 {
     Size aSize(pDrawingArea->get_approximate_digit_width() * 60,
                pDrawingArea->get_text_height() * 6);
-
     pDrawingArea->set_size_request(aSize.Width(), aSize.Height());
-    SetOutputSizePixel(aSize);
-
-    weld::CustomWidgetController::SetDrawingArea(pDrawingArea);
-
-    EnableRTL(false);
-
-    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
-    Color aBgColor = rStyleSettings.GetWindowColor();
-
-    OutputDevice& rDevice = pDrawingArea->get_ref_device();
-
-    rDevice.SetMapMode(MapMode(MapUnit::MapTwip));
-    rDevice.SetBackground(aBgColor);
-
-    Size aOutputSize(rDevice.PixelToLogic(aSize));
-    aSize = aOutputSize;
-    aSize.setHeight( aSize.Height() * 4 );
-
-    m_xEditEngine.reset(new EditEngine(EditEngine::CreatePool()));
-    m_xEditEngine->SetPaperSize( aSize );
-    m_xEditEngine->SetRefDevice( &rDevice );
-
-    m_xEditEngine->SetControlWord(m_xEditEngine->GetControlWord() | EEControlBits::MARKFIELDS);
-
-    m_xEdView.reset(new EditView(m_xEditEngine.get(), nullptr));
-    m_xEdView->setEditViewCallbacks(this);
-    m_xEdView->SetOutputArea(tools::Rectangle(Point(0,0), aOutputSize));
-
-    m_xEdView->SetBackgroundColor(aBgColor);
-    m_xEditEngine->InsertView(m_xEdView.get());
-
-    pDrawingArea->set_cursor(PointerStyle::Text);
-}
-
-void SentenceEditWindow_Impl::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
-{
-    //note: ClassificationEditView::Paint is similar
-
-    rRenderContext.Push(PushFlags::ALL);
-    rRenderContext.SetClipRegion();
-
-    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
-    Color aBgColor = rStyleSettings.GetWindowColor();
-
-    m_xEdView->SetBackgroundColor(aBgColor);
-
-    rRenderContext.SetBackground(aBgColor);
-
-    tools::Rectangle aLogicRect(rRenderContext.PixelToLogic(rRect));
-    m_xEdView->Paint(aLogicRect, &rRenderContext);
-
-    if (HasFocus())
-    {
-        m_xEdView->ShowCursor();
-        vcl::Cursor* pCursor = m_xEdView->GetCursor();
-        pCursor->DrawToDevice(rRenderContext);
-    }
-
-    std::vector<tools::Rectangle> aLogicRects;
-
-    // get logic selection
-    m_xEdView->GetSelectionRectangles(aLogicRects);
-
-    rRenderContext.SetLineColor();
-    rRenderContext.SetFillColor(COL_BLACK);
-    rRenderContext.SetRasterOp(RasterOp::Invert);
-
-    for (const auto &rSelectionRect : aLogicRects)
-        rRenderContext.DrawRect(rSelectionRect);
-
-    rRenderContext.Pop();
-}
-
-bool SentenceEditWindow_Impl::MouseMove(const MouseEvent& rMEvt)
-{
-    return m_xEdView->MouseMove(rMEvt);
-}
-
-bool SentenceEditWindow_Impl::MouseButtonDown(const MouseEvent& rMEvt)
-{
-    if (!HasFocus())
-        GrabFocus();
-
-    return m_xEdView->MouseButtonDown(rMEvt);
-}
-
-bool SentenceEditWindow_Impl::MouseButtonUp(const MouseEvent& rMEvt)
-{
-    return m_xEdView->MouseButtonUp(rMEvt);
-}
-
-void SentenceEditWindow_Impl::Resize()
-{
-    OutputDevice& rDevice = GetDrawingArea()->get_ref_device();
-    Size aOutputSize(rDevice.PixelToLogic(GetOutputSizePixel()));
-    Size aSize(aOutputSize);
-    aSize.setHeight( aSize.Height() * 4 );
-    m_xEditEngine->SetPaperSize(aSize);
-    m_xEdView->SetOutputArea(tools::Rectangle(Point(0,0), aOutputSize));
-    weld::CustomWidgetController::Resize();
+    WeldEditView::SetDrawingArea(pDrawingArea);
 }
 
 SentenceEditWindow_Impl::~SentenceEditWindow_Impl()
@@ -1338,7 +1238,7 @@ bool SentenceEditWindow_Impl::KeyInput(const KeyEvent& rKeyEvt)
     {
         bConsumed = true;
 
-        ESelection aCurrentSelection(m_xEdView->GetSelection());
+        ESelection aCurrentSelection(m_xEditView->GetSelection());
         aCurrentSelection.Adjust();
 
         //determine if the selection contains a field
@@ -1498,13 +1398,13 @@ bool SentenceEditWindow_Impl::KeyInput(const KeyEvent& rKeyEvt)
         sal_Int32 nCurrentLen = m_xEditEngine->GetText().getLength();
         if (nAction != ACTION_SELECTFIELD)
         {
-            m_xEdView->PostKeyEvent(rKeyEvt);
+            m_xEditView->PostKeyEvent(rKeyEvt);
         }
         else
         {
             const EECharAttrib* pCharAttr = pBackAttr ? pBackAttr : pBackAttrLeft;
             if (pCharAttr)
-                m_xEdView->SetSelection(ESelection(0, pCharAttr->nStart, 0, pCharAttr->nEnd));
+                m_xEditView->SetSelection(ESelection(0, pCharAttr->nStart, 0, pCharAttr->nEnd));
         }
         if(nAction == ACTION_EXPAND)
         {
@@ -1591,7 +1491,7 @@ bool SentenceEditWindow_Impl::KeyInput(const KeyEvent& rKeyEvt)
             CallModifyLink();
     }
     else
-        bConsumed = m_xEdView->PostKeyEvent(rKeyEvt);
+        bConsumed = m_xEditView->PostKeyEvent(rKeyEvt);
 
     return bConsumed;
 }
@@ -1606,7 +1506,7 @@ IMPL_LINK(SentenceEditWindow_Impl, ToolbarHdl, const OString&, rCurItemId, void)
 {
     if (rCurItemId == "paste")
     {
-        m_xEdView->Paste();
+        m_xEditView->Paste();
         CallModifyLink();
     }
     else if (rCurItemId == "insert")
@@ -1616,7 +1516,7 @@ IMPL_LINK(SentenceEditWindow_Impl, ToolbarHdl, const OString&, rCurItemId, void)
             OUString aChars = Edit::GetGetSpecialCharsFunction()(GetDrawingArea(), m_xEditEngine->GetStandardFont(0));
             if (!aChars.isEmpty())
             {
-                ESelection aCurrentSelection(m_xEdView->GetSelection());
+                ESelection aCurrentSelection(m_xEditView->GetSelection());
                 m_xEditEngine->QuickInsertText(aChars, aCurrentSelection);
                 CallModifyLink();
             }
@@ -1759,7 +1659,7 @@ void SentenceEditWindow_Impl::MoveErrorMarkTo(sal_Int32 nStart, sal_Int32 nEnd, 
 
     m_xEditEngine->QuickSetAttribs(aSet, ESelection(0, nStart, 0, nEnd));
     // so the editview will autoscroll to make this visible
-    m_xEdView->SetSelection(ESelection(0, nStart));
+    m_xEditView->SetSelection(ESelection(0, nStart));
     Invalidate();
 
     m_nErrorStart = nStart;

@@ -23,7 +23,7 @@
 #include <scdllapi.h>
 #include <cppuhelper/weakref.hxx>
 #include <tools/wintypes.hxx>
-#include <editeng/editview.hxx>
+#include <editeng/weldeditview.hxx>
 #include <editeng/svxenum.hxx>
 #include <vcl/customweld.hxx>
 
@@ -46,8 +46,7 @@ enum ScEditWindowLocation
     Right
 };
 
-class SC_DLLPUBLIC ScEditWindow : public weld::CustomWidgetController
-                                , public EditViewCallbacks
+class SC_DLLPUBLIC ScEditWindow : public WeldEditView
 {
 public:
     ScEditWindow(ScEditWindowLocation eLoc, weld::Window* pParent);
@@ -65,40 +64,17 @@ public:
 
     virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessible() override;
 
-    ScHeaderEditEngine*  GetEditEngine() const { return pEdEngine.get(); }
+    ScHeaderEditEngine* GetEditEngine() const;
     void SetObjectSelectHdl( const Link<ScEditWindow&,void>& aLink) { aObjectSelectLink = aLink; }
     void SetGetFocusHdl(const std::function<void (ScEditWindow&)>& rLink) { m_GetFocusLink = rLink; }
 
 protected:
-    virtual void    Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
-    virtual bool    MouseMove( const MouseEvent& rMEvt ) override;
-    virtual bool    MouseButtonDown( const MouseEvent& rMEvt ) override;
-    virtual bool    MouseButtonUp( const MouseEvent& rMEvt ) override;
-    virtual bool    KeyInput( const KeyEvent& rKEvt ) override;
-    virtual void    GetFocus() override;
-    virtual void    LoseFocus() override;
-    virtual void    Resize() override;
-
-    virtual void EditViewInvalidate(const tools::Rectangle& rRect) const override
-    {
-        weld::DrawingArea* pDrawingArea = GetDrawingArea();
-        pDrawingArea->queue_draw_area(rRect.Left(), rRect.Top(), rRect.GetWidth(), rRect.GetHeight());
-    }
-
-    virtual void EditViewSelectionChange() const override
-    {
-        weld::DrawingArea* pDrawingArea = GetDrawingArea();
-        pDrawingArea->queue_draw();
-    }
-
-    virtual OutputDevice& EditViewOutputDevice() const override
-    {
-        return GetDrawingArea()->get_ref_device();
-    }
+    virtual void makeEditEngine() override;
+    virtual bool KeyInput( const KeyEvent& rKEvt ) override;
+    virtual void GetFocus() override;
+    virtual void LoseFocus() override;
 
 private:
-    std::unique_ptr<ScHeaderEditEngine> pEdEngine;
-    std::unique_ptr<EditView>           pEdView;
     ScEditWindowLocation eLocation;
     bool mbRTL;
     weld::Window* mpDialog;
@@ -108,6 +84,7 @@ private:
 
     Link<ScEditWindow&,void> aObjectSelectLink;
     std::function<void (ScEditWindow&)> m_GetFocusLink;
+
 };
 
 #endif // INCLUDED_SC_SOURCE_UI_INC_TPHFEDIT_HXX

@@ -13,8 +13,7 @@
 
 #include <sal/config.h>
 #include <svx/svxdllapi.h>
-#include <editeng/editeng.hxx>
-#include <editeng/editview.hxx>
+#include <editeng/weldeditview.hxx>
 #include <editeng/svxenum.hxx>
 #include <vcl/customweld.hxx>
 
@@ -28,13 +27,13 @@ public:
     virtual OUString CalcFieldValue(const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos, boost::optional<Color>& rTxtColor, boost::optional<Color>& rFldColor) override;
 };
 
-class SVX_DLLPUBLIC ClassificationEditView : public weld::CustomWidgetController
-                                           , public EditViewCallbacks
+class SVX_DLLPUBLIC ClassificationEditView : public WeldEditView
 {
 public:
     ClassificationEditView();
-    virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
     virtual ~ClassificationEditView() override;
+
+    virtual void makeEditEngine() override;
 
     void SetCharAttributes();
 
@@ -44,44 +43,19 @@ public:
 
     void SetNumType(SvxNumType eNumType);
 
-    std::unique_ptr<ClassificationEditEngine> pEdEngine;
-    std::unique_ptr<EditView> pEdView;
-
-    const ClassificationEditEngine& getEditEngine()
+    ClassificationEditEngine& getEditEngine()
     {
-        return *pEdEngine;
+        return *static_cast<ClassificationEditEngine*>(m_xEditEngine.get());
+    }
+
+    EditView& getEditView()
+    {
+        return *m_xEditView.get();
     }
 
     void SetModifyHdl(const Link<LinkParamNone*,void>& rLink)
     {
-        pEdEngine->SetModifyHdl(rLink);
-    }
-
-protected:
-    virtual void Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
-    virtual bool MouseMove( const MouseEvent& rMEvt ) override;
-    virtual bool MouseButtonDown( const MouseEvent& rMEvt ) override;
-    virtual bool MouseButtonUp( const MouseEvent& rMEvt ) override;
-    virtual bool KeyInput( const KeyEvent& rKEvt ) override;
-    virtual void GetFocus() override;
-    virtual void Resize() override;
-
-
-    virtual void EditViewInvalidate(const tools::Rectangle& rRect) const override
-    {
-        weld::DrawingArea* pDrawingArea = GetDrawingArea();
-        pDrawingArea->queue_draw_area(rRect.Left(), rRect.Top(), rRect.GetWidth(), rRect.GetHeight());
-    }
-
-    virtual void EditViewSelectionChange() const override
-    {
-        weld::DrawingArea* pDrawingArea = GetDrawingArea();
-        pDrawingArea->queue_draw();
-    }
-
-    virtual OutputDevice& EditViewOutputDevice() const override
-    {
-        return GetDrawingArea()->get_ref_device();
+        m_xEditEngine->SetModifyHdl(rLink);
     }
 };
 
