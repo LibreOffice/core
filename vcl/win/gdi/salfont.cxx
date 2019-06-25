@@ -1060,7 +1060,7 @@ struct TempFontItem
     TempFontItem* mpNextItem;
 };
 
-bool ImplAddTempFont( SalData& rSalData, const OUString& rFontFileURL )
+static bool ImplAddTempFont(SalData& rSalData, const OUString& rFontFileURL)
 {
     int nRet = 0;
     OUString aUSytemPath;
@@ -1180,7 +1180,7 @@ static bool ImplGetFontAttrFromFile( const OUString& rFontFileURL,
 bool WinSalGraphics::AddTempDevFont( PhysicalFontCollection* pFontCollection,
     const OUString& rFontFileURL, const OUString& rFontName )
 {
-    SAL_INFO("vcl.fonts", "WinSalGraphics::AddTempDevFont(): " << rFontFileURL);
+    SAL_WARN("vcl.fonts", rFontFileURL);
 
     FontAttributes aDFA;
     aDFA.SetFamilyName(rFontName);
@@ -1192,7 +1192,9 @@ bool WinSalGraphics::AddTempDevFont( PhysicalFontCollection* pFontCollection,
         ImplGetFontAttrFromFile( rFontFileURL, aDFA );
     }
 
-    if ( aDFA.GetFamilyName().isEmpty() )
+    bool bError = aDFA.GetFamilyName().isEmpty();
+    SAL_WARN_IF(bError, "vcl.fonts", "no familiy name");
+    if (bError)
         return false;
 
     // remember temp font for cleanup later
@@ -1224,7 +1226,8 @@ bool WinSalGraphics::AddTempDevFont( PhysicalFontCollection* pFontCollection,
 
 void WinSalGraphics::GetDevFontList( PhysicalFontCollection* pFontCollection )
 {
-    SAL_INFO("vcl.fonts", "WinSalGraphics::GetDevFontList(): enter");
+    SAL_WARN("vcl.fonts", __FUNCTION__ << " " << pFontCollection
+                          << " " << pFontCollection->Count());
 
     // make sure all fonts are registered at least temporarily
     static bool bOnce = true;
