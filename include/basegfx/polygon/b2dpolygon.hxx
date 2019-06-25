@@ -99,7 +99,14 @@ namespace basegfx
         void resetControlPoints();
 
         /// Bezier segment append with control points. The current last polygon point is implicitly taken as start point.
-        void appendBezierSegment(const basegfx::B2DPoint& rNextControlPoint, const basegfx::B2DPoint& rPrevControlPoint, const basegfx::B2DPoint& rPoint);
+        void appendBezierSegment(const basegfx::B2DPoint& rNextControlPoint,
+                                 const basegfx::B2DPoint& rPrevControlPoint,
+                                 const basegfx::B2DPoint& rPoint);
+
+        /// This is a shortcut to append a quadratic bezier segment. The current last polygon point is implicitly taken as start point.
+        /// Note that the quadratic bezier control points will be converted to cubic bezier with 2 control points.
+        void appendQuadraticBezierSegment(const basegfx::B2DPoint& rQuadControlPoint,
+                                          const basegfx::B2DPoint& rPoint);
 
         /// ControlPoint checks
         bool areControlPointsUsed() const;
