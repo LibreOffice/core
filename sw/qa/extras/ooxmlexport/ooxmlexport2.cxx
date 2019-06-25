@@ -32,8 +32,6 @@
 
 #include <string>
 
-#if !defined(_WIN32)
-
 class Test : public SwModelTestBase
 {
 public:
@@ -1113,8 +1111,6 @@ DECLARE_OOXMLEXPORT_TEST(testBnc837302, "bnc837302.docx")
     xParagraph = getParagraph(2);
     CPPUNIT_ASSERT_EQUAL(false, hasProperty(getRun(xParagraph, 1), "RedlineType"));
 }
-
-#endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 

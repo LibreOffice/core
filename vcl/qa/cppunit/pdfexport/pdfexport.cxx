@@ -108,7 +108,6 @@ public:
     void testTdf99680_2();
     void testTdf108963();
     void testTdf118244_radioButtonGroup();
-#if HAVE_MORE_FONTS
     /// Test writing ToUnicode CMAP for LTR ligatures.
     void testTdf115117_1();
     /// Text extracting LTR text with ligatures.
@@ -123,7 +122,6 @@ public:
     void testTdf66597_2();
     /// Test writing ActualText for LTR many to one glyph to Unicode mapping.
     void testTdf66597_3();
-#endif
     void testTdf109143();
     void testTdf105954();
     void testTdf106702();
@@ -151,7 +149,6 @@ public:
     CPPUNIT_TEST(testTdf99680_2);
     CPPUNIT_TEST(testTdf108963);
     CPPUNIT_TEST(testTdf118244_radioButtonGroup);
-#if HAVE_MORE_FONTS
     CPPUNIT_TEST(testTdf115117_1);
     CPPUNIT_TEST(testTdf115117_1a);
     CPPUNIT_TEST(testTdf115117_2);
@@ -159,7 +156,6 @@ public:
     CPPUNIT_TEST(testTdf66597_1);
     CPPUNIT_TEST(testTdf66597_2);
     CPPUNIT_TEST(testTdf66597_3);
-#endif
     CPPUNIT_TEST(testTdf109143);
     CPPUNIT_TEST(testTdf105954);
     CPPUNIT_TEST(testTdf106702);
@@ -368,8 +364,8 @@ void PdfExportTest::testTdf107868()
 {
     // No need to run it on Windows, since it would use GDI printing, and not trigger PDF export
     // which is the intent of the test.
-    // FIXME: Why does this fail on macOS?
-#if !defined MACOSX && !defined _WIN32
+#if !defined _WIN32
+
     // Import the bugdoc and print to PDF.
     OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf107868.odt";
     mxComponent = loadFromDesktop(aURL);
@@ -620,10 +616,10 @@ void PdfExportTest::testTdf106972Pdf17()
 
 void PdfExportTest::testSofthyphenPos()
 {
-    // No need to run it on Windows, since it would use GDI printing, and not
-    // trigger PDF export which is the intent of the test.
-    // FIXME: Why does this fail on macOS?
-#if !defined MACOSX && !defined _WIN32
+    // No need to run it on Windows, since it would use GDI printing, and not trigger PDF export
+    // which is the intent of the test.
+#if !defined _WIN32
+
     // Import the bugdoc and print to PDF.
     OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "softhyphen_pdf.odt";
     mxComponent = loadFromDesktop(aURL);
@@ -886,8 +882,6 @@ void PdfExportTest::testTdf108963()
     PageHolder pPdfPage(FPDF_LoadPage(pPdfDocument.get(), /*page_index=*/0));
     CPPUNIT_ASSERT(pPdfPage.get());
 
-    // FIXME: strangely this fails on some Win systems after a pdfium update, expected: 793.7; actual: 793
-#if !defined _WIN32
     // Test page size (28x15.75 cm, was 1/100th mm off, tdf#112690)
     // bad: MediaBox[0 0 793.672440944882 446.428346456693]
     // good: MediaBox[0 0 793.700787401575 446.456692913386]
@@ -953,7 +947,6 @@ void PdfExportTest::testTdf108963()
     }
 
     CPPUNIT_ASSERT_EQUAL(1, nYellowPathCount);
-#endif
 }
 
 void PdfExportTest::testTdf118244_radioButtonGroup()
@@ -993,13 +986,11 @@ void PdfExportTest::testTdf118244_radioButtonGroup()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("# of radio groups", sal_uInt32(3), nRadioGroups);
 }
 
-#if HAVE_MORE_FONTS
 // This requires Carlito font, if it is missing the test will most likely
 // fail.
 void PdfExportTest::testTdf115117_1()
 {
-// keeps failing on the windows tinderboxen
-#if !defined _WIN32
+#if HAVE_MORE_FONTS
     vcl::filter::PDFDocument aDocument;
     load("tdf115117-1.odt", aDocument);
 
@@ -1055,13 +1046,14 @@ void PdfExportTest::testTdf115117_1()
     const char* pEnd = pStart + aObjectStream.GetSize();
     auto it = std::search(pStart, pEnd, aCmap.getStr(), aCmap.getStr() + aCmap.getLength());
     CPPUNIT_ASSERT(it != pEnd);
-#endif // if !defined _WIN32
+#endif
 }
 
 // This requires DejaVu Sans font, if it is missing the test will most likely
 // fail.
 void PdfExportTest::testTdf115117_2()
 {
+#if HAVE_MORE_FONTS
     // See the comments in testTdf115117_1() for explanation.
 
     vcl::filter::PDFDocument aDocument;
@@ -1107,10 +1099,12 @@ void PdfExportTest::testTdf115117_2()
     const char* pEnd = pStart + aObjectStream.GetSize();
     auto it = std::search(pStart, pEnd, aCmap.getStr(), aCmap.getStr() + aCmap.getLength());
     CPPUNIT_ASSERT(it != pEnd);
+#endif
 }
 
 void PdfExportTest::testTdf115117_1a()
 {
+#if HAVE_MORE_FONTS
     // Import the bugdoc and export as PDF.
     OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf115117-1.odt";
     mxComponent = loadFromDesktop(aURL);
@@ -1148,10 +1142,12 @@ void PdfExportTest::testTdf115117_1a()
         aChars[i] = FPDFText_GetUnicode(pPdfTextPage, i);
     OUString aActualText(aChars.data(), aChars.size());
     CPPUNIT_ASSERT_EQUAL(aExpectedText, aActualText);
+#endif
 }
 
 void PdfExportTest::testTdf115117_2a()
 {
+#if HAVE_MORE_FONTS
     // See the comments in testTdf115117_1a() for explanation.
 
     // Import the bugdoc and export as PDF.
@@ -1188,13 +1184,13 @@ void PdfExportTest::testTdf115117_2a()
         aChars[i] = FPDFText_GetUnicode(pPdfTextPage, i);
     OUString aActualText(aChars.data(), aChars.size());
     CPPUNIT_ASSERT_EQUAL(aExpectedText, aActualText);
+#endif
 }
 
-// This requires Amiri font, if it is missing the test will fail.
 void PdfExportTest::testTdf66597_1()
 {
-    // FIXME: Fallback font is used on Windows for some reason.
-#if !defined _WIN32
+#if HAVE_MORE_FONTS
+    // This requires Amiri font, if it is missing the test will fail.
     vcl::filter::PDFDocument aDocument;
     load("tdf66597-1.odt", aDocument);
 
@@ -1284,8 +1280,7 @@ void PdfExportTest::testTdf66597_1()
 // This requires Reem Kufi font, if it is missing the test will fail.
 void PdfExportTest::testTdf66597_2()
 {
-    // FIXME: Fallback font is used on Windows for some reason.
-#if !defined _WIN32
+#if HAVE_MORE_FONTS
     vcl::filter::PDFDocument aDocument;
     load("tdf66597-2.odt", aDocument);
 
@@ -1381,8 +1376,7 @@ void PdfExportTest::testTdf66597_2()
 // This requires Gentium Basic font, if it is missing the test will fail.
 void PdfExportTest::testTdf66597_3()
 {
-    // fails on some of the windows tinderboxes
-#if !defined _WIN32
+#if HAVE_MORE_FONTS
     vcl::filter::PDFDocument aDocument;
     load("tdf66597-3.odt", aDocument);
 
@@ -1458,9 +1452,8 @@ void PdfExportTest::testTdf66597_3()
         }
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Number of ActualText entries does not match!", static_cast<size_t>(4), nCount);
     }
-#endif // __WIN32
-}
 #endif
+}
 
 void PdfExportTest::testTdf105954()
 {
