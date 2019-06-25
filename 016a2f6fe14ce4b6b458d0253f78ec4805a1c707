@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df7087c5_65a9f1dd",
+        "filename": "RepositoryExternal.mk",
+        "patchSetId": 15
+      },
+      "lineNbr": 4193,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-06-25T08:28:03Z",
+      "side": 1,
+      "message": "so the 2 branches here are identical now, you can remove the if as well",
+      "revId": "016a2f6fe14ce4b6b458d0253f78ec4805a1c707",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
