@@ -39,8 +39,7 @@
 #include <vcl/xtextedt.hxx>
 #include <vcl/txtattr.hxx>
 #include <vcl/customweld.hxx>
-#include <editeng/editeng.hxx>
-#include <editeng/editview.hxx>
+#include <editeng/weldeditview.hxx>
 #include <editeng/SpellPortions.hxx>
 
 #include <set>
@@ -59,13 +58,9 @@ namespace svx{
 class SpellDialog;
 struct SpellErrorDescription;
 
-class SentenceEditWindow_Impl : public weld::CustomWidgetController
-                              , public EditViewCallbacks
+class SentenceEditWindow_Impl : public WeldEditView
 {
 private:
-    std::unique_ptr<EditEngine> m_xEditEngine;
-    std::unique_ptr<EditView> m_xEdView;
-
     std::set<sal_Int32> m_aIgnoreErrorsAt;
     SpellDialog*        m_pSpellDialog;
     weld::Toolbar*      m_pToolbar;
@@ -84,29 +79,7 @@ private:
     DECL_LINK(ToolbarHdl, const OString&, void);
 
 protected:
-    virtual void    Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
-    virtual bool    MouseMove( const MouseEvent& rMEvt ) override;
-    virtual bool    MouseButtonDown( const MouseEvent& rMEvt ) override;
-    virtual bool    MouseButtonUp( const MouseEvent& rMEvt ) override;
     virtual bool    KeyInput( const KeyEvent& rKEvt ) override;
-    virtual void    Resize() override;
-
-    virtual void EditViewInvalidate(const tools::Rectangle& rRect) const override
-    {
-        weld::DrawingArea* pDrawingArea = GetDrawingArea();
-        pDrawingArea->queue_draw_area(rRect.Left(), rRect.Top(), rRect.GetWidth(), rRect.GetHeight());
-    }
-
-    virtual void EditViewSelectionChange() const override
-    {
-        weld::DrawingArea* pDrawingArea = GetDrawingArea();
-        pDrawingArea->queue_draw();
-    }
-
-    virtual OutputDevice& EditViewOutputDevice() const override
-    {
-        return GetDrawingArea()->get_ref_device();
-    }
 
 public:
     SentenceEditWindow_Impl();
