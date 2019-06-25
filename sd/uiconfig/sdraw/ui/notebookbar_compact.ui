@@ -9152,6 +9152,7 @@
                   <class name="context-Text"/>
                   <class name="context-DrawText"/>
                   <class name="context-TextObject"/>
+                  <class name="context-Table"/>
                 </style>
               </object>
               <packing>
@@ -13709,6 +13710,8 @@
                 <property name="use_underline">True</property>
                 <style>
                   <class name="context-Draw"/>
+                  <class name="context-DrawLine"/>
+                  <class name="context-MultiObject"/>
                 </style>
               </object>
               <packing>
