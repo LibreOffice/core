@@ -463,7 +463,7 @@ SfxItemSet ImpEditEngine::GetAttribs( sal_Int32 nPara, sal_Int32 nStart, sal_Int
                         }
                         else
                         {
-                            // OptimizeRagnge() assures that not the same attr can follow for full coverage
+                            // OptimizeRanges() assures that not the same attr can follow for full coverage
                             // only partial, check with current, when using para/style, otherwise invalid.
                             if ( !( nFlags & (GetAttribsFlags::PARAATTRIBS|GetAttribsFlags::STYLESHEET) ) ||
                                 ( *rAttr.GetItem() != aAttribs.Get( rAttr.Which() ) ) )
