@@ -128,6 +128,7 @@ public:
     bool get_visible() const { return m_xDrawingArea->get_visible(); }
     void set_grid_left_attach(int nAttach) { m_xDrawingArea->set_grid_left_attach(nAttach); }
     int get_grid_left_attach() const { return m_xDrawingArea->get_grid_left_attach(); }
+    void set_help_id(const OString& rHelpId) { m_xDrawingArea->set_help_id(rHelpId); }
 };
 }
 #endif
