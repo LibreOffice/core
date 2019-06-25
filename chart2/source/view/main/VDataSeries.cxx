@@ -803,7 +803,7 @@ Symbol* VDataSeries::getSymbolProperties( sal_Int32 index ) const
                     m_apSymbolProperties_InvisibleSymbolForSelection.reset(new Symbol);
                     m_apSymbolProperties_InvisibleSymbolForSelection->Style = SymbolStyle_STANDARD;
                     m_apSymbolProperties_InvisibleSymbolForSelection->StandardSymbol = 0;//square
-                    m_apSymbolProperties_InvisibleSymbolForSelection->Size = m_apSymbolProperties_Series->Size;
+                    m_apSymbolProperties_InvisibleSymbolForSelection->Size = com::sun::star::awt::Size(0, 0);//tdf#126033
                     m_apSymbolProperties_InvisibleSymbolForSelection->BorderColor = 0xff000000;//invisible
                     m_apSymbolProperties_InvisibleSymbolForSelection->FillColor = 0xff000000;//invisible
                 }
