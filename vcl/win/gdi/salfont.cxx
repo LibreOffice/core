@@ -1180,7 +1180,7 @@ static bool ImplGetFontAttrFromFile( const OUString& rFontFileURL,
 bool WinSalGraphics::AddTempDevFont( PhysicalFontCollection* pFontCollection,
     const OUString& rFontFileURL, const OUString& rFontName )
 {
-    SAL_INFO("vcl.fonts", "WinSalGraphics::AddTempDevFont(): " << rFontFileURL);
+    SAL_WARN("vcl.fonts", "WinSalGraphics::AddTempDevFont(): " << rFontFileURL);
 
     FontAttributes aDFA;
     aDFA.SetFamilyName(rFontName);
