@@ -45,74 +45,30 @@ ClassificationEditView::ClassificationEditView()
 {
 }
 
-void ClassificationEditView::SetDrawingArea(weld::DrawingArea* pDrawingArea)
+void ClassificationEditView::makeEditEngine()
 {
-    Size aSize(500, 100);
-    pDrawingArea->set_size_request(aSize.Width(), aSize.Height());
-    SetOutputSizePixel(aSize);
-
-    weld::CustomWidgetController::SetDrawingArea(pDrawingArea);
-
-    EnableRTL(false);
-
-    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
-    Color aBgColor = rStyleSettings.GetWindowColor();
-
-    OutputDevice& rDevice = pDrawingArea->get_ref_device();
-
-    rDevice.SetMapMode(MapMode(MapUnit::MapTwip));
-    rDevice.SetBackground(aBgColor);
-
-    Size aOutputSize(rDevice.PixelToLogic(aSize));
-    aSize = aOutputSize;
-    aSize.setHeight( aSize.Height() * 4 );
-
-    pEdEngine.reset(new ClassificationEditEngine(EditEngine::CreatePool()));
-    pEdEngine->SetPaperSize( aSize );
-    pEdEngine->SetRefDevice( &rDevice );
-
-    pEdEngine->SetControlWord(pEdEngine->GetControlWord() | EEControlBits::MARKFIELDS);
-
-    pEdView.reset(new EditView(pEdEngine.get(), nullptr));
-    pEdView->setEditViewCallbacks(this);
-    pEdView->SetOutputArea(tools::Rectangle(Point(0,0), aOutputSize));
-
-    pEdView->SetBackgroundColor(aBgColor);
-    pEdEngine->InsertView(pEdView.get());
-
-    pDrawingArea->set_cursor(PointerStyle::Text);
+    m_xEditEngine.reset(new ClassificationEditEngine(EditEngine::CreatePool()));
 }
 
 ClassificationEditView::~ClassificationEditView()
 {
 }
 
-void ClassificationEditView::Resize()
-{
-    OutputDevice& rDevice = GetDrawingArea()->get_ref_device();
-    Size aOutputSize(rDevice.PixelToLogic(GetOutputSizePixel()));
-    Size aSize(aOutputSize);
-    aSize.setHeight( aSize.Height() * 4 );
-    pEdEngine->SetPaperSize(aSize);
-    pEdView->SetOutputArea(tools::Rectangle(Point(0,0), aOutputSize));
-    weld::CustomWidgetController::Resize();
-}
-
 void ClassificationEditView::InsertField(const SvxFieldItem& rFieldItem)
 {
-    pEdView->InsertField(rFieldItem);
-    pEdView->Invalidate();
+    m_xEditView->InsertField(rFieldItem);
+    m_xEditView->Invalidate();
 }
 
 void ClassificationEditView::InvertSelectionWeight()
 {
-    ESelection aSelection = pEdView->GetSelection();
+    ESelection aSelection = m_xEditView->GetSelection();
 
     for (sal_Int32 nParagraph = aSelection.nStartPara; nParagraph <= aSelection.nEndPara; ++nParagraph)
     {
         FontWeight eFontWeight = WEIGHT_BOLD;
 
-        std::unique_ptr<SfxItemSet> pSet(new SfxItemSet(pEdEngine->GetParaAttribs(nParagraph)));
+        std::unique_ptr<SfxItemSet> pSet(new SfxItemSet(m_xEditEngine->GetParaAttribs(nParagraph)));
         if (const SfxPoolItem* pItem = pSet->GetItem(EE_CHAR_WEIGHT, false))
         {
             const SvxWeightItem* pWeightItem = dynamic_cast<const SvxWeightItem*>(pItem);
@@ -121,90 +77,10 @@ void ClassificationEditView::InvertSelectionWeight()
         }
         SvxWeightItem aWeight(eFontWeight, EE_CHAR_WEIGHT);
         pSet->Put(aWeight);
-        pEdEngine->SetParaAttribs(nParagraph, *pSet);
+        m_xEditEngine->SetParaAttribs(nParagraph, *pSet);
     }
 
-    pEdView->Invalidate();
-}
-
-void ClassificationEditView::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
-{
-    //note: ScEditWindow::Paint is similar
-
-    rRenderContext.Push(PushFlags::ALL);
-    rRenderContext.SetClipRegion();
-
-    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
-    Color aBgColor = rStyleSettings.GetWindowColor();
-
-    pEdView->SetBackgroundColor(aBgColor);
-
-    rRenderContext.SetBackground(aBgColor);
-
-    tools::Rectangle aLogicRect(rRenderContext.PixelToLogic(rRect));
-    pEdView->Paint(aLogicRect, &rRenderContext);
-
-    if (HasFocus())
-    {
-        pEdView->ShowCursor();
-        vcl::Cursor* pCursor = pEdView->GetCursor();
-        pCursor->DrawToDevice(rRenderContext);
-    }
-
-    std::vector<tools::Rectangle> aLogicRects;
-
-    // get logic selection
-    pEdView->GetSelectionRectangles(aLogicRects);
-
-    rRenderContext.SetLineColor();
-    rRenderContext.SetFillColor(COL_BLACK);
-    rRenderContext.SetRasterOp(RasterOp::Invert);
-
-    for (const auto &rSelectionRect : aLogicRects)
-        rRenderContext.DrawRect(rSelectionRect);
-
-    rRenderContext.Pop();
-}
-
-bool ClassificationEditView::MouseMove(const MouseEvent& rMEvt)
-{
-    return pEdView->MouseMove(rMEvt);
-}
-
-bool ClassificationEditView::MouseButtonDown(const MouseEvent& rMEvt)
-{
-    if (!HasFocus())
-        GrabFocus();
-
-    return pEdView->MouseButtonDown(rMEvt);
-}
-
-bool ClassificationEditView::MouseButtonUp(const MouseEvent& rMEvt)
-{
-    return pEdView->MouseButtonUp(rMEvt);
-}
-
-bool ClassificationEditView::KeyInput(const KeyEvent& rKEvt)
-{
-    sal_uInt16 nKey =  rKEvt.GetKeyCode().GetModifier() + rKEvt.GetKeyCode().GetCode();
-
-    if (nKey == KEY_TAB || nKey == KEY_TAB + KEY_SHIFT)
-    {
-        return false;
-    }
-    else if (!pEdView->PostKeyEvent(rKEvt))
-    {
-        return false;
-    }
-
-    return true;
-}
-
-void ClassificationEditView::GetFocus()
-{
-    pEdView->ShowCursor();
-
-    weld::CustomWidgetController::GetFocus();
+    m_xEditView->Invalidate();
 }
 
 } // end sfx2
