@@ -46,7 +46,6 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/docfile.hxx>
 
-
 #include <basic/basicmanagerrepository.hxx>
 
 #include <xmlscript/xmldlg_imexp.hxx>
@@ -62,6 +61,10 @@
 #include <comphelper/documentinfo.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
+#include <comphelper/string.hxx>
+
+#include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 
 #include <sal/log.hxx>
 #include <osl/file.hxx>
@@ -115,7 +118,10 @@ namespace basctl
     {
         bool StringCompareLessThan( const OUString& lhs, const OUString& rhs )
         {
-            return lhs.compareToIgnoreAsciiCase( rhs ) < 0;
+            auto const sort = comphelper::string::NaturalStringSorter(
+                comphelper::getProcessComponentContext(),
+                Application::GetSettings().GetUILanguageTag().getLocale());
+            return sort.compare(lhs, rhs) < 0;
         }
 
         class FilterDocuments : public docs::IDocumentDescriptorFilter
@@ -1100,26 +1106,6 @@ namespace basctl
         return aDocument;
     }
 
-
-    namespace
-    {
-        struct DocumentTitleLess
-        {
-            explicit DocumentTitleLess( const CollatorWrapper& _rCollator )
-                :m_aCollator( _rCollator )
-            {
-            }
-
-            bool operator()( const ScriptDocument& _lhs, const ScriptDocument& _rhs ) const
-            {
-                return m_aCollator.compareString( _lhs.getTitle(), _rhs.getTitle() ) < 0;
-            }
-        private:
-            const CollatorWrapper   m_aCollator;
-        };
-    }
-
-
     ScriptDocuments ScriptDocument::getAllScriptDocuments( ScriptDocument::ScriptDocumentList _eListType )
     {
         ScriptDocuments aScriptDocs;
@@ -1152,9 +1138,11 @@ namespace basctl
         // sort document list by doc title?
         if ( _eListType == DocumentsSorted )
         {
-            CollatorWrapper aCollator( ::comphelper::getProcessComponentContext() );
-            aCollator.loadDefaultCollator( SvtSysLocale().GetLanguageTag().getLocale(), 0 );
-            std::sort( aScriptDocs.begin(), aScriptDocs.end(), DocumentTitleLess( aCollator ) );
+            std::sort( aScriptDocs.begin(), aScriptDocs.end(),
+                []( const ScriptDocument& lhs, const ScriptDocument& rhs )
+            {
+                return StringCompareLessThan( lhs.getTitle(), rhs.getTitle() );
+            });
         }
 
         return aScriptDocs;
