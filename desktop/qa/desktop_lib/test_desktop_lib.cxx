@@ -2686,7 +2686,7 @@ void DesktopLOKTest::testComplexSelection()
     free(pText);
 
     // We expect this to be complex.
-    // CPPUNIT_ASSERT_EQUAL((int)LOK_SELTYPE_COMPLEX, pDocument->pClass->getSelectionType(pDocument)); // Fails!
+    CPPUNIT_ASSERT_EQUAL((int)LOK_SELTYPE_COMPLEX, pDocument->pClass->getSelectionType(pDocument));
 }
 
 namespace {

@@ -430,6 +430,8 @@ sal_Bool SwTransferable::isComplex()
     if (m_pWrtShell->IsFrameSelected() || m_pWrtShell->IsObjSelected())
         return true;
 
+    // Copy into a new Doc so we don't mess with the existing one.
+    //FIXME: We *should* be able to avoid this and improve the performance.
     m_pClpDocFac = new SwDocFac;
     SwDoc* const pTmpDoc = lcl_GetDoc(*m_pClpDocFac);
 
@@ -437,36 +439,18 @@ sal_Bool SwTransferable::isComplex()
         .LockExpFields(); // never update fields - leave text as it is
     lclOverWriteDoc(*m_pWrtShell, *pTmpDoc);
 
-    // in CORE a new one was created (OLE-objects copied!)
-    m_aDocShellRef = pTmpDoc->GetTmpDocShell();
-    if (m_aDocShellRef.Is())
-        SwTransferable::InitOle(m_aDocShellRef);
-    pTmpDoc->SetTmpDocShell(nullptr);
-
-    SwPaM aOrigPam(pTmpDoc->GetNodes().GetEndOfContent());
-    aOrigPam.Move(fnMoveBackward, GoInDoc);
-    aOrigPam.SetMark();
-    aOrigPam.Move(fnMoveForward, GoInDoc);
-
-    SwPaM aPam(*aOrigPam.End(), *aOrigPam.Start());
-
     bool isComplex = false;
-    while (aPam.GetPoint()->nNode.GetIndex() < aPam.GetMark()->nNode.GetIndex()
-        || (aPam.GetPoint()->nNode.GetIndex() == aPam.GetMark()->nNode.GetIndex()
-            && aPam.GetPoint()->nContent.GetIndex() <= aPam.GetMark()->nContent.GetIndex()))
+    SwNodes& aNodes = pTmpDoc->GetNodes();
+    for( sal_uLong nIndex = 0; nIndex < aNodes.Count(); ++nIndex)
     {
-        SwNode& rNd = aPam.GetNode();
-
+        SwNode& rNd = *aNodes[nIndex];
         if (rNd.IsContentNode() && !rNd.IsTextNode())
         {
-            //FIXME: this doesn't detect GrfNode, which we need to detect complex selections.
             isComplex = true;
             break;
         }
         else if (&rNd == &m_pWrtShell->GetDoc()->GetNodes().GetEndOfContent())
             break;
-
-        ++aPam.GetPoint()->nNode;
     }
 
     return isComplex;
