@@ -11,7 +11,6 @@
 #include <swmodeltestbase.hxx>
 #include <config_features.h>
 
-#if !defined(MACOSX)
 #include <com/sun/star/awt/FontSlant.hpp>
 #include <com/sun/star/awt/Gradient.hpp>
 #include <com/sun/star/container/XIndexReplace.hpp>
@@ -1978,7 +1977,7 @@ DECLARE_ODFEXPORT_TEST(testImageMimetype, "image-mimetype.odt")
 
 DECLARE_ODFEXPORT_TEST(testEmbeddedFontProps, "embedded-font-props.odt")
 {
-#if !defined(WNT)
+#if !defined(MACOSX)
     // Test that font style/weight of embedded fonts is exposed.
     // Test file is a normal ODT, except EmbedFonts is set to true in settings.xml.
     if (xmlDocPtr pXmlDoc = parseExport("content.xml"))
@@ -2229,7 +2228,6 @@ DECLARE_ODFEXPORT_TEST(tdf99631, "tdf99631.docx")
     assertXPathContent(pXmlDoc2, "//config:config-item[@config:name='VisibleAreaWidth']", "4515");
     assertXPathContent(pXmlDoc2, "//config:config-item[@config:name='VisibleAreaHeight']", "1354");
 }
-#endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
