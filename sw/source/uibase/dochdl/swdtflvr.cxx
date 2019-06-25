@@ -419,6 +419,59 @@ namespace
     }
 }
 
+sal_Bool SwTransferable::isComplex()
+{
+    const SelectionType nSelectionType = m_pWrtShell->GetSelectionType();
+
+    // Anything other than text is complex by definition.
+    if (nSelectionType != SelectionType::Text)
+        return true;
+
+    if (m_pWrtShell->IsFrameSelected() || m_pWrtShell->IsObjSelected())
+        return true;
+
+    m_pClpDocFac = new SwDocFac;
+    SwDoc* const pTmpDoc = lcl_GetDoc(*m_pClpDocFac);
+
+    pTmpDoc->getIDocumentFieldsAccess()
+        .LockExpFields(); // never update fields - leave text as it is
+    lclOverWriteDoc(*m_pWrtShell, *pTmpDoc);
+
+    // in CORE a new one was created (OLE-objects copied!)
+    m_aDocShellRef = pTmpDoc->GetTmpDocShell();
+    if (m_aDocShellRef.Is())
+        SwTransferable::InitOle(m_aDocShellRef);
+    pTmpDoc->SetTmpDocShell(nullptr);
+
+    SwPaM aOrigPam(pTmpDoc->GetNodes().GetEndOfContent());
+    aOrigPam.Move(fnMoveBackward, GoInDoc);
+    aOrigPam.SetMark();
+    aOrigPam.Move(fnMoveForward, GoInDoc);
+
+    SwPaM aPam(*aOrigPam.End(), *aOrigPam.Start());
+
+    bool isComplex = false;
+    while (aPam.GetPoint()->nNode.GetIndex() < aPam.GetMark()->nNode.GetIndex()
+        || (aPam.GetPoint()->nNode.GetIndex() == aPam.GetMark()->nNode.GetIndex()
+            && aPam.GetPoint()->nContent.GetIndex() <= aPam.GetMark()->nContent.GetIndex()))
+    {
+        SwNode& rNd = aPam.GetNode();
+
+        if (rNd.IsContentNode() && !rNd.IsTextNode())
+        {
+            //FIXME: this doesn't detect GrfNode, which we need to detect complex selections.
+            isComplex = true;
+            break;
+        }
+        else if (&rNd == &m_pWrtShell->GetDoc()->GetNodes().GetEndOfContent())
+            break;
+
+        ++aPam.GetPoint()->nNode;
+    }
+
+    return isComplex;
+}
+
 bool SwTransferable::GetData( const DataFlavor& rFlavor, const OUString& rDestDoc )
 {
     SotClipboardFormatId nFormat = SotExchange::GetFormat( rFlavor );
