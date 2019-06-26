@@ -3575,6 +3575,7 @@ if test "$_os" = "WINNT"; then
             fi
         fi
         if test "$BUILD_X64" = TRUE; then
+            CXX_X64_BINARY=`win_short_path_for_make "$CXX_X64_BINARY"`
             AC_MSG_RESULT([found])
         else
             AC_MSG_RESULT([not found])
@@ -3600,7 +3601,8 @@ if test "$_os" = "WINNT"; then
             AC_MSG_RESULT([preset])
         elif "$VC_PRODUCT_DIR/Tools/MSVC/$vcbuildnumber/bin/HostX86/x86/cl.exe" -? </dev/null >/dev/null 2>&1; then
             BUILD_X86=TRUE
-            CXX_X86_BINARY="$VC_PRODUCT_DIR/Tools/MSVC/$vcbuildnumber/bin/HostX86/x86/cl.exe -arch:SSE"
+            CXX_X86_BINARY=`win_short_path_for_make "$VC_PRODUCT_DIR/Tools/MSVC/$vcbuildnumber/bin/HostX86/x86/cl.exe"`
+            CXX_X86_BINARY+=" -arch:SSE"
             AC_MSG_RESULT([found])
         else
             CXX_X86_BINARY=
@@ -5289,7 +5291,7 @@ if test "$_os" = "WINNT"; then
     fi
 fi
 if test "$with_system_hsqldb" = "yes"; then
-	perl_use_string="$perl_use_string ; use Archive::Zip"
+    perl_use_string="$perl_use_string ; use Archive::Zip"
 fi
 if $PERL -e "$perl_use_string">/dev/null 2>&1; then
     AC_MSG_RESULT([all modules found])
@@ -7931,11 +7933,11 @@ else
               msdosdjgpp* | go32*)
                 objfmt='COFF'
               ;;
-              os2-emx*)			# not tested
-                objfmt='MSOMF'		# obj
+              os2-emx*) # not tested
+                objfmt='MSOMF' # obj
               ;;
               linux*coff* | linux*oldld*)
-                objfmt='COFF'		# ???
+                objfmt='COFF' # ???
               ;;
               linux*aout*)
                 objfmt='a.out'
@@ -10151,7 +10153,7 @@ if test "$_os" = "WINNT"; then
     if test -f "$VC_PRODUCT_DIR/$assembler_bin/$assembler"; then
         ASM_HOME=$VC_PRODUCT_DIR/$assembler_bin
         AC_MSG_RESULT([found])
-        ML_EXE="$VC_PRODUCT_DIR/$assembler_bin/$assembler"
+        ML_EXE=`win_short_path_for_make "$VC_PRODUCT_DIR/$assembler_bin/$assembler"`
     else
         AC_MSG_ERROR([Configure did not find $assembler assembler.])
     fi
@@ -11354,7 +11356,7 @@ if test "$enable_build_opensymbol" = "yes"; then
     AC_MSG_RESULT([yes])
     AC_PATH_PROG(FONTFORGE, fontforge)
     if test -z "$FONTFORGE"; then
-	AC_MSG_ERROR([fontforge not installed])
+        AC_MSG_ERROR([fontforge not installed])
     fi
 else
     AC_MSG_RESULT([no])
