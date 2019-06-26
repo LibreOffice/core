@@ -688,6 +688,22 @@ private:
     uno::WeakReference< rdf::XRepository > const m_wRep;
     librdf_Repository *const m_pRep;
     uno::Reference< rdf::XURI > const m_xName;
+
+    struct CacheKey
+    {
+        uno::Reference< rdf::XResource > xSubject;
+        uno::Reference< rdf::XURI > xPredicate;
+        uno::Reference< rdf::XNode > xObject;
+
+        bool operator<(const CacheKey& other) const
+        {
+            return xSubject.get() < other.xSubject.get()
+                && xPredicate.get() < other.xPredicate.get()
+                && xObject.get() < other.xObject.get();
+        }
+    };
+    // querying is rather slow, so cache the results
+    std::map<CacheKey, uno::Reference< container::XEnumeration >> m_aStatementsCache;
 };
 
 
@@ -765,13 +781,19 @@ librdf_NamedGraph::getStatements(
     const uno::Reference< rdf::XURI > & i_xPredicate,
     const uno::Reference< rdf::XNode > & i_xObject)
 {
+    CacheKey key { i_xSubject, i_xPredicate, i_xObject };
+    auto it = m_aStatementsCache.find(key);
+    if (it != m_aStatementsCache.end())
+        return it->second;
     uno::Reference< rdf::XRepository > xRep( m_wRep );
     if (!xRep.is()) {
         throw rdf::RepositoryException(
             "librdf_NamedGraph::getStatements: repository is gone", *this);
     }
-    return m_pRep->getStatementsGraph_NoLock(
+    auto ret = m_pRep->getStatementsGraph_NoLock(
             i_xSubject, i_xPredicate, i_xObject, m_xName);
+    m_aStatementsCache.emplace(key, ret);
+    return ret;
 }
 
 
