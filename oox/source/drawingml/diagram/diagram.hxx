@@ -208,6 +208,7 @@ private:
 typedef std::shared_ptr< DiagramData > DiagramDataPtr;
 
 typedef std::map<OUString, LayoutAtomPtr> LayoutAtomMap;
+typedef std::map<const dgm::Point*, ShapePtr> PresPointShapeMap;
 
 class DiagramLayout
 {
@@ -239,6 +240,8 @@ public:
         { return mpStyleData; }
     LayoutAtomMap & getLayoutAtomMap()
         { return maLayoutAtomMap; }
+    PresPointShapeMap & getPresPointShapeMap()
+        { return maPresPointShapeMap; }
 
 private:
     const Diagram& mrDgm;
@@ -256,6 +259,7 @@ private:
     // clrData
 
     LayoutAtomMap maLayoutAtomMap;
+    PresPointShapeMap maPresPointShapeMap;
 };
 
 typedef std::shared_ptr< DiagramLayout > DiagramLayoutPtr;

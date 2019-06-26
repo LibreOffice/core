@@ -19,6 +19,8 @@
 
 #include "diagramlayoutatoms.hxx"
 
+#include "layoutatomvisitorbase.hxx"
+
 #include <basegfx/numeric/ftools.hxx>
 #include <sal/log.hxx>
 
@@ -248,17 +250,6 @@ void ChooseAtom::accept( LayoutAtomVisitor& rVisitor )
     rVisitor.visit(*this);
 }
 
-const std::vector<LayoutAtomPtr>& ChooseAtom::getChildren() const
-{
-    for (const auto& pChild : mpChildNodes)
-    {
-        const ConditionAtomPtr pCond = std::dynamic_pointer_cast<ConditionAtom>(pChild);
-        if (pCond && pCond->getDecision())
-            return pCond->getChildren();
-    }
-    return maEmptyChildren;
-}
-
 ConditionAtom::ConditionAtom(LayoutNode& rLayoutNode, bool isElse, const Reference< XFastAttributeList >& xAttributes) :
     LayoutAtom(rLayoutNode),
     mIsElse(isElse)
@@ -281,18 +272,6 @@ bool ConditionAtom::compareResult(sal_Int32 nOperator, sal_Int32 nFirst, sal_Int
         SAL_WARN("oox.drawingml", "unsupported operator: " << nOperator);
         return false;
     }
-}
-
-const dgm::Point* ConditionAtom::getPresNode() const
-{
-    const DiagramData::PointsNameMap& rPoints = mrLayoutNode.getDiagram().getData()->getPointsPresNameMap();
-    DiagramData::PointsNameMap::const_iterator aDataNode = rPoints.find(mrLayoutNode.getName());
-    if (aDataNode != rPoints.end())
-    {
-        SAL_WARN_IF(aDataNode->second.size() > 1, "oox.drawingml", "multiple nodes found; taking first one");
-        return aDataNode->second.front();
-    }
-    return nullptr;
 }
 
 namespace
@@ -325,69 +304,63 @@ OUString navigate(const LayoutNode& rLayoutNode, sal_Int32 nType, const OUString
 }
 }
 
-sal_Int32 ConditionAtom::getNodeCount() const
+sal_Int32 ConditionAtom::getNodeCount(const dgm::Point* pPresPoint) const
 {
     sal_Int32 nCount = 0;
-    const dgm::Point* pPoint = getPresNode();
-    if (pPoint)
+    OUString sNodeId = navigate(mrLayoutNode, XML_presOf, pPresPoint->msModelId, /*bSourceToDestination*/ false);
+
+    if (sNodeId.isEmpty())
     {
-        OUString sNodeId
-            = navigate(mrLayoutNode, XML_presOf, pPoint->msModelId, /*bSourceToDestination*/ false);
-
-        if (sNodeId.isEmpty())
-        {
-            // The current layout node is not a presentation of anything. Look
-            // up the first presentation child of the layout node.
-            OUString sFirstPresChildId = navigate(mrLayoutNode, XML_presParOf, pPoint->msModelId,
-                                                  /*bSourceToDestination*/ true);
-            if (!sFirstPresChildId.isEmpty())
-                // It has a presentation child: is that a presentation of a
-                // model node?
-                sNodeId = navigate(mrLayoutNode, XML_presOf, sFirstPresChildId,
-                                   /*bSourceToDestination*/ false);
-        }
-
-        if (!sNodeId.isEmpty())
-        {
-            for (const auto& aCxn : mrLayoutNode.getDiagram().getData()->getConnections())
-                if (aCxn.mnType == XML_parOf && aCxn.msSourceId == sNodeId)
-                    nCount++;
-        }
-        else
-        {
-            // No presentation child is a presentation of a model node: just
-            // count presentation children.
-            for (const auto& aCxn : mrLayoutNode.getDiagram().getData()->getConnections())
-                if (aCxn.mnType == XML_presParOf && aCxn.msSourceId == pPoint->msModelId)
-                    nCount++;
-        }
+        // The current layout node is not a presentation of anything. Look
+        // up the first presentation child of the layout node.
+        OUString sFirstPresChildId = navigate(mrLayoutNode, XML_presParOf, pPresPoint->msModelId,
+                                                /*bSourceToDestination*/ true);
+        if (!sFirstPresChildId.isEmpty())
+            // It has a presentation child: is that a presentation of a
+            // model node?
+            sNodeId = navigate(mrLayoutNode, XML_presOf, sFirstPresChildId,
+                                /*bSourceToDestination*/ false);
     }
+
+    if (!sNodeId.isEmpty())
+    {
+        for (const auto& aCxn : mrLayoutNode.getDiagram().getData()->getConnections())
+            if (aCxn.mnType == XML_parOf && aCxn.msSourceId == sNodeId)
+                nCount++;
+    }
+    else
+    {
+        // No presentation child is a presentation of a model node: just
+        // count presentation children.
+        for (const auto& aCxn : mrLayoutNode.getDiagram().getData()->getConnections())
+            if (aCxn.mnType == XML_presParOf && aCxn.msSourceId == pPresPoint->msModelId)
+                nCount++;
+    }
+
     return nCount;
 }
 
-bool ConditionAtom::getDecision() const
+bool ConditionAtom::getDecision(const dgm::Point* pPresPoint) const
 {
     if (mIsElse)
         return true;
+    if (!pPresPoint)
+        return false;
 
     switch (maCond.mnFunc)
     {
     case XML_var:
     {
-        const dgm::Point* pPoint = getPresNode();
-        if (!pPoint)
-            break;
-
         if (maCond.mnArg == XML_dir)
-            return compareResult(maCond.mnOp, pPoint->mnDirection, maCond.mnVal);
+            return compareResult(maCond.mnOp, pPresPoint->mnDirection, maCond.mnVal);
         else if (maCond.mnArg == XML_hierBranch)
         {
-            sal_Int32 nHierarchyBranch = pPoint->moHierarchyBranch.get(XML_std);
-            if (!pPoint->moHierarchyBranch.has())
+            sal_Int32 nHierarchyBranch = pPresPoint->moHierarchyBranch.get(XML_std);
+            if (!pPresPoint->moHierarchyBranch.has())
             {
                 // If <dgm:hierBranch> is missing in the current presentation
                 // point, ask the parent.
-                OUString aParent = navigate(mrLayoutNode, XML_presParOf, pPoint->msModelId,
+                OUString aParent = navigate(mrLayoutNode, XML_presParOf, pPresPoint->msModelId,
                                             /*bSourceToDestination*/ false);
                 DiagramData::PointNameMap& rPointNameMap
                     = mrLayoutNode.getDiagram().getData()->getPointNameMap();
@@ -405,11 +378,18 @@ bool ConditionAtom::getDecision() const
     }
 
     case XML_cnt:
-        return compareResult(maCond.mnOp, getNodeCount(), maCond.msVal.toInt32());
+        return compareResult(maCond.mnOp, getNodeCount(pPresPoint), maCond.msVal.toInt32());
 
     case XML_maxDepth:
+        // TODO: probably depth from current point - docs are unclear
         return compareResult(maCond.mnOp, mrLayoutNode.getDiagram().getData()->getMaxDepth(), maCond.msVal.toInt32());
 
+    case XML_depth:
+    case XML_pos:
+    case XML_revPos:
+    case XML_posEven:
+    case XML_posOdd:
+        // TODO
     default:
         SAL_WARN("oox.drawingml", "unknown function " << maCond.mnFunc);
         break;
@@ -732,7 +712,12 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
             // hierRoot is the manager -> employees vertical linear path,
             // hierChild is the first employee -> last employee horizontal
             // linear path.
-            const sal_Int32 nDir = mnType == XML_hierRoot ? XML_fromT : XML_fromL;
+            sal_Int32 nDir = XML_fromL;
+            if (mnType == XML_hierRoot)
+                nDir = XML_fromT;
+            else if (maMap.count(XML_linDir))
+                nDir = maMap.find(XML_linDir)->second;
+
             if (rShape->getChildren().empty() || rShape->getSize().Width == 0
                 || rShape->getSize().Height == 0)
                 break;
@@ -782,18 +767,25 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
                 aChildSize.Width /= nCount;
             aChildSize.Height *= fHeightScale;
             aChildSize.Width *= fWidthScale;
+            awt::Size aConnectorSize = aChildSize;
+            aConnectorSize.Width = 1;
 
             awt::Point aChildPos(nXOffset, 0);
             for (auto& pChild : rShape->getChildren())
             {
                 pChild->setPosition(aChildPos);
-                pChild->setSize(aChildSize);
-                pChild->setChildSize(aChildSize);
 
                 if (mnType == XML_hierChild && pChild->getSubType() == XML_conn)
+                {
                     // Connectors should not influence the position of
                     // non-connect shapes.
+                    pChild->setSize(aConnectorSize);
+                    pChild->setChildSize(aConnectorSize);
                     continue;
+                }
+
+                pChild->setSize(aChildSize);
+                pChild->setChildSize(aChildSize);
 
                 if (nDir == XML_fromT)
                     aChildPos.Y += aChildSize.Height + aChildSize.Height * fSpace;
