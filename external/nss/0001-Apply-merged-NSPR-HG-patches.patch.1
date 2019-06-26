@@ -1,0 +1,86 @@
+From 3314cb29d6f30b87e637802ed9eb1a6fa31b88d8 Mon Sep 17 00:00:00 2001
+From: Jan-Marek Glogowski <glogow@fbihome.de>
+Date: Fri, 12 Jul 2019 02:18:40 +0200
+Subject: [PATCH 1/2] Apply merged NSPR HG patches
+
+---
+ nspr/config/Makefile.in | 2 +-
+ nspr/config/config.mk   | 2 +-
+ nspr/configure          | 3 +--
+ nspr/configure.in       | 6 +-----
+ 4 files changed, 4 insertions(+), 9 deletions(-)
+
+diff --git a/nspr/config/Makefile.in b/nspr/config/Makefile.in
+index 7c6c815..eb969cb 100644
+--- a/nspr/config/Makefile.in
++++ b/nspr/config/Makefile.in
+@@ -82,7 +82,7 @@ endif
+ 
+ # Redefine MAKE_OBJDIR for just this directory
+ define MAKE_OBJDIR
+-if test ! -d $(@D); then rm -rf $(@D); mkdir $(@D); else true; fi
++if test ! -d $(@D); then mkdir $(@D); fi
+ endef
+ 
+ export:: $(TARGETS)
+diff --git a/nspr/config/config.mk b/nspr/config/config.mk
+index 05db076..5ae8c8c 100644
+--- a/nspr/config/config.mk
++++ b/nspr/config/config.mk
+@@ -64,7 +64,7 @@ endif # MOZ_PROFILE_USE
+ endif # NO_PROFILE_GUIDED_OPTIMIZE
+ 
+ define MAKE_OBJDIR
+-if test ! -d $(@D); then rm -rf $(@D); $(NSINSTALL) -D $(@D); fi
++if test ! -d $(@D); then $(NSINSTALL) -D $(@D); fi
+ endef
+ 
+ LINK_DLL	= $(LD) $(OS_DLLFLAGS) $(DLLFLAGS)
+diff --git a/nspr/configure b/nspr/configure
+index a79b79d..4d72d07 100755
+--- a/nspr/configure
++++ b/nspr/configure
+@@ -6936,7 +6936,7 @@ $as_echo "$as_me: WARNING: Unknown version of the Microsoft (R) Manifest Tool."
+ 
+         CFLAGS="$CFLAGS -W3 -nologo -GF -Gy"
+         DLLFLAGS="$DLLFLAGS -OUT:\"\$@\""
+-        _DEBUG_FLAGS=-Zi
++        _DEBUG_FLAGS="-Zi -Fd\$(@:\$(OBJ_SUFFIX)=.pdb)"
+         _OPTIMIZE_FLAGS=-O2
+ 
+         PROFILE_GEN_CFLAGS="-GL"
+@@ -6945,7 +6945,6 @@ $as_echo "$as_me: WARNING: Unknown version of the Microsoft (R) Manifest Tool."
+         PROFILE_USE_LDFLAGS="-LTCG:PGUPDATE"
+ 
+         if test "$MSC_VER" -ge "1800"; then
+-                                                CFLAGS="$CFLAGS -FS"
+                                     PROFILE_GEN_CFLAGS="$PROFILE_GEN_CFLAGS -Gw"
+             PROFILE_USE_CFLAGS="$PROFILE_USE_CFLAGS -Gw"
+         fi
+diff --git a/nspr/configure.in b/nspr/configure.in
+index 3820e21..440b75a 100644
+--- a/nspr/configure.in
++++ b/nspr/configure.in
+@@ -1795,7 +1795,7 @@ tools are selected during the Xcode/Developer Tools installation.])
+         
+         CFLAGS="$CFLAGS -W3 -nologo -GF -Gy"
+         DLLFLAGS="$DLLFLAGS -OUT:\"\$@\""
+-        _DEBUG_FLAGS=-Zi
++        _DEBUG_FLAGS="-Zi -Fd\$(@:\$(OBJ_SUFFIX)=.pdb)"
+         _OPTIMIZE_FLAGS=-O2
+ 
+         PROFILE_GEN_CFLAGS="-GL"
+@@ -1804,10 +1804,6 @@ tools are selected during the Xcode/Developer Tools installation.])
+         PROFILE_USE_LDFLAGS="-LTCG:PGUPDATE"
+ 
+         if test "$MSC_VER" -ge "1800"; then
+-            dnl Visual C++ 2013 requires -FS when parallel building with
+-            dnl make -jN. If not specified, compiler sometimes emits C1041
+-            dnl error.
+-            CFLAGS="$CFLAGS -FS"
+             dnl -Gw can benefit when using linker optimization on PGO.
+             dnl http://blogs.msdn.com/b/vcblog/archive/2013/09/11/introducing-gw-compiler-switch.aspx
+             PROFILE_GEN_CFLAGS="$PROFILE_GEN_CFLAGS -Gw"
+-- 
+2.20.1
+

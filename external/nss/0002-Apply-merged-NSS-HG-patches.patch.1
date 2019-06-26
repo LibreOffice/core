@@ -1,0 +1,1955 @@
+From 1b3485857370fe4ce12fa93426eb512039c9d3c7 Mon Sep 17 00:00:00 2001
+From: Jan-Marek Glogowski <glogow@fbihome.de>
+Date: Sun, 12 Apr 2020 17:53:37 +0200
+Subject: [PATCH 2/2] Apply merged NSS HG patches
+
+---
+ nss/Makefile                                  |  11 +-
+ nss/cmd/Makefile                              |   4 +-
+ nss/cmd/bltest/manifest.mn                    |   8 +-
+ nss/cmd/chktest/manifest.mn                   |   8 +-
+ nss/cmd/crmf-cgi/manifest.mn                  |   4 -
+ nss/cmd/crmftest/manifest.mn                  |   4 -
+ nss/cmd/fipstest/manifest.mn                  |   6 -
+ nss/cmd/lib/Makefile                          |   1 -
+ nss/cmd/libpkix/testutil/Makefile             |   1 -
+ nss/cmd/lowhashtest/manifest.mn               |   6 -
+ nss/cmd/modutil/manifest.mn                   |   2 -
+ nss/cmd/pk11gcmtest/manifest.mn               |   6 -
+ nss/cmd/pk11mode/manifest.mn                  |   2 -
+ nss/cmd/rsapoptst/manifest.mn                 |   6 -
+ nss/cmd/shlibsign/Makefile                    |   4 +-
+ nss/cmd/signtool/manifest.mn                  |   2 -
+ nss/cmd/smimetools/rules.mk                   |   2 +-
+ nss/cmd/ssltap/manifest.mn                    |   2 -
+ nss/coreconf/Makefile                         |   2 -
+ nss/coreconf/README                           |   6 +-
+ nss/coreconf/UNIX.mk                          |   2 +-
+ nss/coreconf/WIN32.mk                         |   8 +-
+ nss/coreconf/mkdepend/Makefile                |   2 +-
+ nss/coreconf/nsinstall/Makefile               |   3 +-
+ nss/coreconf/rules.mk                         | 261 ++++++++----------
+ nss/coreconf/ruleset.mk                       |  22 +-
+ nss/cpputil/manifest.mn                       |   3 -
+ nss/gtests/certdb_gtest/manifest.mn           |   2 +-
+ nss/gtests/common/Makefile                    |   3 +
+ nss/gtests/google_test/Makefile               |   3 +-
+ nss/gtests/google_test/manifest.mn            |   9 +-
+ nss/gtests/manifest.mn                        |  15 +
+ nss/lib/Makefile                              |  32 +--
+ nss/lib/base/Makefile                         |   1 -
+ nss/lib/certdb/Makefile                       |   1 -
+ nss/lib/certhigh/Makefile                     |   1 -
+ nss/lib/ckfw/Makefile                         |   4 +-
+ nss/lib/crmf/Makefile                         |   1 -
+ nss/lib/cryptohi/Makefile                     |   1 -
+ nss/lib/dbm/include/Makefile                  |   1 -
+ nss/lib/dev/Makefile                          |   1 -
+ nss/lib/dev/manifest.mn                       |   3 -
+ nss/lib/freebl/Makefile                       |  44 ++-
+ nss/lib/libpkix/Makefile                      |   1 -
+ nss/lib/libpkix/include/Makefile              |   1 -
+ nss/lib/libpkix/include/manifest.mn           |   3 -
+ nss/lib/libpkix/pkix/Makefile                 |   1 -
+ nss/lib/libpkix/pkix/certsel/Makefile         |   1 -
+ nss/lib/libpkix/pkix/certsel/manifest.mn      |   3 -
+ nss/lib/libpkix/pkix/checker/Makefile         |   1 -
+ nss/lib/libpkix/pkix/checker/manifest.mn      |   3 -
+ nss/lib/libpkix/pkix/crlsel/Makefile          |   1 -
+ nss/lib/libpkix/pkix/crlsel/manifest.mn       |   3 -
+ nss/lib/libpkix/pkix/params/Makefile          |   1 -
+ nss/lib/libpkix/pkix/params/manifest.mn       |   3 -
+ nss/lib/libpkix/pkix/results/Makefile         |   1 -
+ nss/lib/libpkix/pkix/results/manifest.mn      |   3 -
+ nss/lib/libpkix/pkix/store/Makefile           |   1 -
+ nss/lib/libpkix/pkix/store/manifest.mn        |   3 -
+ nss/lib/libpkix/pkix/top/Makefile             |   1 -
+ nss/lib/libpkix/pkix/top/manifest.mn          |   3 -
+ nss/lib/libpkix/pkix/util/Makefile            |   3 -
+ nss/lib/libpkix/pkix/util/manifest.mn         |   3 -
+ nss/lib/libpkix/pkix_pl_nss/Makefile          |   3 -
+ nss/lib/libpkix/pkix_pl_nss/module/Makefile   |   1 -
+ .../libpkix/pkix_pl_nss/module/manifest.mn    |   4 -
+ nss/lib/libpkix/pkix_pl_nss/pki/Makefile      |   1 -
+ nss/lib/libpkix/pkix_pl_nss/pki/manifest.mn   |   3 -
+ nss/lib/libpkix/pkix_pl_nss/system/Makefile   |   1 -
+ .../libpkix/pkix_pl_nss/system/manifest.mn    |   3 -
+ nss/lib/manifest.mn                           |   8 +
+ nss/lib/nss/Makefile                          |   1 -
+ nss/lib/pk11wrap/Makefile                     |   1 -
+ nss/lib/pki/Makefile                          |   1 -
+ nss/lib/pki/manifest.mn                       |   3 -
+ nss/lib/softoken/Makefile                     |   1 -
+ nss/lib/softoken/legacydb/Makefile            |   2 -
+ nss/lib/sqlite/Makefile                       |   2 -
+ nss/lib/sqlite/manifest.mn                    |   6 -
+ nss/lib/ssl/Makefile                          |   2 -
+ nss/lib/util/Makefile                         |   1 -
+ nss/lib/zlib/Makefile                         |   1 -
+ nss/manifest.mn                               |  21 ++
+ 83 files changed, 249 insertions(+), 367 deletions(-)
+
+diff --git a/nss/Makefile b/nss/Makefile
+index ffdbfc2..cd7e2fd 100644
+--- a/nss/Makefile
++++ b/nss/Makefile
+@@ -1,5 +1,3 @@
+-export AR
+-export RANLIB
+ #! gmake
+ #
+ # This Source Code Form is subject to the terms of the Mozilla Public
+@@ -49,9 +47,14 @@ include $(CORE_DEPTH)/coreconf/rules.mk
+ # (7) Execute "local" rules. (OPTIONAL).                              #
+ #######################################################################
+ 
+-nss_build_all: build_nspr all latest
++nss_build_all:
++	$(MAKE) build_nspr
++	$(MAKE) all
++	$(MAKE) latest
+ 
+-nss_clean_all: clobber_nspr clobber
++nss_clean_all:
++	$(MAKE) clobber_nspr
++	$(MAKE) clobber
+ 
+ NSPR_CONFIG_STATUS = $(CORE_DEPTH)/../nspr/$(OBJDIR_NAME)/config.status
+ NSPR_CONFIGURE = $(CORE_DEPTH)/../nspr/configure
+diff --git a/nss/cmd/Makefile b/nss/cmd/Makefile
+index 86ef29a..292c737 100644
+--- a/nss/cmd/Makefile
++++ b/nss/cmd/Makefile
+@@ -38,7 +38,9 @@ INCLUDES += \
+ 	-I./include \
+ 	$(NULL)
+ 
++$(SOFTOKEN_SRCDIRS) $(NSS_SRCDIRS): $(LIB_SRCDIRS)
++
+ include $(CORE_DEPTH)/coreconf/rules.mk
+ 
+-symbols::
++symbols:
+ 	@echo "TARGETS	= $(TARGETS)"
+diff --git a/nss/cmd/bltest/manifest.mn b/nss/cmd/bltest/manifest.mn
+index 6e9946c..8b05116 100644
+--- a/nss/cmd/bltest/manifest.mn
++++ b/nss/cmd/bltest/manifest.mn
+@@ -12,13 +12,7 @@ INCLUDES += -I$(CORE_DEPTH)/nss/lib/softoken
+ 
+ PROGRAM = bltest
+ 
+- USE_STATIC_LIBS = 1
+-
+-EXPORTS = \
+-	$(NULL)
+-
+-PRIVATE_EXPORTS = \
+-	$(NULL)
++USE_STATIC_LIBS = 1
+ 
+ CSRCS = \
+ 	blapitest.c \
+diff --git a/nss/cmd/chktest/manifest.mn b/nss/cmd/chktest/manifest.mn
+index 50b1ca1..e74e1d7 100644
+--- a/nss/cmd/chktest/manifest.mn
++++ b/nss/cmd/chktest/manifest.mn
+@@ -13,13 +13,7 @@ REQUIRES = seccmd dbm
+ 
+ PROGRAM = chktest
+ 
+- USE_STATIC_LIBS = 1
+-
+-EXPORTS = \
+-	$(NULL)
+-
+-PRIVATE_EXPORTS = \
+-	$(NULL)
++USE_STATIC_LIBS = 1
+ 
+ CSRCS = \
+ 	chktest.c \
+diff --git a/nss/cmd/crmf-cgi/manifest.mn b/nss/cmd/crmf-cgi/manifest.mn
+index 1212424..04d2d8d 100644
+--- a/nss/cmd/crmf-cgi/manifest.mn
++++ b/nss/cmd/crmf-cgi/manifest.mn
+@@ -6,14 +6,10 @@
+ CORE_DEPTH = ../..
+ MODULE	= sectools
+ 
+-EXPORTS = \
+-	$(NULL)
+-
+ CSRCS = \
+ 	crmfcgi.c \
+ 	$(NULL)
+ 
+-
+ REQUIRES = nss dbm seccmd
+ 
+ ifdef ATTACH_CGI
+diff --git a/nss/cmd/crmftest/manifest.mn b/nss/cmd/crmftest/manifest.mn
+index 578729e..4ac669a 100644
+--- a/nss/cmd/crmftest/manifest.mn
++++ b/nss/cmd/crmftest/manifest.mn
+@@ -9,14 +9,10 @@ DEPTH      = .
+ # MODULE public and private header  directories are implicitly REQUIRED.
+ MODULE	= nss
+ 
+-EXPORTS = \
+-	$(NULL)
+-
+ CSRCS = \
+ 	testcrmf.c \
+ 	$(NULL)
+ 
+-
+ # The MODULE is always implicitly required.
+ # Listing it here in REQUIRES makes it appear twice in the cc command line.
+ # REQUIRES = dbm
+diff --git a/nss/cmd/fipstest/manifest.mn b/nss/cmd/fipstest/manifest.mn
+index 1cebd79..6e93f4b 100644
+--- a/nss/cmd/fipstest/manifest.mn
++++ b/nss/cmd/fipstest/manifest.mn
+@@ -11,12 +11,6 @@ PROGRAM = fipstest
+ 
+ USE_STATIC_LIBS = 1
+ 
+-EXPORTS = \
+-	$(NULL)
+-
+-PRIVATE_EXPORTS = \
+-	$(NULL)
+-
+ CSRCS = \
+ 	fipstest.c \
+ 	$(NULL)
+diff --git a/nss/cmd/lib/Makefile b/nss/cmd/lib/Makefile
+index 6b53451..94cfb1d 100644
+--- a/nss/cmd/lib/Makefile
++++ b/nss/cmd/lib/Makefile
+@@ -45,6 +45,5 @@ include $(CORE_DEPTH)/coreconf/rules.mk
+ # (7) Execute "local" rules. (OPTIONAL).                              #
+ #######################################################################
+ 
+-export:: private_export
+ 
+ 
+diff --git a/nss/cmd/libpkix/testutil/Makefile b/nss/cmd/libpkix/testutil/Makefile
+index 859aedd..cc9d235 100755
+--- a/nss/cmd/libpkix/testutil/Makefile
++++ b/nss/cmd/libpkix/testutil/Makefile
+@@ -47,5 +47,4 @@ include $(CORE_DEPTH)/coreconf/rules.mk
+ 
+ include $(PLAT_DEPTH)/platrules.mk
+ 
+-export:: private_export
+ 
+diff --git a/nss/cmd/lowhashtest/manifest.mn b/nss/cmd/lowhashtest/manifest.mn
+index db10daa..00659ee 100644
+--- a/nss/cmd/lowhashtest/manifest.mn
++++ b/nss/cmd/lowhashtest/manifest.mn
+@@ -12,12 +12,6 @@ INCLUDES += -I$(CORE_DEPTH)/nss/lib/freebl
+ 
+ PROGRAM = lowhashtest
+ 
+-EXPORTS = \
+-	$(NULL)
+-
+-PRIVATE_EXPORTS = \
+-	$(NULL)
+-
+ CSRCS = \
+ 	lowhashtest.c \
+ 	$(NULL)
+diff --git a/nss/cmd/modutil/manifest.mn b/nss/cmd/modutil/manifest.mn
+index a92ca68..99b5f3f 100644
+--- a/nss/cmd/modutil/manifest.mn
++++ b/nss/cmd/modutil/manifest.mn
+@@ -7,8 +7,6 @@ CORE_DEPTH = ../..
+ 
+ MODULE = sectools
+ 
+-EXPORTS = 
+-
+ CSRCS = modutil.c		\
+ 		pk11.c			\
+ 		instsec.c		\
+diff --git a/nss/cmd/pk11gcmtest/manifest.mn b/nss/cmd/pk11gcmtest/manifest.mn
+index f5bc0ec..0f73548 100644
+--- a/nss/cmd/pk11gcmtest/manifest.mn
++++ b/nss/cmd/pk11gcmtest/manifest.mn
+@@ -9,12 +9,6 @@ MODULE = nss
+ 
+ PROGRAM = pk11gcmtest
+ 
+-EXPORTS = \
+-	$(NULL)
+-
+-PRIVATE_EXPORTS = \
+-	$(NULL)
+-
+ CSRCS = \
+ 	pk11gcmtest.c \
+ 	$(NULL)
+diff --git a/nss/cmd/pk11mode/manifest.mn b/nss/cmd/pk11mode/manifest.mn
+index ed205cd..964fad3 100644
+--- a/nss/cmd/pk11mode/manifest.mn
++++ b/nss/cmd/pk11mode/manifest.mn
+@@ -7,8 +7,6 @@ CORE_DEPTH = ../..
+ 
+ MODULE = nss
+ 
+-EXPORTS =
+-
+ CSRCS = pk11mode.c
+ 
+ PROGRAM = pk11mode
+diff --git a/nss/cmd/rsapoptst/manifest.mn b/nss/cmd/rsapoptst/manifest.mn
+index 18126cf..ddf561e 100644
+--- a/nss/cmd/rsapoptst/manifest.mn
++++ b/nss/cmd/rsapoptst/manifest.mn
+@@ -10,12 +10,6 @@ REQUIRES = seccmd dbm softoken
+ 
+ PROGRAM = rsapoptst
+ 
+-EXPORTS = \
+-	$(NULL)
+-
+-PRIVATE_EXPORTS = \
+-	$(NULL)
+-
+ CSRCS = \
+ 	rsapoptst.c \
+ 	$(NULL)
+diff --git a/nss/cmd/shlibsign/Makefile b/nss/cmd/shlibsign/Makefile
+index ddae2d4..5c07865 100644
+--- a/nss/cmd/shlibsign/Makefile
++++ b/nss/cmd/shlibsign/Makefile
+@@ -98,5 +98,5 @@ else
+     endif
+ endif
+ 
+-libs install :: $(CHECKLOC)
+-
++libs: install
++	$(MAKE) $(CHECKLOC)
+diff --git a/nss/cmd/signtool/manifest.mn b/nss/cmd/signtool/manifest.mn
+index 40be262..b125685 100644
+--- a/nss/cmd/signtool/manifest.mn
++++ b/nss/cmd/signtool/manifest.mn
+@@ -6,8 +6,6 @@ CORE_DEPTH = ../..
+ 
+ MODULE = nss
+ 
+-EXPORTS = 
+-
+ CSRCS = signtool.c		\
+ 		certgen.c	\
+ 		javascript.c	\
+diff --git a/nss/cmd/smimetools/rules.mk b/nss/cmd/smimetools/rules.mk
+index 1ed381e..b4ee091 100644
+--- a/nss/cmd/smimetools/rules.mk
++++ b/nss/cmd/smimetools/rules.mk
+@@ -3,5 +3,5 @@
+ # License, v. 2.0. If a copy of the MPL was not distributed with this
+ # file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ 
+-install::
++install:
+ 	$(INSTALL) -m 755 $(SCRIPTS) $(SOURCE_BIN_DIR)
+diff --git a/nss/cmd/ssltap/manifest.mn b/nss/cmd/ssltap/manifest.mn
+index 0c09c17..92302a1 100644
+--- a/nss/cmd/ssltap/manifest.mn
++++ b/nss/cmd/ssltap/manifest.mn
+@@ -8,8 +8,6 @@ CORE_DEPTH = ../..
+ # MODULE public and private header  directories are implicitly REQUIRED.
+ MODULE = nss
+ 
+-EXPORTS = 
+-
+ CSRCS = ssltap.c	\
+ 	$(NULL)
+ 
+diff --git a/nss/coreconf/Makefile b/nss/coreconf/Makefile
+index aca8882..6ba1544 100644
+--- a/nss/coreconf/Makefile
++++ b/nss/coreconf/Makefile
+@@ -11,5 +11,3 @@ DIRS		= nsinstall
+ 
+ include $(DEPTH)/coreconf/config.mk
+ include $(DEPTH)/coreconf/rules.mk
+-
+-export:: libs
+diff --git a/nss/coreconf/README b/nss/coreconf/README
+index 4b1e410..d17e64b 100644
+--- a/nss/coreconf/README
++++ b/nss/coreconf/README
+@@ -336,10 +336,6 @@ OVERVIEW of "rules.mk":
+ 
+         clobber_all::           synonym for "realclean::" rule
+ 
+-        private_export::        recursively copy specified
+-                                cross-platform header files to the
+-                                $(SOURCE_XPPRIVATE_DIR) directory
+-
+ 
+         IMPORT
+         ------
+@@ -390,7 +386,7 @@ OVERVIEW of "rules.mk":
+                                 "Tinderbox" to automatically generate
+                                 binary releases on various platforms
+ 
+-        tests::                 automation tool used to run the
++        check::                 automation tool used to run the
+                                 "regress" and "reporter" tools 
+                                 on various regression test suites
+ 
+diff --git a/nss/coreconf/UNIX.mk b/nss/coreconf/UNIX.mk
+index 8f6042e..986235f 100644
+--- a/nss/coreconf/UNIX.mk
++++ b/nss/coreconf/UNIX.mk
+@@ -58,7 +58,7 @@ else
+ endif
+ 
+ define MAKE_OBJDIR
+-if test ! -d $(@D); then rm -rf $(@D); $(NSINSTALL) -D $(@D); fi
++if test ! -d $(@D); then $(NSINSTALL) -D $(@D); fi
+ endef
+ 
+ include $(CORE_DEPTH)/coreconf/Werror.mk
+diff --git a/nss/coreconf/WIN32.mk b/nss/coreconf/WIN32.mk
+index f5d07fc..df72372 100644
+--- a/nss/coreconf/WIN32.mk
++++ b/nss/coreconf/WIN32.mk
+@@ -92,8 +92,6 @@ MKDEPEND        = $(MKDEPEND_DIR)/$(OBJDIR_NAME)/mkdepend.exe
+ MKDEPENDENCIES  = $(OBJDIR_NAME)/depend.mk
+ 
+ INSTALL      = $(NSINSTALL)
+-MAKE_OBJDIR  = mkdir
+-MAKE_OBJDIR += $(OBJDIR)
+ GARBAGE     += $(OBJDIR)/vc20.pdb $(OBJDIR)/vc40.pdb
+ XP_DEFINE   += -DXP_PC
+ ifdef NS_USE_GCC
+@@ -103,6 +101,10 @@ LIB_SUFFIX   = lib
+ endif
+ DLL_SUFFIX   = dll
+ 
++define MAKE_OBJDIR
++if test ! -d $(@D); then mkdir -p $(@D); fi
++endef
++
+ ifdef NS_USE_GCC
+     OS_CFLAGS += -mwindows
+     _GEN_IMPORT_LIB=-Wl,--out-implib,$(IMPORT_LIBRARY)
+@@ -185,6 +187,8 @@ endif
+ endif
+ 	# Purify requires /FIXED:NO when linking EXEs.
+ 	LDFLAGS    += /FIXED:NO
++	# So the linker will find main in the gtestutil library
++	LDFLAGS    += -SUBSYSTEM:CONSOLE
+     endif
+ ifneq ($(_MSC_VER),$(_MSC_VER_6))
+     # NSS has too many of these to fix, downgrade the warning
+diff --git a/nss/coreconf/mkdepend/Makefile b/nss/coreconf/mkdepend/Makefile
+index 4621f2a..2554e23 100644
+--- a/nss/coreconf/mkdepend/Makefile
++++ b/nss/coreconf/mkdepend/Makefile
+@@ -55,6 +55,6 @@ DEFINES += -DINCLUDEDIR=\"/usr/include\" -DOBJSUFFIX=\".$(OBJ_SUFFIX)\"
+ 
+ # Redefine MAKE_OBJDIR for just this directory
+ define MAKE_OBJDIR
+-if test ! -d $(@D); then rm -rf $(@D); mkdir $(@D); fi
++if test ! -d $(@D); then mkdir -p $(@D); fi
+ endef
+ 
+diff --git a/nss/coreconf/nsinstall/Makefile b/nss/coreconf/nsinstall/Makefile
+index 1850bcb..08dfbc2 100644
+--- a/nss/coreconf/nsinstall/Makefile
++++ b/nss/coreconf/nsinstall/Makefile
+@@ -20,6 +20,7 @@ include $(DEPTH)/coreconf/config.mk
+ 
+ ifeq (,$(filter-out OS2 WIN%,$(OS_TARGET)))
+ PROGRAM		=
++TARGETS		=
+ else
+ TARGETS		= $(PROGRAM)
+ INSTALL		= true
+@@ -37,6 +38,6 @@ include $(DEPTH)/coreconf/rules.mk
+ 
+ # Redefine MAKE_OBJDIR for just this directory
+ define MAKE_OBJDIR
+-if test ! -d $(@D); then rm -rf $(@D); mkdir $(@D); fi
++if test ! -d $(@D); then mkdir -p $(@D); fi
+ endef
+ 
+diff --git a/nss/coreconf/rules.mk b/nss/coreconf/rules.mk
+index af66963..35bb406 100644
+--- a/nss/coreconf/rules.mk
++++ b/nss/coreconf/rules.mk
+@@ -10,24 +10,35 @@
+ #######################################################################
+ 
+ #######################################################################
+-# Double-Colon rules for utilizing the binary release model.          #
++# Dont't use double-colon rules!                                      #
+ #######################################################################
+ 
+-all:: export libs 
++ifndef HAVE_ALL_TARGET
++all: libs
++endif
+ 
++autobuild:
+ ifeq ($(AUTOCLEAN),1)
+-autobuild:: clean export private_export libs program install
+-else
+-autobuild:: export private_export libs program install
++	$(MAKE) clean
+ endif
++	$(MAKE) all
++	$(MAKE) install
+ 
+-platform::
++platform:
+ 	@echo $(OBJDIR_NAME)
+ 
+ ifeq (,$(filter-out _WIN%,$(NS_USE_GCC)_$(OS_TARGET)))
+ USE_NT_C_SYNTAX=1
+ endif
+ 
++ifdef DIRS
++ifndef IGNORE_DIRS
++$(DIRS):
++	$(IGNORE_ERROR)@$(MAKE) -C $@ $(MAKECMDGOALS)
++	@$(CLICK_STOPWATCH)
++endif
++endif
++
+ #
+ # IMPORTS will always be associated with a component.  Therefore,
+ # the "import" rule will always change directory to the top-level
+@@ -37,7 +48,7 @@ endif
+ # note: if there is a trailing slash, the component will be appended
+ #       (see import.pl - only used for xpheader.jar)
+ 
+-import::
++import:
+ 	@echo "== import.pl =="
+ 	@$(PERL) -I$(CORE_DEPTH)/coreconf $(CORE_DEPTH)/coreconf/import.pl \
+ 		"RELEASE_TREE=$(RELEASE_TREE)"   \
+@@ -60,68 +71,28 @@ ifeq ($(OS_TARGET),Darwin)
+ 	find $(SOURCE_MD_DIR)/lib -name "*.a" -exec $(RANLIB) {} \;
+ endif
+ 
+-export:: 
+-	+$(LOOP_OVER_DIRS)
++export: $(DIRS) private_export
+ 
+-private_export::
+-	+$(LOOP_OVER_DIRS)
++release_export: $(DIRS)
+ 
+-release_export::
+-	+$(LOOP_OVER_DIRS)
++release_classes: $(DIRS)
+ 
+-release_classes::
+-	+$(LOOP_OVER_DIRS)
++libs program install: $(DIRS) $(TARGETS)
+ 
+-libs program install:: $(TARGETS)
+-ifdef LIBRARY
+-	$(INSTALL) -m 664 $(LIBRARY) $(SOURCE_LIB_DIR)
+-endif
+-ifdef SHARED_LIBRARY
+-	$(INSTALL) -m 775 $(SHARED_LIBRARY) $(SOURCE_LIB_DIR)
+-ifdef MOZ_DEBUG_SYMBOLS
+-ifeq (,$(filter-out _WIN%,$(NS_USE_GCC)_$(OS_TARGET)))
+-	$(INSTALL) -m 644 $(SHARED_LIBRARY:$(DLL_SUFFIX)=pdb) $(SOURCE_LIB_DIR)
+-endif
+-endif
+-endif
+-ifdef IMPORT_LIBRARY
+-	$(INSTALL) -m 775 $(IMPORT_LIBRARY) $(SOURCE_LIB_DIR)
+-endif
+-ifdef PROGRAM
+-	$(INSTALL) -m 775 $(PROGRAM) $(SOURCE_BIN_DIR)
+-ifdef MOZ_DEBUG_SYMBOLS
+-ifeq (,$(filter-out _WIN%,$(NS_USE_GCC)_$(OS_TARGET)))
+-	$(INSTALL) -m 644 $(PROGRAM:$(PROG_SUFFIX)=.pdb) $(SOURCE_BIN_DIR)
+-endif
+-endif
+-endif
+-ifdef PROGRAMS
+-	$(INSTALL) -m 775 $(PROGRAMS) $(SOURCE_BIN_DIR)
+-endif
+-	+$(LOOP_OVER_DIRS)
++check: $(DIRS)
+ 
+-tests::
+-	+$(LOOP_OVER_DIRS)
+-
+-clean clobber::
++clean clobber: $(DIRS)
+ 	rm -rf $(ALL_TRASH)
+-	+$(LOOP_OVER_DIRS)
+ 
+-realclean clobber_all::
++realclean clobber_all: $(DIRS)
+ 	rm -rf $(wildcard *.OBJ) dist $(ALL_TRASH)
+-	+$(LOOP_OVER_DIRS)
+-
+-#######################################################################
+-# Double-Colon rules for populating the binary release model.         #
+-#######################################################################
+-
+ 
+-release_clean::
++release_clean:
+ 	rm -rf $(SOURCE_XP_DIR)/release/$(RELEASE_MD_DIR)
+ 
+-release:: release_clean release_export release_classes release_policy release_md release_jars release_cpdistdir
++release: release_clean release_export release_classes release_policy release_md release_jars release_cpdistdir
+ 
+-release_cpdistdir::
++release_cpdistdir:
+ 	@echo "== cpdist.pl =="
+ 	@$(PERL) -I$(CORE_DEPTH)/coreconf $(CORE_DEPTH)/coreconf/cpdist.pl \
+ 		"RELEASE_TREE=$(RELEASE_TREE)" \
+@@ -147,7 +118,7 @@ release_cpdistdir::
+ # $(SOURCE_RELEASE_xxx_JAR) is a name like yyy.jar
+ # $(SOURCE_RELEASE_xx_DIR)  is a name like 
+ 
+-release_jars::
++release_jars:
+ 	@echo "== release.pl =="
+ 	@$(PERL) -I$(CORE_DEPTH)/coreconf $(CORE_DEPTH)/coreconf/release.pl \
+ 		"RELEASE_TREE=$(RELEASE_TREE)" \
+@@ -193,17 +164,16 @@ endif
+ 
+ # Substitute \$ for $ so the shell doesn't choke
+ ifdef BUILD_OPT
+-release_classes::
++release_classes:
+ 	$(INSTALL) -m 444 $(subst $$,\$$,$(RELEASE_FILES)) $(SOURCE_RELEASE_PREFIX)/$(SOURCE_RELEASE_CLASSES_DIR)/$(PACKAGE)
+ else
+-release_classes::
++release_classes:
+ 	$(INSTALL) -m 444 $(subst $$,\$$,$(RELEASE_DBG_FILES)) $(SOURCE_RELEASE_PREFIX)/$(SOURCE_RELEASE_CLASSES_DBG_DIR)/$(PACKAGE)
+ endif
+ 
+ endif
+ 
+-release_policy::
+-	+$(LOOP_OVER_DIRS)
++release_policy: $(DIRS)
+ 
+ ifndef NO_MD_RELEASE
+     ifdef LIBRARY
+@@ -223,33 +193,62 @@ ifndef NO_MD_RELEASE
+     endif
+ endif
+ 
+-release_md::
++release_md:: $(DIRS)
+ ifneq ($(MD_LIB_RELEASE_FILES),)
+ 	$(INSTALL) -m 444 $(MD_LIB_RELEASE_FILES) $(SOURCE_RELEASE_PREFIX)/$(SOURCE_RELEASE_LIB_DIR)
+ endif
+ ifneq ($(MD_BIN_RELEASE_FILES),)
+ 	$(INSTALL) -m 555 $(MD_BIN_RELEASE_FILES) $(SOURCE_RELEASE_PREFIX)/$(SOURCE_RELEASE_BIN_DIR)
+ endif
+-	+$(LOOP_OVER_DIRS)
+-
+ 
+ alltags:
+ 	rm -f TAGS
+ 	find . -name dist -prune -o \( -name '*.[hc]' -o -name '*.cp' -o -name '*.cpp' \) -print | xargs etags -a
+ 	find . -name dist -prune -o \( -name '*.[hc]' -o -name '*.cp' -o -name '*.cpp' \) -print | xargs ctags -a
+ 
+-$(PROGRAM): $(OBJS) $(EXTRA_LIBS)
+-	@$(MAKE_OBJDIR)
+-ifeq (,$(filter-out _WIN%,$(NS_USE_GCC)_$(OS_TARGET)))
+-	$(MKPROG) $(subst /,\\,$(OBJS)) -Fe$@ -link $(LDFLAGS) $(XLDFLAGS) $(subst /,\\,$(EXTRA_LIBS) $(EXTRA_SHARED_LIBS) $(OS_LIBS))
++define PROGRAM_template
++
++ifndef $(1)_OBJS
++ifdef LIBRARY_NAME
++	$(1)_OBJS := $$(patsubst $$(PROG_PREFIX)%,%,$$(patsubst %$$(PROG_SUFFIX),%,$(1)))$$(OBJ_SUFFIX)
++endif
++ifdef PROGRAMS
++	$(1)_OBJS := $$(patsubst $$(PROG_PREFIX)%,%,$$(patsubst %$$(PROG_SUFFIX),%,$(1)))$$(OBJ_SUFFIX)
++endif
++ifndef $(1)_OBJS
++	$(1)_OBJS := $$(OBJS)
++endif
++endif
++
++$(1): $$($(1)_OBJS) $$(EXTRA_LIBS)
++	@$$(MAKE_OBJDIR)
++	rm -f $$@
++ifeq (,$$(filter-out _WIN%,$$(NS_USE_GCC)_$$(OS_TARGET)))
++	$$(MKPROG) $$($(1)_OBJS) -Fe$$@ -link $$(LDFLAGS) $$(XLDFLAGS) $$(EXTRA_LIBS) $$(EXTRA_SHARED_LIBS) $$(OS_LIBS)
+ ifdef MT
+-	if test -f $@.manifest; then \
+-		$(MT) -NOLOGO -MANIFEST $@.manifest -OUTPUTRESOURCE:$@\;1; \
+-		rm -f $@.manifest; \
++	if test -f $$@.manifest; then \
++		$$(MT) -NOLOGO -MANIFEST $$@.manifest -OUTPUTRESOURCE:$$@\;1; \
++		rm -f $$@.manifest; \
+ 	fi
+ endif	# MSVC with manifest tool
+ else
+-	$(MKPROG) -o $@ $(CFLAGS) $(OBJS) $(LDFLAGS) $(EXTRA_LIBS) $(EXTRA_SHARED_LIBS) $(OS_LIBS)
++	$$(MKPROG) -o $$@ $$(CFLAGS) $$($(1)_OBJS) $$(LDFLAGS) $$(EXTRA_LIBS) $$(EXTRA_SHARED_LIBS) $$(OS_LIBS)
++endif
++	$$(INSTALL) -m 775 $$@ $$(SOURCE_BIN_DIR)
++ifdef MOZ_DEBUG_SYMBOLS
++ifeq (,$$(filter-out _WIN%,$$(NS_USE_GCC)_$$(OS_TARGET)))
++	$$(INSTALL) -m 644 $$(@:$$(PROG_SUFFIX)=.pdb) $$(SOURCE_BIN_DIR)
++endif
++endif
++
++endef
++
++ifdef PROGRAM
++$(eval $(call PROGRAM_template,$(PROGRAM)))
++else
++ifdef PROGRAMS
++$(foreach prog,$(PROGRAMS),$(eval $(call PROGRAM_template,$(prog))))
++endif
+ endif
+ 
+ get_objs:
+@@ -264,17 +263,18 @@ else
+ 	$(AR) cr $@ $(OBJS)
+ endif
+ 	$(RANLIB) $@
+-
++	$(INSTALL) -m 664 $@ $(SOURCE_LIB_DIR)
+ 
+ ifeq ($(OS_TARGET),OS2)
+ $(IMPORT_LIBRARY): $(MAPFILE)
+ 	rm -f $@
+ 	$(IMPLIB) $@ $<
+ 	$(RANLIB) $@
++	$(INSTALL) -m 775 $@ $(SOURCE_LIB_DIR)
+ endif
+ ifeq ($(OS_ARCH),WINNT)
+-$(IMPORT_LIBRARY): $(LIBRARY)
+-	cp -f $< $@
++$(IMPORT_LIBRARY): $(SHARED_LIBRARY)
++	$(INSTALL) -m 775 $@ $(SOURCE_LIB_DIR)
+ endif
+ 
+ ifdef SHARED_LIBRARY_LIBS
+@@ -313,6 +313,12 @@ else
+ 	$(MKSHLIB) -o $@ $(OBJS) $(SUB_SHLOBJS) $(LD_LIBS) $(EXTRA_LIBS) $(EXTRA_SHARED_LIBS) $(OS_LIBS)
+ 	chmod +x $@
+ endif
++endif
++	$(INSTALL) -m 775 $@ $(SOURCE_LIB_DIR)
++ifdef MOZ_DEBUG_SYMBOLS
++ifeq (,$(filter-out _WIN%,$(NS_USE_GCC)_$(OS_TARGET)))
++	$(INSTALL) -m 644 $(@:$(DLL_SUFFIX)=pdb) $(SOURCE_LIB_DIR)
++endif
+ endif
+ 
+ ifeq (,$(filter-out WIN%,$(OS_TARGET)))
+@@ -331,23 +337,6 @@ $(MAPFILE): $(MAPFILE_SOURCE)
+ 	@$(MAKE_OBJDIR)
+ 	$(PROCESS_MAP_FILE)
+ 
+-
+-$(OBJDIR)/$(PROG_PREFIX)%$(PROG_SUFFIX): $(OBJDIR)/$(PROG_PREFIX)%$(OBJ_SUFFIX)
+-	@$(MAKE_OBJDIR)
+-ifeq (,$(filter-out _WIN%,$(NS_USE_GCC)_$(OS_TARGET)))
+-	$(MKPROG) $< -Fe$@ -link \
+-	$(LDFLAGS) $(XLDFLAGS) $(EXTRA_LIBS) $(EXTRA_SHARED_LIBS) $(OS_LIBS)
+-ifdef MT
+-	if test -f $@.manifest; then \
+-		$(MT) -NOLOGO -MANIFEST $@.manifest -OUTPUTRESOURCE:$@\;1; \
+-		rm -f $@.manifest; \
+-	fi
+-endif	# MSVC with manifest tool
+-else
+-	$(MKPROG) -o $@ $(CFLAGS) $< \
+-	$(LDFLAGS) $(EXTRA_LIBS) $(EXTRA_SHARED_LIBS) $(OS_LIBS)
+-endif
+-
+ WCCFLAGS1 := $(subst /,\\,$(CFLAGS))
+ WCCFLAGS2 := $(subst -I,-i=,$(WCCFLAGS1))
+ WCCFLAGS3 := $(subst -D,-d,$(WCCFLAGS2))
+@@ -501,7 +490,7 @@ endif
+ # Bunch of things that extend the 'export' rule (in order):
+ ################################################################################
+ 
+-$(JAVA_DESTPATH) $(JAVA_DESTPATH)/$(PACKAGE) $(JMCSRCDIR)::
++$(JAVA_DESTPATH) $(JAVA_DESTPATH)/$(PACKAGE) $(JMCSRCDIR):
+ 	@if test ! -d $@; then	    \
+ 		echo Creating $@;   \
+ 		rm -rf $@;	    \
+@@ -513,12 +502,12 @@ $(JAVA_DESTPATH) $(JAVA_DESTPATH)/$(PACKAGE) $(JMCSRCDIR)::
+ 
+ ifneq ($(IDL_GEN),)
+ 
+-#export::
++#export:
+ #	$(IDL2JAVA) $(IDL_GEN)
+ 
+-#all:: export
++#all: export
+ 
+-#clobber::
++#clobber:
+ #	rm -f $(IDL_GEN:.idl=.class)	# XXX wrong!
+ 
+ endif
+@@ -538,14 +527,14 @@ endif
+ 
+ JAVA_EXPORT_SRCS=$(shell $(PERL) $(CORE_DEPTH)/coreconf/outofdate.pl $(PERLARG)	-d $(JAVA_DESTPATH)/$(PACKAGE) $(JSRCS) $(PRIVATE_JSRCS))
+ 
+-export:: $(JAVA_DESTPATH) $(JAVA_DESTPATH)/$(PACKAGE)
++export: $(JAVA_DESTPATH) $(JAVA_DESTPATH)/$(PACKAGE)
+ ifneq ($(JAVA_EXPORT_SRCS),)
+ 	$(JAVAC) $(JAVA_EXPORT_SRCS)
+ endif
+ 
+-all:: export
++all: export
+ 
+-clobber::
++clobber:
+ 	rm -f $(SOURCE_XP_DIR)/classes/$(PACKAGE)/*.class
+ 
+ endif
+@@ -572,7 +561,7 @@ endif
+ # to parse the '=' character. A solution is to rewrite outofdate.pl so it
+ # takes the Javac command as an argument and executes the command itself,
+ # instead of returning a list of files.
+-export:: $(JAVA_DESTPATH) $(JAVA_DESTPATH)/$(PACKAGE)
++export: $(JAVA_DESTPATH) $(JAVA_DESTPATH)/$(PACKAGE)
+ 	@echo "!!! THIS COMMAND IS BROKEN ON WINDOWS--SEE rules.mk FOR DETAILS !!!"
+ 	return -1
+ 	@for d in $(JDIRS); do							\
+@@ -625,7 +614,7 @@ JDK_STUB_CFILES		:= $(patsubst %,$(JDK_STUB_DIR)/%.c,$(JDK_GEN))
+ $(JDK_HEADER_CFILES): $(JDK_HEADER_CLASSFILES)
+ $(JDK_STUB_CFILES): $(JDK_STUB_CLASSFILES)
+ 
+-export::
++export:
+ 	@echo Generating/Updating JDK headers 
+ 	$(JAVAH) -d $(JDK_GEN_DIR) $(JDK_PACKAGE_CLASSES)
+ 	@echo Generating/Updating JDK stubs
+@@ -674,7 +663,7 @@ JRI_STUB_CFILES		:= $(patsubst %,$(JRI_GEN_DIR)/%.c,$(JRI_GEN))
+ $(JRI_HEADER_CFILES): $(JRI_HEADER_CLASSFILES)
+ $(JRI_STUB_CFILES): $(JRI_STUB_CLASSFILES)
+ 
+-export::
++export:
+ 	@echo Generating/Updating JRI headers 
+ 	$(JAVAH) -jri -d $(JRI_GEN_DIR) $(JRI_PACKAGE_CLASSES)
+ 	@echo Generating/Updating JRI stubs
+@@ -702,7 +691,7 @@ ifneq ($(JNI_GEN),)
+ ifneq ($(JAVAH),)
+ JNI_HEADERS		:= $(patsubst %,$(JNI_GEN_DIR)/%.h,$(JNI_GEN))
+ 
+-export::
++export:
+ 	@if test ! -d $(JNI_GEN_DIR); then						\
+ 		echo $(JAVAH) -jni -d $(JNI_GEN_DIR) $(JNI_GEN);			\
+ 		$(JAVAH) -jni -d $(JNI_GEN_DIR) $(JNI_GEN);				\
+@@ -726,7 +715,7 @@ JMC_EXPORT_FILES	:= $(patsubst %,$(JAVA_DESTPATH)/$(PACKAGE)/%.class,$(JMC_EXPOR
+ # your NSDISTMODE and make links relative to the current directory. This is a
+ # problem because the source isn't in the current directory:
+ #
+-export:: $(JMC_EXPORT_FILES) $(JMCSRCDIR)
++export: $(JMC_EXPORT_FILES) $(JMCSRCDIR)
+ 	$(NSINSTALL) -t -m 444 $(JMC_EXPORT_FILES) $(JMCSRCDIR)
+ endif
+ 
+@@ -752,7 +741,7 @@ $(OBJDIR)/M%$(OBJ_SUFFIX): $(JMC_GEN_DIR)/M%.c $(JMC_GEN_DIR)/M%.h
+ 	@$(MAKE_OBJDIR)
+ 	$(CC) -o $@ -c $(CFLAGS) $<
+ 
+-export:: $(JMC_HEADERS) $(JMC_STUBS)
++export: $(JMC_HEADERS) $(JMC_STUBS)
+ endif
+ endif
+ 
+@@ -762,18 +751,13 @@ endif
+ PUBLIC_EXPORT_DIR = $(SOURCE_XP_DIR)/public/$(MODULE)
+ 
+ ifneq ($(EXPORTS),)
+-$(PUBLIC_EXPORT_DIR)::
+-	@if test ! -d $@; then	    \
+-		echo Creating $@;   \
+-		$(NSINSTALL) -D $@; \
+-	fi
+-
+-export:: $(PUBLIC_EXPORT_DIR) 
++$(PUBLIC_EXPORT_DIR)/d:
++	@$(MAKE_OBJDIR)
+ 
+-export:: $(EXPORTS) 
++$(PUBLIC_EXPORT_DIR)/%: %
+ 	$(INSTALL) -m 444 $^ $(PUBLIC_EXPORT_DIR)
+ 
+-export:: $(BUILT_SRCS)
++export: $(addprefix $(PUBLIC_EXPORT_DIR)/,$(EXPORTS)) | $(PUBLIC_EXPORT_DIR)/d
+ endif
+ 
+ # Duplicate export rule for private exports, with different directories
+@@ -781,19 +765,16 @@ endif
+ PRIVATE_EXPORT_DIR = $(SOURCE_XP_DIR)/private/$(MODULE)
+ 
+ ifneq ($(PRIVATE_EXPORTS),)
+-$(PRIVATE_EXPORT_DIR)::
+-	@if test ! -d $@; then	    \
+-		echo Creating $@;   \
+-		$(NSINSTALL) -D $@; \
+-	fi
+-
+-private_export:: $(PRIVATE_EXPORT_DIR)
++$(PRIVATE_EXPORT_DIR)/d:
++	@$(MAKE_OBJDIR)
+ 
+-private_export:: $(PRIVATE_EXPORTS) 
++$(PRIVATE_EXPORT_DIR)/%: %
+ 	$(INSTALL) -m 444 $^ $(PRIVATE_EXPORT_DIR)
++
++private_export: $(addprefix $(PRIVATE_EXPORT_DIR)/,$(PRIVATE_EXPORTS)) | $(PRIVATE_EXPORT_DIR)/d
+ else
+-private_export:: 
+-	@echo There are no private exports.;
++private_export:
++	@echo "There are no private exports."
+ endif
+ 
+ ##########################################################################
+@@ -810,7 +791,7 @@ ifneq ($(BUILD_OPT),)
+ REGDATE = $(subst \ ,, $(shell $(PERL)  $(CORE_DEPTH)/$(MODULE)/scripts/now))
+ endif
+ 
+-tests:: $(REGRESSION_SPEC) 
++check: $(REGRESSION_SPEC)
+ 	cd $(PLATFORM); \
+ 	../$(SOURCE_MD_DIR)/bin/regress$(PROG_SUFFIX) specfile=../$(REGRESSION_SPEC) progress $(EXTRA_REGRESS_OPTIONS); \
+ 	if test ! -d $(TESTS_DIR); then \
+@@ -824,23 +805,23 @@ ifneq ($(BUILD_OPT),)
+ 	echo "then run 'reporter specfile=$(RESULTS_DIR)/rptspec'"
+ endif
+ else
+-tests:: 
+-	@echo Error: you didn't specify REGRESSION_SPEC in your manifest.mn file!;
++check:
++	@echo "Error: you didn't specify REGRESSION_SPEC in your manifest.mn file!"
+ endif
+ 
+ 
+ # Duplicate export rule for releases, with different directories
+ 
+ ifneq ($(EXPORTS),)
+-$(SOURCE_RELEASE_XP_DIR)/include::
++$(SOURCE_RELEASE_XP_DIR)/include:
+ 	@if test ! -d $@; then	    \
+ 		echo Creating $@;   \
+ 		$(NSINSTALL) -D $@; \
+ 	fi
+ 
+-release_export:: $(SOURCE_RELEASE_XP_DIR)/include
++release_export: $(SOURCE_RELEASE_XP_DIR)/include
+ 
+-release_export:: $(EXPORTS)
++release_export: $(EXPORTS)
+ 	$(INSTALL) -m 444 $^ $(SOURCE_RELEASE_XP_DIR)/include
+ endif
+ 
+@@ -849,6 +830,7 @@ endif
+ 
+ ################################################################################
+ 
++ifeq ($(MAKECMDGOALS),clean)
+ -include $(DEPENDENCIES)
+ 
+ ifneq (,$(filter-out OS2 WIN%,$(OS_TARGET)))
+@@ -894,7 +876,7 @@ ifdef MKDEPENDENCIES
+ 
+ # For Windows, $(MKDEPENDENCIES) must be -included before including rules.mk
+ 
+-$(MKDEPENDENCIES)::
++$(MKDEPENDENCIES):
+ 	@$(MAKE_OBJDIR)
+ 	touch $(MKDEPENDENCIES) 
+ 	chmod u+w $(MKDEPENDENCIES) 
+@@ -903,24 +885,23 @@ $(MKDEPENDENCIES)::
+ 	$(MKDEPEND) -p$(OBJDIR_NAME)/ -o'$(OBJ_SUFFIX)' -f$(MKDEPENDENCIES) \
+ $(NOMD_CFLAGS) $(YOPT) $(CSRCS) $(CPPSRCS) $(ASFILES)
+ 
+-$(MKDEPEND):: $(MKDEPEND_DIR)/*.c $(MKDEPEND_DIR)/*.h
++$(MKDEPEND): $(MKDEPEND_DIR)/*.c $(MKDEPEND_DIR)/*.h
+ 	$(MAKE) -C $(MKDEPEND_DIR)
+ 
+ ifdef OBJS
+-depend:: $(MKDEPEND) $(MKDEPENDENCIES)
++depend: $(DIRS) $(MKDEPEND) $(MKDEPENDENCIES)
+ else
+-depend::
++depend: $(DIRS)
+ endif
+-	+$(LOOP_OVER_DIRS)
+ 
+-dependclean::
++dependclean: $(DIRS)
+ 	rm -f $(MKDEPENDENCIES)
+-	+$(LOOP_OVER_DIRS)
+ 
+ #-include $(NSINSTALL_DIR)/$(OBJDIR)/depend.mk
+ 
+ else
+-depend::
++depend:
++endif
+ endif
+ 
+ #
+@@ -966,5 +947,5 @@ $(filter $(OBJDIR)/%$(OBJ_SUFFIX),$(OBJS)): $(OBJDIR)/%$(OBJ_SUFFIX): $(DUMMY_DE
+ # Fake targets.  Always run these rules, even if a file/directory with that
+ # name already exists.
+ #
+-.PHONY: all all_platforms alltags boot clean clobber clobber_all export install libs program realclean release $(OBJDIR)
++.PHONY: all all_platforms alltags boot clean clobber clobber_all export install libs program realclean release $(DIRS)
+ 
+diff --git a/nss/coreconf/ruleset.mk b/nss/coreconf/ruleset.mk
+index 74d64e1..43ea718 100644
+--- a/nss/coreconf/ruleset.mk
++++ b/nss/coreconf/ruleset.mk
+@@ -133,13 +133,10 @@ ifndef BUILT_SRCS
+ 		 $(BUILT_CSRCS) $(BUILT_CPPSRCS) $(BUILT_ASFILES))
+ endif
+ 
+-
+-ifeq (,$(filter-out WIN%,$(OS_TARGET)))
+-    MAKE_OBJDIR = $(INSTALL) -D $(OBJDIR)
+-else
+-    define MAKE_OBJDIR
+-	if test ! -d $(@D); then rm -rf $(@D); $(NSINSTALL) -D $(@D); fi
+-    endef
++ifndef MAKE_OBJDIR
++define MAKE_OBJDIR
++if test ! -d $(@D); then $(NSINSTALL) -D $(@D); fi
++endef
+ endif
+ 
+ ifndef PACKAGE
+@@ -206,15 +203,4 @@ ifdef SYSTEM_INCL_DIR
+     YOPT = -Y$(SYSTEM_INCL_DIR)
+ endif
+ 
+-ifdef DIRS
+-define SUBMAKE
+-+@echo "cd $2; $(MAKE) $1"
+-$(IGNORE_ERROR)@$(MAKE) -C $(2) $(1)
+-@$(CLICK_STOPWATCH)
+-
+-endef
+-
+-    LOOP_OVER_DIRS	= $(foreach dir,$(DIRS),$(call SUBMAKE,$@,$(dir)))
+-endif
+-
+ MK_RULESET = included
+diff --git a/nss/cpputil/manifest.mn b/nss/cpputil/manifest.mn
+index b3ccad8..caa859b 100644
+--- a/nss/cpputil/manifest.mn
++++ b/nss/cpputil/manifest.mn
+@@ -19,6 +19,3 @@ CPPSRCS = \
+       tls_parser.cc \
+       $(NULL)
+ endif
+-
+-EXPORTS = \
+-      $(NULL)
+diff --git a/nss/gtests/certdb_gtest/manifest.mn b/nss/gtests/certdb_gtest/manifest.mn
+index c95cf99..2edcf92 100644
+--- a/nss/gtests/certdb_gtest/manifest.mn
++++ b/nss/gtests/certdb_gtest/manifest.mn
+@@ -21,4 +21,4 @@ REQUIRES = nspr nss libdbm gtest
+ PROGRAM = certdb_gtest
+ 
+ EXTRA_LIBS = $(DIST)/lib/$(LIB_PREFIX)gtest.$(LIB_SUFFIX) $(EXTRA_OBJS) \
+-             ../common/$(OBJDIR)/gtests$(OBJ_SUFFIX)
++             $(DIST)/lib/$(LIB_PREFIX)gtestutil.$(LIB_SUFFIX)
+diff --git a/nss/gtests/common/Makefile b/nss/gtests/common/Makefile
+index e17bc28..1476e45 100644
+--- a/nss/gtests/common/Makefile
++++ b/nss/gtests/common/Makefile
+@@ -20,6 +20,9 @@ include $(CORE_DEPTH)/coreconf/config.mk
+ # (3) Include "component" configuration information. (OPTIONAL)       #
+ #######################################################################
+ 
++SHARED_LIBRARY = $(NULL)
++IMPORT_LIBRARY = $(NULL)
++
+ #######################################################################
+ # (4) Include "local" platform-dependent assignments (OPTIONAL).      #
+ #######################################################################
+diff --git a/nss/gtests/google_test/Makefile b/nss/gtests/google_test/Makefile
+index 21fef55..f801ba1 100644
+--- a/nss/gtests/google_test/Makefile
++++ b/nss/gtests/google_test/Makefile
+@@ -20,7 +20,8 @@ include $(CORE_DEPTH)/coreconf/config.mk
+ # (3) Include "component" configuration information. (OPTIONAL)       #
+ #######################################################################
+ 
+-
++SHARED_LIBRARY = $(NULL)
++IMPORT_LIBRARY = $(NULL)
+ 
+ #######################################################################
+ # (4) Include "local" platform-dependent assignments (OPTIONAL).      #
+diff --git a/nss/gtests/google_test/manifest.mn b/nss/gtests/google_test/manifest.mn
+index 70e33e6..2858dc7 100644
+--- a/nss/gtests/google_test/manifest.mn
++++ b/nss/gtests/google_test/manifest.mn
+@@ -6,18 +6,11 @@ CORE_DEPTH = ../..
+ DEPTH = ../..
+ 
+ MODULE = gtest
++
+ LIBRARY_NAME = gtest
+-LIBRARY_VERSION = 1
+ 
+ INCLUDES += -Igtest/include/ -Igtest
+ 
+ CPPSRCS = \
+ 	gtest/src/gtest-all.cc \
+ 	$(NULL)
+-
+-
+-EXPORTS = \
+-	$(NULL)
+-
+-
+-
+diff --git a/nss/gtests/manifest.mn b/nss/gtests/manifest.mn
+index 24d4ce1..d73d11e 100644
+--- a/nss/gtests/manifest.mn
++++ b/nss/gtests/manifest.mn
+@@ -10,10 +10,14 @@ LIB_SRCDIRS = \
+ 	common \
+ 	$(NULL)
+ 
++common: google_test
++
+ ifneq ($(NSS_BUILD_WITHOUT_UTIL),1)
+ UTIL_SRCDIRS = \
+ 	util_gtest \
+ 	$(NULL)
++
++util_gtest: common
+ endif
+ 
+ ifneq ($(NSS_BUILD_SOFTOKEN_ONLY),1)
+@@ -30,6 +34,17 @@ NSS_SRCDIRS = \
+ 	$(SYSINIT_GTEST) \
+ 	nss_bogo_shim \
+ 	$(NULL)
++
++certdb_gtest: common
++certhigh_gtest: common
++cryptohi_gtest: common
++der_gtest: common
++pk11_gtest: common
++smime_gtest: common
++softoken_gtest: common
++ssl_gtest: google_test
++sysinit_gtest: google_test
++util_gtest: common
+ endif
+ endif
+ 
+diff --git a/nss/lib/Makefile b/nss/lib/Makefile
+index 8eedad0..337b328 100644
+--- a/nss/lib/Makefile
++++ b/nss/lib/Makefile
+@@ -54,22 +54,6 @@ ifndef NSS_DISABLE_LIBPKIX
+ LIBPKIX_SRCDIR = libpkix  # Add the libpkix directory to DIRS.
+ endif
+ 
+-#######################################################################
+-# (5) Execute "global" rules. (OPTIONAL)                              #
+-#######################################################################
+-
+-include $(CORE_DEPTH)/coreconf/rules.mk
+-
+-#######################################################################
+-# (6) Execute "component" rules. (OPTIONAL)                           #
+-#######################################################################
+-
+-
+-
+-#######################################################################
+-# (7) Execute "local" rules. (OPTIONAL).                              #
+-#######################################################################
+-
+ ifeq ($(NSS_BUILD_UTIL_ONLY),1)
+   UTIL_SRCDIR = util
+   FREEBL_SRCDIR =
+@@ -95,3 +79,19 @@ else
+     endif
+   endif
+ endif
++
++#######################################################################
++# (5) Execute "global" rules. (OPTIONAL)                              #
++#######################################################################
++
++include $(CORE_DEPTH)/coreconf/rules.mk
++
++#######################################################################
++# (6) Execute "component" rules. (OPTIONAL)                           #
++#######################################################################
++
++
++
++#######################################################################
++# (7) Execute "local" rules. (OPTIONAL).                              #
++#######################################################################
+diff --git a/nss/lib/base/Makefile b/nss/lib/base/Makefile
+index fc78ae9..ca709f6 100644
+--- a/nss/lib/base/Makefile
++++ b/nss/lib/base/Makefile
+@@ -8,4 +8,3 @@ include $(CORE_DEPTH)/coreconf/config.mk
+ include config.mk
+ include $(CORE_DEPTH)/coreconf/rules.mk
+ 
+-export:: private_export
+diff --git a/nss/lib/certdb/Makefile b/nss/lib/certdb/Makefile
+index 36524f5..c3cb5ef 100644
+--- a/nss/lib/certdb/Makefile
++++ b/nss/lib/certdb/Makefile
+@@ -44,5 +44,4 @@ include $(CORE_DEPTH)/coreconf/rules.mk
+ # (7) Execute "local" rules. (OPTIONAL).                              #
+ #######################################################################
+ 
+-export:: private_export
+ 
+diff --git a/nss/lib/certhigh/Makefile b/nss/lib/certhigh/Makefile
+index a2f0cf7..0f71b1a 100644
+--- a/nss/lib/certhigh/Makefile
++++ b/nss/lib/certhigh/Makefile
+@@ -44,5 +44,4 @@ include $(CORE_DEPTH)/coreconf/rules.mk
+ # (7) Execute "local" rules. (OPTIONAL).                              #
+ #######################################################################
+ 
+-export:: private_export
+ 
+diff --git a/nss/lib/ckfw/Makefile b/nss/lib/ckfw/Makefile
+index 2902bef..82c9b8b 100644
+--- a/nss/lib/ckfw/Makefile
++++ b/nss/lib/ckfw/Makefile
+@@ -6,7 +6,6 @@
+ include manifest.mn
+ include $(CORE_DEPTH)/coreconf/config.mk
+ include config.mk
+-include $(CORE_DEPTH)/coreconf/rules.mk
+ 
+ ifdef NOTDEF # was ifdef MOZILLA_CLIENT
+ NSS_BUILD_CAPI = 1
+@@ -25,7 +24,6 @@ endif
+ # nssck.api: ck.api ckapi.perl
+ # 	$(PERL) ckapi.perl ck.api
+ 
+-export:: private_export
+ 
+ # can't do this in manifest.mn because OS_TARGET isn't defined there.
+ ifeq (,$(filter-out WINNT WIN95,$(OS_TARGET)))
+@@ -33,3 +31,5 @@ ifdef NSS_BUILD_CAPI
+ DIRS += capi
+ endif
+ endif
++
++include $(CORE_DEPTH)/coreconf/rules.mk
+diff --git a/nss/lib/crmf/Makefile b/nss/lib/crmf/Makefile
+index a774a95..142bacf 100644
+--- a/nss/lib/crmf/Makefile
++++ b/nss/lib/crmf/Makefile
+@@ -46,4 +46,3 @@ include $(CORE_DEPTH)/coreconf/rules.mk
+ #######################################################################
+ 
+ 
+-export:: private_export
+diff --git a/nss/lib/cryptohi/Makefile b/nss/lib/cryptohi/Makefile
+index 71ae761..c3bb95f 100644
+--- a/nss/lib/cryptohi/Makefile
++++ b/nss/lib/cryptohi/Makefile
+@@ -45,5 +45,4 @@ include $(CORE_DEPTH)/coreconf/rules.mk
+ #######################################################################
+ 
+ 
+-export:: private_export
+ 
+diff --git a/nss/lib/dbm/include/Makefile b/nss/lib/dbm/include/Makefile
+index 4c9e4e9..21bb3b3 100644
+--- a/nss/lib/dbm/include/Makefile
++++ b/nss/lib/dbm/include/Makefile
+@@ -44,4 +44,3 @@ include $(CORE_DEPTH)/coreconf/rules.mk
+ # (7) Execute "local" rules. (OPTIONAL).                              #
+ #######################################################################
+ 
+-export:: private_export
+diff --git a/nss/lib/dev/Makefile b/nss/lib/dev/Makefile
+index d88eb28..b5951dc 100644
+--- a/nss/lib/dev/Makefile
++++ b/nss/lib/dev/Makefile
+@@ -21,4 +21,3 @@ endif
+ endif
+ endif
+ 
+-export:: private_export
+diff --git a/nss/lib/dev/manifest.mn b/nss/lib/dev/manifest.mn
+index 45c7509..4a5b812 100644
+--- a/nss/lib/dev/manifest.mn
++++ b/nss/lib/dev/manifest.mn
+@@ -15,9 +15,6 @@ PRIVATE_EXPORTS = \
+ 	nssdev.h   \
+ 	$(NULL)
+ 
+-EXPORTS =	   \
+-	$(NULL)
+-
+ MODULE = nss
+ 
+ CSRCS =		        \
+diff --git a/nss/lib/freebl/Makefile b/nss/lib/freebl/Makefile
+index 5943fb3..08f1a80 100644
+--- a/nss/lib/freebl/Makefile
++++ b/nss/lib/freebl/Makefile
+@@ -585,7 +585,6 @@ include $(CORE_DEPTH)/coreconf/rules.mk
+ # (7) Execute "local" rules. (OPTIONAL).                              #
+ #######################################################################
+ 
+-export:: private_export
+ 
+ rijndael_tables:
+ 	$(CC) -o $(OBJDIR)/make_rijndael_tab rijndael_tables.c \
+@@ -649,9 +648,11 @@ ALL_TRASH += $(SINGLE_SHLIB_DIR)
+ $(SINGLE_SHLIB_DIR):
+ 	-mkdir -p $(SINGLE_SHLIB_DIR)
+ 
+-release_md libs:: $(SINGLE_SHLIB_DIR)
++release_md:: freebl_single_shlib
++libs: freebl_single_shlib
++freebl_single_shlib: | $(SINGLE_SHLIB_DIR)
+ 	$(MAKE) FREEBL_CHILD_BUILD=1 \
+- OBJDIR=$(SINGLE_SHLIB_DIR) $@
++ OBJDIR=$(SINGLE_SHLIB_DIR) libs
+ ######################## common stuff #########################
+ 
+ endif
+@@ -659,12 +660,15 @@ endif
+ ifdef NEED_STUB_BUILD
+ SINGLE_SHLIB_DIR = $(OBJDIR)/$(OS_TARGET)_SINGLE_SHLIB
+ ALL_TRASH += $(SINGLE_SHLIB_DIR) 
++
+ $(SINGLE_SHLIB_DIR):
+ 	-mkdir $(SINGLE_SHLIB_DIR)
+ 
+-release_md libs:: $(SINGLE_SHLIB_DIR)
++release_md:: freebl_stub_build
++libs: freebl_stub_build
++freebl_stub_build: | $(SINGLE_SHLIB_DIR)
+ 	$(MAKE) FREEBL_CHILD_BUILD=1 USE_STUB_BUILD=1 \
+- OBJDIR=$(SINGLE_SHLIB_DIR) $@
++ OBJDIR=$(SINGLE_SHLIB_DIR) libs
+ endif
+ 
+ # multiple shared libraries
+@@ -677,9 +681,11 @@ ALL_TRASH += $(ABI32_FPU_DIR)
+ $(ABI32_FPU_DIR):
+ 	-mkdir $(ABI32_FPU_DIR)
+ 
+-release_md libs:: $(ABI32_FPU_DIR)
++release_md:: freebl_ABI32_FPU
++libs: freebl_ABI32_FPU
++freebl_ABI32_FPU: | $(ABI32_FPU_DIR)
+ 	$(MAKE) FREEBL_CHILD_BUILD=1 USE_ABI32_FPU=1 \
+- OBJDIR=$(ABI32_FPU_DIR) $@
++ OBJDIR=$(ABI32_FPU_DIR) libs
+ endif
+ 
+ ######################## ABI32_INT32 stuff #########################
+@@ -690,9 +696,11 @@ ALL_TRASH += $(ABI32_INT32_DIR)
+ $(ABI32_INT32_DIR):
+ 	-mkdir $(ABI32_INT32_DIR)
+ 
+-release_md libs:: $(ABI32_INT32_DIR)
++release_md:: freebl_ABI32_INT32
++libs: freebl_ABI32_INT32
++freebl_ABI32_INT32: | $(ABI32_INT32_DIR)
+ 	$(MAKE) FREEBL_CHILD_BUILD=1 USE_ABI32_INT32=1 \
+- OBJDIR=$(ABI32_INT32_DIR) $@
++ OBJDIR=$(ABI32_INT32_DIR) libs
+ endif
+ 
+ ######################## ABI32_INT64 stuff #########################
+@@ -703,9 +711,11 @@ ALL_TRASH += $(ABI32_INT64_DIR)
+ $(ABI32_INT64_DIR):
+ 	-mkdir $(ABI32_INT64_DIR)
+ 
+-release_md libs:: $(ABI32_INT64_DIR)
++release_md:: freebl_ABI32_INT64
++libs: freebl_ABI32_INT64
++freebl_ABI32_INT64: | $(ABI32_INT64_DIR)
+ 	$(MAKE) FREEBL_CHILD_BUILD=1 USE_ABI32_INT64=1\
+- OBJDIR=$(ABI32_INT64_DIR) $@
++ OBJDIR=$(ABI32_INT64_DIR) libs
+ endif
+ 
+ ######################## END of 32-bit stuff #########################
+@@ -720,9 +730,11 @@ ALL_TRASH += $(ABI64_FPU_DIR)
+ $(ABI64_FPU_DIR):
+ 	-mkdir $(ABI64_FPU_DIR)
+ 
+-release_md libs:: $(ABI64_FPU_DIR)
++release_md:: freebl_ABI64_FPU
++libs: freebl_ABI64_FPU
++freebl_ABI64_FPU: | $(ABI64_FPU_DIR)
+ 	$(MAKE) FREEBL_CHILD_BUILD=1 USE_ABI64_FPU=1 \
+- OBJDIR=$(ABI64_FPU_DIR) $@
++ OBJDIR=$(ABI64_FPU_DIR) libs
+ endif
+ 
+ ######################## ABI64_INT stuff #########################
+@@ -733,9 +745,11 @@ ALL_TRASH += $(ABI64_INT_DIR)
+ $(ABI64_INT_DIR):
+ 	-mkdir $(ABI64_INT_DIR)
+ 
+-release_md libs:: $(ABI64_INT_DIR)
++release_md:: freebl_ABI64_INT
++libs: freebl_ABI64_INT
++freebl_ABI64_INT: | $(ABI64_INT_DIR)
+ 	$(MAKE) FREEBL_CHILD_BUILD=1 USE_ABI64_INT=1 \
+- OBJDIR=$(ABI64_INT_DIR) $@
++ OBJDIR=$(ABI64_INT_DIR) libs
+ endif
+ 
+ endif  # FREEBL_CHILD_BUILD
+diff --git a/nss/lib/libpkix/Makefile b/nss/lib/libpkix/Makefile
+index 36524f5..c3cb5ef 100755
+--- a/nss/lib/libpkix/Makefile
++++ b/nss/lib/libpkix/Makefile
+@@ -44,5 +44,4 @@ include $(CORE_DEPTH)/coreconf/rules.mk
+ # (7) Execute "local" rules. (OPTIONAL).                              #
+ #######################################################################
+ 
+-export:: private_export
+ 
+diff --git a/nss/lib/libpkix/include/Makefile b/nss/lib/libpkix/include/Makefile
+index 36524f5..c3cb5ef 100755
+--- a/nss/lib/libpkix/include/Makefile
++++ b/nss/lib/libpkix/include/Makefile
+@@ -44,5 +44,4 @@ include $(CORE_DEPTH)/coreconf/rules.mk
+ # (7) Execute "local" rules. (OPTIONAL).                              #
+ #######################################################################
+ 
+-export:: private_export
+ 
+diff --git a/nss/lib/libpkix/include/manifest.mn b/nss/lib/libpkix/include/manifest.mn
+index cc74890..3792dbb 100755
+--- a/nss/lib/libpkix/include/manifest.mn
++++ b/nss/lib/libpkix/include/manifest.mn
+@@ -4,9 +4,6 @@
+ # file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ CORE_DEPTH = ../../..
+ 
+-EXPORTS = \
+-	$(NULL)
+-
+ PRIVATE_EXPORTS = \
+ 	pkix.h \
+ 	pkix_crlsel.h \
+diff --git a/nss/lib/libpkix/pkix/Makefile b/nss/lib/libpkix/pkix/Makefile
+index 36524f5..c3cb5ef 100755
+--- a/nss/lib/libpkix/pkix/Makefile
++++ b/nss/lib/libpkix/pkix/Makefile
+@@ -44,5 +44,4 @@ include $(CORE_DEPTH)/coreconf/rules.mk
+ # (7) Execute "local" rules. (OPTIONAL).                              #
+ #######################################################################
+ 
+-export:: private_export
+ 
+diff --git a/nss/lib/libpkix/pkix/certsel/Makefile b/nss/lib/libpkix/pkix/certsel/Makefile
+index 36524f5..c3cb5ef 100755
+--- a/nss/lib/libpkix/pkix/certsel/Makefile
++++ b/nss/lib/libpkix/pkix/certsel/Makefile
+@@ -44,5 +44,4 @@ include $(CORE_DEPTH)/coreconf/rules.mk
+ # (7) Execute "local" rules. (OPTIONAL).                              #
+ #######################################################################
+ 
+-export:: private_export
+ 
+diff --git a/nss/lib/libpkix/pkix/certsel/manifest.mn b/nss/lib/libpkix/pkix/certsel/manifest.mn
+index 525ee09..8e28df5 100755
+--- a/nss/lib/libpkix/pkix/certsel/manifest.mn
++++ b/nss/lib/libpkix/pkix/certsel/manifest.mn
+@@ -4,9 +4,6 @@
+ # file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ CORE_DEPTH = ../../../..
+ 
+-EXPORTS = \
+-	$(NULL)
+-
+ PRIVATE_EXPORTS = \
+ 	pkix_certselector.h \
+ 	pkix_comcertselparams.h \
+diff --git a/nss/lib/libpkix/pkix/checker/Makefile b/nss/lib/libpkix/pkix/checker/Makefile
+index 36524f5..c3cb5ef 100755
+--- a/nss/lib/libpkix/pkix/checker/Makefile
++++ b/nss/lib/libpkix/pkix/checker/Makefile
+@@ -44,5 +44,4 @@ include $(CORE_DEPTH)/coreconf/rules.mk
+ # (7) Execute "local" rules. (OPTIONAL).                              #
+ #######################################################################
+ 
+-export:: private_export
+ 
+diff --git a/nss/lib/libpkix/pkix/checker/manifest.mn b/nss/lib/libpkix/pkix/checker/manifest.mn
+index eba69d0..da99416 100755
+--- a/nss/lib/libpkix/pkix/checker/manifest.mn
++++ b/nss/lib/libpkix/pkix/checker/manifest.mn
+@@ -4,9 +4,6 @@
+ # file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ CORE_DEPTH = ../../../..
+ 
+-EXPORTS = \
+-	$(NULL)
+-
+ PRIVATE_EXPORTS = \
+ 	pkix_basicconstraintschecker.h \
+ 	pkix_certchainchecker.h \
+diff --git a/nss/lib/libpkix/pkix/crlsel/Makefile b/nss/lib/libpkix/pkix/crlsel/Makefile
+index 36524f5..c3cb5ef 100755
+--- a/nss/lib/libpkix/pkix/crlsel/Makefile
++++ b/nss/lib/libpkix/pkix/crlsel/Makefile
+@@ -44,5 +44,4 @@ include $(CORE_DEPTH)/coreconf/rules.mk
+ # (7) Execute "local" rules. (OPTIONAL).                              #
+ #######################################################################
+ 
+-export:: private_export
+ 
+diff --git a/nss/lib/libpkix/pkix/crlsel/manifest.mn b/nss/lib/libpkix/pkix/crlsel/manifest.mn
+index 8ea0f59..0ad8105 100755
+--- a/nss/lib/libpkix/pkix/crlsel/manifest.mn
++++ b/nss/lib/libpkix/pkix/crlsel/manifest.mn
+@@ -4,9 +4,6 @@
+ # file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ CORE_DEPTH = ../../../..
+ 
+-EXPORTS = \
+-	$(NULL)
+-
+ PRIVATE_EXPORTS = \
+ 	pkix_comcrlselparams.h \
+ 	pkix_crlselector.h \
+diff --git a/nss/lib/libpkix/pkix/params/Makefile b/nss/lib/libpkix/pkix/params/Makefile
+index 36524f5..c3cb5ef 100755
+--- a/nss/lib/libpkix/pkix/params/Makefile
++++ b/nss/lib/libpkix/pkix/params/Makefile
+@@ -44,5 +44,4 @@ include $(CORE_DEPTH)/coreconf/rules.mk
+ # (7) Execute "local" rules. (OPTIONAL).                              #
+ #######################################################################
+ 
+-export:: private_export
+ 
+diff --git a/nss/lib/libpkix/pkix/params/manifest.mn b/nss/lib/libpkix/pkix/params/manifest.mn
+index f26e588..604f21f 100755
+--- a/nss/lib/libpkix/pkix/params/manifest.mn
++++ b/nss/lib/libpkix/pkix/params/manifest.mn
+@@ -4,9 +4,6 @@
+ # file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ CORE_DEPTH = ../../../..
+ 
+-EXPORTS = \
+-	$(NULL)
+-
+ PRIVATE_EXPORTS = \
+ 	pkix_procparams.h \
+ 	pkix_trustanchor.h \
+diff --git a/nss/lib/libpkix/pkix/results/Makefile b/nss/lib/libpkix/pkix/results/Makefile
+index 36524f5..c3cb5ef 100755
+--- a/nss/lib/libpkix/pkix/results/Makefile
++++ b/nss/lib/libpkix/pkix/results/Makefile
+@@ -44,5 +44,4 @@ include $(CORE_DEPTH)/coreconf/rules.mk
+ # (7) Execute "local" rules. (OPTIONAL).                              #
+ #######################################################################
+ 
+-export:: private_export
+ 
+diff --git a/nss/lib/libpkix/pkix/results/manifest.mn b/nss/lib/libpkix/pkix/results/manifest.mn
+index c082ada..07bb22e 100755
+--- a/nss/lib/libpkix/pkix/results/manifest.mn
++++ b/nss/lib/libpkix/pkix/results/manifest.mn
+@@ -4,9 +4,6 @@
+ # file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ CORE_DEPTH = ../../../..
+ 
+-EXPORTS = \
+-	$(NULL)
+-
+ PRIVATE_EXPORTS = \
+ 	pkix_buildresult.h \
+ 	pkix_policynode.h \
+diff --git a/nss/lib/libpkix/pkix/store/Makefile b/nss/lib/libpkix/pkix/store/Makefile
+index 36524f5..c3cb5ef 100755
+--- a/nss/lib/libpkix/pkix/store/Makefile
++++ b/nss/lib/libpkix/pkix/store/Makefile
+@@ -44,5 +44,4 @@ include $(CORE_DEPTH)/coreconf/rules.mk
+ # (7) Execute "local" rules. (OPTIONAL).                              #
+ #######################################################################
+ 
+-export:: private_export
+ 
+diff --git a/nss/lib/libpkix/pkix/store/manifest.mn b/nss/lib/libpkix/pkix/store/manifest.mn
+index 4df8eb6..cb64455 100755
+--- a/nss/lib/libpkix/pkix/store/manifest.mn
++++ b/nss/lib/libpkix/pkix/store/manifest.mn
+@@ -4,9 +4,6 @@
+ # file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ CORE_DEPTH = ../../../..
+ 
+-EXPORTS = \
+-	$(NULL)
+-
+ PRIVATE_EXPORTS = \
+ 	pkix_store.h \
+ 	$(NULL)
+diff --git a/nss/lib/libpkix/pkix/top/Makefile b/nss/lib/libpkix/pkix/top/Makefile
+index 36524f5..c3cb5ef 100755
+--- a/nss/lib/libpkix/pkix/top/Makefile
++++ b/nss/lib/libpkix/pkix/top/Makefile
+@@ -44,5 +44,4 @@ include $(CORE_DEPTH)/coreconf/rules.mk
+ # (7) Execute "local" rules. (OPTIONAL).                              #
+ #######################################################################
+ 
+-export:: private_export
+ 
+diff --git a/nss/lib/libpkix/pkix/top/manifest.mn b/nss/lib/libpkix/pkix/top/manifest.mn
+index c499410..8ba169d 100755
+--- a/nss/lib/libpkix/pkix/top/manifest.mn
++++ b/nss/lib/libpkix/pkix/top/manifest.mn
+@@ -4,9 +4,6 @@
+ # file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ CORE_DEPTH = ../../../..
+ 
+-EXPORTS = \
+-	$(NULL)
+-
+ PRIVATE_EXPORTS = \
+ 	pkix_build.h \
+ 	pkix_lifecycle.h \
+diff --git a/nss/lib/libpkix/pkix/util/Makefile b/nss/lib/libpkix/pkix/util/Makefile
+index 36524f5..1b75ee7 100755
+--- a/nss/lib/libpkix/pkix/util/Makefile
++++ b/nss/lib/libpkix/pkix/util/Makefile
+@@ -43,6 +43,3 @@ include $(CORE_DEPTH)/coreconf/rules.mk
+ #######################################################################
+ # (7) Execute "local" rules. (OPTIONAL).                              #
+ #######################################################################
+-
+-export:: private_export
+-
+diff --git a/nss/lib/libpkix/pkix/util/manifest.mn b/nss/lib/libpkix/pkix/util/manifest.mn
+index 9c068ae..f18d94b 100755
+--- a/nss/lib/libpkix/pkix/util/manifest.mn
++++ b/nss/lib/libpkix/pkix/util/manifest.mn
+@@ -4,9 +4,6 @@
+ # file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ CORE_DEPTH = ../../../..
+ 
+-EXPORTS = \
+-	$(NULL)
+-
+ PRIVATE_EXPORTS = \
+ 	pkix_tools.h \
+ 	pkix_error.h \
+diff --git a/nss/lib/libpkix/pkix_pl_nss/Makefile b/nss/lib/libpkix/pkix_pl_nss/Makefile
+index 36524f5..1b75ee7 100755
+--- a/nss/lib/libpkix/pkix_pl_nss/Makefile
++++ b/nss/lib/libpkix/pkix_pl_nss/Makefile
+@@ -43,6 +43,3 @@ include $(CORE_DEPTH)/coreconf/rules.mk
+ #######################################################################
+ # (7) Execute "local" rules. (OPTIONAL).                              #
+ #######################################################################
+-
+-export:: private_export
+-
+diff --git a/nss/lib/libpkix/pkix_pl_nss/module/Makefile b/nss/lib/libpkix/pkix_pl_nss/module/Makefile
+index 36524f5..c3cb5ef 100755
+--- a/nss/lib/libpkix/pkix_pl_nss/module/Makefile
++++ b/nss/lib/libpkix/pkix_pl_nss/module/Makefile
+@@ -44,5 +44,4 @@ include $(CORE_DEPTH)/coreconf/rules.mk
+ # (7) Execute "local" rules. (OPTIONAL).                              #
+ #######################################################################
+ 
+-export:: private_export
+ 
+diff --git a/nss/lib/libpkix/pkix_pl_nss/module/manifest.mn b/nss/lib/libpkix/pkix_pl_nss/module/manifest.mn
+index 63bfd70..9ae4d91 100755
+--- a/nss/lib/libpkix/pkix_pl_nss/module/manifest.mn
++++ b/nss/lib/libpkix/pkix_pl_nss/module/manifest.mn
+@@ -4,9 +4,6 @@
+ # file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ CORE_DEPTH = ../../../..
+ 
+-EXPORTS = \
+-	$(NULL)
+-
+ PRIVATE_EXPORTS = \
+ 	pkix_pl_aiamgr.h \
+ 	pkix_pl_colcertstore.h \
+@@ -22,7 +19,6 @@ MODULE = nss
+ 
+ DEFINES += -DSHLIB_SUFFIX=\"$(DLL_SUFFIX)\" -DSHLIB_PREFIX=\"$(DLL_PREFIX)\" -DSHLIB_VERSION=\"$(LIBRARY_VERSION)\"
+ 
+-
+ CSRCS = \
+ 	pkix_pl_aiamgr.c \
+ 	pkix_pl_colcertstore.c \
+diff --git a/nss/lib/libpkix/pkix_pl_nss/pki/Makefile b/nss/lib/libpkix/pkix_pl_nss/pki/Makefile
+index 0fb6c90..a9cebcf 100755
+--- a/nss/lib/libpkix/pkix_pl_nss/pki/Makefile
++++ b/nss/lib/libpkix/pkix_pl_nss/pki/Makefile
+@@ -44,6 +44,5 @@ include $(CORE_DEPTH)/coreconf/rules.mk
+ # (7) Execute "local" rules. (OPTIONAL).                              #
+ #######################################################################
+ 
+-export:: private_export
+ 
+ 
+diff --git a/nss/lib/libpkix/pkix_pl_nss/pki/manifest.mn b/nss/lib/libpkix/pkix_pl_nss/pki/manifest.mn
+index f8d4571..7e105e7 100755
+--- a/nss/lib/libpkix/pkix_pl_nss/pki/manifest.mn
++++ b/nss/lib/libpkix/pkix_pl_nss/pki/manifest.mn
+@@ -4,9 +4,6 @@
+ # file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ CORE_DEPTH = ../../../..
+ 
+-EXPORTS = \
+-	$(NULL)
+-
+ PRIVATE_EXPORTS = \
+ 	pkix_pl_basicconstraints.h \
+ 	pkix_pl_cert.h \
+diff --git a/nss/lib/libpkix/pkix_pl_nss/system/Makefile b/nss/lib/libpkix/pkix_pl_nss/system/Makefile
+index 0fb6c90..a9cebcf 100755
+--- a/nss/lib/libpkix/pkix_pl_nss/system/Makefile
++++ b/nss/lib/libpkix/pkix_pl_nss/system/Makefile
+@@ -44,6 +44,5 @@ include $(CORE_DEPTH)/coreconf/rules.mk
+ # (7) Execute "local" rules. (OPTIONAL).                              #
+ #######################################################################
+ 
+-export:: private_export
+ 
+ 
+diff --git a/nss/lib/libpkix/pkix_pl_nss/system/manifest.mn b/nss/lib/libpkix/pkix_pl_nss/system/manifest.mn
+index 82d2979..16cb6d0 100755
+--- a/nss/lib/libpkix/pkix_pl_nss/system/manifest.mn
++++ b/nss/lib/libpkix/pkix_pl_nss/system/manifest.mn
+@@ -4,9 +4,6 @@
+ # file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ CORE_DEPTH = ../../../..
+ 
+-EXPORTS = \
+-	$(NULL)
+-
+ PRIVATE_EXPORTS = \
+ 	pkix_pl_common.h \
+ 	pkix_pl_mem.h \
+diff --git a/nss/lib/manifest.mn b/nss/lib/manifest.mn
+index 80d7d9c..15cc2e6 100644
+--- a/nss/lib/manifest.mn
++++ b/nss/lib/manifest.mn
+@@ -37,6 +37,14 @@ NSS_SRCDIRS = \
+ endif
+ endif
+ 
++freebl: util
++sysinit: util
++softoken: util dbm sqlite freebl
++nss: certhigh cryptohi pk11wrap certdb pki dev base libpkix util
++smime: nss pkcs12 pkcs7
++ssl: nss freebl
++ckfw: nss
++
+ #
+ # organized by DLL
+ #
+diff --git a/nss/lib/nss/Makefile b/nss/lib/nss/Makefile
+index 3a8e22f..3c18bc1 100644
+--- a/nss/lib/nss/Makefile
++++ b/nss/lib/nss/Makefile
+@@ -43,4 +43,3 @@ include $(CORE_DEPTH)/coreconf/rules.mk
+ # (7) Execute "local" rules. (OPTIONAL).                              #
+ #######################################################################
+ 
+-export:: private_export
+diff --git a/nss/lib/pk11wrap/Makefile b/nss/lib/pk11wrap/Makefile
+index 86ab296..4f0c5cd 100644
+--- a/nss/lib/pk11wrap/Makefile
++++ b/nss/lib/pk11wrap/Makefile
+@@ -44,7 +44,6 @@ include $(CORE_DEPTH)/coreconf/rules.mk
+ # (7) Execute "local" rules. (OPTIONAL).                              #
+ #######################################################################
+ 
+-export:: private_export
+ 
+ $(OBJDIR)/pk11load$(OBJ_SUFFIX): debug_module.c
+ 
+diff --git a/nss/lib/pki/Makefile b/nss/lib/pki/Makefile
+index fc78ae9..ca709f6 100644
+--- a/nss/lib/pki/Makefile
++++ b/nss/lib/pki/Makefile
+@@ -8,4 +8,3 @@ include $(CORE_DEPTH)/coreconf/config.mk
+ include config.mk
+ include $(CORE_DEPTH)/coreconf/rules.mk
+ 
+-export:: private_export
+diff --git a/nss/lib/pki/manifest.mn b/nss/lib/pki/manifest.mn
+index a7efb89..77226b1 100644
+--- a/nss/lib/pki/manifest.mn
++++ b/nss/lib/pki/manifest.mn
+@@ -16,9 +16,6 @@ PRIVATE_EXPORTS = \
+ 	pkim.h     \
+ 	$(NULL)
+ 
+-EXPORTS =	   \
+-	$(NULL)
+-
+ MODULE = nss
+ 
+ CSRCS =		        \
+diff --git a/nss/lib/softoken/Makefile b/nss/lib/softoken/Makefile
+index 90a9da2..e5fb2d4 100644
+--- a/nss/lib/softoken/Makefile
++++ b/nss/lib/softoken/Makefile
+@@ -56,7 +56,6 @@ endif
+ # (7) Execute "local" rules. (OPTIONAL).                              #
+ #######################################################################
+ 
+-export:: private_export
+ 
+ # indicates dependency on freebl static lib
+ $(SHARED_LIBRARY): $(CRYPTOLIB)
+diff --git a/nss/lib/softoken/legacydb/Makefile b/nss/lib/softoken/legacydb/Makefile
+index b7e94ca..1b860a3 100644
+--- a/nss/lib/softoken/legacydb/Makefile
++++ b/nss/lib/softoken/legacydb/Makefile
+@@ -56,7 +56,5 @@ include $(CORE_DEPTH)/coreconf/rules.mk
+ # (7) Execute "local" rules. (OPTIONAL).                              #
+ #######################################################################
+ 
+-export:: private_export
+-
+ # indicates dependency on freebl static lib
+ $(SHARED_LIBRARY): $(CRYPTOLIB)
+diff --git a/nss/lib/sqlite/Makefile b/nss/lib/sqlite/Makefile
+index adae8e0..592adb6 100644
+--- a/nss/lib/sqlite/Makefile
++++ b/nss/lib/sqlite/Makefile
+@@ -47,8 +47,6 @@ include $(CORE_DEPTH)/coreconf/rules.mk
+ 
+ WARNING_CFLAGS = $(NULL)
+ 
+-export:: private_export
+-
+ ifeq (WINNT,$(OS_ARCH))
+ # sqlite calls the deprecated GetVersionExA method
+ OS_CFLAGS += -w44996
+diff --git a/nss/lib/sqlite/manifest.mn b/nss/lib/sqlite/manifest.mn
+index 022749b..be411a6 100644
+--- a/nss/lib/sqlite/manifest.mn
++++ b/nss/lib/sqlite/manifest.mn
+@@ -11,20 +11,14 @@ LIBRARY_VERSION = 3
+ MAPFILE = $(OBJDIR)/sqlite.def
+ DEFINES += -DSQLITE_THREADSAFE=1
+ 
+-EXPORTS = \
+-	$(NULL)
+-
+ PRIVATE_EXPORTS = \
+ 	sqlite3.h \
+ 	$(NULL)
+ 
+-
+ CSRCS = \
+ 	sqlite3.c \
+ 	$(NULL)
+ 
+-
+-
+ # only add module debugging in opt builds if DEBUG_PKCS11 is set
+ ifdef DEBUG_PKCS11
+   DEFINES += -DDEBUG_MODULE
+diff --git a/nss/lib/ssl/Makefile b/nss/lib/ssl/Makefile
+index 24fccc5..8a8b06f 100644
+--- a/nss/lib/ssl/Makefile
++++ b/nss/lib/ssl/Makefile
+@@ -61,5 +61,3 @@ include $(CORE_DEPTH)/coreconf/rules.mk
+ #######################################################################
+ # (7) Execute "local" rules. (OPTIONAL).                              #
+ #######################################################################
+-
+-export:: private_export
+diff --git a/nss/lib/util/Makefile b/nss/lib/util/Makefile
+index 97ec934..9b51d18 100644
+--- a/nss/lib/util/Makefile
++++ b/nss/lib/util/Makefile
+@@ -47,4 +47,3 @@ include $(CORE_DEPTH)/coreconf/rules.mk
+ #######################################################################
+ 
+ 
+-export:: private_export
+diff --git a/nss/lib/zlib/Makefile b/nss/lib/zlib/Makefile
+index 183294f..812c38f 100644
+--- a/nss/lib/zlib/Makefile
++++ b/nss/lib/zlib/Makefile
+@@ -43,7 +43,6 @@ include $(CORE_DEPTH)/coreconf/rules.mk
+ # (7) Execute "local" rules. (OPTIONAL).                              #
+ #######################################################################
+ 
+-export:: private_export
+ 
+ test: $(PROGRAMS)
+ 	@cd $(OBJDIR); \
+diff --git a/nss/manifest.mn b/nss/manifest.mn
+index 500a5ad..4cd1ea5 100644
+--- a/nss/manifest.mn
++++ b/nss/manifest.mn
+@@ -11,3 +11,24 @@ IMPORTS =	nspr20/v4.8 \
+ RELEASE = nss
+ 
+ DIRS = coreconf lib cmd cpputil gtests
++
++lib: coreconf
++cmd: lib
++cpputil: lib
++gtests: cmd cpputil
++
++HAVE_ALL_TARGET := 1
++
++prepare_build:
++	# no real way to encode these in any sensible way
++	$(MAKE) -C coreconf/nsinstall program
++	$(MAKE) export
++	# pre-build child dir -> parent dir dependencies
++	# ckfw/builtins -> ckfw
++	IGNORE_DIRS=1 $(MAKE) -C lib/ckfw libs
++	# ckfw/builtins/testlib -> ckfw/builtins + base
++	$(MAKE) -C lib/base libs
++	IGNORE_DIRS=1 $(MAKE) -C lib/ckfw/builtins libs
++
++all: prepare_build
++	$(MAKE) libs
+-- 
+2.20.1
+
