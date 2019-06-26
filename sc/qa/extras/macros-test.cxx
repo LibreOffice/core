@@ -38,28 +38,21 @@ class ScMacrosTest : public UnoApiTest
 public:
     ScMacrosTest();
 
-#if !defined MACOSX
     void testStarBasic();
     void testVba();
     void testMSP();
     void testPasswordProtectedStarBasic();
     void testRowColumn();
-#endif
+
     CPPUNIT_TEST_SUITE(ScMacrosTest);
-#if !defined(MACOSX)
-    //enable this test if you want to play with star basic macros in unit tests
-    //works but does nothing useful yet
     CPPUNIT_TEST(testStarBasic);
     CPPUNIT_TEST(testMSP);
     CPPUNIT_TEST(testVba);
     CPPUNIT_TEST(testPasswordProtectedStarBasic);
     CPPUNIT_TEST(testRowColumn);
-#endif
 
     CPPUNIT_TEST_SUITE_END();
 };
-
-#if !defined MACOSX
 
 // I suppose you could say this test doesn't really belong here, OTOH
 // we need a full document to run the test ( it related originally to an
@@ -388,8 +381,6 @@ void ScMacrosTest::testRowColumn()
 
     pDocSh->DoClose();
 }
-
-#endif
 
 ScMacrosTest::ScMacrosTest()
       : UnoApiTest("/sc/qa/extras/testdocuments")
