@@ -1,0 +1,39 @@
+From 5777be1c632b39958dd8e8a7721d98e16ca0c017 Mon Sep 17 00:00:00 2001
+From: Jan-Marek Glogowski <glogow@fbihome.de>
+Date: Wed, 4 Dec 2019 16:54:07 +0100
+Subject: [PATCH 10/10] Force synchronous PDB writes
+
+---
+ nspr/configure    | 2 +-
+ nspr/configure.in | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/nspr/configure b/nspr/configure
+index 536fe44..eeab1a8 100755
+--- a/nspr/configure
++++ b/nspr/configure
+@@ -6936,7 +6936,7 @@ $as_echo "$as_me: WARNING: Unknown version of the Microsoft (R) Manifest Tool."
+ 
+         CFLAGS="$CFLAGS -W3 -nologo -GF -Gy"
+         DLLFLAGS="$DLLFLAGS -OUT:\"\$@\""
+-        _DEBUG_FLAGS=-Zi
++        _DEBUG_FLAGS=-Zi -FS
+         _OPTIMIZE_FLAGS=-O2
+ 
+         PROFILE_GEN_CFLAGS="-GL"
+diff --git a/nspr/configure.in b/nspr/configure.in
+index 7dce026..126e9f1 100644
+--- a/nspr/configure.in
++++ b/nspr/configure.in
+@@ -1795,7 +1795,7 @@ tools are selected during the Xcode/Developer Tools installation.])
+         
+         CFLAGS="$CFLAGS -W3 -nologo -GF -Gy"
+         DLLFLAGS="$DLLFLAGS -OUT:\"\$@\""
+-        _DEBUG_FLAGS=-Zi
++        _DEBUG_FLAGS=-Zi -FS
+         _OPTIMIZE_FLAGS=-O2
+ 
+         PROFILE_GEN_CFLAGS="-GL"
+-- 
+2.20.1
+
