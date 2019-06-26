@@ -1131,6 +1131,7 @@ public:
 
     SwDoc* m_pDoc;
     rtl::Reference<SwTextAPIObject> m_xTextObject;
+    bool m_bIsDescriptor;
     bool m_bCallUpdate;
     SwServiceType const m_nServiceId;
     OUString m_sTypeName;
@@ -1140,6 +1141,7 @@ public:
         : m_pFormatField(pFormat)
         , m_EventListeners(m_Mutex)
         , m_pDoc(pDoc)
+        , m_bIsDescriptor(pFormat == nullptr)
         , m_bCallUpdate(false)
         , m_nServiceId(pFormat
                 ? lcl_GetServiceForField(*pFormat->GetField())
@@ -1174,7 +1176,9 @@ public:
     }
     bool IsDescriptor() const
     {
-        return !m_pFormatField;
+        // ideally should be: !m_pFormatField && m_pDoc
+        // but: SwXServiceProvider::MakeInstance() passes nullptr SwDoc, see comment there
+        return m_bIsDescriptor;
     }
     void Invalidate();
 
@@ -2037,6 +2041,7 @@ void SAL_CALL SwXTextField::attach(
     m_pImpl->m_pDoc = pDoc;
     m_pImpl->GetFormatField()->SetXTextField(this);
     m_pImpl->m_wThis = *this;
+    m_pImpl->m_bIsDescriptor = false;
     m_pImpl->ClearFieldType();
     m_pImpl->m_pProps.reset();
     if (m_pImpl->m_bCallUpdate)
@@ -2231,7 +2236,8 @@ SwXTextField::setPropertyValue(
         }
 
         //#i100374# notify SwPostIt about new field content
-        if (SwFieldIds::Postit == nWhich && !m_pImpl->IsDescriptor())
+        assert(m_pImpl->GetFormatField());
+        if (SwFieldIds::Postit == nWhich)
         {
             m_pImpl->GetFormatField()->Broadcast(
                     SwFormatFieldHint( nullptr, SwFormatFieldHintWhich::CHANGED ));
@@ -2677,7 +2683,7 @@ void SwXTextField::Impl::Notify(const SfxHint& rHint)
 
 const SwField* SwXTextField::Impl::GetField() const
 {
-    return IsDescriptor() ? nullptr : m_pFormatField->GetField();
+    return m_pFormatField ? m_pFormatField->GetField() : nullptr;
 }
 
 OUString SwXTextFieldMasters::getImplementationName()
