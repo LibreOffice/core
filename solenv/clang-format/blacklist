@@ -8943,6 +8943,8 @@ oox/source/drawingml/diagram/diagramfragmenthandler.cxx
 oox/source/drawingml/diagram/diagramfragmenthandler.hxx
 oox/source/drawingml/diagram/diagramlayoutatoms.cxx
 oox/source/drawingml/diagram/diagramlayoutatoms.hxx
+oox/source/drawingml/diagram/layoutatomvisitorbase.cxx
+oox/source/drawingml/diagram/layoutatomvisitorbase.hxx
 oox/source/drawingml/diagram/layoutatomvisitors.cxx
 oox/source/drawingml/diagram/layoutatomvisitors.hxx
 oox/source/drawingml/diagram/layoutnodecontext.cxx
