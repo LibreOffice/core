@@ -155,7 +155,12 @@ def nsinstall(argv):
   target = args.pop()
   # ensure target directory
   if not os.path.isdir(target):
-    os.makedirs(target)
+    try:
+      os.makedirs(target)
+    except FileExistsError:
+      if not os.path.isdir(target):
+        sys.stderr.write('nsinstall: ' + target + ' is not a directoy!\n')
+        return 1
 
   copy_all_entries(args, target)
   return 0
