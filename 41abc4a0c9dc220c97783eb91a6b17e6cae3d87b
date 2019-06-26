@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa0c359_a146b84e",
+        "filename": "instsetoo_native/inc_openoffice/windows/msi_templates/Control.idt",
+        "patchSetId": 4
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-06-26T01:50:44Z",
+      "side": 1,
+      "message": "Sorry for not noticing this - please also make these lines identical, too.",
+      "range": {
+        "startLine": 3,
+        "startChar": 29,
+        "endLine": 3,
+        "endChar": 37
+      },
+      "revId": "41abc4a0c9dc220c97783eb91a6b17e6cae3d87b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
