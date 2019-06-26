@@ -1,0 +1,1381 @@
+From c2d4610a89e3c98be975f8dbad97f0f64de4538b Mon Sep 17 00:00:00 2001
+From: Jan-Marek Glogowski <glogow@fbihome.de>
+Date: Sun, 30 Jun 2019 15:46:58 +0000
+Subject: [PATCH 2/7] Add . to LIB_SUFFIX and DLL_SUFFIX
+
+Since SHLIB_SUFFIX is a C define and uses DLL_SUFFIX, it requires
+some minimal code adaptions, to get rid of the . in the code.
+
+This also defaults LIB_SUFFIX to .a and DLL_SUFFIX to .so.
+And static libs on Windows now commonly end on _s.lib.
+---
+ nss/cmd/crmf-cgi/Makefile                     |   2 +-
+ nss/cmd/crmftest/Makefile                     |   2 +-
+ nss/cmd/libpkix/pkixlibs.mk                   |   2 +-
+ nss/cmd/libpkix/pkixutil/manifest.mn          |  28 ++---
+ nss/cmd/libpkix/testutil/config.mk            |   2 +-
+ nss/cmd/lowhashtest/Makefile                  |   2 +-
+ nss/cmd/pk11mode/Makefile                     |   6 +-
+ nss/cmd/platlibs.mk                           | 101 +++++++++---------
+ nss/cmd/shlibsign/Makefile                    |  16 +--
+ nss/cmd/shlibsign/mangle/Makefile             |   6 +-
+ nss/cmd/shlibsign/shlibsign.c                 |   4 +-
+ nss/cmd/tstclnt/tstclnt.c                     |   2 +-
+ nss/cmd/vfychain/vfychain.c                   |   2 +-
+ nss/cmd/vfyserv/vfyserv.c                     |   2 +-
+ nss/coreconf/BSD_OS.mk                        |   4 +-
+ nss/coreconf/Darwin.mk                        |   2 +-
+ nss/coreconf/FreeBSD.mk                       |   6 +-
+ nss/coreconf/HP-UX.mk                         |   3 +-
+ nss/coreconf/NetBSD.mk                        |   8 +-
+ nss/coreconf/OS2.mk                           |   4 +-
+ nss/coreconf/OpenBSD.mk                       |   2 +-
+ nss/coreconf/RISCOS.mk                        |   2 -
+ nss/coreconf/SunOS4.1.3_U1.mk                 |   2 +-
+ nss/coreconf/UNIX.mk                          |   2 -
+ nss/coreconf/WIN32.mk                         |  39 +++----
+ nss/coreconf/rules.mk                         |   3 +-
+ nss/coreconf/ruleset.mk                       |   5 +-
+ nss/coreconf/suffix.mk                        |  13 ++-
+ nss/coreconf/zlib.mk                          |   2 +-
+ nss/gtests/certdb_gtest/manifest.mn           |   2 +-
+ nss/gtests/certhigh_gtest/manifest.mn         |   4 +-
+ nss/gtests/common/manifest.mn                 |   2 +-
+ nss/gtests/cryptohi_gtest/manifest.mn         |   4 +-
+ nss/gtests/der_gtest/manifest.mn              |   4 +-
+ nss/gtests/nss_bogo_shim/manifest.mn          |   2 +-
+ nss/gtests/pk11_gtest/manifest.mn             |   6 +-
+ nss/gtests/softoken_gtest/manifest.mn         |   4 +-
+ nss/gtests/ssl_gtest/manifest.mn              |   4 +-
+ nss/gtests/util_gtest/manifest.mn             |   6 +-
+ nss/lib/ckfw/builtins/Makefile                |   4 +-
+ nss/lib/ckfw/builtins/config.mk               |   2 +-
+ nss/lib/ckfw/capi/Makefile                    |   4 +-
+ nss/lib/ckfw/capi/config.mk                   |   2 +-
+ nss/lib/freebl/blname.c                       |   4 +-
+ nss/lib/freebl/config.mk                      |   2 +-
+ nss/lib/freebl/loader.c                       |   2 +-
+ nss/lib/freebl/lowhash_vector.c               |   2 +-
+ nss/lib/freebl/shvfy.c                        |   4 +-
+ nss/lib/freebl/stubs.c                        |   4 +-
+ .../module/pkix_pl_httpcertstore.c            |   4 +-
+ nss/lib/nss/config.mk                         |  38 +++----
+ nss/lib/pk11wrap/pk11load.c                   |   4 +-
+ nss/lib/smime/config.mk                       |   6 +-
+ nss/lib/softoken/config.mk                    |   4 +-
+ nss/lib/softoken/legacydb/config.mk           |   6 +-
+ nss/lib/softoken/legacydb/lginit.c            |   2 +-
+ nss/lib/softoken/lgglue.c                     |   2 +-
+ nss/lib/sqlite/config.mk                      |   2 +-
+ nss/lib/ssl/config.mk                         |   2 +-
+ nss/lib/sysinit/config.mk                     |   2 +-
+ nss/lib/util/config.mk                        |   2 +-
+ nss/tests/fips/fips.sh                        |  10 +-
+ nss/tests/remote/Makefile                     |   6 +-
+ 63 files changed, 208 insertions(+), 224 deletions(-)
+
+diff --git a/nss/cmd/crmf-cgi/Makefile b/nss/cmd/crmf-cgi/Makefile
+index f817268..156ecbd 100644
+--- a/nss/cmd/crmf-cgi/Makefile
++++ b/nss/cmd/crmf-cgi/Makefile
+@@ -10,7 +10,7 @@
+ ifeq (,$(filter-out WIN%,$(OS_TARGET)))
+ EXTRA_LIBS += $(DIST)/lib/crmf.lib
+ else
+-EXTRA_LIBS += $(DIST)/lib/libcrmf.$(LIB_SUFFIX) 
++EXTRA_LIBS += $(DIST)/lib/libcrmf$(LIB_SUFFIX)
+ endif
+ include manifest.mn
+ 
+diff --git a/nss/cmd/crmftest/Makefile b/nss/cmd/crmftest/Makefile
+index 369cdc8..9ee19f1 100644
+--- a/nss/cmd/crmftest/Makefile
++++ b/nss/cmd/crmftest/Makefile
+@@ -35,7 +35,7 @@ ifeq ($(OS_TARGET)$(OS_RELEASE), SunOS5.6)
+ OS_LIBS += -ldl -lxnet -lposix4 -lsocket -lnsl
+ endif
+ 
+-EXTRA_LIBS += $(DIST)/lib/$(LIB_PREFIX)crmf.$(LIB_SUFFIX)
++EXTRA_LIBS += $(DIST)/lib/$(LIB_PREFIX)crmf$(LIB_SUFFIX)
+ 
+ include ../platlibs.mk
+ 
+diff --git a/nss/cmd/libpkix/pkixlibs.mk b/nss/cmd/libpkix/pkixlibs.mk
+index 2e1eb15..7191997 100755
+--- a/nss/cmd/libpkix/pkixlibs.mk
++++ b/nss/cmd/libpkix/pkixlibs.mk
+@@ -12,7 +12,7 @@ EXTRA_SHARED_LIBS += \
+ 	$(NULL)
+ else # ! NS_USE_GCC
+ EXTRA_SHARED_LIBS += \
+-	$(DIST)/lib/pkixutil.lib \
++	$(DIST)/lib/pkixutil$(LIB_SUFFIX) \
+ 	$(NULL)
+ endif # NS_USE_GCC
+ 
+diff --git a/nss/cmd/libpkix/pkixutil/manifest.mn b/nss/cmd/libpkix/pkixutil/manifest.mn
+index 180e995..0dd9561 100644
+--- a/nss/cmd/libpkix/pkixutil/manifest.mn
++++ b/nss/cmd/libpkix/pkixutil/manifest.mn
+@@ -19,20 +19,20 @@ PROGRAM = pkixutil
+ TOOLS_LIB_DIR=$(PKIX_DEPTH)/$(OBJDIR)
+ 
+ EXTRA_LIBS += \
+-	$(TOOLS_LIB_DIR)/$(LIB_PREFIX)pkixtoolperf.$(LIB_SUFFIX) \
+-	$(TOOLS_LIB_DIR)/$(LIB_PREFIX)pkixtoolcertsel.$(LIB_SUFFIX) \
+-	$(TOOLS_LIB_DIR)/$(LIB_PREFIX)pkixtoolparams.$(LIB_SUFFIX) \
+-	$(TOOLS_LIB_DIR)/$(LIB_PREFIX)pkixtoolmodule.$(LIB_SUFFIX) \
+-	$(TOOLS_LIB_DIR)/$(LIB_PREFIX)pkixtoolpki.$(LIB_SUFFIX) \
+-	$(TOOLS_LIB_DIR)/$(LIB_PREFIX)pkixtoolsys.$(LIB_SUFFIX) \
+-	$(TOOLS_LIB_DIR)/$(LIB_PREFIX)pkixtoolresults.$(LIB_SUFFIX) \
+-	$(TOOLS_LIB_DIR)/$(LIB_PREFIX)pkixtoolstore.$(LIB_SUFFIX) \
+-	$(TOOLS_LIB_DIR)/$(LIB_PREFIX)pkixtooltop.$(LIB_SUFFIX) \
+-	$(TOOLS_LIB_DIR)/$(LIB_PREFIX)pkixtoolutil.$(LIB_SUFFIX) \
+-	$(TOOLS_LIB_DIR)/$(LIB_PREFIX)pkixtoolsmplapps.$(LIB_SUFFIX) \
+-	$(TOOLS_LIB_DIR)/$(LIB_PREFIX)pkixtoolchecker.$(LIB_SUFFIX) \
+-	$(TOOLS_LIB_DIR)/$(LIB_PREFIX)pkixtoolcrlsel.$(LIB_SUFFIX) \
+-	$(TOOLS_LIB_DIR)/$(LIB_PREFIX)pkixtooltestutil.$(LIB_SUFFIX) \
++	$(TOOLS_LIB_DIR)/$(LIB_PREFIX)pkixtoolperf$(LIB_SUFFIX) \
++	$(TOOLS_LIB_DIR)/$(LIB_PREFIX)pkixtoolcertsel$(LIB_SUFFIX) \
++	$(TOOLS_LIB_DIR)/$(LIB_PREFIX)pkixtoolparams$(LIB_SUFFIX) \
++	$(TOOLS_LIB_DIR)/$(LIB_PREFIX)pkixtoolmodule$(LIB_SUFFIX) \
++	$(TOOLS_LIB_DIR)/$(LIB_PREFIX)pkixtoolpki$(LIB_SUFFIX) \
++	$(TOOLS_LIB_DIR)/$(LIB_PREFIX)pkixtoolsys$(LIB_SUFFIX) \
++	$(TOOLS_LIB_DIR)/$(LIB_PREFIX)pkixtoolresults$(LIB_SUFFIX) \
++	$(TOOLS_LIB_DIR)/$(LIB_PREFIX)pkixtoolstore$(LIB_SUFFIX) \
++	$(TOOLS_LIB_DIR)/$(LIB_PREFIX)pkixtooltop$(LIB_SUFFIX) \
++	$(TOOLS_LIB_DIR)/$(LIB_PREFIX)pkixtoolutil$(LIB_SUFFIX) \
++	$(TOOLS_LIB_DIR)/$(LIB_PREFIX)pkixtoolsmplapps$(LIB_SUFFIX) \
++	$(TOOLS_LIB_DIR)/$(LIB_PREFIX)pkixtoolchecker$(LIB_SUFFIX) \
++	$(TOOLS_LIB_DIR)/$(LIB_PREFIX)pkixtoolcrlsel$(LIB_SUFFIX) \
++	$(TOOLS_LIB_DIR)/$(LIB_PREFIX)pkixtooltestutil$(LIB_SUFFIX) \
+ 	$(NULL)
+ 
+ NO_MD_RELEASE = 1
+diff --git a/nss/cmd/libpkix/testutil/config.mk b/nss/cmd/libpkix/testutil/config.mk
+index 820dbb2..44a9994 100644
+--- a/nss/cmd/libpkix/testutil/config.mk
++++ b/nss/cmd/libpkix/testutil/config.mk
+@@ -9,7 +9,7 @@ LIBRARY =
+ ifeq (,$(filter-out WIN%,$(OS_TARGET)))
+ 
+ # don't want the 32 in the shared library name
+-SHARED_LIBRARY = $(OBJDIR)/$(DLL_PREFIX)$(LIBRARY_NAME)$(LIBRARY_VERSION).$(DLL_SUFFIX)
++SHARED_LIBRARY = $(OBJDIR)/$(DLL_PREFIX)$(LIBRARY_NAME)$(LIBRARY_VERSION)$(DLL_SUFFIX)
+ IMPORT_LIBRARY = $(OBJDIR)/$(IMPORT_LIB_PREFIX)$(LIBRARY_NAME)$(LIBRARY_VERSION)$(IMPORT_LIB_SUFFIX)
+ 
+ endif
+diff --git a/nss/cmd/lowhashtest/Makefile b/nss/cmd/lowhashtest/Makefile
+index cfac770..3f5597e 100644
+--- a/nss/cmd/lowhashtest/Makefile
++++ b/nss/cmd/lowhashtest/Makefile
+@@ -43,7 +43,7 @@ include $(CORE_DEPTH)/coreconf/rules.mk
+ 
+ # $(PROGRAM) has explicit dependencies on $(EXTRA_LIBS)
+ EXTRA_LIBS += \
+-	$(DIST)/lib/$(LIB_PREFIX)sectool.$(LIB_SUFFIX) \
++	$(DIST)/lib/$(LIB_PREFIX)sectool$(LIB_SUFFIX) \
+ 	$(NULL)
+ 
+ 
+diff --git a/nss/cmd/pk11mode/Makefile b/nss/cmd/pk11mode/Makefile
+index e9cbcac..af677b9 100755
+--- a/nss/cmd/pk11mode/Makefile
++++ b/nss/cmd/pk11mode/Makefile
+@@ -29,9 +29,9 @@ include ../platlibs.mk
+ ifeq ($(OS_ARCH), WINNT)
+ 
+ EXTRA_LIBS += \
+-	$(NSPR_LIB_DIR)/$(NSPR31_LIB_PREFIX)plc4.$(LIB_SUFFIX) \
+-	$(NSPR_LIB_DIR)/$(NSPR31_LIB_PREFIX)plds4.$(LIB_SUFFIX) \
+-	$(NSPR_LIB_DIR)/$(NSPR31_LIB_PREFIX)nspr4.$(LIB_SUFFIX) \
++	$(NSPR_LIB_DIR)/$(NSPR31_LIB_PREFIX)plc4$(LIB_SUFFIX) \
++	$(NSPR_LIB_DIR)/$(NSPR31_LIB_PREFIX)plds4$(LIB_SUFFIX) \
++	$(NSPR_LIB_DIR)/$(NSPR31_LIB_PREFIX)nspr4$(LIB_SUFFIX) \
+ 	$(NULL)
+ 
+ else
+diff --git a/nss/cmd/platlibs.mk b/nss/cmd/platlibs.mk
+index 8fea9a3..020e2d6 100644
+--- a/nss/cmd/platlibs.mk
++++ b/nss/cmd/platlibs.mk
+@@ -34,13 +34,13 @@ endif # BUILD_SUN_PKG
+ ifdef NSS_DISABLE_DBM
+ DBMLIB = $(NULL)
+ else
+-DBMLIB = $(DIST)/lib/$(LIB_PREFIX)dbm.$(LIB_SUFFIX) 
++DBMLIB = $(DIST)/lib/$(LIB_PREFIX)dbm$(LIB_SUFFIX)
+ endif
+ 
+ ifeq ($(NSS_BUILD_UTIL_ONLY),1)
+ SECTOOL_LIB = $(NULL)
+ else
+-SECTOOL_LIB = $(DIST)/lib/$(LIB_PREFIX)sectool.$(LIB_SUFFIX)
++SECTOOL_LIB = $(DIST)/lib/$(LIB_PREFIX)sectool$(LIB_SUFFIX)
+ endif
+ 
+ ifdef USE_STATIC_LIBS
+@@ -48,13 +48,13 @@ ifdef USE_STATIC_LIBS
+ DEFINES += -DNSS_USE_STATIC_LIBS
+ # $(PROGRAM) has explicit dependencies on $(EXTRA_LIBS)
+ ifndef NSS_USE_SYSTEM_FREEBL
+-CRYPTOLIB=$(DIST)/lib/$(LIB_PREFIX)freebl.$(LIB_SUFFIX)
+-SOFTOKENLIB=$(DIST)/lib/$(LIB_PREFIX)softokn.$(LIB_SUFFIX)
++CRYPTOLIB=$(DIST)/lib/$(LIB_PREFIX)freebl$(LIB_SUFFIX)
++SOFTOKENLIB=$(DIST)/lib/$(LIB_PREFIX)softokn$(LIB_SUFFIX)
+ else
+ # Use the system installed freebl static library and set softoken one to empty.
+ # Some tools need to link statically with freebl but none with softoken. Only
+ # the softoken shared library, not the static one, is installed in the system.
+-CRYPTOLIB=$(FREEBL_LIB_DIR)/$(LIB_PREFIX)freebl.$(LIB_SUFFIX)
++CRYPTOLIB=$(FREEBL_LIB_DIR)/$(LIB_PREFIX)freebl$(LIB_SUFFIX)
+ SOFTOKENLIB=
+ EXTRA_SHARED_LIBS += \
+ 	-L$(SOFTOKEN_LIB_DIR) \
+@@ -65,18 +65,17 @@ endif
+ ifndef NSS_DISABLE_LIBPKIX
+ ifndef NSS_BUILD_SOFTOKEN_ONLY
+ PKIXLIB = \
+-	$(DIST)/lib/$(LIB_PREFIX)pkixtop.$(LIB_SUFFIX) \
+-	$(DIST)/lib/$(LIB_PREFIX)pkixutil.$(LIB_SUFFIX) \
+-	$(DIST)/lib/$(LIB_PREFIX)pkixsystem.$(LIB_SUFFIX) \
+-	$(DIST)/lib/$(LIB_PREFIX)pkixcrlsel.$(LIB_SUFFIX) \
+-	$(DIST)/lib/$(LIB_PREFIX)pkixmodule.$(LIB_SUFFIX) \
+-	$(DIST)/lib/$(LIB_PREFIX)pkixstore.$(LIB_SUFFIX) \
+-	$(DIST)/lib/$(LIB_PREFIX)pkixparams.$(LIB_SUFFIX) \
+-	$(DIST)/lib/$(LIB_PREFIX)pkixchecker.$(LIB_SUFFIX) \
+-	$(DIST)/lib/$(LIB_PREFIX)pkixpki.$(LIB_SUFFIX) \
+-	$(DIST)/lib/$(LIB_PREFIX)pkixtop.$(LIB_SUFFIX) \
+-	$(DIST)/lib/$(LIB_PREFIX)pkixresults.$(LIB_SUFFIX) \
+-	$(DIST)/lib/$(LIB_PREFIX)pkixcertsel.$(LIB_SUFFIX)
++	$(DIST)/lib/$(LIB_PREFIX)pkixtop$(LIB_SUFFIX) \
++	$(DIST)/lib/$(LIB_PREFIX)pkixutil$(LIB_SUFFIX) \
++	$(DIST)/lib/$(LIB_PREFIX)pkixsystem$(LIB_SUFFIX) \
++	$(DIST)/lib/$(LIB_PREFIX)pkixcrlsel$(LIB_SUFFIX) \
++	$(DIST)/lib/$(LIB_PREFIX)pkixmodule$(LIB_SUFFIX) \
++	$(DIST)/lib/$(LIB_PREFIX)pkixstore$(LIB_SUFFIX) \
++	$(DIST)/lib/$(LIB_PREFIX)pkixparams$(LIB_SUFFIX) \
++	$(DIST)/lib/$(LIB_PREFIX)pkixchecker$(LIB_SUFFIX) \
++	$(DIST)/lib/$(LIB_PREFIX)pkixpki$(LIB_SUFFIX) \
++	$(DIST)/lib/$(LIB_PREFIX)pkixresults$(LIB_SUFFIX) \
++	$(DIST)/lib/$(LIB_PREFIX)pkixcertsel$(LIB_SUFFIX)
+ endif
+ endif
+ 
+@@ -89,58 +88,58 @@ ifneq ($(NSS_BUILD_SOFTOKEN_ONLY),1)
+ ifeq ($(OS_ARCH), WINNT)
+ # breakdown for windows
+ NSS_LIBS_1 = \
+-	$(DIST)/lib/$(LIB_PREFIX)smime.$(LIB_SUFFIX) \
+-	$(DIST)/lib/$(LIB_PREFIX)ssl.$(LIB_SUFFIX) \
+-	$(DIST)/lib/$(LIB_PREFIX)nss.$(LIB_SUFFIX) \
++	$(DIST)/lib/$(LIB_PREFIX)smime$(LIB_SUFFIX) \
++	$(DIST)/lib/$(LIB_PREFIX)ssl$(LIB_SUFFIX) \
++	$(DIST)/lib/$(LIB_PREFIX)nss$(LIB_SUFFIX) \
+ 	$(NULL)
+ NSS_LIBS_2 = \
+-	$(DIST)/lib/$(LIB_PREFIX)pkcs12.$(LIB_SUFFIX) \
+-	$(DIST)/lib/$(LIB_PREFIX)pkcs7.$(LIB_SUFFIX) \
+-	$(DIST)/lib/$(LIB_PREFIX)certhi.$(LIB_SUFFIX) \
+-	$(DIST)/lib/$(LIB_PREFIX)cryptohi.$(LIB_SUFFIX) \
+-	$(DIST)/lib/$(LIB_PREFIX)pk11wrap.$(LIB_SUFFIX) \
+-	$(DIST)/lib/$(LIB_PREFIX)certdb.$(LIB_SUFFIX) \
++	$(DIST)/lib/$(LIB_PREFIX)pkcs12$(LIB_SUFFIX) \
++	$(DIST)/lib/$(LIB_PREFIX)pkcs7$(LIB_SUFFIX) \
++	$(DIST)/lib/$(LIB_PREFIX)certhi$(LIB_SUFFIX) \
++	$(DIST)/lib/$(LIB_PREFIX)cryptohi$(LIB_SUFFIX) \
++	$(DIST)/lib/$(LIB_PREFIX)pk11wrap$(LIB_SUFFIX) \
++	$(DIST)/lib/$(LIB_PREFIX)certdb$(LIB_SUFFIX) \
+ 	$(NULL)
+ NSS_LIBS_3 = \
+-	$(DIST)/lib/$(LIB_PREFIX)nsspki.$(LIB_SUFFIX) \
+-	$(DIST)/lib/$(LIB_PREFIX)nssdev.$(LIB_SUFFIX) \
+-	$(DIST)/lib/$(LIB_PREFIX)nssb.$(LIB_SUFFIX) \
++	$(DIST)/lib/$(LIB_PREFIX)nsspki$(LIB_SUFFIX) \
++	$(DIST)/lib/$(LIB_PREFIX)nssdev$(LIB_SUFFIX) \
++	$(DIST)/lib/$(LIB_PREFIX)nssb$(LIB_SUFFIX) \
+ 	$(PKIXLIB) \
+ 	$(DBMLIB) \
+ 	$(NULL)
+ NSS_LIBS_4 = \
+-	$(SQLITE_LIB_DIR)/$(LIB_PREFIX)$(SQLITE_LIB_NAME).$(LIB_SUFFIX) \
+-	$(NSSUTIL_LIB_DIR)/$(LIB_PREFIX)nssutil3.$(LIB_SUFFIX) \
+-	$(NSPR_LIB_DIR)/$(NSPR31_LIB_PREFIX)plc4.$(LIB_SUFFIX) \
+-	$(NSPR_LIB_DIR)/$(NSPR31_LIB_PREFIX)plds4.$(LIB_SUFFIX) \
+-	$(NSPR_LIB_DIR)/$(NSPR31_LIB_PREFIX)nspr4.$(LIB_SUFFIX) \
++	$(SQLITE_LIB_DIR)/$(LIB_PREFIX)$(SQLITE_LIB_NAME)$(LIB_SUFFIX) \
++	$(NSSUTIL_LIB_DIR)/$(LIB_PREFIX)nssutil3$(LIB_SUFFIX) \
++	$(NSPR_LIB_DIR)/$(NSPR31_LIB_PREFIX)plc4$(LIB_SUFFIX) \
++	$(NSPR_LIB_DIR)/$(NSPR31_LIB_PREFIX)plds4$(LIB_SUFFIX) \
++	$(NSPR_LIB_DIR)/$(NSPR31_LIB_PREFIX)nspr4$(LIB_SUFFIX) \
+ 	$(NULL)
+ else
+ # breakdown for others
+ NSS_LIBS_1 = \
+-	$(DIST)/lib/$(LIB_PREFIX)smime.$(LIB_SUFFIX) \
+-	$(DIST)/lib/$(LIB_PREFIX)ssl.$(LIB_SUFFIX) \
+-	$(DIST)/lib/$(LIB_PREFIX)nss.$(LIB_SUFFIX) \
++	$(DIST)/lib/$(LIB_PREFIX)smime$(LIB_SUFFIX) \
++	$(DIST)/lib/$(LIB_PREFIX)ssl$(LIB_SUFFIX) \
++	$(DIST)/lib/$(LIB_PREFIX)nss$(LIB_SUFFIX) \
+ 	$(NULL)
+ NSS_LIBS_2 = \
+-	$(DIST)/lib/$(LIB_PREFIX)pkcs12.$(LIB_SUFFIX) \
+-	$(DIST)/lib/$(LIB_PREFIX)pkcs7.$(LIB_SUFFIX) \
+-	$(DIST)/lib/$(LIB_PREFIX)certhi.$(LIB_SUFFIX) \
+-	$(DIST)/lib/$(LIB_PREFIX)cryptohi.$(LIB_SUFFIX) \
+-	$(DIST)/lib/$(LIB_PREFIX)pk11wrap.$(LIB_SUFFIX) \
++	$(DIST)/lib/$(LIB_PREFIX)pkcs12$(LIB_SUFFIX) \
++	$(DIST)/lib/$(LIB_PREFIX)pkcs7$(LIB_SUFFIX) \
++	$(DIST)/lib/$(LIB_PREFIX)certhi$(LIB_SUFFIX) \
++	$(DIST)/lib/$(LIB_PREFIX)cryptohi$(LIB_SUFFIX) \
++	$(DIST)/lib/$(LIB_PREFIX)pk11wrap$(LIB_SUFFIX) \
+ 	$(NULL)
+ NSS_LIBS_3 = \
+-	$(DIST)/lib/$(LIB_PREFIX)certdb.$(LIB_SUFFIX) \
+-	$(DIST)/lib/$(LIB_PREFIX)nsspki.$(LIB_SUFFIX) \
+-	$(DIST)/lib/$(LIB_PREFIX)nssdev.$(LIB_SUFFIX) \
+-	$(DIST)/lib/$(LIB_PREFIX)nssb.$(LIB_SUFFIX) \
++	$(DIST)/lib/$(LIB_PREFIX)certdb$(LIB_SUFFIX) \
++	$(DIST)/lib/$(LIB_PREFIX)nsspki$(LIB_SUFFIX) \
++	$(DIST)/lib/$(LIB_PREFIX)nssdev$(LIB_SUFFIX) \
++	$(DIST)/lib/$(LIB_PREFIX)nssb$(LIB_SUFFIX) \
+ 	$(NULL)
+ NSS_LIBS_4 = \
+ 	$(DBMLIB) \
+ 	$(PKIXLIB) \
+-	$(DIST)/lib/$(LIB_PREFIX)nss.$(LIB_SUFFIX) \
+-	$(DIST)/lib/$(LIB_PREFIX)pk11wrap.$(LIB_SUFFIX) \
+-	$(DIST)/lib/$(LIB_PREFIX)certhi.$(LIB_SUFFIX) \
++	$(DIST)/lib/$(LIB_PREFIX)nss$(LIB_SUFFIX) \
++	$(DIST)/lib/$(LIB_PREFIX)pk11wrap$(LIB_SUFFIX) \
++	$(DIST)/lib/$(LIB_PREFIX)certhi$(LIB_SUFFIX) \
+ 	$(NULL)
+ endif
+ endif
+@@ -258,8 +257,8 @@ endif # USE_STATIC_LIBS
+ # FREEBL_LIBS to the linker command-line arguments for the system nss-util
+ # (for example, -lfreebl3 on fedora) in the platform's config file in coreconf.
+ ifdef NSS_USE_SYSTEM_FREEBL
+-FREEBL_LIBS = $(FREEBL_LIB_DIR)/$(LIB_PREFIX)freebl.$(LIB_SUFFIX)
++FREEBL_LIBS = $(FREEBL_LIB_DIR)/$(LIB_PREFIX)freebl$(LIB_SUFFIX)
+ EXTRA_LIBS += $(FREEBL_LIBS)
+ endif
+ 
+-JAR_LIBS = $(DIST)/lib/$(LIB_PREFIX)jar.$(LIB_SUFFIX)
++JAR_LIBS = $(DIST)/lib/$(LIB_PREFIX)jar$(LIB_SUFFIX)
+diff --git a/nss/cmd/shlibsign/Makefile b/nss/cmd/shlibsign/Makefile
+index ddae2d4..d7ee0d2 100644
+--- a/nss/cmd/shlibsign/Makefile
++++ b/nss/cmd/shlibsign/Makefile
+@@ -27,9 +27,9 @@ include $(CORE_DEPTH)/coreconf/config.mk
+ ifeq ($(OS_ARCH), WINNT)
+ 
+ EXTRA_LIBS += \
+-	$(NSPR_LIB_DIR)/$(NSPR31_LIB_PREFIX)plc4.$(LIB_SUFFIX) \
+-	$(NSPR_LIB_DIR)/$(NSPR31_LIB_PREFIX)plds4.$(LIB_SUFFIX) \
+-	$(NSPR_LIB_DIR)/$(NSPR31_LIB_PREFIX)nspr4.$(LIB_SUFFIX) \
++	$(NSPR_LIB_DIR)/$(NSPR31_LIB_PREFIX)plc4$(LIB_SUFFIX) \
++	$(NSPR_LIB_DIR)/$(NSPR31_LIB_PREFIX)plds4$(LIB_SUFFIX) \
++	$(NSPR_LIB_DIR)/$(NSPR31_LIB_PREFIX)nspr4$(LIB_SUFFIX) \
+ 	$(NULL)
+ 
+ else
+@@ -52,12 +52,12 @@ ifeq ($(NSS_BUILD_WITHOUT_SOFTOKEN),1)
+ CHECKLIBS =
+ CHECKLOC =
+ else
+-CHECKLIBS = $(DIST)/lib/$(DLL_PREFIX)softokn3.$(DLL_SUFFIX)
+-CHECKLIBS += $(wildcard $(DIST)/lib/$(DLL_PREFIX)freebl*3.$(DLL_SUFFIX))
++CHECKLIBS = $(DIST)/lib/$(DLL_PREFIX)softokn3$(DLL_SUFFIX)
++CHECKLIBS += $(wildcard $(DIST)/lib/$(DLL_PREFIX)freebl*3$(DLL_SUFFIX))
+ ifndef NSS_DISABLE_DBM
+-CHECKLIBS += $(DIST)/lib/$(DLL_PREFIX)nssdbm3.$(DLL_SUFFIX)
++CHECKLIBS += $(DIST)/lib/$(DLL_PREFIX)nssdbm3$(DLL_SUFFIX)
+ endif
+-CHECKLOC = $(CHECKLIBS:.$(DLL_SUFFIX)=.chk)
++CHECKLOC = $(CHECKLIBS:$(DLL_SUFFIX)=.chk)
+ 
+ MD_LIB_RELEASE_FILES = $(CHECKLOC)
+ ALL_TRASH += $(CHECKLOC)
+@@ -83,7 +83,7 @@ include ../platrules.mk
+ 
+ SRCDIR = $(call core_abspath,.)
+ 
+-%.chk: %.$(DLL_SUFFIX) 
++%.chk: %$(DLL_SUFFIX)
+ ifeq ($(OS_TARGET), OS2)
+ 	cd $(OBJDIR) ; cmd.exe /c $(SRCDIR)/sign.cmd $(DIST) \
+ 	$(call core_abspath,$(OBJDIR)) $(OS_TARGET) \
+diff --git a/nss/cmd/shlibsign/mangle/Makefile b/nss/cmd/shlibsign/mangle/Makefile
+index 33ae91b..9e302aa 100644
+--- a/nss/cmd/shlibsign/mangle/Makefile
++++ b/nss/cmd/shlibsign/mangle/Makefile
+@@ -27,9 +27,9 @@ include $(CORE_DEPTH)/coreconf/config.mk
+ ifeq ($(OS_ARCH), WINNT)
+ 
+ EXTRA_LIBS += \
+-	$(NSPR_LIB_DIR)/$(NSPR31_LIB_PREFIX)plc4.$(LIB_SUFFIX) \
+-	$(NSPR_LIB_DIR)/$(NSPR31_LIB_PREFIX)plds4.$(LIB_SUFFIX) \
+-	$(NSPR_LIB_DIR)/$(NSPR31_LIB_PREFIX)nspr4.$(LIB_SUFFIX) \
++	$(NSPR_LIB_DIR)/$(NSPR31_LIB_PREFIX)plc4$(LIB_SUFFIX) \
++	$(NSPR_LIB_DIR)/$(NSPR31_LIB_PREFIX)plds4$(LIB_SUFFIX) \
++	$(NSPR_LIB_DIR)/$(NSPR31_LIB_PREFIX)nspr4$(LIB_SUFFIX) \
+ 	$(NULL)
+ 
+ else
+diff --git a/nss/cmd/shlibsign/shlibsign.c b/nss/cmd/shlibsign/shlibsign.c
+index 221d1e6..e144d54 100644
+--- a/nss/cmd/shlibsign/shlibsign.c
++++ b/nss/cmd/shlibsign/shlibsign.c
+@@ -98,11 +98,11 @@ mkoutput(const char *input)
+ {
+     int in_len = strlen(input);
+     char *output = PR_Malloc(in_len + sizeof(SGN_SUFFIX));
+-    int index = in_len + 1 - sizeof("." SHLIB_SUFFIX);
++    int index = in_len + 1 - sizeof(SHLIB_SUFFIX);
+ 
+     if ((index > 0) &&
+         (PL_strncmp(&input[index],
+-                    "." SHLIB_SUFFIX, sizeof("." SHLIB_SUFFIX)) == 0)) {
++                    SHLIB_SUFFIX, sizeof(SHLIB_SUFFIX)) == 0)) {
+         in_len = index;
+     }
+     memcpy(output, input, in_len);
+diff --git a/nss/cmd/tstclnt/tstclnt.c b/nss/cmd/tstclnt/tstclnt.c
+index 6f5a431..a80e5f7 100644
+--- a/nss/cmd/tstclnt/tstclnt.c
++++ b/nss/cmd/tstclnt/tstclnt.c
+@@ -2021,7 +2021,7 @@ main(int argc, char **argv)
+ 
+     if (loadDefaultRootCAs) {
+         SECMOD_AddNewModule("Builtins",
+-                            DLL_PREFIX "nssckbi." DLL_SUFFIX, 0, 0);
++                            DLL_PREFIX "nssckbi" DLL_SUFFIX, 0, 0);
+     } else if (rootModule) {
+         SECMOD_AddNewModule("Builtins", rootModule, 0, 0);
+     }
+diff --git a/nss/cmd/vfychain/vfychain.c b/nss/cmd/vfychain/vfychain.c
+index d42274c..3d109df 100644
+--- a/nss/cmd/vfychain/vfychain.c
++++ b/nss/cmd/vfychain/vfychain.c
+@@ -570,7 +570,7 @@ breakout:
+         secStatus = NSS_NoDB_Init(NULL);
+ 
+         /* load the builtins */
+-        SECMOD_AddNewModule("Builtins", DLL_PREFIX "nssckbi." DLL_SUFFIX, 0, 0);
++        SECMOD_AddNewModule("Builtins", DLL_PREFIX "nssckbi" DLL_SUFFIX, 0, 0);
+     }
+     if (secStatus != SECSuccess) {
+         exitErr("NSS_Init");
+diff --git a/nss/cmd/vfyserv/vfyserv.c b/nss/cmd/vfyserv/vfyserv.c
+index 4234ecd..2f9ebb2 100644
+--- a/nss/cmd/vfyserv/vfyserv.c
++++ b/nss/cmd/vfyserv/vfyserv.c
+@@ -466,7 +466,7 @@ main(int argc, char **argv)
+ 
+         /* load the builtins */
+         SECMOD_AddNewModule("Builtins",
+-                            DLL_PREFIX "nssckbi." DLL_SUFFIX, 0, 0);
++                            DLL_PREFIX "nssckbi" DLL_SUFFIX, 0, 0);
+     }
+     if (secStatus != SECSuccess) {
+         exitErr("NSS_Init");
+diff --git a/nss/coreconf/BSD_OS.mk b/nss/coreconf/BSD_OS.mk
+index 81b2b25..2e0c589 100644
+--- a/nss/coreconf/BSD_OS.mk
++++ b/nss/coreconf/BSD_OS.mk
+@@ -31,14 +31,12 @@ endif
+ endif
+ endif
+ 
+-DLL_SUFFIX		= so
+-
+ OS_CFLAGS		= $(DSO_CFLAGS) $(OS_REL_CFLAGS) -Wall -Wno-switch -DBSD_OS -DBSDI -Dunix -DHAVE_STRERROR -DHAVE_BSD_FLOCK
+ 
+ ARCH			= bsdos
+ 
+ DSO_CFLAGS		= -fPIC -DPIC
+-DSO_LDOPTS		= -shared -Wl,-soname,lib$(LIBRARY_NAME)$(LIBRARY_VERSION).$(DLL_SUFFIX)
++DSO_LDOPTS		= -shared -Wl,-soname,lib$(LIBRARY_NAME)$(LIBRARY_VERSION)$(DLL_SUFFIX)
+ 
+ ifdef LIBRUNPATH
+ DSO_LDOPTS		+= -Wl,-R$(LIBRUNPATH)
+diff --git a/nss/coreconf/Darwin.mk b/nss/coreconf/Darwin.mk
+index 5c7ad81..b7d468a 100644
+--- a/nss/coreconf/Darwin.mk
++++ b/nss/coreconf/Darwin.mk
+@@ -125,7 +125,7 @@ ifdef USE_GCOV
+ endif
+ 
+ MKSHLIB		= $(CC) $(DSO_LDOPTS) $(DARWIN_SDK_SHLIBFLAGS)
+-DLL_SUFFIX	= dylib
++DLL_SUFFIX	= .dylib
+ ifdef MAPFILE
+ 	MKSHLIB += -exported_symbols_list $(MAPFILE)
+ endif
+diff --git a/nss/coreconf/FreeBSD.mk b/nss/coreconf/FreeBSD.mk
+index 9dc3bc3..d36a9e7 100644
+--- a/nss/coreconf/FreeBSD.mk
++++ b/nss/coreconf/FreeBSD.mk
+@@ -41,10 +41,8 @@ ARCH			= freebsd
+ 
+ MOZ_OBJFORMAT		:= $(shell test -x /usr/bin/objformat && /usr/bin/objformat || echo elf)
+ 
+-ifeq ($(MOZ_OBJFORMAT),elf)
+-DLL_SUFFIX		= so
+-else
+-DLL_SUFFIX		= so.1.0
++ifneq ($(MOZ_OBJFORMAT),elf)
++DLL_SUFFIX		= .so.1.0
+ endif
+ 
+ MKSHLIB			= $(CC) $(DSO_LDOPTS)
+diff --git a/nss/coreconf/HP-UX.mk b/nss/coreconf/HP-UX.mk
+index d18fa14..a4a2425 100644
+--- a/nss/coreconf/HP-UX.mk
++++ b/nss/coreconf/HP-UX.mk
+@@ -17,10 +17,9 @@ ifeq ($(OS_TEST),ia64)
+ 	ifneq ($(USE_64),1)
+ 		64BIT_TAG = _32
+ 	endif
+-	DLL_SUFFIX = so
+ else
+ 	CPU_ARCH = hppa
+-	DLL_SUFFIX = sl
++	DLL_SUFFIX = .sl
+ endif
+ CC         = cc
+ CCC        = CC
+diff --git a/nss/coreconf/NetBSD.mk b/nss/coreconf/NetBSD.mk
+index 654f1ae..0cfef70 100644
+--- a/nss/coreconf/NetBSD.mk
++++ b/nss/coreconf/NetBSD.mk
+@@ -20,10 +20,8 @@ ifndef OBJECT_FMT
+ OBJECT_FMT		:= $(shell if echo __ELF__ | $${CC:-cc} -E - | grep -q __ELF__ ; then echo a.out ; else echo ELF ; fi)
+ endif
+ 
+-ifeq ($(OBJECT_FMT),ELF)
+-DLL_SUFFIX		= so
+-else
+-DLL_SUFFIX		= so.1.0
++ifneq ($(OBJECT_FMT),ELF)
++DLL_SUFFIX		= .so.1.0
+ endif
+ 
+ OS_CFLAGS		= $(DSO_CFLAGS) $(OS_REL_CFLAGS) -Wall -Wno-switch -pipe -DNETBSD -Dunix -DHAVE_STRERROR -DHAVE_BSD_FLOCK
+@@ -35,7 +33,7 @@ ARCH			= netbsd
+ DSO_CFLAGS		= -fPIC -DPIC
+ DSO_LDOPTS		= -shared
+ ifeq ($(OBJECT_FMT),ELF)
+-DSO_LDOPTS		+= -Wl,-soname,lib$(LIBRARY_NAME)$(LIBRARY_VERSION).$(DLL_SUFFIX)
++DSO_LDOPTS		+= -Wl,-soname,lib$(LIBRARY_NAME)$(LIBRARY_VERSION)$(DLL_SUFFIX)
+ endif
+ 
+ ifdef LIBRUNPATH
+diff --git a/nss/coreconf/OS2.mk b/nss/coreconf/OS2.mk
+index 00a9e51..3f14829 100644
+--- a/nss/coreconf/OS2.mk
++++ b/nss/coreconf/OS2.mk
+@@ -13,9 +13,9 @@ XP_DEFINE  += -DXP_PC=1  -DXP_OS2=1
+ LIB_PREFIX  = $(NULL)
+ 
+ # Override suffix in suffix.mk
+-LIB_SUFFIX  = lib
++LIB_SUFFIX  = .lib
+ # the DLL_SUFFIX must be uppercase for FIPS mode to work. bugzilla 240784
+-DLL_SUFFIX  = DLL
++DLL_SUFFIX  = .DLL
+ PROG_SUFFIX = .exe
+ 
+ 
+diff --git a/nss/coreconf/OpenBSD.mk b/nss/coreconf/OpenBSD.mk
+index 36a92d0..01ed979 100644
+--- a/nss/coreconf/OpenBSD.mk
++++ b/nss/coreconf/OpenBSD.mk
+@@ -33,7 +33,7 @@ OS_LIBS			=
+ ARCH			= openbsd
+ 
+ DSO_CFLAGS		= -fPIC -DPIC
+-DSO_LDOPTS		= -shared -fPIC -Wl,-soname,lib$(LIBRARY_NAME)$(LIBRARY_VERSION).$(DLL_SUFFIX)
++DSO_LDOPTS		= -shared -fPIC -Wl,-soname,lib$(LIBRARY_NAME)$(LIBRARY_VERSION)$(DLL_SUFFIX)
+ 
+ MKSHLIB			= $(CC) $(DSO_LDOPTS)
+ 
+diff --git a/nss/coreconf/RISCOS.mk b/nss/coreconf/RISCOS.mk
+index f8d9e2f..673a8ad 100644
+--- a/nss/coreconf/RISCOS.mk
++++ b/nss/coreconf/RISCOS.mk
+@@ -5,8 +5,6 @@
+ 
+ include $(CORE_DEPTH)/coreconf/UNIX.mk
+ 
+-LIB_SUFFIX  = a
+-DLL_SUFFIX  = so
+ AR          = ar cr $@
+ LDOPTS     += -L$(SOURCE_LIB_DIR)
+ MKSHLIB     = $(CC) $(DSO_LDOPTS) -Wl,-soname -Wl,$(@:$(OBJDIR)/%.so=%.so)
+diff --git a/nss/coreconf/SunOS4.1.3_U1.mk b/nss/coreconf/SunOS4.1.3_U1.mk
+index a3eb59f..28d43cf 100644
+--- a/nss/coreconf/SunOS4.1.3_U1.mk
++++ b/nss/coreconf/SunOS4.1.3_U1.mk
+@@ -11,7 +11,7 @@ INCLUDES += -I/usr/dt/include -I/usr/openwin/include -I/home/motif/usr/include
+ 
+ # SunOS 4 _requires_ that shared libs have a version number.
+ # XXX FIXME: Version number should use NSPR_VERSION_NUMBER?
+-DLL_SUFFIX = so.1.0
++DLL_SUFFIX = .so.1.0
+ CC         = gcc
+ RANLIB     = ranlib
+ CPU_ARCH   = sparc
+diff --git a/nss/coreconf/UNIX.mk b/nss/coreconf/UNIX.mk
+index 0e088d1..ec086dc 100644
+--- a/nss/coreconf/UNIX.mk
++++ b/nss/coreconf/UNIX.mk
+@@ -4,8 +4,6 @@
+ # file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ 
+ XP_DEFINE  += -DXP_UNIX
+-LIB_SUFFIX  = a
+-DLL_SUFFIX  = so
+ AR          = ar cr $@
+ LDOPTS     += -L$(SOURCE_LIB_DIR)
+ 
+diff --git a/nss/coreconf/WIN32.mk b/nss/coreconf/WIN32.mk
+index 74b8a02..e2bcdfa 100644
+--- a/nss/coreconf/WIN32.mk
++++ b/nss/coreconf/WIN32.mk
+@@ -94,12 +94,6 @@ MKDEPENDENCIES  = $(OBJDIR_NAME)/depend.mk
+ INSTALL      = $(NSINSTALL)
+ GARBAGE     += $(OBJDIR)/vc20.pdb $(OBJDIR)/vc40.pdb
+ XP_DEFINE   += -DXP_PC
+-ifdef NS_USE_GCC
+-LIB_SUFFIX   = a
+-else
+-LIB_SUFFIX   = lib
+-endif
+-DLL_SUFFIX   = dll
+ 
+ define MAKE_DIR
+ if test ! -d $@; then mkdir -p $@; fi
+@@ -314,47 +308,40 @@ endif
+ # override the definitions of various _SUFFIX symbols in suffix.mk
+ #
+ 
+-#
+-# Object suffixes
+-#
+ ifndef OBJ_SUFFIX
+-    ifdef NS_USE_GCC
+-	OBJ_SUFFIX = .o
+-    else
++    ifndef NS_USE_GCC
+ 	OBJ_SUFFIX = .obj
+     endif
+ endif
+ 
+-#
+-# Assembler source suffixes
+-#
+ ifndef ASM_SUFFIX
+-    ifdef NS_USE_GCC
+-	ASM_SUFFIX = .s
+-    else
++    ifndef NS_USE_GCC
+ 	ASM_SUFFIX = .asm
+     endif
+ endif
+ 
+-#
+-# Library suffixes
+-#
+-
+ ifndef IMPORT_LIB_SUFFIX
+-    IMPORT_LIB_SUFFIX = .$(LIB_SUFFIX)
++    IMPORT_LIB_SUFFIX = .lib
+ endif
+ 
+ ifndef DYNAMIC_LIB_SUFFIX_FOR_LINKING
+     DYNAMIC_LIB_SUFFIX_FOR_LINKING = $(IMPORT_LIB_SUFFIX)
+ endif
+ 
+-#
+-# Program suffixes
+-#
+ ifndef PROG_SUFFIX
+     PROG_SUFFIX = .exe
+ endif
+ 
++ifndef LIB_SUFFIX
++    ifndef NS_USE_GCC
++	LIB_SUFFIX = _s.lib
++    endif
++endif
++
++ifndef DLL_SUFFIX
++    DLL_SUFFIX = .dll
++endif
++
+ #
+ # When the processor is NOT 386-based on Windows NT, override the
+ # value of $(CPU_TAG).  For WinNT, 95, 16, not CE.
+diff --git a/nss/coreconf/rules.mk b/nss/coreconf/rules.mk
+index dfcc40d..5c7cb4a 100644
+--- a/nss/coreconf/rules.mk
++++ b/nss/coreconf/rules.mk
+@@ -277,8 +277,7 @@ $(IMPORT_LIBRARY): $(MAPFILE)
+ 	$(RANLIB) $@
+ endif
+ ifeq ($(OS_ARCH),WINNT)
+-$(IMPORT_LIBRARY): $(LIBRARY)
+-	cp -f $< $@
++$(IMPORT_LIBRARY): $(SHARED_LIBRARY)
+ endif
+ 
+ ifdef SHARED_LIBRARY_LIBS
+diff --git a/nss/coreconf/ruleset.mk b/nss/coreconf/ruleset.mk
+index 74d64e1..d6d0fcc 100644
+--- a/nss/coreconf/ruleset.mk
++++ b/nss/coreconf/ruleset.mk
+@@ -86,16 +86,17 @@ endif
+ 
+ ifdef LIBRARY_NAME
+     ifndef LIBRARY
+-	LIBRARY        = $(OBJDIR)/$(LIB_PREFIX)$(LIBRARY_NAME).$(LIB_SUFFIX)
++	LIBRARY        = $(OBJDIR)/$(LIB_PREFIX)$(LIBRARY_NAME)$(LIB_SUFFIX)
+     endif
+     ifndef SHARED_LIBRARY
+-	SHARED_LIBRARY = $(OBJDIR)/$(DLL_PREFIX)$(LIBRARY_NAME)$(LIBRARY_VERSION)$(JDK_DEBUG_SUFFIX).$(DLL_SUFFIX)
++	SHARED_LIBRARY = $(OBJDIR)/$(DLL_PREFIX)$(LIBRARY_NAME)$(LIBRARY_VERSION)$(JDK_DEBUG_SUFFIX)$(DLL_SUFFIX)
+     endif
+     ifndef MAPFILE_SOURCE
+ 	MAPFILE_SOURCE = $(LIBRARY_NAME).def
+     endif
+ endif
+ 
++
+ #
+ # Common rules used by lots of makefiles...
+ #
+diff --git a/nss/coreconf/suffix.mk b/nss/coreconf/suffix.mk
+index 584bdf5..fac5603 100644
+--- a/nss/coreconf/suffix.mk
++++ b/nss/coreconf/suffix.mk
+@@ -24,6 +24,15 @@ endif
+ #
+ # Library suffixes
+ #
++
++ifndef LIB_SUFFIX
++    LIB_SUFFIX = .a
++endif
++
++ifndef DLL_SUFFIX
++    DLL_SUFFIX = .so
++endif
++
+ STATIC_LIB_EXTENSION =
+ 
+ ifndef DYNAMIC_LIB_EXTENSION
+@@ -32,12 +41,12 @@ endif
+ 
+ 
+ ifndef STATIC_LIB_SUFFIX
+-    STATIC_LIB_SUFFIX = .$(LIB_SUFFIX)
++    STATIC_LIB_SUFFIX = $(LIB_SUFFIX)
+ endif
+ 
+ 
+ ifndef DYNAMIC_LIB_SUFFIX
+-    DYNAMIC_LIB_SUFFIX = .$(DLL_SUFFIX)
++    DYNAMIC_LIB_SUFFIX = $(DLL_SUFFIX)
+ endif
+ 
+ # WIN% overridese this
+diff --git a/nss/coreconf/zlib.mk b/nss/coreconf/zlib.mk
+index a8504b7..823f964 100644
+--- a/nss/coreconf/zlib.mk
++++ b/nss/coreconf/zlib.mk
+@@ -11,7 +11,7 @@
+ ifdef USE_SYSTEM_ZLIB
+ OS_LIBS += $(ZLIB_LIBS)
+ else
+-ZLIB_LIBS = $(DIST)/lib/$(LIB_PREFIX)zlib.$(LIB_SUFFIX)
++ZLIB_LIBS = $(DIST)/lib/$(LIB_PREFIX)zlib$(LIB_SUFFIX)
+ EXTRA_LIBS += $(ZLIB_LIBS)
+ endif
+ 
+diff --git a/nss/gtests/certdb_gtest/manifest.mn b/nss/gtests/certdb_gtest/manifest.mn
+index 4a3a1fd..b75ef34 100644
+--- a/nss/gtests/certdb_gtest/manifest.mn
++++ b/nss/gtests/certdb_gtest/manifest.mn
+@@ -18,5 +18,5 @@ REQUIRES = nspr nss libdbm gtest
+ 
+ PROGRAM = certdb_gtest
+ 
+-EXTRA_LIBS = $(DIST)/lib/$(LIB_PREFIX)gtest.$(LIB_SUFFIX) $(EXTRA_OBJS) \
++EXTRA_LIBS = $(DIST)/lib/$(LIB_PREFIX)gtest$(LIB_SUFFIX) $(EXTRA_OBJS) \
+              ../common/$(OBJDIR)/gtests$(OBJ_SUFFIX)
+diff --git a/nss/gtests/certhigh_gtest/manifest.mn b/nss/gtests/certhigh_gtest/manifest.mn
+index 998f7a3..94241e1 100644
+--- a/nss/gtests/certhigh_gtest/manifest.mn
++++ b/nss/gtests/certhigh_gtest/manifest.mn
+@@ -18,5 +18,5 @@ REQUIRES = nspr gtest
+ 
+ PROGRAM = certhigh_gtest
+ 
+-EXTRA_LIBS = $(DIST)/lib/$(LIB_PREFIX)gtest.$(LIB_SUFFIX) $(EXTRA_OBJS) \
+-             $(DIST)/lib/$(LIB_PREFIX)gtestutil.$(LIB_SUFFIX)
++EXTRA_LIBS = $(DIST)/lib/$(LIB_PREFIX)gtest$(LIB_SUFFIX) $(EXTRA_OBJS) \
++             $(DIST)/lib/$(LIB_PREFIX)gtestutil$(LIB_SUFFIX)
+diff --git a/nss/gtests/common/manifest.mn b/nss/gtests/common/manifest.mn
+index 5d36c26..4b5499d 100644
+--- a/nss/gtests/common/manifest.mn
++++ b/nss/gtests/common/manifest.mn
+@@ -20,4 +20,4 @@ INCLUDES += -I$(CORE_DEPTH)/gtests/google_test/gtest/include \
+ 
+ REQUIRES = gtest
+ 
+-EXTRA_LIBS = $(DIST)/lib/$(LIB_PREFIX)gtest.$(LIB_SUFFIX)
++EXTRA_LIBS = $(DIST)/lib/$(LIB_PREFIX)gtest$(LIB_SUFFIX)
+diff --git a/nss/gtests/cryptohi_gtest/manifest.mn b/nss/gtests/cryptohi_gtest/manifest.mn
+index 644463a..7c72ab2 100644
+--- a/nss/gtests/cryptohi_gtest/manifest.mn
++++ b/nss/gtests/cryptohi_gtest/manifest.mn
+@@ -18,5 +18,5 @@ REQUIRES = nspr gtest
+ 
+ PROGRAM = cryptohi_gtest
+ 
+-EXTRA_LIBS = $(DIST)/lib/$(LIB_PREFIX)gtest.$(LIB_SUFFIX) $(EXTRA_OBJS) \
+-             $(DIST)/lib/$(LIB_PREFIX)gtestutil.$(LIB_SUFFIX)
++EXTRA_LIBS = $(DIST)/lib/$(LIB_PREFIX)gtest$(LIB_SUFFIX) $(EXTRA_OBJS) \
++             $(DIST)/lib/$(LIB_PREFIX)gtestutil$(LIB_SUFFIX)
+diff --git a/nss/gtests/der_gtest/manifest.mn b/nss/gtests/der_gtest/manifest.mn
+index f0d6b51..aaff447 100644
+--- a/nss/gtests/der_gtest/manifest.mn
++++ b/nss/gtests/der_gtest/manifest.mn
+@@ -20,5 +20,5 @@ REQUIRES = nspr gtest
+ 
+ PROGRAM = der_gtest
+ 
+-EXTRA_LIBS = $(DIST)/lib/$(LIB_PREFIX)gtest.$(LIB_SUFFIX) $(EXTRA_OBJS) \
+-             $(DIST)/lib/$(LIB_PREFIX)gtestutil.$(LIB_SUFFIX)
++EXTRA_LIBS = $(DIST)/lib/$(LIB_PREFIX)gtest$(LIB_SUFFIX) $(EXTRA_OBJS) \
++             $(DIST)/lib/$(LIB_PREFIX)gtestutil$(LIB_SUFFIX)
+diff --git a/nss/gtests/nss_bogo_shim/manifest.mn b/nss/gtests/nss_bogo_shim/manifest.mn
+index 2d60dde..d40b70c 100644
+--- a/nss/gtests/nss_bogo_shim/manifest.mn
++++ b/nss/gtests/nss_bogo_shim/manifest.mn
+@@ -15,6 +15,6 @@ CPPSRCS = \
+ REQUIRES = nspr nss libdbm
+ 
+ PROGRAM = nss_bogo_shim
+-#EXTRA_LIBS = $(DIST)/lib/$(LIB_PREFIX)softokn.$(LIB_SUFFIX)
++#EXTRA_LIBS = $(DIST)/lib/$(LIB_PREFIX)softokn$(LIB_SUFFIX)
+ 
+ USE_STATIC_LIBS = 1
+diff --git a/nss/gtests/pk11_gtest/manifest.mn b/nss/gtests/pk11_gtest/manifest.mn
+index a3dff9d..07e8baf 100644
+--- a/nss/gtests/pk11_gtest/manifest.mn
++++ b/nss/gtests/pk11_gtest/manifest.mn
+@@ -28,8 +28,8 @@ REQUIRES = nspr nss libdbm gtest cpputil
+ 
+ PROGRAM = pk11_gtest
+ 
+-EXTRA_LIBS = $(DIST)/lib/$(LIB_PREFIX)gtest.$(LIB_SUFFIX) \
+-             $(DIST)/lib/$(LIB_PREFIX)cpputil.$(LIB_SUFFIX) \
+-             $(DIST)/lib/$(LIB_PREFIX)gtestutil.$(LIB_SUFFIX) \
++EXTRA_LIBS = $(DIST)/lib/$(LIB_PREFIX)gtest$(LIB_SUFFIX) \
++             $(DIST)/lib/$(LIB_PREFIX)cpputil$(LIB_SUFFIX) \
++             $(DIST)/lib/$(LIB_PREFIX)gtestutil$(LIB_SUFFIX) \
+              $(NULL)
+ 
+diff --git a/nss/gtests/softoken_gtest/manifest.mn b/nss/gtests/softoken_gtest/manifest.mn
+index 4b34c09..b19d3f7 100644
+--- a/nss/gtests/softoken_gtest/manifest.mn
++++ b/nss/gtests/softoken_gtest/manifest.mn
+@@ -20,6 +20,6 @@ REQUIRES = nspr gtest
+ PROGRAM = softoken_gtest
+ 
+ EXTRA_LIBS = \
+-	$(DIST)/lib/$(LIB_PREFIX)gtest.$(LIB_SUFFIX) \
+-	$(DIST)/lib/$(LIB_PREFIX)gtestutil.$(LIB_SUFFIX) \
++	$(DIST)/lib/$(LIB_PREFIX)gtest$(LIB_SUFFIX) \
++	$(DIST)/lib/$(LIB_PREFIX)gtestutil$(LIB_SUFFIX) \
+ 	$(NULL)
+diff --git a/nss/gtests/ssl_gtest/manifest.mn b/nss/gtests/ssl_gtest/manifest.mn
+index 8547e56..1809840 100644
+--- a/nss/gtests/ssl_gtest/manifest.mn
++++ b/nss/gtests/ssl_gtest/manifest.mn
+@@ -62,8 +62,8 @@ REQUIRES = nspr nss libdbm gtest cpputil
+ 
+ PROGRAM = ssl_gtest
+ EXTRA_LIBS += \
+-      $(DIST)/lib/$(LIB_PREFIX)gtest.$(LIB_SUFFIX) \
+-      $(DIST)/lib/$(LIB_PREFIX)cpputil.$(LIB_SUFFIX) \
++      $(DIST)/lib/$(LIB_PREFIX)gtest$(LIB_SUFFIX) \
++      $(DIST)/lib/$(LIB_PREFIX)cpputil$(LIB_SUFFIX) \
+       $(NULL)
+ 
+ USE_STATIC_LIBS = 1
+diff --git a/nss/gtests/util_gtest/manifest.mn b/nss/gtests/util_gtest/manifest.mn
+index a90e843..e4ffb3d 100644
+--- a/nss/gtests/util_gtest/manifest.mn
++++ b/nss/gtests/util_gtest/manifest.mn
+@@ -25,7 +25,7 @@ REQUIRES = nspr gtest
+ PROGRAM = util_gtest
+ 
+ EXTRA_LIBS = \
+-	$(DIST)/lib/$(LIB_PREFIX)gtest.$(LIB_SUFFIX) \
+-	$(DIST)/lib/$(LIB_PREFIX)nssutil.$(LIB_SUFFIX) \
+-	$(DIST)/lib/$(LIB_PREFIX)gtestutil.$(LIB_SUFFIX) \
++	$(DIST)/lib/$(LIB_PREFIX)gtest$(LIB_SUFFIX) \
++	$(DIST)/lib/$(LIB_PREFIX)nssutil$(LIB_SUFFIX) \
++	$(DIST)/lib/$(LIB_PREFIX)gtestutil$(LIB_SUFFIX) \
+ 	$(NULL)
+diff --git a/nss/lib/ckfw/builtins/Makefile b/nss/lib/ckfw/builtins/Makefile
+index e1d8a62..696fd7e 100644
+--- a/nss/lib/ckfw/builtins/Makefile
++++ b/nss/lib/ckfw/builtins/Makefile
+@@ -8,8 +8,8 @@ include $(CORE_DEPTH)/coreconf/config.mk
+ include config.mk
+ 
+ EXTRA_LIBS = \
+-	$(DIST)/lib/$(LIB_PREFIX)nssckfw.$(LIB_SUFFIX) \
+-	$(DIST)/lib/$(LIB_PREFIX)nssb.$(LIB_SUFFIX) \
++	$(DIST)/lib/$(LIB_PREFIX)nssckfw$(LIB_SUFFIX) \
++	$(DIST)/lib/$(LIB_PREFIX)nssb$(LIB_SUFFIX) \
+ 	$(NULL)
+ 
+ # can't do this in manifest.mn because OS_TARGET isn't defined there.
+diff --git a/nss/lib/ckfw/builtins/config.mk b/nss/lib/ckfw/builtins/config.mk
+index 6bd62f1..93c2a27 100644
+--- a/nss/lib/ckfw/builtins/config.mk
++++ b/nss/lib/ckfw/builtins/config.mk
+@@ -14,7 +14,7 @@ IMPORT_LIBRARY =
+ PROGRAM        =
+ 
+ ifeq (,$(filter-out WIN%,$(OS_TARGET)))
+-    SHARED_LIBRARY = $(OBJDIR)/$(DLL_PREFIX)$(LIBRARY_NAME)$(LIBRARY_VERSION).$(DLL_SUFFIX)
++    SHARED_LIBRARY = $(OBJDIR)/$(DLL_PREFIX)$(LIBRARY_NAME)$(LIBRARY_VERSION)$(DLL_SUFFIX)
+     RES = $(OBJDIR)/$(LIBRARY_NAME).res
+     RESNAME = $(LIBRARY_NAME).rc
+ endif
+diff --git a/nss/lib/ckfw/capi/Makefile b/nss/lib/ckfw/capi/Makefile
+index 73300ca..ce769f5 100644
+--- a/nss/lib/ckfw/capi/Makefile
++++ b/nss/lib/ckfw/capi/Makefile
+@@ -8,8 +8,8 @@ include $(CORE_DEPTH)/coreconf/config.mk
+ include config.mk
+ 
+ EXTRA_LIBS = \
+-	$(DIST)/lib/$(LIB_PREFIX)nssckfw.$(LIB_SUFFIX) \
+-	$(DIST)/lib/$(LIB_PREFIX)nssb.$(LIB_SUFFIX) \
++	$(DIST)/lib/$(LIB_PREFIX)nssckfw$(LIB_SUFFIX) \
++	$(DIST)/lib/$(LIB_PREFIX)nssb$(LIB_SUFFIX) \
+ 	$(NULL)
+ 
+ # can't do this in manifest.mn because OS_TARGET isn't defined there.
+diff --git a/nss/lib/ckfw/capi/config.mk b/nss/lib/ckfw/capi/config.mk
+index ec0a862..ff341ff 100644
+--- a/nss/lib/ckfw/capi/config.mk
++++ b/nss/lib/ckfw/capi/config.mk
+@@ -14,7 +14,7 @@ IMPORT_LIBRARY =
+ PROGRAM        =
+ 
+ ifeq (,$(filter-out WIN%,$(OS_TARGET)))
+-    SHARED_LIBRARY = $(OBJDIR)/$(DLL_PREFIX)$(LIBRARY_NAME)$(LIBRARY_VERSION).$(DLL_SUFFIX)
++    SHARED_LIBRARY = $(OBJDIR)/$(DLL_PREFIX)$(LIBRARY_NAME)$(LIBRARY_VERSION)$(DLL_SUFFIX)
+     RES = $(OBJDIR)/$(LIBRARY_NAME).res
+     RESNAME = $(LIBRARY_NAME).rc
+ endif
+diff --git a/nss/lib/freebl/blname.c b/nss/lib/freebl/blname.c
+index 4bad74a..1da6b43 100644
+--- a/nss/lib/freebl/blname.c
++++ b/nss/lib/freebl/blname.c
+@@ -6,10 +6,10 @@
+ 
+ #if defined(FREEBL_LOWHASH)
+ static const char* default_name =
+-    SHLIB_PREFIX "freeblpriv" SHLIB_VERSION "." SHLIB_SUFFIX;
++    SHLIB_PREFIX "freeblpriv" SHLIB_VERSION SHLIB_SUFFIX;
+ #else
+ static const char* default_name =
+-    SHLIB_PREFIX "freebl" SHLIB_VERSION "." SHLIB_SUFFIX;
++    SHLIB_PREFIX "freebl" SHLIB_VERSION SHLIB_SUFFIX;
+ #endif
+ 
+ /* getLibName() returns the name of the library to load. */
+diff --git a/nss/lib/freebl/config.mk b/nss/lib/freebl/config.mk
+index 7ac50db..19d3abf 100644
+--- a/nss/lib/freebl/config.mk
++++ b/nss/lib/freebl/config.mk
+@@ -48,7 +48,7 @@ endif
+ ifeq (,$(filter-out WIN%,$(OS_TARGET)))
+ 
+ # don't want the 32 in the shared library name
+-SHARED_LIBRARY = $(OBJDIR)/$(DLL_PREFIX)$(LIBRARY_NAME)$(LIBRARY_VERSION).$(DLL_SUFFIX)
++SHARED_LIBRARY = $(OBJDIR)/$(DLL_PREFIX)$(LIBRARY_NAME)$(LIBRARY_VERSION)$(DLL_SUFFIX)
+ 
+ RES     = $(OBJDIR)/$(LIBRARY_NAME).res
+ RESNAME = freebl.rc
+diff --git a/nss/lib/freebl/loader.c b/nss/lib/freebl/loader.c
+index 6d200e6..3f46270 100644
+--- a/nss/lib/freebl/loader.c
++++ b/nss/lib/freebl/loader.c
+@@ -18,7 +18,7 @@
+ #include "prsystem.h"
+ 
+ static const char *NameOfThisSharedLib =
+-    SHLIB_PREFIX "softokn" SOFTOKEN_SHLIB_VERSION "." SHLIB_SUFFIX;
++    SHLIB_PREFIX "softokn" SOFTOKEN_SHLIB_VERSION SHLIB_SUFFIX;
+ 
+ static PRLibrary *blLib = NULL;
+ 
+diff --git a/nss/lib/freebl/lowhash_vector.c b/nss/lib/freebl/lowhash_vector.c
+index be53bbd..bcc103f 100644
+--- a/nss/lib/freebl/lowhash_vector.c
++++ b/nss/lib/freebl/lowhash_vector.c
+@@ -59,7 +59,7 @@ freebl_lowhash_getLibraryFilePath(void *addr)
+  */
+ #ifdef nodef
+ static const char *NameOfThisSharedLib =
+-    SHLIB_PREFIX "freebl" SHLIB_VERSION "." SHLIB_SUFFIX;
++    SHLIB_PREFIX "freebl" SHLIB_VERSION SHLIB_SUFFIX;
+ #endif
+ 
+ #include "genload.c"
+diff --git a/nss/lib/freebl/shvfy.c b/nss/lib/freebl/shvfy.c
+index 98db461..c6530b1 100644
+--- a/nss/lib/freebl/shvfy.c
++++ b/nss/lib/freebl/shvfy.c
+@@ -236,7 +236,7 @@ static char *
+ mkCheckFileName(const char *libName)
+ {
+     int ln_len = PORT_Strlen(libName);
+-    int index = ln_len + 1 - sizeof("." SHLIB_SUFFIX);
++    int index = ln_len + 1 - sizeof(SHLIB_SUFFIX);
+     char *output = PORT_Alloc(ln_len + sizeof(SGN_SUFFIX));
+     if (!output) {
+         PORT_SetError(SEC_ERROR_NO_MEMORY);
+@@ -245,7 +245,7 @@ mkCheckFileName(const char *libName)
+ 
+     if ((index > 0) &&
+         (PORT_Strncmp(&libName[index],
+-                      "." SHLIB_SUFFIX, sizeof("." SHLIB_SUFFIX)) == 0)) {
++                      SHLIB_SUFFIX, sizeof(SHLIB_SUFFIX)) == 0)) {
+         ln_len = index;
+     }
+     PORT_Memcpy(output, libName, ln_len);
+diff --git a/nss/lib/freebl/stubs.c b/nss/lib/freebl/stubs.c
+index c42f694..b842234 100644
+--- a/nss/lib/freebl/stubs.c
++++ b/nss/lib/freebl/stubs.c
+@@ -664,8 +664,8 @@ NSS_SecureMemcmpZero_stub(const void *mem, size_t n)
+ 
+ #ifdef FREEBL_NO_WEAK
+ 
+-static const char *nsprLibName = SHLIB_PREFIX "nspr4." SHLIB_SUFFIX;
+-static const char *nssutilLibName = SHLIB_PREFIX "nssutil3." SHLIB_SUFFIX;
++static const char *nsprLibName = SHLIB_PREFIX "nspr4" SHLIB_SUFFIX;
++static const char *nssutilLibName = SHLIB_PREFIX "nssutil3" SHLIB_SUFFIX;
+ 
+ static SECStatus
+ freebl_InitNSPR(void *lib)
+diff --git a/nss/lib/libpkix/pkix_pl_nss/module/pkix_pl_httpcertstore.c b/nss/lib/libpkix/pkix_pl_nss/module/pkix_pl_httpcertstore.c
+index 471f920..cc67725 100755
+--- a/nss/lib/libpkix/pkix_pl_nss/module/pkix_pl_httpcertstore.c
++++ b/nss/lib/libpkix/pkix_pl_nss/module/pkix_pl_httpcertstore.c
+@@ -213,7 +213,7 @@ struct pkix_DecodeFuncStr {
+ static struct pkix_DecodeFuncStr pkix_decodeFunc;
+ static const PRCallOnceType pkix_pristine;
+ 
+-#define SMIME_LIB_NAME SHLIB_PREFIX"smime3."SHLIB_SUFFIX
++#define SMIME_LIB_NAME SHLIB_PREFIX "smime3" SHLIB_SUFFIX
+ 
+ /*
+  * load the smime library and look up the SEC_ReadPKCS7Certs function.
+@@ -224,7 +224,7 @@ static const PRCallOnceType pkix_pristine;
+ static PRStatus PR_CALLBACK pkix_getDecodeFunction(void)
+ {
+     pkix_decodeFunc.smimeLib = 
+-		PR_LoadLibrary(SHLIB_PREFIX"smime3."SHLIB_SUFFIX);
++		PR_LoadLibrary(SHLIB_PREFIX "smime3" SHLIB_SUFFIX);
+     if (pkix_decodeFunc.smimeLib == NULL) {
+ 	return PR_FAILURE;
+     }
+diff --git a/nss/lib/nss/config.mk b/nss/lib/nss/config.mk
+index a17f3ef..6399f50 100644
+--- a/nss/lib/nss/config.mk
++++ b/nss/lib/nss/config.mk
+@@ -7,7 +7,7 @@
+ ifeq (,$(filter-out WIN%,$(OS_TARGET)))
+ 
+ # don't want the 32 in the shared library name
+-SHARED_LIBRARY = $(OBJDIR)/$(DLL_PREFIX)$(LIBRARY_NAME)$(LIBRARY_VERSION).$(DLL_SUFFIX)
++SHARED_LIBRARY = $(OBJDIR)/$(DLL_PREFIX)$(LIBRARY_NAME)$(LIBRARY_VERSION)$(DLL_SUFFIX)
+ IMPORT_LIBRARY = $(OBJDIR)/$(IMPORT_LIB_PREFIX)$(LIBRARY_NAME)$(LIBRARY_VERSION)$(IMPORT_LIB_SUFFIX)
+ 
+ RES = $(OBJDIR)/$(LIBRARY_NAME).res
+@@ -51,24 +51,24 @@ endif
+ 
+ # $(PROGRAM) has explicit dependencies on $(EXTRA_LIBS)
+ SHARED_LIBRARY_LIBS = \
+-	$(DIST)/lib/$(LIB_PREFIX)certhi.$(LIB_SUFFIX) \
+-	$(DIST)/lib/$(LIB_PREFIX)cryptohi.$(LIB_SUFFIX) \
+-	$(DIST)/lib/$(LIB_PREFIX)pk11wrap.$(LIB_SUFFIX) \
+-	$(DIST)/lib/$(LIB_PREFIX)certdb.$(LIB_SUFFIX) \
+-	$(DIST)/lib/$(LIB_PREFIX)nsspki.$(LIB_SUFFIX) \
+-	$(DIST)/lib/$(LIB_PREFIX)nssdev.$(LIB_SUFFIX) \
+-	$(DIST)/lib/$(LIB_PREFIX)nssb.$(LIB_SUFFIX) \
+-	$(DIST)/lib/$(LIB_PREFIX)certsel.$(LIB_SUFFIX) \
+-	$(DIST)/lib/$(LIB_PREFIX)checker.$(LIB_SUFFIX) \
+-	$(DIST)/lib/$(LIB_PREFIX)params.$(LIB_SUFFIX) \
+-	$(DIST)/lib/$(LIB_PREFIX)results.$(LIB_SUFFIX) \
+-	$(DIST)/lib/$(LIB_PREFIX)top.$(LIB_SUFFIX) \
+-	$(DIST)/lib/$(LIB_PREFIX)util.$(LIB_SUFFIX) \
+-	$(DIST)/lib/$(LIB_PREFIX)crlsel.$(LIB_SUFFIX) \
+-	$(DIST)/lib/$(LIB_PREFIX)store.$(LIB_SUFFIX) \
+-	$(DIST)/lib/$(LIB_PREFIX)pki.$(LIB_SUFFIX) \
+-	$(DIST)/lib/$(LIB_PREFIX)system.$(LIB_SUFFIX) \
+-	$(DIST)/lib/$(LIB_PREFIX)module.$(LIB_SUFFIX) \
++	$(DIST)/lib/$(LIB_PREFIX)certhi$(LIB_SUFFIX) \
++	$(DIST)/lib/$(LIB_PREFIX)cryptohi$(LIB_SUFFIX) \
++	$(DIST)/lib/$(LIB_PREFIX)pk11wrap$(LIB_SUFFIX) \
++	$(DIST)/lib/$(LIB_PREFIX)certdb$(LIB_SUFFIX) \
++	$(DIST)/lib/$(LIB_PREFIX)nsspki$(LIB_SUFFIX) \
++	$(DIST)/lib/$(LIB_PREFIX)nssdev$(LIB_SUFFIX) \
++	$(DIST)/lib/$(LIB_PREFIX)nssb$(LIB_SUFFIX) \
++	$(DIST)/lib/$(LIB_PREFIX)certsel$(LIB_SUFFIX) \
++	$(DIST)/lib/$(LIB_PREFIX)checker$(LIB_SUFFIX) \
++	$(DIST)/lib/$(LIB_PREFIX)params$(LIB_SUFFIX) \
++	$(DIST)/lib/$(LIB_PREFIX)results$(LIB_SUFFIX) \
++	$(DIST)/lib/$(LIB_PREFIX)top$(LIB_SUFFIX) \
++	$(DIST)/lib/$(LIB_PREFIX)util$(LIB_SUFFIX) \
++	$(DIST)/lib/$(LIB_PREFIX)crlsel$(LIB_SUFFIX) \
++	$(DIST)/lib/$(LIB_PREFIX)store$(LIB_SUFFIX) \
++	$(DIST)/lib/$(LIB_PREFIX)pki$(LIB_SUFFIX) \
++	$(DIST)/lib/$(LIB_PREFIX)system$(LIB_SUFFIX) \
++	$(DIST)/lib/$(LIB_PREFIX)module$(LIB_SUFFIX) \
+ 	$(NULL)
+ 
+ SHARED_LIBRARY_DIRS = \
+diff --git a/nss/lib/pk11wrap/pk11load.c b/nss/lib/pk11wrap/pk11load.c
+index d1f6ec4..acf9f19 100644
+--- a/nss/lib/pk11wrap/pk11load.c
++++ b/nss/lib/pk11wrap/pk11load.c
+@@ -355,9 +355,9 @@ SECMOD_SetRootCerts(PK11SlotInfo *slot, SECMODModule *mod)
+ 
+ #ifndef NSS_TEST_BUILD
+ static const char *my_shlib_name =
+-    SHLIB_PREFIX "nss" SHLIB_VERSION "." SHLIB_SUFFIX;
++    SHLIB_PREFIX "nss" SHLIB_VERSION SHLIB_SUFFIX;
+ static const char *softoken_shlib_name =
+-    SHLIB_PREFIX "softokn" SOFTOKEN_SHLIB_VERSION "." SHLIB_SUFFIX;
++    SHLIB_PREFIX "softokn" SOFTOKEN_SHLIB_VERSION SHLIB_SUFFIX;
+ static const PRCallOnceType pristineCallOnce;
+ static PRCallOnceType loadSoftokenOnce;
+ static PRLibrary *softokenLib;
+diff --git a/nss/lib/smime/config.mk b/nss/lib/smime/config.mk
+index 85d39e8..54840c1 100644
+--- a/nss/lib/smime/config.mk
++++ b/nss/lib/smime/config.mk
+@@ -8,7 +8,7 @@ RELEASE_LIBS = $(TARGETS)
+ ifeq (,$(filter-out WIN%,$(OS_TARGET)))
+ 
+ # don't want the 32 in the shared library name
+-SHARED_LIBRARY = $(OBJDIR)/$(DLL_PREFIX)$(LIBRARY_NAME)$(LIBRARY_VERSION).$(DLL_SUFFIX)
++SHARED_LIBRARY = $(OBJDIR)/$(DLL_PREFIX)$(LIBRARY_NAME)$(LIBRARY_VERSION)$(DLL_SUFFIX)
+ IMPORT_LIBRARY = $(OBJDIR)/$(IMPORT_LIB_PREFIX)$(LIBRARY_NAME)$(LIBRARY_VERSION)$(IMPORT_LIB_SUFFIX)
+ 
+ RES = $(OBJDIR)/smime.res
+@@ -52,8 +52,8 @@ endif
+ 
+ 
+ SHARED_LIBRARY_LIBS = \
+-	$(DIST)/lib/$(LIB_PREFIX)pkcs12.$(LIB_SUFFIX) \
+-	$(DIST)/lib/$(LIB_PREFIX)pkcs7.$(LIB_SUFFIX) \
++	$(DIST)/lib/$(LIB_PREFIX)pkcs12$(LIB_SUFFIX) \
++	$(DIST)/lib/$(LIB_PREFIX)pkcs7$(LIB_SUFFIX) \
+ 	$(NULL)
+ 
+ SHARED_LIBRARY_DIRS = \
+diff --git a/nss/lib/softoken/config.mk b/nss/lib/softoken/config.mk
+index 2924b24..8cc3dfc 100644
+--- a/nss/lib/softoken/config.mk
++++ b/nss/lib/softoken/config.mk
+@@ -4,7 +4,7 @@
+ # file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ 
+ # $(PROGRAM) has explicit dependencies on $(EXTRA_LIBS)
+-CRYPTOLIB=$(DIST)/lib/$(LIB_PREFIX)freebl.$(LIB_SUFFIX)
++CRYPTOLIB=$(DIST)/lib/$(LIB_PREFIX)freebl$(LIB_SUFFIX)
+ 
+ EXTRA_LIBS += \
+ 	$(CRYPTOLIB) \
+@@ -14,7 +14,7 @@ EXTRA_LIBS += \
+ ifeq (,$(filter-out WIN%,$(OS_TARGET)))
+ 
+ # don't want the 32 in the shared library name
+-SHARED_LIBRARY = $(OBJDIR)/$(DLL_PREFIX)$(LIBRARY_NAME)$(LIBRARY_VERSION).$(DLL_SUFFIX)
++SHARED_LIBRARY = $(OBJDIR)/$(DLL_PREFIX)$(LIBRARY_NAME)$(LIBRARY_VERSION)$(DLL_SUFFIX)
+ IMPORT_LIBRARY = $(OBJDIR)/$(IMPORT_LIB_PREFIX)$(LIBRARY_NAME)$(LIBRARY_VERSION)$(IMPORT_LIB_SUFFIX)
+ 
+ RES = $(OBJDIR)/$(LIBRARY_NAME).res
+diff --git a/nss/lib/softoken/legacydb/config.mk b/nss/lib/softoken/legacydb/config.mk
+index ac7240e..66f9cbe 100644
+--- a/nss/lib/softoken/legacydb/config.mk
++++ b/nss/lib/softoken/legacydb/config.mk
+@@ -4,18 +4,18 @@
+ # file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ 
+ # $(PROGRAM) has explicit dependencies on $(EXTRA_LIBS)
+-CRYPTOLIB=$(DIST)/lib/$(LIB_PREFIX)freebl.$(LIB_SUFFIX)
++CRYPTOLIB=$(DIST)/lib/$(LIB_PREFIX)freebl$(LIB_SUFFIX)
+ 
+ EXTRA_LIBS += \
+ 	$(CRYPTOLIB) \
+-	$(DIST)/lib/$(LIB_PREFIX)dbm.$(LIB_SUFFIX) \
++	$(DIST)/lib/$(LIB_PREFIX)dbm$(LIB_SUFFIX) \
+ 	$(NULL)
+ 
+ # can't do this in manifest.mn because OS_TARGET isn't defined there.
+ ifeq (,$(filter-out WIN%,$(OS_TARGET)))
+ 
+ # don't want the 32 in the shared library name
+-SHARED_LIBRARY = $(OBJDIR)/$(DLL_PREFIX)$(LIBRARY_NAME)$(LIBRARY_VERSION).$(DLL_SUFFIX)
++SHARED_LIBRARY = $(OBJDIR)/$(DLL_PREFIX)$(LIBRARY_NAME)$(LIBRARY_VERSION)$(DLL_SUFFIX)
+ IMPORT_LIBRARY = $(OBJDIR)/$(IMPORT_LIB_PREFIX)$(LIBRARY_NAME)$(LIBRARY_VERSION)$(IMPORT_LIB_SUFFIX)
+ 
+ RES = $(OBJDIR)/$(LIBRARY_NAME).res
+diff --git a/nss/lib/softoken/legacydb/lginit.c b/nss/lib/softoken/legacydb/lginit.c
+index 4f0b53f..692b9ba 100644
+--- a/nss/lib/softoken/legacydb/lginit.c
++++ b/nss/lib/softoken/legacydb/lginit.c
+@@ -130,7 +130,7 @@ static rdbfunc lg_rdbfunc = NULL;
+ static rdbstatusfunc lg_rdbstatusfunc = NULL;
+ 
+ /* NOTE: SHLIB_SUFFIX is defined on the command line */
+-#define RDBLIB SHLIB_PREFIX "rdb." SHLIB_SUFFIX
++#define RDBLIB SHLIB_PREFIX "rdb" SHLIB_SUFFIX
+ 
+ DB *
+ rdbopen(const char *appName, const char *prefix,
+diff --git a/nss/lib/softoken/lgglue.c b/nss/lib/softoken/lgglue.c
+index 94f0541..483df95 100644
+--- a/nss/lib/softoken/lgglue.c
++++ b/nss/lib/softoken/lgglue.c
+@@ -241,7 +241,7 @@ sftkdb_decrypt_stub(SDB *sdb, SECItem *cipherText, SECItem **plainText)
+ }
+ 
+ static const char *LEGACY_LIB_NAME =
+-    SHLIB_PREFIX "nssdbm" SHLIB_VERSION "." SHLIB_SUFFIX;
++    SHLIB_PREFIX "nssdbm" SHLIB_VERSION SHLIB_SUFFIX;
+ /*
+  * 2 bools to tell us if we've check the legacy library successfully or
+  * not. Initialize on startup to false by the C BSS segment;
+diff --git a/nss/lib/sqlite/config.mk b/nss/lib/sqlite/config.mk
+index b0e9390..a222c58 100644
+--- a/nss/lib/sqlite/config.mk
++++ b/nss/lib/sqlite/config.mk
+@@ -8,7 +8,7 @@
+ ifeq (,$(filter-out WIN%,$(OS_TARGET)))
+ 
+ # don't want the 32 in the shared library name
+-SHARED_LIBRARY = $(OBJDIR)/$(DLL_PREFIX)$(LIBRARY_NAME)$(LIBRARY_VERSION).$(DLL_SUFFIX)
++SHARED_LIBRARY = $(OBJDIR)/$(DLL_PREFIX)$(LIBRARY_NAME)$(LIBRARY_VERSION)$(DLL_SUFFIX)
+ IMPORT_LIBRARY = $(OBJDIR)/$(IMPORT_LIB_PREFIX)$(LIBRARY_NAME)$(LIBRARY_VERSION)$(IMPORT_LIB_SUFFIX)
+ 
+ #RES = $(OBJDIR)/$(LIBRARY_NAME).res
+diff --git a/nss/lib/ssl/config.mk b/nss/lib/ssl/config.mk
+index d13613f..40043d4 100644
+--- a/nss/lib/ssl/config.mk
++++ b/nss/lib/ssl/config.mk
+@@ -10,7 +10,7 @@ endif
+ ifeq (,$(filter-out WIN%,$(OS_TARGET)))
+ 
+ # don't want the 32 in the shared library name
+-SHARED_LIBRARY = $(OBJDIR)/$(DLL_PREFIX)$(LIBRARY_NAME)$(LIBRARY_VERSION).$(DLL_SUFFIX)
++SHARED_LIBRARY = $(OBJDIR)/$(DLL_PREFIX)$(LIBRARY_NAME)$(LIBRARY_VERSION)$(DLL_SUFFIX)
+ IMPORT_LIBRARY = $(OBJDIR)/$(IMPORT_LIB_PREFIX)$(LIBRARY_NAME)$(LIBRARY_VERSION)$(IMPORT_LIB_SUFFIX)
+ 
+ RES = $(OBJDIR)/ssl.res
+diff --git a/nss/lib/sysinit/config.mk b/nss/lib/sysinit/config.mk
+index 037641b..bf41f59 100644
+--- a/nss/lib/sysinit/config.mk
++++ b/nss/lib/sysinit/config.mk
+@@ -12,7 +12,7 @@
+ ifeq (,$(filter-out WIN%,$(OS_TARGET)))
+ 
+ # don't want the 32 in the shared library name
+-SHARED_LIBRARY = $(OBJDIR)/$(DLL_PREFIX)$(LIBRARY_NAME)$(LIBRARY_VERSION).$(DLL_SUFFIX)
++SHARED_LIBRARY = $(OBJDIR)/$(DLL_PREFIX)$(LIBRARY_NAME)$(LIBRARY_VERSION)$(DLL_SUFFIX)
+ IMPORT_LIBRARY = $(OBJDIR)/$(IMPORT_LIB_PREFIX)$(LIBRARY_NAME)$(LIBRARY_VERSION)$(IMPORT_LIB_SUFFIX)
+ 
+ RES = $(OBJDIR)/$(LIBRARY_NAME).res
+diff --git a/nss/lib/util/config.mk b/nss/lib/util/config.mk
+index a3e7202..2b8ca31 100644
+--- a/nss/lib/util/config.mk
++++ b/nss/lib/util/config.mk
+@@ -7,7 +7,7 @@
+ ifeq (,$(filter-out WIN%,$(OS_TARGET)))
+ 
+ # don't want the 32 in the shared library name
+-SHARED_LIBRARY = $(OBJDIR)/$(DLL_PREFIX)$(LIBRARY_NAME)$(LIBRARY_VERSION).$(DLL_SUFFIX)
++SHARED_LIBRARY = $(OBJDIR)/$(DLL_PREFIX)$(LIBRARY_NAME)$(LIBRARY_VERSION)$(DLL_SUFFIX)
+ IMPORT_LIBRARY = $(OBJDIR)/$(IMPORT_LIB_PREFIX)$(LIBRARY_NAME)$(LIBRARY_VERSION)$(IMPORT_LIB_SUFFIX)
+ 
+ RES = $(OBJDIR)/$(LIBRARY_NAME).res
+diff --git a/nss/tests/fips/fips.sh b/nss/tests/fips/fips.sh
+index 4153e61..c66249e 100755
+--- a/nss/tests/fips/fips.sh
++++ b/nss/tests/fips/fips.sh
+@@ -229,15 +229,15 @@ fips_140()
+   done
+     
+   echo "$SCRIPTNAME: Detect mangled softoken--------------------------"
+-  SOFTOKEN=${MANGLEDIR}/${DLL_PREFIX}softokn3.${DLL_SUFFIX}
++  SOFTOKEN=${MANGLEDIR}/${DLL_PREFIX}softokn3${DLL_SUFFIX}
+ 
+   echo "mangling ${SOFTOKEN}"
+   echo "mangle -i ${SOFTOKEN} -o -8 -b 5"
+   # If nss was built without softoken use the system installed one.
+   # It's location must be specified by the package maintainer.
+-  if [ ! -e  ${MANGLEDIR}/${DLL_PREFIX}softokn3.${DLL_SUFFIX} ]; then
+-    echo "cp ${SOFTOKEN_LIB_DIR}/${DLL_PREFIX}softokn3.${DLL_SUFFIX} ${MANGLEDIR}"
+-    cp ${SOFTOKEN_LIB_DIR}/${DLL_PREFIX}softokn3.${DLL_SUFFIX} ${MANGLEDIR}
++  if [ ! -e  ${MANGLEDIR}/${DLL_PREFIX}softokn3${DLL_SUFFIX} ]; then
++    echo "cp ${SOFTOKEN_LIB_DIR}/${DLL_PREFIX}softokn3${DLL_SUFFIX} ${MANGLEDIR}"
++    cp ${SOFTOKEN_LIB_DIR}/${DLL_PREFIX}softokn3${DLL_SUFFIX} ${MANGLEDIR}
+   fi
+   ${BINDIR}/mangle -i ${SOFTOKEN} -o -8 -b 5 2>&1
+   if [ $? -eq 0 ]; then
+@@ -270,7 +270,7 @@ fips_140()
+ 
+     html_msg ${RESULT} 46 "Init NSS with a corrupted library (dbtest -r)" "."
+   else
+-    html_failed "Mangle ${DLL_PREFIX}softokn3.${DLL_SUFFIX}"
++    html_failed "Mangle ${DLL_PREFIX}softokn3${DLL_SUFFIX}"
+   fi
+ }
+ 
+diff --git a/nss/tests/remote/Makefile b/nss/tests/remote/Makefile
+index 4635bcc..a3411f4 100644
+--- a/nss/tests/remote/Makefile
++++ b/nss/tests/remote/Makefile
+@@ -94,9 +94,9 @@ ifeq ($(CROSS_COMPILE),1)
+ # work around a bug in Android ash that has a corrupted work directory after login
+ 	echo 'cd $${HOME}/nsstest'                          >> $(RTSH)
+ 	echo 'cd nss/cmd/shlibsign'                         >> $(RTSH)
+-	echo '$(TEST_SHELL) ./sign.sh $${DIST}/$${OBJDIR}/ $${DIST}/$${OBJDIR}/bin $${OS_TARGET} $${NSPR_LIB_DIR} $${NSPR_LIB_DIR}$${DLL_PREFIX}freebl3.$${DLL_SUFFIX}'  >> $(RTSH)
+-	echo '$(TEST_SHELL) ./sign.sh $${DIST}/$${OBJDIR}/ $${DIST}/$${OBJDIR}/bin $${OS_TARGET} $${NSPR_LIB_DIR} $${NSPR_LIB_DIR}$${DLL_PREFIX}softokn3.$${DLL_SUFFIX}' >> $(RTSH)
+-	echo '$(TEST_SHELL) ./sign.sh $${DIST}/$${OBJDIR}/ $${DIST}/$${OBJDIR}/bin $${OS_TARGET} $${NSPR_LIB_DIR} $${NSPR_LIB_DIR}$${DLL_PREFIX}nssdbm3.$${DLL_SUFFIX}'  >> $(RTSH)
++	echo '$(TEST_SHELL) ./sign.sh $${DIST}/$${OBJDIR}/ $${DIST}/$${OBJDIR}/bin $${OS_TARGET} $${NSPR_LIB_DIR} $${NSPR_LIB_DIR}$${DLL_PREFIX}freebl3$${DLL_SUFFIX}'  >> $(RTSH)
++	echo '$(TEST_SHELL) ./sign.sh $${DIST}/$${OBJDIR}/ $${DIST}/$${OBJDIR}/bin $${OS_TARGET} $${NSPR_LIB_DIR} $${NSPR_LIB_DIR}$${DLL_PREFIX}softokn3$${DLL_SUFFIX}' >> $(RTSH)
++	echo '$(TEST_SHELL) ./sign.sh $${DIST}/$${OBJDIR}/ $${DIST}/$${OBJDIR}/bin $${OS_TARGET} $${NSPR_LIB_DIR} $${NSPR_LIB_DIR}$${DLL_PREFIX}nssdbm3$${DLL_SUFFIX}'  >> $(RTSH)
+ ifneq ($(OS_TARGET),Android)
+ # Android's ash doesn't support "export -n" yet
+ 	echo 'export -n DIST'                          >> $(RTSH)
+-- 
+2.20.1
+

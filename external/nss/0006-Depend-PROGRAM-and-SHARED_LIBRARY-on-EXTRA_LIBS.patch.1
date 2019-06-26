@@ -1,0 +1,37 @@
+From 3369c2a99437bf649770c9a1ee3ce762abfb4c2b Mon Sep 17 00:00:00 2001
+From: Jan-Marek Glogowski <glogow@fbihome.de>
+Date: Sun, 30 Jun 2019 16:29:22 +0000
+Subject: [PATCH 6/7] Depend PROGRAM and SHARED_LIBRARY on EXTRA_LIBS
+
+EXTRA_LIBS contains just our own static libaries for NSS and it's
+used in the target, so depend on it. NSPR passes many shared and
+OS libraries, so nothing for them to do here.
+---
+ nss/coreconf/rules.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/nss/coreconf/rules.mk b/nss/coreconf/rules.mk
+index 009121c..9fc06ad 100644
+--- a/nss/coreconf/rules.mk
++++ b/nss/coreconf/rules.mk
+@@ -312,7 +312,7 @@ SUB_SHLOBJS = $(foreach dir,$(SHARED_LIBRARY_DIRS),$(addprefix $(dir)/,$(shell $
+ endif
+ endif
+ 
+-$(SHARED_LIBRARY): $(OBJS) $(RES) $(MAPFILE) $(SUB_SHLOBJS) | $(OBJDIR)
++$(SHARED_LIBRARY): $(OBJS) $(RES) $(MAPFILE) $(SUB_SHLOBJS) $(EXTRA_LIBS) | $(OBJDIR)
+ 	rm -f $@
+ ifeq ($(OS_TARGET)$(OS_RELEASE), AIX4.1)
+ 	echo "#!" > $(OBJDIR)/lib$(LIBRARY_NAME)_syms
+@@ -356,7 +356,7 @@ $(MAPFILE): $(MAPFILE_SOURCE) | $(OBJDIR)
+ 	$(PROCESS_MAP_FILE)
+ 
+ 
+-$(OBJDIR)/$(PROG_PREFIX)%$(PROG_SUFFIX): $(OBJDIR)/$(PROG_PREFIX)%$(OBJ_SUFFIX) | $(OBJDIR)
++$(OBJDIR)/$(PROG_PREFIX)%$(PROG_SUFFIX): $(OBJDIR)/$(PROG_PREFIX)%$(OBJ_SUFFIX) $(EXTRA_LIBS) | $(OBJDIR)
+ ifeq (,$(filter-out _WIN%,$(NS_USE_GCC)_$(OS_TARGET)))
+ 	$(MKPROG) $< -Fe$@ -link \
+ 	$(LDFLAGS) $(XLDFLAGS) $(EXTRA_LIBS) $(EXTRA_SHARED_LIBS) $(OS_LIBS)
+-- 
+2.20.1
+
