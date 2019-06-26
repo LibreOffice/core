@@ -112,7 +112,7 @@ private:
     void setParent(const LayoutAtomPtr& pParent) { mpParent = pParent; }
 
 public:
-    virtual const std::vector<LayoutAtomPtr>& getChildren() const
+    const std::vector<LayoutAtomPtr>& getChildren() const
         { return mpChildNodes; }
 
     LayoutAtomPtr getParent() const { return mpParent.lock(); }
@@ -208,11 +208,11 @@ class ConditionAtom
 public:
     explicit ConditionAtom(LayoutNode& rLayoutNode, bool isElse, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttributes);
     virtual void accept( LayoutAtomVisitor& ) override;
-    bool getDecision() const;
+    bool getDecision(const dgm::Point* pPresPoint) const;
+
 private:
     static bool compareResult(sal_Int32 nOperator, sal_Int32 nFirst, sal_Int32 nSecond);
-    const dgm::Point* getPresNode() const;
-    sal_Int32 getNodeCount() const;
+    sal_Int32 getNodeCount(const dgm::Point* pPresPoint) const;
 
     bool const    mIsElse;
     IteratorAttr  maIter;
@@ -228,14 +228,8 @@ class ChooseAtom
 public:
     ChooseAtom(LayoutNode& rLayoutNode)
         : LayoutAtom(rLayoutNode)
-#if defined __clang__ && __clang_major__ == 3 && __clang_minor__ == 8
-        , maEmptyChildren()
-#endif
     {}
     virtual void accept( LayoutAtomVisitor& ) override;
-    virtual const std::vector<LayoutAtomPtr>& getChildren() const override;
-private:
-    const std::vector<LayoutAtomPtr> maEmptyChildren;
 };
 
 class LayoutNode
@@ -297,18 +291,6 @@ private:
 };
 
 typedef std::shared_ptr< ShapeAtom > ShapeAtomPtr;
-
-struct LayoutAtomVisitor
-{
-    virtual ~LayoutAtomVisitor() {}
-    virtual void visit(ConstraintAtom& rAtom) = 0;
-    virtual void visit(AlgAtom& rAtom) = 0;
-    virtual void visit(ForEachAtom& rAtom) = 0;
-    virtual void visit(ConditionAtom& rAtom) = 0;
-    virtual void visit(ChooseAtom& rAtom) = 0;
-    virtual void visit(LayoutNode& rAtom) = 0;
-    virtual void visit(ShapeAtom& rAtom) = 0;
-};
 
 } }
 
