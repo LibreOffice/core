@@ -5186,6 +5186,9 @@ if test -f $TESTGMAKEFILEFUNC/test.txt; then
     AC_MSG_RESULT([yes])
 else
     AC_MSG_RESULT([no])
+    if test "$OS" = WNT; then
+        AC_MSG_ERROR([no file function found; the build will fail without it; use GNU make 4.0 or later])
+    fi
 fi
 rm -rf $TESTGMAKEFILEFUNC
 AC_SUBST(HAVE_GNUMAKE_FILE_FUNC)
