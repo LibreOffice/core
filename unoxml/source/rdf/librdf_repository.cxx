@@ -51,6 +51,7 @@
 #include <com/sun/star/rdf/BlankNode.hpp>
 #include <com/sun/star/rdf/URI.hpp>
 #include <com/sun/star/rdf/Literal.hpp>
+#include <com/sun/star/rdf/XNamedGraph2.hpp>
 
 #include <rtl/ref.hxx>
 #include <rtl/strbuf.hxx>
@@ -646,7 +647,7 @@ librdf_QuerySelectResult::getBindingNames()
  */
 class librdf_NamedGraph:
     public ::cppu::WeakImplHelper<
-        rdf::XNamedGraph>
+        rdf::XNamedGraph2>
 {
 public:
     librdf_NamedGraph(librdf_Repository * i_pRep,
@@ -678,6 +679,11 @@ public:
             const uno::Reference< rdf::XResource > & i_xSubject,
             const uno::Reference< rdf::XURI > & i_xPredicate,
             const uno::Reference< rdf::XNode > & i_xObject) override;
+    // css::rdf::XNamedGraph2
+    virtual uno::Sequence<uno::Reference< rdf::XURI >> SAL_CALL getStatementsObjects(
+            const uno::Reference< rdf::XResource > & i_xSubject,
+            const uno::Reference< rdf::XURI > & i_xPredicate,
+            const uno::Reference< rdf::XNode > & i_xObject) override;
 
 private:
 
@@ -688,6 +694,22 @@ private:
     uno::WeakReference< rdf::XRepository > const m_wRep;
     librdf_Repository *const m_pRep;
     uno::Reference< rdf::XURI > const m_xName;
+
+    struct CacheKey
+    {
+        uno::Reference< rdf::XResource > xSubject;
+        uno::Reference< rdf::XURI > xPredicate;
+        uno::Reference< rdf::XNode > xObject;
+
+        bool operator<(const CacheKey& other) const
+        {
+            return xSubject.get() < other.xSubject.get()
+                && xPredicate.get() < other.xPredicate.get()
+                && xObject.get() < other.xObject.get();
+        }
+    };
+    // querying is rather slow, so cache the results
+    std::map<CacheKey, uno::Sequence<uno::Reference<rdf::XURI>>> m_aStatementsCache;
 };
 
 
@@ -729,6 +751,7 @@ void SAL_CALL librdf_NamedGraph::clear()
         throw lang::WrappedTargetRuntimeException( ex.Message,
                         *this, anyEx );
     }
+    m_aStatementsCache.clear();
 }
 
 void SAL_CALL librdf_NamedGraph::addStatement(
@@ -743,6 +766,7 @@ void SAL_CALL librdf_NamedGraph::addStatement(
     }
     m_pRep->addStatementGraph_NoLock(
             i_xSubject, i_xPredicate, i_xObject, m_xName);
+    m_aStatementsCache.clear();
 }
 
 void SAL_CALL librdf_NamedGraph::removeStatements(
@@ -757,6 +781,7 @@ void SAL_CALL librdf_NamedGraph::removeStatements(
     }
     m_pRep->removeStatementsGraph_NoLock(
             i_xSubject, i_xPredicate, i_xObject, m_xName);
+    m_aStatementsCache.clear();
 }
 
 uno::Reference< container::XEnumeration > SAL_CALL
@@ -770,10 +795,44 @@ librdf_NamedGraph::getStatements(
         throw rdf::RepositoryException(
             "librdf_NamedGraph::getStatements: repository is gone", *this);
     }
-    return m_pRep->getStatementsGraph_NoLock(
+    auto ret = m_pRep->getStatementsGraph_NoLock(
             i_xSubject, i_xPredicate, i_xObject, m_xName);
+    return ret;
 }
 
+uno::Sequence<uno::Reference<rdf::XURI>> SAL_CALL
+librdf_NamedGraph::getStatementsObjects(
+    const uno::Reference< rdf::XResource > & i_xSubject,
+    const uno::Reference< rdf::XURI > & i_xPredicate,
+    const uno::Reference< rdf::XNode > & i_xObject)
+{
+    CacheKey key { i_xSubject, i_xPredicate, i_xObject };
+    auto it = m_aStatementsCache.find(key);
+    if (it != m_aStatementsCache.end())
+        return it->second;
+    uno::Reference< rdf::XRepository > xRep( m_wRep );
+    if (!xRep.is()) {
+        throw rdf::RepositoryException(
+            "librdf_NamedGraph::getStatements: repository is gone", *this);
+    }
+    uno::Reference<container::XEnumeration> xEnum = m_pRep->getStatementsGraph_NoLock(
+            i_xSubject, i_xPredicate, i_xObject, m_xName);
+
+    std::vector<uno::Reference<rdf::XURI>> uris;
+    while (xEnum->hasMoreElements())
+    {
+        rdf::Statement stmt;
+        if (!(xEnum->nextElement() >>= stmt))
+            throw uno::RuntimeException();
+        const uno::Reference<rdf::XURI> xPart(stmt.Object, uno::UNO_QUERY);
+        if (!xPart.is())
+            continue;
+        uris.push_back(xPart);
+    }
+    css::uno::Sequence<uno::Reference<rdf::XURI>> ret = comphelper::containerToSequence(uris);
+    m_aStatementsCache.emplace(key, ret);
+    return ret;
+}
 
 std::shared_ptr<librdf_world> librdf_Repository::m_pWorld;
 sal_uInt32 librdf_Repository::m_NumInstances = 0;
