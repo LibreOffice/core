@@ -4917,7 +4917,7 @@ bool DomainMapper_Impl::IsFieldResultAsString()
     OSL_ENSURE( pContext.get(), "no field context available");
     if( pContext.get() )
     {
-        bRet = pContext->GetTextField().is();
+        bRet = pContext->GetTextField().is() || pContext->GetFieldId() == FIELD_FORMDROPDOWN;
     }
     return bRet;
 }
