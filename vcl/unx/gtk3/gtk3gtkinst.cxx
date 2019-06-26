@@ -2064,6 +2064,11 @@ public:
         if (!m_xDropTarget)
         {
             m_xDropTarget.set(new GtkDropTarget);
+            if (!gtk_drag_dest_get_track_motion(m_pWidget))
+            {
+                gtk_drag_dest_set(m_pWidget, GtkDestDefaults(0), nullptr, 0, GdkDragAction(0));
+                gtk_drag_dest_set_track_motion(m_pWidget, true);
+            }
             m_nDragMotionSignalId = g_signal_connect(m_pWidget, "drag-motion", G_CALLBACK(signalDragMotion), this);
             m_nDragDropSignalId = g_signal_connect(m_pWidget, "drag-drop", G_CALLBACK(signalDragDrop), this);
             m_nDragDropReceivedSignalId = g_signal_connect(m_pWidget, "drag-data-received", G_CALLBACK(signalDragDropReceived), this);
