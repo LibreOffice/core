@@ -19,6 +19,7 @@
 #ifndef INCLUDED_SW_INC_FMTAUTOFMT_HXX
 #define INCLUDED_SW_INC_FMTAUTOFMT_HXX
 
+#include "hintids.hxx"
 #include <svl/poolitem.hxx>
 #include <memory>
 

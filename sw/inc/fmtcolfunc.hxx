@@ -19,6 +19,9 @@
 #ifndef INCLUDED_SW_INC_FMTCOLFUNC_HXX
 #define INCLUDED_SW_INC_FMTCOLFUNC_HXX
 
+#include "numrule.hxx"
+#include "fmtcol.hxx"
+
 class SwFormat;
 class SwNumRuleItem;
 

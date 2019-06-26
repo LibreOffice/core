@@ -21,6 +21,7 @@
 
 #include <rtl/ustring.hxx>
 #include <svl/poolitem.hxx>
+#include <tools/solar.h>
 #include "swdllapi.h"
 
 enum class Master_CollCondition;

@@ -47,6 +47,8 @@
 #include <svl/itemiter.hxx>
 #include <svl/stritem.hxx>
 #include <editeng/colritem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/fontitem.hxx>
 #include <editeng/shaditem.hxx>
 #include <editeng/boxitem.hxx>
 #include <svl/srchitem.hxx>

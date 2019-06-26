@@ -36,7 +36,6 @@
 
 #include <svl/listener.hxx>
 
-#include "calbck.hxx"
 #include "TextCursorHelper.hxx"
 #include "unotext.hxx"
 #include "frmfmt.hxx"

@@ -21,6 +21,7 @@
 
 #include <sfx2/lnkbase.hxx>
 #include <svl/hint.hxx>
+#include <tools/solar.h>
 #include "swdllapi.h"
 #include "fldbas.hxx"
 

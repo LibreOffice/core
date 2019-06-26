@@ -20,6 +20,7 @@
 #define INCLUDED_SW_INC_SWBASLNK_HXX
 
 #include <sfx2/lnkbase.hxx>
+#include <tools/solar.h>
 
 class SwNode;
 class SwContentNode;

@@ -23,6 +23,8 @@
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 
+#include "fmtautofmt.hxx"
+
 #include <memory>
 #include <vector>
 
