@@ -145,9 +145,10 @@ bool FcPreMatchSubstitution::FindFontSubstitute(FontSelectPattern &rFontSelData)
     if( bHaveSubstitute )
     {
         rCachedFontMap.push_front(value_type(rFontSelData, aOut));
-        //fairly arbitrary limit in this case, but I recall measuring max 8
-        //fonts as the typical max amount of fonts in medium sized documents
-        if (rCachedFontMap.size() > 8)
+        // Fairly arbitrary limit in this case, but I recall measuring max 8
+        // fonts as the typical max amount of fonts in medium sized documents, so make it
+        // a fair chunk larger to accomodate weird documents./
+        if (rCachedFontMap.size() > 256)
             rCachedFontMap.pop_back();
         rFontSelData = aOut;
     }
