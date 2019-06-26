@@ -19,8 +19,6 @@
 #ifndef INCLUDED_SW_INC_NDHINTS_HXX
 #define INCLUDED_SW_INC_NDHINTS_HXX
 
-#include <o3tl/sorted_vector.hxx>
-
 #include "swtypes.hxx"
 
 class SwTextNode;

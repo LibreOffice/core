@@ -23,6 +23,8 @@
 #include <tools/gen.hxx>
 #include "swrect.hxx"
 
+#include <memory>
+
 enum SwFillMode
 {
     FILL_TAB,       ///< default, fill with tabs

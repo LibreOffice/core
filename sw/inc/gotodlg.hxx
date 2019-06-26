@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_GOTODLG_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_GOTODLG_HXX
 
+#include <sfx2/bindings.hxx>
 #include <vcl/weld.hxx>
 
 class SwView;
