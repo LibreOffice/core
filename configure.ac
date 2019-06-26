@@ -2681,6 +2681,10 @@ if test "$COMPATH" = "."; then
     COMPATH=`echo $COMPATH | $SED "s@/[[^/:]]*\\\$@@"`
 fi
 COMPATH=`echo $COMPATH | $SED "s@/[[Bb]][[Ii]][[Nn]]\\\$@@"`
+if test "$build_os" = "cygwin"; then
+    COMPATH=`win_short_path_for_make "$COMPATH"`
+fi
+
 
 dnl ===================================================================
 dnl Java support
@@ -3347,9 +3351,9 @@ if test "$_os" = "WINNT"; then
     find_msvc "$with_visual_studio"
     if test -z "$vctest"; then
         if test -n "$with_visual_studio"; then
-            AC_MSG_ERROR([No Visual Studio $with_visual_studio installation found])
+            AC_MSG_ERROR([no Visual Studio $with_visual_studio installation found])
         else
-            AC_MSG_ERROR([No Visual Studio 2017 installation found])
+            AC_MSG_ERROR([no Visual Studio 2017 installation found])
         fi
     fi
 
@@ -3359,7 +3363,7 @@ if test "$_os" = "WINNT"; then
         elif test -f "$vctest/VC/Tools/MSVC/$vcbuildnumber/bin/HostX86/x86/cl.exe"; then
             VC_PRODUCT_DIR=$vctest/VC
         else
-            AC_MSG_ERROR([No compiler (cl.exe) in $vctest/bin/cl.exe])
+            AC_MSG_ERROR([no compiler (cl.exe) found])
         fi
     else
         if test -f "$vctest/bin/amd64/cl.exe"; then
@@ -3367,9 +3371,10 @@ if test "$_os" = "WINNT"; then
         elif test -f "$vctest/VC/Tools/MSVC/$vcbuildnumber/bin/HostX64/x64/cl.exe"; then
             VC_PRODUCT_DIR=$vctest/VC
         else
-            AC_MSG_ERROR([No compiler (cl.exe) in $vctest/VC/Tools/MSVC/$vcbuildnumber/bin/HostX64/x64/cl.exe or $vctest/bin/amd64/cl.exe or $vctest/bin/x86_amd64/cl.exe])
+            AC_MSG_ERROR([no compiler (cl.exe) found])
         fi
     fi
+    AC_MSG_RESULT([$VC_PRODUCT_DIR])
 
     AC_MSG_CHECKING([for short pathname of VC product directory])
     VC_PRODUCT_DIR=`win_short_path_for_make "$VC_PRODUCT_DIR"`
@@ -3535,7 +3540,7 @@ if test "$_os" = "WINNT"; then
         AC_MSG_ERROR([Visual C++ not found after all, huh])
     fi
 
-    AC_MSG_CHECKING([$CC is at least Visual Studio 2017 version 15.7])
+    AC_MSG_CHECKING([$(basename "$CC") is at least Visual Studio 2017 version 15.7])
     AC_COMPILE_IFELSE([AC_LANG_SOURCE([[
         // See <https://docs.microsoft.com/en-us/cpp/preprocessor/predefined-macros> for mapping
         // between Visual Studio versions and _MSC_VER:
@@ -3575,6 +3580,7 @@ if test "$_os" = "WINNT"; then
             fi
         fi
         if test "$BUILD_X64" = TRUE; then
+            CXX_X64_BINARY=`win_short_path_for_make "$CXX_X64_BINARY"`
             AC_MSG_RESULT([found])
         else
             AC_MSG_RESULT([not found])
@@ -3600,7 +3606,8 @@ if test "$_os" = "WINNT"; then
             AC_MSG_RESULT([preset])
         elif "$VC_PRODUCT_DIR/Tools/MSVC/$vcbuildnumber/bin/HostX86/x86/cl.exe" -? </dev/null >/dev/null 2>&1; then
             BUILD_X86=TRUE
-            CXX_X86_BINARY="$VC_PRODUCT_DIR/Tools/MSVC/$vcbuildnumber/bin/HostX86/x86/cl.exe -arch:SSE"
+            CXX_X86_BINARY=`win_short_path_for_make "$VC_PRODUCT_DIR/Tools/MSVC/$vcbuildnumber/bin/HostX86/x86/cl.exe"`
+            CXX_X86_BINARY+=" -arch:SSE"
             AC_MSG_RESULT([found])
         else
             CXX_X86_BINARY=
@@ -4049,7 +4056,7 @@ ENABLE_GDB_INDEX=
 if test "$enable_gdb_index" != "no"; then
     dnl Currently by default enabled only on Linux, feel free to set test_gdb_index above also for other platforms.
     if test "$enable_gdb_index" = yes -o \( "$test_gdb_index" = "yes" -o -n "$ENABLE_DEBUG$ENABLE_DBGUTIL" \); then
-        AC_MSG_CHECKING([whether $CC supports -ggnu-pubnames])
+        AC_MSG_CHECKING([whether $(basename "$CC") supports -ggnu-pubnames])
         save_CFLAGS=$CFLAGS
         CFLAGS="$CFLAGS -Werror -ggnu-pubnames"
         have_ggnu_pubnames=
@@ -5289,7 +5296,7 @@ if test "$_os" = "WINNT"; then
     fi
 fi
 if test "$with_system_hsqldb" = "yes"; then
-	perl_use_string="$perl_use_string ; use Archive::Zip"
+    perl_use_string="$perl_use_string ; use Archive::Zip"
 fi
 if $PERL -e "$perl_use_string">/dev/null 2>&1; then
     AC_MSG_RESULT([all modules found])
@@ -5466,7 +5473,8 @@ find_winsdk_version()
                 # test exist the SDK path
                 if test -d "$tmppath"; then
                    # when path is convertible to a short path then path is okay
-                   if ! cygpath -d "$tmppath"; then
+                   cygpath -d "$tmppath" >/dev/null 2>&1
+                   if test $? -ne 0; then
                       AC_MSG_ERROR([Windows SDK doesn't have a 8.3 name, see NtfsDisable8dot3NameCreation])
                    fi
                 else
@@ -5563,16 +5571,15 @@ find_msms()
 
 find_msvc_x64_dlls()
 {
+    AC_MSG_CHECKING([for MSVC x64 DLL path])
     msvcdllpath="$VC_PRODUCT_DIR/redist/x64/Microsoft.VC${VCVER}.CRT"
     case "$VCVER" in
     150|160)
         for l in `ls -1 $VC_PRODUCT_DIR/redist/MSVC/`; do
-            AC_MSG_CHECKING([for $VC_PRODUCT_DIR/redist/MSVC/$l/x64/Microsoft.VC141.CRT])
             if test -d "$VC_PRODUCT_DIR/redist/MSVC/$l/x64/Microsoft.VC141.CRT"; then
                 msvcdllpath="$VC_PRODUCT_DIR/redist/MSVC/$l/x64/Microsoft.VC141.CRT"
                 break
             fi
-            AC_MSG_CHECKING([for $VC_PRODUCT_DIR/redist/MSVC/$l/x64/Microsoft.VC142.CRT])
             if test -d "$VC_PRODUCT_DIR/redist/MSVC/$l/x64/Microsoft.VC142.CRT"; then
                 msvcdllpath="$VC_PRODUCT_DIR/redist/MSVC/$l/x64/Microsoft.VC142.CRT"
                 break
@@ -5584,12 +5591,15 @@ find_msvc_x64_dlls()
         done
         ;;
     esac
+    AC_MSG_RESULT([$msvcdllpath])
+    AC_MSG_CHECKING([for MSVC x64 DLLs])
     msvcdlls="msvcp140.dll vcruntime140.dll"
     for dll in $msvcdlls; do
         if ! test -f "$msvcdllpath/$dll"; then
-            AC_MSG_ERROR([can not find $dll in $msvcdllpath])
+            AC_MSG_ERROR([missing $dll])
         fi
     done
+    AC_MSG_RESULT([found all ($msvcdlls)])
 }
 
 dnl =========================================
@@ -6395,7 +6405,8 @@ dnl ===================================================================
 dnl C++11
 dnl ===================================================================
 
-AC_MSG_CHECKING([whether $CXX supports C++17])
+CXX_BASE="$(basemae "$CXX")"
+AC_MSG_CHECKING([whether $CXX_BASE supports C++17])
 CXXFLAGS_CXX11=
 if test "$COM" = MSC -a "$COM_IS_CLANG" != TRUE; then
     CXXFLAGS_CXX11='-std:c++17 -Zc:__cplusplus'
@@ -6510,7 +6521,7 @@ abi broken
     AC_LANG_POP([C++])
 fi
 
-AC_MSG_CHECKING([whether $CXX supports C++11 without Language Defect 757])
+AC_MSG_CHECKING([whether $CXX_BASE supports C++11 without Language Defect 757])
 save_CXXFLAGS=$CXXFLAGS
 CXXFLAGS="$CXXFLAGS $CXXFLAGS_CXX11"
 AC_LANG_PUSH([C++])
@@ -6578,7 +6589,7 @@ if test "$GCC" = yes; then
 fi
 AC_SUBST([HAVE_GCC_FNO_SIZED_DEALLOCATION])
 
-AC_MSG_CHECKING([whether $CXX supports guaranteed copy elision])
+AC_MSG_CHECKING([whether $CXX_BASE supports guaranteed copy elision])
 AC_LANG_PUSH([C++])
 save_CXXFLAGS=$CXXFLAGS
 CXXFLAGS="$CXXFLAGS $CXXFLAGS_CXX11"
@@ -6603,7 +6614,7 @@ AC_COMPILE_IFELSE([AC_LANG_SOURCE([
 CXXFLAGS=$save_CXXFLAGS
 AC_LANG_POP([C++])
 
-AC_MSG_CHECKING([whether $CXX has GCC bug 87150])
+AC_MSG_CHECKING([whether $CXX_BASE has GCC bug 87150])
 AC_LANG_PUSH([C++])
 save_CXXFLAGS=$CXXFLAGS
 CXXFLAGS="$CXXFLAGS $CXXFLAGS_CXX11"
@@ -6927,15 +6938,16 @@ UCRT_REDISTDIR="$with_ucrt_dir"
 if test $_os = "WINNT"; then
     find_msvc_x64_dlls
     find_msms
-    MSVC_DLL_PATH="$msvcdllpath"
+    MSVC_DLL_PATH=`win_short_path_for_make "$msvcdllpath"`
     MSVC_DLLS="$msvcdlls"
-    MSM_PATH="$msmdir"
+    MSM_PATH=`win_short_path_for_make "$msmdir"`
     # MSVC 15.3 changed it to VC141
-    if echo "$MSVC_DLL_PATH" | grep -q "VC141.CRT$"; then
+    if echo "$msvcdllpath" | grep -q "VC141.CRT$"; then
         SCPDEFS="$SCPDEFS -DWITH_VC141_REDIST"
     else
         SCPDEFS="$SCPDEFS -DWITH_VC${VCVER}_REDIST"
     fi
+
     if test "$UCRT_REDISTDIR" = "no"; then
         dnl explicitly disabled
         UCRT_REDISTDIR=""
@@ -7931,11 +7943,11 @@ else
               msdosdjgpp* | go32*)
                 objfmt='COFF'
               ;;
-              os2-emx*)			# not tested
-                objfmt='MSOMF'		# obj
+              os2-emx*) # not tested
+                objfmt='MSOMF' # obj
               ;;
               linux*coff* | linux*oldld*)
-                objfmt='COFF'		# ???
+                objfmt='COFF' # ???
               ;;
               linux*aout*)
                 objfmt='a.out'
@@ -10151,7 +10163,7 @@ if test "$_os" = "WINNT"; then
     if test -f "$VC_PRODUCT_DIR/$assembler_bin/$assembler"; then
         ASM_HOME=$VC_PRODUCT_DIR/$assembler_bin
         AC_MSG_RESULT([found])
-        ML_EXE="$VC_PRODUCT_DIR/$assembler_bin/$assembler"
+        ML_EXE=`win_short_path_for_make "$VC_PRODUCT_DIR/$assembler_bin/$assembler"`
     else
         AC_MSG_ERROR([Configure did not find $assembler assembler.])
     fi
@@ -11354,7 +11366,7 @@ if test "$enable_build_opensymbol" = "yes"; then
     AC_MSG_RESULT([yes])
     AC_PATH_PROG(FONTFORGE, fontforge)
     if test -z "$FONTFORGE"; then
-	AC_MSG_ERROR([fontforge not installed])
+        AC_MSG_ERROR([fontforge not installed])
     fi
 else
     AC_MSG_RESULT([no])
@@ -12545,6 +12557,9 @@ if test "$build_os" = "cygwin"; then
     else
         ATL_LIB="$ATL_LIB/x86"
     fi
+    ATL_LIB=`win_short_path_for_make "$ATL_LIB"`
+    ATL_INCLUDE=`win_short_path_for_make "$ATL_INCLUDE"`
+
     # sort.exe and find.exe also exist in C:/Windows/system32 so need /usr/bin/
     PathFormat "/usr/bin/find.exe"
     FIND="$formatted_path"
