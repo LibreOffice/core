@@ -348,15 +348,16 @@ void Diagram::addTo( const ShapePtr & pParentShape )
 
     pParentShape->setChildSize(pParentShape->getSize());
 
-    if( mpLayout->getNode() )
+    const dgm::Point* pRootPoint = mpData->getRootPoint();
+    if (mpLayout->getNode() && pRootPoint)
     {
         // create Shape hierarchy
-        ShapeCreationVisitor aCreationVisitor(pParentShape, *this);
+        ShapeCreationVisitor aCreationVisitor(*this, pRootPoint, pParentShape);
         mpLayout->getNode()->setExistingShape(pParentShape);
         mpLayout->getNode()->accept(aCreationVisitor);
 
         // layout shapes - now all shapes are created
-        ShapeLayoutingVisitor aLayoutingVisitor;
+        ShapeLayoutingVisitor aLayoutingVisitor(*this, pRootPoint);
         mpLayout->getNode()->accept(aLayoutingVisitor);
 
         sortChildrenByZOrder(pParentShape);
