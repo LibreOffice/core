@@ -326,7 +326,13 @@ void SwFrame::PrepareMake(vcl::RenderContext* pRenderContext)
                                 && SwFlowFrame::CastFlowFrame(GetUpper()->Lower())
                                 && SwFlowFrame::CastFlowFrame(pFrame)->IsAnFollow(
                                     SwFlowFrame::CastFlowFrame(GetUpper()->Lower()))
-                                && GetUpper()->Lower()->GetNext() == this));
+                                && (GetUpper()->Lower()->GetNext() == this
+                                    // if it's more than 10 pages long...
+                                    || (SwFlowFrame::CastFlowFrame(GetUpper()->Lower())->GetFollow()
+                                            == SwFlowFrame::CastFlowFrame(GetUpper()->Lower()->GetNext())
+                                        && GetUpper()->Lower()->GetNext()->GetNext() == this)
+                                    // pre-existing empty section frames may end up between them...
+                                    || GetUpper()->Lower()->GetNext()->IsSctFrame())));
                         break; // tdf#119109 frame was moved backward, prevent
                                // FindNext() returning a frame inside this if
                     }          // this is a table!
@@ -455,7 +461,13 @@ void SwFrame::PrepareCursor()
                             && SwFlowFrame::CastFlowFrame(GetUpper()->Lower())
                             && SwFlowFrame::CastFlowFrame(pFrame)->IsAnFollow(
                                 SwFlowFrame::CastFlowFrame(GetUpper()->Lower()))
-                            && GetUpper()->Lower()->GetNext() == this));
+                            && (GetUpper()->Lower()->GetNext() == this
+                                // if it's more than 10 pages long...
+                                || (SwFlowFrame::CastFlowFrame(GetUpper()->Lower())->GetFollow()
+                                        == SwFlowFrame::CastFlowFrame(GetUpper()->Lower()->GetNext())
+                                    && GetUpper()->Lower()->GetNext()->GetNext() == this)
+                                // pre-existing empty section frames may end up between them...
+                                || GetUpper()->Lower()->GetNext()->IsSctFrame())));
                     break; // tdf#119109 frame was moved backward, prevent
                            // FindNext() returning a frame inside this if
                 }          // this is a table!
