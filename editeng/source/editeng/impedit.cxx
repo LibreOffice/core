@@ -1760,12 +1760,12 @@ bool ImpEditView::SetCursorAtPoint( const Point& rPointPixel )
     return true;
 }
 
-
 void ImpEditView::HideDDCursor()
 {
     if ( pDragAndDropInfo && pDragAndDropInfo->bVisCursor )
     {
-        GetWindow()->DrawOutDev( pDragAndDropInfo->aCurSavedCursor.TopLeft(), pDragAndDropInfo->aCurSavedCursor.GetSize(),
+        OutputDevice& rOutDev = getEditViewCallbacks() ? getEditViewCallbacks()->EditViewOutputDevice() : *GetWindow();
+        rOutDev.DrawOutDev( pDragAndDropInfo->aCurSavedCursor.TopLeft(), pDragAndDropInfo->aCurSavedCursor.GetSize(),
                             Point(0,0), pDragAndDropInfo->aCurSavedCursor.GetSize(),*pDragAndDropInfo->pBackground );
         pDragAndDropInfo->bVisCursor = false;
     }
@@ -1775,14 +1775,15 @@ void ImpEditView::ShowDDCursor( const tools::Rectangle& rRect )
 {
     if ( pDragAndDropInfo && !pDragAndDropInfo->bVisCursor )
     {
-        if ( pOutWin->GetCursor() )
+        if (pOutWin && pOutWin->GetCursor())
             pOutWin->GetCursor()->Hide();
 
-        Color aOldFillColor = GetWindow()->GetFillColor();
-        GetWindow()->SetFillColor( Color(4210752) );    // GRAY BRUSH_50, OLDSV, change to DDCursor!
+        OutputDevice& rOutDev = getEditViewCallbacks() ? getEditViewCallbacks()->EditViewOutputDevice() : *GetWindow();
+        Color aOldFillColor = rOutDev.GetFillColor();
+        rOutDev.SetFillColor( Color(4210752) );    // GRAY BRUSH_50, OLDSV, change to DDCursor!
 
         // Save background ...
-        tools::Rectangle aSaveRect( GetWindow()->LogicToPixel( rRect ) );
+        tools::Rectangle aSaveRect( rOutDev.LogicToPixel( rRect ) );
         // prefer to save some more ...
         aSaveRect.AdjustRight(1 );
         aSaveRect.AdjustBottom(1 );
@@ -1792,8 +1793,8 @@ void ImpEditView::ShowDDCursor( const tools::Rectangle& rRect )
 #endif
         if ( !pDragAndDropInfo->pBackground )
         {
-            pDragAndDropInfo->pBackground = VclPtr<VirtualDevice>::Create( *GetWindow() );
-            MapMode aMapMode( GetWindow()->GetMapMode() );
+            pDragAndDropInfo->pBackground = VclPtr<VirtualDevice>::Create(rOutDev);
+            MapMode aMapMode( rOutDev.GetMapMode() );
             aMapMode.SetOrigin( Point( 0, 0 ) );
             pDragAndDropInfo->pBackground->SetMapMode( aMapMode );
 
@@ -1808,19 +1809,19 @@ void ImpEditView::ShowDDCursor( const tools::Rectangle& rRect )
         }
 #endif
 
-        aSaveRect = GetWindow()->PixelToLogic( aSaveRect );
+        aSaveRect = rOutDev.PixelToLogic( aSaveRect );
 
         pDragAndDropInfo->pBackground->DrawOutDev( Point(0,0), aSaveRect.GetSize(),
-                                    aSaveRect.TopLeft(), aSaveRect.GetSize(), *GetWindow() );
+                                    aSaveRect.TopLeft(), aSaveRect.GetSize(), rOutDev );
         pDragAndDropInfo->aCurSavedCursor = aSaveRect;
 
         // Draw Cursor...
-        GetWindow()->DrawRect( rRect );
+        rOutDev.DrawRect( rRect );
 
         pDragAndDropInfo->bVisCursor = true;
         pDragAndDropInfo->aCurCursor = rRect;
 
-        GetWindow()->SetFillColor( aOldFillColor );
+        rOutDev.SetFillColor( aOldFillColor );
     }
 }
 
@@ -2113,8 +2114,10 @@ void ImpEditView::dragOver(const css::datatransfer::dnd::DropTargetDragEvent& rD
 {
     SolarMutexGuard aVclGuard;
 
+    const OutputDevice& rOutDev = getEditViewCallbacks() ? getEditViewCallbacks()->EditViewOutputDevice() : *GetWindow();
+
     Point aMousePos( rDTDE.LocationX, rDTDE.LocationY );
-    aMousePos = GetWindow()->PixelToLogic( aMousePos );
+    aMousePos = rOutDev.PixelToLogic( aMousePos );
 
     bool bAccept = false;
 
@@ -2206,7 +2209,7 @@ void ImpEditView::dragOver(const css::datatransfer::dnd::DropTargetDragEvent& rD
                     aStartPos = GetWindowPos( aStartPos );
                     Point aEndPos( GetOutputArea().GetWidth(), nDDYPos );
                     aEndPos = GetWindowPos( aEndPos );
-                    aEditCursor = GetWindow()->LogicToPixel( tools::Rectangle( aStartPos, aEndPos ) );
+                    aEditCursor = rOutDev.LogicToPixel( tools::Rectangle( aStartPos, aEndPos ) );
                     if ( !pEditEngine->IsVertical() )
                     {
                         aEditCursor.AdjustTop( -1 );
@@ -2225,7 +2228,7 @@ void ImpEditView::dragOver(const css::datatransfer::dnd::DropTargetDragEvent& rD
                             aEditCursor.AdjustRight( -1 );
                         }
                     }
-                    aEditCursor = GetWindow()->PixelToLogic( aEditCursor );
+                    aEditCursor = rOutDev.PixelToLogic( aEditCursor );
                 }
                 else
                 {
@@ -2233,8 +2236,8 @@ void ImpEditView::dragOver(const css::datatransfer::dnd::DropTargetDragEvent& rD
                     Point aTopLeft( GetWindowPos( aEditCursor.TopLeft() ) );
                     aEditCursor.SetPos( aTopLeft );
                     aEditCursor.SetRight( aEditCursor.Left() + pDragAndDropInfo->nCursorWidth );
-                    aEditCursor = GetWindow()->LogicToPixel( aEditCursor );
-                    aEditCursor = GetWindow()->PixelToLogic( aEditCursor );
+                    aEditCursor = rOutDev.LogicToPixel( aEditCursor );
+                    aEditCursor = rOutDev.PixelToLogic( aEditCursor );
                 }
 
                 bool bCursorChanged = !pDragAndDropInfo->bVisCursor || ( pDragAndDropInfo->aCurCursor != aEditCursor );
@@ -2260,18 +2263,31 @@ void ImpEditView::dragOver(const css::datatransfer::dnd::DropTargetDragEvent& rD
 
 void ImpEditView::AddDragAndDropListeners()
 {
-    vcl::Window* pWindow = GetWindow();
-    if ( !bActiveDragAndDropListener && pWindow && pWindow->GetDragGestureRecognizer().is() )
+    if (bActiveDragAndDropListener)
+        return;
+
+    css::uno::Reference<css::datatransfer::dnd::XDropTarget> xDropTarget;
+    if (getEditViewCallbacks())
+        xDropTarget = getEditViewCallbacks()->GetDropTarget();
+    else if (GetWindow())
+        xDropTarget = GetWindow()->GetDropTarget();
+
+    if (xDropTarget.is())
     {
-        vcl::unohelper::DragAndDropWrapper* pDnDWrapper = new vcl::unohelper::DragAndDropWrapper( this );
+        vcl::unohelper::DragAndDropWrapper* pDnDWrapper = new vcl::unohelper::DragAndDropWrapper(this);
         mxDnDListener = pDnDWrapper;
 
-        uno::Reference< datatransfer::dnd::XDragGestureListener> xDGL( mxDnDListener, uno::UNO_QUERY );
-        pWindow->GetDragGestureRecognizer()->addDragGestureListener( xDGL );
-        uno::Reference< datatransfer::dnd::XDropTargetListener> xDTL( xDGL, uno::UNO_QUERY );
-        pWindow->GetDropTarget()->addDropTargetListener( xDTL );
-        pWindow->GetDropTarget()->setActive( true );
-        pWindow->GetDropTarget()->setDefaultActions( datatransfer::dnd::DNDConstants::ACTION_COPY_OR_MOVE );
+        css::uno::Reference<css::datatransfer::dnd::XDragGestureRecognizer> xDragGestureRecognizer(xDropTarget, uno::UNO_QUERY);
+        if (xDragGestureRecognizer.is())
+        {
+            uno::Reference<datatransfer::dnd::XDragGestureListener> xDGL(mxDnDListener, uno::UNO_QUERY);
+            xDragGestureRecognizer->addDragGestureListener(xDGL);
+        }
+
+        uno::Reference<datatransfer::dnd::XDropTargetListener> xDTL(mxDnDListener, uno::UNO_QUERY);
+        xDropTarget->addDropTargetListener(xDTL);
+        xDropTarget->setActive(true);
+        xDropTarget->setDefaultActions(datatransfer::dnd::DNDConstants::ACTION_COPY_OR_MOVE);
 
         bActiveDragAndDropListener = true;
     }
@@ -2279,12 +2295,26 @@ void ImpEditView::AddDragAndDropListeners()
 
 void ImpEditView::RemoveDragAndDropListeners()
 {
-    if ( bActiveDragAndDropListener && GetWindow() && GetWindow()->GetDragGestureRecognizer().is() )
+    if (!bActiveDragAndDropListener)
+        return;
+
+    css::uno::Reference<css::datatransfer::dnd::XDropTarget> xDropTarget;
+    if (getEditViewCallbacks())
+        xDropTarget = getEditViewCallbacks()->GetDropTarget();
+    else if (GetWindow())
+        xDropTarget = GetWindow()->GetDropTarget();
+
+    if (xDropTarget.is())
     {
-        uno::Reference< datatransfer::dnd::XDragGestureListener> xDGL( mxDnDListener, uno::UNO_QUERY );
-        GetWindow()->GetDragGestureRecognizer()->removeDragGestureListener( xDGL );
-        uno::Reference< datatransfer::dnd::XDropTargetListener> xDTL( xDGL, uno::UNO_QUERY );
-        GetWindow()->GetDropTarget()->removeDropTargetListener( xDTL );
+        css::uno::Reference<css::datatransfer::dnd::XDragGestureRecognizer> xDragGestureRecognizer(xDropTarget, uno::UNO_QUERY);
+        if (xDragGestureRecognizer.is())
+        {
+            uno::Reference<datatransfer::dnd::XDragGestureListener> xDGL(mxDnDListener, uno::UNO_QUERY);
+            xDragGestureRecognizer->removeDragGestureListener(xDGL);
+        }
+
+        uno::Reference<datatransfer::dnd::XDropTargetListener> xDTL(mxDnDListener, uno::UNO_QUERY);
+        xDropTarget->removeDropTargetListener(xDTL);
 
         if ( mxDnDListener.is() )
         {
