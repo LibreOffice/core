@@ -1,0 +1,129 @@
+From b0cb29c3144bff678a613259386de85e6ea93d85 Mon Sep 17 00:00:00 2001
+From: Jan-Marek Glogowski <glogow@fbihome.de>
+Date: Fri, 12 Jul 2019 02:18:40 +0200
+Subject: [PATCH 05/11] Don't delete directories
+
+If these files exist and aren't directories, there might be other
+problems. Trying to fix them just will break the build.
+---
+ nspr/config/Makefile.in         |  2 +-
+ nspr/config/config.mk           |  2 +-
+ nss/coreconf/UNIX.mk            |  2 +-
+ nss/coreconf/WIN32.mk           |  6 ++++--
+ nss/coreconf/mkdepend/Makefile  |  2 +-
+ nss/coreconf/nsinstall/Makefile |  2 +-
+ nss/coreconf/ruleset.mk         | 11 ++++-------
+ 7 files changed, 13 insertions(+), 14 deletions(-)
+
+diff --git a/nspr/config/Makefile.in b/nspr/config/Makefile.in
+index 7c6c815..eb969cb 100644
+--- a/nspr/config/Makefile.in
++++ b/nspr/config/Makefile.in
+@@ -82,7 +82,7 @@ endif
+ 
+ # Redefine MAKE_OBJDIR for just this directory
+ define MAKE_OBJDIR
+-if test ! -d $(@D); then rm -rf $(@D); mkdir $(@D); else true; fi
++if test ! -d $(@D); then mkdir $(@D); fi
+ endef
+ 
+ export:: $(TARGETS)
+diff --git a/nspr/config/config.mk b/nspr/config/config.mk
+index 05db076..5ae8c8c 100644
+--- a/nspr/config/config.mk
++++ b/nspr/config/config.mk
+@@ -64,7 +64,7 @@ endif # MOZ_PROFILE_USE
+ endif # NO_PROFILE_GUIDED_OPTIMIZE
+ 
+ define MAKE_OBJDIR
+-if test ! -d $(@D); then rm -rf $(@D); $(NSINSTALL) -D $(@D); fi
++if test ! -d $(@D); then $(NSINSTALL) -D $(@D); fi
+ endef
+ 
+ LINK_DLL	= $(LD) $(OS_DLLFLAGS) $(DLLFLAGS)
+diff --git a/nss/coreconf/UNIX.mk b/nss/coreconf/UNIX.mk
+index 8f6042e..986235f 100644
+--- a/nss/coreconf/UNIX.mk
++++ b/nss/coreconf/UNIX.mk
+@@ -58,7 +58,7 @@ else
+ endif
+ 
+ define MAKE_OBJDIR
+-if test ! -d $(@D); then rm -rf $(@D); $(NSINSTALL) -D $(@D); fi
++if test ! -d $(@D); then $(NSINSTALL) -D $(@D); fi
+ endef
+ 
+ include $(CORE_DEPTH)/coreconf/Werror.mk
+diff --git a/nss/coreconf/WIN32.mk b/nss/coreconf/WIN32.mk
+index eefb736..cecaba4 100644
+--- a/nss/coreconf/WIN32.mk
++++ b/nss/coreconf/WIN32.mk
+@@ -92,8 +92,6 @@ MKDEPEND        = $(MKDEPEND_DIR)/$(OBJDIR_NAME)/mkdepend.exe
+ MKDEPENDENCIES  = $(OBJDIR_NAME)/depend.mk
+ 
+ INSTALL      = $(NSINSTALL)
+-MAKE_OBJDIR  = mkdir
+-MAKE_OBJDIR += $(OBJDIR)
+ GARBAGE     += $(OBJDIR)/vc20.pdb $(OBJDIR)/vc40.pdb
+ XP_DEFINE   += -DXP_PC
+ ifdef NS_USE_GCC
+@@ -103,6 +101,10 @@ LIB_SUFFIX   = lib
+ endif
+ DLL_SUFFIX   = dll
+ 
++define MAKE_OBJDIR
++if test ! -d $(@D); then mkdir -p $(@D); fi
++endef
++
+ ifdef NS_USE_GCC
+     OS_CFLAGS += -mwindows
+     _GEN_IMPORT_LIB=-Wl,--out-implib,$(IMPORT_LIBRARY)
+diff --git a/nss/coreconf/mkdepend/Makefile b/nss/coreconf/mkdepend/Makefile
+index 4621f2a..2554e23 100644
+--- a/nss/coreconf/mkdepend/Makefile
++++ b/nss/coreconf/mkdepend/Makefile
+@@ -55,6 +55,6 @@ DEFINES += -DINCLUDEDIR=\"/usr/include\" -DOBJSUFFIX=\".$(OBJ_SUFFIX)\"
+ 
+ # Redefine MAKE_OBJDIR for just this directory
+ define MAKE_OBJDIR
+-if test ! -d $(@D); then rm -rf $(@D); mkdir $(@D); fi
++if test ! -d $(@D); then mkdir -p $(@D); fi
+ endef
+ 
+diff --git a/nss/coreconf/nsinstall/Makefile b/nss/coreconf/nsinstall/Makefile
+index 1850bcb..50128ed 100644
+--- a/nss/coreconf/nsinstall/Makefile
++++ b/nss/coreconf/nsinstall/Makefile
+@@ -37,6 +37,6 @@ include $(DEPTH)/coreconf/rules.mk
+ 
+ # Redefine MAKE_OBJDIR for just this directory
+ define MAKE_OBJDIR
+-if test ! -d $(@D); then rm -rf $(@D); mkdir $(@D); fi
++if test ! -d $(@D); then mkdir -p $(@D); fi
+ endef
+ 
+diff --git a/nss/coreconf/ruleset.mk b/nss/coreconf/ruleset.mk
+index 4612fca..34ef360 100644
+--- a/nss/coreconf/ruleset.mk
++++ b/nss/coreconf/ruleset.mk
+@@ -149,13 +149,10 @@ ifndef BUILT_SRCS
+ 		 $(BUILT_CSRCS) $(BUILT_CPPSRCS) $(BUILT_ASFILES))
+ endif
+ 
+-
+-ifeq (,$(filter-out WIN%,$(OS_TARGET)))
+-    MAKE_OBJDIR = $(INSTALL) -D $(OBJDIR)
+-else
+-    define MAKE_OBJDIR
+-	if test ! -d $(@D); then rm -rf $(@D); $(NSINSTALL) -D $(@D); fi
+-    endef
++ifndef MAKE_OBJDIR
++define MAKE_OBJDIR
++if test ! -d $(@D); then $(NSINSTALL) -D $(@D); fi
++endef
+ endif
+ 
+ ifndef PACKAGE
+-- 
+2.20.1
+

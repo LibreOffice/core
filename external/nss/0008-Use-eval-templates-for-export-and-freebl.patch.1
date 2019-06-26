@@ -1,0 +1,247 @@
+From 5188a2356f5d387edf6a057a280c56ccb58d9248 Mon Sep 17 00:00:00 2001
+From: Jan-Marek Glogowski <glogow@fbihome.de>
+Date: Tue, 2 Jul 2019 16:48:20 +0200
+Subject: [PATCH 08/11] Use eval templates for export and freebl
+
+Gets rid of a lot of duplicate Makefile code.
+---
+ nss/coreconf/rules.mk   |  72 +++++++++-----------------
+ nss/lib/freebl/Makefile | 110 ++++++++--------------------------------
+ 2 files changed, 45 insertions(+), 137 deletions(-)
+
+diff --git a/nss/coreconf/rules.mk b/nss/coreconf/rules.mk
+index 05625b8..ec59593 100644
+--- a/nss/coreconf/rules.mk
++++ b/nss/coreconf/rules.mk
+@@ -778,37 +778,29 @@ export:: $(JMC_HEADERS) $(JMC_STUBS)
+ endif
+ endif
+ 
+-#
+-# Copy each element of EXPORTS to $(SOURCE_XP_DIR)/public/$(MODULE)/
+-#
+-PUBLIC_EXPORT_DIR = $(SOURCE_XP_DIR)/public/$(MODULE)
+-
+-ifneq ($(EXPORTS),)
+-$(PUBLIC_EXPORT_DIR)/d:
+-	@$(MAKE_OBJDIR)
++define copy_varlist_into_dir_RULE
++ifdef $(2)
++ifneq (,$$(strip $$($(2))))
++$(3)/d:
++	@$$(MAKE_OBJDIR)
+ 
+-$(PUBLIC_EXPORT_DIR)/%: %
+-	$(INSTALL) -m 444 $^ $(PUBLIC_EXPORT_DIR)
++$(3)/%: %
++	$$(INSTALL) -m 444 $$^ $(3)
+ 
+-export:: $(addprefix $(PUBLIC_EXPORT_DIR)/,$(EXPORTS)) | $(PUBLIC_EXPORT_DIR)/d
++$(1):: $$(addprefix $(3)/,$$($(2))) | $(3)/d
++endif
++else
++$(1)::
+ endif
++endef
+ 
+-# Duplicate export rule for private exports, with different directories
++# export rule
++PUBLIC_EXPORT_DIR = $(SOURCE_XP_DIR)/public/$(MODULE)
++$(eval $(call copy_varlist_into_dir_RULE,export,EXPORTS,$(PUBLIC_EXPORT_DIR)))
+ 
++# private_export rule
+ PRIVATE_EXPORT_DIR = $(SOURCE_XP_DIR)/private/$(MODULE)
+-
+-ifneq ($(PRIVATE_EXPORTS),)
+-$(PRIVATE_EXPORT_DIR)/d:
+-	@$(MAKE_OBJDIR)
+-
+-$(PRIVATE_EXPORT_DIR)/%: %
+-	$(INSTALL) -m 444 $^ $(PRIVATE_EXPORT_DIR)
+-
+-private_export:: $(addprefix $(PRIVATE_EXPORT_DIR)/,$(PRIVATE_EXPORTS)) | $(PRIVATE_EXPORT_DIR)/d
+-else
+-private_export:: 
+-	@echo "There are no private exports."
+-endif
++$(eval $(call copy_varlist_into_dir_RULE,private_export,PRIVATE_EXPORTS,$(PRIVATE_EXPORT_DIR)))
+ 
+ ##########################################################################
+ ###   RULES FOR RUNNING REGRESSION SUITE TESTS
+@@ -824,13 +816,12 @@ ifneq ($(BUILD_OPT),)
+ REGDATE = $(subst \ ,, $(shell $(PERL)  $(CORE_DEPTH)/$(MODULE)/scripts/now))
+ endif
+ 
+-check:: $(REGRESSION_SPEC)
++$(TESTS_DIR)/d:
++	@$(MAKE_OBJDIR)
++
++check:: $(REGRESSION_SPEC) | $(TESTS_DIR)/d
+ 	cd $(PLATFORM); \
+-	../$(SOURCE_MD_DIR)/bin/regress$(PROG_SUFFIX) specfile=../$(REGRESSION_SPEC) progress $(EXTRA_REGRESS_OPTIONS); \
+-	if test ! -d $(TESTS_DIR); then \
+-		echo Creating $(TESTS_DIR);   \
+-		$(NSINSTALL) -D $(TESTS_DIR); \
+-	fi
++	../$(SOURCE_MD_DIR)/bin/regress$(PROG_SUFFIX) specfile=../$(REGRESSION_SPEC) progress $(EXTRA_REGRESS_OPTIONS)
+ ifneq ($(BUILD_OPT),)
+ 	$(NSINSTALL) -m 664 $(PLATFORM)/$(REGDATE).sum $(TESTS_DIR); \
+ 	$(NSINSTALL) -m 664 $(PLATFORM)/$(REGDATE).htm $(TESTS_DIR); \
+@@ -842,23 +833,8 @@ check::
+ 	@echo "Error: you didn't specify REGRESSION_SPEC in your manifest.mn file!"
+ endif
+ 
+-
+-# Duplicate export rule for releases, with different directories
+-
+-ifneq ($(EXPORTS),)
+-$(SOURCE_RELEASE_XP_DIR)/include::
+-	@if test ! -d $@; then	    \
+-		echo Creating $@;   \
+-		$(NSINSTALL) -D $@; \
+-	fi
+-
+-release_export:: $(SOURCE_RELEASE_XP_DIR)/include
+-
+-release_export:: $(EXPORTS)
+-	$(INSTALL) -m 444 $^ $(SOURCE_RELEASE_XP_DIR)/include
+-endif
+-
+-
++# release_export rule
++$(eval $(call copy_varlist_into_dir_RULE,release_export,EXPORTS,$(SOURCE_RELEASE_XP_DIR)/include))
+ 
+ 
+ ################################################################################
+diff --git a/nss/lib/freebl/Makefile b/nss/lib/freebl/Makefile
+index ca37c5d..76e974e 100644
+--- a/nss/lib/freebl/Makefile
++++ b/nss/lib/freebl/Makefile
+@@ -639,103 +639,35 @@ ifndef FREEBL_CHILD_BUILD
+ 
+ # Parent build. This is where we decide which shared libraries to build
+ 
+-ifdef FREEBL_BUILD_SINGLE_SHLIB
++# too suppress the SINGLE_SHLIB override warning
++FREEBL_OBJDIRS :=
+ 
+-################### Single shared lib stuff #########################
+-SINGLE_SHLIB_DIR = $(OBJDIR)/$(OS_TARGET)_SINGLE_SHLIB
+-ALL_TRASH += $(SINGLE_SHLIB_DIR) 
++define target_freebl_SHLIB
++ifdef $(2)
++$(1)_DIR = $$(OBJDIR)/$$(OS_TARGET)_$(1)
++ALL_TRASH += $$($(1)_DIR)
+ 
+-$(SINGLE_SHLIB_DIR):
+-	-mkdir -p $(SINGLE_SHLIB_DIR)
+-
+-release_md libs:: $(SINGLE_SHLIB_DIR)
+-	$(MAKE) FREEBL_CHILD_BUILD=1 \
+- OBJDIR=$(SINGLE_SHLIB_DIR) $@
+-######################## common stuff #########################
+-
+-endif
+-
+-ifdef NEED_STUB_BUILD
+-SINGLE_SHLIB_DIR = $(OBJDIR)/$(OS_TARGET)_SINGLE_SHLIB
+-ALL_TRASH += $(SINGLE_SHLIB_DIR) 
+-$(SINGLE_SHLIB_DIR):
+-	-mkdir $(SINGLE_SHLIB_DIR)
+-
+-release_md libs:: $(SINGLE_SHLIB_DIR)
+-	$(MAKE) FREEBL_CHILD_BUILD=1 USE_STUB_BUILD=1 \
+- OBJDIR=$(SINGLE_SHLIB_DIR) $@
+-endif
+-
+-# multiple shared libraries
+-
+-######################## ABI32_FPU stuff #########################
+-ifdef HAVE_ABI32_FPU
+-ABI32_FPU_DIR = $(OBJDIR)/$(OS_TARGET)_ABI32_FPU
+-ALL_TRASH += $(ABI32_FPU_DIR) 
+-
+-$(ABI32_FPU_DIR):
+-	-mkdir $(ABI32_FPU_DIR)
+-
+-release_md libs:: $(ABI32_FPU_DIR)
+-	$(MAKE) FREEBL_CHILD_BUILD=1 USE_ABI32_FPU=1 \
+- OBJDIR=$(ABI32_FPU_DIR) $@
+-endif
+-
+-######################## ABI32_INT32 stuff #########################
+-ifdef HAVE_ABI32_INT32
+-ABI32_INT32_DIR = $(OBJDIR)/$(OS_TARGET)_ABI32_INT32
+-ALL_TRASH += $(ABI32_INT32_DIR) 
+-
+-$(ABI32_INT32_DIR):
+-	-mkdir $(ABI32_INT32_DIR)
+-
+-release_md libs:: $(ABI32_INT32_DIR)
+-	$(MAKE) FREEBL_CHILD_BUILD=1 USE_ABI32_INT32=1 \
+- OBJDIR=$(ABI32_INT32_DIR) $@
+-endif
+-
+-######################## ABI32_INT64 stuff #########################
+-ifdef HAVE_ABI32_INT64
+-ABI32_INT64_DIR = $(OBJDIR)/$(OS_TARGET)_ABI32_INT64
+-ALL_TRASH += $(ABI32_INT64_DIR) 
+-
+-$(ABI32_INT64_DIR):
+-	-mkdir $(ABI32_INT64_DIR)
+-
+-release_md libs:: $(ABI32_INT64_DIR)
+-	$(MAKE) FREEBL_CHILD_BUILD=1 USE_ABI32_INT64=1\
+- OBJDIR=$(ABI32_INT64_DIR) $@
++ifeq (,$$(filter $$($(1)_DIR)/d,$$(FREEBL_OBJDIRS)))
++FREEBL_OBJDIRS += $$($(1)_DIR)/d
++$$($(1)_DIR)/d:
++	@$(MAKE_OBJDIR)
+ endif
+ 
+-######################## END of 32-bit stuff #########################
+-
+-# above is 32-bit builds, below is 64-bit builds
+-
+-######################## ABI64_FPU stuff #########################
+-ifdef HAVE_ABI64_FPU
+-ABI64_FPU_DIR = $(OBJDIR)/$(OS_TARGET)_ABI64_FPU
+-ALL_TRASH += $(ABI64_FPU_DIR) 
+-
+-$(ABI64_FPU_DIR):
+-	-mkdir $(ABI64_FPU_DIR)
+-
+-release_md libs:: $(ABI64_FPU_DIR)
+-	$(MAKE) FREEBL_CHILD_BUILD=1 USE_ABI64_FPU=1 \
+- OBJDIR=$(ABI64_FPU_DIR) $@
++release_md libs:: | $$($(1)_DIR)/d
++	$$(MAKE) FREEBL_CHILD_BUILD=1 $(3)=1 OBJDIR=$$($(1)_DIR) $$@
+ endif
++endef
+ 
+-######################## ABI64_INT stuff #########################
+-ifdef HAVE_ABI64_INT
+-ABI64_INT_DIR = $(OBJDIR)/$(OS_TARGET)_ABI64_INT
+-ALL_TRASH += $(ABI64_INT_DIR) 
++target_freebl_ABI = $(call target_freebl_SHLIB,$(1),HAVE_$(1),USE_$(1))
+ 
+-$(ABI64_INT_DIR):
+-	-mkdir $(ABI64_INT_DIR)
++$(eval $(call target_freebl_SHLIB,SINGLE_SHLIB,FREEBL_BUILD_SINGLE_SHLIB,NEEDED_DUMMY))
++$(eval $(call target_freebl_SHLIB,SINGLE_SHLIB,NEED_STUB_BUILD,USE_STUB_BUILD))
+ 
+-release_md libs:: $(ABI64_INT_DIR)
+-	$(MAKE) FREEBL_CHILD_BUILD=1 USE_ABI64_INT=1 \
+- OBJDIR=$(ABI64_INT_DIR) $@
+-endif
++$(eval $(call target_freebl_ABI,ABI32_FPU))
++$(eval $(call target_freebl_ABI,ABI32_INT32))
++$(eval $(call target_freebl_ABI,ABI32_INT64))
++$(eval $(call target_freebl_ABI,ABI64_FPU))
++$(eval $(call target_freebl_ABI,ABI64_INT))
+ 
+ endif  # FREEBL_CHILD_BUILD
+ 
+-- 
+2.20.1
+

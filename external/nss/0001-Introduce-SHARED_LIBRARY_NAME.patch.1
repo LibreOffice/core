@@ -1,0 +1,552 @@
+From d2165894fa2bb35ffeb83005de2379ad7fca1378 Mon Sep 17 00:00:00 2001
+From: Jan-Marek Glogowski <glogow@fbihome.de>
+Date: Sun, 30 Jun 2019 16:01:24 +0000
+Subject: [PATCH 01/11] Introduce SHARED_LIBRARY_NAME
+
+This way it's easier to separate shared and static library builds.
+And IMPORT_LIB_SUFFIX if now really a WIN32 platform specific.
+---
+ nss/cmd/libpkix/testutil/Makefile         |  1 +
+ nss/cmd/libpkix/testutil/config.mk        |  4 ++--
+ nss/cmd/libpkix/testutil/manifest.mn      |  2 +-
+ nss/coreconf/WIN32.mk                     |  6 +++---
+ nss/coreconf/ruleset.mk                   | 24 +++++++++++++++++++----
+ nss/lib/ckfw/builtins/config.mk           |  6 +++---
+ nss/lib/ckfw/builtins/manifest.mn         |  2 +-
+ nss/lib/ckfw/builtins/testlib/config.mk   |  6 +++---
+ nss/lib/ckfw/builtins/testlib/manifest.mn |  2 +-
+ nss/lib/ckfw/capi/config.mk               |  6 +++---
+ nss/lib/ckfw/capi/manifest.mn             |  2 +-
+ nss/lib/freebl/config.mk                  |  5 +----
+ nss/lib/freebl/manifest.mn                | 20 ++++++++++---------
+ nss/lib/nss/config.mk                     |  8 ++++----
+ nss/lib/nss/manifest.mn                   |  2 +-
+ nss/lib/smime/config.mk                   |  4 ++--
+ nss/lib/smime/manifest.mn                 |  2 +-
+ nss/lib/softoken/config.mk                |  8 ++++----
+ nss/lib/softoken/legacydb/config.mk       |  8 ++++----
+ nss/lib/softoken/legacydb/manifest.mn     |  2 +-
+ nss/lib/softoken/manifest.mn              |  2 +-
+ nss/lib/sqlite/config.mk                  |  6 ++----
+ nss/lib/sqlite/manifest.mn                |  2 +-
+ nss/lib/ssl/config.mk                     |  4 ++--
+ nss/lib/ssl/manifest.mn                   |  2 +-
+ nss/lib/sysinit/config.mk                 |  8 ++++----
+ nss/lib/sysinit/manifest.mn               |  2 +-
+ nss/lib/util/config.mk                    |  8 ++++----
+ nss/lib/util/manifest.mn                  |  2 +-
+ 29 files changed, 85 insertions(+), 71 deletions(-)
+
+diff --git a/nss/cmd/libpkix/testutil/Makefile b/nss/cmd/libpkix/testutil/Makefile
+index 859aedd..ab98f86 100755
+--- a/nss/cmd/libpkix/testutil/Makefile
++++ b/nss/cmd/libpkix/testutil/Makefile
+@@ -21,6 +21,7 @@ include $(CORE_DEPTH)/coreconf/config.mk
+ #######################################################################
+ 
+ include $(PKIX_DEPTH)/config.mk
++include config.mk
+ 
+ #######################################################################
+ # (4) Include "local" platform-dependent assignments (OPTIONAL).      #
+diff --git a/nss/cmd/libpkix/testutil/config.mk b/nss/cmd/libpkix/testutil/config.mk
+index 820dbb2..42cf28c 100644
+--- a/nss/cmd/libpkix/testutil/config.mk
++++ b/nss/cmd/libpkix/testutil/config.mk
+@@ -9,7 +9,7 @@ LIBRARY =
+ ifeq (,$(filter-out WIN%,$(OS_TARGET)))
+ 
+ # don't want the 32 in the shared library name
+-SHARED_LIBRARY = $(OBJDIR)/$(DLL_PREFIX)$(LIBRARY_NAME)$(LIBRARY_VERSION).$(DLL_SUFFIX)
+-IMPORT_LIBRARY = $(OBJDIR)/$(IMPORT_LIB_PREFIX)$(LIBRARY_NAME)$(LIBRARY_VERSION)$(IMPORT_LIB_SUFFIX)
++SHARED_LIBRARY = $(OBJDIR)/$(DLL_PREFIX)$(SHARED_LIBRARY_NAME)$(LIBRARY_VERSION).$(DLL_SUFFIX)
++IMPORT_LIBRARY = $(OBJDIR)/$(IMPORT_LIB_PREFIX)$(SHARED_LIBRARY_NAME)$(LIBRARY_VERSION)$(IMPORT_LIB_SUFFIX)
+ 
+ endif
+diff --git a/nss/cmd/libpkix/testutil/manifest.mn b/nss/cmd/libpkix/testutil/manifest.mn
+index 2f831fc..7d1ccbf 100755
+--- a/nss/cmd/libpkix/testutil/manifest.mn
++++ b/nss/cmd/libpkix/testutil/manifest.mn
+@@ -19,7 +19,7 @@ CSRCS = \
+ 	testutil.c \
+ 	$(NULL)
+ 
+-LIBRARY_NAME = pkixtooltestutil
++SHARED_LIBRARY_NAME = pkixtooltestutil
+ 
+ SOURCE_LIB_DIR = $(PKIX_DEPTH)/$(OBJDIR)
+ 
+diff --git a/nss/coreconf/WIN32.mk b/nss/coreconf/WIN32.mk
+index f5d07fc..681f416 100644
+--- a/nss/coreconf/WIN32.mk
++++ b/nss/coreconf/WIN32.mk
+@@ -358,9 +358,9 @@ endif
+ # override ruleset.mk, removing the "lib" prefix for library names, and
+ # adding the "32" after the LIBRARY_VERSION.
+ #
+-ifdef LIBRARY_NAME
+-    SHARED_LIBRARY = $(OBJDIR)/$(LIBRARY_NAME)$(LIBRARY_VERSION)32$(JDK_DEBUG_SUFFIX).dll
+-    IMPORT_LIBRARY = $(OBJDIR)/$(LIBRARY_NAME)$(LIBRARY_VERSION)32$(JDK_DEBUG_SUFFIX).lib
++ifdef SHARED_LIBRARY_NAME
++    SHARED_LIBRARY = $(OBJDIR)/$(SHARED_LIBRARY_NAME)$(LIBRARY_VERSION)32$(JDK_DEBUG_SUFFIX).dll
++    IMPORT_LIBRARY = $(OBJDIR)/$(SHARED_LIBRARY_NAME)$(LIBRARY_VERSION)32$(JDK_DEBUG_SUFFIX).lib
+ endif
+ 
+ #
+diff --git a/nss/coreconf/ruleset.mk b/nss/coreconf/ruleset.mk
+index 74d64e1..4612fca 100644
+--- a/nss/coreconf/ruleset.mk
++++ b/nss/coreconf/ruleset.mk
+@@ -84,15 +84,31 @@ endif
+ # LIBRARY and SHARED_LIBRARY may be defined differently in $(OS_TARGET).mk
+ #
+ 
+-ifdef LIBRARY_NAME
++ifdef SHARED_LIBRARY_NAME
+     ifndef LIBRARY
+-	LIBRARY        = $(OBJDIR)/$(LIB_PREFIX)$(LIBRARY_NAME).$(LIB_SUFFIX)
++    ifndef LIBRARY_NAME
++	# produce static library if not explicitly disabled.
++	# programs in NSS are all linked statically!
++	LIBRARY_NAME = $(SHARED_LIBRARY_NAME)
++    endif
+     endif
++
+     ifndef SHARED_LIBRARY
+-	SHARED_LIBRARY = $(OBJDIR)/$(DLL_PREFIX)$(LIBRARY_NAME)$(LIBRARY_VERSION)$(JDK_DEBUG_SUFFIX).$(DLL_SUFFIX)
++	SHARED_LIBRARY := $(OBJDIR)/$(DLL_PREFIX)$(SHARED_LIBRARY_NAME)$(LIBRARY_VERSION)$(JDK_DEBUG_SUFFIX).$(DLL_SUFFIX)
++    endif
++    ifdef IMPORT_LIB_SUFFIX
++    ifndef IMPORT_LIBRARY
++	IMPORT_LIBRARY := $(OBJDIR)/$(IMPORT_LIB_PREFIX)$(SHARED_LIBRARY_NAME)$(LIBRARY_VERSION)$(JDK_DEBUG_SUFFIX)$(IMPORT_LIB_SUFFIX)
++    endif
+     endif
+     ifndef MAPFILE_SOURCE
+-	MAPFILE_SOURCE = $(LIBRARY_NAME).def
++	MAPFILE_SOURCE := $(SHARED_LIBRARY_NAME).def
++    endif
++endif
++
++ifdef LIBRARY_NAME
++    ifndef LIBRARY
++	LIBRARY = $(OBJDIR)/$(LIB_PREFIX)$(LIBRARY_NAME).$(LIB_SUFFIX)
+     endif
+ endif
+ 
+diff --git a/nss/lib/ckfw/builtins/config.mk b/nss/lib/ckfw/builtins/config.mk
+index 6bd62f1..e1a27d9 100644
+--- a/nss/lib/ckfw/builtins/config.mk
++++ b/nss/lib/ckfw/builtins/config.mk
+@@ -14,9 +14,9 @@ IMPORT_LIBRARY =
+ PROGRAM        =
+ 
+ ifeq (,$(filter-out WIN%,$(OS_TARGET)))
+-    SHARED_LIBRARY = $(OBJDIR)/$(DLL_PREFIX)$(LIBRARY_NAME)$(LIBRARY_VERSION).$(DLL_SUFFIX)
+-    RES = $(OBJDIR)/$(LIBRARY_NAME).res
+-    RESNAME = $(LIBRARY_NAME).rc
++    SHARED_LIBRARY = $(OBJDIR)/$(DLL_PREFIX)$(SHARED_LIBRARY_NAME)$(LIBRARY_VERSION).$(DLL_SUFFIX)
++    RES = $(OBJDIR)/$(SHARED_LIBRARY_NAME).res
++    RESNAME = $(SHARED_LIBRARY_NAME).rc
+ endif
+ 
+ ifdef BUILD_IDG
+diff --git a/nss/lib/ckfw/builtins/manifest.mn b/nss/lib/ckfw/builtins/manifest.mn
+index 5e6740f..f991817 100644
+--- a/nss/lib/ckfw/builtins/manifest.mn
++++ b/nss/lib/ckfw/builtins/manifest.mn
+@@ -29,4 +29,4 @@ CSRCS =			\
+ 
+ REQUIRES = nspr
+ 
+-LIBRARY_NAME = nssckbi
++SHARED_LIBRARY_NAME = nssckbi
+diff --git a/nss/lib/ckfw/builtins/testlib/config.mk b/nss/lib/ckfw/builtins/testlib/config.mk
+index 39a39da..0a048dc 100644
+--- a/nss/lib/ckfw/builtins/testlib/config.mk
++++ b/nss/lib/ckfw/builtins/testlib/config.mk
+@@ -14,9 +14,9 @@ IMPORT_LIBRARY =
+ PROGRAM        =
+ 
+ ifeq (,$(filter-out WIN%,$(OS_TARGET)))
+-	SHARED_LIBRARY = $(OBJDIR)/$(DLL_PREFIX)$(LIBRARY_NAME)$(LIBRARY_VERSION).$(DLL_SUFFIX)
+-	RES = $(OBJDIR)/$(LIBRARY_NAME).res
+-	RESNAME = $(LIBRARY_NAME).rc
++	SHARED_LIBRARY = $(OBJDIR)/$(DLL_PREFIX)$(SHARED_LIBRARY_NAME)$(LIBRARY_VERSION).$(DLL_SUFFIX)
++	RES = $(OBJDIR)/$(SHARED_LIBRARY_NAME).res
++	RESNAME = $(SHARED_LIBRARY_NAME).rc
+ endif
+ 
+ ifdef BUILD_IDG
+diff --git a/nss/lib/ckfw/builtins/testlib/manifest.mn b/nss/lib/ckfw/builtins/testlib/manifest.mn
+index 4500a90..91c7fcd 100644
+--- a/nss/lib/ckfw/builtins/testlib/manifest.mn
++++ b/nss/lib/ckfw/builtins/testlib/manifest.mn
+@@ -22,4 +22,4 @@ CSRCS =			\
+ 
+ REQUIRES = nspr
+ 
+-LIBRARY_NAME = nssckbi-testlib
++SHARED_LIBRARY_NAME = nssckbi-testlib
+diff --git a/nss/lib/ckfw/capi/config.mk b/nss/lib/ckfw/capi/config.mk
+index ec0a862..0f68bb6 100644
+--- a/nss/lib/ckfw/capi/config.mk
++++ b/nss/lib/ckfw/capi/config.mk
+@@ -14,9 +14,9 @@ IMPORT_LIBRARY =
+ PROGRAM        =
+ 
+ ifeq (,$(filter-out WIN%,$(OS_TARGET)))
+-    SHARED_LIBRARY = $(OBJDIR)/$(DLL_PREFIX)$(LIBRARY_NAME)$(LIBRARY_VERSION).$(DLL_SUFFIX)
+-    RES = $(OBJDIR)/$(LIBRARY_NAME).res
+-    RESNAME = $(LIBRARY_NAME).rc
++    SHARED_LIBRARY = $(OBJDIR)/$(DLL_PREFIX)$(SHARED_LIBRARY_NAME)$(LIBRARY_VERSION).$(DLL_SUFFIX)
++    RES = $(OBJDIR)/$(SHARED_LIBRARY_NAME).res
++    RESNAME = $(SHARED_LIBRARY_NAME).rc
+ endif
+ 
+ ifdef BUILD_IDG
+diff --git a/nss/lib/ckfw/capi/manifest.mn b/nss/lib/ckfw/capi/manifest.mn
+index 38effd7..972d1c3 100644
+--- a/nss/lib/ckfw/capi/manifest.mn
++++ b/nss/lib/ckfw/capi/manifest.mn
+@@ -28,6 +28,6 @@ CSRCS =			\
+ 
+ REQUIRES = nspr
+ 
+-LIBRARY_NAME = nsscapi
++SHARED_LIBRARY_NAME = nsscapi
+ 
+ #EXTRA_SHARED_LIBS = -L$(DIST)/lib -lnssckfw -lnssb -lplc4 -lplds4
+diff --git a/nss/lib/freebl/config.mk b/nss/lib/freebl/config.mk
+index 7ac50db..654f738 100644
+--- a/nss/lib/freebl/config.mk
++++ b/nss/lib/freebl/config.mk
+@@ -28,8 +28,6 @@ ALL_TRASH :=    $(TARGETS) $(OBJS) $(OBJDIR) LOGS TAGS $(GARBAGE) \
+ #
+ # override these variables to prevent building a DSO/DLL.
+   TARGETS        = $(LIBRARY)
+-  SHARED_LIBRARY =
+-  IMPORT_LIBRARY =
+   PROGRAM        =
+ 
+ else
+@@ -38,7 +36,6 @@ else
+ 
+ TARGETS      = $(SHARED_LIBRARY)
+ LIBRARY      =
+-IMPORT_LIBRARY =
+ PROGRAM      =
+ 
+ ifeq ($(OS_TARGET), SunOS)
+@@ -48,7 +45,7 @@ endif
+ ifeq (,$(filter-out WIN%,$(OS_TARGET)))
+ 
+ # don't want the 32 in the shared library name
+-SHARED_LIBRARY = $(OBJDIR)/$(DLL_PREFIX)$(LIBRARY_NAME)$(LIBRARY_VERSION).$(DLL_SUFFIX)
++SHARED_LIBRARY = $(OBJDIR)/$(DLL_PREFIX)$(SHARED_LIBRARY_NAME)$(LIBRARY_VERSION).$(DLL_SUFFIX)
+ 
+ RES     = $(OBJDIR)/$(LIBRARY_NAME).res
+ RESNAME = freebl.rc
+diff --git a/nss/lib/freebl/manifest.mn b/nss/lib/freebl/manifest.mn
+index 8915ac4..fbf1c97 100644
+--- a/nss/lib/freebl/manifest.mn
++++ b/nss/lib/freebl/manifest.mn
+@@ -33,33 +33,35 @@ endif
+ endif
+ endif
+ 
+-
+-LIBRARY_NAME = freebl
+ LIBRARY_VERSION = 3
+ 
+ ifdef FREEBL_CHILD_BUILD
++  SHARED_LIBRARY_NAME = freebl
++
+   ifdef USE_ABI32_INT32
+-    LIBRARY_NAME = freebl_32int
++    SHARED_LIBRARY_NAME = freebl_32int
+   endif
+   ifdef USE_ABI32_INT64
+-    LIBRARY_NAME = freebl_32int64
++    SHARED_LIBRARY_NAME = freebl_32int64
+   endif
+   ifdef USE_ABI32_FPU
+-    LIBRARY_NAME = freebl_32fpu
++    SHARED_LIBRARY_NAME = freebl_32fpu
+   endif
+   ifdef USE_ABI64_INT
+-    LIBRARY_NAME = freebl_64int
++    SHARED_LIBRARY_NAME = freebl_64int
+   endif
+   ifdef USE_ABI64_FPU
+-    LIBRARY_NAME = freebl_64fpu
++    SHARED_LIBRARY_NAME = freebl_64fpu
+   endif
+   ifdef FREEBL_LOWHASH
+-    LIBRARY_NAME = freeblpriv
++    SHARED_LIBRARY_NAME = freeblpriv
+   endif
+   ifdef USE_STUB_BUILD
+     # for the stub build, reset name to the default (from freeblpriv)
+-    LIBRARY_NAME = freebl
++    SHARED_LIBRARY_NAME = freebl
+   endif
++else
++  LIBRARY_NAME = freebl
+ endif
+ 
+ # if the library name contains _, we prefix the version with _
+diff --git a/nss/lib/nss/config.mk b/nss/lib/nss/config.mk
+index a17f3ef..e82447d 100644
+--- a/nss/lib/nss/config.mk
++++ b/nss/lib/nss/config.mk
+@@ -7,11 +7,11 @@
+ ifeq (,$(filter-out WIN%,$(OS_TARGET)))
+ 
+ # don't want the 32 in the shared library name
+-SHARED_LIBRARY = $(OBJDIR)/$(DLL_PREFIX)$(LIBRARY_NAME)$(LIBRARY_VERSION).$(DLL_SUFFIX)
+-IMPORT_LIBRARY = $(OBJDIR)/$(IMPORT_LIB_PREFIX)$(LIBRARY_NAME)$(LIBRARY_VERSION)$(IMPORT_LIB_SUFFIX)
++SHARED_LIBRARY = $(OBJDIR)/$(DLL_PREFIX)$(SHARED_LIBRARY_NAME)$(LIBRARY_VERSION).$(DLL_SUFFIX)
++IMPORT_LIBRARY = $(OBJDIR)/$(IMPORT_LIB_PREFIX)$(SHARED_LIBRARY_NAME)$(LIBRARY_VERSION)$(IMPORT_LIB_SUFFIX)
+ 
+-RES = $(OBJDIR)/$(LIBRARY_NAME).res
+-RESNAME = $(LIBRARY_NAME).rc
++RES = $(OBJDIR)/$(SHARED_LIBRARY_NAME).res
++RESNAME = $(SHARED_LIBRARY_NAME).rc
+ 
+ ifdef NS_USE_GCC
+ EXTRA_SHARED_LIBS += \
+diff --git a/nss/lib/nss/manifest.mn b/nss/lib/nss/manifest.mn
+index 54bed49..9463f85 100644
+--- a/nss/lib/nss/manifest.mn
++++ b/nss/lib/nss/manifest.mn
+@@ -24,7 +24,7 @@ CSRCS = \
+ 
+ MAPFILE = $(OBJDIR)/nss.def
+ 
+-LIBRARY_NAME = nss
++SHARED_LIBRARY_NAME = nss
+ LIBRARY_VERSION = 3
+ 
+ # This part of the code, including all sub-dirs, can be optimized for size
+diff --git a/nss/lib/smime/config.mk b/nss/lib/smime/config.mk
+index 85d39e8..ee037a4 100644
+--- a/nss/lib/smime/config.mk
++++ b/nss/lib/smime/config.mk
+@@ -8,8 +8,8 @@ RELEASE_LIBS = $(TARGETS)
+ ifeq (,$(filter-out WIN%,$(OS_TARGET)))
+ 
+ # don't want the 32 in the shared library name
+-SHARED_LIBRARY = $(OBJDIR)/$(DLL_PREFIX)$(LIBRARY_NAME)$(LIBRARY_VERSION).$(DLL_SUFFIX)
+-IMPORT_LIBRARY = $(OBJDIR)/$(IMPORT_LIB_PREFIX)$(LIBRARY_NAME)$(LIBRARY_VERSION)$(IMPORT_LIB_SUFFIX)
++SHARED_LIBRARY = $(OBJDIR)/$(DLL_PREFIX)$(SHARED_LIBRARY_NAME)$(LIBRARY_VERSION).$(DLL_SUFFIX)
++IMPORT_LIBRARY = $(OBJDIR)/$(IMPORT_LIB_PREFIX)$(SHARED_LIBRARY_NAME)$(LIBRARY_VERSION)$(IMPORT_LIB_SUFFIX)
+ 
+ RES = $(OBJDIR)/smime.res
+ RESNAME = smime.rc
+diff --git a/nss/lib/smime/manifest.mn b/nss/lib/smime/manifest.mn
+index e049d88..1d68d7d 100644
+--- a/nss/lib/smime/manifest.mn
++++ b/nss/lib/smime/manifest.mn
+@@ -44,7 +44,7 @@ CSRCS = \
+ 	smimever.c \
+ 	$(NULL)
+ 
+-LIBRARY_NAME = smime
++SHARED_LIBRARY_NAME = smime
+ LIBRARY_VERSION = 3
+ 
+ # This part of the code, including all sub-dirs, can be optimized for size
+diff --git a/nss/lib/softoken/config.mk b/nss/lib/softoken/config.mk
+index 2924b24..227b31d 100644
+--- a/nss/lib/softoken/config.mk
++++ b/nss/lib/softoken/config.mk
+@@ -14,11 +14,11 @@ EXTRA_LIBS += \
+ ifeq (,$(filter-out WIN%,$(OS_TARGET)))
+ 
+ # don't want the 32 in the shared library name
+-SHARED_LIBRARY = $(OBJDIR)/$(DLL_PREFIX)$(LIBRARY_NAME)$(LIBRARY_VERSION).$(DLL_SUFFIX)
+-IMPORT_LIBRARY = $(OBJDIR)/$(IMPORT_LIB_PREFIX)$(LIBRARY_NAME)$(LIBRARY_VERSION)$(IMPORT_LIB_SUFFIX)
++SHARED_LIBRARY = $(OBJDIR)/$(DLL_PREFIX)$(SHARED_LIBRARY_NAME)$(LIBRARY_VERSION).$(DLL_SUFFIX)
++IMPORT_LIBRARY = $(OBJDIR)/$(IMPORT_LIB_PREFIX)$(SHARED_LIBRARY_NAME)$(LIBRARY_VERSION)$(IMPORT_LIB_SUFFIX)
+ 
+-RES = $(OBJDIR)/$(LIBRARY_NAME).res
+-RESNAME = $(LIBRARY_NAME).rc
++RES = $(OBJDIR)/$(SHARED_LIBRARY_NAME).res
++RESNAME = $(SHARED_LIBRARY_NAME).rc
+ 
+ ifdef NS_USE_GCC
+ EXTRA_SHARED_LIBS += \
+diff --git a/nss/lib/softoken/legacydb/config.mk b/nss/lib/softoken/legacydb/config.mk
+index ac7240e..c84173e 100644
+--- a/nss/lib/softoken/legacydb/config.mk
++++ b/nss/lib/softoken/legacydb/config.mk
+@@ -15,11 +15,11 @@ EXTRA_LIBS += \
+ ifeq (,$(filter-out WIN%,$(OS_TARGET)))
+ 
+ # don't want the 32 in the shared library name
+-SHARED_LIBRARY = $(OBJDIR)/$(DLL_PREFIX)$(LIBRARY_NAME)$(LIBRARY_VERSION).$(DLL_SUFFIX)
+-IMPORT_LIBRARY = $(OBJDIR)/$(IMPORT_LIB_PREFIX)$(LIBRARY_NAME)$(LIBRARY_VERSION)$(IMPORT_LIB_SUFFIX)
++SHARED_LIBRARY = $(OBJDIR)/$(DLL_PREFIX)$(SHARED_LIBRARY_NAME)$(LIBRARY_VERSION).$(DLL_SUFFIX)
++IMPORT_LIBRARY = $(OBJDIR)/$(IMPORT_LIB_PREFIX)$(SHARED_LIBRARY_NAME)$(LIBRARY_VERSION)$(IMPORT_LIB_SUFFIX)
+ 
+-RES = $(OBJDIR)/$(LIBRARY_NAME).res
+-RESNAME = $(LIBRARY_NAME).rc
++RES = $(OBJDIR)/$(SHARED_LIBRARY_NAME).res
++RESNAME = $(SHARED_LIBRARY_NAME).rc
+ 
+ ifdef NS_USE_GCC
+ EXTRA_SHARED_LIBS += \
+diff --git a/nss/lib/softoken/legacydb/manifest.mn b/nss/lib/softoken/legacydb/manifest.mn
+index 9cce849..9a3799e 100644
+--- a/nss/lib/softoken/legacydb/manifest.mn
++++ b/nss/lib/softoken/legacydb/manifest.mn
+@@ -8,7 +8,7 @@ MODULE = nss
+ 
+ REQUIRES = dbm
+ 
+-LIBRARY_NAME = nssdbm
++SHARED_LIBRARY_NAME = nssdbm
+ LIBRARY_VERSION = 3
+ MAPFILE = $(OBJDIR)/nssdbm.def
+ 
+diff --git a/nss/lib/softoken/manifest.mn b/nss/lib/softoken/manifest.mn
+index f25b977..e76d14c 100644
+--- a/nss/lib/softoken/manifest.mn
++++ b/nss/lib/softoken/manifest.mn
+@@ -7,7 +7,7 @@ CORE_DEPTH = ../..
+ MODULE = nss
+ DIRS = legacydb
+ 
+-LIBRARY_NAME = softokn
++SHARED_LIBRARY_NAME = softokn
+ LIBRARY_VERSION = 3
+ MAPFILE = $(OBJDIR)/softokn.def
+ 
+diff --git a/nss/lib/sqlite/config.mk b/nss/lib/sqlite/config.mk
+index b0e9390..925420c 100644
+--- a/nss/lib/sqlite/config.mk
++++ b/nss/lib/sqlite/config.mk
+@@ -8,11 +8,9 @@
+ ifeq (,$(filter-out WIN%,$(OS_TARGET)))
+ 
+ # don't want the 32 in the shared library name
+-SHARED_LIBRARY = $(OBJDIR)/$(DLL_PREFIX)$(LIBRARY_NAME)$(LIBRARY_VERSION).$(DLL_SUFFIX)
+-IMPORT_LIBRARY = $(OBJDIR)/$(IMPORT_LIB_PREFIX)$(LIBRARY_NAME)$(LIBRARY_VERSION)$(IMPORT_LIB_SUFFIX)
++SHARED_LIBRARY = $(OBJDIR)/$(DLL_PREFIX)$(SHARED_LIBRARY_NAME)$(LIBRARY_VERSION).$(DLL_SUFFIX)
++IMPORT_LIBRARY = $(OBJDIR)/$(IMPORT_LIB_PREFIX)$(SHARED_LIBRARY_NAME)$(LIBRARY_VERSION)$(IMPORT_LIB_SUFFIX)
+ 
+-#RES = $(OBJDIR)/$(LIBRARY_NAME).res
+-#RESNAME = $(LIBRARY_NAME).rc
+ endif
+ 
+ ifeq ($(OS_TARGET),AIX)
+diff --git a/nss/lib/sqlite/manifest.mn b/nss/lib/sqlite/manifest.mn
+index 022749b..e128bc3 100644
+--- a/nss/lib/sqlite/manifest.mn
++++ b/nss/lib/sqlite/manifest.mn
+@@ -6,7 +6,7 @@ CORE_DEPTH = ../..
+ 
+ MODULE = nss
+ 
+-LIBRARY_NAME = sqlite
++SHARED_LIBRARY_NAME = sqlite
+ LIBRARY_VERSION = 3
+ MAPFILE = $(OBJDIR)/sqlite.def
+ DEFINES += -DSQLITE_THREADSAFE=1
+diff --git a/nss/lib/ssl/config.mk b/nss/lib/ssl/config.mk
+index b901a88..885da72 100644
+--- a/nss/lib/ssl/config.mk
++++ b/nss/lib/ssl/config.mk
+@@ -10,8 +10,8 @@ endif
+ ifeq (,$(filter-out WIN%,$(OS_TARGET)))
+ 
+ # don't want the 32 in the shared library name
+-SHARED_LIBRARY = $(OBJDIR)/$(DLL_PREFIX)$(LIBRARY_NAME)$(LIBRARY_VERSION).$(DLL_SUFFIX)
+-IMPORT_LIBRARY = $(OBJDIR)/$(IMPORT_LIB_PREFIX)$(LIBRARY_NAME)$(LIBRARY_VERSION)$(IMPORT_LIB_SUFFIX)
++SHARED_LIBRARY = $(OBJDIR)/$(DLL_PREFIX)$(SHARED_LIBRARY_NAME)$(LIBRARY_VERSION).$(DLL_SUFFIX)
++IMPORT_LIBRARY = $(OBJDIR)/$(IMPORT_LIB_PREFIX)$(SHARED_LIBRARY_NAME)$(LIBRARY_VERSION)$(IMPORT_LIB_SUFFIX)
+ 
+ RES = $(OBJDIR)/ssl.res
+ RESNAME = ssl.rc
+diff --git a/nss/lib/ssl/manifest.mn b/nss/lib/ssl/manifest.mn
+index 83df8c0..71a1e17 100644
+--- a/nss/lib/ssl/manifest.mn
++++ b/nss/lib/ssl/manifest.mn
+@@ -60,7 +60,7 @@ CSRCS = \
+         tls13subcerts.c \
+         $(NULL)
+ 
+-LIBRARY_NAME = ssl
++SHARED_LIBRARY_NAME = ssl
+ LIBRARY_VERSION = 3
+ 
+ # This part of the code, including all sub-dirs, can be optimized for size
+diff --git a/nss/lib/sysinit/config.mk b/nss/lib/sysinit/config.mk
+index 037641b..1914598 100644
+--- a/nss/lib/sysinit/config.mk
++++ b/nss/lib/sysinit/config.mk
+@@ -12,11 +12,11 @@
+ ifeq (,$(filter-out WIN%,$(OS_TARGET)))
+ 
+ # don't want the 32 in the shared library name
+-SHARED_LIBRARY = $(OBJDIR)/$(DLL_PREFIX)$(LIBRARY_NAME)$(LIBRARY_VERSION).$(DLL_SUFFIX)
+-IMPORT_LIBRARY = $(OBJDIR)/$(IMPORT_LIB_PREFIX)$(LIBRARY_NAME)$(LIBRARY_VERSION)$(IMPORT_LIB_SUFFIX)
++SHARED_LIBRARY = $(OBJDIR)/$(DLL_PREFIX)$(SHARED_LIBRARY_NAME)$(LIBRARY_VERSION).$(DLL_SUFFIX)
++IMPORT_LIBRARY = $(OBJDIR)/$(IMPORT_LIB_PREFIX)$(SHARED_LIBRARY_NAME)$(LIBRARY_VERSION)$(IMPORT_LIB_SUFFIX)
+ 
+-RES = $(OBJDIR)/$(LIBRARY_NAME).res
+-RESNAME = $(LIBRARY_NAME).rc
++RES = $(OBJDIR)/$(SHARED_LIBRARY_NAME).res
++RESNAME = $(SHARED_LIBRARY_NAME).rc
+ 
+ ifdef NS_USE_GCC
+ EXTRA_SHARED_LIBS += \
+diff --git a/nss/lib/sysinit/manifest.mn b/nss/lib/sysinit/manifest.mn
+index 40a119e..9d183f8 100644
+--- a/nss/lib/sysinit/manifest.mn
++++ b/nss/lib/sysinit/manifest.mn
+@@ -10,7 +10,7 @@ CSRCS = \
+       nsssysinit.c \
+       $(NULL)
+ 
+-LIBRARY_NAME = nsssysinit
++SHARED_LIBRARY_NAME = nsssysinit
+ MAPFILE = $(OBJDIR)/nsssysinit.def
+ 
+ # This part of the code, including all sub-dirs, can be optimized for size
+diff --git a/nss/lib/util/config.mk b/nss/lib/util/config.mk
+index a3e7202..2399adb 100644
+--- a/nss/lib/util/config.mk
++++ b/nss/lib/util/config.mk
+@@ -7,11 +7,11 @@
+ ifeq (,$(filter-out WIN%,$(OS_TARGET)))
+ 
+ # don't want the 32 in the shared library name
+-SHARED_LIBRARY = $(OBJDIR)/$(DLL_PREFIX)$(LIBRARY_NAME)$(LIBRARY_VERSION).$(DLL_SUFFIX)
+-IMPORT_LIBRARY = $(OBJDIR)/$(IMPORT_LIB_PREFIX)$(LIBRARY_NAME)$(LIBRARY_VERSION)$(IMPORT_LIB_SUFFIX)
++SHARED_LIBRARY = $(OBJDIR)/$(DLL_PREFIX)$(SHARED_LIBRARY_NAME)$(LIBRARY_VERSION).$(DLL_SUFFIX)
++IMPORT_LIBRARY = $(OBJDIR)/$(IMPORT_LIB_PREFIX)$(SHARED_LIBRARY_NAME)$(LIBRARY_VERSION)$(IMPORT_LIB_SUFFIX)
+ 
+-RES = $(OBJDIR)/$(LIBRARY_NAME).res
+-RESNAME = $(LIBRARY_NAME).rc
++RES = $(OBJDIR)/$(SHARED_LIBRARY_NAME).res
++RESNAME = $(SHARED_LIBRARY_NAME).rc
+ 
+ ifdef NS_USE_GCC
+ EXTRA_SHARED_LIBS += \
+diff --git a/nss/lib/util/manifest.mn b/nss/lib/util/manifest.mn
+index b33a204..cab6716 100644
+--- a/nss/lib/util/manifest.mn
++++ b/nss/lib/util/manifest.mn
+@@ -85,7 +85,7 @@ MODULE = nss
+ # don't duplicate module name in REQUIRES
+ MAPFILE = $(OBJDIR)/nssutil.def
+ 
+-LIBRARY_NAME = nssutil
++SHARED_LIBRARY_NAME = nssutil
+ LIBRARY_VERSION = 3
+ 
+ # This part of the code, including all sub-dirs, can be optimized for size
+-- 
+2.20.1
+

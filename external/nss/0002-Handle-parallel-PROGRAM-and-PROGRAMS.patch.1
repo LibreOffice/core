@@ -1,0 +1,100 @@
+From 90502e885d75ca0a2de90f2ad4be3cc022968910 Mon Sep 17 00:00:00 2001
+From: Jan-Marek Glogowski <glogow@fbihome.de>
+Date: Sun, 30 Jun 2019 16:10:28 +0000
+Subject: [PATCH 02/11] Handle parallel PROGRAM and PROGRAMS
+
+I have no real clue, why PROGRAMS is actually working in the
+sequence build. There is no special make code really handling it,
+except for the install target.
+
+This patches code is inspired by the $(eval ...) example in the
+GNU make documentation. It generates a program specific make
+target and maps the programs objects based on the defined
+variables.
+---
+ nss/coreconf/rules.mk | 58 ++++++++++++++++++++++++-------------------
+ 1 file changed, 33 insertions(+), 25 deletions(-)
+
+diff --git a/nss/coreconf/rules.mk b/nss/coreconf/rules.mk
+index af66963..b2500eb 100644
+--- a/nss/coreconf/rules.mk
++++ b/nss/coreconf/rules.mk
+@@ -238,18 +238,43 @@ alltags:
+ 	find . -name dist -prune -o \( -name '*.[hc]' -o -name '*.cp' -o -name '*.cpp' \) -print | xargs etags -a
+ 	find . -name dist -prune -o \( -name '*.[hc]' -o -name '*.cp' -o -name '*.cpp' \) -print | xargs ctags -a
+ 
+-$(PROGRAM): $(OBJS) $(EXTRA_LIBS)
+-	@$(MAKE_OBJDIR)
+-ifeq (,$(filter-out _WIN%,$(NS_USE_GCC)_$(OS_TARGET)))
+-	$(MKPROG) $(subst /,\\,$(OBJS)) -Fe$@ -link $(LDFLAGS) $(XLDFLAGS) $(subst /,\\,$(EXTRA_LIBS) $(EXTRA_SHARED_LIBS) $(OS_LIBS))
++define PROGRAM_template
++
++ifndef $(1)_OBJS
++ifdef LIBRARY_NAME
++	$(1)_OBJS := $$(patsubst $$(PROG_PREFIX)%,%,$$(patsubst %$$(PROG_SUFFIX),%,$(1)))$$(OBJ_SUFFIX)
++endif
++ifdef PROGRAMS
++	$(1)_OBJS := $$(patsubst $$(PROG_PREFIX)%,%,$$(patsubst %$$(PROG_SUFFIX),%,$(1)))$$(OBJ_SUFFIX)
++endif
++ifndef $(1)_OBJS
++	$(1)_OBJS := $$(OBJS)
++endif
++endif
++
++$(1): $$($(1)_OBJS) $$(EXTRA_LIBS)
++	@$$(MAKE_OBJDIR)
++	rm -f $$@
++ifeq (,$$(filter-out _WIN%,$$(NS_USE_GCC)_$$(OS_TARGET)))
++	$$(MKPROG) $$($(1)_OBJS) -Fe$$@ -link $$(LDFLAGS) $$(XLDFLAGS) $$(EXTRA_LIBS) $$(EXTRA_SHARED_LIBS) $$(OS_LIBS)
+ ifdef MT
+-	if test -f $@.manifest; then \
+-		$(MT) -NOLOGO -MANIFEST $@.manifest -OUTPUTRESOURCE:$@\;1; \
+-		rm -f $@.manifest; \
++	if test -f $$@.manifest; then \
++		$$(MT) -NOLOGO -MANIFEST $$@.manifest -OUTPUTRESOURCE:$$@\;1; \
++		rm -f $$@.manifest; \
+ 	fi
+ endif	# MSVC with manifest tool
+ else
+-	$(MKPROG) -o $@ $(CFLAGS) $(OBJS) $(LDFLAGS) $(EXTRA_LIBS) $(EXTRA_SHARED_LIBS) $(OS_LIBS)
++	$$(MKPROG) -o $$@ $$(CFLAGS) $$($(1)_OBJS) $$(LDFLAGS) $$(EXTRA_LIBS) $$(EXTRA_SHARED_LIBS) $$(OS_LIBS)
++endif
++
++endef
++
++ifdef PROGRAM
++$(eval $(call PROGRAM_template,$(PROGRAM)))
++else
++ifdef PROGRAMS
++$(foreach prog,$(PROGRAMS),$(eval $(call PROGRAM_template,$(prog))))
++endif
+ endif
+ 
+ get_objs:
+@@ -331,23 +356,6 @@ $(MAPFILE): $(MAPFILE_SOURCE)
+ 	@$(MAKE_OBJDIR)
+ 	$(PROCESS_MAP_FILE)
+ 
+-
+-$(OBJDIR)/$(PROG_PREFIX)%$(PROG_SUFFIX): $(OBJDIR)/$(PROG_PREFIX)%$(OBJ_SUFFIX)
+-	@$(MAKE_OBJDIR)
+-ifeq (,$(filter-out _WIN%,$(NS_USE_GCC)_$(OS_TARGET)))
+-	$(MKPROG) $< -Fe$@ -link \
+-	$(LDFLAGS) $(XLDFLAGS) $(EXTRA_LIBS) $(EXTRA_SHARED_LIBS) $(OS_LIBS)
+-ifdef MT
+-	if test -f $@.manifest; then \
+-		$(MT) -NOLOGO -MANIFEST $@.manifest -OUTPUTRESOURCE:$@\;1; \
+-		rm -f $@.manifest; \
+-	fi
+-endif	# MSVC with manifest tool
+-else
+-	$(MKPROG) -o $@ $(CFLAGS) $< \
+-	$(LDFLAGS) $(EXTRA_LIBS) $(EXTRA_SHARED_LIBS) $(OS_LIBS)
+-endif
+-
+ WCCFLAGS1 := $(subst /,\\,$(CFLAGS))
+ WCCFLAGS2 := $(subst -I,-i=,$(WCCFLAGS1))
+ WCCFLAGS3 := $(subst -D,-d,$(WCCFLAGS2))
+-- 
+2.20.1
+

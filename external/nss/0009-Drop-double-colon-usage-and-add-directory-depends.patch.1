@@ -1,0 +1,503 @@
+From 239ab754ecbaa64a84312b1bafd34047b947ce94 Mon Sep 17 00:00:00 2001
+From: Jan-Marek Glogowski <glogow@fbihome.de>
+Date: Tue, 2 Jul 2019 16:54:56 +0200
+Subject: [PATCH 09/11] Drop double-colon usage and add directory depends
+
+Double-colon rule behaviour isn't really compatible with parallel
+build. This gets rid of all of them, so we can codify the
+directory dependencies.
+
+This leaves just three problems, which aren't really fixable with
+the current build system without completely replacing it:
+
+* everything depends on nsinstall
+* everything depends on installed headers
+* ckfw child directories depend on the build parent libs
+
+This is handled by the prepare_build target.
+
+Overall this allows most if the build to run in parallel.
+---
+ nss/Makefile                |   6 +-
+ nss/cmd/Makefile            |   4 +-
+ nss/cmd/shlibsign/Makefile  |   3 +-
+ nss/cmd/smimetools/rules.mk |   2 +-
+ nss/coreconf/rules.mk       | 135 ++++++++++++++----------------------
+ nss/lib/freebl/Makefile     |  10 ++-
+ nss/lib/manifest.mn         |   8 +++
+ nss/manifest.mn             |  21 ++++++
+ 8 files changed, 97 insertions(+), 92 deletions(-)
+
+diff --git a/nss/Makefile b/nss/Makefile
+index 87b2a2a..cd7e2fd 100644
+--- a/nss/Makefile
++++ b/nss/Makefile
+@@ -1,5 +1,3 @@
+-export AR
+-export RANLIB
+ #! gmake
+ #
+ # This Source Code Form is subject to the terms of the Mozilla Public
+@@ -49,12 +47,12 @@ include $(CORE_DEPTH)/coreconf/rules.mk
+ # (7) Execute "local" rules. (OPTIONAL).                              #
+ #######################################################################
+ 
+-nss_build_all::
++nss_build_all:
+ 	$(MAKE) build_nspr
+ 	$(MAKE) all
+ 	$(MAKE) latest
+ 
+-nss_clean_all::
++nss_clean_all:
+ 	$(MAKE) clobber_nspr
+ 	$(MAKE) clobber
+ 
+diff --git a/nss/cmd/Makefile b/nss/cmd/Makefile
+index 86ef29a..292c737 100644
+--- a/nss/cmd/Makefile
++++ b/nss/cmd/Makefile
+@@ -38,7 +38,9 @@ INCLUDES += \
+ 	-I./include \
+ 	$(NULL)
+ 
++$(SOFTOKEN_SRCDIRS) $(NSS_SRCDIRS): $(LIB_SRCDIRS)
++
+ include $(CORE_DEPTH)/coreconf/rules.mk
+ 
+-symbols::
++symbols:
+ 	@echo "TARGETS	= $(TARGETS)"
+diff --git a/nss/cmd/shlibsign/Makefile b/nss/cmd/shlibsign/Makefile
+index 2a6e4d8..5c07865 100644
+--- a/nss/cmd/shlibsign/Makefile
++++ b/nss/cmd/shlibsign/Makefile
+@@ -98,6 +98,5 @@ else
+     endif
+ endif
+ 
+-libs::
+-	$(MAKE) install
++libs: install
+ 	$(MAKE) $(CHECKLOC)
+diff --git a/nss/cmd/smimetools/rules.mk b/nss/cmd/smimetools/rules.mk
+index 1ed381e..b4ee091 100644
+--- a/nss/cmd/smimetools/rules.mk
++++ b/nss/cmd/smimetools/rules.mk
+@@ -3,5 +3,5 @@
+ # License, v. 2.0. If a copy of the MPL was not distributed with this
+ # file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ 
+-install::
++install:
+ 	$(INSTALL) -m 755 $(SCRIPTS) $(SOURCE_BIN_DIR)
+diff --git a/nss/coreconf/rules.mk b/nss/coreconf/rules.mk
+index ec59593..22ae7ad 100644
+--- a/nss/coreconf/rules.mk
++++ b/nss/coreconf/rules.mk
+@@ -10,49 +10,25 @@
+ #######################################################################
+ 
+ #######################################################################
+-# Double-Colon rules for utilizing the binary release model.          #
++# Dont't use double-colon rules!                                      #
+ #######################################################################
+ 
+-all::
+-	$(MAKE) -C coreconf/nsinstall program
+-	$(MAKE) export
+-	# pre-build child dir -> parent dir dependencies
+-	# ckfw/builtins -> ckfw
+-	IGNORE_DIRS=1 $(MAKE) -C lib/ckfw libs
+-	# ckfw/builtins/testlib -> ckfw/builtins + base
+-	$(MAKE) -C lib/base libs
+-	IGNORE_DIRS=1 $(MAKE) -C lib/ckfw/builtins libs
+-	$(MAKE) -C lib/util libs
+-	# nss -> util + certhi + cryptohi + pk11wrap + certdb + pki + dev (+ base) + pkix
+-	$(MAKE) -C lib/certhigh libs
+-	$(MAKE) -C lib/cryptohi libs
+-	$(MAKE) -C lib/pk11wrap libs
+-	$(MAKE) -C lib/certdb libs
+-	$(MAKE) -C lib/pki libs
+-	$(MAKE) -C lib/dev libs
+-	$(MAKE) -C lib/libpkix libs
+-	$(MAKE) -C lib/nss libs
+-	# smime -> nss + pkcs12 + pkcs7
+-	$(MAKE) -C lib/pkcs7 libs
+-	$(MAKE) -C lib/pkcs12 libs
+-	# softoken + legacydb -> sqlite + freebl + dbm
+-	$(MAKE) -C lib/dbm libs
+-	$(MAKE) -C lib/sqlite libs
+-	$(MAKE) -C lib/freebl libs
+-	# all dependencies done -> finish libraries
+-	$(MAKE) -C lib libs
+-	# cmd library sectool
+-	$(MAKE) -C cmd/lib libs
+-	# everything still missing
++ifndef HAVE_ALL_TARGET
++all:
++	if test ! -d "$(DIST)"; then \
++		$(error run make prepare_build in the top directory) ; \
++	fi
+ 	$(MAKE) libs
++endif
+ 
++autobuild:
+ ifeq ($(AUTOCLEAN),1)
+-autobuild:: clean export libs program install
+-else
+-autobuild:: export libs program install
++	$(MAKE) clean
+ endif
++	$(MAKE) all
++	$(MAKE) install
+ 
+-platform::
++platform:
+ 	@echo $(OBJDIR_NAME)
+ 
+ ifeq (,$(filter-out _WIN%,$(NS_USE_GCC)_$(OS_TARGET)))
+@@ -61,7 +37,7 @@ endif
+ 
+ ifdef DIRS
+ ifndef IGNORE_DIRS
+-$(DIRS)::
++$(DIRS):
+ 	$(IGNORE_ERROR)@$(MAKE) -C $@ $(MAKECMDGOALS)
+ 	@$(CLICK_STOPWATCH)
+ endif
+@@ -76,7 +52,7 @@ endif
+ # note: if there is a trailing slash, the component will be appended
+ #       (see import.pl - only used for xpheader.jar)
+ 
+-import::
++import:
+ 	@echo "== import.pl =="
+ 	@$(PERL) -I$(CORE_DEPTH)/coreconf $(CORE_DEPTH)/coreconf/import.pl \
+ 		"RELEASE_TREE=$(RELEASE_TREE)"   \
+@@ -99,33 +75,28 @@ ifeq ($(OS_TARGET),Darwin)
+ 	find $(SOURCE_MD_DIR)/lib -name "*.a" -exec $(RANLIB) {} \;
+ endif
+ 
+-export:: $(DIRS) private_export
++export: $(DIRS) private_export
+ 
+-release_export:: $(DIRS)
++release_export: $(DIRS)
+ 
+-release_classes:: $(DIRS)
++release_classes: $(DIRS)
+ 
+-libs program install:: $(DIRS) $(TARGETS)
++libs program install: $(DIRS) $(TARGETS)
+ 
+-check:: $(DIRS)
++check: $(DIRS)
+ 
+-clean clobber:: $(DIRS)
++clean clobber: $(DIRS)
+ 	rm -rf $(ALL_TRASH)
+ 
+-realclean clobber_all:: $(DIRS)
++realclean clobber_all: $(DIRS)
+ 	rm -rf $(wildcard *.OBJ) dist $(ALL_TRASH)
+ 
+-#######################################################################
+-# Double-Colon rules for populating the binary release model.         #
+-#######################################################################
+-
+-
+-release_clean::
++release_clean:
+ 	rm -rf $(SOURCE_XP_DIR)/release/$(RELEASE_MD_DIR)
+ 
+-release:: release_clean release_export release_classes release_policy release_md release_jars release_cpdistdir
++release: release_clean release_export release_classes release_policy release_md release_jars release_cpdistdir
+ 
+-release_cpdistdir::
++release_cpdistdir:
+ 	@echo "== cpdist.pl =="
+ 	@$(PERL) -I$(CORE_DEPTH)/coreconf $(CORE_DEPTH)/coreconf/cpdist.pl \
+ 		"RELEASE_TREE=$(RELEASE_TREE)" \
+@@ -151,7 +122,7 @@ release_cpdistdir::
+ # $(SOURCE_RELEASE_xxx_JAR) is a name like yyy.jar
+ # $(SOURCE_RELEASE_xx_DIR)  is a name like 
+ 
+-release_jars::
++release_jars:
+ 	@echo "== release.pl =="
+ 	@$(PERL) -I$(CORE_DEPTH)/coreconf $(CORE_DEPTH)/coreconf/release.pl \
+ 		"RELEASE_TREE=$(RELEASE_TREE)" \
+@@ -197,16 +168,16 @@ endif
+ 
+ # Substitute \$ for $ so the shell doesn't choke
+ ifdef BUILD_OPT
+-release_classes::
++release_classes:
+ 	$(INSTALL) -m 444 $(subst $$,\$$,$(RELEASE_FILES)) $(SOURCE_RELEASE_PREFIX)/$(SOURCE_RELEASE_CLASSES_DIR)/$(PACKAGE)
+ else
+-release_classes::
++release_classes:
+ 	$(INSTALL) -m 444 $(subst $$,\$$,$(RELEASE_DBG_FILES)) $(SOURCE_RELEASE_PREFIX)/$(SOURCE_RELEASE_CLASSES_DBG_DIR)/$(PACKAGE)
+ endif
+ 
+ endif
+ 
+-release_policy:: $(DIRS)
++release_policy: $(DIRS)
+ 
+ ifndef NO_MD_RELEASE
+     ifdef LIBRARY
+@@ -226,7 +197,7 @@ ifndef NO_MD_RELEASE
+     endif
+ endif
+ 
+-release_md:: $(DIRS)
++release_md: $(DIRS)
+ ifneq ($(MD_LIB_RELEASE_FILES),)
+ 	$(INSTALL) -m 444 $(MD_LIB_RELEASE_FILES) $(SOURCE_RELEASE_PREFIX)/$(SOURCE_RELEASE_LIB_DIR)
+ endif
+@@ -523,7 +494,7 @@ endif
+ # Bunch of things that extend the 'export' rule (in order):
+ ################################################################################
+ 
+-$(JAVA_DESTPATH) $(JAVA_DESTPATH)/$(PACKAGE) $(JMCSRCDIR)::
++$(JAVA_DESTPATH) $(JAVA_DESTPATH)/$(PACKAGE) $(JMCSRCDIR):
+ 	@if test ! -d $@; then	    \
+ 		echo Creating $@;   \
+ 		rm -rf $@;	    \
+@@ -535,12 +506,12 @@ $(JAVA_DESTPATH) $(JAVA_DESTPATH)/$(PACKAGE) $(JMCSRCDIR)::
+ 
+ ifneq ($(IDL_GEN),)
+ 
+-#export::
++#export:
+ #	$(IDL2JAVA) $(IDL_GEN)
+ 
+-#all:: export
++#all: export
+ 
+-#clobber::
++#clobber:
+ #	rm -f $(IDL_GEN:.idl=.class)	# XXX wrong!
+ 
+ endif
+@@ -560,14 +531,14 @@ endif
+ 
+ JAVA_EXPORT_SRCS=$(shell $(PERL) $(CORE_DEPTH)/coreconf/outofdate.pl $(PERLARG)	-d $(JAVA_DESTPATH)/$(PACKAGE) $(JSRCS) $(PRIVATE_JSRCS))
+ 
+-export:: $(JAVA_DESTPATH) $(JAVA_DESTPATH)/$(PACKAGE)
++export: $(JAVA_DESTPATH) $(JAVA_DESTPATH)/$(PACKAGE)
+ ifneq ($(JAVA_EXPORT_SRCS),)
+ 	$(JAVAC) $(JAVA_EXPORT_SRCS)
+ endif
+ 
+-all:: export
++all: export
+ 
+-clobber::
++clobber:
+ 	rm -f $(SOURCE_XP_DIR)/classes/$(PACKAGE)/*.class
+ 
+ endif
+@@ -594,7 +565,7 @@ endif
+ # to parse the '=' character. A solution is to rewrite outofdate.pl so it
+ # takes the Javac command as an argument and executes the command itself,
+ # instead of returning a list of files.
+-export:: $(JAVA_DESTPATH) $(JAVA_DESTPATH)/$(PACKAGE)
++export: $(JAVA_DESTPATH) $(JAVA_DESTPATH)/$(PACKAGE)
+ 	@echo "!!! THIS COMMAND IS BROKEN ON WINDOWS--SEE rules.mk FOR DETAILS !!!"
+ 	return -1
+ 	@for d in $(JDIRS); do							\
+@@ -647,7 +618,7 @@ JDK_STUB_CFILES		:= $(patsubst %,$(JDK_STUB_DIR)/%.c,$(JDK_GEN))
+ $(JDK_HEADER_CFILES): $(JDK_HEADER_CLASSFILES)
+ $(JDK_STUB_CFILES): $(JDK_STUB_CLASSFILES)
+ 
+-export::
++export:
+ 	@echo Generating/Updating JDK headers 
+ 	$(JAVAH) -d $(JDK_GEN_DIR) $(JDK_PACKAGE_CLASSES)
+ 	@echo Generating/Updating JDK stubs
+@@ -696,7 +667,7 @@ JRI_STUB_CFILES		:= $(patsubst %,$(JRI_GEN_DIR)/%.c,$(JRI_GEN))
+ $(JRI_HEADER_CFILES): $(JRI_HEADER_CLASSFILES)
+ $(JRI_STUB_CFILES): $(JRI_STUB_CLASSFILES)
+ 
+-export::
++export:
+ 	@echo Generating/Updating JRI headers 
+ 	$(JAVAH) -jri -d $(JRI_GEN_DIR) $(JRI_PACKAGE_CLASSES)
+ 	@echo Generating/Updating JRI stubs
+@@ -724,7 +695,7 @@ ifneq ($(JNI_GEN),)
+ ifneq ($(JAVAH),)
+ JNI_HEADERS		:= $(patsubst %,$(JNI_GEN_DIR)/%.h,$(JNI_GEN))
+ 
+-export::
++export:
+ 	@if test ! -d $(JNI_GEN_DIR); then						\
+ 		echo $(JAVAH) -jni -d $(JNI_GEN_DIR) $(JNI_GEN);			\
+ 		$(JAVAH) -jni -d $(JNI_GEN_DIR) $(JNI_GEN);				\
+@@ -748,7 +719,7 @@ JMC_EXPORT_FILES	:= $(patsubst %,$(JAVA_DESTPATH)/$(PACKAGE)/%.class,$(JMC_EXPOR
+ # your NSDISTMODE and make links relative to the current directory. This is a
+ # problem because the source isn't in the current directory:
+ #
+-export:: $(JMC_EXPORT_FILES) $(JMCSRCDIR)
++export: $(JMC_EXPORT_FILES) $(JMCSRCDIR)
+ 	$(NSINSTALL) -t -m 444 $(JMC_EXPORT_FILES) $(JMCSRCDIR)
+ endif
+ 
+@@ -774,7 +745,7 @@ $(OBJDIR)/M%$(OBJ_SUFFIX): $(JMC_GEN_DIR)/M%.c $(JMC_GEN_DIR)/M%.h
+ 	@$(MAKE_OBJDIR)
+ 	$(CC) -o $@ -c $(CFLAGS) $<
+ 
+-export:: $(JMC_HEADERS) $(JMC_STUBS)
++export: $(JMC_HEADERS) $(JMC_STUBS)
+ endif
+ endif
+ 
+@@ -787,10 +758,10 @@ $(3)/d:
+ $(3)/%: %
+ 	$$(INSTALL) -m 444 $$^ $(3)
+ 
+-$(1):: $$(addprefix $(3)/,$$($(2))) | $(3)/d
++$(1): $$(addprefix $(3)/,$$($(2))) | $(3)/d
+ endif
+ else
+-$(1)::
++$(1):
+ endif
+ endef
+ 
+@@ -819,7 +790,7 @@ endif
+ $(TESTS_DIR)/d:
+ 	@$(MAKE_OBJDIR)
+ 
+-check:: $(REGRESSION_SPEC) | $(TESTS_DIR)/d
++check: $(REGRESSION_SPEC) | $(TESTS_DIR)/d
+ 	cd $(PLATFORM); \
+ 	../$(SOURCE_MD_DIR)/bin/regress$(PROG_SUFFIX) specfile=../$(REGRESSION_SPEC) progress $(EXTRA_REGRESS_OPTIONS)
+ ifneq ($(BUILD_OPT),)
+@@ -829,7 +800,7 @@ ifneq ($(BUILD_OPT),)
+ 	echo "then run 'reporter specfile=$(RESULTS_DIR)/rptspec'"
+ endif
+ else
+-check::
++check:
+ 	@echo "Error: you didn't specify REGRESSION_SPEC in your manifest.mn file!"
+ endif
+ 
+@@ -885,7 +856,7 @@ ifdef MKDEPENDENCIES
+ 
+ # For Windows, $(MKDEPENDENCIES) must be -included before including rules.mk
+ 
+-$(MKDEPENDENCIES)::
++$(MKDEPENDENCIES):
+ 	@$(MAKE_OBJDIR)
+ 	touch $(MKDEPENDENCIES) 
+ 	chmod u+w $(MKDEPENDENCIES) 
+@@ -894,22 +865,22 @@ $(MKDEPENDENCIES)::
+ 	$(MKDEPEND) -p$(OBJDIR_NAME)/ -o'$(OBJ_SUFFIX)' -f$(MKDEPENDENCIES) \
+ $(NOMD_CFLAGS) $(YOPT) $(CSRCS) $(CPPSRCS) $(ASFILES)
+ 
+-$(MKDEPEND):: $(MKDEPEND_DIR)/*.c $(MKDEPEND_DIR)/*.h
++$(MKDEPEND): $(MKDEPEND_DIR)/*.c $(MKDEPEND_DIR)/*.h
+ 	$(MAKE) -C $(MKDEPEND_DIR)
+ 
+ ifdef OBJS
+-depend:: $(DIRS) $(MKDEPEND) $(MKDEPENDENCIES)
++depend: $(DIRS) $(MKDEPEND) $(MKDEPENDENCIES)
+ else
+-depend:: $(DIRS)
++depend: $(DIRS)
+ endif
+ 
+-dependclean:: $(DIRS)
++dependclean: $(DIRS)
+ 	rm -f $(MKDEPENDENCIES)
+ 
+ #-include $(NSINSTALL_DIR)/$(OBJDIR)/depend.mk
+ 
+ else
+-depend::
++depend:
+ endif
+ endif
+ 
+@@ -956,5 +927,5 @@ $(filter $(OBJDIR)/%$(OBJ_SUFFIX),$(OBJS)): $(OBJDIR)/%$(OBJ_SUFFIX): $(DUMMY_DE
+ # Fake targets.  Always run these rules, even if a file/directory with that
+ # name already exists.
+ #
+-.PHONY: all all_platforms alltags boot clean clobber clobber_all export install libs program realclean release
++.PHONY: all all_platforms alltags boot clean clobber clobber_all export install libs program realclean release $(DIRS)
+ 
+diff --git a/nss/lib/freebl/Makefile b/nss/lib/freebl/Makefile
+index 76e974e..8e6e4b4 100644
+--- a/nss/lib/freebl/Makefile
++++ b/nss/lib/freebl/Makefile
+@@ -653,8 +653,14 @@ $$($(1)_DIR)/d:
+ 	@$(MAKE_OBJDIR)
+ endif
+ 
+-release_md libs:: | $$($(1)_DIR)/d
+-	$$(MAKE) FREEBL_CHILD_BUILD=1 $(3)=1 OBJDIR=$$($(1)_DIR) $$@
++build_libs_$(2): | $$($(1)_DIR)/d
++	$$(MAKE) FREEBL_CHILD_BUILD=1 $(3)=1 OBJDIR=$$($(1)_DIR) libs
++
++build_release_md_$(2): | $$($(1)_DIR)/d
++	$$(MAKE) FREEBL_CHILD_BUILD=1 $(3)=1 OBJDIR=$$($(1)_DIR) release_md
++
++release_md: build_release_md_$(2)
++libs: build_libs_$(2)
+ endif
+ endef
+ 
+diff --git a/nss/lib/manifest.mn b/nss/lib/manifest.mn
+index 80d7d9c..f871a27 100644
+--- a/nss/lib/manifest.mn
++++ b/nss/lib/manifest.mn
+@@ -37,6 +37,14 @@ NSS_SRCDIRS = \
+ endif
+ endif
+ 
++nss: certhigh cryptohi pk11wrap certdb pki dev base libpkix util
++smime: nss pkcs12 pkcs7
++freebl: util
++softoken: nss dbm sqlite freebl
++ssl: nss freebl
++ckfw: nss
++sysinit: util
++
+ #
+ # organized by DLL
+ #
+diff --git a/nss/manifest.mn b/nss/manifest.mn
+index 500a5ad..4cd1ea5 100644
+--- a/nss/manifest.mn
++++ b/nss/manifest.mn
+@@ -11,3 +11,24 @@ IMPORTS =	nspr20/v4.8 \
+ RELEASE = nss
+ 
+ DIRS = coreconf lib cmd cpputil gtests
++
++lib: coreconf
++cmd: lib
++cpputil: lib
++gtests: cmd cpputil
++
++HAVE_ALL_TARGET := 1
++
++prepare_build:
++	# no real way to encode these in any sensible way
++	$(MAKE) -C coreconf/nsinstall program
++	$(MAKE) export
++	# pre-build child dir -> parent dir dependencies
++	# ckfw/builtins -> ckfw
++	IGNORE_DIRS=1 $(MAKE) -C lib/ckfw libs
++	# ckfw/builtins/testlib -> ckfw/builtins + base
++	$(MAKE) -C lib/base libs
++	IGNORE_DIRS=1 $(MAKE) -C lib/ckfw/builtins libs
++
++all: prepare_build
++	$(MAKE) libs
+-- 
+2.20.1
+

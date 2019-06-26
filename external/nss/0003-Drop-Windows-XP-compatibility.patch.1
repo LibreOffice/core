@@ -1,0 +1,73 @@
+From d2662c758c6bd90a210eb2747bed6f262afb66eb Mon Sep 17 00:00:00 2001
+From: Jan-Marek Glogowski <glogow@fbihome.de>
+Date: Sun, 30 Jun 2019 16:25:15 +0000
+Subject: [PATCH 03/11] Drop Windows XP compatibility
+
+---
+ nspr/configure        |  4 ----
+ nspr/configure.in     |  5 -----
+ nss/coreconf/WIN32.mk | 14 --------------
+ 3 files changed, 23 deletions(-)
+
+diff --git a/nspr/configure b/nspr/configure
+index a79b79d..536fe44 100755
+--- a/nspr/configure
++++ b/nspr/configure
+@@ -7046,10 +7046,6 @@ $as_echo "$as_me: WARNING: Unknown version of the Microsoft (R) Manifest Tool."
+ 
+ 	else
+ 	    $as_echo "#define _X86_ 1" >>confdefs.h
+-
+-            if test -z "$GNU_CC" -a "$MSC_VER" -ge "1700"; then
+-                                                CFLAGS="$CFLAGS -arch:IA32"
+-            fi
+ 	fi
+         ;;
+     x86_64)
+diff --git a/nspr/configure.in b/nspr/configure.in
+index 3820e21..7dce026 100644
+--- a/nspr/configure.in
++++ b/nspr/configure.in
+@@ -1904,11 +1904,6 @@ tools are selected during the Xcode/Developer Tools installation.])
+ 	    AC_DEFINE(_AMD64_)
+ 	else		
+ 	    AC_DEFINE(_X86_)
+-            if test -z "$GNU_CC" -a "$MSC_VER" -ge "1700"; then
+-                dnl Visual C++ 2012 defaults to -arch:SSE2. Use -arch:IA32
+-                dnl to avoid requiring SSE2.
+-                CFLAGS="$CFLAGS -arch:IA32"
+-            fi
+ 	fi
+         ;;
+     x86_64)
+diff --git a/nss/coreconf/WIN32.mk b/nss/coreconf/WIN32.mk
+index 681f416..eefb736 100644
+--- a/nss/coreconf/WIN32.mk
++++ b/nss/coreconf/WIN32.mk
+@@ -208,23 +208,9 @@ endif
+ ifeq (,$(filter-out x386 x86_64,$(CPU_ARCH)))
+ ifdef USE_64
+ 	DEFINES += -D_AMD64_
+-	# Use subsystem 5.02 to allow running on Windows XP.
+-	ifeq ($(_MSC_VER_GE_11),1)
+-		LDFLAGS += -SUBSYSTEM:CONSOLE,5.02
+-	endif
+ 	CPU_ARCH = x86_64
+ else
+ 	DEFINES += -D_X86_
+-	# VS2012 defaults to -arch:SSE2. Use -arch:IA32 to avoid requiring
+-	# SSE2. Clang-cl gets confused by -arch:IA32, so don't add it.
+-	# (See https://llvm.org/bugs/show_bug.cgi?id=24335)
+-	# Use subsystem 5.01 to allow running on Windows XP.
+-	ifeq ($(_MSC_VER_GE_11),1)
+-		ifneq ($(CLANG_CL),1)
+-			OS_CFLAGS += -arch:IA32
+-		endif
+-		LDFLAGS += -SUBSYSTEM:CONSOLE,5.01
+-	endif
+ 	CPU_ARCH = x386
+ endif
+ endif
+-- 
+2.20.1
+

@@ -1,0 +1,98 @@
+From 7b7a1b8e82a4e2ab12a4a61d0a729be3a19c3893 Mon Sep 17 00:00:00 2001
+From: Jan-Marek Glogowski <glogow@fbihome.de>
+Date: Sun, 30 Jun 2019 16:29:22 +0000
+Subject: [PATCH 04/11] Add dist-install to generating targets
+
+Stuff actually depends on the generated target to be copied into
+the dist/ directory. And order-depend on the SOURCE_* directories,
+so they are created before any copy attempts.
+---
+ nss/coreconf/rules.mk | 42 +++++++++++++++---------------------------
+ 1 file changed, 15 insertions(+), 27 deletions(-)
+
+diff --git a/nss/coreconf/rules.mk b/nss/coreconf/rules.mk
+index b2500eb..b0b0bbd 100644
+--- a/nss/coreconf/rules.mk
++++ b/nss/coreconf/rules.mk
+@@ -73,31 +73,6 @@ release_classes::
+ 	+$(LOOP_OVER_DIRS)
+ 
+ libs program install:: $(TARGETS)
+-ifdef LIBRARY
+-	$(INSTALL) -m 664 $(LIBRARY) $(SOURCE_LIB_DIR)
+-endif
+-ifdef SHARED_LIBRARY
+-	$(INSTALL) -m 775 $(SHARED_LIBRARY) $(SOURCE_LIB_DIR)
+-ifdef MOZ_DEBUG_SYMBOLS
+-ifeq (,$(filter-out _WIN%,$(NS_USE_GCC)_$(OS_TARGET)))
+-	$(INSTALL) -m 644 $(SHARED_LIBRARY:$(DLL_SUFFIX)=pdb) $(SOURCE_LIB_DIR)
+-endif
+-endif
+-endif
+-ifdef IMPORT_LIBRARY
+-	$(INSTALL) -m 775 $(IMPORT_LIBRARY) $(SOURCE_LIB_DIR)
+-endif
+-ifdef PROGRAM
+-	$(INSTALL) -m 775 $(PROGRAM) $(SOURCE_BIN_DIR)
+-ifdef MOZ_DEBUG_SYMBOLS
+-ifeq (,$(filter-out _WIN%,$(NS_USE_GCC)_$(OS_TARGET)))
+-	$(INSTALL) -m 644 $(PROGRAM:$(PROG_SUFFIX)=.pdb) $(SOURCE_BIN_DIR)
+-endif
+-endif
+-endif
+-ifdef PROGRAMS
+-	$(INSTALL) -m 775 $(PROGRAMS) $(SOURCE_BIN_DIR)
+-endif
+ 	+$(LOOP_OVER_DIRS)
+ 
+ tests::
+@@ -265,6 +240,12 @@ ifdef MT
+ endif	# MSVC with manifest tool
+ else
+ 	$$(MKPROG) -o $$@ $$(CFLAGS) $$($(1)_OBJS) $$(LDFLAGS) $$(EXTRA_LIBS) $$(EXTRA_SHARED_LIBS) $$(OS_LIBS)
++endif
++	$$(INSTALL) -m 775 $$@ $$(SOURCE_BIN_DIR)
++ifdef MOZ_DEBUG_SYMBOLS
++ifeq (,$$(filter-out _WIN%,$$(NS_USE_GCC)_$$(OS_TARGET)))
++	$$(INSTALL) -m 644 $$(@:$$(PROG_SUFFIX)=.pdb) $$(SOURCE_BIN_DIR)
++endif
+ endif
+ 
+ endef
+@@ -289,17 +270,18 @@ else
+ 	$(AR) cr $@ $(OBJS)
+ endif
+ 	$(RANLIB) $@
+-
++	$(INSTALL) -m 664 $@ $(SOURCE_LIB_DIR)
+ 
+ ifeq ($(OS_TARGET),OS2)
+ $(IMPORT_LIBRARY): $(MAPFILE)
+ 	rm -f $@
+ 	$(IMPLIB) $@ $<
+ 	$(RANLIB) $@
++	$(INSTALL) -m 775 $@ $(SOURCE_LIB_DIR)
+ endif
+ ifeq ($(OS_ARCH),WINNT)
+ $(IMPORT_LIBRARY): $(LIBRARY)
+-	cp -f $< $@
++	$(INSTALL) -m 775 $@ $(SOURCE_LIB_DIR)
+ endif
+ 
+ ifdef SHARED_LIBRARY_LIBS
+@@ -338,6 +320,12 @@ else
+ 	$(MKSHLIB) -o $@ $(OBJS) $(SUB_SHLOBJS) $(LD_LIBS) $(EXTRA_LIBS) $(EXTRA_SHARED_LIBS) $(OS_LIBS)
+ 	chmod +x $@
+ endif
++endif
++	$(INSTALL) -m 775 $@ $(SOURCE_LIB_DIR)
++ifdef MOZ_DEBUG_SYMBOLS
++ifeq (,$(filter-out _WIN%,$(NS_USE_GCC)_$(OS_TARGET)))
++	$(INSTALL) -m 644 $(@:$(DLL_SUFFIX)=pdb) $(SOURCE_LIB_DIR)
++endif
+ endif
+ 
+ ifeq (,$(filter-out WIN%,$(OS_TARGET)))
+-- 
+2.20.1
+

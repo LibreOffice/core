@@ -1,0 +1,431 @@
+From 8e3378c3324533be3317e02dd91c8292546bf9ff Mon Sep 17 00:00:00 2001
+From: Jan-Marek Glogowski <glogow@fbihome.de>
+Date: Sun, 30 Jun 2019 16:37:23 +0000
+Subject: [PATCH 06/11] "Parallelize" part of the NSS build
+
+This still serializes many targets, but at least these targets
+themself run their build in parallel. The main serialization
+happens in nss/Makefile and nss/coreconf/rules.mk's all target.
+
+We can't add these as real dependencies, as all Makefile snippets
+use the same variable names. I tried to always run sub-makes to
+hack in the depndencies, but these don't know of each other, so
+targets very often run twice, and this breaks the build.
+
+Having a tests:: target and a tests directory leads to misery (and
+doesn't work), so it's renamed to check.
+---
+ nss/Makefile                    |  11 ++-
+ nss/cmd/shlibsign/Makefile      |   5 +-
+ nss/coreconf/Makefile           |   2 -
+ nss/coreconf/README             |   2 +-
+ nss/coreconf/nsinstall/Makefile |   1 +
+ nss/coreconf/rules.mk           | 120 +++++++++++++++++++-------------
+ nss/coreconf/ruleset.mk         |  11 ---
+ nss/lib/Makefile                |  32 ++++-----
+ nss/lib/ckfw/Makefile           |   3 +-
+ 9 files changed, 101 insertions(+), 86 deletions(-)
+
+diff --git a/nss/Makefile b/nss/Makefile
+index ffdbfc2..87b2a2a 100644
+--- a/nss/Makefile
++++ b/nss/Makefile
+@@ -49,9 +49,14 @@ include $(CORE_DEPTH)/coreconf/rules.mk
+ # (7) Execute "local" rules. (OPTIONAL).                              #
+ #######################################################################
+ 
+-nss_build_all: build_nspr all latest
+-
+-nss_clean_all: clobber_nspr clobber
++nss_build_all::
++	$(MAKE) build_nspr
++	$(MAKE) all
++	$(MAKE) latest
++
++nss_clean_all::
++	$(MAKE) clobber_nspr
++	$(MAKE) clobber
+ 
+ NSPR_CONFIG_STATUS = $(CORE_DEPTH)/../nspr/$(OBJDIR_NAME)/config.status
+ NSPR_CONFIGURE = $(CORE_DEPTH)/../nspr/configure
+diff --git a/nss/cmd/shlibsign/Makefile b/nss/cmd/shlibsign/Makefile
+index ddae2d4..2a6e4d8 100644
+--- a/nss/cmd/shlibsign/Makefile
++++ b/nss/cmd/shlibsign/Makefile
+@@ -98,5 +98,6 @@ else
+     endif
+ endif
+ 
+-libs install :: $(CHECKLOC)
+-
++libs::
++	$(MAKE) install
++	$(MAKE) $(CHECKLOC)
+diff --git a/nss/coreconf/Makefile b/nss/coreconf/Makefile
+index aca8882..6ba1544 100644
+--- a/nss/coreconf/Makefile
++++ b/nss/coreconf/Makefile
+@@ -11,5 +11,3 @@ DIRS		= nsinstall
+ 
+ include $(DEPTH)/coreconf/config.mk
+ include $(DEPTH)/coreconf/rules.mk
+-
+-export:: libs
+diff --git a/nss/coreconf/README b/nss/coreconf/README
+index 4b1e410..835c728 100644
+--- a/nss/coreconf/README
++++ b/nss/coreconf/README
+@@ -390,7 +390,7 @@ OVERVIEW of "rules.mk":
+                                 "Tinderbox" to automatically generate
+                                 binary releases on various platforms
+ 
+-        tests::                 automation tool used to run the
++        check::                 automation tool used to run the
+                                 "regress" and "reporter" tools 
+                                 on various regression test suites
+ 
+diff --git a/nss/coreconf/nsinstall/Makefile b/nss/coreconf/nsinstall/Makefile
+index 50128ed..08dfbc2 100644
+--- a/nss/coreconf/nsinstall/Makefile
++++ b/nss/coreconf/nsinstall/Makefile
+@@ -20,6 +20,7 @@ include $(DEPTH)/coreconf/config.mk
+ 
+ ifeq (,$(filter-out OS2 WIN%,$(OS_TARGET)))
+ PROGRAM		=
++TARGETS		=
+ else
+ TARGETS		= $(PROGRAM)
+ INSTALL		= true
+diff --git a/nss/coreconf/rules.mk b/nss/coreconf/rules.mk
+index b0b0bbd..547c239 100644
+--- a/nss/coreconf/rules.mk
++++ b/nss/coreconf/rules.mk
+@@ -13,7 +13,38 @@
+ # Double-Colon rules for utilizing the binary release model.          #
+ #######################################################################
+ 
+-all:: export libs 
++all::
++	$(MAKE) -C coreconf/nsinstall program
++	$(MAKE) export
++	# pre-build child dir -> parent dir dependencies
++	# ckfw/builtins -> ckfw
++	IGNORE_DIRS=1 $(MAKE) -C lib/ckfw libs
++	# ckfw/builtins/testlib -> ckfw/builtins + base
++	$(MAKE) -C lib/base libs
++	IGNORE_DIRS=1 $(MAKE) -C lib/ckfw/builtins libs
++	$(MAKE) -C lib/util libs
++	# nss -> util + certhi + cryptohi + pk11wrap + certdb + pki + dev (+ base) + pkix
++	$(MAKE) -C lib/certhigh libs
++	$(MAKE) -C lib/cryptohi libs
++	$(MAKE) -C lib/pk11wrap libs
++	$(MAKE) -C lib/certdb libs
++	$(MAKE) -C lib/pki libs
++	$(MAKE) -C lib/dev libs
++	$(MAKE) -C lib/libpkix libs
++	$(MAKE) -C lib/nss libs
++	# smime -> nss + pkcs12 + pkcs7
++	$(MAKE) -C lib/pkcs7 libs
++	$(MAKE) -C lib/pkcs12 libs
++	# softoken + legacydb -> sqlite + freebl + dbm
++	$(MAKE) -C lib/dbm libs
++	$(MAKE) -C lib/sqlite libs
++	$(MAKE) -C lib/freebl libs
++	# all dependencies done -> finish libraries
++	$(MAKE) -C lib libs
++	# cmd library sectool
++	$(MAKE) -C cmd/lib libs
++	# everything still missing
++	$(MAKE) libs
+ 
+ ifeq ($(AUTOCLEAN),1)
+ autobuild:: clean export private_export libs program install
+@@ -28,6 +59,14 @@ ifeq (,$(filter-out _WIN%,$(NS_USE_GCC)_$(OS_TARGET)))
+ USE_NT_C_SYNTAX=1
+ endif
+ 
++ifdef DIRS
++ifndef IGNORE_DIRS
++$(DIRS)::
++	$(IGNORE_ERROR)@$(MAKE) -C $@ $(MAKECMDGOALS)
++	@$(CLICK_STOPWATCH)
++endif
++endif
++
+ #
+ # IMPORTS will always be associated with a component.  Therefore,
+ # the "import" rule will always change directory to the top-level
+@@ -60,31 +99,23 @@ ifeq ($(OS_TARGET),Darwin)
+ 	find $(SOURCE_MD_DIR)/lib -name "*.a" -exec $(RANLIB) {} \;
+ endif
+ 
+-export:: 
+-	+$(LOOP_OVER_DIRS)
++export:: $(DIRS)
+ 
+-private_export::
+-	+$(LOOP_OVER_DIRS)
++private_export:: $(DIRS)
+ 
+-release_export::
+-	+$(LOOP_OVER_DIRS)
++release_export:: $(DIRS)
+ 
+-release_classes::
+-	+$(LOOP_OVER_DIRS)
++release_classes:: $(DIRS)
+ 
+-libs program install:: $(TARGETS)
+-	+$(LOOP_OVER_DIRS)
++libs program install:: $(DIRS) $(TARGETS)
+ 
+-tests::
+-	+$(LOOP_OVER_DIRS)
++check:: $(DIRS)
+ 
+-clean clobber::
++clean clobber:: $(DIRS)
+ 	rm -rf $(ALL_TRASH)
+-	+$(LOOP_OVER_DIRS)
+ 
+-realclean clobber_all::
++realclean clobber_all:: $(DIRS)
+ 	rm -rf $(wildcard *.OBJ) dist $(ALL_TRASH)
+-	+$(LOOP_OVER_DIRS)
+ 
+ #######################################################################
+ # Double-Colon rules for populating the binary release model.         #
+@@ -177,8 +208,7 @@ endif
+ 
+ endif
+ 
+-release_policy::
+-	+$(LOOP_OVER_DIRS)
++release_policy:: $(DIRS)
+ 
+ ifndef NO_MD_RELEASE
+     ifdef LIBRARY
+@@ -198,15 +228,13 @@ ifndef NO_MD_RELEASE
+     endif
+ endif
+ 
+-release_md::
++release_md:: $(DIRS)
+ ifneq ($(MD_LIB_RELEASE_FILES),)
+ 	$(INSTALL) -m 444 $(MD_LIB_RELEASE_FILES) $(SOURCE_RELEASE_PREFIX)/$(SOURCE_RELEASE_LIB_DIR)
+ endif
+ ifneq ($(MD_BIN_RELEASE_FILES),)
+ 	$(INSTALL) -m 555 $(MD_BIN_RELEASE_FILES) $(SOURCE_RELEASE_PREFIX)/$(SOURCE_RELEASE_BIN_DIR)
+ endif
+-	+$(LOOP_OVER_DIRS)
+-
+ 
+ alltags:
+ 	rm -f TAGS
+@@ -280,7 +308,7 @@ $(IMPORT_LIBRARY): $(MAPFILE)
+ 	$(INSTALL) -m 775 $@ $(SOURCE_LIB_DIR)
+ endif
+ ifeq ($(OS_ARCH),WINNT)
+-$(IMPORT_LIBRARY): $(LIBRARY)
++$(IMPORT_LIBRARY): $(SHARED_LIBRARY)
+ 	$(INSTALL) -m 775 $@ $(SOURCE_LIB_DIR)
+ endif
+ 
+@@ -758,18 +786,13 @@ endif
+ PUBLIC_EXPORT_DIR = $(SOURCE_XP_DIR)/public/$(MODULE)
+ 
+ ifneq ($(EXPORTS),)
+-$(PUBLIC_EXPORT_DIR)::
+-	@if test ! -d $@; then	    \
+-		echo Creating $@;   \
+-		$(NSINSTALL) -D $@; \
+-	fi
+-
+-export:: $(PUBLIC_EXPORT_DIR) 
++$(PUBLIC_EXPORT_DIR)/d:
++	@$(MAKE_OBJDIR)
+ 
+-export:: $(EXPORTS) 
++$(PUBLIC_EXPORT_DIR)/%: %
+ 	$(INSTALL) -m 444 $^ $(PUBLIC_EXPORT_DIR)
+ 
+-export:: $(BUILT_SRCS)
++export:: $(addprefix $(PUBLIC_EXPORT_DIR)/,$(EXPORTS)) | $(PUBLIC_EXPORT_DIR)/d
+ endif
+ 
+ # Duplicate export rule for private exports, with different directories
+@@ -777,19 +800,16 @@ endif
+ PRIVATE_EXPORT_DIR = $(SOURCE_XP_DIR)/private/$(MODULE)
+ 
+ ifneq ($(PRIVATE_EXPORTS),)
+-$(PRIVATE_EXPORT_DIR)::
+-	@if test ! -d $@; then	    \
+-		echo Creating $@;   \
+-		$(NSINSTALL) -D $@; \
+-	fi
+-
+-private_export:: $(PRIVATE_EXPORT_DIR)
++$(PRIVATE_EXPORT_DIR)/d:
++	@$(MAKE_OBJDIR)
+ 
+-private_export:: $(PRIVATE_EXPORTS) 
++$(PRIVATE_EXPORT_DIR)/%: %
+ 	$(INSTALL) -m 444 $^ $(PRIVATE_EXPORT_DIR)
++
++private_export:: $(addprefix $(PRIVATE_EXPORT_DIR)/,$(PRIVATE_EXPORTS)) | $(PRIVATE_EXPORT_DIR)/d
+ else
+ private_export:: 
+-	@echo There are no private exports.;
++	@echo "There are no private exports."
+ endif
+ 
+ ##########################################################################
+@@ -806,7 +826,7 @@ ifneq ($(BUILD_OPT),)
+ REGDATE = $(subst \ ,, $(shell $(PERL)  $(CORE_DEPTH)/$(MODULE)/scripts/now))
+ endif
+ 
+-tests:: $(REGRESSION_SPEC) 
++check:: $(REGRESSION_SPEC)
+ 	cd $(PLATFORM); \
+ 	../$(SOURCE_MD_DIR)/bin/regress$(PROG_SUFFIX) specfile=../$(REGRESSION_SPEC) progress $(EXTRA_REGRESS_OPTIONS); \
+ 	if test ! -d $(TESTS_DIR); then \
+@@ -820,8 +840,8 @@ ifneq ($(BUILD_OPT),)
+ 	echo "then run 'reporter specfile=$(RESULTS_DIR)/rptspec'"
+ endif
+ else
+-tests:: 
+-	@echo Error: you didn't specify REGRESSION_SPEC in your manifest.mn file!;
++check::
++	@echo "Error: you didn't specify REGRESSION_SPEC in your manifest.mn file!"
+ endif
+ 
+ 
+@@ -845,6 +865,7 @@ endif
+ 
+ ################################################################################
+ 
++ifeq ($(MAKECMDGOALS),clean)
+ -include $(DEPENDENCIES)
+ 
+ ifneq (,$(filter-out OS2 WIN%,$(OS_TARGET)))
+@@ -903,21 +924,20 @@ $(MKDEPEND):: $(MKDEPEND_DIR)/*.c $(MKDEPEND_DIR)/*.h
+ 	$(MAKE) -C $(MKDEPEND_DIR)
+ 
+ ifdef OBJS
+-depend:: $(MKDEPEND) $(MKDEPENDENCIES)
++depend:: $(DIRS) $(MKDEPEND) $(MKDEPENDENCIES)
+ else
+-depend::
++depend:: $(DIRS)
+ endif
+-	+$(LOOP_OVER_DIRS)
+ 
+-dependclean::
++dependclean:: $(DIRS)
+ 	rm -f $(MKDEPENDENCIES)
+-	+$(LOOP_OVER_DIRS)
+ 
+ #-include $(NSINSTALL_DIR)/$(OBJDIR)/depend.mk
+ 
+ else
+ depend::
+ endif
++endif
+ 
+ #
+ # HACK ALERT
+@@ -962,5 +982,5 @@ $(filter $(OBJDIR)/%$(OBJ_SUFFIX),$(OBJS)): $(OBJDIR)/%$(OBJ_SUFFIX): $(DUMMY_DE
+ # Fake targets.  Always run these rules, even if a file/directory with that
+ # name already exists.
+ #
+-.PHONY: all all_platforms alltags boot clean clobber clobber_all export install libs program realclean release $(OBJDIR)
++.PHONY: all all_platforms alltags boot clean clobber clobber_all export install libs program realclean release
+ 
+diff --git a/nss/coreconf/ruleset.mk b/nss/coreconf/ruleset.mk
+index 34ef360..6e927d1 100644
+--- a/nss/coreconf/ruleset.mk
++++ b/nss/coreconf/ruleset.mk
+@@ -219,15 +219,4 @@ ifdef SYSTEM_INCL_DIR
+     YOPT = -Y$(SYSTEM_INCL_DIR)
+ endif
+ 
+-ifdef DIRS
+-define SUBMAKE
+-+@echo "cd $2; $(MAKE) $1"
+-$(IGNORE_ERROR)@$(MAKE) -C $(2) $(1)
+-@$(CLICK_STOPWATCH)
+-
+-endef
+-
+-    LOOP_OVER_DIRS	= $(foreach dir,$(DIRS),$(call SUBMAKE,$@,$(dir)))
+-endif
+-
+ MK_RULESET = included
+diff --git a/nss/lib/Makefile b/nss/lib/Makefile
+index 8eedad0..337b328 100644
+--- a/nss/lib/Makefile
++++ b/nss/lib/Makefile
+@@ -54,22 +54,6 @@ ifndef NSS_DISABLE_LIBPKIX
+ LIBPKIX_SRCDIR = libpkix  # Add the libpkix directory to DIRS.
+ endif
+ 
+-#######################################################################
+-# (5) Execute "global" rules. (OPTIONAL)                              #
+-#######################################################################
+-
+-include $(CORE_DEPTH)/coreconf/rules.mk
+-
+-#######################################################################
+-# (6) Execute "component" rules. (OPTIONAL)                           #
+-#######################################################################
+-
+-
+-
+-#######################################################################
+-# (7) Execute "local" rules. (OPTIONAL).                              #
+-#######################################################################
+-
+ ifeq ($(NSS_BUILD_UTIL_ONLY),1)
+   UTIL_SRCDIR = util
+   FREEBL_SRCDIR =
+@@ -95,3 +79,19 @@ else
+     endif
+   endif
+ endif
++
++#######################################################################
++# (5) Execute "global" rules. (OPTIONAL)                              #
++#######################################################################
++
++include $(CORE_DEPTH)/coreconf/rules.mk
++
++#######################################################################
++# (6) Execute "component" rules. (OPTIONAL)                           #
++#######################################################################
++
++
++
++#######################################################################
++# (7) Execute "local" rules. (OPTIONAL).                              #
++#######################################################################
+diff --git a/nss/lib/ckfw/Makefile b/nss/lib/ckfw/Makefile
+index 2902bef..75c906a 100644
+--- a/nss/lib/ckfw/Makefile
++++ b/nss/lib/ckfw/Makefile
+@@ -6,7 +6,6 @@
+ include manifest.mn
+ include $(CORE_DEPTH)/coreconf/config.mk
+ include config.mk
+-include $(CORE_DEPTH)/coreconf/rules.mk
+ 
+ ifdef NOTDEF # was ifdef MOZILLA_CLIENT
+ NSS_BUILD_CAPI = 1
+@@ -33,3 +32,5 @@ ifdef NSS_BUILD_CAPI
+ DIRS += capi
+ endif
+ endif
++
++include $(CORE_DEPTH)/coreconf/rules.mk
+-- 
+2.20.1
+
