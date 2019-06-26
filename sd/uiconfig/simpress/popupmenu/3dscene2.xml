@@ -58,4 +58,5 @@
   <menu:menuitem menu:id=".uno:Window3D"/>
   <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:AnimationEffects"/>
+  <menu:menuitem menu:id=".uno:ExecuteAnimationEffect"/>
 </menu:menupopup>
