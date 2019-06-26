@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_588e1d28",
+        "filename": "sd/uiconfig/sdraw/popupmenu/multiselect.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2019-06-26T10:45:38Z",
+      "side": 1,
+      "message": "is there a reason for this? afaik this only works in Impress.",
+      "range": {
+        "startLine": 80,
+        "startChar": 31,
+        "endLine": 80,
+        "endChar": 47
+      },
+      "revId": "668a3de9be203f47357190ea059155e70944741f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
