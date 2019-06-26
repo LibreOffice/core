@@ -19,6 +19,8 @@
 #ifndef INCLUDED_SW_INC_ISTYLEACCESS_HXX
 #define INCLUDED_SW_INC_ISTYLEACCESS_HXX
 
+#include <svl/itemset.hxx>
+#include <memory>
 #include <vector>
 
 // Management of (automatic) styles
