@@ -113,8 +113,10 @@ void EachElem(NodeT& rNode, size_t nOffset, size_t nDataSize, FuncElem& rFuncEle
 template<typename BlkT, typename ItrT, typename NodeT, typename FuncElem>
 void EachElem(NodeT& rNode, FuncElem& rFuncElem)
 {
-    ItrT it = BlkT::begin(*rNode.data);
-    ItrT itEnd = BlkT::end(*rNode.data);
+    // Walk backwards through the data - this helps when the FuncElem will be deleting
+    // stuff, so we don't continually move block data around.
+    auto it = BlkT::rbegin(*rNode.data);
+    auto itEnd = BlkT::rend(*rNode.data);
     size_t nRow = rNode.position;
     for (; it != itEnd; ++it, ++nRow)
         rFuncElem(nRow, *it);
