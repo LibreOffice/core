@@ -3609,6 +3609,7 @@ if test "$_os" = "WINNT"; then
             fi
         fi
         if test "$BUILD_X64" = TRUE; then
+            CXX_X64_BINARY=`win_short_path_for_make "$CXX_X64_BINARY"`
             AC_MSG_RESULT([found])
         else
             AC_MSG_RESULT([not found])
@@ -3634,7 +3635,8 @@ if test "$_os" = "WINNT"; then
             AC_MSG_RESULT([preset])
         elif "$VC_PRODUCT_DIR/Tools/MSVC/$vcbuildnumber/bin/HostX86/x86/cl.exe" -? </dev/null >/dev/null 2>&1; then
             BUILD_X86=TRUE
-            CXX_X86_BINARY="$VC_PRODUCT_DIR/Tools/MSVC/$vcbuildnumber/bin/HostX86/x86/cl.exe -arch:SSE"
+            CXX_X86_BINARY=`win_short_path_for_make "$VC_PRODUCT_DIR/Tools/MSVC/$vcbuildnumber/bin/HostX86/x86/cl.exe"`
+            CXX_X86_BINARY+=" -arch:SSE"
             AC_MSG_RESULT([found])
         else
             CXX_X86_BINARY=
