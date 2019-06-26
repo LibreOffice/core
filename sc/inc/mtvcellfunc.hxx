@@ -119,8 +119,10 @@ ParseFormulaNumeric(
 template<typename Func>
 void ProcessFormulaEditText(CellStoreType& rStore, Func& rFunc)
 {
+    // Walk backwards through the data - this helps when the FuncElem will be deleting
+    // stuff, so we don't continually move block data around.
     FuncElseNoOp<size_t> aElse;
-    ProcessElements2<CellStoreType, edittext_block, formula_block, Func, FuncElseNoOp<size_t> >(rStore, rFunc, aElse);
+    ProcessElements2Reverse<CellStoreType, edittext_block, formula_block, Func, FuncElseNoOp<size_t> >(rStore, rFunc, aElse);
 }
 
 template<typename Func>
