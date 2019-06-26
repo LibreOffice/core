@@ -8,7 +8,7 @@
 +pr_abspath = "$(if $(findstring :,$(1)),$(1),$(if $(filter /%,$(shell cygpath -m $(1))),$(1),$(shell cygpath -m $(CURDIR)/$(1))))"
  endif
  
- $(OBJDIR)/%.$(OBJ_SUFFIX): %.cpp
+ $(OBJDIR)/%.$(OBJ_SUFFIX): %.cpp | $(OBJDIR)
 --- a/a/nss/coreconf/rules.mk	2008-12-03 00:24:39.000000000 +0100
 +++ b/b/nss/coreconf/rules.mk	2009-11-27 13:36:22.662753328 +0100
 @@ -386,7 +386,7 @@
@@ -18,8 +18,8 @@
 -core_abspath = '$(if $(findstring :,$(1)),$(1),$(if $(filter /%,$(1)),$(1),$(PWD)/$(1)))'
 +core_abspath = '$(if $(findstring :,$(1)),$(1),$(if $(filter /%,$(shell cygpath -m $(1))),$(1),$(shell cygpath -m $(PWD)/$(1))))'
  
- $(OBJDIR)/$(PROG_PREFIX)%$(OBJ_SUFFIX): %.c
- 	@$(MAKE_OBJDIR)
+ $(OBJDIR)/$(PROG_PREFIX)%$(OBJ_SUFFIX): %.c | $(OBJDIR)
+ ifdef USE_NT_C_SYNTAX
 --- a/a/nspr/pr/include/md/_win95.h
 +++ b/b/nspr/pr/include/md/_win95.h
 @@ -312,7 +312,7 @@
