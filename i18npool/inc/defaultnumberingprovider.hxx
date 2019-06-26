@@ -28,7 +28,10 @@
 
 namespace com::sun::star::container { class XHierarchicalNameAccess; }
 namespace com::sun::star::uno { class XComponentContext; }
-namespace i18npool { class TransliterationImpl; }
+namespace i18npool {
+    class TransliterationImpl;
+    class NativeNumberSupplierService;
+}
 
 namespace i18npool {
 
@@ -74,6 +77,7 @@ private:
     css::uno::Reference < css::uno::XComponentContext > m_xContext;
     css::uno::Reference < css::container::XHierarchicalNameAccess > xHierarchicalNameAccess;
     rtl::Reference<TransliterationImpl> translit;
+    rtl::Reference<NativeNumberSupplierService> mxNatNum;
     /// @throws css::uno::RuntimeException
     OUString makeNumberingIdentifier( sal_Int16 index );
     /// @throws css::uno::RuntimeException
