@@ -20,6 +20,7 @@
 #define INCLUDED_SW_INC_FMTLINE_HXX
 
 #include <svl/poolitem.hxx>
+#include <tools/solar.h>
 #include "hintids.hxx"
 #include "swdllapi.h"
 #include "swatrset.hxx"

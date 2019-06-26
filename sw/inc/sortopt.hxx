@@ -20,6 +20,7 @@
 #define INCLUDED_SW_INC_SORTOPT_HXX
 
 #include <rtl/ustring.hxx>
+#include <i18nlangtag/lang.h>
 #include "swdllapi.h"
 #include <memory>
 #include <vector>
