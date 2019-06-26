@@ -3322,6 +3322,7 @@ void SwLayoutFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect cons
     if ( !pFrame )
         return;
 
+    SwFrameDeleteGuard g(const_cast<SwLayoutFrame*>(this)); // lock because Calc() and recursion
     SwShortCut aShortCut( *pFrame, rRect );
     bool bCnt = pFrame->IsContentFrame();
     if ( bCnt )
