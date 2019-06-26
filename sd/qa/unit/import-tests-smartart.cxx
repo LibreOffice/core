@@ -80,6 +80,7 @@ public:
     void testVerticalBlockList();
     void testBulletList();
     void testRecursion();
+    void testDataFollow();
 
     CPPUNIT_TEST_SUITE(SdImportTestSmartArt);
 
@@ -121,6 +122,7 @@ public:
     CPPUNIT_TEST(testVerticalBlockList);
     CPPUNIT_TEST(testBulletList);
     CPPUNIT_TEST(testRecursion);
+    CPPUNIT_TEST(testDataFollow);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -1312,6 +1314,44 @@ void SdImportTestSmartArt::testRecursion()
     uno::Reference<drawing::XShape> xGroupC3(xGroupB2->getByIndex(1), uno::UNO_QUERY);
     uno::Reference<text::XText> xTextC3(getChildShape(getChildShape(getChildShape(xGroupC3, 0), 0), 0), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString("C3"), xTextC3->getString());
+
+    xDocShRef->DoClose();
+}
+
+void SdImportTestSmartArt::testDataFollow()
+{
+    // checks if data nodes are followed correctly
+    // different variables are set for two presentation points with the same name
+    // they should be layouted differently - one horizontally and one vertically
+
+    sd::DrawDocShellRef xDocShRef = loadURL(
+        m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/smartart-data-follow.pptx"), PPTX);
+
+    uno::Reference<drawing::XShapes> xGroup(getShapeFromPage(0, 0, xDocShRef), uno::UNO_QUERY);
+
+    uno::Reference<drawing::XShapes> xGroupLeft(xGroup->getByIndex(1), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xGroupB(xGroupLeft->getByIndex(1), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShapeB1(getChildShape(getChildShape(getChildShape(xGroupB, 1), 0), 0), uno::UNO_QUERY);
+    uno::Reference<text::XText> xTextB1(xShapeB1, uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("B1"), xTextB1->getString());
+    uno::Reference<drawing::XShape> xShapeB2(getChildShape(getChildShape(getChildShape(xGroupB, 3), 0), 0), uno::UNO_QUERY);
+    uno::Reference<text::XText> xTextB2(xShapeB2, uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("B2"), xTextB2->getString());
+
+    CPPUNIT_ASSERT_EQUAL(xShapeB1->getPosition().Y, xShapeB2->getPosition().Y);
+    CPPUNIT_ASSERT_GREATEREQUAL(xShapeB1->getPosition().X + xShapeB1->getSize().Width, xShapeB2->getPosition().X);
+
+    uno::Reference<drawing::XShapes> xGroupRight(xGroup->getByIndex(2), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xGroupC(xGroupRight->getByIndex(1), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShapeC1(getChildShape(getChildShape(getChildShape(xGroupC, 3), 0), 0), uno::UNO_QUERY);
+    uno::Reference<text::XText> xTextC1(xShapeC1, uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("C1"), xTextC1->getString());
+    uno::Reference<drawing::XShape> xShapeC2(getChildShape(getChildShape(getChildShape(xGroupC, 5), 0), 0), uno::UNO_QUERY);
+    uno::Reference<text::XText> xTextC2(xShapeC2, uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("C2"), xTextC2->getString());
+
+    CPPUNIT_ASSERT_EQUAL(xShapeC1->getPosition().X, xShapeC2->getPosition().X);
+    CPPUNIT_ASSERT_GREATEREQUAL(xShapeC1->getPosition().Y + xShapeC1->getSize().Height, xShapeC2->getPosition().Y);
 
     xDocShRef->DoClose();
 }
