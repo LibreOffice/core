@@ -3387,7 +3387,7 @@ if test "$_os" = "WINNT"; then
     if test "$BITNESS_OVERRIDE" = ""; then
         if test -f "$vctest/bin/cl.exe"; then
             VC_PRODUCT_DIR=$vctest
-        elif test -f "$vctest/VC/Tools/MSVC/$vcbuildnumber/bin/HostX86/x86/cl.exe"; then
+        elif test -f "$vctest/VC/Tools/MSVC/$vcbuildnumber/bin/HostX64/x86/cl.exe"; then
             VC_PRODUCT_DIR=$vctest/VC
         else
             AC_MSG_ERROR([no compiler (cl.exe) found])
@@ -3462,16 +3462,14 @@ if test "$_os" = "WINNT"; then
     dnl  Check for the corresponding mspdb*.dll
     dnl ===========================================================
 
-    MSPDB_PATH=
-    CL_DIR=
+    CL_PATH=
     CL_LIB=
 
+    MSPDB_PATH=`win_short_path_for_make "$VC_PRODUCT_DIR/Tools/MSVC/$vcbuildnumber/bin/HostX64/x64"`
     if test "$BITNESS_OVERRIDE" = ""; then
-        MSPDB_PATH="$VC_PRODUCT_DIR/Tools/MSVC/$vcbuildnumber/bin/HostX86/x86"
-        CL_DIR=Tools/MSVC/$vcbuildnumber/bin/HostX86/x86
+        CL_PATH=`win_short_path_for_make "$VC_PRODUCT_DIR/Tools/MSVC/$vcbuildnumber/bin/HostX64/x86"`
     else
-        MSPDB_PATH="$VC_PRODUCT_DIR/Tools/MSVC/$vcbuildnumber/bin/HostX64/x64"
-        CL_DIR=Tools/MSVC/$vcbuildnumber/bin/HostX64/x64
+        CL_PATH=`win_short_path_for_make "$VC_PRODUCT_DIR/Tools/MSVC/$vcbuildnumber/bin/HostX64/x64"`
     fi
 
     # MSVC 15.0 has libraries from 14.0?
@@ -3480,9 +3478,6 @@ if test "$_os" = "WINNT"; then
     if test ! -e "$MSPDB_PATH/mspdb${mspdbnum}.dll"; then
         AC_MSG_ERROR([No mspdb${mspdbnum}.dll in $MSPDB_PATH, Visual Studio installation broken?])
     fi
-
-    MSPDB_PATH=`cygpath -d "$MSPDB_PATH"`
-    MSPDB_PATH=`cygpath -u "$MSPDB_PATH"`
 
     dnl The path needs to be added before cl is called
     PATH="$MSPDB_PATH:$PATH"
@@ -3497,8 +3492,8 @@ if test "$_os" = "WINNT"; then
     dnl Save the true MSVC cl.exe for use when CC/CXX is actually clang-cl,
     dnl needed when building CLR code:
     if test -z "$MSVC_CXX"; then
-        if test -f "$VC_PRODUCT_DIR/$CL_DIR/cl.exe"; then
-            MSVC_CXX="$VC_PRODUCT_DIR/$CL_DIR/cl.exe"
+        if test -f "$CL_PATH/cl.exe"; then
+            MSVC_CXX="$CL_PATH/cl.exe"
         fi
 
         # This gives us a posix path with 8.3 filename restrictions
@@ -3632,9 +3627,10 @@ if test "$_os" = "WINNT"; then
         if test -n "$CXX_X86_BINARY"; then
             BUILD_X86=TRUE
             AC_MSG_RESULT([preset])
-        elif "$VC_PRODUCT_DIR/Tools/MSVC/$vcbuildnumber/bin/HostX86/x86/cl.exe" -? </dev/null >/dev/null 2>&1; then
+        elif "$VC_PRODUCT_DIR/Tools/MSVC/$vcbuildnumber/bin/HostX64/x86/cl.exe" -? </dev/null >/dev/null 2>&1; then
             BUILD_X86=TRUE
-            CXX_X86_BINARY="$VC_PRODUCT_DIR/Tools/MSVC/$vcbuildnumber/bin/HostX86/x86/cl.exe -arch:SSE"
+            CXX_X86_BINARY=`win_short_path_for_make "$VC_PRODUCT_DIR/Tools/MSVC/$vcbuildnumber/bin/HostX64/x86/cl.exe"`
+            CXX_X86_BINARY+=" /arch:SSE"
             AC_MSG_RESULT([found])
         else
             CXX_X86_BINARY=
@@ -10192,25 +10188,17 @@ ML_EXE=""
 if test "$_os" = "WINNT"; then
     if test "$BITNESS_OVERRIDE" = ""; then
         assembler=ml.exe
-        assembler_bin=$CL_DIR
     else
         assembler=ml64.exe
-        assembler_bin=$CL_DIR
     fi
 
     AC_MSG_CHECKING([for MSVC assembler ($assembler)])
-    if test -f "$VC_PRODUCT_DIR/$assembler_bin/$assembler"; then
-        ASM_HOME=$VC_PRODUCT_DIR/$assembler_bin
-        ML_EXE=`win_short_path_for_make "$VC_PRODUCT_DIR/$assembler_bin/$assembler"`
+    if test -f "$CL_PATH/$assembler"; then
+        ML_EXE=`win_short_path_for_make "$CL_PATH/$assembler"`
         AC_MSG_RESULT([$ML_EXE])
     else
         AC_MSG_ERROR([not found])
     fi
-
-    PathFormat "$ASM_HOME"
-    ASM_HOME="$formatted_path"
-else
-    ASM_HOME=""
 fi
 
 AC_SUBST(ML_EXE)
@@ -12676,12 +12664,14 @@ else
         if test -f "$DOTNET_FRAMEWORK_HOME/bin"; then
             pathmunge "$DOTNET_FRAMEWORK_HOME/bin" "before"
         fi
-        pathmunge "$ASM_HOME" "before"
         pathmunge "$WINDOWS_SDK_HOME/bin" "before"
         pathmunge "$CSC_PATH" "before"
         pathmunge "$MIDL_PATH" "before"
         pathmunge "$AL_PATH" "before"
         pathmunge "$MSPDB_PATH" "before"
+        if test "$MSPDB_PATH" != "$CL_PATH"; then
+                pathmunge "$CL_PATH" "before"
+        fi
         if test -n "$MSBUILD_PATH" ; then
             pathmunge "$MSBUILD_PATH" "before"
         fi
