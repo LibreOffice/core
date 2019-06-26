@@ -421,15 +421,6 @@ namespace
 
 sal_Bool SwTransferable::isComplex()
 {
-    const SelectionType nSelectionType = m_pWrtShell->GetSelectionType();
-
-    // Anything other than text is complex by definition.
-    if (nSelectionType != SelectionType::Text)
-        return true;
-
-    if (m_pWrtShell->IsFrameSelected() || m_pWrtShell->IsObjSelected())
-        return true;
-
     // Copy into a new Doc so we don't mess with the existing one.
     //FIXME: We *should* be able to avoid this and improve the performance.
     m_pClpDocFac.reset(new SwDocFac);
@@ -439,21 +430,29 @@ sal_Bool SwTransferable::isComplex()
         .LockExpFields(); // never update fields - leave text as it is
     lclOverWriteDoc(*m_pWrtShell, *pTmpDoc);
 
-    bool isComplex = false;
+    sal_Int32 nTextLength = 0;
+    const SwNode* pEndOfContent = &m_pWrtShell->GetDoc()->GetNodes().GetEndOfContent();
     SwNodes& aNodes = pTmpDoc->GetNodes();
     for( sal_uLong nIndex = 0; nIndex < aNodes.Count(); ++nIndex)
     {
         SwNode& rNd = *aNodes[nIndex];
-        if (rNd.IsContentNode() && !rNd.IsTextNode())
+        if (&rNd == pEndOfContent)
+            break;
+
+        if (rNd.IsOLENode() || rNd.IsGrfNode())
+            return true; // Complex
+
+        SwTextNode* pTextNode = rNd.GetTextNode();
+        if (pTextNode)
         {
-            isComplex = true;
-            break;
+            nTextLength += pTextNode->GetText().getLength();
+            if (nTextLength >= 1024 * 512)
+                return true; // Complex
         }
-        else if (&rNd == &m_pWrtShell->GetDoc()->GetNodes().GetEndOfContent())
-            break;
     }
 
-    return isComplex;
+    // Simple
+    return false;
 }
 
 bool SwTransferable::GetData( const DataFlavor& rFlavor, const OUString& rDestDoc )
