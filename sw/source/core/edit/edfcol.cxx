@@ -1157,12 +1157,14 @@ void SwEditShell::SetClassification(const OUString& rName, SfxClassificationPoli
     }
 }
 
+// We pass xParent and xNodeSubject even though they point to the same thing because the UNO_QUERY is
+// on a performance-sensitive path.
 static void lcl_ApplyParagraphClassification(SwDoc* pDoc,
                                       const uno::Reference<frame::XModel>& xModel,
                                       const uno::Reference<text::XTextContent>& xParent,
+                                      const css::uno::Reference<css::rdf::XResource>& xNodeSubject,
                                       std::vector<svx::ClassificationResult> aResults)
 {
-    css::uno::Reference<css::rdf::XResource> xNodeSubject(xParent, uno::UNO_QUERY);
     if (!xNodeSubject.is())
         return;
 
@@ -1279,7 +1281,7 @@ void SwEditShell::ApplyParagraphClassification(std::vector<svx::ClassificationRe
 
     uno::Reference<frame::XModel> xModel = pDocShell->GetBaseModel();
     uno::Reference<text::XTextContent> xParent = SwXParagraph::CreateXParagraph(*pNode->GetDoc(), pNode);
-    lcl_ApplyParagraphClassification(GetDoc(), xModel, xParent, std::move(aResults));
+    lcl_ApplyParagraphClassification(GetDoc(), xModel, xParent, css::uno::Reference<css::rdf::XResource>(xParent, uno::UNO_QUERY), std::move(aResults));
 }
 
 static std::vector<svx::ClassificationResult> lcl_CollectParagraphClassification(const uno::Reference<frame::XModel>& xModel, const uno::Reference<text::XTextContent>& xParagraph)
@@ -1987,7 +1989,7 @@ void SwEditShell::RestoreMetadataFieldsAndValidateParagraphSignatures()
             }
 
             // Update classification based on results.
-            lcl_ApplyParagraphClassification(GetDoc(), xModel, xParagraph, aResults);
+            lcl_ApplyParagraphClassification(GetDoc(), xModel, xParagraph, xSubject, aResults);
 
             // Get Signatures
             std::map<OUString, SignatureDescr> aSignatures;
