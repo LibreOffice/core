@@ -16,16 +16,24 @@ $(eval $(call gb_ExternalProject_register_targets,nss,\
 ))
 
 ifeq ($(OS),WNT)
+$(call gb_ExternalProject_get_state_target,nss,build): CROSS_CC := $(subst /x64/,/x86/,$(CXX_X64_BINARY))
 $(call gb_ExternalProject_get_state_target,nss,build): $(call gb_ExternalExecutable_get_dependencies,python)
 	$(call gb_ExternalProject_run,build,\
 		$(if $(MSVC_USE_DEBUG_RUNTIME),USE_DEBUG_RTL=1,BUILD_OPT=1) \
 		MOZ_MSVCVERSION=9 OS_TARGET=WIN95 \
-		$(if $(filter X86_64,$(CPUNAME)),USE_64=1) \
+		$(if $(filter X86_64,$(CPUNAME)),USE_64=1, \
+			$(if $(CXX_X64_BINARY), \
+				PATH="$(dir $(CROSS_CC));$(subst ;;,,$(subst $(dir $(CROSS_CC)),,$(subst HostX86,HostX64.$(PATH))))")) \
 		LIB="$(ILIB)" \
 		XCFLAGS="-arch:SSE $(SOLARINC)" \
-		$(MAKE) -j1 nss_build_all RC="rc.exe $(SOLARINC)" \
+		$(MAKE) nss_build_all RC="rc.exe $(SOLARINC)" \
 			NSINSTALL='$(call gb_ExternalExecutable_get_command,python) $(SRCDIR)/external/nss/nsinstall.py' \
 			NSS_DISABLE_GTESTS=1 \
+			$(if $(filter X86_64,$(CPUNAME)),,$(if $(CXX_X64_BINARY), \
+				CC="$(CROSS_CC)" \
+				CCC="$(CROSS_CC)" \
+				LD="$(subst cl.exe,link.exe,$(CROSS_CC))" \
+				AR="$(subst cl.exe,lib.exe,$(CROSS_CC))")) \
 	,nss)
 
 else # OS!=WNT
@@ -46,7 +54,7 @@ $(call gb_ExternalProject_get_state_target,nss,build): $(call gb_ExternalExecuta
 			$(if $(filter iOS-ARM,$(OS)-$(CPUNAME)),CPU_ARCH=arm) \
 			NSPR_CONFIGURE_OPTS="--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)") \
 		NSDISTMODE=copy \
-		$(MAKE) -j1 AR="$(AR)" \
+		$(MAKE) AR="$(AR)" \
 			RANLIB="$(RANLIB)" \
 			NMEDIT="$(NM)edit" \
 			COMMA=$(COMMA) \
