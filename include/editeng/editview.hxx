@@ -62,6 +62,9 @@ namespace sun {
 namespace star {
 namespace datatransfer {
     class XTransferable;
+    namespace dnd {
+        class XDropTarget;
+    }
 }
 namespace linguistic2 {
     class XSpellChecker1;
@@ -101,6 +104,12 @@ public:
 
     // return the OutputDevice that the EditView will draw to
     virtual OutputDevice& EditViewOutputDevice() const = 0;
+
+    // implemented if drag and drop support is wanted
+    virtual css::uno::Reference<css::datatransfer::dnd::XDropTarget> GetDropTarget() const
+    {
+        return nullptr;
+    }
 };
 
 class EDITENG_DLLPUBLIC EditView final
