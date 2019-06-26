@@ -140,6 +140,7 @@
 #define SID_NOTES_MODE                      (SID_SD_START+69)
 #define SID_HANDOUT_MASTER_MODE             (SID_SD_START+70)
 #define SID_LINEEND_POLYGON                 (SID_SD_START+71)
+#define SID_EXECUTE_ANIMATION_EFFECT        (SID_SD_START+72)
     // FREE
 #define SID_SWITCH_POINTEDIT                (SID_SD_START+74)
     // FREE

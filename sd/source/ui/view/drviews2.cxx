@@ -148,6 +148,7 @@
 #include <fuconnct.hxx>
 #include <fucopy.hxx>
 #include <fudspord.hxx>
+#include <fuexecuteinteraction.hxx>
 #include <fuexpand.hxx>
 #include <fuinsert.hxx>
 #include <fuinsfil.hxx>
@@ -1634,6 +1635,14 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         case SID_ANIMATION_EFFECTS:
         {
             SetCurrentFunction( FuObjectAnimationParameters::Create( this, GetActiveWindow(), mpDrawView.get(), GetDoc(), rReq) );
+            Cancel();
+        }
+        break;
+
+        case SID_EXECUTE_ANIMATION_EFFECT:
+        {
+            SetCurrentFunction(FuExecuteInteraction::Create(this, GetActiveWindow(),
+                                                            mpDrawView.get(), GetDoc(), rReq));
             Cancel();
         }
         break;

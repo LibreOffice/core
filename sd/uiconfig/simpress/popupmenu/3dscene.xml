@@ -57,4 +57,5 @@
   <menu:menuitem menu:id=".uno:EnterGroup"/>
   <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:AnimationEffects"/>
+  <menu:menuitem menu:id=".uno:ExecuteAnimationEffect"/>
 </menu:menupopup>
