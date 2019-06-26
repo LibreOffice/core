@@ -21,6 +21,7 @@
 #define INCLUDED_SW_INC_CELLFML_HXX
 
 #include <memory>
+#include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
 
 class SwTable;

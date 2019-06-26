@@ -29,7 +29,6 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <cppuhelper/implbase.hxx>
-#include "calbck.hxx"
 
 #include <com/sun/star/style/XAutoStyleFamily.hpp>
 #include <com/sun/star/style/XAutoStyles.hpp>

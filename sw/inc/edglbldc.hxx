@@ -20,6 +20,7 @@
 #define INCLUDED_SW_INC_EDGLBLDC_HXX
 
 #include <o3tl/sorted_vector.hxx>
+#include <tools/solar.h>
 
 class SwSection;
 class SwTOXBase;

@@ -21,6 +21,9 @@
 
 #include <tools/link.hxx>
 
+class SdrObject;
+class SdrObjCreatorParams;
+
 class SwObjectFactory
 {
 public:

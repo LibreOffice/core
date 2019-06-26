@@ -20,6 +20,7 @@
 #define INCLUDED_SW_INC_SHELLRES_HXX
 
 #include <memory>
+#include <vector>
 #include "swdllapi.h"
 #include <rtl/ustring.hxx>
 

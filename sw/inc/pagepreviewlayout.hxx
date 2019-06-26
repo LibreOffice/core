@@ -30,6 +30,7 @@
 #include <vcl/outdev.hxx>
 // datatype <SwTwips>
 #include "swtypes.hxx"
+#include <prevwpage.hxx>
 
 class SwViewShell;
 class SwRootFrame;
