@@ -29,11 +29,11 @@ ifeq ($(OS),WNT)
 $(call gb_ExternalProject_get_state_target,nss,build): $(call gb_ExternalProject_get_state_target,nss,configure) $(call gb_ExternalExecutable_get_dependencies,python)
 	$(call gb_ExternalProject_run,build,\
 		$(if $(MSVC_USE_DEBUG_RUNTIME),USE_DEBUG_RTL=1,BUILD_OPT=1) \
-		MOZ_MSVCVERSION=9 OS_TARGET=WIN95 \
+		OS_TARGET=WIN95 \
 		$(if $(filter X86_64,$(CPUNAME)),USE_64=1) \
 		LIB="$(ILIB)" \
 		XCFLAGS="-arch:SSE $(SOLARINC)" \
-		$(MAKE) -j1 nss_build_all RC="rc.exe $(SOLARINC)" \
+		$(MAKE) nss_build_all RC="rc.exe $(SOLARINC)" \
 			NSINSTALL='$(call gb_ExternalExecutable_get_command,python) $(SRCDIR)/external/nss/nsinstall.py' \
 	,nss)
 
@@ -53,7 +53,7 @@ $(call gb_ExternalProject_get_state_target,nss,build): $(call gb_ExternalProject
 			$(if $(filter IOS-ARM,$(OS)-$(CPUNAME)),CPU_ARCH=arm) \
 			NSINSTALL="$(call gb_ExternalExecutable_get_command,python) $(SRCDIR)/external/nss/nsinstall.py") \
 		NSDISTMODE=copy \
-		$(MAKE) -j1 AR="$(AR)" \
+		$(MAKE) AR="$(AR)" \
 			RANLIB="$(RANLIB)" \
 			NMEDIT="$(NM)edit" \
 			CCC="$(CXX)" \
