@@ -278,6 +278,7 @@ $(eval $(call gb_Library_add_exception_objects,sd,\
 	sd/source/ui/func/fudraw \
 	sd/source/ui/func/fudspord \
 	sd/source/ui/func/fuediglu \
+	sd/source/ui/func/fuexecuteinteraction \
 	sd/source/ui/func/fuexpand \
 	sd/source/ui/func/fuformatpaintbrush \
 	sd/source/ui/func/fuhhconv \
