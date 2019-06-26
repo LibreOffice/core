@@ -1072,17 +1072,29 @@ Sequence< sal_Int16 > DefaultNumberingProvider::getSupportedNumberingTypes(  )
 
 sal_Int16 DefaultNumberingProvider::getNumberingType( const OUString& rNumberingIdentifier )
 {
+    auto it = maSupportedTypesCache.find(rNumberingIdentifier);
+    if (it != maSupportedTypesCache.end())
+        return it->second->nType;
     for(sal_Int16 i = 0; i < nSupported_NumberingTypes; i++)
         if(rNumberingIdentifier == makeNumberingIdentifier(i))
+        {
+            maSupportedTypesCache.emplace(rNumberingIdentifier, &aSupportedTypes[i]);
             return aSupportedTypes[i].nType;
+        }
     throw RuntimeException();
 }
 
 sal_Bool DefaultNumberingProvider::hasNumberingType( const OUString& rNumberingIdentifier )
 {
+    auto it = maSupportedTypesCache.find(rNumberingIdentifier);
+    if (it != maSupportedTypesCache.end())
+        return true;
     for(sal_Int16 i = 0; i < nSupported_NumberingTypes; i++)
         if(rNumberingIdentifier == makeNumberingIdentifier(i))
+        {
+            maSupportedTypesCache.emplace(rNumberingIdentifier, &aSupportedTypes[i]);
             return true;
+        }
     return false;
 }
 

@@ -25,12 +25,14 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <rtl/ref.hxx>
+#include <map>
 
 namespace com::sun::star::container { class XHierarchicalNameAccess; }
 namespace com::sun::star::uno { class XComponentContext; }
 namespace i18npool {
     class TransliterationImpl;
     class NativeNumberSupplierService;
+    struct Supported_NumberingType;
 }
 
 namespace i18npool {
@@ -78,6 +80,8 @@ private:
     css::uno::Reference < css::container::XHierarchicalNameAccess > xHierarchicalNameAccess;
     rtl::Reference<TransliterationImpl> translit;
     rtl::Reference<NativeNumberSupplierService> mxNatNum;
+    std::map<OUString, const Supported_NumberingType*> maSupportedTypesCache;
+
     /// @throws css::uno::RuntimeException
     OUString makeNumberingIdentifier( sal_Int16 index );
     /// @throws css::uno::RuntimeException
