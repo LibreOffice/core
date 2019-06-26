@@ -19,6 +19,8 @@
 #ifndef INCLUDED_SW_INC_SWGETPOOLIDFROMNAME_HXX
 #define INCLUDED_SW_INC_SWGETPOOLIDFROMNAME_HXX
 
+#include <sal/types.h>
+
 /* When using the NameMapper to translate pool ids to UI or programmatic
  * names, this enum is used to define which family is required */
 

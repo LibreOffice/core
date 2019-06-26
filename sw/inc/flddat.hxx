@@ -20,6 +20,8 @@
 #ifndef INCLUDED_SW_INC_FLDDAT_HXX
 #define INCLUDED_SW_INC_FLDDAT_HXX
 
+#include <tools/solar.h>
+
 #include "fldbas.hxx"
 
 class DateTime;

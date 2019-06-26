@@ -25,6 +25,7 @@
 #include "SwCapObjType.hxx"
 #include "tblenum.hxx"
 #include "itabenum.hxx"
+#include <caption.hxx>
 #include <tools/globname.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
