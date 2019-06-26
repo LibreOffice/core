@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "bf659307_7809a1db",
+        "filename": "sw/source/core/unocore/unofield.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1177,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-06-26T09:05:08Z",
+      "side": 1,
+      "message": "okay... then i guess there are different kinds of callers: those who actually want to check if its a descriptor, and those who want to check that it isn\u0027t \"live\"\n\n(these uno-services always have 3 lifecycle states, descriptor / live / disposed)\n\nso let\u0027s not hold up this bugfix with that, maybe i\u0027ll investigate that a bit more, if i can find some time...",
+      "parentUuid": "df7087c5_58aff493",
+      "revId": "b33dd6df67223309a32ec10ca93837f2bb5540a4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "df7087c5_45cb8da4",
         "filename": "sw/source/core/unocore/unofield.cxx",
         "patchSetId": 2
