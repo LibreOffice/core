@@ -17,6 +17,7 @@ ifeq ($(OS),WNT)
 $(call gb_ExternalProject_get_state_target,lpsolve,build):
 	$(call gb_ExternalProject_run,build,\
 		LIB="$(ILIB)" RUNTIME_FLAG="$(if $(MSVC_USE_DEBUG_RUNTIME),/MDd,/MD)" \
+		LINKER_FLAGS="$(if $(WINDOWS_X64),,/link /MACHINE:X86)" CC="$(CC)" \
 		cmd /c cvc6.bat \
 	,lpsolve55)
 else # $(OS)!=WNT
