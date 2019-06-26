@@ -675,7 +675,6 @@ CPPUNIT_TEST_FIXTURE(EPUBExportTest, testTextBox)
 
 CPPUNIT_TEST_FIXTURE(EPUBExportTest, testFontEmbedding)
 {
-#if !defined(MACOSX)
     createDoc("font-embedding.fodt", {});
 
     // Make sure that the params of defineEmbeddedFont() are all handled.
@@ -696,7 +695,6 @@ CPPUNIT_TEST_FIXTURE(EPUBExportTest, testFontEmbedding)
     // librevenge:font-weight
     CPPUNIT_ASSERT_EQUAL(OUString("normal"),
                          EPUBExportTest::getCss(aCssDoc, "font-face", "font-weight"));
-#endif
 }
 
 CPPUNIT_TEST_FIXTURE(EPUBExportTest, testImageLink)
