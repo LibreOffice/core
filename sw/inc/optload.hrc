@@ -20,6 +20,9 @@
 #ifndef INCLUDED_SW_INC_OPTLOAD_HRC
 #define INCLUDED_SW_INC_OPTLOAD_HRC
 
+#include <tools/fldunit.hxx>
+#include <utility>
+
 #define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
 
 const std::pair<const char*, FieldUnit> STR_ARR_METRIC[] =

@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SW_INC_PVPRTDAT_HXX
 #define INCLUDED_SW_INC_PVPRTDAT_HXX
 
-#include <tools/solar.h>
+#include <sal/types.h>
 
 class SwPagePreviewPrtData
 {

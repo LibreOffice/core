@@ -20,6 +20,9 @@
 #define INCLUDED_SW_INC_HHCWRP_HXX
 
 #include <editeng/hangulhanja.hxx>
+#include <editeng/svxenum.hxx>
+#include <vcl/vclptr.hxx>
+#include <vcl/window.hxx>
 #include "swdllapi.h"
 
 class SwView;
