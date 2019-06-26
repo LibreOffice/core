@@ -383,6 +383,42 @@ namespace
     }
 }
 
+sal_Bool SwTransferable::isComplex()
+{
+    // Copy into a new Doc so we don't mess with the existing one.
+    //FIXME: We *should* be able to avoid this and improve the performance.
+    m_pClpDocFac.reset(new SwDocFac);
+    SwDoc* const pTmpDoc = lcl_GetDoc(*m_pClpDocFac);
+
+    pTmpDoc->getIDocumentFieldsAccess()
+        .LockExpFields(); // never update fields - leave text as it is
+    lclOverWriteDoc(*m_pWrtShell, *pTmpDoc);
+
+    sal_Int32 nTextLength = 0;
+    const SwNode* pEndOfContent = &m_pWrtShell->GetDoc()->GetNodes().GetEndOfContent();
+    SwNodes& aNodes = pTmpDoc->GetNodes();
+    for( sal_uLong nIndex = 0; nIndex < aNodes.Count(); ++nIndex)
+    {
+        SwNode& rNd = *aNodes[nIndex];
+        if (&rNd == pEndOfContent)
+            break;
+
+        if (rNd.IsOLENode() || rNd.IsGrfNode())
+            return true; // Complex
+
+        SwTextNode* pTextNode = rNd.GetTextNode();
+        if (pTextNode)
+        {
+            nTextLength += pTextNode->GetText().getLength();
+            if (nTextLength >= 1024 * 512)
+                return true; // Complex
+        }
+    }
+
+    // Simple
+    return false;
+}
+
 bool SwTransferable::GetData( const DataFlavor& rFlavor, const OUString& rDestDoc )
 {
     SotClipboardFormatId nFormat = SotExchange::GetFormat( rFlavor );
