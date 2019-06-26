@@ -12734,7 +12734,8 @@ else
 fi
 
 
-if test "$STALE_MAKE" = "TRUE" -a "$build_os" = "cygwin"; then
+if test \( "$STALE_MAKE" = "TRUE" -o "$HAVE_GNUMAKE_FILE_FUNC" != "TRUE" \) \
+        -a "$build_os" = "cygwin"; then
 
 cat << _EOS
 ****************************************************************************
@@ -12770,7 +12771,11 @@ Note: autogen.sh will try to use /opt/lo/bin/make if the environment variable GN
 Alternatively, you can install the 'new' make where ever you want and make sure that `which make` finds it.
 
 _EOS
+if test "$HAVE_GNUMAKE_FILE_FUNC" != "TRUE"; then
+    AC_MSG_ERROR([no file function found; the build will fail without it; use GNU make 4.0 or later])
 fi
+fi
+
 
 cat << _EOF
 ****************************************************************************
