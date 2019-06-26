@@ -144,6 +144,7 @@ $(eval $(call gb_Library_add_exception_objects,oox,\
     oox/source/drawingml/diagram/diagramdefinitioncontext \
     oox/source/drawingml/diagram/diagramfragmenthandler \
     oox/source/drawingml/diagram/diagramlayoutatoms \
+    oox/source/drawingml/diagram/layoutatomvisitorbase \
     oox/source/drawingml/diagram/layoutatomvisitors \
     oox/source/drawingml/diagram/layoutnodecontext \
     oox/source/drawingml/drawingmltypes \
