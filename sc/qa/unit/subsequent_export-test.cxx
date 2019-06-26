@@ -3226,7 +3226,6 @@ void ScExportTest::testSupBookVirtualPathXLS()
 #else
     ASSERT_FORMULA_EQUAL(rDoc, ScAddress(0,0,0), "'file:///home/timar/Documents/external.xls'#$Sheet1.A1", "Wrong SupBook VirtualPath URL");
 #endif
-
     xDocSh->DoClose();
 }
 
