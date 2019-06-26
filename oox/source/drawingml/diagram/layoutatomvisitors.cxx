@@ -30,12 +30,6 @@ using namespace ::oox::core;
 
 namespace oox { namespace drawingml {
 
-void ShapeCreationVisitor::defaultVisit(LayoutAtom const & rAtom)
-{
-    for (const auto& pAtom : rAtom.getChildren())
-        pAtom->accept(*this);
-}
-
 void ShapeCreationVisitor::visit(ConstraintAtom& /*rAtom*/)
 {
     // stop processing
@@ -44,71 +38,6 @@ void ShapeCreationVisitor::visit(ConstraintAtom& /*rAtom*/)
 void ShapeCreationVisitor::visit(AlgAtom& rAtom)
 {
     mpParentShape->setAspectRatio(rAtom.getAspectRatio());
-}
-
-void ShapeCreationVisitor::visit(ForEachAtom& rAtom)
-{
-    if (!rAtom.getRef().isEmpty())
-    {
-        if (LayoutAtomPtr pRefAtom = rAtom.getRefAtom())
-            pRefAtom->accept(*this);
-        return;
-    }
-
-    if (rAtom.iterator().mbHideLastTrans && rAtom.iterator().mnAxis == XML_followSib)
-    {
-        // If last transition is hidden and the axis is the follow sibling,
-        // then the last atom should not be visited.
-        if (mnCurrIdx + mnCurrStep >= mnCurrCnt)
-            return;
-    }
-
-    const std::vector<LayoutAtomPtr>& rChildren=rAtom.getChildren();
-
-    sal_Int32 nChildren=1;
-    // Approximate the non-assistant type with the node type.
-    if (rAtom.iterator().mnPtType == XML_node || rAtom.iterator().mnPtType == XML_nonAsst)
-    {
-        // count child data nodes - check all child Atoms for "name"
-        // attribute that is contained in diagram's
-        // getPointsPresNameMap()
-        ShallowPresNameVisitor aVisitor(mrDgm);
-        for (const auto& pAtom : rChildren)
-            pAtom->accept(aVisitor);
-        nChildren = aVisitor.getCount();
-    }
-
-    const sal_Int32 nCnt = std::min(
-        nChildren,
-        rAtom.iterator().mnCnt==-1 ? nChildren : rAtom.iterator().mnCnt);
-
-    const sal_Int32 nOldIdx=mnCurrIdx;
-    const sal_Int32 nOldStep = mnCurrStep;
-    const sal_Int32 nOldCnt = mnCurrCnt;
-    const sal_Int32 nStep=rAtom.iterator().mnStep;
-    mnCurrStep = nStep;
-    mnCurrCnt = nCnt;
-    for( mnCurrIdx=0; mnCurrIdx<nCnt && nStep>0; mnCurrIdx+=nStep )
-    {
-        // TODO there is likely some conditions
-        for (const auto& pAtom : rChildren)
-            pAtom->accept(*this);
-    }
-
-    // and restore idx
-    mnCurrIdx = nOldIdx;
-    mnCurrStep = nOldStep;
-    mnCurrCnt = nOldCnt;
-}
-
-void ShapeCreationVisitor::visit(ConditionAtom& rAtom)
-{
-    defaultVisit(rAtom);
-}
-
-void ShapeCreationVisitor::visit(ChooseAtom& rAtom)
-{
-    defaultVisit(rAtom);
 }
 
 void ShapeCreationVisitor::visit(LayoutNode& rAtom)
@@ -141,11 +70,12 @@ void ShapeCreationVisitor::visit(LayoutNode& rAtom)
         {
             pShape->setInternalName(rAtom.getName());
             rAtom.addNodeShape(pShape, mnCurrLevel);
+            mrDgm.getLayout()->getPresPointShapeMap()[pNewNode] = pShape;
         }
     }
     else
     {
-        ShapeTemplateVisitor aTemplateVisitor;
+        ShapeTemplateVisitor aTemplateVisitor(mrDgm, pNewNode);
         aTemplateVisitor.defaultVisit(rAtom);
         ShapePtr pShape = aTemplateVisitor.getShapeCopy();
 
@@ -162,6 +92,7 @@ void ShapeCreationVisitor::visit(LayoutNode& rAtom)
                 pCurrParent->addChild(pShape);
                 pCurrParent = pShape;
                 rAtom.addNodeShape(pShape, mnCurrLevel);
+                mrDgm.getLayout()->getPresPointShapeMap()[pNewNode] = pShape;
             }
         }
         else
@@ -198,13 +129,6 @@ void ShapeCreationVisitor::visit(ShapeAtom& /*rAtom*/)
     // stop processing
 }
 
-void ShapeTemplateVisitor::defaultVisit(LayoutAtom const & rAtom)
-{
-    // visit all children, one of them needs to be the layout algorithm
-    for (const auto& pAtom : rAtom.getChildren())
-        pAtom->accept(*this);
-}
-
 void ShapeTemplateVisitor::visit(ConstraintAtom& /*rAtom*/)
 {
     // stop processing
@@ -218,16 +142,6 @@ void ShapeTemplateVisitor::visit(AlgAtom& /*rAtom*/)
 void ShapeTemplateVisitor::visit(ForEachAtom& /*rAtom*/)
 {
     // stop processing
-}
-
-void ShapeTemplateVisitor::visit(ConditionAtom& rAtom)
-{
-    defaultVisit(rAtom);
-}
-
-void ShapeTemplateVisitor::visit(ChooseAtom& rAtom)
-{
-    defaultVisit(rAtom);
 }
 
 void ShapeTemplateVisitor::visit(LayoutNode& /*rAtom*/)
@@ -253,13 +167,6 @@ void ShapeTemplateVisitor::visit(ShapeAtom& rAtom)
     mpShape->cloneFillProperties();
 }
 
-void ShapeLayoutingVisitor::defaultVisit(LayoutAtom const & rAtom)
-{
-    // visit all children, one of them needs to be the layout algorithm
-    for (const auto& pAtom : rAtom.getChildren())
-        pAtom->accept(*this);
-}
-
 void ShapeLayoutingVisitor::visit(ConstraintAtom& rAtom)
 {
     if (meLookFor == CONSTRAINT)
@@ -270,33 +177,11 @@ void ShapeLayoutingVisitor::visit(AlgAtom& rAtom)
 {
     if (meLookFor == ALGORITHM)
     {
-        auto pShapes = rAtom.getLayoutNode().getNodeShapes().find(mnCurrLevel);
-        if (pShapes != rAtom.getLayoutNode().getNodeShapes().end())
-            for (const auto& pShape : pShapes->second)
-                rAtom.layoutShape(pShape, maConstraints, mnCurrLevel);
+        const PresPointShapeMap aMap = rAtom.getLayoutNode().getDiagram().getLayout()->getPresPointShapeMap();
+        auto pShape = aMap.find(mpCurrentNode);
+        if (pShape != aMap.end())
+            rAtom.layoutShape(pShape->second, maConstraints, mnCurrLevel);
     }
-}
-
-void ShapeLayoutingVisitor::visit(ForEachAtom& rAtom)
-{
-    if (!rAtom.getRef().isEmpty())
-    {
-        if (LayoutAtomPtr pRefAtom = rAtom.getRefAtom())
-            pRefAtom->accept(*this);
-        return;
-    }
-
-    defaultVisit(rAtom);
-}
-
-void ShapeLayoutingVisitor::visit(ConditionAtom& rAtom)
-{
-    defaultVisit(rAtom);
-}
-
-void ShapeLayoutingVisitor::visit(ChooseAtom& rAtom)
-{
-    defaultVisit(rAtom);
 }
 
 void ShapeLayoutingVisitor::visit(LayoutNode& rAtom)
@@ -304,11 +189,31 @@ void ShapeLayoutingVisitor::visit(LayoutNode& rAtom)
     if (meLookFor != LAYOUT_NODE)
         return;
 
-    // stop processing if there is no more shapes on this level
-    if (rAtom.getNodeShapes().empty() || mnCurrLevel > rAtom.getNodeShapes().rbegin()->first)
+    // stop processing if it's not a child of previous LayoutNode
+
+    const DiagramData::PointsNameMap::const_iterator aDataNode
+        = mrDgm.getData()->getPointsPresNameMap().find(rAtom.getName());
+    if (aDataNode == mrDgm.getData()->getPointsPresNameMap().end()
+        || mnCurrIdx >= static_cast<sal_Int32>(aDataNode->second.size()))
+        return;
+
+    const dgm::Point* pNewNode = aDataNode->second.at(mnCurrIdx);
+    if (!mpCurrentNode || !pNewNode)
+        return;
+
+    bool bIsChild = false;
+    for (const auto& aConnection : mrDgm.getData()->getConnections())
+        if (aConnection.msSourceId == mpCurrentNode->msModelId
+            && aConnection.msDestId == pNewNode->msModelId)
+            bIsChild = true;
+
+    if (!bIsChild)
         return;
 
     size_t nParentConstraintsNumber = maConstraints.size();
+
+    const dgm::Point* pPreviousNode = mpCurrentNode;
+    mpCurrentNode = pNewNode;
 
     // process alg atoms first, nested layout nodes afterwards
     meLookFor = CONSTRAINT;
@@ -320,59 +225,13 @@ void ShapeLayoutingVisitor::visit(LayoutNode& rAtom)
     meLookFor = LAYOUT_NODE;
     defaultVisit(rAtom);
     mnCurrLevel--;
+    mpCurrentNode = pPreviousNode;
 
     // delete added constraints, keep parent constraints
     maConstraints.erase(maConstraints.begin() + nParentConstraintsNumber, maConstraints.end());
 }
 
 void ShapeLayoutingVisitor::visit(ShapeAtom& /*rAtom*/)
-{
-    // stop processing
-}
-
-void ShallowPresNameVisitor::defaultVisit(LayoutAtom const & rAtom)
-{
-    // visit all children, at least one of them needs to have proper
-    // name set
-    for (const auto& pAtom : rAtom.getChildren())
-        pAtom->accept(*this);
-}
-
-void ShallowPresNameVisitor::visit(ConstraintAtom& /*rAtom*/)
-{
-    // stop processing
-}
-
-void ShallowPresNameVisitor::visit(AlgAtom& /*rAtom*/)
-{
-    // stop processing
-}
-
-void ShallowPresNameVisitor::visit(ForEachAtom& rAtom)
-{
-    defaultVisit(rAtom);
-}
-
-void ShallowPresNameVisitor::visit(ConditionAtom& rAtom)
-{
-    defaultVisit(rAtom);
-}
-
-void ShallowPresNameVisitor::visit(ChooseAtom& rAtom)
-{
-    defaultVisit(rAtom);
-}
-
-void ShallowPresNameVisitor::visit(LayoutNode& rAtom)
-{
-    DiagramData::PointsNameMap::const_iterator aDataNode=
-        mrDgm.getData()->getPointsPresNameMap().find(rAtom.getName());
-    if( aDataNode != mrDgm.getData()->getPointsPresNameMap().end() )
-        mnCnt = std::max(mnCnt,
-                         aDataNode->second.size());
-}
-
-void ShallowPresNameVisitor::visit(ShapeAtom& /*rAtom*/)
 {
     // stop processing
 }
