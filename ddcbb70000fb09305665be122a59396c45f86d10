@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_b8c5f95d",
+        "filename": "configure.ac",
+        "patchSetId": 1
+      },
+      "lineNbr": 5190,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-06-26T10:13:11Z",
+      "side": 1,
+      "message": "should possibly point to our special build?",
+      "revId": "ddcbb70000fb09305665be122a59396c45f86d10",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
