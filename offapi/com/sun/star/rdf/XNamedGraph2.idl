@@ -1,0 +1,134 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#ifndef __com_sun_star_rdf_XNamedGraph_idl__
+#define __com_sun_star_rdf_XNamedGraph_idl__
+
+#include <com/sun/star/rdf/XNamedGraph.idl>
+
+
+
+module com {   module sun {   module star {   module rdf {
+
+/** represents an RDF named graph that is stored in an RDF Repository.
+
+    @since LibreOffice 6.4
+ */
+interface XNamedGraph2 : XNamedGraph
+{
+
+    /** gets objects for matching RDF statements from a graph.
+
+        <p>this call caches its results (as opposed to getStatements in XNamedGraph
+        which cannot because it returns a mutable object).
+
+        <p>
+        Note that the ODF elements that can have metadata attached all
+        implement the interface XMetadatable, which inherits
+        from XResource, meaning that you can simply pass them
+        in as arguments here, and it will magically work.
+        </p>
+
+        <p>
+        Any parameter may be `NULL`, which acts as a wildcard.
+        For example, to get all statements about myURI:
+        <code>getStatements2(myURI, null, null)</code>
+        </p>
+
+        @param Subject
+            the subject of the RDF triple.
+
+        @param Predicate
+            the predicate of the RDF triple.
+
+        @param Object
+            the object of the RDF triple.
+
+        @returns
+            a sequence of XURIs for the objects in RDF statements
+            in the graph that match
+            the parameters, represented as an
+            enumeration of Statement
+
+        @throws com::sun::star::container::NoSuchElementException
+            if this graph does not exist in the repository any more
+
+        @throws RepositoryException
+            if an error occurs when accessing the repository.
+     */
+    sequence<com::sun::star::rdf::XURI> getStatementsObjects(
+            [in] XResource Subject,
+            [in] XURI Predicate,
+            [in] XNode Object)
+        raises( com::sun::star::container::NoSuchElementException,
+                RepositoryException );
+
+    /** returns true if there are matching RDF statements from a graph.
+
+        <p>this call caches its results (as opposed to getStatements in XNamedGraph
+        which cannot because it returns a mutable object).
+
+        <p>
+        Note that the ODF elements that can have metadata attached all
+        implement the interface XMetadatable, which inherits
+        from XResource, meaning that you can simply pass them
+        in as arguments here, and it will magically work.
+        </p>
+
+        <p>
+        Any parameter may be `NULL`, which acts as a wildcard.
+        For example, to get all statements about myURI:
+        <code>getStatements2(myURI, null, null)</code>
+        </p>
+
+        @param Subject
+            the subject of the RDF triple.
+
+        @param Predicate
+            the predicate of the RDF triple.
+
+        @param Object
+            the object of the RDF triple.
+
+        @returns
+            a sequence of XURIs for the objects in RDF statements
+            in the graph that match
+            the parameters, represented as an
+            enumeration of Statement
+
+        @throws com::sun::star::container::NoSuchElementException
+            if this graph does not exist in the repository any more
+
+        @throws RepositoryException
+            if an error occurs when accessing the repository.
+     */
+    boolean hasStatements(
+            [in] XResource Subject,
+            [in] XURI Predicate,
+            [in] XNode Object)
+        raises( com::sun::star::container::NoSuchElementException,
+                RepositoryException );
+};
+
+
+}; }; }; };
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
