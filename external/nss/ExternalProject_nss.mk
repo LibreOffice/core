@@ -24,13 +24,12 @@ $(call gb_ExternalProject_get_state_target,nss,build): $(call gb_ExternalExecuta
 			MOZ_DEBUG_SYMBOLS=1 \
 			MOZ_DEBUG_FLAGS=" " \
 			OPT_CODE_SIZE=0) \
-		MOZ_MSVCVERSION=9 OS_TARGET=WIN95 \
+		OS_TARGET=WIN95 \
 		$(if $(filter X86_64,$(CPUNAME)),USE_64=1) \
 		LIB="$(ILIB)" \
-		XCFLAGS="-arch:SSE $(SOLARINC)" \
-		$(MAKE) -j1 nss_build_all RC="rc.exe $(SOLARINC)" \
+		XCFLAGS="$(if $(filter-out X86_64,$(CPUNAME)),-arch:SSE )$(SOLARINC)" \
+		$(MAKE) nss_build_all RC="rc.exe $(SOLARINC)" \
 			NSINSTALL='$(call gb_ExternalExecutable_get_command,python) $(SRCDIR)/external/nss/nsinstall.py' \
-			NSS_DISABLE_GTESTS=1 \
 	,nss)
 	$(call gb_Trace_EndRange,nss,EXTERNAL)
 
@@ -53,14 +52,13 @@ $(call gb_ExternalProject_get_state_target,nss,build): $(call gb_ExternalExecuta
 			$(if $(filter iOS-ARM,$(OS)-$(CPUNAME)),CPU_ARCH=arm) \
 			NSPR_CONFIGURE_OPTS="--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)") \
 		NSDISTMODE=copy \
-		$(MAKE) -j1 AR="$(AR)" \
+		$(MAKE) AR="$(AR)" \
 			RANLIB="$(RANLIB)" \
 			NMEDIT="$(NM)edit" \
 			COMMA=$(COMMA) \
 			CC="$(CC)$(if $(filter ANDROID,$(OS)), -D_PR_NO_LARGE_FILES=1 -DSQLITE_DISABLE_LFS=1)" CCC="$(CXX)" \
 			$(if $(CROSS_COMPILING),NSINSTALL="$(call gb_ExternalExecutable_get_command,python) $(SRCDIR)/external/nss/nsinstall.py") \
 			$(if $(filter ANDROID,$(OS)),OS_TARGET=Android OS_TARGET_RELEASE=16 ARCHFLAG="" DEFAULT_COMPILER=clang ANDROID_NDK=$(ANDROID_NDK_HOME) ANDROID_TOOLCHAIN_VERSION=$(ANDROID_GCC_TOOLCHAIN_VERSION) ANDROID_PREFIX=$(HOST_PLATFORM) ANDROID_SYSROOT=$(ANDROID_NDK_HOME)/sysroot ANDROID_TOOLCHAIN=$(ANDROID_BINUTILS_PREBUILT_ROOT)) \
-			NSS_DISABLE_GTESTS=1 \
 			nss_build_all \
 		&& rm -f $(call gb_UnpackedTarball_get_dir,nss)/dist/out/lib/*.a \
 		$(if $(filter MACOSX,$(OS)),\
