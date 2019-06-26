@@ -1620,6 +1620,13 @@ DECLARE_OOXMLIMPORT_TEST(testTdf117843, "tdf117843.docx")
         getProperty<sal_Int32>(getParagraphOfText(1, xHeaderText), "ParaTopMargin"));
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf126114, "tdf126114.docx")
+{
+    // The problem was that after the drop-down form field, also the placeholder string
+    // was imported as text. Beside the duplication of the field, it also caused a crash.
+    CPPUNIT_ASSERT_EQUAL(7, getLength());
+}
+
 // tests should only be added to ooxmlIMPORT *if* they fail round-tripping in ooxmlEXPORT
 
 CPPUNIT_PLUGIN_IMPLEMENT();
