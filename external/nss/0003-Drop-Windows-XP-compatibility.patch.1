@@ -1,0 +1,57 @@
+From 46c500ee398f536869f2b313a2a03cada847e19e Mon Sep 17 00:00:00 2001
+From: Jan-Marek Glogowski <glogow@fbihome.de>
+Date: Sun, 30 Jun 2019 16:25:15 +0000
+Subject: [PATCH 3/8] Drop Windows XP compatibility
+
+---
+ nspr/configure.in     |  5 -----
+ nss/coreconf/WIN32.mk | 14 --------------
+ 2 files changed, 19 deletions(-)
+
+diff --git a/nspr/configure.in b/nspr/configure.in
+index 322255a..e820e6a 100644
+--- a/nspr/configure.in
++++ b/nspr/configure.in
+@@ -2095,11 +2095,6 @@ tools are selected during the Xcode/Developer Tools installation.])
+ 	    AC_DEFINE(_AMD64_)
+ 	else		
+ 	    AC_DEFINE(_X86_)
+-            if test -z "$GNU_CC" -a "$MSC_VER" -ge "1700"; then
+-                dnl Visual C++ 2012 defaults to -arch:SSE2. Use -arch:IA32
+-                dnl to avoid requiring SSE2.
+-                CFLAGS="$CFLAGS -arch:IA32"
+-            fi
+ 	fi
+         ;;
+     x86_64)
+diff --git a/nss/coreconf/WIN32.mk b/nss/coreconf/WIN32.mk
+index 28f30d5..7021d13 100644
+--- a/nss/coreconf/WIN32.mk
++++ b/nss/coreconf/WIN32.mk
+@@ -215,23 +215,9 @@ endif
+ ifeq (,$(filter-out x386 x86_64,$(CPU_ARCH)))
+ ifdef USE_64
+ 	DEFINES += -D_AMD64_
+-	# Use subsystem 5.02 to allow running on Windows XP.
+-	ifeq ($(_MSC_VER_GE_11),1)
+-		LDFLAGS += -SUBSYSTEM:CONSOLE,5.02
+-	endif
+ 	CPU_ARCH = x86_64
+ else
+ 	DEFINES += -D_X86_
+-	# VS2012 defaults to -arch:SSE2. Use -arch:IA32 to avoid requiring
+-	# SSE2. Clang-cl gets confused by -arch:IA32, so don't add it.
+-	# (See https://llvm.org/bugs/show_bug.cgi?id=24335)
+-	# Use subsystem 5.01 to allow running on Windows XP.
+-	ifeq ($(_MSC_VER_GE_11),1)
+-		ifneq ($(CLANG_CL),1)
+-			OS_CFLAGS += -arch:IA32
+-		endif
+-		LDFLAGS += -SUBSYSTEM:CONSOLE,5.01
+-	endif
+ 	CPU_ARCH = x386
+ endif
+ endif
+-- 
+2.20.1
+
