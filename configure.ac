@@ -3356,7 +3356,7 @@ if test "$_os" = "WINNT"; then
     if test "$BITNESS_OVERRIDE" = ""; then
         if test -f "$vctest/bin/cl.exe"; then
             VC_PRODUCT_DIR=$vctest
-        elif test -f "$vctest/VC/Tools/MSVC/$vcbuildnumber/bin/HostX86/x86/cl.exe"; then
+        elif test -f "$vctest/VC/Tools/MSVC/$vcbuildnumber/bin/HostX64/x86/cl.exe"; then
             VC_PRODUCT_DIR=$vctest/VC
         else
             AC_MSG_ERROR([No compiler (cl.exe) in $vctest/bin/cl.exe])
@@ -3435,8 +3435,8 @@ if test "$_os" = "WINNT"; then
     CL_LIB=
 
     if test "$BITNESS_OVERRIDE" = ""; then
-        MSPDB_PATH="$VC_PRODUCT_DIR/Tools/MSVC/$vcbuildnumber/bin/HostX86/x86"
-        CL_DIR=Tools/MSVC/$vcbuildnumber/bin/HostX86/x86
+        MSPDB_PATH="$VC_PRODUCT_DIR/Tools/MSVC/$vcbuildnumber/bin/HostX64/x86"
+        CL_DIR=Tools/MSVC/$vcbuildnumber/bin/HostX64/x86
     else
         MSPDB_PATH="$VC_PRODUCT_DIR/Tools/MSVC/$vcbuildnumber/bin/HostX64/x64"
         CL_DIR=Tools/MSVC/$vcbuildnumber/bin/HostX64/x64
@@ -3598,9 +3598,9 @@ if test "$_os" = "WINNT"; then
         if test -n "$CXX_X86_BINARY"; then
             BUILD_X86=TRUE
             AC_MSG_RESULT([preset])
-        elif "$VC_PRODUCT_DIR/Tools/MSVC/$vcbuildnumber/bin/HostX86/x86/cl.exe" -? </dev/null >/dev/null 2>&1; then
+        elif "$VC_PRODUCT_DIR/Tools/MSVC/$vcbuildnumber/bin/HostX64/x86/cl.exe" -? </dev/null >/dev/null 2>&1; then
             BUILD_X86=TRUE
-            CXX_X86_BINARY="$VC_PRODUCT_DIR/Tools/MSVC/$vcbuildnumber/bin/HostX86/x86/cl.exe -arch:SSE"
+            CXX_X86_BINARY="$VC_PRODUCT_DIR/Tools/MSVC/$vcbuildnumber/bin/HostX64/x86/cl.exe -arch:SSE"
             AC_MSG_RESULT([found])
         else
             CXX_X86_BINARY=
