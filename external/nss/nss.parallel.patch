@@ -1,0 +1,1162 @@
+diff -ur a/nss/nspr/config/config.mk b/nss/nspr/config/config.mk
+--- a/nss/nspr/config/config.mk	2019-06-26 10:04:29.927527869 +0000
++++ b/nss/nspr/config/config.mk	2019-06-26 15:39:03.118274746 +0000
+@@ -63,8 +63,8 @@
+ endif # MOZ_PROFILE_USE
+ endif # NO_PROFILE_GUIDED_OPTIMIZE
+ 
+-define MAKE_OBJDIR
+-if test ! -d $(@D); then rm -rf $(@D); $(NSINSTALL) -D $(@D); fi
++define MAKE_DIR
++if test ! -d $@; then $(NSINSTALL) -D $@; fi
+ endef
+ 
+ LINK_DLL	= $(LD) $(OS_DLLFLAGS) $(DLLFLAGS)
+diff -ur a/nss/nspr/config/Makefile.in b/nss/nspr/config/Makefile.in
+--- a/nss/nspr/config/Makefile.in	2019-06-26 10:06:36.831771866 +0000
++++ b/nss/nspr/config/Makefile.in	2019-06-26 15:51:58.000987134 +0000
+@@ -96,9 +96,9 @@
+ endif
+ endif
+ 
+-# Redefine MAKE_OBJDIR for just this directory
+-define MAKE_OBJDIR
+-if test ! -d $(@D); then rm -rf $(@D); mkdir $(@D); else true; fi
++# Redefine MAKE_DIR for just this directory
++define MAKE_DIR
++if test ! -d $@; then mkdir $@; fi
+ endef
+ 
+ export:: $(TARGETS)
+@@ -111,8 +111,7 @@
+ 	$(INSTALL) system_wrappers $(dist_includedir)
+ endif
+ 
+-$(OBJDIR)/%$(PROG_SUFFIX): $(OBJDIR)/%.$(OBJ_SUFFIX)
+-	@$(MAKE_OBJDIR)
++$(OBJDIR)/%$(PROG_SUFFIX): $(OBJDIR)/%.$(OBJ_SUFFIX) | $(OBJDIR)
+ 	$(CC) $(XCFLAGS) $< $(LDFLAGS) $(XLDOPTS) $(OUTOPTION)$@
+ 
+ install:: nspr.m4
+diff -ur a/nss/nspr/config/rules.mk b/nss/nspr/config/rules.mk
+--- a/nss/nspr/config/rules.mk	2019-06-26 09:10:35.717427248 +0000
++++ b/nss/nspr/config/rules.mk	2019-06-26 15:44:52.223494862 +0000
+@@ -62,6 +62,11 @@
+ endif
+ endif
+ 
++ifdef OBJDIR
++$(OBJDIR):
++	@$(MAKE_DIR)
++endif
++
+ #
+ # This makefile contains rules for building the following kinds of
+ # libraries:
+@@ -251,8 +256,7 @@
+ $(NFSPWD):
+ 	cd $(@D); $(MAKE) $(@F)
+ 
+-$(PROGRAM): $(OBJS)
+-	@$(MAKE_OBJDIR)
++$(PROGRAM): $(OBJS) | $(OBJDIR)
+ ifeq ($(NS_USE_GCC)_$(OS_ARCH),_WINNT)
+ ifdef MOZ_PROFILE_USE
+ # In the second pass, we need to merge the pgc files into the pgd file.
+@@ -280,14 +284,13 @@
+ 	$(STRIP) $@
+ endif
+ 
+-$(LIBRARY): $(OBJS)
+-	@$(MAKE_OBJDIR)
++$(LIBRARY): $(OBJS) | $(OBJDIR)
+ 	rm -f $@
+ 	$(AR) $(AR_FLAGS) $(OBJS) $(AR_EXTRA_ARGS)
+ 	$(RANLIB) $@
+ 
+ ifeq ($(OS_TARGET), OS2)
+-$(IMPORT_LIBRARY): $(MAPFILE)
++$(IMPORT_LIBRARY): $(MAPFILE) | $(OBJDIR)
+ 	rm -f $@
+ 	$(IMPLIB) $@ $(MAPFILE)
+ else
+@@ -299,8 +302,7 @@
+ endif
+ endif
+ 
+-$(SHARED_LIBRARY): $(OBJS) $(RES) $(MAPFILE)
+-	@$(MAKE_OBJDIR)
++$(SHARED_LIBRARY): $(OBJS) $(RES) $(MAPFILE) $(LIBRARY) | $(OBJDIR)
+ 	rm -f $@
+ ifeq ($(OS_ARCH)$(OS_RELEASE), AIX4.1)
+ 	echo "#!" > $(OBJDIR)/lib$(LIBRARY_NAME)_syms
+@@ -376,8 +378,7 @@
+ ################################################################################
+ 
+ ifeq ($(OS_ARCH),WINNT)
+-$(RES): $(RESNAME)
+-	@$(MAKE_OBJDIR)
++$(RES): $(RESNAME) | $(OBJDIR)
+ # The resource compiler does not understand the -U option.
+ ifdef NS_USE_GCC
+ 	$(RC) $(RCFLAGS) $(filter-out -U%,$(DEFINES)) $(INCLUDES:-I%=--include-dir %) -o $@ $<
+@@ -387,8 +388,7 @@
+ 	@echo $(RES) finished
+ endif
+ 
+-$(MAPFILE): $(LIBRARY_NAME).def
+-	@$(MAKE_OBJDIR)
++$(MAPFILE): $(LIBRARY_NAME).def | $(OBJDIR)
+ ifeq ($(OS_ARCH),SunOS)
+ 	grep -v ';-' $< | \
+ 	sed -e 's,;+,,' -e 's; DATA ;;' -e 's,;;,,' -e 's,;.*,;,' > $@
+@@ -423,8 +423,7 @@
+ pr_abspath = "$(if $(findstring :,$(1)),$(1),$(if $(filter /%,$(1)),$(1),$(CURDIR)/$(1)))"
+ endif
+ 
+-$(OBJDIR)/%.$(OBJ_SUFFIX): %.cpp
+-	@$(MAKE_OBJDIR)
++$(OBJDIR)/%.$(OBJ_SUFFIX): %.cpp | $(OBJDIR)
+ ifeq ($(NS_USE_GCC)_$(OS_ARCH),_WINNT)
+ 	$(CCC) -Fo$@ -c $(CCCFLAGS) $(call pr_abspath,$<)
+ else
+@@ -442,8 +441,7 @@
+ WCCFLAGS1 = $(subst /,\\,$(CFLAGS))
+ WCCFLAGS2 = $(subst -I,-i=,$(WCCFLAGS1))
+ WCCFLAGS3 = $(subst -D,-d,$(WCCFLAGS2))
+-$(OBJDIR)/%.$(OBJ_SUFFIX): %.c
+-	@$(MAKE_OBJDIR)
++$(OBJDIR)/%.$(OBJ_SUFFIX): %.c | $(OBJDIR)
+ ifeq ($(NS_USE_GCC)_$(OS_ARCH),_WINNT)
+ 	$(CC) -Fo$@ -c $(CFLAGS) $(call pr_abspath,$<)
+ else
+@@ -459,8 +457,7 @@
+ endif
+ 
+ 
+-$(OBJDIR)/%.$(OBJ_SUFFIX): %.s
+-	@$(MAKE_OBJDIR)
++$(OBJDIR)/%.$(OBJ_SUFFIX): %.s | $(OBJDIR)
+ 	$(AS) -o $@ $(ASFLAGS) -c $<
+ 
+ %.i: %.c
+diff -ur a/nss/nspr/lib/ds/Makefile.in b/nss/nspr/lib/ds/Makefile.in
+--- a/nss/nspr/lib/ds/Makefile.in	2018-03-05 15:50:28.000000000 +0000
++++ b/nss/nspr/lib/ds/Makefile.in	2019-06-26 15:49:46.692526557 +0000
+@@ -112,8 +112,7 @@
+ 
+ GARBAGE += $(TINC)
+ 
+-$(TINC):
+-	@$(MAKE_OBJDIR)
++$(TINC): | $(OBJDIR)
+ 	@$(ECHO) '#define _BUILD_STRING "$(SH_DATE)"' > $(TINC)
+ 	@if test ! -z "$(SH_NOW)"; then \
+ 	    $(ECHO) '#define _BUILD_TIME $(SH_NOW)$(SUF)' >> $(TINC); \
+diff -ur a/nss/nspr/lib/libc/src/Makefile.in b/nss/nspr/lib/libc/src/Makefile.in
+--- a/nss/nspr/lib/libc/src/Makefile.in	2018-03-05 15:50:28.000000000 +0000
++++ b/nss/nspr/lib/libc/src/Makefile.in	2019-06-26 15:51:06.068804950 +0000
+@@ -114,8 +114,7 @@
+ 
+ GARBAGE += $(TINC)
+ 
+-$(TINC):
+-	@$(MAKE_OBJDIR)
++$(TINC): | $(OBJDIR)
+ 	@$(ECHO) '#define _BUILD_STRING "$(SH_DATE)"' > $(TINC)
+ 	@if test ! -z "$(SH_NOW)"; then \
+ 	    $(ECHO) '#define _BUILD_TIME $(SH_NOW)$(SUF)' >> $(TINC); \
+diff -ur a/nss/nspr/lib/prstreams/Makefile.in b/nss/nspr/lib/prstreams/Makefile.in
+--- a/nss/nspr/lib/prstreams/Makefile.in	2018-03-05 15:50:28.000000000 +0000
++++ b/nss/nspr/lib/prstreams/Makefile.in	2019-06-26 15:50:27.304668991 +0000
+@@ -114,8 +114,7 @@
+ 	SUF = LL
+ endif
+ 
+-$(TINC):
+-	@$(MAKE_OBJDIR)
++$(TINC): | $(OBJDIR)
+ 	@$(ECHO) '#define _BUILD_STRING "$(SH_DATE)"' > $(TINC)
+ 	@if test ! -z "$(SH_NOW)"; then \
+ 	    $(ECHO) '#define _BUILD_TIME $(SH_NOW)$(SUF)' >> $(TINC); \
+diff -ur a/nss/nspr/lib/prstreams/tests/testprstrm/Makefile.in b/nss/nspr/lib/prstreams/tests/testprstrm/Makefile.in
+--- a/nss/nspr/lib/prstreams/tests/testprstrm/Makefile.in	2018-03-05 15:50:28.000000000 +0000
++++ b/nss/nspr/lib/prstreams/tests/testprstrm/Makefile.in	2019-06-26 15:50:06.796597066 +0000
+@@ -136,8 +136,7 @@
+ # the .$(OBJ_SUFFIX) file from the .c source file, then do the
+ # two-step linking hack below.
+ 
+-$(OBJDIR)/%: $(OBJDIR)/%.$(OBJ_SUFFIX)
+-	@$(MAKE_OBJDIR)
++$(OBJDIR)/%: $(OBJDIR)/%.$(OBJ_SUFFIX) | $(OBJDIR)
+ 	rm -f $@ $(AIX_TMP)
+ 	$(CC) $(AIX_LINK_OPTS) -o $(AIX_TMP) $< $(dist_libdir)/libnspr$(MOD_MAJOR_VERSION).a
+ 	$(CC) -o $@ $(AIX_TMP) $(AIX_WRAP)
+@@ -147,8 +146,7 @@
+ 
+ # All platforms that are not AIX pre-4.2.
+ 
+-$(OBJDIR)/%$(PROG_SUFFIX): $(OBJDIR)/%.$(OBJ_SUFFIX)
+-	@$(MAKE_OBJDIR)
++$(OBJDIR)/%$(PROG_SUFFIX): $(OBJDIR)/%.$(OBJ_SUFFIX) | $(OBJDIR)
+ ifeq ($(OS_ARCH), WINNT)
+ 	link $(LDOPTS) $< $(LIBPR) $(LIBPRSTRMS) ws2_32.lib -out:$@
+ else
+diff -ur a/nss/nspr/lib/tests/Makefile.in b/nss/nspr/lib/tests/Makefile.in
+--- a/nss/nspr/lib/tests/Makefile.in	2018-03-05 15:50:28.000000000 +0000
++++ b/nss/nspr/lib/tests/Makefile.in	2019-06-26 15:50:50.584750636 +0000
+@@ -144,8 +144,7 @@
+ # the .$(OBJ_SUFFIX) file from the .c source file, then do the
+ # two-step linking hack below.
+ 
+-$(OBJDIR)/%: $(OBJDIR)/%.$(OBJ_SUFFIX)
+-	@$(MAKE_OBJDIR)
++$(OBJDIR)/%: $(OBJDIR)/%.$(OBJ_SUFFIX) | $(OBJDIR)
+ 	rm -f $@ $(AIX_TMP)
+ 	$(CC) $(AIX_LINK_OPTS) -o $(AIX_TMP) $< $(dist_libdir)/libnspr$(MOD_MAJOR_VERSION).a
+ 	$(CC) -o $@ $(AIX_TMP) $(AIX_WRAP)
+@@ -155,8 +154,7 @@
+ 
+ # All platforms that are not AIX pre-4.2.
+ 
+-$(OBJDIR)/%$(PROG_SUFFIX): $(OBJDIR)/%.$(OBJ_SUFFIX)
+-	@$(MAKE_OBJDIR)
++$(OBJDIR)/%$(PROG_SUFFIX): $(OBJDIR)/%.$(OBJ_SUFFIX) | $(OBJDIR)
+ 
+ ifeq ($(OS_ARCH), WINNT)
+ 	link $(LDOPTS) $< $(LIBPLC) $(LIBPLDS) $(LIBPR) ws2_32.lib -out:$@
+diff -ur a/nss/nspr/pr/src/cplus/tests/Makefile.in b/nss/nspr/pr/src/cplus/tests/Makefile.in
+--- a/nss/nspr/pr/src/cplus/tests/Makefile.in	2018-03-05 15:50:28.000000000 +0000
++++ b/nss/nspr/pr/src/cplus/tests/Makefile.in	2019-06-26 15:48:03.260163973 +0000
+@@ -175,8 +175,7 @@
+ # the .$(OBJ_SUFFIX) file from the .c source file, then do the
+ # two-step linking hack below.
+ 
+-$(OBJDIR)/%: $(OBJDIR)/%.$(OBJ_SUFFIX)
+-	@$(MAKE_OBJDIR)
++$(OBJDIR)/%: $(OBJDIR)/%.$(OBJ_SUFFIX) | $(OBJDIR)
+ 	rm -f $@ $(AIX_TMP)
+ 	$(CC) $(AIX_LINK_OPTS) -o $(AIX_TMP) $< $(dist_libdir)/libnspr$(MOD_MAJOR_VERSION).a
+ 	$(CC) -o $@ $(AIX_TMP) $(AIX_WRAP)
+@@ -186,8 +185,7 @@
+ 
+ # All platforms that are not AIX pre-4.2.
+ 
+-$(OBJDIR)/%$(PROG_SUFFIX): $(OBJDIR)/%.$(OBJ_SUFFIX)
+-	@$(MAKE_OBJDIR)
++$(OBJDIR)/%$(PROG_SUFFIX): $(OBJDIR)/%.$(OBJ_SUFFIX) | $(OBJDIR)
+ ifeq ($(OS_ARCH), WINNT)
+ ifeq ($(OS_TARGET),WIN16)
+ 	echo system windows         >w16link
+diff -ur a/nss/nspr/pr/src/Makefile.in b/nss/nspr/pr/src/Makefile.in
+--- a/nss/nspr/pr/src/Makefile.in	2019-06-26 08:30:49.974462582 +0000
++++ b/nss/nspr/pr/src/Makefile.in	2019-06-26 15:51:36.056910147 +0000
+@@ -323,8 +323,7 @@
+ 
+ GARBAGE += $(TINC)
+ 
+-$(TINC):
+-	@$(MAKE_OBJDIR)
++$(TINC): | $(OBJDIR)
+ 	@$(ECHO) '#define _BUILD_STRING "$(SH_DATE)"' > $(TINC)
+ 	@if test ! -z "$(SH_NOW)"; then \
+ 	    $(ECHO) '#define _BUILD_TIME $(SH_NOW)$(SUF)' >> $(TINC); \
+diff -ur a/nss/nspr/pr/src/md/windows/Makefile.in b/nss/nspr/pr/src/md/windows/Makefile.in
+--- a/nss/nspr/pr/src/md/windows/Makefile.in	2018-03-05 15:50:28.000000000 +0000
++++ b/nss/nspr/pr/src/md/windows/Makefile.in	2019-06-26 15:47:38.880078540 +0000
+@@ -64,8 +64,7 @@
+ ifdef MOZ_OPTIMIZE
+ ifeq ($(OS_TARGET), WINNT)
+ ifndef NS_USE_GCC
+-$(OBJDIR)/ntio.$(OBJ_SUFFIX): ntio.c
+-	@$(MAKE_OBJDIR)
++$(OBJDIR)/ntio.$(OBJ_SUFFIX): ntio.c | $(OBJDIR)
+ 	$(CC) -Fo$@ -c $(CFLAGS) -Og- $<
+ endif
+ endif
+diff -ur a/nss/nspr/pr/src/misc/Makefile.in b/nss/nspr/pr/src/misc/Makefile.in
+--- a/nss/nspr/pr/src/misc/Makefile.in	2018-03-05 15:50:28.000000000 +0000
++++ b/nss/nspr/pr/src/misc/Makefile.in	2019-06-26 15:51:45.724944065 +0000
+@@ -60,8 +60,7 @@
+ # could change the precision of floating-point calculations for
+ # this single compilation unit.
+ ifeq ($(NS_USE_GCC)_$(OS_ARCH),_WINNT)
+-$(OBJDIR)/prdtoa.$(OBJ_SUFFIX): prdtoa.c
+-	@$(MAKE_OBJDIR)
++$(OBJDIR)/prdtoa.$(OBJ_SUFFIX): prdtoa.c | $(OBJDIR)
+ ifeq (,$(filter-out 1100 1200 1300 1310,$(MSC_VER)))
+ 	$(CC) -Fo$@ -c $(CFLAGS) -Op $(call pr_abspath,$<)
+ else
+diff -ur a/nss/nspr/pr/tests/Makefile.in b/nss/nspr/pr/tests/Makefile.in
+--- a/nss/nspr/pr/tests/Makefile.in	2018-03-05 15:50:28.000000000 +0000
++++ b/nss/nspr/pr/tests/Makefile.in	2019-06-26 15:51:23.360865606 +0000
+@@ -407,8 +407,7 @@
+ # the .$(OBJ_SUFFIX) file from the .c source file, then do the
+ # two-step linking hack below.
+ 
+-$(OBJDIR)/%: $(OBJDIR)/%.$(OBJ_SUFFIX)
+-	@$(MAKE_OBJDIR)
++$(OBJDIR)/%: $(OBJDIR)/%.$(OBJ_SUFFIX) | $(OBJDIR)
+ 	rm -f $@ $(AIX_TMP)
+ 	$(CC) $(AIX_LINK_OPTS) -o $(AIX_TMP) $< $(dist_libdir)/libnspr$(MOD_MAJOR_VERSION).a
+ 	$(CC) -o $@ $(AIX_TMP) $(AIX_WRAP)
+@@ -418,8 +417,7 @@
+ 
+ # All platforms that are not AIX pre-4.2.
+ 
+-$(OBJDIR)/%$(PROG_SUFFIX): $(OBJDIR)/%.$(OBJ_SUFFIX)
+-	@$(MAKE_OBJDIR)
++$(OBJDIR)/%$(PROG_SUFFIX): $(OBJDIR)/%.$(OBJ_SUFFIX) | $(OBJDIR)
+ ifeq ($(NS_USE_GCC)_$(OS_ARCH),_WINNT)
+ 	link $(LDOPTS) $(EXTRA_LDOPTS) $< $(LIBPLC) $(LIBNSPR) $(EXTRA_LIBS) -out:$@
+ ifdef MT
+diff -ur a/nss/nspr/tools/Makefile.in b/nss/nspr/tools/Makefile.in
+--- a/nss/nspr/tools/Makefile.in	2018-03-05 15:50:28.000000000 +0000
++++ b/nss/nspr/tools/Makefile.in	2019-06-26 15:46:50.235908117 +0000
+@@ -138,8 +138,7 @@
+ # the .$(OBJ_SUFFIX) file from the .c source file, then do the
+ # two-step linking hack below.
+ 
+-$(OBJDIR)/%: $(OBJDIR)/%.$(OBJ_SUFFIX)
+-	@$(MAKE_OBJDIR)
++$(OBJDIR)/%: $(OBJDIR)/%.$(OBJ_SUFFIX) | $(OBJDIR)
+ 	rm -f $@ $(AIX_TMP)
+ 	$(CC) $(AIX_LINK_OPTS) -o $(AIX_TMP) $< $(dist_libdir)/libnspr$(NSPR_VERSION).a
+ 	$(CC) -o $@ $(AIX_TMP) $(AIX_WRAP)
+@@ -149,8 +148,7 @@
+ 
+ # All platforms that are not AIX pre-4.2.
+ 
+-$(OBJDIR)/%$(PROG_SUFFIX): $(OBJDIR)/%.$(OBJ_SUFFIX)
+-	@$(MAKE_OBJDIR)
++$(OBJDIR)/%$(PROG_SUFFIX): $(OBJDIR)/%.$(OBJ_SUFFIX) | $(OBJDIR)
+ ifeq ($(OS_ARCH), WINNT)
+ ifeq ($(OS_TARGET),WIN16)
+ 	echo system windows >w16link
+diff -ur a/nss/nss/cmd/lib/Makefile b/nss/nss/cmd/lib/Makefile
+--- a/nss/nss/cmd/lib/Makefile	2018-06-21 09:24:45.000000000 +0000
++++ b/nss/nss/cmd/lib/Makefile	2019-06-26 09:10:35.705427321 +0000
+@@ -44,6 +44,5 @@
+ # (7) Execute "local" rules. (OPTIONAL).                              #
+ #######################################################################
+ 
+-export:: private_export
+ 
+ 
+diff -ur a/nss/nss/cmd/libpkix/testutil/Makefile b/nss/nss/cmd/libpkix/testutil/Makefile
+--- a/nss/nss/cmd/libpkix/testutil/Makefile	2018-06-21 09:24:45.000000000 +0000
++++ b/nss/nss/cmd/libpkix/testutil/Makefile	2019-06-26 09:10:35.705427321 +0000
+@@ -47,5 +47,4 @@
+ 
+ include $(PLAT_DEPTH)/platrules.mk
+ 
+-export:: private_export
+ 
+diff -ur a/nss/nss/cmd/shlibsign/Makefile b/nss/nss/cmd/shlibsign/Makefile
+--- a/nss/nss/cmd/shlibsign/Makefile	2019-06-26 08:30:49.974462582 +0000
++++ b/nss/nss/cmd/shlibsign/Makefile	2019-06-26 09:10:35.709427297 +0000
+@@ -98,5 +98,7 @@
+     endif
+ endif
+ 
+-libs install :: $(CHECKLOC)
++libs::
++	$(MAKE) install
++	$(MAKE) $(CHECKLOC)
+ 
+diff -ur a/nss/nss/coreconf/Makefile b/nss/nss/coreconf/Makefile
+--- a/nss/nss/coreconf/Makefile	2018-06-21 09:24:45.000000000 +0000
++++ b/nss/nss/coreconf/Makefile	2019-06-26 09:10:35.709427297 +0000
+@@ -11,5 +11,3 @@
+ 
+ include $(DEPTH)/coreconf/config.mk
+ include $(DEPTH)/coreconf/rules.mk
+-
+-export:: libs
+diff -ur a/nss/nss/coreconf/mkdepend/Makefile b/nss/nss/coreconf/mkdepend/Makefile
+--- a/nss/nss/coreconf/mkdepend/Makefile	2018-06-21 09:24:45.000000000 +0000
++++ b/nss/nss/coreconf/mkdepend/Makefile	2019-06-26 13:16:28.403133428 +0000
+@@ -53,8 +53,8 @@
+ 
+ DEFINES += -DINCLUDEDIR=\"/usr/include\" -DOBJSUFFIX=\".$(OBJ_SUFFIX)\"
+ 
+-# Redefine MAKE_OBJDIR for just this directory
+-define MAKE_OBJDIR
+-if test ! -d $(@D); then rm -rf $(@D); mkdir $(@D); fi
++# Redefine MAKE_DIR for just this directory
++define MAKE_DIR
++if test ! -d $@; then mkdir $@; fi
+ endef
+ 
+diff -ur a/nss/nss/coreconf/nsinstall/Makefile b/nss/nss/coreconf/nsinstall/Makefile
+--- a/nss/nss/coreconf/nsinstall/Makefile	2018-06-21 09:24:45.000000000 +0000
++++ b/nss/nss/coreconf/nsinstall/Makefile	2019-06-26 15:01:13.890348064 +0000
+@@ -35,8 +35,8 @@
+ 
+ include $(DEPTH)/coreconf/rules.mk
+ 
+-# Redefine MAKE_OBJDIR for just this directory
+-define MAKE_OBJDIR
+-if test ! -d $(@D); then rm -rf $(@D); mkdir $(@D); fi
++# Redefine MAKE_DIR for just this directory
++define MAKE_DIR
++if test ! -d $@; then mkdir $@; fi
+ endef
+ 
+diff -ur a/nss/nss/coreconf/OS2.mk b/nss/nss/coreconf/OS2.mk
+--- a/nss/nss/coreconf/OS2.mk	2018-06-21 09:24:45.000000000 +0000
++++ b/nss/nss/coreconf/OS2.mk	2019-06-26 15:15:55.269440993 +0000
+@@ -130,8 +130,8 @@
+ 	endif
+ endif
+ 
+-define MAKE_OBJDIR
+-if test ! -d $(@D); then rm -rf $(@D); $(NSINSTALL) -D $(@D); fi
++define MAKE_DIR
++if test ! -d $@; $(NSINSTALL) -D $@; fi
+ endef
+ 
+ #
+diff -ur a/nss/nss/coreconf/rules.mk b/nss/nss/coreconf/rules.mk
+--- a/nss/nss/coreconf/rules.mk	2019-06-26 08:30:49.986462630 +0000
++++ b/nss/nss/coreconf/rules.mk	2019-06-26 15:31:09.600630910 +0000
+@@ -13,7 +13,10 @@
+ # Double-Colon rules for utilizing the binary release model.          #
+ #######################################################################
+ 
+-all:: export libs 
++all:
++	$(MAKE) -C coreconf/nsinstall program
++	$(MAKE) export private_export
++	$(MAKE) libs
+ 
+ ifeq ($(AUTOCLEAN),1)
+ autobuild:: clean export private_export libs program install
+@@ -28,6 +31,11 @@
+ USE_NT_C_SYNTAX=1
+ endif
+ 
++ifdef OBJDIR
++$(OBJDIR)::
++	@$(MAKE_DIR)
++endif
++
+ #
+ # IMPORTS will always be associated with a component.  Therefore,
+ # the "import" rule will always change directory to the top-level
+@@ -238,8 +246,7 @@
+ 	find . -name dist -prune -o \( -name '*.[hc]' -o -name '*.cp' -o -name '*.cpp' \) -print | xargs etags -a
+ 	find . -name dist -prune -o \( -name '*.[hc]' -o -name '*.cp' -o -name '*.cpp' \) -print | xargs ctags -a
+ 
+-$(PROGRAM): $(OBJS) $(EXTRA_LIBS)
+-	@$(MAKE_OBJDIR)
++$(PROGRAM): $(OBJS) $(EXTRA_LIBS) | $(OBJDIR)
+ ifeq (,$(filter-out _WIN%,$(NS_USE_GCC)_$(OS_TARGET)))
+ 	$(MKPROG) $(subst /,\\,$(OBJS)) -Fe$@ -link $(LDFLAGS) $(XLDFLAGS) $(subst /,\\,$(EXTRA_LIBS) $(EXTRA_SHARED_LIBS) $(OS_LIBS))
+ ifdef MT
+@@ -255,8 +262,7 @@
+ get_objs:
+ 	@echo $(OBJS)
+ 
+-$(LIBRARY): $(OBJS)
+-	@$(MAKE_OBJDIR)
++$(LIBRARY): $(OBJS) | $(OBJDIR)
+ 	rm -f $@
+ ifeq (,$(filter-out _WIN%,$(NS_USE_GCC)_$(OS_TARGET)))
+ 	$(AR) $(OBJS)
+@@ -273,8 +279,7 @@
+ 	$(RANLIB) $@
+ endif
+ ifeq ($(OS_ARCH),WINNT)
+-$(IMPORT_LIBRARY): $(LIBRARY)
+-	cp -f $< $@
++$(IMPORT_LIBRARY): $(SHARED_LIBRARY)
+ endif
+ 
+ ifdef SHARED_LIBRARY_LIBS
+@@ -285,8 +291,7 @@
+ endif
+ endif
+ 
+-$(SHARED_LIBRARY): $(OBJS) $(RES) $(MAPFILE) $(SUB_SHLOBJS)
+-	@$(MAKE_OBJDIR)
++$(SHARED_LIBRARY): $(OBJS) $(RES) $(MAPFILE) $(SUB_SHLOBJS) $(LIBRARY) | $(OBJDIR)
+ 	rm -f $@
+ ifeq ($(OS_TARGET)$(OS_RELEASE), AIX4.1)
+ 	echo "#!" > $(OBJDIR)/lib$(LIBRARY_NAME)_syms
+@@ -316,8 +321,7 @@
+ endif
+ 
+ ifeq (,$(filter-out WIN%,$(OS_TARGET)))
+-$(RES): $(RESNAME)
+-	@$(MAKE_OBJDIR)
++$(RES): $(RESNAME) | $(OBJDIR)
+ # The resource compiler does not understand the -U option.
+ ifdef NS_USE_GCC
+ 	$(RC) $(filter-out -U%,$(DEFINES)) $(INCLUDES:-I%=--include-dir %) -o $@ $<
+@@ -327,13 +331,12 @@
+ 	@echo $(RES) finished
+ endif
+ 
+-$(MAPFILE): $(MAPFILE_SOURCE)
+-	@$(MAKE_OBJDIR)
++$(MAPFILE): $(MAPFILE_SOURCE) | $(OBJDIR)
+ 	$(PROCESS_MAP_FILE)
+ 
+ 
+-$(OBJDIR)/$(PROG_PREFIX)%$(PROG_SUFFIX): $(OBJDIR)/$(PROG_PREFIX)%$(OBJ_SUFFIX)
+-	@$(MAKE_OBJDIR)
++$(OBJDIR)/$(PROG_PREFIX)%$(PROG_SUFFIX): $(OBJDIR)/$(PROG_PREFIX)%$(OBJ_SUFFIX) $(EXTRA_LIBS) | $(OBJDIR)
++	rm -f "$@"
+ ifeq (,$(filter-out _WIN%,$(NS_USE_GCC)_$(OS_TARGET)))
+ 	$(MKPROG) $< -Fe$@ -link \
+ 	$(LDFLAGS) $(XLDFLAGS) $(EXTRA_LIBS) $(EXTRA_SHARED_LIBS) $(OS_LIBS)
+@@ -388,8 +391,7 @@
+ # The quotes allow absolute paths to contain spaces.
+ core_abspath = '$(if $(findstring :,$(1)),$(1),$(if $(filter /%,$(1)),$(1),$(PWD)/$(1)))'
+ 
+-$(OBJDIR)/$(PROG_PREFIX)%$(OBJ_SUFFIX): %.c
+-	@$(MAKE_OBJDIR)
++$(OBJDIR)/$(PROG_PREFIX)%$(OBJ_SUFFIX): %.c | $(OBJDIR)
+ ifdef USE_NT_C_SYNTAX
+ 	$(CC) -Fo$@ -c $(CFLAGS) $(call core_abspath,$<)
+ else
+@@ -400,7 +402,7 @@
+ endif
+ endif
+ 
+-$(PROG_PREFIX)%$(OBJ_SUFFIX): %.c
++$(PROG_PREFIX)%$(OBJ_SUFFIX): %.c | $(OBJDIR)
+ ifdef USE_NT_C_SYNTAX
+ 	$(CC) -Fo$@ -c $(CFLAGS) $(call core_abspath,$<)
+ else
+@@ -412,21 +414,17 @@
+ endif
+ 
+ ifneq (,$(filter-out _WIN%,$(NS_USE_GCC)_$(OS_TARGET)))
+-$(OBJDIR)/$(PROG_PREFIX)%$(OBJ_SUFFIX): %.s
+-	@$(MAKE_OBJDIR)
++$(OBJDIR)/$(PROG_PREFIX)%$(OBJ_SUFFIX): %.s | $(OBJDIR)
+ 	$(AS) -o $@ $(ASFLAGS) -c $<
+ endif
+ 
+-$(OBJDIR)/$(PROG_PREFIX)%$(OBJ_SUFFIX): %.asm
+-	@$(MAKE_OBJDIR)
++$(OBJDIR)/$(PROG_PREFIX)%$(OBJ_SUFFIX): %.asm | $(OBJDIR)
+ 	$(AS) -Fo$@ $(ASFLAGS) -c $<
+ 
+-$(OBJDIR)/$(PROG_PREFIX)%$(OBJ_SUFFIX): %.S
+-	@$(MAKE_OBJDIR)
++$(OBJDIR)/$(PROG_PREFIX)%$(OBJ_SUFFIX): %.S | $(OBJDIR)
+ 	$(AS) -o $@ $(ASFLAGS) -c $<
+ 
+-$(OBJDIR)/$(PROG_PREFIX)%: %.cpp
+-	@$(MAKE_OBJDIR)
++$(OBJDIR)/$(PROG_PREFIX)%: %.cpp | $(OBJDIR)
+ ifdef USE_NT_C_SYNTAX
+ 	$(CCC) -Fo$@ -c $(CFLAGS) $(CXXFLAGS) $(call core_abspath,$<)
+ else
+@@ -440,8 +438,7 @@
+ #
+ # Please keep the next two rules in sync.
+ #
+-$(OBJDIR)/$(PROG_PREFIX)%$(OBJ_SUFFIX): %.cc
+-	$(MAKE_OBJDIR)
++$(OBJDIR)/$(PROG_PREFIX)%$(OBJ_SUFFIX): %.cc | $(OBJDIR)
+ ifdef STRICT_CPLUSPLUS_SUFFIX
+ 	echo "#line 1 \"$<\"" | cat - $< > $(OBJDIR)/t_$*.cc
+ 	$(CCC) -o $@ -c $(CFLAGS) $(CXXFLAGS) $(OBJDIR)/t_$*.cc
+@@ -458,8 +455,7 @@
+ endif
+ endif #STRICT_CPLUSPLUS_SUFFIX
+ 
+-$(OBJDIR)/$(PROG_PREFIX)%$(OBJ_SUFFIX): %.cpp
+-	@$(MAKE_OBJDIR)
++$(OBJDIR)/$(PROG_PREFIX)%$(OBJ_SUFFIX): %.cpp | $(OBJDIR)
+ ifdef STRICT_CPLUSPLUS_SUFFIX
+ 	echo "#line 1 \"$<\"" | cat - $< > $(OBJDIR)/t_$*.cc
+ 	$(CCC) -o $@ -c $(CFLAGS) $(CXXFLAGS) $(OBJDIR)/t_$*.cc
+@@ -502,11 +498,7 @@
+ ################################################################################
+ 
+ $(JAVA_DESTPATH) $(JAVA_DESTPATH)/$(PACKAGE) $(JMCSRCDIR)::
+-	@if test ! -d $@; then	    \
+-		echo Creating $@;   \
+-		rm -rf $@;	    \
+-		$(NSINSTALL) -D $@; \
+-	fi
++	@$(MAKE_DIR)
+ 
+ ################################################################################
+ ## IDL_GEN
+@@ -748,8 +740,7 @@
+ $(JMC_GEN_DIR)/M%.c: $(JMCSRCDIR)/%.class
+ 	$(JMC) -d $(JMC_GEN_DIR) -module $(JMC_GEN_FLAGS) $(?F:.class=)
+ 
+-$(OBJDIR)/M%$(OBJ_SUFFIX): $(JMC_GEN_DIR)/M%.c $(JMC_GEN_DIR)/M%.h
+-	@$(MAKE_OBJDIR)
++$(OBJDIR)/M%$(OBJ_SUFFIX): $(JMC_GEN_DIR)/M%.c $(JMC_GEN_DIR)/M%.h | $(OBJDIR)
+ 	$(CC) -o $@ -c $(CFLAGS) $<
+ 
+ export:: $(JMC_HEADERS) $(JMC_STUBS)
+@@ -763,14 +754,9 @@
+ 
+ ifneq ($(EXPORTS),)
+ $(PUBLIC_EXPORT_DIR)::
+-	@if test ! -d $@; then	    \
+-		echo Creating $@;   \
+-		$(NSINSTALL) -D $@; \
+-	fi
+-
+-export:: $(PUBLIC_EXPORT_DIR) 
++	@$(MAKE_DIR)
+ 
+-export:: $(EXPORTS) 
++export:: $(EXPORTS) | $(PUBLIC_EXPORT_DIR) 
+ 	$(INSTALL) -m 444 $^ $(PUBLIC_EXPORT_DIR)
+ 
+ export:: $(BUILT_SRCS)
+@@ -781,19 +767,13 @@
+ PRIVATE_EXPORT_DIR = $(SOURCE_XP_DIR)/private/$(MODULE)
+ 
+ ifneq ($(PRIVATE_EXPORTS),)
+-$(PRIVATE_EXPORT_DIR)::
+-	@if test ! -d $@; then	    \
+-		echo Creating $@;   \
+-		$(NSINSTALL) -D $@; \
+-	fi
++$(PRIVATE_EXPORT_DIR):: 
++	@$(MAKE_DIR)
+ 
+-private_export:: $(PRIVATE_EXPORT_DIR)
+-
+-private_export:: $(PRIVATE_EXPORTS) 
++private_export:: $(PRIVATE_EXPORTS) | $(PRIVATE_EXPORT_DIR)
+ 	$(INSTALL) -m 444 $^ $(PRIVATE_EXPORT_DIR)
+ else
+ private_export:: 
+-	@echo There are no private exports.;
+ endif
+ 
+ ##########################################################################
+@@ -810,13 +790,12 @@
+ REGDATE = $(subst \ ,, $(shell $(PERL)  $(CORE_DEPTH)/$(MODULE)/scripts/now))
+ endif
+ 
+-tests:: $(REGRESSION_SPEC) 
++$(TESTS_DIR)::
++	@$(MAKE_DIR)
++
++tests:: $(REGRESSION_SPEC) | $(TESTS_DIR)
+ 	cd $(PLATFORM); \
+-	../$(SOURCE_MD_DIR)/bin/regress$(PROG_SUFFIX) specfile=../$(REGRESSION_SPEC) progress $(EXTRA_REGRESS_OPTIONS); \
+-	if test ! -d $(TESTS_DIR); then \
+-		echo Creating $(TESTS_DIR);   \
+-		$(NSINSTALL) -D $(TESTS_DIR); \
+-	fi
++	../$(SOURCE_MD_DIR)/bin/regress$(PROG_SUFFIX) specfile=../$(REGRESSION_SPEC) progress $(EXTRA_REGRESS_OPTIONS)
+ ifneq ($(BUILD_OPT),)
+ 	$(NSINSTALL) -m 664 $(PLATFORM)/$(REGDATE).sum $(TESTS_DIR); \
+ 	$(NSINSTALL) -m 664 $(PLATFORM)/$(REGDATE).htm $(TESTS_DIR); \
+@@ -828,19 +807,13 @@
+ 	@echo Error: you didn't specify REGRESSION_SPEC in your manifest.mn file!;
+ endif
+ 
+-
+ # Duplicate export rule for releases, with different directories
+ 
+ ifneq ($(EXPORTS),)
+ $(SOURCE_RELEASE_XP_DIR)/include::
+-	@if test ! -d $@; then	    \
+-		echo Creating $@;   \
+-		$(NSINSTALL) -D $@; \
+-	fi
+-
+-release_export:: $(SOURCE_RELEASE_XP_DIR)/include
++	@$(MAKE_DIR)
+ 
+-release_export:: $(EXPORTS)
++release_export:: $(EXPORTS) | $(SOURCE_RELEASE_XP_DIR)/include
+ 	$(INSTALL) -m 444 $^ $(SOURCE_RELEASE_XP_DIR)/include
+ endif
+ 
+@@ -895,7 +868,6 @@
+ # For Windows, $(MKDEPENDENCIES) must be -included before including rules.mk
+ 
+ $(MKDEPENDENCIES)::
+-	@$(MAKE_OBJDIR)
+ 	touch $(MKDEPENDENCIES) 
+ 	chmod u+w $(MKDEPENDENCIES) 
+ #on NT, the preceding touch command creates a read-only file !?!?!
+@@ -966,5 +938,5 @@
+ # Fake targets.  Always run these rules, even if a file/directory with that
+ # name already exists.
+ #
+-.PHONY: all all_platforms alltags boot clean clobber clobber_all export install libs program realclean release $(OBJDIR)
++.PHONY: all all_platforms alltags boot clean clobber clobber_all export install libs program realclean release
+ 
+diff -ur a/nss/nss/coreconf/UNIX.mk b/nss/nss/coreconf/UNIX.mk
+--- a/nss/nss/coreconf/UNIX.mk	2018-06-21 09:24:45.000000000 +0000
++++ b/nss/nss/coreconf/UNIX.mk	2019-06-26 15:15:08.097274906 +0000
+@@ -59,8 +59,8 @@
+ 	endif
+ endif
+ 
+-define MAKE_OBJDIR
+-if test ! -d $(@D); then rm -rf $(@D); $(NSINSTALL) -D $(@D); fi
++define MAKE_DIR
++if test ! -d $@; then $(NSINSTALL) -D $@; fi
+ endef
+ 
+ include $(CORE_DEPTH)/coreconf/Werror.mk
+diff -ur a/nss/nss/coreconf/WIN32.mk b/nss/nss/coreconf/WIN32.mk
+--- a/nss/nss/coreconf/WIN32.mk	2018-06-21 09:24:45.000000000 +0000
++++ b/nss/nss/coreconf/WIN32.mk	2019-06-26 15:16:57.853661391 +0000
+@@ -92,8 +92,6 @@
+ MKDEPENDENCIES  = $(OBJDIR_NAME)/depend.mk
+ 
+ INSTALL      = $(NSINSTALL)
+-MAKE_OBJDIR  = mkdir
+-MAKE_OBJDIR += $(OBJDIR)
+ GARBAGE     += $(OBJDIR)/vc20.pdb $(OBJDIR)/vc40.pdb
+ XP_DEFINE   += -DXP_PC
+ ifdef NS_USE_GCC
+@@ -103,6 +101,10 @@
+ endif
+ DLL_SUFFIX   = dll
+ 
++define MAKE_DIR
++if test ! -d $@; then mkdir -p $@; fi
++endef
++
+ ifdef NS_USE_GCC
+     OS_CFLAGS += -mwindows -mms-bitfields
+     _GEN_IMPORT_LIB=-Wl,--out-implib,$(IMPORT_LIBRARY)
+diff -ur a/nss/nss/gtests/common/gtest.mk b/nss/nss/gtests/common/gtest.mk
+--- a/nss/nss/gtests/common/gtest.mk	2018-06-21 09:24:45.000000000 +0000
++++ b/nss/nss/gtests/common/gtest.mk	2019-06-26 13:18:40.539717772 +0000
+@@ -30,7 +30,7 @@
+ 
+     # On windows, we need to create the parent directory
+     # Needed because we include files from a subdirectory
+-    MAKE_OBJDIR = $(INSTALL) -D $(dir $@)
++    MAKE_DIR = $(INSTALL) -D $(dir $@)
+ else
+     CXXFLAGS += -std=c++0x
+ endif
+diff -ur a/nss/nss/lib/base/Makefile b/nss/nss/lib/base/Makefile
+--- a/nss/nss/lib/base/Makefile	2018-06-21 09:24:45.000000000 +0000
++++ b/nss/nss/lib/base/Makefile	2019-06-26 09:10:35.709427297 +0000
+@@ -8,4 +8,3 @@
+ include config.mk
+ include $(CORE_DEPTH)/coreconf/rules.mk
+ 
+-export:: private_export
+diff -ur a/nss/nss/lib/certdb/Makefile b/nss/nss/lib/certdb/Makefile
+--- a/nss/nss/lib/certdb/Makefile	2018-06-21 09:24:45.000000000 +0000
++++ b/nss/nss/lib/certdb/Makefile	2019-06-26 09:10:35.709427297 +0000
+@@ -44,5 +44,4 @@
+ # (7) Execute "local" rules. (OPTIONAL).                              #
+ #######################################################################
+ 
+-export:: private_export
+ 
+diff -ur a/nss/nss/lib/certhigh/Makefile b/nss/nss/lib/certhigh/Makefile
+--- a/nss/nss/lib/certhigh/Makefile	2018-06-21 09:24:45.000000000 +0000
++++ b/nss/nss/lib/certhigh/Makefile	2019-06-26 09:10:35.709427297 +0000
+@@ -44,5 +44,4 @@
+ # (7) Execute "local" rules. (OPTIONAL).                              #
+ #######################################################################
+ 
+-export:: private_export
+ 
+diff -ur a/nss/nss/lib/ckfw/builtins/Makefile b/nss/nss/lib/ckfw/builtins/Makefile
+--- a/nss/nss/lib/ckfw/builtins/Makefile	2018-06-21 09:24:45.000000000 +0000
++++ b/nss/nss/lib/ckfw/builtins/Makefile	2019-06-26 13:31:18.034618598 +0000
+@@ -49,6 +49,5 @@
+ NSS_CERTDATA_TXT = certdata.txt
+ endif
+ 
+-$(OBJDIR)/certdata.c: $(NSS_CERTDATA_TXT) certdata.perl
+-	@$(MAKE_OBJDIR)
++$(OBJDIR)/certdata.c: $(NSS_CERTDATA_TXT) certdata.perl | $(OBJDIR)
+ 	$(PERL) certdata.perl $(NSS_CERTDATA_TXT) $@
+diff -ur a/nss/nss/lib/ckfw/capi/Makefile b/nss/nss/lib/ckfw/capi/Makefile
+--- a/nss/nss/lib/ckfw/capi/Makefile	2018-06-21 09:24:45.000000000 +0000
++++ b/nss/nss/lib/ckfw/capi/Makefile	2019-06-26 13:34:14.275237961 +0000
+@@ -60,8 +60,7 @@
+ EXTRA_DSO_LDOPTS        = -lc
+ MKSHLIB                 = xlC $(DSO_LDOPTS)
+ 
+-$(SHARED_LIBRARY): $(OBJS)
+-	@$(MAKE_OBJDIR)
++$(SHARED_LIBRARY): $(OBJS) | $(OBJDIR)
+ 	rm -f $@
+ 	$(MKSHLIB) -o $@ $(OBJS) $(EXTRA_LIBS) $(EXTRA_DSO_LDOPTS)
+ 	chmod +x $@
+diff -ur a/nss/nss/lib/ckfw/Makefile b/nss/nss/lib/ckfw/Makefile
+--- a/nss/nss/lib/ckfw/Makefile	2018-06-21 09:24:45.000000000 +0000
++++ b/nss/nss/lib/ckfw/Makefile	2019-06-26 09:10:35.709427297 +0000
+@@ -25,7 +25,6 @@
+ # nssck.api: ck.api ckapi.perl
+ # 	$(PERL) ckapi.perl ck.api
+ 
+-export:: private_export
+ 
+ # can't do this in manifest.mn because OS_TARGET isn't defined there.
+ ifeq (,$(filter-out WINNT WIN95,$(OS_TARGET)))
+diff -ur a/nss/nss/lib/crmf/Makefile b/nss/nss/lib/crmf/Makefile
+--- a/nss/nss/lib/crmf/Makefile	2018-06-21 09:24:45.000000000 +0000
++++ b/nss/nss/lib/crmf/Makefile	2019-06-26 09:10:35.709427297 +0000
+@@ -46,4 +46,3 @@
+ #######################################################################
+ 
+ 
+-export:: private_export
+diff -ur a/nss/nss/lib/cryptohi/Makefile b/nss/nss/lib/cryptohi/Makefile
+--- a/nss/nss/lib/cryptohi/Makefile	2018-06-21 09:24:45.000000000 +0000
++++ b/nss/nss/lib/cryptohi/Makefile	2019-06-26 09:10:35.709427297 +0000
+@@ -45,5 +45,4 @@
+ #######################################################################
+ 
+ 
+-export:: private_export
+ 
+diff -ur a/nss/nss/lib/dbm/include/Makefile b/nss/nss/lib/dbm/include/Makefile
+--- a/nss/nss/lib/dbm/include/Makefile	2018-06-21 09:24:45.000000000 +0000
++++ b/nss/nss/lib/dbm/include/Makefile	2019-06-26 09:10:35.709427297 +0000
+@@ -44,4 +44,3 @@
+ # (7) Execute "local" rules. (OPTIONAL).                              #
+ #######################################################################
+ 
+-export:: private_export
+diff -ur a/nss/nss/lib/dev/Makefile b/nss/nss/lib/dev/Makefile
+--- a/nss/nss/lib/dev/Makefile	2018-06-21 09:24:45.000000000 +0000
++++ b/nss/nss/lib/dev/Makefile	2019-06-26 13:08:35.692716456 +0000
+@@ -14,11 +14,9 @@
+ ifeq ($(OS_TARGET)$(OS_RELEASE),AIX4.3)
+ ifeq ($(USE_64),1)
+ ifndef BUILD_OPT
+-$(OBJDIR)/ckhelper.o: ckhelper.c
+-	@$(MAKE_OBJDIR)
++$(OBJDIR)/ckhelper.o: ckhelper.c | $(OBJDIR)
+ 	$(CC) -o $@ -c -O2 $(CFLAGS) $<
+ endif
+ endif
+ endif
+ 
+-export:: private_export
+diff -ur a/nss/nss/lib/freebl/Makefile b/nss/nss/lib/freebl/Makefile
+--- a/nss/nss/lib/freebl/Makefile	2018-06-21 09:24:45.000000000 +0000
++++ b/nss/nss/lib/freebl/Makefile	2019-06-26 15:15:33.961365966 +0000
+@@ -561,8 +561,6 @@
+ # (7) Execute "local" rules. (OPTIONAL).                              #
+ #######################################################################
+ 
+-export:: private_export
+-
+ rijndael_tables:
+ 	$(CC) -o $(OBJDIR)/make_rijndael_tab rijndael_tables.c \
+ 	         $(DEFINES) $(INCLUDES) $(OBJDIR)/libfreebl.a
+@@ -600,12 +598,10 @@
+ 
+ ifeq ($(SYSV_SPARC),1)
+
+-$(OBJDIR)/mpv_sparcv8.o $(OBJDIR)/mpv_sparcv8x.o $(OBJDIR)/montmulfv8.o : $(OBJDIR)/%.o : %.s
+-	@$(MAKE_OBJDIR)
++$(OBJDIR)/mpv_sparcv8.o $(OBJDIR)/mpv_sparcv8x.o $(OBJDIR)/montmulfv8.o : $(OBJDIR)/%.o : %.s | $(OBJDIR)
+ 	$(SOLARIS_AS) -o $@ $(SOLARIS_AS_FLAGS) $<
+
+-$(OBJDIR)/mpv_sparcv9.o $(OBJDIR)/montmulfv9.o : $(OBJDIR)/%.o : %.s
+-	@$(MAKE_OBJDIR)
++$(OBJDIR)/mpv_sparcv9.o $(OBJDIR)/montmulfv9.o : $(OBJDIR)/%.o : %.s | $(OBJDIR)
+ 	$(SOLARIS_AS) -o $@ $(SOLARIS_AS_FLAGS) $<
+ 
+ $(OBJDIR)/mpmontg.o: mpmontg.c montmulf.h
+@@ -635,10 +631,11 @@
+ ifdef NEED_STUB_BUILD
+ SINGLE_SHLIB_DIR = $(OBJDIR)/$(OS_TARGET)_SINGLE_SHLIB
+ ALL_TRASH += $(SINGLE_SHLIB_DIR) 
++
+ $(SINGLE_SHLIB_DIR):
+-	-mkdir $(SINGLE_SHLIB_DIR)
++	@$(MAKE_DIR)
+ 
+-release_md libs:: $(SINGLE_SHLIB_DIR)
++release_md libs:: | $(SINGLE_SHLIB_DIR)
+ 	$(MAKE) FREEBL_CHILD_BUILD=1 USE_STUB_BUILD=1 \
+  OBJDIR=$(SINGLE_SHLIB_DIR) $@
+ endif
+@@ -721,8 +718,7 @@
+ # ANSI C's strict aliasing rules.
+ ifeq ($(OS_TARGET),Linux)
+ ifneq ($(CPU_ARCH),x86)
+-$(OBJDIR)/$(PROG_PREFIX)desblapi$(OBJ_SUFFIX): desblapi.c
+-	@$(MAKE_OBJDIR)
++$(OBJDIR)/$(PROG_PREFIX)desblapi$(OBJ_SUFFIX): desblapi.c | $(OBJDIR)
+ ifdef NEED_ABSOLUTE_PATH
+ 	$(CC) -o $@ -c $(CFLAGS) -fno-strict-aliasing $(call core_abspath,$<)
+ else
+diff -ur a/nss/nss/lib/libpkix/include/Makefile b/nss/nss/lib/libpkix/include/Makefile
+--- a/nss/nss/lib/libpkix/include/Makefile	2018-06-21 09:24:45.000000000 +0000
++++ b/nss/nss/lib/libpkix/include/Makefile	2019-06-26 09:10:35.709427297 +0000
+@@ -44,5 +44,4 @@
+ # (7) Execute "local" rules. (OPTIONAL).                              #
+ #######################################################################
+ 
+-export:: private_export
+ 
+diff -ur a/nss/nss/lib/libpkix/Makefile b/nss/nss/lib/libpkix/Makefile
+--- a/nss/nss/lib/libpkix/Makefile	2018-06-21 09:24:45.000000000 +0000
++++ b/nss/nss/lib/libpkix/Makefile	2019-06-26 09:10:35.709427297 +0000
+@@ -44,5 +44,4 @@
+ # (7) Execute "local" rules. (OPTIONAL).                              #
+ #######################################################################
+ 
+-export:: private_export
+ 
+diff -ur a/nss/nss/lib/libpkix/pkix/certsel/Makefile b/nss/nss/lib/libpkix/pkix/certsel/Makefile
+--- a/nss/nss/lib/libpkix/pkix/certsel/Makefile	2018-06-21 09:24:45.000000000 +0000
++++ b/nss/nss/lib/libpkix/pkix/certsel/Makefile	2019-06-26 09:10:35.713427272 +0000
+@@ -44,5 +44,4 @@
+ # (7) Execute "local" rules. (OPTIONAL).                              #
+ #######################################################################
+ 
+-export:: private_export
+ 
+diff -ur a/nss/nss/lib/libpkix/pkix/checker/Makefile b/nss/nss/lib/libpkix/pkix/checker/Makefile
+--- a/nss/nss/lib/libpkix/pkix/checker/Makefile	2018-06-21 09:24:45.000000000 +0000
++++ b/nss/nss/lib/libpkix/pkix/checker/Makefile	2019-06-26 09:10:35.713427272 +0000
+@@ -44,5 +44,4 @@
+ # (7) Execute "local" rules. (OPTIONAL).                              #
+ #######################################################################
+ 
+-export:: private_export
+ 
+diff -ur a/nss/nss/lib/libpkix/pkix/crlsel/Makefile b/nss/nss/lib/libpkix/pkix/crlsel/Makefile
+--- a/nss/nss/lib/libpkix/pkix/crlsel/Makefile	2018-06-21 09:24:45.000000000 +0000
++++ b/nss/nss/lib/libpkix/pkix/crlsel/Makefile	2019-06-26 09:10:35.713427272 +0000
+@@ -44,5 +44,4 @@
+ # (7) Execute "local" rules. (OPTIONAL).                              #
+ #######################################################################
+ 
+-export:: private_export
+ 
+diff -ur a/nss/nss/lib/libpkix/pkix/params/Makefile b/nss/nss/lib/libpkix/pkix/params/Makefile
+--- a/nss/nss/lib/libpkix/pkix/params/Makefile	2018-06-21 09:24:45.000000000 +0000
++++ b/nss/nss/lib/libpkix/pkix/params/Makefile	2019-06-26 09:10:35.713427272 +0000
+@@ -44,5 +44,4 @@
+ # (7) Execute "local" rules. (OPTIONAL).                              #
+ #######################################################################
+ 
+-export:: private_export
+ 
+diff -ur a/nss/nss/lib/libpkix/pkix/Makefile b/nss/nss/lib/libpkix/pkix/Makefile
+--- a/nss/nss/lib/libpkix/pkix/Makefile	2018-06-21 09:24:45.000000000 +0000
++++ b/nss/nss/lib/libpkix/pkix/Makefile	2019-06-26 09:10:35.713427272 +0000
+@@ -44,5 +44,4 @@
+ # (7) Execute "local" rules. (OPTIONAL).                              #
+ #######################################################################
+ 
+-export:: private_export
+ 
+diff -ur a/nss/nss/lib/libpkix/pkix/results/Makefile b/nss/nss/lib/libpkix/pkix/results/Makefile
+--- a/nss/nss/lib/libpkix/pkix/results/Makefile	2018-06-21 09:24:45.000000000 +0000
++++ b/nss/nss/lib/libpkix/pkix/results/Makefile	2019-06-26 09:10:35.713427272 +0000
+@@ -44,5 +44,4 @@
+ # (7) Execute "local" rules. (OPTIONAL).                              #
+ #######################################################################
+ 
+-export:: private_export
+ 
+diff -ur a/nss/nss/lib/libpkix/pkix/store/Makefile b/nss/nss/lib/libpkix/pkix/store/Makefile
+--- a/nss/nss/lib/libpkix/pkix/store/Makefile	2018-06-21 09:24:45.000000000 +0000
++++ b/nss/nss/lib/libpkix/pkix/store/Makefile	2019-06-26 09:10:35.713427272 +0000
+@@ -44,5 +44,4 @@
+ # (7) Execute "local" rules. (OPTIONAL).                              #
+ #######################################################################
+ 
+-export:: private_export
+ 
+diff -ur a/nss/nss/lib/libpkix/pkix/top/Makefile b/nss/nss/lib/libpkix/pkix/top/Makefile
+--- a/nss/nss/lib/libpkix/pkix/top/Makefile	2018-06-21 09:24:45.000000000 +0000
++++ b/nss/nss/lib/libpkix/pkix/top/Makefile	2019-06-26 09:10:35.713427272 +0000
+@@ -44,5 +44,4 @@
+ # (7) Execute "local" rules. (OPTIONAL).                              #
+ #######################################################################
+ 
+-export:: private_export
+ 
+diff -ur a/nss/nss/lib/libpkix/pkix/util/Makefile b/nss/nss/lib/libpkix/pkix/util/Makefile
+--- a/nss/nss/lib/libpkix/pkix/util/Makefile	2018-06-21 09:24:45.000000000 +0000
++++ b/nss/nss/lib/libpkix/pkix/util/Makefile	2019-06-26 09:10:35.713427272 +0000
+@@ -44,5 +44,4 @@
+ # (7) Execute "local" rules. (OPTIONAL).                              #
+ #######################################################################
+ 
+-export:: private_export
+ 
+diff -ur a/nss/nss/lib/libpkix/pkix_pl_nss/Makefile b/nss/nss/lib/libpkix/pkix_pl_nss/Makefile
+--- a/nss/nss/lib/libpkix/pkix_pl_nss/Makefile	2018-06-21 09:24:45.000000000 +0000
++++ b/nss/nss/lib/libpkix/pkix_pl_nss/Makefile	2019-06-26 09:10:35.713427272 +0000
+@@ -44,5 +44,4 @@
+ # (7) Execute "local" rules. (OPTIONAL).                              #
+ #######################################################################
+ 
+-export:: private_export
+ 
+diff -ur a/nss/nss/lib/libpkix/pkix_pl_nss/module/Makefile b/nss/nss/lib/libpkix/pkix_pl_nss/module/Makefile
+--- a/nss/nss/lib/libpkix/pkix_pl_nss/module/Makefile	2018-06-21 09:24:45.000000000 +0000
++++ b/nss/nss/lib/libpkix/pkix_pl_nss/module/Makefile	2019-06-26 09:10:35.713427272 +0000
+@@ -44,5 +44,4 @@
+ # (7) Execute "local" rules. (OPTIONAL).                              #
+ #######################################################################
+ 
+-export:: private_export
+ 
+diff -ur a/nss/nss/lib/libpkix/pkix_pl_nss/pki/Makefile b/nss/nss/lib/libpkix/pkix_pl_nss/pki/Makefile
+--- a/nss/nss/lib/libpkix/pkix_pl_nss/pki/Makefile	2018-06-21 09:24:45.000000000 +0000
++++ b/nss/nss/lib/libpkix/pkix_pl_nss/pki/Makefile	2019-06-26 09:10:35.713427272 +0000
+@@ -44,6 +44,5 @@
+ # (7) Execute "local" rules. (OPTIONAL).                              #
+ #######################################################################
+ 
+-export:: private_export
+ 
+ 
+diff -ur a/nss/nss/lib/libpkix/pkix_pl_nss/system/Makefile b/nss/nss/lib/libpkix/pkix_pl_nss/system/Makefile
+--- a/nss/nss/lib/libpkix/pkix_pl_nss/system/Makefile	2018-06-21 09:24:45.000000000 +0000
++++ b/nss/nss/lib/libpkix/pkix_pl_nss/system/Makefile	2019-06-26 09:10:35.713427272 +0000
+@@ -44,6 +44,5 @@
+ # (7) Execute "local" rules. (OPTIONAL).                              #
+ #######################################################################
+ 
+-export:: private_export
+ 
+ 
+diff -ur a/nss/nss/lib/nss/Makefile b/nss/nss/lib/nss/Makefile
+--- a/nss/nss/lib/nss/Makefile	2018-06-21 09:24:45.000000000 +0000
++++ b/nss/nss/lib/nss/Makefile	2019-06-26 09:10:35.713427272 +0000
+@@ -43,4 +43,3 @@
+ # (7) Execute "local" rules. (OPTIONAL).                              #
+ #######################################################################
+ 
+-export:: private_export
+diff -ur a/nss/nss/lib/pk11wrap/Makefile b/nss/nss/lib/pk11wrap/Makefile
+--- a/nss/nss/lib/pk11wrap/Makefile	2018-06-21 09:24:45.000000000 +0000
++++ b/nss/nss/lib/pk11wrap/Makefile	2019-06-26 13:36:56.335799075 +0000
+@@ -44,7 +44,6 @@
+ # (7) Execute "local" rules. (OPTIONAL).                              #
+ #######################################################################
+ 
+-export:: private_export
+ 
+ $(OBJDIR)/pk11load$(OBJ_SUFFIX): debug_module.c
+ 
+@@ -54,8 +53,7 @@
+ ifeq ($(OS_TARGET)$(OS_RELEASE),AIX4.3)
+ ifeq ($(USE_64),1)
+ ifndef BUILD_OPT
+-$(OBJDIR)/pk11slot.o: pk11slot.c
+-	@$(MAKE_OBJDIR)
++$(OBJDIR)/pk11slot.o: pk11slot.c | $(OBJDIR)
+ 	$(CC) -o $@ -c -O2 $(CFLAGS) $<
+ endif
+ endif
+diff -ur a/nss/nss/lib/pki/Makefile b/nss/nss/lib/pki/Makefile
+--- a/nss/nss/lib/pki/Makefile	2018-06-21 09:24:45.000000000 +0000
++++ b/nss/nss/lib/pki/Makefile	2019-06-26 09:10:35.713427272 +0000
+@@ -8,4 +8,3 @@
+ include config.mk
+ include $(CORE_DEPTH)/coreconf/rules.mk
+ 
+-export:: private_export
+diff -ur a/nss/nss/lib/softoken/legacydb/Makefile b/nss/nss/lib/softoken/legacydb/Makefile
+--- a/nss/nss/lib/softoken/legacydb/Makefile	2018-06-21 09:24:45.000000000 +0000
++++ b/nss/nss/lib/softoken/legacydb/Makefile	2019-06-26 09:10:35.713427272 +0000
+@@ -56,7 +56,6 @@
+ # (7) Execute "local" rules. (OPTIONAL).                              #
+ #######################################################################
+ 
+-export:: private_export
+ 
+ # indicates dependency on freebl static lib
+ $(SHARED_LIBRARY): $(CRYPTOLIB)
+diff -ur a/nss/nss/lib/softoken/Makefile b/nss/nss/lib/softoken/Makefile
+--- a/nss/nss/lib/softoken/Makefile	2018-06-21 09:24:45.000000000 +0000
++++ b/nss/nss/lib/softoken/Makefile	2019-06-26 13:09:42.169011912 +0000
+@@ -56,7 +56,6 @@
+ # (7) Execute "local" rules. (OPTIONAL).                              #
+ #######################################################################
+ 
+-export:: private_export
+ 
+ # indicates dependency on freebl static lib
+ $(SHARED_LIBRARY): $(CRYPTOLIB)
+@@ -67,11 +66,9 @@
+ ifeq ($(OS_TARGET)$(OS_RELEASE),AIX4.3)
+ ifeq ($(USE_64),1)
+ ifndef BUILD_OPT
+-$(OBJDIR)/pkcs11.o: pkcs11.c
+-	@$(MAKE_OBJDIR)
++$(OBJDIR)/pkcs11.o: pkcs11.c | $(OBJDIR)
+ 	$(CC) -o $@ -c -O2 $(CFLAGS) $<
+-$(OBJDIR)/pkcs11c.o: pkcs11c.c
+-	@$(MAKE_OBJDIR)
++$(OBJDIR)/pkcs11c.o: pkcs11c.c | $(OBJDIR)
+ 	$(CC) -o $@ -c -O2 $(CFLAGS) $<
+ endif
+ endif
+diff -ur a/nss/nss/lib/sqlite/Makefile b/nss/nss/lib/sqlite/Makefile
+--- a/nss/nss/lib/sqlite/Makefile	2018-06-21 09:24:45.000000000 +0000
++++ b/nss/nss/lib/sqlite/Makefile	2019-06-26 09:10:35.713427272 +0000
+@@ -45,7 +45,6 @@
+ # (7) Execute "local" rules. (OPTIONAL).                              #
+ #######################################################################
+ 
+-export:: private_export
+ 
+ ifeq (WINNT,$(OS_ARCH))
+ # sqlite calls the deprecated GetVersionExA method
+diff -ur a/nss/nss/lib/ssl/Makefile b/nss/nss/lib/ssl/Makefile
+--- a/nss/nss/lib/ssl/Makefile	2018-06-21 09:24:45.000000000 +0000
++++ b/nss/nss/lib/ssl/Makefile	2019-06-26 09:10:35.717427248 +0000
+@@ -62,4 +62,3 @@
+ # (7) Execute "local" rules. (OPTIONAL).                              #
+ #######################################################################
+ 
+-export:: private_export
+diff -ur a/nss/nss/lib/util/Makefile b/nss/nss/lib/util/Makefile
+--- a/nss/nss/lib/util/Makefile	2018-06-21 09:24:45.000000000 +0000
++++ b/nss/nss/lib/util/Makefile	2019-06-26 09:10:35.717427248 +0000
+@@ -47,4 +47,3 @@
+ #######################################################################
+ 
+ 
+-export:: private_export
+diff -ur a/nss/nss/lib/zlib/Makefile b/nss/nss/lib/zlib/Makefile
+--- a/nss/nss/lib/zlib/Makefile	2018-06-21 09:24:45.000000000 +0000
++++ b/nss/nss/lib/zlib/Makefile	2019-06-26 09:10:35.717427248 +0000
+@@ -43,7 +43,6 @@
+ # (7) Execute "local" rules. (OPTIONAL).                              #
+ #######################################################################
+ 
+-export:: private_export
+ 
+ test: $(PROGRAMS)
+ 	@cd $(OBJDIR); \
+diff -ur a/nss/nss/Makefile b/nss/nss/Makefile
+--- a/nss/nss/Makefile	2019-06-26 08:30:49.982462614 +0000
++++ b/nss/nss/Makefile	2019-06-26 10:51:28.286655901 +0000
+@@ -49,7 +49,10 @@
+ # (7) Execute "local" rules. (OPTIONAL).                              #
+ #######################################################################
+ 
+-nss_build_all: build_nspr all latest
++nss_build_all:
++	$(MAKE) build_nspr
++	$(MAKE) all
++	$(MAKE) latest
+ 
+ nss_clean_all: clobber_nspr clobber
+ 
