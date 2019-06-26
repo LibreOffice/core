@@ -905,8 +905,9 @@ DefaultNumberingProvider::makeNumberingString( const Sequence<beans::PropertyVal
      }
 
      if (natNum) {
-            rtl::Reference<NativeNumberSupplierService> xNatNum(new NativeNumberSupplierService);
-            result += xNatNum->getNativeNumberStringParams(OUString::number(number), locale,
+            if (!mxNatNum)
+                mxNatNum.set(new NativeNumberSupplierService);
+            result += mxNatNum->getNativeNumberStringParams(OUString::number(number), locale,
                                                                  natNum, sNatNumParams);
      } else if (tableSize) {
             if ( number > tableSize && !bRecycleSymbol)
