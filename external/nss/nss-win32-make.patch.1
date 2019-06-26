@@ -1,7 +1,7 @@
 --- nss/nss/coreconf/rules.mk.orig2	2014-06-03 15:30:01.667200000 +0200
 +++ nss/nss/coreconf/rules.mk	2014-06-03 15:30:14.537200000 +0200
 @@ -259,7 +259,7 @@
- 	@$(MAKE_OBJDIR)
+ $(LIBRARY): $(OBJS) | $$(@D)/d
  	rm -f $@
  ifeq (,$(filter-out _WIN%,$(NS_USE_GCC)_$(OS_TARGET)))
 -	$(AR) $(subst /,\\,$(OBJS))
