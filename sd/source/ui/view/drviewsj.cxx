@@ -20,6 +20,7 @@
 #include <DrawViewShell.hxx>
 #include <com/sun/star/embed/EmbedMisc.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
+#include <com/sun/star/presentation/ClickAction.hpp>
 #include <svl/aeitem.hxx>
 #include <svx/svxids.hrc>
 #include <svx/globl3d.hxx>
@@ -41,6 +42,7 @@
 
 #include <app.hrc>
 
+#include <anminfo.hxx>
 #include <Outliner.hxx>
 #include <sdpage.hxx>
 #include <fupoor.hxx>
@@ -103,11 +105,14 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
             SfxItemState::DEFAULT == rSet.GetItemState( SID_ORIGINAL_SIZE ) ||
             SfxItemState::DEFAULT == rSet.GetItemState( SID_SAVE_GRAPHIC ) ||
             SfxItemState::DEFAULT == rSet.GetItemState( SID_COMPRESS_GRAPHIC ) ||
-            SfxItemState::DEFAULT == rSet.GetItemState( SID_TEXTATTR_DLG ) )
+            SfxItemState::DEFAULT == rSet.GetItemState( SID_TEXTATTR_DLG ) ||
+            SfxItemState::DEFAULT == rSet.GetItemState( SID_EXECUTE_ANIMATION_EFFECT ))
         {
             const SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
             const SdrGrafObj* pSdrGrafObj = dynamic_cast< const SdrGrafObj* >(pObj);
             const SdrOle2Obj* pSdrOle2Obj = dynamic_cast< const SdrOle2Obj* >(pObj);
+            const SdAnimationInfo* pAnimationInfo
+                = SdDrawDocument::GetAnimationInfo(rMarkList.GetMark(0)->GetMarkedSdrObj());
             SdrInventor nInv = pObj->GetObjInventor();
             sal_uInt16  nId  = pObj->GetObjIdentifier();
             SdrObjTransformInfoRec aInfoRec;
@@ -125,6 +130,17 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
             {
                 rSet.DisableItem(SID_SAVE_GRAPHIC);
                 rSet.DisableItem(SID_COMPRESS_GRAPHIC);
+            }
+
+            if (!pAnimationInfo
+                || pAnimationInfo->meClickAction == presentation::ClickAction::ClickAction_NONE
+                // Sound does not work in edit mode
+                || pAnimationInfo->meClickAction == presentation::ClickAction::ClickAction_SOUND
+                // No point in exiting the presentation in edit mode
+                || pAnimationInfo->meClickAction
+                       == presentation::ClickAction::ClickAction_STOPPRESENTATION)
+            {
+                rSet.DisableItem(SID_EXECUTE_ANIMATION_EFFECT);
             }
 
             /* If it is not a group object or 3D object, we disable "enter
@@ -486,6 +502,7 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
         rSet.DisableItem(SID_EQUALIZEHEIGHT);
         rSet.DisableItem( SID_CONNECT );
         rSet.DisableItem( SID_ANIMATION_EFFECTS );
+        rSet.DisableItem( SID_EXECUTE_ANIMATION_EFFECT );
         rSet.DisableItem( SID_MODIFY_FIELD );
         rSet.DisableItem (SID_OBJECT_SHEAR);
     }

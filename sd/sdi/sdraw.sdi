@@ -51,6 +51,23 @@ SfxVoidItem AnimationEffects SID_ANIMATION_EFFECTS
     GroupId = SfxGroupId::Options;
 ]
 
+SfxVoidItem ExecuteAnimationEffect SID_EXECUTE_ANIMATION_EFFECT
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Options;
+]
+
 SfxBoolItem AnimationObjects SID_ANIMATION_OBJECTS
 
 [

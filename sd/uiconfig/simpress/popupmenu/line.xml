@@ -63,5 +63,6 @@
   <menu:menuitem menu:id=".uno:Dismantle"/>
   <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:AnimationEffects"/>
+  <menu:menuitem menu:id=".uno:ExecuteAnimationEffect"/>
   <menu:menuitem menu:id=".uno:EditStyle"/>
 </menu:menupopup>

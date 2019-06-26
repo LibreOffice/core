@@ -1060,6 +1060,14 @@
           <value>1</value>
         </prop>
       </node>
+      <node oor:name=".uno:ExecuteAnimationEffect" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">E~xecute Interaction...</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
       <node oor:name=".uno:PresentationLayout" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Change Slide Master...</value>

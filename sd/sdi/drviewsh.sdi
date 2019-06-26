@@ -37,6 +37,11 @@ interface ImpressEditView : DrawView
         ExecMethod = FuTemporary ;
         StateMethod = GetMenuState ;
     ]
+    SID_EXECUTE_ANIMATION_EFFECT // ole : no, status : ?
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
     SID_CUSTOM_ANIMATION_PANEL // ole : no, status : ?
     [
         ExecMethod = FuTemporary ;

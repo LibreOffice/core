@@ -65,5 +65,5 @@
   <menu:menuitem menu:id=".uno:ObjectTitleDescription"/>
   <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:AnimationEffects"/>
-  <menu:menuseparator/>
+  <menu:menuitem menu:id=".uno:ExecuteAnimationEffect"/>
 </menu:menupopup>
