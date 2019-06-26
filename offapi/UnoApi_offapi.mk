@@ -2981,6 +2981,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/rdf,\
 	XLiteral \
 	XMetadatable \
 	XNamedGraph \
+	XNamedGraph2 \
 	XNode \
 	XQuerySelectResult \
 	XReifiedStatement \
