@@ -744,6 +744,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         rSet.ClearItem(SID_ANIMATION_OBJECTS);
         rSet.DisableItem(SID_ANIMATION_OBJECTS);
         rSet.DisableItem(SID_ANIMATION_EFFECTS);
+        rSet.DisableItem(SID_EXECUTE_ANIMATION_EFFECT);
 
         if (meEditMode == EditMode::MasterPage)
             rSet.DisableItem(SID_MODIFYPAGE);
@@ -761,6 +762,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         rSet.ClearItem(SID_ANIMATION_OBJECTS);
         rSet.DisableItem(SID_ANIMATION_OBJECTS);
         rSet.DisableItem(SID_ANIMATION_EFFECTS);
+        rSet.DisableItem(SID_EXECUTE_ANIMATION_EFFECT);
         rSet.DisableItem(SID_RENAMEPAGE);
         rSet.DisableItem(SID_RENAMEPAGE_QUICK);
         rSet.DisableItem(SID_INSERTLAYER);
@@ -1289,6 +1291,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
             rSet.ClearItem(SID_OBJECT_ROTATE);
             rSet.ClearItem(SID_FM_CONFIG);
             rSet.ClearItem(SID_ANIMATION_EFFECTS);
+            rSet.ClearItem(SID_EXECUTE_ANIMATION_EFFECT);
             rSet.ClearItem(SID_ANIMATION_OBJECTS);
             rSet.ClearItem(SID_3D_WIN);
 
@@ -1309,6 +1312,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
             rSet.DisableItem(SID_POSITION);
             rSet.DisableItem(SID_FM_CONFIG);
             rSet.DisableItem(SID_ANIMATION_EFFECTS);
+            rSet.DisableItem(SID_EXECUTE_ANIMATION_EFFECT);
             rSet.DisableItem(SID_ANIMATION_OBJECTS);
             rSet.DisableItem(SID_3D_WIN);
         }

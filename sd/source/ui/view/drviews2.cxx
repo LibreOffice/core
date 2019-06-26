@@ -148,6 +148,7 @@
 #include <fuconnct.hxx>
 #include <fucopy.hxx>
 #include <fudspord.hxx>
+#include <fuexecuteinteraction.hxx>
 #include <fuexpand.hxx>
 #include <fuinsert.hxx>
 #include <fuinsfil.hxx>
@@ -1635,6 +1636,15 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         {
             SetCurrentFunction( FuObjectAnimationParameters::Create( this, GetActiveWindow(), mpDrawView.get(), GetDoc(), rReq) );
             Cancel();
+        }
+        break;
+
+        case SID_EXECUTE_ANIMATION_EFFECT:
+        {
+            SetCurrentFunction(FuExecuteInteraction::Create(this, GetActiveWindow(),
+                                                            mpDrawView.get(), GetDoc(), rReq));
+            // Don't cancel (play sound interaction wouldn't work otherwise)
+            rReq.Done();
         }
         break;
 
