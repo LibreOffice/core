@@ -1665,7 +1665,9 @@ public:
 
     virtual void grab_focus() override
     {
+        disable_notify_events();
         gtk_widget_grab_focus(m_pWidget);
+        enable_notify_events();
     }
 
     virtual bool has_focus() const override
