@@ -113,8 +113,18 @@ void EachElem(NodeT& rNode, size_t nOffset, size_t nDataSize, FuncElem& rFuncEle
 template<typename BlkT, typename ItrT, typename NodeT, typename FuncElem>
 void EachElem(NodeT& rNode, FuncElem& rFuncElem)
 {
-    ItrT it = BlkT::begin(*rNode.data);
-    ItrT itEnd = BlkT::end(*rNode.data);
+    auto it = BlkT::begin(*rNode.data);
+    auto itEnd = BlkT::end(*rNode.data);
+    size_t nRow = rNode.position;
+    for (; it != itEnd; ++it, ++nRow)
+        rFuncElem(nRow, *it);
+}
+
+template<typename BlkT, typename ItrT, typename NodeT, typename FuncElem>
+void EachElemReverse(NodeT& rNode, FuncElem& rFuncElem)
+{
+    auto it = BlkT::rbegin(*rNode.data);
+    auto itEnd = BlkT::rend(*rNode.data);
     size_t nRow = rNode.position;
     for (; it != itEnd; ++it, ++nRow)
         rFuncElem(nRow, *it);
@@ -367,6 +377,28 @@ void ProcessElements2(StoreT& rStore, FuncElem& rFuncElem, FuncElse& rFuncElse)
             break;
             case Blk2::block_type:
                 EachElem<Blk2, typename Blk2::iterator>(*it, rFuncElem);
+            break;
+            default:
+                rFuncElse(it->type, nTopRow, nDataSize);
+        }
+    }
+}
+
+template<typename StoreT, typename Blk1, typename Blk2, typename FuncElem, typename FuncElse>
+void ProcessElements2Reverse(StoreT& rStore, FuncElem& rFuncElem, FuncElse& rFuncElse)
+{
+    typename StoreT::size_type nTopRow = 0, nDataSize = 0;
+    typename StoreT::iterator it = rStore.begin(), itEnd = rStore.end();
+    for (; it != itEnd; ++it, nTopRow += nDataSize)
+    {
+        nDataSize = it->size;
+        switch (it->type)
+        {
+            case Blk1::block_type:
+                EachElemReverse<Blk1, typename Blk1::iterator>(*it, rFuncElem);
+            break;
+            case Blk2::block_type:
+                EachElemReverse<Blk2, typename Blk2::iterator>(*it, rFuncElem);
             break;
             default:
                 rFuncElse(it->type, nTopRow, nDataSize);
