@@ -241,8 +241,11 @@ public:
     void VisAreaChanged() const;
 private:
     typedef std::vector<ScAccessibleShapeData*> SortedShapes;
+    typedef std::unordered_map<css::uno::Reference< css::drawing::XShape >, ScAccessibleShapeData*> ShapesMap;
 
     mutable SortedShapes maZOrderedShapes; // a null pointer represents the sheet in the correct order
+    mutable ShapesMap maShapesMap;
+    mutable bool mbShapesNeedSorting; // set if maZOrderedShapes needs sorting
 
     mutable ::accessibility::AccessibleShapeTreeInfo maShapeTreeInfo;
     mutable css::uno::Reference<css::view::XSelectionSupplier> xSelectionSupplier;
@@ -257,7 +260,6 @@ private:
 
     boost::optional<ScAddress> GetAnchor(const uno::Reference<drawing::XShape>& xShape) const;
     uno::Reference<XAccessibleRelationSet> GetRelationSet(const ScAccessibleShapeData* pData) const;
-    void CheckWhetherAnchorChanged(const uno::Reference<drawing::XShape>& xShape) const;
     void SetAnchor(const uno::Reference<drawing::XShape>& xShape, ScAccessibleShapeData* pData) const;
     void AddShape(const uno::Reference<drawing::XShape>& xShape, bool bCommitChange) const;
     void RemoveShape(const uno::Reference<drawing::XShape>& xShape) const;
@@ -373,8 +375,10 @@ void ScChildrenShapes::Notify(SfxBroadcaster&, const SfxHint& rHint)
                 uno::Reference<drawing::XShape> xShape (pObj->getUnoShape(), uno::UNO_QUERY);
                 if (xShape.is())
                 {
-                    std::sort(maZOrderedShapes.begin(), maZOrderedShapes.end(), ScShapeDataLess()); // sort, because the z index or layer could be changed
-                    CheckWhetherAnchorChanged(xShape);
+                    mbShapesNeedSorting = true; // sort, because the z index or layer could be changed
+                    auto it = maShapesMap.find(xShape);
+                    if (it != maShapesMap.end())
+                        SetAnchor(xShape, it->second);
                 }
             }
             break;
@@ -417,13 +421,12 @@ bool ScChildrenShapes::ReplaceChild (::accessibility::AccessibleShape* pCurrentC
     if (pReplacement.is())
     {
         OSL_ENSURE(pCurrentChild->GetXShape().get() == pReplacement->GetXShape().get(), "XShape changes and should be inserted sorted");
-        SortedShapes::iterator aItr;
-
-        if (FindShape(pCurrentChild->GetXShape(), aItr) || (aItr != maZOrderedShapes.end() && (*aItr)))
+        auto it = maShapesMap.find(pCurrentChild->GetXShape());
+        if (it != maShapesMap.end())
         {
-            if ((*aItr)->pAccShape.is())
+            if (it->second->pAccShape.is())
             {
-                OSL_ENSURE((*aItr)->pAccShape == pCurrentChild, "wrong child found");
+                OSL_ENSURE(it->second->pAccShape == pCurrentChild, "wrong child found");
                 AccessibleEventObject aEvent;
                 aEvent.EventId = AccessibleEventId::CHILD;
                 aEvent.Source = uno::Reference< XAccessibleContext >(mpAccessibleDocument);
@@ -433,7 +436,7 @@ bool ScChildrenShapes::ReplaceChild (::accessibility::AccessibleShape* pCurrentC
 
                 pCurrentChild->dispose();
             }
-            (*aItr)->pAccShape = pReplacement;
+            it->second->pAccShape = pReplacement;
             AccessibleEventObject aEvent;
             aEvent.EventId = AccessibleEventId::CHILD;
             aEvent.Source = uno::Reference< XAccessibleContext >(mpAccessibleDocument);
@@ -448,10 +451,9 @@ bool ScChildrenShapes::ReplaceChild (::accessibility::AccessibleShape* pCurrentC
 
 ::accessibility::AccessibleControlShape * ScChildrenShapes::GetAccControlShapeFromModel(css::beans::XPropertySet* pSet)
 {
-    sal_Int32 count = GetCount();
-    for (sal_Int32 index=0;index<count;index++)
+    GetCount(); // populate
+    for (ScAccessibleShapeData* pShape : maZOrderedShapes)
     {
-        ScAccessibleShapeData* pShape = maZOrderedShapes[index];
         if (pShape)
         {
             rtl::Reference< ::accessibility::AccessibleShape > pAccShape(pShape->pAccShape);
@@ -469,17 +471,14 @@ bool ScChildrenShapes::ReplaceChild (::accessibility::AccessibleShape* pCurrentC
 css::uno::Reference < css::accessibility::XAccessible >
 ScChildrenShapes::GetAccessibleCaption (const css::uno::Reference < css::drawing::XShape>& xShape)
 {
-    sal_Int32 count = GetCount();
-    for (sal_Int32 index=0;index<count;index++)
-    {
-        ScAccessibleShapeData* pShape = maZOrderedShapes[index];
-        if (pShape && pShape->xShape == xShape )
-        {
-            css::uno::Reference< css::accessibility::XAccessible > xNewChild(  pShape->pAccShape.get() );
-            if(xNewChild.get())
-                return xNewChild;
-        }
-    }
+    GetCount(); // populate
+    auto it = maShapesMap.find(xShape);
+    if (it == maShapesMap.end())
+        return nullptr;
+    ScAccessibleShapeData* pShape = it->second;
+    css::uno::Reference< css::accessibility::XAccessible > xNewChild( pShape->pAccShape.get() );
+    if(xNewChild.get())
+        return xNewChild;
     return nullptr;
 }
 
@@ -532,6 +531,12 @@ uno::Reference< XAccessible > ScChildrenShapes::Get(sal_Int32 nIndex) const
     if (maZOrderedShapes.size() <= 1)
         GetCount(); // fill list with filtered shapes (no internal shapes)
 
+    if (mbShapesNeedSorting)
+    {
+        std::sort(maZOrderedShapes.begin(), maZOrderedShapes.end(), ScShapeDataLess());
+        mbShapesNeedSorting = false;
+    }
+
     if (static_cast<sal_uInt32>(nIndex) >= maZOrderedShapes.size())
         return nullptr;
 
@@ -543,6 +548,12 @@ uno::Reference< XAccessible > ScChildrenShapes::GetAt(const awt::Point& rPoint) 
     uno::Reference<XAccessible> xAccessible;
     if(mpViewShell)
     {
+        if (mbShapesNeedSorting)
+        {
+            std::sort(maZOrderedShapes.begin(), maZOrderedShapes.end(), ScShapeDataLess());
+            mbShapesNeedSorting = false;
+        }
+
         sal_Int32 i(maZOrderedShapes.size() - 1);
         bool bFound(false);
         while (!bFound && i >= 0)
@@ -586,6 +597,12 @@ bool ScChildrenShapes::IsSelected(sal_Int32 nIndex,
 
     if (!xSelectionSupplier.is())
         throw uno::RuntimeException();
+
+    if (mbShapesNeedSorting)
+    {
+        std::sort(maZOrderedShapes.begin(), maZOrderedShapes.end(), ScShapeDataLess());
+        mbShapesNeedSorting = false;
+    }
 
     if (!maZOrderedShapes[nIndex])
         return false;
@@ -646,6 +663,12 @@ void ScChildrenShapes::Select(sal_Int32 nIndex)
 
     if (!xSelectionSupplier.is())
         throw uno::RuntimeException();
+
+    if (mbShapesNeedSorting)
+    {
+        std::sort(maZOrderedShapes.begin(), maZOrderedShapes.end(), ScShapeDataLess());
+        mbShapesNeedSorting = false;
+    }
 
     if (!maZOrderedShapes[nIndex])
         return;
@@ -781,10 +804,15 @@ uno::Reference< XAccessible > ScChildrenShapes::GetSelected(sal_Int32 nSelectedC
 
         SortedShapes::iterator aItr;
         if (FindShape(aShapes[nSelectedChildIndex], aItr))
-            xAccessible = Get(aItr - maZOrderedShapes.begin());
+            xAccessible = Get(*aItr);
     }
     else
     {
+        if (mbShapesNeedSorting)
+        {
+            std::sort(maZOrderedShapes.begin(), maZOrderedShapes.end(), ScShapeDataLess());
+            mbShapesNeedSorting = false;
+        }
         for(const auto& rpShape : maZOrderedShapes)
         {
             if (!rpShape || rpShape->bSelected)
@@ -1125,13 +1153,6 @@ uno::Reference<XAccessibleRelationSet> ScChildrenShapes::GetRelationSet(const Sc
     return pRelationSet;
 }
 
-void ScChildrenShapes::CheckWhetherAnchorChanged(const uno::Reference<drawing::XShape>& xShape) const
-{
-    SortedShapes::iterator aItr;
-    if (FindShape(xShape, aItr))
-        SetAnchor(xShape, *aItr);
-}
-
 void ScChildrenShapes::SetAnchor(const uno::Reference<drawing::XShape>& xShape, ScAccessibleShapeData* pData) const
 {
     if (pData)
@@ -1149,6 +1170,11 @@ void ScChildrenShapes::SetAnchor(const uno::Reference<drawing::XShape>& xShape, 
 
 void ScChildrenShapes::AddShape(const uno::Reference<drawing::XShape>& xShape, bool bCommitChange) const
 {
+    if (mbShapesNeedSorting)
+    {
+        std::sort(maZOrderedShapes.begin(), maZOrderedShapes.end(), ScShapeDataLess());
+        mbShapesNeedSorting = false;
+    }
     SortedShapes::iterator aFindItr;
     if (!FindShape(xShape, aFindItr))
     {
@@ -1199,7 +1225,7 @@ void ScChildrenShapes::AddShape(const uno::Reference<drawing::XShape>& xShape, b
             AccessibleEventObject aEvent;
             aEvent.EventId = AccessibleEventId::CHILD;
             aEvent.Source = uno::Reference< XAccessibleContext >(mpAccessibleDocument);
-            aEvent.NewValue <<= Get(aNewItr - maZOrderedShapes.begin());
+            aEvent.NewValue <<= Get(*aNewItr);
 
             mpAccessibleDocument->CommitChange(aEvent); // new child - event
         }
@@ -1212,14 +1238,20 @@ void ScChildrenShapes::AddShape(const uno::Reference<drawing::XShape>& xShape, b
 
 void ScChildrenShapes::RemoveShape(const uno::Reference<drawing::XShape>& xShape) const
 {
+    if (mbShapesNeedSorting)
+    {
+        std::sort(maZOrderedShapes.begin(), maZOrderedShapes.end(), ScShapeDataLess());
+        mbShapesNeedSorting = false;
+    }
     SortedShapes::iterator aItr;
     if (FindShape(xShape, aItr))
     {
         if (mpAccessibleDocument)
         {
-            uno::Reference<XAccessible> xOldAccessible (Get(aItr - maZOrderedShapes.begin()));
+            uno::Reference<XAccessible> xOldAccessible (Get(*aItr));
 
             delete *aItr;
+            maShapesMap.erase((*aItr)->xShape);
             maZOrderedShapes.erase(aItr);
 
             AccessibleEventObject aEvent;
@@ -1232,6 +1264,7 @@ void ScChildrenShapes::RemoveShape(const uno::Reference<drawing::XShape>& xShape
         else
         {
             delete *aItr;
+            maShapesMap.erase((*aItr)->xShape);
             maZOrderedShapes.erase(aItr);
         }
     }
@@ -1243,6 +1276,11 @@ void ScChildrenShapes::RemoveShape(const uno::Reference<drawing::XShape>& xShape
 
 bool ScChildrenShapes::FindShape(const uno::Reference<drawing::XShape>& xShape, ScChildrenShapes::SortedShapes::iterator& rItr) const
 {
+    if (mbShapesNeedSorting)
+    {
+        std::sort(maZOrderedShapes.begin(), maZOrderedShapes.end(), ScShapeDataLess());
+        mbShapesNeedSorting = false;
+    }
     bool bResult(false);
     ScAccessibleShapeData aShape;
     aShape.xShape = xShape;
