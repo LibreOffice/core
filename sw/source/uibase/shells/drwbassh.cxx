@@ -193,7 +193,7 @@ void SwDrawBaseShell::Execute(SfxRequest const &rReq)
                         {
                             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                             VclPtr<AbstractSvxCaptionDialog> pCaptionDlg =
-                                    pFact->CreateCaptionDialog( nullptr, pSdrView, nAllowedAnchors );
+                                    pFact->CreateCaptionDialog( GetView().GetWindow(), pSdrView, nAllowedAnchors );
                             pDlg.disposeAndReset(pCaptionDlg);
                             pCaptionDlg->SetValidateFramePosLink( LINK(this, SwDrawBaseShell, ValidatePosition) );
                         }
@@ -201,7 +201,7 @@ void SwDrawBaseShell::Execute(SfxRequest const &rReq)
                         {
                             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                             VclPtr<AbstractSvxTransformTabDialog> pTransform =
-                                        pFact->CreateSvxTransformTabDialog( nullptr, nullptr, pSdrView, nAllowedAnchors );
+                                        pFact->CreateSvxTransformTabDialog( GetView().GetWindow(), nullptr, pSdrView, nAllowedAnchors );
                             pDlg.disposeAndReset(pTransform);
                             pTransform->SetValidateFramePosLink( LINK(this, SwDrawBaseShell, ValidatePosition) );
                         }
