@@ -1873,13 +1873,21 @@ void ScConditionalFormat::CompileXML()
 
 void ScConditionalFormat::UpdateReference( sc::RefUpdateContext& rCxt, bool bCopyAsMove )
 {
-    for(auto& rxEntry : maEntries)
-        rxEntry->UpdateReference(rCxt);
-
     if (rCxt.meMode == URM_COPY && bCopyAsMove)
+    {
+        // ScConditionEntry::UpdateReference() obtains its aSrcPos from
+        // maRanges and does not update it on URM_COPY, but it's needed later
+        // for the moved position, so update maRanges beforehand.
         maRanges.UpdateReference(URM_MOVE, pDoc, rCxt.maRange, rCxt.mnColDelta, rCxt.mnRowDelta, rCxt.mnTabDelta);
+        for (auto& rxEntry : maEntries)
+            rxEntry->UpdateReference(rCxt);
+    }
     else
+    {
+        for (auto& rxEntry : maEntries)
+            rxEntry->UpdateReference(rCxt);
         maRanges.UpdateReference(rCxt.meMode, pDoc, rCxt.maRange, rCxt.mnColDelta, rCxt.mnRowDelta, rCxt.mnTabDelta);
+    }
 }
 
 void ScConditionalFormat::InsertRow(SCTAB nTab, SCCOL nColStart, SCCOL nColEnd, SCROW nRowPos, SCSIZE nSize)
