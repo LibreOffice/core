@@ -3502,10 +3502,11 @@
                             <property name="toolbar_style">icons</property>
                             <property name="show_arrow">False</property>
                             <child>
-                              <object class="GtkMenuToolButton" id="Home-FontColor">
+                              <object class="GtkMenuToolButton" id="Home-BackgroundColor">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="action_name">.uno:Color</property>
+                                <property name="action_name">.uno:BackgroundColor</property>
+                                <property name="use_underline">True</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -3513,11 +3514,10 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkMenuToolButton" id="Home-BackgroundColor">
+                              <object class="GtkMenuToolButton" id="Home-FontColor">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="action_name">.uno:BackgroundColor</property>
-                                <property name="use_underline">True</property>
+                                <property name="action_name">.uno:Color</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -9628,7 +9628,7 @@
                     </child>
                     <child>
                       <object class="svtlo-ManagedMenuButton" id="Image-GraphicButton:MenuGraphic">
-                        <property name="label" translatable="yes" context="notebookbar_compact|GraphicMenuButton">_Graphic</property>
+                        <property name="label" translatable="yes" context="notebookbar_compact|GraphicMenuButton">Im_age</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="focus_on_click">False</property>

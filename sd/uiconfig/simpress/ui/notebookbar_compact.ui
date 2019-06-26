@@ -3893,17 +3893,6 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkMenuToolButton" id="Home-Color">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="action_name">.uno:Color</property>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="homogeneous">True</property>
-                              </packing>
-                            </child>
-                            <child>
                               <object class="GtkMenuToolButton" id="Home-CharBackColor">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
@@ -3912,6 +3901,17 @@
                               <packing>
                                 <property name="expand">False</property>
                                 <property name="homogeneous">False</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkMenuToolButton" id="Home-Color">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="action_name">.uno:Color</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="homogeneous">True</property>
                               </packing>
                             </child>
                           </object>
