@@ -19,6 +19,8 @@
 #ifndef INCLUDED_SW_INC_REFFLD_HXX
 #define INCLUDED_SW_INC_REFFLD_HXX
 
+#include <tools/solar.h>
+
 #include "fldbas.hxx"
 
 class SfxPoolItem;
