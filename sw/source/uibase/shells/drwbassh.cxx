@@ -245,8 +245,8 @@ void SwDrawBaseShell::Execute(SfxRequest const &rReq)
                         pDlg->StartExecuteAsync([=](sal_Int32 nResult){
                             if (nResult == RET_OK)
                             {
-                                SwFormatVertOrient aVOrient(static_cast<const SwFormatVertOrient&>(pFrameFormat->GetFormatAttr(RES_VERT_ORIENT)));
-                                SwFormatHoriOrient aHOrient(static_cast<const SwFormatHoriOrient&>(pFrameFormat->GetFormatAttr(RES_HORI_ORIENT)));
+                                SwFormatVertOrient aVOrientFinal(static_cast<const SwFormatVertOrient&>(pFrameFormat->GetFormatAttr(RES_VERT_ORIENT)));
+                                SwFormatHoriOrient aHOrientFinal(static_cast<const SwFormatHoriOrient&>(pFrameFormat->GetFormatAttr(RES_HORI_ORIENT)));
 
                                 const SfxItemSet* pOutSet = pDlg->GetOutputItemSet();
                                 pSh->StartAllAction();
@@ -294,16 +294,16 @@ void SwDrawBaseShell::Execute(SfxRequest const &rReq)
                                 if(pHoriOrient || pHoriRelation || pHoriPosition || pHoriMirror)
                                 {
                                     if(pHoriOrient)
-                                        aHOrient.SetHoriOrient(
+                                        aHOrientFinal.SetHoriOrient(
                                               static_cast<const SfxInt16Item*>(pHoriOrient)->GetValue());
                                     if(pHoriRelation)
-                                        aHOrient.SetRelationOrient(
+                                        aHOrientFinal.SetRelationOrient(
                                                   static_cast<const SfxInt16Item*>(pHoriRelation)->GetValue());
                                     if(pHoriPosition)
-                                        aHOrient.SetPos( static_cast<const SfxInt32Item*>(pHoriPosition)->GetValue());
+                                        aHOrientFinal.SetPos( static_cast<const SfxInt32Item*>(pHoriPosition)->GetValue());
                                     if(pHoriMirror)
-                                        aHOrient.SetPosToggle( static_cast<const SfxBoolItem*>(pHoriMirror)->GetValue());
-                                    aFrameAttrSet.Put(aHOrient);
+                                        aHOrientFinal.SetPosToggle( static_cast<const SfxBoolItem*>(pHoriMirror)->GetValue());
+                                    aFrameAttrSet.Put(aHOrientFinal);
                                 }
 
                                 const SfxPoolItem* pVertOrient = nullptr;
@@ -315,14 +315,14 @@ void SwDrawBaseShell::Execute(SfxRequest const &rReq)
                                 if(pVertOrient || pVertRelation || pVertPosition )
                                 {
                                     if(pVertOrient)
-                                        aVOrient.SetVertOrient(
+                                        aVOrientFinal.SetVertOrient(
                                             static_cast<const SfxInt16Item*>(pVertOrient)->GetValue());
                                     if(pVertRelation)
-                                        aVOrient.SetRelationOrient(
+                                        aVOrientFinal.SetRelationOrient(
                                             static_cast<const SfxInt16Item*>(pVertRelation)->GetValue());
                                     if(pVertPosition)
-                                        aVOrient.SetPos( static_cast<const SfxInt32Item*>(pVertPosition)->GetValue());
-                                    aFrameAttrSet.Put( aVOrient );
+                                        aVOrientFinal.SetPos( static_cast<const SfxInt32Item*>(pVertPosition)->GetValue());
+                                    aFrameAttrSet.Put( aVOrientFinal );
                                 }
                                 const SfxPoolItem* pFollowItem = nullptr;
                                 pOutSet->GetItemState(RES_FOLLOW_TEXT_FLOW, false, &pFollowItem);
