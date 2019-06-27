@@ -39,6 +39,8 @@
 #include <drawingml/chart/chartspacemodel.hxx>
 #include <drawingml/chart/plotareaconverter.hxx>
 #include <drawingml/chart/titleconverter.hxx>
+#include <ooxresid.hxx>
+#include <strings.hrc>
 
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Reference;
@@ -184,7 +186,7 @@ void ChartSpaceConverter::convertFromModel( const Reference< XShapes >& rxExtern
         if( mrModel.mxTitle.is() || !aAutoTitle.isEmpty() )
         {
             if( aAutoTitle.isEmpty() )
-                aAutoTitle = "Chart Title";
+                aAutoTitle = OoxResId(STR_DIAGRAM_TITLE);
             Reference< XTitled > xTitled( getChartDocument(), UNO_QUERY_THROW );
             TitleConverter aTitleConv( *this, mrModel.mxTitle.getOrCreate() );
             aTitleConv.convertFromModel( xTitled, aAutoTitle, OBJECTTYPE_CHARTTITLE );
