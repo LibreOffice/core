@@ -32,38 +32,36 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
 
-SwDBTablePreviewDialog::SwDBTablePreviewDialog(vcl::Window* pParent, uno::Sequence< beans::PropertyValue> const & rValues ) :
-    SfxModalDialog(pParent, "TablePreviewDialog", "modules/swriter/ui/tablepreviewdialog.ui")
+SwDBTablePreviewDialog::SwDBTablePreviewDialog(weld::Window* pParent, uno::Sequence< beans::PropertyValue> const & rValues)
+    : SfxDialogController(pParent, "modules/swriter/ui/tablepreviewdialog.ui", "TablePreviewDialog")
+    , m_xDescriptionFI(m_xBuilder->weld_label("description"))
+    , m_xBeamerWIN(m_xBuilder->weld_container("beamer"))
 {
-    get(m_pDescriptionFI, "description");
-    get(m_pBeamerWIN, "beamer");
-    Size aSize(LogicToPixel(Size(338, 150), MapMode(MapUnit::MapAppFont)));
-    m_pBeamerWIN->set_width_request(aSize.Width());
-    m_pBeamerWIN->set_height_request(aSize.Height());
+    Size aSize(m_xBeamerWIN->get_approximate_digit_width() * 80,
+               m_xBeamerWIN->get_text_height() * 18);
+    m_xBeamerWIN->set_size_request(aSize.Width(), aSize.Height());
 
     auto pValue = std::find_if(rValues.begin(), rValues.end(),
         [](const beans::PropertyValue& rValue) { return rValue.Name == "Command"; });
     if (pValue != rValues.end())
     {
-        OUString sDescription = m_pDescriptionFI->GetText();
+        OUString sDescription = m_xDescriptionFI->get_label();
         OUString sTemp;
         pValue->Value >>= sTemp;
-        m_pDescriptionFI->SetText(sDescription.replaceFirst("%1", sTemp));
+        m_xDescriptionFI->set_label(sDescription.replaceFirst("%1", sTemp));
     }
 
     try
     {
         // create a frame wrapper for myself
         m_xFrame = frame::Frame::create( comphelper::getProcessComponentContext() );
-        // m_xFrame takes ownership of m_pBeamerWIN
-        m_pUIBuilder->drop_ownership(m_pBeamerWIN);
-        m_xFrame->initialize( VCLUnoHelper::GetInterface( m_pBeamerWIN ) );
+        m_xFrame->initialize(m_xBeamerWIN->CreateChildFrame());
     }
     catch (uno::Exception const &)
     {
         m_xFrame.clear();
     }
-    if(m_xFrame.is())
+    if (m_xFrame.is())
     {
         util::URL aURL;
         aURL.Complete = ".component:DB/DataSourceBrowser";
@@ -71,17 +69,12 @@ SwDBTablePreviewDialog::SwDBTablePreviewDialog(vcl::Window* pParent, uno::Sequen
         if(xD.is())
         {
             xD->dispatch(aURL, rValues);
-            m_pBeamerWIN->Show();
+            m_xBeamerWIN->show();
         }
     }
 }
 
 SwDBTablePreviewDialog::~SwDBTablePreviewDialog()
-{
-    disposeOnce();
-}
-
-void SwDBTablePreviewDialog::dispose()
 {
     if(m_xFrame.is())
     {
@@ -89,9 +82,6 @@ void SwDBTablePreviewDialog::dispose()
         m_xFrame->dispose();
         m_xFrame.clear();
     }
-    m_pDescriptionFI.clear();
-    m_pBeamerWIN.clear();
-    SfxModalDialog::dispose();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -524,7 +524,13 @@ public:
 class SwMailMergeDlg;
 class AbstractMailMergeDlg_Impl : public AbstractMailMergeDlg
 {
-    DECL_ABSTDLG_BASE(AbstractMailMergeDlg_Impl,SwMailMergeDlg)
+    std::unique_ptr<SwMailMergeDlg> m_xDlg;
+public:
+    explicit AbstractMailMergeDlg_Impl(std::unique_ptr<SwMailMergeDlg> p)
+        : m_xDlg(std::move(p))
+    {
+    }
+    virtual short Execute() override;
     virtual DBManagerOptions GetMergeType() override ;
     virtual const OUString& GetSaveFilter() const override;
     virtual css::uno::Sequence< css::uno::Any > GetSelection() const override ;
@@ -747,7 +753,7 @@ public:
     virtual VclPtr<AbstractJavaEditDialog>     CreateJavaEditDialog(weld::Window* pParent,
         SwWrtShell* pWrtSh) override;
     virtual VclPtr<AbstractMailMergeDlg>       CreateMailMergeDlg(
-                                                vcl::Window* pParent, SwWrtShell& rSh,
+                                                weld::Window* pParent, SwWrtShell& rSh,
                                                 const OUString& rSourceName,
                                                 const OUString& rTableName,
                                                 sal_Int32 nCommandType,
