@@ -831,7 +831,14 @@ bool SwTextFrame::CalcPreps()
                 }
                 else
                 {
-                    SwTwips nTmp  = TWIPS_MAX/2 - (getFrameArea().Top()+10000);
+                    // nTmp should be very large, but not so large as to cause overflow later (e.g.,
+                    // GetFrameOfModify in sw/source/core/layout/frmtool.cxx calculates nCurrentDist
+                    // from, among others, the square of aDiff.getY(), which can be close to nTmp);
+                    // the previously used value TWIPS_MAX/2 (i.e., (LONG_MAX - 1)/2) depended on
+                    // the range of 'long', while the value (SAL_MAX_INT32 - 1)/2 (which matches the
+                    // old value on platforms where 'long' is 'sal_Int32') is empirically shown to
+                    // be large enough in practice even on platforms where 'long' is 'sal_Int64':
+                    SwTwips nTmp  = (SAL_MAX_INT32 - 1)/2 - (getFrameArea().Top()+10000);
                     SwTwips nDiff = nTmp - getFrameArea().Height();
 
                     {
