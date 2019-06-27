@@ -742,6 +742,8 @@ SdrGrafObj& SdrGrafObj::operator=( const SdrGrafObj& rObj )
     mbIsSignatureLineCanAddComment = rObj.mbIsSignatureLineCanAddComment;
     mbSignatureLineIsSigned = false;
     mpSignatureLineUnsignedGraphic = rObj.mpSignatureLineUnsignedGraphic;
+    mpQrCode = rObj.mpQrCode;
+
     if (mbIsSignatureLine && rObj.mpSignatureLineUnsignedGraphic)
         mpGraphicObject->SetGraphic(rObj.mpSignatureLineUnsignedGraphic);
     else
