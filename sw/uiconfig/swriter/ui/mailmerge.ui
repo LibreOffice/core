@@ -14,6 +14,9 @@
     <property name="can_focus">False</property>
     <property name="border_width">5</property>
     <property name="title" translatable="yes" context="mailmerge|MailmergeDialog">Mail Merge</property>
+    <property name="modal">True</property>
+    <property name="default_width">0</property>
+    <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
     <child>
       <placeholder/>
@@ -22,7 +25,7 @@
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
         <property name="orientation">vertical</property>
-        <property name="spacing">2</property>
+        <property name="spacing">12</property>
         <child internal-child="action_area">
           <object class="GtkButtonBox" id="dialog-action_area1">
             <property name="can_focus">False</property>
@@ -89,7 +92,7 @@
             <property name="orientation">vertical</property>
             <property name="spacing">6</property>
             <child>
-              <object class="GtkDrawingArea" id="beamer">
+              <object class="GtkBox" id="beamer">
                 <property name="height_request">150</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
