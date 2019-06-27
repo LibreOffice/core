@@ -10,8 +10,6 @@
 "ScTabViewObj";"com::sun::star::sheet::XEnhancedMouseClickBroadcaster#optional";"removeEnhancedMouseClickHandler()"
 "ScTabViewObj";"com::sun::star::ui::XContextMenuInterception#optional";"registerContextMenuInterceptor()"
 "ScTabViewObj";"com::sun::star::ui::XContextMenuInterception#optional";"releaseContextMenuInterceptor()"
-"ScTabViewObj";"com::sun::star::container::XElementAccess";"getElementType()"
-"ScTabViewObj";"com::sun::star::container::XElementAccess";"hasElements()"
 "ScTabViewObj";"com::sun::star::sheet::XRangeSelection";"startRangeSelection()"
 "ScTabViewObj";"com::sun::star::sheet::XRangeSelection";"abortRangeSelection()"
 "ScTabViewObj";"com::sun::star::sheet::XRangeSelection";"addRangeSelectionListener()"
