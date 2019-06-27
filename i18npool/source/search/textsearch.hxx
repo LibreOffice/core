@@ -37,7 +37,6 @@ namespace com::sun::star::i18n { class XExtendedTransliteration; }
 namespace com::sun::star::uno { class XComponentContext; }
 
 
-using namespace U_ICU_NAMESPACE;
 typedef U_ICU_NAMESPACE::UnicodeString IcuUniString;
 
 class WLevDistance;
@@ -89,7 +88,7 @@ class TextSearch: public cppu::WeakImplHelper
                                 sal_Int32 startPos, sal_Int32 endPos );
 
     // Members and methods for the regular expression search
-    std::unique_ptr<RegexMatcher> pRegexMatcher;
+    std::unique_ptr<icu::RegexMatcher> pRegexMatcher;
     /// @throws css::uno::RuntimeException
     css::util::SearchResult SAL_CALL
         RESrchFrwrd( const OUString& searchStr,

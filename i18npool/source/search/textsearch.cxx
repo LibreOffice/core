@@ -838,19 +838,19 @@ void TextSearch::RESrchPrepare( const css::util::SearchOptions2& rOptions)
     // - by replacing \< with "word-break followed by a look-ahead word-char"
     static const IcuUniString aChevronPatternB( "\\\\<", -1, IcuUniString::kInvariant);
     static const IcuUniString aChevronReplaceB( "\\\\b(?=\\\\w)", -1, IcuUniString::kInvariant);
-    static RegexMatcher aChevronMatcherB( aChevronPatternB, 0, nIcuErr);
+    static icu::RegexMatcher aChevronMatcherB( aChevronPatternB, 0, nIcuErr);
     aChevronMatcherB.reset( aIcuSearchPatStr);
     aIcuSearchPatStr = aChevronMatcherB.replaceAll( aChevronReplaceB, nIcuErr);
     aChevronMatcherB.reset();
     // - by replacing \> with "look-behind word-char followed by a word-break"
     static const IcuUniString aChevronPatternE( "\\\\>", -1, IcuUniString::kInvariant);
     static const IcuUniString aChevronReplaceE( "(?<=\\\\w)\\\\b", -1, IcuUniString::kInvariant);
-    static RegexMatcher aChevronMatcherE( aChevronPatternE, 0, nIcuErr);
+    static icu::RegexMatcher aChevronMatcherE( aChevronPatternE, 0, nIcuErr);
     aChevronMatcherE.reset( aIcuSearchPatStr);
     aIcuSearchPatStr = aChevronMatcherE.replaceAll( aChevronReplaceE, nIcuErr);
     aChevronMatcherE.reset();
 #endif
-    pRegexMatcher.reset( new RegexMatcher( aIcuSearchPatStr, nIcuSearchFlags, nIcuErr) );
+    pRegexMatcher.reset( new icu::RegexMatcher( aIcuSearchPatStr, nIcuSearchFlags, nIcuErr) );
     if (nIcuErr)
     {
         SAL_INFO( "i18npool", "TextSearch::RESrchPrepare UErrorCode " << nIcuErr);
@@ -878,7 +878,7 @@ void TextSearch::RESrchPrepare( const css::util::SearchOptions2& rOptions)
 }
 
 
-static bool lcl_findRegex( std::unique_ptr<RegexMatcher> const & pRegexMatcher, sal_Int32 nStartPos, UErrorCode & rIcuErr )
+static bool lcl_findRegex( std::unique_ptr<icu::RegexMatcher> const & pRegexMatcher, sal_Int32 nStartPos, UErrorCode & rIcuErr )
 {
     if (!pRegexMatcher->find( nStartPos, rIcuErr))
     {
