@@ -1,6 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
- <path 
-     style="fill:#4d4d4d" 
-     d="M 12 7 L 8 12 L 10 12 L 10 16 L 7 16 L 7 26 L 17 26 L 17 23 L 21 23 L 21 25 L 26 21 L 21 17 L 21 19 L 17 19 L 17 16 L 14 16 L 14 12 L 16 12 L 12 7 z "
-     />
-</svg>
+<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><path d="m12 7-4 5h2v4h-3v10h10v-3h4v2l5-4-5-4v2h-4v-3h-3v-4h2z" fill="#4d4d4d"/></svg>

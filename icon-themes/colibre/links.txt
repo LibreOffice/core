@@ -1282,7 +1282,7 @@ res/reload.png cmd/sc_reload.png
 res/library_16.png cmd/lc_viewdatasourcebrowser.png
 
 res/sc05508.png cmd/sc_reload.png
-res/sc05555.png cmd/sc_editstyle.png
+res/sc05555.png cmd/sc_stylenewbyexample.png
 res/sc05556.png cmd/sc_reload.png
 res/sc05502.png cmd/sc_saveas.png
 res/sc05504.png cmd/sc_print.png
@@ -1352,8 +1352,8 @@ sc/res/lc26048.png cmd/lc_autosum.png
 sc/res/lc26050.png cmd/lc_cancel.png
 sc/res/lc26051.png cmd/lc_ok.png
 sc/res/na09.png cmd/sc_animationeffects.png
-sc/res/na010.png cmd/sc_datafilterstandardfilter.png
-sc/res/na011.png cmd/lc_ok.png
+sc/res/na010.png sw/res/sc20234.png
+sc/res/na011.png cmd/sc_ok.png
 sc/res/nc01.png cmd/sc_dbviewtablenames.png
 sc/res/nc02.png cmd/sc_dataranges.png
 sc/res/nc03.png cmd/sc_viewdatasourcebrowser.png
@@ -1594,15 +1594,6 @@ svx/res/wireframe_16.png cmd/sc_window3d.png
 svx/res/zoom_page_statusbar.png cmd/sc_zoompanning.png
 svx/res/reloads.png cmd/sc_reload.png
 
-svx/res/symphony/sc_bold.png cmd/sc_bold.png
-svx/res/symphony/sc_italic.png cmd/sc_italic.png
-svx/res/symphony/sc_shadowed.png cmd/sc_shadowed.png
-svx/res/symphony/sc_strikeout.png cmd/sc_strikeout.png
-svx/res/symphony/sc_underline.png cmd/sc_underline.png
-svx/res/symphony/sc_subscript.png cmd/sc_subscript.png
-svx/res/symphony/sc_superscript.png cmd/sc_superscript.png
-svx/res/symphony/sc_backgroundcolor.png cmd/sc_backgroundcolor.png
-svx/res/symphony/sc_color.png cmd/sc_backgroundcolor.png
 svx/res/symphony/rotate_left.png cmd/sc_rotateleft.png
 svx/res/symphony/rotate_right.png cmd/sc_rotateright.png
 svx/res/symphony/spacing3.png cmd/sc_spacepara1.png
@@ -1642,7 +1633,7 @@ sw/res/lc20556.png cmd/lc_dbviewfunctions.png
 sw/res/lc20557.png cmd/lc_cancel.png
 sw/res/lc20558.png cmd/lc_ok.png
 sw/res/nc20001.png cmd/sc_inserttable.png
-sw/res/nc20002.png cmd/sc_insertframe.png
+sw/res/nc20002.png cmd/sc_text.png
 sw/res/nc20003.png cmd/sc_insertgraphic.png
 sw/res/nc20004.png cmd/sc_insertobject.png
 sw/res/nc20005.png cmd/sc_insertbookmark.png
@@ -1651,10 +1642,8 @@ sw/res/nc20007.png cmd/sc_inserthyperlink.png
 sw/res/nc20008.png cmd/sc_insertreferencefield.png
 sw/res/nc20009.png cmd/sc_insertindexesentry.png
 sw/res/nc20010.png cmd/sc_shownote.png
-sw/res/nc20011.png cmd/sc_toggleobjectbeziermode.png
-sw/res/sc20234.png cmd/sc_datafilterstandardfilter.png
-sw/res/sc20244.png cmd/sc_datafilterstandardfilter.png
-sw/res/sc20183.png cmd/sc_addwatch.png
+sw/res/nc20011.png cmd/sc_insertdraw.png
+sw/res/sc20244.png sw/res/sc20234.png
 
 sw/res/re01.png cmd/lc_unsetcellsreadonly.png
 sw/res/re02.png cmd/lc_unsetcellsreadonly.png
@@ -1672,7 +1661,7 @@ sw/res/sc20233.png cmd/sc_ok.png
 sw/res/sc20235.png cmd/sc_inserthyperlinkcontrol.png
 sw/res/sc20238.png cmd/sc_insertbookmark.png
 sw/res/sc20239.png cmd/sc_copy.png
-sw/res/sc20245.png cmd/sc_editdoc.png
+sw/res/sc20245.png cmd/sc_insertdraw.png
 sw/res/sc20246.png cmd/sc_insertbookmark.png
 sw/res/sc20248.png cmd/sc_save.png
 sw/res/sc20249.png cmd/sc_navigator.png
@@ -1695,18 +1684,17 @@ sw/res/sidebar/pageproppanel/last_custom_common_grey.png svx/res/symphony/last_c
 sw/res/sr20000.png cmd/sc_downsearch.png
 sw/res/sr20001.png cmd/sc_upsearch.png
 sw/res/sr20002.png cmd/sc_inserttable.png
-sw/res/sr20003.png cmd/sc_insertframe.png
+sw/res/sr20003.png cmd/sc_text.png
 sw/res/sr20004.png cmd/sc_showsinglepage.png
 sw/res/sr20005.png cmd/sc_insertdraw.png
 sw/res/sr20006.png cmd/sc_choosecontrols.png
 sw/res/sr20007.png cmd/sc_insertsection.png
 sw/res/sr20008.png cmd/sc_insertbookmark.png
-sw/res/sr20009.png cmd/sc_toggleobjectbeziermode.png
-sw/res/sr20010.png cmd/sc_drawchart.png
+sw/res/sr20009.png cmd/sc_insertgraphic.png
+sw/res/sr20010.png cmd/sc_insertobject.png
 sw/res/sr20011.png sw/res/nc20000.png
-sw/res/sr20012.png cmd/sc_insertreferencefield.png
 sw/res/sr20013.png cmd/sc_insertfootnote.png
-sw/res/sr20014.png dbaccess/res/exwarning.png
+sw/res/sr20014.png sw/res/sc20183.png
 sw/res/sr20015.png cmd/sc_shownote.png
 sw/res/sr20016.png cmd/sc_recsearch.png
 sw/res/sr20017.png cmd/sc_insertindexesentry.png
