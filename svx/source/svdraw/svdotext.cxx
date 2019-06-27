@@ -1050,7 +1050,7 @@ SdrTextObj& SdrTextObj::operator=(const SdrTextObj& rObj)
         {
             pNewOutlinerParaObject = pEO->CreateParaObject();
         }
-        else
+        else if (nullptr != rObj.getActiveText()->GetOutlinerParaObject())
         {
             pNewOutlinerParaObject.reset( new OutlinerParaObject(*rObj.getActiveText()->GetOutlinerParaObject()) );
         }
