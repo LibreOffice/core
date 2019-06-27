@@ -52,6 +52,7 @@ cmd/sc_autoformatmenu.png cmd/sc_autocorrectdlg.png
 
 # Insert
 cmd/lc_fieldmenu.png cmd/lc_addfield.png
+cmd/lc_graphicmenu.png cmd/lc_avmediaplayer.png
 cmd/lc_insobjctrl.png cmd/lc_newdoc.png
 cmd/lc_insert.png cmd/lc_togglesheetgrid.png
 cmd/lc_insertavmedia.png cmd/lc_avmediaplayer.png
@@ -89,6 +90,7 @@ cmd/lc_inserttimefield.png cmd/lc_timefield.png
 cmd/lc_shapesmenu.png cmd/lc_basicshapes.pentagon.png
 
 cmd/sc_fieldmenu.png cmd/sc_addfield.png
+cmd/sc_graphicmenu.png cmd/sc_avmediaplayer.png
 cmd/sc_insobjctrl.png cmd/sc_newdoc.png
 cmd/sc_insert.png cmd/sc_togglesheetgrid.png
 cmd/sc_insertavmedia.png cmd/sc_avmediaplayer.png
@@ -112,7 +114,6 @@ cmd/sc_insertformula.png cmd/sc_dbviewfunctions.png
 cmd/sc_insertformvscroll.png cmd/sc_scrollbar.png
 cmd/sc_insertframeinteract.png cmd/sc_insertframe.png
 cmd/sc_insertframeinteractnocolumns.png cmd/sc_insertframe.png
-cmd/sc_insertgraphic.png cmd/sc_gallery.png
 cmd/sc_insertimagecontrol.png cmd/sc_drawchart.png
 cmd/sc_insertobjectchart.png cmd/sc_drawchart.png
 cmd/sc_insertnumericfield.png cmd/sc_numberformatstandard.png
@@ -279,7 +280,6 @@ cmd/sc_graphicfilterposter.png cmd/sc_graphicdialog.png
 cmd/sc_grafmode.png cmd/sc_graphicdialog.png
 cmd/sc_grafinvert.png cmd/sc_graphicfilterinvert.png
 cmd/sc_colorview.png cmd/sc_graphicfilterinvert.png
-cmd/sc_imagebutton.png cmd/sc_gallery.png
 cmd/sc_objecttitledescription.png cmd/sc_insertcaptiondialog.png
 cmd/lc_objecttitledescription.png cmd/lc_insertcaptiondialog.png
 
@@ -455,15 +455,7 @@ cmd/sc_clickchangerotation.png cmd/sc_toggleobjectrotatemode.png
 
 # AddField
 cmd/lc_fieldnames.png cmd/lc_addfield.png
-cmd/lc_dbtablerename.png cmd/lc_addfield.png
-cmd/lc_dbreportrename.png cmd/lc_addfield.png
-cmd/lc_dbqueryrename.png cmd/lc_addfield.png
-cmd/lc_dbformrename.png cmd/lc_addfield.png
 cmd/sc_fieldnames.png cmd/sc_addfield.png
-cmd/sc_dbtablerename.png cmd/sc_addfield.png
-cmd/sc_dbreportrename.png cmd/sc_addfield.png
-cmd/sc_dbqueryrename.png cmd/sc_addfield.png
-cmd/sc_dbformrename.png cmd/sc_addfield.png
 
 # Edit
 cmd/lc_switchcontroldesignmode.png cmd/lc_editdoc.png
@@ -759,8 +751,8 @@ cmd/lc_rulermenu.png cmd/lc_ruler.png
 cmd/sc_rulermenu.png cmd/sc_ruler.png
 
 # Graphic Quality Color
-cmd/lc_outputqualitycolor.png cmd/lc_insertgraphic.png
-cmd/sc_outputqualitycolor.png cmd/sc_gallery.png
+cmd/lc_outputqualitygrayscale.png cmd/lc_graphic.png
+cmd/sc_outputqualitygrayscale.png cmd/sc_graphic.png
 
 # InputLineVisible
 cmd/lc_inputlinevisible.png cmd/lc_dbviewfunctions.png
@@ -922,8 +914,6 @@ cmd/lc_dataincolumns.png cmd/lc_dbviewtablenames.png
 cmd/sc_dataincolumns.png cmd/sc_dbviewtablenames.png
 cmd/lc_dbdtableedit.png cmd/lc_tabledialog.png
 cmd/sc_dbdtableedit.png cmd/sc_tabledialog.png
-cmd/lc_dbquerypropertiesdialog.png cmd/lc_dbqueryedit.png
-cmd/sc_dbquerypropertiesdialog.png cmd/sc_dbqueryedit.png
 cmd/lc_dbnewview.png cmd/lc_dbchangedesignmode.png
 cmd/sc_dbnewview.png cmd/sc_dbchangedesignmode.png
 
@@ -948,7 +938,6 @@ cmd/lc_pluginsactive.png cmd/lc_insertplugin.png
 cmd/sc_pluginsactive.png cmd/sc_insertplugin.png
 
 # Table
-cmd/lc_dbnewtable.png cmd/lc_inserttable.png
 cmd/lc_inscellsctrl.png cmd/lc_inserttable.png
 cmd/lc_setoptimalcolumnwidthdirect.png cmd/lc_setoptimalcolumnwidth.png
 cmd/lc_starchartdialog.png cmd/lc_insertobjectdialog.png
@@ -959,7 +948,6 @@ cmd/lc_tableinsertmenu.png cmd/lc_insertrowsafter.png
 cmd/lc_tableselectall.png cmd/lc_selecttable.png
 cmd/lc_tableselectmenu.png cmd/lc_selecttable.png
 
-cmd/sc_dbnewtable.png cmd/sc_inserttable.png
 cmd/sc_inscellsctrl.png cmd/sc_inserttable.png
 cmd/sc_setoptimalcolumnwidthdirect.png cmd/sc_setoptimalcolumnwidth.png
 cmd/sc_starchartdialog.png cmd/sc_insertobjectdialog.png
@@ -1601,7 +1589,7 @@ svx/res/symphony/enlarge_font.png cmd/sc_grow.png
 
 svx/res/fill_color.png cmd/sc_backgroundcolor.png
 svx/res/ColorModeBlackWhite_16x16.png cmd/sc_outputqualityblackwhite.png
-svx/res/ColorModeGrey_16x16.png cmd/sc_outputqualitygrayscale.png
+svx/res/ColorModeGrey_16x16.png cmd/sc_graphic.png
 svx/res/AdjustColorBlue_16x16.png cmd/sc_grafblue.png
 svx/res/AdjustColorGreen_16x16.png cmd/sc_grafgreen.png
 svx/res/AdjustColorRed_16x16.png cmd/sc_grafred.png
