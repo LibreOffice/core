@@ -39,7 +39,7 @@ $(eval $(call gb_Library_add_exception_objects,basegfx,\
     basegfx/source/matrix/b2dhommatrixtools \
     basegfx/source/matrix/b3dhommatrix \
     basegfx/source/matrix/b3dhommatrixtools \
-	basegfx/source/numeric/ftools \
+    basegfx/source/numeric/ftools \
     basegfx/source/point/b2dpoint \
     basegfx/source/point/b2ipoint \
     basegfx/source/point/b3dpoint \
@@ -58,6 +58,7 @@ $(eval $(call gb_Library_add_exception_objects,basegfx,\
     basegfx/source/polygon/b3dpolygontools \
     basegfx/source/polygon/b3dpolypolygon \
     basegfx/source/polygon/b3dpolypolygontools \
+    basegfx/source/polygon/WaveLine \
     basegfx/source/range/b2dpolyrange \
     basegfx/source/range/b2drange \
     basegfx/source/range/b2drangeclipper \

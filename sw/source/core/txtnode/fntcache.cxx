@@ -58,6 +58,7 @@
 #include <docsh.hxx>
 #include <strings.hrc>
 #include <fntcap.hxx>
+#include <vcl/outdev/ScopedStates.hxx>
 
 using namespace ::com::sun::star;
 
@@ -786,14 +787,14 @@ static void lcl_DrawLineForWrongListData(
             {
                 if (WRONGAREA_WAVE == wrongArea->mLineType)
                 {
+                    vcl::ScopedAntialiasing a(rInf.GetOut(), true);
                     rInf.GetOut().SetLineColor( wrongArea->mColor );
-
                     rInf.GetOut().DrawWaveLine( aStart, aEnd, 1 );
                 }
                 else if (WRONGAREA_BOLDWAVE == wrongArea->mLineType)
                 {
+                    vcl::ScopedAntialiasing a(rInf.GetOut(), true);
                     rInf.GetOut().SetLineColor( wrongArea->mColor );
-
                     rInf.GetOut().DrawWaveLine( aStart, aEnd, 2 );
                 }
                 else if (WRONGAREA_BOLD == wrongArea->mLineType)
@@ -1781,8 +1782,10 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                             rInf.GetFrame()->SwitchHorizontalToVertical( aCurrPos );
                             rInf.GetFrame()->SwitchHorizontalToVertical( aEnd );
                         }
-                        rInf.GetOut().DrawWaveLine( aCurrPos, aEnd );
-
+                        {
+                            vcl::ScopedAntialiasing a(rInf.GetOut(), true);
+                            rInf.GetOut().DrawWaveLine( aCurrPos, aEnd );
+                        }
                         if ( bColSave )
                             rInf.GetOut().SetLineColor( aCol );
 
