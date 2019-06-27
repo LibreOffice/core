@@ -27,7 +27,6 @@
 #include <unicode/regex.h>
 
 using namespace ::com::sun::star;
-using namespace U_ICU_NAMESPACE;
 typedef U_ICU_NAMESPACE::UnicodeString IcuUniString;
 
 class TestTextSearch : public test::BootstrapFixtureBase
@@ -60,7 +59,7 @@ void TestTextSearch::testICU()
     OUString aPattern( "e" );
     IcuUniString aSearchPat( reinterpret_cast<const UChar*>(aPattern.getStr()), aPattern.getLength() );
 
-    std::unique_ptr<RegexMatcher> pRegexMatcher(new RegexMatcher( aSearchPat, nSearchFlags, nErr ));
+    std::unique_ptr<icu::RegexMatcher> pRegexMatcher(new icu::RegexMatcher( aSearchPat, nSearchFlags, nErr ));
 
     IcuUniString aSource( reinterpret_cast<const UChar*>(aString.getStr()), aString.getLength() );
     pRegexMatcher->reset( aSource );
@@ -76,7 +75,7 @@ void TestTextSearch::testICU()
     OUString aPattern2( "a" );
 
     IcuUniString aSearchPat2( reinterpret_cast<const UChar*>(aPattern2.getStr()), aPattern2.getLength() );
-    pRegexMatcher.reset(new RegexMatcher( aSearchPat2, nSearchFlags, nErr ));
+    pRegexMatcher.reset(new icu::RegexMatcher( aSearchPat2, nSearchFlags, nErr ));
 
     IcuUniString aSource2( reinterpret_cast<const UChar*>(aString2.getStr()), aString2.getLength() );
     pRegexMatcher->reset( aSource2 );
