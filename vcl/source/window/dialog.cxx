@@ -1122,7 +1122,7 @@ void Dialog::RemoveFromDlgList()
 
 void Dialog::EndDialog( long nResult )
 {
-    if ( !mbInExecute )
+    if (!mbInExecute || IsDisposed())
         return;
 
     const bool bModal = GetType() != WindowType::MODELESSDIALOG;
