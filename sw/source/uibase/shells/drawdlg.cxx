@@ -93,34 +93,44 @@ void SwDrawShell::ExecDrawDlg(SfxRequest& rReq)
             bool bHasMarked = pView->AreObjectsMarked();
 
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-            ScopedVclPtr<AbstractSvxAreaTabDialog> pDlg(pFact->CreateSvxAreaTabDialog(rReq.GetFrameWeld(),
+            VclPtr<AbstractSvxAreaTabDialog> pDlg(pFact->CreateSvxAreaTabDialog(rReq.GetFrameWeld(),
                                                                             &aNewAttr,
                                                                             pDoc,
                                                                             true));
-            if (pDlg->Execute() == RET_OK)
-            {
-                pSh->StartAction();
-                if (bHasMarked)
-                    pView->SetAttributes(*pDlg->GetOutputItemSet());
-                else
-                    pView->SetDefaultAttr(*pDlg->GetOutputItemSet(), false);
-                pSh->EndAction();
 
-                static sal_uInt16 aInval[] =
+            pDlg->StartExecuteAsync([=](sal_Int32 nResult){
+                if (nResult == RET_OK)
                 {
-                    SID_ATTR_FILL_STYLE,
-                    SID_ATTR_FILL_COLOR,
-                    SID_ATTR_FILL_TRANSPARENCE,
-                    SID_ATTR_FILL_FLOATTRANSPARENCE,
-                    0
-                };
-                SfxBindings &rBnd = GetView().GetViewFrame()->GetBindings();
-                rBnd.Invalidate(aInval);
-                rBnd.Update(SID_ATTR_FILL_STYLE);
-                rBnd.Update(SID_ATTR_FILL_COLOR);
-                rBnd.Update(SID_ATTR_FILL_TRANSPARENCE);
-                rBnd.Update(SID_ATTR_FILL_FLOATTRANSPARENCE);
-            }
+                    pSh->StartAction();
+                    if (bHasMarked)
+                        pView->SetAttributes(*pDlg->GetOutputItemSet());
+                    else
+                        pView->SetDefaultAttr(*pDlg->GetOutputItemSet(), false);
+                    pSh->EndAction();
+
+                    static sal_uInt16 aInval[] =
+                    {
+                        SID_ATTR_FILL_STYLE,
+                        SID_ATTR_FILL_COLOR,
+                        SID_ATTR_FILL_TRANSPARENCE,
+                        SID_ATTR_FILL_FLOATTRANSPARENCE,
+                        0
+                    };
+                    SfxBindings &rBnd = GetView().GetViewFrame()->GetBindings();
+                    rBnd.Invalidate(aInval);
+                    rBnd.Update(SID_ATTR_FILL_STYLE);
+                    rBnd.Update(SID_ATTR_FILL_COLOR);
+                    rBnd.Update(SID_ATTR_FILL_TRANSPARENCE);
+                    rBnd.Update(SID_ATTR_FILL_FLOATTRANSPARENCE);
+                }
+
+                if (pDoc->IsChanged())
+                    GetShell().SetModified();
+                else if (bChanged)
+                    pDoc->SetChanged();
+
+                pDlg->disposeOnce();
+            });
         }
         break;
 
