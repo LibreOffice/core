@@ -240,57 +240,55 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
 
         case SID_ATTR_TRANSFORM:
         {
+            if ( pView->AreObjectsMarked() )
             {
-                if ( pView->AreObjectsMarked() )
+                const SfxItemSet* pArgs = rReq.GetArgs();
+
+                if( !pArgs )
                 {
-                    const SfxItemSet* pArgs = rReq.GetArgs();
-
-                    if( !pArgs )
+                    if( rMarkList.GetMark(0) != nullptr )
                     {
-                        if( rMarkList.GetMark(0) != nullptr )
+                        SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
+                        if( pObj->GetObjIdentifier() == OBJ_CAPTION )
                         {
-                            SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
-                            if( pObj->GetObjIdentifier() == OBJ_CAPTION )
+                            // Caption Itemset
+                            SfxItemSet aNewAttr(pDoc->GetItemPool());
+                            pView->GetAttributes(aNewAttr);
+                            // Size and Position Itemset
+                            SfxItemSet aNewGeoAttr(pView->GetGeoAttrFromMarked());
+
+                            SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+                            ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateCaptionDialog(pWin ? pWin->GetFrameWeld() : nullptr, pView));
+
+                            const sal_uInt16* pRange = pDlg->GetInputRanges( *aNewAttr.GetPool() );
+                            SfxItemSet aCombSet( *aNewAttr.GetPool(), pRange );
+                            aCombSet.Put( aNewAttr );
+                            aCombSet.Put( aNewGeoAttr );
+                            pDlg->SetInputSet( &aCombSet );
+
+                            if (pDlg->Execute() == RET_OK)
                             {
-                                // Caption Itemset
-                                SfxItemSet aNewAttr(pDoc->GetItemPool());
-                                pView->GetAttributes(aNewAttr);
-                                // Size and Position Itemset
-                                SfxItemSet aNewGeoAttr(pView->GetGeoAttrFromMarked());
-
-                                SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                                ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateCaptionDialog(pWin ? pWin->GetFrameWeld() : nullptr, pView));
-
-                                const sal_uInt16* pRange = pDlg->GetInputRanges( *aNewAttr.GetPool() );
-                                SfxItemSet aCombSet( *aNewAttr.GetPool(), pRange );
-                                aCombSet.Put( aNewAttr );
-                                aCombSet.Put( aNewGeoAttr );
-                                pDlg->SetInputSet( &aCombSet );
-
-                                if (pDlg->Execute() == RET_OK)
-                                {
-                                    rReq.Done(*(pDlg->GetOutputItemSet()));
-                                    pView->SetAttributes(*pDlg->GetOutputItemSet());
-                                    pView->SetGeoAttrToMarked(*pDlg->GetOutputItemSet());
-                                }
-                            }
-                            else
-                            {
-                                SfxItemSet aNewAttr(pView->GetGeoAttrFromMarked());
-                                SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                                ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateSvxTransformTabDialog(pWin ? pWin->GetFrameWeld() : nullptr, &aNewAttr, pView));
-                                if (pDlg->Execute() == RET_OK)
-                                {
-                                    rReq.Done(*(pDlg->GetOutputItemSet()));
-                                    pView->SetGeoAttrToMarked(*pDlg->GetOutputItemSet());
-                                }
+                                rReq.Done(*(pDlg->GetOutputItemSet()));
+                                pView->SetAttributes(*pDlg->GetOutputItemSet());
+                                pView->SetGeoAttrToMarked(*pDlg->GetOutputItemSet());
                             }
                         }
-
+                        else
+                        {
+                            SfxItemSet aNewAttr(pView->GetGeoAttrFromMarked());
+                            SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+                            ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateSvxTransformTabDialog(pWin ? pWin->GetFrameWeld() : nullptr, &aNewAttr, pView));
+                            if (pDlg->Execute() == RET_OK)
+                            {
+                                rReq.Done(*(pDlg->GetOutputItemSet()));
+                                pView->SetGeoAttrToMarked(*pDlg->GetOutputItemSet());
+                            }
+                        }
                     }
-                    else
-                        pView->SetGeoAttrToMarked( *pArgs );
+
                 }
+                else
+                    pView->SetGeoAttrToMarked( *pArgs );
             }
 
             ScTabViewShell* pViewShell = pViewData->GetViewShell();
