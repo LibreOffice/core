@@ -21,7 +21,6 @@
 
 
 
-
 #include <sfx2/sfx.hrc>
 #include <svx/globlmn.hrc>
 #include "starmath.hrc"
@@ -40,15 +39,15 @@ FloatingWindow RID_TOOLBOXWINDOW
     Hide = TRUE ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 0 , 0 ) ;  // to be calculated programmatically
+    Size = MAP_APPFONT ( 0, 0 ) ; // to be calculated programmatically
     Text [ en-US ] = "Elements" ;
 
     ToolBox TOOLBOX_CATALOG
     {
         // main menu of selection-window
         HelpId = HID_SMA_SELECTION_TBX ;
-        Pos = MAP_APPFONT ( 0 , 0 ) ;
-        Size = MAP_APPFONT ( 65 , 38 ) ;
+        Pos = MAP_APPFONT ( 0, 0 ) ;
+        Size = MAP_APPFONT ( 65, 38 ) ;
         SVLook = TRUE ;
         LineCount = 2 ;
         ItemList =
@@ -97,7 +96,7 @@ FloatingWindow RID_TOOLBOXWINDOW
             {
                 Identifier = RID_MISC_CAT ;
                 HelpId = HID_SMA_MISC_CAT ;
-                Text [ en-US ] = "Others";
+                Text [ en-US ] = "Others" ;
             };
             ToolBoxItem
             {
@@ -120,19 +119,19 @@ FloatingWindow RID_TOOLBOXWINDOW
 
     FixedLine FL_TOOLBOX_CAT_DELIM
     {
-        Pos = MAP_APPFONT ( 0 , 44 ) ;
-        Size = MAP_APPFONT ( 65 , 8 ) ;
+        Pos = MAP_APPFONT ( 0, 44 ) ;
+        Size = MAP_APPFONT ( 65, 8 ) ;
     };
 
     ToolBox TOOLBOX_CAT_A
     {
         // unary/binary operators
         HelpId = HID_SMA_UNBINOPS_TBX ;
-        Pos = MAP_APPFONT ( 0 , 45 ) ;
-        Size = MAP_APPFONT ( 65 , 95 ) ;
+        Pos = MAP_APPFONT ( 0, 45 ) ;
+        Size = MAP_APPFONT ( 65, 95 ) ;
         SVLook = TRUE ;
         Hide = TRUE ;
-        LineCount = 4 ;
+        LineCount = 5 ;
 
         ItemList =
         {
@@ -242,7 +241,23 @@ FloatingWindow RID_TOOLBOXWINDOW
             {
                 Identifier = RID_XCIRCY ;
                 HelpId = HID_SMA_XCIRCY ;
-                Text [ en-US ] = "Concatenate";
+                Text [ en-US ] = "Concatenate" ;
+            };
+            ToolBoxItem
+            {
+                Type = TOOLBOXITEM_BREAK ;
+            };
+            ToolBoxItem
+            {
+                Identifier = RID_XWIDESLASHY ;
+                HelpId = HID_SMA_XWIDESLASHY ;
+                Text [ en-US ] = "Wide Slash" ;
+            };
+            ToolBoxItem
+            {
+                Identifier = RID_XWIDEBSLASHY ;
+                HelpId = HID_SMA_XWIDEBSLASHY ;
+                Text [ en-US ] = "Wide Backslash" ;
             };
         };
     };
@@ -251,8 +266,8 @@ FloatingWindow RID_TOOLBOXWINDOW
     {
         // relations
         HelpId = HID_SMA_RELATIONS_TBX ;
-        Pos = MAP_APPFONT ( 0 , 45 ) ;
-        Size = MAP_APPFONT ( 65 , 95 ) ;
+        Pos = MAP_APPFONT ( 0, 45 ) ;
+        Size = MAP_APPFONT ( 65, 95 ) ;
         SVLook = TRUE ;
         Hide = TRUE ;
         LineCount = 5 ;
@@ -280,13 +295,13 @@ FloatingWindow RID_TOOLBOXWINDOW
             {
                 Identifier = RID_XDIVIDESY ;
                 HelpId = HID_SMA_XDIVIDESY ;
-                Text [ en-US ] = "Divides";
+                Text [ en-US ] = "Divides" ;
             };
             ToolBoxItem
             {
                 Identifier = RID_XNDIVIDESY ;
                 HelpId = HID_SMA_XNDIVIDESY ;
-                Text [ en-US ] = "Does Not Divide";
+                Text [ en-US ] = "Does Not Divide" ;
             };
             ToolBoxItem
             {
@@ -308,7 +323,6 @@ FloatingWindow RID_TOOLBOXWINDOW
             {
                 Identifier = RID_XSIMEQY ;
                 HelpId = HID_SMA_XSIMEQY ;
-                /* ### ACHTUNG: Neuer Text in Resource? ist �hnlich oder gleich : ist �hnlich oder glech */
                 Text [ en-US ] = "Is Similar Or Equal" ;
             };
             ToolBoxItem
@@ -395,19 +409,19 @@ FloatingWindow RID_TOOLBOXWINDOW
             {
                 Identifier = RID_DLARROW ;
                 HelpId = HID_SMA_DLARROW ;
-                Text [ en-US ] = "Double Arrow Left";
+                Text [ en-US ] = "Double Arrow Left" ;
             };
             ToolBoxItem
             {
                 Identifier = RID_DLRARROW ;
                 HelpId = HID_SMA_DLRARROW ;
-                Text [ en-US ] = "Double Arrow Left And Right";
+                Text [ en-US ] = "Double Arrow Left And Right" ;
             };
             ToolBoxItem
             {
                 Identifier = RID_DRARROW ;
                 HelpId = HID_SMA_DRARROW ;
-                Text [ en-US ] = "Double Arrow Right";
+                Text [ en-US ] = "Double Arrow Right" ;
             };
         };
     };
@@ -416,8 +430,8 @@ FloatingWindow RID_TOOLBOXWINDOW
     {
         // set operations
         HelpId = HID_SMA_SETOPERATIONS_TBX ;
-        Pos = MAP_APPFONT ( 0 , 45 ) ;
-        Size = MAP_APPFONT ( 65 , 95 ) ;
+        Pos = MAP_APPFONT ( 0, 45 ) ;
+        Size = MAP_APPFONT ( 65, 95 ) ;
         SVLook = TRUE ;
         Hide = TRUE ;
         LineCount = 5 ;
@@ -449,7 +463,7 @@ FloatingWindow RID_TOOLBOXWINDOW
             {
                 Identifier = RID_EMPTYSET ;
                 HelpId = HID_SMA_EMPTYSET ;
-                Text [ en-US ] = "Empty Set";
+                Text [ en-US ] = "Empty Set" ;
             };
             ToolBoxItem
             {
@@ -483,7 +497,7 @@ FloatingWindow RID_TOOLBOXWINDOW
             {
                 Identifier = RID_ALEPH ;
                 HelpId = HID_SMA_ALEPH ;
-                Text [ en-US ] = "Aleph";
+                Text [ en-US ] = "Aleph" ;
             };
             ToolBoxItem
             {
@@ -557,31 +571,31 @@ FloatingWindow RID_TOOLBOXWINDOW
             {
                 Identifier = RID_SETN ;
                 HelpId = HID_SMA_SETN ;
-                Text [ en-US ] = "Natural Numbers Set";
+                Text [ en-US ] = "Natural Numbers Set" ;
             };
             ToolBoxItem
             {
                 Identifier = RID_SETZ ;
                 HelpId = HID_SMA_SETZ ;
-                Text [ en-US ] = "Integers Set";
+                Text [ en-US ] = "Integers Set" ;
             };
             ToolBoxItem
             {
                 Identifier = RID_SETQ ;
                 HelpId = HID_SMA_SETQ ;
-                Text [ en-US ] = "Set of Rational Numbers";
+                Text [ en-US ] = "Rational Numbers Set" ;
             };
             ToolBoxItem
             {
                 Identifier = RID_SETR ;
                 HelpId = HID_SMA_SETR ;
-                Text [ en-US ] = "Real Numbers Set";
+                Text [ en-US ] = "Real Numbers Set" ;
             };
             ToolBoxItem
             {
                 Identifier = RID_SETC ;
                 HelpId = HID_SMA_SETC ;
-                Text [ en-US ] = "Complex Numbers Set";
+                Text [ en-US ] = "Complex Numbers Set" ;
             };
         };
     };
@@ -590,8 +604,8 @@ FloatingWindow RID_TOOLBOXWINDOW
     {
         // functions
         HelpId = HID_SMA_FUNCTIONS_TBX ;
-        Pos = MAP_APPFONT ( 0 , 45 ) ;
-        Size = MAP_APPFONT ( 65 , 95 ) ;
+        Pos = MAP_APPFONT ( 0, 45 ) ;
+        Size = MAP_APPFONT ( 65, 95 ) ;
         SVLook = TRUE ;
         Hide = TRUE ;
         LineCount = 5 ;
@@ -625,7 +639,7 @@ FloatingWindow RID_TOOLBOXWINDOW
             {
                 Identifier = RID_RSUPX ;
                 HelpId = HID_SMA_RSUPX ;
-                Text [ en-US ] = "Power";
+                Text [ en-US ] = "Power" ;
             };
             ToolBoxItem
             {
@@ -770,8 +784,8 @@ FloatingWindow RID_TOOLBOXWINDOW
     {
         // operators
         HelpId = HID_SMA_OPERATORS_TBX ;
-        Pos = MAP_APPFONT ( 0 , 45 ) ;
-        Size = MAP_APPFONT ( 65 , 95 ) ;
+        Pos = MAP_APPFONT ( 0, 45 ) ;
+        Size = MAP_APPFONT ( 65, 95 ) ;
         SVLook = TRUE ;
         Hide = TRUE ;
         LineCount = 3 ;
@@ -878,8 +892,8 @@ FloatingWindow RID_TOOLBOXWINDOW
     {
         // attributs
         HelpId = HID_SMA_ATTRIBUTES_TBX ;
-        Pos = MAP_APPFONT ( 0 , 45 ) ;
-        Size = MAP_APPFONT ( 65 , 95 ) ;
+        Pos = MAP_APPFONT ( 0, 45 ) ;
+        Size = MAP_APPFONT ( 65, 95 ) ;
         SVLook = TRUE ;
         Hide = TRUE ;
         LineCount = 5 ;
@@ -889,13 +903,13 @@ FloatingWindow RID_TOOLBOXWINDOW
             {
                 Identifier = RID_ACUTEX ;
                 HelpId = HID_SMA_ACUTEX ;
-                Text [ en-US ] = "Acute Accent";
+                Text [ en-US ] = "Acute Accent" ;
             };
             ToolBoxItem
             {
                 Identifier = RID_GRAVEX ;
                 HelpId = HID_SMA_GRAVEX ;
-                Text [ en-US ] = "Grave Accent";
+                Text [ en-US ] = "Grave Accent" ;
             };
             ToolBoxItem
             {
@@ -957,19 +971,19 @@ FloatingWindow RID_TOOLBOXWINDOW
             {
                 Identifier = RID_WIDEVECX ;
                 HelpId = HID_SMA_WIDEVECX ;
-                Text [ en-US ] = "Large Vector Arrow";
+                Text [ en-US ] = "Large Vector Arrow" ;
             };
             ToolBoxItem
             {
                 Identifier = RID_WIDETILDEX ;
                 HelpId = HID_SMA_WIDETILDEX ;
-                Text [ en-US ] = "Large Tilde";
+                Text [ en-US ] = "Large Tilde" ;
             };
             ToolBoxItem
             {
                 Identifier = RID_WIDEHATX ;
                 HelpId = HID_SMA_WIDEHATX ;
-                Text [ en-US ] = "Large Circumflex";
+                Text [ en-US ] = "Large Circumflex" ;
             };
             ToolBoxItem
             {
@@ -1054,8 +1068,8 @@ FloatingWindow RID_TOOLBOXWINDOW
     {
         // parentheses
         HelpId = HID_SMA_BRACKETS_TBX ;
-        Pos = MAP_APPFONT ( 0 , 45 ) ;
-        Size = MAP_APPFONT ( 65 , 95 ) ;
+        Pos = MAP_APPFONT ( 0, 45 ) ;
+        Size = MAP_APPFONT ( 65, 95 ) ;
         SVLook = TRUE ;
         Hide = TRUE ;
         LineCount = 5 ;
@@ -1077,7 +1091,7 @@ FloatingWindow RID_TOOLBOXWINDOW
             {
                 Identifier = RID_LRDBRACKETX ;
                 HelpId = HID_SMA_LRDBRACKETX ;
-                Text [ en-US ] = "Double Square Brackets";
+                Text [ en-US ] = "Double Square Brackets" ;
             };
             ToolBoxItem
             {
@@ -1111,7 +1125,7 @@ FloatingWindow RID_TOOLBOXWINDOW
             {
                 Identifier = RID_LMRANGLEXY ;
                 HelpId = HID_SMA_LMRANGLEXY ;
-                Text [ en-US ] = "Operator Brackets";
+                Text [ en-US ] = "Operator Brackets" ;
             };
             ToolBoxItem
             {
@@ -1143,7 +1157,7 @@ FloatingWindow RID_TOOLBOXWINDOW
             {
                 Identifier = RID_SLRDBRACKETX ;
                 HelpId = HID_SMA_SLRDBRACKETX ;
-                Text [ en-US ] = "Double Square Brackets (Scalable)";
+                Text [ en-US ] = "Double Square Brackets (Scalable)" ;
             };
             ToolBoxItem
             {
@@ -1177,7 +1191,7 @@ FloatingWindow RID_TOOLBOXWINDOW
             {
                 Identifier = RID_SLMRANGLEXY ;
                 HelpId = HID_SMA_SLMRANGLEXY ;
-                Text [ en-US ] = "Operator Brackets (Scalable)";
+                Text [ en-US ] = "Operator Brackets (Scalable)" ;
             };
             ToolBoxItem
             {
@@ -1187,13 +1201,13 @@ FloatingWindow RID_TOOLBOXWINDOW
             {
                 Identifier = RID_XOVERBRACEY ;
                 HelpId = HID_SMA_XOVERBRACEY ;
-                Text [ en-US ] = "Braces Top (Scalable)";
+                Text [ en-US ] = "Braces Top (Scalable)" ;
             };
             ToolBoxItem
             {
                 Identifier = RID_XUNDERBRACEY ;
                 HelpId = HID_SMA_XUNDERBRACEY ;
-                Text [ en-US ] = "Braces Bottom (Scalable)";
+                Text [ en-US ] = "Braces Bottom (Scalable)" ;
             };
         };
     };
@@ -1202,8 +1216,8 @@ FloatingWindow RID_TOOLBOXWINDOW
     {
         // format
         HelpId = HID_SMA_FORMAT_TBX ;
-        Pos = MAP_APPFONT ( 0 , 45 ) ;
-        Size = MAP_APPFONT ( 65 , 95 ) ;
+        Pos = MAP_APPFONT ( 0, 45 ) ;
+        Size = MAP_APPFONT ( 65, 95 ) ;
         SVLook = TRUE ;
         Hide = TRUE ;
         LineCount = 3 ;
@@ -1253,7 +1267,7 @@ FloatingWindow RID_TOOLBOXWINDOW
             {
                 Identifier = RID_CSUBX ;
                 HelpId = HID_SMA_CSUBX ;
-                Text [ en-US ] = "Subscript Bottom";
+                Text [ en-US ] = "Subscript Bottom" ;
             };
             ToolBoxItem
             {
@@ -1314,8 +1328,8 @@ FloatingWindow RID_TOOLBOXWINDOW
     {
         // misc
         HelpId = HID_SMA_FORMAT_TBX ;
-        Pos = MAP_APPFONT ( 0 , 45 ) ;
-        Size = MAP_APPFONT ( 65 , 95 ) ;
+        Pos = MAP_APPFONT ( 0, 45 ) ;
+        Size = MAP_APPFONT ( 65, 95 ) ;
         SVLook = TRUE ;
         Hide = TRUE ;
         LineCount = 4 ;
@@ -1325,31 +1339,31 @@ FloatingWindow RID_TOOLBOXWINDOW
             {
                 Identifier = RID_INFINITY ;
                 HelpId = HID_SMA_INFINITY ;
-                Text [ en-US ] = "infinite";
+                Text [ en-US ] = "infinite" ;
             };
             ToolBoxItem
             {
                 Identifier = RID_PARTIAL ;
                 HelpId = HID_SMA_PARTIAL ;
-                Text [ en-US ] = "Partial";
+                Text [ en-US ] = "Partial" ;
             };
             ToolBoxItem
             {
                 Identifier = RID_NABLA ;
                 HelpId = HID_SMA_NABLA ;
-                Text [ en-US ] = "Nabla";
+                Text [ en-US ] = "Nabla" ;
             };
             ToolBoxItem
             {
                 Identifier = RID_EXISTS ;
                 HelpId = HID_SMA_EXISTS ;
-                Text [ en-US ] = "There Exists";
+                Text [ en-US ] = "There Exists" ;
             };
             ToolBoxItem
             {
                 Identifier = RID_FORALL ;
                 HelpId = HID_SMA_FORALL ;
-                Text [ en-US ] = "For All";
+                Text [ en-US ] = "For All" ;
             };
             ToolBoxItem
             {
@@ -1359,31 +1373,31 @@ FloatingWindow RID_TOOLBOXWINDOW
             {
                 Identifier = RID_HBAR ;
                 HelpId = HID_SMA_HBAR ;
-                Text [ en-US ] = "h Bar";
+                Text [ en-US ] = "h Bar" ;
             };
             ToolBoxItem
             {
                 Identifier = RID_LAMBDABAR ;
                 HelpId = HID_SMA_LAMBDABAR ;
-                Text [ en-US ] = "Lambda Bar";
+                Text [ en-US ] = "Lambda Bar" ;
             };
             ToolBoxItem
             {
                 Identifier = RID_RE ;
                 HelpId = HID_SMA_RE ;
-                Text [ en-US ] = "Real Part";
+                Text [ en-US ] = "Real Part" ;
             };
             ToolBoxItem
             {
                 Identifier = RID_IM ;
                 HelpId = HID_SMA_IM ;
-                Text [ en-US ] = "Imaginary Part";
+                Text [ en-US ] = "Imaginary Part" ;
             };
             ToolBoxItem
             {
                 Identifier = RID_WP ;
                 HelpId = HID_SMA_WP ;
-                Text [ en-US ] = "Weierstrass p";
+                Text [ en-US ] = "Weierstrass p" ;
             };
             ToolBoxItem
             {
@@ -1393,25 +1407,25 @@ FloatingWindow RID_TOOLBOXWINDOW
             {
                 Identifier = RID_LEFTARROW ;
                 HelpId = HID_SMA_LEFTARROW ;
-                Text [ en-US ] = "Left Arrow";
+                Text [ en-US ] = "Left Arrow" ;
             };
             ToolBoxItem
             {
                 Identifier = RID_RIGHTARROW ;
                 HelpId = HID_SMA_RIGHTARROW ;
-                Text [ en-US ] = "Right Arrow";
+                Text [ en-US ] = "Right Arrow" ;
             };
             ToolBoxItem
             {
                 Identifier = RID_UPARROW ;
                 HelpId = HID_SMA_UPARROW ;
-                Text [ en-US ] = "Up Arrow";
+                Text [ en-US ] = "Up Arrow" ;
             };
             ToolBoxItem
             {
                 Identifier = RID_DOWNARROW ;
                 HelpId = HID_SMA_DOWNARROW ;
-                Text [ en-US ] = "Down Arrow";
+                Text [ en-US ] = "Down Arrow" ;
             };
             ToolBoxItem
             {
@@ -1425,31 +1439,31 @@ FloatingWindow RID_TOOLBOXWINDOW
             {
                 Identifier = RID_DOTSLOW ;
                 HelpId = HID_SMA_DOTSLOW ;
-                Text [ en-US ] = "Dots At Bottom";
+                Text [ en-US ] = "Dots At Bottom" ;
             };
             ToolBoxItem
             {
                 Identifier = RID_DOTSAXIS ;
                 HelpId = HID_SMA_DOTSAXIS ;
-                Text [ en-US ] = "Dots In Middle";
+                Text [ en-US ] = "Dots In Middle" ;
             };
             ToolBoxItem
             {
                 Identifier = RID_DOTSVERT ;
                 HelpId = HID_SMA_DOTSVERT ;
-                Text [ en-US ] = "Dots Vertically";
+                Text [ en-US ] = "Dots Vertically" ;
             };
             ToolBoxItem
             {
                 Identifier = RID_DOTSUP ;
                 HelpId = HID_SMA_DOTSUP ;
-                Text [ en-US ] = "Dots To Top";
+                Text [ en-US ] = "Dots To Top" ;
             };
             ToolBoxItem
             {
                 Identifier = RID_DOTSDOWN ;
                 HelpId = HID_SMA_DOTSDOWN ;
-                Text [ en-US ] = "Dots to Bottom";
+                Text [ en-US ] = "Dots To Bottom" ;
             };
         };
     };
@@ -1457,7 +1471,7 @@ FloatingWindow RID_TOOLBOXWINDOW
 
 
 
-#define UNBINOPS_IDLIST         \
+#define UNBINOPS_IDLIST     \
     IdList =                \
     {                       \
         RID_PLUSX ;         \
@@ -1476,23 +1490,25 @@ FloatingWindow RID_TOOLBOXWINDOW
         RID_XANDY ;         \
         RID_XORY ;          \
         RID_XCIRCY ;        \
+        RID_XWIDESLASHY ;   \
+        RID_XWIDEBSLASHY ;  \
     };                      \
-    IdCount = { 16 ; };
+    IdCount = { 18 ; };
 
     ImageList RID_IL_UNBINOPS
     {
-        Prefix = "un";
+        Prefix = "un" ;
         MaskColor = IMAGE_STDBTN_COLOR ;
         UNBINOPS_IDLIST
     };
     ImageList RID_ILH_UNBINOPS
     {
-        Prefix = "unh";
+        Prefix = "unh" ;
         MaskColor = IMAGE_STDBTN_COLOR_HC ;
         UNBINOPS_IDLIST
     };
 
-#define RELATIONS_IDLIST         \
+#define RELATIONS_IDLIST    \
     IdList =                \
     {                       \
         RID_XEQY ;          \
@@ -1521,18 +1537,18 @@ FloatingWindow RID_TOOLBOXWINDOW
 
     ImageList RID_IL_RELATIONS
     {
-        Prefix = "bi";
+        Prefix = "bi" ;
         MaskColor = IMAGE_STDBTN_COLOR ;
         RELATIONS_IDLIST
     };
     ImageList RID_ILH_RELATIONS
     {
-        Prefix = "bih";
+        Prefix = "bih" ;
         MaskColor = IMAGE_STDBTN_COLOR_HC ;
         RELATIONS_IDLIST
     };
 
-#define SETOPERATIONS_IDLIST             \
+#define SETOPERATIONS_IDLIST    \
     IdList =                    \
     {                           \
         RID_XINY ;              \
@@ -1562,18 +1578,18 @@ FloatingWindow RID_TOOLBOXWINDOW
 
     ImageList RID_IL_SETOPERATIONS
     {
-        Prefix = "op";
+        Prefix = "op" ;
         MaskColor = IMAGE_STDBTN_COLOR ;
         SETOPERATIONS_IDLIST
     };
     ImageList RID_ILH_SETOPERATIONS
     {
-        Prefix = "oph";
+        Prefix = "oph" ;
         MaskColor = IMAGE_STDBTN_COLOR_HC ;
         SETOPERATIONS_IDLIST
     };
 
-#define FUNCTIONS_IDLIST         \
+#define FUNCTIONS_IDLIST    \
     IdList =                \
     {                       \
         RID_ABSX ;          \
@@ -1606,18 +1622,18 @@ FloatingWindow RID_TOOLBOXWINDOW
 
     ImageList RID_IL_FUNCTIONS
     {
-        Prefix = "fu";
+        Prefix = "fu" ;
         MaskColor = IMAGE_STDBTN_COLOR ;
         FUNCTIONS_IDLIST
     };
     ImageList RID_ILH_FUNCTIONS
     {
-        Prefix = "fuh";
+        Prefix = "fuh" ;
         MaskColor = IMAGE_STDBTN_COLOR_HC ;
         FUNCTIONS_IDLIST
     };
 
-#define OPERATORS_IDLIST         \
+#define OPERATORS_IDLIST    \
     IdList =                \
     {                       \
         RID_LIMX ;          \
@@ -1638,127 +1654,127 @@ FloatingWindow RID_TOOLBOXWINDOW
 
     ImageList RID_IL_OPERATORS
     {
-        Prefix = "fo";
+        Prefix = "fo" ;
         MaskColor = IMAGE_STDBTN_COLOR ;
         OPERATORS_IDLIST
     };
     ImageList RID_ILH_OPERATORS
     {
-        Prefix = "foh";
+        Prefix = "foh" ;
         MaskColor = IMAGE_STDBTN_COLOR_HC ;
         OPERATORS_IDLIST
     };
 
-#define ATTRIBUTES_IDLIST             \
-    IdList =                    \
-    {                           \
-        RID_ACUTEX ;            \
-        RID_GRAVEX ;            \
-        RID_CHECKX ;            \
-        RID_BREVEX ;            \
-        RID_BARX ;              \
-        RID_VECX ;              \
-        RID_HATX ;              \
-        RID_TILDEX ;            \
-        RID_CIRCLEX ;           \
-        RID_DOTX ;              \
-        RID_DDOTX ;             \
-        RID_DDDOTX ;            \
-        RID_OVERLINEX ;         \
-        RID_UNDERLINEX ;        \
-        RID_OVERSTRIKEX ;       \
-        RID_PHANTOMX ;          \
-        RID_BOLDX ;             \
-        RID_ITALX ;             \
-        RID_SIZEXY ;            \
-        RID_FONTXY ;            \
-        RID_WIDEHATX ;          \
-        RID_WIDETILDEX ;        \
-        RID_WIDEVECX ;          \
-    };                          \
+#define ATTRIBUTES_IDLIST   \
+    IdList =                \
+    {                       \
+        RID_ACUTEX ;        \
+        RID_GRAVEX ;        \
+        RID_CHECKX ;        \
+        RID_BREVEX ;        \
+        RID_BARX ;          \
+        RID_VECX ;          \
+        RID_HATX ;          \
+        RID_TILDEX ;        \
+        RID_CIRCLEX ;       \
+        RID_DOTX ;          \
+        RID_DDOTX ;         \
+        RID_DDDOTX ;        \
+        RID_OVERLINEX ;     \
+        RID_UNDERLINEX ;    \
+        RID_OVERSTRIKEX ;   \
+        RID_PHANTOMX ;      \
+        RID_BOLDX ;         \
+        RID_ITALX ;         \
+        RID_SIZEXY ;        \
+        RID_FONTXY ;        \
+        RID_WIDEHATX ;      \
+        RID_WIDETILDEX ;    \
+        RID_WIDEVECX ;      \
+    };                      \
     IdCount = { 23 ; };
 
     ImageList RID_IL_ATTRIBUTES
     {
-        Prefix = "at";
+        Prefix = "at" ;
         MaskColor = IMAGE_STDBTN_COLOR ;
         ATTRIBUTES_IDLIST
     };
     ImageList RID_ILH_ATTRIBUTES
     {
-        Prefix = "ath";
+        Prefix = "ath" ;
         MaskColor = IMAGE_STDBTN_COLOR_HC ;
         ATTRIBUTES_IDLIST
     };
 
-#define BRACKETS_IDLIST             \
-    IdList =                    \
-    {                           \
-        RID_LRPARENTX ;         \
-        RID_LRBRACKETX ;        \
-        RID_LRANGLEX ;          \
-        RID_LRBRACEX ;          \
-        RID_LRLINEX ;           \
-        RID_LRDLINEX ;          \
-        RID_LMRANGLEXY ;        \
-        RID_LRGROUPX ;          \
-        RID_SLRPARENTX ;        \
-        RID_SLRBRACKETX ;       \
-        RID_SLRANGLEX ;         \
-        RID_SLRBRACEX ;         \
-        RID_SLRLINEX ;          \
-        RID_SLRDLINEX ;         \
-        RID_SLMRANGLEXY ;       \
-        RID_LRDBRACKETX ;       \
-        RID_SLRDBRACKETX ;      \
-        RID_XOVERBRACEY ;       \
-        RID_XUNDERBRACEY ;      \
-    };                          \
+#define BRACKETS_IDLIST     \
+    IdList =                \
+    {                       \
+        RID_LRPARENTX ;     \
+        RID_LRBRACKETX ;    \
+        RID_LRANGLEX ;      \
+        RID_LRBRACEX ;      \
+        RID_LRLINEX ;       \
+        RID_LRDLINEX ;      \
+        RID_LMRANGLEXY ;    \
+        RID_LRGROUPX ;      \
+        RID_SLRPARENTX ;    \
+        RID_SLRBRACKETX ;   \
+        RID_SLRANGLEX ;     \
+        RID_SLRBRACEX ;     \
+        RID_SLRLINEX ;      \
+        RID_SLRDLINEX ;     \
+        RID_SLMRANGLEXY ;   \
+        RID_LRDBRACKETX ;   \
+        RID_SLRDBRACKETX ;  \
+        RID_XOVERBRACEY ;   \
+        RID_XUNDERBRACEY ;  \
+    };                      \
     IdCount = { 19 ; };
 
     ImageList RID_IL_BRACKETS
     {
-        Prefix = "al";
+        Prefix = "al" ;
         MaskColor = IMAGE_STDBTN_COLOR ;
         BRACKETS_IDLIST
     };
     ImageList RID_ILH_BRACKETS
     {
-        Prefix = "alh";
+        Prefix = "alh" ;
         MaskColor = IMAGE_STDBTN_COLOR_HC ;
         BRACKETS_IDLIST
     };
 
-#define FORMAT_IDLIST         \
-    IdList =                \
-    {                       \
-        RID_NEWLINE ;       \
-        RID_SBLANK ;        \
-        RID_BLANK ;         \
-        RID_BINOMXY ;       \
-        RID_STACK ;         \
-        RID_MATRIX ;        \
-        RID_ALIGNLX ;       \
-        RID_ALIGNCX ;       \
-        RID_ALIGNRX ;       \
-        RID_RSUBX ;         \
-        RID_RSUPX ;         \
-        RID_LSUBX ;         \
-        RID_LSUPX ;         \
-        RID_CSUBX ;         \
-        RID_CSUPX ;         \
-    };                      \
+#define FORMAT_IDLIST   \
+    IdList =            \
+    {                   \
+        RID_NEWLINE ;   \
+        RID_SBLANK ;    \
+        RID_BLANK ;     \
+        RID_BINOMXY ;   \
+        RID_STACK ;     \
+        RID_MATRIX ;    \
+        RID_ALIGNLX ;   \
+        RID_ALIGNCX ;   \
+        RID_ALIGNRX ;   \
+        RID_RSUBX ;     \
+        RID_RSUPX ;     \
+        RID_LSUBX ;     \
+        RID_LSUPX ;     \
+        RID_CSUBX ;     \
+        RID_CSUPX ;     \
+    };                  \
     IdCount = { 15 ; };
 
     ImageList RID_IL_FORMAT
     {
-        Prefix = "co";
+        Prefix = "co" ;
         MaskColor = IMAGE_STDBTN_COLOR ;
         FORMAT_IDLIST
     };
     ImageList RID_ILH_FORMAT
     {
-        Prefix = "coh";
+        Prefix = "coh" ;
         MaskColor = IMAGE_STDBTN_COLOR_HC ;
         FORMAT_IDLIST
     };
@@ -1790,44 +1806,43 @@ FloatingWindow RID_TOOLBOXWINDOW
 
     ImageList RID_IL_MISC
     {
-        Prefix = "mi";
+        Prefix = "mi" ;
         MaskColor = IMAGE_STDBTN_COLOR ;
         MISC_IDLIST
     };
     ImageList RID_ILH_MISC
     {
-        Prefix = "mih";
+        Prefix = "mih" ;
         MaskColor = IMAGE_STDBTN_COLOR_HC ;
         MISC_IDLIST
     };
 
-#define CATALOG_IDLIST                  \
-    IdList =                        \
-    {                               \
-        RID_UNBINOPS_CAT ;          \
-        RID_RELATIONS_CAT ;         \
-        RID_SETOPERATIONS_CAT ;     \
-        RID_FUNCTIONS_CAT ;         \
-        RID_OPERATORS_CAT ;         \
-        RID_ATTRIBUTES_CAT ;        \
-        RID_MISC_CAT ;              \
-        RID_BRACKETS_CAT ;          \
-        RID_FORMAT_CAT ;            \
-    };                              \
+#define CATALOG_IDLIST          \
+    IdList =                    \
+    {                           \
+        RID_UNBINOPS_CAT ;      \
+        RID_RELATIONS_CAT ;     \
+        RID_SETOPERATIONS_CAT ; \
+        RID_FUNCTIONS_CAT ;     \
+        RID_OPERATORS_CAT ;     \
+        RID_ATTRIBUTES_CAT ;    \
+        RID_MISC_CAT ;          \
+        RID_BRACKETS_CAT ;      \
+        RID_FORMAT_CAT ;        \
+    };                          \
     IdCount = { 9 ; };
 
     ImageList RID_IL_CATALOG
     {
-        Prefix = "im";
+        Prefix = "im" ;
         MaskColor = IMAGE_STDBTN_COLOR ;
         CATALOG_IDLIST
     };
     ImageList RID_ILH_CATALOG
     {
-        Prefix = "imh";
+        Prefix = "imh" ;
         MaskColor = IMAGE_STDBTN_COLOR_HC ;
         CATALOG_IDLIST
     };
 
-
-
+// ********************************************************************** EOF
