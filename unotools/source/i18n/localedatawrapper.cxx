@@ -299,9 +299,9 @@ std::vector< LanguageType > LocaleDataWrapper::getInstalledLanguageTypes()
     sal_Int32 nCount = xLoc.getLength();
     std::vector< LanguageType > xLang;
     xLang.reserve(nCount);
-    for ( sal_Int32 i=0; i<nCount; i++ )
+    for ( const auto& rLoc : xLoc )
     {
-        LanguageTag aLanguageTag( xLoc[i] );
+        LanguageTag aLanguageTag( rLoc );
         OUString aDebugLocale;
         if (areChecksEnabled())
         {
@@ -477,21 +477,12 @@ void LocaleDataWrapper::getSecondaryCalendarImpl()
     if (!xSecondaryCalendar && !bSecondaryCalendarValid)
     {
         Sequence< Calendar2 > xCals = getAllCalendars();
-        sal_Int32 nCount = xCals.getLength();
-        if (nCount > 1)
+        if (xCals.getLength() > 1)
         {
-            sal_Int32 nNonDef = -1;
-            const Calendar2* pArr = xCals.getArray();
-            for (sal_Int32 i=0; i<nCount; ++i)
-            {
-                if (!pArr[i].Default)
-                {
-                    nNonDef = i;
-                    break;
-                }
-            }
-            if (nNonDef >= 0)
-                xSecondaryCalendar.reset( new Calendar2( xCals[nNonDef]));
+            auto pCal = std::find_if(xCals.begin(), xCals.end(),
+                [](const Calendar2& rCal) { return !rCal.Default; });
+            if (pCal != xCals.end())
+                xSecondaryCalendar.reset( new Calendar2( *pCal));
         }
         bSecondaryCalendarValid = true;
     }
@@ -532,21 +523,15 @@ void LocaleDataWrapper::getDefaultCalendarImpl()
     if (!xDefaultCalendar)
     {
         Sequence< Calendar2 > xCals = getAllCalendars();
-        sal_Int32 nCount = xCals.getLength();
-        sal_Int32 nDef = 0;
-        if (nCount > 1)
+        auto pCal = xCals.begin();
+        if (xCals.getLength() > 1)
         {
-            const Calendar2* pArr = xCals.getArray();
-            for (sal_Int32 i=0; i<nCount; ++i)
-            {
-                if (pArr[i].Default)
-                {
-                    nDef = i;
-                    break;
-                }
-            }
+            pCal = std::find_if(xCals.begin(), xCals.end(),
+                [](const Calendar2& rCal) { return rCal.Default; });
+            if (pCal == xCals.end())
+                pCal = xCals.begin();
         }
-        xDefaultCalendar.reset( new Calendar2( xCals[nDef]));
+        xDefaultCalendar.reset( new Calendar2( *pCal));
     }
 }
 
@@ -631,35 +616,29 @@ sal_uInt16 LocaleDataWrapper::getCurrDigits() const
 void LocaleDataWrapper::getCurrSymbolsImpl()
 {
     Sequence< Currency2 > aCurrSeq = getAllCurrencies();
-    sal_Int32 nCnt = aCurrSeq.getLength();
-    Currency2 const * const pCurrArr = aCurrSeq.getArray();
-    sal_Int32 nElem;
-    for ( nElem = 0; nElem < nCnt; nElem++ )
+    if ( !aCurrSeq.hasElements() )
     {
-        if ( pCurrArr[nElem].Default )
-            break;
+        if (areChecksEnabled())
+            outputCheckMessage(OUString("LocaleDataWrapper::getCurrSymbolsImpl: no currency at all, using ShellsAndPebbles"));
+        aCurrSymbol = "ShellsAndPebbles";
+        aCurrBankSymbol = aCurrSymbol;
+        nCurrPositiveFormat = nCurrNegativeFormat = nCurrFormatDefault;
+        nCurrDigits = 2;
+        return;
     }
-    if ( nElem >= nCnt )
+    auto pCurr = std::find_if(aCurrSeq.begin(), aCurrSeq.end(),
+        [](const Currency2& rCurr) { return rCurr.Default; });
+    if ( pCurr == aCurrSeq.end() )
     {
         if (areChecksEnabled())
         {
             outputCheckMessage( appendLocaleInfo( "LocaleDataWrapper::getCurrSymbolsImpl: no default currency" ) );
         }
-        nElem = 0;
-        if ( nElem >= nCnt )
-        {
-            if (areChecksEnabled())
-                outputCheckMessage(OUString("LocaleDataWrapper::getCurrSymbolsImpl: no currency at all, using ShellsAndPebbles"));
-            aCurrSymbol = "ShellsAndPebbles";
-            aCurrBankSymbol = aCurrSymbol;
-            nCurrPositiveFormat = nCurrNegativeFormat = nCurrFormatDefault;
-            nCurrDigits = 2;
-            return;
-        }
+        pCurr = aCurrSeq.begin();
     }
-    aCurrSymbol = pCurrArr[nElem].Symbol;
-    aCurrBankSymbol = pCurrArr[nElem].BankSymbol;
-    nCurrDigits = pCurrArr[nElem].DecimalPlaces;
+    aCurrSymbol = pCurr->Symbol;
+    aCurrBankSymbol = pCurr->BankSymbol;
+    nCurrDigits = pCurr->DecimalPlaces;
 }
 
 void LocaleDataWrapper::scanCurrFormatImpl( const OUString& rCode,
@@ -999,9 +978,9 @@ void LocaleDataWrapper::getDateOrdersImpl()
     // find the edit (21), a default (medium preferred),
     // a medium (default preferred), and a long (default preferred)
     NumberFormatCode const * const pFormatArr = aFormatSeq.getArray();
-    sal_Int32 nElem, nEdit, nDef, nMedium, nLong;
+    sal_Int32 nEdit, nDef, nMedium, nLong;
     nEdit = nDef = nMedium = nLong = -1;
-    for ( nElem = 0; nElem < nCnt; nElem++ )
+    for ( sal_Int32 nElem = 0; nElem < nCnt; nElem++ )
     {
         if ( nEdit == -1 && pFormatArr[nElem].Index == NumberFormatIndex::DATE_SYS_DDMMYYYY )
             nEdit = nElem;
@@ -1838,11 +1817,8 @@ void LocaleDataWrapper::setDateAcceptancePatterns(
         // Copy existing full date pattern and append the sequence passed.
         /* TODO: could check for duplicates and shrink target sequence */
         Sequence< OUString > aTmp( rPatterns.getLength() + 1 );
-        OUString* pArray1 = aTmp.getArray();
-        const OUString* pArray2 = rPatterns.getConstArray();
-        pArray1[0] = aDateAcceptancePatterns[0];
-        for (sal_Int32 i=0; i < rPatterns.getLength(); ++i)
-            pArray1[i+1] = pArray2[i];
+        aTmp[0] = aDateAcceptancePatterns[0];
+        std::copy(rPatterns.begin(), rPatterns.end(), std::next(aTmp.begin()));
         aDateAcceptancePatterns = aTmp;
     }
 }

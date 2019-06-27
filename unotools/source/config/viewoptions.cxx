@@ -319,16 +319,12 @@ css::uno::Sequence< css::beans::NamedValue > SvtViewOptionsBase_Impl::GetUserDat
         if (xUserData.is())
         {
             const css::uno::Sequence<OUString> lNames = xUserData->getElementNames();
-            const OUString* pNames = lNames.getConstArray();
             sal_Int32 c = lNames.getLength();
-            sal_Int32 i = 0;
             css::uno::Sequence< css::beans::NamedValue > lUserData(c);
 
-            for (i=0; i<c; ++i)
-            {
-                lUserData[i].Name  = pNames[i];
-                lUserData[i].Value = xUserData->getByName(pNames[i]);
-            }
+            std::transform(lNames.begin(), lNames.end(), lUserData.begin(),
+                [&xUserData](const OUString& rName) -> css::beans::NamedValue {
+                    return { rName, xUserData->getByName(rName) }; });
 
             return lUserData;
         }
@@ -358,15 +354,12 @@ void SvtViewOptionsBase_Impl::SetUserData( const OUString&                      
         xNode->getByName(PROPERTY_USERDATA) >>= xUserData;
         if (xUserData.is())
         {
-            const css::beans::NamedValue* pData = lData.getConstArray();
-            sal_Int32               c     = lData.getLength();
-            sal_Int32               i     = 0;
-            for (i=0; i<c; ++i)
+            for (const css::beans::NamedValue& rData : lData)
             {
-                if (xUserData->hasByName(pData[i].Name))
-                    xUserData->replaceByName(pData[i].Name, pData[i].Value);
+                if (xUserData->hasByName(rData.Name))
+                    xUserData->replaceByName(rData.Name, rData.Value);
                 else
-                    xUserData->insertByName(pData[i].Name, pData[i].Value);
+                    xUserData->insertByName(rData.Name, rData.Value);
             }
         }
         ::comphelper::ConfigurationHelper::flush(m_xRoot);

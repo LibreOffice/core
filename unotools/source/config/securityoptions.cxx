@@ -287,9 +287,8 @@ void SvtSecurityOptions_Impl::SetProperty( sal_Int32 nProperty, const Any& rValu
             if (!utl::ConfigManager::IsFuzzing())
             {
                 SvtPathOptions  aOpt;
-                sal_uInt32      nCount = m_seqSecureURLs.getLength();
-                for( sal_uInt32 nItem = 0; nItem < nCount; ++nItem )
-                    m_seqSecureURLs[ nItem ] = aOpt.SubstituteVariable( m_seqSecureURLs[ nItem ] );
+                std::transform(m_seqSecureURLs.begin(), m_seqSecureURLs.end(), m_seqSecureURLs.begin(),
+                    [&aOpt](const OUString& rUrl) -> OUString { return aOpt.SubstituteVariable( rUrl ); });
             }
             m_bROSecureURLs = bRO;
         }
@@ -418,16 +417,15 @@ void SvtSecurityOptions_Impl::LoadAuthors()
         sal_Int32               c2 = c1 * 3;                // 3 Properties inside Struct TrustedAuthor
         Sequence< OUString >    lAllAuthors( c2 );
 
-        sal_Int32               i1;
-        sal_Int32               i2;
+        sal_Int32               i2 = 0;
         OUString                aSep( "/" );
-        for( i1 = 0, i2 = 0; i1 < c1; ++i1 )
+        for( const auto& rAuthor : lAuthors )
         {
-            lAllAuthors[ i2 ] = PROPERTYNAME_MACRO_TRUSTEDAUTHORS + aSep + lAuthors[ i1 ] + aSep + PROPERTYNAME_TRUSTEDAUTHOR_SUBJECTNAME;
+            lAllAuthors[ i2 ] = PROPERTYNAME_MACRO_TRUSTEDAUTHORS + aSep + rAuthor + aSep + PROPERTYNAME_TRUSTEDAUTHOR_SUBJECTNAME;
             ++i2;
-            lAllAuthors[ i2 ] = PROPERTYNAME_MACRO_TRUSTEDAUTHORS + aSep + lAuthors[ i1 ] + aSep + PROPERTYNAME_TRUSTEDAUTHOR_SERIALNUMBER;
+            lAllAuthors[ i2 ] = PROPERTYNAME_MACRO_TRUSTEDAUTHORS + aSep + rAuthor + aSep + PROPERTYNAME_TRUSTEDAUTHOR_SERIALNUMBER;
             ++i2;
-            lAllAuthors[ i2 ] = PROPERTYNAME_MACRO_TRUSTEDAUTHORS + aSep + lAuthors[ i1 ] + aSep + PROPERTYNAME_TRUSTEDAUTHOR_RAWDATA;
+            lAllAuthors[ i2 ] = PROPERTYNAME_MACRO_TRUSTEDAUTHORS + aSep + rAuthor + aSep + PROPERTYNAME_TRUSTEDAUTHOR_RAWDATA;
             ++i2;
         }
 
@@ -436,7 +434,8 @@ void SvtSecurityOptions_Impl::LoadAuthors()
         {
             std::vector< SvtSecurityOptions::Certificate > v;
             SvtSecurityOptions::Certificate aCert( 3 );
-            for( i1 = 0, i2 = 0; i1 < c1; ++i1 )
+            i2 = 0;
+            for( sal_Int32 i1 = 0; i1 < c1; ++i1 )
             {
                 lValues[ i2 ] >>= aCert[ 0 ];
                 ++i2;
@@ -590,9 +589,8 @@ void SvtSecurityOptions_Impl::ImplCommit()
                 {
                     Sequence< OUString >    lURLs( m_seqSecureURLs );
                     SvtPathOptions          aOpt;
-                    sal_Int32               nURLsCnt = lURLs.getLength();
-                    for( sal_Int32 nItem = 0; nItem < nURLsCnt; ++nItem )
-                        lURLs[ nItem ] = aOpt.UseVariable( lURLs[ nItem ] );
+                    std::transform(lURLs.begin(), lURLs.end(), lURLs.begin(),
+                        [&aOpt](const OUString& rUrl) -> OUString { return aOpt.UseVariable( rUrl ); });
                     lValues[ nRealCount ] <<= lURLs;
                 }
             }

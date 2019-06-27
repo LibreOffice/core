@@ -970,9 +970,8 @@ bool SvtLinguConfig::GetDictionaryEntry(
         if (bSuccess)
         {
             // get file URL's for the locations
-            for (sal_Int32 i = 0;  i < aLocations.getLength();  ++i)
+            for (OUString& rLocation : aLocations)
             {
-                OUString &rLocation = aLocations[i];
                 if (!lcl_GetFileUrlFromOrigin( rLocation, rLocation ))
                     bSuccess = false;
             }
@@ -1018,33 +1017,27 @@ std::vector< SvtLinguConfigDictionaryEntry > SvtLinguConfig::GetActiveDictionari
     {
         uno::Sequence< OUString > aElementNames;
         GetElementNamesFor( aG_Dictionaries, aElementNames );
-        sal_Int32 nLen = aElementNames.getLength();
-        const OUString *pElementNames = aElementNames.getConstArray();
 
         const uno::Sequence< OUString > aDisabledDics( GetDisabledDictionaries() );
 
         SvtLinguConfigDictionaryEntry aDicEntry;
-        for (sal_Int32 i = 0;  i < nLen;  ++i)
+        for (const OUString& rElementName : aElementNames)
         {
             // does dictionary match the format we are looking for?
-            if (GetDictionaryEntry( pElementNames[i], aDicEntry ) &&
+            if (GetDictionaryEntry( rElementName, aDicEntry ) &&
                 aDicEntry.aFormatName == rFormatName)
             {
                 // check if it is active or not
-                bool bDicIsActive = true;
-                for (sal_Int32 k = 0;  bDicIsActive && k < aDisabledDics.getLength();  ++k)
-                {
-                    if (aDisabledDics[k] == pElementNames[i])
-                        bDicIsActive = false;
-                }
+                bool bDicIsActive = std::none_of(aDisabledDics.begin(), aDisabledDics.end(),
+                    [&rElementName](const OUString& rDic) { return rDic == rElementName; });
 
                 if (bDicIsActive)
                 {
                     DBG_ASSERT( !aDicEntry.aFormatName.isEmpty(),
                             "FormatName not set" );
-                    DBG_ASSERT( aDicEntry.aLocations.getLength(),
+                    DBG_ASSERT( aDicEntry.aLocations.hasElements(),
                             "Locations not set" );
-                    DBG_ASSERT( aDicEntry.aLocaleNames.getLength(),
+                    DBG_ASSERT( aDicEntry.aLocaleNames.hasElements(),
                             "Locales not set" );
                     aRes.push_back( aDicEntry );
                 }
