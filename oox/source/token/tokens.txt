@@ -4158,6 +4158,10 @@ qFormat
 qs
 qsCatId
 qsTypeId
+qrcode
+qrcodeborder
+qrcodeecc
+qrcodetext
 quadArrow
 quadArrowCallout
 quadBezTo

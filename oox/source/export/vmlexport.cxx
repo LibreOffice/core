@@ -43,6 +43,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
+#include <com/sun/star/drawing/QrCode.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
@@ -702,6 +703,27 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const tools::Rectangle&
                         pAttrList->add(FSNS(XML_r, XML_id),
                                        OUStringToOString(aImageId, RTL_TEXTENCODING_UTF8));
                         imageData = true;
+                    }
+                    else
+                    {
+                        sax_fastparser::FastAttributeList* pAttrListQrCode
+                            = FastSerializerHelper::createAttrList();
+
+                        css::drawing::QrCode aQrCode = pSdrGrafObj->getQrCode();
+
+                        pAttrListQrCode->add(
+                                FSNS(XML_o, XML_qrcodetext),
+                                    OUStringToOString(aQrCode.Text, RTL_TEXTENCODING_UTF8));
+                        pAttrListQrCode->add(
+                            FSNS(XML_o, XML_qrcodeecc),
+                                OStringBuffer(20).append(aQrCode.ECC).makeStringAndClear());
+                        pAttrListQrCode->add(
+                            FSNS(XML_o, XML_qrcodeborder),
+                                OStringBuffer(20).append(aQrCode.Border).makeStringAndClear());
+
+                        m_pSerializer->singleElementNS(
+                            XML_o, XML_qrcode,
+                            XFastAttributeListRef(pAttrListQrCode));
                     }
 
                     if (rProps.GetOpt(ESCHER_Prop_fNoFillHitTest, nValue))
