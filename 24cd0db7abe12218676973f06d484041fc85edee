@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_bed641f1",
+        "filename": "sw/source/core/text/frmform.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 845,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-06-27T13:34:39Z",
+      "side": 1,
+      "message": "it\u0027s funny because i had suspected the previous change to TWIPS_MAX/2 to cause some problems... but then i had some issue with the orphan/widow code and reverting it didn\u0027t help :)\n\nso i\u0027m not sure if this is entirely hypothetical at this point, but ... there are some places that might need adapting for consistency, let me try to dig those out again...\n\nSwTextFrame::WouldFit() has 2 of these conditions:\n\n    // Because the Orphan flag only exists for a short moment, we also check\n    // whether the Framesize is set to very huge by CalcPreps, in order to\n    // force a MoveFwd\n    if( IsWidow() || ( aRectFnSet.IsVert() ?\n                       ( 0 \u003d\u003d getFrameArea().Left() ) :\n                       ( LONG_MAX - 20000 \u003c getFrameArea().Bottom() ) ) )\n    {\n        SetWidow(false);\n        if ( GetFollow() )\n        {\n            // If we\u0027ve ended up here due to a Widow request by our Follow, we check\n            // whether there\u0027s a Follow with a real height at all.\n            // Else (e.g. for newly created SctFrames) we ignore the IsWidow() and\n            // still check if we can find enough room\n            if( ( ( ! aRectFnSet.IsVert() \u0026\u0026 LONG_MAX - 20000 \u003e\u003d getFrameArea().Bottom() ) ||\n                  (   aRectFnSet.IsVert() \u0026\u0026 0 \u003c getFrameArea().Left() ) ) \u0026\u0026\n                  ( GetFollow()-\u003eIsVertical() ?\n                    !GetFollow()-\u003egetFrameArea().Width() :\n                    !GetFollow()-\u003egetFrameArea().Height() ) )",
+      "revId": "24cd0db7abe12218676973f06d484041fc85edee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
