@@ -190,7 +190,7 @@ void SwDrawBaseShell::Execute(SfxRequest const &rReq)
                         {
                             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                             VclPtr<AbstractSvxCaptionDialog> pCaptionDlg =
-                                    pFact->CreateCaptionDialog( nullptr, pSdrView, nAllowedAnchors );
+                                    pFact->CreateCaptionDialog( rReq.GetFrameWeld(), pSdrView, nAllowedAnchors );
                             pDlg.disposeAndReset(pCaptionDlg);
                             pCaptionDlg->SetValidateFramePosLink( LINK(this, SwDrawBaseShell, ValidatePosition) );
                         }
