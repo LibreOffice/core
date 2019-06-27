@@ -195,11 +195,11 @@ void GlobalEventConfig_Impl::initBindingInfo()
 
     // Expand all keys
     Sequence< OUString > lMacros(1);
-    for (sal_Int32 i=0; i<lEventNames.getLength(); ++i )
+    for (const auto& rEventName : lEventNames )
     {
         OUStringBuffer aBuffer( 32 );
         aBuffer.append( aSetNode );
-        aBuffer.append( lEventNames[i] );
+        aBuffer.append( rEventName );
         aBuffer.append( aCommandKey );
         lMacros[0] = aBuffer.makeStringAndClear();
         SAL_INFO("unotools", "reading binding for: " << lMacros[0]);
@@ -208,12 +208,12 @@ void GlobalEventConfig_Impl::initBindingInfo()
         if( lValues.hasElements() )
         {
             lValues[0] >>= sMacroURL;
-            sal_Int32 startIndex = lEventNames[i].indexOf('\'');
-            sal_Int32 endIndex =  lEventNames[i].lastIndexOf('\'');
+            sal_Int32 startIndex = rEventName.indexOf('\'');
+            sal_Int32 endIndex =  rEventName.lastIndexOf('\'');
             if( startIndex >=0 && endIndex > 0 )
             {
                 startIndex++;
-                OUString eventName = lEventNames[i].copy(startIndex,endIndex-startIndex);
+                OUString eventName = rEventName.copy(startIndex,endIndex-startIndex);
                 m_eventBindingHash[ eventName ] = sMacroURL;
             }
         }
@@ -230,11 +230,10 @@ void GlobalEventConfig_Impl::replaceByName( const OUString& aName, const Any& aE
                 Reference< XInterface > (), 2);
     }
     OUString macroURL;
-    sal_Int32 nPropCount = props.getLength();
-    for( sal_Int32 index = 0; index < nPropCount; ++index )
+    for( const auto& rProp : props )
     {
-        if ( props[ index ].Name == "Script" )
-            props[ index ].Value >>= macroURL;
+        if ( rProp.Name == "Script" )
+            rProp.Value >>= macroURL;
     }
     m_eventBindingHash[ aName ] = macroURL;
     SetModified();

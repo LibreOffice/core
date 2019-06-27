@@ -407,9 +407,8 @@ SvtPathOptions_Impl::SvtPathOptions_Impl() :
     Sequence< Property > aPathPropSeq = xPropSetInfo->getProperties();
 
     NameToHandleMap aTempHashMap;
-    for ( sal_Int32 n = 0; n < aPathPropSeq.getLength(); n++ )
+    for ( const css::beans::Property& aProperty : aPathPropSeq )
     {
-        const css::beans::Property& aProperty = aPathPropSeq[n];
         aTempHashMap.emplace(aProperty.Name, aProperty.Handle);
     }
 

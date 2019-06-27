@@ -159,7 +159,6 @@ SvtCompatibilityOptions_Impl::SvtCompatibilityOptions_Impl() : ConfigItem( ROOTN
     // See impl_GetPropertyNames() for further information.
     Sequence< OUString > lNodes;
     Sequence< OUString > lNames  = impl_GetPropertyNames( lNodes );
-    sal_uInt32           nCount  = lNodes.getLength();
     Sequence< Any >      lValues = GetProperties( lNames );
 
     // Safe impossible cases.
@@ -171,11 +170,11 @@ SvtCompatibilityOptions_Impl::SvtCompatibilityOptions_Impl() : ConfigItem( ROOTN
     // 4 subkeys for every item!
     bool bDefaultFound = false;
     sal_Int32 nDestStep    = 0;
-    for ( sal_uInt32 nItem = 0; nItem < nCount; ++nItem )
+    for ( const auto& rNode : lNodes )
     {
         SvtCompatibilityEntry aItem;
 
-        aItem.setValue<OUString>( SvtCompatibilityEntry::Index::Name, lNodes[ nItem ] );
+        aItem.setValue<OUString>( SvtCompatibilityEntry::Index::Name, rNode );
 
         for ( int i = static_cast<int>(SvtCompatibilityEntry::Index::Module); i < static_cast<int>(SvtCompatibilityEntry::Index::INVALID); ++i )
         {
@@ -292,14 +291,13 @@ Sequence< OUString > SvtCompatibilityOptions_Impl::impl_GetPropertyNames( Sequen
     // expand list to result list ...
     Sequence< OUString > lProperties( rItems.getLength() * ( SvtCompatibilityEntry::getElementCount() - 1 ) );
 
-    sal_Int32 nSourceCount = rItems.getLength();
     sal_Int32 nDestStep    = 0;
     // Copy entries to destination and expand every item with 2 supported sub properties.
-    for ( sal_Int32 nSourceStep = 0; nSourceStep < nSourceCount; ++nSourceStep )
+    for ( const auto& rItem : rItems )
     {
         OUString sFixPath = SETNODE_ALLFILEFORMATS;
         sFixPath += PATHDELIMITER;
-        sFixPath += rItems[ nSourceStep ];
+        sFixPath += rItem;
         sFixPath += PATHDELIMITER;
         for ( int i = static_cast<int>(SvtCompatibilityEntry::Index::Module); i < static_cast<int>(SvtCompatibilityEntry::Index::INVALID); ++i )
         {

@@ -354,13 +354,8 @@ void SvtModuleOptions_Impl::ImplCommit()
         sBasePath  = PATHSEPARATOR + rInfo.getFactory() + PATHSEPARATOR;
 
         const css::uno::Sequence< css::beans::PropertyValue > lChangedProperties = rInfo.getChangedProperties ( sBasePath );
-        const css::beans::PropertyValue*                      pChangedProperties = lChangedProperties.getConstArray();
-        sal_Int32                                             nPropertyCount     = lChangedProperties.getLength();
-        for( sal_Int32 nProperty=0; nProperty<nPropertyCount; ++nProperty )
-        {
-            lCommitProperties[nRealCount] = pChangedProperties[nProperty];
-            ++nRealCount;
-        }
+        std::copy(lChangedProperties.begin(), lChangedProperties.end(), std::next(lCommitProperties.begin(), nRealCount));
+        nRealCount += lChangedProperties.getLength();
     }
     // Resize commit list to real size.
     // If nothing to do - suppress calling of configuration ...
@@ -561,14 +556,14 @@ css::uno::Sequence< OUString > SvtModuleOptions_Impl::impl_ExpandSetNames( const
     OUString* pPropNames = lPropNames.getArray();
     sal_Int32 nPropStart = 0;
 
-    for( sal_Int32 nName=0; nName<nCount; ++nName )
+    for( const auto& rSetName : lSetNames )
     {
-        pPropNames[nPropStart+PROPERTYHANDLE_SHORTNAME       ] = lSetNames[nName] + PATHSEPARATOR PROPERTYNAME_SHORTNAME;
-        pPropNames[nPropStart+PROPERTYHANDLE_TEMPLATEFILE    ] = lSetNames[nName] + PATHSEPARATOR PROPERTYNAME_TEMPLATEFILE;
-        pPropNames[nPropStart+PROPERTYHANDLE_WINDOWATTRIBUTES] = lSetNames[nName] + PATHSEPARATOR PROPERTYNAME_WINDOWATTRIBUTES;
-        pPropNames[nPropStart+PROPERTYHANDLE_EMPTYDOCUMENTURL] = lSetNames[nName] + PATHSEPARATOR PROPERTYNAME_EMPTYDOCUMENTURL;
-        pPropNames[nPropStart+PROPERTYHANDLE_DEFAULTFILTER   ] = lSetNames[nName] + PATHSEPARATOR PROPERTYNAME_DEFAULTFILTER;
-        pPropNames[nPropStart+PROPERTYHANDLE_ICON            ] = lSetNames[nName] + PATHSEPARATOR PROPERTYNAME_ICON;
+        pPropNames[nPropStart+PROPERTYHANDLE_SHORTNAME       ] = rSetName + PATHSEPARATOR PROPERTYNAME_SHORTNAME;
+        pPropNames[nPropStart+PROPERTYHANDLE_TEMPLATEFILE    ] = rSetName + PATHSEPARATOR PROPERTYNAME_TEMPLATEFILE;
+        pPropNames[nPropStart+PROPERTYHANDLE_WINDOWATTRIBUTES] = rSetName + PATHSEPARATOR PROPERTYNAME_WINDOWATTRIBUTES;
+        pPropNames[nPropStart+PROPERTYHANDLE_EMPTYDOCUMENTURL] = rSetName + PATHSEPARATOR PROPERTYNAME_EMPTYDOCUMENTURL;
+        pPropNames[nPropStart+PROPERTYHANDLE_DEFAULTFILTER   ] = rSetName + PATHSEPARATOR PROPERTYNAME_DEFAULTFILTER;
+        pPropNames[nPropStart+PROPERTYHANDLE_ICON            ] = rSetName + PATHSEPARATOR PROPERTYNAME_ICON;
         nPropStart += PROPERTYCOUNT;
     }
 
@@ -698,13 +693,11 @@ void SvtModuleOptions_Impl::impl_Read( const css::uno::Sequence< OUString >& lFa
     //              see "nPropertyStart += PROPERTYCOUNT" ...
 
     sal_Int32                   nPropertyStart  = 0;
-    sal_Int32                   nNodeCount      = lFactories.getLength();
     FactoryInfo*                pInfo           = nullptr;
     SvtModuleOptions::EFactory  eFactory;
 
-    for( sal_Int32 nSetNode=0; nSetNode<nNodeCount; ++nSetNode )
+    for( const OUString& sFactoryName : lFactories )
     {
-        const OUString& sFactoryName = lFactories[nSetNode];
         if( ClassifyFactoryByName( sFactoryName, eFactory ) )
         {
             OUString sTemp;
@@ -733,20 +726,18 @@ void SvtModuleOptions_Impl::MakeReadonlyStatesAvailable()
         return;
 
     css::uno::Sequence< OUString > lFactories = GetNodeNames(OUString());
-    sal_Int32 c = lFactories.getLength();
-    sal_Int32 i = 0;
-    for (i=0; i<c; ++i)
-    {
-        OUStringBuffer sPath(256);
-        sPath.append(lFactories[i]             );
-        sPath.append(PATHSEPARATOR             );
-        sPath.append(PROPERTYNAME_DEFAULTFILTER);
-
-        lFactories[i] = sPath.makeStringAndClear();
-    }
+    std::transform(lFactories.begin(), lFactories.end(), lFactories.begin(),
+        [](const OUString& rFactory) -> OUString {
+            OUStringBuffer sPath(256);
+            sPath.append(rFactory                  );
+            sPath.append(PATHSEPARATOR             );
+            sPath.append(PROPERTYNAME_DEFAULTFILTER);
+            return sPath.makeStringAndClear();
+        });
 
     css::uno::Sequence< sal_Bool > lReadonlyStates = GetReadOnlyStates(lFactories);
-    for (i=0; i<c; ++i)
+    sal_Int32 c = lFactories.getLength();
+    for (sal_Int32 i=0; i<c; ++i)
     {
         OUString&            rFactoryName = lFactories[i];
         SvtModuleOptions::EFactory  eFactory;
@@ -1085,11 +1076,10 @@ SvtModuleOptions::EFactory SvtModuleOptions::ClassifyFactoryByModel(const css::u
         return EFactory::UNKNOWN_FACTORY;
 
     const css::uno::Sequence< OUString > lServices = xInfo->getSupportedServiceNames();
-    const OUString*                      pServices = lServices.getConstArray();
 
-    for (sal_Int32 i=0; i<lServices.getLength(); ++i)
+    for (const OUString& rService : lServices)
     {
-        SvtModuleOptions::EFactory eApp = SvtModuleOptions::ClassifyFactoryByServiceName(pServices[i]);
+        SvtModuleOptions::EFactory eApp = SvtModuleOptions::ClassifyFactoryByServiceName(rService);
         if (eApp != EFactory::UNKNOWN_FACTORY)
             return eApp;
     }

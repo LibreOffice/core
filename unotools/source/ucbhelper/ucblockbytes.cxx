@@ -161,10 +161,9 @@ public:
 
 void SAL_CALL UcbPropertiesChangeListener_Impl::propertiesChange ( const Sequence<PropertyChangeEvent> &rEvent)
 {
-    sal_Int32 i, n = rEvent.getLength();
-    for (i = 0; i < n; i++)
+    for (const auto& rPropChangeEvent : rEvent)
     {
-        if (rEvent[i].PropertyName == "DocumentHeader")
+        if (rPropChangeEvent.PropertyName == "DocumentHeader")
         {
             m_xLockBytes->SetStreamValid_Impl();
         }
@@ -508,8 +507,8 @@ void Moderator::handle( const Reference<XInteractionRequest >& Request )
         if(aReplyType == EXIT) {
             Sequence<Reference<XInteractionContinuation> > aSeq(
                 Request->getContinuations());
-            for(sal_Int32 i = 0; i < aSeq.getLength(); ++i) {
-                Reference<XInteractionAbort> aRef(aSeq[i],UNO_QUERY);
+            for(const auto& rContinuation : aSeq) {
+                Reference<XInteractionAbort> aRef(rContinuation,UNO_QUERY);
                 if(aRef.is()) {
                     aRef->select();
                 }

@@ -231,16 +231,15 @@ void SvtHistoryOptions_Impl::Clear( EHistoryType eHistory )
         xListAccess->getByName(s_sItemList) >>= xNode;
         Sequence<OUString> aStrings(xNode->getElementNames());
 
-        const sal_Int32 nLength = aStrings.getLength();
-        for (sal_Int32 i = 0; i < nLength; ++i)
-            xNode->removeByName(aStrings[i]);
+        for (const auto& rString : aStrings)
+            xNode->removeByName(rString);
 
         // clear OrderList
         xListAccess->getByName(s_sOrderList) >>= xNode;
         aStrings = xNode->getElementNames();
 
-        for (sal_Int32 j = 0; j < nLength; ++j)
-            xNode->removeByName(aStrings[j]);
+        for (const auto& rString : aStrings)
+            xNode->removeByName(rString);
 
         ::comphelper::ConfigurationHelper::flush(m_xCfg);
     }
