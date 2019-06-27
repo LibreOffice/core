@@ -224,6 +224,7 @@ $(eval $(call gb_Library_add_exception_objects,oox,\
     oox/source/helper/graphichelper \
     oox/source/helper/grabbagstack \
     oox/source/helper/modelobjecthelper \
+    oox/source/helper/ooxresid \
     oox/source/helper/progressbar \
     oox/source/helper/propertymap \
     oox/source/helper/propertyset \

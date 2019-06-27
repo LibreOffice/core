@@ -16,6 +16,10 @@ $(eval $(call gb_Module_add_targets,oox,\
 	Package_generated \
 ))
 
+$(eval $(call gb_Module_add_l10n_targets,oox,\
+	AllLangMoTarget_oox \
+))
+
 $(eval $(call gb_Module_add_check_targets,oox,\
 	CppunitTest_oox_tokenmap \
 	CppunitTest_oox_vba_compression \

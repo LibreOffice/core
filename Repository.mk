@@ -1122,6 +1122,7 @@ $(eval $(call gb_Helper_register_mos,\
 	$(call gb_Helper_optional,DESKTOP,fps) \
 	frm \
 	fwk \
+	oox \
 	pcr \
 	rpt \
 	$(call gb_Helper_optional,SCRIPTING,sb) \
