@@ -26,7 +26,6 @@
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::i18n;
-using namespace ::com::sun::star::lang;
 
 namespace i18npool {
 
@@ -41,7 +40,7 @@ CalendarImpl::~CalendarImpl()
 }
 
 void SAL_CALL
-CalendarImpl::loadDefaultCalendarTZ( const Locale& rLocale, const OUString& rTimeZone )
+CalendarImpl::loadDefaultCalendarTZ( const css::lang::Locale& rLocale, const OUString& rTimeZone )
 {
     Sequence< Calendar2 > xC = LocaleDataImpl::get()->getAllCalendars2(rLocale);
     for (sal_Int32 i = 0; i < xC.getLength(); i++) {
@@ -54,7 +53,7 @@ CalendarImpl::loadDefaultCalendarTZ( const Locale& rLocale, const OUString& rTim
 }
 
 void SAL_CALL
-CalendarImpl::loadCalendarTZ( const OUString& uniqueID, const Locale& rLocale, const OUString& rTimeZone )
+CalendarImpl::loadCalendarTZ( const OUString& uniqueID, const css::lang::Locale& rLocale, const OUString& rTimeZone )
 {
     Reference < XCalendar4 > xOldCalendar( xCalendar );  // backup
     const OUString aCacheID( uniqueID + "_" + rTimeZone);
@@ -138,7 +137,7 @@ CalendarImpl::getLoadedCalendar()
 }
 
 Sequence< OUString > SAL_CALL
-CalendarImpl::getAllCalendars( const Locale& rLocale )
+CalendarImpl::getAllCalendars( const css::lang::Locale& rLocale )
 {
     Sequence< Calendar2 > xC = LocaleDataImpl::get()->getAllCalendars2(rLocale);
     sal_Int32 nLen = xC.getLength();
