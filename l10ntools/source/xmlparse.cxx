@@ -33,7 +33,6 @@
 #include <rtl/strbuf.hxx>
 #include <unicode/regex.h>
 
-using namespace U_ICU_NAMESPACE;
 using namespace std;
 using namespace osl;
 
@@ -1082,14 +1081,14 @@ OString XMLUtil::QuotHTML( const OString &rString )
     UErrorCode nIcuErr = U_ZERO_ERROR;
     static const sal_uInt32 nSearchFlags =
         UREGEX_DOTALL | UREGEX_CASE_INSENSITIVE;
-    static const UnicodeString sSearchPat( "<[/]\?\?[a-z_-]+?(?:| +[a-z]+?=\".*?\") *[/]\?\?>" );
+    static const icu::UnicodeString sSearchPat( "<[/]\?\?[a-z_-]+?(?:| +[a-z]+?=\".*?\") *[/]\?\?>" );
 
     const OUString sOUSource = OStringToOUString(rString, RTL_TEXTENCODING_UTF8);
     icu::UnicodeString sSource(
         reinterpret_cast<const UChar*>(
             sOUSource.getStr()), sOUSource.getLength() );
 
-    RegexMatcher aRegexMatcher( sSearchPat, nSearchFlags, nIcuErr );
+    icu::RegexMatcher aRegexMatcher( sSearchPat, nSearchFlags, nIcuErr );
     aRegexMatcher.reset( sSource );
 
     icu::UnicodeString sReturn;
