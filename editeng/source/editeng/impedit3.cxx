@@ -77,6 +77,8 @@
 #include <comphelper/lok.hxx>
 #include <memory>
 
+#include <vcl/outdev/ScopedStates.hxx>
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -223,7 +225,10 @@ static void lcl_DrawRedLines( OutputDevice* pOutDev,
             aPoint2 = Rotate(aPoint2, nOrientation, rOrigin);
         }
 
-        pOutDev->DrawWaveLine(aPoint1, aPoint2);
+        {
+            vcl::ScopedAntialiasing a(*pOutDev, true);
+            pOutDev->DrawWaveLine(aPoint1, aPoint2);
+        }
 
         nStart = nEnd + 1;
         if (nEnd < nMaxEnd)

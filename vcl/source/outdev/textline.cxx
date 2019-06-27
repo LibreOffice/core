@@ -34,6 +34,10 @@
 #include <outdata.hxx>
 #include <impglyphitem.hxx>
 
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <basegfx/polygon/WaveLine.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
+
 #define UNDERLINE_LAST      LINESTYLE_BOLDWAVE
 #define STRIKEOUT_LAST      STRIKEOUT_X
 
@@ -936,7 +940,7 @@ void OutputDevice::DrawTextLine( const Point& rPos, long nWidth,
         mpAlphaVDev->DrawTextLine( rPos, nWidth, eStrikeout, eUnderline, eOverline, bUnderlineAbove );
 }
 
-void OutputDevice::DrawWaveLine( const Point& rStartPos, const Point& rEndPos, long nLineWidth )
+void OutputDevice::DrawWaveLine(const Point& rStartPos, const Point& rEndPos, long nLineWidth)
 {
     assert(!is_double_buffered_window());
 
@@ -956,30 +960,29 @@ void OutputDevice::DrawWaveLine( const Point& rStartPos, const Point& rEndPos, l
     if (!InitFont())
         return;
 
-    Point   aStartPt = ImplLogicToDevicePixel( rStartPos );
-    Point   aEndPt = ImplLogicToDevicePixel( rEndPos );
-    long    nStartX = aStartPt.X();
-    long    nStartY = aStartPt.Y();
-    long    nEndX = aEndPt.X();
-    long    nEndY = aEndPt.Y();
-    short   nOrientation = 0;
+    Point aStartPt = ImplLogicToDevicePixel(rStartPos);
+    Point aEndPt = ImplLogicToDevicePixel(rEndPos);
 
-    // when rotated
-    if ( (nStartY != nEndY) || (nStartX > nEndX) )
+    long nStartX = aStartPt.X();
+    long nStartY = aStartPt.Y();
+    long nEndX = aEndPt.X();
+    long nEndY = aEndPt.Y();
+    double fOrientation = 0.0;
+
+    // handle rotation
+    if (nStartY != nEndY || nStartX > nEndX)
     {
-        long nDX = nEndX - nStartX;
-        double nO = atan2( -nEndY + nStartY, ((nDX == 0) ? 0.000000001 : nDX) );
-        nO /= F_PI1800;
-        nOrientation = static_cast<short>(nO);
-        aStartPt.RotateAround( nEndX, nEndY, -nOrientation );
+        long nLengthX = nEndX - nStartX;
+        fOrientation = std::atan2(nStartY - nEndY, (nLengthX == 0 ? 0.000000001 : nLengthX));
+        fOrientation /= F_PI180;
+        // un-rotate the end point
+        aStartPt.RotateAround(nEndX, nEndY, -fOrientation * 10.0);
     }
 
     long nWaveHeight = 3;
-    nStartY++;
-    nEndY++;
 
+    // Handle HiDPI
     float fScaleFactor = GetDPIScaleFactor();
-
     if (fScaleFactor > 1.0f)
     {
         nWaveHeight *= fScaleFactor;
@@ -995,14 +998,23 @@ void OutputDevice::DrawWaveLine( const Point& rStartPos, const Point& rEndPos, l
 
     // #109280# make sure the waveline does not exceed the descent to avoid paint problems
     LogicalFontInstance* pFontInstance = mpFontInstance.get();
-    if( nWaveHeight > pFontInstance->mxFontMetric->GetWavelineUnderlineSize() )
+    if (nWaveHeight > pFontInstance->mxFontMetric->GetWavelineUnderlineSize())
     {
         nWaveHeight = pFontInstance->mxFontMetric->GetWavelineUnderlineSize();
         nLineWidth = 1;
     }
-    ImplDrawWaveLine(nStartX, nStartY, 0, 0,
-                     nEndX-nStartX, nWaveHeight,
-                     nLineWidth, nOrientation, GetLineColor());
+
+    const basegfx::B2DRectangle aWaveLineRectangle(nStartX, nStartY, nEndX, nEndY + nWaveHeight);
+    const basegfx::B2DPolygon aWaveLinePolygon = basegfx::createWaveLinePolygon(aWaveLineRectangle);
+    const basegfx::B2DHomMatrix aRotationMatrix = basegfx::utils::createRotateAroundPoint(nStartX, nStartY, basegfx::deg2rad(-fOrientation));
+    const basegfx::B2DVector aLineWidth(nLineWidth, nLineWidth);
+    const bool bPixelSnapHairline(mnAntialiasing & AntialiasingFlags::PixelSnapHairline);
+
+    mpGraphics->SetLineColor(GetLineColor());
+    mpGraphics->DrawPolyLine(
+            aRotationMatrix, aWaveLinePolygon, 0.0, aLineWidth,
+            basegfx::B2DLineJoin::NONE, css::drawing::LineCap_BUTT,
+            basegfx::deg2rad(15.0), bPixelSnapHairline, this);
 
     if( mpAlphaVDev )
         mpAlphaVDev->DrawWaveLine( rStartPos, rEndPos, nLineWidth );
