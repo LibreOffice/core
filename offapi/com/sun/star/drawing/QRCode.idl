@@ -34,6 +34,7 @@ published struct QRCode
     string Payload;
 
     /** Qr Code Error Correction Level
+        @see drawing/QRCodeErrorCorrection
         @since LibreOffice 6.4
     */
     com::sun::star::drawing::QRCodeErrorCorrection ErrorCorrection;
