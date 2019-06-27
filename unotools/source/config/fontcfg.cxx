@@ -119,14 +119,12 @@ DefaultFontConfiguration::DefaultFontConfiguration()
         {
             Sequence< OUString > aLocales = m_xConfigAccess->getElementNames();
             // fill config hash with empty interfaces
-            int nLocales = aLocales.getLength();
-            const OUString* pLocaleStrings = aLocales.getConstArray();
-            for( int i = 0; i < nLocales; i++ )
+            for( const OUString& rLocaleString : aLocales )
             {
                 // Feed through LanguageTag for casing.
-                OUString aLoc( LanguageTag( pLocaleStrings[i], true).getBcp47( false));
+                OUString aLoc( LanguageTag( rLocaleString, true).getBcp47( false));
                 m_aConfig[ aLoc ] = LocaleAccess();
-                m_aConfig[ aLoc ].aConfigLocaleString = pLocaleStrings[i];
+                m_aConfig[ aLoc ].aConfigLocaleString = rLocaleString;
             }
         }
     }
@@ -335,14 +333,12 @@ FontSubstConfiguration::FontSubstConfiguration() :
         {
             Sequence< OUString > aLocales = m_xConfigAccess->getElementNames();
             // fill config hash with empty interfaces
-            int nLocales = aLocales.getLength();
-            const OUString* pLocaleStrings = aLocales.getConstArray();
-            for( int i = 0; i < nLocales; i++ )
+            for( const OUString& rLocaleString : aLocales )
             {
                 // Feed through LanguageTag for casing.
-                OUString aLoc( LanguageTag( pLocaleStrings[i], true).getBcp47( false));
+                OUString aLoc( LanguageTag( rLocaleString, true).getBcp47( false));
                 m_aSubst[ aLoc ] = LocaleSubst();
-                m_aSubst[ aLoc ].aConfigLocaleString = pLocaleStrings[i];
+                m_aSubst[ aLoc ].aConfigLocaleString = rLocaleString;
             }
         }
     }
@@ -979,7 +975,6 @@ void FontSubstConfiguration::readLocaleSubst( const OUString& rBcp47 ) const
             {
                 Sequence< OUString > aFonts = xNode->getElementNames();
                 int nFonts = aFonts.getLength();
-                const OUString* pFontNames = aFonts.getConstArray();
                 // improve performance, heap fragmentation
                 it->second.aSubstAttributes.reserve( nFonts );
 
@@ -989,12 +984,12 @@ void FontSubstConfiguration::readLocaleSubst( const OUString& rBcp47 ) const
                 OUString const aSubstWeightStr    ( "FontWeight" );
                 OUString const aSubstWidthStr     ( "FontWidth" );
                 OUString const aSubstTypeStr      ( "FontType" );
-                for( int i = 0; i < nFonts; i++ )
+                for( const OUString& rFontName : aFonts )
                 {
                     Reference< XNameAccess > xFont;
                     try
                     {
-                        Any aAny = xNode->getByName( pFontNames[i] );
+                        Any aAny = xNode->getByName( rFontName );
                         aAny >>= xFont;
                     }
                     catch (const NoSuchElementException&)
@@ -1005,13 +1000,13 @@ void FontSubstConfiguration::readLocaleSubst( const OUString& rBcp47 ) const
                     }
                     if( ! xFont.is() )
                     {
-                        SAL_WARN("unotools.config", "did not get font attributes for " << pFontNames[i]);
+                        SAL_WARN("unotools.config", "did not get font attributes for " << rFontName);
                         continue;
                     }
 
                     FontNameAttr aAttr;
                     // read subst attributes from config
-                    aAttr.Name = pFontNames[i];
+                    aAttr.Name = rFontName;
                     fillSubstVector( xFont, aSubstFontsStr, aAttr.Substitutions );
                     fillSubstVector( xFont, aSubstFontsMSStr, aAttr.MSSubstitutions );
                     aAttr.Weight = getSubstWeight( xFont, aSubstWeightStr );

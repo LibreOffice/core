@@ -241,21 +241,21 @@ bool utl::UCBContentHelper::MakeFolder(
     try {
         css::uno::Sequence<css::ucb::ContentInfo> info(
             parent.queryCreatableContentsInfo());
-        for (sal_Int32 i = 0; i < info.getLength(); ++i) {
+        for (const auto& rInfo : info) {
             // Simply look for the first KIND_FOLDER:
-            if ((info[i].Attributes
+            if ((rInfo.Attributes
                  & css::ucb::ContentInfoAttribute::KIND_FOLDER)
                 != 0)
             {
                 // Make sure the only required bootstrap property is "Title":
-                if ( info[i].Properties.getLength() != 1 || info[i].Properties[0].Name != "Title" )
+                if ( rInfo.Properties.getLength() != 1 || rInfo.Properties[0].Name != "Title" )
                 {
                     continue;
                 }
                 css::uno::Sequence<OUString> keys { "Title" };
                 css::uno::Sequence<css::uno::Any> values(1);
                 values[0] <<= title;
-                if (parent.insertNewContent(info[i].Type, keys, values, result))
+                if (parent.insertNewContent(rInfo.Type, keys, values, result))
                 {
                     return true;
                 }
