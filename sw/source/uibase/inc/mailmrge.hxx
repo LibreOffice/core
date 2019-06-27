@@ -49,50 +49,9 @@ namespace com{namespace sun{namespace star{
     }
 }}}
 
-class SwMailMergeDlg : public SfxModalDialog
+class SwMailMergeDlg : public SfxDialogController
 {
     friend class SwXSelChgLstnr_Impl;
-
-    VclPtr<vcl::Window>     m_pBeamerWin;
-
-    VclPtr<RadioButton>     m_pAllRB;
-    VclPtr<RadioButton>     m_pMarkedRB;
-    VclPtr<RadioButton>     m_pFromRB;
-    VclPtr<NumericField>    m_pFromNF;
-    VclPtr<NumericField>    m_pToNF;
-
-    VclPtr<RadioButton>     m_pPrinterRB;
-    VclPtr<RadioButton>     m_pMailingRB;
-    VclPtr<RadioButton>     m_pFileRB;
-
-    VclPtr<CheckBox>        m_pSingleJobsCB;
-
-    VclPtr<FixedText>       m_pSaveMergedDocumentFT;
-    VclPtr<RadioButton>     m_pSaveSingleDocRB;
-    VclPtr<RadioButton>     m_pSaveIndividualRB;
-
-    VclPtr<CheckBox>        m_pGenerateFromDataBaseCB;
-
-    VclPtr<FixedText>       m_pColumnFT;
-    VclPtr<ListBox>         m_pColumnLB;
-    VclPtr<FixedText>       m_pPathFT;
-    VclPtr<Edit>            m_pPathED;
-    VclPtr<PushButton>      m_pPathPB;
-    VclPtr<FixedText>       m_pFilterFT;
-    VclPtr<ListBox>         m_pFilterLB;
-
-    VclPtr<ListBox>         m_pAddressFieldLB;
-    VclPtr<FixedText>       m_pSubjectFT;
-    VclPtr<Edit>            m_pSubjectED;
-    VclPtr<FixedText>       m_pFormatFT;
-    VclPtr<FixedText>       m_pAttachFT;
-    VclPtr<Edit>            m_pAttachED;
-    VclPtr<PushButton>      m_pAttachPB;
-    VclPtr<CheckBox>        m_pFormatHtmlCB;
-    VclPtr<CheckBox>        m_pFormatRtfCB;
-    VclPtr<CheckBox>        m_pFormatSwCB;
-
-    VclPtr<OKButton>        m_pOkBTN;
 
     std::unique_ptr<SwMailMergeDlg_Impl> pImpl;
 
@@ -106,32 +65,72 @@ class SwMailMergeDlg : public SfxModalDialog
     OUString m_sSaveFilter;
     OUString m_sFilename;
 
-    DECL_LINK( ButtonHdl, Button*, void );
-    DECL_LINK( InsertPathHdl, Button*, void );
-    DECL_LINK( OutputTypeHdl, Button*, void );
-    DECL_LINK( FilenameHdl, Button*, void );
-    DECL_LINK( ModifyHdl, Edit&, void );
-    DECL_LINK( SaveTypeHdl, Button*, void );
+    std::unique_ptr<weld::Container> m_xBeamerWin;
+
+    std::unique_ptr<weld::RadioButton> m_xAllRB;
+    std::unique_ptr<weld::RadioButton> m_xMarkedRB;
+    std::unique_ptr<weld::RadioButton> m_xFromRB;
+    std::unique_ptr<weld::SpinButton> m_xFromNF;
+    std::unique_ptr<weld::SpinButton> m_xToNF;
+
+    std::unique_ptr<weld::RadioButton> m_xPrinterRB;
+    std::unique_ptr<weld::RadioButton> m_xMailingRB;
+    std::unique_ptr<weld::RadioButton> m_xFileRB;
+
+    std::unique_ptr<weld::CheckButton> m_xSingleJobsCB;
+
+    std::unique_ptr<weld::Label> m_xSaveMergedDocumentFT;
+    std::unique_ptr<weld::RadioButton> m_xSaveSingleDocRB;
+    std::unique_ptr<weld::RadioButton> m_xSaveIndividualRB;
+
+    std::unique_ptr<weld::CheckButton> m_xGenerateFromDataBaseCB;
+
+    std::unique_ptr<weld::Label> m_xColumnFT;
+    std::unique_ptr<weld::ComboBox> m_xColumnLB;
+    std::unique_ptr<weld::Label> m_xPathFT;
+    std::unique_ptr<weld::Entry> m_xPathED;
+    std::unique_ptr<weld::Button> m_xPathPB;
+    std::unique_ptr<weld::Label> m_xFilterFT;
+    std::unique_ptr<weld::ComboBox> m_xFilterLB;
+
+    std::unique_ptr<weld::ComboBox> m_xAddressFieldLB;
+    std::unique_ptr<weld::Label> m_xSubjectFT;
+    std::unique_ptr<weld::Entry> m_xSubjectED;
+    std::unique_ptr<weld::Label> m_xFormatFT;
+    std::unique_ptr<weld::Label> m_xAttachFT;
+    std::unique_ptr<weld::Entry> m_xAttachED;
+    std::unique_ptr<weld::Button> m_xAttachPB;
+    std::unique_ptr<weld::CheckButton> m_xFormatHtmlCB;
+    std::unique_ptr<weld::CheckButton> m_xFormatRtfCB;
+    std::unique_ptr<weld::CheckButton> m_xFormatSwCB;
+
+    std::unique_ptr<weld::Button> m_xOkBTN;
+
+    DECL_LINK( ButtonHdl, weld::Button&, void );
+    DECL_LINK( InsertPathHdl, weld::Button&, void );
+    DECL_LINK( OutputTypeHdl, weld::ToggleButton&, void );
+    DECL_LINK( FilenameHdl, weld::ToggleButton&, void );
+    DECL_LINK( ModifyHdl, weld::SpinButton&, void );
+    DECL_LINK( SaveTypeHdl, weld::ToggleButton&, void );
 
     bool            ExecQryShell();
     bool            AskUserFilename() const;
     OUString        GetURLfromPath() const;
 
 public:
-    SwMailMergeDlg(vcl::Window* pParent, SwWrtShell& rSh,
+    SwMailMergeDlg(weld::Window* pParent, SwWrtShell& rSh,
         const OUString& rSourceName,
         const OUString& rTableName,
         sal_Int32 nCommandType,
         const css::uno::Reference< css::sdbc::XConnection>& xConnection,
         css::uno::Sequence< css::uno::Any > const * pSelection);
     virtual ~SwMailMergeDlg() override;
-    virtual void dispose() override;
 
     DBManagerOptions GetMergeType() { return nMergeType; }
 
-    bool IsSaveSingleDoc() const { return m_pSaveSingleDocRB->IsChecked(); }
-    bool IsGenerateFromDataBase() const { return m_pGenerateFromDataBaseCB->IsChecked(); }
-    OUString GetColumnName() const { return m_pColumnLB->GetSelectedEntry(); }
+    bool IsSaveSingleDoc() const { return m_xSaveSingleDocRB->get_active(); }
+    bool IsGenerateFromDataBase() const { return m_xGenerateFromDataBaseCB->get_active(); }
+    OUString GetColumnName() const { return m_xColumnLB->get_active_text(); }
     OUString GetTargetURL() const;
 
     const OUString& GetSaveFilter() const {return m_sSaveFilter;}

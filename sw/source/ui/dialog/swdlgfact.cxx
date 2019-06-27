@@ -243,7 +243,10 @@ short AbstractJavaEditDialog_Impl::Execute()
     return m_xDlg->run();
 }
 
-IMPL_ABSTDLG_BASE(AbstractMailMergeDlg_Impl);
+short AbstractMailMergeDlg_Impl::Execute()
+{
+    return m_xDlg->run();
+}
 
 short AbstractMailMergeCreateFromDlg_Impl::Execute()
 {
@@ -628,42 +631,42 @@ bool AbstractJavaEditDialog_Impl::IsUpdate() const
 
 DBManagerOptions AbstractMailMergeDlg_Impl::GetMergeType()
 {
-    return pDlg->GetMergeType();
+    return m_xDlg->GetMergeType();
 }
 
 const OUString& AbstractMailMergeDlg_Impl::GetSaveFilter() const
 {
-    return pDlg->GetSaveFilter();
+    return m_xDlg->GetSaveFilter();
 }
 
 css::uno::Sequence< css::uno::Any > AbstractMailMergeDlg_Impl::GetSelection() const
 {
-    return pDlg->GetSelection();
+    return m_xDlg->GetSelection();
 }
 
 uno::Reference< sdbc::XResultSet> AbstractMailMergeDlg_Impl::GetResultSet() const
 {
-    return pDlg->GetResultSet();
+    return m_xDlg->GetResultSet();
 }
 
 bool AbstractMailMergeDlg_Impl::IsSaveSingleDoc() const
 {
-    return pDlg->IsSaveSingleDoc();
+    return m_xDlg->IsSaveSingleDoc();
 }
 
 bool AbstractMailMergeDlg_Impl::IsGenerateFromDataBase() const
 {
-    return pDlg->IsGenerateFromDataBase();
+    return m_xDlg->IsGenerateFromDataBase();
 }
 
 OUString AbstractMailMergeDlg_Impl::GetColumnName() const
 {
-    return pDlg->GetColumnName();
+    return m_xDlg->GetColumnName();
 }
 
 OUString AbstractMailMergeDlg_Impl::GetTargetURL() const
 {
-    return pDlg->GetTargetURL();
+    return m_xDlg->GetTargetURL();
 }
 
 bool AbstractMailMergeCreateFromDlg_Impl::IsThisDocument() const
@@ -1050,14 +1053,13 @@ VclPtr<AbstractJavaEditDialog> SwAbstractDialogFactory_Impl::CreateJavaEditDialo
 }
 
 VclPtr<AbstractMailMergeDlg> SwAbstractDialogFactory_Impl::CreateMailMergeDlg(
-                                                vcl::Window* pParent, SwWrtShell& rSh,
+                                                weld::Window* pParent, SwWrtShell& rSh,
                                                 const OUString& rSourceName,
                                                 const OUString& rTableName,
                                                 sal_Int32 nCommandType,
                                                 const uno::Reference< sdbc::XConnection>& xConnection )
 {
-    VclPtr<SwMailMergeDlg> pDlg = VclPtr<SwMailMergeDlg>::Create( pParent, rSh, rSourceName, rTableName, nCommandType, xConnection, nullptr );
-    return VclPtr<AbstractMailMergeDlg_Impl>::Create( pDlg );
+    return VclPtr<AbstractMailMergeDlg_Impl>::Create(std::make_unique<SwMailMergeDlg>(pParent, rSh, rSourceName, rTableName, nCommandType, xConnection, nullptr));
 }
 
 VclPtr<AbstractMailMergeCreateFromDlg> SwAbstractDialogFactory_Impl::CreateMailMergeCreateFromDlg(weld::Window* pParent)
