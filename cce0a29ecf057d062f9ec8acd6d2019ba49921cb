@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_dedbf57a",
+        "filename": "unoxml/source/rdf/librdf_repository.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 700,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-06-27T09:45:16Z",
+      "side": 1,
+      "message": "i\u0027m a bit disappointed that redland is so slow that a cache is necessary... maybe there are other in-memory storage options that are faster? i think redland had at least 2 different ones but i don\u0027t remember why the \"hashes\" is the one we use.\n\nwould it be better to store strings as the keys? there may be different instances of XNode that contain the same string value...\n\nalso the cache shouldn\u0027t keep the instances alive, the XURI might be some writer object or even a whole document.",
+      "revId": "cce0a29ecf057d062f9ec8acd6d2019ba49921cb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
