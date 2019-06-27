@@ -179,8 +179,8 @@
       <menu:menuseparator/>
       <menu:menu menu:id=".uno:RulerMenu">
         <menu:menupopup>
-          <menu:menuitem menu:id=".uno:Ruler" menu:style="text"/>
-          <menu:menuitem menu:id=".uno:VRuler" menu:style="text"/>
+          <menu:menuitem menu:id=".uno:Ruler"/>
+          <menu:menuitem menu:id=".uno:VRuler"/>
         </menu:menupopup>
       </menu:menu>
       <menu:menu menu:id=".uno:ScrollBarMenu">
@@ -200,7 +200,7 @@
       <menu:menuitem menu:id=".uno:ControlCodes"/>
       <menu:menuitem menu:id=".uno:ViewBounds" menu:style="text"/>
       <menu:menuitem menu:id=".uno:TableBoundaries" menu:style="text"/>
-      <menu:menuitem menu:id=".uno:ShowGraphics" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:ShowGraphics"/>
       <menu:menuitem menu:id=".uno:HideWhitespace" menu:style="text"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:ViewTrackChanges"/>
@@ -300,7 +300,7 @@
           <menu:menuitem menu:id=".uno:InsertObjectFloatingFrame"/>
         </menu:menupopup>
       </menu:menu>
-      <menu:menuitem menu:id=".uno:FontworkGalleryFloater" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:FontworkGalleryFloater"/>
       <menu:menuitem menu:id=".uno:InsertCaptionDialog" menu:style="text"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:HyperlinkDialog"/>
@@ -627,12 +627,12 @@
       </menu:menu>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:MergeCells"/>
-      <menu:menuitem menu:id=".uno:SplitCell" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:SplitCell"/>
       <menu:menuitem menu:id=".uno:MergeTable" menu:style="text"/>
       <menu:menuitem menu:id=".uno:SplitTable" menu:style="text"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:Protect"/>
-      <menu:menuitem menu:id=".uno:UnsetCellsReadOnly" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:UnsetCellsReadOnly"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:AutoFormat"/>
       <menu:menuitem menu:id=".uno:TableNumberFormatDialog" menu:style="text"/>
@@ -700,7 +700,7 @@
   <menu:menu menu:id=".uno:ToolsMenu">
     <menu:menupopup>
       <menu:menuitem menu:id=".uno:SpellingAndGrammarDialog"/>
-      <menu:menuitem menu:id=".uno:SpellOnline" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:SpellOnline"/>
       <menu:menuitem menu:id=".uno:ThesaurusDialog" menu:style="text"/>
       <menu:menu menu:id=".uno:LanguageMenu">
         <menu:menupopup>

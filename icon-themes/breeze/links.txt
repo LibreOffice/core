@@ -1267,13 +1267,13 @@ res/reload.png cmd/sc_reload.png
 res/library_16.png cmd/lc_viewdatasourcebrowser.png
 
 res/sc05508.png cmd/sc_reload.png
-res/sc05555.png cmd/sc_editstyle.png
+res/sc05555.png cmd/sc_stylenewbyexample.png
 res/sc05556.png cmd/sc_reload.png
 res/sc05502.png cmd/sc_saveas.png
 res/sc05504.png cmd/sc_print.png
 res/sc05509.png cmd/sc_print.png
 
-res/sc05554.png cmd/sc_formatpaintbrush.png
+res/sc05554.png cmd/sc_backgroundcolor.png
 res/sc05711.png cmd/sc_copy.png
 res/sc05961.png cmd/sc_recsearch.png
 res/sc06300.png cmd/sc_nextrecord.png
@@ -1334,21 +1334,21 @@ sc/res/lc26048.png cmd/lc_autosum.png
 sc/res/lc26050.png cmd/lc_cancel.png
 sc/res/lc26051.png cmd/lc_ok.png
 sc/res/na09.png cmd/sc_animationeffects.png
-sc/res/na010.png cmd/sc_selectobject.png
-sc/res/na011.png cmd/lc_ok.png
+sc/res/na010.png sw/res/sc20234.png
+sc/res/na011.png cmd/sc_ok.png
 sc/res/nc01.png cmd/sc_dbviewtablenames.png
 sc/res/nc02.png cmd/sc_dataranges.png
 sc/res/nc03.png cmd/sc_viewdatasourcebrowser.png
-sc/res/nc04.png cmd/sc_gallery.png
+sc/res/nc04.png cmd/sc_insertgraphic.png
 sc/res/nc05.png cmd/sc_insertobject.png
 sc/res/nc06.png cmd/sc_shownote.png
 sc/res/nc07.png cmd/sc_insertbookmark.png
-sc/res/nc08.png cmd/sc_gallery.png
+sc/res/nc08.png cmd/sc_insertgraphic.png
 sc/res/sc26047.png cmd/sc_dbviewfunctions.png
 sc/res/sc26048.png cmd/sc_autosum.png
 sc/res/sc26050.png cmd/sc_cancel.png
 sc/res/sc26051.png cmd/sc_ok.png
-sc/res/dropurl.png cmd/sc_inserthyperlink.png
+sc/res/dropurl.png cmd/sc_inserthyperlinkcontrol.png
 sc/res/na03.png cmd/sc_dataranges.png
 sc/res/na05.png cmd/sc_upsearch.png
 sc/res/na06.png cmd/sc_downsearch.png
@@ -1622,19 +1622,17 @@ sw/res/lc20556.png cmd/lc_dbviewfunctions.png
 sw/res/lc20557.png cmd/lc_cancel.png
 sw/res/lc20558.png cmd/lc_ok.png
 sw/res/nc20001.png cmd/sc_inserttable.png
-sw/res/nc20002.png cmd/sc_diagramarea.png
-sw/res/nc20003.png cmd/sc_gallery.png
+sw/res/nc20002.png sw/res/sr20003.png
+sw/res/nc20003.png cmd/sc_insertgraphic.png
 sw/res/nc20004.png cmd/sc_insertobject.png
 sw/res/nc20005.png cmd/sc_insertbookmark.png
 sw/res/nc20006.png cmd/sc_insertsection.png
 sw/res/nc20007.png cmd/sc_inserthyperlink.png
 sw/res/nc20008.png cmd/sc_insertreferencefield.png
 sw/res/nc20009.png cmd/sc_insertindexesentry.png
-sw/res/nc20010.png cmd/sc_addwatch.png
-sw/res/nc20011.png cmd/sc_toggleobjectbeziermode.png
-sw/res/sc20234.png cmd/sc_datafilterstandardfilter.png
-sw/res/sc20244.png cmd/sc_datafilterstandardfilter.png
-sw/res/sc20183.png cmd/sc_addwatch.png
+sw/res/nc20010.png cmd/sc_shownote.png
+sw/res/nc20011.png cmd/sc_insertdraw.png
+sw/res/sc20244.png sw/res/sc20234.png
 
 sw/res/re01.png cmd/lc_unsetcellsreadonly.png
 sw/res/re02.png cmd/lc_unsetcellsreadonly.png
@@ -1649,10 +1647,10 @@ sw/res/sc20175.png cmd/sc_nextrecord.png
 sw/res/sc20182.png cmd/sc_anchormenu.png
 sw/res/sc20186.png cmd/sc_prevrecord.png
 sw/res/sc20233.png cmd/sc_ok.png
-sw/res/sc20235.png cmd/sc_editdoc.png
+sw/res/sc20235.png cmd/sc_inserthyperlinkcontrol.png
 sw/res/sc20238.png cmd/sc_insertbookmark.png
 sw/res/sc20239.png cmd/sc_copy.png
-sw/res/sc20245.png cmd/sc_editdoc.png
+sw/res/sc20245.png cmd/sc_insertdraw.png
 sw/res/sc20246.png cmd/sc_insertbookmark.png
 sw/res/sc20248.png cmd/sc_save.png
 sw/res/sc20249.png cmd/sc_navigator.png
@@ -1673,18 +1671,16 @@ sw/res/sf06.png cmd/sc_inserttable.png
 sw/res/sr20000.png cmd/sc_downsearch.png
 sw/res/sr20001.png cmd/sc_upsearch.png
 sw/res/sr20002.png cmd/sc_inserttable.png
-sw/res/sr20003.png cmd/sc_insertframe.png
 sw/res/sr20004.png cmd/sc_showsinglepage.png
-sw/res/sr20005.png cmd/sc_editdoc.png
+sw/res/sr20005.png cmd/sc_insertdraw.png
 sw/res/sr20007.png cmd/sc_insertsection.png
 sw/res/sr20008.png cmd/sc_insertbookmark.png
-sw/res/sr20009.png cmd/sc_toggleobjectbeziermode.png
-sw/res/sr20010.png cmd/sc_drawchart.png
+sw/res/sr20009.png cmd/sc_insertgraphic.png
+sw/res/sr20010.png cmd/sc_insertobject.png
 sw/res/sr20011.png sw/res/nc20000.png
-sw/res/sr20012.png cmd/sc_insertreferencefield.png
 sw/res/sr20013.png cmd/sc_insertfootnote.png
-sw/res/sr20014.png dbaccess/res/exwarning.png
-sw/res/sr20015.png cmd/sc_insertbookmark.png
+sw/res/sr20014.png sw/res/sc20183.png
+sw/res/sr20015.png cmd/sc_shownote.png
 sw/res/sr20016.png cmd/sc_recsearch.png
 sw/res/sr20017.png cmd/sc_insertindexesentry.png
 sw/res/sr20018.png cmd/sc_inserttable.png
@@ -1764,7 +1760,7 @@ cmd/lc_columnwidth.png cmd/lc_setminimalcolumnwidth.png
 # calc toolbar previewbar
 # ==============================================
 cmd/sc_margins.png cmd/sc_pagemargin.png
-cmd/sc_exportasgraphic.png cmd/sc_gallery.png
+cmd/sc_exportasgraphic.png cmd/sc_insertgraphic.png
 cmd/sc_namegroup.png cmd/sc_label.png
 cmd/lc_namegroup.png cmd/lc_label.png
 
