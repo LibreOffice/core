@@ -93,7 +93,7 @@
       </menu:menu>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:CopyObjects"/>
-      <menu:menuitem menu:id=".uno:SelectAll" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:SelectAll"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id="vnd.sun.star.findbar:FocusToFindbar"/>
       <menu:menuitem menu:id=".uno:SearchDialog" menu:style="text"/>
@@ -142,7 +142,7 @@
         </menu:menupopup>
       </menu:menu>
       <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:ShowAnnotations" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:ShowAnnotations"/>
       <menu:menu menu:id=".uno:DisplayQualityMenu">
         <menu:menupopup>
           <menu:menuitem menu:id=".uno:OutputQualityColor" menu:style="radio"/>
@@ -205,12 +205,12 @@
       </menu:menu>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:CapturePoint"/>
-      <menu:menuitem menu:id=".uno:InsertLayer" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:InsertLayer"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:Text"/>
       <menu:menuitem menu:id=".uno:InsertAnnotation"/>
       <menu:menuitem menu:id=".uno:InsertObjectFloatingFrame" menu:style="text"/>
-      <menu:menuitem menu:id=".uno:FontworkGalleryFloater" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:FontworkGalleryFloater"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:HyperlinkDialog"/>
       <menu:menuitem menu:id=".uno:InsertSymbol" menu:style="text"/>
@@ -435,17 +435,17 @@
       <menu:menuitem menu:id=".uno:RenamePage" menu:style="text"/>
       <menu:menuitem menu:id=".uno:DeletePage" menu:style="text"/>
       <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:SaveBackground" menu:style="text"/>
-      <menu:menuitem menu:id=".uno:SelectBackground" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:SaveBackground"/>
+      <menu:menuitem menu:id=".uno:SelectBackground"/>
       <menu:menuitem menu:id=".uno:PageSetup"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:DrawingLayout" menu:style="text"/>
-      <menu:menuitem menu:id=".uno:InsertMasterPage" menu:style="text"/>
-      <menu:menuitem menu:id=".uno:DeleteMasterPage" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:InsertMasterPage"/>
+      <menu:menuitem menu:id=".uno:DeleteMasterPage"/>
       <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:DisplayMasterBackground" menu:style="text"/>
-      <menu:menuitem menu:id=".uno:DisplayMasterObjects" menu:style="text"/>
-      <menu:menuitem menu:id=".uno:MasterLayouts" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:DisplayMasterBackground"/>
+      <menu:menuitem menu:id=".uno:DisplayMasterObjects"/>
+      <menu:menuitem menu:id=".uno:MasterLayouts"/>
       <menu:menuseparator/>
       <menu:menu menu:id=".uno:SlideMoveMenu">
         <menu:menupopup>
@@ -575,11 +575,11 @@
         </menu:menupopup>
       </menu:menu>
       <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:AutoCorrectDlg" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:AutoCorrectDlg"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:ImageMapDialog" menu:style="text"/>
-      <menu:menuitem menu:id=".uno:BmpMask" menu:style="text"/>
-      <menu:menuitem menu:id=".uno:AVMediaPlayer" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:BmpMask"/>
+      <menu:menuitem menu:id=".uno:AVMediaPlayer"/>
       <menu:menuseparator/>
       <menu:menu menu:id=".uno:ToolsFormsMenu">
         <menu:menupopup>

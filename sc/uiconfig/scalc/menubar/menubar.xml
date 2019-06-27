@@ -80,7 +80,7 @@
     <menu:menupopup>
       <menu:menuitem menu:id=".uno:Undo"/>
       <menu:menuitem menu:id=".uno:Redo"/>
-      <menu:menuitem menu:id=".uno:Repeat" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:Repeat"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:Cut"/>
       <menu:menuitem menu:id=".uno:Copy"/>
@@ -97,7 +97,7 @@
         </menu:menupopup>
       </menu:menu>
       <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:SelectAll" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:SelectAll"/>
       <menu:menu menu:id=".uno:EditSelectMenu">
         <menu:menupopup>
           <menu:menuitem menu:id=".uno:TableSelectAll"/>
@@ -152,7 +152,7 @@
       <menu:menuitem menu:id=".uno:StatusBarVisible" menu:style="text"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:ViewRowColumnHeaders" menu:style="text"/>
-      <menu:menuitem menu:id=".uno:ToggleSheetGrid" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:ToggleSheetGrid"/>
       <menu:menu menu:id=".uno:GridMenu">
         <menu:menupopup>
           <menu:menuitem menu:id=".uno:GridVisible" menu:style="text"/>
@@ -161,9 +161,9 @@
         </menu:menupopup>
       </menu:menu>
       <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:ViewValueHighlighting" menu:style="text"/>
-      <menu:menuitem menu:id=".uno:ToggleFormula" menu:style="text"/>
-      <menu:menuitem menu:id=".uno:ShowAnnotations" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:ViewValueHighlighting"/>
+      <menu:menuitem menu:id=".uno:ToggleFormula"/>
+      <menu:menuitem menu:id=".uno:ShowAnnotations"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:SplitWindow"/>
       <menu:menuitem menu:id=".uno:FreezePanes"/>
@@ -251,7 +251,7 @@
       <menu:menuitem menu:id=".uno:DrawText"/>
       <menu:menuitem menu:id=".uno:InsertAnnotation"/>
       <menu:menuitem menu:id=".uno:InsertObjectFloatingFrame" menu:style="text"/>
-      <menu:menuitem menu:id=".uno:FontworkGalleryFloater" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:FontworkGalleryFloater"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:HyperlinkDialog"/>
       <menu:menuitem menu:id=".uno:InsertSymbol"/>
@@ -427,8 +427,8 @@
       </menu:menu>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:ConditionalFormatMenu"/>
-      <menu:menuitem menu:id=".uno:AutoFormat" menu:style="text"/>
-      <menu:menuitem menu:id=".uno:ChooseDesign" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:AutoFormat"/>
+      <menu:menuitem menu:id=".uno:ChooseDesign"/>
       <menu:menuseparator/>
       <menu:menu menu:id=".uno:FormatImageMenu">
         <menu:menupopup>
@@ -504,8 +504,8 @@
       <menu:menuitem menu:id=".uno:FootnoteCellStyles" menu:style="radio"/>
       <menu:menuitem menu:id=".uno:NoteCellStyles" menu:style="radio"/>
       <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:StyleUpdateByExample" menu:style="text"/>
-      <menu:menuitem menu:id=".uno:StyleNewByExample" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:StyleUpdateByExample"/>
+      <menu:menuitem menu:id=".uno:StyleNewByExample"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:DesignerDialog"/>
     </menu:menupopup>
@@ -533,8 +533,8 @@
       </menu:menu>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:DeleteCell"/>
-      <menu:menuitem menu:id=".uno:DeleteRows" menu:style="text"/>
-      <menu:menuitem menu:id=".uno:DeleteColumns" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:DeleteRows"/>
+      <menu:menuitem menu:id=".uno:DeleteColumns"/>
       <menu:menu menu:id=".uno:DelBreakMenu">
         <menu:menupopup>
           <menu:menuitem menu:id=".uno:DeleteRowbreak"/>
@@ -615,39 +615,39 @@
         </menu:menupopup>
       </menu:menu>
       <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:DefineDBName" menu:style="text"/>
-      <menu:menuitem menu:id=".uno:SelectDB" menu:style="text"/>
-      <menu:menuitem menu:id=".uno:DataAreaRefresh" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:DefineDBName"/>
+      <menu:menuitem menu:id=".uno:SelectDB"/>
+      <menu:menuitem menu:id=".uno:DataAreaRefresh"/>
       <menu:menuseparator/>
       <menu:menu menu:id=".uno:DataPilotMenu">
         <menu:menupopup>
-          <menu:menuitem menu:id=".uno:InsertPivotTable" menu:style="text"/>
-          <menu:menuitem menu:id=".uno:RecalcPivotTable" menu:style="text"/>
-          <menu:menuitem menu:id=".uno:DeletePivotTable" menu:style="text"/>
+          <menu:menuitem menu:id=".uno:InsertPivotTable"/>
+          <menu:menuitem menu:id=".uno:RecalcPivotTable"/>
+          <menu:menuitem menu:id=".uno:DeletePivotTable"/>
         </menu:menupopup>
       </menu:menu>
       <menu:menuseparator/>
       <menu:menu menu:id=".uno:CellContentsMenu">
         <menu:menupopup>
-          <menu:menuitem menu:id=".uno:Calculate" menu:style="text"/>
+          <menu:menuitem menu:id=".uno:Calculate"/>
           <menu:menuitem menu:id=".uno:CalculateHard" menu:style="text"/>
           <menu:menuseparator/>
           <menu:menuitem menu:id=".uno:ConvertFormulaToValue" menu:style="text"/>
           <menu:menuitem menu:id=".uno:AutomaticCalculation" menu:style="text"/>
         </menu:menupopup>
       </menu:menu>
-      <menu:menuitem menu:id=".uno:Validation" menu:style="text"/>
-      <menu:menuitem menu:id=".uno:DataSubTotals" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:Validation"/>
+      <menu:menuitem menu:id=".uno:DataSubTotals"/>
       <menu:menuitem menu:id=".uno:DataForm" menu:style="text"/>
       <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:DataStreams" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:DataStreams"/>
       <menu:menuitem menu:id=".uno:ManageXMLSource" menu:style="text"/>
-      <menu:menuitem menu:id=".uno:DataProvider" menu:style="text"/>
-      <menu:menuitem menu:id=".uno:DataProviderRefresh" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:DataProvider"/>
+      <menu:menuitem menu:id=".uno:DataProviderRefresh"/>
       <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:TableOperationDialog" menu:style="text"/>
-      <menu:menuitem menu:id=".uno:TextToColumns" menu:style="text"/>
-      <menu:menuitem menu:id=".uno:DataConsolidate" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:TableOperationDialog"/>
+      <menu:menuitem menu:id=".uno:TextToColumns"/>
+      <menu:menuitem menu:id=".uno:DataConsolidate"/>
       <menu:menu menu:id=".uno:GroupOutlineMenu">
         <menu:menupopup>
           <menu:menuitem menu:id=".uno:Group"/>
@@ -696,12 +696,12 @@
         </menu:menupopup>
       </menu:menu>
       <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:AutoCorrectDlg" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:AutoCorrectDlg" />
       <menu:menuitem menu:id=".uno:AutoComplete" menu:style="text"/>
       <menu:menuitem menu:id=".uno:RedactDoc" menu:style="text"/>
       <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:GoalSeekDialog" menu:style="text"/>
-      <menu:menuitem menu:id=".uno:SolverDialog" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:GoalSeekDialog"/>
+      <menu:menuitem menu:id=".uno:SolverDialog"/>
       <menu:menu menu:id=".uno:AuditMenu">
         <menu:menupopup>
           <menu:menuitem menu:id=".uno:ShowPrecedents"/>
@@ -719,7 +719,7 @@
           <menu:menuitem menu:id=".uno:ShowInvalid"/>
         </menu:menupopup>
       </menu:menu>
-      <menu:menuitem menu:id=".uno:ScenarioManager" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:ScenarioManager"/>
       <menu:menuseparator/>
       <menu:menu menu:id=".uno:ToolsFormsMenu">
         <menu:menupopup>
@@ -738,9 +738,9 @@
         </menu:menupopup>
       </menu:menu>
       <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:ShareDocument" menu:style="text"/>
-      <menu:menuitem menu:id=".uno:Protect" menu:style="text"/>
-      <menu:menuitem menu:id=".uno:ToolProtectionDocument" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:ShareDocument"/>
+      <menu:menuitem menu:id=".uno:Protect"/>
+      <menu:menuitem menu:id=".uno:ToolProtectionDocument"/>
       <menu:menuseparator/>
       <menu:menu menu:id=".uno:MacrosMenu">
         <menu:menupopup>
