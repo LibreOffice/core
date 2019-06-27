@@ -410,26 +410,32 @@ void ScDrawShell::ExecuteAreaDlg( SfxRequest& rReq )
     ScDrawView* pView       = pViewData->GetScDrawView();
     bool        bHasMarked  = pView->AreObjectsMarked();
 
+    std::shared_ptr<SfxRequest> pRequest;
+    pRequest.reset(new SfxRequest(rReq));
+
     SfxItemSet  aNewAttr( pView->GetDefaultAttr() );
     if( bHasMarked )
         pView->MergeAttrFromMarked( aNewAttr, false );
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     vcl::Window* pWin = pViewData->GetDialogParent();
-    ScopedVclPtr<AbstractSvxAreaTabDialog> pDlg(pFact->CreateSvxAreaTabDialog(
+    VclPtr<AbstractSvxAreaTabDialog> pDlg(pFact->CreateSvxAreaTabDialog(
         pWin ? pWin->GetFrameWeld() : nullptr, &aNewAttr,
         pViewData->GetDocument()->GetDrawLayer(), true));
 
-    if ( pDlg->Execute() == RET_OK )
-    {
-        if( bHasMarked )
-            pView->SetAttrToMarked( *pDlg->GetOutputItemSet(), false );
-        else
-            pView->SetDefaultAttr( *pDlg->GetOutputItemSet(), false );
+    pDlg->StartExecuteAsync([=](sal_Int32 nResult){
+        if ( nResult == RET_OK )
+        {
+            if( bHasMarked )
+                pView->SetAttrToMarked( *pDlg->GetOutputItemSet(), false );
+            else
+                pView->SetDefaultAttr( *pDlg->GetOutputItemSet(), false );
 
-        pView->InvalidateAttribs();
-        rReq.Done();
-    }
+            pView->InvalidateAttribs();
+            pRequest->Done();
+        }
+        pDlg->disposeOnce();
+    });
 }
 
 void ScDrawShell::ExecuteTextAttrDlg( SfxRequest& rReq )
