@@ -703,6 +703,19 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const tools::Rectangle&
                                        OUStringToOString(aImageId, RTL_TEXTENCODING_UTF8));
                         imageData = true;
                     }
+                    else
+                    {
+                        sax_fastparser::FastAttributeList* pAttrListQrCode
+                            = FastSerializerHelper::createAttrList();
+
+                        pAttrListQrCode->add(
+                            FSNS(XML_o, XML_qrcode),
+                                OStringBuffer(pSdrGrafObj->getQrCode()).makeStringAndClear());
+
+                        m_pSerializer->singleElementNS(
+                            XML_o, XML_qrcode,
+                            XFastAttributeListRef(pAttrListQrCode));
+                    }
 
                     if (rProps.GetOpt(ESCHER_Prop_fNoFillHitTest, nValue))
                         impl_AddBool(pAttrList, FSNS(XML_o, XML_detectmouseclick), nValue != 0);

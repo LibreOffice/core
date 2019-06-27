@@ -38,6 +38,7 @@
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
+#include <com/sun/star/drawing/QrCode.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
@@ -1350,6 +1351,30 @@ Reference< XShape > ComplexShape::implConvertAndInsert( const Reference< XShapes
             xGraphic = rFilter.getGraphicHelper().importEmbeddedGraphic(aGraphicPath);
             xPropertySet->setPropertyValue("SignatureLineUnsignedImage", uno::makeAny(xGraphic));
         }
+        return xShape;
+    }
+
+    // uno::Reference<graphic::XGraphic> SOME changes may be needed - Please Guide
+    if( getShapeModel().mbIsQrCode )
+    {
+        uno::Reference<graphic::XGraphic> xGraphic;
+
+        Reference< XShape > xShape;
+        if (xGraphic.is())
+        {
+            xShape = SimpleShape::createPictureObject(rxShapes, rShapeRect, xGraphic);
+        }
+        else
+        {
+            xShape = SimpleShape::createEmbeddedPictureObject(rxShapes, rShapeRect, aGraphicPath);
+        }
+
+        // Store qr code properties
+        uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
+        xPropertySet->setPropertyValue(
+            "QrCodeShape",
+            uno::makeAny(getShapeModel().maQrCode));
+
         return xShape;
     }
 
