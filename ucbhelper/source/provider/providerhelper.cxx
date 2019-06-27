@@ -288,8 +288,7 @@ bool ContentProviderImplHelper::renameAdditionalPropertySet(
             {
                 uno::Sequence< OUString > aKeys
                     = xNameAccess->getElementNames();
-                sal_Int32 nCount = aKeys.getLength();
-                if ( nCount > 0 )
+                if ( aKeys.hasElements() )
                 {
                     OUString aOldKeyWithSlash = rOldKey;
                     OUString aOldKeyWithoutSlash;
@@ -302,10 +301,8 @@ bool ContentProviderImplHelper::renameAdditionalPropertySet(
                         aOldKeyWithoutSlash
                             = rOldKey.copy( 0, rOldKey.getLength() - 1 );
 
-                    const OUString* pKeys = aKeys.getConstArray();
-                    for ( sal_Int32 n = 0; n < nCount; ++n )
+                    for ( const OUString& rKey : aKeys )
                     {
-                        const OUString& rKey = pKeys[ n ];
                         if ( rKey.startsWith( aOldKeyWithSlash )
                              || rKey == aOldKeyWithoutSlash )
                         {
@@ -370,8 +367,7 @@ bool ContentProviderImplHelper::copyAdditionalPropertySet(
             {
                 uno::Sequence< OUString > aKeys
                     = xNameAccess->getElementNames();
-                sal_Int32 nCount = aKeys.getLength();
-                if ( nCount > 0 )
+                if ( aKeys.hasElements() )
                 {
                     OUString aSrcKeyWithSlash = rSourceKey;
                     OUString aSrcKeyWithoutSlash;
@@ -384,10 +380,8 @@ bool ContentProviderImplHelper::copyAdditionalPropertySet(
                         aSrcKeyWithoutSlash = rSourceKey.copy(
                             0, rSourceKey.getLength() - 1 );
 
-                    const OUString* pKeys = aKeys.getConstArray();
-                    for ( sal_Int32 n = 0; n < nCount; ++n )
+                    for ( const OUString& rKey : aKeys )
                     {
-                        const OUString& rKey = pKeys[ n ];
                         if ( rKey.startsWith(aSrcKeyWithSlash )
                              || rKey == aSrcKeyWithoutSlash )
                         {
@@ -428,12 +422,11 @@ bool ContentProviderImplHelper::copyAdditionalPropertySet(
         // Obtain all values from old set.
         uno::Sequence< beans::PropertyValue > aValues
             = xOldPropAccess->getPropertyValues();
-        sal_Int32 nCount = aValues.getLength();
 
         uno::Sequence< beans::Property > aProps
             = xPropSetInfo->getProperties();
 
-        if ( nCount )
+        if ( aValues.hasElements() )
         {
             // Fail, if property set with new key already exists.
             uno::Reference< css::ucb::XPersistentPropertySet >
@@ -452,19 +445,13 @@ bool ContentProviderImplHelper::copyAdditionalPropertySet(
             if ( !xNewPropContainer.is() )
                 return false;
 
-            for ( sal_Int32 n = 0; n < nCount; ++n )
+            for ( const beans::PropertyValue& rValue : aValues )
             {
-                const beans::PropertyValue& rValue = aValues[ n ];
-
                 sal_Int16 nAttribs = 0;
-                for ( sal_Int32 m = 0; m < aProps.getLength(); ++m )
-                {
-                    if ( aProps[ m ].Name == rValue.Name )
-                    {
-                        nAttribs = aProps[ m ].Attributes;
-                        break;
-                    }
-                }
+                auto pProp = std::find_if(aProps.begin(), aProps.end(),
+                    [&rValue](const beans::Property& rProp) { return rProp.Name == rValue.Name; });
+                if (pProp != aProps.end())
+                    nAttribs = pProp->Attributes;
 
                 try
                 {
@@ -504,8 +491,7 @@ bool ContentProviderImplHelper::removeAdditionalPropertySet(
             {
                 uno::Sequence< OUString > aKeys
                     = xNameAccess->getElementNames();
-                sal_Int32 nCount = aKeys.getLength();
-                if ( nCount > 0 )
+                if ( aKeys.hasElements() )
                 {
                     OUString aKeyWithSlash = rKey;
                     OUString aKeyWithoutSlash;
@@ -518,10 +504,8 @@ bool ContentProviderImplHelper::removeAdditionalPropertySet(
                         aKeyWithoutSlash
                             = rKey.copy( 0, rKey.getLength() - 1 );
 
-                    const OUString* pKeys = aKeys.getConstArray();
-                    for ( sal_Int32 n = 0; n < nCount; ++n )
+                    for ( const OUString& rCurrKey : aKeys )
                     {
-                        const OUString& rCurrKey = pKeys[ n ];
                         if ( rCurrKey.startsWith(aKeyWithSlash )
                              || rCurrKey == aKeyWithoutSlash )
                         {

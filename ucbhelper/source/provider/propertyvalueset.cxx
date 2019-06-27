@@ -644,8 +644,6 @@ void PropertyValueSet::appendPropertySet(
         if ( xInfo.is() )
         {
             Sequence< Property > aProps      = xInfo->getProperties();
-            const Property*      pProps      = aProps.getConstArray();
-            sal_Int32            nPropsCount = aProps.getLength();
 
             Reference< XPropertyAccess > xPropertyAccess( rxSet, UNO_QUERY );
             if ( xPropertyAccess.is() )
@@ -655,25 +653,15 @@ void PropertyValueSet::appendPropertySet(
                 Sequence< css::beans::PropertyValue > aPropValues
                     = xPropertyAccess->getPropertyValues();
 
-                const css::beans::PropertyValue* pPropValues
-                      = aPropValues.getConstArray();
-
-                sal_Int32 nValuesCount = aPropValues.getLength();
-                for ( sal_Int32 n = 0; n < nValuesCount; ++n )
+                for ( const css::beans::PropertyValue& rPropValue : aPropValues )
                 {
-                    const css::beans::PropertyValue& rPropValue
-                        = pPropValues[ n ];
-
                     // Find info for current property value.
-                    for ( sal_Int32 m = 0; m < nPropsCount; ++m )
+                    auto pProp = std::find_if(aProps.begin(), aProps.end(),
+                        [&rPropValue](const Property& rProp) { return rProp.Name == rPropValue.Name; });
+                    if (pProp != aProps.end())
                     {
-                        const Property& rProp = pProps[ m ];
-                        if ( rProp.Name == rPropValue.Name )
-                        {
-                            // Found!
-                            appendObject( rProp, rPropValue.Value );
-                            break;
-                        }
+                        // Found!
+                        appendObject( *pProp, rPropValue.Value );
                     }
                 }
             }
@@ -681,10 +669,8 @@ void PropertyValueSet::appendPropertySet(
             {
                 // Get every single prop value with one ( remote) call.
 
-                for ( sal_Int32 n = 0; n < nPropsCount; ++n )
+                for ( const Property& rProp : aProps )
                 {
-                    const Property& rProp = pProps[ n ];
-
                     try
                     {
                         Any aValue = rxSet->getPropertyValue( rProp.Name );

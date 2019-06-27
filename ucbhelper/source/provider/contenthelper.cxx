@@ -303,8 +303,7 @@ void SAL_CALL ContentImplHelper::addPropertiesChangeListener(
         m_pImpl->m_pPropertyChangeListeners.reset(
             new PropertyChangeListeners( m_aMutex ));
 
-    sal_Int32 nCount = PropertyNames.getLength();
-    if ( !nCount )
+    if ( !PropertyNames.hasElements() )
     {
         // Note: An empty sequence means a listener for "all" properties.
         m_pImpl->m_pPropertyChangeListeners->addInterface(
@@ -312,11 +311,8 @@ void SAL_CALL ContentImplHelper::addPropertiesChangeListener(
     }
     else
     {
-        const OUString* pSeq = PropertyNames.getConstArray();
-
-        for ( sal_Int32 n = 0; n < nCount; ++n )
+        for ( const OUString& rName : PropertyNames )
         {
-            const OUString& rName = pSeq[ n ];
             if ( !rName.isEmpty() )
                 m_pImpl->m_pPropertyChangeListeners->addInterface(
                     rName, Listener );
@@ -334,8 +330,7 @@ void SAL_CALL ContentImplHelper::removePropertiesChangeListener(
     if ( !m_pImpl->m_pPropertyChangeListeners )
         return;
 
-    sal_Int32 nCount = PropertyNames.getLength();
-    if ( !nCount )
+    if ( !PropertyNames.hasElements() )
     {
         // Note: An empty sequence means a listener for "all" properties.
         m_pImpl->m_pPropertyChangeListeners->removeInterface(
@@ -343,11 +338,8 @@ void SAL_CALL ContentImplHelper::removePropertiesChangeListener(
     }
     else
     {
-        const OUString* pSeq = PropertyNames.getConstArray();
-
-        for ( sal_Int32 n = 0; n < nCount; ++n )
+        for ( const OUString& rName : PropertyNames )
         {
-            const OUString& rName = pSeq[ n ];
             if ( !rName.isEmpty() )
                 m_pImpl->m_pPropertyChangeListeners->removeInterface(
                     rName, Listener );
@@ -671,11 +663,8 @@ void ContentImplHelper::notifyPropertiesChange(
 
         PropertiesEventListenerMap aListeners;
 
-        const beans::PropertyChangeEvent* pEvents = evt.getConstArray();
-
-        for ( sal_Int32 n = 0; n < nCount; ++n )
+        for ( const beans::PropertyChangeEvent& rEvent : evt )
         {
-            const beans::PropertyChangeEvent& rEvent = pEvents[ n ];
             const OUString& rName = rEvent.PropertyName;
 
             cppu::OInterfaceContainerHelper* pPropsContainer

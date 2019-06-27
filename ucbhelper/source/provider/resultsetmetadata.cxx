@@ -316,24 +316,15 @@ sal_Int32 SAL_CALL ResultSetMetaData::getColumnType( sal_Int32 column )
     // Less (remote) calls...
 
                 Sequence< Property > aProps = xInfo->getProperties();
-                const Property* pProps1 = aProps.getConstArray();
-                sal_Int32 nCount1 = aProps.getLength();
 
-                sal_Int32 nCount = m_aProps.getLength();
-                Property* pProps = m_aProps.getArray();
-                for ( sal_Int32 n = 0; n < nCount; ++n )
+                for ( Property& rProp : m_aProps )
                 {
-                    Property& rProp = pProps[ n ];
-
-                    for ( sal_Int32 m = 0; m < nCount1; ++m )
+                    auto pProp = std::find_if(aProps.begin(), aProps.end(),
+                        [&rProp](const Property& rProp1) { return rProp.Name == rProp1.Name; });
+                    if (pProp != aProps.end())
                     {
-                        const Property& rProp1 = pProps1[ m ];
-                        if ( rProp.Name == rProp1.Name )
-                        {
-                            // Found...
-                            rProp.Type = rProp1.Type;
-                            break;
-                        }
+                        // Found...
+                        rProp.Type = pProp->Type;
                     }
                 }
             }

@@ -707,92 +707,85 @@ void SAL_CALL InternetProxyDecider_Impl::changesOccurred(
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
-    sal_Int32 nCount = Event.Changes.getLength();
-    if ( nCount )
+    for ( const util::ElementChange& rElem : Event.Changes )
     {
-        const util::ElementChange* pElementChanges
-            = Event.Changes.getConstArray();
-        for ( sal_Int32 n = 0; n < nCount; ++n )
+        OUString aKey;
+        if ( ( rElem.Accessor >>= aKey ) && !aKey.isEmpty() )
         {
-            const util::ElementChange& rElem = pElementChanges[ n ];
-            OUString aKey;
-            if ( ( rElem.Accessor >>= aKey ) && !aKey.isEmpty() )
+            if ( aKey == PROXY_TYPE_KEY )
             {
-                if ( aKey == PROXY_TYPE_KEY )
+                sal_Int32 tmp;
+                if ( !( rElem.Element >>= tmp ) )
                 {
-                    sal_Int32 tmp;
-                    if ( !( rElem.Element >>= tmp ) )
-                    {
-                        OSL_FAIL( "InternetProxyDecider - changesOccurred - "
-                                    "Error getting config item value!" );
-                    }
-                    else
-                        m_nProxyType = static_cast<ProxyType>(tmp);
+                    OSL_FAIL( "InternetProxyDecider - changesOccurred - "
+                                "Error getting config item value!" );
                 }
-                else if ( aKey == NO_PROXY_LIST_KEY )
+                else
+                    m_nProxyType = static_cast<ProxyType>(tmp);
+            }
+            else if ( aKey == NO_PROXY_LIST_KEY )
+            {
+                OUString aNoProxyList;
+                if ( !( rElem.Element >>= aNoProxyList ) )
                 {
-                    OUString aNoProxyList;
-                    if ( !( rElem.Element >>= aNoProxyList ) )
-                    {
-                        OSL_FAIL( "InternetProxyDecider - changesOccurred - "
-                                    "Error getting config item value!" );
-                    }
+                    OSL_FAIL( "InternetProxyDecider - changesOccurred - "
+                                "Error getting config item value!" );
+                }
 
-                    setNoProxyList( aNoProxyList );
-                }
-                else if ( aKey == HTTP_PROXY_NAME_KEY )
+                setNoProxyList( aNoProxyList );
+            }
+            else if ( aKey == HTTP_PROXY_NAME_KEY )
+            {
+                if ( !( rElem.Element >>= m_aHttpProxy.aName ) )
                 {
-                    if ( !( rElem.Element >>= m_aHttpProxy.aName ) )
-                    {
-                        OSL_FAIL( "InternetProxyDecider - changesOccurred - "
-                                    "Error getting config item value!" );
-                    }
+                    OSL_FAIL( "InternetProxyDecider - changesOccurred - "
+                                "Error getting config item value!" );
                 }
-                else if ( aKey == HTTP_PROXY_PORT_KEY )
+            }
+            else if ( aKey == HTTP_PROXY_PORT_KEY )
+            {
+                if ( !( rElem.Element >>= m_aHttpProxy.nPort ) )
                 {
-                    if ( !( rElem.Element >>= m_aHttpProxy.nPort ) )
-                    {
-                        OSL_FAIL( "InternetProxyDecider - changesOccurred - "
-                                    "Error getting config item value!" );
-                    }
+                    OSL_FAIL( "InternetProxyDecider - changesOccurred - "
+                                "Error getting config item value!" );
+                }
 
-                    if ( m_aHttpProxy.nPort == -1 )
-                        m_aHttpProxy.nPort = 80; // standard HTTP port.
-                }
-                else if ( aKey == HTTPS_PROXY_NAME_KEY )
+                if ( m_aHttpProxy.nPort == -1 )
+                    m_aHttpProxy.nPort = 80; // standard HTTP port.
+            }
+            else if ( aKey == HTTPS_PROXY_NAME_KEY )
+            {
+                if ( !( rElem.Element >>= m_aHttpsProxy.aName ) )
                 {
-                    if ( !( rElem.Element >>= m_aHttpsProxy.aName ) )
-                    {
-                        OSL_FAIL( "InternetProxyDecider - changesOccurred - "
-                                    "Error getting config item value!" );
-                    }
+                    OSL_FAIL( "InternetProxyDecider - changesOccurred - "
+                                "Error getting config item value!" );
                 }
-                else if ( aKey == HTTPS_PROXY_PORT_KEY )
+            }
+            else if ( aKey == HTTPS_PROXY_PORT_KEY )
+            {
+                if ( !( rElem.Element >>= m_aHttpsProxy.nPort ) )
                 {
-                    if ( !( rElem.Element >>= m_aHttpsProxy.nPort ) )
-                    {
-                        OSL_FAIL( "InternetProxyDecider - changesOccurred - "
-                                    "Error getting config item value!" );
-                    }
+                    OSL_FAIL( "InternetProxyDecider - changesOccurred - "
+                                "Error getting config item value!" );
+                }
 
-                    if ( m_aHttpsProxy.nPort == -1 )
-                        m_aHttpsProxy.nPort = 443; // standard HTTPS port.
-                }
-                else if ( aKey == FTP_PROXY_NAME_KEY )
+                if ( m_aHttpsProxy.nPort == -1 )
+                    m_aHttpsProxy.nPort = 443; // standard HTTPS port.
+            }
+            else if ( aKey == FTP_PROXY_NAME_KEY )
+            {
+                if ( !( rElem.Element >>= m_aFtpProxy.aName ) )
                 {
-                    if ( !( rElem.Element >>= m_aFtpProxy.aName ) )
-                    {
-                        OSL_FAIL( "InternetProxyDecider - changesOccurred - "
-                                    "Error getting config item value!" );
-                    }
+                    OSL_FAIL( "InternetProxyDecider - changesOccurred - "
+                                "Error getting config item value!" );
                 }
-                else if ( aKey == FTP_PROXY_PORT_KEY )
+            }
+            else if ( aKey == FTP_PROXY_PORT_KEY )
+            {
+                if ( !( rElem.Element >>= m_aFtpProxy.nPort ) )
                 {
-                    if ( !( rElem.Element >>= m_aFtpProxy.nPort ) )
-                    {
-                        OSL_FAIL( "InternetProxyDecider - changesOccurred - "
-                                    "Error getting config item value!" );
-                    }
+                    OSL_FAIL( "InternetProxyDecider - changesOccurred - "
+                                "Error getting config item value!" );
                 }
             }
         }
