@@ -22,10 +22,9 @@
 #include <tools/gen.hxx>
 #include <vcl/outdev.hxx>
 #include <basegfx/color/bcolormodifier.hxx>
+#include <vcl/outdev/ScopedStates.hxx>
 
-
-using namespace com::sun::star;
-
+using namespace css;
 
 namespace drawinglayer
 {
@@ -55,6 +54,7 @@ namespace drawinglayer
             const basegfx::BColor aProcessedColor(rBColorModifierStack.getModifiedColor(rWrongSpellCandidate.getColor()));
             const bool bMapModeEnabledState(rOutputDevice.IsMapModeEnabled());
 
+            vcl::ScopedAntialiasing a(rOutputDevice, true);
             rOutputDevice.EnableMapMode(false);
             rOutputDevice.SetLineColor(Color(aProcessedColor));
             rOutputDevice.SetFillColor();
