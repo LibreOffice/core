@@ -1461,25 +1461,22 @@ static void lcl_InvalidateAllLowersPrt( SwLayoutFrame* pLayFrame )
     }
 }
 
-bool SwContentFrame::CalcLowers( SwLayoutFrame* pLay, const SwLayoutFrame* pDontLeave,
+bool SwContentFrame::CalcLowers(SwLayoutFrame & rLay, SwLayoutFrame const& rDontLeave,
                                  long nBottom, bool bSkipRowSpanCells )
 {
-    if ( !pLay )
-        return true;
-
-    vcl::RenderContext* pRenderContext = pLay->getRootFrame()->GetCurrShell()->GetOut();
+    vcl::RenderContext* pRenderContext = rLay.getRootFrame()->GetCurrShell()->GetOut();
     // LONG_MAX == nBottom means we have to calculate all
     bool bAll = LONG_MAX == nBottom;
     bool bRet = false;
-    SwContentFrame *pCnt = pLay->ContainsContent();
-    SwRectFnSet aRectFnSet(pLay);
+    SwContentFrame *pCnt = rLay.ContainsContent();
+    SwRectFnSet aRectFnSet(&rLay);
 
     // FME 2007-08-30 #i81146# new loop control
     int nLoopControlRuns = 0;
     const int nLoopControlMax = 10;
     const SwModify* pLoopControlCond = nullptr;
 
-    while ( pCnt && pDontLeave->IsAnLower( pCnt ) )
+    while (pCnt && rDontLeave.IsAnLower(pCnt))
     {
         // #115759# - check, if a format of content frame is
         // possible. Thus, 'copy' conditions, found at the beginning of
@@ -1535,7 +1532,7 @@ bool SwContentFrame::CalcLowers( SwLayoutFrame* pLay, const SwLayoutFrame* pDont
                     if ( nLoopControlRuns < nLoopControlMax )
                     {
                         // restart format with first content
-                        pCnt = pLay->ContainsContent();
+                        pCnt = rLay.ContainsContent();
                         continue;
                     }
 
@@ -1543,6 +1540,11 @@ bool SwContentFrame::CalcLowers( SwLayoutFrame* pLay, const SwLayoutFrame* pDont
                     OSL_FAIL( "LoopControl in SwContentFrame::CalcLowers" );
 #endif
                 }
+            }
+            if (!rDontLeave.IsAnLower(pCnt)) // moved backward?
+            {
+                pCnt = rLay.ContainsContent();
+                continue; // avoid formatting new upper on different page
             }
             pCnt->GetUpper()->Calc(pRenderContext);
         }
@@ -1599,7 +1601,7 @@ static bool lcl_InnerCalcLayout( SwFrame *pFrame,
     return bRet;
 }
 
-static void lcl_RecalcRow( SwRowFrame* pRow, long nBottom )
+static void lcl_RecalcRow(SwRowFrame *const pRow, long const nBottom)
 {
     // FME 2007-08-30 #i81146# new loop control
     int nLoopControlRuns_1 = 0;
@@ -1639,7 +1641,7 @@ static void lcl_RecalcRow( SwRowFrame* pRow, long nBottom )
             OSL_ENSURE(pOriginalRow->GetUpper() && pOriginalRow->GetUpper()->IsTabFrame(), "No table");
             SwTabFrame* pOriginalTab = static_cast<SwTabFrame*>(pRow->GetUpper());
 
-            bCheck = SwContentFrame::CalcLowers( pRow, pRow->GetUpper(), nBottom, true );
+            bCheck = SwContentFrame::CalcLowers(*pRow, *pRow->GetUpper(), nBottom, true);
 
             bool bRowStillExists = false;
             SwFrame* pTestRow = pOriginalTab->Lower();
@@ -1677,7 +1679,7 @@ static void lcl_RecalcRow( SwRowFrame* pRow, long nBottom )
                         SwCellFrame& rToRecalc = 0 == i ?
                                                const_cast<SwCellFrame&>(pCellFrame->FindStartEndOfRowSpanCell( true )) :
                                                *pCellFrame;
-                        bCheck  |= SwContentFrame::CalcLowers( &rToRecalc, &rToRecalc, nBottom, false );
+                        bCheck |= SwContentFrame::CalcLowers(rToRecalc, rToRecalc, nBottom, false);
                     }
 
                     pCellFrame = static_cast<SwCellFrame*>(pCellFrame->GetNext());
