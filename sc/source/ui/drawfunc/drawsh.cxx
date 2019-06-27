@@ -373,6 +373,9 @@ void ScDrawShell::ExecuteLineDlg( SfxRequest& rReq )
     const SdrObject*    pObj        = nullptr;
     const SdrMarkList&  rMarkList   = pView->GetMarkedObjectList();
 
+    std::shared_ptr<SfxRequest> pRequest;
+    pRequest.reset(new SfxRequest(rReq));
+
     if( rMarkList.GetMarkCount() == 1 )
         pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
 
@@ -381,22 +384,25 @@ void ScDrawShell::ExecuteLineDlg( SfxRequest& rReq )
         pView->MergeAttrFromMarked( aNewAttr, false );
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateSvxLineTabDialog( pViewData->GetDialogParent(),
+    VclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateSvxLineTabDialog( pViewData->GetDialogParent(),
                 &aNewAttr,
             pViewData->GetDocument()->GetDrawLayer(),
             pObj,
             bHasMarked));
 
-    if ( pDlg->Execute() == RET_OK )
-    {
-        if( bHasMarked )
-            pView->SetAttrToMarked( *pDlg->GetOutputItemSet(), false );
-        else
-            pView->SetDefaultAttr( *pDlg->GetOutputItemSet(), false );
+    pDlg->StartExecuteAsync([=](sal_Int32 nResult){
+        if ( nResult == RET_OK )
+        {
+            if( bHasMarked )
+                pView->SetAttrToMarked( *pDlg->GetOutputItemSet(), false );
+            else
+                pView->SetDefaultAttr( *pDlg->GetOutputItemSet(), false );
 
-        pView->InvalidateAttribs();
-        rReq.Done();
-    }
+            pView->InvalidateAttribs();
+            pRequest->Done();
+        }
+        pDlg->disposeOnce();
+    });
 }
 
 void ScDrawShell::ExecuteAreaDlg( SfxRequest& rReq )
