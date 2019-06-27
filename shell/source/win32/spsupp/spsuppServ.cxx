@@ -128,7 +128,9 @@ STDAPI DllRegisterServer(void)
     if (FAILED(hr))
         return hr;
 
-    return Registrar(CLSID_spsupp).RegisterObject(LIBID_spsupp, L"LOSPSupport", L"OpenDocuments", 1, szFile, true);
+    // Default is v.5
+    return Registrar(CLSID_spsupp)
+        .RegisterObject(LIBID_spsupp, L"LOSPSupport", L"OpenDocuments", { 5, 1, 2, 3, 4 }, szFile);
 }
 
 STDAPI DllUnregisterServer(void)
@@ -148,7 +150,8 @@ STDAPI DllUnregisterServer(void)
     if (FAILED(hr))
         return hr;
 
-    return Registrar(CLSID_spsupp).UnRegisterObject(L"LOSPSupport", L"OpenDocuments", 1);
+    return Registrar(CLSID_spsupp)
+        .UnRegisterObject(L"LOSPSupport", L"OpenDocuments", { 1, 2, 3, 4, 5 });
 }
 
 // This is called when regsvr32.exe is called with "/i" flag
@@ -162,19 +165,12 @@ STDAPI DllInstall(BOOL bInstall, _In_opt_ PCWSTR pszCmdLine)
         Registrar registrar(CLSID_spsupp);
         if (bInstall)
         {
-            hr = registrar.RegisterProgID(L"SharePoint", L"OpenDocuments", 3, true);
-            if (SUCCEEDED(hr))
-                hr = registrar.RegisterProgID(L"SharePoint", L"OpenDocuments", 2, false);
-            if (SUCCEEDED(hr))
-                hr = registrar.RegisterProgID(L"SharePoint", L"OpenDocuments", 1, false);
+            // Default is v.5
+            hr = registrar.RegisterProgIDs(L"SharePoint", L"OpenDocuments", { 5, 1, 2, 3, 4 });
         }
         else
         {
-            // Try all ProgIDs regardless of error, but make sure to return failure result if at least one failed
-            hr = registrar.UnRegisterProgID(L"SharePoint", L"OpenDocuments", 1);
-            HRESULT hrLast;
-            hr = SUCCEEDED(hrLast = registrar.UnRegisterProgID(L"SharePoint", L"OpenDocuments", 2)) ? hr : hrLast;
-            hr = SUCCEEDED(hrLast = registrar.UnRegisterProgID(L"SharePoint", L"OpenDocuments", 3)) ? hr : hrLast;
+            hr = registrar.UnRegisterProgIDs(L"SharePoint", L"OpenDocuments", { 1, 2, 3, 4, 5 });
         }
         return hr;
     }
