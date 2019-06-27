@@ -2070,11 +2070,23 @@ bool ScColumn::ParseString(
                 if (!bIsNumberFormat)
                     break;
 
-                // convert back to the original language if a built-in format was detected
-                if (!pOldFormat)
-                    pOldFormat = aParam.mpNumFormatter->GetEntry( nOldIndex );
-                if ( pOldFormat )
-                    nIndex = aParam.mpNumFormatter->GetFormatForLanguageIfBuiltIn( nIndex, pOldFormat->GetLanguage() );
+                // If we have bForceFormatDate, the pOldFormat was/is of
+                // nOldIndex date(+time) type already, if detected type is
+                // compatible keep the original format.
+                if (bForceFormatDate && SvNumberFormatter::IsCompatible(
+                            eNumFormatType, aParam.mpNumFormatter->GetType( nIndex)))
+                {
+                    nIndex = nOldIndex;
+                }
+                else
+                {
+                    // convert back to the original language if a built-in format was detected
+                    if (!pOldFormat)
+                        pOldFormat = aParam.mpNumFormatter->GetEntry( nOldIndex );
+                    if (pOldFormat)
+                        nIndex = aParam.mpNumFormatter->GetFormatForLanguageIfBuiltIn(
+                                nIndex, pOldFormat->GetLanguage());
+                }
 
                 rCell.set(nVal);
                 if ( nIndex != nOldIndex)
