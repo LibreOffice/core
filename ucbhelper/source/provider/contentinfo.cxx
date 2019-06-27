@@ -137,12 +137,8 @@ uno::Sequence< beans::Property > SAL_CALL PropertySetInfo::getProperties()
                         sal_Int32 nPos = m_pProps->getLength();
                         m_pProps->realloc( nPos + nAddProps );
 
-                        beans::Property* pProps = m_pProps->getArray();
-                        const beans::Property* pAddProps
-                            = rAddProps.getConstArray();
-
-                        for ( sal_Int32 n = 0; n < nAddProps; ++n, ++nPos )
-                            pProps[ nPos ] = pAddProps[ n ];
+                        std::copy(rAddProps.begin(), rAddProps.end(),
+                                  std::next(m_pProps->begin(), nPos));
                     }
                 }
             }

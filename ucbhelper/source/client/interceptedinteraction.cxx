@@ -48,17 +48,13 @@ InterceptedInteraction::EInterceptionState InterceptedInteraction::intercepted(
 css::uno::Reference< css::task::XInteractionContinuation > InterceptedInteraction::extractContinuation(const css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > >& lContinuations,
                                                                                                        const css::uno::Type&                                                                   aType         )
 {
-    const css::uno::Reference< css::task::XInteractionContinuation >* pContinuations = lContinuations.getConstArray();
-
-    sal_Int32 c = lContinuations.getLength();
-    sal_Int32 i = 0;
-
-    for (i=0; i<c; ++i)
-    {
-        css::uno::Reference< css::uno::XInterface > xCheck(pContinuations[i], css::uno::UNO_QUERY);
-        if (xCheck->queryInterface(aType).hasValue())
-            return pContinuations[i];
-    }
+    const css::uno::Reference< css::task::XInteractionContinuation >* pContinuations = std::find_if(lContinuations.begin(), lContinuations.end(),
+        [&aType](const css::uno::Reference< css::task::XInteractionContinuation >& rContinuation) {
+            css::uno::Reference< css::uno::XInterface > xCheck(rContinuation, css::uno::UNO_QUERY);
+            return xCheck->queryInterface(aType).hasValue();
+        });
+    if (pContinuations != lContinuations.end())
+        return *pContinuations;
 
     return css::uno::Reference< css::task::XInteractionContinuation >();
 }
