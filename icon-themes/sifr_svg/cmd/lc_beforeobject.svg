@@ -1,10 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-  <path
-     style="fill:#555753"
-     d="M 6 2 L 2 6 L 18 6 L 22 2 L 6 2 z M 11 7 L 7 11 L 10 11 L 10 15 L 13 15 L 13 11 L 16 11 L 12 7 L 11 7 z M 1 13 L 1 14 L 2 14 L 2 13 L 1 13 z M 3 13 L 3 14 L 4 14 L 4 13 L 3 13 z M 5 13 L 5 14 L 6 14 L 6 13 L 5 13 z M 7 13 L 7 14 L 8 14 L 8 13 L 7 13 z M 15 13 L 15 14 L 16 14 L 16 13 L 15 13 z M 17 13 L 17 14 L 18 14 L 18 13 L 17 13 z M 19 13 L 19 14 L 20 14 L 20 13 L 19 13 z M 21 13 L 21 14 L 22 14 L 22 13 L 21 13 z M 1 15 L 1 16 L 2 16 L 2 15 L 1 15 z M 21 15 L 21 16 L 22 16 L 22 15 L 21 15 z M 1 17 L 1 18 L 2 18 L 2 17 L 1 17 z M 21 17 L 21 18 L 22 18 L 22 17 L 21 17 z M 1 19 L 1 20 L 2 20 L 2 19 L 1 19 z M 21 19 L 21 20 L 22 20 L 22 19 L 21 19 z M 1 21 L 1 22 L 2 22 L 2 21 L 1 21 z M 3 21 L 3 22 L 4 22 L 4 21 L 3 21 z M 5 21 L 5 22 L 6 22 L 6 21 L 5 21 z M 7 21 L 7 22 L 8 22 L 8 21 L 7 21 z M 9 21 L 9 22 L 10 22 L 10 21 L 9 21 z M 11 21 L 11 22 L 12 22 L 12 21 L 11 21 z M 13 21 L 13 22 L 14 22 L 14 21 L 13 21 z M 15 21 L 15 22 L 16 22 L 16 21 L 15 21 z M 17 21 L 17 22 L 18 22 L 18 21 L 17 21 z M 19 21 L 19 22 L 20 22 L 20 21 L 19 21 z M 21 21 L 21 22 L 22 22 L 22 21 L 21 21 z "
-     />
-  <path
-     style="opacity:0.35;fill:#555753"
-     d="M 7 16 L 3 20 L 16 20 L 20 16 L 7 16 z "
-     />
-</svg>
+<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><g fill="#555753"><path d="m6 2-4 4h16l4-4zm5 5-4 4h3v4h3v-4h3l-4-4zm-10 6v1h1v-1zm2 0v1h1v-1zm2 0v1h1v-1zm2 0v1h1v-1zm8 0v1h1v-1zm2 0v1h1v-1zm2 0v1h1v-1zm2 0v1h1v-1zm-20 2v1h1v-1zm20 0v1h1v-1zm-20 2v1h1v-1zm20 0v1h1v-1zm-20 2v1h1v-1zm20 0v1h1v-1zm-20 2v1h1v-1zm2 0v1h1v-1zm2 0v1h1v-1zm2 0v1h1v-1zm2 0v1h1v-1zm2 0v1h1v-1zm2 0v1h1v-1zm2 0v1h1v-1zm2 0v1h1v-1zm2 0v1h1v-1zm2 0v1h1v-1z"/><path d="m7 16-4 4h13l4-4z" opacity=".35"/></g></svg>
