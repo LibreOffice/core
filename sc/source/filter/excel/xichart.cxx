@@ -88,6 +88,8 @@
 #include <compiler.hxx>
 #include <reftokenhelper.hxx>
 #include <chartlis.hxx>
+#include <globstr.hrc>
+#include <scresid.hxx>
 #include <xltracer.hxx>
 #include <xltools.hxx>
 #include <xistream.hxx>
@@ -4181,7 +4183,7 @@ void XclImpChChart::FinalizeTitle()
             if( !mxTitle )
                 mxTitle.reset( new XclImpChText( GetChRoot() ) );
             if( aAutoTitle.isEmpty() )
-                aAutoTitle = "Chart Title";
+                aAutoTitle = ScResId(STR_CHARTTITLE);
         }
     }
 
