@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_9b47cfbd",
+        "filename": "vcl/source/gdi/salgdilayout.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 822,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2019-06-27T01:45:54Z",
+      "side": 1,
+      "message": "This is the only part I can imagine to affect Windows. I\u0027m not sure it\u0027s correct to return false for an empty ControlRegion. Maybe it should bee an assert too.",
+      "revId": "be3984809020f51031d10f6bef5edf0a6a3907d7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
