@@ -94,6 +94,127 @@ void SvPasteObjectDialog::Insert( SotClipboardFormatId nFormat, const OUString& 
     aSupplementMap.insert( std::make_pair( nFormat, rFormatName ) );
 }
 
+void SvPasteObjectDialog::PreGetFormat( const TransferableDataHelper &rHelper )
+{
+    //TODO/LATER: why is the Descriptor never used?!
+    TransferableObjectDescriptor aDesc;
+    if (rHelper.HasFormat(SotClipboardFormatId::OBJECTDESCRIPTOR))
+    {
+        (void)const_cast<TransferableDataHelper&>(rHelper).GetTransferableObjectDescriptor(
+                                SotClipboardFormatId::OBJECTDESCRIPTOR, aDesc);
+    }
+    const DataFlavorExVector* pFormats = &rHelper.GetDataFlavorExVector();
+
+    // create and fill dialog box
+    OUString aSourceName, aTypeName;
+    SvGlobalName aEmptyNm;
+
+    ObjectLB().SetUpdateMode( false );
+
+    DataFlavorExVector::iterator aIter( const_cast<DataFlavorExVector&>(*pFormats).begin() ),
+                                 aEnd( const_cast<DataFlavorExVector&>(*pFormats).end() );
+    while( aIter != aEnd )
+    {
+        SotClipboardFormatId nFormat = (*aIter++).mnSotId;
+
+        std::map< SotClipboardFormatId, OUString >::iterator itName =
+            aSupplementMap.find( nFormat );
+
+        // if there is an "Embed Source" or and "Embedded Object" on the
+        // Clipboard we read the Description and the Source of this object
+        // from an accompanied "Object Descriptor" format on the clipboard
+        // Remember: these formats mostly appear together on the clipboard
+        OUString aName;
+        const OUString* pName = nullptr;
+        if ( itName == aSupplementMap.end() )
+        {
+            SvPasteObjectHelper::GetEmbeddedName(rHelper,aName,aSourceName,nFormat);
+            if ( !aName.isEmpty() )
+                pName = &aName;
+        }
+        else
+        {
+            pName = &(itName->second);
+        }
+
+        if( pName )
+        {
+            aName = *pName;
+
+            if( SotClipboardFormatId::EMBED_SOURCE == nFormat )
+            {
+                if( aDesc.maClassName != aEmptyNm )
+                {
+                    aSourceName = aDesc.maDisplayName;
+
+                    if( aDesc.maClassName == aObjClassName )
+                        aName = aObjName;
+                    else
+                        aName = aTypeName = aDesc.maTypeName;
+                }
+            }
+            else if( SotClipboardFormatId::LINK_SOURCE == nFormat )
+            {
+                continue;
+            }
+            else if( aName.isEmpty() )
+                aName = SvPasteObjectHelper::GetSotFormatUIName( nFormat );
+
+            // Show RICHTEXT only in case RTF is not present.
+            if (nFormat == SotClipboardFormatId::RICHTEXT)
+            {
+                auto it = std::find_if(pFormats->begin(), pFormats->end(),
+                                       [](const DataFlavorEx& rFlavor) {
+                                           return rFlavor.mnSotId == SotClipboardFormatId::RTF;
+                                       });
+                if (it != pFormats->end())
+                    continue;
+            }
+
+            if( LISTBOX_ENTRY_NOTFOUND == ObjectLB().GetEntryPos( aName ) )
+                ObjectLB().SetEntryData(
+                    ObjectLB().InsertEntry( aName ), reinterpret_cast<void*>(nFormat) );
+        }
+    }
+
+    if( aTypeName.isEmpty() && aSourceName.isEmpty() )
+    {
+        if( aDesc.maClassName != aEmptyNm )
+        {
+            aSourceName = aDesc.maDisplayName;
+            aTypeName = aDesc.maTypeName;
+        }
+
+        if( aTypeName.isEmpty() && aSourceName.isEmpty() )
+        {
+            // global resource from svtools (former so3 resource)
+            aSourceName = SvtResId(STR_UNKNOWN_SOURCE);
+        }
+    }
+
+    ObjectLB().SetUpdateMode( true );
+    SelectObject();
+
+    if( !aSourceName.isEmpty() )
+    {
+        if( !aTypeName.isEmpty() )
+            aTypeName += "\n";
+
+        aTypeName += aSourceName;
+        aTypeName = convertLineEnd(aTypeName, GetSystemLineEnd());
+    }
+
+    m_pFtObjectSource->SetText( aTypeName );
+}
+
+SotClipboardFormatId SvPasteObjectDialog::GetFormatOnly()
+{
+    if (ObjectLB().GetSelectedEntryData())
+        return static_cast<SotClipboardFormatId>(reinterpret_cast<sal_uLong>(ObjectLB().GetSelectedEntryData()));
+
+    return SotClipboardFormatId::NONE;
+}
+
 SotClipboardFormatId SvPasteObjectDialog::GetFormat( const TransferableDataHelper& rHelper)
 {
     //TODO/LATER: why is the Descriptor never used?!

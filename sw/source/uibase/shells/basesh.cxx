@@ -380,23 +380,43 @@ void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
                     // destroyed after the paste.
                     SwView* pView = &rView;
                     SotClipboardFormatId nFormatId = SotClipboardFormatId::NONE;
+
                     rReq.Ignore();
                     bIgnore = true;
-                    if(SwTransferable::PasteSpecial( rSh, aDataHelper, nFormatId ))
+                    bool bRet = false;
+
+                    SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+                    VclPtr<SfxAbstractPasteDialog> pDlg(pFact->CreatePasteDialog( &rSh.GetView().GetEditWin() ));
+
+                    // Prepare the dialog
+                    SwTransferable::PrePasteSpecial(rSh, aDataHelper, pDlg);
+                    pDlg->PreGetFormat(aDataHelper);
+
+                    if (pDlg->Execute() == RET_OK)
                     {
-                        SfxViewFrame* pViewFrame = pView->GetViewFrame();
-                        uno::Reference< frame::XDispatchRecorder > xRecorder =
-                            pViewFrame->GetBindings().GetRecorder();
-                        if(xRecorder.is()) {
-                            SfxRequest aReq( pViewFrame, SID_CLIPBOARD_FORMAT_ITEMS );
-                            aReq.AppendItem( SfxUInt32Item( SID_CLIPBOARD_FORMAT_ITEMS, static_cast<sal_uInt32>(nFormatId) ) );
-                            aReq.Done();
+                        nFormatId = pDlg->GetFormatOnly();
+
+                        if( nFormatId != SotClipboardFormatId::NONE )
+                            bRet = SwTransferable::PasteFormat( rSh, aDataHelper, nFormatId );
+
+                        if (bRet)
+                        {
+                            SfxViewFrame* pViewFrame = pView->GetViewFrame();
+                            uno::Reference< frame::XDispatchRecorder > xRecorder =
+                                pViewFrame->GetBindings().GetRecorder();
+                            if(xRecorder.is()) {
+                                SfxRequest aReq( pViewFrame, SID_CLIPBOARD_FORMAT_ITEMS );
+                                aReq.AppendItem( SfxUInt32Item( SID_CLIPBOARD_FORMAT_ITEMS, static_cast<sal_uInt32>(nFormatId) ) );
+                                aReq.Done();
+                            }
                         }
+
+                        if (rSh.IsFrameSelected() || rSh.IsObjSelected())
+                            rSh.EnterSelFrameMode();
+                        pView->AttrChangedNotify( &rSh );
                     }
 
-                    if (rSh.IsFrameSelected() || rSh.IsObjSelected())
-                        rSh.EnterSelFrameMode();
-                    pView->AttrChangedNotify( &rSh );
+                    pDlg->disposeOnce();
                 }
                 else
                     return;

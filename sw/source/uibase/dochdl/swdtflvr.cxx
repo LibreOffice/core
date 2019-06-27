@@ -129,6 +129,7 @@
 #include <comphelper/lok.hxx>
 #include <sfx2/classificationhelper.hxx>
 #include <sfx2/sfxresid.hxx>
+#include <sfx2/sfxdlg.hxx>
 
 #include <memory>
 
@@ -2938,6 +2939,64 @@ bool SwTransferable::PasteUnformatted( SwWrtShell& rSh, TransferableDataHelper& 
 {
     // Plain text == unformatted
     return SwTransferable::PasteFormat( rSh, rData, SotClipboardFormatId::STRING );
+}
+
+void SwTransferable::PrePasteSpecial( SwWrtShell& rSh, TransferableDataHelper& rData, VclPtr<SfxAbstractPasteDialog>& pDlg )
+{
+    DataFlavorExVector aFormats( rData.GetDataFlavorExVector() );
+    TransferableObjectDescriptor aDesc;
+
+    SotExchangeDest nDest = SwTransferable::GetSotDestination( rSh );
+
+    SwTransferable *pClipboard = GetSwTransferable( rData );
+    if( pClipboard )
+    {
+        aDesc = pClipboard->m_aObjDesc;
+        const char* pResId;
+        if( pClipboard->m_eBufferType & TransferBufferType::Document )
+            pResId = STR_PRIVATETEXT;
+        else if( pClipboard->m_eBufferType & TransferBufferType::Graphic )
+            pResId = STR_PRIVATEGRAPHIC;
+        else if( pClipboard->m_eBufferType == TransferBufferType::Ole )
+            pResId = STR_PRIVATEOLE;
+        else
+            pResId = nullptr;
+
+        if (pResId)
+        {
+            if (strcmp(STR_PRIVATEOLE, pResId) == 0 || strcmp(STR_PRIVATEGRAPHIC, pResId) == 0)
+            {
+                // add SotClipboardFormatId::EMBED_SOURCE to the formats. This
+                // format display then the private format name.
+                DataFlavorEx aFlavorEx;
+                aFlavorEx.mnSotId = SotClipboardFormatId::EMBED_SOURCE;
+                aFormats.insert( aFormats.begin(), aFlavorEx );
+            }
+            pDlg->SetObjName( pClipboard->m_aObjDesc.maClassName,
+                                SwResId(pResId) );
+            pDlg->Insert( SotClipboardFormatId::EMBED_SOURCE, aEmptyOUStr );
+        }
+    }
+    else
+    {
+        if( rData.HasFormat( SotClipboardFormatId::OBJECTDESCRIPTOR ) )
+        {
+            (void)rData.GetTransferableObjectDescriptor(
+                                SotClipboardFormatId::OBJECTDESCRIPTOR, aDesc );
+        }
+
+        if( SwTransferable::TestAllowedFormat( rData, SotClipboardFormatId::EMBED_SOURCE, nDest ))
+            pDlg->Insert( SotClipboardFormatId::EMBED_SOURCE, aEmptyOUStr );
+        if( SwTransferable::TestAllowedFormat( rData, SotClipboardFormatId::LINK_SOURCE, nDest ))
+            pDlg->Insert( SotClipboardFormatId::LINK_SOURCE, aEmptyOUStr );
+    }
+
+    if( SwTransferable::TestAllowedFormat( rData, SotClipboardFormatId::LINK, nDest ))
+        pDlg->Insert( SotClipboardFormatId::LINK, SwResId(STR_DDEFORMAT) );
+
+    for( SotClipboardFormatId* pIds = aPasteSpecialIds; *pIds != SotClipboardFormatId::NONE; ++pIds )
+        if( SwTransferable::TestAllowedFormat( rData, *pIds, nDest ))
+            pDlg->Insert( *pIds, aEmptyOUStr );
 }
 
 bool SwTransferable::PasteSpecial( SwWrtShell& rSh, TransferableDataHelper& rData, SotClipboardFormatId& rFormatUsed )
