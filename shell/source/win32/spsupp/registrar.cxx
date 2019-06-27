@@ -76,7 +76,7 @@ namespace {
         return HRESULT_FROM_WIN32(iRetVal);
     }
 
-}
+} // namespace
 
 // see http://stackoverflow.com/questions/284619
 // see https://msdn.microsoft.com/en-us/library/ms691424
@@ -88,12 +88,9 @@ Registrar::Registrar(REFIID riidCLSID)
         E_UNEXPECTED: S_OK;
 }
 
-HRESULT Registrar::RegisterObject(REFIID riidTypeLib,
-                       const wchar_t* sProgram,
-                       const wchar_t* sComponent,
-                       int nVersion,
-                       const wchar_t* Path,
-                       bool bSetDefault)
+HRESULT Registrar::RegisterObject(REFIID riidTypeLib, const wchar_t* sProgram,
+                                  const wchar_t* sComponent, std::initializer_list<int> aVersions,
+                                  const wchar_t* Path)
 {
     if (!wcslen(sComponent) || !wcslen(sProgram))
         return E_INVALIDARG;
@@ -167,15 +164,16 @@ HRESULT Registrar::RegisterObject(REFIID riidTypeLib,
     }
 
     // ProgID
-    return RegisterProgID(sProgram, sComponent, nVersion, bSetDefault);
+    return RegisterProgIDs(sProgram, sComponent, aVersions);
 }
 
-HRESULT Registrar::UnRegisterObject(const wchar_t* sProgram, const wchar_t* sComponent, int nVersion)
+HRESULT Registrar::UnRegisterObject(const wchar_t* sProgram, const wchar_t* sComponent,
+                                    std::initializer_list<int> aVersions)
 {
     if (FAILED(m_ConstructionResult))
         return m_ConstructionResult;
     // ProgID
-    UnRegisterProgID(sProgram, sComponent, nVersion);
+    UnRegisterProgIDs(sProgram, sComponent, aVersions);
     // CLSID
     wchar_t sBuf[MAX_PATH];
     swprintf(sBuf, MAX_PATH, L"CLSID\\%s\\InProcServer32", m_sCLSID);
@@ -187,7 +185,8 @@ HRESULT Registrar::UnRegisterObject(const wchar_t* sProgram, const wchar_t* sCom
     swprintf(sBuf, MAX_PATH, L"CLSID\\%s\\TypeLib", m_sCLSID);
     RegDel(HKEY_CLASSES_ROOT, sBuf);
     swprintf(sBuf, MAX_PATH, L"CLSID\\%s", m_sCLSID);
-    return RegDel(HKEY_CLASSES_ROOT, sBuf);
+    RegDel(HKEY_CLASSES_ROOT, sBuf);
+    return S_OK;
 }
 
 HRESULT Registrar::RegisterProgID(const wchar_t* sProgram, const wchar_t* sComponent, int nVersion, bool bSetDefault)
@@ -218,6 +217,22 @@ HRESULT Registrar::RegisterProgID(const wchar_t* sProgram, const wchar_t* sCompo
         swprintf(sBufKey, MAX_PATH, L"%s.%s\\CurVer", sProgram, sComponent);
         swprintf(sBufVal, MAX_PATH, L"%s.%s.%d", sProgram, sComponent, nVersion);
         hr = RegWrite(HKEY_CLASSES_ROOT, sBufKey, L"", sBufVal);
+    }
+    return hr;
+}
+
+HRESULT Registrar::RegisterProgIDs(const wchar_t* sProgram, const wchar_t* sComponent,
+                                   std::initializer_list<int> aVersions)
+{
+    HRESULT hr = S_OK;
+    bool bDefaultRegistered = false;
+    for (int nVersion : aVersions)
+    {
+        if (SUCCEEDED(hr))
+        {
+            hr = RegisterProgID(sProgram, sComponent, nVersion, !bDefaultRegistered);
+            bDefaultRegistered = true;
+        }
     }
     return hr;
 }
@@ -254,6 +269,20 @@ HRESULT Registrar::UnRegisterProgID(const wchar_t* sProgram, const wchar_t* sCom
         // Always return a failure result if we failed somewhere
         if (FAILED(hr1))
             hr = hr1;
+    }
+    return hr;
+}
+
+HRESULT Registrar::UnRegisterProgIDs(const wchar_t* sProgram, const wchar_t* sComponent,
+                                    std::initializer_list<int> aVersions)
+{
+    HRESULT hr = S_OK;
+    // Try all ProgIDs regardless of error, but make sure to return failure result if some failed
+    for (int nVersion : aVersions)
+    {
+        HRESULT hrLast = UnRegisterProgID(sProgram, sComponent, nVersion);
+        if (SUCCEEDED(hr))
+            hr = hrLast;
     }
     return hr;
 }
