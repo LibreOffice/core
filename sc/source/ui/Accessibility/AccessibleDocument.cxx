@@ -272,6 +272,7 @@ private:
 
 ScChildrenShapes::ScChildrenShapes(ScAccessibleDocument* pAccessibleDocument, ScTabViewShell* pViewShell, ScSplitPos eSplitPos)
     :
+    mbShapesNeedSorting(false),
     mnShapesSelected(0),
     mpViewShell(pViewShell),
     mpAccessibleDocument(pAccessibleDocument),
