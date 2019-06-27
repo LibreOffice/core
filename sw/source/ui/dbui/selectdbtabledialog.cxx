@@ -122,8 +122,8 @@ IMPL_LINK_NOARG(SwSelectDBTableDialog, PreviewHdl, weld::Button&, void)
     pProperties[4].Name = "ShowTreeViewButton";
     pProperties[4].Value <<= false;
 
-    VclPtrInstance< SwDBTablePreviewDialog > pDlg(nullptr, aProperties); //TODO
-    pDlg->Execute();
+    SwDBTablePreviewDialog aDlg(m_xDialog.get(), aProperties);
+    aDlg.run();
 }
 
 OUString SwSelectDBTableDialog::GetSelectedTable(bool& bIsTable)

@@ -461,7 +461,7 @@ public:
     virtual VclPtr<AbstractJavaEditDialog>     CreateJavaEditDialog(weld::Window* pParent,
         SwWrtShell* pWrtSh) = 0;
     virtual VclPtr<AbstractMailMergeDlg>       CreateMailMergeDlg(
-                                                vcl::Window* pParent, SwWrtShell& rSh,
+                                                weld::Window* pParent, SwWrtShell& rSh,
                                                 const OUString& rSourceName,
                                                 const OUString& rTableName,
                                                 sal_Int32 nCommandType,

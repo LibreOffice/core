@@ -749,24 +749,6 @@ bool SwDBManager::GetTableNames(weld::ComboBox& rBox, const OUString& rDBName)
 }
 
 // fill Listbox with column names of a database
-void SwDBManager::GetColumnNames(ListBox* pListBox,
-                             const OUString& rDBName, const OUString& rTableName)
-{
-    SwDBData aData;
-    aData.sDataSource = rDBName;
-    aData.sCommand = rTableName;
-    aData.nCommandType = -1;
-    SwDSParam* pParam = FindDSData(aData, false);
-    uno::Reference< sdbc::XConnection> xConnection;
-    if(pParam && pParam->xConnection.is())
-        xConnection = pParam->xConnection;
-    else
-    {
-        xConnection = RegisterConnection( rDBName );
-    }
-    GetColumnNames(pListBox, xConnection, rTableName);
-}
-
 void SwDBManager::GetColumnNames(weld::ComboBox& rBox,
                              const OUString& rDBName, const OUString& rTableName)
 {
@@ -783,24 +765,6 @@ void SwDBManager::GetColumnNames(weld::ComboBox& rBox,
         xConnection = RegisterConnection( rDBName );
     }
     GetColumnNames(rBox, xConnection, rTableName);
-}
-
-void SwDBManager::GetColumnNames(ListBox* pListBox,
-        uno::Reference< sdbc::XConnection> const & xConnection,
-        const OUString& rTableName)
-{
-    pListBox->Clear();
-    uno::Reference< sdbcx::XColumnsSupplier> xColsSupp = SwDBManager::GetColumnSupplier(xConnection, rTableName);
-    if(xColsSupp.is())
-    {
-        uno::Reference<container::XNameAccess> xCols = xColsSupp->getColumns();
-        const uno::Sequence<OUString> aColNames = xCols->getElementNames();
-        for (const OUString& rColName : aColNames)
-        {
-            pListBox->InsertEntry(rColName);
-        }
-        ::comphelper::disposeComponent( xColsSupp );
-    }
 }
 
 void SwDBManager::GetColumnNames(weld::ComboBox& rBox,
@@ -3046,7 +3010,7 @@ void SwDBManager::ExecuteFormLetter( SwWrtShell& rSh,
         pFound = FindDSConnection(sDataSource, true);
     }
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-    m_pImpl->pMergeDialog = pFact->CreateMailMergeDlg( &rSh.GetView().GetViewFrame()->GetWindow(), rSh,
+    m_pImpl->pMergeDialog = pFact->CreateMailMergeDlg(rSh.GetView().GetViewFrame()->GetWindow().GetFrameWeld(), rSh,
                                                      sDataSource,
                                                      sDataTableOrQuery,
                                                      nCmdType,
