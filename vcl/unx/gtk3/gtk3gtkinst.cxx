@@ -8825,7 +8825,7 @@ private:
     void signal_draw(cairo_t* cr)
     {
         GdkRectangle rect;
-        if (!gdk_cairo_get_clip_rectangle(cr, &rect))
+        if (!m_pSurface || !gdk_cairo_get_clip_rectangle(cr, &rect))
             return;
         tools::Rectangle aRect(Point(rect.x, rect.y), Size(rect.width, rect.height));
         aRect = m_xDevice->PixelToLogic(aRect);
