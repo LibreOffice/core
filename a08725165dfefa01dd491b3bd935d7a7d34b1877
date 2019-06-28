@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_21e694ea",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-06-28T07:43:35Z",
+      "side": 1,
+      "message": "Having full sha here allows linkifying it at https://git.libreoffice.org/core/+/a08725165dfefa01dd491b3bd935d7a7d34b1877 :-)",
+      "range": {
+        "startLine": 9,
+        "startChar": 30,
+        "endLine": 9,
+        "endChar": 50
+      },
+      "revId": "a08725165dfefa01dd491b3bd935d7a7d34b1877",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
