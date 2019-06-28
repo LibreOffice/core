@@ -1930,7 +1930,7 @@ void ChartExport::exportSeries( const Reference<chart2::XChartType>& xChartType,
                         break;
                         case chart::TYPEID_LINE:
                         {
-                            exportMarker(xDataSeries);
+                            exportMarker(xOldPropSet);
                             break;
                         }
                         case chart::TYPEID_PIE:
@@ -1947,12 +1947,12 @@ void ChartExport::exportSeries( const Reference<chart2::XChartType>& xChartType,
                         }
                         case chart::TYPEID_SCATTER:
                         {
-                            exportMarker(xDataSeries);
+                            exportMarker(xOldPropSet);
                             break;
                         }
                         case chart::TYPEID_RADARLINE:
                         {
-                            exportMarker(xDataSeries);
+                            exportMarker(xOldPropSet);
                             break;
                         }
                     }
@@ -3222,12 +3222,20 @@ void ChartExport::exportDataPoints(
                     case chart::TYPEID_BUBBLE:
                     case chart::TYPEID_HORBAR:
                     case chart::TYPEID_BAR:
-                    {
                         pFS->singleElement(FSNS(XML_c, XML_invertIfNegative), XML_val, "0");
-                    }
-                    break;
+                        exportShapeProps(xPropSet);
+                        break;
+
+                    case chart::TYPEID_LINE:
+                    case chart::TYPEID_SCATTER:
+                    case chart::TYPEID_RADARLINE:
+                        exportMarker(xPropSet);
+                        break;
+
+                    default:
+                        exportShapeProps(xPropSet);
+                        break;
                 }
-                exportShapeProps( xPropSet );
 
                 pFS->endElement( FSNS( XML_c, XML_dPt ) );
             }
@@ -3433,9 +3441,8 @@ void ChartExport::exportTrendlines( const Reference< chart2::XDataSeries >& xSer
     }
 }
 
-void ChartExport::exportMarker(const Reference< chart2::XDataSeries >& xSeries)
+void ChartExport::exportMarker(const Reference< XPropertySet >& xPropSet)
 {
-    Reference< XPropertySet > xPropSet( xSeries, uno::UNO_QUERY );
     chart2::Symbol aSymbol;
     if( GetProperty( xPropSet, "Symbol" ) )
         mAny >>= aSymbol;
