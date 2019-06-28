@@ -22,6 +22,30 @@
       "revId": "430c67fcc81fdcf5a768c266e460ad7f780f8b31",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_813be09a",
+        "filename": "basegfx/source/polygon/b2dpolygon.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1344,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2019-06-28T00:00:26Z",
+      "side": 1,
+      "message": "Ah yes, good point. This was the initial implementation, but I forgot to remove it. It should unconditionally assign it here. Thanks.",
+      "parentUuid": "bf659307_3e18f17f",
+      "range": {
+        "startLine": 1344,
+        "startChar": 42,
+        "endLine": 1344,
+        "endChar": 62
+      },
+      "revId": "430c67fcc81fdcf5a768c266e460ad7f780f8b31",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
