@@ -64,19 +64,26 @@
 #include <CustomNotebookbarGenerator.hxx>
 #include <sfx2/notebookbar/SfxNotebookBar.hxx>
 #include <unotools/configmgr.hxx>
+#include <comphelper/processfactory.hxx>
+#include <com/sun/star/frame/theUICommandDescription.hpp>
 
-static bool isCategoryAvailable(OUString& sClassId, OUString& sUIItemID, OUString& sActiveCategory,
+namespace uno = com::sun::star::uno;
+namespace frame = com::sun::star::frame;
+namespace lang = com::sun::star::lang;
+namespace container = com::sun::star::container;
+namespace beans = com::sun::star::beans;
+namespace graphic = com::sun::star::graphic;
+
+static bool isCategoryAvailable(OUString& sClassId, OUString& sUIItemId, OUString& sActiveCategory,
                                 bool& isCategory)
 {
-    if (sClassId == "GtkMenu" && sUIItemID != sActiveCategory)
+    if (sUIItemId == sActiveCategory)
+        return true;
+    else if ((sClassId == "GtkMenu" || sClassId == "GtkGrid") && sUIItemId != sActiveCategory)
     {
         isCategory = false;
         return false;
     }
-    else if (sActiveCategory == "All Commands")
-        return true;
-    else if (sUIItemID == sActiveCategory)
-        return true;
     return false;
 }
 
@@ -102,6 +109,20 @@ static OUString getFileName(const OUString& aFileName)
         return "GroupedbarCompact";
     else
         return "None";
+}
+
+static OUString getModuleId(const OUString& sModuleName)
+{
+    if (sModuleName == "Writer")
+        return OUString("com.sun.star.text.TextDocument");
+    else if (sModuleName == "Draw")
+        return OUString("com.sun.star.drawing.DrawingDocument");
+    else if (sModuleName == "Impress")
+        return OUString("com.sun.star.presentation.PresentationDocument");
+    else if (sModuleName == "Calc")
+        return OUString("com.sun.star.sheet.SpreadsheetDocument");
+    else
+        return OUString("None");
 }
 
 SvxNotebookbarConfigPage::SvxNotebookbarConfigPage(TabPageParent pParent, const SfxItemSet& rSet)
@@ -180,8 +201,8 @@ void SvxNotebookbarConfigPage::Init()
     m_xSaveInListBox->append(sSaveInListBoxID, sScopeName);
     m_xSaveInListBox->set_active_id(sSaveInListBoxID);
 
-    m_xTopLevelListBox->append("All Commands", "All Commands");
-    m_xTopLevelListBox->set_active_id("All Commands");
+    m_xTopLevelListBox->append("NotebookBar", "All Commands");
+    m_xTopLevelListBox->set_active_id("NotebookBar");
     SelectElement();
 }
 
@@ -223,18 +244,69 @@ short SvxNotebookbarConfigPage::QueryReset()
     return nValue;
 }
 
-void SvxConfigPage::InsertEntryIntoNotebookbarTabUI(OUString& sUIItemID, OUString& sUIItemCommand,
-                                                    int nPos, int nStartCol, int nSpace)
+void SvxConfigPage::InsertEntryIntoNotebookbarTabUI(OUString& sClassId, OUString& sUIItemId,
+                                                    OUString& sUIItemCommand, int nPos,
+                                                    int nStartCol)
 {
-    auto xImage = GetSaveInData()->GetImage(sUIItemCommand);
-    if (xImage.is())
-        m_xContentsListBox->set_image(nPos, xImage, nStartCol);
-    OUStringBuffer sDataInTree;
-    for (int nIdx = 0; nIdx < nSpace; nIdx++)
-        sDataInTree.append("    ");
-    sDataInTree.append("-> ");
-    sDataInTree.append(sUIItemID);
-    m_xContentsListBox->set_text(nPos, sDataInTree.makeStringAndClear(), nStartCol + 1);
+    OUString sAppName, sFileName;
+    CustomNotebookbarGenerator::getFileNameAndAppName(sAppName, sFileName);
+
+    css::uno::Reference<css::container::XNameAccess> m_xCommandToLabelMap,
+        m_xGlobalCommandToLabelMap;
+    uno::Reference<uno::XComponentContext> xContext = ::comphelper::getProcessComponentContext();
+    uno::Reference<container::XNameAccess> xNameAccess(
+        css::frame::theUICommandDescription::get(xContext));
+
+    uno::Sequence<beans::PropertyValue> aPropSeq, aGlobalPropSeq;
+
+    xNameAccess->getByName("com.sun.star.text.GlobalDocument") >>= m_xGlobalCommandToLabelMap;
+    xNameAccess->getByName(getModuleId(sAppName)) >>= m_xCommandToLabelMap;
+
+    try
+    {
+        uno::Any aModuleVal = m_xCommandToLabelMap->getByName(sUIItemCommand);
+
+        aModuleVal >>= aPropSeq;
+    }
+    catch (container::NoSuchElementException&)
+    {
+    }
+
+    try
+    {
+        uno::Any aGlobalVal = m_xGlobalCommandToLabelMap->getByName(sUIItemCommand);
+        aGlobalVal >>= aGlobalPropSeq;
+    }
+    catch (container::NoSuchElementException&)
+    {
+    }
+
+    OUString aLabel;
+    for (sal_Int32 i = 0; i < aPropSeq.getLength(); ++i)
+        if (aPropSeq[i].Name == "Name")
+            aPropSeq[i].Value >>= aLabel;
+    if (aLabel.isEmpty())
+        for (sal_Int32 i = 0; i < aGlobalPropSeq.getLength(); ++i)
+            if (aGlobalPropSeq[i].Name == "Name")
+                aGlobalPropSeq[i].Value >>= aLabel;
+
+    OUString aName = SvxConfigPageHelper::stripHotKey(aLabel);
+
+    if (sClassId == "GtkSeparatorMenuItem" || sClassId == "GtkSeparator")
+    {
+        OUString sDataInTree = "--------------------------------------------";
+        m_xContentsListBox->set_text(nPos, sDataInTree, nStartCol + 1);
+    }
+    else
+    {
+        if (aName.isEmpty())
+            aName = sUIItemId;
+        auto xImage = GetSaveInData()->GetImage(sUIItemCommand);
+        if (xImage.is())
+            m_xContentsListBox->set_image(nPos, xImage, nStartCol);
+        m_xContentsListBox->set_text(nPos, aName, nStartCol + 1);
+        m_xContentsListBox->set_id(nPos, sUIItemId);
+    }
 }
 
 void SvxNotebookbarConfigPage::getNodeValue(xmlNode* pNodePtr, NotebookbarEntries& aNodeEntries)
@@ -268,9 +340,10 @@ void SvxNotebookbarConfigPage::getNodeValue(xmlNode* pNodePtr, NotebookbarEntrie
 }
 
 void SvxNotebookbarConfigPage::searchNodeandAttribute(std::vector<NotebookbarEntries>& aEntries,
-                                                      std::vector<OUString>& aCategoryList,
-                                                      OUString& sActiveCategory, xmlNode* pNodePtr,
-                                                      int nPos, bool isCategory)
+                                                      std::vector<CategoriesEntries>& aCategoryList,
+                                                      OUString& sActiveCategory,
+                                                      CategoriesEntries& aCurItemEntry,
+                                                      xmlNode* pNodePtr, bool isCategory)
 {
     pNodePtr = pNodePtr->xmlChildrenNode;
     while (pNodePtr)
@@ -279,11 +352,12 @@ void SvxNotebookbarConfigPage::searchNodeandAttribute(std::vector<NotebookbarEnt
         {
             const char* cNodeName = reinterpret_cast<const char*>(pNodePtr->name);
             OUString sNodeName = charToString(cNodeName);
+            OUString sSecondVal;
             if (sNodeName == "object")
             {
                 xmlChar* UriValue = xmlGetProp(pNodePtr, reinterpret_cast<const xmlChar*>("id"));
                 const char* cUIItemID = reinterpret_cast<const char*>(UriValue);
-                OUString sUIItemID = charToString(cUIItemID);
+                OUString sUIItemId = charToString(cUIItemID);
                 xmlFree(UriValue);
 
                 UriValue = xmlGetProp(pNodePtr, reinterpret_cast<const xmlChar*>("class"));
@@ -291,45 +365,93 @@ void SvxNotebookbarConfigPage::searchNodeandAttribute(std::vector<NotebookbarEnt
                 OUString sClassId = charToString(cClassId);
                 xmlFree(UriValue);
 
-                NotebookbarEntries nodeEntries;
-                if (sClassId == "sfxlo-PriorityHBox" || sClassId == "GtkMenu")
-                    aCategoryList.push_back(sUIItemID);
+                CategoriesEntries aCategoryEntry;
+                if (sClassId == "sfxlo-PriorityHBox")
+                {
+                    aCategoryEntry.sDisplayName = sUIItemId;
+                    aCategoryEntry.sUIItemId = sUIItemId;
+                    aCategoryEntry.sClassType = sClassId;
+                    aCategoryList.push_back(aCategoryEntry);
 
-                if (isCategoryAvailable(sClassId, sUIItemID, sActiveCategory, isCategory)
+                    aCurItemEntry = aCategoryEntry;
+                }
+                else if (sClassId == "sfxlo-PriorityMergedHBox")
+                {
+                    aCategoryEntry.sDisplayName = aCurItemEntry.sDisplayName + " | " + sUIItemId;
+                    aCategoryEntry.sUIItemId = sUIItemId;
+                    aCategoryEntry.sClassType = sClassId;
+
+                    if (aCurItemEntry.sClassType == sClassId)
+                    {
+                        sal_Int32 rPos = 0;
+                        aCategoryEntry.sDisplayName
+                            = aCurItemEntry.sDisplayName.getToken(rPos, ' ', rPos) + " | "
+                              + sUIItemId;
+                    }
+                    aCategoryList.push_back(aCategoryEntry);
+                    aCurItemEntry = aCategoryEntry;
+                }
+                else if (sClassId == "svtlo-ManagedMenuButton")
+                {
+                    sal_Int32 rPos = 1;
+                    sSecondVal = sUIItemId.getToken(rPos, ':', rPos);
+                    if (!sSecondVal.isEmpty())
+                    {
+                        aCategoryEntry.sDisplayName
+                            = aCurItemEntry.sDisplayName + " | " + sSecondVal;
+                        aCategoryEntry.sUIItemId = sSecondVal;
+                        aCategoryList.push_back(aCategoryEntry);
+                    }
+                }
+
+                NotebookbarEntries nodeEntries;
+                if (isCategoryAvailable(sClassId, sUIItemId, sActiveCategory, isCategory)
                     || isCategory)
                 {
                     isCategory = true;
                     if (sClassId == "GtkMenuItem" || sClassId == "GtkToolButton"
-                        || sClassId == "GtkMenuToolButton")
+                        || sClassId == "GtkMenuToolButton"
+                        || (sClassId == "svtlo-ManagedMenuButton" && sSecondVal.isEmpty()))
                     {
-                        nodeEntries.sUIItemID = sUIItemID;
-                        nodeEntries.nPos = nPos;
+                        nodeEntries.sClassId = sClassId;
+                        nodeEntries.sUIItemId = sUIItemId;
+                        nodeEntries.sDisplayName = sUIItemId;
+
                         getNodeValue(pNodePtr, nodeEntries);
                         aEntries.push_back(nodeEntries);
                     }
-                    else
+                    else if (sClassId == "GtkSeparatorMenuItem" || sClassId == "GtkSeparator")
                     {
-                        nodeEntries.sUIItemID = sUIItemID;
-                        nodeEntries.nPos = nPos;
+                        nodeEntries.sClassId = sClassId;
+                        nodeEntries.sUIItemId = sUIItemId;
+                        nodeEntries.sDisplayName = "Null";
+                        nodeEntries.sVisibleValue = "Null";
+                        nodeEntries.sActionName = "Null";
+                        aEntries.push_back(nodeEntries);
+                    }
+                    else if (sClassId == "sfxlo-PriorityHBox"
+                             || sClassId == "sfxlo-PriorityMergedHBox"
+                             || sClassId == "svtlo-ManagedMenuButton")
+                    {
+                        nodeEntries.sClassId = sClassId;
+                        nodeEntries.sUIItemId = sUIItemId;
+                        nodeEntries.sDisplayName
+                            = aCategoryList[aCategoryList.size() - 1].sDisplayName;
                         nodeEntries.sVisibleValue = "Null";
                         nodeEntries.sActionName = "Null";
                         aEntries.push_back(nodeEntries);
                     }
                 }
             }
-            if (isCategory)
-                searchNodeandAttribute(aEntries, aCategoryList, sActiveCategory, pNodePtr, nPos + 1,
-                                       isCategory);
-            else
-                searchNodeandAttribute(aEntries, aCategoryList, sActiveCategory, pNodePtr, nPos,
-                                       isCategory);
+            searchNodeandAttribute(aEntries, aCategoryList, sActiveCategory, aCurItemEntry,
+                                   pNodePtr, isCategory);
         }
         pNodePtr = pNodePtr->next;
     }
 }
 
 void SvxNotebookbarConfigPage::FillFunctionsList(std::vector<NotebookbarEntries>& aEntries,
-                                                 std::vector<OUString>& aCategoryList,
+                                                 std::vector<CategoriesEntries>& aCategoryList,
                                                  OUString& sActiveCategory)
 {
     xmlDocPtr pDoc;
@@ -338,8 +460,10 @@ void SvxNotebookbarConfigPage::FillFunctionsList(std::vector<NotebookbarEntries>
     char* cUIFileUIPath = CustomNotebookbarGenerator::convertToCharPointer(sUIFilePath);
     pDoc = xmlParseFile(cUIFileUIPath);
     pNodePtr = xmlDocGetRootElement(pDoc);
-    int aRightPos = 0;
-    searchNodeandAttribute(aEntries, aCategoryList, sActiveCategory, pNodePtr, aRightPos, false);
+
+    CategoriesEntries aCurItemEntry;
+    searchNodeandAttribute(aEntries, aCategoryList, sActiveCategory, aCurItemEntry, pNodePtr,
+                           false);
     if (pDoc != nullptr)
     {
         xmlFreeDoc(pDoc);
@@ -351,13 +475,41 @@ void SvxNotebookbarConfigPage::SelectElement()
 {
     m_xContentsListBox->clear();
     std::vector<NotebookbarEntries> aEntries;
-    std::vector<OUString> aCategoryList;
+    std::vector<CategoriesEntries> aCategoryList;
     OUString sActiveCategory = m_xTopLevelListBox->get_active_id();
     FillFunctionsList(aEntries, aCategoryList, sActiveCategory);
 
     if (m_xTopLevelListBox->get_count() == 1)
+    {
         for (unsigned long nIdx = 0; nIdx < aCategoryList.size(); nIdx++)
-            m_xTopLevelListBox->append(aCategoryList[nIdx], aCategoryList[nIdx]);
+            m_xTopLevelListBox->append(aCategoryList[nIdx].sUIItemId,
+                                       aCategoryList[nIdx].sDisplayName);
+    }
+    unsigned long nStart = 0;
+    if (aEntries[nStart].sClassId == "sfxlo-PriorityHBox"
+        || aEntries[nStart].sClassId == "sfxlo-PriorityMergedHBox")
+        nStart = 1;
+
+    std::vector<NotebookbarEntries> aTempEntries;
+    for (unsigned long nIdx = nStart; nIdx < aEntries.size(); nIdx++)
+    {
+        if (aEntries[nIdx].sClassId == "svtlo-ManagedMenuButton")
+        {
+            aTempEntries.push_back(aEntries[nIdx]);
+            std::vector<NotebookbarEntries> aGtkEntries;
+            sal_Int32 rPos = 1;
+            sActiveCategory = aEntries[nIdx].sUIItemId.getToken(rPos, ':', rPos);
+            FillFunctionsList(aGtkEntries, aCategoryList, sActiveCategory);
+            for (unsigned long Idx = 0; Idx < aGtkEntries.size(); Idx++)
+                aTempEntries.push_back(aGtkEntries[Idx]);
+            aGtkEntries.clear();
+        }
+        else
+            aTempEntries.push_back(aEntries[nIdx]);
+    }
+
+    aEntries = aTempEntries;
+    aTempEntries.clear();
 
     sal_Int64 nId = 0;
     for (unsigned long nIdx = 0; nIdx < aEntries.size(); nIdx++)
@@ -375,8 +527,8 @@ void SvxNotebookbarConfigPage::SelectElement()
                 m_xContentsListBox->set_toggle(nIdx, TRISTATE_FALSE, 0);
             }
         }
-        InsertEntryIntoNotebookbarTabUI(aEntries[nIdx].sUIItemID, aEntries[nIdx].sActionName, nIdx,
-                                        1, aEntries[nIdx].nPos);
+        InsertEntryIntoNotebookbarTabUI(aEntries[nIdx].sClassId, aEntries[nIdx].sDisplayName,
+                                        aEntries[nIdx].sActionName, nIdx, 1);
         ++nId;
     }
     aEntries.clear();
@@ -393,19 +545,7 @@ SvxNotebookbarEntriesListBox::SvxNotebookbarEntriesListBox(std::unique_ptr<weld:
 
 SvxNotebookbarEntriesListBox::~SvxNotebookbarEntriesListBox() {}
 
-static OUString getUIItemID(OUString sString)
-{
-    sal_Int32 rPos = 1;
-    sString = sString.getToken(rPos, '>', rPos);
-    OUStringBuffer sUIItemID;
-    for (int nIdx = 1; nIdx < sString.getLength(); nIdx++)
-    {
-        sUIItemID.append(sString[nIdx]);
-    }
-    return sUIItemID.makeStringAndClear();
-}
-
-static void EditRegistryFile(OUString& sUIItemID, OUString& sSetEntry,
+static void EditRegistryFile(OUString& sUIItemId, OUString& sSetEntry,
                              OUString& sNotebookbarInterface)
 {
     int nFlag = 0;
@@ -416,7 +556,7 @@ static void EditRegistryFile(OUString& sUIItemID, OUString& sSetEntry,
     {
         sal_Int32 rPos = 0;
         OUString sFirstValue = aOldEntries[nIdx].getToken(rPos, ',', rPos);
-        if (sFirstValue == sUIItemID)
+        if (sFirstValue == sUIItemId)
         {
             aOldEntries[nIdx] = sSetEntry;
             nFlag = 1;
@@ -438,21 +578,21 @@ static void EditRegistryFile(OUString& sUIItemID, OUString& sSetEntry,
 
 void SvxNotebookbarEntriesListBox::ChangedVisibility(int nRow)
 {
-    OUString sUIItemID = m_xControl->get_selected_text();
+    OUString sUIItemId = m_xControl->get_selected_id();
     OUString sAppName;
     OUString sFileName;
     CustomNotebookbarGenerator::getFileNameAndAppName(sAppName, sFileName);
     OUString sNotebookbarInterface = getFileName(sFileName);
+
     OUString sVisible;
-    sUIItemID = getUIItemID(sUIItemID);
     if (m_xControl->get_toggle(nRow, 0) == TRISTATE_TRUE)
         sVisible = "True";
     else
         sVisible = "False";
-    OUString sSetEntries = sUIItemID + ",visible," + sVisible;
+    OUString sSetEntries = sUIItemId + ",visible," + sVisible;
     Sequence<OUString> sSeqOfEntries(1);
     sSeqOfEntries[0] = sSetEntries;
-    EditRegistryFile(sUIItemID, sSetEntries, sNotebookbarInterface);
+    EditRegistryFile(sUIItemId, sSetEntries, sNotebookbarInterface);
     CustomNotebookbarGenerator::modifyCustomizedUIFile(sSeqOfEntries);
     OUString sUIPath = "modules/s" + sAppName.toAsciiLowerCase() + "/ui/";
     sfx2::SfxNotebookBar::ReloadNotebookBar(sUIPath);
