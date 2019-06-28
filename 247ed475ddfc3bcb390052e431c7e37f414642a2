@@ -22,6 +22,30 @@
       "revId": "247ed475ddfc3bcb390052e431c7e37f414642a2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_8c6477bb",
+        "filename": "basegfx/source/polygon/WaveLine.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2019-06-28T13:13:29Z",
+      "side": 1,
+      "message": "Well, there are a lot of good reasons to use float over double, but that\u0027s mostly something we need to reconsider for the complete graphics layer. In this case however there is no difference, so better to go with more standard double. I\u0027ll change that.",
+      "parentUuid": "bf659307_be03a10f",
+      "range": {
+        "startLine": 20,
+        "startChar": 4,
+        "endLine": 20,
+        "endChar": 9
+      },
+      "revId": "247ed475ddfc3bcb390052e431c7e37f414642a2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
