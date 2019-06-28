@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_0124b00c",
+        "filename": "tools/source/fsys/fileutil.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-06-28T08:30:49Z",
+      "side": 1,
+      "message": "Not entirely sure this is actually better.  Whether the parameters are unused depends on the below #if, so they should be [[maybe_unused]] only in the #else branch (and compilers should arguably still warn if they are unused in the #if branch).",
+      "range": {
+        "startLine": 39,
+        "startChar": 24,
+        "endLine": 39,
+        "endChar": 40
+      },
+      "revId": "20b1e6440aacab043753e93be4499e939a80b05b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
