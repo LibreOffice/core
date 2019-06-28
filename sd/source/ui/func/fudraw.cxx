@@ -504,6 +504,8 @@ void FuDraw::ForcePointer(const MouseEvent* pMEvt)
         }
         else if (!mpView->IsAction())
         {
+            SdrObject* pObj = nullptr;
+            SdrPageView* pPV = nullptr;
             SdrViewEvent aVEvt;
             SdrHitKind eHit = SdrHitKind::NONE;
             SdrDragMode eDragMode = mpView->GetDragMode();
@@ -528,7 +530,16 @@ void FuDraw::ForcePointer(const MouseEvent* pMEvt)
                 }
             }
 
-            if (eHit == SdrHitKind::TextEditObj && dynamic_cast< const FuSelection *>( this ) !=  nullptr)
+            if (eHit == SdrHitKind::NONE)
+            {
+                // found nothing -> look after at the masterpage
+                pObj = mpView->PickObj(aPnt, mpView->getHitTolLog(), pPV, SdrSearchOptions::ALSOONMASTER);
+            }
+            else if (eHit == SdrHitKind::UnmarkedObject)
+            {
+                pObj = aVEvt.pObj;
+            }
+            else if (eHit == SdrHitKind::TextEditObj && dynamic_cast< const FuSelection *>( this ) !=  nullptr)
             {
                 sal_uInt16 nSdrObjKind = aVEvt.pObj->GetObjIdentifier();
 
@@ -537,8 +548,27 @@ void FuDraw::ForcePointer(const MouseEvent* pMEvt)
                      nSdrObjKind != OBJ_OUTLINETEXT &&
                      aVEvt.pObj->IsEmptyPresObj() )
                 {
+                    pObj = nullptr;
                     bDefPointer = false;
                     mpWindow->SetPointer(PointerStyle::Arrow);
+                }
+            }
+
+            if (pObj && pMEvt && !pMEvt->IsMod2()
+                && dynamic_cast<const FuSelection*>(this) != nullptr)
+            {
+                // test for ImageMap
+                bDefPointer = !SetPointer(pObj, aPnt);
+
+                if (bDefPointer
+                    && (dynamic_cast<const SdrObjGroup*>(pObj) != nullptr
+                        || dynamic_cast<const E3dScene*>(pObj) != nullptr))
+                {
+                    // take a glance into the group
+                    pObj = mpView->PickObj(aPnt, mpView->getHitTolLog(), pPV,
+                                           SdrSearchOptions::ALSOONMASTER | SdrSearchOptions::DEEP);
+                    if (pObj)
+                        bDefPointer = !SetPointer(pObj, aPnt);
                 }
             }
         }
@@ -549,6 +579,52 @@ void FuDraw::ForcePointer(const MouseEvent* pMEvt)
         mpWindow->SetPointer(mpView->GetPreferredPointer(
                             aPnt, mpWindow, nModifier, bLeftDown));
     }
+}
+
+/**
+ * Set cursor to pointer when in clickable area of an ImageMap
+ *
+ * @return True when pointer was set
+ */
+bool FuDraw::SetPointer(SdrObject* pObj, const Point& rPos)
+{
+    bool bImageMapInfo = SdDrawDocument::GetIMapInfo(pObj) != nullptr;
+
+    if (!bImageMapInfo)
+        return false;
+
+    const SdrLayerIDSet* pVisiLayer = &mpView->GetSdrPageView()->GetVisibleLayers();
+    sal_uInt16 nHitLog(sal_uInt16(mpWindow->PixelToLogic(Size(HITPIX, 0)).Width()));
+    long n2HitLog(nHitLog * 2);
+    Point aHitPosR(rPos);
+    Point aHitPosL(rPos);
+    Point aHitPosT(rPos);
+    Point aHitPosB(rPos);
+
+    aHitPosR.AdjustX(n2HitLog);
+    aHitPosL.AdjustX(-n2HitLog);
+    aHitPosT.AdjustY(n2HitLog);
+    aHitPosB.AdjustY(-n2HitLog);
+
+    if (!pObj->IsClosedObj()
+        || (SdrObjectPrimitiveHit(*pObj, aHitPosR, nHitLog, *mpView->GetSdrPageView(), pVisiLayer,
+                                  false)
+            && SdrObjectPrimitiveHit(*pObj, aHitPosL, nHitLog, *mpView->GetSdrPageView(),
+                                     pVisiLayer, false)
+            && SdrObjectPrimitiveHit(*pObj, aHitPosT, nHitLog, *mpView->GetSdrPageView(),
+                                     pVisiLayer, false)
+            && SdrObjectPrimitiveHit(*pObj, aHitPosB, nHitLog, *mpView->GetSdrPageView(),
+                                     pVisiLayer, false)))
+    {
+        // hit inside the object (without margin) or open object
+        if (SdDrawDocument::GetHitIMapObject(pObj, rPos))
+        {
+            mpWindow->SetPointer(PointerStyle::RefHand);
+            return true;
+        }
+    }
+
+    return false;
 }
 
 /**
