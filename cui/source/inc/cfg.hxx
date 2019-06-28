@@ -448,8 +448,8 @@ protected:
 
     void                InsertEntryIntoUI(SvxConfigEntry* pNewEntryData,
                                           int nPos, int nStartCol);
-    void InsertEntryIntoNotebookbarTabUI(OUString& sUIItemId, OUString& sUIItemCommand, int nPos,
-                                         int nStartCol, int nSpace);
+    void InsertEntryIntoNotebookbarTabUI(OUString& sClassId ,OUString& sUIItemId, OUString& sUIItemCommand, int nPos,
+                                         int nStartCol);
 
     SvxEntries*     FindParentForChild( SvxEntries* pParentEntries,
                                         SvxConfigEntry* pChildData );
