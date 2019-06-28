@@ -1,6 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
- <path 
-     style="fill:#4d4d4d" 
-     d="M 5 4 L 5 20 L 6 20 L 12 20 L 12 19 L 6 19 L 6 5 L 18 5 L 18 13 L 19 13 L 19 4 L 18 4 L 6 4 L 5 4 z M 8 8 L 8 9 L 7 9 L 7 10 L 8 10 L 8 12 L 7 12 L 7 13 L 8 13 L 8 14 L 9 14 L 9 13 L 11 13 L 11 14 L 12 14 L 12 13 L 13 13 L 13 12 L 12 12 L 12 10 L 13 10 L 13 9 L 12 9 L 12 8 L 11 8 L 11 9 L 9 9 L 9 8 L 8 8 z M 9 10 L 11 10 L 11 12 L 9 12 L 9 10 z M 14 14 L 14 15 L 13 15 L 13 16 L 14 16 L 14 18 L 13 18 L 13 19 L 14 19 L 14 20 L 15 20 L 15 19 L 17 19 L 17 20 L 18 20 L 18 19 L 19 19 L 19 18 L 18 18 L 18 16 L 19 16 L 19 15 L 18 15 L 18 14 L 17 14 L 17 15 L 15 15 L 15 14 L 14 14 z M 15 16 L 17 16 L 17 18 L 15 18 L 15 16 z "
-     />
- </svg>
+<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="m5 4v16h1 6v-1h-6v-14h12v8h1v-9h-1-12zm3 4v1h-1v1h1v2h-1v1h1v1h1v-1h2v1h1v-1h1v-1h-1v-2h1v-1h-1v-1h-1v1h-2v-1zm1 2h2v2h-2zm5 4v1h-1v1h1v2h-1v1h1v1h1v-1h2v1h1v-1h1v-1h-1v-2h1v-1h-1v-1h-1v1h-2v-1zm1 2h2v2h-2z" fill="#4d4d4d"/></svg>
