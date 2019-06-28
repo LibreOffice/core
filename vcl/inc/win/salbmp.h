@@ -44,6 +44,7 @@ private:
 
     Gdiplus::Bitmap*    ImplCreateGdiPlusBitmap(const WinSalBitmap& rAlphaSource);
     Gdiplus::Bitmap*    ImplCreateGdiPlusBitmap();
+    virtual void        updateChecksum() const override;
 
 public:
 

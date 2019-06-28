@@ -91,6 +91,21 @@ void WinSalBitmap::Destroy()
     mnBitCount = 0;
 }
 
+void WinSalBitmap::updateChecksum() const
+{
+    if (mbChecksumValid)
+        return;
+
+    WinSalBitmap* pThis = const_cast<WinSalBitmap*>(this);
+
+    if (mhDDB)
+    {
+        pThis->mnChecksum = reinterpret_cast<BitmapChecksum>(mhDDB);
+        pThis->mbChecksumValid = true;
+    }
+    else
+        SalBitmap::updateChecksum();
+}
 class SystemDependentData_GdiPlusBitmap : public basegfx::SystemDependentData
 {
 private:
