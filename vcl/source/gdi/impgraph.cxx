@@ -465,6 +465,7 @@ void ImpGraphic::setPdfData(const std::shared_ptr<uno::Sequence<sal_Int8>>& rPdf
     ensureAvailable();
 
     mpPdfData = rPdfData;
+    mnChecksum = 0;
 }
 
 const std::shared_ptr<uno::Sequence<sal_Int8>>& ImpGraphic::getPdfData() const
@@ -496,6 +497,7 @@ void ImpGraphic::ImplClearGraphics()
     mpGfxLink.reset();
     maVectorGraphicData.reset();
     mpPdfData.reset();
+    mnChecksum = 0;
 }
 
 ImpSwapFile::~ImpSwapFile()
@@ -563,6 +565,7 @@ void ImpGraphic::ImplSetPrepared(bool bAnimated, Size* pSizeHint)
     maSwapInfo.mbIsTransparent = false;
     maSwapInfo.mbIsAlpha = false;
     maSwapInfo.mbIsAnimated = bAnimated;
+    mnChecksum = 0;
 }
 
 void ImpGraphic::ImplClear()
@@ -578,6 +581,7 @@ void ImpGraphic::ImplClear()
     mnSizeBytes = 0;
     vcl::graphic::Manager::get().changeExisting(this, nOldSize);
     maGraphicExternalLink.msURL.clear();
+    mnChecksum = 0;
 }
 
 void ImpGraphic::ImplSetDefaultType()
@@ -1067,6 +1071,7 @@ void ImpGraphic::ImplSetPrefMapMode( const MapMode& rPrefMapMode )
         }
         break;
     }
+    mnChecksum = 0;
 }
 
 sal_uLong ImpGraphic::ImplGetSizeBytes() const
@@ -1360,6 +1365,7 @@ bool ImpGraphic::ImplReadEmbedded( SvStream& rIStm )
 
     rIStm.SetEndian( nOldFormat );
 
+    mnChecksum = 0;
     return bRet;
 }
 
