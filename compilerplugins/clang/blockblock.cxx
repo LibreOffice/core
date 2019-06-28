@@ -43,6 +43,7 @@ public:
     }
 
     bool VisitCompoundStmt(CompoundStmt const * );
+    bool VisitCaseStmt(CaseStmt const * );
 };
 
 bool BlockBlock::VisitCompoundStmt(CompoundStmt const * compound)
@@ -71,6 +72,30 @@ bool BlockBlock::VisitCompoundStmt(CompoundStmt const * compound)
         "inner block here",
          compat::getBeginLoc(inner))
         << inner->getSourceRange();
+    return true;
+}
+
+bool BlockBlock::VisitCaseStmt(CaseStmt const * caseStmt)
+{
+    if (ignoreLocation(caseStmt))
+        return true;
+    auto compoundStmt = dyn_cast<CompoundStmt>(caseStmt->getSubStmt());
+    if (!compoundStmt)
+        return true;
+    if (compoundStmt->size() != 2)
+        return true;
+    auto it = compoundStmt->body_begin();
+    auto inner1 = *it;
+    if (!isa<CompoundStmt>(inner1))
+        return true;
+    ++it;
+    if (!isa<BreakStmt>(*it))
+        return true;
+    report(
+        DiagnosticsEngine::Warning,
+        "block directly inside block",
+         compat::getBeginLoc(compoundStmt))
+        << compoundStmt->getSourceRange();
     return true;
 }
 
