@@ -48,6 +48,91 @@
     },
     {
       "key": {
+        "uuid": "bf659307_c1a8f878",
+        "filename": "offapi/com/sun/star/drawing/GraphicObjectShape.idl",
+        "patchSetId": 13
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-06-28T07:16:08Z",
+      "side": 1,
+      "message": "Call the property just \"QrCode\"?  (Or even \"QRCode\", following existing practice here with properties like \"GraphicURL\".)",
+      "revId": "ffbed1bb90f460356a5a0489759209a1318a6d28",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_2198d468",
+        "filename": "offapi/com/sun/star/drawing/QrCode.idl",
+        "patchSetId": 13
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-06-28T07:16:08Z",
+      "side": 1,
+      "message": "Please add a @since tag.",
+      "revId": "ffbed1bb90f460356a5a0489759209a1318a6d28",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_c173184d",
+        "filename": "offapi/com/sun/star/drawing/QrCode.idl",
+        "patchSetId": 13
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-06-28T07:16:08Z",
+      "side": 1,
+      "message": "Maybe \"Content\" or \"Payload\" would be better names here (\"Text\" might suggest that it is something that will be displayed legibly)?",
+      "revId": "ffbed1bb90f460356a5a0489759209a1318a6d28",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_a1ab8473",
+        "filename": "offapi/com/sun/star/drawing/QrCode.idl",
+        "patchSetId": 13
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-06-28T07:16:08Z",
+      "side": 1,
+      "message": "* What does \"ECC\" mean (if it means \"Error Correction Code\", why is the description \"Error Correction Level\" instead)?  Maybe better to not use an abbreviation.  (Also, there is a curious mismatch in title- vs. all-upper-case for abbreviations here between \"Qr\" in identifier \"QrCode\" and identifier \"ECC\".  See also the discussion of \"Qr\" vs. \"QR\" at offapi/com/sun/star/drawing/GraphicObjectShape.idl.)\n\n* What is the meaning of the values?  Is \"short\" a good type here?  (If there is no very compelling reason to use \"short\", \"long\" is the natural integer type in UNOIDL and should generally be preferred.)",
+      "revId": "ffbed1bb90f460356a5a0489759209a1318a6d28",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_618ecc28",
+        "filename": "offapi/com/sun/star/drawing/QrCode.idl",
+        "patchSetId": 13
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-06-28T07:16:08Z",
+      "side": 1,
+      "message": "What is the meaning of the values?  Again, is \"short\" a good type here?",
+      "revId": "ffbed1bb90f460356a5a0489759209a1318a6d28",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bf659307_41baa8de",
         "filename": "oox/source/export/vmlexport.cxx",
         "patchSetId": 13
