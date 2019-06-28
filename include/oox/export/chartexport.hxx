@@ -182,7 +182,7 @@ private:
     void exportDataLabels( const css::uno::Reference<css::chart2::XDataSeries>& xSeries, sal_Int32 nSeriesLength, sal_Int32 eChartType );
     void exportGrouping( bool isBar = false );
     void exportTrendlines( const css::uno::Reference< css::chart2::XDataSeries >& xSeries );
-    void exportMarker( const css::uno::Reference< css::chart2::XDataSeries >& xSeries );
+    void exportMarker( const css::uno::Reference< css::beans::XPropertySet >& xPropSet );
     void exportSmooth();
     void exportFirstSliceAng();
 

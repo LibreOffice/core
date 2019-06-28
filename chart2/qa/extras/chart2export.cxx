@@ -73,6 +73,7 @@ public:
     void testFdo78290LineChartMarkerX();
     void testFdo78290ScatterChartMarkerX();
     void testFdo78290CombinationChartMarkerX();
+    void testTdf126115IndividualMarker();
     void testAxisNumberFormatODS();
     void testAxisNumberFormatXLS();
     void testDataLabelBordersDOCX();
@@ -170,6 +171,7 @@ public:
     CPPUNIT_TEST(testFdo78290LineChartMarkerX);
     CPPUNIT_TEST(testFdo78290ScatterChartMarkerX);
     CPPUNIT_TEST(testFdo78290CombinationChartMarkerX);
+    CPPUNIT_TEST(testTdf126115IndividualMarker);
     CPPUNIT_TEST(testAxisNumberFormatODS);
     CPPUNIT_TEST(testAxisNumberFormatXLS);
     CPPUNIT_TEST(testDataLabelBordersDOCX);
@@ -799,6 +801,22 @@ void Chart2ExportTest::testFdo78290CombinationChartMarkerX()
     CPPUNIT_ASSERT(pXmlDoc);
     assertXPath(pXmlDoc, "/c:chartSpace[1]/c:chart[1]/c:plotArea[1]/c:lineChart[1]/c:ser[1]/c:marker[1]/c:symbol[1]","val","x");
     assertXPath(pXmlDoc, "/c:chartSpace[1]/c:chart[1]/c:plotArea[1]/c:lineChart[1]/c:ser[1]/c:marker[1]/c:size[1]","val","7");
+}
+
+void Chart2ExportTest::testTdf126115IndividualMarker()
+{
+    // Check individual marker properties.
+    load("/chart2/qa/extras/data/xlsx/", "tdf126115.xlsx");
+    xmlDocPtr pXmlDoc = parseExport("xl/charts/chart", "Calc Office Open XML");
+    CPPUNIT_ASSERT(pXmlDoc);
+    // 1. series
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:scatterChart/c:ser[1]/c:dPt/c:marker/c:symbol", "val", "square");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:scatterChart/c:ser[1]/c:dPt/c:marker/c:size", "val", "8");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:scatterChart/c:ser[1]/c:dPt/c:marker/c:spPr/a:solidFill/a:srgbClr", "val", "ff0000");
+    // 2. series
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:scatterChart/c:ser[2]/c:dPt/c:marker/c:symbol", "val", "x");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:scatterChart/c:ser[2]/c:dPt/c:marker/c:size", "val", "15");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:scatterChart/c:ser[2]/c:dPt/c:marker/c:spPr/a:solidFill/a:srgbClr", "val", "7030a0");
 }
 
 void Chart2ExportTest::testAxisNumberFormatODS()
