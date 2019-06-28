@@ -2,6 +2,98 @@
   "comments": [
     {
       "key": {
+        "uuid": "bf659307_81c0c052",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2019-06-28T05:24:38Z",
+      "side": 1,
+      "message": "what is this?",
+      "range": {
+        "startLine": 142,
+        "startChar": 35,
+        "endLine": 142,
+        "endChar": 41
+      },
+      "revId": "ffbed1bb90f460356a5a0489759209a1318a6d28",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_21b534ef",
+        "filename": "offapi/com/sun/star/drawing/GraphicObjectShape.idl",
+        "patchSetId": 13
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2019-06-28T05:24:38Z",
+      "side": 1,
+      "message": "?",
+      "range": {
+        "startLine": 152,
+        "startChar": 53,
+        "endLine": 152,
+        "endChar": 72
+      },
+      "revId": "ffbed1bb90f460356a5a0489759209a1318a6d28",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_41baa8de",
+        "filename": "oox/source/export/vmlexport.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 717,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2019-06-28T05:24:38Z",
+      "side": 1,
+      "message": "this looks wrong. Please just skip the vmlexport for now.",
+      "range": {
+        "startLine": 708,
+        "startChar": 24,
+        "endLine": 717,
+        "endChar": 68
+      },
+      "revId": "ffbed1bb90f460356a5a0489759209a1318a6d28",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_e1ce5c82",
+        "filename": "oox/source/token/tokens.txt",
+        "patchSetId": 13
+      },
+      "lineNbr": 4161,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2019-06-28T05:24:38Z",
+      "side": 1,
+      "message": "from where did you get these tokens? Where are they specified?",
+      "range": {
+        "startLine": 4161,
+        "startChar": 0,
+        "endLine": 4161,
+        "endChar": 6
+      },
+      "revId": "ffbed1bb90f460356a5a0489759209a1318a6d28",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bf659307_c1ec78f5",
         "filename": "oox/source/vml/vmlshape.cxx",
         "patchSetId": 13
