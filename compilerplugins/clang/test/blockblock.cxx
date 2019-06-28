@@ -21,6 +21,22 @@ int f(bool b1, bool b2) {
     return 1;
 }
 
+void foo(int x)
+{
+    switch (x)
+    {
+        case 1: break;
+        case 2: {} break;
+        case 3:
+        { // expected-error {{block directly inside block [loplugin:blockblock]}}
+            {
+            }
+            break;
+        }
+    }
+}
+
+
 int main() { // expected-error {{block directly inside block [loplugin:blockblock]}}
     { // expected-note {{inner block here [loplugin:blockblock]}}
         int x = 1;
