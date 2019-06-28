@@ -124,6 +124,17 @@ FuSelection::~FuSelection()
     }
 }
 
+namespace {
+    bool lcl_followHyperlinkAllowed(const MouseEvent& rMEvt) {
+        SvtSecurityOptions aSecOpt;
+        if (!rMEvt.IsMod1() && aSecOpt.IsOptionSet(SvtSecurityOptions::EOption::CtrlClickHyperlink))
+            return false;
+        if (rMEvt.IsMod1() && !aSecOpt.IsOptionSet(SvtSecurityOptions::EOption::CtrlClickHyperlink))
+            return false;
+        return true;
+    }
+}
+
 bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
 {
     pHdl = nullptr;
@@ -264,10 +275,7 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
              {
                 mpWindow->ReleaseMouse();
 
-                SvtSecurityOptions aSecOpt;
-                if (!rMEvt.IsMod1() && aSecOpt.IsOptionSet(SvtSecurityOptions::EOption::CtrlClickHyperlink))
-                    return true;
-                if (rMEvt.IsMod1() && !aSecOpt.IsOptionSet(SvtSecurityOptions::EOption::CtrlClickHyperlink))
+                if (!lcl_followHyperlinkAllowed(rMEvt))
                     return true;
 
                 SfxStringItem aStrItem(SID_FILE_NAME, aVEvt.pURLField->GetURL());
@@ -307,14 +315,37 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                 )
             {
                 pObj = mpView->PickObj(aMDPos, mpView->getHitTolLog(), pPV, SdrSearchOptions::ALSOONMASTER);
-                if (pObj && !bReturn && !bReadOnly && rMEvt.GetClicks() == 2
-                    && (dynamic_cast<const SdrObjGroup*>(pObj) != nullptr
-                        || dynamic_cast<const E3dScene*>(pObj) != nullptr))
+                if (pObj)
                 {
-                    // New: double click on selected Group object
-                    // enter group
-                    if (!bSelectionOnly && pObj->getSdrPageFromSdrObject() == pPV->GetPage())
-                        bReturn = pPV->EnterGroup(pObj);
+                    // Handle ImageMap click when not just selecting
+                    if (!bSelectionOnly)
+                    {
+                        if (lcl_followHyperlinkAllowed(rMEvt))
+                            bReturn = HandleImageMapClick(pObj, aMDPos);
+                    }
+
+                    if (!bReturn
+                        && (dynamic_cast<const SdrObjGroup*>(pObj) != nullptr
+                            || dynamic_cast<const E3dScene*>(pObj) != nullptr))
+                    {
+                        if (rMEvt.GetClicks() == 1)
+                        {
+                            // Look into the group
+                            pObj = mpView->PickObj(aMDPos, mpView->getHitTolLog(), pPV,
+                                                   SdrSearchOptions::ALSOONMASTER
+                                                       | SdrSearchOptions::DEEP);
+                            if (pObj && lcl_followHyperlinkAllowed(rMEvt))
+                                bReturn = HandleImageMapClick(pObj, aMDPos);
+                        }
+                        else if (!bReadOnly && rMEvt.GetClicks() == 2)
+                        {
+                            // New: double click on selected Group object
+                            // enter group
+                            if (!bSelectionOnly
+                                && pObj->getSdrPageFromSdrObject() == pPV->GetPage())
+                                bReturn = pPV->EnterGroup(pObj);
+                        }
+                    }
                 }
 
                 // #i71727# replaced else here with two possibilities, once the original else (!pObj)
@@ -1166,6 +1197,73 @@ void FuSelection::SetEditMode(sal_uInt16 nMode)
     SfxBindings& rBindings = mpViewShell->GetViewFrame()->GetBindings();
     rBindings.Invalidate(SID_BEZIER_MOVE);
     rBindings.Invalidate(SID_BEZIER_INSERT);
+}
+
+/**
+ * Execute ImageMap interaction
+ */
+bool FuSelection::HandleImageMapClick(SdrObject* pObj, const Point& rPos)
+{
+    bool bClosed = pObj->IsClosedObj();
+    bool bFilled = false;
+
+    if (bClosed)
+    {
+        SfxItemSet aSet(mpDoc->GetPool());
+
+        aSet.Put(pObj->GetMergedItemSet());
+
+        const XFillStyleItem& rFillStyle = aSet.Get(XATTR_FILLSTYLE);
+        bFilled = rFillStyle.GetValue() != drawing::FillStyle_NONE;
+    }
+
+    const SdrLayerIDSet* pVisiLayer = &mpView->GetSdrPageView()->GetVisibleLayers();
+    sal_uInt16 nHitLog = sal_uInt16(mpWindow->PixelToLogic(Size(HITPIX, 0)).Width());
+    const long n2HitLog = nHitLog * 2;
+    Point aHitPosR(rPos);
+    Point aHitPosL(rPos);
+    Point aHitPosT(rPos);
+    Point aHitPosB(rPos);
+
+    aHitPosR.AdjustX(n2HitLog);
+    aHitPosL.AdjustX(-n2HitLog);
+    aHitPosT.AdjustY(n2HitLog);
+    aHitPosB.AdjustY(-n2HitLog);
+
+    if (!bClosed || !bFilled
+        || (SdrObjectPrimitiveHit(*pObj, aHitPosR, nHitLog, *mpView->GetSdrPageView(), pVisiLayer,
+                                  false)
+            && SdrObjectPrimitiveHit(*pObj, aHitPosL, nHitLog, *mpView->GetSdrPageView(),
+                                     pVisiLayer, false)
+            && SdrObjectPrimitiveHit(*pObj, aHitPosT, nHitLog, *mpView->GetSdrPageView(),
+                                     pVisiLayer, false)
+            && SdrObjectPrimitiveHit(*pObj, aHitPosB, nHitLog, *mpView->GetSdrPageView(),
+                                     pVisiLayer, false)))
+    {
+        if (SdDrawDocument::GetIMapInfo(pObj))
+        {
+            const IMapObject* pIMapObj = SdDrawDocument::GetHitIMapObject(pObj, rPos);
+
+            if (pIMapObj && !pIMapObj->GetURL().isEmpty())
+            {
+                // Jump to Document
+                mpWindow->ReleaseMouse();
+                SfxStringItem aStrItem(SID_FILE_NAME, pIMapObj->GetURL());
+                SfxStringItem aReferer(SID_REFERER, mpDocSh->GetMedium()->GetName());
+                SfxViewFrame* pFrame = mpViewShell->GetViewFrame();
+                SfxFrameItem aFrameItem(SID_DOCFRAME, pFrame);
+                SfxBoolItem aBrowseItem(SID_BROWSE, true);
+                mpWindow->ReleaseMouse();
+                pFrame->GetDispatcher()->ExecuteList(
+                    SID_OPENDOC, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD,
+                    { &aStrItem, &aFrameItem, &aBrowseItem, &aReferer });
+
+                return true;
+            }
+        }
+    }
+
+    return false;
 }
 
 /** is called when the current function should be aborted. <p>

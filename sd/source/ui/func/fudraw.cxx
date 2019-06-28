@@ -504,6 +504,8 @@ void FuDraw::ForcePointer(const MouseEvent* pMEvt)
         }
         else if (!mpView->IsAction())
         {
+            SdrObject* pObj = nullptr;
+            SdrPageView* pPV = nullptr;
             SdrViewEvent aVEvt;
             SdrHitKind eHit = SdrHitKind::NONE;
             SdrDragMode eDragMode = mpView->GetDragMode();
@@ -528,7 +530,16 @@ void FuDraw::ForcePointer(const MouseEvent* pMEvt)
                 }
             }
 
-            if (eHit == SdrHitKind::TextEditObj && dynamic_cast< const FuSelection *>( this ) !=  nullptr)
+            if (eHit == SdrHitKind::NONE)
+            {
+                // found nothing -> look after at the masterpage
+                pObj = mpView->PickObj(aPnt, mpView->getHitTolLog(), pPV, SdrSearchOptions::ALSOONMASTER);
+            }
+            else if (eHit == SdrHitKind::UnmarkedObject)
+            {
+                pObj = aVEvt.pObj;
+            }
+            else if (eHit == SdrHitKind::TextEditObj && dynamic_cast< const FuSelection *>( this ) !=  nullptr)
             {
                 sal_uInt16 nSdrObjKind = aVEvt.pObj->GetObjIdentifier();
 
@@ -537,8 +548,27 @@ void FuDraw::ForcePointer(const MouseEvent* pMEvt)
                      nSdrObjKind != OBJ_OUTLINETEXT &&
                      aVEvt.pObj->IsEmptyPresObj() )
                 {
+                    pObj = nullptr;
                     bDefPointer = false;
                     mpWindow->SetPointer(PointerStyle::Arrow);
+                }
+            }
+
+            if (pObj && pMEvt && !pMEvt->IsMod2()
+                && dynamic_cast<const FuSelection*>(this) != nullptr)
+            {
+                // test for ImageMap
+                bDefPointer = !SetPointer(pObj, aPnt);
+
+                if (bDefPointer
+                    && (dynamic_cast<const SdrObjGroup*>(pObj) != nullptr
+                        || dynamic_cast<const E3dScene*>(pObj) != nullptr))
+                {
+                    // take a glance into the group
+                    pObj = mpView->PickObj(aPnt, mpView->getHitTolLog(), pPV,
+                                           SdrSearchOptions::ALSOONMASTER | SdrSearchOptions::DEEP);
+                    if (pObj)
+                        bDefPointer = !SetPointer(pObj, aPnt);
                 }
             }
         }
@@ -549,6 +579,52 @@ void FuDraw::ForcePointer(const MouseEvent* pMEvt)
         mpWindow->SetPointer(mpView->GetPreferredPointer(
                             aPnt, mpWindow, nModifier, bLeftDown));
     }
+}
+
+/**
+ * Set cursor to pointer when in clickable area of an ImageMap
+ *
+ * @return True when pointer was set
+ */
+bool FuDraw::SetPointer(SdrObject* pObj, const Point& rPos)
+{
+    bool bImageMapInfo = SdDrawDocument::GetIMapInfo(pObj) != nullptr;
+
+    if (!bImageMapInfo)
+        return false;
+
+    const SdrLayerIDSet* pVisiLayer = &mpView->GetSdrPageView()->GetVisibleLayers();
+    sal_uInt16 nHitLog(sal_uInt16(mpWindow->PixelToLogic(Size(HITPIX, 0)).Width()));
+    long n2HitLog(nHitLog * 2);
+    Point aHitPosR(rPos);
+    Point aHitPosL(rPos);
+    Point aHitPosT(rPos);
+    Point aHitPosB(rPos);
+
+    aHitPosR.AdjustX(n2HitLog);
+    aHitPosL.AdjustX(-n2HitLog);
+    aHitPosT.AdjustY(n2HitLog);
+    aHitPosB.AdjustY(-n2HitLog);
+
+    if (!pObj->IsClosedObj()
+        || (SdrObjectPrimitiveHit(*pObj, aHitPosR, nHitLog, *mpView->GetSdrPageView(), pVisiLayer,
+                                  false)
+            && SdrObjectPrimitiveHit(*pObj, aHitPosL, nHitLog, *mpView->GetSdrPageView(),
+                                     pVisiLayer, false)
+            && SdrObjectPrimitiveHit(*pObj, aHitPosT, nHitLog, *mpView->GetSdrPageView(),
+                                     pVisiLayer, false)
+            && SdrObjectPrimitiveHit(*pObj, aHitPosB, nHitLog, *mpView->GetSdrPageView(),
+                                     pVisiLayer, false)))
+    {
+        // hit inside the object (without margin) or open object
+        if (SdDrawDocument::GetHitIMapObject(pObj, rPos))
+        {
+            mpWindow->SetPointer(PointerStyle::RefHand);
+            return true;
+        }
+    }
+
+    return false;
 }
 
 /**
@@ -658,71 +734,63 @@ bool FuDraw::RequestHelp(const HelpEvent& rHEvt)
 
 bool FuDraw::SetHelpText(SdrObject* pObj, const Point& rPosPixel, const SdrViewEvent& rVEvt)
 {
-    bool bSet = false;
     OUString aHelpText;
     Point aPos(mpWindow->PixelToLogic(mpWindow->ScreenToOutputPixel(rPosPixel)));
+    IMapObject* pIMapObj = SdDrawDocument::GetHitIMapObject(pObj, aPos);
 
-    // URL for IMapObject underneath pointer is help text
-    if ( SdDrawDocument::GetIMapInfo(pObj) )
+    if (!rVEvt.pURLField && !pIMapObj)
+        return false;
+
+    OUString aURL;
+    if (rVEvt.pURLField)
+        aURL = INetURLObject::decode(rVEvt.pURLField->GetURL(),
+                                     INetURLObject::DecodeMechanism::WithCharset);
+    else if (pIMapObj)
     {
-        IMapObject* pIMapObj = SdDrawDocument::GetHitIMapObject(pObj, aPos);
-
-        if ( pIMapObj )
-        {
-            // show name
-            aHelpText = pIMapObj->GetAltText();
-
-            if (aHelpText.isEmpty())
-            {
-                // show url if no name is available
-                aHelpText = INetURLObject::decode( pIMapObj->GetURL(), INetURLObject::DecodeMechanism::WithCharset );
-            }
-        }
+        aURL = pIMapObj->GetAltText();
+        aURL += " ("
+                + INetURLObject::decode(pIMapObj->GetURL(),
+                                        INetURLObject::DecodeMechanism::WithCharset)
+                + ")";
     }
-    else if (rVEvt.pURLField)
+    else
+        return false;
+
+    SvtSecurityOptions aSecOpt;
+    if (aSecOpt.IsOptionSet(SvtSecurityOptions::EOption::CtrlClickHyperlink))
     {
-        /**************************************************************
-        * URL-Field
-        **************************************************************/
-        OUString aURL = INetURLObject::decode(rVEvt.pURLField->GetURL(), INetURLObject::DecodeMechanism::WithCharset);
+        // Hint about Ctrl-click to open hyperlink, but need to detect "Ctrl" key for MacOs
+        vcl::KeyCode aCode(KEY_SPACE);
+        vcl::KeyCode aModifiedCode(KEY_SPACE, KEY_MOD1);
+        OUString aModStr(aModifiedCode.GetName());
+        aModStr = aModStr.replaceFirst(aCode.GetName(), "");
+        aModStr = aModStr.replaceAll("+", "");
 
-        SvtSecurityOptions aSecOpt;
-        if (aSecOpt.IsOptionSet(SvtSecurityOptions::EOption::CtrlClickHyperlink))
-        {
-            // Hint about Ctrl-click to open hyperlink, but need to detect "Ctrl" key for MacOs
-            vcl::KeyCode aCode(KEY_SPACE);
-            vcl::KeyCode aModifiedCode(KEY_SPACE, KEY_MOD1);
-            OUString aModStr(aModifiedCode.GetName());
-            aModStr = aModStr.replaceFirst(aCode.GetName(), "");
-            aModStr = aModStr.replaceAll("+", "");
+        OUString aCtrlClickHlinkStr = SdResId(STR_CTRLCLICKHYPERLINK);
 
-            OUString aCtrlClickHlinkStr = SdResId(STR_CTRLCLICKHYPERLINK);
+        aCtrlClickHlinkStr = aCtrlClickHlinkStr.replaceAll("%s", aModStr);
 
-            aCtrlClickHlinkStr = aCtrlClickHlinkStr.replaceAll("%s", aModStr);
-
-            aHelpText = aCtrlClickHlinkStr + aURL;
-        }
-        else
-        {
-            // Hint about just clicking hyperlink
-            aHelpText = SdResId(STR_CLICKHYPERLINK) + aURL;
-        }
+        aHelpText = aCtrlClickHlinkStr + aURL;
+    }
+    else
+    {
+        // Hint about just clicking hyperlink
+        aHelpText = SdResId(STR_CLICKHYPERLINK) + aURL;
     }
 
-    if (!aHelpText.isEmpty())
-    {
-        bSet = true;
-        ::tools::Rectangle aLogicPix = mpWindow->LogicToPixel(pObj->GetLogicRect());
-        ::tools::Rectangle aScreenRect(mpWindow->OutputToScreenPixel(aLogicPix.TopLeft()),
-                              mpWindow->OutputToScreenPixel(aLogicPix.BottomRight()));
+    if (aHelpText.isEmpty())
+        return false;
 
-        if (Help::IsBalloonHelpEnabled())
-            Help::ShowBalloon( static_cast<vcl::Window*>(mpWindow), rPosPixel, aScreenRect, aHelpText);
-        else if (Help::IsQuickHelpEnabled())
-            Help::ShowQuickHelp( static_cast<vcl::Window*>(mpWindow), aScreenRect, aHelpText);
-    }
+    ::tools::Rectangle aLogicPix = mpWindow->LogicToPixel(pObj->GetLogicRect());
+    ::tools::Rectangle aScreenRect(mpWindow->OutputToScreenPixel(aLogicPix.TopLeft()),
+                            mpWindow->OutputToScreenPixel(aLogicPix.BottomRight()));
 
-    return bSet;
+    if (Help::IsBalloonHelpEnabled())
+        Help::ShowBalloon( static_cast<vcl::Window*>(mpWindow), rPosPixel, aScreenRect, aHelpText);
+    else if (Help::IsQuickHelpEnabled())
+        Help::ShowQuickHelp( static_cast<vcl::Window*>(mpWindow), aScreenRect, aHelpText);
+
+    return true;
 }
 
 /** is called when the current function should be aborted. <p>
