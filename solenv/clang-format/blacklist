@@ -13270,7 +13270,6 @@ slideshow/source/inc/vieweventhandler.hxx
 slideshow/source/inc/viewlayer.hxx
 slideshow/source/inc/viewupdate.hxx
 slideshow/source/inc/wakeupevent.hxx
-slideshow/test/demoshow.cxx
 slideshow/test/slidetest.cxx
 slideshow/test/tests.hxx
 slideshow/test/testshape.cxx

@@ -23,7 +23,4 @@ $(eval $(call gb_Module_add_check_targets,slideshow,\
 	CppunitTest_slideshow \
 ))
 
-# not built normally (and unbuildable anyway ;)
-    # Executable_demoshow \
-
 # vim: set noet sw=4 ts=4:

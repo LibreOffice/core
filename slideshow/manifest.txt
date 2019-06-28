@@ -101,13 +101,3 @@ Design
    original object by plain reference. This is safe, if the original
    object removes the listener from the EventMultiplexer, before or
    within the destructor.
-
-
-Testing
-=======
-
-Before merging changes to HEAD, besides making sure the usual QA has
-been done, also run the unit and integration tests in the
-slideshow/test directory. Issuing a "dmake test" should run the unit
-tests, and generate a "demoshow" binary, that should also be run and
-checked to work properly.
