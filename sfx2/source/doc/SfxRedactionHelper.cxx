@@ -62,6 +62,8 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 
+constexpr OUStringLiteral SfxRedactionHelper::m_aPredefinedTargets[6];
+
 bool SfxRedactionHelper::isRedactMode(const SfxRequest& rReq)
 {
     const SfxItemSet* pArgs = rReq.GetArgs();
