@@ -96,7 +96,7 @@ namespace
             ppMark != rMarkAccess.getAllMarksEnd();
             ++ppMark)
         {
-            if (::sw::mark::DdeBookmark* const pBkmk = dynamic_cast< ::sw::mark::DdeBookmark*>(ppMark->get()))
+            if (::sw::mark::DdeBookmark* const pBkmk = dynamic_cast< ::sw::mark::DdeBookmark*>((*ppMark).get()))
             {
                 if (
                     (bCaseSensitive && (pBkmk->GetName() == sNameLc)) ||

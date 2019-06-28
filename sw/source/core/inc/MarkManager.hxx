@@ -96,6 +96,8 @@ namespace sw {
 
             virtual void assureSortedMarkContainers() const override;
 
+            typedef std::vector<std::shared_ptr<sw::mark::MarkBase>> container_t;
+
         private:
 
             MarkManager(MarkManager const&) = delete;

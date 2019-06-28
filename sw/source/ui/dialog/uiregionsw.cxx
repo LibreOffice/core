@@ -134,7 +134,7 @@ static void lcl_FillSubRegionList( SwWrtShell& rSh, ComboBox& rSubRegions, Combo
         ppMark != pMarkAccess->getBookmarksEnd();
         ++ppMark)
     {
-        const ::sw::mark::IMark* pBkmk = ppMark->get();
+        const ::sw::mark::IMark* pBkmk = (*ppMark).get();
         if( pBkmk->IsExpanded() )
             rSubRegions.InsertEntry( pBkmk->GetName() );
     }

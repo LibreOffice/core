@@ -239,7 +239,7 @@ void ContentIdxStoreImpl::SaveBkmks(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCon
         ppBkmk != ppBkmkEnd;
         ++ppBkmk)
     {
-        const ::sw::mark::IMark* pBkmk = ppBkmk->get();
+        const ::sw::mark::IMark* pBkmk = (*ppBkmk).get();
         bool bMarkPosEqual = false;
         if(pBkmk->GetMarkPos().nNode.GetIndex() == nNode
             && pBkmk->GetMarkPos().nContent.GetIndex() <= nContent)
@@ -272,7 +272,7 @@ void ContentIdxStoreImpl::RestoreBkmks(SwDoc* pDoc, updater_t const & rUpdater)
     IDocumentMarkAccess* const pMarkAccess = pDoc->getIDocumentMarkAccess();
     for (const MarkEntry& aEntry : m_aBkmkEntries)
     {
-        if (MarkBase* pMark = dynamic_cast<MarkBase*>(pMarkAccess->getAllMarksBegin()[aEntry.m_nIdx].get()))
+        if (MarkBase* pMark = pMarkAccess->getAllMarksBegin().get()[aEntry.m_nIdx].get())
         {
             SwPosition aNewPos(GetRightMarkPos(pMark, aEntry.m_bOther));
             rUpdater(aNewPos, aEntry.m_nContent);

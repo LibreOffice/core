@@ -507,7 +507,7 @@ void SwNavigationPI::MakeMark()
         ppMark != pMarkAccess->getAllMarksEnd();
         ++ppMark)
         if( IDocumentMarkAccess::GetType(**ppMark) == IDocumentMarkAccess::MarkType::NAVIGATOR_REMINDER )
-            vNavMarkNames.push_back(ppMark->get()->GetName());
+            vNavMarkNames.push_back((*ppMark)->GetName());
     std::sort(vNavMarkNames.begin(), vNavMarkNames.end());
 
     // we are maxed out and delete one
