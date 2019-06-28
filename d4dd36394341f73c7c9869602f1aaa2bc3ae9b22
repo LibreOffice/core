@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_4cd09f51",
+        "filename": "sfx2/source/appl/newhelp.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2019-06-28T12:46:22Z",
+      "side": 1,
+      "message": "I think the proper fix instead is to simply check for\n\n aBoundary.startPos \u003c aBoundary.endPos\n\nI\u0027ll amend the commit and upload a new patch set.",
+      "revId": "d4dd36394341f73c7c9869602f1aaa2bc3ae9b22",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
