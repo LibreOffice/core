@@ -163,7 +163,6 @@ sw/uiconfig/swriter/ui/mmsendmails.ui://GtkLabel[@id='transferstatus'] orphan-la
 sw/uiconfig/swriter/ui/mmsendmails.ui://GtkLabel[@id='paused'] orphan-label
 sw/uiconfig/swriter/ui/mmsendmails.ui://GtkProgressBar[@id='progress'] no-labelled-by
 sw/uiconfig/swriter/ui/mmsendmails.ui://GtkLabel[@id='errorstatus'] orphan-label
-sw/uiconfig/swriter/ui/mmsendmails.ui://svtlo-SvSimpleTableContainer[@id='container'] no-labelled-by
 sw/uiconfig/swriter/ui/mmsalutationpage.ui://GtkLabel[@id='documentindex'] orphan-label
 sw/uiconfig/swriter/ui/mmsalutationpage.ui://GtkLabel[@id='femalefi'] orphan-label
 sw/uiconfig/swriter/ui/notebookbar_groups.ui://GtkLabel[@id='filegrouplabel'] orphan-label
