@@ -400,23 +400,23 @@ OUString Databases::processLang( const OUString& Language )
 
     if( it == m_aLangSet.end() )
     {
-        sal_Int32 idx;
-        osl::DirectoryItem aDirItem;
+        // XXX the old code looked for '-' and '_' as separator between
+        // language and country, no idea if '_' actually still can happen
+        // (probably not), but play safe and keep that and transform to proper
+        // BCP47.
+        const OUString aBcp47( Language.replaceAll( "_", "-"));
 
-        if( osl::FileBase::E_None == osl::DirectoryItem::get( getInstallPathAsURL() + Language,aDirItem ) )
+        // Try if language tag or fallbacks are installed.
+        osl::DirectoryItem aDirItem;
+        std::vector<OUString> aFallbacks( LanguageTag( aBcp47).getFallbackStrings(true));
+        for (auto const & rFB : aFallbacks)
         {
-            ret = Language;
-            m_aLangSet[ Language ] = ret;
-        }
-        /* FIXME-BCP47: this is wrong, does not work as soon as script or
-         * variant is involved in the language tag. */
-        else if( ( ( idx = Language.indexOf( '-' ) ) != -1 ||
-                   ( idx = Language.indexOf( '_' ) ) != -1 ) &&
-                    osl::FileBase::E_None == osl::DirectoryItem::get( getInstallPathAsURL() + Language.copy( 0,idx ),
-                                                                   aDirItem ) )
-        {
-            ret = Language.copy( 0,idx );
-            m_aLangSet[ Language ] = ret;
+            if (osl::FileBase::E_None == osl::DirectoryItem::get( getInstallPathAsURL() + rFB, aDirItem))
+            {
+                ret = rFB;
+                m_aLangSet[ Language ] = ret;
+                break;  // for
+            }
         }
     }
     else
