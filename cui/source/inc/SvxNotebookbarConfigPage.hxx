@@ -35,6 +35,7 @@
 #include <sfx2/tabdlg.hxx>
 #include <memory>
 #include <vector>
+#include <map>
 
 //#include "cfgutil.hxx"
 #include "cfg.hxx" //for SvxConfigPage and SaveInData
@@ -48,14 +49,22 @@ private:
     void DeleteSelectedContent() override;
     void DeleteSelectedTopLevel() override;
     virtual void SelectElement() override;
+    void SetElement();
 
 public:
     struct NotebookbarEntries
     {
-        OUString sUIItemID;
+        OUString sUIItemId;
+        OUString sClassId;
         OUString sActionName;
+        OUString sDisplayName;
         OUString sVisibleValue;
-        int nPos;
+    };
+    struct CategoriesEntries
+    {
+        OUString sDisplayName;
+        OUString sUIItemId;
+        OUString sClassType;
     };
     SvxNotebookbarConfigPage(TabPageParent pParent, const SfxItemSet& rItemSet);
     virtual ~SvxNotebookbarConfigPage() override;
@@ -63,10 +72,12 @@ public:
                                  const css::uno::Reference<css::ui::XUIConfigurationManager>&,
                                  const OUString& aModuleId, bool docConfig) override;
     static void FillFunctionsList(std::vector<NotebookbarEntries>& aEntries,
-                                  std::vector<OUString>& aCategoryList, OUString& sActiveCategory);
+                                  std::vector<CategoriesEntries>& aCategoryList,
+                                  OUString& sActiveCategory);
     static void searchNodeandAttribute(std::vector<NotebookbarEntries>& aEntries,
-                                       std::vector<OUString>& aCategoryList,
-                                       OUString& sActiveCategory, xmlNode* pNodePtr, int nPos,
+                                       std::vector<CategoriesEntries>& aCategoryList,
+                                       OUString& sActiveCategory,
+                                       CategoriesEntries& aCurCategoryEntry, xmlNode* pNodePtr,
                                        bool isCategory);
     static void getNodeValue(xmlNode* pNodePtr, NotebookbarEntries& aNodeEntries);
 };
