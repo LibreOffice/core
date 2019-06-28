@@ -143,11 +143,26 @@ void SfxLokHelper::setViewLanguage(int nId, const OUString& rBcp47LanguageTag)
     }
 }
 
+static OString lcl_escapeQuotes(const OString &rStr)
+{
+    if (rStr.getLength() < 1)
+        return rStr;
+    // FIXME: need an optimized 'escape' method for O[U]String.
+    OStringBuffer aBuf(rStr.getLength() + 8);
+    for (sal_Int32 i = 0; i < rStr.getLength(); ++i)
+    {
+        if (rStr[i] == '"' || rStr[i] == '\\')
+            aBuf.append('\\');
+        aBuf.append(rStr[i]);
+    }
+    return aBuf.makeStringAndClear();
+}
+
 void SfxLokHelper::notifyOtherView(SfxViewShell* pThisView, SfxViewShell const* pOtherView, int nType, const OString& rKey, const OString& rPayload)
 {
     OString aPayload = OString("{ \"viewId\": \"") + OString::number(SfxLokHelper::getView(pThisView)) +
                        "\", \"part\": \"" + OString::number(pThisView->getPart()) +
-                       "\", \"" + rKey + "\": \"" + rPayload + "\" }";
+                       "\", \"" + rKey + "\": \"" + lcl_escapeQuotes(rPayload) + "\" }";
 
     pOtherView->libreOfficeKitViewCallback(nType, aPayload.getStr());
 }
