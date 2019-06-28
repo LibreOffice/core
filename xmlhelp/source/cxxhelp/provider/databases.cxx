@@ -408,6 +408,8 @@ OUString Databases::processLang( const OUString& Language )
             ret = Language;
             m_aLangSet[ Language ] = ret;
         }
+        /* FIXME-BCP47: this is wrong, does not work as soon as script or
+         * variant is involved in the language tag. */
         else if( ( ( idx = Language.indexOf( '-' ) ) != -1 ||
                    ( idx = Language.indexOf( '_' ) ) != -1 ) &&
                     osl::FileBase::E_None == osl::DirectoryItem::get( getInstallPathAsURL() + Language.copy( 0,idx ),
@@ -421,16 +423,6 @@ OUString Databases::processLang( const OUString& Language )
         ret = it->second;
 
     return ret;
-}
-
-OUString Databases::country( const OUString& Language )
-{
-    sal_Int32 idx;
-    if( ( idx = Language.indexOf( '-' ) ) != -1 ||
-        ( idx = Language.indexOf( '_' ) ) != -1 )
-        return Language.copy( 1+idx );
-
-    return OUString();
 }
 
 helpdatafileproxy::Hdf* Databases::getHelpDataFile( const OUString& Database,
@@ -495,10 +487,11 @@ Databases::getCollator( const OUString& Language )
     if( ! it->second.is() )
     {
         it->second = Collator::create(m_xContext);
-        OUString langStr = processLang(Language);
-        OUString countryStr = country(Language);
+        LanguageTag aLanguageTag( Language);
+        OUString countryStr = aLanguageTag.getCountry();
         if( countryStr.isEmpty() )
         {
+            const OUString langStr = aLanguageTag.getLanguage();
             if( langStr == "de" )
                 countryStr = "DE";
             else if( langStr == "en" )
@@ -515,13 +508,14 @@ Databases::getCollator( const OUString& Language )
                 countryStr = "JP";
             else if( langStr == "ko" )
                 countryStr = "KR";
+
+            // XXX NOTE: there are no complex language tags involved in those
+            // "add country" cases, only because of this we can use this
+            // simplified construction.
+            if (!countryStr.isEmpty())
+                aLanguageTag.reset( langStr + "-" + countryStr);
         }
-        /* FIXME-BCP47: all this does not look right for language tag context,
-         * also check processLang() and country() methods */
-        it->second->loadDefaultCollator(  Locale( langStr,
-                                                  countryStr,
-                                                  OUString() ),
-                                          0 );
+        it->second->loadDefaultCollator( aLanguageTag.getLocale(), 0);
     }
 
     return it->second;

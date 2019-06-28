@@ -204,17 +204,10 @@ namespace chelp {
             OUString* o_pExtensionRegistryPath = nullptr );
 
         /**
-         *  Maps a given language-locale combination to language.
+         *  Maps a given language-locale combination to language or locale.
          */
 
         OUString processLang( const OUString& Language );
-
-        /**
-         *  Maps a given language-locale combination to locale.
-         *  The returned string maybe empty
-         */
-
-        static OUString country( const OUString& Language );
 
         void replaceName( OUString& oustring ) const;
 
