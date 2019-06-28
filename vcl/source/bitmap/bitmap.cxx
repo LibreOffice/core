@@ -241,6 +241,9 @@ bool Bitmap::operator==( const Bitmap& rBmp ) const
     BitmapChecksum aChecksum1, aChecksum2;
     rBmp.mxSalBmp->GetChecksum(aChecksum1);
     mxSalBmp->GetChecksum(aChecksum2);
+    // If the bitmaps can't calculate a checksum, best to regard them as different.
+    if (aChecksum1 == 0 || aChecksum2 == 0)
+        return false;
     return aChecksum1 == aChecksum2;
 }
 
