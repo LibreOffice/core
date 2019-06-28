@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_c1ec78f5",
+        "filename": "oox/source/vml/vmlshape.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 1358,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2019-06-28T05:20:02Z",
+      "side": 1,
+      "message": "the shape is already created below, you don\u0027t need to do that again.\nNothing to do here at the moment. We need to see if (and how) those QR code properties can be stored in ooxml format.\nApart from that, to save the QR code image no changes are needed here.",
+      "revId": "ffbed1bb90f460356a5a0489759209a1318a6d28",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
