@@ -77,7 +77,7 @@ void SwDrawShell::ExecDrawDlg(SfxRequest& rReq)
             bool bHasMarked = pView->AreObjectsMarked();
 
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-            ScopedVclPtr<AbstractSvxAreaTabDialog> pDlg(pFact->CreateSvxAreaTabDialog( nullptr,
+            ScopedVclPtr<AbstractSvxAreaTabDialog> pDlg(pFact->CreateSvxAreaTabDialog( &GetView().GetViewFrame()->GetWindow(),
                                                                             &aNewAttr,
                                                                             pDoc,
                                                                             true));
