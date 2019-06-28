@@ -22,6 +22,30 @@
       "revId": "20b1e6440aacab043753e93be4499e939a80b05b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_61948ce9",
+        "filename": "tools/source/fsys/fileutil.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-06-28T09:23:09Z",
+      "side": 1,
+      "message": "\u003e and compilers should arguably still warn if they are unused in the #if branch\n\n[dcl.attr.unused] tells:\n\n\u003e For an entity marked maybe_unused, implementations are encouraged not to emit a warning that the\nentity is unused, or that the entity is used despite the presence of the attribute.\n\nI supposed this to be superior to the (void)arg;... not sure is there are drawbacks here - but will revert this if you think it is advisable...?",
+      "parentUuid": "bf659307_0124b00c",
+      "range": {
+        "startLine": 39,
+        "startChar": 24,
+        "endLine": 39,
+        "endChar": 40
+      },
+      "revId": "20b1e6440aacab043753e93be4499e939a80b05b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
