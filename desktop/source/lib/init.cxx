@@ -3422,6 +3422,54 @@ static OUString getGenerator()
 
 static bool getFromTransferrable(
     const css::uno::Reference<css::datatransfer::XTransferable> &xTransferable,
+    const OString &aInMimeType, OString &aRet);
+
+static bool encodeImageAsHTML(
+    const css::uno::Reference<css::datatransfer::XTransferable> &xTransferable,
+    const OString &aMimeType, OString &aRet)
+{
+    if (!getFromTransferrable(xTransferable, aMimeType, aRet))
+        return false;
+
+    // Encode in base64.
+    auto aSeq = Sequence<sal_Int8>(reinterpret_cast<const sal_Int8*>(aRet.getStr()),
+                                   aRet.getLength());
+    OUStringBuffer aBase64Data;
+    comphelper::Base64::encode(aBase64Data, aSeq);
+
+    // Embed in HTML.
+    aRet = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">\n"
+        "<html><head>"
+        "<meta http-equiv=\"content-type\" content=\"text/html; charset=utf-8\"/><meta "
+        "name=\"generator\" content=\""
+        + getGenerator().toUtf8()
+        + "\"/>"
+        "</head><body><img src=\"data:" + aMimeType + ";base64,"
+        + aBase64Data.makeStringAndClear().toUtf8() + "\"/></body></html>";
+
+    return true;
+}
+
+static bool encodeTextAsHTML(
+    const css::uno::Reference<css::datatransfer::XTransferable> &xTransferable,
+    const OString &aMimeType, OString &aRet)
+{
+    if (!getFromTransferrable(xTransferable, aMimeType, aRet))
+        return false;
+
+    // Embed in HTML - FIXME: needs some escaping.
+    aRet = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">\n"
+        "<html><head>"
+        "<meta http-equiv=\"content-type\" content=\"text/html; charset=utf-8\"/><meta "
+        "name=\"generator\" content=\""
+        + getGenerator().toUtf8()
+        + "\"/></head><body><pre>" + aRet + "</pre></body></html>";
+
+    return true;
+}
+
+static bool getFromTransferrable(
+    const css::uno::Reference<css::datatransfer::XTransferable> &xTransferable,
     const OString &aInMimeType, OString &aRet)
 {
     OString aMimeType(aInMimeType);
@@ -3447,28 +3495,15 @@ static bool getFromTransferrable(
 
     if (!xTransferable->isDataFlavorSupported(aFlavor))
     {
-        // If html is not supported, might be a graphic-selection, which supports png.
-        if (aInMimeType == "text/html" && getFromTransferrable(xTransferable, "image/png", aRet))
+        // Try harder for HTML it is our copy/paste meta-file format
+        if (aInMimeType == "text/html")
         {
-            // Encode in base64.
-            auto aSeq = Sequence<sal_Int8>(reinterpret_cast<const sal_Int8*>(aRet.getStr()),
-                                           aRet.getLength());
-            OUStringBuffer aBase64Data;
-            comphelper::Base64::encode(aBase64Data, aSeq);
-
-            // Embed in HTML.
-            static const OString aHeader
-                = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">"
-                  "<html><head>"
-                  "<meta http-equiv=\"content-type\" content=\"text/html; charset=utf-8\"/><meta "
-                  "name=\"generator\" content=\""
-                  + getGenerator().toUtf8()
-                  + "\"/>"
-                    "</head><body><img src=\"data:image/png;charset=utf-8;base64,";
-
-            aRet = aHeader + aBase64Data.makeStringAndClear().toUtf8() + "\"/></body></html>";
-
-            return true;
+            // Desperate measures - convert text to HTML instead.
+            if (encodeTextAsHTML(xTransferable, "text/plain;charset=utf-8", aRet))
+                return true;
+            // If html is not supported, might be a graphic-selection,
+            if (encodeImageAsHTML(xTransferable, "image/png", aRet))
+                return true;
         }
 
         SetLastExceptionMsg("Flavor " + aFlavor.MimeType + " is not supported");
@@ -3586,7 +3621,7 @@ static int doc_getSelectionType(LibreOfficeKitDocument* pThis)
     if (!bSuccess)
         return LOK_SELTYPE_NONE;
 
-    if (aRet.getLength() > 1000) // About 2 paragraphs.
+    if (aRet.getLength() > 10000)
         return LOK_SELTYPE_COMPLEX;
 
     return aRet.getLength() ? LOK_SELTYPE_TEXT : LOK_SELTYPE_NONE;
