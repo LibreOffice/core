@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_61efac87",
+        "filename": "unoxml/source/rdf/librdf_repository.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 826,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-06-28T09:16:49Z",
+      "side": 1,
+      "message": "this looks a tad unreliable, there\u0027s no reason why any of the \"URI \" etc prefixes shouldn\u0027t occur as part of a literal or blank-node string value. (probably wouldn\u0027t be a well-formed URI though)\n\nmaybe use 0-byte as a separator? that should not occur in practice i hope...",
+      "revId": "49f8c51c8f1299bfa35ee08905337938b06d9eaf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_81f4405d",
+        "filename": "unoxml/source/rdf/librdf_repository.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 2354,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-06-28T09:16:49Z",
+      "side": 1,
+      "message": "same here, better use some 0-byte separator between value and language and datatype",
+      "revId": "49f8c51c8f1299bfa35ee08905337938b06d9eaf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
