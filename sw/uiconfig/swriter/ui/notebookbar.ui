@@ -11476,9 +11476,6 @@
                             <property name="position">2</property>
                           </packing>
                         </child>
-                        <style>
-                          <class name="priority-10"/>
-                        </style>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -11599,9 +11596,6 @@
                             <property name="position">2</property>
                           </packing>
                         </child>
-                        <style>
-                          <class name="priority-9"/>
-                        </style>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -13874,7 +13868,7 @@
                             <property name="show_arrow">False</property>
                             <property name="icon_size">1</property>
                             <child>
-                              <object class="GtkToolButton" id="DrawFormatArea">
+                              <object class="GtkToolButton" id="Draw-FormatArea">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="valign">center</property>
@@ -13886,7 +13880,7 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkToolButton" id="FormatLine">
+                              <object class="GtkToolButton" id="Draw-FormatLine">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="valign">center</property>
@@ -15766,6 +15760,30 @@
                             <property name="toolbar_style">icons</property>
                             <property name="show_arrow">False</property>
                             <property name="icon_size">1</property>
+                            <child>
+                              <object class="GtkToolButton" id="Media-FormatArea">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="valign">center</property>
+                                <property name="action_name">.uno:FormatArea</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="homogeneous">True</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkToolButton" id="Media-FormatLine">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="valign">center</property>
+                                <property name="action_name">.uno:FormatLine</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="homogeneous">True</property>
+                              </packing>
+                            </child>
                             <child>
                               <object class="GtkToolButton" id="Media-TransformDialog">
                                 <property name="visible">True</property>
