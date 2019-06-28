@@ -340,7 +340,7 @@ int MMTest::documentStartPageNumber( int document ) const
     CPPUNIT_ASSERT_EQUAL(document, pos);
     sal_uInt16 page, dummy;
     shell->Push();
-    shell->GotoMark( mark->get());
+    shell->GotoMark((*mark).get());
     shell->GetPageNum( page, dummy );
     shell->Pop(SwCursorShell::PopMode::DeleteCurrent);
     return page;

@@ -142,7 +142,7 @@ namespace
         return bFound;
     }
 
-    bool lcl_IsUiVisibleBookmark(const IDocumentMarkAccess::pMark_t& rpMark)
+    bool lcl_IsUiVisibleBookmark(std::shared_ptr<::sw::mark::IMark> const& rpMark)
     {
         return IDocumentMarkAccess::GetType(*rpMark) == IDocumentMarkAccess::MarkType::BOOKMARK;
     }
@@ -655,7 +655,7 @@ void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
             {
                 if(lcl_IsUiVisibleBookmark(*ppBookmark))
                 {
-                    const OUString& rBkmName = ppBookmark->get()->GetName();
+                    const OUString& rBkmName = (*ppBookmark)->GetName();
                     //nYPos from 0 -> text::Bookmarks will be sorted alphabetically
                     SwContent* pCnt = new SwContent(this, rBkmName, 0);
                     pMember->insert(pCnt);

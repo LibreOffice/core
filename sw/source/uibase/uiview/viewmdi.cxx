@@ -424,7 +424,7 @@ IMPL_LINK( SwView, MoveNavigationHdl, void*, p, void )
                 ++ppMark)
             {
                 if( IDocumentMarkAccess::GetType(**ppMark) == IDocumentMarkAccess::MarkType::NAVIGATOR_REMINDER )
-                    vNavMarks.push_back(ppMark->get());
+                    vNavMarks.push_back((*ppMark).get());
             }
 
             // move

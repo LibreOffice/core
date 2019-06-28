@@ -30,6 +30,7 @@ class SwTextNode;
 
 namespace sw { namespace mark {
     class SaveBookmark; // FIXME: Ugly: SaveBookmark is a core-internal class, and should not be used in the interface
+    class MarkBase;
 }}
 
 /** Provides access to the marks of a document.
@@ -50,11 +51,60 @@ class IDocumentMarkAccess
             NAVIGATOR_REMINDER
         };
 
-        typedef std::shared_ptr< ::sw::mark::IMark> pMark_t;
-        typedef std::vector< pMark_t > container_t;
-        typedef container_t::iterator iterator_t;
-        typedef container_t::const_iterator const_iterator_t;
-        typedef container_t::const_reverse_iterator const_reverse_iterator_t;
+
+        /** wrapper iterator: wraps iterator of implementation while hiding
+            MarkBase class; only IMark instances can be retrieved directly.
+         */
+        class SW_DLLPUBLIC iterator
+        {
+            private:
+                std::unique_ptr<std::vector<std::shared_ptr<::sw::mark::MarkBase>>::const_iterator> m_pIter;
+
+            public:
+                // MarkManager implementation needs to get the real iterator
+                std::vector<std::shared_ptr<::sw::mark::MarkBase>>::const_iterator const& get() const;
+
+                typedef std::ptrdiff_t difference_type;
+                typedef std::shared_ptr<::sw::mark::IMark> value_type;
+                typedef std::shared_ptr<::sw::mark::IMark> const* pointer;
+                typedef std::shared_ptr<::sw::mark::IMark> const& reference;
+                typedef std::random_access_iterator_tag iterator_category;
+
+                iterator();
+                iterator(std::vector<std::shared_ptr<::sw::mark::MarkBase>>::const_iterator const& rIter);
+                iterator(iterator const& rOther);
+                iterator& operator=(iterator const& rOther);
+                iterator(iterator && rOther);
+                iterator& operator=(iterator && rOther);
+                ~iterator();
+
+                // FIXME unfortuntately there's a requirement on input iterator
+                // and forward iterator to return reference, which isn't
+                // possible because we have to return a temp value;
+                // let's try value_type instead, perhaps it's sufficient,
+                // for a const_iterator...
+                std::shared_ptr<::sw::mark::IMark> /*const&*/ operator*() const;
+                // nope can't do that :(
+                //std::shared_ptr<::sw::mark::IMark> /* const* */ operator->() const;
+                iterator& operator++();
+                iterator operator++(int);
+                bool operator==(iterator const& rOther) const;
+                bool operator!=(iterator const& rOther) const;
+                iterator& operator--();
+                iterator operator--(int);
+                iterator& operator+=(difference_type);
+                iterator operator+(difference_type) const;
+                iterator& operator-=(difference_type);
+                iterator operator-(difference_type) const;
+                difference_type operator-(iterator const&) const;
+                value_type operator[](difference_type) const;
+                bool operator<(iterator const& rOther) const;
+                bool operator>(iterator const& rOther) const;
+                bool operator<=(iterator const& rOther) const;
+                bool operator>=(iterator const& rOther) const;
+        };
+
+        typedef iterator const_iterator_t;
 
         /// To avoid recursive calls of deleteMark, the removal of dummy
         /// characters of fieldmarks has to be delayed; this is the baseclass

@@ -1635,7 +1635,7 @@ void SwView::ExecuteStatusLine(SfxRequest &rReq)
                 {
                     const IDocumentMarkAccess::const_iterator_t ppBookmark = rSh.getIDocumentMarkAccess()->getBookmarksBegin() + nIdx;
                     rSh.EnterStdMode();
-                    rSh.GotoMark( ppBookmark->get() );
+                    rSh.GotoMark( (*ppBookmark).get() );
                 }
                 else
                     OSL_FAIL("SwView::ExecuteStatusLine(..)"
@@ -1986,7 +1986,7 @@ bool SwView::JumpToSwMark( const OUString& rMark )
             }
             else if( pMarkAccess->getAllMarksEnd() != (ppMark = pMarkAccess->findMark(sMark)) )
             {
-                bRet = m_pWrtShell->GotoMark( ppMark->get(), false );
+                bRet = m_pWrtShell->GotoMark( (*ppMark).get(), false );
             }
             else if( nullptr != ( pINet = m_pWrtShell->FindINetAttr( sMark ) )) {
                 m_pWrtShell->addCurrentPosition();
@@ -2012,7 +2012,7 @@ bool SwView::JumpToSwMark( const OUString& rMark )
         }
         else if( pMarkAccess->getAllMarksEnd() != (ppMark = pMarkAccess->findMark(sMark)))
         {
-            bRet = m_pWrtShell->GotoMark( ppMark->get(), false );
+            bRet = m_pWrtShell->GotoMark( (*ppMark).get(), false );
         }
         else if( nullptr != ( pINet = m_pWrtShell->FindINetAttr( sMark ) ))
             bRet = m_pWrtShell->GotoINetAttr( *pINet->GetTextINetFormat() );

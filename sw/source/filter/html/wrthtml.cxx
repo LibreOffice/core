@@ -1122,7 +1122,7 @@ void SwHTMLWriter::OutBookmarks()
     const ::sw::mark::IMark* pBookmark = nullptr;
     IDocumentMarkAccess* const pMarkAccess = m_pDoc->getIDocumentMarkAccess();
     if(m_nBkmkTabPos != -1)
-        pBookmark = (pMarkAccess->getAllMarksBegin() + m_nBkmkTabPos)->get();
+        pBookmark = pMarkAccess->getAllMarksBegin()[m_nBkmkTabPos].get();
     // Output all bookmarks in this paragraph. The content position
     // for the moment isn't considered!
     sal_uInt32 nNode = m_pCurrentPam->GetPoint()->nNode.GetIndex();
@@ -1140,7 +1140,7 @@ void SwHTMLWriter::OutBookmarks()
         if( ++m_nBkmkTabPos >= pMarkAccess->getAllMarksCount() )
             m_nBkmkTabPos = -1;
         else
-            pBookmark = (pMarkAccess->getAllMarksBegin() + m_nBkmkTabPos)->get();
+            pBookmark = pMarkAccess->getAllMarksBegin()[m_nBkmkTabPos].get();
     }
 
     decltype(m_aOutlineMarkPoss)::size_type nPos;
@@ -1148,7 +1148,7 @@ void SwHTMLWriter::OutBookmarks()
                    m_aOutlineMarkPoss[nPos] < nNode; nPos++ )
         ;
 
-    while( nPos < m_aOutlineMarkPoss.size() && m_aOutlineMarkPoss[nPos] == nNode )
+    while (nPos < m_aOutlineMarkPoss.size() && m_aOutlineMarkPoss[nPos] == nNode)
     {
         OUString sMark( m_aOutlineMarks[nPos] );
         OutAnchor( sMark.replace('?', '_') ); // '?' causes problems in IE/Netscape 5

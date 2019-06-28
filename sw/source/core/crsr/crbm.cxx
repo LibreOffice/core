@@ -66,13 +66,13 @@ namespace
         SwCursorSaveState m_aSaveState;
     };
 
-    bool lcl_ReverseMarkOrderingByEnd(const IDocumentMarkAccess::pMark_t& rpFirst,
-        const IDocumentMarkAccess::pMark_t& rpSecond)
+    bool lcl_ReverseMarkOrderingByEnd(const std::shared_ptr<::sw::mark::IMark>& rpFirst,
+        const std::shared_ptr<::sw::mark::IMark>& rpSecond)
     {
         return rpFirst->GetMarkEnd() > rpSecond->GetMarkEnd();
     }
 
-    bool lcl_IsInvisibleBookmark(const IDocumentMarkAccess::pMark_t& pMark)
+    bool lcl_IsInvisibleBookmark(const std::shared_ptr<::sw::mark::IMark>& pMark)
     {
         return IDocumentMarkAccess::GetType(*pMark) != IDocumentMarkAccess::MarkType::BOOKMARK;
     }
@@ -202,7 +202,7 @@ bool SwCursorShell::GotoMark(const ::sw::mark::IMark* const pMark)
 bool SwCursorShell::GoNextBookmark()
 {
     IDocumentMarkAccess* pMarkAccess = getIDocumentMarkAccess();
-    IDocumentMarkAccess::container_t vCandidates;
+    std::vector<std::shared_ptr<::sw::mark::IMark>> vCandidates;
     remove_copy_if(
         upper_bound( // finds the first that is starting after
             pMarkAccess->getBookmarksBegin(),
@@ -215,7 +215,7 @@ bool SwCursorShell::GoNextBookmark()
 
     // watch Cursor-Moves
     CursorStateHelper aCursorSt(*this);
-    IDocumentMarkAccess::const_iterator_t ppMark = vCandidates.begin();
+    auto ppMark = vCandidates.begin();
     for(; ppMark!=vCandidates.end(); ++ppMark)
     {
         if (sw::IsMarkHidden(*GetLayout(), **ppMark))
@@ -241,7 +241,7 @@ bool SwCursorShell::GoPrevBookmark()
     IDocumentMarkAccess* pMarkAccess = getIDocumentMarkAccess();
     // candidates from which to choose the mark before
     // no need to consider marks starting after rPos
-    IDocumentMarkAccess::container_t vCandidates;
+    std::vector<std::shared_ptr<::sw::mark::IMark>> vCandidates;
     remove_copy_if(
         pMarkAccess->getBookmarksBegin(),
         upper_bound(
@@ -258,7 +258,7 @@ bool SwCursorShell::GoPrevBookmark()
 
     // watch Cursor-Moves
     CursorStateHelper aCursorSt(*this);
-    IDocumentMarkAccess::const_iterator_t ppMark = vCandidates.begin();
+    auto ppMark = vCandidates.begin();
     for(; ppMark!=vCandidates.end(); ++ppMark)
     {
         // ignoring those not ending before the Cursor

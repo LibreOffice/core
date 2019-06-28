@@ -235,7 +235,7 @@ namespace
               ppMark != pSrcMarkAccess->getAllMarksEnd();
               ++ppMark )
         {
-            const ::sw::mark::IMark* const pMark = ppMark->get();
+            const ::sw::mark::IMark* const pMark = (*ppMark).get();
 
             const SwPosition& rMarkStart = pMark->GetMarkStart();
             const SwPosition& rMarkEnd = pMark->GetMarkEnd();
