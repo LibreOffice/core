@@ -27,7 +27,6 @@
 
 #include <rtl/ref.hxx>
 #include <com/sun/star/mail/XSmtpService.hpp>
-#include <vcl/fixed.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
@@ -117,7 +116,7 @@ const SwMailDescriptor* SwSendMailDialog_Impl::GetNextDescriptor()
 
 class SwMailDispatcherListener_Impl : public IMailDispatcherListener
 {
-    VclPtr<SwSendMailDialog> m_pSendMailDialog;
+    SwSendMailDialog& m_rSendMailDialog;
 
 public:
     explicit SwMailDispatcherListener_Impl(SwSendMailDialog& rParentDlg);
@@ -131,16 +130,15 @@ public:
     static void DeleteAttachments( uno::Reference< mail::XMailMessage > const & xMessage );
 };
 
-SwMailDispatcherListener_Impl::SwMailDispatcherListener_Impl(SwSendMailDialog& rParentDlg) :
-    m_pSendMailDialog(&rParentDlg)
+SwMailDispatcherListener_Impl::SwMailDispatcherListener_Impl(SwSendMailDialog& rParentDlg)
+    : m_rSendMailDialog(rParentDlg)
 {
 }
 
 void SwMailDispatcherListener_Impl::idle(::rtl::Reference<MailDispatcher> /*xMailDispatcher*/)
 {
     SolarMutexGuard aGuard;
-    if (!m_pSendMailDialog->isDisposed())
-        m_pSendMailDialog->AllMailsSent();
+    m_rSendMailDialog.AllMailsSent();
 }
 
 void SwMailDispatcherListener_Impl::mailDelivered(
@@ -148,8 +146,7 @@ void SwMailDispatcherListener_Impl::mailDelivered(
                         uno::Reference< mail::XMailMessage> xMailMessage)
 {
     SolarMutexGuard aGuard;
-    if (!m_pSendMailDialog->isDisposed())
-        m_pSendMailDialog->DocumentSent( xMailMessage, true, nullptr );
+    m_rSendMailDialog.DocumentSent( xMailMessage, true, nullptr );
     DeleteAttachments( xMailMessage );
 }
 
@@ -159,8 +156,7 @@ void SwMailDispatcherListener_Impl::mailDeliveryError(
                 const OUString& sErrorMessage)
 {
     SolarMutexGuard aGuard;
-    if (!m_pSendMailDialog->isDisposed())
-        m_pSendMailDialog->DocumentSent( xMailMessage, false, &sErrorMessage );
+    m_rSendMailDialog.DocumentSent( xMailMessage, false, &sErrorMessage );
     DeleteAttachments( xMailMessage );
 }
 
@@ -198,70 +194,49 @@ public:
     }
 };
 
-#define ITEMID_TASK     1
-#define ITEMID_STATUS   2
-
-SwSendMailDialog::SwSendMailDialog(vcl::Window *pParent, SwMailMergeConfigItem& rConfigItem) :
-    Dialog(pParent, "SendMailsDialog", "modules/swriter/ui/mmsendmails.ui"),
-    m_pTransferStatus(get<FixedText>("transferstatus")),
-    m_pPaused(get<FixedText>("paused")),
-    m_pProgressBar(get<ProgressBar>("progress")),
-    m_pErrorStatus(get<FixedText>("errorstatus")),
-    m_pContainer(get<SvSimpleTableContainer>("container")),
-    m_pStop(get<PushButton>("stop")),
-    m_pClose(get<PushButton>("cancel")),
-    m_sContinue(SwResId( ST_CONTINUE )),
-    m_sStop(m_pStop->GetText()),
-    m_sTransferStatus(m_pTransferStatus->GetText()),
-    m_sErrorStatus(   m_pErrorStatus->GetText()),
-    m_sSendingTo(   SwResId(ST_SENDINGTO )),
-    m_sCompleted(   SwResId(ST_COMPLETED )),
-    m_sFailed(      SwResId(ST_FAILED     )),
-    m_bCancel(false),
-    m_bDestructionEnabled(false),
-    m_pImpl(new SwSendMailDialog_Impl),
-    m_pConfigItem(&rConfigItem),
-    m_nExpectedCount(0),
-    m_nSendCount(0),
-    m_nErrorCount(0)
+SwSendMailDialog::SwSendMailDialog(weld::Window *pParent, SwMailMergeConfigItem& rConfigItem)
+    : GenericDialogController(pParent, "modules/swriter/ui/mmsendmails.ui", "SendMailsDialog")
+    , m_sContinue(SwResId( ST_CONTINUE ))
+    , m_sSendingTo(   SwResId(ST_SENDINGTO ))
+    , m_sCompleted(   SwResId(ST_COMPLETED ))
+    , m_sFailed(      SwResId(ST_FAILED     ))
+    , m_bCancel(false)
+    , m_bDestructionEnabled(false)
+    , m_pImpl(new SwSendMailDialog_Impl)
+    , m_pConfigItem(&rConfigItem)
+    , m_nExpectedCount(0)
+    , m_nSendCount(0)
+    , m_nErrorCount(0)
+    , m_xTransferStatus(m_xBuilder->weld_label("transferstatus"))
+    , m_xPaused(m_xBuilder->weld_label("paused"))
+    , m_xProgressBar(m_xBuilder->weld_progress_bar("progress"))
+    , m_xErrorStatus(m_xBuilder->weld_label("errorstatus"))
+    , m_xStatus(m_xBuilder->weld_tree_view("container"))
+    , m_xStop(m_xBuilder->weld_button("stop"))
+    , m_xClose(m_xBuilder->weld_button("cancel"))
+    , m_xExpander(m_xBuilder->weld_expander("details"))
 {
-    Size aSize = m_pContainer->LogicToPixel(Size(226, 80), MapMode(MapUnit::MapAppFont));
-    m_pContainer->set_width_request(aSize.Width());
-    m_pContainer->set_height_request(aSize.Height());
-    m_pStatus = VclPtr<SvSimpleTable>::Create(*m_pContainer);
-    m_pStatusHB = &(m_pStatus->GetTheHeaderBar());
+    m_sStop = m_xStop->get_label();
+    m_sTransferStatus = m_xTransferStatus->get_label();
+    m_sErrorStatus = m_xErrorStatus->get_label();
 
-    OUString sTask(SwResId(ST_TASK));
-    OUString sStatus(SwResId(ST_STATUS));
+    Size aSize(m_xStatus->get_approximate_digit_width() * 28,
+               m_xStatus->get_height_rows(20));
+    m_xStatus->set_size_request(aSize.Width(), aSize.Height());
 
-    m_pStop->SetClickHdl(LINK( this, SwSendMailDialog, StopHdl_Impl));
-    m_pClose->SetClickHdl(LINK( this, SwSendMailDialog, CloseHdl_Impl));
+    m_xStop->connect_clicked(LINK( this, SwSendMailDialog, StopHdl_Impl));
+    m_xClose->connect_clicked(LINK( this, SwSendMailDialog, CloseHdl_Impl));
 
-    long nPos1 = aSize.Width()/3 * 2;
-    long nPos2 = aSize.Width()/3;
-    m_pStatusHB->InsertItem( ITEMID_TASK, sTask,
-                            nPos1,
-                            HeaderBarItemBits::LEFT );
-    m_pStatusHB->InsertItem( ITEMID_STATUS, sStatus,
-                            nPos2,
-                            HeaderBarItemBits::LEFT );
+    std::vector<int> aWidths;
+    aWidths.push_back(m_xStatus->get_checkbox_column_width());
+    aWidths.push_back(aSize.Width()/3 * 2);
+    m_xStatus->set_column_fixed_widths(aWidths);
 
-    static long nTabs[] = {0, nPos1};
-    m_pStatus->SetStyle( m_pStatus->GetStyle() | WB_SORT | WB_HSCROLL | WB_CLIPCHILDREN | WB_TABSTOP );
-    m_pStatus->SetSelectionMode( SelectionMode::Single );
-    m_pStatus->SetTabs(SAL_N_ELEMENTS(nTabs), nTabs, MapUnit::MapPixel);
-    m_pStatus->SetSpaceBetweenEntries(3);
-
-    m_pPaused->Show(false);
+    m_xPaused->set_visible(false);
     UpdateTransferStatus();
 }
 
 SwSendMailDialog::~SwSendMailDialog()
-{
-    disposeOnce();
-}
-
-void SwSendMailDialog::dispose()
 {
     if(m_pImpl->xMailDispatcher.is())
     {
@@ -284,18 +259,6 @@ void SwSendMailDialog::dispose()
         {
         }
     }
-    m_pImpl.reset();
-    m_pStatus.disposeAndClear();
-    m_pTransferStatus.clear();
-    m_pPaused.clear();
-    m_pProgressBar.clear();
-    m_pErrorStatus.clear();
-    m_pContainer.clear();
-    m_pStatusHB.clear();
-    m_pStop.clear();
-    m_pClose.clear();
-
-    Dialog::dispose();
 }
 
 void SwSendMailDialog::AddDocument( SwMailDescriptor const & rDesc )
@@ -309,7 +272,7 @@ void SwSendMailDialog::AddDocument( SwMailDescriptor const & rDesc )
     }
 }
 
-IMPL_LINK( SwSendMailDialog, StopHdl_Impl, Button*, pButton, void )
+IMPL_LINK( SwSendMailDialog, StopHdl_Impl, weld::Button&, rButton, void )
 {
     m_bCancel = true;
     if(m_pImpl->xMailDispatcher.is())
@@ -317,24 +280,27 @@ IMPL_LINK( SwSendMailDialog, StopHdl_Impl, Button*, pButton, void )
         if(m_pImpl->xMailDispatcher->isStarted())
         {
             m_pImpl->xMailDispatcher->stop();
-            pButton->SetText(m_sContinue);
-            m_pPaused->Show();
+            rButton.set_label(m_sContinue);
+            m_xPaused->show();
         }
         else
         {
             m_pImpl->xMailDispatcher->start();
-            pButton->SetText(m_sStop);
-            m_pPaused->Show(false);
+            rButton.set_label(m_sStop);
+            m_xPaused->hide();
         }
     }
 }
 
-IMPL_LINK_NOARG(SwSendMailDialog, CloseHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SwSendMailDialog, CloseHdl_Impl, weld::Button&, void)
 {
-    Dialog::Show( false );
+    m_xDialog->hide();
 
-    if ( m_bDestructionEnabled )
-        disposeOnce();
+    if (m_bDestructionEnabled)
+    {
+        //TODO
+        m_xDialog->response(RET_CLOSE);
+    }
     else
     {
         m_pImpl->aRemoveIdle.SetInvokeHandler( LINK( this, SwSendMailDialog, RemoveThis ) );
@@ -361,7 +327,8 @@ IMPL_LINK( SwSendMailDialog, RemoveThis, Timer*, pTimer, void )
             (!m_pImpl->xMailDispatcher.is() ||
                     !m_pImpl->xMailDispatcher->isRunning()))
     {
-        disposeOnce();
+        //TODO
+        m_xDialog->response(RET_CLOSE);
     }
     else
     {
@@ -376,26 +343,26 @@ IMPL_STATIC_LINK( SwSendMailDialog, StopSendMails, void*, p, void )
         pDialog->m_pImpl->xMailDispatcher->isStarted())
     {
         pDialog->m_pImpl->xMailDispatcher->stop();
-        pDialog->m_pStop->SetText(pDialog->m_sContinue);
-        pDialog->m_pPaused->Show();
+        pDialog->m_xStop->set_label(pDialog->m_sContinue);
+        pDialog->m_xPaused->show();
     }
 }
 
-void  SwSendMailDialog::SendMails()
+void SwSendMailDialog::SendMails()
 {
     if(!m_pConfigItem)
     {
         OSL_FAIL("config item not set");
         return;
     }
-    EnterWait();
+    auto xWait(std::make_unique<weld::WaitObject>(m_xDialog.get()));
     //get a mail server connection
     uno::Reference< mail::XSmtpService > xSmtpServer =
                 SwMailMergeHelper::ConnectToSmtpServer( *m_pConfigItem,
                                             m_pImpl->xConnectedInMailService,
-                                            OUString(), OUString(), GetFrameWeld());
+                                            OUString(), OUString(), m_xDialog.get());
     bool bIsLoggedIn = xSmtpServer.is() && xSmtpServer->isConnected();
-    LeaveWait();
+    xWait.reset();
     if(!bIsLoggedIn)
     {
         OSL_FAIL("create error message");
@@ -418,11 +385,11 @@ void  SwSendMailDialog::IterateMails()
     {
         if(!SwMailMergeHelper::CheckMailAddress( pCurrentMailDescriptor->sEMail ))
         {
-            Image aInsertImg(StockImage::Yes, RID_BMP_FORMULA_CANCEL);
-
             OUString sMessage = m_sSendingTo;
-            OUString sTmp = pCurrentMailDescriptor->sEMail + "\t" + m_sFailed;
-            m_pStatus->InsertEntry( sMessage.replaceFirst("%1", sTmp), aInsertImg, aInsertImg);
+            m_xStatus->append();
+            m_xStatus->set_image(m_nSendCount, RID_BMP_FORMULA_CANCEL, 0);
+            m_xStatus->set_text(m_nSendCount, sMessage.replaceFirst("%1", pCurrentMailDescriptor->sEMail), 1);
+            m_xStatus->set_text(m_nSendCount, m_sFailed, 1);
             ++m_nSendCount;
             ++m_nErrorCount;
             UpdateTransferStatus( );
@@ -483,12 +450,11 @@ void  SwSendMailDialog::IterateMails()
     UpdateTransferStatus();
 }
 
-void SwSendMailDialog::ShowDialog(sal_Int32 nExpectedCount)
+void SwSendMailDialog::StartSend(sal_Int32 nExpectedCount)
 {
     Application::PostUserEvent( LINK( this, SwSendMailDialog,
-                                      StartSendMails ), this, true );
+                                      StartSendMails ), this );
     m_nExpectedCount = nExpectedCount > 0 ? nExpectedCount : 1;
-    Dialog::Show();
 }
 
 void SwSendMailDialog::DocumentSent( uno::Reference< mail::XMailMessage> const & xMessage,
@@ -500,14 +466,15 @@ void SwSendMailDialog::DocumentSent( uno::Reference< mail::XMailMessage> const &
         m_pImpl->xMailDispatcher.is() && m_pImpl->xMailDispatcher->isStarted())
     {
         Application::PostUserEvent( LINK( this, SwSendMailDialog,
-                                          StopSendMails ), this, true );
+                                          StopSendMails ), this );
     }
-    Image aInsertImg(StockImage::Yes, bResult ? OUString(RID_BMP_FORMULA_APPLY) : OUString(RID_BMP_FORMULA_CANCEL));
+    OUString sInsertImg(bResult ? OUString(RID_BMP_FORMULA_APPLY) : OUString(RID_BMP_FORMULA_CANCEL));
 
     OUString sMessage = m_sSendingTo;
-    OUString sTmp(xMessage->getRecipients()[0]);
-    sTmp += "\t" + (bResult ? m_sCompleted : m_sFailed);
-    m_pStatus->InsertEntry( sMessage.replaceFirst("%1", sTmp), aInsertImg, aInsertImg);
+    m_xStatus->append();
+    m_xStatus->set_image(m_nSendCount, sInsertImg, 0);
+    m_xStatus->set_text(m_nSendCount, sMessage.replaceFirst("%1", xMessage->getRecipients()[0]), 1);
+    m_xStatus->set_text(m_nSendCount, bResult ? m_sCompleted : m_sFailed, 1);
     ++m_nSendCount;
     if(!bResult)
         ++m_nErrorCount;
@@ -516,8 +483,8 @@ void SwSendMailDialog::DocumentSent( uno::Reference< mail::XMailMessage> const &
 
     if (pError)
     {
-        SwSendWarningBox_Impl aDlg(GetFrameWeld(), *pError);
-        (void)aDlg.run();
+        SwSendWarningBox_Impl aDlg(m_xDialog.get(), *pError);
+        aDlg.run();
     }
 }
 
@@ -526,18 +493,18 @@ void SwSendMailDialog::UpdateTransferStatus()
     OUString sStatus( m_sTransferStatus );
     sStatus = sStatus.replaceFirst("%1", OUString::number(m_nSendCount) );
     sStatus = sStatus.replaceFirst("%2", OUString::number(m_nExpectedCount));
-    m_pTransferStatus->SetText(sStatus);
+    m_xTransferStatus->set_label(sStatus);
 
     sStatus = m_sErrorStatus.replaceFirst("%1", OUString::number(m_nErrorCount) );
-    m_pErrorStatus->SetText(sStatus);
+    m_xErrorStatus->set_label(sStatus);
 
     if (!m_pImpl->aDescriptors.empty())
     {
         assert(m_nExpectedCount && "div-by-zero");
-        m_pProgressBar->SetValue(static_cast<sal_uInt16>(m_nSendCount * 100 / m_nExpectedCount));
+        m_xProgressBar->set_percentage(m_nSendCount * 100 / m_nExpectedCount);
     }
     else
-        m_pProgressBar->SetValue(0);
+        m_xProgressBar->set_percentage(0);
 }
 
 void SwSendMailDialog::AllMailsSent()
@@ -545,8 +512,9 @@ void SwSendMailDialog::AllMailsSent()
     // Leave open if some kind of error occurred
     if ( m_nSendCount == m_nExpectedCount )
     {
-        m_pStop->Enable( false );
-        Dialog::Show( false );
+        m_xStop->set_sensitive(false);
+        //TODO
+        m_xDialog->hide();
     }
 }
 
