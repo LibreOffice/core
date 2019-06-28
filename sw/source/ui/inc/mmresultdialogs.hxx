@@ -20,13 +20,8 @@
 #define INCLUDED_SW_SOURCE_UI_DBUI_MMOUTPUTPAGE_HXX
 
 #include <vcl/wizardmachine.hxx>
-#include <vcl/button.hxx>
-#include <vcl/dialog.hxx>
-#include <vcl/prgsbar.hxx>
 #include <vcl/weld.hxx>
 #include <sfx2/basedlgs.hxx>
-#include <svtools/simptabl.hxx>
-#include <vcl/headbar.hxx>
 #include <mailmergehelper.hxx>
 
 class SwMailMergeWizard;
@@ -140,27 +135,15 @@ struct SwMailDescriptor
 };
 struct SwSendMailDialog_Impl;
 class SwMailMergeConfigItem;
-class SwSendMailDialog : public Dialog
+class SwSendMailDialog : public weld::GenericDialogController
 {
-    VclPtr<FixedText>               m_pTransferStatus;
-    VclPtr<FixedText>               m_pPaused;
-    VclPtr<ProgressBar>             m_pProgressBar;
-    VclPtr<FixedText>               m_pErrorStatus;
-
-    VclPtr<SvSimpleTableContainer>  m_pContainer;
-    VclPtr<HeaderBar>               m_pStatusHB;
-    VclPtr<SvSimpleTable>           m_pStatus;
-
-    VclPtr<PushButton>              m_pStop;
-    VclPtr<PushButton>              m_pClose;
-
-    OUString const          m_sContinue;
-    OUString const          m_sStop;
-    OUString const          m_sTransferStatus;
-    OUString const          m_sErrorStatus;
-    OUString const          m_sSendingTo;
-    OUString const          m_sCompleted;
-    OUString const          m_sFailed;
+    OUString                m_sContinue;
+    OUString                m_sStop;
+    OUString                m_sTransferStatus;
+    OUString                m_sErrorStatus;
+    OUString                m_sSendingTo;
+    OUString                m_sCompleted;
+    OUString                m_sFailed;
 
     bool                    m_bCancel;
     bool                    m_bDestructionEnabled;
@@ -171,8 +154,17 @@ class SwSendMailDialog : public Dialog
     sal_Int32               m_nSendCount;
     sal_Int32               m_nErrorCount;
 
-    DECL_LINK( StopHdl_Impl, Button*, void );
-    DECL_LINK( CloseHdl_Impl, Button* , void);
+    std::unique_ptr<weld::Label> m_xTransferStatus;
+    std::unique_ptr<weld::Label> m_xPaused;
+    std::unique_ptr<weld::ProgressBar> m_xProgressBar;
+    std::unique_ptr<weld::Label> m_xErrorStatus;
+    std::unique_ptr<weld::TreeView> m_xStatus;
+    std::unique_ptr<weld::Button> m_xStop;
+    std::unique_ptr<weld::Button> m_xClose;
+    std::unique_ptr<weld::Expander> m_xExpander;
+
+    DECL_LINK( StopHdl_Impl, weld::Button&, void );
+    DECL_LINK( CloseHdl_Impl, weld::Button& , void);
     DECL_STATIC_LINK( SwSendMailDialog, StartSendMails, void*, void );
     DECL_STATIC_LINK( SwSendMailDialog, StopSendMails, void*, void );
     DECL_LINK( RemoveThis, Timer*, void );
@@ -182,13 +174,12 @@ class SwSendMailDialog : public Dialog
     void        UpdateTransferStatus();
 
 public:
-    SwSendMailDialog( vcl::Window* pParent, SwMailMergeConfigItem& );
+    SwSendMailDialog( weld::Window* pParent, SwMailMergeConfigItem& );
     virtual ~SwSendMailDialog() override;
-    virtual void        dispose() override;
 
     void                AddDocument( SwMailDescriptor const & rDesc );
     void                EnableDestruction() {m_bDestructionEnabled = true;}
-    void                ShowDialog(sal_Int32 nExpectedCount);
+    void                StartSend(sal_Int32 nExpectedCount);
 
     void                DocumentSent( css::uno::Reference< css::mail::XMailMessage> const & xMessage,
                                         bool bResult,
