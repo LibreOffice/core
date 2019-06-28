@@ -1050,9 +1050,11 @@ IMPL_LINK_NOARG(SwMMResultEmailDialog, SendDocumentsHdl_Impl, weld::Button&, voi
 
     //create the send dialog
     vcl::Window* pParent = Application::GetDefDialogParent();
-    VclPtr<SwSendMailDialog> pDlg = VclPtr<SwSendMailDialog>::Create(pParent, *xConfigItem);
+    std::shared_ptr<SwSendMailDialog> xDlg = std::make_shared<SwSendMailDialog>(pParent ? pParent->GetFrameWeld() : nullptr, *xConfigItem);
 
-    pDlg->ShowDialog(nEnd - nBegin);
+    xDlg->StartSend(nEnd - nBegin);
+    weld::DialogController::runAsync(xDlg, [](sal_Int32 /*nResult*/){});
+
     //help to force painting the dialog
     //TODO/CLEANUP
     //predetermined breaking point
@@ -1198,18 +1200,17 @@ IMPL_LINK_NOARG(SwMMResultEmailDialog, SendDocumentsHdl_Impl, weld::Button&, voi
         aDesc.sSubject = m_xSubjectED->get_text();
         aDesc.sCC = m_sCC;
         aDesc.sBCC = m_sBCC;
-        pDlg->AddDocument( aDesc );
+        xDlg->AddDocument( aDesc );
         //help to force painting the dialog
         Application::Reschedule( true );
         //stop creating of data when dialog has been closed
-        if(!pDlg->IsVisible())
+        if (!xDlg->getDialog()->get_visible())
         {
             break;
         }
     }
-    pDlg->EnableDestruction();
+    xDlg->EnableDestruction();
     ::osl::File::remove( sTargetTempURL );
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

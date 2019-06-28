@@ -1327,8 +1327,6 @@
 #define STR_SAVEACOPY_SRC                       NC_("STR_SAVEACOPY_SRC", "~Export copy of source...")
 
 #define ST_CONTINUE                             NC_("ST_CONTINUE", "~Continue")
-#define ST_TASK                                 NC_("ST_TASK", "Task")
-#define ST_STATUS                               NC_("ST_STATUS", "Status")
 #define ST_SENDINGTO                            NC_("ST_SENDINGTO", "Sending to: %1")
 #define ST_COMPLETED                            NC_("ST_COMPLETED", "Successfully sent")
 #define ST_FAILED                               NC_("ST_FAILED", "Sending failed")
