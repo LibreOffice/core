@@ -2,12 +2,12 @@
  <defs>
   <radialGradient id="0" cx="29.425781" cy="6.828182" r="8" gradientUnits="userSpaceOnUse" gradientTransform="matrix(-.87500003-.00000002.00000002-1 41.74756 1043.1904)">
    <stop stop-color="#b3b3b3"/>
-   <stop offset="1" stop-color="#4d4d4d" stop-opacity=".551515"/>
+   <stop offset="1" stop-color="#232629" stop-opacity=".551515"/>
   </radialGradient>
  </defs>
  <g transform="translate(1-1029.3622)">
   <path fill="#b3b3b3" fill-rule="evenodd" color="#000" stroke-width="1" d="m3 1036.36h13v13h-13z"/>
-  <path d="m17 20l3-3v-13h-13l-3 3.00002h13z" transform="translate(-1 1029.3622)" fill="#4d4d4d"/>
+  <path d="m17 20l3-3v-13h-13l-3 3.00002h13z" transform="translate(-1 1029.3622)" fill="#232629"/>
   <path d="m6 1033.3622l-3 3v13h13l3-3v-13h-13" fill="url(#0)" fill-rule="evenodd" color="#000"/>
  </g>
 </svg>

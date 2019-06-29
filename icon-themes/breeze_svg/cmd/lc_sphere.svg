@@ -2,7 +2,7 @@
  <defs>
   <radialGradient r="8" cy="8.00002" cx="8" gradientTransform="matrix(1 0 0 1.0000011 0-.000013)" gradientUnits="userSpaceOnUse" id="0">
    <stop stop-color="#b3b3b3"/>
-   <stop offset="1" stop-color="#4d4d4d"/>
+   <stop offset="1" stop-color="#232629"/>
   </radialGradient>
  </defs>
  <path d="m20 12.00001a8 8.00001 0 1 1 -16 0 8 8.00001 0 1 1 16 0" fill="url(#0)" fill-rule="evenodd" color="#000"/>
