@@ -21,6 +21,7 @@
 #define INCLUDED_SD_SOURCE_UI_INC_DLGPAGE_HXX
 
 #include <sfx2/tabdlg.hxx>
+#include <svx/xtable.hxx>
 
 class SfxObjectShell;
 enum class ChangeType;

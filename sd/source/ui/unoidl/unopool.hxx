@@ -22,6 +22,9 @@
 
 #include <sal/config.h>
 
+#include <com/sun/star/uno/Reference.hxx>
+#include <drawdoc.hxx>
+
 css::uno::Reference<css::uno::XInterface> SdUnoCreatePool(
     SdDrawDocument * pDrawModel);
 

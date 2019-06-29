@@ -21,6 +21,8 @@
 #define INCLUDED_SD_INC_NOTIFYDOCUMENTEVENT_HXX
 
 #include <sal/config.h>
+#include <rtl/ustring.hxx>
+#include <com/sun/star/uno/Reference.hxx>
 
 class SdDrawDocument;
 

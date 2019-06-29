@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SD_INC_SHAPELIST_HXX
 #define INCLUDED_SD_INC_SHAPELIST_HXX
 
+#include <sal/types.h>
 #include <svx/sdrobjectuser.hxx>
 
 #include <list>

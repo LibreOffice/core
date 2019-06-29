@@ -9,6 +9,13 @@
 #ifndef INCLUDED_SD_SOURCE_FILTER_EPPT_EPPTANIMATIONS_HXX
 #define INCLUDED_SD_SOURCE_FILTER_EPPT_EPPTANIMATIONS_HXX
 
+#include <sax/fshelper.hxx>
+
+#include <com/sun/star/drawing/XDrawPage.hpp>
+#include <com/sun/star/uno/Reference.hxx>
+
+#include "epptooxml.hxx"
+
 namespace oox
 {
 namespace core
