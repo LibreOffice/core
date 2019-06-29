@@ -282,7 +282,7 @@ void UITestLogger::logEvent(const EventDescription& rDescription)
 {
     OUString aParameterString = StringMapToOUString(rDescription.aParameters);
 
-    //here we will customize our statments depending on the caller of this function
+    //here we will customize our statements depending on the caller of this function
     OUString aLogLine ;
 
     if(rDescription.aID=="writer_edit"){
