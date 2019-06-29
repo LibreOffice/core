@@ -312,7 +312,7 @@ void UITestLogger::logEvent(const EventDescription& rDescription)
             }
         }
         else if(rDescription.aAction=="LAUNCH"){
-            aLogLine = "Lanuch AutoFilter from Col "+
+            aLogLine = "Launch AutoFilter from Col "+
             GetValueInMapWithIndex(rDescription.aParameters,2) +
             " and Row " + GetValueInMapWithIndex(rDescription.aParameters,1);
         }
