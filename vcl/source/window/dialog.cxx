@@ -640,7 +640,7 @@ void Dialog::dispose()
     css::document::DocumentEvent aObject;
     aObject.EventName = "DialogClosed";
     xEventBroadcaster->documentEventOccured(aObject);
-    UITestLogger::getInstance().log("Close Dialog");
+    UITestLogger::getInstance().log("DialogClosed");
 
     if (comphelper::LibreOfficeKit::isActive())
     {
@@ -988,9 +988,9 @@ bool Dialog::ImplStartExecute()
     aObject.EventName = "DialogExecute";
     xEventBroadcaster->documentEventOccured(aObject);
     if (bModal)
-        UITestLogger::getInstance().log("Open " + get_id());
+        UITestLogger::getInstance().log("ModalDialogExecuted Id:" + get_id());
     else
-        UITestLogger::getInstance().log("Open " + get_id());
+        UITestLogger::getInstance().log("ModelessDialogExecuted Id:" + get_id());
 
     return true;
 }
