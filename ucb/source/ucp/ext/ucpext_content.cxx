@@ -381,14 +381,10 @@ namespace ucb { namespace ucp { namespace ext
         // note: empty sequence means "get values of all supported properties".
         ::rtl::Reference< ::ucbhelper::PropertyValueSet > xRow = new ::ucbhelper::PropertyValueSet( rxContext );
 
-        const sal_Int32 nCount = i_rProperties.getLength();
-        if ( nCount )
+        if ( i_rProperties.hasElements() )
         {
-            const Property* pProps = i_rProperties.getConstArray();
-            for ( sal_Int32 n = 0; n < nCount; ++n )
+            for ( const Property& rProp : i_rProperties )
             {
-                const Property& rProp = pProps[ n ];
-
                 // Process Core properties.
                 if ( rProp.Name == "ContentType" )
                 {
@@ -513,13 +509,10 @@ namespace ucb { namespace ucp { namespace ext
         aEvent.Further        = false;
         aEvent.PropertyHandle = -1;
 
-        const PropertyValue* pValues = i_rValues.getConstArray();
-        const sal_Int32 nCount = i_rValues.getLength();
-
-        for ( sal_Int32 n = 0; n < nCount; ++n, ++pValues )
+        for ( auto& rRet : aRet )
         {
             // all our properties are read-only ...
-            aRet[ n ] <<= IllegalAccessException("property is read-only.", *this );
+            rRet <<= IllegalAccessException("property is read-only.", *this );
         }
 
         return aRet;

@@ -247,11 +247,10 @@ CommandProcessorInfo::getCommands()
 ucb::CommandInfo SAL_CALL
 CommandProcessorInfo::getCommandInfoByName( const OUString& Name )
 {
-    for ( sal_Int32 n = 0; n < m_pInfo->getLength(); ++n )
-    {
-        if ( (*m_pInfo)[ n ].Name == Name )
-            return (*m_pInfo)[ n ];
-    }
+    auto pInfo = std::find_if(m_pInfo->begin(), m_pInfo->end(),
+        [&Name](const ucb::CommandInfo& rInfo) { return rInfo.Name == Name; });
+    if (pInfo != m_pInfo->end())
+        return *pInfo;
 
     throw ucb::UnsupportedCommandException();
 }
@@ -261,11 +260,10 @@ CommandProcessorInfo::getCommandInfoByName( const OUString& Name )
 ucb::CommandInfo SAL_CALL
 CommandProcessorInfo::getCommandInfoByHandle( sal_Int32 Handle )
 {
-    for ( sal_Int32 n = 0; n < m_pInfo->getLength(); ++n )
-    {
-        if ( (*m_pInfo)[ n ].Handle == Handle )
-            return (*m_pInfo)[ n ];
-    }
+    auto pInfo = std::find_if(m_pInfo->begin(), m_pInfo->end(),
+        [&Handle](const ucb::CommandInfo& rInfo) { return rInfo.Handle == Handle; });
+    if (pInfo != m_pInfo->end())
+        return *pInfo;
 
     throw ucb::UnsupportedCommandException();
 }
@@ -275,26 +273,16 @@ CommandProcessorInfo::getCommandInfoByHandle( sal_Int32 Handle )
 sal_Bool SAL_CALL CommandProcessorInfo::hasCommandByName(
                                                 const OUString& Name )
 {
-    for ( sal_Int32 n = 0; n < m_pInfo->getLength(); ++n )
-    {
-        if ( (*m_pInfo)[ n ].Name == Name )
-            return true;
-    }
-
-    return false;
+    return std::any_of(m_pInfo->begin(), m_pInfo->end(),
+        [&Name](const ucb::CommandInfo& rInfo) { return rInfo.Name == Name; });
 }
 
 
 // virtual
 sal_Bool SAL_CALL CommandProcessorInfo::hasCommandByHandle( sal_Int32 Handle )
 {
-    for ( sal_Int32 n = 0; n < m_pInfo->getLength(); ++n )
-    {
-        if ( (*m_pInfo)[ n ].Handle == Handle )
-            return true;
-    }
-
-    return false;
+    return std::any_of(m_pInfo->begin(), m_pInfo->end(),
+        [&Handle](const ucb::CommandInfo& rInfo) { return rInfo.Handle == Handle; });
 }
 
 
@@ -565,8 +553,7 @@ uno::Reference< ucb::XContent > createNew(
         aTypesInfo  = xCreator->queryCreatableContentsInfo();
     }
 
-    sal_Int32 nCount = aTypesInfo.getLength();
-    if ( !nCount )
+    if ( !aTypesInfo.hasElements() )
     {
         uno::Sequence<uno::Any> aArgs(comphelper::InitAnyPropertySequence(
         {
@@ -581,116 +568,87 @@ uno::Reference< ucb::XContent > createNew(
         // Unreachable
     }
 
-
     // (2) Try to find a matching target type for the source object.
 
+    std::function<bool(const sal_Int32)> lCompare;
 
-    uno::Reference< ucb::XContent > xNew;
-    for ( sal_Int32 n = 0; n < nCount; ++n )
+    if ( rContext.aArg.Operation == ucb::TransferCommandOperation_LINK )
     {
-        sal_Int32 nAttribs = aTypesInfo[ n ].Attributes;
-        bool  bMatch   = false;
-
-        if ( rContext.aArg.Operation == ucb::TransferCommandOperation_LINK )
+        // Create link
+        lCompare = [](const sal_Int32 nAttribs) { return !!( nAttribs & ucb::ContentInfoAttribute::KIND_LINK ); };
+    }
+    else if ( ( rContext.aArg.Operation == ucb::TransferCommandOperation_COPY ) ||
+              ( rContext.aArg.Operation == ucb::TransferCommandOperation_MOVE ) )
+    {
+        // Copy / Move
+        // Is source a link? Create link in target folder then.
+        if ( bSourceIsLink )
         {
-            // Create link
-
-            if ( nAttribs & ucb::ContentInfoAttribute::KIND_LINK )
-            {
-                // Match!
-                bMatch = true;
-            }
-        }
-        else if ( ( rContext.aArg.Operation
-                        == ucb::TransferCommandOperation_COPY ) ||
-                  ( rContext.aArg.Operation
-                        == ucb::TransferCommandOperation_MOVE ) )
-        {
-            // Copy / Move
-
-            // Is source a link? Create link in target folder then.
-            if ( bSourceIsLink )
-            {
-                if ( nAttribs & ucb::ContentInfoAttribute::KIND_LINK )
-                {
-                    // Match!
-                    bMatch = true;
-                }
-            }
-            else
-            {
-                // (not a and not b) or (a and b)
-                // not( a or b) or (a and b)
-
-                if ( ( bSourceIsFolder ==
-                        !!( nAttribs
-                            & ucb::ContentInfoAttribute::KIND_FOLDER ) )
-                     &&
-                     ( bSourceIsDocument ==
-                        !!( nAttribs
-                            & ucb::ContentInfoAttribute::KIND_DOCUMENT ) )
-                   )
-                {
-                    // Match!
-                    bMatch = true;
-                }
-            }
+            lCompare = [](const sal_Int32 nAttribs) { return !!( nAttribs & ucb::ContentInfoAttribute::KIND_LINK ); };
         }
         else
         {
+            // (not a and not b) or (a and b)
+            // not( a or b) or (a and b)
+            lCompare = [bSourceIsFolder, bSourceIsDocument](const sal_Int32 nAttribs) {
+                return ( bSourceIsFolder == !!( nAttribs & ucb::ContentInfoAttribute::KIND_FOLDER ) )
+                    && ( bSourceIsDocument == !!( nAttribs & ucb::ContentInfoAttribute::KIND_DOCUMENT ) ) ;
+            };
+        }
+    }
+    else
+    {
+        ucbhelper::cancelCommandExecution(
+            uno::makeAny( lang::IllegalArgumentException(
+                                    "Unknown transfer operation!",
+                                    rContext.xProcessor,
+                                    -1 ) ),
+                          rContext.xOrigEnv );
+        // Unreachable
+    }
+
+    uno::Reference< ucb::XContent > xNew;
+    auto pTypeInfo = std::find_if(aTypesInfo.begin(), aTypesInfo.end(),
+        [&lCompare](const ucb::ContentInfo& rTypeInfo) { return lCompare(rTypeInfo.Attributes); });
+    if (pTypeInfo != aTypesInfo.end())
+    {
+        // (3) Create a new, empty object of matched type.
+
+        if ( !xCreator.is() )
+        {
+            // First, try it using "CreatabeleContentsInfo" property and
+            // "createNewContent" command -> the "new" way.
+            ucb::Command aCreateNewCommand(
+               "createNewContent",
+               -1,
+               uno::makeAny( *pTypeInfo ) );
+
+            xCommandProcessorT->execute( aCreateNewCommand, 0, rContext.xEnv )
+                >>= xNew;
+        }
+        else
+        {
+            // Second, try it using XContentCreator interface -> the "old"
+            // way (not providing the chance to supply an XCommandEnvironment.
+
+            xNew = xCreator->createNewContent( *pTypeInfo );
+        }
+
+        if ( !xNew.is() )
+        {
+            uno::Sequence<uno::Any> aArgs(comphelper::InitAnyPropertySequence(
+            {
+                {"Folder", uno::Any(rContext.aArg.TargetURL)}
+            }));
             ucbhelper::cancelCommandExecution(
-                uno::makeAny( lang::IllegalArgumentException(
-                                        "Unknown transfer operation!",
-                                        rContext.xProcessor,
-                                        -1 ) ),
-                              rContext.xOrigEnv );
+                ucb::IOErrorCode_CANT_CREATE,
+                aArgs,
+                rContext.xOrigEnv,
+                "createNewContent failed!",
+                rContext.xProcessor );
             // Unreachable
         }
-
-        if ( bMatch )
-        {
-
-
-            // (3) Create a new, empty object of matched type.
-
-
-            if ( !xCreator.is() )
-            {
-                // First, try it using "CreatabeleContentsInfo" property and
-                // "createNewContent" command -> the "new" way.
-                ucb::Command aCreateNewCommand(
-                   "createNewContent",
-                   -1,
-                   uno::makeAny( aTypesInfo[ n ] ) );
-
-                xCommandProcessorT->execute( aCreateNewCommand, 0, rContext.xEnv )
-                    >>= xNew;
-            }
-            else
-            {
-                // Second, try it using XContentCreator interface -> the "old"
-                // way (not providing the chance to supply an XCommandEnvironment.
-
-                xNew = xCreator->createNewContent( aTypesInfo[ n ] );
-            }
-
-            if ( !xNew.is() )
-            {
-                uno::Sequence<uno::Any> aArgs(comphelper::InitAnyPropertySequence(
-                {
-                    {"Folder", uno::Any(rContext.aArg.TargetURL)}
-                }));
-                ucbhelper::cancelCommandExecution(
-                    ucb::IOErrorCode_CANT_CREATE,
-                    aArgs,
-                    rContext.xOrigEnv,
-                    "createNewContent failed!",
-                    rContext.xProcessor );
-                // Unreachable
-            }
-            break; // escape from 'for' loop
-        }
-    } // for
+    }
 
     return xNew;
 }

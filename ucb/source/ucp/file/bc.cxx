@@ -404,9 +404,9 @@ BaseContent::addPropertiesChangeListener(
     else
     {
         Reference< beans::XPropertySetInfo > xProp = m_pMyShell->info_p( m_aUncPath );
-        for( sal_Int32 i = 0; i < PropertyNames.getLength(); ++i )
-            if( xProp->hasPropertyByName( PropertyNames[i] ) )
-                m_pPropertyListener->addInterface( PropertyNames[i],Listener );
+        for( const auto& rName : PropertyNames )
+            if( xProp->hasPropertyByName( rName ) )
+                m_pPropertyListener->addInterface( rName,Listener );
     }
 }
 
@@ -423,8 +423,8 @@ BaseContent::removePropertiesChangeListener( const Sequence< OUString >& Propert
     if( ! m_pPropertyListener )
         return;
 
-    for( sal_Int32 i = 0; i < PropertyNames.getLength(); ++i )
-        m_pPropertyListener->removeInterface( PropertyNames[i],Listener );
+    for( const auto& rName : PropertyNames )
+        m_pPropertyListener->removeInterface( rName,Listener );
 
     m_pPropertyListener->removeInterface( OUString(), Listener );
 }
@@ -762,12 +762,12 @@ BaseContent::setPropertyValues(
     // Special handling for files which have to be inserted
     if( m_nState & JustInserted )
     {
-        for( sal_Int32 i = 0; i < Values.getLength(); ++i )
+        for( const auto& rValue : Values )
         {
-            if( Values[i].Name == Title )
+            if( rValue.Name == Title )
             {
                 OUString NewTitle;
-                if( Values[i].Value >>= NewTitle )
+                if( rValue.Value >>= NewTitle )
                 {
                     if ( m_nState & NameForInsertionSet )
                     {
@@ -1247,17 +1247,15 @@ BaseContent::cPCL()
 
     std::unique_ptr<PropertyChangeNotifier> p;
 
-    sal_Int32 length = seqNames.getLength();
-
-    if( length )
+    if( seqNames.hasElements() )
     {
         std::unique_ptr<ListenerMap> listener(new ListenerMap);
-        for( sal_Int32 i = 0; i < length; ++i )
+        for( const auto& rName : seqNames )
         {
-            cppu::OInterfaceContainerHelper* pContainer = m_pPropertyListener->getContainer(seqNames[i]);
+            cppu::OInterfaceContainerHelper* pContainer = m_pPropertyListener->getContainer(rName);
             if (!pContainer)
                 continue;
-            (*listener)[seqNames[i]] = pContainer->getElements();
+            (*listener)[rName] = pContainer->getElements();
         }
 
         p.reset( new PropertyChangeNotifier( this, std::move(listener) ) );

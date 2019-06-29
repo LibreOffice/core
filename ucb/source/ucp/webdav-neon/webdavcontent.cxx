@@ -1195,17 +1195,13 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
     rtl::Reference< ::ucbhelper::PropertyValueSet > xRow
         = new ::ucbhelper::PropertyValueSet( rxContext );
 
-    sal_Int32 nCount = rProperties.getLength();
-    if ( nCount )
+    if ( rProperties.hasElements() )
     {
         uno::Reference< beans::XPropertySet > xAdditionalPropSet;
         bool bTriedToGetAdditionalPropSet = false;
 
-        const beans::Property* pProps = rProperties.getConstArray();
-        for ( sal_Int32 n = 0; n < nCount; ++n )
+        for ( const beans::Property& rProp : rProperties )
         {
-            const beans::Property& rProp = pProps[ n ];
-
             // Process standard UCB, DAV and HTTP properties.
             const uno::Any & rValue = rData.getValue( rProp.Name );
             if ( rValue.hasValue() )
@@ -1378,12 +1374,8 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
 
                 if ( !m_aFailedPropNames.empty() )
                 {
-                    sal_Int32 nProps = 0;
-                    sal_Int32 nCount = rProperties.getLength();
-                    for ( sal_Int32 n = 0; n < nCount; ++n, ++nProps )
-                    {
-                        aProperties[ nProps ] = rProperties[ n ];
-                    }
+                    sal_Int32 nProps = rProperties.getLength();
+                    std::copy(rProperties.begin(), rProperties.end(), aProperties.begin());
 
                     aProperties.realloc( nProps );
                 }
@@ -1659,10 +1651,9 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
         }
     }
 
-    sal_Int32 nCount = rProperties.getLength();
-    for ( sal_Int32 n = 0; n < nCount; ++n )
+    for ( const auto& rProperty : rProperties )
     {
-        const OUString rName = rProperties[ n ].Name;
+        const OUString rName = rProperty.Name;
         if ( rName == "BaseURI" )
         {
             // Add BaseURI property, if requested.
@@ -2969,11 +2960,11 @@ Content::ResourceType Content::resourceTypeForLocks(
             if ( m_xCachedProps->getValue( DAVProperties::SUPPORTEDLOCK )
                  >>= aSupportedLocks )            //get the cached value for supportedlock
             {
-                for ( sal_Int32 n = 0; n < aSupportedLocks.getLength(); ++n )
+                for ( const auto& rSupportedLock : aSupportedLocks )
                 {
-                    if ( aSupportedLocks[ n ].Scope
+                    if ( rSupportedLock.Scope
                          == ucb::LockScope_EXCLUSIVE &&
-                         aSupportedLocks[ n ].Type
+                         rSupportedLock.Type
                          == ucb::LockType_WRITE )
                         eResourceTypeForLocks = DAV;
                 }
@@ -3040,20 +3031,20 @@ Content::ResourceType Content::resourceTypeForLocks(
                                     uno::Sequence< ucb::LockEntry > aSupportedLocks;
                                     if ( rProp.Value >>= aSupportedLocks )
                                     {
-                                        for ( sal_Int32 n = 0; n < aSupportedLocks.getLength(); ++n )
+                                        bool isSupported = std::any_of(aSupportedLocks.begin(), aSupportedLocks.end(),
+                                            [](const ucb::LockEntry& rLock) {
+                                                // TODO: if the lock type is changed from 'exclusive write' to 'shared write'
+                                                // e.g. to implement 'Calc shared file feature', the ucb::LockScope_EXCLUSIVE
+                                                // value should be checked as well, adaptation the code may be needed
+                                                return rLock.Scope == ucb::LockScope_EXCLUSIVE
+                                                    && rLock.Type == ucb::LockType_WRITE;
+                                            });
+                                        if (isSupported)
                                         {
-                                            // TODO: if the lock type is changed from 'exclusive write' to 'shared write'
-                                            // e.g. to implement 'Calc shared file feature', the ucb::LockScope_EXCLUSIVE
-                                            // value should be checked as well, adaptation the code may be needed
-                                            if ( aSupportedLocks[ n ].Scope == ucb::LockScope_EXCLUSIVE &&
-                                                 aSupportedLocks[ n ].Type == ucb::LockType_WRITE )
-                                            {
-                                                // requested locking mode is supported
-                                                eResourceTypeForLocks = DAV;
-                                                SAL_INFO( "ucb.ucp.webdav", "resourceTypeForLocks - URL: <"
-                                                          << m_xIdentifier->getContentIdentifier() << ">, DAV lock/unlock supported");
-                                                break;
-                                            }
+                                            // requested locking mode is supported
+                                            eResourceTypeForLocks = DAV;
+                                            SAL_INFO( "ucb.ucp.webdav", "resourceTypeForLocks - URL: <"
+                                                      << m_xIdentifier->getContentIdentifier() << ">, DAV lock/unlock supported");
                                         }
                                         break;
                                     }
