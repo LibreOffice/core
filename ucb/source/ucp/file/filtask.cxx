@@ -2788,6 +2788,26 @@ void TaskManager::notifyPropertyChanges(
 /********************************************************************************/
 
 void
+TaskManager::erasePersistentSetWithoutChildren( const OUString& aUnqPath )
+{
+    {
+        // Release possible references
+        osl::MutexGuard aGuard( m_aMutex );
+        ContentMap::iterator it = m_aContent.find( aUnqPath );
+        if( it != m_aContent.end() )
+        {
+            it->second.xS = nullptr;
+            it->second.xC = nullptr;
+            it->second.xA = nullptr;
+
+            it->second.properties.clear();
+        }
+    }
+
+    m_xFileRegistry->removePropertySet( aUnqPath );
+}
+
+void
 TaskManager::erasePersistentSet( const OUString& aUnqPath,
                            bool withChildren )
 {
@@ -2797,45 +2817,25 @@ TaskManager::erasePersistentSet( const OUString& aUnqPath,
         return;
     }
 
-    uno::Sequence< OUString > seqNames;
-
-    if( withChildren )
+    if( ! withChildren )
     {
-        uno::Reference< container::XNameAccess > xName( m_xFileRegistry,uno::UNO_QUERY );
-        seqNames = xName->getElementNames();
+        erasePersistentSetWithoutChildren(aUnqPath);
+        return;
     }
 
-    sal_Int32 count = withChildren ? seqNames.getLength() : 1;
+    uno::Reference< container::XNameAccess > xName( m_xFileRegistry,uno::UNO_QUERY );
+    uno::Sequence< OUString > seqNames = xName->getElementNames();
 
-    OUString
-        old_Name = aUnqPath;
+    OUString old_Name = aUnqPath;
 
-    for( sal_Int32 j = 0; j < count; ++j )
+    for( const auto& rName : seqNames )
     {
-        if( withChildren  && ! ( isChild( old_Name,seqNames[j] ) ) )
+        if( ! ( isChild( old_Name,rName ) ) )
             continue;
 
-        if( withChildren )
-        {
-            old_Name = seqNames[j];
-        }
+        old_Name = rName;
 
-        {
-            // Release possible references
-            osl::MutexGuard aGuard( m_aMutex );
-            ContentMap::iterator it = m_aContent.find( old_Name );
-            if( it != m_aContent.end() )
-            {
-                it->second.xS = nullptr;
-                it->second.xC = nullptr;
-                it->second.xA = nullptr;
-
-                it->second.properties.clear();
-            }
-        }
-
-        if( m_xFileRegistry.is() )
-            m_xFileRegistry->removePropertySet( old_Name );
+        erasePersistentSetWithoutChildren(old_Name);
     }
 }
 
@@ -2845,6 +2845,35 @@ TaskManager::erasePersistentSet( const OUString& aUnqPath,
 /*                       from srcUnqPath to dstUnqPath                          */
 /********************************************************************************/
 
+void
+TaskManager::copyPersistentSetWithoutChildren( const OUString& srcUnqPath,
+                          const OUString& dstUnqPath )
+{
+    uno::Reference< XPersistentPropertySet > x_src =
+            m_xFileRegistry->openPropertySet( srcUnqPath,false );
+    m_xFileRegistry->removePropertySet( dstUnqPath );
+
+    if( ! x_src.is() )
+        return;
+
+    uno::Sequence< beans::Property > seqProperty =
+        x_src->getPropertySetInfo()->getProperties();
+
+    if( ! seqProperty.hasElements() )
+        return;
+
+    uno::Reference< XPersistentPropertySet >
+        x_dstS = m_xFileRegistry->openPropertySet( dstUnqPath,true );
+    uno::Reference< beans::XPropertyContainer >
+        x_dstC( x_dstS,uno::UNO_QUERY );
+
+    for( const auto& rProperty : seqProperty )
+    {
+        x_dstC->addProperty( rProperty.Name,
+                             rProperty.Attributes,
+                             x_src->getPropertyValue( rProperty.Name ) );
+    }
+}
 
 void
 TaskManager::copyPersistentSet( const OUString& srcUnqPath,
@@ -2857,60 +2886,26 @@ TaskManager::copyPersistentSet( const OUString& srcUnqPath,
         return;
     }
 
-    uno::Sequence< OUString > seqNames;
-
-    if( withChildren )
+    if( ! withChildren )
     {
-        uno::Reference< container::XNameAccess > xName( m_xFileRegistry,uno::UNO_QUERY );
-        seqNames = xName->getElementNames();
+        copyPersistentSetWithoutChildren(srcUnqPath, dstUnqPath);
+        return;
     }
 
-    sal_Int32 count = withChildren ? seqNames.getLength() : 1;
+    uno::Reference< container::XNameAccess > xName( m_xFileRegistry,uno::UNO_QUERY );
+    uno::Sequence< OUString > seqNames = xName->getElementNames();
 
-    OUString
-        old_Name = srcUnqPath,
-        new_Name = dstUnqPath;
+    OUString new_Name;
 
-    for( sal_Int32 j = 0; j < count; ++j )
+    for( const auto& rName : seqNames )
     {
-        if( withChildren  && ! ( isChild( srcUnqPath,seqNames[j] ) ) )
+        if( ! ( isChild( srcUnqPath,rName ) ) )
             continue;
 
-        if( withChildren )
-        {
-            old_Name = seqNames[j];
-            new_Name = newName( dstUnqPath,srcUnqPath,old_Name );
-        }
+        new_Name = newName( dstUnqPath,srcUnqPath,rName );
 
-        uno::Reference< XPersistentPropertySet > x_src;
-
-        if( m_xFileRegistry.is() )
-        {
-            x_src = m_xFileRegistry->openPropertySet( old_Name,false );
-            m_xFileRegistry->removePropertySet( new_Name );
-        }
-
-        if( x_src.is() )
-        {
-            uno::Sequence< beans::Property > seqProperty =
-                x_src->getPropertySetInfo()->getProperties();
-
-            if( seqProperty.hasElements() )
-            {
-                uno::Reference< XPersistentPropertySet >
-                    x_dstS = m_xFileRegistry->openPropertySet( new_Name,true );
-                uno::Reference< beans::XPropertyContainer >
-                    x_dstC( x_dstS,uno::UNO_QUERY );
-
-                for( sal_Int32 i = 0; i < seqProperty.getLength(); ++i )
-                {
-                    x_dstC->addProperty( seqProperty[i].Name,
-                                         seqProperty[i].Attributes,
-                                         x_src->getPropertyValue( seqProperty[i].Name ) );
-                }
-            }
-        }
-    }         // end for( sal_Int...
+        copyPersistentSetWithoutChildren(rName, new_Name);
+    }
 }
 
 uno::Sequence< ucb::ContentInfo > TaskManager::queryCreatableContentsInfo()
