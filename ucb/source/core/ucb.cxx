@@ -710,21 +710,16 @@ void SAL_CALL UniversalContentBroker::abort( sal_Int32 )
 // virtual
 void SAL_CALL UniversalContentBroker::changesOccurred( const util::ChangesEvent& Event )
 {
-    sal_Int32 nCount = Event.Changes.getLength();
-    if ( nCount )
+    if ( Event.Changes.hasElements() )
     {
         uno::Reference< container::XHierarchicalNameAccess > xHierNameAccess;
         Event.Base >>= xHierNameAccess;
 
         OSL_ASSERT( xHierNameAccess.is() );
 
-        const util::ElementChange* pElementChanges
-            = Event.Changes.getConstArray();
-
         ContentProviderDataList aData;
-        for ( sal_Int32 n = 0; n < nCount; ++n )
+        for ( const util::ElementChange& rElem : Event.Changes )
         {
-            const util::ElementChange& rElem = pElementChanges[ n ];
             OUString aKey;
             rElem.Accessor >>= aKey;
 
@@ -870,16 +865,14 @@ bool UniversalContentBroker::getContentProviderData(
                                             xInterface, uno::UNO_QUERY_THROW );
 
         uno::Sequence< OUString > aElems = xNameAccess->getElementNames();
-        const OUString* pElems = aElems.getConstArray();
-        sal_Int32 nCount = aElems.getLength();
 
-        if ( nCount > 0 )
+        if ( aElems.hasElements() )
         {
             uno::Reference< container::XHierarchicalNameAccess >
                                 xHierNameAccess( xInterface, uno::UNO_QUERY_THROW );
 
             // Iterate over children.
-            for ( sal_Int32 n = 0; n < nCount; ++n )
+            for ( const auto& rElem : aElems )
             {
 
                 try
@@ -889,7 +882,7 @@ bool UniversalContentBroker::getContentProviderData(
 
                     OUStringBuffer aElemBuffer;
                     aElemBuffer.append( "['" );
-                    makeAndAppendXMLName( aElemBuffer, pElems[ n ] );
+                    makeAndAppendXMLName( aElemBuffer, rElem );
                     aElemBuffer.append( "']" );
 
                     OSL_VERIFY(

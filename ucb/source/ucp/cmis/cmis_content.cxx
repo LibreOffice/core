@@ -182,57 +182,44 @@ namespace
         {
             uno::Sequence< OUString > seqValue;
             value >>= seqValue;
-            sal_Int32 nNumValue = seqValue.getLength( );
-            for ( sal_Int32 i = 0; i < nNumValue; ++i )
-            {
-                values.push_back( OUSTR_TO_STDSTR( seqValue[i] ) );
-            }
+            std::transform(seqValue.begin(), seqValue.end(), std::back_inserter(values),
+                [](const OUString& rValue) -> std::string { return OUSTR_TO_STDSTR( rValue ); });
             type = libcmis::PropertyType::String;
         }
         else if ( prop.Type == CMIS_TYPE_BOOL )
         {
             uno::Sequence< sal_Bool > seqValue;
             value >>= seqValue;
-            sal_Int32 nNumValue = seqValue.getLength( );
-            for ( sal_Int32 i = 0; i < nNumValue; ++i )
-            {
-                values.push_back( OUSTR_TO_STDSTR( OUString::boolean( seqValue[i] ) ) );
-            }
+            std::transform(seqValue.begin(), seqValue.end(), std::back_inserter(values),
+                [](const bool nValue) -> std::string { return OUSTR_TO_STDSTR( OUString::boolean( nValue ) ); });
             type = libcmis::PropertyType::Bool;
         }
         else if ( prop.Type == CMIS_TYPE_INTEGER )
         {
             uno::Sequence< sal_Int64 > seqValue;
             value >>= seqValue;
-            sal_Int32 nNumValue = seqValue.getLength( );
-            for ( sal_Int32 i = 0; i < nNumValue; ++i )
-            {
-                values.push_back( OUSTR_TO_STDSTR( OUString::number( seqValue[i] ) ) );
-            }
+            std::transform(seqValue.begin(), seqValue.end(), std::back_inserter(values),
+                [](const sal_Int64 nValue) -> std::string { return OUSTR_TO_STDSTR( OUString::number( nValue ) ); });
             type = libcmis::PropertyType::Integer;
         }
         else if ( prop.Type == CMIS_TYPE_DECIMAL )
         {
             uno::Sequence< double > seqValue;
             value >>= seqValue;
-            sal_Int32 nNumValue = seqValue.getLength( );
-            for ( sal_Int32 i = 0; i < nNumValue; ++i )
-            {
-                values.push_back( OUSTR_TO_STDSTR( OUString::number( seqValue[i] ) ) );
-            }
+            std::transform(seqValue.begin(), seqValue.end(), std::back_inserter(values),
+                [](const double fValue) -> std::string { return OUSTR_TO_STDSTR( OUString::number( fValue ) ); });
             type = libcmis::PropertyType::Decimal;
         }
         else if ( prop.Type == CMIS_TYPE_DATETIME )
         {
             uno::Sequence< util::DateTime > seqValue;
             value >>= seqValue;
-            sal_Int32 nNumValue = seqValue.getLength( );
-            for ( sal_Int32 i = 0; i < nNumValue; ++i )
-            {
-                OUStringBuffer aBuffer;
-                ::sax::Converter::convertDateTime( aBuffer, seqValue[i], nullptr );
-                values.push_back( OUSTR_TO_STDSTR( aBuffer.makeStringAndClear( )  ) );
-            }
+            std::transform(seqValue.begin(), seqValue.end(), std::back_inserter(values),
+                [](const util::DateTime& rValue) -> std::string {
+                    OUStringBuffer aBuffer;
+                    ::sax::Converter::convertDateTime( aBuffer, rValue, nullptr );
+                    return OUSTR_TO_STDSTR( aBuffer.makeStringAndClear( ) );
+                });
             type = libcmis::PropertyType::DateTime;
         }
 
@@ -602,11 +589,10 @@ namespace cmis
         iCmisProps >>= aPropsSeq;
         map< string, libcmis::PropertyPtr > aProperties;
 
-        sal_Int32 propsLen = aPropsSeq.getLength( );
-        for ( sal_Int32 i = 0; i< propsLen; i++ )
+        for ( const auto& rProp : aPropsSeq )
         {
-            std::string id = OUSTR_TO_STDSTR( aPropsSeq[i].Id );
-            libcmis::PropertyPtr prop = lcl_unoToCmisProperty( aPropsSeq[i] );
+            std::string id = OUSTR_TO_STDSTR( rProp.Id );
+            libcmis::PropertyPtr prop = lcl_unoToCmisProperty( rProp );
             aProperties.insert( std::pair<string, libcmis::PropertyPtr>( id, prop ) );
         }
         libcmis::ObjectPtr updateObj;
@@ -628,16 +614,8 @@ namespace cmis
     {
         rtl::Reference< ::ucbhelper::PropertyValueSet > xRow = new ::ucbhelper::PropertyValueSet( m_xContext );
 
-        sal_Int32 nProps;
-        const beans::Property* pProps;
-
-        nProps = rProperties.getLength();
-        pProps = rProperties.getConstArray();
-
-        for( sal_Int32 n = 0; n < nProps; ++n )
+        for( const beans::Property& rProp : rProperties )
         {
-            const beans::Property& rProp = pProps[ n ];
-
             try
             {
                 if ( rProp.Name == "IsDocument" )
@@ -840,14 +818,13 @@ namespace cmis
                         uno::Sequence< document::CmisProperty > aCmisProperties( aProperties.size( ) );
                         document::CmisProperty* pCmisProps = aCmisProperties.getArray( );
                         sal_Int32 i = 0;
-                        for ( const auto& rProperty : aProperties )
+                        for ( const auto& [sId, rProperty] : aProperties )
                         {
-                            string sId = rProperty.first;
-                            string sDisplayName = rProperty.second->getPropertyType()->getDisplayName( );
-                            bool bUpdatable = rProperty.second->getPropertyType()->isUpdatable( );
-                            bool bRequired = rProperty.second->getPropertyType()->isRequired( );
-                            bool bMultiValued = rProperty.second->getPropertyType()->isMultiValued();
-                            bool bOpenChoice = rProperty.second->getPropertyType()->isOpenChoice();
+                            string sDisplayName = rProperty->getPropertyType()->getDisplayName( );
+                            bool bUpdatable = rProperty->getPropertyType()->isUpdatable( );
+                            bool bRequired = rProperty->getPropertyType()->isRequired( );
+                            bool bMultiValued = rProperty->getPropertyType()->isMultiValued();
+                            bool bOpenChoice = rProperty->getPropertyType()->isOpenChoice();
 
                             pCmisProps[i].Id = STD_TO_OUSTR( sId );
                             pCmisProps[i].Name = STD_TO_OUSTR( sDisplayName );
@@ -855,8 +832,8 @@ namespace cmis
                             pCmisProps[i].Required = bRequired;
                             pCmisProps[i].MultiValued = bMultiValued;
                             pCmisProps[i].OpenChoice = bOpenChoice;
-                            pCmisProps[i].Value = lcl_cmisPropertyToUno( rProperty.second );
-                            switch ( rProperty.second->getPropertyType( )->getType( ) )
+                            pCmisProps[i].Value = lcl_cmisPropertyToUno( rProperty );
+                            switch ( rProperty->getPropertyType( )->getType( ) )
                             {
                                 default:
                                 case libcmis::PropertyType::String:

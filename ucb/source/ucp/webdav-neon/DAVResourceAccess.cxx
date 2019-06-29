@@ -1084,11 +1084,11 @@ void DAVResourceAccess::getUserRequestHeaders(
             uno::Sequence< beans::StringPair > aRequestHeaders
                 = xDAVEnv->getUserRequestHeaders( rURI, eMethod );
 
-            for ( sal_Int32 n = 0; n < aRequestHeaders.getLength(); ++n )
+            for ( const auto& rRequestHeader : aRequestHeaders )
             {
                 rRequestHeaders.emplace_back(
-                        aRequestHeaders[ n ].First,
-                        aRequestHeaders[ n ].Second );
+                        rRequestHeader.First,
+                        rRequestHeader.Second );
             }
         }
     }

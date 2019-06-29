@@ -197,20 +197,15 @@ bool LinkSequence::toXML( const uno::Sequence< ucb::Link > & rInData,
 {
     // <link><src>value</src><dst>value</dst></link><link><src>....
 
-    sal_Int32 nCount = rInData.getLength();
-    if ( nCount )
+    for ( const auto& rLink : rInData )
     {
-        for ( sal_Int32 n = 0; n < nCount; ++n )
-        {
-                rOutData += "<link><src>";
-                rOutData += rInData[ n ].Source;
-                rOutData += "</src><dst>";
-                rOutData += rInData[ n ].Destination;
-                rOutData += "</dst></link>";
-        }
-        return true;
+        rOutData += "<link><src>";
+        rOutData += rLink.Source;
+        rOutData += "</src><dst>";
+        rOutData += rLink.Destination;
+        rOutData += "</dst></link>";
     }
-    return false;
+    return rInData.hasElements();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

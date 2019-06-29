@@ -223,9 +223,11 @@ void DynamicResultSetWrapper::impl_notify( const ListEvent& Changes )
 
     {
         osl::Guard< osl::Mutex > aGuard( m_aMutex );
-        for( long i=0; !m_bGotWelcome && i<Changes.Changes.getLength(); i++ )
+        for( ListAction& rAction : aNewEvent.Changes )
         {
-            ListAction& rAction = aNewEvent.Changes[i];
+            if (m_bGotWelcome)
+                break;
+
             switch( rAction.ListActionType )
             {
                 case ListActionType::WELCOME:

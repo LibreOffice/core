@@ -355,14 +355,10 @@ void OFileAccess::createFolder( const OUString& NewFolderURL )
     ucbhelper::Content aCnt( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), mxEnvironment.get(), comphelper::getProcessComponentContext() );
 
     Sequence< ContentInfo > aInfo = aCnt.queryCreatableContentsInfo();
-    sal_Int32 nCount = aInfo.getLength();
-    if ( nCount == 0 )
-        return;
 
-    for ( sal_Int32 i = 0; i < nCount; ++i )
+    for ( const ContentInfo & rCurr : aInfo )
     {
         // Simply look for the first KIND_FOLDER...
-        const ContentInfo & rCurr = aInfo[i];
         if ( rCurr.Attributes & ContentInfoAttribute::KIND_FOLDER )
         {
             // Make sure the only required bootstrap property is "Title",
@@ -591,13 +587,9 @@ bool OFileAccess::createNewFile( const OUString & rParentURL,
     ucbhelper::Content aParentCnt( rParentURL, mxEnvironment.get(), comphelper::getProcessComponentContext() );
 
     Sequence< ContentInfo > aInfo = aParentCnt.queryCreatableContentsInfo();
-    sal_Int32 nCount = aInfo.getLength();
-    if ( nCount == 0 )
-        return false;
 
-    for ( sal_Int32 i = 0; i < nCount; ++i )
+    for ( const ContentInfo & rCurr : aInfo )
     {
-        const ContentInfo & rCurr = aInfo[i];
         if ( ( rCurr.Attributes
                & ContentInfoAttribute::KIND_DOCUMENT ) &&
              ( rCurr.Attributes

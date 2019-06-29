@@ -210,20 +210,19 @@ PropertyChangeNotifier::~PropertyChangeNotifier()
 
 
 void PropertyChangeNotifier::notifyPropertyChanged(
-    const uno::Sequence< beans::PropertyChangeEvent >& Changes_ )
+    const uno::Sequence< beans::PropertyChangeEvent >& seqChanged )
 {
-    sal_Int32 j;
-    uno::Sequence< beans::PropertyChangeEvent > Changes  = Changes_;
+    uno::Sequence< beans::PropertyChangeEvent > Changes  = seqChanged;
 
-    for( j = 0; j < Changes.getLength(); ++j )
-        Changes[j].Source = m_xCreatorContent;
+    for( auto& rChange : Changes )
+        rChange.Source = m_xCreatorContent;
 
     // notify listeners for all Events
 
     uno::Sequence< uno::Reference< uno::XInterface > > seqList = (*m_pListeners)[ OUString() ];
-    for( j = 0; j < seqList.getLength(); ++j )
+    for( const auto& rListener : seqList )
     {
-        uno::Reference< beans::XPropertiesChangeListener > aListener( seqList[j],uno::UNO_QUERY );
+        uno::Reference< beans::XPropertiesChangeListener > aListener( rListener,uno::UNO_QUERY );
         if( aListener.is() )
         {
             aListener->propertiesChange( Changes );
@@ -231,14 +230,14 @@ void PropertyChangeNotifier::notifyPropertyChanged(
     }
 
     uno::Sequence< beans::PropertyChangeEvent > seq(1);
-    for( j = 0; j < Changes.getLength(); ++j )
+    for( const auto& rChange : Changes )
     {
-        seq[0] = Changes[j];
-        seqList = (*m_pListeners)[ seq[0].PropertyName ];
+        seq[0] = rChange;
+        seqList = (*m_pListeners)[ rChange.PropertyName ];
 
-        for( sal_Int32 i = 0; i < seqList.getLength(); ++i )
+        for( const auto& rListener : seqList )
         {
-            uno::Reference< beans::XPropertiesChangeListener > aListener( seqList[i],uno::UNO_QUERY );
+            uno::Reference< beans::XPropertiesChangeListener > aListener( rListener,uno::UNO_QUERY );
             if( aListener.is() )
             {
                 aListener->propertiesChange( seq );

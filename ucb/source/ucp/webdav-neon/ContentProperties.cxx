@@ -222,11 +222,8 @@ void ContentProperties::UCBNamesToDAVNames(
     bool bContentLength = false;
     bool bResourceType  = false;
 
-    sal_Int32 nCount = rProps.getLength();
-    for ( sal_Int32 n = 0; n < nCount; ++n )
+    for ( const beans::Property & rProp : rProps )
     {
-        const beans::Property & rProp = rProps[ n ];
-
         if ( rProp.Name == "Title" )
         {
             // Title is always obtained from resource's URI.
@@ -295,11 +292,8 @@ void ContentProperties::UCBNamesToHTTPNames(
     // Content-Type   <- MediaType
     // Content-Length <- Size
 
-    sal_Int32 nCount = rProps.getLength();
-    for ( sal_Int32 n = 0; n < nCount; ++n )
+    for ( const beans::Property & rProp : rProps )
     {
-        const beans::Property & rProp = rProps[ n ];
-
         if ( rProp.Name == "DateModified" )
         {
             propertyNames.emplace_back("Last-Modified" );
@@ -326,10 +320,9 @@ bool ContentProperties::containsAllNames(
 {
     rNamesNotContained.clear();
 
-    sal_Int32 nCount = rProps.getLength();
-    for ( sal_Int32 n = 0; n < nCount; ++n )
+    for ( const auto& rProp : rProps )
     {
-        const OUString & rName = rProps[ n ].Name;
+        const OUString & rName = rProp.Name;
         if ( !contains( rName ) )
         {
             // Not found.

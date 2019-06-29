@@ -346,9 +346,10 @@ XPropertySetInfoImpl2::queryInterface( const Type& rType )
 Property SAL_CALL
 XPropertySetInfoImpl2::getPropertyByName( const OUString& aName )
 {
-    for( sal_Int32 i = 0; i < m_seq.getLength(); ++i )
-        if( m_seq[i].Name == aName )
-            return m_seq[i];
+    auto pProp = std::find_if(m_seq.begin(), m_seq.end(),
+            [&aName](const Property& rProp) { return rProp.Name == aName; });
+    if (pProp != m_seq.end())
+        return *pProp;
 
     throw UnknownPropertyException( THROW_WHERE );
 }
@@ -365,10 +366,8 @@ sal_Bool SAL_CALL
 XPropertySetInfoImpl2::hasPropertyByName(
     const OUString& aName )
 {
-    for( sal_Int32 i = 0; i < m_seq.getLength(); ++i )
-        if( m_seq[i].Name == aName )
-            return true;
-    return false;
+    return std::any_of(m_seq.begin(), m_seq.end(),
+        [&aName](const Property& rProp) { return rProp.Name == aName; });
 }
 
 

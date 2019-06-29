@@ -146,12 +146,10 @@ static bool noKeepAlive( const uno::Sequence< beans::NamedValue >& rFlags )
         return false;
 
     // find "KeepAlive" property
-    const beans::NamedValue* pAry(rFlags.getConstArray());
-    const sal_Int32          nLen(rFlags.getLength());
     const beans::NamedValue* pValue(
-        std::find_if(pAry,pAry+nLen,
+        std::find_if(rFlags.begin(), rFlags.end(),
             [] (beans::NamedValue const& rNV) { return rNV.Name == "KeepAlive"; } ));
-    return pValue != pAry+nLen && !pValue->Value.get<bool>();
+    return pValue != rFlags.end() && !pValue->Value.get<bool>();
 }
 
 struct NeonRequestContext
@@ -1773,17 +1771,11 @@ namespace {
 bool containsLocktoken( const uno::Sequence< ucb::Lock > & rLocks,
                         const char * token )
 {
-    for ( sal_Int32 n = 0; n < rLocks.getLength(); ++n )
-    {
-        const uno::Sequence< OUString > & rTokens
-            = rLocks[ n ].LockTokens;
-        for ( sal_Int32 m = 0; m < rTokens.getLength(); ++m )
-        {
-            if ( rTokens[ m ].equalsAscii( token ) )
-                return true;
-        }
-    }
-    return false;
+    return std::any_of(rLocks.begin(), rLocks.end(), [&token](const ucb::Lock& rLock) {
+        const uno::Sequence< OUString > & rTokens = rLock.LockTokens;
+        return std::any_of(rTokens.begin(), rTokens.end(),
+            [&token](const OUString& rToken) { return rToken.equalsAscii( token ); });
+    });
 }
 
 } // namespace
