@@ -33,6 +33,24 @@
       "revId": "cbef213fc62a5cb67040565a0f80da18d3b4b777",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_c77c88b7",
+        "filename": "cui/source/customize/SvxNotebookbarConfigPage.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 1001943
+      },
+      "writtenOn": "2019-06-29T17:05:45Z",
+      "side": 1,
+      "message": "What is expected, didn\u0027t get ?",
+      "parentUuid": "df7087c5_0eae172e",
+      "revId": "cbef213fc62a5cb67040565a0f80da18d3b4b777",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
