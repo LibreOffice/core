@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_475e38e7",
+        "filename": "ucb/source/ucp/file/filtask.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 569,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-06-29T12:07:59Z",
+      "side": 1,
+      "message": "copyPersistentSetWIthoutChildren?",
+      "revId": "aa9aea21d2bcaed62cb6136ede469de3dc96de1d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
