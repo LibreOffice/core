@@ -83,16 +83,8 @@ namespace cmis
     {
         rtl::Reference< ::ucbhelper::PropertyValueSet > xRow = new ::ucbhelper::PropertyValueSet( m_xContext );
 
-        sal_Int32 nProps;
-        const beans::Property* pProps;
-
-        nProps = rProperties.getLength();
-        pProps = rProperties.getConstArray();
-
-        for( sal_Int32 n = 0; n < nProps; ++n )
+        for( const beans::Property& rProp : rProperties )
         {
-            const beans::Property& rProp = pProps[ n ];
-
             try
             {
                 if ( rProp.Name == "IsDocument" )

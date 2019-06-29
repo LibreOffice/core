@@ -287,9 +287,8 @@ void SortedDynamicResultSet::impl_notify( const ListEvent& Changes )
     aRet >>= bWasFinal;
 
     // handle the actions in the list
-    for ( long i=0; i<Changes.Changes.getLength(); i++ )
+    for ( const ListAction& aAction : Changes.Changes )
     {
-        const ListAction aAction = Changes.Changes[i];
         switch ( aAction.ListActionType )
         {
             case ListActionType::WELCOME:

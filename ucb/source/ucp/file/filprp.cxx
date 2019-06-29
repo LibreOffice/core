@@ -76,10 +76,12 @@ XPropertySetInfo_impl::~XPropertySetInfo_impl()
 beans::Property SAL_CALL
 XPropertySetInfo_impl::getPropertyByName( const OUString& aName )
 {
-  for( sal_Int32 i = 0; i < m_seq.getLength(); ++i )
-    if( m_seq[i].Name == aName ) return m_seq[i];
+    auto pProp = std::find_if(m_seq.begin(), m_seq.end(),
+        [&aName](const beans::Property& rProp) { return rProp.Name == aName; });
+    if (pProp != m_seq.end())
+        return *pProp;
 
-  throw beans::UnknownPropertyException( THROW_WHERE );
+    throw beans::UnknownPropertyException( THROW_WHERE );
 }
 
 
@@ -93,9 +95,8 @@ XPropertySetInfo_impl::getProperties()
 sal_Bool SAL_CALL
 XPropertySetInfo_impl::hasPropertyByName( const OUString& aName )
 {
-  for( sal_Int32 i = 0; i < m_seq.getLength(); ++i )
-    if( m_seq[i].Name == aName ) return true;
-  return false;
+    return std::any_of(m_seq.begin(), m_seq.end(),
+        [&aName](const beans::Property& rProp) { return rProp.Name == aName; });
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -594,22 +594,22 @@ XResultSet_impl::getCapabilities()
 uno::Reference< sdbc::XResultSetMetaData > SAL_CALL
 XResultSet_impl::getMetaData()
 {
-    for ( sal_Int32 n = 0; n < m_sProperty.getLength(); ++n )
+    auto pProp = std::find_if(m_sProperty.begin(), m_sProperty.end(),
+        [](const beans::Property& rProp) { return rProp.Name == "Title"; });
+    if (pProp != m_sProperty.end())
     {
-        if ( m_sProperty.getConstArray()[ n ].Name == "Title" )
-        {
-            std::vector< ::ucbhelper::ResultSetColumnData >
-                                    aColumnData( m_sProperty.getLength() );
-            // @@@ #82177# - Determine correct value!
-            aColumnData[ n ].isCaseSensitive = false;
+        std::vector< ::ucbhelper::ResultSetColumnData >
+                                aColumnData( m_sProperty.getLength() );
+        auto n = std::distance(m_sProperty.begin(), pProp);
+        // @@@ #82177# - Determine correct value!
+        aColumnData[ n ].isCaseSensitive = false;
 
-            ::ucbhelper::ResultSetMetaData* p =
-                new ::ucbhelper::ResultSetMetaData(
-                    m_pMyShell->m_xContext,
-                    m_sProperty,
-                    aColumnData );
-            return uno::Reference< sdbc::XResultSetMetaData >( p );
-        }
+        ::ucbhelper::ResultSetMetaData* p =
+            new ::ucbhelper::ResultSetMetaData(
+                m_pMyShell->m_xContext,
+                m_sProperty,
+                aColumnData );
+        return uno::Reference< sdbc::XResultSetMetaData >( p );
     }
 
     ::ucbhelper::ResultSetMetaData* p =

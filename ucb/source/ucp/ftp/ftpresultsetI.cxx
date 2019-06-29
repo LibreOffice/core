@@ -55,37 +55,37 @@ ResultSetI::ResultSetI(const Reference<XComponentContext>&  rxContext,
         rtl::Reference<ucbhelper::PropertyValueSet> xRow =
             new ucbhelper::PropertyValueSet(rxContext);
 
-        for( int i = 0; i < seqProp.getLength(); ++i) {
-            const OUString& Name = seqProp[i].Name;
+        for( const auto& rProp : seqProp) {
+            const OUString& Name = rProp.Name;
             if(Name == "ContentType")
-                xRow->appendString(seqProp[i],
+                xRow->appendString(rProp,
                                    OUString( "application/ftp" ));
             else if(Name == "Title")
-                xRow->appendString(seqProp[i],dirvec[n].m_aName);
+                xRow->appendString(rProp,dirvec[n].m_aName);
             else if(Name == "IsReadOnly")
-                xRow->appendBoolean(seqProp[i],
+                xRow->appendBoolean(rProp,
                                     (dirvec[n].m_nMode &
                                              INETCOREFTP_FILEMODE_WRITE) == INETCOREFTP_FILEMODE_WRITE);
             else if(Name == "IsDocument")
-                xRow->appendBoolean(seqProp[i],
+                xRow->appendBoolean(rProp,
                                     (dirvec[n].m_nMode &
                                                INETCOREFTP_FILEMODE_ISDIR) != INETCOREFTP_FILEMODE_ISDIR);
             else if(Name == "IsFolder")
-                xRow->appendBoolean(seqProp[i],
+                xRow->appendBoolean(rProp,
                                     ( dirvec[n].m_nMode &
                                              INETCOREFTP_FILEMODE_ISDIR) == INETCOREFTP_FILEMODE_ISDIR);
             else if(Name == "Size")
-                xRow->appendLong(seqProp[i],
+                xRow->appendLong(rProp,
                                  dirvec[n].m_nSize);
             else if(Name == "DateCreated")
-                xRow->appendTimestamp(seqProp[i],
+                xRow->appendTimestamp(rProp,
                                       dirvec[n].m_aDate);
             else if(Name == "CreatableContentsInfo")
                 xRow->appendObject(
-                    seqProp[i],
+                    rProp,
                     makeAny(FTPContent::queryCreatableContentsInfo_Static()));
             else
-                xRow->appendVoid(seqProp[i]);
+                xRow->appendVoid(rProp);
         }
         m_aItems[n].set(xRow.get());
     }

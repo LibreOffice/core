@@ -731,41 +731,41 @@ Reference< XRow > FTPContent::getPropertyValues(
 
     FTPDirentry aDirEntry = m_aFTPURL.direntry();
 
-    for(sal_Int32 i = 0; i < seqProp.getLength(); ++i) {
-        const OUString& Name = seqProp[i].Name;
+    for(const auto& rProp : seqProp) {
+        const OUString& Name = rProp.Name;
         if(Name == "Title")
-            xRow->appendString(seqProp[i],aDirEntry.m_aName);
+            xRow->appendString(rProp,aDirEntry.m_aName);
         else if(Name == "CreatableContentsInfo")
-            xRow->appendObject(seqProp[i],
+            xRow->appendObject(rProp,
                                makeAny(queryCreatableContentsInfo()));
         else if(aDirEntry.m_nMode != INETCOREFTP_FILEMODE_UNKNOWN) {
             if(Name == "ContentType")
-                xRow->appendString(seqProp[i],
+                xRow->appendString(rProp,
                                    (aDirEntry.m_nMode & INETCOREFTP_FILEMODE_ISDIR)
                                    ? OUString(FTP_FOLDER)
                                    : OUString(FTP_FILE) );
             else if(Name == "IsReadOnly")
-                xRow->appendBoolean(seqProp[i],
+                xRow->appendBoolean(rProp,
                                     (aDirEntry.m_nMode
                                      & INETCOREFTP_FILEMODE_WRITE) == 0 );
             else if(Name == "IsDocument")
-                xRow->appendBoolean(seqProp[i],
+                xRow->appendBoolean(rProp,
                                     (aDirEntry.m_nMode &
                                                INETCOREFTP_FILEMODE_ISDIR) != INETCOREFTP_FILEMODE_ISDIR);
             else if(Name == "IsFolder")
-                xRow->appendBoolean(seqProp[i],
+                xRow->appendBoolean(rProp,
                                     (aDirEntry.m_nMode &
                                              INETCOREFTP_FILEMODE_ISDIR) == INETCOREFTP_FILEMODE_ISDIR);
             else if(Name == "Size")
-                xRow->appendLong(seqProp[i],
+                xRow->appendLong(rProp,
                                  aDirEntry.m_nSize);
             else if(Name == "DateCreated")
-                xRow->appendTimestamp(seqProp[i],
+                xRow->appendTimestamp(rProp,
                                       aDirEntry.m_aDate);
             else
-                xRow->appendVoid(seqProp[i]);
+                xRow->appendVoid(rProp);
         } else
-            xRow->appendVoid(seqProp[i]);
+            xRow->appendVoid(rProp);
     }
 
     return Reference<XRow>(xRow.get());
@@ -817,16 +817,17 @@ Sequence<Any> FTPContent::setPropertyValues(
 
             // either unknown or read-only
             ret[i] <<= UnknownPropertyException();
-            for(sal_Int32 j = 0; j < props.getLength(); ++j)
-                if(props[j].Name == seqPropVal[i].Name) {
-                    ret[i] <<= IllegalAccessException(
-                        "Property is read-only!",
-                            //props[j].Attributes & PropertyAttribute::READONLY
-                            //    ? "Property is read-only!"
-                            //    : "Access denied!"),
-                        static_cast< cppu::OWeakObject * >( this ));
-                    break;
-                }
+            const auto& rName = seqPropVal[i].Name;
+            auto pProp = std::find_if(props.begin(), props.end(),
+                [&rName](const Property& rProp) { return rProp.Name == rName; });
+            if (pProp != props.end()) {
+                ret[i] <<= IllegalAccessException(
+                    "Property is read-only!",
+                        //props[j].Attributes & PropertyAttribute::READONLY
+                        //    ? "Property is read-only!"
+                        //    : "Access denied!"),
+                    static_cast< cppu::OWeakObject * >( this ));
+            }
         }
     }
 

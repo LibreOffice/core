@@ -63,6 +63,7 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <comphelper/propertysequence.hxx>
+#include <comphelper/sequence.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <ucbhelper/contentidentifier.hxx>
 #include <ucbhelper/propertyvalueset.hxx>
@@ -685,15 +686,7 @@ bool HierarchyContent::isReadOnly()
             {
                 uno::Sequence< OUString > aNames
                     = xConfigProv->getAvailableServiceNames();
-                sal_Int32 nCount = aNames.getLength();
-                for ( sal_Int32 n = 0; n < nCount; ++n )
-                {
-                    if ( aNames[ n ] == "com.sun.star.ucb.HierarchyDataReadWriteAccess" )
-                    {
-                        m_bIsReadOnly = false;
-                        break;
-                    }
-                }
+                m_bIsReadOnly = comphelper::findValue(aNames, "com.sun.star.ucb.HierarchyDataReadWriteAccess") == -1;
             }
         }
     }
@@ -851,17 +844,13 @@ uno::Reference< sdbc::XRow > HierarchyContent::getPropertyValues(
     rtl::Reference< ::ucbhelper::PropertyValueSet > xRow
         = new ::ucbhelper::PropertyValueSet( rxContext );
 
-    sal_Int32 nCount = rProperties.getLength();
-    if ( nCount )
+    if ( rProperties.hasElements() )
     {
         uno::Reference< beans::XPropertySet > xAdditionalPropSet;
         bool bTriedToGetAdditionalPropSet = false;
 
-        const beans::Property* pProps = rProperties.getConstArray();
-        for ( sal_Int32 n = 0; n < nCount; ++n )
+        for ( const beans::Property& rProp : rProperties )
         {
-            const beans::Property& rProp = pProps[ n ];
-
             // Process Core properties.
 
             if ( rProp.Name == "ContentType" )

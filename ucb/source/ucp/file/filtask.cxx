@@ -1099,18 +1099,16 @@ TaskManager::getv( sal_Int32 CommandId,
         TaskManager::ContentMap::iterator it = m_aContent.find( aUnqPath );
         commit( it,aFileStatus );
 
-        TaskManager::PropertySet::iterator it1;
         PropertySet& propset = it->second.properties;
 
-        for( sal_Int32 i = 0; i < seq.getLength(); ++i )
-        {
-            MyProperty readProp( properties[i].Name );
-            it1 = propset.find( readProp );
-            if( it1 == propset.end() )
-                seq[i] = uno::Any();
-            else
-                seq[i] = it1->getValue();
-        }
+        std::transform(properties.begin(), properties.end(), seq.begin(),
+            [&propset](const beans::Property& rProp) -> uno::Any {
+                MyProperty readProp( rProp.Name );
+                auto it1 = propset.find( readProp );
+                if( it1 == propset.end() )
+                    return uno::Any();
+                return it1->getValue();
+            });
     }
 
     XRow_impl* p = new XRow_impl( this,seq );
@@ -2154,28 +2152,28 @@ TaskManager::getMaskFromProperties(
     const uno::Sequence< beans::Property >& seq )
 {
     n_Mask = 0;
-    for(sal_Int32 j = 0; j < seq.getLength(); ++j) {
-        if(seq[j].Name == Title)
+    for(const auto& rProp : seq) {
+        if(rProp.Name == Title)
             n_Mask |= osl_FileStatus_Mask_FileName;
-        else if(seq[j].Name == CasePreservingURL)
+        else if(rProp.Name == CasePreservingURL)
             n_Mask |= osl_FileStatus_Mask_FileURL;
-        else if(seq[j].Name == IsDocument ||
-                seq[j].Name == IsFolder ||
-                seq[j].Name == IsVolume ||
-                seq[j].Name == IsRemoveable ||
-                seq[j].Name == IsRemote ||
-                seq[j].Name == IsCompactDisc ||
-                seq[j].Name == IsFloppy ||
-                seq[j].Name == ContentType)
+        else if(rProp.Name == IsDocument ||
+                rProp.Name == IsFolder ||
+                rProp.Name == IsVolume ||
+                rProp.Name == IsRemoveable ||
+                rProp.Name == IsRemote ||
+                rProp.Name == IsCompactDisc ||
+                rProp.Name == IsFloppy ||
+                rProp.Name == ContentType)
             n_Mask |= (osl_FileStatus_Mask_Type | osl_FileStatus_Mask_LinkTargetURL);
-        else if(seq[j].Name == Size)
+        else if(rProp.Name == Size)
             n_Mask |= (osl_FileStatus_Mask_FileSize |
                       osl_FileStatus_Mask_Type |
                       osl_FileStatus_Mask_LinkTargetURL);
-        else if(seq[j].Name == IsHidden ||
-                seq[j].Name == IsReadOnly)
+        else if(rProp.Name == IsHidden ||
+                rProp.Name == IsReadOnly)
             n_Mask |= osl_FileStatus_Mask_Attributes;
-        else if(seq[j].Name == DateModified)
+        else if(rProp.Name == DateModified)
             n_Mask |= osl_FileStatus_Mask_ModifyTime;
     }
 }
@@ -2215,15 +2213,15 @@ TaskManager::load( const ContentMap::iterator& it, bool create )
             PropertySet& properties = it->second.properties;
             uno::Sequence< beans::Property > seq = xS->getPropertySetInfo()->getProperties();
 
-            for( sal_Int32 i = 0; i < seq.getLength(); ++i )
+            for( const auto& rProp : seq )
             {
                 MyProperty readProp( false,
-                                     seq[i].Name,
-                                     seq[i].Handle,
-                                     seq[i].Type,
-                                     xS->getPropertyValue( seq[i].Name ),
+                                     rProp.Name,
+                                     rProp.Handle,
+                                     rProp.Type,
+                                     xS->getPropertyValue( rProp.Name ),
                                      beans::PropertyState_DIRECT_VALUE,
-                                     seq[i].Attributes );
+                                     rProp.Attributes );
                 properties.insert( readProp );
             }
         }
@@ -2524,18 +2522,16 @@ TaskManager::getv(
         TaskManager::ContentMap::iterator it = m_aContent.find( aUnqPath );
         commit( it,aFileStatus );
 
-        TaskManager::PropertySet::iterator it1;
         PropertySet& propset = it->second.properties;
 
-        for( sal_Int32 i = 0; i < seq.getLength(); ++i )
-        {
-            MyProperty readProp( properties[i].Name );
-            it1 = propset.find( readProp );
-            if( it1 == propset.end() )
-                seq[i] = uno::Any();
-            else
-                seq[i] = it1->getValue();
-        }
+        std::transform(properties.begin(), properties.end(), seq.begin(),
+            [&propset](const beans::Property& rProp) -> uno::Any {
+                MyProperty readProp( rProp.Name );
+                auto it1 = propset.find( readProp );
+                if( it1 == propset.end() )
+                    return uno::Any();
+                return it1->getValue();
+            });
     }
     deregisterNotifier( aUnqPath,pNotifier );
 

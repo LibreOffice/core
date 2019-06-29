@@ -445,17 +445,9 @@ css::uno::Reference< css::sdbc::XRow > Content::getPropertyValues(
 {
     rtl::Reference< ::ucbhelper::PropertyValueSet > xRow = new ::ucbhelper::PropertyValueSet( m_xContext );
 
-    sal_Int32 nProps;
-    const css::beans::Property* pProps;
-
-    nProps = rProperties.getLength();
-    pProps = rProperties.getConstArray();
-
     GFileInfo *pInfo = nullptr;
-    for( sal_Int32 n = 0; n < nProps; ++n )
+    for( const css::beans::Property& rProp : rProperties )
     {
-        const css::beans::Property& rProp = pProps[ n ];
-
         if ( rProp.Name == "IsDocument" )
         {
             getFileInfo(xEnv, &pInfo, true);
