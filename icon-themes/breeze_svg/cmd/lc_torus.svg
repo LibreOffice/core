@@ -2,25 +2,25 @@
  <defs>
   <linearGradient id="0">
    <stop stop-color="#b3b3b3"/>
-   <stop offset="1" stop-color="#4d4d4d" stop-opacity="0"/>
+   <stop offset="1" stop-color="#232629" stop-opacity="0"/>
   </linearGradient>
   <radialGradient xlink:href="#0" id="1" cx="15" cy="1037.3622" r="8" gradientUnits="userSpaceOnUse" gradientTransform="matrix(-.64403343-.48884694.31038244-.40891466-297.31851 1468.8874)"/>
   <radialGradient xlink:href="#0" id="2" cx="15" cy="1037.3622" r="8" gradientUnits="userSpaceOnUse" gradientTransform="matrix(.64403343.48884694-.31038244.40891466 319.31851 613.837)"/>
   <radialGradient id="3" cx="11" cy="1041.3622" r="8" gradientUnits="userSpaceOnUse" gradientTransform="matrix(-1.0000002.00001075-.00001076-1.0000128 22.01121 2082.7375)">
    <stop stop-color="#b3b3b3" stop-opacity="0"/>
-   <stop offset=".795008" stop-color="#4d4d4d"/>
-   <stop offset="1" stop-color="#4d4d4d" stop-opacity="0"/>
+   <stop offset=".795008" stop-color="#232629"/>
+   <stop offset="1" stop-color="#232629" stop-opacity="0"/>
   </radialGradient>
   <path id="4" d="m11 1033.3622a8 8 0 0 0 -8 8 8 8 0 0 0 8 8 8 8 0 0 0 8 -8 8 8 0 0 0 -8 -8m0 4a4 4 0 0 1 4 4 4 4 0 0 1 -4 4 4 4 0 0 1 -4 -4 4 4 0 0 1 4 -4"/>
  </defs>
  <g transform="matrix(1 0 0 .87500027 1-899.19219)">
-  <g fill="#4d4d4d">
+  <g fill="#232629">
    <use fill-opacity=".835294" xlink:href="#4"/>
    <path d="M5.845703 1035.2548A8 8 0 0 0 3 1041.3622a8 8 0 0 0 8 8 8 8 0 0 0 6.158203 -2.8965 8 8 0 0 1 -5.158203 1.8965 8 8 0 0 1 -8 -8 8 8 0 0 1 1.845703 -5.1074" fill-opacity=".470588"/>
   </g>
   <use opacity=".719" fill="url(#3)" xlink:href="#4"/>
   <use fill="url(#1)" xlink:href="#4"/>
   <path d="m11 1049.3622a8 8 0 0 0 8 -8 8 8 0 0 0 -8 -8 8 8 0 0 0 -8 8 8 8 0 0 0 8 8m0-4a4 4 0 0 1 -4 -4 4 4 0 0 1 4 -4 4 4 0 0 1 4 4 4 4 0 0 1 -4 4" fill="url(#2)"/>
-  <path d="m16 1040.8622a4.5 4.5 0 0 0 -4.5 -4.5 4.5 4.5 0 0 0 -4.5 4.5 4.5 4.5 0 0 0 .00977 .2852 4 4 0 0 1 3.990234 -3.7852 4 4 0 0 1 4 4 4 4 0 0 1 -3.707031 3.9883 4.5 4.5 0 0 0 .207031 .012 4.5 4.5 0 0 0 4.5 -4.5z" fill="#4d4d4d" fill-opacity=".470588"/>
+  <path d="m16 1040.8622a4.5 4.5 0 0 0 -4.5 -4.5 4.5 4.5 0 0 0 -4.5 4.5 4.5 4.5 0 0 0 .00977 .2852 4 4 0 0 1 3.990234 -3.7852 4 4 0 0 1 4 4 4 4 0 0 1 -3.707031 3.9883 4.5 4.5 0 0 0 .207031 .012 4.5 4.5 0 0 0 4.5 -4.5z" fill="#232629" fill-opacity=".470588"/>
  </g>
 </svg>
