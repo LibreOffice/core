@@ -226,7 +226,7 @@ public:
     */
     inline bool SAL_CALL operator == ( const Sequence & rSeq ) const;
 
-    /** Unequality operator: Compares two sequences.
+    /** Inequality operator: Compares two sequences.
 
         @param rSeq another sequence of same type (right side)
         @return false if both sequences are equal, true otherwise
