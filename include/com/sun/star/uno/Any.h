@@ -272,7 +272,7 @@ public:
         @return true if both any contains equal values
     */
     inline bool SAL_CALL operator == ( const Any & rAny ) const;
-    /** Unequality operator: compares two anys.
+    /** Inequality operator: compares two anys.
         The values need not be of equal type, e.g. a short integer is compared to a long integer.
 
         @param rAny another any (right side)
@@ -392,7 +392,7 @@ inline bool SAL_CALL operator >>= ( const Any & rAny, C & value );
 */
 template< class C >
 inline bool SAL_CALL operator == ( const Any & rAny, const C & value );
-/** Template unequality operator: compares set value of left side any to right side value.
+/** Template inequality operator: compares set value of left side any to right side value.
     The values need not be of equal type, e.g. a short integer is compared to a long integer.
     This operator can be implemented as template member function, if all supported compilers
     can cope with template member functions.
