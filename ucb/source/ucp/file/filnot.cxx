@@ -238,7 +238,7 @@ void PropertyChangeNotifier::notifyPropertyChanged(
 
         for( sal_Int32 i = 0; i < seqList.getLength(); ++i )
         {
-            uno::Reference< beans::XPropertiesChangeListener > aListener( seqList[j],uno::UNO_QUERY );
+            uno::Reference< beans::XPropertiesChangeListener > aListener( seqList[i],uno::UNO_QUERY );
             if( aListener.is() )
             {
                 aListener->propertiesChange( seq );
