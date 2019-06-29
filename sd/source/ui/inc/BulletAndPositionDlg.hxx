@@ -23,11 +23,8 @@
 #include <vector>
 #include <memory>
 
-#include <sfx2/tabdlg.hxx>
-#include <svx/Palette.hxx>
 #include <editeng/numdef.hxx>
 #include <editeng/svxenum.hxx>
-#include <svtools/ctrlbox.hxx>
 #include <vcl/weld.hxx>
 #include "View.hxx"
 #include <cui/numberingpreview.hxx>

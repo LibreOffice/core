@@ -10,8 +10,6 @@
 #define ZEROCONF_SERVICE
 
 #include <string>
-#include <stdio.h>
-#include <stdlib.h>
 
 /**
 * The port used by LO's custom remote server discovery protocol.

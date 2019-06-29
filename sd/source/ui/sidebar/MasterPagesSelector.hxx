@@ -20,9 +20,9 @@
 #ifndef INCLUDED_SD_SOURCE_UI_SIDEBAR_MASTERPAGESSELECTOR_HXX
 #define INCLUDED_SD_SOURCE_UI_SIDEBAR_MASTERPAGESSELECTOR_HXX
 
+#include <map>
 #include <memory>
 #include "MasterPageContainer.hxx"
-#include <SlideSorterViewShell.hxx>
 #include "PreviewValueSet.hxx"
 #include <sfx2/sidebar/ILayoutableWindow.hxx>
 

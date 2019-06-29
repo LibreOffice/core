@@ -16,6 +16,8 @@
 #include <svx/graphctl.hxx>
 #include <xmloff/autolayout.hxx>
 
+#include <com/sun/star/awt/Size.hpp>
+
 namespace com { namespace sun { namespace star { namespace drawing { class XDrawPage; } } } }
 namespace com { namespace sun { namespace star { namespace drawing { class XDrawPages; } } } }
 namespace com { namespace sun { namespace star { namespace graphic { class XGraphicProvider; } } } }

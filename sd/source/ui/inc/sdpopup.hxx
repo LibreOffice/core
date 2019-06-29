@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SD_SOURCE_UI_INC_SDPOPUP_HXX
 #define INCLUDED_SD_SOURCE_UI_INC_SDPOPUP_HXX
 
+#include <i18nlangtag/lang.h>
 #include <vcl/menu.hxx>
 
 class SvxFieldData;

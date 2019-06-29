@@ -26,6 +26,7 @@
 #include <i18nlangtag/mslangid.hxx>
 #include <editeng/numitem.hxx>
 #include <svl/eitem.hxx>
+#include <svl/itempool.hxx>
 #include <vcl/svapp.hxx>
 #include <svx/colorbox.hxx>
 #include <svx/strarray.hxx>

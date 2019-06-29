@@ -22,6 +22,8 @@
 
 #include <memory>
 
+#include <svl/itemset.hxx>
+
 #include <sdundo.hxx>
 
 class SfxItemSet;

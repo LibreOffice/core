@@ -22,6 +22,9 @@
 
 #include <sal/config.h>
 
+#include <tools/stream.hxx>
+#include <drawdoc.hxx>
+
 namespace sd {
 
 void CreateTableFromRTF( SvStream& rStream, SdDrawDocument* pModel );

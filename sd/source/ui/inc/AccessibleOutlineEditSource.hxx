@@ -22,6 +22,7 @@
 
 #include <svl/SfxBroadcaster.hxx>
 #include <svl/lstner.hxx>
+#include <tools/link.hxx>
 #include <editeng/unoedsrc.hxx>
 #include <editeng/unoforou.hxx>
 #include <editeng/unoviwou.hxx>

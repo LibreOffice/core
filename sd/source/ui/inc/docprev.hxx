@@ -22,6 +22,8 @@
 
 #include <tools/gen.hxx>
 #include <tools/wintypes.hxx>
+#include <vcl/ctrl.hxx>
+#include <vcl/window.hxx>
 
 #include <rtl/ref.hxx>
 
