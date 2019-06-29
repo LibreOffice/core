@@ -109,7 +109,7 @@ public:
         @return true if both references are null or refer to the same object, false otherwise
     */
     inline bool SAL_CALL operator == ( XInterface * pInterface ) const;
-    /** Unequality operator: compares two interfaces
+    /** Inequality operator: compares two interfaces
         Checks if both references are null or refer to the same object.
 
         @param pInterface another interface
@@ -124,7 +124,7 @@ public:
         @return true if both references are null or refer to the same object, false otherwise
     */
     inline bool SAL_CALL operator == ( const BaseReference & rRef ) const;
-    /** Unequality operator: compares two interfaces
+    /** Inequality operator: compares two interfaces
         Checks if both references are null or refer to the same object.
 
         @param rRef another reference
