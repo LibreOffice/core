@@ -873,9 +873,9 @@ Dim vProperty As Variant, vPropertiesList() As Variant, sObject As String
 	vPropertiesList = _PropertiesList()
 	sObject = Utils._PCase(_Type)
 	If IsMissing(pvIndex) Then
-		vProperty = PropertiesGet._Properties(sObject, &quot;&quot;, vPropertiesList)
+		vProperty = PropertiesGet._Properties(sObject, _This, vPropertiesList)
 	Else
-		vProperty = PropertiesGet._Properties(sObject, &quot;&quot;, vPropertiesList, pvIndex)
+		vProperty = PropertiesGet._Properties(sObject, _This, vPropertiesList, pvIndex)
 		vProperty._Value = _PropertyGet(vPropertiesList(pvIndex))
 	End If
 	Set vProperty._ParentDatabase = _This
@@ -909,9 +909,7 @@ Dim i As Integer, bFound As Boolean, oQueries As Object
 			Set oObject = New Collect
 			Set oObject._This = oObject
 			oObject._CollType = COLLQUERYDEFS
-			oObject._ParentType = OBJDATABASE
-			oObject._ParentName = &quot;&quot;
-			Set oObject._ParentDatabase = _This
+			Set oObject._Parent = _This
 			oObject._Count = UBound(sObjects) + 1
 			Goto Exit_Function
 		Case VarType(pvIndex) = vbString
@@ -974,9 +972,7 @@ Dim i As Integer, bFound As Boolean, oTables As Object
 			Set oObject = New Collect
 			Set oObject._This = oObject
 			oObject._CollType = COLLRECORDSETS
-			oObject._ParentType = OBJDATABASE
-			oObject._ParentName = &quot;&quot;
-			Set oObject._ParentDatabase = _This
+			Set oObject._Parent = _This
 			oObject._Count = RecordsetsColl.Count
 		Case VarType(pvIndex) = vbString
 			bFound = _hasRecordset(pvIndex)
@@ -1068,9 +1064,7 @@ Dim i As Integer, bFound As Boolean, oTables As Object
 			Set oObject = New Collect
 			Set oObject._This = oObject
 			oObject._CollType = COLLTABLEDEFS
-			oObject._ParentType = OBJDATABASE
-			oObject._ParentName = &quot;&quot;
-			Set oObject._ParentDatabase = _This
+			Set oObject._Parent = _This
 			oObject._Count = UBound(sObjects) + 1
 			Goto Exit_Function
 		Case VarType(pvIndex) = vbString

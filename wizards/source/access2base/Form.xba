@@ -407,9 +407,9 @@ Dim vProperty As Variant, vPropertiesList() As Variant, sObject As String
 	vPropertiesList = _PropertiesList()
 	sObject = Utils._PCase(_Type)
 	If IsMissing(pvIndex) Then
-		vProperty = PropertiesGet._Properties(sObject, _Name, vPropertiesList)
+		vProperty = PropertiesGet._Properties(sObject, _This, vPropertiesList)
 	Else
-		vProperty = PropertiesGet._Properties(sObject, _Name, vPropertiesList, pvIndex)
+		vProperty = PropertiesGet._Properties(sObject, _This, vPropertiesList, pvIndex)
 		vProperty._Value = _PropertyGet(vPropertiesList(pvIndex))
 	End If
 	
@@ -506,8 +506,7 @@ Dim oDatabaseForm As Object, iCtlCount As Integer
 		Set oCounter = New Collect
 		Set oCounter._This = oCounter
 		oCounter._CollType = COLLCONTROLS
-		oCounter._ParentType = OBJFORM
-		oCounter._ParentName = _Name
+		Set oCounter._Parent = _This
 		oCounter._Count = iControlCount
 		Set Controls = oCounter
 		Goto Exit_Function

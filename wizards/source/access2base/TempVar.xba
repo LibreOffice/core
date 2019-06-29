@@ -70,10 +70,10 @@ REM ----------------------------------------------------------------------------
 Public Function getProperty(Optional ByVal pvProperty As Variant) As Variant
 &apos;	Return property value of psProperty property name
 
-	Utils._SetCalledSub(&quot;Property.getProperty&quot;)
+	Utils._SetCalledSub(&quot;TempVar.getProperty&quot;)
 	If IsMissing(pvProperty) Then Call _TraceArguments()
 	getProperty = _PropertyGet(pvProperty)
-	Utils._ResetCalledSub(&quot;Property.getProperty&quot;)
+	Utils._ResetCalledSub(&quot;TempVar.getProperty&quot;)
 	
 End Function		&apos;	getProperty
 
@@ -96,9 +96,9 @@ Dim vProperty As Variant, vPropertiesList() As Variant, sObject As String
 	vPropertiesList = _PropertiesList()
 	sObject = Utils._PCase(_Type)
 	If IsMissing(pvIndex) Then
-		vProperty = PropertiesGet._Properties(sObject, _Name, vPropertiesList)
+		vProperty = PropertiesGet._Properties(sObject, _This, vPropertiesList)
 	Else
-		vProperty = PropertiesGet._Properties(sObject, _Name, vPropertiesList, pvIndex)
+		vProperty = PropertiesGet._Properties(sObject, _This, vPropertiesList, pvIndex)
 		vProperty._Value = _PropertyGet(vPropertiesList(pvIndex))
 	End If
 	
@@ -110,11 +110,9 @@ End Function	&apos;	Properties
 REM -----------------------------------------------------------------------------------------------------------------------
 Public Function setProperty(ByVal Optional psProperty As String, ByVal Optional pvValue As Variant) As Boolean
 &apos;	Return True if property setting OK
-Dim cstThisSub As String
-	cstThisSub = Utils._PCase(_Type) &amp; &quot;.getProperty&quot;
-	Utils._SetCalledSub(cstThisSub)
+	Utils._SetCalledSub(&quot;TempVar.getProperty&quot;)
 	setProperty = _PropertySet(psProperty, pvValue)
-	Utils._ResetCalledSub(cstThisSub)
+	Utils._ResetCalledSub(&quot;TempVar.getProperty&quot;)
 End Function
 
 REM -----------------------------------------------------------------------------------------------------------------------

@@ -149,7 +149,7 @@ Global Const acSubform = 112
 Global Const acTextField = 9		:	Global Const acTextBox = 9
 Global Const acTimeField = 16
 
-REM Record
+REM AcRecord
 REM -----------------------------------------------------------------
 Global Const acFirst = 2 
 Global Const acGoTo = 4 
@@ -177,15 +177,6 @@ Global Const acDataQuery = 1
 Global Const acDataServerView = 7
 Global Const acDataStoredProcedure = 9
 Global Const acDataTable = 0
-
-REM AcRecord
-REM -----------------------------------------------------------------
-Global Const acFirst = 2
-Global Const acGoTo = 4
-Global Const acLast = 3
-Global Const acNewRec = 5
-Global Const acNext = 1
-Global Const acPrevious = 0
 
 REM AcQuitOption
 REM -----------------------------------------------------------------
@@ -223,19 +214,13 @@ Global Const acCmdNewObjectForm = 136
 Global Const acCmdNewObjectTable = 134
 Global Const acCmdNewObjectView = 350
 Global Const acCmdOpenDatabase = 25
-Global Const acCmdRemove = 366
-Global Const acCmdDesignView = 183
 Global Const acCmdNewObjectQuery = 135
 Global Const acCmdShowAllRelationships = 149
-Global Const acCmdRemove = 366
-Global Const acCmdDesignView = 183
 Global Const acCmdNewObjectReport = 137
 Global Const acCmdSelectAll = 333
 Global Const acCmdRemoveTable = 84
-Global Const acCmdDesignView = 183
 Global Const acCmdOpenTable = 221
 Global Const acCmdRename = 143
-Global Const acCmdDelete = 337
 Global Const acCmdDeleteRecord = 223
 Global Const acCmdApplyFilterSort = 93
 Global Const acCmdSnapToGrid = 62
@@ -255,8 +240,6 @@ Global Const acCmdRemoveFilterSort = 144
 Global Const acCmdRunMacro = 31
 Global Const acCmdSave = 20
 Global Const acCmdSaveAs = 21
-Global Const acCmdFind = 30
-Global Const acCmdSelectAll = 333
 Global Const acCmdSelectAllRecords = 109
 Global Const acCmdSendToBack = 53
 Global Const acCmdSortDescending = 164

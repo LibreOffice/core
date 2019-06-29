@@ -20,9 +20,7 @@ REM ----------------------------------------------------------------------------
 Private _Type			As String		&apos;	Must be COLLECTION
 Private _This			As Object		&apos;	Workaround for absence of This builtin function
 Private _CollType		As String
-Private _ParentType		As String
-Private _ParentName		As String		&apos;	Name or shortcut
-Private _ParentDatabase	As Object
+Private _Parent			As Object
 Private _Count			As Long
 
 REM -----------------------------------------------------------------------------------------------------------------------
@@ -32,9 +30,7 @@ Private Sub Class_Initialize()
 	_Type = OBJCOLLECTION
 	Set _This = Nothing
 	_CollType = &quot;&quot;
-	_ParentType = &quot;&quot;
-	_ParentName = &quot;&quot;
-	Set _ParentDatabase = Nothing
+	Set _Parent = Nothing
 	_Count = 0
 End Sub		&apos;	Constructor
 
@@ -63,6 +59,9 @@ Function Item(ByVal Optional pvItem As Variant) As Variant
 &apos;pvItem either numeric index or property name
 
 Const cstThisSub = &quot;Collection.getItem&quot;
+
+	If _ErrorHandler() Then On Local Error Goto Error_Function
+
 	Utils._SetCalledSub(cstThisSub)
 	If IsMissing(pvItem) Then Goto Exit_Function	&apos;	To allow object watching in Basic IDE, do not generate error
 	Select Case _CollType
@@ -85,66 +84,36 @@ Dim vNames() As Variant, oProperty As Object
 		Case COLLCOMMANDBARS
 			Set Item = Application.CommandBars(pvItem)
 		Case COLLCOMMANDBARCONTROLS
-			Set Item = Application.CommandBars(_ParentName).CommandBarControls(pvItem)
+			If IsNull(_Parent) Then GoTo Error_Parent
+			Set Item = _Parent.CommandBarControls(pvItem)
 		Case COLLCONTROLS
-			Select Case _ParentType
-				Case OBJCONTROL, OBJSUBFORM
-					Set Item = getObject(_ParentName).Controls(pvItem)
-				Case OBJDIALOG
-					Set Item = Application.AllDialogs(_ParentName).Controls(pvItem)
-				Case OBJFORM
-					Set Item = Application.Forms(_ParentName).Controls(pvItem)
+			If IsNull(_Parent) Then GoTo Error_Parent
+			Select Case _Parent._Type
+				Case OBJCONTROL, OBJSUBFORM, OBJDIALOG, OBJFORM
+					Set Item = _Parent.Controls(pvItem)
 				Case OBJOPTIONGROUP
 					&apos; NOT SUPPORTED
 			End Select
 		Case COLLFORMS
 			Set Item = Application.Forms(pvItem)
 		Case COLLFIELDS
-			Select Case _ParentType
-				Case OBJQUERYDEF
-					Set Item = _ParentDatabase.QueryDefs(_ParentName).Fields(pvItem)
-				Case OBJRECORDSET
-					Set Item = _ParentDatabase.Recordsets(_ParentName).Fields(pvItem)
-				Case OBJTABLEDEF
-					Set Item = _ParentDatabase.TableDefs(_ParentName).Fields(pvItem)
-			End Select
+			If IsNull(_Parent) Then GoTo Error_Parent
+			Set Item = _Parent.Fields(pvItem)
 		Case COLLPROPERTIES
-			Select Case _ParentType
-				Case OBJCONTROL
-					Set Item = getObject(_ParentName).Properties(pvItem)
-				Case OBJSUBFORM
-					Set Item = getValue(_ParentName).Properties(pvItem)
-				Case OBJDATABASE
-					Set Item = _ParentDatabase.Properties(pvItem)
-				Case OBJDIALOG
-					Set Item = Application.AllDialogs(_ParentName).Properties(pvItem)
-				Case OBJFIELD
-					vNames() = Split(_ParentName, &quot;/&quot;)
-					Select Case vNames(0)
-						Case OBJQUERYDEF
-							Set Item = _ParentDatabase.QueryDefs(vNames(1)).Fields(vNames(2)).Properties(pvItem)
-						Case OBJRECORDSET
-							Set Item = _ParentDatabase.Recordsets(vNames(1)).Fields(vNames(2)).Properties(pvItem)
-						Case OBJTABLEDEF
-							Set Item = _ParentDatabase.TableDefs(vNames(1)).Fields(vNames(2)).Properties(pvItem)
-					End Select
-				Case OBJFORM
-					Set Item = Application.Forms(_ParentName).Properties(pvItem)
-				Case OBJQUERYDEF
-					Set Item = _ParentDatabase.QueryDefs(_ParentName).Properties(pvItem)
-				Case OBJRECORDSET
-					Set Item = _ParentDatabase.Recordsets(_ParentName).Properties(pvItem)
-				Case OBJTABLEDEF
-					Set Item = _ParentDatabase.TableDefs(_ParentName).Properties(pvItem)
+			If IsNull(_Parent) Then GoTo Error_Parent
+			Select Case _Parent._Type
+				Case OBJCONTROL, OBJSUBFORM, OBJDATABASE, OBJDIALOG, OBJFIELD _
+						, OBJFORM, OBJQUERYDEF, OBJRECORDSET, OBJTABLEDEF
+					Set Item = _Parent.Properties(pvItem)
 				Case OBJCOLLECTION, OBJEVENT, OBJOPTIONGROUP, OBJPROPERTY
 					&apos; NOT SUPPORTED
 			End Select
 		Case COLLQUERYDEFS
-			Set Item = _ParentDatabase.QueryDefs(pvItem)
+			Set Item = _Parent.QueryDefs(pvItem)
 		Case COLLRECORDSETS
-			Set Item = _ParentDatabase.Recordsets(pvItem)
+			Set Item = _Parent.Recordsets(pvItem)
 		Case COLLTABLEDEFS
-			Set Item = _ParentDatabase.TableDefs(pvItem)
+			Set Item = _Parent.TableDefs(pvItem)
 		Case COLLTEMPVARS
 			Set Item = Application.TempVars(pvItem)
 		Case Else
@@ -157,7 +126,11 @@ Error_Function:
 	TraceError(TRACEABORT, Err, Utils._CalledSub(), Erl)
 	Set Item = Nothing
 	GoTo Exit_Function
-End Function		&apos;	V1.1.0
+Error_Parent:
+	TraceError(TRACEFATAL, ERROBJECTNOTFOUND, Utils._CalledSub(), 0, True, Array(_GetLabel(&quot;OBJECT&quot;), _GetLabel(&quot;PARENT&quot;)))
+	Set Item = Nothing
+	GoTo Exit_Function
+End Function		&apos;	Item V1.1.0
 
 REM -----------------------------------------------------------------------------------------------------------------------
 Property Get ObjectType() As String
@@ -174,9 +147,9 @@ Dim vProperty As Variant, vPropertiesList() As Variant, sObject As String
 	vPropertiesList = _PropertiesList()
 	sObject = Utils._PCase(_Type)
 	If IsMissing(pvIndex) Then
-		vProperty = PropertiesGet._Properties(sObject, _ParentName, vPropertiesList)
+		vProperty = PropertiesGet._Properties(sObject, _This, vPropertiesList)
 	Else
-		vProperty = PropertiesGet._Properties(sObject, _ParentName, vPropertiesList, pvIndex)
+		vProperty = PropertiesGet._Properties(sObject, _This, vPropertiesList, pvIndex)
 		vProperty._Value = _PropertyGet(vPropertiesList(pvIndex))
 	End If
 	

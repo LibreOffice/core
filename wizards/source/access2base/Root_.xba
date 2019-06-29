@@ -42,7 +42,7 @@ Private StatusBar			As Object
 Private Dialogs				As Object				&apos;	Collection
 Private TempVars			As Object				&apos;	Collection
 Private CurrentDoc()		As Variant				&apos;	Array of document containers - [0] = Base document, [1 ... N] = other documents
-Private PythonVars()		As Variant				&apos;	Array of objects created in Python scripts
+Private PythonCache()		As Variant				&apos;	Array of objects created in Python scripts
 
 REM -----------------------------------------------------------------------------------------------------------------------
 REM --- CONSTRUCTORS / DESTRUCTORS						        														---
@@ -78,7 +78,7 @@ Private Sub Class_Initialize()
 	CurrentDoc = Array()
 	ReDim CurrentDoc(0 To 0)
 	Set CurrentDoc(0) = Nothing
-	PythonVars = Array()
+	PythonCache = Array()
 End Sub		&apos;	Constructor
 
 REM -----------------------------------------------------------------------------------------------------------------------
@@ -101,13 +101,13 @@ REM ----------------------------------------------------------------------------
 
 REM -----------------------------------------------------------------------------------------------------------------------
 Public Function AddPython(ByRef pvObject As Variant) As Long
-&apos;	Store the object as a new entry in PythonVars and return its entry number
+&apos;	Store the object as a new entry in PythonCache and return its entry number
 
 Dim lVars As Long, vObject As Variant
 
-	lVars = UBound(PythonVars) + 1
-	ReDim Preserve PythonVars(0 To lVars)
-	PythonVars(lVars) = pvObject
+	lVars = UBound(PythonCache) + 1
+	ReDim Preserve PythonCache(0 To lVars)
+	PythonCache(lVars) = pvObject
 
 	AddPython = lVars
 

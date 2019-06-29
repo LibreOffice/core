@@ -1148,7 +1148,7 @@ End Function		&apos;	_ParentObject	V0.9.0
 
 REM -----------------------------------------------------------------------------------------------------------------------
 Public Function _Properties(ByVal psObject As String _
-						, ByVal psObjectName As String _
+						, ByRef pvParent As Object _
 						, ByVal pvPropertiesList() As Variant _
 						, ByVal Optional pvIndex As Variant _
 						) As Variant
@@ -1168,8 +1168,7 @@ Dim iArgNr As Integer, iLen As Integer
 		Set oCounter = New Collect
 		Set oCounter._This = oCounter
 		oCounter._CollType = COLLPROPERTIES
-		oCounter._ParentType = UCase(psObject)
-		oCounter._ParentName = psObjectName
+		Set oCounter._Parent = pvParent
 		oCounter._Count = UBound(pvPropertiesList) + 1
 		Set vProperties = oCounter
 	Else

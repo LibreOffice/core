@@ -239,8 +239,6 @@ Const cstSepar = &quot;!&quot;
 		Set vAllDialogs = New Collect
 		Set vAllDialogs._This = vAllDialogs
 		vAllDialogs._CollType = COLLALLDIALOGS
-		vAllDialogs._ParentType = OBJAPPLICATION
-		vAllDialogs._ParentName = &quot;&quot;
 		vAllDialogs._Count = 0
 		Goto Exit_Function
 	End If
@@ -290,8 +288,6 @@ Const cstSepar = &quot;!&quot;
 		Set vAllDialogs = New Collect
 		Set vAllDialogs._This = vAllDialogs
 		vAllDialogs._CollType = COLLALLDIALOGS
-		vAllDialogs._ParentType = OBJAPPLICATION
-		vAllDialogs._ParentName = &quot;&quot;
 		vAllDialogs._Count = iCount
 	Else
 		If Not bFound Then
@@ -367,8 +363,6 @@ Const cstSeparator = &quot;\;&quot;
 		Set oCounter = New Collect
 		Set oCounter._This = oCounter
 		oCounter._CollType = COLLALLFORMS
-		oCounter._ParentType = OBJAPPLICATION
-		oCounter._ParentName = &quot;&quot;
 		If vCurrentDoc.DbConnect = DBCONNECTFORM Then oCounter._Count = UBound(vCurrentDoc.DbContainers) + 1 Else oCounter._Count = UBound(vAllForms) + 1
 		Set vReturn = oCounter
 		Goto Exit_Function
@@ -494,8 +488,6 @@ Const cstDot = &quot;.&quot;
 		Set vAllModules = New Collect
 		Set vAllModules._This = vAllModules
 		vAllModules._CollType = COLLALLMODULES
-		vAllModules._ParentType = OBJAPPLICATION
-		vAllModules._ParentName = &quot;&quot;
 		vAllModules._Count = 0
 		Goto Exit_Function
 	End If
@@ -545,8 +537,6 @@ Const cstDot = &quot;.&quot;
 		Set vAllModules = New Collect
 		Set vAllModules._This =vAllModules
 		vAllModules._CollType = COLLALLMODULES
-		vAllModules._ParentType = OBJAPPLICATION
-		vAllModules._ParentName = &quot;&quot;
 		vAllModules._Count = iCount
 	Else
 		If Not bFound Then
@@ -728,7 +718,6 @@ Const cstCustom = &quot;CUSTOM&quot;
 			Set oObject = New Collect
 			Set oObject._This = oObject
 			oObject._CollType = COLLCOMMANDBARS
-			oObject._ParentType = OBJAPPLICATION
 			oObject._Count = iObjectsCount
 		Case VarType(pvIndex) = vbString
 			Goto Trace_NotFound
@@ -1039,8 +1028,6 @@ Dim iCount As Integer
 		Set oCounter = New Collect
 		Set oCounter._This = oCounter
 		oCounter._CollType = COLLFORMS
-		oCounter._ParentType = OBJAPPLICATION
-		oCounter._ParentName = &quot;&quot;
 		oCounter._Count = iCount
 		Forms = oCounter
 		Exit Function

@@ -282,9 +282,7 @@ Dim i As Integer, bFound As Boolean, oFields As Object
 			Set oObject = New Collect
 			Set oObject._This = oObject
 			oObject._CollType = COLLFIELDS
-			oObject._ParentType = _Type
-			oObject._ParentName = _Name
-			Set oObject._ParentDatabase = _ParentDatabase
+			Set oObject._Parent = _This
 			oObject._Count = UBound(sObjects) + 1
 			Goto Exit_Function
 		Case VarType(pvIndex) = vbString
@@ -435,9 +433,9 @@ Dim cstThisSub As String
 	vPropertiesList = _PropertiesList()
 	sObject = Utils._PCase(_Type)
 	If IsMissing(pvIndex) Then
-		vProperty = PropertiesGet._Properties(sObject, _Name, vPropertiesList)
+		vProperty = PropertiesGet._Properties(sObject, _This, vPropertiesList)
 	Else
-		vProperty = PropertiesGet._Properties(sObject, _Name, vPropertiesList, pvIndex)
+		vProperty = PropertiesGet._Properties(sObject, _This, vPropertiesList, pvIndex)
 		vProperty._Value = _PropertyGet(vPropertiesList(pvIndex))
 	End If
 	Set vProperty._ParentDatabase = _ParentDatabase
@@ -452,7 +450,7 @@ REM ----------------------------------------------------------------------------
 Public Function setProperty(ByVal Optional psProperty As String, ByVal Optional pvValue As Variant) As Boolean
 &apos;	Return True if property setting OK
 Dim cstThisSub As String
-	cstThisSub = Utils._PCase(_Type) &amp; &quot;.getProperty&quot;
+	cstThisSub = Utils._PCase(_Type) &amp; &quot;.setProperty&quot;
 	Utils._SetCalledSub(cstThisSub)
 	setProperty = _PropertySet(psProperty, pvValue)
 	Utils._ResetCalledSub(cstThisSub)

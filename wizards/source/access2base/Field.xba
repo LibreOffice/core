@@ -290,12 +290,12 @@ Const cstThisSub = &quot;Field.Properties&quot;
 	sObject = Utils._PCase(_Type)
 	sName = _ParentType &amp; &quot;/&quot; &amp; _ParentName &amp; &quot;/&quot; &amp; _Name
 	If IsMissing(pvIndex) Then
-		vProperty = PropertiesGet._Properties(sObject, sName, vPropertiesList)
+		vProperty = PropertiesGet._Properties(sObject, _This, vPropertiesList)
 	Else
-		vProperty = PropertiesGet._Properties(sObject, sName, vPropertiesList, pvIndex)
+		vProperty = PropertiesGet._Properties(sObject, _This, vPropertiesList, pvIndex)
 		vProperty._Value = _PropertyGet(vPropertiesList(pvIndex))
+		Set vProperty._ParentDatabase = _ParentDatabase
 	End If
-	Set vProperty._ParentDatabase = _ParentDatabase
 	
 Exit_Function:
 	Set Properties = vProperty
