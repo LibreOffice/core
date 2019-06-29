@@ -2,11 +2,11 @@
  <defs>
   <linearGradient x2="15" x1="3" gradientUnits="userSpaceOnUse" id="0">
    <stop stop-color="#b3b3b3"/>
-   <stop offset="1" stop-color="#4d4d4d"/>
+   <stop offset="1" stop-color="#232629"/>
   </linearGradient>
  </defs>
  <g transform="translate(1-1029.3622)" color="#000">
   <path d="m3.03125 1039.7685c.214567 4.2266 3.688747 7.5937 7.96875 7.5937 4.280003 0 7.754183-3.3671 7.96875-7.5937-.40968 2.017-3.826614 3.5937-7.96875 3.5937-4.142136 0-7.55907-1.5767-7.96875-3.5937" fill="url(#0)" fill-rule="evenodd"/>
-  <path d="m20 12.00002a8 6 0 1 1 -16 0 8 6 0 1 1 16 0" transform="matrix(1 0 0 .66666667-1 1031.3622)" opacity=".986928" fill="#4d4d4d"/>
+  <path d="m20 12.00002a8 6 0 1 1 -16 0 8 6 0 1 1 16 0" transform="matrix(1 0 0 .66666667-1 1031.3622)" opacity=".986928" fill="#232629"/>
  </g>
 </svg>
