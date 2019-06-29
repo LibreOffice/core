@@ -584,34 +584,8 @@ OUString ButtonUIObject::get_action(VclEventId nEvent) const
 {
     if (nEvent == VclEventId::ButtonClick)
     {
-        if(mxButton->get_id()=="writer_all")
-        {
-            return "Start writer" ;
-        }
-        else if(mxButton->get_id()=="calc_all")
-        {
-            return "Start calc" ;
-        }
-        else if(mxButton->get_id()=="impress_all")
-        {
-            return "Start impress" ;
-        }
-        else if(mxButton->get_id()=="draw_all")
-        {
-            return "Start draw" ;
-        }
-        else if(mxButton->get_id()=="math_all")
-        {
-            return "Start math" ;
-        }
-        else if(mxButton->get_id()=="database_all")
-        {
-            return "Start database" ;
-        }
-        else{
-            return "Click on '" + mxButton->get_id() + "' from "+
-                get_top_parent(mxButton)->get_id();
-        }
+        return this->get_type() + " Action:CLICK Id:" + mxButton->get_id() + " Parent:" +
+            get_top_parent(mxButton)->get_id();
     }
     else
         return WindowUIObject::get_action(nEvent);
@@ -734,12 +708,11 @@ OUString EditUIObject::get_action(VclEventId nEvent) const
         const Selection& rSelection  = mxEdit->GetSelection();
         long nMin = rSelection.Min();
         long nMax = rSelection.Max();
-        return  "Select in '" +
+        return this->get_type() + " Action:SELECT Id:" +
                 mxEdit->get_id() +
-                "' {\"FROM\": \"" + OUString::number(nMin) + "\", \"TO\": \"" +
-                OUString::number(nMax) + "\"} from "
-                + get_top_parent(mxEdit)->get_id()
-                ;
+                " Parent:" + get_top_parent(mxEdit)->get_id() +
+                " {\"FROM\": \"" + OUString::number(nMin) + "\", \"TO\": \"" +
+                OUString::number(nMax) + "\"}";
     }
     else
         return WindowUIObject::get_action(nEvent);
@@ -855,7 +828,7 @@ OUString CheckBoxUIObject::get_action(VclEventId nEvent) const
 {
     if (nEvent == VclEventId::CheckboxToggle)
     {
-        return "Toggle '" + mxCheckBox->get_id() + "' CheckBox from " +
+        return this->get_type() + " Action:CLICK Id:" + mxCheckBox->get_id() + " Parent:" +
             get_top_parent(mxCheckBox)->get_id();
     }
     else
@@ -905,7 +878,7 @@ OUString RadioButtonUIObject::get_action(VclEventId nEvent) const
 {
     if (nEvent == VclEventId::RadiobuttonToggle)
     {
-        return "Select '" + mxRadioButton->get_id() + "' RadioButton from " +
+        return this->get_type() + " Action:CLICK Id:" + mxRadioButton->get_id() + " Parent:" +
             get_top_parent(mxRadioButton)->get_id();
     }
     else
@@ -1011,8 +984,9 @@ OUString ListBoxUIObject::get_action(VclEventId nEvent) const
     if (nEvent == VclEventId::ListboxSelect)
     {
         sal_Int32 nPos = mxListBox->GetSelectedEntryPos();
-        return "Select element with position " + OUString::number(nPos) +
-                 " in '" + mxListBox->get_id() +"' from" + get_top_parent(mxListBox)->get_id() ;
+        return this->get_type() + " Action:SELECT Id:" + mxListBox->get_id() +
+            " Parent:" + get_top_parent(mxListBox)->get_id() +
+            " {\"POS\": \"" + OUString::number(nPos) + "\"}";
     }
     else if (nEvent == VclEventId::ListboxFocus)
     {
@@ -1086,9 +1060,10 @@ OUString ComboBoxUIObject::get_action(VclEventId nEvent) const
     if (nEvent == VclEventId::ComboboxSelect)
     {
         sal_Int32 nPos = mxComboBox->GetSelectedEntryPos();
-        return "select in '" + mxComboBox->get_id() +
-                "' ComboBox item number " + OUString::number(nPos) +
-                " from " + get_top_parent(mxComboBox)->get_id();
+        return this->get_type() + " Action:SELECT Id:" +
+                mxComboBox->get_id() +
+                " Parent:" + get_top_parent(mxComboBox)->get_id() +
+                " {\"POS\": \"" + OUString::number(nPos) + "\"}";
     }
     else
         return WindowUIObject::get_action(nEvent);
@@ -1201,13 +1176,13 @@ OUString SpinFieldUIObject::get_action(VclEventId nEvent) const
 {
     if (nEvent == VclEventId::SpinfieldUp)
     {
-        return "Increase '" + mxSpinField->get_id() +
-            "' from " + get_top_parent(mxSpinField)->get_id();
+        return this->get_type() + " Action:UP Id:" + mxSpinField->get_id() +
+            " Parent:" + get_top_parent(mxSpinField)->get_id();
     }
     else if (nEvent == VclEventId::SpinfieldDown)
     {
-        return "Decrease '" + mxSpinField->get_id() +
-            "' from " + get_top_parent(mxSpinField)->get_id();
+        return this->get_type() + " Action:DOWN Id:" + mxSpinField->get_id() +
+            " Parent:" + get_top_parent(mxSpinField)->get_id();
     }
     else
         return WindowUIObject::get_action(nEvent);
@@ -1269,8 +1244,9 @@ OUString TabControlUIObject::get_action(VclEventId nEvent) const
     if (nEvent == VclEventId::TabpageActivate)
     {
         sal_Int32 nPageId = mxTabControl->GetCurPageId();
-        return "Choose Tab number " + OUString::number(mxTabControl->GetPagePos(nPageId)) +
-                " from '" + mxTabControl->get_id() + "'" ;
+        return this->get_type() + " Action:SELECT Id:" + mxTabControl->get_id() +
+            " Parent:" + get_top_parent(mxTabControl)->get_id() +
+            " {\"POS\": \"" + OUString::number(mxTabControl->GetPagePos(nPageId)) + "\"}";
     }
     else
         return WindowUIObject::get_action(nEvent);

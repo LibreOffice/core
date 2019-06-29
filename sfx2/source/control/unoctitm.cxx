@@ -601,7 +601,7 @@ void collectUIInformation(const util::URL& rURL, const css::uno::Sequence< css::
     if (!pFile)
         return;
 
-    UITestLogger::getInstance().logCommand("Send UNO Command (\"" + rURL.Complete + "\") ", rArgs);
+    UITestLogger::getInstance().logCommand("CommandSent Name:" + rURL.Complete, rArgs);
 }
 
 }
