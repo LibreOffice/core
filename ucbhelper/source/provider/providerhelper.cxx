@@ -280,47 +280,43 @@ bool ContentProviderImplHelper::renameAdditionalPropertySet(
         // Get propertyset registry.
         getAdditionalPropertySetRegistry();
 
-        if ( m_pImpl->m_xPropertySetRegistry.is() )
-        {
-            uno::Reference< container::XNameAccess > xNameAccess(
-                m_pImpl->m_xPropertySetRegistry, uno::UNO_QUERY );
-            if ( xNameAccess.is() )
-            {
-                uno::Sequence< OUString > aKeys
-                    = xNameAccess->getElementNames();
-                if ( aKeys.hasElements() )
-                {
-                    OUString aOldKeyWithSlash = rOldKey;
-                    OUString aOldKeyWithoutSlash;
-                    if ( !aOldKeyWithSlash.endsWith("/") )
-                    {
-                        aOldKeyWithSlash += "/";
-                        aOldKeyWithoutSlash = rOldKey;
-                    }
-                    else if ( !rOldKey.isEmpty() )
-                        aOldKeyWithoutSlash
-                            = rOldKey.copy( 0, rOldKey.getLength() - 1 );
+        if ( !m_pImpl->m_xPropertySetRegistry.is() )
+            return false;
 
-                    for ( const OUString& rKey : aKeys )
-                    {
-                        if ( rKey.startsWith( aOldKeyWithSlash )
-                             || rKey == aOldKeyWithoutSlash )
-                        {
-                            OUString aNewKey
-                                = rKey.replaceAt(
-                                    0, rOldKey.getLength(), rNewKey );
-                            if ( !renameAdditionalPropertySet(
-                                    rKey, aNewKey, false ) )
-                                return false;
-                        }
-                    }
+        uno::Reference< container::XNameAccess > xNameAccess(
+            m_pImpl->m_xPropertySetRegistry, uno::UNO_QUERY );
+        if ( !xNameAccess.is() )
+            return false;
+
+        uno::Sequence< OUString > aKeys
+            = xNameAccess->getElementNames();
+        if ( aKeys.hasElements() )
+        {
+            OUString aOldKeyWithSlash = rOldKey;
+            OUString aOldKeyWithoutSlash;
+            if ( !aOldKeyWithSlash.endsWith("/") )
+            {
+                aOldKeyWithSlash += "/";
+                aOldKeyWithoutSlash = rOldKey;
+            }
+            else if ( !rOldKey.isEmpty() )
+                aOldKeyWithoutSlash
+                    = rOldKey.copy( 0, rOldKey.getLength() - 1 );
+
+            for ( const OUString& rKey : aKeys )
+            {
+                if ( rKey.startsWith( aOldKeyWithSlash )
+                     || rKey == aOldKeyWithoutSlash )
+                {
+                    OUString aNewKey
+                        = rKey.replaceAt(
+                            0, rOldKey.getLength(), rNewKey );
+                    if ( !renameAdditionalPropertySet(
+                            rKey, aNewKey, false ) )
+                        return false;
                 }
             }
-            else
-                return false;
         }
-        else
-            return false;
     }
     else
     {
@@ -332,13 +328,11 @@ bool ContentProviderImplHelper::renameAdditionalPropertySet(
             // Rename property set.
             uno::Reference< container::XNamed > xNamed(
                 xOldSet, uno::UNO_QUERY );
-            if ( xNamed.is() )
-            {
-                // ??? throws no exceptions and has no return value ???
-                xNamed->setName( rNewKey );
-            }
-            else
+            if ( !xNamed.is() )
                 return false;
+
+            // ??? throws no exceptions and has no return value ???
+            xNamed->setName( rNewKey );
         }
     }
     return true;
@@ -359,47 +353,43 @@ bool ContentProviderImplHelper::copyAdditionalPropertySet(
         // Get propertyset registry.
         getAdditionalPropertySetRegistry();
 
-        if ( m_pImpl->m_xPropertySetRegistry.is() )
-        {
-            uno::Reference< container::XNameAccess > xNameAccess(
-                m_pImpl->m_xPropertySetRegistry, uno::UNO_QUERY );
-            if ( xNameAccess.is() )
-            {
-                uno::Sequence< OUString > aKeys
-                    = xNameAccess->getElementNames();
-                if ( aKeys.hasElements() )
-                {
-                    OUString aSrcKeyWithSlash = rSourceKey;
-                    OUString aSrcKeyWithoutSlash;
-                    if ( !aSrcKeyWithSlash.endsWith("/") )
-                    {
-                        aSrcKeyWithSlash += "/";
-                        aSrcKeyWithoutSlash = rSourceKey;
-                    }
-                    else if ( !rSourceKey.isEmpty() )
-                        aSrcKeyWithoutSlash = rSourceKey.copy(
-                            0, rSourceKey.getLength() - 1 );
+        if ( !m_pImpl->m_xPropertySetRegistry.is() )
+            return false;
 
-                    for ( const OUString& rKey : aKeys )
-                    {
-                        if ( rKey.startsWith(aSrcKeyWithSlash )
-                             || rKey == aSrcKeyWithoutSlash )
-                        {
-                            OUString aNewKey
-                                = rKey.replaceAt(
-                                    0, rSourceKey.getLength(), rTargetKey );
-                            if ( !copyAdditionalPropertySet(
-                                    rKey, aNewKey, false ) )
-                                return false;
-                        }
-                    }
+        uno::Reference< container::XNameAccess > xNameAccess(
+            m_pImpl->m_xPropertySetRegistry, uno::UNO_QUERY );
+        if ( !xNameAccess.is() )
+            return false;
+
+        uno::Sequence< OUString > aKeys
+            = xNameAccess->getElementNames();
+        if ( aKeys.hasElements() )
+        {
+            OUString aSrcKeyWithSlash = rSourceKey;
+            OUString aSrcKeyWithoutSlash;
+            if ( !aSrcKeyWithSlash.endsWith("/") )
+            {
+                aSrcKeyWithSlash += "/";
+                aSrcKeyWithoutSlash = rSourceKey;
+            }
+            else if ( !rSourceKey.isEmpty() )
+                aSrcKeyWithoutSlash = rSourceKey.copy(
+                    0, rSourceKey.getLength() - 1 );
+
+            for ( const OUString& rKey : aKeys )
+            {
+                if ( rKey.startsWith(aSrcKeyWithSlash )
+                     || rKey == aSrcKeyWithoutSlash )
+                {
+                    OUString aNewKey
+                        = rKey.replaceAt(
+                            0, rSourceKey.getLength(), rTargetKey );
+                    if ( !copyAdditionalPropertySet(
+                            rKey, aNewKey, false ) )
+                        return false;
                 }
             }
-            else
-                return false;
         }
-        else
-            return false;
     }
     else
     {
@@ -483,54 +473,50 @@ bool ContentProviderImplHelper::removeAdditionalPropertySet(
         // Get propertyset registry.
         getAdditionalPropertySetRegistry();
 
-        if ( m_pImpl->m_xPropertySetRegistry.is() )
-        {
-            uno::Reference< container::XNameAccess > xNameAccess(
-                m_pImpl->m_xPropertySetRegistry, uno::UNO_QUERY );
-            if ( xNameAccess.is() )
-            {
-                uno::Sequence< OUString > aKeys
-                    = xNameAccess->getElementNames();
-                if ( aKeys.hasElements() )
-                {
-                    OUString aKeyWithSlash = rKey;
-                    OUString aKeyWithoutSlash;
-                    if ( !aKeyWithSlash.endsWith("/") )
-                    {
-                        aKeyWithSlash += "/";
-                        aKeyWithoutSlash = rKey;
-                    }
-                    else if ( !rKey.isEmpty() )
-                        aKeyWithoutSlash
-                            = rKey.copy( 0, rKey.getLength() - 1 );
+        if ( !m_pImpl->m_xPropertySetRegistry.is() )
+            return false;
 
-                    for ( const OUString& rCurrKey : aKeys )
-                    {
-                        if ( rCurrKey.startsWith(aKeyWithSlash )
-                             || rCurrKey == aKeyWithoutSlash )
-                        {
-                            if ( !removeAdditionalPropertySet(
-                                     rCurrKey, false ) )
-                                return false;
-                        }
-                    }
+        uno::Reference< container::XNameAccess > xNameAccess(
+            m_pImpl->m_xPropertySetRegistry, uno::UNO_QUERY );
+        if ( !xNameAccess.is() )
+            return false;
+
+        uno::Sequence< OUString > aKeys
+            = xNameAccess->getElementNames();
+        if ( aKeys.hasElements() )
+        {
+            OUString aKeyWithSlash = rKey;
+            OUString aKeyWithoutSlash;
+            if ( !aKeyWithSlash.endsWith("/") )
+            {
+                aKeyWithSlash += "/";
+                aKeyWithoutSlash = rKey;
+            }
+            else if ( !rKey.isEmpty() )
+                aKeyWithoutSlash
+                    = rKey.copy( 0, rKey.getLength() - 1 );
+
+            for ( const OUString& rCurrKey : aKeys )
+            {
+                if ( rCurrKey.startsWith(aKeyWithSlash )
+                     || rCurrKey == aKeyWithoutSlash )
+                {
+                    if ( !removeAdditionalPropertySet(
+                             rCurrKey, false ) )
+                        return false;
                 }
             }
-            else
-                return false;
         }
-        else
-            return false;
     }
     else
     {
         // Get propertyset registry.
         getAdditionalPropertySetRegistry();
 
-        if ( m_pImpl->m_xPropertySetRegistry.is() )
-            m_pImpl->m_xPropertySetRegistry->removePropertySet( rKey );
-        else
+        if ( !m_pImpl->m_xPropertySetRegistry.is() )
             return false;
+
+        m_pImpl->m_xPropertySetRegistry->removePropertySet( rKey );
     }
     return true;
 }
