@@ -25,6 +25,17 @@ fi
 save_CC=$CC
 save_CXX=$CXX
 
+first_arg_basename()
+{
+    for i in $1; do
+        basename "$i"
+        break
+    done
+}
+
+CC_BASE=`first_arg_basename "$CC"`
+CXX_BASE=`first_arg_basename "$CXX"`
+
 BUILD_TYPE="LibO"
 SCPDEFS=""
 GIT_NEEDED_SUBMODULES=""
@@ -506,9 +517,11 @@ if test -n "$with_android_ndk"; then
 
     if test -z "$CC"; then
         CC="$ANDROID_COMPILER_BIN/clang $ANDROIDCFLAGS"
+        CC_BASE="clang"
     fi
     if test -z "$CXX"; then
         CXX="$ANDROID_COMPILER_BIN/clang++ $ANDROIDCXXFLAGS"
+        CXX_BASE="clang++"
     fi
 
     # remember to download the ownCloud Android library later
@@ -926,12 +939,15 @@ if test "$_os" != "WINNT"; then
     save_CFLAGS=$CFLAGS
     AC_PROG_CC
     CFLAGS=$save_CFLAGS
+    if test -z "$CC_BASE"; then
+        CC_BASE=`first_arg_basename "$CC"`
+    fi
 fi
 
 if test "$_os" != "WINNT"; then
-AC_C_BIGENDIAN([ENDIANNESS=big], [ENDIANNESS=little])
+    AC_C_BIGENDIAN([ENDIANNESS=big], [ENDIANNESS=little])
 else
-ENDIANNESS=little
+    ENDIANNESS=little
 fi
 AC_SUBST(ENDIANNESS)
 
@@ -2690,9 +2706,11 @@ if test "$_os" != "WINNT"; then
     if test "$GCC_HOME_SET" = "true"; then
         if test -z "$CC"; then
             CC="$GCC_HOME/bin/gcc"
+            CC_BASE="gcc"
         fi
         if test -z "$CXX"; then
             CXX="$GCC_HOME/bin/g++"
+            CXX_BASE="g++"
         fi
     fi
 fi
@@ -2844,20 +2862,29 @@ if test $_os = Darwin -o $_os = iOS; then
     LIBTOOL=/usr/bin/libtool
     INSTALL_NAME_TOOL=install_name_tool
     if test -z "$save_CC"; then
-        AC_MSG_CHECKING([what compiler to use])
         stdlib=-stdlib=libc++
         if test "$ENABLE_LTO" = TRUE; then
             lto=-flto
         fi
-        CC="`xcrun -find clang` -m64 $lto -mmacosx-version-min=$with_macosx_version_min_required -isysroot $MACOSX_SDK_PATH"
-        CXX="`xcrun -find clang++` -m64 $lto $stdlib -mmacosx-version-min=$with_macosx_version_min_required -isysroot $MACOSX_SDK_PATH"
+
+        AC_MSG_CHECKING([what C compiler to use])
+        CC="`xcrun -find clang`"
+        CC_BASE=`first_arg_basename "$CC"`
+        CC+=" -m64 $lto -mmacosx-version-min=$with_macosx_version_min_required -isysroot $MACOSX_SDK_PATH"
+        AC_MSG_RESULT([$CC])
+
+        AC_MSG_CHECKING([what C++ compiler to use])
+        CXX="`xcrun -find clang++`"
+        CXX_BASE=`first_arg_basename "$CXX"`
+        CXX+=" -m64 $lto $stdlib -mmacosx-version-min=$with_macosx_version_min_required -isysroot $MACOSX_SDK_PATH"
+        AC_MSG_RESULT([$CXX])
+
         INSTALL_NAME_TOOL=`xcrun -find install_name_tool`
         AR=`xcrun -find ar`
         NM=`xcrun -find nm`
         STRIP=`xcrun -find strip`
         LIBTOOL=`xcrun -find libtool`
         RANLIB=`xcrun -find ranlib`
-        AC_MSG_RESULT([$CC and $CXX])
     fi
 
     case "$with_macosx_version_max_allowed" in
@@ -3024,8 +3051,17 @@ if test $_os = iOS; then
 
     stdlib="-stdlib=libc++"
 
-    CC="`xcrun -find clang` -arch $host_cpu -isysroot $sysroot $lto $versionmin"
-    CXX="`xcrun -find clang++` -arch $host_cpu $stdlib -isysroot $sysroot $lto $versionmin"
+    AC_MSG_CHECKING([what C compiler to use])
+    CC="`xcrun -find clang`"
+    CC_BASE=`first_arg_basename "$CC"`
+    CC+=" -arch $host_cpu -isysroot $sysroot $lto $versionmin"
+    AC_MSG_RESULT([$CC])
+
+    AC_MSG_CHECKING([what C++ compiler to use])
+    CXX="`xcrun -find clang++`"
+    CXX_BASE=`first_arg_basename "$CXX"`
+    CXX+=" -arch $host_cpu $stdlib -isysroot $sysroot $lto $versionmin"
+    AC_MSG_RESULT([$CXX])
 
     INSTALL_NAME_TOOL=`xcrun -find install_name_tool`
     AR=`xcrun -find ar`
@@ -3370,9 +3406,9 @@ if test "$_os" = "WINNT"; then
     find_msvc "$with_visual_studio"
     if test -z "$vctest"; then
         if test -n "$with_visual_studio"; then
-            AC_MSG_ERROR([No Visual Studio $with_visual_studio installation found])
+            AC_MSG_ERROR([no Visual Studio $with_visual_studio installation found])
         else
-            AC_MSG_ERROR([No Visual Studio 2017 installation found])
+            AC_MSG_ERROR([no Visual Studio 2017 installation found])
         fi
     fi
 
@@ -3380,15 +3416,16 @@ if test "$_os" = "WINNT"; then
         if test -f "$vctest/VC/Tools/MSVC/$vcbuildnumber/bin/HostX86/x86/cl.exe"; then
             VC_PRODUCT_DIR=$vctest/VC
         else
-            AC_MSG_ERROR([No compiler (cl.exe) in $vctest/VC/Tools/MSVC/$vcbuildnumber/bin/HostX86/x86])
+            AC_MSG_ERROR([no compiler (cl.exe) in $vctest/VC/Tools/MSVC/$vcbuildnumber/bin/HostX86/x86])
         fi
     else
         if test -f "$vctest/VC/Tools/MSVC/$vcbuildnumber/bin/HostX64/x64/cl.exe"; then
             VC_PRODUCT_DIR=$vctest/VC
         else
-            AC_MSG_ERROR([No compiler (cl.exe) in $vctest/VC/Tools/MSVC/$vcbuildnumber/bin/HostX64/x64])
+            AC_MSG_ERROR([no compiler (cl.exe) in $vctest/VC/Tools/MSVC/$vcbuildnumber/bin/HostX64/x64])
         fi
     fi
+    AC_MSG_RESULT([$VC_PRODUCT_DIR])
 
     AC_MSG_CHECKING([for short pathname of VC product directory])
     VC_PRODUCT_DIR=`win_short_path_for_make "$VC_PRODUCT_DIR"`
@@ -3494,10 +3531,12 @@ if test "$_os" = "WINNT"; then
 
         # This gives us a posix path with 8.3 filename restrictions
         MSVC_CXX=`win_short_path_for_make "$MSVC_CXX"`
+        CXX_BASE=`first_arg_basename "$MSVC_CXX"`
     fi
 
     if test -z "$CC"; then
         CC=$MSVC_CXX
+        CC_BASE=`first_arg_basename "$CC"`
     fi
     if test "$BITNESS_OVERRIDE" = ""; then
         dnl since MSVC 2012, default for x86 is -arch:SSE2:
@@ -3524,7 +3563,7 @@ if test "$_os" = "WINNT"; then
         export INCLUDE=`cygpath -d "$COMPATH\Include"`
 
         PathFormat "$COMPATH"
-        COMPATH="$formatted_path"
+        COMPATH=`win_short_path_for_make "$formatted_path"`
 
         VCVER=$vcnum
         MSVSVER=$vcyear
@@ -3558,7 +3597,7 @@ if test "$_os" = "WINNT"; then
         AC_MSG_ERROR([Visual C++ not found after all, huh])
     fi
 
-    AC_MSG_CHECKING([$CC is at least Visual Studio 2017 version 15.7])
+    AC_MSG_CHECKING([$CC_BASE is at least Visual Studio 2017 version 15.7])
     AC_COMPILE_IFELSE([AC_LANG_SOURCE([[
         // See <https://docs.microsoft.com/en-us/cpp/preprocessor/predefined-macros> for mapping
         // between Visual Studio versions and _MSC_VER:
@@ -3716,7 +3755,7 @@ AC_SUBST(SHOWINCLUDES_PREFIX)
 # prefix C with ccache if needed
 #
 if test "$CCACHE" != ""; then
-    AC_MSG_CHECKING([whether $CC is already ccached])
+    AC_MSG_CHECKING([whether $CC_BASE is already ccached])
 
     AC_LANG_PUSH([C])
     save_CFLAGS=$CFLAGS
@@ -3728,6 +3767,7 @@ if test "$CCACHE" != ""; then
         AC_MSG_RESULT([yes])
     else
         CC="$CCACHE $CC"
+        CC_BASE="ccache $CC_BASE"
         AC_MSG_RESULT([no])
     fi
     CFLAGS=$save_CFLAGS
@@ -3742,7 +3782,7 @@ fi
 
 HAVE_GCC_GGDB2=
 if test "$GCC" = "yes"; then
-    AC_MSG_CHECKING([whether $CC supports -ggdb2])
+    AC_MSG_CHECKING([whether $CC_BASE supports -ggdb2])
     save_CFLAGS=$CFLAGS
     CFLAGS="$CFLAGS -Werror -ggdb2"
     AC_LINK_IFELSE([AC_LANG_PROGRAM([[]], [[ return 0; ]])],[ HAVE_GCC_GGDB2=TRUE ],[])
@@ -3754,7 +3794,7 @@ if test "$GCC" = "yes"; then
     fi
 
     if test "$host_cpu" = "m68k"; then
-        AC_MSG_CHECKING([whether $CC supports -mlong-jump-table-offsets])
+        AC_MSG_CHECKING([whether $CC_BASE supports -mlong-jump-table-offsets])
         save_CFLAGS=$CFLAGS
         CFLAGS="$CFLAGS -Werror -mlong-jump-table-offsets"
         AC_LINK_IFELSE([AC_LANG_PROGRAM([[]], [[ return 0; ]])],[ HAVE_GCC_LONG_JUMP_TABLE_OFFSETS=TRUE ],[])
@@ -3889,15 +3929,17 @@ NEED_CLANG_LINUX_UBSAN_RTTI_VISIBILITY=
 dnl Clang 9 is known fixed since
 dnl <https://github.com/llvm/llvm-project/commit/5745eccef54ddd3caca278d1d292a88b2281528b> "Adapt
 dnl -fsanitize=function to SANITIZER_NON_UNIQUE_TYPEINFO":
-if test "$COM_IS_CLANG" = TRUE && test "$CLANGVER" -lt 90000 && test "$_os" = Linux; then
-    for i in $CC; do
-        case $i in
-        -fsanitize=*)
-            NEED_CLANG_LINUX_UBSAN_RTTI_VISIBILITY=TRUE
-            break
-            ;;
-        esac
-    done
+if test "$COM_IS_CLANG" = TRUE -a "$_os" = Linux; then
+    if test "$CLANGVER" -lt 90000; then
+        for i in $CC; do
+            case $i in
+            -fsanitize=*)
+                NEED_CLANG_LINUX_UBSAN_RTTI_VISIBILITY=TRUE
+                break
+                ;;
+            esac
+        done
+    fi
 fi
 if test "$NEED_CLANG_LINUX_UBSAN_RTTI_VISIBILITY" = TRUE; then
     AC_MSG_RESULT([yes])
@@ -4034,7 +4076,7 @@ HAVE_GSPLIT_DWARF=
 if test "$enable_split_debug" != no; then
     dnl Currently by default enabled only on Linux, feel free to set test_split_debug above also for other platforms.
     if test "$enable_split_debug" = yes -o \( "$test_split_debug" = "yes" -a -n "$ENABLE_DEBUG$ENABLE_DBGUTIL" \); then
-        AC_MSG_CHECKING([whether $CC supports -gsplit-dwarf])
+        AC_MSG_CHECKING([whether $CC_BASE supports -gsplit-dwarf])
         save_CFLAGS=$CFLAGS
         CFLAGS="$CFLAGS -Werror -gsplit-dwarf"
         AC_LINK_IFELSE([AC_LANG_PROGRAM([[]], [[ return 0; ]])],[ HAVE_GCC_SPLIT_DWARF=TRUE ],[])
@@ -4060,7 +4102,7 @@ ENABLE_GDB_INDEX=
 if test "$enable_gdb_index" != "no"; then
     dnl Currently by default enabled only on Linux, feel free to set test_gdb_index above also for other platforms.
     if test "$enable_gdb_index" = yes -o \( "$test_gdb_index" = "yes" -o -n "$ENABLE_DEBUG$ENABLE_DBGUTIL" \); then
-        AC_MSG_CHECKING([whether $CC supports -ggnu-pubnames])
+        AC_MSG_CHECKING([whether $CC_BASE supports -ggnu-pubnames])
         save_CFLAGS=$CFLAGS
         CFLAGS="$CFLAGS -Werror -ggnu-pubnames"
         have_ggnu_pubnames=
@@ -4073,7 +4115,7 @@ if test "$enable_gdb_index" != "no"; then
             fi
         else
             AC_MSG_RESULT( yes )
-            AC_MSG_CHECKING([whether $CC supports -Wl,--gdb-index])
+            AC_MSG_CHECKING([whether $CC_BASE supports -Wl,--gdb-index])
             ldflags_save=$LDFLAGS
             LDFLAGS="$LDFLAGS -Wl,--gdb-index"
             AC_LINK_IFELSE([AC_LANG_PROGRAM([
@@ -4712,8 +4754,14 @@ if test "$cross_compiling" = "yes"; then
     unset AR NM OBJDUMP PKG_CONFIG RANLIB READELF STRIP
     unset CPPUNIT_CFLAGS CPPUNIT_LIBS
     unset LIBXML_CFLAGS LIBXML_LIBS LIBXSLT_CFLAGS LIBXSLT_LIBS XSLTPROC PKG_CONFIG_LIBDIR
-    test -n "$CC_FOR_BUILD" && export CC="$CC_FOR_BUILD"
-    test -n "$CXX_FOR_BUILD" && export CXX="$CXX_FOR_BUILD"
+    if test -n "$CC_FOR_BUILD"; then
+        export CC="$CC_FOR_BUILD"
+        CC_BASE=`first_arg_basename "$CC"`
+    fi
+    if test -n "$CXX_FOR_BUILD"; then
+        export CXX="$CXX_FOR_BUILD"
+        CXX_BASE=`first_arg_basename "$CXX"`
+    fi
     test -n "$PKG_CONFIG_FOR_BUILD" && export PKG_CONFIG="$PKG_CONFIG_FOR_BUILD"
     cd CONF-FOR-BUILD
     sub_conf_opts=""
@@ -5300,7 +5348,7 @@ if test "$_os" = "WINNT"; then
     fi
 fi
 if test "$with_system_hsqldb" = "yes"; then
-	perl_use_string="$perl_use_string ; use Archive::Zip"
+    perl_use_string="$perl_use_string ; use Archive::Zip"
 fi
 if $PERL -e "$perl_use_string">/dev/null 2>&1; then
     AC_MSG_RESULT([all modules found])
@@ -5477,7 +5525,8 @@ find_winsdk_version()
                 # test exist the SDK path
                 if test -d "$tmppath"; then
                    # when path is convertible to a short path then path is okay
-                   if ! cygpath -d "$tmppath"; then
+                   cygpath -d "$tmppath" >/dev/null 2>&1
+                   if test $? -ne 0; then
                       AC_MSG_ERROR([Windows SDK doesn't have a 8.3 name, see NtfsDisable8dot3NameCreation])
                    fi
                 else
@@ -5506,13 +5555,17 @@ find_winsdk()
 
 find_msms()
 {
+    AC_MSG_CHECKING([for MSVC merge modules directory])
     my_msm_files=Microsoft_VC${VCVER}_CRT_x86.msm
     case "$VCVER" in
         150|160)
         my_msm_files="Microsoft_VC141_CRT_x86.msm Microsoft_VC142_CRT_x86.msm ${my_msm_files}"
         ;;
     esac
-    AC_MSG_CHECKING([for ${my_msm_files}])
+    for f in $my_msm_files; do
+        echo "$as_me:$LINENO: searching for $f" >&5
+    done
+
     msmdir=
     for ver in 14.0 15.0; do
         reg_get_value_32 HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/VisualStudio/$ver/Setup/VS/MSMDir
@@ -5547,7 +5600,7 @@ find_msms()
     case "$VCVER" in
     150|160)
         for l in `ls -1 $VC_PRODUCT_DIR/redist/MSVC/`; do
-            AC_MSG_CHECKING([for $VC_PRODUCT_DIR/redist/MSVC/$l/MergeModules])
+            echo "$as_me:$LINENO: looking in $VC_PRODUCT_DIR/redist/MSVC/$l/MergeModules])" >&5
             my_msm_dir="$VC_PRODUCT_DIR/redist/MSVC/$l/MergeModules/"
             for f in ${my_msm_files}; do
                 if test -e "$my_msm_dir/${f}"; then
@@ -5564,9 +5617,9 @@ find_msms()
         AC_MSG_RESULT([$msmdir])
     else
         if test "$ENABLE_RELEASE_BUILD" = "TRUE" ; then
-            AC_MSG_ERROR([not found])
+            AC_MSG_FAILURE([not found])
         else
-            AC_MSG_WARN([not found])
+            AC_MSG_WARN([not found (check config.log)])
             add_warning "MSM none of ${my_msm_files} found"
         fi
     fi
@@ -5574,20 +5627,22 @@ find_msms()
 
 find_msvc_x64_dlls()
 {
+    AC_MSG_CHECKING([for MSVC x64 DLL path])
     msvcdllpath="$VC_PRODUCT_DIR/redist/x64/Microsoft.VC${VCVER}.CRT"
     case "$VCVER" in
     150|160)
         for l in `ls -1 $VC_PRODUCT_DIR/redist/MSVC/`; do
-            AC_MSG_CHECKING([for $VC_PRODUCT_DIR/redist/MSVC/$l/x64/Microsoft.VC141.CRT])
+            echo "$as_me:$LINENO: testing $VC_PRODUCT_DIR/redist/MSVC/$l/x64/Microsoft.VC141.CRT" >&5
             if test -d "$VC_PRODUCT_DIR/redist/MSVC/$l/x64/Microsoft.VC141.CRT"; then
                 msvcdllpath="$VC_PRODUCT_DIR/redist/MSVC/$l/x64/Microsoft.VC141.CRT"
                 break
             fi
-            AC_MSG_CHECKING([for $VC_PRODUCT_DIR/redist/MSVC/$l/x64/Microsoft.VC142.CRT])
+            echo "$as_me:$LINENO: testing $VC_PRODUCT_DIR/redist/MSVC/$l/x64/Microsoft.VC142.CRT" >&5
             if test -d "$VC_PRODUCT_DIR/redist/MSVC/$l/x64/Microsoft.VC142.CRT"; then
                 msvcdllpath="$VC_PRODUCT_DIR/redist/MSVC/$l/x64/Microsoft.VC142.CRT"
                 break
             fi
+            echo "$as_me:$LINENO: testing $VC_PRODUCT_DIR/redist/MSVC/$l/x64/Microsoft.VC150.CRT" >&5
             if test -d "$VC_PRODUCT_DIR/redist/MSVC/$l/onecore/x64/Microsoft.VC150.CRT"; then
                 msvcdllpath="$VC_PRODUCT_DIR/redist/MSVC/$l/onecore/x64/Microsoft.VC150.CRT"
                 break
@@ -5595,12 +5650,15 @@ find_msvc_x64_dlls()
         done
         ;;
     esac
+    AC_MSG_RESULT([$msvcdllpath])
+    AC_MSG_CHECKING([for MSVC x64 DLLs])
     msvcdlls="msvcp140.dll vcruntime140.dll"
     for dll in $msvcdlls; do
         if ! test -f "$msvcdllpath/$dll"; then
-            AC_MSG_ERROR([can not find $dll in $msvcdllpath])
+            AC_MSG_FAILURE([missing $dll])
         fi
     done
+    AC_MSG_RESULT([found all ($msvcdlls)])
 }
 
 dnl =========================================
@@ -5853,31 +5911,34 @@ if test "$_os" != "WINNT"; then
     save_CXXFLAGS=$CXXFLAGS
     AC_PROG_CXX
     CXXFLAGS=$save_CXXFLAGS
+    if test -z "$CXX_BASE"; then
+        CXX_BASE=`first_arg_basename "$CXX"`
+    fi
 else
     if test -n "$CC" -a -z "$CXX"; then
         CXX="$CC"
+        CXX_BASE="$CC_BASE"
     fi
 fi
 
 dnl check for GNU C++ compiler version
-if test "$GXX" = "yes"; then
+if test "$GXX" = "yes" -a -z "$COM_IS_CLANG"; then
     AC_MSG_CHECKING([the GNU C++ compiler version])
 
     _gpp_version=`$CXX -dumpversion`
     _gpp_majmin=`echo $_gpp_version | $AWK -F. '{ print \$1*100+\$2 }'`
 
-    if test "$_gpp_majmin" -lt "401"; then
-        AC_MSG_ERROR([You need to use GNU C++ compiler version >= 4.1 to build LibreOffice, you have $_gpp_version.])
+    if test "$_gpp_majmin" -lt "700"; then
+        AC_MSG_ERROR([You need to use GNU C++ compiler version >= 7.0 to build LibreOffice, you have $_gpp_version.])
     else
-        AC_MSG_RESULT([checked (g++ $_gpp_version)])
+        AC_MSG_RESULT([ok (g++ $_gpp_version)])
     fi
 
     dnl see https://code.google.com/p/android/issues/detail?id=41770
-    if test "$_gpp_majmin" -ge "401"; then
         glibcxx_threads=no
         AC_LANG_PUSH([C++])
         AC_REQUIRE_CPP
-        AC_MSG_CHECKING([whether $CXX is broken with boost.thread])
+        AC_MSG_CHECKING([whether $CXX_BASE is broken with boost.thread])
         AC_PREPROC_IFELSE([AC_LANG_PROGRAM([[
             #include <bits/c++config.h>]],[[
             #if !defined(_GLIBCXX_HAVE_GTHR_DEFAULT) \
@@ -5891,7 +5952,6 @@ if test "$GXX" = "yes"; then
         if test $glibcxx_threads = yes; then
             BOOST_CXXFLAGS="-D_GLIBCXX_HAS_GTHREADS"
         fi
-     fi
 fi
 AC_SUBST(BOOST_CXXFLAGS)
 
@@ -5899,7 +5959,7 @@ AC_SUBST(BOOST_CXXFLAGS)
 # prefx CXX with ccache if needed
 #
 if test "$CCACHE" != ""; then
-    AC_MSG_CHECKING([whether $CXX is already ccached])
+    AC_MSG_CHECKING([whether $CXX_BASE is already ccached])
     AC_LANG_PUSH([C++])
     save_CXXFLAGS=$CXXFLAGS
     CXXFLAGS="$CXXFLAGS --ccache-skip -O2"
@@ -5910,6 +5970,7 @@ if test "$CCACHE" != ""; then
         AC_MSG_RESULT([yes])
     else
         CXX="$CCACHE $CXX"
+        CXX_BASE="ccache $CXX_BASE"
         AC_MSG_RESULT([no])
     fi
     CXXFLAGS=$save_CXXFLAGS
@@ -6134,7 +6195,7 @@ dnl ===================================================================
 dnl GCC features
 dnl ===================================================================
 if test "$GCC" = "yes" -o "$COM_IS_CLANG" = TRUE; then
-    AC_MSG_CHECKING([whether $CC supports -mno-avx])
+    AC_MSG_CHECKING([whether $CC_BASE supports -mno-avx])
     save_CFLAGS=$CFLAGS
     CFLAGS="$CFLAGS -Werror -mno-avx"
     AC_LINK_IFELSE([AC_LANG_PROGRAM([[]], [[ return 0; ]])],[ HAVE_GCC_AVX=TRUE ],[])
@@ -6145,7 +6206,7 @@ if test "$GCC" = "yes" -o "$COM_IS_CLANG" = TRUE; then
         AC_MSG_RESULT([no])
     fi
 
-    AC_MSG_CHECKING([whether $CC supports -fstack-protector-strong])
+    AC_MSG_CHECKING([whether $CC_BASE supports -fstack-protector-strong])
     save_CFLAGS=$CFLAGS
     CFLAGS="$CFLAGS -O0 -Werror -fstack-protector-strong"
     AC_LINK_IFELSE([AC_LANG_PROGRAM([[]], [[ char a[8]; a[7] = 0; ]])],[ HAVE_GCC_STACK_PROTECTOR_STRONG=TRUE ],[])
@@ -6156,7 +6217,7 @@ if test "$GCC" = "yes" -o "$COM_IS_CLANG" = TRUE; then
         AC_MSG_RESULT([no])
     fi
 
-    AC_MSG_CHECKING([whether $CC supports atomic functions])
+    AC_MSG_CHECKING([whether $CC_BASE supports atomic functions])
     AC_LINK_IFELSE([AC_LANG_PROGRAM([[]], [[
     int v = 0;
     if (__sync_add_and_fetch(&v, 1) != 1 ||
@@ -6175,7 +6236,7 @@ if test "$GCC" = "yes" -o "$COM_IS_CLANG" = TRUE; then
         AC_MSG_RESULT([no])
     fi
 
-    AC_MSG_CHECKING([whether $CC supports __builtin_ffs])
+    AC_MSG_CHECKING([whether $CC_BASE supports __builtin_ffs])
     AC_LINK_IFELSE([AC_LANG_PROGRAM([[]], [[ return __builtin_ffs(1); ]])],[HAVE_GCC_BUILTIN_FFS=TRUE],[])
     if test "$HAVE_GCC_BUILTIN_FFS" = "TRUE"; then
         AC_MSG_RESULT([yes])
@@ -6184,7 +6245,7 @@ if test "$GCC" = "yes" -o "$COM_IS_CLANG" = TRUE; then
         AC_MSG_RESULT([no])
     fi
 
-    AC_MSG_CHECKING([whether $CC supports __attribute__((deprecated(message)))])
+    AC_MSG_CHECKING([whether $CC_BASE supports __attribute__((deprecated(message)))])
     save_CFLAGS=$CFLAGS
     CFLAGS="$CFLAGS -Werror"
     AC_COMPILE_IFELSE([AC_LANG_SOURCE([
@@ -6195,7 +6256,7 @@ if test "$GCC" = "yes" -o "$COM_IS_CLANG" = TRUE; then
         ], [AC_MSG_RESULT([no])])
     CFLAGS=$save_CFLAGS
 
-    AC_MSG_CHECKING([whether $CXX defines __base_class_type_info in cxxabi.h])
+    AC_MSG_CHECKING([whether $CXX_BASE defines __base_class_type_info in cxxabi.h])
     AC_LANG_PUSH([C++])
     AC_COMPILE_IFELSE([AC_LANG_SOURCE([
             #include <cstddef>
@@ -6207,7 +6268,7 @@ if test "$GCC" = "yes" -o "$COM_IS_CLANG" = TRUE; then
         ], [AC_MSG_RESULT([no])])
     AC_LANG_POP([C++])
 
-    AC_MSG_CHECKING([whether $CXX defines __class_type_info in cxxabi.h])
+    AC_MSG_CHECKING([whether $CXX_BASE defines __class_type_info in cxxabi.h])
     AC_LANG_PUSH([C++])
     AC_COMPILE_IFELSE([AC_LANG_SOURCE([
             #include <cstddef>
@@ -6219,7 +6280,7 @@ if test "$GCC" = "yes" -o "$COM_IS_CLANG" = TRUE; then
         ], [AC_MSG_RESULT([no])])
     AC_LANG_POP([C++])
 
-    AC_MSG_CHECKING([whether $CXX declares __cxa_allocate_exception in cxxabi.h])
+    AC_MSG_CHECKING([whether $CXX_BASE declares __cxa_allocate_exception in cxxabi.h])
     AC_LANG_PUSH([C++])
     AC_COMPILE_IFELSE([AC_LANG_SOURCE([
             #include <cxxabi.h>
@@ -6230,7 +6291,7 @@ if test "$GCC" = "yes" -o "$COM_IS_CLANG" = TRUE; then
         ], [AC_MSG_RESULT([no])])
     AC_LANG_POP([C++])
 
-    AC_MSG_CHECKING([whether $CXX defines __cxa_eh_globals in cxxabi.h])
+    AC_MSG_CHECKING([whether $CXX_BASE defines __cxa_eh_globals in cxxabi.h])
     AC_LANG_PUSH([C++])
     AC_COMPILE_IFELSE([AC_LANG_SOURCE([
             #include <cstddef>
@@ -6242,7 +6303,7 @@ if test "$GCC" = "yes" -o "$COM_IS_CLANG" = TRUE; then
         ], [AC_MSG_RESULT([no])])
     AC_LANG_POP([C++])
 
-    AC_MSG_CHECKING([whether $CXX defines __cxa_exceptions in cxxabi.h])
+    AC_MSG_CHECKING([whether $CXX_BASE defines __cxa_exceptions in cxxabi.h])
     AC_LANG_PUSH([C++])
     AC_COMPILE_IFELSE([AC_LANG_SOURCE([
             #include <cstddef>
@@ -6254,7 +6315,7 @@ if test "$GCC" = "yes" -o "$COM_IS_CLANG" = TRUE; then
         ], [AC_MSG_RESULT([no])])
     AC_LANG_POP([C++])
 
-    AC_MSG_CHECKING([whether $CXX declares __cxa_get_globals in cxxabi.h])
+    AC_MSG_CHECKING([whether $CXX_BASE declares __cxa_get_globals in cxxabi.h])
     AC_LANG_PUSH([C++])
     AC_COMPILE_IFELSE([AC_LANG_SOURCE([
             #include <cxxabi.h>
@@ -6265,7 +6326,7 @@ if test "$GCC" = "yes" -o "$COM_IS_CLANG" = TRUE; then
         ], [AC_MSG_RESULT([no])])
     AC_LANG_POP([C++])
 
-    AC_MSG_CHECKING([whether $CXX declares __cxa_current_exception_type in cxxabi.h])
+    AC_MSG_CHECKING([whether $CXX_BASE declares __cxa_current_exception_type in cxxabi.h])
     AC_LANG_PUSH([C++])
     AC_COMPILE_IFELSE([AC_LANG_SOURCE([
             #include <cxxabi.h>
@@ -6276,7 +6337,7 @@ if test "$GCC" = "yes" -o "$COM_IS_CLANG" = TRUE; then
         ], [AC_MSG_RESULT([no])])
     AC_LANG_POP([C++])
 
-    AC_MSG_CHECKING([whether $CXX declares __cxa_throw in cxxabi.h])
+    AC_MSG_CHECKING([whether $CXX_BASE declares __cxa_throw in cxxabi.h])
     AC_LANG_PUSH([C++])
     AC_COMPILE_IFELSE([AC_LANG_SOURCE([
             #include <cxxabi.h>
@@ -6287,7 +6348,7 @@ if test "$GCC" = "yes" -o "$COM_IS_CLANG" = TRUE; then
         ], [AC_MSG_RESULT([no])])
     AC_LANG_POP([C++])
 
-    AC_MSG_CHECKING([whether $CXX defines __si_class_type_info in cxxabi.h])
+    AC_MSG_CHECKING([whether $CXX_BASE defines __si_class_type_info in cxxabi.h])
     AC_LANG_PUSH([C++])
     AC_COMPILE_IFELSE([AC_LANG_SOURCE([
             #include <cstddef>
@@ -6299,7 +6360,7 @@ if test "$GCC" = "yes" -o "$COM_IS_CLANG" = TRUE; then
         ], [AC_MSG_RESULT([no])])
     AC_LANG_POP([C++])
 
-    AC_MSG_CHECKING([whether $CXX defines __vmi_class_type_info in cxxabi.h])
+    AC_MSG_CHECKING([whether $CXX_BASE defines __vmi_class_type_info in cxxabi.h])
     AC_LANG_PUSH([C++])
     AC_COMPILE_IFELSE([AC_LANG_SOURCE([
             #include <cstddef>
@@ -6312,7 +6373,7 @@ if test "$GCC" = "yes" -o "$COM_IS_CLANG" = TRUE; then
     AC_LANG_POP([C++])
 
     dnl Available in GCC 4.9 and at least since Clang 3.4:
-    AC_MSG_CHECKING([whether $CXX supports __attribute__((warn_unused))])
+    AC_MSG_CHECKING([whether $CXX_BASE supports __attribute__((warn_unused))])
     AC_LANG_PUSH([C++])
     save_CXXFLAGS=$CXXFLAGS
     CXXFLAGS="$CXXFLAGS -Werror"
@@ -6406,7 +6467,7 @@ dnl ===================================================================
 dnl C++11
 dnl ===================================================================
 
-AC_MSG_CHECKING([whether $CXX supports C++17])
+AC_MSG_CHECKING([whether $CXX_BASE supports C++17])
 CXXFLAGS_CXX11=
 if test "$COM" = MSC -a "$COM_IS_CLANG" != TRUE; then
     CXXFLAGS_CXX11='-std:c++17 -Zc:__cplusplus'
@@ -6521,7 +6582,7 @@ abi broken
     AC_LANG_POP([C++])
 fi
 
-AC_MSG_CHECKING([whether $CXX supports C++11 without Language Defect 757])
+AC_MSG_CHECKING([whether $CXX_BASE supports C++11 without Language Defect 757])
 save_CXXFLAGS=$CXXFLAGS
 CXXFLAGS="$CXXFLAGS $CXXFLAGS_CXX11"
 AC_LANG_PUSH([C++])
@@ -6558,7 +6619,7 @@ CXXFLAGS=$save_CXXFLAGS
 
 dnl _Pragma support (may require C++11)
 if test "$GCC" = "yes" -o "$COM_IS_CLANG" = TRUE; then
-    AC_MSG_CHECKING([whether $CXX supports _Pragma operator])
+    AC_MSG_CHECKING([whether $CXX_BASE supports _Pragma operator])
     AC_LANG_PUSH([C++])
     save_CXXFLAGS=$CXXFLAGS
     CXXFLAGS="$CXXFLAGS $CXXFLAGS_CXX11 -Werror"
@@ -6574,7 +6635,7 @@ fi
 
 HAVE_GCC_FNO_SIZED_DEALLOCATION=
 if test "$GCC" = yes; then
-    AC_MSG_CHECKING([whether $CXX supports -fno-sized-deallocation])
+    AC_MSG_CHECKING([whether $CXX_BASE supports -fno-sized-deallocation])
     AC_LANG_PUSH([C++])
     save_CXXFLAGS=$CXXFLAGS
     CXXFLAGS="$CXXFLAGS -fno-sized-deallocation"
@@ -6589,7 +6650,7 @@ if test "$GCC" = yes; then
 fi
 AC_SUBST([HAVE_GCC_FNO_SIZED_DEALLOCATION])
 
-AC_MSG_CHECKING([whether $CXX supports guaranteed copy elision])
+AC_MSG_CHECKING([whether $CXX_BASE supports guaranteed copy elision])
 AC_LANG_PUSH([C++])
 save_CXXFLAGS=$CXXFLAGS
 CXXFLAGS="$CXXFLAGS $CXXFLAGS_CXX11"
@@ -6614,7 +6675,7 @@ AC_COMPILE_IFELSE([AC_LANG_SOURCE([
 CXXFLAGS=$save_CXXFLAGS
 AC_LANG_POP([C++])
 
-AC_MSG_CHECKING([whether $CXX has GCC bug 87150])
+AC_MSG_CHECKING([whether $CXX_BASE has GCC bug 87150])
 AC_LANG_PUSH([C++])
 save_CXXFLAGS=$CXXFLAGS
 CXXFLAGS="$CXXFLAGS $CXXFLAGS_CXX11"
@@ -6644,7 +6705,7 @@ dnl librdf_TypeConverter::extractNode_NoLock in unoxml/source/rdf/librdf_reposit
 dnl code is meant to be a faithfully stripped-down and self-contained version of the above code:
 HAVE_BROKEN_GCC_WMAYBE_UNINITIALIZED=
 if test "$GCC" = yes && test "$COM_IS_CLANG" != TRUE; then
-    AC_MSG_CHECKING([whether $CXX might report false -Werror=maybe-uninitialized])
+    AC_MSG_CHECKING([whether $CXX_BASE might report false -Werror=maybe-uninitialized])
     AC_LANG_PUSH([C++])
     save_CXXFLAGS=$CXXFLAGS
     CXXFLAGS="$CXXFLAGS $CXXFLAGS_CXX11 -Werror -Wmaybe-uninitialized"
@@ -6713,7 +6774,7 @@ if test "$_os" != "WINNT"; then
     # As the below test checks things when linking self-compiled dynamic libraries, it presumably is irrelevant
     # when we don't make any dynamic libraries?
     if test "$DISABLE_DYNLOADING" = ""; then
-        AC_MSG_CHECKING([if $CXX is -fvisibility-inlines-hidden safe (Clang bug 11250)])
+        AC_MSG_CHECKING([if $CXX_BASE is -fvisibility-inlines-hidden safe (Clang bug 11250)])
         cat > conftestlib1.cc <<_ACEOF
 template<typename T> struct S1 { virtual ~S1() {} virtual void f() {} };
 struct S2: S1<int> { virtual ~S2(); };
@@ -6754,7 +6815,7 @@ _ACEOF
         fi
     fi
 
-   AC_MSG_CHECKING([if $CXX has a visibility bug with class-level attributes (GCC bug 26905)])
+   AC_MSG_CHECKING([if $CXX_BASE has a visibility bug with class-level attributes (GCC bug 26905)])
     cat >visibility.cxx <<_ACEOF
 #pragma GCC visibility push(hidden)
 struct __attribute__ ((visibility ("default"))) TestStruct {
@@ -6802,7 +6863,7 @@ dnl ===================================================================
 
 HAVE_GCC_FNO_ENFORCE_EH_SPECS=
 if test "$GCC" = "yes"; then
-    AC_MSG_CHECKING([whether $CXX supports -fno-enforce-eh-specs])
+    AC_MSG_CHECKING([whether $CXX_BASE supports -fno-enforce-eh-specs])
     AC_LANG_PUSH([C++])
     save_CXXFLAGS=$CXXFLAGS
     CXXFLAGS="$CFLAGS -Werror -fno-enforce-eh-specs"
@@ -6839,11 +6900,13 @@ if test "$COM_IS_CLANG" = "TRUE"; then
     else
         compiler_plugins=no
     fi
-    if test "$compiler_plugins" != no -a "$CLANGVER" -lt 50002; then
-        if test "$compiler_plugins" = yes; then
-            AC_MSG_ERROR([Clang $CLANGVER is too old to build compiler plugins; need >= 5.0.2.])
-        else
-            compiler_plugins=no
+    if test "$compiler_plugins" != no -a "$my_apple_clang" != yes; then
+        if test "$CLANGVER" -lt 50002; then
+            if test "$compiler_plugins" = yes; then
+                AC_MSG_ERROR([Clang $CLANGVER is too old to build compiler plugins; need >= 5.0.2.])
+            else
+                compiler_plugins=no
+            fi
         fi
     fi
     if test "$compiler_plugins" != "no"; then
@@ -6938,15 +7001,16 @@ UCRT_REDISTDIR="$with_ucrt_dir"
 if test $_os = "WINNT"; then
     find_msvc_x64_dlls
     find_msms
-    MSVC_DLL_PATH="$msvcdllpath"
+    MSVC_DLL_PATH=`win_short_path_for_make "$msvcdllpath"`
     MSVC_DLLS="$msvcdlls"
-    MSM_PATH="$msmdir"
+    MSM_PATH=`win_short_path_for_make "$msmdir"`
     # MSVC 15.3 changed it to VC141
-    if echo "$MSVC_DLL_PATH" | grep -q "VC141.CRT$"; then
+    if echo "$msvcdllpath" | grep -q "VC141.CRT$"; then
         SCPDEFS="$SCPDEFS -DWITH_VC141_REDIST"
     else
         SCPDEFS="$SCPDEFS -DWITH_VC${VCVER}_REDIST"
     fi
+
     if test "$UCRT_REDISTDIR" = "no"; then
         dnl explicitly disabled
         UCRT_REDISTDIR=""
@@ -7104,7 +7168,7 @@ if test "$ENABLE_JAVA" != ""; then
                 AC_MSG_ERROR([IBM JDK is too old, you need at least 1.6])
             fi
 
-            AC_MSG_RESULT([checked (IBM JDK $_jdk)])
+            AC_MSG_RESULT([found (IBM JDK $_jdk)])
 
             if test "$with_jdk_home" = ""; then
                 AC_MSG_ERROR([In order to successfully build LibreOffice using the IBM JDK,
@@ -7126,7 +7190,7 @@ you must use the "--with-jdk-home" configure option explicitly])
                 JAVA_CLASSPATH_NOT_SET=TRUE
             fi
 
-            AC_MSG_RESULT([checked (JDK $_jdk)])
+            AC_MSG_RESULT([found (JDK $_jdk)])
             JAVA_HOME=`echo $JAVAINTERPRETER | $SED -n "s,//*bin//*java,,p"`
             if test "$_os" = "WINNT"; then
                 JAVA_HOME=`echo $JAVA_HOME | $SED "s,\.[[eE]][[xX]][[eE]]$,,"`
@@ -7942,11 +8006,11 @@ else
               msdosdjgpp* | go32*)
                 objfmt='COFF'
               ;;
-              os2-emx*)			# not tested
-                objfmt='MSOMF'		# obj
+              os2-emx*) # not tested
+                objfmt='MSOMF' # obj
               ;;
               linux*coff* | linux*oldld*)
-                objfmt='COFF'		# ???
+                objfmt='COFF' # ???
               ;;
               linux*aout*)
                 objfmt='a.out'
@@ -8418,8 +8482,10 @@ no|disable)
     else
         # Unset variables set by the above AM_PATH_PYTHON so that
         # we actually do check anew.
+        AC_MSG_RESULT([])
         unset PYTHON am_cv_pathless_PYTHON ac_cv_path_PYTHON am_cv_python_version am_cv_python_platform am_cv_python_pythondir am_cv_python_pyexecdir
         AM_PATH_PYTHON([3.3],, [:])
+        AC_MSG_CHECKING([which Python to use for Pyuno])
         if test "$PYTHON" = ":"; then
             if test -z "$PYTHON_FOR_BUILD"; then
                 AC_MSG_RESULT([fully internal])
@@ -9316,7 +9382,7 @@ if test "$with_system_icu" = "yes"; then
     SYSTEM_ICU=TRUE
     AC_LANG_PUSH([C++])
     AC_MSG_CHECKING([for unicode/rbbi.h])
-    AC_PREPROC_IFELSE([AC_LANG_SOURCE([[unicode/rbbi.h]])],[AC_MSG_RESULT(checked.)],[AC_MSG_ERROR(icu headers not found.)])
+    AC_PREPROC_IFELSE([AC_LANG_SOURCE([[unicode/rbbi.h]])],[AC_MSG_RESULT([yes])],[AC_MSG_ERROR([icu headers not found])])
     AC_LANG_POP([C++])
 
     if test "$cross_compiling" != "yes"; then
@@ -10182,12 +10248,12 @@ if test "$_os" = "WINNT"; then
         assembler=ml64.exe
     fi
 
-    AC_MSG_CHECKING([$CL_PATH/$assembler])
+    AC_MSG_CHECKING([for the MSVC assembler ($assembler)])
     if test -f "$CL_PATH/$assembler"; then
-        AC_MSG_RESULT([found])
-        ML_EXE="$CL_PATH/$assembler"
+        ML_EXE=`win_short_path_for_make "$CL_PATH/$assembler"`
+        AC_MSG_RESULT([$ML_EXE])
     else
-        AC_MSG_ERROR([Configure did not find $assembler assembler.])
+        AC_MSG_ERROR([not found])
     fi
 fi
 
@@ -10319,6 +10385,14 @@ if test "x$enable_gtk3_kde5" = "xyes"; then
     R="$R gtk3_kde5"
 fi
 AC_SUBST(ENABLE_GTK3_KDE5)
+
+if test "$_os" = "WINNT"; then
+    R="$R win"
+elif test "$_os" = "Darwin"; then
+    R="$R osx"
+elif test "$_os" = "iOS"; then
+    R="ios (builtin)"
+fi
 
 build_vcl_plugins="$R"
 if test -z "$build_vcl_plugins"; then
@@ -11383,7 +11457,7 @@ if test "$enable_build_opensymbol" = "yes"; then
     AC_MSG_RESULT([yes])
     AC_PATH_PROG(FONTFORGE, fontforge)
     if test -z "$FONTFORGE"; then
-	AC_MSG_ERROR([fontforge not installed])
+        AC_MSG_ERROR([fontforge not installed])
     fi
 else
     AC_MSG_RESULT([no])
@@ -12574,6 +12648,9 @@ if test "$build_os" = "cygwin"; then
     else
         ATL_LIB="$ATL_LIB/x86"
     fi
+    ATL_LIB=`win_short_path_for_make "$ATL_LIB"`
+    ATL_INCLUDE=`win_short_path_for_make "$ATL_INCLUDE"`
+
     # sort.exe and find.exe also exist in C:/Windows/system32 so need /usr/bin/
     PathFormat "/usr/bin/find.exe"
     FIND="$formatted_path"
