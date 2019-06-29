@@ -557,6 +557,7 @@ namespace fileaccess
         /*                       remove persistent propertyset                          */
         /********************************************************************************/
 
+        void erasePersistentSetWithoutChildren( const OUString& aUnqPath );
         void erasePersistentSet( const OUString& aUnqPath,
                                           bool withChildren = false );
 
@@ -565,6 +566,8 @@ namespace fileaccess
         /*                       from srcUnqPath to dstUnqPath                          */
         /********************************************************************************/
 
+        void copyPersistentSetWithoutChildren( const OUString& srcUnqPath,
+                                const OUString& dstUnqPath );
         void copyPersistentSet( const OUString& srcUnqPath,
                                          const OUString& dstUnqPath,
                                          bool withChildren );
