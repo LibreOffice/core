@@ -22,6 +22,8 @@
 
 #include <sal/config.h>
 
+#include <drawdoc.hxx>
+
 void TransformOOo2xDocument( SdDrawDocument* pDocument );
 
 #endif
