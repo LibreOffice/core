@@ -22,8 +22,6 @@
 
 #include <sal/config.h>
 
-#include <sal/types.h>
-
 // SdUnoPseudoStyleFamily
 inline const char sUNO_PseudoSheet_Title[] = "title";
 inline const char sUNO_PseudoSheet_SubTitle[] = "subtitle";

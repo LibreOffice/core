@@ -21,6 +21,11 @@
 #define INCLUDED_SD_SOURCE_UI_INC_CREATECUSTOMANIMATIONPANEL_HXX
 
 #include <sal/config.h>
+#include <vcl/window.hxx>
+
+#include <com/sun/star/frame/XFrame.hpp>
+
+#include "ViewShell.hxx"
 
 namespace sd {
 
