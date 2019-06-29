@@ -21,6 +21,7 @@
 #define INCLUDED_SD_SOURCE_UI_INC_FILEDLG_HXX
 
 #include <vcl/errcode.hxx>
+#include <vcl/weld.hxx>
 
 #include <memory>
 

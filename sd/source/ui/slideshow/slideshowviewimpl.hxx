@@ -29,7 +29,6 @@
 #include <com/sun/star/awt/XPaintListener.hpp>
 #include <com/sun/star/presentation/XSlideShowView.hpp>
 #include <cppcanvas/spritecanvas.hxx>
-#include <tools/gen.hxx>
 
 #include <slideshow.hxx>
 

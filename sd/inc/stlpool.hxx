@@ -25,6 +25,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 
 #include <cppuhelper/implbase.hxx>
+#include <vcl/font.hxx>
 #include <map>
 #include <vector>
 

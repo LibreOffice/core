@@ -22,6 +22,8 @@
 
 #include "sdfilter.hxx"
 
+#include <tools/stream.hxx>
+
 // SdPPTFilter
 class SdPPTFilter : public SdFilter
 {

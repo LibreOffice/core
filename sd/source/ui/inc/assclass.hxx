@@ -23,6 +23,7 @@
 #include <memory>
 
 #include <sddllapi.h>
+#include <vcl/window.hxx>
 
 #define MAX_PAGES 10
 

@@ -21,6 +21,7 @@
 #define INCLUDED_SD_SOURCE_UI_SLIDESORTER_INC_VIEW_SLSTOOLTIP_HXX
 
 #include <model/SlsSharedPageDescriptor.hxx>
+#include <rtl/ustring.hxx>
 #include <vcl/timer.hxx>
 
 namespace sd { namespace slidesorter { class SlideSorter; } }

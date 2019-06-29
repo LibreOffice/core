@@ -21,6 +21,7 @@
 #define INCLUDED_SD_SOURCE_UI_INC_REGISTERINTERFACES_HXX
 
 #include <sal/config.h>
+#include <sfx2/module.hxx>
 
 namespace sd { namespace ui { namespace table {
 

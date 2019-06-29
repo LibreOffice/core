@@ -279,6 +279,9 @@ blacklist:
     sd/source/ui/sidebar/PanelFactory.hxx:
     # base class has to be a complete type
     - com/sun/star/ui/XUIElementFactory.hpp
+    sd/source/ui/sidebar/PageMarginUtils.hxx:
+    # Needed for std::abs
+    - cmath
     sd/source/ui/slideshow/slideshowimpl.hxx:
     # base class has to be a complete type
     - com/sun/star/presentation/XShapeEventListener.hpp
@@ -411,6 +414,9 @@ blacklist:
     sd/source/filter/eppt/epptso.cxx:
     # Needed for direct member access
     - com/sun/star/table/XTable.hpp
+    sd/source/filter/eppt/pptx-animations.hxx:
+    # Needed for typedef
+    - sax/fshelper.hxx
     sd/source/filter/eppt/pptx-epptooxml.cxx:
     # Needed for direct member access
     - com/sun/star/task/XStatusIndicator.hpp
