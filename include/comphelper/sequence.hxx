@@ -290,7 +290,7 @@ namespace comphelper
         return o_Output;
     }
 
-    /** Copy (keys or values) from a associate container into a Sequence
+    /** Copy (keys or values) from an associate container into a Sequence
 
         @tpl M map container type eg. std::map/std::unordered_map
 
