@@ -169,7 +169,7 @@ namespace param
         const ::connectivity::ORowSetValue& operator[]( size_t _index ) const { return m_aParameters[ _index ]->Value(); }
               ::connectivity::ORowSetValue& operator[]( size_t _index )       { return m_aParameters[ _index ]->Value(); }
 
-        /** adds an ParameterWrapper to the end of the array
+        /** adds a ParameterWrapper to the end of the array
         */
         void    push_back( ParameterWrapper* _pParameter )
         {
