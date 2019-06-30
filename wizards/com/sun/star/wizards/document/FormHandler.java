@@ -114,7 +114,7 @@ public class FormHandler
         sModelServices[SOGRIDCONTROL] = "com.sun.star.form.component.GridControl";
         sModelServices[SOIMAGECONTROL] = "com.sun.star.form.component.DatabaseImageControl";
 
-        oControlData = new ControlData[22];
+        oControlData = new ControlData[23];
         oControlData[0] = createControlData(DataType.BIT,          SOCHECKBOX, CHECKBOX);
         oControlData[1] = createControlData(DataType.BOOLEAN,      SOCHECKBOX, CHECKBOX);
         oControlData[2] = createControlData(DataType.TINYINT,      SONUMERICCONTROL, FORMATTEDFIELD);
@@ -136,8 +136,9 @@ public class FormHandler
         oControlData[18] = createControlData(DataType.VARBINARY,   SOIMAGECONTROL, TEXTFIELD);
         oControlData[19] = createControlData(DataType.LONGVARBINARY, SOIMAGECONTROL, TEXTFIELD);
         oControlData[20] = createControlData(DataType.BLOB,        SOIMAGECONTROL, TEXTFIELD);
+        oControlData[21] = createControlData(DataType.CLOB,        SOIMAGECONTROL, TEXTFIELD);
 
-        oControlData[21] = createControlData(DataType.OTHER,       SOIMAGECONTROL, TEXTFIELD);
+        oControlData[22] = createControlData(DataType.OTHER,       SOIMAGECONTROL, TEXTFIELD);
     }
 
     public int getControlType(int _fieldtype)
