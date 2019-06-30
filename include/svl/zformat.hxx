@@ -480,6 +480,9 @@ public:
             return false;
         }
 
+    // Check if era is used with specified calendar or language.
+    bool HasEra(const OUString& sCalendar, LanguageType eLang) const;
+
 private:
     ImpSvNumFor NumFor[4];          // Array for the 4 subformats
     OUString sFormatstring;         // The format code string

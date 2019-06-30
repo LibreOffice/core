@@ -1047,10 +1047,17 @@ sal_uInt16 ImpSvNumberInputScan::ImplGetYear( sal_uInt16 nIndex )
     if (nLen <= 6)
     {
         nYear = static_cast<sal_uInt16>(sStrArray[nNums[nIndex]].toInt32());
+        // Convert the number to CE year if ROC era is used in the date format.
+        sal_Int32 nSignLen = sStrArray[0].getLength();
+        if (mpFormat && mpFormat->HasEra("ROC", LANGUAGE_CHINESE_TRADITIONAL)
+                && (nSignLen == 0 || sStrArray[0][nSignLen - 1] != '-'))
+        {
+            nYear += 1911;
+        }
         // A year in another, not Gregorian CE era is never expanded.
         // A year < 100 entered with at least 3 digits with leading 0 is taken
         // as is without expansion.
-        if (mbEraCE == kDefaultEra && nYear < 100 && nLen < 3)
+        else if (mbEraCE == kDefaultEra && nYear < 100 && nLen < 3)
         {
             nYear = SvNumberFormatter::ExpandTwoDigitYear( nYear, nYear2000 );
         }

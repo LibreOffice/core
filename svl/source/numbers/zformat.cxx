@@ -5758,4 +5758,27 @@ const SvNumberFormatter& SvNumberformat::GetFormatter() const
     return *rScan.GetNumberformatter();
 }
 
+bool SvNumberformat::HasEra(const OUString& sCalendar, LanguageType eLang) const
+{
+    if (GetCal().getUniqueID() != GREGORIAN)
+        return false;
+
+    const ImpSvNumberformatInfo& rInfo = NumFor[0].Info();
+    const sal_uInt16 nCnt = NumFor[0].GetCount();
+    sal_uInt16 i;
+    for (i = 0; i < nCnt; i++)
+    {
+        switch (rInfo.nTypeArray[i])
+        {
+        case NF_SYMBOLTYPE_CALENDAR:
+            return rInfo.sStrArray[i] == sCalendar;
+        case NF_KEY_EC:
+        case NF_KEY_EEC:
+        case NF_KEY_R:
+        case NF_KEY_RR:
+            return eLang == MsLangId::getRealLanguage(GetLanguage());
+        }
+    }
+    return false;
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
