@@ -57,7 +57,7 @@ namespace drawinglayer
             geometry::ViewInformation3D                         maViewInformation3D;
 
             /** if the embedded 3D primitives contain shadow, these parameters are needed
-                to extract the shadow which is a sequence od 2D primitives and may expand
+                to extract the shadow which is a sequence of 2D primitives and may expand
                 the 2D range. Since every single 3D object in a scene may individually
                 have shadow or not, these values need to be provided and prepared. The shadow
                 distance itself (a 2D transformation) is part of the 3D shadow definition
@@ -72,7 +72,7 @@ namespace drawinglayer
             /// #i96669# add simple range buffering for this primitive
             basegfx::B2DRange                                   maB2DRange;
 
-            /** flag if given 3D geometry is already cheched for shadow definitions and 2d shadows
+            /** flag if given 3D geometry is already checked for shadow definitions and 2d shadows
                 are created in maShadowPrimitives
              */
             bool                                                mbShadow3DChecked : 1;
