@@ -65,9 +65,8 @@ void XDatabaseRange::testGetSortDescriptor()
 {
     uno::Reference< sheet::XDatabaseRange > xDBRange(init("SortDescriptor"), UNO_QUERY_THROW);
     uno::Sequence< beans::PropertyValue > xSortDescr = xDBRange->getSortDescriptor();
-    for (sal_Int32 i = 0; i < xSortDescr.getLength(); ++i)
+    for (const beans::PropertyValue& aProp : xSortDescr)
     {
-        beans::PropertyValue aProp = xSortDescr[i];
         //std::cout << "Prop " << i << " Name: " << OUString(aProp.Name) << std::endl;
 
         if (aProp.Name == "IsSortColumns")
