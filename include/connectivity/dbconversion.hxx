@@ -134,7 +134,7 @@ namespace dbtools
         OOO_DLLPUBLIC_DBTOOLS OUString toSQLString(sal_Int32 eType, const css::uno::Any& _rVal,
             const css::uno::Reference< css::script::XTypeConverter >&  _rxTypeConverter);
 
-        /** converts a Unicode string into a 8-bit string, using the given encoding
+        /** converts an Unicode string into a 8-bit string, using the given encoding
 
             @param _rSource
                 the source string to convert
@@ -156,7 +156,7 @@ namespace dbtools
             rtl_TextEncoding _eEncoding
         );
 
-        /** converts a Unicode string into a 8-bit string, using the given encoding
+        /** converts an Unicode string into a 8-bit string, using the given encoding
 
             @param _rSource
                 the source string to convert
