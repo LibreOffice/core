@@ -1475,7 +1475,7 @@ SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(bool bDontDeleteReally)
             pTEOutliner->SetBeginPasteOrDropHdl(Link<PasteOrDropInfos*,void>());
             pTEOutliner->SetEndPasteOrDropHdl(Link<PasteOrDropInfos*,void>());
 
-            const bool bUndo = IsUndoEnabled();
+            const bool bUndo = IsUndoEnabled() && CanDoSdrUndo();
             if( bUndo )
             {
                 OUString aObjName(pTEObj->TakeObjNameSingul());
