@@ -388,10 +388,10 @@ namespace dbaui
         weld::Window* getFrameWeld() const;
         void        setView( const VclPtr<ODataView>& i_rView );
         void        clearView();
-        // shows a error box if the SQLExceptionInfo is valid
+        // shows an error box if the SQLExceptionInfo is valid
         void showError(const ::dbtools::SQLExceptionInfo& _rInfo);
 
-        // if there is an css::util::URL translation for the id
+        // if there is a css::util::URL translation for the id
         // ('handle') then if xListener is NULL the change will be forwarded
         // to all listeners to the given css::util::URL
         // if there is a toolbar slot with the given id it is updated (the new state is determined via GetState)
