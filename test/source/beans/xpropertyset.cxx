@@ -283,9 +283,8 @@ void XPropertySet::fillPropsToTest(const uno::Reference<beans::XPropertySetInfo>
     aSkip.insert("CharRelief");
     aSkip.insert("IsLayerMode");
 
-    for (sal_Int32 i = 0; i < aProps.getLength(); ++i)
+    for (const beans::Property& aProp : aProps)
     {
-        beans::Property aProp = aProps[i];
         if (aSkip.count(aProp.Name) > 0)
             continue;
 

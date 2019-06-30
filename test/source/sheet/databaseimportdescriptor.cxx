@@ -30,69 +30,69 @@ void DatabaseImportDescriptor::testDatabaseImportDescriptorProperties()
     uno::Reference<util::XImportable> xImportable(getXImportable(), UNO_QUERY_THROW);
     uno::Sequence<beans::PropertyValue> aPropValues = xImportable->createImportDescriptor(true);
 
-    for (auto i = 0; i < aPropValues.getLength(); i++)
+    for (auto& rPropValue : aPropValues)
     {
         uno::Any aOldValue;
         uno::Any aNewValue;
-        if (aPropValues[i].Name == "DatabaseName" || aPropValues[i].Name == "SourceObject"
-            || aPropValues[i].Name == "ConnectionResource")
+        if (rPropValue.Name == "DatabaseName" || rPropValue.Name == "SourceObject"
+            || rPropValue.Name == "ConnectionResource")
         {
             OUString aValue;
-            aOldValue = aPropValues[i].Value;
+            aOldValue = rPropValue.Value;
             aOldValue >>= aValue;
             OString aMsgGet = "Unable to get PropertyValue "
-                              + OUStringToOString(aPropValues[i].Name, RTL_TEXTENCODING_UTF8);
+                              + OUStringToOString(rPropValue.Name, RTL_TEXTENCODING_UTF8);
             CPPUNIT_ASSERT_EQUAL_MESSAGE(aMsgGet.getStr(), OUString(""), aValue);
 
             aNewValue <<= OUString("New");
-            aPropValues[i].Value = aNewValue;
+            rPropValue.Value = aNewValue;
 
-            aOldValue = aPropValues[i].Value;
+            aOldValue = rPropValue.Value;
             aOldValue >>= aValue;
             OString aMsgSet = "Unable to set PropertyValue "
-                              + OUStringToOString(aPropValues[i].Name, RTL_TEXTENCODING_UTF8);
+                              + OUStringToOString(rPropValue.Name, RTL_TEXTENCODING_UTF8);
             CPPUNIT_ASSERT_EQUAL_MESSAGE(aMsgSet.getStr(), OUString("New"), aValue);
         }
-        else if (aPropValues[i].Name == "IsNative")
+        else if (rPropValue.Name == "IsNative")
         {
             bool aValue = true;
-            aOldValue = aPropValues[i].Value;
+            aOldValue = rPropValue.Value;
             aOldValue >>= aValue;
             OString aMsgGet = "Unable to get PropertyValue "
-                              + OUStringToOString(aPropValues[i].Name, RTL_TEXTENCODING_UTF8);
+                              + OUStringToOString(rPropValue.Name, RTL_TEXTENCODING_UTF8);
             CPPUNIT_ASSERT_MESSAGE(aMsgGet.getStr(), !aValue);
 
             aNewValue <<= true;
-            aPropValues[i].Value = aNewValue;
+            rPropValue.Value = aNewValue;
 
-            aOldValue = aPropValues[i].Value;
+            aOldValue = rPropValue.Value;
             aOldValue >>= aValue;
             OString aMsgSet = "Unable to set PropertyValue "
-                              + OUStringToOString(aPropValues[i].Name, RTL_TEXTENCODING_UTF8);
+                              + OUStringToOString(rPropValue.Name, RTL_TEXTENCODING_UTF8);
             CPPUNIT_ASSERT_MESSAGE(aMsgSet.getStr(), aValue);
         }
-        else if (aPropValues[i].Name == "SourceType")
+        else if (rPropValue.Name == "SourceType")
         {
             sheet::DataImportMode aValue;
-            aOldValue = aPropValues[i].Value;
+            aOldValue = rPropValue.Value;
             aOldValue >>= aValue;
             OString aMsgGet = "Unable to get PropertyValue "
-                              + OUStringToOString(aPropValues[i].Name, RTL_TEXTENCODING_UTF8);
+                              + OUStringToOString(rPropValue.Name, RTL_TEXTENCODING_UTF8);
             CPPUNIT_ASSERT_EQUAL_MESSAGE(aMsgGet.getStr(), sheet::DataImportMode_NONE, aValue);
 
             aNewValue <<= sheet::DataImportMode_SQL;
-            aPropValues[i].Value = aNewValue;
+            rPropValue.Value = aNewValue;
 
-            aOldValue = aPropValues[i].Value;
+            aOldValue = rPropValue.Value;
             aOldValue >>= aValue;
             OString aMsgSet = "Unable to set PropertyValue "
-                              + OUStringToOString(aPropValues[i].Name, RTL_TEXTENCODING_UTF8);
+                              + OUStringToOString(rPropValue.Name, RTL_TEXTENCODING_UTF8);
             CPPUNIT_ASSERT_EQUAL_MESSAGE(aMsgSet.getStr(), sheet::DataImportMode_SQL, aValue);
         }
         else
         {
             OString aMsg = "Unsupported PropertyValue "
-                           + OUStringToOString(aPropValues[i].Name, RTL_TEXTENCODING_UTF8);
+                           + OUStringToOString(rPropValue.Name, RTL_TEXTENCODING_UTF8);
             CPPUNIT_FAIL(aMsg.getStr());
         }
     }

@@ -44,7 +44,7 @@ void TextContent::testTextContentProperties()
 
     uno::Sequence<text::TextContentAnchorType> aAnchorTypes;
     CPPUNIT_ASSERT(xPS->getPropertyValue("AnchorTypes") >>= aAnchorTypes);
-    CPPUNIT_ASSERT(aAnchorTypes.getLength());
+    CPPUNIT_ASSERT(aAnchorTypes.hasElements());
 
     text::WrapTextMode aExpectedWTM;
     CPPUNIT_ASSERT(xPS->getPropertyValue("TextWrap") >>= aExpectedWTM);
