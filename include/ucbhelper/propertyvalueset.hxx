@@ -40,6 +40,9 @@ namespace com { namespace sun { namespace star { namespace beans {
 
 namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
 
+enum class PropsSet;
+namespace ucbhelper_impl { struct PropertyValue; }
+
 namespace ucbhelper {
 
 class PropertyValues;
@@ -68,6 +71,12 @@ class UCBHELPER_DLLPUBLIC PropertyValueSet :
 private:
     UCBHELPER_DLLPRIVATE const css::uno::Reference< css::script::XTypeConverter >&
     getTypeConverter();
+
+    template <class T, T ucbhelper_impl::PropertyValue::*_member_name_>
+    T getValue(PropsSet nTypeName, sal_Int32 columnIndex);
+
+    template <class T, T ucbhelper_impl::PropertyValue::*_member_name_>
+    void appendValue(const OUString& rPropName, PropsSet nTypeName, const T& rValue);
 
 public:
     PropertyValueSet(
