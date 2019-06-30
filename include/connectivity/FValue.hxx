@@ -307,7 +307,7 @@ namespace connectivity
         ORowSetValue& operator=(const OUString& _rRH);
         // the type isn't set it will be set to VARCHAR if the type is different change it
         ORowSetValue& operator=(const css::uno::Sequence<sal_Int8>& _rRH);
-        // we the possibility to save a any for bookmarks
+        // with the possibility to save an any for bookmarks
         ORowSetValue& operator=(const css::uno::Any& _rAny);
 
         operator bool() const   {   return !isNull() && getBool();    }
@@ -398,7 +398,7 @@ namespace connectivity
         double          getDouble() const;
         float           getFloat()  const;
 
-        OUString getString() const;      // makes a automatic conversion if type isn't a string
+        OUString getString() const;      // makes an automatic conversion if type isn't a string
         css::util::Date                getDate()       const;
         css::util::Time                getTime()       const;
         css::util::DateTime            getDateTime()   const;
@@ -438,7 +438,7 @@ namespace connectivity
         void impl_fill( const sal_Int32 _nType, bool _bNullable, const detail::IValueSource& _rValueSource );
     };
 
-    /// ORowSetValueDecorator decorates a ORowSetValue so the value is "refcounted"
+    /// ORowSetValueDecorator decorates an ORowSetValue so the value is "refcounted"
     class OOO_DLLPUBLIC_DBTOOLS ORowSetValueDecorator : public ::salhelper::SimpleReferenceObject
     {
         ORowSetValue    m_aValue;   // my own value
