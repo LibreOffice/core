@@ -6702,7 +6702,7 @@ if test "$_os" != "WINNT"; then
     # As the below test checks things when linking self-compiled dynamic libraries, it presumably is irrelevant
     # when we don't make any dynamic libraries?
     if test "$DISABLE_DYNLOADING" = ""; then
-        AC_MSG_CHECKING([if gcc is -fvisibility-inlines-hidden safe (Clang bug 11250)])
+        AC_MSG_CHECKING([if $CXX is -fvisibility-inlines-hidden safe (Clang bug 11250)])
         cat > conftestlib1.cc <<_ACEOF
 template<typename T> struct S1 { virtual ~S1() {} virtual void f() {} };
 struct S2: S1<int> { virtual ~S2(); };
@@ -6743,7 +6743,7 @@ _ACEOF
         fi
     fi
 
-   AC_MSG_CHECKING([if gcc has a visibility bug with class-level attributes (GCC bug 26905)])
+   AC_MSG_CHECKING([if $CXX has a visibility bug with class-level attributes (GCC bug 26905)])
     cat >visibility.cxx <<_ACEOF
 #pragma GCC visibility push(hidden)
 struct __attribute__ ((visibility ("default"))) TestStruct {
