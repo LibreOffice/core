@@ -130,101 +130,6 @@ class PropertyValues : public std::vector< ucbhelper_impl::PropertyValue > {};
 } // namespace ucbhelper
 
 
-// Welcome to the macro hell...
-
-
-#define GETVALUE_IMPL( _type_, _type_name_, _member_name_ ) \
-                                                                  \
-    osl::MutexGuard aGuard( m_aMutex );                           \
-                                                                  \
-    _type_ aValue {};   /* default ctor */                \
-                                                                  \
-    m_bWasNull = true;                                            \
-                                                                  \
-    if ( ( columnIndex < 1 )                                      \
-         || ( columnIndex > sal_Int32( m_pValues->size() ) ) )    \
-    {                                                             \
-        OSL_FAIL( "PropertyValueSet - index out of range!" );     \
-        return aValue;                                            \
-    }                                                             \
-    ucbhelper_impl::PropertyValue& rValue                         \
-        = (*m_pValues)[ columnIndex - 1 ];                        \
-                                                                  \
-    if ( rValue.nOrigValue == PropsSet::NONE )                    \
-        return aValue;                                            \
-                                                                  \
-    if ( rValue.nPropsSet & _type_name_ )                         \
-    {                                                             \
-        /* Values is present natively... */                       \
-        aValue = rValue._member_name_;                            \
-        m_bWasNull = false;                                       \
-        return aValue;                                            \
-    }                                                             \
-                                                                  \
-    if ( !(rValue.nPropsSet & PropsSet::Object) )                 \
-    {                                                             \
-        /* Value is not (yet) available as Any. Create it. */     \
-        getObject( columnIndex, Reference< XNameAccess >() );     \
-    }                                                             \
-                                                                  \
-    if ( rValue.nPropsSet & PropsSet::Object )                    \
-    {                                                             \
-        /* Value is available as Any. */                          \
-                                                                  \
-        if ( rValue.aObject.hasValue() )                          \
-        {                                                         \
-            /* Try to convert into native value. */               \
-            if ( rValue.aObject >>= aValue )                      \
-            {                                                     \
-                rValue._member_name_ = aValue;                    \
-                rValue.nPropsSet |= _type_name_;                  \
-                m_bWasNull = false;                               \
-            }                                                     \
-            else                                                  \
-            {                                                     \
-                /* Last chance. Try type converter service... */  \
-                                                                  \
-                Reference< XTypeConverter > xConverter            \
-                                        = getTypeConverter();     \
-                if ( xConverter.is() )                            \
-                {                                                 \
-                    try                                           \
-                    {                                             \
-                        Any aConvAny = xConverter->convertTo(     \
-                                                 rValue.aObject,      \
-                                                 cppu::UnoType<_type_>::get() );    \
-                                                                  \
-                        if ( aConvAny >>= aValue )                \
-                        {                                         \
-                            rValue._member_name_ = aValue;        \
-                            rValue.nPropsSet |= _type_name_;      \
-                            m_bWasNull = false;               \
-                        }                                         \
-                    }                                             \
-                    catch (const IllegalArgumentException&)       \
-                    {                                             \
-                    }                                             \
-                    catch (const CannotConvertException&)         \
-                    {                                             \
-                    }                                             \
-                }                                                 \
-            }                                                     \
-        }                                                         \
-    }                                                             \
-    return aValue;
-
-#define SETVALUE_IMPL( _prop_name_, _type_name_, _member_name_, _value_ )     \
-                                                                              \
-    osl::MutexGuard aGuard( m_aMutex );                                       \
-                                                                              \
-    ucbhelper_impl::PropertyValue aNewValue;                                  \
-    aNewValue.sPropertyName = _prop_name_;                                    \
-    aNewValue.nPropsSet     = _type_name_;                                    \
-    aNewValue.nOrigValue    = _type_name_;                                    \
-    aNewValue._member_name_ = _value_;                                        \
-                                                                              \
-    m_pValues->push_back( aNewValue );
-
 namespace ucbhelper {
 
 
@@ -283,6 +188,87 @@ XTYPEPROVIDER_IMPL_3( PropertyValueSet,
 // XRow methods.
 
 
+template <class T, T ucbhelper_impl::PropertyValue::*_member_name_>
+T PropertyValueSet::getValue(PropsSet nTypeName, sal_Int32 columnIndex)
+{
+    osl::MutexGuard aGuard( m_aMutex );
+
+    T aValue {};   /* default ctor */
+
+    m_bWasNull = true;
+
+    if ( ( columnIndex < 1 ) || ( columnIndex > sal_Int32( m_pValues->size() ) ) )
+    {
+        OSL_FAIL( "PropertyValueSet - index out of range!" );
+        return aValue;
+    }
+    ucbhelper_impl::PropertyValue& rValue = (*m_pValues)[ columnIndex - 1 ];
+
+    if ( rValue.nOrigValue == PropsSet::NONE )
+        return aValue;
+
+    if ( rValue.nPropsSet & nTypeName )
+    {
+        /* Values is present natively... */
+        aValue = rValue.*_member_name_;
+        m_bWasNull = false;
+        return aValue;
+    }
+
+    if ( !(rValue.nPropsSet & PropsSet::Object) )
+    {
+        /* Value is not (yet) available as Any. Create it. */
+        getObject( columnIndex, Reference< XNameAccess >() );
+    }
+
+    if ( rValue.nPropsSet & PropsSet::Object )
+    {
+        /* Value is available as Any. */
+
+        if ( rValue.aObject.hasValue() )
+        {
+            /* Try to convert into native value. */
+            if ( rValue.aObject >>= aValue )
+            {
+                rValue.*_member_name_ = aValue;
+                rValue.nPropsSet |= nTypeName;
+                m_bWasNull = false;
+            }
+            else
+            {
+                /* Last chance. Try type converter service... */
+
+                Reference< XTypeConverter > xConverter = getTypeConverter();
+                if ( xConverter.is() )
+                {
+                    try
+                    {
+                        Any aConvAny = xConverter->convertTo(
+                                                 rValue.aObject,
+                                                 cppu::UnoType<T>::get() );
+
+                        if ( aConvAny >>= aValue )
+                        {
+                            rValue.*_member_name_ = aValue;
+                            rValue.nPropsSet |= nTypeName;
+                            m_bWasNull = false;
+                        }
+                    }
+                    catch (const IllegalArgumentException&)
+                    {
+                    }
+                    catch (const CannotConvertException&)
+                    {
+                    }
+                }
+            }
+        }
+    }
+
+    return aValue;
+}
+
+
 // virtual
 sal_Bool SAL_CALL PropertyValueSet::wasNull()
 {
@@ -296,56 +282,56 @@ sal_Bool SAL_CALL PropertyValueSet::wasNull()
 // virtual
 OUString SAL_CALL PropertyValueSet::getString( sal_Int32 columnIndex )
 {
-    GETVALUE_IMPL( OUString, PropsSet::String, aString );
+    return getValue<OUString, &ucbhelper_impl::PropertyValue::aString>(PropsSet::String, columnIndex);
 }
 
 
 // virtual
 sal_Bool SAL_CALL PropertyValueSet::getBoolean( sal_Int32 columnIndex )
 {
-    GETVALUE_IMPL( bool, PropsSet::Boolean, bBoolean );
+    return getValue<bool, &ucbhelper_impl::PropertyValue::bBoolean>(PropsSet::Boolean, columnIndex);
 }
 
 
 // virtual
 sal_Int8 SAL_CALL PropertyValueSet::getByte( sal_Int32 columnIndex )
 {
-    GETVALUE_IMPL( sal_Int8, PropsSet::Byte, nByte );
+    return getValue<sal_Int8, &ucbhelper_impl::PropertyValue::nByte>(PropsSet::Byte, columnIndex);
 }
 
 
 // virtual
 sal_Int16 SAL_CALL PropertyValueSet::getShort( sal_Int32 columnIndex )
 {
-    GETVALUE_IMPL( sal_Int16, PropsSet::Short, nShort );
+    return getValue<sal_Int16, &ucbhelper_impl::PropertyValue::nShort>(PropsSet::Short, columnIndex);
 }
 
 
 // virtual
 sal_Int32 SAL_CALL PropertyValueSet::getInt( sal_Int32 columnIndex )
 {
-    GETVALUE_IMPL( sal_Int32, PropsSet::Int, nInt );
+    return getValue<sal_Int32, &ucbhelper_impl::PropertyValue::nInt>(PropsSet::Int, columnIndex);
 }
 
 
 // virtual
 sal_Int64 SAL_CALL PropertyValueSet::getLong( sal_Int32 columnIndex )
 {
-    GETVALUE_IMPL( sal_Int64, PropsSet::Long, nLong );
+    return getValue<sal_Int64, &ucbhelper_impl::PropertyValue::nLong>(PropsSet::Long, columnIndex);
 }
 
 
 // virtual
 float SAL_CALL PropertyValueSet::getFloat( sal_Int32 columnIndex )
 {
-    GETVALUE_IMPL( float, PropsSet::Float, nFloat );
+    return getValue<float, &ucbhelper_impl::PropertyValue::nFloat>(PropsSet::Float, columnIndex);
 }
 
 
 // virtual
 double SAL_CALL PropertyValueSet::getDouble( sal_Int32 columnIndex )
 {
-    GETVALUE_IMPL( double, PropsSet::Double, nDouble );
+    return getValue<double, &ucbhelper_impl::PropertyValue::nDouble>(PropsSet::Double, columnIndex);
 }
 
 
@@ -353,28 +339,28 @@ double SAL_CALL PropertyValueSet::getDouble( sal_Int32 columnIndex )
 Sequence< sal_Int8 > SAL_CALL
 PropertyValueSet::getBytes( sal_Int32 columnIndex )
 {
-    GETVALUE_IMPL( Sequence< sal_Int8 >, PropsSet::Bytes, aBytes );
+    return getValue<Sequence< sal_Int8 >, &ucbhelper_impl::PropertyValue::aBytes>(PropsSet::Bytes, columnIndex);
 }
 
 
 // virtual
 Date SAL_CALL PropertyValueSet::getDate( sal_Int32 columnIndex )
 {
-    GETVALUE_IMPL( Date, PropsSet::Date, aDate );
+    return getValue<Date, &ucbhelper_impl::PropertyValue::aDate>(PropsSet::Date, columnIndex);
 }
 
 
 // virtual
 Time SAL_CALL PropertyValueSet::getTime( sal_Int32 columnIndex )
 {
-    GETVALUE_IMPL( Time, PropsSet::Time, aTime );
+    return getValue<Time, &ucbhelper_impl::PropertyValue::aTime>(PropsSet::Time, columnIndex);
 }
 
 
 // virtual
 DateTime SAL_CALL PropertyValueSet::getTimestamp( sal_Int32 columnIndex )
 {
-    GETVALUE_IMPL( DateTime, PropsSet::Timestamp, aTimestamp );
+    return getValue<DateTime, &ucbhelper_impl::PropertyValue::aTimestamp>(PropsSet::Timestamp, columnIndex);
 }
 
 
@@ -382,8 +368,7 @@ DateTime SAL_CALL PropertyValueSet::getTimestamp( sal_Int32 columnIndex )
 Reference< XInputStream > SAL_CALL
 PropertyValueSet::getBinaryStream( sal_Int32 columnIndex )
 {
-    GETVALUE_IMPL(
-        Reference< XInputStream >, PropsSet::BinaryStream, xBinaryStream );
+    return getValue<Reference< XInputStream >, &ucbhelper_impl::PropertyValue::xBinaryStream>(PropsSet::BinaryStream, columnIndex);
 }
 
 
@@ -391,8 +376,7 @@ PropertyValueSet::getBinaryStream( sal_Int32 columnIndex )
 Reference< XInputStream > SAL_CALL
 PropertyValueSet::getCharacterStream( sal_Int32 columnIndex )
 {
-    GETVALUE_IMPL(
-        Reference< XInputStream >, PropsSet::CharacterStream, xCharacterStream );
+    return getValue<Reference< XInputStream >, &ucbhelper_impl::PropertyValue::xCharacterStream>(PropsSet::CharacterStream, columnIndex);
 }
 
 
@@ -528,28 +512,28 @@ Any SAL_CALL PropertyValueSet::getObject(
 // virtual
 Reference< XRef > SAL_CALL PropertyValueSet::getRef( sal_Int32 columnIndex )
 {
-    GETVALUE_IMPL( Reference< XRef >, PropsSet::Ref, xRef );
+    return getValue<Reference< XRef >, &ucbhelper_impl::PropertyValue::xRef>(PropsSet::Ref, columnIndex);
 }
 
 
 // virtual
 Reference< XBlob > SAL_CALL PropertyValueSet::getBlob( sal_Int32 columnIndex )
 {
-    GETVALUE_IMPL( Reference< XBlob >, PropsSet::Blob, xBlob );
+    return getValue<Reference< XBlob >, &ucbhelper_impl::PropertyValue::xBlob>(PropsSet::Blob, columnIndex);
 }
 
 
 // virtual
 Reference< XClob > SAL_CALL PropertyValueSet::getClob( sal_Int32 columnIndex )
 {
-    GETVALUE_IMPL( Reference< XClob >, PropsSet::Clob, xClob );
+    return getValue<Reference< XClob >, &ucbhelper_impl::PropertyValue::xClob>(PropsSet::Clob, columnIndex);
 }
 
 
 // virtual
 Reference< XArray > SAL_CALL PropertyValueSet::getArray( sal_Int32 columnIndex )
 {
-    GETVALUE_IMPL( Reference< XArray >, PropsSet::Array, xArray );
+    return getValue<Reference< XArray >, &ucbhelper_impl::PropertyValue::xArray>(PropsSet::Array, columnIndex);
 }
 
 
@@ -594,44 +578,59 @@ const Reference< XTypeConverter >& PropertyValueSet::getTypeConverter()
 }
 
 
+template <class T, T ucbhelper_impl::PropertyValue::*_member_name_>
+void PropertyValueSet::appendValue(const OUString& rPropName, PropsSet nTypeName, const T& rValue)
+{
+    osl::MutexGuard aGuard( m_aMutex );
+
+    ucbhelper_impl::PropertyValue aNewValue;
+    aNewValue.sPropertyName = rPropName;
+    aNewValue.nPropsSet     = nTypeName;
+    aNewValue.nOrigValue    = nTypeName;
+    aNewValue.*_member_name_ = rValue;
+
+    m_pValues->push_back( aNewValue );
+}
+
+
 void PropertyValueSet::appendString( const OUString& rPropName,
                                      const OUString& rValue )
 {
-    SETVALUE_IMPL( rPropName, PropsSet::String, aString, rValue );
+    appendValue<OUString, &ucbhelper_impl::PropertyValue::aString>(rPropName, PropsSet::String, rValue);
 }
 
 
 void PropertyValueSet::appendBoolean( const OUString& rPropName,
                                       bool bValue )
 {
-    SETVALUE_IMPL( rPropName, PropsSet::Boolean, bBoolean, bValue );
+    appendValue<bool, &ucbhelper_impl::PropertyValue::bBoolean>(rPropName, PropsSet::Boolean, bValue);
 }
 
 
 void PropertyValueSet::appendLong( const OUString& rPropName,
                                    sal_Int64 nValue )
 {
-    SETVALUE_IMPL( rPropName, PropsSet::Long, nLong, nValue );
+    appendValue<sal_Int64, &ucbhelper_impl::PropertyValue::nLong>(rPropName, PropsSet::Long, nValue);
 }
 
 
 void PropertyValueSet::appendTimestamp( const OUString& rPropName,
                                         const DateTime& rValue )
 {
-    SETVALUE_IMPL( rPropName, PropsSet::Timestamp, aTimestamp, rValue );
+    appendValue<DateTime, &ucbhelper_impl::PropertyValue::aTimestamp>(rPropName, PropsSet::Timestamp, rValue);
 }
 
 
 void PropertyValueSet::appendObject( const OUString& rPropName,
                                      const Any& rValue )
 {
-    SETVALUE_IMPL( rPropName, PropsSet::Object, aObject, rValue );
+    appendValue<Any, &ucbhelper_impl::PropertyValue::aObject>(rPropName, PropsSet::Object, rValue);
 }
 
 
 void PropertyValueSet::appendVoid( const OUString& rPropName )
 {
-    SETVALUE_IMPL( rPropName, PropsSet::NONE, aObject, Any() );
+    appendValue<Any, &ucbhelper_impl::PropertyValue::aObject>(rPropName, PropsSet::NONE, Any());
 }
 
 
