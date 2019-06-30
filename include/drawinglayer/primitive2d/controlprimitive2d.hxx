@@ -47,7 +47,7 @@ namespace drawinglayer
             basegfx::B2DHomMatrix                             maTransform;
             css::uno::Reference< css::awt::XControlModel >    mxControlModel;
 
-            /// the created an cached awt::XControl
+            /// the created and cached awt::XControl
             css::uno::Reference< css::awt::XControl >         mxXControl;
 
             /// the last used scaling, used from getDecomposition for buffering
