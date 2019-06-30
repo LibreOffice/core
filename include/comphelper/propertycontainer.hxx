@@ -32,7 +32,7 @@ namespace comphelper
 {
 
 
-/** a OPropertySetHelper implementation which is just a simple container for properties represented
+/** an OPropertySetHelper implementation which is just a simple container for properties represented
     by class members, usually in a derived class.
     <BR>
     A restriction of this class is that no value conversions are made on a setPropertyValue call. Though
