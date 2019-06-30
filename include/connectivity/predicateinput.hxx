@@ -39,7 +39,7 @@ namespace dbtools
     //= OPredicateInputController
 
     /** A class which allows input of an SQL predicate for a row set column
-        into a edit field.
+        into an edit field.
     */
     class OOO_DLLPUBLIC_DBTOOLS OPredicateInputController
     {
