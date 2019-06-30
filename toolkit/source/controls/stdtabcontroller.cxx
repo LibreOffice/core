@@ -62,22 +62,19 @@ bool StdTabController::ImplCreateComponentSequence(
         Sequence< Any>*                                 pTabStops,
         bool bPeerComponent )
 {
-    bool bOK = true;
-
     // Get only the requested controls
     sal_Int32 nModels = rModels.getLength();
     if (nModels != rControls.getLength())
     {
         Sequence< Reference< XControl > > aSeq( nModels );
-        const Reference< XControlModel >* pModels = rModels.getConstArray();
         Reference< XControl >  xCurrentControl;
 
         sal_Int32 nRealControls = 0;
-        for (sal_Int32 n = 0; n < nModels; ++n, ++pModels)
+        for (const Reference< XControlModel >& rModel : rModels)
         {
-            xCurrentControl = FindControl(rControls, *pModels);
+            xCurrentControl = FindControl(rControls, rModel);
             if (xCurrentControl.is())
-                aSeq.getArray()[nRealControls++] = xCurrentControl;
+                aSeq[nRealControls++] = xCurrentControl;
         }
         aSeq.realloc(nRealControls);
         rControls = aSeq;
@@ -86,8 +83,7 @@ bool StdTabController::ImplCreateComponentSequence(
     // there may be less controls than models, but never more controls than models
     assert(rControls.getLength() <= rModels.getLength());
 
-    const Reference< XControl > * pControls = rControls.getConstArray();
-    sal_uInt32 nCtrls = rControls.getLength();
+    sal_Int32 nCtrls = rControls.getLength();
     rComponents.realloc( nCtrls );
     Reference< XWindow > * pComps = rComponents.getArray();
     Any* pTabs = nullptr;
@@ -99,36 +95,37 @@ bool StdTabController::ImplCreateComponentSequence(
         pTabs = pTabStops->getArray();
     }
 
-    for ( sal_uInt32 n = 0; bOK && ( n < nCtrls ); n++ )
+    bool bOK = true;
+    for ( const Reference< XControl >& xCtrl : rControls )
     {
         // Get the matching control for this model
-        Reference< XControl >  xCtrl(pControls[n]);
-        if ( xCtrl.is() )
-        {
-            if (bPeerComponent)
-                pComps[n].set(xCtrl->getPeer(), UNO_QUERY);
-            else
-                pComps[n].set(xCtrl, UNO_QUERY);
-
-            // TabStop-Property
-            if ( pTabs )
-            {
-                // opt: Constant String for TabStop name
-                static const char aTabStopName[] = "Tabstop";
-
-                Reference< XPropertySet >  xPSet( xCtrl->getModel(), UNO_QUERY );
-                Reference< XPropertySetInfo >  xInfo = xPSet->getPropertySetInfo();
-                if( xInfo->hasPropertyByName( aTabStopName ) )
-                    *pTabs++ = xPSet->getPropertyValue( aTabStopName );
-                else
-                    ++pTabs;
-            }
-        }
-        else
+        if ( !xCtrl.is() )
         {
             SAL_WARN("toolkit", "Control not found" );
             bOK = false;
+            break;
         }
+
+        if (bPeerComponent)
+            pComps->set(xCtrl->getPeer(), UNO_QUERY);
+        else
+            pComps->set(xCtrl, UNO_QUERY);
+
+        // TabStop-Property
+        if ( pTabs )
+        {
+            // opt: Constant String for TabStop name
+            static const char aTabStopName[] = "Tabstop";
+
+            Reference< XPropertySet >  xPSet( xCtrl->getModel(), UNO_QUERY );
+            Reference< XPropertySetInfo >  xInfo = xPSet->getPropertySetInfo();
+            if( xInfo->hasPropertyByName( aTabStopName ) )
+                *pTabs++ = xPSet->getPropertyValue( aTabStopName );
+            else
+                ++pTabs;
+        }
+
+        ++pComps;
     }
     return bOK;
 }
@@ -221,19 +218,14 @@ Sequence< Reference< XControl > > StdTabController::getControls(  )
     if ( mxControlContainer.is() )
     {
         Sequence< Reference< XControlModel > > aModels = mxModel->getControlModels();
-        const Reference< XControlModel > * pModels = aModels.getConstArray();
 
         Sequence< Reference< XControl > > xCtrls = mxControlContainer->getControls();
 
-        sal_uInt32 nCtrls = aModels.getLength();
+        sal_Int32 nCtrls = aModels.getLength();
         aSeq = Sequence< Reference< XControl > >( nCtrls );
-        for ( sal_uInt32 n = 0; n < nCtrls; n++ )
-        {
-            Reference< XControlModel >  xCtrlModel = pModels[n];
-            // Search matching Control for this Model
-            Reference< XControl >  xCtrl = FindControl( xCtrls, xCtrlModel );
-            aSeq.getArray()[n] = xCtrl;
-        }
+        std::transform(aModels.begin(), aModels.end(), aSeq.begin(),
+            [&xCtrls](const Reference< XControlModel >& xCtrlModel) -> Reference< XControl > {
+                return FindControl( xCtrls, xCtrlModel ); });
     }
     return aSeq;
 }
@@ -265,14 +257,13 @@ void StdTabController::autoTabOrder(  )
         return;
 
     sal_uInt32 nCtrls = aCompSeq.getLength();
-    Reference< XWindow > * pComponents = aCompSeq.getArray();
 
     // insert sort algorithm
     std::vector< ComponentEntry > aCtrls;
     aCtrls.reserve(nCtrls);
-    for ( size_t n = 0; n < nCtrls; n++ )
+    for ( const Reference< XWindow >& rComponent : aCompSeq )
     {
-        XWindow* pC = pComponents[n].get();
+        XWindow* pC = rComponent.get();
         ComponentEntry newEntry;
         newEntry.pComponent = pC;
         awt::Rectangle aPosSize = pC->getPosSize();
@@ -295,12 +286,11 @@ void StdTabController::autoTabOrder(  )
     }
 
     Sequence< Reference< XControlModel > > aNewSeq( nCtrls );
-    for ( size_t n = 0; n < nCtrls; n++ )
-    {
-        ComponentEntry& rEntry = aCtrls[ n ];
-        Reference< XControl >  xUC( rEntry.pComponent, UNO_QUERY );
-        aNewSeq.getArray()[n] = xUC->getModel();
-    }
+    std::transform(aCtrls.begin(), aCtrls.end(), aNewSeq.begin(),
+        [](const ComponentEntry& rEntry) -> Reference< XControlModel > {
+            Reference< XControl >  xUC( rEntry.pComponent, UNO_QUERY );
+            return xUC->getModel();
+        });
 
     mxModel->setControlModels( aNewSeq );
 }
@@ -400,17 +390,17 @@ Reference< XControl >  StdTabController::FindControl( Sequence< Reference< XCont
         throw lang::IllegalArgumentException("No valid XControlModel",
                                              uno::Reference<uno::XInterface>(), 0);
 
-    const Reference< XControl > * pCtrls = rCtrls.getConstArray();
-    sal_Int32 nCtrls = rCtrls.getLength();
-    for ( sal_Int32 n = 0; n < nCtrls; n++ )
+    auto pCtrl = std::find_if(rCtrls.begin(), rCtrls.end(),
+        [&rxCtrlModel](const Reference< XControl >& rCtrl) {
+            Reference< XControlModel >  xModel(rCtrl.is() ? rCtrl->getModel() : Reference< XControlModel > ());
+            return xModel.get() == rxCtrlModel.get();
+        });
+    if (pCtrl != rCtrls.end())
     {
-        Reference< XControlModel >  xModel(pCtrls[n].is() ? pCtrls[n]->getModel() : Reference< XControlModel > ());
-        if ( xModel.get() == rxCtrlModel.get() )
-        {
-            Reference< XControl >  xCtrl( pCtrls[n] );
-            ::comphelper::removeElementAt( rCtrls, n );
-            return xCtrl;
-        }
+        auto n = static_cast<sal_Int32>(std::distance(rCtrls.begin(), pCtrl));
+        Reference< XControl >  xCtrl( *pCtrl );
+        ::comphelper::removeElementAt( rCtrls, n );
+        return xCtrl;
     }
     return Reference< XControl > ();
 }

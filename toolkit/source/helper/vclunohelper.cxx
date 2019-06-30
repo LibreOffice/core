@@ -135,9 +135,8 @@ vcl::Region VCLUnoHelper::GetRegion( const css::uno::Reference< css::awt::XRegio
     else
     {
         css::uno::Sequence< css::awt::Rectangle > aRects = rxRegion->getRectangles();
-        sal_Int32 nRects = aRects.getLength();
-        for ( sal_Int32 n = 0; n < nRects; n++ )
-            aRegion.Union( VCLRectangle( aRects.getArray()[n] ) );
+        for ( const auto& rRect : aRects )
+            aRegion.Union( VCLRectangle( rRect ) );
     }
     return aRegion;
 }

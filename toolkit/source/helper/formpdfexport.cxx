@@ -614,12 +614,9 @@ namespace toolkitform
                 if( aSelectIndices.hasElements() )
                 {
                     pListWidget->SelectedEntries.resize( 0 );
-                    for( sal_Int32 i = 0; i < aSelectIndices.getLength(); i++ )
-                    {
-                        sal_Int16 nIndex = aSelectIndices.getConstArray()[i];
-                        if( nIndex >= 0 && nIndex < static_cast<sal_Int16>(pListWidget->Entries.size()) )
-                            pListWidget->SelectedEntries.push_back( nIndex );
-                    }
+                    auto nEntriesSize = static_cast<sal_Int16>(pListWidget->Entries.size());
+                    std::copy_if(aSelectIndices.begin(), aSelectIndices.end(), std::back_inserter(pListWidget->SelectedEntries),
+                        [&nEntriesSize](const sal_Int16 nIndex) { return nIndex >= 0 && nIndex < nEntriesSize; });
                 }
             }
 

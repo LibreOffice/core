@@ -169,9 +169,9 @@ namespace toolkit
             o_images.resize(0);
             size_t count = size_t( i_imageURLs.getLength() );
             o_images.reserve( count );
-            for ( size_t i = 0; i < count; ++i )
+            for ( const auto& rImageURL : i_imageURLs )
             {
-                o_images.emplace_back( i_imageURLs[i] );
+                o_images.emplace_back( rImageURL );
             }
         }
 

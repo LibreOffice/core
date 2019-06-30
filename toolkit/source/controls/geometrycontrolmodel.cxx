@@ -402,12 +402,9 @@
 
             css::uno::Sequence< OUString > aNames =
                 xEventCont->getElementNames();
-            const OUString* pNames = aNames.getConstArray();
-            sal_Int32 i, nNameCount = aNames.getLength();
 
-            for( i = 0 ; i < nNameCount ; i++ )
+            for( const OUString& aName : aNames )
             {
-                OUString aName = pNames[ i ];
                 css::uno::Any aElement = xEventCont->getByName( aName );
                 xCloneEventCont->insertByName( aName, aElement );
             }
@@ -534,29 +531,20 @@
             aAggregateProps.end(),
             PropertyNameLess()
         );
-        const Property* pAggProps = aAggregateProps.getConstArray();
-        const Property* pAggPropsEnd = aAggregateProps.getConstArray() + aAggregateProps.getLength();
 
         // now loop through our own props
-        const Property* pProp = aProps.getConstArray();
-        const Property* pPropEnd = aProps.getConstArray() + aProps.getLength();
-        while ( pProp < pPropEnd )
+        for ( const Property& rProp : aProps )
         {
             // look for the current property in the properties of our aggregate
-            const Property* pAggPropPos = ::std::find_if( pAggProps, pAggPropsEnd, PropertyNameEqual( pProp->Name ) );
-            if ( pAggPropPos != pAggPropsEnd )
+            const Property* pAggPropPos = ::std::find_if( aAggregateProps.begin(), aAggregateProps.end(), PropertyNameEqual( rProp.Name ) );
+            if ( pAggPropPos != aAggregateProps.end() )
             {   // found a duplicate
                 // -> remove from the aggregate property sequence
-                ::comphelper::removeElementAt( aAggregateProps, pAggPropPos - pAggProps );
-                // which means we have to adjust the pointers
-                pAggProps = aAggregateProps.getConstArray();
-                pAggPropsEnd = aAggregateProps.getConstArray() + aAggregateProps.getLength();
+                ::comphelper::removeElementAt( aAggregateProps, pAggPropPos - aAggregateProps.begin() );
 
                 // and additionally, remember the id of this property
-                rDuplicateIds.push_back( pProp->Handle );
+                rDuplicateIds.push_back( rProp.Handle );
             }
-
-            ++pProp;
         }
 
         // now, finally, sort the duplicates

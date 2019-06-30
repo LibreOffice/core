@@ -243,8 +243,11 @@ private:
         // create new data row
         RowData newRow( i_assumedColCount > 0 ? i_assumedColCount : i_rowData.getLength() );
         RowData::iterator cellData = newRow.begin();
-        for ( const Any* pData = i_rowData.begin(); pData != i_rowData.end(); ++pData, ++cellData )
-            cellData->first = *pData;
+        for ( const Any& rData : i_rowData )
+        {
+            cellData->first = rData;
+            ++cellData;
+        }
 
         // insert data row
         m_aData.insert( m_aData.begin() + i_position, newRow );
@@ -301,10 +304,9 @@ private:
             return;
 
         // determine max col count in the new data
-        sal_Int32 maxColCount = 0;
-        for ( sal_Int32 row=0; row<rowCount; ++row )
-            if ( i_data[row].getLength() > maxColCount )
-                maxColCount = i_data[row].getLength();
+        auto pData = std::max_element(i_data.begin(), i_data.end(),
+            [](const Sequence< Any >& a, const Sequence< Any >& b) { return a.getLength() < b.getLength(); });
+        sal_Int32 maxColCount = pData->getLength();
 
         if ( maxColCount < m_nColumnCount )
             maxColCount = m_nColumnCount;
@@ -386,9 +388,9 @@ private:
         if ( columnCount == 0 )
             return;
 
-        for ( sal_Int32 col = 0; col < columnCount; ++col )
+        for ( sal_Int32 const columnIndex : i_columnIndexes )
         {
-            if ( ( i_columnIndexes[col] < 0 ) || ( i_columnIndexes[col] > m_nColumnCount ) )
+            if ( ( columnIndex < 0 ) || ( columnIndex > m_nColumnCount ) )
                 throw IndexOutOfBoundsException( OUString(), *this );
         }
 

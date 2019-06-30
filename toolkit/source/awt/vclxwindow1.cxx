@@ -55,14 +55,12 @@ void VCLXWindow::SetSystemParent_Impl( const css::uno::Any& rHandle )
         css::uno::Sequence< css::beans::NamedValue > aProps;
         if( rHandle >>= aProps )
         {
-            const int nProps = aProps.getLength();
-            const css::beans::NamedValue* pProps = aProps.getConstArray();
-            for( int i = 0; i < nProps; i++ )
+            for( const css::beans::NamedValue& rProp : aProps )
             {
-                if ( pProps[i].Name == "WINDOW" )
-                    pProps[i].Value >>= nHandle;
-                else if ( pProps[i].Name == "XEMBED" )
-                    pProps[i].Value >>= bXEmbed;
+                if ( rProp.Name == "WINDOW" )
+                    rProp.Value >>= nHandle;
+                else if ( rProp.Name == "XEMBED" )
+                    rProp.Value >>= bXEmbed;
             }
         }
         else
