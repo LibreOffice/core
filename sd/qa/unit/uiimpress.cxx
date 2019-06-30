@@ -19,6 +19,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <svl/intitem.hxx>
 #include <svx/svxids.hrc>
+#include <svl/stritem.hxx>
 
 #include <DrawDocShell.hxx>
 #include <ViewShell.hxx>
@@ -97,6 +98,23 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf111522)
     // Rotate the shape in window 2 & undo.
     pView2->MarkObj(pShape2, pView2->GetSdrPageView());
     pView2->RotateMarkedObj(pShape2->GetLastBoundRect().Center(), /*nAngle=*/45);
+    // Without the accompanying fix in place, this test would have failed with an assertion failure
+    // in SdrObjEditView::SdrEndTextEdit() as mpOldTextEditUndoManager was not nullptr.
+    pViewShell2->GetViewFrame()->GetDispatcher()->Execute(SID_UNDO, SfxCallMode::SYNCHRON);
+
+    // Start text edit in window 2.
+    // tdf#125824
+    pView2->MarkObj(pShape2, pView2->GetSdrPageView());
+    pView2->SdrBeginTextEdit(pShape2);
+    CPPUNIT_ASSERT(pView2->IsTextEdit());
+    // Write 'test' inside the shape
+    SfxStringItem aInputString(SID_ATTR_CHAR, "test");
+    pViewShell2->GetViewFrame()->GetDispatcher()->ExecuteList(SID_ATTR_CHAR, SfxCallMode::SYNCHRON,
+                                                              { &aInputString });
+    CPPUNIT_ASSERT(pView2->GetTextEditObject());
+    EditView& rEditView = pView2->GetTextEditOutlinerView()->GetEditView();
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4), rEditView.GetSelection().nStartPos);
+    pView2->SdrEndTextEdit();
     // Without the accompanying fix in place, this test would have failed with an assertion failure
     // in SdrObjEditView::SdrEndTextEdit() as mpOldTextEditUndoManager was not nullptr.
     pViewShell2->GetViewFrame()->GetDispatcher()->Execute(SID_UNDO, SfxCallMode::SYNCHRON);
