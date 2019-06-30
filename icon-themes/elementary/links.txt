@@ -1675,6 +1675,7 @@ res/lc10716.png cmd/lc_datafilterautofilter.png
 res/lc10853.png cmd/lc_recsearch.png
 
 res/lx03123.png res/odp_32_8.png
+res/lx03126.png cmd/32/dbviewtables.png
 res/lx03127.png res/ods_32_8.png
 res/lx03129.png res/odb_32_8.png
 res/lx03130.png res/odp_32_8.png
@@ -1685,6 +1686,7 @@ res/lx03145.png res/odf_32_8.png
 res/lx03162.png res/odt_32_8.png
 res/lx03160.png res/odg_32_8.png
 res/lx03165.png cmd/lc_save.png
+res/lx03188.png cmd/32/dbviewtables.png
 res/lx03189.png cmd/lc_open.png
 res/lx03227.png res/odg_32_8.png
 res/lx03228.png res/odg_32_8.png
@@ -1738,16 +1740,16 @@ res/sc10869.png cmd/sc_graftransparence.png
 
 res/sc_helperdialog.png cmd/sc_helpindex.png
 res/sx03123.png res/odp_16_8.png
-res/sx03127.png res/sx03126.png
-res/sx03132.png res/sx03126.png
+res/sx03126.png cmd/sc_dbviewtables.png
+res/sx03127.png res/ots_16_8.png
 res/sx03139.png cmd/sc_newhtmldoc.png
 res/sx03141.png formula/res/fapclose.png
 res/sx03144.png res/odf_16_8.png
 res/sx03162.png res/odt_16_8.png
 res/sx03164.png res/harddisk_16.png
-res/sx03188.png res/sx03126.png
+res/sx03188.png cmd/sc_dbviewtables.png
 res/sx03189.png formula/res/fapclose.png
-res/sx03202.png cmd/sc_viewdatasourcebrowser.png
+res/sx03202.png cmd/sc_dbviewqueries.png
 res/sx03245.png res/odb_16_8.png
 res/sx03246.png res/odg_16_8.png
 res/sx03247.png res/odf_16_8.png
@@ -2235,8 +2237,8 @@ sw/res/sr20016.png cmd/sc_recsearch.png
 sw/res/sr20017.png cmd/sc_insertindexesentry.png
 
 sw/res/sx01.png cmd/sc_viewdatasourcebrowser.png
-sw/res/sx02.png res/sx03126.png
-sw/res/sx03.png cmd/sc_dbqueryedit.png
+sw/res/sx02.png cmd/sc_dbviewtables.png
+sw/res/sx03.png cmd/sc_dbviewqueries.png
 
 sw/res/wr01.png cmd/32/wrapoff.png
 sw/res/wr02.png cmd/32/wrapleft.png
