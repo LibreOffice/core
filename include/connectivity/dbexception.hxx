@@ -232,7 +232,7 @@ OOO_DLLPUBLIC_DBTOOLS void throwFunctionSequenceException(
     );
 
 
-/** throw a invalid index sqlexception
+/** throw an invalid index sqlexception
 
     @throws css::sdbc::SQLException
 */
