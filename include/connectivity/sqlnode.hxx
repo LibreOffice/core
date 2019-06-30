@@ -290,7 +290,7 @@ namespace connectivity
 
             @param _pErrorHolder
                 takes the error which occurred while generating the statement, if any. Might be <NULL/>,
-                in this case the error is not reported back, and can only be recognized by examing the
+                in this case the error is not reported back, and can only be recognized by examining the
                 return value.
 
             @return
@@ -386,7 +386,7 @@ namespace connectivity
 
         // makes the logic formula a little smaller
         static void compress(OSQLParseNode*& pSearchCondition);
-        // return the catalog, schema and tablename form this node
+        // return the catalog, schema and tablename from this node
         // _pTableNode must be a rule of that above or a SQL_TOKEN_NAME
         static bool getTableComponents(const OSQLParseNode* _pTableNode,
                                             css::uno::Any &_rCatalog,
