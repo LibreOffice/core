@@ -66,7 +66,7 @@ namespace internal
 
 
 /**
- * used as callback for a OPropertyArrayAggregationHelper
+ * used as callback for an OPropertyArrayAggregationHelper
  */
 class IPropertyInfoService
 {
@@ -83,7 +83,7 @@ protected:
 };
 
 /**
- * used for implementing an cppu::IPropertyArrayHelper for classes
+ * used for implementing a cppu::IPropertyArrayHelper for classes
  * aggregating property sets
  */
 
@@ -101,7 +101,7 @@ public:
         @param  _rProperties    the properties of the object doing the aggregation. These properties
                                 are used without any checks, so the caller has to ensure that the names and
                                 handles are valid.
-        @param  _rAggProperties the properties of the aggregate, usually got via an call to getProperties on the
+        @param  _rAggProperties the properties of the aggregate, usually got via a call to getProperties on the
                                 XPropertySetInfo of the aggregate.
                                 The names of the properties are used without any checks, so the caller has to ensure
                                 that there are no doubles.
