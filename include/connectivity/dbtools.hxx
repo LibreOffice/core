@@ -117,7 +117,7 @@ namespace dbtools
                 the XConnection interface, this one is returned.</li>
             <li>If the DataSourceName property of the row set is not empty, a connection for this
                 data source is retrieved.</li>
-            <li>If the URL property of the row set is not empty, an connection for this URL is
+            <li>If the URL property of the row set is not empty, a connection for this URL is
                 retrieved from the driver manager.
         </nl>
 
@@ -376,7 +376,7 @@ namespace dbtools
     OOO_DLLPUBLIC_DBTOOLS void qualifiedNameComponents(const css::uno::Reference< css::sdbc::XDatabaseMetaData >& _rxConnMetaData,
         const OUString& _rQualifiedName, OUString& _rCatalog, OUString& _rSchema, OUString& _rName,EComposeRule _eComposeRule);
 
-    /** calculate a NumberFormatsSupplier for use with an given connection
+    /** calculate a NumberFormatsSupplier for use with a given connection
         @param      _rxConn         the connection for which the formatter is requested
         @param      _bAllowDefault  if the connection (and related components, such as its parent) cannot supply
                                     a formatter, we can ask the DatabaseEnvironment for a default one. This parameter
@@ -390,7 +390,7 @@ namespace dbtools
         const css::uno::Reference< css::uno::XComponentContext>& _rxContext = css::uno::Reference< css::uno::XComponentContext>()
     );
 
-    /** create an css::sdb::XSingleSelectQueryComposer which represents
+    /** create a css::sdb::XSingleSelectQueryComposer which represents
         the current settings (Command/CommandType/Filter/Order) of the given rowset.
 
         As such an instance can be obtained from a css::sdb::Connection
