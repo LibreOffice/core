@@ -32,7 +32,7 @@
 
 /** defines for DeclPrimitive2DIDBlock and ImplPrimitive2DIDBlock
     Added to be able to simply change identification stuff later, e.g. add
-    a identification string and/or ID to the interface and to the implementation
+    an identification string and/or ID to the interface and to the implementation
     ATM used to delclare implement getPrimitive2DID()
 */
 
