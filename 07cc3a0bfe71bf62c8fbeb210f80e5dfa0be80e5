@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_f23dc82c",
+        "filename": "sc/source/ui/drawfunc/drawsh.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 286,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2019-06-30T13:30:18Z",
+      "side": 1,
+      "message": "Without this change, build is failing:\n\n  home/davido/projects/libo/sc/source/ui/drawfunc/drawsh.cxx: \n  In lambda function:\n  /home/davido/projects/libo/sc/source/ui/drawfunc/drawsh.cxx:286:57: error: implicit capture of ‘this’ via ‘[\u003d]’ is deprecated in C++20 [-Werror\u003ddeprecated]\n  286 |                                 pDlg-\u003eStartExecuteAsync([\u003d](sal_Int32 nResult){\n      |                                                         ^\n \n /home/davido/projects/libo/sc/source/ui/drawfunc/drawsh.cxx:286:57: note: add explicit ‘this’ or ‘*this’ capture\n\n\nGCC version here is:\n\n  9.1.1 20190520 [gcc-9-branch revision 271396].",
+      "revId": "07cc3a0bfe71bf62c8fbeb210f80e5dfa0be80e5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
