@@ -53,7 +53,7 @@ namespace detail {
 
 class OInterfaceContainerHelper2;
 /**
-  This is the iterator of a InterfaceContainerHelper. Typically
+  This is the iterator of an InterfaceContainerHelper. Typically
   one constructs an instance on the stack for one firing session.
   It is not allowed to assign or copy an instance of this class.
 
