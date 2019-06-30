@@ -612,10 +612,8 @@ void SAL_CALL UnoDialogControl::modified(
 
 void UnoDialogControl::ImplModelPropertiesChanged( const Sequence< PropertyChangeEvent >& rEvents )
 {
-    sal_Int32 nLen = rEvents.getLength();
-    for( sal_Int32 i = 0; i < nLen; i++ )
+    for( const PropertyChangeEvent& rEvt : rEvents )
     {
-        const PropertyChangeEvent& rEvt = rEvents.getConstArray()[i];
         Reference< XControlModel > xModel( rEvt.Source, UNO_QUERY );
         bool bOwnModel = xModel.get() == getModel().get();
         if ( bOwnModel && rEvt.PropertyName == "ImageURL" )
@@ -795,9 +793,8 @@ void UnoMultiPageControl::createPeer( const Reference< XToolkit > & rxToolkit, c
     UnoControlContainer::createPeer( rxToolkit, rParentPeer );
 
     uno::Sequence< uno::Reference< awt::XControl > > aCtrls = getControls();
-    sal_uInt32 nCtrls = aCtrls.getLength();
-    for( sal_uInt32 n = 0; n < nCtrls; n++ )
-       bindPage( aCtrls[ n ] );
+    for( const auto& rCtrl : aCtrls )
+       bindPage( rCtrl );
     sal_Int32 nActiveTab(0);
     Reference< XPropertySet > xMultiProps( getModel(), UNO_QUERY );
     xMultiProps->getPropertyValue( GetPropertyName( BASEPROPERTY_MULTIPAGEVALUE ) ) >>= nActiveTab;
@@ -806,7 +803,7 @@ void UnoMultiPageControl::createPeer( const Reference< XToolkit > & rxToolkit, c
     if ( xTabCntrl.is() )
     {
         xTabCntrl->addTabListener( this );
-        if ( nActiveTab && nCtrls ) // Ensure peer is initialise with correct activated tab
+        if ( nActiveTab && aCtrls.hasElements() ) // Ensure peer is initialise with correct activated tab
         {
             xTabCntrl->activateTab( nActiveTab );
             ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_MULTIPAGEVALUE ), uno::makeAny( nActiveTab ), true );

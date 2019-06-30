@@ -2156,14 +2156,14 @@ void SAL_CALL VCLXListBox::itemListChanged( const EventObject& i_rEvent )
 
     Reference< XItemList > xItemList( i_rEvent.Source, uno::UNO_QUERY_THROW );
     uno::Sequence< beans::Pair< OUString, OUString > > aItems = xItemList->getAllItems();
-    for ( sal_Int32 i=0; i<aItems.getLength(); ++i )
+    for ( const auto& rItem : aItems )
     {
-        OUString aLocalizationKey( aItems[i].First );
+        OUString aLocalizationKey( rItem.First );
         if ( xStringResourceResolver.is() && aLocalizationKey.startsWith("&") )
         {
             aLocalizationKey = xStringResourceResolver->resolveString(aLocalizationKey.copy( 1 ));
         }
-        pListBox->InsertEntry( aLocalizationKey, lcl_getImageFromURL( aItems[i].Second ) );
+        pListBox->InsertEntry( aLocalizationKey, lcl_getImageFromURL( rItem.Second ) );
     }
 }
 
@@ -2660,10 +2660,10 @@ void SAL_CALL VCLXMultiPage::setTabProps( sal_Int32 ID, const uno::Sequence< bea
     if ( pTabControl->GetTabPage( sal::static_int_cast< sal_uInt16 >( ID ) ) == nullptr )
         throw lang::IndexOutOfBoundsException();
 
-    for (sal_Int32 i = 0; i < Properties.getLength(); ++i)
+    for (const auto& rProp : Properties)
     {
-        const OUString &name = Properties[i].Name;
-        const uno::Any &value = Properties[i].Value;
+        const OUString &name = rProp.Name;
+        const uno::Any &value = rProp.Value;
 
         if (name == "Title")
         {
@@ -4247,9 +4247,9 @@ void VCLXComboBox::addItems( const css::uno::Sequence< OUString>& aItems, sal_In
     if ( pBox )
     {
         sal_uInt16 nP = nPos;
-        for ( sal_Int32 n = 0; n < aItems.getLength(); n++ )
+        for ( const auto& rItem : aItems )
         {
-            pBox->InsertEntry( aItems.getConstArray()[n], nP );
+            pBox->InsertEntry( rItem, nP );
             if ( nP == 0xFFFF )
             {
                 OSL_FAIL( "VCLXComboBox::addItems: too many entries!" );
@@ -4616,15 +4616,15 @@ void SAL_CALL VCLXComboBox::itemListChanged( const EventObject& i_rEvent )
 
     Reference< XItemList > xItemList( i_rEvent.Source, uno::UNO_QUERY_THROW );
     uno::Sequence< beans::Pair< OUString, OUString > > aItems = xItemList->getAllItems();
-    for ( sal_Int32 i=0; i<aItems.getLength(); ++i )
+    for ( const auto& rItem : aItems )
     {
-        OUString aLocalizationKey( aItems[i].First );
+        OUString aLocalizationKey( rItem.First );
         if ( xStringResourceResolver.is() && !aLocalizationKey.isEmpty() && aLocalizationKey[0] == '&' )
         {
             aLocalizationKey = xStringResourceResolver->resolveString(aLocalizationKey.copy( 1 ));
         }
         pComboBox->InsertEntryWithImage(aLocalizationKey,
-                lcl_getImageFromURL(aItems[i].Second));
+                lcl_getImageFromURL(rItem.Second));
     }
 }
 void SAL_CALL VCLXComboBox::disposing( const EventObject& i_rEvent )

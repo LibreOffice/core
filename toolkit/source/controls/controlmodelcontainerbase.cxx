@@ -915,8 +915,6 @@ void ControlModelContainerBase::implUpdateGroupStructure()
     maGroups.clear();
 
     Sequence< Reference< XControlModel > > aControlModels = getControlModels();
-    const Reference< XControlModel >* pControlModels = aControlModels.getConstArray();
-    const Reference< XControlModel >* pControlModelsEnd = pControlModels + aControlModels.getLength();
 
     // in extreme we have as much groups as controls
     maGroups.reserve( aControlModels.getLength() );
@@ -927,10 +925,10 @@ void ControlModelContainerBase::implUpdateGroupStructure()
     sal_Int32   nCurrentGroupStep = -1;                 // the step which all controls of the current group belong to
 
 
-    for ( ; pControlModels != pControlModelsEnd; ++pControlModels )
+    for ( const Reference< XControlModel >& rControlModel : aControlModels )
     {
         // we'll need this in every state
-        xModelSI.set(*pControlModels, css::uno::UNO_QUERY);
+        xModelSI.set(rControlModel, css::uno::UNO_QUERY);
         // is it a radio button?
         bool bIsRadioButton = xModelSI.is() && xModelSI->supportsService( "com.sun.star.awt.UnoControlRadioButtonModel" );
 
@@ -948,10 +946,10 @@ void ControlModelContainerBase::implUpdateGroupStructure()
                 maGroups.resize( nGroups + 1 );
                 aCurrentGroup = maGroups.begin() + nGroups;
                 // and add the (only, til now) member
-                aCurrentGroup->push_back( *pControlModels );
+                aCurrentGroup->push_back( rControlModel );
 
                 // get the step which all controls of this group now have to belong to
-                nCurrentGroupStep = lcl_getDialogStep( *pControlModels );
+                nCurrentGroupStep = lcl_getDialogStep( rControlModel );
                 // new state: looking for further members
                 eState = eExpandingGroup;
 
@@ -968,13 +966,13 @@ void ControlModelContainerBase::implUpdateGroupStructure()
                 }
 
                 // it is a radio button - is it on the proper page?
-                const sal_Int32 nThisModelStep = lcl_getDialogStep( *pControlModels );
+                const sal_Int32 nThisModelStep = lcl_getDialogStep( rControlModel );
                 if  (   ( nThisModelStep == nCurrentGroupStep ) // the current button is on the same dialog page
                     ||  ( 0 == nThisModelStep )                 // the current button appears on all pages
                     )
                 {
                     // -> it belongs to the same group
-                    aCurrentGroup->push_back( *pControlModels );
+                    aCurrentGroup->push_back( rControlModel );
                     // state still is eExpandingGroup - we're looking for further elements
                     eState = eExpandingGroup;
 
@@ -990,7 +988,7 @@ void ControlModelContainerBase::implUpdateGroupStructure()
                 maGroups.resize( nGroups + 1 );
                 aCurrentGroup = maGroups.begin() + nGroups;
                 // and add the (only, til now) member
-                aCurrentGroup->push_back( *pControlModels );
+                aCurrentGroup->push_back( rControlModel );
 
                 nCurrentGroupStep = nThisModelStep;
 
@@ -1445,11 +1443,9 @@ sal_Bool ControlContainerBase::setModel( const Reference< XControlModel >& rxMod
     if ( getModel().is() )
     {
         Sequence< Reference< XControl > > aControls = getControls();
-        const Reference< XControl >* pCtrls = aControls.getConstArray();
-        const Reference< XControl >* pCtrlsEnd = pCtrls + aControls.getLength();
 
-        for ( ; pCtrls < pCtrlsEnd; ++pCtrls )
-            removeControl( *pCtrls );
+        for ( const Reference< XControl >& rCtrl : aControls )
+            removeControl( rCtrl );
                 // will implicitly call removingControl, which will remove the PropertyChangeListener
                 // (which we formerly did herein)
                 // 08.01.2001 - 96008 - fs@openoffice.org
@@ -1471,14 +1467,12 @@ sal_Bool ControlContainerBase::setModel( const Reference< XControlModel >& rxMod
         if ( xNA.is() )
         {
             Sequence< OUString > aNames = xNA->getElementNames();
-            const OUString* pNames = aNames.getConstArray();
-            sal_uInt32 nCtrls = aNames.getLength();
 
             Reference< XControlModel > xCtrlModel;
-            for( sal_uInt32 n = 0; n < nCtrls; ++n, ++pNames )
+            for( const OUString& rName : aNames )
             {
-                xNA->getByName( *pNames ) >>= xCtrlModel;
-                ImplInsertControl( xCtrlModel, *pNames );
+                xNA->getByName( rName ) >>= xCtrlModel;
+                ImplInsertControl( xCtrlModel, rName );
             }
         }
 
@@ -1509,10 +1503,8 @@ void ControlContainerBase::setDesignMode( sal_Bool bOn )
     UnoControl::setDesignMode( bOn );
 
     Sequence< Reference< XControl > > xCtrls = getControls();
-    sal_Int32 nControls = xCtrls.getLength();
-    Reference< XControl >* pControls = xCtrls.getArray();
-    for ( sal_Int32 n = 0; n < nControls; n++ )
-        pControls[n]->setDesignMode( bOn );
+    for ( Reference< XControl >& rControl : xCtrls )
+        rControl->setDesignMode( bOn );
 
     // #109067# in design mode the tab controller is not notified about
     // tab index changes, therefore the tab order must be activated
@@ -1610,33 +1602,31 @@ void ControlContainerBase::ImplModelPropertiesChanged( const Sequence< PropertyC
 {
     if( !isDesignMode() && !mbCreatingCompatiblePeer )
     {
-        sal_Int32 nLen = rEvents.getLength();
-        for( sal_Int32 i = 0; i < nLen; i++ )
+        auto pEvt = std::find_if(rEvents.begin(), rEvents.end(),
+            [](const PropertyChangeEvent& rEvt) {
+                return rEvt.PropertyName == "PositionX"
+                    || rEvt.PropertyName == "PositionY"
+                    || rEvt.PropertyName == "Width"
+                    || rEvt.PropertyName == "Height";
+            });
+        if (pEvt != rEvents.end())
         {
-            const PropertyChangeEvent& rEvt = rEvents.getConstArray()[i];
-            Reference< XControlModel > xModel( rEvt.Source, UNO_QUERY );
+            Reference< XControlModel > xModel( pEvt->Source, UNO_QUERY );
             bool bOwnModel = xModel.get() == getModel().get();
-            if ( ( rEvt.PropertyName == "PositionX" ) ||
-                 ( rEvt.PropertyName == "PositionY" ) ||
-                 ( rEvt.PropertyName == "Width" ) ||
-                 ( rEvt.PropertyName == "Height" ) )
+            if ( bOwnModel )
             {
-                if ( bOwnModel )
+                if ( !mbPosModified && !mbSizeModified )
                 {
-                    if ( !mbPosModified && !mbSizeModified )
-                    {
-                        // Don't set new pos/size if we get new values from window listener
-                        Reference< XControl > xThis( static_cast<XAggregation*>(static_cast<cppu::OWeakAggObject*>(this)), UNO_QUERY );
-                        ImplSetPosSize( xThis );
-                    }
+                    // Don't set new pos/size if we get new values from window listener
+                    Reference< XControl > xThis( static_cast<XAggregation*>(static_cast<cppu::OWeakAggObject*>(this)), UNO_QUERY );
+                    ImplSetPosSize( xThis );
                 }
-                else
-                {
-                    Sequence<Reference<XControl> > aControlSequence(getControls());
-                    Reference<XControl> aControlRef( StdTabController::FindControl( aControlSequence, xModel ) );
-                    ImplSetPosSize( aControlRef );
-                }
-                break;
+            }
+            else
+            {
+                Sequence<Reference<XControl> > aControlSequence(getControls());
+                Reference<XControl> aControlRef( StdTabController::FindControl( aControlSequence, xModel ) );
+                ImplSetPosSize( aControlRef );
             }
         }
     }
@@ -1700,9 +1690,8 @@ static void lcl_ApplyResolverToNestedContainees(  const Reference< resource::XSt
     Sequence< OUString > aPropNames { aPropName };
 
     const Sequence< Reference< awt::XControl > > aSeq = xContainer->getControls();
-    for ( sal_Int32 i = 0; i < aSeq.getLength(); i++ )
+    for ( const Reference< XControl >& xControl : aSeq )
     {
-        Reference< XControl > xControl( aSeq[i] );
         Reference< XPropertySet > xPropertySet;
 
         if ( xControl.is() )
@@ -1836,8 +1825,8 @@ ControlModelContainerBase::updateUserFormChildren( const Reference< XNameContain
             if ( xProps.is() )
                 xProps->setPropertyValue(  GetPropertyName( BASEPROPERTY_USERFORMCONTAINEES ), uno::makeAny( uno::Reference< XNameContainer >() ) );
             Sequence< OUString > aChildNames = xChildContainer->getElementNames();
-            for ( sal_Int32 index=0; index< aChildNames.getLength(); ++index )
-                updateUserFormChildren( xAllChildren, aChildNames[ index ], Operation,  Reference< XControlModel > () );
+            for ( const auto& rName : aChildNames )
+                updateUserFormChildren( xAllChildren, rName, Operation,  Reference< XControlModel > () );
         }
     }
     else if ( Operation == Insert )
@@ -1852,10 +1841,10 @@ ControlModelContainerBase::updateUserFormChildren( const Reference< XNameContain
             if ( xProps.is() )
                 xProps->setPropertyValue(  GetPropertyName( BASEPROPERTY_USERFORMCONTAINEES ), uno::makeAny( xAllChildren ) );
             Sequence< OUString > aChildNames = xChildContainer->getElementNames();
-            for ( sal_Int32 index=0; index< aChildNames.getLength(); ++index )
+            for ( const auto& rName : aChildNames )
             {
-                Reference< XControlModel > xChildTarget( xChildContainer->getByName( aChildNames[ index ] ), UNO_QUERY );
-                updateUserFormChildren( xAllChildren, aChildNames[ index ], Operation, xChildTarget );
+                Reference< XControlModel > xChildTarget( xChildContainer->getByName( rName ), UNO_QUERY );
+                updateUserFormChildren( xAllChildren, rName, Operation, xChildTarget );
             }
         }
     }

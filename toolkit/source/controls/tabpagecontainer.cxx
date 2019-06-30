@@ -309,12 +309,10 @@ void UnoControlTabPageContainer::updateFromModel()
     ContainerEvent aEvent;
     aEvent.Source = getModel();
     Sequence< Reference< XControl > > aControls = getControls();
-    const Reference< XControl >* pCtrls = aControls.getConstArray();
-    const Reference< XControl >* pCtrlsEnd = pCtrls + aControls.getLength();
 
-    for ( ; pCtrls < pCtrlsEnd; ++pCtrls )
+    for ( const Reference< XControl >& rCtrl : aControls )
     {
-        aEvent.Element <<= *pCtrls;
+        aEvent.Element <<= rCtrl;
         xContainerListener->elementInserted( aEvent );
     }
 }

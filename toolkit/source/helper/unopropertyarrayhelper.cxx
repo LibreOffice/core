@@ -28,10 +28,8 @@
 
 UnoPropertyArrayHelper::UnoPropertyArrayHelper( const css::uno::Sequence<sal_Int32>& rIDs )
 {
-    sal_Int32 nIDs = rIDs.getLength();
-    const sal_Int32* pIDs = rIDs.getConstArray();
-    for ( sal_Int32 n = 0; n < nIDs; n++ )
-        maIDs.insert( pIDs[n] );
+    for ( const sal_Int32 nID : rIDs )
+        maIDs.insert( nID );
 }
 
 UnoPropertyArrayHelper::UnoPropertyArrayHelper( const std::vector< sal_uInt16 > &rIDs )

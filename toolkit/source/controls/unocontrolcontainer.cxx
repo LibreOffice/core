@@ -297,13 +297,9 @@ static void implUpdateVisibility
 {
     uno::Sequence< uno::Reference< awt::XControl > >
         aCtrls = xControlContainer->getControls();
-    const uno::Reference< awt::XControl >* pCtrls = aCtrls.getConstArray();
-    sal_uInt32 nCtrls = aCtrls.getLength();
     bool bCompleteVisible = (nDialogStep == 0);
-    for( sal_uInt32 n = 0; n < nCtrls; n++ )
+    for( const uno::Reference< awt::XControl >& xControl : aCtrls )
     {
-        uno::Reference< awt::XControl > xControl = pCtrls[ n ];
-
         bool bVisible = bCompleteVisible;
         if( !bVisible )
         {
@@ -389,11 +385,10 @@ UnoControlContainer::~UnoControlContainer()
 
 void UnoControlContainer::ImplActivateTabControllers()
 {
-    sal_uInt32 nCount = maTabControllers.getLength();
-    for ( sal_uInt32 n = 0; n < nCount; n++ )
+    for ( auto& rTabController : maTabControllers )
     {
-        maTabControllers.getArray()[n]->setContainer( this );
-        maTabControllers.getArray()[n]->activateTabOrder();
+        rTabController->setContainer( this );
+        rTabController->activateTabOrder();
     }
 }
 
@@ -708,15 +703,13 @@ void UnoControlContainer::removeTabController( const uno::Reference< awt::XTabCo
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
-    sal_uInt32 nCount = maTabControllers.getLength();
-    const uno::Reference< awt::XTabController >* pLoop = maTabControllers.getConstArray();
-    for ( sal_uInt32 n = 0; n < nCount; ++n, ++pLoop )
+    auto pTabController = std::find_if(maTabControllers.begin(), maTabControllers.end(),
+        [&TabController](const uno::Reference< awt::XTabController >& rTabController) {
+            return rTabController.get() == TabController.get(); });
+    if (pTabController != maTabControllers.end())
     {
-        if( pLoop->get() == TabController.get() )
-        {
-            ::comphelper::removeElementAt( maTabControllers, n );
-            break;
-        }
+        auto n = static_cast<sal_Int32>(std::distance(maTabControllers.begin(), pTabController));
+        ::comphelper::removeElementAt( maTabControllers, n );
     }
 }
 
@@ -759,9 +752,8 @@ void UnoControlContainer::createPeer( const uno::Reference< awt::XToolkit >& rxT
             }
 
             uno::Sequence< uno::Reference< awt::XControl > > aCtrls = getControls();
-            sal_uInt32 nCtrls = aCtrls.getLength();
-            for( sal_uInt32 n = 0; n < nCtrls; n++ )
-                aCtrls.getArray()[n]->createPeer( rxToolkit, getPeer() );
+            for( auto& rCtrl : aCtrls )
+                rCtrl->createPeer( rxToolkit, getPeer() );
 
             uno::Reference< awt::XVclContainerPeer >  xC( getPeer(), uno::UNO_QUERY );
             if ( xC.is() )

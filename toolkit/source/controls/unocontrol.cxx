@@ -86,10 +86,8 @@ static Sequence< OUString> lcl_ImplGetPropertyNames( const Reference< XMultiProp
         Sequence< Property> aProps = xPSInf->getProperties();
         sal_Int32 nLen = aProps.getLength();
         aNames = Sequence< OUString>( nLen );
-        OUString* pNames = aNames.getArray();
-        const Property* pProps = aProps.getConstArray();
-        for ( sal_Int32 n = 0; n < nLen; ++n, ++pProps, ++pNames)
-            *pNames = pProps->Name;
+        std::transform(aProps.begin(), aProps.end(), aNames.begin(),
+            [](const Property& rProp) -> OUString { return rProp.Name; });
     }
     return aNames;
 }
@@ -275,8 +273,8 @@ void UnoControl::ImplSetPeerProperty( const OUString& rPropName, const Any& rVal
                 }
                 else if ( aConvertedValue >>= aSeqValue )
                 {
-                    for ( sal_Int32 i = 0; i < aSeqValue.getLength(); i++ )
-                        ImplCheckLocalize( aSeqValue[i] );
+                    for ( auto& rValue : aSeqValue )
+                        ImplCheckLocalize( rValue );
                     aConvertedValue <<= aSeqValue;
                 }
             }
@@ -478,28 +476,26 @@ void UnoControl::ImplModelPropertiesChanged( const Sequence< PropertyChangeEvent
     Reference< XPropertySetInfo > xPSI( xPS->getPropertySetInfo(), UNO_QUERY );
     OSL_ENSURE( xPSI.is(), "UnoControl::ImplModelPropertiesChanged: should have property set meta data!" );
 
-    const PropertyChangeEvent* pEvents = rEvents.getConstArray();
-
     sal_Int32 nLen = rEvents.getLength();
     aPeerPropertiesToSet.reserve(nLen);
 
-    for( sal_Int32 i = 0; i < nLen; ++i, ++pEvents )
+    for( const PropertyChangeEvent& rEvent : rEvents )
     {
-        Reference< XControlModel > xModel( pEvents->Source, UNO_QUERY );
+        Reference< XControlModel > xModel( rEvent.Source, UNO_QUERY );
         bool bOwnModel = xModel.get() == xOwnModel.get();
         if ( !bOwnModel )
             continue;
 
         // Detect changes on our resource resolver which invalidates
         // automatically some language dependent properties.
-        if ( pEvents->PropertyName == "ResourceResolver" )
+        if ( rEvent.PropertyName == "ResourceResolver" )
         {
             Reference< resource::XStringResourceResolver > xStrResolver;
-            if ( pEvents->NewValue >>= xStrResolver )
+            if ( rEvent.NewValue >>= xStrResolver )
                 bResourceResolverSet = xStrResolver.is();
         }
 
-        sal_uInt16 nPType = GetPropertyId( pEvents->PropertyName );
+        sal_uInt16 nPType = GetPropertyId( rEvent.PropertyName );
         if ( mbDesignMode && mbDisposePeer && !mbRefreshingPeer && !mbCreatingPeer )
         {
             // if we're in design mode, then some properties can change which
@@ -518,7 +514,7 @@ void UnoControl::ImplModelPropertiesChanged( const Sequence< PropertyChangeEvent
                             || ( nPType == BASEPROPERTY_ALIGN )
                             || ( nPType == BASEPROPERTY_PAINTTRANSPARENT );
             else
-                bNeedNewPeer = requiresNewPeer( pEvents->PropertyName );
+                bNeedNewPeer = requiresNewPeer( rEvent.PropertyName );
 
             if ( bNeedNewPeer )
                 break;
@@ -529,7 +525,7 @@ void UnoControl::ImplModelPropertiesChanged( const Sequence< PropertyChangeEvent
             // Add properties with dependencies on other properties last
             // since they're dependent on properties added later (such as
             // VALUE dependency on VALUEMIN/MAX)
-            aPeerPropertiesToSet.emplace_back(pEvents->PropertyName, 0, pEvents->NewValue, PropertyState_DIRECT_VALUE);
+            aPeerPropertiesToSet.emplace_back(rEvent.PropertyName, 0, rEvent.NewValue, PropertyState_DIRECT_VALUE);
         }
         else
         {
@@ -541,7 +537,7 @@ void UnoControl::ImplModelPropertiesChanged( const Sequence< PropertyChangeEvent
                 // resolver. We don't need to handle a special order for these two props.
                 aPeerPropertiesToSet.insert(
                     aPeerPropertiesToSet.begin(),
-                    PropertyValue( pEvents->PropertyName, 0, pEvents->NewValue, PropertyState_DIRECT_VALUE ) );
+                    PropertyValue( rEvent.PropertyName, 0, rEvent.NewValue, PropertyState_DIRECT_VALUE ) );
                 ++nIndependentPos;
             }
             else if ( nPType == BASEPROPERTY_NATIVE_WIDGET_LOOK )
@@ -555,13 +551,13 @@ void UnoControl::ImplModelPropertiesChanged( const Sequence< PropertyChangeEvent
                 // defaults.
                 aPeerPropertiesToSet.insert(
                     aPeerPropertiesToSet.begin(),
-                    PropertyValue( pEvents->PropertyName, 0, pEvents->NewValue, PropertyState_DIRECT_VALUE ) );
+                    PropertyValue( rEvent.PropertyName, 0, rEvent.NewValue, PropertyState_DIRECT_VALUE ) );
                 ++nIndependentPos;
             }
             else
             {
                 aPeerPropertiesToSet.insert(aPeerPropertiesToSet.begin() + nIndependentPos,
-                    PropertyValue(pEvents->PropertyName, 0, pEvents->NewValue, PropertyState_DIRECT_VALUE));
+                    PropertyValue(rEvent.PropertyName, 0, rEvent.NewValue, PropertyState_DIRECT_VALUE));
                 ++nIndependentPos;
             }
         }

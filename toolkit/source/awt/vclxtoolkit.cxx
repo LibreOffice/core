@@ -1413,14 +1413,12 @@ vcl::Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
                                     css::uno::Sequence< css::beans::NamedValue > aProps;
                                     if( anyHandle >>= aProps )
                                     {
-                                        const int nProps = aProps.getLength();
-                                        const css::beans::NamedValue* pProps = aProps.getConstArray();
-                                        for( int i = 0; i < nProps; i++ )
+                                        for( const css::beans::NamedValue& rProp : aProps )
                                         {
-                                            if ( pProps[i].Name == "WINDOW" )
-                                                pProps[i].Value >>= nWindowHandle;
-                                            else if ( pProps[i].Name == "XEMBED" )
-                                                pProps[i].Value >>= bXEmbed;
+                                            if ( rProp.Name == "WINDOW" )
+                                                rProp.Value >>= nWindowHandle;
+                                            else if ( rProp.Name == "XEMBED" )
+                                                rProp.Value >>= bXEmbed;
                                         }
                                     }
                                     else
@@ -1645,14 +1643,12 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::createSystemChild( con
             css::uno::Sequence< css::beans::NamedValue > aProps;
             if( Parent >>= aProps )
             {
-                const int nProps = aProps.getLength();
-                const css::beans::NamedValue* pProps = aProps.getConstArray();
-                for( int i = 0; i < nProps; i++ )
+                for( const css::beans::NamedValue& rProp : aProps )
                 {
-                    if ( pProps[i].Name == "WINDOW" )
-                        pProps[i].Value >>= nWindowHandle;
-                    else if ( pProps[i].Name == "XEMBED" )
-                        pProps[i].Value >>= bXEmbed;
+                    if ( rProp.Name == "WINDOW" )
+                        rProp.Value >>= nWindowHandle;
+                    else if ( rProp.Name == "XEMBED" )
+                        rProp.Value >>= bXEmbed;
                 }
             }
             else

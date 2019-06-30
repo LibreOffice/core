@@ -2410,12 +2410,7 @@ void UnoControlListBoxModel::impl_getStringItemList( ::std::vector< OUString >& 
     getFastPropertyValue( aPropValue, BASEPROPERTY_STRINGITEMLIST );
     OSL_VERIFY( aPropValue >>= aStringItemList );
 
-    o_rStringItems.resize( size_t( aStringItemList.getLength() ) );
-    ::std::copy(
-        aStringItemList.begin(),
-        aStringItemList.end(),
-        o_rStringItems.begin()
-    );
+    comphelper::sequenceToContainer(o_rStringItems, aStringItemList);
 }
 
 
@@ -2693,24 +2688,18 @@ void UnoListBoxControl::addItems( const uno::Sequence< OUString>& aItems, sal_In
     sal_uInt16 nNewLen = nOldLen + nNewItems;
 
     uno::Sequence< OUString> aNewSeq( nNewLen );
-    OUString* pNewData = aNewSeq.getArray();
-    OUString* pOldData = aSeq.getArray();
 
     if ( ( nPos < 0 ) || ( nPos > nOldLen ) )
         nPos = nOldLen;
 
-    sal_uInt16 n;
     // Items before the Paste-Position
-    for ( n = 0; n < nPos; n++ )
-        pNewData[n] = pOldData[n];
+    std::copy(aSeq.begin(), std::next(aSeq.begin(), nPos), aNewSeq.begin());
 
     // New Items
-    for ( n = 0; n < nNewItems; n++ )
-        pNewData[nPos+n] = aItems.getConstArray()[n];
+    std::copy(aItems.begin(), aItems.end(), std::next(aNewSeq.begin(), nPos));
 
     // Rest of old Items
-    for ( n = nPos; n < nOldLen; n++ )
-        pNewData[nNewItems+n] = pOldData[n];
+    std::copy(std::next(aSeq.begin(), nPos), aSeq.end(), std::next(aNewSeq.begin(), nPos + nNewItems));
 
     ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_STRINGITEMLIST ), uno::Any(aNewSeq), true );
 }
@@ -2729,17 +2718,12 @@ void UnoListBoxControl::removeItems( sal_Int16 nPos, sal_Int16 nCount )
         sal_uInt16 nNewLen = nOldLen - nCount;
 
         uno::Sequence< OUString> aNewSeq( nNewLen );
-        OUString* pNewData = aNewSeq.getArray();
-        OUString* pOldData = aSeq.getArray();
 
-        sal_uInt16 n;
         // Items before the Remove-Position
-        for ( n = 0; n < nPos; n++ )
-            pNewData[n] = pOldData[n];
+        std::copy(aSeq.begin(), std::next(aSeq.begin(), nPos), aNewSeq.begin());
 
         // Rest of Items
-        for ( n = nPos; n < (nOldLen-nCount); n++ )
-            pNewData[n] = pOldData[n+nCount];
+        std::copy(std::next(aSeq.begin(), nPos + nCount), aSeq.end(), std::next(aNewSeq.begin(), nPos));
 
         ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_STRINGITEMLIST ), uno::Any(aNewSeq), true );
     }
@@ -2760,7 +2744,7 @@ OUString UnoListBoxControl::getItem( sal_Int16 nPos )
     uno::Sequence< OUString> aSeq;
     aVal >>= aSeq;
     if ( nPos < aSeq.getLength() )
-        aItem = aSeq.getConstArray()[nPos];
+        aItem = aSeq[nPos];
     return aItem;
 }
 
@@ -3304,24 +3288,18 @@ void UnoComboBoxControl::addItems( const uno::Sequence< OUString>& aItems, sal_I
     sal_uInt16 nNewLen = nOldLen + nNewItems;
 
     uno::Sequence< OUString> aNewSeq( nNewLen );
-    OUString* pNewData = aNewSeq.getArray();
-    const OUString* pOldData = aSeq.getConstArray();
 
     if ( ( nPos < 0 ) || ( nPos > nOldLen ) )
         nPos = nOldLen;
 
-    sal_uInt16 n;
     // items before the insert position
-    for ( n = 0; n < nPos; n++ )
-        pNewData[n] = pOldData[n];
+    std::copy(aSeq.begin(), std::next(aSeq.begin(), nPos), aNewSeq.begin());
 
     // New items
-    for ( n = 0; n < nNewItems; n++ )
-        pNewData[nPos+n] = aItems.getConstArray()[n];
+    std::copy(aItems.begin(), aItems.end(), std::next(aNewSeq.begin(), nPos));
 
     // remainder of old items
-    for ( n = nPos; n < nOldLen; n++ )
-        pNewData[nNewItems+n] = pOldData[n];
+    std::copy(std::next(aSeq.begin(), nPos), aSeq.end(), std::next(aNewSeq.begin(), nPos + nNewItems));
 
     ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_STRINGITEMLIST ), Any(aNewSeq), true );
 }
@@ -3340,17 +3318,12 @@ void UnoComboBoxControl::removeItems( sal_Int16 nPos, sal_Int16 nCount )
         sal_uInt16 nNewLen = nOldLen - nCount;
 
         uno::Sequence< OUString> aNewSeq( nNewLen );
-        OUString* pNewData = aNewSeq.getArray();
-        OUString* pOldData = aSeq.getArray();
 
-        sal_uInt16 n;
         // items before the deletion position
-        for ( n = 0; n < nPos; n++ )
-            pNewData[n] = pOldData[n];
+        std::copy(aSeq.begin(), std::next(aSeq.begin(), nPos), aNewSeq.begin());
 
         // remainder of old items
-        for ( n = nPos; n < (nOldLen-nCount); n++ )
-            pNewData[n] = pOldData[n+nCount];
+        std::copy(std::next(aSeq.begin(), nPos + nCount), aSeq.end(), std::next(aNewSeq.begin(), nPos));
 
         ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_STRINGITEMLIST ), uno::Any(aNewSeq), true );
     }
@@ -3371,7 +3344,7 @@ OUString UnoComboBoxControl::getItem( sal_Int16 nPos )
     uno::Sequence< OUString> aSeq;
     aVal >>= aSeq;
     if ( nPos < aSeq.getLength() )
-        aItem = aSeq.getConstArray()[nPos];
+        aItem = aSeq[nPos];
     return aItem;
 }
 

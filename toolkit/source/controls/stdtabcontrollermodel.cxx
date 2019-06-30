@@ -132,14 +132,12 @@ void StdTabControllerModel::ImplGetControlModels( css::uno::Reference< css::awt:
 
 void StdTabControllerModel::ImplSetControlModels( UnoControlModelEntryList& rList, const css::uno::Sequence< css::uno::Reference< css::awt::XControlModel > >& Controls )
 {
-    const css::uno::Reference< css::awt::XControlModel > * pRefs = Controls.getConstArray();
-    sal_uInt32 nControls = Controls.getLength();
-    for ( sal_uInt32 n = 0; n < nControls; n++ )
+    for ( const css::uno::Reference< css::awt::XControlModel >& rRef : Controls )
     {
         UnoControlModelEntry* pNewEntry = new UnoControlModelEntry;
         pNewEntry->bGroup = false;
         pNewEntry->pxControl = new css::uno::Reference< css::awt::XControlModel > ;
-        *pNewEntry->pxControl = pRefs[n];
+        *pNewEntry->pxControl = rRef;
         rList.push_back( pNewEntry );
     }
 }
@@ -166,10 +164,8 @@ static void ImplWriteControls( const css::uno::Reference< css::io::XObjectOutput
     OutStream->writeLong( 0 ); // DataLen
     OutStream->writeLong( 0 ); // nStoredControls
 
-    sal_uInt32 nCtrls = rCtrls.getLength();
-    for ( sal_uInt32 n = 0; n < nCtrls; n++ )
+    for ( const css::uno::Reference< css::awt::XControlModel >& xI : rCtrls )
     {
-        const css::uno::Reference< css::awt::XControlModel >  xI = rCtrls.getConstArray()[n];
         css::uno::Reference< css::io::XPersistObject >  xPO( xI, css::uno::UNO_QUERY );
         DBG_ASSERT( xPO.is(), "write: Control doesn't support XPersistObject" );
         if ( xPO.is() )
