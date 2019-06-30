@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "bf659307_12ccfc87",
+        "filename": "offapi/com/sun/star/drawing/GraphicObjectShape.idl",
+        "patchSetId": 13
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1002063
+      },
+      "writtenOn": "2019-06-30T10:20:14Z",
+      "side": 1,
+      "message": "Fixed",
+      "parentUuid": "bf659307_21b534ef",
+      "range": {
+        "startLine": 152,
+        "startChar": 53,
+        "endLine": 152,
+        "endChar": 72
+      },
+      "revId": "ffbed1bb90f460356a5a0489759209a1318a6d28",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bf659307_c1a8f878",
         "filename": "offapi/com/sun/star/drawing/GraphicObjectShape.idl",
         "patchSetId": 13
@@ -93,6 +117,24 @@
       "writtenOn": "2019-06-28T07:16:08Z",
       "side": 1,
       "message": "Maybe \"Content\" or \"Payload\" would be better names here (\"Text\" might suggest that it is something that will be displayed legibly)?",
+      "revId": "ffbed1bb90f460356a5a0489759209a1318a6d28",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_b2c8b074",
+        "filename": "offapi/com/sun/star/drawing/QrCode.idl",
+        "patchSetId": 13
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1002063
+      },
+      "writtenOn": "2019-06-30T10:20:14Z",
+      "side": 1,
+      "message": "Thanks, choosing Payload here :)",
+      "parentUuid": "bf659307_c173184d",
       "revId": "ffbed1bb90f460356a5a0489759209a1318a6d28",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
