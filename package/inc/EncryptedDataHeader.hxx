@@ -25,7 +25,7 @@
 
    Header signature  4 bytes
    Version number    2 bytes
-   Iteraction count  4 bytes
+   Iteration count   4 bytes
    Size              4 bytes
    EncAlgorithm      4 bytes
    DigestAlgorithm   4 bytes
