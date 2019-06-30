@@ -22,6 +22,7 @@
 #include <com/sun/star/sheet/DataResult.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <cppunit/extensions/HelperMacros.h>
+#include <numeric>
 
 using namespace css;
 using namespace css::uno;
@@ -78,13 +79,13 @@ void XDataPilotTable2::testGetDrillDownData()
 
         if( aData.getLength() > 1 )
         {
-            for ( sal_Int32 row = 1; row < aData.getLength(); ++row)
-            {
-                Any aAny = aData[row][nDim];
-                double nValue = 0;
-                if (aAny >>= nValue)
-                    sum += nValue;
-            }
+            sum = std::accumulate(std::next(aData.begin()), aData.end(), double(0),
+                [nDim](double res, const Sequence<Any>& rSeq) {
+                    double nValue = 0;
+                    if (rSeq[nDim] >>= nValue)
+                        return res + nValue;
+                    return res;
+                });
         }
 
         CPPUNIT_ASSERT_DOUBLES_EQUAL(nVal, sum, 1E-12);

@@ -35,8 +35,8 @@ template<> struct assertion_traits<uno::Sequence< sheet::SubTotalColumn > >
     {
         OStringStream ost;
         ost << "Sequence: Length: " << x.getLength() << "\n";
-        for (auto element = x.begin(); element != x.end(); ++element)
-            ost << "Column: " << element->Column << " Function:\n";
+        for (const auto& rElement : x)
+            ost << "Column: " << rElement.Column << " Function:\n";
             // FIXME: Find a way to print Function
             //ost << "Column: " << element->Column << " Function: " << element->Function << "\n";
         return ost.str();
