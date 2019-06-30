@@ -146,7 +146,7 @@ namespace connectivity
         css::uno::Reference< css::i18n::XCharacterClassification> m_xCharClass;
         static css::uno::Reference< css::i18n::XLocaleData4>       s_xLocaleData;
 
-        // convert a string into double trim it to scale of _nscale and than transform it back to string
+        // convert a string into double trim it to scale of _nscale and then transform it back to string
         OUString stringToDouble(const OUString& _rValue,sal_Int16 _nScale);
         OSQLParseNode*  buildDate(sal_Int32 _nType,OSQLParseNode*& pLiteral);
         bool            extractDate(OSQLParseNode const * pLiteral,double& _rfValue);
@@ -191,7 +191,7 @@ namespace connectivity
         static OUString RuleIDToStr(sal_uInt32 nRuleID);
 #endif
 
-        // StrToRuleID calculates the RuleID for a OUString (that is, css::sdbcx::Index in yytname)
+        // StrToRuleID calculates the RuleID for an OUString (that is, css::sdbcx::Index in yytname)
         // (0 if not found). The search for an ID based on a String is
         // extremely inefficient (sequential search for OUString)!
         static sal_uInt32 StrToRuleID(const OString & rValue);
