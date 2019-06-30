@@ -283,7 +283,7 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
                                 aCombSet.Put( aNewGeoAttr );
                                 pDlg->SetInputSet( &aCombSet );
 
-                                pDlg->StartExecuteAsync([=](sal_Int32 nResult){
+                                pDlg->StartExecuteAsync([=, this](sal_Int32 nResult){
                                     if (nResult == RET_OK)
                                     {
                                         pRequest->Done(*(pDlg->GetOutputItemSet()));
@@ -301,7 +301,7 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
                                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                                 VclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateSvxTransformTabDialog(pWin ? pWin->GetFrameWeld() : nullptr, &aNewAttr, pView));
 
-                                pDlg->StartExecuteAsync([=](sal_Int32 nResult){
+                                pDlg->StartExecuteAsync([=, this](sal_Int32 nResult){
                                     if (nResult == RET_OK)
                                     {
                                         pRequest->Done(*(pDlg->GetOutputItemSet()));
