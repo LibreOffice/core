@@ -65,7 +65,7 @@ public:
        Return the property members Name and Attribute from the handle nHandle.
        @param nHandle   the handle of a property. If the values of the handles
                           are sorted in the same way as the names and the highest handle value
-                          is getCount() -1, than it must be an indexed access to the property array.
+                          is getCount() -1, then it must be an indexed access to the property array.
        @param pPropName is an out parameter filled with property name of the property with the
                               handle nHandle. May be NULL.
        @param pAttributes is an out parameter filled with attributes of the property with the
@@ -143,7 +143,7 @@ public:
        Return the property members Name and Attribute from the handle nHandle.
        @param nHandle   the handle of a property. If the values of the handles
                           are sorted in the same way as the names and the highest handle value
-                          is getCount() -1, than it is only an indexed access to the property array.
+                          is getCount() -1, then it is only an indexed access to the property array.
                           Otherwise it is a linear search through the array.
        @param pPropName is an out parameter filled with property name of the property with the
                               handle nHandle. May be NULL.
@@ -552,7 +552,7 @@ protected:
 
        @param rConvertedValue the converted value. Only set if return is true.
        @param rOldValue the old value. Only set if return is true.
-       @param nHandle the handle of the proberty.
+       @param nHandle the handle of the property.
        @param rValue the value to be converted
        @return true if the value converted.
        @throws css::lang::IllegalArgumentException
@@ -565,7 +565,7 @@ protected:
         sal_Int32 nHandle,
         const css::uno::Any& rValue ) = 0;
 
-    /** The same as setFastProperyValue; nHandle is always valid.
+    /** The same as setFastPropertyValue; nHandle is always valid.
         The changes must not be broadcasted in this method.
         The method is implemented in a derived class.
 
@@ -588,7 +588,7 @@ protected:
         sal_Int32 nHandle,
         const css::uno::Any& rValue ) = 0;
     /**
-       The same as getFastProperyValue, but return the value through rValue and nHandle
+       The same as getFastPropertyValue, but return the value through rValue and nHandle
        is always valid.
        The method is not implemented in this class.
      */
@@ -622,7 +622,7 @@ protected:
     /** The common data of a broadcaster. Use the mutex, disposing state and the listener container. */
     OBroadcastHelper    &rBHelper;
     /**
-       Container for the XProperyChangedListener. The listeners are inserted by handle.
+       Container for the XPropertyChangedListener. The listeners are inserted by handle.
      */
     OMultiTypeInterfaceContainerHelperInt32  aBoundLC;
     /**
