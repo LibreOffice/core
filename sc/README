@@ -10,7 +10,7 @@ Dumps the column width of the first 20 columns.
 
 Dumps the graphic objects and their position and size in pixel.
 
-=== CTRL+SHIFT+F9 ===
+=== CTRL+SHIFT+F6 ===
 
 Dumps the SfxItemSet representing the cell properties' of the
 current selection as a xml file. The file will be named dump.xml
