@@ -95,6 +95,7 @@ define gb_UITest_UITest
 $(call gb_UITest_get_target,$(1)) : PYPATH := $(SRCDIR)/uitest$$(gb_CLASSPATHSEP)$(SRCDIR)/unotest/source/python$$(gb_CLASSPATHSEP)$(INSTROOT)/$(LIBO_LIB_PYUNO_FOLDER)$(if $(filter-out $(LIBO_LIB_PYUNO_FOLDER),$(LIBO_LIB_FOLDER)),$(gb_CLASSPATHSEP)$(INSTROOT)/$(LIBO_LIB_FOLDER))
 $(call gb_UITest_get_target,$(1)) : MODULES :=
 
+$(eval $(call gb_TestHelpers_use_more_fonts,$(call gb_UITest_get_target,$(1))))
 $(eval $(call gb_Module_register_target,UITest_$(1),$(call gb_UITest_get_target,$(1)),$(call gb_UITest_get_clean_target,$(1))))
 $(call gb_Helper_make_userfriendly_targets,$(1),UITest)
 
