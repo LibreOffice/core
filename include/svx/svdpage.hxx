@@ -108,6 +108,7 @@ public:
     bool           IsObjOrdNumsDirty() const        { return mbObjOrdNumsDirty; }
     virtual void   NbcInsertObject(SdrObject* pObj, size_t nPos=SAL_MAX_SIZE);
     virtual void   InsertObject(SdrObject* pObj, size_t nPos=SAL_MAX_SIZE);
+    virtual void sort( std::vector<sal_Int32>& sortOrder );
 
     /// remove from list without delete
     virtual SdrObject* NbcRemoveObject(size_t nObjNum);
