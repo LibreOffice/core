@@ -2373,6 +2373,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/drawing,\
 	XShapeMirror \
 	XShapes \
 	XShapes2 \
+	XShapes3 \
 	XSlidePreviewCache \
 	XSlidePreviewCacheListener \
 	XSlideRenderer \
