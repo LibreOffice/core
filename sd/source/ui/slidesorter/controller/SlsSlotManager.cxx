@@ -234,6 +234,7 @@ void SlotManager::FuTemporary (SfxRequest& rRequest)
             // (DEL -> accelerator -> SID_CUT).
             if (mrSlideSorter.GetModel().GetPageCount() > 1)
             {
+                mrSlideSorter.GetView().EndTextEditAllViews();
                 mrSlideSorter.GetController().GetSelectionManager()->DeleteSelectedPages();
             }
 
@@ -371,6 +372,7 @@ void SlotManager::FuSupport (SfxRequest& rRequest)
         case SID_CUT:
         case SID_COPY:
         case SID_DELETE:
+            mrSlideSorter.GetView().EndTextEditAllViews();
             mrSlideSorter.GetController().GetClipboard().HandleSlotCall(rRequest);
             break;
 

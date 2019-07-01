@@ -977,8 +977,11 @@ bool SdrEditView::InsertObjectAtView(SdrObject* pObj, SdrPageView& rPV, SdrInser
             rPV.GetObjList()->InsertObject(pObj, SAL_MAX_SIZE);
         }
     }
-    if( IsUndoEnabled() && CanDoSdrUndo())
+    if( IsUndoEnabled())
+    {
+        EndTextEditAllViews();
         AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoNewObject(*pObj));
+    }
 
     if (!(nOptions & SdrInsertFlags::DONTMARK)) {
         if (!(nOptions & SdrInsertFlags::ADDMARK)) UnmarkAllObj();
@@ -1033,20 +1036,18 @@ bool SdrEditView::IsUndoEnabled() const
     return mpModel->IsUndoEnabled();
 }
 
-bool SdrEditView::CanDoSdrUndo() const
+void SdrEditView::EndTextEditAllViews() const
 {
     size_t nViews = mpModel->GetListenerCount();
     for (size_t nView = 0; nView < nViews; ++nView)
     {
-        SdrEditView* pView = dynamic_cast<SdrEditView*>(mpModel->GetListener(nView));
+        SdrObjEditView* pView = dynamic_cast<SdrObjEditView*>(mpModel->GetListener(nView));
         if (!pView)
             continue;
 
         if (pView->IsTextEdit())
-            return false;
+            pView->SdrEndTextEdit();
     }
-
-    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
