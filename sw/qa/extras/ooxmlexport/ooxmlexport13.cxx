@@ -18,6 +18,8 @@
 #include <sfx2/docfilt.hxx>
 #include <svx/xfillit0.hxx>
 #include <editeng/frmdiritem.hxx>
+#include <IDocumentSettingAccess.hxx>
+#include <xmloff/odffields.hxx>
 
 #include <editsh.hxx>
 #include <frmatr.hxx>
@@ -197,6 +199,84 @@ DECLARE_OOXMLEXPORT_TEST(testImageCommentAtChar, "image-comment-at-char.docx")
                          getProperty<OUString>(getRun(xPara, 4), "TextPortionType"));
     CPPUNIT_ASSERT_EQUAL(OUString("Text"),
                          getProperty<OUString>(getRun(xPara, 5), "TextPortionType"));
+}
+
+
+DECLARE_OOXMLIMPORT_TEST(testInvalidDateFormField, "invalid_date_form_field.docx")
+{
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+    IDocumentMarkAccess* pMarkAccess = pDoc->getIDocumentMarkAccess();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(6), pMarkAccess->getAllMarksCount());
+
+    int nIndex = 0;
+    for(auto aIter = pMarkAccess->getAllMarksBegin(); aIter != pMarkAccess->getAllMarksEnd(); ++aIter)
+    {
+        ::sw::mark::IFieldmark* pFieldmark = dynamic_cast<::sw::mark::IFieldmark*>(aIter->get());
+
+        if(!pFieldmark)
+            continue;
+
+        CPPUNIT_ASSERT(pFieldmark);
+        CPPUNIT_ASSERT_EQUAL(OUString(ODF_FORMDATE), pFieldmark->GetFieldname());
+
+        // Check date field's parameters.
+        const sw::mark::IFieldmark::parameter_map_t* const pParameters = pFieldmark->GetParameters();
+        OUString sDateFormat;
+        auto pResult = pParameters->find(ODF_FORMDATE_DATEFORMAT);
+        if (pResult != pParameters->end())
+        {
+            pResult->second >>= sDateFormat;
+        }
+
+        OUString sLang;
+        pResult = pParameters->find(ODF_FORMDATE_DATEFORMAT_LANGUAGE);
+        if (pResult != pParameters->end())
+        {
+            pResult->second >>= sLang;
+        }
+
+        OUString sCurrentDate;
+        pResult = pParameters->find(ODF_FORMDATE_CURRENTDATE);
+        if (pResult != pParameters->end())
+        {
+            pResult->second >>= sCurrentDate;
+        }
+
+        // The first one has invalid date format (invalid = LO can't parse it)
+        if(nIndex == 0)
+        {
+
+            CPPUNIT_ASSERT_EQUAL(OUString("YYYY.MM.DDT00:00:00Z"), sDateFormat);
+            CPPUNIT_ASSERT_EQUAL(OUString("en-US"), sLang);
+            CPPUNIT_ASSERT_EQUAL(OUString(""), sCurrentDate);
+
+            CPPUNIT_ASSERT_EQUAL(sal_uLong(9), pFieldmark->GetMarkStart().nNode.GetIndex());
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(5), pFieldmark->GetMarkStart().nContent.GetIndex());
+        }
+        else if (nIndex == 1) // The second has wrong date
+        {
+            CPPUNIT_ASSERT_EQUAL(OUString("MM/DD/YY"), sDateFormat);
+            CPPUNIT_ASSERT_EQUAL(OUString("en-US"), sLang);
+            CPPUNIT_ASSERT_EQUAL(OUString("2019.06.34"), sCurrentDate);
+
+            CPPUNIT_ASSERT_EQUAL(sal_uLong(9), pFieldmark->GetMarkStart().nNode.GetIndex());
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(13), pFieldmark->GetMarkStart().nContent.GetIndex());
+        }
+        else // The third one has wrong local
+        {
+            CPPUNIT_ASSERT_EQUAL(OUString("[NatNum12 MMMM=abbreviation]YYYY\". \"MMMM D."), sDateFormat);
+            CPPUNIT_ASSERT_EQUAL(OUString("xxxx"), sLang);
+            CPPUNIT_ASSERT_EQUAL(OUString("2019.06.11"), sCurrentDate);
+
+            CPPUNIT_ASSERT_EQUAL(sal_uLong(9), pFieldmark->GetMarkStart().nNode.GetIndex());
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(23), pFieldmark->GetMarkStart().nContent.GetIndex());
+        }
+        ++nIndex;
+    }
+    CPPUNIT_ASSERT_EQUAL(int(3), nIndex);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
