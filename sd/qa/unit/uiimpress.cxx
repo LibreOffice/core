@@ -120,6 +120,45 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf111522)
     pViewShell2->GetViewFrame()->GetDispatcher()->Execute(SID_UNDO, SfxCallMode::SYNCHRON);
 }
 
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf126180)
+{
+    // Load the document and create two new windows.
+    mxComponent = loadFromDesktop(m_directories.getURLFromSrc("sd/qa/unit/data/tdf126180.odp"));
+    auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    sd::ViewShell* pViewShell = pImpressDocument->GetDocShell()->GetViewShell();
+    pViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_NEWWINDOW, SfxCallMode::SYNCHRON);
+    sd::ViewShell* pViewShell1 = pImpressDocument->GetDocShell()->GetViewShell();
+    pViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_NEWWINDOW, SfxCallMode::SYNCHRON);
+    sd::ViewShell* pViewShell2 = pImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell1 != pViewShell2);
+
+    // Have slide 2 in window 1, slide 2 in window 2.
+    SfxRequest aRequest1(pViewShell1->GetViewFrame(), SID_SWITCHPAGE);
+    aRequest1.AppendItem(SfxUInt32Item(ID_VAL_WHATPAGE, 2));
+    aRequest1.AppendItem(
+        SfxUInt32Item(ID_VAL_WHATKIND, static_cast<sal_uInt32>(PageKind::Standard)));
+    pViewShell1->ExecuteSlot(aRequest1, /*bAsync=*/false);
+
+    SfxRequest aRequest2(pViewShell2->GetViewFrame(), SID_SWITCHPAGE);
+    aRequest2.AppendItem(SfxUInt32Item(ID_VAL_WHATPAGE, 2));
+    aRequest2.AppendItem(
+        SfxUInt32Item(ID_VAL_WHATKIND, static_cast<sal_uInt32>(PageKind::Standard)));
+    pViewShell2->ExecuteSlot(aRequest2, /*bAsync=*/false);
+
+    // Start text edit in window 1.
+    SdPage* pPage1 = pViewShell1->GetActualPage();
+    SdrObject* pShape1 = pPage1->GetObj(0);
+    SdrView* pView1 = pViewShell1->GetView();
+    pView1->MarkObj(pShape1, pView1->GetSdrPageView());
+    pView1->SdrBeginTextEdit(pShape1);
+    CPPUNIT_ASSERT(pView1->IsTextEdit());
+
+    SdPage* pPage2 = pViewShell2->GetActualPage();
+    CPPUNIT_ASSERT(pPage1 == pPage2);
+    // Without the accompanying fix in place, this test would have failed with an assertion failure
+    // in SdrObjEditView::SdrEndTextEdit() as mpOldTextEditUndoManager was not nullptr.
+    pViewShell2->GetViewFrame()->GetDispatcher()->Execute(SID_DELETE_PAGE, SfxCallMode::SYNCHRON);
+}
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
