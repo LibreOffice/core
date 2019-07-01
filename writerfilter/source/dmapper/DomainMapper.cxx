@@ -1029,10 +1029,7 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
             m_pImpl->m_pSdtHelper->getDropDownItems().push_back(sStringValue);
         break;
         case NS_ooxml::LN_CT_SdtDate_fullDate:
-            if (!IsInHeaderFooter())
-                m_pImpl->m_pSdtHelper->getDate().append(sStringValue);
-            else
-                m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, "ooxml:CT_SdtDate_fullDate", sStringValue);
+            m_pImpl->m_pSdtHelper->getDate().append(sStringValue);
         break;
         case NS_ooxml::LN_CT_Background_color:
             if (m_pImpl->GetSettingsTable()->GetDisplayBackgroundShape())
@@ -3233,8 +3230,16 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
     // Form controls are not allowed in headers / footers; see sw::DocumentContentOperationsManager::InsertDrawObj()
     else if (m_pImpl->m_pSdtHelper->validateDateFormat() && !IsInHeaderFooter())
     {
-        // date field is imported, we don't need the corresponding date text
-        return;
+        // Date field will be imported, so we don't need the corresponding date text in most of the cases
+        // however when fullDate is not specified, but we have a date string we need to import it as
+        // simple text (this is the case when user sets date field manually in MSO).
+        if(!m_pImpl->m_pSdtHelper->getDate().toString().isEmpty() || sText.isEmpty())
+        {
+            return;
+        }
+        // Remove date field attributes to avoid to import an actual date field
+        m_pImpl->m_pSdtHelper->getDateFormat().truncate();
+        m_pImpl->m_pSdtHelper->getLocale().truncate();
     }
     else if (!m_pImpl->m_pSdtHelper->isInteropGrabBagEmpty())
     {
