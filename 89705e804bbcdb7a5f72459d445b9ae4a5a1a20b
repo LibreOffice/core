@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_6d36bdb7",
+        "filename": "filter/source/pdf/impdialog.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 549,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2019-07-01T08:33:28Z",
+      "side": 1,
+      "message": "Somehow there\u0027s mismatch between the comments and variable names",
+      "range": {
+        "startLine": 549,
+        "startChar": 38,
+        "endLine": 549,
+        "endChar": 49
+      },
+      "revId": "89705e804bbcdb7a5f72459d445b9ae4a5a1a20b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
