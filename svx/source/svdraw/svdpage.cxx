@@ -57,6 +57,8 @@
 #include <rtl/strbuf.hxx>
 #include <libxml/xmlwriter.h>
 
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
+
 using namespace ::com::sun::star;
 
 class SdrObjList::WeakSdrObjectContainerType
@@ -554,6 +556,81 @@ SdrObject* SdrObjList::SetObjectOrdNum(size_t nOldObjNum, size_t nNewObjNum)
         pObj->getSdrModelFromSdrObject().SetChanged();
     }
     return pObj;
+}
+
+void SdrObjList::sort( std::vector<sal_Int32>& sortOrder)
+{
+    // no negative indexes and indexes larger than maList size are allowed
+    auto it = std::find_if( sortOrder.begin(), sortOrder.end(), [this](const sal_Int32& rIt)
+         { return ( rIt < 0 || static_cast<size_t>(rIt) >= maList.size() ); } );
+    if ( it != sortOrder.end())
+        throw css::lang::IllegalArgumentException("negative index of shape", nullptr, 1);
+
+    // no duplicates
+    std::vector<bool> aNoDuplicates(sortOrder.size(), false);
+    for (size_t i = 0; i < sortOrder.size(); ++i )
+    {
+        size_t idx =  static_cast<size_t>( sortOrder[i] );
+
+        if ( aNoDuplicates[idx] )
+            throw css::lang::IllegalArgumentException("duplicate index of shape", nullptr, 2);
+
+        aNoDuplicates[idx] = true;
+    }
+
+    std::vector<SdrObject*> aNewList(maList.size());
+
+    std::set<sal_Int32> aShapesWithTextbox;
+    if ( maList.size() > 1)
+    {
+        for (size_t i = 1; i< maList.size(); ++i)
+        {
+            // if this shape is a textbox, then we want
+            // its left neighbour (shape the textbox is in)
+            if (maList[i]->IsTextBox())
+              aShapesWithTextbox.insert(sal_Int32(i-1));
+        }
+    }
+
+    std::vector<sal_Int32> aIncrements(sortOrder);
+    std::vector<sal_Int32> aDuplicates(maList.size());
+    aIncrements[0] = 0;
+
+    for (size_t i = 1; i< sortOrder.size(); ++i)
+    {
+         aDuplicates[i] = i;
+
+         if (aShapesWithTextbox.count(sortOrder[i]))
+         {
+             aIncrements[i] = aIncrements[i-1] + 1;
+             aDuplicates[i+1] =  i;
+         }
+         else
+             aIncrements[i] = aIncrements[i-1];
+    }
+
+    std::vector<sal_Int32> aNewSortOrder(maList.size());
+    sal_Int32 nPrev = -1;
+    for (size_t i = 0; i< aDuplicates.size(); ++i)
+    {
+        if (nPrev != aDuplicates[i])
+            aNewSortOrder[i] = aDuplicates[i] + aIncrements[aDuplicates[i]];
+        else
+            aNewSortOrder[i] = aNewSortOrder[i-1] + 1;
+
+        nPrev = aDuplicates[i];
+    }
+
+    if ( aNewSortOrder.size() !=  maList.size())
+        throw css::lang::IllegalArgumentException("mismatch of no. of shapes", nullptr, 0);
+
+    for (size_t i = 0; i < aNewSortOrder.size(); ++i )
+    {
+        aNewList[i] = maList[ sortOrder[i] ];
+        aNewList[i]->SetOrdNum(i);
+    }
+
+    std::swap(aNewList, maList);
 }
 
 const tools::Rectangle& SdrObjList::GetAllObjSnapRect() const
