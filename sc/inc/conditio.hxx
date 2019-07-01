@@ -31,7 +31,6 @@
 
 #include <svl/listener.hxx>
 
-#include <comphelper/stl_types.hxx>
 #include <com/sun/star/sheet/ConditionOperator.hpp>
 
 #include <rtl/math.hxx>

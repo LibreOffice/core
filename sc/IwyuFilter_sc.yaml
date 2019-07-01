@@ -32,9 +32,6 @@ blacklist:
     - com/sun/star/sheet/XFunctionDescriptions.hpp
     - com/sun/star/sheet/XGlobalSheetSettings.hpp
     - com/sun/star/sheet/XRecentFunctions.hpp
-    sc/inc/autoform.hxx:
-    # contains macro definitions
-    - scitems.hxx
     sc/inc/chartuno.hxx:
     # base class has to be a complete type
     - com/sun/star/container/XEnumerationAccess.hpp

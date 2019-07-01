@@ -22,6 +22,8 @@
 
 #include "scdllapi.h"
 
+#include <rtl/ustring.hxx>
+
 #include <memory>
 #include <vector>
 

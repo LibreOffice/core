@@ -23,15 +23,32 @@
 #include <sfx2/app.hxx>
 #include <sfx2/docfile.hxx>
 #include <unotools/pathoptions.hxx>
+#include <svl/intitem.hxx>
 #include <svl/itemset.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/outdev.hxx>
+#include <svx/algitem.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
+#include <svx/rotmodit.hxx>
 #include <svx/svxids.hrc>
 #include <svx/strings.hrc>
+#include <editeng/adjustitem.hxx>
 #include <editeng/borderline.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/brushitem.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/contouritem.hxx>
+#include <editeng/crossedoutitem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/justifyitem.hxx>
 #include <editeng/langitem.hxx>
+#include <editeng/lineitem.hxx>
+#include <editeng/postitem.hxx>
+#include <editeng/shdditem.hxx>
+#include <editeng/udlnitem.hxx>
+#include <editeng/wghtitem.hxx>
 #include <tools/urlobj.hxx>
 #include <comphelper/fileformat.h>
 #include <unotools/collatorwrapper.hxx>
@@ -40,6 +57,7 @@
 #include <osl/diagnose.h>
 
 #include <globstr.hrc>
+#include <scitems.hxx>
 #include <scresid.hxx>
 #include <document.hxx>
 

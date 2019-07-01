@@ -24,6 +24,7 @@
 #include <editeng/borderline.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/fontitem.hxx>
+#include <editeng/lineitem.hxx>
 #include <editeng/scripttypeitem.hxx>
 #include <svl/srchitem.hxx>
 #include <sfx2/linkmgr.hxx>

@@ -31,6 +31,8 @@
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/implbase.hxx>
 
+#include <climits>
+
 class ScAutoFormatFieldObj;
 class ScAutoFormatObj;
 

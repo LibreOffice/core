@@ -24,6 +24,8 @@
 #include <editeng/colritem.hxx>
 #include <editeng/crossedoutitem.hxx>
 #include <editeng/fontitem.hxx>
+#include <editeng/justifyitem.hxx>
+#include <editeng/lineitem.hxx>
 #include <editeng/postitem.hxx>
 #include <editeng/shdditem.hxx>
 #include <editeng/udlnitem.hxx>

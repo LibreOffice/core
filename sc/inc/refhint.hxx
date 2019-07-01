@@ -10,7 +10,7 @@
 #ifndef INCLUDED_SC_INC_REFHINT_HXX
 #define INCLUDED_SC_INC_REFHINT_HXX
 
-#include "address.hxx"
+#include "types.hxx"
 #include <svl/hint.hxx>
 
 namespace sc {

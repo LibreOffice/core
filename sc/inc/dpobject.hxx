@@ -23,6 +23,7 @@
 #include "scdllapi.h"
 #include "global.hxx"
 #include "address.hxx"
+#include "dpcache.hxx"
 #include "dptypes.hxx"
 #include "pivot.hxx"
 #include "calcmacros.hxx"

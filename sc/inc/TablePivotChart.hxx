@@ -16,6 +16,7 @@
 #include <com/sun/star/container/XNamed.hpp>
 
 #include <svl/lstner.hxx>
+#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
 
 #include "types.hxx"

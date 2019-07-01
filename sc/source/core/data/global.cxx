@@ -30,6 +30,7 @@
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/viewsh.hxx>
+#include <svl/intitem.hxx>
 #include <svl/stritem.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>

@@ -12,7 +12,6 @@
 
 #include "scdllapi.h"
 #include "address.hxx"
-#include <vcl/image.hxx>
 
 #include <vector>
 #include <memory>
