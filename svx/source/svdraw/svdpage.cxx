@@ -57,6 +57,8 @@
 #include <rtl/strbuf.hxx>
 #include <libxml/xmlwriter.h>
 
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
+
 using namespace ::com::sun::star;
 
 class SdrObjList::WeakSdrObjectContainerType
@@ -554,6 +556,40 @@ SdrObject* SdrObjList::SetObjectOrdNum(size_t nOldObjNum, size_t nNewObjNum)
         pObj->getSdrModelFromSdrObject().SetChanged();
     }
     return pObj;
+}
+
+void SdrObjList::sort( std::vector<sal_Int32>& sortOrder)
+{
+    if ( sortOrder.size() !=  maList.size())
+        throw css::lang::IllegalArgumentException("mismatch of no. of shapes", nullptr, 0);
+
+    // no negative indexes and indexes larger than maList size are allowed
+    auto it = std::find_if( sortOrder.begin(), sortOrder.end(), [this](const sal_Int32& rIt)
+         { return ( rIt < 0 || static_cast<size_t>(rIt) >= maList.size() ); } );
+    if ( it != sortOrder.end())
+        throw css::lang::IllegalArgumentException("negative index of shape", nullptr, 1);
+
+    // no duplicates
+    std::vector<bool> aNoDuplicates(sortOrder.size(), false);
+    for (size_t i = 0; i < sortOrder.size(); ++i )
+    {
+        size_t idx =  static_cast<size_t>( sortOrder[i] );
+
+        if ( aNoDuplicates[idx] )
+            throw css::lang::IllegalArgumentException("duplicate index of shape", nullptr, 2);
+
+        aNoDuplicates[idx] = true;
+    }
+
+    std::vector<SdrObject*> aNewList(maList.size());
+
+    for (size_t i = 0; i < sortOrder.size(); ++i )
+    {
+        aNewList[i] = maList[ sortOrder[i] ];
+        aNewList[i]->SetOrdNum(i);
+    }
+
+    std::swap(aNewList, maList);
 }
 
 const tools::Rectangle& SdrObjList::GetAllObjSnapRect() const

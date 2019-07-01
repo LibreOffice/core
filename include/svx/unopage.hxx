@@ -24,12 +24,13 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/drawing/XShapes2.hpp>
+#include <com/sun/star/drawing/XShapes3.hpp>
 #include <com/sun/star/drawing/XShapeGrouper.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <editeng/mutxhelp.hxx>
 #include <svx/svxdllapi.h>
 
-#include <cppuhelper/implbase6.hxx>
+#include <cppuhelper/implbase7.hxx>
 #include <comphelper/servicehelper.hxx>
 
 #include <memory>
@@ -50,9 +51,10 @@ enum class SdrInventor : sal_uInt32;
 #define TWIPS_TO_MM(val) ((val * 127 + 36) / 72)
 #define MM_TO_TWIPS(val) ((val * 72 + 63) / 127)
 
-class SVX_DLLPUBLIC SvxDrawPage : public ::cppu::WeakAggImplHelper6< css::drawing::XDrawPage,
+class SVX_DLLPUBLIC SvxDrawPage : public ::cppu::WeakAggImplHelper7< css::drawing::XDrawPage,
                                                css::drawing::XShapeGrouper,
                                                css::drawing::XShapes2,
+                                               css::drawing::XShapes3,
                                                css::lang::XServiceInfo,
                                                css::lang::XUnoTunnel,
                                                css::lang::XComponent>,
@@ -108,6 +110,9 @@ class SVX_DLLPUBLIC SvxDrawPage : public ::cppu::WeakAggImplHelper6< css::drawin
     // XShapes2
     virtual void SAL_CALL addTop( const css::uno::Reference< css::drawing::XShape >& xShape ) override;
     virtual void SAL_CALL addBottom( const css::uno::Reference< css::drawing::XShape >& xShape ) override;
+
+    // XShapes3
+    virtual void SAL_CALL sort( const css::uno::Sequence< sal_Int32 >& sortOrder ) override;
 
     // XElementAccess
     virtual css::uno::Type SAL_CALL getElementType() override;
