@@ -23,6 +23,7 @@
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/text/PositionLayoutDir.hpp>
+#include <com/sun/star/drawing/XShapes3.hpp>
 
 #include <utility>
 #include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
@@ -795,8 +796,44 @@ void ShapeSortContext::popGroupAndSort()
         while( nCount );
     }
 
+    bool bSorted = std::is_sorted(maZOrderList.begin(), maZOrderList.end(),
+                       [&](const ZOrderHint& rLeft, const ZOrderHint& rRight)
+                       { return rLeft.nShould < rRight.nShould; } );
+
+    if (bSorted)
+        return; // nothin' to do
+
     // sort z-ordered shapes by nShould field
     std::sort(maZOrderList.begin(), maZOrderList.end());
+
+    uno::Reference<drawing::XShapes3> xShapes3(mxShapes, uno::UNO_QUERY);
+    if( xShapes3.is())
+    {
+        uno::Sequence<sal_Int32> aNewOrder(maZOrderList.size() + maUnsortedList.size());
+        sal_Int32 nIndex = 0;
+
+        for (ZOrderHint& rHint : maZOrderList)
+        {
+            // fill in the gaps from unordered list
+            for (vector<ZOrderHint>::iterator aIt = maUnsortedList.begin(); aIt != maUnsortedList.end() && nIndex < rHint.nShould; )
+            {
+                aNewOrder[nIndex++] = (*aIt).nIs;
+                aIt = maUnsortedList.erase(aIt);
+            }
+
+            aNewOrder[nIndex] = rHint.nIs;
+            nIndex++;
+        }
+
+        try
+        {
+            xShapes3->sort(aNewOrder);
+            maZOrderList.clear();
+            return;
+        }
+        catch (const css::lang::IllegalArgumentException& /*e*/)
+        {}
+    }
 
     // this is the current index, all shapes before that
     // index are finished
