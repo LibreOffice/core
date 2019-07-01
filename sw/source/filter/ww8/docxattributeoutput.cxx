@@ -1915,36 +1915,45 @@ void DocxAttributeOutput::WriteFormDate(const OUString& sCurrentDate, const OUSt
 
             double dCurrentDate = 0.0;
             // First get the date internal double representation
-            sal_uInt32 nFormat = pFormatter->GetEntryKey(ODF_FORMDATE_CURRENTDATE_FORMAT, ODF_FORMDATE_CURRENTDATE_LANGUAGE);            if (nFormat == NUMBERFORMAT_ENTRY_NOT_FOUND)
+            sal_uInt32 nFormat = pFormatter->GetEntryKey(ODF_FORMDATE_CURRENTDATE_FORMAT, ODF_FORMDATE_CURRENTDATE_LANGUAGE);
+            bool bValidFormat = nFormat != NUMBERFORMAT_ENTRY_NOT_FOUND;
             if (nFormat == NUMBERFORMAT_ENTRY_NOT_FOUND)
             {
                 sal_Int32 nCheckPos = 0;
                 SvNumFormatType nType;
                 OUString sFormat = ODF_FORMDATE_CURRENTDATE_FORMAT;
-                pFormatter->PutEntry(sFormat,
-                                     nCheckPos,
-                                     nType,
-                                     nFormat,
-                                     ODF_FORMDATE_CURRENTDATE_LANGUAGE);
+                bValidFormat = pFormatter->PutEntry(sFormat,
+                                                    nCheckPos,
+                                                    nType,
+                                                    nFormat,
+                                                    ODF_FORMDATE_CURRENTDATE_LANGUAGE);
             }
-            pFormatter->IsNumberFormat(sCurrentDate, nFormat, dCurrentDate);
+            if (bValidFormat)
+            {
+                pFormatter->IsNumberFormat(sCurrentDate, nFormat, dCurrentDate);
+            }
 
             // Then convert the date to a fromatter string
-            OUString sOutput;
-            Color* pCol = nullptr;
             nFormat = pFormatter->GetEntryKey(sDateFormat, LanguageTag(sLang).getLanguageType());
+            bValidFormat = nFormat != NUMBERFORMAT_ENTRY_NOT_FOUND;
             if (nFormat == NUMBERFORMAT_ENTRY_NOT_FOUND)
             {
                 sal_Int32 nCheckPos = 0;
                 SvNumFormatType nType;
                 OUString sNonConstDateFormat = sDateFormat;
-                pFormatter->PutEntry(sNonConstDateFormat,
-                                     nCheckPos,
-                                     nType,
-                                     nFormat,
-                                     LanguageTag(sLang).getLanguageType());
+                bValidFormat = pFormatter->PutEntry(sNonConstDateFormat,
+                                                    nCheckPos,
+                                                    nType,
+                                                    nFormat,
+                                                    LanguageTag(sLang).getLanguageType());
             }
-            pFormatter->GetOutputString(dCurrentDate, nFormat, sOutput, &pCol, false);
+
+            OUString sOutput;
+            if (bValidFormat)
+            {
+                Color* pCol = nullptr;
+                pFormatter->GetOutputString(dCurrentDate, nFormat, sOutput, &pCol, false);
+            }
 
             RunText(sOutput);
         }
