@@ -36,7 +36,6 @@
 #include <com/sun/star/rdf/Literal.hpp>
 #include <com/sun/star/rdf/URI.hpp>
 #include <com/sun/star/rdf/Repository.hpp>
-#include <com/sun/star/rdf/XNamedGraph2.hpp>
 
 #include <rtl/ustrbuf.hxx>
 #include <rtl/uri.hxx>
@@ -221,7 +220,7 @@ struct DocumentMetadataAccess_Impl
     const SfxObjectShell & m_rXmlIdRegistrySupplier;
     uno::Reference<rdf::XURI> m_xBaseURI;
     uno::Reference<rdf::XRepository> m_xRepository;
-    uno::Reference<rdf::XNamedGraph2> m_xManifest;
+    uno::Reference<rdf::XNamedGraph> m_xManifest;
     DocumentMetadataAccess_Impl(
             uno::Reference<uno::XComponentContext> const& i_xContext,
             SfxObjectShell const & i_rRegistrySupplier)
@@ -229,6 +228,7 @@ struct DocumentMetadataAccess_Impl
       , m_rXmlIdRegistrySupplier(i_rRegistrySupplier)
       , m_xBaseURI()
       , m_xRepository()
+      , m_xManifest()
     {
         OSL_ENSURE(m_xContext.is(), "context null");
     }
@@ -394,12 +394,26 @@ removeFile(struct DocumentMetadataAccess_Impl const & i_rImpl,
     }
 }
 
-static css::uno::Sequence< uno::Reference< rdf::XURI > >
+static ::std::vector< uno::Reference< rdf::XURI > >
 getAllParts(struct DocumentMetadataAccess_Impl const & i_rImpl)
 {
+    ::std::vector< uno::Reference< rdf::XURI > > ret;
     try {
-        return i_rImpl.m_xManifest->getStatementsObjects( i_rImpl.m_xBaseURI.get(),
-                getURI<rdf::URIs::PKG_HASPART>(i_rImpl.m_xContext), nullptr);
+        const uno::Reference<container::XEnumeration> xEnum(
+            i_rImpl.m_xManifest->getStatements( i_rImpl.m_xBaseURI.get(),
+                getURI<rdf::URIs::PKG_HASPART>(i_rImpl.m_xContext), nullptr),
+            uno::UNO_SET_THROW);
+        while (xEnum->hasMoreElements()) {
+            rdf::Statement stmt;
+            if (!(xEnum->nextElement() >>= stmt)) {
+                throw uno::RuntimeException();
+            }
+            const uno::Reference<rdf::XURI> xPart(stmt.Object,
+                uno::UNO_QUERY);
+            if (!xPart.is()) continue;
+            ret.push_back(xPart);
+        }
+        return ret;
     } catch (const uno::RuntimeException &) {
         throw;
     } catch (const uno::Exception &) {
@@ -440,14 +454,27 @@ getAllParts(struct DocumentMetadataAccess_Impl const& i_rImpl,
     ::std::vector<uno::Reference<rdf::XURI>> ret;
     try
     {
-        css::uno::Sequence< uno::Reference< rdf::XURI > > parts1
-            = i_rImpl.m_xManifest->getStatementsObjects(i_rImpl.m_xBaseURI.get(),
+        const uno::Reference<container::XEnumeration> xEnum(
+            i_rImpl.m_xManifest->getStatements(i_rImpl.m_xBaseURI.get(),
                                                getURI<rdf::URIs::PKG_HASPART>(i_rImpl.m_xContext),
-                                               nullptr);
-        for (auto const & xPart : parts1)
+                                               nullptr),
+            uno::UNO_SET_THROW);
+        while (xEnum->hasMoreElements())
         {
-            if (i_rImpl.m_xManifest->hasStatements(
-                    xPart.get(), getURI<rdf::URIs::RDF_TYPE>(i_rImpl.m_xContext), i_xType.get()))
+            rdf::Statement stmt;
+            if (!(xEnum->nextElement() >>= stmt))
+            {
+                throw uno::RuntimeException();
+            }
+            const uno::Reference<rdf::XURI> xPart(stmt.Object, uno::UNO_QUERY);
+            if (!xPart.is())
+                continue;
+
+            const uno::Reference<container::XEnumeration> xEnum2(
+                i_rImpl.m_xManifest->getStatements(
+                    xPart.get(), getURI<rdf::URIs::RDF_TYPE>(i_rImpl.m_xContext), i_xType.get()),
+                uno::UNO_SET_THROW);
+            if (xEnum2->hasMoreElements())
                 ret.emplace_back(xPart);
         }
         return ret;
@@ -746,11 +773,10 @@ retry:
     }
 
     // init manifest graph
-    auto xManifestGraph = i_rImpl.m_xRepository->getGraph(xManifest);
-    if (xManifestGraph.is())
-        i_rImpl.m_xManifest.set(xManifestGraph, uno::UNO_QUERY_THROW);
-    else
-        i_rImpl.m_xManifest.set(i_rImpl.m_xRepository->createGraph(xManifest), uno::UNO_QUERY_THROW);
+    const uno::Reference<rdf::XNamedGraph> xManifestGraph(
+        i_rImpl.m_xRepository->getGraph(xManifest));
+    i_rImpl.m_xManifest.set(xManifestGraph.is() ? xManifestGraph :
+        i_rImpl.m_xRepository->createGraph(xManifest), uno::UNO_SET_THROW);
     const uno::Reference<container::XEnumeration> xEnum(
         i_rImpl.m_xManifest->getStatements(nullptr,
             getURI<rdf::URIs::RDF_TYPE>(i_rImpl.m_xContext),
@@ -782,7 +808,7 @@ static void init(struct DocumentMetadataAccess_Impl & i_rImpl)
 
         i_rImpl.m_xManifest.set(i_rImpl.m_xRepository->createGraph(
             getURIForStream(i_rImpl, s_manifest)),
-            uno::UNO_QUERY_THROW);
+            uno::UNO_SET_THROW);
 
         // insert the document statement
         i_rImpl.m_xManifest->addStatement(i_rImpl.m_xBaseURI.get(),
@@ -1108,7 +1134,7 @@ void SAL_CALL DocumentMetadataAccess::loadMetadataFromStorage(
     std::vector< OUString > MfstMetadataFiles;
 
     try {
-        const css::uno::Sequence< uno::Reference< rdf::XURI > > parts(
+        const ::std::vector< uno::Reference< rdf::XURI > > parts(
             getAllParts(*m_pImpl) );
         const uno::Reference<rdf::XURI>& xContentFile(
             getURI<rdf::URIs::ODF_CONTENTFILE>(m_pImpl->m_xContext));
