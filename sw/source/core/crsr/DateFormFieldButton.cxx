@@ -57,22 +57,26 @@ SwDatePickerDialog::SwDatePickerDialog(SwEditWin* parent, sw::mark::IFieldmark* 
             OUString sDateString;
             pResult->second >>= sDateString;
 
-            double dCurrentDate = 0;
             sal_uInt32 nFormat = m_pNumberFormatter->GetEntryKey(ODF_FORMDATE_CURRENTDATE_FORMAT,
                                                                  ODF_FORMDATE_CURRENTDATE_LANGUAGE);
+            bool bValidFormat = nFormat != NUMBERFORMAT_ENTRY_NOT_FOUND;
             if (nFormat == NUMBERFORMAT_ENTRY_NOT_FOUND)
             {
                 sal_Int32 nCheckPos = 0;
                 SvNumFormatType nType;
                 OUString sFormat = ODF_FORMDATE_CURRENTDATE_FORMAT;
-                m_pNumberFormatter->PutEntry(sFormat, nCheckPos, nType, nFormat,
-                                             ODF_FORMDATE_CURRENTDATE_LANGUAGE);
+                bValidFormat = m_pNumberFormatter->PutEntry(sFormat, nCheckPos, nType, nFormat,
+                                                            ODF_FORMDATE_CURRENTDATE_LANGUAGE);
             }
 
-            m_pNumberFormatter->IsNumberFormat(sDateString, nFormat, dCurrentDate);
+            if (bValidFormat)
+            {
+                double dCurrentDate = 0;
+                m_pNumberFormatter->IsNumberFormat(sDateString, nFormat, dCurrentDate);
 
-            const Date& rNullDate = m_pNumberFormatter->GetNullDate();
-            m_pCalendar->SetCurDate(rNullDate + sal_Int32(dCurrentDate));
+                const Date& rNullDate = m_pNumberFormatter->GetNullDate();
+                m_pCalendar->SetCurDate(rNullDate + sal_Int32(dCurrentDate));
+            }
         }
     }
     m_pCalendar->SetSelectHdl(LINK(this, SwDatePickerDialog, ImplSelectHdl));
@@ -95,26 +99,31 @@ IMPL_LINK(SwDatePickerDialog, ImplSelectHdl, Calendar*, pCalendar, void)
     {
         if (m_pFieldmark != nullptr)
         {
-            Color* pCol = nullptr;
-            OUString sOutput;
             sal_uInt32 nFormat = m_pNumberFormatter->GetEntryKey(ODF_FORMDATE_CURRENTDATE_FORMAT,
                                                                  ODF_FORMDATE_CURRENTDATE_LANGUAGE);
+            bool bValidFormat = nFormat != NUMBERFORMAT_ENTRY_NOT_FOUND;
             if (nFormat == NUMBERFORMAT_ENTRY_NOT_FOUND)
             {
                 sal_Int32 nCheckPos = 0;
                 SvNumFormatType nType;
                 OUString sFormat = ODF_FORMDATE_CURRENTDATE_FORMAT;
-                m_pNumberFormatter->PutEntry(sFormat, nCheckPos, nType, nFormat,
-                                             ODF_FORMDATE_CURRENTDATE_LANGUAGE);
+                bValidFormat = m_pNumberFormatter->PutEntry(sFormat, nCheckPos, nType, nFormat,
+                                                            ODF_FORMDATE_CURRENTDATE_LANGUAGE);
             }
 
-            const Date& rNullDate = m_pNumberFormatter->GetNullDate();
-            double dDate = pCalendar->GetFirstSelectedDate() - rNullDate;
+            if (bValidFormat)
+            {
+                Color* pCol = nullptr;
+                OUString sOutput;
 
-            m_pNumberFormatter->GetOutputString(dDate, nFormat, sOutput, &pCol, false);
+                const Date& rNullDate = m_pNumberFormatter->GetNullDate();
+                double dDate = pCalendar->GetFirstSelectedDate() - rNullDate;
 
-            sw::mark::IFieldmark::parameter_map_t* pParameters = m_pFieldmark->GetParameters();
-            (*pParameters)[ODF_FORMDATE_CURRENTDATE] <<= sOutput;
+                m_pNumberFormatter->GetOutputString(dDate, nFormat, sOutput, &pCol, false);
+
+                sw::mark::IFieldmark::parameter_map_t* pParameters = m_pFieldmark->GetParameters();
+                (*pParameters)[ODF_FORMDATE_CURRENTDATE] <<= sOutput;
+            }
         }
         EndPopupMode();
     }
