@@ -510,14 +510,14 @@ DECLARE_OOXMLEXPORT_TEST(testTableStart2Sdt, "table-start-2-sdt.docx")
     }
 }
 
-/*DECLARE_OOXMLEXPORT_TEST(testSdtDateDuplicate, "sdt-date-duplicate.docx")
+DECLARE_OOXMLEXPORT_TEST(testSdtDateDuplicate, "sdt-date-duplicate.docx")
 {
     if (xmlDocPtr pXmlDoc = parseExport())
     {
         // Single <w:sdt> was exported as 2 <w:sdt> elements.
         assertXPath(pXmlDoc, "//w:sdt", 1);
     }
-}*/
+}
 
 DECLARE_OOXMLEXPORT_TEST(testFdo81492, "fdo81492.docx")
 {
