@@ -10,22 +10,31 @@
 #include "WpsContext.hxx"
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/tuple/b2dtuple.hxx>
+#include <comphelper/propertysequence.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <drawingml/customshapeproperties.hxx>
+#include <drawingml/presetgeometrynames.hxx>
+#include <drawingml/textbody.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
+#include <com/sun/star/beans/XPropertyContainer.hpp>
+#include <com/sun/star/container/XEnumerationAccess.hpp>
+#include <com/sun/star/drawing/EnhancedCustomShapeTextPathMode.hpp>
 #include <com/sun/star/drawing/HomogenMatrix3.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/text/XTextCursor.hpp>
 #include <svx/svdtrans.hxx>
 #include <oox/helper/attributelist.hxx>
+#include <oox/helper/propertymap.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
 #include <oox/drawingml/shape.hxx>
 
 #include <boost/optional.hpp>
 
+using ::com::sun::star::container::XEnumeration;
 using namespace com::sun::star;
 
 namespace oox
@@ -180,10 +189,47 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
                     comphelper::SequenceAsHashMap aCustomShapeGeometry(
                         xPropertySet->getPropertyValue("CustomShapeGeometry"));
                     aCustomShapeGeometry["PresetTextWarp"] <<= preset;
+                    if (!preset.isEmpty() && preset != "textNoShape")
+                    {
+                        // The original shape has its textbox in Warp mode. Restriction to the case
+                        // of outer shape is rectangle, not considered yet.
+
+                        // Might need to backup the text content.
+                        // uno::Reference<text::XTextRange> xTextRange(mxShape, uno::UNO_QUERY);
+                        // OUString sShapeText;
+                        // if (xTextRange.is())
+                        //    sShapeText = xTextRange->getString(); // all paragraphs, with eol encoded
+
+                        // In case I keep it on "true", I get customshape with text box. If I set it
+                        // to false, it removes the text box and the text content, but does not enable "Fontwork".
+                        xPropertySet->setPropertyValue("TextBox", uno::Any(false));
+
+                        const OUString sFontworkType(
+                            PresetGeometryTypeNames::GetFontworkType(preset));
+                        aCustomShapeGeometry["Type"] <<= sFontworkType;
+                        uno::Sequence<beans::PropertyValue> aTextpathPropSeq(
+                            comphelper::InitPropertySequence(
+                                { { "TextPath", uno::Any(true) },
+                                  { "TextPathMode",
+                                    uno::Any(drawing::EnhancedCustomShapeTextPathMode_SHAPE) },
+                                  { "ScaleX", uno::Any(false) },
+                                  { "SameLetterHeights", uno::Any(false) } }));
+                        aCustomShapeGeometry["TextPath"]
+                            <<= comphelper::makePropertyValue("TextPath", aTextpathPropSeq);
+                        // will be set by defaults from preset definitions
+                        aCustomShapeGeometry.erase("ViewBox");
+                        aCustomShapeGeometry.erase("CoordinateSize");
+                        aCustomShapeGeometry.erase("Equations");
+                        aCustomShapeGeometry.erase("Path");
+                        aCustomShapeGeometry.erase("Handles");
+                        // might be set by child avLst
+                        aCustomShapeGeometry.erase("AdjustmentValues");
+                    }
                     xPropertySet->setPropertyValue(
                         "CustomShapeGeometry",
                         uno::makeAny(aCustomShapeGeometry.getAsConstPropertyValueList()));
                 }
+                // return this; // needed to get avLst read. ToDo: add cases for that.
             }
             break;
         case XML_txbx:
