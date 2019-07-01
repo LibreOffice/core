@@ -2030,6 +2030,9 @@ void PDFWriterImpl::ImplClearFontData(bool bNewFontLists)
     }
 }
 
-void PDFWriterImpl::ClipRegionIntersectRectangle(vcl::Region&) {}
+vcl::Region PDFWriterImpl::ClipToDeviceBounds(vcl::Region aRegion) const
+{
+    return aRegion;
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
