@@ -38,6 +38,15 @@ interface XShapes2
      * @since LibreOffice 4.2
      */
     void addBottom( [in] com::sun::star::drawing::XShape xShape );
+
+    /**
+     * FIXME: add a neat description
+     *
+     * @since forever
+     */
+
+    void sort( [in] sequence< long> sortOrder )
+        raises( com::sun::star::lang::IllegalArgumentException );
 };
 
 }; }; }; };

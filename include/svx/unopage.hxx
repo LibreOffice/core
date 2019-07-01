@@ -108,6 +108,7 @@ class SVX_DLLPUBLIC SvxDrawPage : public ::cppu::WeakAggImplHelper6< css::drawin
     // XShapes2
     virtual void SAL_CALL addTop( const css::uno::Reference< css::drawing::XShape >& xShape ) override;
     virtual void SAL_CALL addBottom( const css::uno::Reference< css::drawing::XShape >& xShape ) override;
+    virtual void SAL_CALL sort( const css::uno::Sequence< sal_Int32 >& sortOrder ) override;
 
     // XElementAccess
     virtual css::uno::Type SAL_CALL getElementType() override;
