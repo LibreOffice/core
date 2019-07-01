@@ -27,6 +27,7 @@
 #include <osl/mutex.hxx>
 #include <sfx2/dispatch.hxx>
 #include <comphelper/classids.hxx>
+#include <comphelper/sequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 #include <sfx2/objsh.hxx>
@@ -328,6 +329,12 @@ void SAL_CALL SvxDrawPage::remove( const Reference< drawing::XShape >& xShape )
     }
 
     mpModel->SetChanged();
+}
+
+void SvxDrawPage::sort( const css::uno::Sequence< sal_Int32 >& sortOrder )
+{
+    auto newOrder = comphelper::sequenceToContainer<std::vector<sal_Int32>>(sortOrder);
+    mpPage->sort(newOrder);
 }
 
 // css::container::XIndexAccess
