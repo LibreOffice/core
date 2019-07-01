@@ -44,7 +44,7 @@
       </prop>
       <set oor:name="InternalPaths" oor:node-type="MultiPath">
         <info>
-          <desc>Contains path values configured by an administrator or package (not visible for the user).</desc>
+          <desc>Contains path values configured by an administrator or package (read-only for the user).</desc>
         </info>
       </set>
       <prop oor:name="UserPaths" oor:type="oor:string-list">
