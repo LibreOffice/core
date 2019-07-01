@@ -7027,7 +7027,7 @@
                                 <property name="can_focus">False</property>
                                 <child>
                                   <object class="svtlo-ManagedMenuButton" id="Image-Image:MenuGraphic">
-                                    <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|ImageButton">_Image</property>
+                                    <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|ImageButton">Im_age</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="focus_on_click">False</property>

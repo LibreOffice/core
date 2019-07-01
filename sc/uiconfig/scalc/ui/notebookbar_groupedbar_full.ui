@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<!-- <?xml version="1.0" encoding="UTF-8"?> -->
 <!-- Generated with glade 3.22.1 -->
 <interface domain="sc">
   <requires lib="gtk+" version="3.18"/>
@@ -5601,7 +5601,7 @@
                                     <property name="can_focus">False</property>
                                     <child>
                                       <object class="svtlo-ManagedMenuButton" id="graphicB:MenuGraphic">
-                                        <property name="label" translatable="yes" context="notebookbar_groupedbar_full|graphicB">_Graphic</property>
+                                        <property name="label" translatable="yes" context="notebookbar_groupedbar_full|graphicB">Im_age</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
                                         <property name="focus_on_click">False</property>
