@@ -1669,7 +1669,10 @@ void Printer::SetFontOrientation( LogicalFontInstance* const pFontEntry ) const
     pFontEntry->mnOrientation = pFontEntry->mxFontMetric->GetOrientation();
 }
 
-void Printer::ClipRegionIntersectRectangle(vcl::Region&) {}
+vcl::Region Printer::ClipToDeviceBounds(vcl::Region aRegion) const
+{
+    return aRegion;
+}
 
 Bitmap Printer::GetBitmap( const Point& rSrcPt, const Size& rSize ) const
 {

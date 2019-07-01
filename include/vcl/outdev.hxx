@@ -666,7 +666,14 @@ public:
 protected:
 
     virtual void                InitClipRegion();
-    virtual void                ClipRegionIntersectRectangle(vcl::Region&);
+
+    /** Perform actual rect clip against outdev dimensions, to generate
+        empty clips whenever one of the values is completely off the device.
+
+        @param aRegion      region to be clipped to the device dimensions
+        @returns            region clipped to the device bounds
+     **/
+    virtual vcl::Region         ClipToDeviceBounds(vcl::Region aRegion) const;
     virtual void                ClipToPaintRegion    ( tools::Rectangle& rDstRect );
 
 private:
