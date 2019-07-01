@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_0d9f0151",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 17
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-07-01T14:51:27Z",
+      "side": 1,
+      "message": "this is outdated, describes a previous revision",
+      "revId": "701e819eb441c93a5853ac71ccfd5c0fe7953bf9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_8dbc71bc",
+        "filename": "offapi/com/sun/star/report/XReportComponent.idl",
+        "patchSetId": 17
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-07-01T14:51:27Z",
+      "side": 1,
+      "message": "new attribute is an api change: please put [API CHANGE] in the commit message.\n\nis this interface used by macros or extensions? ... probably only C++/Java would be affected ... probably we can get away with changing this?",
+      "revId": "701e819eb441c93a5853ac71ccfd5c0fe7953bf9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_edf88d7d",
+        "filename": "reportdesign/source/filter/xml/xmlColumn.cxx",
+        "patchSetId": 17
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-07-01T14:51:27Z",
+      "side": 1,
+      "message": "now i\u0027m confused... why is an integer property called AutoGrow? would MinHeight be a more appropriate name?",
+      "revId": "701e819eb441c93a5853ac71ccfd5c0fe7953bf9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_0d3b8138",
+        "filename": "reportdesign/source/filter/xml/xmlExport.cxx",
+        "patchSetId": 17
+      },
+      "lineNbr": 525,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-07-01T14:51:27Z",
+      "side": 1,
+      "message": "is a height guaranteed to be non-0? are entries in _aSize stricly monotonically increasing? if not you could get a wrong value here\n\ni find the commented out code with the booleans to be clearer...",
+      "revId": "701e819eb441c93a5853ac71ccfd5c0fe7953bf9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_2d98c568",
+        "filename": "xmloff/source/table/XMLTableExport.cxx",
+        "patchSetId": 17
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-07-01T14:51:27Z",
+      "side": 1,
+      "message": "my understanding is that  this export code is only used with Impress tables ... and those don\u0027t appear to have a \"MinHeight\" property? in svx/source/table/tablerow.cxx",
+      "revId": "701e819eb441c93a5853ac71ccfd5c0fe7953bf9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_ad76153e",
+        "filename": "xmloff/source/table/XMLTableExport.cxx",
+        "patchSetId": 17
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-07-01T14:51:27Z",
+      "side": 1,
+      "message": "this is definitely an improvement in any case, previously it was just wrong",
+      "revId": "701e819eb441c93a5853ac71ccfd5c0fe7953bf9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
