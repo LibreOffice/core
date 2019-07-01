@@ -57,6 +57,8 @@
 #include <rtl/strbuf.hxx>
 #include <libxml/xmlwriter.h>
 
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
+
 using namespace ::com::sun::star;
 
 class SdrObjList::WeakSdrObjectContainerType
@@ -554,6 +556,100 @@ SdrObject* SdrObjList::SetObjectOrdNum(size_t nOldObjNum, size_t nNewObjNum)
         pObj->getSdrModelFromSdrObject().SetChanged();
     }
     return pObj;
+}
+
+void SdrObjList::sort( std::vector<sal_Int32>& sortOrder)
+{
+    // no negative indexes and indexes larger than maList size are allowed
+    auto it = std::find_if( sortOrder.begin(), sortOrder.end(), [this](const sal_Int32& rIt)
+         { return ( rIt < 0 || static_cast<size_t>(rIt) >= maList.size() ); } );
+    if ( it != sortOrder.end())
+        throw css::lang::IllegalArgumentException("negative index of shape", nullptr, 1);
+
+    // no duplicates
+    std::vector<bool> aNoDuplicates(sortOrder.size(), false);
+    for (size_t i = 0; i < sortOrder.size(); ++i )
+    {
+        size_t idx =  static_cast<size_t>( sortOrder[i] );
+
+        if ( aNoDuplicates[idx] )
+            throw css::lang::IllegalArgumentException("duplicate index of shape", nullptr, 2);
+
+        aNoDuplicates[idx] = true;
+    }
+
+    // example sortOrder [2 0 1]
+    // example maList [T T S T T] ( T T = shape with textbox, S = just a shape )
+    // (shapes at positions 0 and 2 have a textbox)
+
+    std::vector<SdrObject*> aNewList(maList.size());
+    std::set<sal_Int32> aShapesWithTextbox;
+    std::vector<sal_Int32> aIncrements;
+    std::vector<sal_Int32> aDuplicates;
+
+    if ( maList.size() > 1)
+    {
+        for (size_t i = 1; i< maList.size(); ++i)
+        {
+            // if this shape is a textbox, then look at its left neighbour
+            // (shape this textbox is in)
+            // and insert the number of textboxes to the left of it
+            if (maList[i]->IsTextBox())
+              aShapesWithTextbox.insert( i - 1 - aShapesWithTextbox.size() );
+        }
+        // example aShapesWithTextbox [0 2]
+    }
+
+    aIncrements.push_back(0);
+    aDuplicates.push_back(sortOrder[0]);
+
+    // corner case: 1st shape is a textbox, add it twice
+    // otherwise sortOrder loop below will skip it
+    if (aShapesWithTextbox.count(sortOrder[0]) > 0)
+        aDuplicates.push_back(sortOrder[0]);
+
+    for (size_t i = 1; i< sortOrder.size(); ++i)
+    {
+         aDuplicates.push_back(sortOrder[i]);
+
+         if (aShapesWithTextbox.count(sortOrder[i]) > 0)
+         {
+             aIncrements.push_back(aIncrements[i-1] + 1 );
+             aDuplicates.push_back(sortOrder[i]);
+         }
+         else
+         {
+             aIncrements.push_back(aIncrements[i-1]);
+         }
+
+         // example aDuplicates [2 2 0 0 1]
+         // example aIncrements [0 1 1]
+    }
+
+    std::vector<sal_Int32> aNewSortOrder(maList.size());
+    sal_Int32 nPrev = -1;
+    for (size_t i = 0; i< aDuplicates.size(); ++i)
+    {
+        if (nPrev != aDuplicates[i])
+            aNewSortOrder[i] = aDuplicates[i] + aIncrements[aDuplicates[i]];
+        else
+            aNewSortOrder[i] = aNewSortOrder[i-1] + 1;
+
+        nPrev = aDuplicates[i];
+
+        // example aNewSortOrder [3 4 0 1 2]
+    }
+
+    if ( aNewSortOrder.size() !=  maList.size())
+        throw css::lang::IllegalArgumentException("mismatch of no. of shapes", nullptr, 0);
+
+    for (size_t i = 0; i < aNewSortOrder.size(); ++i)
+    {
+        aNewList[i] = maList[ sortOrder[i] ];
+        aNewList[i]->SetOrdNum(i);
+    }
+
+    std::swap(aNewList, maList);
 }
 
 const tools::Rectangle& SdrObjList::GetAllObjSnapRect() const
