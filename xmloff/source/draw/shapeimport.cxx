@@ -23,6 +23,7 @@
 
 #include <com/sun/star/text/PositionLayoutDir.hpp>
 #include <com/sun/star/chart/XChartDocument.hpp>
+#include <com/sun/star/drawing/XShapes2.hpp>
 
 #include <utility>
 #include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
@@ -799,6 +800,23 @@ void ShapeSortContext::popGroupAndSort()
 
     // sort z-ordered shapes by nShould field
     std::sort(maZOrderList.begin(), maZOrderList.end());
+
+    uno::Reference<drawing::XShapes2> xShapes2(mxShapes, uno::UNO_QUERY);
+    if( xShapes2.is())
+    {
+        uno::Sequence<sal_Int32> aNewOrder(maZOrderList.size());
+        sal_Int32 nIndex = 0;
+
+        for (ZOrderHint& rHint : maZOrderList)
+        {
+            aNewOrder[nIndex] = rHint.nShould;
+            nIndex++;
+        }
+
+        xShapes2->sort(aNewOrder);
+        maZOrderList.clear();
+        return;
+    }
 
     // this is the current index, all shapes before that
     // index are finished

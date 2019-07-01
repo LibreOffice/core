@@ -293,6 +293,11 @@ void SAL_CALL SvxShapeGroup::addTop( const uno::Reference< drawing::XShape >& xS
     addUnoShape(xShape, SAL_MAX_SIZE);
 }
 
+void SAL_CALL SvxShapeGroup::sort( const css::uno::Sequence< sal_Int32 >& /*sortOrder*/ )
+{
+    return;
+}
+
 void SAL_CALL SvxShapeGroup::addBottom( const uno::Reference< drawing::XShape >& xShape )
 {
     SolarMutexGuard aGuard;

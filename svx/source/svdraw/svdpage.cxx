@@ -556,6 +556,19 @@ SdrObject* SdrObjList::SetObjectOrdNum(size_t nOldObjNum, size_t nNewObjNum)
     return pObj;
 }
 
+void SdrObjList::sort( std::vector<sal_Int32>& sortOrder)
+{
+    std::vector<SdrObject*> aNewList(maList.size());
+
+    for (size_t i = 0; i < sortOrder.size(); ++i )
+    {
+        aNewList[i] = maList[ sortOrder[i] ];
+        aNewList[i]->SetOrdNum(i);
+    }
+
+    std::swap(aNewList, maList);
+}
+
 const tools::Rectangle& SdrObjList::GetAllObjSnapRect() const
 {
     if (mbRectsDirty) {
