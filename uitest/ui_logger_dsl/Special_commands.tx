@@ -18,7 +18,7 @@ SpecialCommand:
   then we can add whatever we need in the future
 */
 writer_command:
-  Type_command | Select_command | setZoom_command | GOTO_command 
+  Type_command | Select_command | GOTO_command 
 ;
 Type_command:
   'Type on writer' what_to_type=Type_options
