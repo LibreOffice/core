@@ -2367,6 +2367,26 @@ if test "$libo_fuzzed_enable_dbus" = yes -a "$libo_fuzzed_enable_avahi" -a \
     enable_avahi=$enable_dbus
 fi
 
+add_lopath_after ()
+{
+    if ! echo "$LO_PATH" | $EGREP -q "(^|${P_SEP})$1($|${P_SEP})"; then
+        LO_PATH="${LO_PATH:+$LO_PATH$P_SEP}$1"
+    fi
+}
+
+add_lopath_before ()
+{
+    local IFS=${P_SEP}
+    local path_cleanup
+    local dir
+    for dir in $LO_PATH ; do
+        if test "$dir" != "$1" ; then
+            path_cleanup=${path_cleanup:+$path_cleanup$P_SEP}$dir
+        fi
+    done
+    LO_PATH="$1${path_cleanup:+$P_SEP$path_cleanup}"
+}
+
 dnl ===================================================================
 dnl check for required programs (grep, awk, sed, bash)
 dnl ===================================================================
@@ -2385,12 +2405,10 @@ pathmunge ()
         else
             new_path="$1"
         fi
-        if ! echo "$LO_PATH" | $EGREP -q "(^|:)$1($|:)"; then
-            if test "$2" = "after"; then
-                LO_PATH="$LO_PATH${P_SEP}$new_path"
-            else
-                LO_PATH="$new_path${P_SEP}$LO_PATH"
-            fi
+        if test "$2" = "after"; then
+            add_lopath_after "$new_path"
+        else
+            add_lopath_before "$new_path"
         fi
         unset new_path
     fi
