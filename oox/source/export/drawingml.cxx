@@ -132,6 +132,17 @@ using ::css::io::XOutputStream;
 using ::sax_fastparser::FSHelperPtr;
 using ::sax_fastparser::FastSerializerHelper;
 
+namespace
+{
+/// Extracts start or end alpha information from a transparency gradient.
+sal_Int32 GetAlphaFromTransparenceGradient(const awt::Gradient& rGradient, bool bStart)
+{
+    // Our alpha is a gray color value.
+    sal_uInt8 nRed = ::Color(bStart ? rGradient.StartColor : rGradient.EndColor).GetRed();
+    // drawingML alpha is a percentage on a 0..100000 scale.
+    return (255 - nRed) * oox::drawingml::MAX_PERCENT / 255;
+}
+}
 
 namespace oox {
 namespace drawingml {
@@ -415,10 +426,10 @@ void DrawingML::WriteSolidFill( const Reference< XPropertySet >& rXPropSet )
     }
 }
 
-void DrawingML::WriteGradientStop( sal_uInt16 nStop, ::Color nColor )
+void DrawingML::WriteGradientStop(sal_uInt16 nStop, ::Color nColor, sal_Int32 nAlpha)
 {
     mpFS->startElementNS(XML_a, XML_gs, XML_pos, OString::number(nStop * 1000));
-    WriteColor( nColor );
+    WriteColor(nColor, nAlpha);
     mpFS->endElementNS( XML_a, XML_gs );
 }
 
@@ -480,7 +491,7 @@ void DrawingML::WriteGradientFill( const Reference< XPropertySet >& rXPropSet )
         else
         {
             mpFS->startElementNS(XML_a, XML_gradFill, XML_rotWithShape, "0");
-            WriteGradientFill(aGradient);
+            WriteGradientFill(aGradient, rXPropSet);
             mpFS->endElementNS( XML_a, XML_gradFill );
         }
     }
@@ -545,20 +556,40 @@ void DrawingML::WriteGrabBagGradientFill( const Sequence< PropertyValue >& aGrad
     }
 }
 
-void DrawingML::WriteGradientFill( awt::Gradient rGradient )
+void DrawingML::WriteGradientFill(awt::Gradient rGradient,
+                                  const uno::Reference<beans::XPropertySet>& rXPropSet)
 {
     switch( rGradient.Style )
     {
         default:
         case awt::GradientStyle_LINEAR:
+        {
+            awt::Gradient aTransparenceGradient;
+            bool bTransparent = false;
+            if (rXPropSet.is() && GetProperty(rXPropSet, "FillTransparenceGradient"))
+            {
+                aTransparenceGradient = *o3tl::doAccess<awt::Gradient>(mAny);
+                bTransparent = true;
+            }
+
             mpFS->startElementNS(XML_a, XML_gsLst);
-            WriteGradientStop( 0, ColorWithIntensity( rGradient.StartColor, rGradient.StartIntensity ) );
-            WriteGradientStop( 100, ColorWithIntensity( rGradient.EndColor, rGradient.EndIntensity ) );
+            sal_Int32 nStartAlpha = MAX_PERCENT;
+            sal_Int32 nEndAlpha = MAX_PERCENT;
+            if (bTransparent)
+            {
+                nStartAlpha = GetAlphaFromTransparenceGradient(aTransparenceGradient, true);
+                nEndAlpha = GetAlphaFromTransparenceGradient(aTransparenceGradient, false);
+            }
+            WriteGradientStop(0, ColorWithIntensity(rGradient.StartColor, rGradient.StartIntensity),
+                              nStartAlpha);
+            WriteGradientStop(100, ColorWithIntensity(rGradient.EndColor, rGradient.EndIntensity),
+                              nEndAlpha);
             mpFS->endElementNS( XML_a, XML_gsLst );
             mpFS->singleElementNS(
                 XML_a, XML_lin, XML_ang,
                 OString::number((((3600 - rGradient.Angle + 900) * 6000) % 21600000)));
             break;
+        }
 
         case awt::GradientStyle_AXIAL:
             mpFS->startElementNS(XML_a, XML_gsLst);

@@ -109,6 +109,7 @@ public:
     void testCustomXml();
     void testTdf94238();
     void testPictureTransparency();
+    void testTdf125554();
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest1);
 
@@ -140,6 +141,7 @@ public:
     CPPUNIT_TEST(testTdf112633);
     CPPUNIT_TEST(testCustomXml);
     CPPUNIT_TEST(testTdf94238);
+    CPPUNIT_TEST(testTdf125554);
     CPPUNIT_TEST(testPictureTransparency);
 
     CPPUNIT_TEST_SUITE_END();
@@ -909,6 +911,23 @@ void SdOOXMLExportTest1::testPictureTransparency()
     sal_Int16 nTransparency = 0;
     CPPUNIT_ASSERT(xGraphicShape->getPropertyValue("Transparency") >>= nTransparency);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(51), nTransparency);
+
+    xDocShRef->DoClose();
+}
+
+void SdOOXMLExportTest1::testTdf125554()
+{
+    ::sd::DrawDocShellRef xDocShRef
+        = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/tdf125554.pptx"), PPTX);
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX);
+
+    uno::Reference<beans::XPropertySet> xShape = getShapeFromPage(0, 0, xDocShRef);
+    uno::Any aFillTransparenceGradientName
+        = xShape->getPropertyValue("FillTransparenceGradientName");
+    CPPUNIT_ASSERT(aFillTransparenceGradientName.has<OUString>());
+    // Without the accompanying fix in place, this test would have failed, i.e. the transparency of
+    // the shape has no gradient, so it looked like a solid fill instead of a gradient fill.
+    CPPUNIT_ASSERT(!aFillTransparenceGradientName.get<OUString>().isEmpty());
 
     xDocShRef->DoClose();
 }
