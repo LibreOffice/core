@@ -1,9 +1,10 @@
 UNOCommand:
-    'Send UNO Command' '(' uno_command=STRING ')'  prameters*=parameter
+    'Send UNO Command' '(' uno_command_name=STRING ')'  (prameters=parameter)?
 ;
 parameter:
     '{'  parameter_data *= data '}'
 ;
 data:
-    key=STRING ':' value=ID ','
+    key=STRING ':' value= INT|ID ','
 ;
+

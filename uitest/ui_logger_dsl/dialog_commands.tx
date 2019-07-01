@@ -5,9 +5,16 @@ DialogCommand:
 ;
 
 OpenDialog:
-  'Open' dialog_name=ID
+  OpenModalDialog | OpenModelessDialog
 ;
-
+OpenModalDialog :
+  'Open Modal ' dialog_name=ID
+;
+OpenModelessDialog :
+  'Open Modeless ' dialog_name=ID
+;
 CloseDialog:
-  'Close Dialog'
+  //the additional_note=STRING? if you need to add name in the future
+  //Also it's used to make instance of the command of type CloseDialog
+  'Close Dialog' additional_note=STRING?
 ;
