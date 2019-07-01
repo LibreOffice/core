@@ -35,13 +35,19 @@ DECLARE_OOXMLIMPORT_TEST(testTdf108545_embeddedDocxIcon, "tdf108545_embeddedDocx
     CPPUNIT_ASSERT_EQUAL(embed::Aspects::MSOLE_ICON, xSupplier->getAspect());
 }
 
-/*DECLARE_OOXMLIMPORT_TEST(testTdf121203, "tdf121203.docx")
+DECLARE_OOXMLIMPORT_TEST(testTdf121203, "tdf121203.docx")
 {
-    // Make sure that the date SDT's content is imported as plain text, as it
-    // has no ISO date, so we have no idea how to represent that with our date
-    // control.
+    // Make sure that the date SDT's content is imported as plain text, as
+    // the field has no fullDate attribute which we can use to find out the actual date.
     CPPUNIT_ASSERT_EQUAL(OUString("17-Oct-2018 09:00"), getRun(getParagraph(1), 1)->getString());
-}*/
+
+    // Make sure we did not import a date field.
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+    IDocumentMarkAccess* pMarkAccess = pDoc->getIDocumentMarkAccess();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), pMarkAccess->getAllMarksCount());
+}
 
 DECLARE_OOXMLIMPORT_TEST(testTdf109053, "tdf109053.docx")
 {
