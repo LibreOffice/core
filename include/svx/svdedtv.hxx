@@ -187,10 +187,9 @@ public:
     bool IsUndoEnabled() const;
 
     /**
-     * Checks if this or other views have an active text edit, in which case object undos are not
-     * created.
+     * Checks if this or other views have an active text edit, if true, end them.
      */
-    bool CanDoSdrUndo() const;
+    void EndTextEditAllViews() const;
 
     std::vector< std::unique_ptr<SdrUndoAction> > CreateConnectorUndo( SdrObject& rO );
     void AddUndoActions( std::vector< std::unique_ptr<SdrUndoAction> > );
