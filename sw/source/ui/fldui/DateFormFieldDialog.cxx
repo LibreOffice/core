@@ -78,20 +78,23 @@ void DateFormFieldDialog::InitControls()
             LanguageType aLangType = LanguageTag(sLang).getLanguageType();
             sal_uInt32 nFormatKey = m_pNumberFormatter->GetEntryKey(sFormatString, aLangType);
 
-            if (m_xFormatLB->GetCurLanguage() == aLangType)
+            if (aLangType != LANGUAGE_DONTKNOW && nFormatKey != NUMBERFORMAT_ENTRY_NOT_FOUND)
             {
-                m_xFormatLB->SetAutomaticLanguage(true);
-            }
-            else
-            {
-                m_xFormatLB->SetAutomaticLanguage(false);
-                m_xFormatLB->SetLanguage(aLangType);
+                if (m_xFormatLB->GetCurLanguage() == aLangType)
+                {
+                    m_xFormatLB->SetAutomaticLanguage(true);
+                }
+                else
+                {
+                    m_xFormatLB->SetAutomaticLanguage(false);
+                    m_xFormatLB->SetLanguage(aLangType);
 
-                // Change format and change back for regenerating the list
-                m_xFormatLB->SetFormatType(SvNumFormatType::ALL);
-                m_xFormatLB->SetFormatType(SvNumFormatType::DATE);
+                    // Change format and change back for regenerating the list
+                    m_xFormatLB->SetFormatType(SvNumFormatType::ALL);
+                    m_xFormatLB->SetFormatType(SvNumFormatType::DATE);
+                }
+                m_xFormatLB->SetDefFormat(nFormatKey);
             }
-            m_xFormatLB->SetDefFormat(nFormatKey);
         }
     }
 }
