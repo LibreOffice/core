@@ -233,7 +233,7 @@ protected:
                                     const tools::PolyPolygon &rPolyPoly ) override;
 
     void                        ScaleBitmap ( Bitmap&, SalTwoRect& ) override { };
-    void                        ClipRegionIntersectRectangle(vcl::Region&) override;
+    vcl::Region                 ClipToDeviceBounds(vcl::Region aRegion) const override;
 
 public:
     void                        DrawGradientEx( OutputDevice* pOut, const tools::Rectangle& rRect,
