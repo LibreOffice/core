@@ -3175,7 +3175,7 @@ void ScGridWindow::KeyInput(const KeyEvent& rKEvt)
         {
             dumpColumnInformationHmm();
         }
-        else if (rKeyCode.GetCode() == KEY_F9)
+        else if (rKeyCode.GetCode() == KEY_F6)
         {
             dumpCellProperties();
         }
