@@ -23,6 +23,7 @@
 
 #include <com/sun/star/text/PositionLayoutDir.hpp>
 #include <com/sun/star/chart/XChartDocument.hpp>
+#include <com/sun/star/drawing/XShapes2.hpp>
 
 #include <utility>
 #include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
@@ -800,6 +801,37 @@ void ShapeSortContext::popGroupAndSort()
     // sort z-ordered shapes by nShould field
     std::sort(maZOrderList.begin(), maZOrderList.end());
 
+    uno::Reference<drawing::XShapes2> xShapes2(mxShapes, uno::UNO_QUERY);
+    if( xShapes2.is())
+    {
+        uno::Sequence<sal_Int32> aNewOrder(maZOrderList.size());
+        sal_Int32 nIndex = 0;
+
+        for (ZOrderHint& rHint : maZOrderList)
+        {
+            // fill in the gaps from unordered list
+            for (vector<ZOrderHint>::iterator aIt = maUnsortedList.begin(); aIt != maUnsortedList.end() && nIndex < rHint.nShould; )
+            {
+                aNewOrder[nIndex++] = (*aIt).nIs;
+                aIt = maUnsortedList.erase(aIt);
+            }
+
+            if(rHint.nIs != nIndex )
+                aNewOrder[nIndex] = rHint.nIs;
+
+            nIndex++;
+        }
+
+        try
+        {
+            xShapes2->sort(aNewOrder);
+            maZOrderList.clear();
+            return;
+        }
+        catch (const css::lang::IllegalArgumentException& /*e*/)
+        {}
+    }
+
     // this is the current index, all shapes before that
     // index are finished
     sal_Int32 nIndex = 0;
@@ -809,7 +841,6 @@ void ShapeSortContext::popGroupAndSort()
         {
             moveShape( (*aIt).nIs, nIndex++ );
             aIt = maUnsortedList.erase(aIt);
-
         }
 
         if(rHint.nIs != nIndex )
