@@ -68,7 +68,7 @@
 #include <sfx2/event.hxx>
 #include <sal/log.hxx>
 
-void SwWrtShell::Insert(SwField const &rField)
+void SwWrtShell::Insert(SwField const& rField, SwPaM* pAnnotationRange)
 {
     ResetCursorStack();
     if(!CanInsert())
@@ -82,6 +82,11 @@ void SwWrtShell::Insert(SwField const &rField)
 
     bool bDeleted = false;
     std::unique_ptr<SwPaM> pAnnotationTextRange;
+    if (pAnnotationRange)
+    {
+        pAnnotationTextRange.reset(new SwPaM(*pAnnotationRange->Start(), *pAnnotationRange->End()));
+    }
+
     if ( HasSelection() )
     {
         if ( rField.GetTyp()->Which() == SwFieldIds::Postit )
@@ -121,6 +126,17 @@ void SwWrtShell::Insert(SwField const &rField)
     {
         if ( GetDoc() != nullptr )
         {
+            const SwPaM& rCurrPaM = GetCurrentShellCursor();
+            if (*rCurrPaM.Start() == *pAnnotationTextRange->Start()
+                && *rCurrPaM.End() == *pAnnotationTextRange->End())
+            {
+                // Annotation range was passed in externally, and inserting the postit field shifted
+                // its start/end positions right by one. Restore the original position for the range
+                // start. This allows commenting on the placeholder character of the field.
+                SwIndex& rRangeStart = pAnnotationTextRange->Start()->nContent;
+                if (rRangeStart.GetIndex() > 0)
+                    --rRangeStart;
+            }
             IDocumentMarkAccess* pMarksAccess = GetDoc()->getIDocumentMarkAccess();
             pMarksAccess->makeAnnotationMark( *pAnnotationTextRange, OUString() );
         }

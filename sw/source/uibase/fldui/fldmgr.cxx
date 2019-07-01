@@ -1500,7 +1500,7 @@ bool SwFieldMgr::InsertField(
     // insert
     pCurShell->StartAllAction();
 
-    pCurShell->Insert( *pField );
+    pCurShell->Insert(*pField, rData.m_pAnnotationRange.get());
 
     if (TYP_INPUTFLD == rData.m_nTypeId)
     {

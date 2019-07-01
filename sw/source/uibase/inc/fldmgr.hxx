@@ -80,6 +80,8 @@ struct SwInsertField_Data
     css::uno::Any m_aDBConnection;
     css::uno::Any m_aDBColumn;
     weld::Widget* m_pParent; // parent widget used for SwWrtShell::StartInputFieldDlg()
+    /// Marks the PostIt field's annotation start/end if it differs from the cursor selection.
+    std::unique_ptr<SwPaM> m_pAnnotationRange;
 
     SwInsertField_Data(sal_uInt16 nType, sal_uInt16 nSub, const OUString& rPar1, const OUString& rPar2,
                     sal_uInt32 nFormatId, SwWrtShell* pShell = nullptr, sal_Unicode cSep = ' ', bool bIsAutoLanguage = true) :
