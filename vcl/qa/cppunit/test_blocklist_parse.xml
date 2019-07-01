@@ -12,15 +12,6 @@
         <entry os="all" vendor="all" compare="less" version="10.20.30.40">
             <device id="all"/>
         </entry>
-        <entry os="xp" vendor="intel" compare="less_equal" version="11.21.31.41">
-            <device id="all"/>
-        </entry>
-        <entry os="server2003" vendor="ati" compare="greater" version="12.22.32.42">
-            <device id="all"/>
-        </entry>
-        <entry os="vista" vendor="amd" compare="greater_equal" version="10.20.30.40">
-            <device id="all"/>
-        </entry>
         <entry os="7" vendor="nvidia" compare="equal" version="10.20.30.40">
             <device id="all"/>
         </entry>
@@ -45,15 +36,6 @@
     </whitelist>
     <blacklist>
         <entry os="all" vendor="all" compare="less" version="10.20.30.40">
-            <device id="all"/>
-        </entry>
-        <entry os="xp" vendor="intel" compare="less_equal" version="11.21.31.41">
-            <device id="all"/>
-        </entry>
-        <entry os="server2003" vendor="ati" compare="greater" version="12.22.32.42">
-            <device id="all"/>
-        </entry>
-        <entry os="vista" vendor="amd" compare="greater_equal" version="10.20.30.40">
             <device id="all"/>
         </entry>
         <entry os="7" vendor="nvidia" compare="equal" version="10.20.30.40">

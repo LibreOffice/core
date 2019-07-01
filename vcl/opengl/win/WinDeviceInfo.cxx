@@ -153,9 +153,6 @@ uint32_t ParseIDFromDeviceID(const OUString &key, const char *prefix, int length
 // based on http://msdn.microsoft.com/en-us/library/ms724834(VS.85).aspx
 enum {
     kWindowsUnknown    = 0,
-    kWindowsXP         = 0x00050001,
-    kWindowsServer2003 = 0x00050002,
-    kWindowsVista      = 0x00060000,
     kWindows7          = 0x00060001,
     kWindows8          = 0x00060002,
     kWindows8_1        = 0x00060003,
@@ -167,12 +164,6 @@ wgl::OperatingSystem WindowsVersionToOperatingSystem(int32_t aWindowsVersion)
 {
     switch(aWindowsVersion)
     {
-        case kWindowsXP:
-            return wgl::DRIVER_OS_WINDOWS_XP;
-        case kWindowsServer2003:
-            return wgl::DRIVER_OS_WINDOWS_SERVER_2003;
-        case kWindowsVista:
-            return wgl::DRIVER_OS_WINDOWS_VISTA;
         case kWindows7:
             return wgl::DRIVER_OS_WINDOWS_7;
         case kWindows8:

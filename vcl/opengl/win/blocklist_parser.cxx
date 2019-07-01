@@ -33,18 +33,6 @@ wgl::OperatingSystem getOperatingSystem(const OString& rString)
     {
         return wgl::DRIVER_OS_ALL;
     }
-    else if (rString == "xp")
-    {
-        return wgl::DRIVER_OS_WINDOWS_XP;
-    }
-    else if (rString == "server2003")
-    {
-        return wgl::DRIVER_OS_WINDOWS_SERVER_2003;
-    }
-    else if (rString == "vista")
-    {
-        return wgl::DRIVER_OS_WINDOWS_VISTA;
-    }
     else if (rString == "7")
     {
         return wgl::DRIVER_OS_WINDOWS_7;

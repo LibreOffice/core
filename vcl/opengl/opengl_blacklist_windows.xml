@@ -9,7 +9,7 @@
 
 <!--
     entry attributes:
-    os - "all", "xp", "server2003", "vista", "7", "8", "8_1", "10"
+    os - "all", "7", "8", "8_1", "10"
     vendor - "all", "intel", "ati", "amd", "nvidia", "microsoft"
     compare - "less", "less_equal", "greater", "greater_equal", "equal", "not_equal", "between_exclusive", "between_inclusive", "between_inclusive_start"
     version
@@ -54,16 +54,6 @@
             <device id="all"/>
         </entry>
         <entry os="all" vendor="microsoft" compare="less" version="6.2.0.0"> <!-- 6.2.0.0 -->
-            <device id="all"/>
-        </entry>
-
-        <entry os="xp" vendor="all">
-            <device id="all"/>
-        </entry>
-        <entry os="server2003" vendor="all">
-            <device id="all"/>
-        </entry>
-        <entry os="vista" vendor="all">
             <device id="all"/>
         </entry>
     </blacklist>
