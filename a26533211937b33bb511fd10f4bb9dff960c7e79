@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_cdf9094e",
+        "filename": "offapi/com/sun/star/drawing/XShapes2.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-07-01T18:20:08Z",
+      "side": 1,
+      "message": "suggested name: SetSortedOrder?\n\nsuggested comment: Sets the z-ordering of child shapes",
+      "revId": "a26533211937b33bb511fd10f4bb9dff960c7e79",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
