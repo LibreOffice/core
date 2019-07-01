@@ -20,6 +20,8 @@
 #ifndef INCLUDED_SC_INC_UNITCONV_HXX
 #define INCLUDED_SC_INC_UNITCONV_HXX
 
+#include <rtl/ustring.hxx>
+
 #include <map>
 
 class ScUnitConverterData

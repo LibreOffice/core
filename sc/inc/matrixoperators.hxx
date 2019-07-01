@@ -11,6 +11,8 @@
 #define INCLUDED_SC_INC_MATRIXOPERATORS_HXX
 
 
+#include <functional>
+
 namespace sc {
 
 namespace op {

@@ -11,7 +11,6 @@
 #define INCLUDED_SC_INC_SCOPETOOLS_HXX
 
 #include "scdllapi.h"
-#include <vcl/vclptr.hxx>
 
 class ScDocument;
 namespace vcl { class Window; }

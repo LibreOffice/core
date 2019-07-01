@@ -30,25 +30,9 @@
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 **************************************************************************/
 
-#include "scitems.hxx"
-#include <editeng/adjustitem.hxx>
-#include <svx/algitem.hxx>
-#include <editeng/boxitem.hxx>
-#include <editeng/brushitem.hxx>
-#include <editeng/contouritem.hxx>
-#include <editeng/colritem.hxx>
-#include <editeng/crossedoutitem.hxx>
-#include <editeng/fhgtitem.hxx>
-#include <editeng/fontitem.hxx>
-#include <editeng/postitem.hxx>
-#include <editeng/shdditem.hxx>
-#include <editeng/udlnitem.hxx>
-#include <editeng/wghtitem.hxx>
-#include <editeng/justifyitem.hxx>
-#include <svx/rotmodit.hxx>
+#include <svl/poolitem.hxx>
 #include <svx/autoformathelper.hxx>
-#include <svl/intitem.hxx>
-#include <editeng/lineitem.hxx>
+
 #include "scdllapi.h"
 #include "zforauto.hxx"
 

@@ -21,6 +21,7 @@
 #define INCLUDED_SC_INC_SHEETDATA_HXX
 
 #include <editeng/editdata.hxx>
+#include <map>
 #include <unordered_set>
 #include <vector>
 

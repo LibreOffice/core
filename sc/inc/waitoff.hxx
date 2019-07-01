@@ -22,6 +22,8 @@
 
 #include <sal/types.h>
 
+#include <vcl/vclptr.hxx>
+
 namespace vcl { class Window; }
 
 class ScWaitCursorOff

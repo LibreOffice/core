@@ -22,6 +22,7 @@
 #include <comphelper/lok.hxx>
 #include <sfx2/app.hxx>
 #include <editeng/editobj.hxx>
+#include <editeng/justifyitem.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <sfx2/bindings.hxx>
 #include <vcl/svapp.hxx>

@@ -22,7 +22,7 @@
 
 #include <com/sun/star/sheet/DataPilotOutputRangeType.hpp>
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
-#include <comphelper/sequence.hxx>
+#include <com/sun/star/uno/Sequence.hxx>
 
 #include "address.hxx"
 

@@ -22,6 +22,8 @@
 
 #include <sfx2/sfxbasecontroller.hxx>
 #include <svl/itemprop.hxx>
+#include <svl/lstner.hxx>
+#include <tools/gen.hxx>
 #include <com/sun/star/view/XFormLayerAccess.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/sheet/XCellRangeReferrer.hpp>

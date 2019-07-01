@@ -26,6 +26,8 @@
 #include <svl/lstner.hxx>
 #include "address.hxx"
 
+#include <docsh.hxx>
+
 class ScAddressConversionObj : public ::cppu::WeakImplHelper<
                                     css::beans::XPropertySet,
                                     css::lang::XServiceInfo >,

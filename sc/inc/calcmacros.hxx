@@ -30,8 +30,6 @@
     DEBUG_FORMULA_COMPILER || \
     DEBUG_AREA_BROADCASTER
 #include <iostream>
-#include <string>
-#include <cstdio>
 using std::cout;
 using std::cerr;
 using std::endl;
