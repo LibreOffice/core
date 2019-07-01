@@ -38,12 +38,12 @@ public:
 
 class SwBlankPortion : public SwExpandPortion
 {
-    sal_Unicode cChar;
-    bool const bMulti;        // For multiportion brackets
+    sal_Unicode m_cChar;
+    bool const m_bMulti;        // For multiportion brackets
 public:
     SwBlankPortion( sal_Unicode cCh, bool bMult = false )
-        : cChar( cCh ), bMulti( bMult )
-        { cChar = cCh; SetLen(TextFrameIndex(1)); SetWhichPor( PortionType::Blank ); }
+        : m_cChar( cCh ), m_bMulti( bMult )
+        { m_cChar = cCh; SetLen(TextFrameIndex(1)); SetWhichPor( PortionType::Blank ); }
 
     virtual SwLinePortion *Compress() override;
     virtual bool GetExpText( const SwTextSizeInfo &rInf, OUString &rText ) const override;

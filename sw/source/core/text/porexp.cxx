@@ -194,20 +194,20 @@ bool SwBlankPortion::Format( SwTextFormatInfo &rInf )
 
 void SwBlankPortion::Paint( const SwTextPaintInfo &rInf ) const
 {
-    if( !bMulti ) // No gray background for multiportion brackets
+    if( !m_bMulti ) // No gray background for multiportion brackets
         rInf.DrawViewOpt( *this, PortionType::Blank );
     SwExpandPortion::Paint( rInf );
 }
 
 bool SwBlankPortion::GetExpText( const SwTextSizeInfo&, OUString &rText ) const
 {
-    rText = OUString(cChar);
+    rText = OUString(m_cChar);
     return true;
 }
 
 void SwBlankPortion::HandlePortion( SwPortionHandler& rPH ) const
 {
-    rPH.Special( GetLen(), OUString( cChar ), GetWhichPor() );
+    rPH.Special( GetLen(), OUString( m_cChar ), GetWhichPor() );
 }
 
 SwPostItsPortion::SwPostItsPortion( bool bScrpt )
