@@ -48,6 +48,8 @@
 #include <editeng/frmdiritem.hxx>
 
 #include <svx/svdetc.hxx>
+#include <svx/ObjectSelectionBehaviour.hxx>
+
 #include <editeng/editview.hxx>
 
 #include <sdresid.hxx>
@@ -324,11 +326,14 @@ bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
                      ( eHit == SdrHitKind::UnmarkedObject && bFirstObjCreated &&
                        !bPermanent ) )
                 {
-                    // Handle, hit marked or unmarked object
-                    if (eHit == SdrHitKind::TextEditObj)
+                    // Handle, hit marked or unmarked object.
+                    // If svx::doesSingleClickTextChangesToEditMode is false,
+                    // then we skip this condition as we don't want to switch
+                    // to text edit mode, just select the object.
+                    if (svx::doesSingleClickTextChangesToEditMode() && eHit == SdrHitKind::TextEditObj)
                     {
-                        /* hit text of unmarked object:
-                           select object and set to EditMode */
+                        // hit text of unmarked object:
+                        // select object and set to EditMode
                         if (bMarkChanges)
                             mpView->MarkObj(aVEvt.pRootObj, pPV);
 

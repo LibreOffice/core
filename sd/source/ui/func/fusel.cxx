@@ -68,6 +68,7 @@
 #include <avmedia/mediawindow.hxx>
 
 #include <svx/sdrhittesthelper.hxx>
+#include <svx/ObjectSelectionBehaviour.hxx>
 
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <comphelper/lok.hxx>
@@ -194,9 +195,13 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
         SdrViewEvent aVEvt;
         SdrHitKind eHit = mpView->PickAnything(rMEvt, SdrMouseEventKind::BUTTONDOWN, aVEvt);
 
-        if ( eHit == SdrHitKind::TextEditObj && ( mpViewShell->GetFrameView()->IsQuickEdit() || dynamic_cast< sdr::table::SdrTableObj* >( aVEvt.pObj ) != nullptr ) )
+        if (eHit == SdrHitKind::TextEditObj
+            && (mpViewShell->GetFrameView()->IsQuickEdit() || dynamic_cast<sdr::table::SdrTableObj*>(aVEvt.pObj) != nullptr))
         {
-            bTextEdit = true;
+            // if doesClickTextChangesToEditMode is enabled, then 1 mouse button click changes the edit mode,
+            // else 2 mouse button clicks are needed
+            if (svx::doesSingleClickTextChangesToEditMode() || rMEvt.GetClicks() == 2)
+                bTextEdit = true;
         }
 
         if(!bTextEdit

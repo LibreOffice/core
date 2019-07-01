@@ -5390,9 +5390,9 @@
       <prop oor:name="UseWebDAVFileLocking" oor:type="xs:boolean" oor:nillable="false">
         <info>
           <desc>Determines if WebDAV-specific file locking is used for documents
-	  on WebDAV shares. It is not recommended to set this option to 'false' in
-	  scenarios where multi-user, concurrent read/write access to WebDAV share
-	  is required</desc>
+      on WebDAV shares. It is not recommended to set this option to 'false' in
+      scenarios where multi-user, concurrent read/write access to WebDAV share
+      is required</desc>
         </info>
         <value>true</value>
       </prop>
@@ -6539,6 +6539,17 @@
       <prop oor:name="IntellectualPropertyTextInputIsFreeForm" oor:type="xs:boolean" oor:nillable="false">
         <info>
            <desc>Specifies if the intellectual property text in the advanced classification is free-form or limited to ';', '/' and ' ' (space) and delete key.</desc>
+        </info>
+        <value>true</value>
+      </prop>
+    </group>
+    <group oor:name="ObjectInteractionBehaviour">
+      <info>
+        <desc>Configuration of the interaction with document objects</desc>
+      </info>
+      <prop oor:name="SingleClickTextChangesToEditMode" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+           <desc>Specifies if the single click on a text object changes to edit mode or selection.</desc>
         </info>
         <value>true</value>
       </prop>

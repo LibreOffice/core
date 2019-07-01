@@ -50,12 +50,12 @@
 #include <svx/sdrpagewindow.hxx>
 #include <svx/sdrhittesthelper.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
+#include <svx/ObjectSelectionBehaviour.hxx>
 #include <drawinglayer/processor2d/contourextractor2d.hxx>
 #include <drawinglayer/primitive2d/texthierarchyprimitive2d.hxx>
 #include <svx/sdr/contact/objectcontactofpageview.hxx>
 #include <sal/log.hxx>
 #include <vcl/ptrstyle.hxx>
-
 
 SdrViewEvent::SdrViewEvent()
 :     pHdl(nullptr),
@@ -1044,7 +1044,10 @@ PointerStyle SdrView::GetPreferredPointer(const Point& rMousePos, const OutputDe
                 if(pParaObj && pParaObj->IsVertical())
                     return PointerStyle::TextVertical;
             }
-            return PointerStyle::Text;
+            if (svx::doesSingleClickTextChangesToEditMode())
+                return PointerStyle::Text;
+            else
+                return PointerStyle::Move;
         }
         default: break;
     }
