@@ -64,7 +64,8 @@ using namespace svx;
 
 #define TAB_WIDTH_MIN   10
 #define ITEMID_TYPE       1
-#define ITEMID_PATH       2
+#define ITEMID_USER_PATHS 2
+#define ITEMID_INTERNAL_PATHS 3
 
 #define POSTFIX_INTERNAL    "_internal"
 #define POSTFIX_USER        "_user"
@@ -95,6 +96,7 @@ struct PathUserData_Impl
     sal_uInt16      nRealId;
     SfxItemState    eState;
     OUString        sUserPath;
+    OUString        sInternalPath;
     OUString        sWritablePath;
 
     explicit PathUserData_Impl( sal_uInt16 nId ) :
@@ -216,17 +218,22 @@ SvxPathTabPage::SvxPathTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
 
     rBar.InsertItem( ITEMID_TYPE, get<FixedText>("type")->GetText(),
                             0,
-                            HeaderBarItemBits::LEFT | HeaderBarItemBits::VCENTER | HeaderBarItemBits::CLICKABLE | HeaderBarItemBits::UPARROW );
-    rBar.InsertItem( ITEMID_PATH, get<FixedText>("path")->GetText(),
+                            HeaderBarItemBits::LEFT | HeaderBarItemBits::CLICKABLE | HeaderBarItemBits::UPARROW );
+    rBar.InsertItem( ITEMID_USER_PATHS, get<FixedText>("user_paths")->GetText(),
+                            0,
+                            HeaderBarItemBits::LEFT );
+    rBar.InsertItem( ITEMID_INTERNAL_PATHS, get<FixedText>("internal_paths")->GetText(),
                             0,
                             HeaderBarItemBits::LEFT | HeaderBarItemBits::VCENTER );
 
     long nWidth1 = rBar.GetTextWidth(rBar.GetItemText(ITEMID_TYPE));
-    long nWidth2 = rBar.GetTextWidth(rBar.GetItemText(ITEMID_PATH));
+    long nWidth2 = rBar.GetTextWidth(rBar.GetItemText(ITEMID_USER_PATHS));
+    long nWidth3 = rBar.GetTextWidth(rBar.GetItemText(ITEMID_INTERNAL_PATHS));
 
-    long aTabs[] = {3, 0, 0, 0};
+    long aTabs[] = {3, 0, 0, 0, 0};
     aTabs[2] = nWidth1 + 12;
     aTabs[3] = aTabs[2] + nWidth2 + 12;
+    aTabs[4] = aTabs[3] + nWidth3 + 12;
     pPathBox->SetTabs(aTabs, MAP_PIXEL);
 
     pPathBox->SetDoubleClickHdl( LINK( this, SvxPathTabPage, DoubleClickPathHdl_Impl ) );
@@ -284,6 +291,7 @@ void SvxPathTabPage::Reset( const SfxItemSet* )
     HeaderBar &rBar = pPathBox->GetTheHeaderBar();
     long nWidth1 = rBar.GetTextWidth(rBar.GetItemText(1));
     long nWidth2 = rBar.GetTextWidth(rBar.GetItemText(2));
+    long nWidth3 = rBar.GetTextWidth(rBar.GetItemText(3));
 
     for( sal_uInt16 i = 0; i <= (sal_uInt16)SvtPathOptions::PATH_CLASSIFICATION; ++i )
     {
@@ -326,6 +334,10 @@ void SvxPathTabPage::Reset( const SfxItemSet* )
                 const OUString aValue = Convert_Impl( sTmpPath );
                 nWidth2 = std::max(nWidth2, pPathBox->GetTextWidth(aValue));
                 aStr += aValue;
+                aStr += "\t";
+                const OUString aValueInternal = Convert_Impl( sInternal );
+                nWidth3 = std::max(nWidth3, pPathBox->GetTextWidth(aValueInternal));
+                aStr += aValueInternal;
                 SvTreeListEntry* pEntry = pPathBox->InsertEntry( aStr );
                 if ( bReadOnly )
                 {
@@ -339,9 +351,10 @@ void SvxPathTabPage::Reset( const SfxItemSet* )
         }
     }
 
-    long aTabs[] = {3, 0, 0, 0};
+    long aTabs[] = {3, 0, 0, 0, 0};
     aTabs[2] = nWidth1 + 12;
     aTabs[3] = aTabs[2] + nWidth2 + 12;
+    aTabs[4] = aTabs[3] + nWidth3 + 12;
     pPathBox->SetTabs(aTabs, MAP_PIXEL);
 
 #if 0
