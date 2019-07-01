@@ -989,9 +989,9 @@ bool Dialog::ImplStartExecute()
     aObject.EventName = "DialogExecute";
     xEventBroadcaster->documentEventOccured(aObject);
     if (bModal)
-        UITestLogger::getInstance().log("Open " + get_id());
+        UITestLogger::getInstance().log("Open Modal " + get_id());
     else
-        UITestLogger::getInstance().log("Open " + get_id());
+        UITestLogger::getInstance().log("Open Modeless " + get_id());
 
     if (comphelper::LibreOfficeKit::isActive())
     {
