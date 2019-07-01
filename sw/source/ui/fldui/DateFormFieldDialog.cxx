@@ -77,8 +77,17 @@ void DateFormFieldDialog::InitControls()
         {
             LanguageType aLangType = LanguageTag(sLang).getLanguageType();
             sal_uInt32 nFormatKey = m_pNumberFormatter->GetEntryKey(sFormatString, aLangType);
+            bool bValidFormat = nFormatKey != NUMBERFORMAT_ENTRY_NOT_FOUND;
+            if (nFormatKey == NUMBERFORMAT_ENTRY_NOT_FOUND)
+            {
+                sal_Int32 nCheckPos = 0;
+                SvNumFormatType nType;
+                bValidFormat
+                    = m_pNumberFormatter->PutEntry(sFormatString, nCheckPos, nType, nFormatKey,
+                                                   LanguageTag(sLang).getLanguageType());
+            }
 
-            if (aLangType != LANGUAGE_DONTKNOW && nFormatKey != NUMBERFORMAT_ENTRY_NOT_FOUND)
+            if (aLangType != LANGUAGE_DONTKNOW && bValidFormat)
             {
                 if (m_xFormatLB->GetCurLanguage() == aLangType)
                 {
