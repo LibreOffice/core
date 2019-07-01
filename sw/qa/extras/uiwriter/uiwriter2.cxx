@@ -78,6 +78,7 @@ public:
     void testDropDownFormFieldInsertion();
     void testMixedFormFieldInsertion();
     void testImageComment();
+    void testImageCommentAtChar();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest2);
     CPPUNIT_TEST(testRedlineMoveInsertInDelete);
@@ -106,6 +107,7 @@ public:
     CPPUNIT_TEST(testDropDownFormFieldInsertion);
     CPPUNIT_TEST(testMixedFormFieldInsertion);
     CPPUNIT_TEST(testImageComment);
+    CPPUNIT_TEST(testImageCommentAtChar);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -1125,6 +1127,34 @@ void SwUiWriterTest2::testImageComment()
     // Verify that the comment is around the image.
     // Without the accompanying fix in place, this test would have failed, as FN_POSTIT was disabled
     // in the frame shell.
+    uno::Reference<text::XTextRange> xPara = getParagraph(1);
+    CPPUNIT_ASSERT_EQUAL(OUString("Text"),
+                         getProperty<OUString>(getRun(xPara, 1), "TextPortionType"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Annotation"),
+                         getProperty<OUString>(getRun(xPara, 2), "TextPortionType"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Frame"),
+                         getProperty<OUString>(getRun(xPara, 3), "TextPortionType"));
+    CPPUNIT_ASSERT_EQUAL(OUString("AnnotationEnd"),
+                         getProperty<OUString>(getRun(xPara, 4), "TextPortionType"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Text"),
+                         getProperty<OUString>(getRun(xPara, 5), "TextPortionType"));
+}
+
+void SwUiWriterTest2::testImageCommentAtChar()
+{
+    // Load a document with an at-char image in it.
+    SwDoc* pDoc = createDoc("image-comment-at-char.odt");
+    SwView* pView = pDoc->GetDocShell()->GetView();
+
+    // Select the image.
+    pView->GetViewFrame()->GetDispatcher()->Execute(FN_CNTNT_TO_NEXT_FRAME, SfxCallMode::SYNCHRON);
+
+    // Insert a comment while the image is selected.
+    pView->GetViewFrame()->GetDispatcher()->Execute(FN_POSTIT, SfxCallMode::SYNCHRON);
+
+    // Verify that the comment is around the image.
+    // Without the accompanying fix in place, this test would have failed, as the comment was
+    // anchored at the end of the paragraph, it was not around the image.
     uno::Reference<text::XTextRange> xPara = getParagraph(1);
     CPPUNIT_ASSERT_EQUAL(OUString("Text"),
                          getProperty<OUString>(getRun(xPara, 1), "TextPortionType"));
