@@ -463,7 +463,9 @@ ImpPDFTabGeneralPage::ImpPDFTabGeneralPage(TabPageParent pParent, const SfxItemS
     , mxNfQuality(m_xBuilder->weld_metric_spin_button("quality", FieldUnit::PERCENT))
     , mxCbReduceImageResolution(m_xBuilder->weld_check_button("reduceresolution"))
     , mxCoReduceImageResolution(m_xBuilder->weld_combo_box("resolution"))
-    , mxCbPDFA2b(m_xBuilder->weld_check_button("pdfa"))
+    , mxCbPDFA(m_xBuilder->weld_check_button("pdfa"))
+    , mxRbPDFA1b(m_xBuilder->weld_radio_button("pdfa1"))
+    , mxRbPDFA2b(m_xBuilder->weld_radio_button("pdfa2"))
     , mxCbTaggedPDF(m_xBuilder->weld_check_button("tagged"))
     , mxCbExportFormFields(m_xBuilder->weld_check_button("forms"))
     , mxFormsFrame(m_xBuilder->weld_widget("formsframe"))
@@ -531,16 +533,31 @@ void ImpPDFTabGeneralPage::SetFilterConfigItem(ImpPDFTabDialog* pParent)
     mxCbWatermark->connect_toggled( LINK( this, ImpPDFTabGeneralPage, ToggleWatermarkHdl ) );
     mxFtWatermark->set_sensitive(false );
     mxEdWatermark->set_sensitive( false );
-    mxCbPDFA2b->connect_toggled(LINK(this, ImpPDFTabGeneralPage, ToggleExportPDFAHdl));
+    mxCbPDFA->connect_toggled(LINK(this, ImpPDFTabGeneralPage, ToggleExportPDFAHdl));
+    mxRbPDFA1b->connect_toggled(LINK(this, ImpPDFTabGeneralPage, ToggleExportPDFAHdl));
+    mxRbPDFA2b->connect_toggled(LINK(this, ImpPDFTabGeneralPage, ToggleExportPDFAHdl));
     switch( pParent->mnPDFTypeSelection )
     {
     default:
-        mxCbPDFA2b->set_active( false ); // PDF 1.5
+        // PDF 1.5
+        mxCbPDFA->set_active( false );
+        mxRbPDFA1b->set_active( false );
+        mxRbPDFA2b->set_active( true );
         break;
-    case 2: mxCbPDFA2b->set_active(true); // PDF/A-2a
+    case 1:
+        // PDF A-1b
+        mxCbPDFA->set_active(true);
+        mxRbPDFA1b->set_active(true);
+        mxRbPDFA2b->set_active(false);
+        break;
+    case 2:
+        // PDF A-2b
+        mxCbPDFA->set_active(true);
+        mxRbPDFA2b->set_active(true);
+        mxRbPDFA1b->set_active(false);
         break;
     }
-    ToggleExportPDFAHdl( *mxCbPDFA2b );
+    ToggleExportPDFAHdl( *mxCbPDFA );
 
     mxCbExportFormFields->connect_toggled( LINK( this, ImpPDFTabGeneralPage, ToggleExportFormFieldsHdl ) );
 
@@ -548,7 +565,7 @@ void ImpPDFTabGeneralPage::SetFilterConfigItem(ImpPDFTabDialog* pParent)
     mbTaggedPDFUserSelection = pParent->mbUseTaggedPDF;
     mbExportFormFieldsUserSelection = pParent->mbExportFormFields;
 
-    if( !mxCbPDFA2b->get_active() )
+    if( !mxCbPDFA->get_active() )
     {
         // the value for PDF/A set by the ToggleExportPDFAHdl method called before
         mxCbTaggedPDF->set_active( mbTaggedPDFUserSelection  );
@@ -644,9 +661,12 @@ void ImpPDFTabGeneralPage::GetFilterConfigItem( ImpPDFTabDialog* pParent )
     }
 
     pParent->mnPDFTypeSelection = 0;
-    if( mxCbPDFA2b->get_active() )
+    if( mxCbPDFA->get_active() )
     {
         pParent->mnPDFTypeSelection = 2;
+        if( mxRbPDFA1b->get_active() )
+            pParent->mnPDFTypeSelection = 1;
+
         pParent->mbUseTaggedPDF =  mbTaggedPDFUserSelection;
         pParent->mbExportFormFields = mbExportFormFieldsUserSelection;
     }
@@ -759,12 +779,10 @@ IMPL_LINK_NOARG(ImpPDFTabGeneralPage, ToggleExportPDFAHdl, weld::ToggleButton&, 
     // set the security page status (and its controls as well)
     ImpPDFTabSecurityPage* pSecPage = mpParent ? mpParent->getSecurityPage() : nullptr;
     if (pSecPage)
-    {
-        pSecPage->ImplPDFASecurityControl(!mxCbPDFA2b->get_active());
-    }
+        pSecPage->ImplPDFASecurityControl(!mxCbPDFA->get_active());
 
     // PDF/A-1 needs tagged PDF, so force disable the control, will be forced in pdfexport.
-    bool bPDFA1Sel = mxCbPDFA2b->get_active();
+    bool bPDFA1Sel = mxCbPDFA->get_active();
     mxFormsFrame->set_sensitive(bPDFA1Sel);
     if(bPDFA1Sel)
     {
@@ -775,24 +793,28 @@ IMPL_LINK_NOARG(ImpPDFTabGeneralPage, ToggleExportPDFAHdl, weld::ToggleButton&, 
         mbExportFormFieldsUserSelection = mxCbExportFormFields->get_active();
         mxCbExportFormFields->set_active(false);
         mxCbExportFormFields->set_sensitive(false);
+        mxRbPDFA1b->set_sensitive(true);
+        mxRbPDFA2b->set_sensitive(true);
     }
     else
     {
         // retrieve the values of subordinate controls
+        mxCbTaggedPDF->set_sensitive(false);
         mxCbTaggedPDF->set_sensitive(true);
         mxCbTaggedPDF->set_active(mbTaggedPDFUserSelection);
         mxCbExportFormFields->set_active(mbExportFormFieldsUserSelection);
-        mxCbExportFormFields->set_sensitive(true);
+        mxRbPDFA1b->set_sensitive(false);
+        mxRbPDFA2b->set_sensitive(false);
     }
 
     // PDF/A-2 doesn't allow launch action, so enable/disable the selection on
     // Link page
     ImpPDFTabLinksPage* pLinksPage = mpParent ? mpParent->getLinksPage() : nullptr;
     if (pLinksPage)
-        pLinksPage->ImplPDFALinkControl(!mxCbPDFA2b->get_active());
+        pLinksPage->ImplPDFALinkControl(!mxCbPDFA->get_active());
 
     // if a password was set, inform the user that this will not be used in PDF/A case
-    if( mxCbPDFA2b->get_active() && pSecPage && pSecPage->hasPassword() )
+    if( mxCbPDFA->get_active() && pSecPage && pSecPage->hasPassword() )
     {
         std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(m_xContainer.get(),
                                                   VclMessageType::Warning, VclButtonsType::Ok,
@@ -1352,7 +1374,7 @@ void ImpPDFTabLinksPage::SetFilterConfigItem( const  ImpPDFTabDialog* pParent )
 
     ImpPDFTabGeneralPage* pGeneralPage = pParent->getGeneralPage();
     if (pGeneralPage)
-        ImplPDFALinkControl(!pGeneralPage->mxCbPDFA2b->get_active());
+        ImplPDFALinkControl(!pGeneralPage->mxCbPDFA->get_active());
 }
 
 
