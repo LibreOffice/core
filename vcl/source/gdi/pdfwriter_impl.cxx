@@ -4391,7 +4391,7 @@ void PDFWriterImpl::createDefaultCheckBoxAppearance( PDFWidget& rBox, const PDFW
     // reasons require even the standard PS fonts to be embedded!
     getReferenceDevice()->Push();
     getReferenceDevice()->SetFont(
-        Font( OUString( "OpenSymbol" ), Size( 0, 500 ) ) );
+        Font( OUString( "OpenSymbol" ), aFont.GetFontSize() ) );
     getReferenceDevice()->ImplNewFont();
     FontCharMapRef pMap;
     getReferenceDevice()->GetFontCharMap(pMap);
@@ -4401,7 +4401,7 @@ void PDFWriterImpl::createDefaultCheckBoxAppearance( PDFWidget& rBox, const PDFW
 
     // make sure OpenSymbol is embedded, and includes our checkmark
     const sal_Unicode cMark=0x2713;
-    const GlyphItem aItem(pMap->GetGlyphIndex(cMark), 0, 0,
+    const GlyphItem aItem(0, 0, pMap->GetGlyphIndex(cMark),
                           Point(), 0, 0, 0);
     const std::vector<sal_Ucs> aCodeUnits={ cMark };
     sal_uInt8 nMappedGlyph;
@@ -4425,10 +4425,10 @@ void PDFWriterImpl::createDefaultCheckBoxAppearance( PDFWidget& rBox, const PDFW
     rBox.m_aRect = aCheckRect;
 
     // create appearance streams
-    sal_Int32 nCharXOffset = 1000;
+    sal_Int32 nCharXOffset = 1000 - 787; // metrics from OpenSymbol
     nCharXOffset *= aCheckRect.GetHeight();
     nCharXOffset /= 2000;
-    sal_Int32 nCharYOffset = 1000-(820-143); // metrics from Zapf
+    sal_Int32 nCharYOffset = 1000 - (820-143); // metrics from Zapf
     nCharYOffset *= aCheckRect.GetHeight();
     nCharYOffset /= 2000;
 
