@@ -410,6 +410,11 @@ public:
     {
         if( ignoreLocation( arg ))
             return true;
+        if( blockBlock != nullptr )
+        {
+            if( !blockBlock->VisitCaseStmt( arg ))
+                blockBlock = nullptr;
+        }
         if( unnecessaryParen != nullptr )
         {
             if( !unnecessaryParen->VisitCaseStmt( arg ))
