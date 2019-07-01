@@ -157,24 +157,51 @@ DECLARE_OOXMLEXPORT_TEST(tdf123912_protectedForm, "tdf123912_protectedForm.odt")
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Section1 is protected", false, getProperty<bool>(xSect, "IsProtected"));
 }
 
-/*DECLARE_OOXMLEXPORT_TEST(testDateControl, "empty-date-control.odt")
+DECLARE_OOXMLEXPORT_TEST(testDateControl, "empty-date-control.odt")
 {
-    // Check that we did not lost the date control
-    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), xDraws->getCount());
-    uno::Reference<drawing::XControlShape> xControl(getShape(1), uno::UNO_QUERY);
-    CPPUNIT_ASSERT(xControl->getControl().is());
+    // Check that we exported the empty date control correctly
+    // Date form field is converted to date content control.
+    if (!mbExported)
+        return ;
 
-    // check XML
-    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-    if (!pXmlDoc)
-        return;
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+    IDocumentMarkAccess* pMarkAccess = pDoc->getIDocumentMarkAccess();
 
-    // We need to export date format and a dummy character (" ") for empty date control
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtPr/w:date/w:dateFormat", "val", "dd/MM/yyyy");
-    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtContent/w:r/w:t", u" ");
-}*/
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pMarkAccess->getAllMarksCount());
+    ::sw::mark::IFieldmark* pFieldmark = dynamic_cast<::sw::mark::IFieldmark*>(*pMarkAccess->getAllMarksBegin());
+
+    CPPUNIT_ASSERT(pFieldmark);
+    CPPUNIT_ASSERT_EQUAL(OUString(ODF_FORMDATE), pFieldmark->GetFieldname());
+
+    const sw::mark::IFieldmark::parameter_map_t* const pParameters = pFieldmark->GetParameters();
+    OUString sDateFormat;
+    auto pResult = pParameters->find(ODF_FORMDATE_DATEFORMAT);
+    if (pResult != pParameters->end())
+    {
+        pResult->second >>= sDateFormat;
+    }
+
+    OUString sLang;
+    pResult = pParameters->find(ODF_FORMDATE_DATEFORMAT_LANGUAGE);
+    if (pResult != pParameters->end())
+    {
+        pResult->second >>= sLang;
+    }
+
+    OUString sCurrentDate;
+    pResult = pParameters->find(ODF_FORMDATE_CURRENTDATE);
+    if (pResult != pParameters->end())
+    {
+        pResult->second >>= sCurrentDate;
+    }
+
+    CPPUNIT_ASSERT_EQUAL(OUString("dd/MM/yyyy"), sDateFormat);
+    CPPUNIT_ASSERT_EQUAL(OUString("en-US"), sLang);
+    CPPUNIT_ASSERT_EQUAL(OUString(""), sCurrentDate);
+}
 
 DECLARE_OOXMLEXPORT_TEST(testTdf121867, "tdf121867.odt")
 {
