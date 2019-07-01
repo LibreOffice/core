@@ -2,6 +2,57 @@
   "comments": [
     {
       "key": {
+        "uuid": "bf659307_2db525ef",
+        "filename": "schema/libreoffice/OpenDocument-schema-v1.3+libreoffice.rng",
+        "patchSetId": 2
+      },
+      "lineNbr": 1670,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-07-01T11:40:29Z",
+      "side": 1,
+      "message": "so this should be a nested element... in that case i guess we can use an existing attribute for this, office:string-value - like on other existing elements that have both a string representation and some more fancy representation",
+      "revId": "7c6ca58b62b570829504831c778043f32d97df31",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_0de38107",
+        "filename": "schema/libreoffice/OpenDocument-schema-v1.3+libreoffice.rng",
+        "patchSetId": 2
+      },
+      "lineNbr": 1674,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-07-01T11:40:29Z",
+      "side": 1,
+      "message": "there isn\u0027t any documentation what these numbers mean...\n\napparently they originate here:\n\n\tpublic: enum class Ecc {\n\t\tLOW \u003d 0 ,  // The QR Code can tolerate about  7% erroneous codewords\n\t\tMEDIUM  ,  // The QR Code can tolerate about 15% erroneous codewords\n\t\tQUARTILE,  // The QR Code can tolerate about 25% erroneous codewords\n\t\tHIGH    ,  // The QR Code can tolerate about 30% erroneous codewords\n};\n\n\nis there some sort of standard for fault tolerance classification of qr-codes?\n\nthese values look rather ad-hoc to me; maybe it\u0027s better to have a \"percent\" value here, with the idea that the consumer should match it to the closest of whatever implementation defined threshold it supports?\n\nalternatively, writing an enum \"low\", \"medium\", ... would also be better than a mystery int.\n\nah!  https://en.wikipedia.org/wiki/QR_code says there are exactly these 4 levels... i\u0027d use an enum then.",
+      "revId": "7c6ca58b62b570829504831c778043f32d97df31",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_ede5ed0b",
+        "filename": "schema/libreoffice/OpenDocument-schema-v1.3+libreoffice.rng",
+        "patchSetId": 2
+      },
+      "lineNbr": 1677,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-07-01T11:40:29Z",
+      "side": 1,
+      "message": "what does this number mean? is it a length? if so, in what unit?",
+      "revId": "7c6ca58b62b570829504831c778043f32d97df31",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bf659307_0d1e210c",
         "filename": "xmloff/source/draw/QrCodeContext.cxx",
         "patchSetId": 2
