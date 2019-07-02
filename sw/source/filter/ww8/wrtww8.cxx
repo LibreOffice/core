@@ -1474,10 +1474,10 @@ void WW8Export::AppendBookmarks( const SwTextNode& rNd, sal_Int32 nAktPos, sal_I
     }
 }
 
-void WW8Export::AppendAnnotationMarks(const SwTextNode& rNode, sal_Int32 nAktPos, sal_Int32 nLen)
+void WW8Export::AppendAnnotationMarks(const SwWW8AttrIter& rAttrs, sal_Int32 nAktPos, sal_Int32 nLen)
 {
     IMarkVector aMarks;
-    if (GetAnnotationMarks(rNode, nAktPos, nAktPos + nLen, aMarks))
+    if (GetAnnotationMarks(rAttrs, nAktPos, nAktPos + nLen, aMarks))
     {
         for (IMarkVector::const_iterator it = aMarks.begin(), end = aMarks.end(); it != end; ++it)
         {

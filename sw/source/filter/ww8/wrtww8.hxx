@@ -679,7 +679,7 @@ public:
 
     virtual void AppendBookmark( const OUString& rName ) = 0;
 
-    virtual void AppendAnnotationMarks( const SwTextNode& rNd, sal_Int32 nAktPos, sal_Int32 nLen ) = 0;
+    virtual void AppendAnnotationMarks( const SwWW8AttrIter& rAttrs, sal_Int32 nAktPos, sal_Int32 nLen ) = 0;
 
     virtual void AppendSmartTags(SwTextNode& /*rTextNode*/) { }
 
@@ -858,9 +858,9 @@ protected:
     ///
     void NearestAnnotationMark( sal_Int32& rNearest, const sal_Int32 nAktPos, bool bNextPositionOnly );
 
-    void GetSortedAnnotationMarks( const SwTextNode& rNd, sal_Int32 nAktPos, sal_Int32 nLen );
+    void GetSortedAnnotationMarks( const SwWW8AttrIter& rAttrs, sal_Int32 nAktPos, sal_Int32 nLen );
 
-    bool GetAnnotationMarks( const SwTextNode& rNd, sal_Int32 nStt, sal_Int32 nEnd,
+    bool GetAnnotationMarks( const SwWW8AttrIter& rAttrs, sal_Int32 nStt, sal_Int32 nEnd,
             IMarkVector& rArr );
 
     const NfKeywordTable & GetNfKeywordTable();
@@ -1047,7 +1047,7 @@ public:
     virtual void AppendBookmark( const OUString& rName ) override;
     void AppendBookmarkEndWithCorrection( const OUString& rName );
 
-    virtual void AppendAnnotationMarks( const SwTextNode& rNd, sal_Int32 nAktPos, sal_Int32 nLen ) override;
+    virtual void AppendAnnotationMarks( const SwWW8AttrIter& rAttrs, sal_Int32 nAktPos, sal_Int32 nLen ) override;
 
     virtual void AppendSmartTags(SwTextNode& rTextNode) override;
 
@@ -1508,6 +1508,7 @@ public:
     const SwRedlineData* GetParagraphLevelRedline( );
     const SwRedlineData* GetRunLevelRedline( sal_Int32 nPos );
     FlyProcessingState OutFlys(sal_Int32 nSwPos);
+    bool HasFlysAt(sal_Int32 nSwPos) const;
 
     sal_Int32 WhereNext() const { return nAktSwPos; }
     sal_uInt16 GetScript() const { return mnScript; }
@@ -1521,6 +1522,8 @@ public:
     bool IsAnchorLinkedToThisNode( sal_uLong nNodePos );
 
     void SplitRun( sal_Int32 nSplitEndPos );
+
+    const SwTextNode& GetNode() const { return rNd; }
 };
 
 /// Class to collect and output the styles table.
