@@ -1117,7 +1117,7 @@ void SbaXDataBrowserController::modified(const css::lang::EventObject& /*aEvent*
 
 void SbaXDataBrowserController::elementInserted(const css::container::ContainerEvent& evt)
 {
-    OSL_ENSURE(Reference< XInterface >(evt.Source, UNO_QUERY).get() == Reference< XInterface >(getControlModel(), UNO_QUERY).get(),
+    OSL_ENSURE(evt.Source.get() == Reference< XInterface >(getControlModel()).get(),
         "SbaXDataBrowserController::elementInserted: where did this come from (not from the grid model)?!");
     Reference< XPropertySet >  xNewColumn(evt.Element,UNO_QUERY);
     if ( xNewColumn.is() )
@@ -1126,7 +1126,7 @@ void SbaXDataBrowserController::elementInserted(const css::container::ContainerE
 
 void SbaXDataBrowserController::elementRemoved(const css::container::ContainerEvent& evt)
 {
-    OSL_ENSURE(Reference< XInterface >(evt.Source, UNO_QUERY).get() == Reference< XInterface >(getControlModel(), UNO_QUERY).get(),
+    OSL_ENSURE(evt.Source.get() == Reference< XInterface >(getControlModel()).get(),
         "SbaXDataBrowserController::elementRemoved: where did this come from (not from the grid model)?!");
     Reference< XPropertySet >  xOldColumn(evt.Element,UNO_QUERY);
     if ( xOldColumn.is() )
@@ -1135,7 +1135,7 @@ void SbaXDataBrowserController::elementRemoved(const css::container::ContainerEv
 
 void SbaXDataBrowserController::elementReplaced(const css::container::ContainerEvent& evt)
 {
-    OSL_ENSURE(Reference< XInterface >(evt.Source, UNO_QUERY).get() == Reference< XInterface >(getControlModel(), UNO_QUERY).get(),
+    OSL_ENSURE(evt.Source.get() == Reference< XInterface >(getControlModel()).get(),
         "SbaXDataBrowserController::elementReplaced: where did this come from (not from the grid model)?!");
     Reference< XPropertySet >  xOldColumn(evt.ReplacedElement,UNO_QUERY);
     if ( xOldColumn.is() )
@@ -1972,7 +1972,7 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId, const Sequence< Property
                 break;
 
             // only one sort order
-            Reference< XPropertySet >  xField(getBoundField(), UNO_QUERY);
+            Reference< XPropertySet >  xField = getBoundField();
             if (!xField.is())
                 break;
 
@@ -1999,7 +1999,7 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId, const Sequence< Property
             if (!isValidCursor())
                 break;
 
-            Reference< XPropertySet >  xField(getBoundField(), UNO_QUERY);
+            Reference< XPropertySet >  xField = getBoundField();
             if (!xField.is())
                 break;
 
@@ -2321,7 +2321,7 @@ IMPL_LINK(SbaXDataBrowserController, OnSearchContextRequest, FmSearchContext&, r
     }
     sFieldList = comphelper::string::stripEnd(sFieldList, ';');
 
-    rContext.xCursor.set(getRowSet(),UNO_QUERY);
+    rContext.xCursor = getRowSet();
     rContext.strUsedFields = sFieldList;
 
     // if the cursor is in a mode other than STANDARD -> reset

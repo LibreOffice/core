@@ -93,8 +93,7 @@ Reference< XDispatch > SAL_CALL ScriptProtocolHandler::queryDispatch(
     // get scheme of url
 
     Reference< uri::XUriReferenceFactory > xFac = uri::UriReferenceFactory::create( m_xContext );
-    Reference<  uri::XUriReference > uriRef(
-        xFac->parse( aURL.Complete ), UNO_QUERY );
+    Reference<  uri::XUriReference > uriRef = xFac->parse( aURL.Complete );
     if ( uriRef.is() )
     {
         if ( uriRef->getScheme() == "vnd.sun.star.script" )

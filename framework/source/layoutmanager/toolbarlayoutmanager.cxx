@@ -270,10 +270,9 @@ tools::Rectangle ToolbarLayoutManager::implts_calcDockingArea()
 
     for (auto const& window : aWindowVector)
     {
-        uno::Reference< ui::XUIElement > xUIElement( window.m_xUIElement, uno::UNO_QUERY );
-        if ( xUIElement.is() )
+        if ( window.m_xUIElement.is() )
         {
-            uno::Reference< awt::XWindow > xWindow( xUIElement->getRealInterface(), uno::UNO_QUERY );
+            uno::Reference< awt::XWindow > xWindow( window.m_xUIElement->getRealInterface(), uno::UNO_QUERY );
             uno::Reference< awt::XDockableWindow > xDockWindow( xWindow, uno::UNO_QUERY );
             if ( xWindow.is() && xDockWindow.is() )
             {
@@ -1191,8 +1190,8 @@ void ToolbarLayoutManager::implts_createCustomToolBars()
         return;
 
     uno::Reference< frame::XFrame > xFrame( m_xFrame );
-    uno::Reference< ui::XUIConfigurationManager > xModuleCfgMgr( m_xModuleCfgMgr, uno::UNO_QUERY );
-    uno::Reference< ui::XUIConfigurationManager > xDocCfgMgr( m_xDocCfgMgr, uno::UNO_QUERY );
+    uno::Reference< ui::XUIConfigurationManager > xModuleCfgMgr = m_xModuleCfgMgr;
+    uno::Reference< ui::XUIConfigurationManager > xDocCfgMgr = m_xDocCfgMgr;
     aReadLock.clear();
 
     if ( xFrame.is() )
@@ -1655,7 +1654,7 @@ UIElement ToolbarLayoutManager::implts_findToolbar( const uno::Reference< uno::X
     {
         if ( elem.m_xUIElement.is() )
         {
-            uno::Reference< uno::XInterface > xIfac( elem.m_xUIElement->getRealInterface(), uno::UNO_QUERY );
+            uno::Reference< uno::XInterface > xIfac = elem.m_xUIElement->getRealInterface();
             if ( xIfac == xToolbar )
             {
                 aToolbar = elem;
@@ -3760,8 +3759,7 @@ void SAL_CALL ToolbarLayoutManager::closed( const lang::EventObject& e )
             uno::Reference<ui::XUIElement> xUIElement(elem.m_xUIElement);
             if (xUIElement.is())
             {
-                uno::Reference<uno::XInterface> xIfac(xUIElement->getRealInterface(),
-                                                      uno::UNO_QUERY);
+                uno::Reference<uno::XInterface> xIfac = xUIElement->getRealInterface();
                 if (xIfac == e.Source)
                 {
                     aName = elem.m_aName;
@@ -3811,7 +3809,7 @@ void SAL_CALL ToolbarLayoutManager::elementInserted( const ui::ConfigurationEven
         uno::Reference< beans::XPropertySet > xPropSet( xElementSettings, uno::UNO_QUERY );
         if ( xPropSet.is() )
         {
-            if ( rEvent.Source == uno::Reference< uno::XInterface >( m_xDocCfgMgr, uno::UNO_QUERY ))
+            if ( rEvent.Source == uno::Reference< uno::XInterface >( m_xDocCfgMgr ))
                 xPropSet->setPropertyValue( "ConfigurationSource", makeAny( m_xDocCfgMgr ));
         }
         xElementSettings->updateSettings();
@@ -3866,7 +3864,7 @@ void SAL_CALL ToolbarLayoutManager::elementInserted( const ui::ConfigurationEven
 void SAL_CALL ToolbarLayoutManager::elementRemoved( const ui::ConfigurationEvent& rEvent )
 {
     SolarMutexClearableGuard aReadLock;
-    uno::Reference< awt::XWindow > xContainerWindow( m_xContainerWindow, uno::UNO_QUERY );
+    uno::Reference< awt::XWindow > xContainerWindow = m_xContainerWindow;
     uno::Reference< ui::XUIConfigurationManager > xModuleCfgMgr( m_xModuleCfgMgr );
     uno::Reference< ui::XUIConfigurationManager > xDocCfgMgr( m_xDocCfgMgr );
     aReadLock.clear();
@@ -3890,7 +3888,7 @@ void SAL_CALL ToolbarLayoutManager::elementRemoved( const ui::ConfigurationEvent
         if ( rEvent.Source == xElementCfgMgr )
         {
             // Same UI configuration manager where our element has its settings
-            if ( rEvent.Source == uno::Reference< uno::XInterface >( xDocCfgMgr, uno::UNO_QUERY ))
+            if ( rEvent.Source == uno::Reference< uno::XInterface >( xDocCfgMgr ))
             {
                 // document settings removed
                 if ( xModuleCfgMgr->hasSettings( rEvent.ResourceURL ))

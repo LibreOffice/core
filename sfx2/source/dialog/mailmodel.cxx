@@ -183,8 +183,7 @@ SfxMailModel::SaveResult SfxMailModel::ShowFilterOptionsDialog(
                             }
 
                             if( xExporter.is() )
-                                xExporter->setSourceDocument(
-                                    uno::Reference< lang::XComponent >( xModel, uno::UNO_QUERY ) );
+                                xExporter->setSourceDocument( xModel );
 
                             if( xFilterDialog->execute() )
                             {

@@ -88,8 +88,7 @@ static void lcl_html_outEvents( SvStream& rStrm,
                          rtl_TextEncoding eDestEnc,
                          OUString *pNonConvertableChars )
 {
-    uno::Reference< container::XChild > xChild( rFormComp, uno::UNO_QUERY );
-    uno::Reference< uno::XInterface > xParentIfc = xChild->getParent();
+    uno::Reference< uno::XInterface > xParentIfc = rFormComp->getParent();
     OSL_ENSURE( xParentIfc.is(), "lcl_html_outEvents: no parent interface" );
     if( !xParentIfc.is() )
         return;

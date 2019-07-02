@@ -130,7 +130,7 @@ uno::Reference< uno::XInterface > SAL_CALL WindowContentFactoryManager::createIn
     try
     {
         if ( xFrame.is() && xModuleManager.is() )
-            aModuleId = xModuleManager->identify( uno::Reference< uno::XInterface >( xFrame, uno::UNO_QUERY ) );
+            aModuleId = xModuleManager->identify( uno::Reference< uno::XInterface >( xFrame ) );
     }
     catch ( const frame::UnknownModuleException& )
     {

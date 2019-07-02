@@ -479,7 +479,7 @@ OCustomShape::OCustomShape(
 :   SdrObjCustomShape(rSdrModel)
     ,OObjectBase(_xComponent)
 {
-    impl_setUnoShape( uno::Reference< uno::XInterface >(_xComponent,uno::UNO_QUERY) );
+    impl_setUnoShape( uno::Reference< uno::XInterface >(_xComponent) );
     m_bIsListening = true;
 }
 
@@ -568,7 +568,7 @@ bool OCustomShape::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
 
 uno::Reference< beans::XPropertySet> OCustomShape::getAwtComponent()
 {
-    return uno::Reference< beans::XPropertySet>(m_xReportComponent,uno::UNO_QUERY);
+    return m_xReportComponent;
 }
 
 
@@ -617,7 +617,7 @@ OUnoObject::OUnoObject(
     // tdf#119067
     ,m_bSetDefaultLabel(false)
 {
-    impl_setUnoShape( uno::Reference< uno::XInterface >( _xComponent, uno::UNO_QUERY ) );
+    impl_setUnoShape( uno::Reference< uno::XInterface >( _xComponent ) );
 
     if ( !rModelName.isEmpty() )
         impl_initializeModel_nothrow();
@@ -935,7 +935,7 @@ OOle2Obj::OOle2Obj(
     ,m_nType(_nType)
     ,m_bOnlyOnce(true)
 {
-    impl_setUnoShape( uno::Reference< uno::XInterface >( _xComponent, uno::UNO_QUERY ) );
+    impl_setUnoShape( uno::Reference< uno::XInterface >( _xComponent ) );
     m_bIsListening = true;
 }
 
@@ -1072,7 +1072,7 @@ bool OOle2Obj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
 
 uno::Reference< beans::XPropertySet> OOle2Obj::getAwtComponent()
 {
-    return uno::Reference< beans::XPropertySet>(m_xReportComponent,uno::UNO_QUERY);
+    return m_xReportComponent;
 }
 
 

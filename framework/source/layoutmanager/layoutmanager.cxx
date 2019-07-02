@@ -789,7 +789,7 @@ void LayoutManager::implts_updateUIElementsVisibleState( bool bSetVisible )
         implts_notifyListeners( frame::LayoutManagerEvents::INVISIBLE, a );
 
     SolarMutexResettableGuard aWriteLock;
-    Reference< XUIElement >   xMenuBar( m_xMenuBar, UNO_QUERY );
+    Reference< XUIElement >   xMenuBar = m_xMenuBar;
     Reference< awt::XWindow > xContainerWindow( m_xContainerWindow );
     rtl::Reference< MenuBarManager > xInplaceMenuBar( m_xInplaceMenuBar );
     aWriteLock.clear();
@@ -903,8 +903,8 @@ void LayoutManager::implts_createProgressBar()
     Reference< awt::XWindow > xContainerWindow;
 
     SolarMutexResettableGuard aWriteLock;
-    xStatusBar.set( m_aStatusBarElement.m_xUIElement, UNO_QUERY );
-    xProgressBar.set( m_aProgressBarElement.m_xUIElement, UNO_QUERY );
+    xStatusBar = m_aStatusBarElement.m_xUIElement;
+    xProgressBar =  m_aProgressBarElement.m_xUIElement;
     xProgressBarBackup = m_xProgressBarBackup;
     m_xProgressBarBackup.clear();
     xContainerWindow = m_xContainerWindow;
@@ -995,8 +995,8 @@ void LayoutManager::implts_setStatusBarPosSize( const ::Point& rPos, const ::Siz
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     SolarMutexClearableGuard aReadLock;
-    xStatusBar.set( m_aStatusBarElement.m_xUIElement, UNO_QUERY );
-    xProgressBar.set( m_aProgressBarElement.m_xUIElement, UNO_QUERY );
+    xStatusBar = m_aStatusBarElement.m_xUIElement;
+    xProgressBar = m_aProgressBarElement.m_xUIElement;
     xContainerWindow = m_xContainerWindow;
 
     Reference< awt::XWindow > xWindow;
@@ -1034,8 +1034,8 @@ bool LayoutManager::implts_showProgressBar()
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     SolarMutexGuard aWriteLock;
-    xStatusBar.set( m_aStatusBarElement.m_xUIElement, UNO_QUERY );
-    xProgressBar.set( m_aProgressBarElement.m_xUIElement, UNO_QUERY );
+    xStatusBar = m_aStatusBarElement.m_xUIElement;
+    xProgressBar = m_aProgressBarElement.m_xUIElement;
     bool bVisible( m_bVisible );
 
     m_aProgressBarElement.m_bVisible = true;
@@ -1075,7 +1075,7 @@ bool LayoutManager::implts_hideProgressBar()
     bool bHideStatusBar( false );
 
     SolarMutexGuard g;
-    xProgressBar.set( m_aProgressBarElement.m_xUIElement, UNO_QUERY );
+    xProgressBar = m_aProgressBarElement.m_xUIElement;
 
     bool bInternalStatusBar( false );
     if ( xProgressBar.is() )
@@ -2633,7 +2633,7 @@ void SAL_CALL LayoutManager::windowResized( const awt::WindowEvent& aEvent )
     SolarMutexGuard g;
     Reference< awt::XWindow >         xContainerWindow( m_xContainerWindow );
 
-    Reference< XInterface > xIfac( xContainerWindow, UNO_QUERY );
+    Reference< XInterface > xIfac = xContainerWindow;
     if ( xIfac == aEvent.Source && m_bVisible )
     {
         // We have to call our resize handler at least once synchronously, as some
@@ -2679,7 +2679,7 @@ void SAL_CALL LayoutManager::windowShown( const lang::EventObject& aEvent )
     bool                       bParentWindowVisible( m_bParentWindowVisible );
     aReadLock.clear();
 
-    Reference< XInterface > xIfac( xContainerWindow, UNO_QUERY );
+    Reference< XInterface > xIfac = xContainerWindow;
     if ( xIfac == aEvent.Source )
     {
         SolarMutexClearableGuard aWriteLock;
@@ -2699,7 +2699,7 @@ void SAL_CALL LayoutManager::windowHidden( const lang::EventObject& aEvent )
     bool                      bParentWindowVisible( m_bParentWindowVisible );
     aReadLock.clear();
 
-    Reference< XInterface > xIfac( xContainerWindow, UNO_QUERY );
+    Reference< XInterface > xIfac = xContainerWindow;
     if ( xIfac == aEvent.Source )
     {
         SolarMutexClearableGuard aWriteLock;
@@ -2764,7 +2764,7 @@ void SAL_CALL LayoutManager::disposing( const lang::EventObject& rEvent )
     {
         SolarMutexGuard aWriteLock;
 
-        if (rEvent.Source == Reference<XInterface>(m_xFrame, UNO_QUERY))
+        if (rEvent.Source == Reference<XInterface>(m_xFrame))
         {
             // Our frame gets disposed, release all our references that depends on a working frame reference.
 
@@ -2822,7 +2822,7 @@ void SAL_CALL LayoutManager::disposing( const lang::EventObject& rEvent )
 
             bDisposeAndClear = true;
         }
-        else if (rEvent.Source == Reference<XInterface>(m_xContainerWindow, UNO_QUERY))
+        else if (rEvent.Source == Reference<XInterface>(m_xContainerWindow))
         {
             // Our container window gets disposed. Remove all user interface elements.
             ToolbarLayoutManager* pToolbarManager = m_xToolbarManager.get();
@@ -2844,9 +2844,9 @@ void SAL_CALL LayoutManager::disposing( const lang::EventObject& rEvent )
             m_xContainerWindow.clear();
             m_xContainerTopWindow.clear();
         }
-        else if (rEvent.Source == Reference<XInterface>(m_xDocCfgMgr, UNO_QUERY))
+        else if (rEvent.Source == Reference<XInterface>(m_xDocCfgMgr))
             m_xDocCfgMgr.clear();
-        else if (rEvent.Source == Reference<XInterface>(m_xModuleCfgMgr, UNO_QUERY))
+        else if (rEvent.Source == Reference<XInterface>(m_xModuleCfgMgr))
             m_xModuleCfgMgr.clear();
     }
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
@@ -2892,7 +2892,7 @@ void SAL_CALL LayoutManager::elementInserted( const ui::ConfigurationEvent& Even
                 uno::Reference< XPropertySet > xPropSet( xElementSettings, uno::UNO_QUERY );
                 if ( xPropSet.is() )
                 {
-                    if ( Event.Source == uno::Reference< uno::XInterface >( m_xDocCfgMgr, uno::UNO_QUERY ))
+                    if ( Event.Source == uno::Reference< uno::XInterface >( m_xDocCfgMgr ))
                         xPropSet->setPropertyValue( "ConfigurationSource", makeAny( m_xDocCfgMgr ));
                 }
                 xElementSettings->updateSettings();
@@ -2951,7 +2951,7 @@ void SAL_CALL LayoutManager::elementRemoved( const ui::ConfigurationEvent& Event
                 if ( Event.Source == xElementCfgMgr )
                 {
                     // Same UI configuration manager where our element has its settings
-                    if ( Event.Source == Reference< XInterface >( xDocCfgMgr, UNO_QUERY ))
+                    if ( Event.Source == Reference< XInterface >( xDocCfgMgr ))
                     {
                         // document settings removed
                         if ( xModuleCfgMgr->hasSettings( Event.ResourceURL ))

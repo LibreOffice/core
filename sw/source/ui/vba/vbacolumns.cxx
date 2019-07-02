@@ -39,7 +39,7 @@ class ColumnsEnumWrapper : public EnumerationHelper_BASE
 public:
     ColumnsEnumWrapper( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< text::XTextTable >& xTextTable ) : mxParent( xParent ), mxContext( xContext ), mxTextTable( xTextTable ), nIndex( 0 )
     {
-        mxIndexAccess.set( mxTextTable->getColumns(), uno::UNO_QUERY );
+        mxIndexAccess = mxTextTable->getColumns();
     }
     virtual sal_Bool SAL_CALL hasMoreElements(  ) override
     {

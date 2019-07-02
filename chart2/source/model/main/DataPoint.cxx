@@ -155,7 +155,7 @@ uno::Reference< util::XCloneable > SAL_CALL DataPoint::createClone()
 // ____ XChild ____
 Reference< uno::XInterface > SAL_CALL DataPoint::getParent()
 {
-    return Reference< uno::XInterface >( m_xParentProperties.get(), uno::UNO_QUERY );
+    return m_xParentProperties;
 }
 
 void SAL_CALL DataPoint::setParent(

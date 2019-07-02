@@ -361,7 +361,7 @@ namespace basic
 
     std::unique_ptr<BasicManager>& ImplRepository::impl_getLocationForModel( const Reference< XModel >& _rxDocumentModel )
     {
-        Reference< XInterface > xNormalized( _rxDocumentModel, UNO_QUERY );
+        Reference< XInterface > xNormalized = _rxDocumentModel;
         DBG_ASSERT( _rxDocumentModel.is(), "ImplRepository::impl_getLocationForModel: invalid model!" );
 
         std::unique_ptr<BasicManager>& location = m_aStore[ xNormalized ];
@@ -370,7 +370,7 @@ namespace basic
 
     bool ImplRepository::impl_hasLocationForModel( const Reference< XModel >& _rxDocumentModel ) const
     {
-        Reference< XInterface > xNormalized( _rxDocumentModel, UNO_QUERY );
+        Reference< XInterface > xNormalized = _rxDocumentModel;
         DBG_ASSERT( _rxDocumentModel.is(), "ImplRepository::impl_getLocationForModel: invalid model!" );
 
         return m_aStore.find(xNormalized) != m_aStore.end();
@@ -551,7 +551,7 @@ namespace basic
     {
         SolarMutexGuard g;
 
-        Reference< XInterface > xNormalizedSource( _rSource.Source, UNO_QUERY );
+        Reference< XInterface > xNormalizedSource = _rSource.Source;
 
         BasicManagerStore::iterator it = std::find_if(m_aStore.begin(), m_aStore.end(),
             [&xNormalizedSource](BasicManagerStore::reference rEntry) {

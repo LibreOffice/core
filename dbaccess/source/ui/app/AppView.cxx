@@ -487,13 +487,13 @@ void OApplicationView::showPreview( const OUString& _sDataSourceName,
             {
                 Reference<XTablesSupplier> xSup(_xConnection,UNO_QUERY);
                 if ( xSup.is() )
-                    xNameAccess.set(xSup->getTables(),UNO_QUERY);
+                    xNameAccess = xSup->getTables();
             }
             else
             {
                 Reference<XQueriesSupplier> xSup(_xConnection,UNO_QUERY);
                 if ( xSup.is() )
-                    xNameAccess.set(xSup->getQueries(),UNO_QUERY);
+                    xNameAccess = xSup->getQueries();
             }
             if ( xNameAccess.is() && xNameAccess->hasByName(_sName) )
                 m_xObject.set(xNameAccess->getByName(_sName),UNO_QUERY);

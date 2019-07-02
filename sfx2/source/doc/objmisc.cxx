@@ -1029,7 +1029,7 @@ void SfxObjectShell::InitOwnModel_Impl()
     }
 
     pMedium->GetItemSet()->ClearItem( SID_REFERER );
-    uno::Reference< frame::XModel >  xModel ( GetModel(), uno::UNO_QUERY );
+    uno::Reference< frame::XModel >  xModel = GetModel();
     if ( xModel.is() )
     {
         SfxItemSet *pSet = GetMedium()->GetItemSet();

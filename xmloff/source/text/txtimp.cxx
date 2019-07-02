@@ -1100,7 +1100,7 @@ void XMLTextImportHelper::SetCursor( const Reference < XTextCursor > & rCursor )
 {
     m_xImpl->m_xCursor.set(rCursor);
     m_xImpl->m_xText.set(rCursor->getText());
-    m_xImpl->m_xCursorAsRange.set( rCursor, UNO_QUERY );
+    m_xImpl->m_xCursorAsRange = rCursor;
 }
 
 void XMLTextImportHelper::ResetCursor()

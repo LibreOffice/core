@@ -774,7 +774,7 @@ void UpdateHandler::insertControlModel( uno::Reference< awt::XControlModel > con
 
     // insert by Name into DialogModel container
     uno::Reference< container::XNameContainer > xContainer (rxDialogModel, uno::UNO_QUERY_THROW);
-    xContainer->insertByName( rControlName, uno::Any (uno::Reference< uno::XInterface >(xModel, uno::UNO_QUERY)));
+    xContainer->insertByName( rControlName, uno::Any (uno::Reference< uno::XInterface >(xModel)));
 }
 
 

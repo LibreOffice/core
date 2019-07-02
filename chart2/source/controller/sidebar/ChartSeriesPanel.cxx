@@ -45,8 +45,8 @@ namespace {
 
 bool isDataLabelVisible(const css::uno::Reference<css::frame::XModel>& xModel, const OUString& rCID)
 {
-    css::uno::Reference< css::chart2::XDataSeries > xSeries(
-        ObjectIdentifier::getDataSeriesForCID(rCID, xModel), uno::UNO_QUERY );
+    css::uno::Reference< css::chart2::XDataSeries > xSeries =
+        ObjectIdentifier::getDataSeriesForCID(rCID, xModel);
 
     if (!xSeries.is())
         return false;
@@ -56,8 +56,8 @@ bool isDataLabelVisible(const css::uno::Reference<css::frame::XModel>& xModel, c
 
 void setDataLabelVisible(const css::uno::Reference<css::frame::XModel>& xModel, const OUString& rCID, bool bVisible)
 {
-    css::uno::Reference< css::chart2::XDataSeries > xSeries(
-        ObjectIdentifier::getDataSeriesForCID(rCID, xModel), uno::UNO_QUERY );
+    css::uno::Reference< css::chart2::XDataSeries > xSeries =
+        ObjectIdentifier::getDataSeriesForCID(rCID, xModel);
 
     if (!xSeries.is())
         return;
@@ -166,8 +166,8 @@ void setTrendlineVisible(const css::uno::Reference<css::frame::XModel>&
 bool isErrorBarVisible(const css::uno::Reference<css::frame::XModel>& xModel,
                        const OUString& rCID, bool bYError)
 {
-    css::uno::Reference< css::chart2::XDataSeries > xSeries(
-        ObjectIdentifier::getDataSeriesForCID(rCID, xModel), uno::UNO_QUERY );
+    css::uno::Reference< css::chart2::XDataSeries > xSeries =
+        ObjectIdentifier::getDataSeriesForCID(rCID, xModel);
 
     if (!xSeries.is())
         return false;
@@ -178,8 +178,8 @@ bool isErrorBarVisible(const css::uno::Reference<css::frame::XModel>& xModel,
 void setErrorBarVisible(const css::uno::Reference<css::frame::XModel>&
         xModel, const OUString& rCID, bool bYError, bool bVisible)
 {
-    css::uno::Reference< css::chart2::XDataSeries > xSeries(
-        ObjectIdentifier::getDataSeriesForCID(rCID, xModel), uno::UNO_QUERY );
+    css::uno::Reference< css::chart2::XDataSeries > xSeries =
+        ObjectIdentifier::getDataSeriesForCID(rCID, xModel);
 
     if (!xSeries.is())
         return;
@@ -199,8 +199,8 @@ void setErrorBarVisible(const css::uno::Reference<css::frame::XModel>&
 bool isPrimaryAxis(const css::uno::Reference<css::frame::XModel>&
         xModel, const OUString& rCID)
 {
-    css::uno::Reference< css::chart2::XDataSeries > xSeries(
-        ObjectIdentifier::getDataSeriesForCID(rCID, xModel), uno::UNO_QUERY );
+    css::uno::Reference< css::chart2::XDataSeries > xSeries =
+        ObjectIdentifier::getDataSeriesForCID(rCID, xModel);
 
     if (!xSeries.is())
         return true;
@@ -235,8 +235,8 @@ css::uno::Reference<css::chart2::XChartType> getChartType(
 
 OUString getSeriesLabel(const css::uno::Reference<css::frame::XModel>& xModel, const OUString& rCID)
 {
-    css::uno::Reference< css::chart2::XDataSeries > xSeries(
-        ObjectIdentifier::getDataSeriesForCID(rCID, xModel), uno::UNO_QUERY );
+    css::uno::Reference< css::chart2::XDataSeries > xSeries =
+        ObjectIdentifier::getDataSeriesForCID(rCID, xModel);
 
     if (!xSeries.is())
         return OUString();

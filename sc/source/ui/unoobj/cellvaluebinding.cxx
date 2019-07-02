@@ -477,7 +477,7 @@ namespace calc
 
     void SAL_CALL OCellValueBinding::disposing( const EventObject& aEvent )
     {
-        Reference<XInterface> xCellInt( m_xCell, UNO_QUERY );
+        Reference<XInterface> xCellInt( m_xCell );
         if ( xCellInt == aEvent.Source )
         {
             // release references to cell object

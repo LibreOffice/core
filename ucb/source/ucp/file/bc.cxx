@@ -656,7 +656,7 @@ BaseContent::getParent()
 
     try
     {
-        return Reference<XInterface>( m_pMyShell->m_pProvider->queryContent( Identifier ), UNO_QUERY );
+        return m_pMyShell->m_pProvider->queryContent( Identifier );
     }
     catch (const IllegalIdentifierException&)
     {

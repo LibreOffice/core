@@ -244,9 +244,7 @@ handleFilterOptionsRequest_(
                                 document::XImporter > xImporter(
                                     xFilterDialog, uno::UNO_QUERY );
                             if( xImporter.is() )
-                                xImporter->setTargetDocument(
-                                    uno::Reference< lang::XComponent >(
-                                        rRequest.rModel, uno::UNO_QUERY ) );
+                                xImporter->setTargetDocument( rRequest.rModel );
 
                             xFilterProperties->setPropertyValues(
                                 rRequest.rProperties );

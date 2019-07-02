@@ -314,7 +314,7 @@ XMLShapeExport* SwXMLExport::CreateShapeExport()
     Reference < XDrawPageSupplier > xDPS( GetModel(), UNO_QUERY );
     if( xDPS.is() )
     {
-        Reference < XShapes > xShapes( xDPS->getDrawPage(), UNO_QUERY );
+        Reference < XShapes > xShapes = xDPS->getDrawPage();
         pShapeExport->seekShapes( xShapes );
     }
 

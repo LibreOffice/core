@@ -152,7 +152,7 @@ Reference< XInterface > SAL_CALL AddonsToolBarWrapper::getRealInterface()
         if ( pToolBarManager )
         {
             vcl::Window* pWindow = static_cast<vcl::Window *>(pToolBarManager->GetToolBar());
-            return Reference< XInterface >( VCLUnoHelper::GetInterface( pWindow ), UNO_QUERY );
+            return VCLUnoHelper::GetInterface( pWindow );
         }
     }
 

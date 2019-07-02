@@ -802,7 +802,7 @@ Reference< XInterface > FactoryImpl::createAdapter(
     {
         t_ptr_set * adapter_set;
         AdapterImpl * that;
-        Reference< XInterface > xKey( xReceiver, UNO_QUERY );
+        Reference< XInterface > xKey = xReceiver;
         {
         ClearableMutexGuard guard( m_mutex );
         that = lookup_adapter(

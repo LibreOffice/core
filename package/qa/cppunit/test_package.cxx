@@ -70,7 +70,7 @@ namespace
 
         CPPUNIT_ASSERT(xZip.is());
 
-        mxNA = uno::Reference<container::XNameAccess>(xZip, uno::UNO_QUERY);
+        mxNA = xZip;
         CPPUNIT_ASSERT(mxNA.is());
     }
 

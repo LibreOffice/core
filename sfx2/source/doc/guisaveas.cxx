@@ -420,8 +420,7 @@ OUString const & ModelData_Impl::GetModuleName()
 {
     if ( m_aModuleName.isEmpty() )
     {
-        m_aModuleName = m_pOwner->GetModuleManager()->identify(
-                                                uno::Reference< uno::XInterface >( m_xModel, uno::UNO_QUERY ) );
+        m_aModuleName = m_pOwner->GetModuleManager()->identify( m_xModel );
         if ( m_aModuleName.isEmpty() )
             throw uno::RuntimeException(); // TODO:
     }
@@ -592,8 +591,7 @@ bool ModelData_Impl::ExecuteFilterDialog_Impl( const OUString& aFilterName )
 
                             uno::Reference< document::XExporter > xExporter( xFilterDialog, uno::UNO_QUERY );
                             if( xExporter.is() )
-                                xExporter->setSourceDocument(
-                                    uno::Reference< lang::XComponent >( GetModel(), uno::UNO_QUERY ) );
+                                xExporter->setSourceDocument( GetModel() );
 
                             uno::Sequence< beans::PropertyValue > aPropsForDialog;
                             GetMediaDescr() >> aPropsForDialog;

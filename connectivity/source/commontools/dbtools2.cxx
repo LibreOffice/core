@@ -515,7 +515,7 @@ namespace
         while( xParent.is() && !xModel.is() )
         {
             Reference<XChild> xChild(xParent,UNO_QUERY);
-            xParent.set(xChild.is() ? xChild->getParent() : Reference< XInterface >(),UNO_QUERY);
+            xParent = xChild.is() ? xChild->getParent() : Reference< XInterface >();
             xModel.set(xParent,UNO_QUERY);
         }
         return xModel;

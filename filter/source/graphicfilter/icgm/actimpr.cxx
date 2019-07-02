@@ -95,11 +95,8 @@ bool CGMImpressOutAct::ImplInitPage()
     bool    bStatRet = false;
     if( maXDrawPage.is() )
     {
-        maXShapes = uno::Reference< drawing::XShapes >( maXDrawPage, uno::UNO_QUERY );
-        if ( maXShapes.is() )
-        {
-            bStatRet = true;
-        }
+        maXShapes = maXDrawPage;
+        bStatRet = true;
     }
     return bStatRet;
 }
@@ -381,7 +378,7 @@ void CGMImpressOutAct::InsertPage()
 {
     if ( mnCurrentPage )    // one side is always existing, therefore the first side will be left out
     {
-        uno::Reference< drawing::XDrawPage > xPage( maXDrawPages->insertNewByIndex( 0xffff ), uno::UNO_QUERY );
+        uno::Reference< drawing::XDrawPage > xPage = maXDrawPages->insertNewByIndex( 0xffff );
         maXDrawPage = xPage;
         if ( !ImplInitPage() )
             mpCGM->mbStatus = false;

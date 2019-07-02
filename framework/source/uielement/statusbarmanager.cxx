@@ -173,7 +173,7 @@ void SAL_CALL StatusBarManager::disposing( const lang::EventObject& Source )
 
     RemoveControllers();
 
-    if ( Source.Source == uno::Reference< uno::XInterface >( m_xFrame, uno::UNO_QUERY ))
+    if ( Source.Source == uno::Reference< uno::XInterface >( m_xFrame ))
         m_xFrame.clear();
 
     m_xContext.clear();
