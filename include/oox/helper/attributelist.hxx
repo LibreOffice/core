@@ -20,6 +20,8 @@
 #ifndef INCLUDED_OOX_HELPER_ATTRIBUTELIST_HXX
 #define INCLUDED_OOX_HELPER_ATTRIBUTELIST_HXX
 
+#include <vector>
+
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/util/DateTime.hpp>
 #include <oox/helper/helper.hxx>
@@ -163,6 +165,8 @@ public:
     /** Returns the date/time value of the specified attribute, or the default
         value if the attribute is missing or not convertible to a date/time value. */
     css::util::DateTime getDateTime( sal_Int32 nAttrToken, const css::util::DateTime& rDefault ) const;
+
+    std::vector<sal_Int32> getTokenList(sal_Int32 nAttrToken) const;
 
 private:
     css::uno::Reference< css::xml::sax::XFastAttributeList >
