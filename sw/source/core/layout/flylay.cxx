@@ -855,6 +855,8 @@ void SwPageFrame::AppendFlyToPage( SwFlyFrame *pNew )
         pNew->InvalidatePage( this );
         // #i28701#
         pNew->UnlockPosition();
+        // needed to reposition at-page anchored flys moved from different page
+        pNew->InvalidateObjPos();
 
         // Notify accessible layout. That's required at this place for
         // frames only where the anchor is moved. Creation of new frames
