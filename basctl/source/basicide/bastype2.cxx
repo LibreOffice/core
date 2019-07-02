@@ -696,11 +696,10 @@ void TreeListBox::GetRootEntryBitmaps( const ScriptDocument& rDocument, Image& r
         try
         {
             OUString sModule( xModuleManager->identify( rDocument.getDocument() ) );
-            Reference< container::XNameAccess > xModuleConfig( xModuleManager, UNO_QUERY );
-            if ( xModuleConfig.is() )
+            if ( xModuleManager.is() )
             {
                 Sequence< beans::PropertyValue > aModuleDescr;
-                xModuleConfig->getByName( sModule ) >>= aModuleDescr;
+                xModuleManager->getByName( sModule ) >>= aModuleDescr;
                 sal_Int32 nCount = aModuleDescr.getLength();
                 const beans::PropertyValue* pModuleDescr = aModuleDescr.getConstArray();
                 for ( sal_Int32 i = 0; i < nCount; ++i )
@@ -1392,11 +1391,10 @@ OUString SbTreeListBox::GetRootEntryBitmaps(const ScriptDocument& rDocument)
         try
         {
             OUString sModule( xModuleManager->identify( rDocument.getDocument() ) );
-            Reference< container::XNameAccess > xModuleConfig( xModuleManager, UNO_QUERY );
-            if ( xModuleConfig.is() )
+            if ( xModuleManager.is() )
             {
                 Sequence< beans::PropertyValue > aModuleDescr;
-                xModuleConfig->getByName( sModule ) >>= aModuleDescr;
+                xModuleManager->getByName( sModule ) >>= aModuleDescr;
                 sal_Int32 nCount = aModuleDescr.getLength();
                 const beans::PropertyValue* pModuleDescr = aModuleDescr.getConstArray();
                 for ( sal_Int32 i = 0; i < nCount; ++i )

@@ -156,7 +156,7 @@ void SAL_CALL DicEvtListenerHelper::processDictionaryEvent(
 
     // assert that there is a corresponding dictionary entry if one was
     // added or deleted
-    uno::Reference< XDictionaryEntry > xDicEntry( rDicEvent.xDictionaryEntry, UNO_QUERY );
+    uno::Reference< XDictionaryEntry > xDicEntry = rDicEvent.xDictionaryEntry;
     DBG_ASSERT( !(rDicEvent.nEvent &
                     (DictionaryEventFlags::ADD_ENTRY | DictionaryEventFlags::DEL_ENTRY))
                 || xDicEntry.is(),

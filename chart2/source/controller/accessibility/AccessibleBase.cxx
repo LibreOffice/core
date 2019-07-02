@@ -732,9 +732,9 @@ Color AccessibleBase::getColor( eColorType eColType )
         aObjectCID = ObjectIdentifier::createClassifiedIdentifierForParticle( aParentParticle );
     }
 
-    xObjProp.set(
+    xObjProp =
         ObjectIdentifier::getObjectPropertySet(
-            aObjectCID, Reference< chart2::XChartDocument >( m_aAccInfo.m_xChartDocument )), uno::UNO_QUERY );
+            aObjectCID, Reference< chart2::XChartDocument >( m_aAccInfo.m_xChartDocument ));
     if( xObjProp.is())
     {
         try
@@ -773,7 +773,7 @@ Color AccessibleBase::getColor( eColorType eColType )
             }
 
             bool bTransparent = m_bAlwaysTransparent;
-            Reference< beans::XPropertySetInfo > xInfo( xObjProp->getPropertySetInfo(), uno::UNO_QUERY );
+            Reference< beans::XPropertySetInfo > xInfo = xObjProp->getPropertySetInfo();
             if( xInfo.is() &&
                 xInfo->hasPropertyByName( aStylePropName ))
             {

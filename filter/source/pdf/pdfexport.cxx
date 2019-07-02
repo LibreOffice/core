@@ -333,7 +333,7 @@ static OUString getMimetypeForDocument( const Reference< XComponentContext >& xC
         Reference< frame::XModuleManager2 > xModuleManager = frame::ModuleManager::create(xContext);
         if( xStore.is() )
         {
-            OUString aDocServiceName = xModuleManager->identify( Reference< XInterface >( xStore, uno::UNO_QUERY ) );
+            OUString aDocServiceName = xModuleManager->identify( xStore );
             if ( !aDocServiceName.isEmpty() )
             {
                 // get the actual filter name

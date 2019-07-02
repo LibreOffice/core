@@ -92,7 +92,7 @@ OUString SAL_CALL StorageFilterDetect::detect(uno::Sequence<beans::PropertyValue
         if ( !xInStream.is() )
             return OUString();
 
-        uno::Reference< embed::XStorage > xStorage( ::comphelper::OStorageHelper::GetStorageFromInputStream( xInStream, mxCxt ), uno::UNO_QUERY );
+        uno::Reference< embed::XStorage > xStorage = ::comphelper::OStorageHelper::GetStorageFromInputStream( xInStream, mxCxt );
         if ( !xStorage.is() )
             return OUString();
 

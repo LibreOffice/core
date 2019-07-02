@@ -553,7 +553,7 @@ bool SVGFilter::implExportImpressOrDraw( const Reference< XOutputStream >& rxOSt
     {
         if( !mSelectedPages.empty() && !mMasterPageTargets.empty() )
         {
-            Reference< XDocumentHandler > xDocHandler( implCreateExportDocumentHandler( rxOStm ), UNO_QUERY );
+            Reference< XDocumentHandler > xDocHandler = implCreateExportDocumentHandler( rxOStm );
 
             if( xDocHandler.is() )
             {
@@ -643,7 +643,7 @@ bool SVGFilter::implExportWriterOrCalc( const Reference< XOutputStream >& rxOStm
 
     if( rxOStm.is() )
     {
-        Reference< XDocumentHandler > xDocHandler( implCreateExportDocumentHandler( rxOStm ), UNO_QUERY );
+        Reference< XDocumentHandler > xDocHandler = implCreateExportDocumentHandler( rxOStm );
 
         if( xDocHandler.is() )
         {
@@ -1114,7 +1114,7 @@ void SVGFilter::implGenerateMetaData()
             {
                 const Reference< css::drawing::XDrawPage > & xDrawPage = mSelectedPages[i];
                 Reference< css::drawing::XMasterPageTarget > xMasterPageTarget( xDrawPage, UNO_QUERY );
-                Reference< css::drawing::XDrawPage > xMasterPage( xMasterPageTarget->getMasterPage(), UNO_QUERY );
+                Reference< css::drawing::XDrawPage > xMasterPage = xMasterPageTarget->getMasterPage();
                 OUString aSlideId(aId + "_" + OUString::number( i ));
 
                 mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "id", aSlideId );
@@ -1326,7 +1326,7 @@ void SVGFilter::implExportTextShapeIndex()
         {
             OUString sTextShapeIdList = mTextShapeIdListMap[xDrawPage].trim();
 
-            const OUString& rPageId = implGetValidIDFromInterface( Reference<XInterface>(xDrawPage, UNO_QUERY) );
+            const OUString& rPageId = implGetValidIDFromInterface( xDrawPage );
             if( !rPageId.isEmpty() && !sTextShapeIdList.isEmpty() )
             {
                 mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, aOOOAttrSlide, rPageId  );
@@ -1837,7 +1837,7 @@ bool SVGFilter::implExportShape( const Reference< css::drawing::XShape >& rxShap
                 if( xShapes.is() )
                 {
                     mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "class", "Group" );
-                    const OUString& rShapeId = implGetValidIDFromInterface( Reference<XInterface>(rxShape, UNO_QUERY) );
+                    const OUString& rShapeId = implGetValidIDFromInterface( rxShape );
                     if( !rShapeId.isEmpty() )
                     {
                         mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "id", rShapeId );
@@ -1918,7 +1918,7 @@ bool SVGFilter::implExportShape( const Reference< css::drawing::XShape >& rxShap
                     }
 
 
-                    const OUString& rShapeId = implGetValidIDFromInterface( Reference<XInterface>(rxShape, UNO_QUERY) );
+                    const OUString& rShapeId = implGetValidIDFromInterface( rxShape );
                     if( !rShapeId.isEmpty() )
                     {
                         mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "id", rShapeId );
@@ -2142,7 +2142,7 @@ bool SVGFilter::implCreateObjectsFromShape( const Reference< css::drawing::XDraw
                                 {
                                     // We create a map of text shape ids.
                                     implRegisterInterface( rxShape );
-                                    const OUString& rShapeId = implGetValidIDFromInterface( Reference<XInterface>(rxShape, UNO_QUERY) );
+                                    const OUString& rShapeId = implGetValidIDFromInterface( rxShape );
                                     if( !rShapeId.isEmpty() )
                                     {
                                         mTextShapeIdListMap[rxPage] += rShapeId;

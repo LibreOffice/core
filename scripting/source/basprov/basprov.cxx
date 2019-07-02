@@ -119,7 +119,7 @@ namespace basprov
                 Reference< uri::XUriReferenceFactory > xUriFac( uri::UriReferenceFactory::create( m_xContext ) );
 
                 OUString aLinkURL( xLibContainer->getLibraryLinkURL( rLibName ) );
-                Reference<  uri::XUriReference > xUriRef( xUriFac->parse( aLinkURL ), UNO_QUERY );
+                Reference<  uri::XUriReference > xUriRef = xUriFac->parse( aLinkURL );
 
                 if ( xUriRef.is() )
                 {
@@ -246,7 +246,7 @@ namespace basprov
             if ( xDocumentScripts.is() )
             {
                 m_pDocBasicManager = ::basic::BasicManagerRepository::getDocumentBasicManager( xModel );
-                m_xLibContainerDoc.set( xDocumentScripts->getBasicLibraries(), UNO_QUERY );
+                m_xLibContainerDoc = xDocumentScripts->getBasicLibraries();
                 OSL_ENSURE( m_pDocBasicManager && m_xLibContainerDoc.is(),
                     "BasicProviderImpl::initialize: invalid BasicManager, or invalid script container!" );
             }
@@ -278,7 +278,7 @@ namespace basprov
         }
 
         if ( !m_xLibContainerApp.is() )
-            m_xLibContainerApp.set( SfxGetpApp()->GetBasicContainer(), UNO_QUERY );
+            m_xLibContainerApp = SfxGetpApp()->GetBasicContainer();
     }
 
 
@@ -294,8 +294,7 @@ namespace basprov
         Reference< provider::XScript > xScript;
         Reference< uri::XUriReferenceFactory > xFac ( uri::UriReferenceFactory::create( m_xContext )  );
 
-        Reference<  uri::XUriReference > uriRef(
-            xFac->parse( scriptURI ), UNO_QUERY );
+        Reference<  uri::XUriReference > uriRef = xFac->parse( scriptURI );
 
         Reference < uri::XVndSunStarScriptUrl > sfUri( uriRef, UNO_QUERY );
 

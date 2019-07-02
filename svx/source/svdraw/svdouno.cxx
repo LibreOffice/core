@@ -274,7 +274,7 @@ SdrUnoObj& SdrUnoObj::operator= (const SdrUnoObj& rObj)
     aUnoControlTypeName = rObj.aUnoControlTypeName;
 
     // copy the uno control model
-    const uno::Reference< awt::XControlModel > xSourceControlModel( rObj.GetUnoControlModel(), uno::UNO_QUERY );
+    const uno::Reference< awt::XControlModel > xSourceControlModel = rObj.GetUnoControlModel();
     if ( xSourceControlModel.is() )
     {
         try

@@ -855,7 +855,7 @@ void OObjectOutputStream::writeObject( const Reference< XPersistObject > & xPObj
     // write the object identifier
     if( xPObj.is() )
     {
-        Reference< XInterface > rX( xPObj , UNO_QUERY );
+        Reference< XInterface > rX( xPObj );
 
         ObjectContainer_Impl::const_iterator aIt
             = m_mapObject.find( rX );

@@ -218,7 +218,7 @@ void SAL_CALL OQuery::propertyChange( const PropertyChangeEvent& _rSource )
     {
         MutexGuard aGuard(m_aMutex);
 
-        OSL_ENSURE(_rSource.Source.get() == Reference< XInterface >(m_xCommandDefinition, UNO_QUERY).get(),
+        OSL_ENSURE(_rSource.Source.get() == Reference< XInterface >(m_xCommandDefinition).get(),
             "OQuery::propertyChange : where did this call come from ?");
 
         if (m_eDoingCurrently == AggregateAction::SettingProperties)
@@ -248,7 +248,7 @@ void SAL_CALL OQuery::disposing( const EventObject& _rSource )
 {
     MutexGuard aGuard(m_aMutex);
 
-    OSL_ENSURE(_rSource.Source.get() == Reference< XInterface >(m_xCommandDefinition, UNO_QUERY).get(),
+    OSL_ENSURE(_rSource.Source.get() == Reference< XInterface >(m_xCommandDefinition).get(),
         "OQuery::disposing : where did this call come from ?");
 
     m_xCommandDefinition->removePropertyChangeListener(OUString(), this);

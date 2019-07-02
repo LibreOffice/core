@@ -542,7 +542,7 @@ void ScTabViewObj::SheetChanged( bool bSameTabButMoved )
     {
         sheet::ActivationEvent aEvent;
         uno::Reference< sheet::XSpreadsheetView > xView(this);
-        uno::Reference< uno::XInterface > xSource(xView, uno::UNO_QUERY);
+        uno::Reference< uno::XInterface > xSource(xView);
         aEvent.Source = xSource;
         aEvent.ActiveSheet = new ScTableSheetObj(pDocSh, rViewData.GetTabNo());
         for (XActivationEventListenerVector::iterator it = aActivationListeners.begin(); it != aActivationListeners.end(); )
@@ -1083,7 +1083,7 @@ uno::Reference< uno::XInterface > ScTabViewObj::GetClickedObject(const Point& rP
         ScAddress aCellPos (nX, nY, nTab);
         ScCellObj* pCellObj = new ScCellObj(rData.GetDocShell(), aCellPos);
 
-        xTarget.set(uno::Reference<table::XCell>(pCellObj), uno::UNO_QUERY);
+        xTarget = uno::Reference<table::XCell>(pCellObj);
 
         ScDocument* pDoc = rData.GetDocument();
         if (pDoc && pDoc->GetDrawLayer())
@@ -1110,7 +1110,7 @@ uno::Reference< uno::XInterface > ScTabViewObj::GetClickedObject(const Point& rP
                     SdrObject* pObj = pDrawPage->GetObj(i);
                     if (pObj && SdrObjectPrimitiveHit(*pObj, aPos, nHitLog, *pDrawView->GetSdrPageView(), nullptr, false))
                     {
-                        xTarget.set(pObj->getUnoShape(), uno::UNO_QUERY);
+                        xTarget = pObj->getUnoShape();
                         bFound = true;
                     }
                 }

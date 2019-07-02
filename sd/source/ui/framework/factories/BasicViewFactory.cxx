@@ -401,9 +401,8 @@ void BasicViewFactory::ReleaseView (
         Reference<XRelocatableResource> xResource (rpDescriptor->mxView, UNO_QUERY);
         if (xResource.is())
         {
-            Reference<XResource> xNewAnchor (mxLocalPane, UNO_QUERY);
-            if (xNewAnchor.is())
-                if (xResource->relocateToAnchor(xNewAnchor))
+            if (mxLocalPane.is())
+                if (xResource->relocateToAnchor(mxLocalPane))
                     mpViewCache->push_back(rpDescriptor);
                 else
                     bIsCacheable = false;

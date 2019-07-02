@@ -111,7 +111,7 @@ void SchXMLPropertyMappingContext::StartElement(const uno::Reference< xml::sax::
             createAndAddSequenceToSeries(aRole, aRange, xChartDoc, mxDataSeries);
         mrLSequencesPerIndex.emplace(
                     tSchXMLIndexWithPart( 0, SCH_XML_PART_VALUES),
-                    Reference< chart2::data::XLabeledDataSequence >( xSeq, UNO_QUERY ));
+                    xSeq);
     }
 }
 

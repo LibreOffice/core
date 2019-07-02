@@ -270,8 +270,7 @@ void SAL_CALL OPropertySet::getFastPropertyValue
                 uno::Reference< beans::XPropertySet > xPropSet( xStylePropSet, uno::UNO_QUERY );
                 if( xPropSet.is())
                 {
-                    uno::Reference< beans::XPropertySetInfo > xInfo( xPropSet->getPropertySetInfo(),
-                                                                     uno::UNO_QUERY );
+                    uno::Reference< beans::XPropertySetInfo > xInfo = xPropSet->getPropertySetInfo();
                     if( xInfo.is() )
                     {
                         // for some reason the virtual method getInfoHelper() is

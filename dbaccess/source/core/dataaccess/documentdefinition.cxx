@@ -438,9 +438,7 @@ void ODocumentDefinition::closeObject()
     {
         try
         {
-            Reference< css::util::XCloseable> xCloseable(m_xEmbeddedObject,UNO_QUERY);
-            if ( xCloseable.is() )
-                xCloseable->close(true);
+            m_xEmbeddedObject->close(true);
         }
         catch(const Exception&)
         {
@@ -1181,9 +1179,8 @@ void ODocumentDefinition::onCommandInsert( const OUString& _sURL, const Referenc
             }
             try
             {
-                Reference< css::util::XCloseable> xCloseable(m_xEmbeddedObject,UNO_QUERY);
-                if ( xCloseable.is() )
-                    xCloseable->close(true);
+                if ( m_xEmbeddedObject.is() )
+                    m_xEmbeddedObject->close(true);
             }
             catch(const Exception&)
             {
@@ -1753,12 +1750,8 @@ Reference< util::XCloseable > ODocumentDefinition::impl_getComponent_throw( cons
 
         if ( nState == EmbedStates::ACTIVE || nState == EmbedStates::RUNNING )
         {
-            Reference<XComponentSupplier> xCompProv(m_xEmbeddedObject,UNO_QUERY);
-            if ( xCompProv.is() )
-            {
-                xComp = xCompProv->getComponent();
-                OSL_ENSURE(xComp.is(),"No valid component");
-            }
+            xComp = m_xEmbeddedObject->getComponent();
+            OSL_ENSURE(xComp.is(),"No valid component");
         }
     }
     return xComp;

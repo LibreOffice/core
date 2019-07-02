@@ -43,7 +43,7 @@ DocxExportFilter::DocxExportFilter( const uno::Reference< uno::XComponentContext
 bool DocxExportFilter::exportDocument()
 {
     // get SwDoc*
-    uno::Reference< uno::XInterface > xIfc( getModel(), uno::UNO_QUERY );
+    uno::Reference< uno::XInterface > xIfc = getModel();
     SwXTextDocument *pTextDoc = dynamic_cast< SwXTextDocument * >( xIfc.get() );
     if ( !pTextDoc )
         return false;

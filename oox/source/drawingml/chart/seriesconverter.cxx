@@ -114,7 +114,7 @@ Reference< XLabeledDataSequence > lclCreateLabeledDataSequence(
     Reference< XLabeledDataSequence > xLabeledSeq;
     if( xValueSeq.is() || xTitleSeq.is() )
     {
-        xLabeledSeq.set( LabeledDataSequence::create(rParent.getComponentContext()), UNO_QUERY );
+        xLabeledSeq = LabeledDataSequence::create(rParent.getComponentContext());
         if( xLabeledSeq.is() )
         {
             xLabeledSeq->setValues( xValueSeq );

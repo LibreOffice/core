@@ -187,7 +187,7 @@ SQLExceptionInfo createConnection(  const Reference< css::beans::XPropertySet>& 
             }
             else
             {   // instantiate the default SDB interaction handler
-                Reference< XInteractionHandler > xHandler( InteractionHandler::createWithParent(_rxContext, nullptr), UNO_QUERY);
+                Reference< XInteractionHandler > xHandler = InteractionHandler::createWithParent(_rxContext, nullptr);
                 _rOUTConnection = xConnectionCompletion->connectWithCompletion(xHandler);
             }
         }

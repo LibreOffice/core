@@ -528,7 +528,7 @@ void CommandCategoryListBox::addChildren(
 
             OUString uri, description;
 
-            css::uno::Reference < css::beans::XPropertySet >xPropSet( child.get(), css::uno::UNO_QUERY );
+            css::uno::Reference < css::beans::XPropertySet >xPropSet( child, css::uno::UNO_QUERY );
 
             if (!xPropSet.is())
             {

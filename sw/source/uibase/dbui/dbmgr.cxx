@@ -327,7 +327,7 @@ struct SwDBManager::SwDBManager_Impl
 static void lcl_InitNumberFormatter(SwDSParam& rParam, uno::Reference<sdbc::XDataSource> const & xSource)
 {
     uno::Reference<uno::XComponentContext> xContext = ::comphelper::getProcessComponentContext();
-    rParam.xFormatter.set(util::NumberFormatter::create(xContext), uno::UNO_QUERY);
+    rParam.xFormatter = util::NumberFormatter::create(xContext);
     uno::Reference<beans::XPropertySet> xSourceProps(
         (xSource.is()
          ? xSource
@@ -2882,8 +2882,6 @@ OUString SwDBManager::LoadAndRegisterDataSource(weld::Window* pParent, SwDocShel
     OUString sHomePath(SvtPathOptions().GetWorkPath());
     aDlgHelper.SetDisplayDirectory( sHomePath );
 
-    uno::Reference<ui::dialogs::XFilterManager> xFltMgr(xFP, uno::UNO_QUERY);
-
     OUString sFilterAll(SwResId(STR_FILTER_ALL));
     OUString sFilterAllData(SwResId(STR_FILTER_ALL_DATA));
     OUString sFilterSXB(SwResId(STR_FILTER_SXB));
@@ -2898,23 +2896,23 @@ OUString SwDBManager::LoadAndRegisterDataSource(weld::Window* pParent, SwDocShel
     OUString sFilterMDB(SwResId(STR_FILTER_MDB));
     OUString sFilterACCDB(SwResId(STR_FILTER_ACCDB));
 #endif
-    xFltMgr->appendFilter( sFilterAll, "*" );
-    xFltMgr->appendFilter( sFilterAllData, "*.ods;*.sxc;*.odt;*.sxw;*.dbf;*.xls;*.xlsx;*.doc;*.docx;*.txt;*.csv");
+    xFP->appendFilter( sFilterAll, "*" );
+    xFP->appendFilter( sFilterAllData, "*.ods;*.sxc;*.odt;*.sxw;*.dbf;*.xls;*.xlsx;*.doc;*.docx;*.txt;*.csv");
 
-    xFltMgr->appendFilter( sFilterSXB, "*.odb" );
-    xFltMgr->appendFilter( sFilterSXC, "*.ods;*.sxc" );
-    xFltMgr->appendFilter( sFilterSXW, "*.odt;*.sxw" );
-    xFltMgr->appendFilter( sFilterDBF, "*.dbf" );
-    xFltMgr->appendFilter( sFilterXLS, "*.xls;*.xlsx" );
-    xFltMgr->appendFilter( sFilterDOC, "*.doc;*.docx" );
-    xFltMgr->appendFilter( sFilterTXT, "*.txt" );
-    xFltMgr->appendFilter( sFilterCSV, "*.csv" );
+    xFP->appendFilter( sFilterSXB, "*.odb" );
+    xFP->appendFilter( sFilterSXC, "*.ods;*.sxc" );
+    xFP->appendFilter( sFilterSXW, "*.odt;*.sxw" );
+    xFP->appendFilter( sFilterDBF, "*.dbf" );
+    xFP->appendFilter( sFilterXLS, "*.xls;*.xlsx" );
+    xFP->appendFilter( sFilterDOC, "*.doc;*.docx" );
+    xFP->appendFilter( sFilterTXT, "*.txt" );
+    xFP->appendFilter( sFilterCSV, "*.csv" );
 #ifdef _WIN32
-    xFltMgr->appendFilter(sFilterMDB, "*.mdb;*.mde");
-    xFltMgr->appendFilter(sFilterACCDB, "*.accdb;*.accde");
+    xFP->appendFilter(sFilterMDB, "*.mdb;*.mde");
+    xFP->appendFilter(sFilterACCDB, "*.accdb;*.accde");
 #endif
 
-    xFltMgr->setCurrentFilter( sFilterAll ) ;
+    xFP->setCurrentFilter( sFilterAll ) ;
     OUString sFind;
     if( ERRCODE_NONE == aDlgHelper.Execute() )
     {

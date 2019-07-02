@@ -585,7 +585,7 @@ void SdPage::addAnnotation( const Reference< XAnnotation >& xAnnotation, int nIn
     NotifyDocumentEvent(
         static_cast< SdDrawDocument& >(getSdrModelFromSdrPage()),
         "OnAnnotationInserted",
-        Reference<XInterface>(xAnnotation, UNO_QUERY));
+        Reference<XInterface>(xAnnotation));
 }
 
 void SdPage::removeAnnotation( const Reference< XAnnotation >& xAnnotation )
@@ -605,7 +605,7 @@ void SdPage::removeAnnotation( const Reference< XAnnotation >& xAnnotation )
     NotifyDocumentEvent(
         static_cast< SdDrawDocument& >( getSdrModelFromSdrPage() ),
         "OnAnnotationRemoved",
-        Reference<XInterface>( xAnnotation, UNO_QUERY ) );
+        Reference<XInterface>( xAnnotation ) );
 }
 
 void SdPage::dumpAsXml(xmlTextWriterPtr pWriter) const

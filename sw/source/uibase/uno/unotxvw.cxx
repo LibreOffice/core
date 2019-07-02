@@ -360,7 +360,7 @@ uno::Any SwXTextView::getSelection()
                     OSL_ENSURE(rSh.GetTableFormat(), "not a table format?");
                     uno::Reference< text::XTextTableCursor >  xCursor = new SwXTextTableCursor(*rSh.GetTableFormat(),
                                                     rSh.GetTableCursor());
-                    aRef.set(xCursor, uno::UNO_QUERY);
+                    aRef = xCursor;
                     break;
                 }
                 [[fallthrough]];
@@ -371,7 +371,7 @@ uno::Any SwXTextView::getSelection()
             case ShellMode::Text            :
             {
                 uno::Reference< container::XIndexAccess > xPos = SwXTextRanges::Create(rSh.GetCursor());
-                aRef.set(xPos, uno::UNO_QUERY);
+                aRef = xPos;
             }
             break;
             case ShellMode::Frame           :
@@ -420,7 +420,7 @@ uno::Any SwXTextView::getSelection()
                     uno::Reference< drawing::XShape >  xShape(xInt, uno::UNO_QUERY);
                     xShCol->add(xShape);
                 }
-                aRef.set(xShCol, uno::UNO_QUERY);
+                aRef = xShCol;
             }
             break;
             default:;//prevent warning

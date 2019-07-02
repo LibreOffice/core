@@ -637,7 +637,7 @@ uno::Any SAL_CALL SwXMailMerge::execute(
                     xRowSet->execute(); // build ResultSet from properties
                 if( !xCurConnection.is() )
                     xCurConnection.set( xRowSetPropSet->getPropertyValue( "ActiveConnection" ), UNO_QUERY );
-                xCurResultSet.set( xRowSet, UNO_QUERY );
+                xCurResultSet = xRowSet;
                 OSL_ENSURE( xCurResultSet.is(), "failed to build ResultSet" );
             }
         }

@@ -473,8 +473,7 @@ uno::Reference<text::XTextField> ScHeaderFieldsObj::GetObjectByIndex_Impl(sal_In
         break;
     }
 
-    uno::Reference<text::XTextRange> xTemp(xText, uno::UNO_QUERY);
-    xTextRange = xTemp;
+    xTextRange = xText;
 
     sal_Int32 nPar = aTempEngine.GetFieldPar();
     sal_Int32 nPos = aTempEngine.GetFieldPos();

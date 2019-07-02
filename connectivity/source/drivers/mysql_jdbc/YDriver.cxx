@@ -354,7 +354,7 @@ ODriverDelegator::getDataDefinitionByConnection(const Reference<XConnection>& co
                                });
             if (i != m_aConnections.end())
             {
-                xTab.set(i->second.first.get().get(), UNO_QUERY);
+                xTab.set(i->second.first.get(), UNO_QUERY);
                 if (!xTab.is())
                 {
                     xTab = new OMySQLCatalog(connection);
@@ -373,7 +373,7 @@ ODriverDelegator::getDataDefinitionByConnection(const Reference<XConnection>& co
                            });
         if (i != m_aConnections.end())
         {
-            xTab.set(i->second.first.get().get(), UNO_QUERY);
+            xTab.set(i->second.first.get(), UNO_QUERY);
             if (!xTab.is())
             {
                 xTab = new OMySQLCatalog(connection);

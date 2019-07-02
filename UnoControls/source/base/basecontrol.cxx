@@ -353,7 +353,7 @@ Reference< XView > SAL_CALL BaseControl::getView()
 {
     // Ready for multithreading
     MutexGuard aGuard( m_aMutex );
-    return Reference< XView >( static_cast<OWeakObject*>(this), UNO_QUERY );
+    return this;
 }
 
 //  XControl

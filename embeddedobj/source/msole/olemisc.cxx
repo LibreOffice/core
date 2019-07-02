@@ -392,11 +392,10 @@ uno::Reference< util::XCloseable > SAL_CALL OleEmbeddedObject::getComponent()
 void SAL_CALL OleEmbeddedObject::addStateChangeListener( const uno::Reference< embed::XStateChangeListener >& xListener )
 {
     // begin wrapping related part ====================
-    uno::Reference< embed::XStateChangeBroadcaster > xWrappedObject( m_xWrappedObject, uno::UNO_QUERY );
-    if ( xWrappedObject.is() )
+    if ( m_xWrappedObject.is() )
     {
         // the object was converted to OOo embedded object, the current implementation is now only a wrapper
-        xWrappedObject->addStateChangeListener( xListener );
+        m_xWrappedObject->addStateChangeListener( xListener );
         return;
     }
     // end wrapping related part ====================
@@ -417,11 +416,10 @@ void SAL_CALL OleEmbeddedObject::removeStateChangeListener(
                     const uno::Reference< embed::XStateChangeListener >& xListener )
 {
     // begin wrapping related part ====================
-    uno::Reference< embed::XStateChangeBroadcaster > xWrappedObject( m_xWrappedObject, uno::UNO_QUERY );
-    if ( xWrappedObject.is() )
+    if ( m_xWrappedObject.is() )
     {
         // the object was converted to OOo embedded object, the current implementation is now only a wrapper
-        xWrappedObject->removeStateChangeListener( xListener );
+        m_xWrappedObject->removeStateChangeListener( xListener );
         return;
     }
     // end wrapping related part ====================

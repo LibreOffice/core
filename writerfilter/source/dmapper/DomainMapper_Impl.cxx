@@ -416,7 +416,7 @@ void DomainMapper_Impl::RemoveLastParagraph( )
             xCursor->gotoEnd(false);
         }
         else
-            xCursor.set(m_aTextAppendStack.top().xCursor, uno::UNO_QUERY);
+            xCursor = m_aTextAppendStack.top().xCursor;
         uno::Reference<container::XEnumerationAccess> xEnumerationAccess(xCursor, uno::UNO_QUERY);
         // Keep the character properties of the last but one paragraph, even if
         // it's empty. This works for headers/footers, and maybe in other cases
@@ -1494,8 +1494,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                     else
                         xCur->gotoEnd( false );
                     xCur->goLeft( 1 , true );
-                    uno::Reference< text::XTextRange > xParaEnd( xCur, uno::UNO_QUERY );
-                    CheckParaMarkerRedline( xParaEnd );
+                    CheckParaMarkerRedline( xCur );
                 }
 
                 // tdf#118521 set paragraph top or bottom margin based on the paragraph style
@@ -1841,7 +1840,7 @@ void DomainMapper_Impl::appendStarMath( const Value& val )
             xStarMathProperties->setPropertyValue(getPropertyName( PROP_BOTTOM_MARGIN ),
                 uno::makeAny(sal_Int32(0)));
 
-            uno::Reference< uno::XInterface > xInterface( formula->getComponent(), uno::UNO_QUERY );
+            uno::Reference< uno::XInterface > xInterface = formula->getComponent();
             // set zero margins for object's component
             uno::Reference< beans::XPropertySet > xComponentProperties( xInterface, uno::UNO_QUERY_THROW );
             xComponentProperties->setPropertyValue(getPropertyName( PROP_LEFT_MARGIN ),
@@ -5192,7 +5191,7 @@ void DomainMapper_Impl::PopFieldContext()
                 {
                     xToInsert.set(pContext->GetTC(), uno::UNO_QUERY);
                     if( !xToInsert.is() && !m_bStartTOC && !m_bStartIndex && !m_bStartBibliography )
-                        xToInsert.set( pContext->GetTextField(), uno::UNO_QUERY);
+                        xToInsert = pContext->GetTextField();
                     if( xToInsert.is() && !m_bStartTOC && !m_bStartIndex && !m_bStartBibliography)
                     {
                         PropertyMap aMap;
@@ -5222,8 +5221,7 @@ void DomainMapper_Impl::PopFieldContext()
                             }
                             else
                             {
-                                uno::Reference<text::XTextRange> xTxtRange(xCrsr, uno::UNO_QUERY);
-                                pFormControlHelper->insertControl(xTxtRange);
+                                pFormControlHelper->insertControl(xCrsr);
                             }
                         }
                         else if (!pContext->GetHyperlinkURL().isEmpty() && xCrsr.is())
@@ -5872,9 +5870,8 @@ void DomainMapper_Impl::ApplySettingsTable()
                 }
                 uno::Reference<container::XIndexContainer> xBox = document::IndexedPropertyValues::create(m_xComponentContext);
                 xBox->insertByIndex(sal_Int32(0), uno::makeAny(comphelper::containerToSequence(aViewProps)));
-                uno::Reference<container::XIndexAccess> xIndexAccess(xBox, uno::UNO_QUERY);
                 uno::Reference<document::XViewDataSupplier> xViewDataSupplier(m_xTextDocument, uno::UNO_QUERY);
-                xViewDataSupplier->setViewData(xIndexAccess);
+                xViewDataSupplier->setViewData(xBox);
             }
 
             uno::Reference< beans::XPropertySet > xSettings(m_xTextFactory->createInstance("com.sun.star.document.Settings"), uno::UNO_QUERY);

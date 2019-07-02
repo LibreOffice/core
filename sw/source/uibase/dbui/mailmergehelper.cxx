@@ -152,7 +152,7 @@ uno::Reference< mail::XSmtpService > ConnectToSmtpServer(
                     rConfigItem.GetMailPort(),
                     rConfigItem.IsSecureConnection() ? OUString("Ssl") : OUString("Insecure") );
         xSmtpServer->connect(xConnectionContext, xAuthenticator);
-        rxInMailService.set( xSmtpServer, uno::UNO_QUERY );
+        rxInMailService = xSmtpServer;
     }
     catch (const uno::Exception&)
     {

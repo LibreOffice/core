@@ -160,7 +160,7 @@ DECLARE_OOXMLEXPORT_TEST(testDateControl, "empty-date-control.odt")
 {
     // Check that we did not lost the date control
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDraws = xDrawPageSupplier->getDrawPage();
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), xDraws->getCount());
     uno::Reference<drawing::XControlShape> xControl(getShape(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xControl->getControl().is());

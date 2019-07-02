@@ -464,7 +464,7 @@ void DlgEdObj::NameChange( const  css::beans::PropertyChangeEvent& evt )
                 Reference< container::XNameContainer > xCont(xNameAcc, UNO_QUERY );
                 if ( xCont.is() )
                 {
-                    Reference< awt::XControlModel > xCtrl(GetUnoControlModel(), UNO_QUERY);
+                    Reference< awt::XControlModel > xCtrl = GetUnoControlModel();
                     Any aAny;
                     aAny <<= xCtrl;
                     xCont->removeByName( aOldName );
@@ -1521,7 +1521,7 @@ void DlgEdForm::UpdateGroups()
         sal_uInt32 nSize = aChildList.size();
         Sequence< Reference< awt::XControl > > aSeqControls( nSize );
         for ( sal_uInt32 i = 0; i < nSize; ++i )
-            aSeqControls.getArray()[i].set( aChildList[i]->GetControl(), UNO_QUERY );
+            aSeqControls.getArray()[i] = aChildList[i]->GetControl();
 
         sal_Int32 nGroupCount = xTabModel->getGroupCount();
         for ( sal_Int32 nGroup = 0; nGroup < nGroupCount; ++nGroup )
@@ -1557,7 +1557,7 @@ void DlgEdForm::UpdateGroups()
             }
 
             // set the group at the dialog peer
-            Reference< awt::XControl > xDlg( GetControl(), UNO_QUERY );
+            Reference< awt::XControl > xDlg = GetControl();
             if ( xDlg.is() )
             {
                 Reference< awt::XVclContainerPeer > xDlgPeer( xDlg->getPeer(), UNO_QUERY );

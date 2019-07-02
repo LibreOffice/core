@@ -230,17 +230,16 @@ getShapeByName(const uno::Reference<drawing::XShapes>& rShapes, const OUString& 
                const std::function<bool(const uno::Reference<drawing::XShape>&)>& pCondition
                = nullptr)
 {
-    uno::Reference<container::XIndexAccess> XIndexAccess(rShapes, uno::UNO_QUERY);
-    for (sal_Int32 i = 0; i < XIndexAccess->getCount(); ++i)
+    for (sal_Int32 i = 0; i < rShapes->getCount(); ++i)
     {
-        uno::Reference<drawing::XShapes> xShapes(XIndexAccess->getByIndex(i), uno::UNO_QUERY);
+        uno::Reference<drawing::XShapes> xShapes(rShapes->getByIndex(i), uno::UNO_QUERY);
         if (xShapes.is())
         {
             uno::Reference<drawing::XShape> xRet = getShapeByName(xShapes, rName, pCondition);
             if (xRet.is())
                 return xRet;
         }
-        uno::Reference<container::XNamed> xNamedShape(XIndexAccess->getByIndex(i), uno::UNO_QUERY);
+        uno::Reference<container::XNamed> xNamedShape(rShapes->getByIndex(i), uno::UNO_QUERY);
         if (xNamedShape->getName() == rName)
         {
             uno::Reference<drawing::XShape> xShape(xNamedShape, uno::UNO_QUERY);
@@ -961,7 +960,7 @@ void Chart2ImportTest::testTransparentBackground(OUString const & filename)
     uno::Reference< chart::XChartDocument > xChart2Doc (xChartDoc, uno::UNO_QUERY);
     CPPUNIT_ASSERT_MESSAGE("failed to load chart", xChart2Doc.is());
 
-    Reference< beans::XPropertySet > xPropSet( xChart2Doc->getArea(), uno::UNO_QUERY);
+    Reference< beans::XPropertySet > xPropSet = xChart2Doc->getArea();
     CPPUNIT_ASSERT_MESSAGE("failed to get Area", xPropSet.is());
 
     css::drawing::FillStyle aStyle;
@@ -1982,7 +1981,7 @@ void Chart2ImportTest::testTdf122765()
 {
     // The horizontal position of the slices was wrong.
     load("/chart2/qa/extras/data/pptx/", "tdf122765.pptx");
-    Reference<chart::XChartDocument> xChartDoc(getChartDocFromDrawImpress(0, 0), UNO_QUERY);
+    Reference<chart::XChartDocument> xChartDoc = getChartDocFromDrawImpress(0, 0);
     Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xChartDoc, UNO_QUERY_THROW);
     Reference<drawing::XDrawPage> xDrawPage(xDrawPageSupplier->getDrawPage(), UNO_SET_THROW);
     Reference<drawing::XShapes> xShapes(xDrawPage->getByIndex(0), UNO_QUERY_THROW);

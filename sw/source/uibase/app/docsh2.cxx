@@ -582,7 +582,6 @@ void SwDocShell::Execute(SfxRequest& rReq)
                         SfxObjectFactory &rFact = GetFactory();
                         SfxFilterMatcher aMatcher( rFact.GetFactoryName() );
                         SfxFilterMatcherIter aIter( aMatcher );
-                        uno::Reference<XFilterManager> xFltMgr(xFP, UNO_QUERY);
                         std::shared_ptr<const SfxFilter> pFlt = aIter.First();
                         while( pFlt )
                         {
@@ -592,7 +591,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                                   pFlt->GetUserData() == "CXMLV" ) )
                             {
                                 const OUString sWild = pFlt->GetWildcard().getGlob();
-                                xFltMgr->appendFilter( pFlt->GetUIName(), sWild );
+                                xFP->appendFilter( pFlt->GetUIName(), sWild );
                             }
                             pFlt = aIter.Next();
                         }
@@ -605,14 +604,14 @@ void SwDocShell::Execute(SfxRequest& rReq)
                         if(bWeb)
                         {
                             const OUString sWild = pOwnFlt->GetWildcard().getGlob();
-                            xFltMgr->appendFilter( pOwnFlt->GetUIName(), sWild );
+                            xFP->appendFilter( pOwnFlt->GetUIName(), sWild );
                         }
 
                         bool bError = false;
                         // catch exception if wrong filter is selected - should not happen anymore
                         try
                         {
-                            xFltMgr->setCurrentFilter( pOwnFlt->GetUIName() );
+                            xFP->setCurrentFilter( pOwnFlt->GetUIName() );
                         }
                         catch (const uno::Exception&)
                         {
@@ -1013,12 +1012,11 @@ void SwDocShell::Execute(SfxRequest& rReq)
 
                     if( pFlt )
                     {
-                        uno::Reference<XFilterManager> xFltMgr(xFP, UNO_QUERY);
                         const OUString sWild = pFlt->GetWildcard().getGlob();
-                        xFltMgr->appendFilter( pFlt->GetUIName(), sWild );
+                        xFP->appendFilter( pFlt->GetUIName(), sWild );
                         try
                         {
-                            xFltMgr->setCurrentFilter( pFlt->GetUIName() ) ;
+                            xFP->setCurrentFilter( pFlt->GetUIName() ) ;
                         }
                         catch (const uno::Exception&)
                         {

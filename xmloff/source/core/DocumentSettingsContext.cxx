@@ -692,7 +692,7 @@ void XMLConfigItemMapIndexedContext::EndElement()
             if( xForbChars.is() )
             {
 
-                uno::Reference< container::XIndexAccess > xIndex( maProps.GetIndexContainer(), uno::UNO_QUERY );
+                uno::Reference< container::XIndexAccess > xIndex = maProps.GetIndexContainer();
 
                 const sal_Int32 nCount = xIndex->getCount();
                 uno::Sequence < beans::PropertyValue > aProps;
@@ -764,7 +764,7 @@ void XMLConfigItemMapIndexedContext::EndElement()
         }
         else if ( maConfigItemName == "Symbols" )
         {
-            uno::Reference< container::XIndexAccess > xIndex( maProps.GetIndexContainer(), uno::UNO_QUERY );
+            uno::Reference< container::XIndexAccess > xIndex = maProps.GetIndexContainer();
 
             const sal_Int32 nCount = xIndex->getCount();
             uno::Sequence < beans::PropertyValue > aProps;

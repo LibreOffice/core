@@ -525,7 +525,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_getOrCreat
 
         case E_BLANKDISPATCHER :
                 {
-                    css::uno::Reference< css::frame::XFrame > xDesktop( xOwner, css::uno::UNO_QUERY );
+                    css::uno::Reference< css::frame::XFrame > xDesktop = xOwner;
                     if (xDesktop.is())
                     {
                         LoadDispatcher* pDispatcher = new LoadDispatcher(m_xContext, xOwner, SPECIALTARGET_BLANK, 0);
@@ -536,7 +536,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_getOrCreat
 
         case E_DEFAULTDISPATCHER :
                 {
-                    css::uno::Reference< css::frame::XFrame > xDesktop( xOwner, css::uno::UNO_QUERY );
+                    css::uno::Reference< css::frame::XFrame > xDesktop = xOwner;
                     if (xDesktop.is())
                     {
                         LoadDispatcher* pDispatcher = new LoadDispatcher(m_xContext, xOwner, SPECIALTARGET_DEFAULT, 0);
