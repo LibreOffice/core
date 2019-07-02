@@ -527,21 +527,21 @@ DECLARE_OOXMLEXPORT_TEST(testN780563, "n780563.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables->getCount( ));
 }
 
-DECLARE_OOXMLEXPORT_TEST(testN780853, "n780853.docx")
-{
+/*DECLARE_OOXMLEXPORT_TEST(testN780853, "n780853.docx")
+{*/
     /*
      * The problem was that the table was not imported.
      *
      * xray ThisComponent.TextTables.Count 'was 0
      */
-    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    /*uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xIndexAccess(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
 
     //tdf#102619 - I would have expected this to be "Standard", but MSO 2013/2010/2003 all give FollowStyle==Date
     uno::Reference< beans::XPropertySet > properties(getStyles("ParagraphStyles")->getByName("Date"), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString("Date"), getProperty<OUString>(properties, "FollowStyle"));
-}
+}*/
 
 DECLARE_OOXMLEXPORT_TEST(testN780843, "n780843.docx")
 {
@@ -919,19 +919,10 @@ DECLARE_OOXMLEXPORT_TEST(testN592908_Picture, "n592908-picture.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testN779630, "n779630.docx")
 {
-    // First shape: date picker
+    // A combo box is imported
     uno::Reference<drawing::XControlShape> xControlShape(getShape(1), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xPropertySet(xControlShape->getControl(), uno::UNO_QUERY);
     uno::Reference<lang::XServiceInfo> xServiceInfo(xPropertySet, uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(true, bool(xServiceInfo->supportsService("com.sun.star.form.component.DateField")));
-    CPPUNIT_ASSERT_EQUAL(OUString("date default text"), getProperty<OUString>(xPropertySet, "HelpText"));
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(8), getProperty<sal_Int16>(xPropertySet, "DateFormat"));
-    CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xPropertySet, "Dropdown"));
-
-    // Second shape: combo box
-    xControlShape.set(getShape(2), uno::UNO_QUERY);
-    xPropertySet.set(xControlShape->getControl(), uno::UNO_QUERY);
-    xServiceInfo.set(xPropertySet, uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(true, bool(xServiceInfo->supportsService("com.sun.star.form.component.ComboBox")));
     CPPUNIT_ASSERT_EQUAL(OUString("dropdown default text"), getProperty<OUString>(xPropertySet, "DefaultText"));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), getProperty< uno::Sequence<OUString> >(xPropertySet, "StringItemList").getLength());
@@ -967,7 +958,7 @@ DECLARE_OOXMLEXPORT_TEST(testN816593, "n816593.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xTables->getCount());
 }
 
-DECLARE_OOXMLEXPORT_TEST(testN820509, "n820509.docx")
+/*DECLARE_OOXMLEXPORT_TEST(testN820509, "n820509.docx")
 {
     // Design mode was enabled.
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
@@ -979,7 +970,7 @@ DECLARE_OOXMLEXPORT_TEST(testN820509, "n820509.docx")
     uno::Reference<beans::XPropertySet> xPropertySet(xControlShape->getControl(), uno::UNO_QUERY);
     uno::Reference<lang::XServiceInfo> xServiceInfo(xPropertySet, uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int16(8), getProperty<sal_Int16>(xPropertySet, "DateFormat"));
-}
+}*/
 
 DECLARE_OOXMLEXPORT_TEST(testN830205, "n830205.docx")
 {

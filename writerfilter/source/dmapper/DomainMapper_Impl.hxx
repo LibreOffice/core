@@ -666,6 +666,7 @@ public:
     }
     PropertyMapPtr GetTopContextOfType(ContextType eId);
 
+    bool HasTopText() const;
     css::uno::Reference<css::text::XTextAppend> const & GetTopTextAppend();
     FieldContextPtr const & GetTopFieldContext();
 
