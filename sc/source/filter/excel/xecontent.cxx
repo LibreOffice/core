@@ -445,6 +445,10 @@ XclExpHyperlink::XclExpHyperlink( const XclExpRoot& rRoot, const SvxURLField& rU
         aXclStrm    << sal_uInt16( 0 );
 
         mnFlags |= EXC_HLINK_MARK;
+
+        OUString location = XclXmlUtils::ToOUString(*mxTextMark);
+        if (msTarget.endsWith(location))
+            msTarget = msTarget.copy(0, msTarget.getLength() - location.getLength() - 1);
     }
 
     SetRecSize( 32 + mxVarData->Tell() );

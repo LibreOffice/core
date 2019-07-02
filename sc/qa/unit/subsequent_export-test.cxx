@@ -225,6 +225,7 @@ public:
     void testTdf125173XLSX();
     void testTdf79972XLSX();
     void testTdf126024XLSX();
+    void testTdf126177XLSX();
 
     void testXltxExport();
 
@@ -355,6 +356,7 @@ public:
     CPPUNIT_TEST(testTdf125173XLSX);
     CPPUNIT_TEST(testTdf79972XLSX);
     CPPUNIT_TEST(testTdf126024XLSX);
+    CPPUNIT_TEST(testTdf126177XLSX);
 
     CPPUNIT_TEST(testXltxExport);
 
@@ -4434,6 +4436,23 @@ void ScExportTest::testTdf126024XLSX()
     xmlDocPtr pXmlRels = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/worksheets/_rels/sheet1.xml.rels");
     CPPUNIT_ASSERT(pXmlRels);
     assertXPath(pXmlRels, "/r:Relationships/r:Relationship", "Target", "https://bugs.documentfoundation.org/");
+    assertXPath(pXmlRels, "/r:Relationships/r:Relationship", "TargetMode", "External");
+}
+
+void ScExportTest::testTdf126177XLSX()
+{
+    ScDocShellRef xDocSh = loadDoc("hyperlink_export.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xDocSh.is());
+    std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(&(*xDocSh), FORMAT_XLSX);
+
+    xmlDocPtr pDoc = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/worksheets/sheet1.xml");
+    CPPUNIT_ASSERT(pDoc);
+    assertXPath(pDoc, "/x:worksheet/x:hyperlinks/x:hyperlink", "location", "Munka1!A5");
+
+    xmlDocPtr pXmlRels = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/worksheets/_rels/sheet1.xml.rels");
+    CPPUNIT_ASSERT(pXmlRels);
+    OUString aTarget = getXPath(pXmlRels, "/r:Relationships/r:Relationship", "Target");
+    CPPUNIT_ASSERT(aTarget.endsWith("test.xlsx"));
     assertXPath(pXmlRels, "/r:Relationships/r:Relationship", "TargetMode", "External");
 }
 
