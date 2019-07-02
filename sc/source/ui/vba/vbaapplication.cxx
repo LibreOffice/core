@@ -568,11 +568,11 @@ uno::Reference< excel::XWorksheet > SAL_CALL
 ScVbaApplication::getActiveSheet()
 {
     uno::Reference< excel::XWorksheet > result;
-    uno::Reference< excel::XWorkbook > xWorkbook( getActiveWorkbook(), uno::UNO_QUERY );
+    uno::Reference< excel::XWorkbook > xWorkbook = getActiveWorkbook();
     if ( xWorkbook.is() )
     {
-        uno::Reference< excel::XWorksheet > xWorksheet(
-            xWorkbook->getActiveSheet(), uno::UNO_QUERY );
+        uno::Reference< excel::XWorksheet > xWorksheet =
+            xWorkbook->getActiveSheet();
         if ( xWorksheet.is() )
         {
             result = xWorksheet;
@@ -1376,7 +1376,7 @@ ScVbaApplication::MenuBars( const uno::Any& aIndex )
 uno::Any SAL_CALL
 ScVbaApplication::Rows( const uno::Any& aIndex )
 {
-    uno::Reference< excel::XWorksheet > xWorksheet( getActiveSheet(), uno::UNO_QUERY );
+    uno::Reference< excel::XWorksheet > xWorksheet = getActiveSheet();
     if ( xWorksheet.is() )
         return uno::Any( xWorksheet->Rows( aIndex ) );
     return uno::Any();

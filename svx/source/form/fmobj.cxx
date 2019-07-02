@@ -577,7 +577,7 @@ Reference< XInterface >  FmFormObj::ensureModelEnv(const Reference< XInterface >
     }
     while ( nTokIndex >= 0 );
 
-    return Reference<XInterface>( xDestContainer, UNO_QUERY );
+    return xDestContainer;
 }
 
 FmFormObj* FmFormObj::GetFormObject( SdrObject* _pSdrObject )

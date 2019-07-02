@@ -50,8 +50,7 @@ css::uno::Reference< css::task::XInteractionContinuation > InterceptedInteractio
 {
     const css::uno::Reference< css::task::XInteractionContinuation >* pContinuations = std::find_if(lContinuations.begin(), lContinuations.end(),
         [&aType](const css::uno::Reference< css::task::XInteractionContinuation >& rContinuation) {
-            css::uno::Reference< css::uno::XInterface > xCheck(rContinuation, css::uno::UNO_QUERY);
-            return xCheck->queryInterface(aType).hasValue();
+            return rContinuation->queryInterface(aType).hasValue();
         });
     if (pContinuations != lContinuations.end())
         return *pContinuations;

@@ -41,9 +41,8 @@ sfx2::SvBaseLink::UpdateResult ScWebServiceLink::DataChanged(const OUString&, co
     aResult.clear();
     bHasResult = false;
 
-    css::uno::Reference<css::ucb::XSimpleFileAccess3> xFileAccess(
-        css::ucb::SimpleFileAccess::create(comphelper::getProcessComponentContext()),
-        css::uno::UNO_QUERY);
+    css::uno::Reference<css::ucb::XSimpleFileAccess3> xFileAccess
+        = css::ucb::SimpleFileAccess::create(comphelper::getProcessComponentContext());
     if (!xFileAccess.is())
         return ERROR_GENERAL;
 

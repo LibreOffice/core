@@ -855,15 +855,11 @@ SvXMLImportContextRef SdXMLMasterPageContext::CreateChildContext(
                 uno::Reference< presentation::XPresentationPage > xPresPage(GetLocalShapesContext(), uno::UNO_QUERY);
                 if(xPresPage.is())
                 {
-                    uno::Reference< drawing::XDrawPage > xNotesDrawPage(xPresPage->getNotesPage(), uno::UNO_QUERY);
+                    uno::Reference< drawing::XDrawPage > xNotesDrawPage = xPresPage->getNotesPage();
                     if(xNotesDrawPage.is())
                     {
-                        uno::Reference< drawing::XShapes > xNewShapes(xNotesDrawPage, uno::UNO_QUERY);
-                        if(xNewShapes.is())
-                        {
-                            // presentation:notes inside master-page context
-                            xContext = new SdXMLNotesContext( GetSdImport(), nPrefix, rLocalName, xAttrList, xNewShapes);
-                        }
+                        // presentation:notes inside master-page context
+                        xContext = new SdXMLNotesContext( GetSdImport(), nPrefix, rLocalName, xAttrList, xNotesDrawPage);
                     }
                 }
             }
@@ -1417,12 +1413,11 @@ SvXMLImportContextRef SdXMLMasterStylesContext::CreateChildContext(
 
             if(xNewMasterPage.is())
             {
-                uno::Reference< drawing::XShapes > xNewShapes(xNewMasterPage, uno::UNO_QUERY);
-                if(xNewShapes.is() && GetSdImport().GetShapeImport()->GetStylesContext())
+                if(GetSdImport().GetShapeImport()->GetStylesContext())
                 {
                     const rtl::Reference<SdXMLMasterPageContext> xLclContext{
                         new SdXMLMasterPageContext(GetSdImport(),
-                            nPrefix, rLocalName, xAttrList, xNewShapes)};
+                            nPrefix, rLocalName, xAttrList, xNewMasterPage)};
                     xContext = xLclContext.get();
                     maMasterPageList.push_back(xLclContext);
                 }
@@ -1435,7 +1430,7 @@ SvXMLImportContextRef SdXMLMasterStylesContext::CreateChildContext(
         uno::Reference< presentation::XHandoutMasterSupplier > xHandoutSupp( GetSdImport().GetModel(), uno::UNO_QUERY );
         if( xHandoutSupp.is() )
         {
-            uno::Reference< drawing::XShapes > xHandoutPage( xHandoutSupp->getHandoutMasterPage(), uno::UNO_QUERY );
+            uno::Reference< drawing::XShapes > xHandoutPage = xHandoutSupp->getHandoutMasterPage();
             if(xHandoutPage.is() && GetSdImport().GetShapeImport()->GetStylesContext())
             {
                 xContext = new SdXMLMasterPageContext(GetSdImport(),

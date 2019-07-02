@@ -211,7 +211,7 @@ void OLEHandler::importStream(const uno::Reference<uno::XComponentContext>& xCom
     // Set target document.
     uno::Reference<document::XImporter> xImporter(xInterface, uno::UNO_QUERY);
     uno::Reference<document::XEmbeddedObjectSupplier> xSupplier(xOLE, uno::UNO_QUERY);
-    uno::Reference<lang::XComponent> xEmbeddedObject(xSupplier->getEmbeddedObject(), uno::UNO_QUERY);
+    uno::Reference<lang::XComponent> xEmbeddedObject = xSupplier->getEmbeddedObject();
     if (!xEmbeddedObject.is())
         return;
     xImporter->setTargetDocument( xEmbeddedObject );

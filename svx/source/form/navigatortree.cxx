@@ -103,7 +103,7 @@ namespace svxform
             if ( !pFormObject )
                 continue;
 
-            Reference< XInterface > xNormalizedModel( pFormObject->GetUnoControlModel(), UNO_QUERY );
+            Reference< XInterface > xNormalizedModel = pFormObject->GetUnoControlModel();
                 // note that this is normalized (i.e. queried for XInterface explicitly)
 
             ::std::pair< MapModelToShape::iterator, bool > aPos =
@@ -1038,7 +1038,7 @@ namespace svxform
 
             FmEntryData* pCurrentUserData = static_cast<FmEntryData*>(pCurrent->GetUserData());
 
-            Reference< XChild >  xCurrentChild(pCurrentUserData->GetChildIFace(), UNO_QUERY);
+            Reference< XChild >  xCurrentChild = pCurrentUserData->GetChildIFace();
             Reference< XIndexContainer >  xContainer(xCurrentChild->getParent(), UNO_QUERY);
 
             FmFormData* pCurrentParentUserData = static_cast<FmFormData*>(pCurrentUserData->GetParent());
@@ -1081,7 +1081,7 @@ namespace svxform
             if (pTargetData)
                 xContainer.set(pTargetData->GetElement(), UNO_QUERY);
             else
-                xContainer.set(GetNavModel()->GetForms(), UNO_QUERY);
+                xContainer = GetNavModel()->GetForms();
 
             // always insert at the end
             nIndex = xContainer->getCount();
@@ -1340,7 +1340,7 @@ namespace svxform
         if( pFormShell )
         {
             InterfaceBag aSelection;
-            aSelection.insert( Reference<XInterface>( xNewForm, UNO_QUERY ) );
+            aSelection.insert( Reference<XInterface>( xNewForm ) );
             pFormShell->GetImpl()->setCurrentSelection_Lock(aSelection);
 
             pFormShell->GetViewShell()->GetViewFrame()->GetBindings().Invalidate(SID_FM_PROPERTIES, true, true);
@@ -1569,13 +1569,13 @@ namespace svxform
                 if (m_nFormsSelected > 0)
                 {   // exactly one form is selected
                     FmFormData* pFormData = static_cast<FmFormData*>((*m_arrCurrentSelection.begin())->GetUserData());
-                    aSelection.insert( Reference< XInterface >( pFormData->GetFormIface(), UNO_QUERY ) );
+                    aSelection.insert( Reference< XInterface >( pFormData->GetFormIface() ) );
                 }
                 else
                 {   // exactly one control is selected (whatever hidden or normal)
                     FmEntryData* pEntryData = static_cast<FmEntryData*>((*m_arrCurrentSelection.begin())->GetUserData());
 
-                    aSelection.insert( Reference< XInterface >( pEntryData->GetElement(), UNO_QUERY ) );
+                    aSelection.insert( pEntryData->GetElement() );
                 }
             }
             else
@@ -1975,7 +1975,7 @@ namespace svxform
             if ( pSingleSelectionData )
             {
                 InterfaceBag aSelection;
-                aSelection.insert( Reference< XInterface >( pSingleSelectionData->GetFormIface(), UNO_QUERY ) );
+                aSelection.insert( Reference< XInterface >( pSingleSelectionData->GetFormIface() ) );
                 pFormShell->GetImpl()->setCurrentSelection_Lock(aSelection);
             }
         }

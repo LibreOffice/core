@@ -1598,7 +1598,7 @@ void ODatabaseDocument::WriteThroughComponent( const Reference< XOutputStream >&
     xSaxWriter->setOutputStream( xOutputStream );
 
     // prepare arguments (prepend doc handler to given arguments)
-    Reference< XDocumentHandler > xDocHandler( xSaxWriter,UNO_QUERY);
+    Reference< XDocumentHandler > xDocHandler( xSaxWriter );
     Sequence<Any> aArgs( 1 + _rArguments.getLength() );
     aArgs[0] <<= xDocHandler;
     for ( sal_Int32 i = 0; i < _rArguments.getLength(); ++i )

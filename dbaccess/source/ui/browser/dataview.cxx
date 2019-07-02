@@ -147,7 +147,7 @@ namespace dbaui
             try
             {
                 Reference< XController > xController( m_xController->getXController(), UNO_SET_THROW );
-                Reference< XModel > xModel( xController->getModel(), UNO_QUERY );
+                Reference< XModel > xModel = xController->getModel();
                 if ( xModel.is() )
                 {
                     ::comphelper::NamedValueCollection aArgs( xModel->getArgs() );

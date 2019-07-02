@@ -162,7 +162,7 @@ void SwSpellPopup::fillLangPopupMenu(
 
     //6--all languages used in current document
     uno::Reference< css::frame::XModel > xModel;
-    uno::Reference< css::frame::XController > xController( pWrtSh->GetView().GetViewFrame()->GetFrame().GetFrameInterface()->getController(), uno::UNO_QUERY );
+    uno::Reference< css::frame::XController > xController = pWrtSh->GetView().GetViewFrame()->GetFrame().GetFrameInterface()->getController();
     if ( xController.is() )
         xModel = xController->getModel();
     uno::Reference< document::XDocumentLanguages > xDocumentLanguages( xModel, uno::UNO_QUERY );
@@ -342,7 +342,7 @@ SwSpellPopup::SwSpellPopup(
 
         for( sal_uInt16 i = 0; i < nDicCount; i++ )
         {
-            uno::Reference< linguistic2::XDictionary >  xDicTmp( pDic[i], uno::UNO_QUERY );
+            const uno::Reference< linguistic2::XDictionary > & xDicTmp( pDic[i] );
             if (!xDicTmp.is() || LinguMgr::GetIgnoreAllList() == xDicTmp)
                 continue;
 
@@ -724,7 +724,7 @@ void SwSpellPopup::Execute( sal_uInt16 nId )
     }
     else if (nId == m_nIgnoreWordId)
     {
-        uno::Reference< linguistic2::XDictionary > xDictionary( LinguMgr::GetIgnoreAllList(), uno::UNO_QUERY );
+        uno::Reference< linguistic2::XDictionary > xDictionary = LinguMgr::GetIgnoreAllList();
         if (m_bGrammarResults) {
             try
             {

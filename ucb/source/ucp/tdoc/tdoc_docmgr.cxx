@@ -145,7 +145,7 @@ getDocumentId( const uno::Reference< uno::XInterface > & xDoc )
         // normalize the interface pointer first. Else, calls with different
         // interfaces to the same object (say, XFoo and XBar) will produce
         // different IDs
-        uno::Reference< uno::XInterface > xNormalizedIFace( xDoc, uno::UNO_QUERY );
+        uno::Reference< uno::XInterface > xNormalizedIFace( xDoc );
         sal_Int64 nId = reinterpret_cast< sal_Int64 >( xNormalizedIFace.get() );
         aId = OUString::number( nId );
     }

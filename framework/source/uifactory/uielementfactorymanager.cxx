@@ -431,7 +431,7 @@ Reference< XUIElement > SAL_CALL UIElementFactoryManager::createUIElement(
     try
     {
         if ( aModuleId.isEmpty() && xFrame.is() && xManager.is() )
-            aModuleId = xManager->identify( Reference<XInterface>( xFrame, UNO_QUERY ) );
+            aModuleId = xManager->identify( Reference<XInterface>( xFrame ) );
 
         Reference< XUIElementFactory > xUIElementFactory = getFactory( ResourceURL, aModuleId );
         if ( xUIElementFactory.is() )

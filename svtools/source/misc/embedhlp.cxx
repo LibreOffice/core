@@ -93,12 +93,12 @@ rtl::Reference<EmbedEventListener_Impl> EmbedEventListener_Impl::Create( Embedde
     {
         p->GetObject()->addStateChangeListener( pRet.get() );
 
-        uno::Reference < util::XCloseable > xClose( p->GetObject(), uno::UNO_QUERY );
+        uno::Reference < util::XCloseable > xClose = p->GetObject();
         DBG_ASSERT( xClose.is(), "Object does not support XCloseable!" );
         if ( xClose.is() )
             xClose->addCloseListener( pRet.get() );
 
-        uno::Reference < document::XEventBroadcaster > xBrd( p->GetObject(), uno::UNO_QUERY );
+        uno::Reference < document::XEventBroadcaster > xBrd = p->GetObject();
         if ( xBrd.is() )
             xBrd->addEventListener( pRet.get() );
 
@@ -320,11 +320,11 @@ void EmbeddedObjectRef::Clear()
     {
         mpImpl->mxObj->removeStateChangeListener(mpImpl->mxListener.get());
 
-        uno::Reference<util::XCloseable> xClose(mpImpl->mxObj, uno::UNO_QUERY);
+        uno::Reference<util::XCloseable> xClose = mpImpl->mxObj;
         if ( xClose.is() )
             xClose->removeCloseListener( mpImpl->mxListener.get() );
 
-        uno::Reference<document::XEventBroadcaster> xBrd(mpImpl->mxObj, uno::UNO_QUERY);
+        uno::Reference<document::XEventBroadcaster> xBrd = mpImpl->mxObj;
         if ( xBrd.is() )
             xBrd->removeEventListener( mpImpl->mxListener.get() );
 

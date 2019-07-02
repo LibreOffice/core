@@ -624,8 +624,8 @@ void GrammarCheckingIterator::DequeueAndCheck()
                                            || nSuggestedEnd > nStartPos,
                                        "nSuggestedEndOfSentencePos calculation failed?");
 
-                            uno::Reference<linguistic2::XProofreader> xGC(
-                                GetGrammarChecker(aCurLocale), uno::UNO_QUERY);
+                            uno::Reference<linguistic2::XProofreader> xGC =
+                                GetGrammarChecker(aCurLocale);
                             if (xGC.is())
                             {
                                 aGuard.clear();

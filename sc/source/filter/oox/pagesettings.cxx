@@ -746,7 +746,7 @@ void HeaderFooterParser::updateCurrHeight()
 
 void HeaderFooterParser::setAttributes()
 {
-    Reference<text::XTextRange> xRange( getStartPos(), UNO_QUERY );
+    Reference<text::XTextRange> xRange = getStartPos();
     getEndPos()->gotoRange( xRange, false );
     getEndPos()->gotoEnd( true );
     if( !getEndPos()->isCollapsed() )

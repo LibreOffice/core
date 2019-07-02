@@ -1243,7 +1243,7 @@ void SlideshowImpl::registerShapeEvents(sal_Int32 nSlideNumber)
             Reference< XMasterPageTarget > xMasterPageTarget( xDrawPage, UNO_QUERY );
             if( xMasterPageTarget.is() )
             {
-                Reference< XShapes > xMasterPage( xMasterPageTarget->getMasterPage(), UNO_QUERY );
+                Reference< XShapes > xMasterPage = xMasterPageTarget->getMasterPage();
                 if( xMasterPage.is() )
                     registerShapeEvents( xMasterPage );
             }

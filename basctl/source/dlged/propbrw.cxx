@@ -261,7 +261,7 @@ Sequence< Reference< XInterface > >
         {
             if (DlgEdObj* pDlgEdObj = dynamic_cast<DlgEdObj*>(pCurrent))
             {
-                Reference< XInterface > xControlInterface(pDlgEdObj->GetUnoControlModel(), UNO_QUERY);
+                Reference< XInterface > xControlInterface = pDlgEdObj->GetUnoControlModel();
                 if (xControlInterface.is())
                     aInterfaces.push_back(xControlInterface);
             }

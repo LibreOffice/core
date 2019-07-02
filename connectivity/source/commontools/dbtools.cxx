@@ -292,8 +292,8 @@ static Reference< XConnection > getConnection_allowException(
                 Reference<XCompletedConnection> xConnectionCompletion(xProp, UNO_QUERY);
                 if (xConnectionCompletion.is())
                 {   // instantiate the default SDB interaction handler
-                    Reference< XInteractionHandler > xHandler(
-                        InteractionHandler::createWithParent(_rxContext, nullptr), UNO_QUERY );
+                    Reference< XInteractionHandler > xHandler =
+                        InteractionHandler::createWithParent(_rxContext, nullptr);
                     xConnection = xConnectionCompletion->connectWithCompletion(xHandler);
                 }
             }

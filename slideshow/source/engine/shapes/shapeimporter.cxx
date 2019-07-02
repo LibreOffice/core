@@ -361,9 +361,7 @@ bool ShapeImporter::isSkip(
     if(xLayer.is())
     {
         OUString layerName;
-        uno::Reference<beans::XPropertySet> xPropLayerSet(
-                                                          xLayer, uno::UNO_QUERY );
-        const uno::Any& a(xPropLayerSet->getPropertyValue("Name") );
+        const uno::Any& a(xLayer->getPropertyValue("Name") );
         bool const bRet = (a >>= layerName);
         if(bRet)
         {

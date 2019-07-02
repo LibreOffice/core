@@ -335,7 +335,7 @@ namespace calc
 
     void SAL_CALL OCellListSource::disposing( const EventObject& aEvent )
     {
-        Reference<XInterface> xRangeInt( m_xRange, UNO_QUERY );
+        Reference<XInterface> xRangeInt( m_xRange );
         if ( xRangeInt == aEvent.Source )
         {
             // release references to range object

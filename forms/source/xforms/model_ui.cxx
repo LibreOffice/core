@@ -550,8 +550,7 @@ css::uno::Reference<css::xml::dom::XNode> Model::createElement( const css::uno::
         && isValidXMLName( sName ) )
     {
         // TODO: implement proper namespace handling
-        xNode.set( xParent->getOwnerDocument()->createElement( sName ),
-                   UNO_QUERY );
+        xNode = xParent->getOwnerDocument()->createElement( sName );
     }
     return xNode;
 }
@@ -575,8 +574,7 @@ css::uno::Reference<css::xml::dom::XNode> Model::createAttribute( const css::uno
         }
 
         // TODO: implement proper namespace handling
-        xNode.set( xParent->getOwnerDocument()->createAttribute( sUniqueName ),
-                   UNO_QUERY );
+        xNode = xParent->getOwnerDocument()->createAttribute( sUniqueName );
     }
     return xNode;
 }
@@ -603,7 +601,7 @@ css::uno::Reference<css::xml::dom::XNode> Model::renameNode( const css::uno::Ref
     if( xNode->getNodeType() == NodeType_ELEMENT_NODE )
     {
         Reference<XElement> xElem = xDoc->createElement( sName );
-        xNew.set( xElem, UNO_QUERY );
+        xNew = xElem;
 
         // iterate over all attributes and append them to the new element
         Reference<XElement> xOldElem( xNode, UNO_QUERY );

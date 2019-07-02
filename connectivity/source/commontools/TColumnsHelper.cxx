@@ -137,14 +137,14 @@ sdbcx::ObjectType OColumnsHelper::createObject(const OUString& _rName)
     else
     {
 
-        xRet.set(::dbtools::createSDBCXColumn(  m_pTable,
+        xRet = ::dbtools::createSDBCXColumn(  m_pTable,
                                                 xConnection,
                                                 _rName,
                                                 isCaseSensitive(),
                                                 bQueryInfo,
                                                 bAutoIncrement,
                                                 bIsCurrency,
-                                                nDataType),UNO_QUERY);
+                                                nDataType);
     }
     return xRet;
 }

@@ -1703,7 +1703,7 @@ void Shape::finalizeXShape( XmlFilterBase& rFilter, const Reference< XShapes >& 
                     if( !xChartDoc->hasInternalDataProvider() )
                     {
                         Reference< chart2::data::XDataReceiver > xDataRec( xChartDoc, UNO_QUERY );
-                        Reference< chart2::data::XDataSource > xData( xDataRec->getUsedData(), UNO_QUERY );
+                        Reference< chart2::data::XDataSource > xData = xDataRec->getUsedData();
                         if( !xData->getDataSequences().hasElements() || !xData->getDataSequences()[0]->getValues().is() ||
                                 !xData->getDataSequences()[0]->getValues()->getData().hasElements() )
                         {

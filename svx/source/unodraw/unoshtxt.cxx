@@ -516,7 +516,7 @@ SvxTextForwarder* SvxTextEditSourceImpl::GetBackgroundTextForwarder()
                     m_xLinguServiceManager.set(css::linguistic2::LinguServiceManager::create(xContext));
                 }
 
-                css::uno::Reference< css::linguistic2::XHyphenator > xHyphenator( m_xLinguServiceManager->getHyphenator(), css::uno::UNO_QUERY );
+                css::uno::Reference< css::linguistic2::XHyphenator > xHyphenator = m_xLinguServiceManager->getHyphenator();
                 if( xHyphenator.is() )
                     mpOutliner->SetHyphenator( xHyphenator );
             }

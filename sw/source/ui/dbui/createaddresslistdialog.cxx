@@ -421,9 +421,8 @@ IMPL_LINK_NOARG(SwCreateAddressListDialog, OkHdl_Impl, weld::Button&, void)
 
         const OUString sPath( SvtPathOptions().SubstituteVariable("$(userurl)/database") );
         aDlgHelper.SetDisplayDirectory( sPath );
-        uno::Reference< XFilterManager > xFltMgr(xFP, uno::UNO_QUERY);
-        xFltMgr->appendFilter( m_sAddressListFilterName, "*.csv" );
-        xFltMgr->setCurrentFilter( m_sAddressListFilterName ) ;
+        xFP->appendFilter( m_sAddressListFilterName, "*.csv" );
+        xFP->setCurrentFilter( m_sAddressListFilterName ) ;
 
         if( ERRCODE_NONE == aDlgHelper.Execute() )
         {

@@ -137,8 +137,7 @@ uno::Reference< uno::XInterface > SAL_CALL SvxSimpleUnoModel::createInstance( co
 {
     if( aServiceSpecifier == "com.sun.star.text.NumberingRules" )
     {
-        return uno::Reference< uno::XInterface >(
-            SvxCreateNumRule(), uno::UNO_QUERY );
+        return SvxCreateNumRule();
     }
     if (   aServiceSpecifier == "com.sun.star.text.textfield.DateTime"
         || aServiceSpecifier == "com.sun.star.text.TextField.DateTime"

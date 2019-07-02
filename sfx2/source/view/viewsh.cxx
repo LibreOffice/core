@@ -151,7 +151,7 @@ private:
 SfxClipboardChangeListener::SfxClipboardChangeListener( SfxViewShell* pView, const uno::Reference< datatransfer::clipboard::XClipboardNotifier >& xClpbrdNtfr )
   : m_pViewShell( nullptr ), m_xClpbrdNtfr( xClpbrdNtfr )
 {
-    m_xCtrl.set( pView->GetController(), uno::UNO_QUERY );
+    m_xCtrl = pView->GetController();
     if ( m_xCtrl.is() )
     {
         m_xCtrl->addEventListener( uno::Reference < lang::XEventListener > ( static_cast < lang::XEventListener* >( this ) ) );
@@ -392,9 +392,8 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
         }
         case SID_ACTIVATE_STYLE_APPLY:
         {
-            uno::Reference< frame::XFrame > xFrame(
-                GetViewFrame()->GetFrame().GetFrameInterface(),
-                uno::UNO_QUERY);
+            uno::Reference< frame::XFrame > xFrame =
+                GetViewFrame()->GetFrame().GetFrameInterface();
 
             Reference< beans::XPropertySet > xPropSet( xFrame, UNO_QUERY );
             Reference< frame::XLayoutManager > xLayoutManager;
@@ -762,7 +761,7 @@ void SfxViewShell::OutplaceActivated( bool bActive )
 void SfxViewShell::UIActivating( SfxInPlaceClient* /*pClient*/ )
 {
     uno::Reference < frame::XFrame > xOwnFrame( pFrame->GetFrame().GetFrameInterface() );
-    uno::Reference < frame::XFramesSupplier > xParentFrame( xOwnFrame->getCreator(), uno::UNO_QUERY );
+    uno::Reference < frame::XFramesSupplier > xParentFrame = xOwnFrame->getCreator();
     if ( xParentFrame.is() )
         xParentFrame->setActiveFrame( xOwnFrame );
 

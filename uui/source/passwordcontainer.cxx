@@ -123,7 +123,7 @@ bool PasswordContainerHelper::handleAuthenticationRequest(
     OUString const & rURL,
     uno::Reference< task::XInteractionHandler2 > const & xIH )
 {
-    uno::Reference< task::XInteractionHandler > xIH1(xIH, uno::UNO_QUERY);
+    uno::Reference< task::XInteractionHandler > xIH1(xIH);
 
     // Is continuation even a XInteractionSupplyAuthentication2, which
     // is derived from XInteractionSupplyAuthentication?
@@ -233,7 +233,7 @@ bool PasswordContainerHelper::addRecord(
     uno::Reference< task::XInteractionHandler2 > const & xIH,
     bool bPersist )
 {
-    uno::Reference< task::XInteractionHandler > xIH1(xIH, uno::UNO_QUERY);
+    uno::Reference< task::XInteractionHandler > xIH1(xIH);
 
     try
     {

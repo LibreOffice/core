@@ -96,7 +96,7 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl, weld::Button&, void)
     else
     {
         Reference< drawing::XDrawPagesSupplier > xDPS( m_pDoc->getUnoModel(), uno::UNO_QUERY );
-        Reference< drawing::XDrawPages > xDrawPages( xDPS->getDrawPages(), uno::UNO_QUERY );
+        Reference< drawing::XDrawPages > xDrawPages = xDPS->getDrawPages();
         Reference< lang::XMultiServiceFactory > xShapeFactory( m_pDoc->getUnoModel(), uno::UNO_QUERY );
 
         Reference< XComponentContext > xContext(::comphelper::getProcessComponentContext());
@@ -667,8 +667,7 @@ Reference< drawing::XDrawPage > SdPhotoAlbumDialog::appendNewSlide(AutoLayout aL
 )
 {
     Reference< drawing::XDrawPage > xSlide; // Create the slide
-    Reference< container::XIndexAccess > xIndexAccess( xDrawPages, uno::UNO_QUERY );
-    xSlide = xDrawPages->insertNewByIndex( xIndexAccess->getCount() );
+    xSlide = xDrawPages->insertNewByIndex( xDrawPages->getCount() );
     SdPage* pSlide = m_pDoc->GetSdPage( m_pDoc->GetSdPageCount(PageKind::Standard)-1, PageKind::Standard);
     pSlide->SetAutoLayout(aLayout, true); // Set the layout here
     return xSlide;

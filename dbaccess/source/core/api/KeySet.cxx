@@ -291,7 +291,7 @@ void OKeySet::construct(const Reference< XResultSet>& _xDriverSet, const OUStrin
     Reference<XSingleSelectQueryComposer> xAnalyzer(xFactory->createInstance(SERVICE_NAME_SINGLESELECTQUERYCOMPOSER),UNO_QUERY);
     xAnalyzer->setElementaryQuery(xSourceComposer->getElementaryQuery());
     Reference<XTablesSupplier> xTabSup(xAnalyzer,uno::UNO_QUERY);
-    Reference<XNameAccess> xSelectTables(xTabSup->getTables(),uno::UNO_QUERY);
+    Reference<XNameAccess> xSelectTables = xTabSup->getTables();
     const Sequence< OUString> aSeq = xSelectTables->getElementNames();
     if ( aSeq.getLength() > 1 ) // special handling for join
     {

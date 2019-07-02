@@ -250,7 +250,7 @@ void OInterfaceContainer::disposing()
         // revoke event knittings
         if ( m_xEventAttacher.is() )
         {
-            m_xEventAttacher->detach( i - 1, Reference<XInterface>(xSet, UNO_QUERY) );
+            m_xEventAttacher->detach( i - 1, Reference<XInterface>(xSet) );
             m_xEventAttacher->removeEntry( i - 1 );
         }
 
@@ -603,7 +603,7 @@ void SAL_CALL OInterfaceContainer::disposing(const css::lang::EventObject& _rSou
 {
     ::osl::MutexGuard aGuard( m_rMutex );
 
-    Reference< XInterface > xSource( _rSource.Source, UNO_QUERY );
+    Reference< XInterface > xSource( _rSource.Source );
         // normalized source
 
     OInterfaceArray::iterator j;
@@ -754,7 +754,7 @@ void OInterfaceContainer::approveNewElement( const Reference< XPropertySet >& _r
         _pElement->xPropertySet = _rxObject;
         _pElement->xChild = xChild;
         _pElement->aElementTypeInterface = aCorrectType;
-        _pElement->xInterface = Reference< XInterface >( _rxObject, UNO_QUERY );    // normalized XInterface
+        _pElement->xInterface = Reference< XInterface >( _rxObject );    // normalized XInterface
     }
 }
 
@@ -925,8 +925,6 @@ void OInterfaceContainer::implReplaceByIndex( const sal_Int32 _nIndex, const Any
 
     // get the old element
     css::uno::Reference<css::uno::XInterface>  xOldElement( m_aItems[ _nIndex ] );
-    DBG_ASSERT( xOldElement.get() == Reference< XInterface >( xOldElement, UNO_QUERY ).get(),
-        "OInterfaceContainer::implReplaceByIndex: elements should be held normalized!" );
 
     // locate the old element in the map
     OInterfaceMap::iterator j = std::find_if(m_aMap.begin(), m_aMap.end(),
@@ -935,7 +933,7 @@ void OInterfaceContainer::implReplaceByIndex( const sal_Int32 _nIndex, const Any
     // remove event knittings
     if ( m_xEventAttacher.is() )
     {
-        css::uno::Reference<css::uno::XInterface> xNormalized( xOldElement, UNO_QUERY );
+        css::uno::Reference<css::uno::XInterface> xNormalized( xOldElement );
         m_xEventAttacher->detach( _nIndex, xNormalized );
         m_xEventAttacher->removeEntry( _nIndex );
     }
@@ -1018,7 +1016,7 @@ void OInterfaceContainer::implRemoveByIndex( const sal_Int32 _nIndex, ::osl::Cle
     // remove event knittings
     if ( m_xEventAttacher.is() )
     {
-        css::uno::Reference<css::uno::XInterface> xNormalized( xElement, UNO_QUERY );
+        css::uno::Reference<css::uno::XInterface> xNormalized( xElement );
         m_xEventAttacher->detach( _nIndex, xNormalized );
         m_xEventAttacher->removeEntry( _nIndex );
     }

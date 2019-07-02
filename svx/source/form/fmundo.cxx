@@ -395,7 +395,7 @@ void FmXUndoEnvironment::Inserted(FmFormObj* pObj)
         return;
 
     // is the control still assigned to a form
-    Reference< XInterface >  xModel(pObj->GetUnoControlModel(), UNO_QUERY);
+    Reference< XInterface >  xModel = pObj->GetUnoControlModel();
     Reference< XFormComponent >  xContent(xModel, UNO_QUERY);
     if (xContent.is() && pObj->getSdrPageFromSdrObject())
     {
@@ -787,7 +787,7 @@ void SAL_CALL FmXUndoEnvironment::modified( const EventObject& /*aEvent*/ )
 void FmXUndoEnvironment::AddForms(const Reference< XNameContainer > & rForms)
 {
     Lock();
-    AddElement(Reference<XInterface>( rForms, UNO_QUERY ));
+    AddElement(Reference<XInterface>( rForms ));
     UnLock();
 }
 
@@ -795,7 +795,7 @@ void FmXUndoEnvironment::AddForms(const Reference< XNameContainer > & rForms)
 void FmXUndoEnvironment::RemoveForms(const Reference< XNameContainer > & rForms)
 {
     Lock();
-    RemoveElement(Reference<XInterface>( rForms, UNO_QUERY ));
+    RemoveElement(Reference<XInterface>( rForms ));
     UnLock();
 }
 
@@ -1039,7 +1039,7 @@ FmUndoContainerAction::FmUndoContainerAction(FmFormModel& _rMod,
     if ( xCont.is() && xElem.is() )
     {
         // normalize
-        m_xElement.set(xElem, css::uno::UNO_QUERY);
+        m_xElement = xElem;
         if ( m_eAction == Removed )
         {
             if (m_nIndex >= 0)

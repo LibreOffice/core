@@ -1258,7 +1258,7 @@ void PPTXAnimationExport::WriteAnimations(const Reference<XDrawPage>& rXDrawPage
     if (!xEnumerationAccess.is())
         return;
 
-    Reference<XEnumeration> xEnumeration(xEnumerationAccess->createEnumeration(), UNO_QUERY);
+    Reference<XEnumeration> xEnumeration = xEnumerationAccess->createEnumeration();
     if (!(xEnumeration.is() && xEnumeration->hasMoreElements()))
         return;
 
@@ -1372,7 +1372,7 @@ bool NodeContext::initChildNodes()
     Reference<XEnumerationAccess> xEnumerationAccess(mxNode, UNO_QUERY);
     if (xEnumerationAccess.is())
     {
-        Reference<XEnumeration> xEnumeration(xEnumerationAccess->createEnumeration(), UNO_QUERY);
+        Reference<XEnumeration> xEnumeration = xEnumerationAccess->createEnumeration();
         bool bIsMainSeq = mnEffectNodeType == EffectNodeType::MAIN_SEQUENCE;
         bool bIsIterateChild = mxNode->getType() == AnimationNodeType::ITERATE;
         if (xEnumeration.is())

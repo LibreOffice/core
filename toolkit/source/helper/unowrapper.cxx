@@ -231,7 +231,7 @@ void UnoWrapper::WindowDestroyed( vcl::Window* pWindow )
         VclPtr< vcl::Window > pClient = pChild->GetWindow( GetWindowType::Client );
         if ( pClient && pClient->GetWindowPeer() )
         {
-            css::uno::Reference< css::lang::XComponent > xComp( pClient->GetComponentInterface( false ), css::uno::UNO_QUERY );
+            css::uno::Reference< css::lang::XComponent > xComp = pClient->GetComponentInterface( false );
             xComp->dispose();
         }
 
@@ -250,7 +250,7 @@ void UnoWrapper::WindowDestroyed( vcl::Window* pWindow )
 
             if ( pClient && pClient->GetWindowPeer() && lcl_ImplIsParent( pWindow, pClient ) )
             {
-                css::uno::Reference< css::lang::XComponent > xComp( pClient->GetComponentInterface( false ), css::uno::UNO_QUERY );
+                css::uno::Reference< css::lang::XComponent > xComp = pClient->GetComponentInterface( false );
                 xComp->dispose();
             }
 
@@ -265,7 +265,7 @@ void UnoWrapper::WindowDestroyed( vcl::Window* pWindow )
     }
 
     VCLXWindow* pWindowPeer = pWindow->GetWindowPeer();
-    uno::Reference< lang::XComponent > xWindowPeerComp( pWindow->GetComponentInterface( false ), uno::UNO_QUERY );
+    uno::Reference< lang::XComponent > xWindowPeerComp = pWindow->GetComponentInterface( false );
     OSL_ENSURE( ( pWindowPeer != nullptr ) == xWindowPeerComp.is(),
         "UnoWrapper::WindowDestroyed: inconsistency in the window's peers!" );
     if ( pWindowPeer )

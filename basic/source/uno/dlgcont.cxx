@@ -240,7 +240,7 @@ void SfxDialogLibraryContainer::storeLibrariesToStorage( const uno::Reference< e
                         UNO_QUERY );
                     ::xmlscript::importDialogModel( xInput, xDialogModel, mxContext, mxOwnerDocument );
                     std::vector<uno::Reference<graphic::XGraphic>> vxGraphicList;
-                    vcl::graphic::SearchForGraphics(Reference<XInterface>(xDialogModel, UNO_QUERY), vxGraphicList);
+                    vcl::graphic::SearchForGraphics(xDialogModel, vxGraphicList);
                     if (!vxGraphicList.empty())
                     {
                         // Export the images to the storage
@@ -560,8 +560,7 @@ Reference< resource::XStringResourceResolver >
     if( !m_xStringResourcePersistence.is() )
         m_xStringResourcePersistence = m_pParent->implCreateStringResource( this );
 
-    Reference< resource::XStringResourceResolver > xRet( m_xStringResourcePersistence, UNO_QUERY );
-    return xRet;
+    return m_xStringResourcePersistence;
 }
 
 bool SfxDialogLibrary::containsValidDialog( const css::uno::Any& aElement )

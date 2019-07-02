@@ -183,8 +183,7 @@ static void PropagateEvent_Impl( SfxObjectShell const *pDoc, const OUString& aEv
     }
     else
     {
-        xSupplier.set( frame::theGlobalEventBroadcaster::get(::comphelper::getProcessComponentContext()),
-                       uno::UNO_QUERY );
+        xSupplier = frame::theGlobalEventBroadcaster::get(::comphelper::getProcessComponentContext());
     }
 
     if ( !xSupplier.is() )

@@ -670,7 +670,7 @@ Reference<rendering::XPolyPolygon2D> PresenterCanvas::UpdateSpriteClip (
             xDevice->createCompatibleLinePolyPolygon(aPoints));
         if (xLinePolygon.is())
             xLinePolygon->setClosed(0, true);
-        xPolygon.set(xLinePolygon, UNO_QUERY);
+        xPolygon = xLinePolygon;
     }
 
     return xPolygon;

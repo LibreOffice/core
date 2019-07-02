@@ -368,7 +368,7 @@ void SAL_CALL SdrLightEmbeddedClient_Impl::activatingUI()
 
     uno::Reference < beans::XPropertySet > xFrame( lcl_getFrame_throw(mpObj));
     uno::Reference < frame::XFrame > xOwnFrame( xFrame,uno::UNO_QUERY);
-    uno::Reference < frame::XFramesSupplier > xParentFrame( xOwnFrame->getCreator(), uno::UNO_QUERY );
+    uno::Reference < frame::XFramesSupplier > xParentFrame = xOwnFrame->getCreator();
     if ( xParentFrame.is() )
         xParentFrame->setActiveFrame( xOwnFrame );
 

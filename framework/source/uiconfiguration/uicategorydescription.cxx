@@ -342,8 +342,8 @@ void SAL_CALL ConfigurationAccess_UICategory::disposing( const EventObject& aEve
     // remove our reference to the config access
     osl::MutexGuard g(aMutex);
 
-    Reference< XInterface > xIfac1( aEvent.Source, UNO_QUERY );
-    Reference< XInterface > xIfac2( m_xConfigAccess, UNO_QUERY );
+    Reference< XInterface > xIfac1 = aEvent.Source;
+    Reference< XInterface > xIfac2 = m_xConfigAccess;
     if ( xIfac1 == xIfac2 )
         m_xConfigAccess.clear();
 }

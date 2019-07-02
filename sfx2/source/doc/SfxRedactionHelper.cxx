@@ -330,8 +330,8 @@ SfxRedactionHelper::getPageMarginsForWriter(css::uno::Reference<css::frame::XMod
         SAL_WARN("sfx.doc", "Ref to xStyleFamiliesSupplier is null in setPageMargins().");
         return aPageMargins;
     }
-    uno::Reference<container::XNameAccess> xStyleFamilies(
-        xStyleFamiliesSupplier->getStyleFamilies(), UNO_QUERY);
+    uno::Reference<container::XNameAccess> xStyleFamilies
+        = xStyleFamiliesSupplier->getStyleFamilies();
 
     if (!xStyleFamilies.is())
         return aPageMargins;
@@ -387,8 +387,8 @@ SfxRedactionHelper::getPageMarginsForCalc(css::uno::Reference<css::frame::XModel
         SAL_WARN("sfx.doc", "Ref to xStyleFamiliesSupplier is null in getPageMarginsForCalc().");
         return aPageMargins;
     }
-    uno::Reference<container::XNameAccess> xStyleFamilies(
-        xStyleFamiliesSupplier->getStyleFamilies(), UNO_QUERY);
+    uno::Reference<container::XNameAccess> xStyleFamilies
+        = xStyleFamiliesSupplier->getStyleFamilies();
 
     if (!xStyleFamilies.is())
         return aPageMargins;
