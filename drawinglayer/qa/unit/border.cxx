@@ -9,7 +9,6 @@
 
 #include <memory>
 #include <cppunit/TestAssert.h>
-#include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>
 
 #include <drawinglayer/geometry/viewinformation2d.hxx>

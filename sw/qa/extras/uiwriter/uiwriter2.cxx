@@ -33,7 +33,6 @@
 #include <redline.hxx>
 #include <view.hxx>
 #include <cmdid.h>
-#include <com/sun/star/style/BreakType.hpp>
 
 namespace
 {

@@ -31,7 +31,6 @@
 #include <unotools/streamwrap.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
-#include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
 
 #include <com/sun/star/document/XFilter.hpp>

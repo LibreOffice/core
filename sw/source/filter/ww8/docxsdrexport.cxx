@@ -10,10 +10,6 @@
 #include "docxsdrexport.hxx"
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/PointSequenceSequence.hpp>
-#include <com/sun/star/xml/sax/XSAXSerializable.hpp>
-#include <com/sun/star/xml/sax/Writer.hpp>
-#include <com/sun/star/xml/dom/XNodeList.hpp>
-#include <editeng/unoprnms.hxx>
 #include <editeng/charrotateitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/ulspitem.hxx>
@@ -21,10 +17,7 @@
 #include <editeng/opaqitem.hxx>
 #include <editeng/boxitem.hxx>
 #include <svx/svdogrp.hxx>
-#include <oox/helper/propertyset.hxx>
 #include <oox/token/namespaces.hxx>
-#include <oox/token/relationship.hxx>
-#include <oox/token/properties.hxx>
 #include <textboxhelper.hxx>
 #include <fmtanchr.hxx>
 #include <fmtsrnd.hxx>
@@ -36,8 +29,6 @@
 #include <frmatr.hxx>
 #include "docxattributeoutput.hxx"
 #include "docxexportfilter.hxx"
-#include <comphelper/processfactory.hxx>
-#include <comphelper/seqstream.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <sal/log.hxx>

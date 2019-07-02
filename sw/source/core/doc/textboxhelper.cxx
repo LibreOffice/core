@@ -15,7 +15,6 @@
 #include <fmtfsize.hxx>
 #include <doc.hxx>
 #include <IDocumentLayoutAccess.hxx>
-#include <ndtxt.hxx>
 #include <docsh.hxx>
 #include <unocoll.hxx>
 #include <unoframe.hxx>
@@ -29,7 +28,6 @@
 #include <frmfmt.hxx>
 
 #include <editeng/unoprnms.hxx>
-#include <editeng/charrotateitem.hxx>
 #include <editeng/memberids.h>
 #include <svx/svdoashp.hxx>
 #include <svx/svdpage.hxx>
