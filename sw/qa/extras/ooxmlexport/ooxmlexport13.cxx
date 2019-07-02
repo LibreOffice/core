@@ -432,6 +432,23 @@ DECLARE_OOXMLEXPORT_TEST(testTdf125518, "tdf125518.odt")
     CPPUNIT_ASSERT_EQUAL(OUString("Object3"), anchorName);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testImageCommentAtChar, "image-comment-at-char.docx")
+{
+    uno::Reference<text::XTextRange> xPara = getParagraph(1);
+    CPPUNIT_ASSERT_EQUAL(OUString("Text"),
+                         getProperty<OUString>(getRun(xPara, 1), "TextPortionType"));
+    // Without the accompanying fix in place, this test would have failed with 'Expected:
+    // Annotation; Actual: Frame', i.e. the comment start before the image was lost.
+    CPPUNIT_ASSERT_EQUAL(OUString("Annotation"),
+                         getProperty<OUString>(getRun(xPara, 2), "TextPortionType"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Frame"),
+                         getProperty<OUString>(getRun(xPara, 3), "TextPortionType"));
+    CPPUNIT_ASSERT_EQUAL(OUString("AnnotationEnd"),
+                         getProperty<OUString>(getRun(xPara, 4), "TextPortionType"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Text"),
+                         getProperty<OUString>(getRun(xPara, 5), "TextPortionType"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
