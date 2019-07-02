@@ -1243,8 +1243,7 @@ void Test::testDateFormField()
 {
     const OUString aFilterNames[] = {
         "writer8",
-        //"MS Word 97",
-        //"Office Open XML Text",
+        "Office Open XML Text",
     };
 
     for (const OUString& rFilterName : aFilterNames)
@@ -1272,7 +1271,10 @@ void Test::testDateFormField()
         SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
         IDocumentMarkAccess* pMarkAccess = pDoc->getIDocumentMarkAccess();
 
-        CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), sal_Int32(3), pMarkAccess->getAllMarksCount());
+        if(rFilterName == "Office Open XML Text")
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), sal_Int32(6), pMarkAccess->getAllMarksCount());
+        else
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), sal_Int32(3), pMarkAccess->getAllMarksCount());
 
         int nIndex = 0;
         for(auto aIter = pMarkAccess->getAllMarksBegin(); aIter != pMarkAccess->getAllMarksEnd(); ++aIter)
@@ -1315,18 +1317,28 @@ void Test::testDateFormField()
                 CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), OUString("MM/DD/YY"), sDateFormat);
                 CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), OUString("en-US"), sLang);
                 CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), OUString(""), sCurrentDate);
+
+                CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), sal_uLong(9), pFieldmark->GetMarkStart().nNode.GetIndex());
+                CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), sal_Int32(5), pFieldmark->GetMarkStart().nContent.GetIndex());
             }
             else if (nIndex == 1) // The second has the default format
             {
                 CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), OUString("MM/DD/YY"), sDateFormat);
                 CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), OUString("en-US"), sLang);
                 CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), OUString("2019-06-12"), sCurrentDate);
+
+                CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), sal_uLong(9), pFieldmark->GetMarkStart().nNode.GetIndex());
+                CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), sal_Int32(13), pFieldmark->GetMarkStart().nContent.GetIndex());
             }
             else // The third one has special format
             {
                 CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), OUString("[NatNum12 MMMM=abbreviation]YYYY\". \"MMMM D."), sDateFormat);
                 CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), OUString("hu-HU"), sLang);
                 CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), OUString("2019-06-11"), sCurrentDate);
+
+                CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), sal_uLong(9), pFieldmark->GetMarkStart().nNode.GetIndex());
+                CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), sal_Int32(23), pFieldmark->GetMarkStart().nContent.GetIndex());
+
             }
             ++nIndex;
         }
