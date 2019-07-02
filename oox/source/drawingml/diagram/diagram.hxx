@@ -189,10 +189,6 @@ public:
     ::std::vector<OUString> &getExtDrawings()
         { return maExtDrawings; }
     const dgm::Point* getRootPoint() const;
-    sal_Int32 getMaxDepth() const
-        { return mnMaxDepth; }
-    void setMaxDepth(sal_Int32 nDepth)
-        { mnMaxDepth = nDepth; }
     void dump() const;
 private:
     FillPropertiesPtr mpFillProperties;
@@ -202,7 +198,6 @@ private:
     PointsNameMap     maPointsPresNameMap;
     ConnectionNameMap maConnectionNameMap;
     StringMap         maPresOfNameMap;
-    sal_Int32         mnMaxDepth;
 };
 
 typedef std::shared_ptr< DiagramData > DiagramDataPtr;
