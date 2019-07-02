@@ -913,9 +913,16 @@ SwRedlineExtraData* SwRedlineExtraData_FormattingChanges::CreateNew() const
     return new SwRedlineExtraData_FormattingChanges( *this );
 }
 
-void SwRedlineExtraData_FormattingChanges::Reject(SwPaM&) const
+void SwRedlineExtraData_FormattingChanges::Reject(SwPaM& rPam) const
 {
-    // ToDo: Add 'Reject' logic
+    SwDoc* pDoc = rPam.GetDoc();
+
+    RedlineFlags eOld = pDoc->getIDocumentRedlineAccess().GetRedlineFlags();
+    pDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern(eOld & ~RedlineFlags(RedlineFlags::On | RedlineFlags::Ignore));
+
+    pDoc->getIDocumentContentOperations().InsertItemSet(rPam, *GetItemSet());
+
+    pDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld );
 }
 
 bool SwRedlineExtraData_FormattingChanges::operator == ( const SwRedlineExtraData& rExtraData ) const

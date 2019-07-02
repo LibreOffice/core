@@ -649,9 +649,6 @@ namespace
         case RedlineType::Format:
         case RedlineType::FmtColl:
             {
-                if( pRedl->GetExtraData() )
-                    pRedl->GetExtraData()->Reject( *pRedl );
-
                 // tdf#52391 instead of hidden acception at the requested
                 // rejection, remove direct text formatting to get the potential
                 // original state of the text (FIXME if the original text
@@ -660,10 +657,13 @@ namespace
                 if ( pRedl->GetType() == RedlineType::Format )
                 {
                     SwPaM aPam( *(pRedl->Start()), *(pRedl->End()) );
-                    rArr.DeleteAndDestroy( rPos-- );
                     rDoc.ResetAttrs(aPam);
-                } else
-                    rArr.DeleteAndDestroy( rPos-- );
+                }
+
+                if( pRedl->GetExtraData() )
+                    pRedl->GetExtraData()->Reject( *pRedl );
+
+                rArr.DeleteAndDestroy( rPos-- );
             }
             break;
 
