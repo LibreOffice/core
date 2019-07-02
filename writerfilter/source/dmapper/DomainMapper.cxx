@@ -1019,6 +1019,8 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
 
             if (!m_pImpl->m_pSdtHelper->getDropDownItems().empty())
                 m_pImpl->m_pSdtHelper->createDropDownControl();
+            else if (m_pImpl->m_pSdtHelper->validateDateFormat() && !IsInHeaderFooter())
+                m_pImpl->m_pSdtHelper->createDateContentControl();
         break;
         case NS_ooxml::LN_CT_SdtListItem_displayText:
             // TODO handle when this is != value
@@ -2431,16 +2433,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
     break;
     case NS_ooxml::LN_CT_SdtPr_date:
     {
-        if (!IsInHeaderFooter())
-            resolveSprmProps(*this, rSprm);
-        else
-        {
-            OUString sName = "ooxml:CT_SdtPr_date";
-            enableInteropGrabBag(sName);
-            resolveSprmProps(*this, rSprm);
-            m_pImpl->m_pSdtHelper->appendToInteropGrabBag(getInteropGrabBag());
-            m_pImpl->disableInteropGrabBag();
-        }
+        resolveSprmProps(*this, rSprm);
     }
     break;
     case NS_ooxml::LN_CT_SdtDate_dateFormat:
@@ -3240,12 +3233,7 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
     // Form controls are not allowed in headers / footers; see sw::DocumentContentOperationsManager::InsertDrawObj()
     else if (m_pImpl->m_pSdtHelper->validateDateFormat() && !IsInHeaderFooter())
     {
-        /*
-         * Here we assume w:sdt only contains a single text token. We need to
-         * create the control early, as in Writer, it's part of the cell, but
-         * in OOXML, the sdt contains the cell.
-         */
-        m_pImpl->m_pSdtHelper->createDateControl(sText, getInteropGrabBag());
+        // date field is imported, we don't need the corresponding date text
         return;
     }
     else if (!m_pImpl->m_pSdtHelper->isInteropGrabBagEmpty())
@@ -3262,7 +3250,6 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
                 m_pImpl->m_pSdtHelper->containedInInteropGrabBag("ooxml:CT_SdtPr_text") ||
                 m_pImpl->m_pSdtHelper->containedInInteropGrabBag("ooxml:CT_SdtPr_dataBinding") ||
                 m_pImpl->m_pSdtHelper->containedInInteropGrabBag("ooxml:CT_SdtPr_citation") ||
-                m_pImpl->m_pSdtHelper->containedInInteropGrabBag("ooxml:CT_SdtPr_date") ||
                 (m_pImpl->m_pSdtHelper->containedInInteropGrabBag("ooxml:CT_SdtPr_id") &&
                         m_pImpl->m_pSdtHelper->getInteropGrabBagSize() == 1)) && !m_pImpl->m_pSdtHelper->isOutsideAParagraph())
         {

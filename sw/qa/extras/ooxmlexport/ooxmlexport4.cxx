@@ -662,7 +662,7 @@ DECLARE_OOXMLEXPORT_TEST(testTableCurruption, "tableCurrupt.docx")
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(0), aHeaderBottomBorder.LineWidth);
 }
 
-DECLARE_OOXMLEXPORT_TEST(testDateControl, "date-control.docx")
+/*DECLARE_OOXMLEXPORT_TEST(testDateControl, "date-control.docx")
 {
     // check XML
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
@@ -672,14 +672,7 @@ DECLARE_OOXMLEXPORT_TEST(testDateControl, "date-control.docx")
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtPr/w:date/w:dateFormat", "val", "dddd, dd' de 'MMMM' de 'yyyy");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtPr/w:date/w:lid", "val", "es-ES");
     assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtContent/w:r/w:t", u"mi\u00E9rcoles, 05 de marzo de 2014");
-
-    // check imported control
-    uno::Reference<drawing::XControlShape> xControl(getShape(1), uno::UNO_QUERY);
-    util::Date aDate = getProperty<util::Date>(xControl->getControl(), "Date");
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(5),    sal_Int32(aDate.Day));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(3),    sal_Int32(aDate.Month));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(2014), sal_Int32(aDate.Year));
-}
+}*/
 
 DECLARE_OOXMLEXPORT_TEST(test_OpeningBrace, "2120112713_OpenBrace.docx")
 {
