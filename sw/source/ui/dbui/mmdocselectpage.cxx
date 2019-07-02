@@ -70,10 +70,10 @@ SwMailMergeDocSelectPage::SwMailMergeDocSelectPage(SwMailMergeWizard* pWizard, T
 
     const uno::Sequence< OUString >& rDocs =
                             m_pWizard->GetConfigItem().GetSavedDocuments();
-    for(sal_Int32 nDoc = 0; nDoc < rDocs.getLength(); ++nDoc)
+    for(const auto& rDoc : rDocs)
     {
         //insert in reverse order
-        m_xRecentDocLB->insert_text(0, rDocs[nDoc]);
+        m_xRecentDocLB->insert_text(0, rDoc);
     }
     m_xRecentDocLB->set_active(0);
     if(!rDocs.hasElements())

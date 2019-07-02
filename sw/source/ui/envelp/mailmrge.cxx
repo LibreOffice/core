@@ -338,13 +338,10 @@ SwMailMergeDlg::SwMailMergeDlg(vcl::Window* pParent, SwWrtShell& rShell,
             uno::Sequence< beans::PropertyValue > aFilterProperties;
             aProps >>= aFilterProperties;
             OUString sUIName2;
-            const beans::PropertyValue* pFilterProperties = aFilterProperties.getConstArray();
-            for(sal_Int32 nProp = 0; nProp < aFilterProperties.getLength(); ++nProp) {
-                if(pFilterProperties[nProp].Name == "UIName") {
-                    pFilterProperties[nProp].Value >>= sUIName2;
-                    break;
-                }
-            }
+            auto pProp = std::find_if(aFilterProperties.begin(), aFilterProperties.end(),
+                [](const beans::PropertyValue& rProp) { return rProp.Name == "UIName"; });
+            if (pProp != aFilterProperties.end())
+                pProp->Value >>= sUIName2;
             if( !sUIName2.isEmpty() ) {
                 const sal_Int32 nFilter = m_pFilterLB->InsertEntry( sUIName2 );
                 if( sFilter == "writer8" )
@@ -544,11 +541,9 @@ bool SwMailMergeDlg::ExecQryShell()
             uno::Reference< XResultSet > xRes(xRowLocate,UNO_QUERY);
             pImpl->xSelSupp->getSelection() >>= m_aSelection;
             if ( xRowLocate.is() ) {
-                Any* pBegin = m_aSelection.getArray();
-                Any* pEnd   = pBegin + m_aSelection.getLength();
-                for (; pBegin != pEnd ; ++pBegin) {
-                    if ( xRowLocate->moveToBookmark(*pBegin) )
-                        *pBegin <<= xRes->getRow();
+                for (Any& rRow : m_aSelection) {
+                    if ( xRowLocate->moveToBookmark(rRow) )
+                        rRow <<= xRes->getRow();
                 }
             }
         }

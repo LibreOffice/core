@@ -213,14 +213,12 @@ public:
         else
         {
             uno::Sequence< OUString > sElementNames = mxParaStyles->getElementNames();
-            for( sal_Int32 j = 0; j < sElementNames.getLength(); j++ )
+            auto pStyleName = std::find_if(sElementNames.begin(), sElementNames.end(),
+                [&aName](const OUString& rStyleName) { return rStyleName.equalsIgnoreAsciiCase( aName ); });
+            if (pStyleName != sElementNames.end())
             {
-                OUString aStyleName = sElementNames[j];
-                if( aStyleName.equalsIgnoreAsciiCase( aName ) )
-                {
-                    cachePos = mxParaStyles->getByName( aStyleName );
-                    return true;
-                }
+                cachePos = mxParaStyles->getByName( *pStyleName );
+                return true;
             }
         }
         return false;

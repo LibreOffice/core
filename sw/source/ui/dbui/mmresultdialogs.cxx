@@ -387,9 +387,8 @@ void SwMMResultEmailDialog::FillInEmailSettings()
     uno::Sequence< OUString > aFields;
     if (xColAccess.is())
         aFields = xColAccess->getElementNames();
-    const OUString* pFields = aFields.getConstArray();
-    for (sal_Int32 nField = 0; nField < aFields.getLength(); ++nField)
-        m_xMailToLB->append_text(pFields[nField]);
+    for (const OUString& rField : aFields)
+        m_xMailToLB->append_text(rField);
 
     m_xMailToLB->set_active(0);
     // then select the right one - may not be available

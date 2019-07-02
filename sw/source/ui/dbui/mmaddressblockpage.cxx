@@ -38,6 +38,7 @@
 #include <com/sun/star/sdbc/SQLException.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/sdb/XColumn.hpp>
+#include <comphelper/sequence.hxx>
 #include <comphelper/string.hxx>
 #include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
@@ -147,8 +148,8 @@ void SwMailMergeAddressBlockPage::ActivatePage()
         m_pSettingsWIN->Clear();
         const uno::Sequence< OUString> aBlocks =
                     m_pWizard->GetConfigItem().GetAddressBlocks();
-        for(sal_Int32 nAddress = 0; nAddress < aBlocks.getLength(); ++nAddress)
-            m_pSettingsWIN->AddAddress(aBlocks[nAddress]);
+        for(const auto& rAddress : aBlocks)
+            m_pSettingsWIN->AddAddress(rAddress);
         m_pSettingsWIN->SelectAddress(static_cast<sal_uInt16>(rConfigItem.GetCurrentAddressBlockIndex()));
         m_pAddressCB->Check(rConfigItem.IsAddressBlock());
         AddressBlockHdl_Impl(m_pAddressCB);
@@ -203,8 +204,8 @@ IMPL_LINK_NOARG(SwMailMergeAddressBlockPage, SettingsHdl_Impl, Button*, void)
         const uno::Sequence< OUString> aBlocks = aDlg.GetAddressBlocks();
         rConfig.SetAddressBlocks(aBlocks);
         m_pSettingsWIN->Clear();
-        for(sal_Int32 nAddress = 0; nAddress < aBlocks.getLength(); ++nAddress)
-            m_pSettingsWIN->AddAddress(aBlocks[nAddress]);
+        for(const auto& rAddress : aBlocks)
+            m_pSettingsWIN->AddAddress(rAddress);
         m_pSettingsWIN->SelectAddress(0);
         m_pSettingsWIN->Invalidate();    // #i40408
         rConfig.SetCountrySettings(aDlg.IsIncludeCountry(), aDlg.GetCountry());
@@ -355,8 +356,8 @@ void SwSelectAddressBlockDialog::SetAddressBlocks(const uno::Sequence< OUString>
         sal_uInt16 nSelectedAddress)
 {
     m_aAddressBlocks = rBlocks;
-    for (sal_Int32 nAddress = 0; nAddress < m_aAddressBlocks.getLength(); ++nAddress)
-        m_xPreview->AddAddress(m_aAddressBlocks[nAddress]);
+    for (const auto& rAddressBlock : m_aAddressBlocks)
+        m_xPreview->AddAddress(rAddressBlock);
     m_xPreview->SelectAddress(nSelectedAddress);
 }
 
@@ -368,17 +369,9 @@ const uno::Sequence< OUString >&    SwSelectAddressBlockDialog::GetAddressBlocks
     if(nSelect)
     {
         uno::Sequence< OUString >aTemp = m_aAddressBlocks;
-        OUString* pTemp = aTemp.getArray();
-        pTemp[0] = m_aAddressBlocks[nSelect];
-        sal_Int32 nIndex = 0;
-        const sal_Int32 nNumBlocks = m_aAddressBlocks.getLength();
-        for(sal_Int32 nAddress = 1; nAddress < nNumBlocks; ++nAddress)
-        {
-            if(nIndex == nSelect)
-                ++nIndex;
-            pTemp[nAddress] = m_aAddressBlocks[nIndex];
-            nIndex++;
-        }
+        aTemp[0] = m_aAddressBlocks[nSelect];
+        std::copy(m_aAddressBlocks.begin(), std::next(m_aAddressBlocks.begin(), nSelect), std::next(aTemp.begin()));
+        std::copy(std::next(m_aAddressBlocks.begin(), nSelect + 1), m_aAddressBlocks.end(), std::next(aTemp.begin(), nSelect + 1));
         m_aAddressBlocks = aTemp;
     }
     return m_aAddressBlocks;
@@ -410,15 +403,7 @@ IMPL_LINK(SwSelectAddressBlockDialog, DeleteHdl_Impl, weld::Button&, rButton, vo
     if (m_aAddressBlocks.getLength())
     {
         const sal_Int32 nSelected = static_cast<sal_Int32>(m_xPreview->GetSelectedAddress());
-        OUString* pAddressBlocks = m_aAddressBlocks.getArray();
-        sal_Int32 nSource = 0;
-        for(sal_Int32 nTarget = 0; nTarget < m_aAddressBlocks.getLength() - 1; nTarget++)
-        {
-            if(nSource == nSelected)
-                ++nSource;
-            pAddressBlocks[nTarget] = pAddressBlocks[nSource++];
-        }
-        m_aAddressBlocks.realloc(m_aAddressBlocks.getLength() - 1);
+        comphelper::removeElementAt(m_aAddressBlocks, nSelected);
         if (m_aAddressBlocks.getLength() <= 1)
             rButton.set_sensitive(false);
         m_xPreview->RemoveSelectedAddress();
@@ -858,7 +843,6 @@ void SwAssignFieldsControl::Init(SwAssignFieldsDialog* pDialog, SwMailMergeConfi
     uno::Sequence< OUString > aFields;
     if(xColAccess.is())
         aFields = xColAccess->getElementNames();
-    const OUString* pFields = aFields.getConstArray();
 
     //get the current assignment list
     //each position in this sequence matches the position in the header array rHeaders
@@ -879,8 +863,8 @@ void SwAssignFieldsControl::Init(SwAssignFieldsDialog* pDialog, SwMailMergeConfi
         rNewLB.append_text(SwResId(SW_STR_NONE));
         rNewLB.set_active(0);
 
-        for (sal_Int32 nField = 0; nField < aFields.getLength(); ++nField)
-            rNewLB.append_text(pFields[nField]);
+        for (const OUString& rField : aFields)
+            rNewLB.append_text(rField);
         //select the ListBox
         //if there is an assignment
         if(static_cast<sal_uInt32>(aAssignments.getLength()) > i && !aAssignments[i].isEmpty())

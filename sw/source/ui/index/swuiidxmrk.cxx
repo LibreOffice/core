@@ -1068,13 +1068,13 @@ static const TextInfo aTextInfoArr[] =
     {AUTH_FIELD_CUSTOM5,         HID_AUTH_FIELD_CUSTOM5         }
 };
 
-static OUString lcl_FindColumnEntry(const beans::PropertyValue* pFields, sal_Int32 nLen, const OUString& rColumnTitle)
+static OUString lcl_FindColumnEntry(const uno::Sequence<beans::PropertyValue>& rFields, const OUString& rColumnTitle)
 {
-    for(sal_Int32 i = 0; i < nLen; i++)
+    for(const auto& rField : rFields)
     {
         OUString sRet;
-        if(pFields[i].Name == rColumnTitle &&
-            (pFields[i].Value >>= sRet))
+        if(rField.Name == rColumnTitle &&
+            (rField.Value >>= sRet))
         {
             return sRet;
         }
@@ -1157,11 +1157,10 @@ IMPL_LINK( SwAuthorMarkPane, CompEntryHdl, weld::ComboBox&, rBox, void)
                 uno::Sequence<beans::PropertyValue> aFieldProps;
                 if(aEntry >>= aFieldProps)
                 {
-                    const beans::PropertyValue* pProps = aFieldProps.getConstArray();
-                    for(sal_Int32 i = 0; i < AUTH_FIELD_END && i < aFieldProps.getLength(); i++)
+                    auto nSize = std::min(static_cast<sal_Int32>(AUTH_FIELD_END), aFieldProps.getLength());
+                    for(sal_Int32 i = 0; i < nSize; i++)
                     {
-                        m_sFields[i] = lcl_FindColumnEntry(
-                                pProps, aFieldProps.getLength(), m_sColumnTitles[i]);
+                        m_sFields[i] = lcl_FindColumnEntry(aFieldProps, m_sColumnTitles[i]);
                     }
                 }
             }
@@ -1306,14 +1305,12 @@ IMPL_LINK_NOARG(SwAuthorMarkPane, ChangeSourceHdl, weld::ToggleButton&, void)
                 uno::Sequence<beans::PropertyValue> aSeq;
                 if( aNames >>= aSeq)
                 {
-                    const beans::PropertyValue* pArr = aSeq.getConstArray();
-                    for(sal_Int32 i = 0; i < aSeq.getLength(); i++)
+                    for(const beans::PropertyValue& rProp : aSeq)
                     {
-                        OUString sTitle = pArr[i].Name;
                         sal_Int16 nField = 0;
-                        pArr[i].Value >>= nField;
+                        rProp.Value >>= nField;
                         if(nField >= 0 && nField < AUTH_FIELD_END)
-                            m_sColumnTitles[nField] = sTitle;
+                            m_sColumnTitles[nField] = rProp.Name;
                     }
                 }
             }
@@ -1322,9 +1319,8 @@ IMPL_LINK_NOARG(SwAuthorMarkPane, ChangeSourceHdl, weld::ToggleButton&, void)
         if(xBibAccess.is())
         {
             uno::Sequence<OUString> aIdentifiers = xBibAccess->getElementNames();
-            const OUString* pNames = aIdentifiers.getConstArray();
-            for(sal_Int32 i = 0; i < aIdentifiers.getLength(); i++)
-                m_xEntryLB->append_text(pNames[i]);
+            for(const OUString& rName : aIdentifiers)
+                m_xEntryLB->append_text(rName);
         }
     }
     else

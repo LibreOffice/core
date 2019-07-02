@@ -23,6 +23,7 @@
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/sdb/XDatabaseAccess.hpp>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/sequence.hxx>
 #include <sfx2/viewfrm.hxx>
 
 #include <view.hxx>
@@ -89,16 +90,8 @@ void SwChangeDBDlg::FillDBPopup()
     m_xAvailDBTLB->Select(rDBData.sDataSource, rDBData.sCommand, OUString());
     TreeSelect();
 
-    std::vector<OUString> aAllDBNames;
-
     Sequence< OUString > aDBNames = xDBContext->getElementNames();
-    const OUString* pDBNames = aDBNames.getConstArray();
-    sal_Int32 nDBCount = aDBNames.getLength();
-    aAllDBNames.reserve(nDBCount);
-    for (sal_Int32 i = 0; i < nDBCount; i++)
-    {
-        aAllDBNames.push_back(pDBNames[i]);
-    }
+    auto aAllDBNames = comphelper::sequenceToContainer<std::vector<OUString>>(aDBNames);
 
     std::vector<OUString> aDBNameList;
     pSh->GetAllUsedDB( aDBNameList, &aAllDBNames );

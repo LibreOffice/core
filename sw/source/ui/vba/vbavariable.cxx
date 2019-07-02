@@ -66,11 +66,10 @@ sal_Int32 SAL_CALL
 SwVbaVariable::getIndex()
 {
     const uno::Sequence< beans::PropertyValue > props = mxUserDefined->getPropertyValues();
-    for (sal_Int32 i = 0; i < props.getLength(); ++i)
-    {
-        if( maVariableName == props[i].Name )
-            return i+1;
-    }
+    auto pProp = std::find_if(props.begin(), props.end(),
+        [this](const beans::PropertyValue& rProp) { return rProp.Name == maVariableName; });
+    if (pProp != props.end())
+        return static_cast<sal_Int32>(std::distance(props.begin(), pProp)) + 1;
 
     return 0;
 }

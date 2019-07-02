@@ -41,17 +41,14 @@ SwDBTablePreviewDialog::SwDBTablePreviewDialog(vcl::Window* pParent, uno::Sequen
     m_pBeamerWIN->set_width_request(aSize.Width());
     m_pBeamerWIN->set_height_request(aSize.Height());
 
-    const beans::PropertyValue* pValues = rValues.getConstArray();
-    for(sal_Int32 nValue = 0; nValue < rValues.getLength(); ++nValue        )
+    auto pValue = std::find_if(rValues.begin(), rValues.end(),
+        [](const beans::PropertyValue& rValue) { return rValue.Name == "Command"; });
+    if (pValue != rValues.end())
     {
-        if ( pValues[nValue].Name == "Command" )
-        {
-            OUString sDescription = m_pDescriptionFI->GetText();
-            OUString sTemp;
-            pValues[nValue].Value >>= sTemp;
-            m_pDescriptionFI->SetText(sDescription.replaceFirst("%1", sTemp));
-            break;
-        }
+        OUString sDescription = m_pDescriptionFI->GetText();
+        OUString sTemp;
+        pValue->Value >>= sTemp;
+        m_pDescriptionFI->SetText(sDescription.replaceFirst("%1", sTemp));
     }
 
     try
