@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_dff9ac4d",
+        "filename": "unoxml/source/rdf/librdf_repository.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 552,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-07-02T12:29:01Z",
+      "side": 1,
+      "message": "1. this could be const\n2. this file uses \"m_\" prefixes not \"m\"",
+      "revId": "2f898f93c141f4831936784dab471e02db29e867",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_1f008434",
+        "filename": "unoxml/source/rdf/librdf_repository.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 569,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-07-02T12:29:01Z",
+      "side": 1,
+      "message": "this operation needs to be atomic, add a mutex?",
+      "revId": "2f898f93c141f4831936784dab471e02db29e867",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_ff02703e",
+        "filename": "unoxml/source/rdf/librdf_repository.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2251,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-07-02T12:29:01Z",
+      "side": 1,
+      "message": "please append another separator before this",
+      "revId": "2f898f93c141f4831936784dab471e02db29e867",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
