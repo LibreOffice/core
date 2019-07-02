@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_7fc66019",
+        "filename": "sd/qa/unit/uiimpress.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2019-07-02T11:39:38Z",
+      "side": 1,
+      "message": "Hi Miklos,\nI need help with the unittest. Adding EndTextEditAllViews() to SlsSlotManager.cxx fixes the crash if done manually, however it still crashes here.",
+      "range": {
+        "startLine": 160,
+        "startChar": 3,
+        "endLine": 160,
+        "endChar": 4
+      },
+      "revId": "bb281197b0db749f988fc23f776ff260959e7980",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
