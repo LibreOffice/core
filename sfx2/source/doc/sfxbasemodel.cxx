@@ -3179,8 +3179,7 @@ Reference < container::XIndexAccess > SAL_CALL SfxBaseModel::getViewData()
             // currently no frame for this document at all or View is under construction
             return Reference < container::XIndexAccess >();
 
-        m_pData->m_contViewData.set( document::IndexedPropertyValues::create( ::comphelper::getProcessComponentContext() ),
-                                     UNO_QUERY );
+        m_pData->m_contViewData = document::IndexedPropertyValues::create( ::comphelper::getProcessComponentContext() );
 
         if ( !m_pData->m_contViewData.is() )
         {
@@ -3331,10 +3330,9 @@ Sequence< OUString > SAL_CALL SfxBaseModel::getDocumentSubStoragesNames()
     if ( m_pData->m_pObjectShell.is() )
     {
         Reference < embed::XStorage > xStorage = m_pData->m_pObjectShell->GetStorage();
-        Reference < container::XNameAccess > xAccess( xStorage, UNO_QUERY );
-        if ( xAccess.is() )
+        if ( xStorage.is() )
         {
-            Sequence< OUString > aTemp = xAccess->getElementNames();
+            Sequence< OUString > aTemp = xStorage->getElementNames();
             sal_Int32 nResultSize = 0;
             for ( sal_Int32 n = 0; n < aTemp.getLength(); n++ )
             {
@@ -3538,8 +3536,7 @@ Reference< ui::XUIConfigurationManager2 > SfxBaseModel::getUIConfigurationManage
                                 }
                             }
 
-                            Reference< container::XIndexAccess > xToolbarData( xToolbar, UNO_QUERY );
-                            xNewUIConfMan->insertSettings( aCustomTbxName, xToolbarData );
+                            xNewUIConfMan->insertSettings( aCustomTbxName, xToolbar );
                             xNewUIConfMan->store();
                         }
                     }

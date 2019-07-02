@@ -88,8 +88,7 @@ uno::Reference < io::XInputStream > UriBindingHelper::OpenInputStream( const uno
             throw uno::Exception("Could not decode URI for stream element.", nullptr);
 
         uno::Reference< io::XStream > xStream;
-        uno::Reference<container::XNameAccess> xNameAccess(rxStore, uno::UNO_QUERY);
-        if (!xNameAccess->hasByName(sName))
+        if (!rxStore->hasByName(sName))
             SAL_WARN("xmlsecurity.helper", "expected stream, but not found: " << sName);
         else
             xStream = rxStore->cloneStreamElement( sName );

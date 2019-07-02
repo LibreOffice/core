@@ -1374,7 +1374,7 @@ IMPL_LINK(SvxLinguTabPage, ClickHdl_Impl, weld::Button&, rBtn, void)
         ScopedVclPtr<AbstractSvxNewDictionaryDialog> aDlg(pFact->CreateSvxNewDictionaryDialog(GetDialogFrameWeld()));
         uno::Reference< XDictionary >  xNewDic;
         if ( aDlg->Execute() == RET_OK )
-            xNewDic.set( aDlg->GetNewDictionary(), UNO_QUERY );
+            xNewDic = aDlg->GetNewDictionary();
         if ( xNewDic.is() )
         {
             // add new dics to the end

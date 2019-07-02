@@ -1518,7 +1518,6 @@ void FilterCache::impl_savePatchUINames(const css::uno::Reference< css::containe
                                         const CacheItem&                                           rItem)
 {
     css::uno::Reference< css::container::XNameContainer > xAdd  (xNode, css::uno::UNO_QUERY);
-    css::uno::Reference< css::container::XNameAccess >    xCheck(xNode, css::uno::UNO_QUERY);
 
     css::uno::Sequence< css::beans::PropertyValue > lUINames = rItem.getUnpackedValueOrDefault(PROPNAME_UINAMES, css::uno::Sequence< css::beans::PropertyValue >());
     sal_Int32                                       c        = lUINames.getLength();
@@ -1526,7 +1525,7 @@ void FilterCache::impl_savePatchUINames(const css::uno::Reference< css::containe
 
     for (sal_Int32 i=0; i<c; ++i)
     {
-        if (xCheck->hasByName(pUINames[i].Name))
+        if (xNode->hasByName(pUINames[i].Name))
             xNode->replaceByName(pUINames[i].Name, pUINames[i].Value);
         else
             xAdd->insertByName(pUINames[i].Name, pUINames[i].Value);

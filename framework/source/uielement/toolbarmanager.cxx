@@ -441,7 +441,7 @@ void SAL_CALL ToolBarManager::disposing( const EventObject& Source )
     m_xDocImageManager.clear();
     m_xModuleImageManager.clear();
 
-    if ( Source.Source == Reference< XInterface >( m_xFrame, UNO_QUERY ))
+    if ( Source.Source == Reference< XInterface >( m_xFrame ))
         m_xFrame.clear();
 
     m_xContext.clear();
@@ -569,7 +569,7 @@ void ToolBarManager::impl_elementChanged(bool const isRemove,
         ( Event.Element >>= xNameAccess ))
     {
         sal_Int16 nImageInfo( 1 );
-        Reference< XInterface > xIfacDocImgMgr( m_xDocImageManager, UNO_QUERY );
+        Reference< XInterface > xIfacDocImgMgr = m_xDocImageManager;
         if ( xIfacDocImgMgr == Event.Source )
             nImageInfo = 0;
 
@@ -932,7 +932,7 @@ void ToolBarManager::InitImageManager()
             Reference< XUIConfigurationManagerSupplier > xSupplier( xModel, UNO_QUERY );
             if ( xSupplier.is() )
             {
-                Reference< XUIConfigurationManager > xDocUICfgMgr( xSupplier->getUIConfigurationManager(), UNO_QUERY );
+                Reference< XUIConfigurationManager > xDocUICfgMgr = xSupplier->getUIConfigurationManager();
                 m_xDocImageManager.set( xDocUICfgMgr->getImageManager(), UNO_QUERY );
                 m_xDocImageManager->addConfigurationListener(
                                         Reference< XUIConfigurationListener >(
@@ -943,7 +943,7 @@ void ToolBarManager::InitImageManager()
 
     try
     {
-        m_aModuleIdentifier = xModuleManager->identify( Reference< XInterface >( m_xFrame, UNO_QUERY ) );
+        m_aModuleIdentifier = xModuleManager->identify( Reference< XInterface >( m_xFrame ) );
     }
     catch (const Exception&)
     {

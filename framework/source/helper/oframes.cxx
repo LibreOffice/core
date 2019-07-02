@@ -140,7 +140,7 @@ Sequence< css::uno::Reference< XFrame > > SAL_CALL OFrames::queryFrames( sal_Int
             // Add parent to list ... if any exist!
             if( nSearchFlags & FrameSearchFlag::PARENT )
             {
-                css::uno::Reference< XFrame > xParent( xOwner->getCreator(), UNO_QUERY );
+                css::uno::Reference< XFrame > xParent = xOwner->getCreator();
                 if( xParent.is() )
                 {
                     Sequence< css::uno::Reference< XFrame > > seqParent( 1 );
@@ -164,7 +164,7 @@ Sequence< css::uno::Reference< XFrame > > SAL_CALL OFrames::queryFrames( sal_Int
                 // Protect this instance against recursive calls from parents.
                 m_bRecursiveSearchProtection = true;
                 // Ask parent of my owner for frames and append results to return list.
-                css::uno::Reference< XFramesSupplier > xParent( xOwner->getCreator(), UNO_QUERY );
+                css::uno::Reference< XFramesSupplier > xParent = xOwner->getCreator();
                 // If a parent exist ...
                 if ( xParent.is() )
                 {

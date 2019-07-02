@@ -998,7 +998,7 @@ oox::drawingml::chart::ChartConverter* XclExpXmlStream::getChartConverter()
 
 ScDocShell* XclExpXmlStream::getDocShell()
 {
-    uno::Reference< XInterface > xModel( getModel(), UNO_QUERY );
+    uno::Reference< XInterface > xModel = getModel();
 
     ScModelObj *pObj = dynamic_cast < ScModelObj* >( xModel.get() );
 

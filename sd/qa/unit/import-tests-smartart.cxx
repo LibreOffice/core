@@ -851,8 +851,8 @@ void SdImportTestSmartArt::testOrgChart()
     CPPUNIT_ASSERT_GREATER(aAssistantPos.Y, aEmployeePos.Y);
 
     // Make sure the connector of the assistant is above the shape.
-    uno::Reference<drawing::XShape> xAssistantConnector(
-        getChildShape(getChildShape(getChildShape(xGroup, 1), 1), 0), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xAssistantConnector =
+        getChildShape(getChildShape(getChildShape(xGroup, 1), 1), 0);
     CPPUNIT_ASSERT(xAssistantConnector.is());
     awt::Point aAssistantConnectorPos = xAssistantConnector->getPosition();
     // This failed, the vertical positions of the connector and the shape of
@@ -1013,8 +1013,7 @@ void SdImportTestSmartArt::testPictureStrip()
     CPPUNIT_ASSERT(xFirstImage.is());
     uno::Reference<drawing::XShape> xSecondImageShape(xSecondImage, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xSecondImage.is());
-    uno::Reference<drawing::XShape> xThirdImageShape(getChildShape(getChildShape(xGroup, 3), 1),
-                                                     uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xThirdImageShape = getChildShape(getChildShape(xGroup, 3), 1);
     CPPUNIT_ASSERT(xThirdImageShape.is());
     // Without the accompanying fix in place, this test would have failed: the first and the second
     // image were in the same row.

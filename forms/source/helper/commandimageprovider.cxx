@@ -82,7 +82,7 @@ namespace frm
         try
         {
             Reference< XUIConfigurationManagerSupplier > xSuppUIConfig( _rxDocument, UNO_QUERY_THROW );
-            Reference< XUIConfigurationManager > xUIConfig( xSuppUIConfig->getUIConfigurationManager(), UNO_QUERY );
+            Reference< XUIConfigurationManager > xUIConfig = xSuppUIConfig->getUIConfigurationManager();
             m_xDocumentImageManager.set( xUIConfig->getImageManager(), UNO_QUERY_THROW );
         }
         catch( const Exception& )

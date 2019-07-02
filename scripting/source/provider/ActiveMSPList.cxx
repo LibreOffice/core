@@ -142,7 +142,7 @@ Reference< provider::XScriptProvider >
 
     ::osl::MutexGuard guard( m_mutex );
 
-    Reference< XInterface > xNormalized( xContext, UNO_QUERY );
+    Reference< XInterface > xNormalized( xContext );
     ScriptComponent_map::const_iterator pos = m_mScriptComponents.find( xNormalized );
     if ( pos == m_mScriptComponents.end() )
     {
@@ -180,7 +180,7 @@ Reference< provider::XScriptProvider >
             }
 
             ::osl::MutexGuard guard( m_mutex );
-            Reference< XInterface > xNormalized( xModel, UNO_QUERY );
+            Reference< XInterface > xNormalized( xModel );
             ScriptComponent_map::const_iterator pos = m_mScriptComponents.find( xNormalized );
             if ( pos == m_mScriptComponents.end() )
             {
@@ -232,7 +232,7 @@ ActiveMSPList::addActiveMSP( const Reference< uno::XInterface >& xComponent,
                const Reference< provider::XScriptProvider >& msp )
 {
     ::osl::MutexGuard guard( m_mutex );
-    Reference< XInterface > xNormalized( xComponent, UNO_QUERY );
+    Reference< XInterface > xNormalized( xComponent );
     ScriptComponent_map::const_iterator pos = m_mScriptComponents.find( xNormalized );
     if ( pos == m_mScriptComponents.end() )
     {
@@ -258,7 +258,7 @@ void SAL_CALL ActiveMSPList::disposing( const css::lang::EventObject& Source )
 {
     try
     {
-        Reference< XInterface > xNormalized( Source.Source, UNO_QUERY );
+        Reference< XInterface > xNormalized( Source.Source );
         if ( xNormalized.is() )
         {
             ::osl::MutexGuard guard( m_mutex );

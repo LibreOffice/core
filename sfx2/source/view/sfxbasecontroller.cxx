@@ -721,7 +721,7 @@ Reference< frame::XDispatch > SAL_CALL SfxBaseController::queryDispatch(   const
                     Reference< frame::XFrame > xParentFrame;
                     Reference< frame::XFrame > xOwnFrame = pAct->GetFrame().GetFrameInterface();
                     if ( xOwnFrame.is() )
-                        xParentFrame.set( xOwnFrame->getCreator(), uno::UNO_QUERY );
+                        xParentFrame = xOwnFrame->getCreator();
 
                     if ( xParentFrame.is() )
                     {
@@ -778,7 +778,7 @@ Reference< frame::XDispatch > SAL_CALL SfxBaseController::queryDispatch(   const
                     Reference< frame::XFrame > xParentFrame;
                     Reference< frame::XFrame > xOwnFrame = pAct->GetFrame().GetFrameInterface();
                     if ( xOwnFrame.is() )
-                        xParentFrame.set( xOwnFrame->getCreator(), uno::UNO_QUERY );
+                        xParentFrame = xOwnFrame->getCreator();
 
                     if ( xParentFrame.is() )
                     {

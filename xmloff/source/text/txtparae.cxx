@@ -2272,7 +2272,7 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
                         if (xFormField.is())
                         {
                             OUString sName;
-                            Reference< css::container::XNameAccess > xParameters(xFormField->getParameters(), UNO_QUERY);
+                            Reference< css::container::XNameAccess > xParameters = xFormField->getParameters();
                             if (xParameters.is() && xParameters->hasByName("Name"))
                             {
                                 const Any aValue = xParameters->getByName("Name");
@@ -2323,7 +2323,7 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
                         if (xFormField.is())
                         {
                             OUString sName;
-                            Reference< css::container::XNameAccess > xParameters(xFormField->getParameters(), UNO_QUERY);
+                            Reference< css::container::XNameAccess > xParameters = xFormField->getParameters();
                             if (xParameters.is() && xParameters->hasByName("Name"))
                             {
                                 const Any aValue = xParameters->getByName("Name");
@@ -2503,7 +2503,7 @@ void XMLTextParagraphExport::exportTextMark(
         if (nElement == 1)
         {
             Reference<XPropertySet> bkmkProps(rPropSet->getPropertyValue(rProperty), UNO_QUERY);
-            Reference<XPropertySetInfo> bkmkPropInfo(bkmkProps->getPropertySetInfo(), UNO_QUERY);
+            Reference<XPropertySetInfo> bkmkPropInfo = bkmkProps->getPropertySetInfo();
             OUString sHidden("BookmarkHidden");
             if (bkmkPropInfo->hasPropertyByName(sHidden))
             {

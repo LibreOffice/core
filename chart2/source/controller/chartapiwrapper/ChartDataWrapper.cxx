@@ -504,7 +504,7 @@ void SAL_CALL ChartDataWrapper::setAnyColumnDescriptions( const Sequence< Sequen
 void SAL_CALL ChartDataWrapper::setDateCategories( const Sequence< double >& rDates )
 {
     Reference< chart2::XChartDocument > xChartDoc( m_spChart2ModelContact->getChart2Document() );
-    ControllerLockGuardUNO aCtrlLockGuard( uno::Reference< frame::XModel >( xChartDoc, uno::UNO_QUERY ));
+    ControllerLockGuardUNO aCtrlLockGuard( xChartDoc );
     lcl_DateCategoriesOperator aOperator( rDates );
     applyData( aOperator );
     DiagramHelper::switchToDateCategories( xChartDoc );
@@ -625,7 +625,7 @@ void ChartDataWrapper::applyData( lcl_Operator& rDataOperator )
     uno::Sequence< sal_Int32 > aSequenceMapping;
 
     DataSourceHelper::detectRangeSegmentation(
-        uno::Reference< frame::XModel >( xChartDoc, uno::UNO_QUERY ),
+        xChartDoc,
         aRangeString, aSequenceMapping, bUseColumns, bFirstCellAsLabel, bHasCategories );
 
     if( !bHasCategories && rDataOperator.setsCategories( bUseColumns ) )
@@ -636,7 +636,7 @@ void ChartDataWrapper::applyData( lcl_Operator& rDataOperator )
             aRangeString, aSequenceMapping, bUseColumns, bFirstCellAsLabel, bHasCategories ) );
 
     // -- locked controllers
-    ControllerLockGuardUNO aCtrlLockGuard( uno::Reference< frame::XModel >( xChartDoc, uno::UNO_QUERY ));
+    ControllerLockGuardUNO aCtrlLockGuard( xChartDoc );
 
     // create and attach new data source
     switchToInternalDataProvider();

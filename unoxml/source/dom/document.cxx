@@ -726,7 +726,7 @@ namespace DOM
             Reference< XAttr > const xNew =
                 xDocument->createAttribute(xAttr->getName());
             xNew->setValue(xAttr->getValue());
-            xNode.set(xNew, UNO_QUERY);
+            xNode = xNew;
             break;
         }
         case NodeType_CDATA_SECTION_NODE:
@@ -735,7 +735,7 @@ namespace DOM
                     UNO_QUERY_THROW);
             Reference< XCDATASection > const xNewCData =
                 xDocument->createCDATASection(xCData->getData());
-            xNode.set(xNewCData, UNO_QUERY);
+            xNode = xNewCData;
             break;
         }
         case NodeType_COMMENT_NODE:
@@ -744,7 +744,7 @@ namespace DOM
                     UNO_QUERY_THROW);
             Reference< XComment > const xNewComment =
                 xDocument->createComment(xComment->getData());
-            xNode.set(xNewComment, UNO_QUERY);
+            xNode = xNewComment;
             break;
         }
         case NodeType_DOCUMENT_FRAGMENT_NODE:
@@ -753,7 +753,7 @@ namespace DOM
                     UNO_QUERY_THROW);
             Reference< XDocumentFragment > const xNewFrag =
                 xDocument->createDocumentFragment();
-            xNode.set(xNewFrag, UNO_QUERY);
+            xNode = xNewFrag;
             break;
         }
         case NodeType_ELEMENT_NODE:
@@ -798,7 +798,7 @@ namespace DOM
                     }
                 }
             }
-            xNode.set(xNewElement, UNO_QUERY);
+            xNode = xNewElement;
             break;
         }
         case NodeType_ENTITY_REFERENCE_NODE:
@@ -807,7 +807,7 @@ namespace DOM
                     UNO_QUERY_THROW);
             Reference< XEntityReference > const xNewRef(
                 xDocument->createEntityReference(xRef->getNodeName()));
-            xNode.set(xNewRef, UNO_QUERY);
+            xNode = xNewRef;
             break;
         }
         case NodeType_PROCESSING_INSTRUCTION_NODE:
@@ -817,7 +817,7 @@ namespace DOM
             Reference< XProcessingInstruction > const xNewPi(
                 xDocument->createProcessingInstruction(
                     xPi->getTarget(), xPi->getData()));
-            xNode.set(xNewPi, UNO_QUERY);
+            xNode = xNewPi;
             break;
         }
         case NodeType_TEXT_NODE:
@@ -825,7 +825,7 @@ namespace DOM
             Reference< XText > const xText(xImportedNode, UNO_QUERY_THROW);
             Reference< XText > const xNewText(
                 xDocument->createTextNode(xText->getData()));
-            xNode.set(xNewText, UNO_QUERY);
+            xNode = xNewText;
             break;
         }
         case NodeType_ENTITY_NODE:

@@ -430,15 +430,13 @@ void SAL_CALL TabWindow::dispose()
     aLock.clear();
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
 
-    css::uno::Reference< css::lang::XComponent > xComponent( xTabControlWindow, css::uno::UNO_QUERY );
-    if ( xComponent.is() )
-        xComponent->dispose();
+    if ( xTabControlWindow.is() )
+        xTabControlWindow->dispose();
 
-    xComponent.set( xContainerWindow, css::uno::UNO_QUERY );
-    if ( xComponent.is() )
-        xComponent->dispose();
+    if ( xContainerWindow.is() )
+        xContainerWindow->dispose();
 
-    xComponent.set( xTopWindow, css::uno::UNO_QUERY );
+    css::uno::Reference< css::lang::XComponent > xComponent( xTopWindow, css::uno::UNO_QUERY );
     if ( xComponent.is() )
         xComponent->dispose();
 

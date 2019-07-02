@@ -1235,7 +1235,7 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                         aCreationArgs.put( OUString(PROPERTY_GRAPHICAL_DESIGN), ID_NEW_VIEW_DESIGN == _nId );
 
                         const Reference< XDataSource > xDataSource( m_xDataSource, UNO_QUERY );
-                        const Reference< XComponent > xComponent( aDesigner.createNew( xDataSource, aCreationArgs ), UNO_QUERY );
+                        const Reference< XComponent > xComponent = aDesigner.createNew( xDataSource, aCreationArgs );
                         onDocumentOpened( OUString(), E_QUERY, E_OPEN_DESIGN, xComponent, nullptr );
                     }
                 }
@@ -1287,7 +1287,7 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                         RelationDesigner aDesigner( getORB(), this, m_aCurrentFrame.getFrame() );
 
                         const Reference< XDataSource > xDataSource( m_xDataSource, UNO_QUERY );
-                        const Reference< XComponent > xComponent( aDesigner.createNew( xDataSource ), UNO_QUERY );
+                        const Reference< XComponent > xComponent = aDesigner.createNew( xDataSource );
                         onDocumentOpened( OUString(), SID_DB_APP_DSRELDESIGN, E_OPEN_DESIGN, xComponent, nullptr );
                     }
                 }
@@ -1957,7 +1957,7 @@ Reference< XComponent > OApplicationController::newElement( ElementType _eType, 
             }
 
             Reference< XDataSource > xDataSource( m_xDataSource, UNO_QUERY );
-            xComponent.set( pDesigner->createNew( xDataSource, i_rAdditionalArguments ), UNO_QUERY );
+            xComponent = pDesigner->createNew( xDataSource, i_rAdditionalArguments );
         }
         break;
 

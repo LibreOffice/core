@@ -446,7 +446,7 @@ void PresetHandler::connectToResource(      PresetHandler::EConfigType          
     std::vector<OUString> lTargets;
 
     // read preset names of share layer
-    xAccess.set(xShare, css::uno::UNO_QUERY);
+    xAccess = xShare;
     if (xAccess.is())
     {
         lNames  = xAccess->getElementNames();
@@ -464,7 +464,7 @@ void PresetHandler::connectToResource(      PresetHandler::EConfigType          
     }
 
     // read preset names of user layer
-    xAccess.set(xUser, css::uno::UNO_QUERY);
+    xAccess = xUser;
     if (xAccess.is())
     {
         lNames  = xAccess->getElementNames();
@@ -761,7 +761,7 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::impl_openLocalizedPat
 
 ::std::vector< OUString > PresetHandler::impl_getSubFolderNames(const css::uno::Reference< css::embed::XStorage >& xFolder)
 {
-    css::uno::Reference< css::container::XNameAccess > xAccess(xFolder, css::uno::UNO_QUERY);
+    css::uno::Reference< css::container::XNameAccess > xAccess = xFolder;
     if (!xAccess.is())
         return ::std::vector< OUString >();
 

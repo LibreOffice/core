@@ -247,8 +247,8 @@ void ChartController::executeDispatch_InsertMenu_DataLabels()
         m_xUndoManager );
 
     //if a series is selected insert labels for that series only:
-    uno::Reference< chart2::XDataSeries > xSeries(
-        ObjectIdentifier::getDataSeriesForCID( m_aSelection.getSelectedCID(), getModel()), uno::UNO_QUERY );
+    uno::Reference< chart2::XDataSeries > xSeries =
+        ObjectIdentifier::getDataSeriesForCID( m_aSelection.getSelectedCID(), getModel());
     if( xSeries.is() )
     {
         // add labels
@@ -319,8 +319,8 @@ void ChartController::executeDispatch_InsertMenu_MeanValues()
             ActionDescriptionProvider::ActionType::Insert, SchResId( STR_OBJECT_AVERAGE_LINE )),
         m_xUndoManager );
 
-    uno::Reference< chart2::XDataSeries > xSeries(
-        ObjectIdentifier::getDataSeriesForCID( m_aSelection.getSelectedCID(), getModel() ), uno::UNO_QUERY );
+    uno::Reference< chart2::XDataSeries > xSeries =
+        ObjectIdentifier::getDataSeriesForCID( m_aSelection.getSelectedCID(), getModel() );
     if( xSeries.is() )
     {
         //if a series is selected insert mean value only for that series:
@@ -341,8 +341,8 @@ void ChartController::executeDispatch_InsertMenu_Trendlines()
 {
     OUString aCID = m_aSelection.getSelectedCID();
 
-    uno::Reference< chart2::XDataSeries > xSeries(
-        ObjectIdentifier::getDataSeriesForCID( aCID, getModel() ), uno::UNO_QUERY );
+    uno::Reference< chart2::XDataSeries > xSeries =
+        ObjectIdentifier::getDataSeriesForCID( aCID, getModel() );
 
     if( !xSeries.is() )
         return;
@@ -413,8 +413,8 @@ void ChartController::executeDispatch_InsertErrorBars( bool bYError )
     ObjectType objType = bYError ? OBJECTTYPE_DATA_ERRORS_Y : OBJECTTYPE_DATA_ERRORS_X;
 
     //if a series is selected insert error bars for that series only:
-    uno::Reference< chart2::XDataSeries > xSeries(
-        ObjectIdentifier::getDataSeriesForCID( m_aSelection.getSelectedCID(), getModel() ), uno::UNO_QUERY );
+    uno::Reference< chart2::XDataSeries > xSeries =
+        ObjectIdentifier::getDataSeriesForCID( m_aSelection.getSelectedCID(), getModel() );
 
     if( xSeries.is())
     {
@@ -543,8 +543,8 @@ void ChartController::executeDispatch_InsertTrendlineEquation( bool bInsertR2 )
 
 void ChartController::executeDispatch_InsertR2Value()
 {
-    uno::Reference< beans::XPropertySet > xEqProp(
-        ObjectIdentifier::getObjectPropertySet( m_aSelection.getSelectedCID(), getModel() ), uno::UNO_QUERY );
+    uno::Reference< beans::XPropertySet > xEqProp =
+        ObjectIdentifier::getObjectPropertySet( m_aSelection.getSelectedCID(), getModel() );
     if( xEqProp.is())
     {
         UndoGuard aUndoGuard(
@@ -558,8 +558,8 @@ void ChartController::executeDispatch_InsertR2Value()
 
 void ChartController::executeDispatch_DeleteR2Value()
 {
-    uno::Reference< beans::XPropertySet > xEqProp(
-        ObjectIdentifier::getObjectPropertySet( m_aSelection.getSelectedCID(), getModel() ), uno::UNO_QUERY );
+    uno::Reference< beans::XPropertySet > xEqProp =
+        ObjectIdentifier::getObjectPropertySet( m_aSelection.getSelectedCID(), getModel() );
     if( xEqProp.is())
     {
         UndoGuard aUndoGuard(
@@ -633,8 +633,8 @@ void ChartController::executeDispatch_DeleteErrorBars( bool bYError )
 
 void ChartController::executeDispatch_InsertDataLabels()
 {
-    uno::Reference< chart2::XDataSeries > xSeries(
-        ObjectIdentifier::getDataSeriesForCID( m_aSelection.getSelectedCID(), getModel() ), uno::UNO_QUERY );
+    uno::Reference< chart2::XDataSeries > xSeries =
+        ObjectIdentifier::getDataSeriesForCID( m_aSelection.getSelectedCID(), getModel() );
     if( xSeries.is() )
     {
         UndoGuard aUndoGuard( ActionDescriptionProvider::createDescription( ActionDescriptionProvider::ActionType::Insert,
@@ -656,8 +656,8 @@ void ChartController::executeDispatch_InsertDataLabel()
 
 void ChartController::executeDispatch_DeleteDataLabels()
 {
-    uno::Reference< chart2::XDataSeries > xSeries(
-        ObjectIdentifier::getDataSeriesForCID( m_aSelection.getSelectedCID(), getModel() ), uno::UNO_QUERY );
+    uno::Reference< chart2::XDataSeries > xSeries =
+        ObjectIdentifier::getDataSeriesForCID( m_aSelection.getSelectedCID(), getModel() );
     if( xSeries.is() )
     {
         UndoGuard aUndoGuard( ActionDescriptionProvider::createDescription( ActionDescriptionProvider::ActionType::Delete,
@@ -682,7 +682,7 @@ void ChartController::executeDispatch_ResetAllDataPoints()
     UndoGuard aUndoGuard( ActionDescriptionProvider::createDescription( ActionDescriptionProvider::ActionType::Format,
         SchResId( STR_OBJECT_DATAPOINTS )),
         m_xUndoManager );
-    uno::Reference< chart2::XDataSeries > xSeries( ObjectIdentifier::getDataSeriesForCID( m_aSelection.getSelectedCID(), getModel() ), uno::UNO_QUERY );
+    uno::Reference< chart2::XDataSeries > xSeries = ObjectIdentifier::getDataSeriesForCID( m_aSelection.getSelectedCID(), getModel() );
     if( xSeries.is() )
         xSeries->resetAllDataPoints();
     aUndoGuard.commit();
@@ -692,7 +692,7 @@ void ChartController::executeDispatch_ResetDataPoint()
     UndoGuard aUndoGuard( ActionDescriptionProvider::createDescription( ActionDescriptionProvider::ActionType::Format,
         SchResId( STR_OBJECT_DATAPOINT )),
         m_xUndoManager );
-    uno::Reference< chart2::XDataSeries > xSeries( ObjectIdentifier::getDataSeriesForCID( m_aSelection.getSelectedCID(), getModel() ), uno::UNO_QUERY );
+    uno::Reference< chart2::XDataSeries > xSeries = ObjectIdentifier::getDataSeriesForCID( m_aSelection.getSelectedCID(), getModel() );
     if( xSeries.is() )
     {
         sal_Int32 nPointIndex = ObjectIdentifier::getIndexFromParticleOrCID( m_aSelection.getSelectedCID() );

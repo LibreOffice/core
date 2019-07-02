@@ -2345,8 +2345,8 @@ void SAL_CALL VCLXWindow::disposing( const css::lang::EventObject& _rSource )
     SolarMutexGuard aGuard;
 
     // check if it comes from our AccessibleContext
-    uno::Reference< uno::XInterface > aAC( mpImpl->mxAccessibleContext, uno::UNO_QUERY );
-    uno::Reference< uno::XInterface > xSource( _rSource.Source, uno::UNO_QUERY );
+    uno::Reference< uno::XInterface > aAC = mpImpl->mxAccessibleContext;
+    uno::Reference< uno::XInterface > xSource =  _rSource.Source;
 
     if ( aAC.get() == xSource.get() )
     {   // yep, it does

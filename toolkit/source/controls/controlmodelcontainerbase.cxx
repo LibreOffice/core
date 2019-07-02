@@ -1104,7 +1104,7 @@ void SAL_CALL ResourceListener::release() throw ()
 void ResourceListener::startListening(
     const Reference< resource::XStringResourceResolver  >& rResource )
 {
-    Reference< util::XModifyBroadcaster > xModifyBroadcaster( rResource, UNO_QUERY );
+    Reference< util::XModifyBroadcaster > xModifyBroadcaster = rResource;
 
     {
         // --- SAFE ---
@@ -1153,7 +1153,7 @@ void ResourceListener::stopListening()
     // --- SAFE ---
     ::osl::ResettableGuard < ::osl::Mutex > aGuard( m_aMutex );
     if ( m_bListening && m_xResource.is() )
-        xModifyBroadcaster.set( m_xResource, UNO_QUERY );
+        xModifyBroadcaster = m_xResource;
     aGuard.clear();
     // --- SAFE ---
 
@@ -1218,8 +1218,8 @@ void SAL_CALL ResourceListener::disposing(
 
     // --- SAFE ---
     ::osl::ResettableGuard < ::osl::Mutex > aGuard( m_aMutex );
-    Reference< XInterface > xIfacRes( m_xResource, UNO_QUERY );
-    Reference< XInterface > xIfacList( m_xListener, UNO_QUERY );
+    Reference< XInterface > xIfacRes = m_xResource;
+    Reference< XInterface > xIfacList = m_xListener;
     aGuard.clear();
     // --- SAFE ---
 
@@ -1229,7 +1229,7 @@ void SAL_CALL ResourceListener::disposing(
         aGuard.reset();
         m_bListening = false;
         xResource = m_xResource;
-        xListener.set( m_xListener, UNO_QUERY );
+        xListener = m_xListener;
         m_xResource.clear();
         aGuard.clear();
         // --- SAFE ---
@@ -1254,7 +1254,7 @@ void SAL_CALL ResourceListener::disposing(
         // --- SAFE ---
         aGuard.reset();
         m_bListening = false;
-        xListener.set( m_xListener, UNO_QUERY );
+        xListener = m_xListener;
         xResource = m_xResource;
         m_xResource.clear();
         m_xListener.clear();
@@ -1262,7 +1262,7 @@ void SAL_CALL ResourceListener::disposing(
         // --- SAFE ---
 
         // Remove ourself as listener from resource resolver
-        Reference< util::XModifyBroadcaster > xModifyBroadcaster( xResource, UNO_QUERY );
+        Reference< util::XModifyBroadcaster > xModifyBroadcaster = xResource;
         Reference< util::XModifyListener > xThis( static_cast< OWeakObject* >( this ), UNO_QUERY );
         if ( xModifyBroadcaster.is() )
         {
@@ -1411,7 +1411,7 @@ void ControlContainerBase::dispose()
     // --- SAFE ---
 
     SolarMutexClearableGuard aGuard;
-    Reference< XEventListener > xListener( mxListener, UNO_QUERY );
+    Reference< XEventListener > xListener = mxListener;
     mxListener.clear();
     aGuard.clear();
     // --- SAFE ---

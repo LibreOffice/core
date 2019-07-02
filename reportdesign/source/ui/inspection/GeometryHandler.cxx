@@ -1768,7 +1768,7 @@ uno::Reference< report::XFunctionsSupplier> GeometryHandler::fillScope_throw(OUS
     const uno::Reference< report::XReportDefinition> xReportDefinition = xSection->getReportDefinition();
     if ( m_sScope.isEmpty() )
     {
-        const uno::Reference< report::XGroup> xGroup(xSection->getGroup(),uno::UNO_QUERY);
+        const uno::Reference< report::XGroup> xGroup = xSection->getGroup();
         if ( xGroup.is() )
         {
             OUString sGroupName = RptResId(RID_STR_SCOPE_GROUP);

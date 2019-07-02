@@ -57,7 +57,7 @@ OUString lcl_getDataSeriesName( const OUString& rObjectCID, const Reference< fra
     OUString aRet;
 
     Reference< XDiagram > xDiagram( ChartModelHelper::findDiagram( xChartModel ) );
-    Reference< XDataSeries > xSeries( ObjectIdentifier::getDataSeriesForCID( rObjectCID , xChartModel ), uno::UNO_QUERY );
+    Reference< XDataSeries > xSeries = ObjectIdentifier::getDataSeriesForCID( rObjectCID , xChartModel );
     if( xDiagram.is() && xSeries.is() )
     {
         Reference< XChartType > xChartType( DiagramHelper::getChartTypeOfSeries( xDiagram, xSeries ) );
@@ -462,7 +462,7 @@ OUString ObjectNameProvider::getGridName( const OUString& rObjectCID
 
 OUString ObjectNameProvider::getHelpText( const OUString& rObjectCID, const Reference< chart2::XChartDocument >& xChartDocument )
 {
-    return getHelpText( rObjectCID, Reference< frame::XModel >( xChartDocument, uno::UNO_QUERY ) );
+    return getHelpText( rObjectCID, Reference< frame::XModel >( xChartDocument ) );
 }
 
 OUString ObjectNameProvider::getHelpText( const OUString& rObjectCID, const Reference< frame::XModel >& xChartModel, bool bVerbose )
@@ -498,7 +498,7 @@ OUString ObjectNameProvider::getHelpText( const OUString& rObjectCID, const Refe
             aRet=SchResId(STR_TIP_DATAPOINT);
 
         Reference< XDiagram > xDiagram( ChartModelHelper::findDiagram( xChartModel ) );
-        Reference< XDataSeries > xSeries( ObjectIdentifier::getDataSeriesForCID( rObjectCID , xChartModel ), uno::UNO_QUERY );
+        Reference< XDataSeries > xSeries = ObjectIdentifier::getDataSeriesForCID( rObjectCID , xChartModel );
         if( xDiagram.is() && xSeries.is() )
         {
             sal_Int32 nPointIndex( ObjectIdentifier::getParticleID(rObjectCID).toInt32() );
@@ -719,14 +719,14 @@ OUString ObjectNameProvider::getSelectedObjectText( const OUString & rObjectCID,
 {
     OUString aRet;
     ObjectType eObjectType( ObjectIdentifier::getObjectType(rObjectCID) );
-    Reference< frame::XModel > xChartModel( xChartDocument, uno::UNO_QUERY );
+    Reference< frame::XModel > xChartModel = xChartDocument;
 
     if( eObjectType == OBJECTTYPE_DATA_POINT )
     {
         aRet = SchResId( STR_STATUS_DATAPOINT_MARKED );
 
         Reference< XDiagram > xDiagram( ChartModelHelper::findDiagram( xChartModel ) );
-        Reference< XDataSeries > xSeries( ObjectIdentifier::getDataSeriesForCID( rObjectCID , xChartModel ), uno::UNO_QUERY );
+        Reference< XDataSeries > xSeries = ObjectIdentifier::getDataSeriesForCID( rObjectCID , xChartModel );
         if( xDiagram.is() && xSeries.is() )
         {
             sal_Int32 nPointIndex( ObjectIdentifier::getParticleID(rObjectCID).toInt32() );
@@ -772,7 +772,7 @@ OUString ObjectNameProvider::getNameForCID(
     const uno::Reference< chart2::XChartDocument >& xChartDocument )
 {
     ObjectType eType( ObjectIdentifier::getObjectType( rObjectCID ));
-    Reference< frame::XModel > xModel( xChartDocument, uno::UNO_QUERY );
+    Reference< frame::XModel > xModel = xChartDocument;
 
     switch( eType )
     {
@@ -841,8 +841,8 @@ OUString ObjectNameProvider::getName_ObjectForSeries(
         const OUString& rSeriesCID,
         const uno::Reference< chart2::XChartDocument >& xChartDocument )
 {
-    uno::Reference< frame::XModel> xChartModel( xChartDocument, uno::UNO_QUERY );
-    Reference< XDataSeries > xSeries( ObjectIdentifier::getDataSeriesForCID( rSeriesCID , xChartModel ), uno::UNO_QUERY );
+    uno::Reference< frame::XModel> xChartModel = xChartDocument;
+    Reference< XDataSeries > xSeries = ObjectIdentifier::getDataSeriesForCID( rSeriesCID , xChartModel );
     if( xSeries.is() )
     {
         OUString aRet = SchResId(STR_OBJECT_FOR_SERIES);

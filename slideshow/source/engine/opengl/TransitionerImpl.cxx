@@ -298,7 +298,7 @@ bool OGLTransitionerImpl::initWindowFromSlideShowView( const Reference< presenta
     if (isDisposed())
         return false;
 
-    mxView.set( xView, UNO_QUERY );
+    mxView = xView;
     if( !mxView.is() )
         return false;
 

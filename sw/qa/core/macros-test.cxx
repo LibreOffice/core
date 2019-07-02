@@ -357,8 +357,7 @@ void SwMacrosTest::testFdo55289()
 
     uno::Reference<frame::XModel> const xModel(pDocShell->GetModel());
     uno::Reference<drawing::XDrawPageSupplier> const xDPS(xModel, UNO_QUERY);
-    uno::Reference<drawing::XShapes> const xShapes(xDPS->getDrawPage(),
-            UNO_QUERY);
+    uno::Reference<drawing::XShapes> const xShapes = xDPS->getDrawPage();
     uno::Reference<beans::XPropertySet> const xShape(
         uno::Reference<lang::XMultiServiceFactory>(xModel, UNO_QUERY_THROW)->
             createInstance("com.sun.star.drawing.GraphicObjectShape"),

@@ -181,7 +181,7 @@ FmEntryData::~FmEntryData()
 void FmEntryData::newObject( const css::uno::Reference< css::uno::XInterface >& _rxIFace )
 {
     // do not just copy, normalize it
-    m_xNormalizedIFace.set( _rxIFace, UNO_QUERY );
+    m_xNormalizedIFace = _rxIFace;
     m_xProperties.set(m_xNormalizedIFace, css::uno::UNO_QUERY);
     m_xChild.set(m_xNormalizedIFace, css::uno::UNO_QUERY);
 }

@@ -342,7 +342,7 @@ void SAL_CALL LegendWrapper::removeEventListener(
 //ReferenceSizePropertyProvider
 void LegendWrapper::updateReferenceSize()
 {
-    Reference< beans::XPropertySet > xProp( getInnerPropertySet(), uno::UNO_QUERY );
+    Reference< beans::XPropertySet > xProp = getInnerPropertySet();
     if( xProp.is() )
     {
         if( xProp->getPropertyValue( "ReferencePageSize" ).hasValue() )
@@ -353,7 +353,7 @@ void LegendWrapper::updateReferenceSize()
 Any LegendWrapper::getReferenceSize()
 {
     Any aRet;
-    Reference< beans::XPropertySet > xProp( getInnerPropertySet(), uno::UNO_QUERY );
+    Reference< beans::XPropertySet > xProp = getInnerPropertySet();
     if( xProp.is() )
         aRet = xProp->getPropertyValue( "ReferencePageSize" );
 

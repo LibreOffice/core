@@ -318,7 +318,7 @@ Reference< XInterface > SAL_CALL MenuBarWrapper::getRealInterface()
     if ( m_bDisposed )
         throw DisposedException();
 
-    return Reference< XInterface >( m_xMenuBarManager, UNO_QUERY );
+    return m_xMenuBarManager;
 }
 
 } // namespace framework
