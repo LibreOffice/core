@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_9f7d74e9",
+        "filename": "RepositoryExternal.mk",
+        "patchSetId": 18
+      },
+      "lineNbr": 4187,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-07-02T10:17:48Z",
+      "side": 1,
+      "message": "theres a spurious \"l\" at the beginning of the line, which probably causes the build failure in https://ci.libreoffice.org/job/gerrit_windows/39365/console\n\nC:/cygwin/home/tdf/lode/jenkins/workspace/gerrit_windows/cui/Library_cui.mk:65: *** target pattern contains no \u0027%\u0027.  Stop.",
+      "revId": "ecb58fdfea0494ea0e5b5d28d62f1c82eba88e7b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
