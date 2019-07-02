@@ -2405,6 +2405,8 @@ void SwTiledRenderingTest::testSemiTransparent()
     CPPUNIT_ASSERT_GREATEREQUAL(190, static_cast<int>(aColor.GetRed()));
     CPPUNIT_ASSERT_GREATEREQUAL(190, static_cast<int>(aColor.GetGreen()));
     CPPUNIT_ASSERT_GREATEREQUAL(190, static_cast<int>(aColor.GetBlue()));
+
+    comphelper::LibreOfficeKit::setActive(false);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwTiledRenderingTest);
