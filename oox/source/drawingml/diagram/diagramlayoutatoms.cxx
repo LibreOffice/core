@@ -176,8 +176,7 @@ void setHierChildConnPosSize(const oox::drawingml::ShapePtr& pShape)
 namespace oox { namespace drawingml {
 
 IteratorAttr::IteratorAttr( )
-    : mnAxis( 0 )
-    , mnCnt( -1 )
+    : mnCnt( -1 )
     , mbHideLastTrans( true )
     , mnPtType( 0 )
     , mnSt( 0 )
@@ -188,12 +187,15 @@ IteratorAttr::IteratorAttr( )
 void IteratorAttr::loadFromXAttr( const Reference< XFastAttributeList >& xAttr )
 {
     AttributeList attr( xAttr );
-    mnAxis = xAttr->getOptionalValueToken( XML_axis, 0 );
+    maAxis = attr.getTokenList(XML_axis);
     mnCnt = attr.getInteger( XML_cnt, -1 );
     mbHideLastTrans = attr.getBool( XML_hideLastTrans, true );
-    mnPtType = xAttr->getOptionalValueToken( XML_ptType, 0 );
     mnSt = attr.getInteger( XML_st, 0 );
     mnStep = attr.getInteger( XML_step, 1 );
+
+    // better to keep first token instead of error when multiple values
+    std::vector<sal_Int32> aPtTypes = attr.getTokenList(XML_ptType);
+    mnPtType = aPtTypes.empty() ? XML_all : aPtTypes.front();
 }
 
 ConditionAttr::ConditionAttr()
@@ -302,38 +304,31 @@ OUString navigate(const LayoutNode& rLayoutNode, sal_Int32 nType, const OUString
 
     return OUString();
 }
+
+sal_Int32 calcMaxDepth(const OUString& rNodeName, const dgm::Connections& rConnections)
+{
+    sal_Int32 nMaxLength = 0;
+    for (auto const& aCxn : rConnections)
+        if (aCxn.mnType == XML_parOf && aCxn.msSourceId == rNodeName)
+            nMaxLength = std::max(nMaxLength, calcMaxDepth(aCxn.msDestId, rConnections) + 1);
+
+    return nMaxLength;
+}
 }
 
 sal_Int32 ConditionAtom::getNodeCount(const dgm::Point* pPresPoint) const
 {
     sal_Int32 nCount = 0;
-    OUString sNodeId = navigate(mrLayoutNode, XML_presOf, pPresPoint->msModelId, /*bSourceToDestination*/ false);
+    OUString sNodeId = pPresPoint->msPresentationAssociationId;
 
-    if (sNodeId.isEmpty())
-    {
-        // The current layout node is not a presentation of anything. Look
-        // up the first presentation child of the layout node.
-        OUString sFirstPresChildId = navigate(mrLayoutNode, XML_presParOf, pPresPoint->msModelId,
-                                                /*bSourceToDestination*/ true);
-        if (!sFirstPresChildId.isEmpty())
-            // It has a presentation child: is that a presentation of a
-            // model node?
-            sNodeId = navigate(mrLayoutNode, XML_presOf, sFirstPresChildId,
-                                /*bSourceToDestination*/ false);
-    }
+    // HACK: special case - count children of first child
+    if (maIter.maAxis.size() == 2 && maIter.maAxis[0] == XML_ch && maIter.maAxis[1] == XML_ch)
+        sNodeId = navigate(mrLayoutNode, XML_parOf, sNodeId, /*bSourceToDestination*/ true);
 
     if (!sNodeId.isEmpty())
     {
         for (const auto& aCxn : mrLayoutNode.getDiagram().getData()->getConnections())
             if (aCxn.mnType == XML_parOf && aCxn.msSourceId == sNodeId)
-                nCount++;
-    }
-    else
-    {
-        // No presentation child is a presentation of a model node: just
-        // count presentation children.
-        for (const auto& aCxn : mrLayoutNode.getDiagram().getData()->getConnections())
-            if (aCxn.mnType == XML_presParOf && aCxn.msSourceId == pPresPoint->msModelId)
                 nCount++;
     }
 
@@ -381,8 +376,10 @@ bool ConditionAtom::getDecision(const dgm::Point* pPresPoint) const
         return compareResult(maCond.mnOp, getNodeCount(pPresPoint), maCond.msVal.toInt32());
 
     case XML_maxDepth:
-        // TODO: probably depth from current point - docs are unclear
-        return compareResult(maCond.mnOp, mrLayoutNode.getDiagram().getData()->getMaxDepth(), maCond.msVal.toInt32());
+    {
+        sal_Int32 nMaxDepth = calcMaxDepth(pPresPoint->msPresentationAssociationId, mrLayoutNode.getDiagram().getData()->getConnections());
+        return compareResult(maCond.mnOp, nMaxDepth, maCond.msVal.toInt32());
+    }
 
     case XML_depth:
     case XML_pos:

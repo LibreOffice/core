@@ -310,6 +310,19 @@ util::DateTime AttributeList::getDateTime( sal_Int32 nAttrToken, const util::Dat
     return getDateTime( nAttrToken ).get( rDefault );
 }
 
+std::vector<sal_Int32> AttributeList::getTokenList(sal_Int32 nAttrToken) const
+{
+    std::vector<sal_Int32> aValues;
+    OUString sValue = getString(nAttrToken, "");
+    sal_Int32 nIndex = 0;
+    do
+    {
+        aValues.push_back(AttributeConversion::decodeToken(sValue.getToken(0, ' ', nIndex)));
+    } while (nIndex >= 0);
+
+    return aValues;
+}
+
 } // namespace oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
