@@ -16,6 +16,24 @@
       "revId": "ecb58fdfea0494ea0e5b5d28d62f1c82eba88e7b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_5f87dcd8",
+        "filename": "RepositoryExternal.mk",
+        "patchSetId": 18
+      },
+      "lineNbr": 4187,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-07-02T10:35:30Z",
+      "side": 1,
+      "message": "oh btw i should mention, you can\u0027t upload new revisions of this patch because i\u0027ve merged it, you need to fix the problem in the follow-up patch that changes Library_cui.mk",
+      "parentUuid": "bf659307_9f7d74e9",
+      "revId": "ecb58fdfea0494ea0e5b5d28d62f1c82eba88e7b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
