@@ -427,6 +427,13 @@
       </object>
     </child>
     <child>
+      <object class="GtkMenuItem" id="MenuDraw-ArrowsToolbox">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:ArrowsToolbox</property>
+      </object>
+    </child>
+    <child>
       <object class="GtkMenuItem" id="MenuDraw-LineToolbox">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
@@ -434,10 +441,16 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuDraw-ArrowsToolbox">
+      <object class="GtkMenuItem" id="MenuDraw-ConnectorToolbox">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:ArrowsToolbox</property>
+        <property name="action_name">.uno:ConnectorToolbox</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkSeparatorMenuItem" id="MenuDraw-separator2">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
       </object>
     </child>
     <child>
@@ -448,13 +461,6 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuDraw-ArrowShapes">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:ArrowShapes</property>
-      </object>
-    </child>
-    <child>
       <object class="GtkMenuItem" id="MenuDraw-SymbolShapes">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
@@ -462,17 +468,10 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuDraw-StarShapes">
+      <object class="GtkMenuItem" id="MenuDraw-ArrowShapes">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:StarShapes</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="MenuDraw-CalloutShapes">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:CalloutShapes</property>
+        <property name="action_name">.uno:ArrowShapes</property>
       </object>
     </child>
     <child>
@@ -483,7 +482,21 @@
       </object>
     </child>
     <child>
-      <object class="GtkSeparatorMenuItem" id="MenuDraw-separator2">
+      <object class="GtkMenuItem" id="MenuDraw-CalloutShapes">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:CalloutShapes</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="MenuDraw-StarShapes">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:StarShapes</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkSeparatorMenuItem" id="MenuDraw-separator3">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
@@ -517,9 +530,16 @@
       </object>
     </child>
     <child>
-      <object class="GtkSeparatorMenuItem" id="MenuDraw-separator3">
+      <object class="GtkSeparatorMenuItem" id="MenuDraw-separator4">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="MenuDraw-ExtrusionToggle">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:ExtrusionToggle</property>
       </object>
     </child>
     <child>
@@ -5189,7 +5209,7 @@
                           </packing>
                         </child>
                         <style>
-                          <class name="priority-5"/>
+                          <class name="priority-6"/>
                         </style>
                       </object>
                       <packing>
@@ -5418,7 +5438,7 @@
                           </packing>
                         </child>
                         <style>
-                          <class name="priority-4"/>
+                          <class name="priority-5"/>
                         </style>
                       </object>
                       <packing>
@@ -5620,7 +5640,7 @@
                           </packing>
                         </child>
                         <style>
-                          <class name="priority-3"/>
+                          <class name="priority-4"/>
                         </style>
                       </object>
                       <packing>
@@ -5822,7 +5842,7 @@
                           </packing>
                         </child>
                         <style>
-                          <class name="priority-2"/>
+                          <class name="priority-3"/>
                         </style>
                       </object>
                       <packing>
@@ -5998,7 +6018,7 @@
                           </packing>
                         </child>
                         <style>
-                          <class name="priority-1"/>
+                          <class name="priority-2"/>
                         </style>
                       </object>
                       <packing>
@@ -9599,10 +9619,10 @@
                                     <property name="toolbar_style">icons</property>
                                     <property name="show_arrow">False</property>
                                     <child>
-                                      <object class="GtkToolButton" id="CommonAlignUp">
+                                      <object class="GtkToolButton" id="CommonAlignTop">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="action_name">.uno:CommonAlignUp</property>
+                                        <property name="action_name">.uno:CommonAlignTop</property>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
@@ -9610,10 +9630,10 @@
                                       </packing>
                                     </child>
                                     <child>
-                                      <object class="GtkToolButton" id="CommonAlignMiddle">
+                                      <object class="GtkToolButton" id="CommonAlignVerticalCenter">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="action_name">.uno:CommonAlignMiddle</property>
+                                        <property name="action_name">.uno:CommonAlignVerticalCenter</property>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
@@ -9621,10 +9641,10 @@
                                       </packing>
                                     </child>
                                     <child>
-                                      <object class="GtkToolButton" id="CommonAlignDown">
+                                      <object class="GtkToolButton" id="CommonAlignBottom">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="action_name">.uno:CommonAlignDown</property>
+                                        <property name="action_name">.uno:CommonAlignBottom</property>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
@@ -10447,6 +10467,9 @@
                             <property name="position">0</property>
                           </packing>
                         </child>
+                        <style>
+                          <class name="priority-7"/>
+                        </style>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -10729,7 +10752,7 @@
                           </packing>
                         </child>
                         <style>
-                          <class name="priority-5"/>
+                          <class name="priority-6"/>
                         </style>
                       </object>
                       <packing>
@@ -10851,7 +10874,7 @@
                           <placeholder/>
                         </child>
                         <style>
-                          <class name="priority-4"/>
+                          <class name="priority-5"/>
                         </style>
                       </object>
                       <packing>
@@ -11053,7 +11076,7 @@
                           </packing>
                         </child>
                         <style>
-                          <class name="priority-3"/>
+                          <class name="priority-4"/>
                         </style>
                       </object>
                       <packing>
@@ -11495,9 +11518,6 @@
                             <property name="position">0</property>
                           </packing>
                         </child>
-                        <style>
-                          <class name="priority-5"/>
-                        </style>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -13287,9 +13307,6 @@
                             <property name="position">0</property>
                           </packing>
                         </child>
-                        <style>
-                          <class name="priority-4"/>
-                        </style>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -14733,9 +14750,6 @@
                             <property name="position">0</property>
                           </packing>
                         </child>
-                        <style>
-                          <class name="priority-6"/>
-                        </style>
                       </object>
                       <packing>
                         <property name="expand">False</property>
