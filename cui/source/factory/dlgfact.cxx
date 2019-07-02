@@ -510,6 +510,16 @@ void AbstractPasteDialog_Impl::SetObjName(const SvGlobalName & rClass, const OUS
     m_xDlg->SetObjName(rClass, rObjName);
 }
 
+void AbstractPasteDialog_Impl::PreGetFormat( const TransferableDataHelper& aHelper )
+{
+    m_xDlg->PreGetFormat(aHelper);
+}
+
+SotClipboardFormatId AbstractPasteDialog_Impl::GetFormatOnly()
+{
+    return m_xDlg->GetFormatOnly();
+}
+
 SotClipboardFormatId AbstractPasteDialog_Impl::GetFormat( const TransferableDataHelper& aHelper )
 {
     return m_xDlg->GetFormat(aHelper);

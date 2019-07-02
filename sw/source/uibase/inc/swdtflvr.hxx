@@ -34,6 +34,7 @@ class Graphic;
 class ImageMap;
 class INetBookmark;
 class INetImage;
+class SfxAbstractPasteDialog;
 class SwDoc;
 class SwDocFac;
 class SwTextBlocks;
@@ -189,7 +190,12 @@ public:
     static bool IsPasteSpecial( const SwWrtShell& rWrtShell,
                                 const TransferableDataHelper& );
     static bool PasteUnformatted( SwWrtShell& rSh, TransferableDataHelper& );
-    static bool PasteSpecial( SwWrtShell& rSh, TransferableDataHelper&, SotClipboardFormatId& rFormatUsed );
+    /**
+     * @brief PrePasteSpecial Prepares the given dialog without actually running it
+     * @param rSh
+     * @param rFormatUsed
+     */
+    static void PrePasteSpecial( SwWrtShell& rSh, TransferableDataHelper&, VclPtr<SfxAbstractPasteDialog>& pDlg );
     static bool PasteFormat( SwWrtShell& rSh, TransferableDataHelper& rData,
                              SotClipboardFormatId nFormat );
 

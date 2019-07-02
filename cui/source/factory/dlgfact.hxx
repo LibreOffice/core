@@ -571,6 +571,8 @@ public:
 public:
     virtual void Insert( SotClipboardFormatId nFormat, const OUString & rFormatName ) override;
     virtual void SetObjName( const SvGlobalName & rClass, const OUString & rObjName ) override;
+    virtual void PreGetFormat( const TransferableDataHelper& aHelper ) override;
+    virtual SotClipboardFormatId GetFormatOnly() override;
     virtual SotClipboardFormatId GetFormat( const TransferableDataHelper& aHelper ) override;
 };
 

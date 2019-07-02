@@ -92,6 +92,8 @@ protected:
 public:
     virtual void Insert( SotClipboardFormatId nFormat, const OUString & rFormatName ) = 0;
     virtual void SetObjName( const SvGlobalName & rClass, const OUString & rObjName ) = 0;
+    virtual void PreGetFormat( const TransferableDataHelper& aHelper ) = 0;
+    virtual SotClipboardFormatId GetFormatOnly() = 0;
     virtual SotClipboardFormatId GetFormat( const TransferableDataHelper& aHelper ) = 0;
 };
 
