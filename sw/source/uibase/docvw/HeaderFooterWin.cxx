@@ -441,9 +441,8 @@ void SwHeaderFooterWin::ExecuteCommand(const OString& rIdent)
     else if (rIdent == "delete")
     {
         rSh.ChangeHeaderOrFooter( rStyleName, m_bIsHeader, false, true );
-        if ( IsEmptyHeaderFooter() )
-            rSh.ToggleHeaderFooterEdit();
-        GrabFocusToDocument();
+        // warning: "this" may be disposed now
+        rSh.GetWin()->GrabFocusToDocument();
     }
     else if (rIdent == "insert_pagenumber")
     {
