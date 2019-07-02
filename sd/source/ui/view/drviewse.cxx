@@ -824,6 +824,10 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
             }
             else
             {
+                //tdf#126197: EndTextEdit in all views if current one is not in TextEdit
+                if ( !mpDrawView->IsTextEdit() )
+                    mpDrawView->EndTextEditAllViews();
+
                 if(HasCurrentFunction())
                 {
                     GetCurrentFunction()->DoCut();
@@ -998,6 +1002,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
             }
             else
             {
+                mpDrawView->EndTextEditAllViews();
                 FuDeleteSelectedObjects();
             }
             rReq.Ignore ();
