@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "bf659307_22f52fcc",
+        "filename": "configure.ac",
+        "patchSetId": 22
+      },
+      "lineNbr": 3928,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2019-07-02T19:09:47Z",
+      "side": 1,
+      "message": "Check the macos output, which complains about the wrong test comparison ($CLANGVER not a number). Doesn\u0027t matter for macos build, so this failing test command doesn\u0027t break it, but it\u0027s a test command error. Since this is an input error of test, we have to split it.",
+      "parentUuid": "bf659307_ff20304c",
+      "range": {
+        "startLine": 3927,
+        "startChar": 31,
+        "endLine": 3928,
+        "endChar": 6
+      },
+      "revId": "99e9aabfff4c85ab1793f6be6f94846a84f3bd0f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bf659307_1f1e440c",
         "filename": "configure.ac",
         "patchSetId": 22
@@ -36,6 +60,30 @@
       "writtenOn": "2019-07-02T03:48:08Z",
       "side": 1,
       "message": "Ln 3451 has a test with redirected output; do you think that using it here to make it in one line would be cleaner maybe?",
+      "range": {
+        "startLine": 5523,
+        "startChar": 19,
+        "endLine": 5524,
+        "endChar": 35
+      },
+      "revId": "99e9aabfff4c85ab1793f6be6f94846a84f3bd0f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_822d1b48",
+        "filename": "configure.ac",
+        "patchSetId": 22
+      },
+      "lineNbr": 5524,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2019-07-02T19:09:47Z",
+      "side": 1,
+      "message": "L3451 of which version of configure.ac ;-)\n\nI just wanted to keep the test the way it was and get rid of the output, breaking some test lines.",
+      "parentUuid": "bf659307_1f1e440c",
       "range": {
         "startLine": 5523,
         "startChar": 19,

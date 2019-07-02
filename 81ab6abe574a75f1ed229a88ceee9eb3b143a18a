@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "bf659307_02f82bc2",
+        "filename": "configure.ac",
+        "patchSetId": 22
+      },
+      "lineNbr": 3378,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2019-07-02T19:09:47Z",
+      "side": 0,
+      "message": "Ok - I\u0027ll leave them.",
+      "parentUuid": "bf659307_5f2cbc46",
+      "range": {
+        "startLine": 3378,
+        "startChar": 47,
+        "endLine": 3378,
+        "endChar": 102
+      },
+      "revId": "81ab6abe574a75f1ed229a88ceee9eb3b143a18a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bf659307_bf1ab814",
         "filename": "configure.ac",
         "patchSetId": 22
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "bf659307_a2329fa6",
+        "filename": "configure.ac",
+        "patchSetId": 22
+      },
+      "lineNbr": 5545,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2019-07-02T19:09:47Z",
+      "side": 0,
+      "message": "This breaks the Checking... line. We\u0027re testing so many directories, where we don\u0027t report all of the tested ones. Probably there should be a stack, which we can dump on error, but this patch is just about helping reading the normal output. But I\u0027ll write them to the config.log instead.",
+      "parentUuid": "bf659307_bf1ab814",
+      "range": {
+        "startLine": 5545,
+        "startChar": 12,
+        "endLine": 5545,
+        "endChar": 78
+      },
+      "revId": "81ab6abe574a75f1ed229a88ceee9eb3b143a18a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bf659307_df176ced",
         "filename": "configure.ac",
         "patchSetId": 22
@@ -59,6 +107,30 @@
       "writtenOn": "2019-07-02T03:48:08Z",
       "side": 0,
       "message": "And here, and few lines below",
+      "range": {
+        "startLine": 5576,
+        "startChar": 12,
+        "endLine": 5576,
+        "endChar": 89
+      },
+      "revId": "81ab6abe574a75f1ed229a88ceee9eb3b143a18a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_42270366",
+        "filename": "configure.ac",
+        "patchSetId": 22
+      },
+      "lineNbr": 5576,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2019-07-02T19:09:47Z",
+      "side": 0,
+      "message": "see previous comment",
+      "parentUuid": "bf659307_df176ced",
       "range": {
         "startLine": 5576,
         "startChar": 12,
