@@ -588,6 +588,10 @@ PropertyMapPtr DomainMapper_Impl::GetTopContextOfType(ContextType eId)
     return pRet;
 }
 
+bool DomainMapper_Impl::HasTopText() const
+{
+    return !m_aTextAppendStack.empty();
+}
 
 uno::Reference< text::XTextAppend >  DomainMapper_Impl::GetTopTextAppend()
 {

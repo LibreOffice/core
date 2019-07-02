@@ -16,6 +16,7 @@
 #include <vcl/svapp.hxx>
 #include <unotools/datetime.hxx>
 #include <comphelper/sequence.hxx>
+#include <xmloff/odffields.hxx>
 
 namespace writerfilter
 {
@@ -85,62 +86,48 @@ void SdtHelper::createDropDownControl()
     m_aDropDownItems.clear();
 }
 
-void SdtHelper::createDateControl(OUString const& rContentText, const beans::PropertyValue& rCharFormat)
+bool SdtHelper::validateDateFormat() const
 {
-    uno::Reference<awt::XControlModel> xControlModel;
-    try
+    return !m_sDateFormat.toString().isEmpty() && !m_sLocale.toString().isEmpty();
+}
+
+void SdtHelper::createDateContentControl()
+{
+    uno::Reference<text::XTextCursor> xCrsr;
+    if(m_rDM_Impl.HasTopText())
     {
-        xControlModel.set(m_rDM_Impl.GetTextFactory()->createInstance("com.sun.star.form.component.DateField"), uno::UNO_QUERY_THROW);
+        uno::Reference<text::XTextAppend> xTextAppend = m_rDM_Impl.GetTopTextAppend();
+        if (xTextAppend.is())
+            xCrsr = xTextAppend->createTextCursorByRange(xTextAppend->getEnd());
     }
-    catch (css::uno::RuntimeException&)
+    if (xCrsr.is())
     {
-        throw;
+        uno::Reference< uno::XInterface > xFieldInterface;
+        xFieldInterface = m_rDM_Impl.GetTextFactory()->createInstance("com.sun.star.text.FormFieldmark");
+        uno::Reference< text::XFormField > xFormField( xFieldInterface, uno::UNO_QUERY );
+        uno::Reference< text::XTextContent > xToInsert(xFormField, uno::UNO_QUERY);
+        if ( xFormField.is() && xToInsert.is() )
+        {
+            xCrsr->gotoEnd(true);
+            xToInsert->attach( uno::Reference< text::XTextRange >( xCrsr, uno::UNO_QUERY_THROW ));
+            xFormField->setFieldType(ODF_FORMDATE);
+            uno::Reference<container::XNameContainer> xNameCont = xFormField->getParameters();
+            if(xNameCont.is())
+            {
+                xNameCont->insertByName(ODF_FORMDATE_DATEFORMAT, uno::makeAny(m_sDateFormat.makeStringAndClear()));
+                xNameCont->insertByName(ODF_FORMDATE_DATEFORMAT_LANGUAGE, uno::makeAny(m_sLocale.makeStringAndClear()));
+                OUString sDate = m_sDate.makeStringAndClear();
+                if(!sDate.isEmpty())
+                {
+                    // Remove time part of the full date
+                    sal_Int32 nTimeSep = sDate.indexOf("T");
+                    if(nTimeSep != -1)
+                        sDate = sDate.copy(0, nTimeSep);
+                    xNameCont->insertByName(ODF_FORMDATE_CURRENTDATE, uno::makeAny(sDate));
+                }
+            }
+        }
     }
-    catch (css::uno::Exception& e)
-    {
-        css::uno::Any a(cppu::getCaughtException());
-        throw css::lang::WrappedTargetRuntimeException("wrapped " + a.getValueTypeName() + ": " + e.Message, css::uno::Reference<css::uno::XInterface>(), a);
-    }
-    uno::Reference<beans::XPropertySet> xPropertySet(
-        xControlModel, uno::UNO_QUERY_THROW);
-
-    xPropertySet->setPropertyValue("Dropdown", uno::makeAny(true));
-
-    // See com/sun/star/awt/UnoControlDateFieldModel.idl, DateFormat; sadly there are no constants
-    sal_Int16 nDateFormat = 0;
-    OUString sDateFormat = m_sDateFormat.makeStringAndClear();
-    if (sDateFormat == "M/d/yyyy" || sDateFormat == "M.d.yyyy")
-        // Approximate with MM.dd.yyy
-        nDateFormat = 8;
-    else
-        // Set default format, so at least the date picker is created.
-        SAL_WARN("writerfilter", "unhandled w:dateFormat value");
-    xPropertySet->setPropertyValue("DateFormat", uno::makeAny(nDateFormat));
-
-    util::Date aDate;
-    util::DateTime aDateTime;
-    if (utl::ISO8601parseDateTime(m_sDate.makeStringAndClear(), aDateTime))
-    {
-        utl::extractDate(aDateTime, aDate);
-        xPropertySet->setPropertyValue("Date", uno::makeAny(aDate));
-    }
-    else
-        xPropertySet->setPropertyValue("HelpText", uno::makeAny(rContentText.trim()));
-
-    // append date format to grab bag
-    comphelper::SequenceAsHashMap aGrabBag;
-    aGrabBag["OriginalDate"] <<= aDate;
-    aGrabBag["OriginalContent"] <<= rContentText;
-    aGrabBag["DateFormat"] <<= sDateFormat;
-    aGrabBag["Locale"] <<= m_sLocale.makeStringAndClear();
-    aGrabBag["CharFormat"] = rCharFormat.Value;
-    // merge in properties like ooxml:CT_SdtPr_alias and friends.
-    aGrabBag.update(comphelper::SequenceAsHashMap(comphelper::containerToSequence(m_aGrabBag)));
-    // and empty the property list, so they won't end up on the next sdt as well
-    m_aGrabBag.clear();
-
-    std::vector<OUString> aItems;
-    createControlShape(lcl_getOptimalWidth(m_rDM_Impl.GetStyleSheetTable(), rContentText, aItems), xControlModel, aGrabBag.getAsConstPropertyValueList());
 }
 
 void SdtHelper::createControlShape(awt::Size aSize, uno::Reference<awt::XControlModel> const& xControlModel, const uno::Sequence<beans::PropertyValue>& rGrabBag)
