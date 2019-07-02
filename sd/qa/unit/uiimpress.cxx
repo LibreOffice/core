@@ -120,6 +120,37 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf111522)
     pViewShell2->GetViewFrame()->GetDispatcher()->Execute(SID_UNDO, SfxCallMode::SYNCHRON);
 }
 
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf126197)
+{
+    // Load the document and create two new windows.
+    mxComponent = loadFromDesktop(m_directories.getURLFromSrc("sd/qa/unit/data/tdf126197.odp"));
+    auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    sd::ViewShell* pViewShell = pImpressDocument->GetDocShell()->GetViewShell();
+    pViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_NEWWINDOW, SfxCallMode::SYNCHRON);
+    sd::ViewShell* pViewShell1 = pImpressDocument->GetDocShell()->GetViewShell();
+    pViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_NEWWINDOW, SfxCallMode::SYNCHRON);
+    sd::ViewShell* pViewShell2 = pImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell1 != pViewShell2);
+
+    // Start text edit in window 1.
+    SdPage* pPage1 = pViewShell1->GetActualPage();
+    SdrObject* pShape1 = pPage1->GetObj(0);
+    SdrView* pView1 = pViewShell1->GetView();
+    pView1->MarkObj(pShape1, pView1->GetSdrPageView());
+    pView1->SdrBeginTextEdit(pShape1);
+    CPPUNIT_ASSERT(pView1->IsTextEdit());
+
+    SdPage* pPage2 = pViewShell2->GetActualPage();
+    CPPUNIT_ASSERT_EQUAL(pPage1, pPage2);
+    SdrObject* pShape2 = pPage2->GetObj(0);
+    CPPUNIT_ASSERT_EQUAL(pShape1, pShape2);
+    SdrView* pView2 = pViewShell2->GetView();
+    pView2->MarkObj(pShape2, pView2->GetSdrPageView());
+
+    // Without the accompanying fix in place, this test would have failed with an assertion failure
+    // in SdrObjEditView::SdrEndTextEdit()
+    pViewShell2->GetViewFrame()->GetDispatcher()->Execute(SID_DELETE, SfxCallMode::SYNCHRON);
+}
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
