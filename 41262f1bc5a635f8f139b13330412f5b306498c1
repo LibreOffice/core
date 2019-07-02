@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_9f3574fa",
+        "filename": "RepositoryExternal.mk",
+        "patchSetId": 18
+      },
+      "lineNbr": 4187,
+      "author": {
+        "id": 1002063
+      },
+      "writtenOn": "2019-07-02T14:11:22Z",
+      "side": 1,
+      "message": "Changes as asked by Michael Stahl here.\nhttps://gerrit.libreoffice.org/#/c/73302/18/RepositoryExternal.mk@4187",
+      "revId": "41262f1bc5a635f8f139b13330412f5b306498c1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
