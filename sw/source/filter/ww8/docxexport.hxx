@@ -147,7 +147,7 @@ public:
 
     virtual void AppendBookmark( const OUString& rName ) override;
 
-    virtual void AppendAnnotationMarks( const SwTextNode& rNode, sal_Int32 nCurrentPos, sal_Int32 nLen ) override;
+    virtual void AppendAnnotationMarks( const SwWW8AttrIter& rAttrs, sal_Int32 nCurrentPos, sal_Int32 nLen ) override;
 
     virtual void ExportGrfBullet(const SwTextNode&) override;
 

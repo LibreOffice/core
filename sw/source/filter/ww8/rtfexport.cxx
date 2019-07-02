@@ -150,14 +150,14 @@ void RtfExport::AppendBookmark(const OUString& rName)
     m_pAttrOutput->WriteBookmarks_Impl(aStarts, aEnds);
 }
 
-void RtfExport::AppendAnnotationMarks(const SwTextNode& rNode, sal_Int32 nCurrentPos,
+void RtfExport::AppendAnnotationMarks(const SwWW8AttrIter& rAttrs, sal_Int32 nCurrentPos,
                                       sal_Int32 nLen)
 {
     std::vector<OUString> aStarts;
     std::vector<OUString> aEnds;
 
     IMarkVector aMarks;
-    if (GetAnnotationMarks(rNode, nCurrentPos, nCurrentPos + nLen, aMarks))
+    if (GetAnnotationMarks(rAttrs, nCurrentPos, nCurrentPos + nLen, aMarks))
     {
         for (const auto& pMark : aMarks)
         {

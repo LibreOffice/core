@@ -58,6 +58,7 @@
 #include <com/sun/star/text/XRedline.hpp>
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>
 #include <com/sun/star/text/RubyPosition.hpp>
+#include <com/sun/star/text/XTextRangeCompare.hpp>
 #include <com/sun/star/style/DropCapFormat.hpp>
 #include <com/sun/star/util/NumberFormatter.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
@@ -2233,12 +2234,30 @@ void DomainMapper_Impl::PopAnnotation()
             // Create a range that points to the annotation start/end.
             uno::Reference<text::XText> const xText = aAnnotationPosition.m_xStart->getText();
             uno::Reference<text::XTextCursor> const xCursor = xText->createTextCursorByRange(aAnnotationPosition.m_xStart);
+
+            bool bMarker = false;
+            uno::Reference<text::XTextRangeCompare> xTextRangeCompare(xText, uno::UNO_QUERY);
+            if (xTextRangeCompare->compareRegionStarts(aAnnotationPosition.m_xStart, aAnnotationPosition.m_xEnd) == 0)
+            {
+                // Insert a marker so that comment around an anchored image is not collapsed during
+                // insertion.
+                xText->insertString(xCursor, "x", false);
+                bMarker = true;
+            }
+
             xCursor->gotoRange(aAnnotationPosition.m_xEnd, true);
             uno::Reference<text::XTextRange> const xTextRange(xCursor, uno::UNO_QUERY_THROW);
 
             // Attach the annotation to the range.
             uno::Reference<text::XTextAppend> const xTextAppend = m_aTextAppendStack.top().xTextAppend;
             xTextAppend->insertTextContent(xTextRange, uno::Reference<text::XTextContent>(m_xAnnotationField, uno::UNO_QUERY_THROW), !xCursor->isCollapsed());
+
+            if (bMarker)
+            {
+                // Remove the marker.
+                xCursor->goLeft(1, true);
+                xCursor->setString(OUString());
+            }
         }
         m_aAnnotationPositions.erase( m_nAnnotationId );
     }
