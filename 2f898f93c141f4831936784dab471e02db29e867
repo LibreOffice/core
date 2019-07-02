@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "bf659307_bf9158f4",
+        "filename": "unoxml/source/rdf/librdf_repository.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 552,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-07-02T12:50:34Z",
+      "side": 1,
+      "message": "1. I thought we were not marking fields const anymore becuase of the weird side effects\n2. done",
+      "parentUuid": "bf659307_dff9ac4d",
+      "revId": "2f898f93c141f4831936784dab471e02db29e867",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bf659307_1f008434",
         "filename": "unoxml/source/rdf/librdf_repository.cxx",
         "patchSetId": 1
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "bf659307_df8e8ccf",
+        "filename": "unoxml/source/rdf/librdf_repository.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 569,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-07-02T12:50:34Z",
+      "side": 1,
+      "message": "this object should only be accessed by the retrieving code, not on multiple threads, so should not need any locking",
+      "parentUuid": "bf659307_1f008434",
+      "revId": "2f898f93c141f4831936784dab471e02db29e867",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bf659307_ff02703e",
         "filename": "unoxml/source/rdf/librdf_repository.cxx",
         "patchSetId": 1
@@ -47,6 +83,24 @@
       "writtenOn": "2019-07-02T12:29:01Z",
       "side": 1,
       "message": "please append another separator before this",
+      "revId": "2f898f93c141f4831936784dab471e02db29e867",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_7fbd0067",
+        "filename": "unoxml/source/rdf/librdf_repository.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2251,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-07-02T12:50:34Z",
+      "side": 1,
+      "message": "done",
+      "parentUuid": "bf659307_ff02703e",
       "revId": "2f898f93c141f4831936784dab471e02db29e867",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
