@@ -71,7 +71,7 @@ DECLARE_OOXMLEXPORT_TEST(testSdtAlias, "sdt-alias.docx")
     assertXPath(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtPr/w:alias", "val", "Subtitle");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testSdtDateCharformat, "sdt-date-charformat.docx")
+/*DECLARE_OOXMLEXPORT_TEST(testSdtDateCharformat, "sdt-date-charformat.docx")
 {
     if (xmlDocPtr pXmlDoc = parseExport())
     {
@@ -80,7 +80,7 @@ DECLARE_OOXMLEXPORT_TEST(testSdtDateCharformat, "sdt-date-charformat.docx")
         // alias was also missing.
         assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtPr/w:alias", 1);
     }
-}
+}*/
 
 DECLARE_OOXMLEXPORT_TEST(testFooterBodyDistance, "footer-body-distance.docx")
 {
