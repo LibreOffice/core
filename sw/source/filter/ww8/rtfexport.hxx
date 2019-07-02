@@ -73,7 +73,7 @@ public:
 
     void AppendBookmark(const OUString& rName) override;
 
-    void AppendAnnotationMarks(const SwTextNode& rNode, sal_Int32 nCurrentPos,
+    void AppendAnnotationMarks(const SwWW8AttrIter& rAttrs, sal_Int32 nCurrentPos,
                                sal_Int32 nLen) override;
 
     //For i120928,add an interface to export graphic of bullet
