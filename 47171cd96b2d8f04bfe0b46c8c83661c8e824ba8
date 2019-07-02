@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_5f04bc7b",
+        "filename": "oox/source/shape/WpsContext.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2019-07-02T07:26:05Z",
+      "side": 1,
+      "message": "This looks like the good direction to me: at this point the shape is already inserted and the textbox is enabled. So within the limits of our SAX parser, I would keep this \"turn textbox off and modify it to be a fontwork\" approach and investigate why it doesn\u0027t work.",
+      "revId": "47171cd96b2d8f04bfe0b46c8c83661c8e824ba8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
