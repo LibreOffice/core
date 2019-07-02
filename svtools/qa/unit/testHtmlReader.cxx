@@ -9,7 +9,6 @@
  */
 
 #include <cppunit/TestFixture.h>
-#include <cppunit/extensions/HelperMacros.h>
 #include <unotest/bootstrapfixturebase.hxx>
 #include <svtools/parhtml.hxx>
 #include <tools/ref.hxx>

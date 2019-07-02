@@ -440,3 +440,7 @@ blacklist:
     sw/source/filter/ww8/ww8scan.hxx:
     # OSL_BIGENDIAN is being checked
     - osl/endian.h
+    sw/qa/extras/layout/layout.cxx:
+    - comphelper/scopeguard.hxx
+    sw/source/filter/html/htmlreqifreader.cxx:
+    - comphelper/scopeguard.hxx

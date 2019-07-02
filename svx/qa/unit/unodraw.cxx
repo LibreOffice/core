@@ -8,7 +8,6 @@
  */
 
 #include <cppunit/TestAssert.h>
-#include <cppunit/extensions/HelperMacros.h>
 
 #include <com/sun/star/drawing/GraphicExportFilter.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>

@@ -31,3 +31,5 @@ blacklist:
     vcl/source/app/svmain.cxx:
     # Needed on WIN32
     - desktop/exithelper.h
+    vcl/source/filter/ipdf/pdfdocument.cxx:
+    - comphelper/scopeguard.hxx
