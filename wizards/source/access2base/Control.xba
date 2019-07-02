@@ -984,11 +984,11 @@ Error_Function:
 End Function	&apos;	Requery
 
 REM -----------------------------------------------------------------------------------------------------------------------
-Public Function setFocus() As Boolean
+Public Function SetFocus() As Boolean
 &apos;	Execute setFocus method
-	Utils._SetCalledSub(&quot;Control.setFocus&quot;)
+	Utils._SetCalledSub(&quot;Control.SetFocus&quot;)
 	If _ErrorHandler() Then On Local Error Goto Error_Function
-	setFocus = False
+	SetFocus = False
 
 Dim i As Integer, j As Integer, iColPosition As Integer
 Dim ocControl As Object, ocGrid As Variant, oGridModel As Object
@@ -1017,18 +1017,18 @@ Dim ocControl As Object, ocGrid As Variant, oGridModel As Object
 	Else
 		ControlView.setFocus()
 	End If
-	setFocus = True
+	SetFocus = True
 	
 Exit_Function:
-	Utils._ResetCalledSub(&quot;Control.setFocus&quot;)
+	Utils._ResetCalledSub(&quot;Control.SetFocus&quot;)
 	Exit Function
 Error_Function:
-	TraceError(TRACEABORT, Err, &quot;Control.setFocus&quot;, Erl)
+	TraceError(TRACEABORT, Err, &quot;Control.SetFocus&quot;, Erl)
 	Goto Exit_Function
 Error_Grid:
 	TraceError(TRACEFATAL, ERRFOCUSINGRID, Utils._CalledSub(), 0, 1, Array(_Name, ocGrid._Name))
 	Goto Exit_Function
-End Function	&apos;	setFocus	V0.9.0
+End Function	&apos;	SetFocus	V0.9.0
 
 REM -----------------------------------------------------------------------------------------------------------------------
 Public Function setProperty(ByVal Optional psProperty As String, ByVal Optional pvValue As Variant, ByVal Optional pvIndex As Variant) As Boolean
@@ -1041,6 +1041,19 @@ Public Function setProperty(ByVal Optional psProperty As String, ByVal Optional 
 	End If
 	Utils._ResetCalledSub(&quot;Control.setProperty&quot;)
 End Function	&apos;	setProperty
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Public Function SetSelected(ByVal Optional pvValue As Variant, ByVal Optional pvIndex As Variant) As Boolean
+&apos;	Workaround for limitation of Basic: Property Let does not accept optional arguments
+
+	If IsMissing(pvValue) Then Call _TraceArguments()
+	If IsMissing(pvIndex) Then
+		SetSelected = _PropertySet(&quot;Selected&quot;, pvValue)
+	Else
+		SetSelected = _PropertySet(&quot;Selected&quot;, pvValue, pvIndex)
+	End If
+
+End Function		&apos;	SetSelected
 
 REM -----------------------------------------------------------------------------------------------------------------------
 REM --- PRIVATE FUNCTIONS 								        														---
@@ -1720,7 +1733,7 @@ Dim oControlEvents As Object, sEventName As String
 		Case UCase(&quot;TabIndex&quot;)
 			If Utils._hasUNOProperty(ControlModel, &quot;TabIndex&quot;) Then _PropertyGet = ControlModel.TabIndex
 		Case UCase(&quot;TabStop&quot;)
-			If Utils._hasUNOProperty(ControlModel, &quot;TabStop&quot;) Then _PropertyGet = ControlModel.TabStop
+			If Utils._hasUNOProperty(ControlModel, &quot;Tabstop&quot;) Then _PropertyGet = ControlModel.Tabstop
 		Case UCase(&quot;Tag&quot;)
 			If Utils._hasUNOProperty(ControlModel, &quot;Tag&quot;) Then _PropertyGet = ControlModel.Tag
 		Case UCase(&quot;Text&quot;)
