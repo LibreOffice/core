@@ -351,7 +351,7 @@ ScriptEventHelper::ScriptEventHelper( const OUString& sCntrlServiceName ) :
     m_xCtx( comphelper::getProcessComponentContext() ),
     m_bDispose( true )
 {
-   m_xControl.set( m_xCtx->getServiceManager()->createInstanceWithContext( sCntrlServiceName, m_xCtx ), uno::UNO_QUERY );
+   m_xControl = m_xCtx->getServiceManager()->createInstanceWithContext( sCntrlServiceName, m_xCtx );
 }
 
 ScriptEventHelper::~ScriptEventHelper()
@@ -737,7 +737,6 @@ static bool FindControl(const ScriptEvent& evt, void const * pPara)
 {
     lang::EventObject aEvent;
     evt.Arguments[ 0 ] >>= aEvent;
-    uno::Reference< uno::XInterface > xInterface( aEvent.Source, uno::UNO_QUERY );
 
     TypeList const * pTypeListInfo = static_cast<TypeList const *>(pPara);
     Type const * pType = pTypeListInfo->pTypeList;
@@ -745,7 +744,7 @@ static bool FindControl(const ScriptEvent& evt, void const * pPara)
 
     for (int i = 0; i < nLen; i++)
     {
-        if ( xInterface->queryInterface( *pType ).hasValue() )
+        if ( aEvent.Source->queryInterface( *pType ).hasValue() )
         {
             return true;
         }

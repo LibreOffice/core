@@ -594,7 +594,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
             bool bShow = pShowItem == nullptr || pShowItem->GetValue();
 
             InterfaceBag aOnlyTheForm;
-            aOnlyTheForm.insert(Reference<XInterface>(GetImpl()->getCurrentForm_Lock(), UNO_QUERY));
+            aOnlyTheForm.insert(Reference<XInterface>(GetImpl()->getCurrentForm_Lock()));
             GetImpl()->setCurrentSelection_Lock(aOnlyTheForm);
 
             GetImpl()->ShowSelectionProperties_Lock(bShow);

@@ -1974,7 +1974,7 @@ static OUString getFileNameFromDoc( const ScDocument* pDoc )
     if( nullptr != pDoc &&
         nullptr != (pShell = pDoc->GetDocumentShell() ) )
     {
-        uno::Reference< frame::XModel > xModel( pShell->GetModel(), uno::UNO_QUERY );
+        uno::Reference< frame::XModel > xModel = pShell->GetModel();
         if( xModel.is() )
         {
             if( !xModel->getURL().isEmpty() )

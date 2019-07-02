@@ -93,7 +93,7 @@ ChartModel::ChartModel(uno::Reference<uno::XComponentContext > const & xContext)
     , m_aVisualAreaSize( ChartModelHelper::getDefaultPageSize() )
     , m_xPageBackground( new PageBackground )
     , m_xXMLNamespaceMap( createNameContainer( ::cppu::UnoType<OUString>::get(),
-                "com.sun.star.xml.NamespaceMap", "com.sun.star.comp.chart.XMLNameSpaceMap" ), uno::UNO_QUERY)
+                "com.sun.star.xml.NamespaceMap", "com.sun.star.comp.chart.XMLNameSpaceMap" ) )
     , mnStart(0)
     , mnEnd(0)
 {
@@ -1231,7 +1231,7 @@ uno::Reference< util::XNumberFormats > SAL_CALL ChartModel::getNumberFormats()
 // ____ XChild ____
 Reference< uno::XInterface > SAL_CALL ChartModel::getParent()
 {
-    return Reference< uno::XInterface >(m_xParent,uno::UNO_QUERY);
+    return m_xParent;
 }
 
 void SAL_CALL ChartModel::setParent( const Reference< uno::XInterface >& Parent )

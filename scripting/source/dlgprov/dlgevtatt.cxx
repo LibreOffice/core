@@ -203,7 +203,7 @@ namespace dlgprov
         {
             Reference< ooo::vba::XVBAToOOEventDescGen > xVBAToOOEvtDesc( xSMgr->createInstanceWithContext("ooo.vba.VBAToOOEventDesc", m_xContext ), UNO_QUERY );
             if ( xVBAToOOEvtDesc.is() )
-                xEventsSupplier.set( xVBAToOOEvtDesc->getEventSupplier( xControl, sControlName ), UNO_QUERY );
+                xEventsSupplier = xVBAToOOEvtDesc->getEventSupplier( xControl, sControlName );
 
         }
         return xEventsSupplier;
@@ -312,7 +312,7 @@ namespace dlgprov
 
                 for ( sal_Int32 i2 = 0; i2 < nControlCount; ++i2 )
                 {
-                    pObjects2[i2].set( pControls[i2], UNO_QUERY );
+                    pObjects2[i2] = pControls[i2];
                 }
                 nestedAttachEvents( aObjects, Helper, sDialogCodeName );
             }
@@ -473,7 +473,7 @@ namespace dlgprov
 
                     Any aCtx;
                     aCtx <<= OUString("user");
-                    xScriptProvider.set( xFactory->createScriptProvider( aCtx ), UNO_QUERY );
+                    xScriptProvider = xFactory->createScriptProvider( aCtx );
                 }
             }
 

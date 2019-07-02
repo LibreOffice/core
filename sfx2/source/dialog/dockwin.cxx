@@ -139,7 +139,7 @@ SfxDockingWrapper::SfxDockingWrapper( vcl::Window* pParentWnd ,
     uno::Reference< lang::XSingleComponentFactory > xFactoryMgr = ui::theWindowContentFactoryManager::get(xContext);
 
     SfxDispatcher* pDispatcher = pBindings->GetDispatcher();
-    uno::Reference< frame::XFrame > xFrame( pDispatcher->GetFrame()->GetFrame().GetFrameInterface(), uno::UNO_QUERY );
+    uno::Reference< frame::XFrame > xFrame = pDispatcher->GetFrame()->GetFrame().GetFrameInterface();
     // create a resource URL from the nId provided by the sfx2
     OUString aResourceURL =  aDockWindowResourceURL + OUString::number(nId);
     uno::Sequence<uno::Any> aArgs(comphelper::InitAnyPropertySequence(

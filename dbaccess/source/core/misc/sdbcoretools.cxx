@@ -68,7 +68,7 @@ namespace dbaccess
         {
             xReturn = xParent;
             Reference<XChild> xChild(xParent,UNO_QUERY);
-            xParent.set(xChild.is() ? xChild->getParent() : Reference< XInterface >(),UNO_QUERY);
+            xParent = xChild.is() ? xChild->getParent() : Reference< XInterface >();
         }
         return xReturn;
     }

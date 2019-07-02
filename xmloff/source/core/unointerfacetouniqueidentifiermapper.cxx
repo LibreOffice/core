@@ -35,7 +35,7 @@ const OUString& UnoInterfaceToUniqueIdentifierMapper::registerReference( const R
 {
     // Be certain that the references we store in our table are to the
     // leading / primary XInterface - cf. findReference
-    uno::Reference< uno::XInterface > xRef( rInterface, uno::UNO_QUERY );
+    uno::Reference< uno::XInterface > xRef = rInterface;
 
     IdMap_t::const_iterator aIter;
     if( findReference( xRef, aIter ) )
@@ -56,7 +56,7 @@ bool UnoInterfaceToUniqueIdentifierMapper::registerReference( const OUString& rI
 
     // Be certain that the references we store in our table are to the
     // leading / primary XInterface - cf. findReference
-    uno::Reference< uno::XInterface > xRef( rInterface, uno::UNO_QUERY );
+    uno::Reference< uno::XInterface > xRef = rInterface;
 
     if( findReference( xRef, aIter ) )
     {
@@ -78,7 +78,7 @@ void UnoInterfaceToUniqueIdentifierMapper::registerReferenceAlways( const OUStri
 {
     // Be certain that the references we store in our table are to the
     // leading / primary XInterface - cf. findReference
-    uno::Reference< uno::XInterface > xRef( rInterface, uno::UNO_QUERY );
+    uno::Reference< uno::XInterface > xRef = rInterface;
 
     insertReference( rIdentifier, xRef );
 }
@@ -113,7 +113,7 @@ const Reference< XInterface >& UnoInterfaceToUniqueIdentifierMapper::getReferenc
 
 bool UnoInterfaceToUniqueIdentifierMapper::findReference( const Reference< XInterface >& rInterface, IdMap_t::const_iterator& rIter ) const
 {
-    uno::Reference< uno::XInterface > xRef( rInterface, uno::UNO_QUERY );
+    uno::Reference< uno::XInterface > xRef = rInterface;
 
     const IdMap_t::const_iterator aEnd( maEntries.end() );
     rIter = std::find_if(maEntries.begin(), aEnd, [&xRef](const IdMap_t::value_type& rItem) {

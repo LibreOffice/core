@@ -1187,7 +1187,7 @@ Reference< beans::XPropertySet > ObjectIdentifier::getObjectPropertySet(
     const Reference< chart2::XChartDocument >& xChartDocument )
 {
     return ObjectIdentifier::getObjectPropertySet(
-        rObjectCID, Reference< frame::XModel >( xChartDocument, uno::UNO_QUERY ));
+        rObjectCID, Reference< frame::XModel >( xChartDocument ));
 }
 
 Reference< beans::XPropertySet > ObjectIdentifier::getObjectPropertySet(
@@ -1322,7 +1322,7 @@ Reference< beans::XPropertySet > ObjectIdentifier::getObjectPropertySet(
                                 errorBar = "ErrorBarZ";
 
                             xSeriesProp->getPropertyValue( errorBar ) >>= xErrorBarProp;
-                            xObjectProperties.set( xErrorBarProp, uno::UNO_QUERY );
+                            xObjectProperties = xErrorBarProp;
                         }
                     }
                     break;

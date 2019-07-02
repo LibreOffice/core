@@ -365,7 +365,7 @@ bool MediaDescriptor::isStreamReadOnly() const
         css::uno::Reference< css::ucb::XContent > xContent = getUnpackedValueOrDefault(MediaDescriptor::PROP_UCBCONTENT(), css::uno::Reference< css::ucb::XContent >());
         if (xContent.is())
         {
-            css::uno::Reference< css::ucb::XContentIdentifier > xId(xContent->getIdentifier(), css::uno::UNO_QUERY);
+            css::uno::Reference< css::ucb::XContentIdentifier > xId = xContent->getIdentifier();
             OUString aScheme;
             if (xId.is())
                 aScheme = xId->getContentProviderScheme();

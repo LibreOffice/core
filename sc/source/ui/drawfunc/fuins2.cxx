@@ -117,9 +117,8 @@ void lcl_ChartInit(const uno::Reference <embed::XEmbeddedObject>& xObj, ScViewDa
         // connect to Calc data (if no range string, leave chart alone, with its own data)
 
         uno::Reference< css::chart2::data::XDataReceiver > xReceiver;
-        uno::Reference< embed::XComponentSupplier > xCompSupp( xObj, uno::UNO_QUERY );
-        if( xCompSupp.is())
-            xReceiver.set( xCompSupp->getComponent(), uno::UNO_QUERY );
+        if( xObj.is())
+            xReceiver.set( xObj->getComponent(), uno::UNO_QUERY );
         OSL_ASSERT( xReceiver.is());
         if( xReceiver.is() )
         {
@@ -478,9 +477,8 @@ FuInsertChart::FuInsertChart(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawV
         rViewShell.GetObjectShell()->GetEmbeddedObjectContainer().CreateEmbeddedObject( SvGlobalName( SO3_SCH_CLASSID_60 ).GetByteSequence(), aName );
 
     uno::Reference< css::chart2::data::XDataReceiver > xReceiver;
-    uno::Reference< embed::XComponentSupplier > xCompSupp( xObj, uno::UNO_QUERY );
-    if( xCompSupp.is())
-        xReceiver.set( xCompSupp->getComponent(), uno::UNO_QUERY );
+    if( xObj.is())
+        xReceiver.set( xObj->getComponent(), uno::UNO_QUERY );
 
     uno::Reference<chart2::XChartDocument> xChartDoc(xReceiver, uno::UNO_QUERY);
     if (xChartDoc.is())

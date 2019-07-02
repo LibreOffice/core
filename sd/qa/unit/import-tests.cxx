@@ -722,7 +722,7 @@ void SdImportTest::testTdf97808()
 
     uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(
         xDocShRef->GetModel(), uno::UNO_QUERY);
-    uno::Reference<container::XNameAccess> xStyleFamilies(xStyleFamiliesSupplier->getStyleFamilies(), uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xStyleFamilies = xStyleFamiliesSupplier->getStyleFamilies();
     uno::Reference<container::XNameAccess> xStyleFamily(xStyleFamilies->getByName("graphics"), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xStyle(xStyleFamily->getByName("objectwithoutfill"), uno::UNO_QUERY);
     OUString lineend;
@@ -2792,8 +2792,7 @@ void SdImportTest::testCropToShape()
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPages->getByIndex(0), uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_MESSAGE("Could not get xDrawPage", xDrawPage.is());
     uno::Reference<drawing::XShape> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
-    uno::Reference<drawing::XShapeDescriptor> xDesc(xShape, uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString{"com.sun.star.drawing.CustomShape"}, xDesc->getShapeType());
+    CPPUNIT_ASSERT_EQUAL(OUString{"com.sun.star.drawing.CustomShape"}, xShape->getShapeType());
     CPPUNIT_ASSERT_MESSAGE("Could not get xShape", xShape.is());
     uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
     css::drawing::FillStyle fillStyle;

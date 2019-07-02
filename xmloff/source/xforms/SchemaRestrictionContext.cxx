@@ -105,13 +105,11 @@ void SchemaRestrictionContext::CreateDataType()
     try
     {
         mxDataType =
-            Reference<XPropertySet>(
                 mxRepository->cloneDataType(
                     xforms_getBasicTypeName( mxRepository,
                                           GetImport().GetNamespaceMap(),
                                           msBaseName ),
-                    msTypeName ),
-                UNO_QUERY );
+                    msTypeName );
     }
     catch( const Exception& )
     {

@@ -305,10 +305,9 @@ void ChildrenManagerImpl::CreateListOfVisibleShapes (
     }
 
     // Add the visible shapes for which only the XShapes exist.
-    uno::Reference<container::XIndexAccess> xShapeAccess (mxShapeList, uno::UNO_QUERY);
-    if (xShapeAccess.is())
+    if (mxShapeList.is())
     {
-        sal_Int32 nShapeCount = xShapeAccess->getCount();
+        sal_Int32 nShapeCount = mxShapeList->getCount();
         raDescriptorList.reserve( nShapeCount );
         awt::Point aPos;
         awt::Size aSize;
@@ -316,7 +315,7 @@ void ChildrenManagerImpl::CreateListOfVisibleShapes (
         uno::Reference<drawing::XShape> xShape;
         for (sal_Int32 i=0; i<nShapeCount; ++i)
         {
-            xShapeAccess->getByIndex(i) >>= xShape;
+            mxShapeList->getByIndex(i) >>= xShape;
             aPos = xShape->getPosition();
             aSize = xShape->getSize();
 

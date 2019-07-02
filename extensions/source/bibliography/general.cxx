@@ -398,8 +398,7 @@ void BibGeneralPage::RemoveListeners()
     {
         if(aControl.is())
         {
-            uno::Reference< awt::XWindow > xCtrWin(aControl, uno::UNO_QUERY );
-            xCtrWin->removeFocusListener( mxBibGeneralPageFocusListener.get() );
+            aControl->removeFocusListener( mxBibGeneralPageFocusListener.get() );
             aControl = nullptr;
         }
     }

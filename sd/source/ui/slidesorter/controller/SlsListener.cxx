@@ -221,10 +221,9 @@ void Listener::ConnectToController()
     }
 
     // Listen for disposing events.
-    Reference<XComponent> xComponent (xController, UNO_QUERY);
-    if (xComponent.is())
+    if (xController.is())
     {
-        xComponent->addEventListener (
+        xController->addEventListener (
             Reference<lang::XEventListener>(static_cast<XWeak*>(this), UNO_QUERY));
 
         mxControllerWeak = xController;
@@ -249,9 +248,8 @@ void Listener::DisconnectFromController()
         }
 
         // Remove the dispose listener.
-        Reference<XComponent> xComponent (xController, UNO_QUERY);
-        if (xComponent.is())
-            xComponent->removeEventListener (
+        if (xController.is())
+            xController->removeEventListener (
                 Reference<lang::XEventListener>(
                     static_cast<XWeak*>(this), UNO_QUERY));
     }

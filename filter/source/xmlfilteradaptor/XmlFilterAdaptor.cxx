@@ -130,7 +130,7 @@ bool XmlFilterAdaptor::importImpl( const Sequence< css::beans::PropertyValue >& 
 
     // Creating a ConverterBridge instance
 
-    Reference< XInterface > xConvBridge(mxContext->getServiceManager()->createInstanceWithContext(udConvertClass, mxContext), UNO_QUERY);
+    Reference< XInterface > xConvBridge = mxContext->getServiceManager()->createInstanceWithContext(udConvertClass, mxContext);
     if (!xConvBridge.is()) {
         SAL_WARN("filter.xmlfa", "XmlFilterAdaptor: unable to create service " << udConvertClass);
         return false;

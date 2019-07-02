@@ -2444,8 +2444,7 @@ bool SvxAutoCorrectLanguageLists::MakeBlocklist_Imp( SotStorage& rStg )
             uno::Reference < io::XOutputStream> xOut = new utl::OOutputStreamWrapper( *refList );
             xWriter->setOutputStream(xOut);
 
-            uno::Reference<xml::sax::XDocumentHandler> xHandler(xWriter, uno::UNO_QUERY);
-            rtl::Reference< SvXMLAutoCorrectExport > xExp( new SvXMLAutoCorrectExport( xContext, pAutocorr_List.get(), pXMLImplAutocorr_ListStr, xHandler ) );
+            rtl::Reference< SvXMLAutoCorrectExport > xExp( new SvXMLAutoCorrectExport( xContext, pAutocorr_List.get(), pXMLImplAutocorr_ListStr, xWriter ) );
 
             xExp->exportDoc( XML_BLOCK_LIST );
 

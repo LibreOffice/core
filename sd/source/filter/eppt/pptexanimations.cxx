@@ -435,7 +435,7 @@ bool AnimationExporter::isEmptyNode( const Reference< XAnimationNode >& xNode ) 
             Reference< XEnumerationAccess > xEnumerationAccess( xNode, UNO_QUERY );
             if( xEnumerationAccess.is() )
             {
-                Reference< XEnumeration > xEnumeration( xEnumerationAccess->createEnumeration(), UNO_QUERY );
+                Reference< XEnumeration > xEnumeration = xEnumerationAccess->createEnumeration();
                 if( xEnumeration.is() )
                 {
                     while( xEnumeration->hasMoreElements() )
@@ -698,7 +698,7 @@ void AnimationExporter::exportNode( SvStream& rStrm, Reference< XAnimationNode >
             Reference< XEnumerationAccess > xEnumerationAccess( xNode, UNO_QUERY );
             if( xEnumerationAccess.is() )
             {
-                Reference< XEnumeration > xEnumeration( xEnumerationAccess->createEnumeration(), UNO_QUERY );
+                Reference< XEnumeration > xEnumeration = xEnumerationAccess->createEnumeration();
                 if( xEnumeration.is() )
                 {
                     while( xEnumeration->hasMoreElements() )
@@ -2129,7 +2129,7 @@ void AnimationExporter::exportIterate( SvStream& rStrm, const Reference< XAnimat
     Reference< XEnumerationAccess > xEnumerationAccess( xNode, UNO_QUERY );
     if( xEnumerationAccess.is() )
     {
-        Reference< XEnumeration > xEnumeration( xEnumerationAccess->createEnumeration(), UNO_QUERY );
+        Reference< XEnumeration > xEnumeration = xEnumerationAccess->createEnumeration();
         if( xEnumeration.is() )
         {
             while( xEnumeration->hasMoreElements() )

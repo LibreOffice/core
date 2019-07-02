@@ -89,7 +89,7 @@ void RichStringPortion::convert( const Reference< XText >& rxText, bool bReplace
 
     Reference< XTextRange > xRange;
     if( bReplace )
-        xRange.set( rxText, UNO_QUERY );
+        xRange = rxText;
     else
         xRange = rxText->getEnd();
     OSL_ENSURE( xRange.is(), "RichStringPortion::convert - cannot get text range interface" );

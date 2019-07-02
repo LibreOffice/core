@@ -203,8 +203,7 @@ ScVbaWorksheet::createSheetCopyInNewDoc(const OUString& aCurrSheetName)
 {
     uno::Reference< sheet::XSheetCellCursor > xSheetCellCursor = getSheet()->createCursor( );
     uno::Reference<sheet::XUsedAreaCursor> xUsedCursor(xSheetCellCursor,uno::UNO_QUERY_THROW);
-    uno::Reference< table::XCellRange > xRange1( xSheetCellCursor, uno::UNO_QUERY);
-    uno::Reference<excel::XRange> xRange =  new ScVbaRange( this, mxContext, xRange1);
+    uno::Reference<excel::XRange> xRange =  new ScVbaRange( this, mxContext, xSheetCellCursor);
     if (xRange.is())
         xRange->Select();
     excel::implnCopy(mxModel);
@@ -431,8 +430,7 @@ ScVbaWorksheet::getUsedRange()
     uno::Reference<sheet::XUsedAreaCursor> xUsedCursor(xSheetCellCursor,uno::UNO_QUERY_THROW);
     xUsedCursor->gotoStartOfUsedArea( false );
     xUsedCursor->gotoEndOfUsedArea( true );
-    uno::Reference< table::XCellRange > xRange( xSheetCellCursor, uno::UNO_QUERY);
-    return new ScVbaRange(this, mxContext, xRange);
+    return new ScVbaRange(this, mxContext, xSheetCellCursor);
 }
 
 uno::Reference< excel::XOutline >
@@ -541,9 +539,8 @@ ScVbaWorksheet::Move( const uno::Any& Before, const uno::Any& After )
     {
         uno::Reference< sheet::XSheetCellCursor > xSheetCellCursor = getSheet()->createCursor( );
         uno::Reference<sheet::XUsedAreaCursor> xUsedCursor(xSheetCellCursor,uno::UNO_QUERY_THROW);
-        uno::Reference< table::XCellRange > xRange1( xSheetCellCursor, uno::UNO_QUERY);
         // #FIXME needs worksheet as parent
-        uno::Reference<excel::XRange> xRange =  new ScVbaRange( this, mxContext, xRange1);
+        uno::Reference<excel::XRange> xRange =  new ScVbaRange( this, mxContext, xSheetCellCursor);
         if (xRange.is())
             xRange->Select();
         excel::implnCopy(mxModel);

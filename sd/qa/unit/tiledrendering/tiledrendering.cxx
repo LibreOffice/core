@@ -884,8 +884,8 @@ void SdTiledRenderingTest::testResizeTable()
     pView->SdrEndTextEdit();
 
     // Remember the original row heights.
-    uno::Reference<table::XColumnRowRange> xTable(pTableObject->getTable(), uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xRows(xTable->getRows(), uno::UNO_QUERY);
+    uno::Reference<table::XColumnRowRange> xTable = pTableObject->getTable();
+    uno::Reference<container::XIndexAccess> xRows = xTable->getRows();
     uno::Reference<beans::XPropertySet> xRow1(xRows->getByIndex(0), uno::UNO_QUERY);
     sal_Int32 nExpectedRow1 = xRow1->getPropertyValue("Size").get<sal_Int32>();
     uno::Reference<beans::XPropertySet> xRow2(xRows->getByIndex(1), uno::UNO_QUERY);
@@ -2104,7 +2104,7 @@ void SdTiledRenderingTest::testTdf115783()
     pView->SdrEndTextEdit();
 
     // And now verify that the cell has the correct font size.
-    uno::Reference<table::XCellRange> xTable(pTableObject->getTable(), uno::UNO_QUERY);
+    uno::Reference<table::XCellRange> xTable = pTableObject->getTable();
     CPPUNIT_ASSERT(xTable.is());
     uno::Reference<text::XTextRange> xCell(xTable->getCellByPosition(1, 0), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xCell.is());

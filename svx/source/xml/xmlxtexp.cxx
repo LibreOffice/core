@@ -220,7 +220,7 @@ bool SvxXMLXTableExportComponent::save(
         uno::Reference<embed::XStorage > xSubStorage;
         uno::Reference<XGraphicStorageHandler> xGraphicStorageHandler;
 
-        uno::Reference<xml::sax::XDocumentHandler> xHandler( xWriter, uno::UNO_QUERY );
+        uno::Reference<xml::sax::XDocumentHandler> xHandler( xWriter );
 
         if( !bToStorage || !xStorage.is() )
         { // local URL -> SfxMedium route
@@ -276,8 +276,7 @@ bool SvxXMLXTableExportComponent::save(
         if( !xOut.is() )
             return false;
 
-        uno::Reference<io::XActiveDataSource> xMetaSrc( xWriter, uno::UNO_QUERY );
-        xMetaSrc->setOutputStream( xOut );
+        xWriter->setOutputStream( xOut );
         if( xGraphicHelper.is() )
             xGraphicStorageHandler = xGraphicHelper.get();
 
@@ -296,9 +295,7 @@ bool SvxXMLXTableExportComponent::save(
             if( xTrans.is() )
                 xTrans->commit();
 
-            uno::Reference< XComponent > xComp( xSubStorage, UNO_QUERY );
-            if( xComp.is() )
-                xSubStorage->dispose();
+            xSubStorage->dispose();
         }
     }
     catch( uno::Exception& )

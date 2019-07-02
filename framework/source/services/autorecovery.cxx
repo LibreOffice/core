@@ -2155,7 +2155,7 @@ void AutoRecovery::implts_stopListening()
     // May be we must work with our configuration, but don't wish to be informed
     // about changes any longer. Needed e.g. during EMERGENCY_SAVE!
     xCFG.set                   (m_xRecoveryCFG      , css::uno::UNO_QUERY);
-    xGlobalEventBroadcaster.set(m_xNewDocBroadcaster, css::uno::UNO_QUERY);
+    xGlobalEventBroadcaster = m_xNewDocBroadcaster;
     } /* SAFE */
 
     if (xGlobalEventBroadcaster.is() && m_bListenForDocEvents)
@@ -2667,7 +2667,7 @@ AutoRecovery::TDocumentList::iterator AutoRecovery::impl_searchDocument(      Au
 
 void lcl_changeVisibility( const css::uno::Reference< css::frame::XFramesSupplier >& i_rFrames, bool i_bVisible )
 {
-    css::uno::Reference< css::container::XIndexAccess > xFramesContainer( i_rFrames->getFrames(), css::uno::UNO_QUERY );
+    css::uno::Reference< css::container::XIndexAccess > xFramesContainer = i_rFrames->getFrames();
     const sal_Int32 count = xFramesContainer->getCount();
 
     Any aElement;
@@ -2690,7 +2690,7 @@ void lcl_changeVisibility( const css::uno::Reference< css::frame::XFramesSupplie
 
 void AutoRecovery::implts_changeAllDocVisibility(bool bVisible)
 {
-    css::uno::Reference< css::frame::XFramesSupplier > xDesktop( css::frame::Desktop::create(m_xContext), css::uno::UNO_QUERY);
+    css::uno::Reference< css::frame::XFramesSupplier > xDesktop = css::frame::Desktop::create(m_xContext);
     lcl_changeVisibility( xDesktop, bVisible );
 }
 

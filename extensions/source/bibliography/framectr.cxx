@@ -523,7 +523,7 @@ void BibFrameController_Impl::dispatch(const util::URL& _rURL, const uno::Sequen
                     if (xConfirm.is())
                     {
                         sdb::RowChangeEvent aEvent;
-                        aEvent.Source.set(xCursor, UNO_QUERY);
+                        aEvent.Source = xCursor;
                         aEvent.Action = sdb::RowChangeAction::DELETE;
                         aEvent.Rows = 1;
                         bSuccess = xConfirm->confirmDelete(aEvent);

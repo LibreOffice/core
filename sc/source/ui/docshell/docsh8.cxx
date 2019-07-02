@@ -789,8 +789,7 @@ ErrCode ScDocShell::DBaseExport( const OUString& rFullFileName, rtl_TextEncoding
         ::utl::DisposableComponent aConnectionHelper(xConnection);
 
         // get dBase driver
-        uno::Reference< sdbc::XDriverAccess> xAccess(xDrvMan,uno::UNO_QUERY);
-        uno::Reference< sdbcx::XDataDefinitionSupplier > xDDSup( xAccess->getDriverByURL( xConnection->getMetaData()->getURL() ), uno::UNO_QUERY );
+        uno::Reference< sdbcx::XDataDefinitionSupplier > xDDSup( xDrvMan->getDriverByURL( xConnection->getMetaData()->getURL() ), uno::UNO_QUERY );
         if ( !xDDSup.is() )
             return SCERR_EXPORT_CONNECT;
 

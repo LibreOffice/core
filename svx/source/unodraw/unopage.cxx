@@ -481,7 +481,7 @@ void SAL_CALL SvxDrawPage::ungroup( const Reference< drawing::XShapeGroup >& aGr
 
     SdrPageView* pPageView = mpView->ShowSdrPage( mpPage );
 
-    Reference< drawing::XShape > xShape( aGroup, UNO_QUERY );
+    Reference< drawing::XShape > xShape( aGroup );
     SelectObjectInView( xShape, pPageView );
     mpView->UnGroupMarked();
 

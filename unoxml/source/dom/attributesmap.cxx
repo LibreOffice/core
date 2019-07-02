@@ -164,8 +164,8 @@ namespace DOM
                 static_cast<OWeakObject*>(this),
                 DOMExceptionType_NOT_FOUND_ERR);
         }
-        Reference< XNode > const xRet(
-            m_pElement->removeAttributeNode(xAttr), UNO_QUERY);
+        Reference< XNode > const xRet =
+            m_pElement->removeAttributeNode(xAttr);
         return xRet;
     }
 
@@ -185,8 +185,8 @@ namespace DOM
                 static_cast<OWeakObject*>(this),
                 DOMExceptionType_NOT_FOUND_ERR);
         }
-        Reference< XNode > const xRet(
-            m_pElement->removeAttributeNode(xAttr), UNO_QUERY);
+        Reference< XNode > const xRet =
+            m_pElement->removeAttributeNode(xAttr);
         return xRet;
     }
 
@@ -204,8 +204,8 @@ namespace DOM
                 DOMExceptionType_HIERARCHY_REQUEST_ERR);
         }
         // no MutexGuard needed: m_pElement is const
-        Reference< XNode > const xRet(
-            m_pElement->setAttributeNode(xAttr), UNO_QUERY);
+        Reference< XNode > const xRet =
+            m_pElement->setAttributeNode(xAttr);
         return xRet;
     }
 
@@ -223,8 +223,8 @@ namespace DOM
                 DOMExceptionType_HIERARCHY_REQUEST_ERR);
         }
         // no MutexGuard needed: m_pElement is const
-        Reference< XNode > const xRet(
-            m_pElement->setAttributeNodeNS(xAttr), UNO_QUERY);
+        Reference< XNode > const xRet =
+            m_pElement->setAttributeNodeNS(xAttr);
         return xRet;
     }
 }

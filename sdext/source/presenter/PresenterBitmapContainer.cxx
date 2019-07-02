@@ -84,8 +84,8 @@ void PresenterBitmapContainer::Initialize (
 
     // Create an object that is able to load the bitmaps in a format that is
     // supported by the canvas.
-    Reference<lang::XMultiComponentFactory> xFactory (
-        rxComponentContext->getServiceManager(), UNO_QUERY);
+    Reference<lang::XMultiComponentFactory> xFactory =
+        rxComponentContext->getServiceManager();
     if ( ! xFactory.is())
         return;
     mxPresenterHelper.set(

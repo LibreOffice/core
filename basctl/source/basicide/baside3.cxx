@@ -1034,16 +1034,14 @@ bool implImportDialog(weld::Window* pWin, const OUString& rCurPath, const Script
                 }
                 else if( !bLibLocalized )
                 {
-                    Reference< resource::XStringResourceManager > xImportStringResourceManager( xImportStringResource, UNO_QUERY );
-                    LocalizationMgr::resetResourceForDialog( xDialogModel, xImportStringResourceManager );
+                    LocalizationMgr::resetResourceForDialog( xDialogModel, xImportStringResource );
                     bCopyResourcesForDialog = false;
                 }
 
                 if( bCopyResourcesForDialog )
                 {
-                    Reference< resource::XStringResourceResolver > xImportStringResourceResolver( xImportStringResource, UNO_QUERY );
                     LocalizationMgr::copyResourceForDroppedDialog( xDialogModel, aXmlDlgName,
-                        xLibStringResourceManager, xImportStringResourceResolver );
+                        xLibStringResourceManager, xImportStringResource );
                 }
             }
             else if( bLibLocalized )

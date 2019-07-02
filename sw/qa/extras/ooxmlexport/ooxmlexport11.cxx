@@ -149,7 +149,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf121561_tocTitle, "tdf121456_tabsOffse
 DECLARE_OOXMLEXPORT_TEST(testTdf124106, "tdf121456.docx")
 {
     uno::Reference<text::XTextDocument> textDocument(mxComponent, uno::UNO_QUERY);
-    uno::Reference<text::XText> text(textDocument->getText(), uno::UNO_QUERY);
+    uno::Reference<text::XText> text = textDocument->getText();
     // -1 if the 'Y' character does not occur
     CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), text->getString().indexOf('Y'));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), text->getString().indexOf('y'));
@@ -161,7 +161,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf121561_tocTitleDocx, "tdf121456_tabsO
 
     // get TOC node
     uno::Reference<text::XDocumentIndexesSupplier> xIndexSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xIndexes(xIndexSupplier->getDocumentIndexes( ), uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexes = xIndexSupplier->getDocumentIndexes( );
     uno::Reference<text::XDocumentIndex> xTOCIndex(xIndexes->getByIndex(0), uno::UNO_QUERY);
 
     // ensure TOC title was set in TOC properties
@@ -510,7 +510,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf104354, "tdf104354.docx")
 DECLARE_OOXMLEXPORT_TEST(testTdf104354_firstParaInSection, "tdf104354_firstParaInSection.docx")
 {
     uno::Reference<text::XFootnotesSupplier> xFootnotesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xFootnotes(xFootnotesSupplier->getFootnotes(), uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xFootnotes = xFootnotesSupplier->getFootnotes();
     uno::Reference<text::XText> xText(xFootnotes->getByIndex(0), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(494),
                          getProperty<sal_Int32>(getParagraphOfText(1, xText), "ParaTopMargin"));

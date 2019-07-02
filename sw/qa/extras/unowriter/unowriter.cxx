@@ -93,7 +93,7 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testDefaultCharStyle)
     loadURL("private:factory/swriter", nullptr);
 
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
-    uno::Reference<text::XSimpleText> xBodyText(xTextDocument->getText(), uno::UNO_QUERY);
+    uno::Reference<text::XSimpleText> xBodyText = xTextDocument->getText();
     xBodyText->insertString(xBodyText->getStart(), "x", false);
 
     uno::Reference<text::XTextCursor> xCursor(xBodyText->createTextCursor());
@@ -129,7 +129,7 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testGraphicDesciptorURL)
 
     // Insert it.
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
-    uno::Reference<text::XText> xBodyText(xTextDocument->getText(), uno::UNO_QUERY);
+    uno::Reference<text::XText> xBodyText = xTextDocument->getText();
     uno::Reference<text::XTextCursor> xCursor(xBodyText->createTextCursor());
     uno::Reference<text::XTextContent> xTextContent(xTextGraphic, uno::UNO_QUERY);
     xBodyText->insertTextContent(xCursor, xTextContent, false);
@@ -159,7 +159,7 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testGraphicDesciptorURLBitmap)
 
     // Insert it.
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
-    uno::Reference<text::XText> xBodyText(xTextDocument->getText(), uno::UNO_QUERY);
+    uno::Reference<text::XText> xBodyText = xTextDocument->getText();
     uno::Reference<text::XTextCursor> xCursor(xBodyText->createTextCursor());
     uno::Reference<text::XTextContent> xTextContent(xTextGraphic, uno::UNO_QUERY);
     xBodyText->insertTextContent(xCursor, xTextContent, false);
@@ -209,8 +209,8 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testXAutoTextGroup)
     const OUString sTextTitleNew = "Test Auto Text Renamed";
 
     // Create new temporary group
-    uno::Reference<text::XAutoTextGroup> xAutoTextGroup(
-        xAutoTextContainer->insertNewByName(sGroupName), uno::UNO_QUERY);
+    uno::Reference<text::XAutoTextGroup> xAutoTextGroup
+        = xAutoTextContainer->insertNewByName(sGroupName);
     CPPUNIT_ASSERT_MESSAGE("AutoTextGroup was not found!", xAutoTextGroup.is());
 
     // Insert new element and ensure it exists
@@ -338,7 +338,7 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testSetPagePrintSettings)
     loadURL("private:factory/swriter", nullptr);
 
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
-    uno::Reference<text::XSimpleText> xBodyText(xTextDocument->getText(), uno::UNO_QUERY);
+    uno::Reference<text::XSimpleText> xBodyText = xTextDocument->getText();
     xBodyText->insertString(xBodyText->getStart(), "x", false);
 
     uno::Reference<text::XPagePrintable> xPagePrintable(mxComponent, uno::UNO_QUERY);
@@ -478,7 +478,7 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testPasteListener)
 
     // Insert initial string.
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
-    uno::Reference<text::XSimpleText> xBodyText(xTextDocument->getText(), uno::UNO_QUERY);
+    uno::Reference<text::XSimpleText> xBodyText = xTextDocument->getText();
     xBodyText->insertString(xBodyText->getStart(), "ABCDEF", false);
 
     // Add paste listener.
