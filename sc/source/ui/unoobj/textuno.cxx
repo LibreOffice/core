@@ -424,16 +424,13 @@ void SAL_CALL ScHeaderFooterTextObj::insertTextContent(
             switch ( aTextData.GetPart() )
             {
                 case ScHeaderFooterPart::LEFT:
-                    xTextRange = uno::Reference<text::XTextRange>(
-                                  aTextData.GetContentObj()->getLeftText(), uno::UNO_QUERY);
+                    xTextRange = aTextData.GetContentObj()->getLeftText();
                 break;
                 case ScHeaderFooterPart::CENTER:
-                    xTextRange = uno::Reference<text::XTextRange>(
-                                  aTextData.GetContentObj()->getCenterText(), uno::UNO_QUERY);
+                    xTextRange = aTextData.GetContentObj()->getCenterText();
                 break;
                 case ScHeaderFooterPart::RIGHT:
-                    xTextRange = uno::Reference<text::XTextRange>(
-                                  aTextData.GetContentObj()->getRightText(), uno::UNO_QUERY);
+                    xTextRange = aTextData.GetContentObj()->getRightText();
                 break;
             }
 

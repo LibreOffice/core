@@ -89,7 +89,7 @@ PresenterSlidePreview::PresenterSlidePreview (
     if (mpPresenterController.get() != nullptr)
         mnSlideAspectRatio = mpPresenterController->GetSlideAspectRatio();
 
-    Reference<lang::XMultiComponentFactory> xFactory (rxContext->getServiceManager(), UNO_QUERY);
+    Reference<lang::XMultiComponentFactory> xFactory = rxContext->getServiceManager();
     if (xFactory.is())
         mxPreviewRenderer.set(
             xFactory->createInstanceWithContext(

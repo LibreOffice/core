@@ -84,9 +84,8 @@ DEFINE_INIT_SERVICE(HelpOnStartup,
                         xComponent.set(m_xModuleManager, css::uno::UNO_QUERY);
                         if (xComponent.is())
                             xComponent->addEventListener(static_cast< css::lang::XEventListener* >(this));
-                        xComponent.set(m_xDesktop, css::uno::UNO_QUERY);
-                        if (xComponent.is())
-                            xComponent->addEventListener(static_cast< css::lang::XEventListener* >(this));
+                        if (m_xDesktop.is())
+                            m_xDesktop->addEventListener(static_cast< css::lang::XEventListener* >(this));
                         xComponent.set(m_xConfig, css::uno::UNO_QUERY);
                         if (xComponent.is())
                             xComponent->addEventListener(static_cast< css::lang::XEventListener* >(this));

@@ -1469,7 +1469,7 @@ void SAL_CALL CopyTableWizard::initialize( const Sequence< Any >& _rArguments )
                 );
         }
         if ( !m_xInteractionHandler.is() )
-            m_xInteractionHandler.set( InteractionHandler::createWithParent(m_xContext, nullptr), UNO_QUERY );
+            m_xInteractionHandler = InteractionHandler::createWithParent(m_xContext, nullptr);
 
         Reference< XInteractionHandler > xSourceDocHandler;
         Reference< XPropertySet > xSourceDescriptor( impl_ensureDataAccessDescriptor_throw( _rArguments, 0, m_xSourceConnection, xSourceDocHandler ) );

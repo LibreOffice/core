@@ -1495,7 +1495,7 @@ void PresenterSlideSorter::MouseOverManager::SetCanvas (
 {
     mxCanvas = rxCanvas;
     if (mpFont.get() != nullptr)
-        mpFont->PrepareFont(Reference<rendering::XCanvas>(mxCanvas, UNO_QUERY));
+        mpFont->PrepareFont(mxCanvas);
 }
 
 void PresenterSlideSorter::MouseOverManager::SetSlide (
@@ -1697,7 +1697,7 @@ void PresenterSlideSorter::MouseOverManager::PaintButtonBackground (
         xRightLabelBitmap = mpRightLabelBitmap->GetNormalBitmap();
 
     PresenterUIPainter::PaintHorizontalBitmapComposite (
-        Reference<rendering::XCanvas>(rxCanvas, UNO_QUERY),
+        rxCanvas,
         awt::Rectangle(0,0, rSize.Width,rSize.Height),
         awt::Rectangle(0,0, rSize.Width,rSize.Height),
         xLeftLabelBitmap,

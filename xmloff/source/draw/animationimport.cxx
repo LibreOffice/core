@@ -1155,9 +1155,8 @@ void AnimationNodeContext::init_node(  const css::uno::Reference< css::xml::sax:
 
         if (!sXmlId.isEmpty())
         {
-            Reference< XInterface > const xRef( mxNode, UNO_QUERY );
             GetImport().getInterfaceToIdentifierMapper().registerReference(
-                sXmlId, xRef );
+                sXmlId, mxNode );
         }
 
         sal_Int32 nUserDataCount = aUserData.size();

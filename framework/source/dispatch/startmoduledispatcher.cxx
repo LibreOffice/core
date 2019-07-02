@@ -100,8 +100,8 @@ bool StartModuleDispatcher::implts_isBackingModePossible()
     if ( ! SvtModuleOptions().IsModuleInstalled(SvtModuleOptions::EModule::STARTMODULE))
         return false;
 
-    css::uno::Reference< css::frame::XFramesSupplier > xDesktop(
-        css::frame::Desktop::create( m_xContext ), css::uno::UNO_QUERY);
+    css::uno::Reference< css::frame::XFramesSupplier > xDesktop =
+        css::frame::Desktop::create( m_xContext );
 
     FrameListAnalyzer aCheck(
         xDesktop,

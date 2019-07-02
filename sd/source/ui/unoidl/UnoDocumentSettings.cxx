@@ -381,8 +381,7 @@ uno::Sequence<beans::PropertyValue>
         uno::Reference< embed::XTransactedObject > xTrans( xSubStorage, UNO_QUERY );
         if( xTrans.is() )
             xTrans->commit();
-        uno::Reference< lang::XComponent > xComp( xSubStorage, UNO_QUERY );
-        if( xComp.is() )
+        if( xSubStorage.is() )
             xSubStorage->dispose();
     } catch (const uno::Exception &) {
 //        fprintf (stderr, "saving etc. exception '%s'\n",

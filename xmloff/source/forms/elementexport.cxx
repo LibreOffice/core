@@ -1817,7 +1817,7 @@ namespace xmloff
             Reference< XListEntrySink > xSink( m_xProps, UNO_QUERY );
             Reference< XListEntrySource > xSource;
             if ( xSink.is() )
-                xSource.set(xSink->getListEntrySource(), css::uno::UNO_QUERY);
+                xSource = xSink->getListEntrySource();
             OSL_ENSURE( xSource.is(), "OControlExport::exportCellListSourceRange: list source or sink!" );
             if ( xSource.is() )
             {

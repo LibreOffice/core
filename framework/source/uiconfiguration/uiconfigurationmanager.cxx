@@ -460,7 +460,7 @@ void UIConfigurationManager::impl_storeElementTypeData( Reference< XStorage > co
             }
             else
             {
-                Reference< XStream > xStream( xStorage->openStreamElement( rElement.aName, ElementModes::WRITE|ElementModes::TRUNCATE ), UNO_QUERY );
+                Reference< XStream > xStream = xStorage->openStreamElement( rElement.aName, ElementModes::WRITE|ElementModes::TRUNCATE );
                 Reference< XOutputStream > xOutputStream( xStream->getOutputStream() );
 
                 if ( xOutputStream.is() )
@@ -535,7 +535,7 @@ void UIConfigurationManager::impl_resetElementTypeData(
     UIElementDataHashMap& rHashMap          = rDocElementType.aElementsHashMap;
 
     Reference< XUIConfigurationManager > xThis( static_cast< OWeakObject* >( this ), UNO_QUERY );
-    Reference< XInterface > xIfac( xThis, UNO_QUERY );
+    Reference< XInterface > xIfac( xThis );
 
     // Make copies of the event structures to be thread-safe. We have to unlock our mutex before calling
     // our listeners!
@@ -574,7 +574,7 @@ void UIConfigurationManager::impl_reloadElementTypeData(
     Reference< XStorage > xElementStorage( rDocElementType.xStorage );
 
     Reference< XUIConfigurationManager > xThis( static_cast< OWeakObject* >( this ), UNO_QUERY );
-    Reference< XInterface > xIfac( xThis, UNO_QUERY );
+    Reference< XInterface > xIfac( xThis );
     sal_Int16 nType = rDocElementType.nElementType;
 
     for (auto & elem : rHashMap)
@@ -766,7 +766,7 @@ void SAL_CALL UIConfigurationManager::reset()
             for ( int i = 1; i < css::ui::UIElementType::COUNT; i++ )
             {
                 UIElementType&        rElementType = m_aUIElements[i];
-                Reference< XStorage > xSubStorage( rElementType.xStorage, UNO_QUERY );
+                Reference< XStorage > xSubStorage = rElementType.xStorage;
 
                 if ( xSubStorage.is() )
                 {
@@ -956,7 +956,7 @@ void SAL_CALL UIConfigurationManager::replaceSettings( const OUString& ResourceU
         rElementType.bModified = true;
 
         Reference< XUIConfigurationManager > xThis( static_cast< OWeakObject* >( this ), UNO_QUERY );
-        Reference< XInterface > xIfac( xThis, UNO_QUERY );
+        Reference< XInterface > xIfac( xThis );
 
         // Create event to notify listener about replaced element settings
         ConfigurationEvent aEvent;
@@ -1016,7 +1016,7 @@ void SAL_CALL UIConfigurationManager::removeSettings( const OUString& ResourceUR
             rElementType.bModified = true;
 
             Reference< XUIConfigurationManager > xThis( static_cast< OWeakObject* >( this ), UNO_QUERY );
-            Reference< XInterface > xIfac( xThis, UNO_QUERY );
+            Reference< XInterface > xIfac( xThis );
 
             // Create event to notify listener about removed element settings
             ConfigurationEvent aEvent;
@@ -1089,7 +1089,7 @@ void SAL_CALL UIConfigurationManager::insertSettings( const OUString& NewResourc
 
             Reference< XIndexAccess > xInsertSettings( aUIElementData.xSettings );
             Reference< XUIConfigurationManager > xThis( static_cast< OWeakObject* >( this ), UNO_QUERY );
-            Reference< XInterface > xIfac( xThis, UNO_QUERY );
+            Reference< XInterface > xIfac( xThis );
 
             // Create event to notify listener about removed element settings
             ConfigurationEvent aEvent;
@@ -1126,7 +1126,7 @@ Reference< XInterface > SAL_CALL UIConfigurationManager::getImageManager()
         xInit->initialize( aPropSeq );
     }
 
-    return Reference< XInterface >( m_xImageManager, UNO_QUERY );
+    return m_xImageManager;
 }
 
 Reference< XAcceleratorConfiguration > SAL_CALL UIConfigurationManager::getShortCutManager()
@@ -1166,9 +1166,7 @@ void SAL_CALL UIConfigurationManager::setStorage( const Reference< XStorage >& S
         try
         {
             // Dispose old storage to be sure that it will be closed
-            Reference< XComponent > xComponent( m_xDocConfigStorage, UNO_QUERY );
-            if ( xComponent.is() )
-                xComponent->dispose();
+            m_xDocConfigStorage->dispose();
         }
         catch ( const Exception& )
         {
@@ -1179,9 +1177,8 @@ void SAL_CALL UIConfigurationManager::setStorage( const Reference< XStorage >& S
     m_xDocConfigStorage = Storage;
     m_bReadOnly         = true;
 
-    Reference< XUIConfigurationStorage > xAccUpdate(m_xAccConfig, UNO_QUERY);
-    if ( xAccUpdate.is() )
-        xAccUpdate->setStorage( m_xDocConfigStorage );
+    if ( m_xAccConfig.is() )
+        m_xAccConfig->setStorage( m_xDocConfigStorage );
 
     if ( m_xImageManager.is() )
     {
@@ -1279,10 +1276,9 @@ void SAL_CALL UIConfigurationManager::store()
             try
             {
                 UIElementType& rElementType = m_aUIElements[i];
-                Reference< XStorage > xStorage( rElementType.xStorage, UNO_QUERY );
 
-                if ( rElementType.bModified && xStorage.is() )
-                    impl_storeElementTypeData( xStorage, rElementType );
+                if ( rElementType.bModified && rElementType.xStorage.is() )
+                    impl_storeElementTypeData( rElementType.xStorage, rElementType );
             }
             catch ( const Exception& )
             {

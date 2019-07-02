@@ -1058,7 +1058,7 @@ Reference< awt::XWindow> OGenericUnoController::getTopMostContainerWindow() cons
 
         while ( xFrame.is() && !xFrame->isTop() )
         {
-            xFrame.set( xFrame->getCreator(), UNO_QUERY );
+            xFrame = xFrame->getCreator();
         }
         if ( xFrame.is() )
             xWindow = xFrame->getContainerWindow();

@@ -87,7 +87,7 @@ ScVbaControl::getWindowPeer()
     uno::Reference< view::XControlAccess > xControlAccess( m_xModel->getCurrentController(), uno::UNO_QUERY_THROW );
     try
     {
-        uno::Reference< awt::XControl > xControl( xControlAccess->getControl( xControlModel ), uno::UNO_QUERY );
+        uno::Reference< awt::XControl > xControl = xControlAccess->getControl( xControlModel );
         xWinPeer =  xControl->getPeer();
     }
     catch(const uno::Exception&)

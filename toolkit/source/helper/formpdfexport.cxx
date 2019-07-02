@@ -162,7 +162,7 @@ namespace toolkitform
             ::std::vector< Reference< XIndexAccess > > aAncestors;
             ::std::vector< sal_Int32 >                 aPath;
 
-            Reference< XInterface > xNormalizedLookup( _rxRadioModel, UNO_QUERY );
+            Reference< XInterface > xNormalizedLookup = _rxRadioModel;
             Reference< XIndexAccess > xCurrentContainer( xRoot );
             sal_Int32 nStartWithChild = 0;
             sal_Int32 nGroupsEncountered = 0;

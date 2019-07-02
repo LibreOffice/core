@@ -134,7 +134,7 @@ void StringResourceImpl::addModifyListener( const Reference< XModifyListener >& 
         throw RuntimeException();
 
     ::osl::MutexGuard aGuard( getMutex() );
-    m_aListenerContainer.addInterface( Reference<XInterface>( aListener, UNO_QUERY ) );
+    m_aListenerContainer.addInterface( Reference<XInterface>( aListener ) );
 }
 
 void StringResourceImpl::removeModifyListener( const Reference< XModifyListener >& aListener )
@@ -143,7 +143,7 @@ void StringResourceImpl::removeModifyListener( const Reference< XModifyListener 
         throw RuntimeException();
 
     ::osl::MutexGuard aGuard( getMutex() );
-    m_aListenerContainer.removeInterface( Reference<XInterface>( aListener, UNO_QUERY ) );
+    m_aListenerContainer.removeInterface( Reference<XInterface>( aListener ) );
 }
 
 
@@ -2304,10 +2304,9 @@ void StringResourceWithStorageImpl::setStorage( const Reference< XStorage >& Sto
 // Scan locale properties files
 void StringResourceWithStorageImpl::implScanLocales()
 {
-    Reference< container::XNameAccess > xNameAccess( m_xStorage, UNO_QUERY );
-    if( xNameAccess.is() )
+    if( m_xStorage.is() )
     {
-        Sequence< OUString > aContentSeq = xNameAccess->getElementNames();
+        Sequence< OUString > aContentSeq = m_xStorage->getElementNames();
         implScanLocaleNames( aContentSeq );
     }
 

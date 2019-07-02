@@ -263,7 +263,7 @@ void PresenterHelpView::Paint (const awt::Rectangle& rUpdateBox)
     const awt::Rectangle aWindowBox (mxWindow->getPosSize());
     mpPresenterController->GetCanvasHelper()->Paint(
         mpPresenterController->GetViewBackground(mxViewId->getResourceURL()),
-        Reference<rendering::XCanvas>(mxCanvas, UNO_QUERY),
+        mxCanvas,
         rUpdateBox,
         awt::Rectangle(0,0,aWindowBox.Width,aWindowBox.Height),
         awt::Rectangle());

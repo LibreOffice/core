@@ -225,7 +225,7 @@ struct TextAppendContext
         : xTextAppend(xAppend)
     {
         xCursor.set(xCur, css::uno::UNO_QUERY);
-        xInsertPosition.set(xCursor, css::uno::UNO_QUERY);
+        xInsertPosition = xCursor;
     }
 };
 

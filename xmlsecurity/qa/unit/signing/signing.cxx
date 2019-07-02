@@ -493,13 +493,11 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testOOXMLRemoveAll)
 
     // Make sure that the signature count is zero and the whole signature storage is removed completely.
     CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(0), rInformations.size());
-    uno::Reference<container::XNameAccess> xNameAccess(xStorage, uno::UNO_QUERY);
-    CPPUNIT_ASSERT(!xNameAccess->hasByName("_xmlsignatures"));
+    CPPUNIT_ASSERT(!xStorage->hasByName("_xmlsignatures"));
 
     // And that content types no longer contains signature types.
-    uno::Reference<io::XStream> xStream(
-        xStorage->openStreamElement("[Content_Types].xml", embed::ElementModes::READWRITE),
-        uno::UNO_QUERY);
+    uno::Reference<io::XStream> xStream
+        = xStorage->openStreamElement("[Content_Types].xml", embed::ElementModes::READWRITE);
     uno::Reference<io::XInputStream> xInputStream = xStream->getInputStream();
     uno::Sequence<uno::Sequence<beans::StringPair>> aContentTypeInfo
         = comphelper::OFOPXMLHelper::ReadContentTypeSequence(xInputStream, mxComponentContext);

@@ -207,9 +207,8 @@ void SAL_CALL ScChartsObj::addNewByName( const OUString& rName,
                 ScChart2DataProvider( &rDoc );
             // Chart -> DataReceiver
             uno::Reference< chart2::data::XDataReceiver > xReceiver;
-            uno::Reference< embed::XComponentSupplier > xCompSupp( xObj, uno::UNO_QUERY );
-            if( xCompSupp.is())
-                xReceiver.set( xCompSupp->getComponent(), uno::UNO_QUERY );
+            if( xObj.is())
+                xReceiver.set( xObj->getComponent(), uno::UNO_QUERY );
             if( xReceiver.is())
             {
                 OUString sRangeStr;

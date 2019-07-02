@@ -321,9 +321,8 @@ void SfxDispatcher::Call_Impl(SfxShell& rShell, const SfxSlot &rSlot, SfxRequest
     if ( GetFrame() )
     {
         // Recording may start
-        css::uno::Reference< css::frame::XFrame > xFrame(
-                GetFrame()->GetFrame().GetFrameInterface(),
-                css::uno::UNO_QUERY);
+        css::uno::Reference< css::frame::XFrame > xFrame =
+                GetFrame()->GetFrame().GetFrameInterface();
 
         css::uno::Reference< css::beans::XPropertySet > xSet(
                 xFrame,
@@ -766,11 +765,11 @@ void SfxDispatcher::DoDeactivate_Impl(bool bMDI, SfxViewFrame const * pNew)
     bool bHidePopups = bMDI && xImp->pFrame;
     if ( pNew && xImp->pFrame )
     {
-        css::uno::Reference< css::frame::XFrame > xOldFrame(
-            pNew->GetFrame().GetFrameInterface()->getCreator(), css::uno::UNO_QUERY );
+        css::uno::Reference< css::frame::XFrame > xOldFrame =
+            pNew->GetFrame().GetFrameInterface()->getCreator();
 
-        css::uno::Reference< css::frame::XFrame > xMyFrame(
-            GetFrame()->GetFrame().GetFrameInterface(), css::uno::UNO_QUERY );
+        css::uno::Reference< css::frame::XFrame > xMyFrame =
+            GetFrame()->GetFrame().GetFrameInterface();
 
         if ( xOldFrame == xMyFrame )
             bHidePopups = false;

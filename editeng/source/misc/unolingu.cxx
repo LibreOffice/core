@@ -600,9 +600,8 @@ uno::Reference< XDictionary > LinguMgr::GetIgnoreAll()
     if (xTmpDicList.is())
     {
         std::locale loc(Translate::Create("svt"));
-        xIgnoreAll.set( xTmpDicList->getDictionaryByName(
-                                    Translate::get(STR_DESCRIPTION_IGNOREALLLIST, loc) ),
-                                    UNO_QUERY );
+        xIgnoreAll = xTmpDicList->getDictionaryByName(
+                                    Translate::get(STR_DESCRIPTION_IGNOREALLLIST, loc) );
     }
     return xIgnoreAll;
 }
@@ -615,14 +614,13 @@ uno::Reference< XDictionary > LinguMgr::GetChangeAll()
     if (!pExitLstnr)
         pExitLstnr = new LinguMgrExitLstnr;
 
-    uno::Reference< XSearchableDictionaryList > _xDicList( GetDictionaryList() , UNO_QUERY );
+    uno::Reference< XSearchableDictionaryList > _xDicList = GetDictionaryList();
     if (_xDicList.is())
     {
-        xChangeAll.set( _xDicList->createDictionary(
+        xChangeAll = _xDicList->createDictionary(
                             "ChangeAllList",
                             LanguageTag::convertToLocale( LANGUAGE_NONE ),
-                            DictionaryType_NEGATIVE, OUString() ),
-                        UNO_QUERY );
+                            DictionaryType_NEGATIVE, OUString() );
     }
     return xChangeAll;
 }
@@ -640,8 +638,7 @@ uno::Reference< XDictionary > LinguMgr::GetStandard()
         return nullptr;
 
     const OUString aDicName( "standard.dic" );
-    uno::Reference< XDictionary >   xDic( xTmpDicList->getDictionaryByName( aDicName ),
-                                      UNO_QUERY );
+    uno::Reference< XDictionary > xDic = xTmpDicList->getDictionaryByName( aDicName );
     if (!xDic.is())
     {
         // try to create standard dictionary
@@ -663,7 +660,7 @@ uno::Reference< XDictionary > LinguMgr::GetStandard()
             xTmpDicList->addDictionary( xTmp );
             xTmp->setActive( true );
         }
-        xDic.set( xTmp, UNO_QUERY );
+        xDic = xTmp;
     }
 #if OSL_DEBUG_LEVEL > 1
     uno::Reference< XStorable >      xStor( xDic, UNO_QUERY );

@@ -38,7 +38,7 @@ namespace svxform
 {
     void ImplSmartRegisterUnoServices()
     {
-        uno::Reference< lang::XMultiServiceFactory >  xServiceFactory(::comphelper::getProcessServiceFactory(), uno::UNO_QUERY);
+        uno::Reference< lang::XMultiServiceFactory >  xServiceFactory = ::comphelper::getProcessServiceFactory();
         uno::Reference< container::XSet >  xSet(xServiceFactory, uno::UNO_QUERY);
         if (!xSet.is())
             return;

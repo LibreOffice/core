@@ -1449,8 +1449,7 @@ void DbGridControl::setDataSource(const Reference< XRowSet >& _xCursor, DbGridCo
     Reference< css::util::XNumberFormatsSupplier >  xSupplier = getNumberFormats(getConnection(_xCursor), true);
     if (xSupplier.is())
     {
-        m_xFormatter.set( css::util::NumberFormatter::create(m_xContext),
-                          UNO_QUERY);
+        m_xFormatter = css::util::NumberFormatter::create(m_xContext);
         m_xFormatter->attachNumberFormatsSupplier(xSupplier);
 
         // retrieve the datebase of the Numberformatter

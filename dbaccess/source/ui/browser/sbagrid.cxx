@@ -749,7 +749,7 @@ void SbaGridControl::SetColWidth(sal_uInt16 nColId)
 {
     // get the (UNO) column model
     sal_uInt16 nModelPos = GetModelColumnPos(nColId);
-    Reference< XIndexAccess >  xCols(GetPeer()->getColumns(), UNO_QUERY);
+    Reference< XIndexAccess >  xCols = GetPeer()->getColumns();
     Reference< XPropertySet >  xAffectedCol;
     if (xCols.is() && (nModelPos != sal_uInt16(-1)))
         xAffectedCol.set(xCols->getByIndex(nModelPos), css::uno::UNO_QUERY);
@@ -828,7 +828,7 @@ void SbaGridControl::SetColAttrs(sal_uInt16 nColId)
     sal_uInt16 nModelPos = GetModelColumnPos(nColId);
 
     // get the (UNO) column model
-    Reference< XIndexAccess >  xCols(GetPeer()->getColumns(), UNO_QUERY);
+    Reference< XIndexAccess >  xCols = GetPeer()->getColumns();
     Reference< XPropertySet >  xAffectedCol;
     if (xCols.is() && (nModelPos != sal_uInt16(-1)))
         xAffectedCol.set(xCols->getByIndex(nModelPos), css::uno::UNO_QUERY);
@@ -926,7 +926,7 @@ Reference< XPropertySet >  SbaGridControl::getField(sal_uInt16 nModelPos)
     try
     {
         // first get the name of the column
-        Reference< XIndexAccess >  xCols(GetPeer()->getColumns(), UNO_QUERY);
+        Reference< XIndexAccess >  xCols = GetPeer()->getColumns();
         if ( xCols.is() && xCols->getCount() > nModelPos )
         {
             Reference< XPropertySet >  xCol(xCols->getByIndex(nModelPos),UNO_QUERY);
@@ -1089,7 +1089,7 @@ void SbaGridControl::StartDrag( sal_Int8 _nAction, const Point& _rPosPixel )
 
 void SbaGridControl::DoColumnDrag(sal_uInt16 nColumnPos)
 {
-    Reference< XPropertySet >  xDataSource(getDataSource(), UNO_QUERY);
+    Reference< XPropertySet >  xDataSource = getDataSource();
     OSL_ENSURE(xDataSource.is(), "SbaGridControl::DoColumnDrag : invalid data source !");
 
     Reference< XPropertySet > xAffectedCol;
@@ -1103,7 +1103,7 @@ void SbaGridControl::DoColumnDrag(sal_uInt16 nColumnPos)
         xActiveConnection = ::dbtools::getConnection(Reference< XRowSet >(getDataSource(),UNO_QUERY));
 
         sal_uInt16 nModelPos = GetModelColumnPos(GetColumnIdFromViewPos(nColumnPos));
-        Reference< XIndexContainer >  xCols(GetPeer()->getColumns(), UNO_QUERY);
+        Reference< XIndexContainer >  xCols = GetPeer()->getColumns();
         xAffectedCol.set(xCols->getByIndex(nModelPos),UNO_QUERY);
         if (xAffectedCol.is())
         {
@@ -1130,7 +1130,7 @@ void SbaGridControl::CopySelectedRowsToClipboard()
 
 void SbaGridControl::implTransferSelectedRows( sal_Int16 nRowPos, bool _bTrueIfClipboardFalseIfDrag )
 {
-    Reference< XPropertySet > xForm( getDataSource(), UNO_QUERY );
+    Reference< XPropertySet > xForm = getDataSource();
     OSL_ENSURE( xForm.is(), "SbaGridControl::implTransferSelectedRows: invalid form!" );
 
     // build the sequence of numbers of selected rows

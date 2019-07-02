@@ -436,7 +436,7 @@ void SchXMLChartContext::StartElement( const uno::Reference< xml::sax::XAttribut
     }
 
     // set auto-styles for Area
-    uno::Reference<beans::XPropertySet> xProp(mrImportHelper.GetChartDocument()->getArea(), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xProp = mrImportHelper.GetChartDocument()->getArea();
     mrImportHelper.FillAutoStyle(sAutoStyleName, xProp);
 }
 
@@ -677,7 +677,7 @@ static void lcl_ApplyDataFromRectangularRangeToDiagram(
     //work around wrong writer ranges ( see Issue 58464 )
     {
         OUString aChartOleObjectName;
-        uno::Reference< frame::XModel > xModel(xNewDoc, uno::UNO_QUERY );
+        uno::Reference< frame::XModel > xModel = xNewDoc;
         if( xModel.is() )
         {
             utl::MediaDescriptor aMediaDescriptor( xModel->getArgs() );
@@ -823,7 +823,7 @@ void SchXMLChartContext::EndElement()
         if( xNewDoc->hasInternalDataProvider() )
             SchXMLTableHelper::applyTableToInternalDataProvider( maTable, xNewDoc );
 
-        bool bOlderThan2_3 = SchXMLTools::isDocumentGeneratedWithOpenOfficeOlderThan2_3( Reference< frame::XModel >( xNewDoc, uno::UNO_QUERY ));
+        bool bOlderThan2_3 = SchXMLTools::isDocumentGeneratedWithOpenOfficeOlderThan2_3( xNewDoc );
         bool bOldFileWithOwnDataFromRows = (bOlderThan2_3 && bHasOwnData && (meDataRowSource==chart::ChartDataRowSource_ROWS)); // in this case there are range addresses that are simply wrong.
 
         if( mbAllRangeAddressesAvailable && !bSpecialHandlingForDonutChart && !mbIsStockChart &&
@@ -886,7 +886,7 @@ void SchXMLChartContext::EndElement()
                 , SchXMLSeriesHelper::getDataSeriesIndexMapFromDiagram(xNewDiagram) );
         }
 
-        SchXMLSeries2Context::initSeriesPropertySets( maSeriesDefaultsAndStyles, uno::Reference< frame::XModel >(xDoc, uno::UNO_QUERY ) );
+        SchXMLSeries2Context::initSeriesPropertySets( maSeriesDefaultsAndStyles, xDoc );
 
         //set defaults from diagram to the new series:
         //check whether we need to remove lines from symbol only charts
@@ -1056,9 +1056,8 @@ SvXMLImportContextRef SchXMLChartContext::CreateChildContext(
                 {
                     xProp->setPropertyValue("HasMainTitle", uno::makeAny(true) );
                 }
-                uno::Reference< drawing::XShape > xTitleShape( xDoc->getTitle(), uno::UNO_QUERY );
                 pContext = new SchXMLTitleContext( mrImportHelper, GetImport(),
-                                                   rLocalName, maMainTitle, xTitleShape );
+                                                   rLocalName, maMainTitle, xDoc->getTitle() );
             }
             break;
 
@@ -1069,9 +1068,8 @@ SvXMLImportContextRef SchXMLChartContext::CreateChildContext(
                 {
                     xProp->setPropertyValue("HasSubTitle", uno::makeAny(true) );
                 }
-                uno::Reference< drawing::XShape > xTitleShape( xDoc->getSubTitle(), uno::UNO_QUERY );
                 pContext = new SchXMLTitleContext( mrImportHelper, GetImport(),
-                                                   rLocalName, maSubTitle, xTitleShape );
+                                                   rLocalName, maSubTitle, xDoc->getSubTitle() );
             }
             break;
 
@@ -1117,7 +1115,7 @@ SvXMLImportContextRef SchXMLChartContext::CreateChildContext(
             {
                 uno::Reference< drawing::XDrawPageSupplier  > xSupp( xDoc, uno::UNO_QUERY );
                 if( xSupp.is())
-                    mxDrawPage.set( xSupp->getDrawPage(), uno::UNO_QUERY );
+                    mxDrawPage = xSupp->getDrawPage();
 
                 SAL_WARN_IF( !mxDrawPage.is(), "xmloff.chart", "Invalid Chart Page" );
             }

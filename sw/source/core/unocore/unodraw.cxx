@@ -267,7 +267,7 @@ const SdrMarkList&  SwFmDrawPage::PreGroup(const uno::Reference< drawing::XShape
 
 void SwFmDrawPage::PreUnGroup(const uno::Reference< drawing::XShapeGroup >&  rShapeGroup)
 {
-    uno::Reference< drawing::XShape >  xShape( rShapeGroup, uno::UNO_QUERY);
+    uno::Reference< drawing::XShape >  xShape( rShapeGroup);
     SelectObjectInView( xShape, GetPageView() );
 }
 
@@ -374,7 +374,7 @@ uno::Reference< drawing::XShape > SwFmDrawPage::CreateShape( SdrObject *pObj ) c
         if(!pShape)
         {
             xShapeTunnel = nullptr;
-            uno::Reference< uno::XInterface > xCreate(xRet, uno::UNO_QUERY);
+            uno::Reference< uno::XInterface > xCreate(xRet);
             xRet = nullptr;
             uno::Reference< beans::XPropertySet >  xPrSet;
             if ( pObj->IsGroupObject() && (!pObj->Is3DObj() || (dynamic_cast<const E3dScene*>( pObj) !=  nullptr)) )

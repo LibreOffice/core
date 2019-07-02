@@ -195,10 +195,9 @@ bool OO3ExtensionMigration::scanDescriptionXml( const OUString& sDescriptionXmlU
 
                     try
                     {
-                        uno::Reference< xml::dom::XNode > xRootNode( xRoot, uno::UNO_QUERY );
                         uno::Reference< xml::dom::XNode > xNode(
                             xPath->selectSingleNode(
-                                xRootNode, "desc:identifier/@value" ));
+                                xRoot, "desc:identifier/@value" ));
                         if ( xNode.is() )
                             aExtIdentifier = xNode->getNodeValue();
                     }

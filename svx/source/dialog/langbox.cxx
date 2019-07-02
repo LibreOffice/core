@@ -241,7 +241,7 @@ void SvxLanguageBoxBase::SetLanguageList( SvxLanguageListFlags nLangList,
     }
     if (SvxLanguageListFlags::SPELL_USED & nLangList)
     {
-        Reference< XSpellChecker1 > xTmp1( LinguMgr::GetSpellChecker(), UNO_QUERY );
+        Reference< XSpellChecker1 > xTmp1 = LinguMgr::GetSpellChecker();
         if (xTmp1.is())
             aSpellUsedLang = xTmp1->getLanguages();
     }
@@ -330,7 +330,7 @@ sal_Int32 SvxLanguageBoxBase::ImplInsertLanguage( const LanguageType nLangType, 
 
         if (!m_pSpellUsedLang)
         {
-            Reference< XSpellChecker1 > xSpell( LinguMgr::GetSpellChecker(), UNO_QUERY );
+            Reference< XSpellChecker1 > xSpell = LinguMgr::GetSpellChecker();
             if ( xSpell.is() )
                 m_pSpellUsedLang.reset( new Sequence< sal_Int16 >( xSpell->getLanguages() ) );
         }
@@ -519,7 +519,7 @@ void LanguageBox::SetLanguageList( SvxLanguageListFlags nLangList,
     }
     if (SvxLanguageListFlags::SPELL_USED & nLangList)
     {
-        Reference< XSpellChecker1 > xTmp1( LinguMgr::GetSpellChecker(), UNO_QUERY );
+        Reference< XSpellChecker1 > xTmp1 = LinguMgr::GetSpellChecker();
         if (xTmp1.is())
             aSpellUsedLang = xTmp1->getLanguages();
     }
@@ -624,7 +624,7 @@ weld::ComboBoxEntry LanguageBox::BuildEntry(const LanguageType nLangType)
     {
         if (!m_xSpellUsedLang)
         {
-            Reference<XSpellChecker1> xSpell(LinguMgr::GetSpellChecker(), UNO_QUERY);
+            Reference<XSpellChecker1> xSpell = LinguMgr::GetSpellChecker();
             if (xSpell.is())
                 m_xSpellUsedLang.reset(new Sequence<sal_Int16>(xSpell->getLanguages()));
         }

@@ -133,18 +133,17 @@ IMPL_LINK(SwMailMergeDocSelectPage, FileSelectHdl, weld::Button&, rButton, void)
         SfxObjectFactory &rFact = m_pWizard->GetSwView()->GetDocShell()->GetFactory();
         SfxFilterMatcher aMatcher( rFact.GetFactoryName() );
         SfxFilterMatcherIter aIter( aMatcher );
-        Reference<XFilterManager> xFltMgr(xFP, UNO_QUERY);
         std::shared_ptr<const SfxFilter> pFlt = aIter.First();
         while( pFlt )
         {
             if( pFlt && pFlt->IsAllowedAsTemplate() )
             {
                 const OUString sWild = pFlt->GetWildcard().getGlob();
-                xFltMgr->appendFilter( pFlt->GetUIName(), sWild );
+                xFP->appendFilter( pFlt->GetUIName(), sWild );
 
                 // #i40125
                 if(pFlt->GetFilterFlags() & SfxFilterFlags::DEFAULT)
-                    xFltMgr->setCurrentFilter( pFlt->GetUIName() ) ;
+                    xFP->setCurrentFilter( pFlt->GetUIName() ) ;
             }
 
             pFlt = aIter.Next();

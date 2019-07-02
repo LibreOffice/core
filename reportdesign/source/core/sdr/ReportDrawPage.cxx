@@ -90,7 +90,7 @@ uno::Reference< drawing::XShape >  OReportDrawPage::CreateShape( SdrObject *pObj
             else
                 bChangeOrientation = rUnoObj.GetObjIdentifier() == OBJ_DLG_HFIXEDLINE;
             SvxShapeControl* pShape = new SvxShapeControl( pObj );
-            xShape.set(static_cast<cppu::OWeakObject*>(static_cast<SvxShape_UnoImplHelper *>(pShape)),uno::UNO_QUERY);
+            xShape = static_cast<SvxShape_UnoImplHelper *>(pShape);
             pShape->setShapeKind(pObj->GetObjIdentifier());
         }
         else if (dynamic_cast< const OCustomShape* >(pObj) != nullptr)

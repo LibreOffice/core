@@ -2881,8 +2881,8 @@ void XMLDdeFieldImportContext::EndElement()
 
         Reference<XTextFieldsSupplier> xTextFieldsSupp(GetImport().GetModel(),
                                                        UNO_QUERY);
-        Reference<container::XNameAccess> xFieldMasterNameAccess(
-            xTextFieldsSupp->getTextFieldMasters(), UNO_QUERY);
+        Reference<container::XNameAccess> xFieldMasterNameAccess =
+            xTextFieldsSupp->getTextFieldMasters();
 
         if (xFieldMasterNameAccess->hasByName(sMasterName))
         {
@@ -3427,9 +3427,8 @@ void XMLAnnotationImportContext::EndElement()
                 uno::Reference<text::XTextCursor> xCursor =
                     xText->createTextCursorByRange(GetImportHelper().GetCursorAsRange());
                 xCursor->gotoRange(xPrevField->getAnchor(), true);
-                uno::Reference<text::XTextRange> xTextRange(xCursor, uno::UNO_QUERY);
 
-                xText->insertTextContent(xTextRange, xPrevField, !xCursor->isCollapsed());
+                xText->insertTextContent(xCursor, xPrevField, !xCursor->isCollapsed());
             }
         }
         else

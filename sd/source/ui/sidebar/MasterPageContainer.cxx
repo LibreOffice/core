@@ -843,8 +843,8 @@ Reference<frame::XModel> MasterPageContainer::Implementation::GetModel()
         uno::Reference<drawing::XDrawPagesSupplier> xSlideSupplier (mxModel, uno::UNO_QUERY);
         if (xSlideSupplier.is())
         {
-            uno::Reference<drawing::XDrawPages> xSlides (
-                xSlideSupplier->getDrawPages(), uno::UNO_QUERY);
+            uno::Reference<drawing::XDrawPages> xSlides =
+                xSlideSupplier->getDrawPages();
             if (xSlides.is())
             {
                 uno::Reference<drawing::XDrawPage> xNewPage (xSlides->insertNewByIndex(0));

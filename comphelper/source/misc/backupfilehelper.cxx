@@ -819,12 +819,12 @@ namespace
                         {
                             // create a SAXWriter
                             uno::Reference< xml::sax::XWriter > const xSaxWriter = xml::sax::Writer::create(xContext);
-                            uno::Reference< io::XStream > xTempFile(io::TempFile::create(xContext), uno::UNO_QUERY);
-                            uno::Reference< io::XOutputStream > xOutStrm(xTempFile->getOutputStream(), uno::UNO_QUERY);
+                            uno::Reference< io::XStream > xTempFile = io::TempFile::create(xContext);
+                            uno::Reference< io::XOutputStream > xOutStrm = xTempFile->getOutputStream();
 
                             // set output stream and do the serialization
-                            xSaxWriter->setOutputStream(uno::Reference< css::io::XOutputStream >(xOutStrm, uno::UNO_QUERY));
-                            xSerializer->serialize(uno::Reference< xml::sax::XDocumentHandler >(xSaxWriter, uno::UNO_QUERY), uno::Sequence< beans::StringPair >());
+                            xSaxWriter->setOutputStream(xOutStrm);
+                            xSerializer->serialize(xSaxWriter, uno::Sequence< beans::StringPair >());
 
                             // get URL from temp file
                             uno::Reference < beans::XPropertySet > xTempFileProps(xTempFile, uno::UNO_QUERY);
@@ -2115,12 +2115,12 @@ namespace comphelper
 
         // create a SAXWriter
         uno::Reference< xml::sax::XWriter > const xSaxWriter = xml::sax::Writer::create(xContext);
-        uno::Reference< io::XStream > xTempFile(io::TempFile::create(xContext), uno::UNO_QUERY);
-        uno::Reference< io::XOutputStream > xOutStrm(xTempFile->getOutputStream(), uno::UNO_QUERY);
+        uno::Reference< io::XStream > xTempFile = io::TempFile::create(xContext);
+        uno::Reference< io::XOutputStream > xOutStrm = xTempFile->getOutputStream();
 
         // set output stream and do the serialization
-        xSaxWriter->setOutputStream(uno::Reference< css::io::XOutputStream >(xOutStrm, uno::UNO_QUERY));
-        xSerializer->serialize(uno::Reference< xml::sax::XDocumentHandler >(xSaxWriter, uno::UNO_QUERY), uno::Sequence< beans::StringPair >());
+        xSaxWriter->setOutputStream(xOutStrm);
+        xSerializer->serialize(xSaxWriter, uno::Sequence< beans::StringPair >());
 
         // get URL from temp file
         uno::Reference < beans::XPropertySet > xTempFileProps(xTempFile, uno::UNO_QUERY);

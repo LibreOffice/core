@@ -277,8 +277,7 @@ ErrCode SwXMLTextBlocks::GetBlockText( const OUString& rShort, OUString& rText )
         bool bTextOnly = true;
 
         xRoot = xBlkRoot->openStorageElement( aFolderName, embed::ElementModes::READ );
-        uno::Reference < container::XNameAccess > xAccess( xRoot, uno::UNO_QUERY );
-        if ( !xAccess->hasByName( aStreamName ) || !xRoot->isStreamElement( aStreamName ) )
+        if ( !xRoot->hasByName( aStreamName ) || !xRoot->isStreamElement( aStreamName ) )
         {
             bTextOnly = false;
             aStreamName = "content.xml";
@@ -360,11 +359,9 @@ ErrCode SwXMLTextBlocks::PutBlockText( const OUString& rShort,
     uno::Reference < beans::XPropertySet > xSet( xDocStream, uno::UNO_QUERY );
     xSet->setPropertyValue("MediaType", Any(OUString( "text/xml" )) );
     uno::Reference < io::XOutputStream > xOut = xDocStream->getOutputStream();
-    uno::Reference<io::XActiveDataSource> xSrc(xWriter, uno::UNO_QUERY);
-    xSrc->setOutputStream(xOut);
+    xWriter->setOutputStream(xOut);
 
-    uno::Reference<xml::sax::XDocumentHandler> xHandler(xWriter,
-        uno::UNO_QUERY);
+    uno::Reference<xml::sax::XDocumentHandler> xHandler(xWriter);
 
     rtl::Reference<SwXMLTextBlockExport> xExp( new SwXMLTextBlockExport( xContext, *this, GetXMLToken ( XML_UNFORMATTED_TEXT ), xHandler) );
 
@@ -408,8 +405,7 @@ void SwXMLTextBlocks::ReadInfo()
     try
     {
     const OUString sDocName( XMLN_BLOCKLIST );
-    uno::Reference < container::XNameAccess > xAccess( xBlkRoot, uno::UNO_QUERY );
-    if ( xAccess.is() && xAccess->hasByName( sDocName ) && xBlkRoot->isStreamElement( sDocName ) )
+    if ( xBlkRoot.is() && xBlkRoot->hasByName( sDocName ) && xBlkRoot->isStreamElement( sDocName ) )
     {
         uno::Reference< uno::XComponentContext > xContext =
                 comphelper::getProcessComponentContext();
@@ -479,10 +475,9 @@ void SwXMLTextBlocks::WriteInfo()
         uno::Reference < beans::XPropertySet > xSet( xDocStream, uno::UNO_QUERY );
         xSet->setPropertyValue("MediaType", Any(OUString( "text/xml" )) );
         uno::Reference < io::XOutputStream > xOut = xDocStream->getOutputStream();
-        uno::Reference<io::XActiveDataSource> xSrc(xWriter, uno::UNO_QUERY);
-        xSrc->setOutputStream(xOut);
+        xWriter->setOutputStream(xOut);
 
-        uno::Reference<xml::sax::XDocumentHandler> xHandler(xWriter, uno::UNO_QUERY);
+        uno::Reference<xml::sax::XDocumentHandler> xHandler(xWriter);
 
         rtl::Reference<SwXMLBlockListExport> xExp(new SwXMLBlockListExport( xContext, *this, XMLN_BLOCKLIST, xHandler) );
 
@@ -517,8 +512,8 @@ ErrCode SwXMLTextBlocks::SetMacroTable(
         comphelper::getProcessComponentContext();
 
     // Get model
-    uno::Reference< lang::XComponent > xModelComp(
-        m_xDoc->GetDocShell()->GetModel(), UNO_QUERY );
+    uno::Reference< lang::XComponent > xModelComp =
+        m_xDoc->GetDocShell()->GetModel();
     OSL_ENSURE( xModelComp.is(), "XMLWriter::Write: got no model" );
     if( !xModelComp.is() )
         return ERR_SWG_WRITE_ERROR;
@@ -547,8 +542,7 @@ ErrCode SwXMLTextBlocks::SetMacroTable(
 
             // connect XML writer to output stream
             xSaxWriter->setOutputStream( xOutputStream );
-            uno::Reference<xml::sax::XDocumentHandler> xDocHandler(
-                xSaxWriter, UNO_QUERY);
+            uno::Reference<xml::sax::XDocumentHandler> xDocHandler(xSaxWriter);
 
             // construct events object
             uno::Reference<XNameAccess> xEvents =

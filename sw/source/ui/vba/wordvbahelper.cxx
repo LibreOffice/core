@@ -134,7 +134,7 @@ uno::Reference< text::XText > getCurrentXText( const uno::Reference< frame::XMod
     }
 
     if( xTextContent.is() )
-        xTextRange.set( xTextContent->getAnchor(), uno::UNO_QUERY );
+        xTextRange = xTextContent->getAnchor();
 
     if( !xTextRange.is() )
         xTextRange.set( getXTextViewCursor( xModel ), uno::UNO_QUERY_THROW );
@@ -142,7 +142,7 @@ uno::Reference< text::XText > getCurrentXText( const uno::Reference< frame::XMod
     uno::Reference< text::XText > xText;
     try
     {
-        xText.set( xTextRange->getText(), uno::UNO_QUERY );
+        xText = xTextRange->getText();
     }
     catch (const uno::RuntimeException&)
     {

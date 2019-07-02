@@ -308,7 +308,7 @@ void FlashExportFilter::ExportAsMultipleFiles(const Sequence< PropertyValue >& a
     if(!xDrawPagesSupplier.is())
         return;
 
-    Reference< XIndexAccess > xDrawPages( xDrawPagesSupplier->getDrawPages(), UNO_QUERY );
+    Reference< XIndexAccess > xDrawPages = xDrawPagesSupplier->getDrawPages();
     if(!xDrawPages.is())
         return;
 

@@ -476,7 +476,7 @@ Reference< XEnumeration > SAL_CALL RandomAnimationNode::createEnumeration()
 
     if( aEnumAccess.is() )
     {
-        Reference< XEnumeration > xEnumeration( aEnumAccess->createEnumeration(), UNO_QUERY );
+        Reference< XEnumeration > xEnumeration = aEnumAccess->createEnumeration();
         if( xEnumeration.is() )
         {
             while( xEnumeration->hasMoreElements() )

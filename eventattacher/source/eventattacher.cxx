@@ -279,10 +279,7 @@ EventAttacherImpl::EventAttacherImpl( const Reference< XComponentContext >& rxCo
 static Reference< XInterface > EventAttacherImpl_CreateInstance( const Reference< XMultiServiceFactory >& rSMgr )
 {
     XEventAttacher* pEventAttacher = new EventAttacherImpl(comphelper::getComponentContext(rSMgr));
-
-    Reference< XInterface > xRet(pEventAttacher, UNO_QUERY);
-
-    return xRet;
+    return pEventAttacher;
 }
 
 

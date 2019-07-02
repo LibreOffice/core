@@ -296,7 +296,7 @@ void SAL_CALL NameContainer::addContainerListener( const Reference< XContainerLi
     {
         throw RuntimeException("addContainerListener called with null xListener");
     }
-    maContainerListeners.addInterface( Reference<XInterface>(xListener, UNO_QUERY) );
+    maContainerListeners.addInterface( xListener );
 }
 
 void SAL_CALL NameContainer::removeContainerListener( const Reference< XContainerListener >& xListener )
@@ -305,7 +305,7 @@ void SAL_CALL NameContainer::removeContainerListener( const Reference< XContaine
     {
         throw RuntimeException("removeContainerListener called with null xListener");
     }
-    maContainerListeners.removeInterface( Reference<XInterface>(xListener, UNO_QUERY) );
+    maContainerListeners.removeInterface( xListener );
 }
 
 // Methods XChangesNotifier
@@ -315,7 +315,7 @@ void SAL_CALL NameContainer::addChangesListener( const Reference< XChangesListen
     {
         throw RuntimeException("addChangesListener called with null xListener");
     }
-    maChangesListeners.addInterface( Reference<XInterface>(xListener, UNO_QUERY) );
+    maChangesListeners.addInterface( xListener );
 }
 
 void SAL_CALL NameContainer::removeChangesListener( const Reference< XChangesListener >& xListener )
@@ -324,7 +324,7 @@ void SAL_CALL NameContainer::removeChangesListener( const Reference< XChangesLis
     {
         throw RuntimeException("removeChangesListener called with null xListener");
     }
-    maChangesListeners.removeInterface( Reference<XInterface>(xListener, UNO_QUERY) );
+    maChangesListeners.removeInterface( xListener );
 }
 
 
@@ -2888,7 +2888,7 @@ void SAL_CALL SfxLibraryContainer::broadcastVBAScriptEvent( sal_Int32 nIdentifie
     leaveMethod();
 
     Reference< XModel > xModel = mxOwnerDocument;  // weak-ref -> ref
-    vba::VBAScriptEvent aEvent( Reference<XInterface>(xModel, UNO_QUERY), nIdentifier, rModuleName );
+    vba::VBAScriptEvent aEvent( xModel, nIdentifier, rModuleName );
     maVBAScriptListeners.notify( aEvent );
 }
 

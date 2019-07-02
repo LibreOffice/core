@@ -275,7 +275,7 @@ uno::Reference< frame::XModel > OReportEngineJFree::createDocumentAlive( const u
         if ( !xFrameLoad.is() )
         {
             // if there is no frame given, find the right
-            xFrameLoad.set( frame::Desktop::create(m_xContext), uno::UNO_QUERY);
+            xFrameLoad = frame::Desktop::create(m_xContext);
             sal_Int32 const nFrameSearchFlag = frame::FrameSearchFlag::TASKS | frame::FrameSearchFlag::CREATE;
             uno::Reference< frame::XFrame> xFrame = uno::Reference< frame::XFrame>(xFrameLoad,uno::UNO_QUERY_THROW)->findFrame("_blank",nFrameSearchFlag);
             xFrameLoad.set( xFrame,uno::UNO_QUERY);

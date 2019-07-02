@@ -53,7 +53,7 @@ using namespace ::com::sun::star::embed;
 namespace XSLT
 {
     Reference<XStream> OleHandler::createTempFile() {
-        Reference<XStream> tempFile( TempFile::create(m_xContext), UNO_QUERY);
+        Reference<XStream> tempFile = TempFile::create(m_xContext);
         OSL_ASSERT(tempFile.is());
         return tempFile;
     }

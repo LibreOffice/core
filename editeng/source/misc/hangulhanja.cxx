@@ -749,12 +749,11 @@ namespace editeng
         // exactly which characters are really changed in order to keep as much
         // from attributation for the text as possible.
         Sequence< sal_Int32 > aOffsets;
-        Reference< XExtendedTextConversion > xExtConverter( m_xConverter, UNO_QUERY );
-        if (m_eConvType == HHC::eConvSimplifiedTraditional && xExtConverter.is())
+        if (m_eConvType == HHC::eConvSimplifiedTraditional && m_xConverter.is())
         {
             try
             {
-                xExtConverter->getConversionWithOffset(
+                m_xConverter->getConversionWithOffset(
                     m_sCurrentPortion,
                     m_nCurrentStartIndex,
                     m_nCurrentEndIndex - m_nCurrentStartIndex,

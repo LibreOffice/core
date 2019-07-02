@@ -325,9 +325,7 @@ void FileDialogHelper_Impl::dispose()
     if ( mxFileDlg.is() )
     {
         // remove the event listener
-        uno::Reference< XFilePickerNotifier > xNotifier( mxFileDlg, UNO_QUERY );
-        if ( xNotifier.is() )
-            xNotifier->removeFilePickerListener( this );
+        mxFileDlg->removeFilePickerListener( this );
 
         ::comphelper::disposeComponent( mxFileDlg );
         mxFileDlg.clear();
@@ -337,7 +335,7 @@ void FileDialogHelper_Impl::dispose()
 OUString FileDialogHelper_Impl::getCurrentFilterUIName() const
 {
     OUString aFilterName;
-    uno::Reference< XFilterManager > xFltMgr( mxFileDlg, UNO_QUERY );
+    uno::Reference< XFilterManager > xFltMgr = mxFileDlg;
 
     if( xFltMgr.is() )
     {
@@ -936,10 +934,9 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
     mxFileDlg.set(xFactory->createInstance( aService ), css::uno::UNO_QUERY);
     mbSystemPicker = lcl_isSystemFilePicker( mxFileDlg );
 
-    uno::Reference< XFilePickerNotifier > xNotifier( mxFileDlg, UNO_QUERY );
     uno::Reference< XInitialization > xInit( mxFileDlg, UNO_QUERY );
 
-    if ( ! mxFileDlg.is() || ! xNotifier.is() )
+    if ( ! mxFileDlg.is() )
     {
         return;
     }
@@ -1154,7 +1151,7 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
     }
 
     // add the event listener
-    xNotifier->addFilePickerListener( this );
+    mxFileDlg->addFilePickerListener( this );
 }
 
 FileDialogHelper_Impl::~FileDialogHelper_Impl()
@@ -1746,7 +1743,7 @@ void FileDialogHelper_Impl::setFilter( const OUString& rFilter )
             maCurFilter = pFilter->GetUIName();
     }
 
-    uno::Reference< XFilterManager > xFltMgr( mxFileDlg, UNO_QUERY );
+    uno::Reference< XFilterManager > xFltMgr = mxFileDlg;
 
     if ( !maCurFilter.isEmpty() && xFltMgr.is() )
     {
@@ -1771,7 +1768,7 @@ void FileDialogHelper_Impl::addFilters( const OUString& rFactory,
                                         SfxFilterFlags nMust,
                                         SfxFilterFlags nDont )
 {
-    uno::Reference< XFilterManager > xFltMgr( mxFileDlg, UNO_QUERY );
+    uno::Reference< XFilterManager > xFltMgr = mxFileDlg;
 
     if ( ! xFltMgr.is() )
         return;
@@ -1841,7 +1838,7 @@ void FileDialogHelper_Impl::addFilters( const OUString& rFactory,
 void FileDialogHelper_Impl::addFilter( const OUString& rFilterName,
                                        const OUString& rExtension )
 {
-    uno::Reference< XFilterManager > xFltMgr( mxFileDlg, UNO_QUERY );
+    uno::Reference< XFilterManager > xFltMgr = mxFileDlg;
 
     if ( ! xFltMgr.is() )
         return;
@@ -1861,7 +1858,7 @@ void FileDialogHelper_Impl::addFilter( const OUString& rFilterName,
 
 void FileDialogHelper_Impl::addGraphicFilter()
 {
-    uno::Reference< XFilterManager > xFltMgr( mxFileDlg, UNO_QUERY );
+    uno::Reference< XFilterManager > xFltMgr = mxFileDlg;
 
     if ( ! xFltMgr.is() )
         return;
@@ -2222,7 +2219,7 @@ void FileDialogHelper_Impl::setDefaultValues()
     // when no filter is set, we set the currentFilter to <all>
     if ( maCurFilter.isEmpty() && !maSelectFilter.isEmpty() )
     {
-        uno::Reference< XFilterManager > xFltMgr( mxFileDlg, UNO_QUERY );
+        uno::Reference< XFilterManager > xFltMgr = mxFileDlg;
         try
         {
             xFltMgr->setCurrentFilter( maSelectFilter );
@@ -2485,7 +2482,7 @@ Sequence< OUString > FileDialogHelper::GetSelectedFiles() const
 {
     // a) the new way (optional!)
     uno::Sequence< OUString > aResultSeq;
-    uno::Reference< XFilePicker3 > xPickNew(mpImpl->mxFileDlg, UNO_QUERY);
+    uno::Reference< XFilePicker3 > xPickNew = mpImpl->mxFileDlg;
     if (xPickNew.is())
     {
         aResultSeq = xPickNew->getSelectedFiles();

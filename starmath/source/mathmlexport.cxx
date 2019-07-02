@@ -95,7 +95,7 @@ bool SmXMLExportWrapper::Export(SfxMedium &rMedium)
     uno::Reference<uno::XComponentContext> xContext(comphelper::getProcessComponentContext());
 
     //Get model
-    uno::Reference< lang::XComponent > xModelComp(xModel, uno::UNO_QUERY );
+    uno::Reference< lang::XComponent > xModelComp(xModel);
 
     bool bEmbedded = false;
     uno::Reference <lang::XUnoTunnel> xTunnel(xModel,uno::UNO_QUERY);
@@ -263,7 +263,7 @@ bool SmXMLExportWrapper::WriteThroughComponent(
     xSaxWriter->setOutputStream( xOutputStream );
 
     // prepare arguments (prepend doc handler to given arguments)
-    Reference<xml::sax::XDocumentHandler> xDocHandler( xSaxWriter,UNO_QUERY);
+    Reference<xml::sax::XDocumentHandler> xDocHandler( xSaxWriter );
 
     Sequence<Any> aArgs( 2 );
     aArgs[0] <<= xDocHandler;

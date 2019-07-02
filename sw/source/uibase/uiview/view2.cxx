@@ -1146,7 +1146,7 @@ void SwView::Execute(SfxRequest &rReq)
             // reset ignore lists
             pDoc->SpellItAgainSam( true, false, false );
             // clear ignore dictionary
-            uno::Reference< linguistic2::XDictionary > xDictionary( LinguMgr::GetIgnoreAllList(), uno::UNO_QUERY );
+            uno::Reference< linguistic2::XDictionary > xDictionary = LinguMgr::GetIgnoreAllList();
             if( xDictionary.is() )
                 xDictionary->clear();
             // put cursor to the start of the document

@@ -704,8 +704,7 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
 
     // export shapes id if needed
     {
-        uno::Reference< uno::XInterface > xRef( xShape, uno::UNO_QUERY );
-        const OUString& rShapeId = mrExport.getInterfaceToIdentifierMapper().getIdentifier( xRef );
+        const OUString& rShapeId = mrExport.getInterfaceToIdentifierMapper().getIdentifier( xShape );
         if( !rShapeId.isEmpty() )
         {
             mrExport.AddAttributeIdLegacy(XML_NAMESPACE_DRAW, rShapeId);
@@ -1062,7 +1061,7 @@ void XMLShapeExport::ImpCalcShapeType(const uno::Reference< drawing::XShape >& x
     // set in every case, so init here
     eShapeType = XmlShapeTypeUnknown;
 
-    uno::Reference< drawing::XShapeDescriptor > xShapeDescriptor(xShape, uno::UNO_QUERY);
+    uno::Reference< drawing::XShapeDescriptor > xShapeDescriptor = xShape;
     if(xShapeDescriptor.is())
     {
         OUString aType(xShapeDescriptor->getShapeType());
@@ -1576,7 +1575,7 @@ void XMLShapeExport::ImpExportEvents( const uno::Reference< drawing::XShape >& x
     if( !xEventsSupplier.is() )
         return;
 
-    uno::Reference< container::XNameAccess > xEvents( xEventsSupplier->getEvents(), uno::UNO_QUERY );
+    uno::Reference< container::XNameAccess > xEvents = xEventsSupplier->getEvents();
     SAL_WARN_IF( !xEvents.is(), "xmloff", "XEventsSupplier::getEvents() returned NULL" );
     if( !xEvents.is() )
         return;

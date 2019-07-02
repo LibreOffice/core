@@ -137,16 +137,14 @@ namespace basegfx
                 uno::Sequence< uno::Sequence< geometry::RealBezierSegment2D > > outputSequence( 1 );
                 outputSequence[0] = bezierSequenceFromB2DPolygon( rPoly );
 
-                xRes.set( xGraphicDevice->createCompatibleBezierPolyPolygon( outputSequence ),
-                          uno::UNO_QUERY );
+                xRes = xGraphicDevice->createCompatibleBezierPolyPolygon( outputSequence );
             }
             else
             {
                 uno::Sequence< uno::Sequence< geometry::RealPoint2D > > outputSequence( 1 );
                 outputSequence[0] = pointSequenceFromB2DPolygon( rPoly );
 
-                xRes.set( xGraphicDevice->createCompatibleLinePolyPolygon( outputSequence ),
-                          uno::UNO_QUERY );
+                xRes = xGraphicDevice->createCompatibleLinePolyPolygon( outputSequence );
             }
 
             if( xRes.is() && rPoly.isClosed() )
@@ -168,15 +166,13 @@ namespace basegfx
 
             if( rPolyPoly.areControlPointsUsed() )
             {
-                xRes.set( xGraphicDevice->createCompatibleBezierPolyPolygon(
-                              bezierSequenceSequenceFromB2DPolyPolygon( rPolyPoly ) ),
-                          uno::UNO_QUERY );
+                xRes = xGraphicDevice->createCompatibleBezierPolyPolygon(
+                              bezierSequenceSequenceFromB2DPolyPolygon( rPolyPoly ) );
             }
             else
             {
-                xRes.set( xGraphicDevice->createCompatibleLinePolyPolygon(
-                              pointSequenceSequenceFromB2DPolyPolygon( rPolyPoly ) ),
-                          uno::UNO_QUERY );
+                xRes = xGraphicDevice->createCompatibleLinePolyPolygon(
+                              pointSequenceSequenceFromB2DPolyPolygon( rPolyPoly ) );
             }
 
             for( i=0; i<nNumPolies; ++i )

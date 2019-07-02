@@ -328,9 +328,7 @@ namespace sw
                 OSL_ENSURE( !mrPers.GetEmbeddedObjectContainer().HasEmbeddedObject( mxIPRef ), "Object in adaptor is inserted?!" );
                 try
                 {
-                    uno::Reference < css::util::XCloseable > xClose( mxIPRef, uno::UNO_QUERY );
-                    if ( xClose.is() )
-                        xClose->close(true);
+                    mxIPRef->close(true);
                 }
                 catch ( const css::util::CloseVetoException& )
                 {

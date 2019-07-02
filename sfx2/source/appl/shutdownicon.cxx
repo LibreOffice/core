@@ -200,7 +200,7 @@ void ShutdownIcon::OpenURL( const OUString& aURL, const OUString& rTarget, const
     if ( !getInstance() || !getInstance()->m_xDesktop.is() )
         return;
 
-    css::uno::Reference < XDispatchProvider > xDispatchProvider( getInstance()->m_xDesktop, UNO_QUERY );
+    css::uno::Reference < XDispatchProvider > xDispatchProvider = getInstance()->m_xDesktop;
     if ( !xDispatchProvider.is() )
         return;
 
@@ -243,10 +243,10 @@ void ShutdownIcon::FromTemplate()
     if ( !getInstance() || !getInstance()->m_xDesktop.is() )
         return;
 
-    css::uno::Reference < css::frame::XFramesSupplier > xDesktop ( getInstance()->m_xDesktop, UNO_QUERY);
+    css::uno::Reference < css::frame::XFramesSupplier > xDesktop = getInstance()->m_xDesktop;
     css::uno::Reference < css::frame::XFrame > xFrame( xDesktop->getActiveFrame() );
     if ( !xFrame.is() )
-        xFrame.set( xDesktop, UNO_QUERY );
+        xFrame = xDesktop;
 
     URL aTargetURL;
     aTargetURL.Complete = ".uno:NewDoc";
@@ -474,7 +474,7 @@ void ShutdownIcon::terminateDesktop()
     xDesktop->removeTerminateListener( pInst );
 
     // terminate desktop only if no tasks exist
-    css::uno::Reference< XIndexAccess > xTasks ( xDesktop->getFrames(), UNO_QUERY );
+    css::uno::Reference< XIndexAccess > xTasks = xDesktop->getFrames();
     if( xTasks.is() && xTasks->getCount() < 1 )
         Application::Quit();
 

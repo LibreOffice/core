@@ -56,11 +56,10 @@ void ProgressBarWrapper::setStatusBar( const uno::Reference< awt::XWindow >& rSt
     if ( m_bOwnsInstance )
     {
         // dispose XWindow reference of our status bar
-        uno::Reference< lang::XComponent > xComponent( m_xStatusBar, uno::UNO_QUERY );
         try
         {
-            if ( xComponent.is() )
-                xComponent->dispose();
+            if ( m_xStatusBar.is() )
+                m_xStatusBar->dispose();
         }
         catch ( const uno::Exception& )
         {
@@ -273,9 +272,8 @@ void SAL_CALL ProgressBarWrapper::dispose()
         {
             try
             {
-                uno::Reference< lang::XComponent > xComponent( m_xStatusBar, uno::UNO_QUERY );
-                if ( xComponent.is() )
-                    xComponent->dispose();
+                if ( m_xStatusBar.is() )
+                    m_xStatusBar->dispose();
             }
             catch ( const lang::DisposedException& )
             {

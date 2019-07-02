@@ -44,7 +44,7 @@ bool DocumentDecryption::readEncryptionInfo()
     if (!mrOleStorage.isStorage())
         return false;
 
-    uno::Reference<io::XInputStream> xEncryptionInfo(mrOleStorage.openInputStream("EncryptionInfo"), uno::UNO_QUERY);
+    uno::Reference<io::XInputStream> xEncryptionInfo = mrOleStorage.openInputStream("EncryptionInfo");
 
     BinaryXInputStream aBinaryInputStream(xEncryptionInfo, true);
     sal_uInt32 aVersion = aBinaryInputStream.readuInt32();
@@ -93,10 +93,10 @@ bool DocumentDecryption::decrypt(const uno::Reference<io::XStream>& xDocumentStr
         return false;
 
     // open the required input streams in the encrypted package
-    uno::Reference<io::XInputStream> xEncryptedPackage(mrOleStorage.openInputStream("EncryptedPackage"), uno::UNO_QUERY);
+    uno::Reference<io::XInputStream> xEncryptedPackage = mrOleStorage.openInputStream("EncryptedPackage");
 
     // create temporary file for unencrypted package
-    uno::Reference<io::XOutputStream> xDecryptedPackage(xDocumentStream->getOutputStream(), uno::UNO_QUERY);
+    uno::Reference<io::XOutputStream> xDecryptedPackage = xDocumentStream->getOutputStream();
     BinaryXOutputStream aDecryptedPackage(xDecryptedPackage, true);
     BinaryXInputStream aEncryptedPackage(xEncryptedPackage, true);
 

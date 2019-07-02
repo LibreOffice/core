@@ -111,7 +111,7 @@ void AccessibleDocumentViewBase::Init()
     uno::Reference<drawing::XShapes> xShapeList;
     uno::Reference<drawing::XDrawView> xView (mxController, uno::UNO_QUERY);
     if (xView.is())
-        xShapeList.set( xView->getCurrentPage(), uno::UNO_QUERY);
+        xShapeList = xView->getCurrentPage();
 
     // Register this object as dispose event listener at the model.
     if (mxModel.is())

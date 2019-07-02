@@ -216,15 +216,11 @@ void SwMacrosTest::testControlShapeGrouping()
     CPPUNIT_ASSERT(xModel.is());
     uno::Reference<lang::XMultiServiceFactory> xFactory(xModel, UNO_QUERY);
     uno::Reference<drawing::XDrawPageSupplier> const xDPS(xModel, UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> const xDP(xDPS->getDrawPage(), UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> const xDP(xDPS->getDrawPage());
     CPPUNIT_ASSERT(xDP.is());
-    uno::Reference<drawing::XShapes> const xDPShapes(xDP, UNO_QUERY);
-    CPPUNIT_ASSERT(xDPShapes.is());
     uno::Reference<drawing::XShapes> const xShapes(getMultiServiceFactory()->createInstance("com.sun.star.drawing.ShapeCollection"),
                                                    UNO_QUERY);
     CPPUNIT_ASSERT(xShapes.is());
-    uno::Reference<container::XIndexAccess> xShapesIC(xShapes, UNO_QUERY);
-    CPPUNIT_ASSERT(xShapesIC.is());
 
     // uno::Reference<beans::XPropertySet> xFormProps(xForm, UNO_QUERY);
     // xFormProps->setPropertyValue("Name", makeAny("aForm"));
@@ -257,12 +253,12 @@ void SwMacrosTest::testControlShapeGrouping()
     xTimeShapeProps->setPropertyValue("AnchorType", makeAny(text::TextContentAnchorType_AT_PARAGRAPH));
 
     xFormNC->insertByName("aDateCntrl", makeAny(xDateControlModel));
-    xDPShapes->add(xDateShape);
+    xDP->add(xDateShape);
     xFormNC->insertByName("aTimeCntrl", makeAny(xTimeControlModel));
-    xDPShapes->add(xTimeShape);
+    xDP->add(xTimeShape);
 
-    xShapes->add(uno::Reference<drawing::XShape>(xDateShape, UNO_QUERY));
-    xShapes->add(uno::Reference<drawing::XShape>(xTimeShape, UNO_QUERY));
+    xShapes->add(xDateShape);
+    xShapes->add(xTimeShape);
     uno::Reference<drawing::XShapeGrouper> const xDPGrouper(xDP, UNO_QUERY);
     CPPUNIT_ASSERT(xDPGrouper.is());
     uno::Reference<drawing::XShapeGroup> xGroup(xDPGrouper->group(xShapes));
@@ -293,14 +289,14 @@ void SwMacrosTest::testControlShapeGrouping()
     }
     {
         uno::Reference< uno::XInterface > xDI;
-        xShapesIC->getByIndex(0) >>= xDI;
+        xShapes->getByIndex(0) >>= xDI;
         CPPUNIT_ASSERT(xDI.is());
         uno::Reference< drawing::XControlShape > xDS(xDI, UNO_QUERY);
         CPPUNIT_ASSERT(xDS.is());
         CPPUNIT_ASSERT_EQUAL(xDS->getControl(), xDateControlModel);
 
         uno::Reference< uno::XInterface > xTI;
-        xShapesIC->getByIndex(1) >>= xTI;
+        xShapes->getByIndex(1) >>= xTI;
         CPPUNIT_ASSERT(xTI.is());
         uno::Reference< drawing::XControlShape > xTS(xTI, UNO_QUERY);
         CPPUNIT_ASSERT(xTS.is());
@@ -323,8 +319,7 @@ void SwMacrosTest::testFdo55289()
 
     uno::Reference<frame::XModel> const xModel(pDocShell->GetModel());
     uno::Reference<drawing::XDrawPageSupplier> const xDPS(xModel, UNO_QUERY);
-    uno::Reference<drawing::XShapes> const xShapes(xDPS->getDrawPage(),
-            UNO_QUERY);
+    uno::Reference<drawing::XShapes> const xShapes = xDPS->getDrawPage();
     uno::Reference<beans::XPropertySet> const xShape(
         uno::Reference<lang::XMultiServiceFactory>(xModel, UNO_QUERY_THROW)->
             createInstance("com.sun.star.drawing.GraphicObjectShape"),

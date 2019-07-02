@@ -116,7 +116,7 @@ DECLARE_RTFEXPORT_TEST(testFdo62044, "fdo62044.rtf")
 {
     // The problem was that RTF import during copy&paste did not ignore existing paragraph styles.
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
-    uno::Reference<text::XTextRange> xText(xTextDocument->getText(), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xText = xTextDocument->getText();
     uno::Reference<text::XTextRange> xEnd = xText->getEnd();
     paste("rtfexport/data/fdo62044-paste.rtf", xEnd);
 
@@ -211,8 +211,7 @@ DECLARE_RTFIMPORT_TEST(testParaStyleBottomMargin2, "para-style-bottom-margin-2.r
 DECLARE_RTFEXPORT_TEST(testFdo66040, "fdo66040.rtf")
 {
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(),
-                                                   uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDraws = xDrawPageSupplier->getDrawPage();
     // This was 0 (no shapes were imported), we want two textframes.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xDraws->getCount());
 
@@ -261,8 +260,7 @@ DECLARE_RTFEXPORT_TEST(testFdo77996, "fdo77996.rtf")
 DECLARE_RTFEXPORT_TEST(testFdo47802, "fdo47802.rtf")
 {
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(),
-                                                   uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDraws = xDrawPageSupplier->getDrawPage();
     // Shape inside table was ignored.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xDraws->getCount());
 }
@@ -331,8 +329,7 @@ DECLARE_RTFEXPORT_TEST(testFdo68076, "fdo68076.rtf")
 DECLARE_RTFEXPORT_TEST(testFdo70221, "fdo70221.rtf")
 {
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(),
-                                                   uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDraws = xDrawPageSupplier->getDrawPage();
     // The picture was imported twice.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xDraws->getCount());
 }
@@ -342,8 +339,7 @@ DECLARE_RTFEXPORT_TEST(testCp1000018, "cp1000018.rtf")
     // The problem was that the empty paragraph at the end of the footnote got
     // lost during import.
     uno::Reference<text::XFootnotesSupplier> xFootnotesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xFootnotes(xFootnotesSupplier->getFootnotes(),
-                                                       uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xFootnotes = xFootnotesSupplier->getFootnotes();
     uno::Reference<text::XTextRange> xTextRange(xFootnotes->getByIndex(0), uno::UNO_QUERY);
 
     OUString const aExpected = "Footnote first line." SAL_NEWLINE_STRING;
@@ -355,8 +351,7 @@ DECLARE_RTFEXPORT_TEST(testCp1000018, "cp1000018.rtf")
 DECLARE_RTFEXPORT_TEST(testFdo94835, "fdo94835.rtf")
 {
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(),
-                                                   uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDraws = xDrawPageSupplier->getDrawPage();
     // The picture was imported twice.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(19), xDraws->getCount());
 }
@@ -444,7 +439,7 @@ DECLARE_RTFEXPORT_TEST(testFdo65090, "fdo65090.rtf")
     uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(),
                                                     uno::UNO_QUERY);
     uno::Reference<text::XTextTable> xTextTable(xTables->getByIndex(0), uno::UNO_QUERY);
-    uno::Reference<table::XTableRows> xTableRows(xTextTable->getRows(), uno::UNO_QUERY);
+    uno::Reference<table::XTableRows> xTableRows = xTextTable->getRows();
     // The first row had 3 cells, instead of a horizontally merged one and a normal one (2 -> 1 separator).
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty<uno::Sequence<text::TableColumnSeparator>>(
                                            xTableRows->getByIndex(0), "TableColumnSeparators")
@@ -545,7 +540,7 @@ DECLARE_RTFEXPORT_TEST(testFdo69289, "fdo69289.rtf")
     uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(),
                                                     uno::UNO_QUERY);
     uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
-    uno::Reference<table::XTableRows> xTableRows(xTable->getRows(), uno::UNO_QUERY);
+    uno::Reference<table::XTableRows> xTableRows = xTable->getRows();
     // There were only 2 cells (1 separators) in the table, should be 3 (2 separators).
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), getProperty<uno::Sequence<text::TableColumnSeparator>>(
                                            xTableRows->getByIndex(0), "TableColumnSeparators")
@@ -788,7 +783,7 @@ DECLARE_RTFEXPORT_TEST(testFdo49893_2, "fdo49893-2.rtf")
 DECLARE_RTFEXPORT_TEST(testFdo89496, "fdo89496.rtf")
 {
     // Just ensure that document is loaded and shape exists
-    uno::Reference<drawing::XShape> xShape(getShape(1), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape = getShape(1);
     CPPUNIT_ASSERT(xShape.is());
 }
 
@@ -822,7 +817,7 @@ DECLARE_RTFEXPORT_TEST(testTdf91074, "tdf91074.rtf")
 DECLARE_RTFEXPORT_TEST(testTdf90260Nopar, "hello.rtf")
 {
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
-    uno::Reference<text::XTextRange> xText(xTextDocument->getText(), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xText = xTextDocument->getText();
     uno::Reference<text::XTextRange> xEnd = xText->getEnd();
     paste("rtfexport/data/tdf90260-nopar.rtf", xEnd);
     CPPUNIT_ASSERT_EQUAL(1, getParagraphs());
@@ -947,7 +942,7 @@ DECLARE_RTFEXPORT_TEST(testTdf97035, "tdf97035.rtf")
     uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
 
     // First cell width of the second row should be 2300
-    uno::Reference<table::XTableRows> xTableRows(xTable->getRows(), uno::UNO_QUERY);
+    uno::Reference<table::XTableRows> xTableRows = xTable->getRows();
     CPPUNIT_ASSERT_EQUAL(sal_Int16(2299), getProperty<uno::Sequence<text::TableColumnSeparator>>(
                                               xTableRows->getByIndex(1), "TableColumnSeparators")[0]
                                               .Position);
@@ -963,7 +958,7 @@ DECLARE_RTFEXPORT_TEST(testTdf87034, "tdf87034.rtf")
 DECLARE_RTFEXPORT_TEST(testClassificatonPasteLevels, "classification-confidential.rtf")
 {
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
-    uno::Reference<text::XTextRange> xText(xTextDocument->getText(), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xText = xTextDocument->getText();
     uno::Reference<text::XTextRange> xEnd = xText->getEnd();
 
     // Classified source and classified destination, but internal only has a
@@ -1041,7 +1036,7 @@ DECLARE_RTFEXPORT_TEST(testTdf44986, "tdf44986.rtf")
 {
     // Check that the table at the second paragraph.
     uno::Reference<text::XTextTable> xTable(getParagraphOrTable(2), uno::UNO_QUERY);
-    uno::Reference<table::XTableRows> xTableRows(xTable->getRows(), uno::UNO_QUERY);
+    uno::Reference<table::XTableRows> xTableRows = xTable->getRows();
     // Check the first row of the table, it should have two cells (one separator).
     // This was 0: the first row had no separators, so it had only one cell, which was too wide.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty<uno::Sequence<text::TableColumnSeparator>>(
@@ -1079,7 +1074,7 @@ DECLARE_RTFEXPORT_TEST(testTdf105852, "tdf105852.rtf")
     uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(),
                                                     uno::UNO_QUERY);
     uno::Reference<text::XTextTable> xTextTable(xTables->getByIndex(0), uno::UNO_QUERY);
-    uno::Reference<table::XTableRows> xTableRows(xTextTable->getRows(), uno::UNO_QUERY);
+    uno::Reference<table::XTableRows> xTableRows = xTextTable->getRows();
     // All rows but last were merged -> there were only 2 rows
     CPPUNIT_ASSERT_EQUAL(sal_Int32(6), xTableRows->getCount());
     // The first row must have 4 cells.

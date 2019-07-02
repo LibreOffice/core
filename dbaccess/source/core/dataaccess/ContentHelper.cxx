@@ -110,7 +110,7 @@ OUString OContentHelper::impl_getHierarchicalName( bool _includingRootContainer 
     {
         Reference<XPropertySet> xProp( xParent, UNO_QUERY );
         Reference< XChild > xChild( xParent, UNO_QUERY );
-        xParent.set( xChild.is() ? xChild->getParent() : Reference< XInterface >(), UNO_QUERY );
+        xParent = xChild.is() ? xChild->getParent() : Reference< XInterface >();
         if ( xProp.is() && xParent.is() )
         {
             OUString sName;

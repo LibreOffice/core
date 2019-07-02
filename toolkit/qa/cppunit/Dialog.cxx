@@ -59,7 +59,7 @@ CPPUNIT_TEST_FIXTURE(DialogTest, testDialogSizeable)
 
     uno::Reference<awt::XUnoControlDialog> xControl = awt::UnoControlDialog::create(mxContext);
     xControl->setModel(xControlModel);
-    uno::Reference<awt::XWindow> xWindow(xControl, uno::UNO_QUERY);
+    uno::Reference<awt::XWindow> xWindow(xControl);
     xWindow->setVisible(true);
     xDialog.set(xControl, uno::UNO_QUERY_THROW);
     xDialog->execute();

@@ -251,8 +251,8 @@ Any SAL_CALL SdUnoDrawView::getSelection()
         const size_t nCount = rMarkList.GetMarkCount();
         if( nCount )
         {
-            Reference< drawing::XShapes > xShapes( drawing::ShapeCollection::create(
-                        comphelper::getProcessComponentContext()), UNO_QUERY );
+            Reference< drawing::XShapes > xShapes = drawing::ShapeCollection::create(
+                        comphelper::getProcessComponentContext());
             for( size_t nNum = 0; nNum < nCount; ++nNum)
             {
                 SdrMark *pMark = rMarkList.GetMark(nNum);

@@ -397,7 +397,7 @@ DECLARE_OOXMLEXPORT_TEST(testSmartart, "smartart.docx")
     CPPUNIT_ASSERT(bTheme); // Grab Bag has all the expected elements
 
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDraws = xDrawPageSupplier->getDrawPage();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xDraws->getCount()); // One groupshape in the doc
 
     uno::Reference<container::XIndexAccess> xGroup(getShape(1), uno::UNO_QUERY);
@@ -607,7 +607,7 @@ DECLARE_OOXMLEXPORT_TEST(testLineSpacingexport, "test_line_spacing.docx")
 DECLARE_OOXMLEXPORT_TEST(testTextBoxGradientAngle, "fdo65295.docx")
 {
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xIndexAccess(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess = xDrawPageSupplier->getDrawPage();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(8), xIndexAccess->getCount());
 
     // Angle of frame#1 is 135 degrees, but 'aGradient.Angle' holds value in 1/10 of a degree
@@ -933,7 +933,7 @@ DECLARE_OOXMLEXPORT_TEST(testDontSplitTable, "tdf101589_dontSplitTable.odt")
     uno::Reference<text::XTextTable> xTable (xTables->getByIndex(0), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(xTable, "Split"));
 
-    uno::Reference<table::XTableRows> xTableRows(xTable->getRows(), uno::UNO_QUERY);
+    uno::Reference<table::XTableRows> xTableRows = xTable->getRows();
     CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(xTableRows->getByIndex(0), "IsSplitAllowed"));
 }
 

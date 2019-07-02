@@ -5093,7 +5093,7 @@ void DocxAttributeOutput::WritePostponedChart()
 
             OString aRelId;
             m_nChartCount++;
-            uno::Reference< frame::XModel > xModel( xChartDoc, uno::UNO_QUERY );
+            uno::Reference< frame::XModel > xModel( xChartDoc );
             aRelId = m_rExport.OutputChart( xModel, m_nChartCount, m_pSerializer );
 
             m_pSerializer->singleElementNS( XML_c, XML_chart,
@@ -5136,7 +5136,7 @@ void DocxAttributeOutput::WritePostponedMath(const SwOLENode* pPostponedMath)
         {
         }
     }
-    uno::Reference< uno::XInterface > xInterface( xObj->getComponent(), uno::UNO_QUERY );
+    uno::Reference< uno::XInterface > xInterface = xObj->getComponent();
     if (!xInterface.is())
     {
         SAL_WARN("sw.ww8", "Broken math object");

@@ -884,9 +884,7 @@ void ScXMLChangeCellContext::CreateTextPContext(bool bIsNewParagraph)
             {
                 xText->setString(sText);
                 xTextCursor->gotoEnd(false);
-                uno::Reference < text::XTextRange > xTextRange (xTextCursor, uno::UNO_QUERY);
-                if (xTextRange.is())
-                    xText->insertControlCharacter(xTextRange, text::ControlCharacter::PARAGRAPH_BREAK, false);
+                xText->insertControlCharacter(xTextCursor, text::ControlCharacter::PARAGRAPH_BREAK, false);
             }
             GetScImport().GetTextImport()->SetCursor(xTextCursor);
         }

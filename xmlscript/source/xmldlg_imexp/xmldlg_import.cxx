@@ -875,7 +875,7 @@ bool ImportContext::importGraphicOrImageProperty(
         }
         if (xGraphic.is())
         {
-            Reference<beans::XPropertySet> xProps( getControlModel(), UNO_QUERY );
+            Reference<beans::XPropertySet> xProps = getControlModel();
             if (xProps.is())
             {
                 xProps->setPropertyValue("Graphic", makeAny(xGraphic));

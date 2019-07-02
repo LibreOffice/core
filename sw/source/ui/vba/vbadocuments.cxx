@@ -44,7 +44,7 @@ static uno::Any
 getDocument( uno::Reference< uno::XComponentContext > const & xContext, const uno::Reference< text::XTextDocument > &xDoc, const uno::Any& aApplication )
 {
     // FIXME: fine as long as SwVbaDocument is stateless ...
-    uno::Reference< frame::XModel > xModel( xDoc, uno::UNO_QUERY );
+    uno::Reference< frame::XModel > xModel( xDoc );
     if( !xModel.is() )
         return uno::Any();
 

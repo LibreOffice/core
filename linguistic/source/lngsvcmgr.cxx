@@ -1014,12 +1014,8 @@ void LngSvcMgr::GetAvailableSpellSvcs_Impl()
                     if (xInfo.is())
                         aImplName = xInfo->getImplementationName();
                     SAL_WARN_IF( aImplName.isEmpty(), "linguistic", "empty implementation name" );
-                    uno::Reference< linguistic2::XSupportedLocales > xSuppLoc( xSvc, uno::UNO_QUERY );
-                    SAL_WARN_IF( !xSuppLoc.is(), "linguistic", "interfaces not supported" );
-                    if (xSuppLoc.is()) {
-                        uno::Sequence<lang::Locale> aLocaleSequence(xSuppLoc->getLocales());
-                        aLanguages = LocaleSeqToLangVec( aLocaleSequence );
-                    }
+                    uno::Sequence<lang::Locale> aLocaleSequence(xSvc->getLocales());
+                    aLanguages = LocaleSeqToLangVec( aLocaleSequence );
 
                     pAvailSpellSvcs->push_back( std::make_unique<SvcInfo>( aImplName, aLanguages ) );
                 }
@@ -1076,13 +1072,8 @@ void LngSvcMgr::GetAvailableGrammarSvcs_Impl()
                     if (xInfo.is())
                         aImplName = xInfo->getImplementationName();
                     SAL_WARN_IF( aImplName.isEmpty(), "linguistic", "empty implementation name" );
-                    uno::Reference< linguistic2::XSupportedLocales > xSuppLoc( xSvc, uno::UNO_QUERY );
-                    SAL_WARN_IF( !xSuppLoc.is(), "linguistic", "interfaces not supported" );
-                    if (xSuppLoc.is())
-                    {
-                        uno::Sequence<lang::Locale> aLocaleSequence(xSuppLoc->getLocales());
-                        aLanguages = LocaleSeqToLangVec( aLocaleSequence );
-                    }
+                    uno::Sequence<lang::Locale> aLocaleSequence(xSvc->getLocales());
+                    aLanguages = LocaleSeqToLangVec( aLocaleSequence );
 
                     pAvailGrammarSvcs->push_back( std::make_unique<SvcInfo>( aImplName, aLanguages ) );
                 }
@@ -1137,13 +1128,8 @@ void LngSvcMgr::GetAvailableHyphSvcs_Impl()
                     if (xInfo.is())
                         aImplName = xInfo->getImplementationName();
                     SAL_WARN_IF( aImplName.isEmpty(), "linguistic", "empty implementation name" );
-                    uno::Reference< linguistic2::XSupportedLocales > xSuppLoc( xSvc, uno::UNO_QUERY );
-                    SAL_WARN_IF( !xSuppLoc.is(), "linguistic", "interfaces not supported" );
-                    if (xSuppLoc.is())
-                    {
-                        uno::Sequence<lang::Locale> aLocaleSequence(xSuppLoc->getLocales());
-                        aLanguages = LocaleSeqToLangVec( aLocaleSequence );
-                    }
+                    uno::Sequence<lang::Locale> aLocaleSequence(xSvc->getLocales());
+                    aLanguages = LocaleSeqToLangVec( aLocaleSequence );
                     pAvailHyphSvcs->push_back( std::make_unique<SvcInfo>( aImplName, aLanguages ) );
                 }
             }
@@ -1198,13 +1184,8 @@ void LngSvcMgr::GetAvailableThesSvcs_Impl()
                     if (xInfo.is())
                         aImplName = xInfo->getImplementationName();
                     SAL_WARN_IF( aImplName.isEmpty(), "linguistic", "empty implementation name" );
-                    uno::Reference< linguistic2::XSupportedLocales > xSuppLoc( xSvc, uno::UNO_QUERY );
-                    SAL_WARN_IF( !xSuppLoc.is(), "linguistic", "interfaces not supported" );
-                    if (xSuppLoc.is())
-                    {
-                        uno::Sequence<lang::Locale> aLocaleSequence(xSuppLoc->getLocales());
-                        aLanguages = LocaleSeqToLangVec( aLocaleSequence );
-                    }
+                    uno::Sequence<lang::Locale> aLocaleSequence(xSvc->getLocales());
+                    aLanguages = LocaleSeqToLangVec( aLocaleSequence );
 
                     pAvailThesSvcs->push_back( std::make_unique<SvcInfo>( aImplName, aLanguages ) );
                 }

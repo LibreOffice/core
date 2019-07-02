@@ -312,7 +312,7 @@ Reference< XVeto > SAL_CALL OQueryContainer::approveRemoveElement( const Contain
 
 void SAL_CALL OQueryContainer::disposing( const css::lang::EventObject& _rSource )
 {
-    if (_rSource.Source.get() == Reference< XInterface >(m_xCommandDefinitions, UNO_QUERY).get())
+    if (_rSource.Source.get() == Reference< XInterface >(m_xCommandDefinitions).get())
     {   // our "master container" (with the command definitions) is being disposed
         OSL_FAIL("OQueryContainer::disposing : nobody should dispose the CommandDefinition container before disposing my connection !");
         dispose();

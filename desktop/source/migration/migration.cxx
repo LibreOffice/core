@@ -862,8 +862,7 @@ std::vector< MigrationModuleInfo > MigrationImpl::dectectUIChangesForAllModules(
     if (!xModules.is())
         return vModulesInfo;
 
-    uno::Reference< container::XNameAccess > xAccess(xModules, uno::UNO_QUERY);
-    uno::Sequence< OUString > lNames = xAccess->getElementNames();
+    uno::Sequence< OUString > lNames = xModules->getElementNames();
     sal_Int32 nLength = lNames.getLength();
     for (sal_Int32 i=0; i<nLength; ++i) {
         OUString sModuleShortName = lNames[i];
@@ -873,8 +872,7 @@ std::vector< MigrationModuleInfo > MigrationImpl::dectectUIChangesForAllModules(
 
             uno::Reference< embed::XStorage > xMenubar = xModule->openStorageElement(MENUBAR, embed::ElementModes::READ);
             if (xMenubar.is()) {
-                uno::Reference< container::XNameAccess > xNameAccess(xMenubar, uno::UNO_QUERY);
-                if (xNameAccess->getElementNames().hasElements()) {
+                if (xMenubar->getElementNames().hasElements()) {
                     aModuleInfo.sModuleShortName = sModuleShortName;
                     aModuleInfo.bHasMenubar = true;
                 }
@@ -885,8 +883,7 @@ std::vector< MigrationModuleInfo > MigrationImpl::dectectUIChangesForAllModules(
                 const OUString RESOURCEURL_CUSTOM_ELEMENT("custom_");
                 sal_Int32 nCustomLen = 7;
 
-                uno::Reference< container::XNameAccess > xNameAccess(xToolbar, uno::UNO_QUERY);
-                ::uno::Sequence< OUString > lToolbars = xNameAccess->getElementNames();
+                ::uno::Sequence< OUString > lToolbars = xToolbar->getElementNames();
                 for (sal_Int32 j=0; j<lToolbars.getLength(); ++j) {
                     OUString sToolbarName = lToolbars[j];
                     if (sToolbarName.getLength()>=nCustomLen &&
@@ -1060,9 +1057,8 @@ void MigrationImpl::mergeOldToNewVersion(const uno::Reference< ui::XUIConfigurat
         }
     }
 
-    uno::Reference< container::XIndexAccess > xIndexAccess(xIndexContainer, uno::UNO_QUERY);
-    if (xIndexAccess.is())
-        xCfgManager->replaceSettings(sResourceURL, xIndexAccess);
+    if (xIndexContainer.is())
+        xCfgManager->replaceSettings(sResourceURL, xIndexContainer);
 
     uno::Reference< ui::XUIConfigurationPersistence > xUIConfigurationPersistence(xCfgManager, uno::UNO_QUERY);
     if (xUIConfigurationPersistence.is())

@@ -2233,7 +2233,7 @@ void SfxHelpTextWindow_Impl::FindHdl(sfx2::SearchDialog* pDlg)
                 else if ( pDlg->IsWrapAround() && !bWrapAround )
                 {
                     Reference < text::XTextViewCursorSupplier > xCrsrSupp( xController, uno::UNO_QUERY );
-                    Reference < text::XTextViewCursor > xTVCrsr( xCrsrSupp->getViewCursor(), uno::UNO_QUERY );
+                    Reference < text::XTextViewCursor > xTVCrsr = xCrsrSupp->getViewCursor();
                     if ( xTVCrsr.is() )
                     {
                         Reference < text::XTextDocument > xDoc( xController->getModel(), uno::UNO_QUERY );
@@ -3026,7 +3026,7 @@ void SfxHelpWindow_Impl::DoAction( sal_uInt16 nActionId )
         case TBI_COPY :
         case TBI_SELECTIONMODE:
         {
-            Reference < XDispatchProvider > xProv( pTextWin->getFrame(), UNO_QUERY );
+            Reference < XDispatchProvider > xProv = pTextWin->getFrame();
             if ( xProv.is() )
             {
                 URL aURL;

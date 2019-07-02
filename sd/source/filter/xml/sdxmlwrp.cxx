@@ -523,7 +523,7 @@ bool SdXMLFilter::Import( ErrCode& nError )
     Reference< document::XEmbeddedObjectResolver > xObjectResolver;
     rtl::Reference<SvXMLEmbeddedObjectHelper> xObjectHelper;
 
-    Reference< lang::XComponent > xModelComp( mxModel, uno::UNO_QUERY );
+    Reference< lang::XComponent > xModelComp( mxModel );
 
     // try to get an XStatusIndicator from the Medium
     {
@@ -913,7 +913,7 @@ bool SdXMLFilter::Export()
                 xInfoSet->setPropertyValue( "ProgressCurrent" , aProgCurrent);
             }
 
-            uno::Reference< lang::XComponent > xComponent( mxModel, uno::UNO_QUERY );
+            uno::Reference< lang::XComponent > xComponent( mxModel );
 
             XML_SERVICES const * pServiceNames = getServices( false, IsDraw(), mnStoreVer );
 
@@ -970,8 +970,7 @@ bool SdXMLFilter::Export()
                     xInfoSet->setPropertyValue( sStreamName, Any( sDocName ) );
                 }
 
-                uno::Reference< io::XActiveDataSource > xDocSrc( xWriter, uno::UNO_QUERY );
-                xDocSrc->setOutputStream( xDocOut );
+                xWriter->setOutputStream( xDocOut );
 
                 uno::Sequence< uno::Any > aArgs( 2 + ( mxStatusIndicator.is() ? 1 : 0 ) + ( xGraphicStorageHandler.is() ? 1 : 0 ) + ( xObjectResolver.is() ? 1 : 0 ) );
                 uno::Any* pArgs = aArgs.getArray();

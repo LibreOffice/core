@@ -94,7 +94,7 @@ void PresenterCanvasHelper::PaintRectangle (
             || rpBitmap->meVerticalTexturingMode == PresenterBitmapDescriptor::Repeat)
         {
             PaintTiledBitmap(
-                Reference<rendering::XBitmap>(rpBitmap->GetNormalBitmap(), UNO_QUERY),
+                rpBitmap->GetNormalBitmap(),
                 rxCanvas,
                 rRepaintBox,
                 xPolyPolygon,
@@ -105,7 +105,7 @@ void PresenterCanvasHelper::PaintRectangle (
         else
         {
             PaintBitmap(
-                Reference<rendering::XBitmap>(rpBitmap->GetNormalBitmap(), UNO_QUERY),
+                rpBitmap->GetNormalBitmap(),
                 awt::Point(rOuterBoundingBox.X, rOuterBoundingBox.Y),
                 rxCanvas,
                 rRepaintBox,

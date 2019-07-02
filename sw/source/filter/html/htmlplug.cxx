@@ -1158,7 +1158,7 @@ sal_uInt16 SwHTMLWriter::GuessOLENodeFrameType( const SwNode& rNode )
 
     SwHTMLFrameType eType = HTML_FRMTYPE_OLE;
 
-    uno::Reference < embed::XClassifiedObject > xClass ( rObj.GetOleRef(), uno::UNO_QUERY );
+    uno::Reference < embed::XClassifiedObject > xClass = rObj.GetOleRef();
     SvGlobalName aClass( xClass->getClassID() );
     if( aClass == SvGlobalName( SO3_PLUGIN_CLASSID ) )
     {

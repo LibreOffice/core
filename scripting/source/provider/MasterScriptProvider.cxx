@@ -232,8 +232,7 @@ MasterScriptProvider::getScript( const OUString& scriptURI )
 
     Reference< uri::XUriReferenceFactory > xFac ( uri::UriReferenceFactory::create( m_xContext )  );
 
-    Reference<  uri::XUriReference > uriRef(
-        xFac->parse( scriptURI ), UNO_QUERY );
+    Reference<  uri::XUriReference > uriRef = xFac->parse( scriptURI );
 
     Reference < uri::XVndSunStarScriptUrl > sfUri( uriRef, UNO_QUERY );
 

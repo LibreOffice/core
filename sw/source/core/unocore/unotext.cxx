@@ -877,8 +877,7 @@ SwXText::getStart()
         throw aRuntime;
     }
     xRef->gotoStart(false);
-    const uno::Reference< text::XTextRange > xRet(xRef, uno::UNO_QUERY);
-    return xRet;
+    return xRef;
 }
 
 uno::Reference< text::XTextRange > SAL_CALL
@@ -894,8 +893,7 @@ SwXText::getEnd()
         throw aRuntime;
     }
     xRef->gotoEnd(false);
-    const uno::Reference< text::XTextRange >  xRet(xRef, uno::UNO_QUERY);
-    return xRet;
+    return xRef;
 }
 
 OUString SAL_CALL SwXText::getString()

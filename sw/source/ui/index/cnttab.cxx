@@ -101,9 +101,8 @@ static OUString lcl_CreateAutoMarkFileDlg(weld::Window* pParent, const OUString&
                 FileDialogFlags::NONE, pParent);
     uno::Reference < XFilePicker3 > xFP = aDlgHelper.GetFilePicker();
 
-    uno::Reference<XFilterManager> xFltMgr(xFP, UNO_QUERY);
-    xFltMgr->appendFilter( rFileString, "*.sdi" );
-    xFltMgr->setCurrentFilter( rFileString ) ;
+    xFP->appendFilter( rFileString, "*.sdi" );
+    xFP->setCurrentFilter( rFileString ) ;
 
     if( !rURL.isEmpty() )
         xFP->setDisplayDirectory( rURL );
