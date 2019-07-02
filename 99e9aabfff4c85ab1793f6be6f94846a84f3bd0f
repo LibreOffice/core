@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_ff20304c",
+        "filename": "configure.ac",
+        "patchSetId": 22
+      },
+      "lineNbr": 3928,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-07-02T03:48:08Z",
+      "side": 1,
+      "message": "I\u0027m curious why this change? I mean, why is it better?",
+      "range": {
+        "startLine": 3927,
+        "startChar": 31,
+        "endLine": 3928,
+        "endChar": 6
+      },
+      "revId": "99e9aabfff4c85ab1793f6be6f94846a84f3bd0f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_1f1e440c",
+        "filename": "configure.ac",
+        "patchSetId": 22
+      },
+      "lineNbr": 5524,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-07-02T03:48:08Z",
+      "side": 1,
+      "message": "Ln 3451 has a test with redirected output; do you think that using it here to make it in one line would be cleaner maybe?",
+      "range": {
+        "startLine": 5523,
+        "startChar": 19,
+        "endLine": 5524,
+        "endChar": 35
+      },
+      "revId": "99e9aabfff4c85ab1793f6be6f94846a84f3bd0f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

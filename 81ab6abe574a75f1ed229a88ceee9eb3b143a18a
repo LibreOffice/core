@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_5f2cbc46",
+        "filename": "configure.ac",
+        "patchSetId": 22
+      },
+      "lineNbr": 3378,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-07-02T03:48:08Z",
+      "side": 0,
+      "message": "I\u0027m not sure that removing this output is good. Seeing strings like this allows to see easily what the variables were expanded to, and so where it actually looked. Without this, we\u0027d need to debug the previous steps to see that?",
+      "range": {
+        "startLine": 3378,
+        "startChar": 47,
+        "endLine": 3378,
+        "endChar": 102
+      },
+      "revId": "81ab6abe574a75f1ed229a88ceee9eb3b143a18a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_bf1ab814",
+        "filename": "configure.ac",
+        "patchSetId": 22
+      },
+      "lineNbr": 5545,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-07-02T03:48:08Z",
+      "side": 0,
+      "message": "Again - why remove some debug info?",
+      "range": {
+        "startLine": 5545,
+        "startChar": 12,
+        "endLine": 5545,
+        "endChar": 78
+      },
+      "revId": "81ab6abe574a75f1ed229a88ceee9eb3b143a18a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_df176ced",
+        "filename": "configure.ac",
+        "patchSetId": 22
+      },
+      "lineNbr": 5576,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-07-02T03:48:08Z",
+      "side": 0,
+      "message": "And here, and few lines below",
+      "range": {
+        "startLine": 5576,
+        "startChar": 12,
+        "endLine": 5576,
+        "endChar": 89
+      },
+      "revId": "81ab6abe574a75f1ed229a88ceee9eb3b143a18a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
