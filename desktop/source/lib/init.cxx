@@ -155,6 +155,7 @@
 
 #include "lokinteractionhandler.hxx"
 #include "lokclipboard.hxx"
+#include <officecfg/Office/Impress.hxx>
 
 using namespace css;
 using namespace vcl;
@@ -5263,6 +5264,16 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
         comphelper::ThreadPool::getSharedOptimalPool().shutdown();
         rtl_alloc_preInit(rtlAllocPostInit);
     }
+
+// Turn off quick editing on IOS and ANDROID
+#if defined IOS || defined ANDROID
+    if (officecfg::Office::Impress::Misc::TextObject::QuickEditing::get())
+    {
+        std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
+        officecfg::Office::Impress::Misc::TextObject::QuickEditing::set(false, batch);
+        batch->commit();
+    }
+#endif
 
     return bInitialized;
 }
