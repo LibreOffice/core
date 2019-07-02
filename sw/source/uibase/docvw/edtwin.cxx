@@ -5970,9 +5970,9 @@ void QuickHelpData::FillStrArr( SwWrtShell const & rSh, const OUString& rWord )
     uno::Sequence< i18n::CalendarItem2 > aNames( (*pCalendar)->getMonths() );
     for ( sal_uInt16 i = 0; i < 2; ++i )
     {
-        for ( long n = 0; n < aNames.getLength(); ++n )
+        for ( const auto& rName : aNames )
         {
-            const OUString& rStr( aNames[n].FullName );
+            const OUString& rStr( rName.FullName );
             // Check string longer than word and case insensitive match
             if( rStr.getLength() > rWord.getLength() &&
                 rCC.lowercase( rStr, 0, rWord.getLength() ) == sWordLower )

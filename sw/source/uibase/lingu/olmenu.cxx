@@ -175,16 +175,12 @@ void SwSpellPopup::fillLangPopupMenu(
     if (xDocumentLanguages.is())
     {
         uno::Sequence< lang::Locale > rLocales( xDocumentLanguages->getDocumentLanguages( static_cast<sal_Int16>(nScriptType), nMaxCount ) );
-        if (rLocales.hasElements())
+        for (const lang::Locale& rLocale : rLocales)
         {
-            for (sal_Int32 i = 0; i < rLocales.getLength(); ++i)
-            {
-                if (aLangItems.size() == size_t(nMaxCount))
-                    break;
-                const lang::Locale& rLocale = rLocales[i];
-                if (lcl_checkScriptType( nScriptType, SvtLanguageTable::GetLanguageType( rLocale.Language )))
-                    aLangItems.insert( rLocale.Language );
-            }
+            if (aLangItems.size() == size_t(nMaxCount))
+                break;
+            if (lcl_checkScriptType( nScriptType, SvtLanguageTable::GetLanguageType( rLocale.Language )))
+                aLangItems.insert( rLocale.Language );
         }
     }
 
@@ -337,12 +333,10 @@ SwSpellPopup::SwSpellPopup(
             xDic->setActive( true );
 
         m_aDics = xDicList->getDictionaries();
-        const uno::Reference< linguistic2::XDictionary >  *pDic = m_aDics.getConstArray();
-        sal_uInt16 nDicCount = static_cast< sal_uInt16 >(m_aDics.getLength());
 
-        for( sal_uInt16 i = 0; i < nDicCount; i++ )
+        for( const uno::Reference< linguistic2::XDictionary >& rDic : m_aDics )
         {
-            uno::Reference< linguistic2::XDictionary >  xDicTmp( pDic[i], uno::UNO_QUERY );
+            uno::Reference< linguistic2::XDictionary >  xDicTmp( rDic, uno::UNO_QUERY );
             if (!xDicTmp.is() || LinguMgr::GetIgnoreAllList() == xDicTmp)
                 continue;
 
@@ -459,16 +453,15 @@ SwSpellPopup::SwSpellPopup(
 
     // Add an item to show detailed infos if the FullCommentURL property is defined
     beans::PropertyValues  aProperties = rResult.aErrors[ nErrorInResult ].aProperties;
+    for ( const auto& rProp : aProperties )
     {
-        sal_Int32 i = 0;
-        while ( m_sExplanationLink.isEmpty() && i < aProperties.getLength() )
+        if ( rProp.Name == "FullCommentURL" )
         {
-            if ( aProperties[i].Name == "FullCommentURL" )
-            {
-                uno::Any aValue = aProperties[i].Value;
-                aValue >>= m_sExplanationLink;
-            }
-            ++i;
+            uno::Any aValue = rProp.Value;
+            aValue >>= m_sExplanationLink;
+
+            if ( !m_sExplanationLink.isEmpty( ) )
+                break;
         }
     }
 
@@ -480,8 +473,7 @@ SwSpellPopup::SwSpellPopup(
     m_xPopupMenu->SetMenuFlags(MenuFlags::NoAutoMnemonics);
 
     m_xPopupMenu->InsertSeparator(OString(), nPos++);
-    sal_Int32 nStringCount = m_aSuggestions.getLength();
-    if ( nStringCount )     // suggestions available...
+    if ( m_aSuggestions.hasElements() )     // suggestions available...
     {
         Image aImage;
         OUString aSuggestionImageUrl;
@@ -497,9 +489,8 @@ SwSpellPopup::SwSpellPopup(
         }
 
         sal_uInt16 nItemId = MN_SUGGESTION_START;
-        for (sal_Int32 i = 0;  i < nStringCount;  ++i)
+        for (const OUString& aEntry : m_aSuggestions)
         {
-            const OUString aEntry = m_aSuggestions[ i ];
             m_xPopupMenu->InsertItem(nItemId, aEntry, MenuItemBits::NONE, OString(), nPos++);
             m_xPopupMenu->SetHelpId(nItemId, HID_LINGU_REPLACE);
             if (!aSuggestionImageUrl.isEmpty())

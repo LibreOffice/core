@@ -1666,9 +1666,9 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                     if (xFamilies->getByName("PageStyles") >>= xContainer)
                     {
                         uno::Sequence< OUString > aSeqNames = xContainer->getElementNames();
-                        for (sal_Int32 itName = 0; itName < aSeqNames.getLength(); itName++)
+                        for (const auto& rName : aSeqNames)
                         {
-                            aStyleName = aSeqNames[itName];
+                            aStyleName = rName;
                             uno::Reference<XPropertySet> xPropSet(xContainer->getByName(aStyleName), uno::UNO_QUERY);
                             if (xPropSet.is() && (xPropSet->getPropertyValue(sPhysical) >>= bIsPhysical) && bIsPhysical)
                             {

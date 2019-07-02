@@ -330,15 +330,9 @@ SwMailMergeConfigItem_Impl::SwMailMergeConfigItem_Impl() :
     if(m_aSavedDocuments.hasElements())
     {
         uno::Sequence< OUString > aTempDocuments(m_aSavedDocuments.getLength());
-        OUString* pTempDocuments = aTempDocuments.getArray();
-        sal_Int32 nIndex = 0;
-        for(sal_Int32 i = 0; i < m_aSavedDocuments.getLength(); ++i)
-        {
-            if(SWUnoHelper::UCB_IsFile( m_aSavedDocuments[i] ))
-            {
-                pTempDocuments[nIndex++] = m_aSavedDocuments[i];
-            }
-        }
+        OUString* pTempDocuments = std::copy_if(m_aSavedDocuments.begin(), m_aSavedDocuments.end(), aTempDocuments.begin(),
+            [](const OUString& rDoc) { return SWUnoHelper::UCB_IsFile( rDoc ); });
+        sal_Int32 nIndex = static_cast<sal_Int32>(std::distance(aTempDocuments.begin(), pTempDocuments));
         if(nIndex < m_aSavedDocuments.getLength())
         {
             m_aSavedDocuments = aTempDocuments;
@@ -358,26 +352,15 @@ void SwMailMergeConfigItem_Impl::SetCurrentAddressBlockIndex( sal_Int32 nSet )
 
 static OUString lcl_CreateNodeName(Sequence<OUString>& rAssignments )
 {
-    const OUString* pNames = rAssignments.getConstArray();
     sal_Int32 nStart = rAssignments.getLength();
     OUString sNewName;
-    bool bFound;
-    do
+    //search if the name exists
+    while(true)
     {
-        bFound = false;
-        sNewName = "_" + OUString::number(nStart);
-        //search if the name exists
-        for(sal_Int32 nAssign = 0; nAssign < rAssignments.getLength(); ++nAssign)
-        {
-            if(pNames[nAssign] == sNewName)
-            {
-                bFound = true;
-                ++nStart;
-                break;
-            }
-        }
+        sNewName = "_" + OUString::number(nStart++);
+        if(comphelper::findValue(rAssignments, sNewName) == -1)
+            break;
     }
-    while(bFound);
     // add the new name to the array of existing names
     rAssignments.realloc(rAssignments.getLength() + 1);
     rAssignments.getArray()[rAssignments.getLength() - 1] = sNewName;
@@ -601,13 +584,13 @@ const Sequence< OUString> SwMailMergeConfigItem_Impl::GetAddressBlocks(
         bool bConvertToConfig) const
 {
     Sequence< OUString> aRet(m_aAddressBlocks.size());
-    OUString* pRet = aRet.getArray();
-    for(size_t nBlock = 0; nBlock < m_aAddressBlocks.size(); nBlock++)
-    {
-        pRet[nBlock] = m_aAddressBlocks[nBlock];
-        if(bConvertToConfig)
-            lcl_ConvertToNumbers(pRet[nBlock], m_AddressHeaderSA);
-    }
+    std::transform(m_aAddressBlocks.begin(), m_aAddressBlocks.end(), aRet.begin(),
+        [this, bConvertToConfig](const OUString& rBlock) -> OUString {
+            OUString sBlock = rBlock;
+            if(bConvertToConfig)
+                lcl_ConvertToNumbers(sBlock, m_AddressHeaderSA);
+            return sBlock;
+        });
     return aRet;
 }
 
@@ -616,13 +599,13 @@ void SwMailMergeConfigItem_Impl::SetAddressBlocks(
         bool bConvertFromConfig)
 {
     m_aAddressBlocks.clear();
-    for(sal_Int32 nBlock = 0; nBlock < rBlocks.getLength(); nBlock++)
-    {
-        OUString sBlock = rBlocks[nBlock];
-        if(bConvertFromConfig)
-            lcl_ConvertFromNumbers(sBlock, m_AddressHeaderSA);
-        m_aAddressBlocks.push_back(sBlock);
-    }
+    std::transform(rBlocks.begin(), rBlocks.end(), std::back_inserter(m_aAddressBlocks),
+        [this, bConvertFromConfig](const OUString& rBlock) -> OUString {
+            OUString sBlock = rBlock;
+            if(bConvertFromConfig)
+                lcl_ConvertFromNumbers(sBlock, m_AddressHeaderSA);
+            return sBlock;
+        });
     m_nCurrentAddressBlock = 0;
     SetModified();
 }
@@ -635,13 +618,13 @@ const Sequence< OUString>   SwMailMergeConfigItem_Impl::GetGreetings(
             eType == SwMailMergeConfigItem::MALE ? m_aMaleGreetingLines :
                                 m_aNeutralGreetingLines;
     Sequence< OUString> aRet(rGreetings.size());
-    OUString* pRet = aRet.getArray();
-    for(size_t nGreeting = 0; nGreeting < rGreetings.size(); nGreeting++)
-    {
-        pRet[nGreeting] = rGreetings[nGreeting];
-        if(bConvertToConfig)
-            lcl_ConvertToNumbers(pRet[nGreeting], m_AddressHeaderSA);
-    }
+    std::transform(rGreetings.begin(), rGreetings.end(), aRet.begin(),
+        [this, bConvertToConfig](const OUString& rGreeting) -> OUString {
+            OUString sGreeting = rGreeting;
+            if(bConvertToConfig)
+                lcl_ConvertToNumbers(sGreeting, m_AddressHeaderSA);
+            return sGreeting;
+        });
     return aRet;
 }
 
@@ -656,13 +639,13 @@ void  SwMailMergeConfigItem_Impl::SetGreetings(
                                 m_aNeutralGreetingLines;
 
     rGreetings.clear();
-    for(sal_Int32 nGreeting = 0; nGreeting < rSetGreetings.getLength(); nGreeting++)
-    {
-        OUString sGreeting = rSetGreetings[nGreeting];
-        if(bConvertFromConfig)
-            lcl_ConvertFromNumbers(sGreeting, m_AddressHeaderSA);
-        rGreetings.push_back(sGreeting);
-    }
+    std::transform(rSetGreetings.begin(), rSetGreetings.end(), std::back_inserter(rGreetings),
+        [this, bConvertFromConfig](const OUString& rGreeting) -> OUString {
+            OUString sGreeting = rGreeting;
+            if(bConvertFromConfig)
+                lcl_ConvertFromNumbers(sGreeting, m_AddressHeaderSA);
+            return sGreeting;
+        });
     SetModified();
 }
 
@@ -1215,9 +1198,8 @@ bool SwMailMergeConfigItem::IsAddressFieldsAssigned() const
         if(aItem.bIsColumn)
         {
             OUString sConvertedColumn = aItem.sText;
-            for(sal_uInt32 nColumn = 0;
-                    nColumn < rHeaders.size() && nColumn < sal_uInt32(aAssignment.getLength());
-                                                                                ++nColumn)
+            auto nSize = std::min(sal_uInt32(rHeaders.size()), sal_uInt32(aAssignment.getLength()));
+            for(sal_uInt32 nColumn = 0; nColumn < nSize; ++nColumn)
             {
                 if (rHeaders[nColumn].first == aItem.sText &&
                     !pAssignment[nColumn].isEmpty())
@@ -1274,9 +1256,8 @@ bool SwMailMergeConfigItem::IsGreetingFieldsAssigned() const
         if(aItem.bIsColumn)
         {
             OUString sConvertedColumn = aItem.sText;
-            for(sal_uInt32 nColumn = 0;
-                    nColumn < rHeaders.size() && nColumn < sal_uInt32(aAssignment.getLength());
-                                                                                ++nColumn)
+            auto nSize = std::min(sal_uInt32(rHeaders.size()), sal_uInt32(aAssignment.getLength()));
+            for(sal_uInt32 nColumn = 0; nColumn < nSize; ++nColumn)
             {
                 if (rHeaders[nColumn].first == aItem.sText &&
                     !pAssignment[nColumn].isEmpty())

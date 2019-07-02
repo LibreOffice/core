@@ -652,10 +652,9 @@ bool SwDocShell::ConvertTo( SfxMedium& rMedium )
             uno::Reference< XLibraryContainer > xLibCont(GetBasicContainer(), UNO_QUERY);
             uno::Reference< XNameAccess > xLib;
             Sequence<OUString> aNames = xLibCont->getElementNames();
-            const OUString* pNames = aNames.getConstArray();
-            for(sal_Int32 nLib = 0; nLib < aNames.getLength(); nLib++)
+            for(const OUString& rName : aNames)
             {
-                Any aLib = xLibCont->getByName(pNames[nLib]);
+                Any aLib = xLibCont->getByName(rName);
                 aLib >>= xLib;
                 if(xLib.is())
                 {

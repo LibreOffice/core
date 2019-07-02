@@ -1082,12 +1082,10 @@ void SwXTextDocument::setPagePrintSettings(const Sequence< beans::PropertyValue 
     const SwPagePreviewPrtData* pData = pDocShell->GetDoc()->GetPreviewPrtData();
     if(pData)
         aData = *pData;
-    const beans::PropertyValue* pProperties = aSettings.getConstArray();
-    int nCount = aSettings.getLength();
-    for(int i = 0; i < nCount; i++)
+    for(const beans::PropertyValue& rProperty : aSettings)
     {
-        OUString sName = pProperties[i].Name;
-        const Any& rVal = pProperties[i].Value;
+        OUString sName = rProperty.Name;
+        const Any& rVal = rProperty.Value;
         bool bException;
         sal_uInt32 nVal = lcl_Any_To_ULONG(rVal, bException);
         if( sName == "PageRows" )
@@ -1155,10 +1153,9 @@ void SwXTextDocument::printPages(const Sequence< beans::PropertyValue >& xOption
                                 pDocShell->GetDoc()->GetAttrPool());
     aReq.AppendItem(SfxBoolItem(FN_PRINT_PAGEPREVIEW, true));
 
-    for ( int n = 0; n < xOptions.getLength(); ++n )
+    for ( const beans::PropertyValue &rProp : xOptions )
     {
         // get Property-Value from options
-        const beans::PropertyValue &rProp = xOptions.getConstArray()[n];
         Any aValue( rProp.Value );
 
         // FileName-Property?
@@ -1768,15 +1765,12 @@ Sequence< OUString > SwXTextDocument::getAvailableServiceNames()
     if ( !aServices.hasElements() )
     {
         Sequence< OUString > aRet =  SvxFmMSFactory::getAvailableServiceNames();
-        OUString* pRet = aRet.getArray();
-        for ( sal_Int32 i = 0; i < aRet.getLength(); ++i )
+        auto i = comphelper::findValue(aRet, "com.sun.star.drawing.OLE2Shape");
+        if (i != -1)
         {
-            if ( pRet[i] == "com.sun.star.drawing.OLE2Shape" )
-            {
-                pRet[i] = pRet[aRet.getLength() - 1];
-                aRet.realloc( aRet.getLength() - 1 ); // <pRet> no longer valid.
-                break;
-            }
+            auto nLength = aRet.getLength();
+            aRet[i] = aRet[nLength - 1];
+            aRet.realloc( nLength - 1 );
         }
         Sequence< OUString > aOwn = SwXServiceProvider::GetAllServiceNames();
         aServices = SvxFmMSFactory::concatServiceNames(aRet, aOwn);
@@ -2280,12 +2274,10 @@ PropertyState SAL_CALL SwXTextDocument::getPropertyState( const OUString& rPrope
 Sequence< PropertyState > SAL_CALL SwXTextDocument::getPropertyStates( const Sequence< OUString >& rPropertyNames )
 {
     const sal_Int32 nCount = rPropertyNames.getLength();
-    const OUString * pNames = rPropertyNames.getConstArray();
     Sequence < PropertyState > aRet ( nCount );
-    PropertyState *pState = aRet.getArray();
 
-    for ( sal_Int32 nIndex = 0; nIndex < nCount; nIndex++)
-        pState[nIndex] = getPropertyState( pNames[nIndex] );
+    std::transform(rPropertyNames.begin(), rPropertyNames.end(), aRet.begin(),
+        [this](const OUString& rName) -> PropertyState { return getPropertyState(rName); });
 
     return aRet;
 }
@@ -2342,15 +2334,9 @@ static bool lcl_SeqHasProperty(
     const uno::Sequence< beans::PropertyValue >& rOptions,
     const sal_Char *pPropName )
 {
-    bool bRes = false;
-    const sal_Int32 nLen = rOptions.getLength();
-    const beans::PropertyValue *pProps = rOptions.getConstArray();
-    for (sal_Int32 i = 0;  i < nLen && !bRes;  ++i)
-    {
-        if (pProps[i].Name.equalsAscii( pPropName ))
-            bRes = true;
-    }
-    return bRes;
+    return std::any_of(rOptions.begin(), rOptions.end(),
+        [&pPropName](const beans::PropertyValue& rProp) {
+            return rProp.Name.equalsAscii( pPropName ); });
 }
 
 static bool lcl_GetBoolProperty(
@@ -2358,16 +2344,11 @@ static bool lcl_GetBoolProperty(
     const sal_Char *pPropName )
 {
     bool bRes = false;
-    const sal_Int32 nLen = rOptions.getLength();
-    const beans::PropertyValue *pProps = rOptions.getConstArray();
-    for ( sal_Int32 i = 0;  i < nLen;  ++i )
-    {
-        if ( pProps[i].Name.equalsAscii( pPropName ) )
-        {
-            pProps[i].Value >>= bRes;
-            break;
-        }
-    }
+    auto pOption = std::find_if(rOptions.begin(), rOptions.end(),
+        [&pPropName](const beans::PropertyValue& rProp) {
+            return rProp.Name.equalsAscii( pPropName ); });
+    if (pOption != rOptions.end())
+        pOption->Value >>= bRes;
     return bRes;
 }
 
@@ -2383,16 +2364,10 @@ SfxViewShell * SwXTextDocument::GetRenderView(
     else
     {
         uno::Any aTmp;
-        const sal_Int32 nLen = rOptions.getLength();
-        const beans::PropertyValue *pProps = rOptions.getConstArray();
-        for (sal_Int32 i = 0; i < nLen; ++i)
-        {
-            if ( pProps[i].Name == "View" )
-            {
-                aTmp = pProps[i].Value;
-                break;
-            }
-        }
+        auto pOption = std::find_if(rOptions.begin(), rOptions.end(),
+            [](const beans::PropertyValue& rProp) { return rProp.Name == "View"; });
+        if (pOption != rOptions.end())
+            aTmp = pOption->Value;
 
         uno::Reference< frame::XController > xController;
         if (aTmp >>= xController)
@@ -3460,9 +3435,8 @@ void SwXTextDocument::initializeForTiledRendering(const css::uno::Sequence<css::
     // Tiled rendering defaults.
     SwViewOption aViewOption(*pViewShell->GetViewOptions());
     aViewOption.SetHardBlank(false);
-    for (sal_Int32 i = 0; i < rArguments.getLength(); ++i)
+    for (const beans::PropertyValue& rValue : rArguments)
     {
-        const beans::PropertyValue& rValue = rArguments[i];
         if (rValue.Name == ".uno:HideWhitespace" && rValue.Value.has<bool>())
             aViewOption.SetHideWhitespaceMode(rValue.Value.get<bool>());
         else if (rValue.Name == ".uno:ShowBorderShadow" && rValue.Value.has<bool>())
@@ -4091,13 +4065,9 @@ Sequence< OUString > SwXLinkNameAccessWrapper::getElementNames()
     else
     {
         Sequence< OUString > aOrg = xRealAccess->getElementNames();
-        const OUString* pOrgArr = aOrg.getConstArray();
         aRet.realloc(aOrg.getLength());
-        OUString* pResArr = aRet.getArray();
-        for(long i = 0; i < aOrg.getLength(); i++)
-        {
-            pResArr[i] = pOrgArr[i] + sLinkSuffix;
-        }
+        std::transform(aOrg.begin(), aOrg.end(), aRet.begin(),
+            [this](const OUString& rOrg) -> OUString { return rOrg + sLinkSuffix; });
     }
     return aRet;
 }

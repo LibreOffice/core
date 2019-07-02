@@ -593,27 +593,25 @@ void SAL_CALL SwXTextView::setRubyList(
 
     SwRubyList aList;
 
-    const Sequence<PropertyValue>* pRubyList = rRubyList.getConstArray();
-    for(sal_Int32 nPos = 0; nPos < rRubyList.getLength(); nPos++)
+    for(const Sequence<PropertyValue>& rPropList : rRubyList)
     {
         std::unique_ptr<SwRubyListEntry> pEntry(new SwRubyListEntry);
-        const PropertyValue* pProperties = pRubyList[nPos].getConstArray();
         OUString sTmp;
-        for(sal_Int32 nProp = 0; nProp < pRubyList[nPos].getLength(); nProp++)
+        for(const PropertyValue& rProperty : rPropList)
         {
-            if(pProperties[nProp].Name == UNO_NAME_RUBY_BASE_TEXT)
+            if(rProperty.Name == UNO_NAME_RUBY_BASE_TEXT)
             {
-                pProperties[nProp].Value >>= sTmp;
+                rProperty.Value >>= sTmp;
                 pEntry->SetText(sTmp);
             }
-            else if(pProperties[nProp].Name == UNO_NAME_RUBY_TEXT)
+            else if(rProperty.Name == UNO_NAME_RUBY_TEXT)
             {
-                pProperties[nProp].Value >>= sTmp;
+                rProperty.Value >>= sTmp;
                 pEntry->GetRubyAttr().SetText(sTmp);
             }
-            else if(pProperties[nProp].Name == UNO_NAME_RUBY_CHAR_STYLE_NAME)
+            else if(rProperty.Name == UNO_NAME_RUBY_CHAR_STYLE_NAME)
             {
-                if(pProperties[nProp].Value >>= sTmp)
+                if(rProperty.Value >>= sTmp)
                 {
                     OUString sName;
                     SwStyleNameMapper::FillUIName(sTmp, sName, SwGetPoolIdFromName::ChrFmt );
@@ -625,26 +623,26 @@ void SAL_CALL SwXTextView::setRubyList(
                     pEntry->GetRubyAttr().SetCharFormatId( nPoolId );
                 }
             }
-            else if(pProperties[nProp].Name == UNO_NAME_RUBY_ADJUST)
+            else if(rProperty.Name == UNO_NAME_RUBY_ADJUST)
             {
                 sal_Int16 nTmp = 0;
-                if(pProperties[nProp].Value >>= nTmp)
+                if(rProperty.Value >>= nTmp)
                     pEntry->GetRubyAttr().SetAdjustment(static_cast<css::text::RubyAdjust>(nTmp));
             }
-            else if(pProperties[nProp].Name == UNO_NAME_RUBY_IS_ABOVE)
+            else if(rProperty.Name == UNO_NAME_RUBY_IS_ABOVE)
             {
-                bool bValue = !pProperties[nProp].Value.hasValue() ||
-                    *o3tl::doAccess<bool>(pProperties[nProp].Value);
+                bool bValue = !rProperty.Value.hasValue() ||
+                    *o3tl::doAccess<bool>(rProperty.Value);
                 pEntry->GetRubyAttr().SetPosition(bValue ? 0 : 1);
             }
-            else if(pProperties[nProp].Name == UNO_NAME_RUBY_POSITION)
+            else if(rProperty.Name == UNO_NAME_RUBY_POSITION)
             {
                 sal_Int16 nTmp = 0;
-                if(pProperties[nProp].Value >>= nTmp)
+                if(rProperty.Value >>= nTmp)
                     pEntry->GetRubyAttr().SetPosition( nTmp );
             }
         }
-        aList.insert(aList.begin() + nPos, std::move(pEntry));
+        aList.push_back(std::move(pEntry));
     }
     SwDoc* pDoc = m_pView->GetDocShell()->GetDoc();
     pDoc->SetRubyList( *rSh.GetCursor(), aList );
