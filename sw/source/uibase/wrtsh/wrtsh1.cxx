@@ -1795,6 +1795,8 @@ void SwWrtShell::ChangeHeaderOrFooter(
 
                 bExecute = nResult == RET_YES;
                 StartAllAction();
+                if (nResult == RET_YES)
+                    ToggleHeaderFooterEdit();
             }
             if( bExecute )
             {
