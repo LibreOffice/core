@@ -72,8 +72,7 @@ void Point::dump() const
 } // dgm namespace
 
 DiagramData::DiagramData() :
-    mpFillProperties( new FillProperties ),
-    mnMaxDepth(0)
+    mpFillProperties( new FillProperties )
 {
 }
 
@@ -328,8 +327,6 @@ void Diagram::build(  )
         {
             const sal_Int32 nDepth = calcDepth(elem.second.msSourceId, getData()->getConnections());
             elem.second.mnDepth = nDepth != 0 ? nDepth : -1;
-            if (nDepth > getData()->getMaxDepth())
-                getData()->setMaxDepth(nDepth);
         }
     }
 #ifdef DEBUG_OOX_DIAGRAM
