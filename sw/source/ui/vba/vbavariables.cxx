@@ -32,8 +32,9 @@ static uno::Reference< container::XIndexAccess > createVariablesAccess( const un
     const uno::Sequence< beans::PropertyValue > props = xUserDefined->getPropertyValues();
     sal_Int32 nCount = props.getLength();
     aVariables.reserve( nCount );
-    for( sal_Int32 i=0; i < nCount; i++ )
-        aVariables.push_back( uno::Reference< word::XVariable > ( new SwVbaVariable( xParent, xContext, xUserDefined, props[i].Name ) ) );
+    std::transform(props.begin(), props.end(), std::back_inserter(aVariables),
+        [&xParent, &xContext, &xUserDefined](const beans::PropertyValue& rProp) -> uno::Reference< word::XVariable > {
+            return uno::Reference< word::XVariable > ( new SwVbaVariable( xParent, xContext, xUserDefined, rProp.Name ) ); });
 
     uno::Reference< container::XIndexAccess > xVariables( new XNamedObjectCollectionHelper< word::XVariable >( aVariables ) );
     return xVariables;

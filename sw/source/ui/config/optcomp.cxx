@@ -242,14 +242,10 @@ void SwCompatibilityOptPage::InitControls( const SfxItemSet& rSet )
     SvtCompatibilityEntry aEntry;
     aEntry.setValue<bool>( SvtCompatibilityEntry::Index::ExpandWordSpace, false );
 
-    const sal_Int32 nCount = aList.getLength();
-    for ( sal_Int32 i = 0; i < nCount; ++i )
+    for ( const Sequence< PropertyValue >& rEntry : aList )
     {
-        const Sequence< PropertyValue >& rEntry = aList[i];
-        const sal_Int32 nEntries = rEntry.getLength();
-        for ( sal_Int32 j = 0; j < nEntries; j++ )
+        for ( const PropertyValue& aValue : rEntry )
         {
-            PropertyValue aValue = rEntry[j];
             aEntry.setValue( SvtCompatibilityEntry::getIndex(aValue.Name), aValue.Value );
         }
 

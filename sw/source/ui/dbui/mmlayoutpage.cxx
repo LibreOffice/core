@@ -334,10 +334,9 @@ SwFrameFormat* SwMailMergeLayoutPage::InsertAddressFrame(
             if(aItem.bIsColumn)
             {
                 OUString sConvertedColumn = aItem.sText;
-                for(sal_uInt32 nColumn = 0;
-                        nColumn < rHeaders.size() &&
-                        nColumn < static_cast<sal_uInt32>(aAssignment.getLength());
-                                                                                    ++nColumn)
+                auto nSize = std::min(static_cast<sal_uInt32>(rHeaders.size()),
+                                      static_cast<sal_uInt32>(aAssignment.getLength()));
+                for(sal_uInt32 nColumn = 0; nColumn < nSize; ++nColumn)
                 {
                     if (rHeaders[nColumn].first == aItem.sText &&
                         !pAssignment[nColumn].isEmpty())
@@ -554,10 +553,9 @@ void SwMailMergeLayoutPage::InsertGreeting(SwWrtShell& rShell, SwMailMergeConfig
                         if(aItem.bIsColumn)
                         {
                             OUString sConvertedColumn = aItem.sText;
-                            for(sal_uInt32 nColumn = 0;
-                                    nColumn < rHeaders.size() &&
-                                    nColumn < static_cast<sal_uInt32>(aAssignment.getLength());
-                                                                                                ++nColumn)
+                            auto nSize = std::min(static_cast<sal_uInt32>(rHeaders.size()),
+                                                  static_cast<sal_uInt32>(aAssignment.getLength()));
+                            for(sal_uInt32 nColumn = 0; nColumn < nSize; ++nColumn)
                             {
                                 if (rHeaders[nColumn].first == aItem.sText &&
                                     !pAssignment[nColumn].isEmpty())

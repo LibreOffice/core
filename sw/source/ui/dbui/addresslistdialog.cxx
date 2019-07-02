@@ -99,12 +99,12 @@ static OUString lcl_getFlatURL( uno::Reference<beans::XPropertySet> const & xSou
             {
                 OUString sExtension;
                 OUString sCharSet;
-                for(sal_Int32 nInfo = 0; nInfo < aInfo.getLength(); ++nInfo)
+                for(const auto& rInfo : aInfo)
                 {
-                    if(aInfo[nInfo].Name == "Extension")
-                        aInfo[nInfo].Value >>= sExtension;
-                    else if(aInfo[nInfo].Name == "CharSet")
-                        aInfo[nInfo].Value >>= sCharSet;
+                    if(rInfo.Name == "Extension")
+                        rInfo.Value >>= sExtension;
+                    else if(rInfo.Name == "CharSet")
+                        rInfo.Value >>= sCharSet;
                 }
                 if (sCharSet=="UTF-8")
                 {
@@ -168,17 +168,16 @@ SwAddressListDialog::SwAddressListDialog(SwMailMergeAddressBlockPage* pParent)
     SwDBConfig aDb;
     const OUString sBibliography = aDb.GetBibliographySource().sDataSource;
     uno::Sequence< OUString> aNames = m_xDBContext->getElementNames();
-    const OUString* pNames = aNames.getConstArray();
-    for(sal_Int32 nName = 0; nName < aNames.getLength(); ++nName)
+    for(const OUString& rName : aNames)
     {
-        if ( pNames[nName] == sBibliography )
+        if ( rName == sBibliography )
             continue;
         m_xListLB->append(m_xIter.get());
-        m_xListLB->set_text(*m_xIter, pNames[nName], 0);
+        m_xListLB->set_text(*m_xIter, rName, 0);
         m_aUserData.emplace_back(new AddressUserData_Impl);
         AddressUserData_Impl* pUserData = m_aUserData.back().get();
         m_xListLB->set_id(*m_xIter, OUString::number(reinterpret_cast<sal_Int64>(pUserData)));
-        if (pNames[nName] == rCurrentData.sDataSource)
+        if (rName == rCurrentData.sDataSource)
         {
             m_xListLB->select(*m_xIter);
             m_xListLB->set_text(*m_xIter, rCurrentData.sCommand, 1);
@@ -192,7 +191,7 @@ SwAddressListDialog::SwAddressListDialog(SwMailMergeAddressBlockPage* pParent)
             uno::Reference<beans::XPropertySet> xSourceProperties;
             try
             {
-                m_xDBContext->getByName(pNames[nName]) >>= xSourceProperties;
+                m_xDBContext->getByName(rName) >>= xSourceProperties;
                 pUserData->sURL = lcl_getFlatURL( xSourceProperties );
                 bEnableEdit = !pUserData->sURL.isEmpty() &&
                     SWUnoHelper::UCB_IsFile( pUserData->sURL ) && //#i97577#

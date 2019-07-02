@@ -31,45 +31,44 @@ namespace
 inline bool setFilterPropsFromFormat(sal_Int32 nFormat,
                                      css::uno::Sequence<css::beans::PropertyValue>& rProps)
 {
-    bool bRes = false;
-    for (sal_Int32 index = 0; index < rProps.getLength(); ++index)
+    auto pProp
+        = std::find_if(rProps.begin(), rProps.end(), [](const css::beans::PropertyValue& rProp) {
+              return rProp.Name == "FilterName";
+          });
+    if (pProp != rProps.end())
     {
-        if (rProps[index].Name == "FilterName")
+        switch (nFormat)
         {
-            switch (nFormat)
-            {
-                case ooo::vba::word::WdSaveFormat::wdFormatDocument:
-                    rProps[index].Value <<= OUString("MS Word 97");
-                    break;
-                // Just save all the text formats as "Text"
-                case ooo::vba::word::WdSaveFormat::wdFormatDOSText:
-                case ooo::vba::word::WdSaveFormat::wdFormatDOSTextLineBreaks:
-                case ooo::vba::word::WdSaveFormat::wdFormatEncodedText:
-                case ooo::vba::word::WdSaveFormat::wdFormatText:
-                case ooo::vba::word::WdSaveFormat::wdFormatTextLineBreaks:
-                    rProps[index].Value <<= OUString("Text");
-                    break;
-                case ooo::vba::word::WdSaveFormat::wdFormatFilteredHTML:
-                case ooo::vba::word::WdSaveFormat::wdFormatHTML:
-                    rProps[index].Value <<= OUString("HTML");
-                    break;
-                case ooo::vba::word::WdSaveFormat::wdFormatRTF:
-                    rProps[index].Value <<= OUString("Rich Text Format");
-                    break;
-                case ooo::vba::word::WdSaveFormat::wdFormatTemplate:
-                    rProps[index].Value <<= OUString("MS Word 97 Vorlage");
-                    break;
+            case ooo::vba::word::WdSaveFormat::wdFormatDocument:
+                pProp->Value <<= OUString("MS Word 97");
+                break;
+            // Just save all the text formats as "Text"
+            case ooo::vba::word::WdSaveFormat::wdFormatDOSText:
+            case ooo::vba::word::WdSaveFormat::wdFormatDOSTextLineBreaks:
+            case ooo::vba::word::WdSaveFormat::wdFormatEncodedText:
+            case ooo::vba::word::WdSaveFormat::wdFormatText:
+            case ooo::vba::word::WdSaveFormat::wdFormatTextLineBreaks:
+                pProp->Value <<= OUString("Text");
+                break;
+            case ooo::vba::word::WdSaveFormat::wdFormatFilteredHTML:
+            case ooo::vba::word::WdSaveFormat::wdFormatHTML:
+                pProp->Value <<= OUString("HTML");
+                break;
+            case ooo::vba::word::WdSaveFormat::wdFormatRTF:
+                pProp->Value <<= OUString("Rich Text Format");
+                break;
+            case ooo::vba::word::WdSaveFormat::wdFormatTemplate:
+                pProp->Value <<= OUString("MS Word 97 Vorlage");
+                break;
 
-                // Default to "MS Word 97"
-                default:
-                    rProps[index].Value <<= OUString("MS Word 97");
-                    break;
-            }
-            bRes = true;
-            break;
+            // Default to "MS Word 97"
+            default:
+                pProp->Value <<= OUString("MS Word 97");
+                break;
         }
+        return true;
     }
-    return bRes;
+    return false;
 }
 }
 

@@ -147,9 +147,9 @@ void SwFieldDokInfPage::Reset(const SfxItemSet* )
                         OUString sEntryId(OUString::number(USHRT_MAX));
                         m_xTypeTLB->insert(nullptr, -1, &sText, &sEntryId, nullptr,
                                            nullptr, nullptr, false, xInfo.get());
-                        for (sal_Int32 n=0; n < rProperties.getLength(); n++)
+                        for (const auto& rProperty : rProperties)
                         {
-                            const OUString sEntry = rProperties[n].Name;
+                            const OUString sEntry = rProperty.Name;
 
                             m_xTypeTLB->insert(xInfo.get(), -1, &sEntry, &sId,
                                                nullptr, nullptr, nullptr, false, xEntry.get());

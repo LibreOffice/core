@@ -40,10 +40,8 @@ static uno::Reference< container::XIndexAccess > lcl_getAddinCollection( const u
     if( xSFA->isFolder( aAddinPath ) )
     {
         uno::Sequence< OUString > sEntries = xSFA->getFolderContents( aAddinPath, false );
-        sal_Int32 nEntry = sEntries.getLength();
-        for( sal_Int32 index = 0; index < nEntry; ++index )
+        for( const OUString& sUrl : sEntries )
         {
-            OUString sUrl = sEntries[ index ];
             if( !xSFA->isFolder( sUrl ) && sUrl.endsWithIgnoreAsciiCase( ".dot" ) )
             {
                 aAddins.push_back( uno::Reference< word::XAddin >( new SwVbaAddin( xParent, xContext, sUrl ) ) );

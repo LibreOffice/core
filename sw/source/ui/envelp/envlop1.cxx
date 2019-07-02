@@ -280,10 +280,9 @@ void SwEnvPage::InitDatabaseBox()
     {
         m_xDatabaseLB->clear();
         Sequence<OUString> aDataNames = SwDBManager::GetExistingDatabaseNames();
-        const OUString* pDataNames = aDataNames.getConstArray();
 
-        for (sal_Int32 i = 0; i < aDataNames.getLength(); ++i)
-            m_xDatabaseLB->append_text(pDataNames[i]);
+        for (const OUString& rDataName : aDataNames)
+            m_xDatabaseLB->append_text(rDataName);
 
         sal_Int32 nIdx{ 0 };
         OUString sDBName = m_sActDBName.getToken( 0, DB_DELIM, nIdx );

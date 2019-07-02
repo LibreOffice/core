@@ -39,8 +39,8 @@ static void lcl_FillGreetingsBox(weld::ComboBox& rBox,
                         SwMailMergeConfigItem::Gender eType)
 {
     const Sequence< OUString> rEntries = rConfig.GetGreetings(eType);
-    for(sal_Int32 nEntry = 0; nEntry < rEntries.getLength(); ++nEntry)
-        rBox.append_text(rEntries[nEntry]);
+    for(const auto& rEntry : rEntries)
+        rBox.append_text(rEntry);
     rBox.set_active(rConfig.GetCurrentGreeting(eType));
 }
 
@@ -266,8 +266,8 @@ void SwMailMergeGreetingsPage::ActivatePage()
     {
         Reference < container::XNameAccess> xColAccess = xColsSupp->getColumns();
         Sequence< OUString > aColumns = xColAccess->getElementNames();
-        for(sal_Int32 nName = 0; nName < aColumns.getLength(); ++nName)
-            m_xFemaleColumnLB->append_text(aColumns[nName]);
+        for(const auto& rColumn : aColumns)
+            m_xFemaleColumnLB->append_text(rColumn);
     }
 
     m_xFemaleColumnLB->set_active_text(m_rConfigItem.GetAssignedColumn(MM_PART_GENDER));
@@ -378,8 +378,8 @@ SwMailBodyDialog::SwMailBodyDialog(weld::Window* pParent)
     {
         Reference < container::XNameAccess> xColAccess = xColsSupp->getColumns();
         Sequence< OUString > aColumns = xColAccess->getElementNames();
-        for(sal_Int32 nName = 0; nName < aColumns.getLength(); ++nName)
-            m_xFemaleColumnLB->append_text(aColumns[nName]);
+        for(const auto& rColumn : aColumns)
+            m_xFemaleColumnLB->append_text(rColumn);
     }
 
     m_xFemaleColumnLB->set_active_text(m_rConfigItem.GetAssignedColumn(MM_PART_GENDER));

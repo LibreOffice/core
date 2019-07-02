@@ -76,12 +76,10 @@ SwSelectDBTableDialog::SwSelectDBTableDialog(weld::Window* pParent,
     {
         Reference<XNameAccess> xQueries = xQSupplier->getQueries();
         Sequence<OUString> aQueries = xQueries->getElementNames();
-        const OUString* pQueries = aQueries.getConstArray();
         int nPos = m_xTable->n_children();
-        for (sal_Int32 i = 0; i < aQueries.getLength(); i++)
+        for (const OUString& rQuery : aQueries)
         {
-            OUString sEntry = pQueries[i];
-            m_xTable->append_text(sEntry);
+            m_xTable->append_text(rQuery);
             m_xTable->set_text(nPos, SwResId(ST_QUERY), 1);
             m_xTable->set_id(nPos, OUString::number(1));
             ++nPos;

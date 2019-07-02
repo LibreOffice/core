@@ -187,11 +187,11 @@ void SwMailDispatcherListener_Impl::DeleteAttachments( uno::Reference< mail::XMa
 {
     uno::Sequence< mail::MailAttachment > aAttachments = xMessage->getAttachments();
 
-    for(sal_Int32 nFile = 0; nFile < aAttachments.getLength(); ++nFile)
+    for(const auto& rAttachment : aAttachments)
     {
         try
         {
-            uno::Reference< beans::XPropertySet > xTransferableProperties( aAttachments[nFile].Data, uno::UNO_QUERY_THROW);
+            uno::Reference< beans::XPropertySet > xTransferableProperties( rAttachment.Data, uno::UNO_QUERY_THROW);
             OUString sURL;
             xTransferableProperties->getPropertyValue("URL") >>= sURL;
             if(!sURL.isEmpty())

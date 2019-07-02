@@ -322,18 +322,12 @@ public:
             uno::Sequence< beans::NamedValue > const stats(
                 m_xDocProps->getDocumentStatistics());
 
-            sal_Int32 nLen = stats.getLength();
-            bool bFound = false;
-            for ( sal_Int32 index = 0; index < nLen && !bFound ; ++index )
-            {
-                if ( rPropName == stats[ index ].Name )
-                {
-                    aReturn = stats[ index ].Value;
-                    bFound = true;
-                }
-            }
-            if ( !bFound )
+            auto pStat = std::find_if(stats.begin(), stats.end(),
+                [&rPropName](const beans::NamedValue& rStat) { return rPropName == rStat.Name; });
+            if (pStat == stats.end())
                 throw uno::RuntimeException(); // bad Property
+
+            aReturn = pStat->Value;
         }
         return aReturn;
     }
@@ -343,15 +337,12 @@ public:
         uno::Sequence< beans::NamedValue > stats(
                 m_xDocProps->getDocumentStatistics());
 
-        sal_Int32 nLen = stats.getLength();
-        for ( sal_Int32 index = 0; index < nLen; ++index )
+        auto pStat = std::find_if(stats.begin(), stats.end(),
+            [&rPropName](const beans::NamedValue& rStat) { return rPropName == rStat.Name; });
+        if (pStat != stats.end())
         {
-            if ( rPropName == stats[ index ].Name )
-            {
-                stats[ index ].Value = aValue;
-                m_xDocProps->setDocumentStatistics(stats);
-                break;
-            }
+            pStat->Value = aValue;
+            m_xDocProps->setDocumentStatistics(stats);
         }
     }
 };
@@ -828,11 +819,8 @@ public:
     {
         uno::Sequence< beans::Property > aProps = mxUserDefinedProp->getPropertySetInfo()->getProperties();
         uno::Sequence< OUString > aNames( aProps.getLength() );
-        OUString* pString = aNames.getArray();
-        OUString* pEnd = pString + aNames.getLength();
-        beans::Property* pProp = aProps.getArray();
-        for ( ; pString != pEnd; ++pString, ++pProp )
-            *pString = pProp->Name;
+        std::transform(aProps.begin(), aProps.end(), aNames.begin(),
+            [](const beans::Property& rProp) -> OUString { return rProp.Name; });
         return aNames;
     }
 

@@ -199,28 +199,24 @@ uno::Reference< word::XTabStop > SAL_CALL SwVbaTabStops::Add( float Position, co
     aTab.FillChar = cLeader;
 
     uno::Sequence< style::TabStop > aOldTabs = lcl_getTabStops( mxParaProps );
-    bool bOverWriter = false;
 
-    sal_Int32 nTabs = aOldTabs.getLength();
-    uno::Sequence< style::TabStop > aNewTabs( nTabs + 1 );
-
-    style::TabStop* pOldTab = aOldTabs.getArray();
-    style::TabStop* pNewTab = aNewTabs.getArray();
-    pNewTab[0] = aTab;
-    for (sal_Int32 nIndex = 0; nIndex < nTabs; nIndex++)
-    {
-        if( pOldTab[nIndex].Position == nPosition )
-        {
-            bOverWriter = true;
-            pOldTab[nIndex] = aTab;
-            break;
-        }
-        pNewTab[ nIndex+1 ] = pOldTab[ nIndex ];
-    }
+    style::TabStop* pOldTab = std::find_if(aOldTabs.begin(), aOldTabs.end(),
+        [nPosition](const style::TabStop& rTab) { return rTab.Position == nPosition; });
+    bool bOverWriter = pOldTab != aOldTabs.end();
     if( bOverWriter )
+    {
+        *pOldTab = aTab;
         lcl_setTabStops( mxParaProps, aOldTabs );
+    }
     else
+    {
+        sal_Int32 nTabs = aOldTabs.getLength();
+        uno::Sequence< style::TabStop > aNewTabs( nTabs + 1 );
+
+        aNewTabs[0] = aTab;
+        std::copy(aOldTabs.begin(), aOldTabs.end(), std::next(aNewTabs.begin()));
         lcl_setTabStops( mxParaProps, aNewTabs );
+    }
 
     return uno::Reference< word::XTabStop >( new SwVbaTabStop( this, mxContext ) );
 }
