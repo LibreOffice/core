@@ -143,6 +143,7 @@
 #include <vcl/GraphicNativeMetadata.hxx>
 #include <comphelper/lok.hxx>
 #include <sfx2/classificationhelper.hxx>
+#include <sfx2/sfxdlg.hxx>
 
 #include <memory>
 
@@ -3125,12 +3126,8 @@ bool SwTransferable::PasteUnformatted( SwWrtShell& rSh, TransferableDataHelper& 
     return SwTransferable::PasteFormat( rSh, rData, SotClipboardFormatId::STRING );
 }
 
-bool SwTransferable::PasteSpecial( SwWrtShell& rSh, TransferableDataHelper& rData, SotClipboardFormatId& rFormatUsed )
+void SwTransferable::PrePasteSpecial( SwWrtShell& rSh, TransferableDataHelper& rData, VclPtr<SfxAbstractPasteDialog>& pDlg )
 {
-    bool bRet = false;
-    SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    ScopedVclPtr<SfxAbstractPasteDialog> pDlg(pFact->CreatePasteDialog(rSh.GetView().GetEditWin().GetFrameWeld()));
-
     DataFlavorExVector aFormats( rData.GetDataFlavorExVector() );
     TransferableObjectDescriptor aDesc;
 
@@ -3162,7 +3159,7 @@ bool SwTransferable::PasteSpecial( SwWrtShell& rSh, TransferableDataHelper& rDat
             }
             pDlg->SetObjName( pClipboard->m_aObjDesc.maClassName,
                                 SwResId(pResId) );
-            pDlg->Insert(SotClipboardFormatId::EMBED_SOURCE, OUString());
+            pDlg->Insert( SotClipboardFormatId::EMBED_SOURCE, OUString() );
         }
     }
     else
@@ -3174,9 +3171,9 @@ bool SwTransferable::PasteSpecial( SwWrtShell& rSh, TransferableDataHelper& rDat
         }
 
         if( SwTransferable::TestAllowedFormat( rData, SotClipboardFormatId::EMBED_SOURCE, nDest ))
-            pDlg->Insert(SotClipboardFormatId::EMBED_SOURCE, OUString());
+            pDlg->Insert( SotClipboardFormatId::EMBED_SOURCE, OUString() );
         if( SwTransferable::TestAllowedFormat( rData, SotClipboardFormatId::LINK_SOURCE, nDest ))
-            pDlg->Insert(SotClipboardFormatId::LINK_SOURCE, OUString());
+            pDlg->Insert( SotClipboardFormatId::LINK_SOURCE, OUString() );
     }
 
     if( SwTransferable::TestAllowedFormat( rData, SotClipboardFormatId::LINK, nDest ))
@@ -3184,17 +3181,7 @@ bool SwTransferable::PasteSpecial( SwWrtShell& rSh, TransferableDataHelper& rDat
 
     for( SotClipboardFormatId* pIds = aPasteSpecialIds; *pIds != SotClipboardFormatId::NONE; ++pIds )
         if( SwTransferable::TestAllowedFormat( rData, *pIds, nDest ))
-            pDlg->Insert(*pIds, OUString());
-
-    SotClipboardFormatId nFormat = pDlg->GetFormat( rData.GetTransferable() );
-
-    if( nFormat != SotClipboardFormatId::NONE )
-        bRet = SwTransferable::PasteFormat( rSh, rData, nFormat );
-
-    if ( bRet )
-        rFormatUsed = nFormat;
-
-    return bRet;
+            pDlg->Insert( *pIds, OUString() );
 }
 
 void SwTransferable::FillClipFormatItem( const SwWrtShell& rSh,
