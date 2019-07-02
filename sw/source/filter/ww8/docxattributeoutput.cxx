@@ -5310,34 +5310,8 @@ void DocxAttributeOutput::WritePostponedFormControl(const SdrObject* pObject)
     {
         // gather component properties
 
-        Date aOriginalDate(Date::EMPTY);
-        OUString sOriginalContent, sDateFormat, sAlias;
+        OUString sDateFormat;
         OUString sLocale("en-US");
-        uno::Sequence<beans::PropertyValue> aGrabBag;
-        uno::Reference<beans::XPropertySet> xShapePropertySet(pFormObj->getUnoShape(), uno::UNO_QUERY);
-        uno::Sequence<beans::PropertyValue> aCharFormat;
-        if (xShapePropertySet->getPropertyValue(UNO_NAME_MISC_OBJ_INTEROPGRABBAG) >>= aGrabBag)
-        {
-            for (sal_Int32 i=0; i < aGrabBag.getLength(); ++i)
-            {
-                if (aGrabBag[i].Name == "DateFormat")
-                    aGrabBag[i].Value >>= sDateFormat;
-                else if (aGrabBag[i].Name == "Locale")
-                    aGrabBag[i].Value >>= sLocale;
-                else if (aGrabBag[i].Name == "OriginalContent")
-                    aGrabBag[i].Value >>= sOriginalContent;
-                else if (aGrabBag[i].Name == "OriginalDate")
-                {
-                    css::util::Date aUNODate;
-                    aGrabBag[i].Value >>= aUNODate;
-                    aOriginalDate = aUNODate;
-                }
-                else if (aGrabBag[i].Name == "CharFormat")
-                    aGrabBag[i].Value >>= aCharFormat;
-                else if (aGrabBag[i].Name == "ooxml:CT_SdtPr_alias")
-                    aGrabBag[i].Value >>= sAlias;
-            }
-        }
         uno::Reference<beans::XPropertySet> xPropertySet(xControlModel, uno::UNO_QUERY);
 
         OString sDate;
@@ -5349,17 +5323,8 @@ void DocxAttributeOutput::WritePostponedFormControl(const SdrObject* pObject)
             bHasDate = true;
             Date aDate(aUNODate.Day, aUNODate.Month, aUNODate.Year);
             sDate = DateToOString(aDate);
-
-            if (aOriginalDate == aDate)
-            {
-                aContentText = sOriginalContent;
-                // sDateFormat was extracted from the grab bag
-            }
-            else
-            {
-                aContentText = OUString::createFromAscii(DateToDDMMYYYYOString(aDate).getStr());
-                sDateFormat = "dd/MM/yyyy";
-            }
+            aContentText = OUString::createFromAscii(DateToDDMMYYYYOString(aDate).getStr());
+            sDateFormat = "dd/MM/yyyy";
         }
         else
         {
@@ -5374,11 +5339,6 @@ void DocxAttributeOutput::WritePostponedFormControl(const SdrObject* pObject)
 
         m_pSerializer->startElementNS(XML_w, XML_sdt, FSEND);
         m_pSerializer->startElementNS(XML_w, XML_sdtPr, FSEND);
-
-        if (!sAlias.isEmpty())
-            m_pSerializer->singleElementNS(XML_w, XML_alias,
-                                           FSNS(XML_w, XML_val), OUStringToOString(sAlias, RTL_TEXTENCODING_UTF8),
-                                           FSEND);
 
         if (bHasDate)
             m_pSerializer->startElementNS(XML_w, XML_date,
@@ -5407,12 +5367,6 @@ void DocxAttributeOutput::WritePostponedFormControl(const SdrObject* pObject)
 
         m_pSerializer->startElementNS(XML_w, XML_sdtContent, FSEND);
         m_pSerializer->startElementNS(XML_w, XML_r, FSEND);
-
-        if (aCharFormat.hasElements())
-        {
-            m_pTableStyleExport->SetSerializer(m_pSerializer);
-            m_pTableStyleExport->CharFormat(aCharFormat);
-        }
 
         RunText(aContentText);
         m_pSerializer->endElementNS(XML_w, XML_r);
@@ -9158,28 +9112,6 @@ void DocxAttributeOutput::ParaGrabBag(const SfxGrabBagItem& rItem)
                 }
                 else if (aPropertyValue.Name == "ooxml:CT_SdtPr_id")
                     m_bParagraphSdtHasId = true;
-                else if (aPropertyValue.Name == "ooxml:CT_SdtPr_date")
-                {
-                    m_nParagraphSdtPrToken = FSNS(XML_w, XML_date);
-                    uno::Sequence<beans::PropertyValue> aGrabBag = aPropertyValue.Value.get< uno::Sequence<beans::PropertyValue> >();
-                    for (sal_Int32 j=0; j < aGrabBag.getLength(); ++j)
-                    {
-                        OString sValue = OUStringToOString(aGrabBag[j].Value.get<OUString>(), RTL_TEXTENCODING_UTF8);
-
-                        if (aGrabBag[j].Name == "ooxml:CT_SdtDate_fullDate")
-                            AddToAttrList(m_pParagraphSdtPrTokenAttributes, FSNS(XML_w, XML_fullDate), sValue.getStr());
-                        else if (aGrabBag[j].Name == "ooxml:CT_SdtDate_dateFormat")
-                            AddToAttrList(m_pParagraphSdtPrTokenChildren, FSNS(XML_w, XML_dateFormat), sValue.getStr());
-                        else if (aGrabBag[j].Name == "ooxml:CT_SdtDate_lid")
-                            AddToAttrList(m_pParagraphSdtPrTokenChildren, FSNS(XML_w, XML_lid), sValue.getStr());
-                        else if (aGrabBag[j].Name == "ooxml:CT_SdtDate_storeMappedDataAs")
-                            AddToAttrList(m_pParagraphSdtPrTokenChildren, FSNS(XML_w, XML_storeMappedDataAs), sValue.getStr());
-                        else if (aGrabBag[j].Name == "ooxml:CT_SdtDate_calendar")
-                            AddToAttrList(m_pParagraphSdtPrTokenChildren, FSNS(XML_w, XML_calendar), sValue.getStr());
-                        else
-                            SAL_WARN("sw.ww8", "DocxAttributeOutput::ParaGrabBag: unhandled SdtPr / ooxml:CT_SdtPr_date grab bag property " << aGrabBag[j].Name);
-                    }
-                }
                 else
                     SAL_WARN("sw.ww8", "DocxAttributeOutput::ParaGrabBag: unhandled SdtPr grab bag property " << aPropertyValue.Name);
             }
