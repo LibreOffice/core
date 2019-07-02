@@ -132,9 +132,9 @@ void SAL_CALL SfxStatusListener::disposing( const EventObject& Source )
 {
     SolarMutexGuard aGuard;
 
-    if ( Source.Source == Reference< XInterface >( m_xDispatch, UNO_QUERY ))
+    if ( Source.Source == Reference< XInterface >( m_xDispatch ))
         m_xDispatch.clear();
-    else if ( Source.Source == Reference< XInterface >( m_xDispatchProvider, UNO_QUERY ))
+    else if ( Source.Source == Reference< XInterface >( m_xDispatchProvider ))
         m_xDispatchProvider.clear();
 }
 

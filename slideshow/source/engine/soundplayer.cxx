@@ -104,9 +104,8 @@ namespace slideshow
                     mpMediaTempFile = rMediaFileManager.getMediaTempFile(rSoundURL);
                 }
                 const INetURLObject aURL( mpMediaTempFile ? mpMediaTempFile->m_TempFileURL : rSoundURL );
-                mxPlayer.set( avmedia::MediaWindow::createPlayer(
-                                aURL.GetMainURL( INetURLObject::DecodeMechanism::Unambiguous ), ""/*TODO!*/ ),
-                                uno::UNO_QUERY);
+                mxPlayer = avmedia::MediaWindow::createPlayer(
+                                aURL.GetMainURL( INetURLObject::DecodeMechanism::Unambiguous ), ""/*TODO!*/ );
             }
             catch( uno::RuntimeException& )
             {

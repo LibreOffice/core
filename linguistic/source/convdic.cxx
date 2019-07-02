@@ -257,8 +257,7 @@ void ConvDic::Save()
         xSaxWriter->setOutputStream( xStream->getOutputStream() );
 
         // prepare arguments (prepend doc handler to given arguments)
-        uno::Reference< xml::sax::XDocumentHandler > xDocHandler( xSaxWriter, UNO_QUERY );
-        rtl::Reference<ConvDicXMLExport> pExport = new ConvDicXMLExport( *this, aMainURL, xDocHandler );
+        rtl::Reference<ConvDicXMLExport> pExport = new ConvDicXMLExport( *this, aMainURL, xSaxWriter );
         bool bRet = pExport->Export();     // write entries to file
         DBG_ASSERT( !pStream->GetError(), "I/O error while writing to stream" );
         if (bRet)

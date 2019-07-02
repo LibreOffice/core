@@ -125,8 +125,8 @@ void setLabelPosition(const css::uno::Reference<css::frame::XModel>& xModel,
 bool isReverse(const css::uno::Reference<css::frame::XModel>& xModel,
         const OUString& rCID)
 {
-    css::uno::Reference< css::chart2::XAxis > xAxis(
-        ObjectIdentifier::getAxisForCID(rCID, xModel), uno::UNO_QUERY );
+    css::uno::Reference< css::chart2::XAxis > xAxis =
+        ObjectIdentifier::getAxisForCID(rCID, xModel);
 
     if (!xAxis.is())
         return false;
@@ -139,8 +139,8 @@ bool isReverse(const css::uno::Reference<css::frame::XModel>& xModel,
 void setReverse(const css::uno::Reference<css::frame::XModel>& xModel,
         const OUString& rCID, bool bReverse)
 {
-    css::uno::Reference< css::chart2::XAxis > xAxis(
-        ObjectIdentifier::getAxisForCID(rCID, xModel), uno::UNO_QUERY );
+    css::uno::Reference< css::chart2::XAxis > xAxis =
+        ObjectIdentifier::getAxisForCID(rCID, xModel);
 
     if (!xAxis.is())
         return;

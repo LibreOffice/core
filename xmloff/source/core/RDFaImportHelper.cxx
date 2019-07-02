@@ -295,12 +295,11 @@ RDFaInserter::MakeResource( OUString const & i_rResource)
         OUString name( i_rResource.copy(2) );
         const uno::Reference< rdf::XBlankNode > xBNode( LookupBlankNode(name) );
         SAL_WARN_IF(!xBNode.is(), "xmloff.core", "no blank node?");
-        return uno::Reference<rdf::XResource>( xBNode, uno::UNO_QUERY);
+        return xBNode;
     }
     else
     {
-        return uno::Reference<rdf::XResource>( MakeURI( i_rResource ),
-            uno::UNO_QUERY);
+        return MakeURI( i_rResource );
     }
 }
 

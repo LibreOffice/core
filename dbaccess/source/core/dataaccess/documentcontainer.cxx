@@ -210,7 +210,7 @@ Reference< XInterface > SAL_CALL ODocumentContainer::createInstanceWithArguments
         if ( bNew )
         {
             sPersistentName = "Obj" + OUString::number(rDefinitions.size() + 1);
-            Reference<XNameAccess> xElements(getContainerStorage(),UNO_QUERY);
+            Reference<XNameAccess> xElements = getContainerStorage();
             if ( xElements.is() )
                 sPersistentName = ::dbtools::createUniqueName(xElements,sPersistentName);
 

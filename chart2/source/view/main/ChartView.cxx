@@ -1151,7 +1151,7 @@ void ChartView::getMetaFile( const uno::Reference< io::XOutputStream >& xOutStre
     aFilterData[2].Value <<= nVersion;
 
     aFilterData[3].Name = "CurrentPage";
-    aFilterData[3].Value <<= uno::Reference< uno::XInterface >( m_xDrawPage, uno::UNO_QUERY );
+    aFilterData[3].Value <<= uno::Reference< uno::XInterface >( m_xDrawPage );
 
     //#i75867# poor quality of ole's alternative view with 3D scenes and zoomfactors besides 100%
     aFilterData[4].Name = "ScaleXNumerator";

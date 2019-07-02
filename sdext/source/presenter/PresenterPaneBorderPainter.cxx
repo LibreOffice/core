@@ -605,7 +605,7 @@ void PresenterPaneBorderPainter::Renderer::PaintBitmap(
     if (rpBitmap->mnWidth<=0 || rpBitmap->mnHeight<=0)
         return;
 
-    Reference<rendering::XBitmap> xBitmap (rpBitmap->GetNormalBitmap(), UNO_QUERY);
+    Reference<rendering::XBitmap> xBitmap = rpBitmap->GetNormalBitmap();
     if ( ! xBitmap.is())
         return;
 

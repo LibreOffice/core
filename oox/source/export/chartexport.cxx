@@ -400,7 +400,7 @@ OUString ChartExport::parseFormula( const OUString& rRange )
 {
     OUString aResult;
     Reference< XFormulaParser > xParser;
-    uno::Reference< lang::XMultiServiceFactory > xSF( GetFB()->getModelFactory(), uno::UNO_QUERY );
+    uno::Reference< lang::XMultiServiceFactory > xSF = GetFB()->getModelFactory();
     if( xSF.is() )
     {
         try
@@ -639,7 +639,7 @@ void ChartExport::exportChartSpace( const Reference< css::chart::XChartDocument 
     // TODO: style
     // TODO: text properties
     // TODO: shape properties
-    Reference< XPropertySet > xPropSet( xChartDoc->getArea(), uno::UNO_QUERY );
+    Reference< XPropertySet > xPropSet = xChartDoc->getArea();
     if( xPropSet.is() )
         exportShapeProps( xPropSet );
 
@@ -746,7 +746,7 @@ void ChartExport::exportChart( const Reference< css::chart::XChartDocument >& xC
         exportView3D();
 
         // floor
-        Reference< beans::XPropertySet > xFloor( mxNewDiagram->getFloor(), uno::UNO_QUERY );
+        Reference< beans::XPropertySet > xFloor = mxNewDiagram->getFloor();
         if( xFloor.is() )
         {
             pFS->startElement(FSNS(XML_c, XML_floor));
@@ -756,7 +756,7 @@ void ChartExport::exportChart( const Reference< css::chart::XChartDocument >& xC
 
         // LibreOffice doesn't distinguish between sideWall and backWall (both are using the same color).
         // It is controlled by the same Wall property.
-        Reference< beans::XPropertySet > xWall( mxNewDiagram->getWall(), uno::UNO_QUERY );
+        Reference< beans::XPropertySet > xWall = mxNewDiagram->getWall();
         if( xWall.is() )
         {
             // sideWall
@@ -1139,7 +1139,7 @@ void ChartExport::exportPlotArea( const Reference< css::chart::XChartDocument >&
     // We cannot write Wall attributes into Plot Area for 3D charts, because Wall us used as background wall.
     if( !mbIs3DChart && xWallFloorSupplier.is() )
     {
-        Reference< beans::XPropertySet > xWallPropSet( xWallFloorSupplier->getWall(), uno::UNO_QUERY );
+        Reference< beans::XPropertySet > xWallPropSet = xWallFloorSupplier->getWall();
         if( xWallPropSet.is() )
         {
             uno::Any aAny = xWallPropSet->getPropertyValue("LineStyle");
@@ -2376,11 +2376,11 @@ void ChartExport::exportAxis(const AxisIdPair& rAxisIdPair)
             if( xAxisXSupp.is())
                 xAxisProp = xAxisXSupp->getXAxis();
             if( bHasXAxisTitle )
-                xAxisTitle.set( xAxisXSupp->getXAxisTitle(), uno::UNO_QUERY );
+                xAxisTitle = xAxisXSupp->getXAxisTitle();
             if( bHasXAxisMajorGrid )
-                xMajorGrid.set( xAxisXSupp->getXMainGrid(), uno::UNO_QUERY );
+                xMajorGrid = xAxisXSupp->getXMainGrid();
             if( bHasXAxisMinorGrid )
-                xMinorGrid.set( xAxisXSupp->getXHelpGrid(), uno::UNO_QUERY );
+                xMinorGrid = xAxisXSupp->getXHelpGrid();
 
             sal_Int32 eChartType = getChartType();
             nAxisType = getXAxisType(eChartType);
@@ -2394,11 +2394,11 @@ void ChartExport::exportAxis(const AxisIdPair& rAxisIdPair)
             if( xAxisYSupp.is())
                 xAxisProp = xAxisYSupp->getYAxis();
             if( bHasYAxisTitle )
-                xAxisTitle.set( xAxisYSupp->getYAxisTitle(), uno::UNO_QUERY );
+                xAxisTitle = xAxisYSupp->getYAxisTitle();
             if( bHasYAxisMajorGrid )
-                xMajorGrid.set( xAxisYSupp->getYMainGrid(), uno::UNO_QUERY );
+                xMajorGrid = xAxisYSupp->getYMainGrid();
             if( bHasYAxisMinorGrid )
-                xMinorGrid.set( xAxisYSupp->getYHelpGrid(), uno::UNO_QUERY );
+                xMinorGrid = xAxisYSupp->getYHelpGrid();
 
             nAxisType = XML_valAx;
             // FIXME: axPos, need to check axis direction
@@ -2411,11 +2411,11 @@ void ChartExport::exportAxis(const AxisIdPair& rAxisIdPair)
             if( xAxisZSupp.is())
                 xAxisProp = xAxisZSupp->getZAxis();
             if( bHasZAxisTitle )
-                xAxisTitle.set( xAxisZSupp->getZAxisTitle(), uno::UNO_QUERY );
+                xAxisTitle = xAxisZSupp->getZAxisTitle();
             if( bHasZAxisMajorGrid )
-                xMajorGrid.set( xAxisZSupp->getZMainGrid(), uno::UNO_QUERY );
+                xMajorGrid = xAxisZSupp->getZMainGrid();
             if( bHasZAxisMinorGrid )
-                xMinorGrid.set( xAxisZSupp->getZHelpGrid(), uno::UNO_QUERY );
+                xMinorGrid = xAxisZSupp->getZHelpGrid();
 
             sal_Int32 eChartType = getChartType( );
             if( (eChartType == chart::TYPEID_SCATTER)
@@ -2437,7 +2437,7 @@ void ChartExport::exportAxis(const AxisIdPair& rAxisIdPair)
             if( bHasSecondaryXAxisTitle )
             {
                 Reference< css::chart::XSecondAxisTitleSupplier > xAxisSupp( mxDiagram, uno::UNO_QUERY );
-                xAxisTitle.set( xAxisSupp->getSecondXAxisTitle(), uno::UNO_QUERY );
+                xAxisTitle = xAxisSupp->getSecondXAxisTitle();
             }
 
             sal_Int32 eChartType = getChartType();
@@ -2454,7 +2454,7 @@ void ChartExport::exportAxis(const AxisIdPair& rAxisIdPair)
             if( bHasSecondaryYAxisTitle )
             {
                 Reference< css::chart::XSecondAxisTitleSupplier > xAxisSupp( mxDiagram, uno::UNO_QUERY );
-                xAxisTitle.set( xAxisSupp->getSecondYAxisTitle(), uno::UNO_QUERY );
+                xAxisTitle = xAxisSupp->getSecondYAxisTitle();
             }
 
             nAxisType = XML_valAx;

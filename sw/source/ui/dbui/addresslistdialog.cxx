@@ -295,8 +295,7 @@ IMPL_LINK_NOARG(SwAddressListDialog, CreateHdl_Impl, weld::Button&, void)
         const OUString sURL = aDlg.GetURL();
         try
         {
-            uno::Reference<XSingleServiceFactory> xFact( m_xDBContext, UNO_QUERY);
-            uno::Reference<XInterface> xNewInstance = xFact->createInstance();
+            uno::Reference<XInterface> xNewInstance = m_xDBContext->createInstance();
             INetURLObject aURL( sURL );
             const OUString sNewName = aURL.getBase();
             //find a unique name if sNewName already exists
@@ -342,8 +341,7 @@ IMPL_LINK_NOARG(SwAddressListDialog, CreateHdl_Impl, weld::Button&, void)
             }
             xStore->storeAsURL(sTmpName, Sequence< PropertyValue >());
 
-            uno::Reference<XNamingService> xNaming(m_xDBContext, UNO_QUERY);
-            xNaming->registerObject( sFind, xNewInstance );
+            m_xDBContext->registerObject( sFind, xNewInstance );
             //now insert the new source into the ListBox
             m_xListLB->append(m_xIter.get());
             m_xListLB->set_text(*m_xIter, sFind, 0);
@@ -449,7 +447,7 @@ void SwAddressListDialog::DetectTablesAndQueries(
             pUserData->xSource.set(xComplConnection, UNO_QUERY);
 
             uno::Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
-            uno::Reference< XInteractionHandler > xHandler( InteractionHandler::createWithParent(xContext, nullptr), UNO_QUERY );
+            uno::Reference< XInteractionHandler > xHandler = InteractionHandler::createWithParent(xContext, nullptr);
             pUserData->xConnection = SharedConnection( xComplConnection->connectWithCompletion( xHandler ) );
         }
         if(pUserData->xConnection.is())

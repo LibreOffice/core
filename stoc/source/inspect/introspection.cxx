@@ -813,13 +813,13 @@ void ImplIntrospectionAccess::cacheXNameContainer()
     if (mpStaticImpl->mbNameContainer)
     {
         xNameContainer.set( mxIface, UNO_QUERY );
-        xNameReplace.set( xNameContainer, UNO_QUERY );
-        xNameAccess.set( xNameContainer, UNO_QUERY );
+        xNameReplace = xNameContainer;
+        xNameAccess = xNameContainer;
     }
     else if (mpStaticImpl->mbNameReplace)
     {
         xNameReplace.set( mxIface, UNO_QUERY );
-        xNameAccess.set( xNameReplace, UNO_QUERY );
+        xNameAccess = xNameReplace;
     }
     else if (mpStaticImpl->mbNameAccess)
     {
@@ -881,13 +881,13 @@ void ImplIntrospectionAccess::cacheXIndexContainer()
     if (mpStaticImpl->mbIndexContainer)
     {
         xIndexContainer.set( mxIface, UNO_QUERY );
-        xIndexReplace.set( xIndexContainer, UNO_QUERY );
-        xIndexAccess.set( xIndexContainer, UNO_QUERY );
+        xIndexReplace = xIndexContainer;
+        xIndexAccess = xIndexContainer;
     }
     else if (mpStaticImpl->mbIndexReplace)
     {
         xIndexReplace.set( mxIface, UNO_QUERY );
-        xIndexAccess.set( xIndexReplace, UNO_QUERY );
+        xIndexAccess = xIndexReplace;
     }
     else if (mpStaticImpl->mbIndexAccess)
     {

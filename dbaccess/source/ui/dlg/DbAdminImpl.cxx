@@ -238,7 +238,7 @@ bool ODbDataSourceAdministrationHelper::getCurrentSettings(Sequence< PropertyVal
             if ( !xHandler.is() )
             {
                 // instantiate the default SDB interaction handler
-                xHandler.set( task::InteractionHandler::createWithParent(m_xContext, nullptr), UNO_QUERY );
+                xHandler = task::InteractionHandler::createWithParent(m_xContext, nullptr);
             }
 
             OUString sName = pName ? pName->GetValue() : OUString();

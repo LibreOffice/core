@@ -2069,16 +2069,12 @@ void ExtensionsTabPage::dispose()
 
     if ( m_xPage.is() )
     {
-        Reference< XComponent > xComponent( m_xPage, UNO_QUERY );
-        if ( xComponent.is() )
+        try
         {
-            try
-            {
-                xComponent->dispose();
-            }
-            catch ( const Exception & )
-            {
-            }
+            m_xPage->dispose();
+        }
+        catch ( const Exception & )
+        {
         }
         m_xPage.clear();
     }
@@ -2101,9 +2097,9 @@ void ExtensionsTabPage::CreateDialogWithHandler()
         {
             SetStyle( GetStyle() | WB_DIALOGCONTROL | WB_CHILDDLGCTRL );
             Reference< awt::XWindowPeer > xParent( VCLUnoHelper::GetInterface( this ), UNO_QUERY );
-            m_xPage.set(
+            m_xPage =
                 m_xWinProvider->createContainerWindow(
-                    m_sPageURL, OUString(), xParent, m_xEventHdl ), UNO_QUERY );
+                    m_sPageURL, OUString(), xParent, m_xEventHdl );
 
             Reference< awt::XControl > xPageControl( m_xPage, UNO_QUERY );
             if ( xPageControl.is() )

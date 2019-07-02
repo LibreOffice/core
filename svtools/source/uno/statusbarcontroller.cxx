@@ -184,7 +184,7 @@ void SAL_CALL StatusbarController::update()
 // XComponent
 void SAL_CALL StatusbarController::dispose()
 {
-    Reference< XComponent > xThis( static_cast< OWeakObject* >(this), UNO_QUERY );
+    Reference< XComponent > xThis = this;
 
     {
         SolarMutexGuard aSolarMutexGuard;
@@ -196,7 +196,7 @@ void SAL_CALL StatusbarController::dispose()
     m_aListenerContainer.disposeAndClear( aEvent );
 
     SolarMutexGuard aSolarMutexGuard;
-    Reference< XStatusListener > xStatusListener( static_cast< OWeakObject* >( this ), UNO_QUERY );
+    Reference< XStatusListener > xStatusListener = this;
     Reference< XURLTransformer > xURLTransformer = getURLTransformer();
     css::util::URL aTargetURL;
     for (auto const& listener : m_aListenerMap)
@@ -369,7 +369,7 @@ void StatusbarController::addStatusListener( const OUString& aCommandURL )
                 xURLTransformer->parseStrict( aTargetURL );
                 xDispatch = xDispatchProvider->queryDispatch( aTargetURL, OUString(), 0 );
 
-                xStatusListener.set( static_cast< OWeakObject* >( this ), UNO_QUERY );
+                xStatusListener = this;
                 URLToDispatchMap::iterator aIter = m_aListenerMap.find( aCommandURL );
                 if ( aIter != m_aListenerMap.end() )
                 {
@@ -417,7 +417,7 @@ void StatusbarController::bindListener()
         Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
         if ( m_xContext.is() && xDispatchProvider.is() )
         {
-            xStatusListener.set( static_cast< OWeakObject* >( this ), UNO_QUERY );
+            xStatusListener = this;
             for (auto & listener : m_aListenerMap)
             {
                 Reference< XURLTransformer > xURLTransformer = getURLTransformer();

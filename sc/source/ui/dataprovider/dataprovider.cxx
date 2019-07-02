@@ -32,7 +32,7 @@ std::unique_ptr<SvStream> DataProvider::FetchStreamFromURL(const OUString& rURL,
 {
     try
     {
-        uno::Reference< ucb::XSimpleFileAccess3 > xFileAccess( ucb::SimpleFileAccess::create( comphelper::getProcessComponentContext() ), uno::UNO_QUERY );
+        uno::Reference< ucb::XSimpleFileAccess3 > xFileAccess = ucb::SimpleFileAccess::create( comphelper::getProcessComponentContext() );
 
         uno::Reference< io::XInputStream > xStream = xFileAccess->openFileRead( rURL );
 

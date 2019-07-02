@@ -373,7 +373,7 @@ DialogModel::DialogModel(
     const Reference< uno::XComponentContext > & xContext ) :
         m_xChartDocument( xChartDocument ),
         m_xContext( xContext ),
-        m_aTimerTriggeredControllerLock( uno::Reference< frame::XModel >( m_xChartDocument, uno::UNO_QUERY ) )
+        m_aTimerTriggeredControllerLock( m_xChartDocument )
 {
 }
 
@@ -403,8 +403,7 @@ std::shared_ptr< RangeSelectionHelper > const &
 
 Reference< frame::XModel > DialogModel::getChartModel() const
 {
-    Reference< frame::XModel > xResult( m_xChartDocument, uno::UNO_QUERY );
-    return xResult;
+    return m_xChartDocument;
 }
 
 Reference< data::XDataProvider > DialogModel::getDataProvider() const
@@ -545,7 +544,7 @@ void DialogModel::moveSeries(
     MoveDirection eDirection )
 {
     m_aTimerTriggeredControllerLock.startTimer();
-    ControllerLockGuardUNO aLockedControllers( Reference< frame::XModel >( m_xChartDocument, uno::UNO_QUERY ) );
+    ControllerLockGuardUNO aLockedControllers( m_xChartDocument );
 
     Reference< XDiagram > xDiagram( m_xChartDocument->getFirstDiagram());
     DiagramHelper::moveSeries( xDiagram, xSeries, eDirection==MoveDirection::Up );
@@ -557,7 +556,7 @@ Reference< chart2::XDataSeries > DialogModel::insertSeriesAfter(
     bool bCreateDataCachedSequences /* = false */ )
 {
     m_aTimerTriggeredControllerLock.startTimer();
-    ControllerLockGuardUNO aLockedControllers( Reference< frame::XModel >( m_xChartDocument, uno::UNO_QUERY ) );
+    ControllerLockGuardUNO aLockedControllers( m_xChartDocument );
     Reference< XDataSeries > xNewSeries;
 
     try
@@ -602,7 +601,7 @@ void DialogModel::deleteSeries(
     const Reference< XChartType > & xChartType )
 {
     m_aTimerTriggeredControllerLock.startTimer();
-    ControllerLockGuardUNO aLockedControllers( Reference< frame::XModel >( m_xChartDocument, uno::UNO_QUERY ) );
+    ControllerLockGuardUNO aLockedControllers( m_xChartDocument );
 
     DataSeriesHelper::deleteSeries( xSeries, xChartType );
 }
@@ -703,7 +702,7 @@ void DialogModel::setData(
     const Sequence< beans::PropertyValue > & rArguments )
 {
     m_aTimerTriggeredControllerLock.startTimer();
-    ControllerLockGuardUNO aLockedControllers( Reference< frame::XModel >( m_xChartDocument, uno::UNO_QUERY ) );
+    ControllerLockGuardUNO aLockedControllers( m_xChartDocument );
 
     Reference< data::XDataProvider > xDataProvider( getDataProvider());
     if( ! xDataProvider.is() ||

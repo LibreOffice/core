@@ -140,13 +140,13 @@ void PresenterPane::CreateCanvases (
     mxBorderCanvas = mxPresenterHelper->createSharedCanvas(
         rxParentCanvas,
         mxParentWindow,
-        Reference<rendering::XCanvas>(rxParentCanvas, UNO_QUERY),
+        rxParentCanvas,
         mxParentWindow,
         mxBorderWindow);
     mxContentCanvas = mxPresenterHelper->createSharedCanvas(
         rxParentCanvas,
         mxParentWindow,
-        Reference<rendering::XCanvas>(rxParentCanvas, UNO_QUERY),
+        rxParentCanvas,
         mxParentWindow,
         mxContentWindow);
 

@@ -313,9 +313,8 @@ OUString AccessibleControlShape::CreateAccessibleBaseName()
             break;
         default:
             sName = "UnknownAccessibleControlShape";
-            Reference< XShapeDescriptor > xDescriptor (mxShape, UNO_QUERY);
-            if (xDescriptor.is())
-                sName += ": " + xDescriptor->getShapeType();
+            if (mxShape.is())
+                sName += ": " + mxShape->getShapeType();
     }
 
     return sName;
@@ -345,11 +344,10 @@ OUString
 
         default:
             aDG.Initialize ("Unknown accessible control shape");
-            Reference< XShapeDescriptor > xDescriptor (mxShape, UNO_QUERY);
-            if (xDescriptor.is())
+            if (mxShape.is())
             {
                 aDG.AppendString ("service name=");
-                aDG.AppendString (xDescriptor->getShapeType());
+                aDG.AppendString (mxShape->getShapeType());
             }
     }
 
@@ -832,8 +830,8 @@ void SAL_CALL AccessibleControlShape::elementInserted( const css::container::Con
 
     ensureControlModelAccess();
 
-    Reference< XInterface > xNewNormalized( xControl->getModel(), UNO_QUERY );
-    Reference< XInterface > xMyModelNormalized( m_xControlModel, UNO_QUERY );
+    Reference< XInterface > xNewNormalized = xControl->getModel();
+    Reference< XInterface > xMyModelNormalized = m_xControlModel;
     if ( xNewNormalized.get() && xMyModelNormalized.get() )
     {
         // now finally the control for the model we're responsible for has been inserted into the container

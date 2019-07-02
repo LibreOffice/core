@@ -1902,8 +1902,7 @@ void XMLParaContext::EndElement()
         if( xIdCursor.is() )
         {
             xIdCursor->gotoRange( xEnd, true );
-            GetImport().getInterfaceToIdentifierMapper().registerReference(
-                m_sXmlId, Reference<XInterface>( xIdCursor, UNO_QUERY ));
+            GetImport().getInterfaceToIdentifierMapper().registerReference(m_sXmlId, xIdCursor);
         }
     }
 
@@ -2120,7 +2119,7 @@ void XMLParaContext::EndElement()
                             if ( TextContentAnchorType_AT_CHARACTER == eAnchorType )
                             {
                                 // set anchor position for at-character anchored objects
-                                Reference<XTextRange> xRange(xAttrCursor, UNO_QUERY);
+                                Reference<XTextRange> xRange(xAttrCursor);
                                 xPropSet->setPropertyValue("TextRange", Any(xRange));
                             }
                         }
@@ -2148,7 +2147,7 @@ void XMLParaContext::EndElement()
                         if ( TextContentAnchorType_AT_CHARACTER == eAnchorType )
                         {
                             // set anchor position for at-character anchored objects
-                            Reference<XTextRange> xRange(xAttrCursor, UNO_QUERY);
+                            Reference<XTextRange> xRange(xAttrCursor);
                             xPropSet->setPropertyValue("TextRange", Any(xRange));
                         }
                     }

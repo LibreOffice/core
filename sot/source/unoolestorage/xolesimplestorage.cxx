@@ -375,8 +375,7 @@ uno::Any SAL_CALL OLESimpleStorage::getByName( const OUString& aName )
 
     uno::Any aResult;
 
-    uno::Reference< io::XStream > xTempFile(
-        io::TempFile::create(m_xContext), uno::UNO_QUERY );
+    uno::Reference< io::XStream > xTempFile = io::TempFile::create(m_xContext);
     uno::Reference< io::XSeekable > xSeekable( xTempFile, uno::UNO_QUERY_THROW );
     uno::Reference< io::XOutputStream > xOutputStream = xTempFile->getOutputStream();
     uno::Reference< io::XInputStream > xInputStream = xTempFile->getInputStream();

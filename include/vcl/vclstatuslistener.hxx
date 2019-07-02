@@ -55,7 +55,7 @@ VclStatusListener<T>::VclStatusListener(T* widget, const OUString& aCommand) {
 
     css::uno::Reference<css::frame::XFrame> xFrame(xDesktop->getActiveFrame());
     if (!xFrame.is())
-        xFrame = css::uno::Reference<css::frame::XFrame>(xDesktop, css::uno::UNO_QUERY);
+        xFrame = xDesktop;
 
     mxFrame = xFrame;
 

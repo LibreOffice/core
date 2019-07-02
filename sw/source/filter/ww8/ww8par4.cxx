@@ -210,7 +210,7 @@ SwFlyFrameFormat* SwWW8ImplReader::InsertOle(SdrOle2Obj &rObject,
     SwFlyFrameFormat *pRet = nullptr;
 
     std::unique_ptr<SfxItemSet> pMathFlySet;
-    uno::Reference < embed::XClassifiedObject > xClass( rObject.GetObjRef(), uno::UNO_QUERY );
+    uno::Reference < embed::XClassifiedObject > xClass = rObject.GetObjRef();
     if( xClass.is() )
     {
         SvGlobalName aClassName( xClass->getClassID() );

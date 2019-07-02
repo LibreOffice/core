@@ -167,7 +167,7 @@ Reference< XInterface > SAL_CALL StatusBarWrapper::getRealInterface()
         {
             vcl::Window* pWindow = static_cast<vcl::Window *>(pStatusBarManager->GetStatusBar());
             if ( pWindow )
-                return Reference< XInterface >( VCLUnoHelper::GetInterface( pWindow ), UNO_QUERY );
+                return VCLUnoHelper::GetInterface( pWindow );
         }
     }
 

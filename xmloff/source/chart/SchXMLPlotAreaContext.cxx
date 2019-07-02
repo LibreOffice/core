@@ -170,7 +170,7 @@ SchXMLPlotAreaContext::SchXMLPlotAreaContext(
     m_rbHasRangeAtPlotArea = false;
 
     // get Diagram
-    uno::Reference< chart::XChartDocument > xDoc( rImpHelper.GetChartDocument(), uno::UNO_QUERY );
+    uno::Reference< chart::XChartDocument > xDoc = rImpHelper.GetChartDocument();
     if( xDoc.is())
     {
         mxDiagram = xDoc->getDiagram();
@@ -785,10 +785,9 @@ void SchXMLWallFloorContext::StartElement( const uno::Reference< xml::sax::XAttr
         }
 
         // set properties
-        uno::Reference< beans::XPropertySet > xProp( ( meContextType == CONTEXT_TYPE_WALL )
+        uno::Reference< beans::XPropertySet > xProp = ( meContextType == CONTEXT_TYPE_WALL )
                                                      ? mxWallFloorSupplier->getWall()
-                                                     : mxWallFloorSupplier->getFloor(),
-                                                     uno::UNO_QUERY );
+                                                     : mxWallFloorSupplier->getFloor();
 
         if (!sAutoStyleName.isEmpty())
             mrImportHelper.FillAutoStyle(sAutoStyleName, xProp);
@@ -1106,8 +1105,7 @@ void SchXMLStatisticsObjectContext::StartElement( const uno::Reference< xml::sax
                 {
                     aStyle.meType = DataRowPointStyle::ERROR_INDICATOR;
 
-                    uno::Reference< lang::XMultiServiceFactory > xFact( comphelper::getProcessServiceFactory(),
-                                                                        uno::UNO_QUERY );
+                    uno::Reference< lang::XMultiServiceFactory > xFact = comphelper::getProcessServiceFactory();
 
                     uno::Reference< beans::XPropertySet > xBarProp( xFact->createInstance("com.sun.star.chart2.ErrorBar" ),
                                                                     uno::UNO_QUERY );

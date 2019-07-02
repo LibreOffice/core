@@ -137,7 +137,7 @@ void SAL_CALL ButtonToolbarController::initialize(
 // XComponent
 void SAL_CALL ButtonToolbarController::dispose()
 {
-    Reference< XComponent > xThis( static_cast< OWeakObject* >(this), UNO_QUERY );
+    Reference< XComponent > xThis = this;
 
     {
         SolarMutexGuard aSolarMutexGuard;
@@ -183,7 +183,7 @@ void SAL_CALL ButtonToolbarController::disposing(
     if ( m_bDisposed )
         return;
 
-    uno::Reference< uno::XInterface > xIfac( m_xFrame, uno::UNO_QUERY );
+    uno::Reference< uno::XInterface > xIfac( m_xFrame );
     if ( xIfac == xSource )
         m_xFrame.clear();
 }

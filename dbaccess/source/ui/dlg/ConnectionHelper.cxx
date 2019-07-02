@@ -540,8 +540,8 @@ namespace dbaui
     {
         ::ucbhelper::Content aCheckExistence;
         IS_PATH_EXIST eExists = PATH_NOT_EXIST;
-        Reference< css::task::XInteractionHandler > xInteractionHandler(
-            task::InteractionHandler::createWithParent(m_xORB, nullptr), UNO_QUERY );
+        Reference< css::task::XInteractionHandler > xInteractionHandler =
+            task::InteractionHandler::createWithParent(m_xORB, nullptr);
         OFilePickerInteractionHandler* pHandler = new OFilePickerInteractionHandler(xInteractionHandler);
         xInteractionHandler = pHandler;
 

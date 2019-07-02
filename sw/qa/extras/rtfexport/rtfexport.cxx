@@ -457,8 +457,7 @@ DECLARE_RTFEXPORT_TEST(testFdo53604, "fdo53604.odt")
 {
     // Invalid output on empty footnote.
     uno::Reference<text::XFootnotesSupplier> xFootnotesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xFootnotes(xFootnotesSupplier->getFootnotes(),
-                                                       uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xFootnotes = xFootnotesSupplier->getFootnotes();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xFootnotes->getCount());
 }
 
@@ -989,7 +988,7 @@ DECLARE_RTFEXPORT_TEST(testTdf80708, "tdf80708.rtf")
     uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(),
                                                     uno::UNO_QUERY);
     uno::Reference<text::XTextTable> xTable(xTables->getByIndex(1), uno::UNO_QUERY);
-    uno::Reference<table::XTableRows> xTableRows(xTable->getRows(), uno::UNO_QUERY);
+    uno::Reference<table::XTableRows> xTableRows = xTable->getRows();
     // This was 2, i.e. the second table had 3 cols, now 2 as expected.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1),
                          getProperty<uno::Sequence<text::TableColumnSeparator>>(
@@ -1077,8 +1076,8 @@ DECLARE_RTFEXPORT_TEST(testTdf96175, "tdf96175.rtf")
     // The problem that a user defined property named "Company" was lost on export.
     uno::Reference<document::XDocumentPropertiesSupplier> xDocumentPropertiesSupplier(
         mxComponent, uno::UNO_QUERY);
-    uno::Reference<document::XDocumentProperties> xDocumentProperties(
-        xDocumentPropertiesSupplier->getDocumentProperties(), uno::UNO_QUERY);
+    uno::Reference<document::XDocumentProperties> xDocumentProperties
+        = xDocumentPropertiesSupplier->getDocumentProperties();
     uno::Reference<beans::XPropertyContainer> xUserDefinedProperties
         = xDocumentProperties->getUserDefinedProperties();
     // This resulted in a beans::UnknownPropertyException.
@@ -1331,7 +1330,7 @@ DECLARE_RTFEXPORT_TEST(testTdf104937, "tdf104937.rtf")
     uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(),
                                                     uno::UNO_QUERY);
     uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
-    uno::Reference<table::XTableRows> xTableRows(xTable->getRows(), uno::UNO_QUERY);
+    uno::Reference<table::XTableRows> xTableRows = xTable->getRows();
     auto aSeparators = getProperty<uno::Sequence<text::TableColumnSeparator>>(
         xTableRows->getByIndex(1), "TableColumnSeparators");
     // First table's second row had 9 cells (so 8 separators).
@@ -1347,7 +1346,7 @@ DECLARE_RTFEXPORT_TEST(testTdf112507, "tdf112507.rtf")
     uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(),
                                                     uno::UNO_QUERY);
     uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
-    uno::Reference<table::XTableRows> xTableRows(xTable->getRows(), uno::UNO_QUERY);
+    uno::Reference<table::XTableRows> xTableRows = xTable->getRows();
     auto aSeparators = getProperty<uno::Sequence<text::TableColumnSeparator>>(
         xTableRows->getByIndex(1), "TableColumnSeparators");
     // First table's second row had 3 cells (so 2 separators).

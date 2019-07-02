@@ -553,7 +553,7 @@ bool SwWrtShell::InsertOleObject( const svt::EmbeddedObjectRef& xRef, SwFlyFrame
 
     if ( SotExchange::IsChart( aCLSID ) )
     {
-        uno::Reference< embed::XEmbeddedObject > xEmbeddedObj( xRef.GetObject(), uno::UNO_QUERY );
+        uno::Reference< embed::XEmbeddedObject > xEmbeddedObj = xRef.GetObject();
         if ( xEmbeddedObj.is() )
         {
             bool bDisableDataTableDialog = false;

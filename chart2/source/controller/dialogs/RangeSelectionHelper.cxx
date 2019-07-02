@@ -99,7 +99,7 @@ bool RangeSelectionHelper::chooseRange(
     const OUString & aUIString,
     RangeSelectionListenerParent & rListenerParent )
 {
-    ControllerLockGuardUNO aGuard( Reference< frame::XModel >(m_xChartDocument, uno::UNO_QUERY ) );
+    ControllerLockGuardUNO aGuard( m_xChartDocument );
 
     bool bResult = true;
     raiseRangeSelectionDocument();
@@ -127,7 +127,7 @@ bool RangeSelectionHelper::chooseRange(
             if( m_xRangeSelectionListener.is() )
                 stopRangeListening();
             m_xRangeSelectionListener.set( Reference< sheet::XRangeSelectionListener >(
-                new RangeSelectionListener( rListenerParent, aCurrentRange, Reference< frame::XModel >(m_xChartDocument, uno::UNO_QUERY ) )));
+                new RangeSelectionListener( rListenerParent, aCurrentRange, m_xChartDocument )));
 
             xRangeSel->addRangeSelectionListener( m_xRangeSelectionListener );
             xRangeSel->startRangeSelection( aArgs );

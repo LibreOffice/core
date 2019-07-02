@@ -116,7 +116,7 @@ sal_Int32 SAL_CALL AccessibleGridControlBase::getAccessibleIndexInParent()
             sal_Int32 nChildCount = xParentContext->getAccessibleChildCount();
             for( sal_Int32 nChild = 0; nChild < nChildCount; ++nChild )
             {
-                xChild.set(xParentContext->getAccessibleChild( nChild ), css::uno::UNO_QUERY);
+                xChild = xParentContext->getAccessibleChild( nChild );
                 if ( xMeMyselfAndI.get() == xChild.get() )
                 {
                     nRet = nChild;

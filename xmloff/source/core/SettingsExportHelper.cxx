@@ -331,8 +331,7 @@ void XMLSettingsExportHelper::exportSymbolDescriptors(
         xBox->insertByIndex(nIndex, uno::makeAny( aSequence ));
     }
 
-    uno::Reference< container::XIndexAccess > xIA( xBox, uno::UNO_QUERY );
-    exportIndexAccess( xIA, rName );
+    exportIndexAccess( xBox, rName );
 }
 void XMLSettingsExportHelper::exportbase64Binary(
                     const uno::Sequence<sal_Int8>& aProps,
@@ -460,8 +459,7 @@ void XMLSettingsExportHelper::exportForbiddenCharacters(
         }
     }
 
-    uno::Reference< container::XIndexAccess > xIA( xBox, uno::UNO_QUERY );
-    exportIndexAccess( xIA, rName );
+    exportIndexAccess( xBox, rName );
 }
 
 void XMLSettingsExportHelper::exportAllSettings(

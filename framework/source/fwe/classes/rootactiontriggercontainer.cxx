@@ -243,7 +243,7 @@ Sequence< sal_Int8 > SAL_CALL RootActionTriggerContainer::getImplementationId()
 void RootActionTriggerContainer::FillContainer()
 {
     m_bContainerCreated = true;
-    Reference<XIndexContainer> xXIndexContainer( static_cast<OWeakObject *>(this), UNO_QUERY );
+    Reference<XIndexContainer> xXIndexContainer( this );
     ActionTriggerHelper::FillActionTriggerContainerFromMenu(
         xXIndexContainer,
         m_pMenu );

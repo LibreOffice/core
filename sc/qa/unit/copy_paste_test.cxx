@@ -62,7 +62,7 @@ void ScCopyPasteTest::testCopyPasteXLS()
     uno::Reference< frame::XModel2 > xModel2 ( xDocSh->GetModel(), UNO_QUERY );
     CPPUNIT_ASSERT( xModel2.is() );
 
-    Reference< frame::XController2 > xController ( xModel2->createDefaultViewController( xTargetFrame ), UNO_QUERY );
+    Reference< frame::XController2 > xController = xModel2->createDefaultViewController( xTargetFrame );
     CPPUNIT_ASSERT( xController.is() );
 
     // introduce model/view/controller to each other
@@ -175,7 +175,7 @@ void ScCopyPasteTest::testTdf84411()
     uno::Reference< frame::XModel2 > xModel2 ( xDocSh->GetModel(), UNO_QUERY );
     CPPUNIT_ASSERT( xModel2.is() );
 
-    Reference< frame::XController2 > xController ( xModel2->createDefaultViewController( xTargetFrame ), UNO_QUERY );
+    Reference< frame::XController2 > xController = xModel2->createDefaultViewController( xTargetFrame );
     CPPUNIT_ASSERT( xController.is() );
 
     // introduce model/view/controller to each other
@@ -244,7 +244,7 @@ void ScCopyPasteTest::testTdf124565()
     uno::Reference< frame::XModel2 > xModel2 ( xDocSh->GetModel(), UNO_QUERY );
     CPPUNIT_ASSERT( xModel2.is() );
 
-    Reference< frame::XController2 > xController ( xModel2->createDefaultViewController( xTargetFrame ), UNO_QUERY );
+    Reference< frame::XController2 > xController = xModel2->createDefaultViewController( xTargetFrame );
     CPPUNIT_ASSERT( xController.is() );
 
     // introduce model/view/controller to each other

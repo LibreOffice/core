@@ -933,7 +933,7 @@ static int lcl_setitem_index( PyUNO const *me, PyObject *pKey, PyObject *pValue 
 
         xIndexContainer.set( me->members->xInvocation, UNO_QUERY );
         if ( xIndexContainer.is() )
-            xIndexReplace.set( xIndexContainer, UNO_QUERY );
+            xIndexReplace = xIndexContainer;
         else
             xIndexReplace.set( me->members->xInvocation, UNO_QUERY );
 
@@ -980,7 +980,7 @@ static int lcl_setitem_slice( PyUNO const *me, PyObject *pKey, PyObject *pValue 
 
         xIndexContainer.set( me->members->xInvocation, UNO_QUERY );
         if ( xIndexContainer.is() )
-            xIndexReplace.set( xIndexContainer, UNO_QUERY );
+            xIndexReplace = xIndexContainer;
         else
             xIndexReplace.set( me->members->xInvocation, UNO_QUERY );
 
@@ -1114,7 +1114,7 @@ static int lcl_setitem_string( PyUNO const *me, PyObject *pKey, PyObject *pValue
         Reference< XNameContainer > xNameContainer( me->members->xInvocation, UNO_QUERY );
         Reference< XNameReplace > xNameReplace;
         if ( xNameContainer.is() )
-            xNameReplace.set( xNameContainer, UNO_QUERY );
+            xNameReplace = xNameContainer;
         else
             xNameReplace.set( me->members->xInvocation, UNO_QUERY );
 

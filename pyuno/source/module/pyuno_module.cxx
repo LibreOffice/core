@@ -430,7 +430,7 @@ static PyObject *createUnoStructHelper(
                 {
                     OUString typeName( OUString::createFromAscii(PyStr_AsString(structName)));
                     RuntimeCargo *c = runtime.getImpl()->cargo;
-                    Reference<XIdlClass> idl_class ( c->xCoreReflection->forName (typeName),UNO_QUERY);
+                    Reference<XIdlClass> idl_class = c->xCoreReflection->forName (typeName);
                     if (idl_class.is ())
                     {
                         idl_class->createObject (IdlStruct);

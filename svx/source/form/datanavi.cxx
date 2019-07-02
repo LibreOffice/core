@@ -495,10 +495,9 @@ namespace svxform
                     try
                     {
                         Reference< css::xforms::XSubmission > xNewSubmission = aDlg.GetNewSubmission();
-                        Reference< XSet > xSubmissions( xModel->getSubmissions(), UNO_QUERY );
+                        Reference< XSet > xSubmissions = xModel->getSubmissions();
                         xSubmissions->insert( makeAny( xNewSubmission ) );
-                        Reference< XPropertySet > xNewPropSet( xNewSubmission, UNO_QUERY );
-                        SvTreeListEntry* pEntry = AddEntry( xNewPropSet );
+                        SvTreeListEntry* pEntry = AddEntry( xNewSubmission );
                         m_pItemList->Select( pEntry );
                         bIsDocModified = true;
                     }
@@ -612,7 +611,7 @@ namespace svxform
                     {
                         pResId = RID_STR_DATANAV_ADD_BINDING;
                         xNewBinding = xModel->createBinding();
-                        Reference< XSet > xBindings( xModel->getBindings(), UNO_QUERY );
+                        Reference< XSet > xBindings = xModel->getBindings();
                         xBindings->insert( makeAny( xNewBinding ) );
                         pNode.reset(new ItemNode( xNewBinding ));
                         eType = DITBinding;
@@ -667,7 +666,7 @@ namespace svxform
                     {
                         try
                         {
-                            Reference< XSet > xBindings( xModel->getBindings(), UNO_QUERY );
+                            Reference< XSet > xBindings = xModel->getBindings();
                             xBindings->remove( makeAny( xNewBinding ) );
                         }
                         catch ( Exception const & )
@@ -1092,7 +1091,7 @@ namespace svxform
                     if ( xContainer.is() )
                         m_pNaviWin->AddContainerBroadcaster( xContainer );
 
-                    Reference< XEnumerationAccess > xNumAccess( _xModel->getInstances(), UNO_QUERY );
+                    Reference< XEnumerationAccess > xNumAccess = _xModel->getInstances();
                     if ( xNumAccess.is() )
                     {
                         Reference < XEnumeration > xNum = xNumAccess->createEnumeration();
@@ -1139,7 +1138,7 @@ namespace svxform
                     if ( xContainer.is() )
                         m_pNaviWin->AddContainerBroadcaster( xContainer );
 
-                    Reference< XEnumerationAccess > xNumAccess( _xModel->getSubmissions(), UNO_QUERY );
+                    Reference< XEnumerationAccess > xNumAccess = _xModel->getSubmissions();
                     if ( xNumAccess.is() )
                     {
                         Reference < XEnumeration > xNum = xNumAccess->createEnumeration();
@@ -1172,7 +1171,7 @@ namespace svxform
                     if ( xContainer.is() )
                         m_pNaviWin->AddContainerBroadcaster( xContainer );
 
-                    Reference< XEnumerationAccess > xNumAccess( _xModel->getBindings(), UNO_QUERY );
+                    Reference< XEnumerationAccess > xNumAccess = _xModel->getBindings();
                     if ( xNumAccess.is() )
                     {
                         Reference < XEnumeration > xNum = xNumAccess->createEnumeration();
@@ -1417,8 +1416,7 @@ namespace svxform
         // get our frame
         DBG_ASSERT( pBindings != nullptr,
                     "DataNavigatorWindow::LoadModels(): no SfxBindings; can't get frame" );
-        m_xFrame.set( pBindings->GetDispatcher()->GetFrame()->GetFrame().GetFrameInterface(),
-                      UNO_QUERY );
+        m_xFrame = pBindings->GetDispatcher()->GetFrame()->GetFrame().GetFrameInterface();
         DBG_ASSERT( m_xFrame.is(), "DataNavigatorWindow::LoadModels(): no frame" );
         // add frameaction listener
         Reference< XFrameActionListener > xListener(
@@ -1973,7 +1971,7 @@ namespace svxform
             Reference< css::xforms::XModel > xModel;
             if ( aAny >>= xModel )
             {
-                Reference< XEnumerationAccess > xNumAccess( xModel->getInstances(), UNO_QUERY );
+                Reference< XEnumerationAccess > xNumAccess = xModel->getInstances();
                 if ( xNumAccess.is() )
                 {
                     Reference < XEnumeration > xNum = xNumAccess->createEnumeration();
@@ -3088,7 +3086,7 @@ namespace svxform
                 try
                 {
                     m_xNewSubmission = xModel->createSubmission();
-                    m_xSubmission.set( m_xNewSubmission, UNO_QUERY );
+                    m_xSubmission = m_xNewSubmission;
                 }
                 catch ( Exception const & )
                 {
@@ -3143,7 +3141,7 @@ namespace svxform
         {
             try
             {
-                Reference< XEnumerationAccess > xNumAccess( xModel->getBindings(), UNO_QUERY );
+                Reference< XEnumerationAccess > xNumAccess = xModel->getBindings();
                 if ( xNumAccess.is() )
                 {
                     Reference < XEnumeration > xNum = xNumAccess->createEnumeration();

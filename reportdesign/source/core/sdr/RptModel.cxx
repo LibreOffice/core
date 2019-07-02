@@ -137,7 +137,7 @@ uno::Reference< report::XReportDefinition > OReportModel::getReportDefinition() 
 
 uno::Reference< uno::XInterface > OReportModel::createUnoModel()
 {
-    return uno::Reference< uno::XInterface >(getReportDefinition(),uno::UNO_QUERY);
+    return getReportDefinition();
 }
 
 uno::Reference< uno::XInterface > OReportModel::createShape(const OUString& aServiceSpecifier,uno::Reference< drawing::XShape >& _rShape,sal_Int32 nOrientation)

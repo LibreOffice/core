@@ -78,8 +78,7 @@ void XMLAutoTextEventExport::initialize(
         rArguments[1] >>= xSupplier;
         if (xSupplier.is())
         {
-            Reference<XNameAccess> xAccess(xSupplier->getEvents(), UNO_QUERY);
-            xEvents = xAccess;
+            xEvents = xSupplier->getEvents();
         }
         else
         {

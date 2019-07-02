@@ -217,7 +217,7 @@ void CustomAnimationEffect::setNode( const css::uno::Reference< css::animations:
     Reference< XEnumerationAccess > xEnumerationAccess( mxNode, UNO_QUERY );
     if( xEnumerationAccess.is() )
     {
-        Reference< XEnumeration > xEnumeration( xEnumerationAccess->createEnumeration(), UNO_QUERY );
+        Reference< XEnumeration > xEnumeration = xEnumerationAccess->createEnumeration();
         if( xEnumeration.is() )
         {
             while( xEnumeration->hasMoreElements() )
@@ -551,7 +551,7 @@ bool CustomAnimationEffect::checkForText()
             Reference< XEnumerationAccess > xEA( xText, UNO_QUERY );
             if( xEA.is() )
             {
-                Reference< XEnumeration > xEnumeration( xEA->createEnumeration(), UNO_QUERY );
+                Reference< XEnumeration > xEnumeration = xEA->createEnumeration();
                 if( xEnumeration.is() )
                 {
                     bool bHasText = xEnumeration->hasMoreElements();
@@ -653,7 +653,7 @@ void CustomAnimationEffect::setTarget( const css::uno::Any& rTarget )
                 Reference< XEnumerationAccess > xEnumerationAccess( mxNode, UNO_QUERY );
                 if( xEnumerationAccess.is() )
                 {
-                    Reference< XEnumeration > xEnumeration( xEnumerationAccess->createEnumeration(), UNO_QUERY );
+                    Reference< XEnumeration > xEnumeration = xEnumerationAccess->createEnumeration();
                     if( xEnumeration.is() )
                     {
                         while( xEnumeration->hasMoreElements() )
@@ -697,7 +697,7 @@ void CustomAnimationEffect::setTargetSubItem( sal_Int16 nSubItem )
             Reference< XEnumerationAccess > xEnumerationAccess( mxNode, UNO_QUERY );
             if( xEnumerationAccess.is() )
             {
-                Reference< XEnumeration > xEnumeration( xEnumerationAccess->createEnumeration(), UNO_QUERY );
+                Reference< XEnumeration > xEnumeration = xEnumerationAccess->createEnumeration();
                 if( xEnumeration.is() )
                 {
                     while( xEnumeration->hasMoreElements() )
@@ -733,7 +733,7 @@ void CustomAnimationEffect::setDuration( double fDuration )
         Reference< XEnumerationAccess > xEnumerationAccess( mxNode, UNO_QUERY );
         if( xEnumerationAccess.is() )
         {
-            Reference< XEnumeration > xEnumeration( xEnumerationAccess->createEnumeration(), UNO_QUERY );
+            Reference< XEnumeration > xEnumeration = xEnumerationAccess->createEnumeration();
             if( xEnumeration.is() )
             {
                 while( xEnumeration->hasMoreElements() )
@@ -1146,7 +1146,7 @@ Any CustomAnimationEffect::getProperty( sal_Int32 nNodeType, const OUString& rAt
         Reference< XEnumerationAccess > xEnumerationAccess( mxNode, UNO_QUERY );
         if( xEnumerationAccess.is() )
         {
-            Reference< XEnumeration > xEnumeration( xEnumerationAccess->createEnumeration(), UNO_QUERY );
+            Reference< XEnumeration > xEnumeration = xEnumerationAccess->createEnumeration();
             if( xEnumeration.is() )
             {
                 while( xEnumeration->hasMoreElements() && !aProperty.hasValue() )
@@ -1186,7 +1186,7 @@ bool CustomAnimationEffect::setProperty( sal_Int32 nNodeType, const OUString& rA
         Reference< XEnumerationAccess > xEnumerationAccess( mxNode, UNO_QUERY );
         if( xEnumerationAccess.is() )
         {
-            Reference< XEnumeration > xEnumeration( xEnumerationAccess->createEnumeration(), UNO_QUERY );
+            Reference< XEnumeration > xEnumeration = xEnumerationAccess->createEnumeration();
             if( xEnumeration.is() )
             {
                 while( xEnumeration->hasMoreElements() )
@@ -1243,7 +1243,7 @@ Any CustomAnimationEffect::getColor( sal_Int32 nIndex )
         Reference< XEnumerationAccess > xEnumerationAccess( mxNode, UNO_QUERY );
         if( xEnumerationAccess.is() )
         {
-            Reference< XEnumeration > xEnumeration( xEnumerationAccess->createEnumeration(), UNO_QUERY );
+            Reference< XEnumeration > xEnumeration = xEnumerationAccess->createEnumeration();
             if( xEnumeration.is() )
             {
                 while( xEnumeration->hasMoreElements() && !aColor.hasValue() )
@@ -1293,7 +1293,7 @@ void CustomAnimationEffect::setColor( sal_Int32 nIndex, const Any& rColor )
         Reference< XEnumerationAccess > xEnumerationAccess( mxNode, UNO_QUERY );
         if( xEnumerationAccess.is() )
         {
-            Reference< XEnumeration > xEnumeration( xEnumerationAccess->createEnumeration(), UNO_QUERY );
+            Reference< XEnumeration > xEnumeration = xEnumerationAccess->createEnumeration();
             if( xEnumeration.is() )
             {
                 while( xEnumeration->hasMoreElements() )
@@ -1346,7 +1346,7 @@ Any CustomAnimationEffect::getTransformationProperty( sal_Int32 nTransformType, 
         Reference< XEnumerationAccess > xEnumerationAccess( mxNode, UNO_QUERY );
         if( xEnumerationAccess.is() )
         {
-            Reference< XEnumeration > xEnumeration( xEnumerationAccess->createEnumeration(), UNO_QUERY );
+            Reference< XEnumeration > xEnumeration = xEnumerationAccess->createEnumeration();
             if( xEnumeration.is() )
             {
                 while( xEnumeration->hasMoreElements() && !aProperty.hasValue() )
@@ -1383,7 +1383,7 @@ bool CustomAnimationEffect::setTransformationProperty( sal_Int32 nTransformType,
         Reference< XEnumerationAccess > xEnumerationAccess( mxNode, UNO_QUERY );
         if( xEnumerationAccess.is() )
         {
-            Reference< XEnumeration > xEnumeration( xEnumerationAccess->createEnumeration(), UNO_QUERY );
+            Reference< XEnumeration > xEnumeration = xEnumerationAccess->createEnumeration();
             if( xEnumeration.is() )
             {
                 while( xEnumeration->hasMoreElements() )
@@ -1476,12 +1476,12 @@ void CustomAnimationEffect::removeAudio()
 
         if( mxAudio.is() )
         {
-            xChild.set( mxAudio, UNO_QUERY );
+            xChild = mxAudio;
             mxAudio.clear();
         }
         else if( mnCommand == EffectCommands::STOPAUDIO )
         {
-            xChild.set( findCommandNode( mxNode ), UNO_QUERY );
+            xChild = findCommandNode( mxNode );
             mnCommand = 0;
         }
 
@@ -1509,9 +1509,8 @@ void CustomAnimationEffect::setAudio( const Reference< css::animations::XAudio >
         removeAudio();
         mxAudio = xAudio;
         Reference< XTimeContainer > xContainer( mxNode, UNO_QUERY );
-        Reference< XAnimationNode > xChild( mxAudio, UNO_QUERY );
-        if( xContainer.is() && xChild.is() )
-            xContainer->appendChild( xChild );
+        if( xContainer.is() && mxAudio.is() )
+            xContainer->appendChild( mxAudio );
     }
     catch( Exception& )
     {
@@ -1645,8 +1644,7 @@ void EffectSequenceHelper::reset()
 
 Reference< XAnimationNode > EffectSequenceHelper::getRootNode()
 {
-    Reference< XAnimationNode > xRoot( mxSequenceRoot, UNO_QUERY );
-    return xRoot;
+    return mxSequenceRoot;
 }
 
 void EffectSequenceHelper::append( const CustomAnimationEffectPtr& pEffect )
@@ -2185,7 +2183,7 @@ static bool isParagraphTargetTextEmpty( ParagraphTarget aParaTarget )
         Reference< XEnumerationAccess > xEA( xText, UNO_QUERY );
         if( xEA.is() )
         {
-            Reference< XEnumeration > xEnumeration( xEA->createEnumeration(), UNO_QUERY );
+            Reference< XEnumeration > xEnumeration = xEA->createEnumeration();
             if( xEnumeration.is() )
             {
                 // advance to the Nth paragraph

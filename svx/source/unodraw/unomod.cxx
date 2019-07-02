@@ -374,7 +374,7 @@ uno::Reference< uno::XInterface > SAL_CALL SvxUnoDrawingModel::createInstance( c
     }
     if( aServiceSpecifier == "com.sun.star.text.NumberingRules" )
     {
-        return uno::Reference< uno::XInterface >( SvxCreateNumRule( mpDoc ), uno::UNO_QUERY );
+        return SvxCreateNumRule( mpDoc );
     }
 
     if ( aServiceSpecifier == "com.sun.star.image.ImageMapRectangleObject" )

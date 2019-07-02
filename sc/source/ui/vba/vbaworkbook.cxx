@@ -200,7 +200,7 @@ ScVbaWorkbook::init()
 {
     if ( !ColorData.hasElements() )
         ResetColors();
-    uno::Reference< frame::XModel > xModel( getModel(), uno::UNO_QUERY );
+    uno::Reference< frame::XModel > xModel = getModel();
     if ( xModel.is() )
         excel::getDocShell( xModel )->RegisterAutomationWorkbookObject( this );
 }

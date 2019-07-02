@@ -474,7 +474,7 @@ void OComboBoxModel::loadData( bool _bForce )
         return;
 
     // Get Connection
-    Reference<XRowSet> xForm(m_xCursor, UNO_QUERY);
+    Reference<XRowSet> xForm = m_xCursor;
     if (!xForm.is())
         return;
     Reference<XConnection> xConnection = getConnection(xForm);

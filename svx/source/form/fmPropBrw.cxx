@@ -559,10 +559,9 @@ void FmPropBrw::impl_createPropertyBrowser_throw( FmFormShell* _pFormShell )
         :   DefaultFormComponentInspectorModel::createDefault( m_xInspectorContext );
 
     // an object inspector
-    m_xBrowserController.set(
+    m_xBrowserController =
         ObjectInspector::createWithModel(
-            m_xInspectorContext, m_xInspectorModel
-        ), css::uno::UNO_QUERY);
+            m_xInspectorContext, m_xInspectorModel);
 
     if ( !m_xBrowserController.is() )
     {

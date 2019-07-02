@@ -91,7 +91,7 @@ void Panel::dispose()
     }
 
     {
-        Reference<lang::XComponent> xComponent (GetElementWindow(), UNO_QUERY);
+        Reference<lang::XComponent> xComponent = GetElementWindow();
         if (xComponent.is())
             xComponent->dispose();
     }

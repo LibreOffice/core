@@ -159,7 +159,7 @@ DECLARE_WW8EXPORT_TEST(testTdf120225_textControlCrossRef, "tdf120225_textControl
 
     uno::Reference<text::XBookmarksSupplier> xBookmarksSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xBookmarksByIdx(xBookmarksSupplier->getBookmarks(), uno::UNO_QUERY);
-    uno::Reference<container::XNameAccess> xBookmarksByName(xBookmarksSupplier->getBookmarks(), uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xBookmarksByName = xBookmarksSupplier->getBookmarks();
     // TextFields should not be turned into real bookmarks.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), xBookmarksByIdx->getCount());
 

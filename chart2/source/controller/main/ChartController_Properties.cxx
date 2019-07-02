@@ -444,7 +444,7 @@ OUString lcl_getObjectCIDForCommand( const OString& rDispatchCommand, const uno:
 {
     ObjectType eObjectType = OBJECTTYPE_UNKNOWN;
 
-    uno::Reference< frame::XModel > xChartModel( xChartDocument, uno::UNO_QUERY );
+    uno::Reference< frame::XModel > xChartModel = xChartDocument;
     const ObjectType eSelectedType = ObjectIdentifier::getObjectType( rSelectedCID );
     uno::Reference< XDataSeries > xSeries = ObjectIdentifier::getDataSeriesForCID( rSelectedCID, xChartModel );
     uno::Reference< chart2::XRegressionCurveContainer > xRegCurveCnt( xSeries, uno::UNO_QUERY );

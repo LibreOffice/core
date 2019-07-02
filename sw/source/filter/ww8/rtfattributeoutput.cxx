@@ -3920,7 +3920,7 @@ bool RtfAttributeOutput::FlyFrameOLEMath(const SwFlyFrameFormat* pFlyFrameFormat
         return false;
 
     m_aRunText->append("{" LO_STRING_SVTOOLS_RTF_MMATH " ");
-    uno::Reference<util::XCloseable> xClosable(xObj->getComponent(), uno::UNO_QUERY);
+    uno::Reference<util::XCloseable> xClosable = xObj->getComponent();
     if (!xClosable.is())
         return false;
     // gcc4.4 (and 4.3 and possibly older) have a problem with dynamic_cast directly to the target class,

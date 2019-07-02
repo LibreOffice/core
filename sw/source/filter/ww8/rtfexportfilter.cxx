@@ -46,8 +46,7 @@ sal_Bool RtfExportFilter::filter(const uno::Sequence<beans::PropertyValue>& aDes
     m_aWriter.SetStream(pStream.get());
 
     // get SwDoc*
-    uno::Reference<uno::XInterface> xIfc(m_xSrcDoc, uno::UNO_QUERY);
-    auto pTextDoc = dynamic_cast<SwXTextDocument*>(xIfc.get());
+    auto pTextDoc = dynamic_cast<SwXTextDocument*>(m_xSrcDoc.get());
     if (!pTextDoc)
     {
         return false;

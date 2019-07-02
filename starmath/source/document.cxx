@@ -717,14 +717,13 @@ bool SmDocShell::Load( SfxMedium& rMedium )
     if( SfxObjectShell::Load( rMedium ))
     {
         uno::Reference < embed::XStorage > xStorage = GetMedium()->GetStorage();
-        uno::Reference < container::XNameAccess > xAccess (xStorage, uno::UNO_QUERY);
         if (
             (
-             xAccess->hasByName( "content.xml" ) &&
+             xStorage->hasByName( "content.xml" ) &&
              xStorage->isStreamElement( "content.xml" )
             ) ||
             (
-             xAccess->hasByName( "Content.xml" ) &&
+             xStorage->hasByName( "Content.xml" ) &&
              xStorage->isStreamElement( "Content.xml" )
             )
            )

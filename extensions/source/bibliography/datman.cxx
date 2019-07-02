@@ -901,7 +901,7 @@ void BibDataManager::setActiveDataSource(const OUString& rURL)
             aPropertySet->setPropertyValue("FetchSize", aVal);
             OUString aString("SELECT * FROM ");
             // quote the table name which may contain catalog.schema.table
-            Reference<XDatabaseMetaData> xMetaData(xConnection->getMetaData(),UNO_QUERY);
+            Reference<XDatabaseMetaData> xMetaData = xConnection->getMetaData();
             aQuoteChar = xMetaData->getIdentifierQuoteString();
 
             OUString sCatalog, sSchema, sName;

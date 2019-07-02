@@ -86,8 +86,7 @@ static void ImplFillElementList(
     const OUString& rRootStorageName, const bool bRecursive,
     const DocumentSignatureAlgorithm mode)
 {
-    Reference < css::container::XNameAccess > xElements( rxStore, UNO_QUERY );
-    Sequence< OUString > aElements = xElements->getElementNames();
+    Sequence< OUString > aElements = rxStore->getElementNames();
 
     for ( const auto& rName : aElements )
     {
@@ -214,8 +213,7 @@ DocumentSignatureHelper::CreateElementList(
                     xSubStore.clear();
 
                     // Object folders...
-                    Reference < css::container::XNameAccess > xElements( rxStore, UNO_QUERY );
-                    Sequence< OUString > aElementNames = xElements->getElementNames();
+                    Sequence< OUString > aElementNames = rxStore->getElementNames();
                     for ( const auto& rName : aElementNames )
                     {
                         if ( ( rName.match( "Object " ) ) && rxStore->isStorageElement( rName ) )
@@ -288,8 +286,7 @@ DocumentSignatureHelper::CreateElementList(
 
 void DocumentSignatureHelper::AppendContentTypes(const uno::Reference<embed::XStorage>& xStorage, std::vector<OUString>& rElements)
 {
-    uno::Reference<container::XNameAccess> xNameAccess(xStorage, uno::UNO_QUERY);
-    if (!xNameAccess.is() || !xNameAccess->hasByName("[Content_Types].xml"))
+    if (!xStorage.is() || !xStorage->hasByName("[Content_Types].xml"))
         // ODF
         return;
 
@@ -341,11 +338,10 @@ SignatureStreamHelper DocumentSignatureHelper::OpenSignatureStream(
 
     SignatureStreamHelper aHelper;
 
-    uno::Reference<container::XNameAccess> xNameAccess(rxStore, uno::UNO_QUERY);
-    if (!xNameAccess.is())
+    if (!rxStore.is())
         return aHelper;
 
-    if (xNameAccess->hasByName("META-INF"))
+    if (rxStore->hasByName("META-INF"))
     {
         try
         {
@@ -369,11 +365,11 @@ SignatureStreamHelper DocumentSignatureHelper::OpenSignatureStream(
             SAL_WARN_IF( nOpenMode != css::embed::ElementModes::READ, "xmlsecurity.helper", "Error creating signature stream..." );
         }
     }
-    else if(xNameAccess->hasByName("[Content_Types].xml"))
+    else if(rxStore->hasByName("[Content_Types].xml"))
     {
         try
         {
-            if (xNameAccess->hasByName("_xmlsignatures") && (nOpenMode & embed::ElementModes::TRUNCATE))
+            if (rxStore->hasByName("_xmlsignatures") && (nOpenMode & embed::ElementModes::TRUNCATE))
                 // Truncate, then all signatures will be written -> remove previous ones.
                 rxStore->removeElement("_xmlsignatures");
 
@@ -394,11 +390,10 @@ bool DocumentSignatureHelper::CanSignWithGPG(
     const Reference < css::embed::XStorage >& rxStore,
     const OUString& sOdfVersion)
 {
-    uno::Reference<container::XNameAccess> xNameAccess(rxStore, uno::UNO_QUERY);
-    if (!xNameAccess.is())
+    if (!rxStore.is())
         return false;
 
-    if (xNameAccess->hasByName("META-INF")) // ODF
+    if (rxStore->hasByName("META-INF")) // ODF
     {
         return !isODFPre_1_2(sOdfVersion);
     }

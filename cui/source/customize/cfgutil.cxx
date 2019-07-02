@@ -376,7 +376,7 @@ namespace
         {
             Reference< XScriptInvocationContext > xContext( _rxComponent, UNO_QUERY );
             if ( xContext.is() )
-                xScripts.set( xContext->getScriptContainer(), UNO_QUERY );
+                xScripts = xContext->getScriptContainer();
         }
 
         return Reference< XModel >( xScripts, UNO_QUERY );

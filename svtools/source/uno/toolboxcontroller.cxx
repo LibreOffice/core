@@ -288,7 +288,7 @@ void SAL_CALL ToolboxController::disposing( const EventObject& Source )
             listener.second.clear();
     }
 
-    Reference< XInterface > xIfac( m_xFrame, UNO_QUERY );
+    Reference< XInterface > xIfac = m_xFrame;
     if ( xIfac == xSource )
         m_xFrame.clear();
 }

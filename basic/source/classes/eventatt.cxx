@@ -90,7 +90,7 @@ void SFURL_firing_impl( const ScriptEvent& aScriptEvent, Any* pRet, const Refere
 
                 Any aCtx;
                 aCtx <<= OUString("user");
-                xScriptProvider.set( xFactory->createScriptProvider( aCtx ), UNO_QUERY );
+                xScriptProvider = xFactory->createScriptProvider( aCtx );
             }
 
             if ( !xScriptProvider.is() )
@@ -483,10 +483,10 @@ void RTL_Impl_CreateUnoDialog( SbxArray& rPar )
     {
         Reference< frame::XDesktop2 > xDesktop = frame::Desktop::create( xContext );
         Reference< container::XEnumeration > xModels;
-        Reference< container::XEnumerationAccess > xComponents( xDesktop->getComponents(), UNO_QUERY );
+        Reference< container::XEnumerationAccess > xComponents = xDesktop->getComponents();
         if ( xComponents.is() )
         {
-            xModels.set( xComponents->createEnumeration(), UNO_QUERY );
+            xModels = xComponents->createEnumeration();
         }
         if ( xModels.is() )
         {

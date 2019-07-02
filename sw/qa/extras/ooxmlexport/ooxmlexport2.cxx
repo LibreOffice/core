@@ -451,7 +451,7 @@ DECLARE_OOXMLEXPORT_TEST(testTextFrames, "textframes.odt")
 {
     // The frames were simply missing, so let's check if all 3 frames were imported back.
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xIndexAccess(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess = xDrawPageSupplier->getDrawPage();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xIndexAccess->getCount());
 }
 
@@ -492,7 +492,7 @@ DECLARE_OOXMLEXPORT_TEST(testTextFrameBorders, "textframe-borders.docx")
 DECLARE_OOXMLEXPORT_TEST(testTextframeGradient, "textframe-gradient.docx")
 {
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xIndexAccess(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess = xDrawPageSupplier->getDrawPage();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xIndexAccess->getCount());
 
     uno::Reference<beans::XPropertySet> xFrame(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
@@ -826,7 +826,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo58577, "fdo58577.odt")
 {
     // The second frame was simply missing, so let's check if both frames were imported back.
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xIndexAccess(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess = xDrawPageSupplier->getDrawPage();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xIndexAccess->getCount());
 }
 

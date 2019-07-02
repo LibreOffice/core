@@ -709,8 +709,7 @@ void ImpOptimizer::Optimize( const Sequence< PropertyValue >& rArguments )
         }
         else
         {
-            Reference< XComponent > xComponent( mxModel, UNO_QUERY );
-            xComponent->dispose();
+            mxModel->dispose();
         }
     }
     if ( nSourceSize && nDestSize )

@@ -465,7 +465,7 @@ void SdOOXMLExportTest1::testFdo83751()
     CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != nullptr );
 
     uno::Reference<document::XDocumentPropertiesSupplier> xDocumentPropertiesSupplier( xDocShRef->GetModel(), uno::UNO_QUERY );
-    uno::Reference<document::XDocumentProperties> xProps( xDocumentPropertiesSupplier->getDocumentProperties(), uno::UNO_QUERY );
+    uno::Reference<document::XDocumentProperties> xProps = xDocumentPropertiesSupplier->getDocumentProperties();
     uno::Reference<beans::XPropertySet> xUDProps( xProps->getUserDefinedProperties(), uno::UNO_QUERY );
     OUString propValue;
     xUDProps->getPropertyValue("Testing") >>= propValue;
@@ -492,7 +492,7 @@ void SdOOXMLExportTest1::testTableCellFillProperties()
     ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/odp/Table_with_Cell_Fill.odp"), ODP);
 
     // Export the document and import again for a check
-    uno::Reference< lang::XComponent > xComponent(xDocShRef->GetModel(), uno::UNO_QUERY);
+    uno::Reference< lang::XComponent > xComponent = xDocShRef->GetModel();
     uno::Reference<frame::XStorable> xStorable(xComponent, uno::UNO_QUERY);
     utl::MediaDescriptor aMediaDescriptor;
     aMediaDescriptor["FilterName"] <<= OStringToOUString(OString(aFileFormats[PPTX].pFilterName), RTL_TEXTENCODING_UTF8);

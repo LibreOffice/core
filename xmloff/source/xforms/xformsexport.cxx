@@ -299,9 +299,8 @@ void exportXFormsBinding( SvXMLExport& rExport,
                 xModel.is() ? xModel->getDataTypeRepository() : Reference<XDataTypeRepository>() );
             if( xRepository.is() )
             {
-                Reference<XPropertySet> xDataType(
-                    xRepository->getDataType( sTypeName ),
-                    UNO_QUERY );
+                Reference<XPropertySet> xDataType =
+                    xRepository->getDataType( sTypeName );
 
                 // if it's a basic data type, write out the XSD name
                 // for the XSD type class
@@ -555,8 +554,7 @@ void exportXFormsSchemas( SvXMLExport& rExport,
                                         true, true );
 
         // now get data type repository, and export
-        Reference<XEnumerationAccess> xTypes( xModel->getDataTypeRepository(),
-                                              UNO_QUERY );
+        Reference<XEnumerationAccess> xTypes = xModel->getDataTypeRepository();
         if( xTypes.is() )
         {
             Reference<XEnumeration> xEnum = xTypes->createEnumeration();

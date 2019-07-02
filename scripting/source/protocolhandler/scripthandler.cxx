@@ -93,8 +93,7 @@ Reference< XDispatch > SAL_CALL ScriptProtocolHandler::queryDispatch(
     // get scheme of url
 
     Reference< uri::XUriReferenceFactory > xFac = uri::UriReferenceFactory::create( m_xContext );
-    Reference<  uri::XUriReference > uriRef(
-        xFac->parse( aURL.Complete ), UNO_QUERY );
+    Reference<  uri::XUriReference > uriRef = xFac->parse( aURL.Complete );
     if ( uriRef.is() )
     {
         if ( uriRef->getScheme() == "vnd.sun.star.script" )
@@ -324,9 +323,9 @@ ScriptProtocolHandler::getScriptInvocation()
         }
         else
         {
-            Reference< XFrame > xFrame( m_xFrame.get(), UNO_QUERY );
-            if ( xFrame.is() )
+            if ( m_xFrame.is() )
             {
+                Reference< XFrame > xFrame( m_xFrame );
                 SfxFrame* pFrame = nullptr;
                 for ( pFrame = SfxFrame::GetFirst(); pFrame; pFrame = SfxFrame::GetNext( *pFrame ) )
                 {

@@ -378,7 +378,7 @@ void SAL_CALL JobExecutor::disposing( const css::lang::EventObject& aEvent )
 {
     /* SAFE { */
     osl::MutexGuard g(rBHelper.rMutex);
-    css::uno::Reference< css::uno::XInterface > xCFG(m_aConfig.cfg(), css::uno::UNO_QUERY);
+    css::uno::Reference< css::uno::XInterface > xCFG = m_aConfig.cfg();
     if (
         (xCFG                == aEvent.Source        ) &&
         (m_aConfig.getMode() != ConfigAccess::E_CLOSED)

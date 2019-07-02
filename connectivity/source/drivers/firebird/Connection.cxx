@@ -202,9 +202,8 @@ void Connection::construct(const OUString& url, const Sequence< PropertyValue >&
             if (m_sFirebirdURL.startsWith("file://"))
             {
                 m_bIsFile = true;
-                uno::Reference< ucb::XSimpleFileAccess > xFileAccess(
-                    ucb::SimpleFileAccess::create(comphelper::getProcessComponentContext()),
-                    uno::UNO_QUERY);
+                uno::Reference< ucb::XSimpleFileAccess > xFileAccess =
+                    ucb::SimpleFileAccess::create(comphelper::getProcessComponentContext());
                 if (!xFileAccess->exists(m_sFirebirdURL))
                     bIsNewDatabase = true;
 
@@ -526,9 +525,8 @@ void Connection::loadDatabaseFile(const OUString& srcLocation, const OUString& t
     Reference< XStream > xDBStream(m_xEmbeddedStorage->openStreamElement(srcLocation,
             ElementModes::READ));
 
-    uno::Reference< ucb::XSimpleFileAccess2 > xFileAccess(
-        ucb::SimpleFileAccess::create( comphelper::getProcessComponentContext() ),
-                        uno::UNO_QUERY );
+    uno::Reference< ucb::XSimpleFileAccess2 > xFileAccess =
+        ucb::SimpleFileAccess::create( comphelper::getProcessComponentContext() );
     if ( !xFileAccess.is() )
     {
         ::connectivity::SharedResources aResources;
@@ -827,9 +825,8 @@ void SAL_CALL Connection::documentEventOccured( const DocumentEvent& Event )
                                                 xDBStream->getOutputStream());
 
                 // remove old fdb file if exists
-                uno::Reference< ucb::XSimpleFileAccess > xFileAccess(
-                    ucb::SimpleFileAccess::create(xContext),
-                    uno::UNO_QUERY);
+                uno::Reference< ucb::XSimpleFileAccess > xFileAccess =
+                    ucb::SimpleFileAccess::create(xContext);
                 if (xFileAccess->exists(m_sFirebirdURL))
                     xFileAccess->kill(m_sFirebirdURL);
             }

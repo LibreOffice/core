@@ -238,7 +238,7 @@ bool EmbeddedObjectContainer::HasEmbeddedObject( const OUString& rName )
     auto aIt = pImpl->maNameToObjectMap.find( rName );
     if (aIt != pImpl->maNameToObjectMap.end())
         return true;
-    uno::Reference <container::XNameAccess> xAccess(pImpl->mxStorage, uno::UNO_QUERY);
+    uno::Reference <container::XNameAccess> xAccess = pImpl->mxStorage;
     if (!xAccess.is())
         return false;
     return xAccess->hasByName(rName);
@@ -999,7 +999,7 @@ void EmbeddedObjectContainer::CloseEmbeddedObject( const uno::Reference < embed:
         pImpl->maObjectToNameMap.erase( aIter->second );
         pImpl->maNameToObjectMap.erase( aIter );
 
-        uno::Reference < ::util::XCloseable > xClose( xObj, uno::UNO_QUERY );
+        uno::Reference < ::util::XCloseable > xClose = xObj;
         try
         {
             xClose->close( true );

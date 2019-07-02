@@ -581,7 +581,7 @@ void SbaTableQueryBrowser::InitializeGridModel(const Reference< css::form::XForm
         Reference< XNameContainer >  xColContainer(xGrid, UNO_QUERY);
         clearGridColumns( xColContainer );
 
-        Reference< XChild > xGridAsChild(xGrid, UNO_QUERY);
+        Reference< XChild > xGridAsChild = xGrid;
         Reference< XLoadable > xFormAsLoadable;
         if (xGridAsChild.is())
             xFormAsLoadable.set(xGridAsChild->getParent(), css::uno::UNO_QUERY);
@@ -818,7 +818,7 @@ void SbaTableQueryBrowser::transferChangedControlProperty(const OUString& _rProp
     if(m_pCurrentlyDisplayed)
     {
         DBTreeListUserData* pData = static_cast<DBTreeListUserData*>(m_pCurrentlyDisplayed->GetUserData());
-        Reference< XPropertySet > xObjectProps(pData->xObjectProperties, UNO_QUERY);
+        Reference< XPropertySet > xObjectProps = pData->xObjectProperties;
         OSL_ENSURE(xObjectProps.is(),"SbaTableQueryBrowser::transferChangedControlProperty: no table/query object!");
         if (xObjectProps.is())
             xObjectProps->setPropertyValue(_rProperty, _rNewValue);

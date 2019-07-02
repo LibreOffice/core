@@ -174,7 +174,7 @@ void OCommonEmbeddedObject::SwitchStateTo_Impl( sal_Int32 nNextState )
             }
             else
             {
-                uno::Reference < embed::XEmbedPersist > xPersist( static_cast < embed::XClassifiedObject* > (this), uno::UNO_QUERY );
+                uno::Reference < embed::XEmbedPersist > xPersist = this;
                 if ( xPersist.is() )
                 {
                     // in case embedded object is in loaded state the contents must

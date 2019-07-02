@@ -303,7 +303,7 @@ int AnimationImporter::importAnimationContainer( const Atom* pAtom, const Refere
                     Reference< XEnumerationAccess > xEnumerationAccess( xNode, UNO_QUERY );
                     if( xEnumerationAccess.is() )
                     {
-                        Reference< XEnumeration > xEnumeration( xEnumerationAccess->createEnumeration(), UNO_QUERY );
+                        Reference< XEnumeration > xEnumeration = xEnumerationAccess->createEnumeration();
                         if( xEnumeration.is() )
                         {
                             while( xEnumeration->hasMoreElements() )

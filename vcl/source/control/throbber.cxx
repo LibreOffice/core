@@ -79,9 +79,8 @@ namespace
         ::comphelper::NamedValueCollection aMediaProperties;
         for ( const auto& rImageURL : aImageURLs )
         {
-            Reference< XGraphic > xGraphic;
             aMediaProperties.put( "URL", rImageURL );
-            xGraphic.set( xGraphicProvider->queryGraphic( aMediaProperties.getPropertyValues() ), UNO_QUERY );
+            Reference< XGraphic > xGraphic = xGraphicProvider->queryGraphic( aMediaProperties.getPropertyValues() );
             aImages.emplace_back( xGraphic );
         }
 

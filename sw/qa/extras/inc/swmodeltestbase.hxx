@@ -419,7 +419,7 @@ protected:
     uno::Reference<container::XNameAccess> getStyles(const OUString& aFamily)
     {
         uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(mxComponent, uno::UNO_QUERY);
-        uno::Reference<container::XNameAccess> xStyleFamilies(xStyleFamiliesSupplier->getStyleFamilies(), uno::UNO_QUERY);
+        uno::Reference<container::XNameAccess> xStyleFamilies = xStyleFamiliesSupplier->getStyleFamilies();
         uno::Reference<container::XNameAccess> xStyleFamily(xStyleFamilies->getByName(aFamily), uno::UNO_QUERY);
         return xStyleFamily;
     }
@@ -625,7 +625,7 @@ protected:
         int const index, uno::Reference<text::XTextRange> const & xPara) const
     {
         uno::Reference<container::XContentEnumerationAccess> xContentEnumAccess(xPara, uno::UNO_QUERY);
-        uno::Reference<container::XEnumeration> xContentEnum(xContentEnumAccess->createContentEnumeration("com.sun.star.text.TextContent"), uno::UNO_QUERY);
+        uno::Reference<container::XEnumeration> xContentEnum = xContentEnumAccess->createContentEnumeration("com.sun.star.text.TextContent");
         for (int i = 1; i < index; ++i)
         {
             xContentEnum->nextElement();
@@ -650,7 +650,7 @@ protected:
     OUString getFormula(uno::Reference<text::XTextRange> const & xRun) const
     {
         uno::Reference<container::XContentEnumerationAccess> xContentEnumAccess(xRun, uno::UNO_QUERY);
-        uno::Reference<container::XEnumeration> xContentEnum(xContentEnumAccess->createContentEnumeration(""), uno::UNO_QUERY);
+        uno::Reference<container::XEnumeration> xContentEnum = xContentEnumAccess->createContentEnumeration("");
         uno::Reference<beans::XPropertySet> xFormula(xContentEnum->nextElement(), uno::UNO_QUERY);
         return getProperty<OUString>(getProperty< uno::Reference<beans::XPropertySet> >(xFormula, "Model"), "Formula");
     }
@@ -705,7 +705,7 @@ protected:
     uno::Reference<drawing::XShape> getTextFrameByName(const OUString& aName)
     {
         uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
-        uno::Reference<container::XNameAccess> xNameAccess(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
+        uno::Reference<container::XNameAccess> xNameAccess = xTextFramesSupplier->getTextFrames();
         uno::Reference<drawing::XShape> xShape(xNameAccess->getByName(aName), uno::UNO_QUERY);
         return xShape;
     }

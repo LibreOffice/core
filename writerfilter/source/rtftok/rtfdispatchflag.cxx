@@ -1015,8 +1015,7 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
             m_aStates.top().getDrawingObject().setPropertySet(xPropertySet);
             if (xDrawSupplier.is())
             {
-                uno::Reference<drawing::XShapes> xShapes(xDrawSupplier->getDrawPage(),
-                                                         uno::UNO_QUERY);
+                uno::Reference<drawing::XShapes> xShapes = xDrawSupplier->getDrawPage();
                 if (xShapes.is() && nKeyword != RTF_DPTXBX)
                 {
                     // set default VertOrient before inserting

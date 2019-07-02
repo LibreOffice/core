@@ -593,7 +593,7 @@ css::uno::Reference< css::frame::XFrame > CloseDispatcher::static_impl_searchRig
         // c) try to find better results on parent frame
         //    If no parent frame exists (because this frame is used outside the desktop tree)
         //    the given frame must be used directly.
-        css::uno::Reference< css::frame::XFrame > xParent(xTarget->getCreator(), css::uno::UNO_QUERY);
+        css::uno::Reference< css::frame::XFrame > xParent = xTarget->getCreator();
         if ( ! xParent.is())
             return xTarget;
 

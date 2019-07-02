@@ -1162,7 +1162,7 @@ void OQueryController::executeQuery()
                 xDisp->dispatch(aWantToDispatch, aProps);
                 // check the state of the beamer
                 // be notified when the beamer frame is closed
-                Reference< XComponent >  xComponent( getFrame()->findFrame( sFrameName, nSearchFlags ), UNO_QUERY );
+                Reference< XComponent >  xComponent = getFrame()->findFrame( sFrameName, nSearchFlags );
                 if (xComponent.is())
                 {
                     OSL_ENSURE(Reference< XFrame >(xComponent, UNO_QUERY).get() == getContainer()->getPreviewFrame().get(),

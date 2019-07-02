@@ -110,8 +110,8 @@ SdPage* DocumentHelper::CopyMasterPageToLocalDocument (
             rTargetDocument.getUnoModel(), uno::UNO_QUERY);
         if ( ! xSlideSupplier.is())
             break;
-        uno::Reference<drawing::XDrawPages> xSlides (
-            xSlideSupplier->getDrawPages(), uno::UNO_QUERY);
+        uno::Reference<drawing::XDrawPages> xSlides =
+            xSlideSupplier->getDrawPages();
         if ( ! xSlides.is())
             break;
         xSlides->insertNewByIndex (xSlides->getCount());

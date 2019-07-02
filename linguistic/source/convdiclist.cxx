@@ -391,10 +391,10 @@ ConvDicNameContainer & ConvDicList::GetNameContainer()
 
         // since there is no UI to active/deactivate the dictionaries
         // for chinese text conversion they should be activated by default
-        uno::Reference< XConversionDictionary > xS2TDic(
-                    mxNameContainer->GetByName( "ChineseS2T" ), UNO_QUERY );
-        uno::Reference< XConversionDictionary > xT2SDic(
-                    mxNameContainer->GetByName( "ChineseT2S" ), UNO_QUERY );
+        uno::Reference< XConversionDictionary > xS2TDic =
+                    mxNameContainer->GetByName( "ChineseS2T" );
+        uno::Reference< XConversionDictionary > xT2SDic =
+                    mxNameContainer->GetByName( "ChineseT2S" );
         if (xS2TDic.is())
             xS2TDic->setActive( true );
         if (xT2SDic.is())

@@ -80,10 +80,8 @@ namespace dbaui
             return xConnection;
 
         // get the data source
-        Reference< XDataSource > xDatasource(
-            getDataSourceByName( _rDataSourceName, m_pErrorMessageParent, m_xContext, _pErrorInfo ),
-            UNO_QUERY
-        );
+        Reference< XDataSource > xDatasource =
+            getDataSourceByName( _rDataSourceName, m_pErrorMessageParent, m_xContext, _pErrorInfo );
 
         if ( xDatasource.is() )
             xConnection = connect( xDatasource, _pErrorInfo );
@@ -129,7 +127,7 @@ namespace dbaui
                 if ( !xHandler.is() )
                 {
                     // instantiate the default SDB interaction handler
-                    xHandler.set( InteractionHandler::createWithParent(m_xContext, VCLUnoHelper::GetInterface(m_pErrorMessageParent)), UNO_QUERY );
+                    xHandler = InteractionHandler::createWithParent(m_xContext, VCLUnoHelper::GetInterface(m_pErrorMessageParent));
                 }
 
                 xConnection = xConnectionCompletion->connectWithCompletion(xHandler);

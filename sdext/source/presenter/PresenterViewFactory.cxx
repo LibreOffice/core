@@ -89,8 +89,7 @@ public:
             {
                 for (sal_Int32 nIndex=0; nIndex<nCount; ++nIndex)
                 {
-                    if (rxSlide == Reference<drawing::XDrawPage>(
-                        xSlideShowController->getSlideByIndex(nIndex), UNO_QUERY))
+                    if (rxSlide == xSlideShowController->getSlideByIndex(nIndex))
                     {
                         nNextSlideIndex = nIndex + 1;
                     }
@@ -100,9 +99,7 @@ public:
             {
                 if (nNextSlideIndex < nCount)
                 {
-                    xSlide.set(
-                        xSlideShowController->getSlideByIndex(nNextSlideIndex),
-                         UNO_QUERY);
+                    xSlide = xSlideShowController->getSlideByIndex(nNextSlideIndex);
                 }
             }
         }

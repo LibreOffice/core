@@ -432,14 +432,13 @@ sal_Int32 PresenterScreen::GetPresenterScreenNumber (
     sal_Int32 nScreenCount (1);
     try
     {
-        Reference<beans::XPropertySet> xProperties (rxPresentation, UNO_QUERY);
-        if ( ! xProperties.is())
+        if ( ! rxPresentation.is())
             return -1;
 
         // Determine the screen on which the full screen presentation is being
         // displayed.
         sal_Int32 nDisplayNumber (-1);
-        if ( ! (xProperties->getPropertyValue("Display") >>= nDisplayNumber))
+        if ( ! (rxPresentation->getPropertyValue("Display") >>= nDisplayNumber))
             return -1;
         if (nDisplayNumber == -1)
         {

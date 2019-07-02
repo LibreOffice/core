@@ -510,7 +510,7 @@ DECLARE_OOXMLEXPORT_TEST(testFDO79062, "fdo79062.docx")
 
     //tdf#93121 don't add fake tabs in front of extra footnote paragraphs
     uno::Reference<text::XFootnotesSupplier> xFootnoteSupp(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xFootnoteIdxAcc(xFootnoteSupp->getFootnotes(), uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xFootnoteIdxAcc = xFootnoteSupp->getFootnotes();
     uno::Reference<text::XFootnote> xFootnote(xFootnoteIdxAcc->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<text::XText> xFootnoteText(xFootnote, uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess>xParaEnumAccess(xFootnoteText->getText(), uno::UNO_QUERY);
@@ -858,13 +858,13 @@ DECLARE_OOXMLEXPORT_TEST(testTdf117297_tableStyle, "tdf117297_tableStyle.docx")
     uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xCell->getText(), uno::UNO_QUERY);
     uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
     uno::Reference<text::XTextRange> xPara(xParaEnum->nextElement(), uno::UNO_QUERY);
-    uno::Reference<text::XText> xText(xPara->getText(), uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = xPara->getText();
     CPPUNIT_ASSERT_EQUAL(OUString("Green text, default size (9), 1.5 spaced"), xPara->getString());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell B1 Paragraph1 green font", sal_Int32(0x70AD47), getProperty<sal_Int32>(getRun(xPara, 1), "CharColor"));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell B1 Paragraph1 1.5 line spacing", sal_Int16(150), getProperty<style::LineSpacing>(xPara, "ParaLineSpacing").Height);
     xPara.set(xParaEnum->nextElement(), uno::UNO_QUERY);
     xPara.set(xParaEnum->nextElement(), uno::UNO_QUERY);
-    xText.set(xPara->getText(), uno::UNO_QUERY);
+    xText = xPara->getText();
     CPPUNIT_ASSERT_EQUAL(OUString("TableGrid color (blue), TableGrid size (9), double spacing"), xPara->getString());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell B1 Paragraph3 blue font", sal_Int32(0x00B0F0), getProperty<sal_Int32>(getRun(xPara, 1), "CharColor"));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell B1 Paragraph3 double spacing", sal_Int16(200), getProperty<style::LineSpacing>(xPara, "ParaLineSpacing").Height);
@@ -1004,7 +1004,7 @@ DECLARE_OOXMLEXPORT_TEST(tdf66398_permissions, "tdf66398_permissions.docx")
     // get bookmark interface
     uno::Reference<text::XBookmarksSupplier> xBookmarksSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xBookmarksByIdx(xBookmarksSupplier->getBookmarks(), uno::UNO_QUERY);
-    uno::Reference<container::XNameAccess> xBookmarksByName(xBookmarksSupplier->getBookmarks(), uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xBookmarksByName = xBookmarksSupplier->getBookmarks();
 
     // check: we have 2 bookmarks
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), xBookmarksByIdx->getCount());

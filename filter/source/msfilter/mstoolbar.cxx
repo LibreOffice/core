@@ -147,7 +147,7 @@ CustomToolBarImportHelper::createMenu( const OUString& rName, const uno::Referen
             aPopupMenu[3].Value <<= sal_Int32( 0 );
 
             xPopup->insertByIndex( xPopup->getCount(), uno::makeAny( aPopupMenu ) );
-            xCfgManager->insertSettings( sMenuBar, uno::Reference< container::XIndexAccess >( xPopup, uno::UNO_QUERY ) );
+            xCfgManager->insertSettings( sMenuBar, xPopup );
             uno::Reference< ui::XUIConfigurationPersistence > xPersistence( xCfgManager, uno::UNO_QUERY_THROW );
             xPersistence->store();
         }

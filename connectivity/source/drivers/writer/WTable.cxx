@@ -49,11 +49,11 @@ using namespace ::com::sun::star;
 static void lcl_GetDataArea(const uno::Reference<text::XTextTable>& xTable, sal_Int32& rColumnCount,
                             sal_Int32& rRowCount)
 {
-    uno::Reference<container::XIndexAccess> xColumns(xTable->getColumns(), uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xColumns = xTable->getColumns();
     if (xColumns.is())
         rColumnCount = xColumns->getCount();
 
-    uno::Reference<container::XIndexAccess> xRows(xTable->getRows(), uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xRows = xTable->getRows();
     if (xRows.is())
         rRowCount = xRows->getCount() - 1; // first row (headers) is not counted
 }

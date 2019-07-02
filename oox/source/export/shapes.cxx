@@ -1961,8 +1961,7 @@ ShapeExport& ShapeExport::WriteOLE2Shape( const Reference< XShape >& xShape )
         xPropSet->getPropertyValue("Model") >>= xChartDoc;
         assert(xChartDoc.is());
         //export the chart
-        Reference< XModel > xModel( xChartDoc, UNO_QUERY );
-        ChartExport aChartExport( mnXmlNamespace, GetFS(), xModel, GetFB(), GetDocumentType() );
+        ChartExport aChartExport( mnXmlNamespace, GetFS(), xChartDoc, GetFB(), GetDocumentType() );
         static sal_Int32 nChartCount = 0;
         aChartExport.WriteChartObj( xShape, GetNewShapeID( xShape ), ++nChartCount );
         return *this;

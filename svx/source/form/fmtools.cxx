@@ -165,7 +165,7 @@ sal_Int32 getElementPos(const Reference< css::container::XIndexAccess>& xCont, c
         return nIndex;
 
 
-    Reference< XInterface > xNormalized( xElement, UNO_QUERY );
+    Reference< XInterface > xNormalized = xElement;
     DBG_ASSERT( xNormalized.is(), "getElementPos: invalid element!" );
     if ( xNormalized.is() )
     {
@@ -176,7 +176,7 @@ sal_Int32 getElementPos(const Reference< css::container::XIndexAccess>& xCont, c
             try
             {
                 Reference< XInterface > xCurrent(xCont->getByIndex( nIndex ),UNO_QUERY);
-                DBG_ASSERT( xCurrent.get() == Reference< XInterface >( xCurrent, UNO_QUERY ).get(),
+                DBG_ASSERT( xCurrent.get() == xCurrent.get(),
                     "getElementPos: container element not normalized!" );
                 if ( xNormalized.get() == xCurrent.get() )
                     break;

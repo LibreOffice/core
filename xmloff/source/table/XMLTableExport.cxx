@@ -227,8 +227,7 @@ static bool has_states( const std::vector< XMLPropertyState >& xPropStates )
             if( has_states( aPropStates ) )
             {
                 const OUString sStyleName( mrExport.GetAutoStylePool()->Add(XML_STYLE_FAMILY_TABLE_COLUMN, aPropStates) );
-                Reference< XInterface > xKey( xPropSet, UNO_QUERY );
-                xTableInfo->maColumnStyleMap[xKey] = sStyleName;
+                xTableInfo->maColumnStyleMap[xPropSet] = sStyleName;
             }
         }
         catch(const Exception&)
@@ -251,8 +250,7 @@ static bool has_states( const std::vector< XMLPropertyState >& xPropStates )
             if( has_states( aRowPropStates ) )
             {
                 const OUString sStyleName( mrExport.GetAutoStylePool()->Add(XML_STYLE_FAMILY_TABLE_ROW, aRowPropStates) );
-                Reference< XInterface > xKey( xPropSet, UNO_QUERY );
-                xTableInfo->maRowStyleMap[xKey] = sStyleName;
+                xTableInfo->maRowStyleMap[xPropSet] = sStyleName;
             }
 
             // get the current row
@@ -282,8 +280,7 @@ static bool has_states( const std::vector< XMLPropertyState >& xPropStates )
 
                 if( !sStyleName.isEmpty() )
                 {
-                    Reference< XInterface > xKey( xCellSet, UNO_QUERY );
-                    xTableInfo->maCellStyleMap[xKey] = sStyleName;
+                    xTableInfo->maCellStyleMap[xCellSet] = sStyleName;
                 }
 
                 // create auto style for text
@@ -343,8 +340,7 @@ static bool has_states( const std::vector< XMLPropertyState >& xPropStates )
             // table:style-name
             if( xTableInfo.get() )
             {
-                Reference< XInterface > xKey( xCellRange, UNO_QUERY );
-                const OUString sStyleName( xTableInfo->maRowStyleMap[xKey] );
+                const OUString sStyleName( xTableInfo->maRowStyleMap[xCellRange] );
                 if( !sStyleName.isEmpty() )
                     mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_STYLE_NAME, sStyleName );
 
@@ -388,8 +384,7 @@ static bool has_states( const std::vector< XMLPropertyState >& xPropStates )
             // table:style-name
             if( rTableInfo.get() )
             {
-                Reference< XInterface > xKey( xColumnProperties, UNO_QUERY );
-                const OUString sStyleName( rTableInfo->maColumnStyleMap[xKey] );
+                const OUString sStyleName( rTableInfo->maColumnStyleMap[xColumnProperties] );
                 if( !sStyleName.isEmpty() )
                     mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_STYLE_NAME, sStyleName );
             }
@@ -415,8 +410,7 @@ static bool has_states( const std::vector< XMLPropertyState >& xPropStates )
         if( rTableInfo.get() )
         {
             // table:style-name
-            Reference< XInterface > xKey( xCell, UNO_QUERY );
-            const OUString sStyleName( rTableInfo->maCellStyleMap[xKey] );
+            const OUString sStyleName( rTableInfo->maCellStyleMap[xCell] );
             if( !sStyleName.isEmpty() && (sStyleName != rDefaultCellStyle) )
                 mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_STYLE_NAME, sStyleName );
         }
@@ -579,7 +573,7 @@ void XMLTableExport::exportTableTemplates()
             if (mbWriter)
             {
                 mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_NAME, xTableStyle->getName());
-                Reference<XPropertySet> xTableStylePropSet(xTableStyle.get(), UNO_QUERY_THROW);
+                Reference<XPropertySet> xTableStylePropSet(xTableStyle, UNO_QUERY_THROW);
                 pElements = getWriterSpecificTableStyleAttributes();
                 while(pElements->meElement != XML_TOKEN_END)
                 {

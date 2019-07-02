@@ -413,8 +413,7 @@ void ExportStoredChapterNumberingRules(SwChapterNumRules & rRules,
     uno::Reference<xml::sax::XWriter> const xWriter(
             xml::sax::Writer::create(xContext));
 
-    uno::Reference<io::XActiveDataSource> const xADS(xWriter, uno::UNO_QUERY);
-    xADS->setOutputStream(xOutStream);
+    xWriter->setOutputStream(xOutStream);
 
     rtl::Reference<StoredChapterNumberingExport> exp(new StoredChapterNumberingExport(xContext, rFileName, xWriter));
 

@@ -592,7 +592,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
 
             // Create an empty Draw component.
             uno::Reference<frame::XDesktop2> xDesktop = css::frame::Desktop::create(comphelper::getProcessComponentContext());
-            uno::Reference<frame::XComponentLoader> xComponentLoader(xDesktop, uno::UNO_QUERY);
+            uno::Reference<frame::XComponentLoader> xComponentLoader = xDesktop;
             uno::Reference<lang::XComponent> xComponent = xComponentLoader->loadComponentFromURL("private:factory/sdraw", "_default", 0, {});
 
             // Add the doc pages to the new draw document
@@ -1555,7 +1555,7 @@ SignatureState SfxObjectShell::ImplCheckSignaturesInformation( const uno::Sequen
 /// Does this ZIP storage have a signature stream?
 static bool HasSignatureStream(const uno::Reference<embed::XStorage>& xStorage)
 {
-    uno::Reference<container::XNameAccess> xNameAccess(xStorage, uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xNameAccess = xStorage;
     if (!xNameAccess.is())
         return false;
 
@@ -1566,7 +1566,7 @@ static bool HasSignatureStream(const uno::Reference<embed::XStorage>& xStorage)
         {
             uno::Reference<embed::XStorage> xMetaInf
                 = xStorage->openStorageElement("META-INF", embed::ElementModes::READ);
-            uno::Reference<container::XNameAccess> xMetaInfNames(xMetaInf, uno::UNO_QUERY);
+            uno::Reference<container::XNameAccess> xMetaInfNames = xMetaInf;
             if (xMetaInfNames.is())
             {
                 return xMetaInfNames->hasByName("documentsignatures.xml")

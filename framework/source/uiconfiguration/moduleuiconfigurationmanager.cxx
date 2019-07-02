@@ -549,7 +549,7 @@ void ModuleUIConfigurationManager::impl_storeElementTypeData( const Reference< X
             }
             else
             {
-                Reference< XStream > xStream( xStorage->openStreamElement( rElement.aName, ElementModes::WRITE|ElementModes::TRUNCATE ), UNO_QUERY );
+                Reference< XStream > xStream = xStorage->openStreamElement( rElement.aName, ElementModes::WRITE|ElementModes::TRUNCATE );
                 Reference< XOutputStream > xOutputStream( xStream->getOutputStream() );
 
                 if ( xOutputStream.is() )
@@ -627,8 +627,7 @@ void ModuleUIConfigurationManager::impl_resetElementTypeData(
     UIElementDataHashMap& rHashMap          = rUserElementType.aElementsHashMap;
 
     Reference< XUIConfigurationManager > xThis( static_cast< OWeakObject* >( this ), UNO_QUERY );
-    Reference< XInterface >  xIfac( xThis, UNO_QUERY );
-    Reference< XNameAccess > xDefaultNameAccess( rDefaultElementType.xStorage, UNO_QUERY );
+    Reference< XInterface >  xIfac = xThis;
     sal_Int16 nType = rUserElementType.nElementType;
 
     // Make copies of the event structures to be thread-safe. We have to unlock our mutex before calling
@@ -638,7 +637,7 @@ void ModuleUIConfigurationManager::impl_resetElementTypeData(
         UIElementData& rElement = elem.second;
         if ( !rElement.bDefault )
         {
-            if ( xDefaultNameAccess->hasByName( rElement.aName ))
+            if ( rDefaultElementType.xStorage->hasByName( rElement.aName ))
             {
                 // Replace settings with data from default layer
                 Reference< XIndexAccess > xOldSettings( rElement.xSettings );
@@ -688,11 +687,9 @@ void ModuleUIConfigurationManager::impl_reloadElementTypeData(
     ConfigEventNotifyContainer& rReplaceNotifyContainer )
 {
     UIElementDataHashMap& rHashMap          = rUserElementType.aElementsHashMap;
-    Reference< XNameAccess > xUserNameAccess( rUserElementType.xStorage, UNO_QUERY );
-    Reference< XNameAccess > xDefaultNameAccess( rDefaultElementType.xStorage, UNO_QUERY );
 
     Reference< XUIConfigurationManager > xThis( static_cast< OWeakObject* >( this ), UNO_QUERY );
-    Reference< XInterface > xIfac( xThis, UNO_QUERY );
+    Reference< XInterface > xIfac( xThis );
     sal_Int16 nType = rUserElementType.nElementType;
 
     for (auto & elem : rHashMap)
@@ -700,7 +697,7 @@ void ModuleUIConfigurationManager::impl_reloadElementTypeData(
         UIElementData& rElement = elem.second;
         if ( rElement.bModified )
         {
-            if ( xUserNameAccess->hasByName( rElement.aName ))
+            if ( rUserElementType.xStorage->hasByName( rElement.aName ))
             {
                 // Replace settings with data from user layer
                 Reference< XIndexAccess > xOldSettings( rElement.xSettings );
@@ -718,7 +715,7 @@ void ModuleUIConfigurationManager::impl_reloadElementTypeData(
 
                 rElement.bModified = false;
             }
-            else if ( xDefaultNameAccess->hasByName( rElement.aName ))
+            else if ( rDefaultElementType.xStorage->hasByName( rElement.aName ))
             {
                 // Replace settings with data from default layer
                 Reference< XIndexAccess > xOldSettings( rElement.xSettings );
@@ -985,7 +982,7 @@ void SAL_CALL ModuleUIConfigurationManager::reset()
             for ( int i = 1; i < css::ui::UIElementType::COUNT; i++ )
             {
                 UIElementType&        rElementType = m_aUIElements[LAYER_USERDEFINED][i];
-                Reference< XStorage > xSubStorage( rElementType.xStorage, UNO_QUERY );
+                Reference< XStorage > xSubStorage( rElementType.xStorage );
 
                 if ( xSubStorage.is() )
                 {
@@ -1188,7 +1185,7 @@ void SAL_CALL ModuleUIConfigurationManager::replaceSettings( const OUString& Res
             rElementType.bModified = true;
 
             Reference< XUIConfigurationManager > xThis( static_cast< OWeakObject* >( this ), UNO_QUERY );
-            Reference< XInterface > xIfac( xThis, UNO_QUERY );
+            Reference< XInterface > xIfac( xThis );
 
             // Create event to notify listener about replaced element settings
             ui::ConfigurationEvent aEvent;
@@ -1236,7 +1233,7 @@ void SAL_CALL ModuleUIConfigurationManager::replaceSettings( const OUString& Res
                 rElements.emplace( ResourceURL, aUIElementData );
 
             Reference< XUIConfigurationManager > xThis( static_cast< OWeakObject* >( this ), UNO_QUERY );
-            Reference< XInterface > xIfac( xThis, UNO_QUERY );
+            Reference< XInterface > xIfac( xThis );
 
             // Create event to notify listener about replaced element settings
             ui::ConfigurationEvent aEvent;
@@ -1298,7 +1295,7 @@ void SAL_CALL ModuleUIConfigurationManager::removeSettings( const OUString& Reso
             rElementType.bModified = true;
 
             Reference< XUIConfigurationManager > xThis( static_cast< OWeakObject* >( this ), UNO_QUERY );
-            Reference< XInterface > xIfac( xThis, UNO_QUERY );
+            Reference< XInterface > xIfac( xThis );
 
             // Check if we have settings in the default layer which replaces the user-defined one!
             UIElementData* pDefaultDataSettings = impl_findUIElementData( ResourceURL, nElementType );
@@ -1415,7 +1412,7 @@ Reference< XInterface > SAL_CALL ModuleUIConfigurationManager::getImageManager()
         xInit->initialize( aPropSeq );
     }
 
-    return Reference< XInterface >( m_xModuleImageManager, UNO_QUERY );
+    return m_xModuleImageManager;
 }
 
 Reference< ui::XAcceleratorConfiguration > SAL_CALL ModuleUIConfigurationManager::getShortCutManager()
@@ -1554,11 +1551,10 @@ void SAL_CALL ModuleUIConfigurationManager::store()
             try
             {
                 UIElementType&        rElementType = m_aUIElements[LAYER_USERDEFINED][i];
-                Reference< XStorage > xStorage( rElementType.xStorage, UNO_QUERY );
 
-                if ( rElementType.bModified && xStorage.is() )
+                if ( rElementType.bModified && rElementType.xStorage.is() )
                 {
-                    impl_storeElementTypeData( xStorage, rElementType );
+                    impl_storeElementTypeData( rElementType.xStorage, rElementType );
                     m_pStorageHandler[i]->commitUserChanges();
                 }
             }

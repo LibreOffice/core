@@ -1733,7 +1733,7 @@ bool SfxDocTplService_Impl::storeTemplate( const OUString& rGroupName,
 
         // get document service name
         uno::Reference< frame::XModuleManager2 > xModuleManager( frame::ModuleManager::create(xContext) );
-        const OUString sDocServiceName {xModuleManager->identify( uno::Reference< uno::XInterface >( rStorable, uno::UNO_QUERY ) )};
+        const OUString sDocServiceName {xModuleManager->identify( rStorable )};
         if ( sDocServiceName.isEmpty() )
             throw uno::RuntimeException();
 

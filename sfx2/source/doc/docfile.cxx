@@ -1755,7 +1755,7 @@ void SfxMedium::CloseStorage()
 {
     if ( pImpl->xStorage.is() )
     {
-        uno::Reference < lang::XComponent > xComp( pImpl->xStorage, uno::UNO_QUERY );
+        uno::Reference < lang::XComponent > xComp = pImpl->xStorage;
         // in the salvage mode the medium does not own the storage
         if ( pImpl->bDisposeStorage && !pImpl->m_bSalvageMode )
         {
@@ -3829,8 +3829,7 @@ bool SfxMedium::SignDocumentContentUsingCertificate(bool bHasValidDocumentSignat
             throw uno::RuntimeException();
 
         uno::Reference< embed::XStorage > xMetaInf;
-        uno::Reference<container::XNameAccess> xNameAccess(xWriteableZipStor, uno::UNO_QUERY);
-        if (xNameAccess.is() && xNameAccess->hasByName("META-INF"))
+        if (xWriteableZipStor.is() && xWriteableZipStor->hasByName("META-INF"))
         {
             xMetaInf = xWriteableZipStor->openStorageElement(
                                             "META-INF",
@@ -3956,8 +3955,7 @@ bool SfxMedium::SignContents_Impl(weld::Window* pDialogParent,
             throw uno::RuntimeException();
 
         uno::Reference< embed::XStorage > xMetaInf;
-        uno::Reference<container::XNameAccess> xNameAccess(xWriteableZipStor, uno::UNO_QUERY);
-        if (xNameAccess.is() && xNameAccess->hasByName("META-INF"))
+        if (xWriteableZipStor.is() && xWriteableZipStor->hasByName("META-INF"))
         {
             xMetaInf = xWriteableZipStor->openStorageElement(
                                             "META-INF",

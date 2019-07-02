@@ -169,7 +169,7 @@ class DemoRenderer
             aPolys[0] = aPoints;
             xPoly = mxDevice->createCompatibleLinePolyPolygon( aPolys );
             xPoly->setClosed( 0, true );
-            uno::Reference< rendering::XPolyPolygon2D> xPP( xPoly, uno::UNO_QUERY );
+            uno::Reference< rendering::XPolyPolygon2D> xPP = xPoly;
 
             rendering::RenderState aRenderState( maRenderState );
             aRenderState.DeviceColor = aColor;
@@ -249,7 +249,7 @@ class DemoRenderer
 
             xPoly = mxDevice->createCompatibleLinePolyPolygon( aPolys );
             xPoly->setClosed( 0, false );
-            uno::Reference< rendering::XPolyPolygon2D> xPP( xPoly, uno::UNO_QUERY );
+            uno::Reference< rendering::XPolyPolygon2D> xPP = xPoly;
 
             rendering::RenderState aRenderState( maRenderState );
             aRenderState.DeviceColor = maColorRed;
@@ -409,7 +409,7 @@ class DemoRenderer
             xPoly->setClosed( 0, true );
             //uno::Reference< rendering::XBezierPolyPolygon2D> xPP( xPoly, uno::UNO_QUERY );
             //compiles, but totally screws up.  I think it is interpreting the bezier as a line
-            uno::Reference< rendering::XPolyPolygon2D> xPP( xPoly, uno::UNO_QUERY );
+            uno::Reference< rendering::XPolyPolygon2D> xPP = xPoly;
 
             rendering::StrokeAttributes aStrokeAttrs;
             aStrokeAttrs.StrokeWidth = 4.0;
@@ -501,7 +501,7 @@ class DemoRenderer
             xPoly->setClosed( 0, true );
             rendering::RenderState aRenderState( maRenderState );
             aRenderState.DeviceColor = maColorRed;
-            uno::Reference< rendering::XPolyPolygon2D> xPP( xPoly, uno::UNO_QUERY );
+            uno::Reference< rendering::XPolyPolygon2D> xPP = xPoly;
             mxCanvas->drawPolyPolygon( xPP, maViewState, aRenderState);
             mxCanvas->fillPolyPolygon( xPP,
                                        maViewState,
