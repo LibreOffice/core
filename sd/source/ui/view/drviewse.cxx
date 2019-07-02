@@ -824,6 +824,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
             }
             else
             {
+                mpFrameView->EndTextEditAllViews();
                 if(HasCurrentFunction())
                 {
                     GetCurrentFunction()->DoCut();
@@ -998,6 +999,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
             }
             else
             {
+                mpFrameView->EndTextEditAllViews();
                 FuDeleteSelectedObjects();
             }
             rReq.Ignore ();
