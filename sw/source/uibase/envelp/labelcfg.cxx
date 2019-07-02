@@ -26,6 +26,7 @@
 #include <rtl/bootstrap.hxx>
 #include <unotools/configpaths.hxx>
 #include <xmlreader/xmlreader.hxx>
+#include <comphelper/sequence.hxx>
 #include <osl/diagnose.h>
 
 #include <unomid.h>
@@ -64,8 +65,7 @@ static Sequence<OUString> lcl_CreatePropertyNames(const OUString& rPrefix)
 {
     Sequence<OUString> aProperties(2);
     OUString* pProperties = aProperties.getArray();
-    for(sal_Int32 nProp = 0; nProp < 2; nProp++)
-        pProperties[nProp] = rPrefix;
+    std::fill(aProperties.begin(), aProperties.end(), rPrefix);
 
     pProperties[ 0] += "Name";
     pProperties[ 1] += "Measure";
@@ -136,17 +136,14 @@ SwLabelConfig::SwLabelConfig() :
 
     // add to m_aLabels and m_aManufacturers the custom labels
     const Sequence<OUString>& rMan = GetNodeNames( OUString() );
-    const OUString* pMan = rMan.getConstArray();
-    for ( sal_Int32 nMan = 0; nMan < rMan.getLength(); nMan++ )
+    for ( const OUString& rManufacturer : rMan )
     {
-        sManufacturer = pMan[nMan];
-        const Sequence<OUString> aLabels = GetNodeNames( sManufacturer );
-        const OUString* pLabels = aLabels.getConstArray();
-        for( sal_Int32 nLabel = 0; nLabel < aLabels.getLength(); nLabel++ )
+        const Sequence<OUString> aLabels = GetNodeNames( rManufacturer );
+        for( const OUString& rLabel : aLabels )
         {
-            OUString sPrefix( sManufacturer );
+            OUString sPrefix( rManufacturer );
             sPrefix += "/";
-            sPrefix += pLabels[nLabel];
+            sPrefix += rLabel;
             sPrefix += "/";
             Sequence<OUString> aPropNames = lcl_CreatePropertyNames( sPrefix );
             Sequence<Any>   aValues = GetProperties( aPropNames );
@@ -157,10 +154,10 @@ SwLabelConfig::SwLabelConfig() :
             if (aValues.getLength() >= 2)
                 if(pValues[1].hasValue())
                     pValues[1] >>= sMeasure;
-            if ( m_aLabels.find( sManufacturer ) == m_aLabels.end() )
-                m_aManufacturers.push_back( sManufacturer );
-            m_aLabels[sManufacturer][sName].m_aMeasure = sMeasure;
-            m_aLabels[sManufacturer][sName].m_bPredefined = false;
+            if ( m_aLabels.find( rManufacturer ) == m_aLabels.end() )
+                m_aManufacturers.push_back( rManufacturer );
+            m_aLabels[rManufacturer][sName].m_aMeasure = sMeasure;
+            m_aLabels[rManufacturer][sName].m_bPredefined = false;
         }
     }
 }
@@ -265,15 +262,6 @@ bool    SwLabelConfig::HasLabel(const OUString& rManufacturer, const OUString& r
              ( m_aLabels[rManufacturer].find(rType) != m_aLabels[rManufacturer].end() ) );
 }
 
-static bool lcl_Exists(const OUString& rNode, const Sequence<OUString>& rLabels)
-{
-    const OUString* pLabels = rLabels.getConstArray();
-    for(sal_Int32 i = 0; i < rLabels.getLength(); i++)
-        if(pLabels[i] == rNode)
-            return true;
-    return false;
-}
-
 // label is always saved as a custom label
 // predefined labels can NOT be overwritten by custom labels with same manufacturer/name
 void SwLabelConfig::SaveLabel( const OUString& rManufacturer,
@@ -305,7 +293,7 @@ void SwLabelConfig::SaveLabel( const OUString& rManufacturer,
         OUString sPrefix( "Label" );
         sFoundNode = sPrefix;
         sFoundNode += OUString::number( nIndex );
-        while ( lcl_Exists( sFoundNode, aLabels ) )
+        while ( comphelper::findValue(aLabels, sFoundNode) != -1 )
         {
             sFoundNode = sPrefix + OUString::number(nIndex++);
         }
@@ -315,12 +303,11 @@ void SwLabelConfig::SaveLabel( const OUString& rManufacturer,
         // get the appropriate node
         OUString sManufacturer( wrapConfigurationElementName( rManufacturer ) );
         const Sequence<OUString> aLabels = GetNodeNames( sManufacturer );
-        const OUString* pLabels = aLabels.getConstArray();
-        for (sal_Int32 nLabel = 0; nLabel < aLabels.getLength(); nLabel++)
+        for (const OUString& rLabel : aLabels)
         {
             OUString sPrefix( sManufacturer );
             sPrefix += "/";
-            sPrefix += pLabels[nLabel];
+            sPrefix += rLabel;
             sPrefix += "/";
             Sequence<OUString> aProperties { sPrefix };
             aProperties.getArray()[0] += "Name";
@@ -332,7 +319,7 @@ void SwLabelConfig::SaveLabel( const OUString& rManufacturer,
                 pValues[0] >>= sTmp;
                 if ( rType == sTmp )
                 {
-                    sFoundNode = pLabels[nLabel];
+                    sFoundNode = rLabel;
                     break;
                 }
             }

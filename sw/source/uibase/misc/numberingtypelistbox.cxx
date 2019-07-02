@@ -55,14 +55,10 @@ void SwNumberingTypeListBox::Reload(SwInsertNumTypes nTypeFlags)
 {
     m_xWidget->clear();
     uno::Sequence<sal_Int16> aTypes;
-    const sal_Int16* pTypes = nullptr;
     if (nTypeFlags & SwInsertNumTypes::Extended)
     {
         if (m_xImpl->xInfo.is())
-        {
             aTypes = m_xImpl->xInfo->getSupportedNumberingTypes();
-            pTypes = aTypes.getConstArray();
-        }
     }
 
     for(size_t i = 0; i < SvxNumberingTypeTable::Count(); i++)
@@ -97,18 +93,7 @@ void SwNumberingTypeListBox::Reload(SwInsertNumTypes nTypeFlags)
                 if (nValue >  style::NumberingType::CHARS_LOWER_LETTER_N)
                 {
                     // Insert only if offered by i18n framework per configuration.
-                    bInsert = false;
-                    if (pTypes)
-                    {
-                        for(sal_Int32 nType = 0; nType < aTypes.getLength(); nType++)
-                        {
-                            if (pTypes[nType] == nValue)
-                            {
-                                bInsert = true;
-                                break;  // for
-                            }
-                        }
-                    }
+                    bInsert = std::find(aTypes.begin(), aTypes.end(), nValue) != aTypes.end();
                 }
         }
         if (bInsert)
@@ -119,17 +104,13 @@ void SwNumberingTypeListBox::Reload(SwInsertNumTypes nTypeFlags)
     }
     if (nTypeFlags & SwInsertNumTypes::Extended)
     {
-        if (pTypes)
+        for (sal_Int16 nCurrent : aTypes)
         {
-            for (sal_Int32 nType = 0; nType < aTypes.getLength(); nType++)
+            if (nCurrent > style::NumberingType::CHARS_LOWER_LETTER_N)
             {
-                sal_Int16 nCurrent = pTypes[nType];
-                if (nCurrent > style::NumberingType::CHARS_LOWER_LETTER_N)
+                if (m_xWidget->find_id(OUString::number(nCurrent)) == -1)
                 {
-                    if (m_xWidget->find_id(OUString::number(nCurrent)) == -1)
-                    {
-                        m_xWidget->append(OUString::number(nCurrent), m_xImpl->xInfo->getNumberingIdentifier(nCurrent));
-                    }
+                    m_xWidget->append(OUString::number(nCurrent), m_xImpl->xInfo->getNumberingIdentifier(nCurrent));
                 }
             }
         }

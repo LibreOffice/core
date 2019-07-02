@@ -472,9 +472,8 @@ OUString SwAddressPreview::FillData(
 
             //find the appropriate assignment
             OUString sConvertedColumn = aItem.sText;
-            for(sal_uInt32 nColumn = 0;
-                    nColumn < rDefHeaders.size() && nColumn < sal_uInt32(aAssignment.getLength());
-                                                                                ++nColumn)
+            auto nSize = std::min(sal_uInt32(rDefHeaders.size()), sal_uInt32(aAssignment.getLength()));
+            for(sal_uInt32 nColumn = 0; nColumn < nSize; ++nColumn)
             {
                 if (rDefHeaders[nColumn].first == aItem.sText &&
                     !pAssignment[nColumn].isEmpty())

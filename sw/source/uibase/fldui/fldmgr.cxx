@@ -704,17 +704,10 @@ sal_uInt16 SwFieldMgr::GetFormatCount(sal_uInt16 nTypeId, bool bHtmlMode) const
             if(m_xNumberingInfo.is())
             {
                 Sequence<sal_Int16> aTypes = m_xNumberingInfo->getSupportedNumberingTypes();
-                const sal_Int16* pTypes = aTypes.getConstArray();
-                for(sal_Int32 nType = 0; nType < aTypes.getLength(); nType++)
-                {
-                    sal_Int16 nCurrent = pTypes[nType];
-                    //skip all values below or equal to CHARS_LOWER_LETTER_N
-                    if(nCurrent > NumberingType::CHARS_LOWER_LETTER_N)
-                    {
-                        // #i28073# it's not necessarily a sorted sequence
-                        ++nCount;
-                    }
-                }
+                // #i28073# it's not necessarily a sorted sequence
+                //skip all values below or equal to CHARS_LOWER_LETTER_N
+                nCount += std::count_if(aTypes.begin(), aTypes.end(),
+                    [](sal_Int16 nCurrent) { return nCurrent > NumberingType::CHARS_LOWER_LETTER_N; });
             }
             return nCount;
         }
@@ -748,25 +741,23 @@ OUString SwFieldMgr::GetFormatStr(sal_uInt16 nTypeId, sal_uInt32 nFormatId) cons
         if (m_xNumberingInfo.is())
         {
             Sequence<sal_Int16> aTypes = m_xNumberingInfo->getSupportedNumberingTypes();
-            const sal_Int16* pTypes = aTypes.getConstArray();
             sal_Int32 nOffset = aSwFields[nPos].nFormatLength;
             sal_uInt32 nValidEntry = 0;
-            for (sal_Int32 nType = 0; nType < aTypes.getLength(); nType++)
+            for (const sal_Int16 nCurrent : aTypes)
             {
-                sal_Int16 nCurrent = pTypes[nType];
                 if(nCurrent > NumberingType::CHARS_LOWER_LETTER_N &&
                         (nCurrent != (NumberingType::BITMAP | LINK_TOKEN)))
                 {
                     if (nValidEntry == nFormatId - nOffset)
                     {
-                        sal_uInt32 n = SvxNumberingTypeTable::FindIndex(pTypes[nType]);
+                        sal_uInt32 n = SvxNumberingTypeTable::FindIndex(nCurrent);
                         if (n != RESARRAY_INDEX_NOTFOUND)
                         {
                             aRet = SvxNumberingTypeTable::GetString(n);
                         }
                         else
                         {
-                            aRet = m_xNumberingInfo->getNumberingIdentifier( pTypes[nType] );
+                            aRet = m_xNumberingInfo->getNumberingIdentifier( nCurrent );
                         }
                         break;
                     }
@@ -830,17 +821,15 @@ sal_uInt16 SwFieldMgr::GetFormatId(sal_uInt16 nTypeId, sal_uInt32 nFormatId) con
             else if (m_xNumberingInfo.is())
             {
                 Sequence<sal_Int16> aTypes = m_xNumberingInfo->getSupportedNumberingTypes();
-                const sal_Int16* pTypes = aTypes.getConstArray();
                 sal_Int32 nOffset = aSwFields[nPos].nFormatLength;
                 sal_Int32 nValidEntry = 0;
-                for (sal_Int32 nType = 0; nType < aTypes.getLength(); nType++)
+                for (const sal_Int16 nCurrent : aTypes)
                 {
-                    sal_Int16 nCurrent = pTypes[nType];
                     if (nCurrent > NumberingType::CHARS_LOWER_LETTER_N)
                     {
                         if (nValidEntry == static_cast<sal_Int32>(nFormatId) - nOffset)
                         {
-                            nId = pTypes[nType];
+                            nId = nCurrent;
                             break;
                         }
                         ++nValidEntry;

@@ -1289,12 +1289,10 @@ void SwView::ReadUserDataSequence ( const uno::Sequence < beans::PropertyValue >
     if(GetDocShell()->IsPreview()||m_bIsPreviewDoubleClick)
         return;
     bool bIsOwnDocument = lcl_IsOwnDocument( *this );
-    sal_Int32 nLength = rSequence.getLength();
-    if (!nLength)
+    if (!rSequence.hasElements())
         return;
 
     SET_CURR_SHELL(m_pWrtShell.get());
-    const beans::PropertyValue *pValue = rSequence.getConstArray();
     const SwRect& rRect = m_pWrtShell->GetCharRect();
     const tools::Rectangle &rVis = GetVisArea();
     const SwViewOption* pVOpt = m_pWrtShell->GetViewOptions();
@@ -1315,75 +1313,75 @@ void SwView::ReadUserDataSequence ( const uno::Sequence < beans::PropertyValue >
              bGotViewLayoutColumns = false, bGotViewLayoutBookMode = false,
              bBrowseMode = false, bGotBrowseMode = false;
 
-    for (sal_Int32 i = 0 ; i < nLength; i++)
+    for (const beans::PropertyValue& rValue : rSequence)
     {
-        if ( pValue->Name == "ViewLeft" )
+        if ( rValue.Name == "ViewLeft" )
         {
-           pValue->Value >>= nX;
+           rValue.Value >>= nX;
            nX = convertMm100ToTwip( nX );
         }
-        else if ( pValue->Name == "ViewTop" )
+        else if ( rValue.Name == "ViewTop" )
         {
-           pValue->Value >>= nY;
+           rValue.Value >>= nY;
            nY = convertMm100ToTwip( nY );
         }
-        else if ( pValue->Name == "VisibleLeft" )
+        else if ( rValue.Name == "VisibleLeft" )
         {
-           pValue->Value >>= nLeft;
+           rValue.Value >>= nLeft;
            nLeft = convertMm100ToTwip( nLeft );
            bGotVisibleLeft = true;
         }
-        else if ( pValue->Name == "VisibleTop" )
+        else if ( rValue.Name == "VisibleTop" )
         {
-           pValue->Value >>= nTop;
+           rValue.Value >>= nTop;
            nTop = convertMm100ToTwip( nTop );
            bGotVisibleTop = true;
         }
-        else if ( pValue->Name == "VisibleRight" )
+        else if ( rValue.Name == "VisibleRight" )
         {
-           pValue->Value >>= nRight;
+           rValue.Value >>= nRight;
            nRight = convertMm100ToTwip( nRight );
            bGotVisibleRight = true;
         }
-        else if ( pValue->Name == "VisibleBottom" )
+        else if ( rValue.Name == "VisibleBottom" )
         {
-           pValue->Value >>= nBottom;
+           rValue.Value >>= nBottom;
            nBottom = convertMm100ToTwip( nBottom );
            bGotVisibleBottom = true;
         }
-        else if ( pValue->Name == "ZoomType" )
+        else if ( rValue.Name == "ZoomType" )
         {
-           pValue->Value >>= nZoomType;
+           rValue.Value >>= nZoomType;
            bGotZoomType = true;
         }
-        else if ( pValue->Name == "ZoomFactor" )
+        else if ( rValue.Name == "ZoomFactor" )
         {
-           pValue->Value >>= nZoomFactor;
+           rValue.Value >>= nZoomFactor;
            bGotZoomFactor = true;
         }
-        else if ( pValue->Name == "ViewLayoutColumns" )
+        else if ( rValue.Name == "ViewLayoutColumns" )
         {
-           pValue->Value >>= nViewLayoutColumns;
+           rValue.Value >>= nViewLayoutColumns;
            bGotViewLayoutColumns = true;
         }
-        else if ( pValue->Name == "ViewLayoutBookMode" )
+        else if ( rValue.Name == "ViewLayoutBookMode" )
         {
-           bViewLayoutBookMode = *o3tl::doAccess<bool>(pValue->Value);
+           bViewLayoutBookMode = *o3tl::doAccess<bool>(rValue.Value);
            bGotViewLayoutBookMode = true;
         }
-        else if ( pValue->Name == "IsSelectedFrame" )
+        else if ( rValue.Name == "IsSelectedFrame" )
         {
-           pValue->Value >>= bSelectedFrame;
+           rValue.Value >>= bSelectedFrame;
            bGotIsSelectedFrame = true;
         }
-        else if (pValue->Name == "ShowOnlineLayout")
+        else if (rValue.Name == "ShowOnlineLayout")
         {
-           pValue->Value >>= bBrowseMode;
+           rValue.Value >>= bBrowseMode;
            bGotBrowseMode = true;
         }
         // Fallback to common SdrModel processing
-        else GetDocShell()->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel()->ReadUserDataSequenceValue(pValue);
-        pValue++;
+        else
+           GetDocShell()->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel()->ReadUserDataSequenceValue(&rValue);
     }
     if (bGotBrowseMode)
     {

@@ -457,12 +457,10 @@ uno::Any SAL_CALL SwXMailMerge::execute(
 
     SfxObjectShellRef xCurDocSh = m_xDocSh;   // the document
 
-    const beans::NamedValue *pArguments = rArguments.getConstArray();
-    sal_Int32 nArgs = rArguments.getLength();
-    for (sal_Int32 i = 0;  i < nArgs;  ++i)
+    for (const beans::NamedValue& rArgument : rArguments)
     {
-        const OUString &rName   = pArguments[i].Name;
-        const Any &rValue       = pArguments[i].Value;
+        const OUString &rName   = rArgument.Name;
+        const Any &rValue       = rArgument.Value;
 
         bool bOK = true;
         if (rName == UNO_NAME_SELECTION)
@@ -558,20 +556,17 @@ uno::Any SAL_CALL SwXMailMerge::execute(
         Reference< sdbcx::XRowLocate > xRowLocate( xCurResultSet, UNO_QUERY );
         if ( xRowLocate.is() )
         {
-
-            const Any* pBookmarks = aCurSelection.getConstArray();
-            const Any* pBookmarksEnd = pBookmarks + aCurSelection.getLength();
             Any* pTranslated = aTranslated.getArray();
 
             try
             {
                 bool bEverythingsFine = true;
-                for ( ; ( pBookmarks != pBookmarksEnd ) && bEverythingsFine; ++pBookmarks )
+                for ( const Any& rBookmark : aCurSelection )
                 {
-                    if ( xRowLocate->moveToBookmark( *pBookmarks ) )
-                        *pTranslated <<= xCurResultSet->getRow();
-                    else
-                        bEverythingsFine = false;
+                    bEverythingsFine = xRowLocate->moveToBookmark( rBookmark );
+                    if ( !bEverythingsFine )
+                        break;
+                    *pTranslated <<= xCurResultSet->getRow();
                     ++pTranslated;
                 }
                 if ( bEverythingsFine )
