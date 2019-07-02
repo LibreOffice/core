@@ -41,7 +41,7 @@ struct IteratorAttr
     // not sure this belong here, but wth
     void loadFromXAttr( const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttributes );
 
-    sal_Int32 mnAxis;
+    std::vector<sal_Int32> maAxis;
     sal_Int32 mnCnt;
     bool  mbHideLastTrans;
     sal_Int32 mnPtType;

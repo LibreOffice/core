@@ -60,7 +60,7 @@ void LayoutAtomVisitorBase::visit(ForEachAtom& rAtom)
         return;
     }
 
-    if (rAtom.iterator().mbHideLastTrans && rAtom.iterator().mnAxis == XML_followSib)
+    if (rAtom.iterator().mbHideLastTrans && !rAtom.iterator().maAxis.empty() && rAtom.iterator().maAxis[0] == XML_followSib)
     {
         // If last transition is hidden and the axis is the follow sibling,
         // then the last atom should not be visited.
