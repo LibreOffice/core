@@ -8,6 +8,7 @@
  */
 
 #include <swmodeltestbase.hxx>
+#include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/frame/DispatchHelper.hpp>
 #include <com/sun/star/style/LineSpacing.hpp>
 #include <comphelper/propertysequence.hxx>
@@ -1137,6 +1138,35 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf52391)
     // accepted for "Reject All". Now rejection clears formatting of the text
     // in format-only changes, concatenating the text portions in the first paragraph.
     CPPUNIT_ASSERT_EQUAL(OUString("Portion1Portion2"), xRun->getString());
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf126206)
+{
+    load(DATA_DIRECTORY, "tdf126206.docx");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    // normal text (it was bold)
+    auto xText = getParagraph(1)->getText();
+    CPPUNIT_ASSERT(xText.is());
+    {
+        auto xCursor(xText->createTextCursorByRange(getRun(getParagraph(1), 2)));
+        CPPUNIT_ASSERT(xCursor.is());
+        CPPUNIT_ASSERT_EQUAL(awt::FontWeight::NORMAL, getProperty<float>(xCursor, "CharWeight"));
+    }
+
+    // reject tracked changes
+    lcl_dispatchCommand(mxComponent, ".uno:RejectAllTrackedChanges", {});
+
+    // bold text again
+    xText = getParagraph(1)->getText();
+    CPPUNIT_ASSERT(xText.is());
+    {
+        auto xCursor(xText->createTextCursorByRange(getRun(getParagraph(1), 2)));
+        CPPUNIT_ASSERT(xCursor.is());
+        CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD, getProperty<float>(xCursor, "CharWeight"));
+    }
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf101873)
