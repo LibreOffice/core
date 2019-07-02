@@ -54,6 +54,7 @@
 
 #include <rtl/ref.hxx>
 #include <rtl/strbuf.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
 #include <osl/diagnose.h>
 #include <cppuhelper/exc_hlp.hxx>
@@ -242,8 +243,14 @@ public:
         Statement const& i_rStatement);
     static std::shared_ptr<Resource> extractResource_NoLock(
         const uno::Reference< rdf::XResource > & i_xResource);
+    static void extractResourceToCacheKey(
+        const uno::Reference< rdf::XResource > & i_xResource,
+        OUStringBuffer& rBuf);
     static std::shared_ptr<Node> extractNode_NoLock(
         const uno::Reference< rdf::XNode > & i_xNode);
+    static void extractNodeToCacheKey(
+        const uno::Reference< rdf::XNode > & i_xNode,
+        OUStringBuffer& rBuffer);
     static Statement extractStatement_NoLock(
         const uno::Reference< rdf::XResource > & i_xSubject,
         const uno::Reference< rdf::XURI > & i_xPredicate,
@@ -360,7 +367,7 @@ public:
             const uno::Reference< rdf::XURI > & i_xName );
 //        throw (uno::RuntimeException, lang::IllegalArgumentException,
 //            container::NoSuchElementException, rdf::RepositoryException);
-    uno::Reference< container::XEnumeration > getStatementsGraph_NoLock(
+    std::vector<rdf::Statement> getStatementsGraph_NoLock(
             const uno::Reference< rdf::XResource > & i_xSubject,
             const uno::Reference< rdf::XURI > & i_xPredicate,
             const uno::Reference< rdf::XNode > & i_xObject,
@@ -523,6 +530,46 @@ librdf_GraphResult::nextElement()
 }
 
 
+/** result of operations that return a graph, i.e.,
+    an XEnumeration of statements.
+ */
+class librdf_GraphResult2:
+    public ::cppu::WeakImplHelper<
+        container::XEnumeration>
+{
+public:
+
+    librdf_GraphResult2(std::vector<rdf::Statement> statements)
+        : m_vStatements(std::move(statements))
+    { };
+
+    // css::container::XEnumeration:
+    virtual sal_Bool SAL_CALL hasMoreElements() override;
+    virtual uno::Any SAL_CALL nextElement() override;
+
+private:
+
+    std::vector<rdf::Statement> m_vStatements;
+    int m_nIndex = 0;
+};
+
+
+// css::container::XEnumeration:
+sal_Bool SAL_CALL
+librdf_GraphResult2::hasMoreElements()
+{
+    return m_nIndex < static_cast<int>(m_vStatements.size());
+}
+
+css::uno::Any SAL_CALL
+librdf_GraphResult2::nextElement()
+{
+    if (m_nIndex >= static_cast<int>(m_vStatements.size()))
+        throw container::NoSuchElementException();
+    m_nIndex++;
+    return uno::makeAny(m_vStatements[m_nIndex-1]);
+}
+
 /** result of tuple queries ("SELECT").
  */
 class librdf_QuerySelectResult:
@@ -684,10 +731,18 @@ private:
     librdf_NamedGraph(librdf_NamedGraph const&) = delete;
     librdf_NamedGraph& operator=(librdf_NamedGraph const&) = delete;
 
+    static OUString createCacheKey(
+        const uno::Reference< rdf::XResource > & i_xSubject,
+        const uno::Reference< rdf::XURI > & i_xPredicate,
+        const uno::Reference< rdf::XNode > & i_xObject);
+
     /// weak reference: this is needed to check if m_pRep is valid
     uno::WeakReference< rdf::XRepository > const m_wRep;
     librdf_Repository *const m_pRep;
     uno::Reference< rdf::XURI > const m_xName;
+
+    // Querying is rather slow, so cache the results.
+    std::map<OUString, std::vector<rdf::Statement>> m_aStatementsCache;
 };
 
 
@@ -729,6 +784,7 @@ void SAL_CALL librdf_NamedGraph::clear()
         throw lang::WrappedTargetRuntimeException( ex.Message,
                         *this, anyEx );
     }
+    m_aStatementsCache.clear();
 }
 
 void SAL_CALL librdf_NamedGraph::addStatement(
@@ -741,6 +797,7 @@ void SAL_CALL librdf_NamedGraph::addStatement(
         throw rdf::RepositoryException(
             "librdf_NamedGraph::addStatement: repository is gone", *this);
     }
+    m_aStatementsCache.clear();
     m_pRep->addStatementGraph_NoLock(
             i_xSubject, i_xPredicate, i_xObject, m_xName);
 }
@@ -755,8 +812,23 @@ void SAL_CALL librdf_NamedGraph::removeStatements(
         throw rdf::RepositoryException(
             "librdf_NamedGraph::removeStatements: repository is gone", *this);
     }
+    m_aStatementsCache.clear();
     m_pRep->removeStatementsGraph_NoLock(
             i_xSubject, i_xPredicate, i_xObject, m_xName);
+}
+
+OUString librdf_NamedGraph::createCacheKey(
+    const uno::Reference< rdf::XResource > & i_xSubject,
+    const uno::Reference< rdf::XURI > & i_xPredicate,
+    const uno::Reference< rdf::XNode > & i_xObject)
+{
+    OUStringBuffer cacheKey(256);
+    librdf_TypeConverter::extractResourceToCacheKey(i_xSubject, cacheKey);
+    cacheKey.append("\t");
+    librdf_TypeConverter::extractResourceToCacheKey(i_xPredicate, cacheKey);
+    cacheKey.append("\t");
+    librdf_TypeConverter::extractNodeToCacheKey(i_xObject, cacheKey);
+    return cacheKey.makeStringAndClear();
 }
 
 uno::Reference< container::XEnumeration > SAL_CALL
@@ -765,13 +837,21 @@ librdf_NamedGraph::getStatements(
     const uno::Reference< rdf::XURI > & i_xPredicate,
     const uno::Reference< rdf::XNode > & i_xObject)
 {
+    OUString cacheKey = createCacheKey(i_xSubject, i_xPredicate, i_xObject);
+    auto it = m_aStatementsCache.find(cacheKey);
+    if (it != m_aStatementsCache.end())
+        return new librdf_GraphResult2(it->second);
+
     uno::Reference< rdf::XRepository > xRep( m_wRep );
     if (!xRep.is()) {
         throw rdf::RepositoryException(
             "librdf_NamedGraph::getStatements: repository is gone", *this);
     }
-    return m_pRep->getStatementsGraph_NoLock(
+    std::vector<rdf::Statement> vStatements = m_pRep->getStatementsGraph_NoLock(
             i_xSubject, i_xPredicate, i_xObject, m_xName);
+
+    m_aStatementsCache.emplace(cacheKey, vStatements);
+    return new librdf_GraphResult2(vStatements);
 }
 
 
@@ -1553,18 +1633,7 @@ librdf_Repository::getStatementRDFa(
     ::std::vector< rdf::Statement > ret;
     try
     {
-        const uno::Reference<container::XEnumeration> xIter(
-            getStatementsGraph_NoLock(nullptr, nullptr, nullptr, xXmlId, true) );
-        OSL_ENSURE(xIter.is(), "getStatementRDFa: no result?");
-        if (!xIter.is()) throw uno::RuntimeException();
-        while (xIter->hasMoreElements()) {
-            rdf::Statement stmt;
-            if (!(xIter->nextElement() >>= stmt)) {
-                OSL_FAIL("getStatementRDFa: result of wrong type?");
-            } else {
-                ret.push_back(stmt);
-            }
-        }
+        ret = getStatementsGraph_NoLock(nullptr, nullptr, nullptr, xXmlId, true);
     }
     catch (const container::NoSuchElementException&)
     {
@@ -1854,7 +1923,7 @@ void librdf_Repository::removeStatementsGraph_NoLock(
     }
 }
 
-uno::Reference< container::XEnumeration >
+std::vector<rdf::Statement>
 librdf_Repository::getStatementsGraph_NoLock(
     const uno::Reference< rdf::XResource > & i_xSubject,
     const uno::Reference< rdf::XURI > & i_xPredicate,
@@ -1864,6 +1933,8 @@ librdf_Repository::getStatementsGraph_NoLock(
 //throw (uno::RuntimeException, lang::IllegalArgumentException,
 //    container::NoSuchElementException, rdf::RepositoryException)
 {
+    std::vector<rdf::Statement> ret;
+
     // N.B.: if any of subject, predicate, object is an XMetadatable, and
     // has no metadata reference, then there cannot be any node in the graph
     // representing it; in order to prevent side effect
@@ -1872,9 +1943,7 @@ librdf_Repository::getStatementsGraph_NoLock(
         isMetadatableWithoutMetadata(i_xPredicate) ||
         isMetadatableWithoutMetadata(i_xObject))
     {
-        return new librdf_GraphResult(this, m_aMutex,
-            std::shared_ptr<librdf_stream>(),
-            std::shared_ptr<librdf_node>());
+        return ret;
     }
 
     librdf_TypeConverter::Statement const stmt(
@@ -1916,9 +1985,38 @@ librdf_Repository::getStatementsGraph_NoLock(
             "librdf_model_find_statements_in_context failed", *this);
     }
 
-    // librdf_model_find_statements_in_context is buggy and does not put
-    // the context into result statements; pass it to librdf_GraphResult here
-    return new librdf_GraphResult(this, m_aMutex, pStream, pContext);
+    librdf_node *pCtxt1(
+#if LIBRDF_VERSION >= 10012
+        librdf_stream_get_context2(pStream.get()) );
+#else
+        static_cast<librdf_node *>(librdf_stream_get_context(pStream.get())) );
+#endif
+    while (!librdf_stream_end(pStream.get()))
+    {
+        auto pCtxt = pCtxt1;
+        librdf_statement *pStmt( librdf_stream_get_object(pStream.get()) );
+        if (!pStmt) {
+            rdf::QueryException e(
+                "librdf_GraphResult::nextElement: "
+                "librdf_stream_get_object failed", *this);
+            throw lang::WrappedTargetException(
+                "librdf_GraphResult::nextElement: "
+                "librdf_stream_get_object failed", *this,
+                    uno::makeAny(e));
+        }
+        // NB: pCtxt may be null here if this is result of a graph query
+        if (pCtxt && isInternalContext(pCtxt)) {
+            pCtxt = nullptr; // XML ID context is implementation detail!
+        }
+
+        ret.emplace_back(
+            getTypeConverter().convertToStatement(pStmt, pCtxt) );
+
+        // NB: this will invalidate current item.
+        librdf_stream_next(pStream.get());
+    }
+
+    return ret;
 }
 
 extern "C"
@@ -2031,6 +2129,21 @@ librdf_TypeConverter::extractResource_NoLock(
     }
 }
 
+void
+librdf_TypeConverter::extractResourceToCacheKey(
+    const uno::Reference< rdf::XResource > & i_xResource, OUStringBuffer& rBuffer)
+{
+    if (!i_xResource.is()) {
+        return;
+    }
+    uno::Reference< rdf::XBlankNode > xBlankNode(i_xResource, uno::UNO_QUERY);
+    if (xBlankNode.is()) {
+        rBuffer.append("BlankNode ").append(xBlankNode->getStringValue());
+    } else { // assumption: everything else is URI
+        rBuffer.append("URI ").append(i_xResource->getStringValue());
+    }
+}
+
 // create blank or URI node
 librdf_node* librdf_TypeConverter::mkResource_Lock( librdf_world* i_pWorld,
     Resource const*const i_pResource)
@@ -2096,6 +2209,31 @@ librdf_TypeConverter::extractNode_NoLock(
             OUStringToOString(xType->getStringValue(), RTL_TEXTENCODING_UTF8);
     }
     return std::shared_ptr<Node>(new Literal(val, lang, type));
+}
+
+// extract blank or URI or literal node - call without Mutex locked
+void
+librdf_TypeConverter::extractNodeToCacheKey(
+    const uno::Reference< rdf::XNode > & i_xNode,
+    OUStringBuffer& rBuffer)
+{
+    if (!i_xNode.is()) {
+        return;
+    }
+    uno::Reference< rdf::XResource > xResource(i_xNode, uno::UNO_QUERY);
+    if (xResource.is()) {
+        return extractResourceToCacheKey(xResource, rBuffer);
+    }
+    uno::Reference< rdf::XLiteral> xLiteral(i_xNode, uno::UNO_QUERY);
+    OSL_ENSURE(xLiteral.is(),
+        "mkNode: someone invented a new rdf.XNode and did not tell me");
+    if (!xLiteral.is()) {
+        return;
+    }
+    rBuffer.append("Literal ").append(xLiteral->getValue()).append("\t").append(xLiteral->getLanguage());
+    const uno::Reference< rdf::XURI > xType(xLiteral->getDatatype());
+    if (xType.is())
+        rBuffer.append("\t").append(xType->getStringValue());
 }
 
 // create blank or URI or literal node
