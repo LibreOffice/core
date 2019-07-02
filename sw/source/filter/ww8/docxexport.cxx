@@ -187,13 +187,13 @@ void DocxExport::AppendBookmark( const OUString& rName )
     m_pAttrOutput->WriteBookmarks_Impl( aStarts, aEnds );
 }
 
-void DocxExport::AppendAnnotationMarks( const SwTextNode& rNode, sal_Int32 nAktPos, sal_Int32 nLen )
+void DocxExport::AppendAnnotationMarks( const SwWW8AttrIter& rAttrs, sal_Int32 nAktPos, sal_Int32 nLen )
 {
     std::vector< OUString > aStarts;
     std::vector< OUString > aEnds;
 
     IMarkVector aMarks;
-    if ( GetAnnotationMarks( rNode, nAktPos, nAktPos + nLen, aMarks ) )
+    if ( GetAnnotationMarks( rAttrs, nAktPos, nAktPos + nLen, aMarks ) )
     {
         for ( IMarkVector::const_iterator it = aMarks.begin(), end = aMarks.end();
               it != end; ++it )

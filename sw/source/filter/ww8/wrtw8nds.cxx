@@ -571,6 +571,21 @@ bool SwWW8AttrIter::IsAnchorLinkedToThisNode( sal_uLong nNodePos )
     return false ;
 }
 
+bool SwWW8AttrIter::HasFlysAt(sal_Int32 nSwPos) const
+{
+    for (const auto& rFly : maFlyFrames)
+    {
+        const SwPosition& rAnchor = rFly.GetPosition();
+        const sal_Int32 nPos = rAnchor.nContent.GetIndex();
+        if (nPos == nSwPos)
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 FlyProcessingState SwWW8AttrIter::OutFlys(sal_Int32 nSwPos)
 {
     // collection point to first gather info about all of the potentially linked textboxes: to be analyzed later.
@@ -1934,7 +1949,7 @@ sal_Int32 MSWordExportBase::GetNextPos( SwWW8AttrIter const * aAttrIter, const S
     {
         GetSortedBookmarks( rNode, nAktPos, nNextBookmark - nAktPos );
         NearestBookmark( nNextBookmark, nAktPos, false );
-        GetSortedAnnotationMarks( rNode, nAktPos, nNextAnnotationMark - nAktPos );
+        GetSortedAnnotationMarks( *aAttrIter, nAktPos, nNextAnnotationMark - nAktPos );
         NearestAnnotationMark( nNextAnnotationMark, nAktPos, false );
     }
     return std::min( nNextPos, std::min( nNextBookmark, nNextAnnotationMark ) );
@@ -1988,11 +2003,11 @@ bool MSWordExportBase::GetBookmarks( const SwTextNode& rNd, sal_Int32 nStt,
     return ( rArr.size() > 0 );
 }
 
-bool MSWordExportBase::GetAnnotationMarks( const SwTextNode& rNd, sal_Int32 nStt,
+bool MSWordExportBase::GetAnnotationMarks( const SwWW8AttrIter& rAttrs, sal_Int32 nStt,
                     sal_Int32 nEnd, IMarkVector& rArr )
 {
     IDocumentMarkAccess* const pMarkAccess = m_pDoc->getIDocumentMarkAccess();
-    sal_uLong nNd = rNd.GetIndex( );
+    sal_uLong nNd = rAttrs.GetNode().GetIndex();
 
     const sal_Int32 nMarks = pMarkAccess->getAnnotationMarksCount();
     for ( sal_Int32 i = 0; i < nMarks; i++ )
@@ -2014,6 +2029,16 @@ bool MSWordExportBase::GetAnnotationMarks( const SwTextNode& rNd, sal_Int32 nStt
             // point of the comment field. In this case Word wants only the
             // comment field, so ignore the annotation mark itself.
             bool bSingleChar = pMark->GetMarkStart().nNode == pMark->GetMarkEnd().nNode && nBStart + 1 == nBEnd;
+
+            if (bSingleChar)
+            {
+                if (rAttrs.HasFlysAt(nBStart))
+                {
+                    // There is content (an at-char anchored frame) between the annotation mark
+                    // start/end, so still emit range start/end.
+                    bSingleChar = false;
+                }
+            }
 
             if ( ( bIsStartOk || bIsEndOk ) && !bSingleChar )
             {
@@ -2097,10 +2122,10 @@ void MSWordExportBase::NearestAnnotationMark( sal_Int32& rNearest, const sal_Int
     }
 }
 
-void MSWordExportBase::GetSortedAnnotationMarks( const SwTextNode& rNode, sal_Int32 nAktPos, sal_Int32 nLen )
+void MSWordExportBase::GetSortedAnnotationMarks( const SwWW8AttrIter& rAttrs, sal_Int32 nAktPos, sal_Int32 nLen )
 {
     IMarkVector aMarksStart;
-    if ( GetAnnotationMarks( rNode, nAktPos, nAktPos + nLen, aMarksStart ) )
+    if ( GetAnnotationMarks( rAttrs, nAktPos, nAktPos + nLen, aMarksStart ) )
     {
         IMarkVector aSortedEnd;
         IMarkVector aSortedStart;
@@ -2113,6 +2138,7 @@ void MSWordExportBase::GetSortedAnnotationMarks( const SwTextNode& rNode, sal_In
             const sal_Int32 nStart = pMark->GetMarkStart().nContent.GetIndex();
             const sal_Int32 nEnd = pMark->GetMarkEnd().nContent.GetIndex();
 
+            const SwTextNode& rNode = rAttrs.GetNode();
             if ( nStart > nAktPos && ( pMark->GetMarkStart().nNode == rNode.GetIndex()) )
                 aSortedStart.push_back( pMark );
 
@@ -2383,7 +2409,7 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
             // Append bookmarks in this range after flys, exclusive of final
             // position of this range
             AppendBookmarks( rNode, nAktPos, nNextAttr - nAktPos );
-            AppendAnnotationMarks( rNode, nAktPos, nNextAttr - nAktPos );
+            AppendAnnotationMarks( aAttrIter, nAktPos, nNextAttr - nAktPos );
 
             // At the moment smarttags are only written for paragraphs, at the
             // beginning of the paragraph.
@@ -2553,7 +2579,7 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                         nStateOfFlyFrame = aAttrIter.OutFlys( nEnd );
                         // insert final bookmarks if any before CR and after flys
                         AppendBookmarks( rNode, nEnd, 1 );
-                        AppendAnnotationMarks( rNode, nEnd, 1 );
+                        AppendAnnotationMarks(aAttrIter, nEnd, 1);
                         if ( pTOXSect )
                         {
                             m_aCurrentCharPropStarts.pop();
@@ -2607,7 +2633,7 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                     nStateOfFlyFrame = aAttrIter.OutFlys( nEnd );
                     // insert final bookmarks if any before CR and after flys
                     AppendBookmarks( rNode, nEnd, 1 );
-                    AppendAnnotationMarks( rNode, nEnd, 1 );
+                    AppendAnnotationMarks(aAttrIter, nEnd, 1);
                     WriteCR( pTextNodeInfoInner );
                     // #i120928 - position of the bullet's graphic is at end of doc
                     if (bLastCR && (!bExported))
