@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_f53fefb2",
+        "filename": "scripting/java/com/sun/star/script/framework/provider/beanshell/PlainSourceView.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-07-03T10:39:52Z",
+      "side": 1,
+      "message": "this can just be a local variable, it\u0027s better to avoid using  mutable global data where possible",
+      "revId": "15aa3e881668db471bc5281c6e43342d46e721e8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
