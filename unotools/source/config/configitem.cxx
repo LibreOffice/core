@@ -532,16 +532,20 @@ bool ConfigItem::EnableNotification(const Sequence< OUString >& rNames,
 
 void ConfigItem::RemoveChangesListener()
 {
-    Reference<XChangesNotifier> xChgNot(m_xHierarchyAccess, UNO_QUERY);
-    if(xChgNot.is() && xChangeLstnr.is())
+    Reference<XHierarchicalNameAccess> xHierarchyAccess = GetTree();
+    if(xHierarchyAccess.is())
     {
-        try
+        Reference<XChangesNotifier> xChgNot(xHierarchyAccess, UNO_QUERY);
+        if(xChgNot.is() && xChangeLstnr.is())
         {
-            xChgNot->removeChangesListener( xChangeLstnr );
-            xChangeLstnr = nullptr;
-        }
-        catch (const Exception&)
-        {
+            try
+            {
+                xChgNot->removeChangesListener( xChangeLstnr );
+                xChangeLstnr = nullptr;
+            }
+            catch (const Exception&)
+            {
+            }
         }
     }
 }
