@@ -273,7 +273,7 @@ void ContentIdxStoreImpl::RestoreBkmks(SwDoc* pDoc, updater_t const & rUpdater)
     IDocumentMarkAccess* const pMarkAccess = pDoc->getIDocumentMarkAccess();
     for (const MarkEntry& aEntry : m_aBkmkEntries)
     {
-        if (MarkBase* pMark = dynamic_cast<MarkBase*>(pMarkAccess->getAllMarksBegin()[aEntry.m_nIdx]))
+        if (MarkBase *const pMark = pMarkAccess->getAllMarksBegin().get()[aEntry.m_nIdx])
         {
             SwPosition aNewPos(GetRightMarkPos(pMark, aEntry.m_bOther));
             rUpdater(aNewPos, aEntry.m_nContent);
