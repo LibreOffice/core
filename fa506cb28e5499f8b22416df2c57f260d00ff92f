@@ -2,6 +2,40 @@
   "comments": [
     {
       "key": {
+        "uuid": "bf659307_b54737bd",
+        "filename": "offapi/com/sun/star/drawing/XShapes2.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-07-03T15:50:30Z",
+      "side": 1,
+      "message": "also a since tag\n\nalso, can this interface be changed incompatibly or do we need XShapes3",
+      "revId": "fa506cb28e5499f8b22416df2c57f260d00ff92f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_d5442bba",
+        "filename": "offapi/com/sun/star/drawing/XShapes2.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-07-03T15:50:30Z",
+      "side": 1,
+      "message": "there\u0027s already sort in XSortable, maybe call it something more specific?",
+      "revId": "fa506cb28e5499f8b22416df2c57f260d00ff92f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bf659307_f5cfef54",
         "filename": "svx/source/svdraw/svdpage.cxx",
         "patchSetId": 1
@@ -19,6 +53,58 @@
     },
     {
       "key": {
+        "uuid": "bf659307_d5d66bf2",
+        "filename": "svx/source/svdraw/svdpage.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 561,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-07-03T15:50:30Z",
+      "side": 1,
+      "message": "hmm with input coming from a file, or even worse, a BASIC macro, some checks are in order...\n\nthat\u0027s a good start but there are more problems ...",
+      "parentUuid": "bf659307_f5cfef54",
+      "revId": "fa506cb28e5499f8b22416df2c57f260d00ff92f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_75051f7a",
+        "filename": "svx/source/svdraw/svdpage.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 565,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-07-03T15:50:30Z",
+      "side": 1,
+      "message": "the sortOrder[i] could be a number \u003c 0 or \u003e size of maList\n\nguess we should throw then?\n\nalso the sortOrder vector must contain all valid indexes once, no duplicates allowed",
+      "revId": "fa506cb28e5499f8b22416df2c57f260d00ff92f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_950a3388",
+        "filename": "svx/source/svdraw/svdpage.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 566,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-07-03T15:50:30Z",
+      "side": 1,
+      "message": "but if the above throws we\u0027ll have half the items with a new OrdNum and half with the old one, that would be another way to create duplicates... just iterate twice so all checks are before mutations?",
+      "revId": "fa506cb28e5499f8b22416df2c57f260d00ff92f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bf659307_55eb3baf",
         "filename": "xmloff/source/draw/shapeimport.cxx",
         "patchSetId": 1
@@ -30,6 +116,41 @@
       "writtenOn": "2019-07-03T15:20:54Z",
       "side": 1,
       "message": "So I struggle a bit with how to best build the new sorting order and include shapes from maUnsortedList as well. The test doc I have contains only shapes that have z-order set but presumably not all docs are like that ...",
+      "revId": "fa506cb28e5499f8b22416df2c57f260d00ff92f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_7513dfb9",
+        "filename": "xmloff/source/draw/shapeimport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 810,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-07-03T15:50:30Z",
+      "side": 1,
+      "message": "if the below loop is indeed dead then that case already doesn\u0027t work :)",
+      "parentUuid": "bf659307_55eb3baf",
+      "revId": "fa506cb28e5499f8b22416df2c57f260d00ff92f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_5539fb3e",
+        "filename": "xmloff/source/draw/shapeimport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 826,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-07-03T15:50:30Z",
+      "side": 1,
+      "message": "uhm.... apparently maUnsortedList\u0027s elements always have nShould \u003d -1 and then nIndex \u003c rHint.nShould is never true because nIndex \u003e\u003d 0 (until we reach 2 billion shapes) so this loop is dead?\n\n... but then nothing prevents collisions between nIs of maUnsortedList elements and the indexes assigned to maZOrderList elements?",
       "revId": "fa506cb28e5499f8b22416df2c57f260d00ff92f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
