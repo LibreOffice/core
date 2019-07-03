@@ -1019,7 +1019,7 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
 
             if (!m_pImpl->m_pSdtHelper->getDropDownItems().empty())
                 m_pImpl->m_pSdtHelper->createDropDownControl();
-            else if (m_pImpl->m_pSdtHelper->validateDateFormat() && !IsInHeaderFooter())
+            else if (m_pImpl->m_pSdtHelper->validateDateFormat())
                 m_pImpl->m_pSdtHelper->createDateContentControl();
         break;
         case NS_ooxml::LN_CT_SdtListItem_displayText:
@@ -2435,30 +2435,20 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
     break;
     case NS_ooxml::LN_CT_SdtDate_dateFormat:
     {
-        if (!IsInHeaderFooter())
-            m_pImpl->m_pSdtHelper->getDateFormat().append(sStringValue);
-        else
-            m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, "ooxml:CT_SdtDate_dateFormat", sStringValue);
+        m_pImpl->m_pSdtHelper->getDateFormat().append(sStringValue);
     }
     break;
     case NS_ooxml::LN_CT_SdtDate_storeMappedDataAs:
     {
-        if (IsInHeaderFooter())
-            m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, "ooxml:CT_SdtDate_storeMappedDataAs", sStringValue);
     }
     break;
     case NS_ooxml::LN_CT_SdtDate_calendar:
     {
-        if (IsInHeaderFooter())
-            m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, "ooxml:CT_SdtDate_calendar", sStringValue);
     }
     break;
     case NS_ooxml::LN_CT_SdtDate_lid:
     {
-        if (!IsInHeaderFooter())
-            m_pImpl->m_pSdtHelper->getLocale().append(sStringValue);
-        else
-            m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, "ooxml:CT_SdtDate_lid", sStringValue);
+        m_pImpl->m_pSdtHelper->getLocale().append(sStringValue);
     }
     break;
     case NS_ooxml::LN_CT_SdtPr_dataBinding:
@@ -3227,13 +3217,13 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
             return;
         }
     }
-    // Form controls are not allowed in headers / footers; see sw::DocumentContentOperationsManager::InsertDrawObj()
-    else if (m_pImpl->m_pSdtHelper->validateDateFormat() && !IsInHeaderFooter())
+    else if (m_pImpl->m_pSdtHelper->validateDateFormat())
     {
         // Date field will be imported, so we don't need the corresponding date text in most of the cases
         // however when fullDate is not specified, but we have a date string we need to import it as
         // simple text (this is the case when user sets date field manually in MSO).
-        if(!m_pImpl->m_pSdtHelper->getDate().toString().isEmpty() || sText.isEmpty())
+        if((!m_pImpl->m_pSdtHelper->getDate().toString().isEmpty() || sText.isEmpty()) &&
+           (!IsInHeaderFooter() || !m_pImpl->IsDiscardHeaderFooter())) // discard date control with header / footer
         {
             return;
         }
