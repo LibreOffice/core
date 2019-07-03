@@ -202,7 +202,7 @@ bool SwCursorShell::GotoMark(const ::sw::mark::IMark* const pMark)
 bool SwCursorShell::GoNextBookmark()
 {
     IDocumentMarkAccess* pMarkAccess = getIDocumentMarkAccess();
-    IDocumentMarkAccess::container_t vCandidates;
+    std::vector<::sw::mark::IMark*> vCandidates;
     remove_copy_if(
         pMarkAccess->findFirstBookmarkStartsAfter(*GetCursor()->GetPoint()),
         pMarkAccess->getBookmarksEnd(),
@@ -211,7 +211,7 @@ bool SwCursorShell::GoNextBookmark()
 
     // watch Cursor-Moves
     CursorStateHelper aCursorSt(*this);
-    IDocumentMarkAccess::const_iterator_t ppMark = vCandidates.begin();
+    auto ppMark = vCandidates.begin();
     for(; ppMark!=vCandidates.end(); ++ppMark)
     {
         if (sw::IsMarkHidden(*GetLayout(), **ppMark))
@@ -237,7 +237,7 @@ bool SwCursorShell::GoPrevBookmark()
     IDocumentMarkAccess* pMarkAccess = getIDocumentMarkAccess();
     // candidates from which to choose the mark before
     // no need to consider marks starting after rPos
-    IDocumentMarkAccess::container_t vCandidates;
+    std::vector<::sw::mark::IMark*> vCandidates;
     remove_copy_if(
         pMarkAccess->getBookmarksBegin(),
         pMarkAccess->findFirstBookmarkStartsAfter(*GetCursor()->GetPoint()),
@@ -250,7 +250,7 @@ bool SwCursorShell::GoPrevBookmark()
 
     // watch Cursor-Moves
     CursorStateHelper aCursorSt(*this);
-    IDocumentMarkAccess::const_iterator_t ppMark = vCandidates.begin();
+    auto ppMark = vCandidates.begin();
     for(; ppMark!=vCandidates.end(); ++ppMark)
     {
         // ignoring those not ending before the Cursor
