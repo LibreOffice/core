@@ -743,6 +743,16 @@ SdrGrafObj& SdrGrafObj::operator=( const SdrGrafObj& rObj )
     mbIsSignatureLineCanAddComment = rObj.mbIsSignatureLineCanAddComment;
     mbSignatureLineIsSigned = false;
     mpSignatureLineUnsignedGraphic = rObj.mpSignatureLineUnsignedGraphic;
+
+    if(rObj.mpQrCode)
+    {
+        mpQrCode = std::make_unique<css::drawing::QRCode>(*rObj.mpQrCode);
+    }
+    else
+    {
+        mpQrCode.reset();
+    }
+
     if (mbIsSignatureLine && rObj.mpSignatureLineUnsignedGraphic)
         mpGraphicObject->SetGraphic(rObj.mpSignatureLineUnsignedGraphic);
     else
