@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_e255f71e",
+        "filename": "basctl/source/basicide/basobj2.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2019-07-03T09:15:39Z",
+      "side": 1,
+      "message": "Should I create the sorter only once outside this function?",
+      "range": {
+        "startLine": 96,
+        "startChar": 4,
+        "endLine": 98,
+        "endChar": 67
+      },
+      "revId": "0f1078b5fb9ed96da494c9ba761577cd02986446",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_c258f357",
+        "filename": "basctl/source/basicide/scriptdocument.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2019-07-03T09:15:39Z",
+      "side": 1,
+      "message": "Should I create the sorter only once outside this function?",
+      "range": {
+        "startLine": 121,
+        "startChar": 12,
+        "endLine": 123,
+        "endChar": 75
+      },
+      "revId": "0f1078b5fb9ed96da494c9ba761577cd02986446",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
