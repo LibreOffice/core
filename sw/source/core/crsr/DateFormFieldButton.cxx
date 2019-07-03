@@ -59,17 +59,16 @@ SwDatePickerDialog::SwDatePickerDialog(SwEditWin* parent, sw::mark::IFieldmark* 
 
             sal_uInt32 nFormat = m_pNumberFormatter->GetEntryKey(ODF_FORMDATE_CURRENTDATE_FORMAT,
                                                                  ODF_FORMDATE_CURRENTDATE_LANGUAGE);
-            bool bValidFormat = nFormat != NUMBERFORMAT_ENTRY_NOT_FOUND;
             if (nFormat == NUMBERFORMAT_ENTRY_NOT_FOUND)
             {
                 sal_Int32 nCheckPos = 0;
                 SvNumFormatType nType;
                 OUString sFormat = ODF_FORMDATE_CURRENTDATE_FORMAT;
-                bValidFormat = m_pNumberFormatter->PutEntry(sFormat, nCheckPos, nType, nFormat,
-                                                            ODF_FORMDATE_CURRENTDATE_LANGUAGE);
+                m_pNumberFormatter->PutEntry(sFormat, nCheckPos, nType, nFormat,
+                                             ODF_FORMDATE_CURRENTDATE_LANGUAGE);
             }
 
-            if (bValidFormat)
+            if (nFormat != NUMBERFORMAT_ENTRY_NOT_FOUND)
             {
                 double dCurrentDate = 0;
                 m_pNumberFormatter->IsNumberFormat(sDateString, nFormat, dCurrentDate);
@@ -101,17 +100,16 @@ IMPL_LINK(SwDatePickerDialog, ImplSelectHdl, Calendar*, pCalendar, void)
         {
             sal_uInt32 nFormat = m_pNumberFormatter->GetEntryKey(ODF_FORMDATE_CURRENTDATE_FORMAT,
                                                                  ODF_FORMDATE_CURRENTDATE_LANGUAGE);
-            bool bValidFormat = nFormat != NUMBERFORMAT_ENTRY_NOT_FOUND;
             if (nFormat == NUMBERFORMAT_ENTRY_NOT_FOUND)
             {
                 sal_Int32 nCheckPos = 0;
                 SvNumFormatType nType;
                 OUString sFormat = ODF_FORMDATE_CURRENTDATE_FORMAT;
-                bValidFormat = m_pNumberFormatter->PutEntry(sFormat, nCheckPos, nType, nFormat,
-                                                            ODF_FORMDATE_CURRENTDATE_LANGUAGE);
+                m_pNumberFormatter->PutEntry(sFormat, nCheckPos, nType, nFormat,
+                                             ODF_FORMDATE_CURRENTDATE_LANGUAGE);
             }
 
-            if (bValidFormat)
+            if (nFormat != NUMBERFORMAT_ENTRY_NOT_FOUND)
             {
                 Color* pCol = nullptr;
                 OUString sOutput;

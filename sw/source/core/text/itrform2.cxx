@@ -891,20 +891,19 @@ namespace sw { namespace mark {
             pResult->second >>= sFormattedDate;
 
             sal_uInt32 nFormat = pFormatter->GetEntryKey(ODF_FORMDATE_CURRENTDATE_FORMAT, ODF_FORMDATE_CURRENTDATE_LANGUAGE);
-            bool bValidFormat = nFormat != NUMBERFORMAT_ENTRY_NOT_FOUND;
             if (nFormat == NUMBERFORMAT_ENTRY_NOT_FOUND)
             {
                 sal_Int32 nCheckPos = 0;
                 SvNumFormatType nType;
                 OUString sFormat = ODF_FORMDATE_CURRENTDATE_FORMAT;
-                bValidFormat = pFormatter->PutEntry(sFormat,
-                                                    nCheckPos,
-                                                    nType,
-                                                    nFormat,
-                                                    ODF_FORMDATE_CURRENTDATE_LANGUAGE);
+                pFormatter->PutEntry(sFormat,
+                                     nCheckPos,
+                                     nType,
+                                     nFormat,
+                                     ODF_FORMDATE_CURRENTDATE_LANGUAGE);
             }
 
-            if (bValidFormat)
+            if (nFormat != NUMBERFORMAT_ENTRY_NOT_FOUND)
             {
                 pFormatter->IsNumberFormat(sFormattedDate, nFormat, dCurrentDate);
                 bHasCurrentDate = true;
@@ -914,20 +913,19 @@ namespace sw { namespace mark {
         if (!sDateFormat.isEmpty() && !sLang.isEmpty() && bHasCurrentDate)
         {
             sal_uInt32 nFormat = pFormatter->GetEntryKey(sDateFormat, LanguageTag(sLang).getLanguageType());
-            bool bValidFormat = nFormat != NUMBERFORMAT_ENTRY_NOT_FOUND;
             if (nFormat == NUMBERFORMAT_ENTRY_NOT_FOUND)
             {
                 sal_Int32 nCheckPos = 0;
                 SvNumFormatType nType;
-                bValidFormat = pFormatter->PutEntry(sDateFormat,
-                                                    nCheckPos,
-                                                    nType,
-                                                    nFormat,
-                                                    LanguageTag(sLang).getLanguageType());
+                pFormatter->PutEntry(sDateFormat,
+                                     nCheckPos,
+                                     nType,
+                                     nFormat,
+                                     LanguageTag(sLang).getLanguageType());
             }
 
             OUString sOutput;
-            if (bValidFormat)
+            if (nFormat != NUMBERFORMAT_ENTRY_NOT_FOUND)
             {
                 Color* pCol = nullptr;
                 pFormatter->GetOutputString(dCurrentDate, nFormat, sOutput, &pCol, false);
