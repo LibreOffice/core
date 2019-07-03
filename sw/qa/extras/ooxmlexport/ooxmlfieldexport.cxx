@@ -589,13 +589,13 @@ DECLARE_OOXMLEXPORT_TEST(testfdo82492, "fdo82492.docx")
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:sdt[1]/w:sdtContent/w:r",1);
 }
 
-/*DECLARE_OOXMLEXPORT_TEST(testSdtHeader, "sdt-header.docx")
+DECLARE_OOXMLEXPORT_TEST(testSdtHeader, "sdt-header.docx")
 {
     // Problem was that w:sdt elements in headers were lost on import.
     if (xmlDocPtr pXmlDoc = parseExport("word/header1.xml"))
         // This was 0, w:sdt (and then w:date) was missing.
         assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w:date", 1);
-}*/
+}
 
 DECLARE_OOXMLEXPORT_TEST(testSdtCompanyMultipara, "sdt-company-multipara.docx")
 {
