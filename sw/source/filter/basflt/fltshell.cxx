@@ -662,6 +662,17 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
                     if (pPostIt)
                     {
                         assert(pPostIt->GetName().isEmpty());
+
+                        if (!aRegion.HasMark())
+                        {
+                            // Annotation range was found in the file, but start/end is the same,
+                            // pointing after the postit placeholder (see assert above).
+                            // Adjust the start of the range to actually cover the comment, similar
+                            // to what the UI and the UNO API does.
+                            aRegion.SetMark();
+                            --aRegion.Start()->nContent;
+                        }
+
                         pDoc->getIDocumentMarkAccess()->makeAnnotationMark(aRegion, OUString());
                     }
                     else
