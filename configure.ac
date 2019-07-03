@@ -2217,7 +2217,7 @@ AC_ARG_WITH(parallelism,
         [Number of jobs to run simultaneously during build. Parallel builds can
         save a lot of time on multi-cpu machines. Defaults to the number of
         CPUs on the machine, unless you configure --enable-icecream - then to
-        10.]),
+        40.]),
 ,)
 
 AC_ARG_WITH(all-tarballs,
@@ -12409,7 +12409,7 @@ if test -n "$with_parallelism" -a "$with_parallelism" != "yes"; then
     fi
 else
     if test "$enable_icecream" = "yes"; then
-        PARALLELISM="10"
+        PARALLELISM="40"
     else
         case `uname -s` in
 
