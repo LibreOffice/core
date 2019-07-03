@@ -338,13 +338,10 @@ public class ParcelDescriptor {
             String key;
             item = document.createElement("languagedepprops");
 
-            Iterator<String> iter = languagedepprops.keySet().iterator();
-
-            while (iter.hasNext()) {
+            for (Map.Entry<String, String> entry : languagedepprops.entrySet()) {
                 tempitem = document.createElement("prop");
-                key = iter.next();
-                tempitem.setAttribute("name", key);
-                tempitem.setAttribute("value", languagedepprops.get(key));
+                tempitem.setAttribute("name", entry.getKey());
+                tempitem.setAttribute("value", entry.getValue());
                 item.appendChild(tempitem);
             }
 
