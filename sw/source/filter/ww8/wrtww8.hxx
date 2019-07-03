@@ -1230,8 +1230,11 @@ struct WW8_Annotation
     OUString m_sInitials;
     DateTime maDateTime;
     WW8_CP m_nRangeStart, m_nRangeEnd;
+    bool m_bIgnoreEmpty = true;
     WW8_Annotation(const SwPostItField* pPostIt, WW8_CP nRangeStart, WW8_CP nRangeEnd);
     explicit WW8_Annotation(const SwRedlineData* pRedline);
+    /// An annotation has a range if start != end or the m_bIgnoreEmpty flag is cleared.
+    bool HasRange() const;
 };
 
 class WW8_WrPlcAnnotations : public WW8_WrPlcSubDoc  // double Plc for Postits
@@ -1241,12 +1244,12 @@ private:
     WW8_WrPlcAnnotations& operator=(WW8_WrPlcAnnotations const &) = delete;
     std::set<const SwRedlineData*> maProcessedRedlines;
 
-    std::map<const OUString, WW8_CP> m_aRangeStartPositions;
+    std::map<const OUString, std::pair<WW8_CP, bool>> m_aRangeStartPositions;
 public:
     WW8_WrPlcAnnotations() {}
     virtual ~WW8_WrPlcAnnotations() override;
 
-    void AddRangeStartPosition(const OUString& rName, WW8_CP nStartCp);
+    void AddRangeStartPosition(const OUString& rName, WW8_CP nStartCp, bool bIgnoreEmpty);
     void Append( WW8_CP nCp, const SwPostItField* pPostIt );
     void Append( WW8_CP nCp, const SwRedlineData* pRedLine );
     bool IsNewRedlineComment( const SwRedlineData* pRedLine );

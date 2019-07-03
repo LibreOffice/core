@@ -1490,7 +1490,8 @@ void WW8Export::AppendAnnotationMarks(const SwWW8AttrIter& rAttrs, sal_Int32 nCu
             const sal_Int32 nStart = pMark->GetMarkStart().nContent.GetIndex();
             if (nStart == nCurrentPos)
             {
-                m_pAtn->AddRangeStartPosition(pMark->GetName(), Fc2Cp(Strm().Tell()));
+                m_pAtn->AddRangeStartPosition(pMark->GetName(), Fc2Cp(Strm().Tell()),
+                                              !rAttrs.HasFlysAt(nCurrentPos));
             }
         }
     }

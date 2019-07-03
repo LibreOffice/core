@@ -1962,9 +1962,20 @@ WW8_Annotation::WW8_Annotation(const SwRedlineData* pRedline)
     maDateTime = pRedline->GetTimeStamp();
 }
 
-void WW8_WrPlcAnnotations::AddRangeStartPosition(const OUString& rName, WW8_CP nStartCp)
+bool WW8_Annotation::HasRange() const
 {
-    m_aRangeStartPositions[rName] = nStartCp;
+    if (m_nRangeStart != m_nRangeEnd)
+    {
+        return true;
+    }
+
+    return !m_bIgnoreEmpty;
+}
+
+void WW8_WrPlcAnnotations::AddRangeStartPosition(const OUString& rName, WW8_CP nStartCp,
+                                                 bool bIgnoreEmpty)
+{
+    m_aRangeStartPositions[rName] = std::make_pair(nStartCp, bIgnoreEmpty);
 }
 
 void WW8_WrPlcAnnotations::Append( WW8_CP nCp, const SwPostItField *pPostIt )
@@ -1973,7 +1984,9 @@ void WW8_WrPlcAnnotations::Append( WW8_CP nCp, const SwPostItField *pPostIt )
     WW8_Annotation* p;
     if( m_aRangeStartPositions.find(pPostIt->GetName()) != m_aRangeStartPositions.end() )
     {
-        p = new WW8_Annotation(pPostIt, m_aRangeStartPositions[pPostIt->GetName()], nCp);
+        auto [nStartCp, bIgnoreEmpty] = m_aRangeStartPositions[pPostIt->GetName()];
+        p = new WW8_Annotation(pPostIt, nStartCp, nCp);
+        p->m_bIgnoreEmpty = bIgnoreEmpty;
         m_aRangeStartPositions.erase(pPostIt->GetName());
     }
     else
@@ -2178,7 +2191,7 @@ void WW8_WrPlcSubDoc::WriteGenericPlc( WW8Export& rWrt, sal_uInt8 nTTyp,
                     const WW8_Annotation& rAtn = *static_cast<const WW8_Annotation*>(aContent[i]);
                     aStrArr.emplace_back(rAtn.msOwner,rAtn.m_sInitials);
                     // record start and end positions for ranges
-                    if( rAtn.m_nRangeStart != rAtn.m_nRangeEnd )
+                    if (rAtn.HasRange())
                     {
                         aRangeStartPos.emplace_back(rAtn.m_nRangeStart, nIdx);
                         aRangeEndPos.emplace_back(rAtn.m_nRangeEnd, nIdx);
@@ -2403,7 +2416,7 @@ void WW8_WrPlcSubDoc::WriteGenericPlc( WW8Export& rWrt, sal_uInt8 nTTyp,
                 SwWW8Writer::WriteShort( *rWrt.pTableStrm, nFndPos );
                 SwWW8Writer::WriteShort( *rWrt.pTableStrm, 0 );
                 SwWW8Writer::WriteShort( *rWrt.pTableStrm, 0 );
-                if( rAtn.m_nRangeStart != rAtn.m_nRangeEnd )
+                if (rAtn.HasRange())
                 {
                     SwWW8Writer::WriteLong( *rWrt.pTableStrm, nlTag );
                     ++nlTag;
