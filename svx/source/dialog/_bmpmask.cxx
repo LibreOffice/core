@@ -901,19 +901,6 @@ GDIMetaFile SvxBmpMask::ImpMask( const GDIMetaFile& rMtf )
 }
 
 
-BitmapEx SvxBmpMask::ImpReplaceTransparency( const BitmapEx& rBmpEx, const Color& rColor )
-{
-    if( rBmpEx.IsTransparent() )
-    {
-        Bitmap aBmp( rBmpEx.GetBitmap() );
-        aBmp.Replace( rBmpEx.GetMask(), rColor );
-        return BitmapEx(aBmp);
-    }
-    else
-        return rBmpEx;
-}
-
-
 Animation SvxBmpMask::ImpReplaceTransparency( const Animation& rAnim, const Color& rColor )
 {
     Animation   aAnimation( rAnim );
@@ -922,7 +909,7 @@ Animation SvxBmpMask::ImpReplaceTransparency( const Animation& rAnim, const Colo
     for( sal_uInt16 i = 0; i < nAnimationCount; i++ )
     {
         AnimationBitmap aAnimationBitmap(aAnimation.Get(i));
-        aAnimationBitmap.maBitmapEx = ImpReplaceTransparency(aAnimationBitmap.maBitmapEx, rColor);
+        aAnimationBitmap.maBitmapEx.ReplaceTransparency(rColor);
         aAnimation.Replace(aAnimationBitmap, i);
     }
 
@@ -990,14 +977,9 @@ Graphic SvxBmpMask::Mask( const Graphic& rGraphic )
                 // Replace transparency?
                 if( m_pCbxTrans->IsChecked() )
                 {
-                    if( aGraphic.IsTransparent() )
-                    {
-                        BitmapEx    aBmpEx( ImpReplaceTransparency( aGraphic.GetBitmapEx(), aReplColor ) );
-                        const Size  aSize( aBmpEx.GetSizePixel() );
-
-                        if( aSize.Width() && aSize.Height() )
-                            aGraphic = aBmpEx;
-                    }
+                    BitmapEx aBmpEx = aGraphic.GetBitmapEx();
+                    aBmpEx.ReplaceTransparency(aReplColor);
+                    aGraphic = aBmpEx;
                 }
                 else
                 {

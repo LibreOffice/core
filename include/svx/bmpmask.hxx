@@ -141,8 +141,6 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxBmpMask : public SfxDockingWindow
 
     GDIMetaFile         GetMetaFile(const Graphic& rGraphic);
 
-    static BitmapEx     ImpReplaceTransparency( const BitmapEx& rBmpEx,
-                                                const Color& rColor );
     static Animation    ImpReplaceTransparency( const Animation& rAnim,
                                                 const Color& rColor );
     static GDIMetaFile  ImpReplaceTransparency( const GDIMetaFile& rMtf,

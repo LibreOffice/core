@@ -1294,6 +1294,19 @@ void BitmapEx::Replace(const Color& rSearchColor,
     maBitmap.Replace(rSearchColor, rReplaceColor, nTolerance);
 }
 
+void BitmapEx::ReplaceTransparency(const Color& rColor)
+{
+    if( IsTransparent() )
+    {
+        maBitmap.Replace( GetMask(), rColor );
+        maMask = Bitmap();
+        maBitmapSize = maBitmap.GetSizePixel();
+        maTransparentColor = Color();
+        meTransparent = TransparentType::NONE;
+        mbAlpha = false;
+    }
+}
+
 void BitmapEx::setAlphaFrom( sal_uInt8 cIndexFrom, sal_Int8 nAlphaTo )
 {
     AlphaMask aAlphaMask(GetAlpha());
