@@ -244,6 +244,10 @@ public:
     bool IsCropAllowed() const;
     bool IsDistortAllowed(bool bNoContortion=false) const;
 
+    // Consolidate the text from multiple, selected TextObjects,
+    // attempting to identify paragraph fragments and join them together
+    void CombineMarkedTextObjects();
+
     // Unite several objects to a polygon:
     // - rectangles/circles/text... are implicitly converted.
     // - polygones are closed automatically

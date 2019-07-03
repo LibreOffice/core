@@ -94,6 +94,7 @@
     // FREE
 #define SID_POSITION                        (SID_SD_START+22)
     // FREE
+#define SID_TEXT_COMBINE                    (SID_SD_START+25)
 #define SID_COMBINE                         (SID_SD_START+26)
 #define SID_NAME_GROUP                      (SID_SD_START+27)
 #define SID_DRAWTBX_CONNECTORS              (SID_SD_START+28)
