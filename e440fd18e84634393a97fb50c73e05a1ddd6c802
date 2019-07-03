@@ -22,6 +22,30 @@
       "revId": "e440fd18e84634393a97fb50c73e05a1ddd6c802",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_55125bb3",
+        "filename": "sw/source/core/unocore/unofield.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1972,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2019-07-03T15:53:55Z",
+      "side": 1,
+      "message": "SwPaM is confusing: it has 2 values (bound1, bound2) and 2 pointers (point, mark). Point is always a valid pointer, mark also points to the same value as point, unless SetMark() is called. You can also query this state via HasMark().\n\nThis means that if SetMark() is not called, then *GetMark() \u003d foo will actually set the point!\n\nStart/End is not just an alias for point and mark, but operator\u003c() decides if start/ends points to point/mark or the other way around.\n\nRegarding the actual condition change: the patch relaxes it: previously the UNO API discarded a comment\u0027s annotation mark if it covered the comment anchor only; but it no longer does, as that\u0027s exactly the doc model for the commented image (anchor the image to a doc model position which is also a comment anchor, and set the annotation mark to covert the start-\u003eend of the comment anchor, i.e. exactly 1 character).\n\nThis could be just `if (true)`, but I found no use-case for the situation where we have separate mark (not only point) but they point to the same doc model position, so I left that rejected, as before.\n\nDoes this help? :-)",
+      "parentUuid": "bf659307_f5f84f7d",
+      "range": {
+        "startLine": 1972,
+        "startChar": 12,
+        "endLine": 1972,
+        "endChar": 30
+      },
+      "revId": "e440fd18e84634393a97fb50c73e05a1ddd6c802",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
