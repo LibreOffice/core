@@ -136,7 +136,7 @@ diff -ru libgpg-error.orig/src/Makefile.in libgpg-error/src/Makefile.in
  
  errnos-sym.h: Makefile mkstrtable.awk errnos.in
 @@ -1325,7 +1325,7 @@
- 		-v prefix=GPG_ERR_ -v namespace=errnos_ \
+ 		-v prefix=GPG_ERR_ -v pkg_namespace=errnos_ \
  		$(srcdir)/errnos.in >$@
  
 -mkheader: mkheader.c Makefile
