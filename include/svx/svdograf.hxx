@@ -22,6 +22,7 @@
 
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
+#include <com/sun/star/drawing/QRCode.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <vcl/graph.hxx>
 #include <svx/svdorect.hxx>
@@ -111,6 +112,8 @@ private:
     bool mbIsSignatureLineCanAddComment;
     bool mbSignatureLineIsSigned;
     css::uno::Reference<css::graphic::XGraphic> mpSignatureLineUnsignedGraphic;
+
+    css::drawing::QRCode mpQrCode;
 
     void                    ImpRegisterLink();
     void                    ImpDeregisterLink();
@@ -282,6 +285,17 @@ public:
     };
     bool isSignatureLineSigned() const { return mbSignatureLineIsSigned; };
     void setSignatureLineIsSigned(bool bIsSigned) { mbSignatureLineIsSigned = bIsSigned; }
+
+    // Qr Code
+    void setQrCode(const css::drawing::QRCode& rQrCode)
+    {
+        mpQrCode = rQrCode;
+    };
+    const css::drawing::QRCode& getQrCode() const
+    {
+        return mpQrCode;
+    };
+
 };
 
 #endif // INCLUDED_SVX_SVDOGRAF_HXX
