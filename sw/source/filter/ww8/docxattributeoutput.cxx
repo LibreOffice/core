@@ -1891,8 +1891,11 @@ void DocxAttributeOutput::WriteFormDate(const OUString& sCurrentDate, const OUSt
     else
         m_pSerializer->startElementNS(XML_w, XML_date);
 
+    OString sUTF8DateFormat = sDateFormat.toUtf8();
+    // Replace quotation mark used for marking static strings in date format
+    sUTF8DateFormat = sUTF8DateFormat.replaceAll("\"", "'");
     m_pSerializer->singleElementNS(XML_w, XML_dateFormat,
-                                   FSNS(XML_w, XML_val), sDateFormat.toUtf8());
+                                   FSNS(XML_w, XML_val), sUTF8DateFormat);
     m_pSerializer->singleElementNS(XML_w, XML_lid,
                                    FSNS(XML_w, XML_val), sLang.toUtf8());
     m_pSerializer->singleElementNS(XML_w, XML_storeMappedDataAs,
