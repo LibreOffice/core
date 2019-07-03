@@ -344,7 +344,6 @@ const ProvNamesId_Type aProvNamesId[] =
     { "com.sun.star.text.TextField.DocInfo.Description",      SwServiceType::FieldTypeDocInfoDescription },
     { "com.sun.star.text.TextField.DocInfo.CreateAuthor",     SwServiceType::FieldTypeDocInfoCreateAuthor },
     { "com.sun.star.text.TextField.DocInfo.CreateDateTime",   SwServiceType::FieldTypeDocInfoCreateDateTime },
-    { "",                                                     SwServiceType::FieldTypeDummy0 },
     { "",                                                     SwServiceType::FieldTypeDummy1 },
     { "",                                                     SwServiceType::FieldTypeDummy2 },
     { "",                                                     SwServiceType::FieldTypeDummy3 },
