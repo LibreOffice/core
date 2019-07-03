@@ -1997,6 +1997,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/chart,\
 $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/chart2,\
 	AxisOrientation \
 	AxisType \
+	ChartObjectType \
 	CoordinateSystemTypeID \
 	CurveStyle \
 	DataPointGeometry3D \
@@ -2021,6 +2022,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/chart2,\
 	XChartDocument \
 	XChartShape \
 	XChartShapeContainer \
+	XChartStyle \
 	XChartStyles \
 	XChartType \
 	XChartTypeContainer \
