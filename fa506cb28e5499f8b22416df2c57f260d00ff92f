@@ -154,6 +154,24 @@
       "revId": "fa506cb28e5499f8b22416df2c57f260d00ff92f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_1524e30c",
+        "filename": "xmloff/source/draw/shapeimport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 826,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-07-03T15:55:36Z",
+      "side": 1,
+      "message": "was already like this in 2000, commit 0a81c793064b537d29d819254ae7384b534407ac",
+      "parentUuid": "bf659307_5539fb3e",
+      "revId": "fa506cb28e5499f8b22416df2c57f260d00ff92f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
