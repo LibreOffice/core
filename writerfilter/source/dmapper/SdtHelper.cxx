@@ -122,7 +122,10 @@ void SdtHelper::createDateContentControl()
             uno::Reference<container::XNameContainer> xNameCont = xFormField->getParameters();
             if(xNameCont.is())
             {
-                xNameCont->insertByName(ODF_FORMDATE_DATEFORMAT, uno::makeAny(m_sDateFormat.makeStringAndClear()));
+                OUString sDateFormat = m_sDateFormat.makeStringAndClear();
+                // Replace quotation mark used for marking static strings in date format
+                sDateFormat = sDateFormat.replaceAll("'", "\"");
+                xNameCont->insertByName(ODF_FORMDATE_DATEFORMAT, uno::makeAny(sDateFormat));
                 xNameCont->insertByName(ODF_FORMDATE_DATEFORMAT_LANGUAGE, uno::makeAny(m_sLocale.makeStringAndClear()));
                 OUString sDate = m_sDate.makeStringAndClear();
                 if(!sDate.isEmpty())
