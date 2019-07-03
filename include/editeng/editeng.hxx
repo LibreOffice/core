@@ -299,7 +299,7 @@ public:
     void            SetText( const EditTextObject& rTextObject );
 
     void            RemoveParagraph(sal_Int32 nPara);
-    void            InsertParagraph(sal_Int32 nPara, const EditTextObject& rTxtObj);
+    void            InsertParagraph(sal_Int32 nPara, const EditTextObject& rTxtObj, const bool bAppend = false);
     void            InsertParagraph(sal_Int32 nPara, const OUString& rText);
 
     void            SetText(sal_Int32 nPara, const OUString& rText);

@@ -3921,7 +3921,6 @@ EditPaM ImpEditEngine::ConnectContents( sal_Int32 nLeftNode, bool bBackward )
     ContentNode* pRightNode = aEditDoc.GetObject( nLeftNode+1 );
     DBG_ASSERT( pLeftNode, "Invalid left node in ConnectContents ");
     DBG_ASSERT( pRightNode, "Invalid right node in ConnectContents ");
-    DBG_ASSERT( IsInUndo(), "ConnectContent only for Undo()!" );
     return ImpConnectParagraphs( pLeftNode, pRightNode, bBackward );
 }
 

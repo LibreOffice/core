@@ -2598,6 +2598,29 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         }
         break;
 
+        case SID_TEXT_COMBINE:  // BASIC
+        {
+            // End text edit to avoid conflicts
+            if(mpDrawView->IsTextEdit())
+                mpDrawView->SdrEndTextEdit();
+
+            if ( mpDrawView->IsPresObjSelected() )
+            {
+                std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                              VclMessageType::Info, VclButtonsType::Ok,
+                                                              SdResId(STR_ACTION_NOTPOSSIBLE)));
+                xInfoBox->run();
+            }
+            else
+            {
+                WaitObject aWait( GetActiveWindow() );
+                mpDrawView->CombineMarkedTextObjects();
+            }
+            Cancel();
+            rReq.Done ();
+        }
+        break;
+
         case SID_COMBINE:  // BASIC
         {
             // End text edit to avoid conflicts
