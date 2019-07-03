@@ -16,6 +16,7 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,libgpg-error,0))
 $(eval $(call gb_UnpackedTarball_add_patches,libgpg-error, \
     external/libgpg-error/fix-autoconf-macros.patch \
     external/libgpg-error/disable-rpath-option.patch \
+	external/libgpg-error/libgpg-error_gawk5.patch \
 ))
 
 # vim: set noet sw=4 ts=4:
