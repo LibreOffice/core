@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_156623ef",
+        "filename": "svx/uiconfig/ui/defaultshapespanel.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1000447
+      },
+      "writtenOn": "2019-07-03T11:01:30Z",
+      "side": 1,
+      "message": "Poligons -\u003e Polygons",
+      "revId": "52c20708430f07c913a6ff40382e5f7d59fbcf30",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
