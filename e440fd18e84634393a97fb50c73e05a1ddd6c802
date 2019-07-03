@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_f5f84f7d",
+        "filename": "sw/source/core/unocore/unofield.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1972,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-07-03T15:36:48Z",
+      "side": 1,
+      "message": "Seems redundant? previously, the Start()/End() were used unconditionally; they dereference both point and mark - so it seems that both must be valid here.\n\nAlso I cannot quite understand why the new condition is checking something that seems to me to be passed previously - so the new condition is not a hardened old condition?",
+      "range": {
+        "startLine": 1972,
+        "startChar": 12,
+        "endLine": 1972,
+        "endChar": 30
+      },
+      "revId": "e440fd18e84634393a97fb50c73e05a1ddd6c802",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
