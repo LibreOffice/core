@@ -80,10 +80,9 @@ public class MultiTypeInterfaceContainer
     synchronized public InterfaceContainer getContainer(Object key)
     {
         InterfaceContainer retVal= null;
-        Iterator<Object> it= map.keySet().iterator();
-        while (it.hasNext())
+        for (Map.Entry<Object,InterfaceContainer> entry : map.entrySet())
         {
-            Object obj= it.next();
+            Object obj= entry.getKey();
             if (obj == null && key == null)
             {
                 retVal= map.get(null);
@@ -91,7 +90,7 @@ public class MultiTypeInterfaceContainer
             }
             else if( obj != null && obj.equals(key))
             {
-                retVal= map.get(obj);
+                retVal= entry.getValue();
                 break;
             }
         }
