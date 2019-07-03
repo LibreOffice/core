@@ -1666,7 +1666,7 @@ bool EditEngine::IsInSelectionMode() const
                 pImpEditEngine->GetSelEngine().IsInSelection() );
 }
 
-void EditEngine::InsertParagraph( sal_Int32 nPara, const EditTextObject& rTxtObj )
+void EditEngine::InsertParagraph( sal_Int32 nPara, const EditTextObject& rTxtObj, bool bAppend )
 {
     if ( nPara > GetParagraphCount() )
     {
@@ -1682,6 +1682,9 @@ void EditEngine::InsertParagraph( sal_Int32 nPara, const EditTextObject& rTxtObj
     // should be taken over!
     pImpEditEngine->RemoveCharAttribs( nPara );
     pImpEditEngine->InsertText( rTxtObj, EditSelection( aPaM, aPaM ) );
+
+    if ( bAppend && nPara )
+        pImpEditEngine->ConnectContents( nPara-1, /*bBackwards=*/false );
 
     pImpEditEngine->UndoActionEnd();
 

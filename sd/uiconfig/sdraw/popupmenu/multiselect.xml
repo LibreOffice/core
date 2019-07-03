@@ -73,6 +73,7 @@
       <menu:menuitem menu:id=".uno:EqualizeHeight"/>
     </menu:menupopup>
   </menu:menu>
+  <menu:menuitem menu:id=".uno:TextCombine"/>
   <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:FormatGroup"/>
   <menu:menuitem menu:id=".uno:FormatUngroup"/>

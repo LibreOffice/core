@@ -676,7 +676,7 @@ public:
 
     Paragraph*      Insert( const OUString& rText, sal_Int32 nAbsPos = EE_PARA_APPEND, sal_Int16 nDepth = 0 );
     void            SetText( const OutlinerParaObject& );
-    void            AddText( const OutlinerParaObject& );
+    void            AddText( const OutlinerParaObject&, bool bAppend = false );
     void            SetText( const OUString& rText, Paragraph* pParagraph );
     OUString        GetText( Paragraph const * pPara, sal_Int32 nParaCount=1 ) const;
 
