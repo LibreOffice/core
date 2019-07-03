@@ -45,7 +45,7 @@
                   <object class="GtkLabel" id="label1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes" context="defaultshapespanel|label1">Lines &amp; Arrows</property>
+                    <property name="label" translatable="yes" context="defaultshapespanel|label1">Lines and Arrows</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>
@@ -82,7 +82,7 @@
                   <object class="GtkLabel" id="label2">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes" context="defaultshapespanel|label2">Curve</property>
+                    <property name="label" translatable="yes" context="defaultshapespanel|label2">Curves and Polygons</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>
@@ -193,7 +193,7 @@
                   <object class="GtkLabel" id="label5">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes" context="defaultshapespanel|label5">Symbols</property>
+                    <property name="label" translatable="yes" context="defaultshapespanel|label5">Symbol Shapes</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>
@@ -341,7 +341,7 @@
                   <object class="GtkLabel" id="label9">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes" context="defaultshapespanel|label9">Stars</property>
+                    <property name="label" translatable="yes" context="defaultshapespanel|label9">Stars and Banners</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>
