@@ -181,8 +181,10 @@
             <property name="spacing">12</property>
             <child>
               <object class="GtkFrame" id="frame1">
+                <property name="height_request">440</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="valign">start</property>
                 <property name="label_xalign">0</property>
                 <property name="shadow_type">none</property>
                 <child>
@@ -621,7 +623,6 @@
                                         <property name="receives_default">False</property>
                                         <property name="xalign">0</property>
                                         <property name="draw_indicator">True</property>
-                                        <property name="label" translatable="no"></property>
                                         <child>
                                           <placeholder/>
                                         </child>
@@ -972,8 +973,10 @@
             </child>
             <child>
               <object class="GtkFrame" id="frame3">
+                <property name="height_request">440</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="valign">start</property>
                 <property name="label_xalign">0</property>
                 <property name="shadow_type">none</property>
                 <child>
@@ -984,7 +987,6 @@
                     <child>
                       <object class="GtkScrolledWindow">
                         <property name="width_request">150</property>
-                        <property name="height_request">300</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="hscrollbar_policy">never</property>
@@ -997,7 +999,6 @@
                             <child>
                               <object class="GtkDrawingArea" id="preview">
                                 <property name="width_request">150</property>
-                                <property name="height_request">300</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                               </object>
