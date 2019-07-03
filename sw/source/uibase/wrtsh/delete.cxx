@@ -398,7 +398,7 @@ bool SwWrtShell::DelRight()
             // #108205# Remember object's position.
             Point aTmpPt = GetObjRect().TopLeft();
 
-            // Remember the anchof of the selected object before deletion.
+            // Remember the anchor of the selected object before deletion.
             std::unique_ptr<SwPosition> pAnchor;
             SwFlyFrame* pFly = GetSelectedFlyFrame();
             if (pFly)
