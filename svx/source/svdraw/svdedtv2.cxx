@@ -21,6 +21,7 @@
 #include <editeng/outliner.hxx>
 #include <svx/svdundo.hxx>
 #include <svx/svdogrp.hxx>
+#include <svx/svdoutl.hxx>
 #include <svx/svdovirt.hxx>
 #include <svx/svdopath.hxx>
 #include <svx/svdpage.hxx>
@@ -45,6 +46,7 @@
 #include <svx/strings.hrc>
 #include <svx/svdoashp.hxx>
 #include <basegfx/polygon/b2dpolypolygoncutter.hxx>
+#include <i18nutil/unicode.hxx>
 #include <sal/log.hxx>
 #include <tools/debug.hxx>
 #include <memory>
@@ -1211,6 +1213,84 @@ void SdrEditView::EqualizeMarkedObjects(bool bWidth)
 
     if (bUndo)
         EndUndo();
+}
+
+void SdrEditView::CombineMarkedTextObjects()
+{
+    bool bUndo = IsUndoEnabled();
+
+    // Undo-String will be set later
+    if ( bUndo )
+        BegUndo();
+
+    SdrObjList* xpInsOL = nullptr;
+    SdrOutliner& rDrawOutliner = getSdrModelFromSdrView().GetDrawOutliner( );
+    tools::Rectangle aReplacementSize = GetMarkedObjRect();
+
+    UnGroupMarked();
+    SortMarkedObjects();
+
+    for ( size_t a = 0; a < GetMarkedObjectCount(); a++ )
+    {
+        const SdrMark* pM = GetSdrMarkByIndex(a);
+        SdrObject* pObj = pM->GetMarkedSdrObj();
+        SdrTextObj* pTextObj = dynamic_cast<SdrTextObj*>( pObj );
+        if ( !pObj || !pObj->HasText() || !pTextObj || !pTextObj->IsTextFrame() )
+        {
+            size_t preventInfiniteLoop = GetMarkedObjectCount();
+            // Unmark non-textboxes, because all marked objects are deleted at the end.
+            MarkObj(pObj, pM->GetPageView(), /*bUnmark=*/true, true);
+            // don't skip any objects. Unmarking *usually* reduces the count by 1, moving the next into this position "a".
+            if ( preventInfiniteLoop > GetMarkedObjectCount() )
+                --a;
+            continue;
+        }
+
+        const OutlinerParaObject* pOPO = pObj ? pObj->GetOutlinerParaObject() : nullptr;
+        if ( pOPO )
+        {
+            if ( !xpInsOL )
+                xpInsOL = pObj->getParentSdrObjListFromSdrObject();
+
+            // if the last paragraph did not end in paragraph-end punctuation (ignoring whitespace),
+            // assume this text should be added to the end of the last paragraph, instead of starting a new paragraph.
+            const sal_Int32 nPara = rDrawOutliner.GetParagraphCount();
+            const OUString sLastPara = nPara ? rDrawOutliner.GetText(rDrawOutliner.GetParagraph(nPara - 1)) : "";
+            sal_Int32 n = sLastPara.getLength();
+            while( n && unicode::isWhiteSpace( sLastPara[--n] ) )
+                ;
+            //TODO: find way to use Locale to identify sentence final punctuation. Copied IsSentenceAtEnd() from autofmt.cxx
+            const bool bAppend = !n || ( sLastPara[n] != '.' && sLastPara[n] != '?' && sLastPara[n] != '!');
+            rDrawOutliner.AddText( *pOPO, bAppend );
+        }
+    }
+
+    if ( GetMarkedObjectCount() )
+    {
+        aReplacementSize = GetMarkedObjRect();
+    }
+    else
+    {
+        AdjustMarkHdl();
+        MarkListHasChanged();
+    }
+
+    if ( xpInsOL )
+    {
+        SdrRectObj* rReplacement = new SdrRectObj( getSdrModelFromSdrView(), OBJ_TEXT );
+        rReplacement->SetOutlinerParaObject( rDrawOutliner.CreateParaObject() );
+        rReplacement->SetSnapRect(aReplacementSize);
+        DeleteMarkedObj();
+        xpInsOL->InsertObject(rReplacement);
+
+        if ( bUndo )
+            AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoNewObject(*rReplacement));
+    }
+
+    if ( bUndo )
+        EndUndo();
+
+    return;
 }
 
 void SdrEditView::CombineMarkedObjects(bool bNoPolyPoly)

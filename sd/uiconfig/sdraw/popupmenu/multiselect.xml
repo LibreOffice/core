@@ -47,6 +47,7 @@
       <menu:menuitem menu:id=".uno:MirrorHorz"/>
     </menu:menupopup>
   </menu:menu>
+  <menu:menuseparator/>
   <menu:menu menu:id=".uno:ConvertMenu">
     <menu:menupopup>
       <menu:menuitem menu:id=".uno:ChangeBezier"/>
@@ -73,6 +74,7 @@
       <menu:menuitem menu:id=".uno:EqualizeHeight"/>
     </menu:menupopup>
   </menu:menu>
+  <menu:menuitem menu:id=".uno:TextCombine"/>
   <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:FormatGroup"/>
   <menu:menuitem menu:id=".uno:FormatUngroup"/>
