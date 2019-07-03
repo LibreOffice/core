@@ -527,21 +527,21 @@ DECLARE_OOXMLEXPORT_TEST(testN780563, "n780563.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables->getCount( ));
 }
 
-/*DECLARE_OOXMLEXPORT_TEST(testN780853, "n780853.docx")
-{*/
+DECLARE_OOXMLEXPORT_TEST(testN780853, "n780853.docx")
+{
     /*
      * The problem was that the table was not imported.
      *
      * xray ThisComponent.TextTables.Count 'was 0
      */
-    /*uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xIndexAccess(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
 
     //tdf#102619 - I would have expected this to be "Standard", but MSO 2013/2010/2003 all give FollowStyle==Date
     uno::Reference< beans::XPropertySet > properties(getStyles("ParagraphStyles")->getByName("Date"), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString("Date"), getProperty<OUString>(properties, "FollowStyle"));
-}*/
+}
 
 DECLARE_OOXMLEXPORT_TEST(testN780843, "n780843.docx")
 {
