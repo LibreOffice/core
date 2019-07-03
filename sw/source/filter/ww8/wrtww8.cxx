@@ -1485,7 +1485,8 @@ void WW8Export::AppendAnnotationMarks(const SwWW8AttrIter& rAttrs, sal_Int32 nAk
             const sal_Int32 nStart = pMark->GetMarkStart().nContent.GetIndex();
             if (nStart == nAktPos)
             {
-                m_pAtn->AddRangeStartPosition(pMark->GetName(), Fc2Cp(Strm().Tell()));
+                m_pAtn->AddRangeStartPosition(pMark->GetName(), Fc2Cp(Strm().Tell()),
+                                              !rAttrs.HasFlysAt(nAktPos));
             }
         }
     }
