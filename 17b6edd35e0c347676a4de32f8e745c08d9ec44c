@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "3fa0c359_9e50b9d6",
+        "filename": "bin/find-clang-format.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1002107
+      },
+      "writtenOn": "2019-07-03T02:50:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "df87a7cf_102152b5",
+      "revId": "17b6edd35e0c347676a4de32f8e745c08d9ec44c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "df87a7cf_f00cee43",
         "filename": "bin/find-clang-format.py",
         "patchSetId": 1
@@ -30,6 +48,30 @@
       "writtenOn": "2019-03-25T10:52:56Z",
       "side": 1,
       "message": "this won\u0027t work if executed from a different directory. please use \"os.path.basename(__file__)\"",
+      "range": {
+        "startLine": 5,
+        "startChar": 30,
+        "endLine": 5,
+        "endChar": 36
+      },
+      "revId": "17b6edd35e0c347676a4de32f8e745c08d9ec44c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa0c359_3e6165aa",
+        "filename": "bin/find-clang-format.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1002107
+      },
+      "writtenOn": "2019-07-03T02:50:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "df87a7cf_f00cee43",
       "range": {
         "startLine": 5,
         "startChar": 30,
