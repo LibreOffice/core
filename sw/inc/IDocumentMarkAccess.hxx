@@ -79,7 +79,7 @@ class IDocumentMarkAccess
                 iterator& operator=(iterator && rOther);
                 ~iterator();
 
-                // FIXME unfortuntately there's a requirement on input iterator
+                // FIXME unfortunately there's a requirement on input iterator
                 // and forward iterator to return reference, which isn't
                 // possible because we have to return a temp value;
                 // let's try value_type instead, perhaps it's sufficient,
