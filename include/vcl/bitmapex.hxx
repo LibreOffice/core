@@ -94,8 +94,6 @@ public:
     sal_uLong           GetSizeBytes() const;
     BitmapChecksum      GetChecksum() const;
 
-public:
-
     /**
      * @brief extract the bitmap and alpha data separately. Used by the SWF filter.
      */
@@ -293,6 +291,10 @@ public:
                             const Color* pReplaceColors,
                             sal_uLong nColorCount );
 
+    /** Replace transparency with given color.
+     */
+    void                ReplaceTransparency( const Color& rColor );
+
     /** Change various global color characteristics
 
         @param nLuminancePercent
@@ -430,7 +432,6 @@ public:
     void                GetColorModel(css::uno::Sequence< sal_Int32 >& rRGBPalette,
                             sal_uInt32& rnRedMask, sal_uInt32& rnGreenMask, sal_uInt32& rnBlueMask, sal_uInt32& rnAlphaMask, sal_uInt32& rnTransparencyIndex,
                             sal_uInt32& rnWidth, sal_uInt32& rnHeight, sal_uInt8& rnBitCount);
-public:
 
     SAL_DLLPRIVATE std::shared_ptr<SalBitmap> const & ImplGetBitmapSalBitmap() const { return maBitmap.ImplGetSalBitmap(); }
     SAL_DLLPRIVATE std::shared_ptr<SalBitmap> const & ImplGetMaskSalBitmap() const { return maMask.ImplGetSalBitmap(); }
