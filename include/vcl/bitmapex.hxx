@@ -291,6 +291,30 @@ public:
                             const Color* pReplaceColors,
                             sal_uLong nColorCount );
 
+    /** Replace all pixel having one the search colors with the corresponding replace color
+
+        @param pSearchColors
+        Array of colors specifying which pixel should be replaced
+
+        @param rReplaceColors
+        Array of colors to be placed in all changed pixel
+
+        @param nColorCount
+        Size of the aforementioned color arrays
+
+        @param pTols
+        Tolerance value. Specifies the maximal difference between
+        pSearchColor colors and the individual pixel values, such that
+        the corresponding pixel is still regarded a match.
+
+        @return true, if the operation was completed successfully.
+     */
+    void                Replace(
+                            const Color* pSearchColors,
+                            const Color* pReplaceColors,
+                            sal_uLong nColorCount,
+                            sal_uInt8 const * pTols );
+
     /** Replace transparency with given color.
      */
     void                ReplaceTransparency( const Color& rColor );

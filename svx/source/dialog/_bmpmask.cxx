@@ -608,19 +608,16 @@ sal_uInt16 SvxBmpMask::InitColorArrays( Color* pSrcCols, Color* pDstCols, sal_uI
     return nCount;
 }
 
-Bitmap SvxBmpMask::ImpMask( const Bitmap& rBitmap )
+void SvxBmpMask::ImpMask( BitmapEx& rBitmap )
 {
-    Bitmap          aBitmap( rBitmap );
     Color           pSrcCols[4];
     Color           pDstCols[4];
     sal_uInt8       pTols[4];
     const sal_uInt16 nCount = InitColorArrays( pSrcCols, pDstCols, pTols );
 
     EnterWait();
-    aBitmap.Replace( pSrcCols, pDstCols, nCount, pTols );
+    rBitmap.Replace( pSrcCols, pDstCols, nCount, pTols );
     LeaveWait();
-
-    return aBitmap;
 }
 
 BitmapEx SvxBmpMask::ImpMaskTransparent( const BitmapEx& rBitmapEx, const Color& rColor, const sal_uInt8 nTol )
@@ -1006,15 +1003,10 @@ Graphic SvxBmpMask::Mask( const Graphic& rGraphic )
                         }
 
                         // now replace it again with the normal colors
-                        Bitmap  aBitmap( ImpMask( aGraphic.GetBitmapEx().GetBitmap() ) );
-                        Size    aSize( aBitmap.GetSizePixel() );
-
-                        if ( aSize.Width() && aSize.Height() )
+                        BitmapEx  aBitmapEx( aGraphic.GetBitmapEx() );
+                        if ( aBitmapEx.GetSizePixel().Width() && aBitmapEx.GetSizePixel().Height() )
                         {
-                            if ( aGraphic.IsTransparent() )
-                                aGraphic = Graphic( BitmapEx( aBitmap, aGraphic.GetBitmapEx().GetMask() ) );
-                            else
-                                aGraphic = aBitmap;
+                            ImpMask( aBitmapEx );
                         }
                     }
                 }
