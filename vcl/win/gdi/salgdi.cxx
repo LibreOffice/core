@@ -134,8 +134,9 @@ void ImplInitSalGDI()
     pSalData->mpHDCCache = new HDCCache[ CACHESIZE_HDC ];
     memset( pSalData->mpHDCCache, 0, CACHESIZE_HDC * sizeof( HDCCache ) );
 
-    // initialize temporary font list
-    pSalData->mpTempFontItem = nullptr;
+    // initialize temporary font lists
+    pSalData->mpSharedTempFontItem = nullptr;
+    pSalData->mpOtherTempFontItem = nullptr;
 
     // support palettes for 256 color displays
     HDC hDC = GetDC( nullptr );
@@ -348,7 +349,7 @@ void ImplFreeSalGDI()
     }
 
     // delete temporary font list
-    ImplReleaseTempFonts( *pSalData );
+    ImplReleaseTempFonts(*pSalData, true);
 
     pSalData->mbResourcesAlreadyFreed = true;
 }
