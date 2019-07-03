@@ -330,6 +330,23 @@ SfxBoolItem ColorView SID_COLORVIEW
     GroupId = SfxGroupId::View;
 ]
 
+SfxVoidItem TextCombine SID_TEXT_COMBINE
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Modify;
+]
+
 SfxVoidItem Combine SID_COMBINE
 ()
 [

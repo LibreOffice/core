@@ -285,6 +285,7 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
         }
 
         rSet.DisableItem(SID_GROUP);
+        rSet.DisableItem(SID_TEXT_COMBINE);
         rSet.DisableItem(SID_COMBINE);
         rSet.DisableItem(SID_DISTRIBUTE_DLG);
         rSet.DisableItem(SID_POLY_MERGE);
@@ -493,6 +494,7 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
 
         rSet.DisableItem( SID_DISMANTLE );
         rSet.DisableItem( SID_BREAK );
+        rSet.DisableItem( SID_TEXT_COMBINE );
         rSet.DisableItem( SID_COMBINE );
         rSet.DisableItem(SID_DISTRIBUTE_DLG);
         rSet.DisableItem(SID_POLY_MERGE);
