@@ -4172,7 +4172,7 @@ gb_ExternalProject__use_qrcodegen :=
 else # !SYSTEM_QRCODEGEN
 
 define gb_LinkTarget__use_qrcodegen
-l$(call gb_LinkTarget_use_unpacked,$(1),qrcodegen)
+$(call gb_LinkTarget_use_unpacked,$(1),qrcodegen)
 $(call gb_LinkTarget_set_include,$(1),\
 	-I$(call gb_UnpackedTarball_get_dir,qrcodegen/cpp/)\
 	$$(INCLUDE) \
