@@ -602,7 +602,7 @@ void Outliner::SetText( const OutlinerParaObject& rPObj )
     DBG_ASSERT( pEditEngine->GetParagraphCount()==rPObj.Count(),"SetText failed");
 }
 
-void Outliner::AddText( const OutlinerParaObject& rPObj )
+void Outliner::AddText( const OutlinerParaObject& rPObj, bool bAppend )
 {
 
     bool bUpdate = pEditEngine->GetUpdateMode();
@@ -615,16 +615,25 @@ void Outliner::AddText( const OutlinerParaObject& rPObj )
         pParaList->Clear();
         pEditEngine->SetText(rPObj.GetTextObject());
         nPara = 0;
+        bAppend = false;
     }
     else
     {
         nPara = pParaList->GetParagraphCount();
-        pEditEngine->InsertParagraph( EE_PARA_APPEND, rPObj.GetTextObject() );
+        pEditEngine->InsertParagraph( EE_PARA_APPEND, rPObj.GetTextObject(), bAppend );
     }
     bFirstParaIsEmpty = false;
 
     for( sal_Int32 n = 0; n < rPObj.Count(); n++ )
     {
+        if ( n == 0 && bAppend )
+        {
+            // This first "paragraph" was just appended to an existing (incomplete) paragraph.
+            // Since no new paragraph will be added, the assumed increase-by-1 also won't happen.
+            --nPara;
+            continue;
+        }
+
         Paragraph* pPara = new Paragraph( rPObj.GetParagraphData(n) );
         pParaList->Append(std::unique_ptr<Paragraph>(pPara));
         sal_Int32 nP = nPara+n;
