@@ -16,6 +16,7 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,libgpg-error,0))
 # clang-cl.patch src/gpgrt-int.h part upstream at <https://dev.gnupg.org/T4356> "Declaration of
 #  _gpgrt_functions_w32_pollable in src/gpgrt-int.h should be extern"
 $(eval $(call gb_UnpackedTarball_add_patches,libgpg-error, \
+	external/libgpg-error/libgpg-error_gawk5.patch \
 	$(if $(filter MSC,$(COM)),external/libgpg-error/w32-build-fixes.patch) \
 	$(if $(filter MSC,$(COM)),external/libgpg-error/w32-build-fixes-2.patch.1) \
 	$(if $(filter MSC,$(COM)),external/libgpg-error/w32-build-fixes-3.patch.1) \
