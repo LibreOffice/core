@@ -118,10 +118,10 @@
           <value xml:lang="en-US">Basic Shapes</value>
         </prop>
         <prop oor:name="ContextLabel" oor:type="xs:string">
-          <value xml:lang="en-US">~Basic</value>
+          <value xml:lang="en-US">~Basic Shapes</value>
         </prop>
         <prop oor:name="TooltipLabel" oor:type="xs:string">
-          <value xml:lang="en-US">Insert Basic Shapes</value>
+          <value xml:lang="en-US">Basic Shapes</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -132,7 +132,7 @@
           <value xml:lang="en-US">Symbol Shapes</value>
         </prop>
         <prop oor:name="ContextLabel" oor:type="xs:string">
-          <value xml:lang="en-US">~Symbol</value>
+          <value xml:lang="en-US">~Symbol Shapes</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -171,7 +171,10 @@
           <value xml:lang="en-US">Arrow Shapes</value>
         </prop>
         <prop oor:name="ContextLabel" oor:type="xs:string">
-          <value xml:lang="en-US">~Arrow</value>
+          <value xml:lang="en-US">~Block Arrows</value>
+        </prop>
+        <prop oor:name="TooltipLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Block Arrows</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -193,7 +196,7 @@
           <value xml:lang="en-US">Callout Shapes</value>
         </prop>
         <prop oor:name="ContextLabel" oor:type="xs:string">
-          <value xml:lang="en-US">~Callout</value>
+          <value xml:lang="en-US">~Callouts</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -204,7 +207,10 @@
           <value xml:lang="en-US">Star Shapes</value>
         </prop>
         <prop oor:name="ContextLabel" oor:type="xs:string">
-          <value xml:lang="en-US">S~tar</value>
+          <value xml:lang="en-US">S~tars and Banners</value>
+        </prop>
+        <prop oor:name="TooltipLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Stars and Banners</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
