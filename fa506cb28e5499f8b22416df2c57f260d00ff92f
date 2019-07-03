@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_f5cfef54",
+        "filename": "svx/source/svdraw/svdpage.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 561,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2019-07-03T15:20:54Z",
+      "side": 1,
+      "message": "Hm, perhaps I should assert here that the new sort order\u0027s size is the same as the size of the list else bad things are going to happen",
+      "revId": "fa506cb28e5499f8b22416df2c57f260d00ff92f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_55eb3baf",
+        "filename": "xmloff/source/draw/shapeimport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 810,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2019-07-03T15:20:54Z",
+      "side": 1,
+      "message": "So I struggle a bit with how to best build the new sorting order and include shapes from maUnsortedList as well. The test doc I have contains only shapes that have z-order set but presumably not all docs are like that ...",
+      "revId": "fa506cb28e5499f8b22416df2c57f260d00ff92f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
