@@ -541,6 +541,7 @@
         </menu:menupopup>
       </menu:menu>
       <menu:menuseparator/>
+      <menu:menuitem menu:id=".uno:TextboxCombine"/>
       <menu:menuitem menu:id=".uno:Combine"/>
       <menu:menuitem menu:id=".uno:Dismantle"/>
       <menu:menuseparator/>

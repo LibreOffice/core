@@ -469,6 +469,11 @@ interface DrawView
         StateMethod = GetMenuState ;
         FastCall = FALSE ;
     ]
+    SID_TEXTBOX_COMBINE // ole : no, status : ?
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
     SID_COMBINE // ole : no, status : ?
     [
         ExecMethod = FuTemporary ;
