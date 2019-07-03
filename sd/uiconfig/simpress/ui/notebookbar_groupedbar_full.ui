@@ -9083,6 +9083,7 @@
                     </child>
                     <style>
                       <class name="context-Draw"/>
+                      <class name="context-DrawLine"/>
                     </style>
                   </object>
                   <packing>
