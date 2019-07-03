@@ -176,6 +176,7 @@
 #define UNO_NAME_GRAPHOBJ_SIGNATURELINE_CAN_ADD_COMMENT "SignatureLineCanAddComment"
 #define UNO_NAME_GRAPHOBJ_SIGNATURELINE_UNSIGNED_IMAGE "SignatureLineUnsignedImage"
 #define UNO_NAME_GRAPHOBJ_SIGNATURELINE_IS_SIGNED "SignatureLineIsSigned"
+#define UNO_NAME_GRAPHOBJ_QRCODE                "QRCodeProperties"
 
 #define UNO_NAME_OLE2_METAFILE                  "MetaFile"
 #define UNO_NAME_OLE2_PERSISTNAME               "PersistName"

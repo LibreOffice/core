@@ -31,6 +31,7 @@
 #include <com/sun/star/drawing/PointSequence.hpp>
 #include <com/sun/star/drawing/PolygonKind.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
+#include <com/sun/star/drawing/QRCode.hpp>
 #include <o3tl/any.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/svapp.hxx>
@@ -1416,6 +1417,17 @@ bool SvxGraphicObject::setPropertyValueImpl( const OUString& rName, const SfxIte
         break;
     }
 
+    case OWN_ATTR_QRCODE:
+    {
+        css::drawing::QRCode aQrCode;
+        if (rValue >>= aQrCode)
+        {
+            static_cast<SdrGrafObj*>(GetSdrObject())->setQrCode(aQrCode);
+            bOk = true;
+        }
+        break;
+    }
+
     default:
         return SvxShapeText::setPropertyValueImpl( rName, pProperty, rValue );
     }
@@ -1555,6 +1567,16 @@ bool SvxGraphicObject::getPropertyValueImpl( const OUString& rName, const SfxIte
     case OWN_ATTR_SIGNATURELINE_IS_SIGNED:
     {
         rValue <<= static_cast<SdrGrafObj*>(GetSdrObject())->isSignatureLineSigned();
+        break;
+    }
+
+    case OWN_ATTR_QRCODE:
+    {
+        css::drawing::QRCode* ptr = static_cast<SdrGrafObj*>(GetSdrObject())->getQrCode();
+        if(ptr)
+        {
+            rValue <<= *ptr;
+        }
         break;
     }
 
