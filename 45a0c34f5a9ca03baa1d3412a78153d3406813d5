@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_55ba5bde",
+        "filename": "offapi/com/sun/star/drawing/QRCode.idl",
+        "patchSetId": 2
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1002063
+      },
+      "writtenOn": "2019-07-03T14:22:45Z",
+      "side": 1,
+      "message": "declaring as short here, How our new QRCodeErrorCorrection.idl file is used?",
+      "revId": "45a0c34f5a9ca03baa1d3412a78153d3406813d5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
