@@ -1906,57 +1906,52 @@ void DocxAttributeOutput::WriteFormDate(const OUString& sCurrentDate, const OUSt
     m_pSerializer->startElementNS(XML_w, XML_sdtContent);
     m_pSerializer->startElementNS(XML_w, XML_r);
 
+    // Convert the current date to the right format
     if (!sCurrentDate.isEmpty())
     {
-        // Convert the current date to the right format
-        if (!sCurrentDate.isEmpty())
+        SvNumberFormatter* pFormatter = m_rExport.m_pDoc->GetNumberFormatter();
+
+        double dCurrentDate = 0.0;
+        // First get the date internal double representation
+        sal_uInt32 nFormat = pFormatter->GetEntryKey(ODF_FORMDATE_CURRENTDATE_FORMAT, ODF_FORMDATE_CURRENTDATE_LANGUAGE);
+        if (nFormat == NUMBERFORMAT_ENTRY_NOT_FOUND)
         {
-            SvNumberFormatter* pFormatter = m_rExport.m_pDoc->GetNumberFormatter();
-
-            double dCurrentDate = 0.0;
-            // First get the date internal double representation
-            sal_uInt32 nFormat = pFormatter->GetEntryKey(ODF_FORMDATE_CURRENTDATE_FORMAT, ODF_FORMDATE_CURRENTDATE_LANGUAGE);
-            bool bValidFormat = nFormat != NUMBERFORMAT_ENTRY_NOT_FOUND;
-            if (nFormat == NUMBERFORMAT_ENTRY_NOT_FOUND)
-            {
-                sal_Int32 nCheckPos = 0;
-                SvNumFormatType nType;
-                OUString sFormat = ODF_FORMDATE_CURRENTDATE_FORMAT;
-                bValidFormat = pFormatter->PutEntry(sFormat,
-                                                    nCheckPos,
-                                                    nType,
-                                                    nFormat,
-                                                    ODF_FORMDATE_CURRENTDATE_LANGUAGE);
-            }
-            if (bValidFormat)
-            {
-                pFormatter->IsNumberFormat(sCurrentDate, nFormat, dCurrentDate);
-            }
-
-            // Then convert the date to a fromatter string
-            nFormat = pFormatter->GetEntryKey(sDateFormat, LanguageTag(sLang).getLanguageType());
-            bValidFormat = nFormat != NUMBERFORMAT_ENTRY_NOT_FOUND;
-            if (nFormat == NUMBERFORMAT_ENTRY_NOT_FOUND)
-            {
-                sal_Int32 nCheckPos = 0;
-                SvNumFormatType nType;
-                OUString sNonConstDateFormat = sDateFormat;
-                bValidFormat = pFormatter->PutEntry(sNonConstDateFormat,
-                                                    nCheckPos,
-                                                    nType,
-                                                    nFormat,
-                                                    LanguageTag(sLang).getLanguageType());
-            }
-
-            OUString sOutput;
-            if (bValidFormat)
-            {
-                Color* pCol = nullptr;
-                pFormatter->GetOutputString(dCurrentDate, nFormat, sOutput, &pCol, false);
-            }
-
-            RunText(sOutput);
+            sal_Int32 nCheckPos = 0;
+            SvNumFormatType nType;
+            OUString sFormat = ODF_FORMDATE_CURRENTDATE_FORMAT;
+            pFormatter->PutEntry(sFormat,
+                                 nCheckPos,
+                                 nType,
+                                 nFormat,
+                                 ODF_FORMDATE_CURRENTDATE_LANGUAGE);
         }
+        if (nFormat != NUMBERFORMAT_ENTRY_NOT_FOUND)
+        {
+            pFormatter->IsNumberFormat(sCurrentDate, nFormat, dCurrentDate);
+        }
+
+        // Then convert the date to a fromatter string
+        nFormat = pFormatter->GetEntryKey(sDateFormat, LanguageTag(sLang).getLanguageType());
+        if (nFormat == NUMBERFORMAT_ENTRY_NOT_FOUND)
+        {
+            sal_Int32 nCheckPos = 0;
+            SvNumFormatType nType;
+            OUString sNonConstDateFormat = sDateFormat;
+            pFormatter->PutEntry(sNonConstDateFormat,
+                                 nCheckPos,
+                                 nType,
+                                 nFormat,
+                                 LanguageTag(sLang).getLanguageType());
+        }
+
+        OUString sOutput;
+        if (nFormat != NUMBERFORMAT_ENTRY_NOT_FOUND)
+        {
+            Color* pCol = nullptr;
+            pFormatter->GetOutputString(dCurrentDate, nFormat, sOutput, &pCol, false);
+        }
+
+        RunText(sOutput);
     }
 
     m_pSerializer->endElementNS(XML_w, XML_r);
