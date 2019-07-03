@@ -289,7 +289,8 @@ SalData::SalData()
     mnAppThreadId = 0;          // Id from Application-Thread
     mbScrSvrEnabled = FALSE;    // ScreenSaver enabled
     mpFirstIcon = nullptr;      // icon cache, points to first icon, NULL if none
-    mpTempFontItem = nullptr;
+    mpSharedTempFontItem = nullptr;
+    mpOtherTempFontItem = nullptr;
     mbThemeChanged = false;     // true if visual theme was changed: throw away theme handles
     mbThemeMenuSupport = false;
 
