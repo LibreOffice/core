@@ -23,6 +23,10 @@
 #include <view.hxx>
 #include <drawbase.hxx>
 #include <unobaseclass.hxx>
+#include <fmtanchr.hxx>
+#include <flyfrm.hxx>
+#include <ndtxt.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <i18nutil/unicode.hxx>
 #include <rtl/character.hxx>
 
@@ -394,7 +398,43 @@ bool SwWrtShell::DelRight()
             // #108205# Remember object's position.
             Point aTmpPt = GetObjRect().TopLeft();
 
+            // Remember the anchof of the selected object before deletion.
+            std::unique_ptr<SwPosition> pAnchor;
+            SwFlyFrame* pFly = GetSelectedFlyFrame();
+            if (pFly)
+            {
+                SwFrameFormat* pFormat = pFly->GetFormat();
+                if (pFormat && pFormat->GetAnchor().GetAnchorId() == RndStdIds::FLY_AT_CHAR)
+                {
+                    if (pFormat->GetAnchor().GetContentAnchor())
+                    {
+                        pAnchor.reset(new SwPosition(*pFormat->GetAnchor().GetContentAnchor()));
+                    }
+                }
+            }
+
+            // Group deletion of the object and its comment together.
+            mxDoc->GetIDocumentUndoRedo().StartUndo(SwUndoId::EMPTY, nullptr);
+
             DelSelectedObj();
+
+            if (pAnchor)
+            {
+                SwTextNode* pTextNode = pAnchor->nNode.GetNode().GetTextNode();
+                if (pTextNode)
+                {
+                    const SwTextField* pField(
+                        pTextNode->GetFieldTextAttrAt(pAnchor->nContent.GetIndex(), true));
+                    if (pField)
+                    {
+                        // Remove the comment of the deleted object.
+                        *GetCurrentShellCursor().GetPoint() = *pAnchor;
+                        DelRight();
+                    }
+                }
+            }
+
+            mxDoc->GetIDocumentUndoRedo().EndUndo(SwUndoId::EMPTY, nullptr);
 
             // #108205# Set cursor to remembered position.
             SetCursor(&aTmpPt);
