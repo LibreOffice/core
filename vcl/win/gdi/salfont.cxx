@@ -1060,22 +1060,21 @@ struct TempFontItem
     TempFontItem* mpNextItem;
 };
 
-bool ImplAddTempFont( SalData& rSalData, const OUString& rFontFileURL )
+static int lcl_AddFontResource(SalData& rSalData, const OUString& rFontFileURL)
 {
-    int nRet = 0;
-    OUString aUSytemPath;
-    OSL_VERIFY( !osl::FileBase::getSystemPathFromFileURL( rFontFileURL, aUSytemPath ) );
+    OUString aFontSystemPath;
+    OSL_VERIFY(!osl::FileBase::getSystemPathFromFileURL(rFontFileURL, aFontSystemPath));
 
-    nRet = AddFontResourceExW( o3tl::toW(aUSytemPath.getStr()), FR_PRIVATE, nullptr );
-    SAL_WARN_IF(!nRet, "vcl.fonts", "Adding private font failed: " << rFontFileURL);
+    int nRet = AddFontResourceExW(o3tl::toW(aFontSystemPath.getStr()), FR_PRIVATE, nullptr);
+    SAL_WARN_IF(nRet <= 0, "vcl.fonts", "AddFontResourceExW failed for " << rFontFileURL);
     if (nRet > 0)
     {
         TempFontItem* pNewItem = new TempFontItem;
-        pNewItem->maFontResourcePath = aUSytemPath;
+        pNewItem->maFontResourcePath = aFontSystemPath;
         pNewItem->mpNextItem = rSalData.mpTempFontItem;
         rSalData.mpTempFontItem = pNewItem;
     }
-    return (nRet > 0);
+    return nRet;
 }
 
 void ImplReleaseTempFonts( SalData& rSalData )
@@ -1177,10 +1176,9 @@ static bool ImplGetFontAttrFromFile( const OUString& rFontFileURL,
     return true;
 }
 
-bool WinSalGraphics::AddTempDevFont( PhysicalFontCollection* pFontCollection,
-    const OUString& rFontFileURL, const OUString& rFontName )
+bool WinSalGraphics::AddTempDevFont(PhysicalFontCollection* pFontCollection,
+                                    const OUString& rFontFileURL, const OUString& rFontName)
 {
-    SAL_INFO("vcl.fonts", "WinSalGraphics::AddTempDevFont(): " << rFontFileURL);
 
     FontAttributes aDFA;
     aDFA.SetFamilyName(rFontName);
@@ -1193,10 +1191,13 @@ bool WinSalGraphics::AddTempDevFont( PhysicalFontCollection* pFontCollection,
     }
 
     if ( aDFA.GetFamilyName().isEmpty() )
+    {
+        SAL_WARN("vcl.fonts", "error extracting font family from " << rFontFileURL);
         return false;
+    }
 
-    // remember temp font for cleanup later
-    if( !ImplAddTempFont( *GetSalData(), rFontFileURL ) )
+    int nFonts = lcl_AddFontResource(*GetSalData(), rFontFileURL);
+    if (nFonts <= 0)
         return false;
 
     // create matching FontData struct
@@ -1224,9 +1225,7 @@ bool WinSalGraphics::AddTempDevFont( PhysicalFontCollection* pFontCollection,
 
 void WinSalGraphics::GetDevFontList( PhysicalFontCollection* pFontCollection )
 {
-    SAL_INFO("vcl.fonts", "WinSalGraphics::GetDevFontList(): enter");
-
-    // make sure all fonts are registered at least temporarily
+    // make sure all LO shared fonts are registered temporarily
     static bool bOnce = true;
     if( bOnce )
     {
@@ -1245,13 +1244,15 @@ void WinSalGraphics::GetDevFontList( PhysicalFontCollection* pFontCollection )
         if( rcOSL == osl::FileBase::E_None )
         {
             osl::DirectoryItem aDirItem;
+            SalData* pSalData = GetSalData();
+            assert(pSalData);
 
             while( aFontDir.getNextItem( aDirItem, 10 ) == osl::FileBase::E_None )
             {
                 osl::FileStatus aFileStatus( osl_FileStatus_Mask_FileURL );
                 rcOSL = aDirItem.getFileStatus( aFileStatus );
                 if ( rcOSL == osl::FileBase::E_None )
-                    AddTempDevFont( pFontCollection, aFileStatus.getFileURL(), "" );
+                    lcl_AddFontResource(*pSalData, aFileStatus.getFileURL());
             }
         }
     }
@@ -1267,6 +1268,8 @@ void WinSalGraphics::GetDevFontList( PhysicalFontCollection* pFontCollection )
     memset( &aLogFont, 0, sizeof( aLogFont ) );
     aLogFont.lfCharSet = DEFAULT_CHARSET;
     aInfo.mpLogFont = &aLogFont;
+
+    // fill the PhysicalFontCollection
     EnumFontFamiliesExW( getHDC(), &aLogFont,
         SalEnumFontsProcExW, reinterpret_cast<LPARAM>(&aInfo), 0 );
 
@@ -1275,8 +1278,6 @@ void WinSalGraphics::GetDevFontList( PhysicalFontCollection* pFontCollection )
     static WinPreMatchFontSubstititution aPreMatchFont;
     pFontCollection->SetFallbackHook( &aSubstFallback );
     pFontCollection->SetPreMatchHook(&aPreMatchFont);
-
-    SAL_INFO("vcl.fonts", "WinSalGraphics::GetDevFontList(): leave");
 }
 
 void WinSalGraphics::ClearDevFontCache()
