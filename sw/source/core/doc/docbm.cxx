@@ -603,17 +603,13 @@ namespace sw { namespace mark
         assert(pMark.get() &&
             "MarkManager::makeMark(..)"
             " - Mark was not created.");
-        MarkBase *const pMarkBase = pMark.get(); // TODO?
-
-        if (!pMarkBase)
-            return nullptr;
 
         if(pMark->GetMarkPos() != pMark->GetMarkStart())
-            pMarkBase->Swap();
+            pMark->Swap();
 
         // for performance reasons, we trust UnoMarks to have a (generated) unique name
         if ( eType != IDocumentMarkAccess::MarkType::UNO_BOOKMARK )
-            pMarkBase->SetName( getUniqueMarkName( pMarkBase->GetName() ) );
+            pMark->SetName( getUniqueMarkName( pMark->GetName() ) );
 
         // register mark
         lcl_InsertMarkSorted(m_vAllMarks, pMark.get());
@@ -638,7 +634,7 @@ namespace sw { namespace mark
                 // no special array for these
                 break;
         }
-        pMarkBase->InitDoc(m_pDoc, eMode);
+        pMark->InitDoc(m_pDoc, eMode);
         SAL_INFO("sw.core", "--- makeType ---");
         SAL_INFO("sw.core", "Marks");
         lcl_DebugMarks(m_vAllMarks);
