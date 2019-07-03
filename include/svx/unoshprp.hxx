@@ -64,6 +64,7 @@
 #include <com/sun/star/drawing/CameraGeometry.hpp>
 #include <com/sun/star/text/WritingMode.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
+#include <com/sun/star/drawing/QRCode.hpp>
 
 #include <editeng/unoprnms.hxx>
 #include <svx/svddef.hxx>
@@ -190,7 +191,8 @@
 #define OWN_ATTR_SIGNATURELINE_CAN_ADD_COMMENT  (OWN_ATTR_VALUE_START+101)
 #define OWN_ATTR_SIGNATURELINE_UNSIGNED_IMAGE   (OWN_ATTR_VALUE_START+102)
 #define OWN_ATTR_SIGNATURELINE_IS_SIGNED        (OWN_ATTR_VALUE_START+103)
-// ATTENTION: maximum is OWN_ATTR_VALUE_START+103 svx, see include/svl/solar.hrc
+#define OWN_ATTR_QRCODE                         (OWN_ATTR_VALUE_START+104)
+// ATTENTION: maximum is OWN_ATTR_VALUE_START+104 svx, see include/svl/solar.hrc
 
 // #FontWork#
 #define FONTWORK_PROPERTIES \
@@ -441,7 +443,8 @@
     { OUString(UNO_NAME_GRAPHOBJ_SIGNATURELINE_SHOW_SIGN_DATE), OWN_ATTR_SIGNATURELINE_SHOW_SIGN_DATE, cppu::UnoType<bool>::get(), 0, 0}, \
     { OUString(UNO_NAME_GRAPHOBJ_SIGNATURELINE_CAN_ADD_COMMENT), OWN_ATTR_SIGNATURELINE_CAN_ADD_COMMENT, cppu::UnoType<bool>::get(), 0, 0}, \
     { OUString(UNO_NAME_GRAPHOBJ_SIGNATURELINE_UNSIGNED_IMAGE), OWN_ATTR_SIGNATURELINE_UNSIGNED_IMAGE, cppu::UnoType<css::graphic::XGraphic>::get(), 0, 0}, \
-    { OUString(UNO_NAME_GRAPHOBJ_SIGNATURELINE_IS_SIGNED), OWN_ATTR_SIGNATURELINE_IS_SIGNED, cppu::UnoType<bool>::get(), 0, 0},
+    { OUString(UNO_NAME_GRAPHOBJ_SIGNATURELINE_IS_SIGNED),     OWN_ATTR_SIGNATURELINE_IS_SIGNED   , cppu::UnoType<bool>::get(), 0, 0}, \
+    { OUString(UNO_NAME_GRAPHOBJ_QRCODE),               OWN_ATTR_QRCODE            , cppu::UnoType<css::drawing::QRCode>::get(), 0, 0},
 
 #define SPECIAL_3DSCENEOBJECT_PROPERTIES_DEFAULTS \
     { OUString(UNO_NAME_3D_SCENE_AMBIENTCOLOR),     SDRATTR_3DSCENE_AMBIENTCOLOR   , ::cppu::UnoType<sal_Int32>::get(),   0,  0}, \
