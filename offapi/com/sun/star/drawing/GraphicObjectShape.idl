@@ -32,6 +32,7 @@
 
 #include <com/sun/star/drawing/ColorMode.idl>
 #include <com/sun/star/container/XIndexContainer.idl>
+#incldue <com/sun/star/drawing/QRCode.idl>
 
 
  module com {  module sun {  module star {  module drawing {
@@ -154,6 +155,10 @@ published service GraphicObjectShape
 
     /// Whether the signature line is signed using a digital signature
     [optional, property] boolean SignatureLineIsSigned;
+
+    /// Shape as a QR Code
+    /// @since LibreOffice 6.4
+    [optional, property] com::sun::star::drawing::QRCode QRCodeProperties;
 };
 
 

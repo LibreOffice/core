@@ -1,0 +1,50 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#ifndef __com_sun_star_drawing_QRCodeErrorCorrection_idl__
+#define __com_sun_star_drawing_QRCodeErrorCorrection_idl__
+
+module com { module sun { module star { module drawing {
+
+/** These constants identify the type of Error Correction for
+    a QR Code.
+
+    <p>The Error Correction for a QR code is a measure that
+        helps a QR code to recover, if it is destroyed.
+
+        Level L (Low)       7% of codewords can be restored.
+        Level M (Medium)    15% of codewords can be restored.
+        Level Q (Quartile)  25% of codewords can be restored.
+        Level H (High)      30% of codewords can be restored.
+
+        More Info - <a href="https://en.wikipedia.org/wiki/QR_code#Error_correction">here</a>
+    </p>
+
+    @see QRCode
+    @see GraphicObectShape
+
+    @since LibreOffice 6.4
+*/
+
+published constants QRCodeErrorCorrection
+{
+    const long LOW = 1;
+
+    const long MEDIUM = 2;
+
+    const long QUARTILE = 3;
+
+    const long HIGH = 4;
+};
+
+}; }; }; };
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

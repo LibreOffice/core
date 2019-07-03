@@ -22,12 +22,15 @@
 
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
+#include <com/sun/star/drawing/QRCode.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <vcl/graph.hxx>
 #include <svx/svdorect.hxx>
 #include <vcl/GraphicObject.hxx>
 #include <svx/svxdllapi.h>
 #include <o3tl/typed_flags_set.hxx>
+#include <memory>
+#include <cstddef>
 
 namespace sdr
 {
@@ -112,6 +115,7 @@ private:
     bool mbSignatureLineIsSigned;
     css::uno::Reference<css::graphic::XGraphic> mpSignatureLineUnsignedGraphic;
 
+    std::unique_ptr<css::drawing::QRCode> mpQrCode;
     void                    ImpRegisterLink();
     void                    ImpDeregisterLink();
     void                    ImpSetLinkedGraphic( const Graphic& rGraphic );
@@ -282,6 +286,17 @@ public:
     };
     bool isSignatureLineSigned() const { return mbSignatureLineIsSigned; };
     void setSignatureLineIsSigned(bool bIsSigned) { mbSignatureLineIsSigned = bIsSigned; }
+
+    // Qr Code
+    void setQrCode(css::drawing::QRCode& rQrCode)
+    {
+        mpQrCode = std::make_unique<css::drawing::QRCode>(rQrCode);
+    };
+
+    css::drawing::QRCode* getQrCode() const
+    {
+        return mpQrCode.get();
+    };
 };
 
 #endif // INCLUDED_SVX_SVDOGRAF_HXX
