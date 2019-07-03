@@ -1294,6 +1294,14 @@ void BitmapEx::Replace(const Color& rSearchColor,
     maBitmap.Replace(rSearchColor, rReplaceColor, nTolerance);
 }
 
+void BitmapEx::Replace( const Color* pSearchColors,
+                        const Color* pReplaceColors,
+                        sal_uLong nColorCount,
+                        sal_uInt8 const * pTols )
+{
+    maBitmap.Replace( pSearchColors, pReplaceColors, nColorCount, pTols );
+}
+
 void BitmapEx::ReplaceTransparency(const Color& rColor)
 {
     if( IsTransparent() )

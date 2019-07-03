@@ -132,7 +132,7 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxBmpMask : public SfxDockingWindow
     sal_uInt16          InitColorArrays( Color* pSrcCols, Color* pDstCols,
                                          sal_uInt8* pTols );
 
-    Bitmap              ImpMask( const Bitmap& rBitmap );
+    void                ImpMask( BitmapEx& rBitmap );
     GDIMetaFile         ImpMask( const GDIMetaFile& rMtf );
     Animation           ImpMask( const Animation& rAnimation );
     BitmapEx            ImpMaskTransparent( const BitmapEx& rBitmapEx,
