@@ -548,6 +548,8 @@
       <menu:menuitem menu:id=".uno:Substract"/>
       <menu:menuitem menu:id=".uno:Intersect"/>
       <menu:menuseparator/>
+      <menu:menuitem menu:id=".uno:TextCombine"/>
+      <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:CopyObjects"/>
       <menu:menuitem menu:id=".uno:Morphing"/>
       <menu:menuseparator/>
