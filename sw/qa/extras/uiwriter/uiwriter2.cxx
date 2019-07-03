@@ -12,6 +12,7 @@
 #include <swdtflvr.hxx>
 #include <wrtsh.hxx>
 #include <redline.hxx>
+#include <svl/stritem.hxx>
 #include <flyfrms.hxx>
 #include <UndoManager.hxx>
 #include <edtwin.hxx>
@@ -539,6 +540,18 @@ void SwUiWriterTest2::testImageCommentAtChar()
                          getProperty<OUString>(getRun(xPara, 4), "TextPortionType"));
     CPPUNIT_ASSERT_EQUAL(OUString("Text"),
                          getProperty<OUString>(getRun(xPara, 5), "TextPortionType"));
+
+    // Insert content to the comment, and select the image again.
+    SfxStringItem aItem(FN_INSERT_STRING, "x");
+    pView->GetViewFrame()->GetDispatcher()->ExecuteList(FN_INSERT_STRING, SfxCallMode::SYNCHRON,
+                                                        { &aItem });
+    pView->GetViewFrame()->GetDispatcher()->Execute(FN_CNTNT_TO_NEXT_FRAME, SfxCallMode::SYNCHRON);
+    // Now delete the image.
+    pView->GetViewFrame()->GetDispatcher()->Execute(SID_DELETE, SfxCallMode::SYNCHRON);
+    // Without the accompanying fix in place, this test would have failed with 'Expected: 0; Actual:
+    // 1', i.e. the comment of the image was not deleted when the image was deleted.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0),
+                         pDoc->getIDocumentMarkAccess()->getAnnotationMarksCount());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest2);
