@@ -140,6 +140,24 @@
     },
     {
       "key": {
+        "uuid": "bf659307_358247ca",
+        "filename": "xmloff/source/draw/shapeimport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 810,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-07-03T16:23:27Z",
+      "side": 1,
+      "message": "turns out i\u0027m wrong but see below...\n\n... then the tricky part is that moveShape actually modifies the nIs of all the elements ... but that shouldn\u0027t be needed here because i think it\u0027s done because setting the ZOrder property will move things around so these elements need to be updated ...\n\nso i guess just do the same gap-filling as below, until empty, from then on number consecutively?\n\ni think the idea is that at the end aNewOrder is a permutation of [0..size)",
+      "parentUuid": "bf659307_7513dfb9",
+      "revId": "fa506cb28e5499f8b22416df2c57f260d00ff92f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bf659307_5539fb3e",
         "filename": "xmloff/source/draw/shapeimport.cxx",
         "patchSetId": 1
@@ -169,6 +187,24 @@
       "side": 1,
       "message": "was already like this in 2000, commit 0a81c793064b537d29d819254ae7384b534407ac",
       "parentUuid": "bf659307_5539fb3e",
+      "revId": "fa506cb28e5499f8b22416df2c57f260d00ff92f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_7578bff7",
+        "filename": "xmloff/source/draw/shapeimport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 826,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-07-03T16:23:27Z",
+      "side": 1,
+      "message": "oops actually the problem is i can\u0027t read :-/ it is rHint.nShould not aIt.nShould ...\n\nwhich means that it will assign the ZorderHints to their nShould value, and if there are any gaps between 2 nShould values they are filled from maUnsortedList ... until maUnsortedList is empty - then gaps are closed by simply numbering the ZOrderHints consecutively.",
+      "parentUuid": "bf659307_1524e30c",
       "revId": "fa506cb28e5499f8b22416df2c57f260d00ff92f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
