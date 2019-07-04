@@ -26,6 +26,8 @@
 #include <fmtanchr.hxx>
 #include <flyfrm.hxx>
 #include <ndtxt.hxx>
+#include <txtfld.hxx>
+#include <docufld.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <i18nutil/unicode.hxx>
 #include <rtl/character.hxx>
@@ -404,9 +406,11 @@ bool SwWrtShell::DelRight()
             if (pFly)
             {
                 SwFrameFormat* pFormat = pFly->GetFormat();
-                if (pFormat && pFormat->GetAnchor().GetAnchorId() == RndStdIds::FLY_AT_CHAR)
+                if (pFormat)
                 {
-                    if (pFormat->GetAnchor().GetContentAnchor())
+                    RndStdIds eAnchorId = pFormat->GetAnchor().GetAnchorId();
+                    if ((eAnchorId == RndStdIds::FLY_AS_CHAR || eAnchorId == RndStdIds::FLY_AT_CHAR)
+                        && pFormat->GetAnchor().GetContentAnchor())
                     {
                         pAnchor.reset(new SwPosition(*pFormat->GetAnchor().GetContentAnchor()));
                     }
@@ -425,7 +429,8 @@ bool SwWrtShell::DelRight()
                 {
                     const SwTextField* pField(
                         pTextNode->GetFieldTextAttrAt(pAnchor->nContent.GetIndex(), true));
-                    if (pField)
+                    if (pField
+                        && dynamic_cast<const SwPostItField*>(pField->GetFormatField().GetField()))
                     {
                         // Remove the comment of the deleted object.
                         *GetCurrentShellCursor().GetPoint() = *pAnchor;
