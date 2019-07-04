@@ -23,6 +23,7 @@
 #include <PostItMgr.hxx>
 #include <postithelper.hxx>
 #include <AnnotationWin.hxx>
+#include <view.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
