@@ -33,7 +33,6 @@
 #include <rtl/math.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/alpha.hxx>
-#include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/outdev.hxx>

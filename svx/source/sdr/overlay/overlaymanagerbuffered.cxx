@@ -23,7 +23,6 @@
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <vcl/window.hxx>
-#include <vcl/bitmap.hxx>
 #include <tools/stream.hxx>
 #include <tools/fract.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>

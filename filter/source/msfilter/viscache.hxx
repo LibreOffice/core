@@ -22,7 +22,6 @@
 #include <memory>
 #include <sfx2/objsh.hxx>
 #include <vcl/gdimtf.hxx>
-#include <vcl/bitmap.hxx>
 
 class SvStream;
 

@@ -24,7 +24,6 @@
 #include <drawdoc.hxx>
 #include <sdpdffilter.hxx>
 
-#include <vcl/bitmap.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/pdfread.hxx>
 

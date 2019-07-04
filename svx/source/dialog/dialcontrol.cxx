@@ -21,7 +21,6 @@
 #include <cmath>
 #include <vcl/virdev.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/event.hxx>
 #include <vcl/field.hxx>

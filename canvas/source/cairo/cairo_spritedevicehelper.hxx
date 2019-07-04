@@ -25,7 +25,6 @@
 #include <com/sun/star/rendering/XBufferController.hpp>
 
 #include <vcl/window.hxx>
-#include <vcl/bitmap.hxx>
 #include <vcl/cairo.hxx>
 
 #include "cairo_devicehelper.hxx"

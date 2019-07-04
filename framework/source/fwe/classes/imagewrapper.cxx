@@ -19,7 +19,6 @@
 
 #include <classes/imagewrapper.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/BitmapTools.hxx>
 #include <tools/stream.hxx>

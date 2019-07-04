@@ -23,7 +23,6 @@
 #include <basegfx/utils/b2dclipstate.hxx>
 #include <tools/poly.hxx>
 #include <vcl/font.hxx>
-#include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/lineinfo.hxx>
 #include <vcl/outdevstate.hxx>

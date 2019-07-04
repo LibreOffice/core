@@ -28,8 +28,6 @@
 #include <app.hrc>
 #include <helpids.h>
 
-#include <vcl/bitmap.hxx>
-
 namespace sd { namespace sidebar {
 
 VclPtr<vcl::Window> RecentMasterPagesSelector::Create (
