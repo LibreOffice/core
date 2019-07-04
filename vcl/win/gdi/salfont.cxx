@@ -1060,7 +1060,7 @@ struct TempFontItem
     TempFontItem* mpNextItem;
 };
 
-static int lcl_AddFontResource(SalData& rSalData, const OUString& rFontFileURL)
+static int lcl_AddFontResource(SalData& rSalData, const OUString& rFontFileURL, bool bShared)
 {
     OUString aFontSystemPath;
     OSL_VERIFY(!osl::FileBase::getSystemPathFromFileURL(rFontFileURL, aFontSystemPath));
@@ -1071,19 +1071,36 @@ static int lcl_AddFontResource(SalData& rSalData, const OUString& rFontFileURL)
     {
         TempFontItem* pNewItem = new TempFontItem;
         pNewItem->maFontResourcePath = aFontSystemPath;
-        pNewItem->mpNextItem = rSalData.mpTempFontItem;
-        rSalData.mpTempFontItem = pNewItem;
+        if (bShared)
+        {
+            pNewItem->mpNextItem = rSalData.mpSharedTempFontItem;
+            rSalData.mpSharedTempFontItem = pNewItem;
+        }
+        else
+        {
+            pNewItem->mpNextItem = rSalData.mpOtherTempFontItem;
+            rSalData.mpOtherTempFontItem = pNewItem;
+        }
     }
     return nRet;
 }
 
-void ImplReleaseTempFonts( SalData& rSalData )
+void ImplReleaseTempFonts(SalData& rSalData, bool bAll)
 {
-    while (TempFontItem* p = rSalData.mpTempFontItem)
+    while (TempFontItem* p = rSalData.mpOtherTempFontItem)
     {
-        RemoveFontResourceExW(o3tl::toW(p->maFontResourcePath.getStr()),
-                              FR_PRIVATE, nullptr);
-        rSalData.mpTempFontItem = p->mpNextItem;
+        RemoveFontResourceExW(o3tl::toW(p->maFontResourcePath.getStr()), FR_PRIVATE, nullptr);
+        rSalData.mpOtherTempFontItem = p->mpNextItem;
+        delete p;
+    }
+
+    if (!bAll)
+        return;
+
+    while (TempFontItem* p = rSalData.mpSharedTempFontItem)
+    {
+        RemoveFontResourceExW(o3tl::toW(p->maFontResourcePath.getStr()), FR_PRIVATE, nullptr);
+        rSalData.mpSharedTempFontItem = p->mpNextItem;
         delete p;
     }
 }
@@ -1196,7 +1213,7 @@ bool WinSalGraphics::AddTempDevFont(PhysicalFontCollection* pFontCollection,
         return false;
     }
 
-    int nFonts = lcl_AddFontResource(*GetSalData(), rFontFileURL);
+    int nFonts = lcl_AddFontResource(*GetSalData(), rFontFileURL, false);
     if (nFonts <= 0)
         return false;
 
@@ -1252,7 +1269,7 @@ void WinSalGraphics::GetDevFontList( PhysicalFontCollection* pFontCollection )
                 osl::FileStatus aFileStatus( osl_FileStatus_Mask_FileURL );
                 rcOSL = aDirItem.getFileStatus( aFileStatus );
                 if ( rcOSL == osl::FileBase::E_None )
-                    lcl_AddFontResource(*pSalData, aFileStatus.getFileURL());
+                    lcl_AddFontResource(*pSalData, aFileStatus.getFileURL(), true);
             }
         }
     }
@@ -1282,7 +1299,7 @@ void WinSalGraphics::GetDevFontList( PhysicalFontCollection* pFontCollection )
 
 void WinSalGraphics::ClearDevFontCache()
 {
-    //anything to do here ?
+    ImplReleaseTempFonts(*GetSalData(), false);
 }
 
 bool WinFontInstance::ImplGetGlyphBoundRect(sal_GlyphId nId, tools::Rectangle& rRect, bool) const
