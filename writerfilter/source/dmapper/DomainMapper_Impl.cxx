@@ -250,7 +250,6 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_bIgnoreNextPara(false),
         m_bCheckFirstFootnoteTab(false),
         m_bIgnoreNextTab(false),
-        m_bFrameBtLr(false),
         m_bIsSplitPara(false),
         m_vTextFramesForChaining(),
         m_bParaHadField(false),
@@ -2353,15 +2352,9 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
                 uno::Reference<beans::XPropertySet> xShapePropertySet(xShape, uno::UNO_QUERY);
                 uno::Sequence<beans::PropertyValue> aGrabBag;
                 xShapePropertySet->getPropertyValue("FrameInteropGrabBag") >>= aGrabBag;
-                bool checkBtLrStatus = false;
 
                 for (int i = 0; i < aGrabBag.getLength(); ++i)
                 {
-                    if (aGrabBag[i].Name == "mso-layout-flow-alt")
-                    {
-                        m_bFrameBtLr = aGrabBag[i].Value.get<OUString>() == "bottom-to-top";
-                        checkBtLrStatus = true;
-                    }
                     if (aGrabBag[i].Name == "VML-Z-ORDER")
                     {
                         GraphicZOrderHelper* pZOrderHelper = m_rDMapper.graphicZOrderHelper();
@@ -2372,10 +2365,8 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
                         xShapePropertySet->setPropertyValue(getPropertyName( PROP_OPAQUE ), uno::makeAny( zOrder >= 0 ) );
                         checkZOrderStatus = true;
                     }
-                    if(checkBtLrStatus && checkZOrderStatus)
-                        break;
 
-                    if ( aGrabBag[i].Name == "TxbxHasLink" )
+                    else if ( aGrabBag[i].Name == "TxbxHasLink" )
                     {
                         //Chaining of textboxes will happen in ~DomainMapper_Impl
                         //i.e when all the textboxes are read and all its attributes
@@ -2533,7 +2524,6 @@ void DomainMapper_Impl::PopShapeContext()
 
         m_aAnchoredStack.pop();
     }
-    m_bFrameBtLr = false;
 }
 
 bool DomainMapper_Impl::IsSdtEndBefore()
