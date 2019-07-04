@@ -386,6 +386,11 @@ AC_ARG_WITH(android-sdk,
         [Specify location of the Android SDK. Mandatory when building for Android.]),
 ,)
 
+AC_ARG_WITH(android-api-level,
+    AS_HELP_STRING([--with-android-api-level],
+        [Specify the API level when building for Android. Defaults to 16 for ARM and x86 and to 21 for ARM64 and x86-64]),
+,)
+
 ANDROID_NDK_HOME=
 if test -z "$with_android_ndk" -a -e "$SRC_ROOT/external/android-ndk" -a "$build" != "$host"; then
     with_android_ndk="$SRC_ROOT/external/android-ndk"
@@ -422,6 +427,10 @@ if test -n "$with_android_ndk"; then
     esac
 
     ANDROID_API_LEVEL=16
+    if test -n "$with_android_api_level" ; then
+        ANDROID_API_LEVEL="$with_android_api_level"
+    fi
+
     android_cpu=$host_cpu
     if test $host_cpu = arm; then
         android_platform_prefix=arm-linux-androideabi
@@ -434,7 +443,9 @@ if test -n "$with_android_ndk"; then
         android_gnu_prefix=$android_platform_prefix
         LLVM_TRIPLE=$android_platform_prefix
         # minimum android version that supports aarch64
-        ANDROID_API_LEVEL=21
+        if test "$ANDROID_API_LEVEL" -lt "21" ; then
+            ANDROID_API_LEVEL=21
+        fi
         ANDROID_APP_ABI=arm64-v8a
     elif test $host_cpu = x86_64; then
         android_platform_prefix=x86_64-linux-android
@@ -460,6 +471,8 @@ if test -n "$with_android_ndk"; then
     *)
         AC_MSG_ERROR([Unrecognized value for the --with-android-ndk-toolchain-version option. Building for Android is only supported with Clang 5.*])
     esac
+
+    AC_MSG_NOTICE([using the Android API level... $ANDROID_API_LEVEL])
 
     # NDK 15 or later toolchain is 64bit-only, except for Windows that we don't support. Using a 64-bit
     # linker is required if you compile large parts of the code with -g. A 32-bit linker just won't
