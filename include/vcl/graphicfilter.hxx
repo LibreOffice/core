@@ -309,6 +309,8 @@ public:
 
     ErrCode         compressAsPNG(const Graphic& rGraphic, SvStream& rOutputStream);
 
+    void preload();
+
 private:
     OUString        aFilterPath;
     FilterConfigCache*  pConfig;
