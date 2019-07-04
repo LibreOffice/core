@@ -1652,9 +1652,6 @@ void ImpGraphic::ImplSetLink(const std::shared_ptr<GfxLink>& rGfxLink)
     ensureAvailable();
 
     mpGfxLink = rGfxLink;
-
-    if (mpGfxLink && mpGfxLink->IsNative())
-        mpGfxLink->SwapOut();
 }
 
 GfxLink ImpGraphic::ImplGetLink()
