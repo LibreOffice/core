@@ -117,12 +117,12 @@ void SwXMLImport::SetStatistics(
 
     sal_uInt32 nTokens = 0;
 
-    for (sal_Int32 i = 0; i < i_rStats.getLength(); ++i) {
+    for (const auto& rStat : i_rStats) {
         for (struct statistic const* pStat = s_stats; pStat->name != nullptr;
                 ++pStat) {
-            if (i_rStats[i].Name.equalsAscii(pStat->name)) {
+            if (rStat.Name.equalsAscii(pStat->name)) {
                 sal_Int32 val = 0;
-                if (i_rStats[i].Value >>= val) {
+                if (rStat.Value >>= val) {
                     if (pStat->target16 != nullptr) {
                         aDocStat.*(pStat->target16)
                             = static_cast<sal_uInt16> (val);

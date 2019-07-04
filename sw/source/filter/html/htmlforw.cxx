@@ -127,15 +127,13 @@ static void lcl_html_outEvents( SvStream& rStrm,
 
     uno::Sequence< script::ScriptEventDescriptor > aDescs =
             xEventManager->getScriptEvents( nPos );
-    nCount = aDescs.getLength();
-    if( !nCount )
+    if( !aDescs.hasElements() )
         return;
 
-    const script::ScriptEventDescriptor *pDescs = aDescs.getConstArray();
-    for( sal_Int32 i = 0; i < nCount; i++ )
+    for( const script::ScriptEventDescriptor& rDesc : aDescs )
     {
         ScriptType eScriptType = EXTENDED_STYPE;
-        OUString aScriptType( pDescs[i].ScriptType );
+        OUString aScriptType( rDesc.ScriptType );
         if( aScriptType.equalsIgnoreAsciiCase(SVX_MACRO_LANGUAGE_JAVASCRIPT) )
             eScriptType = JAVASCRIPT;
         else if( aScriptType.equalsIgnoreAsciiCase(SVX_MACRO_LANGUAGE_STARBASIC ) )
@@ -143,7 +141,7 @@ static void lcl_html_outEvents( SvStream& rStrm,
         if( JAVASCRIPT != eScriptType && !bCfgStarBasic )
             continue;
 
-        OUString sListener( pDescs[i].ListenerType );
+        OUString sListener( rDesc.ListenerType );
         if (!sListener.isEmpty())
         {
             const sal_Int32 nIdx { sListener.lastIndexOf('.')+1 };
@@ -159,7 +157,7 @@ static void lcl_html_outEvents( SvStream& rStrm,
                 }
             }
         }
-        OUString sMethod( pDescs[i].EventMethod );
+        OUString sMethod( rDesc.EventMethod );
 
         const sal_Char *pOpt = nullptr;
         for( int j=0; aEventListenerTable[j]; j++ )
@@ -175,7 +173,7 @@ static void lcl_html_outEvents( SvStream& rStrm,
 
         OString sOut = " ";
         if( pOpt && (EXTENDED_STYPE != eScriptType ||
-                     pDescs[i].AddListenerParam.isEmpty()) )
+                     rDesc.AddListenerParam.isEmpty()) )
             sOut += OString(pOpt);
         else
         {
@@ -185,16 +183,16 @@ static void lcl_html_outEvents( SvStream& rStrm,
         }
         sOut += "=\"";
         rStrm.WriteOString( sOut );
-        HTMLOutFuncs::Out_String( rStrm, pDescs[i].ScriptCode, eDestEnc, pNonConvertableChars );
+        HTMLOutFuncs::Out_String( rStrm, rDesc.ScriptCode, eDestEnc, pNonConvertableChars );
         rStrm.WriteChar( '\"' );
         if( EXTENDED_STYPE == eScriptType &&
-            !pDescs[i].AddListenerParam.isEmpty() )
+            !rDesc.AddListenerParam.isEmpty() )
         {
             sOut = " " OOO_STRING_SVTOOLS_HTML_O_sdaddparam +
                 OUStringToOString(sListener, RTL_TEXTENCODING_ASCII_US) + "-" +
                 OUStringToOString(sMethod, RTL_TEXTENCODING_ASCII_US) + "=\"";
             rStrm.WriteOString( sOut );
-            HTMLOutFuncs::Out_String( rStrm, pDescs[i].AddListenerParam,
+            HTMLOutFuncs::Out_String( rStrm, rDesc.AddListenerParam,
                                       eDestEnc, pNonConvertableChars );
             rStrm.WriteChar( '\"' );
         }

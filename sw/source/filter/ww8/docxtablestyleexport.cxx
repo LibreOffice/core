@@ -94,11 +94,10 @@ void DocxTableStyleExport::CnfStyle(uno::Sequence<beans::PropertyValue>& rAttrib
     sax_fastparser::FastAttributeList* pAttributeList
         = sax_fastparser::FastSerializerHelper::createAttrList();
 
-    for (sal_Int32 j = 0; j < rAttributeList.getLength(); ++j)
+    for (const auto& rAttribute : rAttributeList)
     {
-        if (rAttributeList[j].Name == "val")
-            pAttributeList->add(FSNS(XML_w, XML_val),
-                                rAttributeList[j].Value.get<OUString>().toUtf8());
+        if (rAttribute.Name == "val")
+            pAttributeList->add(FSNS(XML_w, XML_val), rAttribute.Value.get<OUString>().toUtf8());
         else
         {
             static DocxStringTokenMap const aTokens[]
@@ -116,9 +115,8 @@ void DocxTableStyleExport::CnfStyle(uno::Sequence<beans::PropertyValue>& rAttrib
                     { "lastRowLastColumn", XML_lastRowLastColumn },
                     { nullptr, 0 } };
 
-            if (sal_Int32 nToken = DocxStringGetToken(aTokens, rAttributeList[j].Name))
-                pAttributeList->add(FSNS(XML_w, nToken),
-                                    rAttributeList[j].Value.get<OUString>().toUtf8());
+            if (sal_Int32 nToken = DocxStringGetToken(aTokens, rAttribute.Name))
+                pAttributeList->add(FSNS(XML_w, nToken), rAttribute.Value.get<OUString>().toUtf8());
         }
     }
 
@@ -134,14 +132,11 @@ void DocxTableStyleExport::TableStyles(sal_Int32 nCountStylesToWrite)
     uno::Sequence<beans::PropertyValue> aInteropGrabBag;
     xPropertySet->getPropertyValue("InteropGrabBag") >>= aInteropGrabBag;
     uno::Sequence<beans::PropertyValue> aTableStyles;
-    for (sal_Int32 i = 0; i < aInteropGrabBag.getLength(); ++i)
-    {
-        if (aInteropGrabBag[i].Name == "tableStyles")
-        {
-            aInteropGrabBag[i].Value >>= aTableStyles;
-            break;
-        }
-    }
+    auto pProp = std::find_if(
+        aInteropGrabBag.begin(), aInteropGrabBag.end(),
+        [](const beans::PropertyValue& rProp) { return rProp.Name == "tableStyles"; });
+    if (pProp != aInteropGrabBag.end())
+        pProp->Value >>= aTableStyles;
     if (!aTableStyles.hasElements())
         return;
 
@@ -168,12 +163,12 @@ void DocxTableStyleExport::Impl::tableStyleTableCellMar(
         return;
 
     m_pSerializer->startElementNS(XML_w, nType);
-    for (sal_Int32 i = 0; i < rTableCellMar.getLength(); ++i)
+    for (const auto& rProp : rTableCellMar)
     {
-        if (sal_Int32 nToken = DocxStringGetToken(aTableCellMarTokens, rTableCellMar[i].Name))
+        if (sal_Int32 nToken = DocxStringGetToken(aTableCellMarTokens, rProp.Name))
         {
             comphelper::SequenceAsHashMap aMap(
-                rTableCellMar[i].Value.get<uno::Sequence<beans::PropertyValue>>());
+                rProp.Value.get<uno::Sequence<beans::PropertyValue>>());
             m_pSerializer->singleElementNS(
                 XML_w, nToken, FSNS(XML_w, XML_w), OString::number(aMap["w"].get<sal_Int32>()),
                 FSNS(XML_w, XML_type), aMap["type"].get<OUString>().toUtf8());
@@ -198,10 +193,9 @@ void DocxTableStyleExport::Impl::tableStyleTcBorder(
 
     sax_fastparser::FastAttributeList* pAttributeList
         = sax_fastparser::FastSerializerHelper::createAttrList();
-    for (sal_Int32 i = 0; i < rTcBorder.getLength(); ++i)
-        if (sal_Int32 nAttrToken = DocxStringGetToken(aTcBorderTokens, rTcBorder[i].Name))
-            pAttributeList->add(FSNS(XML_w, nAttrToken),
-                                rTcBorder[i].Value.get<OUString>().toUtf8());
+    for (const auto& rProp : rTcBorder)
+        if (sal_Int32 nAttrToken = DocxStringGetToken(aTcBorderTokens, rProp.Name))
+            pAttributeList->add(FSNS(XML_w, nAttrToken), rProp.Value.get<OUString>().toUtf8());
 
     sax_fastparser::XFastAttributeListRef xAttributeList(pAttributeList);
     m_pSerializer->singleElementNS(XML_w, nToken, xAttributeList);
@@ -226,10 +220,10 @@ void DocxTableStyleExport::Impl::tableStyleTcBorders(
         return;
 
     m_pSerializer->startElementNS(XML_w, nToken);
-    for (sal_Int32 i = 0; i < rTcBorders.getLength(); ++i)
-        if (sal_Int32 nSubToken = DocxStringGetToken(aTcBordersTokens, rTcBorders[i].Name))
+    for (const auto& rTcBorder : rTcBorders)
+        if (sal_Int32 nSubToken = DocxStringGetToken(aTcBordersTokens, rTcBorder.Name))
             tableStyleTcBorder(nSubToken,
-                               rTcBorders[i].Value.get<uno::Sequence<beans::PropertyValue>>());
+                               rTcBorder.Value.get<uno::Sequence<beans::PropertyValue>>());
     m_pSerializer->endElementNS(XML_w, nToken);
 }
 
@@ -240,22 +234,22 @@ void DocxTableStyleExport::Impl::tableStyleShd(uno::Sequence<beans::PropertyValu
 
     sax_fastparser::FastAttributeList* pAttributeList
         = sax_fastparser::FastSerializerHelper::createAttrList();
-    for (sal_Int32 i = 0; i < rShd.getLength(); ++i)
+    for (const auto& rProp : rShd)
     {
-        if (rShd[i].Name == "val")
-            pAttributeList->add(FSNS(XML_w, XML_val), rShd[i].Value.get<OUString>().toUtf8());
-        else if (rShd[i].Name == "color")
-            pAttributeList->add(FSNS(XML_w, XML_color), rShd[i].Value.get<OUString>().toUtf8());
-        else if (rShd[i].Name == "fill")
-            pAttributeList->add(FSNS(XML_w, XML_fill), rShd[i].Value.get<OUString>().toUtf8());
-        else if (rShd[i].Name == "themeFill")
-            pAttributeList->add(FSNS(XML_w, XML_themeFill), rShd[i].Value.get<OUString>().toUtf8());
-        else if (rShd[i].Name == "themeFillShade")
+        if (rProp.Name == "val")
+            pAttributeList->add(FSNS(XML_w, XML_val), rProp.Value.get<OUString>().toUtf8());
+        else if (rProp.Name == "color")
+            pAttributeList->add(FSNS(XML_w, XML_color), rProp.Value.get<OUString>().toUtf8());
+        else if (rProp.Name == "fill")
+            pAttributeList->add(FSNS(XML_w, XML_fill), rProp.Value.get<OUString>().toUtf8());
+        else if (rProp.Name == "themeFill")
+            pAttributeList->add(FSNS(XML_w, XML_themeFill), rProp.Value.get<OUString>().toUtf8());
+        else if (rProp.Name == "themeFillShade")
             pAttributeList->add(FSNS(XML_w, XML_themeFillShade),
-                                rShd[i].Value.get<OUString>().toUtf8());
-        else if (rShd[i].Name == "themeFillTint")
+                                rProp.Value.get<OUString>().toUtf8());
+        else if (rProp.Name == "themeFillTint")
             pAttributeList->add(FSNS(XML_w, XML_themeFillTint),
-                                rShd[i].Value.get<OUString>().toUtf8());
+                                rProp.Value.get<OUString>().toUtf8());
     }
     sax_fastparser::XFastAttributeListRef xAttributeList(pAttributeList);
     m_pSerializer->singleElementNS(XML_w, XML_shd, xAttributeList);
@@ -268,19 +262,16 @@ void DocxTableStyleExport::Impl::tableStyleRColor(uno::Sequence<beans::PropertyV
 
     sax_fastparser::FastAttributeList* pAttributeList
         = sax_fastparser::FastSerializerHelper::createAttrList();
-    for (sal_Int32 i = 0; i < rColor.getLength(); ++i)
+    for (const auto& rProp : rColor)
     {
-        if (rColor[i].Name == "val")
-            pAttributeList->add(FSNS(XML_w, XML_val), rColor[i].Value.get<OUString>().toUtf8());
-        else if (rColor[i].Name == "themeColor")
-            pAttributeList->add(FSNS(XML_w, XML_themeColor),
-                                rColor[i].Value.get<OUString>().toUtf8());
-        else if (rColor[i].Name == "themeTint")
-            pAttributeList->add(FSNS(XML_w, XML_themeTint),
-                                rColor[i].Value.get<OUString>().toUtf8());
-        else if (rColor[i].Name == "themeShade")
-            pAttributeList->add(FSNS(XML_w, XML_themeShade),
-                                rColor[i].Value.get<OUString>().toUtf8());
+        if (rProp.Name == "val")
+            pAttributeList->add(FSNS(XML_w, XML_val), rProp.Value.get<OUString>().toUtf8());
+        else if (rProp.Name == "themeColor")
+            pAttributeList->add(FSNS(XML_w, XML_themeColor), rProp.Value.get<OUString>().toUtf8());
+        else if (rProp.Name == "themeTint")
+            pAttributeList->add(FSNS(XML_w, XML_themeTint), rProp.Value.get<OUString>().toUtf8());
+        else if (rProp.Name == "themeShade")
+            pAttributeList->add(FSNS(XML_w, XML_themeShade), rProp.Value.get<OUString>().toUtf8());
     }
     sax_fastparser::XFastAttributeListRef xAttributeList(pAttributeList);
     m_pSerializer->singleElementNS(XML_w, XML_color, xAttributeList);
@@ -293,14 +284,14 @@ void DocxTableStyleExport::Impl::tableStyleRLang(uno::Sequence<beans::PropertyVa
 
     sax_fastparser::FastAttributeList* pAttributeList
         = sax_fastparser::FastSerializerHelper::createAttrList();
-    for (sal_Int32 i = 0; i < rLang.getLength(); ++i)
+    for (const auto& rProp : rLang)
     {
-        if (rLang[i].Name == "eastAsia")
-            pAttributeList->add(FSNS(XML_w, XML_eastAsia), rLang[i].Value.get<OUString>().toUtf8());
-        else if (rLang[i].Name == "val")
-            pAttributeList->add(FSNS(XML_w, XML_val), rLang[i].Value.get<OUString>().toUtf8());
-        else if (rLang[i].Name == "bidi")
-            pAttributeList->add(FSNS(XML_w, XML_bidi), rLang[i].Value.get<OUString>().toUtf8());
+        if (rProp.Name == "eastAsia")
+            pAttributeList->add(FSNS(XML_w, XML_eastAsia), rProp.Value.get<OUString>().toUtf8());
+        else if (rProp.Name == "val")
+            pAttributeList->add(FSNS(XML_w, XML_val), rProp.Value.get<OUString>().toUtf8());
+        else if (rProp.Name == "bidi")
+            pAttributeList->add(FSNS(XML_w, XML_bidi), rProp.Value.get<OUString>().toUtf8());
     }
     sax_fastparser::XFastAttributeListRef xAttributeList(pAttributeList);
     m_pSerializer->singleElementNS(XML_w, XML_lang, xAttributeList);
@@ -313,20 +304,17 @@ void DocxTableStyleExport::Impl::tableStyleRRFonts(uno::Sequence<beans::Property
 
     sax_fastparser::FastAttributeList* pAttributeList
         = sax_fastparser::FastSerializerHelper::createAttrList();
-    for (sal_Int32 i = 0; i < rRFonts.getLength(); ++i)
+    for (const auto& rRFont : rRFonts)
     {
-        if (rRFonts[i].Name == "eastAsiaTheme")
+        if (rRFont.Name == "eastAsiaTheme")
             pAttributeList->add(FSNS(XML_w, XML_eastAsiaTheme),
-                                rRFonts[i].Value.get<OUString>().toUtf8());
-        else if (rRFonts[i].Name == "asciiTheme")
-            pAttributeList->add(FSNS(XML_w, XML_asciiTheme),
-                                rRFonts[i].Value.get<OUString>().toUtf8());
-        else if (rRFonts[i].Name == "cstheme")
-            pAttributeList->add(FSNS(XML_w, XML_cstheme),
-                                rRFonts[i].Value.get<OUString>().toUtf8());
-        else if (rRFonts[i].Name == "hAnsiTheme")
-            pAttributeList->add(FSNS(XML_w, XML_hAnsiTheme),
-                                rRFonts[i].Value.get<OUString>().toUtf8());
+                                rRFont.Value.get<OUString>().toUtf8());
+        else if (rRFont.Name == "asciiTheme")
+            pAttributeList->add(FSNS(XML_w, XML_asciiTheme), rRFont.Value.get<OUString>().toUtf8());
+        else if (rRFont.Name == "cstheme")
+            pAttributeList->add(FSNS(XML_w, XML_cstheme), rRFont.Value.get<OUString>().toUtf8());
+        else if (rRFont.Name == "hAnsiTheme")
+            pAttributeList->add(FSNS(XML_w, XML_hAnsiTheme), rRFont.Value.get<OUString>().toUtf8());
     }
     sax_fastparser::XFastAttributeListRef xAttributeList(pAttributeList);
     m_pSerializer->singleElementNS(XML_w, XML_rFonts, xAttributeList);
@@ -339,28 +327,24 @@ void DocxTableStyleExport::Impl::tableStylePSpacing(uno::Sequence<beans::Propert
 
     sax_fastparser::FastAttributeList* pAttributeList
         = sax_fastparser::FastSerializerHelper::createAttrList();
-    for (sal_Int32 i = 0; i < rSpacing.getLength(); ++i)
+    for (const auto& rProp : rSpacing)
     {
-        if (rSpacing[i].Name == "after")
-            pAttributeList->add(FSNS(XML_w, XML_after), rSpacing[i].Value.get<OUString>().toUtf8());
-        else if (rSpacing[i].Name == "before")
-            pAttributeList->add(FSNS(XML_w, XML_before),
-                                rSpacing[i].Value.get<OUString>().toUtf8());
-        else if (rSpacing[i].Name == "line")
-            pAttributeList->add(FSNS(XML_w, XML_line), rSpacing[i].Value.get<OUString>().toUtf8());
-        else if (rSpacing[i].Name == "lineRule")
-            pAttributeList->add(FSNS(XML_w, XML_lineRule),
-                                rSpacing[i].Value.get<OUString>().toUtf8());
-        else if (rSpacing[i].Name == "beforeLines")
-            pAttributeList->add(FSNS(XML_w, XML_beforeLines),
-                                rSpacing[i].Value.get<OUString>().toUtf8());
-        else if (rSpacing[i].Name == "ParaTopMarginBeforeAutoSpacing")
+        if (rProp.Name == "after")
+            pAttributeList->add(FSNS(XML_w, XML_after), rProp.Value.get<OUString>().toUtf8());
+        else if (rProp.Name == "before")
+            pAttributeList->add(FSNS(XML_w, XML_before), rProp.Value.get<OUString>().toUtf8());
+        else if (rProp.Name == "line")
+            pAttributeList->add(FSNS(XML_w, XML_line), rProp.Value.get<OUString>().toUtf8());
+        else if (rProp.Name == "lineRule")
+            pAttributeList->add(FSNS(XML_w, XML_lineRule), rProp.Value.get<OUString>().toUtf8());
+        else if (rProp.Name == "beforeLines")
+            pAttributeList->add(FSNS(XML_w, XML_beforeLines), rProp.Value.get<OUString>().toUtf8());
+        else if (rProp.Name == "ParaTopMarginBeforeAutoSpacing")
             // Auto spacing will be available in grab bag only if it was set to true
             pAttributeList->add(FSNS(XML_w, XML_beforeAutospacing), "1");
-        else if (rSpacing[i].Name == "afterLines")
-            pAttributeList->add(FSNS(XML_w, XML_afterLines),
-                                rSpacing[i].Value.get<OUString>().toUtf8());
-        else if (rSpacing[i].Name == "ParaBottomMarginAfterAutoSpacing")
+        else if (rProp.Name == "afterLines")
+            pAttributeList->add(FSNS(XML_w, XML_afterLines), rProp.Value.get<OUString>().toUtf8());
+        else if (rProp.Name == "ParaBottomMarginAfterAutoSpacing")
             // Auto spacing will be available in grab bag only if it was set to true
             pAttributeList->add(FSNS(XML_w, XML_afterAutospacing), "1");
     }
@@ -375,13 +359,12 @@ void DocxTableStyleExport::Impl::tableStylePInd(uno::Sequence<beans::PropertyVal
 
     sax_fastparser::FastAttributeList* pAttributeList
         = sax_fastparser::FastSerializerHelper::createAttrList();
-    for (sal_Int32 i = 0; i < rInd.getLength(); ++i)
+    for (const auto& rProp : rInd)
     {
-        if (rInd[i].Name == "rightChars")
-            pAttributeList->add(FSNS(XML_w, XML_rightChars),
-                                rInd[i].Value.get<OUString>().toUtf8());
-        else if (rInd[i].Name == "right")
-            pAttributeList->add(FSNS(XML_w, XML_right), rInd[i].Value.get<OUString>().toUtf8());
+        if (rProp.Name == "rightChars")
+            pAttributeList->add(FSNS(XML_w, XML_rightChars), rProp.Value.get<OUString>().toUtf8());
+        else if (rProp.Name == "right")
+            pAttributeList->add(FSNS(XML_w, XML_right), rProp.Value.get<OUString>().toUtf8());
     }
     sax_fastparser::XFastAttributeListRef xAttributeList(pAttributeList);
     m_pSerializer->singleElementNS(XML_w, XML_ind, xAttributeList);
@@ -394,13 +377,12 @@ void DocxTableStyleExport::Impl::tableStyleTableInd(uno::Sequence<beans::Propert
 
     sax_fastparser::FastAttributeList* pAttributeList
         = sax_fastparser::FastSerializerHelper::createAttrList();
-    for (sal_Int32 i = 0; i < rTableInd.getLength(); ++i)
+    for (const auto& rProp : rTableInd)
     {
-        if (rTableInd[i].Name == "w")
-            pAttributeList->add(FSNS(XML_w, XML_w),
-                                OString::number(rTableInd[i].Value.get<sal_Int32>()));
-        else if (rTableInd[i].Name == "type")
-            pAttributeList->add(FSNS(XML_w, XML_type), rTableInd[i].Value.get<OUString>().toUtf8());
+        if (rProp.Name == "w")
+            pAttributeList->add(FSNS(XML_w, XML_w), OString::number(rProp.Value.get<sal_Int32>()));
+        else if (rProp.Name == "type")
+            pAttributeList->add(FSNS(XML_w, XML_type), rProp.Value.get<OUString>().toUtf8());
     }
     sax_fastparser::XFastAttributeListRef xAttributeList(pAttributeList);
     m_pSerializer->singleElementNS(XML_w, XML_tblInd, xAttributeList);
@@ -438,37 +420,37 @@ void DocxTableStyleExport::Impl::tableStyleRPr(uno::Sequence<beans::PropertyValu
     OUString aCaps;
     OUString aSmallCaps;
     OUString aSpacing;
-    for (sal_Int32 i = 0; i < rRPr.getLength(); ++i)
+    for (const auto& rProp : rRPr)
     {
-        if (rRPr[i].Name == "rFonts")
-            aRFonts = rRPr[i].Value.get<uno::Sequence<beans::PropertyValue>>();
-        else if (rRPr[i].Name == "lang")
-            aLang = rRPr[i].Value.get<uno::Sequence<beans::PropertyValue>>();
-        else if (rRPr[i].Name == "b")
-            aB = rRPr[i].Value.get<OUString>();
-        else if (rRPr[i].Name == "bCs")
-            aBCs = rRPr[i].Value.get<OUString>();
-        else if (rRPr[i].Name == "i")
-            aI = rRPr[i].Value.get<OUString>();
-        else if (rRPr[i].Name == "color")
-            aColor = rRPr[i].Value.get<uno::Sequence<beans::PropertyValue>>();
-        else if (rRPr[i].Name == "sz")
-            aSz = rRPr[i].Value.get<OUString>();
-        else if (rRPr[i].Name == "szCs")
-            aSzCs = rRPr[i].Value.get<OUString>();
-        else if (rRPr[i].Name == "caps")
-            aCaps = rRPr[i].Value.get<OUString>();
-        else if (rRPr[i].Name == "smallCaps")
-            aSmallCaps = rRPr[i].Value.get<OUString>();
-        else if (rRPr[i].Name == "spacing")
+        if (rProp.Name == "rFonts")
+            aRFonts = rProp.Value.get<uno::Sequence<beans::PropertyValue>>();
+        else if (rProp.Name == "lang")
+            aLang = rProp.Value.get<uno::Sequence<beans::PropertyValue>>();
+        else if (rProp.Name == "b")
+            aB = rProp.Value.get<OUString>();
+        else if (rProp.Name == "bCs")
+            aBCs = rProp.Value.get<OUString>();
+        else if (rProp.Name == "i")
+            aI = rProp.Value.get<OUString>();
+        else if (rProp.Name == "color")
+            aColor = rProp.Value.get<uno::Sequence<beans::PropertyValue>>();
+        else if (rProp.Name == "sz")
+            aSz = rProp.Value.get<OUString>();
+        else if (rProp.Name == "szCs")
+            aSzCs = rProp.Value.get<OUString>();
+        else if (rProp.Name == "caps")
+            aCaps = rProp.Value.get<OUString>();
+        else if (rProp.Name == "smallCaps")
+            aSmallCaps = rProp.Value.get<OUString>();
+        else if (rProp.Name == "spacing")
         {
-            if (rRPr[i].Value.has<OUString>())
+            if (rProp.Value.has<OUString>())
             {
-                aSpacing = rRPr[i].Value.get<OUString>();
+                aSpacing = rProp.Value.get<OUString>();
             }
             else
             {
-                aSpacingSequence = rRPr[i].Value.get<uno::Sequence<beans::PropertyValue>>();
+                aSpacingSequence = rProp.Value.get<uno::Sequence<beans::PropertyValue>>();
                 bSequenceFlag = true; // set the uno::Sequence flag.
             }
         }
@@ -508,18 +490,18 @@ void DocxTableStyleExport::Impl::tableStylePPr(uno::Sequence<beans::PropertyValu
     bool bWordWrap = false;
     OUString aJc;
     OUString aSnapToGrid;
-    for (sal_Int32 i = 0; i < rPPr.getLength(); ++i)
+    for (const auto& rProp : rPPr)
     {
-        if (rPPr[i].Name == "spacing")
-            aSpacing = rPPr[i].Value.get<uno::Sequence<beans::PropertyValue>>();
-        else if (rPPr[i].Name == "ind")
-            aInd = rPPr[i].Value.get<uno::Sequence<beans::PropertyValue>>();
-        else if (rPPr[i].Name == "wordWrap")
+        if (rProp.Name == "spacing")
+            aSpacing = rProp.Value.get<uno::Sequence<beans::PropertyValue>>();
+        else if (rProp.Name == "ind")
+            aInd = rProp.Value.get<uno::Sequence<beans::PropertyValue>>();
+        else if (rProp.Name == "wordWrap")
             bWordWrap = true;
-        else if (rPPr[i].Name == "jc")
-            aJc = rPPr[i].Value.get<OUString>();
-        else if (rPPr[i].Name == "snapToGrid")
-            aSnapToGrid = rPPr[i].Value.get<OUString>();
+        else if (rProp.Name == "jc")
+            aJc = rProp.Value.get<OUString>();
+        else if (rProp.Name == "snapToGrid")
+            aSnapToGrid = rProp.Value.get<OUString>();
     }
     if (bWordWrap)
         m_pSerializer->singleElementNS(XML_w, XML_wordWrap);
@@ -544,18 +526,18 @@ void DocxTableStyleExport::Impl::tableStyleTablePr(uno::Sequence<beans::Property
     uno::Sequence<beans::PropertyValue> aTableCellMar;
     boost::optional<sal_Int32> oTableStyleRowBandSize;
     boost::optional<sal_Int32> oTableStyleColBandSize;
-    for (sal_Int32 i = 0; i < rTablePr.getLength(); ++i)
+    for (const auto& rProp : rTablePr)
     {
-        if (rTablePr[i].Name == "tblStyleRowBandSize")
-            oTableStyleRowBandSize = rTablePr[i].Value.get<sal_Int32>();
-        else if (rTablePr[i].Name == "tblStyleColBandSize")
-            oTableStyleColBandSize = rTablePr[i].Value.get<sal_Int32>();
-        else if (rTablePr[i].Name == "tblInd")
-            aTableInd = rTablePr[i].Value.get<uno::Sequence<beans::PropertyValue>>();
-        else if (rTablePr[i].Name == "tblBorders")
-            aTableBorders = rTablePr[i].Value.get<uno::Sequence<beans::PropertyValue>>();
-        else if (rTablePr[i].Name == "tblCellMar")
-            aTableCellMar = rTablePr[i].Value.get<uno::Sequence<beans::PropertyValue>>();
+        if (rProp.Name == "tblStyleRowBandSize")
+            oTableStyleRowBandSize = rProp.Value.get<sal_Int32>();
+        else if (rProp.Name == "tblStyleColBandSize")
+            oTableStyleColBandSize = rProp.Value.get<sal_Int32>();
+        else if (rProp.Name == "tblInd")
+            aTableInd = rProp.Value.get<uno::Sequence<beans::PropertyValue>>();
+        else if (rProp.Name == "tblBorders")
+            aTableBorders = rProp.Value.get<uno::Sequence<beans::PropertyValue>>();
+        else if (rProp.Name == "tblCellMar")
+            aTableCellMar = rProp.Value.get<uno::Sequence<beans::PropertyValue>>();
     }
     if (oTableStyleRowBandSize)
         m_pSerializer->singleElementNS(XML_w, XML_tblStyleRowBandSize, FSNS(XML_w, XML_val),
@@ -581,16 +563,16 @@ void DocxTableStyleExport::Impl::tableStyleTcPr(uno::Sequence<beans::PropertyVal
     uno::Sequence<beans::PropertyValue> aTcBorders;
     uno::Sequence<beans::PropertyValue> aTcMar;
     OUString aVAlign;
-    for (sal_Int32 i = 0; i < rTcPr.getLength(); ++i)
+    for (const auto& rProp : rTcPr)
     {
-        if (rTcPr[i].Name == "shd")
-            aShd = rTcPr[i].Value.get<uno::Sequence<beans::PropertyValue>>();
-        else if (rTcPr[i].Name == "tcBorders")
-            aTcBorders = rTcPr[i].Value.get<uno::Sequence<beans::PropertyValue>>();
-        else if (rTcPr[i].Name == "tcMar")
-            aTcMar = rTcPr[i].Value.get<uno::Sequence<beans::PropertyValue>>();
-        else if (rTcPr[i].Name == "vAlign")
-            aVAlign = rTcPr[i].Value.get<OUString>();
+        if (rProp.Name == "shd")
+            aShd = rProp.Value.get<uno::Sequence<beans::PropertyValue>>();
+        else if (rProp.Name == "tcBorders")
+            aTcBorders = rProp.Value.get<uno::Sequence<beans::PropertyValue>>();
+        else if (rProp.Name == "tcMar")
+            aTcMar = rProp.Value.get<uno::Sequence<beans::PropertyValue>>();
+        else if (rProp.Name == "vAlign")
+            aVAlign = rProp.Value.get<OUString>();
     }
     tableStyleTcBorders(aTcBorders);
     tableStyleTableCellMar(aTcMar, XML_tcMar);
@@ -612,18 +594,18 @@ void DocxTableStyleExport::Impl::tableStyleTableStylePr(
     uno::Sequence<beans::PropertyValue> aRPr;
     uno::Sequence<beans::PropertyValue> aTablePr;
     uno::Sequence<beans::PropertyValue> aTcPr;
-    for (sal_Int32 i = 0; i < rTableStylePr.getLength(); ++i)
+    for (const auto& rProp : rTableStylePr)
     {
-        if (rTableStylePr[i].Name == "type")
-            aType = rTableStylePr[i].Value.get<OUString>();
-        else if (rTableStylePr[i].Name == "pPr")
-            aPPr = rTableStylePr[i].Value.get<uno::Sequence<beans::PropertyValue>>();
-        else if (rTableStylePr[i].Name == "rPr")
-            aRPr = rTableStylePr[i].Value.get<uno::Sequence<beans::PropertyValue>>();
-        else if (rTableStylePr[i].Name == "tblPr")
-            aTablePr = rTableStylePr[i].Value.get<uno::Sequence<beans::PropertyValue>>();
-        else if (rTableStylePr[i].Name == "tcPr")
-            aTcPr = rTableStylePr[i].Value.get<uno::Sequence<beans::PropertyValue>>();
+        if (rProp.Name == "type")
+            aType = rProp.Value.get<OUString>();
+        else if (rProp.Name == "pPr")
+            aPPr = rProp.Value.get<uno::Sequence<beans::PropertyValue>>();
+        else if (rProp.Name == "rPr")
+            aRPr = rProp.Value.get<uno::Sequence<beans::PropertyValue>>();
+        else if (rProp.Name == "tblPr")
+            aTablePr = rProp.Value.get<uno::Sequence<beans::PropertyValue>>();
+        else if (rProp.Name == "tcPr")
+            aTcPr = rProp.Value.get<uno::Sequence<beans::PropertyValue>>();
     }
 
     m_pSerializer->startElementNS(XML_w, XML_tblStylePr, FSNS(XML_w, XML_type), aType.toUtf8());
@@ -659,38 +641,38 @@ void DocxTableStyleExport::Impl::TableStyle(uno::Sequence<beans::PropertyValue>&
     uno::Sequence<beans::PropertyValue> aTablePr;
     uno::Sequence<beans::PropertyValue> aTcPr;
     std::vector<uno::Sequence<beans::PropertyValue>> aTableStylePrs;
-    for (sal_Int32 i = 0; i < rStyle.getLength(); ++i)
+    for (const auto& rProp : rStyle)
     {
-        if (rStyle[i].Name == "default")
-            bDefault = rStyle[i].Value.get<bool>();
-        else if (rStyle[i].Name == "customStyle")
-            bCustomStyle = rStyle[i].Value.get<bool>();
-        else if (rStyle[i].Name == "styleId")
-            aStyleId = rStyle[i].Value.get<OUString>();
-        else if (rStyle[i].Name == "name")
-            aName = rStyle[i].Value.get<OUString>();
-        else if (rStyle[i].Name == "basedOn")
-            aBasedOn = rStyle[i].Value.get<OUString>();
-        else if (rStyle[i].Name == "uiPriority")
-            aUiPriority = rStyle[i].Value.get<OUString>();
-        else if (rStyle[i].Name == "qFormat")
+        if (rProp.Name == "default")
+            bDefault = rProp.Value.get<bool>();
+        else if (rProp.Name == "customStyle")
+            bCustomStyle = rProp.Value.get<bool>();
+        else if (rProp.Name == "styleId")
+            aStyleId = rProp.Value.get<OUString>();
+        else if (rProp.Name == "name")
+            aName = rProp.Value.get<OUString>();
+        else if (rProp.Name == "basedOn")
+            aBasedOn = rProp.Value.get<OUString>();
+        else if (rProp.Name == "uiPriority")
+            aUiPriority = rProp.Value.get<OUString>();
+        else if (rProp.Name == "qFormat")
             bQFormat = true;
-        else if (rStyle[i].Name == "semiHidden")
+        else if (rProp.Name == "semiHidden")
             bSemiHidden = true;
-        else if (rStyle[i].Name == "unhideWhenUsed")
+        else if (rProp.Name == "unhideWhenUsed")
             bUnhideWhenUsed = true;
-        else if (rStyle[i].Name == "rsid")
-            aRsid = rStyle[i].Value.get<OUString>();
-        else if (rStyle[i].Name == "pPr")
-            aPPr = rStyle[i].Value.get<uno::Sequence<beans::PropertyValue>>();
-        else if (rStyle[i].Name == "rPr")
-            aRPr = rStyle[i].Value.get<uno::Sequence<beans::PropertyValue>>();
-        else if (rStyle[i].Name == "tblPr")
-            aTablePr = rStyle[i].Value.get<uno::Sequence<beans::PropertyValue>>();
-        else if (rStyle[i].Name == "tcPr")
-            aTcPr = rStyle[i].Value.get<uno::Sequence<beans::PropertyValue>>();
-        else if (rStyle[i].Name == "tblStylePr")
-            aTableStylePrs.push_back(rStyle[i].Value.get<uno::Sequence<beans::PropertyValue>>());
+        else if (rProp.Name == "rsid")
+            aRsid = rProp.Value.get<OUString>();
+        else if (rProp.Name == "pPr")
+            aPPr = rProp.Value.get<uno::Sequence<beans::PropertyValue>>();
+        else if (rProp.Name == "rPr")
+            aRPr = rProp.Value.get<uno::Sequence<beans::PropertyValue>>();
+        else if (rProp.Name == "tblPr")
+            aTablePr = rProp.Value.get<uno::Sequence<beans::PropertyValue>>();
+        else if (rProp.Name == "tcPr")
+            aTcPr = rProp.Value.get<uno::Sequence<beans::PropertyValue>>();
+        else if (rProp.Name == "tblStylePr")
+            aTableStylePrs.push_back(rProp.Value.get<uno::Sequence<beans::PropertyValue>>());
     }
 
     sax_fastparser::FastAttributeList* pAttributeList

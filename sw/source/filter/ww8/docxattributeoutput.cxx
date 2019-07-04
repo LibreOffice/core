@@ -616,15 +616,10 @@ bool DocxAttributeOutput::TextBoxIsFramePr(const SwFrameFormat& rFrameFormat)
     {
         uno::Sequence< beans::PropertyValue > propList;
         xPropertySet->getPropertyValue("FrameInteropGrabBag") >>= propList;
-        for (sal_Int32 nProp=0; nProp < propList.getLength(); ++nProp)
-        {
-            OUString propName = propList[nProp].Name;
-            if (propName == "ParaFrameProperties")
-            {
-                aFrameProperties = propList[nProp].Value ;
-                break;
-            }
-        }
+        auto pProp = std::find_if(propList.begin(), propList.end(),
+            [](const beans::PropertyValue& rProp) { return rProp.Name == "ParaFrameProperties"; });
+        if (pProp != propList.end())
+            aFrameProperties = pProp->Value;
     }
     bool bFrameProperties = false;
     aFrameProperties >>= bFrameProperties;
@@ -819,9 +814,9 @@ void DocxAttributeOutput::WriteSdtBlock( sal_Int32& nSdtPrToken,
 
         if (nSdtPrToken ==  FSNS( XML_w, XML_date ) || nSdtPrToken ==  FSNS( XML_w, XML_docPartObj ) || nSdtPrToken ==  FSNS( XML_w, XML_docPartList ) || nSdtPrToken ==  FSNS( XML_w14, XML_checkbox )) {
             uno::Sequence<xml::FastAttribute> aChildren = pSdtPrTokenChildren->getFastAttributes();
-            for( sal_Int32 i=0; i < aChildren.getLength(); ++i )
-                m_pSerializer->singleElement( aChildren[i].Token,
-                                              FSNS(XML_w, XML_val), aChildren[i].Value.toUtf8() );
+            for( const auto& rChild : aChildren )
+                m_pSerializer->singleElement( rChild.Token,
+                                              FSNS(XML_w, XML_val), rChild.Value.toUtf8() );
         }
 
         m_pSerializer->endElement( nSdtPrToken );
@@ -2411,17 +2406,17 @@ void lclProcessRecursiveGrabBag(sal_Int32 aElementId, const css::uno::Sequence<c
     css::uno::Sequence<css::beans::PropertyValue> aAttributes;
     FastAttributeList* pAttributes = FastSerializerHelper::createAttrList();
 
-    for (sal_Int32 j=0; j < rElements.getLength(); ++j)
+    for (const auto& rElement : rElements)
     {
-        if (rElements[j].Name == "attributes")
+        if (rElement.Name == "attributes")
         {
-            rElements[j].Value >>= aAttributes;
+            rElement.Value >>= aAttributes;
         }
     }
 
-    for (sal_Int32 j=0; j < aAttributes.getLength(); ++j)
+    for (const auto& rAttribute : aAttributes)
     {
-        uno::Any aAny = aAttributes[j].Value;
+        uno::Any aAny = rAttribute.Value;
         OString aValue;
 
         if(aAny.getValueType() == cppu::UnoType<sal_Int32>::get())
@@ -2433,7 +2428,7 @@ void lclProcessRecursiveGrabBag(sal_Int32 aElementId, const css::uno::Sequence<c
             aValue =  OUStringToOString(aAny.get<OUString>(), RTL_TEXTENCODING_ASCII_US);
         }
 
-        boost::optional<sal_Int32> aSubElementId = lclGetElementIdForName(aAttributes[j].Name);
+        boost::optional<sal_Int32> aSubElementId = lclGetElementIdForName(rAttribute.Name);
         if(aSubElementId)
             pAttributes->add(*aSubElementId, aValue.getStr());
     }
@@ -2442,14 +2437,14 @@ void lclProcessRecursiveGrabBag(sal_Int32 aElementId, const css::uno::Sequence<c
 
     pSerializer->startElement(aElementId, xAttributesList);
 
-    for (sal_Int32 j=0; j < rElements.getLength(); ++j)
+    for (const auto& rElement : rElements)
     {
         css::uno::Sequence<css::beans::PropertyValue> aSumElements;
 
-        boost::optional<sal_Int32> aSubElementId = lclGetElementIdForName(rElements[j].Name);
+        boost::optional<sal_Int32> aSubElementId = lclGetElementIdForName(rElement.Name);
         if(aSubElementId)
         {
-            rElements[j].Value >>= aSumElements;
+            rElement.Value >>= aSumElements;
             lclProcessRecursiveGrabBag(*aSubElementId, aSumElements, pSerializer);
         }
     }
@@ -2557,14 +2552,11 @@ void DocxAttributeOutput::GetSdtEndBefore(const SdrObject* pSdrObj)
                 xPropSet->getPropertyValue("InteropGrabBag") >>= aGrabBag;
             }
 
-            for (sal_Int32 nProp=0; nProp < aGrabBag.getLength(); ++nProp)
-            {
-                if ("SdtEndBefore" == aGrabBag[nProp].Name && m_bStartedCharSdt && !m_bEndCharSdt)
-                {
-                    aGrabBag[nProp].Value >>= m_bEndCharSdt;
-                    break;
-                }
-            }
+            auto pProp = std::find_if(aGrabBag.begin(), aGrabBag.end(),
+                [this](const beans::PropertyValue& rProp) {
+                    return "SdtEndBefore" == rProp.Name && m_bStartedCharSdt && !m_bEndCharSdt; });
+            if (pProp != aGrabBag.end())
+                pProp->Value >>= m_bEndCharSdt;
         }
     }
 }
@@ -3612,27 +3604,27 @@ sal_Int32 lcl_getWordCompatibilityMode( const SwDoc& rDoc )
         uno::Sequence< beans::PropertyValue > propList;
         xPropSet->getPropertyValue( UNO_NAME_MISC_OBJ_INTEROPGRABBAG ) >>= propList;
 
-        for ( sal_Int32 i = 0; i < propList.getLength(); ++i )
+        for ( const auto& rProp : propList )
         {
-            if ( propList[i].Name == "CompatSettings" )
+            if ( rProp.Name == "CompatSettings" )
             {
                 css::uno::Sequence< css::beans::PropertyValue > aCurrentCompatSettings;
-                propList[i].Value >>= aCurrentCompatSettings;
+                rProp.Value >>= aCurrentCompatSettings;
 
-                for ( sal_Int32 j = 0; j < aCurrentCompatSettings.getLength(); ++j )
+                for ( const auto& rCurrentCompatSetting : aCurrentCompatSettings )
                 {
                     uno::Sequence< beans::PropertyValue > aCompatSetting;
-                    aCurrentCompatSettings[j].Value >>= aCompatSetting;
+                    rCurrentCompatSetting.Value >>= aCompatSetting;
 
                     OUString sName;
                     OUString sUri;
                     OUString sVal;
 
-                    for ( sal_Int32 k = 0; k < aCompatSetting.getLength(); ++k )
+                    for ( const auto& rPropVal : aCompatSetting )
                     {
-                        if ( aCompatSetting[k].Name == "name" ) aCompatSetting[k].Value >>= sName;
-                        if ( aCompatSetting[k].Name == "uri" )  aCompatSetting[k].Value >>= sUri;
-                        if ( aCompatSetting[k].Name == "val" )  aCompatSetting[k].Value >>= sVal;
+                        if ( rPropVal.Name == "name" ) rPropVal.Value >>= sName;
+                        if ( rPropVal.Name == "uri" )  rPropVal.Value >>= sUri;
+                        if ( rPropVal.Name == "val" )  rPropVal.Value >>= sVal;
                     }
 
                     if ( sName == "compatibilityMode" && sUri == "http://schemas.microsoft.com/office/word" )
@@ -3758,10 +3750,10 @@ void DocxAttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t
             FastAttributeList* pAttributeList = FastSerializerHelper::createAttrList();
             uno::Sequence<beans::PropertyValue> aAttributeList = rGrabBagElement.second.get< uno::Sequence<beans::PropertyValue> >();
 
-            for (sal_Int32 i = 0; i < aAttributeList.getLength(); ++i)
+            for (const auto& rAttribute : aAttributeList)
             {
-                if (aAttributeList[i].Name == "val")
-                    pAttributeList->add(FSNS(XML_w, XML_val), lcl_padStartToLength(OString::number(aAttributeList[i].Value.get<sal_Int32>(), 16), 4, '0'));
+                if (rAttribute.Name == "val")
+                    pAttributeList->add(FSNS(XML_w, XML_val), lcl_padStartToLength(OString::number(rAttribute.Value.get<sal_Int32>(), 16), 4, '0'));
                 else
                 {
                     static DocxStringTokenMap const aTokens[] =
@@ -3775,8 +3767,8 @@ void DocxAttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t
                         {nullptr, 0}
                     };
 
-                    if (sal_Int32 nToken = DocxStringGetToken(aTokens, aAttributeList[i].Name))
-                        pAttributeList->add(FSNS(XML_w, nToken), (aAttributeList[i].Value.get<sal_Int32>() ? "1" : "0"));
+                    if (sal_Int32 nToken = DocxStringGetToken(aTokens, rAttribute.Name))
+                        pAttributeList->add(FSNS(XML_w, nToken), (rAttribute.Value.get<sal_Int32>() ? "1" : "0"));
                 }
             }
 
@@ -3859,56 +3851,56 @@ void DocxAttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t
             else // ( pFrame = 0 )
             {
                 // we export the values from the grabBag
-                for (sal_Int32 i = 0; i < aTablePosition.getLength(); ++i)
+                for (const auto& rProp : aTablePosition)
                 {
-                    if (aTablePosition[i].Name == "vertAnchor" && !aTablePosition[i].Value.get<OUString>().isEmpty())
+                    if (rProp.Name == "vertAnchor" && !rProp.Value.get<OUString>().isEmpty())
                     {
-                        OString sOrientation = OUStringToOString( aTablePosition[i].Value.get<OUString>(), RTL_TEXTENCODING_UTF8);
+                        OString sOrientation = OUStringToOString( rProp.Value.get<OUString>(), RTL_TEXTENCODING_UTF8);
                         attrListTablePos->add( FSNS( XML_w, XML_vertAnchor ), sOrientation.getStr() );
                     }
-                    else if (aTablePosition[i].Name == "tblpYSpec" && !aTablePosition[i].Value.get<OUString>().isEmpty())
+                    else if (rProp.Name == "tblpYSpec" && !rProp.Value.get<OUString>().isEmpty())
                     {
-                        OString sOrientation = OUStringToOString( aTablePosition[i].Value.get<OUString>(), RTL_TEXTENCODING_UTF8);
+                        OString sOrientation = OUStringToOString( rProp.Value.get<OUString>(), RTL_TEXTENCODING_UTF8);
                         attrListTablePos->add( FSNS( XML_w, XML_tblpYSpec ), sOrientation.getStr() );
                     }
-                    else if (aTablePosition[i].Name == "horzAnchor" && !aTablePosition[i].Value.get<OUString>().isEmpty())
+                    else if (rProp.Name == "horzAnchor" && !rProp.Value.get<OUString>().isEmpty())
                     {
-                        OString sOrientation = OUStringToOString( aTablePosition[i].Value.get<OUString>(), RTL_TEXTENCODING_UTF8);
+                        OString sOrientation = OUStringToOString( rProp.Value.get<OUString>(), RTL_TEXTENCODING_UTF8);
                         attrListTablePos->add( FSNS( XML_w, XML_horzAnchor ), sOrientation.getStr() );
                     }
-                    else if (aTablePosition[i].Name == "tblpXSpec" && !aTablePosition[i].Value.get<OUString>().isEmpty())
+                    else if (rProp.Name == "tblpXSpec" && !rProp.Value.get<OUString>().isEmpty())
                     {
-                        OString sOrientation = OUStringToOString( aTablePosition[i].Value.get<OUString>(), RTL_TEXTENCODING_UTF8);
+                        OString sOrientation = OUStringToOString( rProp.Value.get<OUString>(), RTL_TEXTENCODING_UTF8);
                         attrListTablePos->add( FSNS( XML_w, XML_tblpXSpec ), sOrientation.getStr() );
                     }
-                    else if (aTablePosition[i].Name == "bottomFromText")
+                    else if (rProp.Name == "bottomFromText")
                     {
-                        sal_Int32 nValue = aTablePosition[i].Value.get<sal_Int32>();
+                        sal_Int32 nValue = rProp.Value.get<sal_Int32>();
                         attrListTablePos->add( FSNS( XML_w, XML_bottomFromText ), OString::number( nValue ) );
                     }
-                    else if (aTablePosition[i].Name == "leftFromText")
+                    else if (rProp.Name == "leftFromText")
                     {
-                        sal_Int32 nValue = aTablePosition[i].Value.get<sal_Int32>();
+                        sal_Int32 nValue = rProp.Value.get<sal_Int32>();
                         attrListTablePos->add( FSNS( XML_w, XML_leftFromText ), OString::number( nValue ) );
                     }
-                    else if (aTablePosition[i].Name == "rightFromText")
+                    else if (rProp.Name == "rightFromText")
                     {
-                        sal_Int32 nValue = aTablePosition[i].Value.get<sal_Int32>();
+                        sal_Int32 nValue = rProp.Value.get<sal_Int32>();
                         attrListTablePos->add( FSNS( XML_w, XML_rightFromText ), OString::number( nValue ) );
                     }
-                    else if (aTablePosition[i].Name == "topFromText")
+                    else if (rProp.Name == "topFromText")
                     {
-                        sal_Int32 nValue = aTablePosition[i].Value.get<sal_Int32>();
+                        sal_Int32 nValue = rProp.Value.get<sal_Int32>();
                         attrListTablePos->add( FSNS( XML_w, XML_topFromText ), OString::number( nValue ) );
                     }
-                    else if (aTablePosition[i].Name == "tblpX")
+                    else if (rProp.Name == "tblpX")
                     {
-                        sal_Int32 nValue = aTablePosition[i].Value.get<sal_Int32>();
+                        sal_Int32 nValue = rProp.Value.get<sal_Int32>();
                         attrListTablePos->add( FSNS( XML_w, XML_tblpX ), OString::number( nValue ) );
                     }
-                    else if (aTablePosition[i].Name == "tblpY")
+                    else if (rProp.Name == "tblpY")
                     {
-                        sal_Int32 nValue = aTablePosition[i].Value.get<sal_Int32>();
+                        sal_Int32 nValue = rProp.Value.get<sal_Int32>();
                         attrListTablePos->add( FSNS( XML_w, XML_tblpY ), OString::number( nValue ) );
                     }
                 }
@@ -4350,26 +4342,22 @@ void DocxAttributeOutput::LatentStyles()
     uno::Sequence<beans::PropertyValue> aInteropGrabBag;
     xPropertySet->getPropertyValue("InteropGrabBag") >>= aInteropGrabBag;
     uno::Sequence<beans::PropertyValue> aLatentStyles;
-    for (sal_Int32 i = 0; i < aInteropGrabBag.getLength(); ++i)
-    {
-        if (aInteropGrabBag[i].Name == "latentStyles")
-        {
-            aInteropGrabBag[i].Value >>= aLatentStyles;
-            break;
-        }
-    }
+    auto pProp = std::find_if(aInteropGrabBag.begin(), aInteropGrabBag.end(),
+        [](const beans::PropertyValue& rProp) { return rProp.Name == "latentStyles"; });
+    if (pProp != aInteropGrabBag.end())
+        pProp->Value >>= aLatentStyles;
     if (!aLatentStyles.hasElements())
         return;
 
     // Extract default attributes first.
     sax_fastparser::FastAttributeList* pAttributeList = FastSerializerHelper::createAttrList();
     uno::Sequence<beans::PropertyValue> aLsdExceptions;
-    for (sal_Int32 i = 0; i < aLatentStyles.getLength(); ++i)
+    for (const auto& rLatentStyle : aLatentStyles)
     {
-        if (sal_Int32 nToken = DocxStringGetToken(aDefaultTokens, aLatentStyles[i].Name))
-            pAttributeList->add(FSNS(XML_w, nToken), OUStringToOString(aLatentStyles[i].Value.get<OUString>(), RTL_TEXTENCODING_UTF8));
-        else if (aLatentStyles[i].Name == "lsdExceptions")
-            aLatentStyles[i].Value >>= aLsdExceptions;
+        if (sal_Int32 nToken = DocxStringGetToken(aDefaultTokens, rLatentStyle.Name))
+            pAttributeList->add(FSNS(XML_w, nToken), OUStringToOString(rLatentStyle.Value.get<OUString>(), RTL_TEXTENCODING_UTF8));
+        else if (rLatentStyle.Name == "lsdExceptions")
+            rLatentStyle.Value >>= aLsdExceptions;
     }
 
     XFastAttributeListRef xAttributeList(pAttributeList);
@@ -4377,15 +4365,15 @@ void DocxAttributeOutput::LatentStyles()
     pAttributeList = nullptr;
 
     // Then handle the exceptions.
-    for (sal_Int32 i = 0; i < aLsdExceptions.getLength(); ++i)
+    for (const auto& rLsdException : aLsdExceptions)
     {
         pAttributeList = FastSerializerHelper::createAttrList();
 
         uno::Sequence<beans::PropertyValue> aAttributes;
-        aLsdExceptions[i].Value >>= aAttributes;
-        for (sal_Int32 j = 0; j < aAttributes.getLength(); ++j)
-            if (sal_Int32 nToken = DocxStringGetToken(aExceptionTokens, aAttributes[j].Name))
-                pAttributeList->add(FSNS(XML_w, nToken), OUStringToOString(aAttributes[j].Value.get<OUString>(), RTL_TEXTENCODING_UTF8));
+        rLsdException.Value >>= aAttributes;
+        for (const auto& rAttribute : aAttributes)
+            if (sal_Int32 nToken = DocxStringGetToken(aExceptionTokens, rAttribute.Name))
+                pAttributeList->add(FSNS(XML_w, nToken), OUStringToOString(rAttribute.Value.get<OUString>(), RTL_TEXTENCODING_UTF8));
 
         xAttributeList = pAttributeList;
         m_pSerializer->singleElementNS(XML_w, XML_lsdException, xAttributeList);
@@ -5113,24 +5101,24 @@ void DocxAttributeOutput::WritePostponedFormControl(const SdrObject* pObject)
         uno::Sequence<beans::PropertyValue> aCharFormat;
         if (xShapePropertySet->getPropertyValue(UNO_NAME_MISC_OBJ_INTEROPGRABBAG) >>= aGrabBag)
         {
-            for (sal_Int32 i=0; i < aGrabBag.getLength(); ++i)
+            for (const auto& rProp : aGrabBag)
             {
-                if (aGrabBag[i].Name == "DateFormat")
-                    aGrabBag[i].Value >>= sDateFormat;
-                else if (aGrabBag[i].Name == "Locale")
-                    aGrabBag[i].Value >>= sLocale;
-                else if (aGrabBag[i].Name == "OriginalContent")
-                    aGrabBag[i].Value >>= sOriginalContent;
-                else if (aGrabBag[i].Name == "OriginalDate")
+                if (rProp.Name == "DateFormat")
+                    rProp.Value >>= sDateFormat;
+                else if (rProp.Name == "Locale")
+                    rProp.Value >>= sLocale;
+                else if (rProp.Name == "OriginalContent")
+                    rProp.Value >>= sOriginalContent;
+                else if (rProp.Name == "OriginalDate")
                 {
                     css::util::Date aUNODate;
-                    aGrabBag[i].Value >>= aUNODate;
+                    rProp.Value >>= aUNODate;
                     aOriginalDate = aUNODate;
                 }
-                else if (aGrabBag[i].Name == "CharFormat")
-                    aGrabBag[i].Value >>= aCharFormat;
-                else if (aGrabBag[i].Name == "ooxml:CT_SdtPr_alias")
-                    aGrabBag[i].Value >>= sAlias;
+                else if (rProp.Name == "CharFormat")
+                    rProp.Value >>= aCharFormat;
+                else if (rProp.Name == "ooxml:CT_SdtPr_alias")
+                    rProp.Value >>= sAlias;
             }
         }
         uno::Reference<beans::XPropertySet> xPropertySet(xControlModel, uno::UNO_QUERY);
@@ -5221,11 +5209,11 @@ void DocxAttributeOutput::WritePostponedFormControl(const SdrObject* pObject)
 
         m_pSerializer->startElementNS(XML_w, XML_dropDownList);
 
-        for (sal_Int32 i=0; i < aItems.getLength(); ++i)
+        for (const auto& rItem : aItems)
         {
             m_pSerializer->singleElementNS(XML_w, XML_listItem,
-                                           FSNS(XML_w, XML_displayText), aItems[i].toUtf8(),
-                                           FSNS(XML_w, XML_value), aItems[i].toUtf8());
+                                           FSNS(XML_w, XML_displayText), rItem.toUtf8(),
+                                           FSNS(XML_w, XML_value), rItem.toUtf8());
         }
 
         m_pSerializer->endElementNS(XML_w, XML_dropDownList);
@@ -5378,12 +5366,10 @@ void DocxAttributeOutput::WriteOLE( SwOLENode& rNode, const Size& rSize, const S
     uno::Reference< beans::XPropertySet > xPropSet( m_rExport.m_pDoc->GetDocShell()->GetBaseModel(), uno::UNO_QUERY_THROW );
     uno::Sequence< beans::PropertyValue > aGrabBag, aObjectsInteropList,aObjectInteropAttributes;
     xPropSet->getPropertyValue( UNO_NAME_MISC_OBJ_INTEROPGRABBAG ) >>= aGrabBag;
-    for( sal_Int32 i=0; i < aGrabBag.getLength(); ++i )
-        if ( aGrabBag[i].Name == "EmbeddedObjects" )
-        {
-            aGrabBag[i].Value >>= aObjectsInteropList;
-            break;
-        }
+    auto pProp = std::find_if(aGrabBag.begin(), aGrabBag.end(),
+        [](const beans::PropertyValue& rProp) { return rProp.Name == "EmbeddedObjects"; });
+    if (pProp != aGrabBag.end())
+        pProp->Value >>= aObjectsInteropList;
 
     SwOLEObj& aObject = rNode.GetOLEObj();
     uno::Reference < embed::XEmbeddedObject > xObj( aObject.GetOleRef() );
@@ -5392,23 +5378,21 @@ void DocxAttributeOutput::WriteOLE( SwOLENode& rNode, const Size& rSize, const S
 
     // set some attributes according to the type of the embedded object
     OUString sProgID, sDrawAspect = "Content";
-    for( sal_Int32 i=0; i < aObjectsInteropList.getLength(); ++i )
-        if ( aObjectsInteropList[i].Name == sObjectName )
-        {
-            aObjectsInteropList[i].Value >>= aObjectInteropAttributes;
-            break;
-        }
+    auto pObjectsInterop = std::find_if(aObjectsInteropList.begin(), aObjectsInteropList.end(),
+        [&sObjectName](const beans::PropertyValue& rProp) { return rProp.Name == sObjectName; });
+    if (pObjectsInterop != aObjectsInteropList.end())
+        pObjectsInterop->Value >>= aObjectInteropAttributes;
 
-    for( sal_Int32 i=0; i < aObjectInteropAttributes.getLength(); ++i )
+    for( const auto& rObjectInteropAttribute : aObjectInteropAttributes )
     {
-            if ( aObjectInteropAttributes[i].Name == "ProgID" )
-            {
-                aObjectInteropAttributes[i].Value >>= sProgID;
-            }
-            else if ( aObjectInteropAttributes[i].Name == "DrawAspect" )
-            {
-                aObjectInteropAttributes[i].Value >>= sDrawAspect;
-            }
+        if ( rObjectInteropAttribute.Name == "ProgID" )
+        {
+            rObjectInteropAttribute.Value >>= sProgID;
+        }
+        else if ( rObjectInteropAttribute.Name == "DrawAspect" )
+        {
+            rObjectInteropAttribute.Value >>= sDrawAspect;
+        }
     }
 
     // write embedded file
@@ -5833,28 +5817,28 @@ void DocxAttributeOutput::StartStyle( const OUString& rName, StyleType eType,
     }
     const uno::Sequence<beans::PropertyValue>& rGrabBag = aAny.get< uno::Sequence<beans::PropertyValue> >();
 
-    for (sal_Int32 i = 0; i < rGrabBag.getLength(); ++i)
+    for (const auto& rProp : rGrabBag)
     {
-        if (rGrabBag[i].Name == "uiPriority")
-            aUiPriority = rGrabBag[i].Value.get<OUString>();
-        else if (rGrabBag[i].Name == "qFormat")
+        if (rProp.Name == "uiPriority")
+            aUiPriority = rProp.Value.get<OUString>();
+        else if (rProp.Name == "qFormat")
             bQFormat = true;
-        else if (rGrabBag[i].Name == "link")
-            aLink = rGrabBag[i].Value.get<OUString>();
-        else if (rGrabBag[i].Name == "rsid")
-            aRsid = rGrabBag[i].Value.get<OUString>();
-        else if (rGrabBag[i].Name == "unhideWhenUsed")
+        else if (rProp.Name == "link")
+            aLink = rProp.Value.get<OUString>();
+        else if (rProp.Name == "rsid")
+            aRsid = rProp.Value.get<OUString>();
+        else if (rProp.Name == "unhideWhenUsed")
             bUnhideWhenUsed = true;
-        else if (rGrabBag[i].Name == "semiHidden")
+        else if (rProp.Name == "semiHidden")
             bSemiHidden = true;
-        else if (rGrabBag[i].Name == "locked")
+        else if (rProp.Name == "locked")
             bLocked = true;
-        else if (rGrabBag[i].Name == "default")
-            bDefault = rGrabBag[i].Value.get<bool>();
-        else if (rGrabBag[i].Name == "customStyle")
-            bCustomStyle = rGrabBag[i].Value.get<bool>();
+        else if (rProp.Name == "default")
+            bDefault = rProp.Value.get<bool>();
+        else if (rProp.Name == "customStyle")
+            bCustomStyle = rProp.Value.get<bool>();
         else
-            SAL_WARN("sw.ww8", "Unhandled style property: " << rGrabBag[i].Name);
+            SAL_WARN("sw.ww8", "Unhandled style property: " << rProp.Name);
     }
 
     // MSO exports English names and writerfilter only recognize them.
@@ -8733,42 +8717,41 @@ void DocxAttributeOutput::ParaGrabBag(const SfxGrabBagItem& rItem)
             uno::Sequence<beans::PropertyValue> aGrabBagSeq;
             rGrabBagElement.second >>= aGrabBagSeq;
 
-            for (sal_Int32 j=0; j < aGrabBagSeq.getLength(); ++j)
+            for (const auto& rProp : aGrabBagSeq)
             {
-                OString sVal = OUStringToOString(aGrabBagSeq[j].Value.get<OUString>(), RTL_TEXTENCODING_UTF8);
+                OString sVal = OUStringToOString(rProp.Value.get<OUString>(), RTL_TEXTENCODING_UTF8);
 
                 if (sVal.isEmpty())
                     continue;
 
-                if (aGrabBagSeq[j].Name == "val")
+                if (rProp.Name == "val")
                     AddToAttrList(m_pBackgroundAttrList, FSNS(XML_w, XML_val), sVal.getStr());
-                else if (aGrabBagSeq[j].Name == "color")
+                else if (rProp.Name == "color")
                     AddToAttrList(m_pBackgroundAttrList, FSNS(XML_w, XML_color), sVal.getStr());
-                else if (aGrabBagSeq[j].Name == "themeColor")
+                else if (rProp.Name == "themeColor")
                     AddToAttrList(m_pBackgroundAttrList, FSNS(XML_w, XML_themeColor), sVal.getStr());
-                else if (aGrabBagSeq[j].Name == "themeTint")
+                else if (rProp.Name == "themeTint")
                     AddToAttrList(m_pBackgroundAttrList, FSNS(XML_w, XML_themeTint), sVal.getStr());
-                else if (aGrabBagSeq[j].Name == "themeShade")
+                else if (rProp.Name == "themeShade")
                     AddToAttrList(m_pBackgroundAttrList, FSNS(XML_w, XML_themeShade), sVal.getStr());
-                else if (aGrabBagSeq[j].Name == "fill")
+                else if (rProp.Name == "fill")
                     AddToAttrList(m_pBackgroundAttrList, FSNS(XML_w, XML_fill), sVal.getStr());
-                else if (aGrabBagSeq[j].Name == "themeFill")
+                else if (rProp.Name == "themeFill")
                     AddToAttrList(m_pBackgroundAttrList, FSNS(XML_w, XML_themeFill), sVal.getStr());
-                else if (aGrabBagSeq[j].Name == "themeFillTint")
+                else if (rProp.Name == "themeFillTint")
                     AddToAttrList(m_pBackgroundAttrList, FSNS(XML_w, XML_themeFillTint), sVal.getStr());
-                else if (aGrabBagSeq[j].Name == "themeFillShade")
+                else if (rProp.Name == "themeFillShade")
                     AddToAttrList(m_pBackgroundAttrList, FSNS(XML_w, XML_themeFillShade), sVal.getStr());
-                else if (aGrabBagSeq[j].Name == "originalColor")
-                    aGrabBagSeq[j].Value >>= m_sOriginalBackgroundColor;
+                else if (rProp.Name == "originalColor")
+                    rProp.Value >>= m_sOriginalBackgroundColor;
             }
         }
         else if (rGrabBagElement.first == "SdtPr")
         {
             uno::Sequence<beans::PropertyValue> aGrabBagSdt =
                     rGrabBagElement.second.get< uno::Sequence<beans::PropertyValue> >();
-            for (sal_Int32 k=0; k < aGrabBagSdt.getLength(); ++k)
+            for (const beans::PropertyValue& aPropertyValue : aGrabBagSdt)
             {
-                beans::PropertyValue aPropertyValue = aGrabBagSdt[k];
                 if (aPropertyValue.Name == "ooxml:CT_SdtPr_docPartObj" ||
                         aPropertyValue.Name == "ooxml:CT_SdtPr_docPartList")
                 {
@@ -8779,18 +8762,18 @@ void DocxAttributeOutput::ParaGrabBag(const SfxGrabBagItem& rItem)
 
                     uno::Sequence<beans::PropertyValue> aGrabBag;
                     aPropertyValue.Value >>= aGrabBag;
-                    for (sal_Int32 j=0; j < aGrabBag.getLength(); ++j)
+                    for (const auto& rProp : aGrabBag)
                     {
-                        OUString sValue = aGrabBag[j].Value.get<OUString>();
-                        if (aGrabBag[j].Name == "ooxml:CT_SdtDocPart_docPartGallery")
+                        OUString sValue = rProp.Value.get<OUString>();
+                        if (rProp.Name == "ooxml:CT_SdtDocPart_docPartGallery")
                             AddToAttrList( m_pParagraphSdtPrTokenChildren,
                                            FSNS( XML_w, XML_docPartGallery ),
                                            OUStringToOString( sValue, RTL_TEXTENCODING_UTF8 ).getStr() );
-                        else if (aGrabBag[j].Name == "ooxml:CT_SdtDocPart_docPartCategory")
+                        else if (rProp.Name == "ooxml:CT_SdtDocPart_docPartCategory")
                             AddToAttrList( m_pParagraphSdtPrTokenChildren,
                                            FSNS( XML_w, XML_docPartCategory ),
                                            OUStringToOString( sValue, RTL_TEXTENCODING_UTF8 ).getStr() );
-                        else if (aGrabBag[j].Name == "ooxml:CT_SdtDocPart_docPartUnique")
+                        else if (rProp.Name == "ooxml:CT_SdtDocPart_docPartUnique")
                         {
                             if (sValue.isEmpty())
                                 sValue = "true";
@@ -8813,18 +8796,18 @@ void DocxAttributeOutput::ParaGrabBag(const SfxGrabBagItem& rItem)
                 {
                     uno::Sequence<beans::PropertyValue> aGrabBag;
                     aPropertyValue.Value >>= aGrabBag;
-                    for (sal_Int32 j = 0; j < aGrabBag.getLength(); ++j)
+                    for (const auto& rProp : aGrabBag)
                     {
-                        OUString sValue = aGrabBag[j].Value.get<OUString>();
-                        if (aGrabBag[j].Name == "ooxml:CT_DataBinding_prefixMappings")
+                        OUString sValue = rProp.Value.get<OUString>();
+                        if (rProp.Name == "ooxml:CT_DataBinding_prefixMappings")
                             AddToAttrList( m_pParagraphSdtPrDataBindingAttrs,
                                            FSNS( XML_w, XML_prefixMappings ),
                                            OUStringToOString( sValue, RTL_TEXTENCODING_UTF8 ).getStr() );
-                        else if (aGrabBag[j].Name == "ooxml:CT_DataBinding_xpath")
+                        else if (rProp.Name == "ooxml:CT_DataBinding_xpath")
                             AddToAttrList( m_pParagraphSdtPrDataBindingAttrs,
                                            FSNS( XML_w, XML_xpath ),
                                            OUStringToOString( sValue, RTL_TEXTENCODING_UTF8 ).getStr() );
-                        else if (aGrabBag[j].Name == "ooxml:CT_DataBinding_storeItemID")
+                        else if (rProp.Name == "ooxml:CT_DataBinding_storeItemID")
                             AddToAttrList( m_pParagraphSdtPrDataBindingAttrs,
                                            FSNS( XML_w, XML_storeItemID ),
                                            OUStringToOString( sValue, RTL_TEXTENCODING_UTF8 ).getStr() );
@@ -8841,18 +8824,18 @@ void DocxAttributeOutput::ParaGrabBag(const SfxGrabBagItem& rItem)
                     m_nParagraphSdtPrToken = FSNS( XML_w14, XML_checkbox );
                     uno::Sequence<beans::PropertyValue> aGrabBag;
                     aPropertyValue.Value >>= aGrabBag;
-                    for (sal_Int32 j=0; j < aGrabBag.getLength(); ++j)
+                    for (const auto& rProp : aGrabBag)
                     {
-                        OUString sValue = aGrabBag[j].Value.get<OUString>();
-                        if (aGrabBag[j].Name == "ooxml:CT_SdtCheckbox_checked")
+                        OUString sValue = rProp.Value.get<OUString>();
+                        if (rProp.Name == "ooxml:CT_SdtCheckbox_checked")
                             AddToAttrList( m_pParagraphSdtPrTokenChildren,
                                            FSNS( XML_w14, XML_checked ),
                                            OUStringToOString( sValue, RTL_TEXTENCODING_UTF8 ).getStr() );
-                        else if (aGrabBag[j].Name == "ooxml:CT_SdtCheckbox_checkedState")
+                        else if (rProp.Name == "ooxml:CT_SdtCheckbox_checkedState")
                             AddToAttrList( m_pParagraphSdtPrTokenChildren,
                                            FSNS( XML_w14, XML_checkedState ),
                                            OUStringToOString( sValue, RTL_TEXTENCODING_UTF8 ).getStr() );
-                        else if (aGrabBag[j].Name == "ooxml:CT_SdtCheckbox_uncheckedState")
+                        else if (rProp.Name == "ooxml:CT_SdtCheckbox_uncheckedState")
                             AddToAttrList( m_pParagraphSdtPrTokenChildren,
                                            FSNS( XML_w14, XML_uncheckedState ),
                                            OUStringToOString( sValue, RTL_TEXTENCODING_UTF8 ).getStr() );
@@ -8864,22 +8847,22 @@ void DocxAttributeOutput::ParaGrabBag(const SfxGrabBagItem& rItem)
                 {
                     m_nParagraphSdtPrToken = FSNS(XML_w, XML_date);
                     uno::Sequence<beans::PropertyValue> aGrabBag = aPropertyValue.Value.get< uno::Sequence<beans::PropertyValue> >();
-                    for (sal_Int32 j=0; j < aGrabBag.getLength(); ++j)
+                    for (const auto& rProp : aGrabBag)
                     {
-                        OString sValue = OUStringToOString(aGrabBag[j].Value.get<OUString>(), RTL_TEXTENCODING_UTF8);
+                        OString sValue = OUStringToOString(rProp.Value.get<OUString>(), RTL_TEXTENCODING_UTF8);
 
-                        if (aGrabBag[j].Name == "ooxml:CT_SdtDate_fullDate")
+                        if (rProp.Name == "ooxml:CT_SdtDate_fullDate")
                             AddToAttrList(m_pParagraphSdtPrTokenAttributes, FSNS(XML_w, XML_fullDate), sValue.getStr());
-                        else if (aGrabBag[j].Name == "ooxml:CT_SdtDate_dateFormat")
+                        else if (rProp.Name == "ooxml:CT_SdtDate_dateFormat")
                             AddToAttrList(m_pParagraphSdtPrTokenChildren, FSNS(XML_w, XML_dateFormat), sValue.getStr());
-                        else if (aGrabBag[j].Name == "ooxml:CT_SdtDate_lid")
+                        else if (rProp.Name == "ooxml:CT_SdtDate_lid")
                             AddToAttrList(m_pParagraphSdtPrTokenChildren, FSNS(XML_w, XML_lid), sValue.getStr());
-                        else if (aGrabBag[j].Name == "ooxml:CT_SdtDate_storeMappedDataAs")
+                        else if (rProp.Name == "ooxml:CT_SdtDate_storeMappedDataAs")
                             AddToAttrList(m_pParagraphSdtPrTokenChildren, FSNS(XML_w, XML_storeMappedDataAs), sValue.getStr());
-                        else if (aGrabBag[j].Name == "ooxml:CT_SdtDate_calendar")
+                        else if (rProp.Name == "ooxml:CT_SdtDate_calendar")
                             AddToAttrList(m_pParagraphSdtPrTokenChildren, FSNS(XML_w, XML_calendar), sValue.getStr());
                         else
-                            SAL_WARN("sw.ww8", "DocxAttributeOutput::ParaGrabBag: unhandled SdtPr / ooxml:CT_SdtPr_date grab bag property " << aGrabBag[j].Name);
+                            SAL_WARN("sw.ww8", "DocxAttributeOutput::ParaGrabBag: unhandled SdtPr / ooxml:CT_SdtPr_date grab bag property " << rProp.Name);
                     }
                 }
                 else
@@ -9022,26 +9005,25 @@ void DocxAttributeOutput::CharGrabBag( const SfxGrabBagItem& rItem )
         {
             uno::Sequence<beans::PropertyValue> aGrabBagSdt =
                     rGrabBagElement.second.get< uno::Sequence<beans::PropertyValue> >();
-            for (sal_Int32 k=0; k < aGrabBagSdt.getLength(); ++k)
+            for (const beans::PropertyValue& aPropertyValue : aGrabBagSdt)
             {
-                beans::PropertyValue aPropertyValue = aGrabBagSdt[k];
                 if (aPropertyValue.Name == "ooxml:CT_SdtPr_checkbox")
                 {
                     m_nRunSdtPrToken = FSNS( XML_w14, XML_checkbox );
                     uno::Sequence<beans::PropertyValue> aGrabBag;
                     aPropertyValue.Value >>= aGrabBag;
-                    for (sal_Int32 j=0; j < aGrabBag.getLength(); ++j)
+                    for (const auto& rProp : aGrabBag)
                     {
-                        OUString sValue = aGrabBag[j].Value.get<OUString>();
-                        if (aGrabBag[j].Name == "ooxml:CT_SdtCheckbox_checked")
+                        OUString sValue = rProp.Value.get<OUString>();
+                        if (rProp.Name == "ooxml:CT_SdtCheckbox_checked")
                             AddToAttrList( m_pRunSdtPrTokenChildren,
                                            FSNS( XML_w14, XML_checked ),
                                            OUStringToOString( sValue, RTL_TEXTENCODING_UTF8 ).getStr() );
-                        else if (aGrabBag[j].Name == "ooxml:CT_SdtCheckbox_checkedState")
+                        else if (rProp.Name == "ooxml:CT_SdtCheckbox_checkedState")
                             AddToAttrList( m_pRunSdtPrTokenChildren,
                                            FSNS( XML_w14, XML_checkedState ),
                                            OUStringToOString( sValue, RTL_TEXTENCODING_UTF8 ).getStr() );
-                        else if (aGrabBag[j].Name == "ooxml:CT_SdtCheckbox_uncheckedState")
+                        else if (rProp.Name == "ooxml:CT_SdtCheckbox_uncheckedState")
                             AddToAttrList( m_pRunSdtPrTokenChildren,
                                            FSNS( XML_w14, XML_uncheckedState ),
                                            OUStringToOString( sValue, RTL_TEXTENCODING_UTF8 ).getStr() );
@@ -9051,18 +9033,18 @@ void DocxAttributeOutput::CharGrabBag( const SfxGrabBagItem& rItem )
                 {
                     uno::Sequence<beans::PropertyValue> aGrabBag;
                     aPropertyValue.Value >>= aGrabBag;
-                    for (sal_Int32 j=0; j < aGrabBag.getLength(); ++j)
+                    for (const auto& rProp : aGrabBag)
                     {
-                        OUString sValue = aGrabBag[j].Value.get<OUString>();
-                        if (aGrabBag[j].Name == "ooxml:CT_DataBinding_prefixMappings")
+                        OUString sValue = rProp.Value.get<OUString>();
+                        if (rProp.Name == "ooxml:CT_DataBinding_prefixMappings")
                             AddToAttrList( m_pRunSdtPrDataBindingAttrs,
                                            FSNS( XML_w, XML_prefixMappings ),
                                            OUStringToOString( sValue, RTL_TEXTENCODING_UTF8 ).getStr() );
-                        else if (aGrabBag[j].Name == "ooxml:CT_DataBinding_xpath")
+                        else if (rProp.Name == "ooxml:CT_DataBinding_xpath")
                             AddToAttrList( m_pRunSdtPrDataBindingAttrs,
                                            FSNS( XML_w, XML_xpath ),
                                            OUStringToOString( sValue, RTL_TEXTENCODING_UTF8 ).getStr() );
-                        else if (aGrabBag[j].Name == "ooxml:CT_DataBinding_storeItemID")
+                        else if (rProp.Name == "ooxml:CT_DataBinding_storeItemID")
                             AddToAttrList( m_pRunSdtPrDataBindingAttrs,
                                            FSNS( XML_w, XML_storeItemID ),
                                            OUStringToOString( sValue, RTL_TEXTENCODING_UTF8 ).getStr() );
