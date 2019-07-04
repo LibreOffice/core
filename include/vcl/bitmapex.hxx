@@ -318,6 +318,10 @@ public:
      */
     void                ReplaceTransparency( const Color& rColor );
 
+    /** Get contours in image */
+    tools::Polygon      GetContour( bool bContourEdgeDetect, bool bContourVert,
+                                    const tools::Rectangle* pWorkRect );
+
     /** Change various global color characteristics
 
         @param nLuminancePercent
