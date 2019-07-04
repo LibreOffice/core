@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_d3ef63e7",
+        "filename": "vcl/win/gdi/salgdi.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-07-04T23:11:02Z",
+      "side": 1,
+      "message": "Why could this be necessary? If the object is just initialized, its ctor has already set it to nullptrs. If ImplReleaseTempFonts(..., true) was called from WinSalGraphics::ClearDevFontCache(), they are also already nullptrs. IIUC non-nullptrs here are some programmer\u0027s error that needs fixing in proper place - I suggest asserting here.",
+      "range": {
+        "startLine": 138,
+        "startChar": 4,
+        "endLine": 139,
+        "endChar": 44
+      },
+      "revId": "2edd43ac0016303cfcf08d2a96c1ffe499ada9ae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
