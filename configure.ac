@@ -391,7 +391,7 @@ if test -z "$with_android_ndk" -a -e "$SRC_ROOT/external/android-ndk" -a "$build
     with_android_ndk="$SRC_ROOT/external/android-ndk"
 fi
 if test -n "$with_android_ndk"; then
-    ANDROID_NDK_HOME=$with_android_ndk
+    eval ANDROID_NDK_HOME=$with_android_ndk
 
     # Set up a lot of pre-canned defaults
 
@@ -525,7 +525,7 @@ if test -z "$with_android_sdk" -a -e "$SRC_ROOT/external/android-sdk-linux" -a "
     with_android_sdk="$SRC_ROOT/external/android-sdk-linux"
 fi
 if test -n "$with_android_sdk"; then
-    ANDROID_SDK_HOME=$with_android_sdk
+    eval ANDROID_SDK_HOME=$with_android_sdk
     PATH="$ANDROID_SDK_HOME/platform-tools:$ANDROID_SDK_HOME/tools:$PATH"
 fi
 AC_SUBST(ANDROID_SDK_HOME)
