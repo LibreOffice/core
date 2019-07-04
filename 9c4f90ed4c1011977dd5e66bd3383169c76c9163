@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_934c8b77",
+        "filename": "test/source/xmltesttools.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-07-04T17:14:08Z",
+      "side": 1,
+      "message": "this is wrong, the xmlXPathFreeObject will free the stringval and also stringVal because it\u0027s just a char*\n\nbetter create a temporary with the result of convert(stringVal) and then free pXmlObj",
+      "revId": "9c4f90ed4c1011977dd5e66bd3383169c76c9163",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
