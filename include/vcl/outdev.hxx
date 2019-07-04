@@ -1289,8 +1289,11 @@ protected:
     virtual long                GetFontExtLeading() const;
 
     virtual void ImplClearFontData(bool bNewFontLists);
+    virtual void ImplRefreshFontData(bool bNewFontLists);
     void ReleaseFontCache();
     void ReleaseFontCollection();
+    void SetFontCollectionFromSVData();
+    void ResetNewFontCache();
 
 private:
 
@@ -1298,7 +1301,6 @@ private:
 
     SAL_DLLPRIVATE bool         ImplNewFont() const;
 
-    SAL_DLLPRIVATE void         ImplRefreshFontData( bool bNewFontLists );
     SAL_DLLPRIVATE static void  ImplUpdateFontDataForAllFrames( FontUpdateHandler_t pHdl, bool bNewFontLists );
 
     static

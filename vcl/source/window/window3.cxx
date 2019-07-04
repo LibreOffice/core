@@ -65,6 +65,14 @@ void Window::ImplClearFontData(bool bNewFontLists)
     for (Window* pChild = mpWindowImpl->mpFirstChild; pChild; pChild = pChild->mpWindowImpl->mpNext)
         pChild->ImplClearFontData(bNewFontLists);
 }
+
+void Window::ImplRefreshFontData(bool bNewFontLists)
+{
+    OutputDevice::ImplRefreshFontData(bNewFontLists);
+    for (Window* pChild = mpWindowImpl->mpFirstChild; pChild; pChild = pChild->mpWindowImpl->mpNext)
+        pChild->ImplRefreshFontData(bNewFontLists);
+}
+
 } /* namespace vcl */
 
 

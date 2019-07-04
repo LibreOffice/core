@@ -594,6 +594,7 @@ public:
 
 protected:
     void ImplClearFontData(bool bNewFontLists) override;
+    void ImplRefreshFontData(bool bNewFontLists) override;
     vcl::Region ClipToDeviceBounds(vcl::Region aRegion) const override;
     void DrawHatchLine_DrawLine(const Point& rStartPoint, const Point& rEndPoint) override;
 
