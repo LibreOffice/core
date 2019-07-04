@@ -85,6 +85,11 @@ SwFlyFrameAttrMgr::SwFlyFrameAttrMgr( bool bNew, SwWrtShell* pSh, Frmmgr_Type nT
         m_aSet.Put( SwFormatFrameSize( ATT_MIN_SIZE, DFLT_WIDTH, DFLT_HEIGHT ));
         if ( 0 != ::GetHtmlMode(pSh->GetView().GetDocShell()) )
             m_aSet.Put( SwFormatHoriOrient( 0, text::HoriOrientation::LEFT, text::RelOrientation::PRINT_AREA ) );
+
+        if (nType == Frmmgr_Type::GRF || nType == Frmmgr_Type::OLE)
+        {
+            m_aSet.Put(SwFormatAnchor(RndStdIds::FLY_AS_CHAR));
+        }
     }
     else if ( nType == Frmmgr_Type::NONE )
     {

@@ -27,6 +27,8 @@
 #include <PostItMgr.hxx>
 #include <postithelper.hxx>
 #include <AnnotationWin.hxx>
+#include <flyfrm.hxx>
+#include <fmtanchr.hxx>
 
 using namespace ::com::sun::star;
 
@@ -521,6 +523,17 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testPasteListener)
     OUString aGraphicURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "test.jpg";
     rView.InsertGraphic(aGraphicURL, OUString(), /*bAsLink=*/false,
                         &GraphicFilter::GetGraphicFilter());
+
+    // Test that the pasted image is anchored as-char.
+    SwFlyFrame* pFly = pWrtShell->GetSelectedFlyFrame();
+    CPPUNIT_ASSERT(pFly);
+    SwFrameFormat* pFlyFormat = pFly->GetFormat();
+    CPPUNIT_ASSERT(pFlyFormat);
+    RndStdIds eFlyAnchor = pFlyFormat->GetAnchor().GetAnchorId();
+    // Without the working image listener in place, this test would have
+    // failed, eFlyAnchor was FLY_AT_PARA.
+    CPPUNIT_ASSERT_EQUAL(RndStdIds::FLY_AS_CHAR, eFlyAnchor);
+
     pTransfer->Cut();
     pListener->GetString().clear();
     SwTransferable::Paste(*pWrtShell, aHelper);
