@@ -3052,9 +3052,6 @@ void DomainMapper::PopListProperties()
 void DomainMapper::lcl_startCharacterGroup()
 {
     m_pImpl->PushProperties(CONTEXT_CHARACTER);
-    if (m_pImpl->m_bFrameBtLr)
-        // No support for this in core, work around by char rotation, as we do so for table cells already.
-        m_pImpl->GetTopContext()->Insert(PROP_CHAR_ROTATION, uno::makeAny(sal_Int16(900)));
     if (m_pImpl->isSdtEndDeferred())
     {
         // Fields have an empty character group before the real one, so don't

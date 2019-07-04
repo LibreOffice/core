@@ -233,6 +233,17 @@ DECLARE_OOXMLIMPORT_TEST(testTdf112443, "tdf112443.docx")
 // and as result only one page should be generated.
 DECLARE_OOXMLIMPORT_TEST(testTdf113182, "tdf113182.docx") { CPPUNIT_ASSERT_EQUAL(1, getPages()); }
 
+DECLARE_OOXMLIMPORT_TEST(testBtlrFrameVml, "btlr-frame-vml.docx")
+{
+    uno::Reference<beans::XPropertySet> xTextFrame(getShape(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xTextFrame.is());
+
+    auto nActual = getProperty<sal_Int16>(xTextFrame, "WritingMode");
+    // Without the accompanying fix in place, this test would have failed with 'Expected: 5; Actual:
+    // 4', i.e. writing direction was inherited from page, instead of explicit btlr.
+    CPPUNIT_ASSERT_EQUAL(text::WritingMode2::BT_LR, nActual);
+}
+
 DECLARE_OOXMLIMPORT_TEST(testTdf124398, "tdf124398.docx")
 {
     uno::Reference<container::XIndexAccess> xGroup(getShape(1), uno::UNO_QUERY);
