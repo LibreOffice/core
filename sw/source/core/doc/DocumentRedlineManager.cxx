@@ -648,6 +648,7 @@ namespace
 
         case RedlineType::Format:
         case RedlineType::FmtColl:
+        case RedlineType::ParagraphFormat:
             {
                 // tdf#52391 instead of hidden acception at the requested
                 // rejection, remove direct text formatting to get the potential
@@ -658,6 +659,36 @@ namespace
                 {
                     SwPaM aPam( *(pRedl->Start()), *(pRedl->End()) );
                     rDoc.ResetAttrs(aPam);
+                }
+                else if ( pRedl->GetType() == RedlineType::ParagraphFormat )
+                {
+                    // handle paragraph formatting changes
+                    // (range is only a full paragraph or a part of it)
+                    const SwPosition* pStt = pRedl->Start();
+                    SwTextNode* pTNd = pStt->nNode.GetNode().GetTextNode();
+                    if( pTNd )
+                    {
+                        // expand range to the whole paragraph
+                        // and reset only the paragraph attributes
+                        SwPaM aPam( *pTNd, pTNd->GetText().getLength() );
+                        std::set<sal_uInt16> aResetAttrsArray;
+
+                        sal_uInt16 aResetableSetRange[] = {
+                                RES_PARATR_LINESPACING, RES_PARATR_OUTLINELEVEL,
+                                RES_PARATR_LIST_BEGIN, RES_PARATR_LIST_END - 1,
+                                0
+                        };
+
+                        const sal_uInt16 *pUShorts = aResetableSetRange;
+                        while (*pUShorts)
+                        {
+                            for (sal_uInt16 i = pUShorts[0]; i <= pUShorts[1]; ++i)
+                                aResetAttrsArray.insert( aResetAttrsArray.end(), i );
+                            pUShorts += 2;
+                        }
+
+                        rDoc.ResetAttrs(aPam, false, aResetAttrsArray);
+                    }
                 }
 
                 if( pRedl->GetExtraData() )
