@@ -195,7 +195,12 @@ void HTMLFetchThread::execute()
     xmlNodeSetPtr pXmlNodes = pXmlXpathObj->nodesetval;
 
     if (pXmlNodes->nodeNr == 0)
+    {
+        xmlXPathFreeNodeSet(pXmlNodes);
+        xmlXPathFreeNodeSetList(pXmlXpathObj);
+        xmlXPathFreeContext(pXmlXpathCtx);
         return;
+    }
 
     xmlNodePtr pNode = pXmlNodes->nodeTab[0];
     handleTable(pNode);
