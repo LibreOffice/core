@@ -1649,4 +1649,33 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testImageCommentAtChar)
                          pDoc->getIDocumentMarkAccess()->getAnnotationMarksCount());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf120338)
+{
+    load(DATA_DIRECTORY, "tdf120338.docx");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1),
+                         getProperty<sal_Int32>(getParagraph(2), "ParaAdjust")); // right
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1),
+                         getProperty<sal_Int32>(getParagraph(3), "ParaAdjust")); // right
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0),
+                         getProperty<sal_Int32>(getParagraph(4), "ParaAdjust")); // left
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1),
+                         getProperty<sal_Int32>(getParagraph(5), "ParaAdjust")); // right
+
+    // reject tracked paragraph adjustments
+    lcl_dispatchCommand(mxComponent, ".uno:RejectAllTrackedChanges", {});
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0),
+                         getProperty<sal_Int32>(getParagraph(2), "ParaAdjust")); // left
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3),
+                         getProperty<sal_Int32>(getParagraph(3), "ParaAdjust")); // center
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3),
+                         getProperty<sal_Int32>(getParagraph(4), "ParaAdjust")); // center
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0),
+                         getProperty<sal_Int32>(getParagraph(5), "ParaAdjust")); // left
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
