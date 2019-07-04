@@ -33,9 +33,6 @@ enum class XOutFlags {
     NONE                 = 0x00000000,
     MirrorHorz           = 0x00000001,
     MirrorVert           = 0x00000010,
-    ContourHorz          = 0x00000001,
-    ContourVert          = 0x00000002,
-    ContourEdgeDetect    = 0x00000004,
     DontAddExtension     = 0x00000008,
     DontExpandFilename   = 0x00010000,
     UseGifIfPossible     = 0x00020000,
@@ -43,7 +40,7 @@ enum class XOutFlags {
     UseNativeIfPossible  = 0x00080000,
 };
 namespace o3tl {
-    template<> struct typed_flags<XOutFlags> : is_typed_flags<XOutFlags, 0x000f001f> {};
+    template<> struct typed_flags<XOutFlags> : is_typed_flags<XOutFlags, 0x000f0019> {};
 }
 
 class GraphicFilter;
@@ -72,11 +69,6 @@ public:
     static ErrCode      ExportGraphic( const Graphic& rGraphic, const INetURLObject& rURL,
                                        GraphicFilter& rFilter, const sal_uInt16 nFormat,
                                        const css::uno::Sequence< css::beans::PropertyValue >* pFilterData );
-
-    static Bitmap       DetectEdges( const Bitmap& rBmp, const sal_uInt8 cThreshold );
-
-    static tools::Polygon GetContour( const Bitmap& rBmp, const XOutFlags nContourFlags,
-                                       const tools::Rectangle* pWorkRect );
 };
 
 #endif // INCLUDED_SVX_XOUTBMP_HXX
