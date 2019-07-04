@@ -221,6 +221,9 @@ TreeParser::TreeParser(
 
 TreeParser::~TreeParser()
 {
+    // be sure m_pSource is freed
+    if (m_bIsInitialized)
+        xmlFreeDoc( m_pSource );
 }
 
 void TreeParser::Extract( const OString& rPOFile )
