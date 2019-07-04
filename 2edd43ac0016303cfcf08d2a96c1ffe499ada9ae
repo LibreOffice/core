@@ -22,6 +22,30 @@
       "revId": "2edd43ac0016303cfcf08d2a96c1ffe499ada9ae",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_93bb2be4",
+        "filename": "vcl/win/gdi/salgdi.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2019-07-04T23:26:09Z",
+      "side": 1,
+      "message": "Now I actually checked the code and I would just drop these lines. ImplInitSalGDI is just called at the end of create_SalInstance, which will just be called once, ever, as it\u0027s the VCL plugin entry point. I guess the SalData init is split because of some Windows setup needed to get GDI working.",
+      "parentUuid": "bf659307_d3ef63e7",
+      "range": {
+        "startLine": 138,
+        "startChar": 4,
+        "endLine": 139,
+        "endChar": 44
+      },
+      "revId": "2edd43ac0016303cfcf08d2a96c1ffe499ada9ae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
