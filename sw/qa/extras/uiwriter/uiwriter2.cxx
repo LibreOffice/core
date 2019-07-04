@@ -1569,6 +1569,12 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testImageComment)
     SwDoc* pDoc = createDoc("image-comment.odt");
     SwView* pView = pDoc->GetDocShell()->GetView();
 
+    // Test document has "before<image>after", remove the content before the image.
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->SttEndDoc(/*bStart=*/true);
+    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/true, 6, /*bBasicCall=*/false);
+    pWrtShell->Delete();
+
     // Select the image.
     pView->GetViewFrame()->GetDispatcher()->Execute(FN_CNTNT_TO_NEXT_FRAME, SfxCallMode::SYNCHRON);
 
@@ -1578,17 +1584,17 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testImageComment)
     // Verify that the comment is around the image.
     // Without the accompanying fix in place, this test would have failed, as FN_POSTIT was disabled
     // in the frame shell.
+    // Then this test would have failed, as in case the as-char anchored image was at the start of
+    // the paragraph, the comment of the image covered the character after the image, not the image.
     uno::Reference<text::XTextRange> xPara = getParagraph(1);
-    CPPUNIT_ASSERT_EQUAL(OUString("Text"),
-                         getProperty<OUString>(getRun(xPara, 1), "TextPortionType"));
     CPPUNIT_ASSERT_EQUAL(OUString("Annotation"),
-                         getProperty<OUString>(getRun(xPara, 2), "TextPortionType"));
+                         getProperty<OUString>(getRun(xPara, 1), "TextPortionType"));
     CPPUNIT_ASSERT_EQUAL(OUString("Frame"),
-                         getProperty<OUString>(getRun(xPara, 3), "TextPortionType"));
+                         getProperty<OUString>(getRun(xPara, 2), "TextPortionType"));
     CPPUNIT_ASSERT_EQUAL(OUString("AnnotationEnd"),
-                         getProperty<OUString>(getRun(xPara, 4), "TextPortionType"));
+                         getProperty<OUString>(getRun(xPara, 3), "TextPortionType"));
     CPPUNIT_ASSERT_EQUAL(OUString("Text"),
-                         getProperty<OUString>(getRun(xPara, 5), "TextPortionType"));
+                         getProperty<OUString>(getRun(xPara, 4), "TextPortionType"));
 
     // Insert content to the comment, and select the image again.
     SfxStringItem aItem(FN_INSERT_STRING, "x");

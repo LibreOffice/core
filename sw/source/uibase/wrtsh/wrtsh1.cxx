@@ -1912,6 +1912,21 @@ void SwWrtShell::InsertPostIt(SwFieldMgr& rFieldMgr, SfxRequest& rReq)
         {
             SwFlyFrame* pFly = GetSelectedFlyFrame();
 
+            // Remember the anchor of the selected object before deletion.
+            std::unique_ptr<SwPosition> pAnchor;
+            if (pFly)
+            {
+                SwFrameFormat* pFormat = pFly->GetFormat();
+                if (pFormat)
+                {
+                    RndStdIds eAnchorId = pFormat->GetAnchor().GetAnchorId();
+                    if ((eAnchorId == RndStdIds::FLY_AS_CHAR || eAnchorId == RndStdIds::FLY_AT_CHAR) && pFormat->GetAnchor().GetContentAnchor())
+                    {
+                        pAnchor.reset(new SwPosition(*pFormat->GetAnchor().GetContentAnchor()));
+                    }
+                }
+            }
+
             // A frame is selected, end frame selection.
             EnterStdMode();
             GetView().AttrChangedNotify(this);
@@ -1920,6 +1935,7 @@ void SwWrtShell::InsertPostIt(SwFieldMgr& rFieldMgr, SfxRequest& rReq)
             // comment.
             if (pFly)
             {
+                *GetCurrentShellCursor().GetPoint() = *pAnchor;
                 SwFrameFormat* pFormat = pFly->GetFormat();
                 if (pFormat && pFormat->GetAnchor().GetAnchorId() == RndStdIds::FLY_AS_CHAR)
                 {
@@ -1927,21 +1943,8 @@ void SwWrtShell::InsertPostIt(SwFieldMgr& rFieldMgr, SfxRequest& rReq)
                 }
                 else if (pFormat && pFormat->GetAnchor().GetAnchorId() == RndStdIds::FLY_AT_CHAR)
                 {
-                    // Ending the frame selection positions the cursor at the end of the paragraph,
-                    // move it to the anchor position.
-                    sal_Int32 nCursor = GetCurrentShellCursor().GetPoint()->nContent.GetIndex();
-                    const SwPosition* pAnchor = pFormat->GetAnchor().GetContentAnchor();
-                    if (pAnchor)
-                    {
-                        sal_Int32 nDiff = nCursor - pAnchor->nContent.GetIndex();
-                        if (nDiff > 0)
-                        {
-                            Left(CRSR_SKIP_CELLS, /*bSelect=*/false, nDiff, /*bBasicCall=*/false,
-                                 /*bVisual=*/true);
-                            aData.m_pAnnotationRange.reset(new SwPaM(
-                                *GetCurrentShellCursor().Start(), *GetCurrentShellCursor().End()));
-                        }
-                    }
+                    aData.m_pAnnotationRange.reset(new SwPaM(*GetCurrentShellCursor().Start(),
+                                                             *GetCurrentShellCursor().End()));
                 }
             }
         }
