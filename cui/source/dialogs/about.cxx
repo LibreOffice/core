@@ -55,7 +55,6 @@
 #include <config_buildid.h>
 #include <sfx2/app.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <vcl/bitmap.hxx>
 
 #if HAVE_FEATURE_OPENCL
 #include <opencl/openclwrapper.hxx>

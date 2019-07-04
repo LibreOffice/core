@@ -36,7 +36,6 @@
 #include <vcl/mnemonic.hxx>
 #include <vcl/window.hxx>
 #include <vcl/graph.hxx>
-#include <vcl/bitmap.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/toolbox.hxx>
 #include <svtools/miscopt.hxx>

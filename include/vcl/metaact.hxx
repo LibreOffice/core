@@ -27,7 +27,6 @@
 #include <vcl/wall.hxx>
 #include <vcl/font.hxx>
 #include <tools/poly.hxx>
-#include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/region.hxx>
 #include <vcl/outdevstate.hxx>

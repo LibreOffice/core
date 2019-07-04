@@ -21,7 +21,6 @@
 #define INCLUDED_VCL_BITMAPEX_HXX
 
 #include <vcl/dllapi.h>
-#include <vcl/bitmap.hxx>
 #include <vcl/alpha.hxx>
 #include <tools/color.hxx>
 

@@ -73,7 +73,6 @@
 #include <rtl/character.hxx>
 
 #include <vcl/bitmapaccess.hxx>
-#include <vcl/bitmap.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/pdfread.hxx>
 #include <vcl/pngwrite.hxx>

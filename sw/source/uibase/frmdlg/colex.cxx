@@ -28,7 +28,6 @@
 #include <svx/pageitem.hxx>
 #include <editeng/brushitem.hxx>
 #include <editeng/frmdiritem.hxx>
-#include <vcl/bitmap.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/settings.hxx>

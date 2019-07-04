@@ -28,7 +28,6 @@
 #include <editeng/outlobj.hxx>
 #include "outleeng.hxx"
 #include <editeng/editobj.hxx>
-#include <vcl/bitmap.hxx>
 #include <tools/stream.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>

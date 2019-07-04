@@ -23,7 +23,6 @@
 #include <osl/module.h>
 #include <tools/stream.hxx>
 #include <tools/link.hxx>
-#include <vcl/bitmap.hxx>
 #include <sane/sane.h>
 #include "scanner.hxx"
 
