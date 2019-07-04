@@ -127,16 +127,29 @@ OUString XmlTestTools::getXPathContent(xmlDocPtr pXmlDoc, const OString& rXPath)
             return s;
         }
         case XPATH_BOOLEAN:
-            return pXmlObj->boolval ? OUString("true") : OUString("false");
+            {
+                auto boolVal = pXmlObj->boolval;
+                xmlXPathFreeObject(pXmlObj);
+                return boolVal ? OUString("true") : OUString("false");
+            }
         case XPATH_NUMBER:
-            return OUString::number(pXmlObj->floatval);
+            {
+                auto floatVal = pXmlObj->floatval;
+                xmlXPathFreeObject(pXmlObj);
+                return OUString::number(floatVal);
+            }
         case XPATH_STRING:
-            return convert(pXmlObj->stringval);
+            {
+                auto convertedVal = convert(pXmlObj->stringval);
+                xmlXPathFreeObject(pXmlObj);
+                return convertedVal;
+            }
         case XPATH_POINT:
         case XPATH_RANGE:
         case XPATH_LOCATIONSET:
         case XPATH_USERS:
         case XPATH_XSLT_TREE:
+            xmlXPathFreeObject(pXmlObj);
             CPPUNIT_FAIL("Unsupported XPath type");
     }
 
