@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_d873024d",
+        "filename": "solenv/bin/native-code.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 274,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-07-04T10:25:57Z",
+      "side": 1,
+      "message": "Is the last character omitted here by mistake?",
+      "revId": "405c4e37b2ddf3afeda5e4bf9f57a3c9dd5eab85",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
