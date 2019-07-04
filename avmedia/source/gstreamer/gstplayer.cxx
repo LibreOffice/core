@@ -846,10 +846,9 @@ uno::Reference< ::media::XPlayerWindow > SAL_CALL Player::createPlayerWindow( co
 
     if( aSize.Width > 0 && aSize.Height > 0 )
     {
-        ::avmedia::gstreamer::Window* pWindow = new ::avmedia::gstreamer::Window;
         if (rArguments.getLength() <= 2)
         {
-            xRet = pWindow;
+            xRet = new ::avmedia::gstreamer::Window;
             return xRet;
         }
 
@@ -894,7 +893,7 @@ uno::Reference< ::media::XPlayerWindow > SAL_CALL Player::createPlayerWindow( co
                 return nullptr;
         }
 
-        xRet = pWindow;
+        xRet = new ::avmedia::gstreamer::Window;
 
         g_object_set(G_OBJECT(mpPlaybin), "video-sink", pVideosink, nullptr);
         g_object_set(G_OBJECT(mpPlaybin), "force-aspect-ratio", FALSE, nullptr);
