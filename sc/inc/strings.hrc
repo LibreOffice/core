@@ -362,7 +362,7 @@
 #define STR_MESSAGE_OUTPUT_TOO_LONG                 NC_("STR_MESSAGE_OUTPUT_TOO_LONG", "Output is too long to write into the sheet.")
 #define STR_INPUT_DATA_RANGE                        NC_("STR_INPUT_DATA_RANGE", "Input data range")
 /*infobar for allowing links to update or not*/
-#define STR_ENABLE_CONTENT                          NC_("STR_ENABLE_CONTENT", "Enable Content")
+#define STR_ENABLE_CONTENT                          NC_("STR_ENABLE_CONTENT", "Allow updating")
 /*Insert image dialog*/
 #define STR_ANCHOR_TO_CELL                          NC_("STR_ANCHOR_TO_CELL", "To cell")
 #define STR_ANCHOR_TO_CELL_RESIZE                   NC_("STR_ANCHOR_TO_CELL_RESIZE", "To cell (resize with cell)")
