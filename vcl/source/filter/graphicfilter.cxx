@@ -66,6 +66,8 @@
 #include <rtl/bootstrap.hxx>
 #include <rtl/instance.hxx>
 #include <vcl/metaact.hxx>
+#include <tools/svlibrary.h>
+#include <comphelper/string.hxx>
 #include <vector>
 #include <memory>
 
@@ -1438,6 +1440,30 @@ void GraphicFilter::ImportGraphics(std::vector< std::shared_ptr<Graphic> >& rGra
             rContext.m_pGraphic = nullptr;
 
         rGraphics.push_back(rContext.m_pGraphic);
+    }
+}
+
+void GraphicFilter::preload()
+{
+    sal_Int32 nTokenCount = comphelper::string::getTokenCount(aFilterPath, ';');
+    ImpFilterLibCache& rCache = Cache::get();
+    static const std::initializer_list<OUStringLiteral> aFilterNames = {
+        "icd", "idx", "ime", "ipb", "ipd", "ips", "ipt", "ipx", "ira", "itg", "iti",
+    };
+
+    // Load library for each filter.
+    for (const auto& rFilterName : aFilterNames)
+    {
+        ImpFilterLibCacheEntry* pFilter = nullptr;
+        // Look at the library in each element inside the filter path.
+        for (sal_Int32 i = 0; i < nTokenCount; ++i)
+        {
+            pFilter = rCache.GetFilter(aFilterPath.getToken(i, ';'), SVLIBRARY("gie"), rFilterName);
+            if (pFilter)
+            {
+                break;
+            }
+        }
     }
 }
 
