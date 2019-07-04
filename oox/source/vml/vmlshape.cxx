@@ -728,33 +728,14 @@ Reference< XShape > SimpleShape::implConvertAndInsert( const Reference< XShapes 
             PropertySet( xShape ).setAnyProperty( PROP_BottomBorderDistance, makeAny( sal_Int32( getTextBox()->borderDistanceBottom )));
         }
 
-        if (getTextBox()->maLayoutFlow == "vertical" && maTypeModel.maLayoutFlowAlt.isEmpty())
+        if (getTextBox()->maLayoutFlow == "vertical")
         {
-            PropertySet(xShape).setAnyProperty(PROP_WritingMode,
-                                               uno::makeAny(text::WritingMode2::TB_RL));
-        }
-
-        if (!maTypeModel.maLayoutFlowAlt.isEmpty())
-        {
-            // Can't handle this property here, as the frame is not attached yet: pass it to writerfilter.
-            uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
-            uno::Sequence<beans::PropertyValue> aGrabBag;
-            xPropertySet->getPropertyValue("FrameInteropGrabBag") >>= aGrabBag;
-            beans::PropertyValue aPair;
-            aPair.Name = "mso-layout-flow-alt";
-            aPair.Value <<= maTypeModel.maLayoutFlowAlt;
-            if (aGrabBag.hasElements())
+            sal_Int16 nWritingMode = text::WritingMode2::TB_RL;
+            if (maTypeModel.maLayoutFlowAlt == "bottom-to-top")
             {
-                sal_Int32 nLength = aGrabBag.getLength();
-                aGrabBag.realloc(nLength + 1);
-                aGrabBag[nLength] = aPair;
+                nWritingMode = text::WritingMode2::BT_LR;
             }
-            else
-            {
-                aGrabBag.realloc(1);
-                aGrabBag[0] = aPair;
-            }
-            xPropertySet->setPropertyValue("FrameInteropGrabBag", uno::makeAny(aGrabBag));
+            PropertySet(xShape).setAnyProperty(PROP_WritingMode, uno::makeAny(nWritingMode));
         }
     }
     else
