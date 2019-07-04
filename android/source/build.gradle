@@ -33,8 +33,7 @@ dependencies {
             "unoloader.jar"
     ])
     implementation files("${liboInstdir}/${liboShareJavaFolder}/unoil.jar")
-    debugImplementation(name:'owncloud_android_lib-debug', ext:'aar')
-    releaseImplementation(name:'owncloud_android_lib-release', ext:'aar')
+    implementation(name:'owncloud_android_lib', ext:'aar')
     implementation 'com.android.support:design:27.1.1' // also pulls-in corresponding support libraries
     implementation 'com.android.support.constraint:constraint-layout:1.1.2'
 }
