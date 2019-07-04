@@ -2,9 +2,10 @@ apply plugin: 'com.android.library'
 buildscript {
     repositories {
         jcenter()
+        google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.3.3'
+        classpath 'com.android.tools.build:gradle:3.3.0'
     }
 }
 
@@ -18,7 +19,6 @@ android {
     }
 
     compileSdkVersion 26
-    buildToolsVersion "26.0.1"
 
     defaultConfig {
         minSdkVersion 14
@@ -45,5 +45,12 @@ android {
                 ]
             }
         }
+    }
+}
+
+allprojects {
+    repositories {
+        jcenter()
+        google()
     }
 }

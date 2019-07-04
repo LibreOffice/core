@@ -371,7 +371,7 @@ if test -z "$with_android_ndk" -a -e "$SRC_ROOT/external/android-ndk" -a "$build
     with_android_ndk="$SRC_ROOT/external/android-ndk"
 fi
 if test -n "$with_android_ndk"; then
-    ANDROID_NDK_HOME=$with_android_ndk
+    eval ANDROID_NDK_HOME=$with_android_ndk
 
     # Set up a lot of pre-canned defaults
 
@@ -393,15 +393,15 @@ if test -n "$with_android_ndk"; then
     11.1.*|12.1.*|13.1.*|14.1.*)
         AC_MSG_ERROR([Building for Android is only supported with NDK versions above 16.x.*])
         ;;
-    16.*)
+    16.*|19.*)
         ;;
     *)
-        AC_MSG_WARN([Untested Android NDK version $ANDROID_NDK_VERSION, only version 16.* have been used successfully. Proceed at your own risk.])
-        add_warning "Untested Android NDK version $ANDROID_NDK_VERSION, only version 16.* have been used successfully. Proceed at your own risk."
+        AC_MSG_WARN([Untested Android NDK version $ANDROID_NDK_VERSION, only version 16.* and 19.* have been used successfully. Proceed at your own risk.])
+        add_warning "Untested Android NDK version $ANDROID_NDK_VERSION, only version 16.* and 19.* have been used successfully. Proceed at your own risk."
         ;;
     esac
 
-    ANDROID_API_LEVEL=14
+    ANDROID_API_LEVEL=16
     android_cpu=$host_cpu
     ANDROID_ARCH=$android_cpu
     if test $host_cpu = arm; then
@@ -517,7 +517,7 @@ if test -z "$with_android_sdk" -a -e "$SRC_ROOT/external/android-sdk-linux" -a "
     with_android_sdk="$SRC_ROOT/external/android-sdk-linux"
 fi
 if test -n "$with_android_sdk"; then
-    ANDROID_SDK_HOME=$with_android_sdk
+    eval ANDROID_SDK_HOME=$with_android_sdk
     PATH="$ANDROID_SDK_HOME/platform-tools:$ANDROID_SDK_HOME/tools:$PATH"
 fi
 AC_SUBST(ANDROID_SDK_HOME)
