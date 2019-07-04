@@ -70,15 +70,11 @@ OUString lclGetAnchorIdFromGrabBag(const SdrObject* pObj)
     else
         aGrabBagName = "InteropGrabBag";
     uno::Sequence<beans::PropertyValue> propList = lclGetProperty(xShape, aGrabBagName);
-    for (sal_Int32 nProp = 0; nProp < propList.getLength(); ++nProp)
-    {
-        OUString aPropName = propList[nProp].Name;
-        if (aPropName == "AnchorId")
-        {
-            propList[nProp].Value >>= aResult;
-            break;
-        }
-    }
+    auto pProp
+        = std::find_if(propList.begin(), propList.end(),
+                       [](const beans::PropertyValue& rProp) { return rProp.Name == "AnchorId"; });
+    if (pProp != propList.end())
+        pProp->Value >>= aResult;
     return aResult;
 }
 
@@ -846,22 +842,14 @@ void DocxSdrExport::writeVMLDrawing(const SdrObject* sdrObj, const SwFrameFormat
 
 static bool lcl_isLockedCanvas(const uno::Reference<drawing::XShape>& xShape)
 {
-    bool bRet = false;
     uno::Sequence<beans::PropertyValue> propList = lclGetProperty(xShape, "InteropGrabBag");
-    for (sal_Int32 nProp = 0; nProp < propList.getLength(); ++nProp)
-    {
-        OUString propName = propList[nProp].Name;
-        if (propName == "LockedCanvas")
-        {
-            /*
-             * Export as Locked Canvas only if the property
-             * is in the PropertySet
-             */
-            bRet = true;
-            break;
-        }
-    }
-    return bRet;
+    /*
+     * Export as Locked Canvas only if the property
+     * is in the PropertySet
+     */
+    return std::any_of(propList.begin(), propList.end(), [](const beans::PropertyValue& rProp) {
+        return rProp.Name == "LockedCanvas";
+    });
 }
 
 void DocxSdrExport::writeDMLDrawing(const SdrObject* pSdrObject, const SwFrameFormat* pFrameFormat,
@@ -1249,15 +1237,12 @@ void DocxSdrExport::writeDMLTextFrame(ww8::Frame const* pParentFrame, int nAncho
         {
             uno::Sequence<beans::PropertyValue> propList;
             xPropertySet->getPropertyValue("FrameInteropGrabBag") >>= propList;
-            for (sal_Int32 nProp = 0; nProp < propList.getLength(); ++nProp)
-            {
-                OUString propName = propList[nProp].Name;
-                if (propName == "mso-rotation-angle")
-                {
-                    aRotation = propList[nProp].Value;
-                    break;
-                }
-            }
+            auto pProp = std::find_if(propList.begin(), propList.end(),
+                                      [](const beans::PropertyValue& rProp) {
+                                          return rProp.Name == "mso-rotation-angle";
+                                      });
+            if (pProp != propList.end())
+                aRotation = pProp->Value;
         }
         aRotation >>= m_pImpl->getDMLandVMLTextFrameRotation();
         OString sRotation(OString::number(
@@ -1282,15 +1267,12 @@ void DocxSdrExport::writeDMLTextFrame(ww8::Frame const* pParentFrame, int nAncho
         {
             uno::Sequence<beans::PropertyValue> propList;
             xPropertySet->getPropertyValue("FrameInteropGrabBag") >>= propList;
-            for (sal_Int32 nProp = 0; nProp < propList.getLength(); ++nProp)
-            {
-                OUString propName = propList[nProp].Name;
-                if (propName == "mso-orig-shape-type")
-                {
-                    propList[nProp].Value >>= shapeType;
-                    break;
-                }
-            }
+            auto pProp = std::find_if(propList.begin(), propList.end(),
+                                      [](const beans::PropertyValue& rProp) {
+                                          return rProp.Name == "mso-orig-shape-type";
+                                      });
+            if (pProp != propList.end())
+                pProp->Value >>= shapeType;
         }
         //Empty shapeType will lead to corruption so to avoid that shapeType is set to default i.e. "rect"
         if (shapeType.isEmpty())

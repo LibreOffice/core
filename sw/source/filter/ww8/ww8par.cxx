@@ -4888,17 +4888,16 @@ void SwWW8ImplReader::ReadGlobalTemplateSettings( const OUString& sCreatedFrom, 
     if( xSFA->isFolder( aAddinPath ) )
         sGlobalTemplates = xSFA->getFolderContents( aAddinPath, false );
 
-    sal_Int32 nEntries = sGlobalTemplates.getLength();
-    for ( sal_Int32 i=0; i<nEntries; ++i )
+    for ( const auto& rGlobalTemplate : sGlobalTemplates )
     {
         INetURLObject aObj;
-        aObj.SetURL( sGlobalTemplates[ i ] );
+        aObj.SetURL( rGlobalTemplate );
         bool bIsURL = aObj.GetProtocol() != INetProtocol::NotValid;
         OUString aURL;
         if ( bIsURL )
-                aURL = sGlobalTemplates[ i ];
+                aURL = rGlobalTemplate;
         else
-                osl::FileBase::getFileURLFromSystemPath( sGlobalTemplates[ i ], aURL );
+                osl::FileBase::getFileURLFromSystemPath( rGlobalTemplate, aURL );
         if ( !aURL.endsWithIgnoreAsciiCase( ".dot" ) || ( !sCreatedFrom.isEmpty() && sCreatedFrom == aURL ) )
             continue; // don't try and read the same document as ourselves
 

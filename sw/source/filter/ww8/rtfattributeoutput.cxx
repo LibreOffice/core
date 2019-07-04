@@ -2191,14 +2191,12 @@ void RtfAttributeOutput::OutputFlyFrame_Impl(const ww8::Frame& rFrame, const Poi
                             }
 
                             xPropSet->getPropertyValue("StringItemList") >>= aStrSeq;
-                            sal_uInt32 nListItems = aStrSeq.getLength();
-                            for (sal_uInt32 i = 0; i < nListItems; i++)
+                            for (const auto& rStr : aStrSeq)
                                 m_aRun
                                     ->append(
                                         "{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_FFL
                                         " ")
-                                    .append(OUStringToOString(aStrSeq[i],
-                                                              m_rExport.GetCurrentEncoding()))
+                                    .append(OUStringToOString(rStr, m_rExport.GetCurrentEncoding()))
                                     .append('}');
 
                             m_aRun->append("}}");
