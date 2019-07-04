@@ -2266,7 +2266,7 @@ void SwBaseShell::ExecBckCol(SfxRequest& rReq)
     const SfxItemSet* pArgs = rReq.GetArgs();
     sal_uInt16 nSlot(rReq.GetSlot());
 
-    if (!pArgs && ( nSlot != SID_BACKGROUND_COLOR || nSlot != SID_TABLE_CELL_BACKGROUND_COLOR ) )
+    if (!pArgs && nSlot != SID_BACKGROUND_COLOR && nSlot != SID_TABLE_CELL_BACKGROUND_COLOR)
     {
         return;
     }
