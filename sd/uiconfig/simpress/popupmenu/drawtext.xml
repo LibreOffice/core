@@ -19,6 +19,7 @@
   <menu:menuitem menu:id=".uno:OutlineBullet"/>
   <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:OpenHyperlinkOnCursor"/>
+  <menu:menuitem menu:id=".uno:EditHyperlink"/>
   <menu:menuitem menu:id=".uno:RemoveHyperlink"/>
   <menu:menuitem menu:id=".uno:ThesaurusFromContext"/>
   <menu:menuseparator/>
