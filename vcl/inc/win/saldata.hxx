@@ -108,7 +108,8 @@ public:
     DWORD                   mnAppThreadId;          // Id from Application-Thread
     BOOL                    mbScrSvrEnabled;        // ScreenSaver enabled
     SalIcon*                mpFirstIcon;            // icon cache, points to first icon, NULL if none
-    TempFontItem*           mpTempFontItem;
+    TempFontItem*           mpSharedTempFontItem;   // LibreOffice shared fonts
+    TempFontItem*           mpOtherTempFontItem;    // other temporary fonts (embedded?)
     bool                    mbThemeChanged;         // true if visual theme was changed: throw away theme handles
     bool                    mbThemeMenuSupport;
 
@@ -156,7 +157,7 @@ void ImplClearHDCCache( SalData* pData );
 HDC ImplGetCachedDC( sal_uLong nID, HBITMAP hBmp = nullptr );
 void ImplReleaseCachedDC( sal_uLong nID );
 
-void ImplReleaseTempFonts( SalData& );
+void ImplReleaseTempFonts(SalData&, bool bAll);
 
 HCURSOR ImplLoadSalCursor( int nId );
 HBITMAP ImplLoadSalBitmap( int nId );
