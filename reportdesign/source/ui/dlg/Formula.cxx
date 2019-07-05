@@ -97,7 +97,6 @@ FormulaDialog::~FormulaDialog()
     StoreFormEditData( m_pFormulaData );
     m_pEdit = nullptr;
     m_pAddField.clear();
-    free(m_pFormulaData);
 }
 
 // functions for right side
