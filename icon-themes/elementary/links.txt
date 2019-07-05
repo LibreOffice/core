@@ -2279,18 +2279,21 @@ cmd/32/deleteallnotes.png cmd/32/deleteallannotation.png
 cmd/32/deletecomment.png cmd/32/deleteannotation.png
 cmd/32/deletenote.png cmd/32/deleteannotation.png
 cmd/32/editcommentsmenu.png cmd/32/editannotation.png
+cmd/32/notevisible.png cmd/32/shownote.png
 cmd/32/showinlinetooltips.png cmd/32/editannotation.png
 
 cmd/lc_deleteallnotes.png cmd/lc_deleteallannotation.png
 cmd/lc_deletecomment.png cmd/lc_deleteannotation.png
 cmd/lc_deletenote.png cmd/lc_deleteannotation.png
 cmd/lc_editcommentsmenu.png cmd/lc_editannotation.png
+cmd/lc_notevisible.png cmd/lc_shownote.png
 cmd/lc_showinlinetooltips.png cmd/lc_editannotation.png
 
 cmd/sc_deleteallnotes.png cmd/sc_deleteallannotation.png
 cmd/sc_deletecomment.png cmd/sc_deleteannotation.png
 cmd/sc_deletenote.png cmd/sc_deleteannotation.png
 cmd/sc_editcommentsmenu.png cmd/sc_editannotation.png
+cmd/sc_notevisible.png cmd/sc_shownote.png
 cmd/sc_showinlinetooltips.png cmd/sc_editannotation.png
 
 # writer
