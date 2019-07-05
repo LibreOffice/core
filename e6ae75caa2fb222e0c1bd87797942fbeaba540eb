@@ -57,6 +57,30 @@
       "revId": "e6ae75caa2fb222e0c1bd87797942fbeaba540eb",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_ceab3c73",
+        "filename": "vcl/win/gdi/salfont.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 1128,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2019-07-05T17:39:51Z",
+      "side": 1,
+      "message": "No, I\u0027m wrong. GetBase() also strips the extension :-(",
+      "parentUuid": "bf659307_cebedcfe",
+      "range": {
+        "startLine": 1128,
+        "startChar": 30,
+        "endLine": 1128,
+        "endChar": 39
+      },
+      "revId": "e6ae75caa2fb222e0c1bd87797942fbeaba540eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
