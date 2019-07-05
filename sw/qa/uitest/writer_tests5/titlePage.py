@@ -32,6 +32,13 @@ class titlePage(UITestCase):
         self.ui_test.close_dialog_through_button(xOKBtn)
         self.assertEqual(document.CurrentController.PageCount, 3)
 
+        # check cancel button
+        self.ui_test.execute_dialog_through_command(".uno:TitlePageDialog")
+        xDialog = self.xUITest.getTopFocusWindow()
+        xCancelBtn = xDialog.getChild("cancel")
+        self.ui_test.close_dialog_through_button(xCancelBtn)
+        self.assertEqual(document.CurrentController.PageCount, 3)
+
         self.ui_test.close_doc()
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
