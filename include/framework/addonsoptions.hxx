@@ -68,6 +68,19 @@ struct FWE_DLLPUBLIC MergeToolbarInstruction
 
 typedef ::std::vector< MergeToolbarInstruction > MergeToolbarInstructionContainer;
 
+struct FWE_DLLPUBLIC MergeNotebookBarInstruction
+{
+    OUString     aMergeNotebookBar;
+    OUString     aMergePoint;
+    OUString     aMergeCommand;
+    OUString     aMergeCommandParameter;
+    OUString     aMergeFallback;
+    OUString     aMergeContext;
+    css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > > aMergeNotebookBarItems;
+};
+
+typedef ::std::vector< MergeNotebookBarInstruction >    MergeNotebookBarInstructionContainer;
+
 struct FWE_DLLPUBLIC MergeStatusbarInstruction
 {
     OUString     aMergePoint;
@@ -117,6 +130,14 @@ class FWE_DLLPUBLIC AddonsOptions
         sal_Int32   GetAddonsToolBarCount() const ;
 
         /*-****************************************************************************************************
+            @short      returns number of addons notebookbar
+            @descr      Call to retrieve the number of addons notebookbar
+
+            @return     number of addons notebookar
+        *//*-*****************************************************************************************************/
+        sal_Int32   GetAddonsNotebookBarCount() const ;
+
+        /*-****************************************************************************************************
             @short      returns the  complete addons menu
             @descr      Call it to get all entries of the addon menu.
                         We return a list of all nodes with its names and properties.
@@ -155,6 +176,24 @@ class FWE_DLLPUBLIC AddonsOptions
         const OUString GetAddonsToolbarResourceName( sal_uInt32 nIndex ) const;
 
         /*-****************************************************************************************************
+            @short      Gets a NotebookBar part of an single addon
+            @return     A complete
+
+            @onerror    We return sal_False
+        *//*-*****************************************************************************************************/
+
+        const css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > >& GetAddonsNotebookBarPart( sal_uInt32 nIndex ) const;
+
+        /*-****************************************************************************************************
+            @short      Gets a unique NotebookBar resource name of an single addon
+            @return     A complete
+
+            @onerror    We return sal_False
+        *//*-*****************************************************************************************************/
+
+        const OUString GetAddonsNotebookBarResourceName( sal_uInt32    ) const;
+
+        /*-****************************************************************************************************
             @short      Retrieves all available merge instructions for the Office menu bar
             @return     The filled MergeMenuDefinitionContaier
 
@@ -170,6 +209,14 @@ class FWE_DLLPUBLIC AddonsOptions
             @onerror    We return sal_False
         *//*-*****************************************************************************************************/
         bool GetMergeToolbarInstructions( const OUString& rToolbarName, MergeToolbarInstructionContainer& rToolbar ) const;
+
+        /*-****************************************************************************************************
+            @short      Retrieves all available merge instructions for Notebookbar
+            @return     The filled
+
+            @onerror    We return sal_False
+        *//*-*****************************************************************************************************/
+        bool GetMergeNotebookBarInstructions( const OUString& rNotebookBarName, MergeNotebookBarInstructionContainer& rNotebookBar ) const;
 
         /*-****************************************************************************************************
             @short      Gets the Add-On help menu part of all addon components registered
