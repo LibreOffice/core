@@ -39,9 +39,7 @@
 
 namespace fileaccess {
 
-class Notifier;
-
-class XResultSet_impl : public Notifier,
+class XResultSet_impl :
         public cppu::WeakImplHelper<  css::lang::XEventListener,
                                       css::sdbc::XRow,
                                       css::sdbc::XResultSet,
@@ -60,31 +58,6 @@ class XResultSet_impl : public Notifier,
                          const css::uno::Sequence< css::ucb::NumberedSortingInfo >& seqSort );
 
         virtual ~XResultSet_impl() override;
-
-        virtual std::unique_ptr<ContentEventNotifier> cDEL() override
-        {
-            return nullptr;
-        }
-
-        virtual std::unique_ptr<ContentEventNotifier> cEXC( const OUString& ) override
-        {
-            return nullptr;
-        }
-
-        virtual std::unique_ptr<ContentEventNotifier> cCEL() override
-        {
-            return nullptr;
-        }
-
-        virtual std::unique_ptr<PropertySetInfoChangeNotifier> cPSL() override
-        {
-            return nullptr;
-        }
-
-        virtual std::unique_ptr<PropertyChangeNotifier> cPCL() override
-        {
-            return nullptr;
-        }
 
         sal_Int32 CtorSuccess() { return m_nErrorCode;}
         sal_Int32 getMinorError() { return m_nMinorErrorCode;}
