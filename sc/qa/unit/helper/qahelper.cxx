@@ -405,8 +405,6 @@ ScRangeList getChartRanges(ScDocument& rDoc, const SdrOle2Obj& rChartObj)
     return aRanges;
 }
 
-namespace {
-
 ScTokenArray* getTokens(ScDocument& rDoc, const ScAddress& rPos)
 {
     ScFormulaCell* pCell = rDoc.GetFormulaCell(rPos);
@@ -418,8 +416,6 @@ ScTokenArray* getTokens(ScDocument& rDoc, const ScAddress& rPos)
     }
 
     return pCell->GetCode();
-}
-
 }
 
 bool checkFormula(ScDocument& rDoc, const ScAddress& rPos, const char* pExpected)
@@ -778,13 +774,9 @@ void ScBootstrapFixture::miscRowHeightsTest( TestParam const * aTestValues, unsi
     }
 }
 
-namespace {
-
 std::string to_std_string(const OUString& rStr)
 {
     return std::string(rStr.toUtf8().getStr());
-}
-
 }
 
 void checkFormula(ScDocument& rDoc, const ScAddress& rPos, const char* expected, const char* msg, CppUnit::SourceLine const & sourceLine)
