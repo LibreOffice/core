@@ -295,6 +295,91 @@
         <value>0</value>
       </prop>
     </group>
+    <group oor:name="MergeNotebookBarInstruction">
+      <info>
+        <desc>Describes a merge menu instruction of an external component. The name must be unique and should be written using a package-scheme like org.openoffice.external.applicationexecuter to minimize name clashes. A menu instruction describes how the attached menu items should be merged into the Office menubar.</desc>
+      </info>
+      <prop oor:name="MergeNotebookBar" oor:type="xs:string">
+        <info>
+          <desc>Defines the notebookbar interface.</desc>
+        </info>
+      </prop>
+      <prop oor:name="MergePoint" oor:type="xs:string">
+        <info>
+          <desc>Describes the command that should be used as a reference point for the merge command.</desc>
+        </info>
+      </prop>
+      <prop oor:name="MergeCommand" oor:type="xs:string">
+        <info>
+          <desc>A command to be processed for this merge menu instruction.</desc>
+        </info>
+      </prop>
+      <prop oor:name="MergeCommandParameter" oor:type="xs:string">
+        <info>
+          <desc>Optional parameters for a merge command. Interpretation depends on the individual command.</desc>
+        </info>
+      </prop>
+      <prop oor:name="MergeFallback" oor:type="xs:string">
+        <info>
+          <desc>A fallback command to be used if MergeCommand cannot be applied.</desc>
+        </info>
+      </prop>
+      <prop oor:name="MergeContext" oor:type="xs:string">
+        <info>
+          <desc>A property to define the context of this merge instruction. It can be empty or a colon separated list of the supported application modules.</desc>
+        </info>
+      </prop>
+      <set oor:name="NotebookBarItems" oor:node-type="NotebookBarItem">
+        <info>
+          <desc>Contains a list of notebookbar items used by an Add-On.</desc>
+        </info>
+      </set>
+    </group>
+    <group oor:name="NotebookBarItem">
+      <info>
+        <desc>Describes a toolbar item representing a function of an external component. The name must be unique and should be written using a package-scheme like org.openoffice.external.applicationexecuter to minimize name clashes.</desc>
+      </info>
+      <prop oor:name="URL" oor:type="xs:string">
+        <info>
+          <desc>A command URL which represents the function to execute.</desc>
+        </info>
+      </prop>
+      <prop oor:name="Title" oor:type="xs:string" oor:localized="true">
+        <info>
+          <desc>A localized string used to as the menu item title.</desc>
+        </info>
+      </prop>
+      <prop oor:name="ImageIdentifier" oor:type="xs:string">
+        <info>
+          <desc>A private URL used to reference an optional internal menu image. Example: private:image/3216 addresses the internal Office image with id=3216.</desc>
+        </info>
+      </prop>
+      <prop oor:name="Target" oor:type="xs:string">
+        <info>
+          <desc>This is the target URL which is used for the dispatch command. There are special URL's to address certain targets: _self, current frame; _default, default; _blank, create new frame.</desc>
+        </info>
+      </prop>
+      <prop oor:name="Context" oor:type="xs:string">
+        <info>
+          <desc>A property to define the context of a notebookbar item. It can be empty or a colon separated list of the supported application modules.</desc>
+        </info>
+      </prop>
+      <prop oor:name="ControlType" oor:type="xs:string">
+        <info>
+          <desc>A property to define the control type of the notebookbar item. It will be interpreted as OpenOffice.org default toggle button.</desc>
+        </info>
+      </prop>
+      <prop oor:name="Width" oor:type="xs:long">
+        <info>
+          <desc>A property to define the size of a toolbar item. This property works only ControlTypes which can have a dynamic size (e.g. comboboxes, edit fields, spin fields)</desc>
+        </info>
+      </prop>
+      <prop oor:name="Style" oor:type="xs:string">
+        <info>
+          <desc>A property to define the style of item in a notebookbar (e.g  text, icon, text + icon)</desc>
+        </info>
+      </prop>
+    </group>
     <group oor:name="UserDefinedImages">
       <info>
         <desc>A group of optional user-defined images. There are two ways to define image - 1. Embed the image data directly into the configuration. 2. Use file URLs to address external bitmap files. Embedded image data has a higher priority than file URLs.</desc>
@@ -365,6 +450,11 @@
         <desc>Contains a list of merge menu instructions defined by an Add-On which specify how to merge menu items into the Office menubar.</desc>
       </info>
     </set>
+    <set oor:name="NotebookBarItems" oor:node-type="NotebookBarItem">
+      <info>
+        <desc>Contains a list of notebookbar items used by an Add-On.</desc>
+      </info>
+    </set>
     <set oor:name="MergeToolBarItems" oor:node-type="MergeToolBarInstruction">
       <info>
         <desc>Contains a list of merge toolbar instructions defined by an Add-On which specify how to merge toolbar items into an existing toolbar.</desc>
@@ -373,6 +463,11 @@
     <set oor:name="MergeStatusBarItems" oor:node-type="MergeStatusBarInstruction">
       <info>
         <desc>Contains a list of merge status bar instructions defined by an Add-On which specify how to merge status bar items into an existing status bar.</desc>
+      </info>
+    </set>
+    <set oor:name="MergeNotebookBarItems" oor:node-type="MergeNotebookBarInstruction">
+      <info>
+        <desc>Contains a list of merge notebookbar instructions defined by an Add-On which specify how to merge notebookbar items into an existing toolbar.</desc>
       </info>
     </set>
   </templates>
@@ -419,6 +514,16 @@
       <set oor:name="OfficeHelp" oor:node-type="MenuItem">
         <info>
           <desc>Contains a list of functions inserted into the Office help menu. The optional property 'Submenu' will be ignored for this set.</desc>
+        </info>
+      </set>
+      <set oor:name="OfficeNotebookBar" oor:node-type="NotebookBarItems">
+        <info>
+          <desc>Contains a list of sets of notebookbar items that are part of add-on notebookbar.</desc>
+        </info>
+      </set>
+      <set oor:name="OfficeNotebookBarMerging" oor:node-type="MergeNotebookBarItems">
+        <info>
+          <desc>Contains a list of notebookbar merging instructions of different add-ons. </desc>
         </info>
       </set>
     </group>
