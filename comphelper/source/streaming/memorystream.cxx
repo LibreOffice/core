@@ -170,9 +170,6 @@ void SAL_CALL UNOMemoryStream::seek( sal_Int64 location )
     if ( location > static_cast< sal_Int64 >( maData.size() ) )
         maData.resize( static_cast< sal_Int32 >( location ) );
 
-    if ( location > static_cast< sal_Int64 >( maData.size() ) )
-        maData.resize( static_cast< sal_Int32 >( location ) );
-
     mnCursor = static_cast< sal_Int32 >( location );
 }
 
