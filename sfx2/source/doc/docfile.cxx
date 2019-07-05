@@ -1136,6 +1136,7 @@ SfxMedium::LockFileResult SfxMedium::LockOrigFileOnDemand(bool bLoading, bool bN
     (void) bLoading;
     (void) bNoUI;
     (void) bTryIgnoreLockFile;
+    (void) pLockData;
     return LockFileResult::Succeeded;
 #else
     LockFileResult eResult = LockFileResult::Failed;
