@@ -610,7 +610,15 @@ extern "C" __declspec(dllexport) UINT __stdcall InstallMSU(MSIHANDLE hInstall)
             case WU_S_ALREADY_INSTALLED:
             case WU_E_NOT_APPLICABLE: // Windows could lie us about its version, etc.
             case ERROR_SUCCESS_REBOOT_REQUIRED:
+
+                // It is no longer a macro with newer winerror.h
+                // https://docs.microsoft.com/en-us/windows/win32/api/winerror/nf-winerror-hresult_from_win32
+#ifdef __HRESULT_FROM_WIN32
+            case __HRESULT_FROM_WIN32(ERROR_SUCCESS_REBOOT_REQUIRED):
+#else
             case HRESULT_FROM_WIN32(ERROR_SUCCESS_REBOOT_REQUIRED):
+#endif
+
             case WU_S_REBOOT_REQUIRED:
                 WriteLog(hInstall, "wusa.exe succeeded with exit code", Num2Hex(nExitCode));
                 return ERROR_SUCCESS;
