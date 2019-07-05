@@ -2994,6 +2994,18 @@ void SwRootFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const&
 
     const SwPageFrame *pPage = pSh->Imp()->GetFirstVisPage(&rRenderContext);
 
+    // #126222. The positions of headers and footers of the previous
+    // pages have to be updated, else these headers and footers could
+    // get visible at a wrong position.
+    const SwPageFrame *pPageDeco = static_cast<const SwPageFrame*>(pPage->GetPrev());
+    while (pPageDeco)
+    {
+        pPageDeco->PaintDecorators();
+        OSL_ENSURE(!pPageDeco->GetPrev() || pPageDeco->GetPrev()->IsPageFrame(),
+            "Neighbour of page is not a page.");
+        pPageDeco = static_cast<const SwPageFrame*>(pPageDeco->GetPrev());
+    }
+
     const bool bBookMode = gProp.pSGlobalShell->GetViewOptions()->IsViewLayoutBookMode();
     if ( bBookMode && pPage->GetPrev() && static_cast<const SwPageFrame*>(pPage->GetPrev())->IsEmptyPage() )
         pPage = static_cast<const SwPageFrame*>(pPage->GetPrev());
