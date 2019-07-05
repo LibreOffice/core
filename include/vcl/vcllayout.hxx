@@ -28,7 +28,7 @@
 class ImplLayoutArgs;
 class PhysicalFontFace;
 class SalGraphics;
-struct GlyphItem;
+class GlyphItem;
 class SalLayoutGlyphs;
 
 // all positions/widths are in font units
