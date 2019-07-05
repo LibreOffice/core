@@ -107,6 +107,7 @@
 
 #include <svx/unobrushitemhelper.hxx>
 #include <comphelper/scopeguard.hxx>
+#include <comphelper/lok.hxx>
 
 #include <SwStyleNameMapper.hxx>
 #include <poolfmt.hxx>
@@ -1650,6 +1651,15 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                         rSet.DisableItem(nWhich);
                     else if(nWhich != SID_ANCHOR_MENU)
                         rSet.Put(SfxBoolItem(nWhich, bSet));
+
+                    if (comphelper::LibreOfficeKit::isActive())
+                    {
+                        if (nWhich == FN_TOOL_ANCHOR_PAGE || nWhich == FN_TOOL_ANCHOR_PARAGRAPH
+                            || nWhich == FN_TOOL_ANCHOR_FRAME)
+                        {
+                            rSet.DisableItem(nWhich);
+                        }
+                    }
                 }
                 else
                     rSet.DisableItem( nWhich );

@@ -71,6 +71,7 @@
 #include <vcl/graphicfilter.hxx>
 #include <vcl/builderfactory.hxx>
 #include <svtools/embedhlp.hxx>
+#include <comphelper/lok.hxx>
 #include <memory>
 
 using namespace ::com::sun::star;
@@ -702,6 +703,13 @@ SwFramePage::SwFramePage(TabPageParent pParent, const SfxItemSet &rSet)
 
     m_xAutoWidthCB->connect_toggled(LINK(this, SwFramePage, AutoWidthClickHdl));
     m_xAutoHeightCB->connect_toggled(LINK(this, SwFramePage, AutoHeightClickHdl));
+
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        m_xAnchorAtPageRB->hide();
+        m_xAnchorAtParaRB->hide();
+        m_xAnchorAtFrameRB->hide();
+    }
 }
 
 SwFramePage::~SwFramePage()
