@@ -674,8 +674,8 @@ namespace
                         std::set<sal_uInt16> aResetAttrsArray;
 
                         sal_uInt16 aResetableSetRange[] = {
-                                RES_PARATR_LINESPACING, RES_PARATR_OUTLINELEVEL,
-                                RES_PARATR_LIST_BEGIN, RES_PARATR_LIST_END - 1,
+                                RES_PARATR_BEGIN, RES_PARATR_END - 1,
+                                RES_PARATR_LIST_BEGIN, RES_FRMATR_END - 1,
                                 0
                         };
 
@@ -821,14 +821,16 @@ namespace
             SfxItemSet aTmp(
                 pDoc->GetAttrPool(),
                 svl::Items<
-                    RES_PARATR_LINESPACING, RES_PARATR_OUTLINELEVEL,
-                    RES_PARATR_LIST_BEGIN, RES_PARATR_LIST_END - 1>{});
+                    RES_PARATR_BEGIN, RES_PARATR_END - 3, // skip RSID and GRABBAG
+                    RES_PARATR_LIST_BEGIN, RES_UL_SPACE,  // skip PAGEDESC and BREAK
+                    RES_CNTNT, RES_FRMATR_END - 1>{});
 
             SfxItemSet aTmp2(
                 pDoc->GetAttrPool(),
                 svl::Items<
-                    RES_PARATR_LINESPACING, RES_PARATR_OUTLINELEVEL,
-                    RES_PARATR_LIST_BEGIN, RES_PARATR_LIST_END - 1>{});
+                    RES_PARATR_BEGIN, RES_PARATR_END - 3, // skip RSID and GRABBAG
+                    RES_PARATR_LIST_BEGIN, RES_UL_SPACE,  // skip PAGEDESC and BREAK
+                    RES_CNTNT, RES_FRMATR_END - 1>{});
 
             pToNode->GetParaAttr(aTmp, 0, 0);
             pFromNode->GetParaAttr(aTmp2, 0, 0);
