@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_cebedcfe",
+        "filename": "vcl/win/gdi/salfont.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 1128,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-07-05T12:12:28Z",
+      "side": 1,
+      "message": "In fact, you are quite right - I must have had wrong idea about the getBase/GetBase. Please keep it.",
+      "range": {
+        "startLine": 1128,
+        "startChar": 30,
+        "endLine": 1128,
+        "endChar": 39
+      },
+      "revId": "e6ae75caa2fb222e0c1bd87797942fbeaba540eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
