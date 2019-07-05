@@ -96,8 +96,8 @@ namespace {
 // This enum can be used to set different active states of frames
 enum EActiveState
 {
-    E_INACTIVE,   // I'am not a member of active path in tree and i don't have the focus.
-    E_ACTIVE,     // I'am in the middle of an active path in tree and i don't have the focus.
+    E_INACTIVE,   // I am not a member of active path in tree and i don't have the focus.
+    E_ACTIVE,     // I am in the middle of an active path in tree and i don't have the focus.
     E_FOCUS       // I have the focus now. I must a member of an active path!
 };
 
@@ -1247,7 +1247,7 @@ void SAL_CALL XFrameImpl::activate()
     aWriteLock.clear();
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
 
-    //  1)  If I'am not active before ...
+    //  1)  If I am not active before...
     if( eState == E_INACTIVE )
     {
         // ... do it then.
@@ -1347,7 +1347,7 @@ void SAL_CALL XFrameImpl::deactivate()
             implts_sendFrameActionEvent( css::frame::FrameAction_FRAME_UI_DEACTIVATING );
         }
 
-        //  3)  If I'am active - I will be deactivated now.
+        //  3)  If I am active - I will be deactivated now.
         if( eState == E_ACTIVE )
         {
             // Set new state and send message to all listener.
@@ -1358,8 +1358,8 @@ void SAL_CALL XFrameImpl::deactivate()
             implts_sendFrameActionEvent( css::frame::FrameAction_FRAME_DEACTIVATING );
         }
 
-        //  4)  If there is a path from here to my parent ...
-        //      ... I'am on the top or in the middle of deactivated subtree and action was started here.
+        //  4)  If there is a path from here to my parent...
+        //      ... I am on the top or in the middle of deactivated subtree and action was started here.
         //      I must deactivate all frames from here to top, which are members of current path.
         //      Stop, if THESE frame not the active frame of our parent!
         if ( xParent.is() && xParent->getActiveFrame() == xThis )
