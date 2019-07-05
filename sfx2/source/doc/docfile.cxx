@@ -1128,7 +1128,9 @@ namespace
 
 // sets SID_DOC_READONLY if the document cannot be opened for editing
 // if user cancel the loading the ERROR_ABORT is set
-SfxMedium::LockFileResult SfxMedium::LockOrigFileOnDemand( bool bLoading, bool bNoUI, bool bTryIgnoreLockFile )
+SfxMedium::LockFileResult SfxMedium::LockOrigFileOnDemand(bool bLoading, bool bNoUI,
+                                                          bool bTryIgnoreLockFile,
+                                                          LockFileEntry* pLockData)
 {
 #if !HAVE_FEATURE_MULTIUSER_ENVIRONMENT
     (void) bLoading;
@@ -1183,38 +1185,47 @@ SfxMedium::LockFileResult SfxMedium::LockOrigFileOnDemand( bool bLoading, bool b
                         catch ( ucb::InteractiveLockingLockedException& )
                         {
                             // received when the resource is already locked
-                            // get the lock owner, using a special ucb.webdav property
-                            // the owner property retrieved here is  what the other principal send the server
-                            // when activating the lock.
-                            // See http://tools.ietf.org/html/rfc4918#section-14.17 for details
-                            LockFileEntry aLockData;
-                            aLockData[LockFileComponent::OOOUSERNAME] = "Unknown user";
-                            // This solution works right when the LO user name and the WebDAV user
-                            // name are the same.
-                            // A better thing to do would be to obtain the 'real' WebDAV user name,
-                            // but that's not possible from a WebDAV UCP provider client.
-                            LockFileEntry aOwnData = svt::LockFileCommon::GenerateOwnEntry();
-                            // use the current LO user name as the system name
-                            aLockData[LockFileComponent::SYSUSERNAME] = aOwnData[LockFileComponent::SYSUSERNAME];
-
-                            uno::Sequence< css::ucb::Lock >  aLocks;
-                            // getting the property, send a PROPFIND to the server over the net
-                            if( aContentToLock.getPropertyValue( "DAV:lockdiscovery" )  >>= aLocks )
+                            if (!bNoUI || pLockData)
                             {
-                                // got at least a lock, show the owner of the first lock returned
-                                css::ucb::Lock aLock = aLocks[0];
-                                OUString aOwner;
-                                if(aLock.Owner >>= aOwner)
+                                // get the lock owner, using a special ucb.webdav property
+                                // the owner property retrieved here is  what the other principal send the server
+                                // when activating the lock.
+                                // See http://tools.ietf.org/html/rfc4918#section-14.17 for details
+                                LockFileEntry aLockData;
+                                aLockData[LockFileComponent::OOOUSERNAME] = "Unknown user";
+                                // This solution works right when the LO user name and the WebDAV user
+                                // name are the same.
+                                // A better thing to do would be to obtain the 'real' WebDAV user name,
+                                // but that's not possible from a WebDAV UCP provider client.
+                                LockFileEntry aOwnData = svt::LockFileCommon::GenerateOwnEntry();
+                                // use the current LO user name as the system name
+                                aLockData[LockFileComponent::SYSUSERNAME]
+                                    = aOwnData[LockFileComponent::SYSUSERNAME];
+
+                                uno::Sequence<css::ucb::Lock> aLocks;
+                                // getting the property, send a PROPFIND to the server over the net
+                                if (aContentToLock.getPropertyValue("DAV:lockdiscovery") >>= aLocks)
                                 {
-                                    // we need to display the WebDAV user name owning the lock, not the local one
-                                    aLockData[LockFileComponent::OOOUSERNAME] = aOwner;
+                                    // got at least a lock, show the owner of the first lock returned
+                                    css::ucb::Lock aLock = aLocks[0];
+                                    OUString aOwner;
+                                    if (aLock.Owner >>= aOwner)
+                                    {
+                                        // we need to display the WebDAV user name owning the lock, not the local one
+                                        aLockData[LockFileComponent::OOOUSERNAME] = aOwner;
+                                    }
                                 }
-                            }
 
-                            if ( !bResult && !bNoUI )
-                            {
-                                bUIStatus
-                                    = ShowLockedDocumentDialog(aLockData, bLoading, false, true);
+                                if (!bNoUI)
+                                {
+                                    bUIStatus = ShowLockedDocumentDialog(aLockData, bLoading, false,
+                                                                         true);
+                                }
+
+                                if (pLockData)
+                                {
+                                    std::copy(aLockData.begin(), aLockData.end(), pLockData->begin());
+                                }
                             }
                         }
                         catch( ucb::InteractiveNetworkWriteException& )
@@ -1467,6 +1478,11 @@ SfxMedium::LockFileResult SfxMedium::LockOrigFileOnDemand( bool bLoading, bool b
                                     }
                                     else if (bLoading && !bHandleSysLocked)
                                         eResult = LockFileResult::FailedLockFile;
+
+                                    if (!bResult && pLockData)
+                                    {
+                                        std::copy(aData.begin(), aData.end(), pLockData->begin());
+                                    }
                                 }
                             }
                         }

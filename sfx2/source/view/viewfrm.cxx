@@ -183,9 +183,10 @@ class SfxQueryOpenAsTemplate
 private:
     std::unique_ptr<weld::MessageDialog> m_xQueryBox;
 public:
-    SfxQueryOpenAsTemplate(weld::Window* pParent, bool bAllowIgnoreLock)
-        : m_xQueryBox(Application::CreateMessageDialog(pParent, VclMessageType::Question, VclButtonsType::NONE,
-                      SfxResId(bAllowIgnoreLock ? STR_QUERY_OPENASTEMPLATE_ALLOW_IGNORE : STR_QUERY_OPENASTEMPLATE)))
+    SfxQueryOpenAsTemplate(weld::Window* pParent, bool bAllowIgnoreLock, LockFileEntry& rLockData)
+        : m_xQueryBox(Application::CreateMessageDialog(pParent, VclMessageType::Question,
+                                                       VclButtonsType::NONE,
+                                                       QueryString(bAllowIgnoreLock, rLockData)))
     {
         m_xQueryBox->add_button(SfxResId(STR_QUERY_OPENASTEMPLATE_OPENCOPY_BTN), RET_YES);
         if (bAllowIgnoreLock)
@@ -194,6 +195,32 @@ public:
         m_xQueryBox->set_default_response(RET_YES);
     }
     short run() { return m_xQueryBox->run(); }
+
+private:
+    static OUString QueryString(bool bAllowIgnoreLock, LockFileEntry& rLockData)
+    {
+        OUString sLockUserData;
+        if (!rLockData[LockFileComponent::OOOUSERNAME].isEmpty())
+            sLockUserData = rLockData[LockFileComponent::OOOUSERNAME];
+        else
+            sLockUserData = rLockData[LockFileComponent::SYSUSERNAME];
+
+        if (!sLockUserData.isEmpty() && !rLockData[LockFileComponent::EDITTIME].isEmpty())
+            sLockUserData += " ( " + rLockData[LockFileComponent::EDITTIME] + " )";
+
+        if (!sLockUserData.isEmpty())
+            sLockUserData = "\n\n" + sLockUserData + "\n";
+
+        const bool bUseLockStr = bAllowIgnoreLock || !sLockUserData.isEmpty();
+
+        OUString sMsg(
+            SfxResId(bUseLockStr ? STR_QUERY_OPENASTEMPLATE_LOCKED : STR_QUERY_OPENASTEMPLATE));
+
+        if (bAllowIgnoreLock)
+            sMsg += "\n\n" + SfxResId(STR_QUERY_OPENASTEMPLATE_ALLOW_IGNORE);
+
+        return sMsg.replaceFirst("%LOCKINFO", sLockUserData);
+    }
 };
 
 /// Is this read-only object shell opened via .uno:SignPDF?
@@ -434,6 +461,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                 bool bRetryIgnoringLock = false;
                 bool bOpenTemplate = false;
                 do {
+                    LockFileEntry aLockData;
                     if ( !pVersionItem )
                     {
                         if (bRetryIgnoringLock)
@@ -455,8 +483,10 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                         pMed->CompleteReOpen();
                         if ( nOpenMode & StreamMode::WRITE )
                         {
-                             auto eResult = pMed->LockOrigFileOnDemand( true, true, bRetryIgnoringLock );
-                             bRetryIgnoringLock = eResult == SfxMedium::LockFileResult::FailedLockFile;
+                            auto eResult = pMed->LockOrigFileOnDemand(
+                                true, true, bRetryIgnoringLock, &aLockData);
+                            bRetryIgnoringLock
+                                = eResult == SfxMedium::LockFileResult::FailedLockFile;
                         }
 
                         // LockOrigFileOnDemand might set the readonly flag itself, it should be set back
@@ -471,7 +501,8 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                         if (nOpenMode == SFX_STREAM_READWRITE && !rReq.IsAPI())
                         {
                             // css::sdbcx::User offering to open it as a template
-                            SfxQueryOpenAsTemplate aBox(GetWindow().GetFrameWeld(), bRetryIgnoringLock);
+                            SfxQueryOpenAsTemplate aBox(GetWindow().GetFrameWeld(),
+                                                        bRetryIgnoringLock, aLockData);
 
                             short nUserAnswer = aBox.run();
                             bOpenTemplate = RET_YES == nUserAnswer;
