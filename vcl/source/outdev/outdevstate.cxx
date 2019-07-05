@@ -29,7 +29,6 @@
 
 #include <outdev.h>
 #include <outdata.hxx>
-#include <outdevstatestack.hxx>
 #include <salgdi.hxx>
 
 OutDevState::OutDevState()
@@ -41,6 +40,8 @@ OutDevState::OutDevState()
     , mnFlags(PushFlags::NONE)
 {
 }
+
+OutDevState::OutDevState(OutDevState&&) = default;
 
 OutDevState::~OutDevState()
 {
@@ -62,57 +63,56 @@ void OutputDevice::Push( PushFlags nFlags )
     if ( mpMetaFile )
         mpMetaFile->AddAction( new MetaPushAction( nFlags ) );
 
-    OutDevState* pState = new OutDevState;
+    maOutDevStateStack.emplace_back();
+    OutDevState& rState = maOutDevStateStack.back();
 
-    pState->mnFlags = nFlags;
+    rState.mnFlags = nFlags;
 
     if (nFlags & PushFlags::LINECOLOR && mbLineColor)
     {
-        pState->mpLineColor = maLineColor;
+        rState.mpLineColor = maLineColor;
     }
     if (nFlags & PushFlags::FILLCOLOR && mbFillColor)
     {
-        pState->mpFillColor = maFillColor;
+        rState.mpFillColor = maFillColor;
     }
     if ( nFlags & PushFlags::FONT )
-        pState->mpFont.reset( new vcl::Font( maFont ) );
+        rState.mpFont.reset( new vcl::Font( maFont ) );
     if ( nFlags & PushFlags::TEXTCOLOR )
-        pState->mpTextColor = GetTextColor();
+        rState.mpTextColor = GetTextColor();
     if (nFlags & PushFlags::TEXTFILLCOLOR && IsTextFillColor())
     {
-        pState->mpTextFillColor = GetTextFillColor();
+        rState.mpTextFillColor = GetTextFillColor();
     }
     if (nFlags & PushFlags::TEXTLINECOLOR && IsTextLineColor())
     {
-        pState->mpTextLineColor = GetTextLineColor();
+        rState.mpTextLineColor = GetTextLineColor();
     }
     if (nFlags & PushFlags::OVERLINECOLOR && IsOverlineColor())
     {
-        pState->mpOverlineColor = GetOverlineColor();
+        rState.mpOverlineColor = GetOverlineColor();
     }
     if ( nFlags & PushFlags::TEXTALIGN )
-        pState->meTextAlign = GetTextAlign();
+        rState.meTextAlign = GetTextAlign();
     if( nFlags & PushFlags::TEXTLAYOUTMODE )
-        pState->mnTextLayoutMode = GetLayoutMode();
+        rState.mnTextLayoutMode = GetLayoutMode();
     if( nFlags & PushFlags::TEXTLANGUAGE )
-        pState->meTextLanguage = GetDigitLanguage();
+        rState.meTextLanguage = GetDigitLanguage();
     if ( nFlags & PushFlags::RASTEROP )
-        pState->meRasterOp = GetRasterOp();
+        rState.meRasterOp = GetRasterOp();
     if ( nFlags & PushFlags::MAPMODE )
     {
-        pState->mpMapMode = maMapMode;
-        pState->mbMapActive = mbMap;
+        rState.mpMapMode = maMapMode;
+        rState.mbMapActive = mbMap;
     }
     if (nFlags & PushFlags::CLIPREGION && mbClipRegion)
     {
-        pState->mpClipRegion.reset( new vcl::Region( maRegion ) );
+        rState.mpClipRegion.reset( new vcl::Region( maRegion ) );
     }
     if (nFlags & PushFlags::REFPOINT && mbRefPoint)
     {
-        pState->mpRefPoint = maRefPoint;
+        rState.mpRefPoint = maRefPoint;
     }
-
-    mpOutDevStateStack->push_back( pState );
 
     if( mpAlphaVDev )
         mpAlphaVDev->Push();
@@ -127,12 +127,12 @@ void OutputDevice::Pop()
     GDIMetaFile* pOldMetaFile = mpMetaFile;
     mpMetaFile = nullptr;
 
-    if ( mpOutDevStateStack->empty() )
+    if ( maOutDevStateStack.empty() )
     {
         SAL_WARN( "vcl.gdi", "OutputDevice::Pop() without OutputDevice::Push()" );
         return;
     }
-    const OutDevState& rState = mpOutDevStateStack->back();
+    const OutDevState& rState = maOutDevStateStack.back();
 
     if( mpAlphaVDev )
         mpAlphaVDev->Pop();
@@ -215,14 +215,14 @@ void OutputDevice::Pop()
             SetRefPoint();
     }
 
-    mpOutDevStateStack->pop_back();
+    maOutDevStateStack.pop_back();
 
     mpMetaFile = pOldMetaFile;
 }
 
 sal_uInt32 OutputDevice::GetGCStackDepth() const
 {
-    return mpOutDevStateStack->size();
+    return maOutDevStateStack.size();
 }
 
 void OutputDevice::EnableOutput( bool bEnable )

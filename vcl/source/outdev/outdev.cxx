@@ -33,7 +33,6 @@
 #include <svdata.hxx>
 #include <window.h>
 #include <outdev.h>
-#include <outdevstatestack.hxx>
 #include <PhysicalFontCollection.hxx>
 
 #ifdef DISABLE_DYNLOADING
@@ -63,7 +62,6 @@ OutputDevice::OutputDevice(OutDevType eOutDevType) :
     mpFontInstance                     = nullptr;
     mpDeviceFontList                = nullptr;
     mpDeviceFontSizeList            = nullptr;
-    mpOutDevStateStack.reset(new OutDevStateStack);
     mpAlphaVDev                     = nullptr;
     mpExtOutDevData                 = nullptr;
     mnOutOffX                       = 0;
@@ -160,15 +158,9 @@ void OutputDevice::dispose()
     mpOutDevData.reset();
 
     // for some reason, we haven't removed state from the stack properly
-    if ( !mpOutDevStateStack->empty() )
-    {
+    if ( !maOutDevStateStack.empty() )
         SAL_WARN( "vcl.gdi", "OutputDevice::~OutputDevice(): OutputDevice::Push() calls != OutputDevice::Pop() calls" );
-        while ( !mpOutDevStateStack->empty() )
-        {
-            mpOutDevStateStack->pop_back();
-        }
-    }
-    mpOutDevStateStack.reset();
+    maOutDevStateStack.clear();
 
     // release the active font instance
     mpFontInstance.clear();

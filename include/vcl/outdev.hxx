@@ -322,8 +322,8 @@ private:
     mutable std::shared_ptr<PhysicalFontCollection> mxFontCollection;
     mutable std::unique_ptr<ImplDeviceFontList>     mpDeviceFontList;
     mutable std::unique_ptr<ImplDeviceFontSizeList> mpDeviceFontSizeList;
-    std::unique_ptr<OutDevStateStack>               mpOutDevStateStack;
-    std::unique_ptr<ImplOutDevData>                 mpOutDevData;
+    std::vector<OutDevState>        maOutDevStateStack;
+    std::unique_ptr<ImplOutDevData> mpOutDevData;
     std::vector< VCLXGraphics* >*   mpUnoGraphicsList;
     vcl::ExtOutDevData*             mpExtOutDevData;
 
