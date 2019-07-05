@@ -879,7 +879,7 @@ static oslFileError osl_getNextFileItem(
         rtl_uString_newConcat( &pItemImpl->m_pFullPath, pDirImpl->m_pDirectoryPath, pTmpFileName );
         rtl_uString_release( pTmpFileName );
 
-        pItemImpl->bFullPathNormalized = FALSE;
+        pItemImpl->bFullPathNormalized = TRUE;
         *pItem = static_cast<oslDirectoryItem>(pItemImpl);
         return osl_File_E_None;
     }
@@ -1083,9 +1083,7 @@ oslFileError SAL_CALL osl_getDirectoryItem(rtl_uString *strFilePath, oslDirector
                     CopyMemory(&pItemImpl->FindData, &aFindData, sizeof(WIN32_FIND_DATAW));
                     rtl_uString_newFromString(&pItemImpl->m_pFullPath, strSysFilePath);
 
-                    // MT: This costs 600ms startup time on fast v60x!
-                    // GetCaseCorrectPathName( pItemImpl->szFullPath, pItemImpl->szFullPath, sizeof(pItemImpl->szFullPath) );
-
+                    pItemImpl->bFullPathNormalized = TRUE;
                     pItemImpl->uType = DIRECTORYITEM_FILE;
                     *pItem = pItemImpl;
                 }
