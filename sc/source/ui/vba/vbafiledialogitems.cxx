@@ -67,7 +67,10 @@ uno::Any
 ScVbaFileDialogSelectedItems::createCollectionObject( const uno::Any& aSource )
 {
     sal_Int32 nPosition = -1;
-    aSource >>= nPosition;
+    if (!(aSource >>= nPosition))
+        throw uno::RuntimeException("not an sal_Int32");
+    if (nPosition < 0 || nPosition >= static_cast<sal_Int32>(m_sItems.size()))
+        throw uno::RuntimeException("out of range");
 
     OUString sPath = m_sItems[nPosition];
     return uno::makeAny( sPath );
