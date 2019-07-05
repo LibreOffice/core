@@ -25,7 +25,6 @@
 #include <tools/ref.hxx>
 #include <tools/gen.hxx>
 
-class ImplFontMetric;
 class FontCharMap;
 
 typedef sal_uInt32 sal_UCS4;
@@ -36,35 +35,44 @@ class VCL_DLLPUBLIC FontMetric : public vcl::Font
 public:
     explicit            FontMetric();
                         FontMetric( const FontMetric& );  // TODO make this explicit
-    virtual             ~FontMetric() override;
+                        ~FontMetric() override;
 
-    long                GetAscent() const;
-    long                GetDescent() const;
-    long                GetInternalLeading() const;
-    long                GetExternalLeading() const;
-    long                GetLineHeight() const;
-    long                GetSlant() const;
-    long                GetBulletOffset() const;
+    long                GetAscent() const                           { return mnAscent; }
+    long                GetDescent() const                          { return mnDescent; }
+    long                GetInternalLeading() const                  { return mnIntLeading; }
+    long                GetExternalLeading() const                  { return mnExtLeading; }
+    long                GetLineHeight() const                       { return mnLineHeight; } // TODO this is ascent + descnt
+    long                GetSlant() const                            { return mnSlant; }
+    long                GetBulletOffset() const                     { return mnBulletOffset; }
 
-    void                SetAscent(long);
-    void                SetDescent(long);
-    void                SetExternalLeading(long);
-    void                SetInternalLeading(long);
-    void                SetLineHeight(long);
-    void                SetSlant(long);
-    void                SetBulletOffset(long);
+    void                SetAscent( long nAscent )                   { mnAscent = nAscent; }
+    void                SetDescent( long nDescent )                 { mnDescent = nDescent; }
+    void                SetExternalLeading( long nExtLeading )      { mnExtLeading = nExtLeading; }
+    void                SetInternalLeading( long nIntLeading )      { mnIntLeading = nIntLeading; }
+    void                SetLineHeight( long nHeight )               { mnLineHeight = nHeight; } // TODO this is ascent + descent
+    void                SetSlant( long nSlant )                     { mnSlant = nSlant; }
+    void                SetBulletOffset( long nOffset )             { mnBulletOffset = nOffset; }
 
-    bool                IsFullstopCentered() const;
+    bool                IsFullstopCentered() const                  { return mbFullstopCentered; }
 
-    void                SetFullstopCenteredFlag(bool);
+    void                SetFullstopCenteredFlag( bool bCentered )   { mbFullstopCentered = bCentered; }
 
+    using Font::operator=;
     FontMetric&         operator=( const FontMetric& rMetric );
     FontMetric&         operator=( FontMetric&& rMetric );
     bool                operator==( const FontMetric& rMetric ) const;
     bool                operator!=( const FontMetric& rMetric ) const
                             { return !operator==( rMetric ); }
 private:
-    tools::SvRef<ImplFontMetric> mxImplMetric;    // Implementation
+    long                mnAscent;                      // Ascent
+    long                mnDescent;                     // Descent
+    long                mnIntLeading;                  // Internal Leading
+    long                mnExtLeading;                  // External Leading
+    long                mnLineHeight;                  // Ascent+Descent+EmphasisMark
+    long                mnSlant;                       // Slant
+    long                mnBulletOffset;                // Offset for non-printing character
+
+    bool                mbFullstopCentered;
 };
 
 template< typename charT, typename traits >

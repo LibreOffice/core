@@ -204,7 +204,7 @@ FontMetric OutputDevice::GetFontMetric() const
     ImplFontMetricDataRef xFontMetric = pFontInstance->mxFontMetric;
 
     // prepare metric
-    aMetric.Font::operator=( maFont );
+    aMetric = maFont;
 
     // set aMetric with info from font
     aMetric.SetFamilyName( maFont.GetFamilyName() );
