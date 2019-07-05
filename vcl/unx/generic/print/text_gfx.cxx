@@ -123,14 +123,14 @@ void PrinterGfx::DrawGlyph(const Point& rPoint,
             PSTranslate( aPoint );
         PSRotate (900);
         // draw the rotated glyph
-        drawGlyph(aRotPoint, rGlyph.m_aGlyphId);
+        drawGlyph(aRotPoint, rGlyph.glyphId());
 
         // restore previous state
         maVirtualStatus = aSaveStatus;
         PSGRestore();
     }
     else
-        drawGlyph(aPoint, rGlyph.m_aGlyphId);
+        drawGlyph(aPoint, rGlyph.glyphId());
 
     // restore the user coordinate system
     if (nCurrentTextAngle != 0)
