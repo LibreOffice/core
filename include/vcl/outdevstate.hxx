@@ -75,10 +75,10 @@ namespace o3tl {
     template<> struct typed_flags<ComplexTextLayoutFlags> : is_typed_flags<ComplexTextLayoutFlags, 0x000f> {};
 }
 
-class OutDevState
+struct OutDevState
 {
-public:
     OutDevState();
+    OutDevState(OutDevState&&);
     ~OutDevState();
 
     boost::optional<MapMode>        mpMapMode;
