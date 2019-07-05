@@ -604,13 +604,21 @@ extern "C" __declspec(dllexport) UINT __stdcall InstallMSU(MSIHANDLE hInstall)
         if (!GetExitCodeProcess(pi.hProcess, &nExitCode))
             ThrowLastError("GetExitCodeProcess");
 
-        switch (HRESULT hr = static_cast<HRESULT>(nExitCode))
+        HRESULT hr = static_cast<HRESULT>(nExitCode);
+
+        // HRESULT_FROM_WIN32 is defined as an inline function in SDK 8.1 without the constexpr
+        // And it won't work to place it inside the switch statement.
+        if (HRESULT_FROM_WIN32(ERROR_SUCCESS_REBOOT_REQUIRED) == hr)
+        {
+            hr = ERROR_SUCCESS_REBOOT_REQUIRED;
+        }
+
+        switch (hr)
         {
             case S_OK:
             case WU_S_ALREADY_INSTALLED:
             case WU_E_NOT_APPLICABLE: // Windows could lie us about its version, etc.
             case ERROR_SUCCESS_REBOOT_REQUIRED:
-            case HRESULT_FROM_WIN32(ERROR_SUCCESS_REBOOT_REQUIRED):
             case WU_S_REBOOT_REQUIRED:
                 WriteLog(hInstall, "wusa.exe succeeded with exit code", Num2Hex(nExitCode));
                 return ERROR_SUCCESS;
