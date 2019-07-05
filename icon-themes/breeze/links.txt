@@ -72,7 +72,7 @@ cmd/32/insertavmedia.png cmd/32/avmediaplayer.png
 cmd/32/insertcolumnsbefore.png cmd/32/insertcolumns.png
 cmd/32/insertcolumnsmenu.png cmd/32/insertcolumns.png
 cmd/32/insertctrl.png cmd/32/inserttable.png
-cmd/32/insertcurrencyfield.png cmd/32/formattedfield.png
+cmd/32/insertcurrencyfield.png cmd/32/currencyfield.png
 cmd/32/insertdatefield.png cmd/32/datefield.png
 cmd/32/insertedit.png cmd/32/text.png
 cmd/32/insertfield.png cmd/32/addfield.png
@@ -130,7 +130,7 @@ cmd/lc_insertavmedia.png cmd/lc_avmediaplayer.png
 cmd/lc_insertcolumnsbefore.png cmd/lc_insertcolumns.png
 cmd/lc_insertcolumnsmenu.png cmd/lc_insertcolumns.png
 cmd/lc_insertctrl.png cmd/lc_inserttable.png
-cmd/lc_insertcurrencyfield.png cmd/lc_formattedfield.png
+cmd/lc_insertcurrencyfield.png cmd/lc_currencyfield.png
 cmd/lc_insertdatefield.png cmd/lc_datefield.png
 cmd/lc_insertedit.png cmd/lc_text.png
 cmd/lc_insertfield.png cmd/lc_addfield.png
@@ -188,7 +188,7 @@ cmd/sc_insertavmedia.png cmd/sc_avmediaplayer.png
 cmd/sc_insertcolumnsbefore.png cmd/sc_insertcolumns.png
 cmd/sc_insertcolumnsmenu.png cmd/sc_insertcolumns.png
 cmd/sc_insertctrl.png cmd/sc_inserttable.png
-cmd/sc_insertcurrencyfield.png cmd/sc_formattedfield.png
+cmd/sc_insertcurrencyfield.png cmd/sc_currencyfield.png
 cmd/sc_insertdatefield.png cmd/sc_datefield.png
 cmd/sc_insertedit.png cmd/sc_text.png
 cmd/sc_insertfield.png cmd/sc_addfield.png
@@ -384,16 +384,19 @@ cmd/32/com.sun.star.deployment.ui.packagemanagerdialog.png cmd/32/insertplugin.p
 cmd/32/focustofindbar.png cmd/32/recsearch.png
 cmd/32/languagemenu.png cmd/32/managelanguage.png
 cmd/32/macroorganizer%3ftabid%3ashort=1.png cmd/32/open.png
+cmd/32/toolsformsmenu.png cmd/32/formproperties.png
 
 cmd/lc_com.sun.star.deployment.ui.packagemanagerdialog.png cmd/lc_insertplugin.png
 cmd/lc_focustofindbar.png cmd/lc_recsearch.png
 cmd/lc_languagemenu.png cmd/lc_managelanguage.png
 cmd/lc_macroorganizer%3ftabid%3ashort=1.png cmd/lc_open.png
+cmd/lc_toolsformsmenu.png cmd/lc_formproperties.png
 
 cmd/sc_com.sun.star.deployment.ui.packagemanagerdialog.png cmd/sc_insertplugin.png
 cmd/sc_focustofindbar.png cmd/sc_recsearch.png
 cmd/sc_languagemenu.png cmd/sc_managelanguage.png
 cmd/sc_macroorganizer%3ftabid%3ashort=1.png cmd/sc_open.png
+cmd/sc_toolsformsmenu.png cmd/sc_formproperties.png
 
 # Annotations
 cmd/32/acceptchanges.png cmd/32/trackchangesbar.png
@@ -402,6 +405,7 @@ cmd/32/deleteallnotes.png cmd/32/deleteallannotation.png
 cmd/32/deletenote.png cmd/32/deleteannotation.png
 cmd/32/deletecomment.png cmd/32/deleteannotation.png
 cmd/32/formatallnotes.png cmd/32/editannotation.png
+cmd/32/notevisible.png cmd/32/shownote.png
 cmd/32/showannotations.png cmd/32/showallnotes.png
 cmd/32/showchanges.png cmd/32/addwatch.png
 
@@ -411,6 +415,7 @@ cmd/lc_deleteallnotes.png cmd/lc_deleteallannotation.png
 cmd/lc_deletenote.png cmd/lc_deleteannotation.png
 cmd/lc_deletecomment.png cmd/lc_deleteannotation.png
 cmd/lc_formatallnotes.png cmd/lc_editannotation.png
+cmd/lc_notevisible.png cmd/lc_shownote.png
 cmd/lc_showannotations.png cmd/lc_showallnotes.png
 cmd/lc_showchanges.png cmd/lc_addwatch.png
 
@@ -420,6 +425,7 @@ cmd/sc_deleteallnotes.png cmd/sc_deleteallannotation.png
 cmd/sc_deletenote.png cmd/sc_deleteannotation.png
 cmd/sc_deletecomment.png cmd/sc_deleteannotation.png
 cmd/sc_formatallnotes.png cmd/sc_editannotation.png
+cmd/sc_notevisible.png cmd/sc_shownote.png
 cmd/sc_showannotations.png cmd/sc_showallnotes.png
 cmd/sc_showchanges.png cmd/sc_addwatch.png
 
@@ -447,6 +453,7 @@ cmd/32/fa/alphaliststyle.png cmd/32/ar/alphaliststyle.png
 cmd/32/fa/alphalowliststyle.png cmd/32/ar/alphalowliststyle.png
 cmd/32/fa/bulletliststyle.png cmd/32/ar/defaultbullet.png
 cmd/32/fa/bulletsandnumberingdialog.png cmd/32/ar/bulletsandnumberingdialog.png
+cmd/32/fa/chapternumberingdialog.png cmd/32/ar/chapternumberingdialog.png
 cmd/32/fa/defaultbullet.png cmd/32/ar/defaultbullet.png
 cmd/32/fa/defaultnumbering.png cmd/32/ar/defaultnumbering.png
 cmd/32/fa/insertneutralparagraph.png cmd/32/ar/insertneutralparagraph.png
@@ -466,6 +473,7 @@ cmd/32/he/alphaliststyle.png cmd/32/ar/alphaliststyle.png
 cmd/32/he/alphalowliststyle.png cmd/32/ar/alphalowliststyle.png
 cmd/32/he/bulletliststyle.png cmd/32/ar/defaultbullet.png
 cmd/32/he/bulletsandnumberingdialog.png cmd/32/ar/bulletsandnumberingdialog.png
+cmd/32/he/chapternumberingdialog.png cmd/32/ar/chapternumberingdialog.png
 cmd/32/he/defaultbullet.png cmd/32/ar/defaultbullet.png
 cmd/32/he/defaultnumbering.png cmd/32/ar/defaultnumbering.png
 cmd/32/he/insertneutralparagraph.png cmd/32/ar/insertneutralparagraph.png
@@ -518,6 +526,7 @@ cmd/32/ur/alphaliststyle.png cmd/32/ar/alphaliststyle.png
 cmd/32/ur/alphalowliststyle.png cmd/32/ar/alphalowliststyle.png
 cmd/32/ur/bulletliststyle.png cmd/32/ar/defaultbullet.png
 cmd/32/ur/bulletsandnumberingdialog.png cmd/32/ar/bulletsandnumberingdialog.png
+cmd/32/ur/chapternumberingdialog.png cmd/32/ar/chapternumberingdialog.png
 cmd/32/ur/defaultbullet.png cmd/32/ar/defaultbullet.png
 cmd/32/ur/defaultnumbering.png cmd/32/ar/defaultnumbering.png
 cmd/32/ur/insertneutralparagraph.png cmd/32/ar/insertneutralparagraph.png
@@ -560,6 +569,7 @@ cmd/fa/lc_alphaliststyle.png cmd/ar/lc_alphaliststyle.png
 cmd/fa/lc_alphalowliststyle.png cmd/ar/lc_alphalowliststyle.png
 cmd/fa/lc_bulletliststyle.png cmd/ar/lc_defaultbullet.png
 cmd/fa/lc_bulletsandnumberingdialog.png cmd/ar/lc_bulletsandnumberingdialog.png
+cmd/fa/lc_chapternumberingdialog.png cmd/ar/lc_chapternumberingdialog.png
 cmd/fa/lc_defaultbullet.png cmd/ar/lc_defaultbullet.png
 cmd/fa/lc_defaultnumbering.png cmd/ar/lc_defaultnumbering.png
 cmd/fa/lc_insertneutralparagraph.png cmd/ar/lc_insertneutralparagraph.png
@@ -576,6 +586,7 @@ cmd/fa/sc_alphaliststyle.png cmd/ar/sc_alphaliststyle.png
 cmd/fa/sc_alphalowliststyle.png cmd/ar/sc_alphalowliststyle.png
 cmd/fa/sc_bulletliststyle.png cmd/ar/sc_defaultbullet.png
 cmd/fa/sc_bulletsandnumberingdialog.png cmd/ar/sc_bulletsandnumberingdialog.png
+cmd/fa/sc_chapternumberingdialog.png cmd/ar/sc_chapternumberingdialog.png
 cmd/fa/sc_defaultbullet.png cmd/ar/sc_defaultbullet.png
 cmd/fa/sc_defaultnumbering.png cmd/ar/sc_defaultnumbering.png
 cmd/fa/sc_insertneutralparagraph.png cmd/ar/sc_insertneutralparagraph.png
@@ -602,6 +613,7 @@ cmd/he/lc_alphaliststyle.png cmd/ar/lc_alphaliststyle.png
 cmd/he/lc_alphalowliststyle.png cmd/ar/lc_alphalowliststyle.png
 cmd/he/lc_bulletliststyle.png cmd/ar/lc_defaultbullet.png
 cmd/he/lc_bulletsandnumberingdialog.png cmd/ar/lc_bulletsandnumberingdialog.png
+cmd/he/lc_chapternumberingdialog.png cmd/ar/lc_chapternumberingdialog.png
 cmd/he/lc_defaultbullet.png cmd/ar/lc_defaultbullet.png
 cmd/he/lc_defaultnumbering.png cmd/ar/lc_defaultnumbering.png
 cmd/he/lc_insertneutralparagraph.png cmd/ar/lc_insertneutralparagraph.png
@@ -618,6 +630,7 @@ cmd/he/sc_alphaliststyle.png cmd/ar/sc_alphaliststyle.png
 cmd/he/sc_alphalowliststyle.png cmd/ar/sc_alphalowliststyle.png
 cmd/he/sc_bulletliststyle.png cmd/ar/sc_defaultbullet.png
 cmd/he/sc_bulletsandnumberingdialog.png cmd/ar/sc_bulletsandnumberingdialog.png
+cmd/he/sc_chapternumberingdialog.png cmd/ar/sc_chapternumberingdialog.png
 cmd/he/sc_defaultbullet.png cmd/ar/sc_defaultbullet.png
 cmd/he/sc_defaultnumbering.png cmd/ar/sc_defaultnumbering.png
 cmd/he/sc_insertneutralparagraph.png cmd/ar/sc_insertneutralparagraph.png
@@ -706,6 +719,7 @@ cmd/ur/lc_alphaliststyle.png cmd/ar/lc_alphaliststyle.png
 cmd/ur/lc_alphalowliststyle.png cmd/ar/lc_alphalowliststyle.png
 cmd/ur/lc_bulletliststyle.png cmd/ar/lc_defaultbullet.png
 cmd/ur/lc_bulletsandnumberingdialog.png cmd/ar/lc_bulletsandnumberingdialog.png
+cmd/ur/lc_chapternumberingdialog.png cmd/ar/lc_chapternumberingdialog.png
 cmd/ur/lc_defaultbullet.png cmd/ar/lc_defaultbullet.png
 cmd/ur/lc_defaultnumbering.png cmd/ar/lc_defaultnumbering.png
 cmd/ur/lc_insertneutralparagraph.png cmd/ar/lc_insertneutralparagraph.png
@@ -722,6 +736,7 @@ cmd/ur/sc_alphaliststyle.png cmd/ar/sc_alphaliststyle.png
 cmd/ur/sc_alphalowliststyle.png cmd/ar/sc_alphalowliststyle.png
 cmd/ur/sc_bulletliststyle.png cmd/ar/sc_defaultbullet.png
 cmd/ur/sc_bulletsandnumberingdialog.png cmd/ar/sc_bulletsandnumberingdialog.png
+cmd/ur/sc_chapternumberingdialog.png cmd/ar/sc_chapternumberingdialog.png
 cmd/ur/sc_defaultbullet.png cmd/ar/sc_defaultbullet.png
 cmd/ur/sc_defaultnumbering.png cmd/ar/sc_defaultnumbering.png
 cmd/ur/sc_insertneutralparagraph.png cmd/ar/sc_insertneutralparagraph.png
@@ -1356,16 +1371,19 @@ cmd/sc_linetoolbox.png cmd/sc_freeline.png
 cmd/sc_rectangletoolbox.png cmd/sc_rect.png
 
 # Format
+cmd/32/backgroundpatterncontroller.png cmd/32/formatarea.png
 cmd/32/fillcolor.png cmd/32/formatarea.png
 cmd/32/fillstyle.png cmd/32/formatarea.png
 cmd/32/styleapply.png cmd/32/formatarea.png
 cmd/32/stylewatercanmode.png cmd/32/formatarea.png
 
+cmd/lc_backgroundpatterncontroller.png cmd/lc_formatarea.png
 cmd/lc_fillcolor.png cmd/lc_formatarea.png
 cmd/lc_fillstyle.png cmd/lc_formatarea.png
 cmd/lc_styleapply.png cmd/lc_formatarea.png
 cmd/lc_stylewatercanmode.png cmd/lc_formatarea.png
 
+cmd/sc_backgroundpatterncontroller.png cmd/sc_formatarea.png
 cmd/sc_fillcolor.png cmd/sc_formatarea.png
 cmd/sc_fillstyle.png cmd/sc_formatarea.png
 cmd/sc_styleapply.png cmd/sc_formatarea.png
@@ -1563,14 +1581,15 @@ cmd/sc_rulerrowsvertical.png cmd/sc_extrusiontiltright.png
 svx/res/legtyp1.png cmd/sc_calloutshapes.line-callout-3.png
 svx/res/legtyp2.png cmd/sc_calloutshapes.line-callout-1.png
 svx/res/legtyp3.png cmd/sc_calloutshapes.line-callout-2.png
-svx/res/lightofffrombottom_22.png svx/res/light.png
-svx/res/lightofffrombottomleft_22.png svx/res/light.png
-svx/res/lightofffrombottomright_22.png svx/res/light.png
-svx/res/lightofffromleft_22.png svx/res/light.png
-svx/res/lightofffromright_22.png svx/res/light.png
-svx/res/lightofffromtop_22.png svx/res/light.png
-svx/res/lightofffromtopleft_22.png svx/res/light.png
-svx/res/lightofffromtopright_22.png svx/res/light.png
+svx/res/light.png cmd/lc_extrusionlightingfloater.png
+svx/res/lightofffrombottom_22.png cmd/lc_extrusionlightingfloater.png
+svx/res/lightofffrombottomleft_22.png cmd/lc_extrusionlightingfloater.png
+svx/res/lightofffrombottomright_22.png cmd/lc_extrusionlightingfloater.png
+svx/res/lightofffromleft_22.png cmd/lc_extrusionlightingfloater.png
+svx/res/lightofffromright_22.png cmd/lc_extrusionlightingfloater.png
+svx/res/lightofffromtop_22.png cmd/lc_extrusionlightingfloater.png
+svx/res/lightofffromtopleft_22.png cmd/lc_extrusionlightingfloater.png
+svx/res/lightofffromtopright_22.png cmd/lc_extrusionlightingfloater.png
 svx/res/lightonfrombottom_22.png svx/res/lighton.png
 svx/res/lightonfrombottomleft_22.png svx/res/lighton.png
 svx/res/lightonfrombottomright_22.png svx/res/lighton.png
@@ -1582,7 +1601,7 @@ svx/res/lightonfromtopright_22.png svx/res/lighton.png
 
 # 3d
 svx/res/3dgeo.png cmd/lc_diagramaxisxyz.png
-svx/res/3dlight.png cmd/lc_graphicfiltersolarize.png
+svx/res/3dlight.png svx/res/lighton.png
 svx/res/3drepres.png cmd/lc_fillshadow.png
 svx/res/3dtextur.png cmd/lc_graphicfilterpopart.png
 
@@ -1646,19 +1665,20 @@ cmd/sc_objectmirrorhorizontal.png cmd/sc_mirror.png
 cmd/sc_objectmirrorvertical.png cmd/sc_mirrorvert.png
 
 # Connector
-cmd/32/connectorcircles.png cmd/32/connector.png
+
 cmd/32/connectorcurvecircles.png cmd/32/connectorcurve.png
 cmd/32/connectorlinecircles.png cmd/32/connectorline.png
+cmd/32/connectorlinescircles.png cmd/32/connectorcircles.png
 cmd/32/connectortoolbox.png cmd/32/connector.png
 
-cmd/lc_connectorcircles.png cmd/lc_connector.png
 cmd/lc_connectorcurvecircles.png cmd/lc_connectorcurve.png
 cmd/lc_connectorlinecircles.png cmd/lc_connectorline.png
+cmd/lc_connectorlinescircles.png cmd/lc_connectorcircles.png
 cmd/lc_connectortoolbox.png cmd/lc_connector.png
 
-cmd/sc_connectorcircles.png cmd/sc_connector.png
 cmd/sc_connectorcurvecircles.png cmd/sc_connectorcurve.png
 cmd/sc_connectorlinecircles.png cmd/sc_connectorline.png
+cmd/sc_connectorlinescircles.png cmd/sc_connectorcircles.png
 cmd/sc_connectortoolbox.png cmd/sc_connector.png
 
 # Time
@@ -2042,7 +2062,6 @@ reportdesign/res/sx12594.png cmd/sc_dbviewfunctions.png
 # ==============================================
 res/adrbook.png cmd/sc_viewdatasourcebrowser.png
 res/browse.png cmd/sc_browseview.png
-res/baswatr.png cmd/lc_addwatch.png
 res/dir-clos.png cmd/sc_open.png
 res/dir-open.png cmd/sc_open.png
 res/fileopen.png cmd/sc_open.png
@@ -2255,7 +2274,6 @@ sd/res/ole.png cmd/lc_insertobject.png
 sd/res/page.png cmd/lc_adddirect.png
 sd/res/pipette.png cmd/lc_bmpmask.png
 sd/res/playblue_16.png cmd/sc_runbasic.png
-sd/res/sf01.png cmd/sc_showfmexplorer.png
 sd/res/sf02.png cmd/sc_dia.png
 sd/res/stopplayingblue_16.png cmd/sc_basicstop.png
 sd/res/time_16.png cmd/sc_timefield.png
@@ -2386,11 +2404,6 @@ svx/res/fw08.png cmd/sc_alignhorizontalcenter.png
 svx/res/fw09.png cmd/sc_alignright.png
 svx/res/graphic.png cmd/lc_graphic.png
 
-/svx/res/3dgeo.png cmd/lc_window3d.png
-/svx/res/3dlight.png svx/res/lighton.png
-/svx/res/blend3d.png cmd/lc_sphere.png
-/svx/res/objects.png cmd/lc_insertdraw.png
-
 svx/res/id01.png cmd/sc_ok.png
 svx/res/id02.png cmd/sc_open.png
 svx/res/id03.png cmd/sc_save.png
@@ -2453,7 +2466,7 @@ svx/res/symphony/AdjustColorBlue_16x16.png cmd/sc_grafblue.png
 svx/res/symphony/AdjustColorGamma_16x16.png cmd/sc_grafgamma.png
 svx/res/symphony/AdjustColorGreen_16x16.png cmd/sc_grafgreen.png
 svx/res/symphony/AdjustColorRed_16x16.png cmd/sc_grafred.png
-svx/res/symphony/fill_color.png cmd/sc_backgroundpatterncontroller.png
+svx/res/symphony/fill_color.png cmd/sc_formatarea.png
 svx/res/symphony/last_custom_common.png sw/res/sidebar/pageproppanel/last_custom_common.png
 svx/res/symphony/last_custom_common_grey.png sw/res/sidebar/pageproppanel/last_custom_common_grey.png
 svx/res/symphony/rotate_left.png cmd/sc_rotateleft.png
@@ -2478,7 +2491,7 @@ sw/res/nc20007.png cmd/sc_inserthyperlink.png
 sw/res/nc20008.png cmd/sc_insertreferencefield.png
 sw/res/nc20009.png cmd/sc_insertindexesentry.png
 sw/res/nc20010.png cmd/sc_shownote.png
-sw/res/nc20011.png cmd/sc_insertdraw.png
+sw/res/nc20011.png sd/res/sf01.png
 sw/res/sc20244.png sw/res/sc20234.png
 
 sw/res/re01.png cmd/lc_unsetcellsreadonly.png
@@ -2497,7 +2510,7 @@ sw/res/sc20233.png cmd/sc_ok.png
 sw/res/sc20235.png cmd/sc_inserthyperlinkcontrol.png
 sw/res/sc20238.png cmd/sc_insertbookmark.png
 sw/res/sc20239.png cmd/sc_copy.png
-sw/res/sc20245.png cmd/sc_insertdraw.png
+sw/res/sc20245.png sd/res/sf01.png
 sw/res/sc20246.png cmd/sc_insertbookmark.png
 sw/res/sc20248.png cmd/sc_save.png
 sw/res/sc20249.png cmd/sc_navigator.png
@@ -2519,7 +2532,7 @@ sw/res/sr20000.png cmd/sc_downsearch.png
 sw/res/sr20001.png cmd/sc_upsearch.png
 sw/res/sr20002.png cmd/sc_inserttable.png
 sw/res/sr20004.png cmd/sc_showsinglepage.png
-sw/res/sr20005.png cmd/sc_insertdraw.png
+sw/res/sr20005.png sd/res/sf01.png
 sw/res/sr20007.png cmd/sc_insertsection.png
 sw/res/sr20008.png cmd/sc_insertbookmark.png
 sw/res/sr20009.png cmd/sc_insertgraphic.png

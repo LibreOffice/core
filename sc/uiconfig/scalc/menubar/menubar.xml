@@ -118,16 +118,16 @@
       <menu:menuseparator/>
       <menu:menu menu:id=".uno:ChangesMenu">
         <menu:menupopup>
-          <menu:menuitem menu:id=".uno:TraceChangeMode" menu:style="text"/>
-          <menu:menuitem menu:id=".uno:ShowChanges" menu:style="text"/>
+          <menu:menuitem menu:id=".uno:TraceChangeMode"/>
+          <menu:menuitem menu:id=".uno:ShowChanges"/>
           <menu:menuseparator/>
-          <menu:menuitem menu:id=".uno:AcceptChanges" menu:style="text"/>
+          <menu:menuitem menu:id=".uno:AcceptChanges"/>
           <menu:menuseparator/>
-          <menu:menuitem menu:id=".uno:CommentChange" menu:style="text"/>
-          <menu:menuitem menu:id=".uno:ProtectTraceChangeMode" menu:style="text"/>
+          <menu:menuitem menu:id=".uno:CommentChange"/>
+          <menu:menuitem menu:id=".uno:ProtectTraceChangeMode"/>
           <menu:menuseparator/>
-          <menu:menuitem menu:id=".uno:CompareDocuments" menu:style="text"/>
-          <menu:menuitem menu:id=".uno:MergeDocuments" menu:style="text"/>
+          <menu:menuitem menu:id=".uno:CompareDocuments"/>
+          <menu:menuitem menu:id=".uno:MergeDocuments"/>
         </menu:menupopup>
       </menu:menu>
       <menu:menuseparator/>
@@ -135,7 +135,7 @@
       <menu:menuitem menu:id=".uno:CellProtection" menu:style="text"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:EditLinks" menu:style="text"/>
-      <menu:menuitem menu:id=".uno:ImageMapDialog" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:ImageMapDialog"/>
       <menu:menuitem menu:id=".uno:ObjectMenue" menu:style="text"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:EditDoc" menu:style="text"/>
@@ -155,9 +155,9 @@
       <menu:menuitem menu:id=".uno:ToggleSheetGrid"/>
       <menu:menu menu:id=".uno:GridMenu">
         <menu:menupopup>
-          <menu:menuitem menu:id=".uno:GridVisible" menu:style="text"/>
-          <menu:menuitem menu:id=".uno:GridUse" menu:style="text"/>
-          <menu:menuitem menu:id=".uno:HelplinesMove" menu:style="text"/>
+          <menu:menuitem menu:id=".uno:GridVisible"/>
+          <menu:menuitem menu:id=".uno:GridUse"/>
+          <menu:menuitem menu:id=".uno:HelplinesMove"/>
         </menu:menupopup>
       </menu:menu>
       <menu:menuseparator/>
@@ -176,8 +176,8 @@
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:Sidebar"/>
       <menu:menuitem menu:id=".uno:ViewSidebarStyles"/>
-      <menu:menuitem menu:id=".uno:Gallery" menu:style="text"/>
-      <menu:menuitem menu:id=".uno:Navigator" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:Gallery"/>
+      <menu:menuitem menu:id=".uno:Navigator"/>
       <menu:menuitem menu:id=".uno:FunctionBox"/>
       <menu:menuitem menu:id=".uno:ViewDataSourceBrowser"/>
       <menu:menuseparator/>
@@ -682,7 +682,7 @@
   <menu:menu menu:id=".uno:ToolsMenu">
     <menu:menupopup>
       <menu:menuitem menu:id=".uno:SpellDialog"/>
-      <menu:menuitem menu:id=".uno:SpellOnline" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:SpellOnline"/>
       <menu:menuitem menu:id=".uno:ThesaurusDialog" menu:style="text"/>
       <menu:menu menu:id=".uno:LanguageMenu">
         <menu:menupopup>
