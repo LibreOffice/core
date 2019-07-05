@@ -196,7 +196,7 @@ void Qt5Graphics::DrawTextLayout(const GenericSalLayout& rLayout)
     int nStart = 0;
     while (rLayout.GetNextGlyph(&pGlyph, aPos, nStart))
     {
-        glyphIndexes.push_back(pGlyph->m_aGlyphId);
+        glyphIndexes.push_back(pGlyph->glyphId());
         positions.push_back(QPointF(aPos.X(), aPos.Y()));
     }
 

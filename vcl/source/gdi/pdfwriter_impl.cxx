@@ -3943,7 +3943,7 @@ void PDFWriterImpl::createDefaultCheckBoxAppearance( PDFWidget& rBox, const PDFW
     // make sure OpenSymbol is embedded, and includes our checkmark
     const sal_Unicode cMark=0x2713;
     const GlyphItem aItem(0, 0, pMap->GetGlyphIndex(cMark),
-                          Point(), 0, 0, 0,
+                          Point(), GlyphItemFlags::NONE, 0, 0,
                           const_cast<LogicalFontInstance*>(pFontInstance));
     const std::vector<sal_Ucs> aCodeUnits={ cMark };
     sal_uInt8 nMappedGlyph;
@@ -5829,7 +5829,7 @@ void PDFWriterImpl::registerGlyph(const GlyphItem* pGlyph,
                                   sal_uInt8& nMappedGlyph,
                                   sal_Int32& nMappedFontObject)
 {
-    const int nFontGlyphId = pGlyph->m_aGlyphId;
+    const int nFontGlyphId = pGlyph->glyphId();
     FontSubset& rSubset = m_aSubsets[ pFont ];
     // search for font specific glyphID
     FontMapping::iterator it = rSubset.m_aMapping.find( nFontGlyphId );
@@ -5987,7 +5987,7 @@ void PDFWriterImpl::drawVerticalGlyphs(
             long nOffsetY = rGlyphs[i+1].m_aPos.Y() - rGlyphs[i].m_aPos.Y();
             nXOffset += static_cast<int>(sqrt(double(nOffsetX*nOffsetX + nOffsetY*nOffsetY)));
         }
-        if( ! rGlyphs[i].m_pGlyph->m_aGlyphId )
+        if (!rGlyphs[i].m_pGlyph->glyphId())
             continue;
 
         aDeltaPos = rRotScale.transform( aDeltaPos );
@@ -6282,9 +6282,9 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
         // * Keep generating (now) redundant ToUnicode entries for
         //   compatibility with old tools not supporting ActualText.
 
-        assert(pGlyph->m_nCharCount >= 0);
-        for (int n = 0; n < pGlyph->m_nCharCount; n++)
-            aCodeUnits.push_back(rText[pGlyph->m_nCharPos + n]);
+        assert(pGlyph->charCount() >= 0);
+        for (int n = 0; n < pGlyph->charCount(); n++)
+            aCodeUnits.push_back(rText[pGlyph->charPos() + n]);
 
         bool bUseActualText = false;
 
@@ -6303,7 +6303,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
         {
             for (const auto& rSubset : m_aSubsets[pFont].m_aSubsets)
             {
-                const auto& it = rSubset.m_aMapping.find(pGlyph->m_aGlyphId);
+                const auto& it = rSubset.m_aMapping.find(pGlyph->glyphId());
                 if (it != rSubset.m_aMapping.cend() && it->second.codes() != aCodeUnits)
                 {
                     bUseActualText = true;
@@ -6322,13 +6322,13 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
         SalGraphics *pGraphics = GetGraphics();
         if (pGraphics)
             nGlyphWidth = m_aFontCache.getGlyphWidth(pFont,
-                                                     pGlyph->m_aGlyphId,
+                                                     pGlyph->glyphId(),
                                                      pGlyph->IsVertical(),
                                                      pGraphics);
 
         int nCharPos = -1;
         if (bUseActualText || pGlyph->IsInCluster())
-            nCharPos = pGlyph->m_nCharPos;
+            nCharPos = pGlyph->charPos();
 
         aGlyphs.emplace_back(aPos,
                              pGlyph,
@@ -6400,12 +6400,12 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
             if (!aRun.front().m_pGlyph->IsRTLGlyph())
             {
                 nCharPos = aRun.front().m_nCharPos;
-                nCharCount = aRun.front().m_pGlyph->m_nCharCount;
+                nCharCount = aRun.front().m_pGlyph->charCount();
             }
             else
             {
                 nCharPos = aRun.back().m_nCharPos;
-                nCharCount = aRun.back().m_pGlyph->m_nCharCount;
+                nCharCount = aRun.back().m_pGlyph->charCount();
             }
 
             if (nCharPos >= 0 && nCharCount)

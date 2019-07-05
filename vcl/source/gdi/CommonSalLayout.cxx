@@ -530,37 +530,37 @@ bool GenericSalLayout::LayoutText(ImplLayoutArgs& rArgs, const SalLayoutGlyphs* 
                         continue;
                 }
 
-                int nGlyphFlags = 0;
+                GlyphItemFlags nGlyphFlags = GlyphItemFlags::NONE;
                 if (bRightToLeft)
-                    nGlyphFlags |= GlyphItem::IS_RTL_GLYPH;
+                    nGlyphFlags |= GlyphItemFlags::IS_RTL_GLYPH;
 
                 if (bClusterStart)
-                    nGlyphFlags |= GlyphItem::IS_CLUSTER_START;
+                    nGlyphFlags |= GlyphItemFlags::IS_CLUSTER_START;
 
                 if (bInCluster)
-                    nGlyphFlags |= GlyphItem::IS_IN_CLUSTER;
+                    nGlyphFlags |= GlyphItemFlags::IS_IN_CLUSTER;
 
                 sal_Int32 indexUtf16 = nCharPos;
                 sal_UCS4 aChar = rArgs.mrStr.iterateCodePoints(&indexUtf16, 0);
 
                 if (u_getIntPropertyValue(aChar, UCHAR_GENERAL_CATEGORY) == U_NON_SPACING_MARK)
-                    nGlyphFlags |= GlyphItem::IS_DIACRITIC;
+                    nGlyphFlags |= GlyphItemFlags::IS_DIACRITIC;
 
                 if (u_isUWhiteSpace(aChar))
-                    nGlyphFlags |= GlyphItem::IS_SPACING;
+                    nGlyphFlags |= GlyphItemFlags::IS_SPACING;
 
                 if (aSubRun.maScript == HB_SCRIPT_ARABIC &&
                     HB_DIRECTION_IS_BACKWARD(aSubRun.maDirection) &&
-                    (nGlyphFlags & GlyphItem::IS_SPACING) == 0)
+                    !(nGlyphFlags & GlyphItemFlags::IS_SPACING))
                 {
-                    nGlyphFlags |= GlyphItem::ALLOW_KASHIDA;
+                    nGlyphFlags |= GlyphItemFlags::ALLOW_KASHIDA;
                     rArgs.mnFlags |= SalLayoutFlags::KashidaJustification;
                 }
 
                 DeviceCoordinate nAdvance, nXOffset, nYOffset;
                 if (aSubRun.maDirection == HB_DIRECTION_TTB)
                 {
-                    nGlyphFlags |= GlyphItem::IS_VERTICAL;
+                    nGlyphFlags |= GlyphItemFlags::IS_VERTICAL;
 
                     // We have glyph offsets that is relative to h origin now,
                     // add the origin back so it is relative to v origin.
@@ -612,7 +612,7 @@ void GenericSalLayout::GetCharWidths(DeviceCoordinate* pCharWidths) const
 
     for (auto const& aGlyphItem : *m_GlyphItems.Impl())
     {
-        const int nIndex = aGlyphItem.m_nCharPos - mnMinCharPos;
+        const int nIndex = aGlyphItem.charPos() - mnMinCharPos;
         if (nIndex >= nCharCount)
             continue;
         pCharWidths[nIndex] += aGlyphItem.m_nNewWidth;
@@ -682,9 +682,9 @@ void GenericSalLayout::ApplyDXArray(const ImplLayoutArgs& rArgs)
     {
         // Accumulate the width difference for all characters corresponding to
         // this glyph.
-        int nCharPos = (*m_GlyphItems.Impl())[i].m_nCharPos - mnMinCharPos;
+        int nCharPos = (*m_GlyphItems.Impl())[i].charPos() - mnMinCharPos;
         DeviceCoordinate nDiff = 0;
-        for (int j = 0; j < (*m_GlyphItems.Impl())[i].m_nCharCount; j++)
+        for (int j = 0; j < (*m_GlyphItems.Impl())[i].charCount(); j++)
             nDiff += pNewCharWidths[nCharPos + j] - pOldCharWidths[nCharPos + j];
 
         if (!(*m_GlyphItems.Impl())[i].IsRTLGlyph())
@@ -731,7 +731,7 @@ void GenericSalLayout::ApplyDXArray(const ImplLayoutArgs& rArgs)
             // last glyph in the cluster not the first as this would be the
             // base glyph.
             if (bKashidaJustify && (*m_GlyphItems.Impl())[i].AllowKashida() &&
-                nDiff > (*m_GlyphItems.Impl())[i].m_nCharCount) // Rounding errors, 1 pixel per character!
+                nDiff > (*m_GlyphItems.Impl())[i].charCount()) // Rounding errors, 1 pixel per character!
             {
                 pKashidas[i] = nDiff;
                 // Move any non-spacing marks attached to this cluster as well.
@@ -782,8 +782,8 @@ void GenericSalLayout::ApplyDXArray(const ImplLayoutArgs& rArgs)
             }
 
             Point aPos(pGlyphIter->m_aLinearPos.getX() - nTotalWidth, 0);
-            int nCharPos = pGlyphIter->m_nCharPos;
-            int const nFlags = GlyphItem::IS_IN_CLUSTER | GlyphItem::IS_RTL_GLYPH;
+            int nCharPos = pGlyphIter->charPos();
+            GlyphItemFlags const nFlags = GlyphItemFlags::IS_IN_CLUSTER | GlyphItemFlags::IS_RTL_GLYPH;
             while (nCopies--)
             {
                 GlyphItem aKashida(nCharPos, 0, nKashidaIndex, aPos, nFlags, nKashidaWidth, 0, &GetFont());
@@ -801,7 +801,7 @@ bool GenericSalLayout::IsKashidaPosValid(int nCharPos) const
 {
     for (auto pIter = m_GlyphItems.Impl()->begin(); pIter != m_GlyphItems.Impl()->end(); ++pIter)
     {
-        if (pIter->m_nCharPos == nCharPos)
+        if (pIter->charPos() == nCharPos)
         {
             // The position is the first glyph, this would happen if we
             // changed the text styling in the middle of a word. Since we don’t
@@ -812,7 +812,7 @@ bool GenericSalLayout::IsKashidaPosValid(int nCharPos) const
 
             // If the character is not supported by this layout, return false
             // so that fallback layouts would be checked for it.
-            if (pIter->m_aGlyphId == 0)
+            if (pIter->glyphId() == 0)
                 break;
 
             // Search backwards for previous glyph belonging to a different
@@ -820,12 +820,12 @@ bool GenericSalLayout::IsKashidaPosValid(int nCharPos) const
             // RTL glyphs, which will be in visual order.
             for (auto pPrev = pIter - 1; pPrev != m_GlyphItems.Impl()->begin(); --pPrev)
             {
-                if (pPrev->m_nCharPos != nCharPos)
+                if (pPrev->charPos() != nCharPos)
                 {
                     // Check if the found glyph belongs to the next character,
                     // otherwise the current glyph will be a ligature which is
                     // invalid kashida position.
-                    if (pPrev->m_nCharPos == (nCharPos + 1))
+                    if (pPrev->charPos() == (nCharPos + 1))
                         return true;
                     break;
                 }

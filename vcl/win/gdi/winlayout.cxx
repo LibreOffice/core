@@ -260,7 +260,7 @@ bool ExTextOutRenderer::operator ()(GenericSalLayout const &rLayout,
     const GlyphItem* pGlyph;
     while (rLayout.GetNextGlyph(&pGlyph, aPos, nStart))
     {
-        WORD glyphWStr[] = { pGlyph->m_aGlyphId };
+        WORD glyphWStr[] = { pGlyph->glyphId() };
         if (hAltFont && pGlyph->IsVertical() == bUseAltFont)
         {
             bUseAltFont = !bUseAltFont;
@@ -414,9 +414,9 @@ bool WinSalGraphics::CacheGlyphs(const GenericSalLayout& rLayout)
     const GlyphItem* pGlyph;
     while (rLayout.GetNextGlyph(&pGlyph, aPos, nStart))
     {
-        if (!rFont.GetOpenGLGlyphCache().IsGlyphCached(pGlyph->m_aGlyphId))
+        if (!rFont.GetOpenGLGlyphCache().IsGlyphCached(pGlyph->glyphId()))
         {
-            if (!rFont.CacheGlyphToAtlas(hDC, hFONT, pGlyph->m_aGlyphId, *this, rLayout))
+            if (!rFont.CacheGlyphToAtlas(hDC, hFONT, pGlyph->glyphId(), *this, rLayout))
                 return false;
         }
     }
@@ -445,7 +445,7 @@ bool WinSalGraphics::DrawCachedGlyphs(const GenericSalLayout& rLayout)
     const GlyphItem* pGlyph;
     while (rLayout.GetNextGlyph(&pGlyph, aPos, nStart))
     {
-        OpenGLGlyphDrawElement& rElement(rFont.GetOpenGLGlyphCache().GetDrawElement(pGlyph->m_aGlyphId));
+        OpenGLGlyphDrawElement& rElement(rFont.GetOpenGLGlyphCache().GetDrawElement(pGlyph->glyphId()));
         OpenGLTexture& rTexture = rElement.maTexture;
 
         if (!rTexture)
