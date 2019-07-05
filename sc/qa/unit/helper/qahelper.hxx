@@ -219,6 +219,10 @@ SCQAHELPER_DLLPUBLIC void checkFormula(ScDocument& rDoc, const ScAddress& rPos,
 
 SCQAHELPER_DLLPUBLIC void testFormats(ScBootstrapFixture* pTest, ScDocument* pDoc, sal_Int32 nFormat);
 
+SCQAHELPER_DLLPUBLIC ScTokenArray* getTokens(ScDocument& rDoc, const ScAddress& rPos);
+
+SCQAHELPER_DLLPUBLIC std::string to_std_string(const OUString& rStr);
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

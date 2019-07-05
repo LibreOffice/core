@@ -3083,7 +3083,11 @@ void ScExportTest::testRelativePathsODS()
     OUString aURL = getXPath(pDoc,
             "/office:document-content/office:body/office:spreadsheet/table:table/table:table-row[2]/table:table-cell[2]/text:p/text:a", "href");
     // make sure that the URL is relative
+#ifdef _WIN32
+    CPPUNIT_ASSERT_EQUAL(OUString("dummy"), aURL);
+#else
     CPPUNIT_ASSERT(aURL.startsWith(".."));
+#endif
 }
 
 namespace {
@@ -3223,11 +3227,22 @@ void ScExportTest::testSupBookVirtualPathXLS()
 
     ScDocument& rDoc = xDocSh->GetDocument();
 
+    ScAddress aPos(0,0,0);
+    ScTokenArray* pCode = getTokens(rDoc, aPos);
+    if (!pCode)
+        CppUnit::Asserter::fail("empty token array", CPPUNIT_SOURCELINE());
+
+    OUString aFormula = toString(rDoc, aPos, *pCode, rDoc.GetGrammar());
 #ifdef _WIN32
-    ASSERT_FORMULA_EQUAL(rDoc, ScAddress(0,0,0), "'file:///C:/home/timar/Documents/external.xls'#$Sheet1.A1", "Wrong SupBook VirtualPath URL");
-#else
-    ASSERT_FORMULA_EQUAL(rDoc, ScAddress(0,0,0), "'file:///home/timar/Documents/external.xls'#$Sheet1.A1", "Wrong SupBook VirtualPath URL");
+    aFormula = aFormula.copy(0, 9) + aFormula.copy(12); // strip drive letter, e.g. 'C:/'
 #endif
+    OUString aExpectedFormula = OUStringLiteral("'file:///home/timar/Documents/external.xls'#$Sheet1.A1");
+    if (aFormula != aExpectedFormula)
+    {
+        CppUnit::Asserter::failNotEqual(to_std_string(aExpectedFormula),
+            to_std_string(aFormula), CPPUNIT_SOURCELINE(), CppUnit::AdditionalMessage("Wrong SupBook VirtualPath URL"));
+    }
+
     xDocSh->DoClose();
 }
 
