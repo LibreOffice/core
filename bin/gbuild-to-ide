@@ -9,6 +9,7 @@
 #
 
 import argparse
+import ntpath
 import os
 import os.path
 import shutil
@@ -1648,6 +1649,14 @@ class QtCreatorIntegrationGenerator(IdeIntegrationGenerator):
             lib_folder = os.path.relpath(lib.location, self.base_folder)
 
             def lopath(path):
+                if platform =="cygwin":
+                    # absolute paths from GbuildToJson are Windows paths,
+                    # so convert everything to such ones
+                    abs_path = path
+                    if not ntpath.isabs(abs_path):
+                        abs_path = ntpath.join(self.gbuildparser.srcdir, path)
+                    return ntpath.relpath(abs_path, lib.location).replace('\\', '/')
+
                 return os.path.relpath(path, lib.location)
 
             defines_list = []
