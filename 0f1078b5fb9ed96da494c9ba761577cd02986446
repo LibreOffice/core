@@ -45,6 +45,30 @@
       "revId": "0f1078b5fb9ed96da494c9ba761577cd02986446",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_536cb307",
+        "filename": "basctl/source/basicide/scriptdocument.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2019-07-05T09:41:33Z",
+      "side": 1,
+      "message": "Feel free to move this into comphelper/source/misc/string.cxx .\nBut that can be done as a follow up patch, let\u0027s have this in as it is now :)",
+      "parentUuid": "bf659307_c258f357",
+      "range": {
+        "startLine": 121,
+        "startChar": 12,
+        "endLine": 123,
+        "endChar": 75
+      },
+      "revId": "0f1078b5fb9ed96da494c9ba761577cd02986446",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
