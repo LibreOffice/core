@@ -300,6 +300,7 @@ rtl::Reference< Entity > readEntity(
                     translateAnnotations(reader.getFieldDocumentation(j)));
             }
             std::vector< InterfaceTypeEntity::Method > meths;
+            meths.reserve(methodCount);
             for (sal_uInt16 j = 0; j != methodCount; ++j) {
                 RTMethodMode flags = reader.getMethodFlags(j);
                 if (flags != RTMethodMode::ATTRIBUTE_GET
