@@ -1130,7 +1130,7 @@ namespace
 // if user cancel the loading the ERROR_ABORT is set
 SfxMedium::LockFileResult SfxMedium::LockOrigFileOnDemand(bool bLoading, bool bNoUI,
                                                           bool bTryIgnoreLockFile,
-                                                          LockFileEntry* pLockData)
+                                                          [[maybe_unused]] LockFileEntry* pLockData)
 {
 #if !HAVE_FEATURE_MULTIUSER_ENVIRONMENT
     (void) bLoading;
