@@ -631,7 +631,7 @@ namespace basegfx
                     {
                         // Should not happen: No 2nd edge; consume the single edge
                         // to not have an endless loop and start next. During development
-                        // i constantly had breakpoints here, so i am sure enough to add an
+                        // i constantly had breakpoints here, so I am sure enough to add an
                         // assertion here
                         OSL_FAIL("Trapezoid decomposer in illegal state (!)");
                         maTrDeEdgeEntries.pop_front();
@@ -645,7 +645,7 @@ namespace basegfx
                     {
                         // Should not happen: We have a 2nd edge, but YStart is on another
                         // line; consume the single edge to not have an endless loop and start
-                        // next. During development i constantly had breakpoints here, so i am
+                        // next. During development i constantly had breakpoints here, so I am
                         // sure enough to add an assertion here
                         OSL_FAIL("Trapezoid decomposer in illegal state (!)");
                         maTrDeEdgeEntries.pop_front();
