@@ -2295,7 +2295,7 @@ SystemTextLayoutData OutputDevice::GetSysTextLayoutData(const Point& rStartPt, c
     SystemGlyphData aSystemGlyph;
     while (pLayout->GetNextGlyph(&pGlyph, aPos, nStart, nullptr, &aSystemGlyph.fallbacklevel))
     {
-        aSystemGlyph.index = pGlyph->m_aGlyphId;
+        aSystemGlyph.index = pGlyph->glyphId();
         aSystemGlyph.x = aPos.X();
         aSystemGlyph.y = aPos.Y();
         aSysLayoutData.rGlyphData.push_back(aSystemGlyph);
