@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_73a3f750",
+        "filename": "reportdesign/source/ui/dlg/Formula.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-07-05T09:01:14Z",
+      "side": 1,
+      "message": "this was allocated with operator new so you\u0027ll have to use operator delete, not free\n\nor just replace it with std::unique_ptr",
+      "revId": "99ec957948ce3af0c40e9cb1560e2de59fbc8912",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
