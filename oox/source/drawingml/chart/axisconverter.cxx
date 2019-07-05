@@ -18,6 +18,8 @@
  */
 
 #include <drawingml/chart/axisconverter.hxx>
+#include <ooxresid.hxx>
+#include <strings.hrc>
 
 #include <com/sun/star/chart/ChartAxisArrangeOrderType.hpp>
 #include <com/sun/star/chart/ChartAxisLabelPosition.hpp>
@@ -360,7 +362,7 @@ void AxisConverter::convertFromModel(
         {
             Reference< XTitled > xTitled( xAxis, UNO_QUERY_THROW );
             TitleConverter aTitleConv( *this, *mrModel.mxTitle );
-            aTitleConv.convertFromModel( xTitled, "Axis Title", OBJECTTYPE_AXISTITLE, nAxesSetIdx, nAxisIdx );
+            aTitleConv.convertFromModel( xTitled, OoxResId(STR_DIAGRAM_AXISTITLE), OBJECTTYPE_AXISTITLE, nAxesSetIdx, nAxisIdx );
         }
 
         // axis data unit label -----------------------------------------------
