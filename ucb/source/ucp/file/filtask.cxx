@@ -2514,7 +2514,8 @@ TaskManager::getv(
     else
         aIsRegular = aFileStatus.getFileType() == osl::FileStatus::Regular;
 
-    registerNotifier( aUnqPath,pNotifier );
+    if (pNotifier)
+        registerNotifier( aUnqPath,pNotifier );
     insertDefaultProperties( aUnqPath );
     {
         osl::MutexGuard aGuard( m_aMutex );
@@ -2533,7 +2534,8 @@ TaskManager::getv(
                 return it1->getValue();
             });
     }
-    deregisterNotifier( aUnqPath,pNotifier );
+    if (pNotifier)
+        deregisterNotifier( aUnqPath,pNotifier );
 
     XRow_impl* p = new XRow_impl( this,seq );
     row = uno::Reference< sdbc::XRow >( p );
