@@ -69,6 +69,7 @@
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/builderfactory.hxx>
+#include <comphelper/lok.hxx>
 #include <memory>
 
 using namespace ::com::sun::star;
@@ -718,6 +719,13 @@ SwFramePage::SwFramePage(vcl::Window *pParent, const SfxItemSet &rSet)
 
     m_pAutoWidthCB->SetClickHdl( LINK( this, SwFramePage, AutoWidthClickHdl ) );
     m_pAutoHeightCB->SetClickHdl( LINK( this, SwFramePage, AutoHeightClickHdl ) );
+
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        m_pAnchorAtPageRB->Hide();
+        m_pAnchorAtParaRB->Hide();
+        m_pAnchorAtFrameRB->Hide();
+    }
 }
 
 SwFramePage::~SwFramePage()

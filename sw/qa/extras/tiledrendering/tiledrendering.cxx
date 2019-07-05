@@ -43,6 +43,7 @@
 #include <vcl/vclevent.hxx>
 #include <vcl/bitmapaccess.hxx>
 #include <flddat.hxx>
+#include <basesh.hxx>
 
 static char const DATA_DIRECTORY[] = "/sw/qa/extras/tiledrendering/data/";
 
@@ -113,6 +114,7 @@ public:
     void testVisCursorInvalidation();
     void testDeselectCustomShape();
     void testSemiTransparent();
+    void testAnchorTypes();
 
     CPPUNIT_TEST_SUITE(SwTiledRenderingTest);
     CPPUNIT_TEST(testRegisterCallback);
@@ -170,6 +172,7 @@ public:
     CPPUNIT_TEST(testVisCursorInvalidation);
     CPPUNIT_TEST(testDeselectCustomShape);
     CPPUNIT_TEST(testSemiTransparent);
+    CPPUNIT_TEST(testAnchorTypes);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -2436,6 +2439,23 @@ void SwTiledRenderingTest::testSemiTransparent()
     CPPUNIT_ASSERT_GREATEREQUAL(190, static_cast<int>(aColor.GetRed()));
     CPPUNIT_ASSERT_GREATEREQUAL(190, static_cast<int>(aColor.GetGreen()));
     CPPUNIT_ASSERT_GREATEREQUAL(190, static_cast<int>(aColor.GetBlue()));
+}
+
+void SwTiledRenderingTest::testAnchorTypes()
+{
+    comphelper::LibreOfficeKit::setActive();
+    SwXTextDocument* pXTextDocument = createDoc("shape.fodt");
+    SwDoc* pDoc = pXTextDocument->GetDocShell()->GetDoc();
+    SwView* pView = pXTextDocument->GetDocShell()->GetView();
+    pView->GetViewFrame()->GetDispatcher()->Execute(FN_CNTNT_TO_NEXT_FRAME, SfxCallMode::SYNCHRON);
+    SfxItemSet aSet(pDoc->GetAttrPool(), svl::Items<FN_TOOL_ANCHOR_PAGE, FN_TOOL_ANCHOR_PAGE>{});
+    SfxBoolItem aItem(FN_TOOL_ANCHOR_PAGE);
+    aSet.Put(aItem);
+    auto pShell = dynamic_cast<SwBaseShell*>(pView->GetCurShell());
+    pShell->GetState(aSet);
+    // Without the accompanying fix in place, this test would have failed, setting the anchor type
+    // to other than as/at-char was possible.
+    CPPUNIT_ASSERT(!aSet.HasItem(FN_TOOL_ANCHOR_PAGE));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwTiledRenderingTest);
