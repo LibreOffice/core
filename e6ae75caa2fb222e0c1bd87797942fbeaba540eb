@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "bf659307_ce533ce2",
+        "filename": "vcl/win/gdi/salfont.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 1120,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-07-05T12:24:14Z",
+      "side": 1,
+      "message": "surely you can use the \\\\?\\ thing to get around that? You add  those magic characters to the front of the string, and Windows know to treat it as a very long path name",
+      "revId": "e6ae75caa2fb222e0c1bd87797942fbeaba540eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bf659307_cebedcfe",
         "filename": "vcl/win/gdi/salfont.cxx",
         "patchSetId": 10
