@@ -1010,6 +1010,7 @@ rtl::Reference< Entity > readEntity(
             }
             offset += 4;
             std::vector< InterfaceTypeEntity::Method > meths;
+            meths.reserve(nMeths);
             for (sal_uInt32 i = 0; i != nMeths; ++i) {
                 OUString methName(file->readIdxName(&offset));
                 checkEntityName(file, methName);
