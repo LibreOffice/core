@@ -118,4 +118,13 @@ class WriterInsertTableDialog(UITestCase):
 
         self.ui_test.close_doc()
 
+    def test_cancel_button_insert_line_break_dialog(self):
+        self.ui_test.create_doc_in_start_center("writer")
+        self.ui_test.execute_dialog_through_command(".uno:InsertTable")
+        Dialog = self.xUITest.getTopFocusWindow()
+        CancelBtn = Dialog.getChild("cancel")
+        self.ui_test.close_dialog_through_button(CancelBtn)
+
+        self.ui_test.close_doc()
+
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

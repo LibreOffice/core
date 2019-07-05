@@ -7,7 +7,7 @@
 
 from uitest.framework import UITestCase
 import unittest
-from uitest.uihelper.common import get_state_as_dict
+from uitest.uihelper.testDialog import testDialog
 
 dialogs = [
     {"command": ".uno:OpenRemote", "closeButton": "cancel"},
@@ -165,29 +165,7 @@ def load_tests(loader, tests, pattern):
 # the test only checks if calc crashes by opening the dialog, see e.g. tdf#120227, tdf#125985, tdf#125982
 class openDialogs(UITestCase):
     def check(self, dialog):
-        calc_doc = self.ui_test.create_doc_in_start_center("calc")
-        self.ui_test.execute_dialog_through_command(dialog['command'])
-        xDialog = self.xUITest.getTopFocusWindow()
-        xCloseBtn = xDialog.getChild(dialog['closeButton'])
-        if 'skipTestOK' in dialog and dialog['skipTestOK'] == True:
-            xOKBtn = None
-        else:
-            try:
-                xOKBtn = xDialog.getChild("ok")
-                if (get_state_as_dict(xOKBtn)["Enabled"] != "true"):
-                    xOKBtn = None
-            except:
-                xOKBtn = None
-
-        self.ui_test.close_dialog_through_button(xCloseBtn)
-        if (xOKBtn != None):
-            print("check also OK button")
-            self.ui_test.execute_dialog_through_command(dialog['command'])
-            xDialog = self.xUITest.getTopFocusWindow()
-            xOKBtn = xDialog.getChild("ok")
-            self.ui_test.close_dialog_through_button(xOKBtn)
-        self.ui_test.close_doc()
-
+        testDialog(self, "calc", dialog)
 
 dialogCount = 0
 for dialog in dialogs:

@@ -157,6 +157,7 @@ $(eval $(call gb_Module_add_uicheck_targets,sw,\
 	UITest_options \
 	UITest_classification \
 	UITest_writer_macro_tests \
+	UITest_writer_dialogs \
 ))
 endif
 

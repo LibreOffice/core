@@ -37,4 +37,12 @@ class GoToPage_dialog(UITestCase):
 
     self.assertEqual(get_state_as_dict(xWriterEdit)["CurrentPage"], "3")
 
+    # check cancel button
+    self.ui_test.execute_dialog_through_command(".uno:GotoPage")
+    xDialog = self.xUITest.getTopFocusWindow()
+    xCancelBtn = xDialog.getChild("cancel")
+    self.ui_test.close_dialog_through_button(xCancelBtn)
+
+    self.assertEqual(get_state_as_dict(xWriterEdit)["CurrentPage"], "3")
+
     self.ui_test.close_doc()

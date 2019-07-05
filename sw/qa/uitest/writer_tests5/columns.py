@@ -64,7 +64,7 @@ class columns(UITestCase):
         self.assertEqual(get_state_as_dict(colsnf)["Text"], "2")
         self.assertEqual(get_state_as_dict(spacing1mf)["Text"], "1.00 cm")
         self.assertEqual(get_state_as_dict(autowidth)["Selected"], "false")
-        xOKBtn = xDialog.getChild("ok")
+        xOKBtn = xDialog.getChild("cancel")
         self.ui_test.close_dialog_through_button(xOKBtn)
 
         self.ui_test.close_doc()
