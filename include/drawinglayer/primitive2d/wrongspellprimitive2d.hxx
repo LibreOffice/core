@@ -37,7 +37,7 @@ namespace drawinglayer
 
             This is a helper primitive to hold evtl. WrongSpell visualisations
             in the sequence of primitives. The primitive holds this information
-            separated form the TextPortions to where it belongs to tot expand the
+            separated from the TextPortions to where it belongs to, to expand the
             TextSimplePortionPrimitive2D more as needed.
 
             A renderer who does not want to visualize this (if contained at all)
