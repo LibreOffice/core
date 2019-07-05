@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_f34b87ad",
+        "filename": "include/sfx2/strings.hrc",
+        "patchSetId": 1
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-07-05T08:15:37Z",
+      "side": 1,
+      "message": "perhaps\n\n\"locked in another session.%LOCKINFO\"\n-\u003e\n\"locked in another session: %LOCKINFO\"\n\n?",
+      "revId": "bdab5257f0d973af26e6d94a8112051c404aca4b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_93c6cb16",
+        "filename": "include/sfx2/strings.hrc",
+        "patchSetId": 1
+      },
+      "lineNbr": 242,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-07-05T08:15:37Z",
+      "side": 1,
+      "message": "and perhaps these \n   \\n\\n \nshould be in the code, not in a localisable string?",
+      "revId": "bdab5257f0d973af26e6d94a8112051c404aca4b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
