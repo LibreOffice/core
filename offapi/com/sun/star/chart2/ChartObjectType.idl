@@ -14,7 +14,19 @@ module com { module sun { module star { module chart2 {
 
 constants ChartObjectType
 {
-    const short TITLE = 0;
+    const short AXIS = 0;
+    const short BASE_COORD = 1;
+    const short DIAGRAM = 2;
+    const short DATA_POINT = 3;
+    const short DATA_SERIES = 4;
+    const short GRID = 5;
+    const short FORMATTED = 6;
+    const short LEGEND = 7;
+    const short PAGE = 8;
+    const short STOCK = 9;
+    const short TITLE = 10;
+    const short WALL = 11;
+    const short UNKNOWN = 12;
 };
 
 }; }; }; };
