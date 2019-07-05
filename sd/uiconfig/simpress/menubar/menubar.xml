@@ -162,8 +162,8 @@
       <menu:menuitem menu:id=".uno:SlideChangeWindow"/>
       <menu:menuitem menu:id=".uno:CustomAnimation"/>
       <menu:menuitem menu:id=".uno:ViewSidebarStyles"/>
-      <menu:menuitem menu:id=".uno:Gallery" menu:style="text"/>
-      <menu:menuitem menu:id=".uno:Navigator" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:Gallery"/>
+      <menu:menuitem menu:id=".uno:Navigator"/>
       <menu:menuitem menu:id=".uno:ColorControl"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:ZoomPanning"/>
@@ -599,7 +599,7 @@
   <menu:menu menu:id=".uno:ToolsMenu">
     <menu:menupopup>
       <menu:menuitem menu:id=".uno:SpellDialog"/>
-      <menu:menuitem menu:id=".uno:SpellOnline" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:SpellOnline"/>
       <menu:menuitem menu:id=".uno:ThesaurusDialog" menu:style="text"/>
       <menu:menu menu:id=".uno:LanguageMenu">
         <menu:menupopup>
@@ -617,7 +617,7 @@
       <menu:menuitem menu:id=".uno:RedactDoc" menu:style="text"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:PresentationMinimizer"/>
-      <menu:menuitem menu:id=".uno:ImageMapDialog" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:ImageMapDialog"/>
       <menu:menuitem menu:id=".uno:BmpMask"/>
       <menu:menuitem menu:id=".uno:AVMediaPlayer"/>
       <menu:menuseparator/>

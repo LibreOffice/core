@@ -1,1 +1,57 @@
-<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="m5 4v16 .001953h1 6v-1.001953h-6v-14h8v3 1h4v2h1v-1.5917969-1.40625-.0097656l-3.992188-3.9921875-.007812.0097656v-.0097656h-1-8zm14 8-1 1-5 5v2h2v-.03125l1-.96875 4-4 1-1zm-.28125 1.6875.5625.59375-4.96875 5-.59375-.59375z" fill="#232629"/></svg>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   viewBox="0 0 24 24"
+   version="1.1"
+   id="svg4"
+   sodipodi:docname="lc_signaturelinedialog.svg"
+   inkscape:version="0.92.4 (unknown)">
+  <metadata
+     id="metadata10">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs8" />
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1360"
+     inkscape:window-height="714"
+     id="namedview6"
+     showgrid="true"
+     inkscape:zoom="27.812867"
+     inkscape:cx="10.649812"
+     inkscape:cy="7.5339662"
+     inkscape:window-x="0"
+     inkscape:window-y="28"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg4">
+    <inkscape:grid
+       type="xygrid"
+       id="grid817" />
+  </sodipodi:namedview>
+  <path
+     d="M 5 4 L 5 20 L 5 20.001953 L 6 20.001953 L 12 20.001953 L 12 19 L 6 19 L 6 5 L 14 5 L 14 8 L 14 9 L 18 9 L 18 11 L 19 11 L 19 9.4082031 L 19 8.0019531 L 19 7.9921875 L 15.007812 4 L 15 4.0097656 L 15 4 L 14 4 L 6 4 L 5 4 z M 19 12 L 18 13 L 13 18 L 13 20 L 15 20 L 15 19.96875 L 16 19 L 20 15 L 21 14 L 19 12 z M 18.71875 13.6875 L 19.28125 14.28125 L 14.3125 19.28125 L 13.71875 18.6875 L 18.71875 13.6875 z M 10 14 L 8 15 L 8 16 L 10 15 L 11 15 L 11 18 L 12 18 L 12 15 L 12 14 L 10 14 z "
+     id="path2"
+     style="fill:#232629;fill-opacity:1;stroke:none" />
+</svg>
