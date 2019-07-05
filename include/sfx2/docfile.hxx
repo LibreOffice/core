@@ -166,7 +166,8 @@ public:
         FailedLockFile, // there was only lock file that prevented success - no syslock or IO error
         Succeeded,
     };
-    LockFileResult      LockOrigFileOnDemand( bool bLoading, bool bNoUI, bool bTryIgnoreLockFile = false );
+    LockFileResult LockOrigFileOnDemand(bool bLoading, bool bNoUI, bool bTryIgnoreLockFile = false,
+                                        LockFileEntry* pLockData = nullptr);
     void                DisableUnlockWebDAV( bool bDisableUnlockWebDAV = true );
     void                UnlockFile( bool bReleaseLockStream );
     /// Lets Transfer_Impl() not fsync the output file.
