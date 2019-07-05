@@ -1125,7 +1125,7 @@ static OUString lcl_GetFontFamilyName(const OUString& rFontFileURL)
     // TODO: use TTLoadEmbeddedFont (needs an EOT as input, so we have to add a header to the TTF)
     // TODO: forward the EOT from the AddTempDevFont call side, if VCL supports it
     INetURLObject aTTFUrl(rFontFileURL);
-    // GetBase() stripts the extension
+    // GetBase() strips the extension
     OUString aFilename = aTTFUrl.GetLastName(INetURLObject::DecodeMechanism::WithCharset);
     if (!CreateScalableFontResourceW(0, o3tl::toW(aResSystemPath.getStr()),
             o3tl::toW(aFilename.getStr()), o3tl::toW(aTTFUrl.GetPath().getStr())))
