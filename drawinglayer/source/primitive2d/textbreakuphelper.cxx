@@ -118,7 +118,7 @@ namespace drawinglayer
                 }
 
                 // add text transformation to new transformation
-                aNewTransform = maDecTrans.getB2DHomMatrix() * aNewTransform;
+                aNewTransform *= maDecTrans.getB2DHomMatrix();
 
                 // callback to allow evtl. changes
                 const bool bCreate(allowChange(rTempResult.size(), aNewTransform, nIndex, nLength));
