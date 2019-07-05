@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "bf659307_53d033ca",
+        "filename": "include/sfx2/strings.hrc",
+        "patchSetId": 1
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-07-05T08:18:48Z",
+      "side": 1,
+      "message": "This is optional, we may have no information to display here, so I suppose it\u0027s better without colon (open to discussion)",
+      "parentUuid": "bf659307_f34b87ad",
+      "revId": "bdab5257f0d973af26e6d94a8112051c404aca4b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bf659307_93c6cb16",
         "filename": "include/sfx2/strings.hrc",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2019-07-05T08:15:37Z",
       "side": 1,
       "message": "and perhaps these \n   \\n\\n \nshould be in the code, not in a localisable string?",
+      "revId": "bdab5257f0d973af26e6d94a8112051c404aca4b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_73d537b9",
+        "filename": "include/sfx2/strings.hrc",
+        "patchSetId": 1
+      },
+      "lineNbr": 242,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-07-05T08:18:48Z",
+      "side": 1,
+      "message": "Agree. Will do.",
+      "parentUuid": "bf659307_93c6cb16",
       "revId": "bdab5257f0d973af26e6d94a8112051c404aca4b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
