@@ -188,11 +188,36 @@ void SfxEditDocumentDialog::dispose()
 class SfxQueryOpenAsTemplate : public QueryBox
 {
 public:
-    SfxQueryOpenAsTemplate(vcl::Window* pParent, MessBoxStyle nStyle, bool bAllowIgnoreLock);
+    SfxQueryOpenAsTemplate(vcl::Window* pParent, MessBoxStyle nStyle, bool bAllowIgnoreLock, LockFileEntry& rLockData);
+private:
+    static OUString QueryString(bool bAllowIgnoreLock, LockFileEntry& rLockData)
+    {
+        OUString sLockUserData;
+        if (!rLockData[LockFileComponent::OOOUSERNAME].isEmpty())
+            sLockUserData = rLockData[LockFileComponent::OOOUSERNAME];
+        else
+            sLockUserData = rLockData[LockFileComponent::SYSUSERNAME];
+
+        if (!sLockUserData.isEmpty() && !rLockData[LockFileComponent::EDITTIME].isEmpty())
+            sLockUserData += " ( " + rLockData[LockFileComponent::EDITTIME] + " )";
+
+        if (!sLockUserData.isEmpty())
+            sLockUserData = "\n\n" + sLockUserData + "\n";
+
+        const bool bUseLockStr = bAllowIgnoreLock || !sLockUserData.isEmpty();
+
+        OUString sMsg(
+            SfxResId(bUseLockStr ? STR_QUERY_OPENASTEMPLATE_LOCKED : STR_QUERY_OPENASTEMPLATE));
+
+        if (bAllowIgnoreLock)
+            sMsg += "\n\n" + SfxResId(STR_QUERY_OPENASTEMPLATE_ALLOW_IGNORE);
+
+        return sMsg.replaceFirst("%LOCKINFO", sLockUserData);
+    }
 };
 
-SfxQueryOpenAsTemplate::SfxQueryOpenAsTemplate(vcl::Window* pParent, MessBoxStyle nStyle, bool bAllowIgnoreLock)
-    : QueryBox(pParent, nStyle, SfxResId(bAllowIgnoreLock ? STR_QUERY_OPENASTEMPLATE_ALLOW_IGNORE : STR_QUERY_OPENASTEMPLATE))
+SfxQueryOpenAsTemplate::SfxQueryOpenAsTemplate(vcl::Window* pParent, MessBoxStyle nStyle, bool bAllowIgnoreLock, LockFileEntry& rLockData)
+    : QueryBox(pParent, nStyle, QueryString(bAllowIgnoreLock, rLockData))
 {
     AddButton(SfxResId(STR_QUERY_OPENASTEMPLATE_OPENCOPY_BTN), RET_YES,
         ButtonDialogFlags::Default | ButtonDialogFlags::OK | ButtonDialogFlags::Focus);
@@ -445,6 +470,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                 bool bRetryIgnoringLock = false;
                 bool bOpenTemplate = false;
                 do {
+                    LockFileEntry aLockData;
                     if ( !pVersionItem )
                     {
                         if (bRetryIgnoringLock)
@@ -466,8 +492,10 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                         pMed->CompleteReOpen();
                         if ( nOpenMode & StreamMode::WRITE )
                         {
-                             auto eResult = pMed->LockOrigFileOnDemand( true, true, bRetryIgnoringLock );
-                             bRetryIgnoringLock = eResult == SfxMedium::LockFileResult::FailedLockFile;
+                            auto eResult = pMed->LockOrigFileOnDemand(
+                                true, true, bRetryIgnoringLock, &aLockData);
+                            bRetryIgnoringLock
+                                = eResult == SfxMedium::LockFileResult::FailedLockFile;
                         }
 
                         // LockOrigFileOnDemand might set the readonly flag itself, it should be set back
@@ -482,7 +510,8 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                         if (nOpenMode == SFX_STREAM_READWRITE && !rReq.IsAPI())
                         {
                             // css::sdbcx::User offering to open it as a template
-                            ScopedVclPtrInstance<SfxQueryOpenAsTemplate> aBox(&GetWindow(), MessBoxStyle::NONE, bRetryIgnoringLock);
+                            ScopedVclPtrInstance<SfxQueryOpenAsTemplate> aBox(&GetWindow(),
+                                MessBoxStyle::NONE, bRetryIgnoringLock, aLockData);
 
                             short nUserAnswer = aBox->Execute();
                             bOpenTemplate = RET_YES == nUserAnswer;
