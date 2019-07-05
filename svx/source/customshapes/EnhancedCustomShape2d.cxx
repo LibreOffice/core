@@ -2032,6 +2032,7 @@ void EnhancedCustomShape2d::CreateSubPath(
 {
     bool bNoFill = false;
     bool bNoStroke = false;
+    bool bFillLogicRect = false;
     double dBrightness = 0.0; //no blending
 
     basegfx::B2DPolyPolygon aNewB2DPolyPolygon;
@@ -2106,6 +2107,8 @@ void EnhancedCustomShape2d::CreateSubPath(
                 break;
                 case CLOSESUBPATH :
                 {
+                    // tdf#117910
+                    bFillLogicRect = true;
                     if(aNewB2DPolygon.count())
                     {
                         if(aNewB2DPolygon.count() > 1)
@@ -2315,6 +2318,8 @@ void EnhancedCustomShape2d::CreateSubPath(
 
                 case LINETO :
                 {
+                    // tdf#126183
+                    bFillLogicRect = true;
                     for ( sal_Int32 i(0); ( i < nPntCount ) && ( rSrcPt < nCoordSize ); i++ )
                     {
                         const Point aTempPoint(GetPoint( seqCoordinates[ rSrcPt++ ], true, true ));
@@ -2542,6 +2547,20 @@ void EnhancedCustomShape2d::CreateSubPath(
 
     if(aNewB2DPolyPolygon.count())
     {
+        if( !bNoFill && bFillLogicRect && !bLineGeometryNeededOnly )
+        {
+            // hack aNewB2DPolyPolygon to fill logic rect - this is
+            // needed to produce gradient fills that look like mso
+            aNewB2DPolygon.clear();
+            aNewB2DPolygon.append(basegfx::B2DPoint(0,0));
+            aNewB2DPolyPolygon.append(aNewB2DPolygon);
+
+            aNewB2DPolygon.clear();
+            aNewB2DPolygon.append(basegfx::B2DPoint(aLogicRect.GetWidth(),
+                                                    aLogicRect.GetHeight()));
+            aNewB2DPolyPolygon.append(aNewB2DPolygon);
+        }
+
         // #i37011#
         bool bForceCreateTwoObjects(false);
 

@@ -413,6 +413,24 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testQuadraticCurveTo)
     //Add some tolerance
     CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("bad height of quadraticcurveto", 3004, fHeight, 10.0);
 }
+
+CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf126184)
+{
+    const OUString sFileName("tdf126184.odg");
+    const OUString sURL = m_directories.getURLFromSrc(sDataDirectory) + sFileName;
+    mxComponent = loadFromDesktop(sURL, "com.sun.star.comp.drawing.DrawingDocument");
+    CPPUNIT_ASSERT_MESSAGE("Could not load document", mxComponent.is());
+    uno::Reference<drawing::XShape> xShape(getShape(2));
+    uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
+    CPPUNIT_ASSERT_MESSAGE("Could not get the shape properties", xShapeProps.is());
+    awt::Rectangle aBoundRect;
+    xShapeProps->getPropertyValue(UNO_NAME_MISC_OBJ_BOUNDRECT) >>= aBoundRect;
+    const double fHeight = static_cast<double>(aBoundRect.Height);
+    const double fWidth = static_cast<double>(aBoundRect.Width);
+    //Add some tolerance
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("bad width", 6709, fWidth, 10.0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("bad height", 2896, fHeight, 10.0);
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
