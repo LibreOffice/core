@@ -27,7 +27,6 @@
 
 #include <fontinstance.hxx>
 #include <fontselect.hxx>
-#include <impfontmetric.hxx>
 #include <impfontmetricdata.hxx>
 #include <PhysicalFontFace.hxx>
 #include <sft.hxx>
@@ -45,126 +44,6 @@ using namespace ::rtl;
 using namespace ::utl;
 
 FontMetric::FontMetric()
-:   mxImplMetric( new ImplFontMetric() )
-{}
-
-FontMetric::FontMetric( const FontMetric& rFontMetric )
-    : Font( rFontMetric )
-    , mxImplMetric( rFontMetric.mxImplMetric )
-{}
-
-FontMetric::~FontMetric()
-{
-    mxImplMetric = nullptr;
-}
-
-FontMetric& FontMetric::operator=(const FontMetric& rFontMetric)
-{
-    Font::operator=(rFontMetric);
-    mxImplMetric = rFontMetric.mxImplMetric;
-    return *this;
-}
-
-FontMetric& FontMetric::operator=(FontMetric&& rFontMetric)
-{
-    mxImplMetric = std::move(rFontMetric.mxImplMetric);
-    Font::operator=(std::move(rFontMetric));
-    return *this;
-}
-
-bool FontMetric::operator==( const FontMetric& rFontMetric ) const
-{
-    if( !Font::operator==( rFontMetric ) )
-        return false;
-    if( mxImplMetric == rFontMetric.mxImplMetric )
-        return true;
-    if( *mxImplMetric == *rFontMetric.mxImplMetric  )
-        return true;
-    return false;
-}
-
-long FontMetric::GetAscent() const
-{
-    return mxImplMetric->GetAscent();
-}
-
-void FontMetric::SetAscent( long nAscent )
-{
-    mxImplMetric->SetAscent( nAscent );
-}
-
-long FontMetric::GetDescent() const
-{
-    return mxImplMetric->GetDescent();
-}
-
-void FontMetric::SetDescent( long nDescent )
-{
-    mxImplMetric->SetDescent( nDescent );
-}
-
-long FontMetric::GetInternalLeading() const
-{
-    return mxImplMetric->GetInternalLeading();
-}
-
-void FontMetric::SetInternalLeading( long nLeading )
-{
-    mxImplMetric->SetInternalLeading( nLeading );
-}
-
-long FontMetric::GetExternalLeading() const
-{
-    return mxImplMetric->GetExternalLeading();
-}
-
-void FontMetric::SetExternalLeading( long nLeading )
-{
-    mxImplMetric->SetExternalLeading( nLeading );
-}
-
-long FontMetric::GetLineHeight() const
-{
-    return mxImplMetric->GetLineHeight();
-}
-
-void FontMetric::SetLineHeight( long nHeight )
-{
-    mxImplMetric->SetLineHeight( nHeight );
-}
-
-long FontMetric::GetSlant() const
-{
-    return mxImplMetric->GetSlant();
-}
-
-void FontMetric::SetSlant( long nSlant )
-{
-    mxImplMetric->SetSlant( nSlant );
-}
-
-long FontMetric::GetBulletOffset() const
-{
-    return mxImplMetric->GetBulletOffset();
-}
-
-void FontMetric::SetBulletOffset( long nOffset )
-{
-    mxImplMetric->SetBulletOffset( nOffset );
-}
-
-bool FontMetric::IsFullstopCentered() const
-{
-    return mxImplMetric->IsFullstopCentered();
-}
-
-void FontMetric::SetFullstopCenteredFlag(bool bScalable)
-{
-    mxImplMetric->SetFullstopCenteredFlag( bScalable );
-}
-
-
-ImplFontMetric::ImplFontMetric()
 :   mnAscent( 0 ),
     mnDescent( 0 ),
     mnIntLeading( 0 ),
@@ -175,8 +54,20 @@ ImplFontMetric::ImplFontMetric()
     mbFullstopCentered( false )
 {}
 
-bool ImplFontMetric::operator==( const ImplFontMetric& r ) const
+FontMetric::FontMetric( const FontMetric& rFontMetric ) = default;
+
+FontMetric::~FontMetric()
 {
+}
+
+FontMetric& FontMetric::operator=(const FontMetric& rFontMetric) = default;
+
+FontMetric& FontMetric::operator=(FontMetric&& rFontMetric) = default;
+
+bool FontMetric::operator==( const FontMetric& r ) const
+{
+    if( Font::operator!=(r) )
+        return false;
     if (mbFullstopCentered != r.mbFullstopCentered)
         return false;
     if( mnAscent     != r.mnAscent )
