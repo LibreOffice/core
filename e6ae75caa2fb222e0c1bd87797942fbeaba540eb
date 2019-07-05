@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "bf659307_8e5f84e4",
+        "filename": "vcl/win/gdi/salfont.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 1120,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-07-05T12:28:31Z",
+      "side": 1,
+      "message": "No :-) In fact, this is a specific limitation of this specific function; its other parameters have the usual Windows\u0027 MAX_PATH (\u003d260 by default) limit; no idea if they support the longpath (32K) syntax (or even Win10 opt-in for big MAX_PATH) - but that\u0027s a different story. But this parameter has the odd 127-character limit - not even half of MAX_PATH.",
+      "parentUuid": "bf659307_ce533ce2",
+      "revId": "e6ae75caa2fb222e0c1bd87797942fbeaba540eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bf659307_cebedcfe",
         "filename": "vcl/win/gdi/salfont.cxx",
         "patchSetId": 10
