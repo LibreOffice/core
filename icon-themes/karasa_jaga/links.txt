@@ -312,6 +312,7 @@ cmd/32/nl/italic.png cmd/32/ca/italic.png
 cmd/32/nl/underlinesimple.png cmd/32/nl/underline.png
 cmd/32/no.png cmd/32/cancel.png
 cmd/32/notecellstyles.png cmd/32/shownote.png
+cmd/32/notevisible.png cmd/32/shownote.png
 cmd/32/numberformatcurrency.png cmd/32/currencyfield.png
 cmd/32/numberformatcurrencysimple.png cmd/32/currencyfield.png
 cmd/32/numberformatmenu.png cmd/32/numberformatstandard.png
@@ -838,6 +839,7 @@ cmd/lc_navigatemenu.png cmd/lc_navigator.png
 cmd/lc_neutralcellstyles.png cmd/lc_neutralcellstyle.png
 cmd/lc_no.png cmd/lc_cancel.png
 cmd/lc_notecellstyles.png cmd/lc_shownote.png
+cmd/lc_notevisible.png cmd/lc_shownote.png
 cmd/lc_numberformatcurrency.png cmd/lc_currencyfield.png
 cmd/lc_numberformatcurrencysimple.png cmd/lc_currencyfield.png
 cmd/lc_numberformatmenu.png cmd/lc_numberformatstandard.png
@@ -1225,6 +1227,7 @@ cmd/sc_neutralcellstyles.png cmd/sc_neutralcellstyle.png
 cmd/sc_newglobaldoc.png res/odm_16_8.png
 cmd/sc_no.png cmd/sc_cancel.png
 cmd/sc_notecellstyles.png cmd/sc_shownote.png
+cmd/sc_notevisible.png cmd/sc_shownote.png
 cmd/sc_numberformatcurrency.png cmd/sc_currencyfield.png
 cmd/sc_numberformatcurrencysimple.png cmd/sc_currencyfield.png
 cmd/sc_numberformatmenu.png cmd/sc_numberformatstandard.png
