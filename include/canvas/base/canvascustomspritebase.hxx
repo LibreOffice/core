@@ -20,6 +20,8 @@
 #ifndef INCLUDED_CANVAS_BASE_CANVASCUSTOMSPRITEBASE_HXX
 #define INCLUDED_CANVAS_BASE_CANVASCUSTOMSPRITEBASE_HXX
 
+#include <com/sun/star/rendering/XCanvas.hpp>
+
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/vector/b2dvector.hxx>
 #include <basegfx/range/b2drange.hxx>

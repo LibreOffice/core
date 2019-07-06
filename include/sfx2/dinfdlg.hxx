@@ -22,6 +22,7 @@
 #include <sal/config.h>
 #include <sfx2/dllapi.h>
 
+#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/util/Duration.hpp>
 #include <com/sun/star/document/CmisProperty.hpp>

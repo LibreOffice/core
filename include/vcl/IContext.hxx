@@ -13,6 +13,8 @@
 #include <vcl/EnumContext.hxx>
 #include <vector>
 
+#include <algorithm>
+
 namespace vcl
 {
 

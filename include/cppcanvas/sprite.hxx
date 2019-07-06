@@ -20,8 +20,6 @@
 #ifndef INCLUDED_CPPCANVAS_SPRITE_HXX
 #define INCLUDED_CPPCANVAS_SPRITE_HXX
 
-#include <memory>
-
 namespace basegfx
 {
     class B2DHomMatrix;

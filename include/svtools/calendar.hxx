@@ -21,13 +21,9 @@
 #define INCLUDED_SVTOOLS_CALENDAR_HXX
 
 #include <svtools/svtdllapi.h>
-#include <unotools/calendarwrapper.hxx>
 
 #include <vcl/calendar.hxx>
-#include <vcl/ctrl.hxx>
 #include <vcl/field.hxx>
-#include <memory>
-#include <set>
 
 class MouseEvent;
 class TrackingEvent;

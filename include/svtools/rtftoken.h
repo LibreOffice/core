@@ -20,6 +20,8 @@
 #ifndef INCLUDED_SVTOOLS_RTFTOKEN_H
 #define INCLUDED_SVTOOLS_RTFTOKEN_H
 
+#include <rtl/ustring.hxx>
+
 namespace rtl {
   class OUString;
 };

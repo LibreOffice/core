@@ -21,6 +21,7 @@
 #define INCLUDED_VCL_MSGBOX_HXX
 
 #include <vcl/dllapi.h>
+#include <vcl/image.hxx>
 
 VCL_DLLPUBLIC Image const & GetStandardInfoBoxImage();
 VCL_DLLPUBLIC OUString GetStandardInfoBoxText();

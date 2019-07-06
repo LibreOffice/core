@@ -10,6 +10,8 @@
 #ifndef INCLUDED_VCL_IPRIORITABLE_HXX
 #define INCLUDED_VCL_IPRIORITABLE_HXX
 
+#include <vcl/dllapi.h>
+
 #define VCL_PRIORITY_DEFAULT -1
 
 namespace vcl
