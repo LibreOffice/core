@@ -22,10 +22,8 @@
 #include <o3tl/safeint.hxx>
 
 #include <stdio.h>
-#include <stdlib.h>
 #include <setjmp.h>
 #include <jpeglib.h>
-#include <jerror.h>
 
 #include <com/sun/star/task/XStatusIndicator.hpp>
 
@@ -38,7 +36,6 @@ extern "C" {
 #include "JpegWriter.hxx"
 #include <memory>
 #include <unotools/configmgr.hxx>
-#include <vcl/bitmapaccess.hxx>
 #include <vcl/graphicfilter.hxx>
 
 #ifdef _MSC_VER

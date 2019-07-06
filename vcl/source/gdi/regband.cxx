@@ -17,10 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <algorithm>
-
 #include <tools/helpers.hxx>
-#include <osl/diagnose.hxx>
+#include <osl/diagnose.h>
 #include <sal/log.hxx>
 
 #include <regband.hxx>

@@ -22,15 +22,11 @@
 #include <vcl/metaact.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/imagerepository.hxx>
-#include <unotools/resmgr.hxx>
 #include <tools/fract.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <vcl/graphicfilter.hxx>
-#include <vcl/wmf.hxx>
 #include <vcl/wmfexternal.hxx>
-#include <svl/solar.hrc>
 #include <vcl/virdev.hxx>
-#include <vcl/settings.hxx>
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/graphic/XGraphicProvider2.hpp>
 #include <com/sun/star/io/XStream.hpp>
@@ -46,11 +42,9 @@
 #include <graphic/UnoGraphicDescriptor.hxx>
 #include <graphic/UnoGraphic.hxx>
 #include <rtl/ref.hxx>
-#include <vcl/GraphicObject.hxx>
 #include <vcl/dibtools.hxx>
 #include <comphelper/sequence.hxx>
 #include <memory>
-#include <svtools/ehdl.hxx>
 
 using namespace com::sun::star;
 

@@ -24,7 +24,6 @@
 
 #include <sal/types.h>
 
-#include <sallayout.hxx>
 #include <salgdi.hxx>
 
 namespace vcl

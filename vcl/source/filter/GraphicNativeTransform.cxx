@@ -21,8 +21,8 @@
 
 #include <vcl/gfxlink.hxx>
 #include <vcl/graphicfilter.hxx>
+#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <tools/stream.hxx>
 
 #include "jpeg/Exif.hxx"

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <algorithm>
 #include <stdio.h>
 #include <string.h>
 #include <osl/thread.h>
@@ -29,7 +28,6 @@
 #include <vcl/outdev.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/graphictools.hxx>
-#include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <unotools/fontdefs.hxx>
 
 namespace

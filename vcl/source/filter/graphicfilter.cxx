@@ -27,11 +27,11 @@
 #include <cppuhelper/implbase.hxx>
 #include <tools/fract.hxx>
 #include <unotools/configmgr.hxx>
-#include <unotools/resmgr.hxx>
 #include <tools/stream.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/zcodec.hxx>
 #include <vcl/dibtools.hxx>
+#include <vcl/fltcall.hxx>
 #include <vcl/salctype.hxx>
 #include <vcl/pngread.hxx>
 #include <vcl/pngwrite.hxx>
@@ -43,7 +43,6 @@
 #include <vcl/graphicfilter.hxx>
 #include <vcl/FilterConfigItem.hxx>
 #include <vcl/wmf.hxx>
-#include <vcl/settings.hxx>
 #include "igif/gifread.hxx"
 #include <vcl/pdfread.hxx>
 #include "jpeg/jpeg.hxx"
@@ -53,10 +52,6 @@
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
-#include <com/sun/star/uno/XWeak.hpp>
-#include <com/sun/star/uno/XAggregation.hpp>
-#include <com/sun/star/lang/XTypeProvider.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/svg/XSVGWriter.hpp>
@@ -67,7 +62,6 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <rtl/bootstrap.hxx>
 #include <rtl/instance.hxx>
-#include <vcl/metaact.hxx>
 #include <tools/svlibrary.h>
 #include <comphelper/string.hxx>
 #include <vector>

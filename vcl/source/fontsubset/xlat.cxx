@@ -18,7 +18,6 @@
  */
 
 #include <rtl/textcvt.h>
-#include <sal/log.hxx>
 #include "xlat.hxx"
 
 namespace {

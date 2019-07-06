@@ -22,7 +22,6 @@
 #include <sal/log.hxx>
 #include <vcl/vectorgraphicdata.hxx>
 #include <comphelper/processfactory.hxx>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/graphic/SvgTools.hpp>
 #include <com/sun/star/graphic/EmfTools.hpp>
 #include <com/sun/star/graphic/Primitive2DTools.hpp>

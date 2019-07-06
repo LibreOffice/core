@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svdata.hxx>
-
 #include <fontinstance.hxx>
 #include <impfontcache.hxx>
 #include <PhysicalFontCollection.hxx>

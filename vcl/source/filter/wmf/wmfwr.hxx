@@ -20,11 +20,10 @@
 #ifndef INCLUDED_VCL_SOURCE_FILTER_WMF_WMFWR_HXX
 #define INCLUDED_VCL_SOURCE_FILTER_WMF_WMFWR_HXX
 
-#include <vcl/metaact.hxx>
-#include <vcl/graph.hxx>
 #include <vcl/gdimtf.hxx>
+#include <vcl/lineinfo.hxx>
 #include <vcl/virdev.hxx>
-#include <vcl/fltcall.hxx>
+#include <vcl/FilterConfigItem.hxx>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <tools/stream.hxx>
 

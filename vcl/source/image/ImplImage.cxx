@@ -19,22 +19,14 @@
 
 #include <sal/log.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/outdev.hxx>
 #include <vcl/bitmapex.hxx>
-#include <vcl/alpha.hxx>
-#include <vcl/window.hxx>
-#include <vcl/bitmapaccess.hxx>
-#include <vcl/virdev.hxx>
-#include <vcl/image.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/BitmapFilter.hxx>
 #include <vcl/ImageTree.hxx>
-#include <vcl/imagerepository.hxx>
 #include <BitmapDisabledImageFilter.hxx>
 #include <comphelper/lok.hxx>
 
 #include <image.h>
-#include <memory>
 
 ImplImage::ImplImage(const BitmapEx &rBitmapEx)
     : maBitmapChecksum(0)

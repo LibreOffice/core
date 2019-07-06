@@ -18,17 +18,14 @@
  */
 
 #include <memory>
-#include <limits.h>
 #include <tools/vcompat.hxx>
 #include <tools/stream.hxx>
-#include <tools/helpers.hxx>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/region.hxx>
 #include <regionband.hxx>
 
-#include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolygonclipper.hxx>

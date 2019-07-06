@@ -13,7 +13,6 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/weld.hxx>
-#include <vcl/wmf.hxx>
 
 using namespace css;
 

@@ -17,11 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <tools/poly.hxx>
-
 #include <vcl/bitmap.hxx>
-#include <vcl/region.hxx>
-#include <vcl/bitmapaccess.hxx>
 
 #include <bmpfast.hxx>
 #include <bitmapwriteaccess.hxx>

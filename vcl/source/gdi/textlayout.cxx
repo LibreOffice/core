@@ -20,12 +20,9 @@
 #include <vcl/ctrl.hxx>
 #include <vcl/outdev.hxx>
 
-#include <fontinstance.hxx>
 #include <textlayout.hxx>
 
-#include <com/sun/star/i18n/ScriptDirection.hpp>
-
-#include <tools/diagnose_ex.h>
+#include <osl/diagnose.h>
 #include <tools/fract.hxx>
 #include <sal/log.hxx>
 

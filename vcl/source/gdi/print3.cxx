@@ -22,7 +22,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/configsettings.hxx>
-#include <vcl/unohelp.hxx>
 #include <tools/urlobj.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
@@ -36,14 +35,11 @@
 #include <salprn.hxx>
 #include <strings.hrc>
 
-#include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/ui/dialogs/FilePicker.hpp>
-#include <com/sun/star/ui/dialogs/XFilterManager.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <com/sun/star/view/DuplexMode.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/awt/Size.hpp>
 
 #include <unordered_map>

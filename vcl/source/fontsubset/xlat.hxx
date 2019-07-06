@@ -22,7 +22,7 @@
 #ifndef INCLUDED_VCL_SOURCE_FONTSUBSET_XLAT_HXX
 #define INCLUDED_VCL_SOURCE_FONTSUBSET_XLAT_HXX
 
-//####include "sft.hxx"
+#include <sal/types.h>
 
 namespace vcl
 {

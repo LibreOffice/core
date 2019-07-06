@@ -19,6 +19,7 @@
 
 #include "Exif.hxx"
 #include <memory>
+#include <osl/endian.h>
 #include <tools/stream.hxx>
 
 Exif::Exif() :

@@ -19,7 +19,6 @@
 
 #include "pdfwriter_impl.hxx"
 #include <vcl/bitmapex.hxx>
-#include <vcl/image.hxx>
 
 using namespace vcl;
 

@@ -17,13 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <functional>
-#include <algorithm>
 #include <utility>
 #include <list>
 #include <vector>
 
-#include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <sal/log.hxx>
 #include <officecfg/Office/Common.hxx>
@@ -34,8 +31,6 @@
 #include <vcl/print.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/bitmapaccess.hxx>
-
-#include <print.h>
 
 #include "pdfwriter_impl.hxx"
 

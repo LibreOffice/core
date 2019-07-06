@@ -21,8 +21,6 @@
 #include "JpegWriter.hxx"
 #include "jpeg.hxx"
 
-#include <vcl/bitmapaccess.hxx>
-#include <vcl/FilterConfigItem.hxx>
 #include <vcl/graphicfilter.hxx>
 
 VCL_DLLPUBLIC bool ImportJPEG( SvStream& rInputStream, Graphic& rGraphic, GraphicFilterImportFlags nImportFlags, BitmapScopedWriteAccess* ppAccess )

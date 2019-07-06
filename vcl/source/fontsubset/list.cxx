@@ -25,7 +25,6 @@
 /*|  Author: Alexander Gelfenbain                       |*/
 /*[]---------------------------------------------------[]*/
 
-#include <rtl/alloc.h>
 #include <assert.h>
 #include <cstdlib>
 

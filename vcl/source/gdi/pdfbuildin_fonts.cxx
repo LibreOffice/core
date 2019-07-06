@@ -20,7 +20,6 @@
 #include "pdfbuildin_fonts.hxx"
 
 #include <rtl/strbuf.hxx>
-#include <vcl/settings.hxx>
 
 using namespace vcl;
 

@@ -18,7 +18,6 @@
  */
 
 #include <math.h>
-#include <stdlib.h>
 
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/bitmapex.hxx>

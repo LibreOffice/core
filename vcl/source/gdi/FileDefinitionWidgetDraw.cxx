@@ -25,8 +25,6 @@
 #include <vcl/bitmapex.hxx>
 #include <vcl/BitmapTools.hxx>
 
-#include <vcl/pngwrite.hxx>
-
 #include <comphelper/seqstream.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/lok.hxx>

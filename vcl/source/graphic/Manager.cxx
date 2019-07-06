@@ -19,8 +19,6 @@
 
 #include <graphic/Manager.hxx>
 #include <impgraph.hxx>
-#include <vcl/lazydelete.hxx>
-#include <vcl/svapp.hxx>
 #include <sal/log.hxx>
 
 #include <officecfg/Office/Common.hxx>

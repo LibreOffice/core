@@ -27,7 +27,6 @@
 #include "JpegWriter.hxx"
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/FilterConfigItem.hxx>
-#include <vcl/graphicfilter.hxx>
 #include <tools/helpers.hxx>
 #include <tools/stream.hxx>
 

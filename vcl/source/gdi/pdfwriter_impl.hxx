@@ -44,7 +44,6 @@
 #include <comphelper/hash.hxx>
 #include <tools/stream.hxx>
 
-#include <sallayout.hxx>
 #include <outdata.hxx>
 #include "pdffontcache.hxx"
 #include "pdfbuildin_fonts.hxx"

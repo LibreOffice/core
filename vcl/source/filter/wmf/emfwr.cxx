@@ -23,7 +23,6 @@
 #include <algorithm>
 
 #include "emfwr.hxx"
-#include <rtl/strbuf.hxx>
 #include <tools/helpers.hxx>
 #include <tools/fract.hxx>
 #include <tools/stream.hxx>
@@ -31,6 +30,7 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <vcl/lineinfo.hxx>
 #include <vcl/dibtools.hxx>
+#include <vcl/metaact.hxx>
 #include <memory>
 
 #define WIN_EMR_POLYGON                     3

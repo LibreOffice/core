@@ -34,7 +34,6 @@
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <memory>
 #include <com/sun/star/io/XOutputStream.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <comphelper/processfactory.hxx>
@@ -44,12 +43,10 @@
 #include <o3tl/numeric.hxx>
 #include <osl/file.hxx>
 #include <osl/thread.h>
-#include <rtl/crc.h>
 #include <rtl/digest.h>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <svl/urihelper.hxx>
-#include <tools/debug.hxx>
 #include <tools/fract.hxx>
 #include <tools/helpers.hxx>
 #include <tools/stream.hxx>
@@ -61,7 +58,6 @@
 #include <vcl/canvastools.hxx>
 #include <vcl/cvtgrf.hxx>
 #include <vcl/fontcharmap.hxx>
-#include <vcl/image.hxx>
 #include <vcl/lineinfo.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/settings.hxx>
@@ -72,10 +68,8 @@
 #include <comphelper/hash.hxx>
 
 #include <fontsubset.hxx>
-#include <outdev.h>
 #include <PhysicalFontFace.hxx>
 #include <salgdi.hxx>
-#include <sallayout.hxx>
 #include <textlayout.hxx>
 #include <textlineinfo.hxx>
 #include <bitmapwriteaccess.hxx>

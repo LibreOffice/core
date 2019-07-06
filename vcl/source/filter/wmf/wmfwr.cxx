@@ -23,19 +23,16 @@
 #include <algorithm>
 
 #include "wmfwr.hxx"
-#include <unotools/fontcvt.hxx>
 #include "emfwr.hxx"
 #include <rtl/crc.h>
-#include <rtl/strbuf.hxx>
 #include <rtl/tencinfo.h>
 #include <tools/bigint.hxx>
 #include <tools/helpers.hxx>
 #include <tools/tenccvt.hxx>
 #include <tools/fract.hxx>
 #include <tools/stream.hxx>
-#include <osl/endian.h>
 #include <vcl/dibtools.hxx>
-#include <vcl/metric.hxx>
+#include <vcl/metaact.hxx>
 #include <vcl/FilterConfigItem.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>

@@ -11,7 +11,6 @@
 #include <vcl/ImageTree.hxx>
 #include <implimagetree.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/container/XNameAccess.hpp>
 
 ImageTree & ImageTree::get() {

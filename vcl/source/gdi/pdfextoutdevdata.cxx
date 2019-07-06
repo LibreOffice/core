@@ -22,7 +22,6 @@
 #include <vcl/graph.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/gfxlink.hxx>
-#include <vcl/dllapi.h>
 #include <vcl/metaact.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
@@ -31,7 +30,6 @@
 #include <osl/diagnose.h>
 #include <tools/stream.hxx>
 
-#include <set>
 #include <memory>
 #include <map>
 

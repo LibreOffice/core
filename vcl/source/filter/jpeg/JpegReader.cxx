@@ -24,8 +24,6 @@
 #include <jerror.h>
 
 #include "JpegReader.hxx"
-#include <vcl/bitmapaccess.hxx>
-#include <vcl/FilterConfigItem.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/outdev.hxx>
 #include <tools/fract.hxx>
