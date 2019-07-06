@@ -308,18 +308,17 @@ void StdTabController::activateTabOrder(  )
     if ( !xC.is() || !xVclContainerPeer.is() )
         return;
 
-    // This may return a TabController, which returns desired list of controls faster
-    Reference< XTabController >  xTabController(static_cast< ::cppu::OWeakObject* >(this), UNO_QUERY);
-
     // Get a flattened list of controls sequences
     Sequence< Reference< XControlModel > > aModels = mxModel->getControlModels();
     Sequence< Reference< XWindow > > aCompSeq;
     Sequence< Any> aTabSeq;
 
-    // DG: For the sake of optimization, retrieve Controls from getControls(),
-    // this may sound counterproductive, but leads to performance improvements
-    // in practical scenarios (Forms)
-    Sequence< Reference< XControl > > aControls = xTabController->getControls();
+    // Previously used aControls = xTabController->getControls() "for the sake of optimization",
+    // but that list isn't valid during the creation phase (missing last created control) because
+    // listenermultiplexer.cxx handles fmvwimp::elementinserted before formcontroller::elementInserted
+    // Perhaps other places using the same optimization need to be reviewed?  (tdf#125609)
+    Sequence< Reference< XControl > > aCachedControls = getControls();
+    Sequence< Reference< XControl > > aControls = aCachedControls;
 
     // #58317# Some Models may be missing from the Container. Plus there is a
     // autoTabOrder call later on.
@@ -337,7 +336,7 @@ void StdTabController::activateTabOrder(  )
     {
         mxModel->getGroup( nG, aThisGroupModels, aName );
 
-        aControls = xTabController->getControls();
+        aControls = aCachedControls;
             // ImplCreateComponentSequence has a really strange semantics regarding it's first parameter:
             // upon method entry, it expects a super set of the controls which it returns
             // this means we need to completely fill this sequence with all available controls before
