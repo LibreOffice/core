@@ -2656,20 +2656,14 @@ css::drawing::PolyPolygonBezierCoords SwXShape::ConvertPolyPolygonBezierToLayout
                 const basegfx::B2DHomMatrix aMatrix(basegfx::utils::createTranslateB2DHomMatrix(
                     aTranslateDiff.X, aTranslateDiff.Y));
 
-                const sal_Int32 nOuterSequenceCount(aConvertedPath.Coordinates.getLength());
-                drawing::PointSequence* pInnerSequence = aConvertedPath.Coordinates.getArray();
-                for(sal_Int32 a(0); a < nOuterSequenceCount; a++)
+                for(drawing::PointSequence& rInnerSequence : aConvertedPath.Coordinates)
                 {
-                    const sal_Int32 nInnerSequenceCount(pInnerSequence->getLength());
-                    awt::Point* pArray = pInnerSequence->getArray();
-
-                    for(sal_Int32 b(0); b < nInnerSequenceCount; b++)
+                    for(awt::Point& rPoint : rInnerSequence)
                     {
-                        basegfx::B2DPoint aNewCoordinatePair(pArray->X, pArray->Y);
+                        basegfx::B2DPoint aNewCoordinatePair(rPoint.X, rPoint.Y);
                         aNewCoordinatePair *= aMatrix;
-                        pArray->X = basegfx::fround(aNewCoordinatePair.getX());
-                        pArray->Y = basegfx::fround(aNewCoordinatePair.getY());
-                        pArray++;
+                        rPoint.X = basegfx::fround(aNewCoordinatePair.getX());
+                        rPoint.Y = basegfx::fround(aNewCoordinatePair.getY());
                     }
                 }
             }

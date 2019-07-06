@@ -142,11 +142,9 @@ void SwHyperlinkEventDescriptor::copyMacrosFromNameReplace(
 {
     // iterate over all names (all names that *we* support)
     Sequence<OUString> aNames = getElementNames();
-    sal_Int32 nCount = aNames.getLength();
-    for(sal_Int32 i = 0; i < nCount; i++)
+    for(const OUString& rName : aNames)
     {
         // copy element for that name
-        const OUString& rName = aNames[i];
         if (xReplace->hasByName(rName))
         {
             SvBaseEventDescriptor::replaceByName(rName,

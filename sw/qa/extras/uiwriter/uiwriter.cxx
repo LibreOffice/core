@@ -1908,17 +1908,17 @@ void SwUiWriterTest::testDefaultsOfOutlineNumbering()
     alocale.Country = "US";
     uno::Sequence<beans::PropertyValues> aPropVal(xDefNum->getDefaultContinuousNumberingLevels(alocale));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(8), aPropVal.getLength());
-    for(int i=0;i<aPropVal.getLength();i++)
+    for(const auto& rPropValues : aPropVal)
     {
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(5), aPropVal[i].getLength());
-        for(int j=0;j<aPropVal[i].getLength();j++)
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(5), rPropValues.getLength());
+        for(const auto& rPropVal : rPropValues)
         {
-            uno::Any aAny = (aPropVal[i])[j].Value;
-            if((aPropVal[i])[j].Name == "Prefix" || (aPropVal[i])[j].Name == "Suffix" || (aPropVal[i])[j].Name == "Transliteration")
+            uno::Any aAny = rPropVal.Value;
+            if(rPropVal.Name == "Prefix" || rPropVal.Name == "Suffix" || rPropVal.Name == "Transliteration")
                 CPPUNIT_ASSERT_EQUAL(OUString("string"), aAny.getValueTypeName());
-            else if((aPropVal[i])[j].Name == "NumberingType")
+            else if(rPropVal.Name == "NumberingType")
                 CPPUNIT_ASSERT_EQUAL(OUString("short"), aAny.getValueTypeName());
-            else if((aPropVal[i])[j].Name == "NatNum")
+            else if(rPropVal.Name == "NatNum")
                 CPPUNIT_ASSERT_EQUAL(OUString("short"), aAny.getValueTypeName());
                 //It is expected to be long but right now its short !error!
             else
@@ -1981,7 +1981,7 @@ void SwUiWriterTest::testXFlatParagraph()
     xFlatPara3->changeAttributes(sal_Int32(0), sal_Int32(5), aDescriptor);
     //checking Language Portions
     uno::Sequence<::sal_Int32> aLangPortions(xFlatPara4->getLanguagePortions());
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aLangPortions.getLength());
+    CPPUNIT_ASSERT(!aLangPortions.hasElements());
     //examining Language of text
     css::lang::Locale alocale = xFlatPara4->getLanguageOfText(sal_Int32(0), sal_Int32(4));
     CPPUNIT_ASSERT_EQUAL(OUString("en"), alocale.Language);
@@ -2000,17 +2000,16 @@ void SwUiWriterTest::testTdf81995()
     alocale.Country = "US";
     uno::Sequence<uno::Reference<container::XIndexAccess>> aIndexAccess(xDefNum->getDefaultOutlineNumberings(alocale));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(8), aIndexAccess.getLength());
-    for(int i=0;i<aIndexAccess.getLength();i++)
+    for(const auto& rIndexAccess : aIndexAccess)
     {
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(5), aIndexAccess[i]->getCount());
-        for(int j=0;j<aIndexAccess[i]->getCount();j++)
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(5), rIndexAccess->getCount());
+        for(int j=0;j<rIndexAccess->getCount();j++)
         {
             uno::Sequence<beans::PropertyValue> aProps;
-            aIndexAccess[i]->getByIndex(j) >>= aProps;
+            rIndexAccess->getByIndex(j) >>= aProps;
             CPPUNIT_ASSERT_EQUAL(sal_Int32(12), aProps.getLength());
-            for(int k=0;k<aProps.getLength();k++)
+            for(const beans::PropertyValue& rProp : aProps)
             {
-                const beans::PropertyValue& rProp = aProps[k];
                 uno::Any aAny = rProp.Value;
                 if(rProp.Name == "Prefix" || rProp.Name == "Suffix" || rProp.Name == "BulletChar" || rProp.Name == "BulletFontName" || rProp.Name == "Transliteration")
                     CPPUNIT_ASSERT_EQUAL(OUString("string"), aAny.getValueTypeName());

@@ -2091,7 +2091,7 @@ void checkPageHeaderOrFooter(const SfxViewShell* pViewShell, sal_uInt16 nWhich, 
         CPPUNIT_ASSERT_EQUAL(OUString("Default Style"), aSeq[0]);
     }
     else
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aSeq.getLength());
+        CPPUNIT_ASSERT(!aSeq.hasElements());
 };
 
 }

@@ -3532,17 +3532,15 @@ uno::Reference< style::XAutoStyle > SwXAutoStyleFamily::insertStyle(
         throw uno::RuntimeException();
 
     SwAttrSet aSet( m_pDocShell->GetDoc()->GetAttrPool(), pRange );
-    const beans::PropertyValue* pSeq = Values.getConstArray();
-    sal_Int32 nLen = Values.getLength();
     const bool bTakeCareOfDrawingLayerFillStyle(IStyleAccess::AUTO_STYLE_PARA == m_eFamily);
 
     if(!bTakeCareOfDrawingLayerFillStyle)
     {
-        for( sal_Int32 i = 0; i < nLen; ++i )
+        for( const beans::PropertyValue& rValue : Values )
         {
             try
             {
-                pPropSet->setPropertyValue( pSeq[i].Name, pSeq[i].Value, aSet );
+                pPropSet->setPropertyValue( rValue.Name, rValue.Value, aSet );
             }
             catch (const beans::UnknownPropertyException &)
             {
@@ -3566,10 +3564,10 @@ uno::Reference< style::XAutoStyle > SwXAutoStyleFamily::insertStyle(
         // used slots functionality here to do this correctly
         const SfxItemPropertyMap& rMap = pPropSet->getPropertyMap();
 
-        for( sal_Int32 i = 0; i < nLen; ++i )
+        for( const beans::PropertyValue& rValue : Values )
         {
-            const OUString& rPropName = pSeq[i].Name;
-            uno::Any aValue(pSeq[i].Value);
+            const OUString& rPropName = rValue.Name;
+            uno::Any aValue(rValue.Value);
             const SfxItemPropertySimpleEntry* pEntry = rMap.getByName(rPropName);
 
             if (!pEntry)

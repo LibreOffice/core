@@ -124,12 +124,8 @@ static bool lcl_getSelectedState(const SwAccessibleChild& aChild,
         if( pRStateSet.is() )
         {
             Sequence<short> aStates = pRStateSet->getStates();
-            sal_Int32 count = aStates.getLength();
-            for( sal_Int32 i = 0; i < count; i++ )
-            {
-                if( aStates[i] == AccessibleStateType::SELECTED)
-                    return true;
-            }
+            if (std::find(aStates.begin(), aStates.end(), AccessibleStateType::SELECTED) != aStates.end())
+                return true;
         }
     }
     return false;

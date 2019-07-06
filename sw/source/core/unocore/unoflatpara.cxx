@@ -268,8 +268,8 @@ void SAL_CALL SwXFlatParagraph::changeText(::sal_Int32 nPos, ::sal_Int32 nLen, c
     uno::Reference< beans::XPropertySet > xPropSet( xRange, uno::UNO_QUERY );
     if ( xPropSet.is() )
     {
-        for ( sal_Int32 i = 0; i < aAttributes.getLength(); ++i )
-            xPropSet->setPropertyValue( aAttributes[i].Name, aAttributes[i].Value );
+        for ( const auto& rAttribute : aAttributes )
+            xPropSet->setPropertyValue( rAttribute.Name, rAttribute.Value );
     }
 
     IDocumentContentOperations& rIDCO = pOldTextNode->getIDocumentContentOperations();
@@ -301,8 +301,8 @@ void SAL_CALL SwXFlatParagraph::changeAttributes(::sal_Int32 nPos, ::sal_Int32 n
     uno::Reference< beans::XPropertySet > xPropSet( xRange, uno::UNO_QUERY );
     if ( xPropSet.is() )
     {
-        for ( sal_Int32 i = 0; i < aAttributes.getLength(); ++i )
-            xPropSet->setPropertyValue( aAttributes[i].Name, aAttributes[i].Value );
+        for ( const auto& rAttribute : aAttributes )
+            xPropSet->setPropertyValue( rAttribute.Name, rAttribute.Value );
     }
 
     ClearTextNode(); // TODO: is this really needed?

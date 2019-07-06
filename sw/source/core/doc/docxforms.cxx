@@ -93,12 +93,10 @@ void SwDoc::disposeXForms( )
     {
         // iterate over all models
         uno::Sequence<OUString> aNames = mxXForms->getElementNames();
-        const OUString* pNames = aNames.getConstArray();
-        sal_Int32 nNames = aNames.getLength();
-        for( sal_Int32 n = 0; (n < nNames); n++ )
+        for( const OUString& rName : aNames )
         {
             Reference< xforms::XModel > xModel(
-                mxXForms->getByName( pNames[n] ), UNO_QUERY );
+                mxXForms->getByName( rName ), UNO_QUERY );
 
             if( xModel.is() )
             {

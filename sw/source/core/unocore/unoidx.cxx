@@ -2700,12 +2700,10 @@ SwXDocumentIndex::TokenAccess_Impl::replaceByIndex(
     }
 
     OUStringBuffer sPattern;
-    const sal_Int32 nTokens = aSeq.getLength();
-    const beans::PropertyValues* pTokens = aSeq.getConstArray();
-    for(sal_Int32 i = 0; i < nTokens; i++)
+    for(const beans::PropertyValues& rToken : aSeq)
     {
-        const beans::PropertyValue* pProperties = pTokens[i].getConstArray();
-        const sal_Int32 nProperties = pTokens[i].getLength();
+        const beans::PropertyValue* pProperties = rToken.getConstArray();
+        const sal_Int32 nProperties = rToken.getLength();
         //create an invalid token
         SwFormToken aToken(TOKEN_END);
         for(sal_Int32 j = 0; j < nProperties; j++)

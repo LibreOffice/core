@@ -79,6 +79,7 @@
 #include <svl/listener.hxx>
 #include <paratr.hxx>
 #include <sal/log.hxx>
+#include <numeric>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -1592,12 +1593,10 @@ void SwXNumberingRules::SetPropertiesToNumFormat(
         InChapterLast = 24
     };
 
-    const beans::PropertyValue* pPropArray = rProperties.getConstArray();
     std::vector<PropertyValue const*> aPropertyValues;
     bool bExcept = false;
-    for(sal_Int32 i = 0; i < rProperties.getLength() && !bExcept; i++)
+    for(const beans::PropertyValue& rProp : rProperties)
     {
-        const beans::PropertyValue& rProp = pPropArray[i];
         bExcept = true;
         for(size_t j = 0; j < SAL_N_ELEMENTS( aNumPropertyNames ); j++)
         {
@@ -1617,6 +1616,8 @@ void SwXNumberingRules::SetPropertiesToNumFormat(
         }
         SAL_WARN_IF( bExcept, "sw.uno", "Unknown/incorrect property " << rProp.Name << ", failing" );
         aPropertyValues.push_back(& rProp);
+        if(bExcept)
+            break;
     }
 
     bool bWrongArg = false;
@@ -2402,12 +2403,8 @@ uno::Sequence< TextColumn > SwXTextColumns::getColumns()
 void SwXTextColumns::setColumns(const uno::Sequence< TextColumn >& rColumns)
 {
     SolarMutexGuard aGuard;
-    sal_Int32 nReferenceTemp = 0;
-    const TextColumn* prCols = rColumns.getConstArray();
-    for(long i = 0; i < rColumns.getLength(); i++)
-    {
-        nReferenceTemp += prCols[i].Width;
-    }
+    sal_Int32 nReferenceTemp = std::accumulate(rColumns.begin(), rColumns.end(), sal_Int32(0),
+        [](const sal_Int32 nSum, const TextColumn& rCol) { return nSum + rCol.Width; });
     m_bIsAutomaticWidth = false;
     m_nReference = !nReferenceTemp ? USHRT_MAX : nReferenceTemp;
     m_aTextColumns = rColumns;

@@ -1479,11 +1479,10 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::uno::Any&
                     else if(aValue >>= aParam)
                     {
                         tools::PolyPolygon aPoly(static_cast<sal_uInt16>(aParam.getLength()));
-                        for(sal_Int32 i = 0; i < aParam.getLength(); i++)
+                        for(const ::drawing::PointSequence& rPointSeq : aParam)
                         {
-                            const ::drawing::PointSequence* pPointSeq = aParam.getConstArray();
-                            sal_Int32 nPoints = pPointSeq[i].getLength();
-                            const ::awt::Point* pPoints = pPointSeq[i].getConstArray();
+                            sal_Int32 nPoints = rPointSeq.getLength();
+                            const ::awt::Point* pPoints = rPointSeq.getConstArray();
                             tools::Polygon aSet( static_cast<sal_uInt16>(nPoints) );
                             for(sal_Int32 j = 0; j < nPoints; j++)
                             {
@@ -2461,8 +2460,7 @@ uno::Sequence< beans::PropertyState > SwXFrame::getPropertyStates(
     }
     else if(IsDescriptor())
     {
-        for(int i = 0; i < aPropertyNames.getLength(); i++)
-            pStates[i] = beans::PropertyState_DIRECT_VALUE;
+        std::fill(aStates.begin(), aStates.end(), beans::PropertyState_DIRECT_VALUE);
     }
     else
         throw uno::RuntimeException();

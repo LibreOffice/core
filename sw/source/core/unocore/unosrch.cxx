@@ -71,24 +71,21 @@ SwSearchProperties_Impl::SwSearchProperties_Impl() :
 
 void SwSearchProperties_Impl::SetProperties(const uno::Sequence< beans::PropertyValue >& aSearchAttribs)
 {
-    const beans::PropertyValue* pProps = aSearchAttribs.getConstArray();
-
     //delete all existing values
     for(size_t i = 0; i < aPropertyEntries.size(); ++i)
     {
         pValueArr[i].reset();
     }
 
-    const sal_uInt32 nLen = aSearchAttribs.getLength();
-    for(sal_uInt32 i = 0; i < nLen; ++i)
+    for(const beans::PropertyValue& rSearchAttrib : aSearchAttribs)
     {
-        const OUString& sName = pProps[i].Name;
+        const OUString& sName = rSearchAttrib.Name;
         auto aIt = std::find_if(aPropertyEntries.begin(), aPropertyEntries.end(),
             [&sName](const SfxItemPropertyNamedEntry& rProp) { return rProp.sName == sName; });
         if( aIt == aPropertyEntries.end() )
             throw beans::UnknownPropertyException();
         auto nIndex = static_cast<sal_uInt32>(std::distance(aPropertyEntries.begin(), aIt));
-        pValueArr[nIndex].reset( new beans::PropertyValue(pProps[i]) );
+        pValueArr[nIndex].reset( new beans::PropertyValue(rSearchAttrib) );
     }
 }
 

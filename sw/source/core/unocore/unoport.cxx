@@ -377,7 +377,7 @@ uno::Sequence< uno::Any > SwXTextPortion::GetPropertyValues_Impl(
 {
     sal_Int32 nLength = rPropertyNames.getLength();
     const OUString *pPropertyNames = rPropertyNames.getConstArray();
-    uno::Sequence< uno::Any > aValues(rPropertyNames.getLength());
+    uno::Sequence< uno::Any > aValues(nLength);
     uno::Any *pValues = aValues.getArray();
     SwUnoCursor& rUnoCursor = GetCursor();
 
@@ -555,14 +555,11 @@ uno::Sequence< beans::GetPropertyTolerantResult > SAL_CALL SwXTextPortion::getPr
 
     uno::Sequence< beans::GetDirectPropertyTolerantResult > aTmpRes(
             GetPropertyValuesTolerant_Impl( rPropertyNames, false ) );
-    const beans::GetDirectPropertyTolerantResult *pTmpRes = aTmpRes.getConstArray();
 
     // copy temporary result to final result type
     sal_Int32 nLen = aTmpRes.getLength();
     uno::Sequence< beans::GetPropertyTolerantResult > aRes( nLen );
-    beans::GetPropertyTolerantResult *pRes = aRes.getArray();
-    for (sal_Int32 i = 0;  i < nLen;  i++)
-        *pRes++ = *pTmpRes++;
+    std::copy(aTmpRes.begin(), aTmpRes.end(), aRes.begin());
     return aRes;
 }
 

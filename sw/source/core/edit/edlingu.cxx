@@ -1000,19 +1000,16 @@ bool SwEditShell::GetGrammarCorrection(
                 bRes = true;
 
                 // get suggestions to use for the specific error position
-                sal_Int32 nErrors = rResult.aErrors.getLength();
                 rSuggestions.realloc( 0 );
-                for (sal_Int32 i = 0;  i < nErrors; ++i )
+                // return suggestions for first error that includes the given error position
+                auto pError = std::find_if(rResult.aErrors.begin(), rResult.aErrors.end(),
+                    [rErrorPosInText, nLen](const linguistic2::SingleProofreadingError &rError) {
+                        return rError.nErrorStart <= rErrorPosInText
+                            && rErrorPosInText + nLen <= rError.nErrorStart + rError.nErrorLength; });
+                if (pError != rResult.aErrors.end())
                 {
-                    // return suggestions for first error that includes the given error position
-                    const linguistic2::SingleProofreadingError &rError = rResult.aErrors[i];
-                    if (rError.nErrorStart <= rErrorPosInText &&
-                        rErrorPosInText + nLen <= rError.nErrorStart + rError.nErrorLength)
-                    {
-                        rSuggestions = rError.aSuggestions;
-                        rErrorIndexInResult = i;
-                        break;
-                    }
+                    rSuggestions = pError->aSuggestions;
+                    rErrorIndexInResult = static_cast<sal_Int32>(std::distance(rResult.aErrors.begin(), pError));
                 }
             }
 
@@ -1533,15 +1530,10 @@ void SwSpellIter::CreatePortion(uno::Reference< XSpellAlternatives > const & xAl
             aPortion.aGrammarError = pGrammarResult->aErrors[0];
             aPortion.sText = pGrammarResult->aText.copy( aPortion.aGrammarError.nErrorStart, aPortion.aGrammarError.nErrorLength );
             aPortion.xGrammarChecker = pGrammarResult->xProofreader;
-            const beans::PropertyValue* pProperties = pGrammarResult->aProperties.getConstArray();
-            for( sal_Int32 nProp = 0; nProp < pGrammarResult->aProperties.getLength(); ++nProp )
-            {
-                if ( pProperties->Name == "DialogTitle" )
-                {
-                    pProperties->Value >>= aPortion.sDialogTitle;
-                    break;
-                }
-            }
+            auto pProperty = std::find_if(pGrammarResult->aProperties.begin(), pGrammarResult->aProperties.end(),
+                [](const beans::PropertyValue& rProperty) { return rProperty.Name == "DialogTitle"; });
+            if (pProperty != pGrammarResult->aProperties.end())
+                pProperty->Value >>= aPortion.sDialogTitle;
         }
     }
     else

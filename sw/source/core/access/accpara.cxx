@@ -18,6 +18,7 @@
  */
 
 #include <memory>
+#include <numeric>
 #include <txtfrm.hxx>
 #include <flyfrm.hxx>
 #include <ndtxt.hxx>
@@ -1593,11 +1594,9 @@ void SwAccessibleParagraph::_getDefaultAttributesImpl(
     }
     else
     {
-        const OUString* pReqAttrs = aRequestedAttributes.getConstArray();
-        const sal_Int32 nLength = aRequestedAttributes.getLength();
-        for( sal_Int32 i = 0; i < nLength; ++i )
+        for( const OUString& rReqAttr : aRequestedAttributes )
         {
-            tAccParaPropValMap::const_iterator const aIter = aDefAttrSeq.find( pReqAttrs[i] );
+            tAccParaPropValMap::const_iterator const aIter = aDefAttrSeq.find( rReqAttr );
             if ( aIter != aDefAttrSeq.end() )
             {
                 rDefAttrSeq[ aIter->first ] = aIter->second;
@@ -1618,30 +1617,13 @@ uno::Sequence< PropertyValue > SwAccessibleParagraph::getDefaultAttributes(
 
     // #i92233#
     static const char sMMToPixelRatio[] = "MMToPixelRatio";
-    bool bProvideMMToPixelRatio( false );
-    {
-        if ( !aRequestedAttributes.hasElements() )
-        {
-            bProvideMMToPixelRatio = true;
-        }
-        else
-        {
-            const OUString* aRequestedAttrIter =
-                  std::find( aRequestedAttributes.begin(), aRequestedAttributes.end(), sMMToPixelRatio );
-            if ( aRequestedAttrIter != aRequestedAttributes.end() )
-                bProvideMMToPixelRatio = true;
-        }
-    }
+    bool bProvideMMToPixelRatio( !aRequestedAttributes.hasElements() ||
+                                 (comphelper::findValue(aRequestedAttributes, sMMToPixelRatio) != -1) );
 
     uno::Sequence< PropertyValue > aValues( aDefAttrSeq.size() +
                                             ( bProvideMMToPixelRatio ? 1 : 0 ) );
-    PropertyValue* pValues = aValues.getArray();
-    sal_Int32 i = 0;
-    for ( const auto& rEntry : aDefAttrSeq )
-    {
-        pValues[i] = rEntry.second;
-        ++i;
-    }
+    std::transform(aDefAttrSeq.begin(), aDefAttrSeq.end(), aValues.begin(),
+        [](const auto& rEntry) -> PropertyValue { return rEntry.second; });
 
     // #i92233#
     if ( bProvideMMToPixelRatio )
@@ -1654,7 +1636,7 @@ uno::Sequence< PropertyValue > SwAccessibleParagraph::getDefaultAttributes(
         rPropVal.Value <<= fRatio;
         rPropVal.Handle = -1;
         rPropVal.State = beans::PropertyState_DEFAULT_VALUE;
-        pValues[ aValues.getLength() - 1 ] = rPropVal;
+        aValues[ aValues.getLength() - 1 ] = rPropVal;
     }
 
     return aValues;
@@ -1749,11 +1731,9 @@ void SwAccessibleParagraph::_getRunAttributesImpl(
         }
         else
         {
-            const OUString* pReqAttrs = aRequestedAttributes.getConstArray();
-            const sal_Int32 nLength = aRequestedAttributes.getLength();
-            for( sal_Int32 i = 0; i < nLength; ++i )
+            for( const OUString& rReqAttr : aRequestedAttributes )
             {
-                tAccParaPropValMap::iterator aIter = aRunAttrSeq.find( pReqAttrs[i] );
+                tAccParaPropValMap::iterator aIter = aRunAttrSeq.find( rReqAttr );
                 if ( aIter != aRunAttrSeq.end() )
                 {
                     rRunAttrSeq[ (*aIter).first ] = (*aIter).second;
@@ -1835,12 +1815,9 @@ void SwAccessibleParagraph::_getSupplementalAttributesImpl(
         }
     }
 
-    const OUString* pSupplementalAttrs = aRequestedAttributes.getConstArray();
-    const sal_Int32 nSupplementalLength = aRequestedAttributes.getLength();
-
-    for( sal_Int32 index = 0; index < nSupplementalLength; ++index )
+    for( const OUString& rSupplementalAttr : aRequestedAttributes )
     {
-        tAccParaPropValMap::const_iterator const aIter = aSupplementalAttrSeq.find( pSupplementalAttrs[index] );
+        tAccParaPropValMap::const_iterator const aIter = aSupplementalAttrSeq.find( rSupplementalAttr );
         if ( aIter != aSupplementalAttrSeq.end() )
         {
             rSupplementalAttrSeq[ aIter->first ] = aIter->second;
@@ -2643,10 +2620,8 @@ sal_Bool SwAccessibleParagraph::setAttributes(
     // build sorted index array
     sal_Int32 nLength = rAttributeSet.getLength();
     const PropertyValue* pPairs = rAttributeSet.getConstArray();
-    std::vector<sal_Int32> aIndices;
-    aIndices.reserve(nLength);
-    for (sal_Int32 i = 0; i < nLength; ++i)
-        aIndices.push_back(i);
+    std::vector<sal_Int32> aIndices(nLength);
+    std::iota(aIndices.begin(), aIndices.end(), 0);
     std::sort(aIndices.begin(), aIndices.end(), IndexCompare(pPairs));
 
     // create sorted sequences according to index array

@@ -111,9 +111,7 @@ void SwDropDownField::SetItems(const uno::Sequence<OUString> & rItems)
 {
     aValues.clear();
 
-    sal_Int32 aCount = rItems.getLength();
-    for (int i = 0; i < aCount; i++)
-        aValues.push_back(rItems[i]);
+    comphelper::sequenceToContainer(aValues, rItems);
 
     aSelectedItem.clear();
 }

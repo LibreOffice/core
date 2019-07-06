@@ -124,14 +124,11 @@ public:
                 uno::Sequence< OUString > sModuleNames = xLib->getElementNames();
                 uno::Reference< script::vba::XVBAModuleInfo > xVBAModuleInfo( xLib, uno::UNO_QUERY );
 
-                for ( sal_Int32 i=0; i < sModuleNames.getLength(); ++i )
-                {
-                    if ( xVBAModuleInfo->hasModuleInfo( sModuleNames[ i ] ) &&  xVBAModuleInfo->getModuleInfo( sModuleNames[ i ] ).ModuleType == script::ModuleType::DOCUMENT )
-                    {
-                        msThisDocumentCodeName = sModuleNames[ i ];
-                        break;
-                    }
-                }
+                auto pModuleName = std::find_if(sModuleNames.begin(), sModuleNames.end(), [&xVBAModuleInfo](const OUString& rName) {
+                    return xVBAModuleInfo->hasModuleInfo(rName)
+                        && xVBAModuleInfo->getModuleInfo(rName).ModuleType == script::ModuleType::DOCUMENT; });
+                if (pModuleName != sModuleNames.end())
+                    msThisDocumentCodeName = *pModuleName;
             }
             catch( uno::Exception& )
             {

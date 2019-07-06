@@ -548,39 +548,38 @@ uno::Reference< chart2::data::XDataSource > SwChartDataProvider::Impl_createData
     OSL_ENSURE( nArgs != 0, "no properties provided" );
     if (nArgs == 0)
         return xRes;
-    const beans::PropertyValue *pArg = rArguments.getConstArray();
-    for (sal_Int32 i = 0;  i < nArgs;  ++i)
+    for (const beans::PropertyValue& rArg : rArguments)
     {
-        if ( pArg[i].Name == "DataRowSource" )
+        if ( rArg.Name == "DataRowSource" )
         {
             chart::ChartDataRowSource eSource;
-            if (!(pArg[i].Value >>= eSource))
+            if (!(rArg.Value >>= eSource))
             {
                 sal_Int32 nTmp = 0;
-                if (!(pArg[i].Value >>= nTmp))
+                if (!(rArg.Value >>= nTmp))
                     throw lang::IllegalArgumentException();
                 eSource = static_cast< chart::ChartDataRowSource >( nTmp );
             }
             bDtaSrcIsColumns = eSource == chart::ChartDataRowSource_COLUMNS;
         }
-        else if ( pArg[i].Name == "FirstCellAsLabel" )
+        else if ( rArg.Name == "FirstCellAsLabel" )
         {
-            if (!(pArg[i].Value >>= bFirstIsLabel))
+            if (!(rArg.Value >>= bFirstIsLabel))
                 throw lang::IllegalArgumentException();
         }
-        else if ( pArg[i].Name == "CellRangeRepresentation" )
+        else if ( rArg.Name == "CellRangeRepresentation" )
         {
-            if (!(pArg[i].Value >>= aRangeRepresentation))
+            if (!(rArg.Value >>= aRangeRepresentation))
                 throw lang::IllegalArgumentException();
         }
-        else if ( pArg[i].Name == "SequenceMapping" )
+        else if ( rArg.Name == "SequenceMapping" )
         {
-            if (!(pArg[i].Value >>= aSequenceMapping))
+            if (!(rArg.Value >>= aSequenceMapping))
                 throw lang::IllegalArgumentException();
         }
-        else if ( pArg[i].Name == "ChartOleObjectName" )
+        else if ( rArg.Name == "ChartOleObjectName" )
         {
-            if (!(pArg[i].Value >>= aChartOleObjectName))
+            if (!(rArg.Value >>= aChartOleObjectName))
                 throw lang::IllegalArgumentException();
         }
     }
@@ -642,13 +641,12 @@ uno::Reference< chart2::data::XDataSource > SwChartDataProvider::Impl_createData
         throw lang::IllegalArgumentException();
 
     SortSubranges( aSubRanges, bDtaSrcIsColumns );
-    const OUString *pSubRanges = aSubRanges.getConstArray();
 
     // get table format for that single table from above
     SwFrameFormat    *pTableFormat  = nullptr;      // pointer to table format
     std::shared_ptr<SwUnoCursor> pUnoCursor;      // here required to check if the cells in the range do actually exist
     if (aSubRanges.hasElements())
-        GetFormatAndCreateCursorFromRangeRep( pDoc, pSubRanges[0], &pTableFormat, pUnoCursor );
+        GetFormatAndCreateCursorFromRangeRep( pDoc, aSubRanges[0], &pTableFormat, pUnoCursor );
 
     if (!pTableFormat || !pUnoCursor)
         throw lang::IllegalArgumentException();
@@ -669,12 +667,11 @@ uno::Reference< chart2::data::XDataSource > SwChartDataProvider::Impl_createData
     //!! by proceeding this way we automatically get rid of
     //!! multiple listed or overlapping cell ranges which should
     //!! just be ignored silently
-    sal_Int32 nSubRanges = aSubRanges.getLength();
-    for (sal_Int32 i = 0; i < nSubRanges; ++i)
+    for (const OUString& rSubRange : aSubRanges)
     {
         OUString aTableName, aStartCell, aEndCell;
         bool bOk2 = GetTableAndCellsFromRangeRep(
-                            pSubRanges[i], aTableName, aStartCell, aEndCell );
+                            rSubRange, aTableName, aStartCell, aEndCell );
         OSL_ENSURE(bOk2, "failed to get table and start/end cells");
 
         sal_Int32 nStartRow, nStartCol, nEndRow, nEndCol;
@@ -879,19 +876,16 @@ uno::Reference< chart2::data::XDataSource > SwChartDataProvider::Impl_createData
     }
 
     // apply 'SequenceMapping' if it was provided
-    sal_Int32 nSequenceMappingLen = aSequenceMapping.getLength();
-    if (nSequenceMappingLen)
+    if (aSequenceMapping.hasElements())
     {
-        sal_Int32 *pSequenceMapping = aSequenceMapping.getArray();
         uno::Sequence<uno::Reference<chart2::data::XLabeledDataSequence>> aOld_LDS(aLDS);
         uno::Reference<chart2::data::XLabeledDataSequence>* pOld_LDS = aOld_LDS.getArray();
 
         sal_Int32 nNewCnt = 0;
-        for (sal_Int32 i = 0; i < nSequenceMappingLen; ++i)
+        for (sal_Int32 nIdx : aSequenceMapping)
         {
             // check that index to be used is valid
             // and has not yet been used
-            sal_Int32 nIdx = pSequenceMapping[i];
             if (0 <= nIdx && nIdx < nNumLDS && pOld_LDS[nIdx].is())
             {
                 pLDS[nNewCnt++] = pOld_LDS[nIdx];
@@ -1238,14 +1232,12 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwChartDataProvider::detectArgume
     uno::Sequence< OUString > aSortedRanges;
     GetSubranges( aCellRanges, aSortedRanges, false /*sub ranges should already be normalized*/ );
     SortSubranges( aSortedRanges, (nDtaSrcIsColumns == 1) );
-    sal_Int32 nSortedRanges = aSortedRanges.getLength();
-    const OUString *pSortedRanges = aSortedRanges.getConstArray();
     OUString aSortedCellRanges;
-    for (sal_Int32 i = 0;  i < nSortedRanges;  ++i)
+    for (const OUString& rSortedRange : aSortedRanges)
     {
         if (!aSortedCellRanges.isEmpty())
             aSortedCellRanges += ";";
-        aSortedCellRanges += pSortedRanges[i];
+        aSortedCellRanges += rSortedRange;
     }
 
     // build value for 'SequenceMapping'

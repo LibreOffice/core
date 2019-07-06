@@ -399,23 +399,23 @@ void SwAuthorityFieldType::PutValue( const Any& rAny, sal_uInt16 nWhichId )
                 //TODO: Limiting to the first SAL_MAX_UINT16 elements of aSeq so that size of
                 // m_SortKeyArr remains in range of sal_uInt16, as GetSortKeyCount and GetSortKey
                 // still expect m_SortKeyArr to be indexed by sal_uInt16:
-                for(sal_Int32 i = 0; i < aSeq.getLength() && i < SAL_MAX_UINT16; i++)
+                auto nSize = std::min<sal_Int32>(aSeq.getLength(), SAL_MAX_UINT16);
+                for(sal_Int32 i = 0; i < nSize; i++)
                 {
-                    const PropertyValue* pValue = pValues[i].getConstArray();
                     SwTOXSortKey aSortKey;
-                    for(sal_Int32 j = 0; j < pValues[i].getLength(); j++)
+                    for(const PropertyValue& rValue : pValues[i])
                     {
-                        if(pValue[j].Name == UNO_NAME_SORT_KEY)
+                        if(rValue.Name == UNO_NAME_SORT_KEY)
                         {
-                            sal_Int16 nVal = -1; pValue[j].Value >>= nVal;
+                            sal_Int16 nVal = -1; rValue.Value >>= nVal;
                             if(nVal >= 0 && nVal < AUTH_FIELD_END)
                                 aSortKey.eField = static_cast<ToxAuthorityField>(nVal);
                             else
                                 bRet = false;
                         }
-                        else if(pValue[j].Name == UNO_NAME_IS_SORT_ASCENDING)
+                        else if(rValue.Name == UNO_NAME_IS_SORT_ASCENDING)
                         {
-                            aSortKey.bSortAscending = *o3tl::doAccess<bool>(pValue[j].Value);
+                            aSortKey.bSortAscending = *o3tl::doAccess<bool>(rValue.Value);
                         }
                     }
                     m_SortKeyArr.push_back(aSortKey);
@@ -636,21 +636,20 @@ bool    SwAuthorityField::PutValue( const Any& rAny, sal_uInt16 /*nWhichId*/ )
     OUStringBuffer sBuf;
     comphelper::string::padToLength(sBuf, AUTH_FIELD_ISBN, TOX_STYLE_DELIMITER);
     OUString sToSet(sBuf.makeStringAndClear());
-    const PropertyValue* pParam = aParam.getConstArray();
-    for(sal_Int32 i = 0; i < aParam.getLength(); i++)
+    for(const PropertyValue& rParam : aParam)
     {
-        const sal_Int32 nFound = lcl_Find(pParam[i].Name);
+        const sal_Int32 nFound = lcl_Find(rParam.Name);
         if(nFound >= 0)
         {
             OUString sContent;
             if(AUTH_FIELD_AUTHORITY_TYPE == nFound)
             {
                 sal_Int16 nVal = 0;
-                pParam[i].Value >>= nVal;
+                rParam.Value >>= nVal;
                 sContent = OUString::number(nVal);
             }
             else
-                pParam[i].Value >>= sContent;
+                rParam.Value >>= sContent;
             sToSet = comphelper::string::setToken(sToSet, nFound, TOX_STYLE_DELIMITER, sContent);
         }
     }
