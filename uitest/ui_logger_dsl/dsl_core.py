@@ -23,6 +23,7 @@ def parse_args():
     return args
 
 class ul_Compiler:
+    prev_command=""
     variables=[]
     objects = dict()
     def __init__(self , input_address , output_address):
@@ -92,6 +93,7 @@ class ul_Compiler:
                 UNOCommand.uno_command_name +"\", mkPropertyValues({"+ paramaters +"}) )\n"
 
         self.variables.append(line)
+        self.prev_command=UNOCommand
 
     def handle_start(self, StarterCommand):
         line="\t\tMainDoc = self.ui_test.create_doc_in_start_center(\""+\
@@ -100,33 +102,45 @@ class ul_Compiler:
 
         line="\t\tMainWindow = self.xUITest.getTopFocusWindow()\n"
         self.variables.append(line)
+        self.prev_command=StarterCommand
 
     def handle_Dialog(self, DialogCommand):
 
         if (DialogCommand.__class__.__name__ == "OpenModalDialog"):
             old_line = self.variables.pop()
 
-            key_word=old_line[-9:-3]
+            if (self.prev_command.__class__.__name__ == "UNOCommand"):
+                key_word=self.prev_command.uno_command_name[-6:]
+            else:
+                key_word=old_line[-9:-3]
+
             if ( key_word == "Dialog"):
                 old_line="\t\tself.ui_test.execute_dialog_through_command(\""+\
-                    old_line[31:-3]+"\")\n"
+                    self.prev_command.uno_command_name+"\")\n"
             self.variables.append(old_line)
             line = "\t\t" + DialogCommand.dialog_name + " = self.xUITest.getTopFocusWindow()\n"
 
         elif (DialogCommand.__class__.__name__ == "OpenModelessDialog"):
             old_line = self.variables.pop()
+            if (self.prev_command.__class__.__name__ == "UNOCommand"):
+                key_word=self.prev_command.uno_command_name[-6:]
+            else:
+                key_word=old_line[-9:-3]
 
-            key_word=old_line[-9:-3]
             if ( key_word == "Dialog"):
                 old_line="\t\tself.ui_test.execute_modeless_dialog_through_command(\""+\
-                    old_line[31:-3]+"\")\n"
+                    self.prev_command.uno_command_name+"\")\n"
             self.variables.append(old_line)
             line = "\t\t" + DialogCommand.dialog_name + "  = self.xUITest.getTopFocusWindow()\n"
 
         elif (DialogCommand.__class__.__name__ == "CloseDialog"):
-            line="\t\tto be implemented after ui Objects\n"
+            if (self.prev_command.__class__.__name__ == "ButtonUIObject"):
+                old_line = self.variables.pop()
+                line="\t\tself.ui_test.close_dialog_through_button("+\
+                    self.prev_command.ui_button+")\n"
 
         self.variables.append(line)
+        self.prev_command=DialogCommand
 
     def handle_button(self, ButtonUIObject):
 
@@ -140,6 +154,7 @@ class ul_Compiler:
 
         line="\t\t"+ButtonUIObject.ui_button+".executeAction(\"CLICK\",tuple())\n"
         self.variables.append(line)
+        self.prev_command=ButtonUIObject
 
     def handle_check_box(self, CheckBoxUIObject):
 
@@ -153,6 +168,7 @@ class ul_Compiler:
 
         line="\t\t"+CheckBoxUIObject.Check_box_id+".executeAction(\"CLICK\",tuple())\n"
         self.variables.append(line)
+        self.prev_command=CheckBoxUIObject
 
     def handle_tab(self, TabControlUIObject):
 
@@ -168,6 +184,7 @@ class ul_Compiler:
             ".executeAction(\"SELECT\", mkPropertyValues({\"POS\": \""+\
             str(TabControlUIObject.tab_page_number)+"\"}))\n"
         self.variables.append(line)
+        self.prev_command=TabControlUIObject
 
     def handle_Combo_box(self, ComboBoxUIObject):
 
@@ -183,6 +200,7 @@ class ul_Compiler:
             ".executeAction(\"SELECT\", mkPropertyValues({\"POS\": \""+\
             str(ComboBoxUIObject.item_num)+"\"}))\n"
         self.variables.append(line)
+        self.prev_command=ComboBoxUIObject
 
     def handle_Radio_button(self,RadioButtonUIObject):
 
@@ -196,6 +214,7 @@ class ul_Compiler:
 
         line="\t\t"+RadioButtonUIObject.Radio_button_id+".executeAction(\"CLICK\",tuple())\n"
         self.variables.append(line)
+        self.prev_command=RadioButtonUIObject
 
     def handle_List_box(self, ListBoxUIObject):
 
@@ -211,6 +230,7 @@ class ul_Compiler:
             ".executeAction(\"SELECT\", mkPropertyValues({\"POS\": \""+\
             str(ListBoxUIObject.POS)+"\"}))\n"
         self.variables.append(line)
+        self.prev_command=ListBoxUIObject
 
     def handle_spin_field(self,SpinFieldUIObject):
 
@@ -227,6 +247,7 @@ class ul_Compiler:
         elif(SpinFieldUIObject.change=="Decrease"):
             line="\t\t"+SpinFieldUIObject.Spin_id+".executeAction(\"DOWN\",tuple())\n"
         self.variables.append(line)
+        self.prev_command=SpinFieldUIObject
 
     def handle_Edit_uiObject(self,EditUIObject):
 
@@ -277,6 +298,7 @@ class ul_Compiler:
             line="\t\t"+EditUIObject.action.edit_button+\
                 ".executeAction(\"CLEAR\",tuple())\n"
             self.variables.append(line)
+        self.prev_command=EditUIObject
 
     def Generate_UI_test(self):
         line="\t\tself.ui_test.close_doc()"
