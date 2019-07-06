@@ -17,22 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <rtl/crc.h>
-#include <rtl/strbuf.hxx>
 #include <sal/log.hxx>
 #include <o3tl/underlyingenumvalue.hxx>
 #include <osl/diagnose.h>
-#include <tools/debug.hxx>
-#include <tools/stream.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/color/bcolormodifier.hxx>
-#include <unotools/resmgr.hxx>
 
 #include <vcl/ImageTree.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/alpha.hxx>
 #include <vcl/bitmapex.hxx>
-#include <vcl/dibtools.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/virdev.hxx>
@@ -43,9 +37,7 @@
 #include <salbmp.hxx>
 #include <salinst.hxx>
 #include <svdata.hxx>
-#include <BitmapFastScaleFilter.hxx>
 #include <bitmapwriteaccess.hxx>
-#include <image.h>
 
 #include <o3tl/any.hxx>
 

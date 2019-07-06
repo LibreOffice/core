@@ -21,7 +21,7 @@
 #include "wmfwr.hxx"
 #include <vcl/wmf.hxx>
 #include <vcl/gdimetafiletools.hxx>
-#include <comphelper/scopeguard.hxx>
+#include <vcl/graph.hxx>
 
 bool ReadWindowMetafile( SvStream& rStream, GDIMetaFile& rMTF )
 {

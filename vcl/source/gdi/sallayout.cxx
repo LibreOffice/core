@@ -30,14 +30,11 @@
 #include <salgdi.hxx>
 #include <sallayout.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
-#include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 #include <i18nlangtag/lang.h>
 
 #include <vcl/svapp.hxx>
-
-#include <limits.h>
 
 #include <unicode/ubidi.h>
 #include <unicode/uchar.h>

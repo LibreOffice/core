@@ -35,7 +35,6 @@
 #endif
 #include <sft.hxx>
 #include "ttcr.hxx"
-#include "xlat.hxx"
 #include <rtl/crc.h>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>

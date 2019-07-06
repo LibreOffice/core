@@ -21,10 +21,8 @@
 
 #include <sal/types.h>
 
-#include <fontinstance.hxx>
 #include <PhysicalFontFace.hxx>
 #include <salgdi.hxx>
-#include <sallayout.hxx>
 
 #include "pdffontcache.hxx"
 

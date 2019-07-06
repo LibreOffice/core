@@ -24,7 +24,6 @@
 #include <unotools/tempfile.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/gfxlink.hxx>
-#include <vcl/cvtgrf.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <memory>
 #include <o3tl/make_shared.hxx>

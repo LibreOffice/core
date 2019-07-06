@@ -20,7 +20,7 @@
 #ifndef INCLUDED_VCL_SOURCE_FILTER_IXPM_XPMREAD_HXX
 #define INCLUDED_VCL_SOURCE_FILTER_IXPM_XPMREAD_HXX
 
-#include <vcl/bitmap.hxx>
+#include <tools/stream.hxx>
 
 class Graphic;
 

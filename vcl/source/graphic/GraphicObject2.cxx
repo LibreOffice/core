@@ -19,20 +19,11 @@
 
 #include <sal/config.h>
 
-#include <cstdlib>
-
-#include <vcl/bitmapaccess.hxx>
-#include <tools/poly.hxx>
+#include <tools/gen.hxx>
 #include <vcl/outdev.hxx>
-#include <vcl/window.hxx>
-#include <vcl/gdimtf.hxx>
-#include <vcl/metaact.hxx>
-#include <vcl/metric.hxx>
-#include <vcl/animate/Animation.hxx>
 #include <vcl/alpha.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/GraphicObject.hxx>
-#include <bitmapwriteaccess.hxx>
 #include <memory>
 
 struct ImplTileInfo
@@ -188,7 +179,7 @@ bool GraphicObject::ImplRenderTileRecursive( VirtualDevice& rVDev, int nExponent
 //          rVDev.SetFillCOL_WHITE );
             rVDev.SetFillColor();
             rVDev.SetLineColor( Color( 255 * nExponent / nMSBFactor, 255 - 255 * nExponent / nMSBFactor, 128 - 255 * nExponent / nMSBFactor ) );
-            rVDev.DrawEllipse( Rectangle(aTileInfo.aNextTileTopLeft.X(), aTileInfo.aTileTopLeft.Y(),
+            rVDev.DrawEllipse( tools::Rectangle(aTileInfo.aNextTileTopLeft.X(), aTileInfo.aTileTopLeft.Y(),
                                          aTileInfo.aNextTileTopLeft.X() - 1 + (aTileInfo.nTilesEmptyX/nMSBFactor)*aTileInfo.aTileSizePixel.Width(),
                                          aTileInfo.aTileTopLeft.Y() + aTileInfo.aTileSizePixel.Height() - 1) );
 #endif
@@ -206,7 +197,7 @@ bool GraphicObject::ImplRenderTileRecursive( VirtualDevice& rVDev, int nExponent
             }
 
 #ifdef DBG_TEST
-            rVDev.DrawEllipse( Rectangle(aTileInfo.aTileTopLeft.X(), aTileInfo.aNextTileTopLeft.Y(),
+            rVDev.DrawEllipse( tools::Rectangle(aTileInfo.aTileTopLeft.X(), aTileInfo.aNextTileTopLeft.Y(),
                                          aTileInfo.aTileTopLeft.X() + aTileInfo.aTileSizePixel.Width() - 1,
                                          aTileInfo.aNextTileTopLeft.Y() - 1 + (aTileInfo.nTilesEmptyY/nMSBFactor)*aTileInfo.aTileSizePixel.Height()) );
 #endif
@@ -272,7 +263,7 @@ bool GraphicObject::ImplRenderTileRecursive( VirtualDevice& rVDev, int nExponent
 //  rVDev.SetFillCOL_WHITE );
     rVDev.SetFillColor();
     rVDev.SetLineColor( Color( 255 * nExponent / nMSBFactor, 255 - 255 * nExponent / nMSBFactor, 128 - 255 * nExponent / nMSBFactor ) );
-    rVDev.DrawRect( Rectangle((rTileInfo.aTileTopLeft.X())*rTileSizePixel.Width(),
+    rVDev.DrawRect( tools::Rectangle((rTileInfo.aTileTopLeft.X())*rTileSizePixel.Width(),
                               (rTileInfo.aTileTopLeft.Y())*rTileSizePixel.Height(),
                               (rTileInfo.aNextTileTopLeft.X())*rTileSizePixel.Width()-1,
                               (rTileInfo.aNextTileTopLeft.Y())*rTileSizePixel.Height()-1) );

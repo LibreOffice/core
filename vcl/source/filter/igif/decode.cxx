@@ -19,7 +19,7 @@
 
 #include "decode.hxx"
 
-#include <rtl/alloc.h>
+#include <cstring>
 
 struct GIFLZWTableEntry
 {

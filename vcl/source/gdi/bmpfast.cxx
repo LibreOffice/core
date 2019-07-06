@@ -22,7 +22,6 @@
 #include <vcl/salgtype.hxx>
 #include <bitmapwriteaccess.hxx>
 
-#include <stdlib.h>
 #include <sal/log.hxx>
 
 typedef unsigned char PIXBYTE;

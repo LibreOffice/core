@@ -10,7 +10,6 @@
 
 #include <utility>
 #include <vcl/font/Feature.hxx>
-#include <strings.hrc>
 #include <svdata.hxx>
 
 #include <hb.h>

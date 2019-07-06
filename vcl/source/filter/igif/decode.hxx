@@ -20,7 +20,8 @@
 #ifndef INCLUDED_VCL_SOURCE_FILTER_IGIF_DECODE_HXX
 #define INCLUDED_VCL_SOURCE_FILTER_IGIF_DECODE_HXX
 
-#include <vcl/bitmapaccess.hxx>
+#include <tools/solar.h>
+#include <vcl/Scanline.hxx>
 #include <array>
 #include <memory>
 

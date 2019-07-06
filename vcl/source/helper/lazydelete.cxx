@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <vcl/window.hxx>
-#include <vcl/menu.hxx>
 #include <vcl/lazydelete.hxx>
 #include <svdata.hxx>
 #include <sal/log.hxx>

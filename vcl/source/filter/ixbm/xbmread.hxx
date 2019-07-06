@@ -21,7 +21,6 @@
 #define INCLUDED_VCL_SOURCE_FILTER_IXBM_XBMREAD_HXX
 
 #include <vcl/graph.hxx>
-#include <vcl/bitmapaccess.hxx>
 
 VCL_DLLPUBLIC bool ImportXBM( SvStream& rStream, Graphic& rGraphic );
 

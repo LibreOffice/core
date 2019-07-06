@@ -20,11 +20,8 @@
 #ifndef INCLUDED_VCL_SOURCE_FILTER_WMF_EMFWR_HXX
 #define INCLUDED_VCL_SOURCE_FILTER_WMF_EMFWR_HXX
 
-#include <vcl/metaact.hxx>
-#include <vcl/graph.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/virdev.hxx>
-#include <vcl/fltcall.hxx>
 
 class LineInfo;
 namespace basegfx { class B2DPolygon; }

@@ -10,9 +10,10 @@
 
 #include <font/OpenTypeFeatureDefinitonList.hxx>
 #include <font/OpenTypeFeatureStrings.hrc>
-#include <svdata.hxx>
 
 #include <rtl/character.hxx>
+
+#include <algorithm>
 
 namespace vcl
 {

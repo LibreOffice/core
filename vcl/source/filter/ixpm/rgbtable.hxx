@@ -20,6 +20,8 @@
 #ifndef INCLUDED_VCL_SOURCE_FILTER_IXPM_RGBTABLE_HXX
 #define INCLUDED_VCL_SOURCE_FILTER_IXPM_RGBTABLE_HXX
 
+#include <sal/types.h>
+
 struct XPMRGBTab
 {
     const char* name;

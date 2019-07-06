@@ -20,9 +20,6 @@
 #ifndef INCLUDED_VCL_SOURCE_FILTER_FILTERCONFIGCACHE_HXX
 #define INCLUDED_VCL_SOURCE_FILTER_FILTERCONFIGCACHE_HXX
 
-#include <com/sun/star/uno/Sequence.h>
-#include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
 #include <rtl/ustring.hxx>
 #include <vector>
 
