@@ -71,39 +71,16 @@
 using namespace ::com::sun::star;
 
 /// @throws lang::IllegalArgumentException
-static OUString
-lcl_AnyToString(uno::Any const& rVal)
+template<typename T>
+static T
+lcl_AnyToType(uno::Any const& rVal)
 {
-    OUString sRet;
-    if(!(rVal >>= sRet))
+    T aRet{};
+    if(!(rVal >>= aRet))
     {
         throw lang::IllegalArgumentException();
     }
-    return sRet;
-}
-
-/// @throws lang::IllegalArgumentException
-static sal_Int16
-lcl_AnyToInt16(uno::Any const& rVal)
-{
-    sal_Int16 nRet = 0;
-    if(!(rVal >>= nRet))
-    {
-        throw lang::IllegalArgumentException();
-    }
-    return nRet;
-}
-
-/// @throws lang::IllegalArgumentException
-static bool
-lcl_AnyToBool(uno::Any const& rVal)
-{
-    bool bRet = false;
-    if(!(rVal >>= bRet))
-    {
-        throw lang::IllegalArgumentException();
-    }
-    return bRet;
+    return aRet;
 }
 
 /// @throws lang::IllegalArgumentException
@@ -111,7 +88,7 @@ template<typename T>
 static void lcl_AnyToBitMask(uno::Any const& rValue,
         T & rBitMask, const T nBit)
 {
-    rBitMask = lcl_AnyToBool(rValue)
+    rBitMask = lcl_AnyToType<bool>(rValue)
         ? (rBitMask |  nBit)
         : (rBitMask & ~nBit);
 }
@@ -650,19 +627,19 @@ SwXDocumentIndex::setPropertyValue(
         break;
         case WID_LEVEL:
         {
-            rTOXBase.SetLevel(lcl_AnyToInt16(rValue));
+            rTOXBase.SetLevel(lcl_AnyToType<sal_Int16>(rValue));
         }
         break;
         case WID_TOC_BOOKMARK:
         {
-           rTOXBase.SetBookmarkName(lcl_AnyToString(rValue));
+           rTOXBase.SetBookmarkName(lcl_AnyToType<OUString>(rValue));
            nCreate = SwTOXElement::Bookmark;
            rTOXBase.SetCreate(nCreate);
         }
         break;
         case WID_INDEX_ENTRY_TYPE:
         {
-            rTOXBase.SetEntryTypeName(lcl_AnyToString(rValue));
+            rTOXBase.SetEntryTypeName(lcl_AnyToType<OUString>(rValue));
             nCreate = SwTOXElement::IndexEntryType;
             rTOXBase.SetCreate(nCreate);
         }
@@ -688,14 +665,14 @@ SwXDocumentIndex::setPropertyValue(
               lcl_AnyToBitMask(rValue, nCreate, SwTOXElement::TableLeader);
         break ;
         case WID_CREATE_FROM_CHAPTER:
-            rTOXBase.SetFromChapter(lcl_AnyToBool(rValue));
+            rTOXBase.SetFromChapter(lcl_AnyToType<bool>(rValue));
         break;
         case WID_CREATE_FROM_LABELS:
-            rTOXBase.SetFromObjectNames(! lcl_AnyToBool(rValue));
+            rTOXBase.SetFromObjectNames(! lcl_AnyToType<bool>(rValue));
         break;
         case WID_PROTECTED:
         {
-            bool bSet = lcl_AnyToBool(rValue);
+            bool bSet = lcl_AnyToType<bool>(rValue);
             rTOXBase.SetProtected(bSet);
             if (pSectionFormat)
             {
@@ -731,19 +708,19 @@ SwXDocumentIndex::setPropertyValue(
         break;
         case WID_IS_COMMA_SEPARATED:
             bForm = true;
-            aForm.SetCommaSeparated(lcl_AnyToBool(rValue));
+            aForm.SetCommaSeparated(lcl_AnyToType<bool>(rValue));
         break;
         case WID_LABEL_CATEGORY:
         {
             // convert file-format/API/external programmatic english name
             // to internal UI name before usage
             rTOXBase.SetSequenceName( SwStyleNameMapper::GetSpecialExtraUIName(
-                                lcl_AnyToString(rValue) ) );
+                                lcl_AnyToType<OUString>(rValue) ) );
         }
         break;
         case WID_LABEL_DISPLAY_TYPE:
         {
-            const sal_Int16 nVal = lcl_AnyToInt16(rValue);
+            const sal_Int16 nVal = lcl_AnyToType<sal_Int16>(rValue);
             sal_uInt16 nSet = CAPTION_COMPLETE;
             switch (nVal)
             {
@@ -763,12 +740,12 @@ SwXDocumentIndex::setPropertyValue(
         }
         break;
         case WID_USE_LEVEL_FROM_SOURCE:
-            rTOXBase.SetLevelFromChapter(lcl_AnyToBool(rValue));
+            rTOXBase.SetLevelFromChapter(lcl_AnyToType<bool>(rValue));
         break;
         case WID_MAIN_ENTRY_CHARACTER_STYLE_NAME:
         {
             OUString aString;
-            SwStyleNameMapper::FillUIName(lcl_AnyToString(rValue),
+            SwStyleNameMapper::FillUIName(lcl_AnyToType<OUString>(rValue),
                 aString, SwGetPoolIdFromName::ChrFmt);
             rTOXBase.SetMainEntryCharStyle( aString );
         }
@@ -804,7 +781,7 @@ SwXDocumentIndex::setPropertyValue(
         case WID_PARA_HEAD:
         {
             OUString aString;
-            SwStyleNameMapper::FillUIName( lcl_AnyToString(rValue),
+            SwStyleNameMapper::FillUIName( lcl_AnyToType<OUString>(rValue),
                 aString, SwGetPoolIdFromName::TxtColl);
             bForm = true;
             // Header is on Pos 0
@@ -813,13 +790,13 @@ SwXDocumentIndex::setPropertyValue(
         break;
         case WID_IS_RELATIVE_TABSTOPS:
             bForm = true;
-            aForm.SetRelTabPos(lcl_AnyToBool(rValue));
+            aForm.SetRelTabPos(lcl_AnyToType<bool>(rValue));
         break;
         case WID_PARA_SEP:
         {
             OUString aString;
             bForm = true;
-            SwStyleNameMapper::FillUIName( lcl_AnyToString(rValue),
+            SwStyleNameMapper::FillUIName( lcl_AnyToType<OUString>(rValue),
                 aString, SwGetPoolIdFromName::TxtColl);
             aForm.SetTemplate( 1, aString );
         }
@@ -843,7 +820,7 @@ SwXDocumentIndex::setPropertyValue(
             // in sdbcx::Index Label 1 begins at Pos 2 otherwise at Pos 1
             const sal_uInt16 nLPos = rTOXBase.GetType() == TOX_INDEX ? 2 : 1;
             OUString aString;
-            SwStyleNameMapper::FillUIName( lcl_AnyToString(rValue),
+            SwStyleNameMapper::FillUIName( lcl_AnyToType<OUString>(rValue),
                 aString, SwGetPoolIdFromName::TxtColl);
             aForm.SetTemplate(nLPos + pEntry->nWID - WID_PARA_LEV1, aString );
         }
@@ -2088,35 +2065,35 @@ SwXDocumentIndexMark::setPropertyValue(
         switch(pEntry->nWID)
         {
             case WID_ALT_TEXT:
-                aMark.SetAlternativeText(lcl_AnyToString(rValue));
+                aMark.SetAlternativeText(lcl_AnyToType<OUString>(rValue));
             break;
             case WID_LEVEL:
                 aMark.SetLevel(std::min( static_cast<sal_Int8>( MAXLEVEL ),
-                            static_cast<sal_Int8>(lcl_AnyToInt16(rValue)+1)));
+                            static_cast<sal_Int8>(lcl_AnyToType<sal_Int16>(rValue)+1)));
             break;
             case WID_TOC_BOOKMARK :
-                aMark.SetBookmarkName(lcl_AnyToString(rValue));
+                aMark.SetBookmarkName(lcl_AnyToType<OUString>(rValue));
             break;
             case WID_INDEX_ENTRY_TYPE :
-                aMark.SetEntryTypeName(lcl_AnyToString(rValue));
+                aMark.SetEntryTypeName(lcl_AnyToType<OUString>(rValue));
             break;
             case WID_PRIMARY_KEY  :
-                aMark.SetPrimaryKey(lcl_AnyToString(rValue));
+                aMark.SetPrimaryKey(lcl_AnyToType<OUString>(rValue));
             break;
             case WID_SECONDARY_KEY:
-                aMark.SetSecondaryKey(lcl_AnyToString(rValue));
+                aMark.SetSecondaryKey(lcl_AnyToType<OUString>(rValue));
             break;
             case WID_MAIN_ENTRY:
-                aMark.SetMainEntry(lcl_AnyToBool(rValue));
+                aMark.SetMainEntry(lcl_AnyToType<bool>(rValue));
             break;
             case WID_TEXT_READING:
-                aMark.SetTextReading(lcl_AnyToString(rValue));
+                aMark.SetTextReading(lcl_AnyToType<OUString>(rValue));
             break;
             case WID_PRIMARY_KEY_READING:
-                aMark.SetPrimaryKeyReading(lcl_AnyToString(rValue));
+                aMark.SetPrimaryKeyReading(lcl_AnyToType<OUString>(rValue));
             break;
             case WID_SECONDARY_KEY_READING:
-                aMark.SetSecondaryKeyReading(lcl_AnyToString(rValue));
+                aMark.SetSecondaryKeyReading(lcl_AnyToType<OUString>(rValue));
             break;
         }
         SwTextTOXMark const*const pTextMark =
@@ -2139,11 +2116,11 @@ SwXDocumentIndexMark::setPropertyValue(
         switch(pEntry->nWID)
         {
             case WID_ALT_TEXT:
-                m_pImpl->m_sAltText = lcl_AnyToString(rValue);
+                m_pImpl->m_sAltText = lcl_AnyToType<OUString>(rValue);
             break;
             case WID_LEVEL:
             {
-                const sal_Int16 nVal = lcl_AnyToInt16(rValue);
+                const sal_Int16 nVal = lcl_AnyToType<sal_Int16>(rValue);
                 if(nVal < 0 || nVal >= MAXLEVEL)
                 {
                     throw lang::IllegalArgumentException();
@@ -2153,38 +2130,38 @@ SwXDocumentIndexMark::setPropertyValue(
             break;
             case WID_TOC_BOOKMARK :
             {
-                m_pImpl->m_aBookmarkName = lcl_AnyToString(rValue);
+                m_pImpl->m_aBookmarkName = lcl_AnyToType<OUString>(rValue);
             }
             break;
             case WID_INDEX_ENTRY_TYPE :
             {
-                m_pImpl->m_aEntryTypeName = lcl_AnyToString(rValue);
+                m_pImpl->m_aEntryTypeName = lcl_AnyToType<OUString>(rValue);
             }
             break;
             case WID_PRIMARY_KEY:
-                m_pImpl->m_sPrimaryKey = lcl_AnyToString(rValue);
+                m_pImpl->m_sPrimaryKey = lcl_AnyToType<OUString>(rValue);
             break;
             case WID_SECONDARY_KEY:
-                m_pImpl->m_sSecondaryKey = lcl_AnyToString(rValue);
+                m_pImpl->m_sSecondaryKey = lcl_AnyToType<OUString>(rValue);
             break;
             case WID_TEXT_READING:
-                m_pImpl->m_sTextReading = lcl_AnyToString(rValue);
+                m_pImpl->m_sTextReading = lcl_AnyToType<OUString>(rValue);
             break;
             case WID_PRIMARY_KEY_READING:
-                m_pImpl->m_sPrimaryKeyReading = lcl_AnyToString(rValue);
+                m_pImpl->m_sPrimaryKeyReading = lcl_AnyToType<OUString>(rValue);
             break;
             case WID_SECONDARY_KEY_READING:
-                m_pImpl->m_sSecondaryKeyReading = lcl_AnyToString(rValue);
+                m_pImpl->m_sSecondaryKeyReading = lcl_AnyToType<OUString>(rValue);
             break;
             case WID_USER_IDX_NAME:
             {
-                OUString sTmp(lcl_AnyToString(rValue));
+                OUString sTmp(lcl_AnyToType<OUString>(rValue));
                 lcl_ConvertTOUNameToUserName(sTmp);
                 m_pImpl->m_sUserIndexName = sTmp;
             }
             break;
             case WID_MAIN_ENTRY:
-                m_pImpl->m_bMainEntry = lcl_AnyToBool(rValue);
+                m_pImpl->m_bMainEntry = lcl_AnyToType<bool>(rValue);
             break;
             case PROPERTY_MAP_INDEX_OBJECTS:
                 // unsupported
@@ -2711,7 +2688,7 @@ SwXDocumentIndex::TokenAccess_Impl::replaceByIndex(
             if ( pProperties[j].Name == "TokenType" )
             {
                 const OUString sTokenType =
-                        lcl_AnyToString(pProperties[j].Value);
+                        lcl_AnyToType<OUString>(pProperties[j].Value);
                 for (TokenType_ const* pTokenType = g_TokenTypes;
                         pTokenType->pName; ++pTokenType)
                 {
@@ -2726,7 +2703,7 @@ SwXDocumentIndex::TokenAccess_Impl::replaceByIndex(
             {
                 OUString sCharStyleName;
                 SwStyleNameMapper::FillUIName(
-                        lcl_AnyToString(pProperties[j].Value),
+                        lcl_AnyToType<OUString>(pProperties[j].Value),
                         sCharStyleName,
                         SwGetPoolIdFromName::ChrFmt);
                 aToken.sCharStyleName = sCharStyleName;
@@ -2735,7 +2712,7 @@ SwXDocumentIndex::TokenAccess_Impl::replaceByIndex(
             }
             else if ( pProperties[j].Name == "TabStopRightAligned" )
             {
-                const bool bRight = lcl_AnyToBool(pProperties[j].Value);
+                const bool bRight = lcl_AnyToType<bool>(pProperties[j].Value);
                 aToken.eTabAlign = bRight ?
                                     SvxTabAdjust::End : SvxTabAdjust::Left;
             }
@@ -2756,7 +2733,7 @@ SwXDocumentIndex::TokenAccess_Impl::replaceByIndex(
             else if ( pProperties[j].Name == "TabStopFillCharacter" )
             {
                 const OUString sFillChar =
-                    lcl_AnyToString(pProperties[j].Value);
+                    lcl_AnyToType<OUString>(pProperties[j].Value);
                 if (sFillChar.getLength() > 1)
                 {
                     throw lang::IllegalArgumentException();
@@ -2766,11 +2743,11 @@ SwXDocumentIndex::TokenAccess_Impl::replaceByIndex(
             }
             else if ( pProperties[j].Name == "Text" )
             {
-                aToken.sText = lcl_AnyToString(pProperties[j].Value);
+                aToken.sText = lcl_AnyToType<OUString>(pProperties[j].Value);
             }
             else if ( pProperties[j].Name == "ChapterFormat" )
             {
-                sal_Int16 nFormat = lcl_AnyToInt16(pProperties[j].Value);
+                sal_Int16 nFormat = lcl_AnyToType<sal_Int16>(pProperties[j].Value);
                 switch(nFormat)
                 {
                     case text::ChapterFormat::NUMBER:
@@ -2796,7 +2773,7 @@ SwXDocumentIndex::TokenAccess_Impl::replaceByIndex(
 // #i53420#
             else if ( pProperties[j].Name == "ChapterLevel" )
             {
-                const sal_Int16 nLevel = lcl_AnyToInt16(pProperties[j].Value);
+                const sal_Int16 nLevel = lcl_AnyToType<sal_Int16>(pProperties[j].Value);
                 if( nLevel < 1 || nLevel > MAXLEVEL )
                 {
                     throw lang::IllegalArgumentException();
@@ -2819,7 +2796,7 @@ SwXDocumentIndex::TokenAccess_Impl::replaceByIndex(
             // #i21237#
             else if ( pProperties[j].Name == "WithTab" )
             {
-                aToken.bWithTab = lcl_AnyToBool(pProperties[j].Value);
+                aToken.bWithTab = lcl_AnyToType<bool>(pProperties[j].Value);
             }
 
         }
