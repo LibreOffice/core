@@ -1756,7 +1756,7 @@ Const cstNull = -1
 	If IsMissing(pvOption) Then
 		pvOption = cstNull
 	Else
-		If Not Utils._CheckArgument(pvOption, 2, Utils._AddNumeric(), dbSQLPassThrough) Then Goto Exit_Function
+		If Not Utils._CheckArgument(pvOption, 2, Utils._AddNumeric(), Array(cstNull, dbSQLPassThrough)) Then Goto Exit_Function
 	End If
 
 	RunSQL = Application._CurrentDb.RunSQL(pvSQL, pvOption)

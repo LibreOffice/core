@@ -115,13 +115,14 @@ If _ErrorHandler() Then On Local Error Goto Error_Function
 	Utils._SetCalledSub(&quot;OptionGroup.Controls&quot;)
 
 Dim ocControl As Variant, iArgNr As Integer, i As Integer
+Dim oCounter As Object
 
 	Set ocControl = Nothing
 	
 	If IsMissing(pvIndex) Then					&apos;	No argument, return Collection object
 		Set oCounter = New Collect
 		Set oCounter._This = oCounter
-		oCounter._SubType = OBJCONTROL
+		oCounter._CollType = COLLCONTROLS
 		Set oCounter._Parent = _This
 		oCounter._Count = _Count
 		Set Controls = oCounter

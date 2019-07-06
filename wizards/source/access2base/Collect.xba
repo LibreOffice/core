@@ -88,12 +88,7 @@ Dim vNames() As Variant, oProperty As Object
 			Set Item = _Parent.CommandBarControls(pvItem)
 		Case COLLCONTROLS
 			If IsNull(_Parent) Then GoTo Error_Parent
-			Select Case _Parent._Type
-				Case OBJCONTROL, OBJSUBFORM, OBJDIALOG, OBJFORM
-					Set Item = _Parent.Controls(pvItem)
-				Case OBJOPTIONGROUP
-					&apos; NOT SUPPORTED
-			End Select
+			Set Item = _Parent.Controls(pvItem)
 		Case COLLFORMS
 			Set Item = Application.Forms(pvItem)
 		Case COLLFIELDS
