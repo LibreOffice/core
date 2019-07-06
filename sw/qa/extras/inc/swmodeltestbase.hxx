@@ -603,15 +603,10 @@ protected:
             {
                 uno::Sequence< beans::PropertyValue > aPropertyValue;
                 xLevels->getByIndex(nNumberingLevel) >>= aPropertyValue;
-                for( int j = 0 ; j< aPropertyValue.getLength() ; ++j)
-                {
-                    beans::PropertyValue aProp= aPropertyValue[j];
-                    if (aProp.Name == "NumberingType")
-                    {
-                        nNumberingType = aProp.Value.get<sal_Int16>();
-                        break;
-                    }
-                }
+                auto pProp = std::find_if(aPropertyValue.begin(), aPropertyValue.end(),
+                    [](const beans::PropertyValue& rProp) { return rProp.Name == "NumberingType"; });
+                if (pProp != aPropertyValue.end())
+                    nNumberingType = pProp->Value.get<sal_Int16>();
             }
         }
         return nNumberingType;

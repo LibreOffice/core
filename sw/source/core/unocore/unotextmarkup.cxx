@@ -396,31 +396,26 @@ void SAL_CALL SwXTextMarkup::commitMultiTextMarkup(
     if (!m_pImpl->m_pTextNode)
         return;
 
-    // check for equal length of all sequences
-    sal_Int32 nLen = rMarkups.getLength();
-
     // for grammar checking there should be exactly one sentence markup
     // and 0..n grammar markups.
     // Different markups are not expected but may be applied anyway since
     // that should be no problem...
     // but it has to be implemented, at the moment only this function is for
     // grammar markups and sentence markup only!
-    sal_Int32 nSentenceMarkUpIndex = -1;
-    const text::TextMarkupDescriptor *pMarkups = rMarkups.getConstArray();
-    sal_Int32 i;
-    for( i = 0;  i < nLen;  ++i )
+    const text::TextMarkupDescriptor *pSentenceMarkUp = nullptr;
+    for( const text::TextMarkupDescriptor &rDesc : rMarkups )
     {
-        if (pMarkups[i].nType == text::TextMarkupType::SENTENCE)
+        if (rDesc.nType == text::TextMarkupType::SENTENCE)
         {
-            if (nSentenceMarkUpIndex != -1)
+            if (pSentenceMarkUp != nullptr)
                 throw lang::IllegalArgumentException(); // there is already one sentence markup
-            nSentenceMarkUpIndex = i;
+            pSentenceMarkUp = &rDesc;
         }
-        else if( pMarkups[i].nType != text::TextMarkupType::PROOFREADING )
+        else if( rDesc.nType != text::TextMarkupType::PROOFREADING )
             return;
     }
 
-    if( nSentenceMarkUpIndex == -1 )
+    if( pSentenceMarkUp == nullptr )
         return;
 
     // get appropriate list to use...
@@ -449,16 +444,15 @@ void SAL_CALL SwXTextMarkup::commitMultiTextMarkup(
     {
         const ModelToViewHelper::ModelPosition aSentenceEnd =
             m_pImpl->m_ConversionMap.ConvertToModelPosition(
-                pMarkups[nSentenceMarkUpIndex].nOffset + pMarkups[nSentenceMarkUpIndex].nLength );
+                pSentenceMarkUp->nOffset + pSentenceMarkUp->nLength );
         bAcceptGrammarError = aSentenceEnd.mnPos > pWList->GetBeginInv();
         pWList->ClearGrammarList( aSentenceEnd.mnPos );
     }
 
     if( bAcceptGrammarError )
     {
-        for( i = 0;  i < nLen;  ++i )
+        for( const text::TextMarkupDescriptor &rDesc : rMarkups )
         {
-            const text::TextMarkupDescriptor &rDesc = pMarkups[i];
             lcl_commitGrammarMarkUp(m_pImpl->m_ConversionMap, pWList, rDesc.nType,
                 rDesc.aIdentifier, rDesc.nOffset, rDesc.nLength, rDesc.xMarkupInfoContainer );
         }
@@ -466,8 +460,7 @@ void SAL_CALL SwXTextMarkup::commitMultiTextMarkup(
     else
     {
         bRepaint = false;
-        i = nSentenceMarkUpIndex;
-        const text::TextMarkupDescriptor &rDesc = pMarkups[i];
+        const text::TextMarkupDescriptor &rDesc = *pSentenceMarkUp;
         lcl_commitGrammarMarkUp(m_pImpl->m_ConversionMap, pWList, rDesc.nType,
             rDesc.aIdentifier, rDesc.nOffset, rDesc.nLength, rDesc.xMarkupInfoContainer );
     }

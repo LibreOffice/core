@@ -155,7 +155,6 @@ public:
             {
                 uno::Reference<text::XTextTable> const xTextTable(xServiceInfo, uno::UNO_QUERY_THROW);
                 uno::Sequence<OUString> const cells = xTextTable->getCellNames();
-                sal_Int32 nLength = cells.getLength();
 
                 if(currentTable == sal_Int32(1))
                     tempMap = &map1;
@@ -174,13 +173,13 @@ public:
 
                 BorderLineMap::iterator it = tempMap->begin();
 
-                for (sal_Int32 i = 0; i < nLength; ++i)
+                for (const auto& rCell : cells)
                 {
-                    uno::Reference<table::XCell> xCell = xTextTable->getCellByName(cells[i]);
+                    uno::Reference<table::XCell> xCell = xTextTable->getCellByName(rCell);
                     uno::Reference< beans::XPropertySet > xPropSet(xCell, uno::UNO_QUERY_THROW);
                     uno::Any aAny = xPropSet->getPropertyValue("TopBorder");
                     table::BorderLine aBorderLine;
-                    it = tempMap->find(cells[i]);
+                    it = tempMap->find(rCell);
                     if ((aAny >>= aBorderLine) && (it!=tempMap->end()))
                     {
                         sal_Int32 innerLineWidth = aBorderLine.InnerLineWidth;

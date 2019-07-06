@@ -174,12 +174,10 @@ PropertyState SAL_CALL SwXTextDefaults::getPropertyState( const OUString& rPrope
 Sequence< PropertyState > SAL_CALL SwXTextDefaults::getPropertyStates( const Sequence< OUString >& rPropertyNames )
 {
     const sal_Int32 nCount = rPropertyNames.getLength();
-    const OUString * pNames = rPropertyNames.getConstArray();
     Sequence < PropertyState > aRet ( nCount );
-    PropertyState *pState = aRet.getArray();
 
-    for ( sal_Int32 nIndex = 0; nIndex < nCount; nIndex++)
-        pState[nIndex] = getPropertyState( pNames[nIndex] );
+    std::transform(rPropertyNames.begin(), rPropertyNames.end(), aRet.begin(),
+        [this](const OUString& rName) -> PropertyState { return getPropertyState(rName); });
 
     return aRet;
 }

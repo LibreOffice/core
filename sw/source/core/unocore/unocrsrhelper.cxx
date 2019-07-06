@@ -1223,9 +1223,9 @@ void makeRedline( SwPaM const & rPaM,
             std::vector<sal_uInt16> aWhichPairs;
             std::vector<SfxItemPropertySimpleEntry const*> aEntries;
             aEntries.reserve(aRevertProperties.getLength());
-            for (sal_Int32 i = 0; i < aRevertProperties.getLength(); ++i)
+            for (const auto& rRevertProperty : aRevertProperties)
             {
-                const OUString &rPropertyName = aRevertProperties[i].Name;
+                const OUString &rPropertyName = rRevertProperty.Name;
                 SfxItemPropertySimpleEntry const* pEntry = rPropSet.getPropertyMap().getByName(rPropertyName);
 
                 if (!pEntry)

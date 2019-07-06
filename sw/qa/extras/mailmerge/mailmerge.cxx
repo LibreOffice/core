@@ -180,14 +180,12 @@ public:
         uno::Sequence< beans::NamedValue > aSeqMailMergeArgs = comphelper::containerToSequence( mMMargs );
         uno::Any res = mxJob->execute( aSeqMailMergeArgs );
 
-        const beans::NamedValue *pArguments = aSeqMailMergeArgs.getConstArray();
         bool bOk = true;
         bool bMMFilenameFromColumn = false;
-        sal_Int32 nArgs = aSeqMailMergeArgs.getLength();
 
-        for (sal_Int32 i = 0; i < nArgs; ++i) {
-            const OUString &rName  = pArguments[i].Name;
-            const uno::Any &rValue = pArguments[i].Value;
+        for (const beans::NamedValue& rArgument : aSeqMailMergeArgs) {
+            const OUString &rName  = rArgument.Name;
+            const uno::Any &rValue = rArgument.Value;
 
             // all error checking was already done by the MM job execution
             if (rName == UNO_NAME_OUTPUT_URL)

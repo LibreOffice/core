@@ -57,9 +57,9 @@ void SwDoc::ReplaceUserDefinedDocumentProperties(
     uno::Sequence<beans::Property> tgtprops
         = xTargetUDSet->getPropertySetInfo()->getProperties();
 
-    for (sal_Int32 i = 0; i < tgtprops.getLength(); ++i) {
+    for (const auto& rTgtProp : tgtprops) {
         try {
-            xTargetUD->removeProperty(tgtprops [i].Name);
+            xTargetUD->removeProperty(rTgtProp.Name);
         } catch (uno::Exception &) {
             // ignore
         }
@@ -69,10 +69,10 @@ void SwDoc::ReplaceUserDefinedDocumentProperties(
         = xSourceUDSet->getPropertySetInfo();
     uno::Sequence<beans::Property> srcprops = xSetInfo->getProperties();
 
-    for (sal_Int32 i = 0; i < srcprops.getLength(); ++i) {
+    for (const auto& rSrcProp : srcprops) {
         try {
-            OUString name = srcprops[i].Name;
-            xTargetUD->addProperty(name, srcprops[i].Attributes,
+            OUString name = rSrcProp.Name;
+            xTargetUD->addProperty(name, rSrcProp.Attributes,
                 xSourceUDSet->getPropertyValue(name));
         } catch (uno::Exception &) {
             // ignore

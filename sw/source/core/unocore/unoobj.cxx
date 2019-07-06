@@ -1786,9 +1786,9 @@ void SwUnoCursorHelper::SetPropertyValues(
     std::vector<sal_uInt16> aWhichPairs;
     std::vector<SfxItemPropertySimpleEntry const*> aEntries;
     aEntries.reserve(rPropertyValues.getLength());
-    for (sal_Int32 i = 0; i < rPropertyValues.getLength(); ++i)
+    for (const auto& rPropVal : rPropertyValues)
     {
-        const OUString &rPropertyName = rPropertyValues[i].Name;
+        const OUString &rPropertyName = rPropVal.Name;
 
         SfxItemPropertySimpleEntry const* pEntry =
             rPropSet.getPropertyMap().getByName(rPropertyName);
@@ -2263,8 +2263,8 @@ SwXTextCursor::getPropertyValues( const uno::Sequence< OUString >& aPropertyName
 {
     // a banal implementation for now
     uno::Sequence< uno::Any > aValues( aPropertyNames.getLength() );
-    for (sal_Int32 i = 0; i < aPropertyNames.getLength(); i++)
-        aValues[i] = getPropertyValue( aPropertyNames[ i ] );
+    std::transform(aPropertyNames.begin(), aPropertyNames.end(), aValues.begin(),
+        [this](const OUString& rName) -> uno::Any { return getPropertyValue( rName ); });
     return aValues;
 }
 
@@ -2350,32 +2350,30 @@ SwXTextCursor::setPropertiesToDefault(
 
     SwUnoCursor & rUnoCursor( m_pImpl->GetCursorOrThrow() );
 
-    const sal_Int32 nCount = rPropertyNames.getLength();
-    if ( nCount )
+    if ( rPropertyNames.hasElements() )
     {
         SwDoc & rDoc = *rUnoCursor.GetDoc();
-        const OUString * pNames = rPropertyNames.getConstArray();
         std::set<sal_uInt16> aWhichIds;
         std::set<sal_uInt16> aParaWhichIds;
-        for (sal_Int32 i = 0; i < nCount; i++)
+        for (const OUString& rName : rPropertyNames)
         {
             SfxItemPropertySimpleEntry const*const  pEntry =
-                m_pImpl->m_rPropSet.getPropertyMap().getByName( pNames[i] );
+                m_pImpl->m_rPropSet.getPropertyMap().getByName( rName );
             if (!pEntry)
             {
-                if (pNames[i] == UNO_NAME_IS_SKIP_HIDDEN_TEXT ||
-                    pNames[i] == UNO_NAME_IS_SKIP_PROTECTED_TEXT)
+                if (rName == UNO_NAME_IS_SKIP_HIDDEN_TEXT ||
+                    rName == UNO_NAME_IS_SKIP_PROTECTED_TEXT)
                 {
                     continue;
                 }
                 throw beans::UnknownPropertyException(
-                    "Unknown property: " + pNames[i],
+                    "Unknown property: " + rName,
                     static_cast<cppu::OWeakObject *>(this));
             }
             if (pEntry->nFlags & beans::PropertyAttribute::READONLY)
             {
                 throw uno::RuntimeException(
-                    "setPropertiesToDefault: property is read-only: " + pNames[i],
+                    "setPropertiesToDefault: property is read-only: " + rName,
                     static_cast<cppu::OWeakObject *>(this));
             }
 
@@ -2586,7 +2584,6 @@ bool SwUnoCursorHelper::ConvertSortProperties(
     SwSortOptions& rSortOpt)
 {
     bool bRet = true;
-    const beans::PropertyValue* pProperties = rDescriptor.getConstArray();
 
     rSortOpt.bTable = false;
     rSortOpt.cDeli = ' ';
@@ -2611,10 +2608,10 @@ bool SwUnoCursorHelper::ConvertSortProperties(
     bool bOldSortdescriptor(false);
     bool bNewSortdescriptor(false);
 
-    for (sal_Int32 n = 0; n < rDescriptor.getLength(); ++n)
+    for (const beans::PropertyValue& rProperty : rDescriptor)
     {
-        uno::Any aValue( pProperties[n].Value );
-        const OUString& rPropName = pProperties[n].Name;
+        uno::Any aValue( rProperty.Value );
+        const OUString& rPropName = rProperty.Name;
 
         // old and new sortdescriptor
         if ( rPropName == "IsSortInTable" )

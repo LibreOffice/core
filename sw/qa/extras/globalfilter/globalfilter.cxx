@@ -634,9 +634,8 @@ void Test::testMSCharBackgroundEditing()
             xRun->setPropertyValue("CharHighlight", uno::makeAny(static_cast<sal_Int32>(COL_TRANSPARENT)));
             // Remove shading marker
             uno::Sequence<beans::PropertyValue> aGrabBag = getProperty<uno::Sequence<beans::PropertyValue> >(xRun,"CharInteropGrabBag");
-            for (int j = 0; j < aGrabBag.getLength(); ++j)
+            for (beans::PropertyValue& rProp : aGrabBag)
             {
-                beans::PropertyValue& rProp = aGrabBag[j];
                 if (rProp.Name == "CharShadingMarker")
                 {
                     CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), true, rProp.Value.get<bool>());
@@ -1207,7 +1206,7 @@ void Test::testDropDownFormField()
             {
                 pListEntries->second >>= vListEntries;
 
-                if(vListEntries.getLength())
+                if(vListEntries.hasElements())
                 {
                     auto pResult = pParameters->find(ODF_FORMDROPDOWN_RESULT);
                     if (pResult != pParameters->end())
@@ -1220,7 +1219,7 @@ void Test::testDropDownFormField()
             // The first one is empty
             if(nIndex == 0)
             {
-                CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), sal_Int32(0), vListEntries.getLength());
+                CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), !vListEntries.hasElements());
                 CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), sal_Int32(-1), nSelection);
             }
             else // The second one has list and also a selected item

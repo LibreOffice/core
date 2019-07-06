@@ -1448,16 +1448,13 @@ SwXText::insertTextContentWithProperties(
     {
         try
         {
-            const sal_Int32 nLen(rCharacterAndParagraphProperties.getLength());
             const uno::Reference< beans::XPropertySet > xAnchor(
                 xTextContent->getAnchor(), uno::UNO_QUERY);
             if (xAnchor.is())
             {
-                for (sal_Int32 nElement = 0; nElement < nLen; ++nElement)
+                for (const auto& rProperty : rCharacterAndParagraphProperties)
                 {
-                    xAnchor->setPropertyValue(
-                        rCharacterAndParagraphProperties[nElement].Name,
-                        rCharacterAndParagraphProperties[nElement].Value);
+                    xAnchor->setPropertyValue(rProperty.Name, rProperty.Value);
                 }
             }
         }
@@ -1673,11 +1670,9 @@ SwXText::convertToTextFrame(
     rNewFrame.SetSelection( aStartPam );
     try
     {
-        const beans::PropertyValue* pValues = rFrameProperties.getConstArray();
-        for (sal_Int32 nProp = 0; nProp < rFrameProperties.getLength(); ++nProp)
+        for (const beans::PropertyValue& rValue : rFrameProperties)
         {
-            rNewFrame.SwXFrame::setPropertyValue(
-                    pValues[nProp].Name, pValues[nProp].Value);
+            rNewFrame.SwXFrame::setPropertyValue(rValue.Name, rValue.Value);
         }
 
         {   // has to be in a block to remove the SwIndexes before
@@ -1975,20 +1970,17 @@ lcl_ApplyRowProperties(
 {
     uno::Reference< beans::XPropertySet > xRow;
     rRow >>= xRow;
-    const beans::PropertyValue* pProperties = rRowProperties.getConstArray();
-    for (sal_Int32 nProperty = 0; nProperty < rRowProperties.getLength();
-         ++nProperty)
+    for (const beans::PropertyValue& rProperty : rRowProperties)
     {
-        if ( pProperties[ nProperty ].Name == "TableColumnSeparators" )
+        if ( rProperty.Name == "TableColumnSeparators" )
         {
             // add the separators to access the cell's positions
             // for vertical merging later
             TableColumnSeparators aSeparators;
-            pProperties[ nProperty ].Value >>= aSeparators;
+            rProperty.Value >>= aSeparators;
             rRowSeparators = aSeparators;
         }
-        xRow->setPropertyValue(
-            pProperties[ nProperty ].Name, pProperties[ nProperty ].Value);
+        xRow->setPropertyValue(rProperty.Name, rProperty.Value);
     }
 }
 
@@ -2008,12 +2000,11 @@ lcl_ApplyCellProperties(
     const uno::Reference< uno::XInterface >& xCell,
     std::vector<VerticallyMergedCell> & rMergedCells)
 {
-    const sal_Int32 nCellProperties = rCellProperties.getLength();
     const uno::Reference< beans::XPropertySet > xCellPS(xCell, uno::UNO_QUERY);
-    for (sal_Int32 nProperty = 0; nProperty < nCellProperties; ++nProperty)
+    for (const auto& rCellProperty : rCellProperties)
     {
-        const OUString & rName  = rCellProperties[nProperty].Name;
-        const uno::Any & rValue = rCellProperties[nProperty].Value;
+        const OUString & rName  = rCellProperty.Name;
+        const uno::Any & rValue = rCellProperty.Value;
         if ( rName == "VerticalMerge" )
         {
             // determine left border position

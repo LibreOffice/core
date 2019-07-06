@@ -707,17 +707,11 @@ SwXParagraph::getPropertyValuesTolerant(
 
     uno::Sequence< beans::GetDirectPropertyTolerantResult > aTmpRes(
         m_pImpl->GetPropertyValuesTolerant_Impl( rPropertyNames, false ) );
-    const beans::GetDirectPropertyTolerantResult *pTmpRes =
-        aTmpRes.getConstArray();
 
     // copy temporary result to final result type
     const sal_Int32 nLen = aTmpRes.getLength();
     uno::Sequence< beans::GetPropertyTolerantResult > aRes( nLen );
-    beans::GetPropertyTolerantResult *pRes = aRes.getArray();
-    for (sal_Int32 i = 0;  i < nLen;  i++)
-    {
-        *pRes++ = *pTmpRes++;
-    }
+    std::copy(aTmpRes.begin(), aTmpRes.end(), aRes.begin());
     return aRes;
 }
 
@@ -746,7 +740,6 @@ SwXParagraph::Impl::GetPropertyValuesTolerant_Impl(
     const SwAttrSet& rValueAttrSet = rTextNode.GetSwAttrSet();
 
     sal_Int32 nProps = rPropertyNames.getLength();
-    const OUString *pProp = rPropertyNames.getConstArray();
 
     uno::Sequence< beans::GetDirectPropertyTolerantResult > aResult( nProps );
     beans::GetDirectPropertyTolerantResult *pResult = aResult.getArray();
@@ -755,17 +748,17 @@ SwXParagraph::Impl::GetPropertyValuesTolerant_Impl(
     // get entry to start with
     const SfxItemPropertyMap &rPropMap = m_rPropSet.getPropertyMap();
 
-    for (sal_Int32 i = 0;  i < nProps;  ++i)
+    for (const OUString& rProp : rPropertyNames)
     {
         OSL_ENSURE( nIdx < nProps, "index out ouf bounds" );
         beans::GetDirectPropertyTolerantResult &rResult = pResult[nIdx];
 
         try
         {
-            rResult.Name = pProp[i];
+            rResult.Name = rProp;
 
             SfxItemPropertySimpleEntry const*const pEntry =
-                rPropMap.getByName( pProp[i] );
+                rPropMap.getByName( rProp );
             if (!pEntry)  // property available?
             {
                 rResult.Result =
@@ -788,7 +781,7 @@ SwXParagraph::Impl::GetPropertyValuesTolerant_Impl(
                     // (compare to SwXParagraph::getPropertyValue(s))
                     uno::Any aValue;
                     if (! ::sw::GetDefaultTextContentValue(
-                                aValue, pProp[i], pEntry->nWID ) )
+                                aValue, rProp, pEntry->nWID ) )
                     {
                         SwPosition aPos( rTextNode );
                         SwPaM aPam( aPos );
