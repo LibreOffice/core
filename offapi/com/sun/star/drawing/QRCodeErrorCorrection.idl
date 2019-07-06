@@ -41,15 +41,15 @@ module com { module sun { module star { module drawing {
     @since LibreOffice 6.4
 */
 
-published enum QRCodeErrorCorrection
+published constants QRCodeErrorCorrection
 {
-    LOW = 1,
+    const short LOW = 1;
 
-    MEDIUM = 2,
+    const short MEDIUM = 2;
 
-    QUARTILE = 3,
+    const short QUARTILE = 3;
 
-    HIGH = 4
+    const short HIGH = 4;
 };
 
 }; }; }; };
