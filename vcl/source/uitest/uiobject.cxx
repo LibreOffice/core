@@ -1270,7 +1270,8 @@ OUString TabControlUIObject::get_action(VclEventId nEvent) const
     {
         sal_Int32 nPageId = mxTabControl->GetCurPageId();
         return "Choose Tab number " + OUString::number(mxTabControl->GetPagePos(nPageId)) +
-                " from '" + mxTabControl->get_id() + "'" ;
+                " in '" + mxTabControl->get_id()+
+                "' from " + get_top_parent(mxTabControl)->get_id() ;
     }
     else
         return WindowUIObject::get_action(nEvent);

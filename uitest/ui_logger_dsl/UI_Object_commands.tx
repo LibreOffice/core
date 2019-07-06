@@ -31,7 +31,7 @@ ComboBoxUIObject:
    'Select in' Combo_box_id=STRING 'ComboBox' 'item number' item_num=INT 'from' parent_id=ID  
 ;
 TabControlUIObject:
-   'Choose Tab number' tab_page_number=INT 'from' parent_id=ID 
+   'Choose Tab number' tab_page_number=INT 'in' tab_id=STRING 'from' parent_id=ID 
 ;
 
 EditUIObject:
@@ -41,7 +41,7 @@ SpinFieldUIObject:
    change=increase_or_ecrease Spin_id=STRING 'from' parent_id=ID 
 ;
 ListBoxUIObject:
-   'Select element with position ' POS=INT 'in' list=STRING 'from' parent_id=ID 
+   'Select element with position ' POS=INT 'in' list_id=STRING 'from' parent_id=ID 
 ;
 //==========================================
 SpinUIObject:
@@ -59,7 +59,7 @@ Type_action:
 ;
 SELECT:
   'Select in ' edit_button=STRING
-  '{"FROM": "' from=INT '", "' To=INT '": "0"}'
+  '{"FROM": "' from_pos=INT '" , "TO" : "'to_pos=INT '"}'
 ;
 Clear:
   'Clear' edit_button=STRING

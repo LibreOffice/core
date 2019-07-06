@@ -24,6 +24,7 @@ def parse_args():
 
 class ul_Compiler:
     variables=[]
+    objects = dict()
     def __init__(self , input_address , output_address):
         self.ui_dsl_mm = metamodel_from_file('ui_logger_dsl_grammar.tx')
         self.output_stream=self.initiate_test_generation(output_address)
@@ -65,6 +66,14 @@ class ul_Compiler:
             'CloseDialog': self.handle_Dialog,
             'OpenModelessDialog': self.handle_Dialog,
             'OpenModalDialog':self.handle_Dialog,
+            'ButtonUIObject':self.handle_button,
+            'CheckBoxUIObject':self.handle_check_box,
+            'TabControlUIObject':self.handle_tab,
+            'ComboBoxUIObject':self.handle_Combo_box,
+            'RadioButtonUIObject':self.handle_Radio_button,
+            'ListBoxUIObject':self.handle_List_box,
+            'SpinFieldUIObject':self.handle_spin_field,
+            'EditUIObject':self.handle_Edit_uiObject,
             })
 
         self.log_lines=self.get_log_file(self.input_address)
@@ -118,6 +127,156 @@ class ul_Compiler:
             line="\t\tto be implemented after ui Objects\n"
 
         self.variables.append(line)
+
+    def handle_button(self, ButtonUIObject):
+
+        if ButtonUIObject.ui_button in self.objects:
+            self.objects[ButtonUIObject.ui_button]+=1
+        else:
+            self.objects[ButtonUIObject.ui_button]=1
+            line="\t\t"+ButtonUIObject.ui_button+" = "+ButtonUIObject.parent_id+\
+                ".getChild(\""+ButtonUIObject.ui_button+"\")\n"
+            self.variables.append(line)
+
+        line="\t\t"+ButtonUIObject.ui_button+".executeAction(\"CLICK\",tuple())\n"
+        self.variables.append(line)
+
+    def handle_check_box(self, CheckBoxUIObject):
+
+        if CheckBoxUIObject.Check_box_id in self.objects:
+            self.objects[CheckBoxUIObject.Check_box_id]+=1
+        else:
+            self.objects[CheckBoxUIObject.Check_box_id]=1
+            line="\t\t"+CheckBoxUIObject.Check_box_id+" = "+CheckBoxUIObject.parent_id+\
+                ".getChild(\""+CheckBoxUIObject.Check_box_id+"\")\n"
+            self.variables.append(line)
+
+        line="\t\t"+CheckBoxUIObject.Check_box_id+".executeAction(\"CLICK\",tuple())\n"
+        self.variables.append(line)
+
+    def handle_tab(self, TabControlUIObject):
+
+        if TabControlUIObject.tab_id in self.objects:
+            self.objects[TabControlUIObject.tab_id]+=1
+        else:
+            self.objects[TabControlUIObject.tab_id]=1
+            line="\t\t"+TabControlUIObject.tab_id+" = "+TabControlUIObject.parent_id+\
+                ".getChild(\""+TabControlUIObject.tab_id+"\")\n"
+            self.variables.append(line)
+
+        line="\t\t"+TabControlUIObject.tab_id+\
+            ".executeAction(\"SELECT\", mkPropertyValues({\"POS\": \""+\
+            str(TabControlUIObject.tab_page_number)+"\"}))\n"
+        self.variables.append(line)
+
+    def handle_Combo_box(self, ComboBoxUIObject):
+
+        if ComboBoxUIObject.Combo_box_id in self.objects:
+            self.objects[ComboBoxUIObject.Combo_box_id]+=1
+        else:
+            self.objects[ComboBoxUIObject.Combo_box_id]=1
+            line="\t\t"+ComboBoxUIObject.Combo_box_id+" = "+ComboBoxUIObject.parent_id+\
+                ".getChild(\""+ComboBoxUIObject.Combo_box_id+"\")\n"
+            self.variables.append(line)
+
+        line="\t\t"+ComboBoxUIObject.Combo_box_id+\
+            ".executeAction(\"SELECT\", mkPropertyValues({\"POS\": \""+\
+            str(ComboBoxUIObject.item_num)+"\"}))\n"
+        self.variables.append(line)
+
+    def handle_Radio_button(self,RadioButtonUIObject):
+
+        if RadioButtonUIObject.Radio_button_id in self.objects:
+            self.objects[RadioButtonUIObject.Radio_button_id]+=1
+        else:
+            self.objects[RadioButtonUIObject.Radio_button_id]=1
+            line="\t\t"+RadioButtonUIObject.Radio_button_id+" = "+RadioButtonUIObject.parent_id+\
+                ".getChild(\""+RadioButtonUIObject.Radio_button_id+"\")\n"
+            self.variables.append(line)
+
+        line="\t\t"+RadioButtonUIObject.Radio_button_id+".executeAction(\"CLICK\",tuple())\n"
+        self.variables.append(line)
+
+    def handle_List_box(self, ListBoxUIObject):
+
+        if ListBoxUIObject.list_id in self.objects:
+            self.objects[ListBoxUIObject.list_id]+=1
+        else:
+            self.objects[ListBoxUIObject.list_id]=1
+            line="\t\t"+ListBoxUIObject.list_id+" = "+ListBoxUIObject.parent_id+\
+                ".getChild(\""+ListBoxUIObject.list_id+"\")\n"
+            self.variables.append(line)
+
+        line="\t\t"+ListBoxUIObject.list_id+\
+            ".executeAction(\"SELECT\", mkPropertyValues({\"POS\": \""+\
+            str(ListBoxUIObject.POS)+"\"}))\n"
+        self.variables.append(line)
+
+    def handle_spin_field(self,SpinFieldUIObject):
+
+        if SpinFieldUIObject.Spin_id in self.objects:
+            self.objects[SpinFieldUIObject.Spin_id]+=1
+        else:
+            self.objects[SpinFieldUIObject.Spin_id]=1
+            line="\t\t"+SpinFieldUIObject.Spin_id+" = "+SpinFieldUIObject.parent_id+\
+                ".getChild(\""+SpinFieldUIObject.Spin_id+"\")\n"
+            self.variables.append(line)
+
+        if(SpinFieldUIObject.change=="Increase"):
+            line="\t\t"+SpinFieldUIObject.Spin_id+".executeAction(\"UP\",tuple())\n"
+        elif(SpinFieldUIObject.change=="Decrease"):
+            line="\t\t"+SpinFieldUIObject.Spin_id+".executeAction(\"DOWN\",tuple())\n"
+        self.variables.append(line)
+
+    def handle_Edit_uiObject(self,EditUIObject):
+
+        if(EditUIObject.action.__class__.__name__ =="Type_action"):
+            if EditUIObject.action.edit_button in self.objects:
+                self.objects[EditUIObject.action.edit_button]+=1
+            else:
+                self.objects[EditUIObject.action.edit_button]=1
+                line="\t\t"+EditUIObject.action.edit_button+" = "+EditUIObject.parent_id+\
+                ".getChild(\""+EditUIObject.action.edit_button+"\")\n"
+                self.variables.append(line)
+
+            if(EditUIObject.action.what_to_type.__class__.__name__=="char"):
+                line="\t\t"+EditUIObject.action.edit_button+\
+                ".executeAction(\"TYPE\", mkPropertyValues({\"TEXT\": \""+\
+                EditUIObject.action.what_to_type.input_char+"\"}))\n"
+
+            elif(EditUIObject.action.what_to_type.__class__.__name__=="KeyCode"):
+                line="\t\t"+EditUIObject.action.edit_button+\
+                ".executeAction(\"TYPE\", mkPropertyValues({\"KEYCODE\":"+\
+                EditUIObject.action.what_to_type.input_key_code+"\"}))\n"
+            self.variables.append(line)
+
+        if(EditUIObject.action.__class__.__name__ =="SELECT"):
+            if EditUIObject.action.edit_button in self.objects:
+                self.objects[EditUIObject.action.edit_button]+=1
+            else:
+                self.objects[EditUIObject.action.edit_button]=1
+                line="\t\t"+EditUIObject.action.edit_button+" = "+EditUIObject.parent_id+\
+                ".getChild(\""+EditUIObject.action.edit_button+"\")\n"
+                self.variables.append(line)
+
+            line="\t\t"+EditUIObject.action.edit_button+\
+                ".executeAction(\"SELECT\", mkPropertyValues({\"from\": \""+\
+                str(EditUIObject.action.from_pos )+"\", \"TO\": \""+\
+                str(EditUIObject.action.to_pos)+"\"}))\n"
+            self.variables.append(line)
+
+        if(EditUIObject.action.__class__.__name__ =="Clear"):
+            if EditUIObject.action.edit_button in self.objects:
+                self.objects[EditUIObject.action.edit_button]+=1
+            else:
+                self.objects[EditUIObject.action.edit_button]=1
+                line="\t\t"+EditUIObject.action.edit_button+" = "+EditUIObject.parent_id+\
+                ".getChild(\""+EditUIObject.action.edit_button+"\")\n"
+                self.variables.append(line)
+
+            line="\t\t"+EditUIObject.action.edit_button+\
+                ".executeAction(\"CLEAR\",tuple())\n"
+            self.variables.append(line)
 
     def Generate_UI_test(self):
         line="\t\tself.ui_test.close_doc()"
