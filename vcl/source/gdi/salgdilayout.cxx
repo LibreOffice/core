@@ -30,7 +30,6 @@
 #endif
 #include <salgdi.hxx>
 #include <salframe.hxx>
-#include <basegfx/numeric/ftools.hxx> //for F_PI180
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <FileDefinitionWidgetDraw.hxx>

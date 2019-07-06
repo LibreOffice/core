@@ -23,14 +23,11 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 
-#include <cmath>
 #include <limits>
 #include <rtl/crc.h>
-#include <rtl/alloc.h>
 #include <tools/zcodec.hxx>
 #include <tools/stream.hxx>
 #include <vcl/bitmapaccess.hxx>
-#include <vcl/svapp.hxx>
 #include <vcl/alpha.hxx>
 #include <osl/endian.h>
 #include <memory>

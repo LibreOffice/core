@@ -18,7 +18,6 @@
  */
 
 
-#include <tools/vcompat.hxx>
 #include <vcl/GraphicObject.hxx>
 
 

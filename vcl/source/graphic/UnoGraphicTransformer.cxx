@@ -21,15 +21,8 @@
 #include <graphic/UnoGraphicTransformer.hxx>
 
 #include <vcl/graph.hxx>
-#include <vcl/svapp.hxx>
-#include <vcl/image.hxx>
-#include <vcl/metaact.hxx>
-#include <svl/solar.hrc>
-#include <vcl/virdev.hxx>
-#include <vcl/bitmapaccess.hxx>
+#include <vcl/BitmapColor.hxx>
 #include <vcl/BitmapDuoToneFilter.hxx>
-
-#include <com/sun/star/text/GraphicCrop.hpp>
 
 using namespace com::sun::star;
 

@@ -11,7 +11,6 @@
 #include <vcl/filter/PngImageReader.hxx>
 #include <png.h>
 #include <tools/stream.hxx>
-#include <vcl/bitmapaccess.hxx>
 #include <bitmapwriteaccess.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/alpha.hxx>

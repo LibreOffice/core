@@ -26,8 +26,6 @@
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/graph.hxx>
 
-#include <svdata.hxx>
-
 #include <unotools/streamwrap.hxx>
 
 #include <tools/helpers.hxx>
@@ -46,7 +44,6 @@
 
 #include <cppuhelper/implbase.hxx>
 
-#include <rtl/digest.h>
 #include <sal/log.hxx>
 #include <memory>
 

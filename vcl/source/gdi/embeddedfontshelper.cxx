@@ -18,7 +18,6 @@
 #include <vcl/embeddedfontshelper.hxx>
 #include <com/sun/star/io/XInputStream.hpp>
 
-#include <fontsubset.hxx>
 #include <outdev.h>
 #include <PhysicalFontCollection.hxx>
 #include <salgdi.hxx>

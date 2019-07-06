@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sal/macros.h>
 #include <tools/stream.hxx>
 #include <tools/vcompat.hxx>
 #include <tools/gen.hxx>
@@ -27,7 +26,6 @@
 #include <vcl/font.hxx>
 
 #include <impfont.hxx>
-#include <fontinstance.hxx>
 #include <fontattributes.hxx>
 #include <sft.hxx>
 

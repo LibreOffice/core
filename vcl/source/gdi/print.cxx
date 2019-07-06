@@ -36,7 +36,6 @@
 #include <salprn.hxx>
 #include <svdata.hxx>
 #include <print.hrc>
-#include <strings.hrc>
 #include <jobset.h>
 #include <outdev.h>
 #include <PhysicalFontCollection.hxx>

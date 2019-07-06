@@ -20,8 +20,9 @@
 #ifndef INCLUDED_VCL_SOURCE_FILTER_JPEG_JPEGWRITER_HXX
 #define INCLUDED_VCL_SOURCE_FILTER_JPEG_JPEGWRITER_HXX
 
+#include <vcl/bitmap.hxx>
+#include <vcl/bitmapaccess.hxx>
 #include <vcl/graph.hxx>
-#include <vcl/fltcall.hxx>
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>

@@ -20,7 +20,6 @@
 
 #include <hb-ot.h>
 
-#include <svdata.hxx>
 #include <fontinstance.hxx>
 #include <impfontcache.hxx>
 

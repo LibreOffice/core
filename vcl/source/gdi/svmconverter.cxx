@@ -20,17 +20,13 @@
 #include <algorithm>
 #include <string.h>
 #include <osl/thread.h>
-#include <tools/debug.hxx>
 #include <tools/fract.hxx>
 #include <tools/stream.hxx>
-#include <tools/helpers.hxx>
 #include <tools/GenericTypeSerializer.hxx>
 #include <vcl/dibtools.hxx>
 #include <vcl/virdev.hxx>
-#include <vcl/graph.hxx>
 #include <vcl/lineinfo.hxx>
 #include <vcl/metaact.hxx>
-#include <rtl/strbuf.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 

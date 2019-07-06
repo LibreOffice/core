@@ -17,26 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <osl/file.hxx>
-#include <tools/stream.hxx>
-#include <unotools/resmgr.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/graphicfilter.hxx>
-#include <vcl/svapp.hxx>
 #include <vcl/image.hxx>
-#include <vcl/imagerepository.hxx>
-#include <vcl/ImageTree.hxx>
 #include <sal/types.h>
 #include <image.h>
 
-#include <BitmapDisabledImageFilter.hxx>
 #include <BitmapColorizeFilter.hxx>
-
-#if OSL_DEBUG_LEVEL > 0
-#include <rtl/strbuf.hxx>
-#endif
 
 using namespace css;
 

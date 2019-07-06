@@ -20,11 +20,7 @@
 #ifndef INCLUDED_VCL_SOURCE_FILTER_JPEG_EXIF_HXX
 #define INCLUDED_VCL_SOURCE_FILTER_JPEG_EXIF_HXX
 
-#include <osl/endian.h>
-#include <vcl/graph.hxx>
-#include <vcl/fltcall.hxx>
-#include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/task/XStatusIndicator.hpp>
+#include <tools/stream.hxx>
 
 enum Orientation {
     TOP_LEFT        = 1,

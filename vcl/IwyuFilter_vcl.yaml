@@ -33,3 +33,20 @@ blacklist:
     - desktop/exithelper.h
     vcl/source/filter/ipdf/pdfdocument.cxx:
     - comphelper/scopeguard.hxx
+    vcl/source/filter/jpeg/JpegWriter.hxx:
+    # Needed for direct member access
+    - vcl/bitmapaccess.hxx
+    vcl/source/fontsubset/sft.cxx:
+    # OSL_BIGENDIAN is being checked
+    - osl/endian.h
+    # Needed on WIN32 / MAC / IOS
+    - xlat.hxx
+    vcl/source/gdi/configsettings.cxx:
+    # Needed for OSL_DEBUG_LEVEL > 2
+    - sal/log.hxx
+    include/vcl/mtfxmldump.hxx:
+    # Silence warning about include/vcl/mtfxmldump.hxx
+    - vcl/metaactiontypes.hxx
+    vcl/source/gdi/salgdilayout.cxx:
+    # Needed on WIN32
+    - desktop/exithelper.h
