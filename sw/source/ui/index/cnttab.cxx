@@ -75,6 +75,7 @@
 
 #include <unomid.h>
 
+#include <cmath>
 #include <memory>
 #include <vector>
 #include <numeric>
@@ -1554,7 +1555,7 @@ void SwTOXEdit::AdjustSize()
 {
     auto nWidth = m_xEntry->get_pixel_size(GetText()).Width();
     float fChars = nWidth / m_xEntry->get_approximate_digit_width();
-    m_xEntry->set_width_chars(std::max(1.0f, ceil(fChars)));
+    m_xEntry->set_width_chars(std::max(1.0f, std::ceil(fChars)));
 }
 
 class SwTOXButton : public SwTOXWidget
