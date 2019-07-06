@@ -279,6 +279,10 @@ blacklist:
     include/vcl/FilterConfigItem.hxx:
     # Needed on Windows with --disable-pch
     - com/sun/star/beans/PropertyValue.hpp
+    include/vcl/builderfactory.hxx:
+    # Needed for macro #define
+    - vcl/builder.hxx
+    - vcl/vclptr.hxx
     include/vcl/decoview.hxx:
     # Full definition needed for VclPtr
     - vcl/outdev.hxx
@@ -298,6 +302,14 @@ blacklist:
     include/vcl/mtfxmldump.hxx:
     # Full definition needed for o3tl::enumarray
     - vcl/metaactiontypes.hxx
+    include/vcl/salbtype.hxx:
+    # TODO remove this file entirely, contains only these headers now
+    - vcl/BitmapAccessMode.hxx
+    - vcl/BitmapBuffer.hxx
+    - vcl/BitmapColor.hxx
+    - vcl/BitmapPalette.hxx
+    - vcl/ColorMask.hxx
+    - vcl/Scanline.hxx
     include/vcl/outdevstate.hxx:
     # Full definition needed for boost::optional
     - vcl/mapmod.hxx

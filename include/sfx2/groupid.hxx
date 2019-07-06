@@ -19,6 +19,10 @@
 #ifndef INCLUDED_SFX2_GROUPID_HXX
 #define INCLUDED_SFX2_GROUPID_HXX
 
+#include <sal/types.h>
+
+#include <functional>
+
 // !! If you add a new group, please change sfxbasecontroller.cxx and
 // !! com.sun.star.frame.CommandGroup accordingly!
 

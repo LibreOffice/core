@@ -20,7 +20,6 @@
 #ifndef INCLUDED_VCL_SCANLINE_HXX
 #define INCLUDED_VCL_SCANLINE_HXX
 
-#include <vcl/dllapi.h>
 #include <o3tl/typed_flags_set.hxx>
 
 typedef sal_uInt8*        Scanline;

@@ -22,7 +22,6 @@
 
 #include <vcl/dllapi.h>
 #include <tools/color.hxx>
-#include <memory>
 
 class VCL_DLLPUBLIC BitmapColor final : public Color
 {

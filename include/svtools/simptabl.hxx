@@ -24,7 +24,6 @@
 #include <vcl/headbar.hxx>
 #include <vcl/svtabbx.hxx>
 #include <unotools/collatorwrapper.hxx>
-#include <vcl/commandevent.hxx>
 
 class SvSimpleTable;
 class SVT_DLLPUBLIC SvSimpleTableContainer : public Control

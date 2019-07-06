@@ -22,7 +22,6 @@
 
 #include <sal/config.h>
 
-#include <map>
 #include <unordered_map>
 #include <utility>
 

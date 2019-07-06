@@ -27,7 +27,6 @@
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Sequence.hxx>
 
-#include <vcl/vclptr.hxx>
 #include <svl/poolitem.hxx>
 #include <sot/formats.hxx>
 #include <sot/object.hxx>

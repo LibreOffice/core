@@ -20,6 +20,12 @@
 #ifndef INCLUDED_CANVAS_BASE_GRAPHICDEVICEBASE_HXX
 #define INCLUDED_CANVAS_BASE_GRAPHICDEVICEBASE_HXX
 
+#include <com/sun/star/rendering/XBufferController.hpp>
+#include <com/sun/star/rendering/XLinePolyPolygon2D.hpp>
+#include <com/sun/star/rendering/XBezierPolyPolygon2D.hpp>
+#include <com/sun/star/rendering/XBitmap.hpp>
+#include <com/sun/star/rendering/XVolatileBitmap.hpp>
+
 #include <rtl/ref.hxx>
 
 #include <canvas/parametricpolypolygon.hxx>

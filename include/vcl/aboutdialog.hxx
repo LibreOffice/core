@@ -10,7 +10,6 @@
 #ifndef INCLUDED_VCL_ABOUT_DIALOG_HXX
 #define INCLUDED_VCL_ABOUT_DIALOG_HXX
 
-#include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/fixedhyper.hxx>
 #include <vcl/dialog.hxx>

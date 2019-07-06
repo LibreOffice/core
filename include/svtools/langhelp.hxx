@@ -12,6 +12,8 @@
 
 #include <svtools/svtdllapi.h>
 
+#include <com/sun/star/uno/Sequence.hxx>
+
 #include <rtl/ustring.hxx>
 
 /** Localize a URI to one of the foundation's webservices

@@ -21,6 +21,7 @@
 #define INCLUDED_SVTOOLS_PRNSETUP_HXX
 
 #include <svtools/svtdllapi.h>
+#include <vcl/print.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/timer.hxx>
 
