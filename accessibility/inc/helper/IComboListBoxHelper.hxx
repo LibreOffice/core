@@ -24,9 +24,9 @@
 #include <rtl/ustring.hxx>
 #include <tools/wintypes.hxx>
 
-namespace com { namespace sun { namespace star { namespace datatransfer { namespace clipboard {
+namespace com::sun::star::datatransfer::clipboard {
     class XClipboard;
-} } } } }
+}
 
 class Point;
 namespace tools { class Rectangle; }
