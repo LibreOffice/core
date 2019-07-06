@@ -36,21 +36,21 @@ ModalDialog DLG_ROWHEIGHT
     OutputSize = TRUE ;
     SVLook = TRUE ;
     HelpId = HID_DLG_ROWHEIGHT ;
-    Size = MAP_APPFONT ( 159 , 59 ) ;
+    Size = MAP_APPFONT ( 159, 59 ) ;
     Moveable = TRUE ;
     Closeable = TRUE ;
     FixedText FT_VALUE
     {
-        Pos = MAP_APPFONT ( 6 , 8 ) ;
-        Size = MAP_APPFONT ( 23 , 10 ) ;
+        Pos = MAP_APPFONT ( 6, 8 ) ;
+        Size = MAP_APPFONT ( 23, 10 ) ;
         Text [ en-US ] = "~Height" ;
     };
     MetricField MF_VALUE
     {
-        HelpID = "dbaccess:MetricField:DLG_ROWHEIGHT:MF_VALUE";
+        HelpID = "dbaccess:MetricField:DLG_ROWHEIGHT:MF_VALUE" ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 36 , 6 ) ;
-        Size = MAP_APPFONT ( 63 , 12 ) ;
+        Pos = MAP_APPFONT ( 36, 6 ) ;
+        Size = MAP_APPFONT ( 63, 12 ) ;
         TabStop = TRUE ;
         Spin = TRUE ;
         Minimum = 10 ;
@@ -61,29 +61,29 @@ ModalDialog DLG_ROWHEIGHT
     };
     CheckBox CB_STANDARD
     {
-        HelpID = "dbaccess:CheckBox:DLG_ROWHEIGHT:CB_STANDARD";
-        Pos = MAP_APPFONT ( 36 , 25 ) ;
-        Size = MAP_APPFONT ( 62 , 12 ) ;
+        HelpID = "dbaccess:CheckBox:DLG_ROWHEIGHT:CB_STANDARD" ;
+        Pos = MAP_APPFONT ( 36, 25 ) ;
+        Size = MAP_APPFONT ( 62, 12 ) ;
         TabStop = TRUE ;
-        Text [ en-US ] = "~Automatic";
+        Text [ en-US ] = "~Automatic" ;
     };
     OKButton PB_OK
     {
-        Pos = MAP_APPFONT ( 105 , 6 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Pos = MAP_APPFONT ( 105, 6 ) ;
+        Size = MAP_APPFONT ( 50, 14 ) ;
         TabStop = TRUE ;
         DefButton = TRUE ;
     };
     CancelButton PB_CANCEL
     {
-        Pos = MAP_APPFONT ( 105 , 23 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Pos = MAP_APPFONT ( 105, 23 ) ;
+        Size = MAP_APPFONT ( 50, 14 ) ;
         TabStop = TRUE ;
     };
     HelpButton PB_HELP
     {
-        Pos = MAP_APPFONT ( 105 , 42 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Pos = MAP_APPFONT ( 105, 42 ) ;
+        Size = MAP_APPFONT ( 50, 14 ) ;
         TabStop = TRUE ;
     };
     Text [ en-US ] = "Row Height" ;
@@ -93,21 +93,21 @@ ModalDialog DLG_COLWIDTH
     OutputSize = TRUE ;
     SVLook = TRUE ;
     HelpId = HID_DLG_COLWIDTH ;
-    Size = MAP_APPFONT ( 159 , 59 ) ;
+    Size = MAP_APPFONT ( 159, 59 ) ;
     Moveable = TRUE ;
     Closeable = TRUE ;
     FixedText FT_VALUE
     {
-        Pos = MAP_APPFONT ( 6 , 8 ) ;
-        Size = MAP_APPFONT ( 23 , 10 ) ;
+        Pos = MAP_APPFONT ( 6, 8 ) ;
+        Size = MAP_APPFONT ( 23, 10 ) ;
         Text [ en-US ] = "~Width" ;
     };
     MetricField MF_VALUE
     {
-        HelpID = "dbaccess:MetricField:DLG_COLWIDTH:MF_VALUE";
+        HelpID = "dbaccess:MetricField:DLG_COLWIDTH:MF_VALUE" ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 36 , 6 ) ;
-        Size = MAP_APPFONT ( 63 , 12 ) ;
+        Pos = MAP_APPFONT ( 36, 6 ) ;
+        Size = MAP_APPFONT ( 63, 12 ) ;
         TabStop = TRUE ;
         Spin = TRUE ;
         Minimum = 10 ;
@@ -118,61 +118,32 @@ ModalDialog DLG_COLWIDTH
     };
     CheckBox CB_STANDARD
     {
-        HelpID = "dbaccess:CheckBox:DLG_COLWIDTH:CB_STANDARD";
-        Pos = MAP_APPFONT ( 36 , 25 ) ;
-        Size = MAP_APPFONT ( 62 , 12 ) ;
+        HelpID = "dbaccess:CheckBox:DLG_COLWIDTH:CB_STANDARD" ;
+        Pos = MAP_APPFONT ( 36, 25 ) ;
+        Size = MAP_APPFONT ( 62, 12 ) ;
         TabStop = TRUE ;
-        Text [ en-US ] = "~Automatic";
+        Text [ en-US ] = "~Automatic" ;
     };
     OKButton PB_OK
     {
-        Pos = MAP_APPFONT ( 105 , 6 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Pos = MAP_APPFONT ( 105, 6 ) ;
+        Size = MAP_APPFONT ( 50, 14 ) ;
         TabStop = TRUE ;
         DefButton = TRUE ;
     };
     CancelButton PB_CANCEL
     {
-        Pos = MAP_APPFONT ( 105 , 23 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Pos = MAP_APPFONT ( 105, 23 ) ;
+        Size = MAP_APPFONT ( 50, 14 ) ;
         TabStop = TRUE ;
     };
     HelpButton PB_HELP
     {
-        Pos = MAP_APPFONT ( 105 , 42 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Pos = MAP_APPFONT ( 105, 42 ) ;
+        Size = MAP_APPFONT ( 50, 14 ) ;
         TabStop = TRUE ;
     };
     Text [ en-US ] = "Column Width" ;
 };
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+// ********************************************************************** EOF
