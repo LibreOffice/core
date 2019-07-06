@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_49988669",
+        "filename": "toolkit/source/controls/stdtabcontroller.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 328,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2019-07-06T16:27:58Z",
+      "side": 1,
+      "message": "The broken \"cache\" comes from listenermultiplexer.cxx doing fmvwimp::elementinserted before formcontroller::elementInserted for\n\nIMPL_LISTENERMULTIPLEXER_LISTENERMETHOD( ContainerListenerMultiplexer, css::container::XContainerListener, elementInserted, css::container::ContainerEvent )\n\nSo probably for \"accuracy\" the other instance should also be de-optimized (although I\u0027m not sure that autoTabOrder is even used).  (There is a third instance which gives some totally different reasoning, but I\u0027m guessing the same logic applies to that case as well.)\n\nOr is it better policy to just \"leave well enough alone\" unless you have a problem document (that\u0027s my level of thinking).",
+      "range": {
+        "startLine": 328,
+        "startChar": 7,
+        "endLine": 328,
+        "endChar": 77
+      },
+      "revId": "83a77ccd5b1d13ff9854d2ed88cfa8ab4913376e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
