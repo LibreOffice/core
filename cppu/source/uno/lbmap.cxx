@@ -147,6 +147,7 @@ struct MappingsData
     Mutex               aMappingsMutex;
     t_OUString2Entry    aName2Entry;
     t_Mapping2Entry     aMapping2Entry;
+    std::unordered_map<OUString, Mapping> aExternalName2Entry;
 
     Mutex               aCallbacksMutex;
     t_CallbackSet       aCallbacks;
@@ -372,85 +373,97 @@ static Mapping loadExternalMapping(
     const Environment & rFrom, const Environment & rTo, const OUString & rAddPurpose )
 {
     OSL_ASSERT( rFrom.is() && rTo.is() );
-    if (rFrom.is() && rTo.is())
-    {
+    if (!rFrom.is() || !rTo.is())
+        return Mapping();
+
 #ifdef DISABLE_DYNLOADING
-        OUString aName;
-        uno_ext_getMappingFunc fpGetMapFunc = 0;
+    OUString aName;
+    uno_ext_getMappingFunc fpGetMapFunc = 0;
 
-        if (EnvDcp::getTypeName(rFrom.getTypeName()) == UNO_LB_UNO)
-        {
-            aName = getBridgeName( rTo, rFrom, rAddPurpose );
-            fpGetMapFunc = selectMapFunc( aName );
-        }
-        if (! fpGetMapFunc)
-        {
-            aName = getBridgeName( rFrom, rTo, rAddPurpose );
-            fpGetMapFunc = selectMapFunc( aName );
-        }
-        if (! fpGetMapFunc)
-        {
-            aName = getBridgeName( rTo, rFrom, rAddPurpose );
-            fpGetMapFunc = selectMapFunc( aName );
-        }
-
-        if (! fpGetMapFunc)
-        {
-            SAL_INFO("cppu", "Could not find mapfunc for " << aName);
-            return Mapping();
-        }
-
-        if (fpGetMapFunc)
-        {
-            Mapping aExt;
-            (*fpGetMapFunc)( (uno_Mapping **)&aExt, rFrom.get(), rTo.get() );
-            OSL_ASSERT( aExt.is() );
-            if (aExt.is())
-                return aExt;
-        }
-#else
-        // find proper lib
-        osl::Module aModule;
-        bool bModule(false);
-        OUString aName;
-
-        if ( EnvDcp::getTypeName(rFrom.getTypeName()) == UNO_LB_UNO )
-        {
-            aName = getBridgeName( rTo, rFrom, rAddPurpose );
-            bModule = loadModule( aModule, aName );
-        }
-        if (!bModule)
-        {
-            aName = getBridgeName( rFrom, rTo, rAddPurpose );
-            bModule = loadModule( aModule, aName );
-        }
-        if (!bModule)
-        {
-            aName = getBridgeName( rTo, rFrom, rAddPurpose );
-            bModule = loadModule( aModule, aName );
-        }
-
-        if (bModule)
-        {
-            uno_ext_getMappingFunc fpGetMapFunc =
-                reinterpret_cast<uno_ext_getMappingFunc>(aModule.getSymbol( UNO_EXT_GETMAPPING ));
-
-            if (fpGetMapFunc)
-            {
-                Mapping aExt;
-                (*fpGetMapFunc)( reinterpret_cast<uno_Mapping **>(&aExt), rFrom.get(), rTo.get() );
-                OSL_ASSERT( aExt.is() );
-                if (aExt.is())
-                {
-                    aModule.release();
-                    return aExt;
-                }
-            }
-            aModule.unload();
-            setNegativeBridge( aName );
-        }
-#endif
+    if (EnvDcp::getTypeName(rFrom.getTypeName()) == UNO_LB_UNO)
+    {
+        aName = getBridgeName( rTo, rFrom, rAddPurpose );
+        fpGetMapFunc = selectMapFunc( aName );
     }
+    if (! fpGetMapFunc)
+    {
+        aName = getBridgeName( rFrom, rTo, rAddPurpose );
+        fpGetMapFunc = selectMapFunc( aName );
+    }
+    if (! fpGetMapFunc)
+    {
+        aName = getBridgeName( rTo, rFrom, rAddPurpose );
+        fpGetMapFunc = selectMapFunc( aName );
+    }
+
+    if (! fpGetMapFunc)
+    {
+        SAL_INFO("cppu", "Could not find mapfunc for " << aName);
+        return Mapping();
+    }
+
+    if (fpGetMapFunc)
+    {
+        Mapping aExt;
+        (*fpGetMapFunc)( (uno_Mapping **)&aExt, rFrom.get(), rTo.get() );
+        OSL_ASSERT( aExt.is() );
+        if (aExt.is())
+            return aExt;
+    }
+#else
+    MappingsData & rData = getMappingsData();
+    auto aMappingName = getMappingName( rFrom, rTo, rAddPurpose );
+    {
+        MutexGuard aGuard( rData.aMappingsMutex );
+        auto iFind = rData.aExternalName2Entry.find(aMappingName);
+        if (iFind != rData.aExternalName2Entry.end())
+            return (*iFind).second;
+    }
+
+    // find proper lib
+    osl::Module aModule;
+    bool bModule(false);
+    OUString aName;
+
+    if ( EnvDcp::getTypeName(rFrom.getTypeName()) == UNO_LB_UNO )
+    {
+        aName = getBridgeName( rTo, rFrom, rAddPurpose );
+        bModule = loadModule( aModule, aName );
+    }
+    if (!bModule)
+    {
+        aName = getBridgeName( rFrom, rTo, rAddPurpose );
+        bModule = loadModule( aModule, aName );
+    }
+    if (!bModule)
+    {
+        aName = getBridgeName( rTo, rFrom, rAddPurpose );
+        bModule = loadModule( aModule, aName );
+    }
+
+    if (!bModule)
+        return Mapping();
+
+    uno_ext_getMappingFunc fpGetMapFunc =
+        reinterpret_cast<uno_ext_getMappingFunc>(aModule.getSymbol( UNO_EXT_GETMAPPING ));
+
+    if (fpGetMapFunc)
+    {
+        Mapping aExt;
+        (*fpGetMapFunc)( reinterpret_cast<uno_Mapping **>(&aExt), rFrom.get(), rTo.get() );
+        OSL_ASSERT( aExt.is() );
+        if (aExt.is())
+        {
+            aModule.release();
+            MutexGuard aGuard( rData.aMappingsMutex );
+            rData.aExternalName2Entry[aMappingName] = aExt;
+            return aExt;
+        }
+    }
+    aModule.unload();
+    setNegativeBridge( aName );
+
+#endif
     return Mapping();
 }
 
