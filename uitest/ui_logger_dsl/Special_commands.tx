@@ -12,21 +12,20 @@ SpecialCommand:
    
     1)  Type 
     2)  Select
-    3)  Set zoom
-    4)  GOTO page
+    3)  GOTO page
 
   then we can add whatever we need in the future
 */
 writer_command:
-  Type_command | Select_command | GOTO_command 
+    writer_Type_command | writer_Select_command | writer_GOTO_command 
 ;
-Type_command:
+writer_Type_command:
   'Type on writer' what_to_type=Type_options
 ;
-Select_command:
-  'Select from Pos' from=INT 'to Pos' to=INT 
+writer_Select_command:
+  'Select from Pos' from_pos=INT 'to Pos' to_pos=INT 
 ;
-GOTO_command:
+writer_GOTO_command:
   'GOTO page number' page_num=INT
 ;
 //=================================================================//
