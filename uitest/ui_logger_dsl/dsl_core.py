@@ -26,6 +26,7 @@ class ul_Compiler:
     prev_command=""
     variables=[]
     objects = dict()
+    current_app=""
     def __init__(self , input_address , output_address):
         self.ui_dsl_mm = metamodel_from_file('ui_logger_dsl_grammar.tx')
         self.output_stream=self.initiate_test_generation(output_address)
@@ -75,6 +76,9 @@ class ul_Compiler:
             'ListBoxUIObject':self.handle_List_box,
             'SpinFieldUIObject':self.handle_spin_field,
             'EditUIObject':self.handle_Edit_uiObject,
+            'writer_Type_command':self.handle_writer_type,
+            'writer_Select_command':self.handle_writer_select,
+            'writer_GOTO_command':self.handle_wirter_goto,
             })
 
         self.log_lines=self.get_log_file(self.input_address)
@@ -102,6 +106,8 @@ class ul_Compiler:
 
         line="\t\tMainWindow = self.xUITest.getTopFocusWindow()\n"
         self.variables.append(line)
+        app={"writer":"writer_edit","calc":"grid_window"}#to be continue
+        self.current_app=app[StarterCommand.program_name]
         self.prev_command=StarterCommand
 
     def handle_Dialog(self, DialogCommand):
@@ -299,6 +305,55 @@ class ul_Compiler:
                 ".executeAction(\"CLEAR\",tuple())\n"
             self.variables.append(line)
         self.prev_command=EditUIObject
+
+    def handle_writer_type (self,writer_Type_command):
+
+        if "writer_edit" in self.objects:
+            self.objects["writer_edit"]+=1
+        else:
+            self.objects["writer_edit"]=1
+            line="\t\twriter_edit = MainWindow.getChild(\"writer_edit\")\n"
+            self.variables.append(line)
+
+        if(writer_Type_command.what_to_type.__class__.__name__=="char"):
+            line="\t\twriter_edit.executeAction(\"TYPE\", mkPropertyValues"+\
+            "({\"TEXT\": \""+\
+            writer_Type_command.what_to_type.input_char+"\"}))\n"
+        elif(writer_Type_command.what_to_type.__class__.__name__=="KeyCode"):
+            line="\t\twriter_edit.executeAction(\"TYPE\", mkPropertyValues"+\
+            "({\"KEYCODE\": \""+\
+            writer_Type_command.what_to_type.input_key_code+"\"}))\n"
+        self.variables.append(line)
+        self.prev_command=writer_Type_command
+
+    def handle_writer_select (self,writer_Select_command):
+
+        if "writer_edit" in self.objects:
+            self.objects["writer_edit"]+=1
+        else:
+            self.objects["writer_edit"]=1
+            line="\t\twriter_edit = MainWindow.getChild(\"writer_edit\")\n"
+            self.variables.append(line)
+
+        line="\t\twriter_edit.executeAction(\"SELECT\", mkPropertyValues({\"END_POS\": \""+\
+            str(writer_Select_command.from_pos)+"\", \"START_POS\": \""+\
+                str(writer_Select_command.to_pos)+"\"}))\n"
+        self.variables.append(line)
+        self.prev_command=writer_Select_command
+
+    def handle_wirter_goto (self,writer_GOTO_command):
+
+        if "writer_edit" in self.objects:
+            self.objects["writer_edit"]+=1
+        else:
+            self.objects["writer_edit"]=1
+            line="\t\twriter_edit = MainWindow.getChild(\"writer_edit\")\n"
+            self.variables.append(line)
+
+        line="\t\twriter_edit.executeAction(\"GOTO\", mkPropertyValues({\"PAGE\": \""+\
+            str(writer_GOTO_command.page_num)+"\"}))\n"
+        self.variables.append(line)
+        self.prev_command=writer_GOTO_command
 
     def Generate_UI_test(self):
         line="\t\tself.ui_test.close_doc()"
