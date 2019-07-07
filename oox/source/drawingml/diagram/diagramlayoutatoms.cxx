@@ -418,6 +418,40 @@ sal_Int32 AlgAtom::getConnectorType()
     return oox::XML_rightArrow;
 }
 
+sal_Int32 AlgAtom::getVerticalShapesCount(const ShapePtr& rShape)
+{
+    if (rShape->getChildren().empty())
+        return (rShape->getSubType() != XML_conn) ? 1 : 0;
+
+    sal_Int32 nDir = XML_fromL;
+    if (mnType == XML_hierRoot)
+        nDir = XML_fromT;
+    else if (maMap.count(XML_linDir))
+        nDir = maMap.find(XML_linDir)->second;
+
+    const sal_Int32 nSecDir = maMap.count(XML_secLinDir) ? maMap.find(XML_secLinDir)->second : 0;
+
+    sal_Int32 nCount = 0;
+    if (nDir == XML_fromT || nDir == XML_fromB)
+    {
+        for (ShapePtr& pChild : rShape->getChildren())
+            nCount += pChild->getVerticalShapesCount();
+    }
+    else if ((nDir == XML_fromL || nDir == XML_fromR) && nSecDir == XML_fromT)
+    {
+        for (ShapePtr& pChild : rShape->getChildren())
+            nCount += pChild->getVerticalShapesCount();
+        nCount = (nCount + 1) / 2;
+    }
+    else
+    {
+        for (ShapePtr& pChild : rShape->getChildren())
+            nCount = std::max(nCount, pChild->getVerticalShapesCount());
+    }
+
+    return nCount;
+}
+
 void AlgAtom::layoutShape( const ShapePtr& rShape,
                            const std::vector<Constraint>& rConstraints )
 {
@@ -660,6 +694,9 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
         case XML_hierChild:
         case XML_hierRoot:
         {
+            if (rShape->getChildren().empty() || rShape->getSize().Width == 0 || rShape->getSize().Height == 0)
+                break;
+
             // hierRoot is the manager -> employees vertical linear path,
             // hierChild is the first employee -> last employee horizontal
             // linear path.
@@ -669,31 +706,20 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
             else if (maMap.count(XML_linDir))
                 nDir = maMap.find(XML_linDir)->second;
 
-            if (rShape->getChildren().empty() || rShape->getSize().Width == 0
-                || rShape->getSize().Height == 0)
-                break;
+            const sal_Int32 nSecDir = maMap.count(XML_secLinDir) ? maMap.find(XML_secLinDir)->second : 0;
 
             sal_Int32 nCount = rShape->getChildren().size();
 
             if (mnType == XML_hierChild)
             {
-                // Connectors should not influence the size of non-connect
-                // shapes.
+                // Connectors should not influence the size of non-connect shapes.
                 nCount = std::count_if(
                     rShape->getChildren().begin(), rShape->getChildren().end(),
                     [](const ShapePtr& pShape) { return pShape->getSubType() != XML_conn; });
             }
 
-            // A manager node's height should be independent from if it has
-            // assistants and employees, compensate for that.
-            bool bTop = mnType == XML_hierRoot && rShape->getInternalName() == "hierRoot1";
-
-            // Add spacing, so connectors have a chance to be visible.
-            double fSpace = (nCount > 1 || bTop) ? 0.3 : 0;
-
-            double fHeightScale = 1.0;
-            if (mnType == XML_hierRoot && nCount < 3 && bTop)
-                fHeightScale = fHeightScale * nCount / 3;
+            const double fSpaceWidth = 0.1;
+            const double fSpaceHeight = 0.3;
 
             if (mnType == XML_hierRoot && nCount == 3)
             {
@@ -704,18 +730,31 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
                     std::swap(rChildren[1], rChildren[2]);
             }
 
+            sal_Int32 nHorizontalShapesCount = 1;
+            if (nSecDir == XML_fromT)
+                nHorizontalShapesCount = 2;
+            else if (nDir == XML_fromL || nDir == XML_fromR)
+                nHorizontalShapesCount = nCount;
+
             awt::Size aChildSize = rShape->getSize();
-            if (nDir == XML_fromT)
-            {
-                aChildSize.Height /= (nCount + nCount * fSpace);
-            }
-            else
-                aChildSize.Width /= nCount;
-            aChildSize.Height *= fHeightScale;
+            aChildSize.Height /= (rShape->getVerticalShapesCount() + (rShape->getVerticalShapesCount() - 1) * fSpaceHeight);
+            aChildSize.Width /= (nHorizontalShapesCount + (nHorizontalShapesCount - 1) * fSpaceWidth);
+
             awt::Size aConnectorSize = aChildSize;
             aConnectorSize.Width = 1;
 
             awt::Point aChildPos(0, 0);
+
+            // indent children to show they are descendants, not siblings
+            if (mnType == XML_hierChild && nHorizontalShapesCount == 1)
+            {
+                const double fChildIndent = 0.1;
+                aChildPos.X = aChildSize.Width * fChildIndent;
+                aChildSize.Width *= (1 - 2 * fChildIndent);
+            }
+
+            sal_Int32 nIdx = 0;
+            sal_Int32 nRowHeight = 0;
             for (auto& pChild : rShape->getChildren())
             {
                 pChild->setPosition(aChildPos);
@@ -729,13 +768,27 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
                     continue;
                 }
 
-                pChild->setSize(aChildSize);
-                pChild->setChildSize(aChildSize);
+                awt::Size aCurrSize = aChildSize;
+                aCurrSize.Height *= pChild->getVerticalShapesCount() + (pChild->getVerticalShapesCount() - 1) * fSpaceHeight;
 
-                if (nDir == XML_fromT)
-                    aChildPos.Y += aChildSize.Height + aChildSize.Height * fSpace;
+                pChild->setSize(aCurrSize);
+                pChild->setChildSize(aCurrSize);
+
+                if (nDir == XML_fromT || nDir == XML_fromB)
+                    aChildPos.Y += aCurrSize.Height + aChildSize.Height * fSpaceHeight;
                 else
-                    aChildPos.X += aChildSize.Width;
+                    aChildPos.X += aCurrSize.Width + aCurrSize.Width * fSpaceWidth;
+
+                nRowHeight = std::max(nRowHeight, aCurrSize.Height);
+
+                if (nSecDir == XML_fromT && nIdx % 2 == 1)
+                {
+                    aChildPos.X = 0;
+                    aChildPos.Y += nRowHeight + aChildSize.Height * fSpaceHeight;
+                    nRowHeight = 0;
+                }
+
+                nIdx++;
             }
 
             break;
