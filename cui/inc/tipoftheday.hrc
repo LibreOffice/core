@@ -106,7 +106,7 @@ const std::tuple<const char*, OUString, OUString> TIPOFTHEDAY_STRINGARRAY[] =
      { NC_("RID_CUI_TIPOFTHEDAY", "Developing new XSLT and xml filters?"), "http://fridrich.blogspot.com.tr/2013/08/extending-swiss-army-knife-overview.html", ""},
 
      { NC_("RID_CUI_TIPOFTHEDAY", "Easily convert your documents to PDF with one click by clicking on the PDF icon in the toolbar."), "", ""},
-     { NC_("RID_CUI_TIPOFTHEDAY", "Select a different icon set from Tools > Options > %PRODUCTNAME > View > User Interface > Icon size and style."), "", ""},
+     { NC_("RID_CUI_TIPOFTHEDAY", "Select a different icon set from Tools > Options > %PRODUCTNAME > View > User Interface > Icon style."), "", ""},
      { NC_("RID_CUI_TIPOFTHEDAY", "Use font embedding for greater interoperability with other office suites at  File > Properties > Font."), "", ""},
      { NC_("RID_CUI_TIPOFTHEDAY", "Generate fully customized PDF documents with the exact format, image compression, comments, access rights, password, etc., via File > Export as PDF."), "", ""},
      { NC_("RID_CUI_TIPOFTHEDAY", "Use Data > Statistics for sampling, descriptive statistics, analysis of variance, correlation, and much more in %PRODUCTNAME Calc."), "", "tipoftheday_c.png"},
