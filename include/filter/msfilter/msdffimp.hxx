@@ -36,7 +36,6 @@
 #include <filter/msfilter/dffrecordheader.hxx>
 #include <filter/msfilter/escherex.hxx>
 #include <filter/msfilter/msfilterdllapi.h>
-#include <rtl/string.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 #include <svx/msdffdef.hxx>

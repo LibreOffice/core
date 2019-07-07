@@ -23,7 +23,6 @@
 #include <algorithm>
 #include <cstddef>
 #include <memory>
-#include <type_traits>
 #include <vector>
 
 #include <com/sun/star/uno/Reference.hxx>

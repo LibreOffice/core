@@ -9,7 +9,6 @@
 #ifndef INCLUDED_FILTER_MSFILTER_MSTOOLBAR_HXX
 #define INCLUDED_FILTER_MSFILTER_MSTOOLBAR_HXX
 
-#include <cstdio>
 #include <memory>
 #include <vector>
 
