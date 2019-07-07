@@ -74,8 +74,7 @@ class ShapeLayoutingVisitor : public LayoutAtomVisitorBase
 {
 public:
     ShapeLayoutingVisitor(const Diagram& rDgm, const dgm::Point* pRootPoint) :
-        LayoutAtomVisitorBase(rDgm, pRootPoint),
-        meLookFor(LAYOUT_NODE)
+        LayoutAtomVisitorBase(rDgm, pRootPoint)
     {}
 
     using LayoutAtomVisitorBase::visit;
@@ -86,7 +85,6 @@ public:
 
 private:
     std::vector<Constraint> maConstraints;
-    enum {LAYOUT_NODE, CONSTRAINT, ALGORITHM} meLookFor;
 };
 
 } }
