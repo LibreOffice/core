@@ -106,7 +106,7 @@ const std::tuple<const char*, OUString, OUString> TIPOFTHEDAY_STRINGARRAY[] =
      { NC_("RID_CUI_TIPOFTHEDAY", "Developing new XSLT and xml filters?"), "http://fridrich.blogspot.com.tr/2013/08/extending-swiss-army-knife-overview.html", ""},
 
      { NC_("RID_CUI_TIPOFTHEDAY", "Easily convert your documents to PDF with one click by clicking on the PDF icon in the toolbar."), "", ""},
-     { NC_("RID_CUI_TIPOFTHEDAY", "Select a different icon set from Tools > Options > %PRODUCTNAME > View > User Interface > Icon size and style."), "", ""},
+     { NC_("RID_CUI_TIPOFTHEDAY", "Select a different icon set from Tools > Options > %PRODUCTNAME > View > User Interface > Icon style."), "", ""},
      { NC_("RID_CUI_TIPOFTHEDAY", "Use font embedding for greater interoperability with other office suites at  File > Properties > Font."), "", ""},
      { NC_("RID_CUI_TIPOFTHEDAY", "Generate fully customized PDF documents with the exact format, image compression, comments, access rights, password, etc., via File > Export as PDF."), "", ""},
      { NC_("RID_CUI_TIPOFTHEDAY", "Use Data > Statistics for sampling, descriptive statistics, analysis of variance, correlation, and much more in %PRODUCTNAME Calc."), "", "tipoftheday_c.png"},
@@ -118,7 +118,7 @@ const std::tuple<const char*, OUString, OUString> TIPOFTHEDAY_STRINGARRAY[] =
      { NC_("RID_CUI_TIPOFTHEDAY", "Batch convert your MS Office documents to OpenDocument format by the Document Converter wizard in menu File > Wizards > Document converter."), "", ""},
      { NC_("RID_CUI_TIPOFTHEDAY", "Uncheck Tools > Options > %PRODUCTNAME Calc > View > Zoom: 'Synchronize sheets' so that each sheet in Calc has its own zoom factor."), "", "tipoftheday_c.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Open a CSV file as a new sheet in the current spreadsheet via Sheet > Sheet from file."), "", "tipoftheday_c.png"},
-     { NC_("RID_CUI_TIPOFTHEDAY", "Need to move a Writer table? Table > Select > Table and Insert > Frame… and move where you want."), "", "tipoftheday_w.png"},
+     { NC_("RID_CUI_TIPOFTHEDAY", "Need to move a Writer table? Table > Select > Table and Insert > Frame> Frame… and move where you want."), "", "tipoftheday_w.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "In %PRODUCTNAME Draw to change the 0/0 point of the rulers, drag the intersection of the two rulers in the top left corner into the workspace."), "", "tipoftheday_d.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Hold down Ctrl and turn the mouse wheel to change the zoom factor."), "", ""},
      { NC_("RID_CUI_TIPOFTHEDAY", "Edit > Find & Replace lets you insert special characters directly: right click in input fields or press Shift+Ctrl+S."), "", ""},
