@@ -78,15 +78,15 @@ ColorNameMap::ColorNameMap() {
 
     // Fill the map to convert from numerical color values to names.
     if (xNA.is())
-        for (long int i=0; i<aNames.getLength(); i++)
+        for (const auto& rName : aNames)
         {
             // Get the numerical value for the i-th color name.
             try
             {
-                css::uno::Any aColor = xNA->getByName(aNames[i]);
+                css::uno::Any aColor = xNA->getByName(rName);
                 long nColor = 0;
                 aColor >>= nColor;
-                map_[nColor] = aNames[i];
+                map_[nColor] = rName;
             }
             catch (css::uno::RuntimeException const&)
             {

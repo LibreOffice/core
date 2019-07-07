@@ -742,13 +742,13 @@ bool XLineDashItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId )
                 css::drawing::LineDash aLineDash;
                 OUString aName;
                 bool bLineDash( false );
-                for ( sal_Int32 n = 0; n < aPropSeq.getLength(); n++ )
+                for ( const auto& rProp : aPropSeq )
                 {
-                    if ( aPropSeq[n].Name == "Name" )
-                        aPropSeq[n].Value >>= aName;
-                    else if ( aPropSeq[n].Name == "LineDash" )
+                    if ( rProp.Name == "Name" )
+                        rProp.Value >>= aName;
+                    else if ( rProp.Name == "LineDash" )
                     {
-                        if ( aPropSeq[n].Value >>= aLineDash )
+                        if ( rProp.Value >>= aLineDash )
                             bLineDash = true;
                     }
                 }
@@ -2105,13 +2105,13 @@ bool XFillGradientItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId
                 css::awt::Gradient aGradient2;
                 OUString aName;
                 bool bGradient( false );
-                for ( sal_Int32 n = 0; n < aPropSeq.getLength(); n++ )
+                for ( const auto& rProp : aPropSeq )
                 {
-                    if ( aPropSeq[n].Name == "Name" )
-                        aPropSeq[n].Value >>= aName;
-                    else if ( aPropSeq[n].Name == "FillGradient" )
+                    if ( rProp.Name == "Name" )
+                        rProp.Value >>= aName;
+                    else if ( rProp.Name == "FillGradient" )
                     {
-                        if ( aPropSeq[n].Value >>= aGradient2 )
+                        if ( rProp.Value >>= aGradient2 )
                             bGradient = true;
                     }
                 }
@@ -2498,13 +2498,13 @@ bool XFillHatchItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId )
                 css::drawing::Hatch aUnoHatch;
                 OUString aName;
                 bool bHatch( false );
-                for ( sal_Int32 n = 0; n < aPropSeq.getLength(); n++ )
+                for ( const auto& rProp : aPropSeq )
                 {
-                    if ( aPropSeq[n].Name == "Name" )
-                        aPropSeq[n].Value >>= aName;
-                    else if ( aPropSeq[n].Name == "FillHatch" )
+                    if ( rProp.Name == "Name" )
+                        rProp.Value >>= aName;
+                    else if ( rProp.Name == "FillHatch" )
                     {
-                        if ( aPropSeq[n].Value >>= aUnoHatch )
+                        if ( rProp.Value >>= aUnoHatch )
                             bHatch = true;
                     }
                 }

@@ -55,10 +55,8 @@ void SvxNumOptionsTabPageHelper::GetI18nNumbering( ListBox& rFmtLB, sal_uInt16 n
     if(xInfo.is())
     {
         Sequence<sal_Int16> aTypes = xInfo->getSupportedNumberingTypes(  );
-        const sal_Int16* pTypes = aTypes.getConstArray();
-        for(sal_Int32 nType = 0; nType < aTypes.getLength(); nType++)
+        for(const sal_Int16 nCurrent : aTypes)
         {
-            sal_Int16 nCurrent = pTypes[nType];
             if(nCurrent > NumberingType::CHARS_LOWER_LETTER_N)
             {
                 bool bInsert = true;
@@ -110,10 +108,8 @@ void SvxNumOptionsTabPageHelper::GetI18nNumbering(weld::ComboBox& rFmtLB, sal_uI
     if(xInfo.is())
     {
         Sequence<sal_Int16> aTypes = xInfo->getSupportedNumberingTypes(  );
-        const sal_Int16* pTypes = aTypes.getConstArray();
-        for(sal_Int32 nType = 0; nType < aTypes.getLength(); nType++)
+        for(const sal_Int16 nCurrent : aTypes)
         {
-            sal_Int16 nCurrent = pTypes[nType];
             if(nCurrent > NumberingType::CHARS_LOWER_LETTER_N)
             {
                 bool bInsert = true;

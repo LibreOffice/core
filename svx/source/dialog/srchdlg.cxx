@@ -2313,12 +2313,12 @@ void SvxSearchDialog::SetDocWin(vcl::Window* pDocWin)
     if (nLen)
     {
         uno::Sequence<uno::Reference<uno::XInterface>> aSequence(nLen);
-        for (sal_Int32 i = 0; i < nLen; ++i)
-        {
-            uno::Reference < css::accessibility::XAccessible > xAcc;
-            aAnySeq[i] >>= xAcc;
-            aSequence[i] = xAcc;
-        }
+        std::transform(aAnySeq.begin(), aAnySeq.end(), aSequence.begin(),
+            [](const uno::Any& rAny) -> uno::Reference < css::accessibility::XAccessible > {
+                uno::Reference < css::accessibility::XAccessible > xAcc;
+                rAny >>= xAcc;
+                return xAcc;
+            });
         m_xDialog->add_extra_accessible_relation(css::accessibility::AccessibleRelation(css::accessibility::AccessibleRelationType::CONTENT_FLOWS_TO, aSequence));
     }
 }

@@ -299,15 +299,13 @@ void SmartTagMgr::changesOccurred( const util::ChangesEvent& rEvent )
 {
     SolarMutexGuard aGuard;
 
-    const util::ElementChange* pElementChanges = rEvent.Changes.getConstArray();
-    const sal_Int32 nNumberOfChanges = rEvent.Changes.getLength();
     bool bExcludedTypes = false;
     bool bRecognize = false;
 
-    for( sal_Int32 i = 0; i < nNumberOfChanges; ++i)
+    for( const util::ElementChange& rElementChange : rEvent.Changes)
     {
         OUString sTemp;
-        pElementChanges[i].Accessor >>= sTemp;
+        rElementChange.Accessor >>= sTemp;
 
         if ( sTemp == "ExcludedSmartTagTypes" )
             bExcludedTypes = true;
@@ -433,10 +431,8 @@ void SmartTagMgr::ReadConfiguration( bool bExcludedTypes, bool bRecognize )
             Sequence< OUString > aValues;
             aAny >>= aValues;
 
-            const sal_Int32 nValues = aValues.getLength();
-
-            for ( sal_Int32 nI = 0; nI < nValues; ++nI )
-                maDisabledSmartTagTypes.insert( aValues[nI] );
+            for ( const auto& rValue : aValues )
+                maDisabledSmartTagTypes.insert( rValue );
         }
 
         if ( bRecognize )

@@ -809,13 +809,11 @@ void AccessibleControlShape::initializeComposedState()
             aInnerStates = xInnerStates->getStates();
 
         // look which one are to be propagated to the composed context
-        const sal_Int16* pStates = aInnerStates.getConstArray();
-        const sal_Int16* pStatesEnd = pStates + aInnerStates.getLength();
-        for ( ; pStates != pStatesEnd; ++pStates )
+        for ( const sal_Int16 nState : aInnerStates )
         {
-            if ( isComposedState( *pStates ) && !pComposedStates->contains( *pStates ) )
+            if ( isComposedState( nState ) && !pComposedStates->contains( nState ) )
             {
-                pComposedStates->AddState( *pStates );
+                pComposedStates->AddState( nState );
             }
         }
     }

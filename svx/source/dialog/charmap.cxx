@@ -205,17 +205,11 @@ void SvxShowCharSet::getFavCharacterList()
     maFavCharFontList.clear();
     //retrieve recent character list
     css::uno::Sequence< OUString > rFavCharList( officecfg::Office::Common::FavoriteCharacters::FavoriteCharacterList::get() );
-    for (int i = 0; i < rFavCharList.getLength(); ++i)
-    {
-        maFavCharList.push_back(rFavCharList[i]);
-    }
+    comphelper::sequenceToContainer(maFavCharList, rFavCharList);
 
     //retrieve recent character font list
     css::uno::Sequence< OUString > rFavCharFontList( officecfg::Office::Common::FavoriteCharacters::FavoriteCharacterFontList::get() );
-    for (int i = 0; i < rFavCharFontList.getLength(); ++i)
-    {
-        maFavCharFontList.push_back(rFavCharFontList[i]);
-    }
+    comphelper::sequenceToContainer(maFavCharFontList, rFavCharFontList);
 }
 
 bool SvxShowCharSet::isFavChar(const OUString& sTitle, const OUString& rFont)

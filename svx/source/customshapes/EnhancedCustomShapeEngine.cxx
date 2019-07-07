@@ -117,16 +117,14 @@ void SAL_CALL EnhancedCustomShapeEngine::release() throw()
 // XInitialization
 void SAL_CALL EnhancedCustomShapeEngine::initialize( const Sequence< Any >& aArguments )
 {
-    sal_Int32 i;
     Sequence< beans::PropertyValue > aParameter;
-    for ( i = 0; i < aArguments.getLength(); i++ )
+    for ( const auto& rArgument : aArguments )
     {
-        if ( aArguments[ i ] >>= aParameter )
+        if ( rArgument >>= aParameter )
             break;
     }
-    for ( i = 0; i < aParameter.getLength(); i++ )
+    for ( const beans::PropertyValue& rProp : aParameter )
     {
-        const beans::PropertyValue& rProp = aParameter[ i ];
         if ( rProp.Name == "CustomShape" )
             rProp.Value >>= mxShape;
         else if ( rProp.Name == "ForceGroupWithText" )

@@ -438,16 +438,11 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
             if (rState.is())
             {
                 css::uno::Sequence<short> aStates = rState->getStates();
-                int count = aStates.getLength();
-                for( int iIndex = 0;iIndex < count;iIndex++ )
+                if (std::find(aStates.begin(), aStates.end(), AccessibleStateType::EDITABLE) != aStates.end())
                 {
-                    if( aStates[iIndex] == AccessibleStateType::EDITABLE )
-                    {
-                        pStateSet->AddState (AccessibleStateType::EDITABLE);
-                        pStateSet->AddState (AccessibleStateType::RESIZABLE);
-                        pStateSet->AddState (AccessibleStateType::MOVEABLE);
-                        break;
-                    }
+                    pStateSet->AddState (AccessibleStateType::EDITABLE);
+                    pStateSet->AddState (AccessibleStateType::RESIZABLE);
+                    pStateSet->AddState (AccessibleStateType::MOVEABLE);
                 }
             }
         }
@@ -813,13 +808,7 @@ sal_Bool SAL_CALL AccessibleShape::isAccessibleChildSelected( sal_Int32 nChildIn
                 return false;
 
             uno::Sequence<short> aStates = pRState->getStates();
-            int nCount = aStates.getLength();
-            for( int i = 0; i < nCount; i++ )
-            {
-                if(aStates[i] == AccessibleStateType::SELECTED)
-                    return true;
-            }
-            return false;
+            return std::find(aStates.begin(), aStates.end(), AccessibleStateType::SELECTED) != aStates.end();
         }
     }
 
@@ -928,16 +917,17 @@ uno::Sequence<uno::Type> SAL_CALL
     // ... and merge them all into one list.
     sal_Int32   nTypeCount (aTypeList.getLength()),
         nComponentTypeCount (aComponentTypeList.getLength());
-    int         i;
 
     aTypeList.realloc (nTypeCount + nComponentTypeCount + 3);
 
-    for (i=0; i<nComponentTypeCount; i++)
-        aTypeList[nTypeCount + i] = aComponentTypeList[i];
+    std::copy(aComponentTypeList.begin(), aComponentTypeList.end(),
+              std::next(aTypeList.begin(), nTypeCount));
 
-    aTypeList[nTypeCount + i++ ] = aLangEventListenerType;
-    aTypeList[nTypeCount + i++ ] = aDocumentEventListenerType;
-    aTypeList[nTypeCount + i ] = aUnoTunnelType;
+    int i = nTypeCount + nComponentTypeCount;
+
+    aTypeList[ i++ ] = aLangEventListenerType;
+    aTypeList[ i++ ] = aDocumentEventListenerType;
+    aTypeList[ i ] = aUnoTunnelType;
 
     return aTypeList;
 }
