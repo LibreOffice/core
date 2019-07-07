@@ -19,6 +19,7 @@
 
 #include <sal/config.h>
 
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/xml/sax/FastParser.hpp>
 #include <oox/core/fastparser.hxx>
 

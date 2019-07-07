@@ -20,9 +20,6 @@
 #ifndef INCLUDED_OOX_DRAWINGML_SHAPEPROPERTYMAP_HXX
 #define INCLUDED_OOX_DRAWINGML_SHAPEPROPERTYMAP_HXX
 
-#include <cstddef>
-#include <vector>
-
 #include <com/sun/star/uno/Any.hxx>
 #include <o3tl/enumarray.hxx>
 #include <oox/dllapi.h>

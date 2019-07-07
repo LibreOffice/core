@@ -23,9 +23,6 @@
 #include <map>
 #include <memory>
 
-#include <com/sun/star/io/IOException.hpp>
-#include <com/sun/star/uno/RuntimeException.hpp>
-#include <com/sun/star/xml/sax/SAXException.hpp>
 #include <oox/helper/binaryinputstream.hxx>
 #include <oox/core/fragmenthandler.hxx>
 #include <rtl/ref.hxx>

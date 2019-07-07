@@ -14,7 +14,6 @@
 #include <oox/dllapi.h>
 #include <oox/crypto/CryptoEngine.hxx>
 #include <filter/msfilter/mscodec.hxx>
-#include <rtl/digest.h>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 

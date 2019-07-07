@@ -21,6 +21,7 @@
 
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
+#include <com/sun/star/xml/sax/SAXException.hpp>
 
 #include <svx/unopage.hxx>
 #include <sal/log.hxx>

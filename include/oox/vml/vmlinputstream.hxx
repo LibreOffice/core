@@ -20,15 +20,9 @@
 #ifndef INCLUDED_OOX_VML_VMLINPUTSTREAM_HXX
 #define INCLUDED_OOX_VML_VMLINPUTSTREAM_HXX
 
-#include <exception>
-
-#include <com/sun/star/io/BufferSizeExceededException.hpp>
-#include <com/sun/star/io/IOException.hpp>
-#include <com/sun/star/io/NotConnectedException.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <rtl/string.hxx>

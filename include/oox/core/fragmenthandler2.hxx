@@ -20,12 +20,9 @@
 #ifndef INCLUDED_OOX_CORE_FRAGMENTHANDLER2_HXX
 #define INCLUDED_OOX_CORE_FRAGMENTHANDLER2_HXX
 
-#include <exception>
 #include <vector>
 
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/RuntimeException.hpp>
-#include <com/sun/star/xml/sax/SAXException.hpp>
 #include <oox/core/contexthandler.hxx>
 #include <oox/core/contexthandler2.hxx>
 #include <oox/core/fragmenthandler.hxx>

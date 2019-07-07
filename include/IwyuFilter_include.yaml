@@ -1059,3 +1059,6 @@ blacklist:
     include/svx/svdtext.hxx:
     # TODO too many replacements would be needed
     - tools/weakbase.hxx
+    include/oox/helper/helper.hxx:
+    # OSL_BIGENDIAN is being checked
+    - osl/endian.h

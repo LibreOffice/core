@@ -21,13 +21,10 @@
 #define INCLUDED_OOX_CORE_CONTEXTHANDLER2_HXX
 
 #include <cstddef>
-#include <exception>
 #include <memory>
 #include <vector>
 
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/RuntimeException.hpp>
-#include <com/sun/star/xml/sax/SAXException.hpp>
 #include <oox/core/contexthandler.hxx>
 #include <oox/dllapi.h>
 #include <rtl/ustring.hxx>

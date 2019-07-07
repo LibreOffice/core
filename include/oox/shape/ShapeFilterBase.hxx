@@ -21,7 +21,6 @@
 #define INCLUDED_OOX_SHAPE_SHAPEFILTERBASE_HXX
 
 #include <memory>
-#include <rtl/ref.hxx>
 #include <oox/dllapi.h>
 #include <oox/vml/vmldrawing.hxx>
 #include <oox/core/xmlfilterbase.hxx>

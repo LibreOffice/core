@@ -20,7 +20,9 @@
 #include <oox/core/recordparser.hxx>
 
 #include <vector>
+#include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
+#include <com/sun/star/xml/sax/SAXException.hpp>
 #include <com/sun/star/xml/sax/XLocator.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <osl/diagnose.h>

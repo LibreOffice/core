@@ -19,6 +19,7 @@
 
 #include <oox/vml/vmlinputstream.hxx>
 
+#include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/io/XTextInputStream2.hpp>
 #include <map>
 #include <string.h>
