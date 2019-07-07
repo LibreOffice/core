@@ -23,6 +23,7 @@
 #include <fmobj.hxx>
 #include <svx/unoshape.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/sequence.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <svx/fmglob.hxx>
 
@@ -81,10 +82,7 @@ using namespace ::svxform;
 
     static const sal_uInt16 nSvxComponentServiceNameListCount = SAL_N_ELEMENTS(aSvxComponentServiceNameList);
 
-    ::com::sun::star::uno::Sequence< OUString > aSeq( nSvxComponentServiceNameListCount );
-    OUString* pStrings = aSeq.getArray();
-    for( sal_uInt16 nIdx = 0; nIdx < nSvxComponentServiceNameListCount; nIdx++ )
-        pStrings[nIdx] = aSvxComponentServiceNameList[nIdx];
+    auto aSeq( comphelper::arrayToSequence< OUString >(aSvxComponentServiceNameList, nSvxComponentServiceNameListCount) );
 
     ::com::sun::star::uno::Sequence< OUString > aParentSeq( SvxUnoDrawMSFactory::getAvailableServiceNames() );
     return concatServiceNames( aParentSeq, aSeq );

@@ -444,14 +444,11 @@ bool EnhancedCustomShape2d::ConvertSequenceToEnhancedCustomShape2dHandle(
         EnhancedCustomShape2d::Handle& rDestinationHandle )
 {
     bool bRetValue = false;
-    sal_uInt32 i, nProperties = rHandleProperties.getLength();
-    if ( nProperties )
+    if ( rHandleProperties.hasElements() )
     {
         rDestinationHandle.nFlags = HandleFlags::NONE;
-        for ( i = 0; i < nProperties; i++ )
+        for ( const css::beans::PropertyValue& rPropVal : rHandleProperties )
         {
-            const css::beans::PropertyValue& rPropVal = rHandleProperties[ i ];
-
             if ( rPropVal.Name == "Position" )
             {
                 if ( rPropVal.Value >>= rDestinationHandle.aPosition )
@@ -806,13 +803,13 @@ EnhancedCustomShape2d::EnhancedCustomShape2d(SdrObjCustomShape& rSdrObjCustomSha
             break;
     }
 
-    sal_Int32 i, nLength = seqEquations.getLength();
+    sal_Int32 nLength = seqEquations.getLength();
 
     if ( nLength )
     {
         vNodesSharedPtr.resize( nLength );
         vEquationResults.resize( nLength );
-        for ( i = 0; i < seqEquations.getLength(); i++ )
+        for ( sal_Int32 i = 0; i < nLength; i++ )
         {
             vEquationResults[ i ].bReady = false;
             try
@@ -2039,15 +2036,12 @@ void EnhancedCustomShape2d::CreateSubPath(
 
     SetPathSize( nIndex );
 
-    sal_Int32 nCoordSize = seqCoordinates.getLength();
     sal_Int32 nSegInfoSize = seqSegments.getLength();
     if ( !nSegInfoSize )
     {
-        const EnhancedCustomShapeParameterPair* pTmp = seqCoordinates.getArray();
-
-        for ( sal_Int32 nPtNum(0); nPtNum < nCoordSize; nPtNum++ )
+        for ( const EnhancedCustomShapeParameterPair& rCoordinate : seqCoordinates )
         {
-            const Point aTempPoint(GetPoint( *pTmp++, true, true ));
+            const Point aTempPoint(GetPoint( rCoordinate, true, true ));
             aNewB2DPolygon.append(basegfx::B2DPoint(aTempPoint.X(), aTempPoint.Y()));
         }
 
@@ -2055,6 +2049,7 @@ void EnhancedCustomShape2d::CreateSubPath(
     }
     else
     {
+        sal_Int32 nCoordSize = seqCoordinates.getLength();
         for ( ;rSegmentInd < nSegInfoSize; )
         {
             sal_Int16 nCommand = seqSegments[ rSegmentInd ].Command;
@@ -2998,14 +2993,13 @@ SdrObject* EnhancedCustomShape2d::CreateObject( bool bLineGeometryNeededOnly )
 
 void EnhancedCustomShape2d::ApplyGluePoints( SdrObject* pObj )
 {
-    if ( pObj && seqGluePoints.hasElements() )
+    if ( pObj )
     {
-        sal_uInt32 i, nCount = seqGluePoints.getLength();
-        for ( i = 0; i < nCount; i++ )
+        for ( const auto& rGluePoint : seqGluePoints )
         {
             SdrGluePoint aGluePoint;
 
-            aGluePoint.SetPos( GetPoint( seqGluePoints[ i ], true, true ) );
+            aGluePoint.SetPos( GetPoint( rGluePoint, true, true ) );
             aGluePoint.SetPercent( false );
             aGluePoint.SetAlign( SdrAlign::VERT_TOP | SdrAlign::HORZ_LEFT );
             aGluePoint.SetEscDir( SdrEscapeDirection::SMART );

@@ -150,12 +150,11 @@ bool lcl_ExecuteFilterDialog( const Sequence< PropertyValue >& rPropsForDialog,
             {
                 bStatus = true;
                 Sequence< PropertyValue > aPropsFromDialog = xFilterProperties->getPropertyValues();
-                const sal_Int32 nPropsLen = aPropsFromDialog.getLength();
-                for ( sal_Int32 nInd = 0; nInd < nPropsLen; ++nInd )
+                for ( const auto& rProp : aPropsFromDialog )
                 {
-                    if (aPropsFromDialog[nInd].Name == "FilterData")
+                    if (rProp.Name == "FilterData")
                     {
-                        aPropsFromDialog[nInd].Value >>= rFilterData;
+                        rProp.Value >>= rFilterData;
                     }
                 }
             }
@@ -300,16 +299,15 @@ OUString GraphicHelper::ExportGraphic(weld::Window* pParent, const Graphic& rGra
                     sal_Int32 nWidth = 0;
                     sal_Int32 nHeight = 0;
 
-                    sal_Int32 nLen = aFilterData.getLength();
-                    for (sal_Int32 i = 0; i < nLen; ++i)
+                    for (const auto& rProp : aFilterData)
                     {
-                        if (aFilterData[i].Name == "PixelWidth")
+                        if (rProp.Name == "PixelWidth")
                         {
-                            aFilterData[i].Value >>= nWidth;
+                            rProp.Value >>= nWidth;
                         }
-                        else if (aFilterData[i].Name == "PixelHeight")
+                        else if (rProp.Name == "PixelHeight")
                         {
-                            aFilterData[i].Value >>= nHeight;
+                            rProp.Value >>= nHeight;
                         }
                     }
 

@@ -75,16 +75,14 @@ OUString GetDicInfoStr( const OUString& rName, const LanguageType nLang, bool bN
 
 static std::vector< LanguageType > lcl_LocaleSeqToLangSeq( Sequence< css::lang::Locale > const &rSeq )
 {
-    const css::lang::Locale *pLocale = rSeq.getConstArray();
     sal_Int32 nCount = rSeq.getLength();
 
     std::vector< LanguageType >   aLangs;
     aLangs.reserve(nCount);
-    for (sal_Int32 i = 0; i < nCount; ++i)
-    {
-        aLangs.push_back( LanguageTag::convertToLanguageType( pLocale[i] ) );
 
-    }
+    std::transform(rSeq.begin(), rSeq.end(), std::back_inserter(aLangs),
+        [](const css::lang::Locale& rLocale) -> LanguageType {
+            return LanguageTag::convertToLanguageType(rLocale); });
 
     return aLangs;
 }
@@ -92,18 +90,8 @@ static std::vector< LanguageType > lcl_LocaleSeqToLangSeq( Sequence< css::lang::
 
 static bool lcl_SeqHasLang( const Sequence< sal_Int16 > & rLangSeq, sal_Int16 nLang )
 {
-    sal_Int32 i = -1;
-    sal_Int32 nLen = rLangSeq.getLength();
-    if (nLen)
-    {
-        const sal_Int16 *pLang = rLangSeq.getConstArray();
-        for (i = 0;  i < nLen;  ++i)
-        {
-            if (nLang == pLang[i])
-                break;
-        }
-    }
-    return i >= 0  &&  i < nLen;
+    return rLangSeq.hasElements()
+        && std::find(rLangSeq.begin(), rLangSeq.end(), nLang) != rLangSeq.end();
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT void makeSvxLanguageBox(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap & rMap)

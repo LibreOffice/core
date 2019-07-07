@@ -688,8 +688,6 @@ void FmSearchEngine::Init(const OUString& sVisibleFields)
         DBG_ASSERT(xSupplyCols.is(), "FmSearchEngine::Init : invalid cursor (no columns supplier) !");
         Reference< css::container::XNameAccess >       xAllFieldNames = xSupplyCols->getColumns();
         Sequence< OUString > seqFieldNames = xAllFieldNames->getElementNames();
-        OUString*            pFieldNames = seqFieldNames.getArray();
-
 
         OUString sCurrentField;
         sal_Int32 nIndex = 0;
@@ -699,16 +697,11 @@ void FmSearchEngine::Init(const OUString& sVisibleFields)
 
             // search in the field collection
             sal_Int32 nFoundIndex = -1;
-            for (sal_Int32 j=0; j<seqFieldNames.getLength(); ++j, ++pFieldNames)
-            {
-                if ( 0 == m_aStringCompare.compareString( *pFieldNames, sCurrentField ) )
-                {
-                    nFoundIndex = j;
-                    break;
-                }
-            }
-            // set the field selection back to the first
-            pFieldNames = seqFieldNames.getArray();
+            auto pFieldName = std::find_if(seqFieldNames.begin(), seqFieldNames.end(),
+                [this, &sCurrentField](const OUString& rFieldName) {
+                    return 0 == m_aStringCompare.compareString( rFieldName, sCurrentField ); });
+            if (pFieldName != seqFieldNames.end())
+                nFoundIndex = static_cast<sal_Int32>(std::distance(seqFieldNames.begin(), pFieldName));
             DBG_ASSERT(nFoundIndex != -1, "FmSearchEngine::Init : Invalid field name were given !");
             m_arrFieldMapping.push_back(nFoundIndex);
         }

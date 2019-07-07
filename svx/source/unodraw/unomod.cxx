@@ -224,25 +224,7 @@ uno::Sequence< OUString > SAL_CALL SvxUnoDrawMSFactory::getAvailableServiceNames
 
 uno::Sequence< OUString > SvxUnoDrawMSFactory::concatServiceNames( uno::Sequence< OUString >& rServices1, uno::Sequence< OUString >& rServices2 ) throw()
 {
-    const sal_Int32 nLen1 = rServices1.getLength();
-    const sal_Int32 nLen2 = rServices2.getLength();
-
-    uno::Sequence< OUString > aSeq( nLen1+nLen2 );
-    OUString* pStrings = aSeq.getArray();
-
-    sal_Int32 nIdx;
-    OUString* pStringDst = pStrings;
-    const OUString* pStringSrc = rServices1.getArray();
-
-    for( nIdx = 0; nIdx < nLen1; nIdx++ )
-        *pStringDst++ = *pStringSrc++;
-
-    pStringSrc = rServices2.getArray();
-
-    for( nIdx = 0; nIdx < nLen2; nIdx++ )
-        *pStringDst++ = *pStringSrc++;
-
-    return aSeq;
+    return comphelper::concatSequences(rServices1, rServices2);
 }
 
 SdrModel& SvxUnoDrawingModel::getSdrModelFromUnoModel() const

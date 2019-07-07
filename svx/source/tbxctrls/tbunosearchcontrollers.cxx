@@ -1401,8 +1401,9 @@ css::uno::Sequence < css::uno::Reference< css::frame::XDispatch > > SAL_CALL Fin
     sal_Int32 nCount = seqDescripts.getLength();
     css::uno::Sequence < css::uno::Reference < XDispatch > > lDispatcher( nCount );
 
-    for( sal_Int32 i=0; i<nCount; ++i )
-        lDispatcher[i] = queryDispatch( seqDescripts[i].FeatureURL, seqDescripts[i].FrameName, seqDescripts[i].SearchFlags );
+    std::transform(seqDescripts.begin(), seqDescripts.end(), lDispatcher.begin(),
+        [this](const css::frame::DispatchDescriptor& rDescript) -> css::uno::Reference < XDispatch > {
+            return queryDispatch( rDescript.FeatureURL, rDescript.FrameName, rDescript.SearchFlags ); });
 
     return lDispatcher;
 }

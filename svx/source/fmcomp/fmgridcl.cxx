@@ -1261,13 +1261,8 @@ void FmGridControl::DeleteSelectedRows()
         SetUpdateMode( true );
 
         // how many rows are deleted?
-        sal_Int32 nDeletedRows = 0;
-        const sal_Int32* pSuccess = aDeletedRows.getConstArray();
-        for (sal_Int32 i = 0; i < aDeletedRows.getLength(); i++)
-        {
-            if (pSuccess[i])
-                ++nDeletedRows;
-        }
+        sal_Int32 nDeletedRows = static_cast<sal_Int32>(std::count_if(aDeletedRows.begin(), aDeletedRows.end(),
+                                                                      [](const sal_Int32 nRow) { return nRow != 0; }));
 
         // have rows been deleted?
         if (nDeletedRows)
@@ -1314,13 +1309,11 @@ void FmGridControl::DeleteSelectedRows()
                 // not all the rows where deleted, so move to the first row which remained in the resultset
                 else
                 {
-                    for (sal_Int32 i = 0; i < aDeletedRows.getLength(); i++)
+                    auto pRow = std::find(aDeletedRows.begin(), aDeletedRows.end(), 0);
+                    if (pRow != aDeletedRows.end())
                     {
-                        if (!pSuccess[i])
-                        {
-                            getDataSource()->moveToBookmark(aBookmarks.getConstArray()[i]);
-                            break;
-                        }
+                        auto i = static_cast<sal_Int32>(std::distance(aDeletedRows.begin(), pRow));
+                        getDataSource()->moveToBookmark(aBookmarks[i]);
                     }
                 }
             }
@@ -1353,11 +1346,11 @@ void FmGridControl::DeleteSelectedRows()
                 else
                 {
                     // select the remaining rows
-                    for (sal_Int32 i = 0; i < aDeletedRows.getLength(); i++)
+                    for (const sal_Int32 nSuccess : aDeletedRows)
                     {
                         try
                         {
-                            if (!pSuccess[i])
+                            if (!nSuccess)
                             {
                                 m_pSeekCursor->moveToBookmark(m_pDataCursor->getBookmark());
                                 SetSeekPos(m_pSeekCursor->getRow() - 1);
@@ -1775,18 +1768,15 @@ bool FmGridControl::selectBookmarks(const Sequence< Any >& _rBookmarks)
         return false;
     }
 
-    const Any* pBookmark = _rBookmarks.getConstArray();
-    const Any* pBookmarkEnd = pBookmark + _rBookmarks.getLength();
-
     SetNoSelection();
 
     bool bAllSuccessfull = true;
     try
     {
-        for (; pBookmark != pBookmarkEnd; ++pBookmark)
+        for (const Any& rBookmark : _rBookmarks)
         {
             // move the seek cursor to the row given
-            if (m_pSeekCursor->moveToBookmark(*pBookmark))
+            if (m_pSeekCursor->moveToBookmark(rBookmark))
                 SelectRow( m_pSeekCursor->getRow() - 1);
             else
                 bAllSuccessfull = false;

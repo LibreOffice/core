@@ -121,16 +121,14 @@ void DictionaryList::refillFromDictionary( sal_Int32 nTextConversionOptions )
         return;
 
     Sequence< OUString > aLeftList(  m_xDictionary->getConversionEntries( linguistic2::ConversionDirection_FROM_LEFT ) );
-    sal_Int32 nCount = aLeftList.getLength();
 
     Reference< linguistic2::XConversionPropertyType > xPropertyType( m_xDictionary, uno::UNO_QUERY );
 
-    OUString aLeft, aRight;
+    OUString aRight;
     sal_Int16 nConversionPropertyType;
 
-    for(sal_Int32 nN=0; nN<nCount; nN++)
+    for(const OUString& aLeft : aLeftList)
     {
-        aLeft  = aLeftList[nN];
         Sequence< OUString > aRightList( m_xDictionary->getConversions(
             aLeft, 0, aLeft.getLength()
             , linguistic2::ConversionDirection_FROM_LEFT, nTextConversionOptions ) );

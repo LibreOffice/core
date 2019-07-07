@@ -525,16 +525,10 @@ namespace svxform
             // has a setting for the preferred line end format
             bool bDosLineEnds = false;
             Sequence< PropertyValue > aInfo = lcl_getDataSourceIndirectProperties( _rxModel, m_pData->m_xContext );
-            const PropertyValue* pInfo = aInfo.getConstArray();
-            const PropertyValue* pInfoEnd = pInfo + aInfo.getLength();
-            for ( ; pInfo != pInfoEnd; ++pInfo )
-            {
-                if ( pInfo->Name == "PreferDosLikeLineEnds" )
-                {
-                    pInfo->Value >>= bDosLineEnds;
-                    break;
-                }
-            }
+            const PropertyValue* pInfo = std::find_if(aInfo.begin(), aInfo.end(),
+                [](const PropertyValue& rInfo) { return rInfo.Name == "PreferDosLikeLineEnds"; });
+            if (pInfo != aInfo.end())
+                pInfo->Value >>= bDosLineEnds;
 
             sal_Int16 nLineEndFormat = bDosLineEnds ? LineEndFormat::CARRIAGE_RETURN_LINE_FEED : LineEndFormat::LINE_FEED;
             _rxModel->setPropertyValue( FM_PROP_LINEENDFORMAT, makeAny( nLineEndFormat ) );

@@ -2348,13 +2348,7 @@ css::uno::Sequence<OUString> FmXGridPeer::getSupportedModes()
 sal_Bool FmXGridPeer::supportsMode(const OUString& Mode)
 {
     css::uno::Sequence<OUString> aModes(getSupportedModes());
-    const OUString* pModes = aModes.getConstArray();
-    for (sal_Int32 i = aModes.getLength(); i > 0; )
-    {
-        if (pModes[--i] == Mode)
-            return true;
-    }
-    return false;
+    return comphelper::findValue(aModes, Mode) != -1;
 }
 
 
@@ -2518,24 +2512,21 @@ void FmXGridPeer::statusChanged(const css::frame::FeatureStateEvent& Event)
     DBG_ASSERT(m_pDispatchers, "FmXGridPeer::statusChanged : invalid call !");
 
     Sequence< css::util::URL>& aUrls = getSupportedURLs();
-    const css::util::URL* pUrls = aUrls.getConstArray();
 
     const std::vector<DbGridControlNavigationBarState>& aSlots = getSupportedGridSlots();
 
-    sal_Int32 i;
-    for (i=0; i<aUrls.getLength(); ++i, ++pUrls)
+    auto pUrl = std::find_if(aUrls.begin(), aUrls.end(),
+        [&Event](const css::util::URL& rUrl) { return rUrl.Main == Event.FeatureURL.Main; });
+    if (pUrl != aUrls.end())
     {
-        if (pUrls->Main == Event.FeatureURL.Main)
-        {
-            DBG_ASSERT(m_pDispatchers[i] == Event.Source, "FmXGridPeer::statusChanged : the event source is a little bit suspect !");
-            m_pStateCache[i] = Event.IsEnabled;
-            VclPtr< FmGridControl > pGrid = GetAs< FmGridControl >();
-            if (aSlots[i] != DbGridControlNavigationBarState::Undo)
-                pGrid->GetNavigationBar().InvalidateState(aSlots[i]);
-            break;
-        }
+        auto i = static_cast<sal_uInt32>(std::distance(aUrls.begin(), pUrl));
+        DBG_ASSERT(m_pDispatchers[i] == Event.Source, "FmXGridPeer::statusChanged : the event source is a little bit suspect !");
+        m_pStateCache[i] = Event.IsEnabled;
+        VclPtr< FmGridControl > pGrid = GetAs< FmGridControl >();
+        if (aSlots[i] != DbGridControlNavigationBarState::Undo)
+            pGrid->GetNavigationBar().InvalidateState(aSlots[i]);
     }
-    DBG_ASSERT(i<aUrls.getLength(), "FmXGridPeer::statusChanged : got a call for an unknown url !");
+    DBG_ASSERT(pUrl != aUrls.end(), "FmXGridPeer::statusChanged : got a call for an unknown url !");
 }
 
 

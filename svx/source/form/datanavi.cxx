@@ -1231,14 +1231,12 @@ namespace svxform
         OUString sInstModel = PN_INSTANCE_MODEL;
         OUString sInstName = PN_INSTANCE_ID;
         OUString sInstURL = PN_INSTANCE_URL;
-        const PropertyValue* pProps = _xPropSeq.getConstArray();
-        const PropertyValue* pPropsEnd = pProps + _xPropSeq.getLength();
-        for ( ; pProps != pPropsEnd; ++pProps )
+        for ( const PropertyValue& rProp : _xPropSeq )
         {
-            if ( sInstModel == pProps->Name )
+            if ( sInstModel == rProp.Name )
             {
                 Reference< css::xml::dom::XNode > xRoot;
-                if ( pProps->Value >>= xRoot )
+                if ( rProp.Value >>= xRoot )
                 {
                     try
                     {
@@ -1260,9 +1258,9 @@ namespace svxform
                     }
                 }
             }
-            else if ( sInstName == pProps->Name && ( pProps->Value >>= sTemp ) )
+            else if ( sInstName == rProp.Name && ( rProp.Value >>= sTemp ) )
                 m_sInstanceName = sRet = sTemp;
-            else if ( sInstURL == pProps->Name && ( pProps->Value >>= sTemp ) )
+            else if ( sInstURL == rProp.Name && ( rProp.Value >>= sTemp ) )
                 m_sInstanceURL = sTemp;
         }
 
@@ -1906,11 +1904,9 @@ namespace svxform
                     {
                         m_xDataContainer = xContainer;
                         Sequence< OUString > aNameList = m_xDataContainer->getElementNames();
-                        sal_Int32 i, nCount = aNameList.getLength();
-                        OUString* pNames = aNameList.getArray();
-                        for ( i = 0; i < nCount; ++i )
+                        for ( const OUString& rName : aNameList )
                         {
-                            Any aAny = m_xDataContainer->getByName( pNames[i] );
+                            Any aAny = m_xDataContainer->getByName( rName );
                             Reference< css::xforms::XModel > xFormsModel;
                             if ( aAny >>= xFormsModel )
                                 m_pModelsBox->InsertEntry( xFormsModel->getID() );
@@ -2047,16 +2043,10 @@ namespace svxform
     void DataNavigatorWindow::CreateInstancePage( const Sequence< PropertyValue >& _xPropSeq )
     {
         OUString sInstName;
-        const PropertyValue* pProps = _xPropSeq.getConstArray();
-        const PropertyValue* pPropsEnd = pProps + _xPropSeq.getLength();
-        for ( ; pProps != pPropsEnd; ++pProps )
-        {
-            if ( PN_INSTANCE_ID == pProps->Name )
-            {
-                pProps->Value >>= sInstName;
-                break;
-            }
-        }
+        auto pProp = std::find_if(_xPropSeq.begin(), _xPropSeq.end(),
+            [](const PropertyValue& rProp) { return PN_INSTANCE_ID == rProp.Name; });
+        if (pProp != _xPropSeq.end())
+            pProp->Value >>= sInstName;
 
         sal_uInt16 nPageId = GetNewPageId();
         if ( sInstName.isEmpty() )
@@ -2418,12 +2408,10 @@ namespace svxform
         {
             // get property names & infos, and iterate over target properties
             Sequence< Property > aProperties = xTo->getPropertySetInfo()->getProperties();
-            sal_Int32 nProperties = aProperties.getLength();
-            const Property* pProperties = aProperties.getConstArray();
             Reference< XPropertySetInfo > xFromInfo = xFrom->getPropertySetInfo();
-            for ( sal_Int32 i = 0; i < nProperties; ++i )
+            for ( const Property& rProperty : aProperties )
             {
-                const OUString& rName = pProperties[i].Name;
+                const OUString& rName = rProperty.Name;
 
                 // if both set have the property, copy the value
                 // (catch and ignore exceptions, if any)
@@ -2684,10 +2672,8 @@ namespace svxform
                     if ( xDataTypes.is() )
                     {
                         Sequence< OUString > aNameList = xDataTypes->getElementNames();
-                        sal_Int32 i, nCount = aNameList.getLength();
-                        OUString* pNames = aNameList.getArray();
-                        for ( i = 0; i < nCount; ++i )
-                            m_xDataTypeLB->append_text(pNames[i]);
+                        for ( const OUString& rName : aNameList )
+                            m_xDataTypeLB->append_text(rName);
                     }
 
                     if ( m_xTempBinding.is() )
@@ -2975,14 +2961,11 @@ namespace svxform
         {
             int nRow = 0;
             Sequence< OUString > aAllNames = m_rNamespaces->getElementNames();
-            const OUString* pAllNames = aAllNames.getConstArray();
-            const OUString* pAllNamesEnd = pAllNames + aAllNames.getLength();
-            for ( ; pAllNames != pAllNamesEnd; ++pAllNames )
+            for ( const OUString& sPrefix : aAllNames )
             {
-                OUString sURL;
-                OUString sPrefix = *pAllNames;
                 if ( m_rNamespaces->hasByName( sPrefix ) )
                 {
+                    OUString sURL;
                     Any aAny = m_rNamespaces->getByName( sPrefix );
                     if (aAny >>= sURL)
                     {

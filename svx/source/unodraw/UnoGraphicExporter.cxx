@@ -450,109 +450,105 @@ VclPtr<VirtualDevice> GraphicExporter::CreatePageVDev( SdrPage* pPage, sal_uIntP
 
 void GraphicExporter::ParseSettings( const Sequence< PropertyValue >& aDescriptor, ExportSettings& rSettings )
 {
-    sal_Int32 nArgs = aDescriptor.getLength();
-    const PropertyValue* pValues = aDescriptor.getConstArray();
-    while( nArgs-- )
+    for( const PropertyValue& rValue : aDescriptor )
     {
-        if ( pValues->Name == "FilterName" )
+        if ( rValue.Name == "FilterName" )
         {
-            pValues->Value >>= rSettings.maFilterName;
+            rValue.Value >>= rSettings.maFilterName;
         }
-        else if ( pValues->Name == "MediaType" )
+        else if ( rValue.Name == "MediaType" )
         {
-            pValues->Value >>= rSettings.maMediaType;
+            rValue.Value >>= rSettings.maMediaType;
         }
-        else if ( pValues->Name == "URL" )
+        else if ( rValue.Name == "URL" )
         {
-            if( !( pValues->Value >>= rSettings.maURL ) )
+            if( !( rValue.Value >>= rSettings.maURL ) )
             {
-                pValues->Value >>= rSettings.maURL.Complete;
+                rValue.Value >>= rSettings.maURL.Complete;
             }
         }
-        else if ( pValues->Name == "OutputStream" )
+        else if ( rValue.Name == "OutputStream" )
         {
-            pValues->Value >>= rSettings.mxOutputStream;
+            rValue.Value >>= rSettings.mxOutputStream;
         }
-        else if ( pValues->Name == "GraphicRenderer" )
+        else if ( rValue.Name == "GraphicRenderer" )
         {
-            pValues->Value >>= rSettings.mxGraphicRenderer;
+            rValue.Value >>= rSettings.mxGraphicRenderer;
         }
-        else if ( pValues->Name == "StatusIndicator" )
+        else if ( rValue.Name == "StatusIndicator" )
         {
-            pValues->Value >>= rSettings.mxStatusIndicator;
+            rValue.Value >>= rSettings.mxStatusIndicator;
         }
-        else if ( pValues->Name == "InteractionHandler" )
+        else if ( rValue.Name == "InteractionHandler" )
         {
-            pValues->Value >>= rSettings.mxInteractionHandler;
+            rValue.Value >>= rSettings.mxInteractionHandler;
         }
-        else if( pValues->Name == "Width" )  // for compatibility reasons, deprecated
+        else if( rValue.Name == "Width" )  // for compatibility reasons, deprecated
         {
-            pValues->Value >>= rSettings.mnWidth;
+            rValue.Value >>= rSettings.mnWidth;
         }
-        else if( pValues->Name == "Height" ) // for compatibility reasons, deprecated
+        else if( rValue.Name == "Height" ) // for compatibility reasons, deprecated
         {
-            pValues->Value >>= rSettings.mnHeight;
+            rValue.Value >>= rSettings.mnHeight;
         }
-        else if( pValues->Name == "ExportOnlyBackground" )   // for compatibility reasons, deprecated
+        else if( rValue.Name == "ExportOnlyBackground" )   // for compatibility reasons, deprecated
         {
-            pValues->Value >>= rSettings.mbExportOnlyBackground;
+            rValue.Value >>= rSettings.mbExportOnlyBackground;
         }
-        else if ( pValues->Name == "FilterData" )
+        else if ( rValue.Name == "FilterData" )
         {
-            pValues->Value >>= rSettings.maFilterData;
+            rValue.Value >>= rSettings.maFilterData;
 
-            sal_Int32 nFilterArgs = rSettings.maFilterData.getLength();
-            PropertyValue* pDataValues = rSettings.maFilterData.getArray();
-            while( nFilterArgs-- )
+            for( PropertyValue& rDataValue : rSettings.maFilterData )
             {
-                if ( pDataValues->Name == "Translucent" )
+                if ( rDataValue.Name == "Translucent" )
                 {
-                    if ( !( pDataValues->Value >>= rSettings.mbTranslucent ) )  // SJ: TODO: The GIF Transparency is stored as int32 in
+                    if ( !( rDataValue.Value >>= rSettings.mbTranslucent ) )  // SJ: TODO: The GIF Transparency is stored as int32 in
                     {                                               // configuration files, this has to be changed to boolean
                         sal_Int32 nTranslucent = 0;
-                        if ( pDataValues->Value >>= nTranslucent )
+                        if ( rDataValue.Value >>= nTranslucent )
                             rSettings.mbTranslucent = nTranslucent != 0;
                     }
                 }
-                else if ( pDataValues->Name == "PixelWidth" )
+                else if ( rDataValue.Name == "PixelWidth" )
                 {
-                    pDataValues->Value >>= rSettings.mnWidth;
+                    rDataValue.Value >>= rSettings.mnWidth;
                 }
-                else if ( pDataValues->Name == "PixelHeight" )
+                else if ( rDataValue.Name == "PixelHeight" )
                 {
-                    pDataValues->Value >>= rSettings.mnHeight;
+                    rDataValue.Value >>= rSettings.mnHeight;
                 }
-                else if( pDataValues->Name == "Width" )  // for compatibility reasons, deprecated
+                else if( rDataValue.Name == "Width" )  // for compatibility reasons, deprecated
                 {
-                    pDataValues->Value >>= rSettings.mnWidth;
-                    pDataValues->Name = "PixelWidth";
+                    rDataValue.Value >>= rSettings.mnWidth;
+                    rDataValue.Name = "PixelWidth";
                 }
-                else if( pDataValues->Name == "Height" ) // for compatibility reasons, deprecated
+                else if( rDataValue.Name == "Height" ) // for compatibility reasons, deprecated
                 {
-                    pDataValues->Value >>= rSettings.mnHeight;
-                    pDataValues->Name = "PixelHeight";
+                    rDataValue.Value >>= rSettings.mnHeight;
+                    rDataValue.Name = "PixelHeight";
                 }
-                else if ( pDataValues->Name == "ExportOnlyBackground" )
+                else if ( rDataValue.Name == "ExportOnlyBackground" )
                 {
-                    pDataValues->Value >>= rSettings.mbExportOnlyBackground;
+                    rDataValue.Value >>= rSettings.mbExportOnlyBackground;
                 }
-                else if ( pDataValues->Name == "HighContrast" )
+                else if ( rDataValue.Name == "HighContrast" )
                 {
-                    pDataValues->Value >>= rSettings.mbUseHighContrast;
+                    rDataValue.Value >>= rSettings.mbUseHighContrast;
                 }
-                else if ( pDataValues->Name == "PageNumber" )
+                else if ( rDataValue.Name == "PageNumber" )
                 {
-                    pDataValues->Value >>= mnPageNumber;
+                    rDataValue.Value >>= mnPageNumber;
                 }
-                else if ( pDataValues->Name == "ScrollText" )
+                else if ( rDataValue.Name == "ScrollText" )
                 {
                     // #110496# Read flag solitary scroll text metafile
-                    pDataValues->Value >>= rSettings.mbScrollText;
+                    rDataValue.Value >>= rSettings.mbScrollText;
                 }
-                else if ( pDataValues->Name == "CurrentPage" )
+                else if ( rDataValue.Name == "CurrentPage" )
                 {
                     Reference< XDrawPage >  xPage;
-                    pDataValues->Value >>= xPage;
+                    rDataValue.Value >>= xPage;
                     if( xPage.is() )
                     {
                         SvxDrawPage* pUnoPage = comphelper::getUnoTunnelImplementation<SvxDrawPage>( xPage );
@@ -560,42 +556,38 @@ void GraphicExporter::ParseSettings( const Sequence< PropertyValue >& aDescripto
                             mpCurrentPage = pUnoPage->GetSdrPage();
                     }
                 }
-                else if ( pDataValues->Name == "ScaleXNumerator" )
+                else if ( rDataValue.Name == "ScaleXNumerator" )
                 {
                     sal_Int32 nVal = 1;
-                    if( pDataValues->Value >>= nVal )
+                    if( rDataValue.Value >>= nVal )
                         rSettings.maScaleX = Fraction( nVal, rSettings.maScaleX.GetDenominator() );
                 }
-                else if ( pDataValues->Name == "ScaleXDenominator" )
+                else if ( rDataValue.Name == "ScaleXDenominator" )
                 {
                     sal_Int32 nVal = 1;
-                    if( pDataValues->Value >>= nVal )
+                    if( rDataValue.Value >>= nVal )
                         rSettings.maScaleX = Fraction( rSettings.maScaleX.GetNumerator(), nVal );
                 }
-                else if ( pDataValues->Name == "ScaleYNumerator" )
+                else if ( rDataValue.Name == "ScaleYNumerator" )
                 {
                     sal_Int32 nVal = 1;
-                    if( pDataValues->Value >>= nVal )
+                    if( rDataValue.Value >>= nVal )
                         rSettings.maScaleY = Fraction( nVal, rSettings.maScaleY.GetDenominator() );
                 }
-                else if ( pDataValues->Name == "ScaleYDenominator" )
+                else if ( rDataValue.Name == "ScaleYDenominator" )
                 {
                     sal_Int32 nVal = 1;
-                    if( pDataValues->Value >>= nVal )
+                    if( rDataValue.Value >>= nVal )
                         rSettings.maScaleY = Fraction( rSettings.maScaleY.GetNumerator(), nVal );
                 }
-                else if (pDataValues->Name == "AntiAliasing")
+                else if (rDataValue.Name == "AntiAliasing")
                 {
                     bool bAntiAliasing;
-                    if (pDataValues->Value >>= bAntiAliasing)
+                    if (rDataValue.Value >>= bAntiAliasing)
                         rSettings.meAntiAliasing = bAntiAliasing ? TRISTATE_TRUE : TRISTATE_FALSE;
                 }
-
-                pDataValues++;
             }
         }
-
-        pValues++;
     }
 
     // putting the StatusIndicator that we got from the MediaDescriptor into our local FilterData copy

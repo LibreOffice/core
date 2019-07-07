@@ -113,16 +113,16 @@ bool SvxViewLayoutItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId
                 bool  bBookMode = false;
                 bool bAllConverted( true );
                 sal_Int16 nConvertedCount( 0 );
-                for ( sal_Int32 i = 0; i < aSeq.getLength(); i++ )
+                for ( const auto& rProp : aSeq )
                 {
-                    if ( aSeq[i].Name == VIEWLAYOUT_PARAM_COLUMNS )
+                    if ( rProp.Name == VIEWLAYOUT_PARAM_COLUMNS )
                     {
-                        bAllConverted &= ( aSeq[i].Value >>= nColumns );
+                        bAllConverted &= ( rProp.Value >>= nColumns );
                         ++nConvertedCount;
                     }
-                    else if ( aSeq[i].Name == VIEWLAYOUT_PARAM_BOOKMODE )
+                    else if ( rProp.Name == VIEWLAYOUT_PARAM_BOOKMODE )
                     {
-                        bAllConverted &= ( aSeq[i].Value >>= bBookMode );
+                        bAllConverted &= ( rProp.Value >>= bBookMode );
                         ++nConvertedCount;
                     }
                 }

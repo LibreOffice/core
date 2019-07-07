@@ -370,13 +370,12 @@ void SvxRubyDialog::SetRubyText(sal_Int32 nPos, weld::Entry& rLeft, weld::Entry&
     if (bEnable)
     {
         const Sequence<PropertyValue> aProps = aRubyValues.getConstArray()[nPos];
-        const PropertyValue* pProps = aProps.getConstArray();
-        for (sal_Int32 nProp = 0; nProp < aProps.getLength(); nProp++)
+        for (const PropertyValue& rProp : aProps)
         {
-            if (pProps[nProp].Name == cRubyBaseText)
-                pProps[nProp].Value >>= sLeft;
-            else if (pProps[nProp].Name == cRubyText)
-                pProps[nProp].Value >>= sRight;
+            if (rProp.Name == cRubyBaseText)
+                rProp.Value >>= sLeft;
+            else if (rProp.Name == cRubyText)
+                rProp.Value >>= sRight;
         }
     }
     else if (!nPos)
@@ -434,30 +433,29 @@ void SvxRubyDialog::Update()
     for (sal_Int32 nRuby = 0; nRuby < nLen; nRuby++)
     {
         const Sequence<PropertyValue> &rProps = aRubyValues.getConstArray()[nRuby];
-        const PropertyValue* pProps = rProps.getConstArray();
-        for (sal_Int32 nProp = 0; nProp < rProps.getLength(); nProp++)
+        for (const PropertyValue& rProp : rProps)
         {
-            if (nAdjust > -2 && pProps[nProp].Name == cRubyAdjust)
+            if (nAdjust > -2 && rProp.Name == cRubyAdjust)
             {
                 sal_Int16 nTmp = sal_Int16();
-                pProps[nProp].Value >>= nTmp;
+                rProp.Value >>= nTmp;
                 if (!nRuby)
                     nAdjust = nTmp;
                 else if(nAdjust != nTmp)
                     nAdjust = -2;
             }
-            if (nPosition > -2 && pProps[nProp].Name == cRubyPosition )
+            if (nPosition > -2 && rProp.Name == cRubyPosition )
             {
                 sal_Int16 nTmp = sal_Int16();
-                pProps[nProp].Value >>= nTmp;
+                rProp.Value >>= nTmp;
                 if (!nRuby)
                     nPosition = nTmp;
                 else if(nPosition != nTmp)
                     nPosition = -2;
             }
-            if (bCharStyleEqual && pProps[nProp].Name == cRubyCharStyleName)
+            if (bCharStyleEqual && rProp.Name == cRubyCharStyleName)
             {
-                pProps[nProp].Value >>= sTmp;
+                rProp.Value >>= sTmp;
                 if (!nRuby)
                     sCharStyleName = sTmp;
                 else if (sCharStyleName != sTmp)

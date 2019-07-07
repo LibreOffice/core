@@ -80,33 +80,31 @@ bool SvxGalleryItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /* nMemberId
     css::uno::Reference< css::lang::XComponent > xDrawing;
     css::uno::Reference< css::graphic::XGraphic > xGraphic;
 
-    const css::beans::PropertyValue *pProp = aSeq.getConstArray();
-    const css::beans::PropertyValue *pEnd = pProp + aSeq.getLength();
-    for ( ; pProp != pEnd; pProp++ )
+    for ( const css::beans::PropertyValue& rProp : aSeq )
     {
-        if ( pProp->Name == SVXGALLERYITEM_TYPE )
+        if ( rProp.Name == SVXGALLERYITEM_TYPE )
         {
-            bAllConverted &= ( pProp->Value >>= nType );
+            bAllConverted &= ( rProp.Value >>= nType );
             ++nConverted;
         }
-        else if ( pProp->Name == SVXGALLERYITEM_URL )
+        else if ( rProp.Name == SVXGALLERYITEM_URL )
         {
-            bAllConverted &= ( pProp->Value >>= aURL );
+            bAllConverted &= ( rProp.Value >>= aURL );
             ++nConverted;
         }
-        else if ( pProp->Name == SVXGALLERYITEM_FILTER )
+        else if ( rProp.Name == SVXGALLERYITEM_FILTER )
         {
-            bAllConverted &= ( pProp->Value >>= aFilterName );
+            bAllConverted &= ( rProp.Value >>= aFilterName );
             ++nConverted;
         }
-        else if ( pProp->Name == SVXGALLERYITEM_DRAWING )
+        else if ( rProp.Name == SVXGALLERYITEM_DRAWING )
         {
-            bAllConverted &= ( pProp->Value >>= xDrawing );
+            bAllConverted &= ( rProp.Value >>= xDrawing );
             ++nConverted;
         }
-        else if ( pProp->Name == SVXGALLERYITEM_GRAPHIC )
+        else if ( rProp.Name == SVXGALLERYITEM_GRAPHIC )
         {
-            bAllConverted &= ( pProp->Value >>= xGraphic );
+            bAllConverted &= ( rProp.Value >>= xGraphic );
             ++nConverted;
         }
     }

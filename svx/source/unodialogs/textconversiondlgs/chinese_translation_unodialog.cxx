@@ -94,11 +94,10 @@ void SAL_CALL ChineseTranslation_UnoDialog::initialize( const uno::Sequence< uno
     if( m_bDisposed || m_bInDispose )
         return;
 
-    const uno::Any* pArguments = aArguments.getConstArray();
-    for(sal_Int32 i=0; i<aArguments.getLength(); ++i, ++pArguments)
+    for(const uno::Any& rArgument : aArguments)
     {
         beans::PropertyValue aProperty;
-        if(*pArguments >>= aProperty)
+        if(rArgument >>= aProperty)
         {
             if( aProperty.Name == "ParentWindow" )
             {

@@ -121,26 +121,26 @@ bool SvxZoomSliderItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId
                     sal_Int16 nConvertedCount( 0 );
                     sal_Int32 nMinZoom( 0 ), nMaxZoom( 0 );
 
-                    for ( sal_Int32 i = 0; i < aSeq.getLength(); i++ )
+                    for ( const auto& rProp : aSeq )
                     {
-                        if ( aSeq[i].Name == ZOOMSLIDER_PARAM_CURRENTZOOM )
+                        if ( rProp.Name == ZOOMSLIDER_PARAM_CURRENTZOOM )
                         {
-                            bAllConverted &= ( aSeq[i].Value >>= nCurrentZoom );
+                            bAllConverted &= ( rProp.Value >>= nCurrentZoom );
                             ++nConvertedCount;
                         }
-                        else if ( aSeq[i].Name == ZOOMSLIDER_PARAM_SNAPPINGPOINTS )
+                        else if ( rProp.Name == ZOOMSLIDER_PARAM_SNAPPINGPOINTS )
                         {
-                            bAllConverted &= ( aSeq[i].Value >>= aValues );
+                            bAllConverted &= ( rProp.Value >>= aValues );
                             ++nConvertedCount;
                         }
-                        else if( aSeq[i].Name == ZOOMSLIDER_PARAM_MINZOOM )
+                        else if( rProp.Name == ZOOMSLIDER_PARAM_MINZOOM )
                         {
-                            bAllConverted &= ( aSeq[i].Value >>= nMinZoom );
+                            bAllConverted &= ( rProp.Value >>= nMinZoom );
                             ++nConvertedCount;
                         }
-                        else if( aSeq[i].Name == ZOOMSLIDER_PARAM_MAXZOOM )
+                        else if( rProp.Name == ZOOMSLIDER_PARAM_MAXZOOM )
                         {
-                            bAllConverted &= ( aSeq[i].Value >>= nMaxZoom );
+                            bAllConverted &= ( rProp.Value >>= nMaxZoom );
                             ++nConvertedCount;
                         }
                     }

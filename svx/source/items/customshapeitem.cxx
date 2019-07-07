@@ -226,9 +226,9 @@ void SdrCustomShapeGeometryItem::ClearPropertyValue( const OUString& rPropName )
                 {
                     PropertyHashMap::iterator aHashIter2( aPropHashMap.find( aPropSeq[ nLength - 1 ].Name ) );
                     (*aHashIter2).second = nIndex;
-                    aPropSeq[ (*aHashIter).second ] = aPropSeq[ aPropSeq.getLength() - 1 ];
+                    aPropSeq[ nIndex ] = aPropSeq[ nLength - 1 ];
                 }
-                aPropSeq.realloc( aPropSeq.getLength() - 1 );
+                aPropSeq.realloc( nLength - 1 );
             }
             aPropHashMap.erase( aHashIter );                            // removing property from hashmap
         }
@@ -276,24 +276,22 @@ bool SdrCustomShapeGeometryItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMe
 {
     if ( ! ( rVal >>= aPropSeq ) )
         return false;
-    else
+
+    for (sal_Int32 i = 0; i < aPropSeq.getLength(); ++i)
     {
-        for (sal_Int32 i = 0; i < aPropSeq.getLength(); ++i)
+        const auto& rName = aPropSeq[i].Name;
+        bool isDuplicated = std::any_of(std::next(aPropSeq.begin(), i + 1), aPropSeq.end(),
+            [&rName](const css::beans::PropertyValue& rProp) { return rProp.Name == rName; });
+        if (isDuplicated)
         {
-            for (sal_Int32 j = i+1; j < aPropSeq.getLength(); ++j)
-            {
-                if (aPropSeq[i].Name == aPropSeq[j].Name)
-                {
-                    assert(false); // serious bug: duplicate xml attribute exported
-                    OUString const name(aPropSeq[i].Name);
-                    aPropSeq.realloc(0);
-                    throw uno::RuntimeException(
-                        "CustomShapeGeometry has duplicate property " + name);
-                }
-            }
+            assert(false); // serious bug: duplicate xml attribute exported
+            OUString const name(aPropSeq[i].Name);
+            aPropSeq.realloc(0);
+            throw uno::RuntimeException(
+                "CustomShapeGeometry has duplicate property " + name);
         }
-        return true;
     }
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
