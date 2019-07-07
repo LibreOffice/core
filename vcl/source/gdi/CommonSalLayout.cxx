@@ -176,6 +176,15 @@ namespace {
         return VerticalOrientation(nRet);
     }
 
+    bool isPrivateUseAreaCodepoint(sal_UCS4 aChar)
+    {
+        if ((aChar >= 0xE000 && aChar <= 0xF8FF) ||
+            (aChar >= 0xF0000 && aChar <= 0xFFFFD) ||
+            (aChar >= 0x100000 && aChar <= 0x10FFFD))
+            return true;
+        return false;
+    }
+
 } // namespace
 
 std::shared_ptr<vcl::TextLayoutCache> GenericSalLayout::CreateTextLayoutCache(OUString const& rString)
@@ -522,8 +531,11 @@ bool GenericSalLayout::LayoutText(ImplLayoutArgs& rArgs, const SalLayoutGlyphs* 
                     }
                 }
 
+                sal_Int32 indexUtf16 = nCharPos;
+                sal_UCS4 aChar = rArgs.mrStr.iterateCodePoints(&indexUtf16, 0);
+
                 // if needed request glyph fallback by updating LayoutArgs
-                if (!nGlyphIndex)
+                if (!nGlyphIndex && !isPrivateUseAreaCodepoint(aChar))
                 {
                     SetNeedFallback(rArgs, nCharPos, bRightToLeft);
                     if (SalLayoutFlags::ForFallback & rArgs.mnFlags)
@@ -539,9 +551,6 @@ bool GenericSalLayout::LayoutText(ImplLayoutArgs& rArgs, const SalLayoutGlyphs* 
 
                 if (bInCluster)
                     nGlyphFlags |= GlyphItemFlags::IS_IN_CLUSTER;
-
-                sal_Int32 indexUtf16 = nCharPos;
-                sal_UCS4 aChar = rArgs.mrStr.iterateCodePoints(&indexUtf16, 0);
 
                 if (u_getIntPropertyValue(aChar, UCHAR_GENERAL_CATEGORY) == U_NON_SPACING_MARK)
                     nGlyphFlags |= GlyphItemFlags::IS_DIACRITIC;
