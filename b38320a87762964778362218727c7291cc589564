@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_49e9667e",
+        "filename": "tools/source/misc/cpuid.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-07-07T11:49:24Z",
+      "side": 1,
+      "message": "#elif",
+      "revId": "b38320a87762964778362218727c7291cc589564",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_69eeaa89",
+        "filename": "tools/source/misc/cpuid.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-07-07T11:49:24Z",
+      "side": 1,
+      "message": "should be \n    (defined(__i386__) || defined(__x86_64__))\nhere too, or build will fail on ARM, etc",
+      "revId": "b38320a87762964778362218727c7291cc589564",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
