@@ -747,7 +747,7 @@ void SwAnnotationWin::SetPosAndSize()
             }
             SwAnnotationWin* pWin = GetTopReplyNote();
             // #i111964#
-            if ( pWin && pWin->Anchor() )
+            if ( pWin != this && pWin->Anchor() )
             {
                 pWin->Anchor()->SetAnchorState(AnchorState::End);
             }
@@ -1352,7 +1352,7 @@ void SwAnnotationWin::SetViewState(ViewState bViewState)
                 mpAnchor->SetAnchorState(AnchorState::All);
                 SwAnnotationWin* pWin = GetTopReplyNote();
                 // #i111964#
-                if ( pWin && pWin->Anchor() )
+                if ( pWin != this && pWin->Anchor() )
                 {
                     pWin->Anchor()->SetAnchorState(AnchorState::End);
                 }
@@ -1394,7 +1394,8 @@ void SwAnnotationWin::SetViewState(ViewState bViewState)
                                                   ? mrMgr.GetActiveSidebarWin()->GetTopReplyNote()
                                                   : nullptr;
                     // #i111964#
-                    if ( pTopWinSelf && ( pTopWinSelf != pTopWinActive ) &&
+                    if ( ( pTopWinSelf != this ) &&
+                         ( pTopWinSelf != pTopWinActive ) &&
                          pTopWinSelf->Anchor() )
                     {
                         if ( pTopWinSelf != mrMgr.GetActiveSidebarWin() )
