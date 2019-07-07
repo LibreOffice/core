@@ -26,8 +26,7 @@ C.2. Tasks should be split into sensible blocks
 C.3. This is not an OS scheduler
      There is no real way to "fix" B.2. and B.3.
      If you need to do a preemptive task, use a thread!
-     Otherwise make your task suspendable and check SalInstance::AnyInput
-     or call Application::Reschedule regularly.
+     Otherwise make your task suspendable.
 
 
 = Driving the scheduler AKA the system timer =
@@ -43,8 +42,7 @@ Every time a task is started, the scheduler timer is adjusted. When the timer
 fires, it posts an event to the system message queue. If the next most
 important task is an Idle (AKA instant, 0ms timeout), the event is pushed to
 the back of the queue, so we don't starve system messages, otherwise to the
-front. This is especially important to get a correct SalInstance::AnyInput
-handling, as this is used to suspend long background Idle tasks.
+front.
 
 Every time the scheduler is invoked it searches for the next task to process,
 restarts the timer with the timeout for the next event and then invokes the
