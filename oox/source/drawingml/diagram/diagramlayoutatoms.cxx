@@ -445,8 +445,7 @@ void AlgAtom::accept( LayoutAtomVisitor& rVisitor )
 }
 
 void AlgAtom::layoutShape( const ShapePtr& rShape,
-                           const std::vector<Constraint>& rConstraints,
-                           sal_Int32 /*nShapeLevel*/ )
+                           const std::vector<Constraint>& rConstraints )
 {
     switch(mnType)
     {

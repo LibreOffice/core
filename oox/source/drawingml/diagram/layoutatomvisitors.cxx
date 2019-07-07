@@ -69,7 +69,7 @@ void ShapeCreationVisitor::visit(LayoutNode& rAtom)
         if (rAtom.setupShape(pShape, pNewNode))
         {
             pShape->setInternalName(rAtom.getName());
-            rAtom.addNodeShape(pShape, mnCurrLevel);
+            rAtom.addNodeShape(pShape);
             mrDgm.getLayout()->getPresPointShapeMap()[pNewNode] = pShape;
         }
     }
@@ -83,15 +83,14 @@ void ShapeCreationVisitor::visit(LayoutNode& rAtom)
         {
             SAL_INFO(
                 "oox.drawingml",
-                "processing shape type " << (pShape->getCustomShapeProperties()->getShapePresetType())
-                << " level " << mnCurrLevel);
+                "processing shape type " << (pShape->getCustomShapeProperties()->getShapePresetType()));
 
             if (rAtom.setupShape(pShape, pNewNode))
             {
                 pShape->setInternalName(rAtom.getName());
                 pCurrParent->addChild(pShape);
                 pCurrParent = pShape;
-                rAtom.addNodeShape(pShape, mnCurrLevel);
+                rAtom.addNodeShape(pShape);
                 mrDgm.getLayout()->getPresPointShapeMap()[pNewNode] = pShape;
             }
         }
@@ -107,13 +106,11 @@ void ShapeCreationVisitor::visit(LayoutNode& rAtom)
     // set new parent for children
     ShapePtr pPreviousParent(mpParentShape);
     mpParentShape=pCurrParent;
-    mnCurrLevel++;
 
     // process children
     defaultVisit(rAtom);
 
     // restore parent
-    mnCurrLevel--;
     mpParentShape=pPreviousParent;
     mpCurrentNode = pPreviousNode;
 
@@ -180,7 +177,7 @@ void ShapeLayoutingVisitor::visit(AlgAtom& rAtom)
         const PresPointShapeMap aMap = rAtom.getLayoutNode().getDiagram().getLayout()->getPresPointShapeMap();
         auto pShape = aMap.find(mpCurrentNode);
         if (pShape != aMap.end())
-            rAtom.layoutShape(pShape->second, maConstraints, mnCurrLevel);
+            rAtom.layoutShape(pShape->second, maConstraints);
     }
 }
 
@@ -220,11 +217,9 @@ void ShapeLayoutingVisitor::visit(LayoutNode& rAtom)
     defaultVisit(rAtom);
     meLookFor = ALGORITHM;
     defaultVisit(rAtom);
-
-    mnCurrLevel++;
     meLookFor = LAYOUT_NODE;
     defaultVisit(rAtom);
-    mnCurrLevel--;
+
     mpCurrentNode = pPreviousNode;
 
     // delete added constraints, keep parent constraints
