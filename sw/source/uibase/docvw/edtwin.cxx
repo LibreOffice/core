@@ -5967,8 +5967,11 @@ void QuickHelpData::FillStrArr( SwWrtShell const & rSh, const OUString& rWord )
     (*pCalendar)->LoadDefaultCalendar( rSh.GetCurLang() );
 
     // Add matching calendar month and day names
-    uno::Sequence< i18n::CalendarItem2 > aNames( (*pCalendar)->getMonths() );
-    for ( sal_uInt16 i = 0; i < 2; ++i )
+    const std::array<uno::Sequence<i18n::CalendarItem2>, 2> aCalendarItems = {
+        (*pCalendar)->getMonths(),
+        (*pCalendar)->getDays()
+    };
+    for ( const auto& aNames : aCalendarItems )
     {
         for ( const auto& rName : aNames )
         {
@@ -5996,9 +5999,6 @@ void QuickHelpData::FillStrArr( SwWrtShell const & rSh, const OUString& rWord )
                     m_aHelpStrings.push_back( rStr );
             }
         }
-        // Data for second loop iteration
-        if ( i == 0 )
-            aNames = (*pCalendar)->getDays();
     }
 
     // Add matching current date in ISO 8601 format, for example 2016-01-30
