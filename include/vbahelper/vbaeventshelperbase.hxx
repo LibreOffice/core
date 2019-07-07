@@ -21,7 +21,6 @@
 #define INCLUDED_VBAHELPER_VBAEVENTSHELPERBASE_HXX
 
 #include <deque>
-#include <exception>
 #include <map>
 #include <unordered_map>
 
@@ -32,9 +31,7 @@
 #include <com/sun/star/script/vba/XVBAEventProcessor.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/util/VetoException.hpp>
 #include <com/sun/star/util/XChangesListener.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <rtl/ustring.hxx>

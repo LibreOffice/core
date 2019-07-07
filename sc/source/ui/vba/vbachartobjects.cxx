@@ -21,6 +21,7 @@
 #include <com/sun/star/document/XEmbeddedObjectSupplier.hpp>
 #include <com/sun/star/table/XTableChartsSupplier.hpp>
 #include <com/sun/star/table/XTableChart.hpp>
+#include <com/sun/star/script/BasicErrorException.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <ooo/vba/excel/XlChartType.hpp>
 

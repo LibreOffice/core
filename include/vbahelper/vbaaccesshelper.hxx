@@ -25,13 +25,11 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/uno/Any.hxx>
-#include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <osl/diagnose.h>
 //#define VBAHELPER_DLLIMPLEMENTATION
-#include <vbahelper/vbadllapi.h>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 #include <sfx2/objsh.hxx>

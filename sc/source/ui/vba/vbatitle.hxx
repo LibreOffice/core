@@ -24,6 +24,7 @@
 #include "vbafont.hxx"
 #include "vbapalette.hxx"
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/script/BasicErrorException.hpp>
 #include <basic/sberrors.hxx>
 #include <memory>
 
