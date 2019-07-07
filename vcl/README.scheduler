@@ -26,8 +26,7 @@ C.2. Tasks should be split into sensible blocks
 C.3. This is not an OS scheduler
      There is no real way to "fix" B.2. and B.3.
      If you need to do a preemptive task, use a thread!
-     Otherwise make your task suspendable and check SalInstance::AnyInput
-     or call Application::Reschedule regularly.
+     Otherwise make your task suspendable.
 
 
 = Driving the scheduler AKA the system timer =
@@ -43,8 +42,7 @@ Every time a task is started, the scheduler timer is adjusted. When the timer
 fires, it posts an event to the system message queue. If the next most
 important task is an Idle (AKA instant, 0ms timeout), the event is pushed to
 the back of the queue, so we don't starve system messages, otherwise to the
-front. This is especially important to get a correct SalInstance::AnyInput
-handling, as this is used to suspend long background Idle tasks.
+front.
 
 Every time the scheduler is invoked it searches for the next task to process,
 restarts the timer with the timeout for the next event and then invokes the
@@ -120,7 +118,7 @@ bool DoYield( bool bWait, bool bAllCurrent )
 
 == General: main thread deferral ==
 
-Currently for Mac and Windows, we run main thread deferrals by disabling the
+In almost all VCL backends, we run main thread deferrals by disabling the
 SolarMutex using a boolean. In the case of the redirect, this makes
 tryToAcquire and doAcquire return true or 1, while a release is ignored.
 Also the IsCurrentThread() mutex check function will act accordingly, so all
@@ -175,6 +173,52 @@ in critical scheduler code.
 To prevent these problems, we don't even try to remove these events, but
 invalidate them by versioning the timer events. Timer events with invalid
 versions are processed but simply don't run the scheduler.
+
+== General: track time of long running tasks ==
+
+There is TaskStopwatch class. It'll track the time and report a timout either
+when the tasks time slice is finished or some system event did occur.
+
+Eventually it will be merged into the main scheduler, so each invoked task can
+easily track it's runtime and eventually this can be used to "blame" / find
+other long running tasks, so interactivity can be improved.
+
+There were some questions coming up when implementing it:
+
+=== Why does the scheduler not detect that we only have idle tasks pending,
+and skip the instant timeout? ===
+
+You never know how long a task will run. Currently the scheduler simply asks
+each task when it'll be ready to run, until two runable tasks are found.
+Normally this is very quick, as LO has a lot of one-shot instant tasks / Idles
+and just a very few long term pending Timers.
+
+Especially UNO calls add a lot of Idles to the task list, which just need to
+be processed in order.
+
+=== Why not use things like Linux timer wheels? ===
+
+LO has relatively few timers and a lot one-shot Idles. 99% of time the search
+for the next task is quick, because there are just ~5 long term timers per
+document (cache invalidation, cursor blinking etc.).
+
+This might become a problem, if you have a lot of open documents, so the long
+term timer list increases AKA for highly loaded LOOL instances.
+
+But the Linux timer wheel mainly relies on the facts that the OS timers are
+expected to not expire, as they are use to catch "error" timeouts, which rarely
+happen, so this definitly not matches LO's usage.
+
+=== Not really usable to find misbehaving tasks ===
+
+The TaskStopwatch class is just a little time keeper + detecting of input
+events. This is not about misbehaving Tasks, but long running tasks, which
+have to yield to the Scheduler, so other Tasks and System events can be
+processed.
+
+There is the TODO to merge the functionality into the Scheduler itself, at
+which point we can think about profiling individual Tasks to improve
+interactivity.
 
 == macOS implementation details ==
 
@@ -343,3 +387,8 @@ A few layers of indirection make this code hard to follow. The SalXLib::Yield
 and SalX11Display::Yield architecture makes it impossible to process just the
 current events. This really needs a refactoring and rearchitecture step, which
 will also affect the Gtk+ and KDE backend for the user event handling.
+
+== Merge TaskStopwatch functionality into the Scheduler ==
+
+This way it can be easier used to profile Tasks, eventually to improve LO's
+interactivity.

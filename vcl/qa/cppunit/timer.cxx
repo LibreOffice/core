@@ -15,6 +15,7 @@
 #include <osl/thread.hxx>
 #include <chrono>
 
+#include <vcl/TaskStopwatch.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/svapp.hxx>
@@ -72,6 +73,8 @@ public:
     void testPriority();
     void testRoundRobin();
 
+    void testStopwatch();
+
     CPPUNIT_TEST_SUITE(TimerTest);
     CPPUNIT_TEST(testIdle);
     CPPUNIT_TEST(testIdleMainloop);
@@ -90,6 +93,8 @@ public:
     CPPUNIT_TEST(testInvokedReStart);
     CPPUNIT_TEST(testPriority);
     CPPUNIT_TEST(testRoundRobin);
+
+    CPPUNIT_TEST(testStopwatch);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -525,6 +530,79 @@ void TimerTest::testRoundRobin()
         CPPUNIT_ASSERT( nCount2 <= 3 );
     }
     CPPUNIT_ASSERT( 3 == nCount1 && 3 == nCount2 );
+}
+
+class StopwatchIdle : public AutoIdle
+{
+    sal_uInt32 m_nIters;
+    sal_uInt64 m_nBusyTicks;
+
+public:
+    StopwatchIdle(sal_uInt64 nBusyTicks)
+        : AutoIdle("StopwatchIdle")
+        , m_nIters(0)
+        , m_nBusyTicks(nBusyTicks)
+    {
+        if (m_nBusyTicks > 0)
+            Start();
+    }
+
+    virtual void Invoke() override
+    {
+        TaskStopwatch aWatch;
+        // ignore all system events
+        aWatch.setInputStop(VclInputFlags::NONE);
+
+        sal_uInt64 nStartTicks = tools::Time::GetSystemTicks();
+        sal_uInt64 nCurTicks = nStartTicks;
+
+        while (!aWatch.exceededRuntime())
+        {
+            nCurTicks = tools::Time::GetSystemTicks();
+            if (nCurTicks - nStartTicks >= m_nBusyTicks)
+            {
+                nCurTicks = nStartTicks + m_nBusyTicks;
+                break;
+            }
+        }
+
+        assert(m_nBusyTicks >= (nCurTicks - nStartTicks));
+        m_nBusyTicks -= (nCurTicks - nStartTicks);
+        m_nIters++;
+
+        if (m_nBusyTicks == 0)
+            Stop();
+    }
+
+    bool isDone(sal_uInt32 &nIters)
+    {
+        nIters = m_nIters;
+        return (m_nBusyTicks == 0);
+    }
+};
+
+void TimerTest::testStopwatch()
+{
+    TaskStopwatch::setTimeSlice(10);
+
+    StopwatchIdle a1Idle(100);
+    StopwatchIdle a2Idle(100);
+
+    sal_uInt32 n1Iter, n2Iter;
+    while (true)
+    {
+        Application::Reschedule();
+
+        bool b1Done = a1Idle.isDone(n1Iter);
+        bool b2Done = a2Idle.isDone(n2Iter);
+        CPPUNIT_ASSERT(n1Iter >= n2Iter);
+
+        if (b1Done && b2Done)
+            break;
+    }
+
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(10), n1Iter);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(10), n2Iter);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(TimerTest);
