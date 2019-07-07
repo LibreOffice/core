@@ -131,11 +131,9 @@ void LayoutAtomVisitorBase::visit(LayoutNode& rAtom)
 
     const dgm::Point* pPreviousNode = mpCurrentNode;
     mpCurrentNode = pNewNode;
-    mnCurrLevel++;
 
     defaultVisit(rAtom);
 
-    mnCurrLevel--;
     mpCurrentNode = pPreviousNode;
 }
 
