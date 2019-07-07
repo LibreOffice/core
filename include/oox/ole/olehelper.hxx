@@ -25,7 +25,6 @@
 #include <oox/dllapi.h>
 #include <oox/helper/binarystreambase.hxx>
 #include <oox/helper/graphichelper.hxx>
-#include <oox/helper/helper.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 #include <tools/ref.hxx>

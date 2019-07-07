@@ -24,7 +24,6 @@
 #include <vector>
 
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/RuntimeException.hpp>
 #include <oox/core/filterbase.hxx>
 #include <oox/core/relations.hxx>
 #include <oox/dllapi.h>

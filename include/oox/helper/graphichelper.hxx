@@ -20,7 +20,6 @@
 #ifndef INCLUDED_OOX_HELPER_GRAPHICHELPER_HXX
 #define INCLUDED_OOX_HELPER_GRAPHICHELPER_HXX
 
-#include <deque>
 #include <map>
 
 #include <com/sun/star/awt/DeviceInfo.hpp>

@@ -15,7 +15,6 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <oox/crypto/Standard2007Engine.hxx>
-#include <oox/crypto/AgileEngine.hxx>
 #include <rtl/ustring.hxx>
 
 namespace com { namespace sun { namespace star {

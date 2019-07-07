@@ -12,6 +12,8 @@
 #include <filter/msfilter/mscodec.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
 
+#include <config_oox.h>
+
 #if USE_TLS_OPENSSL
 #include <openssl/evp.h>
 #include <openssl/sha.h>

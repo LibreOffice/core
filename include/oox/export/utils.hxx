@@ -21,7 +21,6 @@
 #define INCLUDED_OOX_EXPORT_UTILS_HXX
 
 #include <rtl/string.hxx>
-#include <rtl/textenc.h>
 #include <sal/types.h>
 
 inline OString I32SHEX(sal_Int32 x)

@@ -20,8 +20,6 @@
 #ifndef INCLUDED_OOX_DUMP_XLSBDUMPER_HXX
 #define INCLUDED_OOX_DUMP_XLSBDUMPER_HXX
 
-#include <memory>
-
 #include <com/sun/star/uno/Reference.hxx>
 #include <oox/dump/dumperbase.hxx>
 #include <rtl/ustring.hxx>

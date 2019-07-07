@@ -20,7 +20,6 @@
 #ifndef INCLUDED_OOX_CRYPTO_CRYPTTOOLS_HXX
 #define INCLUDED_OOX_CRYPTO_CRYPTTOOLS_HXX
 
-#include <config_oox.h>
 #include <oox/dllapi.h>
 #include <sal/types.h>
 
