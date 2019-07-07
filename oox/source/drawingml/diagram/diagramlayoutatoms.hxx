@@ -160,6 +160,7 @@ public:
         { mnType = nToken; }
     void addParam( sal_Int32 nType, sal_Int32 nVal )
         { maMap[nType]=nVal; }
+    sal_Int32 getVerticalShapesCount(const ShapePtr& rShape);
     void layoutShape( const ShapePtr& rShape,
                       const std::vector<Constraint>& rConstraints );
 
