@@ -20,6 +20,7 @@
 #include <dbaccess/dbaundomanager.hxx>
 
 #include <com/sun/star/lang/DisposedException.hpp>
+#include <com/sun/star/lang/NoSupportException.hpp>
 
 #include <svl/undo.hxx>
 #include <vcl/svapp.hxx>
