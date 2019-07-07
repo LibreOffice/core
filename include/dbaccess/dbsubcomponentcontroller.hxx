@@ -20,15 +20,12 @@
 #ifndef INCLUDED_DBACCESS_DBSUBCOMPONENTCONTROLLER_HXX
 #define INCLUDED_DBACCESS_DBSUBCOMPONENTCONTROLLER_HXX
 
-#include <exception>
 #include <memory>
 
-#include <com/sun/star/beans/PropertyVetoException.hpp>
 #include <com/sun/star/document/XScriptInvocationContext.hpp>
 #include <com/sun/star/lang/EventObject.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Type.hxx>
 #include <com/sun/star/util/XModifiable.hpp>
