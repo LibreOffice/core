@@ -50,8 +50,7 @@ public:
         mpCurrentNode(pRootPoint),
         mnCurrIdx(0),
         mnCurrStep(0),
-        mnCurrCnt(0),
-        mnCurrLevel(0)
+        mnCurrCnt(0)
     {}
 
     void defaultVisit(LayoutAtom const& rAtom);
@@ -68,7 +67,6 @@ protected:
     sal_Int32 mnCurrIdx;
     sal_Int32 mnCurrStep;
     sal_Int32 mnCurrCnt;
-    sal_Int32 mnCurrLevel;
 };
 
 class ShallowPresNameVisitor : public LayoutAtomVisitorBase
