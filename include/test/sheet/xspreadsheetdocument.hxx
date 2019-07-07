@@ -11,7 +11,6 @@
 #define INCLUDED_TEST_SHEET_XSPREADSHEETDOCUMENT_HXX
 
 #include <com/sun/star/uno/Reference.hxx>
-#include <test/testdllapi.hxx>
 
 namespace apitest {
 

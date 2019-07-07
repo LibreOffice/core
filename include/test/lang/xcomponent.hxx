@@ -10,7 +10,6 @@
 #ifndef INCLUDED_TEST_LANG_XCOMPONENT_HXX
 #define INCLUDED_TEST_LANG_XCOMPONENT_HXX
 
-#include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/XInterface.hpp>
 

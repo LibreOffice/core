@@ -10,6 +10,10 @@
 #ifndef INCLUDED_TEST_TEXT_TEXTSETTINGS_HXX
 #define INCLUDED_TEST_TEXT_TEXTSETTINGS_HXX
 
+#include <test/testdllapi.hxx>
+
+#include <com/sun/star/uno/Reference.hxx>
+
 namespace apitest
 {
 class OOO_DLLPUBLIC_TEST TextSettings

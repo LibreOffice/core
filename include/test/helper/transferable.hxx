@@ -9,7 +9,6 @@
 
 #pragma once
 
-#include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 #include <rtl/string.hxx>

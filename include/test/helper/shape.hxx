@@ -10,7 +10,6 @@
 #ifndef INCLUDED_TEST_HELPER_SHAPE_HXX
 #define INCLUDED_TEST_HELPER_SHAPE_HXX
 
-#include <rtl/string.hxx>
 #include <sal/config.h>
 #include <sal/types.h>
 #include <test/testdllapi.hxx>

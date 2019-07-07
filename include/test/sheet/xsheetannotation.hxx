@@ -10,7 +10,6 @@
 #ifndef INCLUDED_TEST_SHEET_XSHEETANNOTATION_HXX
 #define INCLUDED_TEST_SHEET_XSHEETANNOTATION_HXX
 
-#include <rtl/ustring.hxx>
 #include <com/sun/star/sheet/XSheetAnnotation.hpp>
 #include <test/testdllapi.hxx>
 

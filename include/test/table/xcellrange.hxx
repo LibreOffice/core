@@ -11,7 +11,6 @@
 #define INCLUDED_TEST_TABLE_XCELLRANGE_HXX
 
 #include <test/testdllapi.hxx>
-#include <rtl/ustring.h>
 
 #include <com/sun/star/uno/XInterface.hpp>
 

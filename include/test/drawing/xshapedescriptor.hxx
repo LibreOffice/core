@@ -14,7 +14,6 @@
 #include <com/sun/star/uno/Reference.hxx>
 
 #include <test/testdllapi.hxx>
-#include <rtl/string.hxx>
 
 namespace apitest
 {

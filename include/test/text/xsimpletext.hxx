@@ -12,7 +12,7 @@
 
 #include <test/testdllapi.hxx>
 
-#include <com/sun/star/text/XSimpleText.hpp>
+#include <com/sun/star/uno/Reference.hxx>
 
 namespace apitest
 {

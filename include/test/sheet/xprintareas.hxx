@@ -10,7 +10,7 @@
 #ifndef INCLUDED_TEST_SHEET_XPRINTAREAS_HXX
 #define INCLUDED_TEST_SHEET_XPRINTAREAS_HXX
 
-#include <com/sun/star/sheet/XPrintAreas.hpp>
+#include <com/sun/star/uno/Reference.hxx>
 #include <test/testdllapi.hxx>
 
 namespace apitest {

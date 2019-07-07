@@ -10,8 +10,7 @@
 #ifndef INCLUDED_TEST_SHEET_XSHEETPAGEBREAK_HXX
 #define INCLUDED_TEST_SHEET_XSHEETPAGEBREAK_HXX
 
-#include <rtl/ustring.hxx>
-#include <com/sun/star/sheet/XSheetPageBreak.hpp>
+#include <com/sun/star/uno/Reference.hxx>
 #include <test/testdllapi.hxx>
 
 namespace apitest {

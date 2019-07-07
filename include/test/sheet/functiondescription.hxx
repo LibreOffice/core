@@ -11,7 +11,6 @@
 #define INCLUDED_TEST_SHEET_FUNCTIONDESCRIPTION_HXX
 
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 
 #include <test/testdllapi.hxx>

@@ -11,7 +11,6 @@
 #define INCLUDED_TEST_SHEET_XSUBTOTALCALCULATABLE_HXX
 
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <test/testdllapi.hxx>
 
