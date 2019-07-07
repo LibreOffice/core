@@ -223,6 +223,9 @@ public:
 
     double getAspectRatio() const { return mfAspectRatio; }
 
+    void setVerticalShapesCount(sal_Int32 nVerticalShapesCount) { mnVerticalShapesCount = nVerticalShapesCount; }
+    sal_Int32 getVerticalShapesCount() const { return mnVerticalShapesCount; }
+
     /// Changes reference semantics to value semantics for fill properties.
     void cloneFillProperties();
 
@@ -357,6 +360,9 @@ private:
 
     /// Aspect ratio for an in-diagram shape.
     double mfAspectRatio = 0;
+
+    /// Number of child shapes to be layouted vertically inside org chart in-diagram shape.
+    sal_Int32 mnVerticalShapesCount = 0;
 };
 
 } }
