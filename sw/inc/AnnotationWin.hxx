@@ -203,7 +203,11 @@ class SAL_DLLPUBLIC_RTTI SwAnnotationWin : public vcl::Window
         DECL_LINK(DeleteHdl, void*, void);
 
         sal_uInt32 CountFollowing();
+
+        /// Find the first annotation for the thread which this annotation is in.
+        /// This may be the same annotation as this one.
         SwAnnotationWin*   GetTopReplyNote();
+
         SvxLanguageItem GetLanguage();
 
         VclBuilder      maBuilder;
