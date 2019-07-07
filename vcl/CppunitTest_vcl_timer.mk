@@ -27,6 +27,7 @@ $(eval $(call gb_CppunitTest_use_libraries,vcl_timer, \
 	sal \
 	salhelper \
 	test \
+	tl \
 	unotest \
 	vcl \
 ))
