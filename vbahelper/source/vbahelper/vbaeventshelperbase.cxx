@@ -24,6 +24,7 @@
 #include <com/sun/star/script/ModuleType.hpp>
 #include <com/sun/star/script/vba/XVBAModuleInfo.hpp>
 #include <com/sun/star/script/XLibraryContainer.hpp>
+#include <com/sun/star/util/VetoException.hpp>
 #include <com/sun/star/util/XChangesNotifier.hpp>
 #include <cppuhelper/supportsservice.hxx>
 #include <filter/msfilter/msvbahelper.hxx>

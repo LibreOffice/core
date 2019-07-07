@@ -27,6 +27,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/script/BasicErrorException.hpp>
 #include <com/sun/star/script/XTypeConverter.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>

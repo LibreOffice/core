@@ -22,10 +22,8 @@
 #include <memory>
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-#include <com/sun/star/script/BasicErrorException.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>

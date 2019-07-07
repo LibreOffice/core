@@ -23,6 +23,7 @@
 #include <basic/sberrors.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/implbase.hxx>
+#include <com/sun/star/script/BasicErrorException.hpp>
 #include <ooo/vba/excel/XlAxisType.hpp>
 #include <ooo/vba/excel/XlAxisGroup.hpp>
 #include <ooo/vba/excel/XAxis.hpp>
