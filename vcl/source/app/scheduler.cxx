@@ -33,6 +33,7 @@
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <unotools/configmgr.hxx>
+#include <vcl/TaskStopwatch.hxx>
 #include <vcl/scheduler.hxx>
 #include <vcl/idle.hxx>
 #include <saltimer.hxx>
@@ -95,6 +96,8 @@ std::basic_ostream<charT, traits> & operator <<(
 }
 
 } // end anonymous namespace
+
+unsigned int TaskStopwatch::m_nTimeSlice = TaskStopwatch::nDefaultTimeSlice;
 
 void Scheduler::ImplDeInitScheduler()
 {
