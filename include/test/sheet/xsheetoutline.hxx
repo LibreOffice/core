@@ -10,8 +10,7 @@
 #ifndef INCLUDED_TEST_SHEET_XSHEETOUTLINE_HXX
 #define INCLUDED_TEST_SHEET_XSHEETOUTLINE_HXX
 
-#include <rtl/ustring.hxx>
-#include <com/sun/star/sheet/XSheetOutline.hpp>
+#include <com/sun/star/uno/Reference.hxx>
 #include <test/testdllapi.hxx>
 
 namespace apitest {

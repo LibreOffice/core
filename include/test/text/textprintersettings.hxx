@@ -10,10 +10,9 @@
 #ifndef INCLUDED_TEST_TEXT_TEXTPRINTERSETTINGS_HXX
 #define INCLUDED_TEST_TEXT_TEXTPRINTERSETTINGS_HXX
 
-#include <test/unoapi_property_testers.hxx>
 #include <test/testdllapi.hxx>
 
-#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/uno/Reference.hxx>
 
 namespace apitest
 {

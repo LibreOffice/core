@@ -12,6 +12,8 @@
 
 #include <test/testdllapi.hxx>
 
+#include <com/sun/star/uno/Reference.hxx>
+
 namespace apitest
 {
 class OOO_DLLPUBLIC_TEST BaseIndex

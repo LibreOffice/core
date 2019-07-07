@@ -10,8 +10,6 @@
 #ifndef INCLUDED_TEST_TABLE_XTABLECOLUMNS_HXX
 #define INCLUDED_TEST_TABLE_XTABLECOLUMNS_HXX
 
-#include <rtl/string.hxx>
-
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/table/XCell.hpp>
 #include <com/sun/star/uno/XInterface.hpp>

@@ -15,7 +15,6 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 
-#include <rtl/string.hxx>
 #include <sal/config.h>
 #include <sal/types.h>
 #include <test/testdllapi.hxx>

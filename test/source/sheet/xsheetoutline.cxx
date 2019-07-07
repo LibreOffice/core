@@ -17,6 +17,7 @@
 #include <com/sun/star/table/TableOrientation.hpp>
 
 #include <com/sun/star/sheet/XSheetCellRanges.hpp>
+#include <com/sun/star/sheet/XSheetOutline.hpp>
 #include <com/sun/star/sheet/XCellRangesQuery.hpp>
 
 #include <cppunit/extensions/HelperMacros.h>
