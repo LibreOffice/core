@@ -527,7 +527,7 @@ bool SwFlowFrame::PasteTree( SwFrame *pStart, SwLayoutFrame *pParent, SwFrame *p
         pFloat->InvalidateAll_();
         pFloat->CheckDirChange();
 
-        // I'm a friend of the TextFrame and thus am allowed to do many things.
+        // I'm a friend of the TextFrame and thus allowed to do many things.
         // The CacheIdx idea seems to be a bit risky!
         if ( pFloat->IsTextFrame() )
         {
