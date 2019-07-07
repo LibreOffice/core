@@ -523,6 +523,7 @@ SfxApplication::ChooseScript(weld::Window *pParent)
 void SfxApplication::MacroOrganizer(weld::Window* pParent, sal_Int16 nTabId)
 {
 #if !HAVE_FEATURE_SCRIPTING
+    (void) pParent;
     (void) nTabId;
 #else
 
