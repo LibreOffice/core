@@ -113,11 +113,9 @@ private:
             ::DbGridControl::GrantControlAccess aAccess;
             CursorWrapper* pSeek = m_pControl->GetSeekCursor(aAccess);
             const DbGridRowRef& rSeekRow = m_pControl->GetSeekRow(aAccess);
-            const Any* pIter = i_aEvt.Bookmarks.getConstArray();
-            const Any* pEnd  = pIter + i_aEvt.Bookmarks.getLength();
-            for(;pIter != pEnd;++pIter)
+            for(const Any& rBookmark : i_aEvt.Bookmarks)
             {
-                pSeek->moveToBookmark(*pIter);
+                pSeek->moveToBookmark(rBookmark);
                 // get the data
                 rSeekRow->SetState(pSeek, true);
                 sal_Int32 nSeekPos = pSeek->getRow() - 1;

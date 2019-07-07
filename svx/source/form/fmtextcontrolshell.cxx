@@ -1075,12 +1075,9 @@ namespace svx
             m_aControlObservers.resize( 0 );
             m_aControlObservers.reserve( aControls.getLength() );
 
-            const Reference< css::awt::XControl >* pControls = aControls.getConstArray();
-            const Reference< css::awt::XControl >* pControlsEnd = pControls + aControls.getLength();
-            for ( ; pControls != pControlsEnd; ++pControls )
-            {
-                m_aControlObservers.push_back( FocusListenerAdapter( new FmFocusListenerAdapter( *pControls, this ) ) );
-            }
+            std::transform(aControls.begin(), aControls.end(), std::back_inserter(m_aControlObservers),
+                [this](const Reference< css::awt::XControl >& rControl) -> FocusListenerAdapter {
+                    return FocusListenerAdapter( new FmFocusListenerAdapter( rControl, this ) ); });
         }
         catch( const Exception& )
         {

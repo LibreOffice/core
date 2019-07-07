@@ -564,23 +564,21 @@ void FmFilterModel::Update(const Reference< XIndexAccess > & xControllers, FmPar
                 Insert( pFormItem->GetChildren().end(), std::unique_ptr<FmFilterData>(pFilterItems) );
 
                 const Sequence< OUString >& rDisjunction( conjunctionTerm );
-                for (  const OUString* pDisjunctiveTerm = rDisjunction.getConstArray();
-                        pDisjunctiveTerm != rDisjunction.getConstArray() + rDisjunction.getLength();
-                        ++pDisjunctiveTerm
-                    )
+                sal_Int32 nComponentIndex = -1;
+                for ( const OUString& rDisjunctiveTerm : rDisjunction )
                 {
-                    if ( pDisjunctiveTerm->isEmpty() )
+                    ++nComponentIndex;
+
+                    if ( rDisjunctiveTerm.isEmpty() )
                         // no condition for this particular component in this particular conjunction term
                         continue;
-
-                    const sal_Int32 nComponentIndex = pDisjunctiveTerm - rDisjunction.getConstArray();
 
                     // determine the display name of the control
                     const Reference< XControl > xFilterControl( xFilterController->getFilterComponent( nComponentIndex ) );
                     const OUString sDisplayName( lcl_getLabelName_nothrow( xFilterControl ) );
 
                     // insert a new entry
-                    std::unique_ptr<FmFilterItem> pANDCondition(new FmFilterItem( pFilterItems, sDisplayName, *pDisjunctiveTerm, nComponentIndex ));
+                    std::unique_ptr<FmFilterItem> pANDCondition(new FmFilterItem( pFilterItems, sDisplayName, rDisjunctiveTerm, nComponentIndex ));
                     Insert( pFilterItems->GetChildren().end(), std::move(pANDCondition) );
                 }
 

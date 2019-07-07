@@ -196,9 +196,8 @@ void SvxZoomSliderControl::StateChanged( sal_uInt16 /*nSID*/, SfxItemState eStat
 
         // get all snapping points:
         std::set< sal_uInt16 > aTmpSnappingPoints;
-        for ( sal_Int32 j = 0; j < rSnappingPoints.getLength(); ++j )
+        for ( const sal_Int32 nSnappingPoint : rSnappingPoints )
         {
-            const sal_Int32 nSnappingPoint = rSnappingPoints[j];
             aTmpSnappingPoints.insert( static_cast<sal_uInt16>(nSnappingPoint) );
         }
 

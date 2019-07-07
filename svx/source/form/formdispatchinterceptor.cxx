@@ -91,12 +91,9 @@ namespace svxform
     {
         ::osl::MutexGuard aGuard( *m_pMutex );
         Sequence< Reference< XDispatch> > aReturn(aDescripts.getLength());
-        Reference< XDispatch>* pReturn = aReturn.getArray();
-        const DispatchDescriptor* pDescripts = aDescripts.getConstArray();
-        for (sal_Int32 i=0; i<aDescripts.getLength(); ++i, ++pReturn, ++pDescripts)
-        {
-            *pReturn = queryDispatch(pDescripts->FeatureURL, pDescripts->FrameName, pDescripts->SearchFlags);
-        }
+        std::transform(aDescripts.begin(), aDescripts.end(), aReturn.begin(),
+            [this](const DispatchDescriptor& rDescript) -> Reference< XDispatch> {
+                return queryDispatch(rDescript.FeatureURL, rDescript.FrameName, rDescript.SearchFlags); });
         return aReturn;
     }
 

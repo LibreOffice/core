@@ -265,14 +265,14 @@ bool XFillBitmapItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId )
         uno::Sequence< beans::PropertyValue >   aPropSeq;
         if( rVal >>= aPropSeq )
         {
-            for ( sal_Int32 n = 0; n < aPropSeq.getLength(); n++ )
+            for ( const auto& rProp : aPropSeq )
             {
-                if ( aPropSeq[n].Name == "Name" )
-                    bSetName = (aPropSeq[n].Value >>= aName);
-                else if ( aPropSeq[n].Name == "Bitmap" )
-                    bSetBitmap = (aPropSeq[n].Value >>= xBmp);
-                else if ( aPropSeq[n].Name == "FillBitmapURL" )
-                    bSetURL = (aPropSeq[n].Value >>= aURL);
+                if ( rProp.Name == "Name" )
+                    bSetName = (rProp.Value >>= aName);
+                else if ( rProp.Name == "Bitmap" )
+                    bSetBitmap = (rProp.Value >>= xBmp);
+                else if ( rProp.Name == "FillBitmapURL" )
+                    bSetURL = (rProp.Value >>= aURL);
             }
         }
     }

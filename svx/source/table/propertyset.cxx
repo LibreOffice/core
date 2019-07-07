@@ -146,15 +146,13 @@ void SAL_CALL FastPropertySet::removeVetoableChangeListener( const OUString&, co
 
 void SAL_CALL FastPropertySet::setPropertyValues( const Sequence< OUString >& aPropertyNames, const Sequence< Any >& aValues )
 {
-    const OUString* pPropertyNames = aPropertyNames.getConstArray();
-    const Any* pValues = aValues.getConstArray();
-    sal_Int32 nCount = aPropertyNames.getLength();
-    if( nCount != aValues.getLength() )
+    if( aPropertyNames.getLength() != aValues.getLength() )
         throw IllegalArgumentException();
 
-    while( nCount-- )
+    const Any* pValues = aValues.getConstArray();
+    for( const OUString& rPropertyName : aPropertyNames )
     {
-        const Property* pProperty = mxInfo->hasProperty( *pPropertyNames++ );
+        const Property* pProperty = mxInfo->hasProperty( rPropertyName );
         if( pProperty ) try
         {
             setFastPropertyValue( pProperty->Handle, *pValues );
@@ -172,11 +170,10 @@ Sequence< Any > SAL_CALL FastPropertySet::getPropertyValues( const Sequence< OUS
     sal_Int32 nCount = aPropertyNames.getLength();
     Sequence< Any > aValues( nCount );
 
-    const OUString* pPropertyNames = aPropertyNames.getConstArray();
     Any* pValues = aValues.getArray();
-    while( nCount-- )
+    for( const OUString& rPropertyName : aPropertyNames )
     {
-        const Property* pProperty = mxInfo->hasProperty( *pPropertyNames++ );
+        const Property* pProperty = mxInfo->hasProperty( rPropertyName );
         if( pProperty ) try
         {
             *pValues = getFastPropertyValue( pProperty->Handle );

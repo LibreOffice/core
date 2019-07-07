@@ -378,15 +378,12 @@ bool SvxXMLXTableExportComponent::exportTable() throw()
             SvXMLElementExport aElem( *this, XML_NAMESPACE_OOO, pEleName, true, true );
 
             Sequence< OUString > aNames = mxTable->getElementNames();
-            const sal_Int32 nCount = aNames.getLength();
-            const OUString* pNames = aNames.getConstArray();
             Any aAny;
 
-            sal_Int32 nIndex;
-            for( nIndex = 0; nIndex < nCount; nIndex++, pNames++ )
+            for( const OUString& rName : aNames )
             {
-                aAny = mxTable->getByName( *pNames );
-                pExporter->exportEntry( *pNames, aAny );
+                aAny = mxTable->getByName( rName );
+                pExporter->exportEntry( rName, aAny );
             }
 
             bRet = true;

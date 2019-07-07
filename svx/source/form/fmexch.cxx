@@ -250,15 +250,11 @@ namespace svxform
         ListBoxEntrySet aEmpty;
         m_aSelectedEntries.swap( aEmpty );
 
-        sal_Int32 nControls = m_aControlPaths.getLength();
-        const css::uno::Sequence<sal_uInt32>* pPaths = m_aControlPaths.getConstArray();
-        for (sal_Int32 i=0; i<nControls; ++i)
+        for (const css::uno::Sequence<sal_uInt32>& rPaths : m_aControlPaths)
         {
-            sal_Int32 nThisPatLength = pPaths[i].getLength();
-            const sal_uInt32* pThisPath = pPaths[i].getConstArray();
             SvTreeListEntry* pSearch = pRoot;
-            for (sal_Int32 j=0; j<nThisPatLength; ++j)
-                pSearch = pTreeBox->GetEntry(pSearch, pThisPath[j]);
+            for (const sal_uInt32 nThisPath : rPaths)
+                pSearch = pTreeBox->GetEntry(pSearch, nThisPath);
 
             m_aSelectedEntries.insert( pSearch );
         }

@@ -193,11 +193,11 @@ void SAL_CALL GalleryThemePopup::statusChanged(
             }
             else if ( ( rEvent.State >>= sItems ) && sItems.hasElements() )
             {
-                const OUString *pStr = sItems.getConstArray();
-                const OUString *pEnd = pStr + sItems.getLength();
-                for ( sal_uInt16 nId = 1; pStr != pEnd; pStr++, nId++ )
+                sal_uInt16 nId = 1;
+                for ( const OUString& rStr : sItems )
                 {
-                    mpBackgroundPopup->InsertItem( nId, *pStr );
+                    mpBackgroundPopup->InsertItem( nId, rStr );
+                    nId++;
                 }
             }
         }

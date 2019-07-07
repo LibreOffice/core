@@ -2938,13 +2938,10 @@ bool SvxShape::setPropertyToDefaultImpl( const SfxItemPropertySimpleEntry* pProp
 uno::Sequence< beans::PropertyState > SAL_CALL SvxShape::getPropertyStates( const uno::Sequence< OUString >& aPropertyName )
 {
     const sal_Int32 nCount = aPropertyName.getLength();
-    const OUString* pNames = aPropertyName.getConstArray();
-
     uno::Sequence< beans::PropertyState > aRet( nCount );
-    beans::PropertyState* pState = aRet.getArray();
 
-    for( sal_Int32 nIdx = 0; nIdx < nCount; nIdx++ )
-        pState[nIdx] = getPropertyState( pNames[nIdx] );
+    std::transform(aPropertyName.begin(), aPropertyName.end(), aRet.begin(),
+        [this](const OUString& rName) -> beans::PropertyState { return getPropertyState(rName); });
 
     return aRet;
 }
@@ -3049,8 +3046,8 @@ void SvxShape::setAllPropertiesToDefault()
 void SvxShape::setPropertiesToDefault(
     const uno::Sequence<OUString>& aPropertyNames )
 {
-    for ( sal_Int32 pos = 0; pos < aPropertyNames.getLength(); ++pos )
-        setPropertyToDefault( aPropertyNames[pos] );
+    for ( const auto& rPropertyName : aPropertyNames )
+        setPropertyToDefault( rPropertyName );
 }
 
 uno::Sequence<uno::Any> SvxShape::getPropertyDefaults(
@@ -3058,8 +3055,8 @@ uno::Sequence<uno::Any> SvxShape::getPropertyDefaults(
 {
     ::std::vector<uno::Any> ret;
     ret.reserve(aPropertyNames.getLength());
-    for (sal_Int32 pos = 0; pos < aPropertyNames.getLength(); ++pos)
-        ret.push_back( getPropertyDefault( aPropertyNames[pos] ) );
+    std::transform(aPropertyNames.begin(), aPropertyNames.end(), std::back_inserter(ret),
+        [this](const OUString& rName) -> uno::Any { return getPropertyDefault(rName); });
     return uno::Sequence<uno::Any>( ret.data(), ret.size() );
 }
 

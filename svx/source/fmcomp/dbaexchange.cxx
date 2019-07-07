@@ -484,12 +484,10 @@ namespace svx
         const sal_Unicode       cSeparator(11);
         const OUString   sSeparator(&cSeparator, 1);
 
-        const Any* pSelRows = _rSelRows.getConstArray();
-        const Any* pSelRowsEnd = pSelRows + _rSelRows.getLength();
-        for ( ; pSelRows < pSelRowsEnd; ++pSelRows )
+        for ( const Any& rSelRow : _rSelRows )
         {
             sal_Int32 nSelectedRow( 0 );
-            OSL_VERIFY( *pSelRows >>= nSelectedRow );
+            OSL_VERIFY( rSelRow >>= nSelectedRow );
 
             m_sCompatibleObjectDescription += OUString::number(nSelectedRow);
             m_sCompatibleObjectDescription += sSeparator;

@@ -83,6 +83,7 @@
 #include <comphelper/evtmethodhelper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/property.hxx>
+#include <comphelper/sequence.hxx>
 #include <comphelper/solarmutex.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/types.hxx>
@@ -398,44 +399,31 @@ namespace
         Sequence< ScriptEventDescriptor>    aTransferable(nMaxNewLen);
         ScriptEventDescriptor* pTransferable = aTransferable.getArray();
 
-        const ScriptEventDescriptor* pCurrent = rTransferIfAvailable.getConstArray();
-        sal_Int32 i,j,k;
-        for (i=0; i<rTransferIfAvailable.getLength(); ++i, ++pCurrent)
+        for (const ScriptEventDescriptor& rCurrent : rTransferIfAvailable)
         {
             // search the model/control idl classes for the event described by pCurrent
-            for (   Sequence< Type>* pCurrentArray = &aModelListeners;
-                    pCurrentArray;
-                    pCurrentArray = (pCurrentArray == &aModelListeners) ? &aControlListeners : nullptr
-                )
+            for (Sequence< Type>* pCurrentArray : { &aModelListeners, &aControlListeners })
             {
-                const Type* pCurrentListeners = pCurrentArray->getConstArray();
-                for (j=0; j<pCurrentArray->getLength(); ++j, ++pCurrentListeners)
+                for (const Type& rCurrentListener : *pCurrentArray)
                 {
-                    OUString aListener = (*pCurrentListeners).getTypeName();
+                    OUString aListener = rCurrentListener.getTypeName();
                     if (!aListener.isEmpty())
                         aListener = aListener.copy(aListener.lastIndexOf('.')+1);
 
-                    if (aListener == pCurrent->ListenerType)
+                    if (aListener == rCurrent.ListenerType)
                         // the current ScriptEventDescriptor doesn't match the current listeners class
                         continue;
 
                     // now check the methods
-                    Sequence< OUString> aMethodsNames = ::comphelper::getEventMethodsForType(*pCurrentListeners);
+                    Sequence< OUString> aMethodsNames = ::comphelper::getEventMethodsForType(rCurrentListener);
 
-                    const OUString* pMethodsNames = aMethodsNames.getConstArray();
-                    for (k=0; k<aMethodsNames.getLength(); ++k, ++pMethodsNames)
+                    if (comphelper::findValue(aMethodsNames, rCurrent.EventMethod) != -1)
                     {
-                        if ((*pMethodsNames) != pCurrent->EventMethod)
-                            // the current ScriptEventDescriptor doesn't match the current listeners current method
-                            continue;
-
                         // we can transfer the script event : the model (control) supports it
-                        *pTransferable = *pCurrent;
+                        *pTransferable = rCurrent;
                         ++pTransferable;
                         break;
                     }
-                    if (k<aMethodsNames.getLength())
-                        break;
                 }
             }
         }
@@ -1213,18 +1201,12 @@ bool FmXFormShell::executeControlConversionSlot_Lock(const Reference<XFormCompon
                 Reference<XControlContainer> xControlContainer(getControlContainerForView_Lock());
 
                 Sequence< Reference< XControl> > aControls( xControlContainer->getControls() );
-                const Reference< XControl>* pControls = aControls.getConstArray();
 
-                sal_uInt32 nLen = aControls.getLength();
                 Reference< XControl> xControl;
-                for (sal_uInt32 i=0 ; i<nLen; ++i)
-                {
-                    if (pControls[i]->getModel() == xNewModel)
-                    {
-                        xControl = pControls[i];
-                        break;
-                    }
-                }
+                auto pControl = std::find_if(aControls.begin(), aControls.end(),
+                    [&xNewModel](const Reference< XControl>& rControl) { return rControl->getModel() == xNewModel; });
+                if (pControl != aControls.end())
+                    xControl = *pControl;
                 TransferEventScripts(xNewModel, xControl, aOldScripts);
             }
 
@@ -3358,27 +3340,26 @@ void FmXFormShell::CreateExternalView_Lock()
                 Reference< XPropertySetInfo> xControlModelInfo( xCurrentModelSet->getPropertySetInfo());
                 DBG_ASSERT(xControlModelInfo.is(), "FmXFormShell::CreateExternalView : the control model has no property info ! This will crash !");
                 aProps = xControlModelInfo->getProperties();
-                const Property* pProps = aProps.getConstArray();
 
                 // realloc the control description sequence
                 sal_Int32 nExistentDescs = pColumnProps - aColumnProps.getArray();
                 aColumnProps.realloc(nExistentDescs + aProps.getLength());
                 pColumnProps = aColumnProps.getArray() + nExistentDescs;
 
-                for (sal_Int32 i=0; i<aProps.getLength(); ++i, ++pProps)
+                for (const Property& rProp : aProps)
                 {
-                    if (pProps->Name == FM_PROP_LABEL)
+                    if (rProp.Name == FM_PROP_LABEL)
                         // already set
                         continue;
-                    if (pProps->Name == FM_PROP_DEFAULTCONTROL)
+                    if (rProp.Name == FM_PROP_DEFAULTCONTROL)
                         // allow the column's own "default control"
                         continue;
-                    if (pProps->Attributes & PropertyAttribute::READONLY)
+                    if (rProp.Attributes & PropertyAttribute::READONLY)
                         // assume that properties which are readonly for the control are ro for the column to be created, too
                         continue;
 
-                    pColumnProps->Name = pProps->Name;
-                    pColumnProps->Value = xCurrentModelSet->getPropertyValue(pProps->Name);
+                    pColumnProps->Name = rProp.Name;
+                    pColumnProps->Value = xCurrentModelSet->getPropertyValue(rProp.Name);
                     ++pColumnProps;
                 }
                 aColumnProps.realloc(pColumnProps - aColumnProps.getArray());
@@ -3530,10 +3511,8 @@ void FmXFormShell::Notify( const css::uno::Sequence< OUString >& _rPropertyNames
     if (impl_checkDisposed_Lock())
         return;
 
-    const OUString* pSearch = _rPropertyNames.getConstArray();
-    const OUString* pSearchTil = pSearch + _rPropertyNames.getLength();
-    for (;pSearch < pSearchTil; ++pSearch)
-        if (*pSearch == "FormControlPilotsEnabled")
+    for (const OUString& rName : _rPropertyNames)
+        if (rName == "FormControlPilotsEnabled")
         {
             implAdjustConfigCache_Lock();
             InvalidateSlot_Lock(SID_FM_USE_WIZARDS, true);

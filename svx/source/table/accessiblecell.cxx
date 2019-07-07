@@ -230,18 +230,14 @@ Reference<XAccessibleStateSet> SAL_CALL AccessibleCell::getAccessibleStateSet()
                 {
                     css::uno::Reference<XAccessibleStateSet> rState =
                         xTempAccContext->getAccessibleStateSet();
-                    if( rState.is() )           {
+                    if( rState.is() )
+                    {
                         css::uno::Sequence<short> aStates = rState->getStates();
-                        int count = aStates.getLength();
-                        for( int iIndex = 0;iIndex < count;iIndex++ )
+                        if (std::find(aStates.begin(), aStates.end(), AccessibleStateType::EDITABLE) != aStates.end())
                         {
-                            if( aStates[iIndex] == AccessibleStateType::EDITABLE )
-                            {
-                                pStateSet->AddState (AccessibleStateType::EDITABLE);
-                                pStateSet->AddState (AccessibleStateType::RESIZABLE);
-                                pStateSet->AddState (AccessibleStateType::MOVEABLE);
-                                break;
-                            }
+                            pStateSet->AddState (AccessibleStateType::EDITABLE);
+                            pStateSet->AddState (AccessibleStateType::RESIZABLE);
+                            pStateSet->AddState (AccessibleStateType::MOVEABLE);
                         }
                     }
                 }

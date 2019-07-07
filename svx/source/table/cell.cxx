@@ -1325,16 +1325,14 @@ Sequence< Any > SAL_CALL Cell::getPropertyValues( const Sequence< OUString >& aP
         throw DisposedException();
 
     const sal_Int32 nCount = aPropertyNames.getLength();
-    const OUString* pNames = aPropertyNames.getConstArray();
-
     Sequence< Any > aRet( nCount );
     Any* pValue = aRet.getArray();
 
-    for( sal_Int32 nIdx = 0; nIdx < nCount; nIdx++, pValue++, pNames++ )
+    for( const OUString& rName : aPropertyNames )
     {
         try
         {
-            *pValue = getPropertyValue( *pNames );
+            *pValue = getPropertyValue( rName );
         }
         catch( UnknownPropertyException& )
         {
@@ -1344,6 +1342,7 @@ Sequence< Any > SAL_CALL Cell::getPropertyValues( const Sequence< OUString >& aP
         {
             OSL_FAIL( "svx::Cell::getPropertyValues(), Exception caught!" );
         }
+        pValue++;
     }
 
     return aRet;
@@ -1479,23 +1478,19 @@ Sequence< PropertyState > SAL_CALL Cell::getPropertyStates( const Sequence< OUSt
         throw DisposedException();
 
     const sal_Int32 nCount = aPropertyName.getLength();
-
     Sequence< PropertyState > aRet( nCount );
 
-    const OUString* pNames = aPropertyName.getConstArray();
-    PropertyState* pState = aRet.getArray();
-
-    for( sal_Int32 nIdx = 0; nIdx < nCount; nIdx++, pNames++, pState++ )
-    {
-        try
-        {
-            *pState = getPropertyState( *pNames );
-        }
-        catch( Exception& )
-        {
-            *pState = PropertyState_AMBIGUOUS_VALUE;
-        }
-    }
+    std::transform(aPropertyName.begin(), aPropertyName.end(), aRet.begin(),
+        [this](const OUString& rName) -> PropertyState {
+            try
+            {
+                return getPropertyState( rName );
+            }
+            catch( Exception& )
+            {
+                return PropertyState_AMBIGUOUS_VALUE;
+            }
+        });
 
     return aRet;
 }
@@ -1615,11 +1610,8 @@ void SAL_CALL Cell::setAllPropertiesToDefault()
 
 void SAL_CALL Cell::setPropertiesToDefault( const Sequence< OUString >& aPropertyNames )
 {
-    sal_Int32 nCount = aPropertyNames.getLength();
-    const OUString* pName = aPropertyNames.getConstArray();
-
-    while(nCount--)
-        setPropertyToDefault( *pName++ );
+    for(const OUString& rName : aPropertyNames)
+        setPropertyToDefault( rName );
 }
 
 
@@ -1627,11 +1619,9 @@ Sequence< Any > SAL_CALL Cell::getPropertyDefaults( const Sequence< OUString >& 
 {
     sal_Int32 nCount = aPropertyNames.getLength();
     Sequence< Any > aDefaults( nCount );
-    Any* pDefaults = aDefaults.getArray();
-    const OUString* pName = aPropertyNames.getConstArray();
 
-    while(nCount--)
-        *pDefaults++ = getPropertyDefault( *pName++ );
+    std::transform(aPropertyNames.begin(), aPropertyNames.end(), aDefaults.begin(),
+        [this](const OUString& rName) -> Any { return getPropertyDefault(rName); });
 
     return aDefaults;
 }

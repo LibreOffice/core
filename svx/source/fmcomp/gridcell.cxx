@@ -2425,10 +2425,8 @@ void DbComboBox::SetList(const Any& rItems)
     css::uno::Sequence<OUString> aTest;
     if (rItems >>= aTest)
     {
-        const OUString* pStrings = aTest.getConstArray();
-        sal_Int32 nItems = aTest.getLength();
-        for (sal_Int32 i = 0; i < nItems; ++i, ++pStrings )
-             pField->InsertEntry(*pStrings);
+        for (const OUString& rString : aTest)
+             pField->InsertEntry(rString);
 
         // tell the grid control that this controller is invalid and has to be re-initialized
         invalidatedController();
@@ -2546,12 +2544,10 @@ void DbListBox::SetList(const Any& rItems)
     css::uno::Sequence<OUString> aTest;
     if (rItems >>= aTest)
     {
-        const OUString* pStrings = aTest.getConstArray();
-        sal_Int32 nItems = aTest.getLength();
-        if (nItems)
+        if (aTest.hasElements())
         {
-            for (sal_Int32 i = 0; i < nItems; ++i, ++pStrings )
-                 pField->InsertEntry(*pStrings);
+            for (const OUString& rString : aTest)
+                 pField->InsertEntry(rString);
 
             m_rColumn.getModel()->getPropertyValue(FM_PROP_VALUE_SEQ) >>= m_aValueList;
             m_bBound = m_aValueList.hasElements();
@@ -2707,21 +2703,19 @@ void DbFilterField::SetList(const Any& rItems, bool bComboBox)
 {
     css::uno::Sequence<OUString> aTest;
     rItems >>= aTest;
-    const OUString* pStrings = aTest.getConstArray();
-    sal_Int32 nItems = aTest.getLength();
-    if (nItems)
+    if (aTest.hasElements())
     {
         if (bComboBox)
         {
             ComboBox* pField = static_cast<ComboBox*>(m_pWindow.get());
-            for (sal_Int32 i = 0; i < nItems; ++i, ++pStrings )
-                pField->InsertEntry(*pStrings);
+            for (const OUString& rString : aTest)
+                pField->InsertEntry(rString);
         }
         else
         {
             ListBox* pField = static_cast<ListBox*>(m_pWindow.get());
-            for (sal_Int32 i = 0; i < nItems; ++i, ++pStrings )
-                pField->InsertEntry(*pStrings);
+            for (const OUString& rString : aTest)
+                pField->InsertEntry(rString);
 
             m_rColumn.getModel()->getPropertyValue(FM_PROP_VALUE_SEQ) >>= m_aValueList;
         }
@@ -4103,9 +4097,9 @@ void SAL_CALL FmXListBoxCell::addItems(const css::uno::Sequence<OUString>& aItem
     if (m_pBox)
     {
         sal_uInt16 nP = nPos;
-        for ( sal_Int32 n = 0; n < aItems.getLength(); n++ )
+        for ( const auto& rItem : aItems )
         {
-            m_pBox->InsertEntry( aItems.getConstArray()[n], nP );
+            m_pBox->InsertEntry( rItem, nP );
             if ( nPos != -1 )    // Not if 0xFFFF, because LIST_APPEND
                 nP++;
         }
@@ -4431,9 +4425,9 @@ void SAL_CALL FmXComboBoxCell::addItems( const Sequence< OUString >& Items, sal_
     if ( m_pComboBox )
     {
         sal_uInt16 nP = Pos;
-        for ( sal_Int32 n = 0; n < Items.getLength(); n++ )
+        for ( const auto& rItem : Items )
         {
-            m_pComboBox->InsertEntry( Items.getConstArray()[n], nP );
+            m_pComboBox->InsertEntry( rItem, nP );
             if ( Pos != -1 )
                 nP++;
         }

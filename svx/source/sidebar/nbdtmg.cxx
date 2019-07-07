@@ -97,26 +97,25 @@ const sal_Unicode aDefaultBulletTypes[] =
 
 NumSettings_Impl* lcl_CreateNumberingSettingsPtr(const Sequence<PropertyValue>& rLevelProps)
 {
-    const PropertyValue* pValues = rLevelProps.getConstArray();
     NumSettings_Impl* pNew = new NumSettings_Impl;
-    for(sal_Int32 j = 0; j < rLevelProps.getLength(); j++)
+    for(const PropertyValue& rValue : rLevelProps)
     {
-        if(pValues[j].Name == "NumberingType")
+        if(rValue.Name == "NumberingType")
         {
             sal_Int16 nTmp;
-            if (pValues[j].Value >>= nTmp)
+            if (rValue.Value >>= nTmp)
                 pNew->nNumberType = static_cast<SvxNumType>(nTmp);
         }
-        else if(pValues[j].Name == "Prefix")
-            pValues[j].Value >>= pNew->sPrefix;
-        else if(pValues[j].Name == "Suffix")
-            pValues[j].Value >>= pNew->sSuffix;
-        else if(pValues[j].Name == "ParentNumbering")
-            pValues[j].Value >>= pNew->nParentNumbering;
-        else if(pValues[j].Name == "BulletChar")
-            pValues[j].Value >>= pNew->sBulletChar;
-        else if(pValues[j].Name == "BulletFontName")
-            pValues[j].Value >>= pNew->sBulletFont;
+        else if(rValue.Name == "Prefix")
+            rValue.Value >>= pNew->sPrefix;
+        else if(rValue.Name == "Suffix")
+            rValue.Value >>= pNew->sSuffix;
+        else if(rValue.Name == "ParentNumbering")
+            rValue.Value >>= pNew->nParentNumbering;
+        else if(rValue.Name == "BulletChar")
+            rValue.Value >>= pNew->sBulletChar;
+        else if(rValue.Name == "BulletFontName")
+            rValue.Value >>= pNew->sBulletFont;
     }
     const sal_Unicode cLocalPrefix = pNew->sPrefix.getLength() ? pNew->sPrefix[0] : 0;
     const sal_Unicode cLocalSuffix = pNew->sSuffix.getLength() ? pNew->sSuffix[0] : 0;
@@ -597,9 +596,8 @@ void OutlineTypeMgr::Init()
             10, false,
             SvxNumRuleType::NUMBERING, SvxNumberFormat::LABEL_ALIGNMENT);
 
-        for(sal_Int32 nItem = 0;
-            nItem < aOutlineAccess.getLength() && nItem < DEFAULT_NUM_VALUSET_COUNT;
-            nItem++ )
+        auto nSize = std::min<sal_Int32>(aOutlineAccess.getLength(), DEFAULT_NUM_VALUSET_COUNT);
+        for(sal_Int32 nItem = 0; nItem < nSize; nItem++ )
         {
             pOutlineSettingsArrs[ nItem ] = new OutlineSettings_Impl;
             OutlineSettings_Impl* pItemArr = pOutlineSettingsArrs[ nItem ];
