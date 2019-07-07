@@ -37,11 +37,18 @@ void ShapeCreationVisitor::visit(ConstraintAtom& /*rAtom*/)
 
 void ShapeCreationVisitor::visit(AlgAtom& rAtom)
 {
-    mpParentShape->setAspectRatio(rAtom.getAspectRatio());
+    if (meLookFor == ALGORITHM)
+    {
+        mpParentShape->setAspectRatio(rAtom.getAspectRatio());
+        mpParentShape->setVerticalShapesCount(rAtom.getVerticalShapesCount(mpParentShape));
+    }
 }
 
 void ShapeCreationVisitor::visit(LayoutNode& rAtom)
 {
+    if (meLookFor != LAYOUT_NODE)
+        return;
+
     // stop processing if it's not a child of previous LayoutNode
 
     const DiagramData::PointsNameMap::const_iterator aDataNode = mrDgm.getData()->getPointsPresNameMap().find(rAtom.getName());
@@ -108,17 +115,22 @@ void ShapeCreationVisitor::visit(LayoutNode& rAtom)
     mpParentShape=pCurrParent;
 
     // process children
+    meLookFor = LAYOUT_NODE;
     defaultVisit(rAtom);
-
-    // restore parent
-    mpParentShape=pPreviousParent;
-    mpCurrentNode = pPreviousNode;
 
     // remove unneeded empty group shapes
     pCurrParent->getChildren().erase(
         std::remove_if(pCurrParent->getChildren().begin(), pCurrParent->getChildren().end(),
             [] (const ShapePtr & aChild) { return aChild->getServiceName() == "com.sun.star.drawing.GroupShape" && aChild->getChildren().empty(); }),
         pCurrParent->getChildren().end());
+
+    meLookFor = ALGORITHM;
+    defaultVisit(rAtom);
+    meLookFor = LAYOUT_NODE;
+
+    // restore parent
+    mpParentShape=pPreviousParent;
+    mpCurrentNode = pPreviousNode;
 }
 
 void ShapeCreationVisitor::visit(ShapeAtom& /*rAtom*/)

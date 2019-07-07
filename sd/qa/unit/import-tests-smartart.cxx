@@ -37,6 +37,28 @@ uno::Reference<drawing::XShape> getChildShape(const uno::Reference<drawing::XSha
 
     return xRet;
 }
+
+uno::Reference<drawing::XShape> findChildShapeByText(const uno::Reference<drawing::XShape>& xShape,
+                                                     const OUString& sText)
+{
+    uno::Reference<text::XText> xText(xShape, uno::UNO_QUERY);
+    if (xText.is() && xText->getString() == sText)
+        return xShape;
+
+    uno::Reference<container::XIndexAccess> xGroup(xShape, uno::UNO_QUERY);
+    if (!xGroup.is())
+        return uno::Reference<drawing::XShape>();
+
+    for (sal_Int32 i = 0; i < xGroup->getCount(); i++)
+    {
+        uno::Reference<drawing::XShape> xChildShape(xGroup->getByIndex(i), uno::UNO_QUERY);
+        uno::Reference<drawing::XShape> xReturnShape = findChildShapeByText(xChildShape, sText);
+        if (xReturnShape.is())
+            return xReturnShape;
+    }
+
+    return uno::Reference<drawing::XShape>();
+}
 }
 
 class SdImportTestSmartArt : public SdModelTestBase
@@ -81,6 +103,7 @@ public:
     void testBulletList();
     void testRecursion();
     void testDataFollow();
+    void testOrgChart2();
 
     CPPUNIT_TEST_SUITE(SdImportTestSmartArt);
 
@@ -123,6 +146,7 @@ public:
     CPPUNIT_TEST(testBulletList);
     CPPUNIT_TEST(testRecursion);
     CPPUNIT_TEST(testDataFollow);
+    CPPUNIT_TEST(testOrgChart2);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -1353,6 +1377,42 @@ void SdImportTestSmartArt::testDataFollow()
 
     CPPUNIT_ASSERT_EQUAL(xShapeC1->getPosition().X, xShapeC2->getPosition().X);
     CPPUNIT_ASSERT_GREATEREQUAL(xShapeC1->getPosition().Y + xShapeC1->getSize().Height, xShapeC2->getPosition().Y);
+
+    xDocShRef->DoClose();
+}
+
+void SdImportTestSmartArt::testOrgChart2()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/smartart-org-chart2.pptx"), PPTX);
+    uno::Reference<drawing::XShape> xGroup(getShapeFromPage(0, 0, xDocShRef), uno::UNO_QUERY);
+
+    uno::Reference<drawing::XShape> xShapeC1 = findChildShapeByText(xGroup, "C1");
+    uno::Reference<drawing::XShape> xShapeC2 = findChildShapeByText(xGroup, "C2");
+    uno::Reference<drawing::XShape> xShapeC3 = findChildShapeByText(xGroup, "C3");
+    uno::Reference<drawing::XShape> xShapeC4 = findChildShapeByText(xGroup, "C4");
+    uno::Reference<drawing::XShape> xShapeD1 = findChildShapeByText(xGroup, "D1");
+    uno::Reference<drawing::XShape> xShapeD2 = findChildShapeByText(xGroup, "D2");
+
+    CPPUNIT_ASSERT(xShapeC1.is());
+    CPPUNIT_ASSERT(xShapeC2.is());
+    CPPUNIT_ASSERT(xShapeC3.is());
+    CPPUNIT_ASSERT(xShapeC4.is());
+    CPPUNIT_ASSERT(xShapeD1.is());
+    CPPUNIT_ASSERT(xShapeD2.is());
+
+    CPPUNIT_ASSERT_EQUAL(xShapeC1->getPosition().Y, xShapeC2->getPosition().Y);
+    CPPUNIT_ASSERT_GREATEREQUAL(xShapeC1->getPosition().X + xShapeC1->getSize().Width, xShapeC2->getPosition().X);
+
+    CPPUNIT_ASSERT_EQUAL(xShapeC3->getPosition().X, xShapeC4->getPosition().X);
+    CPPUNIT_ASSERT_GREATEREQUAL(xShapeC3->getPosition().Y + xShapeC3->getSize().Height, xShapeC4->getPosition().Y);
+
+    CPPUNIT_ASSERT_EQUAL(xShapeD1->getPosition().X, xShapeD2->getPosition().X);
+    CPPUNIT_ASSERT_GREATEREQUAL(xShapeD1->getPosition().Y + xShapeD1->getSize().Height, xShapeD2->getPosition().Y);
+
+    CPPUNIT_ASSERT_GREATEREQUAL(xShapeC2->getPosition().X, xShapeD1->getPosition().X);
+    CPPUNIT_ASSERT_GREATEREQUAL(xShapeC2->getPosition().Y + xShapeC2->getSize().Height, xShapeD1->getPosition().Y);
+
+    CPPUNIT_ASSERT_GREATEREQUAL(xShapeD1->getPosition().X + xShapeD1->getSize().Width, xShapeC4->getPosition().X);
 
     xDocShRef->DoClose();
 }
