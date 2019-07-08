@@ -67,20 +67,20 @@ private:
         Link<MenuBar::MenuBarButtonCallbackArg&,bool>  m_aHighlightLink;
     };
 
-    VclPtr<Menu>           pMenu;
-    VclPtr<PopupMenu>      pActivePopup;
+    VclPtr<Menu>           m_pMenu;
+    VclPtr<PopupMenu>      m_pActivePopup;
     VclPtr<PopupMenu>      mpParentPopup;
-    sal_uInt16      nHighlightedItem;
-    sal_uInt16      nRolloveredItem;
-    VclPtr<vcl::Window> xSaveFocusId;
+    sal_uInt16      m_nHighlightedItem;
+    sal_uInt16      m_nRolloveredItem;
+    VclPtr<vcl::Window> m_xSaveFocusId;
     bool            mbAutoPopup;
-    bool            bIgnoreFirstMove;
+    bool            m_bIgnoreFirstMove;
     bool            mbHideAccel;
     bool            mbMenuKey;
 
-    VclPtr<DecoToolBox>  aCloseBtn;
-    VclPtr<PushButton>   aFloatBtn;
-    VclPtr<PushButton>   aHideBtn;
+    VclPtr<DecoToolBox>  m_aCloseBtn;
+    VclPtr<PushButton>   m_aFloatBtn;
+    VclPtr<PushButton>   m_aHideBtn;
 
     std::map< sal_uInt16, AddButtonEntry > m_aAddButtons;
 
@@ -124,7 +124,7 @@ public:
     void    SetHeight(long nHeight);
     void    KillActivePopup();
     void    PopupClosed(Menu const * pMenu);
-    sal_uInt16 GetHighlightedItem() const { return nHighlightedItem; }
+    sal_uInt16 GetHighlightedItem() const { return m_nHighlightedItem; }
     virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() override;
 
     void    SetAutoPopup(bool bAuto) { mbAutoPopup = bAuto; }

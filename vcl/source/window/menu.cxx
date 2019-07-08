@@ -2538,7 +2538,7 @@ bool MenuBar::ImplHandleCmdEvent( const CommandEvent& rCEvent )
         if (rCEvent.GetCommand() == CommandEventId::ModKeyChange && ImplGetSVData()->maNWFData.mbAutoAccel)
         {
             const CommandModKeyData* pCData = rCEvent.GetModKeyData ();
-            if (pWin->nHighlightedItem == ITEMPOS_INVALID)
+            if (pWin->m_nHighlightedItem == ITEMPOS_INVALID)
             {
                 if (pCData && pCData->IsMod2() && pCData->IsDown())
                     pWin->SetMBWHideAccel(false);
