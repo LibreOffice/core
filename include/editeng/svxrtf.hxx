@@ -80,7 +80,7 @@ typedef std::map<sal_uInt16, std::unique_ptr<SvxRTFStyleType>> SvxRTFStyleTbl;
 // own helper classes for the RTF Parser
 struct SvxRTFStyleType
 {
-    SfxItemSet aAttrSet;        // the attributes of Style (+ derivate!)
+    SfxItemSet aAttrSet;        // the attributes of Style (+ derivated!)
     OUString sName;
     sal_uInt16 nBasedOn;
     sal_uInt8 nOutlineNo;
