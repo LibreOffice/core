@@ -354,35 +354,13 @@ static SdrObject* ImpCreateShadowObjectClone(const SdrObject& rOriginal, const S
         {
             GraphicObject aGraphicObject(rOriginalSet.Get(XATTR_FILLBITMAP).GetGraphicObject());
             const BitmapEx aBitmapEx(aGraphicObject.GetGraphic().GetBitmapEx());
-            Bitmap aBitmap(aBitmapEx.GetBitmap());
 
-            if(!aBitmap.IsEmpty())
+            if(!aBitmapEx.IsEmpty())
             {
-                Bitmap::ScopedReadAccess pReadAccess(aBitmap);
-
-                if(pReadAccess)
-                {
-                    ScopedVclPtr<VirtualDevice> pVirDev(VclPtr<VirtualDevice>::Create());
-                    pVirDev->SetOutputSizePixel(aBitmap.GetSizePixel());
-
-                    for(long y(0); y < pReadAccess->Height(); y++)
-                    {
-                        for(long x(0); x < pReadAccess->Width(); x++)
-                        {
-                            const BitmapColor aColor = pReadAccess->GetColor(y, x);
-                            sal_uInt16 nLuminance(static_cast<sal_uInt16>(aColor.GetLuminance()) + 1);
-                            const Color aDestColor(
-                                static_cast<sal_uInt8>((nLuminance * static_cast<sal_uInt16>(aShadowColor.GetRed())) >> 8),
-                                static_cast<sal_uInt8>((nLuminance * static_cast<sal_uInt16>(aShadowColor.GetGreen())) >> 8),
-                                static_cast<sal_uInt8>((nLuminance * static_cast<sal_uInt16>(aShadowColor.GetBlue())) >> 8));
-                            pVirDev->DrawPixel(Point(x,y), aDestColor);
-                        }
-                    }
-
-                    pReadAccess.reset();
-
-                    aGraphicObject.SetGraphic(Graphic(pVirDev->GetBitmapEx(Point(0,0), aBitmap.GetSizePixel())));
-                }
+                ScopedVclPtr<VirtualDevice> pVirDev(VclPtr<VirtualDevice>::Create());
+                pVirDev->SetOutputSizePixel(aBitmapEx.GetSizePixel());
+                pVirDev->DrawShadowBitmapEx(aBitmapEx, aShadowColor);
+                aGraphicObject.SetGraphic(Graphic(pVirDev->GetBitmapEx(Point(0,0), aBitmapEx.GetSizePixel())));
             }
 
             aTempSet.Put(XFillBitmapItem(aGraphicObject));

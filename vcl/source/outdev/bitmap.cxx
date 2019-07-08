@@ -1299,6 +1299,30 @@ void OutputDevice::DrawTransformedBitmapEx(
     }
 }
 
+void OutputDevice::DrawShadowBitmapEx(
+    const BitmapEx& rBitmapEx,
+    ::Color aShadowColor)
+{
+    Bitmap::ScopedReadAccess pReadAccess(const_cast<Bitmap&>(rBitmapEx.maBitmap));
+
+    if(!pReadAccess)
+        return;
+
+    for(long y(0); y < pReadAccess->Height(); y++)
+    {
+        for(long x(0); x < pReadAccess->Width(); x++)
+        {
+            const BitmapColor aColor = pReadAccess->GetColor(y, x);
+            sal_uInt16 nLuminance(static_cast<sal_uInt16>(aColor.GetLuminance()) + 1);
+            const Color aDestColor(
+                static_cast<sal_uInt8>((nLuminance * static_cast<sal_uInt16>(aShadowColor.GetRed())) >> 8),
+                static_cast<sal_uInt8>((nLuminance * static_cast<sal_uInt16>(aShadowColor.GetGreen())) >> 8),
+                static_cast<sal_uInt8>((nLuminance * static_cast<sal_uInt16>(aShadowColor.GetBlue())) >> 8));
+            DrawPixel(Point(x,y), aDestColor);
+        }
+    }
+}
+
 void OutputDevice::DrawImage( const Point& rPos, const Image& rImage, DrawImageFlags nStyle )
 {
     assert(!is_double_buffered_window());
