@@ -112,7 +112,7 @@ public:
     void            HideMarkedOutlines( bool bRecord = true );
     bool            OutlinePossible(bool bHide);
 
-    void            UpdateCharts(bool bAllCharts);      // Default: am Cursor
+    void            UpdateCharts(bool bAllCharts);      // Default: at the Cursor
 
     static sal_uInt16   DoUpdateCharts( const ScAddress& rPos, ScDocument* pDoc, bool bAllCharts );
 
