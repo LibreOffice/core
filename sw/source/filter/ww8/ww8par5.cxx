@@ -1452,7 +1452,7 @@ eF_ResT SwWW8ImplReader::Read_F_Seq( WW8FieldDesc*, OUString& rStr )
             break;
 
         case 's':                       // Outline Level
-            //#i19682, what am I to do with this value
+            //#i19682, what I have to do with this value?
             break;
         }
     }
