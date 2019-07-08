@@ -75,7 +75,7 @@ private:
     enum DragDirection { TopLeft, Top, TopRight, Right, BottomRight, Bottom,
                          BottomLeft, Left };
 
-    Bitmap    maPreviewBitmap;
+    BitmapEx  maPreviewBitmapEx;
     tools::Rectangle maPreviewRect;
     Point     maTopLeft, maBottomRight;
     Point     maMinTopLeft, maMaxBottomRight;
@@ -193,7 +193,7 @@ public:
     void UpdatePreviewBounds();
     void SetBitmap(SvStream &rStream)
     {
-        ReadDIB(maPreviewBitmap, rStream, true);
+        ReadDIBBitmapEx(maPreviewBitmapEx, rStream, true);
     }
     virtual Size GetOptimalSize() const override
     {
@@ -928,7 +928,7 @@ void ScanPreview::UpdatePreviewBounds()
     }
     else
     {
-        Size aBMSize( maPreviewBitmap.GetSizePixel() );
+        Size aBMSize( maPreviewBitmapEx.GetSizePixel() );
         if( aBMSize.Width() > aBMSize.Height() && aBMSize.Width() )
         {
             int nVHeight = (maBottomRight.X() - maTopLeft.X()) * aBMSize.Height() / aBMSize.Width();
@@ -956,7 +956,7 @@ void ScanPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectang
                                       Size(PREVIEW_WIDTH, PREVIEW_HEIGHT)));
     rRenderContext.SetMapMode(MapMode(MapUnit::MapPixel));
     // check for sane values
-    rRenderContext.DrawBitmap(maPreviewRect.TopLeft(), maPreviewRect.GetSize(), maPreviewBitmap);
+    rRenderContext.DrawBitmapEx(maPreviewRect.TopLeft(), maPreviewRect.GetSize(), maPreviewBitmapEx);
 
     mbDragDrawn = false;
     DrawDrag(rRenderContext);
