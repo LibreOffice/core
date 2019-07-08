@@ -709,7 +709,7 @@ void EmbeddedObjectRef::DrawPaintReplacement( const tools::Rectangle &rRect, con
             nWidth = nW;
         }
 
-        pOut->DrawBitmap(aP, Size( nWidth, nHeight ), aBmp.GetBitmap());
+        pOut->DrawBitmapEx(aP, Size( nWidth, nHeight ), aBmp);
     }
 
     pOut->IntersectClipRegion( rRect );
