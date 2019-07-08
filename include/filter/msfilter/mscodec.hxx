@@ -364,7 +364,7 @@ public:
      */
     virtual bool InitCipher(sal_uInt32 nCounter) override;
 
-    /** Creates an MD5 digest of salt digest. */
+    /** Creates a MD5 digest of salt digest. */
     void               CreateSaltDigest(
                             const sal_uInt8 nSaltData[16], sal_uInt8 nSaltDigest[16] );
 
