@@ -217,8 +217,8 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/swriter,\
 	sw/uiconfig/swriter/ui/navigatorpanel \
 	sw/uiconfig/swriter/ui/notebookbar \
 	sw/uiconfig/swriter/ui/notebookbar_compact \
-	sw/uiconfig/swriter/ui/notebookbar_groups \
 	sw/uiconfig/swriter/ui/notebookbar_single \
+	sw/uiconfig/swriter/ui/notebookbar_groups \
 	sw/uiconfig/swriter/ui/notebookbar_groupedbar_full \
 	sw/uiconfig/swriter/ui/notebookbar_groupedbar_compact \
 	sw/uiconfig/swriter/ui/pagebreakmenu \

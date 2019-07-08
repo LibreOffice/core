@@ -724,6 +724,42 @@
             <value>Arrow</value>
           </prop>
         </node>
+        <node oor:name="ContextualSingle" oor:op="replace">
+          <prop oor:name="Label">
+            <value xml:lang="en-US">Contextual Single</value>
+          </prop>
+          <prop oor:name="HasNotebookbar">
+            <value>true</value>
+          </prop>
+          <prop oor:name="IsExperimental">
+            <value>false</value>
+          </prop>
+          <prop oor:name="MenuPosition">
+            <value>6</value>
+          </prop>
+          <prop oor:name="CommandArg">
+            <value>notebookbar_single.ui</value>
+          </prop>
+          <prop oor:name="Toolbars">
+            <value>
+            </value>
+          </prop>
+          <prop oor:name="UserToolbars">
+            <value>
+            </value>
+          </prop>
+          <prop oor:name="UIItemProperties">
+            <value>
+              <it>UIItemID,propertyName,propertyValue</it>
+            </value>
+          </prop>
+          <prop oor:name="Sidebar">
+            <value>Arrow</value>
+          </prop>
+          <prop oor:name="HasMenubar">
+            <value>true</value>
+          </prop>
+        </node>
         <node oor:name="ContextualGroups" oor:op="replace">
           <prop oor:name="Label">
             <value xml:lang="en-US">Contextual groups</value>
