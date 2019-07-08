@@ -450,8 +450,8 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="valign">center</property>
-                            <property name="margin_top">8</property>
-                            <property name="margin_bottom">8</property>
+                            <property name="margin_top">5</property>
+                            <property name="margin_bottom">5</property>
                             <property name="orientation">vertical</property>
                           </object>
                           <packing>
@@ -465,7 +465,6 @@
                           <object class="sfxlo-NotebookbarToolBox" id="SectionBottom64">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="margin_left">5</property>
                             <property name="show_arrow">False</property>
                             <child>
                               <object class="GtkMenuToolButton" id="Default-Color">
@@ -1716,8 +1715,8 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="valign">center</property>
-                            <property name="margin_top">8</property>
-                            <property name="margin_bottom">8</property>
+                            <property name="margin_top">5</property>
+                            <property name="margin_bottom">5</property>
                             <property name="orientation">vertical</property>
                           </object>
                           <packing>
@@ -1731,7 +1730,6 @@
                           <object class="sfxlo-NotebookbarToolBox" id="SectionBottom60">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="margin_left">5</property>
                             <property name="show_arrow">False</property>
                             <child>
                               <object class="GtkMenuToolButton" id="Table-Color1">
