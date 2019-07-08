@@ -233,4 +233,19 @@ OString tools::Rectangle::toString() const
     return ss.str().c_str();
 }
 
+void tools::Rectangle::expand(long nExpandBy)
+{
+    nLeft   -= nExpandBy;
+    nTop    -= nExpandBy;
+    if (nRight == RECT_EMPTY)
+        nRight = nLeft + nExpandBy - 1;
+    else
+        nRight += nExpandBy;
+    if (nBottom == RECT_EMPTY)
+        nBottom = nTop + nExpandBy - 1;
+    else
+        nBottom += nExpandBy;
+}
+
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
