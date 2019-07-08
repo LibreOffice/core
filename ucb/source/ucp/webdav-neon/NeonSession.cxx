@@ -1662,7 +1662,8 @@ bool NeonSession::LOCK( NeonLock * pLock,
     TimeValue startCall;
     osl_getSystemTime( &startCall );
 
-    if ( ne_lock_refresh( m_pHttpSession, pLock ) == NE_OK )
+    const int theRetVal = ne_lock_refresh(m_pHttpSession, pLock);
+    if (theRetVal == NE_OK)
     {
         rlastChanceToSendRefreshRequest
             = lastChanceToSendRefreshRequest( startCall, pLock->timeout );
@@ -1677,6 +1678,11 @@ bool NeonSession::LOCK( NeonLock * pLock,
         SAL_WARN( "ucb.ucp.webdav", "LOCK (refresh) - not refreshed! Relative URL: <" << p << "> token: <" << pLock->token << ">"  );
         ne_free( p );
 #endif
+        if (theRetVal == NE_AUTH)
+        {
+            // tdf#126279: see handling of NE_AUTH in HandleError
+            m_bNeedNewSession = true;
+        }
         return false;
     }
 }
@@ -1723,7 +1729,8 @@ bool NeonSession::UNLOCK( NeonLock * pLock )
     }
 #endif
 
-    if ( ne_unlock( m_pHttpSession, pLock ) == NE_OK )
+    const int theRetVal = ne_unlock(m_pHttpSession, pLock);
+    if (theRetVal == NE_OK)
     {
 #if defined SAL_LOG_INFO
     {
@@ -1743,6 +1750,11 @@ bool NeonSession::UNLOCK( NeonLock * pLock )
         ne_free( p );
     }
 #endif
+        if (theRetVal == NE_AUTH)
+        {
+            // tdf#126279: see handling of NE_AUTH in HandleError
+            m_bNeedNewSession = true;
+        }
         return false;
     }
 }
