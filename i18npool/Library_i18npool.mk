@@ -144,7 +144,7 @@ $(WORKDIR)/CustomTarget/i18npool/source/collator/lrl_include.hxx : $(wildcard $(
 
 
 # fdo#31271 ")" reclassified in more recent ICU/Unicode Standards
-include $(OUTDIR)/inc/icuversion.mk
+-include $(OUTDIR)/inc/icuversion.mk
 ICU_RECLASSIFIED_BRACKET := $(shell [ ${ICU_MAJOR} -ge 5 -o \( ${ICU_MAJOR} -eq 4 -a ${ICU_MINOR} -ge 4 \) ] && echo YES)
 
 
