@@ -197,7 +197,7 @@ void SAL_CALL UNOMemoryStream::writeBytes( const Sequence< sal_Int8 >& aData )
         }
 
         if( static_cast< sal_Int32 >( nNewSize ) > static_cast< sal_Int32 >( maData.size() ) )
-            maData.insert( maData.end(), nNewSize - maData.size(), 0 );
+            maData.resize( nNewSize );
 
         sal_Int8* pData = &(*maData.begin());
         sal_Int8* pCursor = &(pData[mnCursor]);
