@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_84b763d9",
+        "filename": "external/libvisio/0001-tdf-76829-Visio-Prints-integer-number-when-needed.patch",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2019-07-08T08:46:06Z",
+      "side": 1,
+      "message": "Could you please replace this with a \u0027git format-patch -1\u0027 output, so we can see which commit was backported from libvisio.git? Thanks.",
+      "revId": "709c81725e1a2cf393ebef12ac33e06e0ab1e0b7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
