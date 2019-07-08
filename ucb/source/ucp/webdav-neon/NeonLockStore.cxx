@@ -72,16 +72,13 @@ void TickerThread::execute()
     int nCount = nNth;
     while ( !m_bFinish )
     {
-        if ( nCount-- <= 0 )
+        if (--nCount < 0)
         {
             m_rLockStore.refreshLocks();
             nCount = nNth;
         }
 
-        TimeValue aTV;
-        aTV.Seconds = 0;
-        aTV.Nanosec = 1000000000 / nNth;
-        salhelper::Thread::wait( aTV );
+        salhelper::Thread::wait(TimeValue(0, 1000000000 / nNth));
     }
 
     SAL_INFO( "ucb.ucp.webdav", "TickerThread: stop." );
