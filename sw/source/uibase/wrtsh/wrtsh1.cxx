@@ -470,6 +470,11 @@ void SwWrtShell::InsertObject( const svt::EmbeddedObjectRef& xRef, SvGlobalName 
 
 bool SwWrtShell::InsertOleObject( const svt::EmbeddedObjectRef& xRef, SwFlyFrameFormat **pFlyFrameFormat )
 {
+    //tdf#125100 Ensure that ole object is initially shown as pictogram
+    comphelper::EmbeddedObjectContainer& rEmbeddedObjectContainer = mxDoc->GetDocShell()->getEmbeddedObjectContainer();
+    bool bSaveUserAllowsLinkUpdate = rEmbeddedObjectContainer.getUserAllowsLinkUpdate();
+    rEmbeddedObjectContainer.setUserAllowsLinkUpdate(true);
+
     ResetCursorStack();
     StartAllAction();
 
@@ -589,6 +594,8 @@ bool SwWrtShell::InsertOleObject( const svt::EmbeddedObjectRef& xRef, SwFlyFrame
         aRewriter.AddRule(UndoArg1, SwResId(STR_OLE));
 
     EndUndo(SwUndoId::INSERT, &aRewriter);
+
+    rEmbeddedObjectContainer.setUserAllowsLinkUpdate(bSaveUserAllowsLinkUpdate);
 
     return bActivate;
 }
