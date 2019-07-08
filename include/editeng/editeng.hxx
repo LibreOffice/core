@@ -129,10 +129,6 @@ namespace o3tl
 {
     template<> struct typed_flags<GetAttribsFlags> : is_typed_flags<GetAttribsFlags, 0x07> {};
 }
-template<class T> bool checkSvxFieldData(const SvxFieldData* pData)
-{
-    return dynamic_cast<const T*>(pData) != nullptr;
-}
 
 enum class SetAttribsMode {
     NONE, WholeWord, Edge
