@@ -209,6 +209,7 @@ public:
     void testTdf122899();
     void testOOXTheme();
     void testCropToShape();
+    void testTdf126234();
 
     CPPUNIT_TEST_SUITE(SdImportTest);
 
@@ -300,6 +301,7 @@ public:
     CPPUNIT_TEST(testTdf122899);
     CPPUNIT_TEST(testOOXTheme);
     CPPUNIT_TEST(testCropToShape);
+    CPPUNIT_TEST(testTdf126234);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -2802,6 +2804,24 @@ void SdImportTest::testCropToShape()
     css::drawing::BitmapMode bitmapmode;
     xShapeProps->getPropertyValue("FillBitmapMode") >>= bitmapmode;
     CPPUNIT_ASSERT_EQUAL(css::drawing::BitmapMode_STRETCH, bitmapmode);
+}
+
+void SdImportTest::testTdf126234()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL( m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/tdf126234.pptx"), PPTX );
+
+    // check relative size of the bullet, 400% is a legitimate value for MS Office document
+    // Without a fix, it will fail to set the size correctly
+    const SdrPage *pPage = GetPage( 1, xDocShRef );
+    SdrTextObj *pTxtObj = dynamic_cast<SdrTextObj *>( pPage->GetObj(0) );
+    CPPUNIT_ASSERT_MESSAGE( "no text object", pTxtObj != nullptr);
+    const EditTextObject& aEdit = pTxtObj->GetOutlinerParaObject()->GetTextObject();
+    const SvxNumBulletItem *pNumFmt = aEdit.GetParaAttribs(0).GetItem(EE_PARA_NUMBULLET);
+    CPPUNIT_ASSERT(pNumFmt);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Bullet's relsize 400 is wrong!",
+        sal_uInt16(400), pNumFmt->GetNumRule()->GetLevel(0).GetBulletRelSize() );
+
+    xDocShRef->DoClose();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdImportTest);
