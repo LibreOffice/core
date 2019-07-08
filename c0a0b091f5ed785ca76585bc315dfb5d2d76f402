@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_24521769",
+        "filename": "xmloff/source/draw/shapeexport.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1302,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-07-08T10:30:07Z",
+      "side": 1,
+      "message": "but isn\u0027t this office:string-value in the schema?",
+      "revId": "c0a0b091f5ed785ca76585bc315dfb5d2d76f402",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_84c68316",
+        "filename": "xmloff/source/draw/shapeexport.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1303,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-07-08T10:30:07Z",
+      "side": 1,
+      "message": "this will produce integer strings, not the enumeration \"low\", \"medium\" etc. that we want\n\nthis is probably the only place that needs to convert from API enums to strings so you could just add some conditionals here...",
+      "revId": "c0a0b091f5ed785ca76585bc315dfb5d2d76f402",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_c44ebbc0",
+        "filename": "xmloff/source/draw/shapeexport.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1304,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-07-08T10:30:07Z",
+      "side": 1,
+      "message": "i still have no idea what these \"border\" values mean",
+      "revId": "c0a0b091f5ed785ca76585bc315dfb5d2d76f402",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
