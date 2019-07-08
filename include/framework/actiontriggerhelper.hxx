@@ -43,7 +43,7 @@ namespace framework
 
             // Creates a "css::ui::ActionTriggerContainer" with the structure of the menu
             // provided as a parameter. The implementation class stores the menu pointer
-            // to optimize the time of creation of a menu from a actiontrigger structure.
+            // to optimize the time of creation of a menu from an actiontrigger structure.
             // IMPORTANT: The caller must ensure that the menu pointer is valid through the
             //            life time of the XIndexContainer object!!!
             // @param pNewMenu = Must be a valid menu. Please be aware that this implementation is based on
