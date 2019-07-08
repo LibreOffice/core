@@ -14,7 +14,7 @@
 
 namespace o3tl
 {
-// Cast an rvalue to an lvalue.  Can be useful if a function parameter is a pointer/reference to T,
+// Cast an rvalue to a lvalue.  Can be useful if a function parameter is a pointer/reference to T,
 // and some call site doesn't need the value beyond the call itself (e.g., in a call like
 // std::modf(x, &o3tl::temporary(double())) to obtain the fractional part of x, ignoring the
 // integral part).
