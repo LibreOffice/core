@@ -152,7 +152,7 @@ namespace drawinglayer
 
             /// helpers
             /** get text outlines as polygons and their according ObjectTransformation. Handles all
-                the necessary VCL outline extractions, scaling adaptions and other stuff.
+                the necessary VCL outline extractions, scaling adaptations and other stuff.
              */
             void getTextOutlinesAndTransformation(basegfx::B2DPolyPolygonVector& rTarget, basegfx::B2DHomMatrix& rTransformation) const;
 
