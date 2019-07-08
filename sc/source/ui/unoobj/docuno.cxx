@@ -2838,14 +2838,8 @@ uno::Sequence<OUString> SAL_CALL ScModelObj::getAvailableServiceNames()
 {
     SolarMutexGuard aGuard;
 
-    //! why are the parameters of concatServiceNames not const ???
-    //! return concatServiceNames( ScServiceProvider::GetAllServiceNames(),
-    //!                            SvxFmMSFactory::getAvailableServiceNames() );
-
-    uno::Sequence<OUString> aMyServices(ScServiceProvider::GetAllServiceNames());
-    uno::Sequence<OUString> aDrawServices(SvxFmMSFactory::getAvailableServiceNames());
-
-    return concatServiceNames( aMyServices, aDrawServices );
+    return comphelper::concatSequences( ScServiceProvider::GetAllServiceNames(),
+                                        SvxFmMSFactory::getAvailableServiceNames() );
 }
 
 // XServiceInfo

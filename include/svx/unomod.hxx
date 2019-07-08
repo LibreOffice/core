@@ -50,10 +50,6 @@ public:
     /// @throws css::uno::Exception
     /// @throws css::uno::RuntimeException
     static css::uno::Reference< css::uno::XInterface > createTextField( const OUString& aServiceSpecifier );
-    // internal
-    static css::uno::Sequence< OUString >
-        concatServiceNames( css::uno::Sequence< OUString >& rServices1,
-                            css::uno::Sequence< OUString >& rServices2 ) throw();
 
     /** fills the given EventObject from the given SdrHint.
         @returns
