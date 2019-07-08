@@ -12,6 +12,7 @@
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/sequence.hxx>
 #include <svl/stritem.hxx>
+#include <editeng/eeitem.hxx>
 #include <editeng/editobj.hxx>
 #include <editeng/outlobj.hxx>
 #include <editeng/ulspitem.hxx>
@@ -212,6 +213,7 @@ public:
     void testTdf125360_1();
     void testTdf125360_2();
     void testTdf125551();
+    void testTdf126234();
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest2);
 
@@ -302,6 +304,7 @@ public:
     CPPUNIT_TEST(testTdf125360_1);
     CPPUNIT_TEST(testTdf125360_2);
     CPPUNIT_TEST(testTdf125551);
+    CPPUNIT_TEST(testTdf126234);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -2425,6 +2428,25 @@ void SdOOXMLExportTest2::testTdf1225573_FontWorkScaleX()
     xShapeWaveProps->getPropertyValue(UNO_NAME_MISC_OBJ_BOUNDRECT) >>= aBoundRectWave;
     // difference should be zero, but allow some range for stroke thickness
     CPPUNIT_ASSERT_LESS(static_cast<long>(50), labs(aBoundRectWave.Width - 11514));
+
+    xDocShRef->DoClose();
+}
+
+void SdOOXMLExportTest2::testTdf126234()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL( m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/tdf126234.pptx"), PPTX );
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+
+    // check relative size of the bullet, 400% is a legitimate value for MS Office document
+    // Without a fix, it will fail to set the size correctly
+    const SdrPage *pPage = GetPage( 1, xDocShRef );
+    SdrTextObj *pTxtObj = dynamic_cast<SdrTextObj *>( pPage->GetObj(0) );
+    CPPUNIT_ASSERT_MESSAGE( "no text object", pTxtObj != nullptr);
+    const EditTextObject& aEdit = pTxtObj->GetOutlinerParaObject()->GetTextObject();
+    const SvxNumBulletItem *pNumFmt = aEdit.GetParaAttribs(0).GetItem(EE_PARA_NUMBULLET);
+    CPPUNIT_ASSERT(pNumFmt);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(400), pNumFmt->GetNumRule()->GetLevel(0).GetBulletRelSize());
 
     xDocShRef->DoClose();
 }
