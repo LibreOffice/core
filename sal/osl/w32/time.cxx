@@ -29,9 +29,7 @@
 
 sal_Bool SAL_CALL osl_getSystemTime(TimeValue* pTimeVal)
 {
-    SYSTEMTIME SystemTime;
-    FILETIME   CurTime, OffTime;
-    __int64    Value;
+    unsigned __int64 CurTime;
 
     typedef VOID (WINAPI *GetSystemTimePreciseAsFileTime_PROC)(LPFILETIME);
 
@@ -46,25 +44,31 @@ sal_Bool SAL_CALL osl_getSystemTime(TimeValue* pTimeVal)
 
     // use ~1 microsecond resolution if available
     if (pGetSystemTimePreciseAsFileTime)
-        pGetSystemTimePreciseAsFileTime(&CurTime);
+        pGetSystemTimePreciseAsFileTime(reinterpret_cast<LPFILETIME>(&CurTime));
     else
     {
+        SYSTEMTIME SystemTime;
         GetSystemTime(&SystemTime);
-        SystemTimeToFileTime(&SystemTime, &CurTime);
+        SystemTimeToFileTime(&SystemTime, reinterpret_cast<LPFILETIME>(&CurTime));
     }
 
-    SystemTime.wYear         = 1970;
-    SystemTime.wMonth        = 1;
-    SystemTime.wDayOfWeek    = 0;
-    SystemTime.wDay          = 1;
-    SystemTime.wHour         = 0;
-    SystemTime.wMinute       = 0;
-    SystemTime.wSecond       = 0;
-    SystemTime.wMilliseconds = 0;
+    static const unsigned __int64 OffTime = [] {
+        SYSTEMTIME SystemTime;
+        SystemTime.wYear = 1970;
+        SystemTime.wMonth = 1;
+        SystemTime.wDayOfWeek = 0;
+        SystemTime.wDay = 1;
+        SystemTime.wHour = 0;
+        SystemTime.wMinute = 0;
+        SystemTime.wSecond = 0;
+        SystemTime.wMilliseconds = 0;
 
-    SystemTimeToFileTime(&SystemTime, &OffTime);
+        unsigned __int64 ft;
+        SystemTimeToFileTime(&SystemTime, reinterpret_cast<LPFILETIME>(&ft));
+        return ft;
+    }();
 
-    Value = *reinterpret_cast<__int64 *>(&CurTime) - *reinterpret_cast<__int64 *>(&OffTime);
+    const unsigned __int64 Value = CurTime - OffTime;
 
     pTimeVal->Seconds  = static_cast<unsigned long>(Value / 10000000L);
     pTimeVal->Nanosec  = static_cast<unsigned long>((Value % 10000000L) * 100);
