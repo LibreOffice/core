@@ -527,7 +527,7 @@ namespace basegfx
                     }
 
                     // Moved the edge construction to a 3rd run: doing it in the 2nd run is
-                    // possible(and i used it), but requires a working vector::reserve()
+                    // possible (and I used it), but requires a working vector::reserve()
                     // implementation, else the vector will be reallocated and the pointers
                     // in the edges may be wrong. Security first here.
                     sal_uInt32 nStartIndex(0);
@@ -631,7 +631,7 @@ namespace basegfx
                     {
                         // Should not happen: No 2nd edge; consume the single edge
                         // to not have an endless loop and start next. During development
-                        // i constantly had breakpoints here, so I am sure enough to add an
+                        // I constantly had breakpoints here, so I am sure enough to add an
                         // assertion here
                         OSL_FAIL("Trapezoid decomposer in illegal state (!)");
                         maTrDeEdgeEntries.pop_front();
@@ -645,7 +645,7 @@ namespace basegfx
                     {
                         // Should not happen: We have a 2nd edge, but YStart is on another
                         // line; consume the single edge to not have an endless loop and start
-                        // next. During development i constantly had breakpoints here, so I am
+                        // next. During development I constantly had breakpoints here, so I am
                         // sure enough to add an assertion here
                         OSL_FAIL("Trapezoid decomposer in illegal state (!)");
                         maTrDeEdgeEntries.pop_front();
