@@ -482,7 +482,6 @@ bool  SwDocShell::Load( SfxMedium& rMedium )
     if (SfxObjectShell::Load(rMedium))
     {
         comphelper::EmbeddedObjectContainer& rEmbeddedObjectContainer = getEmbeddedObjectContainer();
-        rEmbeddedObjectContainer.setUserAllowsLinkUpdate(false);
 
         SAL_INFO( "sw.ui", "after SfxInPlaceObject::Load" );
         if (m_xDoc) // for last version!!
