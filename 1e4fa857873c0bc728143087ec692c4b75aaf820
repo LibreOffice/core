@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_446f0bc5",
+        "filename": "sw/source/uibase/docvw/edtwin.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 5974,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-07-08T00:29:00Z",
+      "side": 1,
+      "message": "I suppose it should also work with implicit initializer list:\n\n    for (const auto\u0026 aNames : { (*pCalendar)-\u003egetMonths(), (*pCalendar)-\u003egetDays() })",
+      "range": {
+        "startLine": 5974,
+        "startChar": 31,
+        "endLine": 5974,
+        "endChar": 45
+      },
+      "revId": "1e4fa857873c0bc728143087ec692c4b75aaf820",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
