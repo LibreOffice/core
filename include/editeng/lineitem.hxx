@@ -29,7 +29,7 @@
 
 /*
 [Description]
-This Item transports a editeng::SvxBorderLine.
+This Item transports an editeng::SvxBorderLine.
 */
 
 namespace editeng {
