@@ -63,7 +63,7 @@ public:
     /** Translates EditEngine notifications into broadcastable hints
 
         @param aNotify
-        Notification object send by the EditEngine.
+        Notification object sent by the EditEngine.
 
         @return the translated hint
      */
