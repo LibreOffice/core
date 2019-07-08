@@ -151,7 +151,7 @@ void NeonLockStore::stopTicker(osl::ClearableMutexGuard & rGuard)
 
     rGuard.clear();
 
-    if (pTickerThread.is())
+    if (pTickerThread.is() && pTickerThread->getIdentifier() != osl::Thread::getCurrentIdentifier())
         pTickerThread->join(); // without m_aMutex locked (to prevent deadlock)
 }
 
@@ -196,6 +196,13 @@ void NeonLockStore::removeLock( NeonLock * pLock )
         stopTicker(aGuard);
 }
 
+void NeonLockStore::removeLockDeferred(NeonLock* pLock)
+{
+    osl::MutexGuard aGuard(m_aMutex);
+
+    m_aRemoveDeferred.push_back(pLock);
+}
+
 void NeonLockStore::refreshLocks()
 {
     osl::MutexGuard aGuard( m_aMutex );
@@ -228,6 +235,10 @@ void NeonLockStore::refreshLocks()
             }
         }
     }
+    // removeLock will not need to actually release the lock, because this is run from TickerThread
+    for (auto pLock : m_aRemoveDeferred)
+        removeLock(pLock);
+    m_aRemoveDeferred.clear();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

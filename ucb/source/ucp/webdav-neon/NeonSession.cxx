@@ -1679,6 +1679,7 @@ bool NeonSession::LOCK( NeonLock * pLock,
         {
             // tdf#126279: see handling of NE_AUTH in HandleError
             m_bNeedNewSession = true;
+            m_aNeonLockStore.removeLockDeferred(pLock);
         }
         return false;
     }
