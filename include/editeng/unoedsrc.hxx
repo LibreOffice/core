@@ -115,7 +115,7 @@ public:
         object to inform all created text ranges about changes
         and also allows to re use already created instances.
         All SvxUnoTextRangeBase must remove itself with
-        removeRange() before theire deleted. */
+        removeRange() before they are deleted. */
     virtual void addRange( SvxUnoTextRangeBase* pNewRange );
 
     /** removes the given SvxUnoTextRangeBase from the text
@@ -364,7 +364,7 @@ public:
      */
     virtual void            GetLineBoundaries( /*out*/sal_Int32 &rStart, /*out*/sal_Int32 &rEnd, sal_Int32 nParagraph, sal_Int32 nLine ) const = 0;
 
-    /** Query the line number for a index in the paragraphs text
+    /** Query the line number for an index in the paragraphs text
 
         @param nPara[0 .. n-1]
         Index of paragraph to query line length in
