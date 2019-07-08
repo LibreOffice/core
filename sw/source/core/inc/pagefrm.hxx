@@ -313,7 +313,7 @@ public:
 
     const SwRect PrtWithoutHeaderAndFooter() const;
 
-    // in case this is am empty page, this function returns the 'reference' page
+    // in case this is an empty page, this function returns the 'reference' page
     const SwPageFrame& GetFormatPage() const;
 
     /// If in header or footer area, it also indicates the exact area in rControl.
