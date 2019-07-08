@@ -451,12 +451,12 @@ Image PreviewRenderer::ScaleBitmap (
         mpPreviewDevice->DrawRect (::tools::Rectangle(Point(0,0), aFrameSize));
 
         // Paint the bitmap scaled to the desired width.
-        BitmapEx aScaledBitmap (rBitmapEx.GetBitmap());
+        BitmapEx aScaledBitmap(rBitmapEx);
         aScaledBitmap.Scale (aPreviewSize, BmpScaleFlag::BestQuality);
-        mpPreviewDevice->DrawBitmap (
+        mpPreviewDevice->DrawBitmapEx (
             Point(1,1),
             aPreviewSize,
-            aScaledBitmap.GetBitmap());
+            aScaledBitmap);
 
         // Get the resulting bitmap.
         aPreview = Image(mpPreviewDevice->GetBitmapEx(Point(0,0), aFrameSize));
