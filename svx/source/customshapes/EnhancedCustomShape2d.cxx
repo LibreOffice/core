@@ -2793,11 +2793,11 @@ void EnhancedCustomShape2d::AdaptObjColor(
             {
                 if ( nColorCount || 0.0 != dBrightness )
                 {
-                    Bitmap aBitmap(rObj.GetMergedItem(XATTR_FILLBITMAP).GetGraphicObject().GetGraphic().GetBitmapEx().GetBitmap());
+                    BitmapEx aBitmap(rObj.GetMergedItem(XATTR_FILLBITMAP).GetGraphicObject().GetGraphic().GetBitmapEx());
 
-                    aBitmap.Adjust(
-                        static_cast< short > ( GetLuminanceChange(
-                            std::min(nColorIndex, nColorCount-1))));
+                    short nLuminancePercent = static_cast< short > ( GetLuminanceChange(
+                            std::min(nColorIndex, nColorCount-1)));
+                    aBitmap.Adjust( nLuminancePercent, 0, 0, 0, 0 );
 
                     rObj.SetMergedItem(XFillBitmapItem(OUString(), Graphic(aBitmap)));
                 }
