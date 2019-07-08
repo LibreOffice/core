@@ -385,7 +385,10 @@ bool TabControl::ImplPlaceTabs( long nWidth )
     std::vector<sal_Int32> aWidths;
     for (auto & item : mpTabCtrlData->maItemList)
     {
-        aWidths.push_back(ImplGetItemSize( &item, nMaxWidth ).Width());
+        long nTabWidth = 0;
+        if (!item.m_bVisible)
+            nTabWidth = ImplGetItemSize(&item, nMaxWidth).Width();
+        aWidths.push_back(nTabWidth);
     }
 
     //aBreakIndexes will contain the indexes of the last tab on each row
@@ -1066,6 +1069,8 @@ void TabControl::Paint( vcl::RenderContext& rRenderContext, const tools::Rectang
     if (GetStyle() & WB_NOBORDER)
         return;
 
+    Control::Paint(rRenderContext, rRect);
+
     HideFocus();
 
     // reformat if needed
@@ -1231,8 +1236,6 @@ void TabControl::Paint( vcl::RenderContext& rRenderContext, const tools::Rectang
         ImplShowFocus();
 
     mbSmallInvalidate = true;
-
-    Control::Paint(rRenderContext, rRect);
 }
 
 void TabControl::setAllocation(const Size &rAllocation)
@@ -1752,7 +1755,13 @@ void TabControl::SetPageVisible( sal_uInt16 nPageId, bool bVisible )
         return;
 
     pItem->m_bVisible = bVisible;
-    pItem->maRect.SetEmpty();
+    if (!bVisible)
+    {
+        if (pItem->mbFullVisible)
+            mbSmallInvalidate = false;
+        pItem->mbFullVisible = false;
+        pItem->maRect.SetEmpty();
+    }
     mbFormat = true;
 
     // SetCurPageId will change to a valid page
@@ -2318,25 +2327,16 @@ bool NotebookbarTabControlBase::ImplPlaceTabs( long nWidth )
     //fdo#66435 throw Knuth/Tex minimum raggedness algorithm at the problem
     //of ugly bare tabs on lines of their own
 
-    //collect widths
-    std::vector<sal_Int32> aWidths;
     for (auto & item : mpTabCtrlData->maItemList)
     {
+        long nTabWidth = 0;
         if (item.m_bVisible)
         {
-            long aSize = ImplGetItemSize( &item, nMaxWidth ).getWidth();
-            if( !item.maText.isEmpty() && aSize < 100)
-            {
-                nFullWidth += 100;
-                aSize = 100;
-            }
-            else
-                nFullWidth += aSize;
-
-            aWidths.push_back(aSize);
+            nTabWidth = ImplGetItemSize(&item, nMaxWidth).getWidth();
+            if (!item.maText.isEmpty() && nTabWidth < 100)
+                nTabWidth = 100;
         }
-        else
-            aWidths.push_back(0);
+        nFullWidth += nTabWidth;
     }
 
     nMaxWidth -= GetItemsOffset().X();
