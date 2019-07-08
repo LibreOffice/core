@@ -470,7 +470,7 @@ public:
     /**
      * Expands the rectangle in all directions by the input value.
      */
-    inline void expand(long nExpandBy);
+    void expand(long nExpandBy);
     inline void shrink(long nShrinkBy);
 
     /**
@@ -720,14 +720,6 @@ inline Rectangle operator - ( const Rectangle& rRect, const Point& rPt )
         : Rectangle( rRect.nLeft - rPt.X(),  rRect.nTop - rPt.Y(),
                      rRect.nRight - rPt.X(), rRect.nBottom - rPt.Y() );
 }
-}
-
-inline void tools::Rectangle::expand(long nExpandBy)
-{
-    nLeft   -= nExpandBy;
-    nTop    -= nExpandBy;
-    nRight  += nExpandBy;
-    nBottom += nExpandBy;
 }
 
 inline void tools::Rectangle::shrink(long nShrinkBy)
