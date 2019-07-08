@@ -1526,8 +1526,7 @@ namespace
             sal_Int32 calltime = aEnd.Seconds - rStart.Seconds;
             if ( calltime <= timeout )
             {
-                lastChanceToSendRefreshRequest
-                    = aEnd.Seconds + timeout - calltime;
+                lastChanceToSendRefreshRequest = rStart.Seconds + timeout;
             }
             else
             {
