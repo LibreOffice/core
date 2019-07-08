@@ -1151,13 +1151,48 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             if (mpDrawView->IsTextEdit())
             {
                 Outliner* pOutl = mpDrawView->GetTextEditOutliner();
-                if (pOutl)
+                OutlinerView* pOlV = mpDrawView->GetTextEditOutlinerView();
+                if (pOutl && pOlV)
                 {
-                    pOutl->RemoveFields(checkSvxFieldData<SvxURLField>);
+                    const SvxFieldItem* pFieldItem = pOlV->GetFieldAtSelection();
+                    if (pFieldItem)
+                    {
+                        // Make sure the whole field is selected
+                        ESelection aSel = pOlV->GetSelection();
+                        if (aSel.nStartPos == aSel.nEndPos)
+                        {
+                            aSel.nEndPos++;
+                            pOlV->SetSelection(aSel);
+                        }
+                    }
+                    if (!pFieldItem)
+                    {
+                        // Cursor probably behind the field - extend selection to select the field
+                        ESelection aSel = pOlV->GetSelection();
+                        if (aSel.nStartPos == aSel.nEndPos)
+                        {
+                            aSel.nStartPos--;
+                            pOlV->SetSelection(aSel);
+                            pFieldItem = pOlV->GetFieldAtSelection();
+                        }
+                    }
+
+                    if (pFieldItem)
+                    {
+                        ESelection aSel = pOlV->GetSelection();
+                        const SvxFieldData* pField = pFieldItem->GetField();
+                        if( auto pUrlField = dynamic_cast< const SvxURLField *>( pField ) )
+                        {
+                            pOutl->QuickInsertText(pUrlField->GetRepresentation(), aSel);
+                        }
+                    }
                 }
             }
         }
+        Cancel();
+        rReq.Done ();
         break;
+
         case SID_SET_DEFAULT:
         {
             std::unique_ptr<SfxItemSet> pSet;
