@@ -122,13 +122,8 @@ void VCLXAccessibleStatusBarItem::SetItemText( const OUString& sItemText )
 OUString VCLXAccessibleStatusBarItem::GetItemText()
 {
     OUString sText;
-    vcl::ControlLayoutData aLayoutData;
     if ( m_pStatusBar )
-    {
-        tools::Rectangle aItemRect = m_pStatusBar->GetItemRect( m_nItemId );
-        m_pStatusBar->RecordLayoutData( &aLayoutData, aItemRect );
-        sText = aLayoutData.m_aDisplayText;
-    }
+        sText = m_pStatusBar->GetItemText( m_nItemId );
 
     return sText;
 }
