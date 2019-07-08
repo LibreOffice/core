@@ -3586,7 +3586,7 @@ void XclImpChAxesSet::Finalize()
 
         // finalize axis titles
         const XclImpChText* pDefText = GetChartData().GetDefaultText( EXC_CHTEXTTYPE_AXISTITLE );
-        OUString aAutoTitle("Axis Title");
+        OUString aAutoTitle(ScResId(STR_AXISTITLE));
         lclFinalizeTitle( mxXAxisTitle, pDefText, aAutoTitle );
         lclFinalizeTitle( mxYAxisTitle, pDefText, aAutoTitle );
         lclFinalizeTitle( mxZAxisTitle, pDefText, aAutoTitle );
