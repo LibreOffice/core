@@ -22,6 +22,7 @@
 
 #include <vcl/dllapi.h>
 #include <vcl/alpha.hxx>
+#include <vcl/Scanline.hxx>
 #include <tools/color.hxx>
 
 #include <sal/types.h>
@@ -47,6 +48,7 @@ public:
     explicit            BitmapEx( const OUString& rIconName );
                         BitmapEx( const BitmapEx& rBitmapEx );
                         BitmapEx( const BitmapEx& rBitmapEx, Point aSrc, Size aSize );
+                        BitmapEx( Size aSize, sal_uInt16 nBitCount );
     explicit            BitmapEx( const Bitmap& rBmp );
                         BitmapEx( const Bitmap& rBmp, const Bitmap& rMask );
                         BitmapEx( const Bitmap& rBmp, const AlphaMask& rAlphaMask );
@@ -467,6 +469,12 @@ public:
 private:
     friend class ImpGraphic;
     friend bool VCL_DLLPUBLIC WriteDIBBitmapEx(const BitmapEx& rSource, SvStream& rOStm);
+    friend void ReadRawDIB();
+    friend bool VCL_DLLPUBLIC ReadRawDIB(BitmapEx& rTarget, const unsigned char* pBuf,
+                                    const ScanlineFormat nFormat,
+                                    const int nHeight,
+                                    const int nStride);
+
     void  loadFromIconTheme( const OUString& rIconName );
 
     Bitmap              maBitmap;

@@ -55,7 +55,7 @@ bool VCL_DLLPUBLIC ReadDIBV5(
     SvStream& rIStm);
 
 bool VCL_DLLPUBLIC ReadRawDIB(
-    Bitmap& rTarget,
+    BitmapEx& rTarget,
     const unsigned char* pBuf,
     const ScanlineFormat nFormat,
     const int nHeight,

@@ -992,7 +992,7 @@ void ImpSdrPdfImport::ImportImage(FPDF_PAGEOBJECT pPageObject, int /*nPageObject
     const int nWidth = FPDFBitmap_GetWidth(bitmap.get());
     const int nHeight = FPDFBitmap_GetHeight(bitmap.get());
     const int nStride = FPDFBitmap_GetStride(bitmap.get());
-    Bitmap aBitmap(Size(nWidth, nHeight), 24);
+    BitmapEx aBitmap(Size(nWidth, nHeight), 24);
 
     switch (format)
     {
