@@ -1170,8 +1170,8 @@ void DlgEditor::Print( Printer* pPrinter, const OUString& rTitle )    // not wor
 
     lcl_PrintHeader( pPrinter, rTitle );
 
-    Bitmap aDlg;
-    Size aBmpSz( pPrinter->PixelToLogic( aDlg.GetSizePixel() ) );
+    BitmapEx aDlgEx;
+    Size aBmpSz( pPrinter->PixelToLogic( aDlgEx.GetSizePixel() ) );
     double nPaperSzWidth = aPaperSz.Width();
     double nPaperSzHeight = aPaperSz.Height();
     double nBmpSzWidth = aBmpSz.Width();
@@ -1198,7 +1198,7 @@ void DlgEditor::Print( Printer* pPrinter, const OUString& rTitle )    // not wor
     aPosOffs.AdjustX(Print::nLeftMargin );
     aPosOffs.AdjustY(Print::nTopMargin );
 
-    pPrinter->DrawBitmap( aPosOffs, aOutputSz, aDlg );
+    pPrinter->DrawBitmapEx( aPosOffs, aOutputSz, aDlgEx );
 
     pPrinter->SetMapMode( aOldMap );
     pPrinter->SetFont( aOldFont );
