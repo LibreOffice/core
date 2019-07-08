@@ -189,7 +189,7 @@ gb_Module_add_l10n_target =
 gb_GbuildToJson_BLACKLISTEDMODULES := cli_ure jurt external
 
 define gb_Module__add_moduledir_impl
-include $(patsubst $(1):%,%,$(filter $(1):%,$(gb_Module_MODULELOCATIONS)))/$(2)/Module_$(2).mk
+include $(patsubst $(1):%,%,$(filter $(1):%,$(gb_Module_MODULELOCATIONS)))/$(2)/Module_$(notdir $(2)).mk
 $(call gb_Module_get_target,$(1)) : $$(firstword $$(gb_Module_TARGETSTACK))
 gb_Module_TARGETSTACK := $$(wordlist 2,$$(words $$(gb_Module_TARGETSTACK)),$$(gb_Module_TARGETSTACK))
 
