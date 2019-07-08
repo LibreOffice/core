@@ -22,9 +22,9 @@
 
 namespace o3tl {
 
-/** Convert an NTBS from the C++ runtime to an OUString.
+/** Convert a NTBS from the C++ runtime to an OUString.
 
-    This is used to convert an NTBS as provided by std::exception::what or
+    This is used to convert a NTBS as provided by std::exception::what or
     std::type_info::name into an OUString in a "lossless" way.  The conversion
     is done using RTL_TEXTENCODING_ISO_8859_1, so each char in the input maps
     to one Unicode character in the output.
