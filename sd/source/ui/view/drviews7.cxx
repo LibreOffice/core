@@ -1454,16 +1454,14 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
             OutlinerView* pOLV = mpDrawView->GetTextEditOutlinerView();
             if (pOLV)
             {
-                const SvxFieldItem* pFieldItem = pOLV->GetFieldAtSelection();
+                const SvxFieldItem* pFieldItem = pOLV->GetFieldUnderMousePointer();
+                if (!pFieldItem)
+                    pFieldItem = pOLV->GetFieldAtSelection();
                 if (pFieldItem)
                 {
-                    ESelection aSel = pOLV->GetSelection();
-                    if ( abs( aSel.nEndPos - aSel.nStartPos ) == 1 )
-                    {
-                        const SvxFieldData* pField = pFieldItem->GetField();
-                        if ( dynamic_cast< const SvxURLField *>( pField ) !=  nullptr )
-                            bDisableEditHyperlink = false;
-                    }
+                    const SvxFieldData* pField = pFieldItem->GetField();
+                    if (dynamic_cast<const SvxURLField*>(pField))
+                        bDisableEditHyperlink = false;
                 }
             }
         }

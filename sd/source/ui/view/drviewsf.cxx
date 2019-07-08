@@ -93,17 +93,34 @@ void DrawViewShell::GetCtrlState(SfxItemSet &rSet)
             const SvxFieldItem* pFieldItem = pOLV->GetFieldAtSelection();
             if (pFieldItem)
             {
+                // Make sure the whole field is selected
                 ESelection aSel = pOLV->GetSelection();
-                if ( abs( aSel.nEndPos - aSel.nStartPos ) == 1 )
+                if (aSel.nStartPos == aSel.nEndPos)
                 {
-                    const SvxFieldData* pField = pFieldItem->GetField();
-                    if( auto pUrlField = dynamic_cast< const SvxURLField *>( pField ) )
-                    {
-                        aHLinkItem.SetName(pUrlField->GetRepresentation());
-                        aHLinkItem.SetURL(pUrlField->GetURL());
-                        aHLinkItem.SetTargetFrame(pUrlField->GetTargetFrame());
-                        bField = true;
-                    }
+                    aSel.nEndPos++;
+                    pOLV->SetSelection(aSel);
+                }
+            }
+            if (!pFieldItem)
+            {
+                // Cursor probably behind the field - extend selection to select the field
+                ESelection aSel = pOLV->GetSelection();
+                if (aSel.nStartPos == aSel.nEndPos)
+                {
+                    aSel.nStartPos--;
+                    pOLV->SetSelection(aSel);
+                    pFieldItem = pOLV->GetFieldAtSelection();
+                }
+            }
+            if (pFieldItem)
+            {
+                const SvxFieldData* pField = pFieldItem->GetField();
+                if( auto pUrlField = dynamic_cast< const SvxURLField *>( pField ) )
+                {
+                    aHLinkItem.SetName(pUrlField->GetRepresentation());
+                    aHLinkItem.SetURL(pUrlField->GetURL());
+                    aHLinkItem.SetTargetFrame(pUrlField->GetTargetFrame());
+                    bField = true;
                 }
             }
             if (!bField)
