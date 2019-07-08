@@ -1839,13 +1839,13 @@ bool ReadDIBV5(
 }
 
 bool ReadRawDIB(
-    Bitmap& rTarget,
+    BitmapEx& rTarget,
     const unsigned char* pBuf,
     const ScanlineFormat nFormat,
     const int nHeight,
     const int nStride)
 {
-    BitmapScopedWriteAccess pWriteAccess(rTarget.AcquireWriteAccess(), rTarget);
+    BitmapScopedWriteAccess pWriteAccess(rTarget.maBitmap.AcquireWriteAccess(), rTarget.maBitmap);
     for (int nRow = 0; nRow < nHeight; ++nRow)
     {
         pWriteAccess->CopyScanline(nRow, pBuf + (nStride * nRow), nFormat, nStride);

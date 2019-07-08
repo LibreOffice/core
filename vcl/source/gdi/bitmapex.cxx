@@ -85,6 +85,14 @@ BitmapEx::BitmapEx( const BitmapEx& rBitmapEx, Point aSrc, Size aSize )
     CopyPixel( aDestRect, aSrcRect, &rBitmapEx );
 }
 
+BitmapEx::BitmapEx( Size aSize, sal_uInt16 nBitCount )
+    : meTransparent(TransparentType::NONE)
+    , mbAlpha(false)
+{
+    maBitmap = Bitmap( aSize, nBitCount );
+    SetSizePixel(aSize);
+}
+
 BitmapEx::BitmapEx( const OUString& rIconName )
     : meTransparent(TransparentType::NONE)
     , mbAlpha(false)
