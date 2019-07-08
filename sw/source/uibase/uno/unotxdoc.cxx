@@ -1773,7 +1773,7 @@ Sequence< OUString > SwXTextDocument::getAvailableServiceNames()
             aRet.realloc( nLength - 1 );
         }
         Sequence< OUString > aOwn = SwXServiceProvider::GetAllServiceNames();
-        aServices = SvxFmMSFactory::concatServiceNames(aRet, aOwn);
+        aServices = comphelper::concatSequences(aRet, aOwn);
     }
 
     return aServices;

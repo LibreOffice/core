@@ -222,11 +222,6 @@ uno::Sequence< OUString > SAL_CALL SvxUnoDrawMSFactory::getAvailableServiceNames
     return UHashMap::getServiceNames();
 }
 
-uno::Sequence< OUString > SvxUnoDrawMSFactory::concatServiceNames( uno::Sequence< OUString >& rServices1, uno::Sequence< OUString >& rServices2 ) throw()
-{
-    return comphelper::concatSequences(rServices1, rServices2);
-}
-
 SdrModel& SvxUnoDrawingModel::getSdrModelFromUnoModel() const
 {
     OSL_ENSURE(mpDoc, "No SdrModel in UnoDrawingModel, should not happen");
