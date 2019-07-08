@@ -2427,6 +2427,8 @@ void SwTiledRenderingTest::testAnchorTypes()
     // Without the accompanying fix in place, this test would have failed, setting the anchor type
     // to other than as/at-char was possible.
     CPPUNIT_ASSERT(!aSet.HasItem(FN_TOOL_ANCHOR_PAGE));
+
+    comphelper::LibreOfficeKit::setActive(false);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwTiledRenderingTest);
