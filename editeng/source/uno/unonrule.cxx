@@ -440,8 +440,10 @@ void SvxUnoNumberingRules::setNumberingRuleByIndex(const Sequence<beans::Propert
             sal_Int16 nSize = sal_Int16();
             if( aVal >>= nSize )
             {
-                // [Bug 120650] the slide content corrupt when open in Aoo
-                if ((nSize>250)||(nSize<=0))
+                // [AOO Bug 120650] the slide content corrupt when open in Aoo
+                // [TDF# 126234] when MS Office document being imported, the value of the relative size
+                // of the bullet could be as high as 400%
+                if ((nSize>400)||(nSize<=0))
                 {
                     nSize = 100;
                 }
