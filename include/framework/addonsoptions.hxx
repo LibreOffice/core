@@ -101,7 +101,7 @@ class FWE_DLLPUBLIC AddonsOptions
 
         /*-****************************************************************************************************
             @short      returns if an addons menu is available
-            @descr      Call to retrieve if a addons menu is available
+            @descr      Call to retrieve if an addons menu is available
 
             @return     true if there is a menu otherwise false
         *//*-*****************************************************************************************************/
@@ -137,7 +137,7 @@ class FWE_DLLPUBLIC AddonsOptions
         const css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > >& GetAddonsMenuBarPart() const;
 
         /*-****************************************************************************************************
-            @short      Gets a toolbar part of an single addon
+            @short      Gets a toolbar part of a single addon
             @return     A complete
 
             @onerror    We return sal_False
@@ -146,7 +146,7 @@ class FWE_DLLPUBLIC AddonsOptions
         const css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > >& GetAddonsToolBarPart( sal_uInt32 nIndex ) const;
 
         /*-****************************************************************************************************
-            @short      Gets a unique toolbar resource name of an single addon
+            @short      Gets a unique toolbar resource name of a single addon
             @return     A complete
 
             @onerror    We return sal_False
