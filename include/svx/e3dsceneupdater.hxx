@@ -61,7 +61,7 @@ public:
     E3DModifySceneSnapRectUpdater(const SdrObject* mpObject);
 
     // the destructor will take action if mpScene is not zero and modify the
-    // 2D geomeztry of the target scene
+    // 2D geometry of the target scene
     ~E3DModifySceneSnapRectUpdater();
 };
 
