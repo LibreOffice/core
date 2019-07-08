@@ -85,7 +85,7 @@ using namespace ::svxform;
     auto aSeq( comphelper::arrayToSequence< OUString >(aSvxComponentServiceNameList, nSvxComponentServiceNameListCount) );
 
     ::com::sun::star::uno::Sequence< OUString > aParentSeq( SvxUnoDrawMSFactory::getAvailableServiceNames() );
-    return concatServiceNames( aParentSeq, aSeq );
+    return comphelper::concatSequences( aParentSeq, aSeq );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

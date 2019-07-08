@@ -2169,7 +2169,7 @@ uno::Sequence< OUString > SAL_CALL OReportDefinition::getAvailableServiceNames()
         pStrings[nIdx] = aSvxComponentServiceNameList[nIdx];
 
     uno::Sequence< OUString > aParentSeq( SvxUnoDrawMSFactory::getAvailableServiceNames() );
-    return concatServiceNames( aParentSeq, aSeq );
+    return comphelper::concatSequences( aParentSeq, aSeq );
 }
 
 // XShape
