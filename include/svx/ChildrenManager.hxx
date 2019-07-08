@@ -88,7 +88,7 @@ public:
         @param rxShapeList
             List of UNO shapes to manage.
         @param rShapeTreeInfo
-            Bundel of information passed down the shape tree.
+            Bundle of information passed down the shape tree.
         @param rContext
             An accessible context object that is called for fireing events
             for new and deleted children, i.e. that holds a list of
