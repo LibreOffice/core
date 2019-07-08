@@ -3265,7 +3265,7 @@ bool ScFormulaCell::UpdateReferenceOnShift(
             bRecompile = (eRelNameRef == RelNameRef::DOUBLE);
         }
         // Reference changed and new listening needed?
-        // Except in Insert/Delete without specialties.
+        // Except in Insert/Delete without specialities.
         bNewListening = (bRefModified || bRecompile
                 || (bValChanged && bInDeleteUndo) || bHasRelName);
 
