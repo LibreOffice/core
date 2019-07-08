@@ -117,7 +117,7 @@ public:
     void setBmp(bool bBmp);
 
     void            NotifyChange(const Color&  rColor);
-    void            NotifyChange(const Bitmap* pBitmap);
+    void            NotifyChange(const BitmapEx* pBitmap);
     void            SetFillColor(const Color& rColor) { aColor = rColor; }
 
 protected:
@@ -130,7 +130,7 @@ private:
     void recalcDrawPos();
 
     bool            bIsBmp;
-    std::unique_ptr<Bitmap> pBitmap;
+    std::unique_ptr<BitmapEx> pBitmap;
     Point           aDrawPos;
     Size            aDrawSize;
     ::tools::Rectangle aDrawRect;
@@ -168,14 +168,14 @@ void BackgroundPreviewImpl::NotifyChange( const Color& rColor )
     }
 }
 
-void BackgroundPreviewImpl::NotifyChange( const Bitmap* pNewBitmap )
+void BackgroundPreviewImpl::NotifyChange( const BitmapEx* pNewBitmap )
 {
     if (bIsBmp && (pNewBitmap || pBitmap))
     {
         if (pNewBitmap && pBitmap)
             *pBitmap = *pNewBitmap;
         else if (pNewBitmap && !pBitmap)
-            pBitmap.reset( new Bitmap(*pNewBitmap) );
+            pBitmap.reset( new BitmapEx(*pNewBitmap) );
         else if (!pNewBitmap)
             pBitmap.reset();
 
@@ -248,7 +248,7 @@ void BackgroundPreviewImpl::Paint(vcl::RenderContext& rRenderContext, const ::to
     if (bIsBmp)
     {
         if (pBitmap)
-            rRenderContext.DrawBitmap(aDrawPos, aDrawSize, *pBitmap);
+            rRenderContext.DrawBitmapEx(aDrawPos, aDrawSize, *pBitmap);
         else
         {
             Size aSize(GetOutputSizePixel());
@@ -998,7 +998,7 @@ IMPL_LINK(SvxBackgroundTabPage, FileClickHdl_Impl, weld::ToggleButton&, rBox, vo
 
             if ( bIsGraphicValid )
             {
-                Bitmap aBmp = aBgdGraphic.GetBitmapEx().GetBitmap();
+                BitmapEx aBmp = aBgdGraphic.GetBitmapEx();
                 m_xPreview2->NotifyChange( &aBmp );
             }
             else
@@ -1106,7 +1106,7 @@ IMPL_LINK( SvxBackgroundTabPage, LoadIdleHdl_Impl, Timer*, pIdle, void )
 
                 if (m_xBtnPreview->get_active() && bIsGraphicValid)
                 {
-                    Bitmap aBmp = aBgdGraphic.GetBitmapEx().GetBitmap();
+                    BitmapEx aBmp = aBgdGraphic.GetBitmapEx();
                     m_xPreview2->NotifyChange( &aBmp );
                 }
                 else
@@ -1317,7 +1317,7 @@ void SvxBackgroundTabPage::FillControls_Impl( const SvxBrushItem& rBgdAttr,
 
         if (m_xBtnPreview->get_active() && bIsGraphicValid)
         {
-            Bitmap aBmp = aBgdGraphic.GetBitmapEx().GetBitmap();
+            BitmapEx aBmp = aBgdGraphic.GetBitmapEx();
             m_xPreview2->NotifyChange( &aBmp );
         }
         else
