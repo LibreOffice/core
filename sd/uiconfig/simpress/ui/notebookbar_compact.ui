@@ -5338,7 +5338,7 @@
                               <object class="GtkToolButton" id="Insert-DrawText1">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="action_name">.uno:DrawText</property>
+                                <property name="action_name">.uno:Text</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
