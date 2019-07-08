@@ -34,7 +34,7 @@ class SwEditWin;
 namespace sw { namespace annotation {
     class SwAnnotationWin;
 } }
-namespace sw::mark { class IMark; }
+namespace sw { namespace mark { class IMark; } }
 
 struct SwPosition;
 
