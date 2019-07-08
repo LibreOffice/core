@@ -161,12 +161,12 @@
     <h2>Other bootstrap variables</h2>
     <dl>
     <dt>JFW_PLUGIN_DO_NOT_CHECK_ACCESSIBILITY</dt>
-    <dd>This is a unofficial variable which was introduced to workaround external issues.
+    <dd>This is an unofficial variable which was introduced to workaround external issues.
     It may be removed in the future. By setting it to 1, the framework will not try to
     find out if the system is configured to use accessibility tools or if a JRE has an
     accessible bridge installed</dd>
     <dt>JFW_PLUGIN_FORCE_ACCESSIBILITY</dt>
-    <dd>This is a unofficial variable which was introduced to workaround external issues.
+    <dd>This is an unofficial variable which was introduced to workaround external issues.
     It may be removed in the future. By setting it to 1, the framework will override a
     platform's desire not to probe each java backend to determine if it has an accessibility
     bridge installed. If the JFW_PLUGIN_DO_NOT_CHECK_ACCESSIBILITY is set this variable has
@@ -698,7 +698,7 @@ JVMFWK_DLLPUBLIC javaFrameworkError jfw_existJRE(const JavaInfo *pInfo, bool *ex
     <code>jfw_unlock()</code>. The function should be called if one
     needs an exact snapshot of the current settings. Then the settings
     are retrieved one by one without risk that the settings may be changed
-    by a different thread. Similiary if one needs to make settings which
+    by a different thread. Similarity if one needs to make settings which
     should become effective at the same time then <code>jfw_lock</code>
     should be called. That is, <code>jfw_startVM</code> which uses the
     settings cannot be called before all settings have be made.</p>
