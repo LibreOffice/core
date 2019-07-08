@@ -366,6 +366,29 @@ namespace MinimumRaggednessWrap
     }
 };
 
+static void lcl_AdjustSingleLineTabs(long nMaxWidth, ImplTabCtrlData *pTabCtrlData)
+{
+    if (!ImplGetSVData()->maNWFData.mbCenteredTabs)
+        return;
+
+    int nRightSpace = nMaxWidth; // space left on the right by the tabs
+    for (auto const& item : pTabCtrlData->maItemList)
+    {
+        if (!item.m_bVisible)
+            continue;
+        nRightSpace -= item.maRect.Right() - item.maRect.Left();
+    }
+    nRightSpace /= 2;
+
+    for (auto& item : pTabCtrlData->maItemList)
+    {
+        if (!item.m_bVisible)
+            continue;
+        item.maRect.AdjustLeft(nRightSpace);
+        item.maRect.AdjustRight(nRightSpace);
+    }
+}
+
 bool TabControl::ImplPlaceTabs( long nWidth )
 {
     if ( nWidth <= 0 )
@@ -385,7 +408,9 @@ bool TabControl::ImplPlaceTabs( long nWidth )
     std::vector<sal_Int32> aWidths;
     for (auto & item : mpTabCtrlData->maItemList)
     {
-        aWidths.push_back(ImplGetItemSize( &item, nMaxWidth ).Width());
+        if (!item.m_bVisible)
+            continue;
+        aWidths.push_back(ImplGetItemSize(&item, nMaxWidth).Width());
     }
 
     //aBreakIndexes will contain the indexes of the last tab on each row
@@ -405,7 +430,6 @@ bool TabControl::ImplPlaceTabs( long nWidth )
     nLinePosAry[0] = 0;
 
     size_t nIndex = 0;
-    sal_uInt16 nPos = 0;
 
     for (auto & item : mpTabCtrlData->maItemList)
     {
@@ -430,7 +454,7 @@ bool TabControl::ImplPlaceTabs( long nWidth )
             nY += aSize.Height();
             nLines++;
             nLineWidthAry[nLines] = 0;
-            nLinePosAry[nLines] = nPos;
+            nLinePosAry[nLines] = nIndex;
         }
 
         tools::Rectangle aNewRect( Point( nX, nY ), aSize );
@@ -446,14 +470,20 @@ bool TabControl::ImplPlaceTabs( long nWidth )
         if (item.id() == mnCurPageId)
             nCurLine = nLines;
 
-        ++nPos;
         ++nIndex;
     }
 
-    if ( nLines )
-    { // two or more lines
+    if (nLines) // two or more lines
+    {
         long nLineHeightAry[100];
-        long nIH = mpTabCtrlData->maItemList[0].maRect.Bottom()-2;
+        long nIH = 0;
+        for (const auto& item : mpTabCtrlData->maItemList)
+        {
+            if (!item.m_bVisible)
+                continue;
+            nIH = item.maRect.Bottom() - 1;
+            break;
+        }
 
         for ( sal_uInt16 i = 0; i < nLines+1; i++ )
         {
@@ -474,6 +504,9 @@ bool TabControl::ImplPlaceTabs( long nWidth )
 
         for (auto & item : mpTabCtrlData->maItemList)
         {
+            if (!item.m_bVisible)
+                continue;
+
             if ( i == nLinePosAry[n] )
             {
                 if ( n == nLines+1 )
@@ -497,7 +530,7 @@ bool TabControl::ImplPlaceTabs( long nWidth )
             item.maRect.AdjustLeft(nIDX );
             item.maRect.AdjustRight(nIDX + nDX );
             item.maRect.SetTop( nLineHeightAry[n-1] );
-            item.maRect.SetBottom( nLineHeightAry[n-1] + nIH );
+            item.maRect.SetBottom(nLineHeightAry[n-1] + nIH - 1);
             nIDX += nDX;
 
             if ( nModDX )
@@ -510,22 +543,8 @@ bool TabControl::ImplPlaceTabs( long nWidth )
             i++;
         }
     }
-    else
-    { // only one line
-        if(ImplGetSVData()->maNWFData.mbCenteredTabs)
-        {
-            int nRightSpace = nMaxWidth;//space left on the right by the tabs
-            for (auto const& item : mpTabCtrlData->maItemList)
-            {
-                nRightSpace -= item.maRect.Right()-item.maRect.Left();
-            }
-            for (auto & item : mpTabCtrlData->maItemList)
-            {
-                item.maRect.AdjustLeft(nRightSpace / 2 );
-                item.maRect.AdjustRight(nRightSpace / 2 );
-            }
-        }
-    }
+    else // only one line
+        lcl_AdjustSingleLineTabs(nMaxWidth, mpTabCtrlData.get());
 
     return true;
 }
@@ -1066,6 +1085,8 @@ void TabControl::Paint( vcl::RenderContext& rRenderContext, const tools::Rectang
     if (GetStyle() & WB_NOBORDER)
         return;
 
+    Control::Paint(rRenderContext, rRect);
+
     HideFocus();
 
     // reformat if needed
@@ -1231,8 +1252,6 @@ void TabControl::Paint( vcl::RenderContext& rRenderContext, const tools::Rectang
         ImplShowFocus();
 
     mbSmallInvalidate = true;
-
-    Control::Paint(rRenderContext, rRect);
 }
 
 void TabControl::setAllocation(const Size &rAllocation)
@@ -1752,7 +1771,13 @@ void TabControl::SetPageVisible( sal_uInt16 nPageId, bool bVisible )
         return;
 
     pItem->m_bVisible = bVisible;
-    pItem->maRect.SetEmpty();
+    if (!bVisible)
+    {
+        if (pItem->mbFullVisible)
+            mbSmallInvalidate = false;
+        pItem->mbFullVisible = false;
+        pItem->maRect.SetEmpty();
+    }
     mbFormat = true;
 
     // SetCurPageId will change to a valid page
@@ -2318,25 +2343,16 @@ bool NotebookbarTabControlBase::ImplPlaceTabs( long nWidth )
     //fdo#66435 throw Knuth/Tex minimum raggedness algorithm at the problem
     //of ugly bare tabs on lines of their own
 
-    //collect widths
-    std::vector<sal_Int32> aWidths;
     for (auto & item : mpTabCtrlData->maItemList)
     {
+        long nTabWidth = 0;
         if (item.m_bVisible)
         {
-            long aSize = ImplGetItemSize( &item, nMaxWidth ).getWidth();
-            if( !item.maText.isEmpty() && aSize < 100)
-            {
-                nFullWidth += 100;
-                aSize = 100;
-            }
-            else
-                nFullWidth += aSize;
-
-            aWidths.push_back(aSize);
+            nTabWidth = ImplGetItemSize(&item, nMaxWidth).getWidth();
+            if (!item.maText.isEmpty() && nTabWidth < 100)
+                nTabWidth = 100;
         }
-        else
-            aWidths.push_back(0);
+        nFullWidth += nTabWidth;
     }
 
     nMaxWidth -= GetItemsOffset().X();
@@ -2373,20 +2389,8 @@ bool NotebookbarTabControlBase::ImplPlaceTabs( long nWidth )
         nX += aSize.Width();
     }
 
-    // only one line
-    if(ImplGetSVData()->maNWFData.mbCenteredTabs)
-    {
-        int nRightSpace = nMaxWidth;//space left on the right by the tabs
-        for (auto const& item : mpTabCtrlData->maItemList)
-        {
-            nRightSpace -= item.maRect.Right()-item.maRect.Left();
-        }
-        for (auto & item : mpTabCtrlData->maItemList)
-        {
-            item.maRect.AdjustLeft(nRightSpace / 2 );
-            item.maRect.AdjustRight(nRightSpace / 2 );
-        }
-    }
+    // we always have only one line of tabs
+    lcl_AdjustSingleLineTabs(nMaxWidth, mpTabCtrlData.get());
 
     // position the shortcutbox
     if (m_pShortcuts)
