@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_046913bd",
+        "filename": "comphelper/source/streaming/memorystream.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2019-07-08T00:49:24Z",
+      "side": 1,
+      "message": "What you did here is essentially the same as resize, just less obvious what it does. \n\nvector::resize changes the size of the vector to that size, but doesn\u0027t dictate what the capacity of the vector should be or how the capacity should grow (so it will grow \"naturally\"). That is unlike reserve, which influences capacity, but not size.\n\nalso note that vector::resize(size, 0); will resize the vector to the new size and any newly allocated elements will be explicitly set to 0 (or whatever the value is you want to allocate it to).",
+      "revId": "ad1e790d76492ca4465114ad17e32912242db34f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
