@@ -16,6 +16,24 @@
       "revId": "ad1e790d76492ca4465114ad17e32912242db34f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_a432a7a6",
+        "filename": "comphelper/source/streaming/memorystream.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-07-08T07:28:00Z",
+      "side": 1,
+      "message": "Ah, you are right, I had in mind that resize() would always change the capacity to the specified size, but apparently it does not, thanks",
+      "parentUuid": "bf659307_046913bd",
+      "revId": "ad1e790d76492ca4465114ad17e32912242db34f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
