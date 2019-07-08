@@ -2254,12 +2254,10 @@ void DrawingML::WriteParagraphNumbering(const Reference< XPropertySet >& rXPropS
             long nPaddingY = std::lround((aDestSize.Height() - fBulletSizeRel * aDestSize.Height()) / 2.f);
             tools::Rectangle aDestRect(nPaddingX, nPaddingY, aDestSize.Width() - nPaddingX, aDestSize.Height() - nPaddingY);
 
-            AlphaMask aMask(aDestSize);
-            aMask.Erase(255);
             BitmapEx aSourceBitmap(aGraphic.GetBitmapEx());
             aSourceBitmap.Scale(aDestRect.GetSize());
             tools::Rectangle aSourceRect(Point(0, 0), aDestRect.GetSize());
-            BitmapEx aDestBitmap(Bitmap(aDestSize, 24), aMask);
+            BitmapEx aDestBitmap(aDestSize, 24);
             aDestBitmap.CopyPixel(aDestRect, aSourceRect, &aSourceBitmap);
             Graphic aDestGraphic(aDestBitmap);
             sRelationId = WriteImage(aDestGraphic);
