@@ -933,6 +933,13 @@ DECLARE_RTFIMPORT_TEST(testUnbalancedColumns, "unbalanced-columns.rtf")
                          getProperty<bool>(xTextSections->getByIndex(0), "DontBalanceTextColumns"));
 }
 
+DECLARE_RTFIMPORT_TEST(testTdf126173, "tdf126173.rtf")
+{
+    // Without the accompanying fix in place, this test would have failed, as the TextFrame was lost
+    // on import.
+    CPPUNIT_ASSERT(getShape(1).is());
+}
+
 DECLARE_RTFIMPORT_TEST(testFdo84685, "fdo84685.rtf")
 {
     // index mark was not imported
