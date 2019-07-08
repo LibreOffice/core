@@ -353,6 +353,7 @@
 #define STR_FUNCTIONLIST_MORE                   NC_("STR_FUNCTIONLIST_MORE", "More...")
 #define STR_ERR_INVALID_AREA                    NC_("STR_ERR_INVALID_AREA", "Invalid range")
 #define STR_CHARTTITLE                          NC_("STR_CHARTTITLE", "Chart Title")
+#define STR_AXISTITLE                           NC_("STR_AXISTITLE", "Axis Title")
 // Templates for data pilot tables.
 #define STR_PIVOT_STYLENAME_INNER                   NC_("STR_PIVOT_STYLE_INNER", "Pivot Table Value")
 #define STR_PIVOT_STYLENAME_RESULT                  NC_("STR_PIVOT_STYLE_RESULT", "Pivot Table Result")
