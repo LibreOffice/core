@@ -5967,11 +5967,7 @@ void QuickHelpData::FillStrArr( SwWrtShell const & rSh, const OUString& rWord )
     (*pCalendar)->LoadDefaultCalendar( rSh.GetCurLang() );
 
     // Add matching calendar month and day names
-    const std::array<uno::Sequence<i18n::CalendarItem2>, 2> aCalendarItems = {
-        (*pCalendar)->getMonths(),
-        (*pCalendar)->getDays()
-    };
-    for ( const auto& aNames : aCalendarItems )
+    for ( const auto& aNames : { (*pCalendar)->getMonths(), (*pCalendar)->getDays() } )
     {
         for ( const auto& rName : aNames )
         {
@@ -6056,7 +6052,6 @@ void QuickHelpData::FillStrArr( SwWrtShell const & rSh, const OUString& rWord )
                 m_aHelpStrings.push_back( aCompletedString );
         }
     }
-
 }
 
 namespace {
