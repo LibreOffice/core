@@ -93,7 +93,7 @@ namespace sdr
 
             SdrObject& GetSdrObject();
 
-            // Test changeability for a single item. If a implementation wants to prevent
+            // Test changeability for a single item. If an implementation wants to prevent
             // changing an item it should override this method.
             virtual bool AllowItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem = nullptr) const = 0;
 
