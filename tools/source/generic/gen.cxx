@@ -247,5 +247,16 @@ void tools::Rectangle::expand(long nExpandBy)
         nBottom += nExpandBy;
 }
 
+void tools::Rectangle::shrink(long nShrinkBy)
+{
+    nLeft   += nShrinkBy;
+    nTop    += nShrinkBy;
+    if (nRight != RECT_EMPTY)
+        nRight -= nShrinkBy;
+    if (nBottom != RECT_EMPTY)
+        nBottom -= nShrinkBy;
+}
+
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

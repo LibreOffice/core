@@ -471,7 +471,7 @@ public:
      * Expands the rectangle in all directions by the input value.
      */
     void expand(long nExpandBy);
-    inline void shrink(long nShrinkBy);
+    void shrink(long nShrinkBy);
 
     /**
      * Sanitizing variants for handling data from the outside
@@ -720,14 +720,6 @@ inline Rectangle operator - ( const Rectangle& rRect, const Point& rPt )
         : Rectangle( rRect.nLeft - rPt.X(),  rRect.nTop - rPt.Y(),
                      rRect.nRight - rPt.X(), rRect.nBottom - rPt.Y() );
 }
-}
-
-inline void tools::Rectangle::shrink(long nShrinkBy)
-{
-    nLeft   += nShrinkBy;
-    nTop    += nShrinkBy;
-    nRight  -= nShrinkBy;
-    nBottom -= nShrinkBy;
 }
 
 template< typename charT, typename traits >
