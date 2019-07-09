@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_f0f2969a",
+        "filename": "vcl/unx/generic/desktopdetect/desktopdetector.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2019-07-09T16:23:24Z",
+      "side": 1,
+      "message": "IMHO the desktop environment would rather be \"plasma5\", also at all other places where it\u0027s used.",
+      "range": {
+        "startLine": 142,
+        "startChar": 0,
+        "endLine": 143,
+        "endChar": 31
+      },
+      "revId": "1806cfe345d37777f5e7c2fd77ab817e3deaecb4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
