@@ -87,13 +87,13 @@
 #include <drawdoc.hxx>
 #include <hints.hxx>
 
-#ifndef NDEBUG
 #include <ndtxt.hxx>
-#endif
 
 #include <svx/sdr/attribute/sdrallfillattributeshelper.hxx>
 #include <svx/xfillit0.hxx>
 #include <svl/itemiter.hxx>
+#include <wrtsh.hxx>
+#include <txtfld.hxx>
 
 using namespace ::com::sun::star;
 
@@ -3224,15 +3224,16 @@ SwHandleAnchorNodeChg::SwHandleAnchorNodeChg( SwFlyFrameFormat& _rFlyFrameFormat
                                               const SwFormatAnchor& _rNewAnchorFormat,
                                               SwFlyFrame const * _pKeepThisFlyFrame )
     : mrFlyFrameFormat( _rFlyFrameFormat ),
-      mbAnchorNodeChanged( false )
+      mbAnchorNodeChanged( false ),
+      mpWrtShell(nullptr)
 {
+    const SwFormatAnchor& aOldAnchorFormat(_rFlyFrameFormat.GetAnchor());
     const RndStdIds nNewAnchorType( _rNewAnchorFormat.GetAnchorId() );
     if ( ((nNewAnchorType == RndStdIds::FLY_AT_PARA) ||
           (nNewAnchorType == RndStdIds::FLY_AT_CHAR)) &&
          _rNewAnchorFormat.GetContentAnchor() &&
          _rNewAnchorFormat.GetContentAnchor()->nNode.GetNode().GetContentNode() )
     {
-        const SwFormatAnchor& aOldAnchorFormat( _rFlyFrameFormat.GetAnchor() );
         if ( aOldAnchorFormat.GetAnchorId() == nNewAnchorType &&
              aOldAnchorFormat.GetContentAnchor() &&
              aOldAnchorFormat.GetContentAnchor()->nNode.GetNode().GetContentNode() &&
@@ -3275,6 +3276,18 @@ SwHandleAnchorNodeChg::SwHandleAnchorNodeChg( SwFlyFrameFormat& _rFlyFrameFormat
             }
         }
     }
+
+    if (aOldAnchorFormat.GetContentAnchor()
+        && aOldAnchorFormat.GetAnchorId() == RndStdIds::FLY_AT_CHAR)
+    {
+        mpCommentAnchor.reset(new SwPosition(*aOldAnchorFormat.GetContentAnchor()));
+    }
+
+    if (_pKeepThisFlyFrame)
+    {
+        SwViewShell* pViewShell = _pKeepThisFlyFrame->getRootFrame()->GetCurrShell();
+        mpWrtShell = dynamic_cast<SwWrtShell*>(pViewShell);
+    }
 }
 
 SwHandleAnchorNodeChg::~SwHandleAnchorNodeChg()
@@ -3283,6 +3296,54 @@ SwHandleAnchorNodeChg::~SwHandleAnchorNodeChg()
     {
         mrFlyFrameFormat.MakeFrames();
     }
+
+    // See if the fly frame had a comment: if so, move it to the new anchor as well.
+    if (!mpCommentAnchor)
+    {
+        return;
+    }
+
+    SwTextNode* pTextNode = mpCommentAnchor->nNode.GetNode().GetTextNode();
+    if (!pTextNode)
+    {
+        return;
+    }
+
+    const SwTextField* pField = pTextNode->GetFieldTextAttrAt(mpCommentAnchor->nContent.GetIndex());
+    if (!pField || pField->GetFormatField().GetField()->GetTyp()->Which() != SwFieldIds::Postit)
+    {
+        return;
+    }
+
+    if (!mpWrtShell)
+    {
+        return;
+    }
+
+    // Save current cursor position, so we can restore it later.
+    mpWrtShell->Push();
+
+    // Set up the source of the move: the old comment anchor.
+    {
+        SwPaM& rCursor = mpWrtShell->GetCurrentShellCursor();
+        *rCursor.GetPoint() = *mpCommentAnchor;
+        rCursor.SetMark();
+        *rCursor.GetMark() = *mpCommentAnchor;
+        ++rCursor.GetMark()->nContent;
+    }
+
+    // Set up the target of the move: the new comment anchor.
+    const SwFormatAnchor& rNewAnchorFormat = mrFlyFrameFormat.GetAnchor();
+    mpWrtShell->CreateCursor();
+    *mpWrtShell->GetCurrentShellCursor().GetPoint() = *rNewAnchorFormat.GetContentAnchor();
+
+    // Move by copying and deleting.
+    mpWrtShell->SwEditShell::Copy(mpWrtShell);
+    mpWrtShell->DestroyCursor();
+
+    mpWrtShell->Delete();
+
+    mpWrtShell->Pop(SwCursorShell::PopMode::DeleteCurrent);
 }
 
 namespace sw
