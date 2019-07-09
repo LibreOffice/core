@@ -93,6 +93,30 @@
       "revId": "989ee787d05da8e3fdf833202b6171eb36bb3d94",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_50002235",
+        "filename": "sc/qa/unit/subsequent_export-test.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3104,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2019-07-09T18:23:32Z",
+      "side": 1,
+      "message": "My bad, I thought if both would be file:///C:/... then it wouldn\u0027t fail, but it does.",
+      "parentUuid": "bf659307_705be686",
+      "range": {
+        "startLine": 3104,
+        "startChar": 31,
+        "endLine": 3104,
+        "endChar": 91
+      },
+      "revId": "989ee787d05da8e3fdf833202b6171eb36bb3d94",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
