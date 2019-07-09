@@ -51,6 +51,7 @@ namespace com { namespace sun { namespace star {
         namespace data
         {
             class XDataSequence;
+            class XLabeledDataSequence;
         }
     }
     namespace drawing {
@@ -119,6 +120,8 @@ private:
 
 private:
     sal_Int32 getChartType();
+
+    css::uno::Sequence< css::uno::Sequence< rtl::OUString > > getSplitCategoriesList(const OUString& rRange);
 
     OUString parseFormula( const OUString& rRange );
     void InitPlotArea();
