@@ -22,6 +22,30 @@
       "revId": "8389bea985414a3093034d5f56c424535738c02d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_0d56172b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2019-07-09T10:14:06Z",
+      "side": 1,
+      "message": "Should have written a bit more. Multiple reports claim there are problems with the main menu. See tdf#125710 or some comment in tdf#126272.\n\nWe know tdf#125673 solves the popup menu highlight problem and KDE4 doesn\u0027t have a native menu, so my untested conclusion was that the same kind of fix for kde5 might help kde4 too. Now I don\u0027t have a 6-2 build, so this is just guesswork, but the implementation seemed so easy, so here we got.",
+      "parentUuid": "bf659307_8d71c7e3",
+      "range": {
+        "startLine": 10,
+        "startChar": 31,
+        "endLine": 11,
+        "endChar": 48
+      },
+      "revId": "8389bea985414a3093034d5f56c424535738c02d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
