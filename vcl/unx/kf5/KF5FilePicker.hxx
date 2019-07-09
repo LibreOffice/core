@@ -23,7 +23,7 @@
 
 class QGridLayout;
 
-class KDE5FilePicker : public Qt5FilePicker
+class KF5FilePicker : public Qt5FilePicker
 {
     Q_OBJECT
 
@@ -34,8 +34,8 @@ protected:
     bool allowRemoteUrls;
 
 public:
-    explicit KDE5FilePicker(css::uno::Reference<css::uno::XComponentContext> const& context,
-                            QFileDialog::FileMode);
+    explicit KF5FilePicker(css::uno::Reference<css::uno::XComponentContext> const& context,
+                           QFileDialog::FileMode);
 
     // XExecutableDialog functions
     virtual sal_Int16 SAL_CALL execute() override;

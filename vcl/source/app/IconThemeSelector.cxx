@@ -55,7 +55,7 @@ IconThemeSelector::GetIconThemeForDesktopEnvironment(const OUString& desktopEnvi
     return OUString("colibre");
 #else
     OUString r;
-    if ( desktopEnvironment.equalsIgnoreAsciiCase("kde5") ||
+    if ( desktopEnvironment.equalsIgnoreAsciiCase("plasma5") ||
          desktopEnvironment.equalsIgnoreAsciiCase("lxqt") ) {
         r = "breeze";
     }

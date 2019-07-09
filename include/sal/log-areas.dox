@@ -479,7 +479,7 @@ certain functionality.
 @li @c vcl.helper
 @li @c vcl.icontest
 @li @c vcl.ios.clipboard
-@li @c vcl.kde5 - KDE5
+@li @c vcl.kf5 - KF5
 @li @c vcl.layout - Widget layout
 @li @c vcl.lazydelete
 @li @c vcl.opengl
