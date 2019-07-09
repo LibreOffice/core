@@ -24,6 +24,7 @@
 
 #include "KDEXLib.hxx"
 #include "KDESalDisplay.hxx"
+#include "KDESalGraphics.hxx"
 
 #include "salvd.hxx"
 
@@ -63,6 +64,12 @@ SalX11Display* KDESalInstance::CreateDisplay() const
 bool KDESalInstance::IsMainThread() const
 {
     return qApp->thread() == QThread::currentThread();
+}
+
+std::unique_ptr<SalVirtualDevice> KDESalInstance::CreateVirtualDevice(SalGraphics* pGraphics,
+        long &nDX, long &nDY, DeviceFormat eFormat, const SystemGraphicsData *pData)
+{
+    return CreateX11VirtualDevice(pGraphics, nDX, nDY, eFormat, pData, o3tl::make_unique<KDESalGraphics>());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
