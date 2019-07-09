@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "bf659307_edd96322",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 19
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2019-07-09T07:30:32Z",
+      "side": 1,
+      "message": "please remove this sentence. The patch includes more than offapi changes.\n\nIf anything, you can briefly explain what your patch does here.",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 29
+      },
+      "revId": "be3b75c4bb38c29f4bf8f62fe46bf40e5da4dfb7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bf659307_cde1ffd2",
         "filename": "offapi/com/sun/star/drawing/GraphicObjectShape.idl",
         "patchSetId": 19
