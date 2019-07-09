@@ -805,9 +805,11 @@ void ScGridWindow::UpdateAutoFilterFromMenu(AutoFilterMode eMode)
         pViewData->GetDispatcher().Execute(SID_FILTER, SfxCallMode::SLOT|SfxCallMode::RECORD);
         return;
     }
-
-    // do not recreate auto-filter rules if there is no any changes from the user
+    if (eMode != AutoFilterMode::Top10
+            && eMode != AutoFilterMode::Empty
+            && eMode != AutoFilterMode::NonEmpty)
     {
+        // do not recreate auto-filter rules if there is no any changes from the user
         ScCheckListMenuWindow::ResultType aResult;
         mpAutoFilterPopup->getResult(aResult);
 
