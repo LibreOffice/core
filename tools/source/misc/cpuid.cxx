@@ -28,7 +28,7 @@ void getCpuId(uint32_t array[4], uint32_t nInfoType)
     __cpuid_count(nInfoType, 0, *(array + 0), *(array + 1), *(array + 2), *(array + 3));
 }
 #else
-void getCpuId(uint32_t array[4], uint32_t nInfoType)
+void getCpuId(uint32_t array[4], uint32_t /*nInfoType*/)
 {
    array[0] = array[1] =  array[2] = array[3] = 0;
 }
