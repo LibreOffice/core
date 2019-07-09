@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include <osl/mutex.hxx>
 #include <sot/exchange.hxx>
 #include <sot/storage.hxx>
@@ -26,9 +28,12 @@
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <comphelper/fileformat.h>
+#include <comphelper/processfactory.hxx>
+#include <com/sun/star/datatransfer/clipboard/SystemClipboard.hpp>
 #include <com/sun/star/datatransfer/dnd/XDropTargetDragContext.hpp>
 #include <com/sun/star/datatransfer/dnd/XDragGestureRecognizer.hpp>
 #include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>
+#include <com/sun/star/uno/DeploymentException.hpp>
 #include <svl/urlbmk.hxx>
 #include <vcl/inetimg.hxx>
 #include <vcl/imap.hxx>
@@ -458,6 +463,42 @@ void TransferDataContainer::StartDrag(
 void TransferDataContainer::DragFinished( sal_Int8 nDropAction )
 {
     pImpl->aFinshedLnk.Call( nDropAction );
+}
+
+Reference<XClipboard> GetSystemClipboard()
+{
+    Reference<XClipboard> xClipboard;
+    try
+    {
+        xClipboard = css::datatransfer::clipboard::SystemClipboard::create(
+            comphelper::getProcessComponentContext());
+    }
+    catch (DeploymentException const &) {}
+    return xClipboard;
+}
+
+Reference<XClipboard> GetSystemPrimarySelection()
+{
+    Reference<XClipboard> xSelection;
+    try
+    {
+        Reference<XComponentContext> xContext(comphelper::getProcessComponentContext());
+#if HAVE_FEATURE_X11
+        // A hack, making the primary selection available as an instance
+        // of the SystemClipboard service on X11:
+        Sequence< Any > args(1);
+        args[0] <<= OUString("PRIMARY");
+        xSelection.set(xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
+            "com.sun.star.datatransfer.clipboard.SystemClipboard", args, xContext), UNO_QUERY_THROW);
+#else
+        static Reference< XClipboard > s_xSelection(
+            xContext->getServiceManager()->createInstanceWithContext(
+                "com.sun.star.datatransfer.clipboard.GenericClipboard", xContext), UNO_QUERY);
+        xSelection = s_xSelection;
+#endif
+    }
+    catch (RuntimeException const &) {}
+    return xSelection;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
