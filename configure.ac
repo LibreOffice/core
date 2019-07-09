@@ -6759,7 +6759,7 @@ if test "$GCC" = "yes"; then
     save_CXXFLAGS=$CXXFLAGS
     CXXFLAGS="$CXXFLAGS -msse2"
     AC_COMPILE_IFELSE([AC_LANG_SOURCE([
-        #include <x86intrin.h>
+        #include <emmintrin.h>
         int main () {
             volatile __m128i a = _mm_set1_epi32 (0), b = _mm_set1_epi32 (0), c;
             c = _mm_xor_si128 (a, b);
@@ -6782,7 +6782,7 @@ if test "$GCC" = "yes"; then
     save_CXXFLAGS=$CXXFLAGS
     CXXFLAGS="$CXXFLAGS -mssse3"
     AC_COMPILE_IFELSE([AC_LANG_SOURCE([
-        #include <x86intrin.h>
+        #include <tmmintrin.h>
         int main () {
             volatile __m128i a = _mm_set1_epi32 (0), b = _mm_set1_epi32 (0), c;
             c = _mm_maddubs_epi16 (a, b);
@@ -6805,7 +6805,7 @@ if test "$GCC" = "yes"; then
     save_CXXFLAGS=$CXXFLAGS
     CXXFLAGS="$CXXFLAGS -mavx"
     AC_COMPILE_IFELSE([AC_LANG_SOURCE([
-        #include <x86intrin.h>
+        #include <immintrin.h>
         int main () {
             volatile __m256 a = _mm256_set1_ps (0.0f), b = _mm256_set1_ps (0.0f), c;
             c = _mm256_xor_ps(a, b);
@@ -6828,7 +6828,7 @@ if test "$GCC" = "yes"; then
     save_CXXFLAGS=$CXXFLAGS
     CXXFLAGS="$CXXFLAGS -mavx2"
     AC_COMPILE_IFELSE([AC_LANG_SOURCE([
-        #include <x86intrin.h>
+        #include <immintrin.h>
         int main () {
             volatile __m256i a = _mm256_set1_epi32 (0), b = _mm256_set1_epi32 (0), c;
             c = _mm256_maddubs_epi16(a, b);
