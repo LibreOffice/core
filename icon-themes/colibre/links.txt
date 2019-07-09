@@ -282,7 +282,6 @@ cmd/sc_alignhorizontalceter.png cmd/sc_alignhorizontalcenter.png
 # Graphic
 cmd/lc_colorsettings.png cmd/lc_graphicfiltersmooth.png
 cmd/lc_colorview.png cmd/lc_graphicfilterinvert.png
-cmd/lc_grafgamma.png cmd/lc_graphicfilterinvert.png
 cmd/lc_grafmode.png cmd/lc_graphicdialog.png
 cmd/lc_grafinvert.png cmd/lc_graphicfilterinvert.png
 cmd/lc_graphicfilterposter.png cmd/lc_graphicdialog.png
@@ -290,7 +289,6 @@ cmd/lc_objecttitledescription.png cmd/lc_insertcaptiondialog.png
 
 cmd/sc_colorsettings.png cmd/sc_graphicfiltersmooth.png
 cmd/sc_colorview.png cmd/sc_graphicfilterinvert.png
-cmd/sc_grafgamma.png cmd/sc_graphicfilterinvert.png
 cmd/sc_grafmode.png cmd/sc_graphicdialog.png
 cmd/sc_grafinvert.png cmd/sc_graphicfilterinvert.png
 cmd/sc_graphicfilterposter.png cmd/sc_graphicdialog.png
@@ -1308,7 +1306,7 @@ res/sc10864.png cmd/sc_grafcontrast.png
 res/sc10865.png cmd/sc_grafred.png
 res/sc10866.png cmd/sc_grafgreen.png
 res/sc10867.png cmd/sc_grafblue.png
-res/sc10868.png cmd/sc_graphicfilterinvert.png
+res/sc10868.png cmd/sc_grafgamma.png
 res/sc10869.png cmd/sc_graftransparence.png
 
 res/sc_helperdialog.png cmd/sc_helpindex.png
@@ -1608,7 +1606,7 @@ svx/res/ColorModeGrey_16x16.png cmd/sc_outputqualitygrayscale.png
 svx/res/AdjustColorBlue_16x16.png cmd/sc_grafblue.png
 svx/res/AdjustColorGreen_16x16.png cmd/sc_grafgreen.png
 svx/res/AdjustColorRed_16x16.png cmd/sc_grafred.png
-svx/res/AdjustColorGamma_16x16.png cmd/sc_graphicfilterinvert.png
+svx/res/AdjustColorGamma_16x16.png cmd/sc_grafgamma.png
 
 svx/res/symphony/lpselected-spacing-1_15.png cmd/lc_spacepara1.png
 svx/res/symphony/lpselected-spacing-1.png cmd/lc_spacepara1.png
@@ -1617,7 +1615,7 @@ svx/res/symphony/lpselected-spacing-2.png cmd/lc_spacepara2.png
 svx/res/symphony/lpsmall-spacing-1.png cmd/lc_spacepara1.png
 
 svx/res/symphony/AdjustColorBlue_16x16.png cmd/sc_grafblue.png
-svx/res/symphony/AdjustColorGamma_16x16.png cmd/sc_graphicfilterinvert.png
+svx/res/symphony/AdjustColorGamma_16x16.png cmd/sc_grafgamma.png
 svx/res/symphony/AdjustColorGreen_16x16.png cmd/sc_grafgreen.png
 svx/res/symphony/AdjustColorRed_16x16.png cmd/sc_grafred.png
 svx/res/symphony/fill_color.png cmd/sc_backgroundcolor.png
