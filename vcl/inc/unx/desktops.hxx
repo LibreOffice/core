@@ -31,7 +31,7 @@ enum SAL_DLLPUBLIC_RTTI DesktopType {
     DESKTOP_UNITY,
     DESKTOP_XFCE,
     DESKTOP_MATE,
-    DESKTOP_KDE5,
+    DESKTOP_PLASMA5,
     DESKTOP_LXQT
 }; // keep in sync with desktop_strings[] in salplug.cxx
 
