@@ -25,6 +25,23 @@
     },
     {
       "key": {
+        "uuid": "bf659307_90f79af6",
+        "filename": "include/svx/svdograf.hxx",
+        "patchSetId": 19
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-07-09T12:23:54Z",
+      "side": 1,
+      "message": "this is using \"p\" prefix but the type is not a pointer\n\nperhaps best to turn it into a unique_ptr? then it can be \"disabled\" i.e. no qrcode...",
+      "revId": "be3b75c4bb38c29f4bf8f62fe46bf40e5da4dfb7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bf659307_cde1ffd2",
         "filename": "offapi/com/sun/star/drawing/GraphicObjectShape.idl",
         "patchSetId": 19
