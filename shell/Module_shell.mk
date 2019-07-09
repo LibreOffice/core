@@ -30,9 +30,9 @@ $(eval $(call gb_Module_add_targets,shell,\
 endif
 endif
 
-ifeq ($(ENABLE_KDE5),TRUE)
+ifeq ($(ENABLE_KF5),TRUE)
 $(eval $(call gb_Module_add_targets,shell,\
-	Library_kde5be \
+	Library_kf5be \
 ))
 endif
 
