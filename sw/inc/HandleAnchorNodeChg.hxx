@@ -59,6 +59,11 @@ private:
     // and that re-creation of fly frames is necessary.
     bool mbAnchorNodeChanged;
 
+    /// If the fly frame has a comment, this points to the old comment anchor.
+    std::unique_ptr<SwPosition> mpCommentAnchor;
+
+    SwWrtShell* mpWrtShell;
+
     SwHandleAnchorNodeChg( const SwHandleAnchorNodeChg& ) = delete;
     void operator=( const SwHandleAnchorNodeChg ) = delete;
 };
