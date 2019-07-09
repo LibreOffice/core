@@ -435,6 +435,13 @@ DECLARE_OOXMLEXPORT_TEST(tdf119809, "tdf119809.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty< uno::Sequence<OUString> >(xPropertySet, "StringItemList").getLength());
 }
 
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf121663, "tdf121663.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    // auto distance of line numbering is 0.5 cm
+    assertXPath(pXmlDoc, "//w:lnNumType", "distance", "283");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
