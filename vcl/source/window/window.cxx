@@ -46,6 +46,7 @@
 #include <vcl/sysdata.hxx>
 #include <vcl/ptrstyle.hxx>
 #include <vcl/IDialogRenderable.hxx>
+#include <vcl/transfer.hxx>
 
 #include <vcl/uitest/uiobject.hxx>
 #include <vcl/uitest/uitest.hxx>
@@ -3273,68 +3274,20 @@ void Window::SetClipboard(Reference<XClipboard> const & xClipboard)
 
 Reference< XClipboard > Window::GetClipboard()
 {
-
-    if( mpWindowImpl->mpFrameData )
-    {
-        if( ! mpWindowImpl->mpFrameData->mxClipboard.is() )
-        {
-            try
-            {
-                mpWindowImpl->mpFrameData->mxClipboard
-                    = css::datatransfer::clipboard::SystemClipboard::create(
-                        comphelper::getProcessComponentContext());
-            }
-            catch (DeploymentException const &)
-            {
-                TOOLS_WARN_EXCEPTION("vcl.window", "ignoring");
-            }
-        }
-
-        return mpWindowImpl->mpFrameData->mxClipboard;
-    }
-
-    return static_cast < XClipboard * > (nullptr);
+    if (!mpWindowImpl->mpFrameData)
+        return static_cast<XClipboard*>(nullptr);
+    if (!mpWindowImpl->mpFrameData->mxClipboard.is())
+        mpWindowImpl->mpFrameData->mxClipboard = GetSystemClipboard();
+    return mpWindowImpl->mpFrameData->mxClipboard;
 }
 
 Reference< XClipboard > Window::GetPrimarySelection()
 {
-
-    if( mpWindowImpl->mpFrameData )
-    {
-        if( ! mpWindowImpl->mpFrameData->mxSelection.is() )
-        {
-            try
-            {
-                Reference< XComponentContext > xContext( comphelper::getProcessComponentContext() );
-
-#if HAVE_FEATURE_X11
-                // A hack, making the primary selection available as an instance
-                // of the SystemClipboard service on X11:
-                Sequence< Any > args(1);
-                args[0] <<= OUString("PRIMARY");
-                mpWindowImpl->mpFrameData->mxSelection.set(
-                    (xContext->getServiceManager()->
-                     createInstanceWithArgumentsAndContext(
-                         "com.sun.star.datatransfer.clipboard.SystemClipboard",
-                         args, xContext)),
-                    UNO_QUERY_THROW);
-#else
-                static Reference< XClipboard > s_xSelection(
-                    xContext->getServiceManager()->createInstanceWithContext( "com.sun.star.datatransfer.clipboard.GenericClipboard", xContext ), UNO_QUERY );
-
-                mpWindowImpl->mpFrameData->mxSelection = s_xSelection;
-#endif
-            }
-            catch (RuntimeException const &)
-            {
-                TOOLS_WARN_EXCEPTION("vcl.window", "ignoring");
-            }
-        }
-
-        return mpWindowImpl->mpFrameData->mxSelection;
-    }
-
-    return static_cast < XClipboard * > (nullptr);
+    if (!mpWindowImpl->mpFrameData)
+        return static_cast<XClipboard*>(nullptr);
+    if (!mpWindowImpl->mpFrameData->mxSelection.is())
+        mpWindowImpl->mpFrameData->mxSelection = GetSystemPrimarySelection();
+    return mpWindowImpl->mpFrameData->mxSelection;
 }
 
 void Window::RecordLayoutData( vcl::ControlLayoutData* pLayout, const tools::Rectangle& rRect )
