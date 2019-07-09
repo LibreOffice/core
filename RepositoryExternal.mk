@@ -3076,9 +3076,9 @@ endef
 
 endif # SYSTEM_POSTGRESQL
 
-ifeq ($(ENABLE_KDE5),TRUE)
+ifeq ($(ENABLE_KF5),TRUE)
 
-define gb_LinkTarget__use_kde5
+define gb_LinkTarget__use_kf5
 $(call gb_LinkTarget_set_include,$(1),\
 	$(subst -isystem/,-isystem /,$(filter -I% -isystem%,$(subst -isystem /,-isystem/,$(KF5_CFLAGS)))) \
 	$$(INCLUDE) \
@@ -3094,13 +3094,13 @@ $(call gb_LinkTarget_add_libs,$(1),\
 
 endef
 
-else # !ENABLE_KDE5
+else # !ENABLE_KF5
 
-define gb_LinkTarget__use_kde5
+define gb_LinkTarget__use_kf5
 
 endef
 
-endif # ENABLE_KDE5
+endif # ENABLE_KF5
 
 
 
