@@ -2115,6 +2115,15 @@ void insertRefCellByIterator(
     }
 }
 
+bool IsLinkUpdateAllowedInDoc(const ScDocument& rDoc)
+{
+    SfxObjectShell* pDocShell = rDoc.GetDocumentShell();
+    if (!pDocShell)
+        return false;
+
+    return pDocShell->GetEmbeddedObjectContainer().getUserAllowsLinkUpdate();
+}
+
 }
 
 void ScExternalRefManager::insertRefCell(sal_uInt16 nFileId, const ScAddress& rCell)
@@ -2322,13 +2331,8 @@ ScDocument* ScExternalRefManager::getInMemorySrcDocument(sal_uInt16 nFileId)
         return nullptr;
 
     // Do not load document until it was allowed
-    SfxObjectShell* pDocShell = mpDoc->GetDocumentShell();
-    if ( pDocShell )
-    {
-        const comphelper::EmbeddedObjectContainer& rContainer = pDocShell->GetEmbeddedObjectContainer();
-        if ( !rContainer.getUserAllowsLinkUpdate() )
-            return nullptr;
-    }
+    if (!IsLinkUpdateAllowedInDoc(*mpDoc))
+        return nullptr;
 
     ScDocument* pSrcDoc = nullptr;
     ScDocShell* pShell = static_cast<ScDocShell*>(SfxObjectShell::GetFirst(checkSfxObjectShell<ScDocShell>, false));
@@ -2573,6 +2577,11 @@ void ScExternalRefManager::maybeLinkExternalFile( sal_uInt16 nFileId, bool bDefe
         aFilter = pFileData->maFilterName;
         aOptions = pFileData->maFilterOptions;
     }
+
+    // Filter detection may access external links; defer it until we are allowed
+    if (!bDeferFilterDetection)
+        bDeferFilterDetection = !IsLinkUpdateAllowedInDoc(*mpDoc);
+
     // If a filter was already set (for example, loading the cached table),
     // don't call GetFilterName which has to access the source file.
     // If filter detection is deferred, the next successful loadSrcDocument()
