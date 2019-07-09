@@ -573,9 +573,15 @@ DECLARE_OOXMLEXPORT_TEST(testTdf106974_int32Crop, "tdf106974_int32Crop.docx")
 
     imageProperties->getPropertyValue( "GraphicCrop" ) >>= aGraphicCropStruct;
 
+    // The crop is constructed in GraphicProperties::pushToPropMap, where
+    // GraphicHelper::getOriginalSize tries to get graphic size in mm, then falls back to pixels,
+    // which are then converted to mm taking screen DPI scaling into account. Thus, the resulting
+    // values are DPI-dependent.
+    const double fXScaleFactor = 96.0 / Application::GetDefaultDevice()->GetDPIX();
+
     CPPUNIT_ASSERT_MESSAGE(
         OString::number(aGraphicCropStruct.Right).getStr(),
-        sal_Int32( 40470 ) < aGraphicCropStruct.Right );
+        40470 * fXScaleFactor < aGraphicCropStruct.Right);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testLineSpacingexport, "test_line_spacing.docx")
@@ -701,10 +707,17 @@ DECLARE_OOXMLEXPORT_TEST(testGIFImageCrop, "test_GIF_ImageCrop.docx")
 
     imageProperties->getPropertyValue( "GraphicCrop" ) >>= aGraphicCropStruct;
 
-    CPPUNIT_ASSERT_EQUAL( sal_Int32( 1085 ), aGraphicCropStruct.Left );
-    CPPUNIT_ASSERT_EQUAL( sal_Int32( 3651 ), aGraphicCropStruct.Right );
-    CPPUNIT_ASSERT_EQUAL( sal_Int32( 953 ), aGraphicCropStruct.Top );
-    CPPUNIT_ASSERT_EQUAL( sal_Int32( 1244 ), aGraphicCropStruct.Bottom );
+    // The crop is constructed in GraphicProperties::pushToPropMap, where
+    // GraphicHelper::getOriginalSize tries to get graphic size in mm, then falls back to pixels,
+    // which are then converted to mm taking screen DPI scaling into account. Thus, the resulting
+    // values are DPI-dependent.
+    const double fXScaleFactor = 96.0 / Application::GetDefaultDevice()->GetDPIX();
+    const double fYScaleFactor = 96.0 / Application::GetDefaultDevice()->GetDPIY();
+
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1085 * fXScaleFactor, aGraphicCropStruct.Left, 1);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(3651 * fXScaleFactor, aGraphicCropStruct.Right, 1);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(953 * fYScaleFactor, aGraphicCropStruct.Top, 1);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1244 * fYScaleFactor, aGraphicCropStruct.Bottom, 1);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testPNGImageCrop, "test_PNG_ImageCrop.docx")
@@ -719,10 +732,17 @@ DECLARE_OOXMLEXPORT_TEST(testPNGImageCrop, "test_PNG_ImageCrop.docx")
 
     imageProperties->getPropertyValue( "GraphicCrop" ) >>= aGraphicCropStruct;
 
-    CPPUNIT_ASSERT_EQUAL( sal_Int32( 1058 ), aGraphicCropStruct.Left );
-    CPPUNIT_ASSERT_EQUAL( sal_Int32( 1111 ), aGraphicCropStruct.Right );
-    CPPUNIT_ASSERT_EQUAL( sal_Int32( 1164 ), aGraphicCropStruct.Top );
-    CPPUNIT_ASSERT_EQUAL( sal_Int32( 635 ), aGraphicCropStruct.Bottom );
+    // The crop is constructed in GraphicProperties::pushToPropMap, where
+    // GraphicHelper::getOriginalSize tries to get graphic size in mm, then falls back to pixels,
+    // which are then converted to mm taking screen DPI scaling into account. Thus, the resulting
+    // values are DPI-dependent.
+    const double fXScaleFactor = 96.0 / Application::GetDefaultDevice()->GetDPIX();
+    const double fYScaleFactor = 96.0 / Application::GetDefaultDevice()->GetDPIY();
+
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1058 * fXScaleFactor, aGraphicCropStruct.Left, 1);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1111 * fXScaleFactor, aGraphicCropStruct.Right, 1);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1164 * fYScaleFactor, aGraphicCropStruct.Top, 1);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(635 * fYScaleFactor, aGraphicCropStruct.Bottom, 1);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf41542_imagePadding, "tdf41542_imagePadding.odt")
