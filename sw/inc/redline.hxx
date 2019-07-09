@@ -50,7 +50,7 @@ public:
     virtual bool operator == ( const SwRedlineExtraData& ) const;
 };
 
-class SwRedlineExtraData_FormatColl : public SwRedlineExtraData
+class SW_DLLPUBLIC SwRedlineExtraData_FormatColl : public SwRedlineExtraData
 {
     OUString m_sFormatNm;
     std::unique_ptr<SfxItemSet> m_pSet;
@@ -63,7 +63,9 @@ public:
     virtual void Reject( SwPaM& rPam ) const override;
     virtual bool operator == ( const SwRedlineExtraData& ) const override;
 
+    const OUString& GetFormatName() const        { return m_sFormatNm; }
     void SetItemSet( const SfxItemSet& rSet );
+    SfxItemSet* GetItemSet( ) const { return m_pSet.get(); }
 };
 
 class SwRedlineExtraData_Format : public SwRedlineExtraData

@@ -2961,18 +2961,25 @@ void DocxAttributeOutput::Redline( const SwRedlineData* pRedlineData)
         if (pRedlineData->GetExtraData())
         {
             const SwRedlineExtraData* pExtraData = pRedlineData->GetExtraData();
-            const SwRedlineExtraData_FormattingChanges* pFormattingChanges = dynamic_cast<const SwRedlineExtraData_FormattingChanges*>(pExtraData);
+            const SwRedlineExtraData_FormatColl* pFormattingChanges = dynamic_cast<const SwRedlineExtraData_FormatColl*>(pExtraData);
 
             // Check if the extra data is of type 'formatting changes'
             if (pFormattingChanges)
             {
                 // Get the item set that holds all the changes properties
                 const SfxItemSet *pChangesSet = pFormattingChanges->GetItemSet();
-                if (pChangesSet)
+                const OUString & sParaStyleName = pFormattingChanges->GetFormatName();
+                if (pChangesSet || !sParaStyleName.isEmpty())
                 {
                     m_pSerializer->mark(Tag_Redline_2);
 
                     m_pSerializer->startElementNS(XML_w, XML_pPr);
+
+                    if ( !sParaStyleName.isEmpty() )
+                    {
+                        OString sStyleName = OUStringToOString( sParaStyleName, RTL_TEXTENCODING_UTF8 );
+                        m_pSerializer->singleElementNS(XML_w, XML_pStyle, FSNS(XML_w, XML_val), sStyleName);
+                    }
 
                     // The 'm_rExport.SdrExporter().getFlyAttrList()', 'm_pParagraphSpacingAttrList' are used to hold information
                     // that should be collected by different properties in the core, and are all flushed together
@@ -2985,7 +2992,8 @@ void DocxAttributeOutput::Redline( const SwRedlineData* pRedlineData)
                     m_pParagraphSpacingAttrList.clear();
 
                     // Output the redline item set
-                    m_rExport.OutputItemSet( *pChangesSet, true, false, i18n::ScriptType::LATIN, m_rExport.m_bExportModeRTF );
+                    if (pChangesSet)
+                        m_rExport.OutputItemSet( *pChangesSet, true, false, i18n::ScriptType::LATIN, m_rExport.m_bExportModeRTF );
 
                     // Write the collected paragraph properties that are stored in 'm_rExport.SdrExporter().getFlyAttrList()', 'm_pParagraphSpacingAttrList'
                     WriteCollectedParagraphProperties();

@@ -777,33 +777,17 @@ void SwRedlineExtraData_FormatColl::Reject( SwPaM& rPam ) const
     SwTextFormatColl* pColl = USHRT_MAX == m_nPoolId
                             ? pDoc->FindTextFormatCollByName( m_sFormatNm )
                             : pDoc->getIDocumentStylePoolAccess().GetTextCollFromPool( m_nPoolId );
+
+    RedlineFlags eOld = pDoc->getIDocumentRedlineAccess().GetRedlineFlags();
+    pDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern(eOld & ~RedlineFlags(RedlineFlags::On | RedlineFlags::Ignore));
+
     if( pColl )
         pDoc->SetTextFormatColl( rPam, pColl, false );
 
     if( m_pSet )
-    {
-        rPam.SetMark();
-        SwPosition& rMark = *rPam.GetMark();
-        SwTextNode* pTNd = rMark.nNode.GetNode().GetTextNode();
-        if( pTNd )
-        {
-            rMark.nContent.Assign(pTNd, pTNd->GetText().getLength());
+        pDoc->getIDocumentContentOperations().InsertItemSet( rPam, *m_pSet );
 
-            if( pTNd->HasSwAttrSet() )
-            {
-                // Only set those that are not there anymore. Others
-                // could have changed, but we don't touch these.
-                SfxItemSet aTmp( *m_pSet );
-                aTmp.Differentiate( *pTNd->GetpSwAttrSet() );
-                pDoc->getIDocumentContentOperations().InsertItemSet( rPam, aTmp );
-            }
-            else
-            {
-                pDoc->getIDocumentContentOperations().InsertItemSet( rPam, *m_pSet );
-            }
-        }
-        rPam.DeleteMark();
-    }
+    pDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld );
 }
 
 bool SwRedlineExtraData_FormatColl::operator == ( const SwRedlineExtraData& r) const

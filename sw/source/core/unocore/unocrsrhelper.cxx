@@ -90,6 +90,7 @@
 #include <fmtmeta.hxx>
 #include <txtfld.hxx>
 #include <unoparagraph.hxx>
+#include <poolfmt.hxx>
 #include <sal/log.hxx>
 
 using namespace ::com::sun::star;
@@ -1199,7 +1200,7 @@ void makeRedline( SwPaM const & rPaM,
         aRedlineData.SetTimeStamp( DateTime( aStamp));
     }
 
-    SwRedlineExtraData_FormattingChanges* pRedlineExtraData = nullptr;
+    SwRedlineExtraData_FormatColl * pRedlineExtraData = nullptr;
 
     // Read the 'Redline Revert Properties' from the parameters
     uno::Sequence< beans::PropertyValue > aRevertProperties;
@@ -1209,7 +1210,14 @@ void makeRedline( SwPaM const & rPaM,
         int nMap = 0;
         // Make sure that paragraph format gets its own map, otherwise e.g. fill attributes are not preserved.
         if (eType == RedlineType::ParagraphFormat)
+        {
             nMap = PROPERTY_MAP_PARAGRAPH;
+            if (!aRevertProperties.hasElements())
+            {
+                // to reject the paragraph style change, use standard style
+                pRedlineExtraData = new SwRedlineExtraData_FormatColl( "",  RES_POOLCOLL_STANDARD, nullptr );
+            }
+        }
         else
             nMap = PROPERTY_MAP_TEXTPORTION_EXTENSIONS;
         SfxItemPropertySet const& rPropSet = *aSwMapProvider.GetPropertySet(nMap);
@@ -1248,6 +1256,8 @@ void makeRedline( SwPaM const & rPaM,
 
             if (!aWhichPairs.empty())
             {
+                sal_uInt16 nStylePoolId = USHRT_MAX;
+                OUString sParaStyleName;
                 aWhichPairs.push_back(0); // terminate
                 SfxItemSet aItemSet(pDoc->GetAttrPool(), aWhichPairs.data());
 
@@ -1256,9 +1266,18 @@ void makeRedline( SwPaM const & rPaM,
                     SfxItemPropertySimpleEntry const*const pEntry = aEntries[i];
                     const uno::Any &rValue = aRevertProperties[i].Value;
                     rPropSet.setPropertyValue(*pEntry, rValue, aItemSet);
+
+                    if ( aRevertProperties[i].Name == "ParaStyleName" )
+                            rValue >>= sParaStyleName;
                 }
-                pRedlineExtraData = new SwRedlineExtraData_FormattingChanges( &aItemSet );
+
+                if (eType == RedlineType::ParagraphFormat && sParaStyleName.isEmpty())
+                    nStylePoolId = RES_POOLCOLL_STANDARD;
+
+                pRedlineExtraData = new SwRedlineExtraData_FormatColl( sParaStyleName, nStylePoolId, &aItemSet );
             }
+            else if (eType == RedlineType::ParagraphFormat)
+                pRedlineExtraData = new SwRedlineExtraData_FormatColl( "", RES_POOLCOLL_STANDARD, nullptr );
         }
 
         // to finalize DOCX import

@@ -1665,6 +1665,11 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf120338)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1),
                          getProperty<sal_Int32>(getParagraph(5), "ParaAdjust")); // right
 
+    CPPUNIT_ASSERT_EQUAL(OUString("Heading 2"),
+                         getProperty<OUString>(getParagraph(10), "ParaStyleName"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Heading 2"),
+                         getProperty<OUString>(getParagraph(11), "ParaStyleName"));
+
     // reject tracked paragraph adjustments
     lcl_dispatchCommand(mxComponent, ".uno:RejectAllTrackedChanges", {});
 
@@ -1676,6 +1681,12 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf120338)
                          getProperty<sal_Int32>(getParagraph(4), "ParaAdjust")); // center
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0),
                          getProperty<sal_Int32>(getParagraph(5), "ParaAdjust")); // left
+
+    // tdf#126243 revert paragraph styles
+    CPPUNIT_ASSERT_EQUAL(OUString("Standard"),
+                         getProperty<OUString>(getParagraph(10), "ParaStyleName"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Heading 3"),
+                         getProperty<OUString>(getParagraph(11), "ParaStyleName"));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
