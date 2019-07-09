@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "KDE5FilePicker.hxx"
-#include <KDE5FilePicker.moc>
+#include "KF5FilePicker.hxx"
+#include <KF5FilePicker.moc>
 
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 #include <cppuhelper/supportsservice.hxx>
@@ -41,17 +41,17 @@ uno::Sequence<OUString> FilePicker_getSupportedServiceNames()
     uno::Sequence<OUString> aRet(4);
     aRet[0] = "com.sun.star.ui.dialogs.FilePicker";
     aRet[1] = "com.sun.star.ui.dialogs.SystemFilePicker";
-    aRet[2] = "com.sun.star.ui.dialogs.KDE5FilePicker";
-    aRet[3] = "com.sun.star.ui.dialogs.KDE5FolderPicker";
+    aRet[2] = "com.sun.star.ui.dialogs.KF5FilePicker";
+    aRet[3] = "com.sun.star.ui.dialogs.KF5FolderPicker";
     return aRet;
 }
 }
 
-// KDE5FilePicker
+// KF5FilePicker
 
-KDE5FilePicker::KDE5FilePicker(css::uno::Reference<css::uno::XComponentContext> const& context,
-                               QFileDialog::FileMode eMode)
-    // Native kde5 filepicker does not add file extension automatically
+KF5FilePicker::KF5FilePicker(css::uno::Reference<css::uno::XComponentContext> const& context,
+                             QFileDialog::FileMode eMode)
+    // Native kf5 filepicker does not add file extension automatically
     : Qt5FilePicker(context, eMode, true, true)
     , _layout(new QGridLayout(m_pExtraControls))
     , allowRemoteUrls(false)
@@ -78,7 +78,7 @@ KDE5FilePicker::KDE5FilePicker(css::uno::Reference<css::uno::XComponentContext> 
     qApp->installEventFilter(this);
 }
 
-sal_Int16 SAL_CALL KDE5FilePicker::execute()
+sal_Int16 SAL_CALL KF5FilePicker::execute()
 {
     SolarMutexGuard g;
     auto* pSalInst(static_cast<Qt5Instance*>(GetSalData()->m_pInstance));
@@ -101,8 +101,8 @@ sal_Int16 SAL_CALL KDE5FilePicker::execute()
 }
 
 // XFilePickerControlAccess
-void SAL_CALL KDE5FilePicker::setValue(sal_Int16 controlId, sal_Int16 nControlAction,
-                                       const uno::Any& value)
+void SAL_CALL KF5FilePicker::setValue(sal_Int16 controlId, sal_Int16 nControlAction,
+                                      const uno::Any& value)
 {
     if (CHECKBOX_AUTOEXTENSION == controlId)
         // We ignore this one and rely on QFileDialog to provide the functionality
@@ -111,7 +111,7 @@ void SAL_CALL KDE5FilePicker::setValue(sal_Int16 controlId, sal_Int16 nControlAc
     Qt5FilePicker::setValue(controlId, nControlAction, value);
 }
 
-uno::Any SAL_CALL KDE5FilePicker::getValue(sal_Int16 controlId, sal_Int16 nControlAction)
+uno::Any SAL_CALL KF5FilePicker::getValue(sal_Int16 controlId, sal_Int16 nControlAction)
 {
     SolarMutexGuard g;
     auto* pSalInst(static_cast<Qt5Instance*>(GetSalData()->m_pInstance));
@@ -136,7 +136,7 @@ uno::Any SAL_CALL KDE5FilePicker::getValue(sal_Int16 controlId, sal_Int16 nContr
     return Qt5FilePicker::getValue(controlId, nControlAction);
 }
 
-void SAL_CALL KDE5FilePicker::enableControl(sal_Int16 controlId, sal_Bool enable)
+void SAL_CALL KF5FilePicker::enableControl(sal_Int16 controlId, sal_Bool enable)
 {
     if (CHECKBOX_AUTOEXTENSION == controlId)
         // We ignore this one and rely on QFileDialog to provide the functionality
@@ -145,7 +145,7 @@ void SAL_CALL KDE5FilePicker::enableControl(sal_Int16 controlId, sal_Bool enable
     Qt5FilePicker::enableControl(controlId, enable);
 }
 
-void SAL_CALL KDE5FilePicker::setLabel(sal_Int16 controlId, const OUString& label)
+void SAL_CALL KF5FilePicker::setLabel(sal_Int16 controlId, const OUString& label)
 {
     if (CHECKBOX_AUTOEXTENSION == controlId)
         // We ignore this one and rely on QFileDialog to provide the functionality
@@ -154,7 +154,7 @@ void SAL_CALL KDE5FilePicker::setLabel(sal_Int16 controlId, const OUString& labe
     Qt5FilePicker::setLabel(controlId, label);
 }
 
-OUString SAL_CALL KDE5FilePicker::getLabel(sal_Int16 controlId)
+OUString SAL_CALL KF5FilePicker::getLabel(sal_Int16 controlId)
 {
     // We ignore this one and rely on QFileDialog to provide the functionality
     if (CHECKBOX_AUTOEXTENSION == controlId)
@@ -163,9 +163,9 @@ OUString SAL_CALL KDE5FilePicker::getLabel(sal_Int16 controlId)
     return Qt5FilePicker::getLabel(controlId);
 }
 
-void KDE5FilePicker::addCustomControl(sal_Int16 controlId)
+void KF5FilePicker::addCustomControl(sal_Int16 controlId)
 {
-    // native kde5 filepicker has its own autoextension checkbox,
+    // native kf5 filepicker has its own autoextension checkbox,
     // therefore avoid adding yet another one
     if (controlId == CHECKBOX_AUTOEXTENSION)
         return;
@@ -174,22 +174,22 @@ void KDE5FilePicker::addCustomControl(sal_Int16 controlId)
 }
 
 // XServiceInfo
-OUString SAL_CALL KDE5FilePicker::getImplementationName()
+OUString SAL_CALL KF5FilePicker::getImplementationName()
 {
-    return OUString("com.sun.star.ui.dialogs.KDE5FilePicker");
+    return OUString("com.sun.star.ui.dialogs.KF5FilePicker");
 }
 
-sal_Bool SAL_CALL KDE5FilePicker::supportsService(const OUString& ServiceName)
+sal_Bool SAL_CALL KF5FilePicker::supportsService(const OUString& ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-uno::Sequence<OUString> SAL_CALL KDE5FilePicker::getSupportedServiceNames()
+uno::Sequence<OUString> SAL_CALL KF5FilePicker::getSupportedServiceNames()
 {
     return FilePicker_getSupportedServiceNames();
 }
 
-bool KDE5FilePicker::eventFilter(QObject* o, QEvent* e)
+bool KF5FilePicker::eventFilter(QObject* o, QEvent* e)
 {
     if (e->type() == QEvent::Show && o->isWidgetType())
     {
