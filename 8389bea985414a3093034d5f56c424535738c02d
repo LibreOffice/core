@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_8d71c7e3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2019-07-09T09:44:11Z",
+      "side": 1,
+      "message": "Pardon me my ignorance but might help exactly how?",
+      "range": {
+        "startLine": 10,
+        "startChar": 31,
+        "endLine": 11,
+        "endChar": 48
+      },
+      "revId": "8389bea985414a3093034d5f56c424535738c02d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
