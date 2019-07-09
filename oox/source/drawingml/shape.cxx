@@ -887,7 +887,7 @@ Reference< XShape > const & Shape::createAndInsert(
         mxShape.set( xServiceFact->createInstance( aServiceName ), UNO_QUERY_THROW );
 
     Reference< XPropertySet > xSet( mxShape, UNO_QUERY );
-    if( mxShape.is() && xSet.is() )
+    if (xSet.is())
     {
         if( !msName.isEmpty() )
         {
