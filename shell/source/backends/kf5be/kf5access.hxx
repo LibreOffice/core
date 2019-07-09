@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!--
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
  * This file is part of the LibreOffice project.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -15,11 +15,34 @@
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
- -->
+ */
 
-<component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="kde5be1" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.comp.configuration.backend.KDE5Backend">
-    <service name="com.sun.star.configuration.backend.KDE5Backend"/>
-  </implementation>
-</component>
+#ifndef INCLUDED_SHELL_SOURCE_BACKENDS_KF5BE_KF5ACCESS_HXX
+#define INCLUDED_SHELL_SOURCE_BACKENDS_KF5BE_KF5ACCESS_HXX
+
+#include <sal/config.h>
+
+#include <com/sun/star/beans/Optional.hpp>
+
+namespace com
+{
+namespace sun
+{
+namespace star
+{
+namespace uno
+{
+class Any;
+}
+}
+}
+}
+
+namespace kf5access
+{
+css::beans::Optional<css::uno::Any> getValue(OUString const& id);
+}
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
