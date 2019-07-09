@@ -1154,37 +1154,11 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 OutlinerView* pOLV = mpDrawView->GetTextEditOutlinerView();
                 if (pOutl && pOLV)
                 {
-                    const SvxFieldItem* pFieldItem = pOLV->GetFieldAtSelection();
-                    if (pFieldItem)
-                    {
-                        // Make sure the whole field is selected
-                        ESelection aSel = pOLV->GetSelection();
-                        if (aSel.nStartPos == aSel.nEndPos)
-                        {
-                            aSel.nEndPos++;
-                            pOLV->SetSelection(aSel);
-                        }
-                    }
-                    if (!pFieldItem)
-                    {
-                        // Cursor probably behind the field - extend selection to select the field
-                        ESelection aSel = pOLV->GetSelection();
-                        if (aSel.nStartPos == aSel.nEndPos)
-                        {
-                            aSel.nStartPos--;
-                            pOLV->SetSelection(aSel);
-                            pFieldItem = pOLV->GetFieldAtSelection();
-                        }
-                    }
-
-                    if (pFieldItem)
+                    const SvxFieldData* pField = GetFieldAtCursor();
+                    if( auto pUrlField = dynamic_cast< const SvxURLField *>( pField ) )
                     {
                         ESelection aSel = pOLV->GetSelection();
-                        const SvxFieldData* pField = pFieldItem->GetField();
-                        if( auto pUrlField = dynamic_cast< const SvxURLField *>( pField ) )
-                        {
-                            pOutl->QuickInsertText(pUrlField->GetRepresentation(), aSel);
-                        }
+                        pOutl->QuickInsertText(pUrlField->GetRepresentation(), aSel);
                     }
                 }
             }
