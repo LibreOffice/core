@@ -22,6 +22,30 @@
       "revId": "1806cfe345d37777f5e7c2fd77ab817e3deaecb4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_b02adee4",
+        "filename": "vcl/unx/generic/desktopdetect/desktopdetector.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2019-07-09T16:27:50Z",
+      "side": 1,
+      "message": "Makes sense. Will do, after it passes or fails. It still compiles locally.",
+      "parentUuid": "bf659307_f0f2969a",
+      "range": {
+        "startLine": 142,
+        "startChar": 0,
+        "endLine": 143,
+        "endChar": 31
+      },
+      "revId": "1806cfe345d37777f5e7c2fd77ab817e3deaecb4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
