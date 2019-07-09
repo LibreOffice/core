@@ -1647,6 +1647,35 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testImageCommentAtChar)
     // 1', i.e. the comment of the image was not deleted when the image was deleted.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0),
                          pDoc->getIDocumentMarkAccess()->getAnnotationMarksCount());
+
+    // Undo the deletion and move the image down, so the anchor changes.
+    pView->GetViewFrame()->GetDispatcher()->Execute(SID_UNDO, SfxCallMode::SYNCHRON);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1),
+                         pDoc->getIDocumentMarkAccess()->getAnnotationMarksCount());
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    Point aNewAnchor = pWrtShell->GetFlyRect().TopLeft();
+    aNewAnchor.Move(0, 600);
+    pWrtShell->SetFlyPos(aNewAnchor);
+
+    // Get the image anchor doc model position.
+    SwFlyFrame* pFly = pWrtShell->GetCurrFlyFrame(false);
+    CPPUNIT_ASSERT(pFly);
+    SwFrameFormat& rFlyFormat = pFly->GetFrameFormat();
+    const SwPosition* pImageAnchor = rFlyFormat.GetAnchor().GetContentAnchor();
+    CPPUNIT_ASSERT(pImageAnchor);
+
+    // Get the annotation mark doc model start.
+    auto it = pDoc->getIDocumentMarkAccess()->getAnnotationMarksBegin();
+    CPPUNIT_ASSERT(it != pDoc->getIDocumentMarkAccess()->getAnnotationMarksEnd());
+    const sw::mark::IMark* pMark = *it;
+    const SwPosition& rAnnotationMarkStart = pMark->GetMarkPos();
+
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: SwPosition (node 14, offset 15)
+    // - Actual  : SwPosition (node 12, offset 3)
+    // This means moving the image anchor did not move the comment anchor / annotation mark, so the
+    // image and its comment got out of sync.
+    CPPUNIT_ASSERT_EQUAL(*pImageAnchor, rAnnotationMarkStart);
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf120338)
