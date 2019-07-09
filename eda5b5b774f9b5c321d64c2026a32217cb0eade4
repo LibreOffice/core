@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_ed76433f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-07-09T06:05:51Z",
+      "side": 1,
+      "message": "This needs an update: as we have discussed, there\u0027s no ODF limit here;  please reword this to include information to relevant ODF chapter, and mention that no limit exists.\n\nThe fix is not to account for the import of PPT(X); this is to extent LO capabilities to match MS PowerPoint (and also address the import).",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 53
+      },
+      "revId": "eda5b5b774f9b5c321d64c2026a32217cb0eade4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
