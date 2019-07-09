@@ -37,6 +37,7 @@
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/chart2/data/XDataSource.hpp>
+#include <com/sun/star/chart2/XChartStyle.hpp>
 #include <com/sun/star/qa/XDumper.hpp>
 
 // public API
@@ -168,6 +169,8 @@ private:
                                           m_xPageBackground;
 
     css::uno::Reference< css::container::XNameAccess>     m_xXMLNamespaceMap;
+
+    css::uno::Reference< css::chart2::XChartStyle > m_xChartStyle;
 
 private:
     //private methods
