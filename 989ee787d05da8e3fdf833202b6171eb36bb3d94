@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "bf659307_b0617e3c",
+        "filename": "sc/qa/unit/subsequent_export-test.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3083,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2019-07-09T17:25:48Z",
+      "side": 1,
+      "message": "I don\u0027t have Windows, so I missed that. Thinking about it, this should compile everywhere.",
+      "parentUuid": "bf659307_700d268f",
+      "range": {
+        "startLine": 3083,
+        "startChar": 12,
+        "endLine": 3083,
+        "endChar": 68
+      },
+      "revId": "989ee787d05da8e3fdf833202b6171eb36bb3d94",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bf659307_90123ab1",
         "filename": "sc/qa/unit/subsequent_export-test.cxx",
         "patchSetId": 2
@@ -36,6 +60,30 @@
       "writtenOn": "2019-07-09T16:51:18Z",
       "side": 1,
       "message": "This does not fail if both drive letters are identical, in which case the href should be relative and we shouldn\u0027t even reach here but did.",
+      "range": {
+        "startLine": 3104,
+        "startChar": 31,
+        "endLine": 3104,
+        "endChar": 91
+      },
+      "revId": "989ee787d05da8e3fdf833202b6171eb36bb3d94",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_705be686",
+        "filename": "sc/qa/unit/subsequent_export-test.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3104,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2019-07-09T17:25:48Z",
+      "side": 1,
+      "message": "We require aDocDrive !\u003d aLinkDrive and both paths must have a drive letter.\n\nI thought about having separate asserts for each condition, but if this assert fails LO probably has more general problems to investigate.",
+      "parentUuid": "bf659307_90123ab1",
       "range": {
         "startLine": 3104,
         "startChar": 31,
