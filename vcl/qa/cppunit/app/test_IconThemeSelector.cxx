@@ -75,8 +75,8 @@ IconThemeSelectorTest::BreezeIsReturnedForKde5Desktop()
 {
     std::vector<vcl::IconThemeInfo> themes = GetFakeInstalledThemes();
     vcl::IconThemeSelector s;
-    OUString r = s.SelectIconThemeForDesktopEnvironment(themes, "kde5");
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("'breeze' theme is returned for kde5 desktop", OUString("breeze"), r);
+    OUString r = s.SelectIconThemeForDesktopEnvironment(themes, "plasma5");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("'breeze' theme is returned for Plasma 5 desktop", OUString("breeze"), r);
 }
 
 void

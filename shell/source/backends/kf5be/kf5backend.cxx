@@ -52,18 +52,18 @@
 #include <osl/process.h>
 #include <osl/thread.h>
 
-#include "kde5access.hxx"
+#include "kf5access.hxx"
 
 namespace
 {
 OUString getServiceImplementationName()
 {
-    return OUString("com.sun.star.comp.configuration.backend.KDE5Backend");
+    return OUString("com.sun.star.comp.configuration.backend.KF5Backend");
 }
 
 css::uno::Sequence<OUString> getServiceSupportedServiceNames()
 {
-    OUString name("com.sun.star.configuration.backend.KDE5Backend");
+    OUString name("com.sun.star.configuration.backend.KF5Backend");
     return css::uno::Sequence<OUString>(&name, 1);
 }
 
@@ -159,14 +159,14 @@ void readKDESettings(std::map<OUString, css::beans::Optional<css::uno::Any>>& rS
 
     for (const OUString& aKey : aKeys)
     {
-        css::beans::Optional<css::uno::Any> aValue = kde5access::getValue(aKey);
+        css::beans::Optional<css::uno::Any> aValue = kf5access::getValue(aKey);
         std::pair<OUString, css::beans::Optional<css::uno::Any>> elem
             = std::make_pair(aKey, aValue);
         rSettings.insert(elem);
     }
 }
 
-// init the QApplication when we load the kde5backend into a non-Qt vclplug (e.g. Gtk3KDE5)
+// init the QApplication when we load the kf5backend into a non-Qt vclplug (e.g. gtk3_kde5)
 // TODO: use a helper process to read these values without linking to Qt directly?
 // TODO: share this code somehow with Qt5Instance.cxx?
 void initQApp(std::map<OUString, css::beans::Optional<css::uno::Any>>& rSettings)
@@ -212,7 +212,7 @@ Service::Service()
         OUString desktop;
         context->getValueByName("system.desktop-environment") >>= desktop;
 
-        if (desktop == "KDE5")
+        if (desktop == "PLASMA5")
         {
             if (!qApp) // no qt event loop yet
             {
@@ -271,7 +271,7 @@ static cppu::ImplementationEntry const services[]
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT void*
-kde5be1_component_getFactory(char const* pImplName, void* pServiceManager, void* pRegistryKey)
+kf5be1_component_getFactory(char const* pImplName, void* pServiceManager, void* pRegistryKey)
 {
     return cppu::component_getFactoryHelper(pImplName, pServiceManager, pRegistryKey, services);
 }
