@@ -40,6 +40,9 @@ public:
                               css::uno::XComponentContext >& ) override;
 
     virtual bool IsMainThread() const override;
+
+    std::unique_ptr<SalVirtualDevice> CreateVirtualDevice(SalGraphics* pGraphics,
+        long &nDX, long &nDY, DeviceFormat eFormat, const SystemGraphicsData *pData) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
