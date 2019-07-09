@@ -485,13 +485,15 @@ private:
 
     void ConfigureAppBackgroundColor( svtools::ColorConfig* pColorConfig = nullptr );
 
+    // Select and return the field at the current cursor position
+    const SvxFieldData* GetFieldAtCursor();
+
     // The colour of the area behind the slide (used to be called "Wiese")
     Color mnAppBackgroundColor;
 };
 
     /// Merge the background properties together and deposit the result in rMergeAttr
     void MergePageBackgroundFilling(SdPage *pPage, SdStyleSheet *pStyleSheet, bool bMasterPage, SfxItemSet& rMergedAttr);
-
 } // end of namespace sd
 
 #endif
