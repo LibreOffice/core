@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_b0fe5e03",
+        "filename": "sw/source/filter/ww8/ww8par5.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1455,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-07-09T10:33:02Z",
+      "side": 0,
+      "message": "this looks grammatically correct, if a little on the archaic side",
+      "revId": "d426bbfabc884d787b594907e0ad4ff24be9af9f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

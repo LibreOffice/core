@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_ed064321",
+        "filename": "sw/source/filter/ww8/ww8par5.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1455,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-07-09T10:33:02Z",
+      "side": 1,
+      "message": "this however is missing a \"do\", because it\u0027s a question: what do I have to do...",
+      "revId": "af61870279db31da2a278c953feab9162794b543",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
