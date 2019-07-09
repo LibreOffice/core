@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_2d03db44",
+        "filename": "setup_native/source/win32/customactions/inst_msu/inst_msu.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 614,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-07-09T09:18:06Z",
+      "side": 1,
+      "message": "Please let\u0027s keep the logging and return statement in one place, so let\u0027s just assign hr to ERROR_SUCCESS_REBOOT_REQUIRED which is tested later. Thanks!",
+      "range": {
+        "startLine": 613,
+        "startChar": 12,
+        "endLine": 614,
+        "endChar": 33
+      },
+      "revId": "ba06604e4e7d138381dcd1df8bc7f6f3c4f52cde",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
