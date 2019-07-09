@@ -73,6 +73,7 @@
 #include "eventimp.hxx"
 #include "descriptionimp.hxx"
 #include "SignatureLineContext.hxx"
+#include "QRCodeContext.hxx"
 #include "ximpcustomshape.hxx"
 #include <XMLEmbeddedObjectImportContext.hxx>
 #include <xmloff/xmlerror.hxx>
@@ -190,6 +191,10 @@ SvXMLImportContextRef SdXMLShapeContext::CreateChildContext( sal_uInt16 p_nPrefi
     else if( p_nPrefix == XML_NAMESPACE_LO_EXT && IsXMLToken( rLocalName, XML_SIGNATURELINE ) )
     {
         xContext = new SignatureLineContext( GetImport(), p_nPrefix, rLocalName, xAttrList, mxShape );
+    }
+    else if( p_nPrefix == XML_NAMESPACE_LO_EXT && IsXMLToken( rLocalName, XML_QRCODE ) )
+    {
+        xContext = new QRCodeContext( GetImport(), p_nPrefix, rLocalName, xAttrList, mxShape );
     }
     else if( p_nPrefix == XML_NAMESPACE_OFFICE && IsXMLToken( rLocalName, XML_EVENT_LISTENERS ) )
     {
@@ -3518,6 +3523,19 @@ SvXMLImportContextRef SdXMLFrameShapeContext::CreateChildContext( sal_uInt16 nPr
             if (xPropSet.is())
             {
                 xContext = new SignatureLineContext(GetImport(), nPrefix, rLocalName, xAttrList,
+                                                    pSContext->getShape());
+            }
+        }
+    }
+    else if ((XML_NAMESPACE_LO_EXT == nPrefix) && IsXMLToken(rLocalName, XML_QRCODE))
+    {
+        SdXMLShapeContext* pSContext = dynamic_cast<SdXMLShapeContext*>(mxImplContext.get());
+        if (pSContext)
+        {
+            uno::Reference<beans::XPropertySet> xPropSet(pSContext->getShape(), uno::UNO_QUERY);
+            if (xPropSet.is())
+            {
+                xContext = new QRCodeContext(GetImport(), nPrefix, rLocalName, xAttrList,
                                                     pSContext->getShape());
             }
         }
