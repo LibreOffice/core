@@ -449,6 +449,13 @@ DECLARE_OOXMLEXPORT_TEST(testImageCommentAtChar, "image-comment-at-char.docx")
                          getProperty<OUString>(getRun(xPara, 5), "TextPortionType"));
 }
 
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf121663, "tdf121663.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    // auto distance of line numbering is 0.5 cm
+    assertXPath(pXmlDoc, "//w:lnNumType", "distance", "283");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
