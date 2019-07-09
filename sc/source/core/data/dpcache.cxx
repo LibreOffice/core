@@ -32,6 +32,7 @@
 #include <columniterator.hxx>
 #include <cellvalue.hxx>
 
+#include <comphelper/parallelsort.hxx>
 #include <rtl/math.hxx>
 #include <unotools/charclass.hxx>
 #include <unotools/textsearch.hxx>
@@ -171,6 +172,7 @@ struct Bucket
     ScDPItemData maValue;
     SCROW mnOrderIndex;
     SCROW mnDataIndex;
+    Bucket() {}
     Bucket(const ScDPItemData& rValue, SCROW nData) :
         maValue(rValue), mnOrderIndex(0), mnDataIndex(nData) {}
 };
@@ -250,7 +252,7 @@ void processBuckets(std::vector<Bucket>& aBuckets, ScDPCache::Field& rField)
         return;
 
     // Sort by the value.
-    std::sort(aBuckets.begin(), aBuckets.end(), LessByValue());
+    comphelper::parallelSort(aBuckets.begin(), aBuckets.end(), LessByValue());
 
     {
         // Set order index such that unique values have identical index value.
@@ -269,14 +271,14 @@ void processBuckets(std::vector<Bucket>& aBuckets, ScDPCache::Field& rField)
     }
 
     // Re-sort the bucket this time by the data index.
-    std::sort(aBuckets.begin(), aBuckets.end(), LessByDataIndex());
+    comphelper::parallelSort(aBuckets.begin(), aBuckets.end(), LessByDataIndex());
 
     // Copy the order index series into the field object.
     rField.maData.reserve(aBuckets.size());
     std::for_each(aBuckets.begin(), aBuckets.end(), PushBackOrderIndex(rField.maData));
 
     // Sort by the value again.
-    std::sort(aBuckets.begin(), aBuckets.end(), LessByOrderIndex());
+    comphelper::parallelSort(aBuckets.begin(), aBuckets.end(), LessByOrderIndex());
 
     // Unique by value.
     std::vector<Bucket>::iterator itUniqueEnd =
