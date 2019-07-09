@@ -6748,7 +6748,7 @@ fi
 AC_SUBST([HAVE_BROKEN_GCC_WMAYBE_UNINITIALIZED])
 
 dnl ===================================================================
-dnl CPU Intrinsincs support - SSE, AVX
+dnl CPU Intrinsics support - SSE, AVX
 dnl ===================================================================
 
 INTRINSICS_CXXFLAGS=""
