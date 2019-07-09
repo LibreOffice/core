@@ -30,6 +30,7 @@ published struct QRCode
 
     /** Border surrounding the Qr Code
         It is a positive value
+        One Border unit is equal to one dot in the generated QR code.
     */
     long Border;
 };
