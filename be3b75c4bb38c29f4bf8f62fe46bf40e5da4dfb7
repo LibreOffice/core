@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_cde1ffd2",
+        "filename": "offapi/com/sun/star/drawing/GraphicObjectShape.idl",
+        "patchSetId": 19
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2019-07-09T07:26:09Z",
+      "side": 1,
+      "message": "this doesn\u0027t contain any shape.\nMaybe rather name it \"QrCodeProperties\" or just \"QRCode\"?",
+      "range": {
+        "startLine": 161,
+        "startChar": 57,
+        "endLine": 161,
+        "endChar": 68
+      },
+      "revId": "be3b75c4bb38c29f4bf8f62fe46bf40e5da4dfb7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_8deb07af",
+        "filename": "offapi/com/sun/star/drawing/QRCode.idl",
+        "patchSetId": 19
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2019-07-09T07:26:09Z",
+      "side": 1,
+      "message": "you can use MPL-only header here.\nSee file TEMPLATE.SOURCECODE.HEADER .",
+      "range": {
+        "startLine": 2,
+        "startChar": 0,
+        "endLine": 18,
+        "endChar": 3
+      },
+      "revId": "be3b75c4bb38c29f4bf8f62fe46bf40e5da4dfb7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_6de6b3eb",
+        "filename": "offapi/com/sun/star/drawing/QRCodeErrorCorrection.idl",
+        "patchSetId": 19
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2019-07-09T07:26:09Z",
+      "side": 1,
+      "message": "you can use MPL-only header here.\nSee file TEMPLATE.SOURCECODE.HEADER .",
+      "range": {
+        "startLine": 2,
+        "startChar": 0,
+        "endLine": 18,
+        "endChar": 3
+      },
+      "revId": "be3b75c4bb38c29f4bf8f62fe46bf40e5da4dfb7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
