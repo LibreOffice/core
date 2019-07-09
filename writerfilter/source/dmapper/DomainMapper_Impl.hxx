@@ -348,7 +348,7 @@ struct LineNumberSettings
     sal_Int32   nInterval;
     bool        bRestartAtEachPage;
     LineNumberSettings() :
-         nDistance(0)
+         nDistance(-1)
         ,nInterval(0)
         ,bRestartAtEachPage(true)
     {}
