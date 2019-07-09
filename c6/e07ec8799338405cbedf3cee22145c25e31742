@@ -1,0 +1,9 @@
+Verified+1: Jenkins
+Code-Review+1: Tomáš Chvátal <tchvatal@suse.cz>
+Verified+1: Tomáš Chvátal <tchvatal@suse.cz>
+Code-Review+2: Samuel Mehrbrodt <Samuel.Mehrbrodt@cib.de>
+Submitted-by: Samuel Mehrbrodt <Samuel.Mehrbrodt@cib.de>
+Submitted-at: Tue, 09 Jul 2019 16:24:47 +0200
+Reviewed-on: https://gerrit.libreoffice.org/75217
+Project: core
+Branch: refs/heads/master
