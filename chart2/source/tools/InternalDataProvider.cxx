@@ -899,6 +899,7 @@ Sequence< uno::Any > SAL_CALL InternalDataProvider::getDataByRangeRepresentation
         }
         else
         {
+            // Maybe this 'else' part and the functions is not necessary anymore.
             Sequence< OUString > aLabels = m_bDataInColumns ? getRowDescriptions() : getColumnDescriptions();
             aResult.realloc( aLabels.getLength() );
             transform( aLabels.begin(), aLabels.end(),
