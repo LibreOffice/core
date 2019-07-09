@@ -409,7 +409,7 @@ public:
     inline void         Move( long nHorzMoveDelta, long nVertMoveDelta );
     void                Move( Size const & s ) { Move(s.Width(), s.Height()); }
     long                AdjustLeft( long nHorzMoveDelta ) { nLeft += nHorzMoveDelta; return nLeft; }
-    long                AdjustRight( long nHorzMoveDelta ) { nRight += nHorzMoveDelta; return nRight; }
+    long                AdjustRight( long nHorzMoveDelta );
     long                AdjustTop( long nVertMoveDelta ) { nTop += nVertMoveDelta; return nTop; }
     long                AdjustBottom( long nVertMoveDelta ) { nBottom += nVertMoveDelta; return nBottom; }
     inline void         SetPos( const Point& rPoint );
