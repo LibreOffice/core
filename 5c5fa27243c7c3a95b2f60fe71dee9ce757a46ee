@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_50d90281",
+        "filename": "svx/source/unodraw/unoshap2.cxx",
+        "patchSetId": 20
+      },
+      "lineNbr": 1575,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-07-09T12:23:54Z",
+      "side": 1,
+      "message": "this can\u0027t ever be void, but if there\u0027s no qrcode we shouldn\u0027t return one....",
+      "revId": "5c5fa27243c7c3a95b2f60fe71dee9ce757a46ee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
