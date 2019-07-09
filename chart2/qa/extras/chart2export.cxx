@@ -128,6 +128,8 @@ public:
     void testChartTitlePropertiesGradientFillPPTX();
     void testChartTitlePropertiesBitmapFillPPTX();
     void testxAxisLabelsRotation();
+    void testMultipleCategoryAxisLablesXLSX();
+    void testMultipleCategoryAxisLablesDOCX();
     void testTdf116163();
     void testTdf111824();
     void testTdf119029();
@@ -226,6 +228,8 @@ public:
     CPPUNIT_TEST(testChartTitlePropertiesGradientFillPPTX);
     CPPUNIT_TEST(testChartTitlePropertiesBitmapFillPPTX);
     CPPUNIT_TEST(testxAxisLabelsRotation);
+    CPPUNIT_TEST(testMultipleCategoryAxisLablesXLSX);
+    CPPUNIT_TEST(testMultipleCategoryAxisLablesDOCX);
     CPPUNIT_TEST(testTdf116163);
     CPPUNIT_TEST(testTdf111824);
     CPPUNIT_TEST(testTdf119029);
@@ -2090,6 +2094,40 @@ void Chart2ExportTest::testxAxisLabelsRotation()
 
     // Chart1 xAxis labels should be 45 degree
     assertXPath(pXmlDoc1, "/c:chartSpace/c:chart/c:plotArea/c:catAx/c:txPr/a:bodyPr", "rot", "2700000");
+}
+
+void Chart2ExportTest::testMultipleCategoryAxisLablesXLSX()
+{
+    load("/chart2/qa/extras/data/ods/", "multilevelcat.ods");
+    xmlDocPtr pXmlDoc = parseExport("xl/charts/chart", "Calc Office Open XML");
+    CPPUNIT_ASSERT(pXmlDoc);
+    // check category axis labels number of first level
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser[1]/c:cat/c:multiLvlStrRef/c:multiLvlStrCache/c:ptCount", "val", "6");
+    // check category axis labels text of first level
+    assertXPathContent(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser[1]/c:cat/c:multiLvlStrRef/c:multiLvlStrCache/c:lvl[1]/c:pt[1]/c:v", "Categoria 1");
+    assertXPathContent(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser[1]/c:cat/c:multiLvlStrRef/c:multiLvlStrCache/c:lvl[1]/c:pt[6]/c:v", "Categoria 6");
+    // check category axis labels text of second level
+    assertXPathContent(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser[1]/c:cat/c:multiLvlStrRef/c:multiLvlStrCache/c:lvl[2]/c:pt[1]/c:v", "2011");
+    assertXPathContent(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser[1]/c:cat/c:multiLvlStrRef/c:multiLvlStrCache/c:lvl[2]/c:pt[3]/c:v", "2013");
+    // check the 'noMultiLvlLbl' tag - ChartExport.cxx:2950 FIXME: seems not support, so check the default noMultiLvlLbl value.
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:catAx/c:noMultiLvlLbl", "val", "0");
+}
+
+void Chart2ExportTest::testMultipleCategoryAxisLablesDOCX()
+{
+    load("/chart2/qa/extras/data/odt/", "multilevelcat.odt");
+    xmlDocPtr pXmlDoc = parseExport("word/charts/chart", "Office Open XML Text");
+    CPPUNIT_ASSERT(pXmlDoc);
+    // check category axis labels number of first level
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser[1]/c:cat/c:multiLvlStrRef/c:multiLvlStrCache/c:ptCount", "val", "4");
+    // check category axis labels text of first level
+    assertXPathContent(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser[1]/c:cat/c:multiLvlStrRef/c:multiLvlStrCache/c:lvl[1]/c:pt[1]/c:v", "Categoria 1");
+    assertXPathContent(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser[1]/c:cat/c:multiLvlStrRef/c:multiLvlStrCache/c:lvl[1]/c:pt[4]/c:v", "Categoria 4");
+    // check category axis labels text of second level
+    assertXPathContent(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser[1]/c:cat/c:multiLvlStrRef/c:multiLvlStrCache/c:lvl[2]/c:pt[1]/c:v", "2011");
+    assertXPathContent(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser[1]/c:cat/c:multiLvlStrRef/c:multiLvlStrCache/c:lvl[2]/c:pt[2]/c:v", "2012");
+    // check the 'noMultiLvlLbl' tag - ChartExport.cxx:2950 FIXME: seems not support, so check the default noMultiLvlLbl value.
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:catAx/c:noMultiLvlLbl", "val", "0");
 }
 
 void Chart2ExportTest::testTdf116163()
