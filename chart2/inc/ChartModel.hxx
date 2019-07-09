@@ -210,6 +210,7 @@ private:
 
     void insertDefaultChart();
 
+    void dudFunction();
 public:
     ChartModel() = delete;
     ChartModel(css::uno::Reference< css::uno::XComponentContext > const & xContext);

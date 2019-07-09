@@ -16,7 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-
+#include <iostream>
 #include <ChartModel.hxx>
 #include <servicenames.hxx>
 #include <DataSourceHelper.hxx>
@@ -169,6 +169,24 @@ ChartModel::ChartModel( const ChartModel & rOther )
         xListener.clear();
     }
     osl_atomic_decrement(&m_refCount);
+}
+
+void ChartModel::dudFunction()
+{
+    uno::Reference< css::chart2::XDiagram > xDia = getFirstDiagram();
+    uno::Reference< css::chart2::XLegend > testLegend = xDia->getLegend();
+    if (testLegend.is())
+    {
+    uno::Reference< beans::XFastPropertySet > testProp(testLegend, uno::UNO_QUERY);
+    if (testProp.is())
+    {
+        testProp->setFastPropertyValue(2, uno::Any(false));
+        std::cout << "property changed\n";
+    }
+    else
+        std::cout << "no property set\n";
+    }
+    else std::cout << "no legend acquired\n";
 }
 
 ChartModel::~ChartModel()
@@ -846,6 +864,7 @@ void SAL_CALL ChartModel::setArguments( const Sequence< beans::PropertyValue >& 
         unlockControllers();
     }
     setModified( true );
+    dudFunction();
 }
 
 Sequence< OUString > SAL_CALL ChartModel::getUsedRangeRepresentations()
