@@ -207,8 +207,8 @@ $(eval $(call gb_Rdb_add_components,services,\
 	$(if $(ENABLE_VLC), \
 		avmedia/source/vlc/avmediavlc \
 	) \
-	$(if $(ENABLE_KDE5), \
-		shell/source/backends/kde5be/kde5be1 \
+	$(if $(ENABLE_KF5), \
+		shell/source/backends/kf5be/kf5be1 \
 	) \
 	$(if $(ENABLE_ONLINE_UPDATE), \
 		extensions/source/update/check/updchk.uno \
