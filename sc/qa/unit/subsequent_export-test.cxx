@@ -3073,6 +3073,17 @@ void ScExportTest::testCustomXml()
     CPPUNIT_ASSERT(pStream);
 }
 
+#ifdef _WIN32
+static sal_Unicode lcl_getWindowsDrive(const OUString& aURL)
+{
+    static const sal_Int32 nMinLen = strlen("file:///X:/");
+    if (aURL.getLength() <= nMinLen)
+        return 0;
+    const OUString aUrlStart = aURL.copy(0, nMinLen);
+    return (aUrlStart.startsWith("file:///") && aUrlStart.endsWith(":/")) ? aUrlStart[8] : 0;
+}
+#endif
+
 void ScExportTest::testRelativePathsODS()
 {
     ScDocShellRef xDocSh = loadDoc("fdo79305.", FORMAT_ODS);
@@ -3082,6 +3093,18 @@ void ScExportTest::testRelativePathsODS()
     CPPUNIT_ASSERT(pDoc);
     OUString aURL = getXPath(pDoc,
             "/office:document-content/office:body/office:spreadsheet/table:table/table:table-row[2]/table:table-cell[2]/text:p/text:a", "href");
+#ifdef _WIN32
+    // if the exported document is not on the same drive then the linked document,
+    // there is no way to get a relative URL for the link, because ../X:/ is undefined.
+    if (!aURL.startsWith(".."))
+    {
+        sal_Unicode aDocDrive = lcl_getWindowsDrive(xDocSh->getDocumentBaseURL());
+        sal_Unicode aLinkDrive = lcl_getWindowsDrive(aURL);
+        CPPUNIT_ASSERT_MESSAGE("document on the same drive but no relative link!",
+                               aDocDrive != 0 && aLinkDrive != 0 && aDocDrive != aLinkDrive);
+        return;
+    }
+#endif
     // make sure that the URL is relative
     CPPUNIT_ASSERT(aURL.startsWith(".."));
 }
