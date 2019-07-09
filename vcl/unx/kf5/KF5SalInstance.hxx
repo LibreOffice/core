@@ -19,29 +19,18 @@
 
 #pragma once
 
-#include <memory>
+#include <qt5/Qt5Instance.hxx>
 
-#include <qt5/Qt5Frame.hxx>
-#include <qt5/Qt5SvpGraphics.hxx>
-
-class QWidget;
-
-class KDE5SalFrame : public Qt5Frame
+class KF5SalInstance final : public Qt5Instance
 {
-private:
-    std::unique_ptr<Qt5SvpGraphics> m_pKDE5Graphics;
-    bool m_bGraphicsInUse;
+    bool hasNativeFileSelection() const override;
+    Qt5FilePicker* createPicker(css::uno::Reference<css::uno::XComponentContext> const& context,
+                                QFileDialog::FileMode) override;
+
+    SalFrame* CreateFrame(SalFrame* pParent, SalFrameStyleFlags nStyle) override;
 
 public:
-    KDE5SalFrame(KDE5SalFrame* pParent, SalFrameStyleFlags nStyle, bool bUseCairo);
-
-    virtual SalGraphics* AcquireGraphics() override;
-    virtual void ReleaseGraphics(SalGraphics* pGraphics) override;
-    virtual void UpdateSettings(AllSettings& rSettings) override;
-
-    virtual LanguageType GetInputLanguage() override { return LANGUAGE_SYSTEM; }
-    virtual SalPointerState GetPointerState() override { return SalPointerState(); }
-    virtual KeyIndicatorState GetIndicatorState() override { return KeyIndicatorState(); }
+    explicit KF5SalInstance(std::unique_ptr<QApplication>& pQApp);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

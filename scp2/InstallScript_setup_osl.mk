@@ -35,7 +35,7 @@ $(eval $(call gb_InstallScript_use_modules,setup_osl,\
 	$(if $(filter TRUE,$(ENABLE_EVOAB2) $(ENABLE_GIO) $(ENABLE_GTK) $(ENABLE_GTK3)),\
 		scp2/gnome \
 	) \
-	$(if $(filter TRUE,$(ENABLE_QT5) $(ENABLE_KDE5) $(ENABLE_GTK3_KDE5)),\
+	$(if $(filter TRUE,$(ENABLE_QT5) $(ENABLE_KF5) $(ENABLE_GTK3_KDE5)),\
 		scp2/kde \
 	) \
 	$(if $(filter TRUE,$(ENABLE_ONLINE_UPDATE)),\

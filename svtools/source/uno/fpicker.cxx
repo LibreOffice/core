@@ -39,9 +39,7 @@ static OUString FilePicker_getSystemPickerServiceName()
 {
 #ifdef UNX
     OUString aDesktopEnvironment (Application::GetDesktopEnvironment());
-    if (aDesktopEnvironment.equalsIgnoreAsciiCase("kde5"))
-        return OUString ("com.sun.star.ui.dialogs.KDE5FilePicker");
-    else if (aDesktopEnvironment.equalsIgnoreAsciiCase("macosx"))
+    if (aDesktopEnvironment.equalsIgnoreAsciiCase("macosx"))
         return OUString ("com.sun.star.ui.dialogs.AquaFilePicker");
     else
         return OUString ("com.sun.star.ui.dialogs.SystemFilePicker");
@@ -113,9 +111,7 @@ static OUString FolderPicker_getSystemPickerServiceName()
 {
 #ifdef UNX
     OUString aDesktopEnvironment (Application::GetDesktopEnvironment());
-    if (aDesktopEnvironment.equalsIgnoreAsciiCase("kde5"))
-        return OUString("com.sun.star.ui.dialogs.KDEFolderPicker");
-    else if (aDesktopEnvironment.equalsIgnoreAsciiCase("macosx"))
+    if (aDesktopEnvironment.equalsIgnoreAsciiCase("macosx"))
         return OUString("com.sun.star.ui.dialogs.AquaFolderPicker");
 #endif
     return OUString("com.sun.star.ui.dialogs.SystemFolderPicker");

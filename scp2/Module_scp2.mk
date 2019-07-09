@@ -39,7 +39,7 @@ $(eval $(call gb_Module_add_targets,scp2,\
 	$(if $(filter TRUE,$(ENABLE_EVOAB2) $(ENABLE_GIO) $(ENABLE_GTK) $(ENABLE_GTK3)),\
 		InstallModule_gnome \
 	) \
-	$(if $(filter TRUE,$(ENABLE_QT5) $(ENABLE_KDE5) $(ENABLE_GTK3_KDE5)),\
+	$(if $(filter TRUE,$(ENABLE_QT5) $(ENABLE_KF5) $(ENABLE_GTK3_KDE5)),\
 		InstallModule_kde \
 	) \
 ))

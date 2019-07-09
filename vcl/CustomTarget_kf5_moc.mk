@@ -7,14 +7,14 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_CustomTarget_CustomTarget,vcl/unx/kde5))
+$(eval $(call gb_CustomTarget_CustomTarget,vcl/unx/kf5))
 
-$(call gb_CustomTarget_get_target,vcl/unx/kde5) : \
-	$(call gb_CustomTarget_get_workdir,vcl/unx/kde5)/KDE5FilePicker.moc
+$(call gb_CustomTarget_get_target,vcl/unx/kf5) : \
+	$(call gb_CustomTarget_get_workdir,vcl/unx/kf5)/KF5FilePicker.moc
 
-$(call gb_CustomTarget_get_workdir,vcl/unx/kde5)/%.moc : \
-		$(SRCDIR)/vcl/unx/kde5/%.hxx \
-		| $(call gb_CustomTarget_get_workdir,vcl/unx/kde5)/.dir
+$(call gb_CustomTarget_get_workdir,vcl/unx/kf5)/%.moc : \
+		$(SRCDIR)/vcl/unx/kf5/%.hxx \
+		| $(call gb_CustomTarget_get_workdir,vcl/unx/kf5)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),MOC,1)
 	$(MOC5) $< -o $@
 

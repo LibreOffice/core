@@ -19,7 +19,7 @@
 
 #include <sal/config.h>
 
-#include "kde5access.hxx"
+#include "kf5access.hxx"
 
 #include <QtGui/QFont>
 #include <QtCore/QString>
@@ -40,7 +40,7 @@
 #include <rtl/string.h>
 #include <rtl/ustring.hxx>
 
-namespace kde5access
+namespace kf5access
 {
 namespace
 {

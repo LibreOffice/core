@@ -603,7 +603,7 @@ $(eval $(call gb_Library_add_libs,vcl,\
 ))
 
 $(eval $(call gb_Library_add_exception_objects,vcl, \
-    $(if $(or $(ENABLE_QT5),$(ENABLE_KDE5)),vcl/source/app/salplug) \
+    $(if $(or $(ENABLE_QT5),$(ENABLE_KF5)),vcl/source/app/salplug) \
 ))
 
 $(eval $(call gb_Library_use_externals,vcl,\

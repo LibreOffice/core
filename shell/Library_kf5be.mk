@@ -7,32 +7,32 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Library_Library,kde5be1))
+$(eval $(call gb_Library_Library,kf5be1))
 
-$(eval $(call gb_Library_use_sdk_api,kde5be1))
+$(eval $(call gb_Library_use_sdk_api,kf5be1))
 
-$(eval $(call gb_Library_use_externals,kde5be1,\
+$(eval $(call gb_Library_use_externals,kf5be1,\
 	boost_headers \
-	kde5 \
+	kf5 \
 ))
 
-$(eval $(call gb_Library_use_libraries,kde5be1,\
+$(eval $(call gb_Library_use_libraries,kf5be1,\
 	cppu \
 	cppuhelper \
 	sal \
 ))
 
-$(eval $(call gb_Library_set_componentfile,kde5be1,shell/source/backends/kde5be/kde5be1))
+$(eval $(call gb_Library_set_componentfile,kf5be1,shell/source/backends/kf5be/kf5be1))
 
-$(eval $(call gb_Library_add_exception_objects,kde5be1,\
-    shell/source/backends/kde5be/kde5access \
-    shell/source/backends/kde5be/kde5backend \
+$(eval $(call gb_Library_add_exception_objects,kf5be1,\
+    shell/source/backends/kf5be/kf5access \
+    shell/source/backends/kf5be/kf5backend \
 ))
 
 # Workaround for clang+icecream (clang's -frewrite-includes
 # doesn't handle Qt5's QT_HAS_INCLUDE that Qt5 uses for <chrono>).
 ifeq ($(COM_IS_CLANG),TRUE)
-$(eval $(call gb_Library_add_cxxflags,kde5be1, \
+$(eval $(call gb_Library_add_cxxflags,kf5be1, \
     -include chrono \
 ))
 endif
