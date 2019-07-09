@@ -3089,7 +3089,8 @@ void ScExportTest::testRelativePathsODS()
     ScDocShellRef xDocSh = loadDoc("fdo79305.", FORMAT_ODS);
     CPPUNIT_ASSERT(xDocSh.is());
 
-    xmlDocPtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "content.xml", FORMAT_ODS);
+    std::shared_ptr<utl::TempFile> pTempFile = exportTo(xDocSh.get(), FORMAT_ODS);
+    xmlDocPtr pDoc = XPathHelper::parseExport(pTempFile, m_xSFactory, "content.xml");
     CPPUNIT_ASSERT(pDoc);
     OUString aURL = getXPath(pDoc,
             "/office:document-content/office:body/office:spreadsheet/table:table/table:table-row[2]/table:table-cell[2]/text:p/text:a", "href");
@@ -3098,7 +3099,7 @@ void ScExportTest::testRelativePathsODS()
     // there is no way to get a relative URL for the link, because ../X:/ is undefined.
     if (!aURL.startsWith(".."))
     {
-        sal_Unicode aDocDrive = lcl_getWindowsDrive(xDocSh->getDocumentBaseURL());
+        sal_Unicode aDocDrive = lcl_getWindowsDrive(pTempFile->GetURL());
         sal_Unicode aLinkDrive = lcl_getWindowsDrive(aURL);
         CPPUNIT_ASSERT_MESSAGE("document on the same drive but no relative link!",
                                aDocDrive != 0 && aLinkDrive != 0 && aDocDrive != aLinkDrive);
