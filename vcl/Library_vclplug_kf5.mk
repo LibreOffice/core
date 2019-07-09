@@ -17,23 +17,23 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 
-$(eval $(call gb_Library_Library,vclplug_kde5))
+$(eval $(call gb_Library_Library,vclplug_kf5))
 
-$(eval $(call gb_Library_use_custom_headers,vclplug_kde5,vcl/unx/kde5))
+$(eval $(call gb_Library_use_custom_headers,vclplug_kf5,vcl/unx/kf5))
 
-$(eval $(call gb_Library_set_include,vclplug_kde5,\
+$(eval $(call gb_Library_set_include,vclplug_kf5,\
     $$(INCLUDE) \
     -I$(SRCDIR)/vcl/inc \
     -I$(SRCDIR)/vcl/inc/qt5 \
 ))
 
-$(eval $(call gb_Library_add_defs,vclplug_kde5,\
-    -DVCLPLUG_KDE5_IMPLEMENTATION \
+$(eval $(call gb_Library_add_defs,vclplug_kf5,\
+    -DVCLPLUG_KF5_IMPLEMENTATION \
 ))
 
-$(eval $(call gb_Library_use_sdk_api,vclplug_kde5))
+$(eval $(call gb_Library_use_sdk_api,vclplug_kf5))
 
-$(eval $(call gb_Library_use_libraries,vclplug_kde5,\
+$(eval $(call gb_Library_use_libraries,vclplug_kf5,\
     vclplug_qt5 \
     vcl \
     tl \
@@ -51,41 +51,41 @@ $(eval $(call gb_Library_use_libraries,vclplug_kde5,\
     sal \
 ))
 
-$(eval $(call gb_Library_use_externals,vclplug_kde5,\
+$(eval $(call gb_Library_use_externals,vclplug_kf5,\
 	boost_headers \
 	cairo \
 	graphite \
 	harfbuzz \
 	icuuc \
-	kde5 \
+	kf5 \
 	epoxy \
 ))
 
 ifneq ($(QT5_HAVE_GLIB),)
-$(eval $(call gb_Library_add_cxxflags,vclplug_kde5,\
+$(eval $(call gb_Library_add_cxxflags,vclplug_kf5,\
     $(QT5_GLIB_CFLAGS) \
 ))
 
-$(eval $(call gb_Library_add_libs,vclplug_kde5,\
+$(eval $(call gb_Library_add_libs,vclplug_kf5,\
     $(QT5_GLIB_LIBS) \
 ))
 endif
 
-$(eval $(call gb_Library_add_cxxflags,vclplug_kde5,\
+$(eval $(call gb_Library_add_cxxflags,vclplug_kf5,\
     $(KF5_CFLAGS) \
 ))
-$(eval $(call gb_Library_add_libs,vclplug_kde5,\
+$(eval $(call gb_Library_add_libs,vclplug_kf5,\
     $(KF5_LIBS) \
 ))
 
-$(eval $(call gb_Library_add_exception_objects,vclplug_kde5,\
-    vcl/unx/kde5/KDE5FilePicker2 \
-    vcl/unx/kde5/KDE5SalFrame \
-    vcl/unx/kde5/KDE5SalInstance \
+$(eval $(call gb_Library_add_exception_objects,vclplug_kf5,\
+    vcl/unx/kf5/KF5FilePicker \
+    vcl/unx/kf5/KF5SalFrame \
+    vcl/unx/kf5/KF5SalInstance \
 ))
 
 ifeq ($(OS),LINUX)
-$(eval $(call gb_Library_add_libs,vclplug_kde5,\
+$(eval $(call gb_Library_add_libs,vclplug_kf5,\
 	-lm \
 	-ldl \
 ))
@@ -94,7 +94,7 @@ endif
 # Workaround for clang+icecream (clang's -frewrite-includes
 # doesn't handle Qt5's QT_HAS_INCLUDE that Qt5 uses for <chrono>).
 ifeq ($(COM_IS_CLANG),TRUE)
-$(eval $(call gb_Library_add_cxxflags,vclplug_kde5, \
+$(eval $(call gb_Library_add_cxxflags,vclplug_kf5, \
     -include chrono \
 ))
 endif

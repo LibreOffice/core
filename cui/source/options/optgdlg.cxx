@@ -208,10 +208,10 @@ OUString impl_SystemFileOpenServiceName()
 {
     const OUString &rDesktopEnvironment = Application::GetDesktopEnvironment();
 
-    if ( rDesktopEnvironment.equalsIgnoreAsciiCase("kde5") )
+    if ( rDesktopEnvironment.equalsIgnoreAsciiCase("kf5") )
     {
-        #if ENABLE_KDE5
-        return OUString("com.sun.star.ui.dialogs.KDE5FilePicker" );
+        #if ENABLE_KF5
+        return OUString("com.sun.star.ui.dialogs.KF5FilePicker" );
         #else
         return OUString();
         #endif

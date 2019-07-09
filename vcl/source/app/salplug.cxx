@@ -65,11 +65,14 @@ SalInstance* tryInstance( const OUString& rModuleBase, bool bForce = false )
 #endif
 
     SalInstance* pInst = nullptr;
+    OUString aUsedModuleBase(rModuleBase);
+    if (aUsedModuleBase == "kde5")
+        aUsedModuleBase = "kf5";
     OUString aModule(
 #ifdef SAL_DLLPREFIX
             SAL_DLLPREFIX
 #endif
-            "vclplug_" + rModuleBase + "lo" SAL_DLLEXTENSION );
+            "vclplug_" + aUsedModuleBase + "lo" SAL_DLLEXTENSION );
 
     osl::Module aMod;
     if (aMod.loadRelative(reinterpret_cast<oslGenericFunction>(&tryInstance), aModule, SAL_LOADMODULE_GLOBAL))
@@ -92,7 +95,7 @@ SalInstance* tryInstance( const OUString& rModuleBase, bool bForce = false )
                  * So make sure libgtk+ & co are still mapped into memory when
                  * atk-bridge's atexit handler gets called.
                  */
-                if( rModuleBase == "gtk" || rModuleBase == "gtk3" || rModuleBase == "gtk3_kde5" || rModuleBase == "win" )
+                if( aUsedModuleBase == "gtk" || aUsedModuleBase == "gtk3" || aUsedModuleBase == "gtk3_kde5" || aUsedModuleBase == "win" )
                 {
                     pCloseModule = nullptr;
                 }
@@ -145,8 +148,8 @@ SalInstance* autodetect_plugin()
 {
     static const char* const pKDEFallbackList[] =
     {
-#if ENABLE_KDE5
-        "kde5",
+#if ENABLE_KF5
+        "kf5",
 #endif
 #if ENABLE_GTK3_KDE5
         "gtk3_kde5",
@@ -181,8 +184,7 @@ SalInstance* autodetect_plugin()
               desktop == DESKTOP_XFCE  ||
               desktop == DESKTOP_MATE )
         pList = pStandardFallbackList;
-    else if( desktop == DESKTOP_KDE5 ||
-              desktop == DESKTOP_LXQT )
+    else if (desktop == DESKTOP_PLASMA5 || desktop == DESKTOP_LXQT)
         pList = pKDEFallbackList;
 
     SalInstance* pInst = nullptr;
@@ -257,7 +259,7 @@ SalInstance *CreateSalInstance()
 #ifdef MACOSX
         "osx"
 #else
-        "gtk3", "gtk", "kde5", "gen"
+        "gtk3", "gtk", "kf5", "gen"
 #endif
 #endif
      };
@@ -314,7 +316,7 @@ const OUString& SalGetDesktopEnvironment()
     // Order to match desktops.hxx' DesktopType
     static const char * const desktop_strings[] = {
         "none", "unknown", "GNOME", "UNITY",
-        "XFCE", "MATE", "KDE5", "LXQT" };
+        "XFCE", "MATE", "PLASMA5", "LXQT" };
     static OUString aDesktopEnvironment;
     if( aDesktopEnvironment.isEmpty())
     {
