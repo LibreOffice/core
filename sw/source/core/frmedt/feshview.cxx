@@ -2727,7 +2727,6 @@ bool SwFEShell::IsAlignPossible() const
     return Imp()->GetDrawView()->IsAlignPossible();
 }
 
-// temporary fix till  SS of JOE is available
 void SwFEShell::CheckUnboundObjects()
 {
     SET_CURR_SHELL( this );
