@@ -31,6 +31,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/datatransfer/XTransferable2.hpp>
+#include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboardOwner.hpp>
 #include <com/sun/star/datatransfer/dnd/DNDConstants.hpp>
 #include <com/sun/star/datatransfer/dnd/XDragGestureListener.hpp>
@@ -502,6 +503,9 @@ public:
     void                StartDrag( vcl::Window* pWindow, sal_Int8 nDragSourceActions,
                                    const Link<sal_Int8,void>& rCallbck );
 };
+
+css::uno::Reference<css::datatransfer::clipboard::XClipboard> VCL_DLLPUBLIC GetSystemClipboard();
+css::uno::Reference<css::datatransfer::clipboard::XClipboard> VCL_DLLPUBLIC GetSystemPrimarySelection();
 
 #endif
 

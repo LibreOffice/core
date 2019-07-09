@@ -283,6 +283,7 @@ private:
     void InvalidateAtWindow(const tools::Rectangle& rRect);
 
     css::uno::Reference<css::datatransfer::clipboard::XClipboard> GetClipboard();
+    css::uno::Reference<css::datatransfer::clipboard::XClipboard> GetSelection();
 
 protected:
 
