@@ -1715,6 +1715,24 @@ namespace cppcanvas
                                         aMatrix );
 
                                     aTexture.Alpha = 1.0 - aFill.getTransparency();
+
+                                    bool IsShadow(false);
+                                    GDIMetaFile myMtf(rMtf);
+                                    MetaAction* pCurrAct;
+                                    while( (pCurrAct=myMtf.NextAction()) != nullptr )
+                                    {
+                                        if( pCurrAct->GetType() == MetaActionType::COMMENT &&
+                                            static_cast<MetaCommentAction*>(pCurrAct)->GetComment().equalsIgnoreAsciiCase(
+                                                "XPATHFILL_SEQ_BEGIN") )
+                                        {
+                                            IsShadow = true;
+                                        }
+                                    }
+
+                                    if( IsShadow )
+                                    {
+                                      aBmpEx.Replace(Color(255,255,255),Color(128,128,128),255);
+                                    }
                                     aTexture.Bitmap = vcl::unotools::xBitmapFromBitmapEx( aBmpEx );
                                     if( aFill.isTiling() )
                                     {
