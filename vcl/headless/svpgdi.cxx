@@ -74,7 +74,8 @@ namespace
     {
         double x1, y1, x2, y2;
 
-        cairo_fill_extents(cr, &x1, &y1, &x2, &y2);
+        // this is faster than cairo_fill_extents, at the cost of some overdraw
+        cairo_path_extents(cr, &x1, &y1, &x2, &y2);
 
         // support B2DRange::isEmpty()
         if(0.0 != x1 || 0.0 != y1 || 0.0 != x2 || 0.0 != y2)
