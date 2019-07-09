@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_30948e44",
+        "filename": "oox/source/export/chartexport.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 286,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2019-07-09T14:46:26Z",
+      "side": 1,
+      "message": "it\u0027s better to remove this function, using its new ~duplicate lcl_getLabelSequence. Ie. instead of\n\nlcl_getLabelString (something)\n\ncall\n\nlcl_flattenStringSequence( lcl_getLabelSequence (something) )",
+      "range": {
+        "startLine": 268,
+        "startChar": 0,
+        "endLine": 286,
+        "endChar": 1
+      },
+      "revId": "077c33f08ef5de66f448f475832091da7effae9f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
