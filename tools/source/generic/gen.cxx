@@ -282,5 +282,11 @@ void tools::Rectangle::setX( long x )
     nLeft = x;
 }
 
+void tools::Rectangle::setY( long y )
+{
+    if (nBottom != RECT_EMPTY)
+        nBottom += y - nTop;
+    nTop  = y;
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
