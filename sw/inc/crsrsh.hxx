@@ -546,6 +546,8 @@ public:
 
     bool GoPrevCursor();
 
+    bool GoNextPrevCursorSetSearchLabel(const bool bNext);
+
     // at CurrentCursor.SPoint
     ::sw::mark::IMark* SetBookmark(
         const vcl::KeyCode&,

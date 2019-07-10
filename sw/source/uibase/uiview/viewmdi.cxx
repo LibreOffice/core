@@ -439,7 +439,7 @@ IMPL_LINK( SwView, MoveNavigationHdl, void*, p, void )
             bNext ? rSh.GotoNextOutline() : rSh.GotoPrevOutline();
         break;
         case NID_SEL :
-            bNext ? rSh.GoNextCursor() : rSh.GoPrevCursor();
+            rSh.GoNextPrevCursorSetSearchLabel(bNext);
         break;
         case NID_FTN:
         {
