@@ -688,6 +688,10 @@ namespace
                         }
 
                         rDoc.ResetAttrs(aPam, false, aResetAttrsArray);
+
+                        // remove numbering
+                        if ( pTNd->GetNumRule() )
+                            rDoc.DelNumRules(aPam);
                     }
                 }
 

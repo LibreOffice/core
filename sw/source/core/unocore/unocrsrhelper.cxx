@@ -91,6 +91,7 @@
 #include <txtfld.hxx>
 #include <unoparagraph.hxx>
 #include <poolfmt.hxx>
+#include <paratr.hxx>
 #include <sal/log.hxx>
 
 using namespace ::com::sun::star;
@@ -1230,7 +1231,10 @@ void makeRedline( SwPaM const & rPaM,
             // Build set of attributes we want to fetch
             std::vector<sal_uInt16> aWhichPairs;
             std::vector<SfxItemPropertySimpleEntry const*> aEntries;
+            std::vector<uno::Any> aValues;
             aEntries.reserve(aRevertProperties.getLength());
+            sal_uInt16 nStyleId = USHRT_MAX;
+            sal_uInt16 nNumId = USHRT_MAX;
             for (const auto& rRevertProperty : aRevertProperties)
             {
                 const OUString &rPropertyName = rRevertProperty.Name;
@@ -1245,13 +1249,22 @@ void makeRedline( SwPaM const & rPaM,
                 {
                     break;
                 }
+                else if (rPropertyName == "NumberingRules")
+                {
+                    aWhichPairs.push_back(RES_PARATR_NUMRULE);
+                    aWhichPairs.push_back(RES_PARATR_NUMRULE);
+                    nNumId = aEntries.size();
+                }
                 else
                 {
                     // FIXME: we should have some nice way of merging ranges surely ?
                     aWhichPairs.push_back(pEntry->nWID);
                     aWhichPairs.push_back(pEntry->nWID);
+                    if (rPropertyName == "ParaStyleName")
+                        nStyleId = aEntries.size();
                 }
                 aEntries.push_back(pEntry);
+                aValues.push_back(rRevertProperty.Value);
             }
 
             if (!aWhichPairs.empty())
@@ -1264,11 +1277,20 @@ void makeRedline( SwPaM const & rPaM,
                 for (size_t i = 0; i < aEntries.size(); ++i)
                 {
                     SfxItemPropertySimpleEntry const*const pEntry = aEntries[i];
-                    const uno::Any &rValue = aRevertProperties[i].Value;
-                    rPropSet.setPropertyValue(*pEntry, rValue, aItemSet);
-
-                    if ( aRevertProperties[i].Name == "ParaStyleName" )
+                    const uno::Any &rValue = aValues[i];
+                    if (i == nNumId)
+                    {
+                        uno::Reference<container::XNamed> xNumberingRules;
+                        rValue >>= xNumberingRules;
+                        if (xNumberingRules.is())
+                            aItemSet.Put( SwNumRuleItem( xNumberingRules->getName() ));
+                    }
+                    else
+                    {
+                        rPropSet.setPropertyValue(*pEntry, rValue, aItemSet);
+                        if (i == nStyleId)
                             rValue >>= sParaStyleName;
+                    }
                 }
 
                 if (eType == RedlineType::ParagraphFormat && sParaStyleName.isEmpty())
