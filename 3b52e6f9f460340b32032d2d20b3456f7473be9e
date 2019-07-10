@@ -22,6 +22,30 @@
       "revId": "3b52e6f9f460340b32032d2d20b3456f7473be9e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_3ecd3f5d",
+        "filename": "svx/source/svdraw/svdograf.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 745,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-07-10T14:52:04Z",
+      "side": 1,
+      "message": "the problem is that rObj is const, so of course you can\u0027t move its members.\n\nyou need to clone the rOjb.mpQrCode instead.",
+      "parentUuid": "bf659307_dec44343",
+      "range": {
+        "startLine": 745,
+        "startChar": 4,
+        "endLine": 745,
+        "endChar": 40
+      },
+      "revId": "3b52e6f9f460340b32032d2d20b3456f7473be9e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
