@@ -1460,7 +1460,7 @@ void SwTiledRenderingTest::testTrackChanges()
     comphelper::LibreOfficeKit::setActive();
     SwXTextDocument* pXTextDocument = createDoc("dummy.fodt");
 
-    // Turn on trak changes, type "zzz" at the end, and move to the start.
+    // Turn on track changes, type "zzz" at the end, and move to the start.
     uno::Reference<beans::XPropertySet> xPropertySet(mxComponent, uno::UNO_QUERY);
     xPropertySet->setPropertyValue("RecordChanges", uno::makeAny(true));
     ViewCallback aView;
