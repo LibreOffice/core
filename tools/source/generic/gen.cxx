@@ -20,6 +20,7 @@
 #include <sal/config.h>
 
 #include <algorithm>
+#include <cassert>
 #include <sstream>
 #include <o3tl/safeint.hxx>
 #include <tools/gen.hxx>
@@ -289,6 +290,12 @@ void tools::Rectangle::setY( long y )
     if (nBottom != RECT_EMPTY)
         nBottom += y - nTop;
     nTop  = y;
+}
+
+long tools::Rectangle::Right() const
+{
+    assert(nRight != RECT_EMPTY && "trying to access a nonsense value");
+    return nRight;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

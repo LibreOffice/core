@@ -81,6 +81,8 @@ static bool AquaGetScrollRect( /* TODO: int nScreen, */  ControlPart nPart,
 {
     bool bRetVal = true;
     rResultRect = rControlRect;
+    if (rControlRect.IsEmpty())
+        return true;
 
     switch( nPart )
     {

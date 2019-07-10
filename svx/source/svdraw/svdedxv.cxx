@@ -735,7 +735,8 @@ void SdrObjEditView::ImpPaintOutlinerView(OutlinerView& rOutlView, const tools::
         aBlankRect.Intersection(rRect);
 
     rOutlView.GetOutliner()->SetUpdateMode(true); // Bugfix #22596#
-    rOutlView.Paint(aBlankRect, &rTargetDevice);
+    if (!aBlankRect.IsEmpty())
+        rOutlView.Paint(aBlankRect, &rTargetDevice);
 
     if(!bModified)
     {
