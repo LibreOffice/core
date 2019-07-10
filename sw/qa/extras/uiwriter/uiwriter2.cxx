@@ -27,9 +27,11 @@
 #include <fmtornt.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
+#include <svx/svxids.hrc>
 #include <view.hxx>
 #include <cmdid.h>
 #include <fmtanchr.hxx>
+#include <txtfrm.hxx>
 
 namespace
 {
@@ -57,6 +59,7 @@ public:
     void testDateFormFieldContentOperations();
     void testDateFormFieldCurrentDateHandling();
     void testDateFormFieldCurrentDateInvalidation();
+    void testShapePageMove();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest2);
     CPPUNIT_TEST(testTdf101534);
@@ -75,6 +78,7 @@ public:
     CPPUNIT_TEST(testDateFormFieldContentOperations);
     CPPUNIT_TEST(testDateFormFieldCurrentDateHandling);
     CPPUNIT_TEST(testDateFormFieldCurrentDateInvalidation);
+    CPPUNIT_TEST(testShapePageMove);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -662,7 +666,8 @@ void SwUiWriterTest2::testDateFormFieldContentOperations()
     // Check whether the fieldmark is created
     auto aIter = pMarkAccess->getAllMarksBegin();
     CPPUNIT_ASSERT(aIter != pMarkAccess->getAllMarksEnd());
-    ::sw::mark::IDateFieldmark* pFieldmark = dynamic_cast<::sw::mark::IDateFieldmark*>(aIter->get());
+    ::sw::mark::IDateFieldmark* pFieldmark
+        = dynamic_cast<::sw::mark::IDateFieldmark*>(aIter->get());
     CPPUNIT_ASSERT(pFieldmark);
     CPPUNIT_ASSERT_EQUAL(OUString(ODF_FORMDATE), pFieldmark->GetFieldname());
 
@@ -695,7 +700,8 @@ void SwUiWriterTest2::testDateFormFieldCurrentDateHandling()
     // Check whether the fieldmark is created
     auto aIter = pMarkAccess->getAllMarksBegin();
     CPPUNIT_ASSERT(aIter != pMarkAccess->getAllMarksEnd());
-    ::sw::mark::IDateFieldmark* pFieldmark = dynamic_cast<::sw::mark::IDateFieldmark*>(aIter->get());
+    ::sw::mark::IDateFieldmark* pFieldmark
+        = dynamic_cast<::sw::mark::IDateFieldmark*>(aIter->get());
     CPPUNIT_ASSERT(pFieldmark);
     CPPUNIT_ASSERT_EQUAL(OUString(ODF_FORMDATE), pFieldmark->GetFieldname());
 
@@ -748,7 +754,8 @@ void SwUiWriterTest2::testDateFormFieldCurrentDateInvalidation()
     // Check whether the fieldmark is created
     auto aIter = pMarkAccess->getAllMarksBegin();
     CPPUNIT_ASSERT(aIter != pMarkAccess->getAllMarksEnd());
-    ::sw::mark::IDateFieldmark* pFieldmark = dynamic_cast<::sw::mark::IDateFieldmark*>(aIter->get());
+    ::sw::mark::IDateFieldmark* pFieldmark
+        = dynamic_cast<::sw::mark::IDateFieldmark*>(aIter->get());
     CPPUNIT_ASSERT(pFieldmark);
     CPPUNIT_ASSERT_EQUAL(OUString(ODF_FORMDATE), pFieldmark->GetFieldname());
 
@@ -788,6 +795,52 @@ void SwUiWriterTest2::testDateFormFieldCurrentDateInvalidation()
         pResult->second >>= sCurrentDate;
     }
     CPPUNIT_ASSERT_EQUAL(OUString(""), sCurrentDate);
+}
+
+void SwUiWriterTest2::testShapePageMove()
+{
+    // Load a document with 2 pages, shape on the first page.
+    SwDoc* pDoc = createDoc("shape-page-move.odt");
+    SwView* pView = pDoc->GetDocShell()->GetView();
+    // Make sure that the 2nd page is below the 1st one.
+    pView->SetViewLayout(/*nColumns=*/1, /*bBookMode=*/false);
+    calcLayout();
+
+    // Select the shape.
+    pView->GetViewFrame()->GetDispatcher()->Execute(FN_CNTNT_TO_NEXT_FRAME, SfxCallMode::SYNCHRON);
+    // Make sure SwTextShell is replaced with SwDrawShell right now, not after 120 ms, as set in the
+    // SwView ctor.
+    pView->StopShellTimer();
+
+    // Move the shape down to the 2nd page.
+    SfxInt32Item aXItem(SID_ATTR_TRANSFORM_POS_X, 4000);
+    SfxInt32Item aYItem(SID_ATTR_TRANSFORM_POS_Y, 12000);
+    pView->GetViewFrame()->GetDispatcher()->ExecuteList(SID_ATTR_TRANSFORM, SfxCallMode::SYNCHRON,
+                                                        { &aXItem, &aYItem });
+
+    // Check if the shape anchor was moved to the 2nd page as well.
+    SwFrameFormats* pShapeFormats = pDoc->GetSpzFrameFormats();
+    CPPUNIT_ASSERT(!pShapeFormats->empty());
+    auto it = pShapeFormats->begin();
+    SwFrameFormat* pShapeFormat = *it;
+    const SwPosition* pAnchor = pShapeFormat->GetAnchor().GetContentAnchor();
+    CPPUNIT_ASSERT(pAnchor);
+
+    // Find out the node index of the 1st para on the 2nd page.
+    SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
+    SwFrame* pFirstPage = pLayout->Lower();
+    SwFrame* pSecondPage = pFirstPage->GetNext();
+    CPPUNIT_ASSERT(pSecondPage->IsLayoutFrame());
+    SwFrame* pBodyFrame = static_cast<SwLayoutFrame*>(pSecondPage)->GetLower();
+    CPPUNIT_ASSERT(pBodyFrame->IsLayoutFrame());
+    SwFrame* pTextFrame = static_cast<SwLayoutFrame*>(pBodyFrame)->GetLower();
+    CPPUNIT_ASSERT(pTextFrame->IsTextFrame());
+    sal_uLong nNodeIndex = static_cast<SwTextFrame*>(pTextFrame)->GetTextNode()->GetIndex();
+
+    // Without the accompanying fix in place, this test would have failed with "Expected: 13;
+    // Actual: 12", i.e. the shape was anchored to the last paragraph of the 1st page, not to a
+    // paragraph on the 2nd page.
+    CPPUNIT_ASSERT_EQUAL(nNodeIndex, pAnchor->nNode.GetIndex());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest2);
