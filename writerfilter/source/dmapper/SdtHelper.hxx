@@ -13,6 +13,8 @@
 #include <vector>
 
 #include <boost/optional.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/text/XTextRange.hpp>
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <rtl/ustrbuf.hxx>
@@ -57,6 +59,8 @@ class SdtHelper final
     OUStringBuffer m_sDate;
     /// Date format string as it comes from the ooxml document.
     OUStringBuffer m_sDateFormat;
+    /// Start range of the date field
+    css::uno::Reference<css::text::XTextRange> m_xDateFieldStartRange;
     /// Locale string as it comes from the ooxml document.
     OUStringBuffer m_sLocale;
     /// Grab bag to store unsupported SDTs, aiming to save them back on export.
@@ -80,14 +84,25 @@ public:
     {
         return m_aSdtTexts;
     }
+
     OUStringBuffer& getDate()
     {
         return m_sDate;
     }
+
     OUStringBuffer& getDateFormat()
     {
         return m_sDateFormat;
     }
+
+    void setDateFieldStartRange(const css::uno::Reference<css::text::XTextRange>& xStartRange)
+    {
+        m_xDateFieldStartRange = xStartRange;
+    }
+
+    /// Decides if we have enough information to create a date control.
+    bool validateDateFormat() const;
+
     OUStringBuffer& getLocale()
     {
         return m_sLocale;
@@ -111,9 +126,8 @@ public:
     /// Create drop-down control from w:sdt's w:dropDownList.
     void createDropDownControl();
 
-    bool validateDateFormat() const;
     /// Create date control from w:sdt's w:date.
-    void createDateContentControl();
+    void createDateContentControl(bool bInsideTable = false);
 
     void appendToInteropGrabBag(const css::beans::PropertyValue& rValue);
     css::uno::Sequence<css::beans::PropertyValue> getInteropGrabBagAndClear();

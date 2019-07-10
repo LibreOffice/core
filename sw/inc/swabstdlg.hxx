@@ -93,7 +93,7 @@ namespace com{namespace sun{namespace star{
 }}}
 
 
-namespace sw { namespace mark { class IFieldmark; } }
+namespace sw { namespace mark { class IFieldmark; class IDateFieldmark; } }
 
 typedef   void (*SwLabDlgMethod) (css::uno::Reference< css::frame::XModel> const & xModel, const SwLabItem& rItem);
 
@@ -418,7 +418,7 @@ public:
 
     virtual VclPtr<SfxAbstractTabDialog> CreateSwEnvDlg ( vcl::Window* pParent, const SfxItemSet& rSet, SwWrtShell* pWrtSh, Printer* pPrt, bool bInsert ) = 0;
 
-    virtual VclPtr<VclAbstractDialog> CreateDateFormFieldDialog(sw::mark::IFieldmark* pDateField, SwDoc* pDoc) = 0;
+    virtual VclPtr<VclAbstractDialog> CreateDateFormFieldDialog(sw::mark::IDateFieldmark* pDateField, SwDoc* pDoc) = 0;
 
     virtual VclPtr<AbstractSwLabDlg> CreateSwLabDlg(const SfxItemSet& rSet,
                                                      SwDBManager* pDBManager, bool bLabel) = 0;
