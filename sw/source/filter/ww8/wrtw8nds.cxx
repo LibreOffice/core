@@ -2333,49 +2333,64 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                     ::sw::mark::IFieldmark const * const pFieldmark = pMarkAccess->getFieldmarkFor( aPosition );
                     OSL_ENSURE( pFieldmark, "Looks like this doc is broken...; where is the Fieldmark for the FIELDSTART??" );
 
-                    if ( pFieldmark && pFieldmark->GetFieldname() == ODF_FORMTEXT
-                         && GetExportFormat() != MSWordExportBase::ExportFormat::DOCX )
+                    // Date field is exported as content control, not as a simple field
+                    if(pFieldmark && pFieldmark->GetFieldname( ) == ODF_FORMDATE)
                     {
-                       AppendBookmark( pFieldmark->GetName() );
-                    }
-                    ww::eField eFieldId = lcl_getFieldId( pFieldmark );
-                    OUString sCode = lcl_getFieldCode( pFieldmark );
-                    if ( pFieldmark && pFieldmark->GetFieldname() == ODF_UNHANDLED )
-                    {
-                        IFieldmark::parameter_map_t::const_iterator it = pFieldmark->GetParameters()->find( ODF_ID_PARAM );
-                        if ( it != pFieldmark->GetParameters()->end() )
+                        if(GetExportFormat() == MSWordExportBase::ExportFormat::DOCX) // supported by DOCX only
                         {
-                            OUString sFieldId;
-                            it->second >>= sFieldId;
-                            eFieldId = static_cast<ww::eField>(sFieldId.toInt32());
-                        }
-
-                        it = pFieldmark->GetParameters()->find( ODF_CODE_PARAM );
-                        if ( it != pFieldmark->GetParameters()->end() )
-                        {
-                            it->second >>= sCode;
+                            OutputField( nullptr, lcl_getFieldId( pFieldmark ),
+                                    lcl_getFieldCode( pFieldmark ),
+                                    FieldFlags::Start | FieldFlags::CmdStart );
+                            WriteFormData( *pFieldmark );
                         }
                     }
-
-                    OutputField( nullptr, eFieldId, sCode, FieldFlags::Start | FieldFlags::CmdStart );
-
-                    if ( pFieldmark && pFieldmark->GetFieldname( ) == ODF_FORMTEXT )
-                        WriteFormData( *pFieldmark );
-                    else if ( pFieldmark && pFieldmark->GetFieldname( ) == ODF_HYPERLINK )
-                        WriteHyperlinkData( *pFieldmark );
-                    OutputField( nullptr, lcl_getFieldId( pFieldmark ), OUString(), FieldFlags::CmdEnd );
-
-                    if ( pFieldmark && pFieldmark->GetFieldname() == ODF_UNHANDLED )
+                    else
                     {
-                        // Check for the presence of a linked OLE object
-                        IFieldmark::parameter_map_t::const_iterator it = pFieldmark->GetParameters()->find( ODF_OLE_PARAM );
-                        if ( it != pFieldmark->GetParameters()->end() )
+
+                        if ( pFieldmark && pFieldmark->GetFieldname() == ODF_FORMTEXT
+                             && GetExportFormat() != MSWordExportBase::ExportFormat::DOCX )
                         {
-                            OUString sOleId;
-                            uno::Any aValue = it->second;
-                            aValue >>= sOleId;
-                            if ( !sOleId.isEmpty() )
-                                OutputLinkedOLE( sOleId );
+                           AppendBookmark( pFieldmark->GetName() );
+                        }
+                        ww::eField eFieldId = lcl_getFieldId( pFieldmark );
+                        OUString sCode = lcl_getFieldCode( pFieldmark );
+                        if ( pFieldmark && pFieldmark->GetFieldname() == ODF_UNHANDLED )
+                        {
+                            IFieldmark::parameter_map_t::const_iterator it = pFieldmark->GetParameters()->find( ODF_ID_PARAM );
+                            if ( it != pFieldmark->GetParameters()->end() )
+                            {
+                                OUString sFieldId;
+                                it->second >>= sFieldId;
+                                eFieldId = static_cast<ww::eField>(sFieldId.toInt32());
+                            }
+
+                            it = pFieldmark->GetParameters()->find( ODF_CODE_PARAM );
+                            if ( it != pFieldmark->GetParameters()->end() )
+                            {
+                                it->second >>= sCode;
+                            }
+                        }
+
+                        OutputField( nullptr, eFieldId, sCode, FieldFlags::Start | FieldFlags::CmdStart );
+
+                        if ( pFieldmark && pFieldmark->GetFieldname( ) == ODF_FORMTEXT)
+                            WriteFormData( *pFieldmark );
+                        else if ( pFieldmark && pFieldmark->GetFieldname( ) == ODF_HYPERLINK )
+                            WriteHyperlinkData( *pFieldmark );
+                        OutputField( nullptr, lcl_getFieldId( pFieldmark ), OUString(), FieldFlags::CmdEnd );
+
+                        if ( pFieldmark && pFieldmark->GetFieldname() == ODF_UNHANDLED )
+                        {
+                            // Check for the presence of a linked OLE object
+                            IFieldmark::parameter_map_t::const_iterator it = pFieldmark->GetParameters()->find( ODF_OLE_PARAM );
+                            if ( it != pFieldmark->GetParameters()->end() )
+                            {
+                                OUString sOleId;
+                                uno::Any aValue = it->second;
+                                aValue >>= sOleId;
+                                if ( !sOleId.isEmpty() )
+                                    OutputLinkedOLE( sOleId );
+                            }
                         }
                     }
                 }
@@ -2386,24 +2401,34 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
 
                     OSL_ENSURE( pFieldmark, "Looks like this doc is broken...; where is the Fieldmark for the FIELDEND??" );
 
-                    ww::eField eFieldId = lcl_getFieldId( pFieldmark );
-                    if ( pFieldmark && pFieldmark->GetFieldname() == ODF_UNHANDLED )
+                    if(pFieldmark && pFieldmark->GetFieldname( ) == ODF_FORMDATE)
                     {
-                        IFieldmark::parameter_map_t::const_iterator it = pFieldmark->GetParameters()->find( ODF_ID_PARAM );
-                        if ( it != pFieldmark->GetParameters()->end() )
+                        if(GetExportFormat() == MSWordExportBase::ExportFormat::DOCX) // supported by DOCX only
                         {
-                            OUString sFieldId;
-                            it->second >>= sFieldId;
-                            eFieldId = static_cast<ww::eField>(sFieldId.toInt32());
+                            OutputField( nullptr, ww::eFORMDATE, OUString(), FieldFlags::Close );
                         }
                     }
-
-                    OutputField( nullptr, eFieldId, OUString(), FieldFlags::Close );
-
-                    if ( pFieldmark && pFieldmark->GetFieldname() == ODF_FORMTEXT
-                         && GetExportFormat() != MSWordExportBase::ExportFormat::DOCX )
+                    else
                     {
-                        AppendBookmark( pFieldmark->GetName() );
+                        ww::eField eFieldId = lcl_getFieldId( pFieldmark );
+                        if ( pFieldmark && pFieldmark->GetFieldname() == ODF_UNHANDLED )
+                        {
+                            IFieldmark::parameter_map_t::const_iterator it = pFieldmark->GetParameters()->find( ODF_ID_PARAM );
+                            if ( it != pFieldmark->GetParameters()->end() )
+                            {
+                                OUString sFieldId;
+                                it->second >>= sFieldId;
+                                eFieldId = static_cast<ww::eField>(sFieldId.toInt32());
+                            }
+                        }
+
+                        OutputField( nullptr, eFieldId, OUString(), FieldFlags::Close );
+
+                        if ( pFieldmark && pFieldmark->GetFieldname() == ODF_FORMTEXT
+                             && GetExportFormat() != MSWordExportBase::ExportFormat::DOCX )
+                        {
+                            AppendBookmark( pFieldmark->GetName() );
+                        }
                     }
                 }
                 else if ( ch == CH_TXT_ATR_FORMELEMENT )
@@ -2411,30 +2436,18 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                     SwPosition aPosition( rNode, SwIndex( &rNode, nCurrentPos ) );
                     ::sw::mark::IFieldmark const * const pFieldmark = pMarkAccess->getFieldmarkFor( aPosition );
 
-                    // Date field is exported as content control, not as a simple field
-                    if(pFieldmark && pFieldmark->GetFieldname( ) == ODF_FORMDATE &&
-                       GetExportFormat() == MSWordExportBase::ExportFormat::DOCX) // supported by DOCX only
-                    {
-                        OutputField( nullptr, lcl_getFieldId( pFieldmark ),
-                                lcl_getFieldCode( pFieldmark ),
-                                FieldFlags::Start | FieldFlags::CmdStart );
+                    bool isDropdownOrCheckbox = pFieldmark && (pFieldmark->GetFieldname( ) == ODF_FORMDROPDOWN ||
+                                                                pFieldmark->GetFieldname( ) == ODF_FORMCHECKBOX );
+                    if ( isDropdownOrCheckbox )
+                        AppendBookmark( pFieldmark->GetName() );
+                    OutputField( nullptr, lcl_getFieldId( pFieldmark ),
+                            lcl_getFieldCode( pFieldmark ),
+                            FieldFlags::Start | FieldFlags::CmdStart );
+                    if ( isDropdownOrCheckbox )
                         WriteFormData( *pFieldmark );
-                    }
-                    else
-                    {
-                        bool isDropdownOrCheckbox = pFieldmark && (pFieldmark->GetFieldname( ) == ODF_FORMDROPDOWN ||
-                                                                    pFieldmark->GetFieldname( ) == ODF_FORMCHECKBOX );
-                        if ( isDropdownOrCheckbox )
-                            AppendBookmark( pFieldmark->GetName() );
-                        OutputField( nullptr, lcl_getFieldId( pFieldmark ),
-                                lcl_getFieldCode( pFieldmark ),
-                                FieldFlags::Start | FieldFlags::CmdStart );
-                        if ( isDropdownOrCheckbox )
-                            WriteFormData( *pFieldmark );
-                        OutputField( nullptr, lcl_getFieldId( pFieldmark ), OUString(), FieldFlags::Close );
-                        if ( isDropdownOrCheckbox )
-                            AppendBookmark( pFieldmark->GetName() );
-                    }
+                    OutputField( nullptr, lcl_getFieldId( pFieldmark ), OUString(), FieldFlags::Close );
+                    if ( isDropdownOrCheckbox )
+                        AppendBookmark( pFieldmark->GetName() );
                 }
                 nLen -= ofs;
 

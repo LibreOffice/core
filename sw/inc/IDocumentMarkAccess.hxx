@@ -322,7 +322,7 @@ class IDocumentMarkAccess
         virtual std::vector< ::sw::mark::IFieldmark* > getDropDownsFor(const SwPaM &rPaM) const=0;
 
         virtual void deleteFieldmarkAt(const SwPosition& rPos) = 0;
-        virtual ::sw::mark::IFieldmark* changeNonTextFieldmarkType(::sw::mark::IFieldmark* pFieldmark, const OUString& rNewType) = 0;
+        virtual ::sw::mark::IFieldmark* changeFormFieldmarkType(::sw::mark::IFieldmark* pFieldmark, const OUString& rNewType) = 0;
 
         virtual void NotifyCursorUpdate(const SwCursorShell& rCursorShell) = 0;
         virtual void ClearFieldActivation() = 0;
