@@ -2066,7 +2066,7 @@ AC_ARG_WITH(visual-studio,
 ,)
 
 AC_ARG_WITH(windows-sdk,
-    AS_HELP_STRING([--with-windows-sdk=<7.1(A)/8.0(A)/8.1(A)/10>],
+    AS_HELP_STRING([--with-windows-sdk=<8.0(A)/8.1(A)/10>],
         [Specify which Windows SDK, or "Windows Kit", version to use
          in case the one that came with the selected Visual Studio
          is not what you want for some reason. Note that not all compiler/SDK
@@ -3573,7 +3573,7 @@ if test "$_os" = "WINNT"; then
 
         case "$vcnum" in
         150|160)
-            WINDOWS_SDK_ACCEPTABLE_VERSIONS="10.0 8.1A 8.1 8.0 7.1A"
+            WINDOWS_SDK_ACCEPTABLE_VERSIONS="10.0 8.1A 8.1 8.0"
             ;;
         esac
 
@@ -5483,20 +5483,12 @@ find_dotnetsdk46()
 
 find_winsdk_version()
 {
-    # Args: $1 : SDK version as in "6.0A", "7.0" etc
+    # Args: $1 : SDK version as in "8.0", "8.1A" etc
     # Return values: $winsdktest, $winsdkbinsubdir, $winsdklibsubdir
 
     unset winsdktest winsdkbinsubdir winsdklibsubdir
 
     case "$1" in
-    7.*)
-        reg_get_value_32 "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Microsoft SDKs/Windows/v${1}/InstallationFolder"
-        if test -n "$regvalue"; then
-            winsdktest=$regvalue
-            winsdklibsubdir=.
-            return
-        fi
-        ;;
     8.0|8.0A)
         reg_get_value_32 "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Windows Kits/Installed Roots/KitsRoot"
         if test -n "$regvalue"; then
@@ -5715,9 +5707,6 @@ the  Windows SDK are installed.])
 
     if test -z "$WINDOWS_SDK_HOME"; then
         AC_MSG_RESULT([no, hoping the necessary headers and libraries will be found anyway!?])
-    elif echo $WINDOWS_SDK_HOME | grep "v7.1" >/dev/null 2>/dev/null; then
-        WINDOWS_SDK_VERSION=70
-        AC_MSG_RESULT([found Windows SDK 7 ($WINDOWS_SDK_HOME)])
     elif echo $WINDOWS_SDK_HOME | grep "8.0" >/dev/null 2>/dev/null; then
         WINDOWS_SDK_VERSION=80
         AC_MSG_RESULT([found Windows SDK 8.0 ($WINDOWS_SDK_HOME)])
