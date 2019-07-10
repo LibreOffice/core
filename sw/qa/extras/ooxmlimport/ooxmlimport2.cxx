@@ -19,6 +19,9 @@
 #include <com/sun/star/document/XEmbeddedObjectSupplier2.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
+#include <xmloff/odffields.hxx>
+#include <IDocumentMarkAccess.hxx>
+#include <IMark.hxx>
 
 class Test : public SwModelTestBase
 {
@@ -37,16 +40,38 @@ DECLARE_OOXMLIMPORT_TEST(testTdf108545_embeddedDocxIcon, "tdf108545_embeddedDocx
 
 DECLARE_OOXMLIMPORT_TEST(testTdf121203, "tdf121203.docx")
 {
-    // Make sure that the date SDT's content is imported as plain text, as
-    // the field has no fullDate attribute which we can use to find out the actual date.
-    CPPUNIT_ASSERT_EQUAL(OUString("17-Oct-2018 09:00"), getRun(getParagraph(1), 1)->getString());
-
-    // Make sure we did not import a date field.
+    // We imported the date field
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
     SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
     IDocumentMarkAccess* pMarkAccess = pDoc->getIDocumentMarkAccess();
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), pMarkAccess->getAllMarksCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pMarkAccess->getAllMarksCount());
+
+    // Custom sdt date content is imported correctly
+    ::sw::mark::IDateFieldmark* pFieldmark
+        = dynamic_cast<::sw::mark::IDateFieldmark*>(*pMarkAccess->getAllMarksBegin());
+    CPPUNIT_ASSERT(pFieldmark);
+    CPPUNIT_ASSERT_EQUAL(OUString(ODF_FORMDATE), pFieldmark->GetFieldname());
+
+    const sw::mark::IFieldmark::parameter_map_t* const pParameters = pFieldmark->GetParameters();
+    OUString sDateFormat;
+    auto pResult = pParameters->find(ODF_FORMDATE_DATEFORMAT);
+    if (pResult != pParameters->end())
+    {
+        pResult->second >>= sDateFormat;
+    }
+
+    OUString sLang;
+    pResult = pParameters->find(ODF_FORMDATE_DATEFORMAT_LANGUAGE);
+    if (pResult != pParameters->end())
+    {
+        pResult->second >>= sLang;
+    }
+
+    OUString sCurrentDate = pFieldmark->GetContent();
+    CPPUNIT_ASSERT_EQUAL(OUString("dd-MMM-yy"), sDateFormat);
+    CPPUNIT_ASSERT_EQUAL(OUString("en-GB"), sLang);
+    CPPUNIT_ASSERT_EQUAL(OUString("17-Oct-2018 09:00"), sCurrentDate);
 }
 
 DECLARE_OOXMLIMPORT_TEST(testTdf109053, "tdf109053.docx")

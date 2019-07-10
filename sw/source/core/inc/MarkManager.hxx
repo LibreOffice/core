@@ -92,7 +92,7 @@ namespace sw {
             virtual std::vector< ::sw::mark::IFieldmark* > getDropDownsFor(const SwPaM &rPaM) const override;
 
             virtual void deleteFieldmarkAt(const SwPosition& rPos) override;
-            virtual ::sw::mark::IFieldmark* changeNonTextFieldmarkType(::sw::mark::IFieldmark* pFieldmark, const OUString& rNewType) override;
+            virtual ::sw::mark::IFieldmark* changeFormFieldmarkType(::sw::mark::IFieldmark* pFieldmark, const OUString& rNewType) override;
 
             virtual void NotifyCursorUpdate(const SwCursorShell& rCursorShell) override;
             virtual void ClearFieldActivation() override;

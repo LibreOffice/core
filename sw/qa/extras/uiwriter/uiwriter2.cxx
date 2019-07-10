@@ -1784,6 +1784,11 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testDateFormFieldInsertion)
     CPPUNIT_ASSERT(pFieldmark);
     CPPUNIT_ASSERT_EQUAL(OUString(ODF_FORMDATE), pFieldmark->GetFieldname());
 
+    // The date form field has the placeholder text in it
+    uno::Reference<text::XTextRange> xPara = getParagraph(1);
+    sal_Unicode vEnSpaces[5] = { 8194, 8194, 8194, 8194, 8194 };
+    CPPUNIT_ASSERT_EQUAL(OUString(vEnSpaces, 5), xPara->getString());
+
     // Undo insertion
     lcl_dispatchCommand(mxComponent, ".uno:Undo", {});
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), pMarkAccess->getAllMarksCount());
