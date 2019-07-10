@@ -26,6 +26,8 @@
 #include "KDESalDisplay.hxx"
 #include "KDESalGraphics.hxx"
 
+#include "salvd.hxx"
+
 #include <QtGui/QApplication>
 #include <QtCore/QThread>
 #include <QX11Info>
