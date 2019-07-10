@@ -277,15 +277,11 @@ namespace sw {
             FieldmarkWithDropDownButton(const SwPaM& rPaM);
             virtual ~FieldmarkWithDropDownButton() override;
 
-            // This method should be called only by the portion so we can now the portion's painting area
-            void SetPortionPaintArea(const SwRect& rPortionPaintArea);
-
             virtual void ShowButton(SwEditWin* pEditWin) = 0;
             void HideButton();
             void RemoveButton();
 
         protected:
-            SwRect m_aPortionPaintArea;
             VclPtr<FormFieldButton> m_pButton;
         };
 
@@ -298,22 +294,47 @@ namespace sw {
             virtual ~DropDownFieldmark() override;
 
             virtual void ShowButton(SwEditWin* pEditWin) override;
+
+            // This method should be called only by the portion so we can now the portion's painting area
+            void SetPortionPaintArea(const SwRect& rPortionPaintArea);
+
+        private:
+            SwRect m_aPortionPaintArea;
         };
 
         /// Fieldmark representing a date form field.
         class DateFieldmark
-            : public FieldmarkWithDropDownButton
+            : virtual public IDateFieldmark
+            , public FieldmarkWithDropDownButton
         {
         public:
             DateFieldmark(const SwPaM& rPaM);
             virtual ~DateFieldmark() override;
 
             virtual void InitDoc(SwDoc* const io_pDoc, sw::mark::InsertMode eMode) override;
+            virtual void ReleaseDoc(SwDoc* const pDoc) override;
 
             virtual void ShowButton(SwEditWin* pEditWin) override;
 
+            void SetPortionPaintAreaStart(const SwRect& rPortionPaintArea);
+            void SetPortionPaintAreaEnd(const SwRect& rPortionPaintArea);
+
+            virtual OUString GetContent() const override;
+            virtual void ReplaceContent(const OUString& sNewContent) override;
+
+            virtual std::pair<bool, double> GetCurrentDate() const override;
+            virtual void SetCurrentDate(double fDate) override;
+            virtual OUString GetDateInStandardDateFormat(double fDate) const override;
+
         private:
+            OUString GetDateInCurrentDateFormat(double fDate) const;
+            std::pair<bool, double> ParseCurrentDateParam() const;
+            void InvalidateCurrentDateParam();
+
             SvNumberFormatter* m_pNumberFormatter;
+            sw::DocumentContentOperationsManager* m_pDocumentContentOperationsManager;
+            SwRect m_aPaintAreaStart;
+            SwRect m_aPaintAreaEnd;
         };
     }
 }
