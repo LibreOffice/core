@@ -386,7 +386,7 @@ public:
                         Rectangle( const Point& rLT, const Size& rSize );
 
     long                Left() const    { return nLeft;   }
-    long                Right() const   { return nRight;  }
+    long                Right() const;
     long                Top() const     { return nTop;    }
     long                Bottom() const  { return nBottom; }
 

@@ -222,8 +222,10 @@ sal_uInt32 PptEscherEx::EnterGroup( ::tools::Rectangle const * pBoundRect, SvMem
         PtReplaceOrInsert( ESCHER_Persist_Grouping_Snap | mnGroupLevel, mpOutStrm->Tell() );
         mpOutStrm ->WriteInt32( aRect.Left() )  // bounding box for the grouped shapes to which they are attached
                    .WriteInt32( aRect.Top() )
-                   .WriteInt32( aRect.Right() )
-                   .WriteInt32( aRect.Bottom() );
+                    // We should not really be writing out things with empty bounding box,
+                    // but if we are, just make the effective size < 0
+                   .WriteInt32( aRect.IsWidthEmpty() ? aRect.Left()-1 : aRect.Right() )
+                   .WriteInt32( aRect.IsHeightEmpty() ? aRect.Top()-1 : aRect.Bottom() );
 
         nShapeId = GenerateShapeId();
         if ( !mnGroupLevel )
