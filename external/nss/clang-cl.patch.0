@@ -15,11 +15,11 @@
 --- nspr/pr/include/prbit.h
 +++ nspr/pr/include/prbit.h
 @@ -14,7 +14,7 @@
- ** functions.
  */
  #if defined(_WIN32) && (_MSC_VER >= 1300) && \
--    (defined(_M_IX86) || defined(_M_AMD64) || defined(_M_ARM))
-+    (defined(_M_IX86) || defined(_M_AMD64) || defined(_M_ARM)) && !defined __clang__
+     (defined(_M_IX86) || defined(_M_X64) || defined(_M_ARM) || \
+-     defined(_M_ARM64))
++     defined(_M_ARM64)) && !defined __clang__
  # include <intrin.h>
  # pragma  intrinsic(_BitScanForward,_BitScanReverse)
    __forceinline static int __prBitScanForward32(unsigned int val)
@@ -29,15 +29,15 @@
  # define  PR_HAVE_BUILTIN_BITSCAN32
 -#elif ((__GNUC__ >= 4) || (__GNUC__ == 3 && __GNUC_MINOR__ >= 4)) && \
 +#elif defined __GNUC__ && ((__GNUC__ >= 4) || (__GNUC__ == 3 && __GNUC_MINOR__ >= 4)) && \
-        (defined(__i386__) || defined(__x86_64__) || defined(__arm__))
+        (defined(__i386__) || defined(__x86_64__) || defined(__arm__) || \
+         defined(__aarch64__))
  # define pr_bitscan_ctz32(val)  __builtin_ctz(val)
- # define pr_bitscan_clz32(val)  __builtin_clz(val)
 @@ -136,7 +136,7 @@
  */
  
  #if defined(_MSC_VER) && (defined(_M_IX86) || defined(_M_AMD64) || \
--    defined(_M_X64) || defined(_M_ARM))
-+    defined(_M_X64) || defined(_M_ARM)) && !defined __clang__
+-    defined(_M_X64) || defined(_M_ARM) || defined(_M_ARM64))
++    defined(_M_X64) || defined(_M_ARM) || defined(_M_ARM64)) && !defined __clang__
  #include <stdlib.h>
  #pragma intrinsic(_rotl, _rotr)
  #define PR_ROTATE_LEFT32(a, bits) _rotl(a, bits)
