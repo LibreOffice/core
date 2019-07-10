@@ -377,6 +377,17 @@ void GetRequestedSizes (
                 if (xPanel.is())
                 {
                     aLayoutSize = xPanel->getHeightForWidth(rContentBox.GetWidth());
+                    if (!(0 <= aLayoutSize.Minimum && aLayoutSize.Minimum <= aLayoutSize.Preferred
+                          && aLayoutSize.Preferred <= aLayoutSize.Maximum))
+                    {
+                        SAL_WARN("sfx.sidebar", "Please follow LayoutSize constraints: 0 ≤ "
+                                                "Minimum ≤ Preferred ≤ Maximum."
+                                                " Currently: Minimum: "
+                                                    << aLayoutSize.Minimum
+                                                    << " Preferred: " << aLayoutSize.Preferred
+                                                    << " Maximum: " << aLayoutSize.Maximum);
+                    }
+
                     sal_Int32 nWidth = xPanel->getMinimalWidth();
 
                     uno::Reference<frame::XDesktop2> xDesktop
