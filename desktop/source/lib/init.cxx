@@ -760,6 +760,11 @@ static void doc_postWindowExtTextInputEvent(LibreOfficeKitDocument* pThis,
                                             unsigned nWindowId,
                                             int nType,
                                             const char* pText);
+static void doc_removeTextContext(LibreOfficeKitDocument* pThis,
+                                  unsigned nLOKWindowId,
+                                  int nCharBefore,
+                                  int nCharAfter);
+
 static void doc_postWindowKeyEvent(LibreOfficeKitDocument* pThis,
                                    unsigned nLOKWindowId,
                                    int nType,
@@ -929,6 +934,7 @@ LibLODocument_Impl::LibLODocument_Impl(const uno::Reference <css::lang::XCompone
         m_pDocumentClass->registerCallback = doc_registerCallback;
         m_pDocumentClass->postKeyEvent = doc_postKeyEvent;
         m_pDocumentClass->postWindowExtTextInputEvent = doc_postWindowExtTextInputEvent;
+        m_pDocumentClass->removeTextContext = doc_removeTextContext;
         m_pDocumentClass->postWindowKeyEvent = doc_postWindowKeyEvent;
         m_pDocumentClass->postMouseEvent = doc_postMouseEvent;
         m_pDocumentClass->postWindowMouseEvent = doc_postWindowMouseEvent;
@@ -3033,6 +3039,44 @@ static void doc_postWindowExtTextInputEvent(LibreOfficeKitDocument* pThis, unsig
         break;
     default:
         assert(false && "Unhandled External Text input event!");
+    }
+}
+
+static void doc_removeTextContext(LibreOfficeKitDocument* pThis, unsigned nLOKWindowId, int nCharBefore, int nCharAfter)
+{
+    SolarMutexGuard aGuard;
+    VclPtr<vcl::Window> pWindow;
+    if (nLOKWindowId == 0)
+    {
+        ITiledRenderable* pDoc = getTiledRenderable(pThis);
+        if (!pDoc)
+        {
+            gImpl->maLastExceptionMsg = "Document doesn't support tiled rendering";
+            return;
+        }
+        pWindow = pDoc->getDocWindow();
+    }
+    else
+    {
+        pWindow = vcl::Window::FindLOKWindow(nLOKWindowId);
+    }
+
+    if (!pWindow)
+    {
+        gImpl->maLastExceptionMsg = "No window found for window id: " + OUString::number(nLOKWindowId);
+        return;
+    }
+
+    if (nCharBefore > 0)
+    {
+        // backspace
+        SfxLokHelper::postKeyEventAsync(pWindow, LOK_EXT_TEXTINPUT, 8, 1283, nCharBefore - 1);
+    }
+
+    if (nCharAfter > 0)
+    {
+        // delete (forward)
+        SfxLokHelper::postKeyEventAsync(pWindow, LOK_EXT_TEXTINPUT, 46, 1286, nCharAfter - 1);
     }
 }
 

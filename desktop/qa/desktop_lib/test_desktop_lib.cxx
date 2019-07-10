@@ -2713,10 +2713,11 @@ void DesktopLOKTest::testABI()
     CPPUNIT_ASSERT_EQUAL(documentClassOffset(52), offsetof(struct _LibreOfficeKitDocumentClass, getClipboard));
     CPPUNIT_ASSERT_EQUAL(documentClassOffset(53), offsetof(struct _LibreOfficeKitDocumentClass, setClipboard));
     CPPUNIT_ASSERT_EQUAL(documentClassOffset(54), offsetof(struct _LibreOfficeKitDocumentClass, getSelectionType));
+    CPPUNIT_ASSERT_EQUAL(documentClassOffset(55), offsetof(struct _LibreOfficeKitDocumentClass, removeTextContext));
 
     // Extending is fine, update this, and add new assert for the offsetof the
     // new method
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(55), sizeof(struct _LibreOfficeKitDocumentClass));
+    CPPUNIT_ASSERT_EQUAL(documentClassOffset(56), sizeof(struct _LibreOfficeKitDocumentClass));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(DesktopLOKTest);
