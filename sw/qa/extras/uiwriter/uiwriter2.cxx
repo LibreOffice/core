@@ -27,9 +27,11 @@
 #include <fmtornt.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
+#include <svx/svxids.hrc>
 #include <view.hxx>
 #include <cmdid.h>
 #include <fmtanchr.hxx>
+#include <txtfrm.hxx>
 
 namespace
 {
@@ -53,6 +55,7 @@ public:
     void testTdf122942();
     void testImageComment();
     void testImageCommentAtChar();
+    void testShapePageMove();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest2);
     CPPUNIT_TEST(testTdf101534);
@@ -67,6 +70,7 @@ public:
     CPPUNIT_TEST(testTdf122942);
     CPPUNIT_TEST(testImageComment);
     CPPUNIT_TEST(testImageCommentAtChar);
+    CPPUNIT_TEST(testShapePageMove);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -600,6 +604,47 @@ void SwUiWriterTest2::testImageCommentAtChar()
     // This means moving the image anchor did not move the comment anchor / annotation mark, so the
     // image and its comment got out of sync.
     CPPUNIT_ASSERT_EQUAL(*pImageAnchor, rAnnotationMarkStart);
+}
+
+void SwUiWriterTest2::testShapePageMove()
+{
+    // Load a document with 2 pages, shape on the first page.
+    SwDoc* pDoc = createDoc("shape-page-move.odt");
+    SwView* pView = pDoc->GetDocShell()->GetView();
+
+    // Select the shape.
+    pView->GetViewFrame()->GetDispatcher()->Execute(FN_CNTNT_TO_NEXT_FRAME, SfxCallMode::SYNCHRON);
+    Scheduler::ProcessEventsToIdle();
+
+    // Move the shape down to the 2nd page.
+    SfxInt32Item aXItem(SID_ATTR_TRANSFORM_POS_X, 4000);
+    SfxInt32Item aYItem(SID_ATTR_TRANSFORM_POS_Y, 12000);
+    pView->GetViewFrame()->GetDispatcher()->ExecuteList(SID_ATTR_TRANSFORM, SfxCallMode::SYNCHRON,
+                                                        { &aXItem, &aYItem });
+
+    // Check if the shape anchor was moved to the 2nd page as well.
+    SwFrameFormats* pShapeFormats = pDoc->GetSpzFrameFormats();
+    CPPUNIT_ASSERT(!pShapeFormats->empty());
+    auto it = pShapeFormats->begin();
+    SwFrameFormat* pShapeFormat = *it;
+    const SwPosition* pAnchor = pShapeFormat->GetAnchor().GetContentAnchor();
+    CPPUNIT_ASSERT(pAnchor);
+
+    // Find out the node index of the 1st para on the 2nd page.
+    SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
+    SwFrame* pFirstPage = pLayout->Lower();
+    SwFrame* pSecondPage = pFirstPage->GetNext();
+    CPPUNIT_ASSERT(pSecondPage->IsLayoutFrame());
+    SwFrame* pBodyFrame = static_cast<SwLayoutFrame*>(pSecondPage)->GetLower();
+    CPPUNIT_ASSERT(pBodyFrame->IsLayoutFrame());
+    SwFrame* pTextFrame = static_cast<SwLayoutFrame*>(pBodyFrame)->GetLower();
+    CPPUNIT_ASSERT(pTextFrame->IsTextFrame());
+    sal_uLong nNodeIndex = static_cast<SwTextFrame*>(pTextFrame)->GetTextNode()->GetIndex();
+
+    // Without the accompanying fix in place, this test would have failed with "Expected: 13;
+    // Actual: 12", i.e. the shape was anchored to the last paragraph of the 1st page, not to a
+    // paragraph on the 2nd page.
+    CPPUNIT_ASSERT_EQUAL(nNodeIndex, pAnchor->nNode.GetIndex());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest2);
