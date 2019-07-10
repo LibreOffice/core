@@ -878,7 +878,7 @@ VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateDropDownFormFieldD
     return VclPtr<AbstractDropDownFormFieldDialog_Impl>::Create(std::make_unique<sw::DropDownFormFieldDialog>(pParent, pDropDownField));
 }
 
-VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateDateFormFieldDialog(weld::Widget *pParent, sw::mark::IFieldmark* pDateField, SwDoc* pDoc)
+VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateDateFormFieldDialog(weld::Widget *pParent, sw::mark::IDateFieldmark* pDateField, SwDoc* pDoc)
 {
     return VclPtr<AbstractDateFormFieldDialog_Impl>::Create(std::make_unique<sw::DateFormFieldDialog>(pParent, pDateField, pDoc));
 }

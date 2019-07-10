@@ -18,8 +18,8 @@
 
 namespace sw
 {
-DateFormFieldDialog::DateFormFieldDialog(weld::Widget* pParent, mark::IFieldmark* pDateField,
-                                         SwDoc* pDoc)
+DateFormFieldDialog::DateFormFieldDialog(weld::Widget* pParent,
+                                         sw::mark::IDateFieldmark* pDateField, SwDoc* pDoc)
     : GenericDialogController(pParent, "modules/swriter/ui/dateformfielddialog.ui",
                               "DateFormFieldDialog")
     , m_pDateField(pDateField)
@@ -44,12 +44,28 @@ void DateFormFieldDialog::Apply()
 {
     if (m_pDateField != nullptr)
     {
-        const SvNumberformat* pFormat = m_pNumberFormatter->GetEntry(m_xFormatLB->GetFormat());
+        // Try to find out the current date value and replace the content
+        // with the right formatted date string
         sw::mark::IFieldmark::parameter_map_t* pParameters = m_pDateField->GetParameters();
-        (*pParameters)[ODF_FORMDATE_DATEFORMAT] <<= pFormat->GetFormatstring();
+        const SvNumberformat* pFormat = m_pNumberFormatter->GetEntry(m_xFormatLB->GetFormat());
 
-        LanguageType aLang = pFormat->GetLanguage();
-        (*pParameters)[ODF_FORMDATE_DATEFORMAT_LANGUAGE] <<= LanguageTag(aLang).getBcp47();
+        // Get date value first
+        std::pair<bool, double> aResult = m_pDateField->GetCurrentDate();
+
+        // Then set the date format
+        (*pParameters)[ODF_FORMDATE_DATEFORMAT] <<= pFormat->GetFormatstring();
+        (*pParameters)[ODF_FORMDATE_DATEFORMAT_LANGUAGE]
+            <<= LanguageTag(pFormat->GetLanguage()).getBcp47();
+
+        // Update current date
+        if (aResult.first)
+        {
+            m_pDateField->SetCurrentDate(aResult.second);
+        }
+        else
+        {
+            (*pParameters)[ODF_FORMDATE_CURRENTDATE] <<= OUString();
+        }
     }
 }
 
@@ -76,16 +92,16 @@ void DateFormFieldDialog::InitControls()
         if (!sFormatString.isEmpty() && !sLang.isEmpty())
         {
             LanguageType aLangType = LanguageTag(sLang).getLanguageType();
-            sal_uInt32 nFormatKey = m_pNumberFormatter->GetEntryKey(sFormatString, aLangType);
-            if (nFormatKey == NUMBERFORMAT_ENTRY_NOT_FOUND)
+            sal_uInt32 nFormat = m_pNumberFormatter->GetEntryKey(sFormatString, aLangType);
+            if (nFormat == NUMBERFORMAT_ENTRY_NOT_FOUND)
             {
                 sal_Int32 nCheckPos = 0;
                 SvNumFormatType nType;
-                m_pNumberFormatter->PutEntry(sFormatString, nCheckPos, nType, nFormatKey,
+                m_pNumberFormatter->PutEntry(sFormatString, nCheckPos, nType, nFormat,
                                              LanguageTag(sLang).getLanguageType());
             }
 
-            if (aLangType != LANGUAGE_DONTKNOW && nFormatKey != NUMBERFORMAT_ENTRY_NOT_FOUND)
+            if (aLangType != LANGUAGE_DONTKNOW && nFormat != NUMBERFORMAT_ENTRY_NOT_FOUND)
             {
                 if (m_xFormatLB->GetCurLanguage() == aLangType)
                 {
@@ -100,7 +116,7 @@ void DateFormFieldDialog::InitControls()
                     m_xFormatLB->SetFormatType(SvNumFormatType::ALL);
                     m_xFormatLB->SetFormatType(SvNumFormatType::DATE);
                 }
-                m_xFormatLB->SetDefFormat(nFormatKey);
+                m_xFormatLB->SetDefFormat(nFormat);
             }
         }
     }
