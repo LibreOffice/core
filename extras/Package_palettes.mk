@@ -17,6 +17,7 @@ $(eval $(call gb_Package_add_files,extras_palettes,$(LIBO_SHARE_FOLDER)/palette,
 	hatching.soh \
 	html.soc \
 	libreoffice.soc \
+	material.soc \
 	modern.sog \
 	standard.sob \
 	standard.soc \
