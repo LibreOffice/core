@@ -461,7 +461,7 @@ public:
     /// Set the left edge of the rectangle to x, preserving the width
     void                setX( long x );
     /// Set the top edge of the rectangle to y, preserving the height
-    void                setY( long y ) { nBottom += y - nTop;  nTop  = y; }
+    void                setY( long y );
     void                setWidth( long n ) { nRight = nLeft + n; }
     void                setHeight( long n ) { nBottom = nTop + n; }
     /// Returns the string representation of the rectangle, format is "x, y, width, height".
