@@ -128,7 +128,7 @@ CalendarImpl::getLoadedCalendar2()
     return xCalendar->getLoadedCalendar2();
 }
 
-Calendar SAL_CALL
+::css::i18n::Calendar SAL_CALL
 CalendarImpl::getLoadedCalendar()
 {
     if (!xCalendar.is())
