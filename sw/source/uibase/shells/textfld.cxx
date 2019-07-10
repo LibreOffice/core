@@ -730,17 +730,25 @@ FIELD_INSERT:
             SwPaM* pCursorPos = rSh.GetCursor();
             if(pCursorPos)
             {
-                IDocumentMarkAccess* pMarksAccess = rSh.GetDoc()->getIDocumentMarkAccess();
-                sw::mark::IFieldmark* pFieldBM = pMarksAccess->makeNoTextFieldBookmark(*pCursorPos, OUString(), ODF_FORMDATE);
+                // Insert five enspaces into the text field so the field has extent
+                sal_Unicode vEnSpaces[ODF_FORMFIELD_DEFAULT_LENGTH] = {8194, 8194, 8194, 8194, 8194};
+                bool bSuccess = rSh.GetDoc()->getIDocumentContentOperations().InsertString(*pCursorPos, OUString(vEnSpaces, ODF_FORMFIELD_DEFAULT_LENGTH));
+                if(bSuccess)
+                {
+                    IDocumentMarkAccess* pMarksAccess = rSh.GetDoc()->getIDocumentMarkAccess();
+                    SwPaM aFieldPam(pCursorPos->GetPoint()->nNode, pCursorPos->GetPoint()->nContent.GetIndex()-5,
+                                    pCursorPos->GetPoint()->nNode, pCursorPos->GetPoint()->nContent.GetIndex());
+                    sw::mark::IFieldmark* pFieldBM = pMarksAccess->makeFieldBookmark(aFieldPam, OUString(), ODF_FORMDATE);
 
-                // Use a default date format and language
-                sw::mark::IFieldmark::parameter_map_t* pParameters = pFieldBM->GetParameters();
-                SvNumberFormatter* pFormatter = rSh.GetDoc()->GetNumberFormatter();
-                sal_uInt32 nStandardFormat = pFormatter->GetStandardFormat(SvNumFormatType::DATE);
-                const SvNumberformat* pFormat = pFormatter->GetEntry(nStandardFormat);
+                    // Use a default date format and language
+                    sw::mark::IFieldmark::parameter_map_t* pParameters = pFieldBM->GetParameters();
+                    SvNumberFormatter* pFormatter = rSh.GetDoc()->GetNumberFormatter();
+                    sal_uInt32 nStandardFormat = pFormatter->GetStandardFormat(SvNumFormatType::DATE);
+                    const SvNumberformat* pFormat = pFormatter->GetEntry(nStandardFormat);
 
-                (*pParameters)[ODF_FORMDATE_DATEFORMAT] <<= pFormat->GetFormatstring();
-                (*pParameters)[ODF_FORMDATE_DATEFORMAT_LANGUAGE] <<= LanguageTag(pFormat->GetLanguage()).getBcp47();
+                    (*pParameters)[ODF_FORMDATE_DATEFORMAT] <<= pFormat->GetFormatstring();
+                    (*pParameters)[ODF_FORMDATE_DATEFORMAT_LANGUAGE] <<= LanguageTag(pFormat->GetLanguage()).getBcp47();
+                }
             }
 
             rSh.GetDoc()->GetIDocumentUndoRedo().EndUndo(SwUndoId::INSERT_FORM_FIELD, nullptr);

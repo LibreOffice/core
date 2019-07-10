@@ -661,9 +661,19 @@ namespace sw { namespace mark
         bool bUndoIsEnabled = m_pDoc->GetIDocumentUndoRedo().DoesUndo();
         m_pDoc->GetIDocumentUndoRedo().DoUndo(false);
 
-        sw::mark::IMark* pMark = makeMark( rPaM, rName,
-                IDocumentMarkAccess::MarkType::TEXT_FIELDMARK,
-                sw::mark::InsertMode::New);
+        sw::mark::IMark* pMark = nullptr;
+        if(rType == ODF_FORMDATE)
+        {
+            pMark = makeMark(rPaM, rName,
+                             IDocumentMarkAccess::MarkType::DATE_FIELDMARK,
+                              sw::mark::InsertMode::New);
+        }
+        else
+        {
+            pMark = makeMark(rPaM, rName,
+                             IDocumentMarkAccess::MarkType::TEXT_FIELDMARK,
+                             sw::mark::InsertMode::New);
+        }
         sw::mark::IFieldmark* pFieldMark = dynamic_cast<sw::mark::IFieldmark*>( pMark );
         if (pFieldMark)
             pFieldMark->SetFieldname( rType );
@@ -1274,23 +1284,29 @@ namespace sw { namespace mark
         deleteMark(lcl_FindMark(m_vAllMarks, *pFieldmark));
     }
 
-    ::sw::mark::IFieldmark* MarkManager::changeNonTextFieldmarkType(::sw::mark::IFieldmark* pFieldmark, const OUString& rNewType)
+    ::sw::mark::IFieldmark* MarkManager::changeFormFieldmarkType(::sw::mark::IFieldmark* pFieldmark, const OUString& rNewType)
     {
         bool bActualChange = false;
         if(rNewType == ODF_FORMDROPDOWN)
         {
             if (!dynamic_cast<::sw::mark::DropDownFieldmark*>(pFieldmark))
                 bActualChange = true;
+            if (!dynamic_cast<::sw::mark::CheckboxFieldmark*>(pFieldmark)) // only allowed converting between checkbox <-> dropdown
+                return nullptr;
         }
         else if(rNewType == ODF_FORMCHECKBOX)
         {
             if (!dynamic_cast<::sw::mark::CheckboxFieldmark*>(pFieldmark))
                 bActualChange = true;
+            if (!dynamic_cast<::sw::mark::DropDownFieldmark*>(pFieldmark)) // only allowed converting between checkbox <-> dropdown
+                return nullptr;
         }
         else if(rNewType == ODF_FORMDATE)
         {
             if (!dynamic_cast<::sw::mark::DateFieldmark*>(pFieldmark))
                 bActualChange = true;
+            if (!dynamic_cast<::sw::mark::TextFieldmark*>(pFieldmark)) // only allowed converting between date field <-> text field
+                return nullptr;
         }
 
         if (!bActualChange)
@@ -1301,12 +1317,19 @@ namespace sw { namespace mark
         SwPaM aPaM(pFieldmark->GetMarkPos());
 
         // Remove the old fieldmark and create a new one with the new type
-        if(aPaM.GetPoint()->nContent > 0)
+        if(aPaM.GetPoint()->nContent > 0 && (rNewType == ODF_FORMDROPDOWN || rNewType == ODF_FORMCHECKBOX))
         {
             --aPaM.GetPoint()->nContent;
             SwPosition aNewPos (aPaM.GetPoint()->nNode, aPaM.GetPoint()->nContent);
             deleteFieldmarkAt(aNewPos);
             return makeNoTextFieldBookmark(aPaM, sName, rNewType);
+        }
+        else if(rNewType == ODF_FORMDATE)
+        {
+            SwPosition aPos (aPaM.GetPoint()->nNode, aPaM.GetPoint()->nContent);
+            SwPaM aNewPaM(pFieldmark->GetMarkStart(), pFieldmark->GetMarkEnd());
+            deleteFieldmarkAt(aPos);
+            return makeFieldBookmark(aNewPaM, sName, rNewType);
         }
         return nullptr;
     }

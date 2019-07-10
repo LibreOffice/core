@@ -162,6 +162,9 @@ void DocxExport::AppendBookmarks( const SwTextNode& rNode, sal_Int32 nCurrentPos
             const sal_Int32 nStart = pMark->GetMarkStart().nContent.GetIndex();
             const sal_Int32 nEnd = pMark->GetMarkEnd().nContent.GetIndex();
 
+            if (dynamic_cast<sw::mark::IDateFieldmark*>(pMark))
+                continue;
+
             if ( nStart == nCurrentPos )
                 aStarts.push_back( pMark->GetName() );
 
