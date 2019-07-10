@@ -27,6 +27,7 @@
 #include <xmloff/odffields.hxx>
 #include <IDocumentMarkAccess.hxx>
 #include <IMark.hxx>
+#include <com/sun/star/awt/FontWeight.hpp>
 
 class Test : public SwModelTestBase
 {
@@ -51,6 +52,7 @@ public:
     void testCheckBoxFormField();
     void testDropDownFormField();
     void testDateFormField();
+    void testDateFormFieldCharacterFormatting();
 
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testEmbeddedGraphicRoundtrip);
@@ -70,6 +72,7 @@ public:
     CPPUNIT_TEST(testCheckBoxFormField);
     CPPUNIT_TEST(testDropDownFormField);
     CPPUNIT_TEST(testDateFormField);
+    CPPUNIT_TEST(testDateFormFieldCharacterFormatting);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -1352,6 +1355,54 @@ void Test::testDateFormField()
             ++nIndex;
         }
         CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), int(5), nIndex);
+    }
+}
+
+void Test::testDateFormFieldCharacterFormatting()
+{
+    const OUString aFilterNames[] = {
+        "writer8",
+        "Office Open XML Text",
+    };
+
+    for (const OUString& rFilterName : aFilterNames)
+    {
+        if (mxComponent.is())
+            mxComponent->dispose();
+        mxComponent = loadFromDesktop(m_directories.getURLFromSrc("/sw/qa/extras/globalfilter/data/date_form_field_char_formatting.odt"), "com.sun.star.text.TextDocument");
+
+        const OString sFailedMessage = OString("Failed on filter: ") + rFilterName.toUtf8();
+
+        // Export the document and import again for a check
+        uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+        utl::MediaDescriptor aMediaDescriptor;
+        aMediaDescriptor["FilterName"] <<= rFilterName;
+        utl::TempFile aTempFile;
+        aTempFile.EnableKillingFile();
+        xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+        uno::Reference< lang::XComponent > xComponent(xStorable, uno::UNO_QUERY);
+        xComponent->dispose();
+        mxComponent = loadFromDesktop(aTempFile.GetURL(), "com.sun.star.text.TextDocument");
+
+        // Check the document after round trip
+        SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
+        CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), pTextDoc);
+        SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+        IDocumentMarkAccess* pMarkAccess = pDoc->getIDocumentMarkAccess();
+
+        // Check that we have the field at the right place
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), sal_Int32(1), pMarkAccess->getAllMarksCount());
+        ::sw::mark::IDateFieldmark* pFieldmark = dynamic_cast<::sw::mark::IDateFieldmark*>(*pMarkAccess->getAllMarksBegin());
+        CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), pFieldmark);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), OUString(ODF_FORMDATE), pFieldmark->GetFieldname());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), sal_Int32(0), pFieldmark->GetMarkStart().nContent.GetIndex());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), sal_Int32(10), pFieldmark->GetMarkEnd().nContent.GetIndex());
+
+        // We have one date field, first half of the field has bold character weight and second part has red character color
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), awt::FontWeight::BOLD, getProperty<float>(getRun(getParagraph(1), 2), "CharWeight"));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), sal_Int32(COL_AUTO), getProperty<sal_Int32>(getRun(getParagraph(1), 2), "CharColor"));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), awt::FontWeight::NORMAL, getProperty<float>(getRun(getParagraph(1), 3), "CharWeight"));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), sal_Int32(0xff0000), getProperty<sal_Int32>(getRun(getParagraph(1), 3), "CharColor"));
     }
 }
 
