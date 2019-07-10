@@ -1328,9 +1328,9 @@ void SwFieldFormDropDownPortion::Paint( const SwTextPaintInfo &rInf ) const
     }
 }
 
-SwFieldPortion *SwFieldFormDatePortion::Clone(const OUString &rExpand) const
+SwFieldPortion *SwFieldFormDatePortion::Clone(const OUString &/*rExpand*/) const
 {
-    return new SwFieldFormDatePortion(m_pFieldMark, rExpand);
+    return new SwFieldFormDatePortion(m_pFieldMark, m_bStart);
 }
 
 void SwFieldFormDatePortion::Paint( const SwTextPaintInfo &rInf ) const
@@ -1342,7 +1342,10 @@ void SwFieldFormDatePortion::Paint( const SwTextPaintInfo &rInf ) const
     {
         SwRect aPaintArea;
         rInf.CalcRect( *this, &aPaintArea );
-        pDateField->SetPortionPaintArea(aPaintArea);
+        if(m_bStart)
+            pDateField->SetPortionPaintAreaStart(aPaintArea);
+        else
+            pDateField->SetPortionPaintAreaEnd(aPaintArea);
     }
 }
 

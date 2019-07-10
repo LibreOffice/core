@@ -235,18 +235,20 @@ private:
 class SwFieldFormDatePortion : public SwFieldPortion
 {
 public:
-    explicit SwFieldFormDatePortion(sw::mark::IFieldmark *pFieldMark, const OUString &rExpand)
-        : SwFieldPortion(rExpand)
+    explicit SwFieldFormDatePortion(sw::mark::IFieldmark *pFieldMark, bool bStart)
+        : SwFieldPortion("")
         , m_pFieldMark(pFieldMark)
+        , m_bStart(bStart)
     {
     }
     // Field cloner for SplitGlue
-    virtual SwFieldPortion *Clone( const OUString &rExpand ) const override;
+    virtual SwFieldPortion *Clone( const OUString &rExpand) const override;
 
     virtual void Paint( const SwTextPaintInfo &rInf ) const override;
 
 private:
     sw::mark::IFieldmark* m_pFieldMark;
+    bool m_bStart;
 };
 
 #endif

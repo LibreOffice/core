@@ -877,7 +877,7 @@ VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateDropDownFormFieldD
     return VclPtr<AbstractDropDownFormFieldDialog_Impl>::Create(o3tl::make_unique<sw::DropDownFormFieldDialog>(pParent, pDropDownField));
 }
 
-VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateDateFormFieldDialog(sw::mark::IFieldmark* pDateField, SwDoc* pDoc)
+VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateDateFormFieldDialog(sw::mark::IDateFieldmark* pDateField, SwDoc* pDoc)
 {
     VclPtr<sw::DateFormFieldDialog> pDlg = VclPtr<sw::DateFormFieldDialog>::Create(nullptr, pDateField, pDoc);
     return VclPtr<AbstractDateFormFieldDialog_Impl>::Create(pDlg);
