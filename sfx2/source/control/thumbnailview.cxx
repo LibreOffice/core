@@ -245,6 +245,7 @@ void ThumbnailView::CalculateItemPositions (bool bScrollBarUsed)
     size_t      nItemCount = mFilteredItemList.size();
     WinBits     nStyle = GetStyle();
     VclPtr<ScrollBar>  pDelScrBar;
+    long        nScrBarWidth = 0;
 
     // consider the scrolling
     if ( nStyle & WB_VSCROLL )
@@ -254,12 +255,9 @@ void ThumbnailView::CalculateItemPositions (bool bScrollBarUsed)
             mpScrBar = VclPtr<ScrollBar>::Create( this, WB_VSCROLL | WB_DRAG );
             mpScrBar->SetScrollHdl( LINK( this, ThumbnailView, ImplScrollHdl ) );
         }
-        else
-        {
-            // adapt the width because of the changed settings
-            long nScrBarWidth = GetSettings().GetStyleSettings().GetScrollBarSize();
-            mpScrBar->setPosSizePixel( 0, 0, nScrBarWidth, 0, PosSizeFlags::Width );
-        }
+
+        // adapt the width because of the changed settings
+        nScrBarWidth = GetSettings().GetStyleSettings().GetScrollBarSize();
     }
     else
     {
@@ -278,11 +276,6 @@ void ThumbnailView::CalculateItemPositions (bool bScrollBarUsed)
                         static_cast<float>(mpScrBar->GetRangeMax()-2);
     else
         nScrollRatio = 0;
-
-    // calculate ScrollBar width
-    long nScrBarWidth = 0;
-    if ( mpScrBar )
-        nScrBarWidth = mpScrBar->GetSizePixel().Width();
 
     // calculate maximum number of visible columns
     mnCols = static_cast<sal_uInt16>((aWinSize.Width()-nScrBarWidth) / mnItemWidth);
