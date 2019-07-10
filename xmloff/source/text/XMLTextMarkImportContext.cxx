@@ -137,8 +137,6 @@ static const char *lcl_getFormFieldmarkName(OUString const &name)
     else if (name == ODF_FORMDROPDOWN ||
              name == "ecma.office-open-xml.field.FORMDROPDOWN")
         return ODF_FORMDROPDOWN;
-    else if (name == ODF_FORMDATE)
-        return ODF_FORMDATE;
     else
         return nullptr;
 }
@@ -332,8 +330,7 @@ void XMLTextMarkImportContext::EndElement()
                                 OUString const type(m_rHelper.getCurrentFieldType());
                                 fieldmarkTypeName = lcl_getFieldmarkName(type);
                                 if (fieldmarkTypeName == ODF_FORMCHECKBOX ||
-                                    fieldmarkTypeName == ODF_FORMDROPDOWN ||
-                                    fieldmarkTypeName == ODF_FORMDATE)
+                                    fieldmarkTypeName == ODF_FORMDROPDOWN)
                                 {   // sw can't handle checkbox with start+end
                                     SAL_INFO("xmloff.text", "invalid fieldmark-start/fieldmark-end ignored");
                                     isInvalid = true;

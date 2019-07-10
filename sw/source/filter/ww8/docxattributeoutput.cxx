@@ -1878,21 +1878,18 @@ void DocxAttributeOutput::WriteFFData(  const FieldInfos& rInfos )
     }
 }
 
-void DocxAttributeOutput::WriteFormDate(const OUString& sCurrentDate, const OUString& sDateFormat, const OUString& sLang)
+void DocxAttributeOutput::WriteFormDateStart(const OUString& sFullDate, const OUString& sDateFormat, const OUString& sLang)
 {
     m_pSerializer->startElementNS(XML_w, XML_sdt);
     m_pSerializer->startElementNS(XML_w, XML_sdtPr);
 
-    if (!sCurrentDate.isEmpty())
-    {
-        OString sDate = sCurrentDate.toUtf8() + "T00:00:00Z";
-        m_pSerializer->startElementNS(XML_w, XML_date, FSNS(XML_w, XML_fullDate), sDate);
-    }
+    if(!sFullDate.isEmpty())
+        m_pSerializer->startElementNS(XML_w, XML_date, FSNS(XML_w, XML_fullDate), sFullDate.toUtf8());
     else
         m_pSerializer->startElementNS(XML_w, XML_date);
 
-    OString sUTF8DateFormat = sDateFormat.toUtf8();
     // Replace quotation mark used for marking static strings in date format
+    OString sUTF8DateFormat = sDateFormat.toUtf8();
     sUTF8DateFormat = sUTF8DateFormat.replaceAll("\"", "'");
     m_pSerializer->singleElementNS(XML_w, XML_dateFormat,
                                    FSNS(XML_w, XML_val), sUTF8DateFormat);
@@ -1907,59 +1904,11 @@ void DocxAttributeOutput::WriteFormDate(const OUString& sCurrentDate, const OUSt
     m_pSerializer->endElementNS(XML_w, XML_sdtPr);
 
     m_pSerializer->startElementNS(XML_w, XML_sdtContent);
-    m_pSerializer->startElementNS(XML_w, XML_r);
+}
 
-    // Convert the current date to the right format
-    if (!sCurrentDate.isEmpty())
-    {
-        SvNumberFormatter* pFormatter = m_rExport.m_pDoc->GetNumberFormatter();
-
-        double dCurrentDate = 0.0;
-        // First get the date internal double representation
-        sal_uInt32 nFormat = pFormatter->GetEntryKey(ODF_FORMDATE_CURRENTDATE_FORMAT, ODF_FORMDATE_CURRENTDATE_LANGUAGE);
-        if (nFormat == NUMBERFORMAT_ENTRY_NOT_FOUND)
-        {
-            sal_Int32 nCheckPos = 0;
-            SvNumFormatType nType;
-            OUString sFormat = ODF_FORMDATE_CURRENTDATE_FORMAT;
-            pFormatter->PutEntry(sFormat,
-                                 nCheckPos,
-                                 nType,
-                                 nFormat,
-                                 ODF_FORMDATE_CURRENTDATE_LANGUAGE);
-        }
-        if (nFormat != NUMBERFORMAT_ENTRY_NOT_FOUND)
-        {
-            pFormatter->IsNumberFormat(sCurrentDate, nFormat, dCurrentDate);
-        }
-
-        // Then convert the date to a fromatter string
-        nFormat = pFormatter->GetEntryKey(sDateFormat, LanguageTag(sLang).getLanguageType());
-        if (nFormat == NUMBERFORMAT_ENTRY_NOT_FOUND)
-        {
-            sal_Int32 nCheckPos = 0;
-            SvNumFormatType nType;
-            OUString sNonConstDateFormat = sDateFormat;
-            pFormatter->PutEntry(sNonConstDateFormat,
-                                 nCheckPos,
-                                 nType,
-                                 nFormat,
-                                 LanguageTag(sLang).getLanguageType());
-        }
-
-        OUString sOutput;
-        if (nFormat != NUMBERFORMAT_ENTRY_NOT_FOUND)
-        {
-            Color* pCol = nullptr;
-            pFormatter->GetOutputString(dCurrentDate, nFormat, sOutput, &pCol, false);
-        }
-
-        RunText(sOutput);
-    }
-
-    m_pSerializer->endElementNS(XML_w, XML_r);
+void DocxAttributeOutput::WriteFormDateEnd()
+{
     m_pSerializer->endElementNS(XML_w, XML_sdtContent);
-
     m_pSerializer->endElementNS(XML_w, XML_sdt);
 }
 
@@ -1972,17 +1921,31 @@ void DocxAttributeOutput::StartField_Impl( const SwTextNode* pNode, sal_Int32 nP
     }
     else if ( rInfos.eType == ww::eFORMDATE )
     {
-        const ::sw::mark::IFieldmark& rFieldmark = *rInfos.pFieldmark;
-        FieldMarkParamsHelper params( rFieldmark );
+        const sw::mark::IDateFieldmark* const pFieldmark = dynamic_cast<const sw::mark::IDateFieldmark* const>(rInfos.pFieldmark);
+        FieldMarkParamsHelper params( *pFieldmark );
 
+        OUString sFullDate;
         OUString sCurrentDate;
         params.extractParam( ODF_FORMDATE_CURRENTDATE, sCurrentDate );
+        if(!sCurrentDate.isEmpty())
+        {
+            sFullDate = sCurrentDate + "T00:00:00Z";
+        }
+        else
+        {
+            std::pair<bool, double> aResult = pFieldmark->GetCurrentDate();
+            if(aResult.first)
+            {
+                sFullDate = pFieldmark->GetDateInStandardDateFormat(aResult.second) + "T00:00:00Z";
+            }
+        }
+
         OUString sDateFormat;
         params.extractParam( ODF_FORMDATE_DATEFORMAT, sDateFormat );
         OUString sLang;
         params.extractParam( ODF_FORMDATE_DATEFORMAT_LANGUAGE, sLang );
 
-        WriteFormDate( sCurrentDate, sDateFormat, sLang );
+        WriteFormDateStart( sFullDate, sDateFormat, sLang );
     }
     else if ( rInfos.eType != ww::eNONE ) // HYPERLINK fields are just commands
     {
@@ -2215,6 +2178,12 @@ void DocxAttributeOutput::DoWriteFieldRunProperties( const SwTextNode * pNode, s
 
 void DocxAttributeOutput::EndField_Impl( const SwTextNode* pNode, sal_Int32 nPos, FieldInfos& rInfos )
 {
+    if ( rInfos.eType == ww::eFORMDATE )
+    {
+        WriteFormDateEnd();
+        return;
+    }
+
     // The command has to be written before for the hyperlinks
     if ( rInfos.pField )
     {

@@ -99,24 +99,40 @@ bool SdtHelper::validateDateFormat()
     return !m_sDateFormat.toString().isEmpty() && !m_sLocale.toString().isEmpty();
 }
 
-void SdtHelper::createDateContentControl()
+void SdtHelper::createDateContentControl(bool bInsideTable)
 {
+    if(!m_xDateFieldStartRange.is())
+        return;
+
     uno::Reference<text::XTextCursor> xCrsr;
     if(m_rDM_Impl.HasTopText())
     {
         uno::Reference<text::XTextAppend> xTextAppend = m_rDM_Impl.GetTopTextAppend();
         if (xTextAppend.is())
-            xCrsr = xTextAppend->createTextCursorByRange(xTextAppend->getEnd());
+        {
+            xCrsr = xTextAppend->createTextCursorByRange(xTextAppend);
+        }
     }
     if (xCrsr.is())
     {
+        try
+        {
+            xCrsr->gotoRange(m_xDateFieldStartRange, false);
+            if(bInsideTable)
+                xCrsr->goRight(1, false);
+            xCrsr->gotoEnd(true);
+        }
+        catch (uno::Exception&) {
+            OSL_ENSURE(false, "Cannot get the right text range for date field");
+            return;
+        }
+
         uno::Reference< uno::XInterface > xFieldInterface;
-        xFieldInterface = m_rDM_Impl.GetTextFactory()->createInstance("com.sun.star.text.FormFieldmark");
+        xFieldInterface = m_rDM_Impl.GetTextFactory()->createInstance("com.sun.star.text.Fieldmark");
         uno::Reference< text::XFormField > xFormField( xFieldInterface, uno::UNO_QUERY );
         uno::Reference< text::XTextContent > xToInsert(xFormField, uno::UNO_QUERY);
         if ( xFormField.is() && xToInsert.is() )
         {
-            xCrsr->gotoEnd(true);
             xToInsert->attach( uno::Reference< text::XTextRange >( xCrsr, uno::UNO_QUERY_THROW ));
             xFormField->setFieldType(ODF_FORMDATE);
             uno::Reference<container::XNameContainer> xNameCont = xFormField->getParameters();
@@ -127,15 +143,14 @@ void SdtHelper::createDateContentControl()
                 sDateFormat = sDateFormat.replaceAll("'", "\"");
                 xNameCont->insertByName(ODF_FORMDATE_DATEFORMAT, uno::makeAny(sDateFormat));
                 xNameCont->insertByName(ODF_FORMDATE_DATEFORMAT_LANGUAGE, uno::makeAny(m_sLocale.makeStringAndClear()));
-                OUString sDate = m_sDate.makeStringAndClear();
-                if(!sDate.isEmpty())
-                {
-                    // Remove time part of the full date
-                    sal_Int32 nTimeSep = sDate.indexOf("T");
-                    if(nTimeSep != -1)
-                        sDate = sDate.copy(0, nTimeSep);
-                    xNameCont->insertByName(ODF_FORMDATE_CURRENTDATE, uno::makeAny(sDate));
-                }
+            }
+            OUString sFullDate = m_sDate.makeStringAndClear();
+            if(!sFullDate.isEmpty())
+            {
+                sal_Int32 nTimeSep = sFullDate.indexOf("T");
+                if(nTimeSep != -1)
+                    sFullDate = sFullDate.copy(0, nTimeSep);
+                xNameCont->insertByName(ODF_FORMDATE_CURRENTDATE, uno::makeAny(sFullDate));
             }
         }
     }

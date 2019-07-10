@@ -545,7 +545,7 @@ DECLARE_OOXMLIMPORT_TEST(testInvalidDateFormField, "invalid_date_form_field.docx
             CPPUNIT_ASSERT_EQUAL(OUString("2019.06.34"), sCurrentDate);
 
             CPPUNIT_ASSERT_EQUAL(sal_uLong(9), pFieldmark->GetMarkStart().nNode.GetIndex());
-            CPPUNIT_ASSERT_EQUAL(sal_Int32(13), pFieldmark->GetMarkStart().nContent.GetIndex());
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(14), pFieldmark->GetMarkStart().nContent.GetIndex());
         }
         else // The third one has wrong local
         {
@@ -554,7 +554,7 @@ DECLARE_OOXMLIMPORT_TEST(testInvalidDateFormField, "invalid_date_form_field.docx
             CPPUNIT_ASSERT_EQUAL(OUString("2019.06.11"), sCurrentDate);
 
             CPPUNIT_ASSERT_EQUAL(sal_uLong(9), pFieldmark->GetMarkStart().nNode.GetIndex());
-            CPPUNIT_ASSERT_EQUAL(sal_Int32(23), pFieldmark->GetMarkStart().nContent.GetIndex());
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(33), pFieldmark->GetMarkStart().nContent.GetIndex());
         }
         ++nIndex;
     }
