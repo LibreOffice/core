@@ -103,7 +103,7 @@ sal_Int32 SAL_CALL OResultSetMetaData::getColumnType(sal_Int32 column)
 
     ColumnTypeInfo aInfo( m_pSqlda->sqlvar[column-1].sqltype,
             m_pSqlda->sqlvar[column-1].sqlsubtype,
-            m_pSqlda->sqlvar[column-1].sqlscale,
+            -(m_pSqlda->sqlvar[column-1].sqlscale),
             sCharset );
 
     return aInfo.getSdbcType();
@@ -153,7 +153,7 @@ OUString SAL_CALL OResultSetMetaData::getColumnTypeName(sal_Int32 column)
 
     ColumnTypeInfo aInfo( m_pSqlda->sqlvar[column-1].sqltype,
             m_pSqlda->sqlvar[column-1].sqlsubtype,
-            m_pSqlda->sqlvar[column-1].sqlscale );
+            -(m_pSqlda->sqlvar[column-1].sqlscale) );
 
     return aInfo.getColumnTypeName();
 }
