@@ -331,8 +331,7 @@ void ThumbnailView::CalculateItemPositions (bool bScrollBarUsed)
     size_t nLastItem = nFirstItem + (mnVisLines + 1) * mnCols;
 
     // If want also draw parts of items in the last line,
-    // then we add one more line if parts of these line are
-    // visible
+    // then we add one more line if parts of this line are visible
 
     size_t nCurCount = 0;
     for ( size_t i = 0; i < nItemCount; i++ )
@@ -1485,8 +1484,7 @@ void SfxThumbnailView::CalculateItemPositions(bool bScrollBarUsed)
     size_t nLastItem = nFirstItem + (mnVisLines + 1) * mnCols;
 
     // If want also draw parts of items in the last line,
-    // then we add one more line if parts of these line are
-    // visible
+    // then we add one more line if parts of this line are visible
 
     size_t nCurCount = 0;
     for ( size_t i = 0; i < nItemCount; i++ )
