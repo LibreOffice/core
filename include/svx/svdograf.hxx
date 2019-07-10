@@ -29,6 +29,8 @@
 #include <vcl/GraphicObject.hxx>
 #include <svx/svxdllapi.h>
 #include <o3tl/typed_flags_set.hxx>
+#include <memory>
+#include <cstddef>
 
 namespace sdr
 {
@@ -113,7 +115,7 @@ private:
     bool mbSignatureLineIsSigned;
     css::uno::Reference<css::graphic::XGraphic> mpSignatureLineUnsignedGraphic;
 
-    css::drawing::QRCode mpQrCode;
+    std::unique_ptr<css::drawing::QRCode> mpQrCode;
 
     void                    ImpRegisterLink();
     void                    ImpDeregisterLink();
@@ -287,15 +289,15 @@ public:
     void setSignatureLineIsSigned(bool bIsSigned) { mbSignatureLineIsSigned = bIsSigned; }
 
     // Qr Code
-    void setQrCode(const css::drawing::QRCode& rQrCode)
+    void setQrCode(css::drawing::QRCode& rQrCode)
     {
-        mpQrCode = rQrCode;
-    };
-    const css::drawing::QRCode& getQrCode() const
-    {
-        return mpQrCode;
+        mpQrCode = std::unique_ptr<css::drawing::QRCode>(new css::drawing::QRCode(rQrCode));
     };
 
+    css::drawing::QRCode* getQrCode()
+    {
+        return mpQrCode.get();
+    };
 };
 
 #endif // INCLUDED_SVX_SVDOGRAF_HXX
