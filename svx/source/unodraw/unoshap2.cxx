@@ -1572,7 +1572,11 @@ bool SvxGraphicObject::getPropertyValueImpl( const OUString& rName, const SfxIte
 
     case OWN_ATTR_QRCODE:
     {
-        rValue <<= static_cast<SdrGrafObj*>(GetSdrObject())->getQrCode();
+        css::drawing::QRCode* ptr = static_cast<SdrGrafObj*>(GetSdrObject())->getQrCode();
+        if(ptr)
+        {
+            rValue <<= *ptr;
+        }
         break;
     }
 

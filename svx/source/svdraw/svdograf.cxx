@@ -487,6 +487,11 @@ void SdrGrafObj::ImpRegisterLink()
     }
 }
 
+std::unique_ptr<css::drawing::QRCode> SdrGrafObj::func(std::unique_ptr<css::drawing::QRCode> &ptr)
+{
+    return std::make_unique<css::drawing::QRCode>(*ptr);
+}
+
 void SdrGrafObj::ImpDeregisterLink()
 {
     sfx2::LinkManager* pLinkManager(getSdrModelFromSdrObject().GetLinkManager());
@@ -742,7 +747,9 @@ SdrGrafObj& SdrGrafObj::operator=( const SdrGrafObj& rObj )
     mbIsSignatureLineCanAddComment = rObj.mbIsSignatureLineCanAddComment;
     mbSignatureLineIsSigned = false;
     mpSignatureLineUnsignedGraphic = rObj.mpSignatureLineUnsignedGraphic;
-    mpQrCode = rObj.mpQrCode;
+
+    std::unique_ptr<com::sun::star::drawing::QRCode>* temp = const_cast< std::unique_ptr<com::sun::star::drawing::QRCode>* >(&rObj.mpQrCode);
+    mpQrCode = func(*temp);
 
     if (mbIsSignatureLine && rObj.mpSignatureLineUnsignedGraphic)
         mpGraphicObject->SetGraphic(rObj.mpSignatureLineUnsignedGraphic);
