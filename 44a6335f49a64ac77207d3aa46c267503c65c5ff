@@ -46,6 +46,30 @@
       "revId": "44a6335f49a64ac77207d3aa46c267503c65c5ff",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_fea82778",
+        "filename": "svx/source/accessibility/AccessibleShape.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 930,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-07-10T14:35:19Z",
+      "side": 1,
+      "message": "For completeness:\n\n    comphelper::containerToSequence({aLangEventListenerType, aDocumentEventListenerType, aUnoTunnelType})\n\nis better and shorter as\n\n    uno::Sequence{aLangEventListenerType, aDocumentEventListenerType, aUnoTunnelType}\n\n(the template parameter is deduced automatically.)",
+      "parentUuid": "bf659307_1e7ddb1b",
+      "range": {
+        "startLine": 923,
+        "startChar": 4,
+        "endLine": 930,
+        "endChar": 36
+      },
+      "revId": "44a6335f49a64ac77207d3aa46c267503c65c5ff",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
