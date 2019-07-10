@@ -415,8 +415,9 @@ public:
 
     virtual VclPtr<AbstractDropDownFieldDialog> CreateDropDownFieldDialog(SwWrtShell &rSh,
         SwField* pField, bool bPrevButton, bool bNextButton) override;
+
     virtual VclPtr<VclAbstractDialog> CreateDropDownFormFieldDialog(sw::mark::IFieldmark* pDropDownField) override;
-    virtual VclPtr<VclAbstractDialog> CreateDateFormFieldDialog(sw::mark::IFieldmark* pDateField, SwDoc* pDoc) override;
+    virtual VclPtr<VclAbstractDialog> CreateDateFormFieldDialog(sw::mark::IDateFieldmark* pDateField, SwDoc* pDoc) override;
     virtual VclPtr<SfxAbstractTabDialog> CreateSwEnvDlg ( vcl::Window* pParent, const SfxItemSet& rSet, SwWrtShell* pWrtSh, Printer* pPrt, bool bInsert ) override;
     virtual VclPtr<AbstractSwLabDlg> CreateSwLabDlg(const SfxItemSet& rSet,
                                                      SwDBManager* pDBManager, bool bLabel) override;
