@@ -121,6 +121,25 @@ namespace sw { namespace mark
             ICheckboxFieldmark &operator =(ICheckboxFieldmark const&) = delete;
     };
 
+    class SW_DLLPUBLIC IDateFieldmark
+        : virtual public IFieldmark
+    {
+        protected:
+            IDateFieldmark() = default;
+
+        public:
+            virtual OUString GetContent() const = 0;
+            virtual void ReplaceContent(const OUString& sNewContent) = 0;
+
+            virtual std::pair<bool, double> GetCurrentDate() const = 0;
+            virtual void SetCurrentDate(double fDate) = 0;
+            virtual OUString GetDateInStandardDateFormat(double fDate) const = 0;
+
+    private:
+            IDateFieldmark(ICheckboxFieldmark const &) = delete;
+            IDateFieldmark &operator =(ICheckboxFieldmark const&) = delete;
+    };
+
     OUString ExpandFieldmark(IFieldmark* pBM);
 
 }}
