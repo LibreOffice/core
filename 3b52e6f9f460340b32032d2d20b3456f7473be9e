@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_dec44343",
+        "filename": "svx/source/svdraw/svdograf.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 745,
+      "author": {
+        "id": 1002063
+      },
+      "writtenOn": "2019-07-10T14:44:18Z",
+      "side": 1,
+      "message": "Compilation error: says mpQrCode is deleted.\n\n/home/shubham/libreoffice/svx/source/svdraw/svdograf.cxx:745:39: error: use of deleted function ‘std::unique_ptr\u003c_Tp, _Dp\u003e\u0026 std::unique_ptr\u003c_Tp, _Dp\u003e::operator\u003d(const std::unique_ptr\u003c_Tp, _Dp\u003e\u0026) [with _Tp \u003d com::sun::star::drawing::QRCode; _Dp \u003d std::default_delete\u003ccom::sun::star::drawing::QRCode\u003e]’\n     mpQrCode \u003d std::move(rObj.mpQrCode);",
+      "range": {
+        "startLine": 745,
+        "startChar": 4,
+        "endLine": 745,
+        "endChar": 40
+      },
+      "revId": "3b52e6f9f460340b32032d2d20b3456f7473be9e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
