@@ -316,9 +316,10 @@ void SwView::SetVisArea( const Point &rPt, bool bUpdateScrollbar )
 
     const long lXDiff = m_aVisArea.Left() - aPt.X();
     const long lYDiff = m_aVisArea.Top()  - aPt.Y();
-    SetVisArea( tools::Rectangle( aPt,
-            Point( m_aVisArea.Right() - lXDiff, m_aVisArea.Bottom() - lYDiff ) ),
-            bUpdateScrollbar);
+    SetVisArea( tools::Rectangle( aPt.X(), aPt.Y(),
+                    m_aVisArea.IsWidthEmpty() ? 0 : (m_aVisArea.Right() - lXDiff),
+                    m_aVisArea.IsHeightEmpty() ? 0 : (m_aVisArea.Bottom() - lYDiff) ),
+                bUpdateScrollbar);
 }
 
 void SwView::CheckVisArea()

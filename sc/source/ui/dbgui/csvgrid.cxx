@@ -1030,7 +1030,7 @@ void ScCsvGrid::Paint( vcl::RenderContext& /*rRenderContext*/, const tools::Rect
 
 void ScCsvGrid::ImplRedraw()
 {
-    if( IsVisible() )
+    if( IsVisible() && maWinSize.Width() > 0 && maWinSize.Height() > 0 )
     {
         if( !IsValidGfx() )
         {
