@@ -210,6 +210,10 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
             bTextEdit = true;
         }
 
+        // When clicking into a URl field, also go to text edit mode (when not following the link)
+        if (!bTextEdit && eHit == SdrHitKind::UrlField && !rMEvt.IsMod2() && !lcl_followHyperlinkAllowed(rMEvt))
+            bTextEdit = true;
+
         if(!bTextEdit
             && !mpDocSh->IsReadOnly()
             && ((mpView->IsMarkedHit(aMDPos, nHitLog) && !rMEvt.IsShift() && !rMEvt.IsMod2()) || pHdl != nullptr)
