@@ -37,6 +37,7 @@ ifeq ($(ENABLE_FIREBIRD_SDBC),TRUE)
 $(eval $(call gb_Module_add_check_targets,dbaccess,\
     $(if $(ENABLE_JAVA),CppunitTest_dbaccess_hsqlbinary_import) \
     $(if $(ENABLE_JAVA),CppunitTest_dbaccess_tdf119625) \
+    $(if $(ENABLE_JAVA),CppunitTest_dbaccess_tdf126268) \
 ))
 
 # remove if we have a be file for this
