@@ -88,13 +88,15 @@ void tools::Rectangle::SaturatingSetSize(const Size& rSize)
 
 void tools::Rectangle::SaturatingSetX(long x)
 {
-    nRight = o3tl::saturating_add(nRight, x - nLeft);
+    if (nRight != RECT_EMPTY)
+        nRight = o3tl::saturating_add(nRight, x - nLeft);
     nLeft = x;
 }
 
 void tools::Rectangle::SaturatingSetY(long y)
 {
-    nBottom = o3tl::saturating_add(nBottom, y - nTop);
+    if (nBottom != RECT_EMPTY)
+        nBottom = o3tl::saturating_add(nBottom, y - nTop);
     nTop = y;
 }
 
