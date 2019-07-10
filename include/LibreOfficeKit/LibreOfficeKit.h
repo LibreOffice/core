@@ -408,6 +408,12 @@ struct _LibreOfficeKitDocumentClass
     /// @see lok::Document::getSelectionType
     int (*getSelectionType) (LibreOfficeKitDocument* pThis);
 
+    /// @see lok::Document::removeTextContext
+    void (*removeTextContext) (LibreOfficeKitDocument* pThis,
+                               unsigned nWindowId,
+                               int nBefore,
+                               int nAfter);
+
 #endif // defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
 };
 
