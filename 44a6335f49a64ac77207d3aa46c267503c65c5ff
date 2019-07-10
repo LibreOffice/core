@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_13bcf403",
+        "filename": "svx/source/accessibility/AccessibleShape.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 930,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-07-10T05:55:29Z",
+      "side": 1,
+      "message": "Alternatively, it all (including size calculation and reallocation) could be rewritten as\n\n    return comphelper::concatSequences(aTypeList, aComponentTypeList, comphelper::containerToSequence({aLangEventListenerType, aDocumentEventListenerType, aUnoTunnelType}));\n\nI\u0027m not sure if that\u0027s as efficient, though - mainly because of the temporary sequence creation in the third parameter.",
+      "range": {
+        "startLine": 923,
+        "startChar": 4,
+        "endLine": 930,
+        "endChar": 36
+      },
+      "revId": "44a6335f49a64ac77207d3aa46c267503c65c5ff",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
