@@ -634,11 +634,17 @@ namespace sw { namespace mark
         const sal_Int32 nStart(GetMarkStart().nContent.GetIndex());
         const sal_Int32 nEnd  (GetMarkEnd().nContent.GetIndex());
 
-        if(nStart + 1 < pTextNode->GetText().getLength() && nEnd <= pTextNode->GetText().getLength())
+        if(nStart + 1 < pTextNode->GetText().getLength() && nEnd <= pTextNode->GetText().getLength() &&
+           nEnd > nStart + 2)
         {
             SwPaM aFieldPam(GetMarkStart().nNode, nStart + 1,
                             GetMarkStart().nNode, nEnd - 1);
             m_pDocumentContentOperationsManager->ReplaceRange(aFieldPam, sNewContent, false);
+        }
+        else
+        {
+            SwPaM aFieldStartPam(GetMarkStart().nNode, nStart + 1);
+            m_pDocumentContentOperationsManager->InsertString(aFieldStartPam, sNewContent);
         }
 
     }
