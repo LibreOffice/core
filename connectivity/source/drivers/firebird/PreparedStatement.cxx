@@ -422,6 +422,13 @@ void SAL_CALL OPreparedStatement::setDouble(sal_Int32 nIndex, double nValue)
     XSQLVAR* pVar = m_pInSqlda->sqlvar + (nIndex - 1);
     int dType = (pVar->sqltype & ~1); // drop flag bit for now
 
+    // take decimal places into account, later on they are removed in makeNumericString
+    // minus because firebird stores scale as a negative number
+    int nDecimalCount = -pVar->sqlscale;
+    sal_Int64 nDecimalCountExp = pow10Integer(nDecimalCount);
+
+    nValue = static_cast<double>(nValue * nDecimalCountExp);
+
     // Caller might try to set an integer type here. It makes sense to convert
     // it instead of throwing an error.
     switch(dType)
