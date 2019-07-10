@@ -157,6 +157,30 @@
     },
     {
       "key": {
+        "uuid": "bf659307_d949bd60",
+        "filename": "oox/source/export/chartexport.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 405,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2019-07-10T18:36:45Z",
+      "side": 1,
+      "message": "(maybe these are not unnecessary, but if yes, it\u0027s possible to remove the whole function)",
+      "parentUuid": "bf659307_b92c099a",
+      "range": {
+        "startLine": 405,
+        "startChar": 22,
+        "endLine": 405,
+        "endChar": 65
+      },
+      "revId": "94acf20f5bc10de834532d0e45bb8f1d4a8a51ed",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bf659307_59212d9f",
         "filename": "oox/source/export/chartexport.cxx",
         "patchSetId": 5
