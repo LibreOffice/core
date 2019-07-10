@@ -46,6 +46,30 @@
       "revId": "3b52e6f9f460340b32032d2d20b3456f7473be9e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_5e135367",
+        "filename": "svx/source/svdraw/svdograf.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 745,
+      "author": {
+        "id": 1002063
+      },
+      "writtenOn": "2019-07-10T17:57:54Z",
+      "side": 1,
+      "message": "mpQrCode.reset(rObj.mpQrCode);\n\ngives error /home/shubham/libreoffice/svx/source/svdraw/svdograf.cxx:745:34: error: no matching function for call to ‘std::unique_ptr\u003ccom::sun::star::drawing::QRCode\u003e::reset(const std::unique_ptr\u003ccom::sun::star::drawing::QRCode\u003e\u0026)’\n     mpQrCode.reset( rObj.mpQrCode);",
+      "parentUuid": "bf659307_dec44343",
+      "range": {
+        "startLine": 745,
+        "startChar": 4,
+        "endLine": 745,
+        "endChar": 40
+      },
+      "revId": "3b52e6f9f460340b32032d2d20b3456f7473be9e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
