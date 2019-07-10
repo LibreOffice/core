@@ -23,8 +23,6 @@ $(eval $(call gb_UnpackedTarball_add_patches,nss,\
     external/nss/ubsan.patch.0 \
     external/nss/clang-cl.patch.0 \
     $(if $(filter iOS,$(OS)), \
-        external/nss/nss-chromium-nss-static.patch \
-        external/nss/nss-more-static.patch \
         external/nss/nss-ios.patch) \
 	$(if $(filter MSC-INTEL,$(COM)-$(CPUNAME)), \
 		external/nss/nss.cygwin64.in32bit.patch) \
