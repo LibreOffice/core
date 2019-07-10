@@ -561,13 +561,14 @@ public:
 
 class AbstractPasteDialog_Impl : public SfxAbstractPasteDialog
 {
-    std::unique_ptr<SvPasteObjectDialog> m_xDlg;
+    std::shared_ptr<SvPasteObjectDialog> m_xDlg;
 public:
     explicit AbstractPasteDialog_Impl(std::unique_ptr<SvPasteObjectDialog> p)
         : m_xDlg(std::move(p))
     {
     }
     virtual short Execute() override;
+    virtual bool StartExecuteAsync(AsyncContext &rCtx) override;
 public:
     virtual void Insert( SotClipboardFormatId nFormat, const OUString & rFormatName ) override;
     virtual void SetObjName( const SvGlobalName & rClass, const OUString & rObjName ) override;

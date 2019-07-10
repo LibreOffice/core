@@ -264,6 +264,11 @@ short AbstractPasteDialog_Impl::Execute()
     return m_xDlg->run();
 }
 
+bool AbstractPasteDialog_Impl::StartExecuteAsync(AsyncContext &rCtx)
+{
+    return SfxDialogController::runAsync(m_xDlg, rCtx.maEndDialogFn);
+}
+
 short AbstractInsertObjectDialog_Impl::Execute()
 {
     return m_xDlg->run();
