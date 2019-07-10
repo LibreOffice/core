@@ -80,7 +80,7 @@ namespace pcr
         css::beans::PropertyState
                 getCurrentTargetURLState( ) const;
 
-        /** determines whether the current button tpye is FormButtonType_URL
+        /** determines whether the current button type is FormButtonType_URL
         */
         bool    currentButtonTypeIsOpenURL() const;
 
