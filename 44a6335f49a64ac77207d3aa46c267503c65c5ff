@@ -22,6 +22,30 @@
       "revId": "44a6335f49a64ac77207d3aa46c267503c65c5ff",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_1e7ddb1b",
+        "filename": "svx/source/accessibility/AccessibleShape.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 930,
+      "author": {
+        "id": 1001501
+      },
+      "writtenOn": "2019-07-10T14:25:36Z",
+      "side": 1,
+      "message": "Good catch! I\u0027ll add this to my to-do list.\nActually this approach creates fourth sequence - the result of concatSequences(). But impact to performance might be similar to aTypeList.realloc().",
+      "parentUuid": "bf659307_13bcf403",
+      "range": {
+        "startLine": 923,
+        "startChar": 4,
+        "endLine": 930,
+        "endChar": 36
+      },
+      "revId": "44a6335f49a64ac77207d3aa46c267503c65c5ff",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
