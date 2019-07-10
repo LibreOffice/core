@@ -264,7 +264,11 @@ ErrCode SwASCIIParser::ReadChars()
         nOrig = nLen = rInput.ReadBytes(pArr.get(), ASC_BUFFLEN);
         rtl_TextEncoding eCharSet;
         LineEnd eLineEnd;
-        bool bRet = SwIoSystem::IsDetectableText(pArr.get(), nLen, &eCharSet, &bSwapUnicode, &eLineEnd);
+        const bool bRet
+            = SwIoSystem::IsDetectableText(pArr.get(), nLen, &eCharSet, &bSwapUnicode, &eLineEnd);
+        if (!bRet)
+            return ERRCODE_IO_BROKENPACKAGE;
+
         OSL_ENSURE(bRet, "Autodetect of text import without nag dialog must have failed");
         if (bRet && eCharSet != RTL_TEXTENCODING_DONTKNOW)
         {
