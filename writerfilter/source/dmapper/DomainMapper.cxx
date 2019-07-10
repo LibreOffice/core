@@ -2431,6 +2431,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
     case NS_ooxml::LN_CT_SdtPr_date:
     {
         resolveSprmProps(*this, rSprm);
+        m_pImpl->m_pSdtHelper->setDateFieldStartRange(GetCurrentTextRange()->getEnd());
     }
     break;
     case NS_ooxml::LN_CT_SdtDate_dateFormat:
@@ -3045,10 +3046,6 @@ void DomainMapper::lcl_startCharacterGroup()
         // call setSdtEndDeferred(false) here, that will happen only in lcl_utext().
         m_pImpl->GetTopContext()->Insert(PROP_SDT_END_BEFORE, uno::makeAny(true), true, CHAR_GRAB_BAG);
     }
-
-    // Remember formatting of the date control as it only supports plain strings natively.
-    if (!m_pImpl->m_pSdtHelper->getDateFormat().isEmpty())
-        enableInteropGrabBag("CharFormat");
 }
 
 void DomainMapper::lcl_endCharacterGroup()
@@ -3217,48 +3214,43 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
             return;
         }
     }
-    else if (m_pImpl->m_pSdtHelper->validateDateFormat())
-    {
-        // Date field will be imported, so we don't need the corresponding date text in most of the cases
-        // however when fullDate is not specified, but we have a date string we need to import it as
-        // simple text (this is the case when user sets date field manually in MSO).
-        if((!m_pImpl->m_pSdtHelper->getDate().toString().isEmpty() || sText.isEmpty()) &&
-           (!IsInHeaderFooter() || !m_pImpl->IsDiscardHeaderFooter())) // discard date control with header / footer
-        {
-            return;
-        }
-        // Remove date field attributes to avoid to import an actual date field
-        m_pImpl->m_pSdtHelper->getDateFormat().truncate();
-        m_pImpl->m_pSdtHelper->getLocale().truncate();
-    }
     else if (!m_pImpl->m_pSdtHelper->isInteropGrabBagEmpty())
     {
-        // there are unsupported SDT properties in the document
-        // save them in the paragraph interop grab bag
-        if (m_pImpl->IsDiscardHeaderFooter())
+         // Ignore grabbag when we have a date field, it can conflict during export
+        if(m_pImpl->m_pSdtHelper->validateDateFormat())
         {
-            // Unless we're supposed to ignore this header/footer.
             m_pImpl->m_pSdtHelper->getInteropGrabBagAndClear();
-            return;
-        }
-        if((m_pImpl->m_pSdtHelper->containedInInteropGrabBag("ooxml:CT_SdtPr_checkbox") ||
-                m_pImpl->m_pSdtHelper->containedInInteropGrabBag("ooxml:CT_SdtPr_text") ||
-                m_pImpl->m_pSdtHelper->containedInInteropGrabBag("ooxml:CT_SdtPr_dataBinding") ||
-                m_pImpl->m_pSdtHelper->containedInInteropGrabBag("ooxml:CT_SdtPr_citation") ||
-                (m_pImpl->m_pSdtHelper->containedInInteropGrabBag("ooxml:CT_SdtPr_id") &&
-                        m_pImpl->m_pSdtHelper->getInteropGrabBagSize() == 1)) && !m_pImpl->m_pSdtHelper->isOutsideAParagraph())
-        {
-            PropertyMapPtr pContext = m_pImpl->GetTopContextOfType(CONTEXT_CHARACTER);
-
-            if (m_pImpl->IsOpenField())
-                // We have a field, insert the SDT properties to the field's grab-bag, so they won't be lost.
-                pContext = m_pImpl->GetTopFieldContext()->getProperties();
-
-            pContext->Insert(PROP_SDTPR, uno::makeAny(m_pImpl->m_pSdtHelper->getInteropGrabBagAndClear()), true, CHAR_GRAB_BAG);
         }
         else
-            m_pImpl->GetTopContextOfType(CONTEXT_PARAGRAPH)->Insert(PROP_SDTPR,
-                    uno::makeAny(m_pImpl->m_pSdtHelper->getInteropGrabBagAndClear()), true, PARA_GRAB_BAG);
+        {
+
+            // there are unsupported SDT properties in the document
+            // save them in the paragraph interop grab bag
+            if (m_pImpl->IsDiscardHeaderFooter())
+            {
+                // Unless we're supposed to ignore this header/footer.
+                m_pImpl->m_pSdtHelper->getInteropGrabBagAndClear();
+                return;
+            }
+            if((m_pImpl->m_pSdtHelper->containedInInteropGrabBag("ooxml:CT_SdtPr_checkbox") ||
+                    m_pImpl->m_pSdtHelper->containedInInteropGrabBag("ooxml:CT_SdtPr_text") ||
+                    m_pImpl->m_pSdtHelper->containedInInteropGrabBag("ooxml:CT_SdtPr_dataBinding") ||
+                    m_pImpl->m_pSdtHelper->containedInInteropGrabBag("ooxml:CT_SdtPr_citation") ||
+                    (m_pImpl->m_pSdtHelper->containedInInteropGrabBag("ooxml:CT_SdtPr_id") &&
+                            m_pImpl->m_pSdtHelper->getInteropGrabBagSize() == 1)) && !m_pImpl->m_pSdtHelper->isOutsideAParagraph())
+            {
+                PropertyMapPtr pContext = m_pImpl->GetTopContextOfType(CONTEXT_CHARACTER);
+
+                if (m_pImpl->IsOpenField())
+                    // We have a field, insert the SDT properties to the field's grab-bag, so they won't be lost.
+                    pContext = m_pImpl->GetTopFieldContext()->getProperties();
+
+                pContext->Insert(PROP_SDTPR, uno::makeAny(m_pImpl->m_pSdtHelper->getInteropGrabBagAndClear()), true, CHAR_GRAB_BAG);
+            }
+            else
+                m_pImpl->GetTopContextOfType(CONTEXT_PARAGRAPH)->Insert(PROP_SDTPR,
+                        uno::makeAny(m_pImpl->m_pSdtHelper->getInteropGrabBagAndClear()), true, PARA_GRAB_BAG);
+        }
     }
     else if (len == 1 && sText[0] == 0x03)
     {
@@ -3282,6 +3274,21 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
         {
             m_pImpl->m_bIgnoreNextTab = false;
             return;
+        }
+    }
+    else if (m_pImpl->m_pSdtHelper->validateDateFormat())
+    {
+        if(IsInHeaderFooter() && m_pImpl->IsDiscardHeaderFooter())
+        {
+            m_pImpl->m_pSdtHelper->getDateFormat().truncate();
+            m_pImpl->m_pSdtHelper->getLocale().truncate();
+            return;
+        }
+        if((m_pImpl->hasTableManager() && m_pImpl->getTableManager().isInTable()) ||
+            m_pImpl->m_nTableDepth > 0)
+        {
+            // Inside a table we need to import date field earlier
+            m_pImpl->m_pSdtHelper->createDateContentControl(true);
         }
     }
 
