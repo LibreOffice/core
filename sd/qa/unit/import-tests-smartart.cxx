@@ -878,10 +878,11 @@ void SdImportTestSmartArt::testOrgChart()
     uno::Reference<drawing::XShape> xAssistantConnector(
         getChildShape(getChildShape(getChildShape(xGroup, 1), 1), 0), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xAssistantConnector.is());
-    awt::Point aAssistantConnectorPos = xAssistantConnector->getPosition();
+    //awt::Point aAssistantConnectorPos = xAssistantConnector->getPosition();
     // This failed, the vertical positions of the connector and the shape of
     // the assistant were the same.
-    CPPUNIT_ASSERT_LESS(aAssistantPos.Y, aAssistantConnectorPos.Y);
+    //CPPUNIT_ASSERT_LESS(aAssistantPos.Y, aAssistantConnectorPos.Y);
+    // connectors are hidden as they don't work correctly
 
     // Make sure the height of xManager and xManager2 is the same.
     uno::Reference<text::XText> xManager2(

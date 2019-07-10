@@ -104,28 +104,6 @@ bool containsDataNodeType(const oox::drawingml::ShapePtr& pShape, sal_Int32 nTyp
 
     return false;
 }
-
-/// Sets the position and size of a connector inside a hierChild algorithm.
-void setHierChildConnPosSize(const oox::drawingml::ShapePtr& pShape)
-{
-    // Connect to the top center of the child.
-    awt::Point aShapePoint = pShape->getPosition();
-    awt::Size aShapeSize = pShape->getSize();
-    tools::Rectangle aRectangle(Point(aShapePoint.X, aShapePoint.Y),
-                                Size(aShapeSize.Width, aShapeSize.Height));
-    Point aTo = aRectangle.TopCenter();
-
-    // Connect from the bottom center of the parent.
-    Point aFrom = aTo;
-    aFrom.setY(aFrom.getY() - aRectangle.getHeight() * 0.3);
-
-    tools::Rectangle aRect(aFrom, aTo);
-    aRect.Justify();
-    aShapePoint = awt::Point(aRect.Left(), aRect.Top());
-    aShapeSize = awt::Size(aRect.getWidth(), aRect.getHeight());
-    pShape->setPosition(aShapePoint);
-    pShape->setSize(aShapeSize);
-}
 }
 
 namespace oox { namespace drawingml {
@@ -407,7 +385,7 @@ sal_Int32 AlgAtom::getConnectorType()
         nEndSty = maMap.find(oox::XML_endSty)->second;
 
     if (nConnRout == oox::XML_bend)
-        return oox::XML_bentConnector3;
+        return 0; // was oox::XML_bentConnector3 - connectors are hidden in org chart as they don't work anyway
     if (nBegSty == oox::XML_arr && nEndSty == oox::XML_arr)
         return oox::XML_leftRightArrow;
     if (nBegSty == oox::XML_arr)
@@ -571,12 +549,6 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
 
                 rShape->setSubType(nType);
                 rShape->getCustomShapeProperties()->setShapePresetType(nType);
-
-                if (nType == XML_bentConnector3)
-                {
-                    setHierChildConnPosSize(rShape);
-                    break;
-                }
             }
 
             // Parse constraints to adjust the size.
