@@ -459,7 +459,7 @@ public:
     /// Returns the difference between bottom and top, assuming the range includes one end, but not the other.
     long                getHeight() const { return nBottom - nTop; }
     /// Set the left edge of the rectangle to x, preserving the width
-    void                setX( long x ) { nRight  += x - nLeft; nLeft = x; }
+    void                setX( long x );
     /// Set the top edge of the rectangle to y, preserving the height
     void                setY( long y ) { nBottom += y - nTop;  nTop  = y; }
     void                setWidth( long n ) { nRight = nLeft + n; }
