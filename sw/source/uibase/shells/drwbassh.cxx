@@ -348,7 +348,22 @@ void SwDrawBaseShell::Execute(SfxRequest const &rReq)
                 }
                 else
                 {
+                    pSh->StartAllAction();
                     pSdrView->SetGeoAttrToMarked( *pArgs );
+                    const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
+                    SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
+                    if (pObj)
+                    {
+                        SwFrameFormat* pFrameFormat = FindFrameFormat(pObj);
+                        if (pFrameFormat)
+                        {
+                            const SwFormatAnchor& rAnchor = pFrameFormat->GetAnchor();
+                            // Don't change shape position / size, just update the anchor doc model
+                            // position.
+                            pSh->ChgAnchor(rAnchor.GetAnchorId(), /*bSameOnly=*/true);
+                        }
+                    }
+                    pSh->EndAllAction();
                 }
             }
         }
