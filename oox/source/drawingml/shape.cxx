@@ -1099,7 +1099,7 @@ Reference< XShape > const & Shape::createAndInsert(
                     aShapeProps.setAnyProperty(PROP_BackColorTransparency, aShapeProps.getProperty(PROP_FillTransparence));
                     aShapeProps.erase(PROP_FillTransparence);
                 }
-                // TextFrames have BackGrahic, not FillBitmap
+                // TextFrames have BackGraphic, not FillBitmap
                 if (aShapeProps.hasProperty(PROP_FillBitmap))
                 {
                     aShapeProps.setAnyProperty(PROP_BackGraphic, aShapeProps.getProperty(PROP_FillBitmap));
