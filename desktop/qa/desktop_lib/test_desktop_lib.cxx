@@ -927,7 +927,7 @@ void DesktopLOKTest::testTrackChanges()
     pDocument->pClass->registerCallback(pDocument, &DesktopLOKTest::callback, this);
     Scheduler::ProcessEventsToIdle();
 
-    // Enable trak changes and assert that both views get notified.
+    // Enable track changes and assert that both views get notified.
     m_nTrackChanges = 0;
     pDocument->pClass->postUnoCommand(pDocument, ".uno:TrackChanges", nullptr, false);
     Scheduler::ProcessEventsToIdle();
