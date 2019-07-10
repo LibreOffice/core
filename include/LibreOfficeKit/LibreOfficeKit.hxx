@@ -728,6 +728,19 @@ public:
         return mpDoc->pClass->resizeWindow(mpDoc, nWindowId, width, height);
     }
 
+    /**
+     * For deleting many characters all at once
+     *
+     * @param nWindowId Specify the window id to post the input event to. If
+     * nWindow is 0, the event is posted into the document
+     * @param nBefore The characters to be deleted before the cursor position
+     * @param nAfter The characters to be deleted after the cursor position
+     */
+    void removeTextContext(unsigned nWindowId, int nBefore, int nAfter)
+    {
+        mpDoc->pClass->removeTextContext(mpDoc, nWindowId, nBefore, nAfter);
+    }
+
 #endif // defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
 };
 

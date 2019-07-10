@@ -375,7 +375,7 @@ namespace
 }
 
 void SfxLokHelper::postKeyEventAsync(const VclPtr<vcl::Window> &xWindow,
-                                     int nType, int nCharCode, int nKeyCode)
+                                     int nType, int nCharCode, int nKeyCode, int nRepeat)
 {
     LOKAsyncEventData* pLOKEv = new LOKAsyncEventData;
     switch (nType)
@@ -389,7 +389,7 @@ void SfxLokHelper::postKeyEventAsync(const VclPtr<vcl::Window> &xWindow,
     default:
         assert(false);
     }
-    pLOKEv->maKeyEvent = KeyEvent(nCharCode, nKeyCode, 0);
+    pLOKEv->maKeyEvent = KeyEvent(nCharCode, nKeyCode, nRepeat);
     pLOKEv->mpWindow = xWindow;
     postEventAsync(pLOKEv);
 }
