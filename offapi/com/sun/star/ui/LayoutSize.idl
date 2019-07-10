@@ -23,7 +23,7 @@ module com { module sun { module star { module ui {
 
 /** Size used for layouting windows.
     It specifies a range of valid values and a preferred value.
-    The values must not violate the relation 0 &lt;&#61; Minimum &lt;&#61; Preferred &lt;&#61; Maximum.
+    The values must not violate the relation 0 ≤ Minimum ≤ Preferred ≤ Maximum.
 
     @param Minimum
         Zero or positive.  The value itself is included in the valid
