@@ -266,5 +266,14 @@ long tools::Rectangle::AdjustRight(long nHorzMoveDelta)
     return nRight;
 }
 
+long tools::Rectangle::AdjustBottom( long nVertMoveDelta )
+{
+    if (nBottom == RECT_EMPTY)
+        nBottom = nTop + nVertMoveDelta - 1;
+    else
+        nBottom += nVertMoveDelta;
+    return nBottom;
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

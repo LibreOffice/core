@@ -411,7 +411,7 @@ public:
     long                AdjustLeft( long nHorzMoveDelta ) { nLeft += nHorzMoveDelta; return nLeft; }
     long                AdjustRight( long nHorzMoveDelta );
     long                AdjustTop( long nVertMoveDelta ) { nTop += nVertMoveDelta; return nTop; }
-    long                AdjustBottom( long nVertMoveDelta ) { nBottom += nVertMoveDelta; return nBottom; }
+    long                AdjustBottom( long nVertMoveDelta );
     inline void         SetPos( const Point& rPoint );
     void                SetSize( const Size& rSize );
     inline Size         GetSize() const;
