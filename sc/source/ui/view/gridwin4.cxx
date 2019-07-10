@@ -28,7 +28,6 @@
 #include <editeng/scripttypeitem.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/printer.hxx>
-#include <vcl/cursor.hxx>
 #include <vcl/settings.hxx>
 
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
@@ -71,6 +70,7 @@
 #include <vcl/virdev.hxx>
 #include <svx/sdrpaintwindow.hxx>
 #include <drwlayer.hxx>
+#include <printfun.hxx>
 
 static void lcl_LimitRect( tools::Rectangle& rRect, const tools::Rectangle& rVisible )
 {
@@ -559,6 +559,30 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
     bool bGridFirst = !rOpts.GetOption( VOPT_GRID_ONTOP );
 
     bool bPage = rOpts.GetOption( VOPT_PAGEBREAKS );
+    // tdf#124983, if option LibreOfficeDev Calc/View/Visual Aids/Page breaks
+    // is enabled, breaks should also be visible in the
+    if (bPage)
+    {
+        SCTAB nTabCount = rDoc.GetTableCount();
+        SAL_WARN("sc", "nTabCount:  " << nTabCount);
+        if (nTabCount > 0)
+        {
+            std::set<SCCOL> aColBreaks;
+            rDoc.GetAllColBreaks(aColBreaks, 0, true, false);
+            SAL_WARN("sc", "aColBreaks count:  " << aColBreaks.size());
+            if (aColBreaks.size() == 0)
+            {
+                // not initialized
+                ScDocShell* pDocSh = pViewData->GetDocShell();
+                for (SCTAB nTab = 0; nTab < nTabCount; ++nTab)
+                {
+                    ScPrintFunc aPrintFunc(pDocSh, pDocSh->GetPrinter(), nTab);
+                    aPrintFunc.UpdatePages();
+                    rDoc.UpdatePageBreaks(nTab);
+                }
+            }
+        }
+    }
 
     bool bPageMode = pViewData->IsPagebreakMode();
     if (bPageMode)                                      // after FindChanged
@@ -1385,10 +1409,10 @@ void ScGridWindow::DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, 
             //  use EditEngine to draw mixed-script string
             pEditEng.reset(new ScEditEngineDefaulter( EditEngine::CreatePool(), true ));
             pEditEng->SetRefMapMode(rRenderContext.GetMapMode());
-            auto pEditDefaults = std::make_unique<SfxItemSet>( pEditEng->GetEmptyItemSet() );
-            rDefPattern.FillEditItemSet( pEditDefaults.get() );
+            SfxItemSet* pEditDefaults = new SfxItemSet( pEditEng->GetEmptyItemSet() );
+            rDefPattern.FillEditItemSet( pEditDefaults );
             pEditDefaults->Put( SvxColorItem( COL_LIGHTGRAY, EE_CHAR_COLOR ) );
-            pEditEng->SetDefaults( std::move(pEditDefaults) );
+            pEditEng->SetDefaults( pEditDefaults );
         }
 
         sal_uInt16 nCount = sal::static_int_cast<sal_uInt16>( pPageData->GetCount() );
