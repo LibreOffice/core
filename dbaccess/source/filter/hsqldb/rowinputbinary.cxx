@@ -89,10 +89,10 @@ OUString lcl_double_dabble(const std::vector<sal_uInt8>& bytes)
 OUString lcl_makeStringFromBigint(const std::vector<sal_uInt8>& bytes)
 {
     std::vector<sal_uInt8> aBytes{ bytes };
-
     OUStringBuffer sRet;
+
     // two's complement
-    if (aBytes[0] == 1)
+    if ((aBytes[0] & 0x80) != 0)
     {
         sRet.append("-");
         for (auto& byte : aBytes)
