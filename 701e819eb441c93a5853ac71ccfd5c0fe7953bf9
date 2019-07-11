@@ -53,6 +53,24 @@
     },
     {
       "key": {
+        "uuid": "bf659307_449f0450",
+        "filename": "reportdesign/source/filter/xml/xmlColumn.cxx",
+        "patchSetId": 17
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2019-07-11T13:27:40Z",
+      "side": 1,
+      "message": "Shouldn\u0027t that rather be a boolean?",
+      "parentUuid": "bf659307_edf88d7d",
+      "revId": "701e819eb441c93a5853ac71ccfd5c0fe7953bf9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bf659307_0d3b8138",
         "filename": "reportdesign/source/filter/xml/xmlExport.cxx",
         "patchSetId": 17
@@ -64,6 +82,24 @@
       "writtenOn": "2019-07-01T14:51:27Z",
       "side": 1,
       "message": "is a height guaranteed to be non-0? are entries in _aSize stricly monotonically increasing? if not you could get a wrong value here\n\ni find the commented out code with the booleans to be clearer...",
+      "revId": "701e819eb441c93a5853ac71ccfd5c0fe7953bf9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_04a90c7a",
+        "filename": "reportdesign/source/filter/xml/xmlExport.cxx",
+        "patchSetId": 17
+      },
+      "lineNbr": 525,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2019-07-11T13:27:40Z",
+      "side": 1,
+      "message": "I don\u0027t see why they would be. Ilhan?",
+      "parentUuid": "bf659307_0d3b8138",
       "revId": "701e819eb441c93a5853ac71ccfd5c0fe7953bf9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
