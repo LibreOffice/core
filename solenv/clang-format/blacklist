@@ -15517,7 +15517,6 @@ sw/source/uibase/misc/glosdoc.cxx
 sw/source/uibase/misc/glshell.cxx
 sw/source/uibase/misc/numberingtypelistbox.cxx
 sw/source/uibase/misc/redlndlg.cxx
-sw/source/uibase/misc/swruler.cxx
 sw/source/uibase/ribbar/conarc.cxx
 sw/source/uibase/ribbar/concustomshape.cxx
 sw/source/uibase/ribbar/conform.cxx
