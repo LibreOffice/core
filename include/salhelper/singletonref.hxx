@@ -37,7 +37,7 @@ namespace salhelper{
 
             Such classes can be instantiated every time they
             are needed. But the internal wrapped object will
-            be created one times only. Of course its used
+            be created one times only. Of course it's used
             resources are referenced one times only too.
             This template hold it alive till the last
             reference is gone. Further all operations
