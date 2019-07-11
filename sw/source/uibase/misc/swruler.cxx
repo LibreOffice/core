@@ -7,9 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-// FIX fdo#38246 https://bugs.libreoffice.org/show_bug.cgi?id=38246
 // Design proposal: https://wiki.documentfoundation.org/Design/Whiteboards/Comments_Ruler_Control
-// TODO Alpha blend border when it doesn't fit in window
 
 #include <swruler.hxx>
 
@@ -31,40 +29,50 @@
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <boost/property_tree/json_parser.hpp>
 
-#define CONTROL_BORDER_WIDTH    1
-#define CONTROL_LEFT_OFFSET     6
-#define CONTROL_RIGHT_OFFSET    3
-#define CONTROL_TOP_OFFSET      4
+#define CONTROL_BORDER_WIDTH 1
 
-#define CONTROL_TRIANGLE_WIDTH  4
-#define CONTROL_TRIANGLE_PAD    3
+#define CONTROL_TRIANGLE_SIZE 8
+#define CONTROL_TRIANGLE_PAD 3
 
 namespace {
 
 /**
- * Draw a little horizontal arrow tip on VirtualDevice.
- * \param nX left coordinate of arrow
- * \param nY top coordinate of arrow
+ * Draw a little arrow with different directions
+ *
+ * The arrow will be centered in a square of size CONTROL_TRIANGLE_SIZE.
+ *
+ * \param nX left coordinate of arrow square
+ * \param nY top coordinate of arrow square
  * \param Color arrow color
- * \param bPointRight if arrow should point to right. Otherwise, it will point left.
+ * \param bCollapsed if the arrow should display the collapsed state
  */
-void ImplDrawArrow(vcl::RenderContext& rRenderContext, long nX, long nY, const Color& rColor, bool bPointRight)
+void ImplDrawArrow(vcl::RenderContext& rRenderContext, long nX, long nY, const Color& rColor, bool bCollapsed)
 {
     rRenderContext.SetLineColor();
     rRenderContext.SetFillColor(rColor);
-    if (bPointRight)
+    if (bCollapsed)
     {
-        rRenderContext.DrawRect(tools::Rectangle(nX + 0, nY + 0, nX + 0, nY + 6) );
-        rRenderContext.DrawRect(tools::Rectangle(nX + 1, nY + 1, nX + 1, nY + 5) );
-        rRenderContext.DrawRect(tools::Rectangle(nX + 2, nY + 2, nX + 2, nY + 4) );
-        rRenderContext.DrawRect(tools::Rectangle(nX + 3, nY + 3, nX + 3, nY + 3) );
+        if (AllSettings::GetLayoutRTL()) // <
+        {
+            rRenderContext.DrawRect(tools::Rectangle(nX + 2, nY + 3, nX + 2, nY + 3));
+            rRenderContext.DrawRect(tools::Rectangle(nX + 3, nY + 2, nX + 3, nY + 4));
+            rRenderContext.DrawRect(tools::Rectangle(nX + 4, nY + 1, nX + 4, nY + 5));
+            rRenderContext.DrawRect(tools::Rectangle(nX + 5, nY + 0, nX + 5, nY + 6));
+        }
+        else // >
+        {
+            rRenderContext.DrawRect(tools::Rectangle(nX + 2, nY + 0, nX + 2, nY + 6));
+            rRenderContext.DrawRect(tools::Rectangle(nX + 3, nY + 1, nX + 3, nY + 5));
+            rRenderContext.DrawRect(tools::Rectangle(nX + 4, nY + 2, nX + 4, nY + 4));
+            rRenderContext.DrawRect(tools::Rectangle(nX + 5, nY + 3, nX + 5, nY + 3));
+        }
     }
-    else
+    else // v
     {
-        rRenderContext.DrawRect(tools::Rectangle(nX + 0, nY + 3, nX + 0, nY + 3));
-        rRenderContext.DrawRect(tools::Rectangle(nX + 1, nY + 2, nX + 1, nY + 4));
-        rRenderContext.DrawRect(tools::Rectangle(nX + 2, nY + 1, nX + 2, nY + 5));
-        rRenderContext.DrawRect(tools::Rectangle(nX + 3, nY + 0, nX + 3, nY + 6));
+        rRenderContext.DrawRect(tools::Rectangle(nX + 0, nY + 1, nX + 6, nY + 1));
+        rRenderContext.DrawRect(tools::Rectangle(nX + 1, nY + 2, nX + 5, nY + 2));
+        rRenderContext.DrawRect(tools::Rectangle(nX + 2, nY + 3, nX + 4, nY + 3));
+        rRenderContext.DrawRect(tools::Rectangle(nX + 3, nY + 4, nX + 3, nY + 4));
     }
 }
 
@@ -83,9 +91,13 @@ SwCommentRuler::SwCommentRuler( SwViewShell* pViewSh, vcl::Window* pParent, SwEd
     maFadeTimer.SetTimeout(40);
     maFadeTimer.SetInvokeHandler( LINK( this, SwCommentRuler, FadeHandler ) );
     maFadeTimer.SetDebugName( "sw::SwCommentRuler maFadeTimer" );
+
+    // we have a little bit more space, as we don't draw ticks
+    vcl::Font aFont(maVirDev->GetFont());
+    aFont.SetFontHeight(aFont.GetFontHeight() + 1);
+    maVirDev->SetFont(aFont);
 }
 
-// Destructor
 SwCommentRuler::~SwCommentRuler()
 {
     disposeOnce();
@@ -114,83 +126,59 @@ void SwCommentRuler::DrawCommentControl(vcl::RenderContext& rRenderContext)
     const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
     bool bIsCollapsed = ! mpViewShell->GetPostItMgr()->ShowNotes();
 
-    tools::Rectangle aControlRect = GetCommentControlRegion();
+    const tools::Rectangle aControlRect = GetCommentControlRegion();
     maVirDev->SetOutputSizePixel(aControlRect.GetSize());
 
-    // Paint comment control background
-    // TODO Check if these are best colors to be used
-    Color aBgColor = GetFadedColor( rStyleSettings.GetDialogColor(), rStyleSettings.GetWorkspaceColor() );
-    maVirDev->SetFillColor( aBgColor );
-
-    if ( mbIsHighlighted || !bIsCollapsed )
+    // Set colors
+    if (!bIsCollapsed)
     {
-        // Draw borders
-        maVirDev->SetLineColor( rStyleSettings.GetShadowColor() );
+        if (mbIsHighlighted)
+            maVirDev->SetFillColor(GetFadedColor(rStyleSettings.GetHighlightColor(), rStyleSettings.GetDialogColor()));
+        else
+            maVirDev->SetFillColor(rStyleSettings.GetDialogColor());
+        maVirDev->SetLineColor(rStyleSettings.GetShadowColor());
     }
     else
     {
-        // No borders
+        if (mbIsHighlighted)
+            maVirDev->SetFillColor(GetFadedColor(rStyleSettings.GetHighlightColor(), rStyleSettings.GetWorkspaceColor()));
+        else
+            maVirDev->SetFillColor(rStyleSettings.GetWorkspaceColor());
         maVirDev->SetLineColor();
     }
+    Color aTextColor = GetFadedColor(rStyleSettings.GetHighlightTextColor(), rStyleSettings.GetButtonTextColor());
+    maVirDev->SetTextColor(aTextColor);
 
-    maVirDev->DrawRect( tools::Rectangle( Point(), aControlRect.GetSize() ) );
+    // Get label and arrow positions
+    OUString aLabel = SwResId(STR_COMMENTS_LABEL);
+    Point aLabelPos(0, (aControlRect.GetHeight() - maVirDev->GetTextHeight()) / 2);
+    Point aArrowPos(0, (aControlRect.GetHeight() - CONTROL_TRIANGLE_SIZE) / 2);
 
-    // Label and arrow tip
-    OUString aLabel( SwResId ( STR_COMMENTS_LABEL ) );
-    // Get label and arrow coordinates
-    Point aLabelPos;
-    Point aArrowPos;
-    bool  bArrowToRight;
-    // TODO Discover why it should be 0 instead of CONTROL_BORDER_WIDTH + CONTROL_TOP_OFFSET
-    aLabelPos.setY( 0 );
-    aArrowPos.setY( CONTROL_BORDER_WIDTH + CONTROL_TOP_OFFSET );
-    if ( !AllSettings::GetLayoutRTL() )
+    if (!AllSettings::GetLayoutRTL()) // | > Comments |
     {
-        // LTR
-        if ( bIsCollapsed )
+        aArrowPos.setX(CONTROL_TRIANGLE_PAD);
+        aLabelPos.setX(aArrowPos.X() + CONTROL_TRIANGLE_SIZE + CONTROL_TRIANGLE_PAD);
+    }
+    else // RTL => | Comments < |
+    {
+        const long nLabelWidth = maVirDev->GetTextWidth(aLabel);
+        if (!bIsCollapsed)
         {
-            // It should draw something like | > Comments  |
-            aLabelPos.setX( CONTROL_LEFT_OFFSET + CONTROL_TRIANGLE_WIDTH + CONTROL_TRIANGLE_PAD );
-            aArrowPos.setX( CONTROL_LEFT_OFFSET );
+            aArrowPos.setX(aControlRect.GetWidth() - 1 - CONTROL_TRIANGLE_PAD - CONTROL_BORDER_WIDTH - CONTROL_TRIANGLE_SIZE);
+            aLabelPos.setX(aArrowPos.X() - CONTROL_TRIANGLE_PAD - nLabelWidth);
         }
         else
         {
-            // It should draw something like | Comments  < |
-            aLabelPos.setX( CONTROL_LEFT_OFFSET );
-            aArrowPos.setX( aControlRect.GetSize().Width() - 1 - CONTROL_RIGHT_OFFSET - CONTROL_BORDER_WIDTH - CONTROL_TRIANGLE_WIDTH );
+            // if comments are collapsed, left align the text, because otherwise it's very likely to be invisible
+            aArrowPos.setX(nLabelWidth + CONTROL_TRIANGLE_PAD + CONTROL_TRIANGLE_SIZE);
+            aLabelPos.setX(aArrowPos.X() - CONTROL_TRIANGLE_PAD - nLabelWidth);
         }
-        bArrowToRight = bIsCollapsed;
-    }
-    else
-    {
-        // RTL
-        long nLabelWidth = GetTextWidth( aLabel );
-        if ( bIsCollapsed )
-        {
-            // It should draw something like |  Comments < |
-            aArrowPos.setX( aControlRect.GetSize().Width() - 1 - CONTROL_RIGHT_OFFSET - CONTROL_BORDER_WIDTH - CONTROL_TRIANGLE_WIDTH );
-            aLabelPos.setX( aArrowPos.X() - CONTROL_TRIANGLE_PAD - nLabelWidth );
-        }
-        else
-        {
-            // It should draw something like | >  Comments |
-            aLabelPos.setX( aControlRect.GetSize().Width() - 1 - CONTROL_RIGHT_OFFSET - CONTROL_BORDER_WIDTH - nLabelWidth );
-            aArrowPos.setX( CONTROL_LEFT_OFFSET );
-        }
-        bArrowToRight = !bIsCollapsed;
     }
 
-    // Draw label
-    Color aTextColor = GetFadedColor( rStyleSettings.GetButtonTextColor(), rStyleSettings.GetDarkShadowColor() );
-    maVirDev->SetTextColor( aTextColor );
-    // FIXME Expected font size?
-    maVirDev->DrawText( aLabelPos, aLabel );
-
-    // Draw arrow
-    // FIXME consistence of button colors. https://opengrok.libreoffice.org/xref/core/vcl/source/control/button.cxx#785
-    ImplDrawArrow(*maVirDev, aArrowPos.X(), aArrowPos.Y(), aTextColor, bArrowToRight);
-
-    // Blit comment control
+    // Draw control
+    maVirDev->DrawRect(tools::Rectangle(Point(), aControlRect.GetSize()));
+    maVirDev->DrawText(aLabelPos, aLabel);
+    ImplDrawArrow(*maVirDev, aArrowPos.X(), aArrowPos.Y(), aTextColor, bIsCollapsed);
     rRenderContext.DrawOutDev(aControlRect.TopLeft(), aControlRect.GetSize(), Point(), aControlRect.GetSize(), *maVirDev);
 }
 
