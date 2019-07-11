@@ -16,6 +16,24 @@
       "revId": "9f88cd864e393ab244eba4e0792459ec15a04d82",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_e4ef38e7",
+        "filename": "chart2/source/tools/ChartStyle.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1002072
+      },
+      "writtenOn": "2019-07-11T12:34:02Z",
+      "side": 1,
+      "message": "Should I remove it for now?",
+      "parentUuid": "bf659307_64dc8846",
+      "revId": "9f88cd864e393ab244eba4e0792459ec15a04d82",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
