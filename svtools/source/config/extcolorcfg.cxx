@@ -30,6 +30,7 @@
 #include <unotools/configitem.hxx>
 #include <unotools/configpaths.hxx>
 #include <com/sun/star/uno/Sequence.h>
+#include <comphelper/sequence.hxx>
 #include <svl/poolitem.hxx>
 #include <svl/hint.hxx>
 #include <osl/mutex.hxx>
@@ -436,11 +437,7 @@ bool ExtendedColorConfig_Impl::ExistsScheme(const OUString& _sSchemeName)
 
     uno::Sequence < OUString > aComponentNames = GetPropertyNames(sBase);
     sBase += "/" + _sSchemeName;
-    const OUString* pCompIter = aComponentNames.getConstArray();
-    const OUString* pCompEnd  = pCompIter + aComponentNames.getLength();
-    for(;pCompIter != pCompEnd && *pCompIter != sBase;++pCompIter)
-        ;
-    return pCompIter != pCompEnd;
+    return comphelper::findValue(aComponentNames, sBase) != -1;
 }
 
 void ExtendedColorConfig_Impl::SetColorConfigValue(const OUString& _sName, const ExtendedColorConfigValue& rValue )

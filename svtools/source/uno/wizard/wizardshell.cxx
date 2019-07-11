@@ -63,8 +63,8 @@ namespace svt { namespace uno
         {
             const Sequence< sal_Int16 >& rPath( i_rPaths[i] );
             WizardPath aPath( rPath.getLength() );
-            for ( sal_Int32 j=0; j<rPath.getLength(); ++j )
-                aPath[j] = impl_pageIdToState( rPath[j] );
+            std::transform(rPath.begin(), rPath.end(), aPath.begin(),
+                [this](const sal_Int16 nPageId) -> WizardPath::value_type { return impl_pageIdToState(nPageId); });
             declarePath( i, aPath );
         }
 

@@ -137,10 +137,9 @@ static basegfx::B2DRange GetShapeRangeForXShape( const uno::Reference< drawing::
     const uno::Sequence< beans::PropertyValue > aParams;
     const uno::Sequence< uno::Reference< graphic::XPrimitive2D > > aPrimitiveSequence( rxPrimitiveFactory2D->createPrimitivesFromXShape( rxShape, aParams ) );
 
-    const sal_Int32 nCount = aPrimitiveSequence.getLength();
-    for( sal_Int32 nIndex = 0; nIndex < nCount; nIndex++ )
+    for( const auto& rPrimitive : aPrimitiveSequence )
     {
-        const geometry::RealRectangle2D aRect( aPrimitiveSequence[ nIndex ]->getRange( rViewInformation ) );
+        const geometry::RealRectangle2D aRect( rPrimitive->getRange( rViewInformation ) );
         aShapeRange.expand( basegfx::B2DTuple( aRect.X1, aRect.Y1 ) );
         aShapeRange.expand( basegfx::B2DTuple( aRect.X2, aRect.Y2 ) );
     }

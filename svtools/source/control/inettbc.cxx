@@ -193,20 +193,16 @@ void SvtMatchContext_Impl::FillPicklist(std::vector<OUString>& rPickList)
     {
         Sequence< PropertyValue > seqPropertySet = seqPicklist[ nItem ];
 
-        OUString sTitle;
-        INetURLObject aURL;
-
-        sal_uInt32 nPropertyCount = seqPropertySet.getLength();
-
-        for( sal_uInt32 nProperty=0; nProperty < nPropertyCount; nProperty++ )
+        auto pProperty = std::find_if(seqPropertySet.begin(), seqPropertySet.end(),
+            [](const PropertyValue& rProperty) { return rProperty.Name == HISTORY_PROPERTYNAME_TITLE; });
+        if (pProperty != seqPropertySet.end())
         {
-            if( seqPropertySet[nProperty].Name == HISTORY_PROPERTYNAME_TITLE )
-            {
-                seqPropertySet[nProperty].Value >>= sTitle;
-                aURL.SetURL( sTitle );
-                rPickList.insert(rPickList.begin() + nItem, aURL.GetMainURL(INetURLObject::DecodeMechanism::WithCharset));
-                break;
-            }
+            OUString sTitle;
+            INetURLObject aURL;
+
+            pProperty->Value >>= sTitle;
+            aURL.SetURL( sTitle );
+            rPickList.insert(rPickList.begin() + nItem, aURL.GetMainURL(INetURLObject::DecodeMechanism::WithCharset));
         }
     }
 }
@@ -518,20 +514,16 @@ void MatchContext_Impl::FillPicklist(std::vector<OUString>& rPickList)
     {
         Sequence< PropertyValue > seqPropertySet = seqPicklist[ nItem ];
 
-        OUString sTitle;
-        INetURLObject aURL;
-
-        sal_uInt32 nPropertyCount = seqPropertySet.getLength();
-
-        for( sal_uInt32 nProperty=0; nProperty < nPropertyCount; nProperty++ )
+        auto pProperty = std::find_if(seqPropertySet.begin(), seqPropertySet.end(),
+            [](const PropertyValue& rProperty) { return rProperty.Name == HISTORY_PROPERTYNAME_TITLE; });
+        if (pProperty != seqPropertySet.end())
         {
-            if( seqPropertySet[nProperty].Name == HISTORY_PROPERTYNAME_TITLE )
-            {
-                seqPropertySet[nProperty].Value >>= sTitle;
-                aURL.SetURL( sTitle );
-                rPickList.insert(rPickList.begin() + nItem, aURL.GetMainURL(INetURLObject::DecodeMechanism::WithCharset));
-                break;
-            }
+            OUString sTitle;
+            INetURLObject aURL;
+
+            pProperty->Value >>= sTitle;
+            aURL.SetURL( sTitle );
+            rPickList.insert(rPickList.begin() + nItem, aURL.GetMainURL(INetURLObject::DecodeMechanism::WithCharset));
         }
     }
 }
@@ -1497,53 +1489,46 @@ void SvtURLBox::UpdatePicklistForSmartProtocol_Impl()
 
     // read history pick list
     Sequence< Sequence< PropertyValue > > seqPicklist = SvtHistoryOptions().GetList( ePICKLIST );
-    sal_uInt32 nCount = seqPicklist.getLength();
     INetURLObject aCurObj;
 
-    for( sal_uInt32 nItem=0; nItem < nCount; nItem++ )
+    for( const Sequence< PropertyValue >& rPropertySet : seqPicklist )
     {
-        Sequence< PropertyValue > seqPropertySet = seqPicklist[ nItem ];
-
-        OUString sURL;
-
-        sal_uInt32 nPropertyCount = seqPropertySet.getLength();
-
-        for( sal_uInt32 nProperty=0; nProperty < nPropertyCount; nProperty++ )
+        auto pProperty = std::find_if(rPropertySet.begin(), rPropertySet.end(),
+            [](const PropertyValue& rProperty) { return rProperty.Name == HISTORY_PROPERTYNAME_URL; });
+        if (pProperty != rPropertySet.end())
         {
-            if( seqPropertySet[nProperty].Name == HISTORY_PROPERTYNAME_URL )
+            OUString sURL;
+
+            pProperty->Value >>= sURL;
+            aCurObj.SetURL( sURL );
+
+            if ( !sURL.isEmpty() && ( eSmartProtocol != INetProtocol::NotValid ) )
             {
-                seqPropertySet[nProperty].Value >>= sURL;
-                aCurObj.SetURL( sURL );
+                if( aCurObj.GetProtocol() != eSmartProtocol )
+                    continue;
+            }
 
-                if ( !sURL.isEmpty() && ( eSmartProtocol != INetProtocol::NotValid ) )
+            OUString aURL( aCurObj.GetMainURL( INetURLObject::DecodeMechanism::WithCharset ) );
+
+            if ( !aURL.isEmpty() )
+            {
+                bool bFound = aURL.endsWith("/");
+                if ( !bFound )
                 {
-                    if( aCurObj.GetProtocol() != eSmartProtocol )
-                        break;
+                    OUString aUpperURL = aURL.toAsciiUpperCase();
+
+                    bFound = ::std::any_of(pImpl->m_aFilters.begin(),
+                                           pImpl->m_aFilters.end(),
+                                           FilterMatch( aUpperURL ) );
                 }
-
-                OUString aURL( aCurObj.GetMainURL( INetURLObject::DecodeMechanism::WithCharset ) );
-
-                if ( !aURL.isEmpty() )
+                if ( bFound )
                 {
-                    bool bFound = aURL.endsWith("/");
-                    if ( !bFound )
-                    {
-                        OUString aUpperURL = aURL.toAsciiUpperCase();
-
-                        bFound = ::std::any_of(pImpl->m_aFilters.begin(),
-                                               pImpl->m_aFilters.end(),
-                                               FilterMatch( aUpperURL ) );
-                    }
-                    if ( bFound )
-                    {
-                        OUString aFile;
-                        if (osl::FileBase::getSystemPathFromFileURL(aURL, aFile) == osl::FileBase::E_None)
-                            InsertEntry(aFile);
-                        else
-                            InsertEntry(aURL);
-                    }
+                    OUString aFile;
+                    if (osl::FileBase::getSystemPathFromFileURL(aURL, aFile) == osl::FileBase::E_None)
+                        InsertEntry(aFile);
+                    else
+                        InsertEntry(aURL);
                 }
-                break;
             }
         }
     }
@@ -2070,53 +2055,46 @@ void URLBox::UpdatePicklistForSmartProtocol_Impl()
 
     // read history pick list
     Sequence< Sequence< PropertyValue > > seqPicklist = SvtHistoryOptions().GetList( ePICKLIST );
-    sal_uInt32 nCount = seqPicklist.getLength();
     INetURLObject aCurObj;
 
-    for( sal_uInt32 nItem=0; nItem < nCount; nItem++ )
+    for( const Sequence< PropertyValue >& rPropertySet : seqPicklist )
     {
-        Sequence< PropertyValue > seqPropertySet = seqPicklist[ nItem ];
-
-        OUString sURL;
-
-        sal_uInt32 nPropertyCount = seqPropertySet.getLength();
-
-        for( sal_uInt32 nProperty=0; nProperty < nPropertyCount; nProperty++ )
+        auto pProperty = std::find_if(rPropertySet.begin(), rPropertySet.end(),
+            [](const PropertyValue& rProperty) { return rProperty.Name == HISTORY_PROPERTYNAME_URL; });
+        if (pProperty != rPropertySet.end())
         {
-            if( seqPropertySet[nProperty].Name == HISTORY_PROPERTYNAME_URL )
+            OUString sURL;
+
+            pProperty->Value >>= sURL;
+            aCurObj.SetURL( sURL );
+
+            if ( !sURL.isEmpty() && ( eSmartProtocol != INetProtocol::NotValid ) )
             {
-                seqPropertySet[nProperty].Value >>= sURL;
-                aCurObj.SetURL( sURL );
+                if( aCurObj.GetProtocol() != eSmartProtocol )
+                    continue;
+            }
 
-                if ( !sURL.isEmpty() && ( eSmartProtocol != INetProtocol::NotValid ) )
+            OUString aURL( aCurObj.GetMainURL( INetURLObject::DecodeMechanism::WithCharset ) );
+
+            if ( !aURL.isEmpty() )
+            {
+                bool bFound = aURL.endsWith("/");
+                if ( !bFound )
                 {
-                    if( aCurObj.GetProtocol() != eSmartProtocol )
-                        break;
+                    OUString aUpperURL = aURL.toAsciiUpperCase();
+
+                    bFound = ::std::any_of(pImpl->m_aFilters.begin(),
+                                           pImpl->m_aFilters.end(),
+                                           FilterMatch( aUpperURL ) );
                 }
-
-                OUString aURL( aCurObj.GetMainURL( INetURLObject::DecodeMechanism::WithCharset ) );
-
-                if ( !aURL.isEmpty() )
+                if ( bFound )
                 {
-                    bool bFound = aURL.endsWith("/");
-                    if ( !bFound )
-                    {
-                        OUString aUpperURL = aURL.toAsciiUpperCase();
-
-                        bFound = ::std::any_of(pImpl->m_aFilters.begin(),
-                                               pImpl->m_aFilters.end(),
-                                               FilterMatch( aUpperURL ) );
-                    }
-                    if ( bFound )
-                    {
-                        OUString aFile;
-                        if (osl::FileBase::getSystemPathFromFileURL(aURL, aFile) == osl::FileBase::E_None)
-                            m_xWidget->append_text(aFile);
-                        else
-                            m_xWidget->append_text(aURL);
-                    }
+                    OUString aFile;
+                    if (osl::FileBase::getSystemPathFromFileURL(aURL, aFile) == osl::FileBase::E_None)
+                        m_xWidget->append_text(aFile);
+                    else
+                        m_xWidget->append_text(aURL);
                 }
-                break;
             }
         }
     }
