@@ -1052,7 +1052,7 @@ SAL_DLLPUBLIC void SAL_CALL rtl_string_newConcat( rtl_String ** newStr, rtl_Stri
 
     The new string results from replacing a number of characters (count),
     starting at the specified position (index) in the original string (str),
-    with some new substring (subStr).  If subStr is null, than only a number
+    with some new substring (subStr).  If subStr is null, then only a number
     of characters is deleted.
 
     The new string does not necessarily have a reference count of 1, so it
