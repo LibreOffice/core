@@ -33,6 +33,24 @@
       "revId": "885192cb51f2848349e8fe6d7c0c289e0eb0c510",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_44c2a487",
+        "filename": "ucb/source/ucp/webdav-neon/NeonLockStore.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 240,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-07-11T10:59:44Z",
+      "side": 1,
+      "message": "You are right; I didn\u0027t mention that. I think I better add a self-holding rtl::Reference\u003cTickerThread\u003e into TickerThread::execute() to guard against self-destruction until it ends...",
+      "parentUuid": "bf659307_a4838056",
+      "revId": "885192cb51f2848349e8fe6d7c0c289e0eb0c510",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
