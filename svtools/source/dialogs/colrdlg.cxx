@@ -84,11 +84,11 @@ short SvColorDialog::Execute(weld::Window* pParent)
         if( ret )
         {
             props = xPropertyAccess->getPropertyValues();
-            for( sal_Int32 n = 0; n < props.getLength(); n++ )
+            for( const auto& rProp : props )
             {
-                if( props[n].Name == sColor )
+                if( rProp.Name == sColor )
                 {
-                    props[n].Value >>= maColor;
+                    rProp.Value >>= maColor;
                 }
             }
         }

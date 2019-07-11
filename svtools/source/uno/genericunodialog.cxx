@@ -260,9 +260,8 @@ void SAL_CALL OGenericUnoDialog::initialize( const Sequence< Any >& aArguments )
     if ( m_bInitialized )
         throw AlreadyInitializedException( OUString(), *this );
 
-    const Any* pArguments = aArguments.getConstArray();
-    for (sal_Int32 i=0; i<aArguments.getLength(); ++i, ++pArguments)
-        implInitialize(*pArguments);
+    for (const Any& rArgument : aArguments)
+        implInitialize(rArgument);
 
     m_bInitialized = true;
 }

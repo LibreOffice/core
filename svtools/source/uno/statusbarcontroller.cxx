@@ -141,9 +141,9 @@ void SAL_CALL StatusbarController::initialize( const Sequence< Any >& aArguments
     m_bInitialized = true;
 
     PropertyValue aPropValue;
-    for ( int i = 0; i < aArguments.getLength(); i++ )
+    for ( const auto& rArgument : aArguments )
     {
-        if ( aArguments[i] >>= aPropValue )
+        if ( rArgument >>= aPropValue )
         {
             if ( aPropValue.Name == "Frame" )
                 aPropValue.Value >>= m_xFrame;

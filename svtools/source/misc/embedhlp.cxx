@@ -865,18 +865,18 @@ OUString EmbeddedObjectRef::GetChartType()
                     uno::Sequence< uno::Reference< chart2::XCoordinateSystem > > aCooSysSeq( xCooSysCnt->getCoordinateSystems());
                     // IA2 CWS. Unused: int nCoordinateCount = aCooSysSeq.getLength();
                     bool bGetChartType = false;
-                    for( sal_Int32 nCooSysIdx=0; nCooSysIdx<aCooSysSeq.getLength(); ++nCooSysIdx )
+                    for( const auto& rCooSys : aCooSysSeq )
                     {
-                        uno::Reference< chart2::XChartTypeContainer > xCTCnt( aCooSysSeq[nCooSysIdx], uno::UNO_QUERY_THROW );
+                        uno::Reference< chart2::XChartTypeContainer > xCTCnt( rCooSys, uno::UNO_QUERY_THROW );
                         uno::Sequence< uno::Reference< chart2::XChartType > > aChartTypes( xCTCnt->getChartTypes());
-                        int nDimesionCount = aCooSysSeq[nCooSysIdx]->getDimension();
+                        int nDimesionCount = rCooSys->getDimension();
                         if( nDimesionCount == 3 )
                             Style += "3D ";
                         else
                             Style += "2D ";
-                        for( sal_Int32 nCTIdx=0; nCTIdx<aChartTypes.getLength(); ++nCTIdx )
+                        for( const auto& rChartType : aChartTypes )
                         {
-                            OUString strChartType = aChartTypes[nCTIdx]->getChartType();
+                            OUString strChartType = rChartType->getChartType();
                             if (strChartType == "com.sun.star.chart2.AreaChartType")
                             {
                                 Style += "Areas";
@@ -889,7 +889,7 @@ OUString EmbeddedObjectRef::GetChartType()
                             }
                             else if (strChartType == "com.sun.star.chart2.ColumnChartType")
                             {
-                                uno::Reference< beans::XPropertySet > xProp( aCooSysSeq[nCooSysIdx], uno::UNO_QUERY );
+                                uno::Reference< beans::XPropertySet > xProp( rCooSys, uno::UNO_QUERY );
                                 if( xProp.is())
                                 {
                                     bool bCurrent = false;

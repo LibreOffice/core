@@ -30,6 +30,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/document/DocumentProperties.hpp>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/sequence.hxx>
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
 #include <sal/log.hxx>
@@ -324,13 +325,7 @@ namespace svt
     {
         OUString entryName = sRealURL.copy( sRealURL.lastIndexOf( '/' ) + 1 );
 
-        for (int i = 0; i < m_rBlackList.getLength() ; i++)
-        {
-            if ( entryName == m_rBlackList[i] )
-                return true;
-        }
-
-        return false;
+        return comphelper::findValue(m_rBlackList, entryName) != -1;
     }
 
 
