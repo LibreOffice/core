@@ -315,7 +315,7 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const OUString& rPath, bool bOutline,
                         pDoc->GetNodes().Delete( aIdx );
 
                     // All Flys in the section
-                    GetDocumentContentOperationsManager().CopyFlyInFlyImpl( aRg, 0, aIdx );
+                    GetDocumentContentOperationsManager().CopyFlyInFlyImpl(aRg, nullptr, aIdx);
 
                     // And what's with all the Bookmarks?
                     // ?????

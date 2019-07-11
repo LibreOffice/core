@@ -299,7 +299,7 @@ void SwDoc::CopyMasterHeader(const SwPageDesc &rChged, const SwFormatHeader &rHe
                 aTmp = *pSttNd->EndOfSectionNode();
                 GetNodes().Copy_( aRange, aTmp, false );
                 aTmp = *pSttNd;
-                GetDocumentContentOperationsManager().CopyFlyInFlyImpl(aRange, 0, aTmp);
+                GetDocumentContentOperationsManager().CopyFlyInFlyImpl(aRange, nullptr, aTmp);
 
                 pFormat->SetFormatAttr( SwFormatContent( pSttNd ) );
                 rDescFrameFormat.SetFormatAttr( SwFormatHeader( pFormat ) );
@@ -371,7 +371,7 @@ void SwDoc::CopyMasterFooter(const SwPageDesc &rChged, const SwFormatFooter &rFo
                 aTmp = *pSttNd->EndOfSectionNode();
                 GetNodes().Copy_( aRange, aTmp, false );
                 aTmp = *pSttNd;
-                GetDocumentContentOperationsManager().CopyFlyInFlyImpl(aRange, 0, aTmp);
+                GetDocumentContentOperationsManager().CopyFlyInFlyImpl(aRange, nullptr, aTmp);
 
                 pFormat->SetFormatAttr( SwFormatContent( pSttNd ) );
                 rDescFrameFormat.SetFormatAttr( SwFormatFooter( pFormat ) );
