@@ -175,7 +175,7 @@ namespace ConversionHelper
 }
 
 
-/** The stroke arrow model structure contains all properties for an line end arrow. */
+/** The stroke arrow model structure contains all properties for a line end arrow. */
 struct StrokeArrowModel
 {
     OptValue< sal_Int32 > moArrowType;
