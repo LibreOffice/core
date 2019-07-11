@@ -74,7 +74,7 @@ for a "FileExists". This should only be done when processing a single file
 (i.e. before opening) and NEVER during enumeration of directory contents on
 any step of information processing. This would change the runtime behaviour
 from O(n) to O(n*n/2) on nearly every file system.  On Windows NT reading the
-contents of an directory with 7000 entries and getting full information about
+contents of a directory with 7000 entries and getting full information about
 every file only takes 0.6 seconds. Specifying the flag
 osl_FileStatus_Mask_Validate for each entry will increase the time to 180
 seconds (!!!).
@@ -151,7 +151,7 @@ typedef void *oslDirectoryItem;
     @retval osl_File_E_None on success
     @retval osl_File_E_INVAL the format of the parameters was not valid
     @retval osl_File_E_NOENT the specified path doesn't exist
-    @retval osl_File_E_NOTDIR the specified path is not an directory
+    @retval osl_File_E_NOTDIR the specified path is not a directory
     @retval osl_File_E_NOMEM not enough memory for allocating structures
     @retval osl_File_E_ACCES permission denied
     @retval osl_File_E_MFILE too many open files used by the process
