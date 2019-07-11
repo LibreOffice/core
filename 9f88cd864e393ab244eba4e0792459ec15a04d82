@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_64dc8846",
+        "filename": "chart2/source/tools/ChartStyle.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2019-07-11T12:31:52Z",
+      "side": 1,
+      "message": "This namespace is unnecessary.",
+      "revId": "9f88cd864e393ab244eba4e0792459ec15a04d82",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
