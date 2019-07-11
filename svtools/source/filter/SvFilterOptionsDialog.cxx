@@ -158,12 +158,10 @@ uno::Sequence< OUString > SAL_CALL SvFilterOptionsDialog::getSupportedServiceNam
 // XPropertyAccess
 uno::Sequence< beans::PropertyValue > SvFilterOptionsDialog::getPropertyValues()
 {
-    sal_Int32 i, nCount;
-    for ( i = 0, nCount = maMediaDescriptor.getLength(); i < nCount; i++ )
-    {
-        if ( maMediaDescriptor[ i ].Name == "FilterData" )
-            break;
-    }
+    auto pProp = std::find_if(maMediaDescriptor.begin(), maMediaDescriptor.end(),
+        [](const beans::PropertyValue& rProp) { return rProp.Name == "FilterData"; });
+    auto i = static_cast<sal_Int32>(std::distance(maMediaDescriptor.begin(), pProp));
+    sal_Int32 nCount = maMediaDescriptor.getLength();
     if ( i == nCount )
         maMediaDescriptor.realloc( ++nCount );
 
@@ -177,16 +175,15 @@ void SvFilterOptionsDialog::setPropertyValues( const uno::Sequence< beans::Prope
 {
     maMediaDescriptor = aProps;
 
-    sal_Int32 i, nCount;
-    for ( i = 0, nCount = maMediaDescriptor.getLength(); i < nCount; i++ )
+    for ( const auto& rProp : maMediaDescriptor )
     {
-        if ( maMediaDescriptor[ i ].Name == "FilterData" )
+        if ( rProp.Name == "FilterData" )
         {
-            maMediaDescriptor[ i ].Value >>= maFilterDataSequence;
+            rProp.Value >>= maFilterDataSequence;
         }
-        else if ( maMediaDescriptor[ i ].Name == "SelectionOnly" )
+        else if ( rProp.Name == "SelectionOnly" )
         {
-            maMediaDescriptor[ i ].Value >>= mbExportSelection;
+            rProp.Value >>= mbExportSelection;
         }
     }
 }
@@ -202,14 +199,13 @@ sal_Int16 SvFilterOptionsDialog::execute()
 
     OUString aInternalFilterName;
     uno::Reference<graphic::XGraphic> xGraphic;
-    sal_Int32 j, nCount = maMediaDescriptor.getLength();
-    for ( j = 0; j < nCount; j++ )
+    for ( const auto& rProp : maMediaDescriptor )
     {
-        const OUString& rName = maMediaDescriptor[ j ].Name;
+        const OUString& rName = rProp.Name;
         if ( rName == "FilterName" )
         {
             OUString aStr;
-            maMediaDescriptor[ j ].Value >>= aStr;
+            rProp.Value >>= aStr;
             aInternalFilterName = aStr.replaceFirst( "draw_", "" );
             aInternalFilterName = aInternalFilterName.replaceFirst( "impress_", "" );
             aInternalFilterName = aInternalFilterName.replaceFirst( "calc_", "" );
@@ -218,7 +214,7 @@ sal_Int16 SvFilterOptionsDialog::execute()
        }
         else if ( rName == "Graphic" )
         {
-            maMediaDescriptor[ j ].Value >>= xGraphic;
+            rProp.Value >>= xGraphic;
         }
     }
     if ( !aInternalFilterName.isEmpty() )

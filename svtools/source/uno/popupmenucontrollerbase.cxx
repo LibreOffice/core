@@ -221,12 +221,9 @@ Sequence< Reference< XDispatch > > SAL_CALL PopupMenuControllerBase::queryDispat
     uno::Sequence< uno::Reference< frame::XDispatch > > lDispatcher( nCount );
 
     // Step over all descriptors and try to get any dispatcher for it.
-    for( sal_Int32 i=0; i<nCount; ++i )
-    {
-        lDispatcher[i] = queryDispatch( lDescriptor[i].FeatureURL  ,
-                                        lDescriptor[i].FrameName   ,
-                                        lDescriptor[i].SearchFlags );
-    }
+    std::transform(lDescriptor.begin(), lDescriptor.end(), lDispatcher.begin(),
+        [this](const DispatchDescriptor& rDesc) -> uno::Reference< frame::XDispatch > {
+            return queryDispatch(rDesc.FeatureURL, rDesc.FrameName, rDesc.SearchFlags); });
 
     return lDispatcher;
 }
@@ -312,9 +309,9 @@ void SAL_CALL PopupMenuControllerBase::initialize( const Sequence< Any >& aArgum
     OUString       aCommandURL;
     Reference< XFrame > xFrame;
 
-    for ( int i = 0; i < aArguments.getLength(); i++ )
+    for ( const auto& rArgument : aArguments )
     {
-        if ( aArguments[i] >>= aPropValue )
+        if ( rArgument >>= aPropValue )
         {
             if ( aPropValue.Name == "Frame" )
                 aPropValue.Value >>= xFrame;

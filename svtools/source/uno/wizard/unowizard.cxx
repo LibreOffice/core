@@ -183,17 +183,13 @@ namespace {
                 throw IllegalArgumentException( OUString(), i_rContext, 2 );
 
             // page IDs must be in ascending order
-            sal_Int16 nPreviousPageID = i_rPaths[i][0];
-            for ( sal_Int32 j=1; j<i_rPaths[i].getLength(); ++j )
+            auto pPageId = std::adjacent_find(i_rPaths[i].begin(), i_rPaths[i].end(), std::greater_equal<sal_Int16>());
+            if (pPageId != i_rPaths[i].end())
             {
-                if ( i_rPaths[i][j] <= nPreviousPageID )
-                {
-                    throw IllegalArgumentException(
-                        "Path " + OUString::number(i)
-                        + ": invalid page ID sequence - each page ID must be greater than the previous one.",
-                        i_rContext, 2 );
-                }
-                nPreviousPageID = i_rPaths[i][j];
+                throw IllegalArgumentException(
+                    "Path " + OUString::number(i)
+                    + ": invalid page ID sequence - each page ID must be greater than the previous one.",
+                    i_rContext, 2 );
             }
         }
 
@@ -203,13 +199,11 @@ namespace {
 
         // if we have multiple paths, they must start with the same page id
         const sal_Int16 nFirstPageId = i_rPaths[0][0];
-        for ( sal_Int32 i = 0; i < i_rPaths.getLength(); ++i )
-        {
-            if ( i_rPaths[i][0] != nFirstPageId )
-                throw IllegalArgumentException(
-                    "All paths must start with the same page id.",
-                    i_rContext, 2 );
-        }
+        if (std::any_of(i_rPaths.begin(), i_rPaths.end(),
+                [nFirstPageId](const Sequence< sal_Int16 >& rPath) { return rPath[0] != nFirstPageId; }))
+            throw IllegalArgumentException(
+                "All paths must start with the same page id.",
+                i_rContext, 2 );
     }
 
     void SAL_CALL Wizard::initialize( const Sequence< Any >& i_Arguments )

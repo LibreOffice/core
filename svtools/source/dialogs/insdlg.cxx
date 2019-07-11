@@ -107,7 +107,6 @@ void SvObjectServerList::FillInsertObjects()
         if( xNameAccess.is())
         {
             uno::Sequence< OUString > seqNames= xNameAccess->getElementNames();
-            sal_Int32 nInd;
 
             OUString aStringProductName( "%PRODUCTNAME" );
             sal_Int32 nStringProductNameLength = aStringProductName.getLength();
@@ -115,10 +114,10 @@ void SvObjectServerList::FillInsertObjects()
             OUString aStringProductVersion( "%PRODUCTVERSION" );
             sal_Int32 nStringProductVersionLength = aStringProductVersion.getLength();
 
-            for( nInd = 0; nInd < seqNames.getLength(); nInd++ )
+            for( const auto& rName : seqNames )
             {
                 uno::Reference< container::XNameAccess > xEntry ;
-                xNameAccess->getByName( seqNames[nInd] ) >>= xEntry;
+                xNameAccess->getByName( rName ) >>= xEntry;
                 if ( xEntry.is() )
                 {
                     OUString aUIName;

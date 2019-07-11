@@ -173,9 +173,9 @@ void SAL_CALL ToolboxController::initialize( const Sequence< Any >& aArguments )
     m_bInitialized = true;
     m_bSupportVisible = false;
     PropertyValue aPropValue;
-    for ( int i = 0; i < aArguments.getLength(); i++ )
+    for ( const auto& rArgument : aArguments )
     {
-        if ( aArguments[i] >>= aPropValue )
+        if ( rArgument >>= aPropValue )
         {
             if ( aPropValue.Name == "Frame" )
                 m_xFrame.set(aPropValue.Value,UNO_QUERY);

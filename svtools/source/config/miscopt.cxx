@@ -23,6 +23,7 @@
 #include <tools/debug.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
+#include <comphelper/sequence.hxx>
 #include <tools/link.hxx>
 #include <osl/diagnose.h>
 
@@ -409,17 +410,6 @@ SvtMiscOptions_Impl::~SvtMiscOptions_Impl()
     assert(!IsModified()); // should have been committed
 }
 
-static int lcl_MapPropertyName( const OUString& rCompare,
-                const uno::Sequence< OUString>& aInternalPropertyNames)
-{
-    for(int nProp = 0; nProp < aInternalPropertyNames.getLength(); ++nProp)
-    {
-        if( aInternalPropertyNames[nProp] == rCompare )
-            return nProp;
-    }
-    return -1;
-}
-
 void SvtMiscOptions_Impl::Load( const Sequence< OUString >& rPropertyNames )
 {
     const uno::Sequence< OUString> aInternalPropertyNames( GetPropertyNames());
@@ -436,7 +426,7 @@ void SvtMiscOptions_Impl::Load( const Sequence< OUString >& rPropertyNames )
     {
         if (!seqValues[nProperty].hasValue())
             continue;
-        switch( lcl_MapPropertyName(rPropertyNames[nProperty], aInternalPropertyNames) )
+        switch( comphelper::findValue(aInternalPropertyNames, rPropertyNames[nProperty]) )
         {
             case PROPERTYHANDLE_PLUGINSENABLED      :   {
                                                             if( !(seqValues[nProperty] >>= m_bPluginsEnabled) )
