@@ -79,7 +79,7 @@ public abstract class DrawingOrPresentationDocumentTest extends DocumentTestBase
         final Object shape = firstPageShapes.getByIndex(0);
         verifyShapeGeometry( shape, BIG_CIRCLE_SIZE, BIG_CIRCLE_SIZE );
         final XPropertySet shapeProps = UnoRuntime.queryInterface( XPropertySet.class, shape );
-        assertEquals( "wrong circle tpye", CIRCLE_TYPE.getValue(), ((CircleKind)shapeProps.getPropertyValue( "CircleKind" )).getValue() );
+        assertEquals( "wrong circle type", CIRCLE_TYPE.getValue(), ((CircleKind)shapeProps.getPropertyValue( "CircleKind" )).getValue() );
         //assertEquals( "wrong circle fill color", FILL_COLOR, ((Integer)shapeProps.getPropertyValue( "FillColor" )).intValue() );
             // disable this particular check: A bug in the drawing layer API restores the FillColor to its
             // default value upon re-insertion. This is issue #i115080#
