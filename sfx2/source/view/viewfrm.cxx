@@ -460,6 +460,13 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                 bool bOK = false;
                 bool bRetryIgnoringLock = false;
                 bool bOpenTemplate = false;
+                boost::optional<bool> aOrigROVal;
+                if (!pVersionItem)
+                {
+                    auto pRO = pMed->GetItemSet()->GetItem<SfxBoolItem>(SID_DOC_READONLY, false);
+                    if (pRO)
+                        aOrigROVal = pRO->GetValue();
+                }
                 do {
                     LockFileEntry aLockData;
                     if ( !pVersionItem )
@@ -524,6 +531,10 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                     {
                         pMed->ResetError();
                         pMed->SetOpenMode( SFX_STREAM_READONLY );
+                        if (aOrigROVal)
+                            pMed->GetItemSet()->Put(SfxBoolItem(SID_DOC_READONLY, *aOrigROVal));
+                        else
+                            pMed->GetItemSet()->ClearItem(SID_DOC_READONLY);
                         pMed->ReOpen();
                         pSh->DoSaveCompleted( pMed );
                     }
