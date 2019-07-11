@@ -370,34 +370,37 @@ void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
 
         case SID_PASTE_SPECIAL:
             {
-                TransferableDataHelper aDataHelper(
-                    TransferableDataHelper::CreateFromSystemClipboard( &rSh.GetView().GetEditWin()) );
-                if( aDataHelper.GetXTransferable().is()
-                    && SwTransferable::IsPaste( rSh, aDataHelper )
+                std::shared_ptr<TransferableDataHelper> aDataHelper;
+                aDataHelper.reset(new TransferableDataHelper( TransferableDataHelper::CreateFromSystemClipboard( &rSh.GetView().GetEditWin()) ));
+
+                if( aDataHelper->GetXTransferable().is()
+                    && SwTransferable::IsPaste( rSh, *aDataHelper )
                     && !rSh.CursorInsideInputField() )
                 {
-                    // Temporary variables, because the shell could already be
-                    // destroyed after the paste.
-                    SwView* pView = &rView;
-                    SotClipboardFormatId nFormatId = SotClipboardFormatId::NONE;
-
                     rReq.Ignore();
                     bIgnore = true;
-                    bool bRet = false;
 
                     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                     VclPtr<SfxAbstractPasteDialog> pDlg(pFact->CreatePasteDialog( &rSh.GetView().GetEditWin() ));
 
                     // Prepare the dialog
-                    SwTransferable::PrePasteSpecial(rSh, aDataHelper, pDlg);
-                    pDlg->PreGetFormat(aDataHelper);
+                    SwTransferable::PrePasteSpecial(rSh, *aDataHelper, pDlg);
+                    pDlg->PreGetFormat(*aDataHelper);
 
-                    if (pDlg->Execute() == RET_OK)
+                    pDlg->StartExecuteAsync([=, &rSh](sal_Int32 nResult){
+                    if (nResult == RET_OK)
                     {
+
+                        // Temporary variables, because the shell could already be
+                        // destroyed after the paste.
+                        SwView* pView = &rView;
+                        SotClipboardFormatId nFormatId = SotClipboardFormatId::NONE;
+                        bool bRet = false;
+
                         nFormatId = pDlg->GetFormatOnly();
 
                         if( nFormatId != SotClipboardFormatId::NONE )
-                            bRet = SwTransferable::PasteFormat( rSh, aDataHelper, nFormatId );
+                            bRet = SwTransferable::PasteFormat( rSh, *aDataHelper, nFormatId );
 
                         if (bRet)
                         {
@@ -417,6 +420,8 @@ void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
                     }
 
                     pDlg->disposeOnce();
+
+                    });
                 }
                 else
                     return;
