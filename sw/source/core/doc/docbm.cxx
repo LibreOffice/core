@@ -1320,21 +1320,22 @@ namespace sw { namespace mark
         SwEditWin& rEditWin = pSwView->GetEditWin();
         SwPosition aPos(*rCursorShell.GetCursor()->GetPoint());
         IFieldmark* pFieldBM = getFieldmarkFor(aPos);
-        DropDownFieldmark* pNewActiveFieldmark = nullptr;
-        if ((!pFieldBM || pFieldBM->GetFieldname() != ODF_FORMDROPDOWN)
+        FieldmarkWithDropDownButton* pNewActiveFieldmark = nullptr;
+        if ((!pFieldBM || (pFieldBM->GetFieldname() != ODF_FORMDROPDOWN && pFieldBM->GetFieldname() != ODF_FORMDATE))
             && aPos.nContent.GetIndex() > 0 )
         {
             --aPos.nContent;
             pFieldBM = getFieldmarkFor(aPos);
         }
 
-        if ( pFieldBM && pFieldBM->GetFieldname() == ODF_FORMDROPDOWN )
+        if ( pFieldBM && (pFieldBM->GetFieldname() == ODF_FORMDROPDOWN ||
+                          pFieldBM->GetFieldname() == ODF_FORMDATE))
         {
             if (m_pLastActiveFieldmark != pFieldBM)
             {
-                DropDownFieldmark* pDropDownFm = dynamic_cast<DropDownFieldmark*>(pFieldBM);
-                pDropDownFm->ShowButton(&rEditWin);
-                pNewActiveFieldmark = pDropDownFm;
+                auto pFormField = dynamic_cast<FieldmarkWithDropDownButton*>(pFieldBM);
+                pFormField->ShowButton(&rEditWin);
+                pNewActiveFieldmark = pFormField;
             }
             else
             {
