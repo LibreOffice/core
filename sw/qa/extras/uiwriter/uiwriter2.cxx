@@ -88,6 +88,9 @@ public:
     void testTdf124261();
     void testShapePageMove();
     void testDateFormFieldInsertion();
+    void testDateFormFieldContentOperations();
+    void testDateFormFieldCurrentDateHandling();
+    void testDateFormFieldCurrentDateInvalidation();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest2);
     CPPUNIT_TEST(testRedlineMoveInsertInDelete);
@@ -120,6 +123,9 @@ public:
     CPPUNIT_TEST(testTdf124261);
     CPPUNIT_TEST(testShapePageMove);
     CPPUNIT_TEST(testDateFormFieldInsertion);
+    CPPUNIT_TEST(testDateFormFieldContentOperations);
+    CPPUNIT_TEST(testDateFormFieldCurrentDateHandling);
+    CPPUNIT_TEST(testDateFormFieldCurrentDateInvalidation);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -1370,6 +1376,152 @@ void SwUiWriterTest2::testDateFormFieldInsertion()
     pFieldmark = dynamic_cast<::sw::mark::IFieldmark*>(aIter->get());
     CPPUNIT_ASSERT(pFieldmark);
     CPPUNIT_ASSERT_EQUAL(OUString(ODF_FORMDATE), pFieldmark->GetFieldname());
+}
+
+void SwUiWriterTest2::testDateFormFieldContentOperations()
+{
+    SwDoc* pDoc = createDoc();
+    CPPUNIT_ASSERT(pDoc);
+    IDocumentMarkAccess* pMarkAccess = pDoc->getIDocumentMarkAccess();
+    CPPUNIT_ASSERT(pMarkAccess);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), pMarkAccess->getAllMarksCount());
+
+    // Insert a date form field
+    lcl_dispatchCommand(mxComponent, ".uno:DatePickerFormField", {});
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pMarkAccess->getAllMarksCount());
+
+    // Check whether the fieldmark is created
+    auto aIter = pMarkAccess->getAllMarksBegin();
+    CPPUNIT_ASSERT(aIter != pMarkAccess->getAllMarksEnd());
+    ::sw::mark::IDateFieldmark* pFieldmark
+        = dynamic_cast<::sw::mark::IDateFieldmark*>(aIter->get());
+    CPPUNIT_ASSERT(pFieldmark);
+    CPPUNIT_ASSERT_EQUAL(OUString(ODF_FORMDATE), pFieldmark->GetFieldname());
+
+    // Check the default content added by insertion
+    uno::Reference<text::XTextRange> xPara = getParagraph(1);
+    sal_Unicode vEnSpaces[5] = { 8194, 8194, 8194, 8194, 8194 };
+    CPPUNIT_ASSERT_EQUAL(OUString(vEnSpaces, 5), pFieldmark->GetContent());
+
+    // Set content to empty string
+    pFieldmark->ReplaceContent("");
+    CPPUNIT_ASSERT_EQUAL(OUString(""), pFieldmark->GetContent());
+
+    // Replace empty string with a valid content
+    pFieldmark->ReplaceContent("2019-10-23");
+    CPPUNIT_ASSERT_EQUAL(OUString("2019-10-23"), pFieldmark->GetContent());
+}
+
+void SwUiWriterTest2::testDateFormFieldCurrentDateHandling()
+{
+    SwDoc* pDoc = createDoc();
+    CPPUNIT_ASSERT(pDoc);
+    IDocumentMarkAccess* pMarkAccess = pDoc->getIDocumentMarkAccess();
+    CPPUNIT_ASSERT(pMarkAccess);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), pMarkAccess->getAllMarksCount());
+
+    // Insert a date form field
+    lcl_dispatchCommand(mxComponent, ".uno:DatePickerFormField", {});
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pMarkAccess->getAllMarksCount());
+
+    // Check whether the fieldmark is created
+    auto aIter = pMarkAccess->getAllMarksBegin();
+    CPPUNIT_ASSERT(aIter != pMarkAccess->getAllMarksEnd());
+    ::sw::mark::IDateFieldmark* pFieldmark
+        = dynamic_cast<::sw::mark::IDateFieldmark*>(aIter->get());
+    CPPUNIT_ASSERT(pFieldmark);
+    CPPUNIT_ASSERT_EQUAL(OUString(ODF_FORMDATE), pFieldmark->GetFieldname());
+
+    // The default content is not a valid date
+    uno::Reference<text::XTextRange> xPara = getParagraph(1);
+    sal_Unicode vEnSpaces[5] = { 8194, 8194, 8194, 8194, 8194 };
+    CPPUNIT_ASSERT_EQUAL(OUString(vEnSpaces, 5), pFieldmark->GetContent());
+    std::pair<bool, double> aResult = pFieldmark->GetCurrentDate();
+    CPPUNIT_ASSERT(!aResult.first);
+
+    // Check empty string
+    pFieldmark->ReplaceContent("");
+    aResult = pFieldmark->GetCurrentDate();
+    CPPUNIT_ASSERT(!aResult.first);
+
+    // Check valid date
+    // Set date format first
+    sw::mark::IFieldmark::parameter_map_t* pParameters = pFieldmark->GetParameters();
+    (*pParameters)[ODF_FORMDATE_DATEFORMAT] <<= OUString("YYYY/MM/DD");
+    (*pParameters)[ODF_FORMDATE_DATEFORMAT_LANGUAGE] <<= OUString("en-US");
+
+    // Set date value and check whether the content is formatted correctly
+    pFieldmark->SetCurrentDate(48000.0);
+    aResult = pFieldmark->GetCurrentDate();
+    CPPUNIT_ASSERT(aResult.first);
+    CPPUNIT_ASSERT_EQUAL(48000.0, aResult.second);
+    CPPUNIT_ASSERT_EQUAL(OUString("2031/06/01"), pFieldmark->GetContent());
+    // Current date param contains date in a "standard format"
+    OUString sCurrentDate;
+    auto pResult = pParameters->find(ODF_FORMDATE_CURRENTDATE);
+    if (pResult != pParameters->end())
+    {
+        pResult->second >>= sCurrentDate;
+    }
+    CPPUNIT_ASSERT_EQUAL(OUString("2031-06-01"), sCurrentDate);
+}
+
+void SwUiWriterTest2::testDateFormFieldCurrentDateInvalidation()
+{
+    SwDoc* pDoc = createDoc();
+    CPPUNIT_ASSERT(pDoc);
+    IDocumentMarkAccess* pMarkAccess = pDoc->getIDocumentMarkAccess();
+    CPPUNIT_ASSERT(pMarkAccess);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), pMarkAccess->getAllMarksCount());
+
+    // Insert a date form field
+    lcl_dispatchCommand(mxComponent, ".uno:DatePickerFormField", {});
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pMarkAccess->getAllMarksCount());
+
+    // Check whether the fieldmark is created
+    auto aIter = pMarkAccess->getAllMarksBegin();
+    CPPUNIT_ASSERT(aIter != pMarkAccess->getAllMarksEnd());
+    ::sw::mark::IDateFieldmark* pFieldmark
+        = dynamic_cast<::sw::mark::IDateFieldmark*>(aIter->get());
+    CPPUNIT_ASSERT(pFieldmark);
+    CPPUNIT_ASSERT_EQUAL(OUString(ODF_FORMDATE), pFieldmark->GetFieldname());
+
+    // Set a date first
+    sw::mark::IFieldmark::parameter_map_t* pParameters = pFieldmark->GetParameters();
+    pFieldmark->SetCurrentDate(48000.0);
+    std::pair<bool, double> aResult = pFieldmark->GetCurrentDate();
+    CPPUNIT_ASSERT(aResult.first);
+    CPPUNIT_ASSERT_EQUAL(48000.0, aResult.second);
+
+    // Do the layouting to trigger invalidation
+    // Since we have the current date consistent with the field content
+    // This invalidation won't change anything
+    calcLayout();
+    Scheduler::ProcessEventsToIdle();
+
+    // Current date param contains date in a "standard format"
+    OUString sCurrentDate;
+    auto pResult = pParameters->find(ODF_FORMDATE_CURRENTDATE);
+    if (pResult != pParameters->end())
+    {
+        pResult->second >>= sCurrentDate;
+    }
+    // We have the current date parameter set
+    CPPUNIT_ASSERT_EQUAL(OUString("2031-06-01"), sCurrentDate);
+
+    // Now change the content of the field
+    pFieldmark->ReplaceContent("[select date]");
+    // Do the layouting to trigger invalidation
+    calcLayout();
+    Scheduler::ProcessEventsToIdle();
+
+    sCurrentDate.clear();
+    pResult = pParameters->find(ODF_FORMDATE_CURRENTDATE);
+    if (pResult != pParameters->end())
+    {
+        pResult->second >>= sCurrentDate;
+    }
+    CPPUNIT_ASSERT_EQUAL(OUString(""), sCurrentDate);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest2);
