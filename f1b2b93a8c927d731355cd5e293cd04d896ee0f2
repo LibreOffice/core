@@ -22,6 +22,30 @@
       "revId": "f1b2b93a8c927d731355cd5e293cd04d896ee0f2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_242450c6",
+        "filename": "vcl/source/app/salplug.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 319,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2019-07-11T17:40:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bf659307_247690da",
+      "range": {
+        "startLine": 319,
+        "startChar": 25,
+        "endLine": 319,
+        "endChar": 28
+      },
+      "revId": "f1b2b93a8c927d731355cd5e293cd04d896ee0f2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
