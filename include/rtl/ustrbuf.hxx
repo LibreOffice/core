@@ -513,7 +513,7 @@ public:
     }
 
     /**
-        Return a OUString instance reflecting the current content
+        Return an OUString instance reflecting the current content
         of this OUStringBuffer.
      */
     const OUString toString() const
