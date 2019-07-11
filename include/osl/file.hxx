@@ -1625,7 +1625,7 @@ extern "C" inline void SAL_CALL onDirectoryCreated(void* pData, rtl_uString* aDi
     static_cast<DirectoryCreationObserver*>(pData)->DirectoryCreated(aDirectoryUrl);
 }
 
-/** The directory class object provides a enumeration of DirectoryItems.
+/** The directory class object provides an enumeration of DirectoryItems.
 
     @see DirectoryItem
     @see File
@@ -1681,7 +1681,7 @@ public:
         @retval E_None on success
         @retval E_INVAL the format of the parameters was not valid
         @retval E_NOENT the specified path doesn't exist
-        @retval E_NOTDIR the specified path is not an directory
+        @retval E_NOTDIR the specified path is not a directory
         @retval E_NOMEM not enough memory for allocating structures
         @retval E_ACCES permission denied
         @retval E_MFILE too many open files used by the process
@@ -1740,7 +1740,7 @@ public:
         @retval E_None on success
         @retval E_INVAL the format of the parameters was not valid
         @retval E_NOENT the specified path doesn't exist
-        @retval E_NOTDIR the specified path is not an directory
+        @retval E_NOTDIR the specified path is not a directory
         @retval E_NOMEM not enough memory for allocating structures
         @retval E_ACCES permission denied
         @retval E_MFILE too many open files used by the process
