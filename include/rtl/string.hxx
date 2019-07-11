@@ -113,7 +113,7 @@ public:
     /**
       New string from OString.
 
-      @param    str         a OString.
+      @param    str         an OString.
     */
     OString( const OString & str )
     {
@@ -126,7 +126,7 @@ public:
     /**
       Move constructor.
 
-      @param    str         a OString.
+      @param    str         an OString.
       @since LibreOffice 5.2
     */
     OString( OString && str )
@@ -141,7 +141,7 @@ public:
     /**
       New string from OString data.
 
-      @param    str         a OString data.
+      @param    str         an OString data.
     */
     OString( rtl_String * str )
     {
@@ -154,7 +154,7 @@ public:
         The SAL_NO_ACQUIRE dummy parameter is only there to distinguish this
         from other constructors.
 
-      @param    str         a OString data.
+      @param    str         an OString data.
     */
     OString( rtl_String * str, __sal_NoAcquire )
     {
@@ -297,7 +297,7 @@ public:
     /**
       Assign a new string.
 
-      @param    str         a OString.
+      @param    str         an OString.
     */
     OString & operator=( const OString & str )
     {
@@ -310,7 +310,7 @@ public:
     /**
       Move assign a new string.
 
-      @param    str         a OString.
+      @param    str         an OString.
       @since LibreOffice 5.2
     */
     OString & operator=( OString && str )
@@ -350,7 +350,7 @@ public:
     /**
       Append a string to this string.
 
-      @param    str         a OString.
+      @param    str         an OString.
     */
     OString & operator+=( const OString & str )
 #if defined LIBO_INTERNAL_ONLY
@@ -546,7 +546,7 @@ public:
     }
 
     /**
-      Perform a ASCII lowercase comparison of two strings.
+      Perform an ASCII lowercase comparison of two strings.
 
       The result is true if and only if second string
       represents the same sequence of characters as the first string,
@@ -570,7 +570,7 @@ public:
     }
 
     /**
-      Perform a ASCII lowercase comparison of two strings.
+      Perform an ASCII lowercase comparison of two strings.
 
       The result is true if and only if second string
       represents the same sequence of characters as the first string,
@@ -625,7 +625,7 @@ public:
     }
 
     /**
-      Perform a ASCII lowercase comparison of two strings.
+      Perform an ASCII lowercase comparison of two strings.
 
       The result is true if and only if second string
       represents the same sequence of characters as the first string,
