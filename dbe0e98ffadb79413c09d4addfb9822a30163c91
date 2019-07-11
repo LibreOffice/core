@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_59d04dca",
+        "filename": "sd/uiconfig/sdraw/popupmenu/multiselect.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2019-07-11T07:29:26Z",
+      "side": 1,
+      "message": "Oops. This extra separator should not have been added.",
+      "range": {
+        "startLine": 50,
+        "startChar": 0,
+        "endLine": 50,
+        "endChar": 23
+      },
+      "revId": "dbe0e98ffadb79413c09d4addfb9822a30163c91",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

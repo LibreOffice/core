@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_99efc586",
+        "filename": "editeng/source/editeng/impedit3.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3924,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2019-07-11T07:29:26Z",
+      "side": 0,
+      "message": "Since OOo import, but I see no reason for limiting this to Undo only. Nothing special or dangerous here.",
+      "range": {
+        "startLine": 3924,
+        "startChar": 4,
+        "endLine": 3924,
+        "endChar": 64
+      },
+      "revId": "02999ba5e40475b5ddc7280376fd68c4b380d27e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
