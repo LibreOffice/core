@@ -458,7 +458,7 @@ public:
     }
 
     /**
-        Return a OString instance reflecting the current content
+        Return an OString instance reflecting the current content
         of this OStringBuffer.
      */
     const OString toString() const
