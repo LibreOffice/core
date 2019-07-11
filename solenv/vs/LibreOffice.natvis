@@ -468,4 +468,7 @@
       <Item Name="data">*reinterpret_cast&lt;$T1 *&gt;(m_storage.dummy_.data)</Item>
     </Expand>
   </Type>
+  <Type Name="ErrCode">
+    <DisplayString>Area: {static_cast&lt;ErrCodeArea&gt;((m_value >> 13) &amp; 0x01fff),en}, class: {static_cast&lt;ErrCodeClass&gt;((m_value >> 8) &amp; 0x1f),en}, code: {m_value &amp; 0xff}</DisplayString>
+  </Type>
 </AutoVisualizer>
