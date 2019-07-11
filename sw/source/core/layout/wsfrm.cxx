@@ -4180,18 +4180,19 @@ static void AddRemoveFlysForNode(
         SwPageFrame *const pPage,
         SwTextNode const*const pNode,
         std::vector<sw::Extent>::const_iterator & rIterFirst,
-        std::vector<sw::Extent>::const_iterator const& rIterEnd)
+        std::vector<sw::Extent>::const_iterator const& rIterEnd,
+        SwTextNode const*const pFirstNode, SwTextNode const*const pLastNode)
 {
     if (pNode == &rTextNode)
     {   // remove existing hidden at-char anchored flys
-        RemoveHiddenObjsOfNode(rTextNode, &rIterFirst, &rIterEnd);
+        RemoveHiddenObjsOfNode(rTextNode, &rIterFirst, &rIterEnd, pFirstNode, pLastNode);
     }
     else if (rTextNode.GetIndex() < pNode->GetIndex())
     {
         // pNode's frame has been deleted by CheckParaRedlineMerge()
         AppendObjsOfNode(&rTable,
             pNode->GetIndex(), &rFrame, pPage, rTextNode.GetDoc(),
-            &rIterFirst, &rIterEnd);
+            &rIterFirst, &rIterEnd, pFirstNode, pLastNode);
         if (pSkipped)
         {
             // if a fly has been added by AppendObjsOfNode, it must be skipped; if not, then it doesn't matter if it's skipped or not because it has no frames and because of that it would be skipped anyway
@@ -4239,7 +4240,8 @@ void AddRemoveFlysAnchoredToFrameStartingAtNode(
                 || iter->pNode != pNode)
             {
                 AddRemoveFlysForNode(rFrame, rTextNode, pSkipped, rTable, pPage,
-                        pNode, iterFirst, iter);
+                        pNode, iterFirst, iter,
+                        pMerged->pFirstNode, pMerged->pLastNode);
                 sal_uLong const until = iter == pMerged->extents.end()
                     ? pMerged->pLastNode->GetIndex() + 1
                     : iter->pNode->GetIndex();
@@ -4251,7 +4253,8 @@ void AddRemoveFlysAnchoredToFrameStartingAtNode(
                     if (pTmp->GetRedlineMergeFlag() == SwNode::Merge::NonFirst)
                     {
                         AddRemoveFlysForNode(rFrame, rTextNode, pSkipped,
-                            rTable, pPage, pTmp->GetTextNode(), iter, iter);
+                            rTable, pPage, pTmp->GetTextNode(), iter, iter,
+                            pMerged->pFirstNode, pMerged->pLastNode);
                     }
                 }
                 if (iter == pMerged->extents.end())
