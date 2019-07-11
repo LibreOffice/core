@@ -119,7 +119,7 @@ bool Qt5Graphics_Controls::isNativeControlSupported(ControlType type, ControlPar
 namespace
 {
 void draw(QStyle::ControlElement element, QStyleOption* option, QImage* image,
-          QStyle::State const& state, QRect rect = QRect())
+          QStyle::State const state = QStyle::State_None, QRect rect = QRect())
 {
     option->state |= state;
     option->rect = !rect.isNull() ? rect : image->rect();
@@ -129,7 +129,7 @@ void draw(QStyle::ControlElement element, QStyleOption* option, QImage* image,
 }
 
 void draw(QStyle::PrimitiveElement element, QStyleOption* option, QImage* image,
-          QStyle::State const& state, QRect rect = QRect())
+          QStyle::State const state = QStyle::State_None, QRect rect = QRect())
 {
     option->state |= state;
     option->rect = !rect.isNull() ? rect : image->rect();
@@ -139,7 +139,7 @@ void draw(QStyle::PrimitiveElement element, QStyleOption* option, QImage* image,
 }
 
 void draw(QStyle::ComplexControl element, QStyleOptionComplex* option, QImage* image,
-          QStyle::State const& state)
+          QStyle::State const state = QStyle::State_None)
 {
     option->state |= state;
     option->rect = image->rect();
@@ -271,6 +271,7 @@ bool Qt5Graphics_Controls::drawNativeControl(ControlType type, ControlPart part,
         if (part == ControlPart::MenuItem)
         {
             QStyleOptionMenuItem option;
+            option.state = vclStateValue2StateFlag(nControlState, value);
             if ((nControlState & ControlState::ROLLOVER)
                 && QApplication::style()->styleHint(QStyle::SH_MenuBar_MouseTracking))
                 option.state |= QStyle::State_Selected;
@@ -279,8 +280,7 @@ bool Qt5Graphics_Controls::drawNativeControl(ControlType type, ControlPart part,
                 & ControlState::SELECTED) // Passing State_Sunken is currently not documented.
                 option.state |= QStyle::State_Sunken; // But some kinds of QStyle interpret it.
 
-            draw(QStyle::CE_MenuBarItem, &option, m_image.get(),
-                 vclStateValue2StateFlag(nControlState, value));
+            draw(QStyle::CE_MenuBarItem, &option, m_image.get());
         }
         else if (part == ControlPart::Entire)
         {
@@ -361,14 +361,12 @@ bool Qt5Graphics_Controls::drawNativeControl(ControlType type, ControlPart part,
         else if (part == ControlPart::Entire)
         {
             QStyleOptionMenuItem option;
-            draw(QStyle::PE_PanelMenu, &option, m_image.get(),
-                 vclStateValue2StateFlag(nControlState, value));
+            option.state = vclStateValue2StateFlag(nControlState, value);
+            draw(QStyle::PE_PanelMenu, &option, m_image.get());
             // Try hard to get any frame!
             QStyleOptionFrame frame;
-            draw(QStyle::PE_FrameMenu, &frame, m_image.get(),
-                 vclStateValue2StateFlag(nControlState, value));
-            draw(QStyle::PE_FrameWindow, &frame, m_image.get(),
-                 vclStateValue2StateFlag(nControlState, value));
+            draw(QStyle::PE_FrameMenu, &frame, m_image.get());
+            draw(QStyle::PE_FrameWindow, &frame, m_image.get());
             m_lastPopupRect = widgetRect;
         }
         else
@@ -380,20 +378,14 @@ bool Qt5Graphics_Controls::drawNativeControl(ControlType type, ControlPart part,
 
         option.arrowType = Qt::NoArrow;
         option.subControls = QStyle::SC_ToolButton;
-
         option.state = vclStateValue2StateFlag(nControlState, value);
         option.state |= QStyle::State_Raised | QStyle::State_Enabled | QStyle::State_AutoRaise;
 
-        draw(QStyle::CC_ToolButton, &option, m_image.get(),
-             vclStateValue2StateFlag(nControlState, value));
+        draw(QStyle::CC_ToolButton, &option, m_image.get());
     }
     else if ((type == ControlType::Toolbar) && (part == ControlPart::Entire))
     {
         QStyleOptionToolBar option;
-
-        option.rect = QRect(0, 0, widgetRect.width(), widgetRect.height());
-        option.state = vclStateValue2StateFlag(nControlState, value);
-
         draw(QStyle::CE_ToolBar, &option, m_image.get(),
              vclStateValue2StateFlag(nControlState, value));
     }
@@ -458,13 +450,13 @@ bool Qt5Graphics_Controls::drawNativeControl(ControlType type, ControlPart part,
     else if (type == ControlType::ListNode)
     {
         QStyleOption option;
-        option.state = QStyle::State_Item | QStyle::State_Children;
+        option.state = vclStateValue2StateFlag(nControlState, value);
+        option.state |= QStyle::State_Item | QStyle::State_Children;
 
         if (value.getTristateVal() == ButtonValue::On)
             option.state |= QStyle::State_Open;
 
-        draw(QStyle::PE_IndicatorBranch, &option, m_image.get(),
-             vclStateValue2StateFlag(nControlState, value));
+        draw(QStyle::PE_IndicatorBranch, &option, m_image.get());
     }
     else if (type == ControlType::ListHeader)
     {
@@ -594,10 +586,10 @@ bool Qt5Graphics_Controls::drawNativeControl(ControlType type, ControlPart part,
     {
         QStyleOptionMenuItem option;
         option.menuItemType = QStyleOptionMenuItem::Separator;
+        option.state = vclStateValue2StateFlag(nControlState, value);
         option.state |= QStyle::State_Item;
 
-        draw(QStyle::CE_MenuItem, &option, m_image.get(),
-             vclStateValue2StateFlag(nControlState, value));
+        draw(QStyle::CE_MenuItem, &option, m_image.get());
     }
     else if (type == ControlType::Slider
              && (part == ControlPart::TrackHorzArea || part == ControlPart::TrackVertArea))
@@ -606,7 +598,6 @@ bool Qt5Graphics_Controls::drawNativeControl(ControlType type, ControlPart part,
         const SliderValue* slVal = static_cast<const SliderValue*>(&value);
         QStyleOptionSlider option;
 
-        option.rect = QRect(0, 0, widgetRect.width(), widgetRect.height());
         option.state = vclStateValue2StateFlag(nControlState, value);
         option.maximum = slVal->mnMax;
         option.minimum = slVal->mnMin;
@@ -616,8 +607,7 @@ bool Qt5Graphics_Controls::drawNativeControl(ControlType type, ControlPart part,
         if (horizontal)
             option.state |= QStyle::State_Horizontal;
 
-        draw(QStyle::CC_Slider, &option, m_image.get(),
-             vclStateValue2StateFlag(nControlState, value));
+        draw(QStyle::CC_Slider, &option, m_image.get());
     }
     else if (type == ControlType::Progress && part == ControlPart::Entire)
     {
@@ -627,8 +617,6 @@ bool Qt5Graphics_Controls::drawNativeControl(ControlType type, ControlPart part,
         option.minimum = 0;
         option.maximum = widgetRect.width();
         option.progress = value.getNumericVal();
-        option.rect = QRect(0, 0, widgetRect.width(), widgetRect.height());
-        option.state = vclStateValue2StateFlag(nControlState, value);
 
         draw(QStyle::CE_ProgressBar, &option, m_image.get(),
              vclStateValue2StateFlag(nControlState, value));
