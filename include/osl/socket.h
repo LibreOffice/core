@@ -47,7 +47,7 @@ typedef enum {
 } oslAddrFamily;
 
 /**
-    represent a specific protocol within a address-family
+    represent a specific protocol within an address-family
 */
 typedef enum {
     osl_Socket_ProtocolIp,          /*!< for all af_inet                        */
@@ -834,7 +834,7 @@ SAL_DLLPUBLIC oslSocketResult SAL_CALL osl_setAddrOfSocketAddr(
 /** Returns the addr field in the struct sockaddr.
     @param[in] Addr The socket address from which to extract the ipaddress.
     @param[out] ppByteSeq After the call, *ppByteSeq contains the ipaddress
-                     in network byteorder. *ppByteSeq may be 0 in case of an invalid socket handle.
+                     in network byte order. *ppByteSeq may be 0 in case of an invalid socket handle.
     @retval osl_Socket_Ok
     @retval osl_Socket_Error
  */
