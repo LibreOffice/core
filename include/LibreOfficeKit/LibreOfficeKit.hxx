@@ -685,7 +685,7 @@ public:
     }
 
     /**
-     * Loads a document from an URL.
+     * Loads a document from a URL.
      *
      * @param pUrl the URL of the document to load
      * @param pFilterOptions options for the import filter, e.g. SkipImages.
