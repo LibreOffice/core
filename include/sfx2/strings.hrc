@@ -319,6 +319,8 @@
 #define STR_PASSWORD_LEN                        NC_("STR_PASSWORD_LEN", "Password length")
 #define STR_PASSWORD_WARNING                    NC_("STR_PASSWORD_WARNING", "The password you have entered causes interoperability issues. Please enter a password that is shorter than 52 bytes, or longer than 55 bytes.")
 
+#define STR_CTRLCLICKHYPERLINK                  NC_("STR_CTRLCLICKHYPERLINK", "%{key}-click to follow hyperlink: %{link}")
+#define STR_CLICKHYPERLINK                      NC_("STR_CLICKHYPERLINK", "Click to open hyperlink: %{link}")
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

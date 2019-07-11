@@ -33,7 +33,6 @@
 #include <authfld.hxx>
 #include <dbmgr.hxx>
 #include <unotools/syslocale.hxx>
-#include <vcl/keycod.hxx>
 
 #include <unomid.h>
 
@@ -135,19 +134,10 @@ ShellResource::ShellResource()
     aTOXTablesName(         SwResId(STR_TOX_TBL)),
     aTOXAuthoritiesName(    SwResId(STR_TOX_AUTH)),
     aTOXCitationName(    SwResId(STR_TOX_CITATION)),
-    aLinkCtrlClick(SwResId(STR_LINK_CTRL_CLICK)),
-    aLinkClick(SwResId(STR_LINK_CLICK)),
     sPageDescFirstName(     SwResId(STR_PAGEDESC_FIRSTNAME)),
     sPageDescFollowName(    SwResId(STR_PAGEDESC_FOLLOWNAME)),
     sPageDescName(          SwResId(STR_PAGEDESC_NAME))
 {
-    vcl::KeyCode aCode( KEY_SPACE );
-    vcl::KeyCode aModifiedCode( KEY_SPACE, KEY_MOD1 );
-    OUString aModStr( aModifiedCode.GetName() );
-    aModStr = aModStr.replaceFirst(aCode.GetName(), "");
-    aModStr = aModStr.replaceAll("+", "");
-    aLinkCtrlClick = aLinkCtrlClick.replaceAll("%s", aModStr);
-
     for (size_t i = 0; i < SAL_N_ELEMENTS(FLD_DOCINFO_ARY); ++i)
         aDocInfoLst.push_back(SwResId(FLD_DOCINFO_ARY[i]));
 }

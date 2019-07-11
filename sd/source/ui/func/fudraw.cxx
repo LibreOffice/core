@@ -32,6 +32,7 @@
 #include <sfx2/app.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/bindings.hxx>
+#include <sfx2/sfxhelp.hxx>
 #include <svx/svdpagv.hxx>
 #include <vcl/imapobj.hxx>
 #include <svx/svxids.hrc>
@@ -756,27 +757,7 @@ bool FuDraw::SetHelpText(SdrObject* pObj, const Point& rPosPixel, const SdrViewE
     else
         return false;
 
-    SvtSecurityOptions aSecOpt;
-    if (aSecOpt.IsOptionSet(SvtSecurityOptions::EOption::CtrlClickHyperlink))
-    {
-        // Hint about Ctrl-click to open hyperlink, but need to detect "Ctrl" key for MacOs
-        vcl::KeyCode aCode(KEY_SPACE);
-        vcl::KeyCode aModifiedCode(KEY_SPACE, KEY_MOD1);
-        OUString aModStr(aModifiedCode.GetName());
-        aModStr = aModStr.replaceFirst(aCode.GetName(), "");
-        aModStr = aModStr.replaceAll("+", "");
-
-        OUString aCtrlClickHlinkStr = SdResId(STR_CTRLCLICKHYPERLINK);
-
-        aCtrlClickHlinkStr = aCtrlClickHlinkStr.replaceAll("%s", aModStr);
-
-        aHelpText = aCtrlClickHlinkStr + aURL;
-    }
-    else
-    {
-        // Hint about just clicking hyperlink
-        aHelpText = SdResId(STR_CLICKHYPERLINK) + aURL;
-    }
+    aHelpText = SfxHelp::GetURLHelpText(aURL);
 
     if (aHelpText.isEmpty())
         return false;
