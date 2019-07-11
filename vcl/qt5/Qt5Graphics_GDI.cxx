@@ -210,7 +210,7 @@ void Qt5Graphics::drawRect(long nX, long nY, long nWidth, long nHeight)
     if (SALCOLOR_NONE != m_aFillColor)
         aPainter.fillRect(nX, nY, nWidth, nHeight, aPainter.brush());
     if (SALCOLOR_NONE != m_aLineColor)
-        aPainter.drawRect(nX, nY, nWidth, nHeight);
+        aPainter.drawRect(nX, nY, nWidth - 1, nHeight - 1);
     aPainter.update(nX, nY, nWidth, nHeight);
 }
 
@@ -624,7 +624,7 @@ bool Qt5Graphics::drawAlphaRect(long nX, long nY, long nWidth, long nHeight,
     if (SALCOLOR_NONE != m_aFillColor)
         aPainter.fillRect(nX, nY, nWidth, nHeight, aPainter.brush());
     if (SALCOLOR_NONE != m_aLineColor)
-        aPainter.drawRect(nX, nY, nWidth, nHeight);
+        aPainter.drawRect(nX, nY, nWidth - 1, nHeight - 1);
     aPainter.update(nX, nY, nWidth, nHeight);
     return true;
 }
