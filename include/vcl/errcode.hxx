@@ -63,12 +63,12 @@ enum class WarningFlag { Yes };
 class SAL_WARN_UNUSED ErrCode final
 {
 public:
-    explicit ErrCode(WarningFlag, ErrCodeArea nArea, ErrCodeClass nClass, sal_uInt16 nCode)
+    explicit constexpr ErrCode(WarningFlag, ErrCodeArea nArea, ErrCodeClass nClass, sal_uInt16 nCode)
         : m_value(ERRCODE_WARNING_MASK | (sal_uInt32(nArea) << ERRCODE_AREA_SHIFT) | (sal_uInt32(nClass) << ERRCODE_CLASS_SHIFT) | nCode)
     {
         assert(nCode <= 0xff && "code out of range");
     }
-    explicit ErrCode(ErrCodeArea nArea, ErrCodeClass nClass, sal_uInt16 nCode)
+    explicit constexpr ErrCode(ErrCodeArea nArea, ErrCodeClass nClass, sal_uInt16 nCode)
         : m_value((sal_uInt32(nArea) << ERRCODE_AREA_SHIFT) | (sal_uInt32(nClass) << ERRCODE_CLASS_SHIFT) | nCode)
     {
         assert(nCode <= 0xff && "code out of range");
