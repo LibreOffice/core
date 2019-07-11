@@ -375,6 +375,7 @@ IMPL_LINK(SwScrollNaviPopup, SelectHdl, ToolBox*, pSet, void)
     sal_uInt16 nSet = pSet->GetCurItemId();
     if( nSet != NID_PREV && nSet != NID_NEXT )
     {
+        SvxSearchDialogWrapper::SetSearchLabel( SearchLabel::Empty );
         SwView::SetMoveType( nSet );
         Sequence< PropertyValue > aArgs;
         SfxToolBoxControl::Dispatch( Reference< XDispatchProvider >( GetFrame()->getController(), UNO_QUERY ),
