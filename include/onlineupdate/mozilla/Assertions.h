@@ -263,7 +263,7 @@ __declspec(noreturn) __inline void MOZ_NoReturn() {}
 #endif
 
 /*
- * MOZ_ASSERT(expr [, explanation-string]) asserts that |expr| must be truthy in
+ * MOZ_ASSERT(expr [, explanation-string]) asserts that |expr| must be true in
  * debug builds.  If it is, execution continues.  Otherwise, an error message
  * including the expression and the explanation-string (if provided) is printed,
  * an attempt is made to invoke any existing debugger, and execution halts.
