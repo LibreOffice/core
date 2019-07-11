@@ -37,6 +37,9 @@ class tdf107975(UITestCase):
         #Undo paste CTRL+Z -> Crash
         self.xUITest.executeCommand(".uno:Undo")
         self.assertEqual(document.Text.String[0:3], "ABC")
+        self.xUITest.executeCommand(".uno:Redo")
+        self.xUITest.executeCommand(".uno:Undo")
+        self.xUITest.executeCommand(".uno:Redo")
 
         self.ui_test.close_doc()
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

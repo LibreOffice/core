@@ -32,6 +32,47 @@
 #include <rolbck.hxx>
 #include <redline.hxx>
 
+namespace sw {
+
+std::unique_ptr<std::vector<SwFrameFormat*>>
+GetFlysAnchoredAt(SwDoc & rDoc, sal_uLong const nSttNode, sal_Int32 const nSttContent)
+{
+    std::unique_ptr<std::vector<SwFrameFormat*>> pFrameFormats;
+    const size_t nArrLen = rDoc.GetSpzFrameFormats()->size();
+    for (size_t n = 0; n < nArrLen; ++n)
+    {
+        SwFrameFormat* pFormat = (*rDoc.GetSpzFrameFormats())[n];
+        SwFormatAnchor const*const pAnchor = &pFormat->GetAnchor();
+        const SwPosition* pAPos = pAnchor->GetContentAnchor();
+        if (pAPos
+#if 0
+             && nSttNode == pAPos->nNode.GetIndex()
+             && ((pAnchor->GetAnchorId() == RndStdIds::FLY_AT_PARA)
+                 || (pAnchor->GetAnchorId() == RndStdIds::FLY_AT_CHAR)))
+#endif
+#if 0
+            &&
+            (pAnchor->GetAnchorId() == RndStdIds::FLY_AT_PARA) &&
+             nSttNode == pAPos->nNode.GetIndex() )
+#endif
+#if 1
+            && nSttNode == pAPos->nNode.GetIndex()
+            && ((pAnchor->GetAnchorId() == RndStdIds::FLY_AT_PARA)
+                || ((pAnchor->GetAnchorId() == RndStdIds::FLY_AT_CHAR)
+                    && nSttContent == pAPos->nContent.GetIndex())))
+#endif
+        {
+            if (!pFrameFormats)
+                pFrameFormats.reset( new std::vector<SwFrameFormat*> );
+            pFrameFormats->push_back( pFormat );
+        }
+    }
+    return pFrameFormats;
+}
+
+} // namespace sw
+
+//note: parameter is SwPam just so we can init SwUndRng, the End is ignored!
 SwUndoInserts::SwUndoInserts( SwUndoId nUndoId, const SwPaM& rPam )
     : SwUndo( nUndoId, rPam.GetDoc() ), SwUndRng( rPam ),
     pTextFormatColl( nullptr ), pLastNdColl(nullptr),
@@ -53,22 +94,7 @@ SwUndoInserts::SwUndoInserts( SwUndoId nUndoId, const SwPaM& rPam )
         // These flys will be saved in pFrameFormats array (only flys which exist BEFORE insertion!)
         // Then in SwUndoInserts::SetInsertRange the flys saved in pFrameFormats will NOT create Undos.
         // m_FlyUndos will only be filled with newly inserted flys.
-
-        const size_t nArrLen = pDoc->GetSpzFrameFormats()->size();
-        for( size_t n = 0; n < nArrLen; ++n )
-        {
-            SwFrameFormat* pFormat = (*pDoc->GetSpzFrameFormats())[n];
-            SwFormatAnchor const*const  pAnchor = &pFormat->GetAnchor();
-            const SwPosition* pAPos = pAnchor->GetContentAnchor();
-            if (pAPos &&
-                (pAnchor->GetAnchorId() == RndStdIds::FLY_AT_PARA) &&
-                 nSttNode == pAPos->nNode.GetIndex() )
-            {
-                if( !pFrameFormats )
-                    pFrameFormats.reset( new std::vector<SwFrameFormat*> );
-                pFrameFormats->push_back( pFormat );
-            }
-        }
+        pFrameFormats = sw::GetFlysAnchoredAt(*pDoc, nSttNode, nSttContent);
     }
     // consider Redline
     if( pDoc->getIDocumentRedlineAccess().IsRedlineOn() )
@@ -125,9 +151,30 @@ void SwUndoInserts::SetInsertRange( const SwPaM& rPam, bool bScanFlys,
             SwFrameFormat* pFormat = (*pDoc->GetSpzFrameFormats())[n];
             SwFormatAnchor const*const pAnchor = &pFormat->GetAnchor();
             SwPosition const*const pAPos = pAnchor->GetContentAnchor();
-            if (pAPos &&
+#if 0
+            // check all at-char flys at the start/end nodes: UndoImpl
+            // directly calls SwNodes::MoveRange which ignores them!
+            if (pAPos
+                && (   nSttNode == pAPos->nNode.GetIndex()
+                    || nEndNode == pAPos->nNode.GetIndex())
+                && (   (pAnchor->GetAnchorId() == RndStdIds::FLY_AT_PARA)
+                    || (pAnchor->GetAnchorId() == RndStdIds::FLY_AT_CHAR)))
+#endif
+#if 1
+            if (pAPos
+                && (   ((pAnchor->GetAnchorId() == RndStdIds::FLY_AT_PARA)
+                        && (   nSttNode == pAPos->nNode.GetIndex()
+                            || nEndNode == pAPos->nNode.GetIndex()))
+                    || ((pAnchor->GetAnchorId() == RndStdIds::FLY_AT_CHAR)
+                        && (   (   nSttNode == pAPos->nNode.GetIndex()
+                                && nSttContent == pAPos->nContent.GetIndex())
+                            || (   nEndNode == pAPos->nNode.GetIndex()
+                                && nEndContent == pAPos->nContent.GetIndex())))))
+#endif
+#if 0
                 (pAnchor->GetAnchorId() == RndStdIds::FLY_AT_PARA) &&
                 (nSttNode == pAPos->nNode.GetIndex() || nEndNode == pAPos->nNode.GetIndex()))
+#endif
             {
                 std::vector<SwFrameFormat*>::iterator it;
                 if( !pFrameFormats ||
@@ -185,6 +232,8 @@ void SwUndoInserts::UndoImpl(::sw::UndoRedoContext & rContext)
     SwDoc& rDoc = rContext.GetDoc();
     SwPaM& rPam = AddUndoRedoPaM(rContext);
 
+    nNdDiff = 0;
+
     if( IDocumentRedlineAccess::IsRedlineOn( GetRedlineFlags() ))
         rDoc.getIDocumentRedlineAccess().DeleteRedline(rPam, true, RedlineType::Any);
 
@@ -204,13 +253,30 @@ void SwUndoInserts::UndoImpl(::sw::UndoRedoContext & rContext)
         }
 
         RemoveIdxFromRange(rPam, false);
-        SetPaM(rPam);
 
+        SetPaM(rPam);
         // are there Footnotes or ContentFlyFrames in text?
         nSetPos = pHistory->Count();
-        nNdDiff = rPam.GetMark()->nNode.GetIndex();
-        DelContentIndex(*rPam.GetMark(), *rPam.GetPoint());
-        nNdDiff -= rPam.GetMark()->nNode.GetIndex();
+        sal_uLong nTmp = rPam.GetMark()->nNode.GetIndex();
+        DelContentIndex(*rPam.GetMark(), *rPam.GetPoint(),
+            DelContentType::AllMask|DelContentType::ExcludeAtCharFlyAtStartEnd);
+        nNdDiff += nTmp - rPam.GetMark()->nNode.GetIndex();
+    }
+
+    // after SetPaM but before MoveToUndoNds for at-char fly anchors
+    // also after DelContentIndex because at-para fly anchors, tdf#108124...
+    if (!m_FlyUndos.empty())
+    {
+        sal_uLong nTmp = rPam.GetPoint()->nNode.GetIndex();
+        for (size_t n = m_FlyUndos.size(); 0 < n; --n)
+        {
+            m_FlyUndos[ n-1 ]->UndoImpl(rContext);
+        }
+        nNdDiff += nTmp - rPam.GetPoint()->nNode.GetIndex();
+    }
+
+    if (nSttNode != nEndNode || nSttContent != nEndContent)
+    {
 
         if( *rPam.GetPoint() != *rPam.GetMark() )
         {
@@ -221,16 +287,6 @@ void SwUndoInserts::UndoImpl(::sw::UndoRedoContext & rContext)
             if( !bSttWasTextNd )
                 rPam.Move( fnMoveBackward, GoInContent );
         }
-    }
-
-    if (!m_FlyUndos.empty())
-    {
-        sal_uLong nTmp = rPam.GetPoint()->nNode.GetIndex();
-        for (size_t n = m_FlyUndos.size(); 0 < n; --n)
-        {
-            m_FlyUndos[ n-1 ]->UndoImpl(rContext);
-        }
-        nNdDiff += nTmp - rPam.GetPoint()->nNode.GetIndex();
     }
 
     SwNodeIndex& rIdx = rPam.GetPoint()->nNode;
@@ -296,6 +352,9 @@ void SwUndoInserts::RedoImpl(::sw::UndoRedoContext & rContext)
     // retrieve start position for rollback
     if( ( nSttNode != nEndNode || nSttContent != nEndContent ) && m_pUndoNodeIndex)
     {
+        auto const pFlysAtInsPos(sw::GetFlysAnchoredAt(*pDoc,
+            rPam.GetPoint()->nNode.GetIndex(), rPam.GetPoint()->nContent.GetIndex()));
+
         const bool bMvBkwrd = MovePtBackward(rPam);
 
         // re-insert content again (first detach m_pUndoNodeIndex!)
@@ -305,6 +364,22 @@ void SwUndoInserts::RedoImpl(::sw::UndoRedoContext & rContext)
         if( bSttWasTextNd )
             MovePtForward(rPam, bMvBkwrd);
         rPam.Exchange();
+
+        // at-char anchors post SplitNode are on index 0 of 2nd node and will
+        // remain there - move them back to the start (end would also work?)
+        if (pFlysAtInsPos)
+        {
+            for (SwFrameFormat * pFly : *pFlysAtInsPos)
+            {
+                SwFormatAnchor const*const pAnchor = &pFly->GetAnchor();
+                if (pAnchor->GetAnchorId() == RndStdIds::FLY_AT_CHAR)
+                {
+                    SwFormatAnchor anchor(*pAnchor);
+                    anchor.SetAnchor( rPam.GetMark() );
+                    pFly->SetFormatAttr(anchor);
+                }
+            }
+        }
     }
 
     if (pDoc->GetTextFormatColls()->IsAlive(pTextFormatColl))

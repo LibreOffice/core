@@ -1486,7 +1486,7 @@ void SwRangeRedline::CopyToSection()
         {
             SwNodeIndex aInsPos( *pSttNd->EndOfSectionNode() );
             SwNodeRange aRg( pStt->nNode, 0, pEnd->nNode, 1 );
-            pDoc->GetDocumentContentOperationsManager().CopyWithFlyInFly( aRg, 0, aInsPos );
+            pDoc->GetDocumentContentOperationsManager().CopyWithFlyInFly(aRg, aInsPos);
         }
     }
     m_pContentSect = new SwNodeIndex( *pSttNd );

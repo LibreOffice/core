@@ -1410,7 +1410,7 @@ void SwDoc::CopyPageDescHeaderFooterImpl( bool bCpyHeader,
                 aTmpIdx = *pSttNd->EndOfSectionNode();
                 rSrcNds.Copy_( aRg, aTmpIdx );
                 aTmpIdx = *pSttNd;
-                rSrcFormat.GetDoc()->GetDocumentContentOperationsManager().CopyFlyInFlyImpl( aRg, 0, aTmpIdx );
+                rSrcFormat.GetDoc()->GetDocumentContentOperationsManager().CopyFlyInFlyImpl(aRg, nullptr, aTmpIdx);
                 pNewFormat->SetFormatAttr( SwFormatContent( pSttNd ));
             }
             else

@@ -65,6 +65,7 @@
 #include <objectformatter.hxx>
 #include <calbck.hxx>
 #include <ndtxt.hxx>
+#include <undobj.hxx>
 #include <DocumentSettingManager.hxx>
 #include <IDocumentDrawModelAccess.hxx>
 #include <IDocumentTimerAccess.hxx>
@@ -1041,7 +1042,9 @@ void AppendObj(SwFrame *const pFrame, SwPageFrame *const pPage, SwFrameFormat *c
 static bool IsShown(sal_uLong const nIndex,
     const SwFormatAnchor & rAnch,
     std::vector<sw::Extent>::const_iterator const*const pIter,
-    std::vector<sw::Extent>::const_iterator const*const pEnd)
+    std::vector<sw::Extent>::const_iterator const*const pEnd,
+    SwTextNode const*const pFirstNode, SwTextNode const*const pLastNode)
+
 {
     assert(!pIter || *pIter == *pEnd || (*pIter)->pNode->GetIndex() == nIndex);
     SwPosition const& rAnchor(*rAnch.GetContentAnchor());
@@ -1050,27 +1053,141 @@ static bool IsShown(sal_uLong const nIndex,
         return false;
     }
     if (pIter && rAnch.GetAnchorId() != RndStdIds::FLY_AT_PARA
+#if 0
         // sw_redlinehide: we want to hide AT_CHAR, but currently can't
         // because Delete and Accept Redline don't delete them!
               && rAnch.GetAnchorId() != RndStdIds::FLY_AT_CHAR)
+#endif
+        )
     {
         // note: frames are not sorted by anchor position.
         assert(pEnd);
         assert(rAnch.GetAnchorId() != RndStdIds::FLY_AT_FLY);
         for (auto iter = *pIter; iter != *pEnd; ++iter)
         {
+            assert(iter->nStart != iter->nEnd); // TODO possible?
             assert(iter->pNode->GetIndex() == nIndex);
             if (rAnchor.nContent.GetIndex() < iter->nStart)
             {
                 return false;
             }
+            // now
+            // if there is an extent then obviously the node was not deleted
+            // fully
+            // only thing that matter is the start/end of section?
+            // which can happen only in first/last node?
+            //
+            // show if start <= pos <= end *or* if first-node/0  *and* not SOSect
+            //                                   | last-node/Len *and* not EOSect
+#if 0
+            if (rAnch.GetAnchorId() == RndStdIds::FLY_AT_CHAR)
+            {
+                if (rAnchor.nContent.GetIndex() <= iter->nEnd)
+                {
+                    SwPosition const start(
+                            const_cast<SwTextNode&>(iter->pNode),
+                            iter == *pIter // first extent?
+                                ? 0
+                                : (iter-1)->nEnd); // previous extent
+                    SwPosition const end(
+                            const_cast<SwTextNode&>(iter->pNode),
+                            iter->nStart);
+
+                }
+            }
+            else
+#endif
+#if 1
+            if (rAnch.GetAnchorId() == RndStdIds::FLY_AT_CHAR)
+            {
+                if (rAnchor.nContent.GetIndex() <= iter->nEnd)
+                {
+                // first determine the extent to compare to, then
+                // construct start/end positions for the deletion *before* the
+                // extent and compare once
+                // the interesting corner cases are on the edge of the extent!
+                // no need to check for > the last extent because those
+                // are never visible
+                    if (iter->nStart == 0)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        SwPosition const start(
+                                const_cast<SwTextNode&>(
+                                    iter == *pIter
+                                        ? *pFirstNode // simplification
+                                        : *iter->pNode),
+                                iter == *pIter // first extent?
+                                    ? iter->pNode == pFirstNode
+                                        ? 0 // at start of 1st node
+                                        : pFirstNode->Len() // previous node; simplification but should get right result
+                                    : (iter-1)->nEnd); // previous extent
+                        SwPosition const end(*iter->pNode, iter->nStart);
+                        return !IsDestroyFrameAnchoredAtChar(rAnchor, start, end);
+                    }
+#if 0
+                    SwPosition const start(
+                            const_cast<SwTextNode&>(iter->pNode),
+                            iter->nEnd);
+                    SwPosition const end(
+                            const_cast<SwTextNode&>(
+                                iter != *pIter && iter == *pEnd - 1 // last extent?
+                                    ? *pLastNode // simplification
+                                    : *iter->pNode),
+                            iter != *pIter && iter == *pEnd - 1
+                                ? iter->pNode == pLastNode
+                                    ? iter->pNode->Len()
+                                    : 0
+                                : iter->nStart);
+                        assert(start != end);
+                    }
+                    assert(start != end
+                        || (start.nNode == *pFirstNode && start.nContent == 0)
+                        || (start.nNode == *pLastNode && start.nContent == pLastNode->Len()));
+                    return start == end // start of first node/end of last node is never deleted
+                        || !IsDestroyFrameAnchoredAtChar(rAnchor, start, end);
+#endif
+                }
+                else if (iter == *pEnd - 1)
+                {
+                    if (iter->nEnd == iter->pNode->Len())
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        SwPosition const start(*iter->pNode, iter->nEnd);
+                        SwPosition const end(
+                                const_cast<SwTextNode&>(*pLastNode), // simplification
+                                iter->pNode == pLastNode
+                                    ? iter->pNode->Len()
+                                    : 0);
+                        return !IsDestroyFrameAnchoredAtChar(rAnchor, start, end);
+                    }
+                }
+            }
+            else
+#endif
             // for AS_CHAR obviously must be <
             // for AT_CHAR it is questionable whether < or <= should be used
             // and there is the additional corner case of Len() to consider
             // prefer < for now for symmetry (and inverted usage with
             // "hidden") and handle special case explicitly
             if (rAnchor.nContent.GetIndex() < iter->nEnd
+#if 1
+               )
+#else
+            // for AT_CHAR use <= for consistency with IsDestroyFrameAnchoredAtChar()
+            // which automatically handles the special case Len()
+                || (rAnchor.nContent.GetIndex() == iter->nEnd
+                    && rAnch.GetAnchorId() == RndStdIds::FLY_AT_CHAR)
+               )
+//#elif 0
+            // TODO why this? ah bc end cant be selected... so not needed with ==
                 || iter->nEnd == iter->pNode->Len())
+#endif
             {
                 return true;
             }
@@ -1085,7 +1202,8 @@ static bool IsShown(sal_uLong const nIndex,
 
 void RemoveHiddenObjsOfNode(SwTextNode const& rNode,
     std::vector<sw::Extent>::const_iterator const*const pIter,
-    std::vector<sw::Extent>::const_iterator const*const pEnd)
+    std::vector<sw::Extent>::const_iterator const*const pEnd,
+    SwTextNode const*const pFirstNode, SwTextNode const*const pLastNode)
 {
     std::vector<SwFrameFormat*> const*const pFlys(rNode.GetAnchoredFlys());
     if (!pFlys)
@@ -1100,7 +1218,7 @@ void RemoveHiddenObjsOfNode(SwTextNode const& rNode,
                 && RES_DRAWFRMFMT == pFrameFormat->Which()))
         {
             assert(rAnchor.GetContentAnchor()->nNode.GetIndex() == rNode.GetIndex());
-            if (!IsShown(rNode.GetIndex(), rAnchor, pIter, pEnd))
+            if (!IsShown(rNode.GetIndex(), rAnchor, pIter, pEnd, pFirstNode, pLastNode))
             {
                 pFrameFormat->DelFrames();
             }
@@ -1111,7 +1229,8 @@ void RemoveHiddenObjsOfNode(SwTextNode const& rNode,
 void AppendObjsOfNode(SwFrameFormats const*const pTable, sal_uLong const nIndex,
     SwFrame *const pFrame, SwPageFrame *const pPage, SwDoc *const pDoc,
     std::vector<sw::Extent>::const_iterator const*const pIter,
-    std::vector<sw::Extent>::const_iterator const*const pEnd)
+    std::vector<sw::Extent>::const_iterator const*const pEnd,
+    SwTextNode const*const pFirstNode, SwTextNode const*const pLastNode)
 {
 #if OSL_DEBUG_LEVEL > 0
     std::vector<SwFrameFormat*> checkFormats;
@@ -1120,7 +1239,7 @@ void AppendObjsOfNode(SwFrameFormats const*const pTable, sal_uLong const nIndex,
         SwFrameFormat *pFormat = (*pTable)[i];
         const SwFormatAnchor &rAnch = pFormat->GetAnchor();
         if ( rAnch.GetContentAnchor() &&
-            IsShown(nIndex, rAnch, pIter, pEnd))
+            IsShown(nIndex, rAnch, pIter, pEnd, pFirstNode, pLastNode))
         {
             checkFormats.push_back( pFormat );
         }
@@ -1136,7 +1255,7 @@ void AppendObjsOfNode(SwFrameFormats const*const pTable, sal_uLong const nIndex,
         SwFrameFormat *const pFormat = (*pFlys)[it];
         const SwFormatAnchor &rAnch = pFormat->GetAnchor();
         if ( rAnch.GetContentAnchor() &&
-            IsShown(nIndex, rAnch, pIter, pEnd))
+            IsShown(nIndex, rAnch, pIter, pEnd, pFirstNode, pLastNode))
         {
 #if OSL_DEBUG_LEVEL > 0
             std::vector<SwFrameFormat*>::iterator checkPos = std::find( checkFormats.begin(), checkFormats.end(), pFormat );
@@ -1170,7 +1289,8 @@ void AppendObjs(const SwFrameFormats *const pTable, sal_uLong const nIndex,
                 if (iter == pMerged->extents.end()
                     || iter->pNode != pNode)
                 {
-                    AppendObjsOfNode(pTable, pNode->GetIndex(), pFrame, pPage, pDoc, &iterFirst, &iter);
+                    AppendObjsOfNode(pTable, pNode->GetIndex(), pFrame, pPage, pDoc,
+                        &iterFirst, &iter, pMerged->pFirstNode, pMerged->pLastNode);
                     sal_uLong const until = iter == pMerged->extents.end()
                         ? pMerged->pLastNode->GetIndex() + 1
                         : iter->pNode->GetIndex();
@@ -1181,7 +1301,7 @@ void AppendObjs(const SwFrameFormats *const pTable, sal_uLong const nIndex,
                         SwNode const*const pTmp(pNode->GetNodes()[i]);
                         if (pTmp->GetRedlineMergeFlag() == SwNode::Merge::NonFirst)
                         {
-                            AppendObjsOfNode(pTable, pTmp->GetIndex(), pFrame, pPage, pDoc, &iter, &iter);
+                            AppendObjsOfNode(pTable, pTmp->GetIndex(), pFrame, pPage, pDoc, &iter, &iter, pMerged->pFirstNode, pMerged->pLastNode);
                         }
                     }
                     if (iter == pMerged->extents.end())
@@ -1195,12 +1315,12 @@ void AppendObjs(const SwFrameFormats *const pTable, sal_uLong const nIndex,
         }
         else
         {
-            return AppendObjsOfNode(pTable, nIndex, pFrame, pPage, pDoc, nullptr, nullptr);
+            return AppendObjsOfNode(pTable, nIndex, pFrame, pPage, pDoc, nullptr, nullptr, nullptr, nullptr);
         }
     }
     else
     {
-        return AppendObjsOfNode(pTable, nIndex, pFrame, pPage, pDoc, nullptr, nullptr);
+        return AppendObjsOfNode(pTable, nIndex, pFrame, pPage, pDoc, nullptr, nullptr, nullptr, nullptr);
     }
 }
 
@@ -1225,7 +1345,8 @@ bool IsAnchoredObjShown(SwTextFrame const& rFrame, SwFormatAnchor const& rAnchor
                 assert(pNode->GetRedlineMergeFlag() != SwNode::Merge::Hidden);
                 if (pNode == &pAnchor->nNode.GetNode())
                 {
-                    ret = IsShown(pNode->GetIndex(), rAnchor, &iterFirst, &iter);
+                    ret = IsShown(pNode->GetIndex(), rAnchor, &iterFirst, &iter,
+                            pMergedPara->pFirstNode, pMergedPara->pLastNode);
                     break;
                 }
                 if (iter == pMergedPara->extents.end())

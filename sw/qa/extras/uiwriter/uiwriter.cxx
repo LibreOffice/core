@@ -156,7 +156,7 @@ public:
     //Regression test of fdo#70143
     //EDITING: undo search&replace corrupt text when searching backward
     void testReplaceBackward();
-    void testRedlineFrame(char const*const file);
+    void testRedlineFrame(char const*const file, bool);
     void testRedlineFrameAtCharStartOutside0();
     void testRedlineFrameAtCharStartOutside();
     void testRedlineFrameAtCharStartInside();
@@ -644,7 +644,7 @@ void SwUiWriterTest::testReplaceForward()
     CPPUNIT_ASSERT_EQUAL(ORIGINAL_REPLACE_CONTENT, pTextNode->GetText());
 }
 
-void SwUiWriterTest::testRedlineFrame(char const*const file)
+void SwUiWriterTest::testRedlineFrame(char const*const file, bool const isDeleted = false)
 {
     SwDoc * pDoc(createDoc(file));
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
@@ -660,18 +660,30 @@ void SwUiWriterTest::testRedlineFrame(char const*const file)
     // hide delete redlines
     pWrtShell->SetRedlineFlags(nMode & ~RedlineFlags::ShowDelete);
 
-    // there is still exactly one frame
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xDrawPage->getCount());
+#if 0
+    if (isDeleted)
+    {
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xDrawPage->getCount());
+    }
+    else
+    {
+#else
+        (void) isDeleted;
+#endif
+        // there is still exactly one frame
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xDrawPage->getCount());
+//    }
 
     pWrtShell->SetRedlineFlags(nMode); // show again
 
     // there is still exactly one frame
+    // argh it was either not copied or not moved back
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xDrawPage->getCount());
 }
 
 void SwUiWriterTest::testRedlineFrameAtCharStartOutside0()
 {
-    testRedlineFrame("redlineFrame.fodt");
+    testRedlineFrame("redlineFrame.fodt", true);
 }
 
 void SwUiWriterTest::testRedlineFrameAtCharStartOutside()

@@ -134,10 +134,11 @@ enum class DelContentType : sal_uInt16
     Fly          = 0x02,
     Bkm          = 0x08,
     AllMask      = 0x0b,
+    ExcludeAtCharFlyAtStartEnd = 0x40,
     CheckNoCntnt = 0x80,
 };
 namespace o3tl {
-    template<> struct typed_flags<DelContentType> : is_typed_flags<DelContentType, 0x8b> {};
+    template<> struct typed_flags<DelContentType> : is_typed_flags<DelContentType, 0xcb> {};
 }
 
 /// will DelContentIndex destroy a frame anchored at character at rAnchorPos?
@@ -227,6 +228,13 @@ public:
 
 class SwUndoInsLayFormat;
 
+namespace sw {
+
+std::unique_ptr<std::vector<SwFrameFormat*>>
+GetFlysAnchoredAt(SwDoc & rDoc, sal_uLong nSttNode, sal_Int32 nSttContent);
+
+}
+
 // base class for insertion of Document, Glossaries and Copy
 class SwUndoInserts : public SwUndo, public SwUndRng, private SwUndoSaveContent
 {
@@ -252,6 +260,7 @@ public:
     // Set destination range after reading.
     void SetInsertRange( const SwPaM&, bool bScanFlys = true,
                          bool bSttWasTextNd = true );
+    std::vector<SwFrameFormat*> * GetFlysAnchoredAt() { return pFrameFormats.get(); }
 };
 
 class SwUndoInsDoc : public SwUndoInserts

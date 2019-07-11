@@ -60,11 +60,13 @@ void AppendObjs( const SwFrameFormats *pTable, sal_uLong nIndex,
 void AppendObjsOfNode(SwFrameFormats const* pTable, sal_uLong nIndex,
         SwFrame * pFrame, SwPageFrame * pPage, SwDoc * pDoc,
         std::vector<sw::Extent>::const_iterator const* pIter,
-        std::vector<sw::Extent>::const_iterator const* pEnd);
+        std::vector<sw::Extent>::const_iterator const* pEnd,
+        SwTextNode const* pFirstNode, SwTextNode const* pLastNode);
 
 void RemoveHiddenObjsOfNode(SwTextNode const& rNode,
         std::vector<sw::Extent>::const_iterator const* pIter,
-        std::vector<sw::Extent>::const_iterator const* pEnd);
+        std::vector<sw::Extent>::const_iterator const* pEnd,
+        SwTextNode const* pFirstNode, SwTextNode const* pLastNode);
 
 bool IsAnchoredObjShown(SwTextFrame const& rFrame, SwFormatAnchor const& rAnchor);
 

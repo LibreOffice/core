@@ -45,6 +45,7 @@
 #include <docedt.hxx>
 #include <frmfmt.hxx>
 #include <ndtxt.hxx>
+#include <undobj.hxx>
 
 #include <vector>
 #include <com/sun/star/linguistic2/XProofreadingIterator.hpp>
@@ -55,7 +56,7 @@ using namespace ::com::sun::star::i18n;
 
 
 void RestFlyInRange( SaveFlyArr & rArr, const SwNodeIndex& rSttIdx,
-                      const SwNodeIndex* pInsertPos )
+        SwPosition const*const pInsertPos)
 {
     SwPosition aPos( rSttIdx );
     for(SaveFly & rSave : rArr)
@@ -63,17 +64,27 @@ void RestFlyInRange( SaveFlyArr & rArr, const SwNodeIndex& rSttIdx,
         // create new anchor
         SwFrameFormat* pFormat = rSave.pFrameFormat;
 
-        if( rSave.bInsertPosition )
+        if (rSave.isAtInsertNode)
         {
             if( pInsertPos != nullptr )
-                aPos.nNode = *pInsertPos;
+            {
+                aPos.nNode = pInsertPos->nNode;
+                aPos.nContent.Assign(dynamic_cast<SwIndexReg*>(&aPos.nNode.GetNode()),
+                    //pInsertPos->nContent.GetIndex() + rSave.nContentIndex);
+                    rSave.nContentIndex);
+            }
             else
+            {
                 aPos.nNode = rSttIdx.GetIndex();
+                aPos.nContent.Assign(dynamic_cast<SwIndexReg*>(&aPos.nNode.GetNode()), 0);
+            }
         }
         else
+        {
             aPos.nNode = rSttIdx.GetIndex() + rSave.nNdDiff;
+            aPos.nContent.Assign(dynamic_cast<SwIndexReg*>(&aPos.nNode.GetNode()), rSave.nContentIndex);
+        }
 
-        aPos.nContent.Assign(dynamic_cast<SwIndexReg*>(&aPos.nNode.GetNode()), 0);
         SwFormatAnchor aAnchor( pFormat->GetAnchor() );
         aAnchor.SetAnchor( &aPos );
         pFormat->GetDoc()->GetSpzFrameFormats()->push_back( pFormat );
@@ -100,6 +111,9 @@ void SaveFlyInRange( const SwNodeRange& rRg, SaveFlyArr& rArr )
             rRg.aStart <= pAPos->nNode && pAPos->nNode < rRg.aEnd )
         {
             SaveFly aSave( pAPos->nNode.GetIndex() - rRg.aStart.GetIndex(),
+                            (RndStdIds::FLY_AT_CHAR == pAnchor->GetAnchorId())
+                                ? pAPos->nContent.GetIndex()
+                                : 0,
                             pFormat, false );
             rArr.push_back( aSave );
             pFormat->DelFrames();
@@ -147,7 +161,9 @@ void SaveFlyInRange( const SwPaM& rPam, const SwNodeIndex& rInsPos,
         {
             bool bInsPos = false;
 
-            if( !bMoveAllFlys && rEndNdIdx == pAPos->nNode )
+            if (!bMoveAllFlys
+                && RndStdIds::FLY_AT_CHAR != pAnchor->GetAnchorId()
+                && rEndNdIdx == pAPos->nNode)
             {
                 // Do not touch Anchor, if only a part of the EndNode
                 // or the whole EndNode is identical with the SttNode
@@ -160,12 +176,27 @@ void SaveFlyInRange( const SwPaM& rPam, const SwNodeIndex& rInsPos,
                     pFormat->SetFormatAttr( aAnchor );
                 }
             }
+#if 0
             else if( ( rSttNdIdx.GetIndex() + nSttOff <= pAPos->nNode.GetIndex()
                     && pAPos->nNode.GetIndex() <= rEndNdIdx.GetIndex() - nOff ) ||
                         ( bInsPos = (rInsPos == pAPos->nNode) ))
+#endif
+            else if (  (/*bMoveAllFlys ... no do not check - all callers are actually from redline code, from the MoveToSection case! so check bMoveAllFlys only for AT_PARA!
+                        &&*/ (RndStdIds::FLY_AT_CHAR == pAnchor->GetAnchorId())
+                        && IsDestroyFrameAnchoredAtChar(*pAPos, *rPam.Start(), *rPam.End()))
+                    || (rSttNdIdx.GetIndex() + nSttOff <= pAPos->nNode.GetIndex()
+                        && pAPos->nNode.GetIndex() <= rEndNdIdx.GetIndex() - nOff)
+                    //WRONG? || (bInsPos = (rInsPos == pAPos->nNode)))
+                    || (RndStdIds::FLY_AT_PARA == pAnchor->GetAnchorId()
+                            && (bInsPos = (rInsPos == pAPos->nNode))))
 
             {
                 SaveFly aSave( pAPos->nNode.GetIndex() - rSttNdIdx.GetIndex(),
+                    (RndStdIds::FLY_AT_CHAR == pAnchor->GetAnchorId())
+                        ? (pAPos->nNode == rSttNdIdx)
+                            ? pAPos->nContent.GetIndex() - rPam.Start()->nContent.GetIndex()
+                            : pAPos->nContent.GetIndex()
+                        : 0,
                                 pFormat, bInsPos );
                 rArr.push_back( aSave );
                 pFormat->DelFrames();
@@ -183,8 +214,18 @@ void SaveFlyInRange( const SwPaM& rPam, const SwNodeIndex& rInsPos,
 /// Delete and move all Flys at the paragraph, that are within the selection.
 /// If there is a Fly at the SPoint, it is moved onto the Mark.
 void DelFlyInRange( const SwNodeIndex& rMkNdIdx,
-                    const SwNodeIndex& rPtNdIdx )
+                    const SwNodeIndex& rPtNdIdx,
+                    SwIndex const*const pMkIdx, SwIndex const*const pPtIdx)
 {
+    assert((pMkIdx == nullptr) == (pPtIdx == nullptr));
+    SwPosition const point(pPtIdx
+                            ? SwPosition(rPtNdIdx, *pPtIdx)
+                            : SwPosition(rPtNdIdx));
+    SwPosition const mark(pPtIdx
+                            ? SwPosition(rMkNdIdx, *pMkIdx)
+                            : SwPosition(rMkNdIdx));
+    SwPosition const& rStart = mark <= point ? mark : point;
+    SwPosition const& rEnd   = mark <= point ? point : mark;
     const bool bDelFwrd = rMkNdIdx.GetIndex() <= rPtNdIdx.GetIndex();
 
     SwDoc* pDoc = rMkNdIdx.GetNode().GetDoc();
@@ -195,14 +236,27 @@ void DelFlyInRange( const SwNodeIndex& rMkNdIdx,
         const SwFormatAnchor &rAnch = pFormat->GetAnchor();
         SwPosition const*const pAPos = rAnch.GetContentAnchor();
         if (pAPos &&
+#if 0
             ((rAnch.GetAnchorId() == RndStdIds::FLY_AT_PARA) ||
+             //TODO where is this called & does caller need to del on start/end  node
              (rAnch.GetAnchorId() == RndStdIds::FLY_AT_CHAR)) &&
             ( bDelFwrd
                 ? rMkNdIdx < pAPos->nNode && pAPos->nNode <= rPtNdIdx
                 : rPtNdIdx <= pAPos->nNode && pAPos->nNode < rMkNdIdx ))
+#else
+            (((rAnch.GetAnchorId() == RndStdIds::FLY_AT_PARA)
+                && (bDelFwrd
+                    ? rMkNdIdx < pAPos->nNode && pAPos->nNode <= rPtNdIdx
+                    : rPtNdIdx <= pAPos->nNode && pAPos->nNode < rMkNdIdx))
+            || ((rAnch.GetAnchorId() == RndStdIds::FLY_AT_CHAR)
+                && IsDestroyFrameAnchoredAtChar(*pAPos, rStart, rEnd, pPtIdx
+                    ? DelContentType::AllMask
+                    : DelContentType::AllMask|DelContentType::CheckNoCntnt))))
+#endif
         {
             // Only move the Anchor??
-            if( rPtNdIdx == pAPos->nNode )
+            if ((rAnch.GetAnchorId() == RndStdIds::FLY_AT_PARA)
+                && rPtNdIdx == pAPos->nNode )
             {
                 SwFormatAnchor aAnch( pFormat->GetAnchor() );
                 SwPosition aPos( rMkNdIdx );
