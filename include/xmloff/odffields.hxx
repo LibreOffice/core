@@ -35,6 +35,7 @@
 
 #define ODF_FORMDATE "vnd.oasis.opendocument.field.FORMDATE"
 #define ODF_FORMDATE_DATEFORMAT "DateField_DateFormat"
+#define ODF_FORMDATE_CURRENTDATE "DateField_CurrentDate"
 
 #define ODF_TOC "vnd.oasis.opendocument.field.TOC"
 
