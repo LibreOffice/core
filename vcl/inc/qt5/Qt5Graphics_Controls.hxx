@@ -31,11 +31,8 @@
 
 class VCLPLUG_QT5_PUBLIC Qt5Graphics_Controls final : public vcl::WidgetDrawInterface
 {
-    std::unique_ptr<QPushButton> m_focusedButton;
     std::unique_ptr<QImage> m_image;
     QRect m_lastPopupRect;
-
-    void initStyles();
 
 public:
     Qt5Graphics_Controls();
