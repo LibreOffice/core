@@ -116,7 +116,7 @@ void SwCommentRuler::DrawCommentControl(vcl::RenderContext& rRenderContext)
 
     // Paint comment control background
     // TODO Check if these are best colors to be used
-    Color aBgColor = GetFadedColor( rStyleSettings.GetDarkShadowColor(), rStyleSettings.GetWorkspaceColor() );
+    Color aBgColor = GetFadedColor( rStyleSettings.GetDialogColor(), rStyleSettings.GetWorkspaceColor() );
     maVirDev->SetFillColor( aBgColor );
 
     if ( mbIsHighlighted || !bIsCollapsed )
@@ -185,8 +185,7 @@ void SwCommentRuler::DrawCommentControl(vcl::RenderContext& rRenderContext)
 
     // Draw arrow
     // FIXME consistence of button colors. https://opengrok.libreoffice.org/xref/core/vcl/source/control/button.cxx#785
-    Color aArrowColor = GetFadedColor(COL_BLACK, rStyleSettings.GetShadowColor());
-    ImplDrawArrow(*maVirDev.get(), aArrowPos.X(), aArrowPos.Y(), aArrowColor, bArrowToRight);
+    ImplDrawArrow(*maVirDev.get(), aArrowPos.X(), aArrowPos.Y(), aTextColor, bArrowToRight);
 
     // Blit comment control
     rRenderContext.DrawOutDev(aControlRect.TopLeft(), aControlRect.GetSize(), Point(), aControlRect.GetSize(), *maVirDev.get());
