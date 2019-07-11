@@ -240,27 +240,11 @@ ErrCode SwReader::Read( const Reader& rOptions )
                 // ok, here IsAlive is a misnomer...
                 if (!aFlyFrameArr.IsAlive(pFrameFormat))
                 {
-                    SwPosition const*const pFrameAnchor(
-                            rAnchor.GetContentAnchor());
                     if  (   (RndStdIds::FLY_AT_PAGE == rAnchor.GetAnchorId())
-                        ||  (   pFrameAnchor
-                            &&  (   (   (RndStdIds::FLY_AT_PARA == rAnchor.GetAnchorId())
-                                    &&  (   (pUndoPam->GetPoint()->nNode ==
-                                             pFrameAnchor->nNode)
-                                        ||  (pUndoPam->GetMark()->nNode ==
-                                             pFrameAnchor->nNode)
-                                        )
-                                    )
-                                // #i97570# also check frames anchored AT char
-                                ||  (   (RndStdIds::FLY_AT_CHAR == rAnchor.GetAnchorId())
-                                    &&  !IsDestroyFrameAnchoredAtChar(
-                                              *pFrameAnchor,
-                                              *pUndoPam->GetPoint(),
-                                              *pUndoPam->GetMark())
-                                    )
-                                )
-                            )
-                        )
+                        // TODO: why is this not handled via SetInsertRange?
+                        ||  SwUndoInserts::IsCreateUndoForNewFly(rAnchor,
+                                pUndoPam->GetPoint()->nNode.GetIndex(),
+                                pUndoPam->GetMark()->nNode.GetIndex()))
                     {
                         if( bChkHeaderFooter &&
                             (RndStdIds::FLY_AT_PARA == rAnchor.GetAnchorId()) &&
