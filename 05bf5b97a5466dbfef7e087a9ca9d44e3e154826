@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_b91e496e",
+        "filename": "sc/source/ui/optdlg/tpformula.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 364,
+      "author": {
+        "id": 1000446
+      },
+      "writtenOn": "2019-07-11T08:52:43Z",
+      "side": 1,
+      "message": "I\u0027m somewhat unsure about this: the Reset button makes no sense if the field(s) it resets are locked down. But what if only some of the fields are locked down? \nFor now, I went for the \"a single one is enough\" to disable it.",
+      "range": {
+        "startLine": 364,
+        "startChar": 4,
+        "endLine": 364,
+        "endChar": 26
+      },
+      "revId": "05bf5b97a5466dbfef7e087a9ca9d44e3e154826",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
