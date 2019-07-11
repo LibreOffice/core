@@ -291,7 +291,7 @@ public:
         @return true if both sequences are equal, false otherwise
     */
     inline bool SAL_CALL operator == ( const ByteSequence & rSeq ) const;
-    /** Unequality operator: Compares two sequences.
+    /** Inequality operator: Compares two sequences.
 
         @param rSeq another byte sequence (right side)
         @return false if both sequences are equal, true otherwise
@@ -306,13 +306,13 @@ public:
     */
     inline void SAL_CALL realloc( sal_Int32 nSize );
 
-    /** Returns the UNnacquired C handle of the sequence
+    /** Returns the UNacquired C handle of the sequence
 
-        @return UNacquired handle of the sequence
+        @return UNcquired handle of the sequence
     */
     sal_Sequence * SAL_CALL getHandle() const
         { return _pSequence; }
-    /** Returns the UNnacquired C handle of the sequence (for compatibility reasons)
+    /** Returns the UNacquired C handle of the sequence (for compatibility reasons)
 
         @return UNacquired handle of the sequence
     */
