@@ -102,14 +102,13 @@ public:
     //Non-Interface methods
 
     void CopyWithFlyInFly( const SwNodeRange& rRg,
-                            const sal_Int32 nEndContentIndex,
                             const SwNodeIndex& rInsPos,
                             const std::pair<const SwPaM&, const SwPosition&> * pCopiedPaM = nullptr,
                             bool bMakeNewFrames = true,
                             bool bDelRedlines = true,
                             bool bCopyFlyAtFly = false ) const;
     void CopyFlyInFlyImpl(  const SwNodeRange& rRg,
-                            const sal_Int32 nEndContentIndex,
+                            SwPaM const*const pCopiedPaM,
                             const SwNodeIndex& rStartIdx,
                             const bool bCopyFlyAtFly = false ) const;
 

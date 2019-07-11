@@ -426,7 +426,7 @@ SwFrameFormat *DocumentLayoutManager::CopyLayoutFormat(
         //contact object itself. They should be managed by SwUndoInsLayFormat.
         const ::sw::DrawUndoGuard drawUndoGuard(m_rDoc.GetIDocumentUndoRedo());
 
-        pSrcDoc->GetDocumentContentOperationsManager().CopyWithFlyInFly( aRg, 0, aIdx, nullptr, false, true, true );
+        pSrcDoc->GetDocumentContentOperationsManager().CopyWithFlyInFly(aRg, aIdx, nullptr, false, true, true);
     }
     else
     {

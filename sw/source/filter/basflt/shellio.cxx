@@ -240,10 +240,18 @@ ErrCode SwReader::Read( const Reader& rOptions )
                 // ok, here IsAlive is a misnomer...
                 if (!aFlyFrameArr.IsAlive(pFrameFormat))
                 {
+#if 0
                     SwPosition const*const pFrameAnchor(
                             rAnchor.GetContentAnchor());
+#endif
                     if  (   (RndStdIds::FLY_AT_PAGE == rAnchor.GetAnchorId())
+                        // TODO: why is this not handled via SetInsertRange?
+                        ||  SwUndoInserts::IsCreateUndoForNewFly(rAnchor,
+                                pUndoPam->GetPoint()->nNode.GetIndex(),
+                                pUndoPam->GetMark()->nNode.GetIndex()))
+#if 0
                         ||  (   pFrameAnchor
+#if 0
                             &&  (   (   (RndStdIds::FLY_AT_PARA == rAnchor.GetAnchorId())
                                     &&  (   (pUndoPam->GetPoint()->nNode ==
                                              pFrameAnchor->nNode)
@@ -258,9 +266,19 @@ ErrCode SwReader::Read( const Reader& rOptions )
                                               *pUndoPam->GetPoint(),
                                               *pUndoPam->GetMark())
                                     )
+#endif
+                            // keep this consistent with logic in SwUndoInserts::SetInsertRange()
+                            &&  (   (RndStdIds::FLY_AT_PARA == rAnchor.GetAnchorId())
+                                // #i97570# also check frames anchored AT char
+                                ||  (RndStdIds::FLY_AT_CHAR == rAnchor.GetAnchorId()))
+                            &&  (   (pUndoPam->GetPoint()->nNode ==
+                                     pFrameAnchor->nNode)
+                                ||  (pUndoPam->GetMark()->nNode ==
+                                     pFrameAnchor->nNode)
                                 )
                             )
                         )
+#endif
                     {
                         if( bChkHeaderFooter &&
                             (RndStdIds::FLY_AT_PARA == rAnchor.GetAnchorId()) &&
