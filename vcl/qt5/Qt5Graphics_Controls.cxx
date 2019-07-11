@@ -21,7 +21,6 @@
 
 #include <QtGui/QPainter>
 #include <QtWidgets/QApplication>
-#include <QtWidgets/QPushButton>
 #include <QtWidgets/QStyle>
 #include <QtWidgets/QStyleOption>
 #include <QtWidgets/QFrame>
@@ -65,7 +64,7 @@ static QStyle::State vclStateValue2StateFlag(ControlState nControlState,
     return nState;
 }
 
-Qt5Graphics_Controls::Qt5Graphics_Controls() { initStyles(); }
+Qt5Graphics_Controls::Qt5Graphics_Controls() {}
 
 bool Qt5Graphics_Controls::isNativeControlSupported(ControlType type, ControlPart part)
 {
@@ -78,8 +77,9 @@ bool Qt5Graphics_Controls::isNativeControlSupported(ControlType type, ControlPar
 
         case ControlType::Radiobutton:
         case ControlType::Checkbox:
-        case ControlType::Pushbutton:
             return (part == ControlPart::Entire) || (part == ControlPart::Focus);
+        case ControlType::Pushbutton:
+            return (part == ControlPart::Entire);
 
         case ControlType::ListHeader:
             return (part == ControlPart::Button);
@@ -250,21 +250,10 @@ bool Qt5Graphics_Controls::drawNativeControl(ControlType type, ControlPart part,
 
     if (type == ControlType::Pushbutton)
     {
-        if (part == ControlPart::Entire)
-        {
-            QStyleOptionButton option;
-            draw(QStyle::CE_PushButton, &option, m_image.get(),
-                 vclStateValue2StateFlag(nControlState, value));
-        }
-        else if (part == ControlPart::Focus)
-        {
-            QStyleOptionButton option;
-            option.state = QStyle::State_HasFocus;
-            option.rect = m_image->rect();
-            QPainter painter(m_image.get());
-            m_focusedButton->style()->drawControl(QStyle::CE_PushButton, &option, &painter,
-                                                  m_focusedButton.get());
-        }
+        assert(part == ControlPart::Entire);
+        QStyleOptionButton option;
+        draw(QStyle::CE_PushButton, &option, m_image.get(),
+             vclStateValue2StateFlag(nControlState, value));
     }
     else if (type == ControlType::Menubar)
     {
@@ -1036,17 +1025,6 @@ bool Qt5Graphics_Controls::hitTestNativeControl(ControlType nType, ControlPart n
         return true;
     }
     return false;
-}
-
-void Qt5Graphics_Controls::initStyles()
-{
-    // button focus
-    m_focusedButton.reset(new QPushButton());
-    QString aHighlightColor = QApplication::palette().color(QPalette::Highlight).name();
-    QString focusStyleSheet("background-color: rgb(0,0,0,0%); border: 1px; border-radius: 2px; "
-                            "border-color: %1; border-style:solid;");
-    focusStyleSheet.replace("%1", aHighlightColor);
-    m_focusedButton->setStyleSheet(focusStyleSheet);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
