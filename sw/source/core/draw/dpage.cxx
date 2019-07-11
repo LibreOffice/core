@@ -18,6 +18,7 @@
  */
 
 #include <basic/basmgr.hxx>
+#include <editeng/flditem.hxx>
 #include <vcl/imapobj.hxx>
 #include <svl/urihelper.hxx>
 #include <sfx2/sfxhelp.hxx>
@@ -164,11 +165,11 @@ bool SwDPage::RequestHelp( vcl::Window* pWindow, SdrView const * pView,
         SdrPageView* pPV;
         SdrObject* pObj = pView->PickObj(aPos, 0, pPV, SdrSearchOptions::PICKMACRO);
         SwVirtFlyDrawObj* pDrawObj = dynamic_cast<SwVirtFlyDrawObj*>(pObj);
+        OUString sText;
         if (pDrawObj)
         {
             SwFlyFrame *pFly = pDrawObj->GetFlyFrame();
             const SwFormatURL &rURL = pFly->GetFormat()->GetURL();
-            OUString sText;
             if( rURL.GetMap() )
             {
                 IMapObject *pTmpObj = pFly->GetFormat()->GetIMapObject( aPos, pFly );
@@ -200,28 +201,33 @@ bool SwDPage::RequestHelp( vcl::Window* pWindow, SdrView const * pView,
                           + "," + OUString::number( aPt.getY() );
                 }
             }
-
-            if ( !sText.isEmpty() )
+        }
+        else
+        {
+            SdrViewEvent aVEvt;
+            MouseEvent aMEvt(pWindow->ScreenToOutputPixel(rEvt.GetMousePosPixel()), 1,
+                             MouseEventModifiers::NONE, MOUSE_LEFT);
+            pView->PickAnything(aMEvt, SdrMouseEventKind::BUTTONDOWN, aVEvt);
+            if (aVEvt.eEvent == SdrEventKind::ExecuteUrl)
             {
-                // #i80029#
-                bool bExecHyperlinks = pDoc->GetDocShell()->IsReadOnly();
-                if ( !bExecHyperlinks )
-                {
-                    sText = SfxHelp::GetURLHelpText(sText);
-                }
-
-                // then display the help:
-                tools::Rectangle aRect( rEvt.GetMousePosPixel(), Size(1,1) );
-                if( rEvt.GetMode() & HelpEventMode::BALLOON )
-                {
-                    Help::ShowBalloon( pWindow, rEvt.GetMousePosPixel(), aRect, sText );
-                }
-                else
-                {
-                    Help::ShowQuickHelp( pWindow, aRect, sText );
-                }
-                bContinue = false;
+                sText = aVEvt.pURLField->GetURL();
             }
+        }
+
+        if (!sText.isEmpty())
+        {
+            // #i80029#
+            bool bExecHyperlinks = pDoc->GetDocShell()->IsReadOnly();
+            if (!bExecHyperlinks)
+                sText = SfxHelp::GetURLHelpText(sText);
+
+            // then display the help:
+            tools::Rectangle aRect(rEvt.GetMousePosPixel(), Size(1, 1));
+            if (rEvt.GetMode() & HelpEventMode::BALLOON)
+                Help::ShowBalloon(pWindow, rEvt.GetMousePosPixel(), aRect, sText);
+            else
+                Help::ShowQuickHelp(pWindow, aRect, sText);
+            bContinue = false;
         }
     }
 
