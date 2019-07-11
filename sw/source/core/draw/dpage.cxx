@@ -20,8 +20,10 @@
 #include <basic/basmgr.hxx>
 #include <vcl/imapobj.hxx>
 #include <svl/urihelper.hxx>
+#include <sfx2/sfxhelp.hxx>
 #include <unotools/securityoptions.hxx>
 #include <vcl/help.hxx>
+#include <vcl/svapp.hxx>
 #include <svx/svdview.hxx>
 #include <fmturl.hxx>
 #include <frmfmt.hxx>
@@ -205,13 +207,7 @@ bool SwDPage::RequestHelp( vcl::Window* pWindow, SdrView const * pView,
                 bool bExecHyperlinks = pDoc->GetDocShell()->IsReadOnly();
                 if ( !bExecHyperlinks )
                 {
-                    SvtSecurityOptions aSecOpts;
-                    bExecHyperlinks = !aSecOpts.IsOptionSet( SvtSecurityOptions::EOption::CtrlClickHyperlink );
-
-                    if ( !bExecHyperlinks )
-                        sText = SwViewShell::GetShellRes()->aLinkCtrlClick + ": " + sText;
-                    else
-                        sText = SwViewShell::GetShellRes()->aLinkClick + ": " + sText;
+                    sText = SfxHelp::GetURLHelpText(sText);
                 }
 
                 // then display the help:

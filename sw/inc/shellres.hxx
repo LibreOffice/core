@@ -58,9 +58,6 @@ struct SW_DLLPUBLIC ShellResource
     OUString const        aTOXAuthoritiesName;
     OUString const        aTOXCitationName;
 
-    OUString        aLinkCtrlClick;
-    OUString const        aLinkClick;
-
     std::vector<OUString> aDocInfoLst;
 
     // The autoFormat-Redline comments.
