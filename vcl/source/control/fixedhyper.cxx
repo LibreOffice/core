@@ -105,9 +105,15 @@ void FixedHyperlink::RequestHelp( const HelpEvent& rHEvt )
 
 void FixedHyperlink::GetFocus()
 {
-    SetTextColor( COL_LIGHTRED );
-    Invalidate(tools::Rectangle(Point(), GetSizePixel()));
-    ShowFocus( tools::Rectangle( Point( 1, 1 ), Size( m_nTextLen + 4, GetSizePixel().Height() - 2 ) ) );
+    Size aSize = GetSizePixel();
+    tools::Rectangle aFocusRect(Point(1, 1), Size(m_nTextLen + 4, aSize.Height() - 2));
+    if (GetStyle() & WB_RIGHT)
+        aFocusRect.Move(aSize.Width() - aFocusRect.getWidth(), 0);
+    else if (GetStyle() & WB_CENTER)
+        aFocusRect.Move((aSize.Width() - aFocusRect.getWidth()) / 2, 0);
+
+    Invalidate(aFocusRect);
+    ShowFocus(aFocusRect);
 }
 
 void FixedHyperlink::LoseFocus()
