@@ -150,6 +150,7 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/core/crsr/crsrsh \
     sw/source/core/crsr/crstrvl \
     sw/source/core/crsr/crstrvl1 \
+    sw/source/core/crsr/DateFormFieldButton \
     sw/source/core/crsr/DropDownFormFieldButton \
     sw/source/core/crsr/findattr \
     sw/source/core/crsr/findcoll \

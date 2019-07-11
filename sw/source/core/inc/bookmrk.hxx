@@ -29,7 +29,7 @@
 #include <tools/ref.hxx>
 #include <IMark.hxx>
 #include <swrect.hxx>
-#include "DropDownFormFieldButton.hxx"
+#include "FormFieldButton.hxx"
 
 namespace com {
     namespace sun {
@@ -268,44 +268,46 @@ namespace sw {
             void SetChecked(bool checked) override;
         };
 
+        /// Fieldmark with a drop down button (e.g. this button opens the date picker for a date field)
+        class FieldmarkWithDropDownButton
+            : public NonTextFieldmark
+        {
+        public:
+            FieldmarkWithDropDownButton(const SwPaM& rPaM);
+            virtual ~FieldmarkWithDropDownButton() override;
+
+            // This method should be called only by the portion so we can now the portion's painting area
+            void SetPortionPaintArea(const SwRect& rPortionPaintArea);
+
+            virtual void ShowButton(SwEditWin* pEditWin) = 0;
+            void HideButton();
+            void RemoveButton();
+
+        protected:
+            SwRect m_aPortionPaintArea;
+            VclPtr<FormFieldButton> m_pButton;
+        };
+
         /// Fieldmark representing a drop-down form field.
         class DropDownFieldmark
-            : public NonTextFieldmark
+            : public FieldmarkWithDropDownButton
         {
         public:
             DropDownFieldmark(const SwPaM& rPaM);
             virtual ~DropDownFieldmark() override;
 
-            // This method should be called only by the portion so we can now the portion's painting area
-            void SetPortionPaintArea(const SwRect& rPortionPaintArea);
-
-            void ShowButton(SwEditWin* pEditWin);
-            void HideButton();
-            void RemoveButton();
-
-        private:
-            SwRect m_aPortionPaintArea;
-            VclPtr<DropDownFormFieldButton> m_pButton;
+            virtual void ShowButton(SwEditWin* pEditWin) override;
         };
 
         /// Fieldmark representing a date form field.
         class DateFieldmark
-            : public NonTextFieldmark
+            : public FieldmarkWithDropDownButton
         {
         public:
             DateFieldmark(const SwPaM& rPaM);
             virtual ~DateFieldmark() override;
 
-            // This method should be called only by the portion so we can now the portion's painting area
-            void SetPortionPaintArea(const SwRect& rPortionPaintArea);
-
-            void ShowButton(SwEditWin* pEditWin);
-            void HideButton();
-            void RemoveButton();
-
-        private:
-            SwRect m_aPortionPaintArea;
-            VclPtr<MenuButton> m_pButton;
+            virtual void ShowButton(SwEditWin* pEditWin) override;
         };
     }
 }

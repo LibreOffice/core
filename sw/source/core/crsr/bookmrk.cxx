@@ -38,6 +38,8 @@
 #include <comphelper/anytostring.hxx>
 #include <sal/log.hxx>
 #include <edtwin.hxx>
+#include <DateFormFieldButton.hxx>
+#include <DropDownFormFieldButton.hxx>
 
 using namespace ::sw::mark;
 using namespace ::com::sun::star;
@@ -485,18 +487,18 @@ namespace sw { namespace mark
         return bResult;
     }
 
-    DropDownFieldmark::DropDownFieldmark(const SwPaM& rPaM)
+    FieldmarkWithDropDownButton::FieldmarkWithDropDownButton(const SwPaM& rPaM)
         : NonTextFieldmark(rPaM)
         , m_pButton(nullptr)
     {
     }
 
-    DropDownFieldmark::~DropDownFieldmark()
+    FieldmarkWithDropDownButton::~FieldmarkWithDropDownButton()
     {
         m_pButton.disposeAndClear();
     }
 
-    void DropDownFieldmark::SetPortionPaintArea(const SwRect& rPortionPaintArea)
+    void FieldmarkWithDropDownButton::SetPortionPaintArea(const SwRect& rPortionPaintArea)
     {
         if(m_aPortionPaintArea == rPortionPaintArea &&
            m_pButton && m_pButton->IsVisible())
@@ -511,6 +513,27 @@ namespace sw { namespace mark
         }
     }
 
+    void FieldmarkWithDropDownButton::HideButton()
+    {
+        if(m_pButton)
+            m_pButton->Show(false);
+    }
+
+    void FieldmarkWithDropDownButton::RemoveButton()
+    {
+        if(m_pButton)
+            m_pButton.disposeAndClear();
+    }
+
+    DropDownFieldmark::DropDownFieldmark(const SwPaM& rPaM)
+        : FieldmarkWithDropDownButton(rPaM)
+    {
+    }
+
+    DropDownFieldmark::~DropDownFieldmark()
+    {
+    }
+
     void DropDownFieldmark::ShowButton(SwEditWin* pEditWin)
     {
         if(pEditWin)
@@ -522,70 +545,24 @@ namespace sw { namespace mark
         }
     }
 
-    void DropDownFieldmark::HideButton()
-    {
-        if(m_pButton)
-            m_pButton->Show(false);
-    }
-
-    void DropDownFieldmark::RemoveButton()
-    {
-        if(m_pButton)
-            m_pButton.disposeAndClear();
-    }
-
     DateFieldmark::DateFieldmark(const SwPaM& rPaM)
-        : NonTextFieldmark(rPaM)
-        //, m_pButton(nullptr)
+        : FieldmarkWithDropDownButton(rPaM)
     {
     }
 
     DateFieldmark::~DateFieldmark()
     {
-        //m_pButton.disposeAndClear();
-        (void)m_pButton;
-    }
-
-    void DateFieldmark::SetPortionPaintArea(const SwRect& /*rPortionPaintArea*/)
-    {
-        /*if(m_aPortionPaintArea == rPortionPaintArea &&
-           m_pButton && m_pButton->IsVisible())
-            return;
-
-        m_aPortionPaintArea = rPortionPaintArea;
-        if(m_pButton)
-        {
-            m_pButton->Show();
-            m_pButton->CalcPosAndSize(m_aPortionPaintArea);
-            m_pButton->Invalidate();
-        }*/
-        (void)m_pButton;
     }
 
     void DateFieldmark::ShowButton(SwEditWin* pEditWin)
     {
         if(pEditWin)
         {
-            //if(!m_pButton)
-            //    m_pButton = VclPtr<DropDownFormFieldButton>::Create(pEditWin, *this);
-            //m_pButton->CalcPosAndSize(m_aPortionPaintArea);
-            //m_pButton->Show();
+            if(!m_pButton)
+                m_pButton = VclPtr<DateFormFieldButton>::Create(pEditWin, *this);
+            m_pButton->CalcPosAndSize(m_aPortionPaintArea);
+            m_pButton->Show();
         }
-        (void)m_pButton;
-    }
-
-    void DateFieldmark::HideButton()
-    {
-        //if(m_pButton)
-            //m_pButton->Show(false);
-        (void)m_pButton;
-    }
-
-    void DateFieldmark::RemoveButton()
-    {
-        //if(m_pButton)
-            //m_pButton.disposeAndClear();
-        (void)m_pButton;
     }
 }}
 
