@@ -292,7 +292,7 @@ public:
         <SfxDispatcher>.
 
         On the given <SfxUndoManager> is automatically the current
-        Max-Undo-Action-Count setting set form the options.
+        Max-Undo-Action-Count setting set from the options.
 
         'pNewUndoMgr' must exist until the Destructor of SfxShell instance is called
         or until the next 'SetUndoManager()'.
