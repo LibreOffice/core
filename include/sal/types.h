@@ -398,7 +398,7 @@ namespace css = ::com::sun::star;
 
 /** C++11 "override" feature.
 
-    For LIBO_INTERNAL_ONLY, force the method to override a existing method in
+    For LIBO_INTERNAL_ONLY, force the method to override an existing method in
     parent, error out if the method with the correct signature does not exist.
 
     @since LibreOffice 4.1
