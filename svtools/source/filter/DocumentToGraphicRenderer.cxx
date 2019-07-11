@@ -152,23 +152,23 @@ Size DocumentToGraphicRenderer::getDocumentSizeIn100mm(sal_Int32 nCurrentPage,
     if (nPages >= nCurrentPage)
     {
         Sequence< beans::PropertyValue > aResult = mxRenderable->getRenderer(nCurrentPage - 1, selection, renderProperties );
-        for( sal_Int32 nProperty = 0, nPropertyCount = aResult.getLength(); nProperty < nPropertyCount; ++nProperty )
+        for( const auto& rProperty : aResult )
         {
-            if ( aResult[ nProperty ].Name == "PageSize" )
+            if ( rProperty.Name == "PageSize" )
             {
-                aResult[ nProperty ].Value >>= aSize;
+                rProperty.Value >>= aSize;
             }
-            else if (aResult[nProperty].Name == "PagePos")
+            else if (rProperty.Name == "PagePos")
             {
-                aResult[nProperty].Value >>= aPos;
+                rProperty.Value >>= aPos;
             }
-            else if (aResult[nProperty].Name == "CalcPagePos")
+            else if (rProperty.Name == "CalcPagePos")
             {
-                aResult[nProperty].Value >>= aCalcPos;
+                rProperty.Value >>= aCalcPos;
             }
-            else if (aResult[nProperty].Name == "CalcPageContentSize")
+            else if (rProperty.Name == "CalcPageContentSize")
             {
-                aResult[nProperty].Value >>= aCalcPageSize;
+                rProperty.Value >>= aCalcPageSize;
             }
         }
     }

@@ -232,10 +232,8 @@ static OUString GetImageExtensionByFactory_Impl( const OUString& rURL )
         if ( !aInternalType.isEmpty() && xAccess->hasByName( aInternalType ) )
         {
             xAccess->getByName( aInternalType ) >>= aTypeProps;
-            sal_Int32 nProps = aTypeProps.getLength();
-            for ( sal_Int32 i = 0; i < nProps; ++i )
+            for ( const css::beans::PropertyValue& rProp : aTypeProps )
             {
-                const css::beans::PropertyValue& rProp = aTypeProps[i];
                 if (rProp.Name == "Extensions")
                 {
                     css::uno::Sequence < OUString > aExtensions;

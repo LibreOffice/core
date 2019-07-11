@@ -151,10 +151,8 @@ void getMacroFromAny(
     OUString sScriptVal;
     OUString sMacroVal;
     OUString sLibVal;
-    sal_Int32 nCount = aSequence.getLength();
-    for (sal_Int32 i = 0; i < nCount; i++)
+    for (const PropertyValue& aValue : aSequence)
     {
-        PropertyValue& aValue = aSequence[i];
         if (aValue.Name == sEventType)
         {
             OUString sTmp;

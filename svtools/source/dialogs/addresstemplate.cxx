@@ -173,19 +173,16 @@ namespace svt
         while ( nIndex >= 0);
 
         // loop through the given names
-        const AliasProgrammaticPair* pFields = _rFields.getConstArray();
-        const AliasProgrammaticPair* pFieldsEnd = pFields + _rFields.getLength();
-        for (;pFields != pFieldsEnd; ++pFields)
+        for (const AliasProgrammaticPair& rField : _rFields)
         {
-            StringBag::const_iterator aKnownPos = aKnownNames.find( pFields->ProgrammaticName );
-            if ( aKnownNames.end() != aKnownPos )
+            if ( aKnownNames.end() != aKnownNames.find( rField.ProgrammaticName ) )
             {
-                m_aAliases[ pFields->ProgrammaticName ] = pFields->Alias;
+                m_aAliases[ rField.ProgrammaticName ] = rField.Alias;
             }
             else
             {
                 SAL_WARN( "svtools", "AssigmentTransientData::AssigmentTransientData: unknown programmatic name: "
-                          << pFields->ProgrammaticName );
+                          << rField.ProgrammaticName );
             }
         }
     }
@@ -292,9 +289,8 @@ void AssignmentPersistentData::ImplCommit()
         :ConfigItem("Office.DataAccess/AddressBook")
     {
         Sequence< OUString > aStoredNames = GetNodeNames("Fields");
-        const OUString* pStoredNames = aStoredNames.getConstArray();
-        for (sal_Int32 i=0; i<aStoredNames.getLength(); ++i, ++pStoredNames)
-            m_aStoredFields.insert(*pStoredNames);
+        std::copy(aStoredNames.begin(), aStoredNames.end(),
+                  std::inserter(m_aStoredFields, m_aStoredFields.end()));
     }
 
     bool AssignmentPersistentData::hasFieldAssignment(const OUString& _rLogicalName)
@@ -713,10 +709,8 @@ void AssignmentPersistentData::ImplCommit()
         {
             OSL_FAIL("AddressBookSourceDialog::initializeDatasources: caught an exception while asking for the data source names!");
         }
-        const OUString* pDatasourceNames = aDatasourceNames.getConstArray();
-        const OUString* pEnd = pDatasourceNames + aDatasourceNames.getLength();
-        for (; pDatasourceNames < pEnd; ++pDatasourceNames)
-            m_xDatasource->append_text(*pDatasourceNames);
+        for (const OUString& rDatasourceName : aDatasourceNames)
+            m_xDatasource->append_text(rDatasourceName);
     }
 
     IMPL_LINK(AddressBookSourceDialog, OnFieldScroll, weld::ScrolledWindow&, rScrollBar, void)
@@ -812,12 +806,10 @@ void AssignmentPersistentData::ImplCommit()
 
         bool bKnowOldTable = false;
         // fill the table list
-        const OUString* pTableNames = aTableNames.getConstArray();
-        const OUString* pEnd = pTableNames + aTableNames.getLength();
-        for (;pTableNames != pEnd; ++pTableNames)
+        for (const OUString& rTableName : aTableNames)
         {
-            m_xTable->append_text(*pTableNames);
-            if (*pTableNames == sOldTable)
+            m_xTable->append_text(rTableName);
+            if (rTableName == sOldTable)
                 bKnowOldTable = true;
         }
 
@@ -861,13 +853,9 @@ void AssignmentPersistentData::ImplCommit()
         }
 
 
-        const OUString* pColumnNames = aColumnNames.getConstArray();
-        const OUString* pEnd = pColumnNames + aColumnNames.getLength();
-
         // for quicker access
         ::std::set< OUString > aColumnNameSet;
-        for (pColumnNames = aColumnNames.getConstArray(); pColumnNames != pEnd; ++pColumnNames)
-            aColumnNameSet.insert(*pColumnNames);
+        std::copy(aColumnNames.begin(), aColumnNames.end(), std::inserter(aColumnNameSet, aColumnNameSet.end()));
 
         std::vector<OUString>::iterator aInitialSelection = m_pImpl->aFieldAssignments.begin() + m_pImpl->nFieldScrollPos;
 
@@ -885,8 +873,8 @@ void AssignmentPersistentData::ImplCommit()
             pListbox->set_id(0, OUString::number(i));
 
             // the field names
-            for (pColumnNames = aColumnNames.getConstArray(); pColumnNames != pEnd; ++pColumnNames)
-                pListbox->append_text(*pColumnNames);
+            for (const OUString& rColumnName : aColumnNames)
+                pListbox->append_text(rColumnName);
 
             if (!aInitialSelection->isEmpty() && (aColumnNameSet.end() != aColumnNameSet.find(*aInitialSelection)))
                 // we can select the entry as specified in our field assignment array

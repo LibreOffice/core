@@ -27,6 +27,7 @@
 #include <tools/debug.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
+#include <comphelper/sequence.hxx>
 #include <vcl/help.hxx>
 #include <osl/mutex.hxx>
 #include <sal/log.hxx>
@@ -125,17 +126,6 @@ SvtHelpOptions_Impl::~SvtHelpOptions_Impl()
         Commit();
 }
 
-static int lcl_MapPropertyName( const OUString& rCompare,
-                const uno::Sequence< OUString>& aInternalPropertyNames)
-{
-    for(int nProp = 0; nProp < aInternalPropertyNames.getLength(); ++nProp)
-    {
-        if( aInternalPropertyNames[nProp] == rCompare )
-            return nProp;
-    }
-    return -1;
-}
-
 void  SvtHelpOptions_Impl::Load(const uno::Sequence< OUString>& rPropertyNames)
 {
     const uno::Sequence< OUString> aInternalPropertyNames( GetPropertyNames());
@@ -156,7 +146,7 @@ void  SvtHelpOptions_Impl::Load(const uno::Sequence< OUString>& rPropertyNames)
             if ( pValues[nProp] >>= bTmp )
               {
                 switch ( static_cast< HelpProperty >(
-                    lcl_MapPropertyName(rPropertyNames[nProp], aInternalPropertyNames) ) )
+                    comphelper::findValue(aInternalPropertyNames, rPropertyNames[nProp]) ) )
                 {
                     case HelpProperty::ExtendedHelp:
                         bExtendedHelp = bTmp;
