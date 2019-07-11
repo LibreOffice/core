@@ -99,24 +99,30 @@ void DelBookmarks(const SwNodeIndex& rStt,
 struct SaveFly
 {
     sal_uLong const nNdDiff;      /// relative node difference
+    sal_Int32 const nContentIndex; ///< index in node
     SwFrameFormat* const pFrameFormat;      /// the fly's frame format
-    bool const bInsertPosition;   /// if true, anchor _at_ insert position
+    bool const isAtInsertNode;   ///< if true, anchor _at_ insert node index
 
-    SaveFly( sal_uLong nNodeDiff, SwFrameFormat* pFormat, bool bInsert )
-        : nNdDiff( nNodeDiff ), pFrameFormat( pFormat ), bInsertPosition( bInsert )
+    SaveFly( sal_uLong nNodeDiff, sal_Int32 const nCntntIdx, SwFrameFormat* pFormat, bool bInsert )
+        : nNdDiff(nNodeDiff)
+        , nContentIndex(nCntntIdx)
+        , pFrameFormat(pFormat)
+        , isAtInsertNode(bInsert)
     { }
 };
 
 typedef std::deque< SaveFly > SaveFlyArr;
 
-void RestFlyInRange( SaveFlyArr& rArr, const SwNodeIndex& rSttIdx,
+void RestFlyInRange( SaveFlyArr& rArr, const SwPosition& rSttIdx,
                       const SwNodeIndex* pInsPos );
 void SaveFlyInRange( const SwNodeRange& rRg, SaveFlyArr& rArr );
-void SaveFlyInRange( const SwPaM& rPam, const SwNodeIndex& rInsPos,
+void SaveFlyInRange( const SwPaM& rPam, const SwPosition& rInsPos,
                        SaveFlyArr& rArr, bool bMoveAllFlys );
 
 void DelFlyInRange( const SwNodeIndex& rMkNdIdx,
-                    const SwNodeIndex& rPtNdIdx );
+                    const SwNodeIndex& rPtNdIdx,
+                    SwIndex const* pMkIdx = nullptr,
+                    SwIndex const* pPtIdx = nullptr);
 
 class SwDataChanged
 {

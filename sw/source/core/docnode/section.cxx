@@ -1352,7 +1352,7 @@ static void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
 
                     SwTableNumFormatMerge aTNFM( *pSrcDoc, *pDoc );
 
-                    pSrcDoc->GetDocumentContentOperationsManager().CopyWithFlyInFly( *pCpyRg, 0, rInsPos, nullptr, bCreateFrame );
+                    pSrcDoc->GetDocumentContentOperationsManager().CopyWithFlyInFly(*pCpyRg, rInsPos, nullptr, bCreateFrame);
                     ++aSave;
 
                     if( !bCreateFrame )
