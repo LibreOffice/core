@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_247690da",
+        "filename": "vcl/source/app/salplug.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 319,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2019-07-11T17:23:16Z",
+      "side": 1,
+      "message": "Since it\u0027s about desktop environments, wouldn\u0027t \"PLASMA5\" fit better? (also everywhere it\u0027s used)",
+      "range": {
+        "startLine": 319,
+        "startChar": 25,
+        "endLine": 319,
+        "endChar": 28
+      },
+      "revId": "f1b2b93a8c927d731355cd5e293cd04d896ee0f2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
