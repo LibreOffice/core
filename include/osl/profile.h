@@ -51,7 +51,7 @@ SAL_DLLPUBLIC oslProfile SAL_CALL osl_openProfile(
 
 /** Deprecated API.
     Close the opened profile an flush all data to the disk.
-    @param Profile handle to a opened profile.
+    @param Profile handle to an opened profile.
     @deprecated
 */
 SAL_DLLPUBLIC sal_Bool SAL_CALL osl_closeProfile(
@@ -123,7 +123,7 @@ SAL_DLLPUBLIC sal_Bool SAL_CALL osl_removeProfileEntry(
 
 /** Deprecated API.
     Get all entries belonging to the specified section.
-    @returns Pointer to a array of pointers.
+    @returns Pointer to an array of pointers.
     @deprecated
 */
 SAL_DLLPUBLIC sal_uInt32 SAL_CALL osl_getProfileSectionEntries(
@@ -132,7 +132,7 @@ SAL_DLLPUBLIC sal_uInt32 SAL_CALL osl_getProfileSectionEntries(
 
 /** Deprecated API.
     Get all section entries
-    @retval Pointer to a array of pointers.
+    @retval Pointer to an array of pointers.
     @deprecated
 */
 SAL_DLLPUBLIC sal_uInt32 SAL_CALL osl_getProfileSections(
