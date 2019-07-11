@@ -299,7 +299,7 @@ Reference< XHyphenatedWord > SAL_CALL Hyphenator::hyphenate( const OUString& aWo
                 return nullptr;
         }
 
-        // other wise hyphenate the word with that dictionary
+        // otherwise hyphenate the word with that dictionary
         dict = mvDicts[k].aPtr;
         eEnc = mvDicts[k].eEnc;
         CharClass * pCC =  mvDicts[k].apCC.get();
@@ -539,7 +539,7 @@ Reference< XPossibleHyphens > SAL_CALL Hyphenator::createPossibleHyphens( const 
                 return nullptr;
         }
 
-        // other wise hyphenate the word with that dictionary
+        // otherwise hyphenate the word with that dictionary
         dict = mvDicts[k].aPtr;
         rtl_TextEncoding eEnc = mvDicts[k].eEnc;
         CharClass* pCC = mvDicts[k].apCC.get();
