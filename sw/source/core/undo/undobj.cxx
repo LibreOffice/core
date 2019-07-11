@@ -1020,7 +1020,9 @@ void SwUndoSaveContent::DelContentIndex( const SwPosition& rMark,
                             pHistory->Add( *static_cast<SwFlyFrameFormat *>(pFormat), nChainInsPos );
                             n = n >= rSpzArr.size() ? rSpzArr.size() : n+1;
                         }
-                        else if( !( DelContentType::CheckNoCntnt & nDelContentType ) )
+                        else if (!((DelContentType::CheckNoCntnt |
+                                    DelContentType::ExcludeAtCharFlyAtStartEnd)
+                                    & nDelContentType))
                         {
                             if( *pStt <= *pAPos && *pAPos < *pEnd )
                             {
@@ -1521,19 +1523,55 @@ OUString ShortenString(const OUString & rStr, sal_Int32 nLength, const OUString 
            + rStr.copy(rStr.getLength() - nBackLen);
 }
 
+static bool IsAtEndOfSection(SwPosition const& rAnchorPos)
+{
+    SwNodeIndex node(*rAnchorPos.nNode.GetNode().EndOfSectionNode());
+    SwContentNode *const pNode(SwNodes::GoPrevious(&node));
+    assert(pNode);
+    assert(rAnchorPos.nNode <= node); // last valid anchor pos is last content
+    return node == rAnchorPos.nNode && rAnchorPos.nContent == pNode->Len();
+}
+
+static bool IsAtStartOfSection(SwPosition const& rAnchorPos)
+{
+    SwNodes const& rNodes(rAnchorPos.nNode.GetNodes());
+    SwNodeIndex node(*rAnchorPos.nNode.GetNode().StartOfSectionNode());
+    SwContentNode *const pNode(rNodes.GoNext(&node));
+    assert(pNode);
+    (void) pNode;
+    assert(node <= rAnchorPos.nNode);
+    return node == rAnchorPos.nNode && rAnchorPos.nContent == 0;
+}
+
 bool IsDestroyFrameAnchoredAtChar(SwPosition const & rAnchorPos,
         SwPosition const & rStart, SwPosition const & rEnd,
         DelContentType const nDelContentType)
 {
-    // Here we identified the objects to destroy:
-    // - anchored between start and end of the selection
-    // - anchored in start of the selection with "CheckNoContent"
-    // - anchored in start of sel. and the selection start at pos 0
-    return  (rAnchorPos.nNode < rEnd.nNode)
-         && (   (DelContentType::CheckNoCntnt & nDelContentType)
-            ||  (rStart.nNode < rAnchorPos.nNode)
-            ||  !rStart.nContent.GetIndex()
-            );
+    // CheckNoCntnt means DelFullPara which is obvious to handle
+    if (DelContentType::CheckNoCntnt & nDelContentType)
+    {   // exclude selection end node because it won't be deleted
+        return (rAnchorPos.nNode < rEnd.nNode)
+            && (rStart.nNode <= rAnchorPos.nNode);
+    }
+
+    if (rAnchorPos.GetDoc()->IsInReading())
+    {   // FIXME hack for writerfilter RemoveLastParagraph(); can't test file format more specific?
+        return (rStart < rAnchorPos) && (rAnchorPos < rEnd);
+    }
+
+    // in general, exclude the start and end position
+    return ((rStart < rAnchorPos)
+            || (rStart == rAnchorPos
+                && !(nDelContentType & DelContentType::ExcludeAtCharFlyAtStartEnd)
+                // special case: fully deleted node
+                && ((rStart.nNode != rEnd.nNode && rStart.nContent == 0)
+                    || IsAtStartOfSection(rAnchorPos))))
+        && ((rAnchorPos < rEnd)
+            || (rAnchorPos == rEnd
+                && !(nDelContentType & DelContentType::ExcludeAtCharFlyAtStartEnd)
+                // special case: fully deleted node
+                && ((rEnd.nNode != rStart.nNode && rEnd.nContent == rEnd.nNode.GetNode().GetTextNode()->Len())
+                    || IsAtEndOfSection(rAnchorPos))));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
