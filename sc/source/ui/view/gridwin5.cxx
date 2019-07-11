@@ -314,6 +314,16 @@ void ScGridWindow::RequestHelp(const HelpEvent& rHEvt)
                     if( aVEvt.eEvent == SdrEventKind::ExecuteUrl )
                     {
                         aHelpText = aVEvt.pURLField->GetURL();
+                        if( bCtrlClickHlink )
+                        {
+                            //prefix STR_CTRLCLICKHYPERLINK to aHelpText
+                            aHelpText = aCtrlClickHlinkStr + aHelpText;
+                        }
+                        else
+                        {
+                            //Option not set, so prefix STR_CLICKHYPERLINK
+                            aHelpText = aClickHlinkStr + aHelpText;
+                        }
                         aPixRect = LogicToPixel(aVEvt.pObj->GetLogicRect());
                     }
                     else
