@@ -50,7 +50,7 @@ public:
     };
 
     /** This is the simpler constructor variant that still exists for
-        compatibility resons.  Note that GetLabel() and GetIcon() will
+        compatibility reasons. Note that GetLabel() and GetIcon() will
         return empty strings/images.
     */
     ControllerItem (
