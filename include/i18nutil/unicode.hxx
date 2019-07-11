@@ -51,7 +51,7 @@ public:
 
         @param nCode  A Unicode code point.
 
-        @return  True if code is an Unicode variation sequence selector.
+        @return  True if code is a Unicode variation sequence selector.
      */
     static bool isIVSSelector(sal_uInt32 nCode)
     {
@@ -63,7 +63,7 @@ public:
 
         @param nCode  A Unicode code point.
 
-        @return  True if code is an Unicode base character part of CJK IVS
+        @return  True if code is a Unicode base character part of CJK IVS
      */
     static bool isCJKIVSCharacter(sal_uInt32 nCode)
     {
