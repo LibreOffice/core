@@ -690,8 +690,6 @@
 #define STR_TOX_TBL                             NC_("STR_TOX_TBL", "Index of Tables")
 #define STR_TOX_OBJ                             NC_("STR_TOX_OBJ", "Table of Objects")
 #define STR_TOX_ILL                             NC_("STR_TOX_ILL", "Table of Figures")
-#define STR_LINK_CTRL_CLICK                     NC_("STR_LINK_CTRL_CLICK", "%s-Click to follow link")
-#define STR_LINK_CLICK                          NC_("STR_LINK_CLICK", "Click to follow link")
 // SubType DocInfo
 #define FLD_DOCINFO_TITEL                       NC_("FLD_DOCINFO_TITEL", "Title")
 #define FLD_DOCINFO_THEMA                       NC_("FLD_DOCINFO_THEMA", "Subject")

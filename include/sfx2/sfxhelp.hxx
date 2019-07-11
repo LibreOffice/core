@@ -50,6 +50,8 @@ public:
     static OUString         GetCurrentModuleIdentifier();
     // Check for built-in help
     static bool             IsHelpInstalled();
+
+    static OUString GetURLHelpText(const OUString&);
 };
 
 #endif // INCLUDED_SFX2_SFXHELP_HXX

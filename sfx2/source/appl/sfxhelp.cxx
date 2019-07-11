@@ -65,8 +65,11 @@
 #include <osl/file.hxx>
 #include <unotools/bootstrap.hxx>
 #include <unotools/tempfile.hxx>
+#include <unotools/localedatawrapper.hxx>
+#include <unotools/securityoptions.hxx>
 #include <rtl/uri.hxx>
 #include <vcl/commandinfoprovider.hxx>
+#include <vcl/keycod.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/waitobj.hxx>
 #include <vcl/weld.hxx>
@@ -678,6 +681,25 @@ OUString SfxHelp::GetHelpText(const OUString& aCommandURL, const weld::Widget* p
     }
 
     return sHelpText;
+}
+
+OUString SfxHelp::GetURLHelpText(const OUString& aURL)
+{
+    SvtSecurityOptions aSecOpt;
+    bool bCtrlClickHlink = aSecOpt.IsOptionSet(SvtSecurityOptions::EOption::CtrlClickHyperlink);
+
+    // "ctrl-click to follow link:" for not MacOS
+    // "⌘-click to follow link:" for MacOs
+    vcl::KeyCode aCode(KEY_SPACE);
+    vcl::KeyCode aModifiedCode(KEY_SPACE, KEY_MOD1);
+    OUString aModStr(aModifiedCode.GetName());
+    aModStr = aModStr.replaceFirst(aCode.GetName(), "");
+    aModStr = aModStr.replaceAll("+", "");
+    OUString aHelpStr
+        = bCtrlClickHlink ? SfxResId(STR_CTRLCLICKHYPERLINK) : SfxResId(STR_CLICKHYPERLINK);
+    aHelpStr = aHelpStr.replaceFirst("%{key}", aModStr);
+    aHelpStr = aHelpStr.replaceFirst("%{link}", aURL);
+    return aHelpStr;
 }
 
 void SfxHelp::SearchKeyword( const OUString& rKeyword )

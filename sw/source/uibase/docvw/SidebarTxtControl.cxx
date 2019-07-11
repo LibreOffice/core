@@ -34,6 +34,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
+#include <sfx2/sfxhelp.hxx>
 
 #include <vcl/commandevent.hxx>
 #include <vcl/svapp.hxx>
@@ -307,13 +308,9 @@ void SidebarTextControl::MouseMove( const MouseEvent& rMEvt )
             const SvxURLField* pURL = dynamic_cast<const SvxURLField*>( pField  );
             if ( pURL )
             {
-                OUString sURL( pURL->GetURL() );
-                SvtSecurityOptions aSecOpts;
-                if ( aSecOpts.IsOptionSet( SvtSecurityOptions::EOption::CtrlClickHyperlink) )
-                    sURL = SwViewShell::GetShellRes()->aLinkCtrlClick + ": " + sURL;
-                else
-                    sURL = SwViewShell::GetShellRes()->aLinkClick + ": " + sURL;
-                Help::ShowQuickHelp( this,PixelToLogic(tools::Rectangle(GetPosPixel(),Size(50,10))),sURL);
+                OUString sText(SfxHelp::GetURLHelpText(pURL->GetURL()));
+                Help::ShowQuickHelp(
+                    this, PixelToLogic(tools::Rectangle(GetPosPixel(), Size(50, 10))), sText);
             }
         }
     }

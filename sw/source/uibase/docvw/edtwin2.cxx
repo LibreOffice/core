@@ -31,6 +31,7 @@
 #include <svl/urihelper.hxx>
 #include <svx/svdotext.hxx>
 #include <editeng/outliner.hxx>
+#include <sfx2/sfxhelp.hxx>
 #include <svl/itemiter.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svdpagv.hxx>
@@ -221,14 +222,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                 bool bExecHyperlinks = m_rView.GetDocShell()->IsReadOnly();
                 if ( !bExecHyperlinks )
                 {
-                    SvtSecurityOptions aSecOpts;
-                    bExecHyperlinks = !aSecOpts.IsOptionSet( SvtSecurityOptions::EOption::CtrlClickHyperlink );
-
-                    sText = ": " + sText;
-                    if ( !bExecHyperlinks )
-                        sText = SwViewShell::GetShellRes()->aLinkCtrlClick + sText;
-                    else
-                        sText = SwViewShell::GetShellRes()->aLinkClick + sText;
+                    sText = SfxHelp::GetURLHelpText(sText);
                 }
                 break;
             }
