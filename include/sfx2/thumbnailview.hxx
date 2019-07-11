@@ -98,7 +98,7 @@ struct ThumbnailItemAttributes;
     SetExtraSpacing() will not be included).
 
     The background color could be specified by SetColor(), with which the image
-    or UserDraw items will be underlayed. If no color is specified the color
+    or UserDraw items will be underlaid. If no color is specified the color
     of other windows (WindowColor) will be used for the background.
 
     --------------------------------------------------------------------------
