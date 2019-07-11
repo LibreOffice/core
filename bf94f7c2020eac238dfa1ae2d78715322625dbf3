@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_048eec77",
+        "filename": "svx/source/svdraw/svdpage.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 573,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-07-11T09:46:57Z",
+      "side": 1,
+      "message": "oh, nice, there\u0027s a std::unique...\n\nhmm this is almost correct but it will only remove *consecutive* duplicate values so to get the non-consecutive duplicates you have to sort the vector first which is unfortunate...\n\n... but you could sort a copy of the vector of course",
+      "revId": "bf94f7c2020eac238dfa1ae2d78715322625dbf3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_4494e48b",
+        "filename": "svx/source/unodraw/unoshap2.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 298,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-07-11T09:46:57Z",
+      "side": 1,
+      "message": "i think this might be needed - in xmloff there\u0027s a stack of these sorting-contexts, so that you can sort the shapes inside of a group. see pushGroupForSorting",
+      "revId": "bf94f7c2020eac238dfa1ae2d78715322625dbf3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_a4e86016",
+        "filename": "xmloff/source/draw/shapeimport.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 819,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-07-11T09:46:57Z",
+      "side": 1,
+      "message": "i think we don\u0027t need this if... the sequence should contain every index... with this if it\u0027ll contain a 0 for every identity-mapping i guess? while a \"no-op\" is if it contains rHint.nIs",
+      "revId": "bf94f7c2020eac238dfa1ae2d78715322625dbf3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_c4ed5426",
+        "filename": "xmloff/source/draw/shapeimport.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 846,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-07-11T09:46:57Z",
+      "side": 1,
+      "message": "this can skip it because it\u0027s a no-op here",
+      "revId": "bf94f7c2020eac238dfa1ae2d78715322625dbf3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
