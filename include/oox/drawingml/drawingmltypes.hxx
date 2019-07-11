@@ -90,11 +90,11 @@ typedef std::shared_ptr< TableProperties > TablePropertiesPtr;
 } // namespace table
 
 
-/** converts the attributes from an CT_TLPoint into an awt Point with 1/1000% */
+/** converts the attributes from a CT_TLPoint into an awt Point with 1/1000% */
 css::awt::Point GetPointPercent( const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttribs );
 
 
-/** converts the attributes from an CT_Size2D into an awt Size with 1/100th mm */
+/** converts the attributes from a CT_Size2D into an awt Size with 1/100th mm */
 css::awt::Size GetSize2D( const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttributes );
 
 /** converts the attributes from a CT_RelativeRect to an IntegerRectangle2D */
