@@ -1226,6 +1226,7 @@ void SdrEditView::CombineMarkedTextObjects()
     SdrObjList* xpInsOL = nullptr;
     SdrOutliner& rDrawOutliner = getSdrModelFromSdrView().GetDrawOutliner( );
     tools::Rectangle aReplacementSize = GetMarkedObjRect();
+    std::vector<SdrTextObj*> aShapesWithText;
 
     UnGroupMarked();
     SortMarkedObjects();
@@ -1234,18 +1235,6 @@ void SdrEditView::CombineMarkedTextObjects()
     {
         const SdrMark* pM = GetSdrMarkByIndex(a);
         SdrObject* pObj = pM->GetMarkedSdrObj();
-        SdrTextObj* pTextObj = dynamic_cast<SdrTextObj*>( pObj );
-        if ( !pObj || !pObj->HasText() || !pTextObj || !pTextObj->IsTextFrame() )
-        {
-            size_t preventInfiniteLoop = GetMarkedObjectCount();
-            // Unmark non-textboxes, because all marked objects are deleted at the end.
-            MarkObj(pObj, pM->GetPageView(), /*bUnmark=*/true, true);
-            // don't skip any objects. Unmarking *usually* reduces the count by 1, moving the next into this position "a".
-            if ( preventInfiniteLoop > GetMarkedObjectCount() )
-                --a;
-            continue;
-        }
-
         const OutlinerParaObject* pOPO = pObj ? pObj->GetOutlinerParaObject() : nullptr;
         if ( pOPO )
         {
@@ -1262,6 +1251,20 @@ void SdrEditView::CombineMarkedTextObjects()
             //TODO: find way to use Locale to identify sentence final punctuation. Copied IsSentenceAtEnd() from autofmt.cxx
             const bool bAppend = !n || ( sLastPara[n] != '.' && sLastPara[n] != '?' && sLastPara[n] != '!');
             rDrawOutliner.AddText( *pOPO, bAppend );
+        }
+
+        SdrTextObj* pTextObj = dynamic_cast<SdrTextObj*>( pObj );
+        if ( !pOPO || !pTextObj || !pTextObj->IsTextFrame() )
+        {
+            size_t preventInfiniteLoop = GetMarkedObjectCount();
+            // Unmark non-textboxes, because all marked objects are deleted at the end.
+            MarkObj(pObj, pM->GetPageView(), /*bUnmark=*/true, true);
+            // don't skip any objects. Unmarking *usually* reduces the count by 1, moving the next into this position "a".
+            if ( preventInfiniteLoop > GetMarkedObjectCount() )
+                --a;
+
+            if ( pOPO && pTextObj )
+                aShapesWithText.push_back(pTextObj);
         }
     }
 
@@ -1282,6 +1285,9 @@ void SdrEditView::CombineMarkedTextObjects()
         rReplacement->SetSnapRect(aReplacementSize);
         DeleteMarkedObj();
         xpInsOL->InsertObject(rReplacement);
+
+        for ( auto pTextShape : aShapesWithText )
+            pTextShape->NbcSetText("");
 
         if ( bUndo )
             AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoNewObject(*rReplacement));
