@@ -399,24 +399,20 @@ bool Qt5Graphics_Controls::drawNativeControl(ControlType type, ControlPart part,
     }
     else if ((type == ControlType::Toolbar)
              && (part == ControlPart::ThumbVert || part == ControlPart::ThumbHorz))
-    { // reduce paint area only to the handle area
+    {
+        // reduce paint area only to the handle area
         const int handleExtend = QApplication::style()->pixelMetric(QStyle::PM_ToolBarHandleExtent);
         QStyleOption option;
-        option.state = vclStateValue2StateFlag(nControlState, value);
-
-        QPainter painter(m_image.get());
+        QRect aRect = m_image->rect();
         if (part == ControlPart::ThumbVert)
         {
-            option.rect = QRect(0, 0, handleExtend, widgetRect.height());
-            painter.setClipRect(widgetRect.x(), widgetRect.y(), handleExtend, widgetRect.height());
-            option.state |= QStyle::State_Horizontal;
+            aRect.setWidth(handleExtend);
+            option.state = QStyle::State_Horizontal;
         }
         else
-        {
-            option.rect = QRect(0, 0, widgetRect.width(), handleExtend);
-            painter.setClipRect(widgetRect.x(), widgetRect.y(), widgetRect.width(), handleExtend);
-        }
-        QApplication::style()->drawPrimitive(QStyle::PE_IndicatorToolBarHandle, &option, &painter);
+            aRect.setHeight(handleExtend);
+        draw(QStyle::PE_IndicatorToolBarHandle, &option, m_image.get(),
+             vclStateValue2StateFlag(nControlState, value), aRect);
     }
     else if (type == ControlType::Editbox || type == ControlType::MultilineEditbox)
     {
