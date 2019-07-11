@@ -26,6 +26,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 
 #include <comphelper/lok.hxx>
+#include <comphelper/sequence.hxx>
 #include <rtl/instance.hxx>
 
 using namespace ::utl;
@@ -197,17 +198,6 @@ SvtSlideSorterBarOptions_Impl::~SvtSlideSorterBarOptions_Impl()
         Commit();
 }
 
-static int lcl_MapPropertyName( const OUString& rCompare,
-                const uno::Sequence< OUString>& aInternalPropertyNames)
-{
-    for(int nProp = 0; nProp < aInternalPropertyNames.getLength(); ++nProp)
-    {
-        if( aInternalPropertyNames[nProp] == rCompare )
-            return nProp;
-    }
-    return -1;
-}
-
 void SvtSlideSorterBarOptions_Impl::Load( const Sequence< OUString >& rPropertyNames )
 {
     const uno::Sequence< OUString> aInternalPropertyNames( GetPropertyNames());
@@ -224,7 +214,7 @@ void SvtSlideSorterBarOptions_Impl::Load( const Sequence< OUString >& rPropertyN
     {
         if (!seqValues[nProperty].hasValue())
             continue;
-        switch( lcl_MapPropertyName(rPropertyNames[nProperty], aInternalPropertyNames) )
+        switch( comphelper::findValue(aInternalPropertyNames, rPropertyNames[nProperty]) )
         {
             case PROPERTYHANDLE_VISIBLE_IMPRESSVIEW:
             {

@@ -104,8 +104,8 @@ void ODocumentInfoPreview::fill(
     css::uno::Reference< css::beans::XPropertySetInfo > info(
         user->getPropertySetInfo());
     css::uno::Sequence< css::beans::Property > props(info->getProperties());
-    for (sal_Int32 i = 0; i < props.getLength(); ++i) {
-        OUString name(props[i].Name);
+    for (const auto& rProp : props) {
+        OUString name(rProp.Name);
         css::uno::Any aAny(user->getPropertyValue(name));
         css::uno::Reference< css::script::XTypeConverter > conv(
             css::script::Converter::create(

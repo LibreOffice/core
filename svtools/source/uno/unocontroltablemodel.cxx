@@ -696,10 +696,8 @@ namespace svt { namespace table
         else
         {
             ::std::vector< ::Color > aColors( aAPIColors.getLength() );
-            for ( sal_Int32 i=0; i<aAPIColors.getLength(); ++i )
-            {
-                aColors[i] = Color(aAPIColors[i]);
-            }
+            std::transform(aAPIColors.begin(), aAPIColors.end(), aColors.begin(),
+                [](const css::util::Color& rAPIColor) -> ::Color { return Color(rAPIColor); });
             m_pImpl->m_aRowColors = aColors;
         }
     }
