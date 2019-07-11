@@ -147,7 +147,7 @@ namespace osl {
 
         /** Get all entries belonging to the specified section.
             @param rSection Name of the section.
-            @return Pointer to a array of pointers.
+            @return Pointer to an array of pointers.
         */
         std::list< rtl::OString > getSectionEntries(const rtl::OString& rSection )
         {
@@ -169,7 +169,7 @@ namespace osl {
         }
 
         /** Get all section entries
-            @return Pointer to a array of pointers.
+            @return Pointer to an array of pointers.
         */
         std::list< rtl::OString > getSections()
         {
