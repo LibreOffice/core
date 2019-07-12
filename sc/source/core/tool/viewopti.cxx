@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <comphelper/lok.hxx>
 #include <vcl/svapp.hxx>
 #include <osl/diagnose.h>
 
@@ -90,6 +91,13 @@ ScViewOptions::ScViewOptions( const ScViewOptions& rCpy )
 
 ScViewOptions::~ScViewOptions()
 {
+}
+
+bool ScViewOptions::GetOption(ScViewOption eOpt) const
+{
+    if (eOpt == VOPT_GRID && comphelper::LibreOfficeKit::isActive())
+        return false;
+    return aOptArr[eOpt];
 }
 
 void ScViewOptions::SetDefaults()
