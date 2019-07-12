@@ -1283,7 +1283,14 @@ void makeRedline( SwPaM const & rPaM,
                         uno::Reference<container::XNamed> xNumberingRules;
                         rValue >>= xNumberingRules;
                         if (xNumberingRules.is())
+                        {
                             aItemSet.Put( SwNumRuleItem( xNumberingRules->getName() ));
+                            // keep it during export
+                            SwNumRule* pRule = pDoc->FindNumRulePtr(
+                                        xNumberingRules->getName());
+                            if (pRule)
+                                pRule->SetUsedByRedline(true);
+                        }
                     }
                     else
                     {
