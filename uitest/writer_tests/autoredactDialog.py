@@ -9,6 +9,7 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 from uitest.uihelper.common import get_state_as_dict
 from uitest.uihelper.common import type_text
 from uitest.uihelper.common import select_pos
+from uitest.uihelper.common import select_text
 import time
 import re
 from uitest.debug import sleep
@@ -123,6 +124,75 @@ class AutoRedactDialog(UITestCase):
 
         self.ui_test.close_doc()
 
+
+    def test_edit_target(self):
+        self.ui_test.create_doc_in_start_center("writer")
+        xDialog = self.launch_and_get_autoredact_dialog()
+        xAddBtn = xDialog.getChild("add")
+        xEditBtn = xDialog.getChild("edit")
+
+        # Make sure we are starting with an empty targets list
+        self.clearTargetsbox(xDialog)
+
+        # We first need to add a target so that we can edit it
+        def handle_add_dlg(dialog):                     #handle add target dialog - need special handling
+            xNewNameTxt=dialog.getChild("name")
+            xNewContentTxt=dialog.getChild("content")
+            xOKBtn = dialog.getChild("close")
+            xTypeList = dialog.getChild("type") #0: Text, 1: Regex, 2: Predefined
+
+            select_pos(xTypeList, 0) #Text
+            self.assertEqual(int(get_state_as_dict(xTypeList)["SelectEntryPos"]), 0)
+
+            type_text(xNewNameTxt, "TestTarget")
+            type_text(xNewContentTxt, "TestContent")
+
+            self.ui_test.close_dialog_through_button(xOKBtn)
+
+        self.ui_test.execute_blocking_action(xAddBtn.executeAction, args=('CLICK', ()),
+                dialog_handler=handle_add_dlg)             #close add target dialog with OK button
+
+        # Make sure target is added successfully
+        xTargetsListbox = xDialog.getChild("targets")
+        targets_box_state_dict = get_state_as_dict(xTargetsListbox)
+        self.assertEqual(int(targets_box_state_dict["Children"]), 1)
+
+        # Select the added target
+        target_entry = xTargetsListbox.getChild(0)
+        target_entry.executeAction("SELECT", tuple())
+
+        # Now edit the target
+        def handle_edit_dlg(dialog):                     #handle add target dialog - need special handling
+            xNameTxt=dialog.getChild("name")
+            xContentTxt=dialog.getChild("content")
+            xOKBtn = dialog.getChild("close")
+
+            xNameTxt.executeAction("CLEAR", tuple())
+            xContentTxt.executeAction("CLEAR", tuple())
+
+            type_text(xNameTxt, "TestTargetEdited")
+            type_text(xContentTxt, "TestContentEdited")
+
+            self.ui_test.close_dialog_through_button(xOKBtn)
+
+        self.ui_test.execute_blocking_action(xEditBtn.executeAction, args=('CLICK', ()),
+                dialog_handler=handle_edit_dlg)             #close add target dialog with OK button
+
+        # Make sure target is still there
+        xTargetsListbox = xDialog.getChild("targets")
+        targets_box_state_dict = get_state_as_dict(xTargetsListbox)
+        self.assertEqual(int(targets_box_state_dict["Children"]), 1)
+
+        # Make sure target has the new values
+        target_entry = xTargetsListbox.getChild(0)
+        target_text = self.parseTargetContent(target_entry)
+        self.assertEqual(target_text[0], "TestTargetEdited") #name
+        self.assertEqual(target_text[2], "TestContentEdited") #content
+
+        xcancBtn = xDialog.getChild("cancel")
+        self.ui_test.close_dialog_through_button(xcancBtn)
+
+        self.ui_test.close_doc()
 
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
