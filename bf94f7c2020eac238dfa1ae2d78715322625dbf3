@@ -53,6 +53,24 @@
     },
     {
       "key": {
+        "uuid": "bf659307_74abd3d5",
+        "filename": "xmloff/source/draw/shapeimport.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 819,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2019-07-12T15:17:13Z",
+      "side": 1,
+      "message": "I don\u0027t understand what you\u0027re saying but I trust you :)",
+      "parentUuid": "bf659307_a4e86016",
+      "revId": "bf94f7c2020eac238dfa1ae2d78715322625dbf3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bf659307_c4ed5426",
         "filename": "xmloff/source/draw/shapeimport.cxx",
         "patchSetId": 3
