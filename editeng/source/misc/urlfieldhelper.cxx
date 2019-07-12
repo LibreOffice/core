@@ -24,4 +24,21 @@ void URLFieldHelper::RemoveURLField(Outliner* pOutl, OutlinerView* pOLV)
     }
 }
 
+bool URLFieldHelper::IsCursorAtURLField(OutlinerView* pOLV)
+{
+    if (!pOLV)
+        return false;
+
+    const SvxFieldItem* pFieldItem = pOLV->GetFieldUnderMousePointer();
+    if (!pFieldItem)
+        pFieldItem = pOLV->GetFieldAtSelection();
+    if (pFieldItem)
+    {
+        const SvxFieldData* pField = pFieldItem->GetField();
+        if (dynamic_cast<const SvxURLField*>(pField))
+            return true;
+    }
+    return false;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
