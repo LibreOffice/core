@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_9440e709",
+        "filename": "vcl/source/gdi/mtfxmldump.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 462,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2019-07-12T16:03:41Z",
+      "side": 1,
+      "message": "This xml output is not stable, so as long as you adapt tests, you could write empty explicitly.",
+      "revId": "1ce1c26dd98e6477139e08d1ebe89fa950ff5fb0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
