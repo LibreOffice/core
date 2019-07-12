@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_b10dfd38",
+        "filename": "oox/source/export/chartexport.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 480,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2019-07-12T08:01:05Z",
+      "side": 1,
+      "message": "leave all loops, for example, \n\nbFoundDataRowSource \u003d true;\nbreak;\n\nand check bFoundDataRowSource in the condition of the other cycles",
+      "revId": "af21cbc425da3fc88444099ec1ad1111dac98e15",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_710f652e",
+        "filename": "oox/source/export/chartexport.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 513,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2019-07-12T08:01:05Z",
+      "side": 1,
+      "message": "Does this work with numerical categories?",
+      "range": {
+        "startLine": 513,
+        "startChar": 64,
+        "endLine": 513,
+        "endChar": 79
+      },
+      "revId": "af21cbc425da3fc88444099ec1ad1111dac98e15",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
