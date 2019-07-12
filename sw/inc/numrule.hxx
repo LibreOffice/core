@@ -134,6 +134,7 @@ private:
     bool mbAbsSpaces : 1;    ///< Levels represent absolute indents.
     bool mbHidden : 1;       ///< Is the numbering rule to be hidden in the UI?
     bool mbCountPhantoms;
+    bool mbUsedByRedline;    /// it needs to export as part of tracked numbering change
 
     const SvxNumberFormat::SvxNumPositionAndSpaceMode meDefaultNumberFormatPositionAndSpaceMode;
     OUString msDefaultListId;
@@ -239,6 +240,9 @@ public:
 
     bool IsCountPhantoms() const        { return mbCountPhantoms; }
     void SetCountPhantoms(bool bCountPhantoms);
+
+    bool IsUsedByRedline() const        { return mbUsedByRedline; }
+    void SetUsedByRedline(bool bUsed )  { mbUsedByRedline = bUsed; }
 
     /// Query and set PoolFormat IDs.
     sal_uInt16 GetPoolFormatId() const         { return mnPoolFormatId; }

@@ -372,6 +372,7 @@ SwNumRule::SwNumRule( const OUString& rNm,
     mbAbsSpaces( false ),
     mbHidden( false ),
     mbCountPhantoms( true ),
+    mbUsedByRedline( false ),
     meDefaultNumberFormatPositionAndSpaceMode( eDefaultNumberFormatPositionAndSpaceMode ),
     msDefaultListId()
 {
@@ -460,6 +461,7 @@ SwNumRule::SwNumRule( const SwNumRule& rNumRule )
       mbAbsSpaces( rNumRule.mbAbsSpaces ),
       mbHidden( rNumRule.mbHidden ),
       mbCountPhantoms( true ),
+      mbUsedByRedline( false ),
       meDefaultNumberFormatPositionAndSpaceMode( rNumRule.meDefaultNumberFormatPositionAndSpaceMode ),
       msDefaultListId( rNumRule.msDefaultListId )
 {

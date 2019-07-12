@@ -145,7 +145,8 @@ bool SwDoc::IsUsed( const SwTableAutoFormat& rTableAutoFormat) const
 bool SwDoc::IsUsed( const SwNumRule& rRule )
 {
     bool bUsed = rRule.GetTextNodeListSize() > 0 ||
-                     rRule.GetParagraphStyleListSize() > 0;
+                     rRule.GetParagraphStyleListSize() > 0 ||
+                     rRule.IsUsedByRedline();
 
     return bUsed;
 }
