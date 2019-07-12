@@ -494,7 +494,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
         }
         break;
 
-        case FN_REMOVE_HYPERLINK:
+        case SID_REMOVE_HYPERLINK:
         {
             URLFieldHelper::RemoveURLField(pSdrView->GetTextEditOutliner(),
                                            pOLV);
@@ -900,7 +900,7 @@ void SwDrawTextShell::GetState(SfxItemSet& rSet)
                     rSet.DisableItem(nWhich);
             }
             break;
-            case FN_REMOVE_HYPERLINK:
+            case SID_REMOVE_HYPERLINK:
             case SID_EDIT_HYPERLINK:
             {
                 if (!URLFieldHelper::IsCursorAtURLField(pOLV))
