@@ -515,18 +515,6 @@ void GtkSalData::initNWF()
     pSVData->maNWFData.mnMenuFormatBorderY = ythickness + vertical_padding;
     pSVData->maNWFData.mnMenuSeparatorBorderX = separator_padding;
 
-    if( SalGetDesktopEnvironment() == "KDE" )
-    {
-        // #i97196# ensure a widget exists and the style engine was loaded
-        NWEnsureGTKButton( SalX11Screen( 0 ) );
-        if( g_type_from_name( "QtEngineStyle" ) )
-        {
-            // KDE 3.3 invented a bug in the qt<->gtk theme engine
-            // that makes direct rendering impossible: they totally
-            // ignore the clip rectangle passed to the paint methods
-            GtkSalGraphics::bNeedPixmapPaint = true;
-        }
-    }
     static const char* pEnv = getenv( "SAL_GTK_USE_PIXMAPPAINT" );
     if( pEnv && *pEnv )
         GtkSalGraphics::bNeedPixmapPaint = true;
