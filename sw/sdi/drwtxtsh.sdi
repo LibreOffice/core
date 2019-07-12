@@ -546,6 +546,18 @@ interface TextDrawText
     [
         StateMethod = StateInsert ;
     ]
+    FN_EDIT_HYPERLINK
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+    FN_REMOVE_HYPERLINK
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
     SID_TRANSLITERATE_SENTENCE_CASE
     [
         ExecMethod = ExecTransliteration;

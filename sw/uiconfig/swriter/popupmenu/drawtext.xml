@@ -20,6 +20,9 @@
   <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:TextAttributes"/>
   <menu:menuseparator/>
+  <menu:menuitem menu:id=".uno:EditHyperlink"/>
+  <menu:menuitem menu:id=".uno:RemoveHyperlink"/>
+  <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:FontDialog"/>
   <menu:menuitem menu:id=".uno:ParagraphDialog"/>
   <menu:menuseparator/>

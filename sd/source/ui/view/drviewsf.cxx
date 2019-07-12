@@ -475,22 +475,8 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
 
             case SID_REMOVE_HYPERLINK:
             {
-                OutlinerView* pOLV = mpDrawView->GetTextEditOutlinerView();
-                if (pOLV)
-                {
-                    bool bField = false;
-                    const SvxFieldItem* pFieldItem = pOLV->GetFieldUnderMousePointer();
-                    if (!pFieldItem)
-                        pFieldItem = pOLV->GetFieldAtSelection();
-                    if (pFieldItem)
-                    {
-                        const SvxFieldData* pField = pFieldItem->GetField();
-                        if (dynamic_cast<const SvxURLField*>(pField))
-                            bField = true;
-                    }
-                    if (!bField)
-                        rSet.DisableItem(nWhich);
-                }
+                if (!URLFieldHelper::IsCursorAtURLField(mpDrawView->GetTextEditOutlinerView()))
+                    rSet.DisableItem(nWhich);
             }
             break;
 

@@ -47,6 +47,7 @@
 #include <editeng/contouritem.hxx>
 #include <editeng/postitem.hxx>
 #include <editeng/frmdiritem.hxx>
+#include <editeng/urlfieldhelper.hxx>
 #include <svx/svdoutl.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svl/stritem.hxx>
@@ -485,6 +486,19 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
         }
         break;
 
+        case FN_EDIT_HYPERLINK:
+        {
+            GetView().GetViewFrame()->GetDispatcher()->Execute(SID_HYPERLINK_DIALOG);
+        }
+        break;
+
+        case FN_REMOVE_HYPERLINK:
+        {
+            URLFieldHelper::RemoveURLField(pSdrView->GetTextEditOutliner(),
+                                           pSdrView->GetTextEditOutlinerView());
+        }
+        break;
+
         case SID_TEXTDIRECTION_LEFT_TO_RIGHT:
         case SID_TEXTDIRECTION_TOP_TO_BOTTOM:
             // Shell switch!
@@ -884,12 +898,19 @@ void SwDrawTextShell::GetState(SfxItemSet& rSet)
                     rSet.DisableItem(nWhich);
             }
             break;
+            case FN_REMOVE_HYPERLINK:
+            case FN_EDIT_HYPERLINK:
+            {
+                if (!URLFieldHelper::IsCursorAtURLField(pOLV))
+                    rSet.DisableItem(nWhich);
+            }
+            break;
             default:
                 nSlotId = 0; // don't know this slot
                 break;
         }
 
-        if (nSlotId)
+        if (nSlotId && bFlag)
             rSet.Put(SfxBoolItem(nWhich, bFlag));
 
         nWhich = aIter.NextWhich();
