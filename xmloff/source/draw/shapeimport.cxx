@@ -932,7 +932,7 @@ void XMLShapeImportHelper::restoreConnections()
             aLine3Delta = xConnector->getPropertyValue(aStr3);
 
             // #86637# simply setting these values WILL force the connector to do
-            // an new layout promptly. So the line delta values have to be rescued
+            // a new layout promptly. So the line delta values have to be rescued
             // and restored around connector changes.
             uno::Reference< drawing::XShape > xShape(
                 mrImporter.getInterfaceToIdentifierMapper().getReference( rHint.aDestShapeId ), uno::UNO_QUERY );

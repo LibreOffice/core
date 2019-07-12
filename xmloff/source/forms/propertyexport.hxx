@@ -54,7 +54,7 @@ namespace xmloff
     //= OPropertyExport
     /** provides export related tools for attribute handling
 
-        <p>(The name is somewhat misleading. It's not only a PropertyExport, but in real a ElementExport.
+        <p>(The name is somewhat misleading. It's not only a PropertyExport, but in real an ElementExport.
         Anyway.)</p>
     */
     class OPropertyExport
@@ -195,7 +195,7 @@ namespace xmloff
             const OUString& _rPropertyName,
             const sal_Int32 _nDefault);
 
-        /** add an attribute which is represented by a enum property to the export context
+        /** add an attribute which is represented by an enum property to the export context
 
             @param _nNamespaceKey
                 the key of the namespace to use for the attribute name. Is used with the namespace map

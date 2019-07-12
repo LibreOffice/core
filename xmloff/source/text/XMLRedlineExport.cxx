@@ -380,7 +380,7 @@ void XMLRedlineExport::ExportChangedRegion(
     if (aSuccessorData.hasElements())
     {
         // The only change that can be "undone" is an insertion -
-        // after all, you can't re-insert an deletion, but you can
+        // after all, you can't re-insert a deletion, but you can
         // delete an insertion. This assumption is asserted in
         // ExportChangeInfo(Sequence<PropertyValue>&).
         SvXMLElementExport aSecondChangeElem(

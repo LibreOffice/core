@@ -1185,7 +1185,7 @@ static void CheckAndResolveEquationParameter( css::drawing::EnhancedCustomShapeP
 
 void XMLEnhancedCustomShapeContext::EndElement()
 {
-    // resolve properties that are indexing a Equation
+    // resolve properties that are indexing an Equation
     if ( !maEquations.empty() )
     {
         // creating hash map containing the name and index of each equation

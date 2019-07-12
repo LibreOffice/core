@@ -169,7 +169,7 @@ bool XMLOpacityPropertyHdl::exportXML(
     return bRet;
 }
 
-// implementation of an text animation step amount
+// implementation of a text animation step amount
 
 XMLTextAnimationStepPropertyHdl::~XMLTextAnimationStepPropertyHdl()
 {
