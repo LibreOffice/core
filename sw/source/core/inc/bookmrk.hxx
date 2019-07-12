@@ -248,7 +248,7 @@ namespace sw {
             virtual void ReleaseDoc(SwDoc* const pDoc) override;
         };
 
-        // Non text fieldmarks has has no content between the start and end marks.
+        // Non text fieldmarks have no content between the start and end marks.
         class NonTextFieldmark
             : public Fieldmark
         {
