@@ -49,8 +49,10 @@ struct expect_t
     OUString number;
 };
 
-static const expect_t expect[]
-    = { { 1, "0.00" }, { 2, "25.00" }, { 3, "26.00" }, { 4, "30.4" }, { 5, "45.8" } };
+static const expect_t expect[] = {
+    { 1, "0.00" },   { 2, "25.00" },  { 3, "26.00" }, { 4, "30.4" },  { 5, "45.8" },
+    { 6, "-25.00" }, { 7, "-26.00" }, { 8, "-30.4" }, { 9, "-45.8" },
+};
 
 void Tdf126268Test::testNumbers()
 {

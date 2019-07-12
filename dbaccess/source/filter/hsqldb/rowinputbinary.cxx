@@ -89,9 +89,27 @@ OUString lcl_double_dabble(const std::vector<sal_uInt8>& bytes)
 OUString lcl_makeStringFromBigint(const std::vector<sal_uInt8>& bytes)
 {
     std::vector<sal_uInt8> aBytes{ bytes };
+    OUStringBuffer sRet;
 
+    // two's complement
+    if ((bytes[0] & 0x80) != 0)
+    {
+        sRet.append("-");
+        for (auto& byte : aBytes)
+            byte = ~byte;
+        // add 1 to byte array
+        // FIXME e.g. 10000 valid ?
+        for (size_t i = aBytes.size() - 1; i != 0; --i)
+        {
+            aBytes[i] += 1;
+            if (aBytes[i] != 0)
+                break;
+        }
+    }
     // convert binary to BCD
-    return lcl_double_dabble(aBytes);
+    OUString sNum = lcl_double_dabble(aBytes);
+    sRet.append(sNum);
+    return sRet.makeStringAndClear();
 }
 
 OUString lcl_putDot(const OUString& sNum, sal_Int32 nScale)
