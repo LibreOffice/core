@@ -117,6 +117,7 @@
 #define CMD_SID_ATTR_CHAR_OVERLINE                  ".uno:Overline"
 #define CMD_SID_3D_WIN                              ".uno:Window3D"
 #define CMD_SID_OPEN_HYPERLINK                      ".uno:OpenHyperlinkOnCursor"
+#define CMD_SID_EDIT_HYPERLINK                      ".uno:EditHyperlink"
 #define CMD_SID_TABLE_MERGE_CELLS                   ".uno:MergeCells"
 #define CMD_SID_TABLE_SPLIT_CELLS                   ".uno:SplitCell"
 #define CMD_SID_TABLE_VERT_BOTTOM                   ".uno:CellVertBottom"

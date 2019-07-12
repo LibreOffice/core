@@ -1319,23 +1319,6 @@ SfxVoidItem DuplicatePage SID_DUPLICATE_PAGE
     GroupId = SfxGroupId::Insert;
 ]
 
-SfxVoidItem EditHyperlink SID_EDIT_HYPERLINK
-()
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-    AccelConfig = FALSE,
-    MenuConfig = TRUE,
-    ToolBoxConfig = FALSE,
-    GroupId = SfxGroupId::Edit;
-]
-
 SfxVoidItem EditOutline SID_EDIT_OUTLINER
 ()
 [
