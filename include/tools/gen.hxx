@@ -455,7 +455,7 @@ public:
     long                getX() const { return nLeft; }
     long                getY() const { return nTop; }
     /// Returns the difference between right and left, assuming the range includes one end, but not the other.
-    long                getWidth() const { return nRight - nLeft; }
+    long                getWidth() const;
     /// Returns the difference between bottom and top, assuming the range includes one end, but not the other.
     long                getHeight() const { return nBottom - nTop; }
     /// Set the left edge of the rectangle to x, preserving the width
