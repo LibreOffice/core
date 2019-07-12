@@ -9362,6 +9362,24 @@ SfxVoidItem OpenHyperlinkOnCursor SID_OPEN_HYPERLINK
         GroupId = SfxGroupId::Edit;
 ]
 
+SfxVoidItem EditHyperlink SID_EDIT_HYPERLINK
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerItem;
+    Asynchron;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Edit;
+]
+
 SfxBoolItem CTLFontState SID_CTLFONT_STATE
 [
         AutoUpdate = FALSE,

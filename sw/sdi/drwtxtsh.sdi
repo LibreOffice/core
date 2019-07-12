@@ -546,7 +546,7 @@ interface TextDrawText
     [
         StateMethod = StateInsert ;
     ]
-    FN_EDIT_HYPERLINK
+    SID_EDIT_HYPERLINK
     [
         ExecMethod = Execute ;
         StateMethod = GetState;

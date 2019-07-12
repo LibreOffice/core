@@ -341,7 +341,7 @@ interface BaseText
         ExecMethod = Execute ;
         StateMethod = GetState;
     ]
-    FN_EDIT_HYPERLINK
+    SID_EDIT_HYPERLINK
     [
         ExecMethod = Execute ;
         StateMethod = GetState;

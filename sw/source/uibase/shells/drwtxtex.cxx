@@ -486,7 +486,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
         }
         break;
 
-        case FN_EDIT_HYPERLINK:
+        case SID_EDIT_HYPERLINK:
         {
             GetView().GetViewFrame()->GetDispatcher()->Execute(SID_HYPERLINK_DIALOG);
         }
@@ -899,7 +899,7 @@ void SwDrawTextShell::GetState(SfxItemSet& rSet)
             }
             break;
             case FN_REMOVE_HYPERLINK:
-            case FN_EDIT_HYPERLINK:
+            case SID_EDIT_HYPERLINK:
             {
                 if (!URLFieldHelper::IsCursorAtURLField(pOLV))
                     rSet.DisableItem(nWhich);

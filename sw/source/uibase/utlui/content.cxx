@@ -3449,7 +3449,7 @@ void SwContentTree::EditEntry(SvTreeListEntry const * pEntry, EditEntryMode nMod
         break;
 
         case ContentTypeId::URLFIELD:
-            nSlot = FN_EDIT_HYPERLINK;
+            nSlot = SID_EDIT_HYPERLINK;
         break;
         case ContentTypeId::REFERENCE:
             nSlot = FN_EDIT_FIELD;

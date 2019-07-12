@@ -762,7 +762,7 @@ class SvxSetItem;
 #define SID_EXTRUSION_SURFACE                           ( SID_SVX_START + 975 )
 #define SID_EXTRUSION_DEPTH_DIALOG                      ( SID_SVX_START + 976 )
 #define SID_FONTWORK_GALLERY_FLOATER                    ( SID_SVX_START + 977 )
-// free                                                 ( SID_SVX_START + 978 )
+#define SID_EDIT_HYPERLINK                              ( SID_SVX_START + 978 )
 #define SID_FONTWORK_SHAPE_TYPE                         ( SID_SVX_START + 979 )
 #define SID_FONTWORK_SAME_LETTER_HEIGHTS                ( SID_SVX_START + 980 )
 #define SID_FONTWORK_ALIGNMENT_FLOATER                  ( SID_SVX_START + 981 )

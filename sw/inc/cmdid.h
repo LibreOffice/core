@@ -131,8 +131,7 @@
 #define FN_EDIT_CURRENT_TOX          (FN_EDIT2 + 32) /* edit current index */
 #define FN_EDIT_AUTH_ENTRY_DLG       (FN_EDIT2 + 33) /* edit authorities entry*/
 #define FN_UPDATE_CHARTS             (FN_EDIT2 + 34) /* update all charts */
-
-#define FN_EDIT_HYPERLINK            (FN_EDIT2 + 35)    /* edit hyperlink */
+// free
 #define FN_NUM_CONTINUE              (FN_EDIT2 + 36)    /* continue previous numbering */
 #define FN_REDLINE_ACCEPT_DIRECT     (FN_EDIT2 + 37)    /* accept redline at current position*/
 #define FN_REDLINE_REJECT_DIRECT     (FN_EDIT2 + 38)    /* reject redline at current position*/
