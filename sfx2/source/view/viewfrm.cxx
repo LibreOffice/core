@@ -484,10 +484,21 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                         }
 
                         pMed->CloseAndRelease();
-                        pMed->GetItemSet()->Put( SfxBoolItem( SID_DOC_READONLY, !( nOpenMode & StreamMode::WRITE ) ) );
                         pMed->SetOpenMode( nOpenMode );
-
+                        // We need to clear the SID_DOC_READONLY item from the set, to allow
+                        // MediaDescriptor::impl_openStreamWithURL (called indirectly by
+                        // SfxMedium::CompleteReOpen) to properly fill input stream of the
+                        // descriptor, even when the file can't be open in read-write mode.
+                        // Only then can following call to SfxMedium::LockOrigFileOnDemand
+                        // return proper information about who has locked the file, to show
+                        // in the SfxQueryOpenAsTemplate box below; otherwise it exits right
+                        // after call to SfxMedium::GetMedium_Impl. This mimics what happens
+                        // when the file is opened initially, when filter detection code also
+                        // calls MediaDescriptor::impl_openStreamWithURL without the item set.
+                        pMed->GetItemSet()->ClearItem(SID_DOC_READONLY);
                         pMed->CompleteReOpen();
+                        pMed->GetItemSet()->Put(
+                            SfxBoolItem(SID_DOC_READONLY, !(nOpenMode & StreamMode::WRITE)));
                         if ( nOpenMode & StreamMode::WRITE )
                         {
                             auto eResult = pMed->LockOrigFileOnDemand(
