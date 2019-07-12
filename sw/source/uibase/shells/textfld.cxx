@@ -82,7 +82,6 @@
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
 #include <IMark.hxx>
-#include <xmloff/odffields.hxx>
 
 
 using namespace nsSwDocInfoSubType;
