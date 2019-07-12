@@ -45,6 +45,9 @@ def find_test_files(dir_path):
         if not os.path.isfile(file_path):
             continue
 
+        if os.path.splitext(file_path)[1] == ".swp":
+            continue # ignore VIM swap files
+
         # fail on any non .py files
         if not os.path.splitext(file_path)[1] == ".py":
             raise Exception("file with an extension which is not .py: " + file_path)
