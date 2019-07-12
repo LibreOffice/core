@@ -45,6 +45,7 @@
 #include <editeng/section.hxx>
 #include <editeng/editobj.hxx>
 #include <editeng/CustomPropertyField.hxx>
+#include <editeng/urlfieldhelper.hxx>
 
 #include <sal/log.hxx>
 
@@ -1150,17 +1151,8 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         {
             if (mpDrawView->IsTextEdit())
             {
-                Outliner* pOutl = mpDrawView->GetTextEditOutliner();
-                OutlinerView* pOLV = mpDrawView->GetTextEditOutlinerView();
-                if (pOutl && pOLV)
-                {
-                    const SvxFieldData* pField = GetFieldAtCursor();
-                    if( auto pUrlField = dynamic_cast< const SvxURLField *>( pField ) )
-                    {
-                        ESelection aSel = pOLV->GetSelection();
-                        pOutl->QuickInsertText(pUrlField->GetRepresentation(), aSel);
-                    }
-                }
+                URLFieldHelper::RemoveURLField(mpDrawView->GetTextEditOutliner(),
+                                               mpDrawView->GetTextEditOutlinerView());
             }
         }
         Cancel();

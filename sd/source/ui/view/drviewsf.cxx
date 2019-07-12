@@ -61,6 +61,7 @@
 #include <editeng/escapementitem.hxx>
 #include <editeng/numitem.hxx>
 #include <editeng/adjustitem.hxx>
+#include <editeng/urlfieldhelper.hxx>
 #include <svx/nbdtmgfact.hxx>
 #include <svx/nbdtmg.hxx>
 #include <memory>
@@ -89,7 +90,7 @@ void DrawViewShell::GetCtrlState(SfxItemSet &rSet)
 
         if (pOLV)
         {
-            const SvxFieldData* pField = GetFieldAtCursor();
+            const SvxFieldData* pField = pOLV->GetFieldAtCursor();
             if( auto pUrlField = dynamic_cast< const SvxURLField *>( pField ) )
             {
                 aHLinkItem.SetName(pUrlField->GetRepresentation());
@@ -794,38 +795,6 @@ bool DrawViewShell::HasSelection(bool bText) const
     }
 
     return bReturn;
-}
-
-const SvxFieldData* DrawViewShell::GetFieldAtCursor()
-{
-    OutlinerView* pOLV = mpDrawView->GetTextEditOutlinerView();
-    if (!pOLV)
-        return nullptr;
-
-    const SvxFieldItem* pFieldItem = pOLV->GetFieldAtSelection();
-    if (pFieldItem)
-    {
-        // Make sure the whole field is selected
-        ESelection aSel = pOLV->GetSelection();
-        if (aSel.nStartPos == aSel.nEndPos)
-        {
-            aSel.nEndPos++;
-            pOLV->SetSelection(aSel);
-        }
-    }
-    if (!pFieldItem)
-    {
-        // Cursor probably behind the field - extend selection to select the field
-        ESelection aSel = pOLV->GetSelection();
-        if (aSel.nStartPos == aSel.nEndPos)
-        {
-            aSel.nStartPos--;
-            pOLV->SetSelection(aSel);
-            pFieldItem = pOLV->GetFieldAtSelection();
-        }
-    }
-
-    return pFieldItem ? pFieldItem->GetField() : nullptr;
 }
 
 } // end of namespace sd
