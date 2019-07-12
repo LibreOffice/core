@@ -1052,24 +1052,6 @@ SfxVoidItem EditGlossary FN_GLOSSARY_DLG
     GroupId = SfxGroupId::Edit;
 ]
 
-SfxVoidItem EditHyperlink FN_EDIT_HYPERLINK
-()
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerItem;
-    Asynchron;
-
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    ToolBoxConfig = TRUE,
-    GroupId = SfxGroupId::Insert;
-]
-
 SfxVoidItem EditRegion FN_EDIT_REGION
 ()
 [

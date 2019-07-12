@@ -882,7 +882,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             rWrtSh.UnProtectTables();
         }
         break;
-        case FN_EDIT_HYPERLINK:
+        case SID_EDIT_HYPERLINK:
             GetView().GetViewFrame()->SetChildWindow(SID_HYPERLINK_DIALOG, true);
         break;
         case FN_REMOVE_HYPERLINK:
@@ -1746,7 +1746,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                 }
                 break;
 
-            case FN_EDIT_HYPERLINK:
+            case SID_EDIT_HYPERLINK:
             case FN_COPY_HYPERLINK_LOCATION:
                 {
                     SfxItemSet aSet(GetPool(),
