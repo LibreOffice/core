@@ -393,8 +393,12 @@ private:
 
     /** Obtain date format order, from accepted date pattern if available or
         otherwise the locale's default order.
+
+        @param  bFromFormatIfNoPattern
+                If <TRUE/> and no pattern was matched, obtain date order from
+                format if available, instead from format's or current locale.
      */
-    DateOrder GetDateOrder();
+    DateOrder GetDateOrder( bool bFromFormatIfNoPattern = false );
 
     /** Whether input may be an ISO 8601 date format, yyyy-mm-dd...
 
