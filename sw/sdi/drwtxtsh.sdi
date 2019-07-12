@@ -552,7 +552,7 @@ interface TextDrawText
         StateMethod = GetState;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
-    FN_REMOVE_HYPERLINK
+    SID_REMOVE_HYPERLINK
     [
         ExecMethod = Execute ;
         StateMethod = GetState;

@@ -885,7 +885,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
         case SID_EDIT_HYPERLINK:
             GetView().GetViewFrame()->SetChildWindow(SID_HYPERLINK_DIALOG, true);
         break;
-        case FN_REMOVE_HYPERLINK:
+        case SID_REMOVE_HYPERLINK:
         {
             bool bSel = rWrtSh.HasSelection();
             if(!bSel)
@@ -1759,7 +1759,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                     }
                 }
             break;
-            case FN_REMOVE_HYPERLINK:
+            case SID_REMOVE_HYPERLINK:
             {
                 SfxItemSet aSet(GetPool(),
                                 svl::Items<RES_TXTATR_INETFMT,
