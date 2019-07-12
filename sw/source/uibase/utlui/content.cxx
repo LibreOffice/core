@@ -1106,12 +1106,12 @@ void SwContentTree::StartDrag( sal_Int8 nAction, const Point& rPosPixel )
         // Only move drag entry and continuous selected siblings:
         m_aDndOutlinesSelected.clear();
         SvTreeListEntry* pEntry = GetEntry(rPosPixel);
-        // Find first selected of continous siblings
+        // Find first selected of continuous siblings
         while (pEntry && IsSelected(pEntry->PrevSibling()))
         {
             pEntry = pEntry->PrevSibling();
         }
-        // Record continous selected siblings
+        // Record continuous selected siblings
         if (pEntry)
         {
             m_aDndOutlinesSelected.push_back(pEntry);
