@@ -106,6 +106,24 @@
     },
     {
       "key": {
+        "uuid": "bf659307_c42f94f4",
+        "filename": "reportdesign/source/filter/xml/xmlExport.cxx",
+        "patchSetId": 17
+      },
+      "lineNbr": 525,
+      "author": {
+        "id": 1001855
+      },
+      "writtenOn": "2019-07-12T08:11:03Z",
+      "side": 1,
+      "message": "This way, it integrated better into the existing code.",
+      "parentUuid": "bf659307_0d3b8138",
+      "revId": "701e819eb441c93a5853ac71ccfd5c0fe7953bf9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bf659307_2d98c568",
         "filename": "xmloff/source/table/XMLTableExport.cxx",
         "patchSetId": 17
