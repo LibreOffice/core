@@ -36,6 +36,24 @@
     },
     {
       "key": {
+        "uuid": "bf659307_b1ee5d86",
+        "filename": "offapi/com/sun/star/report/XReportComponent.idl",
+        "patchSetId": 17
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1001855
+      },
+      "writtenOn": "2019-07-12T13:17:33Z",
+      "side": 1,
+      "message": "I need the property autogrow in the report controls, so I don\u0027t see that this can be omitted.",
+      "parentUuid": "bf659307_8dbc71bc",
+      "revId": "701e819eb441c93a5853ac71ccfd5c0fe7953bf9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bf659307_edf88d7d",
         "filename": "reportdesign/source/filter/xml/xmlColumn.cxx",
         "patchSetId": 17
@@ -65,6 +83,24 @@
       "side": 1,
       "message": "Shouldn\u0027t that rather be a boolean?",
       "parentUuid": "bf659307_edf88d7d",
+      "revId": "701e819eb441c93a5853ac71ccfd5c0fe7953bf9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_31fa4d42",
+        "filename": "reportdesign/source/filter/xml/xmlColumn.cxx",
+        "patchSetId": 17
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1001855
+      },
+      "writtenOn": "2019-07-12T13:17:33Z",
+      "side": 1,
+      "message": "Then I will change the name to MinHeight. I tried it as boolean, but I remember I had some problems with that.",
+      "parentUuid": "bf659307_449f0450",
       "revId": "701e819eb441c93a5853ac71ccfd5c0fe7953bf9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -124,6 +160,24 @@
     },
     {
       "key": {
+        "uuid": "bf659307_7169a523",
+        "filename": "reportdesign/source/filter/xml/xmlExport.cxx",
+        "patchSetId": 17
+      },
+      "lineNbr": 525,
+      "author": {
+        "id": 1001855
+      },
+      "writtenOn": "2019-07-12T13:17:33Z",
+      "side": 1,
+      "message": "I\u0027m not absolutely sure with the increasing, but in my tests I\u0027ve never seen the opposite. A height of 0 should not play a role, if Autogrow is set.\nI tried it with Booleans, but I encountered some problems when reading them later from the property states. It\u0027s some time gone, I think the problem was, that I couldn\u0027t be sure if I\u0027ve a Boolean or an integer at that index in aPropertyStates.",
+      "parentUuid": "bf659307_c42f94f4",
+      "revId": "701e819eb441c93a5853ac71ccfd5c0fe7953bf9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bf659307_2d98c568",
         "filename": "xmloff/source/table/XMLTableExport.cxx",
         "patchSetId": 17
@@ -135,6 +189,24 @@
       "writtenOn": "2019-07-01T14:51:27Z",
       "side": 1,
       "message": "my understanding is that  this export code is only used with Impress tables ... and those don\u0027t appear to have a \"MinHeight\" property? in svx/source/table/tablerow.cxx",
+      "revId": "701e819eb441c93a5853ac71ccfd5c0fe7953bf9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_91b79987",
+        "filename": "xmloff/source/table/XMLTableExport.cxx",
+        "patchSetId": 17
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1001855
+      },
+      "writtenOn": "2019-07-12T13:17:33Z",
+      "side": 1,
+      "message": "So delete the line \"MinHeight\"?",
+      "parentUuid": "bf659307_2d98c568",
       "revId": "701e819eb441c93a5853ac71ccfd5c0fe7953bf9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
