@@ -39,6 +39,7 @@
 #include <dbinsdlg.hxx>
 #include <docfnote.hxx>
 #include <docstdlg.hxx>
+#include <DateFormFieldDialog.hxx>
 #include <DropDownFieldDialog.hxx>
 #include <DropDownFormFieldDialog.hxx>
 #include <envlop.hxx>
@@ -179,6 +180,8 @@ short AbstractDropDownFormFieldDialog_Impl::Execute()
 {
     return m_xDlg->run();
 }
+
+IMPL_ABSTDLG_BASE(AbstractDateFormFieldDialog_Impl);
 
 short AbstractSwLabDlg_Impl::Execute()
 {
@@ -872,6 +875,12 @@ VclPtr<AbstractDropDownFieldDialog> SwAbstractDialogFactory_Impl::CreateDropDown
 VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateDropDownFormFieldDialog(weld::Window *pParent, sw::mark::IFieldmark* pDropDownField)
 {
     return VclPtr<AbstractDropDownFormFieldDialog_Impl>::Create(o3tl::make_unique<sw::DropDownFormFieldDialog>(pParent, pDropDownField));
+}
+
+VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateDateFormFieldDialog(sw::mark::IFieldmark* pDateField)
+{
+    VclPtr<sw::DateFormFieldDialog> pDlg = VclPtr<sw::DateFormFieldDialog>::Create(nullptr, pDateField);
+    return VclPtr<AbstractDateFormFieldDialog_Impl>::Create(pDlg);
 }
 
 VclPtr<SfxAbstractTabDialog> SwAbstractDialogFactory_Impl::CreateSwEnvDlg(weld::Window* pParent, const SfxItemSet& rSet,

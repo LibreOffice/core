@@ -28,6 +28,7 @@
 #include <dbinsdlg.hxx>
 #include <DropDownFieldDialog.hxx>
 #include <DropDownFormFieldDialog.hxx>
+#include <DateFormFieldDialog.hxx>
 #include <fldtdlg.hxx>
 #include <glossary.hxx>
 #include <inpdlg.hxx>

@@ -393,6 +393,8 @@ public:
     virtual VclPtr<VclAbstractDialog> CreateDropDownFormFieldDialog(weld::Window* pParent, sw::mark::IFieldmark* pDropDownField) = 0;
     virtual VclPtr<SfxAbstractTabDialog> CreateSwEnvDlg(weld::Window* pParent, const SfxItemSet& rSet, SwWrtShell* pWrtSh, Printer* pPrt, bool bInsert) = 0;
 
+    virtual VclPtr<VclAbstractDialog> CreateDateFormFieldDialog(sw::mark::IFieldmark* pDateField) = 0;
+
     virtual VclPtr<AbstractSwLabDlg> CreateSwLabDlg(weld::Window* pParent, const SfxItemSet& rSet,
                                                      SwDBManager* pDBManager, bool bLabel) = 0;
 
