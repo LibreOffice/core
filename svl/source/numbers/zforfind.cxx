@@ -1555,12 +1555,15 @@ sal_uInt32 ImpSvNumberInputScan::GetDatePatternOrder()
 }
 
 
-DateOrder ImpSvNumberInputScan::GetDateOrder()
+DateOrder ImpSvNumberInputScan::GetDateOrder( bool bFromFormatIfNoPattern )
 {
     sal_uInt32 nOrder = GetDatePatternOrder();
     if (!nOrder)
     {
-        return pFormatter->GetLocaleData()->getDateOrder();
+        if (bFromFormatIfNoPattern && mpFormat)
+            return mpFormat->GetDateOrder();
+        else
+            return pFormatter->GetLocaleData()->getDateOrder();
     }
     switch ((nOrder & 0xff0000) >> 16)
     {
@@ -1703,21 +1706,13 @@ bool ImpSvNumberInputScan::GetDateRef( double& fDays, sal_uInt16& nCounter )
                 // again is to be preferred. Both date orders can be different
                 // so we need to obtain the actual match. For example ISO
                 // YYYY-MM-DD format vs locale's DD.MM.YY input.
-                if (!GetDatePatternOrder())
-                {
-                    // No pattern match => format match.
-                    DateFmt = mpFormat->GetDateOrder();
-                }
-                else
-                {
-                    // Pattern match. Note that patterns may have been
-                    // constructed from the format's locale and prepended to
-                    // the current locale's patterns, it doesn't necessarily
-                    // mean a current locale's pattern was matched, but may if
-                    // the format's locale's patterns didn't match, which were
-                    // tried first.
-                    DateFmt = GetDateOrder();
-                }
+                // If no pattern was matched, obtain from format.
+                // Note that patterns may have been constructed from the
+                // format's locale and prepended to the current locale's
+                // patterns, it doesn't necessarily mean a current locale's
+                // pattern was matched, but may if the format's locale's
+                // patterns didn't match, which were tried first.
+                DateFmt = GetDateOrder(true);
             }
             break;
         default:
