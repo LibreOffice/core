@@ -26,7 +26,7 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <sal/log.hxx>
-
+#include <officecfg/Office/Common.hxx>
 
 #include <vcl/virdev.hxx>
 #include <vcl/metaact.hxx>
@@ -723,6 +723,14 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
         // nor checked for intersection against other aCCList elements
         ConnectedComponents aBackgroundComponent;
 
+        // Read the configuration value of minimal object area where transparency will be removed
+        double fReduceTransparencyMinArea = officecfg::Office::Common::VCL::ReduceTransparencyMinArea::get() / 100.0;
+        SAL_WARN_IF(fReduceTransparencyMinArea > 1.0, "vcl",
+            "Value of ReduceTransparencyMinArea config option is too high");
+        SAL_WARN_IF(fReduceTransparencyMinArea < 0.0, "vcl",
+            "Value of ReduceTransparencyMinArea config option is too low");
+        fReduceTransparencyMinArea = std::clamp(fReduceTransparencyMinArea, 0.0, 1.0);
+
         // create an OutputDevice to record mapmode changes and the like
         ScopedVclPtrInstance< VirtualDevice > aMapModeVDev;
         aMapModeVDev->mnDPIX = mnDPIX;
@@ -1125,7 +1133,7 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
                 const double fOutArea( static_cast<double>(aOutputRect.GetWidth()) * aOutputRect.GetHeight() );
 
                 // check if output doesn't exceed given size
-                if( bReduceTransparency && bTransparencyAutoMode && ( fBmpArea > ( 0.25 * fOutArea ) ) )
+                if( bReduceTransparency && bTransparencyAutoMode && ( fBmpArea > ( fReduceTransparencyMinArea * fOutArea ) ) )
                 {
                     // output normally. Therefore, we simply clear the
                     // special attribute, as everything non-special is
