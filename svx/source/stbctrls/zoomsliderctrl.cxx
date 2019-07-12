@@ -310,8 +310,8 @@ void SvxZoomSliderControl::Paint( const UserDrawEvent& rUsrEvt )
     Rectangle aRight( aSlider );
     aRight.Left() = aRight.Right();
 
-    pDev->SetLineColor( Color ( COL_WHITE ) );
-    pDev->SetFillColor( Color ( COL_WHITE ) );
+    pDev->SetLineColor( Color ( COL_GRAY ) );
+    pDev->SetFillColor( Color ( COL_GRAY ) );
     pDev->DrawRect( aSecondLine );
     pDev->DrawRect( aRight );
 
