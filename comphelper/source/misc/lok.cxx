@@ -35,6 +35,8 @@ static bool g_bViewIdForVisCursorInvalidation(false);
 
 static bool g_bLocalRendering(false);
 
+static Compat g_eCompatFlags(Compat::none);
+
 static LanguageTag g_aLanguageTag("en-US", true);
 
 /// Scaling of the cairo or CoreGraphics canvas painting for HiDPI or zooming in Calc.
@@ -129,6 +131,10 @@ bool isLocalRendering()
 {
     return g_bLocalRendering;
 }
+
+void setCompatFlag(Compat flag) { g_eCompatFlags = static_cast<Compat>(g_eCompatFlags | flag); }
+
+bool isCompatFlagSet(Compat flag) { return (g_eCompatFlags & flag) == flag; }
 
 void setLanguageTag(const LanguageTag& languageTag)
 {

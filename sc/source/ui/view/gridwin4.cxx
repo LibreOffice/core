@@ -527,6 +527,9 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
     ScDocument& rDoc = *pViewData->GetDocument();
     const ScViewOptions& rOpts = pViewData->GetOptions();
     bool bIsTiledRendering = comphelper::LibreOfficeKit::isActive();
+    bool bNoBackgroundAndGrid = bIsTiledRendering
+                                && comphelper::LibreOfficeKit::isCompatFlagSet(
+                                       comphelper::LibreOfficeKit::Compat::scNoGridBackground);
 
     SCTAB nTab = aOutputData.nTab;
     SCCOL nX1 = aOutputData.nX1;
@@ -710,16 +713,16 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
         DrawRedraw( aOutputData, SC_LAYER_BACK );
     }
     else
-        aOutputData.SetSolidBackground(true);
+        aOutputData.SetSolidBackground(!bNoBackgroundAndGrid);
 
     aOutputData.DrawDocumentBackground();
 
-    if ( bGridFirst && ( bGrid || bPage ) )
+    if (bGridFirst && (bGrid || bPage) && !bNoBackgroundAndGrid)
         aOutputData.DrawGrid(*pContentDev, bGrid, bPage);
 
     aOutputData.DrawBackground(*pContentDev);
 
-    if ( !bGridFirst && ( bGrid || bPage ) )
+    if (!bGridFirst && (bGrid || bPage) && !bNoBackgroundAndGrid)
         aOutputData.DrawGrid(*pContentDev, bGrid, bPage);
 
     pContentDev->SetMapMode(MapMode(MapUnit::MapPixel));
