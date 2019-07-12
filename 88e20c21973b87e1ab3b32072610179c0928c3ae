@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_141cd768",
+        "filename": "oox/source/export/chartexport.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 525,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2019-07-12T14:35:54Z",
+      "side": 1,
+      "message": "It needs a clean-up for 3 or more categories, see next comments.",
+      "range": {
+        "startLine": 511,
+        "startChar": 23,
+        "endLine": 525,
+        "endChar": 49
+      },
+      "revId": "88e20c21973b87e1ab3b32072610179c0928c3ae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_54124f5a",
+        "filename": "oox/source/export/chartexport.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 551,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2019-07-12T14:35:54Z",
+      "side": 1,
+      "message": "I\u0027ve made a clean-up here to support 3 or more categories. That is work in LibreOffice, maybe in MSO, too.",
+      "range": {
+        "startLine": 547,
+        "startChar": 24,
+        "endLine": 551,
+        "endChar": 29
+      },
+      "revId": "88e20c21973b87e1ab3b32072610179c0928c3ae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
