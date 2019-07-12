@@ -45,6 +45,7 @@
 #include <editeng/wghtitem.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <sfx2/bindings.hxx>
+#include <sfx2/dispatch.hxx>
 #include <sfx2/msg.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/objsh.hxx>
@@ -627,6 +628,27 @@ void ScEditShell::Execute( SfxRequest& rReq )
                         ScGlobal::OpenURL( pURLField->GetURL(), pURLField->GetTargetFrame() );
                     return;
                 }
+        case SID_EDIT_HYPERLINK:
+            {
+                // Ensure the field is selected first
+                pEditView->GetFieldAtCursor();
+                pViewData->GetViewShell()->GetViewFrame()->GetDispatcher()->Execute(
+                    SID_HYPERLINK_DIALOG);
+            }
+        break;
+        case SID_REMOVE_HYPERLINK:
+            {
+                // Ensure the field is selected first
+                pEditView->GetFieldAtCursor();
+                const SvxURLField* pURLField = GetURLField();
+                if (pURLField)
+                {
+                    ESelection aSel = pEditView->GetSelection();
+                    pEditView->GetEditEngine()->QuickInsertText(pURLField->GetRepresentation(), aSel);
+                }
+
+            }
+        break;
 
         case FN_INSERT_SOFT_HYPHEN:
             lclInsertCharacter( pTableView, pTopView, CHAR_SHY );
@@ -752,6 +774,8 @@ void ScEditShell::GetState( SfxItemSet& rSet )
                 break;
 
             case SID_OPEN_HYPERLINK:
+            case SID_EDIT_HYPERLINK:
+            case SID_REMOVE_HYPERLINK:
                 {
                     if ( !GetURLField() )
                         rSet.DisableItem( nWhich );

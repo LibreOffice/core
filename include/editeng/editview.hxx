@@ -29,6 +29,7 @@
 #include <vcl/errcode.hxx>
 #include <vcl/vclptr.hxx>
 #include <editeng/editstat.hxx>
+#include <editeng/flditem.hxx>
 #include <svl/languageoptions.hxx>
 #include <editeng/editdata.hxx>
 #include <com/sun/star/uno/Reference.h>
@@ -276,6 +277,8 @@ public:
     const SvxFieldItem* GetField( const Point& rPos, sal_Int32* pnPara = nullptr, sal_Int32* pnPos = nullptr ) const;
 
     const SvxFieldItem* GetFieldAtSelection() const;
+    /// Select and return the field at the current cursor position
+    const SvxFieldData* GetFieldAtCursor();
 
     void            SetInvalidateMore( sal_uInt16 nPixel );
     sal_uInt16      GetInvalidateMore() const;
