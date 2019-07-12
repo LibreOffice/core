@@ -4909,6 +4909,9 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
                 bUnipoll = true;
             else if (it == "profile_events")
                 bProfileZones = true;
+            else if (it == "sc_no_grid_bg")
+                comphelper::LibreOfficeKit::setCompatFlag(
+                    comphelper::LibreOfficeKit::Compat::scNoGridBackground);
         }
     }
 
