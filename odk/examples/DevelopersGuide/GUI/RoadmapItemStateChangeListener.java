@@ -53,7 +53,7 @@ public class RoadmapItemStateChangeListener implements XItemListener {
             XPropertySet xDialogModelPropertySet = UnoRuntime.queryInterface(XPropertySet.class, m_xMSFDialogModel);
             int nOldStep = ((Integer) xDialogModelPropertySet.getPropertyValue("Step")).intValue();
             // in the following line "ID" and "Step" are mixed together.
-            // In fact in this case they denot the same
+            // In fact in this case they denote the same
             if (nNewID != nOldStep){
                 xDialogModelPropertySet.setPropertyValue("Step", Integer.valueOf(nNewID));
             }

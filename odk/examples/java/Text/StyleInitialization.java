@@ -36,7 +36,7 @@
 
 // comment: Step 1: get the Desktop object from the office
 //          Step 2: open an empty text document
-//          Step 3: enter a example text
+//          Step 3: enter an example text
 //          Step 4: use the paragraph collection
 //          Step 5: apply a different paragraph style on the paragraphs
 
@@ -49,7 +49,7 @@ public class StyleInitialization {
     public static void main(String args[]) {
         // You need the desktop to create a document
         // The getDesktop method does the UNO bootstrapping, gets the
-        // remote servie manager and the desktop object.
+        // remote service manager and the desktop object.
         com.sun.star.frame.XDesktop xDesktop = null;
         xDesktop = getDesktop();
 
@@ -111,7 +111,7 @@ public class StyleInitialization {
             // END: 'Style basics' Section from the Tutorial
 
             // There are two way to travel through the paragraphs, with a
-            // paragraph cursor, or a enumeration.
+            // paragraph cursor, or an enumeration.
             // You find both ways in this example
 
             // The first way, with the paragraph cursor
@@ -127,7 +127,7 @@ public class StyleInitialization {
             xEnumerationAccess = UnoRuntime.queryInterface(
                 com.sun.star.container.XEnumerationAccess.class, xText );
 
-            // the enumeration contains all paragraph form the document
+            // the enumeration contains all paragraph from the document
             com.sun.star.container.XEnumeration xParagraphEnumeration = null;
             xParagraphEnumeration = xEnumerationAccess.createEnumeration();
 
@@ -187,7 +187,7 @@ public class StyleInitialization {
             xParaStyleCollection = UnoRuntime.queryInterface(
                 com.sun.star.container.XNameContainer.class, xNameAccess.getByName( "ParagraphStyles" ));
 
-            // create a array from strings with the name of all paragraph styles from the text document
+            // create an array from strings with the name of all paragraph styles from the text document
             String[] sElementNames = xParaStyleCollection.getElementNames();
             int iElementCount = sElementNames.length;
 

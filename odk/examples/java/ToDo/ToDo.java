@@ -742,7 +742,7 @@ public class ToDo {
                     vectorHolidays.add(
                     new Double( intEasterSunday + 1 ) );
 
-                    // Labour Day
+                    // Labor Day
                     vectorHolidays.add( xfunctionaccess.callFunction(
                                                    "DATE",
                                                    new Object[] {

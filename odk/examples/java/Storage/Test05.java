@@ -180,7 +180,7 @@ public class Test05 implements StorageTest {
             try
             {
                 xSubStream1.getInputStream();
-                m_aTestHelper.Error( "Writeable substream was not disposed!" );
+                m_aTestHelper.Error( "Writable substream was not disposed!" );
                 return false;
             }
             catch ( com.sun.star.lang.DisposedException de )
