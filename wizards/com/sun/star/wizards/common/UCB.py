@@ -34,7 +34,7 @@ from com.sun.star.ucb.TransferCommandOperation import COPY
 
 # This class is used to copy the content of a folder to
 # another folder.
-# There is an incosistency with argument order.
+# There is an inconsistency with argument order.
 # It should be always: dir,filename.
 class UCB(object):
 

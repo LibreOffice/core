@@ -141,7 +141,7 @@ public class DesignTemplate
         if (a == null)
         {
             a = SectionEmptyObject.create();
-            // a empty group has to use bold font
+            // an empty group has to use bold font
             a.setPropertyValue("CharWeight", new Float(com.sun.star.awt.FontWeight.BOLD));
         }
         return a;
@@ -259,7 +259,7 @@ public class DesignTemplate
     }
 
     /**
-     * create a new DesignTemplate by try to load a otr file from the given path.
+     * create a new DesignTemplate by try to load an otr file from the given path.
      * Internally we store the loaded ReportDefinition.
      */
     public static DesignTemplate create(XMultiServiceFactory _xMSF, String _sPath)

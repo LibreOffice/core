@@ -88,7 +88,7 @@ public interface IReportDocument
     void setFieldTitles(final String[] sFieldTitles);
 
     /**
-     * Change a the name of the 'title' of one field.
+     * Change the name of the 'title' of one field.
      * It is possible to give all element names new names which are used as
      * element title of a given element name.
      * This is only used as a preview
@@ -194,7 +194,7 @@ public interface IReportDocument
     void insertDatabaseDatatoReportDocument(XMultiServiceFactory xMSF);
     // ???
     /**
-     * set a internal variable to stop a maybe longer DB access.
+     * set an internal variable to stop a maybe longer DB access.
      */
     void StopProcess(); // cancel
 
