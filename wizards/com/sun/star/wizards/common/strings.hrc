@@ -21,7 +21,7 @@ gettext.textdomain('wiz')
 
 def NC_(context, string):
     # Contextual strings are stored with the concatenation of
-    # the context, a EOT byte, and the original string, instead of the original string
+    # the context, an EOT byte, and the original string, instead of the original string
     # see https://www.gnu.org/software/gettext/manual/html_node/MO-Files.html
     ret = gettext.gettext(context + chr(4) + string)
     if ret.find(chr(4)) == -1:

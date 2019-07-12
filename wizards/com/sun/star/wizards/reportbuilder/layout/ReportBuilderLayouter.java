@@ -87,7 +87,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
     }
 
     /**
-     * The Constructor is protected, this is a abstract class, use Tabular or other to create an instance.
+     * The Constructor is protected, this is an abstract class, use Tabular or other to create an instance.
      * @param _xDefinitionAccess
      * @param _aResource
      */
@@ -707,7 +707,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
 
 
     /**
-     * Insert a already formatted field name into a given section
+     * Insert an already formatted field name into a given section
      *
      * Use 'convertToFieldName(dbfield)' to convert a dbfield name in the right.
      *

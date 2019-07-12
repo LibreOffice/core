@@ -169,7 +169,7 @@ class TextDocument(object):
 
     '''
     This method sets the Author of a Wizard-generated template correctly
-    and adds a explanatory sentence to the template description.
+    and adds an explanatory sentence to the template description.
     @param WizardName The name of the Wizard.
     @param TemplateDescription The old Description which is being
     appended with another sentence.

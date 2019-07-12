@@ -356,7 +356,7 @@ Dim sPrevMimeTypeorExtension as String
 					Elseif iGeneralOverwrite = SBOVERWRITENEVER Then
 						bDoSave = False					
 					ElseIf ((iGeneralOverWrite = SBOVERWRITEQUERY) OR (iGeneralOverwrite = SBOVERWRITECANCEL)) Then
-						&apos; Todo: According to AS there might come a new feature that storeasUrl could possibly rise a UI dialog. 
+						&apos; Todo: According to AS there might come a new feature that storeasUrl could possibly rise a UI dialog.
 						&apos; In this case my own UI becomes obsolete
 						sCurFileExists = ReplaceString(sFileExists, ConvertFromUrl(sTargetUrl), &quot;&lt;1&gt;&quot;)
 						sCurFileExists = ReplaceString(sCurFileExists, chr(13), &quot;&lt;CR&gt;&quot;)

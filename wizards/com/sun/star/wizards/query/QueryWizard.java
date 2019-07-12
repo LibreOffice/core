@@ -388,7 +388,7 @@ public class QueryWizard extends DatabaseObjectWizard
         boolean bEnabled = NewItems.length > 0;
         setControlProperty("btnWizardNext", PropertyNames.PROPERTY_ENABLED, bEnabled);
         setControlProperty("btnWizardFinish", PropertyNames.PROPERTY_ENABLED, bEnabled);
-        enableRoadmapItems(bEnabled); // Note: Performancewise this could be improved
+        enableRoadmapItems(bEnabled); // Note: Performance wise this could be improved
     }
 
     private class FieldSelectionListener implements com.sun.star.wizards.ui.XFieldSelectionListener
