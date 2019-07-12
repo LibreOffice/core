@@ -51,6 +51,7 @@ class SwField;
 class SwLabFormatPage;
 class SwLabRec;
 class SwAsciiOptions;
+class SwDoc;
 class SwDocShell;
 class SvStream;
 class SwWrtShell;
@@ -417,7 +418,7 @@ public:
 
     virtual VclPtr<SfxAbstractTabDialog> CreateSwEnvDlg ( vcl::Window* pParent, const SfxItemSet& rSet, SwWrtShell* pWrtSh, Printer* pPrt, bool bInsert ) = 0;
 
-    virtual VclPtr<VclAbstractDialog> CreateDateFormFieldDialog(sw::mark::IFieldmark* pDateField) = 0;
+    virtual VclPtr<VclAbstractDialog> CreateDateFormFieldDialog(sw::mark::IFieldmark* pDateField, SwDoc* pDoc) = 0;
 
     virtual VclPtr<AbstractSwLabDlg> CreateSwLabDlg(const SfxItemSet& rSet,
                                                      SwDBManager* pDBManager, bool bLabel) = 0;

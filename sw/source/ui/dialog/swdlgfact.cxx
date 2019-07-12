@@ -783,9 +783,9 @@ VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateDropDownFormFieldD
     return VclPtr<VclAbstractDialog_Impl>::Create( pDlg );
 }
 
-VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateDateFormFieldDialog(sw::mark::IFieldmark* pDateField)
+VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateDateFormFieldDialog(sw::mark::IFieldmark* pDateField, SwDoc* pDoc)
 {
-    VclPtr<sw::DateFormFieldDialog> pDlg = VclPtr<sw::DateFormFieldDialog>::Create(nullptr, pDateField);
+    VclPtr<sw::DateFormFieldDialog> pDlg = VclPtr<sw::DateFormFieldDialog>::Create(nullptr, pDateField, pDoc);
     return VclPtr<VclAbstractDialog_Impl>::Create( pDlg );
 }
 
