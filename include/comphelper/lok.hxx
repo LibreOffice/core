@@ -72,6 +72,16 @@ COMPHELPER_DLLPUBLIC void setRangeHeaders(bool bTiledAnnotations);
 /// Check if range based header data is enabled
 COMPHELPER_DLLPUBLIC bool isRangeHeaders();
 
+enum Compat : sal_uInt32
+{
+    none = 0,
+    scNoGridBackground = 1,
+};
+/// Set compatibility flags
+COMPHELPER_DLLPUBLIC void setCompatFlag(Compat flag);
+/// Get compatibility flags
+COMPHELPER_DLLPUBLIC bool isCompatFlagSet(Compat flag);
+
 
 /// Check whether clients want viewId in visible cursor invalidation payload.
 COMPHELPER_DLLPUBLIC bool isViewIdForVisCursorInvalidation();
