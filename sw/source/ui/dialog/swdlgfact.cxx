@@ -39,6 +39,7 @@
 #include <dbinsdlg.hxx>
 #include <docfnote.hxx>
 #include <docstdlg.hxx>
+#include <DateFormFieldDialog.hxx>
 #include <DropDownFieldDialog.hxx>
 #include <DropDownFormFieldDialog.hxx>
 #include <envlop.hxx>
@@ -102,6 +103,7 @@ IMPL_ABSTDLG_BASE(AbstractSwConvertTableDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractSwInsertDBColAutoPilot_Impl);
 IMPL_ABSTDLG_BASE(AbstractDropDownFieldDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractDropDownFormFieldDialog_Impl);
+IMPL_ABSTDLG_BASE(AbstractDateFormFieldDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractSwLabDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractSwSelGlossaryDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractSwAutoFormatDlg_Impl);
@@ -778,6 +780,12 @@ VclPtr<AbstractDropDownFieldDialog> SwAbstractDialogFactory_Impl::CreateDropDown
 VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateDropDownFormFieldDialog(sw::mark::IFieldmark* pDropDownField)
 {
     VclPtr<sw::DropDownFormFieldDialog> pDlg = VclPtr<sw::DropDownFormFieldDialog>::Create(nullptr, pDropDownField);
+    return VclPtr<VclAbstractDialog_Impl>::Create( pDlg );
+}
+
+VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateDateFormFieldDialog(sw::mark::IFieldmark* pDateField)
+{
+    VclPtr<sw::DateFormFieldDialog> pDlg = VclPtr<sw::DateFormFieldDialog>::Create(nullptr, pDateField);
     return VclPtr<VclAbstractDialog_Impl>::Create( pDlg );
 }
 
