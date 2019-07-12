@@ -142,7 +142,7 @@ public:
 
         This predicate returns true, if this node is
         neither time- nor ViewInfo dependent. This allows
-        for certain obtimizations, i.e. not the full
+        for certain optimizations, i.e. not the full
         expression tree needs be represented by
         ExpressionNodes.
 
