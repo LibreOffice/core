@@ -710,16 +710,16 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
         DrawRedraw( aOutputData, SC_LAYER_BACK );
     }
     else
-        aOutputData.SetSolidBackground(true);
+        aOutputData.SetSolidBackground(!bIsTiledRendering);
 
     aOutputData.DrawDocumentBackground();
 
-    if ( bGridFirst && ( bGrid || bPage ) )
+    if (bGridFirst && (bGrid || bPage) && !bIsTiledRendering)
         aOutputData.DrawGrid(*pContentDev, bGrid, bPage);
 
     aOutputData.DrawBackground(*pContentDev);
 
-    if ( !bGridFirst && ( bGrid || bPage ) )
+    if (!bGridFirst && (bGrid || bPage) && !bIsTiledRendering)
         aOutputData.DrawGrid(*pContentDev, bGrid, bPage);
 
     pContentDev->SetMapMode(MapMode(MapUnit::MapPixel));
