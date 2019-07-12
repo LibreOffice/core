@@ -85,7 +85,7 @@ public:
     void                    SetDefaults();
 
     void                    SetOption( ScViewOption eOpt, bool bNew )    { aOptArr[eOpt] = bNew; }
-    bool                    GetOption( ScViewOption eOpt ) const         { return aOptArr[eOpt]; }
+    bool                    GetOption( ScViewOption eOpt ) const;
 
     void                    SetObjMode( ScVObjType eObj, ScVObjMode eMode ) { aModeArr[eObj] = eMode; }
     ScVObjMode              GetObjMode( ScVObjType eObj ) const             { return aModeArr[eObj]; }
