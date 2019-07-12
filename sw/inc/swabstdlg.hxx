@@ -412,10 +412,12 @@ public:
 
     virtual VclPtr<AbstractDropDownFieldDialog> CreateDropDownFieldDialog(SwWrtShell &rSh,
         SwField* pField, bool bPrevButton, bool bNextButton) = 0;
+
     virtual VclPtr<VclAbstractDialog> CreateDropDownFormFieldDialog(sw::mark::IFieldmark* pDropDownField) = 0;
 
     virtual VclPtr<SfxAbstractTabDialog> CreateSwEnvDlg ( vcl::Window* pParent, const SfxItemSet& rSet, SwWrtShell* pWrtSh, Printer* pPrt, bool bInsert ) = 0;
 
+    virtual VclPtr<VclAbstractDialog> CreateDateFormFieldDialog(sw::mark::IFieldmark* pDateField) = 0;
 
     virtual VclPtr<AbstractSwLabDlg> CreateSwLabDlg(const SfxItemSet& rSet,
                                                      SwDBManager* pDBManager, bool bLabel) = 0;
