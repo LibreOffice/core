@@ -44,6 +44,9 @@
 #include <scabstdlg.hxx>
 #include <columnspanset.hxx>
 #include <comphelper/lok.hxx>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <comphelper/lok.hxx>
+#include <sfx2/lokhelper.hxx>
 
 #include <memory>
 
@@ -165,6 +168,15 @@ void ScCellShell::Execute( SfxRequest& rReq )
             {
                 if ( pReqArgs )
                 {
+                    if (comphelper::LibreOfficeKit::isActive())
+                    {
+                        // Let the client know about our entry, so if they save
+                        // (say because the user closes the document or window,)
+                        // this change gets persisted (assuming DontTerminateEdit
+                        // is set to false in the .uno:Save command).
+                        SfxLokHelper::notifyAllViews(LOK_CALLBACK_STATE_CHANGED, ".uno:ModifiedStatus=true");
+                    }
+
                     OUString aStr( static_cast<const SfxStringItem&>(pReqArgs->
                                     Get( SID_ENTER_STRING )).GetValue() );
                     const SfxPoolItem* pDontCommitItem;
