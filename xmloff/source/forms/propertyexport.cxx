@@ -243,7 +243,7 @@ namespace xmloff
     {
         DBG_CHECK_PROPERTY( _rPropertyName, OUString );
 
-        // no try-catch here, this would be to expensive. The outer scope has to handle exceptions (which should not
+        // no try-catch here, this would be too expensive. The outer scope has to handle exceptions (which should not
         // happen if we're used correctly :)
 
         // this is way simple, as we don't need to convert anything (the property already is a string)

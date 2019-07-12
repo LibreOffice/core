@@ -708,7 +708,7 @@ void XMLTextFrameContext_Impl::Create()
     }
 
     // Make adding the shape to Z-Ordering dependent from if we are
-    // inside a inside_deleted_section (redlining). That is necessary
+    // inside an inside_deleted_section (redlining). That is necessary
     // since the shape will be removed again later. It would lead to
     // errors if it would stay inside the Z-Ordering. Thus, the
     // easiest way to solve that conflict is to not add it here.

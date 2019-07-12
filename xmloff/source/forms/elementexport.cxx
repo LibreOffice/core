@@ -1310,7 +1310,7 @@ namespace xmloff
             }
             if (i < nValues)
             {
-                // there is an value at this position
+                // there is a value at this position
                 AddAttribute(
                     OAttributeMetaData::getCommonControlAttributeNamespace(CCAFlags::Value),
                     OAttributeMetaData::getCommonControlAttributeName(CCAFlags::Value),

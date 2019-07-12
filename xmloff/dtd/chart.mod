@@ -186,7 +186,7 @@
 		  table:cell-range-address %cell-range-address; #IMPLIED >
 
 <!--
-	each series element must have an cell-range-address element that points
+	each series element must have a cell-range-address element that points
 	to the underlying table data.
 	Impl. Note: Internally all href elements are merged to one table range
 	that represents the data for the whole chart

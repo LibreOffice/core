@@ -171,7 +171,7 @@ void SvXMLImportPropertyMapper::importXML(
                         sal_Int32 nReference = -1;
 
                         // if this is a multi attribute check if another attribute already set
-                        // this any. If so use this as a initial value
+                        // this any. If so use this as an initial value
                         if( ( nFlags & MID_FLAG_MERGE_PROPERTY ) != 0 )
                         {
                             const OUString aAPIName( maPropMapper->GetEntryAPIName( nIndex ) );

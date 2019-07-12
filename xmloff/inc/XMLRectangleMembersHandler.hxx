@@ -39,13 +39,13 @@ public:
     // Just needed for virtual destruction
     virtual ~XMLRectangleMembersHdl() override;
 
-    /// Imports the given value in cas of the given XML-data-type
+    /// Imports the given value in case of the given XML-data-type
     virtual bool importXML(
             const OUString& rStrImpValue,
             css::uno::Any& rValue,
             const SvXMLUnitConverter& rUnitConverter ) const override;
 
-    /// Exports the given value in cas of the given XML-data-type
+    /// Exports the given value in case of the given XML-data-type
     virtual bool exportXML(
             OUString& rStrExpValue,
             const css::uno::Any& rValue,

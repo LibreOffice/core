@@ -394,7 +394,7 @@ static bool has_states( const std::vector< XMLPropertyState >& xPropStates )
                     mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_STYLE_NAME, sStyleName );
             }
 
-            // TODO: All columns first have to be checked if some ones
+            // TODO: all columns first have to be checked if someone
             // have identical properties. If yes, attr table:number-columns-repeated
             // has to be written.
             SvXMLElementExport tableColumnElement( mrExport, XML_NAMESPACE_TABLE, XML_TABLE_COLUMN, true, true );

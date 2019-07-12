@@ -105,7 +105,7 @@ namespace xmloff
                             m_aCurrentPageReferring;
             // the same for the map of referring controls
 
-        // TODO: To avoid this construct above, and to have a cleaner implementation, an class encapsulating the
+        // TODO: To avoid this construct above, and to have a cleaner implementation, a class encapsulating the
         // export of a single page should be introduced.
 
         typedef std::map<css::uno::Reference<css::beans::XPropertySet>, sal_Int32> MapPropertySet2Int;

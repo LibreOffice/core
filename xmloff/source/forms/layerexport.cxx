@@ -198,7 +198,7 @@ namespace xmloff
                     // without this, a lot of stuff in the export routines may fail
                     continue;
 
-                // if the element is part of a ignore list, we are not allowed to export it
+                // if the element is part of an ignore list, we are not allowed to export it
                 if ( m_aIgnoreList.end() != m_aIgnoreList.find( xCurrentProps ) )
                     continue;
 

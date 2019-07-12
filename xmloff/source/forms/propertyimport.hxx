@@ -121,7 +121,7 @@ namespace xmloff
             const OUString& _rLocalName,
             const OUString& _rValue);
 
-        /** determine if the element imported by the object had an given attribute.
+        /** determine if the element imported by the object had a given attribute.
             <p>Please be aware of the fact that the name given must be a local name, i.e. not contain a namespace.
             All form relevant attributes are in the same namespace, so this would be an redundant information.</p>
         */
