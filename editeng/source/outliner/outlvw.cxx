@@ -1319,30 +1319,7 @@ const SvxFieldItem* OutlinerView::GetFieldAtSelection() const
 
 const SvxFieldData* OutlinerView::GetFieldAtCursor()
 {
-    const SvxFieldItem* pFieldItem = GetFieldAtSelection();
-    if (pFieldItem)
-    {
-        // Make sure the whole field is selected
-        ESelection aSel = GetSelection();
-        if (aSel.nStartPos == aSel.nEndPos)
-        {
-            aSel.nEndPos++;
-            SetSelection(aSel);
-        }
-    }
-    if (!pFieldItem)
-    {
-        // Cursor probably behind the field - extend selection to select the field
-        ESelection aSel = GetSelection();
-        if (aSel.nStartPos == aSel.nEndPos)
-        {
-            aSel.nStartPos--;
-            SetSelection(aSel);
-            pFieldItem = GetFieldAtSelection();
-        }
-    }
-
-    return pFieldItem ? pFieldItem->GetField() : nullptr;
+    return pEditView->GetFieldAtCursor();
 }
 
 void OutlinerView::SetInvalidateMore( sal_uInt16 nPixel )

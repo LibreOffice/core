@@ -35,6 +35,7 @@
 #include <editeng/lrspitem.hxx>
 #include <editeng/lspcitem.hxx>
 #include <editeng/ulspitem.hxx>
+#include <editeng/urlfieldhelper.hxx>
 #include <svx/hlnkitem.hxx>
 #include <svx/svdoutl.hxx>
 #include <svx/sdooitm.hxx>
@@ -328,6 +329,20 @@ void ScDrawTextObjectBar::Execute( SfxRequest &rReq )
             }
             break;
 
+        case SID_EDIT_HYPERLINK:
+            {
+                // Ensure the field is selected first
+                pOutView->GetFieldAtCursor();
+                pViewData->GetViewShell()->GetViewFrame()->GetDispatcher()->Execute(SID_HYPERLINK_DIALOG);
+            }
+            break;
+
+        case SID_REMOVE_HYPERLINK:
+            {
+                URLFieldHelper::RemoveURLField(pOutliner, pOutView);
+            }
+            break;
+
         case SID_ENABLE_HYPHENATION:
         case SID_TEXTDIRECTION_LEFT_TO_RIGHT:
         case SID_TEXTDIRECTION_TOP_TO_BOTTOM:
@@ -406,7 +421,9 @@ void ScDrawTextObjectBar::GetState( SfxItemSet& rSet )
         rSet.Put(aHLinkItem);
     }
 
-    if ( rSet.GetItemState( SID_OPEN_HYPERLINK ) != SfxItemState::UNKNOWN )
+    if (rSet.GetItemState(SID_OPEN_HYPERLINK) != SfxItemState::UNKNOWN
+        || rSet.GetItemState(SID_EDIT_HYPERLINK) != SfxItemState::UNKNOWN
+        || rSet.GetItemState(SID_REMOVE_HYPERLINK) != SfxItemState::UNKNOWN)
     {
         SdrView* pView = pViewData->GetScDrawView();
         OutlinerView* pOutView = pView->GetTextEditOutlinerView();
@@ -421,7 +438,11 @@ void ScDrawTextObjectBar::GetState( SfxItemSet& rSet )
             }
         }
         if( !bEnable )
+        {
             rSet.DisableItem( SID_OPEN_HYPERLINK );
+            rSet.DisableItem( SID_EDIT_HYPERLINK );
+            rSet.DisableItem( SID_REMOVE_HYPERLINK );
+        }
     }
 
     if( rSet.GetItemState( SID_TRANSLITERATE_HALFWIDTH ) != SfxItemState::UNKNOWN )
