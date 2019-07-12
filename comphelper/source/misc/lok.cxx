@@ -35,6 +35,8 @@ static bool g_bViewIdForVisCursorInvalidation(false);
 
 static bool g_bLocalRendering(false);
 
+static bool g_bNoSpreadsheetBackgroundAndGrid(false);
+
 static LanguageTag g_aLanguageTag("en-US", true);
 
 /// Scaling of the cairo or CoreGraphics canvas painting for HiDPI or zooming in Calc.
@@ -129,6 +131,13 @@ bool isLocalRendering()
 {
     return g_bLocalRendering;
 }
+
+void setNoSpreadsheetBackgroundAndGrid(bool bDontDrawThem)
+{
+    g_bNoSpreadsheetBackgroundAndGrid = bDontDrawThem;
+}
+
+bool isNoSpreadsheetBackgroundAndGrid() { return g_bNoSpreadsheetBackgroundAndGrid; }
 
 void setLanguageTag(const LanguageTag& languageTag)
 {

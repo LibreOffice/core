@@ -71,6 +71,10 @@ COMPHELPER_DLLPUBLIC bool isTiledAnnotations();
 COMPHELPER_DLLPUBLIC void setRangeHeaders(bool bTiledAnnotations);
 /// Check if range based header data is enabled
 COMPHELPER_DLLPUBLIC bool isRangeHeaders();
+/// Set if we don't want spreadsheet background and grid painted to tiles
+COMPHELPER_DLLPUBLIC void setNoSpreadsheetBackgroundAndGrid(bool bDontDrawThem);
+/// Check if spreadsheet background and grid is disabled on tiles
+COMPHELPER_DLLPUBLIC bool isNoSpreadsheetBackgroundAndGrid();
 
 
 /// Check whether clients want viewId in visible cursor invalidation payload.
