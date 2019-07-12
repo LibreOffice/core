@@ -1,0 +1,188 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_114f09be",
+        "filename": "shell/source/backends/desktopbe/desktopbackend.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 307,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2019-07-12T12:57:02Z",
+      "side": 1,
+      "message": "\"KF5\" -\u003e \"PLASMA5\"",
+      "range": {
+        "startLine": 307,
+        "startChar": 20,
+        "endLine": 307,
+        "endChar": 25
+      },
+      "revId": "bfe77b4e62c24115a62a960b6835077f17c87d3c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_314c8dc6",
+        "filename": "shell/source/backends/kf5be/kf5backend.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2019-07-12T12:57:02Z",
+      "side": 1,
+      "message": "that stays \"gtk3_kde5\"",
+      "range": {
+        "startLine": 169,
+        "startChar": 81,
+        "endLine": 169,
+        "endChar": 88
+      },
+      "revId": "bfe77b4e62c24115a62a960b6835077f17c87d3c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_d1c67117",
+        "filename": "shell/source/backends/kf5be/kf5backend.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2019-07-12T12:57:02Z",
+      "side": 1,
+      "message": "-\u003e \"PLASMA5\"",
+      "range": {
+        "startLine": 215,
+        "startChar": 24,
+        "endLine": 215,
+        "endChar": 27
+      },
+      "revId": "bfe77b4e62c24115a62a960b6835077f17c87d3c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_91d0f9cb",
+        "filename": "svtools/source/uno/fpicker.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2019-07-12T12:57:02Z",
+      "side": 1,
+      "message": "should be \"PLASMA5\" IMHO",
+      "range": {
+        "startLine": 42,
+        "startChar": 50,
+        "endLine": 42,
+        "endChar": 54
+      },
+      "revId": "bfe77b4e62c24115a62a960b6835077f17c87d3c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_b1d5fdbb",
+        "filename": "svtools/source/uno/fpicker.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2019-07-12T12:57:02Z",
+      "side": 1,
+      "message": "same here",
+      "range": {
+        "startLine": 116,
+        "startChar": 49,
+        "endLine": 116,
+        "endChar": 55
+      },
+      "revId": "bfe77b4e62c24115a62a960b6835077f17c87d3c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_51da61e9",
+        "filename": "vcl/qa/cppunit/app/test_IconThemeSelector.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2019-07-12T12:57:02Z",
+      "side": 1,
+      "message": "\"plasma5\"? (and in the output)",
+      "range": {
+        "startLine": 78,
+        "startChar": 64,
+        "endLine": 78,
+        "endChar": 68
+      },
+      "revId": "bfe77b4e62c24115a62a960b6835077f17c87d3c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_71d765c1",
+        "filename": "vcl/source/app/IconThemeSelector.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2019-07-12T12:57:02Z",
+      "side": 1,
+      "message": "-\u003e \"plasma5\"",
+      "range": {
+        "startLine": 58,
+        "startChar": 50,
+        "endLine": 58,
+        "endChar": 55
+      },
+      "revId": "bfe77b4e62c24115a62a960b6835077f17c87d3c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_11e4e9ab",
+        "filename": "vcl/unx/kf5/KF5SalInstance.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2019-07-12T12:57:02Z",
+      "side": 1,
+      "message": "\"PLASMA5\"",
+      "range": {
+        "startLine": 69,
+        "startChar": 49,
+        "endLine": 69,
+        "endChar": 52
+      },
+      "revId": "bfe77b4e62c24115a62a960b6835077f17c87d3c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
