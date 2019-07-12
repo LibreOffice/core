@@ -388,7 +388,7 @@ public:
     long                Left() const    { return nLeft;   }
     long                Right() const;
     long                Top() const     { return nTop;    }
-    long                Bottom() const  { return nBottom; }
+    long                Bottom() const;
 
     void                SetLeft(long v)    { nLeft = v;   }
     void                SetRight(long v)   { nRight = v;  }

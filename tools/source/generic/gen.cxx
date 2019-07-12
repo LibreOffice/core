@@ -18,6 +18,7 @@
  */
 
 #include <sal/config.h>
+#include <sal/log.hxx>
 
 #include <algorithm>
 #include <cassert>
@@ -295,6 +296,11 @@ void tools::Rectangle::setY( long y )
 long tools::Rectangle::Right() const
 {
     return nRight == RECT_EMPTY ? nLeft : nRight;
+}
+
+long tools::Rectangle::Bottom() const
+{
+    return nBottom == RECT_EMPTY ? nTop : nBottom;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
