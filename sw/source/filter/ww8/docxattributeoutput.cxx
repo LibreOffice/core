@@ -1933,7 +1933,7 @@ void DocxAttributeOutput::WriteFormDate(const OUString& sCurrentDate, const OUSt
             pFormatter->IsNumberFormat(sCurrentDate, nFormat, dCurrentDate);
         }
 
-        // Then convert the date to a fromatter string
+        // Then convert the date to a formatted string
         nFormat = pFormatter->GetEntryKey(sDateFormat, LanguageTag(sLang).getLanguageType());
         if (nFormat == NUMBERFORMAT_ENTRY_NOT_FOUND)
         {
