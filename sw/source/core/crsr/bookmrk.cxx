@@ -41,7 +41,6 @@
 #include <DateFormFieldButton.hxx>
 #include <DropDownFormFieldButton.hxx>
 #include <svx/numfmtsh.hxx>
-#include <ndtxt.hxx>
 #include <DocumentContentOperationsManager.hxx>
 
 using namespace ::sw::mark;
