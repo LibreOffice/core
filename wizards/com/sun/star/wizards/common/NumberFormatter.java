@@ -152,7 +152,7 @@ public class NumberFormatter
             }
             else
             {
-                // TODO: throws a exception in a try catch environment, very helpful?
+                // TODO: throws an exception in a try catch environment, very helpful?
                 throw new Exception();
             }
         }

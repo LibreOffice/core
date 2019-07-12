@@ -590,7 +590,7 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener
         boolean bEnabled = NewItems.length > 0;
         setControlProperty("btnWizardNext", PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(bEnabled));
         setControlProperty("btnWizardFinish", PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(bEnabled));
-        enableRoadmapItems(bEnabled);   // Note: Performancewise this could be improved
+        enableRoadmapItems(bEnabled);   // Note: Performance wise this could be improved
     }
 
     public void textChanged(TextEvent xTextEvent)

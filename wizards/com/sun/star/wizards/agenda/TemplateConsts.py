@@ -25,7 +25,7 @@ class TemplateConsts:
     '''
     section name <b>prefix</b> for sections that contain items.
     this is also used as table name prefix, since each items section
-    must contain a table whos name is identical name to the section's name.
+    must contain a table whose name is identical name to the section's name.
     '''
     SECTION_ITEMS = "AGENDA_ITEMS"
     '''

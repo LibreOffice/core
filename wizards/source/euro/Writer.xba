@@ -31,7 +31,7 @@ Dim oCell as Object
 	While oParagraphs.HasMoreElements
 		oPara = oParagraphs.NextElement
 		If NOT oPara.supportsService(&quot;com.sun.star.text.Paragraph&quot;) Then
-			&apos; Note: As cells might be splitted or merged
+			&apos; Note: As cells might be split or merged
 			&apos; you cannot refer to them via their indices
 			sCellNames = oPara.CellNames
 			For i = 0 To Ubound(sCellNames)

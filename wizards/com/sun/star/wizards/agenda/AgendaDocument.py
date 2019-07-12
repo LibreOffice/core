@@ -629,7 +629,7 @@ class ItemsTable(object):
             self.agenda.template, name, self.section)
         self.agenda.textSectionHandler.breakLinkOfTextSection(
             self.section)
-        # we need to get a instance after linking
+        # we need to get an instance after linking
 
         ItemsTable.table = self.agenda.getTable(name)
         self.section = self.agenda.getSection(name)
