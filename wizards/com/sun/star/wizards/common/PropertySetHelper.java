@@ -133,7 +133,7 @@ public class PropertySetHelper
             }
             catch (com.sun.star.lang.IllegalArgumentException e)
             {
-                DebugHelper.writeInfo("can't convert a object to integer.");
+                DebugHelper.writeInfo("can't convert an object to integer.");
             }
         }
         return nValue;
@@ -179,7 +179,7 @@ public class PropertySetHelper
             }
             catch (com.sun.star.lang.IllegalArgumentException e)
             {
-                DebugHelper.writeInfo("can't convert a object to integer.");
+                DebugHelper.writeInfo("can't convert an object to integer.");
             }
         }
         return nValue;
@@ -221,7 +221,7 @@ public class PropertySetHelper
             }
             catch (com.sun.star.lang.IllegalArgumentException e)
             {
-                DebugHelper.writeInfo("can't convert a object to string.");
+                DebugHelper.writeInfo("can't convert an object to string.");
             }
         }
         return sValue;

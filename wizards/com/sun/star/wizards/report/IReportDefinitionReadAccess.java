@@ -36,7 +36,7 @@ public interface IReportDefinitionReadAccess
 
 
     /**
-     * This ServiceFactory is the 'global' Service Factory, which knows all and every thing in the program.
+     * This ServiceFactory is the 'global' Service Factory, which knows all and everything in the program.
      * @return the global service factory of the program
      */
     XMultiServiceFactory getGlobalMSF();

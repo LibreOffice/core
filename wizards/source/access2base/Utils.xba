@@ -209,7 +209,7 @@ End Function	&apos;	CStr			V0.9.5
 
 REM -----------------------------------------------------------------------------------------------------------------------
 Public Function _CVar(ByRef psArg As String, ByVal Optional pbStrDate As Boolean) As Variant
-&apos;	psArg is presumed an output of _CStr (stored in the mean time in a text file f.i.)
+&apos;	psArg is presumed an output of _CStr (stored in the meantime in a text file f.i.)
 &apos;	_CVar returns the corresponding original variant variable or Null/Nothing if not possible
 &apos;	Return values may of types Array, Long, Double, Date, Boolean, String, Null or Empty
 &apos;	pbStrDate = True keeps dates as strings
@@ -1027,7 +1027,7 @@ Dim oEvents As Object, sEvent As String, sEventName As String, oEvent As Object
 	_RegisterDialogEventScript = False
 	If Not _hasUNOMethod(poObject, &quot;getEvents&quot;) Then Exit Function
 
-&apos;	Remove existing event, if any, than store new script code
+&apos;	Remove existing event, if any, then store new script code
 	Set oEvents = poObject.getEvents()
 	sEvent = Utils._GetEventName(psEvent)
 	sEventName = &quot;com.sun.star.awt.&quot; &amp; psListener &amp; &quot;::&quot; &amp; sEvent
