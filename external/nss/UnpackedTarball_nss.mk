@@ -25,6 +25,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,nss,\
 		external/nss/nss.mingw.patch.3) \
     external/nss/ubsan.patch.0 \
     external/nss/clang-cl.patch.0 \
+    external/nss/nss.fix-freebl-add-lcc-support.patch.1 \
     $(if $(filter IOS,$(OS)), \
         external/nss/nss-ios.patch) \
 	$(if $(filter MSC-INTEL,$(COM)-$(CPUNAME)), \
