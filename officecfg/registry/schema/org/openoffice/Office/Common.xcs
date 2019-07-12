@@ -877,6 +877,14 @@
         </info>
         <value>true</value>
       </prop>
+      <prop oor:name="ReduceTransparencyMinArea" oor:type="xs:int" oor:nillable="false">
+        <info>
+           <desc>Specifies minimal area of an object for applying "Reduce Transparency"
+           printer configuration option (removing object transparency). This value
+           is counted in percents of the printable area.</desc>
+        </info>
+        <value>25</value>
+      </prop>
     </group>
     <group oor:name="InternalMSExport">
       <info>
