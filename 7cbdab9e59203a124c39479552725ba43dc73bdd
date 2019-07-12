@@ -22,6 +22,30 @@
       "revId": "7cbdab9e59203a124c39479552725ba43dc73bdd",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_a4d2a033",
+        "filename": "oox/source/export/chartexport.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 479,
+      "author": {
+        "id": 1001901
+      },
+      "writtenOn": "2019-07-12T08:44:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bf659307_e4e5f839",
+      "range": {
+        "startLine": 442,
+        "startChar": 12,
+        "endLine": 479,
+        "endChar": 13
+      },
+      "revId": "7cbdab9e59203a124c39479552725ba43dc73bdd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
