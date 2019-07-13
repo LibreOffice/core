@@ -41,13 +41,12 @@ void SvCommandList::Append
 
 void SvCommandList::FillFromSequence( const css::uno::Sequence < css::beans::PropertyValue >& aCommandSequence )
 {
-    const sal_Int32 nCount = aCommandSequence.getLength();
     OUString aCommand, aArg;
     OUString aApiArg;
-    for( sal_Int32 nIndex=0; nIndex<nCount; nIndex++ )
+    for( const auto& rCommand : aCommandSequence )
     {
-        aCommand = aCommandSequence[nIndex].Name;
-        if( !( aCommandSequence[nIndex].Value >>= aApiArg ) )
+        aCommand = rCommand.Name;
+        if( !( rCommand.Value >>= aApiArg ) )
             return;
         aArg = aApiArg;
         Append( aCommand, aArg );

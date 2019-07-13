@@ -103,9 +103,9 @@ css::uno::Sequence< css::lang::Locale > SvxAsianConfig::GetStartEndCharLocales()
             impl_->context)->
         getElementNames());
     css::uno::Sequence< css::lang::Locale > ls(ns.getLength());
-    for (sal_Int32 i = 0; i < ns.getLength(); ++i) {
-        ls[i] = LanguageTag::convertToLocale( ns[i], false);
-    }
+    std::transform(ns.begin(), ns.end(), ls.begin(),
+        [](const OUString& rName) -> css::lang::Locale {
+            return LanguageTag::convertToLocale( rName, false); });
     return ls;
 }
 

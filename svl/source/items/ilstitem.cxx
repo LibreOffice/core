@@ -40,9 +40,7 @@ SfxIntegerListItem::SfxIntegerListItem( sal_uInt16 which, const ::std::vector < 
 SfxIntegerListItem::SfxIntegerListItem( sal_uInt16 which, const css::uno::Sequence < sal_Int32 >& rList )
     : SfxPoolItem( which )
 {
-    m_aList.resize( rList.getLength() );
-    for ( sal_Int32 n=0; n<rList.getLength(); ++n )
-        m_aList[n] = rList[n];
+    comphelper::sequenceToContainer(m_aList, rList);
 }
 
 SfxIntegerListItem::~SfxIntegerListItem()

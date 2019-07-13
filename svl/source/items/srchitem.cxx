@@ -508,91 +508,91 @@ bool SvxSearchItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId )
             if ( ( rVal >>= aSeq ) && ( aSeq.getLength() == SRCH_PARAMS ) )
             {
                 sal_Int16 nConvertedCount( 0 );
-                for ( sal_Int32 i = 0; i < aSeq.getLength(); ++i )
+                for ( const auto& rProp : aSeq )
                 {
-                    if ( aSeq[i].Name == SRCH_PARA_OPTIONS )
+                    if ( rProp.Name == SRCH_PARA_OPTIONS )
                     {
                         css::util::SearchOptions2 nTmpSearchOpt2;
-                        if ( aSeq[i].Value >>= nTmpSearchOpt2 )
+                        if ( rProp.Value >>= nTmpSearchOpt2 )
                         {
                             m_aSearchOpt = nTmpSearchOpt2;
                             ++nConvertedCount;
                         }
                     }
-                    else if ( aSeq[i].Name == SRCH_PARA_FAMILY )
+                    else if ( rProp.Name == SRCH_PARA_FAMILY )
                     {
                         sal_uInt16 nTemp( 0 );
-                        if ( aSeq[i].Value >>= nTemp )
+                        if ( rProp.Value >>= nTemp )
                         {
                             m_eFamily = SfxStyleFamily( nTemp );
                             ++nConvertedCount;
                         }
                     }
-                    else if ( aSeq[i].Name == SRCH_PARA_COMMAND )
+                    else if ( rProp.Name == SRCH_PARA_COMMAND )
                     {
                         sal_uInt16 nTmp;
-                        if ( aSeq[i].Value >>= nTmp )
+                        if ( rProp.Value >>= nTmp )
                         {
                             m_nCommand = static_cast<SvxSearchCmd>(nTmp);
                             ++nConvertedCount;
                         }
                     }
-                    else if ( aSeq[i].Name == SRCH_PARA_CELLTYPE )
+                    else if ( rProp.Name == SRCH_PARA_CELLTYPE )
                     {
                         sal_uInt16 nTmp;
-                        if ( aSeq[i].Value >>= nTmp )
+                        if ( rProp.Value >>= nTmp )
                         {
                             m_nCellType = static_cast<SvxSearchCellType>(nTmp);
                             ++nConvertedCount;
                         }
                     }
-                    else if ( aSeq[i].Name == SRCH_PARA_APPFLAG )
+                    else if ( rProp.Name == SRCH_PARA_APPFLAG )
                     {
                         sal_uInt16 nTmp;
-                        if ( aSeq[i].Value >>= nTmp )
+                        if ( rProp.Value >>= nTmp )
                         {
                             m_nAppFlag = static_cast<SvxSearchApp>(nTmp);
                             ++nConvertedCount;
                         }
                     }
-                    else if ( aSeq[i].Name == SRCH_PARA_ROWDIR )
+                    else if ( rProp.Name == SRCH_PARA_ROWDIR )
                     {
-                        if ( aSeq[i].Value >>= m_bRowDirection )
+                        if ( rProp.Value >>= m_bRowDirection )
                             ++nConvertedCount;
                     }
-                    else if ( aSeq[i].Name == SRCH_PARA_ALLTABLES )
+                    else if ( rProp.Name == SRCH_PARA_ALLTABLES )
                     {
-                        if ( aSeq[i].Value >>= m_bAllTables )
+                        if ( rProp.Value >>= m_bAllTables )
                             ++nConvertedCount;
                     }
-                    else if ( aSeq[i].Name == SRCH_PARA_SEARCHFILTERED )
+                    else if ( rProp.Name == SRCH_PARA_SEARCHFILTERED )
                     {
-                        if ( aSeq[i].Value >>= m_bSearchFiltered )
+                        if ( rProp.Value >>= m_bSearchFiltered )
                             ++nConvertedCount;
                     }
-                    else if ( aSeq[i].Name == SRCH_PARA_SEARCHFORMATTED )
+                    else if ( rProp.Name == SRCH_PARA_SEARCHFORMATTED )
                     {
-                        if ( aSeq[i].Value >>= m_bSearchFormatted )
+                        if ( rProp.Value >>= m_bSearchFormatted )
                             ++nConvertedCount;
                     }
-                    else if ( aSeq[i].Name == SRCH_PARA_BACKWARD )
+                    else if ( rProp.Name == SRCH_PARA_BACKWARD )
                     {
-                        if ( aSeq[i].Value >>= m_bBackward )
+                        if ( rProp.Value >>= m_bBackward )
                             ++nConvertedCount;
                     }
-                    else if ( aSeq[i].Name == SRCH_PARA_PATTERN )
+                    else if ( rProp.Name == SRCH_PARA_PATTERN )
                     {
-                        if ( aSeq[i].Value >>= m_bPattern )
+                        if ( rProp.Value >>= m_bPattern )
                             ++nConvertedCount;
                     }
-                    else if ( aSeq[i].Name == SRCH_PARA_CONTENT )
+                    else if ( rProp.Name == SRCH_PARA_CONTENT )
                     {
-                        if ( aSeq[i].Value >>= m_bContent )
+                        if ( rProp.Value >>= m_bContent )
                             ++nConvertedCount;
                     }
-                    else if ( aSeq[i].Name == SRCH_PARA_ASIANOPT )
+                    else if ( rProp.Name == SRCH_PARA_ASIANOPT )
                     {
-                        if ( aSeq[i].Value >>= m_bAsianOptions )
+                        if ( rProp.Value >>= m_bAsianOptions )
                             ++nConvertedCount;
                     }
                 }
