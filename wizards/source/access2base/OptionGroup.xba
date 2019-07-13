@@ -17,6 +17,7 @@ REM ----------------------------------------------------------------------------
 
 Private	_Type					As String				&apos;	Must be FORM
 Private _This					As Object				&apos;	Workaround for absence of This builtin function
+Private _Parent					As Object
 Private	_Name					As String
 Private _ParentType				As String
 Private _ParentComponent		As Object
@@ -33,6 +34,7 @@ REM ----------------------------------------------------------------------------
 Private Sub Class_Initialize()
 	_Type = OBJOPTIONGROUP
 	Set _This = Nothing
+	Set _Parent = Nothing
 	_Name = &quot;&quot;
 	_ParentType = &quot;&quot;
 	_ParentComponent = Nothing
@@ -137,6 +139,7 @@ Dim oCounter As Object
 	&apos;	Determine exact name
 	Set ocControl = New Control
 	Set ocControl._This = ocControl
+	Set ocControl._Parent = _This
 	ocControl._ParentType = CTLPARENTISGROUP
 	
 	ocControl._Shortcut = &quot;&quot;

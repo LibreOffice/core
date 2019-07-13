@@ -17,6 +17,7 @@ REM ----------------------------------------------------------------------------
 
 Private	_Type					As String				&apos;	Must be FIELD
 Private _This					As Object				&apos;	Workaround for absence of This builtin function
+Private _Parent					As Object
 Private _Name					As String
 Private _Precision				As Long
 Private _ParentName				As String
@@ -35,6 +36,7 @@ REM ----------------------------------------------------------------------------
 Private Sub Class_Initialize()
 	_Type = OBJFIELD
 	Set _This = Nothing
+	Set _Parent = Nothing
 	_Name = &quot;&quot;
 	_ParentName = &quot;&quot;
 	_ParentType = &quot;&quot;

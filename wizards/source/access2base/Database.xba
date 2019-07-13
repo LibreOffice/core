@@ -17,6 +17,7 @@ REM ----------------------------------------------------------------------------
 
 Private	_Type					As String				&apos;	Must be DATABASE
 Private _This					As Object				&apos;	Workaround for absence of This builtin function
+Private _Parent					As Object
 Private	_DbConnect				As Integer				&apos;	DBCONNECTxxx constants
 Private	Title					As String
 Private	Document				As Object				&apos;	com.sun.star.comp.dba.ODatabaseDocument	or SwXTextDocument or ScModelObj
@@ -43,6 +44,7 @@ REM ----------------------------------------------------------------------------
 Private Sub Class_Initialize()
 	_Type = OBJDATABASE
 	Set _This = Nothing
+	Set _Parent = Nothing
 	_DbConnect = 0
 	Title = &quot;&quot;
 	Set Document = Nothing

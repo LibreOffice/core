@@ -17,6 +17,7 @@ REM ----------------------------------------------------------------------------
 
 Private _Type					As String				&apos;	Must be CONTROL
 Private _This					As Object				&apos;	Workaround for absence of This builtin function
+Private _Parent					As Object
 Private	_ImplementationName		As String
 Private _ClassId				As Integer
 Private	_ParentType				As String				&apos;	One of CTLPARENTISxxxx constants
@@ -40,6 +41,7 @@ REM ----------------------------------------------------------------------------
 Private Sub Class_Initialize()
 	_Type				= OBJCONTROL
 	Set _This			= Nothing
+	Set _Parent			= Nothing
 	_ClassId 			= -1
 	_ParentType			= &quot;&quot;
 	_Shortcut			= &quot;&quot;
@@ -781,6 +783,7 @@ Dim j As Integer, oView As Object
 	&apos;	Determine exact name
 	Set ocControl = New Control
 	Set ocControl._This = ocControl
+	Set ocControl._Parent = _This
 	ocControl._ParentType = CTLPARENTISGRID
 	sParentShortcut = _Shortcut
 	sControls() = ControlModel.getElementNames()
@@ -1649,7 +1652,7 @@ Dim oControlEvents As Object, sEventName As String
 		Case UCase(&quot;Page&quot;)
 			If Utils._hasUNOProperty(ControlModel, &quot;Step&quot;) Then _PropertyGet = ControlModel.Step
 		Case UCase(&quot;Parent&quot;)
-			Set _PropertyGet = PropertiesGet._ParentObject(_Shortcut)
+			Set _PropertyGet = _Parent
 		Case UCase(&quot;Picture&quot;)
 			_PropertyGet = ConvertToUrl(ControlModel.ImageURL)
 		Case UCase(&quot;Required&quot;)

@@ -17,6 +17,7 @@ REM ----------------------------------------------------------------------------
 
 Private	_Type					As String				&apos;	Must be SUBFORM
 Private _This					As Object				&apos;	Workaround for absence of This builtin function
+Private _Parent					As Object
 Private	_Shortcut				As String
 Private	_Name					As String
 Private _MainForm				As String
@@ -32,6 +33,7 @@ REM ----------------------------------------------------------------------------
 Private Sub Class_Initialize()
 	_Type = OBJSUBFORM
 	Set _This = Nothing
+	Set _Parent = Nothing
 	_Shortcut = &quot;&quot;
 	_Name = &quot;&quot;
 	_MainForm = &quot;&quot;
@@ -317,7 +319,7 @@ Public Function Parent() As Object
 	Utils._SetCalledSub(&quot;SubForm.getParent&quot;)
 	On Error Goto Error_Function
 
-	Set Parent = PropertiesGet._ParentObject(_Shortcut)
+	Set Parent = _Parent
 	
 Exit_Function:
 	Utils._ResetCalledSub(&quot;SubForm.getParent&quot;)
@@ -395,6 +397,7 @@ Dim j As Integer
 	&apos;	Determine exact name
 	Set ocControl = New Control
 	Set ocControl._This = ocControl
+	Set ocControl._Parent = _This
 	ocControl._ParentType = CTLPARENTISSUBFORM
 	sParentShortcut = _Shortcut
 	sControls() = DatabaseForm.getElementNames()

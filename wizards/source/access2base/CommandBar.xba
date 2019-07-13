@@ -17,6 +17,7 @@ REM ----------------------------------------------------------------------------
 
 Private _Type			As String		&apos;	Must be COMMANDBAR
 Private _This			As Object		&apos;	Workaround for absence of This builtin function
+Private _Parent			As Object
 Private _Name			As String
 Private _ResourceURL	As String
 Private _Window			As Object		&apos;	com.sun.star.frame.XFrame
@@ -31,6 +32,7 @@ REM ----------------------------------------------------------------------------
 Private Sub Class_Initialize()
 	_Type = OBJCOMMANDBAR
 	Set _This = Nothing
+	Set _Parent = Nothing
 	_Name = &quot;&quot;
 	_ResourceURL = &quot;&quot;
 	Set _Window = Nothing
@@ -73,6 +75,11 @@ REM ----------------------------------------------------------------------------
 Property Get ObjectType() As String
 	ObjectType = _PropertyGet(&quot;ObjectType&quot;)
 End Property		&apos;	ObjectType (get)
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Public Function Parent() As Object
+	Parent = _Parent
+End Function		&apos;	Parent (get)	V6.4.0
 
 REM -----------------------------------------------------------------------------------------------------------------------
 Public Function Properties(ByVal Optional pvIndex As Variant) As Variant
@@ -151,7 +158,8 @@ Dim oObject As Object
 				If pvIndex = iItemsCount - 1 Then
 					Set oObject = New CommandBarControl
 					With oObject
-						._This = oObject
+						Set ._This = oObject
+						Set ._Parent = _This
 						._ParentCommandBarName = _Name
 						._ParentCommandBar = oToolbar
 						._ParentBuiltin = ( _BarBuiltin = 1 )
