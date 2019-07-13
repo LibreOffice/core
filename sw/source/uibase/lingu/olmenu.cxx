@@ -41,6 +41,7 @@
 #include <wview.hxx>
 #include <textsh.hxx>
 
+#include <comphelper/lok.hxx>
 #include <comphelper/anytostring.hxx>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/exc_hlp.hxx>
@@ -296,6 +297,11 @@ SwSpellPopup::SwSpellPopup(
         vcl::CommandInfoProvider::GetPopupLabelForCommand(".uno:SpellingAndGrammarDialog", aModuleName));
     m_xPopupMenu->SetItemText(m_nCorrectDialogId,
         vcl::CommandInfoProvider::GetPopupLabelForCommand(".uno:AutoCorrectDlg", aModuleName));
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        m_xPopupMenu->HideItem(m_nCorrectDialogId);
+        m_xPopupMenu->HideItem(m_nAddId);
+    }
     sal_uInt16 nItemPos = m_xPopupMenu->GetItemPos(m_nIgnoreWordId);
     m_xPopupMenu->InsertItem(MN_IGNORE_SELECTION, aIgnoreSelection, MenuItemBits::NONE, OString(), nItemPos);
     m_xPopupMenu->SetHelpId(MN_IGNORE_SELECTION, HID_LINGU_IGNORE_SELECTION);
