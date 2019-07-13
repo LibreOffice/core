@@ -19,72 +19,73 @@
  *
  *************************************************************/
 
+
 ﻿
- // include ---------------------------------------------------------------
+// include ---------------------------------------------------------------
 #include <svx/dialogs.hrc>
 #include "helpid.hrc"
 #include "stbctrls.h"
- // pragma ----------------------------------------------------------------
+// pragma ----------------------------------------------------------------
 
- // Strings ---------------------------------------------------------------
+// Strings ---------------------------------------------------------------
 String RID_SVXSTR_INSERT_TEXT
 {
-     // 'Einf"ugen' bzw. 'Insert' abgek"urzt auf h"ochstens 5 Zeichen
+    // 'Insert' shortened to max. 5 characters
     Text [ en-US ] = "INSRT" ;
 };
 String RID_SVXSTR_OVERWRITE_TEXT
 {
-     // '"Uberschreiben' bzw. 'Overwrite' abgek"urzt auf h"ochstens 5 Zeichen
+    // 'Overwrite' shortened to max. 5 characters
     Text [ en-US ] = "OVER" ;
 };
 String RID_SVXSTR_SELMODE_STD
 {
-     // 'Standard' abgek"urzt auf h"ochstens 3 Zeichen
+    // 'Standard' shortened to max. 3 characters
     Text [ en-US ] = "STD" ;
 };
 String RID_SVXSTR_SELMODE_ER
 {
-     // 'Erweitert' bzw. 'Extended' abgek"urzt auf h"ochstens 3 Zeichen
+    // 'Extended' shortened to max. 3 characters
     Text [ en-US ] = "EXT" ;
 };
 String RID_SVXSTR_SELMODE_ERG
 {
-     // 'Erg"anzend' bzw. 'Added' abgek"urzt auf h"ochstens 3 Zeichen
+    // 'Added' shortened to max. 3 characters
     Text [ en-US ] = "ADD" ;
 };
 
 String RID_SVXSTR_SELMODE_BLK
 {
-     // 'Block' shortened to max. 3 chararcters
+    // 'Block' shortened to max. 3 characters
     Text [ en-US ] = "BLK" ;
 };
 
 String RID_SVXSTR_XMLSEC_SIG_OK
 {
-    Text [ en-US ] = "Digital Signature: The document signature is OK.";
+    Text [ en-US ] = "Digital Signature: The document signature is OK." ;
 };
 
 String RID_SVXSTR_XMLSEC_SIG_OK_NO_VERIFY
 {
-    Text [ en-US ] = "Digital Signature: The document signature is OK, but the certificates could not be validated.";
+    Text [ en-US ] = "Digital Signature: The document signature is OK, but the certificates could not be validated." ;
 };
 
 String RID_SVXSTR_XMLSEC_SIG_NOT_OK
 {
-    Text [ en-US ] = "Digital Signature: The document signature does not match the document content. We strongly recommend you to do not trust this document.";
+    Text [ en-US ] = "Digital Signature: The document signature does not match the document content. We strongly recommend you to do not trust this document." ;
 };
 
 String RID_SVXSTR_XMLSEC_NO_SIG
 {
-    Text [ en-US ] = "Digital Signature: The document is not signed.";
+    Text [ en-US ] = "Digital Signature: The document is not signed." ;
 };
 
 String RID_SVXSTR_XMLSEC_SIG_CERT_OK_PARTIAL_SIG
 {
-    Text [ en-US ] = "Digital Signature: The document signature and the certificate are OK, but not all parts of the document are signed.";
+    Text [ en-US ] = "Digital Signature: The document signature and the certificate are OK, but not all parts of the document are signed." ;
 };
 
- // PopupMenu -------------------------------------------------------------
+// PopupMenu -------------------------------------------------------------
 Menu RID_SVXMNU_ZOOM
 {
     ItemList =
@@ -93,31 +94,31 @@ Menu RID_SVXMNU_ZOOM
         {
             Identifier = ZOOM_200 ;
             HelpId = HID_MNU_ZOOM_200 ;
-            Text = "200 %" ;
+            Text [ en-US ] = "200 %" ;
         };
         MenuItem
         {
             Identifier = ZOOM_150 ;
             HelpId = HID_MNU_ZOOM_150 ;
-            Text = "150 %" ;
+            Text [ en-US ] = "150 %" ;
         };
         MenuItem
         {
             Identifier = ZOOM_100 ;
             HelpId = HID_MNU_ZOOM_100 ;
-            Text = "100 %" ;
+            Text [ en-US ] = "100 %" ;
         };
         MenuItem
         {
             Identifier = ZOOM_75 ;
             HelpId = HID_MNU_ZOOM_75 ;
-            Text = "75 %" ;
+            Text [ en-US ] = "75 %" ;
         };
         MenuItem
         {
             Identifier = ZOOM_50 ;
             HelpId = HID_MNU_ZOOM_50 ;
-            Text = "50 %" ;
+            Text [ en-US ] = "50 %" ;
         };
         MenuItem
         {
@@ -139,7 +140,7 @@ Menu RID_SVXMNU_ZOOM
         };
     };
 };
- // Funktionsauswahl auf dem SvxPosSizeStatusBarControl fuer Calc
+// Function selection for SvxPosSizeStatusBarControl in Calc
 Menu RID_SVXMNU_PSZ_FUNC
 {
     ItemList =
@@ -203,23 +204,19 @@ Menu RID_SVXMNU_XMLSECSTATBAR
 
 // Images ----------------------------------------------------------------
 
-#define STD_MASKCOLOR   Color{Red=0xffff;Green=0x0000;Blue=0xffff;}
-
 Image RID_SVXBMP_POSITION
 {
     ImageBitmap = Bitmap
     {
-        File = "sc10223.bmp" ;
+        File = "sc10223.png" ;
     };
-    MaskColor = STD_MASKCOLOR;
 };
 Image RID_SVXBMP_SIZE
 {
     ImageBitmap = Bitmap
     {
-        File = "sc10224.bmp" ;
+        File = "sc10224.png" ;
     };
-    MaskColor = STD_MASKCOLOR;
 };
 Image RID_SVXBMP_SIGNET
 {
@@ -227,7 +224,6 @@ Image RID_SVXBMP_SIGNET
     {
         File = "signet_11x16.png" ;
     };
-    MaskColor = STD_MASKCOLOR;
 };
 Image RID_SVXBMP_SIGNET_BROKEN
 {
@@ -235,7 +231,6 @@ Image RID_SVXBMP_SIGNET_BROKEN
     {
         File = "caution_11x16.png" ;
     };
-    MaskColor = STD_MASKCOLOR;
 };
 Image RID_SVXBMP_SIGNET_NOTVALIDATED
 {
@@ -243,7 +238,6 @@ Image RID_SVXBMP_SIGNET_NOTVALIDATED
     {
         File = "notcertificate_16.png" ;
     };
-    MaskColor = STD_MASKCOLOR;
 };
 Image RID_SVXBMP_SIGNET_H
 {
@@ -251,7 +245,6 @@ Image RID_SVXBMP_SIGNET_H
     {
         File = "signet_11x16_h.png" ;
     };
-    MaskColor = STD_MASKCOLOR;
 };
 Image RID_SVXBMP_SIGNET_BROKEN_H
 {
@@ -259,7 +252,6 @@ Image RID_SVXBMP_SIGNET_BROKEN_H
     {
         File = "caution_11x16_h.png" ;
     };
-    MaskColor = STD_MASKCOLOR;
 };
 Image RID_SVXBMP_SIGNET_NOTVALIDATED_H
 {
@@ -267,7 +259,6 @@ Image RID_SVXBMP_SIGNET_NOTVALIDATED_H
     {
         File = "notcertificate_16_h.png" ;
     };
-    MaskColor = STD_MASKCOLOR;
 };
 
 
@@ -277,7 +268,6 @@ Image RID_SVXBMP_SLIDERBUTTON
     {
         File = "navigationball_10.png" ;
     };
-    MaskColor = STD_MASKCOLOR;
 };
 Image RID_SVXBMP_SLIDERDECREASE
 {
@@ -285,7 +275,6 @@ Image RID_SVXBMP_SLIDERDECREASE
     {
         File = "slidezoomout_11.png" ;
     };
-    MaskColor = STD_MASKCOLOR;
 };
 Image RID_SVXBMP_SLIDERINCREASE
 {
@@ -293,7 +282,6 @@ Image RID_SVXBMP_SLIDERINCREASE
     {
         File = "slidezoomin_11.png" ;
     };
-    MaskColor = STD_MASKCOLOR;
 };
 Image RID_SVXBMP_SLIDERBUTTON_HC
 {
@@ -301,7 +289,6 @@ Image RID_SVXBMP_SLIDERBUTTON_HC
     {
         File = "navigationball_10_h.png" ;
     };
-    MaskColor = STD_MASKCOLOR;
 };
 Image RID_SVXBMP_SLIDERDECREASE_HC
 {
@@ -309,7 +296,6 @@ Image RID_SVXBMP_SLIDERDECREASE_HC
     {
         File = "slidezoomout_11_h.png" ;
     };
-    MaskColor = STD_MASKCOLOR;
 };
 Image RID_SVXBMP_SLIDERINCREASE_HC
 {
@@ -317,6 +303,6 @@ Image RID_SVXBMP_SLIDERINCREASE_HC
     {
         File = "slidezoomin_11_h.png" ;
     };
-    MaskColor = STD_MASKCOLOR;
 };
 
+// ********************************************************************** EOF
