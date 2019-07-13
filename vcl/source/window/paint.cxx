@@ -333,7 +333,7 @@ void RenderTools::DrawSelectionBackground(vcl::RenderContext& rRenderContext, vc
     bool bBright = ( rStyles.GetFaceColor() == COL_WHITE );
 
     int c1 = aSelectionBorderColor.GetLuminance();
-    int c2 = rWindow.GetDisplayBackground().GetColor().GetLuminance();
+    int c2 = rWindow.GetBackgroundColor().GetLuminance();
 
     if (!bDark && !bBright && std::abs(c2 - c1) < (pPaintColor ? 40 : 75))
     {
