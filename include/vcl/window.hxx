@@ -1184,8 +1184,8 @@ public:
                                                              ScrollBar* pHScrl,
                                                              ScrollBar* pVScrl );
 
-    void                                SaveBackground( const Point& rPos, const Size& rSize,
-                                                        VirtualDevice& rSaveDevice ) const;
+    void                                SaveBackground(VirtualDevice& rSaveDevice,
+                                                       const Point& rPos, const Size& rSize, const Size&) const override;
 
     virtual const SystemEnvData*        GetSystemData() const;
     css::uno::Any                       GetSystemDataAny() const;
