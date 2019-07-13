@@ -668,9 +668,12 @@ void Window::ImplCalcOverlapRegion( const tools::Rectangle& rSourceRect, vcl::Re
     }
 }
 
-void Window::SaveBackground( const Point& rPos, const Size& rSize,
-                             VirtualDevice& rSaveDevice ) const
+void Window::SaveBackground(VirtualDevice& rSaveDevice, const Point& rPos, const Size& rSize, const Size&) const
 {
+    MapMode aTempMap(GetMapMode());
+    aTempMap.SetOrigin(Point());
+    rSaveDevice.SetMapMode(aTempMap);
+
     if ( mpWindowImpl->mpPaintRegion )
     {
         vcl::Region      aClip( *mpWindowImpl->mpPaintRegion );
@@ -697,7 +700,11 @@ void Window::SaveBackground( const Point& rPos, const Size& rSize,
         }
     }
     else
+    {
         rSaveDevice.DrawOutDev( Point(), rSize, rPos, rSize, *this );
+    }
+
+    rSaveDevice.SetMapMode(MapMode());
 }
 
 } /* namespace vcl */
