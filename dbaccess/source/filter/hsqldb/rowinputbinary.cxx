@@ -92,7 +92,7 @@ OUString lcl_makeStringFromBigint(const std::vector<sal_uInt8>& bytes)
     OUStringBuffer sRet;
 
     // two's complement
-    if ((bytes[0] & 0x80) != 0)
+    if ((aBytes[0] & 0x80) != 0)
     {
         sRet.append("-");
         for (auto& byte : aBytes)
