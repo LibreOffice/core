@@ -79,6 +79,14 @@ class ul_Compiler:
             'writer_Type_command':self.handle_writer_type,
             'writer_Select_command':self.handle_writer_select,
             'writer_GOTO_command':self.handle_wirter_goto,
+            'calc_Select_cell':self.handle_calc_select,
+            'calc_switch_sheet':self.handle_calc_switch_sheet,
+            'calc_Type_command':self.handle_calc_Type_command,
+            'calc_AutoFill_filter':self.handle_calc_AutoFill_filter,
+            'impress_Type_command':self.handle_impress_Type_command,
+            'math_element_selector':self.handle_math_element_selector,
+            'math_Type_command':self.handle_math_Type_command,
+            'setZoom_command':self.handle_setZoom_command
             })
 
         self.log_lines=self.get_log_file(self.input_address)
@@ -106,7 +114,8 @@ class ul_Compiler:
 
         line="\t\tMainWindow = self.xUITest.getTopFocusWindow()\n"
         self.variables.append(line)
-        app={"writer":"writer_edit","calc":"grid_window"}#to be continue
+        app={"writer":"writer_edit","calc":"grid_window","impress":"impress_win"\
+            ,"math":"math_edit"}
         self.current_app=app[StarterCommand.program_name]
         self.prev_command=StarterCommand
 
@@ -354,6 +363,145 @@ class ul_Compiler:
             str(writer_GOTO_command.page_num)+"\"}))\n"
         self.variables.append(line)
         self.prev_command=writer_GOTO_command
+
+    def handle_calc_select (self,calc_Select_cell):
+
+        if self.current_app in self.objects:
+            self.objects[self.current_app]+=1
+        else:
+            self.objects[self.current_app]=1
+            line="\t\t"+self.current_app+" = MainWindow.getChild(\""+self.current_app+"\")\n"
+            self.variables.append(line)
+
+        if(calc_Select_cell.select_op.__class__.__name__=="range_of_cells"):
+            line="\t\t"+self.current_app+".executeAction(\"SELECT\", mkPropertyValues({\"RANGE\": \""+\
+            calc_Select_cell.select_op.input_range+"\"}))\n"
+
+        elif(calc_Select_cell.select_op.__class__.__name__=="one_cell"):
+            line="\t\t"+self.current_app+".executeAction(\"SELECT\", mkPropertyValues({\"CELL\": \""+\
+            calc_Select_cell.select_op.input_cell+"\"}))\n"
+
+        self.variables.append(line)
+        self.prev_command=calc_Select_cell
+
+    def handle_calc_switch_sheet (self,calc_switch_sheet):
+
+        if self.current_app in self.objects:
+            self.objects[self.current_app]+=1
+        else:
+            self.objects[self.current_app]=1
+            line="\t\t"+self.current_app+" = MainWindow.getChild(\""+self.current_app+"\")\n"
+            self.variables.append(line)
+
+        line="\t\t"+self.current_app+".executeAction(\"SELECT\", mkPropertyValues({\"TABLE\": \""+\
+        str(calc_switch_sheet.sheet_num)+"\"}))\n"
+
+        self.variables.append(line)
+        self.prev_command=calc_switch_sheet
+
+    def handle_calc_Type_command (self,calc_Type_command):
+
+        if self.current_app in self.objects:
+            self.objects[self.current_app]+=1
+        else:
+            self.objects[self.current_app]=1
+            line="\t\t"+self.current_app+" = MainWindow.getChild(\""+self.current_app+"\")\n"
+            self.variables.append(line)
+
+        if(calc_Type_command.what_to_type.__class__.__name__=="char"):
+            line="\t\t"+self.current_app+".executeAction(\"TYPE\", mkPropertyValues"+\
+            "({\"TEXT\": \""+\
+            calc_Type_command.what_to_type.input_char+"\"}))\n"
+        elif(calc_Type_command.what_to_type.__class__.__name__=="KeyCode"):
+            line="\t\t"+self.current_app+".executeAction(\"TYPE\", mkPropertyValues"+\
+            "({\"KEYCODE\": \""+\
+            calc_Type_command.what_to_type.input_key_code+"\"}))\n"
+
+        self.variables.append(line)
+        self.prev_command=calc_Type_command
+
+    def handle_calc_AutoFill_filter (self,calc_AutoFill_filter):
+
+        if self.current_app in self.objects:
+            self.objects[self.current_app]+=1
+        else:
+            self.objects[self.current_app]=1
+            line="\t\t"+self.current_app+" = MainWindow.getChild(\""+self.current_app+"\")\n"
+            self.variables.append(line)
+
+        line="\t\t"+self.current_app+".executeAction(\"LAUNCH\", mkPropertyValues"+\
+            "({\"AUTOFILTER\": \"\", \"COL\": \""+\
+            str(calc_AutoFill_filter.col_num)+"\""+\
+            ", \"ROW\": \""+str(calc_AutoFill_filter.row_num)\
+            +"\"}))\n"
+
+        self.variables.append(line)
+        self.prev_command=calc_AutoFill_filter
+
+    def handle_impress_Type_command (self,impress_Type_command):
+
+        if self.current_app in self.objects:
+            self.objects[self.current_app]+=1
+        else:
+            self.objects[self.current_app]=1
+            line="\t\t"+self.current_app+" = MainWindow.getChild(\""+self.current_app+"\")\n"
+            self.variables.append(line)
+
+        if(impress_Type_command.what_to_type.__class__.__name__=="char"):
+            line="\t\t"+self.current_app+".executeAction(\"TYPE\", mkPropertyValues"+\
+            "({\"TEXT\": \""+\
+            impress_Type_command.what_to_type.input_char+"\"}))\n"
+        elif(impress_Type_command.what_to_type.__class__.__name__=="KeyCode"):
+            line="\t\t"+self.current_app+".executeAction(\"TYPE\", mkPropertyValues"+\
+            "({\"KEYCODE\": \""+\
+            impress_Type_command.what_to_type.input_key_code+"\"}))\n"
+
+        self.variables.append(line)
+        self.prev_command=impress_Type_command
+
+    def handle_math_Type_command (self,math_Type_command):
+
+        if self.current_app in self.objects:
+            self.objects[self.current_app]+=1
+        else:
+            self.objects[self.current_app]=1
+            line="\t\t"+self.current_app+" = MainWindow.getChild(\""+self.current_app+"\")\n"
+            self.variables.append(line)
+
+        if(math_Type_command.what_to_type.__class__.__name__=="char"):
+            line="\t\t"+self.current_app+".executeAction(\"TYPE\", mkPropertyValues"+\
+            "({\"TEXT\": \""+\
+            math_Type_command.what_to_type.input_char+"\"}))\n"
+        elif(math_Type_command.what_to_type.__class__.__name__=="KeyCode"):
+            line="\t\t"+self.current_app+".executeAction(\"TYPE\", mkPropertyValues"+\
+            "({\"KEYCODE\": \""+\
+            math_Type_command.what_to_type.input_key_code+"\"}))\n"
+
+        self.variables.append(line)
+        self.prev_command=math_Type_command
+
+    def handle_math_element_selector (self,math_element_selector):
+
+        line="\t\t"+str(math_element_selector.element_no)+" = element_selector.getChild(\""+\
+            str(math_element_selector.element_no)+"\")\n"
+        self.variables.append(line)
+        line="\t\t"+str(math_element_selector.element_no)+".executeAction(\"SELECT\",tuple())\n"
+        self.variables.append(line)
+        self.prev_command=math_element_selector
+
+    def handle_setZoom_command (self,setZoom_command):
+
+        if self.current_app in self.objects:
+            self.objects[self.current_app]+=1
+        else:
+            self.objects[self.current_app]=1
+            line="\t\t"+self.current_app+" = MainWindow.getChild(\""+self.current_app+"\")\n"
+            self.variables.append(line)
+
+        line="\t\t"+self.current_app+".executeAction(\"SET\", mkPropertyValues({\"ZOOM\": \""+\
+            str(setZoom_command.zoom_value)+"\"}))\n"
+        self.variables.append(line)
+        self.prev_command=setZoom_command
 
     def Generate_UI_test(self):
         line="\t\tself.ui_test.close_doc()"
