@@ -45,6 +45,7 @@
 #include <com/sun/star/smarttags/XSmartTagAction.hpp>
 #include <rtl/strbuf.hxx>
 #include <osl/diagnose.h>
+#include <tools/debug.hxx>
 
 #include <autocdlg.hxx>
 #include <editeng/acorrcfg.hxx>

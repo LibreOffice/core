@@ -27,6 +27,7 @@
 #include <svx/svxids.hrc>
 #include <svx/xpool.hxx>
 #include <strings.hrc>
+#include <svx/xfillit0.hxx>
 #include <svx/xflbckit.hxx>
 #include <svx/xtable.hxx>
 #include <svx/xlineit0.hxx>

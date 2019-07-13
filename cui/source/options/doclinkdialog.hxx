@@ -21,7 +21,6 @@
 #define INCLUDED_CUI_SOURCE_OPTIONS_DOCLINKDIALOG_HXX
 
 #include <vcl/weld.hxx>
-#include <vcl/fixed.hxx>
 #include <svtools/inettbc.hxx>
 
 namespace svx

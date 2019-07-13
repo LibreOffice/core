@@ -24,9 +24,7 @@
 
 #include <com/sun/star/container/XNameReplace.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/uno/Reference.hxx>
-#include <svl/macitem.hxx>
 #include <rtl/ustring.hxx>
 
 #include <unordered_map>

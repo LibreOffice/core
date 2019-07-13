@@ -19,18 +19,13 @@
 #ifndef INCLUDED_CUI_SOURCE_INC_HLTPBASE_HXX
 #define INCLUDED_CUI_SOURCE_INC_HLTPBASE_HXX
 
-#include <sfx2/app.hxx>
 #include <sfx2/tabdlg.hxx>
-#include <svl/stritem.hxx>
-#include <svl/eitem.hxx>
 #include <vcl/transfer.hxx>
 #include <sfx2/dispatch.hxx>
-#include <sfx2/fcontnr.hxx>
 #include <svtools/inettbc.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/waitobj.hxx>
 
-#include <sfx2/docfile.hxx>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <svx/hlnkitem.hxx>
 

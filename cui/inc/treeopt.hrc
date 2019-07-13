@@ -22,6 +22,10 @@
 
 #include <sal/types.h>
 #include <sfx2/pageids.hxx>
+#include <svx/dialogs.hrc>
+#include <svx/svxids.hrc>
+
+#include <utility>
 
 #define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
 

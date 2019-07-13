@@ -19,7 +19,6 @@
 #ifndef INCLUDED_CUI_SOURCE_CUSTOMIZE_EVENTDLG_HXX
 #define INCLUDED_CUI_SOURCE_CUSTOMIZE_EVENTDLG_HXX
 
-#include <sfx2/evntconf.hxx>
 #include <vcl/weld.hxx>
 #include <macropg.hxx>
 

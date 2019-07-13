@@ -24,7 +24,6 @@
 #include <svx/pagenumberlistbox.hxx>
 #include <svx/papersizelistbox.hxx>
 #include <svx/frmdirlbox.hxx>
-#include <editeng/svxenum.hxx>
 #include <i18nutil/paper.hxx>
 #include <svx/flagsdef.hxx>
 

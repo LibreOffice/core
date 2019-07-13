@@ -21,7 +21,6 @@
 #define INCLUDED_CUI_SOURCE_OPTIONS_SDBCDRIVERENUM_HXX
 
 
-#include <sal/types.h>
 #include <rtl/ustring.hxx>
 
 #include <vector>

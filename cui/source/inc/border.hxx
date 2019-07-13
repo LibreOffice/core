@@ -21,8 +21,6 @@
 
 #include <editeng/shaditem.hxx>
 #include <svtools/ctrlbox.hxx>
-#include <vcl/field.hxx>
-#include <vcl/fixed.hxx>
 #include <vcl/weld.hxx>
 #include <svtools/valueset.hxx>
 #include <sfx2/tabdlg.hxx>

@@ -25,6 +25,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <svl/grabbagitem.hxx>
 #include <svl/undo.hxx>
+#include <tools/debug.hxx>
 #include <unotools/lingucfg.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/eeitem.hxx>
@@ -51,6 +52,7 @@
 #include <vcl/ptrstyle.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/texteng.hxx>
 #include <vcl/weld.hxx>
 #include <osl/file.hxx>
 #include <editeng/optitems.hxx>

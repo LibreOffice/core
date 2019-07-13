@@ -23,6 +23,7 @@
 #include <svl/intitem.hxx>
 #include <svl/whiter.hxx>
 #include <sfx2/objsh.hxx>
+#include <svx/flagsdef.hxx>
 #include <svx/svxitems.hrc>
 #include <svx/strarray.hxx>
 #include <editeng/flstitem.hxx>

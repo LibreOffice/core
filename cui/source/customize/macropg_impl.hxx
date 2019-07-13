@@ -20,6 +20,9 @@
 #ifndef INCLUDED_CUI_SOURCE_CUSTOMIZE_MACROPG_IMPL_HXX
 #define INCLUDED_CUI_SOURCE_CUSTOMIZE_MACROPG_IMPL_HXX
 
+#include <svl/itemset.hxx>
+#include <vcl/weld.hxx>
+
 class SvxMacroTabPage_Impl
 {
 public:

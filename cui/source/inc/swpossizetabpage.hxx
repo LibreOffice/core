@@ -20,7 +20,6 @@
 #define INCLUDED_CUI_SOURCE_INC_SWPOSSIZETABPAGE_HXX
 
 #include <sfx2/tabdlg.hxx>
-#include <svx/swframeposstrings.hxx>
 #include <svx/swframeexample.hxx>
 #include <vcl/weld.hxx>
 

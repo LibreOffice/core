@@ -20,12 +20,10 @@
 #ifndef INCLUDED_CUI_SOURCE_OPTIONS_CONNPOOLOPTIONS_HXX
 #define INCLUDED_CUI_SOURCE_OPTIONS_CONNPOOLOPTIONS_HXX
 
-#include <svl/solar.hrc>
 #include <sfx2/tabdlg.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/button.hxx>
 #include <vcl/field.hxx>
-#include <svx/databaseregistrationui.hxx>
 
 
 namespace offapp

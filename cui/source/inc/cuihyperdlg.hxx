@@ -28,7 +28,6 @@
 #include <sfx2/childwin.hxx>
 #include <sfx2/ctrlitem.hxx>
 #include <sfx2/bindings.hxx>
-#include <vcl/image.hxx>
 
 #include "iconcdlg.hxx"
 

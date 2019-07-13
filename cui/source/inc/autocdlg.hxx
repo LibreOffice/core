@@ -20,9 +20,7 @@
 #define INCLUDED_CUI_SOURCE_INC_AUTOCDLG_HXX
 
 #include <sfx2/tabdlg.hxx>
-#include <svtools/langtab.hxx>
 #include <svx/langbox.hxx>
-#include <tools/debug.hxx>
 #include <vcl/metric.hxx>
 
 #include <set>

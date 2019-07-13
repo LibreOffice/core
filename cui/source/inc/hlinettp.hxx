@@ -19,7 +19,6 @@
 #ifndef INCLUDED_CUI_SOURCE_INC_HLINETTP_HXX
 #define INCLUDED_CUI_SOURCE_INC_HLINETTP_HXX
 
-#include <svx/hyperdlg.hxx>
 #include "cuihyperdlg.hxx"
 #include "hltpbase.hxx"
 

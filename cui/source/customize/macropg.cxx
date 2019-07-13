@@ -34,6 +34,7 @@
 #include <helpids.h>
 #include <headertablistbox.hxx>
 #include "macropg_impl.hxx"
+#include <svl/macitem.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/svxids.hrc>
 #include <strings.hrc>

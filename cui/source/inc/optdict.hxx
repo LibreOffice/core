@@ -19,9 +19,7 @@
 #ifndef INCLUDED_CUI_SOURCE_INC_OPTDICT_HXX
 #define INCLUDED_CUI_SOURCE_INC_OPTDICT_HXX
 
-#include <vcl/timer.hxx>
 #include <vcl/weld.hxx>
-#include <com/sun/star/util/Language.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <svx/langbox.hxx>

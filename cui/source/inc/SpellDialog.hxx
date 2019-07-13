@@ -20,24 +20,12 @@
 #define INCLUDED_CUI_SOURCE_INC_SPELLDIALOG_HXX
 
 #include <sfx2/basedlgs.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/edit.hxx>
-#include <vcl/lstbox.hxx>
-#include <vcl/button.hxx>
-#include <vcl/menubtn.hxx>
-#include <vcl/decoview.hxx>
-#include <vcl/image.hxx>
-#include <vcl/toolbox.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 
 
 #include <svx/langbox.hxx>
 #include <memory>
-#include <svtools/svmedit.hxx>
-#include <svl/lstner.hxx>
-#include <vcl/fixedhyper.hxx>
-#include <vcl/xtextedt.hxx>
-#include <vcl/txtattr.hxx>
+#include <svl/undo.hxx>
 #include <vcl/customweld.hxx>
 #include <editeng/weldeditview.hxx>
 #include <editeng/SpellPortions.hxx>

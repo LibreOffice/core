@@ -11,10 +11,7 @@
 #define INCLUDED_CUI_SOURCE_OPTIONS_PERSONALIZATION_HXX
 
 #include <sfx2/tabdlg.hxx>
-#include <rtl/ref.hxx>
 #include <vector>
-#include <array>
-#include <atomic>
 
 #define MAX_DEFAULT_PERSONAS 6 // Maximum number of default personas
 

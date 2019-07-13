@@ -21,7 +21,6 @@
 
 // include ---------------------------------------------------------------
 
-#include <svx/optgenrl.hxx>
 #include <sfx2/tabdlg.hxx>
 #include <vcl/weld.hxx>
 

@@ -39,6 +39,7 @@
 #include <cuioptgenrl.hxx>
 #include <svx/dlgutil.hxx>
 #include <svx/svxids.hrc>
+#include <svx/optgenrl.hxx>
 
 using namespace css;
 

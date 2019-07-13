@@ -24,11 +24,7 @@
 
 #include <salhelper/thread.hxx>
 #include <tools/urlobj.hxx>
-#include <vcl/graph.hxx>
 #include <vcl/idle.hxx>
-#include <svl/slstitm.hxx>
-#include <vcl/transfer.hxx>
-#include <vcl/GraphicObject.hxx>
 #include <sfx2/tabdlg.hxx>
 #include <svx/galctrl.hxx>
 #include <svx/galmisc.hxx>

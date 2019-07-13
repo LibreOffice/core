@@ -20,15 +20,7 @@
 #define INCLUDED_CUI_SOURCE_INC_ICONCDLG_HXX
 
 #include <rtl/ustring.hxx>
-#include <vcl/ivctrl.hxx>
-#include <vcl/tabpage.hxx>
-#include <vcl/dialog.hxx>
-#include <vcl/button.hxx>
-#include <vcl/image.hxx>
-#include <vcl/layout.hxx>
 #include <sfx2/tabdlg.hxx>
-#include <sfx2/basedlgs.hxx>
-#include <vector>
 
 // forward-declarations
 struct IconChoicePageData;

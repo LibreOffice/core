@@ -24,7 +24,6 @@
 #include <vcl/weld.hxx>
 #include <editeng/hangulhanja.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <editeng/unolingu.hxx>
 #include <com/sun/star/linguistic2/XConversionDictionaryList.hpp>
 #include <svtools/valueset.hxx>
 

@@ -15,7 +15,6 @@
 #include <vcl/weld.hxx>
 #include <vcl/font/Feature.hxx>
 #include <svx/fntctrl.hxx>
-#include "chardlg.hxx"
 #include <memory>
 
 namespace cui

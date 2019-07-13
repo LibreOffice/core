@@ -22,6 +22,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/docfac.hxx>
 #include <sfx2/docfilt.hxx>
+#include <svl/stritem.hxx>
 #include <com/sun/star/awt/XTopWindow.hpp>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Sequence.h>

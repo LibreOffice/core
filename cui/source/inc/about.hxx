@@ -19,6 +19,7 @@
 #ifndef INCLUDED_CUI_SOURCE_INC_ABOUT_HXX
 #define INCLUDED_CUI_SOURCE_INC_ABOUT_HXX
 
+#include <vcl/bitmapex.hxx>
 #include <vcl/weld.hxx>
 
 class AboutDialog : public weld::DialogController
