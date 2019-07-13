@@ -35,8 +35,8 @@
 SmTmpDevice::SmTmpDevice(OutputDevice &rTheDev, bool bUseMap100th_mm) :
     rOutDev(rTheDev)
 {
-    rOutDev.Push( PushFlags::FONT | PushFlags::MAPMODE |
-                  PushFlags::LINECOLOR | PushFlags::FILLCOLOR | PushFlags::TEXTCOLOR );
+    rOutDev.Push(PushFlags::FONT | PushFlags::MAPMODE |
+                 PushFlags::LINECOLOR | PushFlags::FILLCOLOR | PushFlags::TEXTCOLOR);
     if (bUseMap100th_mm  &&  MapUnit::Map100thMM != rOutDev.GetMapMode().GetMapUnit())
     {
         SAL_WARN("starmath", "incorrect MapMode?");
@@ -45,34 +45,22 @@ SmTmpDevice::SmTmpDevice(OutputDevice &rTheDev, bool bUseMap100th_mm) :
 }
 
 
-Color SmTmpDevice::Impl_GetColor( const Color& rColor )
+Color SmTmpDevice::GetTextColor(const Color& rTextColor)
 {
-    Color nNewCol = rColor;
-    if (nNewCol == COL_AUTO)
+    if (rTextColor == COL_AUTO)
     {
-        if (OUTDEV_PRINTER == rOutDev.GetOutDevType())
-            nNewCol = COL_BLACK;
-        else
-        {
-            Color aBgCol(rOutDev.GetBackgroundColor());
-
-            nNewCol = SM_MOD()->GetColorConfig().GetColorValue(svtools::FONTCOLOR).nColor;
-
-            Color aTmpColor( nNewCol );
-            if (aBgCol.IsDark() && aTmpColor.IsDark())
-                nNewCol = COL_WHITE;
-            else if (aBgCol.IsBright() && aTmpColor.IsBright())
-                nNewCol = COL_BLACK;
-        }
+        Color aConfigFontColor = SM_MOD()->GetColorConfig().GetColorValue(svtools::FONTCOLOR).nColor;
+        return rOutDev.GetReadableFontColor(aConfigFontColor, rOutDev.GetBackgroundColor());
     }
-    return nNewCol;
+
+    return rTextColor;
 }
 
 
 void SmTmpDevice::SetFont(const vcl::Font &rNewFont)
 {
-    rOutDev.SetFont( rNewFont );
-    rOutDev.SetTextColor( Impl_GetColor( rNewFont.GetColor() ) );
+    rOutDev.SetFont(rNewFont);
+    rOutDev.SetTextColor(GetTextColor(rNewFont.GetColor()));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

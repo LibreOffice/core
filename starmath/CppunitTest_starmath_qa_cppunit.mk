@@ -48,6 +48,11 @@ $(eval $(call gb_CppunitTest_use_libraries,starmath_qa_cppunit,\
     xo \
 ))
 
+$(eval $(call gb_CppunitTest_set_include,starmath_qa_cppunit,\
+    -I$(SRCDIR)/starmath/source \
+    $$(INCLUDE) \
+))
+
 $(eval $(call gb_CppunitTest_add_exception_objects,starmath_qa_cppunit,\
     starmath/qa/cppunit/test_cursor \
     starmath/qa/cppunit/test_node \
