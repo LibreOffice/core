@@ -42,6 +42,7 @@
 
 // include interface declarations
 #include <com/sun/star/awt/KeyModifier.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/embed/StorageFactory.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>

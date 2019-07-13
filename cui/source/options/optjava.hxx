@@ -23,19 +23,17 @@
 
 #include <memory>
 #include <vector>
-#include <ucbhelper/content.hxx>
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/idle.hxx>
+#include <vcl/treelistbox.hxx>
 #include <vcl/weld.hxx>
 #include <sfx2/tabdlg.hxx>
 #include <com/sun/star/ui/dialogs/XFolderPicker2.hpp>
 #include <svtools/dialogclosedlistener.hxx>
 #include <svtools/restartdialog.hxx>
-#include <svtools/simptabl.hxx>
-#include <radiobtnbox.hxx>
 
 // forward ---------------------------------------------------------------
 

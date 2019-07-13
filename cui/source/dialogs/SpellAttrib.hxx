@@ -19,12 +19,10 @@
 #ifndef INCLUDED_CUI_SOURCE_DIALOGS_SPELLATTRIB_HXX
 #define INCLUDED_CUI_SOURCE_DIALOGS_SPELLATTRIB_HXX
 
-#include <i18nlangtag/lang.h>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/linguistic2/XProofreader.hpp>
-#include <tools/color.hxx>
 
 namespace svx{
 struct SpellErrorDescription

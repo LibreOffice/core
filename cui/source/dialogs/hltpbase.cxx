@@ -21,6 +21,7 @@
 #include <sal/config.h>
 
 #include <osl/file.hxx>
+#include <sfx2/app.hxx>
 #include <sfx2/event.hxx>
 #include <sfx2/frame.hxx>
 #include <sfx2/viewfrm.hxx>

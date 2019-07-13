@@ -20,7 +20,6 @@
 #define INCLUDED_CUI_SOURCE_INC_MULTIPAT_HXX
 
 #include <vcl/weld.hxx>
-#include "radiobtnbox.hxx"
 
 // define ----------------------------------------------------------------
 

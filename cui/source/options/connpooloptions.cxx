@@ -24,6 +24,8 @@
 #include <vcl/builderfactory.hxx>
 #include "connpoolsettings.hxx"
 #include <svl/eitem.hxx>
+#include <svl/solar.hrc>
+#include <svx/databaseregistrationui.hxx>
 #include <strings.hrc>
 #include <dialmgr.hxx>
 

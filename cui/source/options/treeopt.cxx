@@ -67,6 +67,7 @@
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/frame/UnknownModuleException.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/loader/CannotActivateFactoryException.hpp>
 #include <com/sun/star/linguistic2/LinguProperties.hpp>
 #include <com/sun/star/setup/UpdateCheck.hpp>
@@ -92,6 +93,7 @@
 #include <svl/languageoptions.hxx>
 #include <svtools/helpopt.hxx>
 #include <svtools/miscopt.hxx>
+#include <svx/databaseregistrationui.hxx>
 #include <svx/drawitem.hxx>
 #include <svx/xtable.hxx>
 #include <svx/xpool.hxx>

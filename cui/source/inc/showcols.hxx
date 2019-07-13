@@ -21,7 +21,6 @@
 #define INCLUDED_CUI_SOURCE_INC_SHOWCOLS_HXX
 
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <vcl/weld.hxx>
 

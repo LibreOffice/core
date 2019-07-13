@@ -29,6 +29,7 @@
 #include "optjava.hxx"
 #include <treeopt.hxx>
 #include <dialmgr.hxx>
+#include <radiobtnbox.hxx>
 
 #include <officecfg/Office/Common.hxx>
 #include <svtools/miscopt.hxx>

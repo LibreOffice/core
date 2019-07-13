@@ -21,13 +21,11 @@
 
 #include <svtools/valueset.hxx>
 #include <svx/dlgctrl.hxx>
-#include <svx/xfillit0.hxx>
 #include <svx/xflasit.hxx>
 #include <svx/tabarea.hxx>
 #include <svx/hexcolorcontrol.hxx>
 #include <svx/SvxColorValueSet.hxx>
 #include <svx/SvxPresetListBox.hxx>
-#include <svx/Palette.hxx>
 #include <svx/PaletteManager.hxx>
 #include <svx/svdview.hxx>
 

@@ -70,6 +70,7 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/FileSystemStorageFactory.hpp>
+#include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/frame/UnknownModuleException.hpp>
 #include <com/sun/star/frame/XFrames.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>

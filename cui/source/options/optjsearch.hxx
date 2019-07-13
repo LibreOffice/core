@@ -20,6 +20,7 @@
 #ifndef INCLUDED_CUI_SOURCE_OPTIONS_OPTJSEARCH_HXX
 #define INCLUDED_CUI_SOURCE_OPTIONS_OPTJSEARCH_HXX
 
+#include <i18nutil/transliteration.hxx>
 #include <sfx2/tabdlg.hxx>
 #include <vcl/weld.hxx>
 

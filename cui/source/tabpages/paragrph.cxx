@@ -25,6 +25,7 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/module.hxx>
 #include <vcl/mnemonic.hxx>
+#include <svx/flagsdef.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/svxids.hrc>
 

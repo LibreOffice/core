@@ -21,10 +21,9 @@
 #define INCLUDED_CUI_SOURCE_OPTIONS_OPTCHART_HXX
 
 #include <sfx2/tabdlg.hxx>
-#include <vcl/fixed.hxx>
 #include <svtools/valueset.hxx>
-#include <svx/dlgctrl.hxx>
 #include <vcl/button.hxx>
+#include <vcl/lstbox.hxx>
 #include <svx/xtable.hxx>
 #include <svx/PaletteManager.hxx>
 

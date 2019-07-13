@@ -19,17 +19,10 @@
 #ifndef INCLUDED_CUI_SOURCE_INC_OPTLINGU_HXX
 #define INCLUDED_CUI_SOURCE_INC_OPTLINGU_HXX
 
-#include <vcl/button.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/toolbox.hxx>
-#include <vcl/field.hxx>
-#include <vcl/fixedhyper.hxx>
 #include <sfx2/tabdlg.hxx>
-#include <svx/checklbx.hxx>
 #include <svx/langbox.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/beans/XPropertySet.hpp>
 
 namespace com{namespace sun{namespace star{
 namespace beans{

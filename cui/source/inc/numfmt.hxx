@@ -23,10 +23,8 @@
 #include <rtl/ustring.hxx>
 #include <sfx2/tabdlg.hxx>
 #include <svx/langbox.hxx>
-#include <svx/fontlb.hxx>
 #include <tools/color.hxx>
 #include <vcl/customweld.hxx>
-#include <vcl/toolbox.hxx>
 #include <vcl/weld.hxx>
 
 class SvxNumberFormatShell;

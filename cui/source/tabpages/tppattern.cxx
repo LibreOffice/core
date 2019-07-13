@@ -37,6 +37,7 @@
 #include <svx/strings.hrc>
 
 #include <strings.hrc>
+#include <svx/xfillit0.hxx>
 #include <svx/xbtmpit.hxx>
 #include <svx/xpool.hxx>
 #include <svx/xtable.hxx>

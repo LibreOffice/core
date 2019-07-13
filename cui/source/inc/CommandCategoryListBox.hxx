@@ -19,7 +19,6 @@
 #ifndef INCLUDED_CUI_SOURCE_INC_COMMANDCATEGORYLISTBOX_HXX
 #define INCLUDED_CUI_SOURCE_INC_COMMANDCATEGORYLISTBOX_HXX
 
-#include <vcl/lstbox.hxx>
 #include <i18nutil/searchopt.hxx>
 #include "cfgutil.hxx"
 

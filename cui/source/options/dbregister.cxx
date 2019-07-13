@@ -41,6 +41,7 @@
 #include <dialmgr.hxx>
 #include "dbregisterednamesconfig.hxx"
 #include <svx/dialogs.hrc>
+#include <svx/databaseregistrationui.hxx>
 
 #define TAB_WIDTH1      80
 

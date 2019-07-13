@@ -44,6 +44,7 @@
 #include <sfx2/opengrf.hxx>
 #include <svx/svxerr.hxx>
 #include <svx/drawitem.hxx>
+#include <svx/xfillit0.hxx>
 #include <svx/xflclit.hxx>
 #include <dialmgr.hxx>
 #include <sfx2/htmlmode.hxx>
