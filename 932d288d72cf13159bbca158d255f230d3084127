@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_b4a3ab4f",
+        "filename": "cui/source/options/optgdlg.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2019-07-13T08:02:39Z",
+      "side": 1,
+      "message": "one more \"plasma5\"",
+      "range": {
+        "startLine": 211,
+        "startChar": 51,
+        "endLine": 211,
+        "endChar": 56
+      },
+      "revId": "932d288d72cf13159bbca158d255f230d3084127",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
