@@ -82,7 +82,7 @@ const SfxItemPropertySimpleEntry* SfxItemPropertyMap::getByName( const OUString 
 
 uno::Sequence<beans::Property> const & SfxItemPropertyMap::getProperties() const
 {
-    if( !m_pImpl->m_aPropSeq.getLength() )
+    if( !m_pImpl->m_aPropSeq.hasElements() )
     {
         m_pImpl->m_aPropSeq.realloc( m_pImpl->size() );
         beans::Property* pPropArray = m_pImpl->m_aPropSeq.getArray();
@@ -125,15 +125,13 @@ bool SfxItemPropertyMap::hasPropertyByName( const OUString& rName ) const
 
 void SfxItemPropertyMap::mergeProperties( const uno::Sequence< beans::Property >& rPropSeq )
 {
-    const beans::Property* pPropArray = rPropSeq.getConstArray();
-    sal_uInt32 nElements = rPropSeq.getLength();
-    for( sal_uInt32 nElement = 0; nElement < nElements; ++nElement )
+    for( const beans::Property& rProp : rPropSeq )
     {
         SfxItemPropertySimpleEntry aTemp(
-            sal::static_int_cast< sal_Int16 >( pPropArray[nElement].Handle ), //nWID
-            pPropArray[nElement].Type, //aType
-            pPropArray[nElement].Attributes); //nFlags
-        (*m_pImpl)[pPropArray[nElement].Name] = aTemp;
+            sal::static_int_cast< sal_Int16 >( rProp.Handle ), //nWID
+            rProp.Type, //aType
+            rProp.Attributes); //nFlags
+        (*m_pImpl)[rProp.Name] = aTemp;
     }
 }
 
