@@ -91,6 +91,43 @@ class ul_Compiler:
 
         self.log_lines=self.get_log_file(self.input_address)
 
+    def init_app(self):
+        if self.current_app in self.objects:
+            self.objects[self.current_app]+=1
+        else:
+            self.objects[self.current_app]=1
+            line="\t\t"+self.current_app+" = MainWindow.getChild(\""+self.current_app+"\")\n"
+            self.variables.append(line)
+
+    def init_Object(self,Id_of_Object,Obj_parent):
+
+        if Id_of_Object in self.objects:
+            self.objects[Id_of_Object]+=1
+        else:
+            self.objects[Id_of_Object]=1
+            line="\t\t"+Id_of_Object+" = "+Obj_parent+\
+                ".getChild(\""+Id_of_Object+"\")\n"
+            self.variables.append(line)
+
+    def write_line_without_parameters(self,Action_holder,Action,Action_type):
+        line="\t\t"+Action_holder+".executeAction(\""+Action+"\","+Action_type+"())\n"
+        self.variables.append(line)
+
+    def write_line_with_one_parameters(self,Action_holder,Action,Paramerter_name,parameter_value):
+        line="\t\t"+Action_holder+".executeAction(\""+Action+"\", mkPropertyValues({\""+\
+            Paramerter_name+"\": \""+\
+            str(parameter_value)+"\"}))\n"
+        self.variables.append(line)
+
+    def write_line_with_two_parameters(self,Action_holder,Action,Paramerter_name_1,parameter_value_1,
+    Paramerter_name_2,parameter_value_2):
+
+        line="\t\t"+Action_holder+\
+                ".executeAction(\""+Action+"\", mkPropertyValues({\""+Paramerter_name_1+"\": \""+\
+                str(parameter_value_1)+"\", \""+Paramerter_name_2+"\": \""+\
+                str(parameter_value_2)+"\"}))\n"
+        self.variables.append(line)
+
     def handle_uno(self, UNOCommand):
         if(UNOCommand.prameters==None):
             line = "\t\tself.xUITest.executeCommand(\"" + \
@@ -159,275 +196,153 @@ class ul_Compiler:
 
     def handle_button(self, ButtonUIObject):
 
-        if ButtonUIObject.ui_button in self.objects:
-            self.objects[ButtonUIObject.ui_button]+=1
-        else:
-            self.objects[ButtonUIObject.ui_button]=1
-            line="\t\t"+ButtonUIObject.ui_button+" = "+ButtonUIObject.parent_id+\
-                ".getChild(\""+ButtonUIObject.ui_button+"\")\n"
-            self.variables.append(line)
+        self.init_Object(ButtonUIObject.ui_button,ButtonUIObject.parent_id)
 
-        line="\t\t"+ButtonUIObject.ui_button+".executeAction(\"CLICK\",tuple())\n"
-        self.variables.append(line)
+        self.write_line_without_parameters(ButtonUIObject.ui_button,"CLICK","tuple")
+
         self.prev_command=ButtonUIObject
 
     def handle_check_box(self, CheckBoxUIObject):
 
-        if CheckBoxUIObject.Check_box_id in self.objects:
-            self.objects[CheckBoxUIObject.Check_box_id]+=1
-        else:
-            self.objects[CheckBoxUIObject.Check_box_id]=1
-            line="\t\t"+CheckBoxUIObject.Check_box_id+" = "+CheckBoxUIObject.parent_id+\
-                ".getChild(\""+CheckBoxUIObject.Check_box_id+"\")\n"
-            self.variables.append(line)
+        self.init_Object(CheckBoxUIObject.Check_box_id,CheckBoxUIObject.parent_id)
 
-        line="\t\t"+CheckBoxUIObject.Check_box_id+".executeAction(\"CLICK\",tuple())\n"
-        self.variables.append(line)
+        self.write_line_without_parameters(CheckBoxUIObject.Check_box_id,"CLICK","tuple")
+
         self.prev_command=CheckBoxUIObject
 
     def handle_tab(self, TabControlUIObject):
 
-        if TabControlUIObject.tab_id in self.objects:
-            self.objects[TabControlUIObject.tab_id]+=1
-        else:
-            self.objects[TabControlUIObject.tab_id]=1
-            line="\t\t"+TabControlUIObject.tab_id+" = "+TabControlUIObject.parent_id+\
-                ".getChild(\""+TabControlUIObject.tab_id+"\")\n"
-            self.variables.append(line)
+        self.init_Object(TabControlUIObject.tab_id,TabControlUIObject.parent_id)
 
-        line="\t\t"+TabControlUIObject.tab_id+\
-            ".executeAction(\"SELECT\", mkPropertyValues({\"POS\": \""+\
-            str(TabControlUIObject.tab_page_number)+"\"}))\n"
-        self.variables.append(line)
+        self.write_line_with_one_parameters(TabControlUIObject.tab_id,"SELECT","POS",TabControlUIObject.tab_page_number)
+
         self.prev_command=TabControlUIObject
 
     def handle_Combo_box(self, ComboBoxUIObject):
 
-        if ComboBoxUIObject.Combo_box_id in self.objects:
-            self.objects[ComboBoxUIObject.Combo_box_id]+=1
-        else:
-            self.objects[ComboBoxUIObject.Combo_box_id]=1
-            line="\t\t"+ComboBoxUIObject.Combo_box_id+" = "+ComboBoxUIObject.parent_id+\
-                ".getChild(\""+ComboBoxUIObject.Combo_box_id+"\")\n"
-            self.variables.append(line)
+        self.init_Object(ComboBoxUIObject.Combo_box_id,ComboBoxUIObject.parent_id)
 
-        line="\t\t"+ComboBoxUIObject.Combo_box_id+\
-            ".executeAction(\"SELECT\", mkPropertyValues({\"POS\": \""+\
-            str(ComboBoxUIObject.item_num)+"\"}))\n"
-        self.variables.append(line)
+        self.write_line_with_one_parameters(ComboBoxUIObject.Combo_box_id,"SELECT","POS",ComboBoxUIObject.item_num)
+
         self.prev_command=ComboBoxUIObject
 
     def handle_Radio_button(self,RadioButtonUIObject):
 
-        if RadioButtonUIObject.Radio_button_id in self.objects:
-            self.objects[RadioButtonUIObject.Radio_button_id]+=1
-        else:
-            self.objects[RadioButtonUIObject.Radio_button_id]=1
-            line="\t\t"+RadioButtonUIObject.Radio_button_id+" = "+RadioButtonUIObject.parent_id+\
-                ".getChild(\""+RadioButtonUIObject.Radio_button_id+"\")\n"
-            self.variables.append(line)
+        self.init_Object(RadioButtonUIObject.Radio_button_id,RadioButtonUIObject.parent_id)
 
-        line="\t\t"+RadioButtonUIObject.Radio_button_id+".executeAction(\"CLICK\",tuple())\n"
-        self.variables.append(line)
+        self.write_line_without_parameters(RadioButtonUIObject.Radio_button_id,"CLICK","tuple")
+
         self.prev_command=RadioButtonUIObject
 
     def handle_List_box(self, ListBoxUIObject):
 
-        if ListBoxUIObject.list_id in self.objects:
-            self.objects[ListBoxUIObject.list_id]+=1
-        else:
-            self.objects[ListBoxUIObject.list_id]=1
-            line="\t\t"+ListBoxUIObject.list_id+" = "+ListBoxUIObject.parent_id+\
-                ".getChild(\""+ListBoxUIObject.list_id+"\")\n"
-            self.variables.append(line)
+        self.init_Object(ListBoxUIObject.list_id,ListBoxUIObject.parent_id)
 
-        line="\t\t"+ListBoxUIObject.list_id+\
-            ".executeAction(\"SELECT\", mkPropertyValues({\"POS\": \""+\
-            str(ListBoxUIObject.POS)+"\"}))\n"
-        self.variables.append(line)
+        self.write_line_with_one_parameters(ListBoxUIObject.list_id,"SELECT","POS",ListBoxUIObject.POS)
+
         self.prev_command=ListBoxUIObject
 
     def handle_spin_field(self,SpinFieldUIObject):
 
-        if SpinFieldUIObject.Spin_id in self.objects:
-            self.objects[SpinFieldUIObject.Spin_id]+=1
-        else:
-            self.objects[SpinFieldUIObject.Spin_id]=1
-            line="\t\t"+SpinFieldUIObject.Spin_id+" = "+SpinFieldUIObject.parent_id+\
-                ".getChild(\""+SpinFieldUIObject.Spin_id+"\")\n"
-            self.variables.append(line)
+        self.init_Object(SpinFieldUIObject.Spin_id,SpinFieldUIObject.parent_id)
 
         if(SpinFieldUIObject.change=="Increase"):
-            line="\t\t"+SpinFieldUIObject.Spin_id+".executeAction(\"UP\",tuple())\n"
+            self.write_line_without_parameters(SpinFieldUIObject.Spin_id,"UP","tuple")
         elif(SpinFieldUIObject.change=="Decrease"):
-            line="\t\t"+SpinFieldUIObject.Spin_id+".executeAction(\"DOWN\",tuple())\n"
-        self.variables.append(line)
+            self.write_line_without_parameters(SpinFieldUIObject.Spin_id,"DOWN","tuple")
         self.prev_command=SpinFieldUIObject
 
     def handle_Edit_uiObject(self,EditUIObject):
 
+        self.init_Object(EditUIObject.action.edit_button,EditUIObject.parent_id)
+
         if(EditUIObject.action.__class__.__name__ =="Type_action"):
-            if EditUIObject.action.edit_button in self.objects:
-                self.objects[EditUIObject.action.edit_button]+=1
-            else:
-                self.objects[EditUIObject.action.edit_button]=1
-                line="\t\t"+EditUIObject.action.edit_button+" = "+EditUIObject.parent_id+\
-                ".getChild(\""+EditUIObject.action.edit_button+"\")\n"
-                self.variables.append(line)
 
             if(EditUIObject.action.what_to_type.__class__.__name__=="char"):
-                line="\t\t"+EditUIObject.action.edit_button+\
-                ".executeAction(\"TYPE\", mkPropertyValues({\"TEXT\": \""+\
-                EditUIObject.action.what_to_type.input_char+"\"}))\n"
+                self.write_line_with_one_parameters(EditUIObject.action.edit_button,\
+                    "TYPE","TEXT",EditUIObject.action.what_to_type.input_char)
 
             elif(EditUIObject.action.what_to_type.__class__.__name__=="KeyCode"):
-                line="\t\t"+EditUIObject.action.edit_button+\
-                ".executeAction(\"TYPE\", mkPropertyValues({\"KEYCODE\":"+\
-                EditUIObject.action.what_to_type.input_key_code+"\"}))\n"
-            self.variables.append(line)
+                self.write_line_with_one_parameters(EditUIObject.action.edit_button,\
+                    "TYPE","KEYCODE",EditUIObject.action.what_to_type.input_key_code)
 
         if(EditUIObject.action.__class__.__name__ =="SELECT"):
-            if EditUIObject.action.edit_button in self.objects:
-                self.objects[EditUIObject.action.edit_button]+=1
-            else:
-                self.objects[EditUIObject.action.edit_button]=1
-                line="\t\t"+EditUIObject.action.edit_button+" = "+EditUIObject.parent_id+\
-                ".getChild(\""+EditUIObject.action.edit_button+"\")\n"
-                self.variables.append(line)
 
-            line="\t\t"+EditUIObject.action.edit_button+\
-                ".executeAction(\"SELECT\", mkPropertyValues({\"from\": \""+\
-                str(EditUIObject.action.from_pos )+"\", \"TO\": \""+\
-                str(EditUIObject.action.to_pos)+"\"}))\n"
-            self.variables.append(line)
+            self.write_line_with_two_parameters(EditUIObject.action.edit_button,\
+                    "SELECT","FROM",EditUIObject.action.from_pos,"TO",\
+                        EditUIObject.action.to_pos)
 
         if(EditUIObject.action.__class__.__name__ =="Clear"):
-            if EditUIObject.action.edit_button in self.objects:
-                self.objects[EditUIObject.action.edit_button]+=1
-            else:
-                self.objects[EditUIObject.action.edit_button]=1
-                line="\t\t"+EditUIObject.action.edit_button+" = "+EditUIObject.parent_id+\
-                ".getChild(\""+EditUIObject.action.edit_button+"\")\n"
-                self.variables.append(line)
 
-            line="\t\t"+EditUIObject.action.edit_button+\
-                ".executeAction(\"CLEAR\",tuple())\n"
-            self.variables.append(line)
+            self.write_line_without_parameters(SpinFieldUIObject.Spin_id,"CLEAR","tuple")
+
         self.prev_command=EditUIObject
 
     def handle_writer_type (self,writer_Type_command):
 
-        if "writer_edit" in self.objects:
-            self.objects["writer_edit"]+=1
-        else:
-            self.objects["writer_edit"]=1
-            line="\t\twriter_edit = MainWindow.getChild(\"writer_edit\")\n"
-            self.variables.append(line)
+        self.init_app()
 
         if(writer_Type_command.what_to_type.__class__.__name__=="char"):
-            line="\t\twriter_edit.executeAction(\"TYPE\", mkPropertyValues"+\
-            "({\"TEXT\": \""+\
-            writer_Type_command.what_to_type.input_char+"\"}))\n"
+            self.write_line_with_one_parameters(self.current_app,"TYPE","TEXT",writer_Type_command.what_to_type.input_char)
+
         elif(writer_Type_command.what_to_type.__class__.__name__=="KeyCode"):
-            line="\t\twriter_edit.executeAction(\"TYPE\", mkPropertyValues"+\
-            "({\"KEYCODE\": \""+\
-            writer_Type_command.what_to_type.input_key_code+"\"}))\n"
-        self.variables.append(line)
+            self.write_line_with_one_parameters(self.current_app,"TYPE","KEYCODE",writer_Type_command.what_to_type.input_key_code)
+
         self.prev_command=writer_Type_command
 
     def handle_writer_select (self,writer_Select_command):
 
-        if "writer_edit" in self.objects:
-            self.objects["writer_edit"]+=1
-        else:
-            self.objects["writer_edit"]=1
-            line="\t\twriter_edit = MainWindow.getChild(\"writer_edit\")\n"
-            self.variables.append(line)
+        self.init_app()
 
-        line="\t\twriter_edit.executeAction(\"SELECT\", mkPropertyValues({\"END_POS\": \""+\
-            str(writer_Select_command.from_pos)+"\", \"START_POS\": \""+\
-                str(writer_Select_command.to_pos)+"\"}))\n"
-        self.variables.append(line)
+        self.write_line_with_two_parameters(self.current_app,\
+                    "SELECT","END_POS",writer_Select_command.from_pos,"START_POS",\
+                        writer_Select_command.to_pos)
+
         self.prev_command=writer_Select_command
 
     def handle_wirter_goto (self,writer_GOTO_command):
 
-        if "writer_edit" in self.objects:
-            self.objects["writer_edit"]+=1
-        else:
-            self.objects["writer_edit"]=1
-            line="\t\twriter_edit = MainWindow.getChild(\"writer_edit\")\n"
-            self.variables.append(line)
+        self.init_app()
 
-        line="\t\twriter_edit.executeAction(\"GOTO\", mkPropertyValues({\"PAGE\": \""+\
-            str(writer_GOTO_command.page_num)+"\"}))\n"
-        self.variables.append(line)
+        self.write_line_with_one_parameters(self.current_app,"GOTO","PAGE",writer_GOTO_command.page_num)
+
         self.prev_command=writer_GOTO_command
 
     def handle_calc_select (self,calc_Select_cell):
 
-        if self.current_app in self.objects:
-            self.objects[self.current_app]+=1
-        else:
-            self.objects[self.current_app]=1
-            line="\t\t"+self.current_app+" = MainWindow.getChild(\""+self.current_app+"\")\n"
-            self.variables.append(line)
+        self.init_app()
 
         if(calc_Select_cell.select_op.__class__.__name__=="range_of_cells"):
-            line="\t\t"+self.current_app+".executeAction(\"SELECT\", mkPropertyValues({\"RANGE\": \""+\
-            calc_Select_cell.select_op.input_range+"\"}))\n"
+            self.write_line_with_one_parameters(self.current_app,"SELECT","RANGE",calc_Select_cell.select_op.input_range)
 
         elif(calc_Select_cell.select_op.__class__.__name__=="one_cell"):
-            line="\t\t"+self.current_app+".executeAction(\"SELECT\", mkPropertyValues({\"CELL\": \""+\
-            calc_Select_cell.select_op.input_cell+"\"}))\n"
+            self.write_line_with_one_parameters(self.current_app,"SELECT","CELL",calc_Select_cell.select_op.input_cell)
 
-        self.variables.append(line)
         self.prev_command=calc_Select_cell
 
     def handle_calc_switch_sheet (self,calc_switch_sheet):
 
-        if self.current_app in self.objects:
-            self.objects[self.current_app]+=1
-        else:
-            self.objects[self.current_app]=1
-            line="\t\t"+self.current_app+" = MainWindow.getChild(\""+self.current_app+"\")\n"
-            self.variables.append(line)
+        self.init_app()
 
-        line="\t\t"+self.current_app+".executeAction(\"SELECT\", mkPropertyValues({\"TABLE\": \""+\
-        str(calc_switch_sheet.sheet_num)+"\"}))\n"
+        self.write_line_with_one_parameters(self.current_app,"SELECT","TABLE",calc_switch_sheet.sheet_num)
 
-        self.variables.append(line)
         self.prev_command=calc_switch_sheet
 
     def handle_calc_Type_command (self,calc_Type_command):
 
-        if self.current_app in self.objects:
-            self.objects[self.current_app]+=1
-        else:
-            self.objects[self.current_app]=1
-            line="\t\t"+self.current_app+" = MainWindow.getChild(\""+self.current_app+"\")\n"
-            self.variables.append(line)
+        self.init_app()
 
         if(calc_Type_command.what_to_type.__class__.__name__=="char"):
-            line="\t\t"+self.current_app+".executeAction(\"TYPE\", mkPropertyValues"+\
-            "({\"TEXT\": \""+\
-            calc_Type_command.what_to_type.input_char+"\"}))\n"
-        elif(calc_Type_command.what_to_type.__class__.__name__=="KeyCode"):
-            line="\t\t"+self.current_app+".executeAction(\"TYPE\", mkPropertyValues"+\
-            "({\"KEYCODE\": \""+\
-            calc_Type_command.what_to_type.input_key_code+"\"}))\n"
+            self.write_line_with_one_parameters(self.current_app,"TYPE","TEXT",calc_Type_command.what_to_type.input_char)
 
-        self.variables.append(line)
+        elif(calc_Type_command.what_to_type.__class__.__name__=="KeyCode"):
+            self.write_line_with_one_parameters(self.current_app,"TYPE","KEYCODE",calc_Type_command.what_to_type.input_key_code)
+
         self.prev_command=calc_Type_command
 
     def handle_calc_AutoFill_filter (self,calc_AutoFill_filter):
 
-        if self.current_app in self.objects:
-            self.objects[self.current_app]+=1
-        else:
-            self.objects[self.current_app]=1
-            line="\t\t"+self.current_app+" = MainWindow.getChild(\""+self.current_app+"\")\n"
-            self.variables.append(line)
+        self.init_app()
 
         line="\t\t"+self.current_app+".executeAction(\"LAUNCH\", mkPropertyValues"+\
             "({\"AUTOFILTER\": \"\", \"COL\": \""+\
@@ -440,44 +355,25 @@ class ul_Compiler:
 
     def handle_impress_Type_command (self,impress_Type_command):
 
-        if self.current_app in self.objects:
-            self.objects[self.current_app]+=1
-        else:
-            self.objects[self.current_app]=1
-            line="\t\t"+self.current_app+" = MainWindow.getChild(\""+self.current_app+"\")\n"
-            self.variables.append(line)
+        self.init_app()
 
         if(impress_Type_command.what_to_type.__class__.__name__=="char"):
-            line="\t\t"+self.current_app+".executeAction(\"TYPE\", mkPropertyValues"+\
-            "({\"TEXT\": \""+\
-            impress_Type_command.what_to_type.input_char+"\"}))\n"
-        elif(impress_Type_command.what_to_type.__class__.__name__=="KeyCode"):
-            line="\t\t"+self.current_app+".executeAction(\"TYPE\", mkPropertyValues"+\
-            "({\"KEYCODE\": \""+\
-            impress_Type_command.what_to_type.input_key_code+"\"}))\n"
+            self.write_line_with_one_parameters(self.current_app,"TYPE","TEXT",impress_Type_command.what_to_type.input_char)
 
-        self.variables.append(line)
+        elif(impress_Type_command.what_to_type.__class__.__name__=="KeyCode"):
+            self.write_line_with_one_parameters(self.current_app,"TYPE","KEYCODE",impress_Type_command.what_to_type.input_key_code)
+
         self.prev_command=impress_Type_command
 
     def handle_math_Type_command (self,math_Type_command):
 
-        if self.current_app in self.objects:
-            self.objects[self.current_app]+=1
-        else:
-            self.objects[self.current_app]=1
-            line="\t\t"+self.current_app+" = MainWindow.getChild(\""+self.current_app+"\")\n"
-            self.variables.append(line)
-
+        self.init_app()
         if(math_Type_command.what_to_type.__class__.__name__=="char"):
-            line="\t\t"+self.current_app+".executeAction(\"TYPE\", mkPropertyValues"+\
-            "({\"TEXT\": \""+\
-            math_Type_command.what_to_type.input_char+"\"}))\n"
-        elif(math_Type_command.what_to_type.__class__.__name__=="KeyCode"):
-            line="\t\t"+self.current_app+".executeAction(\"TYPE\", mkPropertyValues"+\
-            "({\"KEYCODE\": \""+\
-            math_Type_command.what_to_type.input_key_code+"\"}))\n"
+            self.write_line_with_one_parameters(self.current_app,"TYPE","TEXT",math_Type_command.what_to_type.input_char)
 
-        self.variables.append(line)
+        elif(math_Type_command.what_to_type.__class__.__name__=="KeyCode"):
+            self.write_line_with_one_parameters(self.current_app,"TYPE","KEYCODE",math_Type_command.what_to_type.input_key_code)
+
         self.prev_command=math_Type_command
 
     def handle_math_element_selector (self,math_element_selector):
@@ -485,22 +381,17 @@ class ul_Compiler:
         line="\t\t"+str(math_element_selector.element_no)+" = element_selector.getChild(\""+\
             str(math_element_selector.element_no)+"\")\n"
         self.variables.append(line)
-        line="\t\t"+str(math_element_selector.element_no)+".executeAction(\"SELECT\",tuple())\n"
-        self.variables.append(line)
+
+        self.write_line_without_parameters(str(math_element_selector.element_no),"SELECT","tuple")
+
         self.prev_command=math_element_selector
 
     def handle_setZoom_command (self,setZoom_command):
 
-        if self.current_app in self.objects:
-            self.objects[self.current_app]+=1
-        else:
-            self.objects[self.current_app]=1
-            line="\t\t"+self.current_app+" = MainWindow.getChild(\""+self.current_app+"\")\n"
-            self.variables.append(line)
+        self.init_app()
 
-        line="\t\t"+self.current_app+".executeAction(\"SET\", mkPropertyValues({\"ZOOM\": \""+\
-            str(setZoom_command.zoom_value)+"\"}))\n"
-        self.variables.append(line)
+        self.write_line_with_one_parameters(self.current_app,"SET","ZOOM",setZoom_command.zoom_value)
+
         self.prev_command=setZoom_command
 
     def Generate_UI_test(self):
