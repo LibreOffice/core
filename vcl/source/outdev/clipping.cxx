@@ -36,6 +36,12 @@
 
 #include <numeric>
 
+void OutputDevice::SaveBackground(VirtualDevice& rSaveDevice,
+                                  const Point& rPos, const Size& rSize, const Size& rBackgroundSize) const
+{
+   rSaveDevice.DrawOutDev(Point(), rBackgroundSize, rPos, rSize, *this);
+}
+
 vcl::Region OutputDevice::GetClipRegion() const
 {
 
