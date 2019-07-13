@@ -181,6 +181,11 @@ void PrinterOptions::ReadFromConfig( bool i_bFile )
         *this = aOldValues;
 }
 
+Color Printer::CalculateFontColor(const Color&, const Color&) const
+{
+    return COL_BLACK;
+}
+
 bool Printer::DrawTransformBitmapExDirect(
     const basegfx::B2DHomMatrix& /*aFullTransform*/,
     const BitmapEx& /*rBitmapEx*/)
