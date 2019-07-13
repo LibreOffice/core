@@ -227,9 +227,13 @@ void Connection::construct(const OUString& url, const Sequence< PropertyValue >&
             dpbBuffer.push_back(1); // 1 byte long
             dpbBuffer.push_back(FIREBIRD_SQL_DIALECT);
 
-            // set UTF8 as default character set
+            // set UTF8 as default character set of the database
             const char sCharset[] = "UTF8";
             dpbBuffer.push_back(isc_dpb_set_db_charset);
+            dpbBuffer.push_back(sizeof(sCharset) - 1);
+            dpbBuffer.append(sCharset);
+            // set UTF8 as default character set of the connection
+            dpbBuffer.push_back(isc_dpb_lc_ctype);
             dpbBuffer.push_back(sizeof(sCharset) - 1);
             dpbBuffer.append(sCharset);
 
