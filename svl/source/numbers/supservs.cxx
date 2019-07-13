@@ -75,13 +75,12 @@ void SAL_CALL SvNumberFormatsSupplierServiceObject::initialize( const Sequence< 
     LanguageType eNewFormatterLanguage = LANGUAGE_SYSTEM;
         // the default
 
-    const Any* pArgs = _rArguments.getConstArray();
-    for (sal_Int32 i=0; i<_rArguments.getLength(); ++i, ++pArgs)
+    for (const Any& rArg : _rArguments)
     {
-        if (pArgs->getValueType().equals(aExpectedArgType))
+        if (rArg.getValueType().equals(aExpectedArgType))
         {
             css::lang::Locale aLocale;
-            *pArgs >>= aLocale;
+            rArg >>= aLocale;
             eNewFormatterLanguage = LanguageTag::convertToLanguageType( aLocale, false);
         }
 #ifdef DBG_UTIL

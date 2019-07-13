@@ -2106,12 +2106,10 @@ sal_Int32 SvNumberFormatter::ImpGetFormatCodeIndex(
             css::uno::Sequence< css::i18n::NumberFormatCode >& rSeq,
             const NfIndexTableOffset nTabOff )
 {
-    const sal_Int32 nLen = rSeq.getLength();
-    for ( sal_Int32 j=0; j<nLen; j++ )
-    {
-        if ( rSeq[j].Index == nTabOff )
-            return j;
-    }
+    auto pSeq = std::find_if(rSeq.begin(), rSeq.end(),
+        [nTabOff](const css::i18n::NumberFormatCode& rCode) { return rCode.Index == nTabOff; });
+    if (pSeq != rSeq.end())
+        return static_cast<sal_Int32>(std::distance(rSeq.begin(), pSeq));
     if (LocaleDataWrapper::areChecksEnabled() && (nTabOff < NF_CURRENCY_START
                 || NF_CURRENCY_END < nTabOff || nTabOff == NF_CURRENCY_1000INT
                 || nTabOff == NF_CURRENCY_1000INT_RED
@@ -2121,31 +2119,27 @@ sal_Int32 SvNumberFormatter::ImpGetFormatCodeIndex(
                       + OUString::number( nTabOff );
         LocaleDataWrapper::outputCheckMessage( xLocaleData->appendLocaleInfo(aMsg));
     }
-    if ( nLen )
+    if ( rSeq.hasElements() )
     {
-        sal_Int32 j;
         // look for a preset default
-        for ( j=0; j<nLen; j++ )
-        {
-            if ( rSeq[j].Default )
-                return j;
-        }
+        pSeq = std::find_if(rSeq.begin(), rSeq.end(),
+            [](const css::i18n::NumberFormatCode& rCode) { return rCode.Default; });
+        if (pSeq != rSeq.end())
+            return static_cast<sal_Int32>(std::distance(rSeq.begin(), pSeq));
         // currencies are special, not all format codes must exist, but all
         // builtin number format key index positions must have a format assigned
         if ( NF_CURRENCY_START <= nTabOff && nTabOff <= NF_CURRENCY_END )
         {
             // look for a format with decimals
-            for ( j=0; j<nLen; j++ )
-            {
-                if ( rSeq[j].Index == NF_CURRENCY_1000DEC2 )
-                    return j;
-            }
+            pSeq = std::find_if(rSeq.begin(), rSeq.end(),
+                [](const css::i18n::NumberFormatCode& rCode) { return rCode.Index == NF_CURRENCY_1000DEC2; });
+            if (pSeq != rSeq.end())
+                return static_cast<sal_Int32>(std::distance(rSeq.begin(), pSeq));
             // last resort: look for a format without decimals
-            for ( j=0; j<nLen; j++ )
-            {
-                if ( rSeq[j].Index == NF_CURRENCY_1000INT )
-                    return j;
-            }
+            pSeq = std::find_if(rSeq.begin(), rSeq.end(),
+                [](const css::i18n::NumberFormatCode& rCode) { return rCode.Index == NF_CURRENCY_1000INT; });
+            if (pSeq != rSeq.end())
+                return static_cast<sal_Int32>(std::distance(rSeq.begin(), pSeq));
         }
     }
     else
@@ -2763,39 +2757,37 @@ void SvNumberFormatter::ImpGenerateAdditionalFormats( sal_uInt32 CLOffset,
     }
     sal_uInt32 nPos = CLOffset + pStdFormat->GetLastInsertKey( SvNumberformat::FormatterPrivateAccess() );
     css::lang::Locale aLocale = GetLanguageTag().getLocale();
-    sal_Int32 j;
 
     // All currencies, this time with [$...] which was stripped in
     // ImpGenerateFormats for old "automatic" currency formats.
     uno::Sequence< i18n::NumberFormatCode > aFormatSeq = rNumberFormatCode->getAllFormatCode( i18n::KNumberFormatUsage::CURRENCY, aLocale );
-    i18n::NumberFormatCode * pFormatArr = aFormatSeq.getArray();
     sal_Int32 nCodes = aFormatSeq.getLength();
     ImpAdjustFormatCodeDefault( aFormatSeq.getArray(), nCodes );
-    for ( j = 0; j < nCodes; j++ )
+    for ( i18n::NumberFormatCode& rFormat : aFormatSeq )
     {
         if ( nPos - CLOffset >= SV_COUNTRY_LANGUAGE_OFFSET )
         {
             SAL_WARN( "svl.numbers", "ImpGenerateAdditionalFormats: too many formats" );
             break;  // for
         }
-        if ( pFormatArr[j].Index < NF_INDEX_TABLE_LOCALE_DATA_DEFAULTS &&
-                pFormatArr[j].Index != NF_CURRENCY_1000DEC2_CCC )
+        if ( rFormat.Index < NF_INDEX_TABLE_LOCALE_DATA_DEFAULTS &&
+                rFormat.Index != NF_CURRENCY_1000DEC2_CCC )
         {   // Insert only if not already inserted, but internal index must be
             // above so ImpInsertFormat can distinguish it.
-            sal_Int16 nOrgIndex = pFormatArr[j].Index;
-            pFormatArr[j].Index = sal::static_int_cast< sal_Int16 >(
-                pFormatArr[j].Index + nCodes + NF_INDEX_TABLE_ENTRIES);
+            sal_Int16 nOrgIndex = rFormat.Index;
+            rFormat.Index = sal::static_int_cast< sal_Int16 >(
+                rFormat.Index + nCodes + NF_INDEX_TABLE_ENTRIES);
             //! no default on currency
-            bool bDefault = aFormatSeq[j].Default;
-            aFormatSeq[j].Default = false;
-            if ( SvNumberformat* pNewFormat = ImpInsertFormat( pFormatArr[j], nPos+1,
+            bool bDefault = rFormat.Default;
+            rFormat.Default = false;
+            if ( SvNumberformat* pNewFormat = ImpInsertFormat( rFormat, nPos+1,
                         bAfterChangingSystemCL, nOrgIndex ) )
             {
                 pNewFormat->SetAdditionalBuiltin();
                 nPos++;
             }
-            pFormatArr[j].Index = nOrgIndex;
-            aFormatSeq[j].Default = bDefault;
+            rFormat.Index = nOrgIndex;
+            rFormat.Default = bDefault;
         }
     }
 
@@ -2806,25 +2798,20 @@ void SvNumberFormatter::ImpGenerateAdditionalFormats( sal_uInt32 CLOffset,
     // There is no harm though, on first invocation ImpGetDefaultFormat() will
     // use the first default encountered.
     aFormatSeq = rNumberFormatCode->getAllFormatCodes( aLocale );
-    nCodes = aFormatSeq.getLength();
-    if ( nCodes )
+    for ( const auto& rFormat : aFormatSeq )
     {
-        pFormatArr = aFormatSeq.getArray();
-        for ( j = 0; j < nCodes; j++ )
+        if ( nPos - CLOffset >= SV_COUNTRY_LANGUAGE_OFFSET )
         {
-            if ( nPos - CLOffset >= SV_COUNTRY_LANGUAGE_OFFSET )
+            SAL_WARN( "svl.numbers", "ImpGenerateAdditionalFormats: too many formats" );
+            break;  // for
+        }
+        if ( rFormat.Index >= NF_INDEX_TABLE_LOCALE_DATA_DEFAULTS )
+        {
+            if ( SvNumberformat* pNewFormat = ImpInsertFormat( rFormat, nPos+1,
+                        bAfterChangingSystemCL ) )
             {
-                SAL_WARN( "svl.numbers", "ImpGenerateAdditionalFormats: too many formats" );
-                break;  // for
-            }
-            if ( pFormatArr[j].Index >= NF_INDEX_TABLE_LOCALE_DATA_DEFAULTS )
-            {
-                if ( SvNumberformat* pNewFormat = ImpInsertFormat( pFormatArr[j], nPos+1,
-                            bAfterChangingSystemCL ) )
-                {
-                    pNewFormat->SetAdditionalBuiltin();
-                    nPos++;
-                }
+                pNewFormat->SetAdditionalBuiltin();
+                nPos++;
             }
         }
     }
@@ -3754,20 +3741,14 @@ void SvNumberFormatter::GetCompatibilityCurrency( OUString& rSymbol, OUString& r
     css::uno::Sequence< css::i18n::Currency2 >
         xCurrencies( xLocaleData->getAllCurrencies() );
 
-    const css::i18n::Currency2 *pCurrencies = xCurrencies.getConstArray();
-    sal_Int32 nCurrencies = xCurrencies.getLength();
-
-    sal_Int32 j;
-    for ( j=0; j < nCurrencies; ++j )
+    auto pCurrency = std::find_if(xCurrencies.begin(), xCurrencies.end(),
+        [](const css::i18n::Currency2& rCurrency) { return rCurrency.UsedInCompatibleFormatCodes; });
+    if (pCurrency != xCurrencies.end())
     {
-        if ( pCurrencies[j].UsedInCompatibleFormatCodes )
-        {
-            rSymbol = pCurrencies[j].Symbol;
-            rAbbrev = pCurrencies[j].BankSymbol;
-            break;
-        }
+        rSymbol = pCurrency->Symbol;
+        rAbbrev = pCurrency->BankSymbol;
     }
-    if ( j >= nCurrencies )
+    else
     {
         if (LocaleDataWrapper::areChecksEnabled())
         {
@@ -3864,16 +3845,15 @@ void SvNumberFormatter::ImpInitCurrencyTable()
     css::uno::Sequence< css::lang::Locale > xLoc = LocaleDataWrapper::getInstalledLocaleNames();
     sal_Int32 nLocaleCount = xLoc.getLength();
     SAL_INFO( "svl.numbers", "number of locales: \"" << nLocaleCount << "\"" );
-    css::lang::Locale const * const pLocales = xLoc.getConstArray();
     NfCurrencyTable &rCurrencyTable = theCurrencyTable::get();
     NfCurrencyTable &rLegacyOnlyCurrencyTable = theLegacyOnlyCurrencyTable::get();
     NfInstalledLocales &rInstalledLocales = theInstalledLocales::get();
     sal_uInt16 nLegacyOnlyCurrencyPos = 0;
-    for ( sal_Int32 nLocale = 0; nLocale < nLocaleCount; nLocale++ )
+    for ( css::lang::Locale const & rLocale : xLoc )
     {
-        LanguageType eLang = LanguageTag::convertToLanguageType( pLocales[nLocale], false);
+        LanguageType eLang = LanguageTag::convertToLanguageType( rLocale, false);
         rInstalledLocales.insert( eLang);
-        pLocaleData->setLanguageTag( LanguageTag( pLocales[nLocale]) );
+        pLocaleData->setLanguageTag( LanguageTag( rLocale) );
         Sequence< Currency2 > aCurrSeq = pLocaleData->getAllCurrencies();
         sal_Int32 nCurrencyCount = aCurrSeq.getLength();
         Currency2 const * const pCurrencies = aCurrSeq.getConstArray();
