@@ -34,8 +34,10 @@ namespace connectivity
             Image = -9546
         };
 
-        // Numeric and decimal types can be identified by their subtype
-        // 1 for NUMERIC, 2 for DECIMAL
+        /**
+         * Numeric and decimal types can be identified by their subtype in
+         * Firebird API. 1 for NUMERIC, 2 for DECIMAL.
+         */
         enum class NumberSubType {
             Other = 0,
             Numeric = 1,
@@ -49,6 +51,16 @@ private:
             short m_nScale;
             OUString m_sCharsetName;
 public:
+            /**
+             * @param tType SQL type of column defined by Firebird (e.g.
+             * SQL_DOUBLE)
+             * @param aSubType SQL sub type as in firebird API. See
+             * NumberSubType.
+             * @param scale: Scale of the number. It is ignored in case it's not
+             * a number. Scale obtained from the Firebird API is negative, so
+             * that should be negated before passing to this constructor.
+             *
+             */
             explicit ColumnTypeInfo( short aType, short aSubType = 0,
                     short nScale = 0, const OUString& sCharset = OUString() )
                 : m_aType(aType)
