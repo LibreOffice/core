@@ -22,6 +22,7 @@
 #include <svl/poolitem.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
+#include <comphelper/sequence.hxx>
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
 #include <tools/lineend.hxx>
@@ -147,8 +148,7 @@ void SfxStringListItem::SetStringList( const css::uno::Sequence< OUString >& rLi
     mpList.reset(new std::vector<OUString>);
 
     // String belongs to the list
-    for ( sal_Int32 n = 0; n < rList.getLength(); n++ )
-        mpList->push_back(rList[n]);
+    comphelper::sequenceToContainer(*mpList, rList);
 }
 
 void SfxStringListItem::GetStringList( css::uno::Sequence< OUString >& rList ) const

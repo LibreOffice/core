@@ -3363,20 +3363,18 @@ void SvNumberformat::SwitchToOtherCalendar( OUString& rOrgCalendar,
     if ( nCnt <= 1 )
         return;
 
-    for ( sal_Int32 j=0; j < nCnt; j++ )
+    auto pCal = std::find_if(xCals.begin(), xCals.end(),
+        [](const OUString& rCalName) { return rCalName != GREGORIAN; });
+    if (pCal == xCals.end())
+        return;
+
+    if ( !rOrgCalendar.getLength() )
     {
-        if ( xCals[j] != GREGORIAN )
-        {
-            if ( !rOrgCalendar.getLength() )
-            {
-                rOrgCalendar = rCal.getUniqueID();
-                fOrgDateTime = rCal.getDateTime();
-            }
-            rCal.loadCalendar( xCals[j], rLoc().getLanguageTag().getLocale() );
-            rCal.setDateTime( fOrgDateTime );
-            break;  // for
-        }
+        rOrgCalendar = rCal.getUniqueID();
+        fOrgDateTime = rCal.getDateTime();
     }
+    rCal.loadCalendar( *pCal, rLoc().getLanguageTag().getLocale() );
+    rCal.setDateTime( fOrgDateTime );
 }
 
 void SvNumberformat::SwitchToGregorianCalendar( const OUString& rOrgCalendar,
