@@ -291,6 +291,7 @@ shell SfxApplication
     SID_AUTO_CORRECT_DLG
     [
         ExecMethod = OfaExec_Impl ;
+        StateMethod = OfaState_Impl;
     ]
     SID_OPTIONS_TREEDIALOG
     [

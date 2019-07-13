@@ -46,6 +46,7 @@
 #include <com/sun/star/util/CloseVetoException.hpp>
 #include <org/freedesktop/PackageKit/SyncDbusSessionHelper.hpp>
 
+#include <comphelper/lok.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
@@ -1689,7 +1690,8 @@ void SfxApplication::OfaState_Impl(SfxItemSet &rSet)
         rSet.DisableItem( FN_BUSINESS_CARD );
         rSet.DisableItem( FN_XFORMS_INIT );
     }
-
+    if ( comphelper::LibreOfficeKit::isActive() )
+        rSet.DisableItem( SID_AUTO_CORRECT_DLG );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
