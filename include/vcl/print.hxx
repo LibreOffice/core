@@ -290,6 +290,7 @@ public:
     bool                        SetPrinterProps( const Printer* pPrinter );
 
     Color                       GetBackgroundColor() const override { return COL_WHITE; }
+    Color                       CalculateFontColor(const Color& rFontColor, const Color& rBgColor) const override;
 
     /** SetPrinterOptions is used internally only now
 
