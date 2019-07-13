@@ -204,27 +204,6 @@ DeactivateRC OfaMiscTabPage::DeactivatePage( SfxItemSet* pSet_ )
 
 namespace
 {
-OUString impl_SystemFileOpenServiceName()
-{
-    const OUString &rDesktopEnvironment = Application::GetDesktopEnvironment();
-
-    if ( rDesktopEnvironment.equalsIgnoreAsciiCase("kde5") )
-    {
-        #if ENABLE_KDE5
-        return OUString("com.sun.star.ui.dialogs.KDE5FilePicker" );
-        #else
-        return OUString();
-        #endif
-    }
-    #if defined(_WIN32)
-    return OUString("com.sun.star.ui.dialogs.SystemFilePicker");
-    #elif defined MACOSX
-    return OUString("com.sun.star.ui.dialogs.AquaFilePicker");
-    #else
-    return OUString();
-    #endif
-}
-
 bool lcl_HasSystemFilePicker()
 {
     if( Application::hasNativeFileSelection() )
@@ -242,8 +221,8 @@ bool lcl_HasSystemFilePicker()
 
     try
     {
-        OUString aFileService = impl_SystemFileOpenServiceName();
-        Reference< XEnumeration > xEnum = xEnumAccess->createContentEnumeration( aFileService );
+        Reference< XEnumeration > xEnum = xEnumAccess->createContentEnumeration(
+            OUStringLiteral("com.sun.star.ui.dialogs.SystemFilePicker"));
         if ( xEnum.is() && xEnum->hasMoreElements() )
             bRet = true;
     }

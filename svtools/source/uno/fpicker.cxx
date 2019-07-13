@@ -27,6 +27,8 @@
 
 #include <vcl/svapp.hxx>
 
+#include <cassert>
+
 #include "fpicker.hxx"
 
 using css::uno::Reference;
@@ -35,22 +37,6 @@ using css::uno::Sequence;
 /*
  * FilePicker implementation.
  */
-static OUString FilePicker_getSystemPickerServiceName()
-{
-#ifdef UNX
-    OUString aDesktopEnvironment (Application::GetDesktopEnvironment());
-    if (aDesktopEnvironment.equalsIgnoreAsciiCase("kde5"))
-        return OUString ("com.sun.star.ui.dialogs.KDE5FilePicker");
-    else if (aDesktopEnvironment.equalsIgnoreAsciiCase("macosx"))
-        return OUString ("com.sun.star.ui.dialogs.AquaFilePicker");
-    else
-        return OUString ("com.sun.star.ui.dialogs.SystemFilePicker");
-#endif
-#ifdef _WIN32
-    return OUString ("com.sun.star.ui.dialogs.Win32FilePicker");
-#endif
-}
-
 Reference< css::uno::XInterface > FilePicker_CreateInstance (
     Reference< css::uno::XComponentContext > const & context)
 {
@@ -62,15 +48,16 @@ Reference< css::uno::XInterface > FilePicker_CreateInstance (
     Reference< css::lang::XMultiComponentFactory > xFactory (context->getServiceManager());
     if (xFactory.is() && SvtMiscOptions().UseSystemFileDialog())
     {
+        // calls the SalInstance's createFilePicker function
         xResult.set( Application::createFilePicker( context ) );
 
+        // Windows and MacOS have extra SystemFilePicker services in /fpicker/
         if (!xResult.is())
         {
             try
             {
                 xResult = xFactory->createInstanceWithContext (
-                        FilePicker_getSystemPickerServiceName(),
-                        context);
+                    OUStringLiteral("com.sun.star.ui.dialogs.SystemFilePicker"), context);
             }
             catch (css::uno::Exception const &)
             {
@@ -79,14 +66,14 @@ Reference< css::uno::XInterface > FilePicker_CreateInstance (
         }
     }
 
-
     if (!xResult.is() && xFactory.is())
     {
         // Always fall back to OfficeFilePicker.
         xResult = xFactory->createInstanceWithContext (
-                "com.sun.star.ui.dialogs.OfficeFilePicker",
-                context);
+            OUStringLiteral("com.sun.star.ui.dialogs.OfficeFilePicker"), context);
     }
+
+    assert(xResult.is());
     if (xResult.is())
     {
         // Add to FilePicker history.
@@ -97,7 +84,7 @@ Reference< css::uno::XInterface > FilePicker_CreateInstance (
 
 OUString FilePicker_getImplementationName()
 {
-    return OUString("com.sun.star.comp.svt.FilePicker");
+    return OUStringLiteral("com.sun.star.comp.svt.FilePicker");
 }
 
 Sequence< OUString > FilePicker_getSupportedServiceNames()
@@ -109,18 +96,6 @@ Sequence< OUString > FilePicker_getSupportedServiceNames()
 /*
  * FolderPicker implementation.
  */
-static OUString FolderPicker_getSystemPickerServiceName()
-{
-#ifdef UNX
-    OUString aDesktopEnvironment (Application::GetDesktopEnvironment());
-    if (aDesktopEnvironment.equalsIgnoreAsciiCase("kde5"))
-        return OUString("com.sun.star.ui.dialogs.KDEFolderPicker");
-    else if (aDesktopEnvironment.equalsIgnoreAsciiCase("macosx"))
-        return OUString("com.sun.star.ui.dialogs.AquaFolderPicker");
-#endif
-    return OUString("com.sun.star.ui.dialogs.SystemFolderPicker");
-}
-
 Reference< css::uno::XInterface > FolderPicker_CreateInstance (
     Reference< css::uno::XComponentContext > const & context)
 {
@@ -132,14 +107,16 @@ Reference< css::uno::XInterface > FolderPicker_CreateInstance (
     Reference< css::lang::XMultiComponentFactory > xFactory (context->getServiceManager());
     if (xFactory.is() && SvtMiscOptions().UseSystemFileDialog())
     {
+        // calls the SalInstance's createFolderPicker function
         xResult.set( Application::createFolderPicker( context ) );
+
+        // Windows and MacOS have extra SystemFolderPicker services in /fpicker/
         if (!xResult.is())
         {
             try
             {
                 xResult = xFactory->createInstanceWithContext (
-                                FolderPicker_getSystemPickerServiceName(),
-                                context);
+                    OUStringLiteral("com.sun.star.ui.dialogs.SystemFolderPicker"), context);
             }
             catch (css::uno::Exception const &)
             {
@@ -151,9 +128,10 @@ Reference< css::uno::XInterface > FolderPicker_CreateInstance (
     {
         // Always fall back to OfficeFolderPicker.
         xResult = xFactory->createInstanceWithContext (
-                 "com.sun.star.ui.dialogs.OfficeFolderPicker",
-                context);
+            OUStringLiteral("com.sun.star.ui.dialogs.OfficeFolderPicker"), context);
     }
+
+    assert(xResult.is());
     if (xResult.is())
     {
         // Add to FolderPicker history.
@@ -164,7 +142,7 @@ Reference< css::uno::XInterface > FolderPicker_CreateInstance (
 
 OUString FolderPicker_getImplementationName()
 {
-    return OUString("com.sun.star.comp.svt.FolderPicker");
+    return OUStringLiteral("com.sun.star.comp.svt.FolderPicker");
 }
 
 Sequence< OUString > FolderPicker_getSupportedServiceNames()
