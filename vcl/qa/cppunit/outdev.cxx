@@ -10,6 +10,8 @@
 #include <test/bootstrapfixture.hxx>
 
 #include <vcl/virdev.hxx>
+#include <vcl/print.hxx>
+#include <vcl/window.hxx>
 #include <vcl/bitmapaccess.hxx>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
@@ -21,18 +23,38 @@ public:
 
     void testVirtualDevice();
     void testUseAfterDispose();
+    void testPrinterBackgroundColor();
+    void testWindowBackgroundColor();
 
     CPPUNIT_TEST_SUITE(VclOutdevTest);
     CPPUNIT_TEST(testVirtualDevice);
     CPPUNIT_TEST(testUseAfterDispose);
+    CPPUNIT_TEST(testPrinterBackgroundColor);
+    CPPUNIT_TEST(testWindowBackgroundColor);
     CPPUNIT_TEST_SUITE_END();
 };
+
+void VclOutdevTest::testPrinterBackgroundColor()
+{
+    ScopedVclPtrInstance<Printer> pPrinter;
+    CPPUNIT_ASSERT_EQUAL(pPrinter->GetBackgroundColor(), COL_WHITE);
+}
+
+void VclOutdevTest::testWindowBackgroundColor()
+{
+    ScopedVclPtrInstance<vcl::Window> pWindow(nullptr, WB_APP | WB_STDWORK);
+    pWindow->SetBackground(Wallpaper(COL_WHITE));
+    CPPUNIT_ASSERT_EQUAL(pWindow->GetBackgroundColor(), COL_WHITE);
+}
 
 void VclOutdevTest::testVirtualDevice()
 {
     ScopedVclPtrInstance< VirtualDevice > pVDev;
     pVDev->SetOutputSizePixel(Size(32,32));
     pVDev->SetBackground(Wallpaper(COL_WHITE));
+
+    CPPUNIT_ASSERT_EQUAL(pVDev->GetBackgroundColor(), COL_WHITE);
+
     pVDev->Erase();
     pVDev->DrawPixel(Point(1,2),COL_BLUE);
     pVDev->DrawPixel(Point(31,30),COL_RED);

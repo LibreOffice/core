@@ -2012,7 +2012,7 @@ css::uno::Any VCLXWindow::getProperty( const OUString& PropertyName )
                 aProp <<= GetWindow()->GetControlBackground();
             break;
             case BASEPROPERTY_DISPLAYBACKGROUNDCOLOR:
-                aProp <<= GetWindow()->GetDisplayBackground().GetColor();
+                aProp <<= GetWindow()->GetBackgroundColor();
             break;
             case BASEPROPERTY_FONTRELIEF:
                 aProp <<= static_cast<sal_Int16>(GetWindow()->GetControlFont().GetRelief());

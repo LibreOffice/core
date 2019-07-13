@@ -235,7 +235,7 @@ EditorWindow::EditorWindow (vcl::Window* pParent, ModulWindow* pModulWindow) :
     bDelayHighlight(true),
     pCodeCompleteWnd(VclPtr<CodeCompleteWindow>::Create(this))
 {
-    SetBackground(Wallpaper(rModulWindow.GetLayout().GetBackgroundColor()));
+    SetBackground(Wallpaper(rModulWindow.GetLayout().GetSyntaxBackgroundColor()));
     SetPointer( PointerStyle::Text );
     SetHelpId( HID_BASICIDE_EDITORWINDOW );
 
