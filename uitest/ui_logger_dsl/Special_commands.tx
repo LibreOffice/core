@@ -39,18 +39,18 @@ writer_GOTO_command:
   then we can add whatever we need in the future
 */
 calc_command:
-  calc_Type_command | switch_sheet | Select_cell | AutoFill_filter 
+  calc_Type_command | calc_switch_sheet | calc_Select_cell | calc_AutoFill_filter 
 ;
 calc_Type_command:
   'Type on current cell' what_to_type=Type_options
 ;
-switch_sheet:
+calc_switch_sheet:
   'Switch to sheet number' sheet_num=INT
 ;
-Select_cell:
+calc_Select_cell:
   'Select from calc' select_op=select_options
 ;
-AutoFill_filter:
+calc_AutoFill_filter:
   'Lanuch AutoFilter from Col' col_num=INT 'and Row' row_num=INT
 ;
 //this is the select options
@@ -88,9 +88,9 @@ impress_Type_command:
   then we can add whatever we need in the future
 */
 math_command:
-    element_selector | math_Type_command
+    math_element_selector | math_Type_command
 ;
-element_selector:
+math_element_selector:
     'Select element no ' element_no=INT ' From ' place=ID
 ;
 math_Type_command:
