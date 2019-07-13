@@ -27,6 +27,7 @@ interface BaseTextDocument
     SID_AUTO_CORRECT_DLG
     [
         ExecMethod = Execute ;
+        StateMethod = GetState ;
     ]
 
     SID_STYLE_NEW

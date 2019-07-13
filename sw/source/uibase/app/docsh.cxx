@@ -47,6 +47,7 @@
 #include <editeng/flstitem.hxx>
 #include <sfx2/htmlmode.hxx>
 #include <svtools/soerr.hxx>
+#include <comphelper/lok.hxx>
 #include <comphelper/classids.hxx>
 #include <basic/basmgr.hxx>
 #include <basic/sbmod.hxx>
@@ -1040,6 +1041,10 @@ void SwDocShell::GetState(SfxItemSet& rSet)
                 rSet.Put( aBool );
             }
         }
+        break;
+        case SID_AUTO_CORRECT_DLG:
+            if ( comphelper::LibreOfficeKit::isActive() )
+                rSet.DisableItem( SID_AUTO_CORRECT_DLG );
         break;
         case SID_SOURCEVIEW:
         {
