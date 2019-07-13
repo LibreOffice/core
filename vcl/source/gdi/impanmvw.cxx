@@ -75,17 +75,7 @@ ImplAnimView::ImplAnimView( Animation* pParent, OutputDevice* pOut,
 
     // save background
     mpBackground->SetOutputSizePixel( maSzPix );
-
-    if( mpRenderContext->GetOutDevType() == OUTDEV_WINDOW )
-    {
-        MapMode aTempMap( mpRenderContext->GetMapMode() );
-        aTempMap.SetOrigin( Point() );
-        mpBackground->SetMapMode( aTempMap );
-        static_cast<vcl::Window*>( mpRenderContext.get() )->SaveBackground( maDispPt, maDispSz, *mpBackground );
-        mpBackground->SetMapMode( MapMode() );
-    }
-    else
-        mpBackground->DrawOutDev( Point(), maSzPix, maDispPt, maDispSz, *mpRenderContext );
+    mpRenderContext->SaveBackground(*mpBackground, maDispPt, maDispSz, maSzPix);
 
     // Initialize drawing to actual position
     drawToPos( mpParent->ImplGetCurPos() );
@@ -317,16 +307,7 @@ void ImplAnimView::repaint()
 {
     const bool bOldPause = mbIsPaused;
 
-    if( mpRenderContext->GetOutDevType() == OUTDEV_WINDOW )
-    {
-        MapMode aTempMap( mpRenderContext->GetMapMode() );
-        aTempMap.SetOrigin( Point() );
-        mpBackground->SetMapMode( aTempMap );
-        static_cast<vcl::Window*>( mpRenderContext.get() )->SaveBackground( maDispPt, maDispSz, *mpBackground );
-        mpBackground->SetMapMode( MapMode() );
-    }
-    else
-        mpBackground->DrawOutDev( Point(), maSzPix, maDispPt, maDispSz, *mpRenderContext );
+    mpRenderContext->SaveBackground(*mpBackground, maDispPt, maDispSz, maSzPix);
 
     mbIsPaused = false;
     drawToPos( mnActPos );
