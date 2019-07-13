@@ -289,6 +289,8 @@ public:
                                       PrinterSetupMode eMode = PrinterSetupMode::DocumentGlobal);
     bool                        SetPrinterProps( const Printer* pPrinter );
 
+    Color                       GetBackgroundColor() const override { return COL_WHITE; }
+
     /** SetPrinterOptions is used internally only now
 
         in earlier times it was used only to set the options loaded directly from the configuration

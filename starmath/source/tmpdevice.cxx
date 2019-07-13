@@ -54,9 +54,7 @@ Color SmTmpDevice::Impl_GetColor( const Color& rColor )
             nNewCol = COL_BLACK;
         else
         {
-            Color aBgCol( rOutDev.GetBackground().GetColor() );
-            if (OUTDEV_WINDOW == rOutDev.GetOutDevType())
-                aBgCol = static_cast<vcl::Window &>(rOutDev).GetDisplayBackground().GetColor();
+            Color aBgCol(rOutDev.GetBackgroundColor());
 
             nNewCol = SM_MOD()->GetColorConfig().GetColorValue(svtools::FONTCOLOR).nColor;
 
