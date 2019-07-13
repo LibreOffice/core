@@ -764,6 +764,8 @@ public:
     ::OutputDevice const*               GetOutDev() const;
     ::OutputDevice*                     GetOutDev();
 
+    Color                               GetBackgroundColor() const override;
+
     virtual void                        EnableRTL ( bool bEnable = true ) override;
     virtual void                        MouseMove( const MouseEvent& rMEvt );
     virtual void                        MouseButtonDown( const MouseEvent& rMEvt );

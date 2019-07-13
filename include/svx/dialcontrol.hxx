@@ -43,9 +43,9 @@ public:
     void                DrawBackground( const Size& rSize, bool bEnabled );
     void                DrawBackground();
     void                DrawElements( const OUString& rText, sal_Int32 nAngle );
+    Color               GetBackgroundColor() const override;
 
 private:
-    const Color&        GetBackgroundColor() const;
     const Color&        GetTextColor() const;
     const Color&        GetScaleLineColor() const;
     const Color&        GetButtonLineColor() const;

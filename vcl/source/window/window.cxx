@@ -585,6 +585,11 @@ Window::~Window()
     return this;
 }
 
+Color Window::GetBackgroundColor() const
+{
+    return GetDisplayBackground().GetColor();
+}
+
 } /* namespace vcl */
 
 WindowImpl::WindowImpl( WindowType nType )
@@ -3320,7 +3325,7 @@ void Window::DrawSelectionBackground( const tools::Rectangle& rRect,
     bool bBright = ( rStyles.GetFaceColor() == COL_WHITE );
 
     int c1 = aSelectionBorderCol.GetLuminance();
-    int c2 = GetDisplayBackground().GetColor().GetLuminance();
+    int c2 = GetBackgroundColor().GetLuminance();
 
     if( !bDark && !bBright && abs( c2-c1 ) < 75 )
     {

@@ -418,7 +418,7 @@ public:
 public:
     void BasicAddWatch (OUString const&);
     void BasicRemoveWatch ();
-    Color const & GetBackgroundColor () const { return aSyntaxColors.GetBackgroundColor(); }
+    Color const & GetSyntaxBackgroundColor () const { return aSyntaxColors.GetBackgroundColor(); }
     Color const & GetFontColor () const { return aSyntaxColors.GetFontColor(); }
     Color const & GetSyntaxColor (TokenType eType) const { return aSyntaxColors.GetColor(eType); }
 
