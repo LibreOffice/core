@@ -24,6 +24,16 @@
 #include <vcl/outdev.hxx>
 #include <vcl/virdev.hxx>
 
+Color OutputDevice::GetReadableFontColor(const Color& rFontColor, const Color& rBgColor) const
+{
+    if (rBgColor.IsDark() && rFontColor.IsDark())
+        return COL_WHITE;
+    else if (rBgColor.IsBright() && rFontColor.IsBright())
+        return COL_BLACK;
+    else
+        return rFontColor;
+}
+
 Color OutputDevice::GetBackgroundColor() const
 {
     return GetBackground().GetColor();

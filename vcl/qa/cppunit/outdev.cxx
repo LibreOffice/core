@@ -9,8 +9,8 @@
 
 #include <test/bootstrapfixture.hxx>
 
-#include <vcl/virdev.hxx>
 #include <vcl/print.hxx>
+#include <vcl/virdev.hxx>
 #include <vcl/window.hxx>
 #include <vcl/bitmapaccess.hxx>
 
@@ -25,14 +25,32 @@ public:
     void testUseAfterDispose();
     void testPrinterBackgroundColor();
     void testWindowBackgroundColor();
+    void testGetReadableFontColorPrinter();
+    void testGetReadableFontColorWindow();
 
     CPPUNIT_TEST_SUITE(VclOutdevTest);
     CPPUNIT_TEST(testVirtualDevice);
     CPPUNIT_TEST(testUseAfterDispose);
     CPPUNIT_TEST(testPrinterBackgroundColor);
     CPPUNIT_TEST(testWindowBackgroundColor);
+    CPPUNIT_TEST(testGetReadableFontColorPrinter);
+    CPPUNIT_TEST(testGetReadableFontColorWindow);
     CPPUNIT_TEST_SUITE_END();
 };
+
+void VclOutdevTest::testGetReadableFontColorPrinter()
+{
+    ScopedVclPtrInstance<Printer> pPrinter;
+    CPPUNIT_ASSERT_EQUAL(pPrinter->GetReadableFontColor(COL_WHITE, COL_WHITE), COL_BLACK);
+}
+
+void VclOutdevTest::testGetReadableFontColorWindow()
+{
+    ScopedVclPtrInstance<vcl::Window> pWindow(nullptr, WB_APP | WB_STDWORK);
+    CPPUNIT_ASSERT_EQUAL(pWindow->GetReadableFontColor(COL_WHITE, COL_BLACK), COL_WHITE);
+    CPPUNIT_ASSERT_EQUAL(pWindow->GetReadableFontColor(COL_WHITE, COL_WHITE), COL_BLACK);
+    CPPUNIT_ASSERT_EQUAL(pWindow->GetReadableFontColor(COL_BLACK, COL_BLACK), COL_WHITE);
+}
 
 void VclOutdevTest::testPrinterBackgroundColor()
 {
