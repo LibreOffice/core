@@ -91,6 +91,24 @@ class ul_Compiler:
 
         self.log_lines=self.get_log_file(self.input_address)
 
+    def init_app(self):
+        if self.current_app in self.objects:
+            self.objects[self.current_app]+=1
+        else:
+            self.objects[self.current_app]=1
+            line="\t\t"+self.current_app+" = MainWindow.getChild(\""+self.current_app+"\")\n"
+            self.variables.append(line)
+
+    def init_Object(self,Id_of_Object,Obj_parent):
+
+        if Id_of_Object in self.objects:
+            self.objects[Id_of_Object]+=1
+        else:
+            self.objects[Id_of_Object]=1
+            line="\t\t"+Id_of_Object+" = "+Obj_parent+\
+                ".getChild(\""+Id_of_Object+"\")\n"
+            self.variables.append(line)
+
     def handle_uno(self, UNOCommand):
         if(UNOCommand.prameters==None):
             line = "\t\tself.xUITest.executeCommand(\"" + \
@@ -159,13 +177,7 @@ class ul_Compiler:
 
     def handle_button(self, ButtonUIObject):
 
-        if ButtonUIObject.ui_button in self.objects:
-            self.objects[ButtonUIObject.ui_button]+=1
-        else:
-            self.objects[ButtonUIObject.ui_button]=1
-            line="\t\t"+ButtonUIObject.ui_button+" = "+ButtonUIObject.parent_id+\
-                ".getChild(\""+ButtonUIObject.ui_button+"\")\n"
-            self.variables.append(line)
+        self.init_Object(ButtonUIObject.ui_button,ButtonUIObject.parent_id)
 
         line="\t\t"+ButtonUIObject.ui_button+".executeAction(\"CLICK\",tuple())\n"
         self.variables.append(line)
@@ -173,13 +185,7 @@ class ul_Compiler:
 
     def handle_check_box(self, CheckBoxUIObject):
 
-        if CheckBoxUIObject.Check_box_id in self.objects:
-            self.objects[CheckBoxUIObject.Check_box_id]+=1
-        else:
-            self.objects[CheckBoxUIObject.Check_box_id]=1
-            line="\t\t"+CheckBoxUIObject.Check_box_id+" = "+CheckBoxUIObject.parent_id+\
-                ".getChild(\""+CheckBoxUIObject.Check_box_id+"\")\n"
-            self.variables.append(line)
+        self.init_Object(CheckBoxUIObject.Check_box_id,CheckBoxUIObject.parent_id)
 
         line="\t\t"+CheckBoxUIObject.Check_box_id+".executeAction(\"CLICK\",tuple())\n"
         self.variables.append(line)
@@ -187,13 +193,7 @@ class ul_Compiler:
 
     def handle_tab(self, TabControlUIObject):
 
-        if TabControlUIObject.tab_id in self.objects:
-            self.objects[TabControlUIObject.tab_id]+=1
-        else:
-            self.objects[TabControlUIObject.tab_id]=1
-            line="\t\t"+TabControlUIObject.tab_id+" = "+TabControlUIObject.parent_id+\
-                ".getChild(\""+TabControlUIObject.tab_id+"\")\n"
-            self.variables.append(line)
+        self.init_Object(TabControlUIObject.tab_id,TabControlUIObject.parent_id)
 
         line="\t\t"+TabControlUIObject.tab_id+\
             ".executeAction(\"SELECT\", mkPropertyValues({\"POS\": \""+\
@@ -203,13 +203,7 @@ class ul_Compiler:
 
     def handle_Combo_box(self, ComboBoxUIObject):
 
-        if ComboBoxUIObject.Combo_box_id in self.objects:
-            self.objects[ComboBoxUIObject.Combo_box_id]+=1
-        else:
-            self.objects[ComboBoxUIObject.Combo_box_id]=1
-            line="\t\t"+ComboBoxUIObject.Combo_box_id+" = "+ComboBoxUIObject.parent_id+\
-                ".getChild(\""+ComboBoxUIObject.Combo_box_id+"\")\n"
-            self.variables.append(line)
+        self.init_Object(ComboBoxUIObject.Combo_box_id,ComboBoxUIObject.parent_id)
 
         line="\t\t"+ComboBoxUIObject.Combo_box_id+\
             ".executeAction(\"SELECT\", mkPropertyValues({\"POS\": \""+\
@@ -219,13 +213,7 @@ class ul_Compiler:
 
     def handle_Radio_button(self,RadioButtonUIObject):
 
-        if RadioButtonUIObject.Radio_button_id in self.objects:
-            self.objects[RadioButtonUIObject.Radio_button_id]+=1
-        else:
-            self.objects[RadioButtonUIObject.Radio_button_id]=1
-            line="\t\t"+RadioButtonUIObject.Radio_button_id+" = "+RadioButtonUIObject.parent_id+\
-                ".getChild(\""+RadioButtonUIObject.Radio_button_id+"\")\n"
-            self.variables.append(line)
+        self.init_Object(RadioButtonUIObject.Radio_button_id,RadioButtonUIObject.parent_id)
 
         line="\t\t"+RadioButtonUIObject.Radio_button_id+".executeAction(\"CLICK\",tuple())\n"
         self.variables.append(line)
@@ -233,13 +221,7 @@ class ul_Compiler:
 
     def handle_List_box(self, ListBoxUIObject):
 
-        if ListBoxUIObject.list_id in self.objects:
-            self.objects[ListBoxUIObject.list_id]+=1
-        else:
-            self.objects[ListBoxUIObject.list_id]=1
-            line="\t\t"+ListBoxUIObject.list_id+" = "+ListBoxUIObject.parent_id+\
-                ".getChild(\""+ListBoxUIObject.list_id+"\")\n"
-            self.variables.append(line)
+        self.init_Object(ListBoxUIObject.list_id,ListBoxUIObject.parent_id)
 
         line="\t\t"+ListBoxUIObject.list_id+\
             ".executeAction(\"SELECT\", mkPropertyValues({\"POS\": \""+\
@@ -249,13 +231,7 @@ class ul_Compiler:
 
     def handle_spin_field(self,SpinFieldUIObject):
 
-        if SpinFieldUIObject.Spin_id in self.objects:
-            self.objects[SpinFieldUIObject.Spin_id]+=1
-        else:
-            self.objects[SpinFieldUIObject.Spin_id]=1
-            line="\t\t"+SpinFieldUIObject.Spin_id+" = "+SpinFieldUIObject.parent_id+\
-                ".getChild(\""+SpinFieldUIObject.Spin_id+"\")\n"
-            self.variables.append(line)
+        self.init_Object(SpinFieldUIObject.Spin_id,SpinFieldUIObject.parent_id)
 
         if(SpinFieldUIObject.change=="Increase"):
             line="\t\t"+SpinFieldUIObject.Spin_id+".executeAction(\"UP\",tuple())\n"
@@ -266,14 +242,9 @@ class ul_Compiler:
 
     def handle_Edit_uiObject(self,EditUIObject):
 
+        self.init_Object(EditUIObject.action.edit_button,EditUIObject.parent_id)
+
         if(EditUIObject.action.__class__.__name__ =="Type_action"):
-            if EditUIObject.action.edit_button in self.objects:
-                self.objects[EditUIObject.action.edit_button]+=1
-            else:
-                self.objects[EditUIObject.action.edit_button]=1
-                line="\t\t"+EditUIObject.action.edit_button+" = "+EditUIObject.parent_id+\
-                ".getChild(\""+EditUIObject.action.edit_button+"\")\n"
-                self.variables.append(line)
 
             if(EditUIObject.action.what_to_type.__class__.__name__=="char"):
                 line="\t\t"+EditUIObject.action.edit_button+\
@@ -287,13 +258,6 @@ class ul_Compiler:
             self.variables.append(line)
 
         if(EditUIObject.action.__class__.__name__ =="SELECT"):
-            if EditUIObject.action.edit_button in self.objects:
-                self.objects[EditUIObject.action.edit_button]+=1
-            else:
-                self.objects[EditUIObject.action.edit_button]=1
-                line="\t\t"+EditUIObject.action.edit_button+" = "+EditUIObject.parent_id+\
-                ".getChild(\""+EditUIObject.action.edit_button+"\")\n"
-                self.variables.append(line)
 
             line="\t\t"+EditUIObject.action.edit_button+\
                 ".executeAction(\"SELECT\", mkPropertyValues({\"from\": \""+\
@@ -302,13 +266,6 @@ class ul_Compiler:
             self.variables.append(line)
 
         if(EditUIObject.action.__class__.__name__ =="Clear"):
-            if EditUIObject.action.edit_button in self.objects:
-                self.objects[EditUIObject.action.edit_button]+=1
-            else:
-                self.objects[EditUIObject.action.edit_button]=1
-                line="\t\t"+EditUIObject.action.edit_button+" = "+EditUIObject.parent_id+\
-                ".getChild(\""+EditUIObject.action.edit_button+"\")\n"
-                self.variables.append(line)
 
             line="\t\t"+EditUIObject.action.edit_button+\
                 ".executeAction(\"CLEAR\",tuple())\n"
@@ -317,12 +274,7 @@ class ul_Compiler:
 
     def handle_writer_type (self,writer_Type_command):
 
-        if "writer_edit" in self.objects:
-            self.objects["writer_edit"]+=1
-        else:
-            self.objects["writer_edit"]=1
-            line="\t\twriter_edit = MainWindow.getChild(\"writer_edit\")\n"
-            self.variables.append(line)
+        self.init_app()
 
         if(writer_Type_command.what_to_type.__class__.__name__=="char"):
             line="\t\twriter_edit.executeAction(\"TYPE\", mkPropertyValues"+\
@@ -337,12 +289,7 @@ class ul_Compiler:
 
     def handle_writer_select (self,writer_Select_command):
 
-        if "writer_edit" in self.objects:
-            self.objects["writer_edit"]+=1
-        else:
-            self.objects["writer_edit"]=1
-            line="\t\twriter_edit = MainWindow.getChild(\"writer_edit\")\n"
-            self.variables.append(line)
+        self.init_app()
 
         line="\t\twriter_edit.executeAction(\"SELECT\", mkPropertyValues({\"END_POS\": \""+\
             str(writer_Select_command.from_pos)+"\", \"START_POS\": \""+\
@@ -352,12 +299,7 @@ class ul_Compiler:
 
     def handle_wirter_goto (self,writer_GOTO_command):
 
-        if "writer_edit" in self.objects:
-            self.objects["writer_edit"]+=1
-        else:
-            self.objects["writer_edit"]=1
-            line="\t\twriter_edit = MainWindow.getChild(\"writer_edit\")\n"
-            self.variables.append(line)
+        self.init_app()
 
         line="\t\twriter_edit.executeAction(\"GOTO\", mkPropertyValues({\"PAGE\": \""+\
             str(writer_GOTO_command.page_num)+"\"}))\n"
@@ -366,12 +308,7 @@ class ul_Compiler:
 
     def handle_calc_select (self,calc_Select_cell):
 
-        if self.current_app in self.objects:
-            self.objects[self.current_app]+=1
-        else:
-            self.objects[self.current_app]=1
-            line="\t\t"+self.current_app+" = MainWindow.getChild(\""+self.current_app+"\")\n"
-            self.variables.append(line)
+        self.init_app()
 
         if(calc_Select_cell.select_op.__class__.__name__=="range_of_cells"):
             line="\t\t"+self.current_app+".executeAction(\"SELECT\", mkPropertyValues({\"RANGE\": \""+\
@@ -386,12 +323,7 @@ class ul_Compiler:
 
     def handle_calc_switch_sheet (self,calc_switch_sheet):
 
-        if self.current_app in self.objects:
-            self.objects[self.current_app]+=1
-        else:
-            self.objects[self.current_app]=1
-            line="\t\t"+self.current_app+" = MainWindow.getChild(\""+self.current_app+"\")\n"
-            self.variables.append(line)
+        self.init_app()
 
         line="\t\t"+self.current_app+".executeAction(\"SELECT\", mkPropertyValues({\"TABLE\": \""+\
         str(calc_switch_sheet.sheet_num)+"\"}))\n"
@@ -401,12 +333,7 @@ class ul_Compiler:
 
     def handle_calc_Type_command (self,calc_Type_command):
 
-        if self.current_app in self.objects:
-            self.objects[self.current_app]+=1
-        else:
-            self.objects[self.current_app]=1
-            line="\t\t"+self.current_app+" = MainWindow.getChild(\""+self.current_app+"\")\n"
-            self.variables.append(line)
+        self.init_app()
 
         if(calc_Type_command.what_to_type.__class__.__name__=="char"):
             line="\t\t"+self.current_app+".executeAction(\"TYPE\", mkPropertyValues"+\
@@ -422,12 +349,7 @@ class ul_Compiler:
 
     def handle_calc_AutoFill_filter (self,calc_AutoFill_filter):
 
-        if self.current_app in self.objects:
-            self.objects[self.current_app]+=1
-        else:
-            self.objects[self.current_app]=1
-            line="\t\t"+self.current_app+" = MainWindow.getChild(\""+self.current_app+"\")\n"
-            self.variables.append(line)
+        self.init_app()
 
         line="\t\t"+self.current_app+".executeAction(\"LAUNCH\", mkPropertyValues"+\
             "({\"AUTOFILTER\": \"\", \"COL\": \""+\
@@ -440,12 +362,7 @@ class ul_Compiler:
 
     def handle_impress_Type_command (self,impress_Type_command):
 
-        if self.current_app in self.objects:
-            self.objects[self.current_app]+=1
-        else:
-            self.objects[self.current_app]=1
-            line="\t\t"+self.current_app+" = MainWindow.getChild(\""+self.current_app+"\")\n"
-            self.variables.append(line)
+        self.init_app()
 
         if(impress_Type_command.what_to_type.__class__.__name__=="char"):
             line="\t\t"+self.current_app+".executeAction(\"TYPE\", mkPropertyValues"+\
@@ -461,13 +378,7 @@ class ul_Compiler:
 
     def handle_math_Type_command (self,math_Type_command):
 
-        if self.current_app in self.objects:
-            self.objects[self.current_app]+=1
-        else:
-            self.objects[self.current_app]=1
-            line="\t\t"+self.current_app+" = MainWindow.getChild(\""+self.current_app+"\")\n"
-            self.variables.append(line)
-
+        self.init_app()
         if(math_Type_command.what_to_type.__class__.__name__=="char"):
             line="\t\t"+self.current_app+".executeAction(\"TYPE\", mkPropertyValues"+\
             "({\"TEXT\": \""+\
