@@ -420,33 +420,43 @@ void SAL_CALL OPreparedStatement::setDouble(sal_Int32 nIndex, double nValue)
     ensurePrepared();
 
     XSQLVAR* pVar = m_pInSqlda->sqlvar + (nIndex - 1);
-    int dType = (pVar->sqltype & ~1); // drop flag bit for now
-
-    // take decimal places into account, later on they are removed in makeNumericString
-    // minus because firebird stores scale as a negative number
-    int nDecimalCount = -pVar->sqlscale;
-    sal_Int64 nDecimalCountExp = pow10Integer(nDecimalCount);
-
-    nValue = static_cast<double>(nValue * nDecimalCountExp);
+    short dType = (pVar->sqltype & ~1); // drop flag bit for now
+    short dSubType = pVar->sqlsubtype;
+    // Assume it is a sub type of a number.
+    if(dSubType < 0 || dSubType > 2)
+    {
+        ::dbtools::throwSQLException(
+            "Incorrect number sub type",
+            ::dbtools::StandardSQLState::INVALID_SQL_DATA_TYPE,
+            *this);
+    }
+    // firebird stores scale as a negative number
+    ColumnTypeInfo columnType{ dType, dSubType,
+        static_cast<short>(-pVar->sqlscale) };
 
     // Caller might try to set an integer type here. It makes sense to convert
     // it instead of throwing an error.
-    switch(dType)
+    switch(columnType.getSdbcType())
     {
-        case SQL_SHORT:
+        case DataType::SMALLINT:
             setValue< sal_Int16 >(nIndex,
                     static_cast<sal_Int16>(nValue),
                     dType);
             break;
-        case SQL_LONG:
+        case DataType::INTEGER:
             setValue< sal_Int32 >(nIndex,
                     static_cast<sal_Int32>(nValue),
                     dType);
             break;
-        case SQL_INT64:
+        case DataType::BIGINT:
             setValue< sal_Int64 >(nIndex,
                     static_cast<sal_Int64>(nValue),
                     dType);
+            break;
+        case DataType::NUMERIC:
+        case DataType::DECIMAL:
+            // take decimal places into account, later on they are removed in makeNumericString
+            setObjectWithInfo(nIndex,Any{nValue}, columnType.getSdbcType(), columnType.getScale());
             break;
         default:
             setValue< double >(nIndex, nValue, SQL_DOUBLE); // TODO: SQL_D_FLOAT?
