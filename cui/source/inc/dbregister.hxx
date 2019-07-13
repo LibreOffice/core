@@ -22,9 +22,7 @@
 
 #include <rtl/ustring.hxx>
 #include <sfx2/basedlgs.hxx>
-#include <svl/poolitem.hxx>
-#include <svtools/simptabl.hxx>
-#include "optpath.hxx"
+#include <sfx2/tabdlg.hxx>
 
 class SvTreeListEntry;
 namespace svx

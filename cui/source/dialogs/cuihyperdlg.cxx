@@ -29,7 +29,9 @@
 #include <hldoctp.hxx>
 #include <hldocntp.hxx>
 #include <bitmaps.hlst>
+#include <sfx2/app.hxx>
 #include <sfx2/viewfrm.hxx>
+#include <svl/eitem.hxx>
 #include <svx/svxids.hrc>
 #include <dialmgr.hxx>
 #include <strings.hrc>

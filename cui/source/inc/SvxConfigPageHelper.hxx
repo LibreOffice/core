@@ -20,7 +20,7 @@
 #ifndef INCLUDED_CUI_SOURCE_INC_SVXCONFIGPAGEHELPER_HXX
 #define INCLUDED_CUI_SOURCE_INC_SVXCONFIGPAGEHELPER_HXX
 
-#include <vector>
+#include <com/sun/star/frame/XModuleManager2.hpp>
 
 #include "cfg.hxx"
 

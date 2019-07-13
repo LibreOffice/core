@@ -28,6 +28,7 @@
 #include <sfx2/htmlmode.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svdpagv.hxx>
+#include <svx/swframeposstrings.hxx>
 #include <svx/rectenum.hxx>
 #include <sal/macros.h>
 #include <com/sun/star/text/HoriOrientation.hpp>

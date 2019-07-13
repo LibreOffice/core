@@ -43,6 +43,7 @@
 #include <strings.hrc>
 #include <hlmarkwn.hxx>
 #include <hltpbase.hxx>
+#include <hlmarkwn_def.hxx>
 
 using namespace ::com::sun::star;
 

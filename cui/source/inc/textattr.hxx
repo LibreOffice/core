@@ -21,7 +21,6 @@
 
 #include <svx/dlgctrl.hxx>
 #include <svx/svdobj.hxx>
-#include <sfx2/basedlgs.hxx>
 
 class SdrView;
 

@@ -20,10 +20,7 @@
 #ifndef INCLUDED_CUI_SOURCE_INC_CUIGRFFLT_HXX
 #define INCLUDED_CUI_SOURCE_INC_CUIGRFFLT_HXX
 
-#include <tools/helpers.hxx>
-#include <vcl/GraphicObject.hxx>
 #include <vcl/timer.hxx>
-#include <svx/graphctl.hxx>
 #include <svx/dlgctrl.hxx>
 #include <svx/rectenum.hxx>
 

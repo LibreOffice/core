@@ -20,7 +20,6 @@
 #define INCLUDED_CUI_SOURCE_OPTIONS_OPTCOLOR_HXX
 
 #include <sfx2/tabdlg.hxx>
-#include <vcl/fixed.hxx>
 #include <vcl/lstbox.hxx>
 
 namespace svtools {class EditableColorConfig;class EditableExtendedColorConfig;}

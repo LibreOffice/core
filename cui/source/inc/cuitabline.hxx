@@ -21,10 +21,14 @@
 #define INCLUDED_CUI_SOURCE_INC_CUITABLINE_HXX
 
 #include <vector>
+#include <editeng/brushitem.hxx>
+#include <sfx2/tabdlg.hxx>
 #include <svx/svdpage.hxx>
-#include <svx/tabline.hxx>
 #include <svx/tabarea.hxx>
 #include <svx/xlnasit.hxx>
+#include <svx/xtable.hxx>
+#include <svx/dlgctrl.hxx>
+#include <vcl/customweld.hxx>
 
 enum class PageType;
 class ColorListBox;

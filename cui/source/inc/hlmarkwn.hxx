@@ -23,7 +23,6 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <vcl/weld.hxx>
 
-#include "hlmarkwn_def.hxx"
 class SvxHyperlinkTabPageBase;
 
 //#                                                                      #

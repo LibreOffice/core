@@ -20,7 +20,8 @@
 #ifndef INCLUDED_CUI_SOURCE_INC_CUSTOMNOTEBOOKBARGENERATOR_HXX
 #define INCLUDED_CUI_SOURCE_INC_CUSTOMNOTEBOOKBARGENERATOR_HXX
 
-#include "cfg.hxx"
+#include <com/sun/star/uno/Sequence.hxx>
+#include <rtl/ustring.hxx>
 
 using namespace css::uno;
 

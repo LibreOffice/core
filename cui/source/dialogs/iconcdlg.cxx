@@ -28,6 +28,7 @@
 #include <vcl/mnemonic.hxx>
 #include <vcl/i18nhelp.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/builderfactory.hxx>
 
 /**********************************************************************

@@ -20,6 +20,7 @@
 #include <unotools/pathoptions.hxx>
 #include "optchart.hxx"
 #include <svx/SvxColorValueSet.hxx>
+#include <vcl/virdev.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>

@@ -19,6 +19,7 @@
 #ifndef INCLUDED_CUI_SOURCE_OPTIONS_OPTGDLG_HXX
 #define INCLUDED_CUI_SOURCE_OPTIONS_OPTGDLG_HXX
 #include <memory>
+#include <vcl/button.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/field.hxx>
 #include <vcl/fixed.hxx>

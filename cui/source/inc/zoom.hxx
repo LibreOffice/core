@@ -21,6 +21,7 @@
 
 #include <memory>
 #include <sfx2/basedlgs.hxx>
+#include <svl/itemset.hxx>
 #include <svx/zoom_def.hxx>
 #include <vcl/weld.hxx>
 

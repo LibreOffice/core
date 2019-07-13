@@ -20,22 +20,14 @@
 #define INCLUDED_CUI_SOURCE_INC_CFG_HXX
 
 #include <vcl/weld.hxx>
-#include <svtools/imgdef.hxx>
-#include <svtools/miscopt.hxx>
 #include <svtools/valueset.hxx>
 
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/ui/XUIConfigurationListener.hpp>
 #include <com/sun/star/ui/XUIConfigurationManager.hpp>
 #include <com/sun/star/ui/XImageManager.hpp>
-#include <com/sun/star/ui/ImageType.hpp>
-#include <com/sun/star/ui/ItemType.hpp>
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
-#include <com/sun/star/frame/ModuleManager.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
 
 #include <sfx2/tabdlg.hxx>

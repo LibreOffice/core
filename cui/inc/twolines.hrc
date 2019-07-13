@@ -10,6 +10,10 @@
 #ifndef INCLUDED_CUI_INC_TWO_LINES_HRC
 #define INCLUDED_CUI_INC_TWO_LINES_HRC
 
+#include <sal/types.h>
+
+#include <utility>
+
 #define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
 
 #define CHRDLG_ENCLOSE_NONE                 0

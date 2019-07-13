@@ -20,6 +20,7 @@
 #include "connpooloptions.hxx"
 #include "dbregisterednamesconfig.hxx"
 #include "dbregistersettings.hxx"
+#include <svx/databaseregistrationui.hxx>
 #include <svx/svxids.hrc>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/sdb/DatabaseContext.hpp>

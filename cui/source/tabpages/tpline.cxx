@@ -41,6 +41,7 @@
 #include <svx/xlnedcit.hxx>
 
 
+#include <svx/tabline.hxx>
 #include <svx/xpool.hxx>
 #include <svx/xtable.hxx>
 #include <svx/drawitem.hxx>

@@ -23,7 +23,6 @@
 #include <memory>
 
 #include <sfx2/tabdlg.hxx>
-#include <svx/Palette.hxx>
 #include <editeng/numdef.hxx>
 #include <editeng/svxenum.hxx>
 #include <svtools/ctrlbox.hxx>

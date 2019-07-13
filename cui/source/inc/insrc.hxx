@@ -20,7 +20,7 @@
 #define INCLUDED_CUI_SOURCE_INC_INSRC_HXX
 
 #include <rtl/string.hxx>
-#include <rtl/ustring.hxx>
+#include <svx/svxdlg.hxx>
 #include <vcl/weld.hxx>
 
 class SvxInsRowColDlg : public SvxAbstractInsRowColDlg, public weld::GenericDialogController

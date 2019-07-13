@@ -19,24 +19,13 @@
 #ifndef INCLUDED_CUI_SOURCE_INC_SVXNOTEBOOKBARCONFIGPAGE_HXX
 #define INCLUDED_CUI_SOURCE_INC_SVXNOTEBOOKBARCONFIGPAGE_HXX
 
-#include <libxml/xmlmemory.h>
 #include <libxml/parser.h>
 #include <vcl/weld.hxx>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/container/XIndexContainer.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/ui/XUIConfigurationListener.hpp>
 #include <com/sun/star/ui/XUIConfigurationManager.hpp>
-#include <com/sun/star/ui/XImageManager.hpp>
-#include <com/sun/star/frame/XFrame.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/lang/XSingleComponentFactory.hpp>
 
-#include <sfx2/tabdlg.hxx>
 #include <memory>
 #include <vector>
 
-//#include "cfgutil.hxx"
 #include "cfg.hxx" //for SvxConfigPage and SaveInData
 
 class SvxNotebookbarConfigPage : public SvxConfigPage

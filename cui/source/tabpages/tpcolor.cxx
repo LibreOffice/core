@@ -35,6 +35,7 @@
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 
 #include <strings.hrc>
+#include <svx/xfillit0.hxx>
 #include <svx/xflclit.hxx>
 #include <svx/xpool.hxx>
 #include <svx/xtable.hxx>
