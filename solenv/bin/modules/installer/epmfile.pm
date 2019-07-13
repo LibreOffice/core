@@ -316,7 +316,7 @@ sub create_epm_header
     push(@epmheader, $line);
 
     $line = "%release" . " " . $installer::globals::packagerevision . "\n";
-    if ( $installer::globals::isrpmbuild ) { $line = "%release" . " " . $installer::globals::buildid . "\n"; }
+    #if ( $installer::globals::isrpmbuild ) { $line = "%release" . " " . $installer::globals::buildid . "\n"; }
     push(@epmheader, $line);
 
     # Description, Copyright and Vendor are multilingual and are defined in
