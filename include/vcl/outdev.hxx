@@ -626,6 +626,7 @@ public:
     void                        SetBackground( const Wallpaper& rBackground );
 
     const Wallpaper&            GetBackground() const { return maBackground; }
+    virtual Color               GetBackgroundColor() const;
     bool                        IsBackground() const { return mbBackground; }
 
     void                        SetFont( const vcl::Font& rNewFont );
