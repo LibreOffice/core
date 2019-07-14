@@ -1060,10 +1060,9 @@ void ScHTMLExport::WriteCell( sc::ColumnBlockPosition& rBlockPos, SCCOL nCol, SC
     TAG_ON(aStrTD.makeStringAndClear().getStr());
 
     //write the note for this as the first thing in the tag
-    if (pDoc->HasNote(aPos))
+    ScPostIt* pNote = pDoc->HasNote(aPos) ? pDoc->GetNote(aPos) : nullptr;
+    if (pNote)
     {
-        ScPostIt* pNote = pDoc->GetNote(aPos);
-
         //create the comment indicator
         OStringBuffer aStr(OOO_STRING_SVTOOLS_HTML_anchor);
         aStr.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_class)
