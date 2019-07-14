@@ -1520,63 +1520,6 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                     GetDispatcher()->ExecuteList(SID_TIPOFTHEDAY, SfxCallMode::SLOT, {}, { &aDocFrame });
                 }
 
-                // inform about the community involvement
-                const auto t0 = std::chrono::system_clock::now().time_since_epoch();
-                const sal_Int64 nLastGetInvolvedShown = officecfg::Setup::Product::LastTimeGetInvolvedShown::get();
-                const sal_Int64 nNow = std::chrono::duration_cast<std::chrono::seconds>(t0).count();
-                const sal_Int64 nPeriodSec(60 * 60 * 24 * 180); // 180 days in seconds
-                bool bUpdateLastTimeGetInvolvedShown = false;
-
-                if (nLastGetInvolvedShown == 0)
-                    bUpdateLastTimeGetInvolvedShown = true;
-                else if (nPeriodSec < nNow && nLastGetInvolvedShown < (nNow + nPeriodSec/2) - nPeriodSec) // 90d alternating with donation
-                {
-                    bUpdateLastTimeGetInvolvedShown = true;
-
-                    VclPtr<SfxInfoBarWindow> pInfoBar = AppendInfoBar("getinvolved", "", SfxResId(STR_GET_INVOLVED_TEXT), InfobarType::INFO);
-
-                    if (pInfoBar)
-                    {
-                        weld::Button& rGetInvolvedButton = pInfoBar->addButton();
-                        rGetInvolvedButton.set_label(SfxResId(STR_GET_INVOLVED_BUTTON));
-                        rGetInvolvedButton.connect_clicked(LINK(this, SfxViewFrame, GetInvolvedHandler));
-                    }
-                }
-
-                if (bUpdateLastTimeGetInvolvedShown
-                    && !officecfg::Setup::Product::LastTimeGetInvolvedShown::isReadOnly())
-                {
-                    std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
-                    officecfg::Setup::Product::LastTimeGetInvolvedShown::set(nNow, batch);
-                    batch->commit();
-                }
-
-                // inform about donations
-                const sal_Int64 nLastDonateShown = officecfg::Setup::Product::LastTimeDonateShown::get();
-                bool bUpdateLastTimeDonateShown = false;
-
-                if (nLastDonateShown == 0)
-                    bUpdateLastTimeDonateShown = true;
-                else if (nPeriodSec < nNow && nLastDonateShown < nNow - nPeriodSec) // 90d alternating with getinvolved
-                {
-                    bUpdateLastTimeDonateShown = true;
-
-                    VclPtr<SfxInfoBarWindow> pInfoBar = AppendInfoBar("donate", "", SfxResId(STR_DONATE_TEXT), InfobarType::INFO);
-                    if (pInfoBar)
-                    {
-                        weld::Button& rDonateButton = pInfoBar->addButton();
-                        rDonateButton.set_label(SfxResId(STR_DONATE_BUTTON));
-                        rDonateButton.connect_clicked(LINK(this, SfxViewFrame, DonationHandler));
-                    }
-                }
-
-                if (bUpdateLastTimeDonateShown
-                    && !officecfg::Setup::Product::LastTimeDonateShown::isReadOnly())
-                {
-                    std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
-                    officecfg::Setup::Product::LastTimeDonateShown::set(nNow, batch);
-                    batch->commit();
-                }
 #endif
                 if (officecfg::Office::Common::Passwords::HasMaster::get() &&
                     officecfg::Office::Common::Passwords::StorageVersion::get() == 0)
@@ -1599,7 +1542,6 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                         }
                     }
                 }
-
                 const bool bEmbedded = m_xObjSh->GetCreateMode() == SfxObjectCreateMode::EMBEDDED;
 
                 // read-only infobar if necessary
