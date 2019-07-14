@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_0ab83228",
+        "filename": "svtools/source/uno/fpicker.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-07-14T06:20:17Z",
+      "side": 1,
+      "message": "why not just make Application::createFilePicker create the system specific file picker correctly?",
+      "revId": "d1ceeba98b5501e59be22a3b79e7c501edfd2468",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
