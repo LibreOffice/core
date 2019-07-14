@@ -1152,9 +1152,7 @@ namespace sfx2
                 // show '*' in extensions only when opening a document
                 sExt = sExt.replaceAll("*", "");
             }
-            sRet += " (";
-            sRet += sExt;
-            sRet += ")";
+            sRet += " (" + sExt + ")";
         }
         _rFileDlgImpl.addFilterPair( _rDisplayText, sRet );
         return sRet;
