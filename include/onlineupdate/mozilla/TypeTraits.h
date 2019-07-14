@@ -974,7 +974,7 @@ struct MakeUnsigned<T, CVRemoved, false>
  * If T is already an unsigned integer type (not including char!), then T is
  * produced.
  *
- * Otherwise, if T is an signed integer type, the unsigned variety of T, with
+ * Otherwise, if T is a signed integer type, the unsigned variety of T, with
  * T's const/volatile qualifiers, is produced.
  *
  * Otherwise, the unsigned integral type of the same size as T, with the lowest
