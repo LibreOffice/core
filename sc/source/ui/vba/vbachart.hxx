@@ -29,8 +29,6 @@
 #include <com/sun/star/chart/XTwoAxisXSupplier.hpp>
 #include <com/sun/star/chart/XTwoAxisYSupplier.hpp>
 #include <ooo/vba/excel/XChart.hpp>
-#include <ooo/vba/excel/XDataLabels.hpp>
-#include <ooo/vba/excel/XSeries.hpp>
 #include <vbahelper/vbahelperinterface.hxx>
 
 typedef InheritedHelperInterfaceWeakImpl<ov::excel::XChart > ChartImpl_BASE;

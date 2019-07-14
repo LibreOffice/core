@@ -21,7 +21,6 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/sheet/XDataPilotTable.hpp>
 #include <ooo/vba/excel/XPivotTable.hpp>
-#include "excelvbahelper.hxx"
 #include <vbahelper/vbahelperinterface.hxx>
 
 typedef InheritedHelperInterfaceWeakImpl< ov::excel::XPivotTable >  PivotTableImpl_BASE;

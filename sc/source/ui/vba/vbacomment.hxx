@@ -20,7 +20,6 @@
 #define INCLUDED_SC_SOURCE_UI_VBA_VBACOMMENT_HXX
 
 #include <ooo/vba/excel/XComment.hpp>
-#include <ooo/vba/excel/XApplication.hpp>
 #include <ooo/vba/msforms/XShape.hpp>
 #include <com/sun/star/sheet/XSheetAnnotations.hpp>
 #include <com/sun/star/sheet/XSheetAnnotation.hpp>

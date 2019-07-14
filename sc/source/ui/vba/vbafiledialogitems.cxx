@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include "vbafiledialogitems.hxx"
-#include <com/sun/star/lang/XSingleComponentFactory.hpp>
-#include <com/sun/star/container/XIndexContainer.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::ooo::vba;

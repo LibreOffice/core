@@ -23,7 +23,6 @@
 #include <com/sun/star/script/BasicErrorException.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <basic/sberrors.hxx>
-#include <docsh.hxx>
 #include "vbachartobject.hxx"
 #include "vbachartobjects.hxx"
 
