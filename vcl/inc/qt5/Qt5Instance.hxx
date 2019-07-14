@@ -142,10 +142,10 @@ public:
     virtual void TriggerUserEventProcessing() override;
     virtual void ProcessEvent(SalUserEvent aEvent) override;
 
-    virtual css::uno::Reference<css::ui::dialogs::XFilePicker2>
+    bool hasNativeFileSelection() const override { return true; }
+    css::uno::Reference<css::ui::dialogs::XFilePicker2>
     createFilePicker(const css::uno::Reference<css::uno::XComponentContext>&) override;
-
-    virtual css::uno::Reference<css::ui::dialogs::XFolderPicker2>
+    css::uno::Reference<css::ui::dialogs::XFolderPicker2>
     createFolderPicker(const css::uno::Reference<css::uno::XComponentContext>&) override;
 
     virtual css::uno::Reference<css::uno::XInterface>
