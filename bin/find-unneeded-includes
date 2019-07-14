@@ -32,8 +32,8 @@ import yaml
 def ignoreRemoval(include, toAdd, absFileName, moduleRules):
     # global rules
 
-    # Avoid replacing .hpp with .hdl in the com::sun::star namespace.
-    if include.startswith("com/sun/star") and include.endswith(".hpp"):
+    # Avoid replacing .hpp with .hdl in the com::sun::star and  ooo::vba namespaces.
+    if ( include.startswith("com/sun/star") or include.startswith("ooo/vba") ) and include.endswith(".hpp"):
         hdl = include.replace(".hpp", ".hdl")
         if hdl in toAdd:
             return True
