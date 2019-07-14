@@ -1356,7 +1356,7 @@ void SwFrameShell::ExecDrawDlgTextFrame(SfxRequest const & rReq)
                     pDoc,
                     false));
 
-                pDlg->StartExecuteAsync([=](sal_Int32 nResult){
+                pDlg->StartExecuteAsync([pDlg, this](sal_Int32 nResult){
                     if(nResult == RET_OK)
                     {
                         // set attributes at FlyFrame
