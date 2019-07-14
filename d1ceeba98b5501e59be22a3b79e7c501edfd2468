@@ -16,6 +16,24 @@
       "revId": "d1ceeba98b5501e59be22a3b79e7c501edfd2468",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_6ad9ae81",
+        "filename": "svtools/source/uno/fpicker.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2019-07-14T10:34:09Z",
+      "side": 1,
+      "message": "You mean moving the whole code from line 45 - 76 into the Application:: functions (and the equivalent for the folder picker)? No general objection here.\n\nBTW / OTOH these functions are the only call sites of the Application:: variants. This kind of separates the VCL embedded picker variants in the Gtk and Qt5 backend from the component variants used for Win32 and MacOS.\n\nIf this still works, that is :-)",
+      "parentUuid": "bf659307_0ab83228",
+      "revId": "d1ceeba98b5501e59be22a3b79e7c501edfd2468",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
