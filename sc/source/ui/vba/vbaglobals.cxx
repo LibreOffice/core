@@ -18,19 +18,13 @@
  */
 #include "vbaglobals.hxx"
 
-#include <sal/macros.h>
-
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <comphelper/sequence.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/frame/XModel.hpp>
-#include <cppuhelper/component_context.hxx>
 
 #include "vbaapplication.hxx"
-#include "vbaworksheet.hxx"
-#include "vbarange.hxx"
-#include <cppuhelper/bootstrap.hxx>
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::ooo::vba;

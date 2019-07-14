@@ -26,7 +26,7 @@
 #include <rtl/ref.hxx>
 
 #include "vbawindow.hxx"
-#include "vbaglobals.hxx"
+#include "vbaworkbook.hxx"
 
 #include <unordered_map>
 

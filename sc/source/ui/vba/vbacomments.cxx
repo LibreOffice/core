@@ -24,8 +24,6 @@
 #include <com/sun/star/sheet/XSheetAnnotation.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
 
-#include "vbaglobals.hxx"
-
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 

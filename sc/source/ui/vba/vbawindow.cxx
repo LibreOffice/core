@@ -17,23 +17,23 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include <vbahelper/helperdecl.hxx>
+#include "excelvbahelper.hxx"
 #include "service.hxx"
 #include "vbawindow.hxx"
 #include "vbaworksheets.hxx"
 #include "vbaworksheet.hxx"
-#include "vbaglobals.hxx"
+#include "vbaworkbook.hxx"
 #include "vbapane.hxx"
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
+#include <com/sun/star/sheet/XViewSplitable.hpp>
+#include <com/sun/star/sheet/XViewFreezable.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/view/DocumentZoomType.hpp>
 #include <com/sun/star/table/CellRangeAddress.hpp>
+#include <ooo/vba/excel/XApplication.hpp>
 #include <ooo/vba/excel/XlWindowState.hpp>
 #include <ooo/vba/excel/XlWindowView.hpp>
-#include <ooo/vba/excel/Constants.hpp>
-#include <com/sun/star/awt/XWindow.hpp>
-#include <com/sun/star/awt/XWindow2.hpp>
-#include <com/sun/star/awt/PosSize.hpp>
 #include <basic/sberrors.hxx>
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/implbase.hxx>

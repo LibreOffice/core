@@ -24,7 +24,6 @@
 
 #include <ooo/vba/office/MsoFileDialogType.hpp>
 
-#include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/ui/dialogs/FilePicker.hpp>
 #include <com/sun/star/ui/dialogs/FolderPicker.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>

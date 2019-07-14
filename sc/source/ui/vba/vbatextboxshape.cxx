@@ -17,11 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "excelvbahelper.hxx"
 #include "vbatextboxshape.hxx"
 #include "vbacharacters.hxx"
 #include <com/sun/star/text/XSimpleText.hpp>
 #include <docsh.hxx>
-#include <vector>
 
 using namespace com::sun::star;
 using namespace ooo::vba;

@@ -36,7 +36,6 @@
 #include <com/sun/star/frame/XModel.hpp>
 
 #include <basic/sberrors.hxx>
-#include <rtl/math.hxx>
 
 #include "excelvbahelper.hxx"
 #include "vbaborders.hxx"
@@ -45,7 +44,6 @@
 #include "vbainterior.hxx"
 
 #include <docsh.hxx>
-#include <document.hxx>
 #include <unonames.hxx>
 #include <cellsuno.hxx>
 #include <scitems.hxx>

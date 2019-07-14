@@ -18,32 +18,22 @@
  */
 #include "vbaworksheets.hxx"
 
-#include <sfx2/dispatch.hxx>
-#include <sfx2/app.hxx>
-#include <sfx2/bindings.hxx>
-#include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <svl/itemset.hxx>
-#include <svl/eitem.hxx>
 
 #include <cppuhelper/implbase.hxx>
 
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
-#include <com/sun/star/sheet/XSpreadsheetView.hpp>
+#include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/script/XTypeConverter.hpp>
 
 #include <ooo/vba/excel/XApplication.hpp>
 #include <tabvwsh.hxx>
 
 #include "excelvbahelper.hxx"
-#include "vbaglobals.hxx"
 #include "vbaworksheet.hxx"
-#include "vbaworkbook.hxx"
-#include <unonames.hxx>
 #include <markdata.hxx>
 
 #include <vector>

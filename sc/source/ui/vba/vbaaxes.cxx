@@ -27,7 +27,6 @@
 #include <ooo/vba/excel/XlAxisType.hpp>
 #include <ooo/vba/excel/XlAxisGroup.hpp>
 #include <ooo/vba/excel/XAxis.hpp>
-#include <map>
 
 using namespace ::com::sun::star;
 using namespace ::ooo::vba;

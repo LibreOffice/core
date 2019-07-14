@@ -22,16 +22,13 @@
 #include <com/sun/star/script/BasicErrorException.hpp>
 #include <com/sun/star/sheet/XCalculatable.hpp>
 #include <com/sun/star/sheet/XCellRangeAddressable.hpp>
-#include <com/sun/star/sheet/XCellRangeReferrer.hpp>
 #include <com/sun/star/sheet/XNamedRanges.hpp>
 #include <com/sun/star/sheet/XSpreadsheetView.hpp>
-#include <com/sun/star/sheet/XSpreadsheets.hpp>
 #include <com/sun/star/task/XStatusIndicatorSupplier.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/util/PathSettings.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <ooo/vba/XCommandBars.hpp>
-#include <ooo/vba/XExecutableDialog.hpp>
 #include <ooo/vba/excel/XApplicationOutgoing.hpp>
 #include <ooo/vba/excel/XlCalculation.hpp>
 #include <ooo/vba/excel/XlMousePointer.hpp>
@@ -42,13 +39,11 @@
 #include "vbaapplication.hxx"
 #include "vbaworkbooks.hxx"
 #include "vbaworkbook.hxx"
-#include "vbaworksheets.hxx"
 #include "vbarange.hxx"
 #include "vbawsfunction.hxx"
 #include "vbadialogs.hxx"
 #include "vbawindow.hxx"
 #include "vbawindows.hxx"
-#include "vbaglobals.hxx"
 #include "vbamenubars.hxx"
 #include <tabvwsh.hxx>
 #include <gridwin.hxx>
@@ -60,7 +55,6 @@
 #include "vbaassistant.hxx"
 #include <sc.hrc>
 #include <macromgr.hxx>
-#include <defaultsoptions.hxx>
 #include "vbafiledialog.hxx"
 
 #include <osl/file.hxx>
@@ -68,17 +62,10 @@
 
 #include <sfx2/bindings.hxx>
 #include <sfx2/request.hxx>
-#include <sfx2/objsh.hxx>
-#include <sfx2/viewfrm.hxx>
 #include <sfx2/app.hxx>
 #include <vcl/svapp.hxx>
 
-#include <toolkit/awt/vclxwindow.hxx>
-
 #include <tools/diagnose_ex.h>
-#include <tools/urlobj.hxx>
-
-#include <docuno.hxx>
 
 #include <basic/sbx.hxx>
 #include <basic/sbstar.hxx>
@@ -88,13 +75,11 @@
 
 #include <convuno.hxx>
 #include <cellsuno.hxx>
-#include <miscuno.hxx>
 #include <unonames.hxx>
 #include <docsh.hxx>
 #include <vbahelper/helperdecl.hxx>
 #include "excelvbahelper.hxx"
 
-#include <basic/sbmod.hxx>
 #include <basic/sbxobj.hxx>
 
 #include <viewutil.hxx>

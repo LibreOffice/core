@@ -16,20 +16,12 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#include <vbahelper/helperdecl.hxx>
-
-#include <com/sun/star/table/XCellRange.hpp>
-#include <com/sun/star/sheet/XCellRangeAddressable.hpp>
-#include <com/sun/star/sheet/XCellRangeReferrer.hpp>
 
 #include "excelvbahelper.hxx"
 #include "vbaname.hxx"
 #include "vbarange.hxx"
-#include "vbaglobals.hxx"
-#include <vector>
+#include <docsh.hxx>
 #include <rangenam.hxx>
-#include <tabvwsh.hxx>
-#include <viewdata.hxx>
 #include <nameuno.hxx>
 #include <compiler.hxx>
 #include <tokenarray.hxx>

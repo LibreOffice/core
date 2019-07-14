@@ -21,10 +21,8 @@
 
 #include <ooo/vba/excel/XWorksheetFunction.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include "vbarange.hxx"
 
-#include <com/sun/star/beans/XExactName.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
+#include <vbahelper/vbahelperinterface.hxx>
 
 typedef InheritedHelperInterfaceWeakImpl< ov::excel::XWorksheetFunction > ScVbaWSFunction_BASE;
 

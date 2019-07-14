@@ -19,10 +19,9 @@
 
 #include <vbahelper/helperdecl.hxx>
 #include <tools/urlobj.hxx>
-#include <boost/optional.hpp>
 
-#include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/util/XProtectable.hpp>
+#include <com/sun/star/sheet/XNamedRanges.hpp>
 #include <com/sun/star/sheet/XSpreadsheetView.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
@@ -30,7 +29,6 @@
 #include <ooo/vba/excel/XlFileFormat.hpp>
 #include <ooo/vba/excel/XApplication.hpp>
 
-#include <scextopt.hxx>
 #include "service.hxx"
 #include "vbaworksheet.hxx"
 #include "vbaworksheets.hxx"
@@ -41,9 +39,7 @@
 #include "vbapalette.hxx"
 #include <osl/file.hxx>
 #include "vbanames.hxx"
-#include <nameuno.hxx>
 #include <docoptio.hxx>
-#include <unonames.hxx>
 #include <docsh.hxx>
 
 // Much of the impl. for the equivalent UNO module is

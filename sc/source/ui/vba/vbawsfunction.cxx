@@ -17,18 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/table/XCell.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
-#include <com/sun/star/table/XColumnRowRange.hpp>
-#include <com/sun/star/beans/XIntrospection.hpp>
 #include <com/sun/star/beans/XIntrospectionAccess.hpp>
 #include <com/sun/star/sheet/XFunctionAccess.hpp>
-#include <com/sun/star/sheet/XCellRangesQuery.hpp>
 #include <com/sun/star/sheet/XCellRangeAddressable.hpp>
-#include <com/sun/star/sheet/CellFlags.hpp>
-#include <com/sun/star/reflection/XIdlMethod.hpp>
-#include <com/sun/star/beans/MethodConcept.hpp>
-#include <cppuhelper/queryinterface.hxx>
+#include <ooo/vba/excel/XRange.hpp>
 
 #include "vbawsfunction.hxx"
 #include <compiler.hxx>

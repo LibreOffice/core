@@ -23,10 +23,7 @@
 #include <ooo/vba/excel/XPageSetup.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <vbahelper/vbahelperinterface.hxx>
 #include <vbahelper/vbapagesetupbase.hxx>
-#include <ooo/vba/excel/XlPaperSize.hpp>
 
 typedef cppu::ImplInheritanceHelper< VbaPageSetupBase, ov::excel::XPageSetup > ScVbaPageSetup_BASE;
 

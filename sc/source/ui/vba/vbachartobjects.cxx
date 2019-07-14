@@ -16,9 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#include "vbachart.hxx"
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/document/XEmbeddedObjectSupplier.hpp>
+
 #include <com/sun/star/table/XTableChartsSupplier.hpp>
 #include <com/sun/star/table/XTableChart.hpp>
 #include <com/sun/star/script/BasicErrorException.hpp>
@@ -27,7 +25,6 @@
 
 #include "vbachartobjects.hxx"
 #include "vbachartobject.hxx"
-#include "vbaglobals.hxx"
 #include <docsh.hxx>
 #include <cellsuno.hxx>
 #include <vector>

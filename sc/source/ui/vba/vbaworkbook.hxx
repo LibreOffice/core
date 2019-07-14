@@ -22,7 +22,6 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <ooo/vba/excel/XWorkbook.hpp>
 #include <cppuhelper/implbase.hxx>
-#include <vbahelper/vbahelperinterface.hxx>
 #include <vbahelper/vbadocumentbase.hxx>
 
 typedef cppu::ImplInheritanceHelper< VbaDocumentBase, ov::excel::XWorkbook > ScVbaWorkbook_BASE;

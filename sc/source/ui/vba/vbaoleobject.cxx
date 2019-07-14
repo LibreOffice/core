@@ -18,18 +18,12 @@
  */
 
 #include <com/sun/star/awt/XControlModel.hpp>
-#include <com/sun/star/awt/XWindow2.hpp>
-#include <com/sun/star/view/XControlAccess.hpp>
 #include <com/sun/star/container/XChild.hpp>
-#include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <ooo/vba/XControlProvider.hpp>
 
 #include "vbaoleobject.hxx"
-#include <svx/svdobj.hxx>
-#include <drwlayer.hxx>
-#include "excelvbahelper.hxx"
-#include <svtools/bindablecontrolhelper.hxx>
+
 using namespace com::sun::star;
 using namespace ooo::vba;
 

@@ -18,7 +18,6 @@
  */
 #include "vbacharacters.hxx"
 
-#include "vbaglobals.hxx"
 #include "vbafont.hxx"
 
 #include <com/sun/star/beans/XPropertySet.hpp>

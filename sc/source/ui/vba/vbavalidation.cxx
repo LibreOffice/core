@@ -24,7 +24,6 @@
 #include <com/sun/star/sheet/ValidationAlertStyle.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <ooo/vba/excel/XlDVType.hpp>
-#include <ooo/vba/excel/XlFormatConditionOperator.hpp>
 #include <ooo/vba/excel/XlDVAlertStyle.hpp>
 
 #include <unonames.hxx>

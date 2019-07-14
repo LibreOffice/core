@@ -22,8 +22,6 @@
 #include <com/sun/star/text/XTextRange.hpp>
 #include <ooo/vba/msforms/XTextBoxShape.hpp>
 #include <vbahelper/vbashape.hxx>
-#include "excelvbahelper.hxx"
-#include "vbacharacters.hxx"
 
 typedef cppu::ImplInheritanceHelper< ScVbaShape, ov::msforms::XTextBoxShape > TextBoxShapeImpl_BASE;
 

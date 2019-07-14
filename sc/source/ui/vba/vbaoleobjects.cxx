@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <ooo/vba/excel/XOLEObject.hpp>

@@ -21,17 +21,12 @@
 
 #include <ooo/vba/excel/XWindow.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/sheet/XViewPane.hpp>
-#include <com/sun/star/sheet/XViewFreezable.hpp>
-#include <com/sun/star/sheet/XViewSplitable.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <ooo/vba/excel/XPane.hpp>
 #include <com/sun/star/awt/XDevice.hpp>
 #include <cppuhelper/implbase.hxx>
 
-#include <vbahelper/vbahelperinterface.hxx>
 #include <vbahelper/vbawindowbase.hxx>
-#include "vbaworkbook.hxx"
 
 typedef cppu::ImplInheritanceHelper< VbaWindowBase, ov::excel::XWindow > WindowImpl_BASE;
 

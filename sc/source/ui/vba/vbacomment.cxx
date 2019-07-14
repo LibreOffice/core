@@ -18,7 +18,6 @@
  */
 #include "vbacomment.hxx"
 
-#include <ooo/vba/excel/XlCreator.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/sheet/XSheetAnnotationAnchor.hpp>
@@ -28,13 +27,14 @@
 #include <com/sun/star/sheet/XCellAddressable.hpp>
 #include <com/sun/star/table/CellAddress.hpp>
 #include <com/sun/star/table/XCell.hpp>
-#include <com/sun/star/text/XText.hpp>
+#include <com/sun/star/text/XSimpleText.hpp>
+#include <com/sun/star/text/XTextCursor.hpp>
+#include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <ooo/vba/office/MsoShapeType.hpp>
 
 #include <vbahelper/vbashape.hxx>
 #include <sal/log.hxx>
-#include "vbaglobals.hxx"
 #include "vbacomments.hxx"
 
 using namespace ::ooo::vba;
