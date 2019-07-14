@@ -3246,7 +3246,7 @@ void Notify_Background( const SdrObject* pObj,
 }
 
 /// Provides the Upper of an anchor in paragraph-bound objects. If the latter
-/// is a chained border or a footnote, the "virtual" Upper might be returne.
+/// is a chained border or a footnote, the "virtual" Upper might be returned.
 const SwFrame* GetVirtualUpper( const SwFrame* pFrame, const Point& rPos )
 {
     if( pFrame->IsTextFrame() )
