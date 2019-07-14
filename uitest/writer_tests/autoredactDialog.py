@@ -12,7 +12,12 @@ from uitest.uihelper.common import select_pos
 from uitest.uihelper.common import select_text
 import time
 import re
+import os
 from uitest.debug import sleep
+from uitest.path import get_srcdir_url
+
+def get_url_for_data_file(file_name):
+    return get_srcdir_url() + "/uitest/writer_tests/data/" + file_name
 
 class AutoRedactDialog(UITestCase):
 
@@ -188,6 +193,76 @@ class AutoRedactDialog(UITestCase):
         target_text = self.parseTargetContent(target_entry)
         self.assertEqual(target_text[0], "TestTargetEdited") #name
         self.assertEqual(target_text[2], "TestContentEdited") #content
+
+        xcancBtn = xDialog.getChild("cancel")
+        self.ui_test.close_dialog_through_button(xcancBtn)
+
+        self.ui_test.close_doc()
+
+
+    def test_save_load_targets(self):
+        self.ui_test.create_doc_in_start_center("writer")
+        xDialog = self.launch_and_get_autoredact_dialog()
+        xLoadBtn = xDialog.getChild("btnLoadTargets")
+        xSaveBtn = xDialog.getChild("btnSaveTargets")
+        xAddBtn = xDialog.getChild("add")
+
+        def handle_add_dlg(dialog):                     #handle add target dialog - need special handling
+            xNewNameTxt=dialog.getChild("name")
+            xNewContentTxt=dialog.getChild("content")
+            xOKBtn = dialog.getChild("close")
+            xTypeList = dialog.getChild("type") #0: Text, 1: Regex, 2: Predefined
+
+            select_pos(xTypeList, 0) #Text
+            self.assertEqual(int(get_state_as_dict(xTypeList)["SelectEntryPos"]), 0)
+
+            type_text(xNewNameTxt, "TestTarget")
+            type_text(xNewContentTxt, "TestContent")
+
+            self.ui_test.close_dialog_through_button(xOKBtn)
+
+        def handle_save_dlg(dialog):                     #handle add target dialog - need special handling
+            xSaveBtn = dialog.getChild("open")
+            xFileName = dialog.getChild("file_name")
+            xCurrPath = dialog.getChild("current_path")
+
+            current_path = get_state_as_dict(xCurrPath)["Text"]
+            file_name = "TestTargetsFile.json"
+            full_path = current_path + "/" + file_name
+
+            if os.path.exists(full_path):
+                os.remove(full_path)
+
+            type_text(xFileName, "TestTargetsFile.json")
+
+            self.ui_test.close_dialog_through_button(xSaveBtn)
+
+        def handle_load_dlg(dialog):                     #handle add target dialog - need special handling
+            xSaveBtn = dialog.getChild("open")
+            xFileName = dialog.getChild("file_name")
+
+            type_text(xFileName, "TestTargetsFile.json")
+
+            self.ui_test.close_dialog_through_button(xSaveBtn)
+
+        self.ui_test.execute_blocking_action(xAddBtn.executeAction, args=('CLICK', ()),
+                dialog_handler=handle_add_dlg)             #close add target dialog with OK button
+
+        # Make sure target is added successfully
+        xTargetsListbox = xDialog.getChild("targets")
+        targets_box_state_dict = get_state_as_dict(xTargetsListbox)
+        self.assertEqual(int(targets_box_state_dict["Children"]), 1)
+
+        self.ui_test.execute_blocking_action(xSaveBtn.executeAction, args=('CLICK', ()),
+                dialog_handler=handle_save_dlg)             #close add target dialog with OK button
+
+        self.ui_test.execute_blocking_action(xLoadBtn.executeAction, args=('CLICK', ()),
+                dialog_handler=handle_load_dlg)             #close add target dialog with OK button
+
+        # Make sure target is loaded successfully
+        xTargetsListbox = xDialog.getChild("targets")
+        targets_box_state_dict = get_state_as_dict(xTargetsListbox)
+        self.assertEqual(int(targets_box_state_dict["Children"]), 1)
 
         xcancBtn = xDialog.getChild("cancel")
         self.ui_test.close_dialog_through_button(xcancBtn)
