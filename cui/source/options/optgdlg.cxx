@@ -281,20 +281,20 @@ OfaMiscTabPage::OfaMiscTabPage(TabPageParent pParent, const SfxItemSet& rSet)
 {
     if (!lcl_HasSystemFilePicker())
         m_xFileDlgFrame->hide();
-#if ! ENABLE_GTK
-    m_xFileDlgFrame->hide();
-#else
-    if (!SvtMiscOptions().IsExperimentalMode())
-    {
-        m_xFileDlgFrame->hide();
-    }
-#endif
-
-    if (m_xFileDlgCB->get_visible() && SvtMiscOptions().IsUseSystemFileDialogReadOnly())
+    else if (SvtMiscOptions().IsUseSystemFileDialogReadOnly())
     {
         m_xFileDlgROImage->show();
         m_xFileDlgCB->set_sensitive(false);
     }
+
+#if ! ENABLE_GTK
+    m_xPrintDlgFrame->hide();
+#else
+    if (!SvtMiscOptions().IsExperimentalMode())
+    {
+        m_xPrintDlgFrame->hide();
+    }
+#endif
 
     m_xQuickLaunchCB->show();
 

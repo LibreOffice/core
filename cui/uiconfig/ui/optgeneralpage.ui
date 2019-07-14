@@ -96,6 +96,7 @@
     </child>
     <child>
       <object class="GtkFrame" id="filedlgframe">
+        <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="label_xalign">0</property>
         <property name="shadow_type">none</property>
