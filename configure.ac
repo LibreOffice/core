@@ -11552,7 +11552,7 @@ if test "$enable_build_opensymbol" = "yes"; then
     fi
 else
     AC_MSG_RESULT([no])
-    OPENSYMBOL_TTF=49a64f3bcf20a7909ba2751349231d6652ded9cd2840e961b5164d09de3ffa63-opens___.ttf
+    OPENSYMBOL_TTF=884ed41809687c3e168fc7c19b16585149ff058eca79acbf3ee784f6630704cc-opens___.ttf
     BUILD_TYPE="$BUILD_TYPE OPENSYMBOL"
 fi
 AC_SUBST(OPENSYMBOL_TTF)

@@ -31,7 +31,7 @@ for a in *fuzzer; do
     #some minimal fonts required
     mv $a $OUT
     mkdir -p $OUT/$a.fonts
-    cp $SRC/49a64f3bcf20a7909ba2751349231d6652ded9cd2840e961b5164d09de3ffa63-opens___.ttf ../share/fonts/truetype/Liberation* $OUT/$a.fonts
+    cp $SRC/884ed41809687c3e168fc7c19b16585149ff058eca79acbf3ee784f6630704cc-opens___.ttf ../share/fonts/truetype/Liberation* $OUT/$a.fonts
     #minimal runtime requirements
     cp templateservices.rdb $OUT/$a.services.rdb
     cp types.rdb $OUT/$a.types.rdb
