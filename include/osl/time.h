@@ -167,7 +167,7 @@ SAL_DLLPUBLIC sal_Bool SAL_CALL osl_getSystemTimeFromLocalTime(
 
 
 /** Get the value of the global timer
-    @return current timer value in milli seconds
+    @return current timer value in milliseconds
  */
 
 SAL_DLLPUBLIC sal_uInt32 SAL_CALL osl_getGlobalTimer(void);
