@@ -384,7 +384,7 @@ RedactionTarget* JSONtoRedactionTarget(const boost::property_tree::ptree::value_
 {
     OUString sName = OUString::fromUtf8(rValue.second.get<std::string>("sName").c_str());
     RedactionTargetType eType
-        = static_cast<RedactionTargetType>(atoi(rValue.second.get<std::string>("sName").c_str()));
+        = static_cast<RedactionTargetType>(atoi(rValue.second.get<std::string>("eType").c_str()));
     OUString sContent = OUString::fromUtf8(rValue.second.get<std::string>("sContent").c_str());
     bool bCaseSensitive
         = OUString::fromUtf8(rValue.second.get<std::string>("bCaseSensitive").c_str()).toBoolean();
