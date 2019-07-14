@@ -392,7 +392,7 @@ void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
                     pDlg->PreGetFormat(*aDataHelper);
 
 
-                    pDlg->StartExecuteAsync([=, &rSh](sal_Int32 nResult){
+                    pDlg->StartExecuteAsync([aDataHelper, pDlg, &rSh, this](sal_Int32 nResult){
                     if (nResult == RET_OK)
                     {
                         // Temporary variables, because the shell could already be

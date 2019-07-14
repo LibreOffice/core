@@ -98,7 +98,8 @@ void SwDrawShell::ExecDrawDlg(SfxRequest& rReq)
                                                                             pDoc,
                                                                             true));
 
-            pDlg->StartExecuteAsync([=](sal_Int32 nResult){
+            pDlg->StartExecuteAsync([bChanged, bHasMarked, pDoc, pDlg, pSh, pView, this](
+                                        sal_Int32 nResult){
                 if (nResult == RET_OK)
                 {
                     pSh->StartAction();
@@ -150,7 +151,8 @@ void SwDrawShell::ExecDrawDlg(SfxRequest& rReq)
                 pObj,
                 bHasMarked));
 
-            pDlg->StartExecuteAsync([=](sal_Int32 nResult){
+            pDlg->StartExecuteAsync([bChanged, bHasMarked, pDoc, pDlg, pSh, pView, this](
+                                        sal_Int32 nResult){
                 if (nResult == RET_OK)
                 {
                     pSh->StartAction();
