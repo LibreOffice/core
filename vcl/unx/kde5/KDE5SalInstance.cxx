@@ -50,6 +50,13 @@ SalFrame* KDE5SalInstance::CreateFrame(SalFrame* pParent, SalFrameStyleFlags nSt
     return pRet;
 }
 
+bool KDE5SalInstance::hasNativeFileSelection() const
+{
+    if (Application::GetDesktopEnvironment() == "PLASMA5")
+        return true;
+    return Qt5Instance::hasNativeFileSelection();
+}
+
 Qt5FilePicker*
 KDE5SalInstance::createPicker(css::uno::Reference<css::uno::XComponentContext> const& context,
                               QFileDialog::FileMode eMode)
