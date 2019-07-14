@@ -5359,10 +5359,10 @@ ErrCode SwWW8ImplReader::CoreLoad(WW8Glossary const *pGloss)
                     for( size_t nHintPos = 0; pHints && nHintPos < pHints->Count(); ++nHintPos)
                     {
                         const SwTextAttr *pHt = pHints->Get(nHintPos);
+                        if (pHt->Which() != RES_TXTATR_FLYCNT)
+                            continue;
                         const sal_Int32 st = pHt->GetStart();
-                        if( pHt
-                            && pHt->Which() == RES_TXTATR_FLYCNT
-                            && (st >= (*ppBkmk)->GetMarkStart().nContent.GetIndex()) )
+                        if (st >= (*ppBkmk)->GetMarkStart().nContent.GetIndex())
                         {
                             SwFrameFormat* pFrameFormat = pHt->GetFlyCnt().GetFrameFormat();
                             vecFrameFormat.push_back(pFrameFormat);
