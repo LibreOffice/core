@@ -166,7 +166,7 @@ public:
         order.  When there is one this method returns <TRUE/> and the
         GetObjectForNavigationPosition() and
         SdrObject::GetNavigationPosition() methods will return values
-        different from those returne by SdrObject::GetOrdNum() and
+        different from those returned by SdrObject::GetOrdNum() and
         GetObj().
     */
     bool HasObjectNavigationOrder() const;
