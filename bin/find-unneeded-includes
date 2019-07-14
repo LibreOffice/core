@@ -277,7 +277,7 @@ def tidy(compileCommands, paths):
             if assume:
                 args = args.replace(assumeAbs, "-x c++ " + pathAbs)
 
-            invocation = "include-what-you-use -Xiwyu --no_fwd_decls " + args
+            invocation = "include-what-you-use -Xiwyu --no_fwd_decls -Xiwyu --max_line_length=200 " + args
             task_queue.put((invocation, moduleRules))
 
         task_queue.join()
