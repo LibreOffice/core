@@ -19,6 +19,7 @@
 
 #include "vbasheetobject.hxx"
 #include <com/sun/star/awt/TextAlign.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
 #include <com/sun/star/frame/XModel.hpp>
@@ -28,11 +29,8 @@
 #include <ooo/vba/excel/Constants.hpp>
 #include <ooo/vba/excel/XlOrientation.hpp>
 #include <ooo/vba/excel/XlPlacement.hpp>
-#include <rtl/ustrbuf.hxx>
 #include <filter/msfilter/msvbahelper.hxx>
-#include <svx/unoshape.hxx>
 #include "vbafont.hxx"
-#include <drwlayer.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::ooo::vba;

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include "vbapagesetup.hxx"
-#include <cellsuno.hxx>
 #include <convuno.hxx>
 #include <rangelst.hxx>
 #include <docsh.hxx>
@@ -31,11 +30,8 @@
 #include <ooo/vba/excel/XlPageOrientation.hpp>
 #include <ooo/vba/excel/XlOrder.hpp>
 #include <ooo/vba/excel/Constants.hpp>
-#include <ooo/vba/excel/XRange.hpp>
+#include <ooo/vba/excel/XlPaperSize.hpp>
 #include <basic/sberrors.hxx>
-#include <i18nutil/paper.hxx>
-#include <sal/macros.h>
-#include <algorithm>
 #include <filter/msfilter/util.hxx>
 
 using namespace ::com::sun::star;

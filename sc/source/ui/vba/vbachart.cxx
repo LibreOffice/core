@@ -29,7 +29,6 @@
 #include <com/sun/star/chart/ChartSymbolType.hpp>
 #include <com/sun/star/chart/ChartSolidType.hpp>
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
-#include <com/sun/star/chart/ChartDataCaption.hpp>
 #include <ooo/vba/excel/XlChartType.hpp>
 #include <ooo/vba/excel/XlRowCol.hpp>
 #include <ooo/vba/excel/XlAxisType.hpp>

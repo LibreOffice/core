@@ -21,9 +21,9 @@
 
 #include <com/sun/star/sheet/XViewPane.hpp>
 #include <cppuhelper/implbase.hxx>
+#include <cppuhelper/weakref.hxx>
 #include <ooo/vba/excel/XPane.hpp>
-#include <vbahelper/vbahelperinterface.hxx>
-#include "excelvbahelper.hxx"
+#include <vbahelper/vbahelper.hxx>
 
 class ScVbaPane final : public cppu::WeakImplHelper< ov::excel::XPane >
 {

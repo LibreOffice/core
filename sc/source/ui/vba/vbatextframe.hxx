@@ -20,7 +20,6 @@
 #define INCLUDED_SC_SOURCE_UI_VBA_VBATEXTFRAME_HXX
 #include <cppuhelper/implbase.hxx>
 #include <ooo/vba/excel/XTextFrame.hpp>
-#include <vbahelper/vbahelperinterface.hxx>
 #include <vbahelper/vbatextframe.hxx>
 
 //typedef InheritedHelperInterfaceWeakImpl< ov::excel::XTextFrame > ScVbaTextFrame_BASE;

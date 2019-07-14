@@ -24,8 +24,6 @@
 #include <comphelper/types.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <o3tl/any.hxx>
-#include <sfx2/objsh.hxx>
-#include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
 
 #include <com/sun/star/script/ArrayWrapper.hpp>
@@ -56,18 +54,14 @@
 #include <com/sun/star/sheet/XPrintAreas.hpp>
 #include <com/sun/star/sheet/XCellRangesQuery.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/sheet/XFunctionAccess.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
-#include <com/sun/star/table/XCellCursor.hpp>
 #include <com/sun/star/table/XTableRows.hpp>
 #include <com/sun/star/table/XTableColumns.hpp>
 #include <com/sun/star/table/TableSortField.hpp>
 #include <com/sun/star/util/XMergeable.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
-#include <com/sun/star/lang/XMultiComponentFactory.hpp>
-#include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/util/XNumberFormats.hpp>
 #include <com/sun/star/util/NumberFormat.hpp>
@@ -75,19 +69,12 @@
 #include <com/sun/star/util/XReplaceable.hpp>
 #include <com/sun/star/util/XSortable.hpp>
 #include <com/sun/star/sheet/XCellRangeMovement.hpp>
-#include <com/sun/star/sheet/XCellRangeData.hpp>
 #include <com/sun/star/sheet/FormulaResult.hpp>
 #include <com/sun/star/sheet/FilterOperator2.hpp>
-#include <com/sun/star/sheet/TableFilterField.hpp>
 #include <com/sun/star/sheet/TableFilterField2.hpp>
 #include <com/sun/star/sheet/XSheetFilterDescriptor2.hpp>
-#include <com/sun/star/sheet/XSheetFilterable.hpp>
 #include <com/sun/star/sheet/FilterConnection.hpp>
-#include <com/sun/star/util/CellProtection.hpp>
 #include <com/sun/star/util/TriState.hpp>
-
-#include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
-#include <com/sun/star/awt/XDevice.hpp>
 
 #include <com/sun/star/sheet/XSubTotalCalculatable.hpp>
 #include <com/sun/star/sheet/XSubTotalDescriptor.hpp>
@@ -98,7 +85,6 @@
 
 #include <ooo/vba/excel/XlPasteSpecialOperation.hpp>
 #include <ooo/vba/excel/XlPasteType.hpp>
-#include <ooo/vba/excel/Constants.hpp>
 #include <ooo/vba/excel/XlFindLookIn.hpp>
 #include <ooo/vba/excel/XlLookAt.hpp>
 #include <ooo/vba/excel/XlSearchOrder.hpp>
@@ -115,8 +101,6 @@
 #include <ooo/vba/excel/XlPageBreak.hpp>
 #include <ooo/vba/excel/XlAutoFilterOperator.hpp>
 #include <ooo/vba/excel/XlAutoFillType.hpp>
-#include <ooo/vba/excel/XlTextParsingType.hpp>
-#include <ooo/vba/excel/XlTextQualifier.hpp>
 #include <ooo/vba/excel/XlCellType.hpp>
 #include <ooo/vba/excel/XlSpecialCellsValue.hpp>
 #include <ooo/vba/excel/XlConsolidationFunction.hpp>
@@ -127,14 +111,13 @@
 #include <cellsuno.hxx>
 #include <dbdata.hxx>
 #include <docfunc.hxx>
-#include <docuno.hxx>
 #include <columnspanset.hxx>
+#include <queryparam.hxx>
 #include <sortparam.hxx>
 
 #include <sfx2/dispatch.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/bindings.hxx>
-#include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sc.hrc>
 #include <unonames.hxx>
@@ -155,9 +138,6 @@
 #include <rangelst.hxx>
 #include <convuno.hxx>
 #include <compiler.hxx>
-#include <attrib.hxx>
-#include <undodat.hxx>
-#include <dbdocfun.hxx>
 #include <patattr.hxx>
 #include <olinetab.hxx>
 #include <transobj.hxx>
@@ -168,16 +148,11 @@
 
 #include <global.hxx>
 
-#include "vbaglobals.hxx"
 #include "vbastyle.hxx"
 #include "vbaname.hxx"
 #include <vector>
 #include <vbahelper/vbacollectionimpl.hxx>
-// begin test includes
-#include <com/sun/star/sheet/FunctionArgument.hpp>
-// end test includes
 
-#include <ooo/vba/excel/Range.hpp>
 #include <com/sun/star/bridge/oleautomation/Date.hpp>
 #include <tokenarray.hxx>
 #include <tokenuno.hxx>

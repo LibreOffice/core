@@ -18,14 +18,12 @@
  */
 
 #include <vbahelper/helperdecl.hxx>
-#include <cppuhelper/queryinterface.hxx>
 
 #include "vbaworksheet.hxx"
 #include "vbanames.hxx"
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XIntrospectionAccess.hpp>
-#include <com/sun/star/beans/XIntrospection.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/util/XProtectable.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
@@ -33,30 +31,23 @@
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/sheet/XCalculatable.hpp>
 #include <com/sun/star/sheet/XCellRangeAddressable.hpp>
-#include <com/sun/star/sheet/XCellRangeReferrer.hpp>
 #include <com/sun/star/sheet/XSheetCellRange.hpp>
 #include <com/sun/star/sheet/XSheetCellCursor.hpp>
 #include <com/sun/star/sheet/XSheetAnnotationsSupplier.hpp>
 #include <com/sun/star/sheet/XUsedAreaCursor.hpp>
 #include <com/sun/star/sheet/XSpreadsheets.hpp>
-#include <com/sun/star/sheet/XSheetPastable.hpp>
-#include <com/sun/star/sheet/XCellAddressable.hpp>
 #include <com/sun/star/sheet/XSheetOutline.hpp>
 #include <com/sun/star/sheet/XSheetPageBreak.hpp>
 #include <com/sun/star/sheet/XDataPilotTablesSupplier.hpp>
 #include <com/sun/star/sheet/XNamedRanges.hpp>
-#include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
-#include <com/sun/star/table/XColumnRowRange.hpp>
 #include <com/sun/star/table/XTableChartsSupplier.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
-#include <com/sun/star/form/FormComponentType.hpp>
 #include <com/sun/star/form/XFormsSupplier.hpp>
 #include <ooo/vba/excel/XApplication.hpp>
 #include <ooo/vba/excel/XlEnableSelection.hpp>
 #include <ooo/vba/excel/XlSheetVisibility.hpp>
-#include <ooo/vba/excel/XWorkbook.hpp>
 #include <ooo/vba/XControlProvider.hpp>
 
 #include <basic/sberrors.hxx>
@@ -65,18 +56,10 @@
 #include <vbahelper/vbashapes.hxx>
 
 //zhangyun showdataform
-#include <sfx2/sfxdlg.hxx>
 #include <scabstdlg.hxx>
 #include <tabvwsh.hxx>
-#include <scitems.hxx>
 
-#include <svx/svdouno.hxx>
-#include <svx/svdpage.hxx>
-
-#include <cellsuno.hxx>
-#include <drwlayer.hxx>
 #include <tabprotection.hxx>
-#include <scextopt.hxx>
 #include "excelvbahelper.hxx"
 #include "service.hxx"
 #include "vbaoutline.hxx"
@@ -84,14 +67,12 @@
 #include "vbacomments.hxx"
 #include "vbachartobjects.hxx"
 #include "vbapivottables.hxx"
-#include "vbaoleobject.hxx"
 #include "vbaoleobjects.hxx"
 #include "vbapagesetup.hxx"
 #include "vbapagebreaks.hxx"
 #include "vbaworksheets.hxx"
 #include "vbahyperlinks.hxx"
 #include "vbasheetobjects.hxx"
-#include <markdata.hxx>
 #include <dbdata.hxx>
 
 #include <attrib.hxx>

@@ -20,7 +20,6 @@
 #include "vbacondition.hxx"
 #include <ooo/vba/excel/XlFormatConditionOperator.hpp>
 #include <ooo/vba/excel/XFormatCondition.hpp>
-#include <com/sun/star/table/XCellRange.hpp>
 #include <com/sun/star/sheet/XCellRangeAddressable.hpp>
 #include <com/sun/star/sheet/XSheetCondition.hpp>
 #include <basic/sberrors.hxx>

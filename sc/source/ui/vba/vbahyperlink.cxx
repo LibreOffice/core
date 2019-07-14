@@ -28,7 +28,6 @@
 #include <com/sun/star/table/XCellRange.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>
-#include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <ooo/vba/office/MsoHyperlinkType.hpp>
 #include <ooo/vba/msforms/XShape.hpp>
 #include "vbarange.hxx"

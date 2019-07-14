@@ -33,7 +33,6 @@
 #include <docuno.hxx>
 #include <tabvwsh.hxx>
 #include <transobj.hxx>
-#include <scmod.hxx>
 #include <cellsuno.hxx>
 #include <gridwin.hxx>
 
