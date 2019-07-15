@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_c04c5978",
+        "filename": "xmloff/source/draw/shapeimport.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 815,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-07-15T10:33:03Z",
+      "side": 0,
+      "message": "this one is a performance optimisation... if the index doesn\u0027t change we don\u0027t need to do anything like move it\n\n(whereas above with sort, \"not doing anything\" still requires an entry in the array)",
+      "revId": "73c5eb47db46acfd9818876f36f6a2cbc572e798",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
