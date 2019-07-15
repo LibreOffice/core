@@ -7,8 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef LO_CLANG_SHARED_PLUGINS
-
 #include "plugin.hxx"
 #include "check.hxx"
 #include "compat.hxx"
@@ -30,7 +28,6 @@ public:
     {
     }
 
-    bool preRun() override;
     void run() override;
 
     bool TraverseConstructorInitializer(CXXCtorInitializer* init);
@@ -47,23 +44,15 @@ private:
     CXXConstructorDecl* m_currentConstructor = nullptr;
 };
 
-bool StaticConstField::preRun()
+void StaticConstField::run()
 {
     std::string fn = handler.getMainFileName();
     loplugin::normalizeDotDotInFilePath(fn);
 
     // unusual case where a user constructor sets a field to one value, and a copy constructor sets it to a different value
     if (fn == SRCDIR "/sw/source/core/attr/hints.cxx")
-        return false;
+        return;
     if (fn == SRCDIR "/oox/source/core/contexthandler2.cxx")
-        return false;
-
-    return true;
-}
-
-void StaticConstField::run()
-{
-    if (!preRun())
         return;
 
     TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
@@ -179,10 +168,7 @@ bool StaticConstField::TraverseConstructorInitializer(CXXCtorInitializer* init)
     return true;
 }
 
-loplugin::Plugin::Registration<StaticConstField> staticconstfield("staticconstfield");
-
-} // namespace
-
-#endif // LO_CLANG_SHARED_PLUGINS
+loplugin::Plugin::Registration<StaticConstField> X("staticconstfield", true);
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

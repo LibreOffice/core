@@ -7,8 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef LO_CLANG_SHARED_PLUGINS
-
 #include <algorithm>
 #include <cassert>
 #include <cstdint>
@@ -110,8 +108,6 @@ public:
     explicit StringConstant(loplugin::InstantiationData const & data):
         FilteringRewritePlugin(data) {}
 
-    bool preRun() override;
-
     void run() override;
 
     bool TraverseCallExpr(CallExpr * expr);
@@ -190,15 +186,14 @@ private:
     std::stack<Expr const *> calls_;
 };
 
-bool StringConstant::preRun() {
-    return compiler.getLangOpts().CPlusPlus
-        && compiler.getPreprocessor().getIdentifierInfo(
-            "LIBO_INTERNAL_ONLY")->hasMacroDefinition();
-            //TODO: some parts of it are useful for external code, too
-}
 void StringConstant::run() {
-    if (preRun())
+    if (compiler.getLangOpts().CPlusPlus
+        && compiler.getPreprocessor().getIdentifierInfo(
+            "LIBO_INTERNAL_ONLY")->hasMacroDefinition())
+            //TODO: some parts of it are useful for external code, too
+    {
         TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
+    }
 }
 
 bool StringConstant::TraverseCallExpr(CallExpr * expr) {
@@ -2092,10 +2087,8 @@ void StringConstant::handleFunArgOstring(
     }
 }
 
-loplugin::Plugin::Registration< StringConstant > stringconstant("stringconstant");
+loplugin::Plugin::Registration< StringConstant > X("stringconstant", true);
 
-} // namespace
-
-#endif // LO_CLANG_SHARED_PLUGINS
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

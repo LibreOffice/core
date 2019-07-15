@@ -7,8 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef LO_CLANG_SHARED_PLUGINS
-
 #include <stack>
 
 #include "check.hxx"
@@ -74,24 +72,18 @@ public:
         return true;
     }
 
-    bool preRun() override {
-        return compiler.getLangOpts().CPlusPlus;
-    }
-
+private:
     void run() override {
-        if (preRun()) {
+        if (compiler.getLangOpts().CPlusPlus) {
             TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
         }
     }
 
-private:
     std::stack<Expr const *> subExprs_;
 };
 
-static loplugin::Plugin::Registration<UnicodeToChar> unicodetochar("unicodetochar");
+static loplugin::Plugin::Registration<UnicodeToChar> reg("unicodetochar");
 
-} // namespace
-
-#endif // LO_CLANG_SHARED_PLUGINS
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

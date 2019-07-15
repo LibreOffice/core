@@ -5,8 +5,6 @@
  * Based on LLVM/Clang.
  *
  */
-#ifndef LO_CLANG_SHARED_PLUGINS
-
 #include "plugin.hxx"
 
 /*
@@ -24,7 +22,7 @@ class StaticAnonymous
     public:
         explicit StaticAnonymous( const InstantiationData& data );
         virtual void run() override;
-        bool VisitFunctionDecl( const FunctionDecl* func );
+        bool VisitFunctionDecl( FunctionDecl* func );
 
     };
 
@@ -39,7 +37,7 @@ void StaticAnonymous::run()
     }
 
 
-bool StaticAnonymous::VisitFunctionDecl( const FunctionDecl* func )
+bool StaticAnonymous::VisitFunctionDecl( FunctionDecl* func )
 
     {
     if( ignoreLocation( func ) )
@@ -61,10 +59,8 @@ bool StaticAnonymous::VisitFunctionDecl( const FunctionDecl* func )
     }
 
 // Register the plugin action with the LO plugin handling.
-static Plugin::Registration< StaticAnonymous > staticanonymous("staticanonymous");
+static Plugin::Registration< StaticAnonymous > X( "staticanonymous",true);
 
 } // namespace
-
-#endif // LO_CLANG_SHARED_PLUGINS
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

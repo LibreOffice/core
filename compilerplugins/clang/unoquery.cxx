@@ -7,8 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef LO_CLANG_SHARED_PLUGINS
-
 #include "check.hxx"
 #include "plugin.hxx"
 
@@ -26,16 +24,7 @@ public:
     {
     }
 
-    bool preRun() override { return compiler.getLangOpts().CPlusPlus; }
-
-    void run() override
-    {
-        if (preRun())
-        {
-            TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
-        }
-    }
-
+    void run() override { TraverseDecl(compiler.getASTContext().getTranslationUnitDecl()); }
     bool VisitCXXMemberCallExpr(CXXMemberCallExpr const*);
 };
 
@@ -90,10 +79,7 @@ bool UnoQuery::VisitCXXMemberCallExpr(CXXMemberCallExpr const* memberCallExpr)
     return true;
 }
 
-loplugin::Plugin::Registration<UnoQuery> unoquery("unoquery");
-
-} // namespace
-
-#endif // LO_CLANG_SHARED_PLUGINS
+loplugin::Plugin::Registration<UnoQuery> unoquery("unoquery", true);
+};
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

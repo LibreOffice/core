@@ -6,7 +6,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-#ifndef LO_CLANG_SHARED_PLUGINS
 
 #include <cassert>
 #include <string>
@@ -112,10 +111,7 @@ bool SimplifyDynamicCast::VisitCXXStaticCastExpr(CXXStaticCastExpr const* static
     return true;
 }
 
-loplugin::Plugin::Registration<SimplifyDynamicCast> simplifydynamiccast("simplifydynamiccast");
-
-} // namespace
-
-#endif // LO_CLANG_SHARED_PLUGINS
+loplugin::Plugin::Registration<SimplifyDynamicCast> X("simplifydynamiccast", true);
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

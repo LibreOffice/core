@@ -7,8 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef LO_CLANG_SHARED_PLUGINS
-
 #include <cassert>
 #include <string>
 #include <iostream>
@@ -33,7 +31,7 @@ public:
     {
     }
 
-    void run() override { TraverseDecl(compiler.getASTContext().getTranslationUnitDecl()); }
+    virtual void run() override { TraverseDecl(compiler.getASTContext().getTranslationUnitDecl()); }
 
     bool VisitFunctionDecl(FunctionDecl const*);
     bool VisitCXXMethodDecl(CXXMethodDecl const*);
@@ -323,10 +321,7 @@ static bool areTypesEqual(QualType lhs, QualType rhs)
     return lhsType == rhsType;
 }
 
-loplugin::Plugin::Registration<TypedefParam> typedefparam("typedefparam");
-
-} // namespace
-
-#endif // LO_CLANG_SHARED_PLUGINS
+loplugin::Plugin::Registration<TypedefParam> X("typedefparam", true);
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

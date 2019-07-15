@@ -7,8 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef LO_CLANG_SHARED_PLUGINS
-
 #include "plugin.hxx"
 #include "check.hxx"
 
@@ -153,10 +151,8 @@ bool StringConcat::isStringLiteral(Expr const * expr) {
             != "OSL_THIS_FUNC");
 }
 
-loplugin::Plugin::Registration<StringConcat> stringconcat("stringconcat");
+loplugin::Plugin::Registration<StringConcat> X("stringconcat");
 
-} // namespace
-
-#endif // LO_CLANG_SHARED_PLUGINS
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

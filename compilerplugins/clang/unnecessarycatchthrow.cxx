@@ -7,8 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef LO_CLANG_SHARED_PLUGINS
-
 #include <cassert>
 #include <string>
 #include <iostream>
@@ -83,10 +81,8 @@ bool UnnecessaryCatchThrow::VisitCXXTryStmt(CXXTryStmt const * tryStmt)
 }
 
 
-loplugin::Plugin::Registration< UnnecessaryCatchThrow > unnecessarycatchthrow("unnecessarycatchthrow");
+loplugin::Plugin::Registration< UnnecessaryCatchThrow > X("unnecessarycatchthrow");
 
-} // namespace
-
-#endif // LO_CLANG_SHARED_PLUGINS
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
