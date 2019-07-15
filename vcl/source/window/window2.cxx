@@ -750,23 +750,26 @@ bool Window::HandleScrollCommand( const CommandEvent& rCmd,
 
             case CommandEventId::Gesture:
             {
-                const CommandGestureData* pData = rCmd.GetGestureData();
-                if (pData->meEventType == GestureEventType::PanningBegin)
+                if (pVScrl)
                 {
-                    mpWindowImpl->mpFrameData->mnTouchPanPosition = pVScrl->GetThumbPos();
+                    const CommandGestureData* pData = rCmd.GetGestureData();
+                    if (pData->meEventType == GestureEventType::PanningBegin)
+                    {
+                        mpWindowImpl->mpFrameData->mnTouchPanPosition = pVScrl->GetThumbPos();
+                    }
+                    else if(pData->meEventType == GestureEventType::PanningUpdate)
+                    {
+                        long nOriginalPosition = mpWindowImpl->mpFrameData->mnTouchPanPosition;
+                        pVScrl->DoScroll(nOriginalPosition + (pData->mfOffset / pVScrl->GetVisibleSize()));
+                    }
+                    if (pData->meEventType == GestureEventType::PanningEnd)
+                    {
+                        mpWindowImpl->mpFrameData->mnTouchPanPosition = -1;
+                    }
+                    bRet = true;
                 }
-                else if(pData->meEventType == GestureEventType::PanningUpdate)
-                {
-                    long nOriginalPosition = mpWindowImpl->mpFrameData->mnTouchPanPosition;
-                    pVScrl->DoScroll(nOriginalPosition + (pData->mfOffset / pVScrl->GetVisibleSize()));
-                }
-                if (pData->meEventType == GestureEventType::PanningEnd)
-                {
-                    mpWindowImpl->mpFrameData->mnTouchPanPosition = -1;
-                }
-                bRet = true;
+                break;
             }
-            break;
 
             case CommandEventId::AutoScroll:
             {
