@@ -459,9 +459,14 @@ void writeRectangle(tools::XmlWriter& rWriter, tools::Rectangle const& rRectangl
 {
     rWriter.attribute("left", rRectangle.Left());
     rWriter.attribute("top", rRectangle.Top());
-    // FIXME what should we write for empty?
-    rWriter.attribute("right", rRectangle.IsWidthEmpty() ? -32767 : rRectangle.Right());
-    rWriter.attribute("bottom", rRectangle.IsHeightEmpty() ? -32767 : rRectangle.Bottom());
+    if (rRectangle.IsWidthEmpty())
+        rWriter.attribute("right", OString("empty"));
+    else
+        rWriter.attribute("right", rRectangle.Right());
+    if (rRectangle.IsHeightEmpty())
+        rWriter.attribute("bottom", OString("empty"));
+    else
+        rWriter.attribute("bottom", rRectangle.Bottom());
 }
 
 void writeLineInfo(tools::XmlWriter& rWriter, LineInfo const& rLineInfo)
