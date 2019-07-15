@@ -1901,7 +1901,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testDateFormFieldCurrentDateHandling)
     CPPUNIT_ASSERT_EQUAL(OUString("2031-06-01"), sCurrentDate);
 }
 
-/*CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testDateFormFieldCurrentDateInvalidation)
+#if !defined(_WIN32)
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testDateFormFieldCurrentDateInvalidation)
 {
     SwDoc* pDoc = createDoc();
     CPPUNIT_ASSERT(pDoc);
@@ -1956,6 +1957,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testDateFormFieldCurrentDateHandling)
         pResult->second >>= sCurrentDate;
     }
     CPPUNIT_ASSERT_EQUAL(OUString(""), sCurrentDate);
-}*/
+}
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
