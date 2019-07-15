@@ -365,7 +365,7 @@ void LoadEnv::startLoading()
     // <- SAFE
 
     // detect its type/filter etc.
-    // These information will be available by the
+    // This information will be available by the
     // used descriptor member afterwards and is needed
     // for all following operations!
     // Note: An exception will be thrown, in case operation was not successfully ...
