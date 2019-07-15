@@ -94,6 +94,7 @@ uint32_t FeatureParameter::getCode() const { return m_nCode; }
 FeatureDefinition::FeatureDefinition()
     : m_pDescriptionID(nullptr)
     , m_nCode(0)
+    , m_nDefault(0)
     , m_eType(FeatureParameterType::BOOL)
 {
 }
