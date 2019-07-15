@@ -603,7 +603,15 @@ Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const OUString
 
 #if ENABLE_FIREBIRD_SDBC
     bool bNeedMigration = false;
-    if(m_pImpl->m_sConnectURL == "sdbc:embedded:hsqldb")
+    OUString sIgnoreMigration;
+    osl_getEnvironment(OUString("IGNORE_HSQL_MIGRATION").pData, &sIgnoreMigration.pData);
+
+    if ( !sIgnoreMigration.isEmpty() )
+    {
+        // Reset value once we don't execute the HSQL migration
+        osl_setEnvironment(OUString{ "IGNORE_HSQL_MIGRATION" }.pData, OUString().pData);
+    }
+    else if(m_pImpl->m_sConnectURL == "sdbc:embedded:hsqldb")
     {
         Reference<XStorage> const xRootStorage = m_pImpl->getOrCreateRootStorage();
         OUString sMigrEnvVal;

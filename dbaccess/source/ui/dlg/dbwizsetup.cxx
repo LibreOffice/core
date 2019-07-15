@@ -31,6 +31,7 @@
 #include <svl/stritem.hxx>
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
+#include <osl/process.h>
 #include <stringconstants.hxx>
 #include "adminpages.hxx"
 #include <sfx2/docfilt.hxx>
@@ -688,6 +689,7 @@ bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
             if ( !m_pFinalPage || m_pFinalPage->IsDatabaseDocumentToBeRegistered() )
                 RegisterDataSourceByLocation( sPath );
 
+            osl_setEnvironment(OUString{ "IGNORE_HSQL_MIGRATION" }.pData, OUString{ "1" }.pData);
             return true;
         }
     }

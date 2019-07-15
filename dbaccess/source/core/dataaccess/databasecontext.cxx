@@ -27,6 +27,7 @@
 #include "databaseregistrations.hxx"
 #include "datasource.hxx"
 #include <stringconstants.hxx>
+#include <osl/process.h>
 
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -387,6 +388,7 @@ Reference< XInterface > ODatabaseContext::loadObjectFromURL(const OUString& _rNa
             }
         }
 
+        osl_setEnvironment(OUString{ "IGNORE_HSQL_MIGRATION" }.pData, OUString{ "1" }.pData);
         Sequence< PropertyValue > aResource( aArgs.getPropertyValues() );
         xLoad->load( aResource );
         xModel->attachResource( _sURL, aResource );
