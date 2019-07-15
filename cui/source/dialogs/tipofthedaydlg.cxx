@@ -37,9 +37,11 @@ TipOfTheDayDialog::TipOfTheDayDialog(weld::Window* pParent)
     , m_pShowTip(m_xBuilder->weld_check_button("cbShowTip"))
     , m_pNext(m_xBuilder->weld_button("btnNext"))
     , m_pLink(m_xBuilder->weld_link_button("btnLink"))
+    , m_pOk(m_xBuilder->weld_button("btnOk"))
 {
     m_pShowTip->connect_toggled(LINK(this, TipOfTheDayDialog, OnShowTipToggled));
     m_pNext->connect_clicked(LINK(this, TipOfTheDayDialog, OnNextClick));
+    m_pOk->grab_focus();
 
     nNumberOfTips = SAL_N_ELEMENTS(TIPOFTHEDAY_STRINGARRAY);
     srand(time(nullptr));

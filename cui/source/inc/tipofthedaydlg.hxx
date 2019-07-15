@@ -29,6 +29,7 @@ private:
     std::unique_ptr<weld::CheckButton> m_pShowTip;
     std::unique_ptr<weld::Button> m_pNext;
     std::unique_ptr<weld::LinkButton> m_pLink;
+    std::unique_ptr<weld::Button> m_pOk;
 
     sal_uInt32 nCurrentTip;
     sal_uInt32 nNumberOfTips;
