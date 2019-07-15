@@ -118,6 +118,7 @@ namespace drawinglayer
                 }
 
                 // add text transformation to new transformation
+                // coverity[swapped_arguments : FALSE] - this is in the correct order
                 aNewTransform *= maDecTrans.getB2DHomMatrix();
 
                 // callback to allow evtl. changes
