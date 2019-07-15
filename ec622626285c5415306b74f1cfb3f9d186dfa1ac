@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_e50acf88",
+        "filename": "vcl/source/gdi/print2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 731,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2019-07-15T08:19:58Z",
+      "side": 1,
+      "message": "As the value is user-input, better clamp it to the permissible range (after indeed warning about it) - e.g. via std::clamp()",
+      "revId": "ec622626285c5415306b74f1cfb3f9d186dfa1ac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
