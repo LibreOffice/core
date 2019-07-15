@@ -6,6 +6,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
+#ifndef LO_CLANG_SHARED_PLUGINS
 
 #include <cassert>
 
@@ -16,7 +17,7 @@ namespace {
 
 // Like clang::Stmt::IgnoreImplicit (lib/AST/Stmt.cpp), but also looking through implicit
 // UserDefinedConversion's member function call:
-Expr const * ignoreAllImplicit(Expr const * expr) {
+Expr const * ignoreImplicitAndUserDefinedConversion(Expr const * expr) {
     if (auto const e = dyn_cast<ExprWithCleanups>(expr)) {
         expr = e->getSubExpr();
     }
@@ -184,6 +185,10 @@ public:
     explicit SimplifyBool(loplugin::InstantiationData const & data):
         FilteringPlugin(data) {}
 
+    bool preRun() override {
+        return compiler.getLangOpts().CPlusPlus;
+    }
+
     void run() override;
 
     bool VisitUnaryLNot(UnaryOperator const * expr);
@@ -211,7 +216,7 @@ private:
 };
 
 void SimplifyBool::run() {
-    if (compiler.getLangOpts().CPlusPlus) {
+    if (preRun()) {
         TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
     }
 }
@@ -228,7 +233,7 @@ bool SimplifyBool::VisitUnaryLNot(UnaryOperator const * expr) {
         if (compat::getBeginLoc(e).isMacroID())
             return true;
         // double logical not of an int is an idiom to convert to bool
-        auto const sub = ignoreAllImplicit(e);
+        auto const sub = ignoreImplicitAndUserDefinedConversion(e);
         if (!sub->getType()->isBooleanType())
             return true;
         report(
@@ -1275,8 +1280,10 @@ bool SimplifyBool::TraverseCXXMethodDecl(CXXMethodDecl * functionDecl) {
     return ret;
 }
 
-loplugin::Plugin::Registration<SimplifyBool> X("simplifybool");
+loplugin::Plugin::Registration<SimplifyBool> simplifybool("simplifybool");
 
-}
+} // namespace
+
+#endif // LO_CLANG_SHARED_PLUGINS
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
