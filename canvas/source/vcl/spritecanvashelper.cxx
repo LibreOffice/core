@@ -215,18 +215,13 @@ namespace vclcanvas
         const Point aEmptyPoint(0,0);
 
         vcl::Window* pTargetWindow = nullptr;
-        if( rOutDev.GetOutDevType() == OUTDEV_WINDOW )
-        {
-            pTargetWindow = &static_cast<vcl::Window&>(rOutDev); // TODO(Q3): Evil downcast.
 
-            // we're double-buffered, thus no need for paint area-limiting
-            // clips. besides that, will interfere with animations (as for
-            // Window-invalidate repaints, only parts of the window will
-            // be redrawn otherwise)
-            const vcl::Region aFullWindowRegion( ::tools::Rectangle(aEmptyPoint,
-                                                      aOutDevSize) );
-            pTargetWindow->ExpandPaintClipRegion(aFullWindowRegion);
-        }
+        // in Window, we're double-buffered, thus no need for paint area-limiting
+        // clips. besides that, will interfere with animations (as for
+        // Window-invalidate repaints, only parts of the window will
+        // be redrawn otherwise)
+        const vcl::Region aFullWindowRegion( ::tools::Rectangle(aEmptyPoint, aOutDevSize) );
+        rOutDev.ExpandPaintClipRegion(aFullWindowRegion);
 
         // TODO(P1): Might be worthwhile to track areas of background
         // changes, too.
@@ -303,11 +298,7 @@ namespace vclcanvas
         // render requests (calling code might rely on timing,
         // i.e. assume that things are visible on screen after
         // updateScreen() returns).
-        if( pTargetWindow )
-        {
-            // commit to screen
-            pTargetWindow->Flush();
-        }
+        rOutDev.Flush();
 
         return true;
     }
