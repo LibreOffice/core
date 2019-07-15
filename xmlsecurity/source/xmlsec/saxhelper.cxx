@@ -118,7 +118,7 @@ SAXHelper::SAXHelper( )
      * compile error:
      * xmlLoadExtDtdDefaultValue = XML_DETECT_IDS | XML_COMPLETE_ATTRS ;
      */
-    xmlSubstituteEntitiesDefault( 1 ) ;
+    xmlSubstituteEntitiesDefault(0) ;
 
 #ifndef XMLSEC_NO_XSLT
     xmlIndentTreeOutput = 1 ;
