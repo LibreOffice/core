@@ -2182,7 +2182,7 @@
           <desc>Specifies that automatically inserted empty pages are printed.</desc>
           <label>Print automatically inserted blank pages</label>
         </info>
-        <value>false</value>
+        <value>true</value>
       </prop>
     </group>
     <group oor:name="Table">
