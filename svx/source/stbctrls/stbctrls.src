@@ -72,7 +72,7 @@ String RID_SVXSTR_XMLSEC_SIG_OK_NO_VERIFY
 
 String RID_SVXSTR_XMLSEC_SIG_NOT_OK
 {
-    Text [ en-US ] = "Digital Signature: The document signature does not match the document content. We strongly recommend you to do not trust this document." ;
+    Text [ en-US ] = "Digital Signature: The document signature does not match the document content. We strongly recommend you not to trust this document." ;
 };
 
 String RID_SVXSTR_XMLSEC_NO_SIG
@@ -236,7 +236,7 @@ Image RID_SVXBMP_SIGNET_NOTVALIDATED
 {
     ImageBitmap = Bitmap
     {
-        File = "notcertificate_16.png" ;
+        File = "notcertificate_11x16.png" ;
     };
 };
 Image RID_SVXBMP_SIGNET_H
@@ -257,7 +257,7 @@ Image RID_SVXBMP_SIGNET_NOTVALIDATED_H
 {
     ImageBitmap = Bitmap
     {
-        File = "notcertificate_16_h.png" ;
+        File = "notcertificate_11x16_h.png" ;
     };
 };
 
