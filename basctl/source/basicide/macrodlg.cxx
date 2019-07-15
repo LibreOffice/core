@@ -496,11 +496,8 @@ IMPL_LINK_NOARG(MacroChooser, BasicSelectHdl, weld::TreeView&, void)
             m_xMacroBox->append_text(macro.second->GetName());
         m_xMacroBox->thaw();
 
-        if (m_xMacroBox->n_children())
-        {
-            m_xMacroBox->get_iter_first(*m_xMacroBoxIter);
+        if (m_xMacroBox->get_iter_first(*m_xMacroBoxIter))
             m_xMacroBox->set_cursor(*m_xMacroBoxIter);
-        }
     }
 
     UpdateFields();
