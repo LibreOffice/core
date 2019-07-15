@@ -1,0 +1,95 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_c561cb3b",
+        "filename": "sc/source/ui/view/gridwin4.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 569,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2019-07-15T09:27:10Z",
+      "side": 1,
+      "message": "This func only draws the current sheet so you don\u0027t have to do anything/can ignore the remaining non-current sheets\n\naOutputData.nTab tells you which sheet this is",
+      "revId": "fad49150250d94bf9d422e3da7bfbfe2d4f48d25",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_4555bb4f",
+        "filename": "sc/source/ui/view/gridwin4.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 574,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2019-07-15T09:27:10Z",
+      "side": 1,
+      "message": "Consequently, here you can call ScTable::GetAllColBreaks ...\n\nApropos what about row breaks? Presumably for evaluating whether to update page breaks or not, row breaks matter just as well",
+      "range": {
+        "startLine": 573,
+        "startChar": 12,
+        "endLine": 574,
+        "endChar": 39
+      },
+      "revId": "fad49150250d94bf9d422e3da7bfbfe2d4f48d25",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_45da9be9",
+        "filename": "sc/source/ui/view/gridwin4.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 577,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2019-07-15T09:27:10Z",
+      "side": 1,
+      "message": "... thus this loop doesn\u0027t have to be here",
+      "revId": "fad49150250d94bf9d422e3da7bfbfe2d4f48d25",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_05e4a3ab",
+        "filename": "sc/source/ui/view/gridwin4.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 581,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2019-07-15T09:27:10Z",
+      "side": 1,
+      "message": "... and use ScTable::UpdatePageBreaks",
+      "revId": "fad49150250d94bf9d422e3da7bfbfe2d4f48d25",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_85e99381",
+        "filename": "sc/source/ui/view/gridwin4.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1412,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2019-07-15T09:27:10Z",
+      "side": 1,
+      "message": "Afaics those are unrelated whitespace changes only, no? Please drop",
+      "revId": "fad49150250d94bf9d422e3da7bfbfe2d4f48d25",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
