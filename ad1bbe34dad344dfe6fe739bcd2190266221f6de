@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_c0ef7985",
+        "filename": "dbaccess/source/core/dataaccess/databasecontext.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 391,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2019-07-15T16:10:25Z",
+      "side": 1,
+      "message": "loadObjectFromURL sounds like it doesn\u0027t create a new file, but loads an existing one. I fail to see that this code executes only on the case that it is open non-interactively.",
+      "range": {
+        "startLine": 391,
+        "startChar": 8,
+        "endLine": 391,
+        "endChar": 93
+      },
+      "revId": "ad1bbe34dad344dfe6fe739bcd2190266221f6de",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
