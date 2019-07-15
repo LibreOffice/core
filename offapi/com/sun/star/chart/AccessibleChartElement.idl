@@ -138,7 +138,7 @@ service AccessibleChartElement
         <code>getLocation</code>, <code>getLocationOnScreen</code>, and
         <code>getSize</code> work on pixel coordinates.  (To transform between
         the internal 100th of mm and pixels a chart element has to have access
-        to information that allows it to do so.  These information are the
+        to information that allows it to do so.  This information is the
         enclosing window's size in pixel, 100th of mm, and its own relative
         position in one or the other coordinate system).</p>
 

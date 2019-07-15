@@ -29,7 +29,7 @@
 published enum TextureKind
 {
     /** With TextureKind LUMINANCE, the texture
-        and the lighting information are    mixed to produce the image, so a
+        and the lighting information is mixed to produce the image, so a
         lit, textured object is achieved.
      */
     LUMINANCE,

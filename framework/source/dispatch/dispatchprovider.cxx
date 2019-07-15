@@ -467,7 +467,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_searchProt
                 {
                     try
                     {
-                        // but do it only, if all context information are OK
+                        // but do it only, if all context information is OK
                         css::uno::Sequence< css::uno::Any > lContext(1);
                         lContext[0] <<= xOwner;
                         xInit->initialize(lContext);

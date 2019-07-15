@@ -86,7 +86,7 @@
 /*-************************************************************************************************************
     @descr  This struct hold information about one factory. We declare a complete array which can hold infos
             for all well known factories. Values of enum "EFactory" (see header!) are directly used as index!
-            So we can support a fast access on these information.
+            So we can support a fast access on this information.
 *//*-*************************************************************************************************************/
 struct FactoryInfo
 {

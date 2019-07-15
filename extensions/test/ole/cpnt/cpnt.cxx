@@ -1719,7 +1719,7 @@ void SAL_CALL OComponent::testInterface(  const Reference< XCallback >& xCallbac
 
     // ############################################################################
     // Call a COM object that has not been passed as parameter to a UNO component and
-    // hence no type information are available in the COM wrapper
+    // hence no type information is available in the COM wrapper
     // ############################################################################
     case 300:
         {

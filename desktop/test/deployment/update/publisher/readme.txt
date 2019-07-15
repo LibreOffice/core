@@ -47,7 +47,7 @@ the update information from the repository as feed:
 
 http://updateext.services.openoffice.org/ProductUpdateService/check.Update
 
-pub8.oxt provides <publisher> and <release-notes>. These information should be transferred
+pub8.oxt provides <publisher> and <release-notes>. This information should be transferred
 in the update feed and not those entered in the repository.
 
 Test
