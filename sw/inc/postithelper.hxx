@@ -55,6 +55,12 @@ struct SwLayoutInfo
 
     std::size_t mRedlineAuthor;
 
+    /**
+     * If true, the overlay arrow points to the comment anchor, otherwise it points to the commented
+     * frame.
+     */
+    bool mPositionFromCommentAnchor;
+
     SwLayoutInfo()
         : mpAnchorFrame(nullptr)
         , mPosition()
@@ -65,6 +71,7 @@ struct SwLayoutInfo
         , mnPageNumber(1)
         , meSidebarPosition(sw::sidebarwindows::SidebarPosition::NONE)
         , mRedlineAuthor(0)
+        , mPositionFromCommentAnchor(true)
     {}
 };
 
