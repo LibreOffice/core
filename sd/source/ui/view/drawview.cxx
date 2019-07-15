@@ -316,7 +316,7 @@ bool DrawView::SetAttributes(const SfxItemSet& rSet,
     return bOk;
 }
 
-void DrawView::SetMasterAttributes( SdrObject* pObject, SdPage& rPage, SfxItemSet rSet, SfxStyleSheetBasePool* pStShPool, bool& bOk, bool /*bMaster*/, bool bSlide )
+void DrawView::SetMasterAttributes( SdrObject* pObject, SdPage& rPage, SfxItemSet rSet, SfxStyleSheetBasePool* pStShPool, bool& bOk, bool bMaster, bool bSlide )
 {
    SdrInventor nInv    = pObject->GetObjInventor();
 
@@ -365,6 +365,8 @@ void DrawView::SetMasterAttributes( SdrObject* pObject, SdPage& rPage, SfxItemSe
         }
         else if (eObjKind == OBJ_OUTLINETEXT)
         {
+            if (bMaster)
+            {
             // Presentation object outline
             for (sal_uInt16 nLevel = 9; nLevel > 0; nLevel--)
             {
@@ -415,6 +417,10 @@ void DrawView::SetMasterAttributes( SdrObject* pObject, SdPage& rPage, SfxItemSe
                     pObject->ClearMergedItem( nWhich );
                 nWhich = aWhichIter.NextWhich();
             }
+
+            }
+
+            pObject->SetMergedItemSet(rSet);
 
             bOk = true;
         }
