@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_c0dc591a",
+        "filename": "cui/source/dialogs/tipofthedaydlg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2019-07-15T13:52:11Z",
+      "side": 1,
+      "message": "you can set the default widget in the ui file.",
+      "range": {
+        "startLine": 44,
+        "startChar": 11,
+        "endLine": 44,
+        "endChar": 21
+      },
+      "revId": "6ab498ee3262ac3b123a8f6bab3d22e85a2b25d1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
