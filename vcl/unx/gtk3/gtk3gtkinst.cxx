@@ -3284,6 +3284,7 @@ public:
     virtual void collapse(weld::Widget* pEdit, weld::Widget* pButton) override
     {
         GtkInstanceWidget* pVclEdit = dynamic_cast<GtkInstanceWidget*>(pEdit);
+        assert(pVclEdit);
         GtkInstanceWidget* pVclButton = dynamic_cast<GtkInstanceWidget*>(pButton);
 
         GtkWidget* pRefEdit = pVclEdit->getWidget();
