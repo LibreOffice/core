@@ -794,7 +794,8 @@ void SwAnnotationWin::SetPosAndSize()
             if (bDisableMapMode)
                 EditWin().EnableMapMode(false);
 
-            pTmpCursorForAnnotationTextRange->FillRects();
+            if (mrSidebarItem.maLayoutInfo.mPositionFromCommentAnchor)
+                pTmpCursorForAnnotationTextRange->FillRects();
 
             if (bDisableMapMode)
                 EditWin().EnableMapMode();
