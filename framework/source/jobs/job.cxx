@@ -318,7 +318,7 @@ void Job::die()
                 b) it's specific configuration data (Different for every job.)
                 c) some environment values          (e.g. the frame, for which this job was started)
                 d) any other dynamic data           (e.g. parameters of a dispatch() request)
-            We collect all these information and generate one list which include all others.
+            We collect all this information and generate one list which include all others.
 
     @param  lDynamicArgs
                 list of dynamic arguments (given by a corresponding dispatch() call)

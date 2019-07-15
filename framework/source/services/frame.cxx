@@ -2989,7 +2989,7 @@ void XFrameImpl::implts_resizeComponentWindow()
 /*-****************************************************************************************************
     @short      helper to set icon on our container window (if it is a system window!)
     @descr      We use our internal set controller (if it exist) to specify which factory he represented.
-                These information can be used to find right icon. But our controller can say it us directly
+                This information can be used to find right icon. But our controller can say it us directly
                 too ... we should ask his optional property set first ...
 
     @seealso    method Window::SetIcon()
