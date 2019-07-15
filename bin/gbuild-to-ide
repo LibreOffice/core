@@ -1694,10 +1694,11 @@ class QtCreatorIntegrationGenerator(IdeIntegrationGenerator):
             # List headers files from current lib
             for hdir in lib.include:
                 if hdir.startswith(lib.location):
-                    for hf in os.listdir(hdir):
-                        if hf.endswith(('.h', '.hxx', '.hpp', '.hrc')):
-                            hf_lopath = lopath(os.path.join(hdir, hf))
-                            headers_list.append(hf_lopath)
+                    for dirpath, _, files in os.walk(hdir):
+                        for hf in files:
+                            if hf.endswith(('.h', '.hxx', '.hpp', '.hrc')):
+                                hf_lopath = lopath(os.path.join(dirpath, hf))
+                                headers_list.append(hf_lopath)
 
             # List defines
             for key, value in lib.defs.items():
