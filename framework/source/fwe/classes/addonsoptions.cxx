@@ -517,9 +517,9 @@ const Sequence< Sequence< PropertyValue > >& AddonsOptions_Impl::GetAddonsToolBa
 const Sequence< Sequence< PropertyValue > >& AddonsOptions_Impl::GetAddonsNotebookBarPart( sal_uInt32 nIndex ) const
 {
     if ( /*nIndex >= 0 &&*/ nIndex < m_aCachedNotebookBarPartProperties.size() )
-        return m_aCachedNotebookBarPartProperties[nIndex];
+            return m_aCachedNotebookBarPartProperties[nIndex];
     else
-        return m_aEmptyAddonToolBar;
+        return m_aEmptyAddonNotebookBar;
 }
 
 //  public method
@@ -813,7 +813,7 @@ void AddonsOptions_Impl::ReadOfficeNotebookBarSet(
     std::vector<OUString>& rAddonOfficeNotebookBarResNames)
 {
     // Read the OfficeToolBar set and fill property sequences
-    OUString aAddonNotebookBarNodeName("AddonUI/OfficeNotebookbar");
+    OUString aAddonNotebookBarNodeName("AddonUI/OfficeNotebookBar");
     Sequence<OUString> aAddonNotebookBarNodeSeq = GetNodeNames(aAddonNotebookBarNodeName);
     OUString aAddonNotebookBarNode(aAddonNotebookBarNodeName + m_aPathDelimiter);
 

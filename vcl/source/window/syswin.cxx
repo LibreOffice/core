@@ -967,12 +967,12 @@ void SystemWindow::SetMenuBar(MenuBar* pMenuBar)
 }
 
 void SystemWindow::SetNotebookBar(const OUString& rUIXMLDescription,
-                                  const css::uno::Reference<css::frame::XFrame>& rFrame,
+                                  const css::uno::Reference<css::frame::XFrame>& rFrame, const AddonsNotebookBarItems &aAddonsNotebookBarItems,
                                   bool bReloadNotebookbar)
 {
     if (rUIXMLDescription != maNotebookBarUIFile || bReloadNotebookbar)
     {
-        static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow.get())->SetNotebookBar(rUIXMLDescription, rFrame);
+        static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow.get())->SetNotebookBar(rUIXMLDescription, rFrame , aAddonsNotebookBarItems);
         maNotebookBarUIFile = rUIXMLDescription;
         if(GetNotebookBar())
             GetNotebookBar()->SetSystemWindow(this);

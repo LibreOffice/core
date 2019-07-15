@@ -30,7 +30,8 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <unotools/confignode.hxx>
 #include <comphelper/types.hxx>
-
+#include <framework/addonsoptions.hxx>
+#include <vcl/NotebookBarAddons.hxx>
 using namespace sfx2;
 using namespace css::uno;
 using namespace css::ui;
@@ -336,8 +337,16 @@ bool SfxNotebookBar::StateMethod(SystemWindow* pSysWindow,
             OUStringBuffer aBuf(rUIFile);
             aBuf.append( sFile );
 
+            //Addons For Notebookbar
+            framework::AddonsOptions aAddonsItems;
+            AddonsNotebookBarItems aAddonsNotebookBarItems;
+            for(int nIdx = 0 ; nIdx < aAddonsItems.GetAddonsNotebookBarCount() ; nIdx++)
+            {
+                 css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > > aExtension = aAddonsItems.GetAddonsNotebookBarPart( nIdx);
+                 aAddonsNotebookBarItems.push_back(aExtension);
+            }
             // setup if necessary
-            pSysWindow->SetNotebookBar(aBuf.makeStringAndClear(), xFrame, bReloadNotebookbar);
+            pSysWindow->SetNotebookBar(aBuf.makeStringAndClear(), xFrame, aAddonsNotebookBarItems , bReloadNotebookbar);
             pNotebookBar = pSysWindow->GetNotebookBar();
             pNotebookBar->Show();
             pNotebookBar->GetParent()->Resize();

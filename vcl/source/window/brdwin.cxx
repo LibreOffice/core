@@ -2015,11 +2015,13 @@ void ImplBorderWindow::SetMenuBarMode( bool bHide )
     UpdateMenuHeight();
 }
 
-void ImplBorderWindow::SetNotebookBar(const OUString& rUIXMLDescription, const css::uno::Reference<css::frame::XFrame>& rFrame)
+void ImplBorderWindow::SetNotebookBar(const OUString& rUIXMLDescription,
+                                      const css::uno::Reference<css::frame::XFrame>& rFrame,
+                                      const AddonsNotebookBarItems& aAddonsNotebookBarItems)
 {
     if (mpNotebookBar)
         mpNotebookBar.disposeAndClear();
-    mpNotebookBar = VclPtr<NotebookBar>::Create(this, "NotebookBar", rUIXMLDescription, rFrame);
+    mpNotebookBar = VclPtr<NotebookBar>::Create(this, "NotebookBar", rUIXMLDescription, rFrame , aAddonsNotebookBarItems);
     Resize();
 }
 
