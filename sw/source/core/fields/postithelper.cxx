@@ -142,6 +142,7 @@ SwPostItHelper::SwLayoutStatus SwPostItHelper::getLayoutInfos(
                     {
                         pTextFrame->GetCharRect(o_rInfo.mPosition, rAnchorPos, nullptr, false);
                     }
+                    o_rInfo.mPositionFromCommentAnchor = bPositionFromCommentAnchor;
                 }
                 if (pAnnotationMark != nullptr)
                 {
