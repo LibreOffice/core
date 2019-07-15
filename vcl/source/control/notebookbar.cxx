@@ -35,7 +35,7 @@ public:
 
 
 
-NotebookBar::NotebookBar(Window* pParent, const OString& rID, const OUString& rUIXMLDescription, const css::uno::Reference<css::frame::XFrame> &rFrame)
+NotebookBar::NotebookBar(Window* pParent, const OString& rID, const OUString& rUIXMLDescription, const css::uno::Reference<css::frame::XFrame> &rFrame , const AddonsNotebookBarItems &aAddonsNotebookBarItems )
     : Control(pParent), m_pEventListener(new NotebookBarContextChangeEventListener(this))
 {
     SetStyle(GetStyle() | WB_DIALOGCONTROL);
@@ -43,7 +43,7 @@ NotebookBar::NotebookBar(Window* pParent, const OString& rID, const OUString& rU
     bool doesCustomizedUIExist = doesFileExist(getCustomizedUIRootDir(), rUIXMLDescription);
     if ( doesCustomizedUIExist )
         sUIDir = getCustomizedUIRootDir();
-    m_pUIBuilder.reset( new VclBuilder(this, sUIDir, rUIXMLDescription, rID, rFrame));
+    m_pUIBuilder.reset( new VclBuilder(this, sUIDir, rUIXMLDescription, rID, rFrame , true , aAddonsNotebookBarItems));
     mxFrame = rFrame;
     // In the Notebookbar's .ui file must exist control handling context
     // - implementing NotebookbarContextControl interface with id "ContextContainer"
