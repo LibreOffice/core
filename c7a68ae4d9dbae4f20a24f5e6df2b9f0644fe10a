@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_a545b719",
+        "filename": "vcl/unx/kde5/KDE5SalInstance.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1000130
+      },
+      "writtenOn": "2019-07-15T05:43:27Z",
+      "side": 1,
+      "message": "libreoffice-6-3 doesn\u0027t have that rename (yet).\n\nFWIW, If I am not blind master doesn\u0027t have it either yet",
+      "revId": "c7a68ae4d9dbae4f20a24f5e6df2b9f0644fe10a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
