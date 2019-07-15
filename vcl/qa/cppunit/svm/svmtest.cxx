@@ -1250,8 +1250,8 @@ void SvmTest::checkWallpaper(const GDIMetaFile& rMetaFile)
     {
         {"left", "0"},
         {"top", "0"},
-        {"right", "-32767"},
-        {"bottom", "-32767"},
+        {"right", "empty"},
+        {"bottom", "empty"},
     });
 
     assertXPathAttrs(pDoc, "/metafile/wallpaper[1]/wallpaper",
