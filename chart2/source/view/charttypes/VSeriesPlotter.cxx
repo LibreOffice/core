@@ -1605,41 +1605,46 @@ void VSeriesPlotter::setTimeResolutionOnXAxis( long TimeResolution, const Date& 
 long VSeriesPlotter::calculateTimeResolutionOnXAxis()
 {
     long nRet = css::chart::TimeUnit::YEAR;
-    if( m_pExplicitCategoriesProvider )
+    if (!m_pExplicitCategoriesProvider)
+        return nRet;
+
+    const std::vector<double>& rDateCategories = m_pExplicitCategoriesProvider->getDateCategories();
+    if (rDateCategories.empty())
+        return nRet;
+
+    std::vector<double>::const_iterator aIt = rDateCategories.begin(), aEnd = rDateCategories.end();
+
+    aIt = std::find_if(aIt, aEnd, [](const double& rDateCategory) { return !rtl::math::isNan(rDateCategory); });
+    if (aIt == aEnd)
+        return nRet;
+
+    Date aNullDate(30,12,1899);
+    if (m_apNumberFormatterWrapper)
+        aNullDate = m_apNumberFormatterWrapper->getNullDate();
+
+    Date aPrevious(aNullDate); aPrevious.AddDays(rtl::math::approxFloor(*aIt));
+    ++aIt;
+    for(;aIt!=aEnd;++aIt)
     {
-        const std::vector< double >&  rDateCategories = m_pExplicitCategoriesProvider->getDateCategories();
-        Date aNullDate(30,12,1899);
-        if (m_apNumberFormatterWrapper)
-            aNullDate = m_apNumberFormatterWrapper->getNullDate();
-        if( !rDateCategories.empty() )
+        if (rtl::math::isNan(*aIt))
+            continue;
+
+        Date aCurrent(aNullDate); aCurrent.AddDays(rtl::math::approxFloor(*aIt));
+        if( nRet == css::chart::TimeUnit::YEAR )
         {
-            std::vector< double >::const_iterator aIt = rDateCategories.begin(), aEnd = rDateCategories.end();
-            aIt = std::find_if(aIt, aEnd, [](const double& rDateCategory) { return !rtl::math::isNan(rDateCategory); });
-
-            Date aPrevious(aNullDate); aPrevious.AddDays(rtl::math::approxFloor(*aIt));
-            ++aIt;
-            for(;aIt!=aEnd;++aIt)
-            {
-                if (rtl::math::isNan(*aIt))
-                    continue;
-
-                Date aCurrent(aNullDate); aCurrent.AddDays(rtl::math::approxFloor(*aIt));
-                if( nRet == css::chart::TimeUnit::YEAR )
-                {
-                    if( DateHelper::IsInSameYear( aPrevious, aCurrent ) )
-                        nRet = css::chart::TimeUnit::MONTH;
-                }
-                if( nRet == css::chart::TimeUnit::MONTH )
-                {
-                    if( DateHelper::IsInSameMonth( aPrevious, aCurrent ) )
-                        nRet = css::chart::TimeUnit::DAY;
-                }
-                if( nRet == css::chart::TimeUnit::DAY )
-                    break;
-                aPrevious=aCurrent;
-            }
+            if( DateHelper::IsInSameYear( aPrevious, aCurrent ) )
+                nRet = css::chart::TimeUnit::MONTH;
         }
+        if( nRet == css::chart::TimeUnit::MONTH )
+        {
+            if( DateHelper::IsInSameMonth( aPrevious, aCurrent ) )
+                nRet = css::chart::TimeUnit::DAY;
+        }
+        if( nRet == css::chart::TimeUnit::DAY )
+            break;
+        aPrevious=aCurrent;
     }
+
     return nRet;
 }
 double VSeriesPlotter::getMinimumX()
