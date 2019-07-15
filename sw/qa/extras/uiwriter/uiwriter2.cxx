@@ -56,7 +56,9 @@ public:
     void testDateFormFieldInsertion();
     void testDateFormFieldContentOperations();
     void testDateFormFieldCurrentDateHandling();
+#if !defined(_WIN32)
     void testDateFormFieldCurrentDateInvalidation();
+#endif
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest2);
     CPPUNIT_TEST(testTdf101534);
@@ -74,7 +76,9 @@ public:
     CPPUNIT_TEST(testDateFormFieldInsertion);
     CPPUNIT_TEST(testDateFormFieldContentOperations);
     CPPUNIT_TEST(testDateFormFieldCurrentDateHandling);
+#if !defined(_WIN32)
     CPPUNIT_TEST(testDateFormFieldCurrentDateInvalidation);
+#endif
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -733,6 +737,7 @@ void SwUiWriterTest2::testDateFormFieldCurrentDateHandling()
     CPPUNIT_ASSERT_EQUAL(OUString("2031-06-01"), sCurrentDate);
 }
 
+#if !defined(_WIN32)
 void SwUiWriterTest2::testDateFormFieldCurrentDateInvalidation()
 {
     SwDoc* pDoc = createDoc();
@@ -789,7 +794,9 @@ void SwUiWriterTest2::testDateFormFieldCurrentDateInvalidation()
     }
     CPPUNIT_ASSERT_EQUAL(OUString(""), sCurrentDate);
 }
+#endif
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest2);
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
