@@ -350,18 +350,18 @@ bool LayoutConverter::calcAbsRectangle( awt::Rectangle& orRect ) const
 {
     if( !mrModel.mbAutoLayout )
     {
-        awt::Size rChartSize=getChartSize();
-        if( (rChartSize.Width < 0) || (rChartSize.Height < 0) )
+        awt::Size aChartSize=getChartSize();
+        if( aChartSize.Width <= 0 || aChartSize.Height <= 0 )
         {
-        rChartSize.Width = 16000;
-        rChartSize.Height = 9000;
+            aChartSize.Width = 16000;
+            aChartSize.Height = 9000;
         }
-        orRect.X = lclCalcPosition( rChartSize.Width,  mrModel.mfX, mrModel.mnXMode );
-        orRect.Y = lclCalcPosition( rChartSize.Height, mrModel.mfY, mrModel.mnYMode );
+        orRect.X = lclCalcPosition( aChartSize.Width,  mrModel.mfX, mrModel.mnXMode );
+        orRect.Y = lclCalcPosition( aChartSize.Height, mrModel.mfY, mrModel.mnYMode );
         if( (orRect.X >= 0) && (orRect.Y >= 0) )
         {
-            orRect.Width  = lclCalcSize( orRect.X, rChartSize.Width,  mrModel.mfW, mrModel.mnWMode );
-            orRect.Height = lclCalcSize( orRect.Y, rChartSize.Height, mrModel.mfH, mrModel.mnHMode );
+            orRect.Width  = lclCalcSize( orRect.X, aChartSize.Width,  mrModel.mfW, mrModel.mnWMode );
+            orRect.Height = lclCalcSize( orRect.Y, aChartSize.Height, mrModel.mfH, mrModel.mnHMode );
             return (orRect.Width > 0) && (orRect.Height > 0);
         }
     }
