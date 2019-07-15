@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_001b311b",
+        "filename": "cui/uiconfig/ui/menuassignpage.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 331,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2019-07-15T13:22:11Z",
+      "side": 0,
+      "message": "you don\u0027t want to remove this line when just changing some labels",
+      "revId": "ed2107f0488887528d8e49135d3270705f389ed5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_c0d21935",
+        "filename": "cui/uiconfig/ui/menuassignpage.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 502,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2019-07-15T13:22:11Z",
+      "side": 0,
+      "message": "the reason this didn\u0027t error out is because its the same context for the same string, so just one translations extracted and used in both place. Probably better, as in new version, to have separate ones, but no biggy that it was the same for both",
+      "revId": "ed2107f0488887528d8e49135d3270705f389ed5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
