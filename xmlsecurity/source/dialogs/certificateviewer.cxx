@@ -293,7 +293,7 @@ void CertificateViewerCertPathTP::ActivatePage()
             if (!xParent)
             {
                 xParent = mxCertPathLB->make_iterator();
-                mxCertPathLB->get_iter_first(*xParent);
+                (void)mxCertPathLB->get_iter_first(*xParent);
             }
             else
             {
