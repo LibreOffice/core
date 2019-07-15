@@ -79,6 +79,7 @@ SvxRedlinTable::SvxRedlinTable(std::unique_ptr<weld::TreeView> xWriterControl,
         Application::GetSettings().GetUILanguageTag().getLocale()))
     , xWriterTreeView(std::move(xWriterControl))
     , xCalcTreeView(std::move(xCalcControl))
+    , pTreeView(nullptr)
     , nDatePos(WRITER_DATE)
     , bAuthor(false)
     , bDate(false)
