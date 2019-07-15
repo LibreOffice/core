@@ -1063,7 +1063,7 @@ public:
     void                                Validate();
     bool                                HasPaintEvent() const;
     void                                Update();
-    void                                Flush();
+    void                                Flush() override;
 
     // toggles new docking support, enabled via toolkit
     void                                EnableDocking( bool bEnable = true );

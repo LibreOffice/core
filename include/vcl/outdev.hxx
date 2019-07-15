@@ -539,6 +539,7 @@ public:
     ///@{
 
 public:
+    virtual void                Flush() {}
 
     virtual void                DrawOutDev(
                                     const Point& rDestPt, const Size& rDestSize,
