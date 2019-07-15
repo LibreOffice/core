@@ -216,9 +216,9 @@ void SwFieldDokInfPage::Reset(const SfxItemSet* )
 IMPL_LINK_NOARG(SwFieldDokInfPage, TypeHdl, weld::TreeView&, void)
 {
     // current ListBoxPos
-    if (!m_xTypeTLB->get_selected(m_xSelEntry.get()))
+    if (!m_xTypeTLB->get_selected(m_xSelEntry.get()) &&
+        m_xTypeTLB->get_iter_first(*m_xSelEntry))
     {
-        m_xTypeTLB->get_iter_first(*m_xSelEntry);
         m_xTypeTLB->select(*m_xSelEntry);
     }
     FillSelectionLB(m_xTypeTLB->get_id(*m_xSelEntry).toUInt32());
