@@ -15,6 +15,7 @@
 #include <unotools/resmgr.hxx>
 #include <tools/fldunit.hxx>
 #include <vcl/dllapi.h>
+#include <vcl/NotebookBarAddons.hxx>
 #include <vcl/window.hxx>
 #include <vcl/vclptr.hxx>
 #include <tools/wintypes.hxx>
@@ -73,12 +74,13 @@ public:
             const OUString& sUIFile,
             const OString& sID = OString(),
             const css::uno::Reference<css::frame::XFrame> &rFrame = css::uno::Reference<css::frame::XFrame>(),
-            bool bLegacy = true);
+            bool bLegacy = true,
+            const AddonsNotebookBarItems &aAddonsNotebookBarItems = AddonsNotebookBarItems());
     ~VclBuilder();
-
+    AddonsNotebookBarItems m_pAddonsNotebookBarItems;
     ///releases references and disposes all children.
     void disposeBuilder();
-
+    const css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > > m_pExtension;
     //sID must exist and be of type T
     template <typename T> T* get(VclPtr<T>& ret, const OString& sID);
 
