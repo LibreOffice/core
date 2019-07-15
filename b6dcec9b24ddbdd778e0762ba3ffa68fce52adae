@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_3b21c64e",
+        "filename": "sc/source/ui/view/gridwin.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 808,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2019-07-15T22:40:22Z",
+      "side": 1,
+      "message": "The else seems redundant here - code above is returning already",
+      "revId": "b6dcec9b24ddbdd778e0762ba3ffa68fce52adae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
