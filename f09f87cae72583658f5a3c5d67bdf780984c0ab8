@@ -34,6 +34,24 @@
       "revId": "f09f87cae72583658f5a3c5d67bdf780984c0ab8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_78c0c151",
+        "filename": "vcl/source/gdi/pdfwriter_impl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 6100,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2019-07-15T22:41:59Z",
+      "side": 1,
+      "message": "Right. Clamping to INT_MAX then and a SAL_WARN.\n\nOr assert() here, and push the invalid input handling up the stack?",
+      "parentUuid": "df7087c5_6eb793da",
+      "revId": "f09f87cae72583658f5a3c5d67bdf780984c0ab8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
