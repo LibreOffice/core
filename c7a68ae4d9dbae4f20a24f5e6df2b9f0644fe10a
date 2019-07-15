@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "bf659307_25e1a79b",
+        "filename": "vcl/inc/qt5/Qt5Instance.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2019-07-15T09:23:02Z",
+      "side": 1,
+      "message": "Thanks, sounds reasonable. :-)",
+      "parentUuid": "bf659307_c5130bb8",
+      "range": {
+        "startLine": 145,
+        "startChar": 4,
+        "endLine": 145,
+        "endChar": 65
+      },
+      "revId": "c7a68ae4d9dbae4f20a24f5e6df2b9f0644fe10a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bf659307_a545b719",
         "filename": "vcl/unx/kde5/KDE5SalInstance.cxx",
         "patchSetId": 1
