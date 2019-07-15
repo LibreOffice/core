@@ -42,6 +42,30 @@
     },
     {
       "key": {
+        "uuid": "bf659307_05590359",
+        "filename": "sc/source/ui/view/gridwin4.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 574,
+      "author": {
+        "id": 1001855
+      },
+      "writtenOn": "2019-07-15T09:59:34Z",
+      "side": 1,
+      "message": "My assumption was, that before any update of page breaks, the number of col and row breaks is \u0027\u003d0\u0027 for both and after an update it is \u0027\u003e0\u0027 for both. So there will be only the need to check for col or row breaks. If this is an incorrect assumption, I\u0027ll check for both.",
+      "parentUuid": "bf659307_4555bb4f",
+      "range": {
+        "startLine": 573,
+        "startChar": 12,
+        "endLine": 574,
+        "endChar": 39
+      },
+      "revId": "fad49150250d94bf9d422e3da7bfbfe2d4f48d25",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bf659307_45da9be9",
         "filename": "sc/source/ui/view/gridwin4.cxx",
         "patchSetId": 4
