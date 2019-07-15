@@ -150,7 +150,7 @@ public class _XContentProviderManager extends MultiMethodTest {
         log.println("registering the second provider in non-replacing mode");
         try {
             oObj.registerContentProvider(contentProvider, myScheme, false);
-            Status.failed("registerContentProvider(.., .., false)");
+            throw new StatusException(Status.failed("registerContentProvider(.., .., false)"));
         } catch (DuplicateProviderException e) {
             log.println("DuplicateProviderException thrown - OK");
         }
