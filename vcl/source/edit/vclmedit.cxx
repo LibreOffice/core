@@ -631,7 +631,7 @@ bool ImpVclMEdit::HandleCommand( const CommandEvent& rCEvt )
     {
         ScrollBar* pHScrollBar = mpHScrollBar->IsVisible() ? mpHScrollBar.get() : nullptr;
         ScrollBar* pVScrollBar = mpVScrollBar->IsVisible() ? mpVScrollBar.get() : nullptr;
-        (void)mpTextWindow->HandleScrollCommand(rCEvt, pHScrollBar, pVScrollBar);
+        mpTextWindow->HandleScrollCommand(rCEvt, pHScrollBar, pVScrollBar);
         bDone = true;
     }
     return bDone;
