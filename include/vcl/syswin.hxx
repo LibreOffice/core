@@ -27,6 +27,7 @@
 #include <vcl/window.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <memory>
+#include <vcl/NotebookBarAddonsMerger.hxx>
 
 class MenuBar;
 class NotebookBar;
@@ -217,6 +218,7 @@ public:
 
     void SetNotebookBar(const OUString& rUIXMLDescription,
                         const css::uno::Reference<css::frame::XFrame>& rFrame,
+                        const NotebookBarAddonsItem& aNotebookBarAddonsItem,
                         bool bReloadNotebookbar = false);
 
     void            CloseNotebookBar();

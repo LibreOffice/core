@@ -51,17 +51,19 @@ public:
     virtual void SAL_CALL disposing(const ::css::lang::EventObject&) override;
 };
 
-
-
-NotebookBar::NotebookBar(Window* pParent, const OString& rID, const OUString& rUIXMLDescription, const css::uno::Reference<css::frame::XFrame> &rFrame)
-    : Control(pParent), m_pEventListener(new NotebookBarContextChangeEventListener(this))
+NotebookBar::NotebookBar(Window* pParent, const OString& rID, const OUString& rUIXMLDescription,
+                         const css::uno::Reference<css::frame::XFrame>& rFrame,
+                         const NotebookBarAddonsItem& aNotebookBarAddonsItem)
+    : Control(pParent)
+    , m_pEventListener(new NotebookBarContextChangeEventListener(this))
 {
     SetStyle(GetStyle() | WB_DIALOGCONTROL);
     OUString sUIDir = getUIRootDir();
     bool doesCustomizedUIExist = doesFileExist(getCustomizedUIRootDir(), rUIXMLDescription);
     if ( doesCustomizedUIExist )
         sUIDir = getCustomizedUIRootDir();
-    m_pUIBuilder.reset( new VclBuilder(this, sUIDir, rUIXMLDescription, rID, rFrame));
+    m_pUIBuilder.reset(
+        new VclBuilder(this, sUIDir, rUIXMLDescription, rID, rFrame, true, aNotebookBarAddonsItem));
     mxFrame = rFrame;
     // In the Notebookbar's .ui file must exist control handling context
     // - implementing NotebookbarContextControl interface with id "ContextContainer"

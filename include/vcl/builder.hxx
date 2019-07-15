@@ -15,6 +15,7 @@
 #include <unotools/resmgr.hxx>
 #include <tools/fldunit.hxx>
 #include <vcl/dllapi.h>
+#include <vcl/NotebookBarAddonsMerger.hxx>
 #include <vcl/window.hxx>
 #include <vcl/vclptr.hxx>
 #include <tools/wintypes.hxx>
@@ -67,18 +68,16 @@ public:
     typedef void (*customMakeWidget)(VclPtr<vcl::Window> &rRet, VclPtr<vcl::Window> &pParent, stringmap &rVec);
 
 public:
-    VclBuilder(
-            vcl::Window *pParent,
-            const OUString& sUIRootDir,
-            const OUString& sUIFile,
-            const OString& sID = OString(),
-            const css::uno::Reference<css::frame::XFrame> &rFrame = css::uno::Reference<css::frame::XFrame>(),
-            bool bLegacy = true);
+    VclBuilder(vcl::Window* pParent, const OUString& sUIRootDir, const OUString& sUIFile,
+               const OString& sID = OString(),
+               const css::uno::Reference<css::frame::XFrame>& rFrame
+               = css::uno::Reference<css::frame::XFrame>(),
+               bool bLegacy = true,
+               const NotebookBarAddonsItem& aNotebookBarAddonsItem = NotebookBarAddonsItem());
     ~VclBuilder();
-
     ///releases references and disposes all children.
     void disposeBuilder();
-
+    NotebookBarAddonsItem m_pNotebookBarAddonsItem;
     //sID must exist and be of type T
     template <typename T> T* get(VclPtr<T>& ret, const OString& sID);
 

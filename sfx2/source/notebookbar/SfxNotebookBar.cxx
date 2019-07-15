@@ -30,16 +30,50 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <unotools/confignode.hxx>
 #include <comphelper/types.hxx>
-
+#include <framework/addonsoptions.hxx>
+#include <vcl/NotebookBarAddonsMerger.hxx>
+#include <vector>
 using namespace sfx2;
 using namespace css::uno;
 using namespace css::ui;
 using namespace css;
 
 #define MENUBAR_STR "private:resource/menubar/menubar"
+static const char MERGE_NOTEBOOKBAR_IMAGEID[] = "ImageIdentifier";
 
 bool SfxNotebookBar::m_bLock = false;
 bool SfxNotebookBar::m_bHide = false;
+
+static void NotebookbarAddonValues(
+    std::vector<Image>& aImageValues,
+    std::vector<css::uno::Sequence<css::uno::Sequence<css::beans::PropertyValue>>>&
+        aExtensionValues)
+{
+    framework::AddonsOptions aAddonsItems;
+
+    for (int nIdx = 0; nIdx < aAddonsItems.GetAddonsNotebookBarCount(); nIdx++)
+    {
+        css::uno::Sequence<css::uno::Sequence<css::beans::PropertyValue>> aExtension
+            = aAddonsItems.GetAddonsNotebookBarPart(nIdx);
+        for (int nSecIdx = 0; nSecIdx < aExtension.getLength(); nSecIdx++)
+        {
+            css::uno::Sequence<css::beans::PropertyValue> pExtensionVal = aExtension[nSecIdx];
+            Image aImage;
+
+            for (int nRes = 0; nRes < pExtensionVal.getLength(); nRes++)
+            {
+                OUString sImage;
+                if (pExtensionVal[nRes].Name == MERGE_NOTEBOOKBAR_IMAGEID)
+                {
+                    pExtensionVal[nRes].Value >>= sImage;
+                    aImage = framework::AddonsOptions().GetImageFromURL(sImage, false);
+                }
+            }
+            aImageValues.push_back(aImage);
+        }
+        aExtensionValues.push_back(aExtension);
+    }
+}
 
 static Reference<frame::XLayoutManager> lcl_getLayoutManager( const Reference<frame::XFrame>& xFrame )
 {
@@ -336,8 +370,16 @@ bool SfxNotebookBar::StateMethod(SystemWindow* pSysWindow,
             OUStringBuffer aBuf(rUIFile);
             aBuf.append( sFile );
 
+            //Addons For Notebookbar
+            std::vector<Image> aImageValues;
+            std::vector<css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > > > aExtensionValues;
+            NotebookBarAddonsItem aNotebookBarAddonsItem;
+            NotebookbarAddonValues(aImageValues , aExtensionValues);
+            aNotebookBarAddonsItem.aAddonValues = aExtensionValues;
+            aNotebookBarAddonsItem.aImageValues = aImageValues;
+
             // setup if necessary
-            pSysWindow->SetNotebookBar(aBuf.makeStringAndClear(), xFrame, bReloadNotebookbar);
+            pSysWindow->SetNotebookBar(aBuf.makeStringAndClear(), xFrame, aNotebookBarAddonsItem , bReloadNotebookbar);
             pNotebookBar = pSysWindow->GetNotebookBar();
             pNotebookBar->Show();
             pNotebookBar->GetParent()->Resize();

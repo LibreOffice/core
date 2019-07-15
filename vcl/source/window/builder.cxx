@@ -399,8 +399,9 @@ namespace weld
     }
 }
 
-VclBuilder::VclBuilder(vcl::Window *pParent, const OUString& sUIDir, const OUString& sUIFile, const OString& sID,
-                       const css::uno::Reference<css::frame::XFrame>& rFrame, bool bLegacy)
+VclBuilder::VclBuilder(vcl::Window* pParent, const OUString& sUIDir, const OUString& sUIFile,
+                       const OString& sID, const css::uno::Reference<css::frame::XFrame>& rFrame,
+                       bool bLegacy, const NotebookBarAddonsItem& aNotebookBarAddonsItem)
     : m_sID(sID)
     , m_sHelpRoot(OUStringToOString(sUIFile, RTL_TEXTENCODING_UTF8))
     , m_pStringReplace(Translate::GetReadStringHook())
@@ -410,6 +411,7 @@ VclBuilder::VclBuilder(vcl::Window *pParent, const OUString& sUIDir, const OUStr
     , m_pParserState(new ParserState)
     , m_xFrame(rFrame)
 {
+    m_pNotebookBarAddonsItem = aNotebookBarAddonsItem;
     m_bToplevelHasDeferredInit = pParent &&
         ((pParent->IsSystemWindow() && static_cast<SystemWindow*>(pParent)->isDeferredInit()) ||
          (pParent->IsDockingWindow() && static_cast<DockingWindow*>(pParent)->isDeferredInit()));
@@ -2167,6 +2169,11 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
     else if (name == "GtkToolbar")
     {
         xWindow = VclPtr<ToolBox>::Create(pParent, WB_3DLOOK | WB_TABSTOP);
+    }
+    else if (name == "NotebookBarAddonsMergePoint")
+    {
+        NotebookBarAddonsMerger aNotebookBarAddonsMerger(pParent,m_xFrame, m_pNotebookBarAddonsItem);
+        return nullptr;
     }
     else if (name == "GtkToolButton" || name == "GtkMenuToolButton" ||
              name == "GtkToggleToolButton" || name == "GtkRadioToolButton")

@@ -12,6 +12,7 @@
 
 #include <vcl/builder.hxx>
 #include <vcl/ctrl.hxx>
+#include <vcl/NotebookBarAddonsMerger.hxx>
 #include <vcl/settings.hxx>
 #include <vector>
 
@@ -25,7 +26,9 @@ class VCL_DLLPUBLIC NotebookBar : public Control, public VclBuilderContainer
 {
 friend class NotebookBarContextChangeEventListener;
 public:
-    NotebookBar(Window* pParent, const OString& rID, const OUString& rUIXMLDescription, const css::uno::Reference<css::frame::XFrame> &rFrame);
+    NotebookBar(Window* pParent, const OString& rID, const OUString& rUIXMLDescription,
+                const css::uno::Reference<css::frame::XFrame>& rFrame,
+                const NotebookBarAddonsItem& aNotebookBarAddonsItem);
     virtual ~NotebookBar() override;
     virtual void dispose() override;
 
