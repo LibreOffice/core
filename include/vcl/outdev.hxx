@@ -663,6 +663,8 @@ public:
     void                        IntersectClipRegion( const vcl::Region& rRegion );
 
     virtual vcl::Region         GetActiveClipRegion() const;
+    virtual void                ExpandPaintClipRegion(const vcl::Region&)
+                                    { /* noop, needed for Window but called as polymorphic function */ }
 
 protected:
 
