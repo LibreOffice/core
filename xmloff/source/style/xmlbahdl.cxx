@@ -21,6 +21,7 @@
 
 #include <sal/log.hxx>
 #include <o3tl/any.hxx>
+#include <o3tl/safeint.hxx>
 #include <sax/tools/converter.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <com/sun/star/uno/Any.hxx>
@@ -377,9 +378,11 @@ XMLNegPercentPropHdl::~XMLNegPercentPropHdl()
 bool XMLNegPercentPropHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
 {
     sal_Int32 nValue = 0;
-    bool const bRet = ::sax::Converter::convertPercent( nValue, rStrImpValue );
-    lcl_xmloff_setAny( rValue, 100-nValue, nBytes );
-
+    bool bRet = ::sax::Converter::convertPercent( nValue, rStrImpValue );
+    if (bRet)
+        bRet = !o3tl::checked_sub<sal_Int32>(100, nValue, nValue);
+    if (bRet)
+        lcl_xmloff_setAny( rValue, nValue, nBytes );
     return bRet;
 }
 
