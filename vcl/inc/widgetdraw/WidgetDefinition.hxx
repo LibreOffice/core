@@ -89,6 +89,10 @@ public:
 
     WidgetDrawActionLine()
         : WidgetDrawActionShape(WidgetDrawActionType::LINE)
+        , mfX1(0.0)
+        , mfY1(0.0)
+        , mfX2(0.0)
+        , mfY2(0.0)
     {
     }
 };
