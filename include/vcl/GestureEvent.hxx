@@ -35,6 +35,25 @@ public:
 
     sal_Int32 mnOffset;
     PanningOrientation meOrientation;
+
+    GestureEvent()
+        : mnX(0)
+        , mnY(0)
+        , meEventType(GestureEventType::PanningBegin)
+        , mnOffset(0)
+        , meOrientation(PanningOrientation::Horizontal)
+    {
+    }
+
+    GestureEvent(sal_Int32 nX, sal_Int32 nY, GestureEventType eEventType, sal_Int32 nOffset,
+                 PanningOrientation eOrientation)
+        : mnX(nX)
+        , mnY(nY)
+        , meEventType(eEventType)
+        , mnOffset(nOffset)
+        , meOrientation(eOrientation)
+    {
+    }
 };
 
 #endif // INCLUDED_VCL_GESTUREEVENT_HXX

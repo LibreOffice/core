@@ -847,13 +847,13 @@ ImplSVEvent* Application::PostGestureEvent(VclEventId nEvent, vcl::Window* pWin,
         aTransformedPosition.AdjustX(pWin->GetOutOffXPixel());
         aTransformedPosition.AdjustY(pWin->GetOutOffYPixel());
 
-        const GestureEvent aGestureEvent{
+        const GestureEvent aGestureEvent(
             sal_Int32(aTransformedPosition.X()),
             sal_Int32(aTransformedPosition.Y()),
             pGestureEvent->meEventType,
             pGestureEvent->mnOffset,
             pGestureEvent->meOrientation
-        };
+        );
 
         std::unique_ptr<ImplPostEventData> pPostEventData(new ImplPostEventData(nEvent, pWin, aGestureEvent));
 
