@@ -1201,7 +1201,7 @@ void makeRedline( SwPaM const & rPaM,
         aRedlineData.SetTimeStamp( DateTime( aStamp));
     }
 
-    SwRedlineExtraData_FormatColl * pRedlineExtraData = nullptr;
+    std::unique_ptr<SwRedlineExtraData_FormatColl> xRedlineExtraData;
 
     // Read the 'Redline Revert Properties' from the parameters
     uno::Sequence< beans::PropertyValue > aRevertProperties;
@@ -1216,7 +1216,7 @@ void makeRedline( SwPaM const & rPaM,
             if (!aRevertProperties.hasElements())
             {
                 // to reject the paragraph style change, use standard style
-                pRedlineExtraData = new SwRedlineExtraData_FormatColl( "",  RES_POOLCOLL_STANDARD, nullptr );
+                xRedlineExtraData.reset(new SwRedlineExtraData_FormatColl( "",  RES_POOLCOLL_STANDARD, nullptr ));
             }
         }
         else
@@ -1303,10 +1303,10 @@ void makeRedline( SwPaM const & rPaM,
                 if (eType == RedlineType::ParagraphFormat && sParaStyleName.isEmpty())
                     nStylePoolId = RES_POOLCOLL_STANDARD;
 
-                pRedlineExtraData = new SwRedlineExtraData_FormatColl( sParaStyleName, nStylePoolId, &aItemSet );
+                xRedlineExtraData.reset(new SwRedlineExtraData_FormatColl( sParaStyleName, nStylePoolId, &aItemSet ));
             }
             else if (eType == RedlineType::ParagraphFormat)
-                pRedlineExtraData = new SwRedlineExtraData_FormatColl( "", RES_POOLCOLL_STANDARD, nullptr );
+                xRedlineExtraData.reset(new SwRedlineExtraData_FormatColl( "", RES_POOLCOLL_STANDARD, nullptr ));
         }
 
         // to finalize DOCX import
@@ -1316,7 +1316,8 @@ void makeRedline( SwPaM const & rPaM,
 
     SwRangeRedline* pRedline = new SwRangeRedline( aRedlineData, rPaM );
     RedlineFlags nPrevMode = pRedlineAccess->GetRedlineFlags( );
-    pRedline->SetExtraData( pRedlineExtraData );
+    // xRedlineExtraData is copied here
+    pRedline->SetExtraData( xRedlineExtraData.get() );
 
     pRedlineAccess->SetRedlineFlags_intern(RedlineFlags::On);
     auto const result(pRedlineAccess->AppendRedline(pRedline, false));
