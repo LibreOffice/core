@@ -96,7 +96,7 @@ the update information from the repository as feed:
 http://updateext.services.openoffice.org/ProductUpdateService/check.Update
 
 The description.xml which will be uploaded contains URLs for release notes and publisher 
-names/ URLs. That is, these information are not generated from the information of the
+names/ URLs. That is, this information is not generated from the information of the
 repository web site.
 
 Test

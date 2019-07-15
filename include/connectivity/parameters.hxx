@@ -152,7 +152,7 @@ namespace dbtools
         /// clears the instance data
                 void    clearAllParameterInformation();
 
-        /// checks whether the parameter information are up-to-date
+        /// checks whether the parameter information is up-to-date
         bool    isUpToDate() const { return m_bUpToDate; }
 
         /** updates all parameter information represented by the instance
