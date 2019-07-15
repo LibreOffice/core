@@ -52,7 +52,7 @@ SalFrame* KDE5SalInstance::CreateFrame(SalFrame* pParent, SalFrameStyleFlags nSt
 
 bool KDE5SalInstance::hasNativeFileSelection() const
 {
-    if (Application::GetDesktopEnvironment() == "PLASMA5")
+    if (Application::GetDesktopEnvironment() == "KDE5")
         return true;
     return Qt5Instance::hasNativeFileSelection();
 }
