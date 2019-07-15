@@ -1247,6 +1247,7 @@ public:
     virtual void collapse(weld::Widget* pEdit, weld::Widget* pButton) override
     {
         SalInstanceWidget* pVclEdit = dynamic_cast<SalInstanceWidget*>(pEdit);
+        assert(pVclEdit);
         SalInstanceWidget* pVclButton = dynamic_cast<SalInstanceWidget*>(pButton);
 
         vcl::Window* pRefEdit = pVclEdit->getWidget();
