@@ -7,6 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#ifndef LO_CLANG_SHARED_PLUGINS
+
 #include "clang/AST/Attr.h"
 
 #include "check.hxx"
@@ -28,7 +30,7 @@ public:
     void run() override
     { TraverseDecl(compiler.getASTContext().getTranslationUnitDecl()); }
 
-    bool TraverseCXXMethodDecl(const CXXMethodDecl * decl);
+    bool TraverseCXXMethodDecl(CXXMethodDecl * decl);
 
     bool VisitCXXThisExpr(const CXXThisExpr *) { bVisitedThis = true; return true; }
     // these two indicate that we hit something that makes our analysis unreliable
@@ -67,7 +69,7 @@ bool startsWith(const std::string& rStr, const char* pSubStr) {
     return rStr.compare(0, strlen(pSubStr), pSubStr) == 0;
 }
 
-bool StaticMethods::TraverseCXXMethodDecl(const CXXMethodDecl * pCXXMethodDecl) {
+bool StaticMethods::TraverseCXXMethodDecl(CXXMethodDecl * pCXXMethodDecl) {
     if (ignoreLocation(pCXXMethodDecl)) {
         return true;
     }
@@ -231,8 +233,10 @@ bool StaticMethods::TraverseCXXMethodDecl(const CXXMethodDecl * pCXXMethodDecl) 
     return true;
 }
 
-loplugin::Plugin::Registration<StaticMethods> X("staticmethods");
+loplugin::Plugin::Registration<StaticMethods> staticmethods("staticmethods");
 
-}
+} // namespace
+
+#endif // LO_CLANG_SHARED_PLUGINS
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

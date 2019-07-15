@@ -26,13 +26,28 @@
 #include "../loopvartoosmall.cxx"
 #include "../privatebase.cxx"
 #include "../reservedid.cxx"
+#include "../salunicodeliteral.cxx"
+#include "../sfxpoolitem.cxx"
 #include "../simplifyconstruct.cxx"
+#include "../simplifydynamiccast.cxx"
+#include "../staticaccess.cxx"
+#include "../staticanonymous.cxx"
+#include "../staticconstfield.cxx"
+#include "../staticmethods.cxx"
+#include "../stringconcat.cxx"
+#include "../stringconstant.cxx"
 #include "../stringstatic.cxx"
 #include "../subtlezeroinit.cxx"
+#include "../typedefparam.cxx"
+#include "../unicodetochar.cxx"
+#include "../unnecessarycatchthrow.cxx"
 #include "../unnecessaryoverride.cxx"
 #include "../unnecessaryparen.cxx"
+#include "../unoany.cxx"
+#include "../unoquery.cxx"
 #include "../unreffun.cxx"
 #include "../unusedvariablecheck.cxx"
+#include "../weakbase.cxx"
 #include "../weakobject.cxx"
 #include "../dyncastvisibility.cxx"
 #include "../vclwidgets.cxx"
@@ -64,13 +79,28 @@ public:
         , loopVarTooSmall( nullptr )
         , privateBase( nullptr )
         , reservedId( nullptr )
+        , salUnicodeLiteral( nullptr )
+        , sfxPoolItem( nullptr )
         , simplifyConstruct( nullptr )
+        , simplifyDynamicCast( nullptr )
+        , staticAccess( nullptr )
+        , staticAnonymous( nullptr )
+        , staticConstField( nullptr )
+        , staticMethods( nullptr )
+        , stringConcat( nullptr )
+        , stringConstant( nullptr )
         , stringStatic( nullptr )
         , subtleZeroInit( nullptr )
+        , typedefParam( nullptr )
+        , unicodeToChar( nullptr )
+        , unnecessaryCatchThrow( nullptr )
         , unnecessaryOverride( nullptr )
         , unnecessaryParen( nullptr )
+        , unoAny( nullptr )
+        , unoQuery( nullptr )
         , unrefFun( nullptr )
         , unusedVariableCheck( nullptr )
+        , weakBase( nullptr )
         , weakObject( nullptr )
         {}
     virtual bool preRun() override
@@ -105,20 +135,50 @@ public:
             privateBase = nullptr;
         if( reservedId && !reservedId->preRun())
             reservedId = nullptr;
+        if( salUnicodeLiteral && !salUnicodeLiteral->preRun())
+            salUnicodeLiteral = nullptr;
+        if( sfxPoolItem && !sfxPoolItem->preRun())
+            sfxPoolItem = nullptr;
         if( simplifyConstruct && !simplifyConstruct->preRun())
             simplifyConstruct = nullptr;
+        if( simplifyDynamicCast && !simplifyDynamicCast->preRun())
+            simplifyDynamicCast = nullptr;
+        if( staticAccess && !staticAccess->preRun())
+            staticAccess = nullptr;
+        if( staticAnonymous && !staticAnonymous->preRun())
+            staticAnonymous = nullptr;
+        if( staticConstField && !staticConstField->preRun())
+            staticConstField = nullptr;
+        if( staticMethods && !staticMethods->preRun())
+            staticMethods = nullptr;
+        if( stringConcat && !stringConcat->preRun())
+            stringConcat = nullptr;
+        if( stringConstant && !stringConstant->preRun())
+            stringConstant = nullptr;
         if( stringStatic && !stringStatic->preRun())
             stringStatic = nullptr;
         if( subtleZeroInit && !subtleZeroInit->preRun())
             subtleZeroInit = nullptr;
+        if( typedefParam && !typedefParam->preRun())
+            typedefParam = nullptr;
+        if( unicodeToChar && !unicodeToChar->preRun())
+            unicodeToChar = nullptr;
+        if( unnecessaryCatchThrow && !unnecessaryCatchThrow->preRun())
+            unnecessaryCatchThrow = nullptr;
         if( unnecessaryOverride && !unnecessaryOverride->preRun())
             unnecessaryOverride = nullptr;
         if( unnecessaryParen && !unnecessaryParen->preRun())
             unnecessaryParen = nullptr;
+        if( unoAny && !unoAny->preRun())
+            unoAny = nullptr;
+        if( unoQuery && !unoQuery->preRun())
+            unoQuery = nullptr;
         if( unrefFun && !unrefFun->preRun())
             unrefFun = nullptr;
         if( unusedVariableCheck && !unusedVariableCheck->preRun())
             unusedVariableCheck = nullptr;
+        if( weakBase && !weakBase->preRun())
+            weakBase = nullptr;
         if( weakObject && !weakObject->preRun())
             weakObject = nullptr;
         return anyPluginActive();
@@ -155,20 +215,50 @@ public:
             privateBase->postRun();
         if( reservedId )
             reservedId->postRun();
+        if( salUnicodeLiteral )
+            salUnicodeLiteral->postRun();
+        if( sfxPoolItem )
+            sfxPoolItem->postRun();
         if( simplifyConstruct )
             simplifyConstruct->postRun();
+        if( simplifyDynamicCast )
+            simplifyDynamicCast->postRun();
+        if( staticAccess )
+            staticAccess->postRun();
+        if( staticAnonymous )
+            staticAnonymous->postRun();
+        if( staticConstField )
+            staticConstField->postRun();
+        if( staticMethods )
+            staticMethods->postRun();
+        if( stringConcat )
+            stringConcat->postRun();
+        if( stringConstant )
+            stringConstant->postRun();
         if( stringStatic )
             stringStatic->postRun();
         if( subtleZeroInit )
             subtleZeroInit->postRun();
+        if( typedefParam )
+            typedefParam->postRun();
+        if( unicodeToChar )
+            unicodeToChar->postRun();
+        if( unnecessaryCatchThrow )
+            unnecessaryCatchThrow->postRun();
         if( unnecessaryOverride )
             unnecessaryOverride->postRun();
         if( unnecessaryParen )
             unnecessaryParen->postRun();
+        if( unoAny )
+            unoAny->postRun();
+        if( unoQuery )
+            unoQuery->postRun();
         if( unrefFun )
             unrefFun->postRun();
         if( unusedVariableCheck )
             unusedVariableCheck->postRun();
+        if( weakBase )
+            weakBase->postRun();
         if( weakObject )
             weakObject->postRun();
     }
@@ -211,20 +301,50 @@ public:
             privateBase = static_cast< PrivateBase* >( plugin );
         else if( strcmp( name, "reservedid" ) == 0 )
             reservedId = static_cast< ReservedId* >( plugin );
+        else if( strcmp( name, "salunicodeliteral" ) == 0 )
+            salUnicodeLiteral = static_cast< SalUnicodeLiteral* >( plugin );
+        else if( strcmp( name, "sfxpoolitem" ) == 0 )
+            sfxPoolItem = static_cast< SfxPoolItem* >( plugin );
         else if( strcmp( name, "simplifyconstruct" ) == 0 )
             simplifyConstruct = static_cast< SimplifyConstruct* >( plugin );
+        else if( strcmp( name, "simplifydynamiccast" ) == 0 )
+            simplifyDynamicCast = static_cast< SimplifyDynamicCast* >( plugin );
+        else if( strcmp( name, "staticaccess" ) == 0 )
+            staticAccess = static_cast< StaticAccess* >( plugin );
+        else if( strcmp( name, "staticanonymous" ) == 0 )
+            staticAnonymous = static_cast< StaticAnonymous* >( plugin );
+        else if( strcmp( name, "staticconstfield" ) == 0 )
+            staticConstField = static_cast< StaticConstField* >( plugin );
+        else if( strcmp( name, "staticmethods" ) == 0 )
+            staticMethods = static_cast< StaticMethods* >( plugin );
+        else if( strcmp( name, "stringconcat" ) == 0 )
+            stringConcat = static_cast< StringConcat* >( plugin );
+        else if( strcmp( name, "stringconstant" ) == 0 )
+            stringConstant = static_cast< StringConstant* >( plugin );
         else if( strcmp( name, "stringstatic" ) == 0 )
             stringStatic = static_cast< StringStatic* >( plugin );
         else if( strcmp( name, "subtlezeroinit" ) == 0 )
             subtleZeroInit = static_cast< SubtleZeroInit* >( plugin );
+        else if( strcmp( name, "typedefparam" ) == 0 )
+            typedefParam = static_cast< TypedefParam* >( plugin );
+        else if( strcmp( name, "unicodetochar" ) == 0 )
+            unicodeToChar = static_cast< UnicodeToChar* >( plugin );
+        else if( strcmp( name, "unnecessarycatchthrow" ) == 0 )
+            unnecessaryCatchThrow = static_cast< UnnecessaryCatchThrow* >( plugin );
         else if( strcmp( name, "unnecessaryoverride" ) == 0 )
             unnecessaryOverride = static_cast< UnnecessaryOverride* >( plugin );
         else if( strcmp( name, "unnecessaryparen" ) == 0 )
             unnecessaryParen = static_cast< UnnecessaryParen* >( plugin );
+        else if( strcmp( name, "unoany" ) == 0 )
+            unoAny = static_cast< UnoAny* >( plugin );
+        else if( strcmp( name, "unoquery" ) == 0 )
+            unoQuery = static_cast< UnoQuery* >( plugin );
         else if( strcmp( name, "unreffun" ) == 0 )
             unrefFun = static_cast< UnrefFun* >( plugin );
         else if( strcmp( name, "unusedvariablecheck" ) == 0 )
             unusedVariableCheck = static_cast< UnusedVariableCheck* >( plugin );
+        else if( strcmp( name, "weakbase" ) == 0 )
+            weakBase = static_cast< WeakBase* >( plugin );
         else if( strcmp( name, "weakobject" ) == 0 )
             weakObject = static_cast< WeakObject* >( plugin );
         else
@@ -319,6 +439,17 @@ public:
         }
         return anyPluginActive();
     }
+    bool VisitCStyleCastExpr(const class clang::CStyleCastExpr * arg)
+    {
+        if( ignoreLocation( arg ))
+            return true;
+        if( salUnicodeLiteral != nullptr )
+        {
+            if( !salUnicodeLiteral->VisitCStyleCastExpr( arg ))
+                salUnicodeLiteral = nullptr;
+        }
+        return anyPluginActive();
+    }
     bool VisitCXXConstructExpr(const class clang::CXXConstructExpr * arg)
     {
         if( ignoreLocation( arg ))
@@ -327,6 +458,11 @@ public:
         {
             if( !simplifyConstruct->VisitCXXConstructExpr( arg ))
                 simplifyConstruct = nullptr;
+        }
+        if( stringConstant != nullptr )
+        {
+            if( !stringConstant->VisitCXXConstructExpr( arg ))
+                stringConstant = nullptr;
         }
         return anyPluginActive();
     }
@@ -341,10 +477,48 @@ public:
         }
         return anyPluginActive();
     }
+    bool VisitCXXDependentScopeMemberExpr(const class clang::CXXDependentScopeMemberExpr * arg)
+    {
+        if( ignoreLocation( arg ))
+            return true;
+        if( staticMethods != nullptr )
+        {
+            if( !staticMethods->VisitCXXDependentScopeMemberExpr( arg ))
+                staticMethods = nullptr;
+        }
+        return anyPluginActive();
+    }
+    bool VisitCXXFunctionalCastExpr(const class clang::CXXFunctionalCastExpr * arg)
+    {
+        if( ignoreLocation( arg ))
+            return true;
+        if( salUnicodeLiteral != nullptr )
+        {
+            if( !salUnicodeLiteral->VisitCXXFunctionalCastExpr( arg ))
+                salUnicodeLiteral = nullptr;
+        }
+        return anyPluginActive();
+    }
+    bool VisitCXXMemberCallExpr(const class clang::CXXMemberCallExpr * arg)
+    {
+        if( ignoreLocation( arg ))
+            return true;
+        if( unoQuery != nullptr )
+        {
+            if( !unoQuery->VisitCXXMemberCallExpr( arg ))
+                unoQuery = nullptr;
+        }
+        return anyPluginActive();
+    }
     bool VisitCXXMethodDecl(const class clang::CXXMethodDecl * arg)
     {
         if( ignoreLocation( arg ))
             return true;
+        if( typedefParam != nullptr )
+        {
+            if( !typedefParam->VisitCXXMethodDecl( arg ))
+                typedefParam = nullptr;
+        }
         if( unnecessaryOverride != nullptr )
         {
             if( !unnecessaryOverride->VisitCXXMethodDecl( arg ))
@@ -377,6 +551,11 @@ public:
             if( !unnecessaryParen->VisitCXXOperatorCallExpr( arg ))
                 unnecessaryParen = nullptr;
         }
+        if( unoAny != nullptr )
+        {
+            if( !unoAny->VisitCXXOperatorCallExpr( arg ))
+                unoAny = nullptr;
+        }
         return anyPluginActive();
     }
     bool VisitCXXRecordDecl(const class clang::CXXRecordDecl * arg)
@@ -388,6 +567,54 @@ public:
             if( !privateBase->VisitCXXRecordDecl( arg ))
                 privateBase = nullptr;
         }
+        if( sfxPoolItem != nullptr )
+        {
+            if( !sfxPoolItem->VisitCXXRecordDecl( arg ))
+                sfxPoolItem = nullptr;
+        }
+        if( weakBase != nullptr )
+        {
+            if( !weakBase->VisitCXXRecordDecl( arg ))
+                weakBase = nullptr;
+        }
+        return anyPluginActive();
+    }
+    bool VisitCXXStaticCastExpr(const class clang::CXXStaticCastExpr * arg)
+    {
+        if( ignoreLocation( arg ))
+            return true;
+        if( salUnicodeLiteral != nullptr )
+        {
+            if( !salUnicodeLiteral->VisitCXXStaticCastExpr( arg ))
+                salUnicodeLiteral = nullptr;
+        }
+        if( simplifyDynamicCast != nullptr )
+        {
+            if( !simplifyDynamicCast->VisitCXXStaticCastExpr( arg ))
+                simplifyDynamicCast = nullptr;
+        }
+        return anyPluginActive();
+    }
+    bool VisitCXXThisExpr(const class clang::CXXThisExpr * arg)
+    {
+        if( ignoreLocation( arg ))
+            return true;
+        if( staticMethods != nullptr )
+        {
+            if( !staticMethods->VisitCXXThisExpr( arg ))
+                staticMethods = nullptr;
+        }
+        return anyPluginActive();
+    }
+    bool VisitCXXTryStmt(const class clang::CXXTryStmt * arg)
+    {
+        if( ignoreLocation( arg ))
+            return true;
+        if( unnecessaryCatchThrow != nullptr )
+        {
+            if( !unnecessaryCatchThrow->VisitCXXTryStmt( arg ))
+                unnecessaryCatchThrow = nullptr;
+        }
         return anyPluginActive();
     }
     bool VisitCallExpr(const class clang::CallExpr * arg)
@@ -398,6 +625,16 @@ public:
         {
             if( !dbgUnhandledException->VisitCallExpr( arg ))
                 dbgUnhandledException = nullptr;
+        }
+        if( stringConcat != nullptr )
+        {
+            if( !stringConcat->VisitCallExpr( arg ))
+                stringConcat = nullptr;
+        }
+        if( stringConstant != nullptr )
+        {
+            if( !stringConstant->VisitCallExpr( arg ))
+                stringConstant = nullptr;
         }
         if( unnecessaryParen != nullptr )
         {
@@ -501,6 +738,16 @@ public:
             if( !inlineVisible->VisitFunctionDecl( arg ))
                 inlineVisible = nullptr;
         }
+        if( staticAnonymous != nullptr )
+        {
+            if( !staticAnonymous->VisitFunctionDecl( arg ))
+                staticAnonymous = nullptr;
+        }
+        if( typedefParam != nullptr )
+        {
+            if( !typedefParam->VisitFunctionDecl( arg ))
+                typedefParam = nullptr;
+        }
         if( unrefFun != nullptr )
         {
             if( !unrefFun->VisitFunctionDecl( arg ))
@@ -524,6 +771,17 @@ public:
         }
         return anyPluginActive();
     }
+    bool VisitImplicitCastExpr(const class clang::ImplicitCastExpr * arg)
+    {
+        if( ignoreLocation( arg ))
+            return true;
+        if( unicodeToChar != nullptr )
+        {
+            if( !unicodeToChar->VisitImplicitCastExpr( arg ))
+                unicodeToChar = nullptr;
+        }
+        return anyPluginActive();
+    }
     bool VisitMaterializeTemporaryExpr(const class clang::MaterializeTemporaryExpr * arg)
     {
         if( ignoreLocation( arg ))
@@ -539,6 +797,11 @@ public:
     {
         if( ignoreLocation( arg ))
             return true;
+        if( staticAccess != nullptr )
+        {
+            if( !staticAccess->VisitMemberExpr( arg ))
+                staticAccess = nullptr;
+        }
         if( unnecessaryParen != nullptr )
         {
             if( !unnecessaryParen->VisitMemberExpr( arg ))
@@ -617,6 +880,17 @@ public:
         }
         return anyPluginActive();
     }
+    bool VisitUnresolvedMemberExpr(const class clang::UnresolvedMemberExpr * arg)
+    {
+        if( ignoreLocation( arg ))
+            return true;
+        if( staticMethods != nullptr )
+        {
+            if( !staticMethods->VisitUnresolvedMemberExpr( arg ))
+                staticMethods = nullptr;
+        }
+        return anyPluginActive();
+    }
     bool VisitVarDecl(const class clang::VarDecl *const arg)
     {
         if( ignoreLocation( arg ))
@@ -669,6 +943,13 @@ public:
         }
         return anyPluginActive();
     }
+    bool TraverseCStyleCastExpr(class clang::CStyleCastExpr * arg)
+    {
+        UnicodeToChar* saveUnicodeToChar = unicodeToChar;
+        bool ret = RecursiveASTVisitor::TraverseCStyleCastExpr( arg );
+        unicodeToChar = saveUnicodeToChar;
+        return ret;
+    }
     bool TraverseCXXBindTemporaryExpr(class clang::CXXBindTemporaryExpr * arg)
     {
         SimplifyConstruct* saveSimplifyConstruct = simplifyConstruct;
@@ -698,6 +979,69 @@ public:
         dbgUnhandledException = saveDbgUnhandledException;
         return ret;
     }
+    bool TraverseCXXConstructExpr(class clang::CXXConstructExpr * arg)
+    {
+        StringConstant* saveStringConstant = stringConstant;
+        bool ret = RecursiveASTVisitor::TraverseCXXConstructExpr( arg );
+        stringConstant = saveStringConstant;
+        return ret;
+    }
+    bool TraverseCXXConstructorDecl(class clang::CXXConstructorDecl * arg)
+    {
+        StaticConstField* saveStaticConstField = staticConstField;
+        bool ret = RecursiveASTVisitor::TraverseCXXConstructorDecl( arg );
+        staticConstField = saveStaticConstField;
+        return ret;
+    }
+    bool TraverseCXXFunctionalCastExpr(class clang::CXXFunctionalCastExpr * arg)
+    {
+        UnicodeToChar* saveUnicodeToChar = unicodeToChar;
+        bool ret = RecursiveASTVisitor::TraverseCXXFunctionalCastExpr( arg );
+        unicodeToChar = saveUnicodeToChar;
+        return ret;
+    }
+    bool TraverseCXXMemberCallExpr(class clang::CXXMemberCallExpr * arg)
+    {
+        StringConstant* saveStringConstant = stringConstant;
+        bool ret = RecursiveASTVisitor::TraverseCXXMemberCallExpr( arg );
+        stringConstant = saveStringConstant;
+        return ret;
+    }
+    bool TraverseCXXMethodDecl(class clang::CXXMethodDecl * arg)
+    {
+        StaticMethods* saveStaticMethods = staticMethods;
+        bool ret = RecursiveASTVisitor::TraverseCXXMethodDecl( arg );
+        staticMethods = saveStaticMethods;
+        return ret;
+    }
+    bool TraverseCXXOperatorCallExpr(class clang::CXXOperatorCallExpr * arg)
+    {
+        StringConstant* saveStringConstant = stringConstant;
+        bool ret = RecursiveASTVisitor::TraverseCXXOperatorCallExpr( arg );
+        stringConstant = saveStringConstant;
+        return ret;
+    }
+    bool TraverseCXXStaticCastExpr(class clang::CXXStaticCastExpr * arg)
+    {
+        UnicodeToChar* saveUnicodeToChar = unicodeToChar;
+        bool ret = RecursiveASTVisitor::TraverseCXXStaticCastExpr( arg );
+        unicodeToChar = saveUnicodeToChar;
+        return ret;
+    }
+    bool TraverseCallExpr(class clang::CallExpr * arg)
+    {
+        StringConstant* saveStringConstant = stringConstant;
+        bool ret = RecursiveASTVisitor::TraverseCallExpr( arg );
+        stringConstant = saveStringConstant;
+        return ret;
+    }
+    bool TraverseConstructorInitializer(class clang::CXXCtorInitializer * arg)
+    {
+        StaticConstField* saveStaticConstField = staticConstField;
+        bool ret = RecursiveASTVisitor::TraverseConstructorInitializer( arg );
+        staticConstField = saveStaticConstField;
+        return ret;
+    }
     bool TraverseFriendDecl(class clang::FriendDecl * arg)
     {
         UnrefFun* saveUnrefFun = unrefFun;
@@ -713,6 +1057,13 @@ public:
                 saveUnrefFun = nullptr;
         }
         unrefFun = saveUnrefFun;
+        return ret;
+    }
+    bool TraverseIfStmt(class clang::IfStmt * arg)
+    {
+        SimplifyDynamicCast* saveSimplifyDynamicCast = simplifyDynamicCast;
+        bool ret = RecursiveASTVisitor::TraverseIfStmt( arg );
+        simplifyDynamicCast = saveSimplifyDynamicCast;
         return ret;
     }
     bool TraverseInitListExpr(class clang::InitListExpr * arg)
@@ -757,13 +1108,28 @@ private:
             || loopVarTooSmall != nullptr
             || privateBase != nullptr
             || reservedId != nullptr
+            || salUnicodeLiteral != nullptr
+            || sfxPoolItem != nullptr
             || simplifyConstruct != nullptr
+            || simplifyDynamicCast != nullptr
+            || staticAccess != nullptr
+            || staticAnonymous != nullptr
+            || staticConstField != nullptr
+            || staticMethods != nullptr
+            || stringConcat != nullptr
+            || stringConstant != nullptr
             || stringStatic != nullptr
             || subtleZeroInit != nullptr
+            || typedefParam != nullptr
+            || unicodeToChar != nullptr
+            || unnecessaryCatchThrow != nullptr
             || unnecessaryOverride != nullptr
             || unnecessaryParen != nullptr
+            || unoAny != nullptr
+            || unoQuery != nullptr
             || unrefFun != nullptr
             || unusedVariableCheck != nullptr
+            || weakBase != nullptr
             || weakObject != nullptr;
     }
     BadStatics* badStatics;
@@ -781,13 +1147,28 @@ private:
     LoopVarTooSmall* loopVarTooSmall;
     PrivateBase* privateBase;
     ReservedId* reservedId;
+    SalUnicodeLiteral* salUnicodeLiteral;
+    SfxPoolItem* sfxPoolItem;
     SimplifyConstruct* simplifyConstruct;
+    SimplifyDynamicCast* simplifyDynamicCast;
+    StaticAccess* staticAccess;
+    StaticAnonymous* staticAnonymous;
+    StaticConstField* staticConstField;
+    StaticMethods* staticMethods;
+    StringConcat* stringConcat;
+    StringConstant* stringConstant;
     StringStatic* stringStatic;
     SubtleZeroInit* subtleZeroInit;
+    TypedefParam* typedefParam;
+    UnicodeToChar* unicodeToChar;
+    UnnecessaryCatchThrow* unnecessaryCatchThrow;
     UnnecessaryOverride* unnecessaryOverride;
     UnnecessaryParen* unnecessaryParen;
+    UnoAny* unoAny;
+    UnoQuery* unoQuery;
     UnrefFun* unrefFun;
     UnusedVariableCheck* unusedVariableCheck;
+    WeakBase* weakBase;
     WeakObject* weakObject;
 };
 

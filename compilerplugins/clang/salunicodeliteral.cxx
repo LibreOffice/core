@@ -6,6 +6,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
+#ifndef LO_CLANG_SHARED_PLUGINS
 
 #include "check.hxx"
 #include "plugin.hxx"
@@ -41,16 +42,18 @@ public:
         return true;
     }
 
-private:
-    void run() override {
-        if (compiler.getLangOpts().CPlusPlus
+    bool preRun() override {
+        return compiler.getLangOpts().CPlusPlus
             && compiler.getPreprocessor().getIdentifierInfo(
-                "LIBO_INTERNAL_ONLY")->hasMacroDefinition())
-        {
-            TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
-        }
+                "LIBO_INTERNAL_ONLY")->hasMacroDefinition();
     }
 
+    void run() override {
+        if (preRun())
+            TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
+    }
+
+private:
     void check(ExplicitCastExpr const * expr) {
         if (ignoreLocation(expr)
             || isInUnoIncludeFile(expr->getExprLoc()))
@@ -90,9 +93,11 @@ private:
     }
 };
 
-static loplugin::Plugin::Registration<SalUnicodeLiteral> reg(
+static loplugin::Plugin::Registration<SalUnicodeLiteral> salunicodeliteral(
     "salunicodeliteral");
 
-}
+} // namespace
+
+#endif // LO_CLANG_SHARED_PLUGINS
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
