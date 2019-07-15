@@ -65,12 +65,12 @@ class SwXCell final : public SwXCellBaseClass,
     friend void   sw_setValue( SwXCell &rCell, double nVal );
 
     const SfxItemPropertySet*   m_pPropSet;
-    SwTableBox*                 pBox;       // only set in non-XML import
-    const SwStartNode*      pStartNode; // only set in XML import
+    SwTableBox*                 m_pBox;       // only set in non-XML import
+    const SwStartNode*      m_pStartNode; // only set in XML import
     SwFrameFormat* m_pTableFormat;
 
     // table position where pBox was found last
-    size_t nFndPos;
+    size_t m_nFndPos;
     css::uno::Reference<css::text::XText> m_xParentText;
     static size_t const NOTFOUND = SAL_MAX_SIZE;
 
@@ -140,7 +140,7 @@ public:
     virtual css::uno::Type SAL_CALL getElementType(  ) override;
     virtual sal_Bool SAL_CALL hasElements(  ) override;
 
-    SwTableBox* GetTableBox() const { return pBox; }
+    SwTableBox* GetTableBox() const { return m_pBox; }
     static SwXCell* CreateXCell(SwFrameFormat* pTableFormat, SwTableBox* pBox, SwTable *pTable = nullptr );
     SwTableBox* FindBox(SwTable* pTable, SwTableBox* pBox);
     SwFrameFormat* GetFrameFormat() const { return m_pTableFormat; }
