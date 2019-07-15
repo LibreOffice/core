@@ -48,8 +48,11 @@ void SetFieldUnit(weld::MetricSpinButton& rField, FieldUnit eUnit, bool bAll)
 
     rField.set_unit(eUnit);
 
-    if (FieldUnit::POINT == eUnit && rField.get_digits() > 1)
-        rField.set_digits(1);
+    if (FieldUnit::POINT == eUnit)
+    {
+        if (rField.get_digits() > 1)
+            rField.set_digits(1);
+    }
     else
         rField.set_digits(2);
 
