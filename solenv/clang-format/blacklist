@@ -18449,8 +18449,6 @@ writerfilter/source/dmapper/PropertyMap.cxx
 writerfilter/source/dmapper/PropertyMap.hxx
 writerfilter/source/dmapper/PropertyMapHelper.cxx
 writerfilter/source/dmapper/PropertyMapHelper.hxx
-writerfilter/source/dmapper/SdtHelper.cxx
-writerfilter/source/dmapper/SdtHelper.hxx
 writerfilter/source/dmapper/SectionColumnHandler.cxx
 writerfilter/source/dmapper/SectionColumnHandler.hxx
 writerfilter/source/dmapper/SettingsTable.cxx

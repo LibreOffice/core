@@ -69,29 +69,20 @@ class SdtHelper final : public virtual SvRefBase
     bool m_bOutsideAParagraph;
 
     /// Create and append the drawing::XControlShape, containing the various models.
-    void createControlShape(css::awt::Size aSize, css::uno::Reference<css::awt::XControlModel> const& xControlModel, const css::uno::Sequence<css::beans::PropertyValue>& rGrabBag);
+    void createControlShape(css::awt::Size aSize,
+                            css::uno::Reference<css::awt::XControlModel> const& xControlModel,
+                            const css::uno::Sequence<css::beans::PropertyValue>& rGrabBag);
+
 public:
     explicit SdtHelper(DomainMapper_Impl& rDM_Impl);
     ~SdtHelper() override;
 
-    std::vector<OUString>& getDropDownItems()
-    {
-        return m_aDropDownItems;
-    }
-    OUStringBuffer& getSdtTexts()
-    {
-        return m_aSdtTexts;
-    }
+    std::vector<OUString>& getDropDownItems() { return m_aDropDownItems; }
+    OUStringBuffer& getSdtTexts() { return m_aSdtTexts; }
 
-    OUStringBuffer& getDate()
-    {
-        return m_sDate;
-    }
+    OUStringBuffer& getDate() { return m_sDate; }
 
-    OUStringBuffer& getDateFormat()
-    {
-        return m_sDateFormat;
-    }
+    OUStringBuffer& getDateFormat() { return m_sDateFormat; }
 
     void setDateFieldStartRange(const css::uno::Reference<css::text::XTextRange>& xStartRange)
     {
@@ -101,25 +92,16 @@ public:
     /// Decides if we have enough information to create a date control.
     bool validateDateFormat();
 
-    OUStringBuffer& getLocale()
-    {
-        return m_sLocale;
-    }
+    OUStringBuffer& getLocale() { return m_sLocale; }
     /// If createControlShape() was ever called.
-    bool hasElements()
-    {
-        return m_bHasElements;
-    }
+    bool hasElements() { return m_bHasElements; }
 
     void setOutsideAParagraph(bool bOutsideAParagraph)
     {
         m_bOutsideAParagraph = bOutsideAParagraph;
     }
 
-    bool isOutsideAParagraph()
-    {
-        return m_bOutsideAParagraph;
-    }
+    bool isOutsideAParagraph() { return m_bOutsideAParagraph; }
 
     /// Create drop-down control from w:sdt's w:dropDownList.
     void createDropDownControl();
