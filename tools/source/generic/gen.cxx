@@ -308,4 +308,11 @@ long tools::Rectangle::getWidth() const
 {
     return nRight == RECT_EMPTY ? 0 : nRight - nLeft;
 }
+
+/// Returns the difference between bottom and top, assuming the range includes one end, but not the other.
+long tools::Rectangle::getHeight() const
+{
+    return nBottom == RECT_EMPTY ? 0 : nBottom - nTop;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
