@@ -23,6 +23,7 @@
 #include <vcl/notebookbar.hxx>
 #include <vcl/window.hxx>
 #include <o3tl/typed_flags_set.hxx>
+#include <vcl/NotebookBarAddonsMerger.hxx>
 
 #include <com/sun/star/frame/XFrame.hpp>
 
@@ -152,8 +153,10 @@ public:
     void                    SetMenuBarWindow( vcl::Window* pWindow );
     void                    SetMenuBarMode( bool bHide );
 
-    void                    SetNotebookBar(const OUString& rUIXMLDescription, const css::uno::Reference<css::frame::XFrame>& rFrame);
-    void                    CloseNotebookBar();
+    void SetNotebookBar(const OUString& rUIXMLDescription,
+                        const css::uno::Reference<css::frame::XFrame>& rFrame,
+                        const NotebookBarAddonsItem &aNotebookBarAddonsItem);
+    void CloseNotebookBar();
     const VclPtr<NotebookBar>& GetNotebookBar() const { return mpNotebookBar; }
 
     void                    SetMinOutputSize( long nWidth, long nHeight )
