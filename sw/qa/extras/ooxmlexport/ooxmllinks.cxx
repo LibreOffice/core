@@ -141,7 +141,9 @@ DECLARE_LINKS_IMPORT_TEST(testRelativeToRelativeImport, "relative-link.docx", US
 {
     uno::Reference<text::XTextRange> xParagraph = getParagraph(1);
     uno::Reference<text::XTextRange> xText = getRun(xParagraph, 1);
-    CPPUNIT_ASSERT_EQUAL(OUString("relative.docx"), getProperty<OUString>(xText, "HyperLinkURL"));
+    OUString sTarget = getProperty<OUString>(xText, "HyperLinkURL");
+    CPPUNIT_ASSERT(sTarget.startsWith("file:///"));
+    CPPUNIT_ASSERT(sTarget.endsWith("relative.docx"));
 }
 
 DECLARE_LINKS_IMPORT_TEST(testRelativeToAbsoluteImport, "relative-link.docx", USE_ABSOLUTE)
@@ -179,8 +181,9 @@ DECLARE_LINKS_EXPORT_TEST(testRelativeToRelativeExport, "relative-link.docx", US
     xmlDocPtr pXmlDoc = parseExport("word/_rels/document.xml.rels");
     if (!pXmlDoc)
         return;
-
-    assertXPath(pXmlDoc, "/rels:Relationships/rels:Relationship[2]", "Target", "relative.docx");
+    OUString sTarget = getXPath(pXmlDoc, "/rels:Relationships/rels:Relationship[2]", "Target");
+    CPPUNIT_ASSERT(sTarget.startsWith("../"));
+    CPPUNIT_ASSERT(sTarget.endsWith("relative.docx"));
 }
 
 DECLARE_LINKS_EXPORT_TEST(testRelativeToAbsoluteExport, "relative-link.docx", USE_ABSOLUTE,
