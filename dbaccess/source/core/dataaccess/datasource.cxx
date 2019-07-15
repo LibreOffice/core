@@ -602,8 +602,22 @@ Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const OUString
     Reference< XDriverManager > xManager;
 
 #if ENABLE_FIREBIRD_SDBC
+    bool bIgnoreMigration = false;
     bool bNeedMigration = false;
-    if(m_pImpl->m_sConnectURL == "sdbc:embedded:hsqldb")
+    Reference< XModel > xModel = m_pImpl->getModel_noCreate();
+    if ( xModel)
+    {
+        //See ODbTypeWizDialogSetup::SaveDatabaseDocument
+        ::comphelper::NamedValueCollection aArgs( xModel->getArgs() );
+        aArgs.get("IgnoreFirebirdMigration") >>= bIgnoreMigration;
+    }
+    else
+    {
+        //ignore when we don't have a model. E.g. Mailmerge, data sources, fields...
+        bIgnoreMigration = true;
+    }
+
+    if(!bIgnoreMigration && m_pImpl->m_sConnectURL == "sdbc:embedded:hsqldb")
     {
         Reference<XStorage> const xRootStorage = m_pImpl->getOrCreateRootStorage();
         OUString sMigrEnvVal;
