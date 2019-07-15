@@ -129,6 +129,23 @@ DECLARE_RTFEXPORT_TEST(testBtlrCell, "btlr-cell.rtf")
     CPPUNIT_ASSERT_EQUAL(text::WritingMode2::TB_RL, getProperty<sal_Int16>(xC1, "WritingMode"));
 }
 
+DECLARE_RTFIMPORT_TEST(testPageBorder, "page-border.rtf")
+{
+    uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName("Standard"),
+                                                   uno::UNO_QUERY);
+    auto aTopBorder = getProperty<table::BorderLine2>(xPageStyle, "TopBorder");
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(18), aTopBorder.LineWidth);
+
+    auto aLeftBorder = getProperty<table::BorderLine2>(xPageStyle, "LeftBorder");
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(35), aLeftBorder.LineWidth);
+
+    auto aBottomBorder = getProperty<table::BorderLine2>(xPageStyle, "BottomBorder");
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(53), aBottomBorder.LineWidth);
+
+    auto aRightBorder = getProperty<table::BorderLine2>(xPageStyle, "RightBorder");
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(71), aRightBorder.LineWidth);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
