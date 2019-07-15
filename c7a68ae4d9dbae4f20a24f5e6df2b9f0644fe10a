@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "bf659307_e5096fdd",
+        "filename": "vcl/inc/qt5/Qt5Instance.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2019-07-15T06:14:15Z",
+      "side": 1,
+      "message": "Don\u0027t know what exactly \"hasNativeFileSelection\" means in LO context, but at least from Qt perspective, native file dialog is only used on KDE Plasma with the qt5 VCL plugin, s. Qt5FilePicker ctor.",
+      "range": {
+        "startLine": 145,
+        "startChar": 4,
+        "endLine": 145,
+        "endChar": 65
+      },
+      "revId": "c7a68ae4d9dbae4f20a24f5e6df2b9f0644fe10a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bf659307_a545b719",
         "filename": "vcl/unx/kde5/KDE5SalInstance.cxx",
         "patchSetId": 1
