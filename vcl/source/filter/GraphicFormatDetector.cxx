@@ -90,6 +90,10 @@ sal_uInt8* ImplSearchEntry(sal_uInt8* pSource, sal_uInt8 const* pDest, sal_uLong
 GraphicFormatDetector::GraphicFormatDetector(SvStream& rStream, OUString const& rFormatExtension)
     : mrStream(rStream)
     , maExtension(rFormatExtension)
+    , mnFirstLong(0)
+    , mnSecondLong(0)
+    , mnStreamPosition(0)
+    , mnStreamLength(0)
 {
 }
 
