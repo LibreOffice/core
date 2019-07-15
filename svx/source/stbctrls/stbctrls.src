@@ -72,7 +72,7 @@ String RID_SVXSTR_XMLSEC_SIG_OK_NO_VERIFY
 
 String RID_SVXSTR_XMLSEC_SIG_NOT_OK
 {
-    Text [ en-US ] = "Digital Signature: The document signature does not match the document content. We strongly recommend you not to trust this document." ;
+    Text [ en-US ] = "Digital Signature: The document signature does not match the document content. We strongly recommend that you do not trust this document." ;
 };
 
 String RID_SVXSTR_XMLSEC_NO_SIG
