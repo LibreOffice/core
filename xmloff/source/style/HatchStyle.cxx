@@ -125,13 +125,12 @@ void XMLHatchStyleImport::importXML(
                 rUnitConverter.convertMeasureToCore(aHatch.Distance, rStrValue);
                 break;
             case XML_TOK_HATCH_ROTATION:
-                {
-                    sal_Int32 nValue;
-                    ::sax::Converter::convertNumber(nValue, rStrValue, 0, 3600);
-                    aHatch.Angle = sal_Int16( nValue );
-                }
+            {
+                sal_Int32 nValue;
+                if (::sax::Converter::convertNumber(nValue, rStrValue, 0, 3600))
+                    aHatch.Angle = sal_Int16(nValue);
                 break;
-
+            }
             default:
                 SAL_INFO("xmloff.style", "Unknown token at import hatch style");
         }
