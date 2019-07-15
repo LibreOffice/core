@@ -90,7 +90,9 @@ public:
     void testDateFormFieldInsertion();
     void testDateFormFieldContentOperations();
     void testDateFormFieldCurrentDateHandling();
-    //void testDateFormFieldCurrentDateInvalidation();
+#if !defined(_WIN32)
+    void testDateFormFieldCurrentDateInvalidation();
+#endif
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest2);
     CPPUNIT_TEST(testRedlineMoveInsertInDelete);
@@ -125,7 +127,9 @@ public:
     CPPUNIT_TEST(testDateFormFieldInsertion);
     CPPUNIT_TEST(testDateFormFieldContentOperations);
     CPPUNIT_TEST(testDateFormFieldCurrentDateHandling);
-    //CPPUNIT_TEST(testDateFormFieldCurrentDateInvalidation);
+#if !defined(_WIN32)
+    CPPUNIT_TEST(testDateFormFieldCurrentDateInvalidation);
+#endif
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -1466,7 +1470,8 @@ void SwUiWriterTest2::testDateFormFieldCurrentDateHandling()
     CPPUNIT_ASSERT_EQUAL(OUString("2031-06-01"), sCurrentDate);
 }
 
-/*void SwUiWriterTest2::testDateFormFieldCurrentDateInvalidation()
+#if !defined(_WIN32)
+void SwUiWriterTest2::testDateFormFieldCurrentDateInvalidation()
 {
     SwDoc* pDoc = createDoc();
     CPPUNIT_ASSERT(pDoc);
@@ -1522,7 +1527,8 @@ void SwUiWriterTest2::testDateFormFieldCurrentDateHandling()
         pResult->second >>= sCurrentDate;
     }
     CPPUNIT_ASSERT_EQUAL(OUString(""), sCurrentDate);
-}*/
+}
+#endif
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest2);
 
