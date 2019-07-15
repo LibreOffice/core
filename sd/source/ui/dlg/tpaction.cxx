@@ -621,51 +621,51 @@ IMPL_LINK_NOARG(SdTPAction, CheckFileHdl, weld::Widget&, void)
     if( aFile == aLastFile )
         return;
 
-    // check if it is a valid draw file
-    SfxMedium aMedium( aFile,
-                StreamMode::READ | StreamMode::NOCREATE );
+    bool bHideTreeDocument = true;
 
-    if( aMedium.IsStorage() )
+    if (mpDoc)
     {
-        WaitObject aWait( GetParentDialog() );
+        // check if it is a valid draw file
+        SfxMedium aMedium( aFile,
+                    StreamMode::READ | StreamMode::NOCREATE );
 
-        bool bHideTreeDocument = true;
-
-        // is it a draw file?
-        // open with READ, otherwise the Storages might write into the file!
-        uno::Reference < embed::XStorage > xStorage = aMedium.GetStorage();
-        DBG_ASSERT( xStorage.is(), "No storage!" );
-
-        uno::Reference < container::XNameAccess > xAccess( xStorage, uno::UNO_QUERY );
-        if (xAccess.is())
+        if( aMedium.IsStorage() )
         {
-            try
-            {
-                if (xAccess->hasByName(pStarDrawXMLContent) ||
-                    xAccess->hasByName(pStarDrawOldXMLContent))
-                {
-                    if (SdDrawDocument* pBookmarkDoc = mpDoc->OpenBookmarkDoc(aFile))
-                    {
-                        aLastFile = aFile;
+            WaitObject aWait( GetParentDialog() );
 
-                        m_xLbTreeDocument->clear();
-                        m_xLbTreeDocument->Fill(pBookmarkDoc, aFile);
-                        mpDoc->CloseBookmarkDoc();
-                        m_xLbTreeDocument->show();
-                        bHideTreeDocument = false;
+            // is it a draw file?
+            // open with READ, otherwise the Storages might write into the file!
+            uno::Reference < embed::XStorage > xStorage = aMedium.GetStorage();
+            DBG_ASSERT( xStorage.is(), "No storage!" );
+
+            uno::Reference < container::XNameAccess > xAccess( xStorage, uno::UNO_QUERY );
+            if (xAccess.is())
+            {
+                try
+                {
+                    if (xAccess->hasByName(pStarDrawXMLContent) ||
+                        xAccess->hasByName(pStarDrawOldXMLContent))
+                    {
+                        if (SdDrawDocument* pBookmarkDoc = mpDoc->OpenBookmarkDoc(aFile))
+                        {
+                            aLastFile = aFile;
+
+                            m_xLbTreeDocument->clear();
+                            m_xLbTreeDocument->Fill(pBookmarkDoc, aFile);
+                            mpDoc->CloseBookmarkDoc();
+                            m_xLbTreeDocument->show();
+                            bHideTreeDocument = false;
+                        }
                     }
                 }
-            }
-            catch (...)
-            {
+                catch (...)
+                {
+                }
             }
         }
-
-        if (bHideTreeDocument)
-            m_xLbTreeDocument->hide();
-
     }
-    else
+
+    if (bHideTreeDocument)
         m_xLbTreeDocument->hide();
 }
 
