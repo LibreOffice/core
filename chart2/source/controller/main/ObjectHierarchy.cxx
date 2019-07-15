@@ -767,7 +767,7 @@ bool ObjectKeyNavigation::next()
     {
         ObjectHierarchy::tChildContainer::const_iterator aIt(
             std::find( aSiblings.begin(), aSiblings.end(), getCurrentSelection()));
-        OSL_ASSERT( aIt != aSiblings.end());
+        assert(aIt != aSiblings.end());
         if( ++aIt == aSiblings.end())
             aIt = aSiblings.begin();
         setCurrentSelection( *aIt );
