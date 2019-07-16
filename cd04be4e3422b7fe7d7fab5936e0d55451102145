@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_36c55b8f",
+        "filename": "sc/source/ui/view/gridwin4.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 577,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2019-07-16T10:11:29Z",
+      "side": 1,
+      "message": "Calculating all breaks on large documents can be a huge performance penalty; there\u0027s a reason this is not done after document load or on the fly. Furthermore, UpdatePages() may calculate breaks for more then just the sheet/tab passed as argument if other sheets use the same print style as on that sheet.",
+      "range": {
+        "startLine": 577,
+        "startChar": 23,
+        "endLine": 577,
+        "endChar": 34
+      },
+      "revId": "cd04be4e3422b7fe7d7fab5936e0d55451102145",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_16bcd703",
+        "filename": "sc/source/ui/view/gridwin4.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 579,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2019-07-16T10:11:29Z",
+      "side": 1,
+      "message": "This UpdatePageBreaks() is unnecessary as it duplicates the same call already happening via ScPrintFunc::UpdatePages() -\u003e ScPrintFunc::ResetBreaks().",
+      "range": {
+        "startLine": 579,
+        "startChar": 17,
+        "endLine": 579,
+        "endChar": 33
+      },
+      "revId": "cd04be4e3422b7fe7d7fab5936e0d55451102145",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
