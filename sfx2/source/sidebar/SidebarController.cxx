@@ -192,7 +192,6 @@ void SidebarController::registerSidebarForFrame(SidebarController* pController, 
 
 void SidebarController::unregisterSidebarForFrame(SidebarController* pController, const css::uno::Reference<css::frame::XController>& xController)
 {
-    pController->disposeDecks();
     css::uno::Reference<css::ui::XContextChangeEventMultiplexer> xMultiplexer (
         css::ui::ContextChangeEventMultiplexer::get(
             ::comphelper::getProcessComponentContext()));
@@ -228,22 +227,7 @@ void SAL_CALL SidebarController::disposing()
     }
 
     // clear decks
-    ResourceManager::DeckContextDescriptorContainer aDecks;
-
-    mpResourceManager->GetMatchingDecks (
-            aDecks,
-            GetCurrentContext(),
-            IsDocumentReadOnly(),
-            mxFrame->getController());
-
-    for (const auto& rDeck : aDecks)
-    {
-        std::shared_ptr<DeckDescriptor> deckDesc = mpResourceManager->GetDeckDescriptor(rDeck.msId);
-
-        VclPtr<Deck> aDeck = deckDesc->mpDeck;
-        if (aDeck)
-            aDeck.disposeAndClear();
-    }
+    disposeDecks();
 
     uno::Reference<css::frame::XController> xController = mxFrame->getController();
     if (!xController.is())
@@ -698,9 +682,6 @@ void SidebarController::SwitchToDeck (
     const DeckDescriptor& rDeckDescriptor,
     const Context& rContext)
 {
-
-    maFocusManager.Clear();
-
     const bool bForceNewDeck ((mnRequestedForceFlags&SwitchFlag_ForceNewDeck)!=0);
     const bool bForceNewPanels ((mnRequestedForceFlags&SwitchFlag_ForceNewPanels)!=0);
     mnRequestedForceFlags = SwitchFlag_NoForce;
