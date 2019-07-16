@@ -567,7 +567,6 @@
         <menu:menupopup>
           <menu:menuitem menu:id=".uno:SetLanguageAllTextMenu"/>
           <menu:menuseparator/>
-          <menu:menuitem menu:id=".uno:Hyphenation" menu:style="text"/>
           <menu:menuitem menu:id=".uno:ChineseConversion"/>
           <menu:menuitem menu:id=".uno:HangulHanjaConversion"/>
           <menu:menuseparator/>
