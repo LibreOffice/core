@@ -6,6 +6,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
+#ifndef LO_CLANG_SHARED_PLUGINS
 
 #include "check.hxx"
 #include "compat.hxx"
@@ -21,15 +22,6 @@ public:
     explicit RedundantFCast(loplugin::InstantiationData const& data)
         : FilteringPlugin(data)
     {
-    }
-
-    bool TraverseFunctionDecl(FunctionDecl* functionDecl)
-    {
-        auto prev = m_CurrentFunctionDecl;
-        m_CurrentFunctionDecl = functionDecl;
-        auto rv = RecursiveASTVisitor<RedundantFCast>::TraverseFunctionDecl(functionDecl);
-        m_CurrentFunctionDecl = prev;
-        return rv;
     }
 
     bool VisitReturnStmt(ReturnStmt const* returnStmt)
@@ -206,25 +198,32 @@ public:
         return true;
     }
 
-private:
-    void run() override
+    bool preRun() override
     {
         if (!compiler.getLangOpts().CPlusPlus)
-            return;
+            return false;
         std::string fn = handler.getMainFileName();
         loplugin::normalizeDotDotInFilePath(fn);
         // necessary on some other platforms
         if (fn == SRCDIR "/sal/osl/unx/socket.cxx")
-            return;
+            return false;
         // compile-time check of constant
         if (fn == SRCDIR "/bridges/source/jni_uno/jni_bridge.cxx")
-            return;
-        TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
+            return false;
+        return true;
     }
-    FunctionDecl const* m_CurrentFunctionDecl;
+
+    void run() override
+    {
+        if (preRun())
+            TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
+    }
 };
 
-static loplugin::Plugin::Registration<RedundantFCast> reg("redundantfcast");
-}
+static loplugin::Plugin::Registration<RedundantFCast> redundantfcast("redundantfcast");
+
+} // namespace
+
+#endif // LO_CLANG_SHARED_PLUGINS
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
