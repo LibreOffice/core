@@ -192,21 +192,12 @@ void SidebarController::registerSidebarForFrame(SidebarController* pController, 
 
 void SidebarController::unregisterSidebarForFrame(SidebarController* pController, const css::uno::Reference<css::frame::XController>& xController)
 {
-    pController->disposeDecks();
     css::uno::Reference<css::ui::XContextChangeEventMultiplexer> xMultiplexer (
         css::ui::ContextChangeEventMultiplexer::get(
             ::comphelper::getProcessComponentContext()));
     xMultiplexer->removeContextChangeEventListener(
         static_cast<css::ui::XContextChangeEventListener*>(pController),
         xController);
-}
-
-void SidebarController::disposeDecks()
-{
-    SolarMutexGuard aSolarMutexGuard;
-    mpCurrentDeck.clear();
-    maFocusManager.Clear();
-    mpResourceManager->disposeDecks();
 }
 
 void SAL_CALL SidebarController::disposing()
@@ -228,6 +219,7 @@ void SAL_CALL SidebarController::disposing()
     }
 
     // clear decks
+    mpCurrentDeck.clear();
     ResourceManager::DeckContextDescriptorContainer aDecks;
 
     mpResourceManager->GetMatchingDecks (

@@ -155,8 +155,6 @@ public:
 
     void updateModel(const css::uno::Reference<css::frame::XModel>& xModel);
 
-    void disposeDecks();
-
     void FadeIn();
     void FadeOut();
 

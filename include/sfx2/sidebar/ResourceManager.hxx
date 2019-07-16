@@ -55,8 +55,6 @@ public:
     void SaveDeckSettings(const DeckDescriptor* pDeckDesc);
     void SaveLastActiveDeck(const Context& rContext, const OUString& rActiveDeck);
 
-    void disposeDecks();
-
     class DeckContextDescriptor
     {
     public:

@@ -780,14 +780,6 @@ void ResourceManager::UpdateModel(const css::uno::Reference<css::frame::XModel>&
     }
 }
 
-void ResourceManager::disposeDecks()
-{
-    for (auto const& deck : maDecks)
-    {
-        deck->mpDeck.disposeAndClear();
-    }
-}
-
 } } // end of namespace sfx2::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
