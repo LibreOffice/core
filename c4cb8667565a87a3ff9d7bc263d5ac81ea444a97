@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_f69123f3",
+        "filename": "svx/source/svdraw/svdpage.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 562,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-07-16T14:30:39Z",
+      "side": 1,
+      "message": "here\u0027s a funny algorithm that might work\n\n1. duplicate the textboxes in the array\n   \u0026 create separate list of textboxes\n2. sort textboxes\n3. process list of textboxes into increments (same length as input array)\n4. iterate \u0026 increment\n\n[ source ]\n\n[0 1 2 3]\n\n-\u003eduplicate \u0026 list\n[0 0 1 2 2 3]\n0 2\n\n-\u003esort\n0 2\n\n-\u003eincrements:\n0 1 1 2\n\n-\u003eadd (2 consecutive are duplicate, 2nd always +1)\n[0 0+1 2 3 3+1 5]\n\n\n[2 0 1]\n-\u003e dup.\u0026list\n[2 2 0 0 1]\n2 0\n-\u003e sort\n0 2\n-\u003e incr.\n0 1 1\n-\u003e add\n[3 3+1 0 0+1 2]",
+      "revId": "c4cb8667565a87a3ff9d7bc263d5ac81ea444a97",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_96e1c701",
+        "filename": "svx/source/svdraw/svdpage.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 588,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-07-16T14:30:39Z",
+      "side": 1,
+      "message": "hmm... this will reorder the objects\u0027s child indexes - do we really need to do that?\n\ni\u0027d assume the ZOrder can be independent of the child index... but evidently SetObjectOrdNum does the same...\n\n... and SwTextBoxHelper::getOrdNum apparently assumes they\u0027re the same",
+      "revId": "c4cb8667565a87a3ff9d7bc263d5ac81ea444a97",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_b6a08ba7",
+        "filename": "sw/qa/extras/uiwriter/uiwriter.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1354,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-07-16T14:30:39Z",
+      "side": 1,
+      "message": "if we follow the assumption that the child order is the same as the zorder, then 2 is the correct index for the 2nd shape, and 1 is the correct index for the textframe of the 1st shape",
+      "revId": "c4cb8667565a87a3ff9d7bc263d5ac81ea444a97",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
