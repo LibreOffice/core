@@ -3027,19 +3027,7 @@ static void doc_postWindowExtTextInputEvent(LibreOfficeKitDocument* pThis, unsig
         return;
     }
 
-    switch (nType)
-    {
-    case LOK_EXT_TEXTINPUT:
-        pWindow->PostExtTextInputEvent(VclEventId::ExtTextInput,
-                                       OUString::fromUtf8(OString(pText, strlen(pText))));
-        break;
-    case LOK_EXT_TEXTINPUT_END:
-        pWindow->PostExtTextInputEvent(VclEventId::EndExtTextInput,
-                                       OUString::fromUtf8(OString(pText, strlen(pText))));
-        break;
-    default:
-        assert(false && "Unhandled External Text input event!");
-    }
+    SfxLokHelper::postExtTextEventAsync(pWindow, nType, OUString::fromUtf8(OString(pText, strlen(pText))));
 }
 
 static void doc_removeTextContext(LibreOfficeKitDocument* pThis, unsigned nLOKWindowId, int nCharBefore, int nCharAfter)
