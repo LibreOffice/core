@@ -17,9 +17,11 @@ $(eval $(call gb_Package_add_files,infoplist,$(PRODUCTNAME_WITHOUT_SPACES).app/C
 	Info.plist \
 ))
 
-$(foreach lang,$(filter ca cs da de el en es fi fr hr hu id it ja ko ms nl no pl pt pt_PT ro ru sk sv th tr uk vi zh_CN zh_TW,$(gb_WITH_LANG)),\
+$(foreach lang,$(filter ca cs da de el es fi fr hr hu id it ja ko ms nl no pl pt pt_PT ro ru sk sv th tr uk vi zh_CN zh_TW,$(gb_WITH_LANG)),\
 $(eval $(call gb_Package_add_files,infoplist,$(PRODUCTNAME_WITHOUT_SPACES).app/Contents/Resources/$(lang).lproj,\
 	InfoPlist_$(lang)/InfoPlist.strings \
 )))
+
+$(eval $(call gb_Package_add_empty_directory,infoplist,$(PRODUCTNAME_WITHOUT_SPACES).app/Contents/Resources/en.lproj))
 
 # vim: set noet sw=4 ts=4:
