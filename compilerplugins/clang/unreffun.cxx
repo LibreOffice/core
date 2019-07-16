@@ -78,14 +78,13 @@ public:
         friendFunction.push( dyn_cast_or_null<FunctionDecl>(decl->getFriendDecl()));
         return true;
     }
-    bool PostTraverseFriendDecl(FriendDecl *, bool ) {
+    void PostTraverseFriendDecl(FriendDecl *) {
         friendFunction.pop();
-        return true;
     }
     bool TraverseFriendDecl(FriendDecl * decl) {
         PreTraverseFriendDecl(decl);
         auto const ret = RecursiveASTVisitor::TraverseFriendDecl(decl);
-        PostTraverseFriendDecl(decl, ret);
+        PostTraverseFriendDecl(decl);
         return ret;
     }
 

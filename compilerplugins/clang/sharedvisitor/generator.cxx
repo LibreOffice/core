@@ -318,9 +318,7 @@ void generateVisitor( PluginType type )
                 output << "        if( " << plugin.variableName << " != nullptr ";
                 output << ")\n";
                 output << "        {\n";
-                output << "            if( !" << plugin.variableName << "->Post" << traverse.name << "( arg, ret ))\n";
-                // This will disable the plugin for the rest of the run.
-                output << "                save" << plugin.className << " = nullptr;\n";
+                output << "            " << plugin.variableName << "->Post" << traverse.name << "( arg );\n";
                 output << "        }\n";
             }
             output << "        " << plugin.variableName << " = save" << plugin.className << ";\n";

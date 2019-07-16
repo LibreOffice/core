@@ -1008,8 +1008,7 @@ public:
         bool ret = RecursiveASTVisitor::TraverseCStyleCastExpr( arg );
         if( unicodeToChar != nullptr )
         {
-            if( !unicodeToChar->PostTraverseCStyleCastExpr( arg, ret ))
-                saveUnicodeToChar = nullptr;
+            unicodeToChar->PostTraverseCStyleCastExpr( arg );
         }
         unicodeToChar = saveUnicodeToChar;
         return ret;
@@ -1037,8 +1036,7 @@ public:
         bool ret = RecursiveASTVisitor::TraverseCXXCatchStmt( arg );
         if( dbgUnhandledException != nullptr )
         {
-            if( !dbgUnhandledException->PostTraverseCXXCatchStmt( arg, ret ))
-                saveDbgUnhandledException = nullptr;
+            dbgUnhandledException->PostTraverseCXXCatchStmt( arg );
         }
         dbgUnhandledException = saveDbgUnhandledException;
         return ret;
@@ -1054,8 +1052,7 @@ public:
         bool ret = RecursiveASTVisitor::TraverseCXXFunctionalCastExpr( arg );
         if( unicodeToChar != nullptr )
         {
-            if( !unicodeToChar->PostTraverseCXXFunctionalCastExpr( arg, ret ))
-                saveUnicodeToChar = nullptr;
+            unicodeToChar->PostTraverseCXXFunctionalCastExpr( arg );
         }
         unicodeToChar = saveUnicodeToChar;
         return ret;
@@ -1071,8 +1068,7 @@ public:
         bool ret = RecursiveASTVisitor::TraverseCXXStaticCastExpr( arg );
         if( unicodeToChar != nullptr )
         {
-            if( !unicodeToChar->PostTraverseCXXStaticCastExpr( arg, ret ))
-                saveUnicodeToChar = nullptr;
+            unicodeToChar->PostTraverseCXXStaticCastExpr( arg );
         }
         unicodeToChar = saveUnicodeToChar;
         return ret;
@@ -1088,8 +1084,7 @@ public:
         bool ret = RecursiveASTVisitor::TraverseFriendDecl( arg );
         if( unrefFun != nullptr )
         {
-            if( !unrefFun->PostTraverseFriendDecl( arg, ret ))
-                saveUnrefFun = nullptr;
+            unrefFun->PostTraverseFriendDecl( arg );
         }
         unrefFun = saveUnrefFun;
         return ret;
