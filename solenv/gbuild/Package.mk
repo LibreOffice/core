@@ -129,6 +129,26 @@ gb_Package_OUTDIR_$(1) := $(2)
 
 endef
 
+# Add empty directory (if it's non-empty, don't use this, use
+# gb_Package_add_file for the files in it instead!)
+define gb_Package_add_empty_directory
+$(call gb_Package__check,$(1))
+$(if $(strip $(2)),,$(call gb_Output_error,gb_Package_add_directory requires 2 arguments))
+$(call gb_Package_get_target,$(1)) :| $$(gb_Package_OUTDIR_$(1))/$(2)/.dir
+gb_Package_$(1)_FILES += $$(gb_Package_OUTDIR_$(1))/$(2)
+$(call gb_Package_get_clean_target,$(1)) : FILES += $$(gb_Package_OUTDIR_$(1))/$(2)
+
+endef
+
+# Example:
+# $(eval $(call gb_Package_add_empty_directories,foo_inc,inc/foo))
+# # -> inc/foo
+define gb_Package_add_empty_directories
+$(call gb_Package__check,$(1))
+$(foreach file,$(2),$(call gb_Package_add_empty_directory,$(1),$(file)))
+
+endef
+
 define gb_Package_add_symbolic_link
 $(call gb_Package__check,$(1))
 $(if $(strip $(3)),,$(call gb_Output_error,gb_Package_add_symbolic_link requires 3 arguments))

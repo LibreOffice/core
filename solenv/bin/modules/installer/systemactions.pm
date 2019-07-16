@@ -277,6 +277,16 @@ sub create_directories
 # Copying one file
 ########################
 
+sub is_empty_dir
+{
+    my ($dir) = @_;
+    my ($handle, $count);
+    opendir($handle, $dir) or return 0;
+    $count = scalar(grep { $_ ne '.' && $_ ne '..' } readdir($handle));
+    closedir($handle);
+    return $count == 0;
+}
+
 sub copy_one_file
 {
     my ($source, $dest) = @_;
@@ -285,6 +295,10 @@ sub copy_one_file
 
     if ( -l $source ) {
         $copyreturn = symlink(readlink("$source"), "$dest");
+    }
+    elsif (-d $source && is_empty_dir($source)) {
+        my $mode = (stat($source))[2] & 07777;
+        $copyreturn = mkdir($dest, $mode);
     }
     else {
         $copyreturn = copy($source, $dest);
