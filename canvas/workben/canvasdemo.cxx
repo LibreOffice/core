@@ -37,6 +37,7 @@
 #include <com/sun/star/rendering/XSpriteCanvas.hpp>
 #include <com/sun/star/ucb/UniversalContentBroker.hpp>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/random.hxx>
 #include <cppuhelper/bootstrap.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/svapp.hxx>
@@ -424,9 +425,9 @@ class DemoRenderer
             maRenderState = maOldRenderState; // pop
         }
 
-    double gimmerand()
+        double gimmerand()
         {
-            return static_cast<double>(rand()) / RAND_MAX * 100 + 50;
+            return comphelper::rng::uniform_real_distribution(0, 100);
         }
 
         void drawArcs()
