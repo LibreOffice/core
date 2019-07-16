@@ -8,6 +8,7 @@
  * License. See LICENSE.TXT for details.
  *
  */
+#ifndef LO_CLANG_SHARED_PLUGINS
 
 #include "plugin.hxx"
 #include "check.hxx"
@@ -27,7 +28,19 @@ class SalLogAreas
     public:
         explicit SalLogAreas( const loplugin::InstantiationData& data )
             : FilteringPlugin(data), inFunction(nullptr) {}
-        virtual void run() override;
+
+        bool preRun() override {
+            return true;
+        }
+
+        void run() override {
+            if (preRun())
+                {
+                lastSalDetailLogStreamMacro = SourceLocation();
+                TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
+                }
+        }
+
         bool VisitFunctionDecl( const FunctionDecl* function );
         bool VisitCallExpr( const CallExpr* call );
     private:
@@ -50,12 +63,6 @@ Check area used in SAL_INFO/SAL_WARN macros against the list in include/sal/log-
 report if the area is not listed there. The fix is either use a proper area or add it to the list
 if appropriate.
 */
-
-void SalLogAreas::run()
-    {
-    lastSalDetailLogStreamMacro = SourceLocation();
-    TraverseDecl( compiler.getASTContext().getTranslationUnitDecl());
-    }
 
 bool SalLogAreas::VisitFunctionDecl( const FunctionDecl* function )
     {
@@ -261,8 +268,10 @@ void SalLogAreas::readLogAreas()
         report( DiagnosticsEngine::Warning, "error reading log areas" );
     }
 
-static loplugin::Plugin::Registration< SalLogAreas > X( "sallogareas" );
+static loplugin::Plugin::Registration< SalLogAreas > sallogareas( "sallogareas" );
 
 } // namespace
+
+#endif // LO_CLANG_SHARED_PLUGINS
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
