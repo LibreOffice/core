@@ -1078,7 +1078,7 @@ bool SdrObjCustomShape::IsDefaultGeometry( const DefaultType eDefaultType ) cons
             const OUString sViewBox( "ViewBox" );
             const Any* pViewBox = const_cast<SdrCustomShapeGeometryItem&>(aGeometryItem).GetPropertyValueByName( sViewBox );
             css::awt::Rectangle aViewBox;
-            if ( pViewBox && ( *pViewBox >>= aViewBox ) )
+            if (pViewBox && (*pViewBox >>= aViewBox) && pDefCustomShape)
             {
                 if ( ( aViewBox.Width == pDefCustomShape->nCoordWidth )
                     && ( aViewBox.Height == pDefCustomShape->nCoordHeight ) )
