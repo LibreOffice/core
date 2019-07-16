@@ -67,6 +67,8 @@ SwModalRedlineAcceptDlg::~SwModalRedlineAcceptDlg()
     m_xImplDlg->FillInfo(sExtraData);
     SvtViewOptions aDlgOpt(EViewType::Dialog, OStringToOUString(m_xDialog->get_help_id(), RTL_TEXTENCODING_UTF8));
     aDlgOpt.SetUserItem("UserItem", css::uno::makeAny(sExtraData));
+
+    m_xDialog->set_modal(false);
 }
 
 void SwModalRedlineAcceptDlg::Activate()
