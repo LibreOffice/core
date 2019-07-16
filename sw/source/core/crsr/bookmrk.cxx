@@ -583,19 +583,26 @@ namespace sw { namespace mark
         {
             if(!m_pButton)
                 m_pButton = VclPtr<DateFormFieldButton>::Create(pEditWin, *this, m_pNumberFormatter);
-            m_pButton->CalcPosAndSize(m_aPaintAreaEnd);
+            SwRect aPaintArea(m_aPaintAreaStart.TopLeft(), m_aPaintAreaEnd.BottomRight());
+            m_pButton->CalcPosAndSize(aPaintArea);
             m_pButton->Show();
         }
     }
 
     void DateFieldmark::SetPortionPaintAreaStart(const SwRect& rPortionPaintArea)
     {
+        if (rPortionPaintArea.IsEmpty())
+            return;
+
         m_aPaintAreaStart = rPortionPaintArea;
         InvalidateCurrentDateParam();
     }
 
     void DateFieldmark::SetPortionPaintAreaEnd(const SwRect& rPortionPaintArea)
     {
+        if (rPortionPaintArea.IsEmpty())
+            return;
+
         if(m_aPaintAreaEnd == rPortionPaintArea &&
            m_pButton && m_pButton->IsVisible())
             return;
