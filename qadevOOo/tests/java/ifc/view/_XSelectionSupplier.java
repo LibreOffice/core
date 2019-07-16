@@ -123,7 +123,7 @@ public class _XSelectionSupplier extends MultiMethodTest {
                 if (locRes) {
 
                     if (ObjCompare != null) {
-                        ObjCompare.compare(selections[i], curSelection);
+                        compRes = ObjCompare.compare(selections[i], curSelection) == 0;
                     } else {
                         compRes = util.ValueComparer.equalValue(selections[i], curSelection);
                     }
