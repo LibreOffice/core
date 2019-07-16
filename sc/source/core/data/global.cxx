@@ -778,22 +778,9 @@ void ScGlobal::OpenURL(const OUString& rURL, const OUString& rTarget)
 {
     // OpenURL is always called in the GridWindow by mouse clicks in some way or another.
     // That's why pScActiveViewShell and nScClickMouseModifier are correct.
-    // SvtSecurityOptions to access Libreoffice global security parameters
-    SvtSecurityOptions aSecOpt;
-    bool bCtrlClickHappened = (nScClickMouseModifier & KEY_MOD1);
-    bool bCtrlClickSecOption = aSecOpt.IsOptionSet( SvtSecurityOptions::EOption::CtrlClickHyperlink );
-    if( bCtrlClickHappened && ! bCtrlClickSecOption )
-    {
-        // return since ctrl+click happened when the
-        // ctrl+click security option was disabled, link should not open
+
+    if (!ShouldOpenURL())
         return;
-    }
-    else if( ! bCtrlClickHappened && bCtrlClickSecOption )
-    {
-        // ctrl+click did not happen; only click happened maybe with some
-        // other key combo. and security option is set, so return
-        return;
-    }
 
     SfxViewFrame* pViewFrm = SfxViewFrame::Current();
     if (!pViewFrm)
@@ -850,6 +837,26 @@ void ScGlobal::OpenURL(const OUString& rURL, const OUString& rTarget)
     pViewFrm->GetDispatcher()->ExecuteList(SID_OPENDOC,
             SfxCallMode::ASYNCHRON | SfxCallMode::RECORD,
             { &aUrl, &aTarget, &aFrm, &aReferer, &aNewView, &aBrowsing });
+}
+
+bool ScGlobal::ShouldOpenURL()
+{
+    SvtSecurityOptions aSecOpt;
+    bool bCtrlClickHappened = (nScClickMouseModifier & KEY_MOD1);
+    bool bCtrlClickSecOption = aSecOpt.IsOptionSet( SvtSecurityOptions::EOption::CtrlClickHyperlink );
+    if( bCtrlClickHappened && ! bCtrlClickSecOption )
+    {
+        // return since ctrl+click happened when the
+        // ctrl+click security option was disabled, link should not open
+        return false;
+    }
+    else if( ! bCtrlClickHappened && bCtrlClickSecOption )
+    {
+        // ctrl+click did not happen; only click happened maybe with some
+        // other key combo. and security option is set, so return
+        return false;
+    }
+    return true;
 }
 
 bool ScGlobal::IsSystemRTL()

@@ -567,6 +567,8 @@ public:
     static void                 SetUserList( const ScUserList* pNewList );
     /// Open the specified URL.
     static void                 OpenURL(const OUString& rURL, const OUString& rTarget);
+    /// Whether the URL can be opened according to current security options (Click/Ctrl-Click)
+    static bool                 ShouldOpenURL();
     SC_DLLPUBLIC static OUString            GetAbsDocName( const OUString& rFileName,
                                                 const SfxObjectShell* pShell );
     SC_DLLPUBLIC static OUString            GetDocTabName( const OUString& rFileName,
