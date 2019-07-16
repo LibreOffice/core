@@ -1805,7 +1805,7 @@ void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt, MouseEventSta
             //      links in the edit cell
 
     bool bAlt = rMEvt.IsMod2();
-    if ( !bAlt && rMEvt.IsLeft() &&
+    if ( !bAlt && rMEvt.IsLeft() && ScGlobal::ShouldOpenURL() &&
             GetEditUrl(rMEvt.GetPosPixel()) )           // click on link: do not move cursor
     {
         SetPointer( PointerStyle::RefHand );
@@ -2452,7 +2452,7 @@ void ScGridWindow::MouseMove( const MouseEvent& rMEvt )
             }
             //  Field can only be URL field
             bool bAlt = rMEvt.IsMod2();
-            if ( !bAlt && !nButtonDown && pFld )
+            if ( !bAlt && !nButtonDown && ScGlobal::ShouldOpenURL() && pFld )
                 SetPointer( PointerStyle::RefHand );
             else if ( pEditView->GetEditEngine()->IsVertical() )
                 SetPointer( PointerStyle::TextVertical );
@@ -2533,7 +2533,7 @@ void ScGridWindow::MouseMove( const MouseEvent& rMEvt )
 
             if (bEditMode)                                  // First has to be in edit mode!
                 SetPointer( PointerStyle::Arrow );
-            else if ( !bAlt && !nButtonDown &&
+            else if ( !bAlt && !nButtonDown && ScGlobal::ShouldOpenURL() &&
                         GetEditUrl(rMEvt.GetPosPixel()) )
                 SetPointer( PointerStyle::RefHand );
             else if ( DrawMouseMove(rMEvt) )                // Reset pointer
