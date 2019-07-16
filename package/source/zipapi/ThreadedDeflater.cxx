@@ -48,6 +48,7 @@ class ThreadedDeflater::Task : public comphelper::ThreadTask
 public:
     Task(ThreadedDeflater* deflater_, int sequence_, int blockSize_)
         : comphelper::ThreadTask(deflater_->threadTaskTag)
+        , stream()
         , deflater(deflater_)
         , sequence(sequence_)
         , blockSize(blockSize_)
