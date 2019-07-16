@@ -266,13 +266,17 @@ void ScCellShell::Execute( SfxRequest& rReq )
             {
                 if ( pReqArgs )
                 {
-                    if (comphelper::LibreOfficeKit::isActive())
+                    // In the LOK case, we want to set the document modified state
+                    // right away at the start of the edit, so that the content is
+                    // saved even when the user leaves the document before hitting
+                    // Enter
+                    // NOTE: This also means we want to set the modified state
+                    // regardless of the DontCommit parameter's value.
+                    if (comphelper::LibreOfficeKit::isActive() && !GetViewData()->GetDocShell()->IsModified())
                     {
-                        // Let the client know about our entry, so if they save
-                        // (say because the user closes the document or window,)
-                        // this change gets persisted (assuming DontTerminateEdit
-                        // is set to false in the .uno:Save command).
-                        SfxLokHelper::notifyAllViews(LOK_CALLBACK_STATE_CHANGED, ".uno:ModifiedStatus=true");
+                        GetViewData()->GetDocShell()->SetModified();
+                        rBindings.Invalidate(SID_SAVEDOC);
+                        rBindings.Invalidate(SID_DOC_MODIFIED);
                     }
 
                     OUString aStr( static_cast<const SfxStringItem&>(pReqArgs->

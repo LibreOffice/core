@@ -2756,6 +2756,9 @@ void ScInputHandler::InvalidateAttribs()
         rBindings.Invalidate( SID_SET_SUB_SCRIPT );
         rBindings.Invalidate( SID_ATTR_CHAR_STRIKEOUT );
         rBindings.Invalidate( SID_ATTR_CHAR_SHADOWED );
+
+        rBindings.Invalidate( SID_SAVEDOC );
+        rBindings.Invalidate( SID_DOC_MODIFIED );
     }
 }
 
@@ -3779,6 +3782,14 @@ bool ScInputHandler::KeyInput( const KeyEvent& rKEvt, bool bStartEdit /* = false
             // #i114511# don't count cursor keys as modification
             bool bSetModified = !bCursorKey;
             DataChanged(false, bSetModified); // also calls UpdateParenthesis()
+
+            // In the LOK case, we want to set the document modified state
+            // right away at the start of the edit, so that the content is
+            // saved even when the user leaves the document before hitting
+            // Enter
+            if (comphelper::LibreOfficeKit::isActive() && bSetModified && pActiveViewSh && !pActiveViewSh->GetViewData().GetDocShell()->IsModified())
+                pActiveViewSh->GetViewData().GetDocShell()->SetModified();
+
             InvalidateAttribs();        //! in DataChanged?
         }
     }
