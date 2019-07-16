@@ -367,60 +367,59 @@ void DrawView::SetMasterAttributes( SdrObject* pObject, SdPage& rPage, SfxItemSe
         {
             if (bMaster)
             {
-            // Presentation object outline
-            for (sal_uInt16 nLevel = 9; nLevel > 0; nLevel--)
-            {
-                OUString aName = rPage.GetLayoutName() + " " +
-                    OUString::number(nLevel);
-                SfxStyleSheet* pSheet = static_cast<SfxStyleSheet*>(pStShPool->
-                                    Find(aName, SfxStyleFamily::Page));
-                DBG_ASSERT(pSheet, "StyleSheet not found");
-
-                SfxItemSet aTempSet( pSheet->GetItemSet() );
-
-                if( nLevel > 1 )
+                // Presentation object outline
+                for (sal_uInt16 nLevel = 9; nLevel > 0; nLevel--)
                 {
-                    // for all levels over 1, clear all items that will be
-                    // hard set to level 1
-                    SfxWhichIter aWhichIter(rSet);
-                    sal_uInt16 nWhich(aWhichIter.FirstWhich());
-                    while( nWhich )
+                    OUString aName = rPage.GetLayoutName() + " " +
+                        OUString::number(nLevel);
+                    SfxStyleSheet* pSheet = static_cast<SfxStyleSheet*>(pStShPool->
+                                        Find(aName, SfxStyleFamily::Page));
+                    DBG_ASSERT(pSheet, "StyleSheet not found");
+
+                    SfxItemSet aTempSet( pSheet->GetItemSet() );
+
+                    if( nLevel > 1 )
                     {
-                        if( SfxItemState::SET == rSet.GetItemState( nWhich ) )
-                            aTempSet.ClearItem( nWhich );
-                        nWhich = aWhichIter.NextWhich();
+                        // for all levels over 1, clear all items that will be
+                        // hard set to level 1
+                        SfxWhichIter aWhichIter(rSet);
+                        sal_uInt16 nWhich(aWhichIter.FirstWhich());
+                        while( nWhich )
+                        {
+                            if( SfxItemState::SET == rSet.GetItemState( nWhich ) )
+                                aTempSet.ClearItem( nWhich );
+                            nWhich = aWhichIter.NextWhich();
+                        }
+
+                    }
+                    else
+                    {
+                        // put the items hard into level one
+                        aTempSet.Put( rSet );
                     }
 
+                    aTempSet.ClearInvalidItems();
+
+                    // Undo-Action
+                    mpDocSh->GetUndoManager()->AddUndoAction(
+                        std::make_unique<StyleSheetUndoAction>(&mrDoc, pSheet, &aTempSet));
+
+                    pSheet->GetItemSet().Set(aTempSet,false);
+                    pSheet->Broadcast(SfxHint(SfxHintId::DataChanged));
                 }
-                else
+
+                // remove all hard set items from shape that are now set in style
+                SfxWhichIter aWhichIter(rSet);
+                sal_uInt16 nWhich(aWhichIter.FirstWhich());
+                while( nWhich )
                 {
-                    // put the items hard into level one
-                    aTempSet.Put( rSet );
+                    if( SfxItemState::SET == rSet.GetItemState( nWhich ) )
+                        pObject->ClearMergedItem( nWhich );
+                    nWhich = aWhichIter.NextWhich();
                 }
-
-                aTempSet.ClearInvalidItems();
-
-                // Undo-Action
-                mpDocSh->GetUndoManager()->AddUndoAction(
-                    std::make_unique<StyleSheetUndoAction>(&mrDoc, pSheet, &aTempSet));
-
-                pSheet->GetItemSet().Set(aTempSet,false);
-                pSheet->Broadcast(SfxHint(SfxHintId::DataChanged));
             }
-
-            // remove all hard set items from shape that are now set in style
-            SfxWhichIter aWhichIter(rSet);
-            sal_uInt16 nWhich(aWhichIter.FirstWhich());
-            while( nWhich )
-            {
-                if( SfxItemState::SET == rSet.GetItemState( nWhich ) )
-                    pObject->ClearMergedItem( nWhich );
-                nWhich = aWhichIter.NextWhich();
-            }
-
-            }
-
-            pObject->SetMergedItemSet(rSet);
+            else
+                pObject->SetMergedItemSet(rSet);
 
             bOk = true;
         }
