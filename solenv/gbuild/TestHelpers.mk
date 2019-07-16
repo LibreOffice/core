@@ -10,6 +10,7 @@
 # This makes sure that more_fonts, opensymbol and fontconfig is installed
 define gb_TestHelpers_use_more_fonts
 
+ifneq ($(MAKECMDGOALS),clean)
 ifneq (,$$(filter MORE_FONTS,$$(BUILD_TYPE)))
 ifeq (,$$(filter more_fonts,$$(gb_Module_ALLMODULES)))
 
@@ -37,6 +38,7 @@ $(1): \
     $$(call gb_Package_get_files,extras_font) \
     $$(if $$(filter Package_extras_fontconfig,$$(call gb_Module_get_classnames,extras)), \
         $$(call gb_Package_get_files,extras_fontconfig))
+endif
 endif
 endif
 
