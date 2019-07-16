@@ -29,6 +29,7 @@
 #include <vcl/virdev.hxx>
 #include <sfx2/sfxhelp.hxx>
 #include <vcl/svapp.hxx>
+#include <comphelper/random.hxx>
 
 TipOfTheDayDialog::TipOfTheDayDialog(weld::Window* pParent)
     : GenericDialogController(pParent, "cui/ui/tipofthedaydialog.ui", "TipOfTheDayDialog")
@@ -42,8 +43,7 @@ TipOfTheDayDialog::TipOfTheDayDialog(weld::Window* pParent)
     m_pNext->connect_clicked(LINK(this, TipOfTheDayDialog, OnNextClick));
 
     nNumberOfTips = SAL_N_ELEMENTS(TIPOFTHEDAY_STRINGARRAY);
-    srand(time(nullptr));
-    nCurrentTip = rand() % nNumberOfTips;
+    nCurrentTip = comphelper::rng::uniform_int_distribution(0, nNumberOfTips - 1);
     UpdateTip();
 }
 
