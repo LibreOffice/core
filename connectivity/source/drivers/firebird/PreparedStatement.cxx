@@ -18,6 +18,7 @@
  */
 
 #include <sal/config.h>
+#include <cmath>
 
 #include <string_view>
 
@@ -729,7 +730,8 @@ void SAL_CALL OPreparedStatement::setObjectWithInfo( sal_Int32 parameterIndex, c
         OUString sValue;
         if( x >>= dbValue )
         {
-            sValue = OUString::number( dbValue );
+            // truncate and round to 'scale' number of decimal places
+            sValue = OUString::number( std::floor((dbValue * pow10Integer(scale)) + .5) / pow10Integer(scale) );
         }
         else
         {
