@@ -560,8 +560,6 @@ void SidebarController::OpenThenToggleDeck (
     if (mnSavedSidebarWidth < nRequestedWidth)
         SetChildWindowWidth(nRequestedWidth);
 
-    mpTabBar->Invalidate();
-    mpTabBar->HighlightDeck(rsDeckId);
     collectUIInformation(rsDeckId);
 }
 
@@ -574,8 +572,7 @@ void SidebarController::OpenThenSwitchToDeck (
         pSplitWindow->FadeIn();
     RequestOpenDeck();
     SwitchToDeck(rsDeckId);
-    mpTabBar->Invalidate();
-    mpTabBar->HighlightDeck(rsDeckId);
+
 }
 
 void SidebarController::SwitchToDefaultDeck()
@@ -715,6 +712,7 @@ void SidebarController::SwitchToDeck (
 
         msCurrentDeckId = rDeckDescriptor.msId;
     }
+    mpTabBar->Invalidate();
     mpTabBar->HighlightDeck(msCurrentDeckId);
 
     // Determine the panels to display in the deck.
