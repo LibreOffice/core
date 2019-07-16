@@ -105,7 +105,8 @@ SwCompatibilityOptPage::SwCompatibilityOptPage(vcl::Window* pParent, const SfxIt
     if ( pEntry )
     {
         SvLBoxButton* pButton = static_cast<SvLBoxButton*>(pEntry->GetFirstItem(SvLBoxItemType::Button));
-        if(bChecked)
+        assert(pButton);
+        if (bChecked)
             pButton->SetStateChecked();
         else
             pButton->SetStateUnchecked();
