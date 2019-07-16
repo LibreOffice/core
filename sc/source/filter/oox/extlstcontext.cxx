@@ -81,11 +81,12 @@ void ExtCfRuleContext::onStartElement( const AttributeList& rAttribs )
     }
 }
 
-ExtConditionalFormattingContext::ExtConditionalFormattingContext(WorksheetContextBase& rFragment):
-    WorksheetContextBase(rFragment)
+ExtConditionalFormattingContext::ExtConditionalFormattingContext(WorksheetContextBase& rFragment)
+    : WorksheetContextBase(rFragment)
+    , nPriority(-1)
+    , eOperator(ScConditionMode::NONE)
+    , isPreviousElementF(false)
 {
-    nPriority = -1;
-    isPreviousElementF = false;
 }
 
 ContextHandlerRef ExtConditionalFormattingContext::onCreateContext(sal_Int32 nElement, const AttributeList& rAttribs)
