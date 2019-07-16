@@ -28,10 +28,9 @@ void SdAnimationPrmsUndoAction::Undo()
     if (!bInfoCreated)
     {
         SdDrawDocument* pDoc(dynamic_cast< SdDrawDocument* >(&pObject->getSdrModelFromSdrObject()));
-        if( pDoc )
+        SdAnimationInfo* pInfo = pDoc ? SdDrawDocument::GetAnimationInfo(pObject) : nullptr;
+        if (pInfo)
         {
-            SdAnimationInfo* pInfo = SdDrawDocument::GetAnimationInfo( pObject );
-
             pInfo->mbActive     = bOldActive;
             pInfo->meEffect      = eOldEffect;
             pInfo->meTextEffect  = eOldTextEffect;
