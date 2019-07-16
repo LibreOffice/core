@@ -119,6 +119,7 @@ public:
     void testNotificationCompression();
     void testTileInvalidationCompression();
     void testPartInInvalidation();
+    void testInput();
     void testRedlineWriter();
     void testTrackChanges();
     void testRedlineCalc();
@@ -172,6 +173,7 @@ public:
     CPPUNIT_TEST(testNotificationCompression);
     CPPUNIT_TEST(testTileInvalidationCompression);
     CPPUNIT_TEST(testPartInInvalidation);
+    CPPUNIT_TEST(testInput);
     CPPUNIT_TEST(testRedlineWriter);
     CPPUNIT_TEST(testTrackChanges);
     CPPUNIT_TEST(testRedlineCalc);
@@ -1698,6 +1700,43 @@ void DesktopLOKTest::testPartInInvalidation()
         // payload, so this was merged -> it was 1.
         CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), notifs.size());
     }
+}
+
+void DesktopLOKTest::testInput()
+{
+    // Load a Writer document, enable change recording and press a key.
+    LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
+    uno::Reference<beans::XPropertySet> xPropertySet(mxComponent, uno::UNO_QUERY);
+
+    Scheduler::ProcessEventsToIdle(); // Get focus & other bits setup.
+
+    pDocument->pClass->postWindowExtTextInputEvent(pDocument, 0, LOK_EXT_TEXTINPUT, "far");
+    pDocument->pClass->postWindowExtTextInputEvent(pDocument, 0, LOK_EXT_TEXTINPUT_END, "far");
+    pDocument->pClass->postWindowExtTextInputEvent(pDocument, 0, LOK_EXT_TEXTINPUT, " ");
+    pDocument->pClass->postWindowExtTextInputEvent(pDocument, 0, LOK_EXT_TEXTINPUT_END, " ");
+    pDocument->pClass->postWindowExtTextInputEvent(pDocument, 0, LOK_EXT_TEXTINPUT, "beyond");
+    pDocument->pClass->postWindowExtTextInputEvent(pDocument, 0, LOK_EXT_TEXTINPUT_END, "beyond");
+    pDocument->pClass->postWindowExtTextInputEvent(pDocument, 0, LOK_EXT_TEXTINPUT, " ");
+    pDocument->pClass->postWindowExtTextInputEvent(pDocument, 0, LOK_EXT_TEXTINPUT_END, " ");
+    // Mis-spelled ...
+    pDocument->pClass->postWindowExtTextInputEvent(pDocument, 0, LOK_EXT_TEXTINPUT, "kovely");
+    pDocument->pClass->postWindowExtTextInputEvent(pDocument, 0, LOK_EXT_TEXTINPUT_END, "kovely");
+    // Remove it again
+    pDocument->pClass->removeTextContext(pDocument, 0, 6, 0);
+    // Replace it with lovely
+    pDocument->pClass->postWindowExtTextInputEvent(pDocument, 0, LOK_EXT_TEXTINPUT, "lovely");
+    pDocument->pClass->postWindowExtTextInputEvent(pDocument, 0, LOK_EXT_TEXTINPUT_END, "lovely");
+    pDocument->pClass->postWindowExtTextInputEvent(pDocument, 0, LOK_EXT_TEXTINPUT, " ");
+    pDocument->pClass->postWindowExtTextInputEvent(pDocument, 0, LOK_EXT_TEXTINPUT_END, " ");
+
+    // get the text ...
+    pDocument->pClass->postUnoCommand(pDocument, ".uno:SelectAll", nullptr, false);
+    Scheduler::ProcessEventsToIdle();
+    char* pText = pDocument->pClass->getTextSelection(pDocument, "text/plain;charset=utf-8", nullptr);
+    CPPUNIT_ASSERT(pText != nullptr);
+    OString aLovely("far beyond lovely ");
+    CPPUNIT_ASSERT_EQUAL(aLovely, OString(pText));
+    free(pText);
 }
 
 void DesktopLOKTest::testRedlineWriter()
