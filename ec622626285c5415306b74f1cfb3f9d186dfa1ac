@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "bf659307_5b003a35",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Common.xcs",
+        "patchSetId": 1
+      },
+      "lineNbr": 880,
+      "author": {
+        "id": 1000880
+      },
+      "writtenOn": "2019-07-16T07:50:36Z",
+      "side": 1,
+      "message": "short is sufficient to store percents (0-100) and also widely used here.\nhowever, i have no strong objections to int. so it is changed to int in next patch",
+      "parentUuid": "bf659307_0091f199",
+      "range": {
+        "startLine": 880,
+        "startChar": 49,
+        "endLine": 880,
+        "endChar": 68
+      },
+      "revId": "ec622626285c5415306b74f1cfb3f9d186dfa1ac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bf659307_e50acf88",
         "filename": "vcl/source/gdi/print2.cxx",
         "patchSetId": 1
@@ -36,6 +60,24 @@
       "writtenOn": "2019-07-15T08:19:58Z",
       "side": 1,
       "message": "As the value is user-input, better clamp it to the permissible range (after indeed warning about it) - e.g. via std::clamp()",
+      "revId": "ec622626285c5415306b74f1cfb3f9d186dfa1ac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_fbfcae3f",
+        "filename": "vcl/source/gdi/print2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 731,
+      "author": {
+        "id": 1000880
+      },
+      "writtenOn": "2019-07-16T07:50:36Z",
+      "side": 1,
+      "message": "good idea! done in next patch",
+      "parentUuid": "bf659307_e50acf88",
       "revId": "ec622626285c5415306b74f1cfb3f9d186dfa1ac",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
