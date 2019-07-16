@@ -26,6 +26,7 @@
 #include "../loopvartoosmall.cxx"
 #include "../overrideparam.cxx"
 #include "../overridevirtual.cxx"
+#include "../passparamsbyref.cxx"
 #include "../pointerbool.cxx"
 #include "../privatebase.cxx"
 #include "../rangedforcopy.cxx"
@@ -84,6 +85,7 @@ public:
         , loopVarTooSmall( nullptr )
         , overrideParam( nullptr )
         , overrideVirtual( nullptr )
+        , passParamsByRef( nullptr )
         , pointerBool( nullptr )
         , privateBase( nullptr )
         , rangedForCopy( nullptr )
@@ -144,6 +146,8 @@ public:
             overrideParam = nullptr;
         if( overrideVirtual && !overrideVirtual->preRun())
             overrideVirtual = nullptr;
+        if( passParamsByRef && !passParamsByRef->preRun())
+            passParamsByRef = nullptr;
         if( pointerBool && !pointerBool->preRun())
             pointerBool = nullptr;
         if( privateBase && !privateBase->preRun())
@@ -232,6 +236,8 @@ public:
             overrideParam->postRun();
         if( overrideVirtual )
             overrideVirtual->postRun();
+        if( passParamsByRef )
+            passParamsByRef->postRun();
         if( pointerBool )
             pointerBool->postRun();
         if( privateBase )
@@ -326,6 +332,8 @@ public:
             overrideParam = static_cast< OverrideParam* >( plugin );
         else if( strcmp( name, "overridevirtual" ) == 0 )
             overrideVirtual = static_cast< OverrideVirtual* >( plugin );
+        else if( strcmp( name, "passparamsbyref" ) == 0 )
+            passParamsByRef = static_cast< PassParamsByRef* >( plugin );
         else if( strcmp( name, "pointerbool" ) == 0 )
             pointerBool = static_cast< PointerBool* >( plugin );
         else if( strcmp( name, "privatebase" ) == 0 )
@@ -383,6 +391,17 @@ public:
         else
             return false;
         return true;
+    }
+    bool VisitBinAssign(const class clang::BinaryOperator * arg)
+    {
+        if( ignoreLocation( arg ))
+            return true;
+        if( passParamsByRef != nullptr )
+        {
+            if( !passParamsByRef->VisitBinAssign( arg ))
+                passParamsByRef = nullptr;
+        }
+        return anyPluginActive();
     }
     bool VisitBinEQ(const class clang::BinaryOperator * arg)
     {
@@ -594,6 +613,11 @@ public:
     {
         if( ignoreLocation( arg ))
             return true;
+        if( passParamsByRef != nullptr )
+        {
+            if( !passParamsByRef->VisitCXXOperatorCallExpr( arg ))
+                passParamsByRef = nullptr;
+        }
         if( unnecessaryParen != nullptr )
         {
             if( !unnecessaryParen->VisitCXXOperatorCallExpr( arg ))
@@ -1102,6 +1126,34 @@ public:
         unrefFun = saveUnrefFun;
         return ret;
     }
+    bool TraverseFunctionDecl(class clang::FunctionDecl * arg)
+    {
+        PassParamsByRef* savePassParamsByRef = passParamsByRef;
+        if( passParamsByRef != nullptr )
+        {
+            if( !passParamsByRef->PreTraverseFunctionDecl( arg ))
+                passParamsByRef = nullptr;
+        }
+        bool ret = RecursiveASTVisitor::TraverseFunctionDecl( arg );
+        if( passParamsByRef != nullptr )
+        {
+            passParamsByRef->PostTraverseFunctionDecl( arg );
+        }
+        passParamsByRef = savePassParamsByRef;
+        return ret;
+    }
+    bool TraverseImplicitCastExpr(class clang::ImplicitCastExpr * arg)
+    {
+        PassParamsByRef* savePassParamsByRef = passParamsByRef;
+        if( passParamsByRef != nullptr )
+        {
+            if( !passParamsByRef->PreTraverseImplicitCastExpr( arg ))
+                passParamsByRef = nullptr;
+        }
+        bool ret = RecursiveASTVisitor::TraverseImplicitCastExpr( arg );
+        passParamsByRef = savePassParamsByRef;
+        return ret;
+    }
     bool TraverseInitListExpr(class clang::InitListExpr * arg)
     {
         SimplifyConstruct* saveSimplifyConstruct = simplifyConstruct;
@@ -1144,6 +1196,7 @@ private:
             || loopVarTooSmall != nullptr
             || overrideParam != nullptr
             || overrideVirtual != nullptr
+            || passParamsByRef != nullptr
             || pointerBool != nullptr
             || privateBase != nullptr
             || rangedForCopy != nullptr
@@ -1187,6 +1240,7 @@ private:
     LoopVarTooSmall* loopVarTooSmall;
     OverrideParam* overrideParam;
     OverrideVirtual* overrideVirtual;
+    PassParamsByRef* passParamsByRef;
     PointerBool* pointerBool;
     PrivateBase* privateBase;
     RangedForCopy* rangedForCopy;
