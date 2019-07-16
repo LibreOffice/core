@@ -6,6 +6,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
+#ifndef LO_CLANG_SHARED_PLUGINS
 
 #include <algorithm>
 #include <cassert>
@@ -26,6 +27,7 @@ public:
     explicit OverrideVirtual(loplugin::InstantiationData const & data):
         FilteringRewritePlugin(data) {}
 
+    virtual bool preRun() override;
     virtual void run() override;
 
     bool VisitCXXMethodDecl(CXXMethodDecl const * decl);
@@ -34,13 +36,15 @@ private:
     std::set<SourceLocation> insertions_;
 };
 
-void OverrideVirtual::run() {
-    if (compiler.getLangOpts().CPlusPlus
+bool OverrideVirtual::preRun() {
+    return compiler.getLangOpts().CPlusPlus
         && compiler.getPreprocessor().getIdentifierInfo(
-            "LIBO_INTERNAL_ONLY")->hasMacroDefinition())
-    {
+            "LIBO_INTERNAL_ONLY")->hasMacroDefinition();
+}
+
+void OverrideVirtual::run() {
+    if (preRun())
         TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
-    }
 }
 bool OverrideVirtual::VisitCXXMethodDecl(CXXMethodDecl const * decl) {
     // As a heuristic, ignore declarations where the name is spelled out in an
@@ -161,8 +165,10 @@ bool OverrideVirtual::VisitCXXMethodDecl(CXXMethodDecl const * decl) {
     return true;
 }
 
-loplugin::Plugin::Registration<OverrideVirtual> X("overridevirtual", true);
+loplugin::Plugin::Registration<OverrideVirtual> overridevirtual("overridevirtual");
 
-}
+} // namespace
+
+#endif // LO_CLANG_SHARED_PLUGINS
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
