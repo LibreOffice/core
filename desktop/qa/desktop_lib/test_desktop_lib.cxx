@@ -1755,7 +1755,9 @@ void DesktopLOKTest::testInput()
 
     pDocument->pClass->postWindowExtTextInputEvent(pDocument, 0, LOK_EXT_TEXTINPUT, "kovely");
     pDocument->pClass->postWindowExtTextInputEvent(pDocument, 0, LOK_EXT_TEXTINPUT_END, "kovely");
+    Scheduler::ProcessEventsToIdle();
     pDocument->pClass->removeTextContext(pDocument, 0, 6, 0);
+    Scheduler::ProcessEventsToIdle();
     pDocument->pClass->postWindowExtTextInputEvent(pDocument, 0, LOK_EXT_TEXTINPUT, "lovely");
     pDocument->pClass->postWindowExtTextInputEvent(pDocument, 0, LOK_EXT_TEXTINPUT_END, "lovely");
     pDocument->pClass->postWindowExtTextInputEvent(pDocument, 0, LOK_EXT_TEXTINPUT, " ");
@@ -1767,7 +1769,7 @@ void DesktopLOKTest::testInput()
     Scheduler::ProcessEventsToIdle();
     char* pText = pDocument->pClass->getTextSelection(pDocument, "text/plain;charset=utf-8", nullptr);
     CPPUNIT_ASSERT(pText != nullptr);
-    OString aLovely("lovely");
+    OString aLovely("lovely ");
     CPPUNIT_ASSERT_EQUAL(aLovely, OString(pText));
     free(pText);
 }
