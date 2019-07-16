@@ -32,6 +32,9 @@
 #include <cmdid.h>
 #include <fmtanchr.hxx>
 #include <txtfrm.hxx>
+#include <AnnotationWin.hxx>
+#include <PostItMgr.hxx>
+#include <postithelper.hxx>
 
 namespace
 {
@@ -537,6 +540,22 @@ void SwUiWriterTest2::testImageComment()
     pView->GetViewFrame()->GetDispatcher()->ExecuteList(FN_INSERT_STRING, SfxCallMode::SYNCHRON,
                                                         { &aItem });
     pView->GetViewFrame()->GetDispatcher()->Execute(FN_CNTNT_TO_NEXT_FRAME, SfxCallMode::SYNCHRON);
+
+#if !defined(MACOSX)
+    // Make sure that the anchor points to the bottom left corner of the image.
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected less or equal than: 1418
+    // - Actual: 2442
+    // The anchor pointed to the bottom right corner, so as-char and at-char was inconsistent.
+    Scheduler::ProcessEventsToIdle();
+    SwPostItMgr* pPostItMgr = pView->GetPostItMgr();
+    for (const auto& pItem : *pPostItMgr)
+    {
+        const SwRect& rAnchor = pItem->pPostIt->GetAnchorRect();
+        CPPUNIT_ASSERT_LESSEQUAL(static_cast<long>(1418), rAnchor.Left());
+    }
+#endif
+
     // Now delete the image.
     pView->GetViewFrame()->GetDispatcher()->Execute(SID_DELETE, SfxCallMode::SYNCHRON);
     // Without the accompanying fix in place, this test would have failed with 'Expected: 0; Actual:
