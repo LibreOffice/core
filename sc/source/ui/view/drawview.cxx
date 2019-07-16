@@ -899,7 +899,7 @@ SdrEndTextEditKind ScDrawView::ScEndTextEdit()
     bool bIsTextEdit = IsTextEdit();
     SdrEndTextEditKind eKind = SdrEndTextEdit();
 
-    if ( bIsTextEdit && pViewData )
+    if (bIsTextEdit)
         pViewData->GetViewShell()->SetDrawTextUndo(nullptr);   // the "normal" undo manager
 
     return eKind;
