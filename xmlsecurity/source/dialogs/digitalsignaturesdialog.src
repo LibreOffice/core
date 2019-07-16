@@ -28,7 +28,7 @@
 ModalDialog RID_XMLSECDLG_DIGSIG
 {
     HelpId = HID_XMLSEC_DLG_DIGSIG ;
-    Size = MAP_APPFONT ( 234, 191 ) ;
+    Size = MAP_APPFONT ( 249, 191 ) ;
     OutputSize = TRUE ;
     Closeable = TRUE ;
     Moveable = TRUE ;
@@ -61,7 +61,7 @@ ModalDialog RID_XMLSECDLG_DIGSIG
     {
         HelpId = HID_XMLSEC_CTRL_SIGNATURESDLG ;
         Pos = MAP_APPFONT ( 6, 14 ) ;
-        Size = MAP_APPFONT ( 222, 109 ) ;
+        Size = MAP_APPFONT ( 237, 109 ) ;
         SVLook = TRUE ;
         Border = TRUE ;
     };
@@ -140,32 +140,32 @@ ModalDialog RID_XMLSECDLG_DIGSIG
     {
         HelpID = "xmlsecurity:PushButton:RID_XMLSECDLG_DIGSIG:BTN_VIEWCERT" ;
         Pos = MAP_APPFONT ( 6, 142 ) ;
-        Size = MAP_APPFONT ( 70, 14 ) ;
+        Size = MAP_APPFONT ( 75, 14 ) ;
         Text [ en-US ] = "View Certificate..." ;
     };
     PushButton BTN_ADDCERT
     {
         HelpID = "xmlsecurity:PushButton:RID_XMLSECDLG_DIGSIG:BTN_ADDCERT" ;
-        Pos = MAP_APPFONT ( 82, 142 ) ;
-        Size = MAP_APPFONT ( 70, 14 ) ;
+        Pos = MAP_APPFONT ( 87, 142 ) ;
+        Size = MAP_APPFONT ( 75, 14 ) ;
         Text [ en-US ] = "Sign Document..." ;
     };
     PushButton BTN_REMOVECERT
     {
         HelpID = "xmlsecurity:PushButton:RID_XMLSECDLG_DIGSIG:BTN_REMOVECERT" ;
-        Pos = MAP_APPFONT ( 158, 142 ) ;
-        Size = MAP_APPFONT ( 70, 14 ) ;
+        Pos = MAP_APPFONT ( 168, 142 ) ;
+        Size = MAP_APPFONT ( 75, 14 ) ;
         Text [ en-US ] = "Remove" ;
     };
     FixedLine FL_BOTTOM_SEP
     {
         Pos = MAP_APPFONT ( 0, 160 ) ;
-        Size = MAP_APPFONT ( 234, 8 ) ;
+        Size = MAP_APPFONT ( 249, 8 ) ;
     };
     OKButton BTN_OK
     {
         DefButton = TRUE;
-        Pos = MAP_APPFONT ( 178, 171 ) ;
+        Pos = MAP_APPFONT ( 193, 171 ) ;
         Size = MAP_APPFONT ( 50, 14 ) ;
         Text [ en-US ] = "Close" ;
     };
@@ -193,8 +193,7 @@ ErrorBox RID_XMLSECDLG_OLD_ODF_FORMAT
 {
     Buttons = WB_OK ;
     DefButton = WB_DEF_OK ;
-    Message [ en-US ] = "This document contains signatures in ODF 1.1 format. Signing documents in %PRODUCTNAME %PRODUCTVERSION requires ODF 1.2 format version. "
-                        "Thus no signatures can be added or removed to this document.\n\nSave document in ODF 1.2 format and add all desired signatures again." ;
+    Message [ en-US ] = "This document contains signatures in ODF 1.1 format. Signing documents in %PRODUCTNAME %PRODUCTVERSION requires ODF 1.2 format version. Thus no signatures can be added or removed to this document.\n\nSave document in ODF 1.2 format and add all desired signatures again." ;
 };
 
 
