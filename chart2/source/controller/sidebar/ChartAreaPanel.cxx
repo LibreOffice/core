@@ -100,30 +100,26 @@ DrawModelWrapper* getDrawModelWrapper(const css::uno::Reference<css::frame::XMod
     return pController->GetDrawModelWrapper();
 }
 
-XGradient getXGradientForName(const css::uno::Reference<css::frame::XModel>& xModel,
+XFillGradientItem getXGradientForName(const css::uno::Reference<css::frame::XModel>& xModel,
         const OUString& rName)
 {
-    try
-    {
-        ViewElementListProvider aProvider = getViewElementListProvider(xModel);
-        XGradientListRef aRef = aProvider.GetGradientList();
-        size_t n = aRef->Count();
-        for (size_t i = 0; i < n; ++i)
-        {
-            const XGradientEntry* pGradient = aRef->GetGradient(i);
-            if (!pGradient)
-                continue;
+    css::uno::Reference<css::lang::XMultiServiceFactory> xFact(xModel, css::uno::UNO_QUERY);
+    css::uno::Reference<css::container::XNameAccess> xNameAccess(
+            xFact->createInstance("com.sun.star.drawing.GradientTable"), css::uno::UNO_QUERY);
+    if (!xNameAccess.is())
+        return XFillGradientItem();
 
-            if (pGradient->GetName() == rName)
-                return pGradient->GetGradient();
-        }
-    }
-    catch (...)
-    {
-        // ignore exception
-    }
+    if (!xNameAccess->hasByName(rName))
+        return XFillGradientItem();
 
-    return XGradient();
+    css::uno::Any aAny = xNameAccess->getByName(rName);
+
+    XFillGradientItem aItem;
+    aItem.SetName(rName);
+    aItem.PutValue(aAny, MID_FILLGRADIENT);
+
+    return aItem;
+
 }
 
 XFillFloatTransparenceItem getXTransparencyGradientForName(const css::uno::Reference<css::frame::XModel>& xModel,
@@ -369,7 +365,12 @@ void ChartAreaPanel::setFillStyleAndGradient(const XFillStyleItem* pStyleItem,
 
     if (pStyleItem)
         xPropSet->setPropertyValue("FillStyle", css::uno::Any(pStyleItem->GetValue()));
-    xPropSet->setPropertyValue("FillGradientName", css::uno::Any(rGradientItem.GetValue()));
+
+    const OUString& aName = rGradientItem.GetName();
+    css::uno::Any aGradientVal;
+    rGradientItem.QueryValue(aGradientVal, MID_FILLGRADIENT);
+    OUString aNewName = PropertyHelper::addGradientUniqueNameToTable(aGradientVal, css::uno::Reference<css::lang::XMultiServiceFactory>(mxModel, css::uno::UNO_QUERY_THROW), aName);
+    xPropSet->setPropertyValue("FillGradientName", css::uno::Any(aNewName));
 }
 
 void ChartAreaPanel::setFillStyleAndHatch(const XFillStyleItem* pStyleItem,
@@ -435,11 +436,10 @@ void ChartAreaPanel::updateData()
 
     if (xInfo->hasPropertyByName("FillGradientName"))
     {
-       OUString aGradientName;
-       xPropSet->getPropertyValue("FillGradientName") >>= aGradientName;
-       XGradient aGradient = getXGradientForName(mxModel, aGradientName);
-       XFillGradientItem aGradientItem(aGradientName, aGradient);
-       updateFillGradient(false, true, &aGradientItem);
+        OUString aGradientName;
+        xPropSet->getPropertyValue("FillGradientName") >>= aGradientName;
+        XFillGradientItem aGradientItem = getXGradientForName(mxModel, aGradientName);
+        updateFillGradient(false, true, &aGradientItem);
     }
 
     if (xInfo->hasPropertyByName("FillHatchName"))
