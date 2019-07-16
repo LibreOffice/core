@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_5451e8d7",
+        "filename": "svl/source/numbers/zforfind.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 1052,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2019-07-16T19:53:41Z",
+      "side": 1,
+      "message": "Checking mpFormat here will not do the ROCExpansion for a default unformatted cell, for which mpFormat is nullptr. Also not for a differently (not date(+time)) formatted cell into which a date was entered. I guess users would expect it worked in any case, not just if a cell was already formatted as date with ROC calendar or era code.",
+      "range": {
+        "startLine": 1052,
+        "startChar": 12,
+        "endLine": 1052,
+        "endChar": 20
+      },
+      "revId": "e6e71f5768b27949e973ea3ad8e359749a22d5a5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_d413b80c",
+        "filename": "svl/source/numbers/zforfind.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 1053,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2019-07-16T19:53:41Z",
+      "side": 1,
+      "message": "Note that nSignLen will never be 0 here because there\u0027s always some input (i.e. sStrArray[0] never be empty and not a sign character). sStrArray contains the split input, e.g.\n{\"1999\", \"-\", \"11\", \"-\", \"22\"}\nfor 1999-11-22. It\u0027s good to check though before subtracting 1. Just to mention.\n\nThe input though may have leading blanks and still yield a negative year, e.g.\n{\" -\", \"1999\", \"-\", \"11\", \"-\", \"22\"}\nfor \" -1999-11-22\".\n\nIt\u0027s probably better to check for mbEraCE \u003d\u003d kDefaultEra here as well like in the other (Gregorian) case, as that doesn\u0027t depend on any hard coded string positions and is not true if a negative year was encountered.",
+      "range": {
+        "startLine": 1053,
+        "startChar": 20,
+        "endLine": 1053,
+        "endChar": 33
+      },
+      "revId": "e6e71f5768b27949e973ea3ad8e359749a22d5a5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_d45e58e5",
+        "filename": "svl/source/numbers/zformat.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 5761,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2019-07-16T19:53:41Z",
+      "side": 1,
+      "message": "The name HasEra() is a bit confusing, as the function returns true already if the calendar name matches. I\u0027d rather suggest HasCalendarOrEraCode() as that is what it does.",
+      "range": {
+        "startLine": 5761,
+        "startChar": 21,
+        "endLine": 5761,
+        "endChar": 27
+      },
+      "revId": "e6e71f5768b27949e973ea3ad8e359749a22d5a5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
