@@ -45,7 +45,6 @@
 #include <salsys.hxx>
 #include <units.hrc>
 #include <print.h>
-#include <salframe.hxx>
 
 #include <com/sun/star/accessibility/MSAAService.hpp>
 
