@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "bf659307_9447801e",
+        "filename": "cui/source/options/optgdlg.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 310,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2019-07-16T19:53:41Z",
+      "side": 1,
+      "message": "What I meant was, if the UI language was different (for example en-US) but the current locale was zh-TW then users may still expect to see the ROCExpansion behaviour for date input. But I really don\u0027t know.\n\nAnother problem with hiding the button here was, if the UI language was zh-TW and ROCExpansion enabled and then the user switched to another UI language, the ROCExpansion would still be enabled in the configuration but no means to disable it.\n\nAnyway, code is different now so this is moot.",
+      "parentUuid": "df7087c5_8e99c720",
+      "range": {
+        "startLine": 310,
+        "startChar": 48,
+        "endLine": 310,
+        "endChar": 64
+      },
+      "revId": "9106291246191750e0732665b22e755caeb12fcb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "df7087c5_ee7c0322",
         "filename": "officecfg/registry/schema/org/openoffice/Office/Common.xcs",
         "patchSetId": 7
@@ -107,6 +131,24 @@
     },
     {
       "key": {
+        "uuid": "bf659307_b4408409",
+        "filename": "sc/inc/docoptio.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2019-07-16T19:53:41Z",
+      "side": 1,
+      "message": "Hum.. yeah might be. Was just an observation I stumbled upon.",
+      "parentUuid": "df7087c5_eed963f4",
+      "revId": "9106291246191750e0732665b22e755caeb12fcb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "df7087c5_ae760b3e",
         "filename": "sc/source/core/data/poolhelp.cxx",
         "patchSetId": 7
@@ -159,6 +201,30 @@
       "side": 1,
       "message": "We never see orders other than EMD(YMD) when we use ROC era. That\u0027s why I try to make it more restrictive. Why do you think it affect both ROC calendar and Gregorian calendar and it shouldn\u0027t? Do you mean it should only applicable when EMD is used? I don\u0027t get what you exactly mean here.",
       "parentUuid": "df7087c5_0e7a9723",
+      "range": {
+        "startLine": 1065,
+        "startChar": 12,
+        "endLine": 1065,
+        "endChar": 23
+      },
+      "revId": "9106291246191750e0732665b22e755caeb12fcb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_d445f818",
+        "filename": "svl/source/numbers/zforfind.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1065,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2019-07-16T19:53:41Z",
+      "side": 1,
+      "message": "The user can define date acceptance patterns and a date format in a different order. Restricting to nIndex\u003d\u003d0 will not do the transformation for DMY or MDY orders. I don\u0027t know whether that would be expected or not.\n\nIt could also affect the Gregorian calendar if the date input was for example 99-1-1 and IsROCEraExpansion() was true but the input was actually be meant to be a 2-digit Gregorian year. Anyway, current code is different now.",
+      "parentUuid": "df7087c5_8ecb071d",
       "range": {
         "startLine": 1065,
         "startChar": 12,
