@@ -6,6 +6,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
+#ifndef LO_CLANG_SHARED_PLUGINS
 
 #include <cassert>
 
@@ -20,7 +21,10 @@ public:
     explicit RedundantInline(loplugin::InstantiationData const & data):
         FilteringRewritePlugin(data) {}
 
-    void run() override { TraverseDecl(compiler.getASTContext().getTranslationUnitDecl()); }
+    void run() override {
+        if (preRun())
+            TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
+    }
 
     bool VisitFunctionDecl(FunctionDecl const * decl) {
         if (ignoreLocation(decl)) {
@@ -164,8 +168,10 @@ private:
     }
 };
 
-loplugin::Plugin::Registration<RedundantInline> reg("redundantinline", true);
+loplugin::Plugin::Registration<RedundantInline> redundantinline("redundantinline");
 
-}
+} // namespace
+
+#endif // LO_CLANG_SHARED_PLUGINS
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

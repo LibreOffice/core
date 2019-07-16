@@ -25,7 +25,10 @@
 #include "../inlinevisible.cxx"
 #include "../loopvartoosmall.cxx"
 #include "../privatebase.cxx"
+#include "../redundantinline.cxx"
+#include "../redundantpointerops.cxx"
 #include "../reservedid.cxx"
+#include "../sallogareas.cxx"
 #include "../salunicodeliteral.cxx"
 #include "../sfxpoolitem.cxx"
 #include "../simplifyconstruct.cxx"
@@ -74,7 +77,10 @@ public:
         , inlineVisible( nullptr )
         , loopVarTooSmall( nullptr )
         , privateBase( nullptr )
+        , redundantInline( nullptr )
+        , redundantPointerOps( nullptr )
         , reservedId( nullptr )
+        , salLogAreas( nullptr )
         , salUnicodeLiteral( nullptr )
         , sfxPoolItem( nullptr )
         , simplifyConstruct( nullptr )
@@ -125,8 +131,14 @@ public:
             loopVarTooSmall = nullptr;
         if( privateBase && !privateBase->preRun())
             privateBase = nullptr;
+        if( redundantInline && !redundantInline->preRun())
+            redundantInline = nullptr;
+        if( redundantPointerOps && !redundantPointerOps->preRun())
+            redundantPointerOps = nullptr;
         if( reservedId && !reservedId->preRun())
             reservedId = nullptr;
+        if( salLogAreas && !salLogAreas->preRun())
+            salLogAreas = nullptr;
         if( salUnicodeLiteral && !salUnicodeLiteral->preRun())
             salUnicodeLiteral = nullptr;
         if( sfxPoolItem && !sfxPoolItem->preRun())
@@ -197,8 +209,14 @@ public:
             loopVarTooSmall->postRun();
         if( privateBase )
             privateBase->postRun();
+        if( redundantInline )
+            redundantInline->postRun();
+        if( redundantPointerOps )
+            redundantPointerOps->postRun();
         if( reservedId )
             reservedId->postRun();
+        if( salLogAreas )
+            salLogAreas->postRun();
         if( salUnicodeLiteral )
             salUnicodeLiteral->postRun();
         if( sfxPoolItem )
@@ -275,8 +293,14 @@ public:
             loopVarTooSmall = static_cast< LoopVarTooSmall* >( plugin );
         else if( strcmp( name, "privatebase" ) == 0 )
             privateBase = static_cast< PrivateBase* >( plugin );
+        else if( strcmp( name, "redundantinline" ) == 0 )
+            redundantInline = static_cast< RedundantInline* >( plugin );
+        else if( strcmp( name, "redundantpointerops" ) == 0 )
+            redundantPointerOps = static_cast< RedundantPointerOps* >( plugin );
         else if( strcmp( name, "reservedid" ) == 0 )
             reservedId = static_cast< ReservedId* >( plugin );
+        else if( strcmp( name, "sallogareas" ) == 0 )
+            salLogAreas = static_cast< SalLogAreas* >( plugin );
         else if( strcmp( name, "salunicodeliteral" ) == 0 )
             salUnicodeLiteral = static_cast< SalUnicodeLiteral* >( plugin );
         else if( strcmp( name, "sfxpoolitem" ) == 0 )
@@ -562,6 +586,11 @@ public:
             if( !dbgUnhandledException->VisitCallExpr( arg ))
                 dbgUnhandledException = nullptr;
         }
+        if( salLogAreas != nullptr )
+        {
+            if( !salLogAreas->VisitCallExpr( arg ))
+                salLogAreas = nullptr;
+        }
         if( stringConcat != nullptr )
         {
             if( !stringConcat->VisitCallExpr( arg ))
@@ -669,6 +698,21 @@ public:
             if( !inlineVisible->VisitFunctionDecl( arg ))
                 inlineVisible = nullptr;
         }
+        if( redundantInline != nullptr )
+        {
+            if( !redundantInline->VisitFunctionDecl( arg ))
+                redundantInline = nullptr;
+        }
+        if( redundantPointerOps != nullptr )
+        {
+            if( !redundantPointerOps->VisitFunctionDecl( arg ))
+                redundantPointerOps = nullptr;
+        }
+        if( salLogAreas != nullptr )
+        {
+            if( !salLogAreas->VisitFunctionDecl( arg ))
+                salLogAreas = nullptr;
+        }
         if( staticAnonymous != nullptr )
         {
             if( !staticAnonymous->VisitFunctionDecl( arg ))
@@ -728,6 +772,11 @@ public:
     {
         if( ignoreLocation( arg ))
             return true;
+        if( redundantPointerOps != nullptr )
+        {
+            if( !redundantPointerOps->VisitMemberExpr( arg ))
+                redundantPointerOps = nullptr;
+        }
         if( staticAccess != nullptr )
         {
             if( !staticAccess->VisitMemberExpr( arg ))
@@ -808,6 +857,17 @@ public:
         {
             if( !unnecessaryParen->VisitUnaryExprOrTypeTraitExpr( arg ))
                 unnecessaryParen = nullptr;
+        }
+        return anyPluginActive();
+    }
+    bool VisitUnaryOperator(const class clang::UnaryOperator * arg)
+    {
+        if( ignoreLocation( arg ))
+            return true;
+        if( redundantPointerOps != nullptr )
+        {
+            if( !redundantPointerOps->VisitUnaryOperator( arg ))
+                redundantPointerOps = nullptr;
         }
         return anyPluginActive();
     }
@@ -1001,7 +1061,10 @@ private:
             || inlineVisible != nullptr
             || loopVarTooSmall != nullptr
             || privateBase != nullptr
+            || redundantInline != nullptr
+            || redundantPointerOps != nullptr
             || reservedId != nullptr
+            || salLogAreas != nullptr
             || salUnicodeLiteral != nullptr
             || sfxPoolItem != nullptr
             || simplifyConstruct != nullptr
@@ -1036,7 +1099,10 @@ private:
     InlineVisible* inlineVisible;
     LoopVarTooSmall* loopVarTooSmall;
     PrivateBase* privateBase;
+    RedundantInline* redundantInline;
+    RedundantPointerOps* redundantPointerOps;
     ReservedId* reservedId;
+    SalLogAreas* salLogAreas;
     SalUnicodeLiteral* salUnicodeLiteral;
     SfxPoolItem* sfxPoolItem;
     SimplifyConstruct* simplifyConstruct;
