@@ -1138,7 +1138,8 @@ public:
     std::unique_ptr<SwFieldProperties_Impl> m_pProps;
 
     Impl(SwDoc *const pDoc, SwFormatField *const pFormat, SwServiceType nServiceId)
-        : m_pFormatField(pFormat)
+        : m_pFieldType(nullptr)
+        , m_pFormatField(pFormat)
         , m_EventListeners(m_Mutex)
         , m_pDoc(pDoc)
         , m_bIsDescriptor(pFormat == nullptr)
