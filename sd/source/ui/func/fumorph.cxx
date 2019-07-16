@@ -380,8 +380,8 @@ void FuMorph::ImpInsertPolygons(
         return;
 
     SfxItemSet      aSet( aSet1 );
-    SdrObjGroup*    pObjGroup = new SdrObjGroup(mpView->getSdrModelFromSdrView());
-    SdrObjList*     pObjList = pObjGroup->GetSubList();
+    std::unique_ptr<SdrObjGroup, SdrObjectFreeOp> xObjGroup(new SdrObjGroup(mpView->getSdrModelFromSdrView()));
+    SdrObjList*     pObjList = xObjGroup->GetSubList();
     const size_t    nCount = rPolyPolyList3D.size();
     const double    fStep = 1. / ( nCount + 1 );
     const double    fDelta = nEndLineWidth - nStartLineWidth;
@@ -434,7 +434,7 @@ void FuMorph::ImpInsertPolygons(
             pObj2->CloneSdrObject(pObj2->getSdrModelFromSdrObject()) );
 
         mpView->DeleteMarked();
-        mpView->InsertObjectAtView( pObjGroup, *pPageView, SdrInsertFlags:: SETDEFLAYER );
+        mpView->InsertObjectAtView(xObjGroup.release(), *pPageView, SdrInsertFlags:: SETDEFLAYER);
     }
 }
 
