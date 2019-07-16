@@ -16,6 +16,24 @@
       "revId": "4a45d35aa2b921183ad5633af8b8725b6c5ffe8f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_7be65eeb",
+        "filename": "extras/source/palettes/libreoffice.soc",
+        "patchSetId": 3
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000996
+      },
+      "writtenOn": "2019-07-16T07:19:54Z",
+      "side": 0,
+      "message": "no color was removed",
+      "parentUuid": "bf659307_3ba2269c",
+      "revId": "4a45d35aa2b921183ad5633af8b8725b6c5ffe8f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
