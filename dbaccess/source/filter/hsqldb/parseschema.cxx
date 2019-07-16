@@ -28,6 +28,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <sal/log.hxx>
+#include <connectivity/dbexception.hxx>
 
 namespace
 {
@@ -74,8 +75,14 @@ public:
 
     OUString getTableName() const
     {
-        // SET TABLE <tableName>
-        return string::split(m_sql, u' ')[2];
+        // SET TABLE <tableName> or SET TABLE "<multi word table name>"
+        OUString sName = string::split(m_sql, u' ')[2];
+        if (sName.indexOf('"') >= 0)
+        {
+            // Table name with string delimiter
+            sName = string::split(m_sql, u'"')[1];
+        }
+        return sName;
     }
 };
 
@@ -169,6 +176,12 @@ void SchemaParser::parseSchema()
 
 std::vector<ColumnDefinition> SchemaParser::getTableColumnTypes(const OUString& sTableName) const
 {
+    if (m_ColumnTypes.count(sTableName) < 1)
+    {
+        constexpr char NOT_EXIST[] = "Internal error while getting column information of table";
+        SAL_WARN("dbaccess", NOT_EXIST << ". Table name is: " << sTableName);
+        dbtools::throwGenericSQLException(NOT_EXIST, ::comphelper::getProcessComponentContext());
+    }
     return m_ColumnTypes.at(sTableName);
 }
 
