@@ -133,6 +133,36 @@ inline css::uno::Any DbgGetCaughtException()
 */
 TOOLS_DLLPUBLIC OString exceptionToString(css::uno::Any const & caughtEx);
 
+/**
+   Logs an message along with a nicely formatted version of the current exception.
+   This must be called as the FIRST thing in a catch block.
+*/
+#define TOOLS_WARN_EXCEPTION(area, stream) \
+    do { \
+        css::uno::Any tools_warn_exception( DbgGetCaughtException() ); \
+        SAL_WARN(area, stream << " " << exceptionToString(tools_warn_exception)); \
+    } while (false)
+
+/**
+   Logs an message along with a nicely formatted version of the current exception.
+   This must be called as the FIRST thing in a catch block.
+*/
+#define TOOLS_WARN_EXCEPTION_IF(cond, area, stream) \
+    do { \
+        css::uno::Any tools_warn_exception( DbgGetCaughtException() ); \
+        SAL_WARN_IF(cond, area, stream << " " << exceptionToString(tools_warn_exception)); \
+    } while (false)
+
+/**
+   Logs an message along with a nicely formatted version of the current exception.
+   This must be called as the FIRST thing in a catch block.
+*/
+#define TOOLS_INFO_EXCEPTION(area, stream) \
+    do { \
+        css::uno::Any tools_warn_exception( DbgGetCaughtException() ); \
+        SAL_INFO(area, stream << " " << exceptionToString(tools_warn_exception)); \
+    } while (false)
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
