@@ -135,7 +135,6 @@
       <menu:menuitem menu:id=".uno:CellProtection" menu:style="text"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:EditLinks" menu:style="text"/>
-      <menu:menuitem menu:id=".uno:ImageMapDialog"/>
       <menu:menuitem menu:id=".uno:ObjectMenue" menu:style="text"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:EditDoc" menu:style="text"/>
@@ -699,6 +698,7 @@
       <menu:menuitem menu:id=".uno:AutoCorrectDlg" />
       <menu:menuitem menu:id=".uno:AutoComplete" menu:style="text"/>
       <menu:menuitem menu:id=".uno:RedactDoc" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:ImageMapDialog"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:GoalSeekDialog"/>
       <menu:menuitem menu:id=".uno:SolverDialog"/>
