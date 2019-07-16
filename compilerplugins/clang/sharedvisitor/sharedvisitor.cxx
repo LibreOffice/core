@@ -25,6 +25,7 @@
 #include "../inlinevisible.cxx"
 #include "../loopvartoosmall.cxx"
 #include "../overrideparam.cxx"
+#include "../overridevirtual.cxx"
 #include "../pointerbool.cxx"
 #include "../privatebase.cxx"
 #include "../rangedforcopy.cxx"
@@ -82,6 +83,7 @@ public:
         , inlineVisible( nullptr )
         , loopVarTooSmall( nullptr )
         , overrideParam( nullptr )
+        , overrideVirtual( nullptr )
         , pointerBool( nullptr )
         , privateBase( nullptr )
         , rangedForCopy( nullptr )
@@ -140,6 +142,8 @@ public:
             loopVarTooSmall = nullptr;
         if( overrideParam && !overrideParam->preRun())
             overrideParam = nullptr;
+        if( overrideVirtual && !overrideVirtual->preRun())
+            overrideVirtual = nullptr;
         if( pointerBool && !pointerBool->preRun())
             pointerBool = nullptr;
         if( privateBase && !privateBase->preRun())
@@ -226,6 +230,8 @@ public:
             loopVarTooSmall->postRun();
         if( overrideParam )
             overrideParam->postRun();
+        if( overrideVirtual )
+            overrideVirtual->postRun();
         if( pointerBool )
             pointerBool->postRun();
         if( privateBase )
@@ -318,6 +324,8 @@ public:
             loopVarTooSmall = static_cast< LoopVarTooSmall* >( plugin );
         else if( strcmp( name, "overrideparam" ) == 0 )
             overrideParam = static_cast< OverrideParam* >( plugin );
+        else if( strcmp( name, "overridevirtual" ) == 0 )
+            overrideVirtual = static_cast< OverrideVirtual* >( plugin );
         else if( strcmp( name, "pointerbool" ) == 0 )
             pointerBool = static_cast< PointerBool* >( plugin );
         else if( strcmp( name, "privatebase" ) == 0 )
@@ -548,6 +556,11 @@ public:
         {
             if( !overrideParam->VisitCXXMethodDecl( arg ))
                 overrideParam = nullptr;
+        }
+        if( overrideVirtual != nullptr )
+        {
+            if( !overrideVirtual->VisitCXXMethodDecl( arg ))
+                overrideVirtual = nullptr;
         }
         if( typedefParam != nullptr )
         {
@@ -1130,6 +1143,7 @@ private:
             || inlineVisible != nullptr
             || loopVarTooSmall != nullptr
             || overrideParam != nullptr
+            || overrideVirtual != nullptr
             || pointerBool != nullptr
             || privateBase != nullptr
             || rangedForCopy != nullptr
@@ -1172,6 +1186,7 @@ private:
     InlineVisible* inlineVisible;
     LoopVarTooSmall* loopVarTooSmall;
     OverrideParam* overrideParam;
+    OverrideVirtual* overrideVirtual;
     PointerBool* pointerBool;
     PrivateBase* privateBase;
     RangedForCopy* rangedForCopy;
