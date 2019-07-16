@@ -24,7 +24,10 @@
 #include "../externvar.cxx"
 #include "../inlinevisible.cxx"
 #include "../loopvartoosmall.cxx"
+#include "../overrideparam.cxx"
+#include "../pointerbool.cxx"
 #include "../privatebase.cxx"
+#include "../rangedforcopy.cxx"
 #include "../redundantfcast.cxx"
 #include "../redundantinline.cxx"
 #include "../redundantpointerops.cxx"
@@ -50,6 +53,7 @@
 #include "../weakbase.cxx"
 #include "../weakobject.cxx"
 #include "../dyncastvisibility.cxx"
+#include "../ptrvector.cxx"
 #include "../vclwidgets.cxx"
 
 using namespace clang;
@@ -77,7 +81,10 @@ public:
         , externVar( nullptr )
         , inlineVisible( nullptr )
         , loopVarTooSmall( nullptr )
+        , overrideParam( nullptr )
+        , pointerBool( nullptr )
         , privateBase( nullptr )
+        , rangedForCopy( nullptr )
         , redundantFCast( nullptr )
         , redundantInline( nullptr )
         , redundantPointerOps( nullptr )
@@ -131,8 +138,14 @@ public:
             inlineVisible = nullptr;
         if( loopVarTooSmall && !loopVarTooSmall->preRun())
             loopVarTooSmall = nullptr;
+        if( overrideParam && !overrideParam->preRun())
+            overrideParam = nullptr;
+        if( pointerBool && !pointerBool->preRun())
+            pointerBool = nullptr;
         if( privateBase && !privateBase->preRun())
             privateBase = nullptr;
+        if( rangedForCopy && !rangedForCopy->preRun())
+            rangedForCopy = nullptr;
         if( redundantFCast && !redundantFCast->preRun())
             redundantFCast = nullptr;
         if( redundantInline && !redundantInline->preRun())
@@ -211,8 +224,14 @@ public:
             inlineVisible->postRun();
         if( loopVarTooSmall )
             loopVarTooSmall->postRun();
+        if( overrideParam )
+            overrideParam->postRun();
+        if( pointerBool )
+            pointerBool->postRun();
         if( privateBase )
             privateBase->postRun();
+        if( rangedForCopy )
+            rangedForCopy->postRun();
         if( redundantFCast )
             redundantFCast->postRun();
         if( redundantInline )
@@ -297,8 +316,14 @@ public:
             inlineVisible = static_cast< InlineVisible* >( plugin );
         else if( strcmp( name, "loopvartoosmall" ) == 0 )
             loopVarTooSmall = static_cast< LoopVarTooSmall* >( plugin );
+        else if( strcmp( name, "overrideparam" ) == 0 )
+            overrideParam = static_cast< OverrideParam* >( plugin );
+        else if( strcmp( name, "pointerbool" ) == 0 )
+            pointerBool = static_cast< PointerBool* >( plugin );
         else if( strcmp( name, "privatebase" ) == 0 )
             privateBase = static_cast< PrivateBase* >( plugin );
+        else if( strcmp( name, "rangedforcopy" ) == 0 )
+            rangedForCopy = static_cast< RangedForCopy* >( plugin );
         else if( strcmp( name, "redundantfcast" ) == 0 )
             redundantFCast = static_cast< RedundantFCast* >( plugin );
         else if( strcmp( name, "redundantinline" ) == 0 )
@@ -477,6 +502,17 @@ public:
         }
         return anyPluginActive();
     }
+    bool VisitCXXForRangeStmt(const class clang::CXXForRangeStmt * arg)
+    {
+        if( ignoreLocation( arg ))
+            return true;
+        if( rangedForCopy != nullptr )
+        {
+            if( !rangedForCopy->VisitCXXForRangeStmt( arg ))
+                rangedForCopy = nullptr;
+        }
+        return anyPluginActive();
+    }
     bool VisitCXXFunctionalCastExpr(const class clang::CXXFunctionalCastExpr * arg)
     {
         if( ignoreLocation( arg ))
@@ -508,6 +544,11 @@ public:
     {
         if( ignoreLocation( arg ))
             return true;
+        if( overrideParam != nullptr )
+        {
+            if( !overrideParam->VisitCXXMethodDecl( arg ))
+                overrideParam = nullptr;
+        }
         if( typedefParam != nullptr )
         {
             if( !typedefParam->VisitCXXMethodDecl( arg ))
@@ -603,6 +644,11 @@ public:
         {
             if( !dbgUnhandledException->VisitCallExpr( arg ))
                 dbgUnhandledException = nullptr;
+        }
+        if( pointerBool != nullptr )
+        {
+            if( !pointerBool->VisitCallExpr( arg ))
+                pointerBool = nullptr;
         }
         if( redundantFCast != nullptr )
         {
@@ -1088,7 +1134,10 @@ private:
             || externVar != nullptr
             || inlineVisible != nullptr
             || loopVarTooSmall != nullptr
+            || overrideParam != nullptr
+            || pointerBool != nullptr
             || privateBase != nullptr
+            || rangedForCopy != nullptr
             || redundantFCast != nullptr
             || redundantInline != nullptr
             || redundantPointerOps != nullptr
@@ -1127,7 +1176,10 @@ private:
     ExternVar* externVar;
     InlineVisible* inlineVisible;
     LoopVarTooSmall* loopVarTooSmall;
+    OverrideParam* overrideParam;
+    PointerBool* pointerBool;
     PrivateBase* privateBase;
+    RangedForCopy* rangedForCopy;
     RedundantFCast* redundantFCast;
     RedundantInline* redundantInline;
     RedundantPointerOps* redundantPointerOps;
@@ -1164,12 +1216,15 @@ public:
     explicit SharedRecursiveASTVisitorVisitTemplates(const InstantiationData& rData)
         : FilteringPlugin(rData)
         , dynCastVisibility( nullptr )
+        , ptrVector( nullptr )
         , vCLWidgets( nullptr )
         {}
     virtual bool preRun() override
     {
         if( dynCastVisibility && !dynCastVisibility->preRun())
             dynCastVisibility = nullptr;
+        if( ptrVector && !ptrVector->preRun())
+            ptrVector = nullptr;
         if( vCLWidgets && !vCLWidgets->preRun())
             vCLWidgets = nullptr;
         return anyPluginActive();
@@ -1178,6 +1233,8 @@ public:
     {
         if( dynCastVisibility )
             dynCastVisibility->postRun();
+        if( ptrVector )
+            ptrVector->postRun();
         if( vCLWidgets )
             vCLWidgets->postRun();
     }
@@ -1192,6 +1249,8 @@ public:
     {
         if( strcmp( name, "dyncastvisibility" ) == 0 )
             dynCastVisibility = static_cast< DynCastVisibility* >( plugin );
+        else if( strcmp( name, "ptrvector" ) == 0 )
+            ptrVector = static_cast< PtrVector* >( plugin );
         else if( strcmp( name, "vclwidgets" ) == 0 )
             vCLWidgets = static_cast< VCLWidgets* >( plugin );
         else
@@ -1251,6 +1310,17 @@ bool shouldVisitTemplateInstantiations() const { return true; }
         {
             if( !dynCastVisibility->VisitCXXDynamicCastExpr( arg ))
                 dynCastVisibility = nullptr;
+        }
+        return anyPluginActive();
+    }
+    bool VisitCXXOperatorCallExpr(const class clang::CXXOperatorCallExpr * arg)
+    {
+        if( ignoreLocation( arg ))
+            return true;
+        if( ptrVector != nullptr )
+        {
+            if( !ptrVector->VisitCXXOperatorCallExpr( arg ))
+                ptrVector = nullptr;
         }
         return anyPluginActive();
     }
@@ -1324,9 +1394,11 @@ private:
     bool anyPluginActive() const
     {
         return dynCastVisibility != nullptr
+            || ptrVector != nullptr
             || vCLWidgets != nullptr;
     }
     DynCastVisibility* dynCastVisibility;
+    PtrVector* ptrVector;
     VCLWidgets* vCLWidgets;
 };
 
