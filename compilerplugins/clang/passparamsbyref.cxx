@@ -6,6 +6,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
+#ifndef LO_CLANG_SHARED_PLUGINS
 
 #include <string>
 #include <unordered_set>
@@ -42,7 +43,10 @@ public:
     // on the other hand, use a hack of ignoring just the DeclRefExprs nested in
     // LValueToRValue ImplicitCastExprs when determining whether a param is
     // bound to a reference:
+    bool PreTraverseFunctionDecl(FunctionDecl *);
+    void PostTraverseFunctionDecl(FunctionDecl *);
     bool TraverseFunctionDecl(FunctionDecl *);
+    bool PreTraverseImplicitCastExpr(ImplicitCastExpr *);
     bool TraverseImplicitCastExpr(ImplicitCastExpr *);
 
     bool VisitBinAssign(BinaryOperator const *);
@@ -55,28 +59,32 @@ private:
     std::unordered_set<ParmVarDecl const *> mParamExclusions;
 };
 
-bool PassParamsByRef::TraverseFunctionDecl(FunctionDecl* functionDecl)
+bool PassParamsByRef::PreTraverseFunctionDecl(FunctionDecl* functionDecl)
 {
     if (ignoreLocation(functionDecl))
-        return true;
+        return false;
     if (functionDecl->isDeleted()
         || functionDecl->isFunctionTemplateSpecialization())
     {
-        return true;
+        return false;
     }
     // only consider base declarations, not overridden ones, or we warn on methods that
     // are overriding stuff from external libraries
     const CXXMethodDecl * methodDecl = dyn_cast<CXXMethodDecl>(functionDecl);
     if (methodDecl && methodDecl->size_overridden_methods() > 0)
-        return true;
+        return false;
 
     // Only warn on the definition of the function:
     if (!functionDecl->doesThisDeclarationHaveABody())
-        return true;
+        return false;
 
     mbInsideFunctionDecl = true;
     mParamExclusions.clear();
-    bool ret = RecursiveASTVisitor::TraverseFunctionDecl(functionDecl);
+    return true;
+}
+
+void PassParamsByRef::PostTraverseFunctionDecl(FunctionDecl* functionDecl)
+{
     mbInsideFunctionDecl = false;
 
     auto cxxConstructorDecl = dyn_cast<CXXConstructorDecl>(functionDecl);
@@ -124,17 +132,37 @@ bool PassParamsByRef::TraverseFunctionDecl(FunctionDecl* functionDecl)
                 << can->getSourceRange();
         }
     }
+}
+
+bool PassParamsByRef::TraverseFunctionDecl(FunctionDecl* functionDecl)
+{
+    bool ret = true;
+    if (PreTraverseFunctionDecl(functionDecl))
+    {
+        ret = RecursiveASTVisitor::TraverseFunctionDecl(functionDecl);
+        PostTraverseFunctionDecl(functionDecl);
+    }
     return ret;
 }
 
-bool PassParamsByRef::TraverseImplicitCastExpr(ImplicitCastExpr * expr) {
+bool PassParamsByRef::PreTraverseImplicitCastExpr(ImplicitCastExpr * expr)
+{
     if (ignoreLocation(expr))
-        return true;
-    return
-        (expr->getCastKind() == CK_LValueToRValue
-         && (dyn_cast<DeclRefExpr>(expr->getSubExpr()->IgnoreParenImpCasts())
-             != nullptr))
-        || RecursiveASTVisitor::TraverseImplicitCastExpr(expr);
+        return false;
+    if (expr->getCastKind() == CK_LValueToRValue
+         && isa<DeclRefExpr>(expr->getSubExpr()->IgnoreParenImpCasts()))
+        return false;
+    return true;
+}
+
+bool PassParamsByRef::TraverseImplicitCastExpr(ImplicitCastExpr * expr)
+{
+    bool ret = true;
+    if (PreTraverseImplicitCastExpr(expr))
+    {
+        ret = RecursiveASTVisitor::TraverseImplicitCastExpr(expr);
+    }
+    return ret;
 }
 
 bool PassParamsByRef::VisitBinAssign(const BinaryOperator * binaryOperator)
@@ -193,8 +221,10 @@ bool PassParamsByRef::isFat(QualType type) {
         && compiler.getASTContext().getTypeSizeInChars(t2).getQuantity() > 64;
 }
 
-loplugin::Plugin::Registration< PassParamsByRef > X("passparamsbyref");
+loplugin::Plugin::Registration< PassParamsByRef > passparamsbyref("passparamsbyref");
 
-}
+} // namespace
+
+#endif // LO_CLANG_SHARED_PLUGINS
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
