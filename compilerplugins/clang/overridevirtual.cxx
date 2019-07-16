@@ -19,11 +19,11 @@
 
 namespace {
 
-class Override:
-    public loplugin::FilteringRewritePlugin<Override>
+class OverrideVirtual:
+    public loplugin::FilteringRewritePlugin<OverrideVirtual>
 {
 public:
-    explicit Override(loplugin::InstantiationData const & data):
+    explicit OverrideVirtual(loplugin::InstantiationData const & data):
         FilteringRewritePlugin(data) {}
 
     virtual void run() override;
@@ -34,7 +34,7 @@ private:
     std::set<SourceLocation> insertions_;
 };
 
-void Override::run() {
+void OverrideVirtual::run() {
     if (compiler.getLangOpts().CPlusPlus
         && compiler.getPreprocessor().getIdentifierInfo(
             "LIBO_INTERNAL_ONLY")->hasMacroDefinition())
@@ -42,7 +42,7 @@ void Override::run() {
         TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
     }
 }
-bool Override::VisitCXXMethodDecl(CXXMethodDecl const * decl) {
+bool OverrideVirtual::VisitCXXMethodDecl(CXXMethodDecl const * decl) {
     // As a heuristic, ignore declarations where the name is spelled out in an
     // ignored location; that e.g. handles uses of the Q_OBJECT macro from
     // external QtCore/qobjectdefs.h:
@@ -161,7 +161,7 @@ bool Override::VisitCXXMethodDecl(CXXMethodDecl const * decl) {
     return true;
 }
 
-loplugin::Plugin::Registration<Override> X("override", true);
+loplugin::Plugin::Registration<OverrideVirtual> X("overridevirtual", true);
 
 }
 

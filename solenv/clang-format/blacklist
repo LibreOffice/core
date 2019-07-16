@@ -1702,8 +1702,8 @@ compilerplugins/clang/mergeclasses.cxx
 compilerplugins/clang/nullptr.cxx
 compilerplugins/clang/oncevar.cxx
 compilerplugins/clang/oslendian.cxx
-compilerplugins/clang/override.cxx
 compilerplugins/clang/overrideparam.cxx
+compilerplugins/clang/overridevirtual.cxx
 compilerplugins/clang/passparamsbyref.cxx
 compilerplugins/clang/passstuffbyref.cxx
 compilerplugins/clang/plugin.cxx
