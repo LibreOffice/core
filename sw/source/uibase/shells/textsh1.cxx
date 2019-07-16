@@ -739,7 +739,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                     rReq.Ignore();
                     break;
 
-                case 2:
+                case 102:
                     xDlg->Execute();
                     rReq.Done();
                     break;
