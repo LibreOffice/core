@@ -1210,6 +1210,7 @@ IMPL_LINK_NOARG(ScCheckListMenuWindow, TriStateHdl, Button*, void)
     }
 
     mePrevToggleAllState = maChkToggleAll->GetState();
+    maTabStops.SetTabStop(maChkToggleAll); // Needed for when accelerator is used
 }
 
 IMPL_LINK_NOARG(ScCheckListMenuWindow, EdModifyHdl, Edit&, void)
@@ -1285,7 +1286,14 @@ IMPL_LINK_NOARG(ScCheckListMenuWindow, EdModifyHdl, Edit&, void)
         maChkToggleAll->SetState( TRISTATE_INDET );
 
     if ( !maConfig.mbAllowEmptySet )
-        maBtnOk->Enable( nSelCount != 0);
+    {
+        const bool bEmptySet( nSelCount == 0 );
+        maChecks->Enable( !bEmptySet );
+        maChkToggleAll->Enable( !bEmptySet );
+        maBtnSelectSingle->Enable( !bEmptySet );
+        maBtnUnselectSingle->Enable( !bEmptySet );
+        maBtnOk->Enable( !bEmptySet );
+    }
 }
 
 IMPL_LINK( ScCheckListMenuWindow, CheckHdl, SvTreeListBox*, pChecks, void )
@@ -1323,14 +1331,27 @@ void ScCheckListMenuWindow::MouseMove(const MouseEvent& rMEvt)
 
 bool ScCheckListMenuWindow::EventNotify(NotifyEvent& rNEvt)
 {
-    if (rNEvt.GetType() == MouseNotifyEvent::KEYUP)
+    MouseNotifyEvent nType = rNEvt.GetType();
+    if (HasFocus() && nType == MouseNotifyEvent::GETFOCUS)
+    {
+        setSelectedMenuItem( 0 , false, false );
+        return true;
+    }
+    if (nType == MouseNotifyEvent::KEYINPUT)
     {
         const KeyEvent* pKeyEvent = rNEvt.GetKeyEvent();
         const vcl::KeyCode& rCode = pKeyEvent->GetKeyCode();
-        bool bShift = rCode.IsShift();
-        if (rCode.GetCode() == KEY_TAB)
+        const sal_uInt16 nCode = rCode.GetCode();
+        if (rCode.IsMod2()) // Hack to prevent tdf#122772
         {
-            maTabStops.CycleFocus(bShift);
+            if (nCode == KEY_DOWN || nCode == KEY_RIGHT)
+                return true;
+        }
+        else
+        {
+            bool bShift = rCode.IsShift();
+            if (nCode == KEY_TAB)
+                maTabStops.CycleFocus(bShift);
             return true;
         }
     }
