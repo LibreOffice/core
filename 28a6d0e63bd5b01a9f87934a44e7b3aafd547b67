@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "bf659307_f6492360",
+        "filename": "sc/source/core/data/table2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 542,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-07-16T09:37:27Z",
+      "side": 1,
+      "message": "The function copies static values from src to dest (i.e., turns formulas to values iiuc). The range could include some allocated columns in src, some unallocated. And dest range also may include some allocated, and some not.\n\nSo my idea is this: when we copy from allocated columns in src, we also make sure to allocate in dest. So we find the max allocated column from the range in src, and make sure dest also has those. But then we *continue* \"copying\" from src: from top-level PoV, the rest is empty, which should overwrite dest cells possibly containing data. And since the CopyStaticToDocument makes sure to copy cell format explicitly, I also do that explicitly from default attr array - that contains formatting for those unallocated columns from src.\n\nBut I don\u0027t think I should allocate more columns in dest than were allocated in src - so I stop when both src and dest are unallocated.",
+      "parentUuid": "bf659307_3b2466c6",
+      "revId": "28a6d0e63bd5b01a9f87934a44e7b3aafd547b67",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bf659307_5b211ab4",
         "filename": "sc/source/core/data/table2.cxx",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2019-07-16T08:54:06Z",
       "side": 1,
       "message": "surely this should be \u003c ?",
+      "revId": "28a6d0e63bd5b01a9f87934a44e7b3aafd547b67",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_1647f74d",
+        "filename": "sc/source/core/data/table2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 577,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-07-16T09:37:27Z",
+      "side": 1,
+      "message": "No. This code cleans (\u003dcopies empty data to) dest \"from empty src\".",
+      "parentUuid": "bf659307_5b211ab4",
       "revId": "28a6d0e63bd5b01a9f87934a44e7b3aafd547b67",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "bf659307_b675eb9a",
+        "filename": "sc/source/core/data/table2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 579,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-07-16T09:37:27Z",
+      "side": 1,
+      "message": "No, because we only clean as much as already allocated, not trying to allocate new just to clean it.",
+      "parentUuid": "bf659307_fb2d8ea8",
+      "revId": "28a6d0e63bd5b01a9f87934a44e7b3aafd547b67",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bf659307_9b181282",
         "filename": "sc/source/core/data/table2.cxx",
         "patchSetId": 1
@@ -70,6 +124,24 @@
     },
     {
       "key": {
+        "uuid": "bf659307_d67adf86",
+        "filename": "sc/source/core/data/table2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1121,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-07-16T09:37:27Z",
+      "side": 1,
+      "message": "possibly - here I wasn\u0027t sure...",
+      "parentUuid": "bf659307_9b181282",
+      "revId": "28a6d0e63bd5b01a9f87934a44e7b3aafd547b67",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bf659307_fb06ee20",
         "filename": "sc/source/core/data/table2.cxx",
         "patchSetId": 1
@@ -81,6 +153,24 @@
       "writtenOn": "2019-07-16T08:54:06Z",
       "side": 1,
       "message": "we may need to CreateColumnIfNotExists here, since we\u0027re trying to set border attributes (I think)",
+      "revId": "28a6d0e63bd5b01a9f87934a44e7b3aafd547b67",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_9674679b",
+        "filename": "sc/source/core/data/table2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2583,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-07-16T09:37:27Z",
+      "side": 1,
+      "message": "this is hit when I simply debug in Basic - see bug #. No editing was performed - and creating columns here would create everything in the debugging session",
+      "parentUuid": "bf659307_fb06ee20",
       "revId": "28a6d0e63bd5b01a9f87934a44e7b3aafd547b67",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
