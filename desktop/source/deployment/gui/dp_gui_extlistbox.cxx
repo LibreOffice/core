@@ -187,6 +187,7 @@ ExtensionBox_Impl::ExtensionBox_Impl(std::unique_ptr<weld::ScrolledWindow> xScro
     , m_bInDelete( false )
     , m_nActive( 0 )
     , m_nTopIndex( 0 )
+    , m_nStdHeight( 0 )
     , m_nActiveHeight( 0 )
     , m_aSharedImage(StockImage::Yes, RID_BMP_SHARED)
     , m_aLockedImage(StockImage::Yes, RID_BMP_LOCKED)
