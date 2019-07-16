@@ -34,7 +34,7 @@ public:
     bool VisitCallExpr(CallExpr const* call);
     bool TraverseCXXCatchStmt(CXXCatchStmt*);
     bool PreTraverseCXXCatchStmt(CXXCatchStmt*);
-    bool PostTraverseCXXCatchStmt(CXXCatchStmt*, bool traverseOk);
+    void PostTraverseCXXCatchStmt(CXXCatchStmt*);
 
 private:
     std::stack<CXXCatchStmt const*> currCatchStmt;
@@ -56,11 +56,10 @@ bool DbgUnhandledException::PreTraverseCXXCatchStmt(CXXCatchStmt* catchStmt)
     return true;
 }
 
-bool DbgUnhandledException::PostTraverseCXXCatchStmt(CXXCatchStmt* catchStmt, bool)
+void DbgUnhandledException::PostTraverseCXXCatchStmt(CXXCatchStmt* catchStmt)
 {
     assert(currCatchStmt.top() == catchStmt);
     currCatchStmt.pop();
-    return true;
 }
 
 bool DbgUnhandledException::TraverseCXXCatchStmt(CXXCatchStmt* catchStmt)
@@ -68,8 +67,7 @@ bool DbgUnhandledException::TraverseCXXCatchStmt(CXXCatchStmt* catchStmt)
     if (!PreTraverseCXXCatchStmt(catchStmt))
         return false;
     bool ret = RecursiveASTVisitor::TraverseCXXCatchStmt(catchStmt);
-    if (!PostTraverseCXXCatchStmt(catchStmt, ret))
-        return false;
+    PostTraverseCXXCatchStmt(catchStmt);
     return ret;
 }
 
