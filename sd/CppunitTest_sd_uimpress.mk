@@ -94,6 +94,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sd_uimpress,\
 ))
 
 $(eval $(call gb_CppunitTest_use_ure,sd_uimpress))
+$(eval $(call gb_CppunitTest_use_vcl,sd_uimpress))
 
 $(eval $(call gb_CppunitTest_use_components,sd_uimpress,\
     configmgr/source/configmgr \
