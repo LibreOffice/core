@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_d6889f72",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2019-07-16T09:59:27Z",
+      "side": 1,
+      "message": "That’s not what the word “tooltip” means lol\n\nIn general I recommend not to copy bug titles as commit messages, but that is just a personal preference…",
+      "range": {
+        "startLine": 7,
+        "startChar": 17,
+        "endLine": 7,
+        "endChar": 24
+      },
+      "revId": "fdd826eefd0f184fd832582237a8ccdae3572f48",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
