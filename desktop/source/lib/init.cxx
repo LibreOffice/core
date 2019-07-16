@@ -3055,16 +3055,33 @@ static void doc_removeTextContext(LibreOfficeKitDocument* pThis, unsigned nLOKWi
         return;
     }
 
+    // Annoyingly - backspace and delete are handled in the apps via an accelerator
+    // which are PostMessage'd by SfxViewShell::ExecKey_Impl so to stay in the same
+    // order we do this synchronously here, unless we're in a dialog.
     if (nCharBefore > 0)
     {
         // backspace
-        SfxLokHelper::postKeyEventAsync(pWindow, LOK_EXT_TEXTINPUT, 8, 1283, nCharBefore - 1);
+        if (nLOKWindowId == 0)
+        {
+            KeyEvent aEvt(8, 1283);
+            for (int i = 0; i < nCharBefore; ++i)
+                pWindow->KeyInput(aEvt);
+        }
+        else
+            SfxLokHelper::postKeyEventAsync(pWindow, LOK_KEYEVENT_KEYINPUT, 8, 1283, nCharBefore - 1);
     }
 
     if (nCharAfter > 0)
     {
         // delete (forward)
-        SfxLokHelper::postKeyEventAsync(pWindow, LOK_EXT_TEXTINPUT, 46, 1286, nCharAfter - 1);
+        if (nLOKWindowId == 0)
+        {
+            KeyEvent aEvt(46, 1286);
+            for (int i = 0; i < nCharAfter; ++i)
+                pWindow->KeyInput(aEvt);
+        }
+        else
+            SfxLokHelper::postKeyEventAsync(pWindow, LOK_KEYEVENT_KEYINPUT, 46, 1286, nCharAfter - 1);
     }
 }
 
