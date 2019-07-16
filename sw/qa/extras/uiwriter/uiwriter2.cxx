@@ -8,6 +8,11 @@
  */
 
 #include <swmodeltestbase.hxx>
+
+#include <sstream>
+
+#include <boost/property_tree/json_parser.hpp>
+
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/frame/DispatchHelper.hpp>
 #include <com/sun/star/style/LineSpacing.hpp>
@@ -1619,6 +1624,26 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testImageComment)
         const SwRect& rAnchor = pItem->pPostIt->GetAnchorRect();
         CPPUNIT_ASSERT_LESSEQUAL(static_cast<long>(1418), rAnchor.Left());
     }
+
+    // Test the comment anchor we expose via the LOK API.
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1418, 1418, 0, 0
+    // - Actual  : 1418, 1418, 1024, 1024
+    // I.e. the anchor position had a non-empty size, which meant different rendering via tiled
+    // rendering and on the desktop.
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    OUString aPostits = pTextDoc->getPostIts();
+    std::stringstream aStream(aPostits.toUtf8().getStr());
+    boost::property_tree::ptree aTree;
+    boost::property_tree::read_json(aStream, aTree);
+    for (boost::property_tree::ptree::value_type& rValue : aTree.get_child("comments"))
+    {
+        const boost::property_tree::ptree& rComment = rValue.second;
+        OString aAnchorPos(rComment.get<std::string>("anchorPos").c_str());
+        CPPUNIT_ASSERT_EQUAL(OString("1418, 1418, 0, 0"), aAnchorPos);
+    }
+
 #endif
 
     // Now delete the image.
