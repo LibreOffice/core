@@ -20,6 +20,7 @@
 /**
   Look for calls where the param is bool but the call-site-arg is pointer.
 */
+#ifndef LO_CLANG_SHARED_PLUGINS
 
 namespace
 {
@@ -31,7 +32,11 @@ public:
     {
     }
 
-    virtual void run() override { TraverseDecl(compiler.getASTContext().getTranslationUnitDecl()); }
+    virtual void run() override
+    {
+        if (preRun())
+            TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
+    }
 
     bool VisitCallExpr(CallExpr const*);
 
@@ -117,7 +122,10 @@ llvm::Optional<APSInt> PointerBool::getCallValue(const Expr* arg)
     return llvm::Optional<APSInt>();
 }
 
-loplugin::Plugin::Registration<PointerBool> X("pointerbool", true);
-}
+loplugin::Plugin::Registration<PointerBool> pointerbool("pointerbool");
+
+} // namespace
+
+#endif // LO_CLANG_SHARED_PLUGINS
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
