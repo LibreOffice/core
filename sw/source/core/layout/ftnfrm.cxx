@@ -2677,6 +2677,7 @@ bool SwLayoutFrame::MoveLowerFootnotes( SwContentFrame *pStart, SwFootnoteBossFr
             pNewBoss->MoveFootnotes_( aFootnoteArr, true );
         if( pFootnoteArr )
         {
+            assert(pNewChief);
             static_cast<SwFootnoteBossFrame*>(pNewChief)->MoveFootnotes_( *pFootnoteArr, true );
             pFootnoteArr.reset();
         }
