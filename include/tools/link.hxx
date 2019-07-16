@@ -34,6 +34,8 @@
 #   ifdef DBG_UTIL
 #       define TRACE_LINKS 1
 #       include <cstdio>
+#   else
+#       define TRACE_LINKS 0
 #   endif
 #endif
 
