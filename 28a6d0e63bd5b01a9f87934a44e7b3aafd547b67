@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_3b2466c6",
+        "filename": "sc/source/core/data/table2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 542,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-07-16T08:54:06Z",
+      "side": 1,
+      "message": "this logic looks weird, you\u0027re checking the the allocated-cols of the source table, and then resizing the columns of the destination table?\n\nI would expect something like:\n\n    nCol2 \u003d ClampToAllocatedColumns(nCol2)\n    pDestTab-\u003eCreatColumnIfNotExists(nCol2);\n\ni.e. clamp source columns to actual allocated range, then make sure the destination table also has that range allocated.",
+      "revId": "28a6d0e63bd5b01a9f87934a44e7b3aafd547b67",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_5b211ab4",
+        "filename": "sc/source/core/data/table2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 577,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-07-16T08:54:06Z",
+      "side": 1,
+      "message": "surely this should be \u003c ?",
+      "revId": "28a6d0e63bd5b01a9f87934a44e7b3aafd547b67",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_fb2d8ea8",
+        "filename": "sc/source/core/data/table2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 579,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-07-16T08:54:06Z",
+      "side": 1,
+      "message": "and we should be resizing the dest to accept the data here?",
+      "revId": "28a6d0e63bd5b01a9f87934a44e7b3aafd547b67",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_9b181282",
+        "filename": "sc/source/core/data/table2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1121,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-07-16T08:54:06Z",
+      "side": 1,
+      "message": "I would expect to clamp here, since we\u0027re trying to listen to all the currently available cells?",
+      "revId": "28a6d0e63bd5b01a9f87934a44e7b3aafd547b67",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_fb06ee20",
+        "filename": "sc/source/core/data/table2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2583,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-07-16T08:54:06Z",
+      "side": 1,
+      "message": "we may need to CreateColumnIfNotExists here, since we\u0027re trying to set border attributes (I think)",
+      "revId": "28a6d0e63bd5b01a9f87934a44e7b3aafd547b67",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
