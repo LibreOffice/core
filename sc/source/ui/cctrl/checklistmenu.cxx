@@ -1323,16 +1323,14 @@ void ScCheckListMenuWindow::MouseMove(const MouseEvent& rMEvt)
 
 bool ScCheckListMenuWindow::EventNotify(NotifyEvent& rNEvt)
 {
-    if (rNEvt.GetType() == MouseNotifyEvent::KEYUP)
+    if (rNEvt.GetType() == MouseNotifyEvent::KEYINPUT)
     {
         const KeyEvent* pKeyEvent = rNEvt.GetKeyEvent();
         const vcl::KeyCode& rCode = pKeyEvent->GetKeyCode();
         bool bShift = rCode.IsShift();
         if (rCode.GetCode() == KEY_TAB)
-        {
             maTabStops.CycleFocus(bShift);
-            return true;
-        }
+        return true;
     }
     return ScMenuFloatingWindow::EventNotify(rNEvt);
 }
@@ -1597,8 +1595,20 @@ void ScTabStops::CycleFocus( bool bReverse )
 
     if ( nIterCount <= maControls.size() )
     {
+        // Temporarily disable controls so menu is able to keep focus grab.
+        if ( mpMenuWindow && mnCurTabStop == 0 )
+        {
+            mpMenuWindow->setSelectedMenuItem( 0 , false, false );
+            for ( size_t n = 1; n < maControls.size(); n++ )
+                maControls[n]->Disable();
+        }
         maControls[mnCurTabStop]->SetFakeFocus( true );
         maControls[mnCurTabStop]->GrabFocus();
+        if ( mpMenuWindow && mnCurTabStop == 0 )
+        {
+            for ( size_t n = 1; n < maControls.size(); n++ )
+                maControls[n]->Enable();
+        }
     }
     // else : all controls are disabled, so can't do anything
 }
