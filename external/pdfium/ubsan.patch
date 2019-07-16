@@ -10,9 +10,9 @@
      m_String[offset + nLen] = 0;
    }
  
---- core/fxge/cfx_facecache.cpp
-+++ core/fxge/cfx_facecache.cpp
-@@ -183,7 +183,8 @@ std::unique_ptr<CFX_GlyphBitmap> CFX_FaceCache::RenderGlyph(
+--- core/fxge/cfx_glyphcache.cpp
++++ core/fxge/cfx_glyphcache.cpp
+@@ -183,7 +183,8 @@ std::unique_ptr<CFX_GlyphBitmap> CFX_GlyphCache::RenderGlyph(
        }
      }
    } else {
