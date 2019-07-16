@@ -1231,7 +1231,9 @@ BitmapEx ThumbnailView::readThumbnail(const OUString &msURL)
 }
 
 SfxThumbnailView::SfxThumbnailView(std::unique_ptr<weld::ScrolledWindow> xWindow, std::unique_ptr<weld::Menu> xMenu)
-    : mpItemAttrs(new ThumbnailItemAttributes)
+    : mnThumbnailHeight(0)
+    , mnDisplayHeight(0)
+    , mpItemAttrs(new ThumbnailItemAttributes)
     , mxScrolledWindow(std::move(xWindow))
     , mxContextMenu(std::move(xMenu))
 {
