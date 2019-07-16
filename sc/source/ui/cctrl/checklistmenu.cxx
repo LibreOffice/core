@@ -1323,16 +1323,14 @@ void ScCheckListMenuWindow::MouseMove(const MouseEvent& rMEvt)
 
 bool ScCheckListMenuWindow::EventNotify(NotifyEvent& rNEvt)
 {
-    if (rNEvt.GetType() == MouseNotifyEvent::KEYUP)
+    if (rNEvt.GetType() == MouseNotifyEvent::KEYINPUT)
     {
         const KeyEvent* pKeyEvent = rNEvt.GetKeyEvent();
         const vcl::KeyCode& rCode = pKeyEvent->GetKeyCode();
         bool bShift = rCode.IsShift();
         if (rCode.GetCode() == KEY_TAB)
-        {
             maTabStops.CycleFocus(bShift);
-            return true;
-        }
+        return true;
     }
     return ScMenuFloatingWindow::EventNotify(rNEvt);
 }
@@ -1568,8 +1566,13 @@ void ScTabStops::CycleFocus( bool bReverse )
     else
         mnCurTabStop = 0;
 
+    // Clear selected menu item and enable controls when menu loses focus
     if ( mpMenuWindow && mnCurTabStop == 0 )
+    {
         mpMenuWindow->clearSelectedMenuItem();
+        for ( size_t n = 1; n < maControls.size(); n++ )
+            maControls[n]->Enable();
+    }
 
     size_t nIterCount = 0;
 
@@ -1597,6 +1600,13 @@ void ScTabStops::CycleFocus( bool bReverse )
 
     if ( nIterCount <= maControls.size() )
     {
+        // Disable controls when menu has focus.
+        if ( mpMenuWindow && mnCurTabStop == 0 )
+        {
+            mpMenuWindow->setSelectedMenuItem( 0 , false, false );
+            for ( size_t n = 1; n < maControls.size(); n++ )
+                maControls[n]->Disable();
+        }
         maControls[mnCurTabStop]->SetFakeFocus( true );
         maControls[mnCurTabStop]->GrabFocus();
     }
