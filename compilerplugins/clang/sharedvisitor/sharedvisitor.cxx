@@ -25,6 +25,7 @@
 #include "../inlinevisible.cxx"
 #include "../loopvartoosmall.cxx"
 #include "../privatebase.cxx"
+#include "../redundantfcast.cxx"
 #include "../redundantinline.cxx"
 #include "../redundantpointerops.cxx"
 #include "../reservedid.cxx"
@@ -77,6 +78,7 @@ public:
         , inlineVisible( nullptr )
         , loopVarTooSmall( nullptr )
         , privateBase( nullptr )
+        , redundantFCast( nullptr )
         , redundantInline( nullptr )
         , redundantPointerOps( nullptr )
         , reservedId( nullptr )
@@ -131,6 +133,8 @@ public:
             loopVarTooSmall = nullptr;
         if( privateBase && !privateBase->preRun())
             privateBase = nullptr;
+        if( redundantFCast && !redundantFCast->preRun())
+            redundantFCast = nullptr;
         if( redundantInline && !redundantInline->preRun())
             redundantInline = nullptr;
         if( redundantPointerOps && !redundantPointerOps->preRun())
@@ -209,6 +213,8 @@ public:
             loopVarTooSmall->postRun();
         if( privateBase )
             privateBase->postRun();
+        if( redundantFCast )
+            redundantFCast->postRun();
         if( redundantInline )
             redundantInline->postRun();
         if( redundantPointerOps )
@@ -293,6 +299,8 @@ public:
             loopVarTooSmall = static_cast< LoopVarTooSmall* >( plugin );
         else if( strcmp( name, "privatebase" ) == 0 )
             privateBase = static_cast< PrivateBase* >( plugin );
+        else if( strcmp( name, "redundantfcast" ) == 0 )
+            redundantFCast = static_cast< RedundantFCast* >( plugin );
         else if( strcmp( name, "redundantinline" ) == 0 )
             redundantInline = static_cast< RedundantInline* >( plugin );
         else if( strcmp( name, "redundantpointerops" ) == 0 )
@@ -446,6 +454,11 @@ public:
     {
         if( ignoreLocation( arg ))
             return true;
+        if( redundantFCast != nullptr )
+        {
+            if( !redundantFCast->VisitCXXConstructExpr( arg ))
+                redundantFCast = nullptr;
+        }
         if( simplifyConstruct != nullptr )
         {
             if( !simplifyConstruct->VisitCXXConstructExpr( arg ))
@@ -468,6 +481,11 @@ public:
     {
         if( ignoreLocation( arg ))
             return true;
+        if( redundantFCast != nullptr )
+        {
+            if( !redundantFCast->VisitCXXFunctionalCastExpr( arg ))
+                redundantFCast = nullptr;
+        }
         if( salUnicodeLiteral != nullptr )
         {
             if( !salUnicodeLiteral->VisitCXXFunctionalCastExpr( arg ))
@@ -585,6 +603,11 @@ public:
         {
             if( !dbgUnhandledException->VisitCallExpr( arg ))
                 dbgUnhandledException = nullptr;
+        }
+        if( redundantFCast != nullptr )
+        {
+            if( !redundantFCast->VisitCallExpr( arg ))
+                redundantFCast = nullptr;
         }
         if( salLogAreas != nullptr )
         {
@@ -815,6 +838,11 @@ public:
     {
         if( ignoreLocation( arg ))
             return true;
+        if( redundantFCast != nullptr )
+        {
+            if( !redundantFCast->VisitReturnStmt( arg ))
+                redundantFCast = nullptr;
+        }
         if( stringStatic != nullptr )
         {
             if( !stringStatic->VisitReturnStmt( arg ))
@@ -1061,6 +1089,7 @@ private:
             || inlineVisible != nullptr
             || loopVarTooSmall != nullptr
             || privateBase != nullptr
+            || redundantFCast != nullptr
             || redundantInline != nullptr
             || redundantPointerOps != nullptr
             || reservedId != nullptr
@@ -1099,6 +1128,7 @@ private:
     InlineVisible* inlineVisible;
     LoopVarTooSmall* loopVarTooSmall;
     PrivateBase* privateBase;
+    RedundantFCast* redundantFCast;
     RedundantInline* redundantInline;
     RedundantPointerOps* redundantPointerOps;
     ReservedId* reservedId;
