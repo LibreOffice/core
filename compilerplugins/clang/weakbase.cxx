@@ -7,6 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#ifndef LO_CLANG_SHARED_PLUGINS
+
 #include <string>
 #include <iostream>
 #include <map>
@@ -28,7 +30,15 @@ public:
     {
     }
 
-    virtual void run() override { TraverseDecl(compiler.getASTContext().getTranslationUnitDecl()); }
+    bool preRun() override { return compiler.getLangOpts().CPlusPlus; }
+
+    void run() override
+    {
+        if (preRun())
+        {
+            TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
+        }
+    }
 
     bool VisitCXXRecordDecl(CXXRecordDecl const*);
 };
@@ -104,7 +114,10 @@ bool WeakBase::VisitCXXRecordDecl(CXXRecordDecl const* recordDecl)
     return true;
 }
 
-loplugin::Plugin::Registration<WeakBase> WeakBase("weakbase", true);
-}
+loplugin::Plugin::Registration<WeakBase> weakbase("weakbase");
+
+} // namespace
+
+#endif // LO_CLANG_SHARED_PLUGINS
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
