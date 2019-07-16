@@ -281,6 +281,7 @@ ScConditionEntry::ScConditionEntry( ScConditionMode eOper,
     bRelRef2(false),
     bFirstRun(true),
     mpListener(new ScFormulaListener(pDocument)),
+    eConditionType(ScFormatEntry::Type::Condition),
     pCondFormat(nullptr)
 {
     if ( pArr1 )
