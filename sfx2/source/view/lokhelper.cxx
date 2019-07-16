@@ -316,8 +316,19 @@ namespace
         switch (pLOKEv->mnEvent)
         {
         case VclEventId::WindowKeyInput:
-            pLOKEv->mpWindow->KeyInput(pLOKEv->maKeyEvent);
+        {
+            sal_uInt16 nRepeat = pLOKEv->maKeyEvent.GetRepeat();
+            if (nRepeat > 0)
+            {
+                KeyEvent singlePress(pLOKEv->maKeyEvent.GetCharCode(),
+                                     pLOKEv->maKeyEvent.GetKeyCode());
+                for (sal_uInt16 i = 0; i <= nRepeat; ++i)
+                    pLOKEv->mpWindow->KeyInput(singlePress);
+            }
+            else
+                pLOKEv->mpWindow->KeyInput(pLOKEv->maKeyEvent);
             break;
+        }
         case VclEventId::WindowKeyUp:
             pLOKEv->mpWindow->KeyUp(pLOKEv->maKeyEvent);
             break;
