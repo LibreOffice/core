@@ -145,8 +145,7 @@ void DocumentFocusListener::attachRecursive(
     if( xStateSet->contains(AccessibleStateType::FOCUSED ) )
         m_aFocusTracker.setFocusedObject( xAccessible );
 
-    Reference< XAccessibleEventBroadcaster > xBroadcaster =
-        Reference< XAccessibleEventBroadcaster >(xContext, UNO_QUERY);
+    Reference< XAccessibleEventBroadcaster > xBroadcaster(xContext, UNO_QUERY);
 
     // If not already done, add the broadcaster to the list and attach as listener.
     if( xBroadcaster.is() && m_aRefList.insert(xBroadcaster).second )
@@ -192,8 +191,7 @@ void DocumentFocusListener::detachRecursive(
     const Reference< XAccessibleStateSet >& xStateSet
 )
 {
-    Reference< XAccessibleEventBroadcaster > xBroadcaster =
-        Reference< XAccessibleEventBroadcaster >(xContext, UNO_QUERY);
+    Reference< XAccessibleEventBroadcaster > xBroadcaster(xContext, UNO_QUERY);
 
     if( xBroadcaster.is() && 0 < m_aRefList.erase(xBroadcaster) )
     {
