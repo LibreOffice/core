@@ -116,7 +116,12 @@ static typelib_TypeClass cpp2uno_call(
         if ( !rParam.bOut && bridges::cpp_uno::shared::isSimpleType( rParam.pTypeRef ) ) // value
         {
             // Simple types must fit exactly one register on x86_64
-            assert(bFitsRegisters && ( ( nUsedSSE == 1 && nUsedGPR == 0 ) || ( nUsedSSE == 0 && nUsedGPR == 1 ) ));
+
+#if OSL_DEBUG_LEVEL > 0
+            assert(bFitsRegisters);
+#endif
+
+            assert( ( nUsedSSE == 1 && nUsedGPR == 0 ) || ( nUsedSSE == 0 && nUsedGPR == 1 ) );
 
             if ( nUsedSSE == 1 )
             {
