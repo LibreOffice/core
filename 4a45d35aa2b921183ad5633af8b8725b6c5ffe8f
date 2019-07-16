@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_3ba2269c",
+        "filename": "extras/source/palettes/libreoffice.soc",
+        "patchSetId": 3
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-07-16T07:11:35Z",
+      "side": 0,
+      "message": "Why do you remove these colors?",
+      "revId": "4a45d35aa2b921183ad5633af8b8725b6c5ffe8f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
