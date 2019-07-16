@@ -1663,6 +1663,7 @@ CommentCaptionState ScTable::GetAllNoteCaptionsState(const ScRange& rRange, std:
     bool bFirstControl = true;
 
     ScTable* pTab = pDocument->FetchTable(nTab);
+    assert(pTab);
     const SCCOL nEndCol = pTab->ClampToAllocatedColumns(rRange.aEnd.Col());
     for (SCCOL nCol = rRange.aStart.Col(); nCol <= nEndCol; ++nCol)
     {
