@@ -1766,13 +1766,13 @@ void DesktopLOKTest::testInput()
     // Mis-spelled ...
     pDocument->pClass->postWindowExtTextInputEvent(pDocument, 0, LOK_EXT_TEXTINPUT, "kovely");
     pDocument->pClass->postWindowExtTextInputEvent(pDocument, 0, LOK_EXT_TEXTINPUT_END, "kovely");
+    // Remove it again
     pDocument->pClass->removeTextContext(pDocument, 0, 6, 0);
-    Scheduler::ProcessEventsToIdle(); // FIXME: why is this required ? ...
+    // Replace it with lovely
     pDocument->pClass->postWindowExtTextInputEvent(pDocument, 0, LOK_EXT_TEXTINPUT, "lovely");
     pDocument->pClass->postWindowExtTextInputEvent(pDocument, 0, LOK_EXT_TEXTINPUT_END, "lovely");
     pDocument->pClass->postWindowExtTextInputEvent(pDocument, 0, LOK_EXT_TEXTINPUT, " ");
     pDocument->pClass->postWindowExtTextInputEvent(pDocument, 0, LOK_EXT_TEXTINPUT_END, " ");
-    Scheduler::ProcessEventsToIdle();
 
     // get the text ...
     pDocument->pClass->postUnoCommand(pDocument, ".uno:SelectAll", nullptr, false);
