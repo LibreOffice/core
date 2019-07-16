@@ -168,7 +168,7 @@
                         </child>
                         <child>
                           <object class="GtkButton" id="admin">
-                            <property name="label" translatable="yes" context="addresstemplatedialog|admin">_Address Data Source...</property>
+                            <property name="label" translatable="yes" context="addresstemplatedialog|admin">_Assign</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
