@@ -65,6 +65,10 @@ public:
     static void postKeyEventAsync(const VclPtr<vcl::Window> &xWindow,
                                   int nType, int nCharCode, int nKeyCode, int nRepeat = 0);
 
+    /// Helper for posting input event
+    static void postExtTextEventAsync(const VclPtr<vcl::Window> &xWindow,
+                                      int nType, const OUString &rText);
+
     /// Helper for posting async mouse event
     static void postMouseEventAsync(const VclPtr<vcl::Window> &xWindow,
                                     int nType, const Point &rPos,

@@ -301,6 +301,7 @@ namespace
         VclEventId mnEvent;
         MouseEvent maMouseEvent;
         KeyEvent maKeyEvent;
+        OUString maText;
     };
 
     void LOKPostAsyncEvent(void* pEv, void*)
@@ -356,6 +357,10 @@ namespace
         case VclEventId::WindowMouseMove:
             pLOKEv->mpWindow->LogicMouseMove(pLOKEv->maMouseEvent);
             break;
+        case VclEventId::ExtTextInput:
+        case VclEventId::EndExtTextInput:
+            pLOKEv->mpWindow->PostExtTextInputEvent(pLOKEv->mnEvent, pLOKEv->maText);
+            break;
         default:
             assert(false);
             break;
@@ -401,6 +406,27 @@ void SfxLokHelper::postKeyEventAsync(const VclPtr<vcl::Window> &xWindow,
         assert(false);
     }
     pLOKEv->maKeyEvent = KeyEvent(nCharCode, nKeyCode, nRepeat);
+    pLOKEv->mpWindow = xWindow;
+    postEventAsync(pLOKEv);
+}
+
+void SfxLokHelper::postExtTextEventAsync(const VclPtr<vcl::Window> &xWindow,
+                                         int nType, const OUString &rText)
+{
+    LOKAsyncEventData* pLOKEv = new LOKAsyncEventData;
+    switch (nType)
+    {
+    case LOK_EXT_TEXTINPUT:
+        pLOKEv->mnEvent = VclEventId::ExtTextInput;
+        pLOKEv->maText = rText;
+        break;
+    case LOK_EXT_TEXTINPUT_END:
+        pLOKEv->mnEvent = VclEventId::EndExtTextInput;
+        pLOKEv->maText = "";
+        break;
+    default:
+        assert(false);
+    }
     pLOKEv->mpWindow = xWindow;
     postEventAsync(pLOKEv);
 }
