@@ -177,7 +177,7 @@
 #define SCSTR_QHELP_BTNCALC                         NC_("SCSTR_QHELP_BTNCALC", "Function Wizard")
 #define SCSTR_QHELP_BTNOK                           NC_("SCSTR_QHELP_BTNOK", "Accept")
 #define SCSTR_QHELP_BTNCANCEL                       NC_("SCSTR_QHELP_BTNCANCEL", "Cancel")
-#define SCSTR_QHELP_BTNSUM                          NC_("SCSTR_QHELP_BTNSUM", "Autosum")
+#define SCSTR_QHELP_BTNSUM                          NC_("SCSTR_QHELP_BTNSUM", "Select Function")
 #define SCSTR_QHELP_BTNEQUAL                        NC_("SCSTR_QHELP_BTNEQUAL", "Formula")
 #define SCSTR_QHELP_EXPAND_FORMULA                  NC_("SCSTR_QHELP_EXPAND_FORMULA", "Expand Formula Bar")
 #define SCSTR_QHELP_COLLAPSE_FORMULA                NC_("SCSTR_QHELP_COLLAPSE_FORMULA", "Collapse Formula Bar")
