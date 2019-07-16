@@ -22,4 +22,13 @@ $(eval $(call gb_Package_add_files,infoplist,$(PRODUCTNAME_WITHOUT_SPACES).app/C
 	InfoPlist_$(lang)/InfoPlist.strings \
 )))
 
+# note: en-US was subsituted with en in ITERATE_ALL_LANG_DIR_LPROJ
+# assumption is that the $(lang).lproj dir must exist even if empty;
+# if it's non-empty the above add_files creates it, if empty we need this:
+$(eval $(call gb_Package_add_empty_directories,infoplist,\
+	$(foreach lang,$(filter-out ca cs da de el en es fi fr hr hu id it ja ko ms nl no pl pt pt_PT ro ru sk sv th tr uk vi zh_CN zh_TW,$(subst en-US,en,$(gb_WITH_LANG))),\
+		share/xdg/emptydir/$(PRODUCTNAME_WITHOUT_SPACES).app/Contents/Resources/$(lang).lproj \
+	) \
+))
+
 # vim: set noet sw=4 ts=4:
