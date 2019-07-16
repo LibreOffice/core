@@ -60,7 +60,22 @@ bool AnnotationMarkCoversCommentAnchor(const sw::mark::IMark* pAnnotationMark,
 
     if (rMarkStart != rAnchorPos)
     {
-        return false;
+        // This can be the as-char case: the comment placeholder character is exactly between the
+        // annotation mark start and end.
+        SwPosition aPosition(rMarkStart);
+        ++aPosition.nContent;
+        if (aPosition != rAnchorPos)
+        {
+            return false;
+        }
+
+        ++aPosition.nContent;
+        if (aPosition != rMarkEnd)
+        {
+            return false;
+        }
+
+        return true;
     }
 
     if (rMarkStart.nNode != rMarkEnd.nNode)
