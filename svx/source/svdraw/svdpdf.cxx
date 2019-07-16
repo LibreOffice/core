@@ -1140,12 +1140,12 @@ void ImpSdrPdfImport::ImportPath(FPDF_PAGEOBJECT pPageObject, int /*nPageObjectI
     unsigned int nG;
     unsigned int nB;
     unsigned int nA;
-    FPDFPath_GetFillColor(pPageObject, &nR, &nG, &nB, &nA);
+    FPDFPageObj_GetFillColor(pPageObject, &nR, &nG, &nB, &nA);
     mpVD->SetFillColor(Color(nR, nG, nB));
 
     if (bStroke)
     {
-        FPDFPath_GetStrokeColor(pPageObject, &nR, &nG, &nB, &nA);
+        FPDFPageObj_GetStrokeColor(pPageObject, &nR, &nG, &nB, &nA);
         mpVD->SetLineColor(Color(nR, nG, nB));
     }
     else
