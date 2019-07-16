@@ -246,7 +246,7 @@ void PdfExportTest::testTdf105461()
     CPPUNIT_ASSERT(mpPdfPage);
 
     // Make sure there is a filled rectangle inside.
-    int nPageObjectCount = FPDFPage_CountObject(mpPdfPage);
+    int nPageObjectCount = FPDFPage_CountObjects(mpPdfPage);
     int nYellowPathCount = 0;
     for (int i = 0; i < nPageObjectCount; ++i)
     {
@@ -255,7 +255,7 @@ void PdfExportTest::testTdf105461()
             continue;
 
         unsigned int nRed = 0, nGreen = 0, nBlue = 0, nAlpha = 0;
-        FPDFPath_GetFillColor(pPdfPageObject, &nRed, &nGreen, &nBlue, &nAlpha);
+        FPDFPageObj_GetFillColor(pPdfPageObject, &nRed, &nGreen, &nBlue, &nAlpha);
         if (RGB_COLORDATA(nRed, nGreen, nBlue) == COL_YELLOW)
             ++nYellowPathCount;
     }
@@ -301,7 +301,7 @@ void PdfExportTest::testTdf107868()
     CPPUNIT_ASSERT(mpPdfPage);
 
     // Make sure there is no filled rectangle inside.
-    int nPageObjectCount = FPDFPage_CountObject(mpPdfPage);
+    int nPageObjectCount = FPDFPage_CountObjects(mpPdfPage);
     int nWhitePathCount = 0;
     for (int i = 0; i < nPageObjectCount; ++i)
     {
@@ -310,7 +310,7 @@ void PdfExportTest::testTdf107868()
             continue;
 
         unsigned int nRed = 0, nGreen = 0, nBlue = 0, nAlpha = 0;
-        FPDFPath_GetFillColor(pPdfPageObject, &nRed, &nGreen, &nBlue, &nAlpha);
+        FPDFPageObj_GetFillColor(pPdfPageObject, &nRed, &nGreen, &nBlue, &nAlpha);
         if (RGB_COLORDATA(nRed, nGreen, nBlue) == COL_WHITE)
             ++nWhitePathCount;
     }
