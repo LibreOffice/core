@@ -1595,7 +1595,7 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
     if( len > 0 ) {
         NSString *pString = [aString string];
         OUString aInsertString( GetOUString( pString ) );
-        std::vector<ExtTextInputAttr> aInputFlags = std::vector<ExtTextInputAttr>( std::max( 1, len ), ExtTextInputAttr::NONE );
+        std::vector<ExtTextInputAttr> aInputFlags( std::max( 1, len ), ExtTextInputAttr::NONE );
         for ( int i = 0; i < len; i++ )
         {
             unsigned int nUnderlineValue;
