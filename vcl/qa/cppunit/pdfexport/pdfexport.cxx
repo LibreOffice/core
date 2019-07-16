@@ -351,7 +351,7 @@ void PdfExportTest::testTdf105461()
             continue;
 
         unsigned int nRed = 0, nGreen = 0, nBlue = 0, nAlpha = 0;
-        FPDFPath_GetFillColor(pPdfPageObject, &nRed, &nGreen, &nBlue, &nAlpha);
+        FPDFPageObj_GetFillColor(pPdfPageObject, &nRed, &nGreen, &nBlue, &nAlpha);
         if (Color(nRed, nGreen, nBlue) == COL_YELLOW)
             ++nYellowPathCount;
     }
@@ -406,7 +406,7 @@ void PdfExportTest::testTdf107868()
             continue;
 
         unsigned int nRed = 0, nGreen = 0, nBlue = 0, nAlpha = 0;
-        FPDFPath_GetFillColor(pPdfPageObject, &nRed, &nGreen, &nBlue, &nAlpha);
+        FPDFPageObj_GetFillColor(pPdfPageObject, &nRed, &nGreen, &nBlue, &nAlpha);
         if (Color(nRed, nGreen, nBlue) == COL_WHITE)
             ++nWhitePathCount;
     }
@@ -902,7 +902,7 @@ void PdfExportTest::testTdf108963()
             continue;
 
         unsigned int nRed = 0, nGreen = 0, nBlue = 0, nAlpha = 0;
-        FPDFPath_GetFillColor(pPdfPageObject, &nRed, &nGreen, &nBlue, &nAlpha);
+        FPDFPageObj_GetFillColor(pPdfPageObject, &nRed, &nGreen, &nBlue, &nAlpha);
         if (Color(nRed, nGreen, nBlue) == COL_YELLOW)
         {
             ++nYellowPathCount;
