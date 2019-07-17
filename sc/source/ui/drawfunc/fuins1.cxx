@@ -198,12 +198,12 @@ static void lcl_InsertGraphic( const Graphic& rGraphic,
 
     //  don't select if from (dispatch) API, to allow subsequent cell operations
     SdrInsertFlags nInsOptions = bApi ? SdrInsertFlags::DONTMARK : SdrInsertFlags::NONE;
-    pView->InsertObjectAtView( pObj, *pPV, nInsOptions );
+    bool bSuccess = pView->InsertObjectAtView( pObj, *pPV, nInsOptions );
 
     // SetGraphicLink has to be used after inserting the object,
     // otherwise an empty graphic is swapped in and the contact stuff crashes.
     // See #i37444#.
-    if ( bAsLink )
+    if (bSuccess && bAsLink)
         pObj->SetGraphicLink( rFileName, ""/*TODO?*/, rFilterName );
 }
 
