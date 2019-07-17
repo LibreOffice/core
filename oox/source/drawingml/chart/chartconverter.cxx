@@ -56,12 +56,12 @@ static OUString lclGenerateApiString( const OUString& rString )
     return "\"" + aRetString + "\"";
 }
 
-static OUString lclGenerateApiArray(const std::vector<Any>& rRow)
+static OUString lclGenerateApiArray(const std::vector<Any>& rRow, sal_Int32 nStart, sal_Int32 nCount)
 {
     OSL_ENSURE( !rRow.empty(), "ChartConverter::lclGenerateApiArray - missing matrix values" );
     OUStringBuffer aBuffer;
     aBuffer.append( API_TOKEN_ARRAY_OPEN );
-    for (auto aBeg = rRow.begin(), aIt = aBeg, aEnd = rRow.end(); aIt != aEnd; ++aIt)
+    for (auto aBeg = rRow.begin() + nStart, aIt = aBeg, aEnd = aBeg + nCount; aIt != aEnd; ++aIt)
     {
         double fValue = 0.0;
         OUString aString;
@@ -124,21 +124,26 @@ Reference< XDataSequence > ChartConverter::createDataSequence(
     if( rxDataProvider.is() )
     {
         OUString aRangeRep;
-        if( !rDataSeq.maData.empty() )
+        if( !rDataSeq.maData.empty() ) try
         {
             // create a single-row array from constant source data
-            std::vector<Any> aRow(rDataSeq.mnPointCount);
+            // (multiple levels in the case of complex categories)
+            std::vector<Any> aRow(rDataSeq.mnLevelCount * rDataSeq.mnPointCount);
             for (auto const& elem : rDataSeq.maData)
                 aRow.at(elem.first) = elem.second;
 
-            aRangeRep = lclGenerateApiArray(aRow);
-        }
+            for (sal_Int32 i = rDataSeq.mnLevelCount-1; i >= 0; i--)
+            {
+                aRangeRep = lclGenerateApiArray( aRow, i * rDataSeq.mnPointCount, rDataSeq.mnPointCount);
 
-        if( !aRangeRep.isEmpty() ) try
-        {
-            // create the data sequence
-            xDataSeq = rxDataProvider->createDataSequenceByValueArray(rRole, aRangeRep);
-            return xDataSeq;
+                if (!aRangeRep.isEmpty())
+                {
+                    // create or add a new level to the data sequence
+                    xDataSeq = rxDataProvider->createDataSequenceByValueArray(rRole, aRangeRep);
+                    if (i == 0)
+                        return xDataSeq;
+                }
+            }
         }
         catch( Exception& )
         {

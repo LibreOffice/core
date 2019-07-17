@@ -515,8 +515,12 @@ Sequence< Sequence< OUString > > ChartExport::getSplitCategoriesList( const OUSt
                             aFinalSplitSource[nLevelCount - i - 1].realloc(aAnyCategories.getLength());
                             for (auto const& elemLabel : aAnyCategories)
                             {
-                                aFinalSplitSource[nLevelCount - i - 1][nElemLabel] = elemLabel[i].get<OUString>();
-                                nElemLabel++;
+                                // make sure elemLabel[i] exists!
+                                if (elemLabel.getLength() > i)
+                                {
+                                    aFinalSplitSource[nLevelCount - i - 1][nElemLabel] = elemLabel[i].get<OUString>();
+                                    nElemLabel++;
+                                }
                             }
                         }
                         return aFinalSplitSource;
