@@ -144,10 +144,6 @@ void SwFiltersTest::testCVEs()
             m_directories.getURLFromSrc("/sw/qa/core/data/ww8/"),
             FILTER_WW8);
 
-    testDir("MS WinWord 6.0",
-            m_directories.getURLFromSrc("/sw/qa/core/data/ww6/"),
-            sWW6);
-
     testDir("MS WinWord 5",
             m_directories.getURLFromSrc("/sw/qa/core/data/ww5/"),
             sWW5);
