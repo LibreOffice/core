@@ -268,7 +268,7 @@ void Window::Command(const CommandEvent& rCEvt)
     //show the text edit outliner view cursor
     else if (!HasFocus() && rCEvt.GetCommand() == CommandEventId::CursorPos)
     {
-        OutlinerView* pOLV = mpViewShell->GetView()->GetTextEditOutlinerView();
+        OutlinerView* pOLV = mpViewShell ? mpViewShell->GetView()->GetTextEditOutlinerView() : nullptr;
         if (pOLV && this == pOLV->GetWindow())
         {
             GrabFocus();
