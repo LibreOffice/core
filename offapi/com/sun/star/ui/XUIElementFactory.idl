@@ -98,7 +98,7 @@ interface XUIElementFactory : ::com::sun::star::uno::XInterface
                     (Sidebar only) specifies the current com::sun::star::rendering::XSpriteCanvas instance.
                 </li>
                 <li><b>ApplicationName</b><br>
-                    (Sidebar only) Specifies the current application application name (as a string)
+                    (Sidebar only) Specifies the current application name (as a string)
                 </li>
                 <li><b>ContextName</b><br>
                     (Sidebar only) Specifies the current context (as a string)
