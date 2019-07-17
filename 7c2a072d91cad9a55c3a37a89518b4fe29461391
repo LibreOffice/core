@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_f74cbe77",
+        "filename": "sfx2/source/sidebar/SidebarController.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2019-07-17T08:46:07Z",
+      "side": 0,
+      "message": "this is now called twice, once here, second time below (disposeDecks())",
+      "revId": "7c2a072d91cad9a55c3a37a89518b4fe29461391",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
