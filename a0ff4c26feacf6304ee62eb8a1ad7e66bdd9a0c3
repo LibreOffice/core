@@ -97,6 +97,30 @@
     },
     {
       "key": {
+        "uuid": "bf659307_b73ac6e4",
+        "filename": "cppu/source/uno/lbmap.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-07-17T13:59:00Z",
+      "side": 1,
+      "message": "Capturing our ensuing IRC conversation for reference here:\n\n\u003e Jul 17 15:22:20 \u003csberg\u003e\tnoelgrandin, are we talking past each other in \u003chttps://gerrit.libreoffice.org/#/c/75162\u003e?\n\u003e Jul 17 15:22:22 \u003cIZBot\u003e\tgerrit: »tdf#121740 related, cache external mapping in cppu::loadExternal« by Noel Grandin for master [NEW]\n\u003e Jul 17 15:22:48 \u003cnoelgrandin\u003e\tsberg, I\u0027m not sure: I\u0027m saying yes, I know there will be \"more leak\", but we leak these things anyway, so how bad could it be?\n\u003e Jul 17 15:23:12 \u003csberg\u003e\twhere do we \"leak these things [what exactly] anyway\"?\n\u003e Jul 17 15:23:47 \u003cnoelgrandin\u003e\tsberg, as you pointed out, that says that we leak that struct, and that struct already holds mappings\n\u003e Jul 17 15:23:53 \u003cnoelgrandin\u003e\ts/that/that comment\n\u003e Jul 17 15:24:27 \u003cnoelgrandin\u003e\tin aName2Entry\n\u003e Jul 17 15:24:55 \u003csberg\u003e\tnoelgrandin, from which they are removed by uno_revokeMapping\n\u003e Jul 17 15:26:29 \u003csberg\u003e\tnoelgrandin, (i.e., how do you know that it isn\u0027t an error if a mapping added with uno_registerMapping is never removed with uno_revokeMapping, i.e., that while that s_p may get leaked since forever, no uno_Mappings are ever leaked through that)\n\u003e Jul 17 15:27:42 \u003cnoelgrandin\u003e\tsberg, ah, ok, I see what you are saying. Yeah, I don\u0027t have answer for that, there is nowhere useful I can \"revoke\" a mapping, since the DLL load site is pretty far from the mapping lookup site\n\u003e Jul 17 15:28:53 \u003cnoelgrandin\u003e\tmaybe I should create a cache down in the windows-specific version of osl_getModuleURLFromAddress\n\u003e Jul 17 15:29:12 \u003cnoelgrandin\u003e\tthen at least it only affects the platform that has the problem\n\u003e Jul 17 15:31:59 \u003csberg\u003e\tnoelgrandin, and the link between that loadExternalMapping and osl_getModuleURLFromAddress isn\u0027t clear to me\n\u003e Jul 17 15:51:10 \u003cnoelgrandin\u003e\tsberg, ah, sorry, I elided that. It looks like osl_getModuleURLFromAddress \u003c- cppu::detail::loadModule \u003c- cppu::loadModule \u003c- cppu::loadExternalMapping \u003c- uno_getMapping \u003c- cppu::getCaughtException",
+      "parentUuid": "bf659307_d7bc1a6b",
+      "range": {
+        "startLine": 161,
+        "startChar": 6,
+        "endLine": 161,
+        "endChar": 33
+      },
+      "revId": "a0ff4c26feacf6304ee62eb8a1ad7e66bdd9a0c3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bf659307_17305256",
         "filename": "cppu/source/uno/lbmap.cxx",
         "patchSetId": 2
