@@ -1022,7 +1022,7 @@ void PrintDialog::checkPaperSize( Size& rPaperSize )
     if ( (eOrientation == Orientation::Portrait && rPaperSize.Width() > rPaperSize.Height()) ||
          (eOrientation == Orientation::Landscape && rPaperSize.Width() < rPaperSize.Height()) )
     {
-        // coverity[swapped_arguments : FALSE] - this is in the correct order
+        // coverity[swapped-arguments : FALSE] - this is in the correct order
         rPaperSize = Size( rPaperSize.Height(), rPaperSize.Width() );
     }
 }
