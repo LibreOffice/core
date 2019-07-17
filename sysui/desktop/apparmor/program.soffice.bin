@@ -216,6 +216,9 @@ profile libreoffice-soffice INSTDIR-program/soffice.bin {
 
     owner @{HOME}/.gnupg/* r,
     owner @{HOME}/.gnupg/random_seed rk,
+    owner @{HOME}/.gnupg/trustdb.gpg w,
+    owner @{HOME}/.gnupg/S.gpg-agent w,
+    owner /{,var/}run/user/[0-9]*/gnupg/S.gpg-agent rw,
   }
 
   # probably should become a subprofile like gpg above, but then it doesn't
