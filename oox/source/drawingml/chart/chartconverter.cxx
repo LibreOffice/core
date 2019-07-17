@@ -121,10 +121,39 @@ Reference< XDataSequence > ChartConverter::createDataSequence(
     const OUString& rRole )
 {
     Reference< XDataSequence > xDataSeq;
-    if( rxDataProvider.is() )
+    if( rxDataProvider.is() && !rDataSeq.maData.empty() )
     {
         OUString aRangeRep;
-        if( !rDataSeq.maData.empty() )
+        if( rDataSeq.mnLevelCount > 0 )
+        {
+            // create a single-row array from constant source data
+            std::vector<Any> aRowHelp((rDataSeq.mnLevelCount + 1) * rDataSeq.mnPointCount);
+            for (auto const& elem : rDataSeq.maData)
+                aRowHelp.at(elem.first) = elem.second;
+            // create a multi-row array from constant source data
+            std::vector< std::vector<Any>> aRow(rDataSeq.mnLevelCount + 1);
+            for (sal_Int32 i = rDataSeq.mnLevelCount; i >= 0; i--)
+            {
+                aRow[i].resize(rDataSeq.mnPointCount);
+                for (sal_Int32 j = 0; j < rDataSeq.mnPointCount; j++)
+                {
+                    aRow[i][j] = aRowHelp[i * rDataSeq.mnPointCount + j];
+                }
+                aRangeRep = lclGenerateApiArray(aRow[i]);
+
+                if (!aRangeRep.isEmpty()) try
+                {
+                    // create the data sequence
+                    xDataSeq = rxDataProvider->createDataSequenceByValueArray(rRole, aRangeRep);
+                }
+                catch (Exception&)
+                {
+                    OSL_FAIL("ChartConverter::createDataSequence - cannot create data sequence");
+                }
+            }
+            return xDataSeq;
+        }
+        else
         {
             // create a single-row array from constant source data
             std::vector<Any> aRow(rDataSeq.mnPointCount);
@@ -132,17 +161,17 @@ Reference< XDataSequence > ChartConverter::createDataSequence(
                 aRow.at(elem.first) = elem.second;
 
             aRangeRep = lclGenerateApiArray(aRow);
-        }
 
-        if( !aRangeRep.isEmpty() ) try
-        {
-            // create the data sequence
-            xDataSeq = rxDataProvider->createDataSequenceByValueArray(rRole, aRangeRep);
-            return xDataSeq;
-        }
-        catch( Exception& )
-        {
-            OSL_FAIL( "ChartConverter::createDataSequence - cannot create data sequence" );
+            if (!aRangeRep.isEmpty()) try
+            {
+                // create the data sequence
+                xDataSeq = rxDataProvider->createDataSequenceByValueArray(rRole, aRangeRep);
+                return xDataSeq;
+            }
+            catch (Exception&)
+            {
+                OSL_FAIL("ChartConverter::createDataSequence - cannot create data sequence");
+            }
         }
     }
 
