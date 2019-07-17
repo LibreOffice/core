@@ -49,7 +49,6 @@ class SfxModelessDialog_Impl : public SfxListener
 public:
     OString aWinState;
     SfxChildWindow* pMgr;
-    bool            bConstructed;
     bool            bClosing;
     void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
@@ -185,7 +184,6 @@ void SfxModelessDialogController::Init(SfxBindings *pBindinx, SfxChildWindow *pC
     m_pBindings = pBindinx;
     m_xImpl.reset(new SfxModelessDialog_Impl);
     m_xImpl->pMgr = pCW;
-    m_xImpl->bConstructed = true;
     m_xImpl->bClosing = false;
     if (pBindinx)
         m_xImpl->StartListening( *pBindinx );

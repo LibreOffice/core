@@ -90,14 +90,11 @@ struct OptPath_Impl
     }
 };
 
-// struct PathUserData_Impl ----------------------------------------------
-
 struct PathUserData_Impl
 {
     sal_uInt16      nRealId;
     SfxItemState    eState;
     OUString        sUserPath;
-    OUString        sInternalPath;
     OUString        sWritablePath;
 
     explicit PathUserData_Impl( sal_uInt16 nId ) :
@@ -367,7 +364,6 @@ void SvxPathTabPage::Reset( const SfxItemSet* )
             }
             PathUserData_Impl* pPathImpl = new PathUserData_Impl(i);
             pPathImpl->sUserPath = sUser;
-            pPathImpl->sInternalPath = sInternal;
             pPathImpl->sWritablePath = sWritable;
             pEntry->SetUserData( pPathImpl );
         }
