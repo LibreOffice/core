@@ -37,7 +37,8 @@
 #define SWPAGE_WIDE_VALUE2     2880
 #define SWPAGE_WIDE_VALUE3     1800
 
-static const long MINBODY = 284; //0.5 cm in twips
+// #i19922# - tdf#126051 see cui/source/tabpages/page.cxx and svx/source/dialog/hdft.cxx
+static const long MINBODY = 56;  // 1mm in twips rounded
 
 namespace sw { namespace sidebar {
 
