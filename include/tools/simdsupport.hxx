@@ -24,7 +24,7 @@
 // SSE2 is required for X64
 #if (defined(_M_X64) || defined(_M_IX86_FP) && _M_IX86_FP >= 2)
 #define LO_SSE2_AVAILABLE
-#endif
+#endif // end SSE2
 
 // compiled with /arch:AVX
 #if defined(__AVX__)
@@ -33,30 +33,40 @@
 #endif
 #define LO_SSSE3_AVAILABLE
 #define LO_AVX_AVAILABLE
-#endif
+#endif // defined(__AVX__)
 
 // compiled with /arch:AVX2
 #if defined(__AVX2__)
 #define LO_AVX2_AVAILABLE
-#endif
+#endif // defined(__AVX2__)
 
-#else // Clang and GCC
+#else // compiler Clang and GCC
 
 #if defined(__SSE2__) || defined(__x86_64__) // SSE2 is required for X64
 #define LO_SSE2_AVAILABLE
-#endif
+#endif // defined(__SSE2__)
 
 #if defined(__SSSE3__)
 #define LO_SSSE3_AVAILABLE
-#endif
+#endif // defined(__SSSE3__)
+
 #if defined(__AVX__)
 #define LO_AVX_AVAILABLE
+#endif // defined(__AVX__)
 
-#endif
 #if defined(__AVX2__)
 #define LO_AVX2_AVAILABLE
-#endif
+#endif // defined(__AVX2__)
 
+#endif // end compiler Clang and GCC
+
+// If we detect any SIMD intrinsics, include the headers automatically
+#if defined(LO_SSE2_AVAILABLE)
+#include <emmintrin.h>
+#elif defined(LO_SSSE3_AVAILABLE)
+#include <tmmintrin.h>
+#elif defined(LO_AVX_AVAILABLE) || defined(LO_AVX2_AVAILABLE)
+#include <immintrin.h>
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

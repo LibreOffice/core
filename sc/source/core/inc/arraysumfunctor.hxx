@@ -18,14 +18,6 @@
 #include <tools/simd.hxx>
 #include <tools/cpuid.hxx>
 
-#if defined(LO_SSE2_AVAILABLE)
-#ifdef _WIN32
-#include <intrin.h>
-#else
-#include <x86intrin.h>
-#endif
-#endif
-
 namespace sc
 {
 
