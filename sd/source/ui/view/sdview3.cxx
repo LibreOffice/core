@@ -1175,14 +1175,16 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                             nOptions |= SdrInsertFlags::DONTMARK;
                     }
 
-                    InsertObjectAtView( pObj, *pPV, nOptions );
+                    bReturn = InsertObjectAtView( pObj, *pPV, nOptions );
 
-                    if( pImageMap )
-                        pObj->AppendUserData( std::unique_ptr<SdrObjUserData>(new SdIMapInfo( *pImageMap )) );
+                    if (bReturn)
+                    {
+                        if( pImageMap )
+                            pObj->AppendUserData( std::unique_ptr<SdrObjUserData>(new SdIMapInfo( *pImageMap )) );
 
-                    // let the object stay in loaded state after insertion
-                    pObj->Unload();
-                    bReturn = true;
+                        // let the object stay in loaded state after insertion
+                        pObj->Unload();
+                    }
                 }
             }
         }
