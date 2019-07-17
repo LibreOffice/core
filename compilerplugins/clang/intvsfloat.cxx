@@ -6,6 +6,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
+#ifndef LO_CLANG_SHARED_PLUGINS
 
 #include "plugin.hxx"
 #include "check.hxx"
@@ -103,7 +104,10 @@ llvm::Optional<double> IntVsFloat::getExprValue(Expr const* expr)
     return d;
 }
 
-loplugin::Plugin::Registration<IntVsFloat> X("intvsfloat");
-}
+loplugin::Plugin::Registration<IntVsFloat> intvsfloat("intvsfloat");
+
+} // namespace
+
+#endif // LO_CLANG_SHARED_PLUGINS
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

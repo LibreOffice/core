@@ -8,6 +8,7 @@
  * License. See LICENSE.TXT for details.
  *
  */
+#ifndef LO_CLANG_SHARED_PLUGINS
 
 #include <cassert>
 #include <string>
@@ -33,43 +34,58 @@ public:
     {
     }
 
-    virtual void run() override
+    virtual bool preRun() override
     {
         std::string fn(handler.getMainFileName());
         loplugin::normalizeDotDotInFilePath(fn);
         // include another file to build a table
         if (fn == SRCDIR "/sc/source/core/tool/cellkeytranslator.cxx")
-            return;
+            return false;
         // weird structure
         if (fn == SRCDIR "/sc/source/core/tool/compiler.cxx")
-            return;
+            return false;
         // looks like lex/yacc output
         if (fn == SRCDIR "/hwpfilter/source/grammar.cxx")
-            return;
+            return false;
         // TODO need to learn to handle attributes like "[[maybe_unused]]"
         if (fn == SRCDIR "/binaryurp/source/bridge.cxx")
-            return;
+            return false;
         // the QEMIT macros
         if (loplugin::hasPathnamePrefix(fn, SRCDIR "/vcl/qt5/")
             || loplugin::isSamePathname(fn, SRCDIR "/vcl/unx/gtk3_kde5/kde5_filepicker_ipc.cxx"))
-            return;
-        TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
+            return false;
+        return true;
+    }
+
+    virtual void run() override
+    {
+        if (preRun())
+            TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
     }
 
     bool VisitCompoundStmt(CompoundStmt const*);
+    bool PreTraverseSwitchStmt(SwitchStmt*);
+    void PostTraverseSwitchStmt(SwitchStmt*);
     bool TraverseSwitchStmt(SwitchStmt*);
     bool VisitSwitchStmt(SwitchStmt const*);
 
 private:
-    Stmt const* switchStmtBody = nullptr;
+    std::vector<const Stmt*> switchStmtBodies;
 };
+
+bool Indentation::PreTraverseSwitchStmt(SwitchStmt* switchStmt)
+{
+    switchStmtBodies.push_back(switchStmt->getBody());
+    return true;
+}
+
+void Indentation::PostTraverseSwitchStmt(SwitchStmt*) { switchStmtBodies.pop_back(); }
 
 bool Indentation::TraverseSwitchStmt(SwitchStmt* switchStmt)
 {
-    auto prev = switchStmtBody;
-    switchStmtBody = switchStmt->getBody();
+    PreTraverseSwitchStmt(switchStmt);
     FilteringPlugin::TraverseSwitchStmt(switchStmt);
-    switchStmtBody = prev;
+    PostTraverseSwitchStmt(switchStmt);
     return true;
 }
 
@@ -78,7 +94,7 @@ bool Indentation::VisitCompoundStmt(CompoundStmt const* compoundStmt)
     if (ignoreLocation(compoundStmt))
         return true;
     // these are kind of free form
-    if (switchStmtBody == compoundStmt)
+    if (!switchStmtBodies.empty() && switchStmtBodies.back() == compoundStmt)
         return true;
 
     constexpr unsigned MAX = std::numeric_limits<unsigned>::max();
@@ -233,8 +249,10 @@ bool Indentation::VisitSwitchStmt(SwitchStmt const* switchStmt)
     return true;
 }
 
-loplugin::Plugin::Registration<Indentation> X("indentation");
+loplugin::Plugin::Registration<Indentation> indentation("indentation");
 
 } // namespace
+
+#endif // LO_CLANG_SHARED_PLUGINS
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

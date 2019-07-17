@@ -6,6 +6,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
+#ifndef LO_CLANG_SHARED_PLUGINS
 
 #include "plugin.hxx"
 
@@ -57,24 +58,29 @@ public:
         return true;
     }
 
-private:
-    void run() override {
+    bool preRun() override {
         // DISABLE_DYNLOADING makes SAL_DLLPUBLIC_{EXPORT,IMPORT,TEMPLATE} expand
         // to visibility("hidden") attributes, which would cause bogus warnings
         // here (e.g., in UBSan builds that explicitly define DISABLE_DYNLOADING
         // in jurt/source/pipe/staticsalhack.cxx); alternatively, change
         // include/sal/types.h to make those SAL_DLLPUBLIC_* expand to nothing
         // for DISABLE_DYNLOADING:
-        if (!compiler.getPreprocessor().getIdentifierInfo("DISABLE_DYNLOADING")
-            ->hasMacroDefinition())
-        {
+        return !compiler.getPreprocessor().getIdentifierInfo("DISABLE_DYNLOADING")
+            ->hasMacroDefinition();
+    }
+
+    void run() override {
+        if (preRun()) {
             TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
         }
     }
 };
 
-static loplugin::Plugin::Registration<DllPrivate> reg("dllprivate");
+static loplugin::Plugin::Registration<DllPrivate> dllprivate("dllprivate");
 
-}
+} // namespace
+
+#endif // LO_CLANG_SHARED_PLUGINS
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

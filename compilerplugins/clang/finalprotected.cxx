@@ -6,6 +6,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
+#ifndef LO_CLANG_SHARED_PLUGINS
 
 #include <string>
 #include <iostream>
@@ -74,8 +75,10 @@ bool FinalProtected::VisitFieldDecl(FieldDecl const * fieldDecl)
     return true;
 }
 
-loplugin::Plugin::Registration< FinalProtected > X("finalprotected", true);
+loplugin::Plugin::Registration< FinalProtected > finalprotected("finalprotected");
 
-}
+} // namespace
+
+#endif // LO_CLANG_SHARED_PLUGINS
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

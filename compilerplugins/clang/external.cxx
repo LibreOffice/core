@@ -6,6 +6,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
+#ifndef LO_CLANG_SHARED_PLUGINS
 
 #include <algorithm>
 #include <cassert>
@@ -17,30 +18,6 @@
 
 namespace
 {
-// It appears that, given a function declaration, there is no way to determine
-// the language linkage of the function's type, only of the function's name
-// (via FunctionDecl::isExternC); however, in a case like
-//
-//   extern "C" { static void f(); }
-//
-// the function's name does not have C language linkage while the function's
-// type does (as clarified in C++11 [decl.link]); cf. <http://clang-developers.
-// 42468.n3.nabble.com/Language-linkage-of-function-type-tt4037248.html>
-// "Language linkage of function type":
-bool hasCLanguageLinkageType(FunctionDecl const* decl)
-{
-    assert(decl != nullptr);
-    if (decl->isExternC())
-    {
-        return true;
-    }
-    if (decl->isInExternCContext())
-    {
-        return true;
-    }
-    return false;
-}
-
 bool derivesFromTestFixture(CXXRecordDecl const* decl)
 {
     static auto const pred = [](CXXBaseSpecifier const& spec) {
@@ -130,7 +107,7 @@ public:
         {
             return true;
         }
-        if (hasCLanguageLinkageType(decl)
+        if (loplugin::hasCLanguageLinkageType(decl)
             && loplugin::DeclCheck(decl).Function("_DllMainCRTStartup").GlobalNamespace())
         {
             return true;
@@ -150,7 +127,7 @@ public:
             return true;
         }
         auto const canon = decl->getCanonicalDecl();
-        if (hasCLanguageLinkageType(canon)
+        if (loplugin::hasCLanguageLinkageType(canon)
             && (canon->hasAttr<ConstructorAttr>() || canon->hasAttr<DestructorAttr>()))
         {
             return true;
@@ -337,7 +314,10 @@ private:
     }
 };
 
-loplugin::Plugin::Registration<External> X("external");
-}
+loplugin::Plugin::Registration<External> external("external");
+
+} // namespace
+
+#endif // LO_CLANG_SHARED_PLUGINS
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
