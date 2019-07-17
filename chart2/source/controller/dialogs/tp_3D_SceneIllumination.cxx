@@ -442,6 +442,8 @@ IMPL_LINK(ThreeD_SceneIllumination_TabPage, ClickLightSourceButtonHdl, weld::But
         }
     }
 
+    assert(pInfo);
+
     bool bIsChecked = pInfo->bButtonActive;
 
     ControllerLockGuardUNO aGuard( m_xChartModel );
