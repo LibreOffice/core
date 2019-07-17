@@ -559,8 +559,8 @@ IMPL_LINK_NOARG(View, DropInsertFileHdl, Timer *, void)
                                     nOptions |= SdrInsertFlags::DONTMARK;
                             }
 
-                            InsertObjectAtView( pOleObj, *GetSdrPageView(), nOptions );
-                            pOleObj->SetLogicRect( aRect );
+                            if (InsertObjectAtView( pOleObj, *GetSdrPageView(), nOptions ))
+                                pOleObj->SetLogicRect( aRect );
                             aSz.Width = aRect.GetWidth();
                             aSz.Height = aRect.GetHeight();
                             xObj->setVisualAreaSize( nAspect,aSz );
