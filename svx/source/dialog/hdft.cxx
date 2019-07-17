@@ -53,6 +53,7 @@
 using namespace com::sun::star;
 
 // Word 97 incompatibility (#i19922#)
+// #i19922# - tdf#126051 see cui/source/tabpages/page.cxx and sw/source/uibase/sidebar/PageMarginControl.hxx
 static const long MINBODY = 56;  // 1mm in twips rounded
 
 // default distance to Header or footer
