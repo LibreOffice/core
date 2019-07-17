@@ -426,7 +426,9 @@ sub create_package
             }
         }
 
-        $systemcall = "cd $localtempdir && hdiutil create -megabytes 1500 -srcfolder $folder $archive -ov -fs HFS+ -volname \"$volume_name\" -format UDBZ";
+        my $megabytes = 1500;
+        $megabytes = 2000 if $ENV{'ENABLE_DBGUTIL'};
+        $systemcall = "cd $localtempdir && hdiutil create -megabytes $megabytes -srcfolder $folder $archive -ov -fs HFS+ -volname \"$volume_name\" -format UDBZ";
         if (( $ref ne "" ) && ( $$ref ne "" )) {
             $systemcall .= " && hdiutil unflatten $archive && Rez -a $$ref -o $archive && hdiutil flatten $archive &&";
         }
