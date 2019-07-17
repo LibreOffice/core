@@ -58,7 +58,6 @@ XMLOFF_DLLPUBLIC void * xo_component_getFactory( const sal_Char * pImplName, voi
 
         // impress oasis import
         SINGLEFACTORY( XMLImpressStylesImportOasis )
-        else SINGLEFACTORY( XMLImpressContentImportOasis )
 
         else SINGLEFACTORY( AnimationsImport )
 
