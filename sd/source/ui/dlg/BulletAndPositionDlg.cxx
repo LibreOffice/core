@@ -469,9 +469,10 @@ void SvxBulletAndPositionDlg::InitControls()
     bool bBullRelSize = pActNum->IsFeatureSupported(SvxNumRuleFlags::BULLET_REL_SIZE);
     for (sal_uInt16 i = 0; i < pActNum->GetLevelCount(); i++)
     {
+        aNumFmtArr[i] = &pActNum->GetLevel(i);
+
         if (nActNumLvl & nMask)
         {
-            aNumFmtArr[i] = &pActNum->GetLevel(i);
             bShowBullet &= aNumFmtArr[i]->GetNumberingType() == SVX_NUM_CHAR_SPECIAL;
             bShowBitmap &= (aNumFmtArr[i]->GetNumberingType() & (~LINK_TOKEN)) == SVX_NUM_BITMAP;
             eFirstAdjust = aNumFmtArr[i]->GetNumAdjust();
@@ -508,8 +509,6 @@ void SvxBulletAndPositionDlg::InitControls()
             }
             nHighestLevel = i;
         }
-        else
-            aNumFmtArr[i] = nullptr;
 
         nMask <<= 1;
     }
