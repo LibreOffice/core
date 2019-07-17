@@ -55,7 +55,7 @@ int main(int argc, char** argv)
         stringstream contents;
         contents << filestream.rdbuf();
         filestream.close();
-        remove(varandfile.second.c_str());
+        (void)remove(varandfile.second.c_str());
         string escapedcontents;
         for(auto& c : contents.str())
         {
