@@ -868,67 +868,6 @@ bool SwRedlineExtraData_Format::operator == ( const SwRedlineExtraData& rCmp ) c
     return true;
 }
 
-SwRedlineExtraData_FormattingChanges::SwRedlineExtraData_FormattingChanges( const SfxItemSet* pItemSet )
-{
-    if( pItemSet && pItemSet->Count() )
-        m_pSet.reset( new SfxItemSet( *pItemSet ) );
-}
-
-SwRedlineExtraData_FormattingChanges::SwRedlineExtraData_FormattingChanges( const SwRedlineExtraData_FormattingChanges& rCpy )
-    : SwRedlineExtraData()
-{
-    // Checking pointer pSet before accessing it for Count
-    if( rCpy.m_pSet && rCpy.m_pSet->Count() )
-    {
-        m_pSet.reset( new SfxItemSet( *(rCpy.m_pSet) ) );
-    }
-    else
-    {
-        m_pSet.reset();
-    }
-}
-
-SwRedlineExtraData_FormattingChanges::~SwRedlineExtraData_FormattingChanges()
-{
-}
-
-SwRedlineExtraData* SwRedlineExtraData_FormattingChanges::CreateNew() const
-{
-    return new SwRedlineExtraData_FormattingChanges( *this );
-}
-
-void SwRedlineExtraData_FormattingChanges::Reject(SwPaM& rPam) const
-{
-    SwDoc* pDoc = rPam.GetDoc();
-
-    if( m_pSet )
-    {
-        RedlineFlags eOld = pDoc->getIDocumentRedlineAccess().GetRedlineFlags();
-        pDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern(eOld & ~RedlineFlags(RedlineFlags::On | RedlineFlags::Ignore));
-
-        pDoc->getIDocumentContentOperations().InsertItemSet(rPam, *GetItemSet());
-
-        pDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld );
-    }
-}
-
-bool SwRedlineExtraData_FormattingChanges::operator == ( const SwRedlineExtraData& rExtraData ) const
-{
-    const SwRedlineExtraData_FormattingChanges& rCmp = static_cast<const SwRedlineExtraData_FormattingChanges&>(rExtraData);
-
-    if ( !m_pSet && !rCmp.m_pSet )
-    {
-        // Both SfxItemSet are null
-        return true;
-    }
-    else if ( m_pSet && rCmp.m_pSet && *m_pSet == *rCmp.m_pSet )
-    {
-        // Both SfxItemSet exist and are equal
-        return true;
-    }
-    return false;
-}
-
 SwRedlineData::SwRedlineData( RedlineType eT, std::size_t nAut )
     : m_pNext( nullptr ), m_pExtraData( nullptr ),
     m_aStamp( DateTime::SYSTEM ),

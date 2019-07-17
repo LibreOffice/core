@@ -84,11 +84,6 @@ public:
     void tableStyleRColor(uno::Sequence<beans::PropertyValue>& rColor);
 };
 
-void DocxTableStyleExport::CharFormat(css::uno::Sequence<css::beans::PropertyValue>& rRPr)
-{
-    m_pImpl->tableStyleRPr(rRPr);
-}
-
 void DocxTableStyleExport::CnfStyle(uno::Sequence<beans::PropertyValue>& rAttributeList)
 {
     sax_fastparser::FastAttributeList* pAttributeList

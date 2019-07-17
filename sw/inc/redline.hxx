@@ -82,29 +82,6 @@ public:
     virtual bool operator == ( const SwRedlineExtraData& ) const override;
 };
 
-/*
- * This class is used to store 'redline' data regarding formatting changes,
- * e.g. - a text portion *was* italic and now is not italic,
- * e.g. - a text portion got a highlight to it
- *
- * The way the information is stored is in an 'SfxItemSet' that holds all
- * the WhichIds with their values.
- */
-class SW_DLLPUBLIC SwRedlineExtraData_FormattingChanges : public SwRedlineExtraData
-{
-    std::unique_ptr<SfxItemSet> m_pSet;
-
-    SwRedlineExtraData_FormattingChanges( const SwRedlineExtraData_FormattingChanges& rCpy );
-
-public:
-    SwRedlineExtraData_FormattingChanges( const SfxItemSet* pItemSet );
-    virtual ~SwRedlineExtraData_FormattingChanges() override;
-    virtual SwRedlineExtraData* CreateNew() const override;
-    virtual void Reject( SwPaM& rPam ) const override;
-    virtual bool operator == ( const SwRedlineExtraData& ) const override;
-    SfxItemSet* GetItemSet( ) const { return m_pSet.get(); }
-};
-
 class SW_DLLPUBLIC SwRedlineData
 {
     friend class SwRangeRedline;

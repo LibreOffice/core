@@ -38,9 +38,6 @@ class DocxTableStyleExport
 public:
     void TableStyles(sal_Int32 nCountStylesToWrite);
 
-    /// Writes <w:rPr>...</w:rPr> based on grab-bagged character properties.
-    void CharFormat(css::uno::Sequence<css::beans::PropertyValue>& rRPr);
-
     /// Writes <w:cnfStyle .../> based on grab-bagged para, cell or row properties.
     void CnfStyle(css::uno::Sequence<css::beans::PropertyValue>& rAttributeList);
 

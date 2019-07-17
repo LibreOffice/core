@@ -121,7 +121,6 @@ public:
     virtual DeactivateRC DeactivatePage( SfxItemSet* pSet ) override;
 
     bool IsMarkWndVisible() const { return static_cast<bool>(mxMarkWnd); }
-    Size GetSizeExtraWnd()       { return mxMarkWnd->getDialog()->get_size(); }
     void MoveToExtraWnd ( Point aNewPos );
 
     virtual bool        QueryClose() override;

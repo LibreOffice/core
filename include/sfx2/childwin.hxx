@@ -169,8 +169,6 @@ public:
     SfxChildAlignment   GetAlignment() const
                         { return eChildAlignment; }
     void                SetAlignment(SfxChildAlignment eAlign);
-    Size                GetSizePixel() const
-                        { return pWindow->GetSizePixel(); }
     virtual void        Hide();
     virtual void        Show( ShowFlags nFlags );
     sal_uInt16          GetPosition();

@@ -353,11 +353,6 @@ public:
                            nullptr, nullptr, nullptr, false, nullptr);
     }
 
-    void insert(int pos, const OUString& rId, const OUString& rStr, const OUString* pImage = nullptr)
-    {
-        m_xControl->insert(pos, rStr, &rId, pImage, nullptr);
-    }
-
     DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
 
     void CreateDropDown();

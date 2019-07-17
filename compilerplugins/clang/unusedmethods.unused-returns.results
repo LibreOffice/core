@@ -4,13 +4,13 @@ connectivity/source/inc/odbc/OConnection.hxx:78
     short connectivity::odbc::OConnection::Construct(const class rtl::OUString &,const class com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> &)
 connectivity/source/inc/odbc/OStatement.hxx:115
     _Bool connectivity::odbc::OStatement_Base::lockIfNecessary(const class rtl::OUString &)
-extensions/source/scanner/sane.hxx:98
+extensions/source/scanner/sane.hxx:97
     _Bool Sane::CheckConsistency(const char *,_Bool)
-extensions/source/scanner/sane.hxx:141
+extensions/source/scanner/sane.hxx:140
     _Bool Sane::GetOptionValue(int,double *)
-extensions/source/scanner/sane.hxx:148
+extensions/source/scanner/sane.hxx:147
     _Bool Sane::ActivateButtonOption(int)
-extensions/source/scanner/sane.hxx:154
+extensions/source/scanner/sane.hxx:153
     _Bool Sane::Open(int)
 extensions/source/scanner/sanedlg.hxx:89
     _Bool SaneDlg::LoadState()
@@ -34,7 +34,7 @@ include/basegfx/vector/b3dvector.hxx:171
     class basegfx::B3DVector & basegfx::B3DVector::normalize()
 include/comphelper/backupfilehelper.hxx:204
     _Bool comphelper::BackupFileHelper::tryPush_extensionInfo(const class rtl::OUString &)
-include/editeng/editview.hxx:220
+include/editeng/editview.hxx:230
     class ErrCode EditView::Read(class SvStream &,enum EETextFormat,class SvKeyValueIterator *)
 include/LibreOfficeKit/LibreOfficeKit.hxx:63
     struct _LibreOfficeKitDocument * lok::Document::get()
@@ -64,13 +64,13 @@ include/LibreOfficeKit/LibreOfficeKit.hxx:621
     int lok::Document::getSignatureState()
 include/LibreOfficeKit/LibreOfficeKit.hxx:631
     unsigned long lok::Document::renderShapeSelection(char **)
-include/LibreOfficeKit/LibreOfficeKit.hxx:741
+include/LibreOfficeKit/LibreOfficeKit.hxx:749
     char * lok::Office::getFilterTypes()
-include/LibreOfficeKit/LibreOfficeKit.hxx:795
+include/LibreOfficeKit/LibreOfficeKit.hxx:803
     char * lok::Office::getVersionInfo()
-include/LibreOfficeKit/LibreOfficeKit.hxx:809
-    _Bool lok::Office::runMacro(const char *)
 include/LibreOfficeKit/LibreOfficeKit.hxx:817
+    _Bool lok::Office::runMacro(const char *)
+include/LibreOfficeKit/LibreOfficeKit.hxx:825
     _Bool lok::Office::signDocument(const char *,const unsigned char *,const int,const unsigned char *,const int)
 include/oox/crypto/AgileEngine.hxx:121
     _Bool oox::core::AgileEngine::decryptHmacKey()
@@ -198,7 +198,7 @@ include/tools/multisel.hxx:93
     _Bool StringRangeEnumerator::insertRange(int,int,_Bool)
 include/vcl/bitmap.hxx:169
     _Bool Bitmap::Dither()
-include/vcl/bitmapex.hxx:241
+include/vcl/bitmapex.hxx:240
     _Bool BitmapEx::Rotate(long,const class Color &)
 include/vcl/filter/PngImageReader.hxx:36
     _Bool vcl::PngImageReader::read(class BitmapEx &)
@@ -218,9 +218,9 @@ include/vcl/texteng.hxx:276
     _Bool TextEngine::Read(class SvStream &,const class TextSelection *)
 include/vcl/toolbox.hxx:515
     _Bool ToolBox::ChangeHighlightUpDn(_Bool)
-include/vcl/weld.hxx:756
+include/vcl/weld.hxx:764
     _Bool weld::TreeView::iter_nth_child(class weld::TreeIter &,int) const
-include/vcl/weld.hxx:1597
+include/vcl/weld.hxx:1610
     _Bool weld::TextView::get_selection_bounds(int &,int &)
 lotuswordpro/inc/lwpsvstream.hxx:76
     class LwpSvStream & LwpSvStream::ReadUInt8(unsigned char &)
@@ -228,7 +228,7 @@ lotuswordpro/inc/lwpsvstream.hxx:77
     class LwpSvStream & LwpSvStream::ReadUInt16(unsigned short &)
 lotuswordpro/inc/lwpsvstream.hxx:78
     class LwpSvStream & LwpSvStream::ReadUInt32(unsigned int &)
-sc/inc/document.hxx:2145
+sc/inc/document.hxx:2151
     const struct ScDocumentThreadSpecific & ScDocument::CalculateInColumnInThread(struct ScInterpreterContext &,const class ScAddress &,unsigned long,unsigned int,unsigned int)
 sc/inc/orcusfilters.hxx:44
     _Bool ScOrcusFilters::importODS_Styles(class ScDocument &,class rtl::OUString &) const
@@ -284,18 +284,22 @@ sc/source/ui/vba/vbaformat.hxx:152
     class com::sun::star::uno::Any ScVbaFormat::getReadingOrder()
 sd/source/filter/eppt/pptx-epptooxml.cxx:112
     class oox::drawingml::ShapeExport & oox::core::PowerPointShapeExport::WritePageShape(const class com::sun::star::uno::Reference<class com::sun::star::drawing::XShape> &,enum PageType,_Bool)
+sd/source/ui/inc/DrawViewShell.hxx:254
+    _Bool sd::DrawViewShell::SelectPage(unsigned short,unsigned short)
 sd/source/ui/inc/OutlineViewShell.hxx:115
     class ErrCode sd::OutlineViewShell::ReadRtf(class SvStream &)
 sd/source/ui/remotecontrol/IBluetoothSocket.hxx:37
     int sd::IBluetoothSocket::write(const void *,unsigned int)
 sfx2/inc/autoredactdialog.hxx:146
-    _Bool SfxAutoRedactDialog::moveTargets(class std::__debug::vector<struct std::pair<struct RedactionTarget *, class rtl::OUString>, class std::allocator<struct std::pair<struct RedactionTarget *, class rtl::OUString> > > &)
-svgio/source/svguno/xsvgparser.cxx:51
+    _Bool SfxAutoRedactDialog::getTargets(class std::__debug::vector<struct std::pair<struct RedactionTarget *, class rtl::OUString>, class std::allocator<struct std::pair<struct RedactionTarget *, class rtl::OUString> > > &)
+svgio/source/svguno/xsvgparser.cxx:52
     _Bool svgio::svgreader::XSvgParser::parseSvgXML(const class com::sun::star::uno::Reference<class com::sun::star::io::XInputStream> &,const class com::sun::star::uno::Reference<class com::sun::star::xml::sax::XDocumentHandler> &)
 sw/inc/authfld.hxx:98
     unsigned short SwAuthorityFieldType::AppendField(const class SwAuthEntry &)
 sw/inc/calc.hxx:114
     class SwSbxValue & SwSbxValue::MakeDouble()
+sw/inc/crsrsh.hxx:549
+    _Bool SwCursorShell::GoNextPrevCursorSetSearchLabel(const _Bool)
 sw/inc/doc.hxx:1081
     _Bool SwDoc::ReplaceNumRule(const struct SwPosition &,const class rtl::OUString &,const class rtl::OUString &)
 sw/inc/doc.hxx:1244
@@ -312,7 +316,7 @@ sw/inc/IDocumentUndoRedo.hxx:181
     _Bool IDocumentUndoRedo::Repeat(class sw::RepeatContext &,const unsigned short)
 sw/inc/swcrsr.hxx:159
     _Bool SwCursor::ExpandToSentenceBorders(const class SwRootFrame *)
-sw/inc/tblafmt.hxx:289
+sw/inc/tblafmt.hxx:272
     _Bool SwTableAutoFormatTable::Load(class SvStream &)
 sw/source/core/inc/laycache.hxx:64
     _Bool SwLayoutCache::CompareLayout(const class SwDoc &) const
@@ -320,9 +324,9 @@ sw/source/core/inc/scriptinfo.hxx:226
     _Bool SwScriptInfo::GetBoundsOfHiddenRange(struct o3tl::strong_int<int, struct Tag_TextFrameIndex>,struct o3tl::strong_int<int, struct Tag_TextFrameIndex> &,struct o3tl::strong_int<int, struct Tag_TextFrameIndex> &) const
 sw/source/filter/ww8/ww8toolbar.hxx:339
     _Bool Tcg::ImportCustomToolBar(class SfxObjectShell &)
-sw/source/uibase/inc/drawbase.hxx:53
+sw/source/uibase/inc/drawbase.hxx:54
     _Bool SwDrawBase::MouseMove(const class MouseEvent &)
-sw/source/uibase/inc/fldmgr.hxx:115
+sw/source/uibase/inc/fldmgr.hxx:116
     const class com::sun::star::uno::Reference<class com::sun::star::text::XNumberingTypeInfo> & SwFieldMgr::GetNumberingInfo() const
 sw/source/uibase/inc/mailmergewizard.hxx:79
     _Bool SwMailMergeWizard::skipUntil(unsigned short)
@@ -340,21 +344,21 @@ vcl/inc/opengl/salbmp.hxx:102
     _Bool OpenGLSalBitmap::ImplScaleArea(const class rtl::Reference<class OpenGLContext> &,double,double)
 vcl/inc/opengl/texture.hxx:112
     _Bool OpenGLTexture::CopyData(int,int,int,int,const unsigned char *)
-vcl/inc/salframe.hxx:231
+vcl/inc/salframe.hxx:233
     _Bool SalFrame::SetPluginParent(struct SystemParentData *)
 vcl/inc/salgdi.hxx:211
     class basegfx::B2DPoint SalGraphics::mirror(const class basegfx::B2DPoint &,const class OutputDevice *) const
-vcl/inc/salgdi.hxx:393
+vcl/inc/salgdi.hxx:385
+    _Bool SalGraphics::UpdateSettings(class AllSettings &)
+vcl/inc/salgdi.hxx:387
     _Bool SalGraphics::BlendBitmap(const struct SalTwoRect &,const class SalBitmap &,const class OutputDevice *)
 vcl/inc/unx/gtk/gtkdata.hxx:165
     int GtkSalDisplay::CaptureMouse(class SalFrame *)
 vcl/inc/unx/saldisp.hxx:310
     _Bool SalDisplay::Dispatch(union _XEvent *)
-vcl/inc/WidgetDrawInterface.hxx:97
-    _Bool vcl::WidgetDrawInterface::updateSettings(class AllSettings &)
-vcl/source/gdi/pdfwriter_impl.hxx:1228
+vcl/source/gdi/pdfwriter_impl.hxx:1233
     _Bool vcl::PDFWriterImpl::setCurrentStructureElement(int)
-vcl/source/gdi/pdfwriter_impl.hxx:1229
+vcl/source/gdi/pdfwriter_impl.hxx:1234
     _Bool vcl::PDFWriterImpl::setStructureAttribute(enum vcl::PDFWriter::StructAttribute,enum vcl::PDFWriter::StructAttributeValue)
-vcl/source/gdi/pdfwriter_impl.hxx:1230
+vcl/source/gdi/pdfwriter_impl.hxx:1235
     _Bool vcl::PDFWriterImpl::setStructureAttributeNumerical(enum vcl::PDFWriter::StructAttribute,int)

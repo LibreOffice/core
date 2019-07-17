@@ -72,7 +72,6 @@ public:
     void                            SetOnlyDirectories( bool bDir );
     void                            SetNoURLSelection( bool bSet );
     INetProtocol                    GetSmartProtocol() const { return eSmartProtocol; }
-    void                            SetSmartProtocol( INetProtocol eProt );
     OUString                        GetURL();
     void                            DisableHistory();
 

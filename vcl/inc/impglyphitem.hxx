@@ -94,8 +94,6 @@ public:
     sal_GlyphId glyphId() const { return m_aGlyphId; }
     int charCount() const { return m_nCharCount; }
     int origWidth() const { return m_nOrigWidth; }
-    LogicalFontInstance* fontInstance() const { return m_pFontInstance; }
-    GlyphItemFlags flags() const { return m_nFlags; }
     int charPos() const { return m_nCharPos; }
     int xOffset() const { return m_nXOffset; }
 };
