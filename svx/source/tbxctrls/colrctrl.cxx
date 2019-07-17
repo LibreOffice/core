@@ -190,6 +190,7 @@ SvxColorDockingWindow::SvxColorDockingWindow
     nCount          ( 0 )
 {
     SetText(SvxResId(STR_COLORTABLE));
+    SetQuickHelpText(SvxResId(RID_SVXSTR_COLORBAR));
     SetSizePixel(LogicToPixel(Size(150, 22), MapMode(MapUnit::MapAppFont)));
     SetHelpId(HID_CTRL_COLOR);
 
@@ -270,7 +271,9 @@ void SvxColorDockingWindow::FillValueSet()
     nCount = pColorList->Count();
     aColorSet->Clear();
 
-    // create the first entry for 'invisible/none'
+    aColorSet->addEntriesForXColorList(*pColorList, 2);
+
+    // create the last entry for 'invisible/none'
     const Size aColorSize(SvxColorValueSet::getEntryEdgeLength(), SvxColorValueSet::getEntryEdgeLength());
     long nPtX = aColorSize.Width() - 1;
     long nPtY = aColorSize.Height() - 1;
@@ -286,7 +289,6 @@ void SvxColorDockingWindow::FillValueSet()
 
     aColorSet->InsertItem( sal_uInt16(1), Image(aBmp), SvxResId( RID_SVXSTR_INVISIBLE ) );
 
-    aColorSet->addEntriesForXColorList(*pColorList, 2);
 }
 
 void SvxColorDockingWindow::SetSize()

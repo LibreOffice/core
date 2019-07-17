@@ -552,6 +552,7 @@
 #define RID_SVXSTR_GRAFMODE_GREYS                           NC_("RID_SVXSTR_GRAFMODE_GREYS", "Grayscale")
 #define RID_SVXSTR_GRAFMODE_MONO                            NC_("RID_SVXSTR_GRAFMODE_MONO", "Black/White")
 #define RID_SVXSTR_GRAFMODE_WATERMARK                       NC_("RID_SVXSTR_GRAFMODE_WATERMARK", "Watermark")
+#define RID_SVXSTR_COLORBAR                                 NC_("RID_SVXSTR_COLORBAR", "Left click to apply as background color, right click to set line color")
 // Default colors
 #define RID_SVXSTR_COLOR_DEFAULT_FONT                       NC_("RID_SVXSTR_COLOR_DEFAULT_FONTCOLOR", "Dark Red 2")
 #define RID_SVXSTR_COLOR_DEFAULT_FRAMELINE                  NC_("RID_SVXSTR_COLOR_DEFAULT_FRAMELINE", "Blue")
