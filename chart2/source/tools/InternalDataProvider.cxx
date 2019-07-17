@@ -488,7 +488,7 @@ void InternalDataProvider::decreaseMapReferences(
 Reference< chart2::data::XDataSequence > InternalDataProvider::createDataSequenceAndAddToMap(
     const OUString & rRangeRepresentation )
 {
-    Reference<chart2::data::XDataSequence> xSeq = createDataSequenceFromArray(rRangeRepresentation, OUString());
+    Reference<chart2::data::XDataSequence> xSeq = createDataSequenceFromArrays(rRangeRepresentation, OUString());
     if (xSeq.is())
         return xSeq;
 
@@ -497,17 +497,9 @@ Reference< chart2::data::XDataSequence > InternalDataProvider::createDataSequenc
     return xSeq;
 }
 
-uno::Reference<chart2::data::XDataSequence>
-InternalDataProvider::createDataSequenceFromArray( const OUString& rArrayStr, const OUString& rRole )
+void InternalDataProvider::createDataSequenceFromArray( uno::Reference<chart2::data::XDataSequence>& xSeq, const OUString& rArrayStr, const OUString& rRole )
 {
-    if (rArrayStr.indexOf('{') != 0 || rArrayStr[rArrayStr.getLength()-1] != '}')
-    {
-        // Not an array string.
-        return uno::Reference<chart2::data::XDataSequence>();
-    }
-
     bool bAllNumeric = true;
-    uno::Reference<chart2::data::XDataSequence> xSeq;
 
     const sal_Unicode* p = rArrayStr.getStr();
     const sal_Unicode* pEnd = p + rArrayStr.getLength();
@@ -634,7 +626,26 @@ InternalDataProvider::createDataSequenceFromArray( const OUString& rArrayStr, co
             addDataSequenceToMap(aRangeRep, xSeq);
         }
     }
+}
 
+uno::Reference<chart2::data::XDataSequence>
+InternalDataProvider::createDataSequenceFromArrays( const OUString& rArrayStr, const OUString& rRole )
+{
+    sal_Int32 nArrayStart = 0;
+    sal_Int32 nArrayEnd;
+    uno::Reference<chart2::data::XDataSequence> xSeq;
+
+    // process value array string by splitting in the case of complex categories
+    while (nArrayStart < rArrayStr.getLength() && rArrayStr[nArrayStart] == '{' &&
+          (((nArrayEnd = rArrayStr.indexOf("}{", nArrayStart)) > 0) ||
+          (nArrayEnd = rArrayStr.indexOf('}', rArrayStr.getLength() - 1)) > 0))
+    {
+        createDataSequenceFromArray( xSeq,
+            (nArrayStart == 0 && nArrayEnd == rArrayStr.getLength()-1)
+            ? rArrayStr
+            : rArrayStr.copy(nArrayStart, nArrayEnd - nArrayStart + 1), rRole);
+        nArrayStart = nArrayEnd + 1;
+    }
     return xSeq;
 }
 
@@ -823,7 +834,7 @@ Reference<chart2::data::XDataSequence> SAL_CALL
 InternalDataProvider::createDataSequenceByValueArray(
     const OUString& aRole, const OUString& aRangeRepresentation )
 {
-    return createDataSequenceFromArray(aRangeRepresentation, aRole);
+    return createDataSequenceFromArrays(aRangeRepresentation, aRole);
 }
 
 Reference< sheet::XRangeSelection > SAL_CALL InternalDataProvider::getRangeSelection()

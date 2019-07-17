@@ -183,8 +183,11 @@ private:
     css::uno::Reference< css::chart2::data::XDataSequence >
         createDataSequenceAndAddToMap( const OUString & rRangeRepresentation );
 
+    void createDataSequenceFromArray(
+        css::uno::Reference<css::chart2::data::XDataSequence>& xSeq,
+        const OUString& rArrayStr, const OUString& rRole );
     css::uno::Reference<css::chart2::data::XDataSequence>
-        createDataSequenceFromArray( const OUString& rArrayStr, const OUString& rRole );
+        createDataSequenceFromArrays( const OUString& rArrayStr, const OUString& rRole );
 
     void deleteMapReferences( const OUString & rRangeRepresentation );
 
