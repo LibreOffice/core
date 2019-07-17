@@ -774,12 +774,12 @@ bool ScGlobal::EETextObjEqual( const EditTextObject* pObj1,
     return false;
 }
 
-void ScGlobal::OpenURL(const OUString& rURL, const OUString& rTarget)
+void ScGlobal::OpenURL(const OUString& rURL, const OUString& rTarget, bool bIgnoreSettings)
 {
     // OpenURL is always called in the GridWindow by mouse clicks in some way or another.
     // That's why pScActiveViewShell and nScClickMouseModifier are correct.
 
-    if (!ShouldOpenURL())
+    if (!bIgnoreSettings && !ShouldOpenURL())
         return;
 
     SfxViewFrame* pViewFrm = SfxViewFrame::Current();

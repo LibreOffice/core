@@ -324,7 +324,7 @@ void ScDrawTextObjectBar::Execute( SfxRequest &rReq )
                 const SvxFieldData* pField = pFieldItem->GetField();
                 if (const SvxURLField* pURLField = dynamic_cast<const SvxURLField*>(pField))
                 {
-                    ScGlobal::OpenURL(pURLField->GetURL(), pURLField->GetTargetFrame());
+                    ScGlobal::OpenURL(pURLField->GetURL(), pURLField->GetTargetFrame(), true);
                 }
             }
             break;

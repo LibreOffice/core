@@ -248,7 +248,7 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
 
                 ScMacroInfo* pInfo = ScDrawLayer::GetMacroInfo( pObj );
                 if ( pInfo && !pInfo->GetHlink().isEmpty() )
-                    ScGlobal::OpenURL( pInfo->GetHlink(), OUString() );
+                    ScGlobal::OpenURL( pInfo->GetHlink(), OUString(), true );
             }
             break;
 
