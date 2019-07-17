@@ -132,7 +132,7 @@ enum RTTypeClass {
 enum class RTFieldAccess
 {
     NONE        = 0x0000,
-    /// specifies a unknown flag
+    /// specifies an unknown flag
     INVALID     = 0x0000,
     /// specifies a readonly property/attribute
     READONLY    = 0x0001,
@@ -298,7 +298,7 @@ enum class RTReferenceType {
     /// the reference type is unknown
     INVALID,
 
-    /** the service support the interface that means a implementation of this
+    /** the service support the interface that means an implementation of this
         service must implement this interface.
      */
     SUPPORTS,
