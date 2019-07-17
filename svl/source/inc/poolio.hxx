@@ -61,7 +61,10 @@ public:
     o3tl::sorted_vector<SfxPoolItem*>::const_iterator find(SfxPoolItem* pItem) const { return maPoolItemSet.find(pItem); }
     void insert(SfxPoolItem* pItem)
     {
-        maPoolItemSet.insert(pItem);
+        bool bInserted = maPoolItemSet.insert(pItem).second;
+        assert( bInserted && "duplicate item?" );
+        (void)bInserted;
+
         if (pItem->IsSortable())
         {
             // bail early if someone modified one of these things underneath me
