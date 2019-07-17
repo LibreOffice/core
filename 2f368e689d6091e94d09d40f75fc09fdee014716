@@ -45,6 +45,30 @@
       "revId": "2f368e689d6091e94d09d40f75fc09fdee014716",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_97c8e255",
+        "filename": "oox/source/drawingml/chart/datasourcemodel.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2019-07-17T11:34:08Z",
+      "side": 1,
+      "message": "(it depends from the OOXML scheme, ie. where is the first lvl, so maybe it\u0027s ok or more simple to use zero)",
+      "parentUuid": "bf659307_17bdb2b6",
+      "range": {
+        "startLine": 28,
+        "startChar": 17,
+        "endLine": 28,
+        "endChar": 19
+      },
+      "revId": "2f368e689d6091e94d09d40f75fc09fdee014716",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
