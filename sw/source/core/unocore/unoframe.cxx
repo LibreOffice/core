@@ -3000,6 +3000,8 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
 
 void SwXFrame::attach(const uno::Reference< text::XTextRange > & xTextRange)
 {
+    SolarMutexGuard g;
+
     SwFrameFormat* pFormat;
     if(IsDescriptor())
         attachToRange(xTextRange);
