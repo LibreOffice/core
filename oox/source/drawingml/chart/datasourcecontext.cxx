@@ -180,6 +180,7 @@ ContextHandlerRef StringSequenceContext::onCreateContext( sal_Int32 nElement, co
             switch( nElement )
             {
                 case C_TOKEN( f ):
+                case C_TOKEN( multiLvlStrCache ):
                     return this;
             }
         break;
@@ -206,6 +207,28 @@ ContextHandlerRef StringSequenceContext::onCreateContext( sal_Int32 nElement, co
             }
         break;
 
+        case C_TOKEN( multiLvlStrCache ):
+            switch (nElement)
+            {
+                case C_TOKEN( ptCount ):
+                    mrModel.mnPointCount = rAttribs.getInteger(XML_val, -1);
+                    mrModel.mnLevelCount--; // normalize level count
+                    return nullptr;
+                case C_TOKEN( lvl ):
+                    mrModel.mnLevelCount++;
+                    return this;
+            }
+            break;
+
+        case C_TOKEN( lvl ):
+            switch (nElement)
+            {
+                case C_TOKEN(pt):
+                    mnPtIndex = rAttribs.getInteger(XML_idx, -1);
+                    return this;
+            }
+            break;
+
         case C_TOKEN( pt ):
             switch( nElement )
             {
@@ -226,7 +249,7 @@ void StringSequenceContext::onCharacters( const OUString& rChars )
         break;
         case C_TOKEN( v ):
             if( mnPtIndex >= 0 )
-                mrModel.maData[ mnPtIndex ] <<= rChars;
+                mrModel.maData[ (mrModel.mnLevelCount-1) * mrModel.mnPointCount + mnPtIndex ] <<= rChars;
         break;
     }
 }
