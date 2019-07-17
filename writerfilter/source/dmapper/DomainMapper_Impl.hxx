@@ -1004,6 +1004,11 @@ public:
     /// start/end node.
     void ClearPreviousParagraph();
 
+    /// Handle redline text portions in frames:
+    /// store their data, and create them after frame creation
+    bool m_bIsActualParagraphFramed;
+    std::vector<css::uno::Any> aFramedRedlines;
+
 private:
     void PushPageHeaderFooter(bool bHeader, SectionPropertyMap::PageType eType);
     std::vector<css::uno::Reference< css::drawing::XShape > > m_vTextFramesForChaining ;
