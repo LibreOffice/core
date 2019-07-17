@@ -308,7 +308,7 @@
                         </child>
                         <child>
                           <object class="GtkCheckButton" id="ctrlclick">
-                            <property name="label" translatable="yes" context="securityoptionsdialog|ctrlclick">Ctrl-click required _to follow hyperlinks</property>
+                            <property name="label" translatable="yes" context="securityoptionsdialog|ctrlclick">Ctrl-click required _to open hyperlinks</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>

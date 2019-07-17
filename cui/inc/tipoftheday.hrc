@@ -242,7 +242,7 @@ const std::tuple<const char*, OUString, OUString> TIPOFTHEDAY_STRINGARRAY[] =
      { NC_("RID_CUI_TIPOFTHEDAY", "You can toggle between the field names and the actual value with View > Fields Names (or Ctrl + F9)."), "", "tipoftheday_w.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Creating a Style based on another, you can enter a percentage value or a point value (e.g. 110% or -2pt or +5pt)."), "", "tipoftheday_w.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Want to return to default after applying a list style? Click Bullets or Numbering On/Off tool on the Formatting toolbar."), "", "tipoftheday_w.png"},
-     { NC_("RID_CUI_TIPOFTHEDAY", "Configure use of the Ctrl key to follow hyperlinks? Tools > Options > %PRODUCTNAME > Security > Options > ‘Ctrl+click required to follow hyperlinks’."), "", ""},
+     { NC_("RID_CUI_TIPOFTHEDAY", "Configure use of the Ctrl key to open hyperlinks? Tools > Options > %PRODUCTNAME > Security > Options > ‘Ctrl+click required to open hyperlinks’."), "", ""},
      { NC_("RID_CUI_TIPOFTHEDAY", "Annoyed from the marching ants around cells in Calc. Press escape to stop them; the copied content will remain available for pasting."), "", "tipoftheday_c.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "To quickly insert or delete rows, select the desired number of rows (or columns) and press Ctrl+ to add or Ctrl- to delete."), "", "tipoftheday_c.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "To select a contiguous range of cells containing data and bounded by empty row and columns use Ctrl+* (numeric key pad)."), "", "tipoftheday_c.png"},
