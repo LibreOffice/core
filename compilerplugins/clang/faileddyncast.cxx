@@ -6,6 +6,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
+#ifndef LO_CLANG_SHARED_PLUGINS
 
 #include <algorithm>
 
@@ -98,13 +99,18 @@ public:
 
     bool shouldVisitTemplateInstantiations() const { return true; }
 
+    bool preRun() override;
     void run() override;
 
     bool VisitCXXDynamicCastExpr(CXXDynamicCastExpr const * expr);
 };
 
+bool FailedDynCast::preRun() {
+    return compiler.getLangOpts().CPlusPlus;
+}
+
 void FailedDynCast::run() {
-    if (compiler.getLangOpts().CPlusPlus) {
+    if (preRun()) {
         TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
     }
 }
@@ -123,8 +129,10 @@ bool FailedDynCast::VisitCXXDynamicCastExpr(CXXDynamicCastExpr const * expr) {
     return true;
 }
 
-loplugin::Plugin::Registration<FailedDynCast> X("faileddyncast");
+loplugin::Plugin::Registration<FailedDynCast> faileddyncast("faileddyncast");
 
-}
+} // namespace
+
+#endif // LO_CLANG_SHARED_PLUGINS
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

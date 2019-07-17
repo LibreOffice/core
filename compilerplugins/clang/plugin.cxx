@@ -686,6 +686,17 @@ bool isSamePathname(StringRef pathname, StringRef other)
         pathname, other, [](StringRef p, StringRef a) { return p == a; });
 }
 
+bool hasCLanguageLinkageType(FunctionDecl const * decl) {
+    assert(decl != nullptr);
+    if (decl->isExternC()) {
+        return true;
+    }
+    if (decl->isInExternCContext()) {
+        return true;
+    }
+    return false;
+}
+
 } // namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

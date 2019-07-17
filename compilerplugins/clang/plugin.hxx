@@ -271,6 +271,18 @@ bool hasPathnamePrefix(StringRef pathname, StringRef prefix);
 // also contain backslashes:
 bool isSamePathname(StringRef pathname, StringRef other);
 
+// It appears that, given a function declaration, there is no way to determine
+// the language linkage of the function's type, only of the function's name
+// (via FunctionDecl::isExternC); however, in a case like
+//
+//   extern "C" { static void f(); }
+//
+// the function's name does not have C language linkage while the function's
+// type does (as clarified in C++11 [decl.link]); cf. <http://clang-developers.
+// 42468.n3.nabble.com/Language-linkage-of-function-type-tt4037248.html>
+// "Language linkage of function type":
+bool hasCLanguageLinkageType(FunctionDecl const * decl);
+
 } // namespace
 
 #endif // COMPILEPLUGIN_H

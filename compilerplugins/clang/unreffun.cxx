@@ -20,27 +20,6 @@
 
 namespace {
 
-// It appears that, given a function declaration, there is no way to determine
-// the language linkage of the function's type, only of the function's name
-// (via FunctionDecl::isExternC); however, in a case like
-//
-//   extern "C" { static void f(); }
-//
-// the function's name does not have C language linkage while the function's
-// type does (as clarified in C++11 [decl.link]); cf. <http://clang-developers.
-// 42468.n3.nabble.com/Language-linkage-of-function-type-tt4037248.html>
-// "Language linkage of function type":
-bool hasCLanguageLinkageType(FunctionDecl const * decl) {
-    assert(decl != nullptr);
-    if (decl->isExternC()) {
-        return true;
-    }
-    if (decl->isInExternCContext()) {
-        return true;
-    }
-    return false;
-}
-
 bool isFriendDecl(Decl const * decl) {
     return decl->getFriendObjectKind() != Decl::FOK_None;
 }
@@ -173,7 +152,7 @@ bool UnrefFun::VisitFunctionDecl(FunctionDecl const * decl) {
     }
     LinkageInfo info(canon->getLinkageAndVisibility());
     if (info.getLinkage() == ExternalLinkage
-        && hasCLanguageLinkageType(canon) && canon->isDefined()
+        && loplugin::hasCLanguageLinkageType(canon) && canon->isDefined()
         && ((decl == canon && info.getVisibility() == DefaultVisibility)
             || ((canon->hasAttr<ConstructorAttr>()
                  || canon->hasAttr<DestructorAttr>())

@@ -8,6 +8,7 @@
  * License. See LICENSE.TXT for details.
  *
  */
+#ifndef LO_CLANG_SHARED_PLUGINS
 
 #include "plugin.hxx"
 #include "check.hxx"
@@ -32,24 +33,30 @@ public:
     {
     }
 
-    void run()
+    bool preRun()
     {
         std::string fn(handler.getMainFileName());
         loplugin::normalizeDotDotInFilePath(fn);
         // these are below tools in the module hierarchy, so we can't use the pretty printing
         if (loplugin::hasPathnamePrefix(fn, SRCDIR "/cppuhelper/"))
-            return;
+            return false;
         if (loplugin::hasPathnamePrefix(fn, SRCDIR "/ucbhelper/"))
-            return;
+            return false;
         if (loplugin::hasPathnamePrefix(fn, SRCDIR "/binaryurp/"))
-            return;
+            return false;
         if (loplugin::hasPathnamePrefix(fn, SRCDIR "/comphelper/"))
-            return;
+            return false;
         // can't do that here, don't have an Any
         if (loplugin::hasPathnamePrefix(fn, SRCDIR
                                         "/connectivity/source/drivers/hsqldb/HStorageMap.cxx"))
-            return;
-        TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
+            return false;
+        return true;
+    }
+
+    void run()
+    {
+        if (preRun())
+            TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
     }
 
     static bool BaseCheckNotExceptionSubclass(const CXXRecordDecl* BaseDefinition)
@@ -129,8 +136,10 @@ public:
     }
 };
 
-static Plugin::Registration<LogExceptionNicely> X("logexceptionnicely");
+static Plugin::Registration<LogExceptionNicely> logexceptionnicely("logexceptionnicely");
 
 } // namespace
+
+#endif // LO_CLANG_SHARED_PLUGINS
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

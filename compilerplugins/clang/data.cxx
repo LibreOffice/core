@@ -6,6 +6,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
+#ifndef LO_CLANG_SHARED_PLUGINS
 
 #include "check.hxx"
 #include "compat.hxx"
@@ -68,17 +69,21 @@ public:
         return true;
     }
 
-private:
+    bool preRun() override { return compiler.getLangOpts().CPlusPlus; }
+
     void run() override
     {
-        if (compiler.getLangOpts().CPlusPlus)
+        if (preRun())
         {
             TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
         }
     }
 };
 
-static loplugin::Plugin::Registration<Data> reg("data");
-}
+static loplugin::Plugin::Registration<Data> data("data");
+
+} // namespace
+
+#endif // LO_CLANG_SHARED_PLUGINS
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

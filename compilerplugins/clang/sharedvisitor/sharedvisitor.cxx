@@ -14,16 +14,26 @@
 #include "../badstatics.cxx"
 #include "../blockblock.cxx"
 #include "../charrightshift.cxx"
+#include "../data.cxx"
 #include "../datamembershadow.cxx"
 #include "../dbgunhandledexception.cxx"
 #include "../derefnullptr.cxx"
+#include "../dllprivate.cxx"
 #include "../doubleconvert.cxx"
+#include "../dynexcspec.cxx"
 #include "../empty.cxx"
 #include "../emptyif.cxx"
 #include "../externandnotdefined.cxx"
 #include "../externvar.cxx"
+#include "../external.cxx"
+#include "../finalprotected.cxx"
+#include "../indentation.cxx"
 #include "../inlinevisible.cxx"
+#include "../intvsfloat.cxx"
+#include "../literaltoboolconversion.cxx"
+#include "../logexceptionnicely.cxx"
 #include "../loopvartoosmall.cxx"
+#include "../nestedunnamed.cxx"
 #include "../overrideparam.cxx"
 #include "../overridevirtual.cxx"
 #include "../passparamsbyref.cxx"
@@ -55,6 +65,7 @@
 #include "../weakbase.cxx"
 #include "../weakobject.cxx"
 #include "../dyncastvisibility.cxx"
+#include "../faileddyncast.cxx"
 #include "../ptrvector.cxx"
 #include "../vclwidgets.cxx"
 
@@ -73,16 +84,26 @@ public:
         , badStatics( nullptr )
         , blockBlock( nullptr )
         , charRightShift( nullptr )
+        , data( nullptr )
         , dataMemberShadow( nullptr )
         , dbgUnhandledException( nullptr )
         , derefNullPtr( nullptr )
+        , dllPrivate( nullptr )
         , doubleConvert( nullptr )
+        , dynExcSpec( nullptr )
         , empty( nullptr )
         , emptyIf( nullptr )
         , externAndNotDefined( nullptr )
         , externVar( nullptr )
+        , external( nullptr )
+        , finalProtected( nullptr )
+        , indentation( nullptr )
         , inlineVisible( nullptr )
+        , intVsFloat( nullptr )
+        , literalToBoolConversion( nullptr )
+        , logExceptionNicely( nullptr )
         , loopVarTooSmall( nullptr )
+        , nestedUnnamed( nullptr )
         , overrideParam( nullptr )
         , overrideVirtual( nullptr )
         , passParamsByRef( nullptr )
@@ -122,14 +143,20 @@ public:
             blockBlock = nullptr;
         if( charRightShift && !charRightShift->preRun())
             charRightShift = nullptr;
+        if( data && !data->preRun())
+            data = nullptr;
         if( dataMemberShadow && !dataMemberShadow->preRun())
             dataMemberShadow = nullptr;
         if( dbgUnhandledException && !dbgUnhandledException->preRun())
             dbgUnhandledException = nullptr;
         if( derefNullPtr && !derefNullPtr->preRun())
             derefNullPtr = nullptr;
+        if( dllPrivate && !dllPrivate->preRun())
+            dllPrivate = nullptr;
         if( doubleConvert && !doubleConvert->preRun())
             doubleConvert = nullptr;
+        if( dynExcSpec && !dynExcSpec->preRun())
+            dynExcSpec = nullptr;
         if( empty && !empty->preRun())
             empty = nullptr;
         if( emptyIf && !emptyIf->preRun())
@@ -138,10 +165,24 @@ public:
             externAndNotDefined = nullptr;
         if( externVar && !externVar->preRun())
             externVar = nullptr;
+        if( external && !external->preRun())
+            external = nullptr;
+        if( finalProtected && !finalProtected->preRun())
+            finalProtected = nullptr;
+        if( indentation && !indentation->preRun())
+            indentation = nullptr;
         if( inlineVisible && !inlineVisible->preRun())
             inlineVisible = nullptr;
+        if( intVsFloat && !intVsFloat->preRun())
+            intVsFloat = nullptr;
+        if( literalToBoolConversion && !literalToBoolConversion->preRun())
+            literalToBoolConversion = nullptr;
+        if( logExceptionNicely && !logExceptionNicely->preRun())
+            logExceptionNicely = nullptr;
         if( loopVarTooSmall && !loopVarTooSmall->preRun())
             loopVarTooSmall = nullptr;
+        if( nestedUnnamed && !nestedUnnamed->preRun())
+            nestedUnnamed = nullptr;
         if( overrideParam && !overrideParam->preRun())
             overrideParam = nullptr;
         if( overrideVirtual && !overrideVirtual->preRun())
@@ -212,14 +253,20 @@ public:
             blockBlock->postRun();
         if( charRightShift )
             charRightShift->postRun();
+        if( data )
+            data->postRun();
         if( dataMemberShadow )
             dataMemberShadow->postRun();
         if( dbgUnhandledException )
             dbgUnhandledException->postRun();
         if( derefNullPtr )
             derefNullPtr->postRun();
+        if( dllPrivate )
+            dllPrivate->postRun();
         if( doubleConvert )
             doubleConvert->postRun();
+        if( dynExcSpec )
+            dynExcSpec->postRun();
         if( empty )
             empty->postRun();
         if( emptyIf )
@@ -228,10 +275,24 @@ public:
             externAndNotDefined->postRun();
         if( externVar )
             externVar->postRun();
+        if( external )
+            external->postRun();
+        if( finalProtected )
+            finalProtected->postRun();
+        if( indentation )
+            indentation->postRun();
         if( inlineVisible )
             inlineVisible->postRun();
+        if( intVsFloat )
+            intVsFloat->postRun();
+        if( literalToBoolConversion )
+            literalToBoolConversion->postRun();
+        if( logExceptionNicely )
+            logExceptionNicely->postRun();
         if( loopVarTooSmall )
             loopVarTooSmall->postRun();
+        if( nestedUnnamed )
+            nestedUnnamed->postRun();
         if( overrideParam )
             overrideParam->postRun();
         if( overrideVirtual )
@@ -308,14 +369,20 @@ public:
             blockBlock = static_cast< BlockBlock* >( plugin );
         else if( strcmp( name, "charrightshift" ) == 0 )
             charRightShift = static_cast< CharRightShift* >( plugin );
+        else if( strcmp( name, "data" ) == 0 )
+            data = static_cast< Data* >( plugin );
         else if( strcmp( name, "datamembershadow" ) == 0 )
             dataMemberShadow = static_cast< DataMemberShadow* >( plugin );
         else if( strcmp( name, "dbgunhandledexception" ) == 0 )
             dbgUnhandledException = static_cast< DbgUnhandledException* >( plugin );
         else if( strcmp( name, "derefnullptr" ) == 0 )
             derefNullPtr = static_cast< DerefNullPtr* >( plugin );
+        else if( strcmp( name, "dllprivate" ) == 0 )
+            dllPrivate = static_cast< DllPrivate* >( plugin );
         else if( strcmp( name, "doubleconvert" ) == 0 )
             doubleConvert = static_cast< DoubleConvert* >( plugin );
+        else if( strcmp( name, "dynexcspec" ) == 0 )
+            dynExcSpec = static_cast< DynExcSpec* >( plugin );
         else if( strcmp( name, "empty" ) == 0 )
             empty = static_cast< Empty* >( plugin );
         else if( strcmp( name, "emptyif" ) == 0 )
@@ -324,10 +391,24 @@ public:
             externAndNotDefined = static_cast< ExternAndNotDefined* >( plugin );
         else if( strcmp( name, "externvar" ) == 0 )
             externVar = static_cast< ExternVar* >( plugin );
+        else if( strcmp( name, "external" ) == 0 )
+            external = static_cast< External* >( plugin );
+        else if( strcmp( name, "finalprotected" ) == 0 )
+            finalProtected = static_cast< FinalProtected* >( plugin );
+        else if( strcmp( name, "indentation" ) == 0 )
+            indentation = static_cast< Indentation* >( plugin );
         else if( strcmp( name, "inlinevisible" ) == 0 )
             inlineVisible = static_cast< InlineVisible* >( plugin );
+        else if( strcmp( name, "intvsfloat" ) == 0 )
+            intVsFloat = static_cast< IntVsFloat* >( plugin );
+        else if( strcmp( name, "literaltoboolconversion" ) == 0 )
+            literalToBoolConversion = static_cast< LiteralToBoolConversion* >( plugin );
+        else if( strcmp( name, "logexceptionnicely" ) == 0 )
+            logExceptionNicely = static_cast< LogExceptionNicely* >( plugin );
         else if( strcmp( name, "loopvartoosmall" ) == 0 )
             loopVarTooSmall = static_cast< LoopVarTooSmall* >( plugin );
+        else if( strcmp( name, "nestedunnamed" ) == 0 )
+            nestedUnnamed = static_cast< NestedUnnamed* >( plugin );
         else if( strcmp( name, "overrideparam" ) == 0 )
             overrideParam = static_cast< OverrideParam* >( plugin );
         else if( strcmp( name, "overridevirtual" ) == 0 )
@@ -411,6 +492,11 @@ public:
         {
             if( !empty->VisitBinEQ( arg ))
                 empty = nullptr;
+        }
+        if( intVsFloat != nullptr )
+        {
+            if( !intVsFloat->VisitBinEQ( arg ))
+                intVsFloat = nullptr;
         }
         return anyPluginActive();
     }
@@ -571,6 +657,11 @@ public:
     {
         if( ignoreLocation( arg ))
             return true;
+        if( finalProtected != nullptr )
+        {
+            if( !finalProtected->VisitCXXMethodDecl( arg ))
+                finalProtected = nullptr;
+        }
         if( overrideParam != nullptr )
         {
             if( !overrideParam->VisitCXXMethodDecl( arg ))
@@ -613,6 +704,11 @@ public:
     {
         if( ignoreLocation( arg ))
             return true;
+        if( logExceptionNicely != nullptr )
+        {
+            if( !logExceptionNicely->VisitCXXOperatorCallExpr( arg ))
+                logExceptionNicely = nullptr;
+        }
         if( passParamsByRef != nullptr )
         {
             if( !passParamsByRef->VisitCXXOperatorCallExpr( arg ))
@@ -725,6 +821,17 @@ public:
         }
         return anyPluginActive();
     }
+    bool VisitClassTemplateDecl(const class clang::ClassTemplateDecl * arg)
+    {
+        if( ignoreLocation( arg ))
+            return true;
+        if( external != nullptr )
+        {
+            if( !external->VisitClassTemplateDecl( arg ))
+                external = nullptr;
+        }
+        return anyPluginActive();
+    }
     bool VisitCompoundStmt(const class clang::CompoundStmt * arg)
     {
         if( ignoreLocation( arg ))
@@ -733,6 +840,11 @@ public:
         {
             if( !blockBlock->VisitCompoundStmt( arg ))
                 blockBlock = nullptr;
+        }
+        if( indentation != nullptr )
+        {
+            if( !indentation->VisitCompoundStmt( arg ))
+                indentation = nullptr;
         }
         return anyPluginActive();
     }
@@ -772,6 +884,11 @@ public:
             if( !dataMemberShadow->VisitFieldDecl( arg ))
                 dataMemberShadow = nullptr;
         }
+        if( finalProtected != nullptr )
+        {
+            if( !finalProtected->VisitFieldDecl( arg ))
+                finalProtected = nullptr;
+        }
         return anyPluginActive();
     }
     bool VisitForStmt(const class clang::ForStmt * arg)
@@ -794,10 +911,20 @@ public:
     {
         if( ignoreLocation( arg ))
             return true;
+        if( dynExcSpec != nullptr )
+        {
+            if( !dynExcSpec->VisitFunctionDecl( arg ))
+                dynExcSpec = nullptr;
+        }
         if( externAndNotDefined != nullptr )
         {
             if( !externAndNotDefined->VisitFunctionDecl( arg ))
                 externAndNotDefined = nullptr;
+        }
+        if( external != nullptr )
+        {
+            if( !external->VisitFunctionDecl( arg ))
+                external = nullptr;
         }
         if( inlineVisible != nullptr )
         {
@@ -836,6 +963,17 @@ public:
         }
         return anyPluginActive();
     }
+    bool VisitFunctionTemplateDecl(const class clang::FunctionTemplateDecl * arg)
+    {
+        if( ignoreLocation( arg ))
+            return true;
+        if( external != nullptr )
+        {
+            if( !external->VisitFunctionTemplateDecl( arg ))
+                external = nullptr;
+        }
+        return anyPluginActive();
+    }
     bool VisitIfStmt(const class clang::IfStmt * arg)
     {
         if( ignoreLocation( arg ))
@@ -856,6 +994,11 @@ public:
     {
         if( ignoreLocation( arg ))
             return true;
+        if( literalToBoolConversion != nullptr )
+        {
+            if( !literalToBoolConversion->VisitImplicitCastExpr( arg ))
+                literalToBoolConversion = nullptr;
+        }
         if( unicodeToChar != nullptr )
         {
             if( !unicodeToChar->VisitImplicitCastExpr( arg ))
@@ -899,10 +1042,26 @@ public:
     {
         if( ignoreLocation( arg ))
             return true;
+        if( dllPrivate != nullptr )
+        {
+            if( !dllPrivate->VisitNamedDecl( arg ))
+                dllPrivate = nullptr;
+        }
         if( reservedId != nullptr )
         {
             if( !reservedId->VisitNamedDecl( arg ))
                 reservedId = nullptr;
+        }
+        return anyPluginActive();
+    }
+    bool VisitNamespaceDecl(const class clang::NamespaceDecl * arg)
+    {
+        if( ignoreLocation( arg ))
+            return true;
+        if( nestedUnnamed != nullptr )
+        {
+            if( !nestedUnnamed->VisitNamespaceDecl( arg ))
+                nestedUnnamed = nullptr;
         }
         return anyPluginActive();
     }
@@ -942,10 +1101,26 @@ public:
     {
         if( ignoreLocation( arg ))
             return true;
+        if( indentation != nullptr )
+        {
+            if( !indentation->VisitSwitchStmt( arg ))
+                indentation = nullptr;
+        }
         if( unnecessaryParen != nullptr )
         {
             if( !unnecessaryParen->VisitSwitchStmt( arg ))
                 unnecessaryParen = nullptr;
+        }
+        return anyPluginActive();
+    }
+    bool VisitTagDecl(const class clang::TagDecl * arg)
+    {
+        if( ignoreLocation( arg ))
+            return true;
+        if( external != nullptr )
+        {
+            if( !external->VisitTagDecl( arg ))
+                external = nullptr;
         }
         return anyPluginActive();
     }
@@ -975,6 +1150,11 @@ public:
     {
         if( ignoreLocation( arg ))
             return true;
+        if( data != nullptr )
+        {
+            if( !data->VisitUnaryOperator( arg ))
+                data = nullptr;
+        }
         if( redundantPointerOps != nullptr )
         {
             if( !redundantPointerOps->VisitUnaryOperator( arg ))
@@ -996,6 +1176,16 @@ public:
             if( !externVar->VisitVarDecl( arg ))
                 externVar = nullptr;
         }
+        if( external != nullptr )
+        {
+            if( !external->VisitVarDecl( arg ))
+                external = nullptr;
+        }
+        if( intVsFloat != nullptr )
+        {
+            if( !intVsFloat->VisitVarDecl( arg ))
+                intVsFloat = nullptr;
+        }
         if( simplifyConstruct != nullptr )
         {
             if( !simplifyConstruct->VisitVarDecl( arg ))
@@ -1015,6 +1205,17 @@ public:
         {
             if( !unusedVariableCheck->VisitVarDecl( arg ))
                 unusedVariableCheck = nullptr;
+        }
+        return anyPluginActive();
+    }
+    bool VisitVarTemplateDecl(const class clang::VarTemplateDecl * arg)
+    {
+        if( ignoreLocation( arg ))
+            return true;
+        if( external != nullptr )
+        {
+            if( !external->VisitVarTemplateDecl( arg ))
+                external = nullptr;
         }
         return anyPluginActive();
     }
@@ -1166,6 +1367,22 @@ public:
         simplifyConstruct = saveSimplifyConstruct;
         return ret;
     }
+    bool TraverseLinkageSpecDecl(class clang::LinkageSpecDecl * arg)
+    {
+        LiteralToBoolConversion* saveLiteralToBoolConversion = literalToBoolConversion;
+        if( literalToBoolConversion != nullptr )
+        {
+            if( !literalToBoolConversion->PreTraverseLinkageSpecDecl( arg ))
+                literalToBoolConversion = nullptr;
+        }
+        bool ret = RecursiveASTVisitor::TraverseLinkageSpecDecl( arg );
+        if( literalToBoolConversion != nullptr )
+        {
+            literalToBoolConversion->PostTraverseLinkageSpecDecl( arg );
+        }
+        literalToBoolConversion = saveLiteralToBoolConversion;
+        return ret;
+    }
     bool TraverseReturnStmt(class clang::ReturnStmt * arg)
     {
         SimplifyConstruct* saveSimplifyConstruct = simplifyConstruct;
@@ -1178,22 +1395,48 @@ public:
         simplifyConstruct = saveSimplifyConstruct;
         return ret;
     }
+    bool TraverseSwitchStmt(class clang::SwitchStmt * arg)
+    {
+        Indentation* saveIndentation = indentation;
+        if( indentation != nullptr )
+        {
+            if( !indentation->PreTraverseSwitchStmt( arg ))
+                indentation = nullptr;
+        }
+        bool ret = RecursiveASTVisitor::TraverseSwitchStmt( arg );
+        if( indentation != nullptr )
+        {
+            indentation->PostTraverseSwitchStmt( arg );
+        }
+        indentation = saveIndentation;
+        return ret;
+    }
 private:
     bool anyPluginActive() const
     {
         return badStatics != nullptr
             || blockBlock != nullptr
             || charRightShift != nullptr
+            || data != nullptr
             || dataMemberShadow != nullptr
             || dbgUnhandledException != nullptr
             || derefNullPtr != nullptr
+            || dllPrivate != nullptr
             || doubleConvert != nullptr
+            || dynExcSpec != nullptr
             || empty != nullptr
             || emptyIf != nullptr
             || externAndNotDefined != nullptr
             || externVar != nullptr
+            || external != nullptr
+            || finalProtected != nullptr
+            || indentation != nullptr
             || inlineVisible != nullptr
+            || intVsFloat != nullptr
+            || literalToBoolConversion != nullptr
+            || logExceptionNicely != nullptr
             || loopVarTooSmall != nullptr
+            || nestedUnnamed != nullptr
             || overrideParam != nullptr
             || overrideVirtual != nullptr
             || passParamsByRef != nullptr
@@ -1228,16 +1471,26 @@ private:
     BadStatics* badStatics;
     BlockBlock* blockBlock;
     CharRightShift* charRightShift;
+    Data* data;
     DataMemberShadow* dataMemberShadow;
     DbgUnhandledException* dbgUnhandledException;
     DerefNullPtr* derefNullPtr;
+    DllPrivate* dllPrivate;
     DoubleConvert* doubleConvert;
+    DynExcSpec* dynExcSpec;
     Empty* empty;
     EmptyIf* emptyIf;
     ExternAndNotDefined* externAndNotDefined;
     ExternVar* externVar;
+    External* external;
+    FinalProtected* finalProtected;
+    Indentation* indentation;
     InlineVisible* inlineVisible;
+    IntVsFloat* intVsFloat;
+    LiteralToBoolConversion* literalToBoolConversion;
+    LogExceptionNicely* logExceptionNicely;
     LoopVarTooSmall* loopVarTooSmall;
+    NestedUnnamed* nestedUnnamed;
     OverrideParam* overrideParam;
     OverrideVirtual* overrideVirtual;
     PassParamsByRef* passParamsByRef;
@@ -1280,6 +1533,7 @@ public:
     explicit SharedRecursiveASTVisitorVisitTemplates(const InstantiationData& rData)
         : FilteringPlugin(rData)
         , dynCastVisibility( nullptr )
+        , failedDynCast( nullptr )
         , ptrVector( nullptr )
         , vCLWidgets( nullptr )
         {}
@@ -1287,6 +1541,8 @@ public:
     {
         if( dynCastVisibility && !dynCastVisibility->preRun())
             dynCastVisibility = nullptr;
+        if( failedDynCast && !failedDynCast->preRun())
+            failedDynCast = nullptr;
         if( ptrVector && !ptrVector->preRun())
             ptrVector = nullptr;
         if( vCLWidgets && !vCLWidgets->preRun())
@@ -1297,6 +1553,8 @@ public:
     {
         if( dynCastVisibility )
             dynCastVisibility->postRun();
+        if( failedDynCast )
+            failedDynCast->postRun();
         if( ptrVector )
             ptrVector->postRun();
         if( vCLWidgets )
@@ -1313,6 +1571,8 @@ public:
     {
         if( strcmp( name, "dyncastvisibility" ) == 0 )
             dynCastVisibility = static_cast< DynCastVisibility* >( plugin );
+        else if( strcmp( name, "faileddyncast" ) == 0 )
+            failedDynCast = static_cast< FailedDynCast* >( plugin );
         else if( strcmp( name, "ptrvector" ) == 0 )
             ptrVector = static_cast< PtrVector* >( plugin );
         else if( strcmp( name, "vclwidgets" ) == 0 )
@@ -1374,6 +1634,11 @@ bool shouldVisitTemplateInstantiations() const { return true; }
         {
             if( !dynCastVisibility->VisitCXXDynamicCastExpr( arg ))
                 dynCastVisibility = nullptr;
+        }
+        if( failedDynCast != nullptr )
+        {
+            if( !failedDynCast->VisitCXXDynamicCastExpr( arg ))
+                failedDynCast = nullptr;
         }
         return anyPluginActive();
     }
@@ -1458,10 +1723,12 @@ private:
     bool anyPluginActive() const
     {
         return dynCastVisibility != nullptr
+            || failedDynCast != nullptr
             || ptrVector != nullptr
             || vCLWidgets != nullptr;
     }
     DynCastVisibility* dynCastVisibility;
+    FailedDynCast* failedDynCast;
     PtrVector* ptrVector;
     VCLWidgets* vCLWidgets;
 };

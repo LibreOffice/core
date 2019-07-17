@@ -6,6 +6,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
+#ifndef LO_CLANG_SHARED_PLUGINS
 
 #include <cassert>
 #include <limits>
@@ -29,6 +30,8 @@ public:
 
     bool VisitImplicitCastExpr(ImplicitCastExpr const * expr);
 
+    bool PreTraverseLinkageSpecDecl(LinkageSpecDecl * decl);
+    void PostTraverseLinkageSpecDecl(LinkageSpecDecl * decl);
     bool TraverseLinkageSpecDecl(LinkageSpecDecl * decl);
 
 private:
@@ -55,12 +58,21 @@ bool LiteralToBoolConversion::VisitImplicitCastExpr(
     return true;
 }
 
-bool LiteralToBoolConversion::TraverseLinkageSpecDecl(LinkageSpecDecl * decl) {
+bool LiteralToBoolConversion::PreTraverseLinkageSpecDecl(LinkageSpecDecl *) {
     assert(externCContexts_ != std::numeric_limits<unsigned int>::max()); //TODO
     ++externCContexts_;
-    bool ret = RecursiveASTVisitor::TraverseLinkageSpecDecl(decl);
+    return true;
+}
+
+void LiteralToBoolConversion::PostTraverseLinkageSpecDecl(LinkageSpecDecl *) {
     assert(externCContexts_ != 0);
     --externCContexts_;
+}
+
+bool LiteralToBoolConversion::TraverseLinkageSpecDecl(LinkageSpecDecl * decl) {
+    PreTraverseLinkageSpecDecl(decl);
+    bool ret = RecursiveASTVisitor::TraverseLinkageSpecDecl(decl);
+    PostTraverseLinkageSpecDecl(decl);
     return ret;
 }
 
@@ -210,7 +222,8 @@ void LiteralToBoolConversion::handleImplicitCastSubExpr(
     }
 }
 
-loplugin::Plugin::Registration<LiteralToBoolConversion> X(
-    "literaltoboolconversion", true);
+loplugin::Plugin::Registration<LiteralToBoolConversion> literaltoboolconversion("literaltoboolconversion");
 
-}
+} // namespace
+
+#endif // LO_CLANG_SHARED_PLUGINS
