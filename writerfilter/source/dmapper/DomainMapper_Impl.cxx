@@ -251,6 +251,7 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_bCheckFirstFootnoteTab(false),
         m_bIgnoreNextTab(false),
         m_bIsSplitPara(false),
+        m_bIsActualParagraphFramed( false ),
         m_vTextFramesForChaining(),
         m_bParaHadField(false),
         m_bParaAutoBefore(false),
@@ -2085,7 +2086,6 @@ void DomainMapper_Impl::CreateRedline(uno::Reference<text::XTextRange> const& xR
             default:
                 throw lang::IllegalArgumentException("illegal redline token type", nullptr, 0);
             }
-            uno::Reference < text::XRedline > xRedline( xRange, uno::UNO_QUERY_THROW );
             beans::PropertyValues aRedlineProperties( 3 );
             beans::PropertyValue * pRedlineProperties = aRedlineProperties.getArray(  );
             pRedlineProperties[0].Name = getPropertyName( PROP_REDLINE_AUTHOR );
@@ -2094,7 +2094,17 @@ void DomainMapper_Impl::CreateRedline(uno::Reference<text::XTextRange> const& xR
             pRedlineProperties[1].Value <<= ConversionHelper::ConvertDateStringToDateTime( pRedline->m_sDate );
             pRedlineProperties[2].Name = getPropertyName( PROP_REDLINE_REVERT_PROPERTIES );
             pRedlineProperties[2].Value <<= pRedline->m_aRevertProperties;
-            xRedline->makeRedline( sType, aRedlineProperties );
+            if (!m_bIsActualParagraphFramed)
+            {
+                uno::Reference < text::XRedline > xRedline( xRange, uno::UNO_QUERY_THROW );
+                xRedline->makeRedline( sType, aRedlineProperties );
+            }
+            else
+            {
+                aFramedRedlines.push_back( uno::makeAny(xRange) );
+                aFramedRedlines.push_back( uno::makeAny(sType) );
+                aFramedRedlines.push_back( uno::makeAny(aRedlineProperties) );
+            }
         }
         catch( const uno::Exception & )
         {
@@ -5709,15 +5719,46 @@ void DomainMapper_Impl::ExecuteFrameConversion()
         try
         {
             uno::Reference< text::XTextAppendAndConvert > xTextAppendAndConvert( GetTopTextAppend(), uno::UNO_QUERY_THROW );
-            xTextAppendAndConvert->convertToTextFrame(
+            // convert redline ranges to cursor movement and character length
+            std::vector<sal_Int32> redPos, redLen;
+            for( size_t i = 0; i < aFramedRedlines.size(); i+=3)
+            {
+                uno::Reference< text::XTextRange > xRange;
+                aFramedRedlines[i] >>= xRange;
+                uno::Reference<text::XTextCursor> xRangeCursor = GetTopTextAppend()->createTextCursorByRange( xRange );
+                sal_Int32 nLen = xRange->getString().getLength();
+                redLen.push_back(nLen);
+                xRangeCursor->gotoRange(m_xFrameStartRange, true);
+                redPos.push_back(xRangeCursor->getString().getLength() - nLen);
+            }
+
+            const uno::Reference< text::XTextContent >& xTextContent = xTextAppendAndConvert->convertToTextFrame(
                 m_xFrameStartRange,
                 m_xFrameEndRange,
                 comphelper::containerToSequence(m_aFrameProperties) );
+
+            // create redlines in the previous frame
+            for( size_t i = 0; i < aFramedRedlines.size(); i+=3)
+            {
+                OUString sType;
+                beans::PropertyValues aRedlineProperties( 3 );
+                aFramedRedlines[i+1] >>= sType;
+                aFramedRedlines[i+2] >>= aRedlineProperties;
+                uno::Reference< text::XTextFrame > xFrame( xTextContent, uno::UNO_QUERY_THROW );
+                uno::Reference< text::XTextCursor > xCrsr = xFrame->getText()->createTextCursor();
+                xCrsr->goRight(redPos[i/3], false);
+                xCrsr->goRight(redLen[i/3], true);
+                uno::Reference < text::XRedline > xRedline( xCrsr, uno::UNO_QUERY_THROW );
+                xRedline->makeRedline( sType, aRedlineProperties );
+            }
         }
         catch( const uno::Exception&)
         {
             DBG_UNHANDLED_EXCEPTION( "writerfilter.dmapper", "Exception caught when converting to frame");
         }
+
+        m_bIsActualParagraphFramed = false;
+        aFramedRedlines.clear();
     }
     m_xFrameStartRange = nullptr;
     m_xFrameEndRange = nullptr;

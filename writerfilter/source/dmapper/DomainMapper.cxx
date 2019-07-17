@@ -1991,6 +1991,8 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
             ParagraphPropertyMap* pParaContext = dynamic_cast< ParagraphPropertyMap* >( pContext.get() );
             if (pParaContext)
                 pParaContext->SetFrameMode();
+
+            m_pImpl->m_bIsActualParagraphFramed = true;
         }
         else
         {
