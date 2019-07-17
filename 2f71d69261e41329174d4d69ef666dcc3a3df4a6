@@ -16,6 +16,24 @@
       "revId": "2f71d69261e41329174d4d69ef666dcc3a3df4a6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_14305056",
+        "filename": "sc/source/core/data/table2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 680,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-07-17T05:52:54Z",
+      "side": 1,
+      "message": "Yes, that makes sense...",
+      "parentUuid": "bf659307_14bdb0b6",
+      "revId": "2f71d69261e41329174d4d69ef666dcc3a3df4a6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
