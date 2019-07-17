@@ -570,9 +570,11 @@ bool TIFFReader::ReadMap()
                 if ( nStrip >= aStripOffsets.size())
                     return false;
                 pTIFF->Seek( aStripOffsets[ nStrip ] + ( ny % GetRowsPerStrip() ) * nStripBytesPerRow );
-                pTIFF->ReadBytes(getMapData(np), nBytesPerRow);
-                if (!pTIFF->good())
-                    return false;
+                // tdf#126147 allow a short incomplete read
+                auto pDest = getMapData(np);
+                auto nRead = pTIFF->ReadBytes(pDest, nBytesPerRow);
+                if (nRead != nBytesPerRow)
+                    memset(pDest + nRead, 0, nBytesPerRow - nRead);
             }
             if ( !ConvertScanline( ny ) )
                 return false;
@@ -1512,8 +1514,7 @@ bool TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
                     if (bStatus)
                     {
                         auto nStart = aStripOffsets[ nStrip ] + ( ny % GetRowsPerStrip() ) * nStripBytesPerRow;
-                        auto nEnd = nStart + nBytesPerRow;
-                        if (nEnd > nEndOfFile)
+                        if (nStart > nEndOfFile)
                             bStatus = false;
                     }
                 }
