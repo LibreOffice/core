@@ -1,0 +1,163 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_777d0e1b",
+        "filename": "cui/source/options/optgdlg.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 225,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-07-17T11:28:21Z",
+      "side": 1,
+      "message": "* This does no work e.g. on macOS, where the service is registered as \"com.sun.star.ui.dialogs.AquaFilePicker\" and not as \"com.sun.star.ui.dialogs.SystemFilePicker\" (cf. fpicker/source/aqua/fps_aqua.component).\n\n* Why use OUStringLiteral(\"...\") here instead of plain \"...\"?",
+      "revId": "1f2dba571a134ced884a5473cc48becd7c777026",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_163297f2",
+        "filename": "svtools/source/uno/fpicker.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-07-17T11:28:21Z",
+      "side": 1,
+      "message": "* This does no work e.g. on macOS, where the service is registered as \"com.sun.star.ui.dialogs.AquaFilePicker\" and not as \"com.sun.star.ui.dialogs.SystemFilePicker\" (cf. fpicker/source/aqua/fps_aqua.component).\n\n* Why use OUStringLiteral(\"...\") here instead of plain \"...\"?",
+      "range": {
+        "startLine": 60,
+        "startChar": 20,
+        "endLine": 60,
+        "endChar": 35
+      },
+      "revId": "1f2dba571a134ced884a5473cc48becd7c777026",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_977a2222",
+        "filename": "svtools/source/uno/fpicker.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-07-17T11:28:21Z",
+      "side": 1,
+      "message": "Why do an unrelated change here?",
+      "revId": "1f2dba571a134ced884a5473cc48becd7c777026",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_b798866a",
+        "filename": "svtools/source/uno/fpicker.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-07-17T11:28:21Z",
+      "side": 1,
+      "message": "This is nonsensical.  Either xResult.is() is guaranteed to be true (and the following if should be removed), or it is not (in which case the assert should be removed).  And xResult.is() can be false in case of deployment errors, so it arguably would be better to handle that with e.g. an exception than to consider it a logic error via assesrt.",
+      "revId": "1f2dba571a134ced884a5473cc48becd7c777026",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_3777963d",
+        "filename": "svtools/source/uno/fpicker.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-07-17T11:28:21Z",
+      "side": 1,
+      "message": "Why do an unrelated change here?",
+      "revId": "1f2dba571a134ced884a5473cc48becd7c777026",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_1794d236",
+        "filename": "svtools/source/uno/fpicker.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-07-17T11:28:21Z",
+      "side": 1,
+      "message": "* This does no work e.g. on macOS, where the service is registered as \"com.sun.star.ui.dialogs.AquaFolderPicker\" and not as \"com.sun.star.ui.dialogs.SystemFolderPicker\" (cf. fpicker/source/aqua/fps_aqua.component).\n\n* Why use OUStringLiteral(\"...\") here instead of plain \"...\"?",
+      "revId": "1f2dba571a134ced884a5473cc48becd7c777026",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_57748a35",
+        "filename": "svtools/source/uno/fpicker.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-07-17T11:28:21Z",
+      "side": 1,
+      "message": "Why do an unrelated change here?",
+      "revId": "1f2dba571a134ced884a5473cc48becd7c777026",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_d79dfa59",
+        "filename": "svtools/source/uno/fpicker.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-07-17T11:28:21Z",
+      "side": 1,
+      "message": "This is nonsensical.  Either xResult.is() is guaranteed to be true (and the following if should be removed), or it is not (in which case the assert should be removed).  And xResult.is() can be false in case of deployment errors, so it arguably would be better to handle that with e.g. an exception than to consider it a logic error via assesrt.",
+      "revId": "1f2dba571a134ced884a5473cc48becd7c777026",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_f78efe25",
+        "filename": "svtools/source/uno/fpicker.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-07-17T11:28:21Z",
+      "side": 1,
+      "message": "Why do an unrelated change here?",
+      "revId": "1f2dba571a134ced884a5473cc48becd7c777026",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
