@@ -1076,12 +1076,10 @@ short Dialog::Execute()
 #endif
     if ( !xWindow->IsDisposed() )
         xWindow.clear();
-#ifdef DBG_UTIL
     else
     {
         OSL_FAIL( "Dialog::Execute() - Dialog destroyed in Execute()" );
     }
-#endif
 
     long nRet = mpDialogImpl->mnResult;
     mpDialogImpl->mnResult = -1;
