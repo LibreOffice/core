@@ -146,34 +146,6 @@ bool GfxLink::LoadNative( Graphic& rGraphic )
     return bRet;
 }
 
-void GfxLink::SwapOut()
-{
-    if( !IsSwappedOut() && mpSwapInData && mnSwapInDataSize )
-    {
-        ::utl::TempFile aTempFile;
-
-        OUString aURL = aTempFile.GetURL();
-
-        if (!aURL.isEmpty())
-        {
-            std::shared_ptr<GfxLink::SwapOutData> pSwapOut = std::make_shared<SwapOutData>(aURL);    // aURL is removed in the destructor
-            SvStream* pOStm = aTempFile.GetStream(StreamMode::STD_WRITE);
-            if (pOStm)
-            {
-                pOStm->WriteBytes(mpSwapInData.get(), mnSwapInDataSize);
-                bool bError = (ERRCODE_NONE != pOStm->GetError());
-                aTempFile.CloseStream();
-
-                if( !bError )
-                {
-                    mpSwapOutData = pSwapOut;
-                    mpSwapInData.reset();
-                }
-            }
-        }
-    }
-}
-
 bool GfxLink::ExportNative( SvStream& rOStream ) const
 {
     if( GetDataSize() )

@@ -470,7 +470,6 @@ private:
     friend class ImpGraphic;
     friend class OutputDevice;
     friend bool VCL_DLLPUBLIC WriteDIBBitmapEx(const BitmapEx& rSource, SvStream& rOStm);
-    friend void ReadRawDIB();
     friend bool VCL_DLLPUBLIC ReadRawDIB(BitmapEx& rTarget, const unsigned char* pBuf,
                                     const ScanlineFormat nFormat,
                                     const int nHeight,

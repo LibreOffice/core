@@ -1223,16 +1223,6 @@ namespace sw { namespace mark
         return IDocumentMarkAccess::iterator(ret);
     }
 
-    // find the first Mark that does not start before
-    IDocumentMarkAccess::const_iterator_t MarkManager::findFirstMarkStartsBefore(const SwPosition& rPos) const
-    {
-        return std::lower_bound(
-                m_vAllMarks.begin(),
-                m_vAllMarks.end(),
-                rPos,
-                CompareIMarkStartsBefore());
-    }
-
     IDocumentMarkAccess::const_iterator_t MarkManager::getAllMarksBegin() const
         { return m_vAllMarks.begin(); }
 

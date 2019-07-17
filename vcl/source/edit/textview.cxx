@@ -2164,8 +2164,6 @@ bool                TextView::HasSelection() const
 { return mpImpl->maSelection.HasRange(); }
 bool                TextView::IsInsertMode() const
 { return mpImpl->mbInsertMode; }
-void                TextView::SupportProtectAttribute(bool bSupport)
-{ mpImpl->mbSupportProtectAttribute = bSupport;}
 
 void TextView::MatchGroup()
 {

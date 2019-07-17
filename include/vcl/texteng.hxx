@@ -284,8 +284,6 @@ public:
     const TextAttrib*       FindAttrib( const TextPaM& rPaM, sal_uInt16 nWhich ) const;
     const TextCharAttrib*   FindCharAttrib( const TextPaM& rPaM, sal_uInt16 nWhich ) const;
 
-    void                RemoveAttribs( sal_uInt32 nPara, sal_uInt16 nWhich );
-    std::unique_ptr<TextCharAttrib>     RemoveAttrib( sal_uInt32 nPara, const TextCharAttrib& rAttrib );
     void                RemoveAttribs( sal_uInt32 nPara );
     void                SetAttrib( const TextAttrib& rAttr, sal_uInt32 nPara, sal_Int32 nStart, sal_Int32 nEnd, bool bIdleFormatAndUpdate = true );
 

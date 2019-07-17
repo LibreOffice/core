@@ -274,13 +274,6 @@ class IDocumentMarkAccess
         */
         virtual const_iterator_t findMark(const OUString& rMark) const =0;
 
-        /** Find the first Mark that does not start before.
-
-            @returns
-            an iterator pointing to the mark, or pointing to getAllMarksEnd() if nothing was found.
-        */
-        virtual const_iterator_t findFirstMarkStartsBefore(const SwPosition& rPos) const =0;
-
         // interface IBookmarks (BOOKMARK, CROSSREF_NUMITEM_BOOKMARK, CROSSREF_HEADING_BOOKMARK )
 
         /** returns a STL-like random access iterator to the begin of the sequence the IBookmarks.

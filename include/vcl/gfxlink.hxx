@@ -106,7 +106,6 @@ public:
 
     bool                ExportNative( SvStream& rOStream ) const;
 
-    void                SwapOut();
     bool                IsSwappedOut() const { return( bool(mpSwapOutData) ); }
 
     bool                IsEMF() const; // WMF & EMF stored under the same type (NativeWmf)

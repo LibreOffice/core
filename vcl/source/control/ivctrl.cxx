@@ -227,11 +227,6 @@ SvxIconChoiceCtrlEntry* SvtIconChoiceCtrl::GetEntry( const Point& rPixPos ) cons
     return const_cast<SvtIconChoiceCtrl*>(this)->_pImpl->GetEntry( aPos );
 }
 
-void SvtIconChoiceCtrl::SetStyle( WinBits nWinStyle )
-{
-    _pImpl->SetStyle( nWinStyle );
-}
-
 WinBits SvtIconChoiceCtrl::GetStyle() const
 {
     return _pImpl->GetStyle();

@@ -175,7 +175,7 @@ static const sal_Int32 Tag_EndRun_1 = 9;
 static const sal_Int32 Tag_EndRun_2 = 10;
 static const sal_Int32 Tag_StartRunProperties = 11;
 static const sal_Int32 Tag_InitCollectedRunProperties = 12;
-static const sal_Int32 Tag_Redline_1 = 13;
+//static const sal_Int32 Tag_Redline_1 = 13;
 static const sal_Int32 Tag_Redline_2 = 14;
 static const sal_Int32 Tag_TableDefinition = 15;
 static const sal_Int32 Tag_OutputFlyFrame = 16;
@@ -2968,55 +2968,6 @@ void DocxAttributeOutput::Redline( const SwRedlineData* pRedlineData)
                 FSNS( XML_w, XML_author ), aAuthor,
                 FSNS( XML_w, XML_date ), aDate );
 
-        // Check if there is any extra data stored in the redline object
-        if (pRedlineData->GetExtraData())
-        {
-            const SwRedlineExtraData* pExtraData = pRedlineData->GetExtraData();
-            const SwRedlineExtraData_FormattingChanges* pFormattingChanges = dynamic_cast<const SwRedlineExtraData_FormattingChanges*>(pExtraData);
-
-            // Check if the extra data is of type 'formatting changes'
-            if (pFormattingChanges)
-            {
-                // Get the item set that holds all the changes properties
-                const SfxItemSet *pChangesSet = pFormattingChanges->GetItemSet();
-                if (pChangesSet)
-                {
-                    m_pSerializer->mark(Tag_Redline_1);
-
-                    m_pSerializer->startElementNS(XML_w, XML_rPr);
-
-                    // The 'm_pFontsAttrList', 'm_pEastAsianLayoutAttrList', 'm_pCharLangAttrList' are used to hold information
-                    // that should be collected by different properties in the core, and are all flushed together
-                    // to the DOCX when the function 'WriteCollectedRunProperties' gets called.
-                    // So we need to store the current status of these lists, so that we can revert back to them when
-                    // we are done exporting the redline attributes.
-                    rtl::Reference<sax_fastparser::FastAttributeList> pFontsAttrList_Original(m_pFontsAttrList);
-                    m_pFontsAttrList.clear();
-                    rtl::Reference<sax_fastparser::FastAttributeList> pColorAttrList_Original(m_pColorAttrList);
-                    m_pColorAttrList.clear();
-                    rtl::Reference<sax_fastparser::FastAttributeList> pEastAsianLayoutAttrList_Original(m_pEastAsianLayoutAttrList);
-                    m_pEastAsianLayoutAttrList.clear();
-                    rtl::Reference<sax_fastparser::FastAttributeList> pCharLangAttrList_Original(m_pCharLangAttrList);
-                    m_pCharLangAttrList.clear();
-
-                    // Output the redline item set
-                    m_rExport.OutputItemSet( *pChangesSet, false, true, i18n::ScriptType::LATIN, m_rExport.m_bExportModeRTF );
-
-                    // Write the collected run properties that are stored in 'm_pFontsAttrList', 'm_pEastAsianLayoutAttrList', 'm_pCharLangAttrList'
-                    WriteCollectedRunProperties();
-
-                    // Revert back the original values that were stored in 'm_pFontsAttrList', 'm_pEastAsianLayoutAttrList', 'm_pCharLangAttrList'
-                    m_pFontsAttrList = pFontsAttrList_Original;
-                    m_pColorAttrList = pColorAttrList_Original;
-                    m_pEastAsianLayoutAttrList = pEastAsianLayoutAttrList_Original;
-                    m_pCharLangAttrList = pCharLangAttrList_Original;
-
-                    m_pSerializer->endElementNS( XML_w, XML_rPr );
-
-                    m_pSerializer->mergeTopMarks(Tag_Redline_1, sax_fastparser::MergeMarks::PREPEND);
-                }
-            }
-        }
         m_pSerializer->endElementNS( XML_w, XML_rPrChange );
         break;
 

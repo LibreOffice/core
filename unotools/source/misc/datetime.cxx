@@ -257,13 +257,6 @@ void typeConvert(const css::util::DateTime& _rDateTime, DateTime& _rOut)
     _rOut = DateTime(aDate, aTime);
 }
 
-void extractDate(const css::util::DateTime& _rDateTime, css::util::Date& _rOut)
-{
-    _rOut.Day = _rDateTime.Day;
-    _rOut.Month = _rDateTime.Month;
-    _rOut.Year = _rDateTime.Year;
-}
-
 OUString toISO8601(const css::util::DateTime& rDateTime)
 {
     OUStringBuffer rBuffer;

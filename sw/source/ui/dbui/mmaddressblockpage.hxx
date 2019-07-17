@@ -156,8 +156,6 @@ public:
     void UpdateFields();
     virtual ~AddressMultiLineEdit() override;
 
-    SwCustomizeAddressBlockDialog* GetAddressDialog() { return m_pParentDialog; }
-
     void            SetSelectionChangedHdl( const Link<bool,void>& rLink ) { m_aSelectionLink = rLink; }
     void            SetModifyHdl( const Link<AddressMultiLineEdit&,void>& rLink ) { m_aModifyLink = rLink; }
 

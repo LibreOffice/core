@@ -213,7 +213,6 @@ public:
     virtual             ~SvtIconChoiceCtrl() override;
     virtual void        dispose() override;
 
-    void                SetStyle( WinBits nWinStyle );
     WinBits             GetStyle() const;
 
     void                SetChoiceWithCursor();
