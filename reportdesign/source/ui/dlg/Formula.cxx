@@ -52,7 +52,7 @@ FormulaDialog::FormulaDialog(weld::Window* pParent
                              , svl::SharedStringPool& rStrPool )
     : FormulaModalDialog( pParent, _pFunctionMgr.get(),this)
     ,m_aFunctionManager(_pFunctionMgr)
-    ,m_pFormulaData(new FormEditData())
+    ,m_xFormulaData(new FormEditData())
     ,m_pAddField(nullptr)
     ,m_xRowSet(_xRowSet)
     ,m_pEdit(nullptr)
@@ -94,7 +94,7 @@ FormulaDialog::~FormulaDialog()
         aDlgOpt.SetWindowState(OStringToOUString(m_pAddField->GetWindowState(WindowStateMask::X | WindowStateMask::Y | WindowStateMask::State | WindowStateMask::Minimized), RTL_TEXTENCODING_ASCII_US));
     }
 
-    StoreFormEditData( m_pFormulaData );
+    StoreFormEditData(m_xFormulaData.get());
     m_pEdit = nullptr;
     m_pAddField.clear();
 }
@@ -145,7 +145,7 @@ void FormulaDialog::switchBack()
 }
 FormEditData* FormulaDialog::getFormEditData() const
 {
-    return m_pFormulaData;
+    return m_xFormulaData.get();
 }
 void FormulaDialog::setCurrentFormula(const OUString& _sReplacement)
 {
