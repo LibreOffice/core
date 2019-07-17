@@ -121,29 +121,36 @@ Reference< XDataSequence > ChartConverter::createDataSequence(
     const OUString& rRole )
 {
     Reference< XDataSequence > xDataSeq;
-    if( rxDataProvider.is() )
+    if( rxDataProvider.is() && !rDataSeq.maData.empty() )
     {
         OUString aRangeRep;
-        if( !rDataSeq.maData.empty() )
+        // create a single-row array from constant source data
+        sal_Int32 realLevelCount = (rDataSeq.mnLevelCount == -1) ? rDataSeq.mnLevelCount + 2 : rDataSeq.mnLevelCount + 1;
+        std::vector<Any> aRowHelp(realLevelCount * rDataSeq.mnPointCount);
+        for (auto const& elem : rDataSeq.maData)
+            aRowHelp.at(elem.first) = elem.second;
+
+        // create a multi-row array
+        for (sal_Int32 i = realLevelCount-1; i >= 0; i--)
         {
-            // create a single-row array from constant source data
             std::vector<Any> aRow(rDataSeq.mnPointCount);
-            for (auto const& elem : rDataSeq.maData)
-                aRow.at(elem.first) = elem.second;
-
+            for (sal_Int32 j = 0; j < rDataSeq.mnPointCount; j++)
+            {
+                aRow[j] = aRowHelp[i * rDataSeq.mnPointCount + j];
+            }
             aRangeRep = lclGenerateApiArray(aRow);
-        }
 
-        if( !aRangeRep.isEmpty() ) try
-        {
-            // create the data sequence
-            xDataSeq = rxDataProvider->createDataSequenceByValueArray(rRole, aRangeRep);
-            return xDataSeq;
+            if (!aRangeRep.isEmpty()) try
+            {
+                // create the data sequence
+                xDataSeq = rxDataProvider->createDataSequenceByValueArray(rRole, aRangeRep);
+            }
+            catch (Exception&)
+            {
+                OSL_FAIL("ChartConverter::createDataSequence - cannot create data sequence");
+            }
         }
-        catch( Exception& )
-        {
-            OSL_FAIL( "ChartConverter::createDataSequence - cannot create data sequence" );
-        }
+        return xDataSeq;
     }
 
     return nullptr;
