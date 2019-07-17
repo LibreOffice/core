@@ -24,7 +24,8 @@ namespace drawingml {
 namespace chart {
 
 DataSequenceModel::DataSequenceModel() :
-    mnPointCount( -1 )
+    mnPointCount( -1 ),
+    mnLevelCount( 1 )
 {
 }
 

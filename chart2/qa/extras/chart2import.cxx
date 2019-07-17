@@ -131,6 +131,7 @@ public:
     void testDataPointInheritedColorDOCX();
     void testExternalStrRefsXLSX();
     void testSourceNumberFormatComplexCategoriesXLS();
+    void testMultilevelCategoryAxis();
     void testTdf123504();
     void testTdf122765();
 
@@ -216,6 +217,7 @@ public:
     CPPUNIT_TEST(testDataPointInheritedColorDOCX);
     CPPUNIT_TEST(testExternalStrRefsXLSX);
     CPPUNIT_TEST(testSourceNumberFormatComplexCategoriesXLS);
+    CPPUNIT_TEST(testMultilevelCategoryAxis);
     CPPUNIT_TEST(testTdf123504);
     CPPUNIT_TEST(testTdf122765);
 
@@ -1534,10 +1536,10 @@ void Chart2ImportTest::testInternalDataProvider() {
     // Parse mixed types, mixed role
     xDataSeq = rxDataProvider->createDataSequenceByValueArray("categories", "{42;\"hello\";0;\"world\"}");
     xSequence = xDataSeq->getData();
-    CPPUNIT_ASSERT_EQUAL(uno::Any(OUString("42")),    xSequence[0]);
-    CPPUNIT_ASSERT_EQUAL(uno::Any(OUString("hello")), xSequence[1]);
-    CPPUNIT_ASSERT_EQUAL(uno::Any(OUString("0")),     xSequence[2]);
-    CPPUNIT_ASSERT_EQUAL(uno::Any(OUString("world")), xSequence[3]);
+    CPPUNIT_ASSERT_EQUAL(uno::Any(OUString("Row 1 42")), xSequence[0]);
+    CPPUNIT_ASSERT_EQUAL(uno::Any(OUString("Row 2 hello")), xSequence[1]);
+    CPPUNIT_ASSERT_EQUAL(uno::Any(OUString("Row 3 0")), xSequence[2]);
+    CPPUNIT_ASSERT_EQUAL(uno::Any(OUString("Row 4 world")), xSequence[3]);
 }
 
 void Chart2ImportTest::testTdf90510()
@@ -1944,6 +1946,34 @@ void Chart2ImportTest::testSourceNumberFormatComplexCategoriesXLS()
     chart2::ScaleData aScaleData = xAxis->getScaleData();
     sal_Int32 nNumberFormat =  aScaleData.Categories->getValues()->getNumberFormatKeyByIndex(-1);
     CPPUNIT_ASSERT(nNumberFormat != 0);
+}
+
+void Chart2ImportTest::testMultilevelCategoryAxis()
+{
+    load("/chart2/qa/extras/data/docx/", "testMultilevelCategoryAxis.docx");
+    uno::Reference< chart2::XChartDocument > xChartDoc(getChartDocFromWriter(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xChartDoc.is());
+
+    // Test the internal data.
+    CPPUNIT_ASSERT(xChartDoc->hasInternalDataProvider());
+
+    Reference<chart2::XInternalDataProvider> xInternalProvider(xChartDoc->getDataProvider(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xInternalProvider.is());
+
+    Reference<chart::XComplexDescriptionAccess> xDescAccess(xInternalProvider, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xDescAccess.is());
+
+    // Get the complex category labels.
+    Sequence<Sequence<OUString> > aCategories = xDescAccess->getComplexRowDescriptions();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), aCategories.getLength());
+    CPPUNIT_ASSERT_EQUAL(OUString("2011"), aCategories[0][0]);
+    CPPUNIT_ASSERT_EQUAL(OUString(""), aCategories[1][0]);
+    CPPUNIT_ASSERT_EQUAL(OUString("2012"), aCategories[2][0]);
+    CPPUNIT_ASSERT_EQUAL(OUString(""), aCategories[3][0]);
+    CPPUNIT_ASSERT_EQUAL(OUString("Categoria 1"), aCategories[0][1]);
+    CPPUNIT_ASSERT_EQUAL(OUString("Categoria 2"), aCategories[1][1]);
+    CPPUNIT_ASSERT_EQUAL(OUString("Categoria 3"), aCategories[2][1]);
+    CPPUNIT_ASSERT_EQUAL(OUString("Categoria 4"), aCategories[3][1]);
 }
 
 void Chart2ImportTest::testTdf123504()
