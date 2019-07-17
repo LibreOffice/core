@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "bf659307_177e12e4",
+        "filename": "cppu/source/uno/lbmap.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-07-17T12:23:03Z",
+      "side": 1,
+      "message": "Since this leak pre-dates my change, and we already have another map of mapping data, surely that will not be a problem?\n\nUnless it is possible to un-load extensions on the fly? (the only problematic case I can think of)",
+      "parentUuid": "bf659307_3748f6ca",
+      "range": {
+        "startLine": 161,
+        "startChar": 6,
+        "endLine": 161,
+        "endChar": 33
+      },
+      "revId": "a0ff4c26feacf6304ee62eb8a1ad7e66bdd9a0c3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bf659307_17305256",
         "filename": "cppu/source/uno/lbmap.cxx",
         "patchSetId": 2
@@ -36,6 +60,24 @@
       "writtenOn": "2019-07-17T12:09:51Z",
       "side": 1,
       "message": "Any reason to include flattening like this here?  It looks to me like that is irrelevant for this change, and just makes it harder to read the diff.",
+      "revId": "a0ff4c26feacf6304ee62eb8a1ad7e66bdd9a0c3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_b782c6c7",
+        "filename": "cppu/source/uno/lbmap.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 377,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-07-17T12:23:03Z",
+      "side": 1,
+      "message": "Between the ifdef and the nested conditionals, it became hard to keep straight.",
+      "parentUuid": "bf659307_17305256",
       "revId": "a0ff4c26feacf6304ee62eb8a1ad7e66bdd9a0c3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
