@@ -1182,6 +1182,7 @@ void ScChildrenShapes::AddShape(const uno::Reference<drawing::XShape>& xShape, b
         ScAccessibleShapeData* pShape = new ScAccessibleShapeData();
         pShape->xShape = xShape;
         SortedShapes::iterator aNewItr = maZOrderedShapes.insert(aFindItr, pShape);
+        maShapesMap[xShape] = pShape;
         SetAnchor(xShape, pShape);
 
         uno::Reference< beans::XPropertySet > xShapeProp(xShape, uno::UNO_QUERY);
