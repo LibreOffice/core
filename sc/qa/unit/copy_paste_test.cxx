@@ -33,11 +33,13 @@ public:
     void testCopyPasteXLS();
     void testTdf84411();
     void testTdf124565();
+    void testTdf126421();
 
     CPPUNIT_TEST_SUITE(ScCopyPasteTest);
     CPPUNIT_TEST(testCopyPasteXLS);
     CPPUNIT_TEST(testTdf84411);
     CPPUNIT_TEST(testTdf124565);
+    CPPUNIT_TEST(testTdf126421);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -135,6 +137,8 @@ void lcl_copy( const OUString& rSrcRange, const OUString& rDstRange, ScDocument&
     ScRefFlags nRes = aSrcRange.Parse(rSrcRange, &rDoc, rDoc.GetAddressConvention());
     CPPUNIT_ASSERT_MESSAGE("Failed to parse.", (nRes & ScRefFlags::VALID));
     pViewShell->GetViewData().GetMarkData().SetMarkArea(aSrcRange);
+    pViewShell->GetViewData().GetMarkData().SetSelectedTabs(
+        { aSrcRange.aStart.Tab(), aSrcRange.aEnd.Tab() });
     pViewShell->GetViewData().GetView()->CopyToClip(&aClipDoc, false, false, false, false);
 
     // 2. Paste
@@ -142,6 +146,8 @@ void lcl_copy( const OUString& rSrcRange, const OUString& rDstRange, ScDocument&
     nRes = aDstRange.Parse(rDstRange, &rDoc, rDoc.GetAddressConvention());
     CPPUNIT_ASSERT_MESSAGE("Failed to parse.", (nRes & ScRefFlags::VALID));
     pViewShell->GetViewData().GetMarkData().SetMarkArea(aDstRange);
+    pViewShell->GetViewData().GetMarkData().SetSelectedTabs(
+        { aDstRange.aStart.Tab(), aDstRange.aEnd.Tab() });
     pViewShell->GetViewData().GetView()->PasteFromClip(InsertDeleteFlags::ALL, &aClipDoc);
 }
 
@@ -287,6 +293,69 @@ void ScCopyPasteTest::testTdf124565()
     CPPUNIT_ASSERT_MESSAGE("Row#2 must be manual height!", rDoc.IsManualRowHeight(nRow, nTab));
 
     xDocSh->DoClose();
+}
+
+void ScCopyPasteTest::testTdf126421()
+{
+    uno::Reference<frame::XDesktop2> xDesktop
+        = frame::Desktop::create(::comphelper::getProcessComponentContext());
+    CPPUNIT_ASSERT(xDesktop.is());
+
+    // create a frame
+    Reference<frame::XFrame> xTargetFrame = xDesktop->findFrame("_blank", 0);
+    CPPUNIT_ASSERT(xTargetFrame.is());
+
+    // 1. Create spreadsheet
+    uno::Sequence<beans::PropertyValue> aEmptyArgList;
+    uno::Reference<lang::XComponent> xComponent
+        = xDesktop->loadComponentFromURL("private:factory/scalc", "_blank", 0, aEmptyArgList);
+    CPPUNIT_ASSERT(xComponent.is());
+
+    // Get the document model
+    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
+    CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
+
+    ScDocShellRef xDocSh = dynamic_cast<ScDocShell*>(pFoundShell);
+    CPPUNIT_ASSERT(xDocSh.get() != nullptr);
+
+    uno::Reference<frame::XModel2> xModel2(xDocSh->GetModel(), UNO_QUERY);
+    CPPUNIT_ASSERT(xModel2.is());
+
+    Reference<frame::XController2> xController(xModel2->createDefaultViewController(xTargetFrame),
+                                               UNO_QUERY);
+    CPPUNIT_ASSERT(xController.is());
+
+    // introduce model/view/controller to each other
+    xController->attachModel(xModel2.get());
+    xModel2->connectController(xController.get());
+    xTargetFrame->setComponent(xController->getComponentWindow(), xController.get());
+    xController->attachFrame(xTargetFrame);
+    xModel2->setCurrentController(xController.get());
+
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    // Get the document controller
+    ScTabViewShell* pViewShell = xDocSh->GetBestViewShell(false);
+    CPPUNIT_ASSERT(pViewShell != nullptr);
+
+    // 2. Setup data
+    for (int r = 0; r < 2; ++r)
+        for (int c = 0; c < 1024; ++c)
+            rDoc.SetValue(c, r, 0, (c + 1) * 100 + (r + 1));
+
+    const SCTAB n2ndTab = rDoc.GetMaxTableNumber() + 1;
+    rDoc.MakeTable(n2ndTab);
+    const auto aTabNames = rDoc.GetAllTableNames();
+
+    lcl_copy(aTabNames[0] + ".A1:CV2", aTabNames[n2ndTab] + ".A1:CV2", rDoc, pViewShell);
+
+    // 3. Check all cells in destination table
+    for (int r = 0; r < 2; ++r)
+        for (int c = 0; c < 1024; ++c)
+            CPPUNIT_ASSERT_EQUAL(double((c + 1) * 100 + (r + 1)), rDoc.GetValue(c, r, n2ndTab));
+
+    // 4. Close the document
+    xComponent->dispose();
 }
 
 ScCopyPasteTest::ScCopyPasteTest()
