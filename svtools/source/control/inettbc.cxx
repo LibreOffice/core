@@ -1472,15 +1472,6 @@ void SvtURLBox::UpdatePickList( )
     }
 }
 
-void SvtURLBox::SetSmartProtocol( INetProtocol eProt )
-{
-    if ( eSmartProtocol != eProt )
-    {
-        eSmartProtocol = eProt;
-        UpdatePicklistForSmartProtocol_Impl();
-    }
-}
-
 void SvtURLBox::UpdatePicklistForSmartProtocol_Impl()
 {
     Clear();

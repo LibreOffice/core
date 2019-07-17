@@ -2454,56 +2454,6 @@ void TextEngine::RemoveAttribs( sal_uInt32 nPara )
     }
 }
 
-void TextEngine::RemoveAttribs( sal_uInt32 nPara, sal_uInt16 nWhich )
-{
-    if ( nPara < mpDoc->GetNodes().size() )
-    {
-        TextNode* pNode = mpDoc->GetNodes()[ nPara ].get();
-        if ( pNode->GetCharAttribs().Count() )
-        {
-            TextCharAttribList& rAttribs = pNode->GetCharAttribs();
-            for(sal_uInt16 nAttr = rAttribs.Count(); nAttr; --nAttr)
-            {
-                if(rAttribs.GetAttrib( nAttr - 1 ).Which() == nWhich)
-                {
-                    // tdf#113400 destroy unique_ptr returned
-                    rAttribs.RemoveAttrib( nAttr -1 ).reset();
-                }
-            }
-            TEParaPortion* pTEParaPortion = mpTEParaPortions->GetObject( nPara );
-            pTEParaPortion->MarkSelectionInvalid( 0 );
-            mbFormatted = false;
-            IdleFormatAndUpdate( nullptr, 0xFFFF );
-        }
-    }
-}
-
-std::unique_ptr<TextCharAttrib> TextEngine::RemoveAttrib( sal_uInt32 nPara, const TextCharAttrib& rAttrib )
-{
-    std::unique_ptr<TextCharAttrib> pRet;
-    if ( nPara < mpDoc->GetNodes().size() )
-    {
-        TextNode* pNode = mpDoc->GetNodes()[ nPara ].get();
-        if ( pNode->GetCharAttribs().Count() )
-        {
-            TextCharAttribList& rAttribs = pNode->GetCharAttribs();
-            for(sal_uInt16 nAttr = rAttribs.Count(); nAttr; --nAttr)
-            {
-                if(&(rAttribs.GetAttrib( nAttr - 1 )) == &rAttrib)
-                {
-                    pRet = rAttribs.RemoveAttrib( nAttr -1 );
-                    break;
-                }
-            }
-            TEParaPortion* pTEParaPortion = mpTEParaPortions->GetObject( nPara );
-            pTEParaPortion->MarkSelectionInvalid( 0 );
-            mbFormatted = false;
-            FormatAndUpdate();
-        }
-    }
-    return pRet;
-}
-
 void TextEngine::SetAttrib( const TextAttrib& rAttr, sal_uInt32 nPara, sal_Int32 nStart, sal_Int32 nEnd, bool bIdleFormatAndUpdate )
 {
 

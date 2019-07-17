@@ -66,8 +66,6 @@ private:
     const SfxItemSet*   pSet;
     bool                bHasExchangeSupport;
 
-    void                ImplInitSettings();
-
 protected:
 
     IconChoicePage(weld::Container* pParent, const OUString& rUIXMLDescription, const OString& rID, const SfxItemSet* pItemSet);

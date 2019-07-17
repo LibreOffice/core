@@ -208,13 +208,6 @@ public:
     TextPaM             CursorEndOfDoc();
 
     /**
-        Drag and Drop, deleting and selection regards all text that has an attribute
-        TEXTATTR_PROTECTED set as one entity. Drag and dropped text is automatically
-        attributed as protected.
-     */
-    void                SupportProtectAttribute(bool bSupport);
-
-    /**
         Returns the number in paragraph of the line in which the cursor is blinking
         if enabled, -1 otherwise.
      */
