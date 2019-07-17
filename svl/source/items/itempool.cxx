@@ -680,7 +680,6 @@ const SfxPoolItem& SfxItemPool::PutImpl( const SfxPoolItem& rItem, sal_uInt16 nW
     AddRef( *pNewItem );
 
     // 4. finally insert into the pointer array
-    assert( rItemArr.find(pNewItem) == rItemArr.end() );
     rItemArr.insert( pNewItem );
     return *pNewItem;
 }
