@@ -81,9 +81,28 @@ interface XUIElementFactory : ::com::sun::star::uno::XInterface
                     the UI element. Depending on the concrete UI element type, this parameter
                     might be required or ignored by an implementation.
                 </li>
-                <li><b>Persistent</b><br>specifies if changes to a configurable
+                <li><b>Persistent</b><br>
+                    specifies if changes to a configurable
                     user interface element should be persistent. This is an
-                    optional argument. The default value is `TRUE`.</li>
+                    optional argument. The default value is `TRUE`.
+                </li>
+                <li><b>Module</b><br>
+                    specifies the current module name (as a string).
+                    May be empty.
+                </li>
+                <li><b>Controller</b><br>
+                    (Sidebar only) specifies the current com::sun::star::frame::XController2 instance.
+                    May be empty.
+                </li>
+                <li><b>Canvas</b><br>
+                    (Sidebar only) specifies the current com::sun::star::rendering::XSpriteCanvas instance.
+                </li>
+                <li><b>ApplicationName</b><br>
+                    (Sidebar only) Specifies the current application application name (as a string)
+                </li>
+                <li><b>ContextName</b><br>
+                    (Sidebar only) Specifies the current context (as a string)
+                </li>
             </ul>
 
         <p>
