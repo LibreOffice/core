@@ -702,6 +702,7 @@ void ExtensionBox_Impl::SetupScrollBar()
 void ExtensionBox_Impl::Resize()
 {
     RecalcAll();
+    Invalidate();
 }
 
 void ExtensionBox_Impl::SetDrawingArea(weld::DrawingArea* pDrawingArea)
