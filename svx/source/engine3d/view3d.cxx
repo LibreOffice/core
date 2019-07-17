@@ -1560,11 +1560,13 @@ void E3dView::BreakSingle3DObj(E3dObject* pObj)
     else
     {
         SdrAttrObj* pNewObj = pObj->GetBreakObj().release();
-        if(pNewObj)
+        if (pNewObj)
         {
-            InsertObjectAtView(pNewObj, *GetSdrPageView(), SdrInsertFlags::DONTMARK);
-            pNewObj->SetChanged();
-            pNewObj->BroadcastObjectChange();
+            if (InsertObjectAtView(pNewObj, *GetSdrPageView(), SdrInsertFlags::DONTMARK))
+            {
+                pNewObj->SetChanged();
+                pNewObj->BroadcastObjectChange();
+            }
         }
     }
 }
