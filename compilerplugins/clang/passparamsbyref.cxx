@@ -44,7 +44,7 @@ public:
     // LValueToRValue ImplicitCastExprs when determining whether a param is
     // bound to a reference:
     bool PreTraverseFunctionDecl(FunctionDecl *);
-    void PostTraverseFunctionDecl(FunctionDecl *);
+    bool PostTraverseFunctionDecl(FunctionDecl *, bool);
     bool TraverseFunctionDecl(FunctionDecl *);
     bool PreTraverseImplicitCastExpr(ImplicitCastExpr *);
     bool TraverseImplicitCastExpr(ImplicitCastExpr *);
@@ -83,7 +83,7 @@ bool PassParamsByRef::PreTraverseFunctionDecl(FunctionDecl* functionDecl)
     return true;
 }
 
-void PassParamsByRef::PostTraverseFunctionDecl(FunctionDecl* functionDecl)
+bool PassParamsByRef::PostTraverseFunctionDecl(FunctionDecl* functionDecl, bool)
 {
     mbInsideFunctionDecl = false;
 
@@ -132,6 +132,7 @@ void PassParamsByRef::PostTraverseFunctionDecl(FunctionDecl* functionDecl)
                 << can->getSourceRange();
         }
     }
+    return true;
 }
 
 bool PassParamsByRef::TraverseFunctionDecl(FunctionDecl* functionDecl)
@@ -140,7 +141,7 @@ bool PassParamsByRef::TraverseFunctionDecl(FunctionDecl* functionDecl)
     if (PreTraverseFunctionDecl(functionDecl))
     {
         ret = RecursiveASTVisitor::TraverseFunctionDecl(functionDecl);
-        PostTraverseFunctionDecl(functionDecl);
+        PostTraverseFunctionDecl(functionDecl, ret);
     }
     return ret;
 }

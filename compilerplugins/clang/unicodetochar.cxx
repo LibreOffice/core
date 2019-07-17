@@ -30,13 +30,14 @@ public:
         subExprs_.push(expr->getSubExpr());
         return true;
     }
-    void PostTraverseCStyleCastExpr(CStyleCastExpr *) {
+    bool PostTraverseCStyleCastExpr(CStyleCastExpr *, bool ) {
         subExprs_.pop();
+        return true;
     }
     bool TraverseCStyleCastExpr(CStyleCastExpr * expr) {
         PreTraverseCStyleCastExpr(expr);
         bool ret = RecursiveASTVisitor::TraverseCStyleCastExpr(expr);
-        PostTraverseCStyleCastExpr(expr);
+        PostTraverseCStyleCastExpr(expr, ret);
         return ret;
     }
 
@@ -44,13 +45,14 @@ public:
         subExprs_.push(expr->getSubExpr());
         return true;
     }
-    void PostTraverseCXXStaticCastExpr(CXXStaticCastExpr *) {
+    bool PostTraverseCXXStaticCastExpr(CXXStaticCastExpr *, bool) {
         subExprs_.pop();
+        return true;
     }
     bool TraverseCXXStaticCastExpr(CXXStaticCastExpr * expr) {
         PreTraverseCXXStaticCastExpr(expr);
         bool ret = RecursiveASTVisitor::TraverseCXXStaticCastExpr(expr);
-        PostTraverseCXXStaticCastExpr(expr);
+        PostTraverseCXXStaticCastExpr(expr, ret);
         return ret;
     }
 
@@ -58,13 +60,14 @@ public:
         subExprs_.push(expr->getSubExpr());
         return true;
     }
-    void PostTraverseCXXFunctionalCastExpr(CXXFunctionalCastExpr *) {
+    bool PostTraverseCXXFunctionalCastExpr(CXXFunctionalCastExpr *, bool) {
         subExprs_.pop();
+        return true;
     }
     bool TraverseCXXFunctionalCastExpr(CXXFunctionalCastExpr * expr) {
         PreTraverseCXXFunctionalCastExpr(expr);
         bool ret = RecursiveASTVisitor::TraverseCXXFunctionalCastExpr(expr);
-        PostTraverseCXXFunctionalCastExpr(expr);
+        PostTraverseCXXFunctionalCastExpr(expr, ret);
         return ret;
     }
 

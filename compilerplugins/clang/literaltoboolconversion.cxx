@@ -31,7 +31,7 @@ public:
     bool VisitImplicitCastExpr(ImplicitCastExpr const * expr);
 
     bool PreTraverseLinkageSpecDecl(LinkageSpecDecl * decl);
-    void PostTraverseLinkageSpecDecl(LinkageSpecDecl * decl);
+    bool PostTraverseLinkageSpecDecl(LinkageSpecDecl * decl, bool);
     bool TraverseLinkageSpecDecl(LinkageSpecDecl * decl);
 
 private:
@@ -64,15 +64,16 @@ bool LiteralToBoolConversion::PreTraverseLinkageSpecDecl(LinkageSpecDecl *) {
     return true;
 }
 
-void LiteralToBoolConversion::PostTraverseLinkageSpecDecl(LinkageSpecDecl *) {
+bool LiteralToBoolConversion::PostTraverseLinkageSpecDecl(LinkageSpecDecl *, bool) {
     assert(externCContexts_ != 0);
     --externCContexts_;
+    return true;
 }
 
 bool LiteralToBoolConversion::TraverseLinkageSpecDecl(LinkageSpecDecl * decl) {
     PreTraverseLinkageSpecDecl(decl);
     bool ret = RecursiveASTVisitor::TraverseLinkageSpecDecl(decl);
-    PostTraverseLinkageSpecDecl(decl);
+    PostTraverseLinkageSpecDecl(decl, ret);
     return ret;
 }
 
