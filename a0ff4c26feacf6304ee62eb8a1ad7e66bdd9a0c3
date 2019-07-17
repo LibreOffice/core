@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "bf659307_d7bc1a6b",
+        "filename": "cppu/source/uno/lbmap.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-07-17T13:20:13Z",
+      "side": 1,
+      "message": "What I mean is that we\u0027ve had this leak for a very long time, without a problem, which means that these mappings are not something that seem to be problematic.\n\nWould it help if I made this something like o3tl::lru_map to keep the potential number of leaked mappings to a minimum?",
+      "parentUuid": "bf659307_578faacb",
+      "range": {
+        "startLine": 161,
+        "startChar": 6,
+        "endLine": 161,
+        "endChar": 33
+      },
+      "revId": "a0ff4c26feacf6304ee62eb8a1ad7e66bdd9a0c3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bf659307_17305256",
         "filename": "cppu/source/uno/lbmap.cxx",
         "patchSetId": 2
