@@ -121,10 +121,28 @@ Reference< XDataSequence > ChartConverter::createDataSequence(
     const OUString& rRole )
 {
     Reference< XDataSequence > xDataSeq;
-    if( rxDataProvider.is() )
+    if( rxDataProvider.is() && !rDataSeq.maData.empty() )
     {
         OUString aRangeRep;
-        if( !rDataSeq.maData.empty() )
+        if( rDataSeq.mnLevelCount > 1 )
+        {
+            // create a single-row array from constant source data
+            std::vector<Any> aRowHelp(rDataSeq.mnLevelCount * rDataSeq.mnPointCount);
+            for (auto const& elem : rDataSeq.maData)
+                aRowHelp.at(elem.first) = elem.second;
+            // create a multi-row array from constant source data
+            std::vector< std::vector<Any>> aRow(rDataSeq.mnLevelCount);
+            for (size_t i = 0; i < rDataSeq.mnLevelCount; i++)
+            {
+                aRow[i].resize(rDataSeq.mnPointCount);
+                for (size_t j = 0; j < rDataSeq.mnPointCount; j++)
+                {
+                    aRow[i][j] = aRowHelp[i * rDataSeq.mnPointCount + j];
+                }
+                aRangeRep = lclGenerateApiArray(aRow[i]) + aRangeRep;
+            }
+        }
+        else
         {
             // create a single-row array from constant source data
             std::vector<Any> aRow(rDataSeq.mnPointCount);

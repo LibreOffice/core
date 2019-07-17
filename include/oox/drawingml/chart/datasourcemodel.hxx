@@ -40,6 +40,7 @@ struct DataSequenceModel
     OUString     maFormula;          /// Formula reference, e.g. into a spreadsheet.
     OUString     maFormatCode;       /// Number format for double values.
     sal_Int32           mnPointCount;       /// Number of points in this series source.
+    sal_Int32           mnLevelCount;       /// Number of category levels.
 
     explicit            DataSequenceModel();
                         ~DataSequenceModel();

@@ -500,141 +500,153 @@ Reference< chart2::data::XDataSequence > InternalDataProvider::createDataSequenc
 uno::Reference<chart2::data::XDataSequence>
 InternalDataProvider::createDataSequenceFromArray( const OUString& rArrayStr, const OUString& rRole )
 {
-    if (rArrayStr.indexOf('{') != 0 || rArrayStr[rArrayStr.getLength()-1] != '}')
-    {
-        // Not an array string.
-        return uno::Reference<chart2::data::XDataSequence>();
-    }
-
-    bool bAllNumeric = true;
+    OUString rOriginalArrayStr = rArrayStr;
     uno::Reference<chart2::data::XDataSequence> xSeq;
-
-    const sal_Unicode* p = rArrayStr.getStr();
-    const sal_Unicode* pEnd = p + rArrayStr.getLength();
-    const sal_Unicode* pElem = nullptr;
-    OUString aElem;
-
-    std::vector<OUString> aRawElems;
-    ++p; // Skip the first '{'.
-    --pEnd; // Skip the last '}'.
-    bool bInQuote = false;
-    for (; p != pEnd; ++p)
+    OUString rFirstStr;
+    sal_Int32 rFirstStrLength = 0;
+    while (!rOriginalArrayStr.isEmpty())
     {
-        if (*p == '"')
+        if (rOriginalArrayStr.indexOf('{') != 0 || rOriginalArrayStr[rOriginalArrayStr.getLength() - 1] != '}')
         {
-            bInQuote = !bInQuote;
-            if (bInQuote)
-            {
-                // Opening quote.
-                bAllNumeric = false;
-                pElem = nullptr;
-            }
-            else
-            {
-                // Closing quote.
-                if (pElem)
-                    aElem = OUString(pElem, p-pElem);
-                aRawElems.push_back(aElem);
-                pElem = nullptr;
-                aElem.clear();
-
-                ++p; // Skip '"'.
-                if (p == pEnd)
-                    break;
-            }
-        }
-        else if (*p == ';' && !bInQuote)
-        {
-            // element separator.
-            if (pElem)
-                aElem = OUString(pElem, p-pElem);
-            aRawElems.push_back(aElem);
-            pElem = nullptr;
-            aElem.clear();
-        }
-        else if (!pElem)
-            pElem = p;
-    }
-
-    if (pElem)
-    {
-        aElem = OUString(pElem, p-pElem);
-        aRawElems.push_back(aElem);
-    }
-
-    if (rRole == "values-y" || rRole == "values-first" || rRole == "values-last" ||
-        rRole == "values-min" || rRole == "values-max" || rRole == "values-size")
-    {
-        // Column values.  Append a new data column and populate it.
-
-        std::vector<double> aValues;
-        aValues.reserve(aRawElems.size());
-        for (OUString & aRawElem : aRawElems)
-        {
-            if (aRawElem.isEmpty())
-                aValues.push_back(NAN);
-            else
-                aValues.push_back(aRawElem.toDouble());
-        }
-        sal_Int32 n = m_aInternalData.appendColumn();
-
-        m_aInternalData.setColumnValues(n, aValues);
-
-        OUString aRangeRep = OUString::number(n);
-        xSeq.set(new UncachedDataSequence(this, aRangeRep));
-        addDataSequenceToMap(aRangeRep, xSeq);
-    }
-    else if (rRole == "values-x")
-    {
-        std::vector<double> aValues;
-        aValues.reserve(aRawElems.size());
-        if (bAllNumeric)
-        {
-            for (OUString & aRawElem : aRawElems)
-                aValues.push_back(aRawElem.toDouble());
+            // Not an array string.
+            return uno::Reference<chart2::data::XDataSequence>();
         }
         else
         {
-            for (size_t i = 0; i < aRawElems.size(); ++i)
-                aValues.push_back(i+1);
+            rFirstStr = rOriginalArrayStr.copy(rOriginalArrayStr.indexOf('{'), rOriginalArrayStr.indexOf('}') + 1);
+            rFirstStrLength = rFirstStr.getLength();
         }
 
-        sal_Int32 n = m_aInternalData.appendColumn();
-        m_aInternalData.setColumnValues(n, aValues);
+        bool bAllNumeric = true;
 
-        OUString aRangeRep = OUString::number(n);
-        xSeq.set(new UncachedDataSequence(this, aRangeRep));
-        addDataSequenceToMap(aRangeRep, xSeq);
-    }
-    else if (rRole == "categories")
-    {
-        // Category labels.
+        const sal_Unicode* p = rFirstStr.getStr();
+        const sal_Unicode* pEnd = p + rFirstStr.getLength();
+        const sal_Unicode* pElem = nullptr;
+        OUString aElem;
 
-        for (size_t i = 0; i < aRawElems.size(); ++i)
+        std::vector<OUString> aRawElems;
+        ++p; // Skip the first '{'.
+        --pEnd; // Skip the last '}'.
+        bool bInQuote = false;
+        for (; p != pEnd; ++p)
         {
-            std::vector<uno::Any> aLabels(1, uno::Any(aRawElems[i]));
-            m_aInternalData.setComplexRowLabel(i, aLabels);
+            if (*p == '"')
+            {
+                bInQuote = !bInQuote;
+                if (bInQuote)
+                {
+                    // Opening quote.
+                    bAllNumeric = false;
+                    pElem = nullptr;
+                }
+                else
+                {
+                    // Closing quote.
+                    if (pElem)
+                        aElem = OUString(pElem, p - pElem);
+                    aRawElems.push_back(aElem);
+                    pElem = nullptr;
+                    aElem.clear();
+
+                    ++p; // Skip '"'.
+                    if (p == pEnd)
+                        break;
+                }
+            }
+            else if (*p == ';' && !bInQuote)
+            {
+                // element separator.
+                if (pElem)
+                    aElem = OUString(pElem, p - pElem);
+                aRawElems.push_back(aElem);
+                pElem = nullptr;
+                aElem.clear();
+            }
+            else if (!pElem)
+                pElem = p;
         }
 
-        xSeq.set(new UncachedDataSequence(this, lcl_aCategoriesRangeName));
-        addDataSequenceToMap(lcl_aCategoriesRangeName, xSeq);
-    }
-    else if (rRole == "label")
-    {
-        // Data series label.  There should be only one element.  This always
-        // goes to the last data column.
-        sal_Int32 nColSize = m_aInternalData.getColumnCount();
-        if (!aRawElems.empty() && nColSize)
+        if (pElem)
         {
-            std::vector<uno::Any> aLabels(1, uno::Any(aRawElems[0]));
-            m_aInternalData.setComplexColumnLabel(nColSize-1, aLabels);
+            aElem = OUString(pElem, p - pElem);
+            aRawElems.push_back(aElem);
+        }
 
-            OUString aRangeRep = lcl_aLabelRangePrefix + OUString::number(nColSize-1);
+        if (rRole == "values-y" || rRole == "values-first" || rRole == "values-last" ||
+            rRole == "values-min" || rRole == "values-max" || rRole == "values-size")
+        {
+            // Column values.  Append a new data column and populate it.
+
+            std::vector<double> aValues;
+            aValues.reserve(aRawElems.size());
+            for (OUString & aRawElem : aRawElems)
+            {
+                if (aRawElem.isEmpty())
+                    aValues.push_back(NAN);
+                else
+                    aValues.push_back(aRawElem.toDouble());
+            }
+            sal_Int32 n = m_aInternalData.appendColumn();
+
+            m_aInternalData.setColumnValues(n, aValues);
+
+            OUString aRangeRep = OUString::number(n);
             xSeq.set(new UncachedDataSequence(this, aRangeRep));
             addDataSequenceToMap(aRangeRep, xSeq);
         }
-    }
+        else if (rRole == "values-x")
+        {
+            std::vector<double> aValues;
+            aValues.reserve(aRawElems.size());
+            if (bAllNumeric)
+            {
+                for (OUString & aRawElem : aRawElems)
+                    aValues.push_back(aRawElem.toDouble());
+            }
+            else
+            {
+                for (size_t i = 0; i < aRawElems.size(); ++i)
+                    aValues.push_back(i + 1);
+            }
 
+            sal_Int32 n = m_aInternalData.appendColumn();
+            m_aInternalData.setColumnValues(n, aValues);
+
+            OUString aRangeRep = OUString::number(n);
+            xSeq.set(new UncachedDataSequence(this, aRangeRep));
+            addDataSequenceToMap(aRangeRep, xSeq);
+        }
+        else if (rRole == "categories")
+        {
+            // Category labels.
+
+            for (size_t i = 0; i < aRawElems.size(); ++i)
+            {
+                std::vector<uno::Any> aLabels(1, uno::Any(aRawElems[i]));
+                m_aInternalData.setComplexRowLabel(i, aLabels);
+            }
+
+            xSeq.set(new UncachedDataSequence(this, lcl_aCategoriesRangeName));
+            addDataSequenceToMap(lcl_aCategoriesRangeName, xSeq);
+        }
+        else if (rRole == "label")
+        {
+            // Data series label.  There should be only one element.  This always
+            // goes to the last data column.
+            sal_Int32 nColSize = m_aInternalData.getColumnCount();
+            if (!aRawElems.empty() && nColSize)
+            {
+                std::vector<uno::Any> aLabels(1, uno::Any(aRawElems[0]));
+                m_aInternalData.setComplexColumnLabel(nColSize - 1, aLabels);
+
+                OUString aRangeRep = lcl_aLabelRangePrefix + OUString::number(nColSize - 1);
+                xSeq.set(new UncachedDataSequence(this, aRangeRep));
+                addDataSequenceToMap(aRangeRep, xSeq);
+            }
+        }
+
+        rOriginalArrayStr = rOriginalArrayStr.copy(rFirstStrLength);
+    }
     return xSeq;
 }
 
