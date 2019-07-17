@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_94c8e055",
+        "filename": "cui/inc/tipoftheday.hrc",
+        "patchSetId": 6
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-07-17T03:46:44Z",
+      "side": 1,
+      "message": "I would omit this repetition although it\u0027s correct. Not a showstopper OTOH.",
+      "range": {
+        "startLine": 121,
+        "startChar": 106,
+        "endLine": 121,
+        "endChar": 113
+      },
+      "revId": "ec99e4a5b63bbe0fdcfda054ec09f253492f07f8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_34c5543d",
+        "filename": "cui/inc/tipoftheday.hrc",
+        "patchSetId": 6
+      },
+      "lineNbr": 182,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-07-17T03:46:44Z",
+      "side": 1,
+      "message": "Again, might be more precise but reads weird.",
+      "range": {
+        "startLine": 182,
+        "startChar": 114,
+        "endLine": 182,
+        "endChar": 129
+      },
+      "revId": "ec99e4a5b63bbe0fdcfda054ec09f253492f07f8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_74d0acf8",
+        "filename": "cui/inc/tipoftheday.hrc",
+        "patchSetId": 6
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-07-17T03:46:44Z",
+      "side": 1,
+      "message": "(values are just) numbers... or (Date/time) value is just...\n\nchoosen -\u003e chosen \n\n\"chosen day zero\" sounds like there is an option but isnt it always 1970/01/01?",
+      "range": {
+        "startLine": 214,
+        "startChar": 61,
+        "endLine": 214,
+        "endChar": 69
+      },
+      "revId": "ec99e4a5b63bbe0fdcfda054ec09f253492f07f8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
