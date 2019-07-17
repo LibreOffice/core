@@ -137,10 +137,10 @@
                     "dest-filename": "external/tarballs/edc4d741888bc0d38e32dbaa17149596-source-sans-pro-2.010R-ro-1.065R-it.tar.gz"
                 },
                 {
-                    "url": "https://dev-www.libreoffice.org/src/source-serif-font-2.007R.tar.gz",
-                    "sha256": "10b2bbb357d52bf0f516d3e0ac0a09b5f7901470fbf649b69dad9ccc2d29f7cb",
+                    "url": "https://dev-www.libreoffice.org/src/source-serif-pro-3.000R.tar.gz",
+                    "sha256": "826a2b784d5cdb4c2bbc7830eb62871528360a61a52689c102a101623f1928e3",
                     "type": "file",
-                    "dest-filename": "external/tarballs/source-serif-font-2.007R.tar.gz"
+                    "dest-filename": "external/tarballs/source-serif-pro-3.000R.tar.gz"
                 },
                 {
                     "url": "https://dev-www.libreoffice.org/src/EmojiOneColor-SVGinOT-1.3.tar.gz",
