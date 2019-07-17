@@ -1113,6 +1113,8 @@ SentenceEditWindow_Impl::SentenceEditWindow_Impl()
     : m_nErrorStart(0)
     , m_nErrorEnd(0)
     , m_bIsUndoEditMode(false)
+    , m_pSpellDialog(nullptr)
+    , m_pToolbar(nullptr)
 {
 }
 
