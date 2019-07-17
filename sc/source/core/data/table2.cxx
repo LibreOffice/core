@@ -670,17 +670,20 @@ bool ScTable::InitColumnBlockPosition( sc::ColumnBlockPosition& rBlockPos, SCCOL
     return true;
 }
 
+// pTable is source
+
 void ScTable::CopyFromClip(
     sc::CopyFromClipContext& rCxt, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
     SCCOL nDx, SCROW nDy, ScTable* pTable )
 {
-    if (nCol2 > aCol.size() - 1)
-        nCol2 = aCol.size() - 1;
+    if (nCol2 > MAXCOL)
+        nCol2 = MAXCOL;
     if (nRow2 > MAXROW)
         nRow2 = MAXROW;
 
     if (ValidColRow(nCol1, nRow1) && ValidColRow(nCol2, nRow2))
     {
+        CreateColumnIfNotExists(nCol2);
         for ( SCCOL i = nCol1; i <= nCol2; i++)
         {
             pTable->CreateColumnIfNotExists(i - nDx);
