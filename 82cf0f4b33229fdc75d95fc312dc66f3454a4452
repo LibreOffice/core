@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_3421d4fc",
+        "filename": "sc/source/core/data/table2.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 680,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-07-17T06:21:32Z",
+      "side": 1,
+      "message": "Well - possibly we shouldn\u0027t clamp it here; if we copy range with some columns unallocated, then we need to treat them as empty, and erase relevant cells in target. The code allocates absent columns in source (clipboard) later - something I\u0027d like to optimize out, but not by omitting the part of the range, but by carefully clearing. IMO that\u0027s a separate task.",
+      "range": {
+        "startLine": 679,
+        "startChar": 4,
+        "endLine": 680,
+        "endChar": 23
+      },
+      "revId": "82cf0f4b33229fdc75d95fc312dc66f3454a4452",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
