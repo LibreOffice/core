@@ -311,9 +311,12 @@ void LinkManager::UpdateAllLinks(
 
         if( bAskUpdate )
         {
+            OUString aMsg = SfxResId(STR_QUERY_UPDATE_LINKS);
+            INetURLObject aURL(pPersist->getDocumentBaseURL());
+            aMsg = aMsg.replaceFirst("%{filename}", aURL.GetLastName());
+
             std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(pParentWin,
-                                                           VclMessageType::Question, VclButtonsType::YesNo,
-                                                           SfxResId(STR_QUERY_UPDATE_LINKS)));
+                                                           VclMessageType::Question, VclButtonsType::YesNo, aMsg));
             xQueryBox->set_default_response(RET_YES);
 
             int nRet = xQueryBox->run();

@@ -142,7 +142,7 @@
 #define STR_QUICKSTART_FILE                     NC_("STR_QUICKSTART_FILE", "File")
 #define STR_QUICKSTART_STARTCENTER              NC_("STR_QUICKSTART_STARTCENTER", "Startcenter")
 #define STR_QUICKSTART_RECENTDOC                NC_("STR_QUICKSTART_RECENTDOC", "Recent Documents")
-#define STR_QUERY_UPDATE_LINKS                  NC_("STR_QUERY_UPDATE_LINKS", "This document contains one or more links to external data.\n\nWould you like to change the document, and update all links\nto get the most recent data?")
+#define STR_QUERY_UPDATE_LINKS                  NC_("STR_QUERY_UPDATE_LINKS", "The document %{filename} contains one or more links to external data.\n\nWould you like to change the document, and update all links\nto get the most recent data?")
 #define STR_DDE_ERROR                           NC_("STR_DDE_ERROR", "DDE link to %1 for %2 area %3 are not available.")
 #define STR_SECURITY_WARNING_NO_HYPERLINKS      NC_("STR_SECURITY_WARNING_NO_HYPERLINKS", "For security reasons, the hyperlink cannot be executed.\nThe stated address will not be opened.")
 #define RID_SECURITY_WARNING_TITLE                  NC_("RID_SECURITY_WARNING_TITLE", "Security Warning")
