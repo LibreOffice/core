@@ -150,6 +150,7 @@ IMPL_LINK_NOARG(SwFieldDlg, OKHdl, weld::Button&, void)
     if (GetOKButton().get_sensitive())
     {
         SfxTabPage* pPage = GetTabPage(GetCurPageId());
+        assert(pPage);
         pPage->FillItemSet(nullptr);
 
         GetOKButton().grab_focus();  // because of InputField-Dlg
