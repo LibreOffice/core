@@ -65,7 +65,7 @@ public:
 
     bool VisitCompoundStmt(CompoundStmt const*);
     bool PreTraverseSwitchStmt(SwitchStmt*);
-    void PostTraverseSwitchStmt(SwitchStmt*);
+    bool PostTraverseSwitchStmt(SwitchStmt*, bool);
     bool TraverseSwitchStmt(SwitchStmt*);
     bool VisitSwitchStmt(SwitchStmt const*);
 
@@ -79,14 +79,18 @@ bool Indentation::PreTraverseSwitchStmt(SwitchStmt* switchStmt)
     return true;
 }
 
-void Indentation::PostTraverseSwitchStmt(SwitchStmt*) { switchStmtBodies.pop_back(); }
+bool Indentation::PostTraverseSwitchStmt(SwitchStmt*, bool)
+{
+    switchStmtBodies.pop_back();
+    return true;
+}
 
 bool Indentation::TraverseSwitchStmt(SwitchStmt* switchStmt)
 {
     PreTraverseSwitchStmt(switchStmt);
-    FilteringPlugin::TraverseSwitchStmt(switchStmt);
-    PostTraverseSwitchStmt(switchStmt);
-    return true;
+    auto ret = FilteringPlugin::TraverseSwitchStmt(switchStmt);
+    PostTraverseSwitchStmt(switchStmt, ret);
+    return ret;
 }
 
 bool Indentation::VisitCompoundStmt(CompoundStmt const* compoundStmt)

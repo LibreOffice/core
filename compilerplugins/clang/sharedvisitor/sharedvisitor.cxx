@@ -1246,7 +1246,8 @@ public:
         bool ret = RecursiveASTVisitor::TraverseCStyleCastExpr( arg );
         if( unicodeToChar != nullptr )
         {
-            unicodeToChar->PostTraverseCStyleCastExpr( arg );
+            if( !unicodeToChar->PostTraverseCStyleCastExpr( arg, ret ))
+                saveUnicodeToChar = nullptr;
         }
         unicodeToChar = saveUnicodeToChar;
         return ret;
@@ -1274,7 +1275,8 @@ public:
         bool ret = RecursiveASTVisitor::TraverseCXXCatchStmt( arg );
         if( dbgUnhandledException != nullptr )
         {
-            dbgUnhandledException->PostTraverseCXXCatchStmt( arg );
+            if( !dbgUnhandledException->PostTraverseCXXCatchStmt( arg, ret ))
+                saveDbgUnhandledException = nullptr;
         }
         dbgUnhandledException = saveDbgUnhandledException;
         return ret;
@@ -1290,7 +1292,8 @@ public:
         bool ret = RecursiveASTVisitor::TraverseCXXFunctionalCastExpr( arg );
         if( unicodeToChar != nullptr )
         {
-            unicodeToChar->PostTraverseCXXFunctionalCastExpr( arg );
+            if( !unicodeToChar->PostTraverseCXXFunctionalCastExpr( arg, ret ))
+                saveUnicodeToChar = nullptr;
         }
         unicodeToChar = saveUnicodeToChar;
         return ret;
@@ -1306,7 +1309,8 @@ public:
         bool ret = RecursiveASTVisitor::TraverseCXXStaticCastExpr( arg );
         if( unicodeToChar != nullptr )
         {
-            unicodeToChar->PostTraverseCXXStaticCastExpr( arg );
+            if( !unicodeToChar->PostTraverseCXXStaticCastExpr( arg, ret ))
+                saveUnicodeToChar = nullptr;
         }
         unicodeToChar = saveUnicodeToChar;
         return ret;
@@ -1322,7 +1326,8 @@ public:
         bool ret = RecursiveASTVisitor::TraverseFriendDecl( arg );
         if( unrefFun != nullptr )
         {
-            unrefFun->PostTraverseFriendDecl( arg );
+            if( !unrefFun->PostTraverseFriendDecl( arg, ret ))
+                saveUnrefFun = nullptr;
         }
         unrefFun = saveUnrefFun;
         return ret;
@@ -1338,7 +1343,8 @@ public:
         bool ret = RecursiveASTVisitor::TraverseFunctionDecl( arg );
         if( passParamsByRef != nullptr )
         {
-            passParamsByRef->PostTraverseFunctionDecl( arg );
+            if( !passParamsByRef->PostTraverseFunctionDecl( arg, ret ))
+                savePassParamsByRef = nullptr;
         }
         passParamsByRef = savePassParamsByRef;
         return ret;
@@ -1378,7 +1384,8 @@ public:
         bool ret = RecursiveASTVisitor::TraverseLinkageSpecDecl( arg );
         if( literalToBoolConversion != nullptr )
         {
-            literalToBoolConversion->PostTraverseLinkageSpecDecl( arg );
+            if( !literalToBoolConversion->PostTraverseLinkageSpecDecl( arg, ret ))
+                saveLiteralToBoolConversion = nullptr;
         }
         literalToBoolConversion = saveLiteralToBoolConversion;
         return ret;
@@ -1406,7 +1413,8 @@ public:
         bool ret = RecursiveASTVisitor::TraverseSwitchStmt( arg );
         if( indentation != nullptr )
         {
-            indentation->PostTraverseSwitchStmt( arg );
+            if( !indentation->PostTraverseSwitchStmt( arg, ret ))
+                saveIndentation = nullptr;
         }
         indentation = saveIndentation;
         return ret;
