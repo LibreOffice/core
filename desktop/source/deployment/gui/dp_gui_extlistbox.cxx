@@ -278,8 +278,6 @@ void ExtensionBox_Impl::CalcActiveHeight( const long nPos )
 
     // calc description height
     Size aSize = GetOutputSizePixel();
-    if ( m_bHasScrollBar )
-        aSize.AdjustWidth(-m_xScrollBar->get_vscroll_width());
 
     aSize.AdjustWidth( -(ICON_OFFSET) );
     aSize.setHeight( 10000 );
@@ -307,9 +305,6 @@ tools::Rectangle ExtensionBox_Impl::GetEntryRect( const long nPos ) const
     const ::osl::MutexGuard aGuard( m_entriesMutex );
 
     Size aSize( GetOutputSizePixel() );
-
-    if ( m_bHasScrollBar )
-        aSize.AdjustWidth(-m_xScrollBar->get_vscroll_width());
 
     if ( m_vEntries[ nPos ]->m_bActive )
         aSize.setHeight( m_nActiveHeight );
@@ -650,9 +645,6 @@ void ExtensionBox_Impl::Paint(vcl::RenderContext& rRenderContext, const tools::R
 
     Point aStart( 0, -m_nTopIndex );
     Size aSize(GetOutputSizePixel());
-
-    if ( m_bHasScrollBar )
-        aSize.AdjustWidth(-m_xScrollBar->get_vscroll_width());
 
     const ::osl::MutexGuard aGuard( m_entriesMutex );
 
