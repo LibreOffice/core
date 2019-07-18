@@ -471,7 +471,6 @@ void SwLayoutFrame::DestroyImpl()
                 const size_t nCnt = pFrame->GetDrawObjs()->size();
                 // #i28701#
                 SwAnchoredObject* pAnchoredObj = (*pFrame->GetDrawObjs())[0];
-                pAnchoredObj->ClearTmpConsiderWrapInfluence();
                 if (SwFlyFrame* pFlyFrame = dynamic_cast<SwFlyFrame*>(pAnchoredObj))
                 {
                     SwFrame::DestroyFrame(pFlyFrame);
@@ -479,6 +478,7 @@ void SwLayoutFrame::DestroyImpl()
                 }
                 else
                 {
+                    pAnchoredObj->ClearTmpConsiderWrapInfluence();
                     SdrObject* pSdrObj = pAnchoredObj->DrawObj();
                     SwDrawContact* pContact =
                             static_cast<SwDrawContact*>(pSdrObj->GetUserCall());
