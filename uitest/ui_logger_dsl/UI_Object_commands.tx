@@ -5,7 +5,7 @@ import type_options
         EditUIObject	
         CheckBoxUIObject	
         RadioButtonUIObject	
-        ListBoxUIObject	
+        ListBoxUIObject
         ComboBoxUIObject	
         SpinUIObject	
         SpinFieldUIObject	
@@ -15,7 +15,7 @@ import type_options
 UIObjectCommand:
   ButtonUIObject | CheckBoxUIObject | EditUIObject | 
   RadioButtonUIObject | ListBoxUIObject | ComboBoxUIObject | 
-  SpinUIObject | SpinFieldUIObject | TabControlUIObject
+  SpinUIObject | SpinFieldUIObject | TabControlUIObject | General_type_command_on_UI_Object
 ;
 
 ButtonUIObject:
@@ -68,4 +68,9 @@ Clear:
 //helper functions for SpinUIObject
 increase_or_ecrease:
   'Increase' | 'Decrease'
+;
+
+//==================================================
+General_type_command_on_UI_Object:
+  'Type on' UI_Obj=STRING  what_to_type=Type_options 'from' parent_id=ID  
 ;
