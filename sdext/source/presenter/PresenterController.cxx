@@ -160,8 +160,8 @@ PresenterController::PresenterController (
 
     // Create an object that is able to load the bitmaps in a format that is
     // supported by the canvas.
-    Reference<lang::XMultiComponentFactory> xFactory (
-        rxContext->getServiceManager(), UNO_QUERY);
+    Reference<lang::XMultiComponentFactory> xFactory =
+        rxContext->getServiceManager();
     if ( ! xFactory.is())
         return;
     mxPresenterHelper.set(
@@ -1157,7 +1157,7 @@ void PresenterController::UpdatePendingSlideNumber (const sal_Int32 nPendingSlid
     if (pFont.get() == nullptr)
         return;
 
-    pFont->PrepareFont(Reference<rendering::XCanvas>(mxCanvas, UNO_QUERY));
+    pFont->PrepareFont(mxCanvas);
     if ( ! pFont->mxFont.is())
         return;
 

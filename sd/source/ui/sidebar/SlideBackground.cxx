@@ -469,11 +469,11 @@ void SlideBackground::SetPanelTitle( const OUString& rTitle )
     if ( !xController.is() )
         return;
 
-    Reference<ui::XSidebarProvider> xSidebarProvider( xController->getSidebar(), uno::UNO_QUERY );
+    Reference<ui::XSidebarProvider> xSidebarProvider = xController->getSidebar();
     if ( !xSidebarProvider.is() )
         return;
 
-    Reference<ui::XDecks> xDecks ( xSidebarProvider->getDecks(), uno::UNO_QUERY);
+    Reference<ui::XDecks> xDecks = xSidebarProvider->getDecks();
     if ( !xDecks.is() )
         return;
 
@@ -481,7 +481,7 @@ void SlideBackground::SetPanelTitle( const OUString& rTitle )
     if ( !xDeck.is() )
         return;
 
-    Reference<ui::XPanels> xPanels ( xDeck->getPanels(), uno::UNO_QUERY);
+    Reference<ui::XPanels> xPanels = xDeck->getPanels();
     if ( !xPanels.is() )
         return;
 

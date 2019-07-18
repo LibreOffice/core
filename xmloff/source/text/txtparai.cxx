@@ -2120,8 +2120,7 @@ void XMLParaContext::EndElement()
                             if ( TextContentAnchorType_AT_CHARACTER == eAnchorType )
                             {
                                 // set anchor position for at-character anchored objects
-                                Reference<XTextRange> xRange(xAttrCursor, UNO_QUERY);
-                                xPropSet->setPropertyValue("TextRange", Any(xRange));
+                                xPropSet->setPropertyValue("TextRange", Any(xAttrCursor));
                             }
                         }
                     }
@@ -2148,8 +2147,7 @@ void XMLParaContext::EndElement()
                         if ( TextContentAnchorType_AT_CHARACTER == eAnchorType )
                         {
                             // set anchor position for at-character anchored objects
-                            Reference<XTextRange> xRange(xAttrCursor, UNO_QUERY);
-                            xPropSet->setPropertyValue("TextRange", Any(xRange));
+                            xPropSet->setPropertyValue("TextRange", Any(xAttrCursor));
                         }
                     }
                 }

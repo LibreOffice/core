@@ -228,7 +228,7 @@ sal_Bool SAL_CALL ExcelFilter::filter( const css::uno::Sequence< css::beans::Pro
         Reference< XExporter > xExporter(
             new XclExpXmlStream( getComponentContext(), bExportVBA, isExportTemplate() ) );
 
-        Reference< XComponent > xDocument( getModel(), UNO_QUERY );
+        Reference< XComponent > xDocument = getModel();
         Reference< XFilter > xFilter( xExporter, UNO_QUERY );
 
         if ( xFilter.is() )

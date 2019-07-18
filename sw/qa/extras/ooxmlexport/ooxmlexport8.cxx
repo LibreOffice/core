@@ -143,15 +143,13 @@ DECLARE_OOXMLEXPORT_TEST(testFdo49940, "fdo49940.docx")
 DECLARE_OOXMLEXPORT_TEST(testFdo74745, "fdo74745.docx")
 {
     uno::Reference<text::XTextRange > paragraph = getParagraph(3);
-    uno::Reference<text::XTextRange> text(paragraph, uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("09/02/14"), text->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString("09/02/14"), paragraph->getString());
 }
 
 DECLARE_OOXMLEXPORT_TEST(testFdo81486, "fdo81486.docx")
 {
     uno::Reference<text::XTextRange > paragraph = getParagraph(1);
-    uno::Reference<text::XTextRange> text(paragraph, uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("CustomTitle"), text->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString("CustomTitle"), paragraph->getString());
 }
 
 DECLARE_OOXMLEXPORT_TEST(testFdo79738, "fdo79738.docx")
@@ -360,7 +358,7 @@ note that the indexes may get off as the implementation evolves, C++ code search
     uno::Reference< text::XTextRange > paragraph(getParagraph( 1, "Text1." ));
     OUString numberingStyleName = getProperty< OUString >( paragraph, "NumberingStyleName" );
     uno::Reference<text::XNumberingRulesSupplier> xNumberingRulesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> numberingRules(xNumberingRulesSupplier->getNumberingRules(), uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> numberingRules = xNumberingRulesSupplier->getNumberingRules();
     uno::Reference<container::XIndexAccess> numberingRule;
     for( int i = 0;
          i < numberingRules->getCount();
@@ -505,7 +503,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo74357, "fdo74357.docx")
 {
     // Floating table wasn't converted to a textframe.
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xDrawPage(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDrawPage = xDrawPageSupplier->getDrawPage();
     // This was 0.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xDrawPage->getCount());
 
@@ -639,7 +637,7 @@ DECLARE_OOXMLEXPORT_TEST(testN785767, "n785767.docx")
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables( ), uno::UNO_QUERY);
     uno::Reference<text::XTextTable> xTextTable(xTables->getByIndex(0), uno::UNO_QUERY);
-    uno::Reference<table::XTableRows> xTableRows(xTextTable->getRows(), uno::UNO_QUERY);
+    uno::Reference<table::XTableRows> xTableRows = xTextTable->getRows();
     // Check the A1 and B1 cells, the width of both of them was the default value (10000 / 9, as there were 9 cells in the row).
     CPPUNIT_ASSERT_MESSAGE("A1 must not have default width", sal_Int16(10000 / 9) != getProperty< uno::Sequence<text::TableColumnSeparator> >(xTableRows->getByIndex(0), "TableColumnSeparators")[0].Position);
     CPPUNIT_ASSERT_MESSAGE("B1 must not have default width", sal_Int16(10000 / 9) != getProperty< uno::Sequence<text::TableColumnSeparator> >(xTableRows->getByIndex(1), "TableColumnSeparators")[0].Position);
@@ -669,7 +667,7 @@ DECLARE_OOXMLEXPORT_TEST(testN792778, "n792778.docx")
      * xray ThisComponent.DrawPage(0).getByIndex(1).getByIndex(0).Position.Y ' 11684
      */
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xDrawPage(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDrawPage = xDrawPageSupplier->getDrawPage();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xDrawPage->getCount());
 
     uno::Reference<drawing::XShapes> xGroupShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
@@ -820,7 +818,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo61343, "fdo61343.docx")
     // The problem was that there were a groupshape in the doc, followed by an
     // OLE object, and this lead to a crash.
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDraws = xDrawPageSupplier->getDrawPage();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xDraws->getCount());
 }
 
@@ -884,7 +882,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo59273, "fdo59273.docx")
     // Was 115596 (i.e. 10 times wider than necessary), as w:tblW was missing and the importer didn't set it.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(12961), getProperty<sal_Int32>(xTextTable, "Width"));
 
-    uno::Reference<table::XTableRows> xTableRows(xTextTable->getRows(), uno::UNO_QUERY);
+    uno::Reference<table::XTableRows> xTableRows = xTextTable->getRows();
     // Was 9997, so the 4th column had ~zero width
     CPPUNIT_ASSERT_EQUAL(sal_Int16(7498), getProperty< uno::Sequence<text::TableColumnSeparator> >(xTableRows->getByIndex(0), "TableColumnSeparators")[2].Position);
 }
@@ -1037,7 +1035,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo65632, "fdo65632.docx")
     // The problem was that the footnote text had fake redline: only the body
     // text has redline in fact.
     uno::Reference<text::XFootnotesSupplier> xFootnotesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xFootnotes(xFootnotesSupplier->getFootnotes(), uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xFootnotes = xFootnotesSupplier->getFootnotes();
     uno::Reference<text::XText> xText(xFootnotes->getByIndex(0), uno::UNO_QUERY);
     //uno::Reference<text::XTextRange> xParagraph = getParagraphOfText(1, xText);
     CPPUNIT_ASSERT_EQUAL(OUString("Text"), getProperty<OUString>(getRun(getParagraphOfText(1, xText), 1), "TextPortionType"));
@@ -1127,7 +1125,7 @@ DECLARE_OOXMLEXPORT_TEST(testChartProp, "chart-prop.docx")
 {
     // The problem was that chart was not getting parsed in writer module.
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xDrawPage(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDrawPage = xDrawPageSupplier->getDrawPage();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xDrawPage->getCount());
 
     uno::Reference<beans::XPropertySet> xPropertySet(getShape(1), uno::UNO_QUERY);

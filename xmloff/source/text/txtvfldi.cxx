@@ -826,8 +826,8 @@ bool XMLVariableDeclImportContext::FindFieldMaster(
     // get text fields supplier and field masters
     Reference<XTextFieldsSupplier> xTextFieldsSupp(rImport.GetModel(),
                                                    UNO_QUERY);
-    Reference<container::XNameAccess> xFieldMasterNameAccess(
-        xTextFieldsSupp->getTextFieldMasters(), UNO_QUERY);
+    Reference<container::XNameAccess> xFieldMasterNameAccess =
+        xTextFieldsSupp->getTextFieldMasters();
 
     OUStringBuffer sBuffer;
     sBuffer.append(sAPI_fieldmaster_prefix);

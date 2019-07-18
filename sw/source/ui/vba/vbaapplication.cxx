@@ -388,13 +388,13 @@ void SAL_CALL SwVbaApplication::setCustomizationContext(const uno::Any& /*_custo
 void SAL_CALL SwVbaApplication::setStatusBar( const OUString& _statusbar )
 {
     // ScVbaAppSettings::setStatusBar() also uses the XStatusIndicator to show this, so maybe that is OK?
-    uno::Reference< frame::XModel > xModel( getCurrentDocument(), uno::UNO_QUERY );
+    uno::Reference< frame::XModel > xModel = getCurrentDocument();
     if (xModel.is())
     {
         uno::Reference< task::XStatusIndicatorSupplier > xStatusIndicatorSupplier( xModel->getCurrentController(), uno::UNO_QUERY );
         if (xStatusIndicatorSupplier.is())
         {
-            uno::Reference< task::XStatusIndicator > xStatusIndicator( xStatusIndicatorSupplier->getStatusIndicator(), uno::UNO_QUERY );
+            uno::Reference< task::XStatusIndicator > xStatusIndicator = xStatusIndicatorSupplier->getStatusIndicator();
             if (xStatusIndicator.is())
                 xStatusIndicator->start( _statusbar, 100 );
         }

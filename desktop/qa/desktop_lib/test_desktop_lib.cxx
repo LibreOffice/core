@@ -878,7 +878,7 @@ void DesktopLOKTest::testWriterComments()
 
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
     pDocument->pClass->registerCallback(pDocument, &DesktopLOKTest::callback, this);
-    uno::Reference<awt::XReschedule> xToolkit(com::sun::star::awt::Toolkit::create(comphelper::getProcessComponentContext()), uno::UNO_QUERY);
+    uno::Reference<awt::XReschedule> xToolkit = com::sun::star::awt::Toolkit::create(comphelper::getProcessComponentContext());
 
     // Insert a comment at the beginning of the document and wait till the main
     // loop grabs the focus, so characters end up in the annotation window.

@@ -100,7 +100,7 @@ void AccessibleDrawDocumentView::Init()
     uno::Reference<drawing::XShapes> xShapeList;
     uno::Reference<drawing::XDrawView> xView (mxController, uno::UNO_QUERY);
     if (xView.is())
-        xShapeList.set( xView->getCurrentPage(), uno::UNO_QUERY);
+        xShapeList = xView->getCurrentPage();
 
     // Create the children manager.
     mpChildrenManager.reset(new ChildrenManager(this, xShapeList, maShapeTreeInfo, *this));
@@ -298,8 +298,7 @@ void SAL_CALL
             // Inform the children manager to forget all children and give
             // him the new ones.
             mpChildrenManager->ClearAccessibleShapeList ();
-            mpChildrenManager->SetShapeList (uno::Reference<drawing::XShapes> (
-                xView->getCurrentPage(), uno::UNO_QUERY));
+            mpChildrenManager->SetShapeList (xView->getCurrentPage());
 
             rtl::Reference<AccessiblePageShape> xPage(CreateDrawPageShape ());
             if (xPage.is())
@@ -346,8 +345,7 @@ void SAL_CALL
                     xSlide = xSlideController->getCurrentSlide();
                     if (xSlide.is())
                     {
-                        mpChildrenManager->SetShapeList (uno::Reference<drawing::XShapes> (
-                                    xSlide, uno::UNO_QUERY));
+                        mpChildrenManager->SetShapeList (xSlide);
                     }
                 }
             }
@@ -918,7 +916,7 @@ void AccessibleDrawDocumentView::UpdateAccessibleName()
     Reference<drawing::XDrawPagesSupplier> xPagesSupplier (mxModel, UNO_QUERY);
     if (xPagesSupplier.is())
     {
-        Reference<container::XIndexAccess> xPages (xPagesSupplier->getDrawPages(), UNO_QUERY);
+        Reference<container::XIndexAccess> xPages = xPagesSupplier->getDrawPages();
         if (xPages.is())
         {
             sNewName += " / ";

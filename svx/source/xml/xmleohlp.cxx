@@ -146,8 +146,7 @@ void SAL_CALL SvXMLEmbeddedObjectHelper::disposing()
 {
     if( mxTempStorage.is() )
     {
-        Reference < XComponent > xComp( mxTempStorage, UNO_QUERY );
-        xComp->dispose();
+        mxTempStorage->dispose();
     }
 }
 

@@ -79,7 +79,7 @@ void PresenterPaneBase::disposing()
     }
 
     {
-        Reference<XComponent> xComponent (mxContentWindow, UNO_QUERY);
+        Reference<XComponent> xComponent = mxContentWindow;
         mxContentWindow = nullptr;
         if (xComponent.is())
             xComponent->dispose();
@@ -93,7 +93,7 @@ void PresenterPaneBase::disposing()
     }
 
     {
-        Reference<XComponent> xComponent (mxBorderWindow, UNO_QUERY);
+        Reference<XComponent> xComponent  = mxBorderWindow;
         mxBorderWindow = nullptr;
         if (xComponent.is())
             xComponent->dispose();

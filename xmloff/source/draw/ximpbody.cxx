@@ -231,15 +231,11 @@ SvXMLImportContextRef SdXMLDrawPageContext::CreateChildContext( sal_uInt16 nPref
                 uno::Reference< presentation::XPresentationPage > xPresPage(GetLocalShapesContext(), uno::UNO_QUERY);
                 if(xPresPage.is())
                 {
-                    uno::Reference< drawing::XDrawPage > xNotesDrawPage(xPresPage->getNotesPage(), uno::UNO_QUERY);
+                    uno::Reference< drawing::XDrawPage > xNotesDrawPage = xPresPage->getNotesPage();
                     if(xNotesDrawPage.is())
                     {
-                        uno::Reference< drawing::XShapes > xNewShapes(xNotesDrawPage, uno::UNO_QUERY);
-                        if(xNewShapes.is())
-                        {
-                            // presentation:notes inside draw:page context
-                            xContext = new SdXMLNotesContext( GetSdImport(), nPrefix, rLocalName, xAttrList, xNewShapes);
-                        }
+                        // presentation:notes inside draw:page context
+                        xContext = new SdXMLNotesContext( GetSdImport(), nPrefix, rLocalName, xAttrList, xNotesDrawPage);
                     }
                 }
             }
@@ -342,13 +338,9 @@ SvXMLImportContextRef SdXMLBodyContext::CreateChildContext(
 
                 if(xNewDrawPage.is())
                 {
-                    uno::Reference< drawing::XShapes > xNewShapes(xNewDrawPage, uno::UNO_QUERY);
-                    if(xNewShapes.is())
-                    {
-                        // draw:page inside office:body context
-                        xContext = new SdXMLDrawPageContext(GetSdImport(), nPrefix, rLocalName, xAttrList,
-                            xNewShapes);
-                    }
+                    // draw:page inside office:body context
+                    xContext = new SdXMLDrawPageContext(GetSdImport(), nPrefix, rLocalName, xAttrList,
+                        xNewDrawPage);
                 }
             }
             break;

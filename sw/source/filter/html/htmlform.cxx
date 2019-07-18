@@ -321,7 +321,7 @@ const uno::Reference< drawing::XShapes > & SwHTMLForm_Impl::GetShapes()
         GetDrawPage();
         if( m_xDrawPage.is() )
         {
-            m_xShapes.set( m_xDrawPage, UNO_QUERY );
+            m_xShapes = m_xDrawPage;
             OSL_ENSURE( m_xShapes.is(),
                     "XShapes not received from drawing::XDrawPage" );
         }

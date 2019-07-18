@@ -168,8 +168,8 @@ namespace pcr
 
         try
         {
-            Reference< XPropertySet > xSource( _pSourceType->getUnoDataType(), UNO_QUERY );
-            Reference< XPropertySet > xDest( getUnoDataType(), UNO_QUERY );
+            Reference< XPropertySet > xSource = _pSourceType->getUnoDataType();
+            Reference< XPropertySet > xDest = getUnoDataType();
             lcl_copyProperties( xSource, xDest );
         }
         catch( const Exception& )

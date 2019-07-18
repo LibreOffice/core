@@ -235,7 +235,7 @@ css::uno::Sequence< css::uno::Type > OPropertySetHelper::getTypes()
 void OPropertySetHelper::disposing()
 {
     // Create an event with this as sender
-    Reference < XPropertySet  > rSource( static_cast< XPropertySet *  >(this), UNO_QUERY );
+    Reference < XPropertySet  > rSource = this;
     EventObject aEvt;
     aEvt.Source = rSource;
 

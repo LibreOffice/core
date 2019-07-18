@@ -811,10 +811,9 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
 
                 if ( !bTriedToGetAdditionalPropSet && !xAdditionalPropSet.is() )
                 {
-                    xAdditionalPropSet.set(
+                    xAdditionalPropSet =
                             rProvider->getAdditionalPropertySet( rContentId,
-                                                                 false ),
-                            uno::UNO_QUERY );
+                                                                 false );
                     bTriedToGetAdditionalPropSet = true;
                 }
 
@@ -932,9 +931,8 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
 
         // Append all Additional Core Properties.
 
-        uno::Reference< beans::XPropertySet > xSet(
-            rProvider->getAdditionalPropertySet( rContentId, false ),
-            uno::UNO_QUERY );
+        uno::Reference< beans::XPropertySet > xSet =
+            rProvider->getAdditionalPropertySet( rContentId, false );
         xRow->appendPropertySet( xSet );
     }
 

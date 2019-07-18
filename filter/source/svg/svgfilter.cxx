@@ -186,7 +186,7 @@ bool SVGFilter::filterImpressOrDraw( const Sequence< PropertyValue >& rDescripto
             }
 
             // get the DrawPages
-            uno::Reference< drawing::XDrawPages > xDrawPages( xDrawPagesSupplier->getDrawPages(), uno::UNO_QUERY );
+            uno::Reference< drawing::XDrawPages > xDrawPages = xDrawPagesSupplier->getDrawPages();
 
             if(!xDrawPages.is())
             {
@@ -469,8 +469,8 @@ bool SVGFilter::filterImpressOrDraw( const Sequence< PropertyValue >& rDescripto
 
             if( xMasterPagesSupplier.is() && xDrawPagesSupplier.is() )
             {
-                uno::Reference< drawing::XDrawPages >   xMasterPages( xMasterPagesSupplier->getMasterPages(), uno::UNO_QUERY );
-                uno::Reference< drawing::XDrawPages >   xDrawPages( xDrawPagesSupplier->getDrawPages(), uno::UNO_QUERY );
+                uno::Reference< drawing::XDrawPages >   xMasterPages = xMasterPagesSupplier->getMasterPages();
+                uno::Reference< drawing::XDrawPages >   xDrawPages = xDrawPagesSupplier->getDrawPages();
                 if( xMasterPages.is() && xMasterPages->getCount() &&
                     xDrawPages.is() && xDrawPages->getCount() )
                 {

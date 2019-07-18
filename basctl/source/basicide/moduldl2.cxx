@@ -271,8 +271,7 @@ IMPL_LINK(LibPage, EditingEntryHdl, const weld::TreeIter&, rIter, bool)
         if ( xPasswd.is() && xPasswd->isLibraryPasswordProtected( aLibName ) && !xPasswd->isLibraryPasswordVerified( aLibName ) )
         {
             OUString aPassword;
-            Reference< script::XLibraryContainer > xModLibContainer1( xModLibContainer, UNO_QUERY );
-            bOK = QueryPassword( xModLibContainer1, aLibName, aPassword );
+            bOK = QueryPassword( xModLibContainer, aLibName, aPassword );
         }
         if ( !bOK )
             return false;
@@ -613,13 +612,13 @@ void LibPage::InsertLib()
     OUString aModURL( aModURLObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
     if ( xSFA->exists( aModURL ) )
     {
-        xModLibContImport.set( script::DocumentScriptLibraryContainer::createWithURL(xContext, aModURL), UNO_QUERY );
+        xModLibContImport = script::DocumentScriptLibraryContainer::createWithURL(xContext, aModURL);
     }
 
     OUString aDlgURL( aDlgURLObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
     if ( xSFA->exists( aDlgURL ) )
     {
-        xDlgLibContImport.set( script::DocumentDialogLibraryContainer::createWithURL(xContext, aDlgURL), UNO_QUERY );
+        xDlgLibContImport = script::DocumentDialogLibraryContainer::createWithURL(xContext, aDlgURL);
     }
 
     if ( !xModLibContImport.is() && !xDlgLibContImport.is() )
@@ -627,9 +626,7 @@ void LibPage::InsertLib()
 
     std::shared_ptr<LibDialog> xLibDlg;
 
-    Reference< script::XLibraryContainer > xModLibContImp( xModLibContImport, UNO_QUERY );
-    Reference< script::XLibraryContainer > xDlgLibContImp( xDlgLibContImport, UNO_QUERY );
-    Sequence< OUString > aLibNames = GetMergedLibraryNames( xModLibContImp, xDlgLibContImp );
+    Sequence< OUString > aLibNames = GetMergedLibraryNames( xModLibContImport, xDlgLibContImport );
     sal_Int32 nLibCount = aLibNames.getLength();
     const OUString* pLibNames = aLibNames.getConstArray();
     for ( sal_Int32 i = 0 ; i < nLibCount ; i++ )
@@ -672,7 +669,7 @@ void LibPage::InsertLib()
     if ( aExtension != aLibExtension && aExtension != aContExtension )
         xLibDlg->EnableReference(false);
 
-    weld::DialogController::runAsync(xLibDlg, [aContExtension, aDlgURLObj, aExtension, aLibExtension, aModURLObj, xLibDlg, xDlgLibContImport, xModLibContImp, xModLibContImport, this](sal_Int32 nResult)
+    weld::DialogController::runAsync(xLibDlg, [aContExtension, aDlgURLObj, aExtension, aLibExtension, aModURLObj, xLibDlg, xDlgLibContImport, xModLibContImport, this](sal_Int32 nResult)
         {
             if (!nResult )
                 return;
@@ -744,7 +741,7 @@ void LibPage::InsertLib()
                         Reference< script::XLibraryContainerPassword > xPasswd( xModLibContImport, UNO_QUERY );
                         if ( xPasswd.is() && xPasswd->isLibraryPasswordProtected( aLibName ) && !xPasswd->isLibraryPasswordVerified( aLibName ) && !bReference )
                         {
-                            bOK = QueryPassword( xModLibContImp, aLibName, aPassword, true, true );
+                            bOK = QueryPassword( xModLibContImport, aLibName, aPassword, true, true );
 
                             if ( !bOK )
                             {
@@ -928,8 +925,7 @@ void LibPage::Export()
         if ( xPasswd.is() && xPasswd->isLibraryPasswordProtected( aLibName ) && !xPasswd->isLibraryPasswordVerified( aLibName ) )
         {
             OUString aPassword;
-            Reference< script::XLibraryContainer > xModLibContainer1( xModLibContainer, UNO_QUERY );
-            bOK = QueryPassword( xModLibContainer1, aLibName, aPassword );
+            bOK = QueryPassword( xModLibContainer, aLibName, aPassword );
         }
         if ( !bOK )
             return;
@@ -1052,10 +1048,7 @@ void LibPage::ExportAsPackage( const OUString& aLibName )
         Reference< task::XInteractionHandler > xDummyHandler( new DummyInteractionHandler( xHandler ) );
         implExportLib( aLibName, aTmpPath, xDummyHandler );
 
-        Reference< XCommandEnvironment > xCmdEnv =
-                new OLibCommandEnvironment(
-                    Reference< task::XInteractionHandler >(
-                        xHandler, UNO_QUERY));
+        Reference< XCommandEnvironment > xCmdEnv = new OLibCommandEnvironment(xHandler);
 
         ::ucbhelper::Content sourceContent( aSourcePath, xCmdEnv, comphelper::getProcessComponentContext() );
 

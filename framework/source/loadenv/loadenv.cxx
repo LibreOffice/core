@@ -444,13 +444,13 @@ css::uno::Reference< css::lang::XComponent > LoadEnv::getTargetComponent() const
 
     css::uno::Reference< css::frame::XController > xController = m_xTargetFrame->getController();
     if (!xController.is())
-        return css::uno::Reference< css::lang::XComponent >(m_xTargetFrame->getComponentWindow(), css::uno::UNO_QUERY);
+        return m_xTargetFrame->getComponentWindow();
 
     css::uno::Reference< css::frame::XModel > xModel = xController->getModel();
     if (!xModel.is())
-        return css::uno::Reference< css::lang::XComponent >(xController, css::uno::UNO_QUERY);
+        return xController;
 
-    return css::uno::Reference< css::lang::XComponent >(xModel, css::uno::UNO_QUERY);
+    return xModel;
 }
 
 void SAL_CALL LoadEnvListener::loadFinished(const css::uno::Reference< css::frame::XFrameLoader >&)
@@ -1291,7 +1291,7 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchAlreadyLoaded()
     // otherwise - iterate through the tasks of the desktop container
     // to find out, which of them might contains the requested document
     css::uno::Reference< css::frame::XDesktop2 >  xSupplier = css::frame::Desktop::create( m_xContext );
-    css::uno::Reference< css::container::XIndexAccess > xTaskList(xSupplier->getFrames()                      , css::uno::UNO_QUERY);
+    css::uno::Reference< css::container::XIndexAccess > xTaskList = xSupplier->getFrames();
 
     if (!xTaskList.is())
         return css::uno::Reference< css::frame::XFrame >(); // task list can be empty!
@@ -1422,7 +1422,7 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchRecycleTarget()
     if (m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_HIDDEN(), false))
         return css::uno::Reference< css::frame::XFrame >();
 
-    css::uno::Reference< css::frame::XFramesSupplier > xSupplier( css::frame::Desktop::create( m_xContext ), css::uno::UNO_QUERY);
+    css::uno::Reference< css::frame::XFramesSupplier > xSupplier = css::frame::Desktop::create( m_xContext );
     FrameListAnalyzer aTasksAnalyzer(xSupplier, css::uno::Reference< css::frame::XFrame >(), FrameAnalyzerFlags::BackingComponent);
     if (aTasksAnalyzer.m_xBackingComponent.is())
     {
@@ -1616,15 +1616,13 @@ void LoadEnv::impl_reactForLoadingState()
     {
         // close empty frames
         css::uno::Reference< css::util::XCloseable > xCloseable (m_xTargetFrame, css::uno::UNO_QUERY);
-        css::uno::Reference< css::lang::XComponent > xDisposable(m_xTargetFrame, css::uno::UNO_QUERY);
 
         try
         {
             if (xCloseable.is())
                 xCloseable->close(true);
-            else
-            if (xDisposable.is())
-                xDisposable->dispose();
+            else if (m_xTargetFrame.is())
+                m_xTargetFrame->dispose();
         }
         catch(const css::util::CloseVetoException&)
         {}

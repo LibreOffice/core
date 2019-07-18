@@ -977,7 +977,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL XFrameImpl::findFrame( const 
     // get threadsafe some necessary member which are necessary for following functionality
     /* SAFE { */
     SolarMutexResettableGuard aReadLock;
-    css::uno::Reference< css::frame::XFrame > xParent ( m_xParent, css::uno::UNO_QUERY );
+    css::uno::Reference< css::frame::XFrame > xParent = m_xParent;
     bool bIsTopFrame  = m_bIsFrameTop;
     bool bIsTopWindow = WindowHelper::isTopWindow(m_xContainerWindow);
     aReadLock.clear();
@@ -1125,7 +1125,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL XFrameImpl::findFrame( const 
                 css::uno::Reference< css::frame::XFramesSupplier > xSupplier( xParent, css::uno::UNO_QUERY );
                 if (xSupplier.is())
                 {
-                    css::uno::Reference< css::container::XIndexAccess > xContainer( xSupplier->getFrames(), css::uno::UNO_QUERY );
+                    css::uno::Reference< css::container::XIndexAccess > xContainer = xSupplier->getFrames();
                     if (xContainer.is())
                     {
                         sal_Int32 nCount = xContainer->getCount();
@@ -1240,7 +1240,7 @@ void SAL_CALL XFrameImpl::activate()
     // It's not necessary for m_aChildFrameContainer ... because
     // he is threadsafe himself and live if we live.
     css::uno::Reference< css::frame::XFrame >           xActiveChild    = m_aChildFrameContainer.getActive();
-    css::uno::Reference< css::frame::XFramesSupplier >  xParent         ( m_xParent, css::uno::UNO_QUERY );
+    css::uno::Reference< css::frame::XFramesSupplier >  xParent         = m_xParent;
     css::uno::Reference< css::frame::XFrame >           xThis           ( static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY );
     EActiveState                                        eState          = m_eActiveState;
 
@@ -1318,7 +1318,7 @@ void SAL_CALL XFrameImpl::deactivate()
 
     // Copy necessary member and free the lock.
     css::uno::Reference< css::frame::XFrame > xActiveChild = m_aChildFrameContainer.getActive();
-    css::uno::Reference< css::frame::XFramesSupplier > xParent ( m_xParent, css::uno::UNO_QUERY );
+    css::uno::Reference< css::frame::XFramesSupplier > xParent = m_xParent;
     css::uno::Reference< css::frame::XFrame > xThis ( static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY );
     EActiveState eState = m_eActiveState;
 
@@ -1485,12 +1485,11 @@ sal_Bool SAL_CALL XFrameImpl::setComponent(const css::uno::Reference< css::awt::
         }
         /* } SAFE */
 
-        css::uno::Reference< css::lang::XComponent > xDisposable( xOldController, css::uno::UNO_QUERY );
-        if (xDisposable.is())
+        if (xOldController.is())
         {
             try
             {
-                xDisposable->dispose();
+                xOldController->dispose();
             }
             catch(const css::lang::DisposedException&)
                 {}
@@ -1515,12 +1514,11 @@ sal_Bool SAL_CALL XFrameImpl::setComponent(const css::uno::Reference< css::awt::
         }
         /* } SAFE */
 
-        css::uno::Reference< css::lang::XComponent > xDisposable( xOldComponentWindow, css::uno::UNO_QUERY );
-        if (xDisposable.is())
+        if (xOldComponentWindow.is())
         {
             try
             {
-                xDisposable->dispose();
+                xOldComponentWindow->dispose();
             }
             catch(const css::lang::DisposedException&)
             {
@@ -2162,8 +2160,8 @@ void SAL_CALL XFrameImpl::disposing()
     css::uno::Reference< css::lang::XComponent > xDisposableComp;
     {
         SolarMutexGuard g;
-        xDisposableCtrl.set( m_xController, css::uno::UNO_QUERY );
-        xDisposableComp.set( m_xComponentWindow, css::uno::UNO_QUERY );
+        xDisposableCtrl = m_xController;
+        xDisposableComp = m_xComponentWindow;
     }
     if (xDisposableCtrl.is())
         xDisposableCtrl->dispose();
@@ -2496,7 +2494,7 @@ void SAL_CALL XFrameImpl::windowDeactivated( const css::lang::EventObject& )
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     SolarMutexClearableGuard aReadLock;
 
-    css::uno::Reference< css::frame::XFrame > xParent          ( m_xParent, css::uno::UNO_QUERY );
+    css::uno::Reference< css::frame::XFrame > xParent          = m_xParent;
     css::uno::Reference< css::awt::XWindow >  xContainerWindow = m_xContainerWindow;
     EActiveState                              eActiveState     = m_eActiveState;
 
@@ -3004,8 +3002,8 @@ void XFrameImpl::implts_setIconOnWindow()
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     // Make snapshot of necessary members and release lock.
     SolarMutexClearableGuard aReadLock;
-    css::uno::Reference< css::awt::XWindow > xContainerWindow( m_xContainerWindow, css::uno::UNO_QUERY );
-    css::uno::Reference< css::frame::XController > xController( m_xController, css::uno::UNO_QUERY );
+    css::uno::Reference< css::awt::XWindow > xContainerWindow = m_xContainerWindow;
+    css::uno::Reference< css::frame::XController > xController = m_xController;
     aReadLock.clear();
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
 

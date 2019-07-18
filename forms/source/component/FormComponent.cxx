@@ -259,7 +259,7 @@ void OControl::impl_resetStateGuard_nothrow()
     try
     {
         xWindow.set( getPeer(), UNO_QUERY );
-        xModel.set( getModel(), UNO_QUERY );
+        xModel = getModel();
     }
     catch( const Exception& )
     {
@@ -1920,7 +1920,7 @@ void OBoundControlModel::connectToField(const Reference<XRowSet>& rForm)
             DBG_ASSERT(xColumnsSupplier.is(), "OBoundControlModel::connectToField : the row set should support the css::sdb::ResultSet service !");
             if (xColumnsSupplier.is())
             {
-                Reference<XNameAccess> xColumns(xColumnsSupplier->getColumns(), UNO_QUERY);
+                Reference<XNameAccess> xColumns = xColumnsSupplier->getColumns();
                 if (xColumns.is() && xColumns->hasByName(m_aControlSource))
                 {
                     OSL_VERIFY( xColumns->getByName(m_aControlSource) >>= xFieldCandidate );

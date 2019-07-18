@@ -270,7 +270,7 @@ namespace svxform
             if (pFolder)
                 xContainer.set(pFolder->GetFormIface(), UNO_QUERY);
             else
-                xContainer.set(GetForms(), UNO_QUERY);
+                xContainer = GetForms();
 
             bool bUndo = m_pFormModel->IsUndoEnabled();
 
@@ -487,7 +487,7 @@ namespace svxform
         // insert forms from root
         if( pFormData == nullptr )
         {
-            Reference< XIndexContainer >   xForms(GetForms(), UNO_QUERY);
+            Reference< XIndexContainer >   xForms = GetForms();
             if (!xForms.is())
                 return;
 

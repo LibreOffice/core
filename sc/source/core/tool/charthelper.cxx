@@ -228,9 +228,7 @@ void ScChartHelper::SetChartRanges( const uno::Reference< chart2::XChartDocument
     if( !xDataProvider.is() )
         return;
 
-    uno::Reference< frame::XModel > xModel( xChartDoc, uno::UNO_QUERY );
-    if( xModel.is() )
-        xModel->lockControllers();
+    xChartDoc->lockControllers();
 
     try
     {
@@ -279,8 +277,7 @@ void ScChartHelper::SetChartRanges( const uno::Reference< chart2::XChartDocument
         OSL_FAIL("Exception in ScChartHelper::SetChartRanges - invalid range string?");
     }
 
-    if( xModel.is() )
-        xModel->unlockControllers();
+    xChartDoc->unlockControllers();
 }
 
 void ScChartHelper::AddRangesIfProtectedChart( ScRangeListVector& rRangesVector, const ScDocument* pDocument, SdrObject* pObject )

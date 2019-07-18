@@ -216,14 +216,14 @@ void SwMacrosTest::testControlShapeGrouping()
     CPPUNIT_ASSERT(xModel.is());
     uno::Reference<lang::XMultiServiceFactory> xFactory(xModel, UNO_QUERY);
     uno::Reference<drawing::XDrawPageSupplier> const xDPS(xModel, UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> const xDP(xDPS->getDrawPage(), UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> const xDP = xDPS->getDrawPage();
     CPPUNIT_ASSERT(xDP.is());
-    uno::Reference<drawing::XShapes> const xDPShapes(xDP, UNO_QUERY);
+    uno::Reference<drawing::XShapes> const xDPShapes = xDP;
     CPPUNIT_ASSERT(xDPShapes.is());
     uno::Reference<drawing::XShapes> const xShapes(getMultiServiceFactory()->createInstance("com.sun.star.drawing.ShapeCollection"),
                                                    UNO_QUERY);
     CPPUNIT_ASSERT(xShapes.is());
-    uno::Reference<container::XIndexAccess> xShapesIC(xShapes, UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xShapesIC = xShapes;
     CPPUNIT_ASSERT(xShapesIC.is());
 
     // uno::Reference<beans::XPropertySet> xFormProps(xForm, UNO_QUERY);
@@ -261,8 +261,8 @@ void SwMacrosTest::testControlShapeGrouping()
     xFormNC->insertByName("aTimeCntrl", makeAny(xTimeControlModel));
     xDPShapes->add(xTimeShape);
 
-    xShapes->add(uno::Reference<drawing::XShape>(xDateShape, UNO_QUERY));
-    xShapes->add(uno::Reference<drawing::XShape>(xTimeShape, UNO_QUERY));
+    xShapes->add(xDateShape);
+    xShapes->add(xTimeShape);
     uno::Reference<drawing::XShapeGrouper> const xDPGrouper(xDP, UNO_QUERY);
     CPPUNIT_ASSERT(xDPGrouper.is());
     uno::Reference<drawing::XShapeGroup> xGroup(xDPGrouper->group(xShapes));
@@ -323,8 +323,7 @@ void SwMacrosTest::testFdo55289()
 
     uno::Reference<frame::XModel> const xModel(pDocShell->GetModel());
     uno::Reference<drawing::XDrawPageSupplier> const xDPS(xModel, UNO_QUERY);
-    uno::Reference<drawing::XShapes> const xShapes(xDPS->getDrawPage(),
-            UNO_QUERY);
+    uno::Reference<drawing::XShapes> const xShapes = xDPS->getDrawPage();
     uno::Reference<beans::XPropertySet> const xShape(
         uno::Reference<lang::XMultiServiceFactory>(xModel, UNO_QUERY_THROW)->
             createInstance("com.sun.star.drawing.GraphicObjectShape"),

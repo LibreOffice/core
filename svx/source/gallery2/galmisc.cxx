@@ -342,25 +342,22 @@ GalleryProgress::GalleryProgress( const GraphicFilter* pFilter )
 
     if ( xMonitor.is() )
     {
-        mxProgressBar.set( xMonitor, uno::UNO_QUERY );
+        mxProgressBar = xMonitor;
 
-        if( mxProgressBar.is() )
+        OUString aProgressText;
+
+        if( pFilter )
         {
-            OUString aProgressText;
-
-            if( pFilter )
-            {
-                aProgressText = SvxResId(RID_SVXSTR_GALLERY_FILTER);
-//              pFilter->SetUpdatePercentHdl( LINK( this, GalleryProgress, Update ) );     // sj: progress wasn't working up from SO7 at all
-//                                                                                          // so I am removing this. The gallery progress should
-//                                                                                          // be changed to use the XStatusIndicator instead of XProgressMonitor
-            }
-            else
-                aProgressText = "Gallery";
-
-            xMonitor->addText( "Gallery", aProgressText, false ) ;
-            mxProgressBar->setRange( 0, GALLERY_PROGRESS_RANGE );
+            aProgressText = SvxResId(RID_SVXSTR_GALLERY_FILTER);
+//          pFilter->SetUpdatePercentHdl( LINK( this, GalleryProgress, Update ) );     // sj: progress wasn't working up from SO7 at all
+//                                                                                     // so I am removing this. The gallery progress should
+//                                                                                     // be changed to use the XStatusIndicator instead of XProgressMonitor
         }
+        else
+            aProgressText = "Gallery";
+
+        xMonitor->addText( "Gallery", aProgressText, false ) ;
+        mxProgressBar->setRange( 0, GALLERY_PROGRESS_RANGE );
     }
 }
 

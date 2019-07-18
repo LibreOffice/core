@@ -371,13 +371,11 @@ uno::Reference<ui::XSidebar> getSidebarFromModel(const uno::Reference<frame::XMo
     if (!xController.is())
         return nullptr;
 
-    uno::Reference<ui::XSidebarProvider> xSidebarProvider (xController->getSidebar(), uno::UNO_QUERY);
+    uno::Reference<ui::XSidebarProvider> xSidebarProvider  = xController->getSidebar();
     if (!xSidebarProvider.is())
         return nullptr;
 
-    uno::Reference<ui::XSidebar> xSidebar(xSidebarProvider->getSidebar(), uno::UNO_QUERY);
-
-    return xSidebar;
+    return xSidebarProvider->getSidebar();
 }
 
 }
@@ -784,8 +782,7 @@ void SAL_CALL ChartController::dispose()
             if( xSelectionChangeListener.is() )
             {
                 uno::Reference< frame::XController > xController( this );
-                uno::Reference< lang::XComponent > xComp( xController, uno::UNO_QUERY );
-                lang::EventObject aEvent( xComp );
+                lang::EventObject aEvent( xController );
                 xSelectionChangeListener->disposing( aEvent );
             }
         }

@@ -145,11 +145,7 @@ bool DocumentSignatureManager::readManifest()
     uno::Reference<packages::manifest::XManifestReader> xReader
         = packages::manifest::ManifestReader::create(mxContext);
 
-    uno::Reference<container::XNameAccess> xNameAccess(mxStore, uno::UNO_QUERY);
-    if (!xNameAccess.is())
-        return false;
-
-    if (xNameAccess->hasByName("META-INF"))
+    if (mxStore->hasByName("META-INF"))
     {
         //Get the manifest.xml
         uno::Reference<embed::XStorage> xSubStore(
@@ -231,12 +227,8 @@ SignatureStreamHelper DocumentSignatureManager::ImplOpenSignatureStream(sal_Int3
                                                                         bool bTempStream)
 {
     SignatureStreamHelper aHelper;
-    if (mxStore.is())
-    {
-        uno::Reference<container::XNameAccess> xNameAccess(mxStore, uno::UNO_QUERY);
-        if (xNameAccess.is() && xNameAccess->hasByName("[Content_Types].xml"))
-            aHelper.nStorageFormat = embed::StorageFormats::OFOPXML;
-    }
+    if (mxStore.is() && mxStore->hasByName("[Content_Types].xml"))
+        aHelper.nStorageFormat = embed::StorageFormats::OFOPXML;
 
     if (bTempStream)
     {

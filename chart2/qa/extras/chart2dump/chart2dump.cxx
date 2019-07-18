@@ -253,17 +253,16 @@ protected:
 
     uno::Reference<drawing::XShape> getShapeByName(const uno::Reference<drawing::XShapes>& rShapes, const OUString& rName, bool (*pCondition)(const uno::Reference<drawing::XShape>&) = nullptr)
     {
-        uno::Reference<container::XIndexAccess> XIndexAccess(rShapes, uno::UNO_QUERY);
-        for (sal_Int32 i = 0; i < XIndexAccess->getCount(); ++i)
+        for (sal_Int32 i = 0; i < rShapes->getCount(); ++i)
         {
-            uno::Reference<drawing::XShapes> xShapes(XIndexAccess->getByIndex(i), uno::UNO_QUERY);
+            uno::Reference<drawing::XShapes> xShapes(rShapes->getByIndex(i), uno::UNO_QUERY);
             if (xShapes.is())
             {
                 uno::Reference<drawing::XShape> xRet = getShapeByName(xShapes, rName, pCondition);
                 if (xRet.is())
                     return xRet;
             }
-            uno::Reference<container::XNamed> xNamedShape(XIndexAccess->getByIndex(i), uno::UNO_QUERY);
+            uno::Reference<container::XNamed> xNamedShape(rShapes->getByIndex(i), uno::UNO_QUERY);
             if (xNamedShape->getName() == rName)
             {
                 uno::Reference<drawing::XShape> xShape(xNamedShape, uno::UNO_QUERY);

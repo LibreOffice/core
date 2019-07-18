@@ -1038,7 +1038,7 @@ namespace svxform
 
             FmEntryData* pCurrentUserData = static_cast<FmEntryData*>(pCurrent->GetUserData());
 
-            Reference< XChild >  xCurrentChild(pCurrentUserData->GetChildIFace(), UNO_QUERY);
+            Reference< XChild >  xCurrentChild = pCurrentUserData->GetChildIFace();
             Reference< XIndexContainer >  xContainer(xCurrentChild->getParent(), UNO_QUERY);
 
             FmFormData* pCurrentParentUserData = static_cast<FmFormData*>(pCurrentUserData->GetParent());
@@ -1081,7 +1081,7 @@ namespace svxform
             if (pTargetData)
                 xContainer.set(pTargetData->GetElement(), UNO_QUERY);
             else
-                xContainer.set(GetNavModel()->GetForms(), UNO_QUERY);
+                xContainer = GetNavModel()->GetForms();
 
             // always insert at the end
             nIndex = xContainer->getCount();

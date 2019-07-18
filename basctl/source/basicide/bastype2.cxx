@@ -696,20 +696,16 @@ void TreeListBox::GetRootEntryBitmaps( const ScriptDocument& rDocument, Image& r
         try
         {
             OUString sModule( xModuleManager->identify( rDocument.getDocument() ) );
-            Reference< container::XNameAccess > xModuleConfig( xModuleManager, UNO_QUERY );
-            if ( xModuleConfig.is() )
+            Sequence< beans::PropertyValue > aModuleDescr;
+            xModuleManager->getByName( sModule ) >>= aModuleDescr;
+            sal_Int32 nCount = aModuleDescr.getLength();
+            const beans::PropertyValue* pModuleDescr = aModuleDescr.getConstArray();
+            for ( sal_Int32 i = 0; i < nCount; ++i )
             {
-                Sequence< beans::PropertyValue > aModuleDescr;
-                xModuleConfig->getByName( sModule ) >>= aModuleDescr;
-                sal_Int32 nCount = aModuleDescr.getLength();
-                const beans::PropertyValue* pModuleDescr = aModuleDescr.getConstArray();
-                for ( sal_Int32 i = 0; i < nCount; ++i )
+                if ( pModuleDescr[ i ].Name == "ooSetupFactoryEmptyDocumentURL" )
                 {
-                    if ( pModuleDescr[ i ].Name == "ooSetupFactoryEmptyDocumentURL" )
-                    {
-                        pModuleDescr[ i ].Value >>= sFactoryURL;
-                        break;
-                    }
+                    pModuleDescr[ i ].Value >>= sFactoryURL;
+                    break;
                 }
             }
         }
@@ -1392,20 +1388,16 @@ OUString SbTreeListBox::GetRootEntryBitmaps(const ScriptDocument& rDocument)
         try
         {
             OUString sModule( xModuleManager->identify( rDocument.getDocument() ) );
-            Reference< container::XNameAccess > xModuleConfig( xModuleManager, UNO_QUERY );
-            if ( xModuleConfig.is() )
+            Sequence< beans::PropertyValue > aModuleDescr;
+            xModuleManager->getByName( sModule ) >>= aModuleDescr;
+            sal_Int32 nCount = aModuleDescr.getLength();
+            const beans::PropertyValue* pModuleDescr = aModuleDescr.getConstArray();
+            for ( sal_Int32 i = 0; i < nCount; ++i )
             {
-                Sequence< beans::PropertyValue > aModuleDescr;
-                xModuleConfig->getByName( sModule ) >>= aModuleDescr;
-                sal_Int32 nCount = aModuleDescr.getLength();
-                const beans::PropertyValue* pModuleDescr = aModuleDescr.getConstArray();
-                for ( sal_Int32 i = 0; i < nCount; ++i )
+                if ( pModuleDescr[ i ].Name == "ooSetupFactoryEmptyDocumentURL" )
                 {
-                    if ( pModuleDescr[ i ].Name == "ooSetupFactoryEmptyDocumentURL" )
-                    {
-                        pModuleDescr[ i ].Value >>= sFactoryURL;
-                        break;
-                    }
+                    pModuleDescr[ i ].Value >>= sFactoryURL;
+                    break;
                 }
             }
         }

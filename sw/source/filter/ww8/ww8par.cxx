@@ -1866,9 +1866,8 @@ void SwWW8ImplReader::ImportDop()
         uno::Reference< uno::XComponentContext > xComponentContext(comphelper::getProcessComponentContext());
         uno::Reference<container::XIndexContainer> xBox = document::IndexedPropertyValues::create(xComponentContext);
         xBox->insertByIndex(sal_Int32(0), uno::makeAny(aViewProps));
-        uno::Reference<container::XIndexAccess> xIndexAccess(xBox, uno::UNO_QUERY);
         uno::Reference<document::XViewDataSupplier> xViewDataSupplier(m_pDocShell->GetModel(), uno::UNO_QUERY);
-        xViewDataSupplier->setViewData(xIndexAccess);
+        xViewDataSupplier->setViewData(xBox);
     }
 
     m_rDoc.getIDocumentSettingAccess().set(DocumentSettingId::USE_VIRTUAL_DEVICE, !m_xWDop->fUsePrinterMetrics);

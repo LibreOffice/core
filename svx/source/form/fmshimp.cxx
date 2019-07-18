@@ -752,9 +752,8 @@ void SAL_CALL FmXFormShell::disposing(const lang::EventObject& e)
         if (xFormController.is())
             xFormController->removeActivateListener(static_cast<XFormControllerListener*>(this));
 
-        Reference< css::lang::XComponent> xComp(m_xExternalViewController, UNO_QUERY);
-        if (xComp.is())
-            xComp->removeEventListener(static_cast<XEventListener*>(static_cast<XPropertyChangeListener*>(this)));
+        if (m_xExternalViewController.is())
+            m_xExternalViewController->removeEventListener(static_cast<XEventListener*>(static_cast<XPropertyChangeListener*>(this)));
 
         m_xExternalViewController = nullptr;
         m_xExternalDisplayedForm = nullptr;
@@ -1522,7 +1521,7 @@ void FmXFormShell::ExecuteSearch_Lock()
                 Reference< XGridPeer> xGridPeer(xActiveControl->getPeer(), UNO_QUERY);
                 Reference< XIndexAccess> xColumns;
                 if (xGridPeer.is())
-                    xColumns.set(xGridPeer->getColumns(),UNO_QUERY);
+                    xColumns = xGridPeer->getColumns();
 
                 sal_Int16 nViewCol = xGrid->getCurrentColumnPosition();
                 sal_Int32 nModelCol = GridView2ModelPos(xColumns, nViewCol);
@@ -1645,7 +1644,7 @@ void FmXFormShell::SetY2KState_Lock(sal_uInt16 n)
     if (!xCurrentForms.is())
     {   // in the alive mode, my forms are not set, but the ones on the page are
         if (m_pShell->GetCurPage())
-            xCurrentForms.set( m_pShell->GetCurPage()->GetForms( false ), UNO_QUERY );
+            xCurrentForms = m_pShell->GetCurPage()->GetForms( false );
     }
     if (!xCurrentForms.is())
         return;
@@ -1797,14 +1796,13 @@ void FmXFormShell::ExecuteFormSlot_Lock( sal_Int32 _nSlot )
 
 void FmXFormShell::impl_switchActiveControllerListening_Lock(const bool _bListen)
 {
-    Reference< XComponent> xComp( m_xActiveController, UNO_QUERY );
-    if ( !xComp.is() )
+    if ( !m_xActiveController.is() )
         return;
 
     if ( _bListen )
-        xComp->addEventListener( static_cast<XFormControllerListener*>(this) );
+        m_xActiveController->addEventListener( static_cast<XFormControllerListener*>(this) );
     else
-        xComp->removeEventListener( static_cast<XFormControllerListener*>(this) );
+        m_xActiveController->removeEventListener( static_cast<XFormControllerListener*>(this) );
 }
 
 
@@ -2079,7 +2077,7 @@ void FmXFormShell::startListening_Lock()
                     case NavigationBarMode_PARENT:
                     {
                         // search for the controller via which navigation is possible
-                        Reference< XChild> xChild(m_xActiveController, UNO_QUERY);
+                        Reference< XChild> xChild = m_xActiveController;
                         Reference< runtime::XFormController > xParent;
                         while (xChild.is())
                         {
@@ -2380,7 +2378,7 @@ IMPL_LINK(FmXFormShell, OnSearchContextRequest_Lock, FmSearchContext&, rfmscCont
                     if (!xPeerContainer.is())
                         break;
 
-                    Reference< XIndexAccess> xModelColumns(xGridPeer->getColumns(), UNO_QUERY);
+                    Reference< XIndexAccess> xModelColumns = xGridPeer->getColumns();
                     DBG_ASSERT(xModelColumns.is(), "FmXFormShell::OnSearchContextRequest : there is a grid control without columns !");
                     // the case 'no columns' should be indicated with an empty container, I think ...
                     DBG_ASSERT(xModelColumns->getCount() >= xPeerContainer->getCount(), "FmXFormShell::OnSearchContextRequest : impossible : have more view than model columns !");
@@ -2543,7 +2541,7 @@ void FmXFormShell::UpdateForms_Lock(bool _bInvalidate)
 
     FmFormPage* pPage = m_pShell->GetCurPage();
     if ( pPage && m_pShell->m_bDesignMode )
-        xForms.set(pPage->GetForms( false ), css::uno::UNO_QUERY);
+        xForms = pPage->GetForms( false );
 
     if ( m_xForms != xForms )
     {
@@ -2965,13 +2963,12 @@ static void saveFilter(const Reference< runtime::XFormController >& _rxControlle
 {
     Reference< XPropertySet> xFormAsSet(_rxController->getModel(), UNO_QUERY);
     Reference< XPropertySet> xControllerAsSet(_rxController, UNO_QUERY);
-    Reference< XIndexAccess> xControllerAsIndex(_rxController, UNO_QUERY);
 
     // call the subcontroller
     Reference< runtime::XFormController > xController;
-    for (sal_Int32 i = 0, nCount = xControllerAsIndex->getCount(); i < nCount; ++i)
+    for (sal_Int32 i = 0, nCount = _rxController->getCount(); i < nCount; ++i)
     {
-        xControllerAsIndex->getByIndex(i) >>= xController;
+        _rxController->getByIndex(i) >>= xController;
         saveFilter(xController);
     }
 
@@ -3157,9 +3154,8 @@ void FmXFormShell::CreateExternalView_Lock()
         if (xExternalViewFrame.is())
         {
             m_xExternalViewController = xExternalViewFrame->getController();
-            Reference< css::lang::XComponent> xComp(m_xExternalViewController, UNO_QUERY);
-            if (xComp.is())
-                xComp->addEventListener(static_cast<XEventListener*>(static_cast<XPropertyChangeListener*>(this)));
+            if (m_xExternalViewController.is())
+                m_xExternalViewController->addEventListener(static_cast<XEventListener*>(static_cast<XPropertyChangeListener*>(this)));
         }
     }
     else
@@ -3663,7 +3659,7 @@ void FmXFormShell::impl_defaultCurrentForm_nothrow_Lock()
 
     try
     {
-        Reference< XIndexAccess > xForms( pPage->GetForms( false ), UNO_QUERY );
+        Reference< XIndexAccess > xForms = pPage->GetForms( false );
         if ( !xForms.is() || !xForms->hasElements() )
             return;
 
@@ -3807,8 +3803,7 @@ void FmXFormShell::loadForms_Lock(FmFormPage* _pPage, const LoadFormsFlags _nBeh
         rFmFormModel.GetUndoEnv().Lock();
 
         // load all forms
-        Reference< XIndexAccess >  xForms;
-        xForms.set(_pPage->GetForms( false ), css::uno::UNO_QUERY);
+        Reference< XIndexAccess >  xForms = _pPage->GetForms( false );
 
         if ( xForms.is() )
         {

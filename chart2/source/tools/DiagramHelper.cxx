@@ -1069,12 +1069,11 @@ void lcl_switchToTextCategories( const Reference< XChartDocument >& xChartDoc, c
 
 void DiagramHelper::switchToDateCategories( const Reference< XChartDocument >& xChartDoc )
 {
-    Reference< frame::XModel > xChartModel( xChartDoc, uno::UNO_QUERY );
-    if(xChartModel.is())
+    if(xChartDoc.is())
     {
-        ControllerLockGuardUNO aCtrlLockGuard( xChartModel );
+        ControllerLockGuardUNO aCtrlLockGuard( xChartDoc );
 
-        Reference< chart2::XCoordinateSystem > xCooSys( ChartModelHelper::getFirstCoordinateSystem( xChartModel ) );
+        Reference< chart2::XCoordinateSystem > xCooSys( ChartModelHelper::getFirstCoordinateSystem( xChartDoc ) );
         if( xCooSys.is() )
         {
             Reference< XAxis > xAxis( xCooSys->getAxisByDimension(0,0) );
@@ -1085,12 +1084,11 @@ void DiagramHelper::switchToDateCategories( const Reference< XChartDocument >& x
 
 void DiagramHelper::switchToTextCategories( const Reference< XChartDocument >& xChartDoc )
 {
-    Reference< frame::XModel > xChartModel( xChartDoc, uno::UNO_QUERY );
-    if(xChartModel.is())
+    if(xChartDoc.is())
     {
-        ControllerLockGuardUNO aCtrlLockGuard( xChartModel );
+        ControllerLockGuardUNO aCtrlLockGuard( xChartDoc );
 
-        Reference< chart2::XCoordinateSystem > xCooSys( ChartModelHelper::getFirstCoordinateSystem( xChartModel ) );
+        Reference< chart2::XCoordinateSystem > xCooSys( ChartModelHelper::getFirstCoordinateSystem( xChartDoc ) );
         if( xCooSys.is() )
         {
             Reference< XAxis > xAxis( xCooSys->getAxisByDimension(0,0) );

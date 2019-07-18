@@ -48,9 +48,8 @@ namespace frm
         if ( m_xFirstDispatchInterceptor.is() )
         {
             // there is already an interceptor; the new one will become its master
-            Reference< XDispatchProvider > xFirstProvider( m_xFirstDispatchInterceptor, UNO_QUERY );
-            _rxInterceptor->setSlaveDispatchProvider( xFirstProvider );
-            m_xFirstDispatchInterceptor->setMasterDispatchProvider( xFirstProvider );
+            _rxInterceptor->setSlaveDispatchProvider( m_xFirstDispatchInterceptor );
+            m_xFirstDispatchInterceptor->setMasterDispatchProvider( m_xFirstDispatchInterceptor );
         }
 
         // we are the master of the chain's first interceptor

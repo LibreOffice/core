@@ -350,10 +350,10 @@ ChineseDictionaryDialog::ChineseDictionaryDialog(weld::Window* pParent)
                     else
                     {
                         aLocale.Country = "TW";
-                        xDictionary_To_Simplified.set(
+                        xDictionary_To_Simplified =
                                 xDictionaryList->addNewDictionary( aNameTo_Simplified
                                     , aLocale, linguistic2::ConversionDictionaryType::SCHINESE_TCHINESE
-                                ), UNO_QUERY );
+                                );
                     }
                     if (xDictionary_To_Simplified.is())
                         xDictionary_To_Simplified->setActive( true );
@@ -365,10 +365,9 @@ ChineseDictionaryDialog::ChineseDictionaryDialog(weld::Window* pParent)
                     else
                     {
                         aLocale.Country = "CN";
-                        xDictionary_To_Traditional.set(
+                        xDictionary_To_Traditional =
                                 xDictionaryList->addNewDictionary( aNameTo_Traditional
-                                    ,aLocale, linguistic2::ConversionDictionaryType::SCHINESE_TCHINESE),
-                                UNO_QUERY );
+                                    ,aLocale, linguistic2::ConversionDictionaryType::SCHINESE_TCHINESE);
                     }
                     if (xDictionary_To_Traditional.is())
                         xDictionary_To_Traditional->setActive( true );

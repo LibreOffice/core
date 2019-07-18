@@ -1062,10 +1062,9 @@ void XMLShapeExport::ImpCalcShapeType(const uno::Reference< drawing::XShape >& x
     // set in every case, so init here
     eShapeType = XmlShapeTypeUnknown;
 
-    uno::Reference< drawing::XShapeDescriptor > xShapeDescriptor(xShape, uno::UNO_QUERY);
-    if(xShapeDescriptor.is())
+    if(xShape.is())
     {
-        OUString aType(xShapeDescriptor->getShapeType());
+        OUString aType(xShape->getShapeType());
 
         if(aType.match("com.sun.star."))
         {
@@ -1576,7 +1575,7 @@ void XMLShapeExport::ImpExportEvents( const uno::Reference< drawing::XShape >& x
     if( !xEventsSupplier.is() )
         return;
 
-    uno::Reference< container::XNameAccess > xEvents( xEventsSupplier->getEvents(), uno::UNO_QUERY );
+    uno::Reference< container::XNameAccess > xEvents = xEventsSupplier->getEvents();
     SAL_WARN_IF( !xEvents.is(), "xmloff", "XEventsSupplier::getEvents() returned NULL" );
     if( !xEvents.is() )
         return;

@@ -106,7 +106,7 @@ void SchXMLLegendContext::StartElement( const uno::Reference< xml::sax::XAttribu
         }
     }
 
-    uno::Reference< drawing::XShape > xLegendShape( xDoc->getLegend(), uno::UNO_QUERY );
+    uno::Reference< drawing::XShape > xLegendShape = xDoc->getLegend();
     uno::Reference< beans::XPropertySet > xLegendProps( xLegendShape, uno::UNO_QUERY );
     if( !xLegendShape.is() || !xLegendProps.is() )
     {

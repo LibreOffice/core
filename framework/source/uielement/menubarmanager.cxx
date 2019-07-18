@@ -851,7 +851,7 @@ IMPL_LINK( MenuBarManager, Select, Menu *, pMenu, bool )
                 Reference< XDesktop2 > xDesktop = css::frame::Desktop::create( m_xContext );
 
                 sal_uInt16 nTaskId = START_ITEMID_WINDOWLIST;
-                Reference< XIndexAccess > xList( xDesktop->getFrames(), UNO_QUERY );
+                Reference< XIndexAccess > xList = xDesktop->getFrames();
                 sal_Int32 nCount = xList->getCount();
                 for ( sal_Int32 i=0; i<nCount; ++i )
                 {
@@ -1084,7 +1084,7 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
                 VCLXPopupMenu* pVCLXPopupMenu = new VCLXPopupMenu;
                 PopupMenu* pNewPopupMenu = static_cast<PopupMenu *>(pVCLXPopupMenu->GetMenu());
                 pMenu->SetPopupMenu( nItemId, pNewPopupMenu );
-                pItemHandler->xPopupMenu.set( static_cast<OWeakObject *>(pVCLXPopupMenu), UNO_QUERY );
+                pItemHandler->xPopupMenu = pVCLXPopupMenu;
                 pItemHandler->aMenuItemURL = aItemCommand;
                 m_aMenuItemHandlerVector.push_back( std::unique_ptr<MenuItemHandler>(pItemHandler) );
                 pPopup.disposeAndClear();
@@ -1160,7 +1160,7 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
                 VCLXPopupMenu* pVCLXPopupMenu = new VCLXPopupMenu;
                 PopupMenu* pPopupMenu = static_cast<PopupMenu *>(pVCLXPopupMenu->GetMenu());
                 pMenu->SetPopupMenu( pItemHandler->nItemId, pPopupMenu );
-                pItemHandler->xPopupMenu.set( static_cast<OWeakObject *>(pVCLXPopupMenu), UNO_QUERY );
+                pItemHandler->xPopupMenu = pVCLXPopupMenu;
 
                 if ( bAccessibilityEnabled && CreatePopupMenuController( pItemHandler.get() ) )
                 {
@@ -1255,7 +1255,7 @@ void MenuBarManager::RetrieveShortcuts( std::vector< std::unique_ptr<MenuItemHan
                         Reference< XUIConfigurationManagerSupplier > xSupplier( xModel, UNO_QUERY );
                         if ( xSupplier.is() )
                         {
-                            Reference< XUIConfigurationManager > xDocUICfgMgr( xSupplier->getUIConfigurationManager(), UNO_QUERY );
+                            Reference< XUIConfigurationManager > xDocUICfgMgr = xSupplier->getUIConfigurationManager();
                             if ( xDocUICfgMgr.is() )
                             {
                                 xDocAccelCfg = xDocUICfgMgr->getShortCutManager();
@@ -1335,7 +1335,7 @@ void MenuBarManager::RetrieveImageManagers()
                 Reference< XUIConfigurationManagerSupplier > xSupplier( xModel, UNO_QUERY );
                 if ( xSupplier.is() )
                 {
-                    Reference< XUIConfigurationManager > xDocUICfgMgr( xSupplier->getUIConfigurationManager(), UNO_QUERY );
+                    Reference< XUIConfigurationManager > xDocUICfgMgr = xSupplier->getUIConfigurationManager();
                     m_xDocImageManager.set( xDocUICfgMgr->getImageManager(), UNO_QUERY );
                     m_xDocImageManager->addConfigurationListener(
                                             Reference< XUIConfigurationListener >(
@@ -1754,7 +1754,7 @@ void MenuBarManager::Init(const Reference< XFrame >& rFrame, Menu* pAddonMenu, b
                         VCLXPopupMenu* pVCLXPopupMenu = new VCLXPopupMenu;
                         PopupMenu* pCtlPopupMenu = static_cast<PopupMenu *>(pVCLXPopupMenu->GetMenu());
                         pAddonMenu->SetPopupMenu( pMenuItemHandler->nItemId, pCtlPopupMenu );
-                        pMenuItemHandler->xPopupMenu.set( static_cast<OWeakObject *>(pVCLXPopupMenu), UNO_QUERY );
+                        pMenuItemHandler->xPopupMenu = pVCLXPopupMenu;
 
                     }
                 }
@@ -1787,7 +1787,7 @@ void MenuBarManager::UpdateSpecialWindowMenu( Menu* pMenu,const Reference< XComp
     sal_uInt16  nItemId = START_ITEMID_WINDOWLIST;
 
     Reference< XFrame > xCurrentFrame = xDesktop->getCurrentFrame();
-    Reference< XIndexAccess > xList( xDesktop->getFrames(), UNO_QUERY );
+    Reference< XIndexAccess > xList = xDesktop->getFrames();
     sal_Int32 nFrameCount = xList->getCount();
     aNewWindowListVector.reserve(nFrameCount);
     for (sal_Int32 i=0; i<nFrameCount; ++i )

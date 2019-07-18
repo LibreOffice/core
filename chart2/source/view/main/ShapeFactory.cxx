@@ -2382,9 +2382,8 @@ uno::Reference< drawing::XShape >
         //set text and text properties
         uno::Reference< text::XText > xText( xShape, uno::UNO_QUERY );
         uno::Reference< text::XTextCursor > xTextCursor( xText->createTextCursor() );
-        uno::Reference< text::XTextRange > xTextRange( xTextCursor, uno::UNO_QUERY );
         uno::Reference< beans::XPropertySet > xShapeProp( xShape, uno::UNO_QUERY );
-        if( !xText.is() || !xTextRange.is() || !xTextCursor.is() || !xShapeProp.is() || !xTextProperties.is() )
+        if( !xText.is() || !xTextCursor.is() || !xShapeProp.is() || !xTextProperties.is() )
             return xShape;
 
         tPropertyNameValueMap aValueMap;
@@ -2439,7 +2438,7 @@ uno::Reference< drawing::XShape >
                 aLabel = ShapeFactory::getStackedString( aLabel, bStackCharacters );
 
                 xTextCursor->gotoEnd(false);
-                xText->insertString( xTextRange, aLabel, false );
+                xText->insertString( xTextCursor, aLabel, false );
                 xTextCursor->gotoEnd(true);
                 uno::Reference< beans::XPropertySet > xTargetProps( xShape, uno::UNO_QUERY );
                 uno::Reference< beans::XPropertySet > xSourceProps( xFormattedString[0], uno::UNO_QUERY );
@@ -2461,7 +2460,7 @@ uno::Reference< drawing::XShape >
             for( nN=0; nN<xFormattedString.getLength();nN++ )
             {
                 xTextCursor->gotoEnd(false);
-                xText->insertString( xTextRange, xFormattedString[nN]->getString(), false );
+                xText->insertString( xTextCursor, xFormattedString[nN]->getString(), false );
                 xTextCursor->gotoEnd(true);
             }
             awt::Size aOldRefSize;

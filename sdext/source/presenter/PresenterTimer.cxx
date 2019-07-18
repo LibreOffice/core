@@ -449,8 +449,8 @@ PresenterClockTimer::PresenterClockTimer (const Reference<XComponentContext>& rx
     , m_xContext(rxContext)
 {
     assert(m_xContext.is());
-    Reference<lang::XMultiComponentFactory> xFactory (
-        rxContext->getServiceManager(), UNO_QUERY);
+    Reference<lang::XMultiComponentFactory> xFactory =
+        rxContext->getServiceManager();
     if (xFactory.is())
         mxRequestCallback.set(
             xFactory->createInstanceWithContext(

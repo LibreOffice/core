@@ -135,7 +135,7 @@ void SAL_CALL DynamicResultSetWrapper::dispose()
             return;
         m_bInDispose = true;
 
-        xSourceComponent.set(m_xSource, UNO_QUERY);
+        xSourceComponent = m_xSource;
 
         if( m_pDisposeEventListeners && m_pDisposeEventListeners->getLength() )
         {
@@ -326,7 +326,7 @@ Reference< XResultSet > SAL_CALL DynamicResultSetWrapper::getStaticResultSet()
 
         xSource = m_xSource;
         m_bStatic = true;
-        xMyListenerImpl.set( css::uno::Reference< css::ucb::XDynamicResultSetListener >(m_xMyListenerImpl.get()), UNO_QUERY );
+        xMyListenerImpl = m_xMyListenerImpl.get();
     }
 
     if( xSource.is() )

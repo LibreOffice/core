@@ -1354,9 +1354,7 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, LoadHdl, sfx2::FileDialogHelper*, void
             xComponent.set(xCfgMgr, uno::UNO_QUERY);
             if (xComponent.is())
                 xComponent->dispose();
-            xComponent.set(xRootStorage, uno::UNO_QUERY);
-            if (xComponent.is())
-                xComponent->dispose();
+            xRootStorage->dispose();
         }
     }
     catch(const uno::RuntimeException&)
@@ -1430,12 +1428,9 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, SaveHdl, sfx2::FileDialogHelper*, void
 
         if (xRootStorage.is())
         {
-            uno::Reference<lang::XComponent> xComponent(xCfgMgr, uno::UNO_QUERY);
-            if (xComponent.is())
-                xComponent->dispose();
-            xComponent.set(xRootStorage, uno::UNO_QUERY);
-            if (xComponent.is())
-                xComponent->dispose();
+            if (xCfgMgr.is())
+                xCfgMgr->dispose();
+            xRootStorage->dispose();
         }
     }
     catch(const uno::RuntimeException&)

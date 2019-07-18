@@ -66,7 +66,7 @@ void Communicator::execute()
     Receiver aReceiver( pTransmitter.get() );
     try {
         uno::Reference< frame::XDesktop2 > xFramesSupplier = frame::Desktop::create( ::comphelper::getProcessComponentContext() );
-        uno::Reference< frame::XFrame > xFrame ( xFramesSupplier->getActiveFrame(), uno::UNO_QUERY );
+        uno::Reference< frame::XFrame > xFrame = xFramesSupplier->getActiveFrame();
 
         uno::Reference<presentation::XPresentationSupplier> xPS;
         if( xFrame.is() )

@@ -88,11 +88,10 @@ class InterceptionHelper : public  ::cppu::WeakImplHelper<
               */
             iterator findByReference(const css::uno::Reference< css::frame::XDispatchProviderInterceptor >& xInterceptor)
             {
-                css::uno::Reference< css::frame::XDispatchProviderInterceptor > xProviderInterface(xInterceptor, css::uno::UNO_QUERY);
                 iterator pIt;
                 for (pIt=begin(); pIt!=end(); ++pIt)
                 {
-                    if (pIt->xInterceptor == xProviderInterface)
+                    if (pIt->xInterceptor == xInterceptor)
                         return pIt;
                 }
                 return end();

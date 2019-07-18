@@ -169,7 +169,7 @@ uno::Reference< awt::XWindowPeer > createToolkitWindow( const uno::Reference< un
     aDescriptor.Type                =   awt::WindowClass_SIMPLE;
     aDescriptor.WindowServiceName   =   OUString::createFromAscii( pService );
     aDescriptor.ParentIndex         =   -1;
-    aDescriptor.Parent.set( rParent, uno::UNO_QUERY );
+    aDescriptor.Parent = rParent;
     aDescriptor.Bounds              =   awt::Rectangle(0,0,0,0);
     aDescriptor.WindowAttributes    =   0;
 
@@ -252,7 +252,7 @@ uno::Reference< frame::XModel > impl_getModelFromFrame( const uno::Reference< fr
     uno::Reference< frame::XModel > xModel;
     if ( rFrame.is() )
     {
-        uno::Reference< frame::XController > xController( rFrame->getController(), uno::UNO_QUERY );
+        uno::Reference< frame::XController > xController = rFrame->getController();
         if ( xController.is() )
             xModel = xController->getModel();
     }

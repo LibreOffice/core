@@ -160,7 +160,7 @@ void SAL_CALL PresenterButton::disposing()
         mxWindow->removePaintListener(this);
         mxWindow->removeMouseListener(this);
         mxWindow->removeMouseMotionListener(this);
-        Reference<lang::XComponent> xComponent (mxWindow, UNO_QUERY);
+        Reference<lang::XComponent> xComponent = mxWindow;
         mxWindow = nullptr;
         if (xComponent.is())
             xComponent->dispose();

@@ -268,7 +268,7 @@ bool ScTBC::ImportToolBarControl( ScCTBWrapper& rWrapper, const css::uno::Refere
                      return false;
                  if ( !bIsMenuToolbar )
                  {
-                     if ( !helper.createMenu( pMenu->Name(), uno::Reference< container::XIndexAccess >( xMenuDesc, uno::UNO_QUERY ) ) )
+                     if ( !helper.createMenu( pMenu->Name(), xMenuDesc ) )
                          return false;
                  }
                  else

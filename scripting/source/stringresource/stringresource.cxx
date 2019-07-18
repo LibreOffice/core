@@ -2304,10 +2304,9 @@ void StringResourceWithStorageImpl::setStorage( const Reference< XStorage >& Sto
 // Scan locale properties files
 void StringResourceWithStorageImpl::implScanLocales()
 {
-    Reference< container::XNameAccess > xNameAccess( m_xStorage, UNO_QUERY );
-    if( xNameAccess.is() )
+    if( m_xStorage.is() )
     {
-        Sequence< OUString > aContentSeq = xNameAccess->getElementNames();
+        Sequence< OUString > aContentSeq = m_xStorage->getElementNames();
         implScanLocaleNames( aContentSeq );
     }
 

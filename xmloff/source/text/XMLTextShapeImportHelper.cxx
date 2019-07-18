@@ -53,7 +53,7 @@ XMLTextShapeImportHelper::XMLTextShapeImportHelper(
     Reference < XDrawPageSupplier > xDPS( rImp.GetModel(), UNO_QUERY );
     if( xDPS.is() )
     {
-        Reference < XShapes > xShapes( xDPS->getDrawPage(), UNO_QUERY );
+        Reference < XShapes > xShapes = xDPS->getDrawPage();
         pushGroupForSorting( xShapes );
     }
 

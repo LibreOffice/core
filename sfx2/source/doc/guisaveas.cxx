@@ -592,8 +592,7 @@ bool ModelData_Impl::ExecuteFilterDialog_Impl( const OUString& aFilterName )
 
                             uno::Reference< document::XExporter > xExporter( xFilterDialog, uno::UNO_QUERY );
                             if( xExporter.is() )
-                                xExporter->setSourceDocument(
-                                    uno::Reference< lang::XComponent >( GetModel(), uno::UNO_QUERY ) );
+                                xExporter->setSourceDocument( GetModel() );
 
                             uno::Sequence< beans::PropertyValue > aPropsForDialog;
                             GetMediaDescr() >> aPropsForDialog;

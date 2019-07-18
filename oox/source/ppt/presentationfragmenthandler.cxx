@@ -147,7 +147,7 @@ static void ResolveTextFields( XmlFilterBase const & rFilter )
                             aURL = "#" + xNamed->getName();
                             xPropSet->setPropertyValue( sURL, Any( aURL ) );
                             Reference< text::XTextContent > xContent( rTextField.xTextField, UNO_QUERY);
-                            Reference< text::XTextRange > xTextRange( rTextField.xTextCursor, UNO_QUERY );
+                            Reference< text::XTextRange > xTextRange = rTextField.xTextCursor;
                             rTextField.xText->insertTextContent( xTextRange, xContent, true );
                         }
                         catch( uno::Exception& )

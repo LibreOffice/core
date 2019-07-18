@@ -121,7 +121,7 @@ bool FlashExporter::exportAll( const Reference< XComponent >& xDoc, Reference< X
     if(!xDrawPagesSupplier.is())
         return false;
 
-    Reference< XIndexAccess > xDrawPages( xDrawPagesSupplier->getDrawPages(), UNO_QUERY );
+    Reference< XIndexAccess > xDrawPages = xDrawPagesSupplier->getDrawPages();
     if(!xDrawPages.is())
         return false;
 
@@ -451,9 +451,7 @@ sal_uInt16 FlashExporter::exportDrawPageBackground(sal_uInt16 nPage, Reference< 
 
 sal_uInt16 FlashExporter::exportMasterPageObjects(sal_uInt16 nPage, Reference< XDrawPage > const & xMasterPage)
 {
-    Reference< XShapes > xShapes( xMasterPage, UNO_QUERY );
-
-    BitmapChecksum shapesum = ActionSummer(xShapes);
+    BitmapChecksum shapesum = ActionSummer(xMasterPage);
 
     ChecksumCache::iterator it = gObjectCache.find(shapesum);
 
@@ -481,8 +479,7 @@ sal_uInt16 FlashExporter::exportMasterPageObjects(sal_uInt16 nPage, Reference< X
     shape infos to the current PageInfo */
 void FlashExporter::exportDrawPageContents( const Reference< XDrawPage >& xPage, bool bStream, bool bMaster )
 {
-    Reference< XShapes > xShapes( xPage, UNO_QUERY );
-    exportShapes(xShapes, bStream, bMaster);
+    exportShapes(xPage, bStream, bMaster);
 }
 
 

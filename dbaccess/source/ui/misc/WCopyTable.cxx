@@ -607,7 +607,7 @@ OCopyTableWizard::OCopyTableWizard( vcl::Window* pParent, const OUString& _rDefa
     ::dbaui::fillTypeInfo( _xConnection, m_sTypeNames, m_aTypeInfo, m_aTypeInfoIndex );
     ::dbaui::fillTypeInfo( _xConnection, m_sTypeNames, m_aDestTypeInfo, m_aDestTypeInfoIndex );
 
-    m_xInteractionHandler.set( InteractionHandler::createWithParent(m_xContext, nullptr), UNO_QUERY );
+    m_xInteractionHandler = InteractionHandler::createWithParent(m_xContext, nullptr);
 
     VclPtrInstance<OCopyTable> pPage1( this );
     pPage1->disallowViews();

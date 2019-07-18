@@ -36,8 +36,7 @@ XMLBasicImportContext::XMLBasicImportContext( SvXMLImport& rImport, sal_uInt16 n
     Reference< uno::XComponentContext > xContext = GetImport().GetComponentContext();
     m_xHandler = document::XMLOasisBasicImporter::create( xContext );
 
-    Reference< lang::XComponent > xComp( m_xModel, UNO_QUERY );
-    m_xHandler->setTargetDocument( xComp );
+    m_xHandler->setTargetDocument( m_xModel );
 }
 
 XMLBasicImportContext::~XMLBasicImportContext()

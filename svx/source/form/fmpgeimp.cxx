@@ -239,7 +239,7 @@ namespace
     void lcl_insertFormObject_throw( const FmFormObj& _object, const Reference< XMap >& _map )
     {
         // the control model
-        Reference< XControlModel > xControlModel( _object.GetUnoControlModel(), UNO_QUERY );
+        Reference< XControlModel > xControlModel = _object.GetUnoControlModel();
         OSL_ENSURE( xControlModel.is(), "lcl_insertFormObject_throw: suspicious: no control model!" );
         if ( !xControlModel.is() )
             return;
@@ -255,7 +255,7 @@ namespace
     void lcl_removeFormObject_throw( const FmFormObj& _object, const Reference< XMap >& _map )
     {
         // the control model
-        Reference< XControlModel > xControlModel( _object.GetUnoControlModel(), UNO_QUERY );
+        Reference< XControlModel > xControlModel = _object.GetUnoControlModel();
         OSL_ENSURE( xControlModel.is(), "lcl_removeFormObject: suspicious: no control model!" );
         if ( !xControlModel.is() )
         {
@@ -276,10 +276,10 @@ Reference< XMap > FmFormPageImpl::impl_createControlShapeMap_nothrow()
 
     try
     {
-        xMap.set( EnumerableMap::create( comphelper::getProcessComponentContext(),
+        xMap = EnumerableMap::create( comphelper::getProcessComponentContext(),
             ::cppu::UnoType< XControlModel >::get(),
             ::cppu::UnoType< XControlShape >::get()
-        ).get(), UNO_SET_THROW );
+        );
 
         SdrObjListIter aPageIter( &m_rPage );
         while ( aPageIter.IsMore() )
@@ -344,9 +344,7 @@ bool FmFormPageImpl::validateCurForm()
     if ( !xCurrentForm.is() )
         return false;
 
-    Reference< XChild > xAsChild( xCurrentForm, UNO_QUERY );
-    DBG_ASSERT( xAsChild.is(), "FmFormPageImpl::validateCurForm: a form which is no child??" );
-    if ( !xAsChild.is() || !xAsChild->getParent().is() )
+    if ( !xCurrentForm->getParent().is() )
         xCurrentForm.clear();
 
     return xCurrentForm.is();
@@ -464,7 +462,7 @@ Reference< css::form::XForm >  FmFormPageImpl::findPlaceInFormComponentHierarchy
         // first search in the current form
         xForm = findFormForDataSource( xCurrentForm, rDatabase, rCursorSource, nCommandType );
 
-        Reference< css::container::XIndexAccess >  xFormsByIndex( getForms(), UNO_QUERY );
+        Reference< css::container::XIndexAccess >  xFormsByIndex = getForms();
         DBG_ASSERT(xFormsByIndex.is(), "FmFormPageImpl::findPlaceInFormComponentHierarchy : no index access for my forms collection !");
         sal_Int32 nCount = xFormsByIndex->getCount();
         for (sal_Int32 i = 0; !xForm.is() && i < nCount; i++)
@@ -506,7 +504,7 @@ Reference< css::form::XForm >  FmFormPageImpl::findPlaceInFormComponentHierarchy
             xFormProps->setPropertyValue(FM_PROP_COMMAND,makeAny(rCursorSource));
             xFormProps->setPropertyValue(FM_PROP_COMMANDTYPE, makeAny(nCommandType));
 
-            Reference< css::container::XNameAccess >  xNamedSet( getForms(), UNO_QUERY );
+            Reference< css::container::XNameAccess >  xNamedSet = getForms();
 
             const bool bTableOrQuery = ( CommandType::TABLE == nCommandType ) || ( CommandType::QUERY == nCommandType );
             OUString sName = FormControlFactory::getUniqueName( xNamedSet,
@@ -516,7 +514,7 @@ Reference< css::form::XForm >  FmFormPageImpl::findPlaceInFormComponentHierarchy
 
             if( bUndo )
             {
-                Reference< css::container::XIndexContainer >  xContainer( getForms(), UNO_QUERY );
+                Reference< css::container::XIndexContainer >  xContainer = getForms();
                 rModel.AddUndo(
                     std::make_unique<FmUndoContainerAction>(
                         static_cast< FmFormModel& >(rModel),

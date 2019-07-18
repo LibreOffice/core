@@ -568,7 +568,7 @@ bool MenuSaveInData::Apply()
     if ( IsModified() )
     {
         // Apply new menu bar structure to our settings container
-        m_xMenuSettings.set( GetConfigManager()->createSettings(), uno::UNO_QUERY );
+        m_xMenuSettings = GetConfigManager()->createSettings();
 
         uno::Reference< container::XIndexContainer > xIndexContainer (
             m_xMenuSettings, uno::UNO_QUERY );
@@ -871,7 +871,7 @@ bool ContextMenuSaveInData::Apply()
     {
         if ( pEntry->IsModified() || SvxConfigPageHelper::SvxConfigEntryModified( pEntry ) )
         {
-            css::uno::Reference< css::container::XIndexContainer > xIndexContainer( GetConfigManager()->createSettings(), css::uno::UNO_QUERY );
+            css::uno::Reference< css::container::XIndexContainer > xIndexContainer = GetConfigManager()->createSettings();
             css::uno::Reference< css::lang::XSingleComponentFactory > xFactory( xIndexContainer, css::uno::UNO_QUERY );
             ApplyMenu( xIndexContainer, xFactory, pEntry );
 
@@ -2400,8 +2400,8 @@ void ToolbarSaveInData::ApplyToolbar(
 void ToolbarSaveInData::ApplyToolbar( SvxConfigEntry* pToolbar )
 {
     // Apply new toolbar structure to our settings container
-    uno::Reference< container::XIndexAccess > xSettings(
-        GetConfigManager()->createSettings(), uno::UNO_QUERY );
+    uno::Reference< container::XIndexAccess > xSettings =
+        GetConfigManager()->createSettings();
 
     uno::Reference< container::XIndexContainer > xIndexContainer (
         xSettings, uno::UNO_QUERY );
@@ -2449,7 +2449,7 @@ void ToolbarSaveInData::CreateToolbar( SvxConfigEntry* pToolbar )
 {
     // show the new toolbar in the UI also
     uno::Reference< container::XIndexAccess >
-        xSettings( GetConfigManager()->createSettings(), uno::UNO_QUERY );
+        xSettings = GetConfigManager()->createSettings();
 
     uno::Reference< beans::XPropertySet >
         xPropertySet( xSettings, uno::UNO_QUERY );
@@ -2892,11 +2892,9 @@ IMPL_LINK_NOARG(SvxIconSelectorDialog, DeleteHdl, weld::Button&, void)
         uno::Sequence< OUString > URLs { aSelImageText };
         m_xTbSymbol->RemoveItem(nId);
         m_xImportedImageManager->removeImages( SvxConfigPageHelper::GetImageType(), URLs );
-        uno::Reference< css::ui::XUIConfigurationPersistence >
-            xConfigPersistence( m_xImportedImageManager, uno::UNO_QUERY );
-        if ( xConfigPersistence.is() && xConfigPersistence->isModified() )
+        if ( m_xImportedImageManager->isModified() )
         {
-            xConfigPersistence->store();
+            m_xImportedImageManager->store();
         }
     }
 }
@@ -2906,8 +2904,6 @@ bool SvxIconSelectorDialog::ReplaceGraphicItem(
 {
     uno::Sequence< OUString > URLs(1);
     uno::Sequence< uno::Reference<graphic::XGraphic > > aImportGraph( 1 );
-    uno::Reference< css::ui::XUIConfigurationPersistence >
-        xConfigPer( m_xImportedImageManager, uno::UNO_QUERY );
 
     uno::Reference< graphic::XGraphic > xGraphic;
     uno::Sequence< beans::PropertyValue > aMediaProps( 1 );
@@ -2964,7 +2960,7 @@ bool SvxIconSelectorDialog::ReplaceGraphicItem(
                 URLs[0] = aURL;
                 aImportGraph[ 0 ] = xGraphic;
                 m_xImportedImageManager->replaceImages( SvxConfigPageHelper::GetImageType(), URLs, aImportGraph );
-                xConfigPer->store();
+                m_xImportedImageManager->store();
 
                 bResult = true;
                 break;
@@ -3157,12 +3153,9 @@ bool SvxIconSelectorDialog::ImportGraphic( const OUString& aURL )
                 uno::Sequence< uno::Reference<graphic::XGraphic > > aImportGraph( 1 );
                 aImportGraph[ 0 ] = xGraphic;
                 m_xImportedImageManager->insertImages( SvxConfigPageHelper::GetImageType(), aImportURL, aImportGraph );
-                uno::Reference< css::ui::XUIConfigurationPersistence >
-                xConfigPersistence( m_xImportedImageManager, uno::UNO_QUERY );
-
-                if ( xConfigPersistence.is() && xConfigPersistence->isModified() )
+                if ( m_xImportedImageManager->isModified() )
                 {
-                    xConfigPersistence->store();
+                    m_xImportedImageManager->store();
                 }
 
                 result = true;

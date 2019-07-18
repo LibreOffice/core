@@ -88,8 +88,8 @@ void ScPDFExportTest::setUp()
         uno::Reference<frame::XModel2> xModel2(xModel, UNO_QUERY);
         CPPUNIT_ASSERT(xModel2.is());
 
-        Reference<frame::XController2> xController(
-            xModel2->createDefaultViewController(xTargetFrame), UNO_QUERY);
+        Reference<frame::XController2> xController
+            = xModel2->createDefaultViewController(xTargetFrame);
         CPPUNIT_ASSERT(xController.is());
 
         // introduce model/view/controller to each other
@@ -161,8 +161,7 @@ std::shared_ptr<utl::TempFile> ScPDFExportTest::exportToPdf(uno::Reference<frame
 
     // select requested cells to print
     // query for the XCellRange interface
-    uno::Reference<table::XCellRange> rCellRange(rSheet, UNO_QUERY);
-    uno::Reference<table::XCellRange> xCellRange = rCellRange->getCellRangeByPosition(
+    uno::Reference<table::XCellRange> xCellRange = rSheet->getCellRangeByPosition(
         range.aStart.Col(), range.aStart.Row(), range.aEnd.Col(), range.aEnd.Row());
     {
         uno::Reference<frame::XController> xController = xModel->getCurrentController();

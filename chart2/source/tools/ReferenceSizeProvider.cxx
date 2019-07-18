@@ -229,7 +229,7 @@ ReferenceSizeProvider::AutoResizeState ReferenceSizeProvider::getAutoResizeState
         return eResult;
 
     // diagram is needed by the rest of the objects
-    Reference< XDiagram > xDiagram( ChartModelHelper::findDiagram( xChartDoc ), uno::UNO_QUERY );
+    Reference< XDiagram > xDiagram = ChartModelHelper::findDiagram( xChartDoc );
     if( ! xDiagram.is())
         return eResult;
 
@@ -317,7 +317,7 @@ void ReferenceSizeProvider::setAutoResizeState( ReferenceSizeProvider::AutoResiz
     impl_setValuesAtTitled( Reference< XTitled >( m_xChartDoc, uno::UNO_QUERY ));
 
     // diagram is needed by the rest of the objects
-    Reference< XDiagram > xDiagram( ChartModelHelper::findDiagram( m_xChartDoc ), uno::UNO_QUERY );
+    Reference< XDiagram > xDiagram = ChartModelHelper::findDiagram( m_xChartDoc );
     if( ! xDiagram.is())
         return;
 

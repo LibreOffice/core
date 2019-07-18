@@ -126,8 +126,7 @@ void ORadioButtonModel::SetSiblingPropsTo(const OUString& rPropName, const Any& 
     Reference<XIndexAccess> xIndexAccess(getParent(), UNO_QUERY);
     if (xIndexAccess.is())
     {
-        Reference<XPropertySet> xMyProps(
-            static_cast<XWeak*>(this), css::uno::UNO_QUERY);
+        Reference<XPropertySet> xMyProps = this;
         OUString sCurrentGroup;
         sal_Int32 nNumSiblings = xIndexAccess->getCount();
         for (sal_Int32 i=0; i<nNumSiblings; ++i)
@@ -203,8 +202,7 @@ void ORadioButtonModel::setControlSource()
             getPropertyValue(PROPERTY_GROUP_NAME) >>= sGroupName;
         getPropertyValue(PROPERTY_NAME) >>= sName;
 
-        Reference<XPropertySet> xMyProps(
-            static_cast<XWeak*>(this), css::uno::UNO_QUERY);
+        Reference<XPropertySet> xMyProps = this;
         for (sal_Int32 i=0; i<xIndexAccess->getCount(); ++i)
         {
             Reference<XPropertySet> xSiblingProperties(xIndexAccess->getByIndex(i), UNO_QUERY);

@@ -131,7 +131,7 @@ sal_Int32 SAL_CALL SdUnoSearchReplaceShape::replaceAll( const uno::Reference< ut
     {
         // replace in xShape
         uno::Reference< text::XText >  xText(xShape, uno::UNO_QUERY);
-        uno::Reference< text::XTextRange >  xRange(xText, uno::UNO_QUERY);
+        uno::Reference< text::XTextRange >  xRange = xText;
         uno::Reference< text::XTextRange >  xFound;
 
         while( xRange.is() )
@@ -217,7 +217,7 @@ uno::Reference< css::container::XIndexAccess > SAL_CALL SdUnoSearchReplaceShape:
     {
         // find in xShape
         uno::Reference< text::XText >  xText(xShape, uno::UNO_QUERY);
-        uno::Reference< text::XTextRange >  xRange(xText, uno::UNO_QUERY);
+        uno::Reference< text::XTextRange >  xRange = xText;
         uno::Reference< text::XTextRange >  xFound;
 
         while( xRange.is() )
@@ -542,9 +542,8 @@ uno::Reference< text::XTextRange >  SdUnoSearchReplaceShape::Search( const uno::
     uno::Reference< text::XTextRange >  xFound;
     ESelection aSel;
 
-    uno::Reference< text::XTextRange > xRangeRef( xText, uno::UNO_QUERY );
-    if( xRangeRef.is() )
-        aSel = GetSelection( xRangeRef );
+    if( xText.is() )
+        aSel = GetSelection( xText );
 
     sal_Int32 nStartPos;
     sal_Int32 nEndPos   = 0;

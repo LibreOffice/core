@@ -520,7 +520,7 @@ void SdOOXMLExportTest2::testTdf91378()
       SdDrawDocument *pDoc = xDocShRef->GetDoc();
       CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != nullptr );
       uno::Reference<document::XDocumentPropertiesSupplier> xDocumentPropertiesSupplier( xDocShRef->GetModel(), uno::UNO_QUERY );
-      uno::Reference<document::XDocumentProperties> xProps( xDocumentPropertiesSupplier->getDocumentProperties(), uno::UNO_QUERY );
+      uno::Reference<document::XDocumentProperties> xProps = xDocumentPropertiesSupplier->getDocumentProperties();
       uno::Reference<beans::XPropertySet> xUDProps( xProps->getUserDefinedProperties(), uno::UNO_QUERY );
       OUString propValue;
       xUDProps->getPropertyValue("Testing") >>= propValue;

@@ -295,7 +295,6 @@ void SwSrcView::Execute(SfxRequest& rReq)
                 TemplateDescription::FILESAVE_AUTOEXTENSION,
                 FileDialogFlags::NONE, aEditWin->GetFrameWeld());
             uno::Reference < XFilePicker3 > xFP = aDlgHelper.GetFilePicker();
-            uno::Reference<XFilterManager> xFltMgr(xFP, UNO_QUERY);
 
             // search for an html filter for export
             SfxFilterContainer* pFilterCont = GetObjectShell()->GetFactory().GetFilterContainer();
@@ -306,15 +305,15 @@ void SwSrcView::Execute(SfxRequest& rReq)
                 // filter found -> use its uiname and wildcard
                 const OUString& rUIName = pFilter->GetUIName();
                 const WildCard& rCard = pFilter->GetWildcard();
-                xFltMgr->appendFilter( rUIName, rCard.getGlob() );
-                xFltMgr->setCurrentFilter( rUIName ) ;
+                xFP->appendFilter( rUIName, rCard.getGlob() );
+                xFP->setCurrentFilter( rUIName ) ;
             }
             else
             {
                 // filter not found
                 OUString sHtml("HTML");
-                xFltMgr->appendFilter( sHtml, "*.html;*.htm" );
-                xFltMgr->setCurrentFilter( sHtml ) ;
+                xFP->appendFilter( sHtml, "*.html;*.htm" );
+                xFP->setCurrentFilter( sHtml ) ;
             }
 
             xFP->setDisplayDirectory( aPathOpt.GetWorkPath() );

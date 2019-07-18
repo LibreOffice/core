@@ -507,7 +507,7 @@ void AxisHelper::hideAxisIfNoDataIsAttached( const Reference< XAxis >& xAxis, co
     std::vector< Reference< chart2::XDataSeries > > aSeriesVector( DiagramHelper::getDataSeriesFromDiagram( xDiagram ) );
     for (auto const& series : aSeriesVector)
     {
-        uno::Reference< chart2::XAxis > xCurrentAxis( DiagramHelper::getAttachedAxis(series, xDiagram ), uno::UNO_QUERY );
+        uno::Reference< chart2::XAxis > xCurrentAxis = DiagramHelper::getAttachedAxis(series, xDiagram );
         if( xCurrentAxis==xAxis )
         {
             bOtherSeriesAttachedToThisAxis = true;

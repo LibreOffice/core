@@ -262,7 +262,7 @@ SbaGridControl* UnoDataBrowserView::getVclControl() const
                 if ( pPeer )
                 {
                     m_pVclControl = static_cast<SbaGridControl*>(pPeer->GetWindow().get());
-                    pTHIS->startComponentListening(Reference<XComponent>(VCLUnoHelper::GetInterface(m_pVclControl),UNO_QUERY));
+                    pTHIS->startComponentListening(VCLUnoHelper::GetInterface(m_pVclControl));
                 }
             }
         }
@@ -291,7 +291,7 @@ void UnoDataBrowserView::GetFocus()
 
 void UnoDataBrowserView::_disposing( const css::lang::EventObject& /*_rSource*/ )
 {
-    stopComponentListening(Reference<XComponent>(VCLUnoHelper::GetInterface(m_pVclControl),UNO_QUERY));
+    stopComponentListening(VCLUnoHelper::GetInterface(m_pVclControl));
     m_pVclControl = nullptr;
 }
 

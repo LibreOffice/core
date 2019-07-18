@@ -592,8 +592,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
 
             // Create an empty Draw component.
             uno::Reference<frame::XDesktop2> xDesktop = css::frame::Desktop::create(comphelper::getProcessComponentContext());
-            uno::Reference<frame::XComponentLoader> xComponentLoader(xDesktop, uno::UNO_QUERY);
-            uno::Reference<lang::XComponent> xComponent = xComponentLoader->loadComponentFromURL("private:factory/sdraw", "_default", 0, {});
+            uno::Reference<lang::XComponent> xComponent = xDesktop->loadComponentFromURL("private:factory/sdraw", "_default", 0, {});
 
             // Add the doc pages to the new draw document
             SfxRedactionHelper::addPagesToDraw(xComponent, nPages, aMetaFiles, aPageSizes, aPageMargins, aRedactionTargets, bIsAutoRedact);
@@ -1555,23 +1554,21 @@ SignatureState SfxObjectShell::ImplCheckSignaturesInformation( const uno::Sequen
 /// Does this ZIP storage have a signature stream?
 static bool HasSignatureStream(const uno::Reference<embed::XStorage>& xStorage)
 {
-    uno::Reference<container::XNameAccess> xNameAccess(xStorage, uno::UNO_QUERY);
-    if (!xNameAccess.is())
+    if (!xStorage.is())
         return false;
 
-    if (xNameAccess->hasByName("META-INF"))
+    if (xStorage->hasByName("META-INF"))
     {
         // ODF case.
         try
         {
             uno::Reference<embed::XStorage> xMetaInf
                 = xStorage->openStorageElement("META-INF", embed::ElementModes::READ);
-            uno::Reference<container::XNameAccess> xMetaInfNames(xMetaInf, uno::UNO_QUERY);
-            if (xMetaInfNames.is())
+            if (xMetaInf.is())
             {
-                return xMetaInfNames->hasByName("documentsignatures.xml")
-                       || xMetaInfNames->hasByName("macrosignatures.xml")
-                       || xMetaInfNames->hasByName("packagesignatures.xml");
+                return xMetaInf->hasByName("documentsignatures.xml")
+                       || xMetaInf->hasByName("macrosignatures.xml")
+                       || xMetaInf->hasByName("packagesignatures.xml");
             }
         }
         catch (const css::io::IOException& rException)
@@ -1581,7 +1578,7 @@ static bool HasSignatureStream(const uno::Reference<embed::XStorage>& xStorage)
     }
 
     // OOXML case.
-    return xNameAccess->hasByName("_xmlsignatures");
+    return xStorage->hasByName("_xmlsignatures");
 }
 
 uno::Sequence< security::DocumentSignatureInformation > SfxObjectShell::GetDocumentSignatureInformation( bool bScriptingContent, const uno::Reference< security::XDocumentDigitalSignatures >& xSigner )

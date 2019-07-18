@@ -212,11 +212,9 @@ OUString GraphicHelper::ExportGraphic(weld::Window* pParent, const Graphic& rGra
     aExtension = aExtension.toAsciiLowerCase();
     sal_uInt16 nDefaultFilter = USHRT_MAX;
 
-    Reference<XFilterManager> xFilterManager(xFilePicker, UNO_QUERY);
-
     for ( sal_uInt16 i = 0; i < nCount; i++ )
     {
-        xFilterManager->appendFilter( rGraphicFilter.GetExportFormatName( i ), rGraphicFilter.GetExportWildcard( i ) );
+        xFilePicker->appendFilter( rGraphicFilter.GetExportFormatName( i ), rGraphicFilter.GetExportWildcard( i ) );
         OUString aFormatShortName = rGraphicFilter.GetExportFormatShortName( i );
         if ( aFormatShortName.equalsIgnoreAsciiCase( aExtension ) )
         {
@@ -237,7 +235,7 @@ OUString GraphicHelper::ExportGraphic(weld::Window* pParent, const Graphic& rGra
 
     if( USHRT_MAX != nDefaultFilter )
     {
-        xFilterManager->setCurrentFilter( rGraphicFilter.GetExportFormatName( nDefaultFilter ) ) ;
+        xFilePicker->setCurrentFilter( rGraphicFilter.GetExportFormatName( nDefaultFilter ) ) ;
 
         if( aDialogHelper.Execute() == ERRCODE_NONE )
         {
@@ -247,7 +245,7 @@ OUString GraphicHelper::ExportGraphic(weld::Window* pParent, const Graphic& rGra
             sGraphicsPath = aPath.GetPath();
 
             if( !rGraphicName.isEmpty() &&
-                nDefaultFilter == rGraphicFilter.GetExportFormatNumber( xFilterManager->getCurrentFilter()))
+                nDefaultFilter == rGraphicFilter.GetExportFormatNumber( xFilePicker->getCurrentFilter()))
             {
                 // try to save the original graphic
                 SfxMedium aIn( rGraphicName, StreamMode::READ | StreamMode::NOCREATE );
@@ -269,9 +267,9 @@ OUString GraphicHelper::ExportGraphic(weld::Window* pParent, const Graphic& rGra
             }
 
             sal_uInt16 nFilter;
-            if ( !xFilterManager->getCurrentFilter().isEmpty() && rGraphicFilter.GetExportFormatCount() )
+            if ( !xFilePicker->getCurrentFilter().isEmpty() && rGraphicFilter.GetExportFormatCount() )
             {
-                nFilter = rGraphicFilter.GetExportFormatNumber( xFilterManager->getCurrentFilter() );
+                nFilter = rGraphicFilter.GetExportFormatNumber( xFilePicker->getCurrentFilter() );
             }
             else
             {
@@ -366,7 +364,6 @@ void GraphicHelper::SaveShapeAsGraphic(weld::Window* pParent,  const Reference< 
         // populate filter dialog filter list and select default filter to match graphic mime type
 
         GraphicFilter& rGraphicFilter = GraphicFilter::GetGraphicFilter();
-        Reference<XFilterManager> xFilterManager( xFilePicker, UNO_QUERY );
         const OUString aDefaultMimeType("image/png");
         OUString aDefaultFormatName;
         sal_uInt16 nCount = rGraphicFilter.GetExportFormatCount();
@@ -377,21 +374,21 @@ void GraphicHelper::SaveShapeAsGraphic(weld::Window* pParent,  const Reference< 
         {
             const OUString aExportFormatName( rGraphicFilter.GetExportFormatName( i ) );
             const OUString aFilterMimeType( rGraphicFilter.GetExportFormatMediaType( i ) );
-            xFilterManager->appendFilter( aExportFormatName, rGraphicFilter.GetExportWildcard( i ) );
+            xFilePicker->appendFilter( aExportFormatName, rGraphicFilter.GetExportWildcard( i ) );
             aMimeTypeMap[ aExportFormatName ] = aFilterMimeType;
             if( aDefaultMimeType == aFilterMimeType )
                 aDefaultFormatName = aExportFormatName;
         }
 
         if( !aDefaultFormatName.isEmpty() )
-            xFilterManager->setCurrentFilter( aDefaultFormatName );
+            xFilePicker->setCurrentFilter( aDefaultFormatName );
 
         // execute dialog
 
         if( aDialogHelper.Execute() == ERRCODE_NONE )
         {
             OUString sPath( xFilePicker->getFiles().getConstArray()[0] );
-            OUString aExportMimeType( aMimeTypeMap[xFilterManager->getCurrentFilter()] );
+            OUString aExportMimeType( aMimeTypeMap[xFilePicker->getCurrentFilter()] );
 
             Reference< XInputStream > xGraphStream;
 

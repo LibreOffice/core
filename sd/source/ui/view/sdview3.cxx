@@ -685,7 +685,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
             SdDrawDocument* pModel = xShell->GetDoc();
             pModel->InsertPage(pModel->AllocPage(false));
 
-            Reference< XComponent > xComponent( xShell->GetModel(), UNO_QUERY );
+            Reference< XComponent > xComponent = xShell->GetModel();
             xStm->Seek( 0 );
 
             css::uno::Reference< css::io::XInputStream > xInputStream( new utl::OInputStreamWrapper( *xStm ) );

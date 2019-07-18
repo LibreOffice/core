@@ -613,7 +613,7 @@ ChartTypeTabPage::ChartTypeTabPage(TabPageParent pParent , const uno::Reference<
     , m_aChartTypeDialogControllerList(0)
     , m_pCurrentMainType(nullptr)
     , m_nChangingCalls(0)
-    , m_aTimerTriggeredControllerLock( uno::Reference< frame::XModel >( m_xChartModel, uno::UNO_QUERY ) )
+    , m_aTimerTriggeredControllerLock( m_xChartModel )
     , m_xFT_ChooseType(m_xBuilder->weld_label("FT_CAPTION_FOR_WIZARD"))
     , m_xMainTypeList(m_xBuilder->weld_tree_view("charttype"))
     , m_xSubTypeList(new SvtValueSet(m_xBuilder->weld_scrolled_window("subtypewin")))
@@ -867,8 +867,7 @@ void ChartTypeTabPage::initializePage()
     if( !m_xChartModel.is() )
         return;
     uno::Reference< lang::XMultiServiceFactory > xTemplateManager( m_xChartModel->getChartTypeManager(), uno::UNO_QUERY );
-    uno::Reference< frame::XModel > xModel( m_xChartModel, uno::UNO_QUERY);
-    uno::Reference< XDiagram > xDiagram( ChartModelHelper::findDiagram( xModel ) );
+    uno::Reference< XDiagram > xDiagram( ChartModelHelper::findDiagram( m_xChartModel ) );
     DiagramHelper::tTemplateWithServiceName aTemplate =
         DiagramHelper::getTemplateForDiagram( xDiagram, xTemplateManager );
     OUString aServiceName( aTemplate.second );

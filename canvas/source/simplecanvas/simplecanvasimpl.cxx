@@ -72,9 +72,8 @@ namespace
         uno::Sequence< uno::Sequence< geometry::RealPoint2D > > sequenceSequence( 1 );
         sequenceSequence[0] = rectSequence;
 
-        uno::Reference< rendering::XPolyPolygon2D > xRes(
-            xDevice->createCompatibleLinePolyPolygon( sequenceSequence ),
-            uno::UNO_QUERY );
+        uno::Reference< rendering::XPolyPolygon2D > xRes =
+            xDevice->createCompatibleLinePolyPolygon( sequenceSequence );
         if( xRes.is() )
             xRes->setClosed( 0, true );
         return xRes;

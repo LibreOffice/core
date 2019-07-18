@@ -1968,8 +1968,7 @@ bool SwTransferable::PasteOLE( TransferableDataHelper& rData, SwWrtShell& rSh,
                 default:
                     try
                     {
-                        uno::Reference < lang::XComponent > xComp( xStore, uno::UNO_QUERY );
-                        xComp->dispose();
+                        xStore->dispose();
                         xStore = nullptr;
                     }
                     catch (const uno::Exception&)

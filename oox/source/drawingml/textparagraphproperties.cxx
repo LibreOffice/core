@@ -515,10 +515,9 @@ void TextParagraphProperties::dump() const
 
     const OUString sText = "debug";
     xText->setString( sText );
-    Reference< css::text::XTextCursor > xStart( xText->createTextCursor(), UNO_QUERY );
-    Reference< css::text::XTextRange > xRange( xStart, UNO_QUERY );
+    Reference< css::text::XTextCursor > xStart = xText->createTextCursor();
     xStart->gotoEnd( true );
-    Reference< XPropertySet > xPropSet( xRange, UNO_QUERY );
+    Reference< XPropertySet > xPropSet( xStart, UNO_QUERY );
     pushToPropSet( nullptr, xPropSet, emptyMap, nullptr, false, 0 );
     PropertySet aPropSet( xPropSet );
     aPropSet.dump();

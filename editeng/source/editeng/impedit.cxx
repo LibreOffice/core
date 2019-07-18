@@ -1438,7 +1438,7 @@ OUString ImpEditView::SpellIgnoreWord()
 
         if ( !aWord.isEmpty() )
         {
-            Reference< XDictionary >  xDic( LinguMgr::GetIgnoreAllList(), UNO_QUERY );
+            Reference< XDictionary >  xDic = LinguMgr::GetIgnoreAllList();
             if (xDic.is())
                 xDic->add( aWord, false, OUString() );
             EditDoc& rDoc = pEditEngine->GetEditDoc();
@@ -2325,8 +2325,7 @@ void ImpEditView::RemoveDragAndDropListeners()
 
         if ( mxDnDListener.is() )
         {
-            uno::Reference< lang::XEventListener> xEL( mxDnDListener, uno::UNO_QUERY );
-            xEL->disposing( lang::EventObject() );  // #95154# Empty Source means it's the Client
+            mxDnDListener->disposing( lang::EventObject() );  // #95154# Empty Source means it's the Client
             mxDnDListener.clear();
         }
 

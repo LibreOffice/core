@@ -262,7 +262,7 @@ namespace dlgprov
         Reference< uri::XUriReference > uriRef;
         for (;;)
         {
-            uriRef.set( xFac->parse( aURL ), UNO_QUERY );
+            uriRef = xFac->parse( aURL );
             if ( !uriRef.is() )
             {
                 OUString errorMsg = "DialogProviderImpl::getDialogModel: failed to parse URI: " + aURL;
@@ -310,14 +310,14 @@ namespace dlgprov
 
             if ( sLocation == "application" )
             {
-                xLibContainer.set( SfxGetpApp()->GetDialogContainer(), UNO_QUERY );
+                xLibContainer = SfxGetpApp()->GetDialogContainer();
             }
             else if ( sLocation == "document" )
             {
                 Reference< XEmbeddedScripts > xDocumentScripts( m_xModel, UNO_QUERY );
                 if ( xDocumentScripts.is() )
                 {
-                    xLibContainer.set( xDocumentScripts->getDialogLibraries(), UNO_QUERY );
+                    xLibContainer = xDocumentScripts->getDialogLibraries();
                     OSL_ENSURE( xLibContainer.is(),
                         "DialogProviderImpl::createDialogModel: invalid dialog container!" );
                 }
@@ -346,7 +346,7 @@ namespace dlgprov
                     if ( !xDocumentScripts.is() )
                         continue;
 
-                    xLibContainer.set( xDocumentScripts->getDialogLibraries(), UNO_QUERY );
+                    xLibContainer = xDocumentScripts->getDialogLibraries();
                     OSL_ENSURE( xLibContainer.is(),
                         "DialogProviderImpl::createDialogModel: invalid dialog container!" );
                 }
@@ -451,10 +451,10 @@ namespace dlgprov
             }
             else if ( m_xModel.is() )
             {
-                Reference< frame::XController > xController( m_xModel->getCurrentController(), UNO_QUERY );
+                Reference< frame::XController > xController = m_xModel->getCurrentController();
                 if ( xController.is() )
                 {
-                    Reference< frame::XFrame > xFrame( xController->getFrame(), UNO_QUERY );
+                    Reference< frame::XFrame > xFrame = xController->getFrame();
                     if ( xFrame.is() )
                         xPeer.set( xFrame->getContainerWindow(), UNO_QUERY );
                 }

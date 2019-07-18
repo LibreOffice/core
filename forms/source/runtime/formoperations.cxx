@@ -259,8 +259,7 @@ namespace frm
             case FormFeature::ReloadForm:
             {
                 // there must be an active connection
-                Reference< XRowSet > xCursorRowSet( m_xCursor, UNO_QUERY );
-                aState.Enabled = ::dbtools::getConnection( xCursorRowSet ).is();
+                aState.Enabled = ::dbtools::getConnection( m_xCursor ).is();
 
                 // and an active command
                 OUString sActiveCommand;
@@ -480,14 +479,12 @@ namespace frm
         {
             bool shouldCommit(true);
             assert(xCntrl.is());
-            Reference< XIndexAccess > xSubForms(xCntrl, UNO_QUERY);
-            assert(xSubForms.is());
-            if(xSubForms.is())
+            if(xCntrl.is())
             {
-                const sal_Int32 cnt = xSubForms->getCount();
+                const sal_Int32 cnt = xCntrl->getCount();
                 for(int i=0; i < cnt; ++i)
                 {
-                    Reference< XFormController > xSubForm(xSubForms->getByIndex(i), UNO_QUERY);
+                    Reference< XFormController > xSubForm(xCntrl->getByIndex(i), UNO_QUERY);
                     assert(xSubForm.is());
                     if (xSubForm.is())
                     {
@@ -1091,9 +1088,8 @@ namespace frm
                 m_xCursorProperties->removePropertyChangeListener( PROPERTY_ISNEW, this );
             }
 
-            Reference< XModifyBroadcaster > xBroadcaster( m_xController, UNO_QUERY );
-            if ( xBroadcaster.is() )
-                xBroadcaster->removeModifyListener( this );
+            if ( m_xController.is() )
+                m_xController->removeModifyListener( this );
         }
         catch( const Exception& )
         {
@@ -1127,9 +1123,8 @@ namespace frm
 
         impl_initFromForm_throw();
 
-        Reference< XModifyBroadcaster > xBroadcaster( m_xController, UNO_QUERY );
-        if ( xBroadcaster.is() )
-            xBroadcaster->addModifyListener( this );
+        if ( m_xController.is() )
+            m_xController->addModifyListener( this );
     }
 
 
@@ -1691,13 +1686,12 @@ namespace frm
             css::uno::Reference<css::awt::XWindow> xDialogParent;
 
             //tdf#122152 extract parent for dialog
-            css::uno::Reference<css::awt::XTabController> xTabController(m_xController, css::uno::UNO_QUERY);
-            if (xTabController.is())
+            if (m_xController.is())
             {
-                css::uno::Reference<css::awt::XControl> xContainerControl(xTabController->getContainer(), css::uno::UNO_QUERY);
+                css::uno::Reference<css::awt::XControl> xContainerControl(m_xController->getContainer(), css::uno::UNO_QUERY);
                 if (xContainerControl.is())
                 {
-                    css::uno::Reference<css::awt::XWindowPeer> xContainerPeer(xContainerControl->getPeer(), css::uno::UNO_QUERY);
+                    css::uno::Reference<css::awt::XWindowPeer> xContainerPeer = xContainerControl->getPeer();
                     xDialogParent = css::uno::Reference<css::awt::XWindow>(xContainerPeer, css::uno::UNO_QUERY);
                 }
             }

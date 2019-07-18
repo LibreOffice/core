@@ -1499,8 +1499,7 @@ void SvXMLExport::ExportScripts_()
         Reference < XDocumentHandler > xHdl( new XMLBasicExportFilter( mxHandler ) );
         Reference< document::XXMLBasicExporter > xExporter = document::XMLOasisBasicExporter::createWithHandler( m_xContext, xHdl );
 
-        Reference< XComponent > xComp( mxModel, UNO_QUERY );
-        xExporter->setSourceDocument( xComp );
+        xExporter->setSourceDocument( mxModel );
         Sequence< PropertyValue > aMediaDesc( 0 );
         xExporter->filter( aMediaDesc );
     }

@@ -575,7 +575,6 @@ IMPL_LINK(SwGlossaryDlg, MenuHdl, const OString&, rItemIdent, void)
         SvtPathOptions aPathOpt;
         xFP->setDisplayDirectory(aPathOpt.GetWorkPath() );
 
-        uno::Reference<XFilterManager> xFltMgr(xFP, UNO_QUERY);
         SfxFilterMatcher aMatcher( SwDocShell::Factory().GetFactoryName() );
         SfxFilterMatcherIter aIter( aMatcher );
         std::shared_ptr<const SfxFilter> pFilter = aIter.First();
@@ -583,15 +582,15 @@ IMPL_LINK(SwGlossaryDlg, MenuHdl, const OString&, rItemIdent, void)
         {
             if( pFilter->GetUserData() == FILTER_WW8 )
             {
-                xFltMgr->appendFilter( pFilter->GetUIName(),
+                xFP->appendFilter( pFilter->GetUIName(),
                             pFilter->GetWildcard().getGlob() );
-                xFltMgr->setCurrentFilter( pFilter->GetUIName() ) ;
+                xFP->setCurrentFilter( pFilter->GetUIName() ) ;
             }
             else if( pFilter->GetUserData() == FILTER_DOCX )
             {
-                xFltMgr->appendFilter( pFilter->GetUIName(),
+                xFP->appendFilter( pFilter->GetUIName(),
                             pFilter->GetWildcard().getGlob() );
-                xFltMgr->setCurrentFilter( pFilter->GetUIName() ) ;
+                xFP->setCurrentFilter( pFilter->GetUIName() ) ;
             }
 
             pFilter = aIter.Next();
@@ -934,8 +933,7 @@ void SwGlossaryDlg::ResumeShowAutoText()
                     uno::Any aEntry(xGroup->getByName(sShortName));
                     uno::Reference< XAutoTextEntry >  xEntry;
                     aEntry >>= xEntry;
-                    uno::Reference< XTextRange >  xRange(xCursor, uno::UNO_QUERY);
-                    xEntry->applyTo(xRange);
+                    xEntry->applyTo(xCursor);
                 }
             }
         }

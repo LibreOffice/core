@@ -176,7 +176,7 @@ void NewMenuController::setAccelerators( PopupMenu* pPopupMenu )
                         Reference< XUIConfigurationManagerSupplier > xSupplier( xModel, UNO_QUERY );
                         if ( xSupplier.is() )
                         {
-                            Reference< XUIConfigurationManager > xDocUICfgMgr( xSupplier->getUIConfigurationManager(), UNO_QUERY );
+                            Reference< XUIConfigurationManager > xDocUICfgMgr = xSupplier->getUIConfigurationManager();
                             if ( xDocUICfgMgr.is() )
                             {
                                 xDocAccelCfg = xDocUICfgMgr->getShortCutManager();

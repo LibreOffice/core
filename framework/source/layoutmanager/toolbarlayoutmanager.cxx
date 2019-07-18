@@ -270,10 +270,9 @@ tools::Rectangle ToolbarLayoutManager::implts_calcDockingArea()
 
     for (auto const& window : aWindowVector)
     {
-        uno::Reference< ui::XUIElement > xUIElement( window.m_xUIElement, uno::UNO_QUERY );
-        if ( xUIElement.is() )
+        if ( window.m_xUIElement.is() )
         {
-            uno::Reference< awt::XWindow > xWindow( xUIElement->getRealInterface(), uno::UNO_QUERY );
+            uno::Reference< awt::XWindow > xWindow( window.m_xUIElement->getRealInterface(), uno::UNO_QUERY );
             uno::Reference< awt::XDockableWindow > xDockWindow( xWindow, uno::UNO_QUERY );
             if ( xWindow.is() && xDockWindow.is() )
             {
@@ -1191,8 +1190,8 @@ void ToolbarLayoutManager::implts_createCustomToolBars()
         return;
 
     uno::Reference< frame::XFrame > xFrame( m_xFrame );
-    uno::Reference< ui::XUIConfigurationManager > xModuleCfgMgr( m_xModuleCfgMgr, uno::UNO_QUERY );
-    uno::Reference< ui::XUIConfigurationManager > xDocCfgMgr( m_xDocCfgMgr, uno::UNO_QUERY );
+    uno::Reference< ui::XUIConfigurationManager > xModuleCfgMgr = m_xModuleCfgMgr;
+    uno::Reference< ui::XUIConfigurationManager > xDocCfgMgr = m_xDocCfgMgr;
     aReadLock.clear();
 
     if ( xFrame.is() )
@@ -3866,7 +3865,7 @@ void SAL_CALL ToolbarLayoutManager::elementInserted( const ui::ConfigurationEven
 void SAL_CALL ToolbarLayoutManager::elementRemoved( const ui::ConfigurationEvent& rEvent )
 {
     SolarMutexClearableGuard aReadLock;
-    uno::Reference< awt::XWindow > xContainerWindow( m_xContainerWindow, uno::UNO_QUERY );
+    uno::Reference< awt::XWindow > xContainerWindow = m_xContainerWindow;
     uno::Reference< ui::XUIConfigurationManager > xModuleCfgMgr( m_xModuleCfgMgr );
     uno::Reference< ui::XUIConfigurationManager > xDocCfgMgr( m_xDocCfgMgr );
     aReadLock.clear();

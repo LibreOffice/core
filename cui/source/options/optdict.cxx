@@ -154,7 +154,7 @@ IMPL_LINK_NOARG(SvxNewDictionaryDialog, OKHdl_Impl, weld::Button&, void)
         {
             lang::Locale aLocale( LanguageTag::convertToLocale(nLang) );
             OUString aURL( linguistic::GetWritableDictionaryURL( sDict ) );
-            m_xNewDic.set(xDicList->createDictionary(sDict, aLocale, eType, aURL) , UNO_QUERY);
+            m_xNewDic = xDicList->createDictionary(sDict, aLocale, eType, aURL);
             m_xNewDic->setActive(true);
         }
         DBG_ASSERT(m_xNewDic.is(), "NULL pointer");
@@ -172,7 +172,7 @@ IMPL_LINK_NOARG(SvxNewDictionaryDialog, OKHdl_Impl, weld::Button&, void)
 
     if (xDicList.is() && m_xNewDic.is())
     {
-        xDicList->addDictionary(Reference<XDictionary>(m_xNewDic, UNO_QUERY));
+        xDicList->addDictionary(m_xNewDic);
 
         // refresh list of dictionaries
         //! dictionaries may have been added/removed elsewhere too.
@@ -253,7 +253,7 @@ SvxEditDictionaryDialog::SvxEditDictionaryDialog(weld::Window* pParent, const OU
     OUString aLookUpEntry;
     for ( sal_Int32 i = 0; i < nCount; ++i )
     {
-        Reference< XDictionary >  xDic( pDic[i], UNO_QUERY );
+        Reference< XDictionary >  xDic = pDic[i];
         if (xDic.is())
         {
             bool bNegative = xDic->getDictionaryType() == DictionaryType_NEGATIVE;

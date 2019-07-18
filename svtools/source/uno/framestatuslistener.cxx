@@ -79,13 +79,12 @@ void SAL_CALL FrameStatusListener::release() throw ()
 // XComponent
 void SAL_CALL FrameStatusListener::dispose()
 {
-    Reference< XComponent > xThis( static_cast< OWeakObject* >(this), UNO_QUERY );
+    Reference< XComponent > xThis = this;
 
     SolarMutexGuard aSolarMutexGuard;
     if ( m_bDisposed )
         throw DisposedException();
 
-    Reference< XStatusListener > xStatusListener( static_cast< OWeakObject* >( this ), UNO_QUERY );
     for (auto const& listener : m_aListenerMap)
     {
         try
@@ -96,8 +95,8 @@ void SAL_CALL FrameStatusListener::dispose()
             aTargetURL.Complete = listener.first;
             xURLTransformer->parseStrict( aTargetURL );
 
-            if ( xDispatch.is() && xStatusListener.is() )
-                xDispatch->removeStatusListener( xStatusListener, aTargetURL );
+            if ( xDispatch.is() )
+                xDispatch->removeStatusListener( this, aTargetURL );
         }
         catch (const Exception&)
         {
@@ -165,7 +164,7 @@ void FrameStatusListener::addStatusListener( const OUString& aCommandURL )
             xURLTransformer->parseStrict( aTargetURL );
             xDispatch = xDispatchProvider->queryDispatch( aTargetURL, OUString(), 0 );
 
-            xStatusListener.set( static_cast< OWeakObject* >( this ), UNO_QUERY );
+            xStatusListener = this;
             URLToDispatchMap::iterator aIter = m_aListenerMap.find( aCommandURL );
             if ( aIter != m_aListenerMap.end() )
             {
@@ -210,7 +209,7 @@ void FrameStatusListener::bindListener()
         Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
         if ( m_xContext.is() && xDispatchProvider.is() )
         {
-            xStatusListener.set( static_cast< OWeakObject* >( this ), UNO_QUERY );
+            xStatusListener = this;
             for (auto & listener : m_aListenerMap)
             {
                 Reference< XURLTransformer > xURLTransformer( css::util::URLTransformer::create( m_xContext ) );

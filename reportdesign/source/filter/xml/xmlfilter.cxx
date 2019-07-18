@@ -425,7 +425,7 @@ bool ORptFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
 
     if ( !sFileName.isEmpty() )
     {
-        uno::Reference<XComponent> xCom(GetModel(),UNO_QUERY);
+        uno::Reference<XComponent> xCom = GetModel();
 
         tools::SvRef<SfxMedium> pMedium = new SfxMedium(
                 sFileName, ( StreamMode::READ | StreamMode::NOCREATE ) );
@@ -489,7 +489,7 @@ bool ORptFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
         const OUString sHierarchicalDocumentName( aDescriptor.getUnpackedValueOrDefault("HierarchicalDocumentName",OUString()) );
         xProp->setPropertyValue("StreamRelPath", uno::makeAny(sHierarchicalDocumentName));
 
-        uno::Reference<XComponent> xModel(GetModel(),UNO_QUERY);
+        uno::Reference<XComponent> xModel = GetModel();
         static const char s_sMeta[] = "meta.xml";
         static const char s_sStreamName[] = "StreamName";
         xProp->setPropertyValue(s_sStreamName, uno::makeAny(OUString(s_sMeta)));

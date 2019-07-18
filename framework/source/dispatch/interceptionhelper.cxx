@@ -107,7 +107,7 @@ void SAL_CALL InterceptionHelper::registerDispatchProviderInterceptor(const css:
     // If no list exist register these interceptor for all dispatch events with "*"!
     InterceptorInfo aInfo;
 
-    aInfo.xInterceptor.set(xInterceptor, css::uno::UNO_QUERY);
+    aInfo.xInterceptor = xInterceptor;
     css::uno::Reference< css::frame::XInterceptorInfo > xInfo(xInterceptor, css::uno::UNO_QUERY);
     if (xInfo.is())
         aInfo.lURLPattern = xInfo->getInterceptedURLs();
@@ -176,8 +176,8 @@ void SAL_CALL InterceptionHelper::releaseDispatchProviderInterceptor(const css::
     InterceptorList::iterator pIt = m_lInterceptionRegs.findByReference(xInterceptor);
     if (pIt != m_lInterceptionRegs.end())
     {
-        css::uno::Reference< css::frame::XDispatchProvider >            xSlaveD  (xInterceptor->getSlaveDispatchProvider() , css::uno::UNO_QUERY);
-        css::uno::Reference< css::frame::XDispatchProvider >            xMasterD (xInterceptor->getMasterDispatchProvider(), css::uno::UNO_QUERY);
+        css::uno::Reference< css::frame::XDispatchProvider >            xSlaveD  = xInterceptor->getSlaveDispatchProvider();
+        css::uno::Reference< css::frame::XDispatchProvider >            xMasterD = xInterceptor->getMasterDispatchProvider();
         css::uno::Reference< css::frame::XDispatchProviderInterceptor > xSlaveI  (xSlaveD                                  , css::uno::UNO_QUERY);
         css::uno::Reference< css::frame::XDispatchProviderInterceptor > xMasterI (xMasterD                                 , css::uno::UNO_QUERY);
 

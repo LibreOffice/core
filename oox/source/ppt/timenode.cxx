@@ -136,7 +136,7 @@ namespace oox { namespace ppt {
                         // with node
                         xE2->nextElement() >>= xEA2;
                         if( xEA2.is() )
-                            xE2.set(xEA2->createEnumeration(), css::uno::UNO_QUERY);
+                            xE2 = xEA2->createEnumeration();
                         else
                             xE2.clear();
 

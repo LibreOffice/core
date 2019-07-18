@@ -562,8 +562,7 @@ void SAL_CALL FmXGridControl::createPeer(const Reference< css::awt::XToolkit >& 
                                 // as the FmGridControl touches the data source it is connected to we have to remember the current
                                 // cursor position (and restore afterwards)
                                 // OJ: but only when we stand on a valid row
-                                Reference< XResultSet > xResultSet(xForm, UNO_QUERY);
-                                if ( !xResultSet->isBeforeFirst() && !xResultSet->isAfterLast() )
+                                if ( !xForm->isBeforeFirst() && !xForm->isAfterLast() )
                                 {
                                     try
                                     {
@@ -2083,9 +2082,8 @@ void FmXGridPeer::startCursorListening()
 {
     if (!m_nCursorListening)
     {
-        Reference< XRowSet >  xRowSet(m_xCursor, UNO_QUERY);
-        if (xRowSet.is())
-            xRowSet->addRowSetListener(this);
+        if (m_xCursor.is())
+            m_xCursor->addRowSetListener(this);
 
         Reference< XReset >  xReset(m_xCursor, UNO_QUERY);
         if (xReset.is())
@@ -2107,9 +2105,8 @@ void FmXGridPeer::stopCursorListening()
 {
     if (!--m_nCursorListening)
     {
-        Reference< XRowSet >  xRowSet(m_xCursor, UNO_QUERY);
-        if (xRowSet.is())
-            xRowSet->removeRowSetListener(this);
+        if (m_xCursor.is())
+            m_xCursor->removeRowSetListener(this);
 
         Reference< XReset >  xReset(m_xCursor, UNO_QUERY);
         if (xReset.is())
@@ -2429,10 +2426,9 @@ void FmXGridPeer::registerDispatchProviderInterceptor(const Reference< css::fram
     {
         if (m_xFirstDispatchInterceptor.is())
         {
-            Reference< css::frame::XDispatchProvider > xFirstProvider(m_xFirstDispatchInterceptor, UNO_QUERY);
             // there is already an interceptor; the new one will become its master
-            _xInterceptor->setSlaveDispatchProvider(xFirstProvider);
-            m_xFirstDispatchInterceptor->setMasterDispatchProvider(xFirstProvider);
+            _xInterceptor->setSlaveDispatchProvider(m_xFirstDispatchInterceptor);
+            m_xFirstDispatchInterceptor->setMasterDispatchProvider(m_xFirstDispatchInterceptor);
         }
         else
         {
