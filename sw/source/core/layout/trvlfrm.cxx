@@ -48,6 +48,7 @@
 #include <frmatr.hxx>
 #include <frmtool.hxx>
 #include <ndtxt.hxx>
+#include <undobj.hxx>
 
 #include <cfloat>
 #include <swselectionlist.hxx>
@@ -2573,9 +2574,18 @@ void SwRootFrame::CalcFrameRects(SwShellCursor &rCursor)
                 const SwFlyFrame* pFly = static_cast<const SwFlyFrame*>(pAnchoredObj);
                 const SwVirtFlyDrawObj* pObj = pFly->GetVirtDrawObj();
                 const SwFormatSurround &rSur = pFly->GetFormat()->GetSurround();
-                const SwPosition* anchoredAt = pAnchoredObj->GetFrameFormat().GetAnchor().GetContentAnchor();
-                bool inSelection = ( anchoredAt != nullptr && *pStartPos <= *anchoredAt && *anchoredAt < *pEndPos );
-                if( anchoredAt != nullptr && *anchoredAt == *pEndPos )
+                SwFormatAnchor const& rAnchor(pAnchoredObj->GetFrameFormat().GetAnchor());
+                const SwPosition* anchoredAt = rAnchor.GetContentAnchor();
+                bool inSelection = (
+                            anchoredAt != nullptr
+                        && (   (rAnchor.GetAnchorId() == RndStdIds::FLY_AT_CHAR
+                                && IsDestroyFrameAnchoredAtChar(*anchoredAt, *pStartPos, *pEndPos))
+                            || (rAnchor.GetAnchorId() == RndStdIds::FLY_AT_PARA
+                                && *pStartPos <= *anchoredAt
+                                && *anchoredAt < *pEndPos)));
+                if (anchoredAt != nullptr
+                    && rAnchor.GetAnchorId() != RndStdIds::FLY_AT_CHAR
+                    && *anchoredAt == *pEndPos)
                 {
                     const SwNodes& nodes = anchoredAt->GetDoc()->GetNodes();
                     if( *pEndPos == SwPosition( nodes.GetEndOfContent()))
