@@ -681,7 +681,8 @@ namespace sw { namespace mark
         if (bUndoIsEnabled)
         {
             m_pDoc->GetIDocumentUndoRedo().DoUndo(bUndoIsEnabled);
-            m_pDoc->GetIDocumentUndoRedo().AppendUndo(std::make_unique<SwUndoInsTextFieldmark>(*pFieldMark));
+            if (pFieldMark)
+                m_pDoc->GetIDocumentUndoRedo().AppendUndo(std::make_unique<SwUndoInsTextFieldmark>(*pFieldMark));
         }
 
         return pFieldMark;
@@ -726,7 +727,8 @@ namespace sw { namespace mark
         if (bUndoIsEnabled)
         {
             m_pDoc->GetIDocumentUndoRedo().DoUndo(bUndoIsEnabled);
-            m_pDoc->GetIDocumentUndoRedo().AppendUndo(std::make_unique<SwUndoInsNoTextFieldmark>(*pFieldMark));
+            if (pFieldMark)
+                m_pDoc->GetIDocumentUndoRedo().AppendUndo(std::make_unique<SwUndoInsNoTextFieldmark>(*pFieldMark));
         }
 
         m_pDoc->getIDocumentState().SetEnableSetModified(bEnableSetModified);
