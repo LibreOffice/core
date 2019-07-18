@@ -789,6 +789,7 @@ bool OCopyTableWizard::CheckColumns(sal_Int32& _rnBreakPos)
                 if ( aDestIter != m_vDestColumns.end() )
                 {
                     ODatabaseExport::TColumnVector::const_iterator aFind = std::find(m_aDestVec.begin(),m_aDestVec.end(),aDestIter);
+                    assert(aFind != m_aDestVec.end());
                     sal_Int32 nPos = (aFind - m_aDestVec.begin())+1;
                     m_vColumnPositions.emplace_back(nPos,nPos);
                     m_vColumnTypes.push_back((*aFind)->second->GetType());
