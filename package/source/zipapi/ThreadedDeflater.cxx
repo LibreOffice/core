@@ -66,7 +66,7 @@ ThreadedDeflater::ThreadedDeflater(sal_Int32 nSetLevel)
 {
 }
 
-ThreadedDeflater::~ThreadedDeflater()
+ThreadedDeflater::~ThreadedDeflater() COVERITY_NOEXCEPT_FALSE
 {
     waitForTasks();
     clear();

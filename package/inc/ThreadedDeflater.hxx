@@ -47,7 +47,7 @@ class ThreadedDeflater final
 public:
     // Unlike with Deflater class, bNoWrap is always true.
     ThreadedDeflater(sal_Int32 nSetLevel);
-    ~ThreadedDeflater();
+    ~ThreadedDeflater() COVERITY_NOEXCEPT_FALSE;
     void startDeflate(const css::uno::Sequence<sal_Int8>& rBuffer);
     void waitForTasks();
     bool finished() const;
