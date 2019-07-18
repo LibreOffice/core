@@ -120,8 +120,8 @@ int main ( int argc, char ** argv)
     {
         osl::DirectoryItem aDI;
         osl::FileStatus fileStatus( osl_FileStatus_Mask_FileName );
-        osl::DirectoryItem::get( aCommand.aExportFile, aDI );
-        aDI.getFileStatus(fileStatus);
+        (void)osl::DirectoryItem::get( aCommand.aExportFile, aDI );
+        (void)aDI.getFileStatus(fileStatus);
         pDataBase->SetExportFile( fileStatus.getFileName() );
     }
 
