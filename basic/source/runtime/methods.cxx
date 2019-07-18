@@ -2966,9 +2966,9 @@ void SbRtl_GetAttr(StarBASIC * pBasic, SbxArray & rPar, bool bWrite)
         else
         {
             DirectoryItem aItem;
-            DirectoryItem::get( getFullPath( rPar.Get(1)->GetOUString() ), aItem );
+            (void)DirectoryItem::get( getFullPath( rPar.Get(1)->GetOUString() ), aItem );
             FileStatus aFileStatus( osl_FileStatus_Mask_Attributes | osl_FileStatus_Mask_Type );
-            aItem.getFileStatus( aFileStatus );
+            (void)aItem.getFileStatus( aFileStatus );
             sal_uInt64 nAttributes = aFileStatus.getAttributes();
             bool bReadOnly = (nAttributes & osl_File_Attribute_ReadOnly) != 0;
 
