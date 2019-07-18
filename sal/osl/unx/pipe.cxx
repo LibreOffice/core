@@ -246,7 +246,7 @@ static oslPipe osl_psz_createPipe(const sal_Char *pszPipeName, oslPipeOptions Op
             depends on umask */
 
         if (!Security)
-            chmod(name.getStr(),S_IRWXU | S_IRWXG |S_IRWXO);
+            (void)chmod(name.getStr(),S_IRWXU | S_IRWXG |S_IRWXO);
 
         strcpy(pPipe->m_Name, name.getStr()); // safe, see check above
 
