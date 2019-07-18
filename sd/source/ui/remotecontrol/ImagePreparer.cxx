@@ -155,16 +155,19 @@ uno::Sequence<sal_Int8> ImagePreparer::preparePreview(
 
     xFilter->filter( aProps );
 
-    // FIXME: error handling.
+    File aFile(aFileURL);
+    if (aFile.open(0) != osl::File::E_None)
+        return uno::Sequence<sal_Int8>();
 
-    File aFile( aFileURL );
-    aFile.open(0);
     sal_uInt64 aRead;
     rSize = 0;
     aFile.getSize( rSize );
     uno::Sequence<sal_Int8> aContents( rSize );
 
     aFile.read( aContents.getArray(), rSize, aRead );
+    if (aRead != rSize)
+        aContents.realloc(aRead);
+
     aFile.close();
     File::remove( aFileURL );
     return aContents;
