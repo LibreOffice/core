@@ -131,7 +131,7 @@ class DemoRenderer
 
         void drawGrid()
         {
-            double d, dIncr = maSize.Width() / 3;
+            long d, dIncr = maSize.Width() / 3;
             for ( d = 0; d <= maSize.Width(); d += dIncr )
                 mxCanvas->drawLine( geometry::RealPoint2D( d, 0 ),
                                     geometry::RealPoint2D( d, maSize.Height() ),
