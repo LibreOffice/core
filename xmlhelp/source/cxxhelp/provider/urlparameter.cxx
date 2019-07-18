@@ -565,7 +565,7 @@ helpMatch(const char * URI) {
 static void *
 fileOpen(const char *URI) {
     osl::File *pRet = new osl::File(OUString(URI, strlen(URI), RTL_TEXTENCODING_UTF8));
-    pRet->open(osl_File_OpenFlag_Read);
+    (void)pRet->open(osl_File_OpenFlag_Read);
     return pRet;
 }
 
