@@ -707,8 +707,9 @@ void SAL_CALL SdStyleSheet::release(  ) throw ()
         dispose();
     }
     catch (RuntimeException const&)
-    { // don't break throw ()
-        css::uno::Any ex( cppu::getCaughtException() );
+    {
+        // don't break throw ()
+        css::uno::Any ex(DbgGetCaughtException());
         SAL_WARN( "sd", exceptionToString(ex) );
     }
     OSL_ASSERT( mrBHelper.bDisposed );
