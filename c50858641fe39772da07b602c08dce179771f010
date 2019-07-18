@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_e85e1fe5",
+        "filename": "sw/uiconfig/swriter/ui/notebookbar.ui",
+        "patchSetId": 3
+      },
+      "lineNbr": 17458,
+      "author": {
+        "id": 1001943
+      },
+      "writtenOn": "2019-07-18T14:33:52Z",
+      "side": 1,
+      "message": "Please change GtkToolButton to NotebookBarAddonsMergePoint",
+      "range": {
+        "startLine": 17458,
+        "startChar": 45,
+        "endLine": 17458,
+        "endChar": 58
+      },
+      "revId": "c50858641fe39772da07b602c08dce179771f010",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_8873e380",
+        "filename": "sw/uiconfig/swriter/ui/notebookbar.ui",
+        "patchSetId": 3
+      },
+      "lineNbr": 17494,
+      "author": {
+        "id": 1001943
+      },
+      "writtenOn": "2019-07-18T14:33:52Z",
+      "side": 1,
+      "message": "We don\u0027t need these placeholders",
+      "range": {
+        "startLine": 17494,
+        "startChar": 21,
+        "endLine": 17494,
+        "endChar": 26
+      },
+      "revId": "c50858641fe39772da07b602c08dce179771f010",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
