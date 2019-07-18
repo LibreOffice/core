@@ -891,6 +891,13 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf125894, "tdf125894.docx")
     assertXPath(pXmlDoc, "//w:ins");
 }
 
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf125546, "tdf125546.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    // compress redlines (it was 15)
+    assertXPath(pXmlDoc, "//w:rPrChange", 2);
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf118691, "tdf118691.docx")
 {
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
