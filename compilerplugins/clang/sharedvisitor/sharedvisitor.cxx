@@ -14,6 +14,7 @@
 #include "../badstatics.cxx"
 #include "../blockblock.cxx"
 #include "../charrightshift.cxx"
+#include "../cppunitassertequals.cxx"
 #include "../data.cxx"
 #include "../datamembershadow.cxx"
 #include "../dbgunhandledexception.cxx"
@@ -84,6 +85,7 @@ public:
         , badStatics( nullptr )
         , blockBlock( nullptr )
         , charRightShift( nullptr )
+        , cppunitAssertEquals( nullptr )
         , data( nullptr )
         , dataMemberShadow( nullptr )
         , dbgUnhandledException( nullptr )
@@ -143,6 +145,8 @@ public:
             blockBlock = nullptr;
         if( charRightShift && !charRightShift->preRun())
             charRightShift = nullptr;
+        if( cppunitAssertEquals && !cppunitAssertEquals->preRun())
+            cppunitAssertEquals = nullptr;
         if( data && !data->preRun())
             data = nullptr;
         if( dataMemberShadow && !dataMemberShadow->preRun())
@@ -253,6 +257,8 @@ public:
             blockBlock->postRun();
         if( charRightShift )
             charRightShift->postRun();
+        if( cppunitAssertEquals )
+            cppunitAssertEquals->postRun();
         if( data )
             data->postRun();
         if( dataMemberShadow )
@@ -369,6 +375,8 @@ public:
             blockBlock = static_cast< BlockBlock* >( plugin );
         else if( strcmp( name, "charrightshift" ) == 0 )
             charRightShift = static_cast< CharRightShift* >( plugin );
+        else if( strcmp( name, "cppunitassertequals" ) == 0 )
+            cppunitAssertEquals = static_cast< CppunitAssertEquals* >( plugin );
         else if( strcmp( name, "data" ) == 0 )
             data = static_cast< Data* >( plugin );
         else if( strcmp( name, "datamembershadow" ) == 0 )
@@ -773,6 +781,11 @@ public:
     {
         if( ignoreLocation( arg ))
             return true;
+        if( cppunitAssertEquals != nullptr )
+        {
+            if( !cppunitAssertEquals->VisitCallExpr( arg ))
+                cppunitAssertEquals = nullptr;
+        }
         if( dbgUnhandledException != nullptr )
         {
             if( !dbgUnhandledException->VisitCallExpr( arg ))
@@ -1425,6 +1438,7 @@ private:
         return badStatics != nullptr
             || blockBlock != nullptr
             || charRightShift != nullptr
+            || cppunitAssertEquals != nullptr
             || data != nullptr
             || dataMemberShadow != nullptr
             || dbgUnhandledException != nullptr
@@ -1479,6 +1493,7 @@ private:
     BadStatics* badStatics;
     BlockBlock* blockBlock;
     CharRightShift* charRightShift;
+    CppunitAssertEquals* cppunitAssertEquals;
     Data* data;
     DataMemberShadow* dataMemberShadow;
     DbgUnhandledException* dbgUnhandledException;
