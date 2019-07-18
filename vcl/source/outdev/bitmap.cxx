@@ -1235,6 +1235,8 @@ void OutputDevice::DrawTransformedBitmapEx(
             return;
         }
 
+        assert(bSheared || bRotated); // at this point we are either sheared or rotated or both
+
         // fallback; create transformed bitmap the hard way (back-transform
         // the pixels) and paint
         basegfx::B2DRange aVisibleRange(0.0, 0.0, 1.0, 1.0);
@@ -1245,7 +1247,7 @@ void OutputDevice::DrawTransformedBitmapEx(
         // to avoid crashes/resource problems (ca. 1500x3000 here)
         const Size& rOriginalSizePixel(rBitmapEx.GetSizePixel());
         const double fOrigArea(rOriginalSizePixel.Width() * rOriginalSizePixel.Height() * 0.5);
-        const double fOrigAreaScaled(bSheared || bRotated ? fOrigArea * 1.44 : fOrigArea);
+        const double fOrigAreaScaled(fOrigArea * 1.44);
         double fMaximumArea(std::min(4500000.0, std::max(1000000.0, fOrigAreaScaled)));
 
         if(!bMetafile)
