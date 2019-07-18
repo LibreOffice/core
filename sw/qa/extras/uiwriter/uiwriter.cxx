@@ -916,12 +916,11 @@ void SwUiWriterTest::testFdo70807()
     for (sal_Int32 i = 0; i < xStylesIter->getCount(); ++i)
     {
         uno::Reference<style::XStyle> xStyle(xStylesIter->getByIndex(i), uno::UNO_QUERY);
-        uno::Reference<container::XNamed> xName(xStyle, uno::UNO_QUERY);
 
         bool expectedUsedStyle = false;
         bool expectedUserDefined = false;
 
-        OUString styleName(xName->getName());
+        OUString styleName(xStyle->getName());
 
         // just these styles are user defined styles
         if (styleName == "pagestyle1" || styleName == "pagestyle2")
@@ -1113,7 +1112,7 @@ void SwUiWriterTest::testWatermarkPosition()
         const OUString rPageStyleName = "Default Style";
         uno::Reference<frame::XModel> xModel = pDoc->GetDocShell()->GetBaseModel();
         uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(xModel, uno::UNO_QUERY);
-        uno::Reference<container::XNameAccess> xStyleFamilies(xStyleFamiliesSupplier->getStyleFamilies(), uno::UNO_QUERY);
+        uno::Reference<container::XNameAccess> xStyleFamilies = xStyleFamiliesSupplier->getStyleFamilies();
         uno::Reference<container::XNameAccess> xStyleFamily(xStyleFamilies->getByName("PageStyles"), uno::UNO_QUERY);
         uno::Reference<beans::XPropertySet> xPageStyle(xStyleFamily->getByName(rPageStyleName), uno::UNO_QUERY);
 
@@ -1147,7 +1146,7 @@ void SwUiWriterTest::testWatermarkPosition()
 
         pEditShell->SetWatermark(aWatermark);
 
-        uno::Reference<css::drawing::XShape> xShape(getShape(1), uno::UNO_QUERY);
+        uno::Reference<css::drawing::XShape> xShape = getShape(1);
         CPPUNIT_ASSERT(xShape.is());
 
         SdrPage* pPage = pWrtShell->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
@@ -2195,7 +2194,7 @@ void SwUiWriterTest::testTextSearch()
     rIDCO.InsertPoolItem(*pCursor, aWeightItem);
     //Performing Search Operation and also covering the UNO coverage for setProperty
     uno::Reference<util::XSearchable> xSearch(mxComponent, uno::UNO_QUERY);
-    uno::Reference<util::XSearchDescriptor> xSearchDes(xSearch->createSearchDescriptor(), uno::UNO_QUERY);
+    uno::Reference<util::XSearchDescriptor> xSearchDes = xSearch->createSearchDescriptor();
     uno::Reference<util::XPropertyReplace> xProp(xSearchDes, uno::UNO_QUERY);
     //setting some properties
     uno::Sequence<beans::PropertyValue> aDescriptor( comphelper::InitPropertySequence({
@@ -2216,7 +2215,7 @@ void SwUiWriterTest::testTextSearch()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xIndex->getCount());
     //Replacing the searched string via XReplaceable
     uno::Reference<util::XReplaceable> xReplace(mxComponent, uno::UNO_QUERY);
-    uno::Reference<util::XReplaceDescriptor> xReplaceDes(xReplace->createReplaceDescriptor(), uno::UNO_QUERY);
+    uno::Reference<util::XReplaceDescriptor> xReplaceDes = xReplace->createReplaceDescriptor();
     uno::Reference<util::XPropertyReplace> xProp2(xReplaceDes, uno::UNO_QUERY);
     xProp2->setReplaceAttributes(aDescriptor);
     //checking that the proper attributes are there or not
@@ -2244,7 +2243,7 @@ void SwUiWriterTest::testTdf69282()
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
     SwDoc* source = pTextDoc->GetDocShell()->GetDoc();
-    uno::Reference<lang::XComponent> xSourceDoc(mxComponent, uno::UNO_QUERY);
+    uno::Reference<lang::XComponent> xSourceDoc = mxComponent;
     mxComponent.clear();
     SwDoc* target = createDoc();
     SwPageDesc* sPageDesc = source->MakePageDesc("SourceStyle");
@@ -2305,7 +2304,7 @@ void SwUiWriterTest::testTdf69282WithMirror()
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
     SwDoc* source = pTextDoc->GetDocShell()->GetDoc();
-    uno::Reference<lang::XComponent> xSourceDoc(mxComponent, uno::UNO_QUERY);
+    uno::Reference<lang::XComponent> xSourceDoc = mxComponent;
     mxComponent.clear();
     SwDoc* target = createDoc();
     SwPageDesc* sPageDesc = source->MakePageDesc("SourceStyle");
@@ -3335,8 +3334,8 @@ void SwUiWriterTest::testTdf90808()
 {
     createDoc();
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
-    uno::Reference<text::XTextRange> xTextRange(xTextDocument->getText(), uno::UNO_QUERY);
-    uno::Reference<text::XText> xText(xTextRange->getText(), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xTextRange = xTextDocument->getText();
+    uno::Reference<text::XText> xText = xTextRange->getText();
     uno::Reference<text::XParagraphCursor> xCursor(xText->createTextCursor(), uno::UNO_QUERY);
     //inserting text into document so that the paragraph is not empty
     xText->setString("Hello World!");
@@ -3649,7 +3648,7 @@ void SwUiWriterTest::testTdf88899()
     createDoc();
     uno::Reference<document::XDocumentPropertiesSupplier> xDocumentPropertiesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<document::XDocumentProperties> xProps(xDocumentPropertiesSupplier->getDocumentProperties());
-    uno::Reference<beans::XPropertyContainer> xUserProps(xProps->getUserDefinedProperties(), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertyContainer> xUserProps = xProps->getUserDefinedProperties();
     css::util::DateTime aDateTime = {sal_uInt32(1234567), sal_uInt16(3), sal_uInt16(3), sal_uInt16(3), sal_uInt16(10), sal_uInt16(11), sal_uInt16(2014), true};
     xUserProps->addProperty("dateTime", sal_Int16(beans::PropertyAttribute::OPTIONAL), uno::makeAny(aDateTime));
     uno::Reference<lang::XMultiServiceFactory> xFact(mxComponent, uno::UNO_QUERY);
@@ -3667,8 +3666,8 @@ void SwUiWriterTest::testTdf88899()
     xPropSet->setPropertyValue("NumberFormat", uno::makeAny(key));
     //Inserting Text Content
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
-    uno::Reference<text::XTextRange> xTextRange(xTextDocument->getText(), uno::UNO_QUERY);
-    uno::Reference<text::XText> xText(xTextRange->getText(), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xTextRange = xTextDocument->getText();
+    uno::Reference<text::XText> xText = xTextRange->getText();
     xText->insertTextContent(xTextRange, xTextField, true);
     //Retrieving the contents for verification
     CPPUNIT_ASSERT_EQUAL(OUString("11/10/14 03:03 AM"), xTextField->getPresentation(false));
@@ -3924,10 +3923,9 @@ void SwUiWriterTest::testEmbeddedDataSource()
     uno::Reference<sdbc::XDataSource> xDataSource(xDatabaseContext->getByName("calc-data-source"), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xDataSource.is());
     auto xConnection = xDataSource->getConnection("", "");
-    uno::Reference<container::XNameAccess> xTables(
+    uno::Reference<container::XNameAccess> xTables =
         css::uno::Reference<css::sdbcx::XTablesSupplier>(
-            xConnection, uno::UNO_QUERY_THROW)->getTables(),
-        uno::UNO_QUERY);
+            xConnection, uno::UNO_QUERY_THROW)->getTables();
     CPPUNIT_ASSERT(xTables.is());
     CPPUNIT_ASSERT(xTables->hasByName("Sheet1"));
     xConnection->close();
@@ -3940,11 +3938,10 @@ void SwUiWriterTest::testEmbeddedDataSource()
     // Data source has a table named Sheet1 after saving to a different directory.
     xDataSource.set(xDatabaseContext->getByName("calc-data-source"), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xDataSource.is());
-    xConnection.set(xDataSource->getConnection("", ""), uno::UNO_QUERY);
-    xTables.set(
+    xConnection = xDataSource->getConnection("", "");
+    xTables =
         css::uno::Reference<css::sdbcx::XTablesSupplier>(
-            xConnection, uno::UNO_QUERY_THROW)->getTables(),
-        uno::UNO_QUERY);
+            xConnection, uno::UNO_QUERY_THROW)->getTables();
     CPPUNIT_ASSERT(xTables.is());
     CPPUNIT_ASSERT(xTables->hasByName("Sheet1"));
     xConnection->close();
@@ -4598,8 +4595,8 @@ void SwUiWriterTest::testTdf96479()
 
         // Create cursor from bookmark
         uno::Reference<text::XTextContent> xTextContent(xBookmarksSupplier->getBookmarks()->getByName("original"), uno::UNO_QUERY);
-        uno::Reference<text::XTextRange> xRange(xTextContent->getAnchor(), uno::UNO_QUERY);
-        uno::Reference<text::XTextCursor> xCursor(xRange->getText()->createTextCursorByRange(xRange), uno::UNO_QUERY);
+        uno::Reference<text::XTextRange> xRange = xTextContent->getAnchor();
+        uno::Reference<text::XTextCursor> xCursor = xRange->getText()->createTextCursorByRange(xRange);
         CPPUNIT_ASSERT(xCursor->isCollapsed());
 
         // Remove bookmark
@@ -4654,8 +4651,8 @@ void SwUiWriterTest::testTdf96479()
         CPPUNIT_ASSERT(xBookmarksSupplier->getBookmarks()->hasByName("replacement"));
 
         uno::Reference<text::XTextContent> xTextContent(xBookmarksSupplier->getBookmarks()->getByName("replacement"), uno::UNO_QUERY);
-        uno::Reference<text::XTextRange> xRange(xTextContent->getAnchor(), uno::UNO_QUERY);
-        uno::Reference<text::XTextCursor> xCursor(xRange->getText()->createTextCursorByRange(xRange), uno::UNO_QUERY);
+        uno::Reference<text::XTextRange> xRange = xTextContent->getAnchor();
+        uno::Reference<text::XTextCursor> xCursor = xRange->getText()->createTextCursorByRange(xRange);
         CPPUNIT_ASSERT(!xCursor->isCollapsed());
 
         // Verify bookmark content via text node / PaM
@@ -4858,7 +4855,7 @@ void SwUiWriterTest::testRemoveBookmarkTextAndAddNew()
 
             // Create cursor from bookmark
             uno::Reference<text::XTextContent> xTextContent(xBookmarksSupplier->getBookmarks()->getByName("testBookmark"), uno::UNO_QUERY);
-            uno::Reference<text::XTextRange> xRange(xTextContent->getAnchor(), uno::UNO_QUERY);
+            uno::Reference<text::XTextRange> xRange = xTextContent->getAnchor();
             CPPUNIT_ASSERT_EQUAL(OUString(""), xRange->getString());
 
             // write "abc"
@@ -4925,7 +4922,7 @@ void SwUiWriterTest::testRemoveBookmarkTextAndAddNewAfterReload()
 
         // Create cursor from bookmark
         uno::Reference<text::XTextContent> xTextContent(xBookmarksSupplier->getBookmarks()->getByName("test"), uno::UNO_QUERY);
-        uno::Reference<text::XTextRange> xRange(xTextContent->getAnchor(), uno::UNO_QUERY);
+        uno::Reference<text::XTextRange> xRange = xTextContent->getAnchor();
         CPPUNIT_ASSERT_EQUAL(OUString(""), xRange->getString());
 
         // write "abc"
@@ -6375,7 +6372,7 @@ void SwUiWriterTest::testParagraphOfTextRange()
     // Assert that we get the right paragraph object.
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextViewCursorSupplier> xController(xModel->getCurrentController(), uno::UNO_QUERY);
-    uno::Reference<text::XTextRange> xViewCursor(xController->getViewCursor(), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xViewCursor = xController->getViewCursor();
     // This failed as there were no TextParagraph property.
     auto xParagraph = getProperty< uno::Reference<text::XTextRange> >(xViewCursor->getStart(), "TextParagraph");
     CPPUNIT_ASSERT_EQUAL(OUString("In section"), xParagraph->getString());
