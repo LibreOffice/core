@@ -1397,14 +1397,14 @@ void ScAcceptChgDlg::AppendChanges(const ScChangeTrack* pChanges,sal_uLong nStar
 void ScAcceptChgDlg::RemoveEntries(sal_uLong nStartAction,sal_uLong nEndAction)
 {
     weld::TreeView& rTreeView = pTheView->GetWidget();
-    rTreeView.freeze();
 
     ScRedlinData *pEntryData=nullptr;
     std::unique_ptr<weld::TreeIter> xEntry(rTreeView.make_iterator());
     if (rTreeView.get_cursor(xEntry.get()))
         pEntryData = reinterpret_cast<ScRedlinData*>(rTreeView.get_id(*xEntry).toInt64());
 
-    rTreeView.get_iter_first(*xEntry);
+    if (!rTreeView.get_iter_first(*xEntry))
+        return;
 
     sal_uLong nAction=0;
     if (pEntryData)
@@ -1427,6 +1427,8 @@ void ScAcceptChgDlg::RemoveEntries(sal_uLong nStartAction,sal_uLong nEndAction)
         }
     }
     while (rTreeView.iter_next(*xEntry));
+
+    rTreeView.freeze();
 
     // MUST do it backwards, don't delete parents before children and GPF
     for (auto it = aIdsToRemove.rbegin(); it != aIdsToRemove.rend(); ++it)
