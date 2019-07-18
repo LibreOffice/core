@@ -1091,7 +1091,7 @@ OUString ComboBoxUIObject::get_action(VclEventId nEvent) const
     if (nEvent == VclEventId::ComboboxSelect)
     {
         sal_Int32 nPos = mxComboBox->GetSelectedEntryPos();
-        return "select in '" + mxComboBox->get_id() +
+        return "Select in '" + mxComboBox->get_id() +
                 "' ComboBox item number " + OUString::number(nPos) +
                 " from " + get_top_parent(mxComboBox)->get_id();
     }

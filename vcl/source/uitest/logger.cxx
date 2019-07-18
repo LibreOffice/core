@@ -292,7 +292,7 @@ void UITestLogger::logEvent(const EventDescription& rDescription)
     OUString aLogLine ;
     //first check on general commands
     if(rDescription.aAction=="SET"){
-        aLogLine =  "Set Zoom to be "  + GetValueInMapWithIndex(rDescription.aParameters,0);
+        aLogLine =  "Set Zoom to "  + GetValueInMapWithIndex(rDescription.aParameters,0);
     }
     else if(rDescription.aAction=="SIDEBAR"){
         aLogLine = "From SIDEBAR Choose " + aParameterString;
@@ -308,7 +308,7 @@ void UITestLogger::logEvent(const EventDescription& rDescription)
         else if(rDescription.aAction=="SELECT"){
             OUString to = GetValueInMapWithIndex(rDescription.aParameters,0);
             OUString from =   GetValueInMapWithIndex(rDescription.aParameters,1);
-            aLogLine =  "Select from Pos "  +  from + " to " + to ;
+            aLogLine =  "Select from Pos "  +  from + " to Pos" + to ;
         }
     }
     else if(rDescription.aID=="grid_window"){
