@@ -319,7 +319,7 @@ void ODatabaseExport::insertValueIntoColumn()
                                 if ( eNumLang != LANGUAGE_NONE )
                                 {
                                     nNumberFormat2 = m_pFormatter->GetFormatForLanguageIfBuiltIn( nNumberFormat2, eNumLang );
-                                    m_pFormatter->IsNumberFormat( m_sTextToken, nNumberFormat2, fOutNumber );
+                                    (void)m_pFormatter->IsNumberFormat( m_sTextToken, nNumberFormat2, fOutNumber );
                                 }
                                 nNumberFormat = static_cast<sal_Int32>(nNumberFormat2);
                             }
