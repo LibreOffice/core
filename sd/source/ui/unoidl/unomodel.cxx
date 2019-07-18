@@ -329,8 +329,9 @@ void SAL_CALL SdXImpressDocument::release() throw ( )
             dispose();
         }
         catch (const uno::RuntimeException&)
-        { // don't break throw ()
-            css::uno::Any ex( cppu::getCaughtException() );
+        {
+            // don't break throw ()
+            css::uno::Any ex(DbgGetCaughtException());
             SAL_WARN( "sd", exceptionToString(ex) );
         }
     }
