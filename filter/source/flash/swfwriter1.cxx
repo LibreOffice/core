@@ -740,14 +740,10 @@ sal_uInt16 Writer::defineBitmap( const BitmapEx &bmpSource, sal_Int32 nJPEGQuali
         alpha_compressed_size = uLongf(width * height + static_cast<sal_uInt32>(raw_size/100) + 12);
         pAlphaCompressed.reset(new sal_uInt8[ compressed_size ]);
 
-#ifdef DBG_UTIL
         if(compress2(pAlphaCompressed.get(), &alpha_compressed_size, aAlphaData.data(), width * height, Z_BEST_COMPRESSION) != Z_OK)
         {
             SAL_WARN( "filter.flash", "compress2 failed!" ); ((void)0);
         }
-#else
-        compress2(pAlphaCompressed.get(), &alpha_compressed_size, aAlphaData.data(), width * height, Z_BEST_COMPRESSION);
-#endif
     }
 
     // clear these early for less peak memory usage
