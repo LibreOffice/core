@@ -2557,6 +2557,8 @@ void ScTabView::DoDPFieldPopup(OUString const & rPivotTableName, sal_Int32 nDime
 
     ScDPCollection* pDPCollection = rDocument.GetDPCollection();
     ScDPObject* pDPObject = pDPCollection->GetByName(rPivotTableName);
+    if (!pDPObject)
+        return;
 
     pDPObject->BuildAllDimensionMembers();
 
