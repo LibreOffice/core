@@ -635,20 +635,19 @@ void DlgEditor::CreateDefaultObject()
 
         // insert object into drawing page
         SdrPageView* pPageView = pDlgEdView->GetSdrPageView();
-        pDlgEdView->InsertObjectAtView( pDlgEdObj, *pPageView);
-
-        // start listening
-        pDlgEdObj->StartListening();
+        if (pDlgEdView->InsertObjectAtView(pDlgEdObj, *pPageView))
+        {
+            // start listening
+            pDlgEdObj->StartListening();
+        }
     }
 }
-
 
 void DlgEditor::Cut()
 {
     Copy();
     Delete();
 }
-
 
 static void implCopyStreamToByteSequence( const Reference< XInputStream >& xStream,
     Sequence< sal_Int8 >& bytes )
