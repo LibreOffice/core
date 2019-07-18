@@ -1347,6 +1347,7 @@ namespace sw { namespace mark
             if (m_pLastActiveFieldmark != pFieldBM)
             {
                 auto pFormField = dynamic_cast<FieldmarkWithDropDownButton*>(pFieldBM);
+                assert(pFormField);
                 pFormField->ShowButton(&rEditWin);
                 pNewActiveFieldmark = pFormField;
             }
