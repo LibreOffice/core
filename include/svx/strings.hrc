@@ -1231,7 +1231,7 @@
 #define RID_SVXSTR_INSERT_TEXT                              NC_("RID_SVXSTR_INSERT_TEXT", "Insert")
 #define RID_SVXSTR_XMLSEC_SIG_OK                            NC_("RID_SVXSTR_XMLSEC_SIG_OK", "Digital Signature: The document signature is OK.")
 #define RID_SVXSTR_XMLSEC_SIG_OK_NO_VERIFY                  NC_("RID_SVXSTR_XMLSEC_SIG_OK_NO_VERIFY", "Digital Signature: The document signature is OK, but the certificates could not be validated.")
-#define RID_SVXSTR_XMLSEC_SIG_NOT_OK                        NC_("RID_SVXSTR_XMLSEC_SIG_NOT_OK", "Digital Signature: The document signature does not match the document content. We strongly recommend you to do not trust this document.")
+#define RID_SVXSTR_XMLSEC_SIG_NOT_OK                        NC_("RID_SVXSTR_XMLSEC_SIG_NOT_OK", "Digital Signature: The document signature does not match the document content. We strongly recommend you not to trust this document.")
 #define RID_SVXSTR_XMLSEC_NO_SIG                            NC_("RID_SVXSTR_XMLSEC_NO_SIG", "Digital Signature: The document is not signed.")
 #define RID_SVXSTR_XMLSEC_SIG_CERT_OK_PARTIAL_SIG           NC_("RID_SVXSTR_XMLSEC_SIG_CERT_OK_PARTIAL_SIG", "Digital Signature: The document signature and the certificate are OK, but not all parts of the document are signed.")
 #define RID_SVXSTR_DOC_MODIFIED_YES                         NC_("RID_SVXSTR_DOC_MODIFIED_YES", "The document has been modified. Click to save the document.")
