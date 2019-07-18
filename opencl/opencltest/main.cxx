@@ -110,9 +110,9 @@ static void runTest(const char* deviceName, const char* devicePlatform)
     cl_program program = clCreateProgramWithSource(context, 1, source, sourceSize, &state);
     openclcheck(state);
     state = clBuildProgram(program, 1, &deviceId, nullptr, nullptr, nullptr);
+#ifdef DBG_UTIL
     if (state != CL_SUCCESS)
     {
-#ifdef DBG_UTIL
         size_t length;
         status
             = clGetProgramBuildInfo(program, deviceId, CL_PROGRAM_BUILD_LOG, 0, nullptr, &length);
@@ -122,10 +122,9 @@ static void runTest(const char* deviceName, const char* devicePlatform)
         error[length] = '\0';
         cerr << "OpenCL driver check build error:" << error.data() << endl;
         abort();
-#else
-        openclcheck(state);
-#endif
     }
+#endif
+    openclcheck(state);
     cl_kernel kernel = clCreateKernel(program, "testFunction", &state);
     openclcheck(state);
 
