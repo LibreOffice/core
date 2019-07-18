@@ -6946,7 +6946,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                         nPos--;
                                         FE = std::find_if(FE, FieldList.end(),
                                             [&nPos](const std::unique_ptr<PPTFieldEntry>& rxField) {return rxField->nPos <= nPos;});
-                                        if ( !(FE < FieldList.end()) )
+                                        if (FE == FieldList.end())
                                             break;
 
                                         if ( (*FE)->nPos == nPos )
