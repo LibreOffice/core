@@ -1371,7 +1371,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 rWrtSh.InvalidateWindows( rWrtSh.GetView().GetVisArea() );
                 rWrtSh.UpdateCursor(); // cursor position might be invalid
                 // Hide the button here and make it visible later, to make transparent background work with SAL_USE_VCLPLUGIN=gen
-                dynamic_cast<::sw::mark::DropDownFieldmark*>(pFieldBM)->HideButton();
+                dynamic_cast<::sw::mark::DropDownFieldmark&>(*pFieldBM).HideButton();
             }
         }
         else if ( pFieldBM && pFieldBM->GetFieldname() == ODF_FORMDATE )
