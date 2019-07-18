@@ -130,7 +130,7 @@ namespace desktop {
                 // remove file and create new
                 File::remove( m_aLockname );
                 File aFile(m_aLockname);
-                aFile.open( osl_File_OpenFlag_Create );
+                (void)aFile.open( osl_File_OpenFlag_Create );
                 aFile.close( );
                 syncToFile( );
                 m_bRemove = true;
