@@ -247,7 +247,8 @@ sal_uInt64 OslStream::SeekPos( sal_uInt64 nPos )
     }
     OSL_VERIFY(rc == ::osl::FileBase::E_None);
     sal_uInt64 nRealPos(0);
-    maFile.getPos( nRealPos );
+    rc = maFile.getPos( nRealPos );
+    OSL_VERIFY(rc == ::osl::FileBase::E_None);
     return nRealPos;
 }
 
