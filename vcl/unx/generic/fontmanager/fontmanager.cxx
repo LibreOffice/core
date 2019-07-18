@@ -236,10 +236,12 @@ std::vector<std::unique_ptr<PrintFontManager::PrintFont>> PrintFontManager::anal
                 if (aFile.open(osl_File_OpenFlag_Read | osl_File_OpenFlag_NoLock) == osl::File::E_None)
                 {
                     osl::DirectoryItem aItem;
-                    osl::DirectoryItem::get( aURL, aItem );
-                    osl::FileStatus aFileStatus( osl_FileStatus_Mask_FileSize );
-                    aItem.getFileStatus( aFileStatus );
-                    fileSize = aFileStatus.getFileSize();
+                    if (osl::DirectoryItem::get(aURL, aItem) == osl::File::E_None)
+                    {
+                        osl::FileStatus aFileStatus( osl_FileStatus_Mask_FileSize );
+                        aItem.getFileStatus( aFileStatus );
+                        fileSize = aFileStatus.getFileSize();
+                    }
                 }
             }
 
