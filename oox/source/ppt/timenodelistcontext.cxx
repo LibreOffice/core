@@ -602,7 +602,7 @@ namespace oox { namespace ppt {
                         if (!tav.msFormula.isEmpty())
                         {
                             OUString sFormula = tav.msFormula;
-                            convertMeasure(sFormula);
+                            (void)convertMeasure(sFormula);
                             aProps[NP_FORMULA] <<= sFormula;
                         }
 
