@@ -358,9 +358,9 @@ Reference<XInterface> OPoolCollection::openNode(const OUString& _rPath,const Ref
         SAL_WARN("connectivity.cpool", "::openNode: there is no element named " <<
                  _rPath << "!");
     }
-    catch(Exception&)
+    catch(const Exception&)
     {
-        css::uno::Any ex( cppu::getCaughtException() );
+        css::uno::Any ex(DbgGetCaughtException());
         SAL_WARN("connectivity.cpool", "OConfigurationNode::openNode: caught an exception while retrieving the node! " << exceptionToString(ex));
     }
     return xNode;
