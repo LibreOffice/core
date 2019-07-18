@@ -4500,7 +4500,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                             // Try to make absolute any relative URLs, except
                             // for relative same-document URLs that only contain
                             // a fragment part:
-                            if (!sURL.startsWith("#") && !m_aSaveOpt.IsSaveRelFSys()) {
+                            if (!sURL.startsWith("#")) {
                                 try {
                                     sURL = rtl::Uri::convertRelToAbs(
                                         m_aBaseUrl, sURL);
