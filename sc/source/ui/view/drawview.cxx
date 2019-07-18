@@ -804,7 +804,7 @@ bool ScDrawView::GetObjectIsMarked(  const SdrObject* pObject  )
     return  bisMarked;
 }
 
-void ScDrawView::InsertObjectSafe(SdrObject* pObj, SdrPageView& rPV)
+bool ScDrawView::InsertObjectSafe(SdrObject* pObj, SdrPageView& rPV)
 {
     SdrInsertFlags nOptions=SdrInsertFlags::NONE;
     // Do not change marks when the ole object is active
@@ -817,7 +817,7 @@ void ScDrawView::InsertObjectSafe(SdrObject* pObj, SdrPageView& rPV)
             nOptions |= SdrInsertFlags::DONTMARK;
     }
 
-    InsertObjectAtView( pObj, rPV, nOptions );
+    return InsertObjectAtView(pObj, rPV, nOptions);
 }
 
 SdrObject* ScDrawView::GetMarkedNoteCaption( ScDrawObjData** ppCaptData )

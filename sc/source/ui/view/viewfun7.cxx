@@ -447,15 +447,15 @@ bool ScViewFunc::PasteGraphic( const Point& rPos, const Graphic& rGraphic,
     pGrafObj->SetName(aName);
 
     // don't mark if OLE
-    pScDrawView->InsertObjectSafe(pGrafObj, *pScDrawView->GetSdrPageView());
+    bool bSuccess = pScDrawView->InsertObjectSafe(pGrafObj, *pScDrawView->GetSdrPageView());
 
     // SetGraphicLink has to be used after inserting the object,
     // otherwise an empty graphic is swapped in and the contact stuff crashes.
     // See #i37444#.
-    if (!rFile.isEmpty())
+    if (bSuccess && !rFile.isEmpty())
         pGrafObj->SetGraphicLink( rFile, ""/*TODO?*/, rFilter );
 
-    return true;
+    return bSuccess;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
