@@ -459,9 +459,8 @@ public:
 
     SaveInData*     GetSaveInData() { return pCurrentSaveInData; }
 
-    int             AddFunction(int nTarget = -1,
-                                bool bFront = false,
-                                bool bAllowDuplicates = false);
+    int             AddFunction(int nTarget,
+                                bool bAllowDuplicates);
 
     virtual void    MoveEntry( bool bMoveUp );
 

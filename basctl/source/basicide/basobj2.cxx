@@ -249,7 +249,7 @@ OUString ChooseMacro(weld::Window* pParent,
     OUString aScriptURL;
     SbMethod* pMethod = nullptr;
 
-    MacroChooser aChooser(pParent, xDocFrame, true);
+    MacroChooser aChooser(pParent, xDocFrame);
     if ( bChooseOnly || !SvtModuleOptions::IsBasicIDE() )
         aChooser.SetMode(MacroChooser::ChooseOnly);
 

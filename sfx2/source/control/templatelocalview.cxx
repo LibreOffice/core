@@ -84,8 +84,8 @@ bool ViewFilter_Application::operator () (const ThumbnailViewItem *pItem)
     return true;
 }
 
-TemplateLocalView::TemplateLocalView ( vcl::Window* pParent, WinBits nWinStyle)
-    : ThumbnailView(pParent, nWinStyle),
+TemplateLocalView::TemplateLocalView ( vcl::Window* pParent)
+    : ThumbnailView(pParent, WB_TABSTOP),
       mnCurRegionId(0),
       maSelectedItem(nullptr),
       mnThumbnailWidth(TEMPLATE_THUMBNAIL_MAX_WIDTH),

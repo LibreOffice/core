@@ -865,7 +865,7 @@ void SvxToolbarConfigPage::AddFunction(int nTarget)
 
     // Add the command to the contents listbox of the selected toolbar
     int nNewLBEntry =
-        SvxConfigPage::AddFunction(nTarget, /*bFront*/false, true/*bAllowDuplicates*/);
+        SvxConfigPage::AddFunction(nTarget, true/*bAllowDuplicates*/);
 
     if (nNewLBEntry == -1)
         return;

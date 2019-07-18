@@ -295,7 +295,7 @@ namespace
         typedef Color (*ColorFunc)(Color);
         typedef Color (*ColorDistFunc)(Color, Color);
 
-                        LineListBox( vcl::Window* pParent, WinBits nWinStyle = WB_BORDER );
+                        LineListBox( vcl::Window* pParent );
         virtual         ~LineListBox() override;
         virtual void    dispose() override;
 
@@ -442,8 +442,8 @@ namespace
         rBmp = aVirDev->GetBitmapEx( Point(), Size( aSize.Width(), n1+nDist+n2 ) );
     }
 
-    LineListBox::LineListBox( vcl::Window* pParent, WinBits nWinStyle ) :
-        ListBox( pParent, nWinStyle ),
+    LineListBox::LineListBox( vcl::Window* pParent ) :
+        ListBox( pParent, WB_BORDER ),
         m_nWidth( 5 ),
         m_sNone( ),
         aVirDev( VclPtr<VirtualDevice>::Create() ),
