@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_7df96f7e",
+        "filename": "chart2/source/tools/InternalDataProvider.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 546,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2019-07-18T09:25:57Z",
+      "side": 1,
+      "message": "unnecessary cosmetic change",
+      "range": {
+        "startLine": 546,
+        "startChar": 49,
+        "endLine": 546,
+        "endChar": 52
+      },
+      "revId": "5c0fbb9cae2f93c3178184f03f35731a7af176c9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_9df6c38f",
+        "filename": "chart2/source/tools/InternalDataProvider.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 560,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2019-07-18T09:25:57Z",
+      "side": 1,
+      "message": "unnecessary cosmetic change",
+      "range": {
+        "startLine": 560,
+        "startChar": 45,
+        "endLine": 560,
+        "endChar": 48
+      },
+      "revId": "5c0fbb9cae2f93c3178184f03f35731a7af176c9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_3df3f7a0",
+        "filename": "chart2/source/tools/InternalDataProvider.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 571,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2019-07-18T09:25:57Z",
+      "side": 1,
+      "message": "unnecessary cosmetic change",
+      "range": {
+        "startLine": 571,
+        "startChar": 37,
+        "endLine": 571,
+        "endChar": 40
+      },
+      "revId": "5c0fbb9cae2f93c3178184f03f35731a7af176c9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_5df02b91",
+        "filename": "chart2/source/tools/InternalDataProvider.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 609,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2019-07-18T09:25:57Z",
+      "side": 1,
+      "message": "unnecessary cosmetic change",
+      "range": {
+        "startLine": 609,
+        "startChar": 39,
+        "endLine": 609,
+        "endChar": 42
+      },
+      "revId": "5c0fbb9cae2f93c3178184f03f35731a7af176c9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_1d307356",
+        "filename": "chart2/source/tools/InternalDataProvider.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 640,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2019-07-18T09:25:57Z",
+      "side": 1,
+      "message": "unnecessary cosmetic change",
+      "range": {
+        "startLine": 640,
+        "startChar": 62,
+        "endLine": 640,
+        "endChar": 65
+      },
+      "revId": "5c0fbb9cae2f93c3178184f03f35731a7af176c9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_bd34e74b",
+        "filename": "chart2/source/tools/InternalDataProvider.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 642,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2019-07-18T09:25:57Z",
+      "side": 1,
+      "message": "unnecessary cosmetic change",
+      "range": {
+        "startLine": 642,
+        "startChar": 86,
+        "endLine": 642,
+        "endChar": 89
+      },
+      "revId": "5c0fbb9cae2f93c3178184f03f35731a7af176c9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
