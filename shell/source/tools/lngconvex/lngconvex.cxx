@@ -108,7 +108,7 @@ OUString get_absolute_path(
     osl::FileBase::getFileURLFromSystemPath(RelDir, rel_url);
 
     OUString abs_url;
-    osl::FileBase::getAbsoluteFileURL(base_url, rel_url, abs_url);
+    (void)osl::FileBase::getAbsoluteFileURL(base_url, rel_url, abs_url);
 
     OUString abs_sys_path;
     osl::FileBase::getSystemPathFromFileURL(abs_url, abs_sys_path);
