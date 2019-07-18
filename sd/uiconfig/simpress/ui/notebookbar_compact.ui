@@ -14052,9 +14052,6 @@
                     <property name="position">11</property>
                   </packing>
                 </child>
-                <style>
-                  <class name="Context-Draw"/>
-                </style>
               </object>
               <packing>
                 <property name="position">9</property>
@@ -14069,7 +14066,6 @@
                 <style>
                   <class name="context-Draw"/>
                   <class name="context-DrawLine"/>
-                  <class name="context-3DObject"/>
                   <class name="context-MultiObject"/>
                 </style>
               </object>
@@ -15135,10 +15131,6 @@
                     <property name="position">8</property>
                   </packing>
                 </child>
-                <style>
-                  <class name="Context-Frame"/>
-                  <class name="Context-OLE"/>
-                </style>
               </object>
               <packing>
                 <property name="position">10</property>
@@ -16366,9 +16358,6 @@
                     <property name="position">8</property>
                   </packing>
                 </child>
-                <style>
-                  <class name="context-Media"/>
-                </style>
               </object>
               <packing>
                 <property name="position">11</property>
@@ -17699,9 +17688,6 @@
                     <property name="position">8</property>
                   </packing>
                 </child>
-                <style>
-                  <class name="context-Form"/>
-                </style>
               </object>
               <packing>
                 <property name="position">12</property>
@@ -19563,9 +19549,6 @@
                     <property name="position">8</property>
                   </packing>
                 </child>
-                <style>
-                  <class name="context-Form"/>
-                </style>
               </object>
               <packing>
                 <property name="position">12</property>
