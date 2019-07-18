@@ -402,7 +402,7 @@ TVChildTarget::TVChildTarget( const Reference< XComponentContext >& xContext )
         len = configData.vFileLen[--j];
         std::unique_ptr<char[]> s(new char[ int(len) ]);  // the buffer to hold the installed files
         osl::File aFile( configData.vFileURL[j] );
-        aFile.open( osl_File_OpenFlag_Read );
+        (void)aFile.open( osl_File_OpenFlag_Read );
         aFile.read( s.get(),len,ret );
         aFile.close();
 
