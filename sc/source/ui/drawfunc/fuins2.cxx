@@ -347,9 +347,9 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawView*
                 aName,
                 aRect);
             SdrPageView* pPV = pView->GetSdrPageView();
-            pView->InsertObjectAtView(pObj, *pPV);
+            bool bSuccess = pView->InsertObjectAtView(pObj, *pPV);
 
-            if ( nAspect != embed::Aspects::MSOLE_ICON )
+            if (bSuccess && nAspect != embed::Aspects::MSOLE_ICON)
             {
                 //  Math objects change their object size during InsertObject.
                 //  New size must be set in SdrObject, or a wrong scale will be set at
@@ -380,7 +380,7 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawView*
                     // Object selected, activate Draw-Shell
                     rViewShell.SetDrawShell( true );
                 }
-                else
+                else if (bSuccess)
                 {
                     rViewShell.ActivateObject(pObj, embed::EmbedVerbs::MS_OLEVERB_SHOW);
                 }
