@@ -1167,8 +1167,8 @@ TaskManager::move( sal_Int32 CommandId,
 
             osl::FileStatus aStatus(osl_FileStatus_Mask_Type|osl_FileStatus_Mask_LinkTargetURL);
             osl::DirectoryItem aItem;
-            osl::DirectoryItem::get(dstUnqPath,aItem);
-            aItem.getFileStatus(aStatus);
+            (void)osl::DirectoryItem::get(dstUnqPath,aItem);
+            (void)aItem.getFileStatus(aStatus);
 
             if( aStatus.isValid(osl_FileStatus_Mask_Type)          &&
                 aStatus.isValid(osl_FileStatus_Mask_LinkTargetURL) &&
