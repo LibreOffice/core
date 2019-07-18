@@ -69,7 +69,7 @@ int main(int argc, char **argv)
         OUString cwd;
         osl_getProcessWorkingDir(&cwd.pData);
 
-        osl::File::getAbsoluteFileURL(cwd, sDir, sDir);
+        (void)osl::File::getAbsoluteFileURL(cwd, sDir, sDir);
 
         HelpIndexer indexer(
             OUString(lang.c_str(), lang.size(), osl_getThreadTextEncoding()),
