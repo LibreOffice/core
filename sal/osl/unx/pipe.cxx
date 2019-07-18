@@ -208,7 +208,8 @@ static oslPipe osl_psz_createPipe(const sal_Char *pszPipeName, oslPipeOptions Op
     SAL_INFO("sal.osl.pipe", "new pipe on fd " << pPipe->m_Socket << " '" << name << "'");
 
     addr.sun_family = AF_UNIX;
-    strcpy(addr.sun_path, name.getStr()); // safe, see check above
+    // coverity[fixed_size_dest : FALSE] - safe, see check above
+    strcpy(addr.sun_path, name.getStr());
 #if defined(FREEBSD)
     len = SUN_LEN(&addr);
 #else
