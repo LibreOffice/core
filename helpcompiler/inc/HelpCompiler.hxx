@@ -63,7 +63,7 @@ namespace fs
             OString tmp(in.c_str());
             OUString ustrSystemPath(OStringToOUString(tmp, getThreadTextEncoding()));
             osl::File::getFileURLFromSystemPath(ustrSystemPath, data);
-            osl::File::getAbsoluteFileURL(sWorkingDir, data, data);
+            (void)osl::File::getAbsoluteFileURL(sWorkingDir, data, data);
         }
         path(const std::string &FileURL)
         {
