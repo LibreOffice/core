@@ -66,7 +66,6 @@ sal_Int32 SAL_CALL OSLInputStreamWrapper::readBytes(css::uno::Sequence< sal_Int8
     return sal::static_int_cast< sal_Int32 >(nRead);
 }
 
-
 sal_Int32 SAL_CALL OSLInputStreamWrapper::readSomeBytes(css::uno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead)
 {
     if (!m_pFile)
@@ -78,7 +77,6 @@ sal_Int32 SAL_CALL OSLInputStreamWrapper::readSomeBytes(css::uno::Sequence< sal_
     return readBytes(aData, nMaxBytesToRead);
 }
 
-
 void SAL_CALL OSLInputStreamWrapper::skipBytes(sal_Int32 nBytesToSkip)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -86,16 +84,15 @@ void SAL_CALL OSLInputStreamWrapper::skipBytes(sal_Int32 nBytesToSkip)
         throw css::io::NotConnectedException(OUString(), static_cast<css::uno::XWeak*>(this));
 
     sal_uInt64 nCurrentPos;
-    m_pFile->getPos(nCurrentPos);
+    FileBase::RC eError = m_pFile->getPos(nCurrentPos);
+    if (eError != FileBase::E_None)
+        throw css::io::NotConnectedException(OUString(), static_cast<css::uno::XWeak*>(this));
 
     sal_uInt64 nNewPos = nCurrentPos + nBytesToSkip;
-    FileBase::RC eError = m_pFile->setPos(osl_Pos_Absolut, nNewPos);
+    eError = m_pFile->setPos(osl_Pos_Absolut, nNewPos);
     if (eError != FileBase::E_None)
-    {
         throw css::io::NotConnectedException(OUString(), static_cast<css::uno::XWeak*>(this));
-    }
 }
-
 
 sal_Int32 SAL_CALL OSLInputStreamWrapper::available()
 {
