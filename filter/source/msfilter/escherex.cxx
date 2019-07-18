@@ -1576,7 +1576,7 @@ bool EscherPropertyContainer::CreateGraphicProperties(const uno::Reference<beans
             // actually supported by mso.
             INetURLObject   aTmp( aGraphicUrl );
             GraphicDescriptor aDescriptor(aTmp);
-            aDescriptor.Detect();
+            (void)aDescriptor.Detect();
             const GraphicFileFormat nFormat = aDescriptor.GetFileFormat();
 
             // can MSO handle it?
