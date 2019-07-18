@@ -395,10 +395,10 @@ void scaleDown32bit(ScaleContext &rCtx, long nStartY, long nEndY)
                                 1 : (rCtx.maMapIX[nRight] - rCtx.maMapIX[nLeft]);
             }
 
-            long nSum1 = 0;
-            long nSum2 = 0;
-            long nSum3 = 0;
-            long nSum4 = 0;
+            int nSum1 = 0;
+            int nSum2 = 0;
+            int nSum3 = 0;
+            int nSum4 = 0;
             BilinearWeightType nTotalWeightY = 0;
 
             for (long i = 0; i<= nLineRange; i++)
@@ -406,10 +406,10 @@ void scaleDown32bit(ScaleContext &rCtx, long nStartY, long nEndY)
                 Scanline pTmpY = rCtx.mpSrc->GetScanline(nLineStart + i);
                 Scanline pTmpX = pTmpY + constColorComponents * nRowStart;
 
-                long nSumRow1 = 0;
-                long nSumRow2 = 0;
-                long nSumRow3 = 0;
-                long nSumRow4 = 0;
+                int nSumRow1 = 0;
+                int nSumRow2 = 0;
+                int nSumRow3 = 0;
+                int nSumRow4 = 0;
                 BilinearWeightType nTotalWeightX = 0;
 
                 for (long j = 0; j <= nRowRange; j++)
@@ -531,17 +531,17 @@ void scaleDownPalette8bit(ScaleContext &rCtx, long nStartY, long nEndY)
                 nRowRange = ( rCtx.maMapIX[ nRight ] == rCtx.maMapIX[ nLeft ] )? 1 : ( rCtx.maMapIX[ nRight ] - rCtx.maMapIX[ nLeft ] );
             }
 
-            long nSumR = 0;
-            long nSumG = 0;
-            long nSumB = 0;
+            int nSumR = 0;
+            int nSumG = 0;
+            int nSumB = 0;
             BilinearWeightType nTotalWeightY = 0;
 
             for(long i = 0; i<= nLineRange; i++)
             {
                 Scanline pTmpY = rCtx.mpSrc->GetScanline( nLineStart + i );
-                long nSumRowR = 0;
-                long nSumRowG = 0;
-                long nSumRowB = 0;
+                int nSumRowR = 0;
+                int nSumRowG = 0;
+                int nSumRowB = 0;
                 BilinearWeightType nTotalWeightX = 0;
 
                 for(long j = 0; j <= nRowRange; j++)
@@ -655,16 +655,16 @@ void scaleDownPaletteGeneral(ScaleContext &rCtx, long nStartY, long nEndY)
                 nRowRange = ( rCtx.maMapIX[ nRight ] == rCtx.maMapIX[ nLeft ] )? 1 : ( rCtx.maMapIX[ nRight ] - rCtx.maMapIX[ nLeft ] );
             }
 
-            long nSumR = 0;
-            long nSumG = 0;
-            long nSumB = 0;
+            int nSumR = 0;
+            int nSumG = 0;
+            int nSumB = 0;
             BilinearWeightType nTotalWeightY = 0;
 
             for(long i = 0; i<= nLineRange; i++)
             {
-                long nSumRowR = 0;
-                long nSumRowG = 0;
-                long nSumRowB = 0;
+                int nSumRowR = 0;
+                int nSumRowG = 0;
+                int nSumRowB = 0;
                 BilinearWeightType nTotalWeightX = 0;
 
                 Scanline pScanlineSrc = rCtx.mpSrc->GetScanline( nLineStart + i );
@@ -915,16 +915,16 @@ void scaleDownNonPaletteGeneral(ScaleContext &rCtx, long nStartY, long nEndY)
                 nRowRange = ( rCtx.maMapIX[ nRight ] == rCtx.maMapIX[ nLeft ] )? 1 : ( rCtx.maMapIX[ nRight ] - rCtx.maMapIX[ nLeft ] );
             }
 
-            long nSumR = 0;
-            long nSumG = 0;
-            long nSumB = 0;
+            int nSumR = 0;
+            int nSumG = 0;
+            int nSumB = 0;
             BilinearWeightType nTotalWeightY = 0;
 
             for(long i = 0; i<= nLineRange; i++)
             {
-                long nSumRowR = 0;
-                long nSumRowG = 0;
-                long nSumRowB = 0;
+                int nSumRowR = 0;
+                int nSumRowG = 0;
+                int nSumRowB = 0;
                 BilinearWeightType nTotalWeightX = 0;
 
                 Scanline pScanlineSrc = rCtx.mpSrc->GetScanline( nLineStart + i );
