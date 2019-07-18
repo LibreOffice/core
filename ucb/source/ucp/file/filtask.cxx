@@ -2501,7 +2501,7 @@ TaskManager::getv(
         // Assume failure
         aIsRegular = false;
         osl::DirectoryItem aTargetItem;
-        osl::DirectoryItem::get( aFileStatus.getLinkTargetURL(), aTargetItem );
+        (void)osl::DirectoryItem::get( aFileStatus.getLinkTargetURL(), aTargetItem );
         if ( aTargetItem.is() )
         {
             osl::FileStatus aTargetStatus( osl_FileStatus_Mask_Type );
