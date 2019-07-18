@@ -787,15 +787,6 @@ namespace sw
                 const SwFltRedline *pFltRedline = static_cast<const SwFltRedline*>
                     (pEntry->pAttr.get());
 
-                if (SwFltRedline::NoPrevAuthor != pFltRedline->nAutorNoPrev)
-                {
-                    SwRedlineData aData(pFltRedline->eTypePrev,
-                        pFltRedline->nAutorNoPrev, pFltRedline->aStampPrev, OUString(),
-                        nullptr);
-
-                    mrDoc.getIDocumentRedlineAccess().AppendRedline(new SwRangeRedline(aData, aRegion), true);
-                }
-
                 SwRedlineData aData(pFltRedline->eType, pFltRedline->nAutorNo,
                         pFltRedline->aStamp, OUString(), nullptr);
 

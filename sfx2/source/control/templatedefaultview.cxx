@@ -29,7 +29,7 @@ static constexpr int gnItemPadding(5); //TODO:: Change padding to 10. It looks r
 static constexpr long gnTextHeight = 30;
 
 TemplateDefaultView::TemplateDefaultView( Window* pParent)
-    : TemplateLocalView(pParent, WB_TABSTOP)
+    : TemplateLocalView(pParent)
 {
     tools::Rectangle aScreen = Application::GetScreenPosSizePixel(Application::GetDisplayBuiltInScreen());
     mnItemMaxSize = std::min(aScreen.GetWidth(),aScreen.GetHeight()) > 800 ? 256 : 192;

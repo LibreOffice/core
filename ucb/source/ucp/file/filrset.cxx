@@ -216,8 +216,7 @@ XResultSet_impl::OneMore()
         }
         else if( err == osl::FileBase::E_None )
         {
-            if (!m_pMyShell->getv(
-                    nullptr, m_sProperty, aDirIte, aUnqPath, IsRegular, aRow ))
+            if (!m_pMyShell->getv( m_sProperty, aDirIte, aUnqPath, IsRegular, aRow ))
             {
                 SAL_WARN(
                     "ucb.ucp.file",

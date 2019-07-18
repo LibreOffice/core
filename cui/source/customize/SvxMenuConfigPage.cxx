@@ -424,7 +424,7 @@ IMPL_LINK_NOARG(SvxMenuConfigPage, SelectCategory, weld::ComboBox&, void)
 
 IMPL_LINK_NOARG( SvxMenuConfigPage, AddCommandHdl, weld::Button&, void )
 {
-    int nPos = AddFunction();
+    int nPos = AddFunction(-1, /*bAllowDuplicates*/false);
     if (nPos == -1)
         return;
     SvxConfigEntry* pEntry =

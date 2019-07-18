@@ -215,20 +215,15 @@ public:
     RedlineType const   eType;
     RedlineType const   eTypePrev;
     std::size_t const     nAutorNo;
-    std::size_t const     nAutorNoPrev;
-
-    static constexpr auto NoPrevAuthor
-        = std::numeric_limits<std::size_t>::max();
 
     SwFltRedline(RedlineType   eType_,
                  std::size_t     nAutorNo_,
                  const DateTime& rStamp_,
-                 RedlineType   eTypePrev_    = RedlineType::Insert,
-                 std::size_t     nAutorNoPrev_ = NoPrevAuthor)
+                 RedlineType   eTypePrev_    = RedlineType::Insert)
         : SfxPoolItem(RES_FLTR_REDLINE), aStamp(rStamp_),
         aStampPrev( DateTime::EMPTY ),
         eType(eType_),
-        eTypePrev(eTypePrev_), nAutorNo(nAutorNo_), nAutorNoPrev(nAutorNoPrev_)
+        eTypePrev(eTypePrev_), nAutorNo(nAutorNo_)
     {
     }
 

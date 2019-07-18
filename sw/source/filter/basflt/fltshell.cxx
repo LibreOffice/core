@@ -764,16 +764,6 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
                                               | RedlineFlags::ShowDelete );
                 SwFltRedline& rFltRedline = *static_cast<SwFltRedline*>(rEntry.pAttr.get());
 
-                if( SwFltRedline::NoPrevAuthor != rFltRedline.nAutorNoPrev )
-                {
-                    SwRedlineData aData(rFltRedline.eTypePrev,
-                                        rFltRedline.nAutorNoPrev,
-                                        rFltRedline.aStampPrev,
-                                        OUString(),
-                                        nullptr
-                                        );
-                    pDoc->getIDocumentRedlineAccess().AppendRedline(new SwRangeRedline(aData, aRegion), true);
-                }
                 SwRedlineData aData(rFltRedline.eType,
                                     rFltRedline.nAutorNo,
                                     rFltRedline.aStamp,

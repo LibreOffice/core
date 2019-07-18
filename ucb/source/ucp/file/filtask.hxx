@@ -577,8 +577,7 @@ namespace fileaccess
         // is returned by osl::DirectoryItem::getNextItem()
 
         bool
-        getv( Notifier* pNotifier,
-              const css::uno::Sequence< css::beans::Property >& properties,
+        getv( const css::uno::Sequence< css::beans::Property >& properties,
               osl::DirectoryItem& DirItem,
               OUString& aUnqPath,
               bool&      bIsRegular,

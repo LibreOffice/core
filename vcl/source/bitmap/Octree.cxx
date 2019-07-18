@@ -287,9 +287,10 @@ sal_uInt16 Octree::GetBestPaletteIndex(const BitmapColor& rColor)
     return mnPalIndex;
 }
 
+constexpr int nColorMax = 1 << OCTREE_BITS;
+
 InverseColorMap::InverseColorMap(const BitmapPalette& rPal)
 {
-    const int nColorMax = 1 << OCTREE_BITS;
     const unsigned long xsqr = 1 << (gnBits << 1);
     const unsigned long xsqr2 = xsqr << 1;
     const int nColors = rPal.GetEntryCount();
@@ -298,7 +299,7 @@ InverseColorMap::InverseColorMap(const BitmapPalette& rPal)
     sal_uLong r, g, b;
     long rxx, gxx, bxx;
 
-    ImplCreateBuffers(nColorMax);
+    ImplCreateBuffers();
 
     for (int nIndex = 0; nIndex < nColors; nIndex++)
     {
@@ -337,9 +338,9 @@ InverseColorMap::InverseColorMap(const BitmapPalette& rPal)
 
 InverseColorMap::~InverseColorMap() {}
 
-void InverseColorMap::ImplCreateBuffers(const sal_uLong nMax)
+void InverseColorMap::ImplCreateBuffers()
 {
-    const sal_uLong nCount = nMax * nMax * nMax;
+    const sal_uLong nCount = nColorMax * nColorMax * nColorMax;
     const sal_uLong nSize = nCount * sizeof(sal_uLong);
 
     mpMap.resize(nCount, 0x00);

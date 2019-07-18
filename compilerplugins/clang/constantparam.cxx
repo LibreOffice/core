@@ -168,9 +168,10 @@ std::string ConstantParam::getCallValue(const Expr* arg)
     }
     arg = arg->IgnoreParenCasts();
     // ignore this, it seems to trigger an infinite recursion
-    if (isa<UnaryExprOrTypeTraitExpr>(arg)) {
+    if (isa<UnaryExprOrTypeTraitExpr>(arg))
         return "unknown1";
-    }
+    if (arg->isValueDependent())
+        return "unknown2";
     APSInt x1;
     if (compat::EvaluateAsInt(arg, x1, compiler.getASTContext()))
     {

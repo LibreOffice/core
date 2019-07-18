@@ -73,7 +73,7 @@ private:
     std::vector<sal_uInt8> mpBuffer;
     std::vector<sal_uInt8> mpMap;
 
-    SAL_DLLPRIVATE void ImplCreateBuffers(const sal_uLong nMax);
+    SAL_DLLPRIVATE void ImplCreateBuffers();
 
 public:
     explicit InverseColorMap(const BitmapPalette& rPal);

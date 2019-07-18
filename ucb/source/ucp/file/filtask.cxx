@@ -2465,7 +2465,6 @@ TaskManager::commit( const TaskManager::ContentMap::iterator& it,
 
 bool
 TaskManager::getv(
-    Notifier* pNotifier,
     const uno::Sequence< beans::Property >& properties,
     osl::DirectoryItem& aDirItem,
     OUString& aUnqPath,
@@ -2514,8 +2513,6 @@ TaskManager::getv(
     else
         aIsRegular = aFileStatus.getFileType() == osl::FileStatus::Regular;
 
-    if (pNotifier)
-        registerNotifier( aUnqPath,pNotifier );
     insertDefaultProperties( aUnqPath );
     {
         osl::MutexGuard aGuard( m_aMutex );
@@ -2534,8 +2531,6 @@ TaskManager::getv(
                 return it1->getValue();
             });
     }
-    if (pNotifier)
-        deregisterNotifier( aUnqPath,pNotifier );
 
     XRow_impl* p = new XRow_impl( this,seq );
     row = uno::Reference< sdbc::XRow >( p );

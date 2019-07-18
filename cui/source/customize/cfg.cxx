@@ -1422,7 +1422,7 @@ SvxEntries* SvxConfigPage::FindParentForChild(
     return nullptr;
 }
 
-int SvxConfigPage::AddFunction(int nTarget, bool bFront, bool bAllowDuplicates)
+int SvxConfigPage::AddFunction(int nTarget, bool bAllowDuplicates)
 {
     OUString aURL = GetScriptURL();
     SvxConfigEntry* pParent = GetTopLevelSelection();
@@ -1465,7 +1465,7 @@ int SvxConfigPage::AddFunction(int nTarget, bool bFront, bool bAllowDuplicates)
         }
     }
 
-    return InsertEntry(pNewEntryData, nTarget, bFront);
+    return InsertEntry(pNewEntryData, nTarget, /*bFront*/false);
 }
 
 int SvxConfigPage::InsertEntry(
