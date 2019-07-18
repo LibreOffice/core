@@ -1,22 +1,29 @@
-Start writer
-Send UNO Command (".uno:UpdateInputFields")
-Send UNO Command (".uno:FontDialog")
-Open CharacterPropertiesDialog
-Choose Tab number 0 from CharacterPropertiesDialog 
-Choose Tab number 2 from CharacterPropertiesDialog
-Select "90deg" Radio Button from CharacterPropertiesDialog
-Toggle "pairkerning" CheckBox from CharacterPropertiesDialog
-Select in "weststylelb-cjk" ComboBox item number 2 from CharacterPropertiesDialog 
-Increase "scalewidthsb" from CharacterPropertiesDialog
-Decrease "scalewidthsb" from CharacterPropertiesDialog
-Type on "linewidthmf" {"TEXT": "1"} from CharacterPropertiesDialog
-Select element with position 2 in "effectslb" from CharacterPropertiesDialog
-Click on "ok" from CharacterPropertiesDialog 
-Close Dialog
-Type on writer {"TEXT": "s"}
-Select from Pos 5 to Pos 7
-Set Zoom to 100
-GOTO page number 1
-Open QuerySaveDialog
-Click on "ok" from QuerySaveDialog
+Start calc
+Switch to sheet number 0
+Select from calc {"CELL": "A1"}
+Select from calc {"CELL": "B5"}
+Select from calc {"CELL": "C6"}
+Switch to sheet number 1
+Select from calc {"CELL": "A1"}
+Switch to sheet number 0
+Select from calc {"CELL": "C6"}
+Switch to sheet number 1
+Select from calc {"CELL": "A1"}
+Switch to sheet number 2
+Select from calc {"CELL": "A1"}
+Select from calc {"CELL": "C5"}
+Type on current cell {"TEXT": "a"}
+Type on current cell {"TEXT": "a"}
+Select from calc {"CELL": "C7"}
+Type on current cell {"TEXT": "a"}
+Type on current cell {"TEXT": "v"}
+Select from calc {"CELL": "C5"}
+Send UNO Command (".uno:ZoomSlider") 
+Send UNO Command (".uno:ZoomSlider")  {}
+Send UNO Command (".uno:DataFilterAutoFilter") 
+Lanuch AutoFilter from Col 0 and Row 2
+Click on 'ok' from check_list_menu
+Select from calc {"RANGE": "C1:C7"}
+Open Modal QuerySaveDialog
+Click on 'discard' from QuerySaveDialog
 Close Dialog
