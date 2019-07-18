@@ -6,6 +6,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
+#ifndef LO_CLANG_SHARED_PLUGINS
 
 #include "plugin.hxx"
 #include "check.hxx"
@@ -27,9 +28,14 @@ public:
     explicit CppunitAssertEquals(loplugin::InstantiationData const & data):
         FilteringPlugin(data) {}
 
+    virtual bool preRun() override
+    {
+        return compiler.getLangOpts().CPlusPlus;
+    }
+
     virtual void run() override
     {
-        if (compiler.getLangOpts().CPlusPlus) {
+        if (preRun()) {
             TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
         }
     }
@@ -129,7 +135,7 @@ bool CppunitAssertEquals::VisitCallExpr(const CallExpr* callExpr)
 }
 
 // copied from stringconcat.cxx
-Expr const * stripCtor(Expr const * expr) {
+Expr const * stripConstructor(Expr const * expr) {
     auto e0 = expr;
     auto const e1 = dyn_cast<CXXFunctionalCastExpr>(e0);
     if (e1 != nullptr) {
@@ -164,7 +170,7 @@ bool CppunitAssertEquals::isCompileTimeConstant(Expr const * expr)
         return true;
     // is string literal ?
     expr = expr->IgnoreParenImpCasts();
-    expr = stripCtor(expr);
+    expr = stripConstructor(expr);
     return isa<clang::StringLiteral>(expr);
 }
 
@@ -220,8 +226,10 @@ void CppunitAssertEquals::reportEquals(
         << (name == "CPPUNIT_ASSERT_MESSAGE") << negative << range;
 }
 
-loplugin::Plugin::Registration< CppunitAssertEquals > X("cppunitassertequals");
+loplugin::Plugin::Registration< CppunitAssertEquals > cppunitassertequals("cppunitassertequals");
 
-}
+} // namespace
+
+#endif // LO_CLANG_SHARED_PLUGINS
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
