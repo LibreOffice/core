@@ -94,13 +94,11 @@ public:
             {
                 OUString aURL(m_directories.getURLFromSrc(mpTestDocumentPath) + OUString::createFromAscii(filename));
                 CPPUNIT_ASSERT_MESSAGE("no desktop", mxDesktop.is());
-                uno::Reference<frame::XComponentLoader> xLoader(mxDesktop, uno::UNO_QUERY);
-                CPPUNIT_ASSERT_MESSAGE("no loader", xLoader.is());
                 uno::Sequence<beans::PropertyValue> args( comphelper::InitPropertySequence({
                         { "DocumentService", uno::Any(OUString("com.sun.star.text.TextDocument")) }
                     }));
 
-                uno::Reference<lang::XComponent> xComponent = xLoader->loadComponentFromURL(aURL, "_default", 0, args);
+                uno::Reference<lang::XComponent> xComponent = mxDesktop->loadComponentFromURL(aURL, "_default", 0, args);
                 OUString sMessage = "loading succeeded: " + aURL;
                 CPPUNIT_ASSERT_MESSAGE(OUStringToOString(sMessage, RTL_TEXTENCODING_UTF8).getStr(), !xComponent.is());
             }
@@ -492,7 +490,7 @@ DECLARE_OOXMLIMPORT_TEST(testN780645, "n780645.docx")
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables( ), uno::UNO_QUERY);
     uno::Reference<text::XTextTable> xTextTable(xTables->getByIndex(0), uno::UNO_QUERY);
-    uno::Reference<table::XTableRows> xTableRows(xTextTable->getRows(), uno::UNO_QUERY);
+    uno::Reference<table::XTableRows> xTableRows = xTextTable->getRows();
     CPPUNIT_ASSERT_EQUAL(sal_Int16(2135), getProperty< uno::Sequence<text::TableColumnSeparator> >(xTableRows->getByIndex(1), "TableColumnSeparators")[0].Position); // was 1999
 }
 
@@ -503,7 +501,7 @@ DECLARE_OOXMLIMPORT_TEST(testWordArtResizing, "WordArt.docx")
        The test-case ensures the original height and width of the word-art is not changed while importing*/
 
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xDrawPage(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDrawPage = xDrawPageSupplier->getDrawPage();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xDrawPage->getCount());
 
     uno::Reference<drawing::XShape> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
@@ -525,7 +523,7 @@ DECLARE_OOXMLIMPORT_TEST(testGroupshapeLine, "groupshape-line.docx")
      * xray ThisComponent.DrawPage(1).getByIndex(0).Size 'width: 10160, height: 0
      */
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xDrawPage(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDrawPage = xDrawPageSupplier->getDrawPage();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xDrawPage->getCount());
 
     uno::Reference<drawing::XShape> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
@@ -588,7 +586,7 @@ DECLARE_OOXMLIMPORT_TEST(testN820788, "n820788.docx")
 DECLARE_OOXMLIMPORT_TEST(testN820504, "n820504.docx")
 {
     uno::Reference<style::XStyleFamiliesSupplier> xFamiliesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XNameAccess> xFamiliesAccess(xFamiliesSupplier->getStyleFamilies(), uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xFamiliesAccess = xFamiliesSupplier->getStyleFamilies();
     uno::Reference<container::XNameAccess> xStylesAccess(xFamiliesAccess->getByName("ParagraphStyles"), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xStyle(xStylesAccess->getByName("Default Style"), uno::UNO_QUERY);
     // The problem was that the CharColor was set to AUTO (-1) even if we have some default char color set
@@ -726,7 +724,7 @@ DECLARE_OOXMLIMPORT_TEST(testTdf75573_lostTable, "tdf75573_lostTable.docx")
     CPPUNIT_ASSERT_EQUAL_MESSAGE("# of tables", sal_Int32(1), xTables->getCount() );
 
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDraws = xDrawPageSupplier->getDrawPage();
     CPPUNIT_ASSERT_EQUAL_MESSAGE("# of frames/shapes", sal_Int32(0), xDraws->getCount() );
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE("# of pages", 3, getPages() );
@@ -1072,7 +1070,7 @@ DECLARE_OOXMLIMPORT_TEST(testTdf85232, "tdf85232.docx")
 {
     uno::Reference<drawing::XShapes> xShapes(getShapeByName("Group 219"), uno::UNO_QUERY);
     uno::Reference<drawing::XShape> xShape(xShapes->getByIndex(1), uno::UNO_QUERY);
-    uno::Reference<drawing::XShapeDescriptor> xShapeDescriptor(xShape, uno::UNO_QUERY);
+    uno::Reference<drawing::XShapeDescriptor> xShapeDescriptor = xShape;
     // Make sure we're not testing the ellipse child.
     CPPUNIT_ASSERT_EQUAL(OUString("com.sun.star.drawing.LineShape"), xShapeDescriptor->getShapeType());
 
@@ -1159,7 +1157,7 @@ DECLARE_OOXMLIMPORT_TEST(testTdf95970, "tdf95970.docx")
 
 DECLARE_OOXMLIMPORT_TEST(testTdf96674, "tdf96674.docx")
 {
-    uno::Reference<drawing::XShape> xShape(getShape(1), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape = getShape(1);
     CPPUNIT_ASSERT(xShape.is());
     awt::Size aActualSize(xShape->getSize());
     // Width was 3493: the vertical line was horizontal.

@@ -575,7 +575,7 @@ DECLARE_ODFEXPORT_TEST(testFdo79358, "fdo79358.odt")
 {
     // the boolean properties of the index were not exported properly
     uno::Reference<text::XDocumentIndexesSupplier> xIndexSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xIndexes(xIndexSupplier->getDocumentIndexes(), uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexes = xIndexSupplier->getDocumentIndexes();
     uno::Reference<text::XDocumentIndex> xTOCIndex(xIndexes->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xTOCProps(xTOCIndex, uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(xTOCProps, "CreateFromOutline"));
@@ -637,8 +637,8 @@ DECLARE_ODFEXPORT_TEST(testDuplicateCrossRefHeadingBookmark, "CrossRefHeadingBoo
 
     uno::Reference<text::XBookmarksSupplier> xBookmarksSupplier(mxComponent,
         uno::UNO_QUERY);
-    uno::Reference<container::XNameAccess> xBookmarks(
-        xBookmarksSupplier->getBookmarks(), uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xBookmarks =
+        xBookmarksSupplier->getBookmarks();
     uno::Reference<text::XTextContent> xBookmark1(
         xBookmarks->getByName("__RefHeading__8284_1826734303"), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xBookmark1.is());
@@ -721,7 +721,7 @@ DECLARE_ODFEXPORT_TEST(testStylePageNumber, "ooo321_stylepagenumber.odt")
     CPPUNIT_ASSERT_EQUAL(OUString("Right Page"), getProperty<OUString>(xPara0, "PageDescName"));
     CPPUNIT_ASSERT_EQUAL(uno::Any(), xPara0->getPropertyValue("PageNumberOffset"));
 
-    uno::Reference<container::XNameAccess> xParaStyles(getStyles("ParagraphStyles"), uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xParaStyles = getStyles("ParagraphStyles");
     uno::Reference<beans::XPropertySet> xStyle1(xParaStyles->getByName("stylewithbreak1"), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString("Right Page"), getProperty<OUString>(xStyle1, "PageDescName"));
     CPPUNIT_ASSERT_EQUAL(sal_Int16(1), getProperty<sal_Int16>(xStyle1, "PageNumberOffset"));
@@ -864,7 +864,7 @@ DECLARE_ODFEXPORT_TEST(testCharacterBorder, "charborder.odt")
 
         // Check character style
         {
-            uno::Reference< container::XNameAccess > xStyleFamily(getStyles("CharacterStyles"), uno::UNO_QUERY);
+            uno::Reference< container::XNameAccess > xStyleFamily = getStyles("CharacterStyles");
             uno::Reference < beans::XPropertySet > xStyleSet(xStyleFamily->getByName("CharDiffBor"), uno::UNO_QUERY);
 
             // Top border
@@ -1149,8 +1149,8 @@ DECLARE_ODFEXPORT_TEST(testWhitespace, "whitespace.odt")
         // what a stupid idea to require recursively enumerating this
         uno::Reference<container::XEnumerationAccess> xMeta(
             getProperty<uno::Reference<text::XTextContent>>(xPortion, "InContentMetadata"), uno::UNO_QUERY);
-        uno::Reference<container::XEnumeration> xMetaPortions(
-            xMeta->createEnumeration(), uno::UNO_QUERY);
+        uno::Reference<container::XEnumeration> xMetaPortions =
+            xMeta->createEnumeration();
         uno::Reference<text::XTextRange> xMP(xMetaPortions->nextElement(), uno::UNO_QUERY);
         CPPUNIT_ASSERT_EQUAL(OUString("Text"), getProperty<OUString>(xMP, "TextPortionType"));
         CPPUNIT_ASSERT_EQUAL(OUString(" "), xMP->getString());
@@ -1172,8 +1172,8 @@ DECLARE_ODFEXPORT_TEST(testWhitespace, "whitespace.odt")
         // what a stupid idea to require recursively enumerating this
         uno::Reference<container::XEnumerationAccess> xMeta(
             getProperty<uno::Reference<text::XTextContent>>(xPortion, "TextField"), uno::UNO_QUERY);
-        uno::Reference<container::XEnumeration> xMetaPortions(
-            xMeta->createEnumeration(), uno::UNO_QUERY);
+        uno::Reference<container::XEnumeration> xMetaPortions =
+            xMeta->createEnumeration();
         uno::Reference<text::XTextRange> xMP(xMetaPortions->nextElement(), uno::UNO_QUERY);
         CPPUNIT_ASSERT_EQUAL(OUString("Text"), getProperty<OUString>(xMP, "TextPortionType"));
         CPPUNIT_ASSERT_EQUAL(OUString(" "), xMP->getString());
@@ -2139,7 +2139,7 @@ DECLARE_ODFEXPORT_TEST(tdf101856_overlapped, "tdf101856_overlapped.odt")
     // get bookmark interface
     uno::Reference<text::XBookmarksSupplier> xBookmarksSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xBookmarksByIdx(xBookmarksSupplier->getBookmarks(), uno::UNO_QUERY);
-    uno::Reference<container::XNameAccess> xBookmarksByName(xBookmarksSupplier->getBookmarks(), uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xBookmarksByName = xBookmarksSupplier->getBookmarks();
 
     // check: we have 2 bookmarks
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), xBookmarksByIdx->getCount());
@@ -2163,7 +2163,7 @@ DECLARE_ODFEXPORT_TEST(tdf101856, "tdf101856.odt")
     // get bookmark interface
     uno::Reference<text::XBookmarksSupplier> xBookmarksSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xBookmarksByIdx(xBookmarksSupplier->getBookmarks(), uno::UNO_QUERY);
-    uno::Reference<container::XNameAccess> xBookmarksByName(xBookmarksSupplier->getBookmarks(), uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xBookmarksByName = xBookmarksSupplier->getBookmarks();
 
     // check: we have 2 bookmarks
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(5), xBookmarksByIdx->getCount());

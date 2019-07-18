@@ -354,8 +354,7 @@ DECLARE_OOXMLEXPORT_TEST(testObjectCrossReference, "object_cross_reference.odt")
     uno::Reference<container::XIndexAccess> xBookmarksByIdx(xBookmarksSupplier->getBookmarks(),
                                                             uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(15), xBookmarksByIdx->getCount());
-    uno::Reference<container::XNameAccess> xBookmarksByName(xBookmarksSupplier->getBookmarks(),
-                                                            uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xBookmarksByName = xBookmarksSupplier->getBookmarks();
     CPPUNIT_ASSERT(xBookmarksByName->hasByName("Ref_Drawing0_full"));
     CPPUNIT_ASSERT(xBookmarksByName->hasByName("Ref_Drawing0_label_and_number"));
     CPPUNIT_ASSERT(xBookmarksByName->hasByName("Ref_Drawing0_caption_only"));
@@ -379,31 +378,31 @@ DECLARE_OOXMLEXPORT_TEST(testObjectCrossReference, "object_cross_reference.odt")
     {
         uno::Reference<text::XTextContent> xContent(
             xBookmarksByName->getByName("Ref_Drawing0_full"), uno::UNO_QUERY);
-        uno::Reference<text::XTextRange> xRange(xContent->getAnchor(), uno::UNO_QUERY);
+        uno::Reference<text::XTextRange> xRange = xContent->getAnchor();
         CPPUNIT_ASSERT_EQUAL(OUString("Drawing 1: A rectangle"), xRange->getString());
     }
     {
         uno::Reference<text::XTextContent> xContent(
             xBookmarksByName->getByName("Ref_Drawing0_label_and_number"), uno::UNO_QUERY);
-        uno::Reference<text::XTextRange> xRange(xContent->getAnchor(), uno::UNO_QUERY);
+        uno::Reference<text::XTextRange> xRange = xContent->getAnchor();
         CPPUNIT_ASSERT_EQUAL(OUString("Drawing 1"), xRange->getString());
     }
     {
         uno::Reference<text::XTextContent> xContent(
             xBookmarksByName->getByName("Ref_Drawing0_caption_only"), uno::UNO_QUERY);
-        uno::Reference<text::XTextRange> xRange(xContent->getAnchor(), uno::UNO_QUERY);
+        uno::Reference<text::XTextRange> xRange = xContent->getAnchor();
         CPPUNIT_ASSERT_EQUAL(OUString("A rectangle"), xRange->getString());
     }
     {
         uno::Reference<text::XTextContent> xContent(
             xBookmarksByName->getByName("Ref_Drawing0_number_only"), uno::UNO_QUERY);
-        uno::Reference<text::XTextRange> xRange(xContent->getAnchor(), uno::UNO_QUERY);
+        uno::Reference<text::XTextRange> xRange = xContent->getAnchor();
         CPPUNIT_ASSERT_EQUAL(OUString("1"), xRange->getString());
     }
     {
         uno::Reference<text::XTextContent> xContent(
             xBookmarksByName->getByName("Ref_Drawing1_full"), uno::UNO_QUERY);
-        uno::Reference<text::XTextRange> xRange(xContent->getAnchor(), uno::UNO_QUERY);
+        uno::Reference<text::XTextRange> xRange = xContent->getAnchor();
         CPPUNIT_ASSERT_EQUAL(OUString("Drawing 2: a circle"), xRange->getString());
     }
 
@@ -411,31 +410,31 @@ DECLARE_OOXMLEXPORT_TEST(testObjectCrossReference, "object_cross_reference.odt")
     {
         uno::Reference<text::XTextContent> xContent(
             xBookmarksByName->getByName("Ref_Illustration0_full"), uno::UNO_QUERY);
-        uno::Reference<text::XTextRange> xRange(xContent->getAnchor(), uno::UNO_QUERY);
+        uno::Reference<text::XTextRange> xRange = xContent->getAnchor();
         CPPUNIT_ASSERT_EQUAL(OUString("Illustration 1: A picture"), xRange->getString());
     }
     {
         uno::Reference<text::XTextContent> xContent(
             xBookmarksByName->getByName("Ref_Illustration0_label_and_number"), uno::UNO_QUERY);
-        uno::Reference<text::XTextRange> xRange(xContent->getAnchor(), uno::UNO_QUERY);
+        uno::Reference<text::XTextRange> xRange = xContent->getAnchor();
         CPPUNIT_ASSERT_EQUAL(OUString("Illustration 1"), xRange->getString());
     }
     {
         uno::Reference<text::XTextContent> xContent(
             xBookmarksByName->getByName("Ref_Illustration0_caption_only"), uno::UNO_QUERY);
-        uno::Reference<text::XTextRange> xRange(xContent->getAnchor(), uno::UNO_QUERY);
+        uno::Reference<text::XTextRange> xRange = xContent->getAnchor();
         CPPUNIT_ASSERT_EQUAL(OUString("A picture"), xRange->getString());
     }
     {
         uno::Reference<text::XTextContent> xContent(
             xBookmarksByName->getByName("Ref_Illustration0_number_only"), uno::UNO_QUERY);
-        uno::Reference<text::XTextRange> xRange(xContent->getAnchor(), uno::UNO_QUERY);
+        uno::Reference<text::XTextRange> xRange = xContent->getAnchor();
         CPPUNIT_ASSERT_EQUAL(OUString("1"), xRange->getString());
     }
     {
         uno::Reference<text::XTextContent> xContent(
             xBookmarksByName->getByName("Ref_Illustration1_caption_only"), uno::UNO_QUERY);
-        uno::Reference<text::XTextRange> xRange(xContent->getAnchor(), uno::UNO_QUERY);
+        uno::Reference<text::XTextRange> xRange = xContent->getAnchor();
         CPPUNIT_ASSERT_EQUAL(OUString("an other image"), xRange->getString());
     }
 
@@ -443,31 +442,31 @@ DECLARE_OOXMLEXPORT_TEST(testObjectCrossReference, "object_cross_reference.odt")
     {
         uno::Reference<text::XTextContent> xContent(xBookmarksByName->getByName("Ref_Text0_full"),
                                                     uno::UNO_QUERY);
-        uno::Reference<text::XTextRange> xRange(xContent->getAnchor(), uno::UNO_QUERY);
+        uno::Reference<text::XTextRange> xRange = xContent->getAnchor();
         CPPUNIT_ASSERT_EQUAL(OUString("Text 1: A frame"), xRange->getString());
     }
     {
         uno::Reference<text::XTextContent> xContent(
             xBookmarksByName->getByName("Ref_Text0_label_and_number"), uno::UNO_QUERY);
-        uno::Reference<text::XTextRange> xRange(xContent->getAnchor(), uno::UNO_QUERY);
+        uno::Reference<text::XTextRange> xRange = xContent->getAnchor();
         CPPUNIT_ASSERT_EQUAL(OUString("Text 1"), xRange->getString());
     }
     {
         uno::Reference<text::XTextContent> xContent(
             xBookmarksByName->getByName("Ref_Text0_caption_only"), uno::UNO_QUERY);
-        uno::Reference<text::XTextRange> xRange(xContent->getAnchor(), uno::UNO_QUERY);
+        uno::Reference<text::XTextRange> xRange = xContent->getAnchor();
         CPPUNIT_ASSERT_EQUAL(OUString("A frame"), xRange->getString());
     }
     {
         uno::Reference<text::XTextContent> xContent(
             xBookmarksByName->getByName("Ref_Text0_number_only"), uno::UNO_QUERY);
-        uno::Reference<text::XTextRange> xRange(xContent->getAnchor(), uno::UNO_QUERY);
+        uno::Reference<text::XTextRange> xRange = xContent->getAnchor();
         CPPUNIT_ASSERT_EQUAL(OUString("1"), xRange->getString());
     }
     {
         uno::Reference<text::XTextContent> xContent(
             xBookmarksByName->getByName("Ref_Text1_label_and_number"), uno::UNO_QUERY);
-        uno::Reference<text::XTextRange> xRange(xContent->getAnchor(), uno::UNO_QUERY);
+        uno::Reference<text::XTextRange> xRange = xContent->getAnchor();
         CPPUNIT_ASSERT_EQUAL(OUString("Text 2"), xRange->getString());
     }
 
@@ -763,8 +762,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf120224_textControlCrossRef, "tdf120224_textContr
     uno::Reference<text::XBookmarksSupplier> xBookmarksSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xBookmarksByIdx(xBookmarksSupplier->getBookmarks(),
                                                             uno::UNO_QUERY);
-    uno::Reference<container::XNameAccess> xBookmarksByName(xBookmarksSupplier->getBookmarks(),
-                                                            uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xBookmarksByName = xBookmarksSupplier->getBookmarks();
     // TextFields should not be turned into real bookmarks.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), xBookmarksByIdx->getCount());
 
@@ -786,7 +784,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf117504_numberingIndent, "tdf117504_numberingInde
 
 DECLARE_OOXMLEXPORT_TEST(testWatermark, "watermark.docx")
 {
-    uno::Reference<drawing::XShape> xShape(getShape(1), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape = getShape(1);
     uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
 
     sal_Int32 nHeight = xShape->getSize().Height;
@@ -801,7 +799,7 @@ DECLARE_OOXMLEXPORT_TEST(testWatermark, "watermark.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testWatermarkTrim, "tdf114308.docx")
 {
-    uno::Reference<drawing::XShape> xShape(getShape(1), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape = getShape(1);
 
     // Rounding errors
     sal_Int32 nHeight = xShape->getSize().Height;
