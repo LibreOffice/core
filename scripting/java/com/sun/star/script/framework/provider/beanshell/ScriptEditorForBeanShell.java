@@ -228,7 +228,7 @@ public class ScriptEditorForBeanShell implements ScriptEditor, ActionListener {
         this.context   = context;
         this.scriptURL = url;
         this.model     = new ScriptSourceModel(url);
-        this.filename  = url.getFile();
+        this.filename  = ScriptMetaData.getFileName(url);
         this.cl = cl;
 
         try {

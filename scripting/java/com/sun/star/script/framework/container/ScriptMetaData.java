@@ -102,6 +102,15 @@ public class ScriptMetaData extends ScriptEntry {
 
     private static final String UNO_SHARED_PACKAGES2 = SHARE + "/uno_packages";
 
+    public static String getFileName(URL url) {
+        String fileName = url.toExternalForm();
+        if (fileName.lastIndexOf(UCBStreamHandler.separator) != -1) {
+            fileName = fileName.substring(0, fileName.lastIndexOf(UCBStreamHandler.separator));
+            fileName = fileName.substring(fileName.lastIndexOf("/") + 1);
+        }
+        return fileName;
+    }
+
     public static String getLocationPlaceHolder(String url, String pkgname) {
         String result = "Unknown";
 
