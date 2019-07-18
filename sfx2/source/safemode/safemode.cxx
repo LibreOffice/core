@@ -75,7 +75,7 @@ OUString SafeMode::getFilePath(const OUString& sFilename)
 
     OUString aProfilePath;
     FileBase::getSystemPathFromFileURL(url, aProfilePath);
-    FileBase::getAbsoluteFileURL(url, sFilename, aProfilePath);
+    (void)FileBase::getAbsoluteFileURL(url, sFilename, aProfilePath);
     return aProfilePath;
 }
 
