@@ -100,6 +100,8 @@
 
 #include <toolkit/helper/vclunohelper.hxx>
 #include <sfx2/viewfrm.hxx>
+#include <vcl/uitest/logger.hxx>
+#include <vcl/uitest/eventdescription.hxx>
 
 #include <PostItMgr.hxx>
 #include <FrameControlsManager.hxx>
@@ -117,6 +119,20 @@
 
 using namespace sw::mark;
 using namespace com::sun::star;
+namespace {
+
+void collectUIInformation(const OUString action,const OUString aParameters)
+{
+    EventDescription aDescription;
+    aDescription.aAction = action;
+    aDescription.aParameters = {{"parameters",aParameters}};
+    aDescription.aID = "writer_edit";
+    aDescription.aKeyWord = "SwEditWinUIObject";
+    aDescription.aParent = "MainWindow";
+    UITestLogger::getInstance().logEvent(aDescription);
+}
+
+}
 
 #define BITFLD_INI_LIST \
         m_bClearMark = \
@@ -889,6 +905,7 @@ void SwWrtShell::InsertPageBreak(const OUString *pPageDesc, const ::boost::optio
             SetAttrItem( SvxFormatBreakItem(SvxBreak::PageBefore, RES_BREAK) );
         EndUndo(SwUndoId::UI_INSERT_PAGE_BREAK);
     }
+    collectUIInformation("BREAK_PAGE","parameter");
 }
 
 // Insert hard page break;
