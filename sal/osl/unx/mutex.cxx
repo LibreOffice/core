@@ -85,6 +85,12 @@ void SAL_CALL osl_destroyMutex(oslMutex pMutex)
     }
 }
 
+#ifdef __COVERITY__
+    extern void __coverity_recursive_lock_acquire__(void*);
+    extern void __coverity_recursive_lock_release__(void*);
+    extern void __coverity_assert_locked__(void*);
+#endif
+
 sal_Bool SAL_CALL osl_acquireMutex(oslMutex pMutex)
 {
     SAL_WARN_IF(!pMutex, "sal.osl.mutex", "null pMutex");
@@ -97,6 +103,9 @@ sal_Bool SAL_CALL osl_acquireMutex(oslMutex pMutex)
             SAL_WARN("sal.osl.mutex", "pthread_mutex_lock failed: " << UnixErrnoString(nRet));
             return false;
         }
+#ifdef __COVERITY__
+    __coverity_recursive_lock_acquire__(pMutex);
+#endif
         return true;
     }
 
@@ -114,7 +123,12 @@ sal_Bool SAL_CALL osl_tryToAcquireMutex(oslMutex pMutex)
     {
         int nRet = pthread_mutex_trylock(&(pMutex->mutex));
         if ( nRet == 0  )
+        {
+#ifdef __COVERITY__
+            __coverity_recursive_lock_acquire__(pMutex);
+#endif
             result = true;
+        }
     }
 
     return result;
@@ -122,6 +136,9 @@ sal_Bool SAL_CALL osl_tryToAcquireMutex(oslMutex pMutex)
 
 sal_Bool SAL_CALL osl_releaseMutex(oslMutex pMutex)
 {
+#ifdef __COVERITY__
+    __coverity_assert_locked__(pMutex);
+#endif
     SAL_WARN_IF(!pMutex, "sal.osl.mutex", "null pMutex");
 
     if ( pMutex )
@@ -133,6 +150,9 @@ sal_Bool SAL_CALL osl_releaseMutex(oslMutex pMutex)
             return false;
         }
 
+#ifdef __COVERITY__
+            __coverity_recursive_lock_release__(pMutex);
+#endif
         return true;
     }
 
