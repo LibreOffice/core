@@ -2717,21 +2717,24 @@ TaskManager::getContentExchangedEventListeners( const OUString& aOldPrefix,
 
                 m_aContent.erase( itold );
 
-                if( itnew != m_aContent.end() && !itnew->second.notifier.empty() )
+                if (itnew != m_aContent.end())
                 {
-                    std::vector<Notifier*>& listOfNotifiers = itnew->second.notifier;
-                    for (auto const& pointer : listOfNotifiers)
+                    if (!itnew->second.notifier.empty())
                     {
-                        std::unique_ptr<ContentEventNotifier> notifier = pointer->cEXC( aNewName );
-                        if( notifier )
-                            aVector.push_back( std::move(notifier) );
+                        std::vector<Notifier*>& listOfNotifiers = itnew->second.notifier;
+                        for (auto const& pointer : listOfNotifiers)
+                        {
+                            std::unique_ptr<ContentEventNotifier> notifier = pointer->cEXC( aNewName );
+                            if( notifier )
+                                aVector.push_back( std::move(notifier) );
+                        }
                     }
-                }
 
-                // Merge with preexisting notifiers
-                // However, these may be in status BaseContent::Deleted
-                for( const auto& rCopyPtr : copyList )
-                    itnew->second.notifier.push_back( rCopyPtr );
+                    // Merge with preexisting notifiers
+                    // However, these may be in status BaseContent::Deleted
+                    for( const auto& rCopyPtr : copyList )
+                        itnew->second.notifier.push_back( rCopyPtr );
+                }
             }
         }
     }
