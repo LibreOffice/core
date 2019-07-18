@@ -63,7 +63,7 @@ InternalStreamLock::InternalStreamLock(
         m_nEndPos( nEnd ),
         m_pStream( pStream )
 {
-    osl::DirectoryItem::get( m_pStream->GetFileName(), m_aItem );
+    (void)osl::DirectoryItem::get( m_pStream->GetFileName(), m_aItem );
 #if OSL_DEBUG_LEVEL > 1
     OString aFileName(OUStringToOString(m_pStream->GetFileName(),
                                                   osl_getThreadTextEncoding()));
