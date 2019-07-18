@@ -171,6 +171,7 @@ class ul_Compiler:
                     self.prev_command.uno_command_name+"\")\n"
             self.variables.append(old_line)
             line = "\t\t" + DialogCommand.dialog_name + " = self.xUITest.getTopFocusWindow()\n"
+            self.variables.append(line)
 
         elif (DialogCommand.__class__.__name__ == "OpenModelessDialog"):
             old_line = self.variables.pop()
@@ -184,14 +185,15 @@ class ul_Compiler:
                     self.prev_command.uno_command_name+"\")\n"
             self.variables.append(old_line)
             line = "\t\t" + DialogCommand.dialog_name + "  = self.xUITest.getTopFocusWindow()\n"
+            self.variables.append(line)
 
         elif (DialogCommand.__class__.__name__ == "CloseDialog"):
             if (self.prev_command.__class__.__name__ == "ButtonUIObject"):
                 old_line = self.variables.pop()
                 line="\t\tself.ui_test.close_dialog_through_button("+\
                     self.prev_command.ui_button+")\n"
+                self.variables.append(line)
 
-        self.variables.append(line)
         self.prev_command=DialogCommand
 
     def handle_button(self, ButtonUIObject):
