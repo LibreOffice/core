@@ -38,6 +38,7 @@
 #include <txtfrm.hxx>
 #include <notxtfrm.hxx>
 #include <ndtxt.hxx>
+#include <undobj.hxx>
 #include <dcontact.hxx>
 #include <fmtanchr.hxx>
 
@@ -341,6 +342,13 @@ bool SwAccessibleFrameBase::GetSelectedState( )
                             if( ((nHere > nStartIndex) || pStart->nContent.GetIndex() ==0 )
                                 && (nHere < nEndIndex ) )
                                 return true;
+                        }
+                        else if (rAnchor.GetAnchorId() == RndStdIds::FLY_AT_CHAR)
+                        {
+                            if (IsDestroyFrameAnchoredAtChar(*pPos, *pStart, *pEnd))
+                            {
+                                return true;
+                            }
                         }
                         break;
                     }
