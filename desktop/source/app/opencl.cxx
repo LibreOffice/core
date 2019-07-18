@@ -217,7 +217,7 @@ void Desktop::CheckOpenCLCompute(const Reference< XDesktop2 > &xDesktop)
     rtl::Bootstrap::expandMacros(aURL);
 
     DirectoryItem aItem;
-    DirectoryItem::get( aURL, aItem );
+    (void)DirectoryItem::get( aURL, aItem );
     FileStatus aFileStatus( osl_FileStatus_Mask_ModifyTime );
     (void)aItem.getFileStatus( aFileStatus );
     TimeValue aTimeVal = aFileStatus.getModifyTime();
