@@ -239,8 +239,8 @@ std::vector<std::unique_ptr<PrintFontManager::PrintFont>> PrintFontManager::anal
                     if (osl::DirectoryItem::get(aURL, aItem) == osl::File::E_None)
                     {
                         osl::FileStatus aFileStatus( osl_FileStatus_Mask_FileSize );
-                        aItem.getFileStatus( aFileStatus );
-                        fileSize = aFileStatus.getFileSize();
+                        if (aItem.getFileStatus(aFileStatus) == osl::File::E_None)
+                            fileSize = aFileStatus.getFileSize();
                     }
                 }
             }
