@@ -37,6 +37,8 @@
 #include <vcl/waitobj.hxx>
 #include <stdlib.h>
 #include <unotools/charclass.hxx>
+#include <vcl/uitest/logger.hxx>
+#include <vcl/uitest/eventdescription.hxx>
 
 #include <viewfunc.hxx>
 #include <tabvwsh.hxx>
@@ -95,6 +97,22 @@ ScViewFunc::ScViewFunc( vcl::Window* pParent, ScDocShell& rDocSh, ScTabViewShell
 
 ScViewFunc::~ScViewFunc()
 {
+}
+
+namespace {
+
+void collectUIInformation(const std::map<OUString, OUString>& aParameters,const OUString action)
+{
+    EventDescription aDescription;
+    aDescription.aID = "grid_window";
+    aDescription.aAction = action;
+    aDescription.aParameters = aParameters;
+    aDescription.aParent = "MainWindow";
+    aDescription.aKeyWord = "ScGridWinUIObject";
+
+    UITestLogger::getInstance().logEvent(aDescription);
+}
+
 }
 
 void ScViewFunc::StartFormatArea()
@@ -1616,6 +1634,9 @@ bool ScViewFunc::InsertCells( InsCellCmd eCmd, bool bRecord, bool bPartOfPaste )
                     ScTabViewShell::notifyAllViewsHeaderInvalidation(ROW_HEADER, GetViewData().GetTabNo());
             }
         }
+        OUString aStartAddress =  aRange.aStart.GetColRowString();
+        OUString aEndAddress = aRange.aEnd.GetColRowString();
+        collectUIInformation({{"RANGE", aStartAddress + ":" + aEndAddress}},"INSERT_CELLS");
         return bSuccess;
     }
     else
@@ -1700,6 +1721,10 @@ void ScViewFunc::DeleteCells( DelCellCmd eCmd )
         else
             ErrorMessage(STR_NOMULTISELECT);
     }
+
+    OUString aStartAddress =  aRange.aStart.GetColRowString();
+    OUString aEndAddress = aRange.aEnd.GetColRowString();
+    collectUIInformation({{"RANGE", aStartAddress + ":" + aEndAddress}},"DELETE_CELLS");
 
     Unmark();
 }
@@ -1978,6 +2003,9 @@ void ScViewFunc::DeleteContents( InsertDeleteFlags nFlags )
         else
             StartFormatArea();              // delete attribute is also attribute-change
     }
+    OUString aStartAddress =  aMarkRange.aStart.GetColRowString();
+    OUString aEndAddress = aMarkRange.aEnd.GetColRowString();
+    collectUIInformation({{"RANGE", aStartAddress + ":" + aEndAddress}},"DELETE");
 }
 
 //  column width/row height (via header) - undo OK
