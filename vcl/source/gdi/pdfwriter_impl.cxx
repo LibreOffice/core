@@ -5181,8 +5181,10 @@ sal_Int32 PDFWriterImpl::emitOutputIntent()
     bool written = writeBuffer( aBuffer.data(), static_cast<sal_Int32>(aBuffer.size()) );
     disableStreamEncryption();
     endCompression();
+
     sal_uInt64 nEndStreamPos = 0;
-    m_aFile.getPos(nEndStreamPos);
+    if (m_aFile.getPos(nEndStreamPos) != osl::File::E_None)
+        return 0;
 
     if( !written )
         return 0;
