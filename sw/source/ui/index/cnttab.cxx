@@ -2150,7 +2150,7 @@ IMPL_LINK(SwTOXEntryTabPage, RemoveInsertAuthHdl, weld::Button&, rButton, void)
         sal_Int32 nSelPos = m_xAuthFieldsLB->get_active();
         const OUString sToInsert(m_xAuthFieldsLB->get_active_text());
         SwFormToken aInsert(TOKEN_AUTHORITY);
-        aInsert.nAuthorityField = m_xAuthFieldsLB->get_id(nSelPos).toInt32();
+        aInsert.nAuthorityField = m_xAuthFieldsLB->get_id(nSelPos).toUInt32();
         m_xTokenWIN->InsertAtSelection(aInsert);
         m_xAuthFieldsLB->remove_text(sToInsert);
         m_xAuthFieldsLB->set_active(nSelPos ? nSelPos - 1 : 0);
