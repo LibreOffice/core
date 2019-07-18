@@ -138,6 +138,8 @@
 #include <iodetect.hxx>
 #include <unotextrange.hxx>
 #include <unoframe.hxx>
+#include <vcl/uitest/logger.hxx>
+#include <vcl/uitest/eventdescription.hxx>
 
 #include <vcl/GraphicNativeTransform.hxx>
 #include <vcl/GraphicNativeMetadata.hxx>
@@ -161,6 +163,20 @@ using namespace ::svx;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::datatransfer;
+namespace {
+
+void collectUIInformation(const OUString action,const OUString aParameters)
+{
+    EventDescription aDescription;
+    aDescription.aAction = action;
+    aDescription.aParameters = {{"parameters",aParameters}};
+    aDescription.aID = "writer_edit";
+    aDescription.aKeyWord = "SwEditWinUIObject";
+    aDescription.aParent = "MainWindow";
+    UITestLogger::getInstance().logEvent(aDescription);
+}
+
+}
 
 #define DDE_TXT_ENCODING    osl_getThreadTextEncoding()
 
@@ -830,6 +846,7 @@ int SwTransferable::Cut()
     int nRet = Copy( true );
     if( nRet )
         DeleteSelection();
+    collectUIInformation("CUT","parameter");
     return nRet;
 }
 
@@ -1094,6 +1111,11 @@ int SwTransferable::Copy( bool bIsCut )
     {
         CopyToClipboard( &m_pWrtShell->GetView().GetEditWin() );
     }
+
+    if( !bIsCut ){
+        collectUIInformation("COPY","parameter");
+    }
+
     return nRet;
 }
 
@@ -1410,6 +1432,8 @@ bool SwTransferable::Paste(SwWrtShell& rSh, TransferableDataHelper& rData, RndSt
             nFormat = SotClipboardFormatId::RICHTEXT;
         }
     }
+
+    collectUIInformation("PASTE","parameter");
 
     return EXCHG_INOUT_ACTION_NONE != nAction &&
             SwTransferable::PasteData( rData, rSh, nAction, nActionFlags, nFormat,
