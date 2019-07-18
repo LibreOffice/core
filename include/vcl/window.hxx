@@ -1112,6 +1112,7 @@ public:
     bool                                HasActiveChildFrame();
     GetFocusFlags                       GetGetFocusFlags() const;
     void                                GrabFocusToDocument();
+    VclPtr<vcl::Window>                 GetFocusedWindow() const;
 
     /**
      * Set this when you need to act as if the window has focus even if it
