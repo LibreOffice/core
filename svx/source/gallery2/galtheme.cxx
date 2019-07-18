@@ -932,8 +932,8 @@ bool GalleryTheme::InsertModel(const FmFormModel& rModel, sal_uInt32 nInsertPos)
             {
                 uno::Reference< io::XOutputStream > xDocOut( new utl::OOutputStreamWrapper( aMemStm ) );
 
-                if( xDocOut.is() )
-                    SvxDrawingLayerExport( pFormModel, xDocOut );
+                if (xDocOut.is())
+                    (void)SvxDrawingLayerExport( pFormModel, xDocOut );
             }
 
             aMemStm.Seek( 0 );
