@@ -1726,6 +1726,11 @@ void SdrObject::dumpAsXml(xmlTextWriterPtr pWriter) const
     xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("nOrdNum"), "%" SAL_PRIuUINT32, GetOrdNumDirect());
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("aOutRect"), BAD_CAST(aOutRect.toString().getStr()));
 
+    if (mpProperties)
+    {
+        mpProperties->dumpAsXml(pWriter);
+    }
+
     if (const OutlinerParaObject* pOutliner = GetOutlinerParaObject())
         pOutliner->dumpAsXml(pWriter);
 

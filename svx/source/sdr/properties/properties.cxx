@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <libxml/xmlwriter.h>
+
 #include <svx/sdr/properties/properties.hxx>
 #include <sdr/properties/itemsettools.hxx>
 #include <svl/itemset.hxx>
@@ -152,6 +154,12 @@ namespace sdr
         sal_uInt32 BaseProperties::getVersion() const
         {
             return 0;
+        }
+
+        void BaseProperties::dumpAsXml(xmlTextWriterPtr pWriter) const
+        {
+            xmlTextWriterStartElement(pWriter, BAD_CAST("BaseProperties"));
+            xmlTextWriterEndElement(pWriter);
         }
 
         void CleanupFillProperties( SfxItemSet& rItemSet )

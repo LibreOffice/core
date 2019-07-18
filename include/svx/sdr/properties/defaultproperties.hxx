@@ -68,7 +68,7 @@ namespace sdr
             // destructor
             virtual ~DefaultProperties() override;
 
-            void dumpAsXml(xmlTextWriterPtr pWriter) const;
+            void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 
             // Clone() operator, normally just calls the local copy constructor
             virtual std::unique_ptr<BaseProperties> Clone(SdrObject& rObj) const override;
