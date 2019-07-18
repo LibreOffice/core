@@ -7055,8 +7055,8 @@ void DocxAttributeOutput::CharIdctHint( const SfxPoolItem& )
 
 void DocxAttributeOutput::CharRotate( const SvxCharRotateItem& rRotate)
 {
-    // Not rotated or we the rotation already handled?
-    if ( !rRotate.GetValue() || m_rExport.SdrExporter().getFrameBtLr())
+    // Not rotated?
+    if ( !rRotate.GetValue())
         return;
 
     AddToAttrList( m_pEastAsianLayoutAttrList, FSNS( XML_w, XML_vert ), "true" );
