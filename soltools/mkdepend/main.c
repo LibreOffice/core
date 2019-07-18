@@ -272,7 +272,6 @@ int main(int argc, char    **argv)
             break;
         /* do not use if endmarker processing */
         case 'a':
-            if (endmarker) break;
             break;
         case 'w':
             if (endmarker) break;
