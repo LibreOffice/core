@@ -270,9 +270,10 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
         }
         else
         {
-            InsertObjectAtView(pNewGrafObj, *pPV, nOptions);
-
-            if( pImageMap )
+            bool bSuccess = InsertObjectAtView(pNewGrafObj, *pPV, nOptions);
+            if (!bSuccess)
+                pNewGrafObj = nullptr;
+            else if (pImageMap)
                 pNewGrafObj->AppendUserData(std::unique_ptr<SdrObjUserData>(new SdIMapInfo(*pImageMap)));
         }
     }
