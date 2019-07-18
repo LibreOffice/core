@@ -415,6 +415,13 @@ DECLARE_OOXMLIMPORT_TEST(testTdf126114, "tdf126114.docx")
     CPPUNIT_ASSERT_EQUAL(7, getLength());
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf123627, "tdf123627.docx")
+{
+    uno::Reference<text::XTextRange> xText = getRun(getParagraph(1), 1);
+    OUString sTarget = getProperty<OUString>(xText, "HyperLinkURL");
+    CPPUNIT_ASSERT(sTarget.startsWith("file:///"));
+    CPPUNIT_ASSERT(sTarget.endsWith("New/test.docx"));
+}
 // tests should only be added to ooxmlIMPORT *if* they fail round-tripping in ooxmlEXPORT
 
 CPPUNIT_PLUGIN_IMPLEMENT();
