@@ -333,7 +333,7 @@ bool SlideSorterController::Command (
             else
                 aPopupId = "pagepanenoselmaster";
 
-            std::unique_ptr<InsertionIndicatorHandler::ForceShowContext> pContext;
+            std::unique_ptr<InsertionIndicatorHandler::ForceShowContext, o3tl::default_delete<InsertionIndicatorHandler::ForceShowContext>> xContext;
             if (pPage == nullptr)
             {
                 // When there is no selection, then we show the insertion
@@ -344,7 +344,7 @@ bool SlideSorterController::Command (
                 mpInsertionIndicatorHandler->UpdatePosition(
                     pWindow->PixelToLogic(rEvent.GetMousePosPixel()),
                     InsertionIndicatorHandler::MoveMode);
-                pContext.reset(new InsertionIndicatorHandler::ForceShowContext(
+                xContext.reset(new InsertionIndicatorHandler::ForceShowContext(
                     mpInsertionIndicatorHandler));
             }
 
@@ -389,7 +389,7 @@ bool SlideSorterController::Command (
                 GetSelectionManager()->SetInsertionPosition(
                     GetInsertionIndicatorHandler()->GetInsertionPageIndex());
             }
-            pContext.reset();
+            xContext.reset();
             bEventHasBeenHandled = true;
         }
         break;
