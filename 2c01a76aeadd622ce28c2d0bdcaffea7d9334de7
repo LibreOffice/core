@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_1d52b314",
+        "filename": "include/vcl/NotebookBarAddons.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2019-07-18T07:12:27Z",
+      "side": 1,
+      "message": "NotebookBarAddonsMerger would be better",
+      "revId": "2c01a76aeadd622ce28c2d0bdcaffea7d9334de7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_bd562706",
+        "filename": "vcl/source/window/builder.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2142,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2019-07-18T07:12:27Z",
+      "side": 1,
+      "message": "Better to use non Gtk* name - to not confuse with existing gtk widgets. Maybe \u0027NotebookBarAddonsMergePoint\u0027?",
+      "revId": "2c01a76aeadd622ce28c2d0bdcaffea7d9334de7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
