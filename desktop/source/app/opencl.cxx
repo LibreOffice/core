@@ -219,7 +219,7 @@ void Desktop::CheckOpenCLCompute(const Reference< XDesktop2 > &xDesktop)
     DirectoryItem aItem;
     DirectoryItem::get( aURL, aItem );
     FileStatus aFileStatus( osl_FileStatus_Mask_ModifyTime );
-    aItem.getFileStatus( aFileStatus );
+    (void)aItem.getFileStatus( aFileStatus );
     TimeValue aTimeVal = aFileStatus.getModifyTime();
     aSelectedCLDeviceVersionID += "--";
     aSelectedCLDeviceVersionID += OUString::number(aTimeVal.Seconds);
