@@ -17,7 +17,9 @@ SpecialCommand:
   then we can add whatever we need in the future
 */
 writer_command:
-    writer_Type_command | writer_Select_command | writer_GOTO_command 
+    writer_Type_command | writer_Select_command | writer_GOTO_command |
+    writer_Create_table | writer_Copy_Text | writer_Cut_Text |
+    writer_Paste_Text
 ;
 writer_Type_command:
   'Type on writer' what_to_type=Type_options
@@ -27,6 +29,18 @@ writer_Select_command:
 ;
 writer_GOTO_command:
   'GOTO page number' page_num=INT
+;
+writer_Create_table:
+  'Create Table with  Columns :' cols=INT ', Rows :' rows=INT
+;
+writer_Copy_Text:
+  'Copy the Selected Text'
+;
+writer_Cut_Text:
+  'Cut the Selected Text'
+;
+writer_Paste_Text:
+  'Paste in the Current Cursor Location'
 ;
 //=================================================================//
 /*
@@ -39,7 +53,9 @@ writer_GOTO_command:
   then we can add whatever we need in the future
 */
 calc_command:
-  calc_Type_command | calc_switch_sheet | calc_Select_cell | calc_AutoFill_filter 
+  calc_Type_command | calc_switch_sheet | calc_Select_cell | calc_AutoFill_filter |
+  calc_Delete_Cells | calc_Remove_Content | calc_insert_cells | calc_Cut_Cells | 
+  calc_Copy_Cells | calc_Paste_Cells | calc_UNMerge_Cells | calc_Merge_Cells
 ;
 calc_Type_command:
   'Type on current cell' what_to_type=Type_options
@@ -62,6 +78,30 @@ range_of_cells:
 ;
 one_cell:
     '{' '"CELL":' input_cell=STRING '}'
+;
+calc_Delete_Cells:
+    'Delete The Cells in' '{' '"RANGE":' input_range=STRING '}'
+;
+calc_Remove_Content:
+    'Remove Content from This' '{' '"RANGE":' input_range=STRING '}'
+;
+calc_insert_cells:
+    'Insert Cell around the ' '{' '"RANGE":' input_range=STRING '}'
+;
+calc_Cut_Cells:
+    'CUT the selected ' '{' '"RANGE":' input_range=STRING '}'
+;
+calc_Copy_Cells:
+    'COPY the selected ' '{' '"RANGE":' input_range=STRING '}'
+;
+calc_Paste_Cells:
+    'Paste in the' '{' '"RANGE":' input_range=STRING '}'
+;
+calc_Merge_Cells:
+    'Merge' '{' '"RANGE":' input_range=STRING '}'
+;
+calc_UNMerge_Cells:
+    'Delete the merge between' '{' '"CELL":' input_range=STRING '}'
 ;
 //=================================================================//
 /*
