@@ -711,9 +711,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf119824)
 
     // and a tracked text deletion at the beginning of the paragraph
     CPPUNIT_ASSERT_EQUAL(OUString("Pellentesque habitant morbi tristique senectus "),
-                         getRun(getParagraph(3), 3)->getString());
-    CPPUNIT_ASSERT_EQUAL(OUString(""), getRun(getParagraph(3), 2)->getString());
-    CPPUNIT_ASSERT(hasProperty(getRun(getParagraph(3), 2), "RedlineType"));
+                         getRun(getParagraph(3), 2)->getString());
 
     // delete last word of the third paragraph to remove tracked paragraph formatting
     // of this paragraph to track and show word deletion correctly.
