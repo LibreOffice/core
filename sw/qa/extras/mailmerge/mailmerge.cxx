@@ -126,7 +126,7 @@ public:
             uno::Reference< sdbc::XRowSet > xRowSet( xInstance, uno::UNO_QUERY );
             if (xRowSet.is())
                 xRowSet->execute(); // build ResultSet from properties
-            xCurResultSet.set( xRowSet, uno::UNO_QUERY );
+            xCurResultSet = xRowSet;
             assert( xCurResultSet.is() && "failed to build ResultSet" );
         }
         return xCurResultSet;
@@ -366,7 +366,7 @@ DECLARE_SHELL_MAILMERGE_TEST(testMultiPageAnchoredDraws, "multiple-page-anchored
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(8), nPhysPages);
 
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxMMComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDraws = xDrawPageSupplier->getDrawPage();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(8), xDraws->getCount());
 
     std::set<sal_uInt16> pages;
@@ -393,7 +393,7 @@ DECLARE_FILE_MAILMERGE_TEST(testMissingDefaultLineColor, "missing-default-line-c
     // The document was created by LO version which didn't write out the default value for line color
     // (see XMLGraphicsDefaultStyle::SetDefaults()).
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDraws = xDrawPageSupplier->getDrawPage();
     uno::Reference<beans::XPropertySet> xPropertySet(xDraws->getByIndex(0), uno::UNO_QUERY);
     // Lines do not have a line color.
     CPPUNIT_ASSERT( !xPropertySet->getPropertySetInfo()->hasPropertyByName( "LineColor" ));
@@ -700,7 +700,7 @@ DECLARE_SHELL_MAILMERGE_TEST(testTdf118113, "tdf118113.odt", "tdf118113.ods", "t
 
     // verify that there is a text box for each data record
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxMMComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDraws = xDrawPageSupplier->getDrawPage();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(4), xDraws->getCount());
 
     // verify the text box for each data record is anchored to the first page of the given data record's pages

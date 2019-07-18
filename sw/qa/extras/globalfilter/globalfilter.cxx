@@ -109,7 +109,7 @@ void Test::testEmbeddedGraphicRoundtrip()
 
         // Check whether graphic exported well after it was swapped out
         uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-        uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+        uno::Reference<container::XIndexAccess> xDraws = xDrawPageSupplier->getDrawPage();
 
         const OString sFailedMessage = OString("Failed on filter: ") + rFilterName.toUtf8();
         CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(2), xDraws->getCount());
@@ -246,7 +246,7 @@ void Test::testImageWithSpecialID()
 
         // Check whether graphic exported well
         uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-        uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+        uno::Reference<container::XIndexAccess> xDraws = xDrawPageSupplier->getDrawPage();
 
         const OString sFailedMessage = OString("Failed on filter: ") + rFilterName.toUtf8();
         CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(2), xDraws->getCount());
@@ -344,7 +344,7 @@ void Test::testGraphicShape()
 
         // Check whether graphic exported well
         uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-        uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+        uno::Reference<container::XIndexAccess> xDraws = xDrawPageSupplier->getDrawPage();
 
         const OString sFailedMessage = OString("Failed on filter: ") + rFilterName.toUtf8();
         CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(2), xDraws->getCount());
@@ -801,7 +801,7 @@ void Test::testSkipImages()
 
         // Check shapes (images, textboxes, custom shapes)
         uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-        uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+        uno::Reference<container::XIndexAccess> xDraws = xDrawPageSupplier->getDrawPage();
         uno::Reference<drawing::XShape> xShape;
         uno::Reference<graphic::XGraphic> xGraphic;
         uno::Reference< beans::XPropertySet > XPropSet;

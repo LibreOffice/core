@@ -348,10 +348,9 @@ DECLARE_OOXMLIMPORT_TEST(testTdf115094, "tdf115094.docx")
     // anchor of graphic has to be the text in the text frame
     // xray ThisComponent.DrawPage(1).Anchor.Text
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xDrawPage(xDrawPageSupplier->getDrawPage(),
-                                                      uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDrawPage = xDrawPageSupplier->getDrawPage();
     uno::Reference<text::XTextContent> xShape(xDrawPage->getByIndex(1), uno::UNO_QUERY);
-    uno::Reference<text::XTextRange> xText1(xShape->getAnchor()->getText(), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xText1 = xShape->getAnchor()->getText();
 
     // xray ThisComponent.TextTables(0).getCellByName("A1")
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);

@@ -55,8 +55,6 @@ AccessibilityTools::getAccessibleObjectForRole(
 
     if ((ac->getAccessibleRole() == role) && isShowing)
     {
-        css::uno::Reference<css::accessibility::XAccessible> SearchedAccessible(xacc,
-                                                                                uno::UNO_QUERY);
         return ac;
     }
     else

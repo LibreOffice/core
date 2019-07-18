@@ -682,7 +682,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf112446_frameStyle, "tdf112446_frameStyle.docx")
 DECLARE_OOXMLEXPORT_TEST(testTdf82173_footnoteStyle, "tdf82173_footnoteStyle.docx")
 {
     uno::Reference<text::XFootnotesSupplier> xFootnotesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xFootnotes(xFootnotesSupplier->getFootnotes(), uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xFootnotes = xFootnotesSupplier->getFootnotes();
 
     uno::Reference<text::XText> xFootnoteText;
     xFootnotes->getByIndex(0) >>= xFootnoteText;
@@ -705,7 +705,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf82173_footnoteStyle, "tdf82173_footnoteStyle.doc
 DECLARE_OOXMLEXPORT_TEST(testTdf82173_endnoteStyle, "tdf82173_endnoteStyle.docx")
 {
     uno::Reference<text::XEndnotesSupplier> xEndnotesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xEndnotes(xEndnotesSupplier->getEndnotes(), uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xEndnotes = xEndnotesSupplier->getEndnotes();
     uno::Reference<text::XFootnote> xEndnote;
     xEndnotes->getByIndex(0) >>= xEndnote;
     // character properties were previously not assigned to the footnote/endnote in-text anchor.
@@ -743,10 +743,10 @@ DECLARE_OOXMLEXPORT_TEST(testTdf55427_footnote2endnote, "tdf55427_footnote2endno
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "Endnote numbering type", SVX_NUM_ROMAN_LOWER, pDoc->GetEndNoteInfo().aFormat.GetNumberingType() );
 
     uno::Reference<text::XFootnotesSupplier> xFootnotesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xFootnotes(xFootnotesSupplier->getFootnotes(), uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xFootnotes = xFootnotesSupplier->getFootnotes();
 
     uno::Reference<text::XEndnotesSupplier> xEndnotesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xEndnotes(xEndnotesSupplier->getEndnotes(), uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xEndnotes = xEndnotesSupplier->getEndnotes();
     uno::Reference<text::XFootnote> xEndnote;
     xEndnotes->getByIndex(0) >>= xEndnote;
     uno::Reference<text::XText> xEndnoteText;
@@ -980,7 +980,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf100075, "tdf100075.docx")
 DECLARE_OOXMLEXPORT_TEST(testTdf105095, "tdf105095.docx")
 {
     uno::Reference<text::XFootnotesSupplier> xFootnotesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xFootnotes(xFootnotesSupplier->getFootnotes(), uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xFootnotes = xFootnotesSupplier->getFootnotes();
     uno::Reference<text::XTextRange> xTextRange(xFootnotes->getByIndex(0), uno::UNO_QUERY);
     // This failed, tab between the footnote number and the footnote content
     // was lost on import.
@@ -990,7 +990,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf105095, "tdf105095.docx")
 DECLARE_OOXMLEXPORT_TEST(testTdf106062_nonHangingFootnote, "tdf106062_nonHangingFootnote.odt")
 {
     uno::Reference<text::XFootnotesSupplier> xFootnotesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xFootnotes(xFootnotesSupplier->getFootnotes(), uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xFootnotes = xFootnotesSupplier->getFootnotes();
     uno::Reference<text::XTextRange> xTextRange(xFootnotes->getByIndex(0), uno::UNO_QUERY);
     // This failed, tab between the footnote number and the footnote content was lost on import.
     CPPUNIT_ASSERT_MESSAGE( "Footnote starts with a tab", xTextRange->getString().startsWith("\t") );
@@ -1265,7 +1265,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf90789, "tdf90789.docx")
 
     uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(xCtrl, uno::UNO_QUERY_THROW);
     uno::Reference<text::XTextViewCursor> xTextCursor(xTextViewCursorSupplier->getViewCursor(), uno::UNO_SET_THROW);
-    uno::Reference<text::XPageCursor> xPageCursor(xTextCursor.get(), uno::UNO_QUERY_THROW);
+    uno::Reference<text::XPageCursor> xPageCursor(xTextCursor, uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(1), xPageCursor->getPage());
 }
 
