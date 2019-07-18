@@ -231,8 +231,7 @@ void UITestLogger::logKeyInput(VclPtr<vcl::Window> const & xUIElement, const Key
         aContent = "Type on math " + aKeyCode ;
     }
     else{
-        aContent= pUIObject->get_type() + " Action:TYPE Id:" +
-                rID + " Parent:"+ aParentID +" " + aKeyCode;
+        aContent =  "Type on '" + rID + "' " + aKeyCode + " from " + aParentID ;
     }
     maStream.WriteLine(OUStringToOString(aContent, RTL_TEXTENCODING_UTF8));
 }
@@ -327,6 +326,30 @@ void UITestLogger::logEvent(const EventDescription& rDescription)
             aLogLine = "Lanuch AutoFilter from Col "+
             GetValueInMapWithIndex(rDescription.aParameters,2) +
             " and Row " + GetValueInMapWithIndex(rDescription.aParameters,1);
+        }
+        else if(rDescription.aAction=="DELETE_CONTENT"){
+            aLogLine = "Remove Content from This " + aParameterString;
+        }
+        else if(rDescription.aAction=="DELETE_CELLS"){
+            aLogLine = "Delete The Cells in" + aParameterString;
+        }
+        else if(rDescription.aAction=="INSERT_CELLS"){
+            aLogLine = "Insert Cell around the " + aParameterString;
+        }
+        else if(rDescription.aAction=="CUT"){
+            aLogLine = "CUT the selected " + aParameterString;
+        }
+        else if(rDescription.aAction=="COPY"){
+            aLogLine = "COPY the selected " + aParameterString;
+        }
+        else if(rDescription.aAction=="PASTE"){
+            aLogLine = "Paste in the " + aParameterString;
+        }
+        else if(rDescription.aAction=="MERGE_CELLS"){
+            aLogLine = "Merge " + aParameterString;
+        }
+        else if(rDescription.aAction=="UNMERGE_CELL"){
+            aLogLine = "Delete the merged " + aParameterString;
         }
     }
     else if(rDescription.aParent=="element_selector"){

@@ -44,6 +44,8 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 
 #include <viewfunc.hxx>
+#include <vcl/uitest/logger.hxx>
+#include <vcl/uitest/eventdescription.hxx>
 
 #include <sc.hrc>
 #include <globstr.hrc>
@@ -99,6 +101,21 @@
 
 using namespace com::sun::star;
 using ::editeng::SvxBorderLine;
+
+namespace {
+
+void collectUIInformation(const std::map<OUString, OUString>& aParameters,const OUString action)
+{
+    EventDescription aDescription;
+    aDescription.aID = "grid_window";
+    aDescription.aAction = action;
+    aDescription.aParameters = aParameters;
+    aDescription.aParent = "MainWindow";
+    aDescription.aKeyWord = "ScGridWinUIObject";
+
+    UITestLogger::getInstance().logEvent(aDescription);
+}
+}
 
 using ::std::vector;
 using ::std::unique_ptr;
@@ -1222,7 +1239,9 @@ bool ScViewFunc::MergeCells( bool bApi, bool& rDoContents, bool bCenter )
             UpdateInputLine();
         }
     }
-
+    OUString aStartAddress =  aMarkRange.aStart.GetColRowString();
+    OUString aEndAddress = aMarkRange.aEnd.GetColRowString();
+    collectUIInformation({{"RANGE", aStartAddress + ":" + aEndAddress}},"MERGE_CELLS");
     return bOk;
 }
 
@@ -1308,6 +1327,10 @@ bool ScViewFunc::RemoveMerge()
         if (bOk)
             pDocSh->UpdateOle(&GetViewData());
     }
+
+    OUString Cell_location =  aRange.aStart.GetColRowString();
+    collectUIInformation({{"CELL", Cell_location }},"UNMERGE_CELL");
+
     return true;        //! bOk ??
 }
 
