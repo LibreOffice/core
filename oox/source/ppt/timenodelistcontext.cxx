@@ -602,8 +602,8 @@ namespace oox { namespace ppt {
                         if (!tav.msFormula.isEmpty())
                         {
                             OUString sFormula = tav.msFormula;
-                            convertMeasure(sFormula);
-                            aProps[NP_FORMULA] <<= sFormula;
+                            if (convertMeasure(sFormula))
+                                aProps[NP_FORMULA] <<= sFormula;
                         }
 
                         ++i;
