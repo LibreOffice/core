@@ -33,6 +33,7 @@ $(eval $(call gb_Library_use_libraries,ldapbe2,\
 	cppu \
 	salhelper \
 	sal \
+	tl \
 ))
 
 ifeq ($(OS),WNT)

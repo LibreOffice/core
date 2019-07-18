@@ -26,6 +26,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/byteseq.h>
 #include <sal/log.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <rtl/instance.hxx>
 #include <com/sun/star/beans/NamedValue.hpp>
@@ -138,9 +139,10 @@ bool LdapUserProfileBe::readLdapConfiguration(
         getLdapStringParam(xAccess, kUser, definition->mAnonUser);
         getLdapStringParam(xAccess, kPassword, definition->mAnonCredentials);
     }
-    catch (const uno::Exception & e)
+    catch (const uno::Exception&)
     {
-        SAL_WARN("extensions.config", "LdapUserProfileBackend: access to configuration data failed: " << e);
+        css::uno::Any ex(DbgGetCaughtException());
+        SAL_WARN("extensions.config", "LdapUserProfileBackend: access to configuration data failed: " << exceptionToString(ex));
         return false;
     }
 
