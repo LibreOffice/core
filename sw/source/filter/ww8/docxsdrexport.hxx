@@ -67,8 +67,6 @@ public:
     /// Attributes of the next v:textbox element.
     rtl::Reference<sax_fastparser::FastAttributeList>& getTextboxAttrList();
     OStringBuffer& getTextFrameStyle();
-    /// Same, as DocxAttributeOutput::m_bBtLr, but for textframe rotation.
-    bool getFrameBtLr();
 
     /// Set if paragraph sdt open in the current drawing.
     void setParagraphSdtOpen(bool bParagraphSdtOpen);
