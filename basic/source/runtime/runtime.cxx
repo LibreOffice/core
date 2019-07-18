@@ -344,7 +344,7 @@ SbiInstance::~SbiInstance()
     }
     catch( const Exception& )
     {
-        css::uno::Any ex( cppu::getCaughtException() );
+        css::uno::Any ex(DbgGetCaughtException());
         SAL_WARN("basic", "SbiInstance::~SbiInstance: caught an exception while disposing the components! " << exceptionToString(ex) );
     }
 }
