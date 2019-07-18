@@ -37,6 +37,7 @@
 #include <sfx2/dispatch.hxx>
 #include <svl/stritem.hxx>
 #include <svx/svxids.hrc>
+#include <comphelper/lok.hxx>
 #include <txtfrm.hxx>
 #include <redline.hxx>
 #include <view.hxx>
@@ -2003,5 +2004,40 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testDateFormFieldCurrentDateInvalidation)
     CPPUNIT_ASSERT_EQUAL(OUString(""), sCurrentDate);
 }
 #endif
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testOleSaveWhileEdit)
+{
+    // Enable LOK mode, otherwise OCommonEmbeddedObject::SwitchStateTo_Impl() will throw when it
+    // finds out that the test runs headless.
+    comphelper::LibreOfficeKit::setActive();
+
+    // Load a document with a Draw doc in it.
+    SwDoc* pDoc = createDoc("ole-save-while-edit.odt");
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->GotoObj(/*bNext=*/true, GotoObjFlags::Any);
+
+    // Select the frame and switch to the frame shell.
+    SwView* pView = pDoc->GetDocShell()->GetView();
+    pView->StopShellTimer();
+
+    // Start editing the OLE object.
+    pWrtShell->LaunchOLEObj();
+
+    // Save the document without existing the OLE edit.
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    xStorable->storeToURL(maTempFile.GetURL(), {});
+
+    uno::Reference<packages::zip::XZipFileAccess2> xNameAccess
+        = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory),
+                                                      maTempFile.GetURL());
+    // Without the accompanying fix in place, this test would have failed: the OLE object lost its
+    // replacement on save if the edit was active while saving.
+    CPPUNIT_ASSERT(xNameAccess->hasByName("ObjectReplacements/Object 1"));
+
+    // Dispose the document while LOK is still active to avoid leaks.
+    mxComponent->dispose();
+    mxComponent.clear();
+    comphelper::LibreOfficeKit::setActive(false);
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
