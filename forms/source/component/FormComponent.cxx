@@ -1973,7 +1973,6 @@ void OBoundControlModel::connectToField(const Reference<XRowSet>& rForm)
         }
 
     }
-    hasField();
 }
 
 void OBoundControlModel::initFromField( const Reference< XRowSet >& _rxRowSet )
