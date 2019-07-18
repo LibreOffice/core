@@ -86,7 +86,16 @@ class ul_Compiler:
             'impress_Type_command':self.handle_impress_Type_command,
             'math_element_selector':self.handle_math_element_selector,
             'math_Type_command':self.handle_math_Type_command,
-            'setZoom_command':self.handle_setZoom_command
+            'setZoom_command':self.handle_setZoom_command,
+
+            'writer_Create_table':self.do_nothing,
+            'calc_Remove_Content':self.do_nothing,
+            'calc_Delete_Cells':self.do_nothing,
+            'calc_insert_cells':self.do_nothing,
+            'calc_Cut_Cells':self.do_nothing,
+            'calc_Copy_Cells':self.do_nothing,
+            'calc_Merge_Cells':self.do_nothing,
+            'calc_UNMerge_Cells':self.do_nothing,
             })
 
         self.log_lines=self.get_log_file(self.input_address)
@@ -402,6 +411,9 @@ class ul_Compiler:
 
         for line in self.variables:
             self.output_stream.write(str(line))
+
+    def do_nothing(self,Command):
+        line="to be added in the future"
 
     def __del__(self):
         self.output_stream.close()
