@@ -1523,7 +1523,7 @@ IMPL_LINK(SdPageObjsTLV, RequestingChildrenHdl, const weld::TreeIter&, rFileEntr
                         m_xTreeView->iter_children(*xPageEntry);
                     }
                     else
-                        m_xTreeView->iter_next_sibling(*xPageEntry);
+                        (void)m_xTreeView->iter_next_sibling(*xPageEntry);
 
                     SdrObjListIter aIter( pPage, SdrIterMode::DeepWithGroups );
 
