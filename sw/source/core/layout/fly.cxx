@@ -264,6 +264,8 @@ void SwFlyFrame::DestroyImpl()
 
     if( GetFormat() && !GetFormat()->GetDoc()->IsInDtor() )
     {
+        ClearTmpConsiderWrapInfluence(); // remove this from SwLayouter
+
         // OD 2004-01-19 #110582#
         Unchain();
 
