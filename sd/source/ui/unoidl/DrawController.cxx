@@ -429,7 +429,7 @@ void DrawController::FireSwitchCurrentPage (SdPage* pNewCurrentPage) throw()
     }
     catch (const uno::Exception&)
     {
-        css::uno::Any ex( cppu::getCaughtException() );
+        css::uno::Any ex(DbgGetCaughtException());
         SAL_WARN("sd", "sd::SdUnoDrawView::FireSwitchCurrentPage(), exception caught:  " << exceptionToString(ex));
     }
 }
