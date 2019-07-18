@@ -28,6 +28,8 @@
 #include <svx/svxdllapi.h>
 #include <svl/typedwhich.hxx>
 
+struct _xmlTextWriter;
+typedef struct _xmlTextWriter* xmlTextWriterPtr;
 class SdrObject;
 class SfxItemSet;
 class SfxPoolItem;
@@ -196,6 +198,8 @@ namespace sdr
             // allow detection of e.g. style sheet or single text attribute changes. The
             // default implementation returns 0 (zero)
             virtual sal_uInt32 getVersion() const;
+
+            virtual void dumpAsXml(xmlTextWriterPtr pWriter) const;
         };
 
         // checks the FillStyle item and removes unneeded Gradient, FillBitmap and Hatch items
