@@ -54,7 +54,7 @@ void SimpleReferenceComponent::release()
         }
         catch (RuntimeException const &) // don't break throw ()
         {
-            css::uno::Any ex( cppu::getCaughtException() );
+            css::uno::Any ex(DbgGetCaughtException());
             SAL_WARN( "sd", exceptionToString(ex) );
         }
     }
