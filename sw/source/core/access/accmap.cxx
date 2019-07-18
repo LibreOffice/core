@@ -73,6 +73,7 @@
 #include <dflyobj.hxx>
 #include <prevwpage.hxx>
 #include <calbck.hxx>
+#include <undobj.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
@@ -1196,7 +1197,6 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
                                 sal_uLong nEndIndex = pEnd->nNode.GetIndex();
                                 if ((nStartIndex <= nLastNode) && (nFirstNode <= nEndIndex))
                                 {
-                                    // FIXME: what about missing FLY_AT_CHAR?
                                     if( rAnchor.GetAnchorId() == RndStdIds::FLY_AS_CHAR )
                                     {
                                         if( ( ((nHere == nStartIndex) && (nIndex >= pStart->nContent.GetIndex())) || (nHere > nStartIndex) )
@@ -1228,6 +1228,21 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
                                             uno::Reference < XAccessible > xAcc( (*aIter).second );
                                             if(xAcc.is())
                                                 static_cast < ::accessibility::AccessibleShape* >(xAcc.get())->ResetState( AccessibleStateType::SELECTED );
+                                        }
+                                    }
+                                    else if (rAnchor.GetAnchorId() == RndStdIds::FLY_AT_CHAR)
+                                    {
+                                        uno::Reference<XAccessible> const xAcc((*aIter).second);
+                                        if (xAcc.is())
+                                        {
+                                            if (IsDestroyFrameAnchoredAtChar(*pPos, *pStart, *pEnd))
+                                            {
+                                                static_cast<::accessibility::AccessibleShape*>(xAcc.get())->SetState( AccessibleStateType::SELECTED );
+                                            }
+                                            else
+                                            {
+                                                static_cast<::accessibility::AccessibleShape*>(xAcc.get())->ResetState( AccessibleStateType::SELECTED );
+                                            }
                                         }
                                     }
                                 }
