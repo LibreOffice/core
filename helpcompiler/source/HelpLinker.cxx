@@ -910,7 +910,7 @@ bool compileExtensionHelp
         sal_uInt64 ret, len = aFileStatus.getFileSize();
         std::unique_ptr<char[]> s(new char[ int(len) ]);  // the buffer to hold the installed files
         osl::File aFile( aTreeFileURL );
-        aFile.open( osl_File_OpenFlag_Read );
+        (void)aFile.open( osl_File_OpenFlag_Read );
         aFile.read( s.get(), len, ret );
         aFile.close();
 
