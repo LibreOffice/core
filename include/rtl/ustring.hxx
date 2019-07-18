@@ -142,7 +142,7 @@ public:
     /**
       New string from OUString.
 
-      @param    str         a OUString.
+      @param    str         an OUString.
     */
     OUString( const OUString & str )
     {
@@ -155,7 +155,7 @@ public:
     /**
       Move constructor.
 
-      @param    str         a OUString.
+      @param    str         an OUString.
       @since LibreOffice 5.2
     */
     OUString( OUString && str )
@@ -170,7 +170,7 @@ public:
     /**
       New string from OUString data.
 
-      @param    str         a OUString data.
+      @param    str         an OUString data.
     */
     OUString( rtl_uString * str )
     {
@@ -446,7 +446,7 @@ public:
     /**
       Assign a new string.
 
-      @param    str         a OUString.
+      @param    str         an OUString.
     */
     OUString & operator=( const OUString & str )
     {
@@ -546,7 +546,7 @@ public:
     /**
       Append a string to this string.
 
-      @param    str         a OUString.
+      @param    str         an OUString.
 
       @exception std::bad_alloc is thrown if an out-of-memory condition occurs
     */
@@ -804,7 +804,7 @@ public:
     }
 
     /**
-      Perform a ASCII lowercase comparison of two strings.
+      Perform an ASCII lowercase comparison of two strings.
 
       The result is true if and only if second string
       represents the same sequence of characters as the first string,
@@ -828,7 +828,7 @@ public:
     }
 
     /**
-      Perform a ASCII lowercase comparison of two strings.
+      Perform an ASCII lowercase comparison of two strings.
 
       Compare the two strings with uppercase ASCII
       character values between 65 and 90 (ASCII A-Z) interpreted as
@@ -1154,7 +1154,7 @@ public:
     }
 
     /**
-      Perform a ASCII lowercase comparison of two strings.
+      Perform an ASCII lowercase comparison of two strings.
 
       The result is true if and only if second string
       represents the same sequence of characters as the first string,
@@ -3539,7 +3539,7 @@ public:
     }
 
     /**
-      Returns a OUString copied without conversion from an ASCII
+      Returns an OUString copied without conversion from an ASCII
       character string.
 
       Since this method is optimized for performance, the ASCII character
