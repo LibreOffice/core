@@ -1211,6 +1211,14 @@ void SwDocShell::CalcLayoutForOLEObjects()
     if (!m_pWrtShell)
         return;
 
+    if (m_pView && m_pView->GetIPClient())
+    {
+        // We have an active OLE edit: allow link updates, so an up to date replacement graphic can
+        // be created.
+        comphelper::EmbeddedObjectContainer& rEmbeddedObjectContainer = getEmbeddedObjectContainer();
+        rEmbeddedObjectContainer.setUserAllowsLinkUpdate(true);
+    }
+
     SwIterator<SwContentNode,SwFormatColl> aIter( *m_pDoc->GetDfltGrfFormatColl() );
     for( SwContentNode* pNd = aIter.First(); pNd; pNd = aIter.Next() )
     {

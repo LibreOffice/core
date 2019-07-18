@@ -108,6 +108,7 @@
 #include <sfx2/watermarkitem.hxx>
 #include <svtools/htmlout.hxx>
 #include <test/htmltesttools.hxx>
+#include <comphelper/lok.hxx>
 #include <wrthtml.hxx>
 
 namespace
@@ -279,6 +280,7 @@ public:
     void testHtmlCopyImages();
     void testTdf116789();
     void testTdf117225();
+    void testOleSaveWhileEdit();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -420,6 +422,7 @@ public:
     CPPUNIT_TEST(testHtmlCopyImages);
     CPPUNIT_TEST(testTdf116789);
     CPPUNIT_TEST(testTdf117225);
+    CPPUNIT_TEST(testOleSaveWhileEdit);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -5081,6 +5084,41 @@ void SwUiWriterTest::testTdf117225()
     int nActual = CountFilesInDirectory(aTargetDirectory);
     // nActual was nExpected + 1, i.e. we leaked a tempfile.
     CPPUNIT_ASSERT_EQUAL(nExpected, nActual);
+}
+
+void SwUiWriterTest::testOleSaveWhileEdit()
+{
+    // Enable LOK mode, otherwise OCommonEmbeddedObject::SwitchStateTo_Impl() will throw when it
+    // finds out that the test runs headless.
+    comphelper::LibreOfficeKit::setActive();
+
+    // Load a document with a Draw doc in it.
+    SwDoc* pDoc = createDoc("ole-save-while-edit.odt");
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->GotoObj(/*bNext=*/true, GotoObjFlags::Any);
+
+    // Select the frame and switch to the frame shell.
+    SwView* pView = pDoc->GetDocShell()->GetView();
+    pView->StopShellTimer();
+
+    // Start editing the OLE object.
+    pWrtShell->LaunchOLEObj();
+
+    // Save the document without existing the OLE edit.
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    xStorable->storeToURL(maTempFile.GetURL(), {});
+
+    uno::Reference<packages::zip::XZipFileAccess2> xNameAccess
+        = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory),
+                                                      maTempFile.GetURL());
+    // Without the accompanying fix in place, this test would have failed: the OLE object lost its
+    // replacement on save if the edit was active while saving.
+    CPPUNIT_ASSERT(xNameAccess->hasByName("ObjectReplacements/Object 1"));
+
+    // Dispose the document while LOK is still active to avoid leaks.
+    mxComponent->dispose();
+    mxComponent.clear();
+    comphelper::LibreOfficeKit::setActive(false);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);
