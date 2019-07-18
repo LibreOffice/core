@@ -27,6 +27,7 @@
 #include <com/sun/star/text/XTextFrame.hpp>
 #include <com/sun/star/style/TabStop.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
+#include <unotools/saveopt.hxx>
 #include <queue>
 #include <stack>
 #include <tuple>
@@ -406,6 +407,7 @@ public:
 private:
     SourceDocumentType const                                                        m_eDocumentType;
     DomainMapper&                                                                   m_rDMapper;
+    SvtSaveOptions const                                                            m_aSaveOpt;
     OUString m_aBaseUrl;
     css::uno::Reference<css::text::XTextDocument> m_xTextDocument;
     css::uno::Reference<css::beans::XPropertySet> m_xDocumentSettings;
