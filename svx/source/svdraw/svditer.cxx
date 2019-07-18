@@ -74,11 +74,8 @@ SdrObjListIter::SdrObjListIter(const SdrPage* pSdrPage, SdrIterMode eMode, bool 
     mbReverse(bReverse),
     mbUseZOrder(true)
 {
-    if(nullptr != pSdrPage)
-    {
-        ImpProcessObjectList(*dynamic_cast< const SdrObjList* >(pSdrPage), eMode);
-    }
-
+    if (const SdrObjList* pList = dynamic_cast<const SdrObjList*>(pSdrPage))
+        ImpProcessObjectList(*pList, eMode);
     Reset();
 }
 
