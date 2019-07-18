@@ -779,7 +779,7 @@ void SbRtl_FileLen(StarBASIC *, SbxArray & rPar, bool)
             DirectoryItem aItem;
             (void)DirectoryItem::get( getFullPath( aStr ), aItem );
             FileStatus aFileStatus( osl_FileStatus_Mask_FileSize );
-            aItem.getFileStatus( aFileStatus );
+            (void)aItem.getFileStatus( aFileStatus );
             nLen = static_cast<sal_Int32>(aFileStatus.getFileSize());
         }
         rPar.Get(0)->PutLong( static_cast<long>(nLen) );
