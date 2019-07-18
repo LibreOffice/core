@@ -1921,8 +1921,8 @@ void DocxAttributeOutput::StartField_Impl( const SwTextNode* pNode, sal_Int32 nP
     }
     else if ( rInfos.eType == ww::eFORMDATE )
     {
-        const sw::mark::IDateFieldmark* const pFieldmark = dynamic_cast<const sw::mark::IDateFieldmark* const>(rInfos.pFieldmark);
-        FieldMarkParamsHelper params( *pFieldmark );
+        const sw::mark::IDateFieldmark& rFieldmark = dynamic_cast<const sw::mark::IDateFieldmark&>(*rInfos.pFieldmark);
+        FieldMarkParamsHelper params(rFieldmark);
 
         OUString sFullDate;
         OUString sCurrentDate;
@@ -1933,10 +1933,10 @@ void DocxAttributeOutput::StartField_Impl( const SwTextNode* pNode, sal_Int32 nP
         }
         else
         {
-            std::pair<bool, double> aResult = pFieldmark->GetCurrentDate();
+            std::pair<bool, double> aResult = rFieldmark.GetCurrentDate();
             if(aResult.first)
             {
-                sFullDate = pFieldmark->GetDateInStandardDateFormat(aResult.second) + "T00:00:00Z";
+                sFullDate = rFieldmark.GetDateInStandardDateFormat(aResult.second) + "T00:00:00Z";
             }
         }
 
