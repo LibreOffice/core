@@ -673,7 +673,7 @@ static IsoLanguageCountryEntry const aImplIsoLangEntries[] =
     { LANGUAGE_USER_FON,                   "fon", "BJ", k0    },
     { LANGUAGE_USER_PLAUTDIETSCH,          "pdt", "CA", k0    },
     { LANGUAGE_USER_ARMENIAN_WESTERN,      "hyw", "AM", k0    },
-    { LANGUAGE_USER_ARMENIAN_CLASSIC,      "xcl", "AM", k0    },
+    { LANGUAGE_USER_ARMENIAN_CLASSICAL,    "xcl", "AM", k0    },
     { LANGUAGE_USER_JUHOAN,                "ktz", "NA", k0    },
     { LANGUAGE_USER_NARO,                  "nhr", "BW", k0    },
     { LANGUAGE_USER_ILOKO,                 "ilo", "PH", k0    },
