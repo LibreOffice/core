@@ -201,7 +201,7 @@ bool XMLFilterJarHelper::savePackage( const OUString& rPackageURL, const std::ve
 
             {
                 osl::File aOutputFile( aTempFileURL );
-                /* osl::File::RC rc = */ aOutputFile.open( osl_File_OpenFlag_Write );
+                (void)aOutputFile.open(osl_File_OpenFlag_Write);
                 Reference< XOutputStream > xOS( new OSLOutputStreamWrapper( aOutputFile ) );
 
                 TypeDetectionExporter aExporter( mxContext );
