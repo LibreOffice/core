@@ -58,7 +58,7 @@ public:
     virtual ~SdUnoPageBackground() throw() override;
 
     // internal
-    void fillItemSet( SdDrawDocument* pDoc, SfxItemSet& rSet ) throw();
+    void fillItemSet( SdDrawDocument* pDoc, SfxItemSet& rSet );
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
     // uno helper
