@@ -317,24 +317,29 @@ namespace
             SfxLokHelper::setView(pLOKEv->mnView);
         }
 
+        if (!pLOKEv->mpWindow->HasChildPathFocus(true))
+        {
+            SAL_INFO("sfx.view", "LOK - focus mismatch, switching focus");
+            pLOKEv->mpWindow->GrabFocus();
+        }
+
+        VclPtr<vcl::Window> pFocusWindow = pLOKEv->mpWindow->GetFocusedWindow();
+        if (!pFocusWindow)
+            pFocusWindow = pLOKEv->mpWindow;
+
         switch (pLOKEv->mnEvent)
         {
         case VclEventId::WindowKeyInput:
         {
             sal_uInt16 nRepeat = pLOKEv->maKeyEvent.GetRepeat();
-            if (nRepeat > 0)
-            {
-                KeyEvent singlePress(pLOKEv->maKeyEvent.GetCharCode(),
-                                     pLOKEv->maKeyEvent.GetKeyCode());
-                for (sal_uInt16 i = 0; i <= nRepeat; ++i)
-                    pLOKEv->mpWindow->KeyInput(singlePress);
-            }
-            else
-                pLOKEv->mpWindow->KeyInput(pLOKEv->maKeyEvent);
+            KeyEvent singlePress(pLOKEv->maKeyEvent.GetCharCode(),
+                                 pLOKEv->maKeyEvent.GetKeyCode());
+            for (sal_uInt16 i = 0; i <= nRepeat; ++i)
+                pFocusWindow->KeyInput(singlePress);
             break;
         }
         case VclEventId::WindowKeyUp:
-            pLOKEv->mpWindow->KeyUp(pLOKEv->maKeyEvent);
+            pFocusWindow->KeyUp(pLOKEv->maKeyEvent);
             break;
         case VclEventId::WindowMouseButtonDown:
             pLOKEv->mpWindow->LogicMouseButtonDown(pLOKEv->maMouseEvent);

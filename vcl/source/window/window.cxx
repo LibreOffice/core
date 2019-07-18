@@ -2992,6 +2992,14 @@ void Window::GrabFocusToDocument()
     ImplGrabFocusToDocument(GetFocusFlags::NONE);
 }
 
+VclPtr<vcl::Window> Window::GetFocusedWindow() const
+{
+    if (mpWindowImpl && mpWindowImpl->mpFrameData)
+        return mpWindowImpl->mpFrameData->mpFocusWin;
+    else
+        return VclPtr<vcl::Window>();
+}
+
 void Window::SetFakeFocus( bool bFocus )
 {
     ImplGetWindowImpl()->mbFakeFocusSet = bFocus;
