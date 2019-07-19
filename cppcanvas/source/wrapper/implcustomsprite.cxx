@@ -34,8 +34,7 @@ namespace cppcanvas
                                             const uno::Reference< rendering::XCustomSprite >&       rSprite,
                                             const ImplSpriteCanvas::TransformationArbiterSharedPtr& rTransformArbiter ) :
             ImplSprite( rParentCanvas,
-                        uno::Reference< rendering::XSprite >(rSprite,
-                                                             uno::UNO_QUERY),
+                        rSprite,
                         rTransformArbiter ),
             mpLastCanvas(),
             mxCustomSprite( rSprite )

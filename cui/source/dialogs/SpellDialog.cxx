@@ -545,7 +545,7 @@ IMPL_LINK_NOARG(SpellDialog, ChangeAllHdl, weld::Button&, void)
     // add new word to ChangeAll list
     OUString  aOldWord( m_xSentenceED->GetErrorText() );
     SvxPrepareAutoCorrect( aOldWord, aString );
-    Reference<XDictionary> aXDictionary( LinguMgr::GetChangeAllList(), UNO_QUERY );
+    Reference<XDictionary> aXDictionary = LinguMgr::GetChangeAllList();
     DictionaryError nAdded = AddEntryToDic( aXDictionary,
             aOldWord, true,
             aString );
@@ -568,7 +568,7 @@ IMPL_LINK( SpellDialog, IgnoreAllHdl, weld::Button&, rButton, void )
 {
     m_xSentenceED->UndoActionStart( SPELLUNDO_CHANGE_GROUP );
     // add word to IgnoreAll list
-    Reference< XDictionary > aXDictionary( LinguMgr::GetIgnoreAllList(), UNO_QUERY );
+    Reference< XDictionary > aXDictionary = LinguMgr::GetIgnoreAllList();
     //in case the error has been changed manually it has to be restored
     m_xSentenceED->RestoreCurrentError();
     if (&rButton == m_xIgnoreRulePB.get())
@@ -780,7 +780,7 @@ int SpellDialog::InitUserDicts()
     sal_uInt16 nItemId = 1;     // menu items should be enumerated from 1 and not 0
     for (sal_Int32 i = 0; i < nSize; ++i)
     {
-        uno::Reference< linguistic2::XDictionary >  xDicTmp( pDic[i], uno::UNO_QUERY );
+        uno::Reference< linguistic2::XDictionary >  xDicTmp = pDic[i];
         if (!xDicTmp.is() || LinguMgr::GetIgnoreAllList() == xDicTmp)
             continue;
 
@@ -1082,7 +1082,7 @@ bool SpellDialog::ApplyChangeAllList_Impl(SpellPortions& rSentence, bool &bHasRe
 {
     bHasReplaced = false;
     bool bRet = true;
-    Reference<XDictionary> xChangeAll( LinguMgr::GetChangeAllList(), UNO_QUERY );
+    Reference<XDictionary> xChangeAll = LinguMgr::GetChangeAllList();
     if(!xChangeAll->getCount())
         return bRet;
     bRet = false;
@@ -1585,7 +1585,7 @@ bool SentenceEditWindow_Impl::MarkNextError( bool bIgnoreCurrentError, const css
         nCursor = nMinPos;
 
         // maybe the error found here is already in the ChangeAllList and has to be replaced
-        Reference<XDictionary> xChangeAll( LinguMgr::GetChangeAllList(), UNO_QUERY );
+        Reference<XDictionary> xChangeAll = LinguMgr::GetChangeAllList();
         Reference<XDictionaryEntry> xEntry;
 
         if (xChangeAll->getCount() && pSpellErrorDescription &&
