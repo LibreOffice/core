@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SVX_OPTGENRL_HXX
 #define INCLUDED_SVX_OPTGENRL_HXX
 
-// Defines for setting the focus of a Edit via a slot from external.
+// Defines for setting the focus of an Edit via a slot from external.
 enum class EditPosition
 {
     UNKNOWN    = 0,
