@@ -34,15 +34,14 @@ public:
 /// Represents the contents of LOKClipboard.
 class LOKTransferable : public cppu::WeakImplHelper<css::datatransfer::XTransferable>
 {
-    OUString m_aMimeType;
-    css::uno::Sequence<sal_Int8> m_aSequence;
-
-    /// Provides a list of flavors, used by getTransferDataFlavors() and isDataFlavorSupported().
-    std::vector<css::datatransfer::DataFlavor> getTransferDataFlavorsAsVector();
+    css::uno::Sequence<css::datatransfer::DataFlavor> m_aFlavors;
+    std::vector<css::uno::Any> m_aContent;
 
 public:
-    LOKTransferable(const char* pMimeType, const char* pData, std::size_t nSize);
-    LOKTransferable(OUString sMimeType, const css::uno::Sequence<sal_Int8>& aSequence);
+    LOKTransferable(const size_t   nInCount,
+                    const char   **pInMimeTypes,
+                    const size_t  *pInSizes,
+                    const char   **pInStreams);
 
     css::uno::Any SAL_CALL getTransferData(const css::datatransfer::DataFlavor& rFlavor) override;
 
