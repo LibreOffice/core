@@ -122,7 +122,7 @@ public:
     // two methods to allow the field import/export to treat system languages
     // properly:
 
-    /// obtain number format with system languange for a given key
+    /// obtain number format with system language for a given key
     sal_uInt32 ForceSystemLanguage( sal_uInt32 nKey );
 };
 

@@ -127,7 +127,7 @@ public:
     // it into the document if this hasn't happened already in CreateAndInsert().
     virtual void CreateAndInsertLate( bool bOverwrite );
 
-    // This method is called fpr every style after all styles have been
+    // This method is called for every style after all styles have been
     // inserted into the document.
     virtual void Finish( bool bOverwrite );
 

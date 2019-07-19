@@ -202,7 +202,7 @@ namespace svx
         */
         static bool canExtractObjectDescriptor(const DataFlavorExVector& _rFlavors);
 
-        /** extracts a object descriptor from the transferable given
+        /** extracts an object descriptor from the transferable given
         */
         static ODataAccessDescriptor
                         extractObjectDescriptor(const TransferableDataHelper& _rData);
@@ -251,7 +251,7 @@ namespace svx
         */
         static bool canExtractDescriptor(const DataFlavorExVector& _rFlavors);
 
-        /** extracts a object descriptor from the transferable given
+        /** extracts an object descriptor from the transferable given
         */
         static css::uno::Sequence< css::beans::PropertyValue > extractDescriptor(const TransferableDataHelper& _rData);
 

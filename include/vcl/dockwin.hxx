@@ -196,7 +196,7 @@ public:
     void    EndPopupMode( const vcl::Window *pWin );
 
     // required because those methods are not virtual in Window (!!!) and must
-    // be availbale from the toolkit
+    // be available from the toolkit
     void        SetPosSizePixel( vcl::Window const *pWin, long nX, long nY,
                                 long nWidth, long nHeight,
                                 PosSizeFlags nFlags );
