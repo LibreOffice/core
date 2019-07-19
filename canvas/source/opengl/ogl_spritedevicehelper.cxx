@@ -361,9 +361,7 @@ namespace oglcanvas
     uno::Reference<rendering::XColorSpace> SpriteDeviceHelper::getColorSpace() const
     {
         // always the same
-        return uno::Reference<rendering::XColorSpace>(
-            ::canvas::tools::getStdColorSpace(),
-            uno::UNO_QUERY);
+        return ::canvas::tools::getStdColorSpace();
     }
 
     void SpriteDeviceHelper::notifySizeUpdate( const awt::Rectangle& rBounds )

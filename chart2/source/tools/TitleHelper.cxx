@@ -145,7 +145,7 @@ uno::Reference< XTitle > TitleHelper::getTitle( TitleHelper::eTitleType nTitleIn
     if(nTitleIndex == TitleHelper::MAIN_TITLE)
         return rModel.getTitleObject();
 
-    uno::Reference< XDiagram > xDiagram( rModel.getFirstDiagram(), uno::UNO_QUERY );
+    uno::Reference< XDiagram > xDiagram = rModel.getFirstDiagram();
     uno::Reference< XTitled > xTitled( lcl_getTitleParent( nTitleIndex, xDiagram ) );
     if( xTitled.is())
         return xTitled->getTitleObject();

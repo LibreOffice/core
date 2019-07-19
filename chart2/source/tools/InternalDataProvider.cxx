@@ -316,7 +316,7 @@ InternalDataProvider::InternalDataProvider(
         Reference< chart2::XDiagram > xDiagram( ChartModelHelper::findDiagram( xChartDoc ) );
         if( xDiagram.is())
         {
-            Reference< frame::XModel > xChartModel( xChartDoc, uno::UNO_QUERY );
+            Reference< frame::XModel > xChartModel = xChartDoc;
 
             //data in columns?
             {

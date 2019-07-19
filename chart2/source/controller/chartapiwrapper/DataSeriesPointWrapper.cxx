@@ -543,7 +543,7 @@ Reference< beans::XPropertySet > DataSeriesPointWrapper::getDataPointProperties(
 //ReferenceSizePropertyProvider
 void DataSeriesPointWrapper::updateReferenceSize()
 {
-    Reference< beans::XPropertySet > xProp( getInnerPropertySet(), uno::UNO_QUERY );
+    Reference< beans::XPropertySet > xProp = getInnerPropertySet();
     if( xProp.is() )
     {
         if( xProp->getPropertyValue("ReferencePageSize").hasValue() )
@@ -554,7 +554,7 @@ void DataSeriesPointWrapper::updateReferenceSize()
 Any DataSeriesPointWrapper::getReferenceSize()
 {
     Any aRet;
-    Reference< beans::XPropertySet > xProp( getInnerPropertySet(), uno::UNO_QUERY );
+    Reference< beans::XPropertySet > xProp = getInnerPropertySet();
     if( xProp.is() )
         aRet = xProp->getPropertyValue("ReferencePageSize");
     return aRet;

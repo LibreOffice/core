@@ -291,8 +291,8 @@ void ControllerState::update(
                 bool bHasR2Value = false;
                 try
                 {
-                    uno::Reference< beans::XPropertySet > xEquationProperties(
-                        ObjectIdentifier::getObjectPropertySet( aSelObjCID, xModel ), uno::UNO_QUERY );
+                    uno::Reference< beans::XPropertySet > xEquationProperties =
+                        ObjectIdentifier::getObjectPropertySet( aSelObjCID, xModel );
                     if( xEquationProperties.is() )
                         xEquationProperties->getPropertyValue( "ShowCorrelationCoefficient" ) >>= bHasR2Value;
                 }
