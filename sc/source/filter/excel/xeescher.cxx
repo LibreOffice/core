@@ -1125,8 +1125,7 @@ void XclExpChartObj::SaveXml( XclExpXmlStream& rStrm )
     if (xPropSet.is())
     {
         XclObjAny::WriteFromTo( rStrm, mxShape, GetTab() );
-        Reference< XModel > xModel( mxChartDoc, UNO_QUERY );
-        ChartExport aChartExport(XML_xdr, pDrawing, xModel, &rStrm, drawingml::DOCUMENT_XLSX);
+        ChartExport aChartExport(XML_xdr, pDrawing, mxChartDoc, &rStrm, drawingml::DOCUMENT_XLSX);
         std::shared_ptr<oox::drawingml::URLTransformer> pURLTransformer(new ScURLTransformer(*mpDoc));
         aChartExport.SetURLTranslator(pURLTransformer);
         static sal_Int32 nChartCount = 0;

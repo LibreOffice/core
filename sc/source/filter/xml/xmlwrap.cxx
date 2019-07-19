@@ -120,10 +120,9 @@ ErrCode ScXMLImportWrapper::ImportFromComponent(const uno::Reference<uno::XCompo
     {
         try
         {
-            uno::Reference < container::XNameAccess > xAccess( xStorage, uno::UNO_QUERY );
-            if ( xAccess->hasByName(sDocName) && xStorage->isStreamElement( sDocName) )
+            if ( xStorage->hasByName(sDocName) && xStorage->isStreamElement( sDocName) )
                 xDocStream = xStorage->openStreamElement( sDocName, embed::ElementModes::READ );
-            else if (!sOldDocName.isEmpty() && xAccess->hasByName(sOldDocName) && xStorage->isStreamElement( sOldDocName) )
+            else if (!sOldDocName.isEmpty() && xStorage->hasByName(sOldDocName) && xStorage->isStreamElement( sOldDocName) )
             {
                 xDocStream = xStorage->openStreamElement( sOldDocName, embed::ElementModes::READ );
                 sStream = sOldDocName;
@@ -172,9 +171,8 @@ ErrCode ScXMLImportWrapper::ImportFromComponent(const uno::Reference<uno::XCompo
         uno::UNO_QUERY );
     OSL_ENSURE( xDocHandler.is(), "can't get Calc importer" );
     uno::Reference<document::XImporter> xImporter( xDocHandler, uno::UNO_QUERY );
-    uno::Reference<lang::XComponent> xComponent( xModel, uno::UNO_QUERY );
     if (xImporter.is())
-        xImporter->setTargetDocument( xComponent );
+        xImporter->setTargetDocument( xModel );
 
     ScXMLImport* pImporterImpl = dynamic_cast<ScXMLImport*>(xImporter.get());
     if (pImporterImpl)
@@ -666,9 +664,8 @@ bool ScXMLImportWrapper::ExportToComponent(const uno::Reference<uno::XComponentC
         uno::UNO_QUERY );
     OSL_ENSURE( xFilter.is(), "can't get exporter" );
     uno::Reference<document::XExporter> xExporter( xFilter, uno::UNO_QUERY );
-    uno::Reference<lang::XComponent> xComponent( xModel, uno::UNO_QUERY );
     if (xExporter.is())
-        xExporter->setSourceDocument( xComponent );
+        xExporter->setSourceDocument( xModel );
 
     if ( xFilter.is() )
     {

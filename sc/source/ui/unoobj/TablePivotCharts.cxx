@@ -130,10 +130,9 @@ void SAL_CALL TablePivotCharts::addNewByName(OUString const & rName,
             uno::Reference<chart2::data::XDataProvider> xDataProvider(pPivotTableDataProvider.release());
 
             uno::Reference<chart2::data::XDataReceiver> xReceiver;
-            uno::Reference<embed::XComponentSupplier> xCompSupp(xObject, uno::UNO_QUERY);
 
-            if (xCompSupp.is())
-                xReceiver.set(xCompSupp->getComponent(), uno::UNO_QUERY);
+            if (xObject.is())
+                xReceiver.set(xObject->getComponent(), uno::UNO_QUERY);
 
             if (xReceiver.is())
             {

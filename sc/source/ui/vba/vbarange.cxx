@@ -3094,9 +3094,8 @@ ScVbaRange::Replace( const OUString& What, const OUString& Replacement, const un
         // ignore MatchByte for the moment, it's not supported in
         // OOo.org afaik
 
-        uno::Reference< util::XSearchDescriptor > xSearch( xDescriptor, uno::UNO_QUERY );
-        uno::Reference< container::XIndexAccess > xIndexAccess = xReplace->findAll( xSearch );
-        xReplace->replaceAll( xSearch );
+        uno::Reference< container::XIndexAccess > xIndexAccess = xReplace->findAll( xDescriptor );
+        xReplace->replaceAll( xDescriptor );
         if ( xIndexAccess.is() && xIndexAccess->getCount() > 0 )
         {
             for ( sal_Int32 i = 0; i < xIndexAccess->getCount(); ++i )
