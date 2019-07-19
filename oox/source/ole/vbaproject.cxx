@@ -187,7 +187,7 @@ void VbaProject::importVbaProject( StorageBase& rVbaPrjStrg, const GraphicHelper
 void VbaProject::importVbaData(const uno::Reference<io::XInputStream>& xInputStream)
 {
     uno::Reference<document::XStorageBasedDocument> xStorageBasedDoc(mxDocModel, uno::UNO_QUERY);
-    uno::Reference<embed::XStorage> xDocStorage(xStorageBasedDoc->getDocumentStorage(), uno::UNO_QUERY);
+    uno::Reference<embed::XStorage> xDocStorage = xStorageBasedDoc->getDocumentStorage();
     {
         const sal_Int32 nOpenMode = ElementModes::SEEKABLE | ElementModes::WRITE | ElementModes::TRUNCATE;
         uno::Reference<io::XOutputStream> xDocStream(xDocStorage->openStreamElement("_MS_VBA_Macros_XML", nOpenMode), uno::UNO_QUERY);

@@ -1619,7 +1619,7 @@ void DrawingML::WriteShapeTransformation( const Reference< XShape >& rXShape, sa
 void DrawingML::WriteRunProperties( const Reference< XPropertySet >& rRun, bool bIsField, sal_Int32 nElement, bool bCheckDirect,
                                     bool& rbOverridingCharHeight, sal_Int32& rnCharHeight )
 {
-    Reference< XPropertySet > rXPropSet( rRun, UNO_QUERY );
+    Reference< XPropertySet > rXPropSet = rRun;
     Reference< XPropertyState > rXPropState( rRun, UNO_QUERY );
     OUString usLanguage;
     PropertyState eState;
