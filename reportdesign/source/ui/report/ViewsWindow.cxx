@@ -1263,7 +1263,7 @@ void OViewsWindow::EndDragObj(bool _bControlKeyPressed, const OSectionView* _pSe
                         if ( (pColIter+1) != pColEnd )
                         {
                             // bring aNewPos to the position of the next object
-                            uno::Reference< report::XReportComponent> xRCNext(*(pColIter + 1),uno::UNO_QUERY);
+                            uno::Reference< report::XReportComponent> xRCNext = *(pColIter + 1);
                             Point aNextPosition = VCLPoint(xRCNext->getPosition());
                             aNewPos += aNextPosition - aPrevious;
                         }

@@ -1840,7 +1840,7 @@ uno::Reference< container::XIndexAccess > SAL_CALL OReportDefinition::getViewDat
     ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
     if ( !m_pImpl->m_xViewData.is() )
     {
-        m_pImpl->m_xViewData.set( document::IndexedPropertyValues::create(m_aProps->m_xContext), uno::UNO_QUERY);
+        m_pImpl->m_xViewData = document::IndexedPropertyValues::create(m_aProps->m_xContext);
         uno::Reference< container::XIndexContainer > xContainer(m_pImpl->m_xViewData,uno::UNO_QUERY);
         for (const auto& rxController : m_pImpl->m_aControllers)
         {
@@ -1907,7 +1907,7 @@ uno::Sequence< OUString > SAL_CALL OReportDefinition::getDocumentSubStoragesName
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
-    uno::Reference<container::XNameAccess> xNameAccess(m_pImpl->m_xStorage,uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xNameAccess = m_pImpl->m_xStorage;
     return xNameAccess.is() ? xNameAccess->getElementNames() : uno::Sequence< OUString >();
 }
 
