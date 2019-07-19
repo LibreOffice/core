@@ -543,10 +543,8 @@ void Binding::bind( bool bForceRebind )
                           aContext.mxNamespaces ) )
         {
             aContext.mxContextNode->appendChild(
-                Reference<XNode>(
                     aContext.mxContextNode->getOwnerDocument()->createElement(
-                        maBindingExpression.getExpression() ),
-                    UNO_QUERY ) );
+                        maBindingExpression.getExpression() ) );
             maBindingExpression.evaluate( aContext );
             OSL_ENSURE( maBindingExpression.getNode().is(),
                         "we should bind to the newly inserted node!" );
@@ -751,8 +749,8 @@ css::uno::Reference<css::xsd::XDataType> Binding::getDataType()
     OSL_ENSURE( getModel().is(), "need model" );
     OSL_ENSURE( getModel()->getDataTypeRepository().is(), "need types" );
 
-    Reference<XDataTypeRepository> xRepository(
-        getModel()->getDataTypeRepository(), UNO_QUERY );
+    Reference<XDataTypeRepository> xRepository =
+        getModel()->getDataTypeRepository();
     OUString sTypeName = maMIP.getTypeName();
 
     return ( xRepository.is() && xRepository->hasByName( sTypeName ) )

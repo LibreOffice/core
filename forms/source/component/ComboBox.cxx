@@ -474,10 +474,9 @@ void OComboBoxModel::loadData( bool _bForce )
         return;
 
     // Get Connection
-    Reference<XRowSet> xForm(m_xCursor, UNO_QUERY);
-    if (!xForm.is())
+    if (!m_xCursor.is())
         return;
-    Reference<XConnection> xConnection = getConnection(xForm);
+    Reference<XConnection> xConnection = getConnection(m_xCursor);
     if (!xConnection.is())
         return;
 
@@ -518,7 +517,7 @@ void OComboBoxModel::loadData( bool _bForce )
                 else
                 {
                     // otherwise look for the alias
-                    Reference<XPropertySet> xFormProp(xForm,UNO_QUERY);
+                    Reference<XPropertySet> xFormProp(m_xCursor,UNO_QUERY);
                     Reference< XColumnsSupplier > xSupplyFields;
                     xFormProp->getPropertyValue("SingleSelectQueryComposer") >>= xSupplyFields;
 
@@ -627,7 +626,7 @@ void OComboBoxModel::loadData( bool _bForce )
                 if ( !xDataField.is() )
                     return;
 
-                ::dbtools::FormattedColumnValue aValueFormatter( getContext(), xForm, xDataField );
+                ::dbtools::FormattedColumnValue aValueFormatter( getContext(), m_xCursor, xDataField );
 
                 // Fill Lists
                 sal_Int16 i = 0;
