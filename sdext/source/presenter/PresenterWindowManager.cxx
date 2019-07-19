@@ -988,7 +988,7 @@ void PresenterWindowManager::ProvideBackgroundBitmap()
     }
     else
     {
-        mxScaledBackgroundBitmap.set(xBitmap, UNO_QUERY);
+        mxScaledBackgroundBitmap = xBitmap;
     }
 }
 

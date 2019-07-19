@@ -191,11 +191,10 @@ Reference<rendering::XPolyPolygon2D> PresenterGeometryHelper::CreatePolygon(
     aPoints[0][3] = geometry::RealPoint2D(rBox.X+rBox.Width, rBox.Y);
     Reference<rendering::XLinePolyPolygon2D> xPolygon (
         rxDevice->createCompatibleLinePolyPolygon(aPoints));
-    Reference<rendering::XPolyPolygon2D> xRectangle (xPolygon, UNO_QUERY);
-    if (xRectangle.is())
-        xRectangle->setClosed(0, true);
+    if (xPolygon.is())
+        xPolygon->setClosed(0, true);
 
-    return xRectangle;
+    return xPolygon;
 }
 
 Reference<rendering::XPolyPolygon2D> PresenterGeometryHelper::CreatePolygon(
@@ -213,11 +212,10 @@ Reference<rendering::XPolyPolygon2D> PresenterGeometryHelper::CreatePolygon(
     aPoints[0][3] = geometry::RealPoint2D(rBox.X2, rBox.Y1);
     Reference<rendering::XLinePolyPolygon2D> xPolygon (
         rxDevice->createCompatibleLinePolyPolygon(aPoints));
-    Reference<rendering::XPolyPolygon2D> xRectangle (xPolygon, UNO_QUERY);
-    if (xRectangle.is())
-        xRectangle->setClosed(0, true);
+    if (xPolygon.is())
+        xPolygon->setClosed(0, true);
 
-    return xRectangle;
+    return xPolygon;
 }
 
 Reference<rendering::XPolyPolygon2D> PresenterGeometryHelper::CreatePolygon(
@@ -241,12 +239,11 @@ Reference<rendering::XPolyPolygon2D> PresenterGeometryHelper::CreatePolygon(
 
     Reference<rendering::XLinePolyPolygon2D> xPolygon (
         rxDevice->createCompatibleLinePolyPolygon(aPoints));
-    Reference<rendering::XPolyPolygon2D> xRectangle (xPolygon, UNO_QUERY);
-    if (xRectangle.is())
+    if (xPolygon.is())
         for (sal_Int32 nIndex=0; nIndex<nCount; ++nIndex)
-            xRectangle->setClosed(nIndex, true);
+            xPolygon->setClosed(nIndex, true);
 
-    return xRectangle;
+    return xPolygon;
 }
 
 } }
