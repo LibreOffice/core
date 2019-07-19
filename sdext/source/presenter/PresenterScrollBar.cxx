@@ -150,7 +150,7 @@ void SAL_CALL PresenterScrollBar::disposing()
         mxWindow->removeMouseListener(this);
         mxWindow->removeMouseMotionListener(this);
 
-        Reference<lang::XComponent> xComponent (mxWindow, UNO_QUERY);
+        Reference<lang::XComponent> xComponent = mxWindow;
         mxWindow = nullptr;
         if (xComponent.is())
             xComponent->dispose();

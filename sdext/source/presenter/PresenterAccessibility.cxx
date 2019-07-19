@@ -660,7 +660,7 @@ Reference<XAccessibleContext> SAL_CALL PresenterAccessible::getAccessibleContext
         Reference<XPane> xMainPane (mxMainPane, UNO_QUERY);
         if (xMainPane.is())
         {
-            mxMainWindow.set(xMainPane->getWindow(), UNO_QUERY);
+            mxMainWindow = xMainPane->getWindow();
             mxMainWindow->addFocusListener(this);
         }
         mpAccessibleConsole = AccessibleConsole::Create(
@@ -1606,8 +1606,8 @@ awt::Point PresenterAccessible::AccessibleParagraph::GetAbsoluteParentLocation()
 {
     if (mxParentAccessible.is())
     {
-        Reference<XAccessibleContext> xParentContext(
-            mxParentAccessible->getAccessibleContext(), UNO_QUERY);
+        Reference<XAccessibleContext> xParentContext =
+            mxParentAccessible->getAccessibleContext();
         if (xParentContext.is())
         {
             Reference<XAccessibleComponent> xGrandParentComponent(
@@ -1703,9 +1703,7 @@ void AccessibleNotes::SetTextView (
                     rpTextView->GetParagraph(nIndex),
                     nIndex));
             pParagraph->LateInitialization();
-            pParagraph->SetWindow(
-                Reference<awt::XWindow>(mxContentWindow, UNO_QUERY),
-                Reference<awt::XWindow>(mxBorderWindow, UNO_QUERY));
+            pParagraph->SetWindow(mxContentWindow, mxBorderWindow);
             pParagraph->SetAccessibleParent(this);
             aChildren.emplace_back(pParagraph.get());
         }

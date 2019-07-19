@@ -209,7 +209,7 @@ void PresenterSlideShowView::disposing()
     }
     if (mxViewWindow.is())
     {
-        Reference<XComponent> xComponent (mxViewWindow, UNO_QUERY);
+        Reference<XComponent> xComponent = mxViewWindow;
         mxViewWindow = nullptr;
         if (xComponent.is())
             xComponent->dispose();

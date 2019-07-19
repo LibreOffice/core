@@ -86,8 +86,8 @@ PresenterTextView::PresenterTextView (
       mbIsFormatPending(false),
       maTextChangeBroadcaster()
 {
-    Reference<lang::XMultiComponentFactory> xFactory (
-        rxContext->getServiceManager(), UNO_QUERY);
+    Reference<lang::XMultiComponentFactory> xFactory =
+        rxContext->getServiceManager();
     if ( ! xFactory.is())
         return;
 
@@ -111,8 +111,8 @@ void PresenterTextView::SetText (const Reference<text::XText>& rxText)
     if ( ! xParagraphAccess.is())
         return;
 
-    Reference<container::XEnumeration> xParagraphs (
-        xParagraphAccess->createEnumeration() , UNO_QUERY);
+    Reference<container::XEnumeration> xParagraphs =
+        xParagraphAccess->createEnumeration();
     if ( ! xParagraphs.is())
         return;
 

@@ -160,7 +160,7 @@ void SAL_CALL PresenterNotesView::disposing()
             xComponent->dispose();
     }
     {
-        Reference<XComponent> xComponent (mxToolBarWindow, UNO_QUERY);
+        Reference<XComponent> xComponent = mxToolBarWindow;
         mxToolBarWindow = nullptr;
         if (xComponent.is())
             xComponent->dispose();
@@ -225,17 +225,16 @@ void PresenterNotesView::SetSlide (const Reference<drawing::XDrawPage>& rxNotesP
     static const OUString sTextShapeName (
         "com.sun.star.drawing.TextShape");
 
-    Reference<container::XIndexAccess> xIndexAccess (rxNotesPage, UNO_QUERY);
-    if (!xIndexAccess.is())
+    if (!rxNotesPage.is())
         return;
 
     // Iterate over all shapes and find the one that holds the text.
-    sal_Int32 nCount (xIndexAccess->getCount());
+    sal_Int32 nCount (rxNotesPage->getCount());
     for (sal_Int32 nIndex=0; nIndex<nCount; ++nIndex)
     {
 
         Reference<lang::XServiceName> xServiceName (
-            xIndexAccess->getByIndex(nIndex), UNO_QUERY);
+            rxNotesPage->getByIndex(nIndex), UNO_QUERY);
         if (xServiceName.is()
             && xServiceName->getServiceName() == sNotesShapeName)
         {
@@ -243,14 +242,14 @@ void PresenterNotesView::SetSlide (const Reference<drawing::XDrawPage>& rxNotesP
         else
         {
             Reference<drawing::XShapeDescriptor> xShapeDescriptor (
-                xIndexAccess->getByIndex(nIndex), UNO_QUERY);
+                rxNotesPage->getByIndex(nIndex), UNO_QUERY);
             if (xShapeDescriptor.is())
             {
                 OUString sType (xShapeDescriptor->getShapeType());
                 if (sType == sNotesShapeName || sType == sTextShapeName)
                 {
                     Reference<text::XTextRange> xText (
-                        xIndexAccess->getByIndex(nIndex), UNO_QUERY);
+                        rxNotesPage->getByIndex(nIndex), UNO_QUERY);
                     if (xText.is())
                     {
                         mpTextView->SetText(Reference<text::XText>(xText, UNO_QUERY));
