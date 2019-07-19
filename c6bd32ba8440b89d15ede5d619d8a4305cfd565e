@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_69ed31ee",
+        "filename": "sc/uiconfig/scalc/ui/notebookbar_groupedbar_full.ui",
+        "patchSetId": 4
+      },
+      "lineNbr": 361,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2019-07-19T16:11:19Z",
+      "side": 1,
+      "message": "Why is this in Calc\u0027s sc/ if the implementation is in Writer\u0027s sw/ ?",
+      "revId": "c6bd32ba8440b89d15ede5d619d8a4305cfd565e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
