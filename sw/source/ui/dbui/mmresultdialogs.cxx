@@ -346,8 +346,6 @@ void SwMMResultPrintDialog::FillInPrinterSettings()
     sal_Int32 count = xConfigItem->GetMergedDocumentCount();
     m_xToNF->set_value(count);
     m_xToNF->set_max(count);
-
-    m_xPrinterLB->set_active_text(xConfigItem->GetSelectedPrinter());
 }
 
 void SwMMResultEmailDialog::FillInEmailSettings()
