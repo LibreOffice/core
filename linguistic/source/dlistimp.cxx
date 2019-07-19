@@ -156,10 +156,9 @@ void SAL_CALL DicEvtListenerHelper::processDictionaryEvent(
 
     // assert that there is a corresponding dictionary entry if one was
     // added or deleted
-    uno::Reference< XDictionaryEntry > xDicEntry( rDicEvent.xDictionaryEntry, UNO_QUERY );
     DBG_ASSERT( !(rDicEvent.nEvent &
                     (DictionaryEventFlags::ADD_ENTRY | DictionaryEventFlags::DEL_ENTRY))
-                || xDicEntry.is(),
+                || rDicEvent.xDictionaryEntry.is(),
                 "lng : missing dictionary entry" );
 
     // evaluate DictionaryEvents and update data for next DictionaryListEvent
@@ -167,11 +166,11 @@ void SAL_CALL DicEvtListenerHelper::processDictionaryEvent(
     DBG_ASSERT(eDicType != DictionaryType_MIXED,
         "lng : unexpected dictionary type");
     if ((rDicEvent.nEvent & DictionaryEventFlags::ADD_ENTRY) && xDic->isActive())
-        nCondensedEvt |= xDicEntry->isNegative() ?
+        nCondensedEvt |= rDicEvent.xDictionaryEntry->isNegative() ?
             DictionaryListEventFlags::ADD_NEG_ENTRY :
             DictionaryListEventFlags::ADD_POS_ENTRY;
     if ((rDicEvent.nEvent & DictionaryEventFlags::DEL_ENTRY) && xDic->isActive())
-        nCondensedEvt |= xDicEntry->isNegative() ?
+        nCondensedEvt |= rDicEvent.xDictionaryEntry->isNegative() ?
             DictionaryListEventFlags::DEL_NEG_ENTRY :
             DictionaryListEventFlags::DEL_POS_ENTRY;
     if ((rDicEvent.nEvent & DictionaryEventFlags::ENTRIES_CLEARED) && xDic->isActive())
