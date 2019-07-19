@@ -60,7 +60,7 @@ namespace sfx2
     Some general words about what's going on here ....
 
     <p>In our file open dialog, usually we display every filter we know. That's how it was before: every filter
-    lead to an own line in the filter list box, e.g. "StarWriter 5.0 Dokument" or "Microsoft Word 97".</p>
+    lead to an own line in the filter list box, e.g. "StarWriter 5.0 Document" or "Microsoft Word 97".</p>
 
     <p>But then the PM came. And everything changed ....</p>
 
@@ -76,7 +76,7 @@ namespace sfx2
     is a matter of this implementation. We only do this grouping and suggest it to the FilePicker service ...</p>
 
     <p>Now for the second concept:<br/>
-    Thinking about it (and that's what the PM did), both "StarWriter 5.0 Dokument" and "Microsoft Word 97"
+    Thinking about it (and that's what the PM did), both "StarWriter 5.0 Document" and "Microsoft Word 97"
     describe a text document. It's a text. It's of no interest for the user that one of the texts was saved in
     MS' format, and one in our own format.<br/>
     So in a first step, we want to have a filter entry "Text documents". This would cover both above-mentioned
