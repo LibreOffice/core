@@ -77,7 +77,7 @@ void TipOfTheDayDialog::UpdateTip()
     }
     else if (aLink.startsWith("http"))
     {
-        m_pLink->set_uri(aLink);
+        m_pLink->set_uri(CuiResId(aLink.toUtf8().getStr()));
         m_pLink->set_label(CuiResId(STR_MORE_LINK));
         m_pLink->set_visible(true);
         m_pLink->connect_clicked(Link<weld::LinkButton&, void>());
