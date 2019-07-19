@@ -191,7 +191,7 @@ void SAL_CALL MenuBarWrapper::initialize( const Sequence< Any >& aArguments )
             // Initialize toolkit menu bar implementation to have awt::XMenuBar for data exchange.
             // Don't use this toolkit menu bar or one of its functions. It is only used as a data container!
             pAwtMenuBar = new VCLXMenuBar( pVCLMenuBar );
-            m_xMenuBar.set( static_cast< OWeakObject *>( pAwtMenuBar ), UNO_QUERY );
+            m_xMenuBar = pAwtMenuBar;
         }
     }
 }

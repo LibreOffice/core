@@ -413,8 +413,7 @@ void SAL_CALL TabWindow::initialize( const css::uno::Sequence< css::uno::Any >& 
 void SAL_CALL TabWindow::dispose()
 {
     // Send message to all listener and forget her references.
-    css::uno::Reference< css::lang::XComponent > xThis(
-        static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY );
+    css::uno::Reference< css::lang::XComponent > xThis = this;
     css::lang::EventObject aEvent( xThis );
 
     m_aListenerContainer.disposeAndClear( aEvent );
@@ -430,15 +429,13 @@ void SAL_CALL TabWindow::dispose()
     aLock.clear();
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
 
-    css::uno::Reference< css::lang::XComponent > xComponent( xTabControlWindow, css::uno::UNO_QUERY );
-    if ( xComponent.is() )
-        xComponent->dispose();
+    if ( xTabControlWindow.is() )
+        xTabControlWindow->dispose();
 
-    xComponent.set( xContainerWindow, css::uno::UNO_QUERY );
-    if ( xComponent.is() )
-        xComponent->dispose();
+    if ( xContainerWindow.is() )
+        xContainerWindow->dispose();
 
-    xComponent.set( xTopWindow, css::uno::UNO_QUERY );
+    css::uno::Reference< css::lang::XComponent > xComponent( xTopWindow, css::uno::UNO_QUERY );
     if ( xComponent.is() )
         xComponent->dispose();
 
@@ -531,7 +528,7 @@ void SAL_CALL TabWindow::windowOpened( const css::lang::EventObject& )
 
 void SAL_CALL TabWindow::windowClosing( const css::lang::EventObject& )
 {
-    css::uno::Reference< css::lang::XComponent > xComponent( static_cast<OWeakObject *>(this), css::uno::UNO_QUERY );
+    css::uno::Reference< css::lang::XComponent > xComponent = this;
     if ( xComponent.is() )
         xComponent->dispose();
 }

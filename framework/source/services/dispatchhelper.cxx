@@ -141,7 +141,7 @@ DispatchHelper::executeDispatch(const css::uno::Reference<css::frame::XDispatch>
             /* SAFE { */
             {
                 osl::MutexGuard aWriteLock(m_mutex);
-                m_xBroadcaster.set(xNotifyDispatch, css::uno::UNO_QUERY);
+                m_xBroadcaster = xNotifyDispatch;
                 m_aBlock.reset();
             }
             /* } SAFE */

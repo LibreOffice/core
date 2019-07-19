@@ -110,7 +110,7 @@ void FillLangItems( std::set< OUString > &rLangItems,
     Reference< css::frame::XModel > xModel;
     if ( rxFrame.is() )
     {
-       Reference< css::frame::XController > xController( rxFrame->getController(), UNO_QUERY );
+       Reference< css::frame::XController > xController = rxFrame->getController();
        if ( xController.is() )
            xModel = xController->getModel();
     }

@@ -932,7 +932,7 @@ void ToolBarManager::InitImageManager()
             Reference< XUIConfigurationManagerSupplier > xSupplier( xModel, UNO_QUERY );
             if ( xSupplier.is() )
             {
-                Reference< XUIConfigurationManager > xDocUICfgMgr( xSupplier->getUIConfigurationManager(), UNO_QUERY );
+                Reference< XUIConfigurationManager > xDocUICfgMgr = xSupplier->getUIConfigurationManager();
                 m_xDocImageManager.set( xDocUICfgMgr->getImageManager(), UNO_QUERY );
                 m_xDocImageManager->addConfigurationListener(
                                         Reference< XUIConfigurationListener >(

@@ -442,7 +442,7 @@ void SaveToolbarController::initialize( const css::uno::Sequence< css::uno::Any 
     if ( !getToolboxId( nId, &pToolBox ) )
         return;
 
-    css::uno::Reference< css::frame::XController > xController( m_xFrame->getController(), css::uno::UNO_QUERY );
+    css::uno::Reference< css::frame::XController > xController = m_xFrame->getController();
     if ( xController.is() )
         m_xModifiable.set( xController->getModel(), css::uno::UNO_QUERY );
 

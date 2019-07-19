@@ -549,7 +549,7 @@ void ModuleUIConfigurationManager::impl_storeElementTypeData( const Reference< X
             }
             else
             {
-                Reference< XStream > xStream( xStorage->openStreamElement( rElement.aName, ElementModes::WRITE|ElementModes::TRUNCATE ), UNO_QUERY );
+                Reference< XStream > xStream = xStorage->openStreamElement( rElement.aName, ElementModes::WRITE|ElementModes::TRUNCATE );
                 Reference< XOutputStream > xOutputStream( xStream->getOutputStream() );
 
                 if ( xOutputStream.is() )
@@ -628,7 +628,6 @@ void ModuleUIConfigurationManager::impl_resetElementTypeData(
 
     Reference< XUIConfigurationManager > xThis( static_cast< OWeakObject* >( this ), UNO_QUERY );
     Reference< XInterface >  xIfac( xThis, UNO_QUERY );
-    Reference< XNameAccess > xDefaultNameAccess( rDefaultElementType.xStorage, UNO_QUERY );
     sal_Int16 nType = rUserElementType.nElementType;
 
     // Make copies of the event structures to be thread-safe. We have to unlock our mutex before calling
@@ -638,7 +637,7 @@ void ModuleUIConfigurationManager::impl_resetElementTypeData(
         UIElementData& rElement = elem.second;
         if ( !rElement.bDefault )
         {
-            if ( xDefaultNameAccess->hasByName( rElement.aName ))
+            if ( rDefaultElementType.xStorage->hasByName( rElement.aName ))
             {
                 // Replace settings with data from default layer
                 Reference< XIndexAccess > xOldSettings( rElement.xSettings );
@@ -688,8 +687,6 @@ void ModuleUIConfigurationManager::impl_reloadElementTypeData(
     ConfigEventNotifyContainer& rReplaceNotifyContainer )
 {
     UIElementDataHashMap& rHashMap          = rUserElementType.aElementsHashMap;
-    Reference< XNameAccess > xUserNameAccess( rUserElementType.xStorage, UNO_QUERY );
-    Reference< XNameAccess > xDefaultNameAccess( rDefaultElementType.xStorage, UNO_QUERY );
 
     Reference< XUIConfigurationManager > xThis( static_cast< OWeakObject* >( this ), UNO_QUERY );
     Reference< XInterface > xIfac( xThis, UNO_QUERY );
@@ -700,7 +697,7 @@ void ModuleUIConfigurationManager::impl_reloadElementTypeData(
         UIElementData& rElement = elem.second;
         if ( rElement.bModified )
         {
-            if ( xUserNameAccess->hasByName( rElement.aName ))
+            if ( rUserElementType.xStorage->hasByName( rElement.aName ))
             {
                 // Replace settings with data from user layer
                 Reference< XIndexAccess > xOldSettings( rElement.xSettings );
@@ -718,7 +715,7 @@ void ModuleUIConfigurationManager::impl_reloadElementTypeData(
 
                 rElement.bModified = false;
             }
-            else if ( xDefaultNameAccess->hasByName( rElement.aName ))
+            else if ( rDefaultElementType.xStorage->hasByName( rElement.aName ))
             {
                 // Replace settings with data from default layer
                 Reference< XIndexAccess > xOldSettings( rElement.xSettings );
@@ -985,21 +982,20 @@ void SAL_CALL ModuleUIConfigurationManager::reset()
             for ( int i = 1; i < css::ui::UIElementType::COUNT; i++ )
             {
                 UIElementType&        rElementType = m_aUIElements[LAYER_USERDEFINED][i];
-                Reference< XStorage > xSubStorage( rElementType.xStorage, UNO_QUERY );
 
-                if ( xSubStorage.is() )
+                if ( rElementType.xStorage.is() )
                 {
                     bool bCommitSubStorage( false );
-                    Sequence< OUString > aUIElementStreamNames = xSubStorage->getElementNames();
+                    Sequence< OUString > aUIElementStreamNames = rElementType.xStorage->getElementNames();
                     for ( sal_Int32 j = 0; j < aUIElementStreamNames.getLength(); j++ )
                     {
-                        xSubStorage->removeElement( aUIElementStreamNames[j] );
+                        rElementType.xStorage->removeElement( aUIElementStreamNames[j] );
                         bCommitSubStorage = true;
                     }
 
                     if ( bCommitSubStorage )
                     {
-                        Reference< XTransactedObject > xTransactedObject( xSubStorage, UNO_QUERY );
+                        Reference< XTransactedObject > xTransactedObject( rElementType.xStorage, UNO_QUERY );
                         if ( xTransactedObject.is() )
                             xTransactedObject->commit();
                         m_pStorageHandler[i]->commitUserChanges();
@@ -1554,11 +1550,10 @@ void SAL_CALL ModuleUIConfigurationManager::store()
             try
             {
                 UIElementType&        rElementType = m_aUIElements[LAYER_USERDEFINED][i];
-                Reference< XStorage > xStorage( rElementType.xStorage, UNO_QUERY );
 
-                if ( rElementType.bModified && xStorage.is() )
+                if ( rElementType.bModified && rElementType.xStorage.is() )
                 {
-                    impl_storeElementTypeData( xStorage, rElementType );
+                    impl_storeElementTypeData( rElementType.xStorage, rElementType );
                     m_pStorageHandler[i]->commitUserChanges();
                 }
             }
