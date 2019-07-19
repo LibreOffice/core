@@ -1144,7 +1144,7 @@ void SwFootnoteBossFrame::ResetFootnote( const SwFootnoteFrame *pCheck )
                 pFootnote = pFootnote->GetMaster();
             if ( pFootnote != pCheck )
             {
-                while ( pFootnote )
+                while (pFootnote && !pFootnote->IsDeleteForbidden())
                 {
                     SwFootnoteFrame *pNxt = pFootnote->GetFollow();
                     pFootnote->Cut();
@@ -2264,11 +2264,14 @@ void SwFootnoteBossFrame::RearrangeFootnotes( const SwTwips nDeadLine, const boo
                     // #i49383# - format anchored objects
                     if ( pCnt->IsTextFrame() && pCnt->isFrameAreaDefinitionValid() )
                     {
+                        SwFrameDeleteGuard aDeleteGuard(pFootnote);
                         if ( !SwObjectFormatter::FormatObjsAtFrame( *pCnt,
                                                                   *(pCnt->FindPageFrame()) ) )
                         {
                             // restart format with first content
                             pCnt = pFootnote->ContainsAny();
+                            if (!pCnt)
+                                bMore = false;
                             continue;
                         }
                     }

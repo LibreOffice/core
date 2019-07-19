@@ -1237,8 +1237,19 @@ public:
     //Flag pFrame for SwFrameDeleteGuard lifetime that we shouldn't delete
     //it in e.g. SwSectionFrame::MergeNext etc because we will need it
     //again after the SwFrameDeleteGuard dtor
-    explicit SwFrameDeleteGuard(SwFrame* pFrame);
-    ~SwFrameDeleteGuard();
+    explicit SwFrameDeleteGuard(SwFrame* pFrame)
+        : m_pForbidFrame((pFrame && !pFrame->IsDeleteForbidden()) ?
+            pFrame : nullptr)
+    {
+        if (m_pForbidFrame)
+            m_pForbidFrame->ForbidDelete();
+    }
+
+    ~SwFrameDeleteGuard()
+    {
+        if (m_pForbidFrame)
+            m_pForbidFrame->AllowDelete();
+    }
 };
 
 typedef long (SwFrame:: *SwFrameGet)() const;
