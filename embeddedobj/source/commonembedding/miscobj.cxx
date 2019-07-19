@@ -439,7 +439,7 @@ uno::Reference< util::XCloseable > SAL_CALL OCommonEmbeddedObject::getComponent(
                                      static_cast< ::cppu::OWeakObject* >(this) );
     }
 
-    return uno::Reference< util::XCloseable >( m_xDocHolder->GetComponent(), uno::UNO_QUERY );
+    return m_xDocHolder->GetComponent();
 }
 
 
@@ -550,15 +550,9 @@ void SAL_CALL OCommonEmbeddedObject::close( sal_Bool bDeliverOwnership )
     // will use the storage, the storage will be disposed by the document and recreated by the object
     if ( m_xObjectStorage.is() )
     {
-        uno::Reference< lang::XComponent > xComp( m_xObjectStorage, uno::UNO_QUERY );
-        OSL_ENSURE( xComp.is(), "Storage does not support XComponent!" );
-
-        if ( xComp.is() )
-        {
-            try {
-                xComp->dispose();
-            } catch ( const uno::Exception& ) {}
-        }
+        try {
+            m_xObjectStorage->dispose();
+        } catch ( const uno::Exception& ) {}
 
         m_xObjectStorage.clear();
         m_xRecoveryStorage.clear();
