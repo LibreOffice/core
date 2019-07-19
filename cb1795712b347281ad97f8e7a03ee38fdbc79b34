@@ -34,6 +34,24 @@
       "revId": "cb1795712b347281ad97f8e7a03ee38fdbc79b34",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_e90dc137",
+        "filename": "scripting/java/com/sun/star/script/framework/provider/beanshell/ScriptEditorForBeanShell.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-07-19T12:20:00Z",
+      "side": 1,
+      "message": "No, otherwise it would be throwing an NPE there. But the url object could __return__ null from its getFile() method",
+      "parentUuid": "bf659307_6e045718",
+      "revId": "cb1795712b347281ad97f8e7a03ee38fdbc79b34",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
