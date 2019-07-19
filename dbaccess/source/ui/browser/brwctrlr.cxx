@@ -1972,7 +1972,7 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId, const Sequence< Property
                 break;
 
             // only one sort order
-            Reference< XPropertySet >  xField(getBoundField(), UNO_QUERY);
+            Reference< XPropertySet >  xField = getBoundField();
             if (!xField.is())
                 break;
 
@@ -1999,7 +1999,7 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId, const Sequence< Property
             if (!isValidCursor())
                 break;
 
-            Reference< XPropertySet >  xField(getBoundField(), UNO_QUERY);
+            Reference< XPropertySet >  xField = getBoundField();
             if (!xField.is())
                 break;
 
@@ -2321,7 +2321,7 @@ IMPL_LINK(SbaXDataBrowserController, OnSearchContextRequest, FmSearchContext&, r
     }
     sFieldList = comphelper::string::stripEnd(sFieldList, ';');
 
-    rContext.xCursor.set(getRowSet(),UNO_QUERY);
+    rContext.xCursor = getRowSet();
     rContext.strUsedFields = sFieldList;
 
     // if the cursor is in a mode other than STANDARD -> reset

@@ -721,7 +721,7 @@ void OTableController::appendPrimaryKey(Reference<XKeysSupplier> const & _rxSup,
         return; // the database doesn't support keys
 
     OSL_ENSURE(_rxSup.is(),"No XKeysSupplier!");
-    Reference<XIndexAccess> xKeys(_rxSup->getKeys(),UNO_QUERY);
+    Reference<XIndexAccess> xKeys = _rxSup->getKeys();
     Reference<XPropertySet> xProp;
     if (!xKeys.is())
         return;
