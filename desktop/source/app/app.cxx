@@ -2291,7 +2291,7 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
             if ( !xTask.is() )
             {
                 // get any task if there is no active one
-                Reference< css::container::XIndexAccess > xList( xDesktop->getFrames(), css::uno::UNO_QUERY );
+                Reference< css::container::XIndexAccess > xList = xDesktop->getFrames();
                 if ( xList->getCount() > 0 )
                     xList->getByIndex(0) >>= xTask;
             }

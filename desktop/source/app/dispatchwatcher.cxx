@@ -771,7 +771,7 @@ bool DispatchWatcher::executeDispatchRequests( const std::vector<DispatchRequest
     if ( bEmpty && !bNoTerminate /*m_aRequestContainer.empty()*/ )
     {
         // We have to check if we have an open task otherwise we have to shutdown the office.
-        Reference< XElementAccess > xList( xDesktop->getFrames(), UNO_QUERY );
+        Reference< XElementAccess > xList = xDesktop->getFrames();
 
         if ( !xList->hasElements() )
         {
@@ -799,7 +799,7 @@ void SAL_CALL DispatchWatcher::dispatchFinished( const DispatchResultEvent& )
     {
         // We have to check if we have an open task otherwise we have to shutdown the office.
         Reference< XDesktop2 > xDesktop = css::frame::Desktop::create( ::comphelper::getProcessComponentContext() );
-        Reference< XElementAccess > xList( xDesktop->getFrames(), UNO_QUERY );
+        Reference< XElementAccess > xList = xDesktop->getFrames();
 
         if ( !xList->hasElements() )
         {

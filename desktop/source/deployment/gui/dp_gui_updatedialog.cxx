@@ -228,9 +228,8 @@ UpdateDialog::Thread::Thread(
 {
     if( m_context.is() )
     {
-        m_xInteractionHdl.set(
-            task::InteractionHandler::createWithParent(m_context, dialog.getDialog()->GetXWindow()),
-            uno::UNO_QUERY );
+        m_xInteractionHdl =
+            task::InteractionHandler::createWithParent(m_context, dialog.getDialog()->GetXWindow());
         m_updateInformation->setInteractionHandler( m_xInteractionHdl );
     }
 }

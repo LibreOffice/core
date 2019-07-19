@@ -3484,11 +3484,9 @@ static char* getLanguages(const char* pCommand)
         css::uno::Reference<css::linguistic2::XLinguServiceManager2> xLangSrv = css::linguistic2::LinguServiceManager::create(xContext);
         if (xLangSrv.is())
         {
-            css::uno::Reference<css::linguistic2::XSpellChecker> xSpell(xLangSrv->getSpellChecker(), css::uno::UNO_QUERY);
-            css::uno::Reference<css::linguistic2::XSupportedLocales> xLocales(xSpell, css::uno::UNO_QUERY);
-
-            if (xLocales.is())
-                aLocales = xLocales->getLocales();
+            css::uno::Reference<css::linguistic2::XSpellChecker> xSpell = xLangSrv->getSpellChecker();
+            if (xSpell.is())
+                aLocales = xSpell->getLocales();
         }
     }
 
@@ -3615,7 +3613,7 @@ static char* getStyles(LibreOfficeKitDocument* pThis, const char* pCommand)
     boost::property_tree::ptree aTree;
     aTree.put("commandName", pCommand);
     uno::Reference<css::style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(pDocument->mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XNameAccess> xStyleFamilies(xStyleFamiliesSupplier->getStyleFamilies(), uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xStyleFamilies = xStyleFamiliesSupplier->getStyleFamilies();
     uno::Sequence<OUString> aStyleFamilies = xStyleFamilies->getElementNames();
 
     static const std::vector<OUString> aWriterStyles =
@@ -4838,10 +4836,9 @@ static void preloadData()
     css::uno::Reference<css::linguistic2::XLinguServiceManager2> xLangSrv = css::linguistic2::LinguServiceManager::create(xContext);
     if (xLangSrv.is())
     {
-        css::uno::Reference<css::linguistic2::XSpellChecker> xSpell(xLangSrv->getSpellChecker(), css::uno::UNO_QUERY);
-        css::uno::Reference<css::linguistic2::XSupportedLocales> xLocales(xSpell, css::uno::UNO_QUERY);
-        if (xLocales.is())
-            aLocales = xLocales->getLocales();
+        css::uno::Reference<css::linguistic2::XSpellChecker> xSpell = xLangSrv->getSpellChecker();
+        if (xSpell.is())
+            aLocales = xSpell->getLocales();
     }
 
     for (const auto& aLocale : aLocales)
