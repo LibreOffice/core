@@ -112,9 +112,7 @@ $(eval $(call gb_Library_add_exception_objects,fwk,\
     framework/source/services/taskcreatorsrv \
     framework/source/services/urltransformer \
     framework/source/uiconfiguration/CommandImageResolver \
-    framework/source/uiconfiguration/ImageArrayData \
     framework/source/uiconfiguration/ImageList \
-    framework/source/uiconfiguration/ImplImageList \
     framework/source/uiconfiguration/globalsettings \
     framework/source/uiconfiguration/graphicnameaccess \
     framework/source/uiconfiguration/imagemanager \
