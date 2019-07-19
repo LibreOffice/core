@@ -141,21 +141,21 @@ css::uno::Reference< XComponent > OComponentAccess::impl_getFrameComponent( cons
     if ( !xController.is() )
     {
         // Controller not exist - use the VCL-component.
-        xComponent.set( xFrame->getComponentWindow(), UNO_QUERY );
+        xComponent = xFrame->getComponentWindow();
     }
     else
     {
         // Does no model exists?
-        css::uno::Reference< XModel > xModel( xController->getModel(), UNO_QUERY );
+        css::uno::Reference< XModel > xModel = xController->getModel();
         if ( xModel.is() )
         {
             // Model exist - use the model as component.
-            xComponent.set( xModel, UNO_QUERY );
+            xComponent = xModel;
         }
         else
         {
             // Model not exist - use the controller as component.
-            xComponent.set( xController, UNO_QUERY );
+            xComponent = xController;
         }
     }
 

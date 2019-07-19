@@ -789,7 +789,7 @@ void LayoutManager::implts_updateUIElementsVisibleState( bool bSetVisible )
         implts_notifyListeners( frame::LayoutManagerEvents::INVISIBLE, a );
 
     SolarMutexResettableGuard aWriteLock;
-    Reference< XUIElement >   xMenuBar( m_xMenuBar, UNO_QUERY );
+    Reference< XUIElement >   xMenuBar = m_xMenuBar;
     Reference< awt::XWindow > xContainerWindow( m_xContainerWindow );
     rtl::Reference< MenuBarManager > xInplaceMenuBar( m_xInplaceMenuBar );
     aWriteLock.clear();
@@ -903,8 +903,8 @@ void LayoutManager::implts_createProgressBar()
     Reference< awt::XWindow > xContainerWindow;
 
     SolarMutexResettableGuard aWriteLock;
-    xStatusBar.set( m_aStatusBarElement.m_xUIElement, UNO_QUERY );
-    xProgressBar.set( m_aProgressBarElement.m_xUIElement, UNO_QUERY );
+    xStatusBar = m_aStatusBarElement.m_xUIElement;
+    xProgressBar = m_aProgressBarElement.m_xUIElement;
     xProgressBarBackup = m_xProgressBarBackup;
     m_xProgressBarBackup.clear();
     xContainerWindow = m_xContainerWindow;
@@ -995,8 +995,8 @@ void LayoutManager::implts_setStatusBarPosSize( const ::Point& rPos, const ::Siz
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     SolarMutexClearableGuard aReadLock;
-    xStatusBar.set( m_aStatusBarElement.m_xUIElement, UNO_QUERY );
-    xProgressBar.set( m_aProgressBarElement.m_xUIElement, UNO_QUERY );
+    xStatusBar = m_aStatusBarElement.m_xUIElement;
+    xProgressBar = m_aProgressBarElement.m_xUIElement;
     xContainerWindow = m_xContainerWindow;
 
     Reference< awt::XWindow > xWindow;
@@ -1034,8 +1034,8 @@ bool LayoutManager::implts_showProgressBar()
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     SolarMutexGuard aWriteLock;
-    xStatusBar.set( m_aStatusBarElement.m_xUIElement, UNO_QUERY );
-    xProgressBar.set( m_aProgressBarElement.m_xUIElement, UNO_QUERY );
+    xStatusBar = m_aStatusBarElement.m_xUIElement;
+    xProgressBar = m_aProgressBarElement.m_xUIElement;
     bool bVisible( m_bVisible );
 
     m_aProgressBarElement.m_bVisible = true;
@@ -1075,7 +1075,7 @@ bool LayoutManager::implts_hideProgressBar()
     bool bHideStatusBar( false );
 
     SolarMutexGuard g;
-    xProgressBar.set( m_aProgressBarElement.m_xUIElement, UNO_QUERY );
+    xProgressBar = m_aProgressBarElement.m_xUIElement;
 
     bool bInternalStatusBar( false );
     if ( xProgressBar.is() )
