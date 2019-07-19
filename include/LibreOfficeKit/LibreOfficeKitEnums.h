@@ -47,6 +47,15 @@ typedef enum
 }
 LibreOfficeKitWindowAction;
 
+typedef enum
+{
+    LOK_SELTYPE_NONE,
+    LOK_SELTYPE_TEXT,
+    LOK_SELTYPE_LARGE_TEXT,
+    LOK_SELTYPE_COMPLEX
+}
+LibreOfficeKitSelectionType;
+
 /** Optional features of LibreOfficeKit, in particular callbacks that block
  *  LibreOfficeKit until the corresponding reply is received, which would
  *  deadlock if the client does not support the feature.
