@@ -149,10 +149,8 @@ static uno::Reference< io::XInputStream > createTempInpStreamFromStor(
     }
 
     try {
-        uno::Reference< lang::XComponent > xComponent( xTempStorage, uno::UNO_QUERY );
-        SAL_WARN_IF( !xComponent.is(), "embeddedobj.common", "Wrong storage implementation!" );
-        if ( xComponent.is() )
-            xComponent->dispose();
+        if ( xTempStorage.is() )
+            xTempStorage->dispose();
     }
     catch ( const uno::Exception& )
     {
@@ -252,9 +250,7 @@ void OCommonEmbeddedObject::SwitchOwnPersistence( const uno::Reference< embed::X
         return;
     }
 
-    uno::Reference< lang::XComponent > xComponent( m_xObjectStorage, uno::UNO_QUERY );
-    OSL_ENSURE( !m_xObjectStorage.is() || xComponent.is(), "Wrong storage implementation!" );
-
+    auto xOldObjectStorage = m_xObjectStorage;
     m_xObjectStorage = xNewObjectStorage;
     m_xParentStorage = xNewParentStorage;
     m_aEntryName = aNewName;
@@ -268,8 +264,8 @@ void OCommonEmbeddedObject::SwitchOwnPersistence( const uno::Reference< embed::X
     }
 
     try {
-        if ( xComponent.is() )
-            xComponent->dispose();
+        if ( xOldObjectStorage.is() )
+            xOldObjectStorage->dispose();
     }
     catch ( const uno::Exception& )
     {
@@ -348,12 +344,11 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::InitNewDocument_Impl()
     }
     catch( const uno::Exception& )
     {
-        uno::Reference< util::XCloseable > xCloseable( xDocument, uno::UNO_QUERY );
-        if ( xCloseable.is() )
+        if ( xDocument.is() )
         {
             try
             {
-                xCloseable->close( true );
+                xDocument->close( true );
             }
             catch( const uno::Exception& )
             {
@@ -417,12 +412,11 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::LoadLink_Impl()
     }
     catch( const uno::Exception& )
     {
-        uno::Reference< util::XCloseable > xCloseable( xDocument, uno::UNO_QUERY );
-        if ( xCloseable.is() )
+        if ( xDocument.is() )
         {
             try
             {
-                xCloseable->close( true );
+                xDocument->close( true );
             }
             catch( const uno::Exception& )
             {
@@ -549,12 +543,11 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::LoadDocumentFromStorag
     }
     catch( const uno::Exception& )
     {
-        uno::Reference< util::XCloseable > xCloseable( xDocument, uno::UNO_QUERY );
-        if ( xCloseable.is() )
+        if ( xDocument.is() )
         {
             try
             {
-                xCloseable->close( true );
+                xDocument->close( true );
             }
             catch( const uno::Exception& )
             {
@@ -834,12 +827,11 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::CreateDocFromMediaDesc
     }
     catch( const uno::Exception& )
     {
-        uno::Reference< util::XCloseable > xCloseable( xDocument, uno::UNO_QUERY );
-        if ( xCloseable.is() )
+        if ( xDocument.is() )
         {
             try
             {
-                xCloseable->close( true );
+                xDocument->close( true );
             }
             catch( const uno::Exception& )
             {
@@ -1456,10 +1448,7 @@ void SAL_CALL OCommonEmbeddedObject::saveCompleted( sal_Bool bUseNew )
     else
     {
         try {
-            uno::Reference< lang::XComponent > xComponent( m_xNewObjectStorage, uno::UNO_QUERY );
-            SAL_WARN_IF( !xComponent.is(), "embeddedobj.common", "Wrong storage implementation!" );
-            if ( xComponent.is() )
-                xComponent->dispose();
+            m_xNewObjectStorage->dispose();
         }
         catch ( const uno::Exception& )
         {
@@ -1740,10 +1729,8 @@ void SAL_CALL OCommonEmbeddedObject::reload(
     {
         // close own storage
         try {
-            uno::Reference< lang::XComponent > xComponent( m_xObjectStorage, uno::UNO_QUERY );
-            OSL_ENSURE( !m_xObjectStorage.is() || xComponent.is(), "Wrong storage implementation!" );
-            if ( xComponent.is() )
-                xComponent->dispose();
+            if ( m_xObjectStorage.is() )
+                m_xObjectStorage->dispose();
         }
         catch ( const uno::Exception& )
         {
@@ -1756,11 +1743,10 @@ void SAL_CALL OCommonEmbeddedObject::reload(
 
 sal_Bool SAL_CALL OCommonEmbeddedObject::isStored()
 {
-    uno::Reference<container::XNameAccess> xNA(m_xObjectStorage, uno::UNO_QUERY);
-    if (!xNA.is())
+    if (!m_xObjectStorage.is())
         return false;
 
-    return xNA->getElementNames().hasElements();
+    return m_xObjectStorage->getElementNames().hasElements();
 }
 
 

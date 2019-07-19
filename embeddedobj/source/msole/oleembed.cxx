@@ -129,15 +129,14 @@ void OleEmbeddedObject::MoveListeners()
                 m_pInterfaceContainer->getContainer( cppu::UnoType<embed::XStateChangeListener>::get());
             if ( pStateChangeContainer != nullptr )
             {
-                uno::Reference< embed::XStateChangeBroadcaster > xWrappedObject( m_xWrappedObject, uno::UNO_QUERY );
-                if ( xWrappedObject.is() )
+                if ( m_xWrappedObject.is() )
                 {
                     ::cppu::OInterfaceIteratorHelper pIterator( *pStateChangeContainer );
                     while ( pIterator.hasMoreElements() )
                     {
                         try
                         {
-                            xWrappedObject->addStateChangeListener( static_cast<embed::XStateChangeListener*>(pIterator.next()) );
+                            m_xWrappedObject->addStateChangeListener( static_cast<embed::XStateChangeListener*>(pIterator.next()) );
                         }
                         catch( const uno::RuntimeException& )
                         {
@@ -154,15 +153,14 @@ void OleEmbeddedObject::MoveListeners()
                 m_pInterfaceContainer->getContainer( cppu::UnoType<document::XEventListener>::get());
             if ( pEventContainer != nullptr )
             {
-                uno::Reference< document::XEventBroadcaster > xWrappedObject( m_xWrappedObject, uno::UNO_QUERY );
-                if ( xWrappedObject.is() )
+                if ( m_xWrappedObject.is() )
                 {
                     ::cppu::OInterfaceIteratorHelper pIterator( *pEventContainer );
                     while ( pIterator.hasMoreElements() )
                     {
                         try
                         {
-                            xWrappedObject->addEventListener( static_cast<document::XEventListener*>(pIterator.next()) );
+                            m_xWrappedObject->addEventListener( static_cast<document::XEventListener*>(pIterator.next()) );
                         }
                         catch( const uno::RuntimeException& )
                         {
@@ -179,15 +177,14 @@ void OleEmbeddedObject::MoveListeners()
                 m_pInterfaceContainer->getContainer( cppu::UnoType<util::XCloseListener>::get());
             if ( pCloseContainer != nullptr )
             {
-                uno::Reference< util::XCloseBroadcaster > xWrappedObject( m_xWrappedObject, uno::UNO_QUERY );
-                if ( xWrappedObject.is() )
+                if ( m_xWrappedObject.is() )
                 {
                     ::cppu::OInterfaceIteratorHelper pIterator( *pCloseContainer );
                     while ( pIterator.hasMoreElements() )
                     {
                         try
                         {
-                            xWrappedObject->addCloseListener( static_cast<util::XCloseListener*>(pIterator.next()) );
+                            m_xWrappedObject->addCloseListener( static_cast<util::XCloseListener*>(pIterator.next()) );
                         }
                         catch( const uno::RuntimeException& )
                         {

@@ -100,9 +100,8 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
     }
 
     try {
-        uno::Reference< lang::XComponent > xComp( xSubStorage, uno::UNO_QUERY );
-        if ( xComp.is() )
-            xComp->dispose();
+        if ( xSubStorage.is() )
+            xSubStorage->dispose();
     }
     catch ( const uno::Exception& )
     {
