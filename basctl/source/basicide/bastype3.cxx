@@ -89,7 +89,7 @@ void TreeListBox::RequestingChildren( SvTreeListEntry* pEntry )
 
             // load dialog library
             bool bDlgLibLoaded = false;
-            Reference< script::XLibraryContainer > xDlgLibContainer( aDocument.getLibraryContainer( E_DIALOGS ), UNO_QUERY );
+            Reference< script::XLibraryContainer > xDlgLibContainer = aDocument.getLibraryContainer( E_DIALOGS );
             if ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aOULibName ) )
             {
                 if ( !xDlgLibContainer->isLibraryLoaded( aOULibName ) )
@@ -178,7 +178,7 @@ IMPL_LINK(SbTreeListBox, RequestingChildrenHdl, const weld::TreeIter&, rEntry, b
 
             // load dialog library
             bool bDlgLibLoaded = false;
-            Reference< script::XLibraryContainer > xDlgLibContainer( aDocument.getLibraryContainer( E_DIALOGS ), UNO_QUERY );
+            Reference< script::XLibraryContainer > xDlgLibContainer = aDocument.getLibraryContainer( E_DIALOGS );
             if ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aOULibName ) )
             {
                 if ( !xDlgLibContainer->isLibraryLoaded( aOULibName ) )

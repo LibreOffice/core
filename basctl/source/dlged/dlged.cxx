@@ -362,11 +362,10 @@ void DlgEditor::SetDialog( const uno::Reference< container::XNameContainer >& xU
     pDlgEdForm->StartListening();
 
     // create controls
-    Reference< css::container::XNameAccess > xNameAcc( m_xUnoControlDialogModel, UNO_QUERY );
-    if ( xNameAcc.is() )
+    if ( m_xUnoControlDialogModel.is() )
     {
         // get sequence of control names
-        Sequence< OUString > aNames = xNameAcc->getElementNames();
+        Sequence< OUString > aNames = m_xUnoControlDialogModel->getElementNames();
         const OUString* pNames = aNames.getConstArray();
         sal_Int32 nCtrls = aNames.getLength();
 
@@ -379,7 +378,7 @@ void DlgEditor::SetDialog( const uno::Reference< container::XNameContainer >& xU
 
             // get tab index
             sal_Int16 nTabIndex = -1;
-            Any aCtrl = xNameAcc->getByName( aName );
+            Any aCtrl = m_xUnoControlDialogModel->getByName( aName );
             Reference< css::beans::XPropertySet > xPSet;
             aCtrl >>= xPSet;
             if ( xPSet.is() )
@@ -392,7 +391,7 @@ void DlgEditor::SetDialog( const uno::Reference< container::XNameContainer >& xU
         // create controls and insert them into drawing page
         for (auto const& indexToName : aIndexToNameMap)
         {
-            Any aCtrl = xNameAcc->getByName( indexToName.second );
+            Any aCtrl = m_xUnoControlDialogModel->getByName( indexToName.second );
             Reference< css::awt::XControlModel > xCtrlModel;
             aCtrl >>= xCtrlModel;
             DlgEdObj* pCtrlObj = new DlgEdObj(*pDlgEdModel);
@@ -679,10 +678,9 @@ void DlgEditor::Copy()
     Reference< util::XCloneable > xNewClone = xClone->createClone();
     Reference< container::XNameContainer > xClipDialogModel( xNewClone, UNO_QUERY );
 
-    Reference< container::XNameAccess > xNAcc( xClipDialogModel, UNO_QUERY );
-    if ( xNAcc.is() )
+    if ( xClipDialogModel.is() )
     {
-        Sequence< OUString > aNames = xNAcc->getElementNames();
+        Sequence< OUString > aNames = xClipDialogModel->getElementNames();
         const OUString* pNames = aNames.getConstArray();
         sal_uInt32 nCtrls = aNames.getLength();
 
@@ -708,10 +706,9 @@ void DlgEditor::Copy()
                 xMarkPSet->getPropertyValue( DLGED_PROP_NAME ) >>= aName;
             }
 
-            Reference< container::XNameAccess > xNameAcc(m_xUnoControlDialogModel, UNO_QUERY );
-            if ( xNameAcc.is() && xNameAcc->hasByName(aName) )
+            if ( m_xUnoControlDialogModel.is() && m_xUnoControlDialogModel->hasByName(aName) )
             {
-                Any aCtrl = xNameAcc->getByName( aName );
+                Any aCtrl = m_xUnoControlDialogModel->getByName( aName );
 
                 // clone control model
                 Reference< util::XCloneable > xCtrl;
@@ -759,9 +756,7 @@ void DlgEditor::Copy()
             // With resource, support old and new format
 
             // Export xClipDialogModel another time with ids replaced by current language string
-            uno::Reference< resource::XStringResourceManager >
-                xStringResourceManager( xStringResourcePersistence, uno::UNO_QUERY );
-            LocalizationMgr::resetResourceForDialog( xClipDialogModel, xStringResourceManager );
+            LocalizationMgr::resetResourceForDialog( xClipDialogModel, xStringResourcePersistence );
             Reference< XInputStreamProvider > xISP2 = ::xmlscript::exportDialogModel( xClipDialogModel, xContext, m_xDocument );
             Reference< XInputStream > xStream2( xISP2->createInputStream() );
             Sequence< sal_Int8 > NoResourceDialogModelBytes;
@@ -906,10 +901,9 @@ void DlgEditor::Paste()
                 }
 
                 // get control models from clipboard dialog model
-                Reference< css::container::XNameAccess > xNameAcc( xClipDialogModel, UNO_QUERY );
-                if ( xNameAcc.is() )
+                if ( xClipDialogModel.is() )
                 {
-                    Sequence< OUString > aNames = xNameAcc->getElementNames();
+                    Sequence< OUString > aNames = xClipDialogModel->getElementNames();
                     const OUString* pNames = aNames.getConstArray();
                     sal_uInt32 nCtrls = aNames.getLength();
 
@@ -921,7 +915,7 @@ void DlgEditor::Paste()
                     }
                     for( sal_uInt32 n = 0; n < nCtrls; n++ )
                     {
-                        Any aA = xNameAcc->getByName( pNames[n] );
+                        Any aA = xClipDialogModel->getByName( pNames[n] );
                         Reference< css::awt::XControlModel > xCM;
                         aA >>= xCM;
 
@@ -940,8 +934,7 @@ void DlgEditor::Paste()
                         xPSet->setPropertyValue( DLGED_PROP_NAME, Any(aOUniqueName) );
 
                         // set tabindex
-                        Reference< container::XNameAccess > xNA( m_xUnoControlDialogModel , UNO_QUERY );
-                        Sequence< OUString > aNames_ = xNA->getElementNames();
+                        Sequence< OUString > aNames_ = m_xUnoControlDialogModel->getElementNames();
                         xPSet->setPropertyValue( DLGED_PROP_TABINDEX, Any(static_cast<sal_Int16>(aNames_.getLength())) );
 
                         if( bLocalized )
@@ -950,10 +943,8 @@ void DlgEditor::Paste()
                             aControlAny <<= xCtrlModel;
                             if( bSourceIsLocalized && xStringResourcePersistence.is() )
                             {
-                                Reference< resource::XStringResourceResolver >
-                                    xSourceStringResolver( xStringResourcePersistence, UNO_QUERY );
                                 LocalizationMgr::copyResourcesForPastedEditorObject( this,
-                                    aControlAny, aOUniqueName, xSourceStringResolver );
+                                    aControlAny, aOUniqueName, xStringResourcePersistence );
                             }
                             else
                             {
