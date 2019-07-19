@@ -341,6 +341,7 @@ void SwMMResultPrintDialog::FillInPrinterSettings()
     {
         m_xPrinterLB->set_active_text(xConfigItem->GetSelectedPrinter());
     }
+    PrinterChangeHdl_Impl(*m_xPrinterLB);
 
     sal_Int32 count = xConfigItem->GetMergedDocumentCount();
     m_xToNF->set_value(count);
@@ -782,8 +783,6 @@ IMPL_LINK_NOARG(SwMMResultPrintDialog, PrintHdl_Impl, weld::Button&, void)
 
 IMPL_LINK_NOARG(SwMMResultPrintDialog, PrinterSetupHdl_Impl, weld::Button&, void)
 {
-    if (!m_pTempPrinter)
-        PrinterChangeHdl_Impl(*m_xPrinterLB);
     if (m_pTempPrinter)
         m_pTempPrinter->Setup(m_xDialog.get());
 }
