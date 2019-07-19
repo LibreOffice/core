@@ -171,7 +171,7 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
         if( const SdrObject* pSdrObj = rObj.GetSdrObject() )
             if (!pSdrObj->GetName().isEmpty())
                 aShapeName = pSdrObj->GetName();
-        uno::Reference< drawing::XShape> xShape(rObj.GetShapeRef(), uno::UNO_QUERY);
+        uno::Reference< drawing::XShape> xShape = rObj.GetShapeRef();
         if (xShape.is())
         {
             uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
@@ -414,7 +414,7 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
         }
         else if ( rObj.GetType() == "drawing.Control" )
         {
-            const Reference< XPropertySet > xPropSet(rObj.mXPropSet, UNO_QUERY);
+            const Reference< XPropertySet > xPropSet = rObj.mXPropSet;
             const Reference<XPropertySetInfo> xPropInfo = xPropSet.is() ? xPropSet->getPropertySetInfo() : Reference<XPropertySetInfo>();
             // This code is expected to be called only for DOCX format.
             if (xPropInfo.is() && xPropInfo->hasPropertyByName("AnchorType") && bOOxmlExport)
@@ -868,7 +868,7 @@ bool ImplEESdrWriter::ImplInitPage( const SdrPage& rPage )
         if (xOldDrawPage.is())
             xOldDrawPage->dispose();
         mXDrawPage = pSvxDrawPage = new SvxFmDrawPage( const_cast<SdrPage*>(&rPage) );
-        mXShapes.set( mXDrawPage, UNO_QUERY );
+        mXShapes = mXDrawPage;
         if ( !mXShapes.is() )
             return false;
         ImplInitPageValues();

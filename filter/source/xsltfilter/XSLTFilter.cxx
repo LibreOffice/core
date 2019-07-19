@@ -334,19 +334,15 @@ namespace XSLT
                                 this));
 
                         // connect input to transformer
-                        css::uno::Reference<XActiveDataSink> tsink(m_tcontrol, UNO_QUERY);
-                        tsink->setInputStream(xInputStream);
+                        m_tcontrol->setInputStream(xInputStream);
 
                         // create pipe
-                        css::uno::Reference<XOutputStream> pipeout(
-                                        Pipe::create(m_xContext),
-                                        UNO_QUERY);
+                        css::uno::Reference<XOutputStream> pipeout =
+                                        Pipe::create(m_xContext);
                         css::uno::Reference<XInputStream> pipein(pipeout, UNO_QUERY);
 
                         //connect transformer to pipe
-                        css::uno::Reference<XActiveDataSource> tsource(m_tcontrol,
-                                UNO_QUERY);
-                        tsource->setOutputStream(pipeout);
+                        m_tcontrol->setOutputStream(pipeout);
 
                         // connect pipe to sax parser
                         InputSource aInput;
@@ -477,9 +473,8 @@ namespace XSLT
                 m_tcontrol->addListener(css::uno::Reference<XStreamListener> (this));
 
                 // create pipe
-                css::uno::Reference<XOutputStream> pipeout(
-                                Pipe::create(m_xContext),
-                                UNO_QUERY);
+                css::uno::Reference<XOutputStream> pipeout =
+                                Pipe::create(m_xContext);
                 css::uno::Reference<XInputStream> pipein(pipeout, UNO_QUERY);
 
                 // connect sax writer to pipe
@@ -488,12 +483,10 @@ namespace XSLT
                 xmlsource->setOutputStream(pipeout);
 
                 // connect pipe to transformer
-                css::uno::Reference<XActiveDataSink> tsink(m_tcontrol, UNO_QUERY);
-                tsink->setInputStream(pipein);
+                m_tcontrol->setInputStream(pipein);
 
                 // connect transformer to output
-                css::uno::Reference<XActiveDataSource> tsource(m_tcontrol, UNO_QUERY);
-                tsource->setOutputStream(m_rOutputStream);
+                m_tcontrol->setOutputStream(m_rOutputStream);
 
                 // we will start receiving events after returning 'true'.
                 // we will start the transformation as soon as we receive the startDocument
