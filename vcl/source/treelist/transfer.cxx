@@ -388,6 +388,11 @@ Any SAL_CALL TransferableHelper::getTransferData2( const DataFlavor& rFlavor, co
     return maAny;
 }
 
+sal_Bool SAL_CALL TransferableHelper::isComplex()
+{
+    //FIXME: get from each document.
+    return sal_True;
+}
 
 Sequence< DataFlavor > SAL_CALL TransferableHelper::getTransferDataFlavors()
 {

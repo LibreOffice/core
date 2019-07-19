@@ -31,6 +31,11 @@ interface XTransferable2 : com::sun::star::datatransfer::XTransferable
      */
     any getTransferData2( [in] DataFlavor aFlavor, [in] string aDestShellID )
         raises ( UnsupportedFlavorException, com::sun::star::io::IOException );
+
+    /**
+     * Returns true if the selection contains embedded objects or is a large text blob.
+     */
+    boolean isComplex();
 };
 
 }; }; }; };
