@@ -577,14 +577,8 @@ void SAL_CALL BackingComp::dispose()
     // stop listening at the window
     if (m_xWindow.is())
     {
-        css::uno::Reference< css::lang::XComponent > xBroadcaster(m_xWindow, css::uno::UNO_QUERY);
-        if (xBroadcaster.is())
-        {
-            css::uno::Reference< css::lang::XEventListener > xEventThis(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY);
-            xBroadcaster->removeEventListener(xEventThis);
-        }
-        css::uno::Reference< css::awt::XKeyListener > xKeyThis(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY);
-        m_xWindow->removeKeyListener(xKeyThis);
+        m_xWindow->removeEventListener(this);
+        m_xWindow->removeKeyListener(this);
         m_xWindow.clear();
     }
 
@@ -678,9 +672,7 @@ void SAL_CALL BackingComp::initialize( /*IN*/ const css::uno::Sequence< css::uno
 
     // start listening for window disposing
     // It's set at our owner frame as component window later too. So it will may be disposed there ...
-    css::uno::Reference< css::lang::XComponent > xBroadcaster(m_xWindow, css::uno::UNO_QUERY);
-    if (xBroadcaster.is())
-        xBroadcaster->addEventListener(static_cast< css::lang::XEventListener* >(this));
+    m_xWindow->addEventListener(static_cast< css::lang::XEventListener* >(this));
 
     m_xWindow->setVisible(true);
 

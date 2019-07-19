@@ -57,8 +57,7 @@ bool DocumentSigner::signDocument(uno::Reference<security::XCertificate> const& 
     try
     {
         uno::Reference<embed::XStorage> xMetaInf;
-        uno::Reference<container::XNameAccess> xNameAccess(xWriteableZipStore, uno::UNO_QUERY);
-        if (xNameAccess.is() && xNameAccess->hasByName("META-INF"))
+        if (xWriteableZipStore.is() && xWriteableZipStore->hasByName("META-INF"))
         {
             xMetaInf = xWriteableZipStore->openStorageElement("META-INF",
                                                               embed::ElementModes::READWRITE);

@@ -2597,9 +2597,8 @@ void SfxViewFrame::AddDispatchMacroToBasic_Impl( const OUString& sMacro )
 
     //seen in tdf#122598, no parent for subsequent dialog
     SfxAllItemSet aSet(rPool);
-    css::uno::Reference< css::frame::XFrame > xFrame(
-            GetFrame().GetFrameInterface(),
-            css::uno::UNO_QUERY);
+    css::uno::Reference< css::frame::XFrame > xFrame =
+            GetFrame().GetFrameInterface();
     aSet.Put(SfxUnoFrameItem(SID_FILLFRAME, xFrame));
     aReq.SetInternalArgs_Impl(aSet);
 
@@ -2685,21 +2684,18 @@ void SfxViewFrame::AddDispatchMacroToBasic_Impl( const OUString& sMacro )
 
         // get LibraryContainer
         css::uno::Any aTemp;
-        css::uno::Reference< css::container::XNameAccess > xRoot(
-                xLibCont,
-                css::uno::UNO_QUERY);
 
         css::uno::Reference< css::container::XNameAccess > xLib;
-        if(xRoot->hasByName(aLibName))
+        if(xLibCont->hasByName(aLibName))
         {
             // library must be loaded
-            aTemp = xRoot->getByName(aLibName);
+            aTemp = xLibCont->getByName(aLibName);
             xLibCont->loadLibrary(aLibName);
             aTemp >>= xLib;
         }
         else
         {
-            xLib.set( xLibCont->createLibrary(aLibName), css::uno::UNO_QUERY);
+            xLib = xLibCont->createLibrary(aLibName);
         }
 
         // pack the macro as direct usable "sub" routine
@@ -2780,9 +2776,8 @@ void SfxViewFrame::MiscExec_Impl( SfxRequest& rReq )
         {
             // try to find any active recorder on this frame
             const OUString sProperty("DispatchRecorderSupplier");
-            css::uno::Reference< css::frame::XFrame > xFrame(
-                    GetFrame().GetFrameInterface(),
-                    css::uno::UNO_QUERY);
+            css::uno::Reference< css::frame::XFrame > xFrame =
+                    GetFrame().GetFrameInterface();
 
             css::uno::Reference< css::beans::XPropertySet > xSet(xFrame,css::uno::UNO_QUERY);
             css::uno::Any aProp = xSet->getPropertyValue(sProperty);
@@ -2840,9 +2835,8 @@ void SfxViewFrame::MiscExec_Impl( SfxRequest& rReq )
 
         case SID_TOGGLESTATUSBAR:
         {
-            css::uno::Reference< css::frame::XFrame > xFrame(
-                    GetFrame().GetFrameInterface(),
-                    css::uno::UNO_QUERY);
+            css::uno::Reference< css::frame::XFrame > xFrame =
+                    GetFrame().GetFrameInterface();
 
             Reference< css::beans::XPropertySet > xPropSet( xFrame, UNO_QUERY );
             Reference< css::frame::XLayoutManager > xLayoutManager;
@@ -2894,9 +2888,8 @@ void SfxViewFrame::MiscExec_Impl( SfxRequest& rReq )
                 WorkWindow* pWork = static_cast<WorkWindow*>( pTop->GetFrame().GetTopWindow_Impl() );
                 if ( pWork )
                 {
-                    css::uno::Reference< css::frame::XFrame > xFrame(
-                            GetFrame().GetFrameInterface(),
-                            css::uno::UNO_QUERY);
+                    css::uno::Reference< css::frame::XFrame > xFrame =
+                            GetFrame().GetFrameInterface();
 
                     Reference< css::beans::XPropertySet > xPropSet( xFrame, UNO_QUERY );
                     Reference< css::frame::XLayoutManager > xLayoutManager;
