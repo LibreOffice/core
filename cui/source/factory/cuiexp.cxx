@@ -57,11 +57,9 @@
 
 namespace cui
 {
-    static AbstractDialogFactory_Impl* pFactory=nullptr;
     static AbstractDialogFactory_Impl* GetFactory()
     {
-        if ( !pFactory )
-            pFactory = new AbstractDialogFactory_Impl;
+        static AbstractDialogFactory_Impl* pFactory = new AbstractDialogFactory_Impl;
         return pFactory;
     }
 }
