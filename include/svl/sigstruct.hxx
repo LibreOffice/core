@@ -48,7 +48,7 @@ struct SignatureReferenceInformation
     // For ODF: XAdES digests (SHA256) or the old SHA1, from css::xml::crypto::DigestID
     sal_Int32  nDigestID;
     OUString   ouDigestValue;
-    /// Type of the reference: an URI (newer idSignedProperties references) or empty.
+    /// Type of the reference: a URI (newer idSignedProperties references) or empty.
     OUString ouType;
 
     SignatureReferenceInformation() :
@@ -109,9 +109,9 @@ struct SignatureInformation
     //XML signatures are written again (unless they have been removed).
     //If the date time string is converted into the DateTime structure
     //then information can be lost because it only holds a fractional
-    //of a second with a accuracy of one hundredth of second.
+    //of a second with an accuracy of one hundredth of second.
     //If the string contains
-    //milli seconds (because the document was created by an application other than OOo)
+    //milliseconds (because the document was created by an application other than OOo)
     //and the converted time is written back, then the string looks different
     //and the signature is broken.
     OUString ouDateTime;
