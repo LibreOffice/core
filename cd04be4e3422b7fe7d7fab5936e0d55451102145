@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "bf659307_a9cca989",
+        "filename": "sc/source/ui/view/gridwin4.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 577,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2019-07-19T16:23:53Z",
+      "side": 1,
+      "message": "Rather have a hint in the settings \"after calculated\" or such. If needed maybe introduce an explicit \"Calculate page breaks\" slot / menu entry for those who really want it. We should avoid expensive calculations during document load.",
+      "parentUuid": "bf659307_b62deb47",
+      "range": {
+        "startLine": 577,
+        "startChar": 23,
+        "endLine": 577,
+        "endChar": 34
+      },
+      "revId": "cd04be4e3422b7fe7d7fab5936e0d55451102145",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bf659307_16bcd703",
         "filename": "sc/source/ui/view/gridwin4.cxx",
         "patchSetId": 6
