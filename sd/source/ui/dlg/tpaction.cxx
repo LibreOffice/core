@@ -638,13 +638,12 @@ IMPL_LINK_NOARG(SdTPAction, CheckFileHdl, weld::Widget&, void)
             uno::Reference < embed::XStorage > xStorage = aMedium.GetStorage();
             DBG_ASSERT( xStorage.is(), "No storage!" );
 
-            uno::Reference < container::XNameAccess > xAccess( xStorage, uno::UNO_QUERY );
-            if (xAccess.is())
+            if (xStorage.is())
             {
                 try
                 {
-                    if (xAccess->hasByName(pStarDrawXMLContent) ||
-                        xAccess->hasByName(pStarDrawOldXMLContent))
+                    if (xStorage->hasByName(pStarDrawXMLContent) ||
+                        xStorage->hasByName(pStarDrawOldXMLContent))
                     {
                         if (SdDrawDocument* pBookmarkDoc = mpDoc->OpenBookmarkDoc(aFile))
                         {

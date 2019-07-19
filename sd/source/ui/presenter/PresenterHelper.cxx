@@ -390,8 +390,7 @@ Reference<rendering::XBitmap> SAL_CALL PresenterHelper::loadBitmap (
     ::osl::MutexGuard aGuard (::osl::Mutex::getGlobalMutex());
 
     const cppcanvas::CanvasSharedPtr pCanvas (
-        cppcanvas::VCLFactory::createCanvas(
-            Reference<css::rendering::XCanvas>(rxCanvas,UNO_QUERY)));
+        cppcanvas::VCLFactory::createCanvas(rxCanvas));
 
     if (pCanvas.get() != nullptr)
     {

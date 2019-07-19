@@ -1353,11 +1353,10 @@ void SdPageObjsTLB::AddShapeToTransferable (
 
         uno::Reference<frame::XDesktop2> xDesktop = frame::Desktop::create(xContext);
 
-        uno::Reference<frame::XFramesSupplier> xFrameSupplier (xDesktop, uno::UNO_QUERY);
-        if ( ! xFrameSupplier.is())
+        if ( ! xDesktop.is())
             return nullptr;
 
-        uno::Reference<container::XIndexAccess> xFrameAccess (xFrameSupplier->getFrames(), uno::UNO_QUERY);
+        uno::Reference<container::XIndexAccess> xFrameAccess = xDesktop->getFrames();
         if ( ! xFrameAccess.is())
             return nullptr;
 

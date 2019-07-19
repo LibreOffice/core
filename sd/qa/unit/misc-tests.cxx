@@ -155,7 +155,7 @@ sd::DrawDocShellRef SdMiscTest::Load(const OUString& rURL, sal_Int32 nFormat)
     uno::Reference< frame::XModel2 > xModel2(xDocSh->GetModel(), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xModel2.is());
 
-    uno::Reference< frame::XController2 > xController(xModel2->createDefaultViewController(xTargetFrame), uno::UNO_QUERY);
+    uno::Reference< frame::XController2 > xController = xModel2->createDefaultViewController(xTargetFrame);
     CPPUNIT_ASSERT(xController.is());
 
     // introduce model/view/controller to each other

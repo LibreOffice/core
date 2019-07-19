@@ -304,14 +304,10 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
                 GetEmbeddedObjectContainer().CreateEmbeddedObject( aName.GetByteSequence(), aObjName );
         if ( xObj.is() )
         {
-            uno::Reference<embed::XComponentSupplier> xCompSupp(xObj, uno::UNO_QUERY);
-            if (xCompSupp.is())
-            {
-                // Create default chart type.
-                uno::Reference<chart2::XChartDocument> xChartDoc(xCompSupp->getComponent(), uno::UNO_QUERY);
-                if (xChartDoc.is())
-                    xChartDoc->createDefaultChart();
-            }
+            // Create default chart type.
+            uno::Reference<chart2::XChartDocument> xChartDoc(xObj->getComponent(), uno::UNO_QUERY);
+            if (xChartDoc.is())
+                xChartDoc->createDefaultChart();
 
             sal_Int64 nAspect = embed::Aspects::MSOLE_CONTENT;
 

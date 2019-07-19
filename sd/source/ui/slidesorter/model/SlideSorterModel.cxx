@@ -444,7 +444,7 @@ void SlideSorterModel::UpdatePageList()
                     xController->getModel(), UNO_QUERY);
                 if (xSupplier.is())
                 {
-                    xPages.set( xSupplier->getMasterPages(), UNO_QUERY);
+                    xPages = xSupplier->getMasterPages();
                 }
             }
             break;
@@ -455,7 +455,7 @@ void SlideSorterModel::UpdatePageList()
                     xController->getModel(), UNO_QUERY);
                 if (xSupplier.is())
                 {
-                    xPages.set( xSupplier->getDrawPages(), UNO_QUERY);
+                    xPages = xSupplier->getDrawPages();
                 }
             }
             break;
