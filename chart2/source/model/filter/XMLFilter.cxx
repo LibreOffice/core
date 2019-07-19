@@ -414,9 +414,8 @@ ErrCode XMLFilter::impl_ImportStream(
 {
     ErrCode nWarning = ERRCODE_SFX_GENERAL;
 
-    Reference< container::XNameAccess > xNameAcc( xStorage, uno::UNO_QUERY );
-    if( ! (xNameAcc.is() &&
-           xNameAcc->hasByName( rStreamName )))
+    if( ! (xStorage.is() &&
+           xStorage->hasByName( rStreamName )))
         return ERRCODE_NONE;
 
     if( xImportInfo.is() )
@@ -553,7 +552,7 @@ ErrCode XMLFilter::impl_Export(
         if( ! xStorage.is())
             return ERRCODE_SFX_GENERAL;
 
-        uno::Reference< xml::sax::XDocumentHandler> xDocHandler( xSaxWriter, uno::UNO_QUERY );
+        uno::Reference< xml::sax::XDocumentHandler> xDocHandler = xSaxWriter;
 
         if ( !m_sDocumentHandler.isEmpty() )
         {

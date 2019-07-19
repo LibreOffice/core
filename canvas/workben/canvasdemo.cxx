@@ -170,11 +170,10 @@ class DemoRenderer
             aPolys[0] = aPoints;
             xPoly = mxDevice->createCompatibleLinePolyPolygon( aPolys );
             xPoly->setClosed( 0, true );
-            uno::Reference< rendering::XPolyPolygon2D> xPP( xPoly, uno::UNO_QUERY );
 
             rendering::RenderState aRenderState( maRenderState );
             aRenderState.DeviceColor = aColor;
-            mxCanvas->drawPolyPolygon( xPP, maViewState, aRenderState );
+            mxCanvas->drawPolyPolygon( xPoly, maViewState, aRenderState );
         }
 
         void translate( double x, double y)
@@ -250,7 +249,6 @@ class DemoRenderer
 
             xPoly = mxDevice->createCompatibleLinePolyPolygon( aPolys );
             xPoly->setClosed( 0, false );
-            uno::Reference< rendering::XPolyPolygon2D> xPP( xPoly, uno::UNO_QUERY );
 
             rendering::RenderState aRenderState( maRenderState );
             aRenderState.DeviceColor = maColorRed;
@@ -263,9 +261,9 @@ class DemoRenderer
             aStrokeAttrs.JoinType = rendering::PathJoinType::MITER;
             //fprintf( stderr, "FIXME: stroking a tools::PolyPolygon doesn't show up\n" );
             //yes it does
-            mxCanvas->strokePolyPolygon( xPP, maViewState, aRenderState, aStrokeAttrs );
+            mxCanvas->strokePolyPolygon( xPoly, maViewState, aRenderState, aStrokeAttrs );
             // FIXME: do this instead:
-            //mxCanvas->drawPolyPolygon( xPP, maViewState, aRenderState );
+            //mxCanvas->drawPolyPolygon( xPoly, maViewState, aRenderState );
         }
 
         void drawTitle( OString aTitle )
@@ -410,7 +408,6 @@ class DemoRenderer
             xPoly->setClosed( 0, true );
             //uno::Reference< rendering::XBezierPolyPolygon2D> xPP( xPoly, uno::UNO_QUERY );
             //compiles, but totally screws up.  I think it is interpreting the bezier as a line
-            uno::Reference< rendering::XPolyPolygon2D> xPP( xPoly, uno::UNO_QUERY );
 
             rendering::StrokeAttributes aStrokeAttrs;
             aStrokeAttrs.StrokeWidth = 4.0;
@@ -418,9 +415,9 @@ class DemoRenderer
             aStrokeAttrs.StartCapType = rendering::PathCapType::BUTT;
             aStrokeAttrs.EndCapType = rendering::PathCapType::BUTT;
             aStrokeAttrs.JoinType = rendering::PathJoinType::MITER;
-            mxCanvas->strokePolyPolygon( xPP, maViewState, maRenderState, aStrokeAttrs );
+            mxCanvas->strokePolyPolygon( xPoly, maViewState, maRenderState, aStrokeAttrs );
             //you can't draw a BezierPolyPolygon2D with this, even though it is derived from it
-            //mxCanvas->drawPolyPolygon( xPP, maViewState, maRenderState );
+            //mxCanvas->drawPolyPolygon( xPoly, maViewState, maRenderState );
 
             maRenderState = maOldRenderState; // pop
         }
@@ -502,9 +499,8 @@ class DemoRenderer
             xPoly->setClosed( 0, true );
             rendering::RenderState aRenderState( maRenderState );
             aRenderState.DeviceColor = maColorRed;
-            uno::Reference< rendering::XPolyPolygon2D> xPP( xPoly, uno::UNO_QUERY );
-            mxCanvas->drawPolyPolygon( xPP, maViewState, aRenderState);
-            mxCanvas->fillPolyPolygon( xPP,
+            mxCanvas->drawPolyPolygon( xPoly, maViewState, aRenderState);
+            mxCanvas->fillPolyPolygon( xPoly,
                                        maViewState,
                                        aRenderState );
         }

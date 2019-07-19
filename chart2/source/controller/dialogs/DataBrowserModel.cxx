@@ -412,7 +412,7 @@ void DataBrowserModel::insertComplexCategoryLevel( sal_Int32 nAfterColumnIndex )
     }
 
     m_apDialogModel->startControllerLockTimer();
-    ControllerLockGuardUNO aLockedControllers( Reference< frame::XModel >( m_xChartDocument, uno::UNO_QUERY ) );
+    ControllerLockGuardUNO aLockedControllers( m_xChartDocument );
     xDataProvider->insertComplexCategoryLevel( nAfterColumnIndex+1 );
     updateFromModel();
 }
@@ -427,7 +427,7 @@ void DataBrowserModel::removeComplexCategoryLevel( sal_Int32 nAtColumnIndex )
         return;
 
     m_apDialogModel->startControllerLockTimer();
-    ControllerLockGuardUNO aLockedControllers( Reference< frame::XModel >( m_xChartDocument, uno::UNO_QUERY ) );
+    ControllerLockGuardUNO aLockedControllers( m_xChartDocument );
     xDataProvider->deleteComplexCategoryLevel( nAtColumnIndex );
 
     updateFromModel();
@@ -658,7 +658,7 @@ bool DataBrowserModel::setCellAny( sal_Int32 nAtColumn, sal_Int32 nAtRow, const 
         bResult = true;
         try
         {
-            ControllerLockGuardUNO aLockedControllers( Reference< frame::XModel >( m_xChartDocument, uno::UNO_QUERY ) );
+            ControllerLockGuardUNO aLockedControllers( m_xChartDocument );
 
             // label
             if( nAtRow == -1 )
@@ -779,7 +779,7 @@ void DataBrowserModel::updateFromModel()
     sal_Int32 nHeaderStart = 0;
     sal_Int32 nHeaderEnd   = 0;
     {
-        Reference< frame::XModel > xChartModel( m_xChartDocument, uno::UNO_QUERY );
+        Reference< frame::XModel > xChartModel = m_xChartDocument;
         ChartModel* pModel = dynamic_cast<ChartModel*>(xChartModel.get());
         if (!pModel)
             return;
