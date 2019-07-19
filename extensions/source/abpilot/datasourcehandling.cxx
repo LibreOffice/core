@@ -521,9 +521,7 @@ namespace abp
         Reference< XInteractionHandler > xInteractions;
         try
         {
-            xInteractions.set(
-                InteractionHandler::createWithParent(m_pImpl->xORB, nullptr),
-                UNO_QUERY);
+            xInteractions = InteractionHandler::createWithParent(m_pImpl->xORB, nullptr);
         }
         catch(const Exception&)
         {

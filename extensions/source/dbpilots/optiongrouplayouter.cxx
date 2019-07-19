@@ -59,7 +59,7 @@ namespace dbp
 
     void OOptionGroupLayouter::doLayout(const OControlWizardContext& _rContext, const OOptionGroupSettings& _rSettings)
     {
-        Reference< XShapes > xPageShapes(_rContext.xDrawPage, UNO_QUERY);
+        Reference< XShapes > xPageShapes = _rContext.xDrawPage;
         if (!xPageShapes.is())
         {
             OSL_FAIL("OOptionGroupLayouter::OOptionGroupLayouter: missing the XShapes interface for the page!");

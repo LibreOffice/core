@@ -250,13 +250,15 @@ namespace pcr
                 OUString sOldDataTypeName;
                 OSL_VERIFY( xBinding->getPropertyValue( PROPERTY_XSD_DATA_TYPE ) >>= sOldDataTypeName );
                 Reference< XPropertySet > xOldType;
-                try { xOldType.set(getDataType( sOldDataTypeName ), css::uno::UNO_QUERY); } catch( const Exception& ) { }
+                try {
+                    xOldType = getDataType( sOldDataTypeName );
+                } catch( const Exception& ) { }
 
                 // set the new data type name
                 xBinding->setPropertyValue( PROPERTY_XSD_DATA_TYPE, makeAny( _rName ) );
 
                 // retrieve the new data type object
-                Reference< XPropertySet > xNewType( getDataType( _rName ), UNO_QUERY );
+                Reference< XPropertySet > xNewType = getDataType( _rName );
 
                 // fire any changes in the properties which result from this new type
                 std::set< OUString > aFilter; aFilter.insert( PROPERTY_NAME );

@@ -281,7 +281,7 @@ namespace dbp
 
     void OControlWizard::implDetermineShape()
     {
-        Reference< XIndexAccess > xPageObjects(m_aContext.xDrawPage, UNO_QUERY);
+        Reference< XIndexAccess > xPageObjects = m_aContext.xDrawPage;
         DBG_ASSERT(xPageObjects.is(), "OControlWizard::implDetermineShape: invalid page!");
 
         // for comparing the model
