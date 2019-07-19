@@ -233,15 +233,14 @@ bool SvxHlinkDlgMarkWnd::RefreshFromDoc(const OUString& aURL)
     if( !aURL.isEmpty() )
     {
         // load from url
-        uno::Reference< frame::XComponentLoader > xLoader( xDesktop, uno::UNO_QUERY );
-        if( xLoader.is() )
+        if( xDesktop.is() )
         {
             try
             {
                 uno::Sequence< beans::PropertyValue > aArg(1);
                 aArg.getArray()[0].Name = "Hidden";
                 aArg.getArray()[0].Value <<= true;
-                xComp = xLoader->loadComponentFromURL( aURL, "_blank", 0, aArg );
+                xComp = xDesktop->loadComponentFromURL( aURL, "_blank", 0, aArg );
             }
             catch( const io::IOException& )
             {

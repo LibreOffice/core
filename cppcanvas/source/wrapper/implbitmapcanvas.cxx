@@ -36,8 +36,7 @@ namespace cppcanvas
     namespace internal
     {
         ImplBitmapCanvas::ImplBitmapCanvas( const uno::Reference< rendering::XBitmapCanvas >& rCanvas ) :
-            ImplCanvas( uno::Reference< rendering::XCanvas >(rCanvas,
-                                                             uno::UNO_QUERY) ),
+            ImplCanvas( rCanvas ),
             mxBitmapCanvas( rCanvas ),
             mxBitmap( rCanvas,
                       uno::UNO_QUERY )
