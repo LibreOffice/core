@@ -39,6 +39,8 @@ using namespace css::ui;
 using namespace css;
 
 #define MENUBAR_STR "private:resource/menubar/menubar"
+
+static const char MERGE_NOTEBOOKBAR_URL[] = "URL";
 static const char MERGE_NOTEBOOKBAR_IMAGEID[] = "ImageIdentifier";
 
 bool SfxNotebookBar::m_bLock = false;
@@ -59,14 +61,26 @@ static void NotebookbarAddonValues(
         {
             css::uno::Sequence<css::beans::PropertyValue> pExtensionVal = aExtension[nSecIdx];
             Image aImage;
-
+            bool isBigImage = true;
             for (int nRes = 0; nRes < pExtensionVal.getLength(); nRes++)
             {
                 OUString sImage;
                 if (pExtensionVal[nRes].Name == MERGE_NOTEBOOKBAR_IMAGEID)
                 {
                     pExtensionVal[nRes].Value >>= sImage;
-                    aImage = framework::AddonsOptions().GetImageFromURL(sImage, false);
+                    aImage = framework::AddonsOptions().GetImageFromURL(sImage, isBigImage);
+                }
+            }
+            if(!aImage)
+            {
+                for (int nRes = 0; nRes < pExtensionVal.getLength(); nRes++)
+                {
+                    OUString sImage;
+                    if (pExtensionVal[nRes].Name == MERGE_NOTEBOOKBAR_URL)
+                    {
+                        pExtensionVal[nRes].Value >>= sImage;
+                        aImage = framework::AddonsOptions().GetImageFromURL(sImage, isBigImage);
+                    }
                 }
             }
             aImageValues.push_back(aImage);

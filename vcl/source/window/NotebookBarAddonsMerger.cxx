@@ -21,6 +21,9 @@
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/toolbox.hxx>
 
+static const char STYLE_TEXT[] = "Text";
+static const char STYLE_ICON[] = "Icon";
+
 static const char MERGE_NOTEBOOKBAR_URL[] = "URL";
 static const char MERGE_NOTEBOOKBAR_TITLE[] = "Title";
 static const char MERGE_NOTEBOOKBAR_IMAGEID[] = "ImageIdentifier";
@@ -77,21 +80,33 @@ void NotebookBarAddonsMerger::MergeNotebookBarAddons(
             if (pToolbox)
             {
                 Size aSize(0, 0);
+                Image sImage;
                 pToolbox->InsertItem(aAddonNotebookBarItem.sCommandURL, m_xFrame,
                                      ToolBoxItemBits::NONE, aSize);
                 nItemId = pToolbox->GetItemId(aAddonNotebookBarItem.sCommandURL);
                 pToolbox->SetItemCommand(nItemId, aAddonNotebookBarItem.sCommandURL);
                 pToolbox->SetQuickHelpText(nItemId, aAddonNotebookBarItem.sLabel);
-                pToolbox->SetItemText(nItemId, aAddonNotebookBarItem.sLabel);
+
                 if (nIter < aImageVec.size())
                 {
-                    Image sImage = aImageVec[nIter];
+                    sImage = aImageVec[nIter];
                     if (!sImage)
+                    {
                         sImage = vcl::CommandInfoProvider::GetImageForCommand(
                             aAddonNotebookBarItem.sImageIdentifier, m_xFrame);
+                    }
+                    nIter++;
+                }
+
+                if (aAddonNotebookBarItem.sStyle == STYLE_TEXT)
+                    pToolbox->SetItemText(nItemId, aAddonNotebookBarItem.sLabel);
+                else if (aAddonNotebookBarItem.sStyle == STYLE_ICON)
+                    pToolbox->SetItemImage(nItemId, sImage);
+                else
+                {
+                    pToolbox->SetItemText(nItemId, aAddonNotebookBarItem.sLabel);
                     pToolbox->SetItemImage(nItemId, sImage);
                 }
-                nIter++;
             }
             pToolbox->InsertSeparator();
         }
