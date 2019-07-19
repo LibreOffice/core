@@ -222,7 +222,7 @@ void Table::alterColumnByName(
     const OUString& colName,
     const Reference< XPropertySet >& descriptor )
 {
-    Reference< css::container::XNameAccess > columns( getColumns(), UNO_QUERY );
+    Reference< css::container::XNameAccess > columns = getColumns();
 
     OUString newName = extractStringProperty(descriptor, getStatics().NAME );
     ::pq_sdbc_driver::alterColumnByDescriptor(

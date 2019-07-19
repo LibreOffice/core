@@ -418,7 +418,7 @@ void OFlatTable::construct()
     Reference< XNumberFormatsSupplier > xSupplier = NumberFormatsSupplier::createWithLocale( m_pConnection->getDriver()->getComponentContext(), aAppLocale );
     m_xNumberFormatter.set( NumberFormatter::create( m_pConnection->getDriver()->getComponentContext()), UNO_QUERY_THROW);
     m_xNumberFormatter->attachNumberFormatsSupplier(xSupplier);
-    Reference<XPropertySet> xProp(xSupplier->getNumberFormatSettings(),UNO_QUERY);
+    Reference<XPropertySet> xProp = xSupplier->getNumberFormatSettings();
     xProp->getPropertyValue("NullDate") >>= m_aNullDate;
 
     INetURLObject aURL;
