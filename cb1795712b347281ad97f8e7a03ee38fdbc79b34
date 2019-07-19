@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_ee186782",
+        "filename": "scripting/java/com/sun/star/script/framework/provider/beanshell/ScriptEditorForBeanShell.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-07-19T12:07:59Z",
+      "side": 1,
+      "message": "this line makes me think it is possible for the filename to be null, in which case this change will throw a NPE",
+      "revId": "cb1795712b347281ad97f8e7a03ee38fdbc79b34",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
