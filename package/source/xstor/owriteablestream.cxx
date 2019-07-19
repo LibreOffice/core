@@ -1320,12 +1320,7 @@ uno::Reference< io::XStream > OWriteStream_Impl::GetStream_Impl( sal_Int32 nStre
         else
             m_pAntiImpl = new OWriteStream( this, xStream, bHierarchyAccess );
 
-        uno::Reference< io::XStream > xWriteStream( static_cast< ::cppu::OWeakObject* >( m_pAntiImpl ),
-                                                    uno::UNO_QUERY );
-
-        SAL_WARN_IF( !xWriteStream.is(), "package.xstor", "OWriteStream MUST implement XStream && XComponent interfaces!" );
-
-        return xWriteStream;
+        return m_pAntiImpl;
     }
 
     throw lang::IllegalArgumentException(); // TODO
@@ -1380,7 +1375,7 @@ void OWriteStream_Impl::CreateReadonlyCopyBasedOnData( const uno::Reference< io:
 {
     uno::Reference < io::XStream > xTempFile;
     if ( !xTargetStream.is() )
-        xTempFile.set( io::TempFile::create(m_xContext), uno::UNO_QUERY );
+        xTempFile = io::TempFile::create(m_xContext);
     else
         xTempFile = xTargetStream;
 
@@ -2069,7 +2064,7 @@ uno::Reference< io::XInputStream > SAL_CALL OWriteStream::getInputStream()
     if ( !m_bInitOnDemand && ( m_bInStreamDisconnected || !m_xInStream.is() ) )
         return uno::Reference< io::XInputStream >();
 
-    return uno::Reference< io::XInputStream >( static_cast< io::XInputStream* >( this ), uno::UNO_QUERY );
+    return this;
 }
 
 uno::Reference< io::XOutputStream > SAL_CALL OWriteStream::getOutputStream()
@@ -2095,7 +2090,7 @@ uno::Reference< io::XOutputStream > SAL_CALL OWriteStream::getOutputStream()
     if ( !m_xOutStream.is() )
         return uno::Reference< io::XOutputStream >();
 
-    return uno::Reference< io::XOutputStream >( static_cast< io::XOutputStream* >( this ), uno::UNO_QUERY );
+    return this;
 }
 
 void SAL_CALL OWriteStream::writeBytes( const uno::Sequence< sal_Int8 >& aData )
