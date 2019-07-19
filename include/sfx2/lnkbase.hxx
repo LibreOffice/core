@@ -57,8 +57,8 @@ class FileDialogHelper;
 
 #define OBJECT_CLIENT_SO              0x80 // a Link
 #define OBJECT_CLIENT_DDE           0x81
-//#define   OBJECT_CLIENT_OLE         0x82 // a Ole-Link
-//#define   OBJECT_CLIENT_OLE_CACHE   0x83 // a Ole-Link with SvEmbeddedObject
+//#define   OBJECT_CLIENT_OLE         0x82 // an Ole-Link
+//#define   OBJECT_CLIENT_OLE_CACHE   0x83 // an Ole-Link with SvEmbeddedObject
 #define OBJECT_CLIENT_FILE          0x90
 #define OBJECT_CLIENT_GRF           0x91
 #define OBJECT_CLIENT_OLE           0x92 // embedded link
