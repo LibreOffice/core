@@ -822,6 +822,13 @@ void SwHTMLWriter::Out_SwDoc( SwPaM* pPam )
                 OutHTML_Section( *this, *rNd.GetSectionNode() );
                 m_nBkmkTabPos = m_bWriteAll ? FindPos_Bkmk( *m_pCurrentPam->GetPoint() ) : -1;
             }
+            else if( rNd.IsGrfNode() )
+            {
+                SwGrfNode* pGrfNd = rNd.GetGrfNode();
+                assert(pGrfNd && !"FIXME: Implement Graphic copy as HTML.");
+                // if (pGrfNd)
+                //     OutHTML_SwGrfNode( *this, *pGrfNd );
+            }
             else if( &rNd == &m_pDoc->GetNodes().GetEndOfContent() )
                 break;
 
