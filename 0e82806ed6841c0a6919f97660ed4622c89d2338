@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_49b86d29",
+        "filename": "chart2/qa/extras/chart2import.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1534,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2019-07-19T13:30:07Z",
+      "side": 0,
+      "message": "likely we don\u0027t want to remove \"mixed testing\", because this was the aim of the original \"hidden\" UNO extension in commit 6c4e21a234f12e1310ba06f9859e08b424acf8bf \"bnc#812796: Correctly handle static value array for OOXML charts.\" (That we want to extend in secret, allowing multiple rows in the form of {...}{...}...)",
+      "revId": "0e82806ed6841c0a6919f97660ed4622c89d2338",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

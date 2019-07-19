@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "bf659307_e9a941df",
+        "filename": "oox/source/drawingml/chart/datasourcecontext.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2019-07-19T13:30:07Z",
+      "side": 1,
+      "message": "likely it is always defined when there are data points",
+      "parentUuid": "bf659307_c96f9dc3",
+      "range": {
+        "startLine": 255,
+        "startChar": 35,
+        "endLine": 255,
+        "endChar": 55
+      },
+      "revId": "a68302943955465be5cb24bb678e99f5e6b12978",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bf659307_ce456372",
         "filename": "oox/source/drawingml/chart/datasourcecontext.cxx",
         "patchSetId": 4
