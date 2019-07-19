@@ -401,7 +401,7 @@ Reference< XDictionary >  SvxSpellWrapper::GetAllRightDic()
         sal_Int32 i = 0;
         while (!xDic.is()  &&  i < nCount)
         {
-            Reference< XDictionary >  xTmp( pDic[i], UNO_QUERY );
+            Reference< XDictionary >  xTmp = pDic[i];
             if (xTmp.is())
             {
                 if ( xTmp->isActive() &&
@@ -457,8 +457,8 @@ bool SvxSpellWrapper::FindSpellError()
             else
             {
                 // look up in ChangeAllList for misspelled word
-                Reference< XDictionary >    xChangeAllList(
-                        LinguMgr::GetChangeAllList(), UNO_QUERY );
+                Reference< XDictionary >    xChangeAllList =
+                        LinguMgr::GetChangeAllList();
                 Reference< XDictionaryEntry >   xEntry;
                 if (xChangeAllList.is())
                     xEntry = xChangeAllList->getEntry( xAlt->getWord() );

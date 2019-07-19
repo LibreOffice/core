@@ -975,7 +975,7 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link<SpellCallbackInfo
             sal_uInt16 nDicCount = static_cast<sal_uInt16>(aDics.getLength());
             for (sal_uInt16 i = 0; i < nDicCount; i++)
             {
-                uno::Reference< linguistic2::XDictionary >  xDicTmp( pDic[i], uno::UNO_QUERY );
+                uno::Reference< linguistic2::XDictionary >  xDicTmp = pDic[i];
                 if (!xDicTmp.is() || LinguMgr::GetIgnoreAllList() == xDicTmp)
                     continue;
 
