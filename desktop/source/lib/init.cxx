@@ -74,6 +74,7 @@
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 #include <com/sun/star/datatransfer/UnsupportedFlavorException.hpp>
+#include <com/sun/star/datatransfer/XTransferable2.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/document/XRedlinesSupplier.hpp>
 #include <com/sun/star/ui/GlobalAcceleratorConfiguration.hpp>
@@ -783,6 +784,7 @@ static void doc_setTextSelection (LibreOfficeKitDocument* pThis,
 static char* doc_getTextSelection(LibreOfficeKitDocument* pThis,
                                   const char* pMimeType,
                                   char** pUsedMimeType);
+static int doc_getSelectionType(LibreOfficeKitDocument* pThis);
 static int doc_getSelection (LibreOfficeKitDocument* pThis,
                              const char **pMimeTypes,
                              size_t      *pOutCount,
@@ -893,6 +895,7 @@ LibLODocument_Impl::LibLODocument_Impl(const uno::Reference <css::lang::XCompone
         m_pDocumentClass->postUnoCommand = doc_postUnoCommand;
         m_pDocumentClass->setTextSelection = doc_setTextSelection;
         m_pDocumentClass->getTextSelection = doc_getTextSelection;
+        m_pDocumentClass->getSelectionType = doc_getSelectionType;
         m_pDocumentClass->getSelection = doc_getSelection;
         m_pDocumentClass->setClipboard = doc_setClipboard;
         m_pDocumentClass->paste = doc_paste;
@@ -3480,6 +3483,39 @@ static char* doc_getTextSelection(LibreOfficeKitDocument* pThis, const char* pMi
     }
 
     return convertOString(aRet);
+}
+
+static int doc_getSelectionType(LibreOfficeKitDocument* pThis)
+{
+    SolarMutexGuard aGuard;
+    SetLastExceptionMsg();
+
+    ITiledRenderable* pDoc = getTiledRenderable(pThis);
+    if (!pDoc)
+    {
+        SetLastExceptionMsg("Document doesn't support tiled rendering");
+        return LOK_SELTYPE_NONE;
+    }
+
+    css::uno::Reference<css::datatransfer::XTransferable2> xTransferable(pDoc->getSelection(), css::uno::UNO_QUERY);
+    if (!xTransferable)
+    {
+        SetLastExceptionMsg("No selection available");
+        return LOK_SELTYPE_NONE;
+    }
+
+    if (xTransferable->isComplex())
+        return LOK_SELTYPE_COMPLEX;
+
+    OString aRet;
+    bool bSuccess = getFromTransferrable(xTransferable, OString("text/plain;charset=utf-8"), aRet);
+    if (!bSuccess)
+        return LOK_SELTYPE_NONE;
+
+    if (aRet.getLength() > 1000) // About 2 paragraphs.
+        return LOK_SELTYPE_COMPLEX;
+
+    return aRet.getLength() ? LOK_SELTYPE_TEXT : LOK_SELTYPE_NONE;
 }
 
 static int doc_getSelection(LibreOfficeKitDocument* pThis,
