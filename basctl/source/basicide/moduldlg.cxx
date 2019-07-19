@@ -165,8 +165,7 @@ void Shell::CopyDialogResources(
     {
         if( bSourceLocalized && bDestLocalized )
         {
-            Reference< resource::XStringResourceResolver > xSourceStringResolver( xSourceMgr, UNO_QUERY );
-            LocalizationMgr::copyResourceForDroppedDialog( xDialogModel, rDlgName, xDestMgr, xSourceStringResolver );
+            LocalizationMgr::copyResourceForDroppedDialog( xDialogModel, rDlgName, xDestMgr, xSourceMgr );
         }
         else if( bSourceLocalized )
         {

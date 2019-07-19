@@ -179,7 +179,7 @@ IMPL_STATIC_LINK(ExtraData, GlobalBasicBreakHdl, StarBASIC *, pBasic, BasicDebug
             if ( aDocument.isValid() )
             {
                 OUString aOULibName( pBasic->GetName() );
-                Reference< script::XLibraryContainer > xModLibContainer( aDocument.getLibraryContainer( E_SCRIPTS ), UNO_QUERY );
+                Reference< script::XLibraryContainer > xModLibContainer = aDocument.getLibraryContainer( E_SCRIPTS );
                 if ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) )
                 {
                     Reference< script::XLibraryContainerPassword > xPasswd( xModLibContainer, UNO_QUERY );

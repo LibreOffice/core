@@ -152,11 +152,7 @@ void MediaWindowImpl::dispose()
         mxPlayerWindow->removeKeyListener( uno::Reference< awt::XKeyListener >( pEventsIf, uno::UNO_QUERY ) );
         mxPlayerWindow->removeMouseListener( uno::Reference< awt::XMouseListener >( pEventsIf, uno::UNO_QUERY ) );
         mxPlayerWindow->removeMouseMotionListener( uno::Reference< awt::XMouseMotionListener >( pEventsIf, uno::UNO_QUERY ) );
-
-        uno::Reference< lang::XComponent > xComponent( mxPlayerWindow, uno::UNO_QUERY );
-        if (xComponent.is())
-            xComponent->dispose();
-
+        mxPlayerWindow->dispose();
         mxPlayerWindow.clear();
     }
 
@@ -222,7 +218,7 @@ uno::Reference< media::XPlayer > MediaWindowImpl::createPlayer(
             xContext->getServiceManager()->createInstanceWithContext(rManagerServName, xContext),
             uno::UNO_QUERY );
         if( xManager.is() )
-            xPlayer.set( xManager->createPlayer( rURL ), uno::UNO_QUERY );
+            xPlayer = xManager->createPlayer( rURL );
         else
             SAL_INFO( "avmedia", "failed to create media player service " << rManagerServName );
     } catch ( const uno::Exception & )
