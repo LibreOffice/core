@@ -501,6 +501,18 @@ void SaveToolbarController::updateImage()
             aImage = Image(StockImage::Yes, BMP_SAVEMODIFIED_EXTRALARGE);
         else
             aImage = Image(StockImage::Yes, BMP_SAVEMODIFIED_SMALL);
+
+        // not sure why this is not being automatically scaled by the StockImage::Yes
+        sal_Int32 nScalePercentage = Application::GetDefaultDevice()->GetDPIScalePercentage();
+        if (nScalePercentage > 100)
+        {
+            double aScaleFactor(nScalePercentage / 100.0);
+            BitmapEx aScaledBitmapEx = aImage.GetBitmapEx();
+            Size aSizePixel = aImage.GetSizePixel();
+            aScaledBitmapEx.Scale( Size(aSizePixel.getWidth() * aScaleFactor, aSizePixel.getHeight() * aScaleFactor),
+                                   BmpScaleFlag::Fast);
+            aImage = Image(aScaledBitmapEx);
+        }
     }
 
     if ( !aImage )
