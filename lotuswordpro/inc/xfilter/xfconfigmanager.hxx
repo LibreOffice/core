@@ -71,7 +71,7 @@
  * @brief
  * Config information for OOo document, ie, line count config, endnote and footnote config.
  * This object should only exist one instance.
- * Don't make this object an singleton because it's managed by XFStyleManager.
+ * Don't make this object a singleton because it's managed by XFStyleManager.
  */
 class XFConfigManager : public XFStyleContainer
 {

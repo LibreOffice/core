@@ -29,7 +29,7 @@ import lib.MultiPropertyTest;
  * Testing is done by lib.MultiPropertyTest, except for properties
  * <ul>
  *  <li>PrinterPaperTray</li>
- *  <li>UserDefinedAttribures</li>
+ *  <li>UserDefinedAttributes</li>
  * </ul>
  */
 public class _PageProperties  extends MultiPropertyTest {

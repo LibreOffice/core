@@ -400,7 +400,7 @@ public:
         there mnemonic character is pressed. If there are multiple entries with the
         same mnemonic, the selection cycles between them.
 
-        Entries with an collapsed ancestor are not included in the calculation of
+        Entries with a collapsed ancestor are not included in the calculation of
         mnemonics. That is, if you press the accelerator key of an invisible
         entry, then this entry is *not* selected.
 

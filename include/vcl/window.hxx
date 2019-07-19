@@ -1489,7 +1489,7 @@ public:
     void set_secondary(bool bSecondary);
 
     /*
-     * If true this child is exempted from homogenous sizing
+     * If true this child is exempted from homogeneous sizing
      * e.g. special button in a buttonbox
      */
     bool get_non_homogeneous() const;

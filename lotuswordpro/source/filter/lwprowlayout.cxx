@@ -452,7 +452,7 @@ void LwpRowLayout::CollectMergeInfo()
 }
 /**
  * @short   split merge cells in this row
- * @param   nEffectRows - max spanned number of prevoius row
+ * @param   nEffectRows - max spanned number of previous row
  */
 void LwpRowLayout::SetCellSplit(sal_uInt16 nEffectRows)
 {

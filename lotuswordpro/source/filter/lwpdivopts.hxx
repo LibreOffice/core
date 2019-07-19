@@ -81,7 +81,7 @@ private:
 };
 
 /*
-Text languange.
+Text language.
 This class which holds identifiers for language and dialect.
 DESCRIPTION You can mark text as being a certain language. When we spell
     check or grammar check we'll use this info to determine which dictionary

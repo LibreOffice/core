@@ -91,7 +91,7 @@ public:
      */
     void    SetStyleName(const OUString& style) override;
     /**
-     * @descr   Add a entry in the template.
+     * @descr   Add an entry in the template.
      */
     void    AddEntry(enumXFIndexTemplate entry, const OUString& styleName);
 
@@ -101,7 +101,7 @@ public:
     void    AddTabEntry(enumXFTab type, double len, sal_Unicode leader, sal_Unicode delimiter, const OUString& styleName);
 
     /**
-     * @descr   Add a entry in the template.
+     * @descr   Add an entry in the template.
      */
     void    AddTextEntry(const OUString& sSpan, const OUString& styleName);
 

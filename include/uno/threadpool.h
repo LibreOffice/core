@@ -130,7 +130,7 @@ uno_threadpool_detach( uno_ThreadPool hPool ) SAL_THROW_EXTERN_C();
   If the request is asynchronous, it is put into the queue of asynchronous
   requests for the current threadid. The requests are always executed in a new
   thread, even if the thread with the given id is waiting in the pool. No id is bound
-  to the newly created thread. The responsibilty is left to the bridge ( if it
+  to the newly created thread. The responsibility is left to the bridge (if it
   wishes to bind a name).
 
   If pJob is a reply, there MUST be a thread with the given threadId waiting

@@ -71,14 +71,14 @@ int XFGlobal::s_nImageID = 1;
 
 OUString XFGlobal::GenSectionName()
 {
-    //give it a initial name:
+    //give it an initial name:
     OUString sResult = "sect" + OUString::number(s_nSectionID++);
     return sResult;
 }
 
 OUString XFGlobal::GenFrameName()
 {
-    //give it a initial name:
+    //give it an initial name:
     OUString sResult = "frame" + OUString::number(s_nFrameID++);
     return sResult;
 }

@@ -159,7 +159,7 @@ void  LwpTocSuperLayout::XFConvert(XFContentContainer* pCont)
 
         if(!pLevel)
         {
-            // add an blank template so that SODC won't add default style to this level
+            // add a blank template so that SODC won't add default style to this level
             xToc->AddTemplate(OUString::number(i),  OUString(), pTemplate);
             continue;
         }

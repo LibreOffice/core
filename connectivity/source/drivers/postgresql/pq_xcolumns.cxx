@@ -127,7 +127,7 @@ OUString columnMetaData2SDBCX(
     //  3. TABLE_NAME string => table name
     //               => pg_class.relname
     //  4. COLUMN_NAME string => column name
-    //               => pg_attribure.attname
+    //               => pg_attribute.attname
     //  5. DATA_TYPE short => SQL type from java.sql.Types
     //               => pg_type.typname => sdbc.DataType
     //  6. TYPE_NAME string => Data source dependent type name, for a UDT the
