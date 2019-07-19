@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_2e041f15",
+        "filename": "svx/source/svdraw/svdograf.cxx",
+        "patchSetId": 22
+      },
+      "lineNbr": 746,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-07-19T04:11:09Z",
+      "side": 1,
+      "message": "This unconditionally dereferences rObj.mpQrCode. Is it guaranteed to be set? Or have you possibly make it conditional, just resetting mpQrCode in case when rObj.mpQrCode is holding nullptr?",
+      "range": {
+        "startLine": 746,
+        "startChar": 4,
+        "endLine": 746,
+        "endChar": 70
+      },
+      "revId": "7849b6b97a70b27c9edec8a234a8161a72d0d2b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
