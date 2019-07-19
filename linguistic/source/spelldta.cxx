@@ -74,7 +74,7 @@ void SearchSimilarText( const OUString &rText, LanguageType nLanguage,
 
     for (sal_Int32 i = 0;  i < nDics;  i++)
     {
-        Reference< XDictionary > xDic( pDic[i], UNO_QUERY );
+        Reference< XDictionary > xDic = pDic[i];
 
         LanguageType nLang = LinguLocaleToLanguage( xDic->getLocale() );
 

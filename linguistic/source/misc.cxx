@@ -282,7 +282,7 @@ uno::Reference< XDictionaryEntry > SearchDicList(
     sal_Int32 i;
     for (i = 0;  i < nDics;  i++)
     {
-        uno::Reference< XDictionary > axDic( pDic[i], UNO_QUERY );
+        uno::Reference< XDictionary > axDic = pDic[i];
 
         DictionaryType  eType = axDic->getDictionaryType();
         LanguageType    nLang = LinguLocaleToLanguage( axDic->getLocale() );
