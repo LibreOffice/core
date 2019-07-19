@@ -483,7 +483,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
         {
 
             Reference < XDesktop2 > xDesktop  = Desktop::create( ::comphelper::getProcessComponentContext() );
-            Reference< XIndexAccess > xTasks( xDesktop->getFrames(), UNO_QUERY );
+            Reference< XIndexAccess > xTasks = xDesktop->getFrames();
             if ( !xTasks.is() )
                 break;
 
@@ -1128,7 +1128,7 @@ void SfxApplication::MiscState_Impl(SfxItemSet &rSet)
                 case SID_CLOSEDOCS:
                 {
                     Reference < XDesktop2 > xDesktop = Desktop::create( ::comphelper::getProcessComponentContext() );
-                    Reference< XIndexAccess > xTasks( xDesktop->getFrames(), UNO_QUERY );
+                    Reference< XIndexAccess > xTasks = xDesktop->getFrames();
                     if ( !xTasks.is() || !xTasks->getCount() )
                         rSet.DisableItem(nWhich);
                     break;
