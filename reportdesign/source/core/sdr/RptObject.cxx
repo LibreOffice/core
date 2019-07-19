@@ -568,7 +568,7 @@ bool OCustomShape::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
 
 uno::Reference< beans::XPropertySet> OCustomShape::getAwtComponent()
 {
-    return uno::Reference< beans::XPropertySet>(m_xReportComponent,uno::UNO_QUERY);
+    return m_xReportComponent;
 }
 
 
@@ -1072,7 +1072,7 @@ bool OOle2Obj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
 
 uno::Reference< beans::XPropertySet> OOle2Obj::getAwtComponent()
 {
-    return uno::Reference< beans::XPropertySet>(m_xReportComponent,uno::UNO_QUERY);
+    return m_xReportComponent;
 }
 
 
