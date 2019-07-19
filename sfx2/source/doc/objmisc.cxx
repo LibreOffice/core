@@ -924,6 +924,9 @@ void SfxObjectShell::BreakMacroSign_Impl( bool bBreakMacroSign )
 
 void SfxObjectShell::CheckSecurityOnLoading_Impl()
 {
+    // make sure LO evaluates the macro signatures, so it can be preserved
+    GetScriptingSignatureState();
+
     uno::Reference< task::XInteractionHandler > xInteraction;
     if ( GetMedium() )
         xInteraction = GetMedium()->GetInteractionHandler();
@@ -1818,7 +1821,7 @@ bool SfxObjectShell_Impl::hasTrustedScriptingSignature( bool bAllowUIToAddAuthor
             if ( aInfo.getLength() )
             {
                 if ( nScriptingSignatureState == SignatureState::UNKNOWN )
-                    nScriptingSignatureState = SfxObjectShell::ImplCheckSignaturesInformation( aInfo );
+                    nScriptingSignatureState = DocumentSignatures::getSignatureState(aInfo);
 
                 if ( nScriptingSignatureState == SignatureState::OK
                   || nScriptingSignatureState == SignatureState::NOTVALIDATED )

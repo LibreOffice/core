@@ -1081,6 +1081,14 @@ void Lock_Impl( SfxObjectShell const * pDoc, bool bLock )
 
 }
 
+static OUString lcl_strip_template(const OUString &aString)
+{
+    static const OUString sPostfix("_template");
+    OUString sRes(aString);
+    if (sRes.endsWith(sPostfix))
+        sRes = sRes.copy(0, sRes.getLength() - sPostfix.getLength());
+    return sRes;
+}
 
 bool SfxObjectShell::SaveTo_Impl
 (
@@ -1160,10 +1168,16 @@ bool SfxObjectShell::SaveTo_Impl
             {}
 
             // preserve only if the same filter has been used
-            bTryToPreserveScriptSignature = pMedium->GetFilter() && pFilter && pMedium->GetFilter()->GetFilterName() == pFilter->GetFilterName();
+            // for templates, strip the _template from the filter name for comparison
+            const OUString aMediumFilter = lcl_strip_template(pMedium->GetFilter()->GetFilterName());
+            bTryToPreserveScriptSignature = pMedium->GetFilter() && pFilter && aMediumFilter == lcl_strip_template(pFilter->GetFilterName());
 
+            // signatures were specified in ODF 1.2 but were used since much longer.
+            // LO will still correctly validate an old style signature on an ODF 1.2
+            // document, but technically this is not correct, so this prevents old
+            // signatures to be copied over to a version 1.2 document
             bNoPreserveForOasis = (
-                                   (aODFVersion == ODFVER_012_TEXT && nVersion == SvtSaveOptions::ODFVER_011) ||
+                                   (aODFVersion == ODFVER_012_TEXT && nVersion < SvtSaveOptions::ODFVER_012) ||
                                    (aODFVersion.isEmpty() && nVersion >= SvtSaveOptions::ODFVER_012)
                                   );
         }
@@ -1588,7 +1602,7 @@ bool SfxObjectShell::SaveTo_Impl
                         uno::Sequence< security::DocumentSignatureInformation > aInfos =
                             xDDSigns->verifyScriptingContentSignatures( xTarget,
                                                                         uno::Reference< io::XInputStream >() );
-                        SignatureState nState = ImplCheckSignaturesInformation( aInfos );
+                        SignatureState nState = DocumentSignatures::getSignatureState(aInfos);
                         if ( nState == SignatureState::OK || nState == SignatureState::NOTVALIDATED
                             || nState == SignatureState::PARTIAL_OK)
                         {
@@ -2026,13 +2040,21 @@ bool SfxObjectShell::DoSaveCompleted( SfxMedium* pNewMed, bool bRegisterRecent )
                 {}
             }
 
+            const SfxBoolItem* pTemplateItem = SfxItemSet::GetItem<SfxBoolItem>(pMedium->GetItemSet(), SID_TEMPLATE, false);
+            bool bTemplate = pTemplateItem && pTemplateItem->GetValue();
+
             // before the title regenerated the document must lose the signatures
             pImpl->nDocumentSignatureState = SignatureState::NOSIGNATURES;
-            pImpl->nScriptingSignatureState = pNewMed->GetCachedSignatureState_Impl();
-            OSL_ENSURE( pImpl->nScriptingSignatureState != SignatureState::BROKEN, "The signature must not be broken at this place" );
+            if (!bTemplate)
+            {
+                pImpl->nScriptingSignatureState = pNewMed->GetCachedSignatureState_Impl();
+                OSL_ENSURE( pImpl->nScriptingSignatureState != SignatureState::BROKEN, "The signature must not be broken at this place" );
 
-            // TODO/LATER: in future the medium must control own signature state, not the document
-            pNewMed->SetCachedSignatureState_Impl( SignatureState::NOSIGNATURES ); // set the default value back
+                // TODO/LATER: in future the medium must control own signature state, not the document
+                pNewMed->SetCachedSignatureState_Impl( SignatureState::NOSIGNATURES ); // set the default value back
+            }
+            else
+                pNewMed->SetCachedSignatureState_Impl( pImpl->nScriptingSignatureState );
 
             // Set new title
             if (!pNewMed->GetName().isEmpty() && SfxObjectCreateMode::EMBEDDED != eCreateMode)

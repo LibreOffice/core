@@ -13,6 +13,7 @@ $(eval $(call gb_CppunitTest_CppunitTest,xmlsecurity_signing))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,xmlsecurity_signing, \
 	xmlsecurity/qa/unit/signing/signing \
+	xmlsecurity/qa/unit/signing/signing2 \
 ))
 
 $(eval $(call gb_CppunitTest_use_libraries,xmlsecurity_signing, \
@@ -70,5 +71,9 @@ $(call gb_CppunitTest_get_target,xmlsecurity_signing): \
     gb_CppunitTest_run_gpgconf
 endif
 endif
+
+$(eval $(call gb_CppunitTest_use_custom_headers,xmlsecurity_signing,\
+    officecfg/registry \
+))
 
 # vim: set noet sw=4 ts=4:

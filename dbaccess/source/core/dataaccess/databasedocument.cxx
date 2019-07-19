@@ -46,6 +46,8 @@
 #include <com/sun/star/io/XTruncate.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/script/provider/theMasterScriptProviderFactory.hpp>
+#include <com/sun/star/security/DocumentDigitalSignatures.hpp>
+#include <com/sun/star/security/XDocumentDigitalSignatures.hpp>
 #include <com/sun/star/sdb/DatabaseContext.hpp>
 #include <com/sun/star/sdb/application/XDatabaseDocumentUI.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
@@ -70,6 +72,7 @@
 #include <comphelper/numberedcollection.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/storagehelper.hxx>
+#include <comphelper/processfactory.hxx>
 
 #include <connectivity/dbtools.hxx>
 
@@ -78,7 +81,9 @@
 #include <framework/titlehelper.hxx>
 #include <unotools/saveopt.hxx>
 #include <tools/debug.hxx>
+#include <unotools/tempfile.hxx>
 #include <tools/diagnose_ex.h>
+#include <osl/file.hxx>
 #include <osl/diagnose.h>
 #include <vcl/errcode.hxx>
 
@@ -1217,7 +1222,7 @@ void ODatabaseDocument::impl_storeToStorage_throw( const Reference< XStorage >& 
         lcl_triggerStatusIndicator_throw( aWriteArgs, _rDocGuard, false );
 
         // commit target storage
-        OSL_VERIFY( tools::stor::commitStorageIfWriteable( _rxTargetStorage ) );
+        m_pImpl->commitStorageIfWriteable_ignoreErrors(_rxTargetStorage);
     }
     catch( const IOException& ) { throw; }
     catch( const RuntimeException& ) { throw; }
