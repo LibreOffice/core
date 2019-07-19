@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_43ab6c1c",
+        "filename": "include/svx/svdograf.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 294,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-07-19T01:13:16Z",
+      "side": 1,
+      "message": "Better use make_unique, like you did elsewhere",
+      "range": {
+        "startLine": 294,
+        "startChar": 19,
+        "endLine": 294,
+        "endChar": 92
+      },
+      "revId": "888676feab4d265ee4eafd69548efb35ef1e8310",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_c3b77c86",
+        "filename": "svx/source/svdraw/svdograf.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 490,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-07-19T01:13:16Z",
+      "side": 1,
+      "message": "This needs not be non-const",
+      "range": {
+        "startLine": 490,
+        "startChar": 55,
+        "endLine": 490,
+        "endChar": 94
+      },
+      "revId": "888676feab4d265ee4eafd69548efb35ef1e8310",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_a3ae082c",
+        "filename": "svx/source/svdraw/svdograf.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 752,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-07-19T01:13:16Z",
+      "side": 1,
+      "message": "Since you declared your func to accept non-const reference, you have to do all the dance with const_cast above. Why?\n\nAnd ... what if you replace\n\n    mpQrCode \u003d func(*temp);\n\nwith\n\n    mpQrCode \u003d std::make_unique\u003ccss::drawing::QRCode\u003e(*rObj.mpQrCode);\n\nwould it be less clear? I bet it would be more clear: the copy is visible right reading the construct. Then - you may just drop all that \"func\"...",
+      "range": {
+        "startLine": 752,
+        "startChar": 20,
+        "endLine": 752,
+        "endChar": 25
+      },
+      "revId": "888676feab4d265ee4eafd69548efb35ef1e8310",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
