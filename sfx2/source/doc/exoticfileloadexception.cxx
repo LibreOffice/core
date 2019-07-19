@@ -23,10 +23,8 @@ ExoticFileLoadException::ExoticFileLoadException(const OUString& rURL,
 
     m_aRequest <<= aReq;
 
-    m_xAbort.set(uno::Reference<task::XInteractionAbort>(new comphelper::OInteractionAbort),
-                 uno::UNO_QUERY);
-    m_xApprove.set(uno::Reference<task::XInteractionApprove>(new comphelper::OInteractionApprove),
-                   uno::UNO_QUERY);
+    m_xAbort = new comphelper::OInteractionAbort;
+    m_xApprove = new comphelper::OInteractionApprove;
     m_lContinuations.realloc(2);
     m_lContinuations[0] = m_xApprove;
     m_lContinuations[1] = m_xAbort;

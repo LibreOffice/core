@@ -381,7 +381,7 @@ ErrCode SfxApplication::LoadTemplate( SfxObjectShellLock& xDoc, const OUString &
     xDoc->SetModified(false);
     xDoc->ResetError();
 
-    css::uno::Reference< css::frame::XModel >  xModel ( xDoc->GetModel(), css::uno::UNO_QUERY );
+    css::uno::Reference< css::frame::XModel >  xModel = xDoc->GetModel();
     if ( xModel.is() )
     {
         std::unique_ptr<SfxItemSet> pNew = xDoc->GetMedium()->GetItemSet()->Clone();
@@ -1010,7 +1010,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
         }
         else
         {
-            xTargetFrame.set( Desktop::create(::comphelper::getProcessComponentContext()), UNO_QUERY );
+            xTargetFrame = Desktop::create(::comphelper::getProcessComponentContext());
         }
     }
 

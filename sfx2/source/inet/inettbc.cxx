@@ -166,7 +166,7 @@ IMPL_LINK_NOARG(SfxURLToolBoxControl_Impl, OpenHdl, SvtURLBox*, void)
     OpenURL( pURLBox->GetURL() );
 
     Reference< XDesktop2 > xDesktop = Desktop::create( m_xContext );
-    Reference< XFrame > xFrame( xDesktop->getActiveFrame(), UNO_QUERY );
+    Reference< XFrame > xFrame = xDesktop->getActiveFrame();
     if ( xFrame.is() )
     {
         VclPtr<vcl::Window> pWin = VCLUnoHelper::GetWindow( xFrame->getContainerWindow() );
