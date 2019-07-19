@@ -50,8 +50,8 @@ Animation::Animation(const Animation& rAnimation)
     , mbIsInAnimation(false)
     , mbLoopTerminated(rAnimation.mbLoopTerminated)
 {
-    for (auto const& i : rAnimation.maList)
-        maList.emplace_back(new AnimationBitmap(*i));
+    for (auto const& i : rAnimation.maAnimationFrames)
+        maAnimationFrames.emplace_back(new AnimationBitmap(*i));
 
     maTimer.SetInvokeHandler(LINK(this, Animation, ImplTimeoutHdl));
     mnLoops = mbLoopTerminated ? 0 : mnLoopCount;
@@ -69,8 +69,8 @@ Animation& Animation::operator=(const Animation& rAnimation)
     {
         Clear();
 
-        for (auto const& i : rAnimation.maList)
-            maList.emplace_back(new AnimationBitmap(*i));
+        for (auto const& i : rAnimation.maAnimationFrames)
+            maAnimationFrames.emplace_back(new AnimationBitmap(*i));
 
         maGlobalSize = rAnimation.maGlobalSize;
         maBitmapEx = rAnimation.maBitmapEx;
@@ -84,9 +84,10 @@ Animation& Animation::operator=(const Animation& rAnimation)
 
 bool Animation::operator==(const Animation& rAnimation) const
 {
-    return maList.size() == rAnimation.maList.size() && maBitmapEx == rAnimation.maBitmapEx
-           && maGlobalSize == rAnimation.maGlobalSize
-           && std::equal(maList.begin(), maList.end(), rAnimation.maList.begin(),
+    return maAnimationFrames.size() == rAnimation.maAnimationFrames.size()
+           && maBitmapEx == rAnimation.maBitmapEx && maGlobalSize == rAnimation.maGlobalSize
+           && std::equal(maAnimationFrames.begin(), maAnimationFrames.end(),
+                         rAnimation.maAnimationFrames.begin(),
                          [](const std::unique_ptr<AnimationBitmap>& pAnim1,
                             const std::unique_ptr<AnimationBitmap>& pAnim2) -> bool {
                              return *pAnim1 == *pAnim2;
@@ -99,7 +100,7 @@ void Animation::Clear()
     mbIsInAnimation = false;
     maGlobalSize = Size();
     maBitmapEx.SetEmpty();
-    maList.clear();
+    maAnimationFrames.clear();
     maViewList.clear();
 }
 
@@ -113,7 +114,7 @@ bool Animation::IsTransparent() const
     // graphics due to performance reasons.
 
     return maBitmapEx.IsTransparent()
-           || std::any_of(maList.begin(), maList.end(),
+           || std::any_of(maAnimationFrames.begin(), maAnimationFrames.end(),
                           [&aRect](const std::unique_ptr<AnimationBitmap>& pAnim) -> bool {
                               return pAnim->meDisposal == Disposal::Back
                                      && tools::Rectangle{ pAnim->maPositionPixel,
@@ -126,7 +127,7 @@ sal_uLong Animation::GetSizeBytes() const
 {
     sal_uLong nSizeBytes = GetBitmapEx().GetSizeBytes();
 
-    for (auto const& pAnimationBitmap : maList)
+    for (auto const& pAnimationBitmap : maAnimationFrames)
     {
         nSizeBytes += pAnimationBitmap->maBitmapEx.GetSizeBytes();
     }
@@ -140,7 +141,7 @@ BitmapChecksum Animation::GetChecksum() const
     BitmapChecksumOctetArray aBCOA;
     BitmapChecksum nCrc = GetBitmapEx().GetChecksum();
 
-    UInt32ToSVBT32(maList.size(), aBT32);
+    UInt32ToSVBT32(maAnimationFrames.size(), aBT32);
     nCrc = vcl_get_checksum(nCrc, aBT32, 4);
 
     Int32ToSVBT32(maGlobalSize.Width(), aBT32);
@@ -149,7 +150,7 @@ BitmapChecksum Animation::GetChecksum() const
     Int32ToSVBT32(maGlobalSize.Height(), aBT32);
     nCrc = vcl_get_checksum(nCrc, aBT32, 4);
 
-    for (auto const& i : maList)
+    for (auto const& i : maAnimationFrames)
     {
         BCToBCOA(i->GetChecksum(), aBCOA);
         nCrc = vcl_get_checksum(nCrc, aBCOA, BITMAP_CHECKSUM_SIZE);
@@ -163,10 +164,10 @@ bool Animation::Start(OutputDevice* pOut, const Point& rDestPt, const Size& rDes
 {
     bool bRet = false;
 
-    if (!maList.empty())
+    if (!maAnimationFrames.empty())
     {
         if ((pOut->GetOutDevType() == OUTDEV_WINDOW) && !mbLoopTerminated
-            && (ANIMATION_TIMEOUT_ON_CLICK != maList[mnPos]->mnWait))
+            && (ANIMATION_TIMEOUT_ON_CLICK != maAnimationFrames[mnPos]->mnWait))
         {
             ImplAnimView* pView;
             ImplAnimView* pMatch = nullptr;
@@ -205,7 +206,7 @@ bool Animation::Start(OutputDevice* pOut, const Point& rDestPt, const Size& rDes
 
             if (!mbIsInAnimation)
             {
-                ImplRestartTimer(maList[mnPos]->mnWait);
+                ImplRestartTimer(maAnimationFrames[mnPos]->mnWait);
                 mbIsInAnimation = true;
             }
         }
@@ -240,14 +241,14 @@ void Animation::Draw(OutputDevice* pOut, const Point& rDestPt) const
 
 void Animation::Draw(OutputDevice* pOut, const Point& rDestPt, const Size& rDestSz) const
 {
-    const size_t nCount = maList.size();
+    const size_t nCount = maAnimationFrames.size();
 
     if (nCount)
     {
-        AnimationBitmap* pObj = maList[std::min(mnPos, nCount - 1)].get();
+        AnimationBitmap* pObj = maAnimationFrames[std::min(mnPos, nCount - 1)].get();
 
         if (pOut->GetConnectMetaFile() || (pOut->GetOutDevType() == OUTDEV_PRINTER))
-            maList[0]->maBitmapEx.Draw(pOut, rDestPt, rDestSz);
+            maAnimationFrames[0]->maBitmapEx.Draw(pOut, rDestPt, rDestSz);
         else if (ANIMATION_TIMEOUT_ON_CLICK == pObj->mnWait)
             pObj->maBitmapEx.Draw(pOut, rDestPt, rDestSz);
         else
@@ -278,7 +279,7 @@ void Animation::ImplRestartTimer(sal_uLong nTimeout)
 
 IMPL_LINK_NOARG(Animation, ImplTimeoutHdl, Timer*, void)
 {
-    const size_t nAnimCount = maList.size();
+    const size_t nAnimCount = maAnimationFrames.size();
 
     if (nAnimCount)
     {
@@ -338,7 +339,8 @@ IMPL_LINK_NOARG(Animation, ImplTimeoutHdl, Timer*, void)
             ImplRestartTimer(10);
         else
         {
-            AnimationBitmap* pStepBmp = (++mnPos < maList.size()) ? maList[mnPos].get() : nullptr;
+            AnimationBitmap* pStepBmp
+                = (++mnPos < maAnimationFrames.size()) ? maAnimationFrames[mnPos].get() : nullptr;
 
             if (!pStepBmp)
             {
@@ -347,7 +349,7 @@ IMPL_LINK_NOARG(Animation, ImplTimeoutHdl, Timer*, void)
                     Stop();
                     mbLoopTerminated = true;
                     mnPos = nAnimCount - 1;
-                    maBitmapEx = maList[mnPos]->maBitmapEx;
+                    maBitmapEx = maAnimationFrames[mnPos]->maBitmapEx;
                     return;
                 }
                 else
@@ -356,7 +358,7 @@ IMPL_LINK_NOARG(Animation, ImplTimeoutHdl, Timer*, void)
                         mnLoops--;
 
                     mnPos = 0;
-                    pStepBmp = maList[mnPos].get();
+                    pStepBmp = maAnimationFrames[mnPos].get();
                 }
             }
 
@@ -399,10 +401,10 @@ bool Animation::Insert(const AnimationBitmap& rStepBmp)
         maGlobalSize
             = aGlobalRect.Union(tools::Rectangle(rStepBmp.maPositionPixel, rStepBmp.maSizePixel))
                   .GetSize();
-        maList.emplace_back(new AnimationBitmap(rStepBmp));
+        maAnimationFrames.emplace_back(new AnimationBitmap(rStepBmp));
 
         // As a start, we make the first BitmapEx the replacement BitmapEx
-        if (maList.size() == 1)
+        if (maAnimationFrames.size() == 1)
             maBitmapEx = rStepBmp.maBitmapEx;
 
         bRet = true;
@@ -413,20 +415,20 @@ bool Animation::Insert(const AnimationBitmap& rStepBmp)
 
 const AnimationBitmap& Animation::Get(sal_uInt16 nAnimation) const
 {
-    SAL_WARN_IF((nAnimation >= maList.size()), "vcl", "No object at this position");
-    return *maList[nAnimation];
+    SAL_WARN_IF((nAnimation >= maAnimationFrames.size()), "vcl", "No object at this position");
+    return *maAnimationFrames[nAnimation];
 }
 
 void Animation::Replace(const AnimationBitmap& rNewAnimationBitmap, sal_uInt16 nAnimation)
 {
-    SAL_WARN_IF((nAnimation >= maList.size()), "vcl", "No object at this position");
+    SAL_WARN_IF((nAnimation >= maAnimationFrames.size()), "vcl", "No object at this position");
 
-    maList[nAnimation].reset(new AnimationBitmap(rNewAnimationBitmap));
+    maAnimationFrames[nAnimation].reset(new AnimationBitmap(rNewAnimationBitmap));
 
     // If we insert at first position we also need to
     // update the replacement BitmapEx
-    if ((!nAnimation && (!mbLoopTerminated || (maList.size() == 1)))
-        || ((nAnimation == maList.size() - 1) && mbLoopTerminated))
+    if ((!nAnimation && (!mbLoopTerminated || (maAnimationFrames.size() == 1)))
+        || ((nAnimation == maAnimationFrames.size() - 1) && mbLoopTerminated))
     {
         maBitmapEx = rNewAnimationBitmap.maBitmapEx;
     }
@@ -450,12 +452,12 @@ void Animation::Convert(BmpConversion eConversion)
 
     bool bRet;
 
-    if (!IsInAnimation() && !maList.empty())
+    if (!IsInAnimation() && !maAnimationFrames.empty())
     {
         bRet = true;
 
-        for (size_t i = 0, n = maList.size(); (i < n) && bRet; ++i)
-            bRet = maList[i]->maBitmapEx.Convert(eConversion);
+        for (size_t i = 0, n = maAnimationFrames.size(); (i < n) && bRet; ++i)
+            bRet = maAnimationFrames[i]->maBitmapEx.Convert(eConversion);
 
         maBitmapEx.Convert(eConversion);
     }
@@ -467,13 +469,13 @@ bool Animation::ReduceColors(sal_uInt16 nNewColorCount)
 
     bool bRet;
 
-    if (!IsInAnimation() && !maList.empty())
+    if (!IsInAnimation() && !maAnimationFrames.empty())
     {
         bRet = true;
 
-        for (size_t i = 0, n = maList.size(); (i < n) && bRet; ++i)
+        for (size_t i = 0, n = maAnimationFrames.size(); (i < n) && bRet; ++i)
         {
-            bRet = BitmapFilter::Filter(maList[i]->maBitmapEx,
+            bRet = BitmapFilter::Filter(maAnimationFrames[i]->maBitmapEx,
                                         BitmapColorQuantizationFilter(nNewColorCount));
         }
 
@@ -493,12 +495,12 @@ bool Animation::Invert()
 
     bool bRet;
 
-    if (!IsInAnimation() && !maList.empty())
+    if (!IsInAnimation() && !maAnimationFrames.empty())
     {
         bRet = true;
 
-        for (size_t i = 0, n = maList.size(); (i < n) && bRet; ++i)
-            bRet = maList[i]->maBitmapEx.Invert();
+        for (size_t i = 0, n = maAnimationFrames.size(); (i < n) && bRet; ++i)
+            bRet = maAnimationFrames[i]->maBitmapEx.Invert();
 
         maBitmapEx.Invert();
     }
@@ -514,15 +516,15 @@ void Animation::Mirror(BmpMirrorFlags nMirrorFlags)
 
     bool bRet;
 
-    if (!IsInAnimation() && !maList.empty())
+    if (!IsInAnimation() && !maAnimationFrames.empty())
     {
         bRet = true;
 
         if (nMirrorFlags != BmpMirrorFlags::NONE)
         {
-            for (size_t i = 0, n = maList.size(); (i < n) && bRet; ++i)
+            for (size_t i = 0, n = maAnimationFrames.size(); (i < n) && bRet; ++i)
             {
-                AnimationBitmap* pStepBmp = maList[i].get();
+                AnimationBitmap* pStepBmp = maAnimationFrames[i].get();
                 bRet = pStepBmp->maBitmapEx.Mirror(nMirrorFlags);
                 if (bRet)
                 {
@@ -550,15 +552,15 @@ void Animation::Adjust(short nLuminancePercent, short nContrastPercent, short nC
 
     bool bRet;
 
-    if (!IsInAnimation() && !maList.empty())
+    if (!IsInAnimation() && !maAnimationFrames.empty())
     {
         bRet = true;
 
-        for (size_t i = 0, n = maList.size(); (i < n) && bRet; ++i)
+        for (size_t i = 0, n = maAnimationFrames.size(); (i < n) && bRet; ++i)
         {
-            bRet = maList[i]->maBitmapEx.Adjust(nLuminancePercent, nContrastPercent,
-                                                nChannelRPercent, nChannelGPercent,
-                                                nChannelBPercent, fGamma, bInvert);
+            bRet = maAnimationFrames[i]->maBitmapEx.Adjust(nLuminancePercent, nContrastPercent,
+                                                           nChannelRPercent, nChannelGPercent,
+                                                           nChannelBPercent, fGamma, bInvert);
         }
 
         maBitmapEx.Adjust(nLuminancePercent, nContrastPercent, nChannelRPercent, nChannelGPercent,
