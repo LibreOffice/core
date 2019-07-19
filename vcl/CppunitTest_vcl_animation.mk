@@ -16,6 +16,7 @@ $(eval $(call gb_CppunitTest_set_include,vcl_animation,\
 
 $(eval $(call gb_CppunitTest_add_exception_objects,vcl_animation, \
 	vcl/qa/cppunit/implanimview \
+	vcl/qa/cppunit/animation \
 ))
 
 $(eval $(call gb_CppunitTest_use_libraries,vcl_animation, \
