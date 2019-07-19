@@ -96,7 +96,7 @@ namespace toolkit
         virtual css::uno::Reference< css::accessibility::XAccessibleContext >
             createAccessibleContext( VCLXScrollBar* _pXWindow ) = 0;
 
-        /** creates an accessible context for a edit window
+        /** creates an accessible context for an edit window
         */
         virtual css::uno::Reference< css::accessibility::XAccessibleContext >
             createAccessibleContext( VCLXEdit* _pXWindow ) = 0;
