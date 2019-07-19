@@ -2641,15 +2641,12 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf109137)
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testForcepoint72) { createDoc("forcepoint72-1.rtf"); }
 
 //just care it doesn't crash/assert
-CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testForcepoint75)
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testForcepoint75) { createDoc("forcepoint75-1.rtf"); }
+
+//just care it doesn't crash/assert
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testForcepointFootnoteFrame)
 {
-    try
-    {
-        createDoc("forcepoint75-1.rtf");
-    }
-    catch (...)
-    {
-    }
+    createDoc("forcepoint-swfootnoteframe-1.rtf");
 }
 
 //just care it doesn't crash/assert
