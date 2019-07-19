@@ -389,6 +389,22 @@ struct _LibreOfficeKitDocumentClass
     void (*resizeWindow) (LibreOfficeKitDocument* pThis, unsigned nWindowId,
                           const int width, const int height);
 
+    /// Pass a nullptr terminated array of mime-type strings
+    /// @see lok::Document::getSelection for more details
+    int (*getSelection) (LibreOfficeKitDocument* pThis,
+                         const char **pMimeTypes,
+                         size_t      *pOutCount,
+                         char      ***pOutMimeTypes,
+                         size_t     **pOutSizes,
+                         char      ***pOutStreams);
+
+    /// @see lok::Document::setClipboard
+    int (*setClipboard) (LibreOfficeKitDocument* pThis,
+                         const size_t   nInCount,
+                         const char   **pInMimeTypes,
+                         const size_t  *pInSizes,
+                         const char   **pInStreams);
+
 #endif // defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
 };
 

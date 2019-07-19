@@ -165,6 +165,7 @@ static std::weak_ptr< LibreOfficeKitDocumentClass > gDocumentClass;
 
 static void SetLastExceptionMsg(const OUString& s = OUString())
 {
+    SAL_WARN("lok", "lok exception " + s);
     if (gImpl)
         gImpl->maLastExceptionMsg = s;
 }
@@ -782,6 +783,17 @@ static void doc_setTextSelection (LibreOfficeKitDocument* pThis,
 static char* doc_getTextSelection(LibreOfficeKitDocument* pThis,
                                   const char* pMimeType,
                                   char** pUsedMimeType);
+static int doc_getSelection (LibreOfficeKitDocument* pThis,
+                             const char **pMimeTypes,
+                             size_t      *pOutCount,
+                             char      ***pOutMimeTypes,
+                             size_t     **pOutSizes,
+                             char      ***pOutStreams);
+static int doc_setClipboard (LibreOfficeKitDocument* pThis,
+                             const size_t   nInCount,
+                             const char   **pInMimeTypes,
+                             const size_t  *pInSizes,
+                             const char   **pInStreams);
 static bool doc_paste(LibreOfficeKitDocument* pThis,
                       const char* pMimeType,
                       const char* pData,
@@ -881,6 +893,8 @@ LibLODocument_Impl::LibLODocument_Impl(const uno::Reference <css::lang::XCompone
         m_pDocumentClass->postUnoCommand = doc_postUnoCommand;
         m_pDocumentClass->setTextSelection = doc_setTextSelection;
         m_pDocumentClass->getTextSelection = doc_getTextSelection;
+        m_pDocumentClass->getSelection = doc_getSelection;
+        m_pDocumentClass->setClipboard = doc_setClipboard;
         m_pDocumentClass->paste = doc_paste;
         m_pDocumentClass->setGraphicSelection = doc_setGraphicSelection;
         m_pDocumentClass->resetSelection = doc_resetSelection;
@@ -3355,10 +3369,11 @@ static void doc_setTextSelection(LibreOfficeKitDocument* pThis, int nType, int n
 
 static bool getFromTransferrable(
     const css::uno::Reference<css::datatransfer::XTransferable> &xTransferable,
-    const char *pMimeType, OString &aRet)
+    const OString &aInMimeType, OString &aRet)
 {
+    OString aMimeType(aInMimeType);
+
     // Take care of UTF-8 text here.
-    OString aMimeType(pMimeType);
     bool bConvert = false;
     sal_Int32 nIndex = 0;
     if (aMimeType.getToken(0, ';', nIndex) == "text/plain")
@@ -3418,6 +3433,14 @@ static bool getFromTransferrable(
     return true;;
 }
 
+// Tolerate embedded \0s etc.
+static char *convertOString(const OString &rStr)
+{
+    char* pMemory = static_cast<char*>(malloc(rStr.getLength() + 1));
+    memcpy(pMemory, rStr.getStr(), rStr.getLength() + 1);
+    return pMemory;
+}
+
 static char* doc_getTextSelection(LibreOfficeKitDocument* pThis, const char* pMimeType, char** pUsedMimeType)
 {
     comphelper::ProfileZone aZone("doc_getTextSelection");
@@ -3444,29 +3467,107 @@ static char* doc_getTextSelection(LibreOfficeKitDocument* pThis, const char* pMi
         pType = "text/plain;charset=utf-8";
 
     OString aRet;
-    bool bSuccess = getFromTransferrable(xTransferable, pType, aRet);
+    bool bSuccess = getFromTransferrable(xTransferable, OString(pType), aRet);
     if (!bSuccess)
         return nullptr;
-
-    char* pMemory = static_cast<char*>(malloc(aRet.getLength() + 1));
-    strcpy(pMemory, aRet.getStr());
 
     if (pUsedMimeType) // legacy
     {
         if (pMimeType)
-        {
-            *pUsedMimeType = static_cast<char*>(malloc(strlen(pMimeType) + 1));
-            strcpy(*pUsedMimeType, pMimeType);
-        }
+            *pUsedMimeType = strdup(pMimeType);
         else
             *pUsedMimeType = nullptr;
     }
 
-    return pMemory;
+    return convertOString(aRet);
 }
 
-static bool doc_paste(LibreOfficeKitDocument* pThis, const char* pMimeType, const char* pData, size_t nSize)
+static int doc_getSelection(LibreOfficeKitDocument* pThis,
+                            const char **pMimeTypes,
+                            size_t      *pOutCount,
+                            char      ***pOutMimeTypes,
+                            size_t     **pOutSizes,
+                            char      ***pOutStreams)
 {
+    SolarMutexGuard aGuard;
+    SetLastExceptionMsg();
+
+    assert (pOutCount);
+    assert (pOutMimeTypes);
+    assert (pOutSizes);
+    assert (pOutStreams);
+
+    *pOutCount = 0;
+    *pOutMimeTypes = nullptr;
+    *pOutSizes = nullptr;
+    *pOutStreams = nullptr;
+
+    ITiledRenderable* pDoc = getTiledRenderable(pThis);
+    if (!pDoc)
+    {
+        SetLastExceptionMsg("Document doesn't support tiled rendering");
+        return 0;
+    }
+
+    css::uno::Reference<css::datatransfer::XTransferable> xTransferable = pDoc->getSelection();
+    if (!xTransferable)
+    {
+        SetLastExceptionMsg("No selection available");
+        return 0;
+    }
+
+    std::vector<OString> aMimeTypes;
+    if (!pMimeTypes) // everything
+    {
+        uno::Sequence< css::datatransfer::DataFlavor > flavors = xTransferable->getTransferDataFlavors();
+        if (!flavors.getLength())
+        {
+            SetLastExceptionMsg("Flavourless selection");
+            return 0;
+        }
+        for (auto &it : flavors)
+            aMimeTypes.push_back(OUStringToOString(it.MimeType, RTL_TEXTENCODING_UTF8));
+    }
+    else
+    {
+        for (size_t i = 0; pMimeTypes[i]; ++i)
+            aMimeTypes.push_back(OString(pMimeTypes[i]));
+    }
+
+    *pOutCount = aMimeTypes.size();
+    *pOutSizes = static_cast<size_t *>(malloc(*pOutCount * sizeof(size_t)));
+    *pOutMimeTypes = static_cast<char **>(malloc(*pOutCount * sizeof(char *)));
+    *pOutStreams = static_cast<char **>(malloc(*pOutCount * sizeof(char *)));
+    for (size_t i = 0; i < aMimeTypes.size(); ++i)
+    {
+        (*pOutMimeTypes)[i] = strdup(aMimeTypes[i].getStr());
+
+        OString aRet;
+        bool bSuccess = getFromTransferrable(xTransferable, aMimeTypes[i], aRet);
+        if (!bSuccess || aRet.getLength() < 1)
+        {
+            (*pOutSizes)[i] = 0;
+            (*pOutStreams)[i] = nullptr;
+        }
+        else
+        {
+            (*pOutSizes)[i] = aRet.getLength();
+            (*pOutStreams)[i] =  convertOString(aRet);
+        }
+    }
+
+    return 1;
+}
+
+static int doc_setClipboard(LibreOfficeKitDocument* pThis,
+                            const size_t   nInCount,
+                            const char   **pInMimeTypes,
+                            const size_t  *pInSizes,
+                            const char   **pInStreams)
+{
+    SolarMutexGuard aGuard;
+    if (gImpl)
+
     comphelper::ProfileZone aZone("doc_paste");
 
     SolarMutexGuard aGuard;
@@ -3479,15 +3580,33 @@ static bool doc_paste(LibreOfficeKitDocument* pThis, const char* pMimeType, cons
         return false;
     }
 
-    uno::Reference<datatransfer::XTransferable> xTransferable(new LOKTransferable(pMimeType, pData, nSize));
+    uno::Reference<datatransfer::XTransferable> xTransferable(new LOKTransferable(nInCount, pInMimeTypes, pInSizes, pInStreams));
     uno::Reference<datatransfer::clipboard::XClipboard> xClipboard(new LOKClipboard);
     xClipboard->setContents(xTransferable, uno::Reference<datatransfer::clipboard::XClipboardOwner>());
     pDoc->setClipboard(xClipboard);
+
     if (!pDoc->isMimeTypeSupported())
     {
         SetLastExceptionMsg("Document doesn't support this mime type");
         return false;
     }
+
+    return true;
+}
+
+static bool doc_paste(LibreOfficeKitDocument* pThis, const char* pMimeType, const char* pData, size_t nSize)
+{
+    SolarMutexGuard aGuard;
+
+    const char *pInMimeTypes[1];
+    const char *pInStreams[1];
+    size_t pInSizes[1];
+    pInMimeTypes[0] = pMimeType;
+    pInSizes[0] = nSize;
+    pInStreams[0] = pData;
+
+    if (!doc_setClipboard(pThis, 1, pInMimeTypes, pInSizes, pInStreams))
+        return false;
 
     uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
     {
