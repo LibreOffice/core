@@ -68,7 +68,7 @@ public:
     basegfx::B3DRange getAllContentRange3D() const;
 
 private:
-    // Create a Object-Specific ViewObjectContact, set ViewContact and
+    // Create an Object-Specific ViewObjectContact, set ViewContact and
     // ObjectContact. Always needs to return something. Default is to create
     // a standard ViewObjectContact containing the given ObjectContact and *this
     virtual ViewObjectContact& CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact) override;

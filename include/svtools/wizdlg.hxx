@@ -87,7 +87,7 @@ handler can be set as a Link. GetCurLevel() returns the current level and
 Level 0 is the first page.
 
 The DeactivatePage()-Handler is called if a new TabPage should be shown.
-In that handler has a optional error check and returns sal_False, if the
+In that handler has an optional error check and returns sal_False, if the
 switch should not be done. Also the Handler can be set as a Link. The
 default implementation calls the Link and returns the Links value or returns
 sal_True if no Link is set.

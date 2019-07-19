@@ -55,7 +55,7 @@ SVT_DLLPUBLIC SvStream* getImageStream(
             OUString const & rImageResourceURL);
 
 /** for a given URL of an image within a resource, this method retrieves
-    an css::io::XInputStream for this image.
+    a css::io::XInputStream for this image.
 */
 SVT_DLLPUBLIC css::uno::Reference<css::io::XInputStream> getImageXStream(
             css::uno::Reference<css::uno::XComponentContext> const & rxContext,

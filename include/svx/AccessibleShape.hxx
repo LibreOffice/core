@@ -76,7 +76,7 @@ class IAccessibleParent;
 
     <p>The children of a shape can stem from two sources which, in case of
     SVX and SD shapes, are mutually exclusive.  This implementation,
-    however, handles both simultaniously to cope with future extensions or
+    however, handles both simultaneously to cope with future extensions or
     shapes from other projects.
     <ul>
         <li>If this shape is a group shape, i.e. a
@@ -112,7 +112,7 @@ public:
             and the accessible object that will become the parent of the new
             object.
         @param rShapeTreeInfo
-            Bundel of information passed to this shape and all of its desendants.
+            Bundle of information passed to this shape and all of its descendants.
         @attention
             Always call the <member>init</member> method after creating a
             new accessible shape.  This is one way to overcome the potential
