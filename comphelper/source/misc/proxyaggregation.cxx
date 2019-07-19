@@ -168,12 +168,10 @@ namespace comphelper
         // dispose our inner context
         // before we do this, remove ourself as listener - else in disposing( EventObject ), we
         // would dispose ourself a second time
-        Reference< XComponent > xComp( m_xInner, UNO_QUERY );
-        if ( xComp.is() )
+        if ( m_xInner.is() )
         {
-            xComp->removeEventListener( this );
-            xComp->dispose();
-            xComp.clear();
+            m_xInner->removeEventListener( this );
+            m_xInner->dispose();
         }
     }
 

@@ -71,7 +71,7 @@ bool dispatchCommand(const OUString& rCommand, const css::uno::Sequence<css::bea
 
     uno::Reference<frame::XFrame> xFrame(xDesktop->getActiveFrame());
     if (!xFrame.is())
-        xFrame.set(xDesktop, uno::UNO_QUERY);
+        xFrame = xDesktop;
 
     return dispatchCommand(rCommand, xFrame, rArguments, rListener);
 }
