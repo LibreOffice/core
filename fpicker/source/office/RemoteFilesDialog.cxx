@@ -719,9 +719,8 @@ void RemoteFilesDialog::SavePassword( const OUString& rURL, const OUString& rUse
             && m_xMasterPasswd->authorizateWithMasterPassword( Reference< XInteractionHandler>() ) )
         )
         {
-            Reference< XInteractionHandler > xInteractionHandler(
-                InteractionHandler::createWithParent( m_xContext, nullptr ),
-                UNO_QUERY );
+            Reference< XInteractionHandler > xInteractionHandler =
+                InteractionHandler::createWithParent( m_xContext, nullptr );
 
             Sequence<OUString> aPasswd { rPassword };
 
@@ -866,9 +865,8 @@ IMPL_LINK ( RemoteFilesDialog, EditServiceMenuHdl, MenuButton *, pButton, void )
                     {
                         OUString sUrl( m_aServices[nPos]->GetUrl() );
 
-                        Reference< XInteractionHandler > xInteractionHandler(
-                            InteractionHandler::createWithParent( m_xContext, nullptr ),
-                            UNO_QUERY );
+                        Reference< XInteractionHandler > xInteractionHandler =
+                            InteractionHandler::createWithParent( m_xContext, nullptr );
 
                         UrlRecord aURLEntries = m_xMasterPasswd->find( sUrl, xInteractionHandler );
 
@@ -908,9 +906,8 @@ IMPL_LINK ( RemoteFilesDialog, EditServiceMenuHdl, MenuButton *, pButton, void )
                 {
                     OUString sUrl( m_aServices[nPos]->GetUrl() );
 
-                    Reference< XInteractionHandler > xInteractionHandler(
-                        InteractionHandler::createWithParent( m_xContext, nullptr ),
-                        UNO_QUERY );
+                    Reference< XInteractionHandler > xInteractionHandler =
+                        InteractionHandler::createWithParent( m_xContext, nullptr );
 
                     UrlRecord aURLEntries = m_xMasterPasswd->find( sUrl, xInteractionHandler );
 

@@ -113,7 +113,7 @@ EvaluationContext Model::getEvaluationContext()
     // the default context is the top-level element node. A default
     // node (instanceData' is inserted when there is no default node
     Reference<XDocument> xInstance = getDefaultInstance();
-    Reference<XNode> xElement( xInstance->getDocumentElement(), UNO_QUERY );
+    Reference<XNode> xElement = xInstance->getDocumentElement();
 
     // no element found? Then insert default element 'instanceData'
     if( ! xElement.is() )
