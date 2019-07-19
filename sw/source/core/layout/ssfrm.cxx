@@ -469,33 +469,6 @@ void SwTextFrame::RegisterToNode(SwTextNode & rNode, bool const isForceNodeAsFir
     }
 }
 
-//Flag pFrame for SwFrameDeleteGuard lifetime that we shouldn't delete
-//it in e.g. SwSectionFrame::MergeNext etc because we will need it
-//again after the SwFrameDeleteGuard dtor
-SwFrameDeleteGuard::SwFrameDeleteGuard(SwFrame* pFrame)
-    : m_pForbidFrame((pFrame && !pFrame->IsDeleteForbidden()) ? pFrame : nullptr)
-{
-    if (m_pForbidFrame)
-    {
-        m_pForbidFrame->ForbidDelete();
-    }
-}
-
-SwFrameDeleteGuard::~SwFrameDeleteGuard()
-{
-    if (m_pForbidFrame)
-    {
-        const bool bLogicErrorThrown = !m_pForbidFrame->IsDeleteForbidden();
-        if (bLogicErrorThrown)
-        {
-            // see testForcepoint80
-            SwFrame::DestroyFrame(m_pForbidFrame);
-            return;
-        }
-        m_pForbidFrame->AllowDelete();
-    }
-}
-
 void SwLayoutFrame::DestroyImpl()
 {
     while (!m_VertPosOrientFramesFor.empty())
@@ -510,7 +483,6 @@ void SwLayoutFrame::DestroyImpl()
 
     if( GetFormat() && !GetFormat()->GetDoc()->IsInDtor() )
     {
-        bool bFatalError = false;
         while ( pFrame )
         {
             //First delete the Objs of the Frame because they can't unregister
@@ -549,20 +521,9 @@ void SwLayoutFrame::DestroyImpl()
                 }
             }
             pFrame->RemoveFromLayout();
-            // see testForcepoint80
-            if (pFrame->IsDeleteForbidden())
-            {
-                pFrame->AllowDelete();
-                bFatalError = true;
-            }
-            else
-                SwFrame::DestroyFrame(pFrame);
+            SwFrame::DestroyFrame(pFrame);
             pFrame = m_pLower;
         }
-
-        if (bFatalError)
-            throw std::logic_error("DeleteForbidden");
-
         //Delete the Flys, the last one also deletes the array.
         while ( GetDrawObjs() && GetDrawObjs()->size() )
         {
