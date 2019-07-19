@@ -71,4 +71,8 @@ $(call gb_CppunitTest_get_target,xmlsecurity_signing): \
 endif
 endif
 
+$(eval $(call gb_CppunitTest_use_custom_headers,xmlsecurity_signing,\
+    officecfg/registry \
+))
+
 # vim: set noet sw=4 ts=4:
