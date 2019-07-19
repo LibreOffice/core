@@ -38,50 +38,65 @@ LOKTransferable::LOKTransferable(OUString sMimeType, const css::uno::Sequence<sa
 {
 }
 
-uno::Any SAL_CALL LOKTransferable::getTransferData(const datatransfer::DataFlavor& rFlavor)
+LOKTransferable::LOKTransferable(const size_t nInCount, const char** pInMimeTypes,
+                                 const size_t* pInSizes, const char** pInStreams)
 {
-    uno::Any aRet;
-    if (rFlavor.DataType == cppu::UnoType<OUString>::get())
+    m_aContent.reserve(nInCount);
+    m_aFlavors = css::uno::Sequence<css::datatransfer::DataFlavor>(nInCount);
+    for (size_t i = 0; i < nInCount; ++i)
     {
-        auto pText = reinterpret_cast<sal_Char*>(m_aSequence.getArray());
-        aRet <<= OUString(pText, m_aSequence.getLength(), RTL_TEXTENCODING_UTF8);
+        OUString aMimeType = OUString::fromUtf8(pInMimeTypes[i]);
+
+        // cf. sot/source/base/exchange.cxx for these two exceptional types.
+        if (aMimeType.startsWith("text/plain"))
+        {
+            aMimeType = "text/plain;charset=utf-16";
+            m_aFlavors[i].DataType = cppu::UnoType<OUString>::get();
+        }
+        else if (aMimeType == "application/x-libreoffice-tsvc")
+            m_aFlavors[i].DataType = cppu::UnoType<OUString>::get();
+        else
+            m_aFlavors[i].DataType = cppu::UnoType<uno::Sequence<sal_Int8>>::get();
+        m_aFlavors[i].MimeType = aMimeType;
+        m_aFlavors[i].HumanPresentableName = aMimeType;
+
+        uno::Any aContent;
+        if (m_aFlavors[i].DataType == cppu::UnoType<OUString>::get())
+            aContent <<= OUString(pInStreams[i], pInSizes[i], RTL_TEXTENCODING_UTF8);
+        else
+            aContent <<= css::uno::Sequence<sal_Int8>(
+                reinterpret_cast<const sal_Int8*>(pInStreams[i]), pInSizes[i]);
+        m_aContent.push_back(aContent);
     }
-    else
-        aRet <<= m_aSequence;
-    return aRet;
 }
 
-std::vector<datatransfer::DataFlavor> LOKTransferable::getTransferDataFlavorsAsVector()
+uno::Any SAL_CALL LOKTransferable::getTransferData(const datatransfer::DataFlavor& rFlavor)
 {
-    std::vector<datatransfer::DataFlavor> aRet;
-    datatransfer::DataFlavor aFlavor;
-    aFlavor.MimeType = m_aMimeType;
-    aFlavor.DataType = cppu::UnoType<uno::Sequence<sal_Int8>>::get();
-
-    sal_Int32 nIndex(0);
-    if (m_aMimeType.getToken(0, ';', nIndex) == "text/plain")
+    assert(m_aContent.size() == m_aFlavors.getLength());
+    for (size_t i = 0; i < m_aContent.size(); ++i)
     {
-        if (m_aMimeType.getToken(0, ';', nIndex) != "charset=utf-16")
-            aFlavor.MimeType = "text/plain;charset=utf-16";
-        aFlavor.DataType = cppu::UnoType<OUString>::get();
+        if (m_aFlavors[i].MimeType == rFlavor.MimeType)
+        {
+            if (m_aFlavors[i].DataType != rFlavor.DataType)
+                SAL_WARN("lok", "Horror type mismatch!");
+            return m_aContent[i];
+        }
     }
-    aRet.push_back(aFlavor);
-
-    return aRet;
+    return uno::Any();
 }
 
 uno::Sequence<datatransfer::DataFlavor> SAL_CALL LOKTransferable::getTransferDataFlavors()
 {
-    return comphelper::containerToSequence(getTransferDataFlavorsAsVector());
+    return m_aFlavors;
 }
 
 sal_Bool SAL_CALL LOKTransferable::isDataFlavorSupported(const datatransfer::DataFlavor& rFlavor)
 {
-    const std::vector<datatransfer::DataFlavor> aFlavors = getTransferDataFlavorsAsVector();
-    return std::any_of(aFlavors.begin(), aFlavors.end(),
-                       [&rFlavor](const datatransfer::DataFlavor& i) {
-                           return i.MimeType == rFlavor.MimeType && i.DataType == rFlavor.DataType;
-                       });
+    return std::find_if(m_aFlavors.begin(), m_aFlavors.end(),
+                        [&rFlavor](const datatransfer::DataFlavor& i) {
+                            return i.MimeType == rFlavor.MimeType && i.DataType == rFlavor.DataType;
+                        })
+           != m_aFlavors.end();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
