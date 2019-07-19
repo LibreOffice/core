@@ -21,6 +21,7 @@ public:
     }
 
     void testFrameCount();
+    void testDisplaySize();
 
     CPPUNIT_TEST_SUITE(VclAnimationTest);
     CPPUNIT_TEST(testFrameCount);
