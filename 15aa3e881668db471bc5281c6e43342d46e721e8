@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_29041915",
+        "filename": "scripting/java/com/sun/star/script/framework/provider/beanshell/ScriptEditorForBeanShell.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2019-07-19T12:18:16Z",
+      "side": 0,
+      "message": "I think the url object can never be null, otherwise this line would have thrown a NPE, therefore the change should be ok",
+      "revId": "15aa3e881668db471bc5281c6e43342d46e721e8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
