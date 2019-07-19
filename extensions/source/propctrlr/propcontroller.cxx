@@ -510,9 +510,8 @@ namespace pcr
         // don't delete explicitly (this is done by the frame we reside in)
         m_pView = nullptr;
 
-        Reference< XComponent > xViewAsComp( m_xView, UNO_QUERY );
-        if ( xViewAsComp.is() )
-            xViewAsComp->removeEventListener( static_cast< XPropertyChangeListener* >( this ) );
+        if ( m_xView.is() )
+            m_xView->removeEventListener( static_cast< XPropertyChangeListener* >( this ) );
         m_xView.clear( );
 
         m_aInspectedObjects.clear();
@@ -672,9 +671,8 @@ namespace pcr
         // and this disposal _deletes_ the view, so it would be deadly if we use our m_pView member
         // after that
         m_xView = VCLUnoHelper::GetInterface(m_pView);
-        Reference< XComponent > xViewAsComp(m_xView, UNO_QUERY);
-        if (xViewAsComp.is())
-            xViewAsComp->addEventListener( static_cast< XPropertyChangeListener* >( this ) );
+        if (m_xView.is())
+            m_xView->addEventListener( static_cast< XPropertyChangeListener* >( this ) );
 
         getPropertyBox().SetLineListener(this);
         getPropertyBox().SetControlObserver(this);

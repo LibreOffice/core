@@ -324,7 +324,7 @@ namespace dbp
                 Reference< XTablesSupplier > xSupplTables(xConn, UNO_QUERY);
                 if ( xSupplTables.is() )
                 {
-                    Reference< XNameAccess > xTables(xSupplTables->getTables(), UNO_QUERY);
+                    Reference< XNameAccess > xTables = xSupplTables->getTables();
                     if (xTables.is())
                         aTableNames = xTables->getElementNames();
                 }
@@ -333,7 +333,7 @@ namespace dbp
                 Reference< XQueriesSupplier > xSuppQueries( xConn, UNO_QUERY );
                 if ( xSuppQueries.is() )
                 {
-                    Reference< XNameAccess > xQueries( xSuppQueries->getQueries(), UNO_QUERY );
+                    Reference< XNameAccess > xQueries = xSuppQueries->getQueries();
                     if ( xQueries.is() )
                         aQueryNames = xQueries->getElementNames();
                 }
