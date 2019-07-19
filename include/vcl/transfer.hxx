@@ -180,6 +180,7 @@ private:
     // Transferable2
     virtual css::uno::Any SAL_CALL getTransferData2(
         const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc ) override;
+    virtual sal_Bool SAL_CALL isComplex() override;
 
     // XEventListener
     virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
