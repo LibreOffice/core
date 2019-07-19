@@ -114,7 +114,7 @@ namespace svt { namespace table
         */
         virtual void    columnRemoved() = 0;
 
-        /** notifies the listener that all columns have been removed form the model
+        /** notifies the listener that all columns have been removed from the model
         */
         virtual void    allColumnsRemoved() = 0;
 

@@ -94,7 +94,7 @@ public:
     void        SetWidthInner(double inner);
 
     /**
-     * @descr   Set space between double lines fo border.
+     * @descr   Set space between double lines of border.
      */
     void        SetWidthSpace(double space);
 
@@ -105,7 +105,7 @@ public:
 
 private:
     /**
-     * @descr   Forst line width to OOo border width format.
+     * @descr   First line width to OOo border width format.
      */
     OUString   GetLineWidth();
 
@@ -156,7 +156,7 @@ public:
     void    SetWidthInner(enumXFBorder side, double inner);
 
     /**
-     * @descr   Set space between two borders fo border side.
+     * @descr   Set space between two borders of border side.
      */
     void    SetWidthSpace(enumXFBorder side, double space);
 

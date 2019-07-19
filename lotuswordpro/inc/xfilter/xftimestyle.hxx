@@ -55,7 +55,7 @@
  ************************************************************************/
 /*************************************************************************
  * @file
- * Time style. The TIme format for time field.
+ * Time style. The Time format for time field.
  ************************************************************************/
 #ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFTIMESTYLE_HXX
 #define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFTIMESTYLE_HXX

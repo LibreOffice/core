@@ -588,7 +588,7 @@ XMultiPropertySet
      *  <p>
      *  The method handles Any arguments the same as Object arguments. That is, the <em>setVal</em> argument can
      *  be a java.lang.Boolean or a com.sun.star.uno.Any containing a java.lang.Boolean. Likewise, a member
-     *  containing a property value can be a com.sun.star.uno.Any or an java.lang.Object.
+     *  containing a property value can be a com.sun.star.uno.Any or a java.lang.Object.
      *  Then, no conversion is necessary, since they can hold all possible values. However, if
      *  the member is an Object and <em>setVal</em> is an Any then the object contained in the any is assigned to
      *  the member. The extra type information which exists as Type object in the Any will get lost. If this is not

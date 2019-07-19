@@ -411,7 +411,7 @@ void LwpFormulaFunc::AddArg(std::unique_ptr<LwpFormulaArg> pArg)
     m_aArgs.push_back(std::move(pArg));
 }
 /**
-*   Convert the functions to a string, which is a argument of other formula
+*   Convert the functions to a string, which is an argument of other formula
 */
 OUString LwpFormulaFunc::ToArgString(LwpTableLayout* pCellsMap)
 {
