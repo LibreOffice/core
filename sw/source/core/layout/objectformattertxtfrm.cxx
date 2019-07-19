@@ -659,7 +659,7 @@ static void lcl_FormatContentOfLayoutFrame( SwLayoutFrame* pLayFrame,
             {
                 assert(pFootnote->IsFootnoteFrame());
                 SwFrame *const pNextNote = pFootnote->GetNext();
-                if (!pFootnote->GetLower() && !pFootnote->IsColLocked() &&
+                if (!pFootnote->IsDeleteForbidden() && !pFootnote->GetLower() && !pFootnote->IsColLocked() &&
                     !static_cast<SwFootnoteFrame*>(pFootnote)->IsBackMoveLocked())
                 {
                     pFootnote->Cut();
