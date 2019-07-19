@@ -42,7 +42,7 @@ public:
     /// returns a legacy view name. This is "view" with an appended ordinal/ID.
     OUString      GetLegacyViewName() const;
 
-    /** returns a API-compatible view name.
+    /** returns an API-compatible view name.
 
         For details on which view names are specified, see the XModel2.getAvailableViewControllerNames
         documentation.
