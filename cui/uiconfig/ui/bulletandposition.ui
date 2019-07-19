@@ -97,6 +97,9 @@
     <property name="default_width">0</property>
     <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
+    <child>
+      <placeholder/>
+    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
@@ -622,7 +625,7 @@
                                         <property name="can_focus">True</property>
                                         <property name="receives_default">False</property>
                                         <property name="xalign">0</property>
-                                        <property name="draw_indicator">True</property>
+                                        <property name="draw_indicator">False</property>
                                         <child>
                                           <placeholder/>
                                         </child>
@@ -989,9 +992,9 @@
                         <property name="width_request">150</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="hscrollbar_policy">never</property>
-                        <property name="vscrollbar_policy">never</property>
                         <property name="shadow_type">in</property>
+                        <property name="max_content_width">150</property>
+                        <property name="max_content_height">300</property>
                         <child>
                           <object class="GtkViewport">
                             <property name="visible">True</property>

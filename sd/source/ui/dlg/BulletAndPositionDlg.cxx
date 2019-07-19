@@ -1215,6 +1215,10 @@ IMPL_LINK(SvxBulletAndPositionDlg, DistanceHdl_Impl, weld::MetricSpinButton&, rF
     {
         m_xDistBorderMF->set_text("");
     }
+
+    sal_Int32 aLastLevelLSpace
+        = pActNum->GetLevel(pActNum->GetLevelCount() - 1).GetAbsLSpace() / 40;
+    m_aPreviewWIN.set_size_request(aLastLevelLSpace, 300);
 }
 
 IMPL_LINK(SvxBulletAndPositionDlg, RelativeHdl_Impl, weld::ToggleButton&, rBox, void)
