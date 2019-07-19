@@ -404,7 +404,7 @@ typedef struct SAL_DLLPUBLIC_RTTI _typelib_InterfaceTypeDescription
     /** number of members plus number of read-write attributes
     */
     sal_Int32                                   nMapFunctionIndexToMemberIndex;
-    /** array mapping function index to member index; size of arry is nMapFunctionIndexToMemberIndex
+    /** array mapping function index to member index; size of array is nMapFunctionIndexToMemberIndex
     */
     sal_Int32 *                                 pMapFunctionIndexToMemberIndex;
     /** number of base types

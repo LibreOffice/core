@@ -67,7 +67,7 @@ protected:
      can rely on the fact that the methods ApplyChangedSentence() is called for the
      position that the last GetNextWrongSentence() returned.
      If 'bRecheck' is set to true then the same sentence should be rechecked once from
-     the start. This should be used too find errors that the user has introduced by
+     the start. This should be used to find errors that the user has introduced by
      manual changes in the edit field, and in order to not miss the still following errors
      in that sentence.
     */
