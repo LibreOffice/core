@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_293c1992",
+        "filename": "sw/qa/extras/ooxmlimport/ooxmlimport2.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 424,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2019-07-19T14:17:53Z",
+      "side": 1,
+      "message": "Could you add also an ooxmlexport test, please? (Not only because this is an export problem, according to the bug report, but the policy is to use always ooxmlexport instead of ooxmlimport, except if it\u0027s not possible to do that)",
+      "range": {
+        "startLine": 418,
+        "startChar": 0,
+        "endLine": 424,
+        "endChar": 1
+      },
+      "revId": "7a2947032e1747e3bea715aaaf9fa90d85296b17",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
