@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_0e4cbb9c",
+        "filename": "chart2/source/tools/InternalDataProvider.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 501,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2019-07-19T11:38:01Z",
+      "side": 1,
+      "message": "this huge diff can be eliminated by using an extra function, helping the review and future code reading. I\u0027m going to do it now.",
+      "range": {
+        "startLine": 501,
+        "startChar": 22,
+        "endLine": 501,
+        "endChar": 49
+      },
+      "revId": "a68302943955465be5cb24bb678e99f5e6b12978",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_ce456372",
+        "filename": "oox/source/drawingml/chart/datasourcecontext.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 256,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2019-07-19T11:38:01Z",
+      "side": 1,
+      "message": "Is it really not possible to replace this by a single line?",
+      "range": {
+        "startLine": 251,
+        "startChar": 11,
+        "endLine": 256,
+        "endChar": 13
+      },
+      "revId": "a68302943955465be5cb24bb678e99f5e6b12978",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
