@@ -139,6 +139,7 @@ public:
     void testInsertCertificate_PEM_DOCX();
     void testSignDocument_PEM_PDF();
     void testTextSelectionHandles();
+    void testComplexSelection();
     void testDialogPaste();
     void testShowHideDialog();
     void testABI();
@@ -193,6 +194,7 @@ public:
     CPPUNIT_TEST(testSignDocument_PEM_PDF);
 #endif
     CPPUNIT_TEST(testTextSelectionHandles);
+    CPPUNIT_TEST(testComplexSelection);
     CPPUNIT_TEST(testDialogPaste);
     CPPUNIT_TEST(testShowHideDialog);
     CPPUNIT_TEST(testABI);
@@ -586,7 +588,7 @@ void DesktopLOKTest::testPasteWriter()
     free(pText);
 
     // textt/plain should be rejected.
-    CPPUNIT_ASSERT(!pDocument->pClass->paste(pDocument, "textt/plain;charset=utf-8", aText.getStr(), aText.getLength()));
+    CPPUNIT_ASSERT(!pDocument->pClass->paste(pDocument, "text/plain;charset=utf-8", aText.getStr(), aText.getLength()));
     // Writer is expected to support text/html.
     CPPUNIT_ASSERT(pDocument->pClass->paste(pDocument, "text/html", aText.getStr(), aText.getLength()));
 
@@ -2635,6 +2637,52 @@ void DesktopLOKTest::testShowHideDialog()
     Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(std::string("invalidate"), aView.m_aCallbackWindowResult.get<std::string>("action"));
+}
+
+void DesktopLOKTest::testComplexSelection()
+{
+    // Start with a blank text file and add contents.
+    LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
+    // LibLODocument_Impl* pDocument = loadDoc("sheet_with_image.ods");
+    static const OString aText("hello world");
+
+    // Paste text.
+    CPPUNIT_ASSERT(pDocument->pClass->paste(pDocument, "text/plain;charset=utf-8", aText.getStr(), aText.getLength()));
+
+    // Paste an image.
+    OUString aFileURL;
+    createFileURL("paste.jpg", aFileURL);
+    std::ifstream aImageStream(aFileURL.toUtf8().copy(strlen("file://")).getStr());
+    std::vector<char> aImageContents((std::istreambuf_iterator<char>(aImageStream)), std::istreambuf_iterator<char>());
+    CPPUNIT_ASSERT(pDocument->pClass->paste(pDocument, "image/jpeg", aImageContents.data(), aImageContents.size()));
+
+    // Now select-all.
+    pDocument->pClass->postUnoCommand(pDocument, ".uno:SelectAll", nullptr, false);
+    Scheduler::ProcessEventsToIdle();
+
+    // We expect this to be complex.
+    const int type = pDocument->pClass->getSelectionType(pDocument);
+    CPPUNIT_ASSERT_EQUAL((int)LOK_SELTYPE_COMPLEX, type);
+
+    // Export as plain text, we should get only the text part "hello".
+    char* pText = pDocument->pClass->getTextSelection(pDocument, "text/plain;charset=utf-8", nullptr);
+    CPPUNIT_ASSERT(pText != nullptr);
+    CPPUNIT_ASSERT_EQUAL(aText, OString(pText));
+    free(pText);
+
+    // Export as rtf, we should also get the image.
+    pText = pDocument->pClass->getTextSelection(pDocument, "text/rtf", nullptr);
+    CPPUNIT_ASSERT(pText != nullptr);
+    CPPUNIT_ASSERT(std::string(pText).find(aText.getStr()) != std::string::npos); // Must have the text.
+    CPPUNIT_ASSERT(std::string(pText).find("pict{") != std::string::npos); // Must have the image as well.
+    free(pText);
+
+    // Export as html, we should also get the image.
+    pText = pDocument->pClass->getTextSelection(pDocument, "text/html", nullptr);
+    CPPUNIT_ASSERT(pText != nullptr);
+    CPPUNIT_ASSERT(std::string(pText).find(aText.getStr()) != std::string::npos); // Must have the text.
+    // CPPUNIT_ASSERT(std::string(pText).find("<img") != std::string::npos); // Must have the image as well.
+    free(pText);
 }
 
 namespace {
