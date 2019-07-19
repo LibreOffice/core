@@ -553,7 +553,7 @@ bool SVGFilter::implExportImpressOrDraw( const Reference< XOutputStream >& rxOSt
     {
         if( !mSelectedPages.empty() && !mMasterPageTargets.empty() )
         {
-            Reference< XDocumentHandler > xDocHandler( implCreateExportDocumentHandler( rxOStm ), UNO_QUERY );
+            Reference< XDocumentHandler > xDocHandler = implCreateExportDocumentHandler( rxOStm );
 
             if( xDocHandler.is() )
             {
@@ -643,7 +643,7 @@ bool SVGFilter::implExportWriterOrCalc( const Reference< XOutputStream >& rxOStm
 
     if( rxOStm.is() )
     {
-        Reference< XDocumentHandler > xDocHandler( implCreateExportDocumentHandler( rxOStm ), UNO_QUERY );
+        Reference< XDocumentHandler > xDocHandler = implCreateExportDocumentHandler( rxOStm );
 
         if( xDocHandler.is() )
         {
@@ -1114,7 +1114,7 @@ void SVGFilter::implGenerateMetaData()
             {
                 const Reference< css::drawing::XDrawPage > & xDrawPage = mSelectedPages[i];
                 Reference< css::drawing::XMasterPageTarget > xMasterPageTarget( xDrawPage, UNO_QUERY );
-                Reference< css::drawing::XDrawPage > xMasterPage( xMasterPageTarget->getMasterPage(), UNO_QUERY );
+                Reference< css::drawing::XDrawPage > xMasterPage = xMasterPageTarget->getMasterPage();
                 OUString aSlideId(aId + "_" + OUString::number( i ));
 
                 mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "id", aSlideId );
