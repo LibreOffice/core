@@ -194,9 +194,6 @@ void test::BootstrapFixture::validate(const OUString& rPath, test::ValidationFor
     OUString aCommand = aValidator + " " + rPath + " > " + aOutputFile;
 
     int returnValue = system(OUStringToOString(aCommand, RTL_TEXTENCODING_UTF8).getStr());
-    CPPUNIT_ASSERT_EQUAL_MESSAGE(
-        OUStringToOString("failed to execute: " + aCommand,
-            RTL_TEXTENCODING_UTF8).getStr(), 0, returnValue);
 
     OString aContentString = loadFile(aOutput.GetURL());
     OUString aContentOUString = OStringToOUString(aContentString, RTL_TEXTENCODING_UTF8);
@@ -231,6 +228,9 @@ void test::BootstrapFixture::validate(const OUString& rPath, test::ValidationFor
             CPPUNIT_FAIL(aContentString.getStr());
         }
     }
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(
+        OUStringToOString("failed to execute: " + aCommand + "\n" + aContentOUString,
+            RTL_TEXTENCODING_UTF8).getStr(), 0, returnValue);
 #else
     (void)rPath;
     (void)eFormat;
