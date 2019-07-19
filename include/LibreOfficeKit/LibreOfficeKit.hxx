@@ -352,6 +352,46 @@ public:
     }
 
     /**
+     * Gets the selected content for the current view as a series of binary streams.
+     *
+     * NB. returns a complete set of possible selection types if nullptr is passed for pMimeTypes.
+     *
+     * @param pMimeTypes passes in a nullptr terminated list of mime types to fetch
+     * @param pOutCount     returns the size of the other @pOut arrays
+     * @param pOutMimeTypes returns an array of mime types
+     * @param pOutSizes     returns the size of each pOutStream
+     * @param pOutStreams   the content of each mime-type, of length in @pOutSizes
+     *
+     * @returns: true on success, false on error.
+     */
+    bool getSelection(const char **pMimeTypes,
+                      size_t      *pOutCount,
+                      char      ***pOutMimeTypes,
+                      size_t     **pOutSizes,
+                      char      ***pOutStreams)
+    {
+        return mpDoc->pClass->getSelection(mpDoc, pMimeTypes, pOutCount, pOutMimeTypes, pOutSizes, pOutStreams);
+    }
+
+    /**
+     * Populates the clipboard for this view with multiple types of content.
+     *
+     * @param nInCount the number of types to paste
+     * @param pInMimeTypes array of mime type strings
+     * @param pInSizes array of sizes of the data to paste
+     * @param pInStreams array containing the data of the various types
+     *
+     * @return if the supplied data was populated successfully.
+     */
+    bool setClipboard(const size_t  nInCount,
+                      const char  **pInMimeTypes,
+                      const size_t *pInSizes,
+                      const char  **pInStreams)
+    {
+        return mpDoc->pClass->setClipboard(mpDoc, nInCount, pInMimeTypes, pInSizes, pInStreams);
+    }
+
+    /**
      * Pastes content at the current cursor position.
      *
      * @param pMimeType format of pData, for example text/plain;charset=utf-8.
