@@ -147,7 +147,7 @@ void lcl_createDefintionObject(const OUString& _rName
         else
         {
             // set as folder
-            _xTableDefinition.set( TableDefinition::createWithName( ::comphelper::getProcessComponentContext(), _rName ), UNO_QUERY);
+            _xTableDefinition = TableDefinition::createWithName( ::comphelper::getProcessComponentContext(), _rName );
             _xTableDefinitions->insertByName(_rName,makeAny(_xTableDefinition));
         }
         Reference<XColumnsSupplier> xColumnsSupplier(_xTableDefinition,UNO_QUERY);

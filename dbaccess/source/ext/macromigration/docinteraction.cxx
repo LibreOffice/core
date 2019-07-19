@@ -49,7 +49,7 @@ namespace dbmm
         Reference< XInteractionHandler >    xHandler;
 
         explicit InteractionHandler_Data( const Reference<XComponentContext>& _rContext )
-            :xHandler( css::task::InteractionHandler::createWithParent(_rContext, nullptr), UNO_QUERY )
+            :xHandler( css::task::InteractionHandler::createWithParent(_rContext, nullptr) )
         {
         }
     };

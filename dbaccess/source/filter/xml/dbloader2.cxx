@@ -325,7 +325,7 @@ namespace
             xWindow = xActiveFrame->getContainerWindow();
             Reference<XFrame> xFrame = xActiveFrame;
             while ( xFrame.is() && !xFrame->isTop() )
-                xFrame.set(xFrame->getCreator(),UNO_QUERY);
+                xFrame = xFrame->getCreator();
 
             if ( xFrame.is() )
                 xWindow = xFrame->getContainerWindow();

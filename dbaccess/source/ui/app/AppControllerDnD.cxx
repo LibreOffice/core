@@ -658,7 +658,7 @@ bool OApplicationController::paste( ElementType _eType, const svx::ODataAccessDe
                     }
                 }
 
-                Reference< XNameContainer > xDestQueries(getQueryDefinitions(), UNO_QUERY);
+                Reference< XNameContainer > xDestQueries = getQueryDefinitions();
                 Reference< XSingleServiceFactory > xQueryFactory(xDestQueries, UNO_QUERY);
                 if (!xQueryFactory.is())
                 {

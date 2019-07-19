@@ -82,7 +82,7 @@ void RowSetClones::test()
     rowSetProperties->setPropertyValue("ActiveConnection", Any(xConnection));
 
     xRowSet->execute();
-    uno::Reference< XResultSet > xResultSet(xRowSet, UNO_QUERY);
+    uno::Reference< XResultSet > xResultSet = xRowSet;
     CPPUNIT_ASSERT(xResultSet.is());
     // always starts at BeforeFirst position
     CPPUNIT_ASSERT(xResultSet->isBeforeFirst());

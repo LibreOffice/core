@@ -150,7 +150,7 @@ namespace dbaccess
 
         try
         {
-            Reference< XNameAccess > xDocEvents( xEventsSupplier->getEvents().get(), UNO_SET_THROW );
+            Reference< XNameAccess > xDocEvents( xEventsSupplier->getEvents(), UNO_SET_THROW );
             if ( !xDocEvents->hasByName( Event.EventName ) )
             {
                 // this is worth an assertion: We are listener at the very same document which we just asked
