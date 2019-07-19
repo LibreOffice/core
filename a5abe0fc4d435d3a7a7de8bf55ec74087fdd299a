@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_29d7394e",
+        "filename": "sfx2/source/doc/objstor.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1174,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2019-07-19T13:54:19Z",
+      "side": 0,
+      "message": "For templates aODFVersion is empty. I don\u0027t know why you would  skip preservation for larger nVersion. The \u003d\u003d SvtSaveOptions::ODFVER_011 check doesn\u0027t make any sense for me.",
+      "revId": "a5abe0fc4d435d3a7a7de8bf55ec74087fdd299a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_89c52591",
+        "filename": "sfx2/source/doc/objstor.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2031,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2019-07-19T13:54:19Z",
+      "side": 1,
+      "message": "So for templates we don\u0027t loose the macro signature this way. Obviously the document signature must go in any way.",
+      "revId": "522a69eb941a91ae201abbb55ae506aff3118cbb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
