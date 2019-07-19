@@ -405,6 +405,9 @@ struct _LibreOfficeKitDocumentClass
                          const size_t  *pInSizes,
                          const char   **pInStreams);
 
+    /// @see lok::Document::getSelectionType
+    int (*getSelectionType) (LibreOfficeKitDocument* pThis);
+
 #endif // defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
 };
 

@@ -352,6 +352,16 @@ public:
     }
 
     /**
+     * Gets the type of the selected content.
+     *
+     * @return an element of the LibreOfficeKitSelectionType enum.
+     */
+    int getSelectionType(LibreOfficeKitDocument* pThis)
+    {
+        return mpDoc->pClass->getSelectionType(mpDoc);
+    }
+
+    /**
      * Gets the selected content for the current view as a series of binary streams.
      *
      * NB. returns a complete set of possible selection types if nullptr is passed for pMimeTypes.
