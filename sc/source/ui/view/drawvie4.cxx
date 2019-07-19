@@ -180,11 +180,7 @@ void getRangeFromOle2Object(const SdrOle2Obj& rObj, std::vector<OUString>& rRang
     if (!xObj.is())
         return;
 
-    uno::Reference<embed::XComponentSupplier> xCompSupp(xObj, uno::UNO_QUERY);
-    if (!xCompSupp.is())
-        return;
-
-    uno::Reference<chart2::XChartDocument> xChartDoc(xCompSupp->getComponent(), uno::UNO_QUERY);
+    uno::Reference<chart2::XChartDocument> xChartDoc(xObj->getComponent(), uno::UNO_QUERY);
     if (!xChartDoc.is())
         return;
 
@@ -457,7 +453,7 @@ void ScDrawView::SetMarkedOriginalSize()
         if (nIdent == OBJ_OLE2)
         {
             // TODO/LEAN: working with visual area can switch object to running state
-            uno::Reference < embed::XEmbeddedObject > xObj( static_cast<SdrOle2Obj*>(pObj)->GetObjRef(), uno::UNO_QUERY );
+            uno::Reference < embed::XEmbeddedObject > xObj = static_cast<SdrOle2Obj*>(pObj)->GetObjRef();
             if ( xObj.is() )    // NULL for an invalid object that couldn't be loaded
             {
                 sal_Int64 nAspect = static_cast<SdrOle2Obj*>(pObj)->GetAspect();

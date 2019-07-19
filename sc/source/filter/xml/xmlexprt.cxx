@@ -499,14 +499,13 @@ void ScXMLExport::CollectSharedData(SCTAB& nTableCount, sal_Int32& nShapesCount)
         aDrawPage.bHasForms = false;
         aDrawPage.xDrawPage.set(xDrawPage);
         pSharedData->AddDrawPage(aDrawPage, nTable);
-        uno::Reference<container::XIndexAccess> xShapesIndex(xDrawPage, uno::UNO_QUERY);
-        if (!xShapesIndex.is())
+        if (!xDrawPage.is())
             continue;
 
-        sal_Int32 nShapes = xShapesIndex->getCount();
+        sal_Int32 nShapes = xDrawPage->getCount();
         for (sal_Int32 nShape = 0; nShape < nShapes; ++nShape)
         {
-            uno::Reference<drawing::XShape> xShape(xShapesIndex->getByIndex(nShape), uno::UNO_QUERY);
+            uno::Reference<drawing::XShape> xShape(xDrawPage->getByIndex(nShape), uno::UNO_QUERY);
             if (!xShape.is())
                 continue;
 
@@ -579,11 +578,10 @@ void ScXMLExport::CollectShapesAutoStyles(SCTAB nTableCount)
         for (SCTAB nTable = 0; nTable < nTableCount; ++nTable)
         {
             uno::Reference<drawing::XDrawPage> xDrawPage(pSharedData->GetDrawPage(nTable));
-            uno::Reference<drawing::XShapes> xShapes (xDrawPage, uno::UNO_QUERY);
 
-            if (xShapes.is())
+            if (xDrawPage.is())
             {
-                GetShapeExport()->seekShapes(xShapes);
+                GetShapeExport()->seekShapes(xDrawPage);
                 uno::Reference< form::XFormsSupplier2 > xFormsSupplier( xDrawPage, uno::UNO_QUERY );
                 if( xFormsSupplier.is() && xFormsSupplier->hasForms() )
                 {
@@ -2797,7 +2795,7 @@ void ScXMLExport::WriteTable(sal_Int32 nTable, const uno::Reference<sheet::XSpre
         return;
 
     xCurrentTable.set(xTable);
-    xCurrentTableCellRange.set(xTable, uno::UNO_QUERY);
+    xCurrentTableCellRange = xTable;
     uno::Reference<container::XNamed> xName (xTable, uno::UNO_QUERY );
     if (!xName.is())
         return;
@@ -2906,7 +2904,7 @@ void ScXMLExport::WriteTable(sal_Int32 nTable, const uno::Reference<sheet::XSpre
     {
         // store sheet events
         uno::Reference<document::XEventsSupplier> xSupplier(xTable, uno::UNO_QUERY);
-        uno::Reference<container::XNameAccess> xEvents(xSupplier->getEvents(), uno::UNO_QUERY);
+        uno::Reference<container::XNameAccess> xEvents = xSupplier->getEvents();
         GetEventExport().ExportExt( xEvents );
     }
 
@@ -2922,7 +2920,7 @@ void ScXMLExport::WriteTable(sal_Int32 nTable, const uno::Reference<sheet::XSpre
     }
     if (pSharedData->HasDrawPage())
     {
-        GetShapeExport()->seekShapes(uno::Reference<drawing::XShapes>(pSharedData->GetDrawPage(nTable), uno::UNO_QUERY));
+        GetShapeExport()->seekShapes(pSharedData->GetDrawPage(nTable));
         WriteTableShapes();
     }
     table::CellRangeAddress aRange(GetEndAddress(xTable));
