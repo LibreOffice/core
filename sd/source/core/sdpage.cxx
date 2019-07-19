@@ -140,7 +140,7 @@ namespace
         css::uno::Reference<css::container::XEnumerationAccess > xEnumerationAccess(rAnimationNode, UNO_QUERY);
         if (!xEnumerationAccess.is())
             return;
-        css::uno::Reference<css::container::XEnumeration> xEnumeration(xEnumerationAccess->createEnumeration(), UNO_QUERY);
+        css::uno::Reference<css::container::XEnumeration> xEnumeration = xEnumerationAccess->createEnumeration();
         if (!xEnumeration.is())
             return;
         while (xEnumeration->hasMoreElements())

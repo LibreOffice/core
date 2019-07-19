@@ -460,7 +460,7 @@ void SdExportTest::testSwappedOutImageExport()
         const OString sFailedMessage = OString("Failed on filter: ") + OString(aFileFormats[vFormats[nExportFormat]].pFilterName);
 
         // Export the document and import again for a check
-        uno::Reference< lang::XComponent > xComponent(xDocShRef->GetModel(), uno::UNO_QUERY);
+        uno::Reference< lang::XComponent > xComponent = xDocShRef->GetModel();
         uno::Reference<frame::XStorable> xStorable(xComponent, uno::UNO_QUERY);
         utl::MediaDescriptor aMediaDescriptor;
         aMediaDescriptor["FilterName"] <<= OStringToOUString(OString(aFileFormats[vFormats[nExportFormat]].pFilterName), RTL_TEXTENCODING_UTF8);
@@ -516,7 +516,7 @@ void SdExportTest::testOOoXMLAnimations()
 {
     ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/sxi/ooo41061-1.sxi"), SXI);
 
-    uno::Reference<lang::XComponent> xComponent(xDocShRef->GetModel(), uno::UNO_QUERY);
+    uno::Reference<lang::XComponent> xComponent = xDocShRef->GetModel();
     uno::Reference<frame::XStorable> xStorable(xComponent, uno::UNO_QUERY);
     utl::MediaDescriptor aMediaDescriptor;
     aMediaDescriptor["FilterName"] <<= OStringToOUString(OString(getFormat(ODP)->pFilterName), RTL_TEXTENCODING_UTF8);
@@ -592,7 +592,7 @@ void SdExportTest::testUnknownAttributes()
 {
     ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/unknown-attribute.fodp"), FODP);
 
-    uno::Reference<lang::XComponent> xComponent(xDocShRef->GetModel(), uno::UNO_QUERY);
+    uno::Reference<lang::XComponent> xComponent = xDocShRef->GetModel();
     uno::Reference<frame::XStorable> xStorable(xComponent, uno::UNO_QUERY);
     utl::MediaDescriptor aMediaDescriptor;
     aMediaDescriptor["FilterName"] <<= OStringToOUString(OString(getFormat(ODP)->pFilterName), RTL_TEXTENCODING_UTF8);
@@ -615,14 +615,14 @@ void SdExportTest::testTdf80020()
     ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/odp/tdf80020.odp"), ODP);
     {
         uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(xDocShRef->GetModel(), uno::UNO_QUERY);
-        uno::Reference<container::XNameAccess> xStyleFamilies(xStyleFamiliesSupplier->getStyleFamilies(), uno::UNO_QUERY);
+        uno::Reference<container::XNameAccess> xStyleFamilies = xStyleFamiliesSupplier->getStyleFamilies();
         uno::Reference<container::XNameAccess> xStyleFamily(xStyleFamilies->getByName("graphics"), uno::UNO_QUERY);
         uno::Reference<style::XStyle> xStyle(xStyleFamily->getByName("Test Style"), uno::UNO_QUERY);
         CPPUNIT_ASSERT_EQUAL(OUString("text"), xStyle->getParentStyle());
         xDocShRef = saveAndReload( xDocShRef.get(), ODP );
     }
     uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(xDocShRef->GetModel(), uno::UNO_QUERY);
-    uno::Reference<container::XNameAccess> xStyleFamilies(xStyleFamiliesSupplier->getStyleFamilies(), uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xStyleFamilies = xStyleFamiliesSupplier->getStyleFamilies();
     uno::Reference<container::XNameAccess> xStyleFamily(xStyleFamilies->getByName("graphics"), uno::UNO_QUERY);
     uno::Reference<style::XStyle> xStyle(xStyleFamily->getByName("Test Style"), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString("text"), xStyle->getParentStyle());
@@ -645,7 +645,7 @@ void SdExportTest::testLinkedGraphicRT()
         sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/odp/document_with_linked_graphic.odp"), ODP);
 
         // Export the document and import again for a check
-        uno::Reference< lang::XComponent > xComponent(xDocShRef->GetModel(), uno::UNO_QUERY);
+        uno::Reference< lang::XComponent > xComponent = xDocShRef->GetModel();
         uno::Reference<frame::XStorable> xStorable(xComponent, uno::UNO_QUERY);
         utl::MediaDescriptor aMediaDescriptor;
         aMediaDescriptor["FilterName"] <<= OStringToOUString(OString(aFileFormats[vFormats[nExportFormat]].pFilterName), RTL_TEXTENCODING_UTF8);
@@ -717,7 +717,7 @@ void SdExportTest::testImageWithSpecialID()
         const OString sFailedMessage = OString("Failed on filter: ") + OString(aFileFormats[vFormats[nExportFormat]].pFilterName);
 
         // Export the document and import again for a check
-        uno::Reference< lang::XComponent > xComponent(xDocShRef->GetModel(), uno::UNO_QUERY);
+        uno::Reference< lang::XComponent > xComponent = xDocShRef->GetModel();
         uno::Reference<frame::XStorable> xStorable(xComponent, uno::UNO_QUERY);
         utl::MediaDescriptor aMediaDescriptor;
         aMediaDescriptor["FilterName"] <<= OStringToOUString(OString(aFileFormats[vFormats[nExportFormat]].pFilterName), RTL_TEXTENCODING_UTF8);
@@ -983,7 +983,7 @@ void SdExportTest::testTdf115394PPT()
     sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/ppt/tdf115394.ppt"), PPT);
 
     // Export the document and import again for a check
-    uno::Reference< lang::XComponent > xComponent(xDocShRef->GetModel(), uno::UNO_QUERY);
+    uno::Reference< lang::XComponent > xComponent = xDocShRef->GetModel();
     uno::Reference<frame::XStorable> xStorable(xComponent, uno::UNO_QUERY);
     utl::MediaDescriptor aMediaDescriptor;
     aMediaDescriptor["FilterName"] <<= OStringToOUString(OString(aFileFormats[PPT].pFilterName), RTL_TEXTENCODING_UTF8);
@@ -1022,7 +1022,7 @@ void SdExportTest::testBulletsAsImage()
         ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/odp/BulletsAsImage.odp"), ODP);
         const OString sFailedMessageBase = OString("Failed on filter '") + OString(aFileFormats[nExportFormat].pFilterName) + OString("': ");
 
-        uno::Reference< lang::XComponent > xComponent(xDocShRef->GetModel(), uno::UNO_QUERY);
+        uno::Reference< lang::XComponent > xComponent = xDocShRef->GetModel();
         uno::Reference<frame::XStorable> xStorable(xComponent, uno::UNO_QUERY);
         utl::MediaDescriptor aMediaDescriptor;
         aMediaDescriptor["FilterName"] <<= OStringToOUString(OString(aFileFormats[nExportFormat].pFilterName), RTL_TEXTENCODING_UTF8);

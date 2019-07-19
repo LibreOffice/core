@@ -623,8 +623,8 @@ void SdTpOptionsMisc::UpdateCompatibilityControls()
         {
             Reference<frame::XDesktop2> xDesktop = frame::Desktop::create(xContext);
 
-            Reference<container::XEnumerationAccess> xComponents (
-                xDesktop->getComponents(), UNO_QUERY);
+            Reference<container::XEnumerationAccess> xComponents =
+                xDesktop->getComponents();
             if ( ! xComponents.is())
                 break;
 

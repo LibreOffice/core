@@ -616,7 +616,7 @@ uno::Reference < container::XIndexAccess > SAL_CALL SdXImpressDocument::getViewD
 
         if( !rList.empty() )
         {
-            xRet.set(document::IndexedPropertyValues::create( ::comphelper::getProcessComponentContext() ), uno::UNO_QUERY);
+            xRet = document::IndexedPropertyValues::create( ::comphelper::getProcessComponentContext() );
 
             uno::Reference < container::XIndexContainer > xCont( xRet, uno::UNO_QUERY );
             DBG_ASSERT( xCont.is(), "SdXImpressDocument::getViewData() failed for OLE object" );
@@ -1998,11 +1998,10 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
                                 uno::Reference< drawing::XDrawPage > xMasterPage = xMasterPageTarget->getMasterPage();
                                 if ( xMasterPage.is() )
                                 {
-                                    uno::Reference< drawing::XShapes> xShapes( xMasterPage, uno::UNO_QUERY );
-                                    sal_Int32 i, nCount = xShapes->getCount();
+                                    sal_Int32 i, nCount = xMasterPage->getCount();
                                     for ( i = 0; i < nCount; i++ )
                                     {
-                                        aAny = xShapes->getByIndex( i );
+                                        aAny = xMasterPage->getByIndex( i );
                                         uno::Reference< drawing::XShape > xShape;
                                         if ( aAny >>= xShape )
                                             ImplPDFExportShapeInteraction( xShape, *mpDoc, *pPDFExtOutDevData );
@@ -2012,11 +2011,10 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
                         }
 
                         // exporting slide page object interactions
-                        uno::Reference< drawing::XShapes> xShapes( xPage, uno::UNO_QUERY );
-                        sal_Int32 i, nCount = xShapes->getCount();
+                        sal_Int32 i, nCount = xPage->getCount();
                         for ( i = 0; i < nCount; i++ )
                         {
-                            aAny = xShapes->getByIndex( i );
+                            aAny = xPage->getByIndex( i );
                             uno::Reference< drawing::XShape > xShape;
                             if ( aAny >>= xShape )
                                 ImplPDFExportShapeInteraction( xShape, *mpDoc, *pPDFExtOutDevData );

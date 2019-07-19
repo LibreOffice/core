@@ -225,17 +225,16 @@ OString ImagePreparer::prepareNotes( sal_uInt32 aSlideNumber )
     static const OUString sTextShapeName (
         "com.sun.star.drawing.TextShape" );
 
-    uno::Reference<container::XIndexAccess> xIndexAccess ( aNotesPage, UNO_QUERY);
-    if (xIndexAccess.is())
+    if (aNotesPage.is())
     {
 
         // Iterate over all shapes and find the one that holds the text.
-        sal_Int32 nCount (xIndexAccess->getCount());
+        sal_Int32 nCount (aNotesPage->getCount());
         for (sal_Int32 nIndex=0; nIndex<nCount; ++nIndex)
         {
 
             uno::Reference<lang::XServiceName> xServiceName (
-                xIndexAccess->getByIndex(nIndex), UNO_QUERY);
+                aNotesPage->getByIndex(nIndex), UNO_QUERY);
             if (xServiceName.is()
                 && xServiceName->getServiceName() == sNotesShapeName)
             {
@@ -249,14 +248,14 @@ OString ImagePreparer::prepareNotes( sal_uInt32 aSlideNumber )
             else
             {
                 uno::Reference<drawing::XShapeDescriptor> xShapeDescriptor (
-                    xIndexAccess->getByIndex(nIndex), UNO_QUERY);
+                    aNotesPage->getByIndex(nIndex), UNO_QUERY);
                 if (xShapeDescriptor.is())
                 {
                     OUString sType (xShapeDescriptor->getShapeType());
                     if (sType == sNotesShapeName || sType == sTextShapeName)
                     {
                         uno::Reference<text::XTextRange> xText (
-                            xIndexAccess->getByIndex(nIndex), UNO_QUERY);
+                            aNotesPage->getByIndex(nIndex), UNO_QUERY);
                         if (xText.is())
                         {
                             aRet.append(xText->getString());

@@ -289,7 +289,7 @@ bool PPTWriterBase::GetPageByIndex( sal_uInt32 nIndex, PageType ePageType )
         if (GetPropertyValue( aAny, mXPagePropSet, "IsBackgroundDark" ) )
             aAny >>= mbIsBackgroundDark;
 
-        mXShapes.set( mXDrawPage, UNO_QUERY );
+        mXShapes = mXDrawPage;
         if ( !mXShapes.is() )
             break;
 
@@ -625,7 +625,7 @@ bool PPTWriterBase::CreateMainNotes()
     if ( !mXPropSet.is() )
         return false;
 
-    mXShapes.set( mXDrawPage, css::uno::UNO_QUERY );
+    mXShapes = mXDrawPage;
     if ( !mXShapes.is() )
         return false;
 
