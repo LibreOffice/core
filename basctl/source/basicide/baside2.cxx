@@ -53,6 +53,7 @@
 #include <vcl/xtextedt.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <cassert>
+#include <officecfg/Office/Common.hxx>
 
 namespace basctl
 {
@@ -298,15 +299,14 @@ void ModulWindow::BasicExecute()
 {
     // #116444# check security settings before macro execution
     ScriptDocument aDocument( GetDocument() );
-    if ( aDocument.isDocument() )
+    bool bMacrosDisabled = officecfg::Office::Common::Security::Scripting::DisableMacrosExecution::get();
+    if (bMacrosDisabled || (aDocument.isDocument() && !aDocument.allowMacros()))
     {
-        if ( !aDocument.allowMacros() )
-        {
-            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(),
-                                                      VclMessageType::Warning, VclButtonsType::Ok, IDEResId(RID_STR_CANNOTRUNMACRO)));
-            xBox->run();
-            return;
-        }
+        std::unique_ptr<weld::MessageDialog> xBox(
+            Application::CreateMessageDialog(GetFrameWeld(), VclMessageType::Warning,
+                                             VclButtonsType::Ok, IDEResId(RID_STR_CANNOTRUNMACRO)));
+        xBox->run();
+        return;
     }
 
     CheckCompileBasic();
