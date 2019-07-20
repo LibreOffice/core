@@ -123,6 +123,9 @@ private:
     SAL_DLLPRIVATE AnimationBitmap* GetNextFrameBitmap();
     SAL_DLLPRIVATE void RenderNextFrame();
     SAL_DLLPRIVATE void ClearAnimationRenderers();
+    SAL_DLLPRIVATE bool CanRepaintRenderers(OutputDevice* pOut, sal_uLong nCallerId,
+                                            const Point& rDestPt, const Size& rDestSz);
+    SAL_DLLPRIVATE bool NoRenderersAreAvailable();
 
     SAL_DLLPRIVATE void RestartTimer(sal_uLong nTimeout);
     DECL_DLLPRIVATE_LINK(ImplTimeoutHdl, Timer*, void);
