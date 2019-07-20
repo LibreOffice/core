@@ -23,7 +23,7 @@
 #include <vcl/window.hxx>
 
 #include <AnimationData.hxx>
-#include <AnimationRenderer.hxx>
+#include <vcl/animate/AnimationRenderer.hxx>
 #include <window.h>
 
 #include <memory>
@@ -33,11 +33,11 @@ AnimationRenderer::AnimationRenderer(Animation* pParent, OutputDevice* pOut, con
                                      OutputDevice* pFirstFrameOutDev)
     : mpParent(pParent)
     , mpRenderContext(pFirstFrameOutDev ? pFirstFrameOutDev : pOut)
+    , maClip(mpRenderContext->GetClipRegion())
+    , maSzPix(mpRenderContext->LogicToPixel(maSz))
     , mnCallerId(nCallerId)
     , maPt(rPt)
     , maSz(rSz)
-    , maSzPix(mpRenderContext->LogicToPixel(maSz))
-    , maClip(mpRenderContext->GetClipRegion())
     , mpBackground(VclPtr<VirtualDevice>::Create())
     , mpRestore(VclPtr<VirtualDevice>::Create())
     , meLastDisposal(Disposal::Back)
@@ -97,85 +97,77 @@ AnimationRenderer::~AnimationRenderer()
     Animation::ImplDecAnimCount();
 }
 
-bool AnimationRenderer::matches( OutputDevice* pOut, long nCallerId ) const
+bool AnimationRenderer::matches(OutputDevice* pOut, long nCallerId) const
 {
     bool bRet = false;
 
-    if( nCallerId )
+    if (nCallerId)
     {
-        if( ( mnCallerId == nCallerId ) && ( !pOut || ( pOut == mpRenderContext ) ) )
+        if ((mnCallerId == nCallerId) && (!pOut || (pOut == mpRenderContext)))
             bRet = true;
     }
-    else if( !pOut || ( pOut == mpRenderContext ) )
+    else if (!pOut || (pOut == mpRenderContext))
         bRet = true;
 
     return bRet;
 }
 
-void AnimationRenderer::getPosSize( const AnimationBitmap& rAnimationBitmap, Point& rPosPix, Size& rSizePix )
+void AnimationRenderer::getPosSize(const AnimationBitmap& rAnimationBitmap, Point& rPosPix,
+                                   Size& rSizePix)
 {
     const Size& rAnmSize = mpParent->GetDisplaySizePixel();
-    Point       aPt2( rAnimationBitmap.maPositionPixel.X() + rAnimationBitmap.maSizePixel.Width() - 1,
-                      rAnimationBitmap.maPositionPixel.Y() + rAnimationBitmap.maSizePixel.Height() - 1 );
-    double      fFactX, fFactY;
+    Point aPt2(rAnimationBitmap.maPositionPixel.X() + rAnimationBitmap.maSizePixel.Width() - 1,
+               rAnimationBitmap.maPositionPixel.Y() + rAnimationBitmap.maSizePixel.Height() - 1);
+    double fFactX, fFactY;
 
     // calculate x scaling
-    if( rAnmSize.Width() > 1 )
-        fFactX = static_cast<double>( maSzPix.Width() - 1 ) / ( rAnmSize.Width() - 1 );
+    if (rAnmSize.Width() > 1)
+        fFactX = static_cast<double>(maSzPix.Width() - 1) / (rAnmSize.Width() - 1);
     else
         fFactX = 1.0;
 
     // calculate y scaling
-    if( rAnmSize.Height() > 1 )
-        fFactY = static_cast<double>( maSzPix.Height() - 1 ) / ( rAnmSize.Height() - 1 );
+    if (rAnmSize.Height() > 1)
+        fFactY = static_cast<double>(maSzPix.Height() - 1) / (rAnmSize.Height() - 1);
     else
         fFactY = 1.0;
 
-    rPosPix.setX( FRound( rAnimationBitmap.maPositionPixel.X() * fFactX ) );
-    rPosPix.setY( FRound( rAnimationBitmap.maPositionPixel.Y() * fFactY ) );
+    rPosPix.setX(FRound(rAnimationBitmap.maPositionPixel.X() * fFactX));
+    rPosPix.setY(FRound(rAnimationBitmap.maPositionPixel.Y() * fFactY));
 
-    aPt2.setX( FRound( aPt2.X() * fFactX ) );
-    aPt2.setY( FRound( aPt2.Y() * fFactY ) );
+    aPt2.setX(FRound(aPt2.X() * fFactX));
+    aPt2.setY(FRound(aPt2.Y() * fFactY));
 
-    rSizePix.setWidth( aPt2.X() - rPosPix.X() + 1 );
-    rSizePix.setHeight( aPt2.Y() - rPosPix.Y() + 1 );
+    rSizePix.setWidth(aPt2.X() - rPosPix.X() + 1);
+    rSizePix.setHeight(aPt2.Y() - rPosPix.Y() + 1);
 
     // Mirrored horizontally?
-    if( mbIsMirroredHorizontally )
-        rPosPix.setX( maSzPix.Width() - 1 - aPt2.X() );
+    if (mbIsMirroredHorizontally)
+        rPosPix.setX(maSzPix.Width() - 1 - aPt2.X());
 
     // Mirrored vertically?
-    if( mbIsMirroredVertically )
-        rPosPix.setY( maSzPix.Height() - 1 - aPt2.Y() );
+    if (mbIsMirroredVertically)
+        rPosPix.setY(maSzPix.Height() - 1 - aPt2.Y());
 }
 
 void AnimationRenderer::drawToIndex(sal_uLong nIndex)
 {
     VclPtr<vcl::RenderContext> pRenderContext = mpRenderContext;
 
-    std::unique_ptr<PaintBufferGuard> pGuard;
-    if (mpRenderContext->GetOutDevType() == OUTDEV_WINDOW)
-    {
-        vcl::Window* pWindow = static_cast<vcl::Window*>(mpRenderContext.get());
-        pGuard.reset(new PaintBufferGuard(pWindow->ImplGetWindowImpl()->mpFrameData, pWindow));
-        pRenderContext = pGuard->GetRenderContext();
-    }
-
     ScopedVclPtrInstance<VirtualDevice> aVDev;
-    std::unique_ptr<vcl::Region> xOldClip(!maClip.IsNull() ? new vcl::Region( pRenderContext->GetClipRegion() ) : nullptr);
+    std::unique_ptr<vcl::Region> xOldClip(
+        !maClip.IsNull() ? new vcl::Region(pRenderContext->GetClipRegion()) : nullptr);
 
-    aVDev->SetOutputSizePixel( maSzPix, false );
-    nIndex = std::min( nIndex, static_cast<sal_uLong>(mpParent->Count()) - 1 );
+    aVDev->SetOutputSizePixel(maSzPix, false);
+    nIndex = std::min(nIndex, static_cast<sal_uLong>(mpParent->Count()) - 1);
 
-    for( sal_uLong i = 0; i <= nIndex; i++ )
-        draw( i, aVDev.get() );
+    for (sal_uLong i = 0; i <= nIndex; i++)
+        draw(i, aVDev.get());
 
     if (xOldClip)
-        pRenderContext->SetClipRegion( maClip );
+        pRenderContext->SetClipRegion(maClip);
 
-    pRenderContext->DrawOutDev( maDispPt, maDispSz, Point(), maSzPix, *aVDev );
-    if (pGuard)
-        pGuard->SetPaintRect(tools::Rectangle(maDispPt, maDispSz));
+    pRenderContext->DrawOutDev(maDispPt, maDispSz, Point(), maSzPix, *aVDev);
 
     if (xOldClip)
         pRenderContext->SetClipRegion(*xOldClip);
@@ -193,60 +185,62 @@ void AnimationRenderer::draw(sal_uLong nIndex, VirtualDevice* pVDev)
         pRenderContext = pGuard->GetRenderContext();
     }
 
-    tools::Rectangle aOutRect( pRenderContext->PixelToLogic( Point() ), pRenderContext->GetOutputSize() );
+    tools::Rectangle aOutRect(pRenderContext->PixelToLogic(Point()),
+                              pRenderContext->GetOutputSize());
 
     // check, if output lies out of display
-    if( aOutRect.Intersection( tools::Rectangle( maDispPt, maDispSz ) ).IsEmpty() )
-        setMarked( true );
-    else if( !mbIsPaused )
+    if (aOutRect.Intersection(tools::Rectangle(maDispPt, maDispSz)).IsEmpty())
+        setMarked(true);
+    else if (!mbIsPaused)
     {
-        VclPtr<VirtualDevice>   pDev;
-        Point                   aPosPix;
-        Point                   aBmpPosPix;
-        Size                    aSizePix;
-        Size                    aBmpSizePix;
-        const sal_uLong             nLastPos = mpParent->Count() - 1;
-        mnActIndex = std::min( nIndex, nLastPos );
-        const AnimationBitmap&  rAnimationBitmap = mpParent->Get( static_cast<sal_uInt16>( mnActIndex ) );
+        VclPtr<VirtualDevice> pDev;
+        Point aPosPix;
+        Point aBmpPosPix;
+        Size aSizePix;
+        Size aBmpSizePix;
+        const sal_uLong nLastPos = mpParent->Count() - 1;
+        mnActIndex = std::min(nIndex, nLastPos);
+        const AnimationBitmap& rAnimationBitmap
+            = mpParent->Get(static_cast<sal_uInt16>(mnActIndex));
 
-        getPosSize( rAnimationBitmap, aPosPix, aSizePix );
+        getPosSize(rAnimationBitmap, aPosPix, aSizePix);
 
         // Mirrored horizontally?
         if (mbIsMirroredHorizontally)
         {
-            aBmpPosPix.setX( aPosPix.X() + aSizePix.Width() - 1 );
-            aBmpSizePix.setWidth( -aSizePix.Width() );
+            aBmpPosPix.setX(aPosPix.X() + aSizePix.Width() - 1);
+            aBmpSizePix.setWidth(-aSizePix.Width());
         }
         else
         {
-            aBmpPosPix.setX( aPosPix.X() );
-            aBmpSizePix.setWidth( aSizePix.Width() );
+            aBmpPosPix.setX(aPosPix.X());
+            aBmpSizePix.setWidth(aSizePix.Width());
         }
 
         // Mirrored vertically?
         if (mbIsMirroredVertically)
         {
-            aBmpPosPix.setY( aPosPix.Y() + aSizePix.Height() - 1 );
-            aBmpSizePix.setHeight( -aSizePix.Height() );
+            aBmpPosPix.setY(aPosPix.Y() + aSizePix.Height() - 1);
+            aBmpSizePix.setHeight(-aSizePix.Height());
         }
         else
         {
-            aBmpPosPix.setY( aPosPix.Y() );
-            aBmpSizePix.setHeight( aSizePix.Height() );
+            aBmpPosPix.setY(aPosPix.Y());
+            aBmpSizePix.setHeight(aSizePix.Height());
         }
 
         // get output device
-        if( !pVDev )
+        if (!pVDev)
         {
             pDev = VclPtr<VirtualDevice>::Create();
-            pDev->SetOutputSizePixel( maSzPix, false );
-            pDev->DrawOutDev( Point(), maSzPix, maDispPt, maDispSz, *pRenderContext );
+            pDev->SetOutputSizePixel(maSzPix, false);
+            pDev->DrawOutDev(Point(), maSzPix, maDispPt, maDispSz, *pRenderContext);
         }
         else
             pDev = pVDev;
 
         // restore background after each run
-        if( !nIndex )
+        if (!nIndex)
         {
             meLastDisposal = Disposal::Back;
             maRestPt = Point();
@@ -254,12 +248,12 @@ void AnimationRenderer::draw(sal_uLong nIndex, VirtualDevice* pVDev)
         }
 
         // restore
-        if( ( Disposal::Not != meLastDisposal ) && maRestSz.Width() && maRestSz.Height() )
+        if ((Disposal::Not != meLastDisposal) && maRestSz.Width() && maRestSz.Height())
         {
-            if( Disposal::Back == meLastDisposal )
-                pDev->DrawOutDev( maRestPt, maRestSz, maRestPt, maRestSz, *mpBackground );
+            if (Disposal::Back == meLastDisposal)
+                pDev->DrawOutDev(maRestPt, maRestSz, maRestPt, maRestSz, *mpBackground);
             else
-                pDev->DrawOutDev( maRestPt, maRestSz, Point(), maRestSz, *mpRestore );
+                pDev->DrawOutDev(maRestPt, maRestSz, Point(), maRestSz, *mpRestore);
         }
 
         meLastDisposal = rAnimationBitmap.meDisposal;
@@ -269,28 +263,29 @@ void AnimationRenderer::draw(sal_uLong nIndex, VirtualDevice* pVDev)
         // What do we need to restore the next time?
         // Put it into a bitmap if needed, else delete
         // SaveBitmap to conserve memory
-        if( ( meLastDisposal == Disposal::Back ) || ( meLastDisposal == Disposal::Not ) )
-            mpRestore->SetOutputSizePixel( Size( 1, 1 ), false );
+        if ((meLastDisposal == Disposal::Back) || (meLastDisposal == Disposal::Not))
+            mpRestore->SetOutputSizePixel(Size(1, 1), false);
         else
         {
-            mpRestore->SetOutputSizePixel( maRestSz, false );
-            mpRestore->DrawOutDev( Point(), maRestSz, aPosPix, aSizePix, *pDev );
+            mpRestore->SetOutputSizePixel(maRestSz, false);
+            mpRestore->DrawOutDev(Point(), maRestSz, aPosPix, aSizePix, *pDev);
         }
 
-        pDev->DrawBitmapEx( aBmpPosPix, aBmpSizePix, rAnimationBitmap.maBitmapEx );
+        pDev->DrawBitmapEx(aBmpPosPix, aBmpSizePix, rAnimationBitmap.maBitmapEx);
 
-        if( !pVDev )
+        if (!pVDev)
         {
-            std::unique_ptr<vcl::Region> xOldClip(!maClip.IsNull() ? new vcl::Region( pRenderContext->GetClipRegion() ) : nullptr);
+            std::unique_ptr<vcl::Region> xOldClip(
+                !maClip.IsNull() ? new vcl::Region(pRenderContext->GetClipRegion()) : nullptr);
 
             if (xOldClip)
-                pRenderContext->SetClipRegion( maClip );
+                pRenderContext->SetClipRegion(maClip);
 
-            pRenderContext->DrawOutDev( maDispPt, maDispSz, Point(), maSzPix, *pDev );
+            pRenderContext->DrawOutDev(maDispPt, maDispSz, Point(), maSzPix, *pDev);
             if (pGuard)
                 pGuard->SetPaintRect(tools::Rectangle(maDispPt, maDispSz));
 
-            if( xOldClip)
+            if (xOldClip)
             {
                 pRenderContext->SetClipRegion(*xOldClip);
                 xOldClip.reset();
@@ -298,8 +293,8 @@ void AnimationRenderer::draw(sal_uLong nIndex, VirtualDevice* pVDev)
 
             pDev.disposeAndClear();
 
-            if( pRenderContext->GetOutDevType() == OUTDEV_WINDOW )
-                static_cast<vcl::Window*>( pRenderContext.get() )->Flush();
+            if (pRenderContext->GetOutDevType() == OUTDEV_WINDOW)
+                static_cast<vcl::Window*>(pRenderContext.get())->Flush();
         }
     }
 }
@@ -311,7 +306,7 @@ void AnimationRenderer::repaint()
     mpRenderContext->SaveBackground(*mpBackground, maDispPt, maDispSz, maSzPix);
 
     mbIsPaused = false;
-    drawToIndex( mnActIndex );
+    drawToIndex(mnActIndex);
     mbIsPaused = bOldPause;
 }
 
@@ -322,7 +317,7 @@ AnimationData* AnimationRenderer::createAnimationData() const
     pAnimationData->aStartOrg = maPt;
     pAnimationData->aStartSize = maSz;
     pAnimationData->pOutDev = mpRenderContext;
-    pAnimationData->pAnimationRenderer = const_cast<AnimationRenderer *>(this);
+    pAnimationData->pAnimationRenderer = const_cast<AnimationRenderer*>(this);
     pAnimationData->nCallerId = mnCallerId;
     pAnimationData->bPause = mbIsPaused;
 
