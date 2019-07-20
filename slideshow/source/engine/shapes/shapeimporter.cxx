@@ -398,14 +398,13 @@ void ShapeImporter::importPolygons(uno::Reference<beans::XPropertySet> const& xP
     getPropertyValue( fLineWidth, xPropSet, "LineWidth" );
 
     drawing::PointSequence* pOuterSequence = aRetval.getArray();
-    awt::Point* pInnerSequence = pOuterSequence->getArray();
 
     ::basegfx::B2DPolygon aPoly;
     basegfx::B2DPoint aPoint;
-    for( sal_Int32 nCurrPoly=0; nCurrPoly<pOuterSequence->getLength(); ++nCurrPoly, ++pInnerSequence )
+    for( const awt::Point& rPoint : *pOuterSequence )
     {
-        aPoint.setX((*pInnerSequence).X);
-        aPoint.setY((*pInnerSequence).Y);
+        aPoint.setX(rPoint.X);
+        aPoint.setY(rPoint.Y);
         aPoly.append( aPoint );
     }
     for( const auto& pView : mrContext.mrViewContainer )

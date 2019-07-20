@@ -51,6 +51,7 @@
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
+#include <iterator>
 #include <unordered_map>
 #include <unordered_set>
 
@@ -88,12 +89,7 @@ Sequence< OUString > retrieveAsciiValueList(
                     sal_Int32 n2Len = seq2.getLength();
 
                     seq.realloc( n1Len + n2Len );
-                    const OUString *pSource = seq2.getConstArray();
-                    OUString *pTarget = seq.getArray();
-                    for( int i = 0 ; i < n2Len ; i ++ )
-                    {
-                        pTarget[i+n1Len] = pSource[i];
-                    }
+                    std::copy(seq2.begin(), seq2.end(), std::next(seq.begin(), n1Len));
                 }
             }
         }
@@ -198,13 +194,8 @@ beans::Property PropertySetInfo_Impl::getPropertyByName( OUString const & name )
 
 sal_Bool PropertySetInfo_Impl::hasPropertyByName( OUString const & name )
 {
-    beans::Property const * p = m_properties.getConstArray();
-    for ( sal_Int32 nPos = m_properties.getLength(); nPos--; )
-    {
-        if (p[ nPos ].Name == name)
-            return true;
-    }
-    return false;
+    return std::any_of(m_properties.begin(), m_properties.end(),
+        [&name](const beans::Property& rProp) { return rProp.Name == name; });
 }
 
 
@@ -784,12 +775,10 @@ Reference< XInterface > OServiceManager::createInstanceWithContext(
 
     Sequence< Reference< XInterface > > factories(
         queryServiceFactories( rServiceSpecifier, xContext ) );
-    Reference< XInterface > const * p = factories.getConstArray();
-    for ( sal_Int32 nPos = 0; nPos < factories.getLength(); ++nPos )
+    for ( Reference< XInterface > const & xFactory : factories )
     {
         try
         {
-            Reference< XInterface > const & xFactory = p[ nPos ];
             if (xFactory.is())
             {
                 Reference< XSingleComponentFactory > xFac( xFactory, UNO_QUERY );
@@ -838,12 +827,10 @@ Reference< XInterface > OServiceManager::createInstanceWithArgumentsAndContext(
 
     Sequence< Reference< XInterface > > factories(
         queryServiceFactories( rServiceSpecifier, xContext ) );
-    Reference< XInterface > const * p = factories.getConstArray();
-    for ( sal_Int32 nPos = 0; nPos < factories.getLength(); ++nPos )
+    for ( Reference< XInterface > const & xFactory : factories )
     {
         try
         {
-            Reference< XInterface > const & xFactory = p[ nPos ];
             if (xFactory.is())
             {
                 Reference< XSingleComponentFactory > xFac( xFactory, UNO_QUERY );
@@ -1052,11 +1039,10 @@ void OServiceManager::insert( const Any & Element )
 
         //put into the service map
         Sequence< OUString > aServiceNames = xInfo->getSupportedServiceNames();
-        const OUString * pArray = aServiceNames.getConstArray();
-        for( sal_Int32 i = 0; i < aServiceNames.getLength(); i++ )
+        for( const OUString& rServiceName : aServiceNames )
         {
             m_ServiceMap.emplace(
-                pArray[i], *o3tl::doAccess<Reference<XInterface>>(Element) );
+                rServiceName, *o3tl::doAccess<Reference<XInterface>>(Element) );
         }
     }
     }
@@ -1137,11 +1123,10 @@ void OServiceManager::remove( const Any & Element )
         return;
 
     Sequence< OUString > aServiceNames = xSF->getSupportedServiceNames();
-    const OUString * pArray = aServiceNames.getConstArray();
-    for( sal_Int32 i = 0; i < aServiceNames.getLength(); i++ )
+    for( const OUString& rServiceName : aServiceNames )
     {
         pair<HashMultimap_OWString_Interface::iterator, HashMultimap_OWString_Interface::iterator> p =
-            m_ServiceMap.equal_range( pArray[i] );
+            m_ServiceMap.equal_range( rServiceName );
 
         while( p.first != p.second )
         {
@@ -1321,10 +1306,9 @@ Reference<XInterface > ORegistryServiceManager::loadWithServiceName(
     const OUString& serviceName, Reference< XComponentContext > const & xContext )
 {
     Sequence<OUString> implEntries = getFromServiceName( serviceName );
-    for (sal_Int32 i = 0; i < implEntries.getLength(); i++)
+    for (const auto& rEntry : implEntries)
     {
-        Reference< XInterface > x(
-            loadWithImplementationName( implEntries.getConstArray()[i], xContext ) );
+        Reference< XInterface > x( loadWithImplementationName( rEntry, xContext ) );
         if (x.is())
             return x;
     }
@@ -1349,8 +1333,9 @@ void ORegistryServiceManager::fillAllNamesFromRegistry( HashSet_OWString & rSet 
         {
             sal_Int32 nPrefix = xServicesKey->getKeyName().getLength() +1;
             Sequence<Reference<XRegistryKey > > aKeys = xServicesKey->openKeys();
-            for( sal_Int32 i = 0; i < aKeys.getLength(); i++ )
-                rSet.insert( aKeys.getConstArray()[i]->getKeyName().copy( nPrefix ) );
+            std::transform(aKeys.begin(), aKeys.end(), std::inserter(rSet, rSet.end()),
+                [nPrefix](const Reference<XRegistryKey>& rKey) -> OUString {
+                    return rKey->getKeyName().copy( nPrefix ); });
         }
     }
     catch (InvalidRegistryException &)
@@ -1428,11 +1413,8 @@ Reference<XEnumeration > ORegistryServiceManager::createContentEnumeration(
     // get all implementation names registered under this service name from the registry
     Sequence<OUString> aImpls = getFromServiceName( aServiceName );
     // load and insert all factories specified by the registry
-    sal_Int32 i;
-    OUString aImplName;
-    for( i = 0; i < aImpls.getLength(); i++ )
+    for( const OUString& aImplName : aImpls )
     {
-        aImplName = aImpls.getConstArray()[i];
         if ( !haveFactoryWithThisImplementation(aImplName) )
         {
             loadWithImplementationName( aImplName, m_xContext );

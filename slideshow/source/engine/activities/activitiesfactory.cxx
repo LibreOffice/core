@@ -621,11 +621,11 @@ AnimationActivitySharedPtr createValueListActivity(
     ValueVectorType aValueVector;
     aValueVector.reserve( rValues.getLength() );
 
-    for( ::std::size_t i=0, nLen=rValues.getLength(); i<nLen; ++i )
+    for( const auto& rValue : rValues )
     {
         ValueType aValue;
         ENSURE_OR_THROW(
-            extractValue( aValue, rValues[i], rShape, rSlideBounds ),
+            extractValue( aValue, rValue, rShape, rSlideBounds ),
             "createValueListActivity(): Could not extract values" );
         aValueVector.push_back( aValue );
     }

@@ -373,17 +373,9 @@ void SmMathConfig::ReadSymbol( SmSym &rSymbol,
     sal_Int32 nProps = aNames.getLength();
 
     OUString aDelim( "/" );
-    OUString *pName = aNames.getArray();
-    for (sal_Int32 i = 0;  i < nProps;  ++i)
-    {
-        OUString &rName = pName[i];
-        OUString aTmp( rName );
-        rName = rBaseNode;
-        rName += aDelim;
-        rName += rSymbolName;
-        rName += aDelim;
-        rName += aTmp;
-    }
+    std::transform(aNames.begin(), aNames.end(), aNames.begin(),
+        [&rBaseNode, &rSymbolName, &aDelim](const OUString& rName) -> OUString {
+            return rBaseNode + aDelim + rSymbolName + aDelim + rName; });
 
     const Sequence< Any > aValues = const_cast<SmMathConfig*>(this)->GetProperties(aNames);
 
@@ -569,15 +561,13 @@ void SmMathConfig::LoadFontFormatList()
         pFontFormatList->Clear();
 
     Sequence< OUString > aNodes( GetNodeNames( FONT_FORMAT_LIST ) );
-    const OUString *pNode = aNodes.getConstArray();
-    sal_Int32 nNodes = aNodes.getLength();
 
-    for (sal_Int32 i = 0;  i < nNodes;  ++i)
+    for (const OUString& rNode : aNodes)
     {
         SmFontFormat aFntFmt;
-        ReadFontFormat( aFntFmt, pNode[i], FONT_FORMAT_LIST );
-        if (!pFontFormatList->GetFontFormat( pNode[i] ))
-            pFontFormatList->AddFontFormat( pNode[i], aFntFmt );
+        ReadFontFormat( aFntFmt, rNode, FONT_FORMAT_LIST );
+        if (!pFontFormatList->GetFontFormat( rNode ))
+            pFontFormatList->AddFontFormat( rNode, aFntFmt );
     }
     pFontFormatList->SetModified( false );
 }
@@ -590,17 +580,9 @@ void SmMathConfig::ReadFontFormat( SmFontFormat &rFontFormat,
     sal_Int32 nProps = aNames.getLength();
 
     OUString aDelim( "/" );
-    OUString *pName = aNames.getArray();
-    for (sal_Int32 i = 0;  i < nProps;  ++i)
-    {
-        OUString &rName = pName[i];
-        OUString aTmp( rName );
-        rName = rBaseNode;
-        rName += aDelim;
-        rName += rSymbolName;
-        rName += aDelim;
-        rName += aTmp;
-    }
+    std::transform(aNames.begin(), aNames.end(), aNames.begin(),
+        [&rBaseNode, &rSymbolName, &aDelim](const OUString& rName) -> OUString {
+            return rBaseNode + aDelim + rSymbolName + aDelim + rName; });
 
     const Sequence< Any > aValues = const_cast<SmMathConfig*>(this)->GetProperties(aNames);
 

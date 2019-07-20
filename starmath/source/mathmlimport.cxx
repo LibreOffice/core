@@ -3079,38 +3079,34 @@ void SmXMLImport::SetViewSettings(const Sequence<PropertyValue>& aViewProps)
 
     tools::Rectangle aRect( pDocShell->GetVisArea() );
 
-    sal_Int32 nCount = aViewProps.getLength();
-    const PropertyValue *pValue = aViewProps.getConstArray();
-
     long nTmp = 0;
 
-    for (sal_Int32 i = 0; i < nCount ; i++)
+    for (const PropertyValue& rValue : aViewProps)
     {
-        if (pValue->Name == "ViewAreaTop" )
+        if (rValue.Name == "ViewAreaTop" )
         {
-            pValue->Value >>= nTmp;
+            rValue.Value >>= nTmp;
             aRect.SaturatingSetY(nTmp);
         }
-        else if (pValue->Name == "ViewAreaLeft" )
+        else if (rValue.Name == "ViewAreaLeft" )
         {
-            pValue->Value >>= nTmp;
+            rValue.Value >>= nTmp;
             aRect.SaturatingSetX(nTmp);
         }
-        else if (pValue->Name == "ViewAreaWidth" )
+        else if (rValue.Name == "ViewAreaWidth" )
         {
-            pValue->Value >>= nTmp;
+            rValue.Value >>= nTmp;
             Size aSize( aRect.GetSize() );
             aSize.setWidth( nTmp );
             aRect.SaturatingSetSize(aSize);
         }
-        else if (pValue->Name == "ViewAreaHeight" )
+        else if (rValue.Name == "ViewAreaHeight" )
         {
-            pValue->Value >>= nTmp;
+            rValue.Value >>= nTmp;
             Size aSize( aRect.GetSize() );
             aSize.setHeight( nTmp );
             aRect.SaturatingSetSize(aSize);
         }
-        pValue++;
     }
 
     pDocShell->SetVisArea ( aRect );
@@ -3126,22 +3122,19 @@ void SmXMLImport::SetConfigurationSettings(const Sequence<PropertyValue>& aConfP
     if (!xInfo.is() )
         return;
 
-    sal_Int32 nCount = aConfProps.getLength();
-    const PropertyValue* pValues = aConfProps.getConstArray();
-
     const OUString sFormula ( "Formula" );
     const OUString sBasicLibraries ( "BasicLibraries" );
     const OUString sDialogLibraries ( "DialogLibraries" );
-    while ( nCount-- )
+    for ( const PropertyValue& rValue : aConfProps )
     {
-        if (pValues->Name != sFormula &&
-            pValues->Name != sBasicLibraries &&
-            pValues->Name != sDialogLibraries)
+        if (rValue.Name != sFormula &&
+            rValue.Name != sBasicLibraries &&
+            rValue.Name != sDialogLibraries)
         {
             try
             {
-                if ( xInfo->hasPropertyByName( pValues->Name ) )
-                    xProps->setPropertyValue( pValues->Name, pValues->Value );
+                if ( xInfo->hasPropertyByName( rValue.Name ) )
+                    xProps->setPropertyValue( rValue.Name, rValue.Value );
             }
             catch (const beans::PropertyVetoException &)
             {
@@ -3152,8 +3145,6 @@ void SmXMLImport::SetConfigurationSettings(const Sequence<PropertyValue>& aConfP
                 DBG_UNHANDLED_EXCEPTION("starmath");
             }
         }
-
-        pValues++;
     }
 }
 

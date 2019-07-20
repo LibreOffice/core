@@ -636,22 +636,20 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
                 if ( !(*pValues >>= aSequence) )
                     throw IllegalArgumentException();
 
-                sal_uInt32 nSize = aSequence.getLength();
                 SmModule *pp = SM_MOD();
                 SmSymbolManager &rManager = pp->GetSymbolManager();
-                SymbolDescriptor *pDescriptor = aSequence.getArray();
-                for (sal_uInt32 i = 0; i < nSize ; i++, pDescriptor++)
+                for (const SymbolDescriptor& rDescriptor : aSequence)
                 {
                     vcl::Font aFont;
-                    aFont.SetFamilyName ( pDescriptor->sFontName );
-                    aFont.SetCharSet ( static_cast < rtl_TextEncoding > (pDescriptor->nCharSet) );
-                    aFont.SetFamily ( static_cast < FontFamily > (pDescriptor->nFamily ) );
-                    aFont.SetPitch  ( static_cast < FontPitch >  (pDescriptor->nPitch ) );
-                    aFont.SetWeight ( static_cast < FontWeight > (pDescriptor->nWeight ) );
-                    aFont.SetItalic ( static_cast < FontItalic > (pDescriptor->nItalic ) );
-                    SmSym aSymbol ( pDescriptor->sName, aFont, static_cast < sal_Unicode > (pDescriptor->nCharacter),
-                                    pDescriptor->sSymbolSet );
-                    aSymbol.SetExportName ( pDescriptor->sExportName );
+                    aFont.SetFamilyName ( rDescriptor.sFontName );
+                    aFont.SetCharSet ( static_cast < rtl_TextEncoding > (rDescriptor.nCharSet) );
+                    aFont.SetFamily ( static_cast < FontFamily > (rDescriptor.nFamily ) );
+                    aFont.SetPitch  ( static_cast < FontPitch >  (rDescriptor.nPitch ) );
+                    aFont.SetWeight ( static_cast < FontWeight > (rDescriptor.nWeight ) );
+                    aFont.SetItalic ( static_cast < FontItalic > (rDescriptor.nItalic ) );
+                    SmSym aSymbol ( rDescriptor.sName, aFont, static_cast < sal_Unicode > (rDescriptor.nCharacter),
+                                    rDescriptor.sSymbolSet );
+                    aSymbol.SetExportName ( rDescriptor.sExportName );
                     rManager.AddOrReplaceSymbol ( aSymbol );
                 }
             }
@@ -982,10 +980,10 @@ void SAL_CALL SmModel::render(
 
     // get device to be rendered in
     uno::Reference< awt::XDevice >  xRenderDevice;
-    for (sal_Int32 i = 0, nCount = rxOptions.getLength();  i < nCount;  ++i)
+    for (const auto& rxOption : rxOptions)
     {
-        if( rxOptions[i].Name == "RenderDevice" )
-            rxOptions[i].Value >>= xRenderDevice;
+        if( rxOption.Name == "RenderDevice" )
+            rxOption.Value >>= xRenderDevice;
     }
 
     if (!xRenderDevice.is())
