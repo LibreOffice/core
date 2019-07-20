@@ -58,7 +58,7 @@
  (RFC2396) may be handled platform independent, but
  will not in osl which is considered wrong.
  Future version of osl should handle File URLs this
- way. In rtl/uri there is already an URI parser etc.
+ way. In rtl/uri there is already a URI parser etc.
  so this code should be consolidated.
 
 */

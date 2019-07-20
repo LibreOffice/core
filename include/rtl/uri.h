@@ -309,7 +309,7 @@ SAL_DLLPUBLIC void SAL_CALL rtl_uriDecode(
     signaled.
 
     @param pRelUriRef
-    An URI reference that may be either absolute or relative.  If it is
+    A URI reference that may be either absolute or relative.  If it is
     absolute, it will be returned unmodified.
 
     @param pResult

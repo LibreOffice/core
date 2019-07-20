@@ -26,7 +26,7 @@
 
 module com {   module sun {   module star {   module rdf {
 
-/** represents an URI node that may occur in a RDF graph.
+/** represents a URI node that may occur in a RDF graph.
 
     <p>
     Note that this is actually an IRI, but the RDF literature speaks of URIs
@@ -41,8 +41,8 @@ module com {   module sun {   module star {   module rdf {
     <li>after the last occurrence of the path separator: "/"</li>
     <li>after the last occurrence of the scheme separator: ":"</li>
     </ol>
-    An URI without a ":" is invalid.
-    This implies that the Namespace part of an URI must not be empty, while
+    A URI without a ":" is invalid.
+    This implies that the Namespace part of a URI must not be empty, while
     the LocalName part may be empty.
     </p>
 

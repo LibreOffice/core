@@ -27,7 +27,7 @@
 
 module com {   module sun {   module star {   module rdf {
 
-/** represents an URI node that may occur in a RDF graph.
+/** represents a URI node that may occur in a RDF graph.
 
     @since OOo 3.0
 
@@ -36,7 +36,7 @@ module com {   module sun {   module star {   module rdf {
 service URI : XURI
 {
 
-    /** creates an URI RDF node.
+    /** creates a URI RDF node.
 
         @param Value
             the URI, represented as `string`.
@@ -47,7 +47,7 @@ service URI : XURI
     create( [in] string Value )
         raises( com::sun::star::lang::IllegalArgumentException );
 
-    /** creates an URI RDF node from namespace prefix and local name.
+    /** creates a URI RDF node from namespace prefix and local name.
 
         @param Namespace
             the namespace prefix of the URI, represented as
@@ -62,7 +62,7 @@ service URI : XURI
     createNS( [in] string Namespace, [in] string LocalName )
         raises( com::sun::star::lang::IllegalArgumentException );
 
-    /** creates an URI RDF node for a well-known URI.
+    /** creates a URI RDF node for a well-known URI.
 
         @param Id
             the URI, represented as a constant from URIs.

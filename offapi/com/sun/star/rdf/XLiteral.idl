@@ -33,7 +33,7 @@ module com {   module sun {   module star {   module rdf {
     <ul>
     <li>just a string Value</li>
     <li>Value and Language</li>
-    <li>typed literal: Value and Datatype (represented by an URI)</li>
+    <li>typed literal: Value and Datatype (represented by a URI)</li>
     </ul>
     Note that there is no literal with both Language and Datatype.
     </p>
