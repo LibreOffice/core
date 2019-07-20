@@ -14069,7 +14069,6 @@
                 <style>
                   <class name="context-Draw"/>
                   <class name="context-DrawLine"/>
-                  <class name="context-3DObject"/>
                   <class name="context-MultiObject"/>
                 </style>
               </object>
