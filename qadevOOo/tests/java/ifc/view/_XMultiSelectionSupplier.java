@@ -319,7 +319,7 @@ public class _XMultiSelectionSupplier extends MultiMethodTest {
             i++;
 
             if (ObjCompare != null) {
-                ObjCompare.compare(shouldElement, nextElement);
+                compRes = ObjCompare.compare(shouldElement, nextElement) == 0;
             } else {
                 compRes = util.ValueComparer.equalValue(shouldElement, nextElement);
             }
