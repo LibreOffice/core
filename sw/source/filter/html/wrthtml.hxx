@@ -269,6 +269,8 @@ class SW_DLLPUBLIC SwHTMLWriter : public Writer
     void AddLinkTarget( const OUString& rURL );
     void CollectLinkTargets();
 
+    void SetupFilterOptions(const OUString& rFilterOptions);
+
 protected:
     ErrCode WriteStream() override;
     void SetupFilterOptions(SfxMedium& rMedium) override;
@@ -403,7 +405,9 @@ public:
     /// Tracks which text portion attributes are currently open: a which id -> open count map.
     std::map<sal_uInt16, int> maStartedAttributes;
 
-    explicit SwHTMLWriter( const OUString& rBaseURL );
+    /// Construct an instance of SwHTMLWriter and optionally give it
+    /// the filter options directly, which can also be set via SetupFilterOptions().
+    explicit SwHTMLWriter( const OUString& rBaseURL, const OUString& rFilterOptions = "" );
     virtual ~SwHTMLWriter() override;
 
     void Out_SwDoc( SwPaM* );       // write the marked range

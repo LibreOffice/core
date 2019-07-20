@@ -2682,7 +2682,7 @@ void DesktopLOKTest::testComplexSelection()
     pText = pDocument->pClass->getTextSelection(pDocument, "text/html", nullptr);
     CPPUNIT_ASSERT(pText != nullptr);
     CPPUNIT_ASSERT(std::string(pText).find(aText.getStr()) != std::string::npos); // Must have the text.
-    // CPPUNIT_ASSERT(std::string(pText).find("<img") != std::string::npos); // Must have the image as well.
+    CPPUNIT_ASSERT(std::string(pText).find("<img") != std::string::npos); // Must have the image as well.
     free(pText);
 
     // We expect this to be complex.

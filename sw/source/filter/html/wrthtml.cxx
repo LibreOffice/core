@@ -91,7 +91,7 @@ using namespace css;
 static sal_Char sIndentTabs[MAX_INDENT_LEVEL+2] =
     "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t";
 
-SwHTMLWriter::SwHTMLWriter( const OUString& rBaseURL )
+SwHTMLWriter::SwHTMLWriter( const OUString& rBaseURL, const OUString& rFilterOptions )
     : m_pNumRuleInfo(new SwHTMLNumRuleInfo)
     , m_nHTMLMode(0)
     , m_eCSS1Unit(FieldUnit::NONE)
@@ -163,6 +163,8 @@ SwHTMLWriter::SwHTMLWriter( const OUString& rBaseURL )
         mpTempBaseURL->EnableKillingFile();
         SetBaseURL(mpTempBaseURL->GetURL());
     }
+
+    SetupFilterOptions(rFilterOptions);
 }
 
 SwHTMLWriter::~SwHTMLWriter()
@@ -185,21 +187,26 @@ void SwHTMLWriter::SetupFilterOptions(SfxMedium& rMedium)
         return;
 
 
-    OUString sFilterOptions = static_cast<const SfxStringItem*>(pItem)->GetValue();
-    if (sFilterOptions == "SkipImages")
+    const OUString sFilterOptions = static_cast<const SfxStringItem*>(pItem)->GetValue();
+    SetupFilterOptions(sFilterOptions);
+}
+
+void SwHTMLWriter::SetupFilterOptions(const OUString& rFilterOptions)
+{
+    if (rFilterOptions == "SkipImages")
     {
         mbSkipImages = true;
     }
-    else if (sFilterOptions == "SkipHeaderFooter")
+    else if (rFilterOptions == "SkipHeaderFooter")
     {
         mbSkipHeaderFooter = true;
     }
-    else if (sFilterOptions == "EmbedImages" )
+    else if (rFilterOptions == "EmbedImages")
     {
         mbEmbedImages = true;
     }
 
-    uno::Sequence<OUString> aOptionSeq = comphelper::string::convertCommaSeparated(sFilterOptions);
+    uno::Sequence<OUString> aOptionSeq = comphelper::string::convertCommaSeparated(rFilterOptions);
     const OUString aXhtmlNsKey("xhtmlns=");
     for (const auto& rOption : aOptionSeq)
     {
@@ -822,13 +829,6 @@ void SwHTMLWriter::Out_SwDoc( SwPaM* pPam )
             {
                 OutHTML_Section( *this, *rNd.GetSectionNode() );
                 m_nBkmkTabPos = m_bWriteAll ? FindPos_Bkmk( *m_pCurrentPam->GetPoint() ) : -1;
-            }
-            else if( rNd.IsGrfNode() )
-            {
-                SwGrfNode* pGrfNd = rNd.GetGrfNode();
-                assert(pGrfNd && !"FIXME: Implement Graphic copy as HTML.");
-                // if (pGrfNd)
-                //     OutHTML_SwGrfNode( *this, *pGrfNd );
             }
             else if( &rNd == &m_pDoc->GetNodes().GetEndOfContent() )
                 break;
@@ -1555,9 +1555,9 @@ HTMLSaveData::~HTMLSaveData()
     }
 }
 
-void GetHTMLWriter( const OUString&, const OUString& rBaseURL, WriterRef& xRet )
+void GetHTMLWriter( const OUString& rFilterOptions, const OUString& rBaseURL, WriterRef& xRet )
 {
-    xRet = new SwHTMLWriter( rBaseURL );
+    xRet = new SwHTMLWriter( rBaseURL, rFilterOptions );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

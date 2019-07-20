@@ -432,7 +432,7 @@ sal_Bool SwTransferable::isComplex()
 
     // Copy into a new Doc so we don't mess with the existing one.
     //FIXME: We *should* be able to avoid this and improve the performance.
-    m_pClpDocFac = new SwDocFac;
+    m_pClpDocFac.reset(new SwDocFac);
     SwDoc* const pTmpDoc = lcl_GetDoc(*m_pClpDocFac);
 
     pTmpDoc->getIDocumentFieldsAccess()
@@ -773,8 +773,12 @@ bool SwTransferable::WriteObject( tools::SvRef<SotStorageStream>& xStream,
         break;
 
     case SWTRANSFER_OBJECTTYPE_HTML:
-        GetHTMLWriter(OUString(), OUString(), xWrt);
+    {
+        // LOK is interested in getting images embedded for copy/paste support.
+        const OUString aFilterOptions("EmbedImages");
+        GetHTMLWriter( comphelper::LibreOfficeKit::isActive() ? aFilterOptions : OUString(), OUString(), xWrt );
         break;
+    }
 
     case SWTRANSFER_OBJECTTYPE_RTF:
     case SWTRANSFER_OBJECTTYPE_RICHTEXT:
