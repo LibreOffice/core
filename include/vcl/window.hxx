@@ -34,6 +34,8 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <memory>
 
+#include <WindowAnimationRenderer.hxx>
+
 class VirtualDevice;
 struct ImplSVEvent;
 struct ImplWinData;
@@ -730,6 +732,13 @@ public:
 protected:
     // Single argument ctors shall be explicit.
     explicit                            Window( WindowType nType );
+
+    virtual AnimationRenderer*          CreateAnimationRenderer(Animation* pAnim,
+                                                        OutputDevice* pOut,
+                                                        const Point& rDestPt, const Size& rDestSz,
+                                                        sal_uLong nCallerId,
+                                                        OutputDevice *pFirstFrameOutDev = nullptr) override
+                                    { return new WindowAnimationRenderer(pAnim, pOut, rDestPt, rDestSz, nCallerId, pFirstFrameOutDev); }
 
             void                        SetCompoundControl( bool bCompound );
 
