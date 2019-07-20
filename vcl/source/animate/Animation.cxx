@@ -181,8 +181,7 @@ bool Animation::Start(OutputDevice* pOut, const Point& rDestPt, const Size& rDes
             }
 
             if (bRendererDoesNotExist)
-                maAnimationRenderers.emplace_back(new AnimationRenderer(
-                    this, pOut, rDestPt, rDestSz, nCallerId, pFirstFrameOutDev));
+                CreateDefaultRenderer(this, pOut, rDestPt, rDestSz, nCallerId, pFirstFrameOutDev);
 
             if (!mbIsInAnimation)
             {

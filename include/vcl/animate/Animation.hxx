@@ -126,6 +126,9 @@ private:
     SAL_DLLPRIVATE bool CanRepaintRenderers(OutputDevice* pOut, sal_uLong nCallerId,
                                             const Point& rDestPt, const Size& rDestSz);
     SAL_DLLPRIVATE bool NoRenderersAreAvailable();
+    SAL_DLLPRIVATE void CreateDefaultRenderer(Animation* pAnim, OutputDevice* pOut,
+                                              const Point& rDestPt, const Size& rDestSz,
+                                              sal_uLong nCallerId, OutputDevice* pFirstFrameOutDev);
 
     SAL_DLLPRIVATE void RestartTimer(sal_uLong nTimeout);
     DECL_DLLPRIVATE_LINK(ImplTimeoutHdl, Timer*, void);
