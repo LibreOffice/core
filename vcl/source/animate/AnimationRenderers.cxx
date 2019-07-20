@@ -66,6 +66,14 @@ std::vector<std::unique_ptr<AnimationData>> Animation::CreateAnimationDataItems(
     return aAnimationDataItems;
 }
 
+void Animation::CreateDefaultRenderer(Animation* pAnim, OutputDevice* pOut, const Point& rDestPt,
+                                      const Size& rDestSz, sal_uLong nCallerId,
+                                      OutputDevice* pFirstFrameOutDev)
+{
+    maAnimationRenderers.emplace_back(
+        new AnimationRenderer(pAnim, pOut, rDestPt, rDestSz, nCallerId, pFirstFrameOutDev));
+}
+
 void Animation::PopulateRenderers()
 {
     AnimationRenderer* pRenderer;
