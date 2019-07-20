@@ -651,7 +651,11 @@ void FloatingWindow::StateChanged( StateChangedType nType )
                 SetLOKNotifier(pParent->GetLOKNotifier());
                 aItems.emplace_back("type", "child");
                 aItems.emplace_back("parentId", OString::number(pParent->GetLOKWindowId()));
-                aItems.emplace_back("position", mpImplData->maPos.toString()); // pixels
+                if (mbInPopupMode)
+                    aItems.emplace_back("position", mpImplData->maPos.toString()); // pixels
+                else // mpImplData->maPos is not set
+                    aItems.emplace_back("position", GetPosPixel().toString());
+
             }
             aItems.emplace_back("size", GetSizePixel().toString());
             GetLOKNotifier()->notifyWindow(GetLOKWindowId(), "created", aItems);
