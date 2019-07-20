@@ -25,6 +25,35 @@
 
 void Animation::ClearAnimationRenderers() { maAnimationRenderers.clear(); }
 
+bool Animation::CanRepaintRenderers(OutputDevice* pOut, sal_uLong nCallerId, const Point& rDestPt,
+                                    const Size& rDestSz)
+{
+    AnimationRenderer* pRenderer;
+
+    for (size_t i = 0; i < maAnimationRenderers.size(); ++i)
+    {
+        pRenderer = maAnimationRenderers[i].get();
+        if (pRenderer->matches(pOut, nCallerId))
+        {
+            if (pRenderer->getOutPos() == rDestPt
+                && pRenderer->getOutSizePix() == pOut->LogicToPixel(rDestSz))
+            {
+                pRenderer->repaint();
+                return true;
+            }
+            else
+            {
+                maAnimationRenderers.erase(maAnimationRenderers.begin() + i);
+                return false;
+            }
+        }
+    }
+
+    return false;
+}
+
+bool Animation::NoRenderersAreAvailable() { return maAnimationRenderers.empty(); }
+
 std::vector<std::unique_ptr<AnimationData>> Animation::CreateAnimationDataItems()
 {
     std::vector<std::unique_ptr<AnimationData>> aAnimationDataItems;
