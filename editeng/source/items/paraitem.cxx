@@ -48,6 +48,7 @@
 #include <sal/log.hxx>
 #include <editeng/memberids.h>
 #include <editeng/editids.hrc>
+#include <editeng/editrids.hrc>
 #include <editeng/itemtype.hxx>
 #include <editeng/eerdll.hxx>
 #include <editeng/paperinf.hxx>
@@ -226,23 +227,87 @@ SfxPoolItem* SvxLineSpacingItem::Clone( SfxItemPool * ) const
     return new SvxLineSpacingItem( *this );
 }
 
-
 bool SvxLineSpacingItem::GetPresentation
 (
-    SfxItemPresentation /*ePres*/,
-    MapUnit             /*eCoreUnit*/,
-    MapUnit             /*ePresUnit*/,
-    OUString&           rText, const IntlWrapper&
+    SfxItemPresentation ePres,
+    MapUnit             eCoreUnit,
+    MapUnit             ePresUnit,
+    OUString&           rText, const IntlWrapper& rIntl
 )   const
 {
-#ifdef DBG_UTIL
-    rText = "SvxLineSpacingItem";
-#else
-    rText.clear();
-#endif
-    return false;
-}
+    switch ( ePres )
+    {
+        case SfxItemPresentation::Nameless:
+        case SfxItemPresentation::Complete:
+        {
+            switch( GetLineSpaceRule() )
+            {
+                case SvxLineSpaceRule::Auto:
+                {
+                    SvxInterLineSpaceRule eInter = GetInterLineSpaceRule();
 
+                    switch( eInter )
+                    {
+                        // Default single line spacing
+                        case SvxInterLineSpaceRule::Off:
+                            rText = EditResId(RID_SVXITEMS_LINESPACING_SINGLE);
+                            break;
+
+                        // Default single line spacing
+                        case SvxInterLineSpaceRule::Prop:
+                            if ( 100 == GetPropLineSpace() )
+                            {
+                                rText = EditResId(RID_SVXITEMS_LINESPACING_SINGLE);
+                                break;
+                            }
+                            // 1.15 line spacing
+                            if ( 115 == GetPropLineSpace() )
+                            {
+                                rText = EditResId(RID_SVXITEMS_LINESPACING_115);
+                                break;
+                            }
+                            // 1.5 line spacing
+                            if ( 150 == GetPropLineSpace() )
+                            {
+                                rText = EditResId(RID_SVXITEMS_LINESPACING_15);
+                                break;
+                            }
+                            // double line spacing
+                            if ( 200 == GetPropLineSpace() )
+                            {
+                                rText = EditResId(RID_SVXITEMS_LINESPACING_DOUBLE);
+                                break;
+                            }
+                            // the set per cent value
+                            rText = EditResId(RID_SVXITEMS_LINESPACING_PROPORTIONAL) + " " + OUString::number(GetPropLineSpace()) + "%";
+                            break;
+
+                        case SvxInterLineSpaceRule::Fix:
+                            rText = EditResId(RID_SVXITEMS_LINESPACING_LEADING)  +
+                                    " " + GetMetricText(GetInterLineSpace(), eCoreUnit, ePresUnit, &rIntl) +
+                                    " " + EditResId(GetMetricId(ePresUnit));
+                            break;
+                        default: ;//prevent warning
+                    }
+                }
+                break;
+                case SvxLineSpaceRule::Fix:
+                    rText = EditResId(RID_SVXITEMS_LINESPACING_FIXED)  +
+                            " " + GetMetricText(GetLineHeight(), eCoreUnit, ePresUnit, &rIntl) +
+                            " " + EditResId(GetMetricId(ePresUnit));
+                    break;
+
+                case SvxLineSpaceRule::Min:
+                    rText = EditResId(RID_SVXITEMS_LINESPACING_MIN) +
+                            " " + GetMetricText(GetLineHeight(), eCoreUnit, ePresUnit, &rIntl) +
+                            " " + EditResId(GetMetricId(ePresUnit));
+                    break;
+                default: ;//prevent warning
+            }
+        }
+    }
+    return true;
+}
 
 sal_uInt16 SvxLineSpacingItem::GetValueCount() const
 {

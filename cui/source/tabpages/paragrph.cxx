@@ -226,7 +226,8 @@ bool SvxStdParagraphTabPage::FillItemSet( SfxItemSet* rOutSet )
     int nPos = m_xLineDist->get_active();
 
     if ( nPos != -1 &&
-         ( m_xLineDist->get_value_changed_from_saved() ||
+         ( m_bLineDistToggled ||
+           m_xLineDist->get_value_changed_from_saved() ||
            m_xLineDistAtPercentBox->get_value_changed_from_saved() ||
            m_xLineDistAtMetricBox->get_value_changed_from_saved() ) )
     {
@@ -264,7 +265,8 @@ bool SvxStdParagraphTabPage::FillItemSet( SfxItemSet* rOutSet )
         eState = GetItemSet().GetItemState( nWhich );
         pOld = GetOldItem( *rOutSet, SID_ATTR_PARA_LINESPACE );
 
-        if ( !pOld || !( *static_cast<const SvxLineSpacingItem*>(pOld) == aSpacing ) ||
+        if ( m_bLineDistToggled ||
+             !pOld || !( *static_cast<const SvxLineSpacingItem*>(pOld) == aSpacing ) ||
              SfxItemState::DONTCARE == eState )
         {
             rOutSet->Put( aSpacing );
@@ -789,6 +791,11 @@ void SvxStdParagraphTabPage::SetLineSpacing_Impl
     LineDistHdl_Impl( *m_xLineDist );
 }
 
+IMPL_LINK_NOARG(SvxStdParagraphTabPage, LineDistPopupHdl_Impl, weld::ComboBox&, void)
+{
+    m_bLineDistToggled = true;
+}
+
 IMPL_LINK(SvxStdParagraphTabPage, LineDistHdl_Impl, weld::ComboBox&, rBox, void)
 {
     switch (rBox.get_active())
@@ -863,6 +870,7 @@ IMPL_LINK_NOARG(SvxStdParagraphTabPage, ModifyHdl_Impl, weld::MetricSpinButton&,
 
 void SvxStdParagraphTabPage::Init_Impl()
 {
+    m_xLineDist->connect_popup_toggled(LINK(this, SvxStdParagraphTabPage, LineDistPopupHdl_Impl));
     m_xLineDist->connect_changed(LINK(this, SvxStdParagraphTabPage, LineDistHdl_Impl));
 
     Link<weld::MetricSpinButton&,void> aLink2 = LINK(this, SvxStdParagraphTabPage, ELRLoseFocusHdl);

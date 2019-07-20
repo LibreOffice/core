@@ -90,9 +90,12 @@ private:
     void                    UpdateExample_Impl();
     void                    ELRLoseFocus();
 
+    DECL_LINK(LineDistPopupHdl_Impl, weld::ComboBox&, void);
     DECL_LINK(LineDistHdl_Impl, weld::ComboBox&, void);
     DECL_LINK(ModifyHdl_Impl, weld::MetricSpinButton&, void);
     DECL_LINK(AutoHdl_Impl, weld::ToggleButton&, void);
+
+    bool m_bLineDistToggled = false;
 
 protected:
     virtual void            ActivatePage( const SfxItemSet& rSet ) override;
