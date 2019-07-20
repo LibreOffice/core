@@ -149,9 +149,9 @@ public:
     void * SAL_CALL getContext() const
         { return _pEnv->pContext; }
 
-    /** Tests if a environment is set.
+    /** Tests if an environment is set.
 
-        @return true, if a environment is set, false otherwise
+        @return true, if an environment is set, false otherwise
     */
     bool SAL_CALL is() const
         { return (_pEnv != NULL); }

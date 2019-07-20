@@ -31,7 +31,7 @@ namespace sdr { namespace contact {
 class SVX_DLLPUBLIC ViewContactOfPageObj : public ViewContactOfSdrObj
 {
 protected:
-    // Create a Object-Specific ViewObjectContact, set ViewContact and
+    // Create an Object-Specific ViewObjectContact, set ViewContact and
     // ObjectContact. Always needs to return something.
     virtual ViewObjectContact& CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact) override;
 

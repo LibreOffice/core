@@ -267,7 +267,7 @@ public:
 };
 
 /**
- * Inserting Objects into a ObjectList.
+ * Inserting Objects into an ObjectList.
  * Use with corresponding Removes within an UndoGroup.
  * Create Action before removal from ObjList.
  */
