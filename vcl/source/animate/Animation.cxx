@@ -341,26 +341,28 @@ bool Animation::ResetMarkedRenderers()
     return bGlobalPause;
 }
 
+bool Animation::IsTimeoutSetup() { return maTimeoutNotifier.IsSet(); }
+
+bool Animation::SendTimeout()
+{
+    if (IsTimeoutSetup())
+    {
+        maTimeoutNotifier.Call(this);
+        PopulateRenderers();
+        DeleteUnmarkedRenderers();
+        return ResetMarkedRenderers();
+    }
+
+    return false;
+}
+
 IMPL_LINK_NOARG(Animation, ImplTimeoutHdl, Timer*, void)
 {
     const size_t nAnimCount = maAnimationFrames.size();
 
     if (nAnimCount)
     {
-        bool bGlobalPause = true;
-        AnimationRenderer* pRenderer;
-
-        if (maNotifyLink.IsSet())
-        {
-            maNotifyLink.Call(this);
-            PopulateRenderers();
-            DeleteUnmarkedRenderers();
-            bGlobalPause = ResetMarkedRenderers();
-        }
-        else
-        {
-            bGlobalPause = false;
-        }
+        bool bGlobalPause = SendTimeout();
 
         if (maAnimationRenderers.empty())
             Stop();
@@ -397,13 +399,11 @@ IMPL_LINK_NOARG(Animation, ImplTimeoutHdl, Timer*, void)
             // set from view itself
             for (size_t i = 0; i < maAnimationRenderers.size();)
             {
-                pRenderer = maAnimationRenderers[i].get();
+                AnimationRenderer* pRenderer = maAnimationRenderers[i].get();
                 pRenderer->draw(mnPos);
 
                 if (pRenderer->isMarked())
-                {
                     maAnimationRenderers.erase(maAnimationRenderers.begin() + i);
-                }
                 else
                     i++;
             }
