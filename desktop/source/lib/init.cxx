@@ -1529,6 +1529,18 @@ bool CallbackFlushHandler::processWindowEvent(CallbackData& aCallbackData)
             }
             return false;
         });
+
+        VclPtr<Window> pWindow = vcl::Window::FindLOKWindow(nLOKWindowId);
+        if (!pWindow)
+        {
+            gImpl->maLastExceptionMsg = "Document doesn't support dialog rendering, or window not found.";
+            return false;
+        }
+
+        auto xClip = forceSetClipboardForCurrentView(m_pDocument);
+
+        uno::Reference<datatransfer::clipboard::XClipboard> xClipboard(xClip.get());
+        pWindow->SetClipboard(xClipboard);
     }
     else if (aAction == "size_changed")
     {
