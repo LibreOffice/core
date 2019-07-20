@@ -81,7 +81,7 @@ namespace
         {
             Reference< XGraphic > xGraphic;
             aMediaProperties.put( "URL", rImageURL );
-            xGraphic.set( xGraphicProvider->queryGraphic( aMediaProperties.getPropertyValues() ), UNO_QUERY );
+            xGraphic = xGraphicProvider->queryGraphic( aMediaProperties.getPropertyValues() );
             aImages.emplace_back( xGraphic );
         }
 
