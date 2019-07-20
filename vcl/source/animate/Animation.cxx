@@ -17,11 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <algorithm>
 #include <sal/config.h>
 
-#include <tools/stream.hxx>
 #include <sal/log.hxx>
+#include <tools/stream.hxx>
 
 #include <vcl/animate/Animation.hxx>
 #include <vcl/animate/AnimationData.hxx>
@@ -29,7 +28,9 @@
 #include <vcl/dibtools.hxx>
 #include <vcl/BitmapColorQuantizationFilter.hxx>
 
-#include <impanmvw.hxx>
+#include <AnimationRenderer.hxx>
+
+#include <algorithm>
 
 sal_uLong Animation::mnAnimCount = 0;
 
