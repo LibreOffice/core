@@ -82,7 +82,7 @@ void ScVbaShapes::initBaseCollection()
     for ( sal_Int32 index=0; index<nLen; ++index )
         aShapes.emplace_back( m_xIndexAccess->getByIndex( index ) , uno::UNO_QUERY );
     uno::Reference< container::XIndexAccess > xShapes( new XNamedObjectCollectionHelper< drawing::XShape >( aShapes ) );
-    m_xIndexAccess.set( xShapes, uno::UNO_QUERY );
+    m_xIndexAccess = xShapes;
     m_xNameAccess.set( xShapes, uno::UNO_QUERY );
 }
 
