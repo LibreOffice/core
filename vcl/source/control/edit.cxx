@@ -238,8 +238,7 @@ void Edit::dispose()
             GetDropTarget()->removeDropTargetListener( xDTL );
         }
 
-        uno::Reference< lang::XEventListener> xEL( mxDnDListener, uno::UNO_QUERY );
-        xEL->disposing( lang::EventObject() );  // #95154# #96585# Empty Source means it's the Client
+        mxDnDListener->disposing( lang::EventObject() );  // #95154# #96585# Empty Source means it's the Client
         mxDnDListener.clear();
     }
 
@@ -808,7 +807,7 @@ void Edit::ImplInsertText( const OUString& rStr, const Selection* pNewSel, bool 
 
         // determine if input-sequence-checking should be applied or not
 
-        uno::Reference < i18n::XBreakIterator > xBI( ImplGetBreakIterator(), UNO_QUERY );
+        uno::Reference < i18n::XBreakIterator > xBI = ImplGetBreakIterator();
         bool bIsInputSequenceChecking = rStr.getLength() == 1 &&
                 officecfg::Office::Common::I18N::CTL::CTLFont::get() &&
                 officecfg::Office::Common::I18N::CTL::CTLSequenceChecking::get() &&

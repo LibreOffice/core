@@ -134,11 +134,10 @@ sal_Int16 SAL_CALL SalGtkFolderPicker::execute()
 
     sal_Int16 retVal = 0;
 
-    uno::Reference< awt::XExtendedToolkit > xToolkit(
-        awt::Toolkit::create(m_xContext),
-        uno::UNO_QUERY);
+    uno::Reference< awt::XExtendedToolkit > xToolkit =
+        awt::Toolkit::create(m_xContext);
 
-    uno::Reference<frame::XDesktop> xDesktop(frame::Desktop::create(m_xContext), uno::UNO_QUERY);
+    uno::Reference<frame::XDesktop> xDesktop = frame::Desktop::create(m_xContext);
 
     GtkWindow *pParent = RunDialog::GetTransientFor();
     if (pParent)
