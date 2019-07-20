@@ -53,7 +53,7 @@ ScFormulaReferenceHelper::ScFormulaReferenceHelper(IAnyRefDialog* _pDlg,SfxBindi
     m_bEnableColorRef=aInputOption.GetRangeFinder();
 }
 
-ScFormulaReferenceHelper::~ScFormulaReferenceHelper()
+ScFormulaReferenceHelper::~ScFormulaReferenceHelper() COVERITY_NOEXCEPT_FALSE
 {
     dispose();
 }
