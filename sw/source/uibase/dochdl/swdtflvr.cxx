@@ -773,8 +773,12 @@ bool SwTransferable::WriteObject( tools::SvRef<SotStorageStream>& xStream,
         break;
 
     case SWTRANSFER_OBJECTTYPE_HTML:
-        GetHTMLWriter(OUString(), OUString(), xWrt);
+    {
+        // LOK is interested in getting images embedded for copy/paste support.
+        const OUString aFilterOptions("EmbedImages");
+        GetHTMLWriter( comphelper::LibreOfficeKit::isActive() ? aFilterOptions : aEmptyOUStr, OUString(), xWrt );
         break;
+    }
 
     case SWTRANSFER_OBJECTTYPE_RTF:
     case SWTRANSFER_OBJECTTYPE_RICHTEXT:
