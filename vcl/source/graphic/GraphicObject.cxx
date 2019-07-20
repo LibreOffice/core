@@ -551,7 +551,7 @@ void GraphicObject::DrawTiled( OutputDevice* pOut, const tools::Rectangle& rArea
 }
 
 bool GraphicObject::StartAnimation( OutputDevice* pOut, const Point& rPt, const Size& rSz,
-                                    long nExtraData,
+                                    long nCallerId,
                                     OutputDevice* pFirstFrameOutDev )
 {
     bool bRet = false;
@@ -589,7 +589,7 @@ bool GraphicObject::StartAnimation( OutputDevice* pOut, const Point& rPt, const 
             mxSimpleCache->maGraphic.SetAnimationNotifyHdl(GetGraphic().GetAnimationNotifyHdl());
         }
 
-        mxSimpleCache->maGraphic.StartAnimation(pOut, aPt, aSz, nExtraData, pFirstFrameOutDev);
+        mxSimpleCache->maGraphic.StartAnimation(pOut, aPt, aSz, nCallerId, pFirstFrameOutDev);
 
         if( bCropped )
             pOut->Pop();
@@ -602,10 +602,10 @@ bool GraphicObject::StartAnimation( OutputDevice* pOut, const Point& rPt, const 
     return bRet;
 }
 
-void GraphicObject::StopAnimation( OutputDevice* pOut, long nExtraData )
+void GraphicObject::StopAnimation( OutputDevice* pOut, long nCallerId )
 {
     if (mxSimpleCache)
-        mxSimpleCache->maGraphic.StopAnimation(pOut, nExtraData);
+        mxSimpleCache->maGraphic.StopAnimation(pOut, nCallerId);
 }
 
 const Graphic& GraphicObject::GetGraphic() const

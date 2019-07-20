@@ -462,17 +462,17 @@ void Graphic::DrawEx( OutputDevice* pOutDev, const OUString& rText,
 }
 
 void Graphic::StartAnimation( OutputDevice* pOutDev, const Point& rDestPt,
-                              const Size& rDestSz, long nExtraData,
+                              const Size& rDestSz, long nCallerId,
                               OutputDevice* pFirstFrameOutDev )
 {
     ImplTestRefCount();
-    mxImpGraphic->ImplStartAnimation( pOutDev, rDestPt, rDestSz, nExtraData, pFirstFrameOutDev );
+    mxImpGraphic->ImplStartAnimation( pOutDev, rDestPt, rDestSz, nCallerId, pFirstFrameOutDev );
 }
 
-void Graphic::StopAnimation( OutputDevice* pOutDev, long nExtraData )
+void Graphic::StopAnimation( OutputDevice* pOutDev, long nCallerId )
 {
     ImplTestRefCount();
-    mxImpGraphic->ImplStopAnimation( pOutDev, nExtraData );
+    mxImpGraphic->ImplStopAnimation( pOutDev, nCallerId );
 }
 
 void Graphic::SetAnimationNotifyHdl( const Link<Animation*,void>& rLink )
