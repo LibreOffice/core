@@ -980,8 +980,7 @@ bool SlideImpl::loadShapes()
     if( xMasterPageTarget.is() )
     {
         xMasterPage = xMasterPageTarget->getMasterPage();
-        xMasterPageShapes.set( xMasterPage,
-                               uno::UNO_QUERY );
+        xMasterPageShapes = xMasterPage;
 
         if( xMasterPage.is() && xMasterPageShapes.is() )
         {

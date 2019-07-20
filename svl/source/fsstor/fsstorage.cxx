@@ -453,10 +453,7 @@ uno::Reference< embed::XStorage > SAL_CALL FSStorage::openStorageElement(
             throw io::IOException(); // there is no such folder
 
         ::ucbhelper::Content aResultContent( aFolderURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), xDummyEnv, comphelper::getProcessComponentContext() );
-        xResult.set( static_cast< OWeakObject* >( new FSStorage( aResultContent,
-                                                                 nStorageMode,
-                                                                 m_pImpl->m_xContext ) ),
-                     uno::UNO_QUERY );
+        xResult = new FSStorage( aResultContent, nStorageMode, m_pImpl->m_xContext );
     }
     catch( embed::InvalidStorageException& )
     {

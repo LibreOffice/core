@@ -93,12 +93,12 @@ rtl::Reference<EmbedEventListener_Impl> EmbedEventListener_Impl::Create( Embedde
     {
         p->GetObject()->addStateChangeListener( pRet.get() );
 
-        uno::Reference < util::XCloseable > xClose( p->GetObject(), uno::UNO_QUERY );
+        uno::Reference < util::XCloseable > xClose = p->GetObject();
         DBG_ASSERT( xClose.is(), "Object does not support XCloseable!" );
         if ( xClose.is() )
             xClose->addCloseListener( pRet.get() );
 
-        uno::Reference < document::XEventBroadcaster > xBrd( p->GetObject(), uno::UNO_QUERY );
+        uno::Reference < document::XEventBroadcaster > xBrd = p->GetObject();
         if ( xBrd.is() )
             xBrd->addEventListener( pRet.get() );
 
@@ -320,31 +320,23 @@ void EmbeddedObjectRef::Clear()
     {
         mpImpl->mxObj->removeStateChangeListener(mpImpl->mxListener.get());
 
-        uno::Reference<util::XCloseable> xClose(mpImpl->mxObj, uno::UNO_QUERY);
-        if ( xClose.is() )
-            xClose->removeCloseListener( mpImpl->mxListener.get() );
-
-        uno::Reference<document::XEventBroadcaster> xBrd(mpImpl->mxObj, uno::UNO_QUERY);
-        if ( xBrd.is() )
-            xBrd->removeEventListener( mpImpl->mxListener.get() );
+        mpImpl->mxObj->removeCloseListener( mpImpl->mxListener.get() );
+        mpImpl->mxObj->removeEventListener( mpImpl->mxListener.get() );
 
         if ( mpImpl->bIsLocked )
         {
-            if ( xClose.is() )
+            try
             {
-                try
-                {
-                    mpImpl->mxObj->changeState(embed::EmbedStates::LOADED);
-                    xClose->close( true );
-                }
-                catch (const util::CloseVetoException&)
-                {
-                    // there's still someone who needs the object!
-                }
-                catch (const uno::Exception&)
-                {
-                    TOOLS_WARN_EXCEPTION("svtools.misc", "Error on switching of the object to loaded state and closing");
-                }
+                mpImpl->mxObj->changeState(embed::EmbedStates::LOADED);
+                mpImpl->mxObj->close( true );
+            }
+            catch (const util::CloseVetoException&)
+            {
+                // there's still someone who needs the object!
+            }
+            catch (const uno::Exception&)
+            {
+                TOOLS_WARN_EXCEPTION("svtools.misc", "Error on switching of the object to loaded state and closing");
             }
         }
     }
