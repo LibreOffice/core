@@ -170,24 +170,24 @@ bool Animation::Start(OutputDevice* pOut, const Point& rDestPt, const Size& rDes
         if ((pOut->GetOutDevType() == OUTDEV_WINDOW) && !mbLoopTerminated
             && (ANIMATION_TIMEOUT_ON_CLICK != maAnimationFrames[mnPos]->mnWait))
         {
-            AnimationRenderer* pView;
+            AnimationRenderer* pRenderer;
             AnimationRenderer* pMatch = nullptr;
 
             for (size_t i = 0; i < maAnimationRenderers.size(); ++i)
             {
-                pView = maAnimationRenderers[i].get();
-                if (pView->matches(pOut, nCallerId))
+                pRenderer = maAnimationRenderers[i].get();
+                if (pRenderer->matches(pOut, nCallerId))
                 {
-                    if (pView->getOutPos() == rDestPt
-                        && pView->getOutSizePix() == pOut->LogicToPixel(rDestSz))
+                    if (pRenderer->getOutPos() == rDestPt
+                        && pRenderer->getOutSizePix() == pOut->LogicToPixel(rDestSz))
                     {
-                        pView->repaint();
-                        pMatch = pView;
+                        pRenderer->repaint();
+                        pMatch = pRenderer;
                     }
                     else
                     {
                         maAnimationRenderers.erase(maAnimationRenderers.begin() + i);
-                        pView = nullptr;
+                        pRenderer = nullptr;
                     }
 
                     break;
@@ -291,52 +291,57 @@ std::vector<std::unique_ptr<AnimationData>> Animation::CreateAnimationDataItems(
     return aAnimationDataItems;
 }
 
+void Animation::PopulateRenderers()
+{
+    AnimationRenderer* pRenderer;
+
+    for (auto& pItem : CreateAnimationDataItems())
+    {
+        if (!pItem->pAnimationRenderer)
+        {
+            pRenderer = new AnimationRenderer(this, pItem->pOutDev, pItem->aStartOrg,
+                                              pItem->aStartSize, pItem->nCallerId);
+
+            maAnimationRenderers.push_back(std::unique_ptr<AnimationRenderer>(pRenderer));
+        }
+        else
+        {
+            pRenderer = static_cast<AnimationRenderer*>(pItem->pAnimationRenderer);
+        }
+
+        pRenderer->pause(pItem->bPause);
+        pRenderer->setMarked(true);
+    }
+}
+
 IMPL_LINK_NOARG(Animation, ImplTimeoutHdl, Timer*, void)
 {
     const size_t nAnimCount = maAnimationFrames.size();
 
     if (nAnimCount)
     {
-        AnimationRenderer* pView;
         bool bGlobalPause = true;
+        AnimationRenderer* pRenderer;
 
         if (maNotifyLink.IsSet())
         {
             maNotifyLink.Call(this);
-
-            // set view state from AnimationData structure
-            for (auto& pItem : CreateAnimationDataItems())
-            {
-                if (!pItem->pAnimationRenderer)
-                {
-                    pView = new AnimationRenderer(this, pItem->pOutDev, pItem->aStartOrg,
-                                                  pItem->aStartSize, pItem->nCallerId);
-
-                    maAnimationRenderers.push_back(std::unique_ptr<AnimationRenderer>(pView));
-                }
-                else
-                {
-                    pView = static_cast<AnimationRenderer*>(pItem->pAnimationRenderer);
-                }
-
-                pView->pause(pItem->bPause);
-                pView->setMarked(true);
-            }
+            PopulateRenderers();
 
             // delete all unmarked views and reset marked state
             for (size_t i = 0; i < maAnimationRenderers.size();)
             {
-                pView = maAnimationRenderers[i].get();
-                if (!pView->isMarked())
+                pRenderer = maAnimationRenderers[i].get();
+                if (!pRenderer->isMarked())
                 {
                     maAnimationRenderers.erase(maAnimationRenderers.begin() + i);
                 }
                 else
                 {
-                    if (!pView->isPause())
+                    if (!pRenderer->isPause())
                         bGlobalPause = false;
 
-                    pView->setMarked(false);
+                    pRenderer->setMarked(false);
                     i++;
                 }
             }
@@ -379,10 +384,10 @@ IMPL_LINK_NOARG(Animation, ImplTimeoutHdl, Timer*, void)
             // set from view itself
             for (size_t i = 0; i < maAnimationRenderers.size();)
             {
-                pView = maAnimationRenderers[i].get();
-                pView->draw(mnPos);
+                pRenderer = maAnimationRenderers[i].get();
+                pRenderer->draw(mnPos);
 
-                if (pView->isMarked())
+                if (pRenderer->isMarked())
                 {
                     maAnimationRenderers.erase(maAnimationRenderers.begin() + i);
                 }
