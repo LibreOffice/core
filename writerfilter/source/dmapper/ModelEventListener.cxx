@@ -61,7 +61,7 @@ void ModelEventListener::notifyEvent( const document::EventObject& rEvent )
 
             // If we have PAGEREF fields, update fields as well.
             uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(rEvent.Source, uno::UNO_QUERY);
-            uno::Reference<container::XEnumeration> xEnumeration(xTextFieldsSupplier->getTextFields()->createEnumeration(), uno::UNO_QUERY);
+            uno::Reference<container::XEnumeration> xEnumeration = xTextFieldsSupplier->getTextFields()->createEnumeration();
             sal_Int32 nIndex = 0;
             while(xEnumeration->hasMoreElements())
             {

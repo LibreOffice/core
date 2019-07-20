@@ -1113,7 +1113,7 @@ OUString TreeFileIterator::expandURL( const OUString& aURL )
     Reference< uri::XUriReference > uriRef;
     for (;;)
     {
-        uriRef.set( xFac->parse( aRetURL ), UNO_QUERY );
+        uriRef = xFac->parse( aRetURL );
         if ( uriRef.is() )
         {
             Reference < uri::XVndSunStarExpandUrl > sxUri( uriRef, UNO_QUERY );

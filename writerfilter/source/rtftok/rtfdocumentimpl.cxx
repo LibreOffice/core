@@ -320,8 +320,7 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
     uno::Reference<document::XDocumentPropertiesSupplier> xDocumentPropertiesSupplier(
         m_xDstDoc, uno::UNO_QUERY);
     if (xDocumentPropertiesSupplier.is())
-        m_xDocumentProperties.set(xDocumentPropertiesSupplier->getDocumentProperties(),
-                                  uno::UNO_QUERY);
+        m_xDocumentProperties = xDocumentPropertiesSupplier->getDocumentProperties();
 
     m_pGraphicHelper.reset(new oox::GraphicHelper(m_xContext, xFrame, oox::StorageRef()));
 
@@ -958,7 +957,7 @@ void RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing::XS
         uno::Reference<drawing::XDrawPageSupplier> const xDrawSupplier(m_xDstDoc, uno::UNO_QUERY);
         if (xDrawSupplier.is())
         {
-            uno::Reference<drawing::XShapes> xShapes(xDrawSupplier->getDrawPage(), uno::UNO_QUERY);
+            uno::Reference<drawing::XShapes> xShapes = xDrawSupplier->getDrawPage();
             if (xShapes.is())
                 xShapes->add(xShape);
         }
@@ -3119,8 +3118,7 @@ RTFError RTFDocumentImpl::popState()
             uno::Reference<document::XDocumentPropertiesSupplier> xDocumentPropertiesSupplier(
                 m_xDstDoc, uno::UNO_QUERY);
             if (xDocumentPropertiesSupplier.is())
-                m_xDocumentProperties.set(xDocumentPropertiesSupplier->getDocumentProperties(),
-                                          uno::UNO_QUERY);
+                m_xDocumentProperties = xDocumentPropertiesSupplier->getDocumentProperties();
 
             if (m_xDocumentProperties.is())
             {
