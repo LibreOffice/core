@@ -110,6 +110,24 @@
     },
     {
       "key": {
+        "uuid": "bf659307_b1888b1f",
+        "filename": "svtools/source/uno/fpicker.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2019-07-20T22:35:00Z",
+      "side": 1,
+      "message": "\u003e * This does no work e.g. on macOS, where the service is registered\n \u003e as \"com.sun.star.ui.dialogs.AquaFolderPicker\" and not as\n \u003e \"com.sun.star.ui.dialogs.SystemFolderPicker\" (cf. fpicker/source/aqua/fps_aqua.component).\n\nCan this be changed, or would that be an ABI break?\n\nI think it\u0027s worth cleaning up this stuff. Doesn\u0027t make any sense to have multiple System*Picker per backend.\n\nI\u0027ll switch the kde5 rename back to just drop the kde5 based lines.",
+      "parentUuid": "bf659307_1794d236",
+      "revId": "1f2dba571a134ced884a5473cc48becd7c777026",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bf659307_57748a35",
         "filename": "svtools/source/uno/fpicker.cxx",
         "patchSetId": 2
