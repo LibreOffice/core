@@ -28,18 +28,6 @@ class OutputDevice;
 class VirtualDevice;
 struct AnimationBitmap;
 
-struct AnimationData
-{
-    Point aStartOrg;
-    Size aStartSize;
-    VclPtr<OutputDevice> pOutDev;
-    void* pViewData;
-    long nCallerId;
-    bool bPause;
-
-    AnimationData();
-};
-
 class AnimationRenderer
 {
 public:
