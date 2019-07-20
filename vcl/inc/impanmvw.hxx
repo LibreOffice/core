@@ -43,8 +43,32 @@ struct AInfo
 
 class AnimationRenderer
 {
+public:
+                    ~AnimationRenderer();
 private:
+                    AnimationRenderer( Animation* pParent, OutputDevice* pOut,
+                                  const Point& rPt, const Size& rSz, sal_uLong nCallerId,
+                                  OutputDevice* pFirstFrameOutDev = nullptr );
 
+    bool            matches( OutputDevice* pOut, long nCallerId ) const;
+    void            drawToIndex(sal_uLong nIndex);
+    void            draw( sal_uLong nIndex, VirtualDevice* pVDev=nullptr );
+    void            repaint();
+    AInfo*          createAInfo() const;
+
+    void            getPosSize( const AnimationBitmap& rAnm, Point& rPosPix, Size& rSizePix );
+
+    const Point&    getOutPos() const { return maPt; }
+
+    const Size&     getOutSizePix() const { return maSzPix; }
+
+    void            pause( bool bPause ) { mbIsPaused = bPause; }
+    bool            isPause() const { return mbIsPaused; }
+
+    void            setMarked( bool bMarked ) { mbIsMarked = bMarked; }
+    bool            isMarked() const { return mbIsMarked; }
+
+private:
     friend class Animation;
 
     Animation* const      mpParent;
@@ -66,31 +90,6 @@ private:
     bool            mbIsMarked;
     bool const      mbIsMirroredHorizontally;
     bool const      mbIsMirroredVertically;
-
-public:
-                    ~AnimationRenderer();
-private:
-                    AnimationRenderer( Animation* pParent, OutputDevice* pOut,
-                                  const Point& rPt, const Size& rSz, sal_uLong nCallerId,
-                                  OutputDevice* pFirstFrameOutDev = nullptr );
-
-    bool            matches( OutputDevice* pOut, long nCallerId ) const;
-    void            drawToIndex(sal_uLong nIndex);
-    void            draw( sal_uLong nIndex, VirtualDevice* pVDev=nullptr );
-    void            repaint();
-    AInfo*          createAInfo() const;
-
-    void            getPosSize( const AnimationBitmap& rAnm, Point& rPosPix, Size& rSizePix );
-
-    const Point&    getOutPos() const { return maPt; }
-
-    const Size&     getOutSizePix() const { return maSzPix; }
-
-    void            pause( bool bIsPaused ) { mbIsPaused = bIsPaused; }
-    bool            isPause() const { return mbIsPaused; }
-
-    void            setMarked( bool bIsMarked ) { mbIsMarked = bIsMarked; }
-    bool            isMarked() const { return mbIsMarked; }
 };
 
 #endif
