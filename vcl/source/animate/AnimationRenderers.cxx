@@ -71,7 +71,7 @@ void AnimationRenderers::CreateDefaultRenderer(Animation* pAnim, OutputDevice* p
                                                sal_uLong nCallerId, OutputDevice* pFirstFrameOutDev)
 {
     maAnimationRenderers.emplace_back(
-        new AnimationRenderer(pAnim, pOut, rDestPt, rDestSz, nCallerId, pFirstFrameOutDev));
+        pOut->CreateAnimationRenderer(pAnim, pOut, rDestPt, rDestSz, nCallerId, pFirstFrameOutDev));
 }
 
 void AnimationRenderers::RemoveAnimationInstance(OutputDevice* pOut, sal_uLong nCallerId)
@@ -92,8 +92,8 @@ void AnimationRenderers::PopulateRenderers(Animation* pAnim)
     {
         if (!pItem->pAnimationRenderer)
         {
-            pRenderer = new AnimationRenderer(pAnim, pItem->pOutDev, pItem->aStartOrg,
-                                              pItem->aStartSize, pItem->nCallerId);
+            pRenderer = pItem->pOutDev->CreateAnimationRenderer(
+                pAnim, pItem->pOutDev, pItem->aStartOrg, pItem->aStartSize, pItem->nCallerId);
 
             maAnimationRenderers.push_back(std::unique_ptr<AnimationRenderer>(pRenderer));
         }
