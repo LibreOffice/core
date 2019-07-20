@@ -27,6 +27,7 @@
 #define ANIMATION_TIMEOUT_ON_CLICK 2147483647L
 
 class AnimationRenderer;
+struct AnimationData;
 
 class VCL_DLLPUBLIC Animation
 {
@@ -111,6 +112,7 @@ private:
     bool mbIsInAnimation;
     bool mbLoopTerminated;
 
+    SAL_DLLPRIVATE std::vector<std::unique_ptr<AnimationData>> CreateAnimationDataItems();
     SAL_DLLPRIVATE void ImplRestartTimer(sal_uLong nTimeout);
     DECL_DLLPRIVATE_LINK(ImplTimeoutHdl, Timer*, void);
 };
