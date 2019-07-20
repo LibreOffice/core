@@ -390,7 +390,8 @@ Any SAL_CALL TransferableHelper::getTransferData2( const DataFlavor& rFlavor, co
 
 sal_Bool SAL_CALL TransferableHelper::isComplex()
 {
-    //FIXME: get from each document.
+    // By default everything is complex, until proven otherwise
+    // in the respective document type transferable handler.
     return sal_True;
 }
 
