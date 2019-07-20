@@ -101,7 +101,7 @@ void Animation::Clear()
     maGlobalSize = Size();
     maBitmapEx.SetEmpty();
     maAnimationFrames.clear();
-    maViewList.clear();
+    maAnimationRenderers.clear();
 }
 
 bool Animation::IsTransparent() const
@@ -169,12 +169,12 @@ bool Animation::Start(OutputDevice* pOut, const Point& rDestPt, const Size& rDes
         if ((pOut->GetOutDevType() == OUTDEV_WINDOW) && !mbLoopTerminated
             && (ANIMATION_TIMEOUT_ON_CLICK != maAnimationFrames[mnPos]->mnWait))
         {
-            ImplAnimView* pView;
-            ImplAnimView* pMatch = nullptr;
+            AnimationRenderer* pView;
+            AnimationRenderer* pMatch = nullptr;
 
-            for (size_t i = 0; i < maViewList.size(); ++i)
+            for (size_t i = 0; i < maAnimationRenderers.size(); ++i)
             {
-                pView = maViewList[i].get();
+                pView = maAnimationRenderers[i].get();
                 if (pView->matches(pOut, nExtraData))
                 {
                     if (pView->getOutPos() == rDestPt
@@ -185,7 +185,7 @@ bool Animation::Start(OutputDevice* pOut, const Point& rDestPt, const Size& rDes
                     }
                     else
                     {
-                        maViewList.erase(maViewList.begin() + i);
+                        maAnimationRenderers.erase(maAnimationRenderers.begin() + i);
                         pView = nullptr;
                     }
 
@@ -193,7 +193,7 @@ bool Animation::Start(OutputDevice* pOut, const Point& rDestPt, const Size& rDes
                 }
             }
 
-            if (maViewList.empty())
+            if (maAnimationRenderers.empty())
             {
                 maTimer.Stop();
                 mbIsInAnimation = false;
@@ -201,8 +201,8 @@ bool Animation::Start(OutputDevice* pOut, const Point& rDestPt, const Size& rDes
             }
 
             if (!pMatch)
-                maViewList.emplace_back(
-                    new ImplAnimView(this, pOut, rDestPt, rDestSz, nExtraData, pFirstFrameOutDev));
+                maAnimationRenderers.emplace_back(new AnimationRenderer(
+                    this, pOut, rDestPt, rDestSz, nExtraData, pFirstFrameOutDev));
 
             if (!mbIsInAnimation)
             {
@@ -221,13 +221,14 @@ bool Animation::Start(OutputDevice* pOut, const Point& rDestPt, const Size& rDes
 
 void Animation::Stop(OutputDevice* pOut, long nExtraData)
 {
-    maViewList.erase(std::remove_if(maViewList.begin(), maViewList.end(),
-                                    [=](const std::unique_ptr<ImplAnimView>& pAnimView) -> bool {
-                                        return pAnimView->matches(pOut, nExtraData);
-                                    }),
-                     maViewList.end());
+    maAnimationRenderers.erase(
+        std::remove_if(maAnimationRenderers.begin(), maAnimationRenderers.end(),
+                       [=](const std::unique_ptr<AnimationRenderer>& pAnimView) -> bool {
+                           return pAnimView->matches(pOut, nExtraData);
+                       }),
+        maAnimationRenderers.end());
 
-    if (maViewList.empty())
+    if (maAnimationRenderers.empty())
     {
         maTimer.Stop();
         mbIsInAnimation = false;
@@ -258,7 +259,7 @@ void Animation::Draw(OutputDevice* pOut, const Point& rDestPt, const Size& rDest
                 const_cast<Animation*>(this)->mnPos = nCount - 1;
 
             {
-                ImplAnimView{ const_cast<Animation*>(this), pOut, rDestPt, rDestSz, 0 };
+                AnimationRenderer{ const_cast<Animation*>(this), pOut, rDestPt, rDestSz, 0 };
             }
 
             const_cast<Animation*>(this)->mnPos = nOldPos;
@@ -283,14 +284,14 @@ IMPL_LINK_NOARG(Animation, ImplTimeoutHdl, Timer*, void)
 
     if (nAnimCount)
     {
-        ImplAnimView* pView;
+        AnimationRenderer* pView;
         bool bGlobalPause = true;
 
         if (maNotifyLink.IsSet())
         {
             std::vector<std::unique_ptr<AInfo>> aAInfoList;
             // create AInfo-List
-            for (auto const& i : maViewList)
+            for (auto const& i : maAnimationRenderers)
                 aAInfoList.emplace_back(i->createAInfo());
 
             maNotifyLink.Call(this);
@@ -300,25 +301,25 @@ IMPL_LINK_NOARG(Animation, ImplTimeoutHdl, Timer*, void)
             {
                 if (!pAInfo->pViewData)
                 {
-                    pView = new ImplAnimView(this, pAInfo->pOutDev, pAInfo->aStartOrg,
-                                             pAInfo->aStartSize, pAInfo->nExtraData);
+                    pView = new AnimationRenderer(this, pAInfo->pOutDev, pAInfo->aStartOrg,
+                                                  pAInfo->aStartSize, pAInfo->nExtraData);
 
-                    maViewList.push_back(std::unique_ptr<ImplAnimView>(pView));
+                    maAnimationRenderers.push_back(std::unique_ptr<AnimationRenderer>(pView));
                 }
                 else
-                    pView = static_cast<ImplAnimView*>(pAInfo->pViewData);
+                    pView = static_cast<AnimationRenderer*>(pAInfo->pViewData);
 
                 pView->pause(pAInfo->bPause);
                 pView->setMarked(true);
             }
 
             // delete all unmarked views and reset marked state
-            for (size_t i = 0; i < maViewList.size();)
+            for (size_t i = 0; i < maAnimationRenderers.size();)
             {
-                pView = maViewList[i].get();
+                pView = maAnimationRenderers[i].get();
                 if (!pView->isMarked())
                 {
-                    maViewList.erase(maViewList.begin() + i);
+                    maAnimationRenderers.erase(maAnimationRenderers.begin() + i);
                 }
                 else
                 {
@@ -333,7 +334,7 @@ IMPL_LINK_NOARG(Animation, ImplTimeoutHdl, Timer*, void)
         else
             bGlobalPause = false;
 
-        if (maViewList.empty())
+        if (maAnimationRenderers.empty())
             Stop();
         else if (bGlobalPause)
             ImplRestartTimer(10);
@@ -366,21 +367,21 @@ IMPL_LINK_NOARG(Animation, ImplTimeoutHdl, Timer*, void)
             // marked; in this case remove view, because area of output
             // lies out of display area of window; mark state is
             // set from view itself
-            for (size_t i = 0; i < maViewList.size();)
+            for (size_t i = 0; i < maAnimationRenderers.size();)
             {
-                pView = maViewList[i].get();
+                pView = maAnimationRenderers[i].get();
                 pView->draw(mnPos);
 
                 if (pView->isMarked())
                 {
-                    maViewList.erase(maViewList.begin() + i);
+                    maAnimationRenderers.erase(maAnimationRenderers.begin() + i);
                 }
                 else
                     i++;
             }
 
             // stop or restart timer
-            if (maViewList.empty())
+            if (maAnimationRenderers.empty())
                 Stop();
             else
                 ImplRestartTimer(pStepBmp->mnWait);
