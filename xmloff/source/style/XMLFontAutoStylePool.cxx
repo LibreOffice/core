@@ -617,7 +617,7 @@ OUString XMLFontAutoStylePool::embedFontFile(OUString const & fileUrl, OUString 
         propertySet->setPropertyValue( "MediaType", uno::makeAny( OUString( "application/x-font-ttf" ))); // TODO
         for(;;)
         {
-            char buffer[ 4096 ];
+            sal_Int8 buffer[ 4096 ];
             sal_uInt64 readSize;
             sal_Bool eof;
             if( file.isEndOfFile( &eof ) != osl::File::E_None )
@@ -636,7 +636,8 @@ OUString XMLFontAutoStylePool::embedFontFile(OUString const & fileUrl, OUString 
             }
             if( readSize == 0 )
                 break;
-            outputStream->writeBytes( uno::Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >( buffer ), readSize ));
+            // coverity[overrun-buffer-arg : FALSE] - coverity has difficulty with css::uno::Sequence
+            outputStream->writeBytes(uno::Sequence<sal_Int8>(buffer, readSize));
         }
         outputStream->closeOutput();
         if( storage.is() )
