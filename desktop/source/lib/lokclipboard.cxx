@@ -8,14 +8,16 @@
  */
 
 #include "lokclipboard.hxx"
+#include <vcl/lazydelete.hxx>
 #include <sfx2/lokhelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 using namespace css;
 using namespace css::uno;
 
-osl::Mutex LOKClipboardFactory::gMutex;
-std::unordered_map<int, rtl::Reference<LOKClipboard>> LOKClipboardFactory::gClipboards;
+/* static */ osl::Mutex LOKClipboardFactory::gMutex;
+static vcl::DeleteOnDeinit<std::unordered_map<int, rtl::Reference<LOKClipboard>>>
+gClipboards(new std::unordered_map<int, rtl::Reference<LOKClipboard>>);
 
 rtl::Reference<LOKClipboard> LOKClipboardFactory::getClipboardForCurView()
 {
@@ -23,16 +25,37 @@ rtl::Reference<LOKClipboard> LOKClipboardFactory::getClipboardForCurView()
 
     osl::MutexGuard aGuard(gMutex);
 
-    auto it = gClipboards.find(nViewId);
-    if (it != gClipboards.end())
+    auto it = gClipboards.get()->find(nViewId);
+    if (it != gClipboards.get()->end())
     {
         SAL_INFO("lok", "Got clip: " << it->second.get() << " from " << nViewId);
         return it->second;
     }
     rtl::Reference<LOKClipboard> xClip(new LOKClipboard());
-    gClipboards[nViewId] = xClip;
+    (*gClipboards.get())[nViewId] = xClip;
     SAL_INFO("lok", "Created clip: " << xClip.get() << " for viewId " << nViewId);
     return xClip;
+}
+
+/// FIXME: should really copy and stash its content for a bit.
+void LOKClipboardFactory::releaseClipboardForView(int nViewId)
+{
+    osl::MutexGuard aGuard(gMutex);
+
+    if (nViewId < 0) // clear all
+    {
+        gClipboards.get()->clear();
+        SAL_INFO("lok", "Released all clipboards on doc destroy\n");
+    }
+    else
+    {
+        auto it = gClipboards.get()->find(nViewId);
+        if (it != gClipboards.get()->end())
+        {
+            gClipboards.get()->erase(it);
+            SAL_INFO("lok", "Released clip: " << it->second.get() << " for destroyed " << nViewId);
+        }
+    }
 }
 
 uno::Reference<uno::XInterface>
@@ -178,7 +201,7 @@ LOKTransferable::LOKTransferable(const size_t nInCount, const char** pInMimeType
 
 uno::Any SAL_CALL LOKTransferable::getTransferData(const datatransfer::DataFlavor& rFlavor)
 {
-    assert(m_aContent.size() == (size_t)m_aFlavors.getLength());
+    assert(m_aContent.size() == static_cast<size_t>(m_aFlavors.getLength()));
     for (size_t i = 0; i < m_aContent.size(); ++i)
     {
         if (m_aFlavors[i].MimeType == rFlavor.MimeType)
