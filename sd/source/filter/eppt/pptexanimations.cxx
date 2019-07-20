@@ -904,7 +904,7 @@ sal_uInt32 AnimationExporter::GetPresetID( const OUString& rPreset, sal_uInt32 n
     if ( ( nLast != -1 ) && ( ( nLast + 1 ) < rPreset.getLength() ) )
     {
         OUString aNumber( rPreset.copy( nLast + 1 ) );
-        nPresetId = aNumber.toInt32();
+        nPresetId = aNumber.toUInt32();
         bPresetId = true;
     }
     }
