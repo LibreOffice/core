@@ -162,14 +162,14 @@ void ScTable::CopyOneCellFromClip(
         OSL_ENSURE(pDrawLayer, "No drawing layer");
         if (pDrawLayer)
         {
-            const ScAddress& rSrcStartPos
+            const ScAddress aSrcStartPos
                 = rCxt.getClipDoc()->GetClipParam().getWholeRange().aStart;
-            const ScAddress& rSrcEndPos = rCxt.getClipDoc()->GetClipParam().getWholeRange().aEnd;
+            const ScAddress aSrcEndPos = rCxt.getClipDoc()->GetClipParam().getWholeRange().aEnd;
             tools::Rectangle aSourceRect = rCxt.getClipDoc()->GetMMRect(
-                rSrcStartPos.Col(), rSrcStartPos.Row(), rSrcEndPos.Col(), rSrcEndPos.Row(),
-                rSrcStartPos.Tab());
+                aSrcStartPos.Col(), aSrcStartPos.Row(), aSrcEndPos.Col(), aSrcEndPos.Row(),
+                aSrcStartPos.Tab());
             tools::Rectangle aDestRect = GetDoc().GetMMRect(nCol1, nRow1, nCol2, nRow2, nTab);
-            pDrawLayer->CopyFromClip(rCxt.getClipDoc()->mpDrawLayer.get(), rSrcStartPos.Tab(),
+            pDrawLayer->CopyFromClip(rCxt.getClipDoc()->mpDrawLayer.get(), aSrcStartPos.Tab(),
                                      aSourceRect, ScAddress(nCol1, nRow1, nTab), aDestRect);
         }
     }
