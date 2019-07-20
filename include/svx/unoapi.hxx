@@ -55,7 +55,7 @@ SVX_DLLPUBLIC css::uno::Reference< css::drawing::XDrawPage > GetXDrawPageForSdrP
 SVX_DLLPUBLIC SdrPage* GetSdrPageFromXDrawPage( const css::uno::Reference< css::drawing::XDrawPage >& xDrawPage ) throw() ;
 
 /**
- * Maps the vcl MapUnit enum to a API constant MeasureUnit.
+ * Maps the vcl MapUnit enum to an API constant MeasureUnit.
  * Returns false if conversion is not supported.
  */
 SVX_DLLPUBLIC bool SvxMapUnitToMeasureUnit( const MapUnit nVcl, short& eApi ) throw();
@@ -67,7 +67,7 @@ SVX_DLLPUBLIC bool SvxMapUnitToMeasureUnit( const MapUnit nVcl, short& eApi ) th
 SVX_DLLPUBLIC bool SvxMeasureUnitToFieldUnit( const short eApi, FieldUnit& nVcl ) throw();
 
 /**
- * Maps the vcl MapUnit enum to a API constant MeasureUnit.
+ * Maps the vcl MapUnit enum to an API constant MeasureUnit.
  * Returns false if conversion is not supported.
  */
 SVX_DLLPUBLIC bool SvxFieldUnitToMeasureUnit( const FieldUnit nVcl, short& eApi ) throw();
