@@ -85,8 +85,7 @@ void XMLEventExport::Export( Reference<XEventsSupplier> const & rSupplier,
 {
     if (rSupplier.is())
     {
-        Reference<XNameAccess> xAccess(rSupplier->getEvents(), UNO_QUERY);
-        Export(xAccess, bWhitespace);
+        Export(rSupplier->getEvents(), bWhitespace);
     }
     // else: no supplier, no export -> ignore!
 }
@@ -94,7 +93,7 @@ void XMLEventExport::Export( Reference<XEventsSupplier> const & rSupplier,
 void XMLEventExport::Export( Reference<XNameReplace> const & rReplace,
                              bool bWhitespace)
 {
-    Reference<XNameAccess> xAccess(rReplace, UNO_QUERY);
+    Reference<XNameAccess> xAccess(rReplace);
     Export(xAccess, bWhitespace);
 }
 

@@ -1918,8 +1918,8 @@ void XMLTextFieldExport::ExportFieldDeclarations(
     if( !xTextFieldsSupp.is() )
         return;
 
-    Reference<container::XNameAccess> xFieldMasterNameAccess(
-        xTextFieldsSupp->getTextFieldMasters(), UNO_QUERY);
+    Reference<container::XNameAccess> xFieldMasterNameAccess =
+        xTextFieldsSupp->getTextFieldMasters();
 
     // where to get the text field masters from?
     // a) we get a specific XText: then use pUsedMasters

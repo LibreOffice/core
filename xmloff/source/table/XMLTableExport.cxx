@@ -579,7 +579,7 @@ void XMLTableExport::exportTableTemplates()
             if (mbWriter)
             {
                 mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_NAME, xTableStyle->getName());
-                Reference<XPropertySet> xTableStylePropSet(xTableStyle.get(), UNO_QUERY_THROW);
+                Reference<XPropertySet> xTableStylePropSet(xTableStyle, UNO_QUERY_THROW);
                 pElements = getWriterSpecificTableStyleAttributes();
                 while(pElements->meElement != XML_TOKEN_END)
                 {
