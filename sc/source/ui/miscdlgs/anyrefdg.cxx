@@ -605,7 +605,7 @@ bool ScRefHandler::EnterRefMode()
     return m_bInRefMode = true;
 }
 
-ScRefHandler::~ScRefHandler()
+ScRefHandler::~ScRefHandler() COVERITY_NOEXCEPT_FALSE
 {
     disposeRefHandler();
 }

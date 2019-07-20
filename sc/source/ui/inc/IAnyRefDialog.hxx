@@ -32,7 +32,7 @@ namespace formula
 class SAL_NO_VTABLE IAnyRefDialog : public formula::IControlReferenceHandler
 {
 public:
-    virtual ~IAnyRefDialog(){}
+    virtual ~IAnyRefDialog() COVERITY_NOEXCEPT_FALSE {}
 
     virtual void SetReference( const ScRange& rRef, ScDocument* pDoc ) = 0;
     virtual void RefInputStart( formula::RefEdit* pEdit, formula::RefButton* pButton = nullptr ) = 0;
