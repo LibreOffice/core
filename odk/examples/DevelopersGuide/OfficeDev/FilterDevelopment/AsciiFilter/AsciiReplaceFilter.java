@@ -231,7 +231,7 @@ public class AsciiReplaceFilter
         /**
         * It's not allowed for us - neither very easy to change our internal
         * name during runtime of an office. Because every filter name must
-        * be unambigous ...
+        * be unambiguous...
         * So we don't implement this method here.
         */
         public void setName( String sName )
@@ -362,7 +362,7 @@ public class AsciiReplaceFilter
 
         /**
         * Makes the filter process breakable. To do so the outside code may use threads.
-        * We use a internal "condition" variable which is queried by the real filter method on
+        * We use an internal "condition" variable which is queried by the real filter method on
         * every loop they do. So it's more a polling mechanism.
         */
         public void cancel()

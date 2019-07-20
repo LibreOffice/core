@@ -131,7 +131,7 @@ public class sdbcx
             if(con != null)
             {
                 System.out.println("Connection could be created!");
-                // we the XDatabaseDefinitionSupplier interface from the driver to get the XTablesSupplier
+                // with the XDatabaseDefinitionSupplier interface from the driver to get the XTablesSupplier
                 XDataDefinitionSupplier xDDSup = UnoRuntime.queryInterface(
                         XDataDefinitionSupplier.class,xDriver);
                 if(xDDSup != null)

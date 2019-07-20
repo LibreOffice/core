@@ -36,7 +36,7 @@
 
 // comment: Step 1: get the Desktop object from the office
 //          Step 2: open an empty text document
-//          Step 3: enter a example text
+//          Step 3: enter an example text
 //          Step 4: get some text attributes
 //          Step 5: check the PropertyState from the selection
 
@@ -50,7 +50,7 @@ public class HardFormatting {
     public static void main(String args[]) {
         // You need the desktop to create a document
         // The getDesktop method does the UNO bootstrapping, gets the
-        // remote servie manager and the desktop object.
+        // remote service manager and the desktop object.
         com.sun.star.frame.XDesktop xDesktop = null;
         xDesktop = getDesktop();
 

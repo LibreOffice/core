@@ -42,7 +42,7 @@ include $(SETTINGS)/std.mk
 
 # Define non-platform/compiler specific settings
 
-# we use the sample directory name dor separating this example 
+# we use the sample directory name for separating this example
 # from others in the output directory
 SAMPLE_NAME=LicenseTest
 SAMPLE_CLASS_OUT=$(OUT_CLASS)/$(SAMPLE_NAME)

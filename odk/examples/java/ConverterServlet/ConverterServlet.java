@@ -217,7 +217,7 @@ public class ConverterServlet extends HttpServlet {
                 com.sun.star.comp.helper.Bootstrap.createInitialComponentContext( null );
 
             /* Gets the service manager instance to be used (or null). This method has
-               been added for convenience, because the service manager is a often used
+               been added for convenience, because the service manager is an often used
                object. */
             XMultiComponentFactory xmulticomponentfactory =
                 xcomponentcontext.getServiceManager();

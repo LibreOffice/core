@@ -134,7 +134,7 @@ public class FunctionHelper
      * the deprecated one not exist we get an empty frame, we can try to use the new service.
      *
      * @param xSMGR
-     *          we nee the remote service manager to create this task/frame service
+     *          we need the remote service manager to create this task/frame service
      *
      * @return [com.sun.star.frame.XFrame]
      *          the new created frame reference in case of success or null otherwise
@@ -518,7 +518,7 @@ public class FunctionHelper
 
             // First prepare frame for loading
             // We must address it inside the frame tree without any complications.
-            // So we set an unambigous (we hope it) name and use it later.
+            // So we set an unambiguous (we hope it) name and use it later.
             // Don't forget to reset original name after that.
                    sOldName = xFrame.getName();
             String sTarget  = "odk_officedev_desk";

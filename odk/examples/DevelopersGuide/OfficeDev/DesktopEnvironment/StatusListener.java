@@ -150,7 +150,7 @@ class StatusListener implements com.sun.star.frame.XStatusListener,
 
 
     /**
-     * In case we got an oneway listener callback - we had to use the office
+     * In case we got a oneway listener callback - we had to use the office
      * asynchronous then. This method is the callback from the started thread
      * (started inside the original oneway method). We found all parameters of
      * the original request packed inside a vector. Here we unpack it and
@@ -243,7 +243,7 @@ class StatusListener implements com.sun.star.frame.XStatusListener,
                 return;
 
             // enable/disable the control.
-            // Means: if the feature isn't available currently - we can't show an status really here.
+            // Means: if the feature isn't available currently - we can't show a status really here.
             // Then we should colorize it gray...
             m_rControl.setEnabled(aEvent.IsEnabled);
 

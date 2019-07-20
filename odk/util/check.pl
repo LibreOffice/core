@@ -17,7 +17,7 @@
 #
 
 #
-# check - a perl script to check some files and directories if they exists
+# check - a perl script to check some files and directories if they exist
 # A first simple check if the SDK was built completely.
 #
 
