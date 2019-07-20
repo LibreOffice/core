@@ -63,8 +63,8 @@ public:
     void SetLoopCount(const sal_uInt32 nLoopCount);
     void ResetLoopCount();
 
-    void SetNotifyHdl(const Link<Animation*, void>& rLink) { maNotifyLink = rLink; }
-    const Link<Animation*, void>& GetNotifyHdl() const { return maNotifyLink; }
+    void SetNotifyHdl(const Link<Animation*, void>& rLink) { maTimeoutNotifier = rLink; }
+    const Link<Animation*, void>& GetNotifyHdl() const { return maTimeoutNotifier; }
 
     std::vector<std::unique_ptr<AnimationBitmap>>& GetAnimationFrames()
     {
@@ -102,7 +102,7 @@ private:
     std::vector<std::unique_ptr<AnimationBitmap>> maAnimationFrames;
     std::vector<std::unique_ptr<AnimationRenderer>> maAnimationRenderers;
 
-    Link<Animation*, void> maNotifyLink;
+    Link<Animation*, void> maTimeoutNotifier;
     BitmapEx maBitmapEx;
     Timer maTimer;
     Size maGlobalSize;
@@ -117,6 +117,7 @@ private:
     SAL_DLLPRIVATE void DeleteUnmarkedRenderers();
     SAL_DLLPRIVATE bool ResetMarkedRenderers();
     SAL_DLLPRIVATE bool IsTimeoutSetup();
+    SAL_DLLPRIVATE bool SendTimeout();
 
     SAL_DLLPRIVATE void ImplRestartTimer(sal_uLong nTimeout);
     DECL_DLLPRIVATE_LINK(ImplTimeoutHdl, Timer*, void);
