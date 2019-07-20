@@ -3650,9 +3650,6 @@ static int doc_setClipboard(LibreOfficeKitDocument* pThis,
                             const size_t  *pInSizes,
                             const char   **pInStreams)
 {
-    SolarMutexGuard aGuard;
-    if (gImpl)
-
     comphelper::ProfileZone aZone("doc_paste");
 
     SolarMutexGuard aGuard;
