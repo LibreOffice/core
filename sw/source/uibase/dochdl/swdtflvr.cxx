@@ -419,7 +419,7 @@ namespace
     }
 }
 
-sal_Bool SwTransferable::isComplex()
+sal_Bool SAL_CALL SwTransferable::isComplex()
 {
     // Copy into a new Doc so we don't mess with the existing one.
     //FIXME: We *should* be able to avoid this and improve the performance.
