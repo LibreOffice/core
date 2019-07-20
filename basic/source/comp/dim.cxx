@@ -41,6 +41,7 @@ using namespace ::com::sun::star::uno;
 SbiSymDef* SbiParser::VarDecl( SbiExprListPtr* ppDim, bool bStatic, bool bConst )
 {
     bool bWithEvents = false;
+    bool bIsArray = false;
     if( Peek() == WITHEVENTS )
     {
         Next();
@@ -56,13 +57,14 @@ SbiSymDef* SbiParser::VarDecl( SbiExprListPtr* ppDim, bool bStatic, bool bConst 
         pDim = SbiExprList::ParseDimList( this );
         if( !pDim->GetDims() )
             pDef->SetWithBrackets();
+        bIsArray = true;
     }
     pDef->SetType( t );
     if( bStatic )
         pDef->SetStatic();
     if( bWithEvents )
         pDef->SetWithEvents();
-    TypeDecl( *pDef );
+    TypeDecl( *pDef , false , bIsArray );
     if( !ppDim && pDim )
     {
         if(pDim->GetDims() )
@@ -76,7 +78,7 @@ SbiSymDef* SbiParser::VarDecl( SbiExprListPtr* ppDim, bool bStatic, bool bConst 
 // Resolving of an AS-Type-Declaration
 // The data type were inserted into the handed over variable
 
-void SbiParser::TypeDecl( SbiSymDef& rDef, bool bAsNewAlreadyParsed )
+void SbiParser::TypeDecl( SbiSymDef& rDef, bool bAsNewAlreadyParsed, bool bIsArray )
 {
     SbxDataType eType = rDef.GetType();
     if( bAsNewAlreadyParsed || Peek() == AS )
@@ -186,7 +188,7 @@ void SbiParser::TypeDecl( SbiSymDef& rDef, bool bAsNewAlreadyParsed )
             else if( eType == SbxSTRING && rDef.GetLen() != nSize )
                 Error( ERRCODE_BASIC_VAR_DEFINED, rDef.GetName() );
         }
-        rDef.SetType( eType );
+        rDef.SetType( static_cast<SbxDataType>(eType | (bIsArray ? SbxARRAY : SbxEMPTY)) );
         rDef.SetLen( nSize );
     }
 }
@@ -981,7 +983,7 @@ SbiProcDef* SbiParser::ProcDecl( bool bDecl )
     TypeDecl( *pDef );
     if( eType != SbxVARIANT && pDef->GetType() != eType )
     {
-        Error( ERRCODE_BASIC_BAD_DECLARATION, aName );
+        Error( ERRCODE_BASIC_BAD_DECLARATION, aName + "(dim.cxx:986)" );
     }
     if( pDef->GetType() == SbxVARIANT && !( bFunc || bProp ) )
     {
@@ -1026,7 +1028,7 @@ void SbiParser::DefDeclare( bool bPrivate )
                 if( !p )
                 {
                     // Declared as a variable
-                    Error( ERRCODE_BASIC_BAD_DECLARATION, pDef->GetName() );
+                    Error( ERRCODE_BASIC_BAD_DECLARATION, pDef->GetName()  + "(dim.cxx:1031)" );
                     delete pDef;
                     pDef = nullptr;
                 }
@@ -1197,9 +1199,9 @@ void SbiParser::DefProc( bool bStatic, bool bPrivate )
         if( !pProc )
         {
             // Declared as a variable
-            Error( ERRCODE_BASIC_BAD_DECLARATION, pDef->GetName() );
+            Error( ERRCODE_BASIC_BAD_DECLARATION, pDef->GetName() + "(dim.cxx:1202)" );
             delete pDef;
-            return;
+            return;v
         }
         // #100027: Multiple declaration -> Error
         // #112787: Not for setup, REMOVE for 8
