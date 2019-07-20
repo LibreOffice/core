@@ -45,7 +45,7 @@ public:
     bool Start(OutputDevice* pOutDev, const Point& rDestPt, const Size& rDestSz, long nCallerId,
                OutputDevice* pFirstFrameOutDev);
 
-    void Stop(OutputDevice* pOutDev = nullptr, long nCallerId = 0);
+    void Stop(OutputDevice* pOutDev = nullptr, sal_uLong nCallerId = 0);
 
     void Draw(OutputDevice* pOutDev, const Point& rDestPt) const;
     void Draw(OutputDevice* pOutDev, const Point& rDestPt, const Size& rDestSz) const;
@@ -129,6 +129,7 @@ private:
     SAL_DLLPRIVATE void CreateDefaultRenderer(Animation* pAnim, OutputDevice* pOut,
                                               const Point& rDestPt, const Size& rDestSz,
                                               sal_uLong nCallerId, OutputDevice* pFirstFrameOutDev);
+    SAL_DLLPRIVATE void RemoveAnimationInstance(OutputDevice* pOut, sal_uLong nCallerId);
 
     SAL_DLLPRIVATE void RestartTimer(sal_uLong nTimeout);
     DECL_DLLPRIVATE_LINK(ImplTimeoutHdl, Timer*, void);

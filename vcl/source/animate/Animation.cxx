@@ -198,14 +198,9 @@ bool Animation::Start(OutputDevice* pOut, const Point& rDestPt, const Size& rDes
     return bRet;
 }
 
-void Animation::Stop(OutputDevice* pOut, long nCallerId)
+void Animation::Stop(OutputDevice* pOut, sal_uLong nCallerId)
 {
-    maAnimationRenderers.erase(
-        std::remove_if(maAnimationRenderers.begin(), maAnimationRenderers.end(),
-                       [=](const std::unique_ptr<AnimationRenderer>& pAnimView) -> bool {
-                           return pAnimView->matches(pOut, nCallerId);
-                       }),
-        maAnimationRenderers.end());
+    RemoveAnimationInstance(pOut, nCallerId);
 
     if (NoRenderersAreAvailable())
     {
