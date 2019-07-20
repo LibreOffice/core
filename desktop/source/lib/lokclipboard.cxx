@@ -69,6 +69,9 @@ LOKClipboard::LOKClipboard()
     : cppu::WeakComponentImplHelper<css::datatransfer::clipboard::XSystemClipboard,
                                     css::lang::XServiceInfo>(m_aMutex)
 {
+    // Encourage 'paste' menu items to always show up.
+    uno::Reference<datatransfer::XTransferable> xTransferable(new LOKTransferable());
+    setContents(xTransferable, uno::Reference<datatransfer::clipboard::XClipboardOwner>());
 }
 
 Sequence<OUString> LOKClipboard::getSupportedServiceNames_static()
@@ -150,6 +153,18 @@ LOKTransferable::LOKTransferable(const OUString& sMimeType,
         aContent <<= aSequence;
     m_aContent.push_back(aContent);
 }
+
+/// Use to ensure we have some dummy content on the clipboard to allow a 1st 'paste'
+LOKTransferable::LOKTransferable()
+{
+    m_aContent.reserve(1);
+    m_aFlavors = css::uno::Sequence<css::datatransfer::DataFlavor>(1);
+    initFlavourFromMime(m_aFlavors[0], "text/plain");
+    uno::Any aContent;
+    aContent <<= OUString();
+    m_aContent.push_back(aContent);
+}
+
 // cf. sot/source/base/exchange.cxx for these two exceptional types.
 void LOKTransferable::initFlavourFromMime(css::datatransfer::DataFlavor& rFlavor,
                                           OUString aMimeType)
