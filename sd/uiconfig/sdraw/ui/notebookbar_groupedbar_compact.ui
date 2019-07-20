@@ -2658,10 +2658,10 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuSnap-GlueInsertPoint">
+      <object class="GtkMenuItem" id="MenuSnap-GlueEditMode">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:GlueInsertPoint</property>
+        <property name="action_name">.uno:GlueEditMode</property>
       </object>
     </child>
     <child>
