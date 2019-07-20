@@ -18,9 +18,9 @@
  */
 
 #include <vcl/animate/Animation.hxx>
-#include <vcl/animate/AnimationData.hxx>
 #include <vcl/outdev.hxx>
 
+#include <AnimationData.hxx>
 #include <AnimationRenderer.hxx>
 
 std::vector<std::unique_ptr<AnimationData>> Animation::CreateAnimationDataItems()
