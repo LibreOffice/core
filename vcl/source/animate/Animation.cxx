@@ -24,6 +24,7 @@
 #include <sal/log.hxx>
 
 #include <vcl/animate/Animation.hxx>
+#include <vcl/animate/AnimationData.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/dibtools.hxx>
 #include <vcl/BitmapColorQuantizationFilter.hxx>
@@ -278,6 +279,18 @@ void Animation::ImplRestartTimer(sal_uLong nTimeout)
     maTimer.Start();
 }
 
+std::vector<std::unique_ptr<AnimationData>> Animation::CreateAnimationDataItems()
+{
+    std::vector<std::unique_ptr<AnimationData>> aAnimationDataItems;
+
+    for (auto const& rItem : maAnimationRenderers)
+    {
+        aAnimationDataItems.emplace_back(rItem->createAnimationData());
+    }
+
+    return aAnimationDataItems;
+}
+
 IMPL_LINK_NOARG(Animation, ImplTimeoutHdl, Timer*, void)
 {
     const size_t nAnimCount = maAnimationFrames.size();
@@ -289,27 +302,21 @@ IMPL_LINK_NOARG(Animation, ImplTimeoutHdl, Timer*, void)
 
         if (maNotifyLink.IsSet())
         {
-            std::vector<std::unique_ptr<AnimationData>> aAnimationDataItems;
-            // create AnimationData-List
-            for (auto const& rAnimDataItem : maAnimationRenderers)
-                aAnimationDataItems.emplace_back(rAnimDataItem->createAnimationData());
-
             maNotifyLink.Call(this);
 
             // set view state from AnimationData structure
-            for (auto& pItem : aAnimationDataItems)
+            for (auto& pItem : CreateAnimationDataItems())
             {
-                if (!pItem->pViewData)
+                if (!pItem->pAnimationRenderer)
                 {
-                    pView = new AnimationRenderer(
-                        this, pItem->pOutDev, pItem->aStartOrg,
-                        pItem->aStartSize, pItem->nCallerId);
+                    pView = new AnimationRenderer(this, pItem->pOutDev, pItem->aStartOrg,
+                                                  pItem->aStartSize, pItem->nCallerId);
 
                     maAnimationRenderers.push_back(std::unique_ptr<AnimationRenderer>(pView));
                 }
                 else
                 {
-                    pView = static_cast<AnimationRenderer*>(pItem->pViewData);
+                    pView = static_cast<AnimationRenderer*>(pItem->pAnimationRenderer);
                 }
 
                 pView->pause(pItem->bPause);
@@ -688,7 +695,7 @@ SvStream& ReadAnimation(SvStream& rIStm, Animation& rAnimation)
 
 AnimationData::AnimationData()
     : pOutDev(nullptr)
-    , pViewData(nullptr)
+    , pAnimationRenderer(nullptr)
     , nCallerId(0)
     , bPause(false)
 {
