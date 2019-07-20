@@ -17318,7 +17318,6 @@ vcl/inc/headless/svpprn.hxx
 vcl/inc/headless/svpvd.hxx
 vcl/inc/helpwin.hxx
 vcl/inc/image.h
-vcl/inc/impanmvw.hxx
 vcl/inc/impdel.hxx
 vcl/inc/impfont.hxx
 vcl/inc/impfontcache.hxx
