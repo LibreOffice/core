@@ -378,7 +378,7 @@ void FormViewPageWindowAdapter::updateTabOrder( const Reference< XForm >& _rxFor
             // there is a parent form -> look for the respective controller
             Reference< XFormController > xParentController;
             if ( xParentForm.is() )
-                xParentController.set( getController( xParentForm ), UNO_QUERY );
+                xParentController = getController( xParentForm );
 
             setController( _rxForm, xParentController );
         }
@@ -661,16 +661,15 @@ namespace
             if(xController == xActiveController && isActivableDatabaseForm(xController))
                 return xController;
 
-            Reference< XIndexAccess > xSubControllers( xController, UNO_QUERY );
-            if ( !xSubControllers.is() )
+            if ( !xController.is() )
             {
                 SAL_WARN( "svx.form", "FmXFormView::OnActivate: a form controller which does not have children?" );
                 return nullptr;
             }
 
-            for(sal_Int32 i = 0; i < xSubControllers->getCount(); ++i)
+            for(sal_Int32 i = 0; i < xController->getCount(); ++i)
             {
-                const Any a(xSubControllers->getByIndex(i));
+                const Any a(xController->getByIndex(i));
                 Reference < XFormController > xI;
                 if ((a >>= xI) && xI.is())
                 {
@@ -920,7 +919,7 @@ IMPL_LINK_NOARG(FmXFormView, OnAutoFocus, void*, void)
     SdrPage *pSdrPage = pPageView ? pPageView->GetPage() : nullptr;
     // get the forms collection of the page we belong to
     FmFormPage* pPage = dynamic_cast<FmFormPage*>( pSdrPage  );
-    Reference< XIndexAccess > xForms( pPage ? Reference< XIndexAccess >( pPage->GetForms(), UNO_QUERY ) : Reference< XIndexAccess >() );
+    Reference< XIndexAccess > xForms( pPage ? Reference< XIndexAccess >( pPage->GetForms() ) : Reference< XIndexAccess >() );
 
     const PFormViewPageWindowAdapter pAdapter = m_aPageWindowAdapters.empty() ? nullptr : m_aPageWindowAdapters[0];
     const vcl::Window* pWindow = pAdapter.get() ? pAdapter->getWindow() : nullptr;

@@ -138,7 +138,7 @@ sal_uInt16 FmGridHeader::GetModelColumnPos(sal_uInt16 nId) const
 void FmGridHeader::notifyColumnSelect(sal_uInt16 nColumnId)
 {
     sal_uInt16 nPos = GetModelColumnPos(nColumnId);
-    Reference< XIndexAccess >  xColumns(static_cast<FmGridControl*>(GetParent())->GetPeer()->getColumns(), UNO_QUERY);
+    Reference< XIndexAccess >  xColumns = static_cast<FmGridControl*>(GetParent())->GetPeer()->getColumns();
     if ( nPos < xColumns->getCount() )
     {
         Reference< XSelectionSupplier >  xSelSupplier(xColumns, UNO_QUERY);
@@ -1985,7 +1985,7 @@ void FmGridControl::Select()
 
             try
             {
-                Reference< XIndexAccess >  xColumns(GetPeer()->getColumns(), UNO_QUERY);
+                Reference< XIndexAccess >  xColumns = GetPeer()->getColumns();
                 Reference< XSelectionSupplier >  xSelSupplier(xColumns, UNO_QUERY);
                 if (xSelSupplier.is())
                 {

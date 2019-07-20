@@ -84,11 +84,10 @@ bool SvxDrawingLayerExport( SdrModel* pModel, const uno::Reference<io::XOutputSt
             xGraphicHelper = SvXMLGraphicHelper::Create( SvXMLGraphicHelperMode::Write );
             xGraphicStorageHandler = xGraphicHelper.get();
 
-            uno::Reference<xml::sax::XDocumentHandler>  xHandler( xWriter, uno::UNO_QUERY );
+            uno::Reference<xml::sax::XDocumentHandler>  xHandler = xWriter;
 
             // doc export
-            uno::Reference< io::XActiveDataSource > xDocSrc( xWriter, uno::UNO_QUERY );
-            xDocSrc->setOutputStream( xOut );
+            xWriter->setOutputStream( xOut );
 
             uno::Sequence< uno::Any > aArgs( xObjectResolver.is() ? 3 : 2 );
             aArgs[0] <<= xHandler;

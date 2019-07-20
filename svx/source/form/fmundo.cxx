@@ -1039,7 +1039,7 @@ FmUndoContainerAction::FmUndoContainerAction(FmFormModel& _rMod,
     if ( xCont.is() && xElem.is() )
     {
         // normalize
-        m_xElement.set(xElem, css::uno::UNO_QUERY);
+        m_xElement = xElem;
         if ( m_eAction == Removed )
         {
             if (m_nIndex >= 0)
