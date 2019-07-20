@@ -2287,10 +2287,8 @@ librdf_TypeConverter::Statement librdf_TypeConverter::extractStatement_NoLock(
 {
     std::shared_ptr<Resource> const pSubject(
             extractResource_NoLock(i_xSubject));
-    const uno::Reference<rdf::XResource> xPredicate(i_xPredicate,
-        uno::UNO_QUERY);
     std::shared_ptr<URI> const pPredicate(
-        std::dynamic_pointer_cast<URI>(extractResource_NoLock(xPredicate)));
+        std::dynamic_pointer_cast<URI>(extractResource_NoLock(i_xPredicate)));
     std::shared_ptr<Node> const pObject(extractNode_NoLock(i_xObject));
     return Statement(pSubject, pPredicate, pObject);
 }
@@ -2381,8 +2379,7 @@ librdf_TypeConverter::convertToXResource(librdf_node* i_pNode) const
             OString(reinterpret_cast<const sal_Char*>(label)),
             RTL_TEXTENCODING_UTF8) );
         try {
-            return uno::Reference<rdf::XResource>(
-                rdf::BlankNode::create(m_xContext, labelU), uno::UNO_QUERY);
+            return rdf::BlankNode::create(m_xContext, labelU);
         } catch (const lang::IllegalArgumentException &) {
             css::uno::Any anyEx = cppu::getCaughtException();
             throw lang::WrappedTargetRuntimeException(
@@ -2390,8 +2387,7 @@ librdf_TypeConverter::convertToXResource(librdf_node* i_pNode) const
                     "illegal blank node label", m_rRep, anyEx);
         }
     } else {
-        return uno::Reference<rdf::XResource>(convertToXURI(i_pNode),
-            uno::UNO_QUERY);
+        return convertToXURI(i_pNode);
     }
 }
 
@@ -2400,8 +2396,7 @@ librdf_TypeConverter::convertToXNode(librdf_node* i_pNode) const
 {
     if (!i_pNode) return nullptr;
     if (!librdf_node_is_literal(i_pNode)) {
-        return uno::Reference<rdf::XNode>(convertToXResource(i_pNode),
-            uno::UNO_QUERY);
+        return convertToXResource(i_pNode);
     }
     const unsigned char* value( librdf_node_get_literal_value(i_pNode) );
     if (!value) {
@@ -2420,19 +2415,13 @@ librdf_TypeConverter::convertToXNode(librdf_node* i_pNode) const
         const OUString langU( OStringToOUString(
             OString(reinterpret_cast<const sal_Char*>(lang)),
             RTL_TEXTENCODING_UTF8) );
-        return uno::Reference<rdf::XNode>(
-            rdf::Literal::createWithLanguage(m_xContext, valueU, langU),
-            uno::UNO_QUERY);
+        return rdf::Literal::createWithLanguage(m_xContext, valueU, langU);
     } else if (pType) {
         uno::Reference<rdf::XURI> xType(convertToXURI(pType));
         OSL_ENSURE(xType.is(), "convertToXNode: null uri");
-        return uno::Reference<rdf::XNode>(
-            rdf::Literal::createWithType(m_xContext, valueU, xType),
-            uno::UNO_QUERY);
+        return rdf::Literal::createWithType(m_xContext, valueU, xType);
     } else {
-        return uno::Reference<rdf::XNode>(
-            rdf::Literal::create(m_xContext, valueU),
-            uno::UNO_QUERY);
+        return rdf::Literal::create(m_xContext, valueU);
     }
 }
 

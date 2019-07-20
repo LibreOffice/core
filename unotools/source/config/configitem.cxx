@@ -351,7 +351,7 @@ Sequence< sal_Bool > ConfigItem::GetReadOnlyStates(const css::uno::Sequence< OUS
             }
             else
             {
-                xNode.set( xHierarchyAccess, UNO_QUERY );
+                xNode = xHierarchyAccess;
             }
 
             xSet.set(xNode, UNO_QUERY);

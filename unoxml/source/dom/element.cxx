@@ -632,7 +632,7 @@ namespace DOM
             "DOMAttrModified"), UNO_QUERY);
         event->initMutationEvent("DOMAttrModified",
             true, false,
-            Reference< XNode >(getAttributeNode(name), UNO_QUERY),
+            getAttributeNode(name),
             oldValue, value, name, aChangeType);
 
         guard.clear(); // release mutex before calling event handlers
@@ -713,7 +713,7 @@ namespace DOM
             "DOMAttrModified"), UNO_QUERY);
         event->initMutationEvent(
             "DOMAttrModified", true, false,
-            Reference< XNode >(getAttributeNodeNS(namespaceURI, OUString(reinterpret_cast<char const *>(pLName), strlen(reinterpret_cast<char const *>(pLName)), RTL_TEXTENCODING_UTF8)), UNO_QUERY),
+            getAttributeNodeNS(namespaceURI, OUString(reinterpret_cast<char const *>(pLName), strlen(reinterpret_cast<char const *>(pLName)), RTL_TEXTENCODING_UTF8)),
             oldValue, value, qualifiedName, aChangeType);
 
         guard.clear(); // release mutex before calling event handlers
