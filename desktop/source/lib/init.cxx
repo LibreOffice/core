@@ -43,6 +43,7 @@
 #include <rtl/strbuf.hxx>
 #include <rtl/uri.hxx>
 #include <cppuhelper/bootstrap.hxx>
+#include <comphelper/base64.hxx>
 #include <comphelper/dispatchcommand.hxx>
 #include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
@@ -3398,6 +3399,15 @@ static void doc_setTextSelection(LibreOfficeKitDocument* pThis, int nType, int n
     pDoc->setTextSelection(nType, nX, nY);
 }
 
+static OUString getGenerator()
+{
+    OUString sGenerator(
+        Translate::ExpandVariables("%PRODUCTNAME %PRODUCTVERSION%PRODUCTEXTENSION (%1)"));
+    OUString os("$_OS");
+    ::rtl::Bootstrap::expandMacros(os);
+    return sGenerator.replaceFirst("%1", os);
+}
+
 static bool getFromTransferrable(
     const css::uno::Reference<css::datatransfer::XTransferable> &xTransferable,
     const OString &aInMimeType, OString &aRet)
@@ -3425,6 +3435,30 @@ static bool getFromTransferrable(
 
     if (!xTransferable->isDataFlavorSupported(aFlavor))
     {
+        // If html is not supported, might be a graphic-selection, which supports png.
+        if (aInMimeType == "text/html" && getFromTransferrable(xTransferable, "image/png", aRet))
+        {
+            // Encode in base64.
+            auto aSeq = Sequence<sal_Int8>(reinterpret_cast<const sal_Int8*>(aRet.getStr()),
+                                           aRet.getLength());
+            OUStringBuffer aBase64Data;
+            comphelper::Base64::encode(aBase64Data, aSeq);
+
+            // Embed in HTML.
+            static const OString aHeader
+                = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">"
+                  "<html><head>"
+                  "<meta http-equiv=\"content-type\" content=\"text/html; charset=utf-8\"/><meta "
+                  "name=\"generator\" content=\""
+                  + getGenerator().toUtf8()
+                  + "\"/>"
+                    "</head><body><img src=\"data:image/png;charset=utf-8;base64,";
+
+            aRet = aHeader + aBase64Data.makeStringAndClear().toUtf8() + "\"/></body></html>";
+
+            return true;
+        }
+
         SetLastExceptionMsg("Flavor " + aFlavor.MimeType + " is not supported");
         return false;
     }
@@ -3461,7 +3495,7 @@ static bool getFromTransferrable(
         aRet = OString(reinterpret_cast<sal_Char*>(aSequence.getArray()), aSequence.getLength());
     }
 
-    return true;;
+    return true;
 }
 
 // Tolerate embedded \0s etc.
