@@ -409,6 +409,22 @@ AnimationBitmap* Animation::GetNextFrameBitmap()
     return pCurrentFrameBmp;
 }
 
+void Animation::RenderNextFrame()
+{
+    AnimationBitmap* pCurrentFrameBmp = GetNextFrameBitmap();
+    if (pCurrentFrameBmp)
+    {
+        PaintRenderers();
+        EraseMarkedRenderers();
+
+        // stop or restart timer
+        if (maAnimationRenderers.empty())
+            Stop();
+        else
+            ImplRestartTimer(pCurrentFrameBmp->mnWait);
+    }
+}
+
 IMPL_LINK_NOARG(Animation, ImplTimeoutHdl, Timer*, void)
 {
     if (!maAnimationFrames.empty())
@@ -416,28 +432,11 @@ IMPL_LINK_NOARG(Animation, ImplTimeoutHdl, Timer*, void)
         bool bGlobalPause = SendTimeout();
 
         if (maAnimationRenderers.empty())
-        {
             Stop();
-        }
         else if (bGlobalPause)
-        {
             ImplRestartTimer(10);
-        }
         else
-        {
-            AnimationBitmap* pCurrentFrameBmp = GetNextFrameBitmap();
-            if (!pCurrentFrameBmp)
-                return;
-
-            PaintRenderers();
-            EraseMarkedRenderers();
-
-            // stop or restart timer
-            if (maAnimationRenderers.empty())
-                Stop();
-            else
-                ImplRestartTimer(pCurrentFrameBmp->mnWait);
-        }
+            RenderNextFrame();
     }
     else
     {
