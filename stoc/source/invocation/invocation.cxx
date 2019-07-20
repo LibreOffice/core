@@ -680,14 +680,10 @@ Any Invocation_Impl::invoke( const OUString& FunctionName, const Sequence<Any>& 
 
         // OUT Params
         OutIndices.realloc( nOutIndex );
-        pOutIndices        = OutIndices.getArray();
         OutParams.realloc( nOutIndex );
-        Any* pOutParams = OutParams.getArray();
 
-        while (nOutIndex--)
-        {
-            pOutParams[nOutIndex] = pInvokeParams[ pOutIndices[nOutIndex] ];
-        }
+        std::transform(OutIndices.begin(), OutIndices.end(), OutParams.begin(),
+            [&pInvokeParams](const sal_Int16 nIndex) -> Any { return pInvokeParams[nIndex]; });
 
         return aRet;
     }

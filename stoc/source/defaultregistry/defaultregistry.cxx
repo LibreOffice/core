@@ -18,6 +18,7 @@
  */
 
 #include <osl/mutex.hxx>
+#include <comphelper/sequence.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/implbase4.hxx>
@@ -756,54 +757,27 @@ Sequence< Reference< XRegistryKey > > SAL_CALL NestedKeyImpl::openKeys(  )
 
     sal_uInt32 local = localSeq.getLength();
     sal_uInt32 def = defaultSeq.getLength();
-    sal_uInt32 len = 0;
-
-    sal_uInt32 i, j;
-    for (i=0; i < local; i++)
-    {
-        for (j=0 ; j < def; j++)
-        {
-            if ( localSeq.getConstArray()[i] == defaultSeq.getConstArray()[j] )
-            {
-                len++;
-                break;
-            }
-        }
-    }
+    sal_uInt32 len = static_cast<sal_uInt32>(std::count_if(localSeq.begin(), localSeq.end(),
+        [&defaultSeq](const OUString& rLocal) { return comphelper::findValue(defaultSeq, rLocal) != -1; }));
 
     Sequence< Reference<XRegistryKey> > retSeq(local + def - len);
-    OUString                            name;
-    sal_Int32                           lastIndex;
 
-    for (i=0; i < local; i++)
-    {
-        name = localSeq.getConstArray()[i];
-        lastIndex = name.lastIndexOf('/');
-        name = name.copy(lastIndex);
-        retSeq.getArray()[i] = new NestedKeyImpl(name, this);
-    }
+    auto lKeyNameToRegKey = [this](const OUString& rName) -> Reference<XRegistryKey> {
+        sal_Int32 lastIndex = rName.lastIndexOf('/');
+        OUString name = rName.copy(lastIndex);
+        return new NestedKeyImpl(name, this);
+    };
+    std::transform(localSeq.begin(), localSeq.end(), retSeq.begin(), lKeyNameToRegKey);
 
     sal_uInt32 k = local;
-    for (i=0; i < def; i++)
+    for (const auto& rDef : defaultSeq)
     {
-        bool insert = true;
-
-        for (j=0 ; j < local; j++)
-        {
-            if ( retSeq.getConstArray()[j]->getKeyName()
-                    == defaultSeq.getConstArray()[i] )
-            {
-                insert = false;
-                break;
-            }
-        }
+        bool insert = std::none_of(retSeq.begin(), std::next(retSeq.begin(), local),
+            [&rDef](const Reference<XRegistryKey>& rKey) { return rKey->getKeyName() == rDef; });
 
         if ( insert )
         {
-            name = defaultSeq.getConstArray()[i];
-            lastIndex = name.lastIndexOf('/');
-            name = name.copy(lastIndex);
-            retSeq.getArray()[k++] = new NestedKeyImpl(name, this);
+            retSeq.getArray()[k++] = lKeyNameToRegKey(rDef);
         }
     }
 
@@ -830,49 +804,7 @@ Sequence< OUString > SAL_CALL NestedKeyImpl::getKeyNames(  )
         defaultSeq = m_defaultKey->getKeyNames();
     }
 
-    sal_uInt32 local = localSeq.getLength();
-    sal_uInt32 def = defaultSeq.getLength();
-    sal_uInt32 len = 0;
-
-    sal_uInt32 i, j;
-    for (i=0; i < local; i++)
-    {
-        for (j=0 ; j < def; j++)
-        {
-            if ( localSeq.getConstArray()[i] == defaultSeq.getConstArray()[j] )
-            {
-                len++;
-                break;
-            }
-        }
-    }
-
-    Sequence<OUString>  retSeq(local + def - len);
-
-    for (i=0; i < local; i++)
-    {
-        retSeq.getArray()[i] = localSeq.getConstArray()[i];
-    }
-
-    sal_uInt32 k = local;
-    for (i=0; i < def; i++)
-    {
-        bool insert = true;
-
-        for (j=0 ; j < local; j++)
-        {
-            if ( retSeq.getConstArray()[j] == defaultSeq.getConstArray()[i] )
-            {
-                insert = false;
-                break;
-            }
-        }
-
-        if ( insert )
-            retSeq.getArray()[k++] = defaultSeq.getConstArray()[i];
-    }
-
-    return retSeq;
+    return comphelper::combineSequences(localSeq, defaultSeq);
 }
 
 

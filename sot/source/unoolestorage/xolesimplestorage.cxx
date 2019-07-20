@@ -237,15 +237,15 @@ void OLESimpleStorage::InsertNameAccessToStorage_Impl( BaseStorage* pStorage, co
     try
     {
         uno::Sequence< OUString > aElements = xNameAccess->getElementNames();
-        for ( sal_Int32 nInd = 0; nInd < aElements.getLength(); nInd++ )
+        for ( const auto& rElement : aElements )
         {
             uno::Reference< io::XInputStream > xInputStream;
             uno::Reference< container::XNameAccess > xSubNameAccess;
-            uno::Any aAny = xNameAccess->getByName( aElements[nInd] );
+            uno::Any aAny = xNameAccess->getByName( rElement );
             if ( aAny >>= xInputStream )
-                InsertInputStreamToStorage_Impl( pNewStorage.get(), aElements[nInd], xInputStream );
+                InsertInputStreamToStorage_Impl( pNewStorage.get(), rElement, xInputStream );
             else if ( aAny >>= xSubNameAccess )
-                InsertNameAccessToStorage_Impl( pNewStorage.get(), aElements[nInd], xSubNameAccess );
+                InsertNameAccessToStorage_Impl( pNewStorage.get(), rElement, xSubNameAccess );
         }
     }
     catch( uno::Exception& )

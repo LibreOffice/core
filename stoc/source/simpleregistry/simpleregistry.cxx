@@ -33,6 +33,7 @@
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
+#include <comphelper/sequence.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weak.hxx>
@@ -313,12 +314,7 @@ css::uno::Sequence< sal_Int32 > Key::getLongListValue()
 void Key::setLongListValue(css::uno::Sequence< sal_Int32 > const & seqValue)
 {
     osl::MutexGuard guard(registry_->mutex_);
-    std::vector< sal_Int32 > list;
-    list.reserve(seqValue.getLength());
-    for (sal_Int32 i = 0; i < seqValue.getLength(); ++i)
-    {
-        list.push_back(seqValue[i]);
-    }
+    auto list = comphelper::sequenceToContainer<std::vector<sal_Int32>>(seqValue);
     RegError err = key_.setLongListValue(
         OUString(), list.data(), static_cast< sal_uInt32 >(list.size()));
     if (err != RegError::NO_ERROR) {
@@ -475,9 +471,9 @@ void Key::setAsciiListValue(
 {
     osl::MutexGuard guard(registry_->mutex_);
     std::vector< OString > list;
-    for (sal_Int32 i = 0; i < seqValue.getLength(); ++i) {
+    for (const auto& rValue : seqValue) {
         OString utf8;
-        if (!seqValue[i].convertToString(
+        if (!rValue.convertToString(
                 &utf8, RTL_TEXTENCODING_UTF8,
                 (RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR |
                  RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR)))
@@ -616,10 +612,8 @@ void Key::setStringListValue(
     osl::MutexGuard guard(registry_->mutex_);
     std::vector< sal_Unicode * > list;
     list.reserve(seqValue.getLength());
-    for (sal_Int32 i = 0; i < seqValue.getLength(); ++i)
-    {
-        list.push_back(const_cast< sal_Unicode * >(seqValue[i].getStr()));
-    }
+    std::transform(seqValue.begin(), seqValue.end(), std::back_inserter(list),
+        [](const OUString& rValue) -> sal_Unicode* { return const_cast<sal_Unicode*>(rValue.getStr()); });
     RegError err = key_.setUnicodeListValue(
         OUString(), list.data(), static_cast< sal_uInt32 >(list.size()));
     if (err != RegError::NO_ERROR) {
