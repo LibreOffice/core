@@ -230,8 +230,7 @@ void XMLSignatureHelper::ExportOOXMLSignature(const uno::Reference<embed::XStora
         xSaxWriter->setOutputStream(xOutputStream);
         xSaxWriter->startDocument();
 
-        uno::Reference<xml::sax::XDocumentHandler> xDocumentHandler(xSaxWriter, uno::UNO_QUERY);
-        mpXSecController->exportOOXMLSignature(xRootStorage, xDocumentHandler, rInformation);
+        mpXSecController->exportOOXMLSignature(xRootStorage, xSaxWriter, rInformation);
 
         xSaxWriter->endDocument();
     }
@@ -318,8 +317,7 @@ bool lcl_isSignatureOriginType(const beans::StringPair& rPair)
 bool XMLSignatureHelper::ReadAndVerifySignatureStorage(const uno::Reference<embed::XStorage>& xStorage, bool bCacheLastSignature)
 {
     sal_Int32 nOpenMode = embed::ElementModes::READ;
-    uno::Reference<container::XNameAccess> xNameAccess(xStorage, uno::UNO_QUERY);
-    if (xNameAccess.is() && !xNameAccess->hasByName("_rels"))
+    if (xStorage.is() && !xStorage->hasByName("_rels"))
     {
         SAL_WARN("xmlsecurity.helper", "expected stream, in signature storage but not found: _rels");
         return false;
@@ -338,7 +336,7 @@ bool XMLSignatureHelper::ReadAndVerifySignatureStorage(const uno::Reference<embe
             std::vector<beans::StringPair>::iterator it = std::find_if(aRelation.begin(), aRelation.end(), [](const beans::StringPair& rPair) { return rPair.First == "Target"; });
             if (it != aRelation.end())
             {
-                if (xNameAccess.is() && !xNameAccess->hasByName(it->Second))
+                if (xStorage.is() && !xStorage->hasByName(it->Second))
                 {
                     SAL_WARN("xmlsecurity.helper", "expected stream, but not found: " << it->Second);
                     continue;
@@ -477,7 +475,7 @@ void XMLSignatureHelper::ExportSignatureRelations(const css::uno::Reference<css:
     xOriginStream->closeOutput();
 
     // Write the relations.
-    uno::Reference<embed::XStorage> xSubStorage(xStorage->openStorageElement("_rels", nOpenMode), uno::UNO_QUERY);
+    uno::Reference<embed::XStorage> xSubStorage = xStorage->openStorageElement("_rels", nOpenMode);
     uno::Reference<io::XOutputStream> xRelStream(xSubStorage->openStreamElement("origin.sigs.rels", nOpenMode), uno::UNO_QUERY);
     std::vector< uno::Sequence<beans::StringPair> > aRelations;
     for (int i = 0; i < nSignatureCount; ++i)
@@ -495,7 +493,7 @@ void XMLSignatureHelper::ExportSignatureRelations(const css::uno::Reference<css:
 
 void XMLSignatureHelper::ExportSignatureContentTypes(const css::uno::Reference<css::embed::XStorage>& xStorage, int nSignatureCount)
 {
-    uno::Reference<io::XStream> xStream(xStorage->openStreamElement("[Content_Types].xml", embed::ElementModes::READWRITE), uno::UNO_QUERY);
+    uno::Reference<io::XStream> xStream = xStorage->openStreamElement("[Content_Types].xml", embed::ElementModes::READWRITE);
     uno::Reference<io::XInputStream> xInputStream = xStream->getInputStream();
     uno::Sequence< uno::Sequence<beans::StringPair> > aContentTypeInfo = comphelper::OFOPXMLHelper::ReadContentTypeSequence(xInputStream, mxCtx);
     if (aContentTypeInfo.getLength() < 2)
@@ -542,8 +540,7 @@ void XMLSignatureHelper::CreateAndWriteOOXMLSignature(const uno::Reference<embed
     xSaxWriter->startDocument();
 
     mbError = false;
-    uno::Reference<xml::sax::XDocumentHandler> xDocumentHandler(xSaxWriter, uno::UNO_QUERY);
-    if (!mpXSecController->WriteOOXMLSignature(xRootStorage, xDocumentHandler))
+    if (!mpXSecController->WriteOOXMLSignature(xRootStorage, xSaxWriter))
         mbError = true;
 
     xSaxWriter->endDocument();
