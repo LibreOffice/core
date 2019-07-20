@@ -290,14 +290,14 @@ void ScColumn::CopyOneCellFromClip( sc::CopyFromClipContext& rCxt, SCROW nRow1, 
         // Duplicate the cell note over the whole pasted range.
 
         ScDocument* pClipDoc = rCxt.getClipDoc();
-        const ScAddress& rSrcPos = pClipDoc->GetClipParam().getWholeRange().aStart;
+        const ScAddress aSrcPos = pClipDoc->GetClipParam().getWholeRange().aStart;
         std::vector<ScPostIt*> aNotes;
         ScAddress aDestPos(nCol, nRow1, nTab);
         aNotes.reserve(nDestSize);
         for (size_t i = 0; i < nDestSize; ++i)
         {
             bool bCloneCaption = (nFlags & InsertDeleteFlags::NOCAPTIONS) == InsertDeleteFlags::NONE;
-            aNotes.push_back(pNote->Clone(rSrcPos, *pDocument, aDestPos, bCloneCaption).release());
+            aNotes.push_back(pNote->Clone(aSrcPos, *pDocument, aDestPos, bCloneCaption).release());
             aDestPos.IncRow();
         }
 
