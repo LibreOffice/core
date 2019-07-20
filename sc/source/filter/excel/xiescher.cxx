@@ -3138,8 +3138,7 @@ void XclImpPictureObj::ReadPictFmla( XclImpStream& rStrm, sal_uInt16 nLinkSize )
                 // a class name may follow inside the picture link
                 if( rStrm.GetRecPos() + 2 <= nLinkEnd )
                 {
-                    sal_uInt16 nLen;
-                    nLen = rStrm.ReaduInt16();
+                    sal_uInt16 nLen = rStrm.ReaduInt16();
                     if( nLen > 0 )
                         maClassName = (GetBiff() == EXC_BIFF8) ? rStrm.ReadUniString( nLen ) : rStrm.ReadRawByteString( nLen );
                 }
