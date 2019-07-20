@@ -314,6 +314,33 @@ void Animation::PopulateRenderers()
     }
 }
 
+void Animation::DeleteUnmarkedRenderers()
+{
+    AnimationRenderer* pRenderer;
+
+    for (size_t i = 0; i < maAnimationRenderers.size();)
+    {
+        pRenderer = maAnimationRenderers[i].get();
+        if (!pRenderer->isMarked())
+            maAnimationRenderers.erase(maAnimationRenderers.begin() + i);
+    }
+}
+
+bool Animation::ResetMarkedRenderers()
+{
+    bool bGlobalPause = true;
+
+    for (auto& rItem : maAnimationRenderers)
+    {
+        if (!rItem->isPause())
+            bGlobalPause = false;
+
+        rItem->setMarked(false);
+    }
+
+    return bGlobalPause;
+}
+
 IMPL_LINK_NOARG(Animation, ImplTimeoutHdl, Timer*, void)
 {
     const size_t nAnimCount = maAnimationFrames.size();
@@ -327,22 +354,8 @@ IMPL_LINK_NOARG(Animation, ImplTimeoutHdl, Timer*, void)
         {
             maNotifyLink.Call(this);
             PopulateRenderers();
-
-            // delete all unmarked views and reset marked state
-            for (size_t i = 0; i < maAnimationRenderers.size();)
-            {
-                pRenderer = maAnimationRenderers[i].get();
-                if (!pRenderer->isMarked())
-                    maAnimationRenderers.erase(maAnimationRenderers.begin() + i);
-            }
-
-            for (auto& rItem : maAnimationRenderers)
-            {
-                if (!rItem->isPause())
-                    bGlobalPause = false;
-
-                rItem->setMarked(false);
-            }
+            DeleteUnmarkedRenderers();
+            bGlobalPause = ResetMarkedRenderers();
         }
         else
         {
