@@ -74,6 +74,16 @@ void Animation::CreateDefaultRenderer(Animation* pAnim, OutputDevice* pOut, cons
         new AnimationRenderer(pAnim, pOut, rDestPt, rDestSz, nCallerId, pFirstFrameOutDev));
 }
 
+void Animation::RemoveAnimationInstance(OutputDevice* pOut, sal_uLong nCallerId)
+{
+    maAnimationRenderers.erase(
+        std::remove_if(maAnimationRenderers.begin(), maAnimationRenderers.end(),
+                       [=](const std::unique_ptr<AnimationRenderer>& pAnimView) -> bool {
+                           return pAnimView->matches(pOut, nCallerId);
+                       }),
+        maAnimationRenderers.end());
+}
+
 void Animation::PopulateRenderers()
 {
     AnimationRenderer* pRenderer;
