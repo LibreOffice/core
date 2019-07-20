@@ -63,7 +63,7 @@ class SC_DLLPUBLIC DelayFormulaGroupingSwitch
     bool const mbOldValue;
 public:
     DelayFormulaGroupingSwitch(ScDocument& rDoc, bool delay);
-    ~DelayFormulaGroupingSwitch();
+    ~DelayFormulaGroupingSwitch() COVERITY_NOEXCEPT_FALSE;
     void reset();
 };
 
