@@ -99,6 +99,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/rendercontext/ImplMapRes \
     vcl/source/animate/Animation \
     vcl/source/animate/AnimationBitmap \
+    vcl/source/animate/AnimationRenderer \
     vcl/source/cnttype/mcnttfactory \
     vcl/source/cnttype/mcnttype \
     vcl/source/printer/QueueInfo \
@@ -269,7 +270,6 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/gdi/graph \
     vcl/source/gdi/graphictools \
     vcl/source/gdi/hatch \
-    vcl/source/gdi/impanmvw \
     vcl/source/gdi/impglyphitem \
     vcl/source/gdi/impgraph \
     vcl/source/gdi/jobset \
