@@ -25,10 +25,13 @@ rtl::Reference<LOKClipboard> LOKClipboardFactory::getClipboardForCurView()
 
     auto it = gClipboards.find(nViewId);
     if (it != gClipboards.end())
+    {
+        SAL_INFO("lok", "Got clip: " << it->second.get() << " from " << nViewId);
         return it->second;
+    }
     rtl::Reference<LOKClipboard> xClip(new LOKClipboard());
     gClipboards[nViewId] = xClip;
-    SAL_INFO("lok", "Created clipboard for view " << nViewId << " as " << xClip.get());
+    SAL_INFO("lok", "Created clip: " << xClip.get() << " for viewId " << nViewId);
     return xClip;
 }
 
@@ -81,6 +84,7 @@ void LOKClipboard::setContents(
     std::vector<Reference<datatransfer::clipboard::XClipboardListener>> aListeners(m_aListeners);
     datatransfer::clipboard::ClipboardEvent aEv;
     aEv.Contents = m_xTransferable;
+    SAL_INFO("lok", "Clip: " << this << " set contents to " << m_xTransferable);
 
     aGuard.clear();
 

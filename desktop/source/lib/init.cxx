@@ -3572,12 +3572,12 @@ static int doc_getClipboard(LibreOfficeKitDocument* pThis,
     }
 
     rtl::Reference<LOKClipboard> xClip(LOKClipboardFactory::getClipboardForCurView());
-    SAL_INFO("lok", "Got clipboard for view " << xClip.get());
 
     css::uno::Reference<css::datatransfer::XTransferable> xTransferable = xClip->getContents();
+    SAL_INFO("lok", "Got from clip: " << xClip.get() << " transferrable: " << xTransferable);
     if (!xTransferable)
     {
-        SetLastExceptionMsg("No selection available");
+        SetLastExceptionMsg("No clipboard content available");
         return 0;
     }
 
@@ -3649,6 +3649,8 @@ static int doc_setClipboard(LibreOfficeKitDocument* pThis,
 
     auto xClip = forceSetClipboardForCurrentView(pThis);
     xClip->setContents(xTransferable, uno::Reference<datatransfer::clipboard::XClipboardOwner>());
+
+    SAL_INFO("lok", "Set clip: " << xClip.get() << " to: " << xTransferable);
 
     if (!pDoc->isMimeTypeSupported())
     {
