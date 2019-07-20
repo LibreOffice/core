@@ -430,7 +430,7 @@ void SbiProcDef::Match( SbiProcDef* pOld )
     {
         // mark the whole line
         pOld->pIn->GetParser()->SetCol1( 0 );
-        pOld->pIn->GetParser()->Error( ERRCODE_BASIC_BAD_DECLARATION, aName );
+        pOld->pIn->GetParser()->Error( ERRCODE_BASIC_BAD_DECLARATION, aName + "(symtbl.cxx:433)" );
     }
 
     if( !pIn && pOld->pIn )
