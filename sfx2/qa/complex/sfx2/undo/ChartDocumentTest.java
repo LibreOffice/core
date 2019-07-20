@@ -51,7 +51,7 @@ public class ChartDocumentTest implements DocumentTest
     {
         m_textDocument = OfficeDocument.blankDocument( i_orb, DocumentType.WRITER );
 
-        // create a OLE shape in the document
+        // create an OLE shape in the document
         final XMultiServiceFactory factory = UnoRuntime.queryInterface( XMultiServiceFactory.class, m_textDocument.getDocument() );
         final String shapeServiceName = "com.sun.star.text.TextEmbeddedObject";
         final XPropertySet shapeProps = UnoRuntime.queryInterface( XPropertySet.class, factory.createInstance( shapeServiceName ) );

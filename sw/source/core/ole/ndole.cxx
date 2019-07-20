@@ -246,7 +246,7 @@ const Graphic* SwOLENode::GetGraphic()
 }
 
 /**
- * Loading a OLE object that has been moved to the Undo Area
+ * Loading an OLE object that has been moved to the Undo Area
  */
 bool SwOLENode::RestorePersistentData()
 {

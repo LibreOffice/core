@@ -382,7 +382,7 @@ SwFrameFormat* SwWW8ImplReader::MakeGrafInContent(const WW8_PIC& rPic,
 
     SwFrameFormat* pFlyFormat = nullptr;
 
-    if (rFileName.isEmpty() && m_nObjLocFc)      // then it should be a OLE-Object
+    if (rFileName.isEmpty() && m_nObjLocFc)      // then it should be an OLE-Object
         pFlyFormat = ImportOle(pGraph, &aFlySet, &rGrfSet);
 
     if( !pFlyFormat )                          // then just as graphic
@@ -659,7 +659,7 @@ SwFrameFormat* SwWW8ImplReader::ImportGraf(SdrTextObj const * pTextObj,
                             // Now add the link or rather the graphic to the doc
                             const Graphic& rGraph = pGraphObject->GetGraphic();
 
-                            if (m_nObjLocFc)  // is it a OLE-Object?
+                            if (m_nObjLocFc)  // is it an OLE-Object?
                                 pRet = ImportOle(&rGraph, &aAttrSet, &aGrSet, pObject->GetBLIPSizeRectangle());
 
                             if (!pRet)

@@ -131,7 +131,7 @@ bool SvxOle2Shape::setPropertyValueImpl( const OUString& rName, const SfxItemPro
         OUString aCLSID;
         if( rValue >>= aCLSID )
         {
-            // init a ole object with a global name
+            // init an OLE object with a global name
             SvGlobalName aClassName;
             if( aClassName.MakeId( aCLSID ) )
             {
