@@ -470,10 +470,10 @@ void UnoControl::ImplModelPropertiesChanged( const Sequence< PropertyChangeEvent
     bool bNeedNewPeer = false;
         // some properties require a re-creation of the peer, 'cause they can't be changed on the fly
 
-    Reference< XControlModel > xOwnModel( getModel(), UNO_QUERY );
+    Reference< XControlModel > xOwnModel = getModel();
         // our own model for comparison
     Reference< XPropertySet > xPS( xOwnModel, UNO_QUERY );
-    Reference< XPropertySetInfo > xPSI( xPS->getPropertySetInfo(), UNO_QUERY );
+    Reference< XPropertySetInfo > xPSI = xPS->getPropertySetInfo();
     OSL_ENSURE( xPSI.is(), "UnoControl::ImplModelPropertiesChanged: should have property set meta data!" );
 
     sal_Int32 nLen = rEvents.getLength();

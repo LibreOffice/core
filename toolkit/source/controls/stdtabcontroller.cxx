@@ -133,8 +133,7 @@ bool StdTabController::ImplCreateComponentSequence(
 void StdTabController::ImplActivateControl( bool bFirst ) const
 {
     // HACK due to bug #53688#, map controls onto an interface if remote controls may occur
-    Reference< XTabController >  xTabController(const_cast< ::cppu::OWeakObject* >(static_cast< const ::cppu::OWeakObject* >(this)), UNO_QUERY);
-    Sequence< Reference< XControl > > aCtrls = xTabController->getControls();
+    Sequence< Reference< XControl > > aCtrls = const_cast<StdTabController*>(this)->getControls();
     const Reference< XControl > * pControls = aCtrls.getConstArray();
     sal_uInt32 nCount = aCtrls.getLength();
 
@@ -248,8 +247,7 @@ void StdTabController::autoTabOrder(  )
     Sequence< Reference< XWindow > > aCompSeq;
 
     // This may return a TabController, which returns desired list of controls faster
-    Reference< XTabController >  xTabController(static_cast< ::cppu::OWeakObject* >(this), UNO_QUERY);
-    Sequence< Reference< XControl > > aControls = xTabController->getControls();
+    Sequence< Reference< XControl > > aControls = getControls();
 
     // #58317# Some Models may be missing from the Container. Plus there is a
     // autoTabOrder call later on.

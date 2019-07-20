@@ -441,7 +441,7 @@ void UnoRoadmapControl::elementReplaced( const ContainerEvent& rEvent )
 void SAL_CALL UnoRoadmapControl::itemStateChanged( const ItemEvent& rEvent )
 {
     sal_Int16 CurItemIndex = sal::static_int_cast< sal_Int16 >(rEvent.ItemId);
-    Reference< XControlModel > xModel( getModel( ), UNO_QUERY );
+    Reference< XControlModel > xModel = getModel( );
     Reference< XPropertySet > xPropertySet( xModel, UNO_QUERY );
     xPropertySet->setPropertyValue( GetPropertyName( BASEPROPERTY_CURRENTITEMID ), Any(CurItemIndex) );
     if ( maItemListeners.getLength() )
