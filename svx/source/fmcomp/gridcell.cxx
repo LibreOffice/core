@@ -542,12 +542,12 @@ DbCellControl::DbCellControl( DbGridColumn& _rColumn )
     ,m_pPainter( nullptr )
     ,m_pWindow( nullptr )
 {
-    Reference< XPropertySet > xColModelProps( _rColumn.getModel(), UNO_QUERY );
+    Reference< XPropertySet > xColModelProps = _rColumn.getModel();
     if ( !xColModelProps.is() )
         return;
 
     // if our model's format key changes we want to propagate the new value to our windows
-    m_pModelChangeBroadcaster = new ::comphelper::OPropertyChangeMultiplexer(this, Reference< css::beans::XPropertySet > (_rColumn.getModel(), UNO_QUERY));
+    m_pModelChangeBroadcaster = new ::comphelper::OPropertyChangeMultiplexer(this, _rColumn.getModel());
 
     // be listener for some common properties
     implDoPropertyListening( FM_PROP_READONLY, false );
@@ -589,7 +589,7 @@ void DbCellControl::implDoPropertyListening(const OUString& _rPropertyName, bool
 {
     try
     {
-        Reference< XPropertySet > xColModelProps( m_rColumn.getModel(), UNO_QUERY );
+        Reference< XPropertySet > xColModelProps = m_rColumn.getModel();
         Reference< XPropertySetInfo > xPSI;
         if ( xColModelProps.is() )
             xPSI = xColModelProps->getPropertySetInfo();
@@ -1316,10 +1316,9 @@ void DbFormattedField::Init( vcl::Window& rParent, const Reference< XRowSet >& x
     // No? Maybe the css::form::component::Form behind the cursor?
     if (!m_xSupplier.is())
     {
-        Reference< XRowSet >  xCursorForm(xCursor, UNO_QUERY);
-        if (xCursorForm.is())
+        if (xCursor.is())
         {   // If we take the formatter from the cursor, then also the key from the field to which we are bound
-            m_xSupplier = getNumberFormats(getConnection(xCursorForm));
+            m_xSupplier = getNumberFormats(getConnection(xCursor));
 
             if (m_rColumn.GetField().is())
                 nFormatKey = ::comphelper::getINT32(m_rColumn.GetField()->getPropertyValue(FM_PROP_FORMATKEY));

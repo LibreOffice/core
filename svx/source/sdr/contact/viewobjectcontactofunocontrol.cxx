@@ -320,7 +320,7 @@ namespace sdr { namespace contact {
     {
         try
         {
-            Reference< XComponent > xControlComp( _rControl.getControl(), UNO_QUERY );
+            Reference< XComponent > xControlComp = _rControl.getControl();
             if ( xControlComp.is() )
                 xControlComp->dispose();
         }

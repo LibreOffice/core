@@ -2034,7 +2034,7 @@ IMPL_LINK_NOARG(SvxColorWindow, OpenPickerClickHdl, Button*, void)
     }
     else
     {
-        const css::uno::Reference<css::awt::XWindow> xParent(mxFrame->getContainerWindow(), uno::UNO_QUERY);
+        const css::uno::Reference<css::awt::XWindow> xParent = mxFrame->getContainerWindow();
         pParentFrame = Application::GetFrameWeld(xParent);
     }
     mxPaletteManager->PopupColorPicker(pParentFrame, maCommand, GetSelectEntryColor().first);

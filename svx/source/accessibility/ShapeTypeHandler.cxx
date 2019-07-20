@@ -94,9 +94,8 @@ ShapeTypeId ShapeTypeHandler::GetTypeId (const OUString& aServiceName) const
 */
 ShapeTypeId ShapeTypeHandler::GetTypeId (const uno::Reference<drawing::XShape>& rxShape) const
 {
-    uno::Reference<drawing::XShapeDescriptor> xDescriptor (rxShape, uno::UNO_QUERY);
-    if (xDescriptor.is())
-        return GetTypeId (xDescriptor->getShapeType());
+    if (rxShape.is())
+        return GetTypeId (rxShape->getShapeType());
     else
         return -1;
 }
@@ -185,9 +184,8 @@ long ShapeTypeHandler::GetSlotId (const OUString& aServiceName) const
 // method.
 long ShapeTypeHandler::GetSlotId (const uno::Reference<drawing::XShape>& rxShape) const
 {
-    uno::Reference<drawing::XShapeDescriptor> xDescriptor (rxShape, uno::UNO_QUERY);
-    if (xDescriptor.is())
-        return GetSlotId (xDescriptor->getShapeType());
+    if (rxShape.is())
+        return GetSlotId (rxShape->getShapeType());
     else
         return 0;
 }
@@ -292,9 +290,8 @@ OUString ShapeTypeHandler::CreateAccessibleBaseName (const uno::Reference<drawin
         default:
             pResourceId = nullptr;
             sName = "UnknownAccessibleShape";
-            uno::Reference<drawing::XShapeDescriptor> xDescriptor (rxShape, uno::UNO_QUERY);
-            if (xDescriptor.is())
-                sName += ": " + xDescriptor->getShapeType();
+            if (rxShape.is())
+                sName += ": " + rxShape->getShapeType();
             break;
     }
 
