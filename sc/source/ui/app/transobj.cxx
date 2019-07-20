@@ -242,6 +242,42 @@ void ScTransferObj::AddSupportedFormats()
     }
 }
 
+static ScRange lcl_reduceBlock(ScDocumentUniquePtr &pDoc, ScRange aReducedBlock, bool bIncludeVisual = false)
+{
+    if ((aReducedBlock.aEnd.Col() == MAXCOL || aReducedBlock.aEnd.Row() == MAXROW) &&
+        aReducedBlock.aStart.Tab() == aReducedBlock.aEnd.Tab())
+    {
+        // Shrink the block here so we don't waste time creating huge
+        // output when whole columns or rows are selected.
+
+        SCCOL nPrintAreaEndCol = 0;
+        SCROW nPrintAreaEndRow = 0;
+        if (bIncludeVisual)
+            pDoc->GetPrintArea( aReducedBlock.aStart.Tab(), nPrintAreaEndCol, nPrintAreaEndRow, true );
+
+        // Shrink the area to allow pasting to external applications.
+        // Shrink to real data area for HTML, RTF and RICHTEXT, but include
+        // all objects and top-left area for BITMAP and PNG.
+        SCCOL nStartCol = aReducedBlock.aStart.Col();
+        SCROW nStartRow = aReducedBlock.aStart.Row();
+        SCCOL nEndCol = aReducedBlock.aEnd.Col();
+        SCROW nEndRow = aReducedBlock.aEnd.Row();
+        bool bShrunk = false;
+        pDoc->ShrinkToUsedDataArea( bShrunk, aReducedBlock.aStart.Tab(), nStartCol, nStartRow, nEndCol, nEndRow,
+                                      false, bIncludeVisual /*bStickyTopRow*/, bIncludeVisual /*bStickyLeftCol*/,
+                                      bIncludeVisual /*bConsiderCellNotes*/, bIncludeVisual /*bConsiderCellDrawObjects*/);
+
+        if ( nPrintAreaEndRow > nEndRow )
+            nEndRow = nPrintAreaEndRow;
+
+        if ( nPrintAreaEndCol > nEndCol )
+            nEndCol = nPrintAreaEndCol;
+
+        aReducedBlock = ScRange(nStartCol, nStartRow, aReducedBlock.aStart.Tab(), nEndCol, nEndRow, aReducedBlock.aEnd.Tab());
+    }
+    return aReducedBlock;
+}
+
 bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor, const OUString& /*rDestDoc*/ )
 {
     SotClipboardFormatId nFormat = SotExchange::GetFormat( rFlavor );
@@ -258,39 +294,11 @@ bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor, const OUSt
             || nFormat == SotClipboardFormatId::BITMAP
             || nFormat == SotClipboardFormatId::PNG;
 
-        if (bReduceBlockFormat && (m_aBlock.aEnd.Col() == MAXCOL || m_aBlock.aEnd.Row() == MAXROW) &&
-                m_aBlock.aStart.Tab() == m_aBlock.aEnd.Tab())
-        {
-            // Shrink the block here so we don't waste time creating huge
-            // output when whole columns or rows are selected.
+        const bool bIncludeVisual = (nFormat == SotClipboardFormatId::BITMAP ||
+                                     nFormat == SotClipboardFormatId::PNG);
 
-            SCCOL nPrintAreaEndCol = 0;
-            SCROW nPrintAreaEndRow = 0;
-            const bool bIncludeVisual = (nFormat == SotClipboardFormatId::BITMAP ||
-                    nFormat == SotClipboardFormatId::PNG);
-            if (bIncludeVisual)
-                m_pDoc->GetPrintArea( m_aBlock.aStart.Tab(), nPrintAreaEndCol, nPrintAreaEndRow, true );
-
-            // Shrink the area to allow pasting to external applications.
-            // Shrink to real data area for HTML, RTF and RICHTEXT, but include
-            // all objects and top-left area for BITMAP and PNG.
-            SCCOL nStartCol = aReducedBlock.aStart.Col();
-            SCROW nStartRow = aReducedBlock.aStart.Row();
-            SCCOL nEndCol = aReducedBlock.aEnd.Col();
-            SCROW nEndRow = aReducedBlock.aEnd.Row();
-            bool bShrunk = false;
-            m_pDoc->ShrinkToUsedDataArea( bShrunk, aReducedBlock.aStart.Tab(), nStartCol, nStartRow, nEndCol, nEndRow,
-                    false, bIncludeVisual /*bStickyTopRow*/, bIncludeVisual /*bStickyLeftCol*/,
-                    bIncludeVisual /*bConsiderCellNotes*/, bIncludeVisual /*bConsiderCellDrawObjects*/);
-
-            if ( nPrintAreaEndRow > nEndRow )
-                nEndRow = nPrintAreaEndRow;
-
-            if ( nPrintAreaEndCol > nEndCol )
-                nEndCol = nPrintAreaEndCol;
-
-            aReducedBlock = ScRange(nStartCol, nStartRow, aReducedBlock.aStart.Tab(), nEndCol, nEndRow, aReducedBlock.aEnd.Tab());
-        }
+        if (bReduceBlockFormat)
+            aReducedBlock = lcl_reduceBlock(m_pDoc, m_aBlock, bIncludeVisual);
 
         if ( nFormat == SotClipboardFormatId::LINKSRCDESCRIPTOR || nFormat == SotClipboardFormatId::OBJECTDESCRIPTOR )
         {
@@ -541,6 +549,15 @@ bool ScTransferObj::WriteObject( tools::SvRef<SotStorageStream>& rxOStm, void* p
             OSL_FAIL("unknown object id");
     }
     return bRet;
+}
+
+sal_Bool SAL_CALL ScTransferObj::isComplex()
+{
+    ScRange aReduced = lcl_reduceBlock(m_pDoc, m_aBlock);
+    size_t nCells = (aReduced.aEnd.Col() - aReduced.aStart.Col() + 1) *
+                    (aReduced.aEnd.Row() - aReduced.aStart.Row() + 1) *
+                    (aReduced.aEnd.Tab() - aReduced.aStart.Tab() + 1);
+    return nCells > 1000;
 }
 
 void ScTransferObj::DragFinished( sal_Int8 nDropAction )
