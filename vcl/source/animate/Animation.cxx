@@ -23,11 +23,11 @@
 #include <tools/stream.hxx>
 
 #include <vcl/animate/Animation.hxx>
-#include <vcl/animate/AnimationData.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/dibtools.hxx>
 #include <vcl/BitmapColorQuantizationFilter.hxx>
 
+#include <AnimationData.hxx>
 #include <AnimationRenderer.hxx>
 
 #include <algorithm>
