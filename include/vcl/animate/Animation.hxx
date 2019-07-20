@@ -116,6 +116,7 @@ private:
     SAL_DLLPRIVATE void PopulateRenderers();
     SAL_DLLPRIVATE void DeleteUnmarkedRenderers();
     SAL_DLLPRIVATE bool ResetMarkedRenderers();
+    SAL_DLLPRIVATE bool IsTimeoutSetup();
 
     SAL_DLLPRIVATE void ImplRestartTimer(sal_uLong nTimeout);
     DECL_DLLPRIVATE_LINK(ImplTimeoutHdl, Timer*, void);
