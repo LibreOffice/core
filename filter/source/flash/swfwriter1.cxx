@@ -722,14 +722,10 @@ sal_uInt16 Writer::defineBitmap( const BitmapEx &bmpSource, sal_Int32 nJPEGQuali
     uLongf compressed_size = raw_size + static_cast<sal_uInt32>(raw_size/100) + 12;
     std::unique_ptr<sal_uInt8[]> pCompressed(new sal_uInt8[ compressed_size ]);
 
-#ifdef DBG_UTIL
     if(compress2(pCompressed.get(), &compressed_size, aImageData.data(), raw_size, Z_BEST_COMPRESSION) != Z_OK)
     {
         SAL_WARN( "filter.flash", "compress2 failed!" ); ((void)0);
     }
-#else
-    compress2(pCompressed.get(), &compressed_size, aImageData.data(), raw_size, Z_BEST_COMPRESSION);
-#endif
 
     // AS: SWF files let you provide an Alpha mask for JPEG images, but we have
     //  to ZLIB compress the alpha channel separately.
