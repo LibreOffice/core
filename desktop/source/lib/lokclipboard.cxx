@@ -8,23 +8,103 @@
  */
 
 #include "lokclipboard.hxx"
-#include <comphelper/sequence.hxx>
+#include <sfx2/lokhelper.hxx>
 
-using namespace com::sun::star;
+using namespace css;
+using namespace css::uno;
 
-uno::Reference<datatransfer::XTransferable> SAL_CALL LOKClipboard::getContents()
+osl::Mutex LOKClipboardFactory::gMutex;
+std::unordered_map<int, rtl::Reference<LOKClipboard>> LOKClipboardFactory::gClipboards;
+
+rtl::Reference<LOKClipboard> LOKClipboardFactory::getClipboardForCurView()
 {
-    return m_xTransferable;
+    int nViewId = SfxLokHelper::getView(); // currently active.
+
+    osl::MutexGuard aGuard(gMutex);
+
+    auto it = gClipboards.find(nViewId);
+    if (it != gClipboards.end())
+        return it->second;
+    rtl::Reference<LOKClipboard> xClip(new LOKClipboard());
+    gClipboards[nViewId] = xClip;
+    SAL_INFO("lok", "Created clipboard for view " << nViewId << " as " << xClip.get());
+    return xClip;
 }
 
-void SAL_CALL LOKClipboard::setContents(
-    const uno::Reference<datatransfer::XTransferable>& xTransferable,
-    const uno::Reference<datatransfer::clipboard::XClipboardOwner>& /*xClipboardOwner*/)
+uno::Reference<uno::XInterface>
+    SAL_CALL LOKClipboardFactory::createInstanceWithArguments(const Sequence<Any>& /* rArgs */)
 {
-    m_xTransferable = xTransferable;
+    return uno::Reference<uno::XInterface>(
+        static_cast<cppu::OWeakObject*>(getClipboardForCurView().get()));
 }
 
-OUString SAL_CALL LOKClipboard::getName() { return OUString(); }
+LOKClipboard::LOKClipboard()
+    : cppu::WeakComponentImplHelper<css::datatransfer::clipboard::XSystemClipboard,
+                                    css::lang::XServiceInfo>(m_aMutex)
+{
+}
+
+Sequence<OUString> LOKClipboard::getSupportedServiceNames_static()
+{
+    Sequence<OUString> aRet{ "com.sun.star.datatransfer.clipboard.SystemClipboard" };
+    return aRet;
+}
+
+OUString LOKClipboard::getImplementationName()
+{
+    return OUString("com.sun.star.datatransfer.LOKClipboard");
+}
+
+Sequence<OUString> LOKClipboard::getSupportedServiceNames()
+{
+    return getSupportedServiceNames_static();
+}
+
+sal_Bool LOKClipboard::supportsService(const OUString& ServiceName)
+{
+    return cppu::supportsService(this, ServiceName);
+}
+
+Reference<css::datatransfer::XTransferable> LOKClipboard::getContents() { return m_xTransferable; }
+
+void LOKClipboard::setContents(
+    const Reference<css::datatransfer::XTransferable>& xTrans,
+    const Reference<css::datatransfer::clipboard::XClipboardOwner>& xClipboardOwner)
+{
+    osl::ClearableMutexGuard aGuard(m_aMutex);
+    Reference<datatransfer::clipboard::XClipboardOwner> xOldOwner(m_aOwner);
+    Reference<datatransfer::XTransferable> xOldContents(m_xTransferable);
+    m_xTransferable = xTrans;
+    m_aOwner = xClipboardOwner;
+
+    std::vector<Reference<datatransfer::clipboard::XClipboardListener>> aListeners(m_aListeners);
+    datatransfer::clipboard::ClipboardEvent aEv;
+    aEv.Contents = m_xTransferable;
+
+    aGuard.clear();
+
+    if (xOldOwner.is() && xOldOwner != xClipboardOwner)
+        xOldOwner->lostOwnership(this, xOldContents);
+    for (auto const& listener : aListeners)
+    {
+        listener->changedContents(aEv);
+    }
+}
+
+void LOKClipboard::addClipboardListener(
+    const Reference<datatransfer::clipboard::XClipboardListener>& listener)
+{
+    osl::ClearableMutexGuard aGuard(m_aMutex);
+    m_aListeners.push_back(listener);
+}
+
+void LOKClipboard::removeClipboardListener(
+    const Reference<datatransfer::clipboard::XClipboardListener>& listener)
+{
+    osl::ClearableMutexGuard aGuard(m_aMutex);
+    m_aListeners.erase(std::remove(m_aListeners.begin(), m_aListeners.end(), listener),
+                       m_aListeners.end());
+}
 
 LOKTransferable::LOKTransferable(const char* pMimeType, const char* pData, std::size_t nSize)
     : m_aMimeType(OUString::fromUtf8(pMimeType))

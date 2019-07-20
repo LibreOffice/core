@@ -390,8 +390,8 @@ struct _LibreOfficeKitDocumentClass
                           const int width, const int height);
 
     /// Pass a nullptr terminated array of mime-type strings
-    /// @see lok::Document::getSelection for more details
-    int (*getSelection) (LibreOfficeKitDocument* pThis,
+    /// @see lok::Document::getClipboard for more details
+    int (*getClipboard) (LibreOfficeKitDocument* pThis,
                          const char **pMimeTypes,
                          size_t      *pOutCount,
                          char      ***pOutMimeTypes,
