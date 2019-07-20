@@ -171,30 +171,9 @@ bool Animation::Start(OutputDevice* pOut, const Point& rDestPt, const Size& rDes
         if ((pOut->GetOutDevType() == OUTDEV_WINDOW) && !mbLoopTerminated
             && (ANIMATION_TIMEOUT_ON_CLICK != maAnimationFrames[mnFrameIndex]->mnWait))
         {
-            AnimationRenderer* pRenderer;
-            bool bRendererDoesNotExist = true;
+            bool bRendererDoesNotExist = CanRepaintRenderers(pOut, nCallerId, rDestPt, rDestSz);
 
-            for (size_t i = 0; i < maAnimationRenderers.size(); ++i)
-            {
-                pRenderer = maAnimationRenderers[i].get();
-                if (pRenderer->matches(pOut, nCallerId))
-                {
-                    if (pRenderer->getOutPos() == rDestPt
-                        && pRenderer->getOutSizePix() == pOut->LogicToPixel(rDestSz))
-                    {
-                        pRenderer->repaint();
-                        bRendererDoesNotExist = false;
-                    }
-                    else
-                    {
-                        maAnimationRenderers.erase(maAnimationRenderers.begin() + i);
-                    }
-
-                    break;
-                }
-            }
-
-            if (maAnimationRenderers.empty())
+            if (NoRenderersAreAvailable())
             {
                 maTimer.Stop();
                 mbIsInAnimation = false;
@@ -229,7 +208,7 @@ void Animation::Stop(OutputDevice* pOut, long nCallerId)
                        }),
         maAnimationRenderers.end());
 
-    if (maAnimationRenderers.empty())
+    if (NoRenderersAreAvailable())
     {
         maTimer.Stop();
         mbIsInAnimation = false;
@@ -285,7 +264,7 @@ IMPL_LINK_NOARG(Animation, ImplTimeoutHdl, Timer*, void)
     {
         bool bIsGloballyPaused = CanSendTimeout();
 
-        if (maAnimationRenderers.empty())
+        if (NoRenderersAreAvailable())
             Stop();
         else if (bIsGloballyPaused)
             RestartTimer(10);
