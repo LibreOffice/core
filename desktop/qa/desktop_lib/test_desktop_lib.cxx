@@ -588,7 +588,7 @@ void DesktopLOKTest::testPasteWriter()
     free(pText);
 
     // textt/plain should be rejected.
-    CPPUNIT_ASSERT(!pDocument->pClass->paste(pDocument, "text/plain;charset=utf-8", aText.getStr(), aText.getLength()));
+    CPPUNIT_ASSERT(!pDocument->pClass->paste(pDocument, "textt/plain;charset=utf-8", aText.getStr(), aText.getLength()));
     // Writer is expected to support text/html.
     CPPUNIT_ASSERT(pDocument->pClass->paste(pDocument, "text/html", aText.getStr(), aText.getLength()));
 
@@ -2765,7 +2765,7 @@ void DesktopLOKTest::testABI()
     CPPUNIT_ASSERT_EQUAL(documentClassOffset(48), offsetof(struct _LibreOfficeKitDocumentClass, createViewWithOptions));
     CPPUNIT_ASSERT_EQUAL(documentClassOffset(49), offsetof(struct _LibreOfficeKitDocumentClass, selectPart));
     CPPUNIT_ASSERT_EQUAL(documentClassOffset(50), offsetof(struct _LibreOfficeKitDocumentClass, moveSelectedParts));
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(51), offsetof(struct _LibreOfficeKitDocumentClass, getSelection));
+    CPPUNIT_ASSERT_EQUAL(documentClassOffset(51), offsetof(struct _LibreOfficeKitDocumentClass, getClipboard));
     CPPUNIT_ASSERT_EQUAL(documentClassOffset(52), offsetof(struct _LibreOfficeKitDocumentClass, setClipboard));
     CPPUNIT_ASSERT_EQUAL(documentClassOffset(53), offsetof(struct _LibreOfficeKitDocumentClass, getSelectionType));
 
