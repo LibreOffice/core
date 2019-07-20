@@ -846,7 +846,7 @@ void SchXMLSeries2Context::setStylesToSeries( SeriesDefaultsAndStyles& rSeriesDe
                         if( bIsStockChart )
                         {
                             if( SchXMLSeriesHelper::isCandleStickSeries( seriesStyle.m_xSeries
-                                    , uno::Reference< frame::XModel >( rImportHelper.GetChartDocument(), uno::UNO_QUERY ) ) )
+                                    , rImportHelper.GetChartDocument() ) )
                                 bIsMinMaxSeries = true;
                         }
                         if( !bIsMinMaxSeries )
@@ -913,7 +913,7 @@ void SchXMLSeries2Context::setStylesToRegressionCurves(
 
             if( !aServiceName.isEmpty() )
             {
-                Reference< lang::XMultiServiceFactory > xMSF( comphelper::getProcessServiceFactory(), uno::UNO_QUERY );
+                Reference< lang::XMultiServiceFactory > xMSF = comphelper::getProcessServiceFactory();
                 Reference< chart2::XRegressionCurve > xRegCurve( xMSF->createInstance( aServiceName ), uno::UNO_QUERY_THROW );
                 Reference< chart2::XRegressionCurveContainer > xRegCurveCont( regressionStyle.m_xSeries, uno::UNO_QUERY_THROW );
 
@@ -1028,7 +1028,7 @@ void SchXMLSeries2Context::setStylesToDataPoints( SeriesDefaultsAndStyles& rSeri
         //... todo ...
         if( bIsStockChart )
         {
-            if( SchXMLSeriesHelper::isCandleStickSeries( seriesStyle.m_xSeries, uno::Reference< frame::XModel >( rImportHelper.GetChartDocument(), uno::UNO_QUERY ) ) )
+            if( SchXMLSeriesHelper::isCandleStickSeries( seriesStyle.m_xSeries, rImportHelper.GetChartDocument() ) )
                 continue;
         }
 
@@ -1039,7 +1039,7 @@ void SchXMLSeries2Context::setStylesToDataPoints( SeriesDefaultsAndStyles& rSeri
             {
                 uno::Reference< beans::XPropertySet > xPointProp(
                     SchXMLSeriesHelper::createOldAPIDataPointPropertySet( seriesStyle.m_xSeries, seriesStyle.m_nPointIndex + i
-                        , uno::Reference< frame::XModel >( rImportHelper.GetChartDocument(), uno::UNO_QUERY ) ) );
+                        , rImportHelper.GetChartDocument() ) );
 
                 if( !xPointProp.is() )
                     continue;

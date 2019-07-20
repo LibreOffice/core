@@ -1149,7 +1149,7 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument > 
     // get property states for autostyles
     if( mxExpPropMapper.is())
     {
-        Reference< beans::XPropertySet > xPropSet( rChartDoc->getArea(), uno::UNO_QUERY );
+        Reference< beans::XPropertySet > xPropSet = rChartDoc->getArea();
         if( xPropSet.is())
             aPropertyStates = mxExpPropMapper->Filter( xPropSet );
     }
@@ -1448,7 +1448,7 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument > 
                 SAL_WARN_IF( !xSupplier.is(), "xmloff.chart", "Cannot retrieve draw page to initialize shape export" );
                 if( xSupplier.is() )
                 {
-                    Reference< drawing::XShapes > xDrawPage( xSupplier->getDrawPage(), uno::UNO_QUERY );
+                    Reference< drawing::XShapes > xDrawPage = xSupplier->getDrawPage();
                     SAL_WARN_IF( !xDrawPage.is(), "xmloff.chart", "Invalid draw page for initializing shape export" );
                     if( xDrawPage.is())
                         mrExport.GetShapeExport()->seekShapes( xDrawPage );
@@ -1856,11 +1856,10 @@ void SchXMLExportHelper_Impl::exportPlotArea(
         }
 
         // attributes
-        Reference< drawing::XShape > xShape ( xDiagram, uno::UNO_QUERY );
-        if( xShape.is())
+        if( xDiagram.is())
         {
-            addPosition( xShape );
-            addSize( xShape );
+            addPosition( xDiagram );
+            addSize( xDiagram );
         }
 
         bool bIs3DChart = false;
@@ -1996,7 +1995,7 @@ void SchXMLExportHelper_Impl::exportPlotArea(
         // remove property states for autostyles
         aPropertyStates.clear();
 
-        Reference< beans::XPropertySet > xWallPropSet( xWallFloorSupplier->getWall(), uno::UNO_QUERY );
+        Reference< beans::XPropertySet > xWallPropSet = xWallFloorSupplier->getWall();
         if( xWallPropSet.is())
         {
             aPropertyStates = mxExpPropMapper->Filter( xWallPropSet );
@@ -2022,7 +2021,7 @@ void SchXMLExportHelper_Impl::exportPlotArea(
         // remove property states for autostyles
         aPropertyStates.clear();
 
-        Reference< beans::XPropertySet > xFloorPropSet( xWallFloorSupplier->getFloor(), uno::UNO_QUERY );
+        Reference< beans::XPropertySet > xFloorPropSet = xWallFloorSupplier->getFloor();
         if( xFloorPropSet.is())
         {
             aPropertyStates = mxExpPropMapper->Filter( xFloorPropSet );
