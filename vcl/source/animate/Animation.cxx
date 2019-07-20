@@ -356,72 +356,93 @@ bool Animation::SendTimeout()
     return false;
 }
 
-IMPL_LINK_NOARG(Animation, ImplTimeoutHdl, Timer*, void)
+void Animation::PaintRenderers()
+{
+    for (auto& rRenderer : maAnimationRenderers)
+    {
+        rRenderer->draw(mnPos);
+    }
+}
+
+void Animation::EraseMarkedRenderers()
+{
+    for (size_t i = 0; i < maAnimationRenderers.size();)
+    {
+        AnimationRenderer* pRenderer = maAnimationRenderers[i].get();
+
+        if (pRenderer->isMarked())
+            maAnimationRenderers.erase(maAnimationRenderers.begin() + i);
+        else
+            i++;
+    }
+}
+
+AnimationBitmap* Animation::GetNextFrameBitmap()
 {
     const size_t nAnimCount = maAnimationFrames.size();
 
-    if (nAnimCount)
+    bool bIsFrameAtEnd = mnPos >= maAnimationFrames.size();
+    mnPos++;
+
+    AnimationBitmap* pCurrentFrameBmp
+        = bIsFrameAtEnd ? nullptr : maAnimationFrames[mnPos].get();
+
+    if (!pCurrentFrameBmp)
+    {
+        if (mnLoops == 1)
+        {
+            Stop();
+            mbLoopTerminated = true;
+            mnPos = nAnimCount - 1;
+            maBitmapEx = maAnimationFrames[mnPos]->maBitmapEx;
+        }
+        else
+        {
+            if (mnLoops)
+                mnLoops--;
+
+            mnPos = 0;
+            pCurrentFrameBmp = maAnimationFrames[mnPos].get();
+        }
+    }
+
+    return pCurrentFrameBmp;
+}
+
+IMPL_LINK_NOARG(Animation, ImplTimeoutHdl, Timer*, void)
+{
+    if (!maAnimationFrames.empty())
     {
         bool bGlobalPause = SendTimeout();
 
         if (maAnimationRenderers.empty())
+        {
             Stop();
+        }
         else if (bGlobalPause)
+        {
             ImplRestartTimer(10);
+        }
         else
         {
-            AnimationBitmap* pStepBmp
-                = (++mnPos < maAnimationFrames.size()) ? maAnimationFrames[mnPos].get() : nullptr;
+            AnimationBitmap* pCurrentFrameBmp = GetNextFrameBitmap();
+            if (!pCurrentFrameBmp)
+                return;
 
-            if (!pStepBmp)
-            {
-                if (mnLoops == 1)
-                {
-                    Stop();
-                    mbLoopTerminated = true;
-                    mnPos = nAnimCount - 1;
-                    maBitmapEx = maAnimationFrames[mnPos]->maBitmapEx;
-                    return;
-                }
-                else
-                {
-                    if (mnLoops)
-                        mnLoops--;
-
-                    mnPos = 0;
-                    pStepBmp = maAnimationFrames[mnPos].get();
-                }
-            }
-
-            // Paint all views; after painting check, if view is
-            // marked; in this case remove view, because area of output
-            // lies out of display area of window; mark state is
-            // set from view itself
-
-            for (auto& rRenderer : maAnimationRenderers)
-            {
-                rRenderer->draw(mnPos);
-            }
-
-            for (size_t i = 0; i < maAnimationRenderers.size();)
-            {
-                AnimationRenderer* pRenderer = maAnimationRenderers[i].get();
-
-                if (pRenderer->isMarked())
-                    maAnimationRenderers.erase(maAnimationRenderers.begin() + i);
-                else
-                    i++;
-            }
+            PaintRenderers();
+            EraseMarkedRenderers();
 
             // stop or restart timer
             if (maAnimationRenderers.empty())
                 Stop();
             else
-                ImplRestartTimer(pStepBmp->mnWait);
+                ImplRestartTimer(pCurrentFrameBmp->mnWait);
         }
     }
     else
+    {
         Stop();
+    }
 }
 
 bool Animation::Insert(const AnimationBitmap& rStepBmp)
