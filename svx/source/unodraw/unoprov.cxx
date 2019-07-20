@@ -931,7 +931,7 @@ const SvxItemPropertySet* SvxUnoPropertyMapProvider::GetPropertySet(sal_uInt16 n
     return aSetArr[nPropertyId].get();
 }
 
-/** maps the vcl MapUnit enum to a API constant MeasureUnit.
+/** maps the vcl MapUnit enum to an API constant MeasureUnit.
     Returns false if conversion is not supported.
 */
 bool SvxMapUnitToMeasureUnit( const MapUnit eVcl, short& eApi ) throw()
@@ -983,7 +983,7 @@ bool SvxMeasureUnitToFieldUnit( const short eApi, FieldUnit& eVcl ) throw()
     return true;
 }
 
-/** maps the vcl MapUnit enum to a API constant MeasureUnit.
+/** maps the vcl MapUnit enum to an API constant MeasureUnit.
     Returns false if conversion is not supported.
 */
 bool SvxFieldUnitToMeasureUnit( const FieldUnit eVcl, short& eApi ) throw()
