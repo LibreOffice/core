@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_1b4878ca",
+        "filename": "sysui/desktop/apparmor/program.soffice.bin",
+        "patchSetId": 5
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1000130
+      },
+      "writtenOn": "2019-07-20T13:02:24Z",
+      "side": 1,
+      "message": "no, LO does NOT need to write into trustdb.\n\nWhy would it? gpg would.\n\nOne should allow stuff LO needs, not everything apparmor might warn about.",
+      "revId": "97204bc26c6187fef522b25546a0b1c96fec588a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
