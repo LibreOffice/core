@@ -131,8 +131,7 @@ DECLARE_RTFEXPORT_TEST(testFdo42465, "fdo42465.rtf") { CPPUNIT_ASSERT_EQUAL(3, g
 DECLARE_RTFEXPORT_TEST(testFdo45187, "fdo45187.rtf")
 {
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(),
-                                                   uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDraws = xDrawPageSupplier->getDrawPage();
     // There should be two shapes.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xDraws->getCount());
 
@@ -301,8 +300,7 @@ DECLARE_RTFEXPORT_TEST(testFdo44176, "fdo44176.rtf")
 DECLARE_RTFEXPORT_TEST(testFdo39053, "fdo39053.rtf")
 {
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(),
-                                                   uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDraws = xDrawPageSupplier->getDrawPage();
     int nAsCharacter = 0;
     for (int i = 0; i < xDraws->getCount(); ++i)
         if (getProperty<text::TextContentAnchorType>(xDraws->getByIndex(i), "AnchorType")
@@ -471,7 +469,7 @@ DECLARE_RTFEXPORT_TEST(testFdo76633, "fdo76633.rtf")
     CPPUNIT_ASSERT(xShape->supportsService("com.sun.star.text.TextGraphicObject"));
     try
     {
-        uno::Reference<drawing::XShape> xShape2(getShape(2), uno::UNO_QUERY);
+        uno::Reference<drawing::XShape> xShape2 = getShape(2);
         CPPUNIT_FAIL("exception expected");
     }
     catch (lang::IndexOutOfBoundsException const&)
@@ -597,7 +595,7 @@ DECLARE_RTFEXPORT_TEST(testFdo52475, "fdo52475.rtf")
 DECLARE_RTFEXPORT_TEST(testFdo55493, "fdo55493.rtf")
 {
     // The problem was that the width of the PNG was detected as 15,24cm, instead of 3.97cm
-    uno::Reference<drawing::XShape> xShape(getShape(1), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape = getShape(1);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3969), xShape->getSize().Width);
 }
 
@@ -606,7 +604,7 @@ DECLARE_RTFEXPORT_TEST(testCopyPastePageStyle, "copypaste-pagestyle.rtf")
     // The problem was that RTF import during copy&paste did not ignore page styles.
     // Once we have more copy&paste tests, makes sense to refactor this to some helper method.
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
-    uno::Reference<text::XTextRange> xText(xTextDocument->getText(), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xText = xTextDocument->getText();
     uno::Reference<text::XTextRange> xEnd = xText->getEnd();
     paste("rtfexport/data/copypaste-pagestyle-paste.rtf", xEnd);
 
@@ -620,8 +618,7 @@ DECLARE_RTFEXPORT_TEST(testCopyPasteFootnote, "copypaste-footnote.rtf")
 {
     // The RTF import did not handle the case when the position wasn't the main document XText, but something different, e.g. a footnote.
     uno::Reference<text::XFootnotesSupplier> xFootnotesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xFootnotes(xFootnotesSupplier->getFootnotes(),
-                                                       uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xFootnotes = xFootnotesSupplier->getFootnotes();
     uno::Reference<text::XTextRange> xTextRange(xFootnotes->getByIndex(0), uno::UNO_QUERY);
     paste("rtfexport/data/copypaste-footnote-paste.rtf", xTextRange);
 
@@ -632,7 +629,7 @@ DECLARE_RTFEXPORT_TEST(testFdo63428, "hello.rtf")
 {
     // Pasting content that contained an annotation caused a crash.
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
-    uno::Reference<text::XTextRange> xText(xTextDocument->getText(), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xText = xTextDocument->getText();
     uno::Reference<text::XTextRange> xEnd = xText->getEnd();
     paste("rtfexport/data/fdo63428.rtf", xEnd);
 
@@ -656,7 +653,7 @@ DECLARE_RTFEXPORT_TEST(testFdo69384, "fdo69384-paste.rtf")
 DECLARE_RTFEXPORT_TEST(testFdo69384Inserted, "hello.rtf")
 {
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
-    uno::Reference<text::XTextRange> xText(xTextDocument->getText(), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xText = xTextDocument->getText();
     uno::Reference<text::XTextRange> xEnd = xText->getEnd();
     paste("rtfexport/data/fdo69384-paste.rtf", xEnd);
 
@@ -671,7 +668,7 @@ DECLARE_RTFEXPORT_TEST(testFdo61193, "hello.rtf")
 {
     // Pasting content that contained a footnote caused a crash.
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
-    uno::Reference<text::XTextRange> xText(xTextDocument->getText(), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xText = xTextDocument->getText();
     uno::Reference<text::XTextRange> xEnd = xText->getEnd();
     paste("rtfexport/data/fdo61193.rtf", xEnd);
 }
@@ -681,7 +678,7 @@ DECLARE_RTFEXPORT_TEST(testTdf108123, "hello.rtf")
     // This crashed, the shape push/pop and table manager stack went out of
     // sync -> we tried to de-reference an empty stack.
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
-    uno::Reference<text::XTextRange> xText(xTextDocument->getText(), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xText = xTextDocument->getText();
     uno::Reference<text::XTextRange> xEnd = xText->getEnd();
     paste("rtfexport/data/tdf108123.rtf", xEnd);
 }
@@ -696,8 +693,7 @@ DECLARE_RTFEXPORT_TEST(testShptxtPard, "shptxt-pard.rtf")
 DECLARE_RTFEXPORT_TEST(testDoDhgt, "do-dhgt.rtf")
 {
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(),
-                                                   uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDraws = xDrawPageSupplier->getDrawPage();
     for (int i = 0; i < xDraws->getCount(); ++i)
     {
         sal_Int32 nFillColor = getProperty<sal_Int32>(xDraws->getByIndex(i), "FillColor");
@@ -732,8 +728,7 @@ DECLARE_RTFEXPORT_TEST(testDppolyline, "dppolyline.rtf")
 {
     // This was completely ignored, for now, just make sure we have all 4 lines.
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(),
-                                                   uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDraws = xDrawPageSupplier->getDrawPage();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(4), xDraws->getCount());
 }
 
@@ -750,7 +745,7 @@ DECLARE_RTFEXPORT_TEST(testFdo56512, "fdo56512.rtf")
 DECLARE_RTFEXPORT_TEST(testFdo52989, "fdo52989.rtf")
 {
     // Same as n#192129, but for JPEG files.
-    uno::Reference<drawing::XShape> xShape(getShape(1), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape = getShape(1);
     OString aMessage("xShape->getSize().Width() = ");
     aMessage += OString::number(xShape->getSize().Width);
 
@@ -806,8 +801,7 @@ DECLARE_RTFEXPORT_TEST(testFdo54612, "fdo54612.rtf")
 {
     // \dpptx without a \dppolycount caused a crash.
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(),
-                                                   uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDraws = xDrawPageSupplier->getDrawPage();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(8), xDraws->getCount());
 }
 
@@ -828,7 +822,7 @@ DECLARE_RTFEXPORT_TEST(testFdo44053, "fdo44053.rtf")
     uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(),
                                                     uno::UNO_QUERY);
     uno::Reference<text::XTextTable> xTextTable(xTables->getByIndex(0), uno::UNO_QUERY);
-    uno::Reference<table::XTableRows> xTableRows(xTextTable->getRows(), uno::UNO_QUERY);
+    uno::Reference<table::XTableRows> xTableRows = xTextTable->getRows();
     // The with of the table's A1 and A2 cell should equal.
     CPPUNIT_ASSERT_EQUAL(getProperty<uno::Sequence<text::TableColumnSeparator>>(
                              xTableRows->getByIndex(0), "TableColumnSeparators")[0]

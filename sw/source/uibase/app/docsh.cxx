@@ -649,7 +649,7 @@ bool SwDocShell::ConvertTo( SfxMedium& rMedium )
         SvxHtmlOptions& rHtmlOpt = SvxHtmlOptions::Get();
         if( !rHtmlOpt.IsStarBasic() && rHtmlOpt.IsStarBasicWarning() && HasBasic() )
         {
-            uno::Reference< XLibraryContainer > xLibCont(GetBasicContainer(), UNO_QUERY);
+            uno::Reference< XLibraryContainer > xLibCont = GetBasicContainer();
             uno::Reference< XNameAccess > xLib;
             Sequence<OUString> aNames = xLibCont->getElementNames();
             for(const OUString& rName : aNames)

@@ -119,7 +119,7 @@ void SwHTMLParser::EndScript()
             aLibName = "Standard";
 
         // get module library container
-        Reference< script::XLibraryContainer > xModLibContainer( pDocSh->GetBasicContainer(), UNO_QUERY );
+        Reference< script::XLibraryContainer > xModLibContainer = pDocSh->GetBasicContainer();
 
         if ( xModLibContainer.is() )
         {
@@ -161,7 +161,7 @@ void SwHTMLParser::EndScript()
         }
 
         // get dialog library container
-        Reference< script::XLibraryContainer > xDlgLibContainer( pDocSh->GetDialogContainer(), UNO_QUERY );
+        Reference< script::XLibraryContainer > xDlgLibContainer = pDocSh->GetDialogContainer();
 
         if ( xDlgLibContainer.is() )
         {

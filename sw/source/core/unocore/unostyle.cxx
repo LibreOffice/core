@@ -4766,7 +4766,7 @@ sal_Bool SAL_CALL SwXTextCellStyle::isInUse()
     if (!xFamiliesSupplier.is())
         return false;
 
-    uno::Reference<container::XNameAccess> xFamilies(xFamiliesSupplier->getStyleFamilies(), uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xFamilies = xFamiliesSupplier->getStyleFamilies();
     if (!xFamilies.is())
         return false;
 

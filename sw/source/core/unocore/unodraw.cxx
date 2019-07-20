@@ -267,8 +267,7 @@ const SdrMarkList&  SwFmDrawPage::PreGroup(const uno::Reference< drawing::XShape
 
 void SwFmDrawPage::PreUnGroup(const uno::Reference< drawing::XShapeGroup >&  rShapeGroup)
 {
-    uno::Reference< drawing::XShape >  xShape( rShapeGroup, uno::UNO_QUERY);
-    SelectObjectInView( xShape, GetPageView() );
+    SelectObjectInView( rShapeGroup, GetPageView() );
 }
 
 SdrPageView*    SwFmDrawPage::GetPageView()

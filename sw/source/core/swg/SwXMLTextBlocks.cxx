@@ -165,9 +165,8 @@ void SwXMLTextBlocks::AddName( const OUString& rShort, const OUString& rLong,
 ErrCode SwXMLTextBlocks::Delete( sal_uInt16 n )
 {
     const OUString aPckName (m_aNames[n]->aPackageName);
-    uno::Reference < container::XNameAccess > xAccess( xBlkRoot, uno::UNO_QUERY );
-    if ( xAccess.is() &&
-            xAccess->hasByName( aPckName ) && xBlkRoot->isStreamElement( aPckName ) )
+    if ( xBlkRoot.is() &&
+            xBlkRoot->hasByName( aPckName ) && xBlkRoot->isStreamElement( aPckName ) )
     {
         try
         {

@@ -48,8 +48,7 @@ DECLARE_OOXMLEXPORT_TEST(testTableCrossReference, "table_cross_reference.odt")
     uno::Reference<container::XIndexAccess> xBookmarksByIdx(xBookmarksSupplier->getBookmarks(),
                                                             uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4), xBookmarksByIdx->getCount());
-    uno::Reference<container::XNameAccess> xBookmarksByName(xBookmarksSupplier->getBookmarks(),
-                                                            uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xBookmarksByName = xBookmarksSupplier->getBookmarks();
     CPPUNIT_ASSERT(xBookmarksByName->hasByName("Ref_Table0_full"));
     CPPUNIT_ASSERT(xBookmarksByName->hasByName("Ref_Table0_label_and_number"));
     CPPUNIT_ASSERT(xBookmarksByName->hasByName("Ref_Table0_caption_only"));
@@ -59,25 +58,25 @@ DECLARE_OOXMLEXPORT_TEST(testTableCrossReference, "table_cross_reference.odt")
     {
         uno::Reference<text::XTextContent> xContent(xBookmarksByName->getByName("Ref_Table0_full"),
                                                     uno::UNO_QUERY);
-        uno::Reference<text::XTextRange> xRange(xContent->getAnchor(), uno::UNO_QUERY);
+        uno::Reference<text::XTextRange> xRange = xContent->getAnchor();
         CPPUNIT_ASSERT_EQUAL(OUString("Table 1: Table caption"), xRange->getString());
     }
     {
         uno::Reference<text::XTextContent> xContent(
             xBookmarksByName->getByName("Ref_Table0_label_and_number"), uno::UNO_QUERY);
-        uno::Reference<text::XTextRange> xRange(xContent->getAnchor(), uno::UNO_QUERY);
+        uno::Reference<text::XTextRange> xRange = xContent->getAnchor();
         CPPUNIT_ASSERT_EQUAL(OUString("Table 1"), xRange->getString());
     }
     {
         uno::Reference<text::XTextContent> xContent(
             xBookmarksByName->getByName("Ref_Table0_caption_only"), uno::UNO_QUERY);
-        uno::Reference<text::XTextRange> xRange(xContent->getAnchor(), uno::UNO_QUERY);
+        uno::Reference<text::XTextRange> xRange = xContent->getAnchor();
         CPPUNIT_ASSERT_EQUAL(OUString("Table caption"), xRange->getString());
     }
     {
         uno::Reference<text::XTextContent> xContent(
             xBookmarksByName->getByName("Ref_Table0_number_only"), uno::UNO_QUERY);
-        uno::Reference<text::XTextRange> xRange(xContent->getAnchor(), uno::UNO_QUERY);
+        uno::Reference<text::XTextRange> xRange = xContent->getAnchor();
         CPPUNIT_ASSERT_EQUAL(OUString("1"), xRange->getString());
     }
 
@@ -222,8 +221,7 @@ DECLARE_OOXMLEXPORT_TEST(testTableCrossReferenceCustomFormat,
     uno::Reference<container::XIndexAccess> xBookmarksByIdx(xBookmarksSupplier->getBookmarks(),
                                                             uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(16), xBookmarksByIdx->getCount());
-    uno::Reference<container::XNameAccess> xBookmarksByName(xBookmarksSupplier->getBookmarks(),
-                                                            uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xBookmarksByName = xBookmarksSupplier->getBookmarks();
     CPPUNIT_ASSERT(xBookmarksByName->hasByName("Ref_Table0_full"));
     CPPUNIT_ASSERT(xBookmarksByName->hasByName("Ref_Table0_label_and_number"));
     CPPUNIT_ASSERT(xBookmarksByName->hasByName("Ref_Table0_caption_only"));
@@ -246,100 +244,100 @@ DECLARE_OOXMLEXPORT_TEST(testTableCrossReferenceCustomFormat,
     {
         uno::Reference<text::XTextContent> xContent(xBookmarksByName->getByName("Ref_Table0_full"),
                                                     uno::UNO_QUERY);
-        uno::Reference<text::XTextRange> xRange(xContent->getAnchor(), uno::UNO_QUERY);
+        uno::Reference<text::XTextRange> xRange = xContent->getAnchor();
         CPPUNIT_ASSERT_EQUAL(OUString("1. Table: Table caption"), xRange->getString());
     }
     {
         uno::Reference<text::XTextContent> xContent(
             xBookmarksByName->getByName("Ref_Table0_label_and_number"), uno::UNO_QUERY);
-        uno::Reference<text::XTextRange> xRange(xContent->getAnchor(), uno::UNO_QUERY);
+        uno::Reference<text::XTextRange> xRange = xContent->getAnchor();
         CPPUNIT_ASSERT_EQUAL(OUString("1. Table"), xRange->getString());
     }
     {
         uno::Reference<text::XTextContent> xContent(
             xBookmarksByName->getByName("Ref_Table0_caption_only"), uno::UNO_QUERY);
-        uno::Reference<text::XTextRange> xRange(xContent->getAnchor(), uno::UNO_QUERY);
+        uno::Reference<text::XTextRange> xRange = xContent->getAnchor();
         CPPUNIT_ASSERT_EQUAL(OUString("Table caption"), xRange->getString());
     }
     {
         uno::Reference<text::XTextContent> xContent(
             xBookmarksByName->getByName("Ref_Table0_number_only"), uno::UNO_QUERY);
-        uno::Reference<text::XTextRange> xRange(xContent->getAnchor(), uno::UNO_QUERY);
+        uno::Reference<text::XTextRange> xRange = xContent->getAnchor();
         CPPUNIT_ASSERT_EQUAL(OUString("1"), xRange->getString());
     }
     // Second table's caption
     {
         uno::Reference<text::XTextContent> xContent(xBookmarksByName->getByName("Ref_Table1_full"),
                                                     uno::UNO_QUERY);
-        uno::Reference<text::XTextRange> xRange(xContent->getAnchor(), uno::UNO_QUERY);
+        uno::Reference<text::XTextRange> xRange = xContent->getAnchor();
         CPPUNIT_ASSERT_EQUAL(OUString("2. TableTable caption"), xRange->getString());
     }
     {
         uno::Reference<text::XTextContent> xContent(
             xBookmarksByName->getByName("Ref_Table1_label_and_number"), uno::UNO_QUERY);
-        uno::Reference<text::XTextRange> xRange(xContent->getAnchor(), uno::UNO_QUERY);
+        uno::Reference<text::XTextRange> xRange = xContent->getAnchor();
         CPPUNIT_ASSERT_EQUAL(OUString("2. Table"), xRange->getString());
     }
     {
         uno::Reference<text::XTextContent> xContent(
             xBookmarksByName->getByName("Ref_Table1_caption_only"), uno::UNO_QUERY);
-        uno::Reference<text::XTextRange> xRange(xContent->getAnchor(), uno::UNO_QUERY);
+        uno::Reference<text::XTextRange> xRange = xContent->getAnchor();
         CPPUNIT_ASSERT_EQUAL(OUString("Table caption"), xRange->getString());
     }
     {
         uno::Reference<text::XTextContent> xContent(
             xBookmarksByName->getByName("Ref_Table1_number_only"), uno::UNO_QUERY);
-        uno::Reference<text::XTextRange> xRange(xContent->getAnchor(), uno::UNO_QUERY);
+        uno::Reference<text::XTextRange> xRange = xContent->getAnchor();
         CPPUNIT_ASSERT_EQUAL(OUString("2"), xRange->getString());
     }
     // Third table's caption
     {
         uno::Reference<text::XTextContent> xContent(xBookmarksByName->getByName("Ref_Table2_full"),
                                                     uno::UNO_QUERY);
-        uno::Reference<text::XTextRange> xRange(xContent->getAnchor(), uno::UNO_QUERY);
+        uno::Reference<text::XTextRange> xRange = xContent->getAnchor();
         CPPUNIT_ASSERT_EQUAL(OUString("3) Table Table caption"), xRange->getString());
     }
     {
         uno::Reference<text::XTextContent> xContent(
             xBookmarksByName->getByName("Ref_Table2_label_and_number"), uno::UNO_QUERY);
-        uno::Reference<text::XTextRange> xRange(xContent->getAnchor(), uno::UNO_QUERY);
+        uno::Reference<text::XTextRange> xRange = xContent->getAnchor();
         CPPUNIT_ASSERT_EQUAL(OUString("3) Table"), xRange->getString());
     }
     {
         uno::Reference<text::XTextContent> xContent(
             xBookmarksByName->getByName("Ref_Table2_caption_only"), uno::UNO_QUERY);
-        uno::Reference<text::XTextRange> xRange(xContent->getAnchor(), uno::UNO_QUERY);
+        uno::Reference<text::XTextRange> xRange = xContent->getAnchor();
         CPPUNIT_ASSERT_EQUAL(OUString("Table caption"), xRange->getString());
     }
     {
         uno::Reference<text::XTextContent> xContent(
             xBookmarksByName->getByName("Ref_Table2_number_only"), uno::UNO_QUERY);
-        uno::Reference<text::XTextRange> xRange(xContent->getAnchor(), uno::UNO_QUERY);
+        uno::Reference<text::XTextRange> xRange = xContent->getAnchor();
         CPPUNIT_ASSERT_EQUAL(OUString("3"), xRange->getString());
     }
     // Fourth table's caption
     {
         uno::Reference<text::XTextContent> xContent(xBookmarksByName->getByName("Ref_Table3_full"),
                                                     uno::UNO_QUERY);
-        uno::Reference<text::XTextRange> xRange(xContent->getAnchor(), uno::UNO_QUERY);
+        uno::Reference<text::XTextRange> xRange = xContent->getAnchor();
         CPPUNIT_ASSERT_EQUAL(OUString("Table 4- Table caption"), xRange->getString());
     }
     {
         uno::Reference<text::XTextContent> xContent(
             xBookmarksByName->getByName("Ref_Table3_label_and_number"), uno::UNO_QUERY);
-        uno::Reference<text::XTextRange> xRange(xContent->getAnchor(), uno::UNO_QUERY);
+        uno::Reference<text::XTextRange> xRange = xContent->getAnchor();
         CPPUNIT_ASSERT_EQUAL(OUString("Table 4"), xRange->getString());
     }
     {
         uno::Reference<text::XTextContent> xContent(
             xBookmarksByName->getByName("Ref_Table3_caption_only"), uno::UNO_QUERY);
-        uno::Reference<text::XTextRange> xRange(xContent->getAnchor(), uno::UNO_QUERY);
+        uno::Reference<text::XTextRange> xRange = xContent->getAnchor();
         CPPUNIT_ASSERT_EQUAL(OUString("Table caption"), xRange->getString());
     }
     {
         uno::Reference<text::XTextContent> xContent(
             xBookmarksByName->getByName("Ref_Table3_number_only"), uno::UNO_QUERY);
-        uno::Reference<text::XTextRange> xRange(xContent->getAnchor(), uno::UNO_QUERY);
+        uno::Reference<text::XTextRange> xRange = xContent->getAnchor();
         CPPUNIT_ASSERT_EQUAL(OUString("4"), xRange->getString());
     }
 }

@@ -44,11 +44,10 @@ static uno::Any
 getDocument( uno::Reference< uno::XComponentContext > const & xContext, const uno::Reference< text::XTextDocument > &xDoc, const uno::Any& aApplication )
 {
     // FIXME: fine as long as SwVbaDocument is stateless ...
-    uno::Reference< frame::XModel > xModel( xDoc, uno::UNO_QUERY );
-    if( !xModel.is() )
+    if( !xDoc.is() )
         return uno::Any();
 
-    SwVbaDocument *pWb = new SwVbaDocument(  uno::Reference< XHelperInterface >( aApplication, uno::UNO_QUERY_THROW ), xContext, xModel );
+    SwVbaDocument *pWb = new SwVbaDocument(  uno::Reference< XHelperInterface >( aApplication, uno::UNO_QUERY_THROW ), xContext, xDoc );
     return uno::Any( uno::Reference< word::XDocument > (pWb) );
 }
 

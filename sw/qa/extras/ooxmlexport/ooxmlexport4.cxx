@@ -67,7 +67,7 @@ DECLARE_OOXMLEXPORT_TEST(testRelorientation, "relorientation.docx")
 DECLARE_OOXMLEXPORT_TEST(testBezier, "bezier.odt")
 {
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDraws = xDrawPageSupplier->getDrawPage();
     // Check that no shape got lost: a bezier, a line and a text shape.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xDraws->getCount());
 }
@@ -452,7 +452,7 @@ DECLARE_OOXMLEXPORT_TEST(testChartInFooter, "chart-in-footer.docx")
     if (xDrawPageSupplier.is())
     {
         // If xDrawPage->getCount()==1, then document contains one shape.
-        uno::Reference<container::XIndexAccess> xDrawPage(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+        uno::Reference<container::XIndexAccess> xDrawPage = xDrawPageSupplier->getDrawPage();
         CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xDrawPage->getCount()); // One shape in the doc
     }
 }
@@ -464,18 +464,18 @@ DECLARE_OOXMLEXPORT_TEST(testNestedTextFrames, "nested-text-frames.odt")
     // Second problem was LO made file corruption, writing out nested text boxes, which can't be handled by Word.
     // Test that all three exported text boxes are anchored to the same paragraph and not each other.
     uno::Reference<text::XTextContent> xTextContent(getShape(1), uno::UNO_QUERY);
-    uno::Reference<text::XTextRange> xRange(xTextContent->getAnchor(), uno::UNO_QUERY);
-    uno::Reference<text::XText> xText(xRange->getText(), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xRange = xTextContent->getAnchor();
+    uno::Reference<text::XText> xText = xRange->getText();
     CPPUNIT_ASSERT_EQUAL(OUString("Anchor point"), xText->getString());
 
     xTextContent.set(getShape(2), uno::UNO_QUERY);
-    xRange.set(xTextContent->getAnchor(), uno::UNO_QUERY);
-    xText.set(xRange->getText(), uno::UNO_QUERY);
+    xRange = xTextContent->getAnchor();
+    xText = xRange->getText();
     CPPUNIT_ASSERT_EQUAL(OUString("Anchor point"), xText->getString());
 
     xTextContent.set(getShape(3), uno::UNO_QUERY);
-    xRange.set(xTextContent->getAnchor(), uno::UNO_QUERY);
-    xText.set(xRange->getText(), uno::UNO_QUERY);
+    xRange = xTextContent->getAnchor();
+    xText = xRange->getText();
     CPPUNIT_ASSERT_EQUAL(OUString("Anchor point"), xText->getString());
 }
 
@@ -506,7 +506,7 @@ DECLARE_OOXMLEXPORT_TEST(testEmbeddedXlsx, "embedded-xlsx.docx")
 {
     // check there are two objects and they are FrameShapes
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDraws = xDrawPageSupplier->getDrawPage();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xDraws->getCount());
     CPPUNIT_ASSERT_EQUAL(OUString("FrameShape"), getShape(1)->getShapeType());
     CPPUNIT_ASSERT_EQUAL(OUString("FrameShape"), getShape(2)->getShapeType());
@@ -1072,7 +1072,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf102466, "tdf102466.docx")
     // check content of the first page
     {
         uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-        uno::Reference<container::XIndexAccess> xIndexAccess(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+        uno::Reference<container::XIndexAccess> xIndexAccess = xDrawPageSupplier->getDrawPage();
         uno::Reference<beans::XPropertySet> xFrame(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
 
         // no border

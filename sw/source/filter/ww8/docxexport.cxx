@@ -1322,13 +1322,13 @@ void DocxExport::WriteVBA()
     if (!xStorageBasedDocument.is())
         return;
 
-    uno::Reference<embed::XStorage> xDocumentStorage(xStorageBasedDocument->getDocumentStorage(), uno::UNO_QUERY);
+    uno::Reference<embed::XStorage> xDocumentStorage = xStorageBasedDocument->getDocumentStorage();
     OUString aMacrosName("_MS_VBA_Macros");
     if (!xDocumentStorage.is() || !xDocumentStorage->hasByName(aMacrosName))
         return;
 
     const sal_Int32 nOpenMode = embed::ElementModes::READ;
-    uno::Reference<io::XStream> xMacrosStream(xDocumentStorage->openStreamElement(aMacrosName, nOpenMode), uno::UNO_QUERY);
+    uno::Reference<io::XStream> xMacrosStream = xDocumentStorage->openStreamElement(aMacrosName, nOpenMode);
     uno::Reference<io::XOutputStream> xProjectStream;
     if (xMacrosStream.is())
     {
@@ -1352,7 +1352,7 @@ void DocxExport::WriteVBA()
     if (!xDocumentStorage.is() || !xDocumentStorage->hasByName(aDataName))
         return;
 
-    uno::Reference<io::XStream> xDataStream(xDocumentStorage->openStreamElement(aDataName, nOpenMode), uno::UNO_QUERY);
+    uno::Reference<io::XStream> xDataStream = xDocumentStorage->openStreamElement(aDataName, nOpenMode);
     if (xDataStream.is())
     {
         // Then the data stream, which wants to work with an already set

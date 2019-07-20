@@ -197,7 +197,6 @@ void SwOneExampleFrame::CreateControl()
         sTempURL = m_sArgumentURL;
 
     uno::Reference<frame::XDesktop2> xDesktop = frame::Desktop::create(::comphelper::getProcessComponentContext());
-    uno::Reference<frame::XComponentLoader> xLoader(xDesktop, uno::UNO_QUERY);
     uno::Sequence<beans::PropertyValue> args( comphelper::InitPropertySequence({
             { "DocumentService", uno::Any(OUString("com.sun.star.text.TextDocument")) },
             { "OpenFlags", uno::Any(OUString("-RB")) },
@@ -206,7 +205,7 @@ void SwOneExampleFrame::CreateControl()
             { "Hidden", uno::Any(true) }
         }));
 
-    m_xModel.set(xLoader->loadComponentFromURL(sTempURL, "_blank", 0, args), uno::UNO_QUERY);
+    m_xModel.set(xDesktop->loadComponentFromURL(sTempURL, "_blank", 0, args), uno::UNO_QUERY);
 
     m_aLoadedIdle.Start();
 }
@@ -232,7 +231,7 @@ IMPL_LINK( SwOneExampleFrame, TimeoutHdl, Timer*, pTimer, void )
 
     if (m_xController.is())
     {
-        uno::Reference<frame::XFrame> xFrame(m_xController->getFrame(), uno::UNO_QUERY);
+        uno::Reference<frame::XFrame> xFrame = m_xController->getFrame();
         uno::Reference< beans::XPropertySet > xPropSet( xFrame, uno::UNO_QUERY );
         if ( xPropSet.is() )
         {
