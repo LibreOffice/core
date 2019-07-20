@@ -360,20 +360,27 @@ SdrMediaObj* View::InsertMediaObj( const OUString& rMediaURL, const OUString& rM
         if( pPickObj )
             ReplaceObjectAtView(pPickObj, *pPV, pNewMediaObj);
         else
-            InsertObjectAtView( pNewMediaObj, *pPV, SdrInsertFlags::SETDEFLAYER );
+        {
+            if (!InsertObjectAtView(pNewMediaObj, *pPV, SdrInsertFlags::SETDEFLAYER))
+                pNewMediaObj = nullptr;
+        }
 
         OUString referer;
         DrawDocShell * sh = GetDocSh();
         if (sh != nullptr && sh->HasName()) {
             referer = sh->GetMedium()->GetName();
         }
-        pNewMediaObj->setURL( rMediaURL, referer, rMimeType );
 
-        if( pPickObj )
+        if (pNewMediaObj)
         {
-            pNewMediaObj->AdjustToMaxRect( aRect );
-            if( bIsPres )
-                pNewMediaObj->SetUserCall( pUserCall );
+            pNewMediaObj->setURL( rMediaURL, referer, rMimeType );
+
+            if( pPickObj )
+            {
+                pNewMediaObj->AdjustToMaxRect( aRect );
+                if( bIsPres )
+                    pNewMediaObj->SetUserCall( pUserCall );
+            }
         }
     }
 
