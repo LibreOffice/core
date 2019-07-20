@@ -289,27 +289,30 @@ IMPL_LINK_NOARG(Animation, ImplTimeoutHdl, Timer*, void)
 
         if (maNotifyLink.IsSet())
         {
-            std::vector<std::unique_ptr<AInfo>> aAInfoList;
-            // create AInfo-List
-            for (auto const& i : maAnimationRenderers)
-                aAInfoList.emplace_back(i->createAInfo());
+            std::vector<std::unique_ptr<AnimationData>> aAnimationDataItems;
+            // create AnimationData-List
+            for (auto const& rAnimDataItem : maAnimationRenderers)
+                aAnimationDataItems.emplace_back(rAnimDataItem->createAnimationData());
 
             maNotifyLink.Call(this);
 
-            // set view state from AInfo structure
-            for (auto& pAInfo : aAInfoList)
+            // set view state from AnimationData structure
+            for (auto& pItem : aAnimationDataItems)
             {
-                if (!pAInfo->pViewData)
+                if (!pItem->pViewData)
                 {
-                    pView = new AnimationRenderer(this, pAInfo->pOutDev, pAInfo->aStartOrg,
-                                                  pAInfo->aStartSize, pAInfo->nCallerId);
+                    pView = new AnimationRenderer(
+                        this, pItem->pOutDev, pItem->aStartOrg,
+                        pItem->aStartSize, pItem->nCallerId);
 
                     maAnimationRenderers.push_back(std::unique_ptr<AnimationRenderer>(pView));
                 }
                 else
-                    pView = static_cast<AnimationRenderer*>(pAInfo->pViewData);
+                {
+                    pView = static_cast<AnimationRenderer*>(pItem->pViewData);
+                }
 
-                pView->pause(pAInfo->bPause);
+                pView->pause(pItem->bPause);
                 pView->setMarked(true);
             }
 
@@ -683,7 +686,7 @@ SvStream& ReadAnimation(SvStream& rIStm, Animation& rAnimation)
     return rIStm;
 }
 
-AInfo::AInfo()
+AnimationData::AnimationData()
     : pOutDev(nullptr)
     , pViewData(nullptr)
     , nCallerId(0)
