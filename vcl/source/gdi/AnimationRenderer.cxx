@@ -23,7 +23,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/window.hxx>
 
-#include <impanmvw.hxx>
+#include <AnimationRenderer.hxx>
 #include <window.h>
 
 #include <memory>
