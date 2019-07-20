@@ -43,11 +43,10 @@ struct AnimationData
 class AnimationRenderer
 {
 public:
-    ~AnimationRenderer();
-
-private:
     AnimationRenderer(Animation* pParent, OutputDevice* pOut, const Point& rPt, const Size& rSz,
                       sal_uLong nCallerId, OutputDevice* pFirstFrameOutDev = nullptr);
+
+    ~AnimationRenderer();
 
     bool matches(OutputDevice* pOut, long nCallerId) const;
     void drawToIndex(sal_uLong nIndex);
@@ -68,8 +67,6 @@ private:
     bool isMarked() const { return mbIsMarked; }
 
 private:
-    friend class Animation;
-
     Animation* const mpParent;
     VclPtr<OutputDevice> mpRenderContext;
     long const mnCallerId;
