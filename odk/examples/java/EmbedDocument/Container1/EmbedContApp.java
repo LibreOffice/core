@@ -388,7 +388,7 @@ public class EmbedContApp extends Applet implements MouseListener, XEmbeddedClie
                     if ( m_xStorage == null )
                     {
                         JOptionPane.showMessageDialog( m_aFrame,
-                                                        "No storage for oned file!",
+                                                        "No storage for owned file!",
                                                         "Error:",
                                                         JOptionPane.ERROR_MESSAGE );
                         return;
