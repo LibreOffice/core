@@ -92,7 +92,6 @@ public:
 class LOKClipboardFactory : public ::cppu::WeakComponentImplHelper<css::lang::XSingleServiceFactory>
 {
     static osl::Mutex gMutex;
-    static std::unordered_map<int, rtl::Reference<LOKClipboard>> gClipboards;
 
 public:
     LOKClipboardFactory()
@@ -106,7 +105,12 @@ public:
     }
     css::uno::Reference<css::uno::XInterface> SAL_CALL
     createInstanceWithArguments(const css::uno::Sequence<css::uno::Any>& /* rArgs */) override;
+
+    /// Fetch clipboard from the gobal pool.
     static rtl::Reference<LOKClipboard> getClipboardForCurView();
+
+    /// Release a clipboard before its document dies, nViewId of -1 clears all.
+    static void releaseClipboardForView(int nViewId);
 };
 
 #endif
