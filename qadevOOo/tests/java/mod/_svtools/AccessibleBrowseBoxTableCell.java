@@ -151,32 +151,13 @@ public class AccessibleBrowseBoxTableCell extends TestCase {
 
         the_frame2.setName("DatasourceBrowser");
 
-        XInterface oObj = null;
-
-        UnoRuntime.queryInterface(
-                XInitialization.class, the_frame2.getController());
-
-        Object[] params = new Object[3];
-        PropertyValue param1 = new PropertyValue();
-        param1.Name = "DataSourceName";
-        param1.Value = "Bibliography";
-        params[0] = param1;
-        PropertyValue param2 = new PropertyValue();
-        param2.Name = "CommandType";
-        param2.Value = Integer.valueOf(com.sun.star.sdb.CommandType.TABLE);
-        params[1] = param2;
-        PropertyValue param3 = new PropertyValue();
-        param3.Name = "Command";
-        param3.Value = "biblio";
-        params[2] = param3;
-
         util.utils.waitForEventIdle(tParam.getMSF());
 
         XWindow xWindow = secondController.getFrame().getContainerWindow();
 
         XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
 
-        oObj = AccessibilityTools.getAccessibleObjectForRole(xRoot, AccessibleRole.TABLE_CELL);
+        XInterface oObj = AccessibilityTools.getAccessibleObjectForRole(xRoot, AccessibleRole.TABLE_CELL);
 
         log.println("ImplementationName: "+util.utils.getImplName(oObj));
 
