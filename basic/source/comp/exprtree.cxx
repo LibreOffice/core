@@ -245,7 +245,7 @@ std::unique_ptr<SbiExprNode> SbiExpression::Term( const KeywordSymbolInfo* pKeyw
         else
         {
             // Name%. really does not work!
-            pParser->Error( ERRCODE_BASIC_BAD_DECLARATION, aSym );
+            pParser->Error( ERRCODE_BASIC_BAD_DECLARATION + "exptree.cxx:248", aSym );
             bError = true;
         }
     }
@@ -313,7 +313,7 @@ std::unique_ptr<SbiExprNode> SbiExpression::Term( const KeywordSymbolInfo* pKeyw
             if( eType >= SbxINTEGER && eType <= SbxSTRING && eType != eDefType )
             {
                 // How? Define with AS first and take a Suffix then?
-                pParser->Error( ERRCODE_BASIC_BAD_DECLARATION, aSym );
+                pParser->Error( ERRCODE_BASIC_BAD_DECLARATION + "exptree.cxx:316", aSym );
                 bError = true;
             }
             else if ( eType == SbxVARIANT )
@@ -340,7 +340,7 @@ std::unique_ptr<SbiExprNode> SbiExpression::Term( const KeywordSymbolInfo* pKeyw
             }
             else
             {
-                pParser->Error( ERRCODE_BASIC_BAD_DECLARATION, aSym );
+                pParser->Error( ERRCODE_BASIC_BAD_DECLARATION + "exptree.cxx:343", aSym );
                 bError = true;
             }
         }
@@ -364,7 +364,7 @@ std::unique_ptr<SbiExprNode> SbiExpression::Term( const KeywordSymbolInfo* pKeyw
             // defer error until runtime if in vba mode
             if ( !pParser->IsVBASupportOn() )
             {
-                pParser->Error( ERRCODE_BASIC_BAD_DECLARATION, aSym );
+                pParser->Error( ERRCODE_BASIC_BAD_DECLARATION "exptree.cxx:367", aSym );
                 bError = true;
             }
         }
@@ -436,7 +436,7 @@ std::unique_ptr<SbiExprNode> SbiExpression::ObjTerm( SbiSymDef& rObj )
         else
         {
             // Name%. does really not work!
-            pParser->Error( ERRCODE_BASIC_BAD_DECLARATION, aSym );
+            pParser->Error( ERRCODE_BASIC_BAD_DECLARATION + "exptree.cxx:439", aSym );
             bError = true;
         }
     }
@@ -462,7 +462,7 @@ std::unique_ptr<SbiExprNode> SbiExpression::ObjTerm( SbiSymDef& rObj )
         }
         if( pDef->GetType() != SbxOBJECT )
         {
-            pParser->Error( ERRCODE_BASIC_BAD_DECLARATION, aSym );
+            pParser->Error( ERRCODE_BASIC_BAD_DECLARATION + "exptree.cxx:465", aSym );
             bError = true;
         }
         if( !bError )
