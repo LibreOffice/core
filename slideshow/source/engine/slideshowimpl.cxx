@@ -1410,20 +1410,19 @@ void SlideShowImpl::registerUserPaintPolygons( const uno::Reference< lang::XMult
     uno::Reference< drawing::XLayerManager > xLayerManager(xNameAccess, uno::UNO_QUERY);
     // create a layer and set its properties
     uno::Reference< drawing::XLayer > xDrawnInSlideshow = xLayerManager->insertNewByIndex(xLayerManager->getCount());
-    uno::Reference< beans::XPropertySet > xLayerPropSet(xDrawnInSlideshow, uno::UNO_QUERY);
 
     //Layer Name which enables to catch annotations
     OUString layerName = "DrawnInSlideshow";
     uno::Any aPropLayer;
 
     aPropLayer <<= layerName;
-    xLayerPropSet->setPropertyValue("Name", aPropLayer);
+    xDrawnInSlideshow->setPropertyValue("Name", aPropLayer);
 
     aPropLayer <<= true;
-    xLayerPropSet->setPropertyValue("IsVisible", aPropLayer);
+    xDrawnInSlideshow->setPropertyValue("IsVisible", aPropLayer);
 
     aPropLayer <<= false;
-    xLayerPropSet->setPropertyValue("IsLocked", aPropLayer);
+    xDrawnInSlideshow->setPropertyValue("IsLocked", aPropLayer);
 
     //Register polygons for each slide
     for( const auto& rPoly : maPolygons )

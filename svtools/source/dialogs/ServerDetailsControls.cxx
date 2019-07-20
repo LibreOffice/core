@@ -285,8 +285,8 @@ CmisDetailsContainer::CmisDetailsContainer(PlaceEditDialog* pParentDialog, OUStr
     m_xParentDialog(pParentDialog->getDialog()->GetXWindow())
 {
     Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
-    Reference< XInteractionHandler > xGlobalInteractionHandler(
-        InteractionHandler::createWithParent(xContext, m_xParentDialog), UNO_QUERY);
+    Reference< XInteractionHandler > xGlobalInteractionHandler =
+        InteractionHandler::createWithParent(xContext, m_xParentDialog);
     m_xCmdEnv = new ucbhelper::CommandEnvironment( xGlobalInteractionHandler, Reference< XProgressHandler >() );
 
     set_visible( false );
@@ -435,9 +435,8 @@ IMPL_LINK_NOARG( CmisDetailsContainer, RefreshReposHdl, weld::Button&, void  )
     {
         if( !sUrl.isEmpty() && !m_sUsername.isEmpty() && !m_sPassword.isEmpty() )
         {
-            Reference< XInteractionHandler > xInteractionHandler(
-                InteractionHandler::createWithParent(xContext, m_xParentDialog),
-                UNO_QUERY );
+            Reference< XInteractionHandler > xInteractionHandler =
+                InteractionHandler::createWithParent(xContext, m_xParentDialog);
 
             Sequence<OUString> aPasswd { m_sPassword };
 

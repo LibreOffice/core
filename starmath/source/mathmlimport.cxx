@@ -100,7 +100,7 @@ ErrCode SmXMLImportWrapper::Import(SfxMedium &rMedium)
     uno::Reference<uno::XComponentContext> xContext( comphelper::getProcessComponentContext() );
 
     //Make a model component from our SmModel
-    uno::Reference< lang::XComponent > xModelComp( xModel, uno::UNO_QUERY );
+    uno::Reference< lang::XComponent > xModelComp = xModel;
     OSL_ENSURE( xModelComp.is(), "XMLReader::Read: got no model" );
 
     // try to get an XStatusIndicator from the Medium
@@ -366,8 +366,7 @@ ErrCode SmXMLImportWrapper::ReadThroughComponent(
 
     // open stream (and set parser input)
     OUString sStreamName = OUString::createFromAscii(pStreamName);
-    uno::Reference < container::XNameAccess > xAccess( xStorage, uno::UNO_QUERY );
-    if ( !xAccess->hasByName(sStreamName) || !xStorage->isStreamElement(sStreamName) )
+    if ( !xStorage->hasByName(sStreamName) || !xStorage->isStreamElement(sStreamName) )
     {
         // stream name not found! Then try the compatibility name.
         // do we even have an alternative name?
