@@ -392,7 +392,7 @@ sal_Bool SAL_CALL TransferableHelper::isComplex()
 {
     // By default everything is complex, until proven otherwise
     // in the respective document type transferable handler.
-    return sal_True;
+    return true;
 }
 
 Sequence< DataFlavor > SAL_CALL TransferableHelper::getTransferDataFlavors()
