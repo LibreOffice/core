@@ -429,11 +429,11 @@ IMPL_LINK_NOARG(Animation, ImplTimeoutHdl, Timer*, void)
 {
     if (!maAnimationFrames.empty())
     {
-        bool bGlobalPause = SendTimeout();
+        bool bIsGloballyPaused = SendTimeout();
 
         if (maAnimationRenderers.empty())
             Stop();
-        else if (bGlobalPause)
+        else if (bIsGloballyPaused)
             ImplRestartTimer(10);
         else
             RenderNextFrame();
