@@ -33,11 +33,11 @@ AnimationRenderer::AnimationRenderer(Animation* pParent, OutputDevice* pOut, con
                                      OutputDevice* pFirstFrameOutDev)
     : mpParent(pParent)
     , mpRenderContext(pFirstFrameOutDev ? pFirstFrameOutDev : pOut)
+    , maClip(mpRenderContext->GetClipRegion())
+    , maSzPix(mpRenderContext->LogicToPixel(maSz))
     , mnCallerId(nCallerId)
     , maPt(rPt)
     , maSz(rSz)
-    , maSzPix(mpRenderContext->LogicToPixel(maSz))
-    , maClip(mpRenderContext->GetClipRegion())
     , mpBackground(VclPtr<VirtualDevice>::Create())
     , mpRestore(VclPtr<VirtualDevice>::Create())
     , meLastDisposal(Disposal::Back)
@@ -154,14 +154,6 @@ void AnimationRenderer::drawToIndex(sal_uLong nIndex)
 {
     VclPtr<vcl::RenderContext> pRenderContext = mpRenderContext;
 
-    std::unique_ptr<PaintBufferGuard> pGuard;
-    if (mpRenderContext->GetOutDevType() == OUTDEV_WINDOW)
-    {
-        vcl::Window* pWindow = static_cast<vcl::Window*>(mpRenderContext.get());
-        pGuard.reset(new PaintBufferGuard(pWindow->ImplGetWindowImpl()->mpFrameData, pWindow));
-        pRenderContext = pGuard->GetRenderContext();
-    }
-
     ScopedVclPtrInstance<VirtualDevice> aVDev;
     std::unique_ptr<vcl::Region> xOldClip(
         !maClip.IsNull() ? new vcl::Region(pRenderContext->GetClipRegion()) : nullptr);
@@ -176,8 +168,6 @@ void AnimationRenderer::drawToIndex(sal_uLong nIndex)
         pRenderContext->SetClipRegion(maClip);
 
     pRenderContext->DrawOutDev(maDispPt, maDispSz, Point(), maSzPix, *aVDev);
-    if (pGuard)
-        pGuard->SetPaintRect(tools::Rectangle(maDispPt, maDispSz));
 
     if (xOldClip)
         pRenderContext->SetClipRegion(*xOldClip);
