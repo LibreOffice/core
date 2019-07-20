@@ -63,7 +63,7 @@ DelayFormulaGroupingSwitch::DelayFormulaGroupingSwitch(ScDocument& rDoc, bool de
     mrDoc.DelayFormulaGrouping(delay);
 }
 
-DelayFormulaGroupingSwitch::~DelayFormulaGroupingSwitch()
+DelayFormulaGroupingSwitch::~DelayFormulaGroupingSwitch() COVERITY_NOEXCEPT_FALSE
 {
     mrDoc.DelayFormulaGrouping(mbOldValue);
 }
