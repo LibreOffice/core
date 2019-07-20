@@ -17896,7 +17896,6 @@ vcl/source/gdi/gradient.cxx
 vcl/source/gdi/graph.cxx
 vcl/source/gdi/graphictools.cxx
 vcl/source/gdi/hatch.cxx
-vcl/source/gdi/AnimationRenderer.cxx
 vcl/source/gdi/impgraph.cxx
 vcl/source/gdi/impvect.cxx
 vcl/source/gdi/impvect.hxx
