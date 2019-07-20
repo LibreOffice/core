@@ -1382,6 +1382,13 @@ void ExcelToSc8::ConvertExternName( std::unique_ptr<ScTokenArray>& rpArray, XclI
                 nRow2 = rStrm.ReaduInt16();
                 nGrbitCol1 = rStrm.ReaduInt16();
                 nGrbitCol2 = rStrm.ReaduInt16();
+
+                if (nExtTab1 >= nTabCount || nExtTab2 >= nTabCount)
+                {
+                    bError = true;
+                    break;
+                }
+
                 ScSingleRefData& rR1 = aCRD.Ref1;
                 ScSingleRefData& rR2 = aCRD.Ref2;
 
