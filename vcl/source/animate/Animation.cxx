@@ -50,8 +50,8 @@ Animation::Animation(const Animation& rAnimation)
     , mbIsInAnimation(false)
     , mbLoopTerminated(rAnimation.mbLoopTerminated)
 {
-    for (auto const& i : rAnimation.maAnimationFrames)
-        maAnimationFrames.emplace_back(new AnimationBitmap(*i));
+    for (auto const& rFrame : rAnimation.maAnimationFrames)
+        maAnimationFrames.emplace_back(new AnimationBitmap(*rFrame));
 
     maTimer.SetInvokeHandler(LINK(this, Animation, ImplTimeoutHdl));
     mnLoops = mbLoopTerminated ? 0 : mnLoopCount;
