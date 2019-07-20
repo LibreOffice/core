@@ -88,7 +88,7 @@ public class Inspector{
         private TDocSupplier oTDocSupplier;
         private Introspector m_oIntrospector = null;
         // TODO: improve these strings:
-        private static final String sWRONGINSTALLATIONPATH = "Your selected path does not refer to an SDK-Installation!";
+        private static final String sWRONGINSTALLATIONPATH = "Your selected path does not refer to a SDK-Installation!";
         /** Creates a new instance of Dialog */
         public _Inspector(XComponentContext _xComponentContext) {
             m_xComponentContext = _xComponentContext;

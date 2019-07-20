@@ -307,7 +307,7 @@ public class SCalc  {
             XChartDocument xChart = UnoRuntime.queryInterface(
                 XChartDocument.class,oInt);
             XDiagram oDiag = xChart.getDiagram();
-            System.out.println("Change Diagramm to 3D");
+            System.out.println("Change Diagram to 3D");
             XPropertySet oCPS = UnoRuntime.queryInterface(
                 XPropertySet.class, oDiag );
             oCPS.setPropertyValue("Dim3D", Boolean.TRUE);
@@ -317,7 +317,7 @@ public class SCalc  {
                 XPropertySet.class, xChart.getTitle() );
             oTPS.setPropertyValue("String","The new title");
         } catch (Exception e){
-            System.err.println("Changin Properties failed "+e);
+            System.err.println("Changing Properties failed "+e);
             e.printStackTrace(System.err);
         }
 

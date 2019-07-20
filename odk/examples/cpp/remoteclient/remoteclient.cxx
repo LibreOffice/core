@@ -168,7 +168,7 @@ sal_Int32 PipeClientMain::run( const Sequence< OUString > & aArguments ) throw (
         {
             OString o = OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US );
             printf( "%s\n", o.pData->buffer );
-            printf( "couldn't access local resource ( possible security resons )\n" );
+            printf( "couldn't access local resource (possible security reasons)\n" );
         }
         catch( NoConnectException &e )
         {
