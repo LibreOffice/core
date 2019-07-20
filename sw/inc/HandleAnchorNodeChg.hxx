@@ -50,7 +50,7 @@ public:
                            SwFlyFrame const * _pKeepThisFlyFrame = nullptr );
 
     /** calls <SwFlyFrameFormat::MakeFrames>, if re-creation of fly frames is necessary. */
-    ~SwHandleAnchorNodeChg();
+    ~SwHandleAnchorNodeChg() COVERITY_NOEXCEPT_FALSE;
 
 private:
     // fly frame format, which is tracked for a anchor node change.
