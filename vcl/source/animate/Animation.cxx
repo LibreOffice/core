@@ -397,10 +397,15 @@ IMPL_LINK_NOARG(Animation, ImplTimeoutHdl, Timer*, void)
             // marked; in this case remove view, because area of output
             // lies out of display area of window; mark state is
             // set from view itself
+
+            for (auto& rRenderer : maAnimationRenderers)
+            {
+                pRenderer->draw(mnPos);
+            }
+
             for (size_t i = 0; i < maAnimationRenderers.size();)
             {
                 AnimationRenderer* pRenderer = maAnimationRenderers[i].get();
-                pRenderer->draw(mnPos);
 
                 if (pRenderer->isMarked())
                     maAnimationRenderers.erase(maAnimationRenderers.begin() + i);
