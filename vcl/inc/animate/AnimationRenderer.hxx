@@ -17,8 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_SOURCE_GDI_IMPANMVW_HXX
-#define INCLUDED_VCL_SOURCE_GDI_IMPANMVW_HXX
+#pragma once
+
+#include <sal/config.h>
 
 #include <vcl/dllapi.h>
 #include <vcl/animate/Animation.hxx>
@@ -33,21 +34,42 @@ struct AInfo
 {
     Point           aStartOrg;
     Size            aStartSize;
-    VclPtr<OutputDevice>   pOutDev;
+    VclPtr<OutputDevice>  pOutDev;
     void*           pViewData;
-    tools::Long            nExtraData;
+    tools::Long     nExtraData;
     bool            bPause;
 
     AInfo();
 };
 
-
-class VCL_DLLPUBLIC ImplAnimView
+class VCL_DLLPUBLIC AnimationRenderer
 {
-private:
-
     friend class Animation;
 
+public:
+    AnimationRenderer(Animation* pParent, OutputDevice* pOut, const Point& rPt, const Size& rSz,
+                      sal_uLong nExtraData, OutputDevice* pFirstFrameOutDev = nullptr);
+    ~AnimationRenderer();
+
+    bool            matches(const OutputDevice* pOut, tools::Long nExtraData) const;
+    void            drawToPos( sal_uLong nPos );
+    void            draw( sal_uLong nPos, VirtualDevice* pVDev=nullptr );
+    void            repaint();
+    AInfo*          createAInfo() const;
+
+    void            getPosSize( const AnimationBitmap& rAnm, Point& rPosPix, Size& rSizePix );
+
+    const Point&    getOutPos() const { return maPt; }
+
+    const Size&     getOutSizePix() const { return maSzPix; }
+
+    void            pause( bool bIsPaused ) { mbIsPaused = bIsPaused; }
+    bool            isPause() const { return mbIsPaused; }
+
+    void            setMarked( bool bIsMarked ) { mbIsMarked = bIsMarked; }
+    bool            isMarked() const { return mbIsMarked; }
+
+private:
     Animation*      mpParent;
     VclPtr<OutputDevice>  mpRenderContext;
     tools::Long            mnExtraData;
@@ -67,32 +89,6 @@ private:
     bool            mbIsMarked;
     bool            mbIsMirroredHorizontally;
     bool            mbIsMirroredVertically;
-
-public:
-                    ImplAnimView( Animation* pParent, OutputDevice* pOut,
-                                  const Point& rPt, const Size& rSz, sal_uLong nExtraData,
-                                  OutputDevice* pFirstFrameOutDev = nullptr );
-                    ~ImplAnimView();
-
-    bool            matches(const OutputDevice* pOut, tools::Long nExtraData) const;
-    void            drawToPos( sal_uLong nPos );
-    void            draw( sal_uLong nPos, VirtualDevice* pVDev=nullptr );
-    void            repaint();
-    AInfo*          createAInfo() const;
-
-    void            getPosSize( const AnimationBitmap& rAnm, Point& rPosPix, Size& rSizePix );
-
-    const Point&    getOutPos() const { return maPt; }
-
-    const Size&     getOutSizePix() const { return maSzPix; }
-
-    void            pause( bool bIsPaused ) { mbIsPaused = bIsPaused; }
-    bool            isPause() const { return mbIsPaused; }
-
-    void            setMarked( bool bIsMarked ) { mbIsMarked = bIsMarked; }
-    bool            isMarked() const { return mbIsMarked; }
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
