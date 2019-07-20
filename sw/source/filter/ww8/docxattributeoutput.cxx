@@ -6489,6 +6489,7 @@ void DocxAttributeOutput::EmbedFontStyle( const OUString& name, int tag, FontFam
             }
             if( readSize == 0 )
                 break;
+            // coverity[overrun-buffer-arg : FALSE] - coverity has difficulty with css::uno::Sequence
             xOutStream->writeBytes( uno::Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >( buffer ), readSize ));
         }
         xOutStream->closeOutput();
