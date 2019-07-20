@@ -111,13 +111,18 @@ End Function
 Function GetControlGroupModel(oContainer as Object, sGroupName as String )
 Dim aForm, oForms As Object
 Dim aControlModel() As Object
+Dim atmpControlModel As Variant
 Dim i as integer
-
+Dim j as integer
 	oForms = oContainer.DrawPage.Forms
 	For i = 0 To oForms.Count-1
 		aForm = oForms(i)
 		If aForm.HasbyName(sGroupName) Then
-			aForm.GetGroupbyName(sGroupName,aControlModel)
+			aForm.GetGroupbyName(sGroupName,atmpControlModel)
+  			Redim aControlModel(UBound(atmpControlModel))
+			For j = 0 to UBound(atmpControlModel)
+				aControlModel(j) = atmpControlModel(j)
+			Next j
 			GetControlGroupModel = aControlModel
 			Exit Function
 		End If
@@ -130,14 +135,14 @@ End Function
 &apos; &apos;oControlGroup&apos; is a sequence of the Control objects
 Function GetRefValue(oControlGroup() as Object)
 Dim i as Integer
-	For i = 0 To Ubound(oControlGroup())
+	For i = 0 To Ubound(oControlGroup)
 &apos;		oControlGroup(i).DefaultState = oControlGroup(i).State
 		If oControlGroup(i).State Then
 			GetRefValue = oControlGroup(i).RefValue
 			exit Function
 		End If
 	Next
-	GetRefValue() = -1
+	GetRefValue = -1
 End Function
 
 
