@@ -286,8 +286,7 @@ ScChildrenShapes::ScChildrenShapes(ScAccessibleDocument* pAccessibleDocument, Sc
             xSelectionSupplier = uno::Reference<view::XSelectionSupplier>(pViewFrame->GetFrame().GetController(), uno::UNO_QUERY);
             if (xSelectionSupplier.is())
             {
-                if (mpAccessibleDocument)
-                    xSelectionSupplier->addSelectionChangeListener(mpAccessibleDocument);
+                xSelectionSupplier->addSelectionChangeListener(mpAccessibleDocument);
                 uno::Reference<drawing::XShapes> xShapes(mpViewShell->getSelectedXShapes());
                 if (xShapes.is())
                     mnShapesSelected = xShapes->getCount();
