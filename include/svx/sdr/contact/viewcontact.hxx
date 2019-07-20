@@ -65,7 +65,7 @@ protected:
     sal_uInt32 getViewObjectContactCount() const { return maViewObjectContactVector.size(); }
     ViewObjectContact* getViewObjectContact(sal_uInt32 a) const { return maViewObjectContactVector[a]; }
 
-    // Create a Object-Specific ViewObjectContact, set ViewContact and
+    // Create an Object-Specific ViewObjectContact, set ViewContact and
     // ObjectContact. Always needs to return something. Default is to create
     // a standard ViewObjectContact containing the given ObjectContact and *this
     virtual ViewObjectContact& CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact);
@@ -87,7 +87,7 @@ public:
     // basic destructor with needed cleanups
     virtual ~ViewContact();
 
-    // get a Object-specific ViewObjectContact for a specific
+    // get an Object-specific ViewObjectContact for a specific
     // ObjectContact (->View). Always needs to return something.
     ViewObjectContact& GetViewObjectContact(ObjectContact& rObjectContact);
 

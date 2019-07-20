@@ -278,7 +278,7 @@ private:
 
     BrowserMode         m_nMode;
     sal_Int32           m_nCurrentPos;      // Current position;
-    ImplSVEvent *       m_nDeleteEvent;     // EventId for asychronous deletion of rows
+    ImplSVEvent *       m_nDeleteEvent;     // EventId for asynchronous deletion of rows
     DbGridControlOptions m_nOptions;        // What is the able to do (Insert, Update, Delete)
                                             // default readonly
     DbGridControlOptions m_nOptionMask;     // the mask of options to be enabled in setDataSource

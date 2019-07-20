@@ -185,7 +185,7 @@ namespace svt
 
     //= MultiLineTextCell
 
-    /** a multi line edit which can be used in a cell of a EditBrowseBox
+    /** a multi line edit which can be used in a cell of an EditBrowseBox
     */
     class SVT_DLLPUBLIC MultiLineTextCell : public MultiLineEdit
     {

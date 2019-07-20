@@ -304,7 +304,7 @@ inline void * Mapping::mapInterface(
 /** Deprecated. This function DOES NOT WORK with Purpose Environments
     (http://wiki.openoffice.org/wiki/Uno/Binary/Spec/Purpose Environments)
 
-    Maps an binary C UNO interface to be used in the currently used compiler environment.
+    Maps a binary C UNO interface to be used in the currently used compiler environment.
 
     @tparam C interface type
     @param ppRet inout returned interface pointer

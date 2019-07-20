@@ -455,7 +455,7 @@
 #define OOO_STRING_SVTOOLS_HTML_O_target "target"
 #define OOO_STRING_SVTOOLS_HTML_O_to "to"
 
-// attributes with an URI as value
+// attributes with a URI as value
 #define OOO_STRING_SVTOOLS_HTML_O_action "action"
 #define OOO_STRING_SVTOOLS_HTML_O_archive "archive"
 #define OOO_STRING_SVTOOLS_HTML_O_background "background"

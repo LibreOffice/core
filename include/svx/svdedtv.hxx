@@ -92,7 +92,7 @@ protected:
     bool                        m_bDismantleMakeLinesPossible : 1;
     bool                        m_bOrthoDesiredOnMarked : 1;
     bool                        m_bOneOrMoreMovable : 1;        // at least one object is moveable
-    bool                        m_bMoreThanOneNoMovRot : 1;     // more then one object is not movable nor turnable (Crook)
+    bool                        m_bMoreThanOneNoMovRot : 1;     // more than one object is not movable nor turnable (Crook)
     bool                        m_bContortionPossible : 1;      // all polygones (grouped if necessary)
     bool                        m_bMoveAllowed : 1;
     bool                        m_bResizeFreeAllowed : 1;
