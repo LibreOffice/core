@@ -84,7 +84,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     Reference< XComponentContext > xComponentContext(::cppu::defaultBootstrap_InitialComponentContext());
 
     /* Gets the service manager instance to be used (or null). This method has
-       been added for convenience, because the service manager is a often used
+       been added for convenience, because the service manager is an often used
        object.
     */
     Reference< XMultiComponentFactory > xMultiComponentFactoryClient(

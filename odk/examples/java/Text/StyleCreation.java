@@ -49,7 +49,7 @@ public class StyleCreation {
     public static void main(String args[]) {
         // You need the desktop to create a document
         // The getDesktop method does the UNO bootstrapping, gets the
-        // remote servie manager and the desktop object.
+        // remote service manager and the desktop object.
         com.sun.star.frame.XDesktop xDesktop = null;
         xDesktop = getDesktop();
 

@@ -49,7 +49,7 @@ public class TestHelper  {
             return false;
         }
 
-        // get XTrucate implementation from output stream
+        // get XTruncate implementation from output stream
         XTruncate xTruncate = UnoRuntime.queryInterface( XTruncate.class, xOutput );
         if ( xTruncate == null )
         {

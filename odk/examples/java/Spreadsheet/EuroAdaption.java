@@ -36,7 +36,7 @@
 
 // comment: Step 1: get the Desktop object from the office
 //          Step 2: open an empty Calc document
-//          Step 3: enter a example text, set the numberformat to DM
+//          Step 3: enter an example text, set the numberformat to DM
 //          Step 4: change the numberformat to EUR (Euro)
 //          Step 5: use the DM/EUR factor on each cell with a content
 
@@ -80,7 +80,7 @@ public class EuroAdaption {
     public static void main(String args[]) {
         // You need the desktop to create a document
         // The getDesktop method does the UNO bootstrapping, gets the
-        // remote servie manager and the desktop object.
+        // remote service manager and the desktop object.
         com.sun.star.frame.XDesktop xDesktop = null;
         xDesktop = getDesktop();
 
@@ -294,7 +294,7 @@ public class EuroAdaption {
                 xCellRange = xSheet.getCellRangeByPosition( 2, 1 + iCounter,
                                                             2, 1 + iCounter );
 
-                // get the ProperySet from the cell, to change the numberformat
+                // get the PropertySet from the cell, to change the numberformat
                 XPropertySet xCellProp = UnoRuntime.queryInterface(
                     XPropertySet.class, xCellRange );
                 xCellProp.setPropertyValue( "NumberFormat",

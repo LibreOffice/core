@@ -83,7 +83,7 @@ public class SWriter  {
 
         //oooooooooooooooooooooooooooStep 3oooooooooooooooooooooooooooooooooooooooo
         // insert some text.
-        // For this purpose get the Text-Object of the document an create the
+        // For this purpose get the Text-Object of the document and create the
         // cursor. Now it is possible to insert a text at the cursor-position
         // via insertString
 
@@ -243,7 +243,7 @@ public class SWriter  {
         // insert a text frame.
         // create an instance of com.sun.star.text.TextFrame using the MSF of the
         // document. Change some properties an insert it.
-        // Now get the text-Object of the frame an the corresponding cursor.
+        // Now get the text-Object of the frame and the corresponding cursor.
         // Insert some text via insertString.
 
 

@@ -161,7 +161,7 @@ public class LinguisticExamples
         // Only properties with values different from the (default) values
         // in the LinguProperties property set need to be supllied.
         // Thus we may stay with an empty list in order to use the ones
-        // form the property set.
+        // from the property set.
         PropertyValue[] aEmptyProps = new PropertyValue[0];
 
         // use american english as language

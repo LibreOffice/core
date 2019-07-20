@@ -233,7 +233,7 @@ public class ContextMenuInterceptor implements XContextMenuInterceptor {
         }
         catch ( com.sun.star.beans.UnknownPropertyException ex ) {
             // do something useful
-            // we used a unknown property
+            // we used an unknown property
         }
         catch ( com.sun.star.lang.IndexOutOfBoundsException ex ) {
             // do something useful
