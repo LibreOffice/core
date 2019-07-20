@@ -138,17 +138,9 @@ void Test::checkRectPrimitive(Primitive2DSequence const & rPrimitive)
 
 bool arePrimitive2DSequencesEqual(const Primitive2DSequence& rA, const Primitive2DSequence& rB)
 {
-    const sal_Int32 nCount(rA.getLength());
-
-    if(nCount != rB.getLength())
-        return false;
-
-    for(sal_Int32 a(0); a < nCount; a++) {
-        if(!drawinglayer::primitive2d::arePrimitive2DReferencesEqual(rA[a], rB[a]))
-            return false;
-    }
-
-    return true;
+    return std::equal(rA.begin(), rA.end(), rB.begin(), rB.end(),
+        [](const Primitive2DReference& a, const Primitive2DReference& b) {
+            return drawinglayer::primitive2d::arePrimitive2DReferencesEqual(a, b); });
 }
 
 // Attributes for an object (like rect as in this case) can be defined

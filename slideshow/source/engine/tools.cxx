@@ -432,11 +432,7 @@ namespace slideshow
         bool findNamedValue( uno::Sequence< beans::NamedValue > const& rSequence,
                              const beans::NamedValue&               rSearchKey )
         {
-            const beans::NamedValue*    pArray = rSequence.getConstArray();
-            const size_t                nLen( rSequence.getLength() );
-
-            return ::std::any_of( pArray,
-                                  pArray + nLen,
+            return ::std::any_of( rSequence.begin(), rSequence.end(),
                                   NamedValueComparator( rSearchKey ) );
         }
 

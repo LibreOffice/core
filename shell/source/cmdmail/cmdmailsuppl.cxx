@@ -237,20 +237,18 @@ void SAL_CALL CmdMailSuppl::sendSimpleMailMessage( const Reference< XSimpleMailM
 
     // Append carbon copy recipients set in the message
     Sequence< OUString > aStringList = xSimpleMailMessage->getCcRecipient();
-    sal_Int32 n, nmax = aStringList.getLength();
-    for ( n = 0; n < nmax; n++ )
+    for ( const auto& rString : aStringList )
     {
         aBuffer.append(" --cc ");
-        appendShellWord(aBuffer, aStringList[n], false);
+        appendShellWord(aBuffer, rString, false);
     }
 
     // Append blind carbon copy recipients set in the message
     aStringList = xSimpleMailMessage->getBccRecipient();
-    nmax = aStringList.getLength();
-    for ( n = 0; n < nmax; n++ )
+    for ( const auto& rString : aStringList )
     {
         aBuffer.append(" --bcc ");
-        appendShellWord(aBuffer, aStringList[n], false);
+        appendShellWord(aBuffer, rString, false);
     }
 
     // Append subject if set in the message
@@ -262,11 +260,10 @@ void SAL_CALL CmdMailSuppl::sendSimpleMailMessage( const Reference< XSimpleMailM
 
     // Append attachments set in the message
     aStringList = xSimpleMailMessage->getAttachement();
-    nmax = aStringList.getLength();
-    for ( n = 0; n < nmax; n++ )
+    for ( const auto& rString : aStringList )
     {
         OUString aSystemPath;
-        if ( FileBase::E_None == FileBase::getSystemPathFromFileURL(aStringList[n], aSystemPath) )
+        if ( FileBase::E_None == FileBase::getSystemPathFromFileURL(rString, aSystemPath) )
         {
             aBuffer.append(" --attach ");
             appendShellWord(aBuffer, aSystemPath, true);

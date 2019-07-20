@@ -1813,14 +1813,12 @@ sal_Int32 UCBStorage_Impl::GetObjectCount()
 static OUString Find_Impl( const Sequence < Sequence < PropertyValue > >& rSequence, const OUString& rPath )
 {
     bool bFound = false;
-    for ( sal_Int32 nSeqs=0; nSeqs<rSequence.getLength(); nSeqs++ )
+    for ( const Sequence < PropertyValue >& rMyProps : rSequence )
     {
-        const Sequence < PropertyValue >& rMyProps = rSequence[nSeqs];
         OUString aType;
 
-        for ( sal_Int32 nProps=0; nProps<rMyProps.getLength(); nProps++ )
+        for ( const PropertyValue& rAny : rMyProps )
         {
-            const PropertyValue& rAny = rMyProps[nProps];
             if ( rAny.Name == "FullPath" )
             {
                 OUString aTmp;
@@ -1944,14 +1942,12 @@ bool UCBStorage_Impl::Insert( ::ucbhelper::Content *pContent )
     try
     {
         Sequence< ContentInfo > aInfo = pContent->queryCreatableContentsInfo();
-        sal_Int32 nCount = aInfo.getLength();
-        if ( nCount == 0 )
+        if ( !aInfo.hasElements() )
             return false;
 
-        for ( sal_Int32 i = 0; i < nCount; ++i )
+        for ( const ContentInfo & rCurr : aInfo )
         {
             // Simply look for the first KIND_FOLDER...
-            const ContentInfo & rCurr = aInfo[i];
             if ( rCurr.Attributes & ContentInfoAttribute::KIND_FOLDER )
             {
                 // Make sure the only required bootstrap property is "Title",

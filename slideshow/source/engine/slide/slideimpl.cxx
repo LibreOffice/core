@@ -845,11 +845,10 @@ void SlideImpl::applyShapeAttributes(
         TargetPropertiesCreator::createTargetProperties( xRootAnimationNode, bInitial ) );
 
     // apply extracted values to our shapes
-    const ::std::size_t nSize( aProps.getLength() );
-    for( ::std::size_t i=0; i<nSize; ++i )
+    for( const auto& rProp : aProps )
     {
         sal_Int16                         nParaIndex( -1 );
-        uno::Reference< drawing::XShape > xShape( aProps[i].Target,
+        uno::Reference< drawing::XShape > xShape( rProp.Target,
                                                   uno::UNO_QUERY );
 
         if( !xShape.is() )
@@ -857,7 +856,7 @@ void SlideImpl::applyShapeAttributes(
             // not a shape target. Maybe a ParagraphTarget?
             presentation::ParagraphTarget aParaTarget;
 
-            if( aProps[i].Target >>= aParaTarget )
+            if( rProp.Target >>= aParaTarget )
             {
                 // yep, ParagraphTarget found - extract shape
                 // and index
@@ -913,14 +912,13 @@ void SlideImpl::applyShapeAttributes(
                 }
             }
 
-            const uno::Sequence< beans::NamedValue >& rShapeProps( aProps[i].Properties );
-            const ::std::size_t nShapePropSize( rShapeProps.getLength() );
-            for( ::std::size_t j=0; j<nShapePropSize; ++j )
+            const uno::Sequence< beans::NamedValue >& rShapeProps( rProp.Properties );
+            for( const auto& rShapeProp : rShapeProps )
             {
                 bool bVisible=false;
-                if( rShapeProps[j].Name.equalsIgnoreAsciiCase("visibility") &&
+                if( rShapeProp.Name.equalsIgnoreAsciiCase("visibility") &&
                     extractValue( bVisible,
-                                  rShapeProps[j].Value,
+                                  rShapeProp.Value,
                                   pShape,
                                   ::basegfx::B2DSize( getSlideSize() ) ))
                 {

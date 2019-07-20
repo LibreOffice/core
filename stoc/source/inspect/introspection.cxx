@@ -93,20 +93,12 @@ typedef WeakImplHelper< XIntrospectionAccess, XMaterialHolder, XExactName,
 bool isDerivedFrom( const Reference<XIdlClass>& xToTestClass, const Reference<XIdlClass>& xDerivedFromClass )
 {
     Sequence< Reference<XIdlClass> > aClassesSeq = xToTestClass->getSuperclasses();
-    const Reference<XIdlClass>* pClassesArray = aClassesSeq.getConstArray();
 
-    sal_Int32 nSuperClassCount = aClassesSeq.getLength();
-    for ( sal_Int32 i = 0; i < nSuperClassCount; ++i )
-    {
-        const Reference<XIdlClass>& rxClass = pClassesArray[i];
-
-        if ( xDerivedFromClass->equals( rxClass ) ||
-             isDerivedFrom( rxClass, xDerivedFromClass )
-           )
-            return true;
-    }
-
-    return false;
+    return std::any_of(aClassesSeq.begin(), aClassesSeq.end(),
+        [&xDerivedFromClass](const Reference<XIdlClass>& rxClass) {
+            return xDerivedFromClass->equals( rxClass )
+                || isDerivedFrom( rxClass, xDerivedFromClass );
+        });
 }
 
 
@@ -1761,13 +1753,9 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
 
                 aClassSeq.realloc( nIfaceCount + 1 );
                 aClassSeq.getArray()[ nIfaceCount ] = xImplClass2;
-                nIfaceCount++;
 
-                const Reference<XIdlClass>* pParamArray = aClassSeq.getConstArray();
-
-                for( sal_Int32 j = 0 ; j < nIfaceCount ; j++ )
+                for( const Reference<XIdlClass>& rxIfaceClass : aClassSeq )
                 {
-                    const Reference<XIdlClass>& rxIfaceClass = pParamArray[j];
                     if (!seen.insert(rxIfaceClass->getName()).second) {
                         continue;
                     }
@@ -1776,12 +1764,9 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
 
                     // Get fields
                     Sequence< Reference<XIdlField> > fields = rxIfaceClass->getFields();
-                    const Reference<XIdlField>* pFields = fields.getConstArray();
-                    sal_Int32 nLen = fields.getLength();
 
-                    for( i = 0 ; i < nLen ; i++ )
+                    for( const Reference<XIdlField>& xField : fields )
                     {
-                        Reference<XIdlField> xField = pFields[i];
                         Reference<XIdlClass> xPropType = xField->getType();
 
                         // Is the property sequence big enough?
@@ -2291,7 +2276,6 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
                             // Option 1: Search for parameters for a listener class
                             // Disadvantage: Superclasses should be searched recursively
                             Sequence< Reference<XIdlClass> > aParams = rxMethod->getParameterTypes();
-                            const Reference<XIdlClass>* pParamArray2 = aParams.getConstArray();
 
                             css::uno::Reference<css::reflection::XIdlClass>
                                 xEventListenerClass(
@@ -2300,19 +2284,15 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
                                             css::lang::XEventListener>::get()
                                         .getTypeName()));
                             // Old: Reference<XIdlClass> xEventListenerClass = XEventListener_getReflection()->getIdlClass();
-                            sal_Int32 nParamCount = aParams.getLength();
-                            sal_Int32 k;
-                            for( k = 0 ; k < nParamCount ; k++ )
+                            auto pParam = std::find_if(aParams.begin(), aParams.end(),
+                                [&xEventListenerClass](const Reference<XIdlClass>& rxClass) {
+                                    // Are we derived from a listener?
+                                    return rxClass->equals( xEventListenerClass )
+                                        || isDerivedFrom( rxClass, xEventListenerClass );
+                                });
+                            if (pParam != aParams.end())
                             {
-                                const Reference<XIdlClass>& rxClass = pParamArray2[k];
-
-                                // Are we derived from a listener?
-                                if( rxClass->equals( xEventListenerClass ) ||
-                                    isDerivedFrom( rxClass, xEventListenerClass ) )
-                                {
-                                    xListenerClass = rxClass;
-                                    break;
-                                }
+                                xListenerClass = *pParam;
                             }
 
                             // Option 2: Unload the name of the method
@@ -2376,12 +2356,9 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
 
         // Get fields
         Sequence< Reference<XIdlField> > fields = xClassRef->getFields();
-        const Reference<XIdlField>* pFields = fields.getConstArray();
-        sal_Int32 nLen = fields.getLength();
 
-        for( i = 0 ; i < nLen ; i++ )
+        for( const Reference<XIdlField>& xField : fields )
         {
-            Reference<XIdlField> xField = pFields[i];
             Reference<XIdlClass> xPropType = xField->getType();
             OUString aPropName = xField->getName();
 
