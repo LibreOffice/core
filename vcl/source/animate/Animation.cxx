@@ -172,7 +172,7 @@ bool Animation::Start(OutputDevice* pOut, const Point& rDestPt, const Size& rDes
             && (ANIMATION_TIMEOUT_ON_CLICK != maAnimationFrames[mnFrameIndex]->mnWait))
         {
             AnimationRenderer* pRenderer;
-            AnimationRenderer* pMatch = nullptr;
+            bool bRendererDoesNotExist = true;
 
             for (size_t i = 0; i < maAnimationRenderers.size(); ++i)
             {
@@ -183,12 +183,11 @@ bool Animation::Start(OutputDevice* pOut, const Point& rDestPt, const Size& rDes
                         && pRenderer->getOutSizePix() == pOut->LogicToPixel(rDestSz))
                     {
                         pRenderer->repaint();
-                        pMatch = pRenderer;
+                        bRendererDoesNotExist = false;
                     }
                     else
                     {
                         maAnimationRenderers.erase(maAnimationRenderers.begin() + i);
-                        pRenderer = nullptr;
                     }
 
                     break;
@@ -202,7 +201,7 @@ bool Animation::Start(OutputDevice* pOut, const Point& rDestPt, const Size& rDes
                 mnFrameIndex = 0;
             }
 
-            if (!pMatch)
+            if (bRendererDoesNotExist)
                 maAnimationRenderers.emplace_back(new AnimationRenderer(
                     this, pOut, rDestPt, rDestSz, nCallerId, pFirstFrameOutDev));
 
