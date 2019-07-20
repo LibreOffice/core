@@ -333,21 +333,21 @@ IMPL_LINK_NOARG(Animation, ImplTimeoutHdl, Timer*, void)
             {
                 pRenderer = maAnimationRenderers[i].get();
                 if (!pRenderer->isMarked())
-                {
                     maAnimationRenderers.erase(maAnimationRenderers.begin() + i);
-                }
-                else
-                {
-                    if (!pRenderer->isPause())
-                        bGlobalPause = false;
+            }
 
-                    pRenderer->setMarked(false);
-                    i++;
-                }
+            for (auto& rItem : maAnimationRenderers)
+            {
+                if (!rItem->isPause())
+                    bGlobalPause = false;
+
+                rItem->setMarked(false);
             }
         }
         else
+        {
             bGlobalPause = false;
+        }
 
         if (maAnimationRenderers.empty())
             Stop();
