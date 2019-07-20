@@ -207,7 +207,7 @@ bool Animation::Start(OutputDevice* pOut, const Point& rDestPt, const Size& rDes
 
             if (!mbIsInAnimation)
             {
-                ImplRestartTimer(maAnimationFrames[mnFrameIndex]->mnWait);
+                RestartTimer(maAnimationFrames[mnFrameIndex]->mnWait);
                 mbIsInAnimation = true;
             }
         }
@@ -273,7 +273,7 @@ namespace
 constexpr sal_uLong constMinTimeout = 2;
 }
 
-void Animation::ImplRestartTimer(sal_uLong nTimeout)
+void Animation::RestartTimer(sal_uLong nTimeout)
 {
     maTimer.SetTimeout(std::max(nTimeout, constMinTimeout) * 10);
     maTimer.Start();
@@ -421,7 +421,7 @@ void Animation::RenderNextFrame()
         if (maAnimationRenderers.empty())
             Stop();
         else
-            ImplRestartTimer(pCurrentFrameBmp->mnWait);
+            RestartTimer(pCurrentFrameBmp->mnWait);
     }
 }
 
@@ -434,7 +434,7 @@ IMPL_LINK_NOARG(Animation, ImplTimeoutHdl, Timer*, void)
         if (maAnimationRenderers.empty())
             Stop();
         else if (bIsGloballyPaused)
-            ImplRestartTimer(10);
+            RestartTimer(10);
         else
             RenderNextFrame();
     }
