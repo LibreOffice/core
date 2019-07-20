@@ -790,9 +790,9 @@ void scaleDown24bit(ScaleContext &rCtx, long nStartY, long nEndY)
                                 1 : (rCtx.maMapIX[nRight] - rCtx.maMapIX[nLeft]);
             }
 
-            long nSum1 = 0;
-            long nSum2 = 0;
-            long nSum3 = 0;
+            int nSum1 = 0;
+            int nSum2 = 0;
+            int nSum3 = 0;
             BilinearWeightType nTotalWeightY = 0;
 
             for (long i = 0; i<= nLineRange; i++)
