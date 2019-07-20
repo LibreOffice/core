@@ -278,7 +278,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/gdi/graph \
     vcl/source/gdi/graphictools \
     vcl/source/gdi/hatch \
-    vcl/source/gdi/impanmvw \
+    vcl/source/gdi/AnimationRenderer \
     vcl/source/gdi/impglyphitem \
     vcl/source/gdi/impgraph \
     vcl/source/gdi/impvect \
