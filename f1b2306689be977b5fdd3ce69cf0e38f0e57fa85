@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_fba584b6",
+        "filename": "sysui/desktop/apparmor/libreoffice-soffice.bin",
+        "patchSetId": 1
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1000130
+      },
+      "writtenOn": "2019-07-20T10:16:40Z",
+      "side": 1,
+      "message": "Is anything in LO using openssl? xmlsec uses nss. As does neon. TTBOMK openssl is just a bystander just being built for postgresql etc. to me (I do  https://salsa.debian.org/libreoffice-team/libreoffice/libreoffice/blob/master/patches/no-openssl.diff ...)",
+      "revId": "f1b2306689be977b5fdd3ce69cf0e38f0e57fa85",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_dba0c0a8",
+        "filename": "sysui/desktop/apparmor/libreoffice-soffice.bin",
+        "patchSetId": 1
+      },
+      "lineNbr": 276,
+      "author": {
+        "id": 1000130
+      },
+      "writtenOn": "2019-07-20T10:16:40Z",
+      "side": 1,
+      "message": "dri abstractions is available:\nhttps://salsa.debian.org/libreoffice-team/libreoffice/libreoffice/blob/master/patches/apparmor-cleanups.diff\n\nmesa abstraction also is available:\nhttps://salsa.debian.org/libreoffice-team/libreoffice/libreoffice/blob/master/patches/apparmor-mesa.diff",
+      "revId": "f1b2306689be977b5fdd3ce69cf0e38f0e57fa85",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
