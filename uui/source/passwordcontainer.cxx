@@ -123,8 +123,6 @@ bool PasswordContainerHelper::handleAuthenticationRequest(
     OUString const & rURL,
     uno::Reference< task::XInteractionHandler2 > const & xIH )
 {
-    uno::Reference< task::XInteractionHandler > xIH1(xIH, uno::UNO_QUERY);
-
     // Is continuation even a XInteractionSupplyAuthentication2, which
     // is derived from XInteractionSupplyAuthentication?
     uno::Reference< ucb::XInteractionSupplyAuthentication2 >
@@ -174,12 +172,12 @@ bool PasswordContainerHelper::handleAuthenticationRequest(
             {
                 task::UrlRecord aRec;
                 if ( !rURL.isEmpty() )
-                    aRec = m_xPasswordContainer->find(rURL, xIH1);
+                    aRec = m_xPasswordContainer->find(rURL, xIH);
 
                 if ( !aRec.UserList.hasElements() )
                 {
                     // compat: try server name.
-                    aRec = m_xPasswordContainer->find(rRequest.ServerName, xIH1);
+                    aRec = m_xPasswordContainer->find(rRequest.ServerName, xIH);
                 }
 
                 if ( fillContinuation( false,
@@ -198,13 +196,13 @@ bool PasswordContainerHelper::handleAuthenticationRequest(
                 task::UrlRecord aRec;
                 if ( !rURL.isEmpty() )
                     aRec = m_xPasswordContainer->findForName(
-                        rURL, rRequest.UserName, xIH1);
+                        rURL, rRequest.UserName, xIH);
 
                 if ( !aRec.UserList.hasElements() )
                 {
                     // compat: try server name.
                     aRec = m_xPasswordContainer->findForName(
-                        rRequest.ServerName, rRequest.UserName, xIH1);
+                        rRequest.ServerName, rRequest.UserName, xIH);
                 }
 
                 if ( fillContinuation( false,
@@ -233,8 +231,6 @@ bool PasswordContainerHelper::addRecord(
     uno::Reference< task::XInteractionHandler2 > const & xIH,
     bool bPersist )
 {
-    uno::Reference< task::XInteractionHandler > xIH1(xIH, uno::UNO_QUERY);
-
     try
     {
         if ( !rUsername.isEmpty() )
@@ -254,13 +250,13 @@ bool PasswordContainerHelper::addRecord(
                 m_xPasswordContainer->addPersistent( rURL,
                                                      rUsername,
                                                      rPasswords,
-                                                     xIH1 );
+                                                     xIH );
             }
             else
                 m_xPasswordContainer->add( rURL,
                                            rUsername,
                                            rPasswords,
-                                           xIH1 );
+                                           xIH );
         }
         else
         {
