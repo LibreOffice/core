@@ -1016,8 +1016,8 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwChartDataProvider::detectArgume
             OSL_FAIL("got NULL for XLabeledDataSequence from Data source");
             continue;
         }
-        const uno::Reference< chart2::data::XDataSequence > xCurLabel( xLabeledDataSequence->getLabel(), uno::UNO_QUERY );
-        const uno::Reference< chart2::data::XDataSequence > xCurValues( xLabeledDataSequence->getValues(), uno::UNO_QUERY );
+        const uno::Reference< chart2::data::XDataSequence > xCurLabel = xLabeledDataSequence->getLabel();
+        const uno::Reference< chart2::data::XDataSequence > xCurValues = xLabeledDataSequence->getValues();
 
         // get sequence lengths for label and values.
         // (0 length is Ok)
@@ -1475,12 +1475,11 @@ void SwChartDataProvider::DeleteBox( const SwTable *pTable, const SwTableBox &rB
             bool bSeqDisposed = false;
 
             // check if weak reference is still valid...
-            uno::Reference< chart2::data::XDataSequence > xTemp(*aIt);  // temporary needed for g++ 3.3.5
-            uno::Reference< chart2::data::XDataSequence > xRef( xTemp, uno::UNO_QUERY );
-            if (xRef.is())
+            uno::Reference< chart2::data::XDataSequence > xTemp(*aIt);
+            if (xTemp.is())
             {
                 // then delete that table box (check if implementation cursor needs to be adjusted)
-                pDataSeq = static_cast< SwChartDataSequence * >( xRef.get() );
+                pDataSeq = static_cast< SwChartDataSequence * >( xTemp.get() );
                 if (pDataSeq)
                 {
                     try

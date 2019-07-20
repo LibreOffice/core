@@ -105,7 +105,7 @@ DECLARE_OOXMLEXPORT_TEST(testSmartart, "smartart.docx")
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xTextDocumentPropertySet(xTextDocument, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDraws = xDrawPageSupplier->getDrawPage();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xDraws->getCount()); // One groupshape in the doc
 
     uno::Reference<container::XIndexAccess> xGroup(getShape(1), uno::UNO_QUERY);
@@ -232,7 +232,7 @@ DECLARE_OOXMLEXPORT_TEST(testMceNested, "mce-nested.docx")
     // This was -1 (default), make sure the background color is set.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0x4f81bd), getProperty<sal_Int32>(xShape, "FillColor"));
 
-    uno::Reference<drawing::XShapeDescriptor> xShapeDescriptor(getShape(2), uno::UNO_QUERY);
+    uno::Reference<drawing::XShapeDescriptor> xShapeDescriptor = getShape(2);
     // This was a com.sun.star.drawing.CustomShape, due to incorrect handling of wpg elements after a wps textbox.
     CPPUNIT_ASSERT_EQUAL(OUString("com.sun.star.drawing.GroupShape"), xShapeDescriptor->getShapeType());
 
@@ -262,7 +262,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo70457, "fdo70457.docx")
 
     // Check: there is one shape in the doc
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDraws = xDrawPageSupplier->getDrawPage();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xDraws->getCount());
 
     // Check: the angle of the shape is 45º
@@ -335,7 +335,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo65090, "fdo65090.docx")
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables( ), uno::UNO_QUERY);
     uno::Reference<text::XTextTable> xTextTable(xTables->getByIndex(0), uno::UNO_QUERY);
-    uno::Reference<table::XTableRows> xTableRows(xTextTable->getRows(), uno::UNO_QUERY);
+    uno::Reference<table::XTableRows> xTableRows = xTextTable->getRows();
     // The first row had two cells, instead of a single horizontally merged one.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty< uno::Sequence<text::TableColumnSeparator> >(xTableRows->getByIndex(0), "TableColumnSeparators").getLength());
 }
@@ -344,11 +344,11 @@ DECLARE_OOXMLEXPORT_TEST(testFdo69649, "fdo69649.docx")
 {
     // The DOCX containing the Table of Contents was not imported with correct page nos
     uno::Reference<text::XDocumentIndexesSupplier> xIndexSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xIndexes(xIndexSupplier->getDocumentIndexes( ), uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexes = xIndexSupplier->getDocumentIndexes( );
     uno::Reference<text::XDocumentIndex> xTOCIndex(xIndexes->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xTextRange(xTOCIndex->getAnchor(), uno::UNO_QUERY);
-    uno::Reference<text::XText> xText(xTextRange->getText( ), uno::UNO_QUERY);
-    uno::Reference<text::XTextCursor> xTextCursor(xText->createTextCursor( ), uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = xTextRange->getText( );
+    uno::Reference<text::XTextCursor> xTextCursor = xText->createTextCursor( );
     xTextCursor->gotoRange(xTextRange->getStart(),false);
     xTextCursor->gotoRange(xTextRange->getEnd(),true);
     OUString aTocString(xTextCursor->getString());
@@ -424,13 +424,13 @@ DECLARE_OOXMLEXPORT_TEST(testFloatingTablesAnchor, "floating-tables-anchor.docx"
     // Problem was one of the two text frames was anchored to the other text frame
     // Both frames should be anchored to the paragraph with the text "Anchor point"
     uno::Reference<text::XTextContent> xTextContent(getShape(1), uno::UNO_QUERY);
-    uno::Reference<text::XTextRange> xRange(xTextContent->getAnchor(), uno::UNO_QUERY);
-    uno::Reference<text::XText> xText(xRange->getText(), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xRange = xTextContent->getAnchor();
+    uno::Reference<text::XText> xText = xRange->getText();
     CPPUNIT_ASSERT_EQUAL(OUString("Anchor point"), xText->getString());
 
     xTextContent.set(getShape(2), uno::UNO_QUERY);
-    xRange.set(xTextContent->getAnchor(), uno::UNO_QUERY);
-    xText.set(xRange->getText(), uno::UNO_QUERY);
+    xRange = xTextContent->getAnchor();
+    xText = xRange->getText();
     CPPUNIT_ASSERT_EQUAL(OUString("Anchor point"), xText->getString());
 }
 
@@ -530,7 +530,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo38414, "fdo38414.docx" )
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables( ), uno::UNO_QUERY);
     uno::Reference<text::XTextTable> xTextTable(xTables->getByIndex(0), uno::UNO_QUERY);
-    uno::Reference<table::XTableColumns> xTableColumns(xTextTable->getColumns(), uno::UNO_QUERY);
+    uno::Reference<table::XTableColumns> xTableColumns = xTextTable->getColumns();
     CPPUNIT_ASSERT_EQUAL( sal_Int32( 5 ), xTableColumns->getCount());
     OUString height3 = parseDump("/root/page/body/tab/row[1]/cell[4]/infos/bounds", "height" );
     OUString height4 = parseDump("/root/page/body/tab/row[1]/cell[5]/infos/bounds", "height" );
@@ -541,7 +541,7 @@ DECLARE_OOXMLEXPORT_TEST(test_extra_image, "test_extra_image.docx" )
 {
     // fdo#74652 Check there is no shape added to the doc during import
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDraws = xDrawPageSupplier->getDrawPage();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xDraws->getCount());
 }
 
@@ -561,7 +561,7 @@ DECLARE_OOXMLEXPORT_TEST(testGridBefore, "gridbefore.docx")
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables( ), uno::UNO_QUERY);
     uno::Reference<text::XTextTable> xTextTable(xTables->getByIndex(0), uno::UNO_QUERY);
-    uno::Reference<table::XTableColumns> xTableColumns(xTextTable->getColumns(), uno::UNO_QUERY);
+    uno::Reference<table::XTableColumns> xTableColumns = xTextTable->getColumns();
     CPPUNIT_ASSERT_EQUAL( sal_Int32( 3 ), xTableColumns->getCount());
     OUString textA3 = parseDump("/root/page/body/tab/row[1]/cell[3]/txt/text()" );
     OUString leftA3 = parseDump("/root/page/body/tab/row[1]/cell[3]/infos/bounds", "left" );
@@ -573,7 +573,7 @@ DECLARE_OOXMLEXPORT_TEST(testGridBefore, "gridbefore.docx")
 DECLARE_OOXMLEXPORT_TEST(testMsoBrightnessContrast, "msobrightnesscontrast.docx")
 {
     uno::Reference<text::XTextDocument> textDocument(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XShape> image(getShape(1), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> image = getShape(1);
     uno::Reference<beans::XPropertySet> imageProperties(image, uno::UNO_QUERY);
     uno::Reference<graphic::XGraphic> graphic;
     imageProperties->getPropertyValue( "Graphic" ) >>= graphic;
@@ -643,13 +643,13 @@ DECLARE_OOXMLEXPORT_TEST(testBnc875718, "bnc875718.docx")
          ++i )
     {
         uno::Reference<text::XTextFrame> frame(xIndexAccess->getByIndex( i ), uno::UNO_QUERY);
-        uno::Reference<text::XTextRange> range(frame->getAnchor(), uno::UNO_QUERY);
+        uno::Reference<text::XTextRange> range = frame->getAnchor();
         uno::Reference<lang::XServiceInfo> text(range->getText(), uno::UNO_QUERY);
         CPPUNIT_ASSERT_EQUAL( OUString( "SwXHeadFootText" ), text->getImplementationName());
     }
     // Also check that the footer contents are not in the body text.
     uno::Reference<text::XTextDocument> textDocument(mxComponent, uno::UNO_QUERY);
-    uno::Reference<text::XText> text(textDocument->getText(), uno::UNO_QUERY);
+    uno::Reference<text::XText> text = textDocument->getText();
     CPPUNIT_ASSERT_EQUAL( OUString( "Text" ), text->getString());
 }
 
@@ -683,7 +683,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo78939, "fdo78939.docx")
 DECLARE_OOXMLEXPORT_TEST(testFootnote, "footnote.docx")
 {
     uno::Reference<text::XFootnotesSupplier> xFootnotesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xFootnotes(xFootnotesSupplier->getFootnotes(), uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xFootnotes = xFootnotesSupplier->getFootnotes();
     uno::Reference<text::XTextRange> xFootnote(xFootnotes->getByIndex(0), uno::UNO_QUERY);
     OUString aFootnote = xFootnote->getString();
     // Ensure there are no additional newlines after "bar".

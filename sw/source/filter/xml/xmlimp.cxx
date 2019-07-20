@@ -1186,8 +1186,7 @@ SvTextShapeImportHelper::SvTextShapeImportHelper(SvXMLImport& rImp) :
         }
 
         xPage  = xSupplier->getDrawPage();
-        Reference<XShapes> xShapes( xPage, UNO_QUERY );
-        XMLShapeImportHelper::startPage( xShapes );
+        XMLShapeImportHelper::startPage( xPage );
     }
 }
 
@@ -1197,8 +1196,7 @@ SvTextShapeImportHelper::~SvTextShapeImportHelper()
 
     if (xPage.is())
     {
-        Reference<XShapes> xShapes( xPage, UNO_QUERY );
-        XMLShapeImportHelper::endPage(xShapes);
+        XMLShapeImportHelper::endPage(xPage);
     }
 }
 

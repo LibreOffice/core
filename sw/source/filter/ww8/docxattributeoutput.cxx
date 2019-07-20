@@ -5044,8 +5044,7 @@ void DocxAttributeOutput::WritePostponedChart()
 
             OString aRelId;
             m_nChartCount++;
-            uno::Reference< frame::XModel > xModel( xChartDoc, uno::UNO_QUERY );
-            aRelId = m_rExport.OutputChart( xModel, m_nChartCount, m_pSerializer );
+            aRelId = m_rExport.OutputChart( xChartDoc, m_nChartCount, m_pSerializer );
 
             m_pSerializer->singleElementNS( XML_c, XML_chart,
                     FSNS( XML_xmlns, XML_c ), GetExport().GetFilter().getNamespaceURL(OOX_NS(dmlChart)).toUtf8(),

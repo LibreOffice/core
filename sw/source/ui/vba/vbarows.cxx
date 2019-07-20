@@ -42,7 +42,7 @@ class RowsEnumWrapper : public EnumerationHelper_BASE
 public:
     RowsEnumWrapper( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< text::XTextTable >& xTextTable ) : mxParent( xParent ), mxContext( xContext ), mxTextTable( xTextTable ), nIndex( 0 )
     {
-        mxIndexAccess.set( mxTextTable->getRows(), uno::UNO_QUERY );
+        mxIndexAccess = mxTextTable->getRows();
     }
     virtual sal_Bool SAL_CALL hasMoreElements(  ) override
     {
