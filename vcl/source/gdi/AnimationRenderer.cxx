@@ -28,62 +28,61 @@
 
 #include <memory>
 
-AnimationRenderer::AnimationRenderer( Animation* pParent, OutputDevice* pOut,
-                            const Point& rPt, const Size& rSz,
-                            sal_uLong nCallerId,
-                            OutputDevice* pFirstFrameOutDev ) :
-        mpParent        ( pParent ),
-        mpRenderContext ( pFirstFrameOutDev ? pFirstFrameOutDev : pOut ),
-        mnCallerId      (nCallerId),
-        maPt            ( rPt ),
-        maSz            ( rSz ),
-        maSzPix         ( mpRenderContext->LogicToPixel( maSz ) ),
-        maClip          ( mpRenderContext->GetClipRegion() ),
-        mpBackground    ( VclPtr<VirtualDevice>::Create() ),
-        mpRestore       ( VclPtr<VirtualDevice>::Create() ),
-        meLastDisposal  ( Disposal::Back ),
-        mbIsPaused      ( false ),
-        mbIsMarked      ( false ),
-        mbIsMirroredHorizontally         ( maSz.Width() < 0 ),
-        mbIsMirroredVertically         ( maSz.Height() < 0 )
+AnimationRenderer::AnimationRenderer(Animation* pParent, OutputDevice* pOut, const Point& rPt,
+                                     const Size& rSz, sal_uLong nCallerId,
+                                     OutputDevice* pFirstFrameOutDev)
+    : mpParent(pParent)
+    , mpRenderContext(pFirstFrameOutDev ? pFirstFrameOutDev : pOut)
+    , mnCallerId(nCallerId)
+    , maPt(rPt)
+    , maSz(rSz)
+    , maSzPix(mpRenderContext->LogicToPixel(maSz))
+    , maClip(mpRenderContext->GetClipRegion())
+    , mpBackground(VclPtr<VirtualDevice>::Create())
+    , mpRestore(VclPtr<VirtualDevice>::Create())
+    , meLastDisposal(Disposal::Back)
+    , mbIsPaused(false)
+    , mbIsMarked(false)
+    , mbIsMirroredHorizontally(maSz.Width() < 0)
+    , mbIsMirroredVertically(maSz.Height() < 0)
 {
     Animation::ImplIncAnimCount();
 
     // Mirrored horizontally?
     if( mbIsMirroredHorizontally )
     {
-        maDispPt.setX( maPt.X() + maSz.Width() + 1 );
-        maDispSz.setWidth( -maSz.Width() );
-        maSzPix.setWidth( -maSzPix.Width() );
+        maDispPt.setX(maPt.X() + maSz.Width() + 1);
+        maDispSz.setWidth(-maSz.Width());
+        maSzPix.setWidth(-maSzPix.Width());
     }
     else
     {
-        maDispPt.setX( maPt.X() );
-        maDispSz.setWidth( maSz.Width() );
+        maDispPt.setX(maPt.X());
+        maDispSz.setWidth(maSz.Width());
     }
 
     // Mirrored vertically?
     if( mbIsMirroredVertically )
     {
-        maDispPt.setY( maPt.Y() + maSz.Height() + 1 );
-        maDispSz.setHeight( -maSz.Height() );
-        maSzPix.setHeight( -maSzPix.Height() );
+        maDispPt.setY(maPt.Y() + maSz.Height() + 1);
+        maDispSz.setHeight(-maSz.Height());
+        maSzPix.setHeight(-maSzPix.Height());
     }
     else
     {
-        maDispPt.setY( maPt.Y() );
-        maDispSz.setHeight( maSz.Height() );
+        maDispPt.setY(maPt.Y());
+        maDispSz.setHeight(maSz.Height());
     }
 
     // save background
-    mpBackground->SetOutputSizePixel( maSzPix );
+    mpBackground->SetOutputSizePixel(maSzPix);
     mpRenderContext->SaveBackground(*mpBackground, maDispPt, maDispSz, maSzPix);
 
     // Initialize drawing to actual position
-    drawToIndex( mpParent->ImplGetCurPos() );
+    drawToIndex(mpParent->ImplGetCurPos());
 
     // If first frame OutputDevice is set, update variables now for real OutputDevice
-    if( pFirstFrameOutDev )
+    if (pFirstFrameOutDev)
     {
         mpRenderContext = pOut;
         maClip = mpRenderContext->GetClipRegion();
@@ -213,7 +212,7 @@ void AnimationRenderer::draw(sal_uLong nIndex, VirtualDevice* pVDev)
         getPosSize( rAnimationBitmap, aPosPix, aSizePix );
 
         // Mirrored horizontally?
-        if( mbIsMirroredHorizontally )
+        if (mbIsMirroredHorizontally)
         {
             aBmpPosPix.setX( aPosPix.X() + aSizePix.Width() - 1 );
             aBmpSizePix.setWidth( -aSizePix.Width() );
@@ -225,7 +224,7 @@ void AnimationRenderer::draw(sal_uLong nIndex, VirtualDevice* pVDev)
         }
 
         // Mirrored vertically?
-        if( mbIsMirroredVertically )
+        if (mbIsMirroredVertically)
         {
             aBmpPosPix.setY( aPosPix.Y() + aSizePix.Height() - 1 );
             aBmpSizePix.setHeight( -aSizePix.Height() );
