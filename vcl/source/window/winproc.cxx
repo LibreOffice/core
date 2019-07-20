@@ -157,9 +157,6 @@ static bool ImplHandleMouseFloatMode( vcl::Window* pChild, const Point& rMousePo
 
 static void ImplHandleMouseHelpRequest( vcl::Window* pChild, const Point& rMousePos )
 {
-    if (comphelper::LibreOfficeKit::isActive())
-        return;
-
     ImplSVData* pSVData = ImplGetSVData();
     if ( !pSVData->maHelpData.mpHelpWin ||
          !( pSVData->maHelpData.mpHelpWin->IsWindowOrChild( pChild ) ||
