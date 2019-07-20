@@ -9,6 +9,7 @@
 
 #include "lokclipboard.hxx"
 #include <sfx2/lokhelper.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 using namespace css;
 using namespace css::uno;
@@ -105,17 +106,38 @@ void LOKClipboard::removeClipboardListener(
     m_aListeners.erase(std::remove(m_aListeners.begin(), m_aListeners.end(), listener),
                        m_aListeners.end());
 }
-
-LOKTransferable::LOKTransferable(const char* pMimeType, const char* pData, std::size_t nSize)
-    : m_aMimeType(OUString::fromUtf8(pMimeType))
-    , m_aSequence(reinterpret_cast<const sal_Int8*>(pData), nSize)
+LOKTransferable::LOKTransferable(const OUString& sMimeType,
+                                 const css::uno::Sequence<sal_Int8>& aSequence)
 {
+    m_aContent.reserve(1);
+    m_aFlavors = css::uno::Sequence<css::datatransfer::DataFlavor>(1);
+    initFlavourFromMime(m_aFlavors[0], sMimeType);
+
+    uno::Any aContent;
+    if (m_aFlavors[0].DataType == cppu::UnoType<OUString>::get())
+    {
+        auto pText = reinterpret_cast<const sal_Char*>(aSequence.getConstArray());
+        aContent <<= OUString(pText, aSequence.getLength(), RTL_TEXTENCODING_UTF8);
+    }
+    else
+        aContent <<= aSequence;
+    m_aContent.push_back(aContent);
 }
-
-LOKTransferable::LOKTransferable(OUString sMimeType, const css::uno::Sequence<sal_Int8>& aSequence)
-    : m_aMimeType(std::move(sMimeType))
-    , m_aSequence(aSequence)
+// cf. sot/source/base/exchange.cxx for these two exceptional types.
+void LOKTransferable::initFlavourFromMime(css::datatransfer::DataFlavor& rFlavor,
+                                          OUString aMimeType)
 {
+    if (aMimeType.startsWith("text/plain"))
+    {
+        aMimeType = "text/plain;charset=utf-16";
+        rFlavor.DataType = cppu::UnoType<OUString>::get();
+    }
+    else if (aMimeType == "application/x-libreoffice-tsvc")
+        rFlavor.DataType = cppu::UnoType<OUString>::get();
+    else
+        rFlavor.DataType = cppu::UnoType<uno::Sequence<sal_Int8>>::get();
+    rFlavor.MimeType = aMimeType;
+    rFlavor.HumanPresentableName = aMimeType;
 }
 
 LOKTransferable::LOKTransferable(const size_t nInCount, const char** pInMimeTypes,
@@ -152,7 +174,7 @@ LOKTransferable::LOKTransferable(const size_t nInCount, const char** pInMimeType
 
 uno::Any SAL_CALL LOKTransferable::getTransferData(const datatransfer::DataFlavor& rFlavor)
 {
-    assert(m_aContent.size() == m_aFlavors.getLength());
+    assert(m_aContent.size() == (size_t)m_aFlavors.getLength());
     for (size_t i = 0; i < m_aContent.size(); ++i)
     {
         if (m_aFlavors[i].MimeType == rFlavor.MimeType)
