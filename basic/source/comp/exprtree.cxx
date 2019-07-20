@@ -188,6 +188,9 @@ std::unique_ptr<SbiExprNode> SbiExpression::Term( const KeywordSymbolInfo* pKeyw
     pParser->LockColumn();
     OUString aSym( (pKeywordSymbolInfo == nullptr) ? pParser->GetSym() : pKeywordSymbolInfo->m_aKeywordSymbol );
     SbxDataType eType = (pKeywordSymbolInfo == nullptr) ? pParser->GetType() : pKeywordSymbolInfo->m_eSbxDataType;
+    if(aSym == OUString("oControlGroup"))
+      pParser->Error( ERRCODE_BASIC_BAD_DECLARATION, aSym  + "(exptree.cxx:192)" + OUString::number(static_cast<int>(eType)));
+
     SbiExprListPtr pPar;
     std::unique_ptr<SbiExprListVector> pvMoreParLcl;
     // are there parameters following?
@@ -241,11 +244,13 @@ std::unique_ptr<SbiExprNode> SbiExpression::Term( const KeywordSymbolInfo* pKeyw
         if( eType == SbxVARIANT )
         {
             eType = SbxOBJECT;
+            if(aSym == OUString("oControlGroup"))
+              pParser->Error( ERRCODE_BASIC_BAD_DECLARATION, aSym  + "(exptree.cxx:245)" + OUString::number(static_cast<int>(eType)));
         }
         else
         {
             // Name%. really does not work!
-            pParser->Error( ERRCODE_BASIC_BAD_DECLARATION, aSym );
+            pParser->Error( ERRCODE_BASIC_BAD_DECLARATION, aSym +  "(exptree.cxx:248)");
             bError = true;
         }
     }
@@ -270,6 +275,8 @@ std::unique_ptr<SbiExprNode> SbiExpression::Term( const KeywordSymbolInfo* pKeyw
         if( bObj )
         {
             eType = SbxOBJECT;
+            if(aSym == OUString("oControlGroup"))
+              pParser->Error( ERRCODE_BASIC_BAD_DECLARATION, aSym  + "(exptree.cxx:274)" + OUString::number(static_cast<int>(eType)));
         }
         pDef = AddSym( eTok, *pParser->pPool, eCurExpr, aSym, eType, pPar.get() );
         // Looks like this is a local ( but undefined variable )
@@ -313,7 +320,7 @@ std::unique_ptr<SbiExprNode> SbiExpression::Term( const KeywordSymbolInfo* pKeyw
             if( eType >= SbxINTEGER && eType <= SbxSTRING && eType != eDefType )
             {
                 // How? Define with AS first and take a Suffix then?
-                pParser->Error( ERRCODE_BASIC_BAD_DECLARATION, aSym );
+                pParser->Error( ERRCODE_BASIC_BAD_DECLARATION, aSym + "(exptree.cxx:316)" );
                 bError = true;
             }
             else if ( eType == SbxVARIANT )
@@ -322,6 +329,8 @@ std::unique_ptr<SbiExprNode> SbiExpression::Term( const KeywordSymbolInfo* pKeyw
                 // but only if the var hasn't been defined with AS XXX
                 // so that we catch n% = 5 : print n
                 eType = eDefType;
+                if(aSym == OUString("oControlGroup"))
+                  pParser->Error( ERRCODE_BASIC_BAD_DECLARATION, aSym  + "(exptree.cxx:326)" + OUString::number(static_cast<int>(eType)));
             }
         }
         // checking type of variables:
@@ -334,13 +343,13 @@ std::unique_ptr<SbiExprNode> SbiExpression::Term( const KeywordSymbolInfo* pKeyw
             // maybe pDef describes an object that so far has only been
             // recognized as SbxVARIANT - then change type of pDef
             // from 16.12.95 (similar cases possible perhaps?!?)
-            if( eType == SbxOBJECT && pDef->GetType() == SbxVARIANT )
+            if( (eType == SbxOBJECT || (eType & SbxARRAY) == SbxARRAY  ) && pDef->GetType() == SbxVARIANT )
             {
-                pDef->SetType( SbxOBJECT );
+                pDef->SetType( eType );
             }
             else
             {
-                pParser->Error( ERRCODE_BASIC_BAD_DECLARATION, aSym );
+                pParser->Error( ERRCODE_BASIC_BAD_DECLARATION, aSym  + "(exptree.cxx:343)" + OUString::number(static_cast<int>(eType)) + "," + OUString::number(static_cast<int>(pDef->GetType())) );
                 bError = true;
             }
         }
@@ -364,7 +373,7 @@ std::unique_ptr<SbiExprNode> SbiExpression::Term( const KeywordSymbolInfo* pKeyw
             // defer error until runtime if in vba mode
             if ( !pParser->IsVBASupportOn() )
             {
-                pParser->Error( ERRCODE_BASIC_BAD_DECLARATION, aSym );
+                pParser->Error( ERRCODE_BASIC_BAD_DECLARATION, aSym +  "(exptree.cxx:367)" );
                 bError = true;
             }
         }
@@ -436,7 +445,7 @@ std::unique_ptr<SbiExprNode> SbiExpression::ObjTerm( SbiSymDef& rObj )
         else
         {
             // Name%. does really not work!
-            pParser->Error( ERRCODE_BASIC_BAD_DECLARATION, aSym );
+            pParser->Error( ERRCODE_BASIC_BAD_DECLARATION, aSym + "(exptree.cxx:439)" );
             bError = true;
         }
     }
@@ -462,7 +471,7 @@ std::unique_ptr<SbiExprNode> SbiExpression::ObjTerm( SbiSymDef& rObj )
         }
         if( pDef->GetType() != SbxOBJECT )
         {
-            pParser->Error( ERRCODE_BASIC_BAD_DECLARATION, aSym );
+            pParser->Error( ERRCODE_BASIC_BAD_DECLARATION, aSym + "(exptree.cxx:465)" );
             bError = true;
         }
         if( !bError )
