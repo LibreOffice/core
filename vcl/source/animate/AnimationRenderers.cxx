@@ -23,6 +23,8 @@
 #include <AnimationData.hxx>
 #include <AnimationRenderer.hxx>
 
+void Animation::ClearAnimationRenderers() { maAnimationRenderers.clear(); }
+
 std::vector<std::unique_ptr<AnimationData>> Animation::CreateAnimationDataItems()
 {
     std::vector<std::unique_ptr<AnimationData>> aAnimationDataItems;
