@@ -67,6 +67,7 @@ public:
     virtual void        AddSupportedFormats() override;
     virtual bool GetData( const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc ) override;
     virtual void        ObjectReleased() override;
+    virtual sal_Bool SAL_CALL isComplex() override;
 };
 
 #endif

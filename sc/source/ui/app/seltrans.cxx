@@ -413,4 +413,16 @@ void ScSelectionTransferObj::ObjectReleased()
     TransferableHelper::ObjectReleased();
 }
 
+sal_Bool SAL_CALL ScSelectionTransferObj::isComplex()
+{
+    switch (eMode)
+    {
+    case SC_SELTRANS_CELL:
+    case SC_SELTRANS_CELLS:
+        return false;
+    default:
+        return true;
+    }
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
