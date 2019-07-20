@@ -535,15 +535,8 @@ bool ContentProvider::queryNamesOfChildren(
 
                 if ( xStorage.is() )
                 {
-                    uno::Reference< container::XNameAccess > xNA(
-                        xStorage, uno::UNO_QUERY );
-
-                    OSL_ENSURE( xNA.is(), "Got no css.container.XNameAccess!" );
-                    if ( xNA.is() )
-                    {
-                        rNames = xNA->getElementNames();
-                        return true;
-                    }
+                    rNames = xStorage->getElementNames();
+                    return true;
                 }
             }
             catch ( embed::InvalidStorageException const & )
