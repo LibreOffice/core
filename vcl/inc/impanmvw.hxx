@@ -43,30 +43,6 @@ struct AInfo
 
 class AnimationRenderer
 {
-private:
-
-    friend class Animation;
-
-    Animation* const      mpParent;
-    VclPtr<OutputDevice>  mpRenderContext;
-    long const            mnCallerId;
-    Point const           maPt;
-    Point                 maDispPt;
-    Point                 maRestPt;
-    Size const            maSz;
-    Size            maSzPix;
-    Size            maDispSz;
-    Size            maRestSz;
-    vcl::Region     maClip;
-    VclPtr<VirtualDevice>  mpBackground;
-    VclPtr<VirtualDevice>  mpRestore;
-    sal_uLong       mnActIndex;
-    Disposal        meLastDisposal;
-    bool            mbIsPaused;
-    bool            mbIsMarked;
-    bool const      mbMirroredHorizontally;
-    bool const      mbMirroredVertically;
-
 public:
                     ~AnimationRenderer();
 private:
@@ -91,6 +67,30 @@ private:
 
     void            setMarked( bool bMarked ) { mbIsMarked = bMarked; }
     bool            isMarked() const { return mbIsMarked; }
+
+private:
+    friend class Animation;
+
+    Animation* const      mpParent;
+    VclPtr<OutputDevice>  mpRenderContext;
+    long const            mnCallerId;
+    Point const           maPt;
+    Point                 maDispPt;
+    Point                 maRestPt;
+    Size const            maSz;
+    Size            maSzPix;
+    Size            maDispSz;
+    Size            maRestSz;
+    vcl::Region     maClip;
+    VclPtr<VirtualDevice>  mpBackground;
+    VclPtr<VirtualDevice>  mpRestore;
+    sal_uLong       mnActIndex;
+    Disposal        meLastDisposal;
+    bool            mbIsPaused;
+    bool            mbIsMarked;
+    bool const      mbMirroredHorizontally;
+    bool const      mbMirroredVertically;
+
 };
 
 #endif
