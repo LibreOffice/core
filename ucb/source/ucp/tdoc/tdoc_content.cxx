@@ -925,10 +925,9 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
 
                 if ( !bTriedToGetAdditionalPropSet && !xAdditionalPropSet.is() )
                 {
-                    xAdditionalPropSet.set(
+                    xAdditionalPropSet =
                             pProvider->getAdditionalPropertySet( rContentId,
-                                                                 false ),
-                            uno::UNO_QUERY );
+                                                                 false );
                     bTriedToGetAdditionalPropSet = true;
                 }
 
@@ -1019,9 +1018,8 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
 
         // Append all Additional Core Properties.
 
-        uno::Reference< beans::XPropertySet > xSet(
-            pProvider->getAdditionalPropertySet( rContentId, false ),
-            uno::UNO_QUERY );
+        uno::Reference< beans::XPropertySet > xSet =
+            pProvider->getAdditionalPropertySet( rContentId, false );
         xRow->appendPropertySet( xSet );
     }
 
@@ -2131,12 +2129,7 @@ bool Content::hasData( ContentProvider const * pProvider, const Uri & rUri )
         if ( !xStorage.is() )
             return false;
 
-        uno::Reference< container::XNameAccess > xParentNA(
-            xStorage, uno::UNO_QUERY );
-
-        OSL_ENSURE( xParentNA.is(), "Got no css.container.XNameAccess!" );
-
-        return xParentNA->hasByName( rUri.getDecodedName() );
+        return xStorage->hasByName( rUri.getDecodedName() );
     }
 }
 
