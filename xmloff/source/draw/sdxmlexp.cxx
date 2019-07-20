@@ -446,7 +446,7 @@ void SAL_CALL SdXMLExport::setSourceDocument( const Reference< lang::XComponent 
     Reference < drawing::XMasterPagesSupplier > xMasterPagesSupplier(GetModel(), UNO_QUERY);
     if(xMasterPagesSupplier.is())
     {
-        mxDocMasterPages.set(xMasterPagesSupplier->getMasterPages(), css::uno::UNO_QUERY);
+        mxDocMasterPages = xMasterPagesSupplier->getMasterPages();
         if(mxDocMasterPages.is())
         {
             mnDocMasterPageCount = mxDocMasterPages->getCount();
@@ -458,7 +458,7 @@ void SAL_CALL SdXMLExport::setSourceDocument( const Reference< lang::XComponent 
     Reference <XDrawPagesSupplier> xDrawPagesSupplier(GetModel(), UNO_QUERY);
     if(xDrawPagesSupplier.is())
     {
-        mxDocDrawPages.set(xDrawPagesSupplier->getDrawPages(), css::uno::UNO_QUERY);
+        mxDocDrawPages = xDrawPagesSupplier->getDrawPages();
         if(mxDocDrawPages.is())
         {
             mnDocDrawPageCount = mxDocDrawPages->getCount();
@@ -485,14 +485,8 @@ void SAL_CALL SdXMLExport::setSourceDocument( const Reference< lang::XComponent 
             if(xHandoutSupp.is())
             {
                 Reference<XDrawPage> xHandoutPage(xHandoutSupp->getHandoutMasterPage());
-                if(xHandoutPage.is())
-                {
-                    Reference<drawing::XShapes> xShapes(xHandoutPage, UNO_QUERY);
-                    if(xShapes.is() && xShapes->getCount())
-                    {
-                        mnObjectCount += ImpRecursiveObjectCount(xShapes);
-                    }
-                }
+                if(xHandoutPage.is() && xHandoutPage->getCount())
+                    mnObjectCount += ImpRecursiveObjectCount(xHandoutPage);
             }
         }
 
@@ -515,14 +509,8 @@ void SAL_CALL SdXMLExport::setSourceDocument( const Reference< lang::XComponent 
                     if((aAny >>= xPresPage) && xPresPage.is())
                     {
                         Reference<XDrawPage> xNotesPage(xPresPage->getNotesPage());
-                        if(xNotesPage.is())
-                        {
-                            Reference<drawing::XShapes> xShapes(xNotesPage, UNO_QUERY);
-                            if(xShapes.is() && xShapes->getCount())
-                            {
-                                mnObjectCount += ImpRecursiveObjectCount(xShapes);
-                            }
-                        }
+                        if(xNotesPage.is() && xNotesPage->getCount())
+                            mnObjectCount += ImpRecursiveObjectCount(xNotesPage);
                     }
                 }
             }
@@ -547,14 +535,8 @@ void SAL_CALL SdXMLExport::setSourceDocument( const Reference< lang::XComponent 
                     if((aAny >>= xPresPage) && xPresPage.is())
                     {
                         Reference<XDrawPage> xNotesPage(xPresPage->getNotesPage());
-                        if(xNotesPage.is())
-                        {
-                            Reference<drawing::XShapes> xShapes(xNotesPage, UNO_QUERY);
-                            if(xShapes.is() && xShapes->getCount())
-                            {
-                                mnObjectCount += ImpRecursiveObjectCount(xShapes);
-                            }
-                        }
+                        if(xNotesPage.is() && xNotesPage->getCount())
+                            mnObjectCount += ImpRecursiveObjectCount(xNotesPage);
                     }
                 }
             }
@@ -1787,9 +1769,8 @@ void SdXMLExport::ExportContent_()
             exportFormsElement( xDrawPage );
 
             // write graphic objects on this page (if any)
-            Reference< drawing::XShapes > xExportShapes(xDrawPage, UNO_QUERY);
-            if(xExportShapes.is() && xExportShapes->getCount())
-                GetShapeExport()->exportShapes( xExportShapes );
+            if(xDrawPage.is() && xDrawPage->getCount())
+                GetShapeExport()->exportShapes( xDrawPage );
 
             // write animations and presentation notes (ONLY if presentation)
             if(IsImpress())
@@ -1816,23 +1797,19 @@ void SdXMLExport::ExportContent_()
                     Reference< XDrawPage > xNotesPage(xPresPage->getNotesPage());
                     if(xNotesPage.is())
                     {
-                        Reference< drawing::XShapes > xShapes(xNotesPage, UNO_QUERY);
-                        if(xShapes.is())
-                        {
-                            if( !maDrawNotesPagesStyleNames[nPageInd].isEmpty() )
-                                AddAttribute(XML_NAMESPACE_DRAW, XML_STYLE_NAME, maDrawNotesPagesStyleNames[nPageInd]);
+                        if( !maDrawNotesPagesStyleNames[nPageInd].isEmpty() )
+                            AddAttribute(XML_NAMESPACE_DRAW, XML_STYLE_NAME, maDrawNotesPagesStyleNames[nPageInd]);
 
-                            ImplExportHeaderFooterDeclAttributes( maDrawNotesPagesHeaderFooterSettings[nPageInd] );
+                        ImplExportHeaderFooterDeclAttributes( maDrawNotesPagesHeaderFooterSettings[nPageInd] );
 
-                            // write presentation notes
-                            SvXMLElementExport aPSY(*this, XML_NAMESPACE_PRESENTATION, XML_NOTES, true, true);
+                        // write presentation notes
+                        SvXMLElementExport aPSY(*this, XML_NAMESPACE_PRESENTATION, XML_NOTES, true, true);
 
-                            // write optional office:forms
-                            exportFormsElement( xNotesPage );
+                        // write optional office:forms
+                        exportFormsElement( xNotesPage );
 
-                            // write shapes per se
-                            GetShapeExport()->exportShapes( xShapes );
-                        }
+                        // write shapes per se
+                        GetShapeExport()->exportShapes( xNotesPage );
                     }
                 }
             }
@@ -2104,12 +2081,8 @@ void SdXMLExport::collectAutoStyles()
             if( xHandoutSupp.is() )
             {
                 Reference< XDrawPage > xHandoutPage( xHandoutSupp->getHandoutMasterPage() );
-                if( xHandoutPage.is() )
-                {
-                    Reference< drawing::XShapes > xShapes(xHandoutPage, UNO_QUERY);
-                    if(xShapes.is() && xShapes->getCount())
-                        GetShapeExport()->collectShapesAutoStyles( xShapes );
-                }
+                if( xHandoutPage.is() && xHandoutPage->getCount())
+                    GetShapeExport()->collectShapesAutoStyles( xHandoutPage );
             }
         }
 
@@ -2136,9 +2109,8 @@ void SdXMLExport::collectAutoStyles()
                 }
                 GetShapeExport()->setPresentationStylePrefix( aMasterPageNamePrefix );
 
-                Reference< drawing::XShapes > xMasterShapes(xMasterPage, UNO_QUERY);
-                if(xMasterShapes.is() && xMasterShapes->getCount())
-                    GetShapeExport()->collectShapesAutoStyles( xMasterShapes );
+                if(xMasterPage.is() && xMasterPage->getCount())
+                    GetShapeExport()->collectShapesAutoStyles( xMasterPage );
 
                 if(IsImpress())
                 {
@@ -2151,9 +2123,8 @@ void SdXMLExport::collectAutoStyles()
                             // collect layer information
                             GetFormExport()->examineForms( xNotesPage );
 
-                            Reference< drawing::XShapes > xShapes(xNotesPage, UNO_QUERY);
-                            if(xShapes.is() && xShapes->getCount())
-                                GetShapeExport()->collectShapesAutoStyles( xShapes );
+                            if(xNotesPage->getCount())
+                                GetShapeExport()->collectShapesAutoStyles( xNotesPage );
                         }
                     }
                 }
@@ -2203,9 +2174,8 @@ void SdXMLExport::collectAutoStyles()
                 GetShapeExport()->setPresentationStylePrefix( aMasterPageNamePrefix );
 
                 // prepare object infos
-                Reference< drawing::XShapes > xDrawShapes(xDrawPage, UNO_QUERY);
-                if(xDrawShapes.is() && xDrawShapes->getCount())
-                    GetShapeExport()->collectShapesAutoStyles( xDrawShapes );
+                if(xDrawPage.is() && xDrawPage->getCount())
+                    GetShapeExport()->collectShapesAutoStyles( xDrawPage );
 
                 // prepare presentation notes page object infos (ONLY if presentation)
                 if(IsImpress())
@@ -2219,9 +2189,8 @@ void SdXMLExport::collectAutoStyles()
                             // collect layer information
                             GetFormExport()->examineForms( xNotesPage );
 
-                            Reference< drawing::XShapes > xShapes(xNotesPage, UNO_QUERY);
-                            if(xShapes.is() && xShapes->getCount())
-                                GetShapeExport()->collectShapesAutoStyles( xShapes );
+                            if(xNotesPage->getCount())
+                                GetShapeExport()->collectShapesAutoStyles( xNotesPage );
                         }
                     }
                 }
@@ -2301,9 +2270,8 @@ void SdXMLExport::ExportMasterStyles_()
                 SvXMLElementExport aMPG(*this, XML_NAMESPACE_STYLE, XML_HANDOUT_MASTER, true, true);
 
                 // write graphic objects on this master page (if any)
-                Reference< drawing::XShapes > xShapes(xHandoutPage, UNO_QUERY);
-                if(xShapes.is() && xShapes->getCount())
-                    GetShapeExport()->exportShapes( xShapes );
+                if(xHandoutPage.is() && xHandoutPage->getCount())
+                    GetShapeExport()->exportShapes( xHandoutPage );
             }
         }
     }
@@ -2348,9 +2316,8 @@ void SdXMLExport::ExportMasterStyles_()
             exportFormsElement( xMasterPage );
 
             // write graphic objects on this master page (if any)
-            Reference< drawing::XShapes > xMasterShapes(xMasterPage, UNO_QUERY);
-            if(xMasterShapes.is() && xMasterShapes->getCount())
-                GetShapeExport()->exportShapes( xMasterShapes );
+            if(xMasterPage.is() && xMasterPage->getCount())
+                GetShapeExport()->exportShapes( xMasterPage );
 
             // write presentation notes (ONLY if presentation)
             if(IsImpress())
@@ -2361,25 +2328,21 @@ void SdXMLExport::ExportMasterStyles_()
                     Reference< XDrawPage > xNotesPage(xPresPage->getNotesPage());
                     if(xNotesPage.is())
                     {
-                        Reference< drawing::XShapes > xShapes(xNotesPage, UNO_QUERY);
-                        if(xShapes.is())
+                        ImpXMLEXPPageMasterInfo* pMasterInfo = mvNotesPageMasterUsageList.at( nMPageId );
+                        if(pMasterInfo)
                         {
-                            ImpXMLEXPPageMasterInfo* pMasterInfo = mvNotesPageMasterUsageList.at( nMPageId );
-                            if(pMasterInfo)
-                            {
-                                const OUString& sString = pMasterInfo->GetName();
-                                AddAttribute(XML_NAMESPACE_STYLE, XML_PAGE_LAYOUT_NAME, sString);
-                            }
-
-                            // write presentation notes
-                            SvXMLElementExport aPSY(*this, XML_NAMESPACE_PRESENTATION, XML_NOTES, true, true);
-
-                            // write optional office:forms
-                            exportFormsElement( xNotesPage );
-
-                            // write shapes per se
-                            GetShapeExport()->exportShapes( xShapes );
+                            const OUString& sString = pMasterInfo->GetName();
+                            AddAttribute(XML_NAMESPACE_STYLE, XML_PAGE_LAYOUT_NAME, sString);
                         }
+
+                        // write presentation notes
+                        SvXMLElementExport aPSY(*this, XML_NAMESPACE_PRESENTATION, XML_NOTES, true, true);
+
+                        // write optional office:forms
+                        exportFormsElement( xNotesPage );
+
+                        // write shapes per se
+                        GetShapeExport()->exportShapes( xNotesPage );
                     }
                 }
             }
@@ -2503,7 +2466,7 @@ OUString SdXMLExport::getNavigationOrder( const Reference< XDrawPage >& xDrawPag
         Reference< XPropertySet > xSet( xDrawPage, UNO_QUERY_THROW );
         Reference< XIndexAccess > xNavOrder( xSet->getPropertyValue("NavigationOrder"), UNO_QUERY_THROW );
 
-        Reference< XIndexAccess > xZOrderAccess( xDrawPage, UNO_QUERY );
+        Reference< XIndexAccess > xZOrderAccess = xDrawPage;
 
         // only export navigation order if it is different from the z-order
         if( (xNavOrder.get() != xZOrderAccess.get()) && (xNavOrder->getCount() == xDrawPage->getCount())  )
@@ -2734,7 +2697,7 @@ XMLFontAutoStylePool* SdXMLExport::CreateFontAutoStylePool()
             if (xFactory.is())
                 xProps.set(xFactory->createInstance("com.sun.star.document.Settings"), UNO_QUERY);
             if (xProps.is())
-                xInfo.set(xProps->getPropertySetInfo(), uno::UNO_QUERY);
+                xInfo =  xProps->getPropertySetInfo();
             if (xInfo.is() && xProps.is())
             {
                 if (xInfo->hasPropertyByName("EmbedFonts"))
