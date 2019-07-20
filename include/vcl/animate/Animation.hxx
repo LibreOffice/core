@@ -115,9 +115,9 @@ private:
     SAL_DLLPRIVATE std::vector<std::unique_ptr<AnimationData>> CreateAnimationDataItems();
     SAL_DLLPRIVATE void PopulateRenderers();
     SAL_DLLPRIVATE void DeleteUnmarkedRenderers();
-    SAL_DLLPRIVATE bool ResetMarkedRenderers();
+    SAL_DLLPRIVATE bool CanResetMarkedRenderers();
     SAL_DLLPRIVATE bool IsTimeoutSetup();
-    SAL_DLLPRIVATE bool SendTimeout();
+    SAL_DLLPRIVATE bool CanSendTimeout();
     SAL_DLLPRIVATE void PaintRenderers();
     SAL_DLLPRIVATE void EraseMarkedRenderers();
     SAL_DLLPRIVATE AnimationBitmap* GetNextFrameBitmap();
