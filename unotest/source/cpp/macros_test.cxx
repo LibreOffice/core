@@ -25,8 +25,6 @@ namespace unotest {
 uno::Reference<css::lang::XComponent> MacrosTest::loadFromDesktop(const OUString& rURL, const OUString& rDocService, const uno::Sequence<beans::PropertyValue>& rExtraArgs)
 {
     CPPUNIT_ASSERT_MESSAGE("no desktop", mxDesktop.is());
-    uno::Reference<frame::XComponentLoader> xLoader(mxDesktop, uno::UNO_QUERY);
-    CPPUNIT_ASSERT_MESSAGE("no loader", xLoader.is());
     std::vector<beans::PropertyValue> args;
     beans::PropertyValue aMacroValue;
     aMacroValue.Name = "MacroExecutionMode";
@@ -47,7 +45,7 @@ uno::Reference<css::lang::XComponent> MacrosTest::loadFromDesktop(const OUString
 
     args.insert(args.end(), rExtraArgs.begin(), rExtraArgs.end());
 
-    uno::Reference<lang::XComponent> xComponent = xLoader->loadComponentFromURL(rURL, "_default", 0, comphelper::containerToSequence(args));
+    uno::Reference<lang::XComponent> xComponent = mxDesktop->loadComponentFromURL(rURL, "_default", 0, comphelper::containerToSequence(args));
     OUString sMessage = "loading failed: " + rURL;
     CPPUNIT_ASSERT_MESSAGE(OUStringToOString( sMessage, RTL_TEXTENCODING_UTF8 ).getStr( ), xComponent.is());
     return xComponent;
