@@ -34,10 +34,10 @@ public:
     AnimationRenderer(Animation* pParent, OutputDevice* pOut, const Point& rPt, const Size& rSz,
                       sal_uLong nCallerId, OutputDevice* pFirstFrameOutDev = nullptr);
 
-    ~AnimationRenderer();
+    virtual ~AnimationRenderer();
 
     bool matches(OutputDevice* pOut, long nCallerId) const;
-    void drawToIndex(sal_uLong nIndex);
+    virtual void drawToIndex(sal_uLong nIndex);
     void draw(sal_uLong nIndex, VirtualDevice* pVDev = nullptr);
     void repaint();
     AnimationData* createAnimationData() const;
@@ -54,18 +54,20 @@ public:
     void setMarked(bool bMarked) { mbIsMarked = bMarked; }
     bool isMarked() const { return mbIsMarked; }
 
-private:
+protected:
     Animation* const mpParent;
     VclPtr<OutputDevice> mpRenderContext;
-    long const mnCallerId;
-    Point const maPt;
+    vcl::Region maClip;
     Point maDispPt;
-    Point maRestPt;
-    Size const maSz;
     Size maSzPix;
     Size maDispSz;
+
+private:
+    long const mnCallerId;
+    Point const maPt;
+    Point maRestPt;
+    Size const maSz;
     Size maRestSz;
-    vcl::Region maClip;
     VclPtr<VirtualDevice> mpBackground;
     VclPtr<VirtualDevice> mpRestore;
     sal_uLong mnActIndex;
