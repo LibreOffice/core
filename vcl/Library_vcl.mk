@@ -117,6 +117,8 @@ endif
 $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/animate/Animation \
     vcl/source/animate/AnimationBitmap \
+    vcl/source/animate/AnimationRenderer \
+    vcl/source/animate/AnimationRenderers \
     vcl/source/window/aboutdialog \
     vcl/source/window/errinf \
     vcl/source/window/settings \
@@ -278,7 +280,6 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/gdi/graph \
     vcl/source/gdi/graphictools \
     vcl/source/gdi/hatch \
-    vcl/source/gdi/AnimationRenderer \
     vcl/source/gdi/impglyphitem \
     vcl/source/gdi/impgraph \
     vcl/source/gdi/impvect \
