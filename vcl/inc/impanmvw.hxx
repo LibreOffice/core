@@ -30,67 +30,65 @@ struct AnimationBitmap;
 
 struct AInfo
 {
-    Point           aStartOrg;
-    Size            aStartSize;
-    VclPtr<OutputDevice>   pOutDev;
-    void*           pViewData;
-    long            nCallerId;
-    bool            bPause;
+    Point aStartOrg;
+    Size aStartSize;
+    VclPtr<OutputDevice> pOutDev;
+    void* pViewData;
+    long nCallerId;
+    bool bPause;
 
     AInfo();
 };
 
-
 class AnimationRenderer
 {
 public:
-                    ~AnimationRenderer();
+    ~AnimationRenderer();
+
 private:
-                    AnimationRenderer( Animation* pParent, OutputDevice* pOut,
-                                  const Point& rPt, const Size& rSz, sal_uLong nCallerId,
-                                  OutputDevice* pFirstFrameOutDev = nullptr );
+    AnimationRenderer(Animation* pParent, OutputDevice* pOut, const Point& rPt, const Size& rSz,
+                      sal_uLong nCallerId, OutputDevice* pFirstFrameOutDev = nullptr);
 
-    bool            matches( OutputDevice* pOut, long nCallerId ) const;
-    void            drawToIndex(sal_uLong nIndex);
-    void            draw( sal_uLong nIndex, VirtualDevice* pVDev=nullptr );
-    void            repaint();
-    AInfo*          createAInfo() const;
+    bool matches(OutputDevice* pOut, long nCallerId) const;
+    void drawToIndex(sal_uLong nIndex);
+    void draw(sal_uLong nIndex, VirtualDevice* pVDev = nullptr);
+    void repaint();
+    AInfo* createAInfo() const;
 
-    void            getPosSize( const AnimationBitmap& rAnm, Point& rPosPix, Size& rSizePix );
+    void getPosSize(const AnimationBitmap& rAnm, Point& rPosPix, Size& rSizePix);
 
-    const Point&    getOutPos() const { return maPt; }
+    const Point& getOutPos() const { return maPt; }
 
-    const Size&     getOutSizePix() const { return maSzPix; }
+    const Size& getOutSizePix() const { return maSzPix; }
 
-    void            pause( bool bPause ) { mbIsPaused = bPause; }
-    bool            isPause() const { return mbIsPaused; }
+    void pause(bool bPause) { mbIsPaused = bPause; }
+    bool isPause() const { return mbIsPaused; }
 
-    void            setMarked( bool bMarked ) { mbIsMarked = bMarked; }
-    bool            isMarked() const { return mbIsMarked; }
+    void setMarked(bool bMarked) { mbIsMarked = bMarked; }
+    bool isMarked() const { return mbIsMarked; }
 
 private:
     friend class Animation;
 
-    Animation* const      mpParent;
-    VclPtr<OutputDevice>  mpRenderContext;
-    long const            mnCallerId;
-    Point const           maPt;
-    Point                 maDispPt;
-    Point                 maRestPt;
-    Size const            maSz;
-    Size            maSzPix;
-    Size            maDispSz;
-    Size            maRestSz;
-    vcl::Region     maClip;
-    VclPtr<VirtualDevice>  mpBackground;
-    VclPtr<VirtualDevice>  mpRestore;
-    sal_uLong       mnActIndex;
-    Disposal        meLastDisposal;
-    bool            mbIsPaused;
-    bool            mbIsMarked;
-    bool const      mbMirroredHorizontally;
-    bool const      mbMirroredVertically;
-
+    Animation* const mpParent;
+    VclPtr<OutputDevice> mpRenderContext;
+    long const mnCallerId;
+    Point const maPt;
+    Point maDispPt;
+    Point maRestPt;
+    Size const maSz;
+    Size maSzPix;
+    Size maDispSz;
+    Size maRestSz;
+    vcl::Region maClip;
+    VclPtr<VirtualDevice> mpBackground;
+    VclPtr<VirtualDevice> mpRestore;
+    sal_uLong mnActIndex;
+    Disposal meLastDisposal;
+    bool mbIsPaused;
+    bool mbIsMarked;
+    bool const mbMirroredHorizontally;
+    bool const mbMirroredVertically;
 };
 
 #endif
