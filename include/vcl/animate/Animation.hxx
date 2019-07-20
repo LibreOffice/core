@@ -21,8 +21,9 @@
 #define INCLUDED_VCL_ANIMATE_ANIMATION_HXX
 
 #include <vcl/dllapi.h>
-#include <vcl/timer.hxx>
 #include <vcl/animate/AnimationBitmap.hxx>
+#include <vcl/animate/AnimationRenderers.hxx>
+#include <vcl/timer.hxx>
 
 #define ANIMATION_TIMEOUT_ON_CLICK 2147483647L
 
@@ -100,7 +101,7 @@ private:
     SAL_DLLPRIVATE static sal_uLong mnAnimCount;
 
     std::vector<std::unique_ptr<AnimationBitmap>> maAnimationFrames;
-    std::vector<std::unique_ptr<AnimationRenderer>> maAnimationRenderers;
+    AnimationRenderers maAnimationRenderers;
 
     Link<Animation*, void> maTimeoutNotifier;
     BitmapEx maBitmapEx;
@@ -112,24 +113,10 @@ private:
     bool mbIsInAnimation;
     bool mbLoopTerminated;
 
-    SAL_DLLPRIVATE std::vector<std::unique_ptr<AnimationData>> CreateAnimationDataItems();
-    SAL_DLLPRIVATE void PopulateRenderers();
-    SAL_DLLPRIVATE void DeleteUnmarkedRenderers();
-    SAL_DLLPRIVATE bool CanResetMarkedRenderers();
     SAL_DLLPRIVATE bool IsTimeoutSetup();
     SAL_DLLPRIVATE bool CanSendTimeout();
-    SAL_DLLPRIVATE void PaintRenderers();
-    SAL_DLLPRIVATE void EraseMarkedRenderers();
     SAL_DLLPRIVATE AnimationBitmap* GetNextFrameBitmap();
     SAL_DLLPRIVATE void RenderNextFrame();
-    SAL_DLLPRIVATE void ClearAnimationRenderers();
-    SAL_DLLPRIVATE bool CanRepaintRenderers(OutputDevice* pOut, sal_uLong nCallerId,
-                                            const Point& rDestPt, const Size& rDestSz);
-    SAL_DLLPRIVATE bool NoRenderersAreAvailable();
-    SAL_DLLPRIVATE void CreateDefaultRenderer(Animation* pAnim, OutputDevice* pOut,
-                                              const Point& rDestPt, const Size& rDestSz,
-                                              sal_uLong nCallerId, OutputDevice* pFirstFrameOutDev);
-    SAL_DLLPRIVATE void RemoveAnimationInstance(OutputDevice* pOut, sal_uLong nCallerId);
 
     SAL_DLLPRIVATE void RestartTimer(sal_uLong nTimeout);
     DECL_DLLPRIVATE_LINK(ImplTimeoutHdl, Timer*, void);
