@@ -119,7 +119,7 @@ public:
     {
         return name && m_nameToPathMap.find(name) != m_nameToPathMap.end();
     }
-    /** return a new stream for a ole zone */
+    /** return a new stream for an OLE zone */
     librevenge::RVNGInputStream* getSubStreamByName(const char* name) override
     {
         if (m_nameToPathMap.find(name) == m_nameToPathMap.end() || !m_xContent.is())
@@ -160,7 +160,7 @@ public:
 
         return nullptr;
     }
-    /** return a new stream for a ole zone */
+    /** return a new stream for an OLE zone */
     librevenge::RVNGInputStream* getSubStreamById(unsigned id) override
     {
         char const* name = subStreamName(id);

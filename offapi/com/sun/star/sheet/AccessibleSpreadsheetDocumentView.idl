@@ -70,7 +70,7 @@ service AccessibleSpreadsheetDocumentView
                 A child where calling getAccessibleChild()
                 an object that supports this service is returned for
                 the current OLE object in edit mode. It exists
-                only if a OLE object is in edit mode.</li>
+                only if an OLE object is in edit mode.</li>
         </ul>
         <p>The following rules apply to the children order. General it
             represents the paint order. The object in the background came

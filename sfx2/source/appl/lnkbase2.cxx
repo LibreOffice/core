@@ -141,7 +141,7 @@ SvBaseLink::SvBaseLink( SfxLinkUpdateMode nUpdateMode, SotClipboardFormatId nCon
     bVisible = bSynchron = true;
     bWasLastEditOK = false;
 
-    // It is going to be a Ole-Link,
+    // It is going to be an OLE-Link,
     pImplData->ClientType.nUpdateMode = nUpdateMode;
     pImplData->ClientType.nCntntType = nContentType;
     pImplData->ClientType.bIntrnlLnk = false;
