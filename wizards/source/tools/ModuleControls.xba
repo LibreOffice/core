@@ -111,14 +111,18 @@ End Function
 Function GetControlGroupModel(oContainer as Object, sGroupName as String )
 Dim aForm, oForms As Object
 Dim aControlModel() As Object
+Dim atmpControlModel As Object
 Dim i as integer
-
+Dim j as integer
 	oForms = oContainer.DrawPage.Forms
 	For i = 0 To oForms.Count-1
 		aForm = oForms(i)
 		If aForm.HasbyName(sGroupName) Then
-			aForm.GetGroupbyName(sGroupName,aControlModel)
-			GetControlGroupModel = aControlModel
+			aForm.GetGroupbyName(sGroupName,atmpControlModel)
+			For j = LBound(atmpControlModel) to UBound(atmpControlModel)
+				aControlGroupModel(j) = atmpControlModel(j)
+			Next j
+			GetControlGroupModel = atmpControlGroupModel
 			Exit Function
 		End If
 	Next i

@@ -48,7 +48,7 @@ class SbiParser : public SbiTokenizer
     void DefStatic( bool bPrivate );
     void DefProc( bool bStatic, bool bPrivate ); // read in procedure
     void DefVar( SbiOpcode eOp, bool bStatic ); // read in DIM/REDIM
-    void TypeDecl( SbiSymDef&, bool bAsNewAlreadyParsed=false );    // AS-declaration
+    void TypeDecl( SbiSymDef&, bool bAsNewAlreadyParsed=false, bool bIsArray=false );    // AS-declaration
     void OpenBlock( SbiToken, SbiExprNode* = nullptr );
     void CloseBlock();
     bool Channel( bool bAlways=false );     // parse channel number
