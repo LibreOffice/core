@@ -5165,7 +5165,8 @@ sal_Int32 PDFWriterImpl::emitOutputIntent()
     if ( !writeBuffer( aLine.getStr(), aLine.getLength() ) ) return 0;
     //get file position
     sal_uInt64 nBeginStreamPos = 0;
-    m_aFile.getPos(nBeginStreamPos);
+    if (osl::File::E_None != m_aFile.getPos(nBeginStreamPos))
+        return 0;
     beginCompression();
     checkAndEnableStreamEncryption( nICCObject );
     cmsHPROFILE hProfile = cmsCreate_sRGBProfile();
