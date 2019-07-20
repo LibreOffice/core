@@ -111,13 +111,18 @@ End Function
 Function GetControlGroupModel(oContainer as Object, sGroupName as String )
 Dim aForm, oForms As Object
 Dim aControlModel() As Object
+Dim atmpControlModel As Variant
 Dim i as integer
-
+Dim j as integer
 	oForms = oContainer.DrawPage.Forms
 	For i = 0 To oForms.Count-1
 		aForm = oForms(i)
 		If aForm.HasbyName(sGroupName) Then
-			aForm.GetGroupbyName(sGroupName,aControlModel)
+			aForm.GetGroupbyName(sGroupName,atmpControlModel)
+  			Redim aControlModel(UBound(atmpControlModel))
+			For j = 0 to UBound(atmpControlModel)
+				aControlModel(j) = atmpControlModel(j)
+			Next j
 			GetControlGroupModel = aControlModel
 			Exit Function
 		End If
@@ -130,29 +135,29 @@ End Function
 &apos; &apos;oControlGroup&apos; is a sequence of the Control objects
 Function GetRefValue(oControlGroup() as Object)
 Dim i as Integer
-	For i = 0 To Ubound(oControlGroup())
+	For i = 0 To Ubound(oControlGroup)
 &apos;		oControlGroup(i).DefaultState = oControlGroup(i).State
 		If oControlGroup(i).State Then
 			GetRefValue = oControlGroup(i).RefValue
 			exit Function
 		End If
 	Next
-	GetRefValue() = -1
+	GetRefValue = -1
 End Function
 
 
 Function GetRefValueOfControlGroup(oContainer as Object, GroupName as String)
 Dim oOptGroup() as Object
 Dim iRef as Integer
-	oOptGroup() = GetControlGroupModel(oContainer, GroupName)
-	iRef = GetRefValue(oOptGroup())
+	oOptGroup = GetControlGroupModel(oContainer, GroupName)
+	iRef = GetRefValue(oOptGroup)
 	GetRefValueofControlGroup = iRef
 End Function
 
 
 Function GetOptionGroupValue(oContainer as Object, OptGroupName as String) as Boolean
 Dim oRulesOptions() as Object
-	oRulesOptions() = GetControlGroupModel(oContainer, OptGroupName)
+	oRulesOptions = GetControlGroupModel(oContainer, OptGroupName)
 	GetOptionGroupValue = oRulesOptions(0).State
 End Function
 
@@ -164,7 +169,7 @@ Dim oCell as Object
 	bOptValue = GetOptionGroupValue(oSheet, OptGroupName)
 	oCell = oSheet.GetCellByPosition(iCol, iRow)
 	oCell.SetValue(ABS(CInt(bOptValue)))
-	WriteOptValueToCell() = bOptValue
+	WriteOptValueToCell = bOptValue
 End Function
 
 
@@ -179,7 +184,7 @@ Dim oRuntimeDialog as Object
 	oLib = oLibContainer.GetByName(Libname)
 	oLibDialog = oLib.GetByName(DialogName)
 	oRuntimeDialog = CreateUnoDialog(oLibDialog)
-	LoadDialog() = oRuntimeDialog
+	LoadDialog = oRuntimeDialog
 End Function
 
 
@@ -285,7 +290,7 @@ Dim FilterIndex as Integer
 		End If
 	End If
 	oStoreDialog.dispose()
-	StoreDocument() = sPath
+	StoreDocument = sPath
 	Exit Function
 NOSAVING:
 	If Err &lt;&gt; 0 Then
@@ -306,7 +311,7 @@ Dim oProdNameAccess as Object
 Dim sProdName as String
 	oProdNameAccess = GetRegistryKeyContent(&quot;org.openoffice.Setup/Product&quot;)
 	sProdName = oProdNameAccess.getByName(&quot;ooName&quot;)
-	MaxIndex = Ubound(FilterNames(), 1)
+	MaxIndex = Ubound(FilterNames, 1)
 	For i = 0 To MaxIndex
 		Filternames(i,0) = ReplaceString(Filternames(i,0), sProdName,&quot;%productname%&quot;)
 		oDialog.AppendFilter(FilterNames(i,0), FilterNames(i,1))
