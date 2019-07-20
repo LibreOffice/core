@@ -1462,6 +1462,20 @@ void CallbackFlushHandler::queue(const int type, const char* data)
                         assert(aCallbackData.validate() && "Validation after setJson failed!");
                     }
                 }
+                else if (aTree.get<std::string>("action", "") == "created")
+                {
+                    VclPtr<Window> pWindow = vcl::Window::FindLOKWindow(nLOKWindowId);
+                    if (!pWindow)
+                    {
+                        gImpl->maLastExceptionMsg = "Document doesn't support dialog rendering, or window not found.";
+                        return;
+                    }
+
+                    auto xClip = forceSetClipboardForCurrentView(m_pDocument);
+
+                    uno::Reference<datatransfer::clipboard::XClipboard> xClipboard(xClip.get());
+                    pWindow->SetClipboard(xClipboard);
+                }
             }
             break;
         }
