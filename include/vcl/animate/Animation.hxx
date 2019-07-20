@@ -26,7 +26,7 @@
 
 #define ANIMATION_TIMEOUT_ON_CLICK 2147483647L
 
-class ImplAnimView;
+class AnimationRenderer;
 
 class VCL_DLLPUBLIC Animation
 {
@@ -99,7 +99,7 @@ private:
     SAL_DLLPRIVATE static sal_uLong mnAnimCount;
 
     std::vector<std::unique_ptr<AnimationBitmap>> maAnimationFrames;
-    std::vector<std::unique_ptr<ImplAnimView>> maViewList;
+    std::vector<std::unique_ptr<AnimationRenderer>> maAnimationRenderers;
 
     Link<Animation*, void> maNotifyLink;
     BitmapEx maBitmapEx;
