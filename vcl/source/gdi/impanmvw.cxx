@@ -314,18 +314,18 @@ void AnimationRenderer::repaint()
     mbIsPaused = bOldPause;
 }
 
-AInfo* AnimationRenderer::createAInfo() const
+AnimationData* AnimationRenderer::createAnimationData() const
 {
-    AInfo* pAInfo = new AInfo;
+    AnimationData* pAnimationData = new AnimationData;
 
-    pAInfo->aStartOrg = maPt;
-    pAInfo->aStartSize = maSz;
-    pAInfo->pOutDev = mpRenderContext;
-    pAInfo->pViewData = const_cast<AnimationRenderer *>(this);
-    pAInfo->nCallerId = mnCallerId;
-    pAInfo->bPause = mbIsPaused;
+    pAnimationData->aStartOrg = maPt;
+    pAnimationData->aStartSize = maSz;
+    pAnimationData->pOutDev = mpRenderContext;
+    pAnimationData->pViewData = const_cast<AnimationRenderer *>(this);
+    pAnimationData->nCallerId = mnCallerId;
+    pAnimationData->bPause = mbIsPaused;
 
-    return pAInfo;
+    return pAnimationData;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
