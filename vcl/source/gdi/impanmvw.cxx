@@ -17,14 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <memory>
-#include <impanmvw.hxx>
-
-#include <vcl/virdev.hxx>
-#include <vcl/window.hxx>
 #include <tools/helpers.hxx>
 
+#include <vcl/animate/AnimationData.hxx>
+#include <vcl/virdev.hxx>
+#include <vcl/window.hxx>
+
+#include <impanmvw.hxx>
 #include <window.h>
+
+#include <memory>
 
 AnimationRenderer::AnimationRenderer( Animation* pParent, OutputDevice* pOut,
                             const Point& rPt, const Size& rSz,
@@ -321,7 +323,7 @@ AnimationData* AnimationRenderer::createAnimationData() const
     pAnimationData->aStartOrg = maPt;
     pAnimationData->aStartSize = maSz;
     pAnimationData->pOutDev = mpRenderContext;
-    pAnimationData->pViewData = const_cast<AnimationRenderer *>(this);
+    pAnimationData->pAnimationRenderer = const_cast<AnimationRenderer *>(this);
     pAnimationData->nCallerId = mnCallerId;
     pAnimationData->bPause = mbIsPaused;
 
