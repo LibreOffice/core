@@ -743,7 +743,8 @@ bool SmCursor::InsertRow() {
     if(pTable) {
         std::unique_ptr<SmNodeList> pNewLineList(new SmNodeList);
         //Move elements from pLineList to pNewLineList
-        pNewLineList->splice(pNewLineList->begin(), *pLineList, it, pLineList->end());
+        SmNodeList& rLineList = *pLineList;
+        pNewLineList->splice(pNewLineList->begin(), rLineList, it, rLineList.end());
         //Make sure it is valid again
         it = pLineList->end();
         if(it != pLineList->begin())
