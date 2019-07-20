@@ -987,6 +987,9 @@ bool scaleTexture(const rtl::Reference< OpenGLContext > &xContext,
 {
     int nWidth = rTexture.GetWidth();
     int nHeight = rTexture.GetHeight();
+    if (nWidth == 0 || nHeight == 0)
+        return false;
+
     int nNewWidth = nWidth / ixscale;
     int nNewHeight = nHeight / iyscale;
 
