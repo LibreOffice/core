@@ -226,7 +226,7 @@ public class SecurityDialog extends WeakBase implements
 
     // XServiceInfo
     public String[] getSupportedServiceNames() {
-        String[] retValue = new String[0];
+        String[] retValue = new String[1];
         retValue[0] = __serviceName;
         return retValue;
     }
