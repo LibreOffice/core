@@ -3290,7 +3290,7 @@ SwHandleAnchorNodeChg::SwHandleAnchorNodeChg( SwFlyFrameFormat& _rFlyFrameFormat
     }
 }
 
-SwHandleAnchorNodeChg::~SwHandleAnchorNodeChg()
+SwHandleAnchorNodeChg::~SwHandleAnchorNodeChg() COVERITY_NOEXCEPT_FALSE
 {
     if ( mbAnchorNodeChanged )
     {
