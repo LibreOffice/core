@@ -150,6 +150,7 @@ protected:
                                         const css::datatransfer::DataFlavor& rFlavor ) override;
     virtual void        DragFinished( sal_Int8 nDropAction ) override;
     virtual void        ObjectReleased() override;
+    virtual sal_Bool SAL_CALL isComplex() override;
 
     using TransferableHelper::StartDrag;
 
