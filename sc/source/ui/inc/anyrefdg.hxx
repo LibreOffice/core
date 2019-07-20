@@ -53,7 +53,7 @@ class ScFormulaReferenceHelper
 
 public:
     ScFormulaReferenceHelper(IAnyRefDialog* _pDlg, SfxBindings* _pBindings);
-    ~ScFormulaReferenceHelper();
+    ~ScFormulaReferenceHelper() COVERITY_NOEXCEPT_FALSE;
     void dispose();
 
     void                ShowSimpleReference(const OUString& rStr);
