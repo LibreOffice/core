@@ -23,12 +23,12 @@
 #include <tools/stream.hxx>
 
 #include <vcl/animate/Animation.hxx>
+#include <vcl/animate/AnimationRenderer.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/dibtools.hxx>
 #include <vcl/BitmapColorQuantizationFilter.hxx>
 
 #include <AnimationData.hxx>
-#include <AnimationRenderer.hxx>
 
 #include <algorithm>
 
@@ -96,6 +96,69 @@ bool Animation::operator==(const Animation& rAnimation) const
                          });
 }
 
+bool Animation::IsTimeoutSetup() { return maTimeoutNotifier.IsSet(); }
+
+bool Animation::SendTimeout()
+{
+    if (IsTimeoutSetup())
+    {
+        maTimeoutNotifier.Call(this);
+        maAnimationRenderers.PopulateRenderers(this);
+        maAnimationRenderers.DeleteUnmarkedRenderers();
+        return maAnimationRenderers.ResetMarkedRenderers();
+    }
+
+    return false;
+}
+
+AnimationBitmap* Animation::GetNextFrameBitmap()
+{
+    const size_t nAnimCount = maAnimationFrames.size();
+
+    bool bIsFrameAtEnd = mnFrameIndex >= maAnimationFrames.size();
+    mnFrameIndex++;
+
+    AnimationBitmap* pCurrentFrameBmp
+        = bIsFrameAtEnd ? nullptr : maAnimationFrames[mnFrameIndex].get();
+
+    if (!pCurrentFrameBmp)
+    {
+        if (mnLoops == 1)
+        {
+            Stop();
+            mbLoopTerminated = true;
+            mnFrameIndex = nAnimCount - 1;
+            maBitmapEx = maAnimationFrames[mnFrameIndex]->maBitmapEx;
+        }
+        else
+        {
+            if (mnLoops)
+                mnLoops--;
+
+            mnFrameIndex = 0;
+            pCurrentFrameBmp = maAnimationFrames[mnFrameIndex].get();
+        }
+    }
+
+    return pCurrentFrameBmp;
+}
+
+void Animation::RenderNextFrame()
+{
+    AnimationBitmap* pCurrentFrameBmp = GetNextFrameBitmap();
+    if (pCurrentFrameBmp)
+    {
+        maAnimationRenderers.PaintRenderers(mnFrameIndex);
+        maAnimationRenderers.EraseMarkedRenderers();
+
+        // stop or restart timer
+        if (maAnimationRenderers.NoRenderersAreAvailable())
+            Stop();
+        else
+            RestartTimer(pCurrentFrameBmp->mnWait);
+    }
+}
+
 void Animation::Clear()
 {
     maTimer.Stop();
@@ -103,7 +166,7 @@ void Animation::Clear()
     maGlobalSize = Size();
     maBitmapEx.SetEmpty();
     maAnimationFrames.clear();
-    ClearAnimationRenderers();
+    maAnimationRenderers.ClearAnimationRenderers();
 }
 
 bool Animation::IsTransparent() const
@@ -171,9 +234,10 @@ bool Animation::Start(OutputDevice* pOut, const Point& rDestPt, const Size& rDes
         if ((pOut->GetOutDevType() == OUTDEV_WINDOW) && !mbLoopTerminated
             && (ANIMATION_TIMEOUT_ON_CLICK != maAnimationFrames[mnFrameIndex]->mnWait))
         {
-            bool bRendererDoesNotExist = CanRepaintRenderers(pOut, nCallerId, rDestPt, rDestSz);
+            bool bRendererDoesNotExist
+                = maAnimationRenderers.RepaintRenderers(pOut, nCallerId, rDestPt, rDestSz);
 
-            if (NoRenderersAreAvailable())
+            if (maAnimationRenderers.NoRenderersAreAvailable())
             {
                 maTimer.Stop();
                 mbIsInAnimation = false;
@@ -181,7 +245,8 @@ bool Animation::Start(OutputDevice* pOut, const Point& rDestPt, const Size& rDes
             }
 
             if (bRendererDoesNotExist)
-                CreateDefaultRenderer(this, pOut, rDestPt, rDestSz, nCallerId, pFirstFrameOutDev);
+                maAnimationRenderers.CreateDefaultRenderer(this, pOut, rDestPt, rDestSz, nCallerId,
+                                                           pFirstFrameOutDev);
 
             if (!mbIsInAnimation)
             {
@@ -198,16 +263,11 @@ bool Animation::Start(OutputDevice* pOut, const Point& rDestPt, const Size& rDes
     return bRet;
 }
 
-void Animation::Stop(OutputDevice* pOut, long nCallerId)
+void Animation::Stop(OutputDevice* pOut, sal_uLong nCallerId)
 {
-    maAnimationRenderers.erase(
-        std::remove_if(maAnimationRenderers.begin(), maAnimationRenderers.end(),
-                       [=](const std::unique_ptr<AnimationRenderer>& pAnimView) -> bool {
-                           return pAnimView->matches(pOut, nCallerId);
-                       }),
-        maAnimationRenderers.end());
+    maAnimationRenderers.RemoveAnimationInstance(pOut, nCallerId);
 
-    if (NoRenderersAreAvailable())
+    if (maAnimationRenderers.NoRenderersAreAvailable())
     {
         maTimer.Stop();
         mbIsInAnimation = false;
@@ -228,9 +288,13 @@ void Animation::Draw(OutputDevice* pOut, const Point& rDestPt, const Size& rDest
         AnimationBitmap* pObj = maAnimationFrames[std::min(mnFrameIndex, nCount - 1)].get();
 
         if (pOut->GetConnectMetaFile() || (pOut->GetOutDevType() == OUTDEV_PRINTER))
+        {
             maAnimationFrames[0]->maBitmapEx.Draw(pOut, rDestPt, rDestSz);
+        }
         else if (ANIMATION_TIMEOUT_ON_CLICK == pObj->mnWait)
+        {
             pObj->maBitmapEx.Draw(pOut, rDestPt, rDestSz);
+        }
         else
         {
             const size_t nOldPos = mnFrameIndex;
@@ -263,7 +327,7 @@ IMPL_LINK_NOARG(Animation, ImplTimeoutHdl, Timer*, void)
     {
         bool bIsGloballyPaused = SendTimeout();
 
-        if (NoRenderersAreAvailable())
+        if (maAnimationRenderers.NoRenderersAreAvailable())
             Stop();
         else if (bIsGloballyPaused)
             RestartTimer(10);
