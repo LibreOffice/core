@@ -77,6 +77,7 @@ class LOKTransferable : public cppu::WeakImplHelper<css::datatransfer::XTransfer
     static void initFlavourFromMime(css::datatransfer::DataFlavor& rFlavor, OUString sMimeType);
 
 public:
+    LOKTransferable();
     LOKTransferable(const size_t nInCount, const char** pInMimeTypes, const size_t* pInSizes,
                     const char** pInStreams);
     LOKTransferable(const OUString& sMimeType, const css::uno::Sequence<sal_Int8>& aSequence);
