@@ -1179,21 +1179,21 @@ void ImpGraphic::ImplDraw( OutputDevice* pOutDev,
 }
 
 void ImpGraphic::ImplStartAnimation( OutputDevice* pOutDev, const Point& rDestPt,
-                                     const Size& rDestSize, long nExtraData,
+                                     const Size& rDestSize, long nCallerId,
                                      OutputDevice* pFirstFrameOutDev )
 {
     ensureAvailable();
 
     if( ImplIsSupportedGraphic() && !ImplIsSwapOut() && mpAnimation )
-        mpAnimation->Start( pOutDev, rDestPt, rDestSize, nExtraData, pFirstFrameOutDev );
+        mpAnimation->Start( pOutDev, rDestPt, rDestSize, nCallerId, pFirstFrameOutDev );
 }
 
-void ImpGraphic::ImplStopAnimation( OutputDevice* pOutDev, long nExtraData )
+void ImpGraphic::ImplStopAnimation( OutputDevice* pOutDev, long nCallerId )
 {
     ensureAvailable();
 
     if( ImplIsSupportedGraphic() && !ImplIsSwapOut() && mpAnimation )
-        mpAnimation->Stop( pOutDev, nExtraData );
+        mpAnimation->Stop( pOutDev, nCallerId );
 }
 
 void ImpGraphic::ImplSetAnimationNotifyHdl( const Link<Animation*,void>& rLink )
