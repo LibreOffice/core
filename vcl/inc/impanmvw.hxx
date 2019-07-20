@@ -41,7 +41,7 @@ struct AInfo
 };
 
 
-class ImplAnimView
+class AnimationRenderer
 {
 private:
 
@@ -68,9 +68,9 @@ private:
     bool const      mbMirroredVertically;
 
 public:
-                    ~ImplAnimView();
+                    ~AnimationRenderer();
 private:
-                    ImplAnimView( Animation* pParent, OutputDevice* pOut,
+                    AnimationRenderer( Animation* pParent, OutputDevice* pOut,
                                   const Point& rPt, const Size& rSz, sal_uLong nExtraData,
                                   OutputDevice* pFirstFrameOutDev = nullptr );
 
