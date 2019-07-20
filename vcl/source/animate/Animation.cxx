@@ -53,8 +53,8 @@ Animation::Animation(const Animation& rAnimation)
     , mbIsInAnimation(false)
     , mbLoopTerminated(rAnimation.mbLoopTerminated)
 {
-    for (auto const& i : rAnimation.maFrames)
-        maFrames.emplace_back(new AnimationBitmap(*i));
+    for (auto const& rFrame : rAnimation.maFrames)
+        maFrames.emplace_back(new AnimationBitmap(*rFrame));
 
     maTimer.SetInvokeHandler(LINK(this, Animation, ImplTimeoutHdl));
     mnLoops = mbLoopTerminated ? 0 : mnLoopCount;
@@ -248,18 +248,25 @@ void Animation::Draw(OutputDevice& rOut, const Point& rDestPt, const Size& rDest
     AnimationBitmap* pObj = maFrames[std::min(mnPos, nCount - 1)].get();
 
     if (rOut.GetConnectMetaFile() || (rOut.GetOutDevType() == OUTDEV_PRINTER))
+    {
         maFrames[0]->maBitmapEx.Draw(&rOut, rDestPt, rDestSz);
+    }
     else if (ANIMATION_TIMEOUT_ON_CLICK == pObj->mnWait)
+    {
         pObj->maBitmapEx.Draw(&rOut, rDestPt, rDestSz);
+    }
     else
     {
         const size_t nOldPos = mnPos;
         if (mbLoopTerminated)
             const_cast<Animation*>(this)->mnPos = nCount - 1;
 
-        {
+        if (rOut.GetConnectMetaFile() || (rOut.GetOutDevType() == OUTDEV_PRINTER))
+            maFrames[0]->maBitmapEx.Draw(&rOut, rDestPt, rDestSz);
+        else if (ANIMATION_TIMEOUT_ON_CLICK == pObj->mnWait)
+            pObj->maBitmapEx.Draw(&rOut, rDestPt, rDestSz);
+        else
             AnimationRenderer{ const_cast<Animation*>(this), &rOut, rDestPt, rDestSz, 0 };
-        }
 
         const_cast<Animation*>(this)->mnPos = nOldPos;
     }
@@ -327,6 +334,8 @@ IMPL_LINK_NOARG(Animation, ImplTimeoutHdl, Timer*, void)
             std::for_each(maRenderers.cbegin(), maRenderers.cend(),
                           [](const auto& pRenderer) { pRenderer->setMarked(false); });
         }
+        else
+            bGlobalPause = false;
 
         if (maRenderers.empty())
         {
