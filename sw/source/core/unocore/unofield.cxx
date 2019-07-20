@@ -405,9 +405,9 @@ static sal_uInt16 lcl_GetPropertyMapOfService( SwServiceType nServiceId )
     case SwServiceType::FieldMasterDummy5: nRet = PROPERTY_MAP_FLDMSTR_DUMMY0; break;
     case SwServiceType::FieldTypeHiddenText: nRet = PROPERTY_MAP_FLDTYP_HIDDEN_TEXT; break;
     default:
-        OSL_FAIL( "wrong service id" );
         nRet = USHRT_MAX;
     }
+    assert(nRet != USHRT_MAX && "wrong service id");
     return nRet;
 }
 
