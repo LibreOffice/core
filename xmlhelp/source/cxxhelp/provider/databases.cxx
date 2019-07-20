@@ -109,7 +109,7 @@ OUString Databases::expandURL( const OUString& aURL, const Reference< uno::XComp
         Reference< uri::XUriReference > uriRef;
         for (;;)
         {
-            uriRef.set( xFac->parse( aRetURL ), UNO_QUERY );
+            uriRef = xFac->parse( aRetURL );
             if ( uriRef.is() )
             {
                 Reference < uri::XVndSunStarExpandUrl > sxUri( uriRef, UNO_QUERY );
@@ -140,7 +140,7 @@ Databases::Databases( bool showBasic,
       vendVersion( "%VENDORVERSION" ),
       vendShort( "%VENDORSHORT" )
 {
-    m_xSMgr.set( m_xContext->getServiceManager(), UNO_QUERY );
+    m_xSMgr = m_xContext->getServiceManager();
 
     m_vAdd[0] = 12;
     m_vAdd[1] = 15;
@@ -1600,7 +1600,7 @@ Reference< XHierarchicalNameAccess > JarFileIterator::implGetJarFromPackage
         aArg.Value <<= OUString(ZIP_STORAGE_FORMAT_STRING);
         aArguments[ 1 ] <<= aArg;
 
-        Reference< XMultiComponentFactory >xSMgr( m_xContext->getServiceManager(), UNO_QUERY );
+        Reference< XMultiComponentFactory >xSMgr = m_xContext->getServiceManager();
         Reference< XInterface > xIfc
             = xSMgr->createInstanceWithArgumentsAndContext(
                 "com.sun.star.packages.comp.ZipPackage",
