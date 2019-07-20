@@ -1377,15 +1377,15 @@ void SwTextShell::Execute(SfxRequest &rReq)
         else if ( pFieldBM && pFieldBM->GetFieldname() == ODF_FORMDATE )
         {
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            sw::mark::DateFieldmark* pDateField = dynamic_cast<sw::mark::DateFieldmark*>(pFieldBM);
-            ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateDateFormFieldDialog(rWrtSh.GetView().GetFrameWeld(), pDateField, GetView().GetDocShell()->GetDoc()));
+            sw::mark::DateFieldmark& rDateField = dynamic_cast<sw::mark::DateFieldmark&>(*pFieldBM);
+            ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateDateFormFieldDialog(rWrtSh.GetView().GetFrameWeld(), &rDateField, GetView().GetDocShell()->GetDoc()));
             if (pDlg->Execute() == RET_OK)
             {
-                pFieldBM->Invalidate();
+                rDateField.Invalidate();
                 rWrtSh.InvalidateWindows( rWrtSh.GetView().GetVisArea() );
                 rWrtSh.UpdateCursor(); // cursor position might be invalid
                 // Hide the button here and make it visible later, to make transparent background work with SAL_USE_VCLPLUGIN=gen
-                dynamic_cast<::sw::mark::DateFieldmark*>(pFieldBM)->HideButton();
+                rDateField.HideButton();
             }
         }
         else
