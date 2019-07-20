@@ -1470,7 +1470,7 @@ IMPL_LINK(SvxLinguTabPage, ClickHdl_Impl, weld::Button&, rBtn, void)
         DBG_ASSERT(nEntry != -1, "no entry selected");
         if (nEntry != -1)
         {
-            OptionsUserData aData(m_xLinguOptionsCLB->get_id(nEntry).toInt32());
+            OptionsUserData aData(m_xLinguOptionsCLB->get_id(nEntry).toUInt32());
             if (aData.HasNumericValue())
             {
                 sal_uInt16 nRID = aData.GetEntryId();
