@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_SOURCE_GDI_IMPANMVW_HXX
-#define INCLUDED_VCL_SOURCE_GDI_IMPANMVW_HXX
+#ifndef INCLUDED_VCL_INC_ANIMATERENDERER_HXX
+#define INCLUDED_VCL_INC_ANIMATERENDERER_HXX
 
 #include <vcl/animate/Animation.hxx>
 #include <vcl/vclptr.hxx>
