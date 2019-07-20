@@ -790,7 +790,7 @@ static char* doc_getTextSelection(LibreOfficeKitDocument* pThis,
                                   const char* pMimeType,
                                   char** pUsedMimeType);
 static int doc_getSelectionType(LibreOfficeKitDocument* pThis);
-static int doc_getSelection (LibreOfficeKitDocument* pThis,
+static int doc_getClipboard (LibreOfficeKitDocument* pThis,
                              const char **pMimeTypes,
                              size_t      *pOutCount,
                              char      ***pOutMimeTypes,
@@ -863,6 +863,34 @@ static size_t doc_renderShapeSelection(LibreOfficeKitDocument* pThis, char** pOu
 static void doc_resizeWindow(LibreOfficeKitDocument* pThis, unsigned nLOKWindowId,
                              const int nWidth, const int nHeight);
 
+} // extern "C"
+
+namespace {
+ITiledRenderable* getTiledRenderable(LibreOfficeKitDocument* pThis)
+{
+    LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
+    return dynamic_cast<ITiledRenderable*>(pDocument->mxComponent.get());
+}
+
+/*
+ * Unfortunately clipboard creation using UNO is insanely baroque.
+ * we also need to ensure that this works for the first view which
+ * has no clear 'createView' called for it (unfortunately).
+ */
+
+rtl::Reference<LOKClipboard> forceSetClipboardForCurrentView(LibreOfficeKitDocument *pThis)
+{
+    ITiledRenderable* pDoc = getTiledRenderable(pThis);
+    rtl::Reference<LOKClipboard> xClip(LOKClipboardFactory::getClipboardForCurView());
+
+    SAL_INFO("lok", "Set to clipboard for view " << xClip.get());
+    // FIXME: using a hammer here - should not be necessary if all tests used createView.
+    pDoc->setClipboard(uno::Reference<datatransfer::clipboard::XClipboard>(xClip->getXI(), UNO_QUERY));
+
+    return xClip;
+}
+} // anonymous namespace
+
 LibLODocument_Impl::LibLODocument_Impl(const uno::Reference <css::lang::XComponent> &xComponent)
     : mxComponent(xComponent)
 {
@@ -901,7 +929,7 @@ LibLODocument_Impl::LibLODocument_Impl(const uno::Reference <css::lang::XCompone
         m_pDocumentClass->setTextSelection = doc_setTextSelection;
         m_pDocumentClass->getTextSelection = doc_getTextSelection;
         m_pDocumentClass->getSelectionType = doc_getSelectionType;
-        m_pDocumentClass->getSelection = doc_getSelection;
+        m_pDocumentClass->getClipboard = doc_getClipboard;
         m_pDocumentClass->setClipboard = doc_setClipboard;
         m_pDocumentClass->paste = doc_paste;
         m_pDocumentClass->setGraphicSelection = doc_setGraphicSelection;
@@ -942,6 +970,8 @@ LibLODocument_Impl::LibLODocument_Impl(const uno::Reference <css::lang::XCompone
         gDocumentClass = m_pDocumentClass;
     }
     pClass = m_pDocumentClass.get();
+
+    forceSetClipboardForCurrentView(this);
 }
 
 LibLODocument_Impl::~LibLODocument_Impl()
@@ -955,6 +985,8 @@ LibLODocument_Impl::~LibLODocument_Impl()
         SAL_WARN("lok", "failed to dispose document:" << rException.Message);
     }
 }
+
+extern "C" {
 
 CallbackFlushHandler::CallbackFlushHandler(LibreOfficeKitDocument* pDocument, LibreOfficeKitCallback pCallback, void* pData)
     : Idle( "lokit timer callback" ),
@@ -1690,12 +1722,6 @@ LibLibreOffice_Impl::~LibLibreOffice_Impl()
 
 namespace
 {
-
-ITiledRenderable* getTiledRenderable(LibreOfficeKitDocument* pThis)
-{
-    LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
-    return dynamic_cast<ITiledRenderable*>(pDocument->mxComponent.get());
-}
 
 #ifdef IOS
 void paintTileToCGContext(ITiledRenderable* pDocument,
@@ -3535,7 +3561,7 @@ static int doc_getSelectionType(LibreOfficeKitDocument* pThis)
     return aRet.getLength() ? LOK_SELTYPE_TEXT : LOK_SELTYPE_NONE;
 }
 
-static int doc_getSelection(LibreOfficeKitDocument* pThis,
+static int doc_getClipboard(LibreOfficeKitDocument* pThis,
                             const char **pMimeTypes,
                             size_t      *pOutCount,
                             char      ***pOutMimeTypes,
@@ -3562,7 +3588,10 @@ static int doc_getSelection(LibreOfficeKitDocument* pThis,
         return 0;
     }
 
-    css::uno::Reference<css::datatransfer::XTransferable> xTransferable = pDoc->getSelection();
+    rtl::Reference<LOKClipboard> xClip(LOKClipboardFactory::getClipboardForCurView());
+    SAL_INFO("lok", "Got clipboard for view " << xClip.get());
+
+    css::uno::Reference<css::datatransfer::XTransferable> xTransferable = xClip->getContents();
     if (!xTransferable)
     {
         SetLastExceptionMsg("No selection available");
@@ -3637,9 +3666,9 @@ static int doc_setClipboard(LibreOfficeKitDocument* pThis,
     }
 
     uno::Reference<datatransfer::XTransferable> xTransferable(new LOKTransferable(nInCount, pInMimeTypes, pInSizes, pInStreams));
-    uno::Reference<datatransfer::clipboard::XClipboard> xClipboard(new LOKClipboard);
-    xClipboard->setContents(xTransferable, uno::Reference<datatransfer::clipboard::XClipboardOwner>());
-    pDoc->setClipboard(xClipboard);
+
+    auto xClip = forceSetClipboardForCurrentView(pThis);
+    xClip->setContents(xTransferable, uno::Reference<datatransfer::clipboard::XClipboardOwner>());
 
     if (!pDoc->isMimeTypeSupported())
     {
@@ -4305,7 +4334,7 @@ static void doc_setOutlineState(LibreOfficeKitDocument* pThis, bool bColumn, int
     pDoc->setOutlineState(bColumn, nLevel, nIndex, bHidden);
 }
 
-static int doc_createViewWithOptions(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pThis*/,
+static int doc_createViewWithOptions(LibreOfficeKitDocument* pThis,
                                      const char* pOptions)
 {
     comphelper::ProfileZone aZone("doc_createView");
@@ -4322,7 +4351,11 @@ static int doc_createViewWithOptions(SAL_UNUSED_PARAMETER LibreOfficeKitDocument
         comphelper::LibreOfficeKit::setLanguageTag(LanguageTag(aLanguage));
     }
 
-    return SfxLokHelper::createView();
+    int nId = SfxLokHelper::createView();
+
+    forceSetClipboardForCurrentView(pThis);
+
+    return nId;
 }
 
 static int doc_createView(LibreOfficeKitDocument* pThis)
@@ -5498,14 +5531,10 @@ static void lo_destroy(LibreOfficeKit* pThis)
     SAL_INFO("lok", "LO Destroy Done");
 }
 
-}
-
 #ifdef IOS
 
 // Used by the unmaintained LibreOfficeLight app. Once that has been retired, get rid of this, too.
 
-extern "C"
-{
 __attribute__((visibility("default")))
 void temporaryHackToInvokeCallbackHandlers(LibreOfficeKitDocument* pThis)
 {
@@ -5519,7 +5548,9 @@ void temporaryHackToInvokeCallbackHandlers(LibreOfficeKitDocument* pThis)
         pDocument->mpCallbackFlushHandlers[nOrigViewId]->Invoke();
     }
 }
-}
+
 #endif
+
+} // extern "C"
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
