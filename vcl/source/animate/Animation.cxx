@@ -328,17 +328,17 @@ void Animation::DeleteUnmarkedRenderers()
 
 bool Animation::CanResetMarkedRenderers()
 {
-    bool bGlobalPause = true;
+    bool bIsGloballyPaused = true;
 
     for (auto& rItem : maAnimationRenderers)
     {
         if (!rItem->isPause())
-            bGlobalPause = false;
+            bIsGloballyPaused = false;
 
         rItem->setMarked(false);
     }
 
-    return bGlobalPause;
+    return bIsGloballyPaused;
 }
 
 bool Animation::IsTimeoutSetup() { return maTimeoutNotifier.IsSet(); }
@@ -429,11 +429,11 @@ IMPL_LINK_NOARG(Animation, ImplTimeoutHdl, Timer*, void)
 {
     if (!maAnimationFrames.empty())
     {
-        bool bGlobalPause = CanSendTimeout();
+        bool bIsGloballyPaused = CanSendTimeout();
 
         if (maAnimationRenderers.empty())
             Stop();
-        else if (bGlobalPause)
+        else if (bIsGloballyPaused)
             ImplRestartTimer(10);
         else
             RenderNextFrame();
