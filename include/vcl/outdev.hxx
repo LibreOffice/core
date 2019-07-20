@@ -40,6 +40,8 @@
 #include <vcl/outdevmap.hxx>
 #include <vcl/vclreferencebase.hxx>
 
+#include <AnimationRenderer.hxx>
+
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/vector/b2enums.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
@@ -454,6 +456,13 @@ public:
                                 CreateUnoGraphics();
     std::vector< VCLXGraphics* > *GetUnoGraphicsList() const  { return mpUnoGraphicsList; }
     std::vector< VCLXGraphics* > *CreateUnoGraphicsList();
+
+    virtual AnimationRenderer*  CreateAnimationRenderer(Animation* pAnim,
+                                                        OutputDevice* pOut,
+                                                        const Point& rDestPt, const Size& rDestSz,
+                                                        sal_uLong nCallerId,
+                                                        OutputDevice *pFirstFrameOutDev = nullptr)
+                                    { return new AnimationRenderer(pAnim, pOut, rDestPt, rDestSz, nCallerId, pFirstFrameOutDev); }
 
 protected:
 
