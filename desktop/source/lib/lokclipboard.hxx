@@ -29,6 +29,7 @@ class LOKClipboard
                                            css::lang::XServiceInfo>
 {
     osl::Mutex m_aMutex;
+    css::uno::Reference<css::datatransfer::XTransferable> m_xTransferable;
     css::uno::Reference<css::datatransfer::clipboard::XClipboardOwner> m_aOwner;
     std::vector<css::uno::Reference<css::datatransfer::clipboard::XClipboardListener>> m_aListeners;
 
@@ -73,9 +74,12 @@ class LOKTransferable : public cppu::WeakImplHelper<css::datatransfer::XTransfer
     css::uno::Sequence<css::datatransfer::DataFlavor> m_aFlavors;
     std::vector<css::uno::Any> m_aContent;
 
+    static void initFlavourFromMime(css::datatransfer::DataFlavor& rFlavor, OUString sMimeType);
+
 public:
     LOKTransferable(const size_t nInCount, const char** pInMimeTypes, const size_t* pInSizes,
                     const char** pInStreams);
+    LOKTransferable(const OUString& sMimeType, const css::uno::Sequence<sal_Int8>& aSequence);
 
     css::uno::Any SAL_CALL getTransferData(const css::datatransfer::DataFlavor& rFlavor) override;
 
