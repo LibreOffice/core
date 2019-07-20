@@ -23,10 +23,10 @@
 #include <AnimationData.hxx>
 #include <AnimationRenderer.hxx>
 
-void Animation::ClearAnimationRenderers() { maAnimationRenderers.clear(); }
+void AnimationRenderers::ClearAnimationRenderers() { maAnimationRenderers.clear(); }
 
-bool Animation::CanRepaintRenderers(OutputDevice* pOut, sal_uLong nCallerId, const Point& rDestPt,
-                                    const Size& rDestSz)
+bool AnimationRenderers::RepaintRenderers(OutputDevice* pOut, sal_uLong nCallerId,
+                                             const Point& rDestPt, const Size& rDestSz)
 {
     AnimationRenderer* pRenderer;
 
@@ -52,9 +52,9 @@ bool Animation::CanRepaintRenderers(OutputDevice* pOut, sal_uLong nCallerId, con
     return false;
 }
 
-bool Animation::NoRenderersAreAvailable() { return maAnimationRenderers.empty(); }
+bool AnimationRenderers::NoRenderersAreAvailable() { return maAnimationRenderers.empty(); }
 
-std::vector<std::unique_ptr<AnimationData>> Animation::CreateAnimationDataItems()
+std::vector<std::unique_ptr<AnimationData>> AnimationRenderers::CreateAnimationDataItems()
 {
     std::vector<std::unique_ptr<AnimationData>> aAnimationDataItems;
 
@@ -66,15 +66,15 @@ std::vector<std::unique_ptr<AnimationData>> Animation::CreateAnimationDataItems(
     return aAnimationDataItems;
 }
 
-void Animation::CreateDefaultRenderer(Animation* pAnim, OutputDevice* pOut, const Point& rDestPt,
-                                      const Size& rDestSz, sal_uLong nCallerId,
-                                      OutputDevice* pFirstFrameOutDev)
+void AnimationRenderers::CreateDefaultRenderer(Animation* pAnim, OutputDevice* pOut,
+                                               const Point& rDestPt, const Size& rDestSz,
+                                               sal_uLong nCallerId, OutputDevice* pFirstFrameOutDev)
 {
     maAnimationRenderers.emplace_back(
         new AnimationRenderer(pAnim, pOut, rDestPt, rDestSz, nCallerId, pFirstFrameOutDev));
 }
 
-void Animation::RemoveAnimationInstance(OutputDevice* pOut, sal_uLong nCallerId)
+void AnimationRenderers::RemoveAnimationInstance(OutputDevice* pOut, sal_uLong nCallerId)
 {
     maAnimationRenderers.erase(
         std::remove_if(maAnimationRenderers.begin(), maAnimationRenderers.end(),
@@ -84,7 +84,7 @@ void Animation::RemoveAnimationInstance(OutputDevice* pOut, sal_uLong nCallerId)
         maAnimationRenderers.end());
 }
 
-void Animation::PopulateRenderers()
+void AnimationRenderers::PopulateRenderers(Animation* pAnim)
 {
     AnimationRenderer* pRenderer;
 
@@ -92,7 +92,7 @@ void Animation::PopulateRenderers()
     {
         if (!pItem->pAnimationRenderer)
         {
-            pRenderer = new AnimationRenderer(this, pItem->pOutDev, pItem->aStartOrg,
+            pRenderer = new AnimationRenderer(pAnim, pItem->pOutDev, pItem->aStartOrg,
                                               pItem->aStartSize, pItem->nCallerId);
 
             maAnimationRenderers.push_back(std::unique_ptr<AnimationRenderer>(pRenderer));
@@ -107,7 +107,7 @@ void Animation::PopulateRenderers()
     }
 }
 
-void Animation::DeleteUnmarkedRenderers()
+void AnimationRenderers::DeleteUnmarkedRenderers()
 {
     AnimationRenderer* pRenderer;
 
@@ -119,7 +119,7 @@ void Animation::DeleteUnmarkedRenderers()
     }
 }
 
-bool Animation::ResetMarkedRenderers()
+bool AnimationRenderers::ResetMarkedRenderers()
 {
     bool bIsGloballyPaused = true;
 
@@ -134,30 +134,15 @@ bool Animation::ResetMarkedRenderers()
     return bIsGloballyPaused;
 }
 
-bool Animation::IsTimeoutSetup() { return maTimeoutNotifier.IsSet(); }
-
-bool Animation::SendTimeout()
-{
-    if (IsTimeoutSetup())
-    {
-        maTimeoutNotifier.Call(this);
-        PopulateRenderers();
-        DeleteUnmarkedRenderers();
-        return ResetMarkedRenderers();
-    }
-
-    return false;
-}
-
-void Animation::PaintRenderers()
+void AnimationRenderers::PaintRenderers(sal_uLong nFrameIndex)
 {
     for (auto& rRenderer : maAnimationRenderers)
     {
-        rRenderer->draw(mnFrameIndex);
+        rRenderer->draw(nFrameIndex);
     }
 }
 
-void Animation::EraseMarkedRenderers()
+void AnimationRenderers::EraseMarkedRenderers()
 {
     for (size_t i = 0; i < maAnimationRenderers.size();)
     {
@@ -167,54 +152,6 @@ void Animation::EraseMarkedRenderers()
             maAnimationRenderers.erase(maAnimationRenderers.begin() + i);
         else
             i++;
-    }
-}
-
-AnimationBitmap* Animation::GetNextFrameBitmap()
-{
-    const size_t nAnimCount = maAnimationFrames.size();
-
-    bool bIsFrameAtEnd = mnFrameIndex >= maAnimationFrames.size();
-    mnFrameIndex++;
-
-    AnimationBitmap* pCurrentFrameBmp
-        = bIsFrameAtEnd ? nullptr : maAnimationFrames[mnFrameIndex].get();
-
-    if (!pCurrentFrameBmp)
-    {
-        if (mnLoops == 1)
-        {
-            Stop();
-            mbLoopTerminated = true;
-            mnFrameIndex = nAnimCount - 1;
-            maBitmapEx = maAnimationFrames[mnFrameIndex]->maBitmapEx;
-        }
-        else
-        {
-            if (mnLoops)
-                mnLoops--;
-
-            mnFrameIndex = 0;
-            pCurrentFrameBmp = maAnimationFrames[mnFrameIndex].get();
-        }
-    }
-
-    return pCurrentFrameBmp;
-}
-
-void Animation::RenderNextFrame()
-{
-    AnimationBitmap* pCurrentFrameBmp = GetNextFrameBitmap();
-    if (pCurrentFrameBmp)
-    {
-        PaintRenderers();
-        EraseMarkedRenderers();
-
-        // stop or restart timer
-        if (maAnimationRenderers.empty())
-            Stop();
-        else
-            RestartTimer(pCurrentFrameBmp->mnWait);
     }
 }
 
