@@ -1648,6 +1648,8 @@ static void doc_destroy(LibreOfficeKitDocument *pThis)
 
     SolarMutexGuard aGuard;
 
+    LOKClipboardFactory::releaseClipboardForView(-1);
+
     LibLODocument_Impl *pDocument = static_cast<LibLODocument_Impl*>(pThis);
     delete pDocument;
 }
@@ -4358,6 +4360,8 @@ static void doc_destroyView(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pThis
 
     SolarMutexGuard aGuard;
     SetLastExceptionMsg();
+
+    LOKClipboardFactory::releaseClipboardForView(nId);
 
     SfxLokHelper::destroyView(nId);
 }
