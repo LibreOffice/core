@@ -362,7 +362,7 @@ public:
     }
 
     /**
-     * Gets the selected content for the current view as a series of binary streams.
+     * Gets the content on the clipboard for the current view as a series of binary streams.
      *
      * NB. returns a complete set of possible selection types if nullptr is passed for pMimeTypes.
      *
@@ -374,13 +374,13 @@ public:
      *
      * @returns: true on success, false on error.
      */
-    bool getSelection(const char **pMimeTypes,
+    bool getClipboard(const char **pMimeTypes,
                       size_t      *pOutCount,
                       char      ***pOutMimeTypes,
                       size_t     **pOutSizes,
                       char      ***pOutStreams)
     {
-        return mpDoc->pClass->getSelection(mpDoc, pMimeTypes, pOutCount, pOutMimeTypes, pOutSizes, pOutStreams);
+        return mpDoc->pClass->getClipboard(mpDoc, pMimeTypes, pOutCount, pOutMimeTypes, pOutSizes, pOutStreams);
     }
 
     /**

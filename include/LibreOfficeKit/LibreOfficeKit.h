@@ -385,8 +385,8 @@ struct _LibreOfficeKitDocumentClass
     void (*moveSelectedParts) (LibreOfficeKitDocument* pThis, int nPosition, bool bDuplicate);
 
     /// Pass a nullptr terminated array of mime-type strings
-    /// @see lok::Document::getSelection for more details
-    int (*getSelection) (LibreOfficeKitDocument* pThis,
+    /// @see lok::Document::getClipboard for more details
+    int (*getClipboard) (LibreOfficeKitDocument* pThis,
                          const char **pMimeTypes,
                          size_t      *pOutCount,
                          char      ***pOutMimeTypes,
