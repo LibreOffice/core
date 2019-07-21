@@ -635,7 +635,7 @@ SvStream& ReadAnimation(SvStream& rIStm, Animation& rAnimation)
 AnimationData::AnimationData()
     : mpRenderContext(nullptr)
     , mpAnimationRenderer(nullptr)
-    , nCallerId(0)
+    , mnCallerId(0)
     , mbIsPaused(false)
 {
 }
