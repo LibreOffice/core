@@ -38,7 +38,7 @@ void WindowAnimationRenderer::drawToIndex(sal_uLong nIndex)
     std::unique_ptr<vcl::Region> xOldClip(
         !maClip.IsNull() ? new vcl::Region(pRenderContext->GetClipRegion()) : nullptr);
 
-    aVDev->SetOutputSizePixel(maSzPix, false);
+    aVDev->SetOutputSizePixel(maSizePx, false);
     nIndex = std::min(nIndex, static_cast<sal_uLong>(mpParent->Count()) - 1);
 
     for (sal_uLong i = 0; i <= nIndex; i++)
@@ -47,7 +47,7 @@ void WindowAnimationRenderer::drawToIndex(sal_uLong nIndex)
     if (xOldClip)
         pRenderContext->SetClipRegion(maClip);
 
-    pRenderContext->DrawOutDev(maDispPt, maDispSz, Point(), maSzPix, *aVDev);
+    pRenderContext->DrawOutDev(maDispPt, maDispSz, Point(), maSizePx, *aVDev);
     if (pGuard)
         pGuard->SetPaintRect(tools::Rectangle(maDispPt, maDispSz));
 
