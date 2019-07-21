@@ -90,16 +90,17 @@ void AnimationRenderers::PopulateRenderers(Animation* pAnim)
 
     for (auto& pItem : CreateAnimationDataItems())
     {
-        if (!pItem->pAnimationRenderer)
+        if (!pItem->mpAnimationRenderer)
         {
-            pRenderer = pItem->pOutDev->CreateAnimationRenderer(
-                pAnim, pItem->pOutDev, pItem->maOriginStartPt, pItem->aStartSize, pItem->nCallerId);
+            pRenderer = pItem->mpRenderContext->CreateAnimationRenderer(
+                pAnim, pItem->mpRenderContext, pItem->maOriginStartPt, pItem->aStartSize,
+                pItem->nCallerId);
 
             maAnimationRenderers.push_back(std::unique_ptr<AnimationRenderer>(pRenderer));
         }
         else
         {
-            pRenderer = static_cast<AnimationRenderer*>(pItem->pAnimationRenderer);
+            pRenderer = static_cast<AnimationRenderer*>(pItem->mpAnimationRenderer);
         }
 
         pRenderer->Pause(pItem->mbIsPaused);
