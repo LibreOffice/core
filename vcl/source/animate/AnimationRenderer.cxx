@@ -310,7 +310,7 @@ void AnimationRenderer::Repaint()
     mbIsPaused = bOldPause;
 }
 
-AnimationData* AnimationRenderer::createAnimationData() const
+AnimationData* AnimationRenderer::CreateAnimationData() const
 {
     AnimationData* pAnimationData = new AnimationData;
 
