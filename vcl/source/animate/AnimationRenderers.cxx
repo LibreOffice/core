@@ -104,7 +104,7 @@ void AnimationRenderers::PopulateRenderers(Animation* pAnim)
         }
 
         pRenderer->Pause(pItem->mbIsPaused);
-        pRenderer->setMarked(true);
+        pRenderer->SetMarked(true);
     }
 }
 
@@ -115,7 +115,7 @@ void AnimationRenderers::DeleteUnmarkedRenderers()
     for (size_t i = 0; i < maAnimationRenderers.size();)
     {
         pRenderer = maAnimationRenderers[i].get();
-        if (!pRenderer->isMarked())
+        if (!pRenderer->IsMarked())
             maAnimationRenderers.erase(maAnimationRenderers.begin() + i);
     }
 }
@@ -129,7 +129,7 @@ bool AnimationRenderers::CanResetMarkedRenderers()
         if (!rItem->IsPaused())
             bIsGloballyPaused = false;
 
-        rItem->setMarked(false);
+        rItem->SetMarked(false);
     }
 
     return bIsGloballyPaused;
@@ -149,7 +149,7 @@ void AnimationRenderers::EraseMarkedRenderers()
     {
         AnimationRenderer* pRenderer = maAnimationRenderers[i].get();
 
-        if (pRenderer->isMarked())
+        if (pRenderer->IsMarked())
             maAnimationRenderers.erase(maAnimationRenderers.begin() + i);
         else
             i++;
