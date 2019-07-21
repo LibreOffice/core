@@ -314,7 +314,7 @@ AnimationData* AnimationRenderer::createAnimationData() const
 {
     AnimationData* pAnimationData = new AnimationData;
 
-    pAnimationData->aStartOrg = maOriginPt;
+    pAnimationData->maOriginStartPt = maOriginPt;
     pAnimationData->aStartSize = maLogicalSize;
     pAnimationData->pOutDev = mpRenderContext;
     pAnimationData->pAnimationRenderer = const_cast<AnimationRenderer*>(this);
