@@ -28,7 +28,7 @@ class OutputDevice;
 
 struct AnimationData
 {
-    Point aStartOrg;
+    Point maOriginStartPt;
     Size aStartSize;
     VclPtr<OutputDevice> pOutDev;
     void* pAnimationRenderer;
