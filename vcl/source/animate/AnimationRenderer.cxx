@@ -318,7 +318,7 @@ AnimationData* AnimationRenderer::createAnimationData() const
     pAnimationData->aStartSize = maLogicalSize;
     pAnimationData->mpRenderContext = mpRenderContext;
     pAnimationData->mpAnimationRenderer = const_cast<AnimationRenderer*>(this);
-    pAnimationData->nCallerId = mnCallerId;
+    pAnimationData->mnCallerId = mnCallerId;
     pAnimationData->mbIsPaused = mbIsPaused;
 
     return pAnimationData;

@@ -94,7 +94,7 @@ void AnimationRenderers::PopulateRenderers(Animation* pAnim)
         {
             pRenderer = pItem->mpRenderContext->CreateAnimationRenderer(
                 pAnim, pItem->mpRenderContext, pItem->maOriginStartPt, pItem->aStartSize,
-                pItem->nCallerId);
+                pItem->mnCallerId);
 
             maAnimationRenderers.push_back(std::unique_ptr<AnimationRenderer>(pRenderer));
         }
