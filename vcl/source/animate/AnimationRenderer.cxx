@@ -19,11 +19,11 @@
 
 #include <tools/helpers.hxx>
 
+#include <vcl/animate/AnimationRenderer.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/window.hxx>
 
 #include <AnimationData.hxx>
-#include <vcl/animate/AnimationRenderer.hxx>
 #include <window.h>
 
 #include <memory>
@@ -33,11 +33,11 @@ AnimationRenderer::AnimationRenderer(Animation* pParent, OutputDevice* pOut, con
                                      OutputDevice* pFirstFrameOutDev)
     : mpParent(pParent)
     , mpRenderContext(pFirstFrameOutDev ? pFirstFrameOutDev : pOut)
-    , maClip(mpRenderContext->GetClipRegion())
-    , maSzPix(mpRenderContext->LogicToPixel(maSz))
+    , maSizePx(mpRenderContext->LogicToPixel(maSz))
     , mnCallerId(nCallerId)
     , maOriginPt(rPt)
     , maSz(rSz)
+    , maClip(mpRenderContext->GetClipRegion())
     , mpBackground(VclPtr<VirtualDevice>::Create())
     , mpRestore(VclPtr<VirtualDevice>::Create())
     , meLastDisposal(Disposal::Back)
@@ -53,7 +53,7 @@ AnimationRenderer::AnimationRenderer(Animation* pParent, OutputDevice* pOut, con
     {
         maDispPt.setX(maOriginPt.X() + maSz.Width() + 1);
         maDispSz.setWidth(-maSz.Width());
-        maSzPix.setWidth(-maSzPix.Width());
+        maSizePx.setWidth(-maSizePx.Width());
     }
     else
     {
@@ -66,7 +66,7 @@ AnimationRenderer::AnimationRenderer(Animation* pParent, OutputDevice* pOut, con
     {
         maDispPt.setY(maOriginPt.Y() + maSz.Height() + 1);
         maDispSz.setHeight(-maSz.Height());
-        maSzPix.setHeight(-maSzPix.Height());
+        maSizePx.setHeight(-maSizePx.Height());
     }
     else
     {
@@ -122,13 +122,13 @@ void AnimationRenderer::getPosSize(const AnimationBitmap& rAnimationBitmap, Poin
 
     // calculate x scaling
     if (rAnmSize.Width() > 1)
-        fFactX = static_cast<double>(maSzPix.Width() - 1) / (rAnmSize.Width() - 1);
+        fFactX = static_cast<double>(maSizePx.Width() - 1) / (rAnmSize.Width() - 1);
     else
         fFactX = 1.0;
 
     // calculate y scaling
     if (rAnmSize.Height() > 1)
-        fFactY = static_cast<double>(maSzPix.Height() - 1) / (rAnmSize.Height() - 1);
+        fFactY = static_cast<double>(maSizePx.Height() - 1) / (rAnmSize.Height() - 1);
     else
         fFactY = 1.0;
 
@@ -143,11 +143,11 @@ void AnimationRenderer::getPosSize(const AnimationBitmap& rAnimationBitmap, Poin
 
     // Mirrored horizontally?
     if (mbIsMirroredHorizontally)
-        rPosPix.setX(maSzPix.Width() - 1 - aPt2.X());
+        rPosPix.setX(maSizePx.Width() - 1 - aPt2.X());
 
     // Mirrored vertically?
     if (mbIsMirroredVertically)
-        rPosPix.setY(maSzPix.Height() - 1 - aPt2.Y());
+        rPosPix.setY(maSizePx.Height() - 1 - aPt2.Y());
 }
 
 void AnimationRenderer::drawToIndex(sal_uLong nIndex)
@@ -158,7 +158,7 @@ void AnimationRenderer::drawToIndex(sal_uLong nIndex)
     std::unique_ptr<vcl::Region> xOldClip(
         !maClip.IsNull() ? new vcl::Region(pRenderContext->GetClipRegion()) : nullptr);
 
-    aVDev->SetOutputSizePixel(maSzPix, false);
+    aVDev->SetOutputSizePixel(maSizePx, false);
     nIndex = std::min(nIndex, static_cast<sal_uLong>(mpParent->Count()) - 1);
 
     for (sal_uLong i = 0; i <= nIndex; i++)
@@ -167,7 +167,7 @@ void AnimationRenderer::drawToIndex(sal_uLong nIndex)
     if (xOldClip)
         pRenderContext->SetClipRegion(maClip);
 
-    pRenderContext->DrawOutDev(maDispPt, maDispSz, Point(), maSzPix, *aVDev);
+    pRenderContext->DrawOutDev(maDispPt, maDispSz, Point(), maSizePx, *aVDev);
 
     if (xOldClip)
         pRenderContext->SetClipRegion(*xOldClip);
@@ -233,8 +233,8 @@ void AnimationRenderer::draw(sal_uLong nIndex, VirtualDevice* pVDev)
         if (!pVDev)
         {
             pDev = VclPtr<VirtualDevice>::Create();
-            pDev->SetOutputSizePixel(maSzPix, false);
-            pDev->DrawOutDev(Point(), maSzPix, maDispPt, maDispSz, *pRenderContext);
+            pDev->SetOutputSizePixel(maSizePx, false);
+            pDev->DrawOutDev(Point(), maSizePx, maDispPt, maDispSz, *pRenderContext);
         }
         else
             pDev = pVDev;
@@ -244,7 +244,7 @@ void AnimationRenderer::draw(sal_uLong nIndex, VirtualDevice* pVDev)
         {
             meLastDisposal = Disposal::Back;
             maRestPt = Point();
-            maRestSz = maSzPix;
+            maRestSz = maSizePx;
         }
 
         // restore
@@ -281,7 +281,7 @@ void AnimationRenderer::draw(sal_uLong nIndex, VirtualDevice* pVDev)
             if (xOldClip)
                 pRenderContext->SetClipRegion(maClip);
 
-            pRenderContext->DrawOutDev(maDispPt, maDispSz, Point(), maSzPix, *pDev);
+            pRenderContext->DrawOutDev(maDispPt, maDispSz, Point(), maSizePx, *pDev);
             if (pGuard)
                 pGuard->SetPaintRect(tools::Rectangle(maDispPt, maDispSz));
 
@@ -303,7 +303,7 @@ void AnimationRenderer::repaint()
 {
     const bool bOldPause = mbIsPaused;
 
-    mpRenderContext->SaveBackground(*mpBackground, maDispPt, maDispSz, maSzPix);
+    mpRenderContext->SaveBackground(*mpBackground, maDispPt, maDispSz, maSizePx);
 
     mbIsPaused = false;
     drawToIndex(mnActIndex);
