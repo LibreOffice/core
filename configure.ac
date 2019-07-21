@@ -786,6 +786,7 @@ linux-android*)
     test_freetype=no
     test_gtk=no
     test_kf5=no
+    test_qt5=no
     test_gtk3_kde5=no
     test_randr=no
     test_xrender=no
@@ -4927,7 +4928,7 @@ if test "$OS" = "HAIKU"; then
     test_kf5=yes
 fi
 
-if test "x$enable_kde5" = "xyes"; then
+if test "$test_kf5" = "yes" -a "$enable_kde5" = "yes"; then
     AC_MSG_WARN([The kde5 VCL plugin was renamed to kf5. Please update your configuration to use --enable-kf5, as --enable-kde5 will be removed after the next major release!])
     add_warning "The kde5 VCL plugin was renamed to kf5. Please update your configuration to use --enable-kf5, as --enable-kde5 will be removed after the next major release!"
     test_kf5=yes
@@ -4937,7 +4938,7 @@ if test "$test_kf5" = "yes"; then
     test_qt5=yes
 fi
 
-if test "$test_kf5" = "yes"; then
+if test "$test_kf5" = "yes" -a "$enable_kf5" = "yes"; then
     if test "$enable_qt5" = "no"; then
         AC_MSG_ERROR([KF5 support depends on QT5, so it conflicts with --disable-qt5])
     else
