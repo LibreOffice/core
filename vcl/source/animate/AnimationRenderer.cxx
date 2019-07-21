@@ -79,7 +79,7 @@ AnimationRenderer::AnimationRenderer(Animation* pParent, OutputDevice* pOut, con
     mpRenderContext->SaveBackground(*mpBackground, maDispPt, maDispSz, maSizePx);
 
     // Initialize drawing to actual position
-    drawToIndex(mpParent->ImplGetCurPos());
+    DrawToIndex(mpParent->ImplGetCurPos());
 
     // If first frame OutputDevice is set, update variables now for real OutputDevice
     if (pFirstFrameOutDev)
@@ -150,7 +150,7 @@ void AnimationRenderer::getPosSize(const AnimationBitmap& rAnimationBitmap, Poin
         rPosPix.setY(maSizePx.Height() - 1 - aPt2.Y());
 }
 
-void AnimationRenderer::drawToIndex(sal_uLong nIndex)
+void AnimationRenderer::DrawToIndex(sal_uLong nIndex)
 {
     VclPtr<vcl::RenderContext> pRenderContext = mpRenderContext;
 
@@ -162,7 +162,7 @@ void AnimationRenderer::drawToIndex(sal_uLong nIndex)
     nIndex = std::min(nIndex, static_cast<sal_uLong>(mpParent->Count()) - 1);
 
     for (sal_uLong i = 0; i <= nIndex; i++)
-        draw(i, aVDev.get());
+        Draw(i, aVDev.get());
 
     if (xOldClip)
         pRenderContext->SetClipRegion(maClip);
@@ -173,7 +173,7 @@ void AnimationRenderer::drawToIndex(sal_uLong nIndex)
         pRenderContext->SetClipRegion(*xOldClip);
 }
 
-void AnimationRenderer::draw(sal_uLong nIndex, VirtualDevice* pVDev)
+void AnimationRenderer::Draw(sal_uLong nIndex, VirtualDevice* pVDev)
 {
     VclPtr<vcl::RenderContext> pRenderContext = mpRenderContext;
 
@@ -306,7 +306,7 @@ void AnimationRenderer::repaint()
     mpRenderContext->SaveBackground(*mpBackground, maDispPt, maDispSz, maSizePx);
 
     mbIsPaused = false;
-    drawToIndex(mnActIndex);
+    DrawToIndex(mnActIndex);
     mbIsPaused = bOldPause;
 }
 
