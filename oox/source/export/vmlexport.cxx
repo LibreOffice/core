@@ -681,6 +681,24 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const tools::Rectangle&
                                        OUStringToOString(aImageId, RTL_TEXTENCODING_UTF8));
                         imageData = true;
                     }
+
+                    else if (pSdrGrafObj && pSdrGrafObj->getQrCode() && m_pTextExport)
+                    {
+                        sax_fastparser::FastAttributeList* pAttrListQrCode
+                            = FastSerializerHelper::createAttrList();
+                        if (pSdrGrafObj->getQrCode())
+                        {
+                            pAttrListQrCode->add(
+                                /* FIX */XML_id, OUStringToOString(*(pSdrGrafObj->getQrCode()),
+                                                          RTL_TEXTENCODING_UTF8));
+                        }
+
+                        m_pSerializer->singleElementNS(
+                            /* FIX */
+                            XML_o, XML_signatureline,
+                            XFastAttributeListRef(pAttrListQrCode));
+
+                    }
                     else if (rProps.GetOpt(ESCHER_Prop_fillBlip, aStruct) && m_pTextExport)
                     {
                         SvMemoryStream aStream;

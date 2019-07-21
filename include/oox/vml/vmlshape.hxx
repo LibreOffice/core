@@ -25,6 +25,7 @@
 
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/drawing/QRCode.hpp>
 #include <oox/dllapi.h>
 #include <oox/helper/helper.hxx>
 #include <oox/vml/vmlformatting.hxx>
@@ -217,6 +218,8 @@ struct ShapeModel
     OUString     maSignatureLineSigningInstructions;
     bool         mbSignatureLineShowSignDate;
     bool         mbSignatureLineCanAddComment;
+
+    css::drawing::QRCode* mpQrCode;
 
     explicit            ShapeModel();
                         ~ShapeModel();

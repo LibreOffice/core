@@ -1343,6 +1343,15 @@ Reference< XShape > ComplexShape::implConvertAndInsert( const Reference< XShapes
         return xShape;
     }
 
+    if( getShapeModel().mpQrCode )
+    {
+        // Store Qr Code properties
+        uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
+        xPropertySet->setPropertyValue("QRCodeProperties",
+                                        uno::makeAny(*(getShapeModel().mpQrCode)));
+        return xShape;
+    }
+
     // try to create a picture object
     if( !aGraphicPath.isEmpty() )
     {
