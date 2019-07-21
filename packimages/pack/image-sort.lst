@@ -1,9 +1,9 @@
 #
 # This file exists to help improve the ordering of
-# icons inside the OO.o theme / images.zip file.
+# icons inside the AOO theme / images.zip file.
 #
 # Sections are processed together, and are delimited
-# by '-- <tag> [small]' a 'group' tage denotes equal
+# by '-- <tag> [small]' a 'group' tag denotes equal
 # importance: icons must be interleaved, 'ordered'
 # denotes a simple best-fit order. 'literal' denotes
 # a list of explicit image loads
@@ -11,8 +11,8 @@
 
 res/mainapp_16.png
 res/mainapp_32.png
-sw/res/punkt.png
-sw/res/punkt_h.png
+sw/res/point.png
+sw/res/point_h.png
 res/sx03251.png
 res/lx03251.png
 
@@ -46,7 +46,7 @@ svtools/res/bmpfont.png
 svtools/res/scalfont.png
 svx/res/signet_11x16.png
 svx/res/caution_11x16.png
-svx/res/notcertificate_16.png
+svx/res/notcertificate_11x16.png
 res/sc10223.png
 res/sc10224.png
 res/sx03250.png
