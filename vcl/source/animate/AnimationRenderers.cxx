@@ -139,7 +139,7 @@ void AnimationRenderers::PaintRenderers(sal_uLong nFrameIndex)
 {
     for (auto& rRenderer : maAnimationRenderers)
     {
-        rRenderer->draw(nFrameIndex);
+        rRenderer->Draw(nFrameIndex);
     }
 }
 
