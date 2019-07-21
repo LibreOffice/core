@@ -32,7 +32,7 @@ public:
     {
     }
 
-    virtual void drawToIndex(sal_uLong nIndex) override;
+    virtual void DrawToIndex(sal_uLong nIndex) override;
 };
 
 #endif
