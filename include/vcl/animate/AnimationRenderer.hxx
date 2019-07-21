@@ -40,7 +40,7 @@ public:
     virtual void DrawToIndex(sal_uLong nIndex);
     void Draw(sal_uLong nIndex, VirtualDevice* pVDev = nullptr);
     void Repaint();
-    AnimationData* createAnimationData() const;
+    AnimationData* CreateAnimationData() const;
 
     void getPosSize(const AnimationBitmap& rAnm, Point& rPosPix, Size& rSizePix);
 
