@@ -47,8 +47,8 @@ public:
     const Point& GetOriginPosition() const { return maOriginPt; }
     const Size& GetSizePx() const { return maSizePx; }
 
-    void pause(bool bPause) { mbIsPaused = bPause; }
-    bool isPause() const { return mbIsPaused; }
+    void Pause(bool bIsPaused) { mbIsPaused = bIsPaused; }
+    bool IsPaused() const { return mbIsPaused; }
 
     void setMarked(bool bMarked) { mbIsMarked = bMarked; }
     bool isMarked() const { return mbIsMarked; }
