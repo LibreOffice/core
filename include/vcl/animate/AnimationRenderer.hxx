@@ -51,8 +51,8 @@ public:
     void Pause(bool bIsPaused) { mbIsPaused = bIsPaused; }
     bool IsPaused() const { return mbIsPaused; }
 
-    void setMarked(bool bMarked) { mbIsMarked = bMarked; }
-    bool isMarked() const { return mbIsMarked; }
+    void SetMarked(bool bMarked) { mbIsMarked = bMarked; }
+    bool IsMarked() const { return mbIsMarked; }
 
 protected:
     Animation* const mpParent;
