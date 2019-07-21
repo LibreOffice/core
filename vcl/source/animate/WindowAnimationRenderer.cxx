@@ -24,7 +24,7 @@
 #include <WindowAnimationRenderer.hxx>
 #include <window.h>
 
-void WindowAnimationRenderer::drawToIndex(sal_uLong nIndex)
+void WindowAnimationRenderer::DrawToIndex(sal_uLong nIndex)
 {
     VclPtr<vcl::RenderContext> pRenderContext = mpRenderContext;
 
@@ -42,7 +42,7 @@ void WindowAnimationRenderer::drawToIndex(sal_uLong nIndex)
     nIndex = std::min(nIndex, static_cast<sal_uLong>(mpParent->Count()) - 1);
 
     for (sal_uLong i = 0; i <= nIndex; i++)
-        draw(i, aVDev.get());
+        Draw(i, aVDev.get());
 
     if (xOldClip)
         pRenderContext->SetClipRegion(maClip);
