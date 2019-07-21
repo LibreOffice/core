@@ -681,6 +681,42 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const tools::Rectangle&
                                        OUStringToOString(aImageId, RTL_TEXTENCODING_UTF8));
                         imageData = true;
                     }
+
+                    else if (pSdrGrafObj && pSdrGrafObj->getQrCode() && m_pTextExport)
+                    {
+                        sax_fastparser::FastAttributeList* pAttrListQrCode
+                            = FastSerializerHelper::createAttrList();
+
+                        css::drawing::QRCode* pQRCode = pSdrGrafObj->getQrCode());
+                        if (pQRCode)
+                        {
+                            pAttrListQrCode->add(
+                                /* FIX: Which token to use*/
+                                FSNS(XML_o, XML_suggestedsigneremail), //How to replace XML_suggestedsigneremail, how MCE should be used.
+                                //Looked at MCE used in ShapeExport::WriteMathShape, but confused with many namespace used there.
+                                OUStringToOString(pQRCode->Payload,
+                                                            RTL_TEXTENCODING_UTF8));
+
+                            pAttrListQrCode->add(
+                                /* FIX: Which token to use*/
+                                FSNS(XML_o, XML_suggestedsigneremail), //How to replace XML_suggestedsigneremail, how MCE should be used.
+                                //Looked at MCE used in ShapeExport::WriteMathShape, but confused with many namespace used there.
+                                OUStringToOString(pQRCode->ErrorCorrection,
+                                                            RTL_TEXTENCODING_UTF8));
+
+                            pAttrListQrCode->add(
+                                /* FIX: Which token to use*/
+                                FSNS(XML_o, XML_suggestedsigneremail), //How to replace XML_suggestedsigneremail, how MCE should be used.
+                                //Looked at MCE used in ShapeExport::WriteMathShape, but confused with many namespace used there.
+                                OUStringToOString(pQRCode->Border,
+                                                            RTL_TEXTENCODING_UTF8));
+                        }
+
+                        m_pSerializer->singleElementNS(
+                            /* FIX:How MCE will be used ? */
+                            XML_o, XML_signatureline,
+                            XFastAttributeListRef(pAttrListQrCode));
+                    }
                     else if (rProps.GetOpt(ESCHER_Prop_fillBlip, aStruct) && m_pTextExport)
                     {
                         SvMemoryStream aStream;
