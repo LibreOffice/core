@@ -636,7 +636,7 @@ AnimationData::AnimationData()
     : pOutDev(nullptr)
     , pAnimationRenderer(nullptr)
     , nCallerId(0)
-    , bPause(false)
+    , mbIsPaused(false)
 {
 }
 
