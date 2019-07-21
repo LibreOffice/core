@@ -65,7 +65,7 @@ private:
     long const mnCallerId;
     Point const maOriginPt;
     Point maRestPt;
-    Size const maSz;
+    Size const maLogicalSize;
     Size maRestSz;
     VclPtr<VirtualDevice> mpBackground;
     VclPtr<VirtualDevice> mpRestore;
