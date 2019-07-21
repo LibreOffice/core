@@ -427,6 +427,10 @@ void TIFFReader::ReadTagData( sal_uInt16 nTagType, sal_uInt32 nDataLen)
         case 0x0115:   // Samples Per Pixel
             nSamplesPerPixel = ReadIntData();
             SAL_INFO("filter.tiff","SamplesPerPixel: " << nSamplesPerPixel);
+
+            if (nSamplesPerPixel > USHRT_MAX) // ofz#15993 the expected type is SHORT
+                bStatus = false;
+
             break;
 
         case 0x0116:   // Rows Per Strip
