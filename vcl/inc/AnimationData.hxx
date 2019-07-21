@@ -33,7 +33,7 @@ struct AnimationData
     VclPtr<OutputDevice> pOutDev;
     void* pAnimationRenderer;
     long nCallerId;
-    bool bPause;
+    bool mbIsPaused;
 
     AnimationData();
 };
