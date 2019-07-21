@@ -60,7 +60,7 @@ std::vector<std::unique_ptr<AnimationData>> AnimationRenderers::CreateAnimationD
 
     for (auto const& rItem : maAnimationRenderers)
     {
-        aAnimationDataItems.emplace_back(rItem->createAnimationData());
+        aAnimationDataItems.emplace_back(rItem->CreateAnimationData());
     }
 
     return aAnimationDataItems;
