@@ -224,7 +224,7 @@ void AnimationRenderer::Draw(sal_uLong nIndex, VirtualDevice* pVDev)
     // check, if output lies out of display
     if (aOutRect.Intersection(tools::Rectangle(maDispPt, maDispSz)).IsEmpty())
     {
-        setMarked(true);
+        SetMarked(true);
     }
     else if (!mbIsPaused)
     {
