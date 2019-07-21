@@ -112,42 +112,75 @@ bool AnimationRenderer::Matches(OutputDevice* pOut, long nCallerId) const
     return bRet;
 }
 
-void AnimationRenderer::getPosSize(const AnimationBitmap& rAnimationBitmap, Point& rPosPix,
-                                   Size& rSizePix)
+double AnimationRenderer::CalculateXScaling()
 {
-    const Size& rAnmSize = mpParent->GetDisplaySizePixel();
-    Point aPt2(rAnimationBitmap.maPositionPixel.X() + rAnimationBitmap.maSizePixel.Width() - 1,
-               rAnimationBitmap.maPositionPixel.Y() + rAnimationBitmap.maSizePixel.Height() - 1);
-    double fFactX, fFactY;
+    const Size& rAnimSize = mpParent->GetDisplaySizePixel();
+    double fFactX = 1.0;
 
-    // calculate x scaling
-    if (rAnmSize.Width() > 1)
-        fFactX = static_cast<double>(maSizePx.Width() - 1) / (rAnmSize.Width() - 1);
-    else
-        fFactX = 1.0;
+    if (rAnimSize.Width() > 1)
+        fFactX = static_cast<double>(maSizePx.Width() - 1) / (rAnimSize.Width() - 1);
 
-    // calculate y scaling
-    if (rAnmSize.Height() > 1)
-        fFactY = static_cast<double>(maSizePx.Height() - 1) / (rAnmSize.Height() - 1);
-    else
-        fFactY = 1.0;
+    return fFactX;
+}
 
-    rPosPix.setX(FRound(rAnimationBitmap.maPositionPixel.X() * fFactX));
-    rPosPix.setY(FRound(rAnimationBitmap.maPositionPixel.Y() * fFactY));
+double AnimationRenderer::CalculateYScaling()
+{
+    const Size& rAnimSize = mpParent->GetDisplaySizePixel();
+    double fFactY = 1.0;
 
-    aPt2.setX(FRound(aPt2.X() * fFactX));
-    aPt2.setY(FRound(aPt2.Y() * fFactY));
+    if (rAnimSize.Height() > 1)
+        fFactY = static_cast<double>(maSizePx.Height() - 1) / (rAnimSize.Height() - 1);
 
-    rSizePix.setWidth(aPt2.X() - rPosPix.X() + 1);
-    rSizePix.setHeight(aPt2.Y() - rPosPix.Y() + 1);
+    return fFactY;
+}
+
+Point AnimationRenderer::GetBottomRightPoint(const AnimationBitmap& rAnimationBitmap)
+{
+    return Point(rAnimationBitmap.maPositionPixel.X() + rAnimationBitmap.maSizePixel.Width() - 1,
+                 rAnimationBitmap.maPositionPixel.Y() + rAnimationBitmap.maSizePixel.Height() - 1);
+}
+
+Size AnimationRenderer::GetSize(const AnimationBitmap& rAnimationBitmap)
+{
+    double fFactX = CalculateXScaling();
+    double fFactY = CalculateYScaling();
+
+    Point aPositionPt;
+
+    aPositionPt.setX(FRound(rAnimationBitmap.maPositionPixel.X() * fFactX));
+    aPositionPt.setY(FRound(rAnimationBitmap.maPositionPixel.Y() * fFactY));
+
+    Point aBottomRightPt = GetBottomRightPoint(rAnimationBitmap);
+
+    aBottomRightPt.setX(FRound(aBottomRightPt.X() * fFactX));
+    aBottomRightPt.setY(FRound(aBottomRightPt.Y() * fFactY));
+
+    Size aSizePix;
+
+    aSizePix.setWidth(aBottomRightPt.X() - aPositionPt.X() + 1);
+    aSizePix.setHeight(aBottomRightPt.Y() - aPositionPt.Y() + 1);
+
+    return aSizePix;
+}
+
+Point AnimationRenderer::GetPosition(const AnimationBitmap& rAnimationBitmap)
+{
+    Point aPositionPt;
+
+    aPositionPt.setX(FRound(rAnimationBitmap.maPositionPixel.X() * CalculateXScaling()));
+    aPositionPt.setY(FRound(rAnimationBitmap.maPositionPixel.Y() * CalculateYScaling()));
+
+    Point aBottomRightPt = GetBottomRightPoint(rAnimationBitmap);
 
     // Mirrored horizontally?
     if (mbMirroredHorizontally)
-        rPosPix.setX(maSizePx.Width() - 1 - aPt2.X());
+        aPositionPt.setX(maSizePx.Width() - 1 - aBottomRightPt.X());
 
     // Mirrored vertically?
     if (mbMirroredVertically)
-        rPosPix.setY(maSizePx.Height() - 1 - aPt2.Y());
+        aPositionPt.setY(maSizePx.Height() - 1 - aBottomRightPt.Y());
+
+    return aPositionPt;
 }
 
 void AnimationRenderer::DrawToIndex(sal_uLong nIndex)
@@ -190,7 +223,9 @@ void AnimationRenderer::Draw(sal_uLong nIndex, VirtualDevice* pVDev)
 
     // check, if output lies out of display
     if (aOutRect.Intersection(tools::Rectangle(maDispPt, maDispSz)).IsEmpty())
+    {
         setMarked(true);
+    }
     else if (!mbIsPaused)
     {
         VclPtr<VirtualDevice> pDev;
@@ -203,7 +238,8 @@ void AnimationRenderer::Draw(sal_uLong nIndex, VirtualDevice* pVDev)
         const AnimationBitmap& rAnimationBitmap
             = mpParent->Get(static_cast<sal_uInt16>(mnActIndex));
 
-        getPosSize(rAnimationBitmap, aPosPix, aSizePix);
+        aPosPix = GetPosition(rAnimationBitmap);
+        aSizePix = GetSize(rAnimationBitmap);
 
         // Mirrored horizontally?
         if (mbMirroredHorizontally)
@@ -237,7 +273,9 @@ void AnimationRenderer::Draw(sal_uLong nIndex, VirtualDevice* pVDev)
             pDev->DrawOutDev(Point(), maSizePx, maDispPt, maDispSz, *pRenderContext);
         }
         else
+        {
             pDev = pVDev;
+        }
 
         // restore background after each run
         if (!nIndex)

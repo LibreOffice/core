@@ -42,7 +42,8 @@ public:
     void Repaint();
     AnimationData* CreateAnimationData() const;
 
-    void getPosSize(const AnimationBitmap& rAnm, Point& rPosPix, Size& rSizePix);
+    Point GetPosition(const AnimationBitmap& rAnm);
+    Size GetSize(const AnimationBitmap& rAnm);
 
     const Point& GetOriginPosition() const { return maOriginPt; }
     const Size& GetSizePx() const { return maSizePx; }
@@ -75,6 +76,10 @@ private:
     bool mbIsMarked;
     bool const mbMirroredHorizontally;
     bool const mbMirroredVertically;
+
+    SAL_DLLPRIVATE double CalculateXScaling();
+    SAL_DLLPRIVATE double CalculateYScaling();
+    SAL_DLLPRIVATE Point GetBottomRightPoint(const AnimationBitmap& rAnimationBitmap);
 };
 
 #endif
