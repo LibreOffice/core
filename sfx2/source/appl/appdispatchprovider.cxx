@@ -164,10 +164,9 @@ Sequence< Reference < XDispatch > > SAL_CALL SfxAppDispatchProvider::queryDispat
 {
     sal_Int32 nCount = seqDescriptor.getLength();
     uno::Sequence< uno::Reference < frame::XDispatch > > lDispatcher(nCount);
-    for( sal_Int32 i=0; i<nCount; ++i )
-        lDispatcher[i] = queryDispatch( seqDescriptor[i].FeatureURL,
-                                              seqDescriptor[i].FrameName,
-                                              seqDescriptor[i].SearchFlags );
+    std::transform(seqDescriptor.begin(), seqDescriptor.end(), lDispatcher.begin(),
+        [this](const DispatchDescriptor& rDescr) -> uno::Reference<frame::XDispatch> {
+            return queryDispatch(rDescr.FeatureURL, rDescr.FrameName, rDescr.SearchFlags); });
     return lDispatcher;
 }
 

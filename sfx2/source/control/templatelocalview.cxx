@@ -438,14 +438,8 @@ bool TemplateLocalView::IsDefaultTemplate(const OUString& rPath)
     SvtModuleOptions aModOpt;
     const css::uno::Sequence<OUString> &aServiceNames = aModOpt.GetAllServiceNames();
 
-    for( sal_Int32 i=0, nCount = aServiceNames.getLength(); i < nCount; ++i )
-    {
-        const OUString defaultPath = SfxObjectFactory::GetStandardTemplate( aServiceNames[i] );
-        if(defaultPath.match(rPath))
-            return true;
-    }
-
-    return false;
+    return std::any_of(aServiceNames.begin(), aServiceNames.end(), [&rPath](const OUString& rName) {
+        return SfxObjectFactory::GetStandardTemplate(rName).match(rPath); });
 }
 
 BitmapEx TemplateLocalView::getDefaultThumbnail( const OUString& rPath )
@@ -1301,14 +1295,8 @@ bool SfxTemplateLocalView::IsDefaultTemplate(const OUString& rPath)
     SvtModuleOptions aModOpt;
     const css::uno::Sequence<OUString> &aServiceNames = aModOpt.GetAllServiceNames();
 
-    for( sal_Int32 i=0, nCount = aServiceNames.getLength(); i < nCount; ++i )
-    {
-        const OUString defaultPath = SfxObjectFactory::GetStandardTemplate( aServiceNames[i] );
-        if(defaultPath.match(rPath))
-            return true;
-    }
-
-    return false;
+    return std::any_of(aServiceNames.begin(), aServiceNames.end(), [&rPath](const OUString& rName) {
+        return SfxObjectFactory::GetStandardTemplate(rName).match(rPath); });
 }
 
 void SfxTemplateLocalView::RemoveDefaultTemplateIcon(const OUString& rPath)

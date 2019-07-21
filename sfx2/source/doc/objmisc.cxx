@@ -259,9 +259,9 @@ bool SfxObjectShell::IsModified()
     if (pImpl->mpObjectContainer)
     {
         uno::Sequence < OUString > aNames = GetEmbeddedObjectContainer().GetObjectNames();
-        for ( sal_Int32 n=0; n<aNames.getLength(); n++ )
+        for ( const auto& rName : aNames )
         {
-            uno::Reference < embed::XEmbeddedObject > xObj = GetEmbeddedObjectContainer().GetEmbeddedObject( aNames[n] );
+            uno::Reference < embed::XEmbeddedObject > xObj = GetEmbeddedObjectContainer().GetEmbeddedObject( rName );
             OSL_ENSURE( xObj.is(), "An empty entry in the embedded objects list!" );
             if ( xObj.is() )
             {
@@ -1802,10 +1802,9 @@ bool SfxObjectShell_Impl::hasTrustedScriptingSignature( bool bAllowUIToAddAuthor
                 if ( nScriptingSignatureState == SignatureState::OK
                   || nScriptingSignatureState == SignatureState::NOTVALIDATED )
                 {
-                    for ( sal_Int32 nInd = 0; !bResult && nInd < aInfo.getLength(); nInd++ )
-                    {
-                        bResult = xSigner->isAuthorTrusted( aInfo[nInd].Signer );
-                    }
+                    bResult = std::any_of(aInfo.begin(), aInfo.end(),
+                        [&xSigner](const security::DocumentSignatureInformation& rInfo) {
+                            return xSigner->isAuthorTrusted( rInfo.Signer ); });
 
                     if ( !bResult && bAllowUIToAddAuthor )
                     {

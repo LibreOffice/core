@@ -108,21 +108,21 @@ bool SvxZoomItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId )
                 sal_Int16 nTypeTmp( 0 );
                 bool bAllConverted( true );
                 sal_Int16 nConvertedCount( 0 );
-                for ( sal_Int32 i = 0; i < aSeq.getLength(); i++ )
+                for ( const auto& rProp : aSeq )
                 {
-                    if ( aSeq[i].Name == ZOOM_PARAM_VALUE )
+                    if ( rProp.Name == ZOOM_PARAM_VALUE )
                     {
-                        bAllConverted &= ( aSeq[i].Value >>= nValueTmp );
+                        bAllConverted &= ( rProp.Value >>= nValueTmp );
                         ++nConvertedCount;
                     }
-                    else if ( aSeq[i].Name == ZOOM_PARAM_VALUESET )
+                    else if ( rProp.Name == ZOOM_PARAM_VALUESET )
                     {
-                        bAllConverted &= ( aSeq[i].Value >>= nValueSetTmp );
+                        bAllConverted &= ( rProp.Value >>= nValueSetTmp );
                         ++nConvertedCount;
                     }
-                    else if ( aSeq[i].Name == ZOOM_PARAM_TYPE )
+                    else if ( rProp.Name == ZOOM_PARAM_TYPE )
                     {
-                        bAllConverted &= ( aSeq[i].Value >>= nTypeTmp );
+                        bAllConverted &= ( rProp.Value >>= nTypeTmp );
                         ++nConvertedCount;
                     }
                 }

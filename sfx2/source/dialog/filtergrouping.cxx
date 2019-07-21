@@ -225,17 +225,12 @@ namespace sfx2
         _rGlobalClasses.clear();
         _rGlobalClassNames.clear();
 
-
         // get the list describing the order of all global classes
         Sequence< OUString > aGlobalClasses;
         _rFilterClassification.getNodeValue( "GlobalFilters/Order" ) >>= aGlobalClasses;
 
-        const OUString* pNames = aGlobalClasses.getConstArray();
-        const OUString* pNamesEnd = pNames + aGlobalClasses.getLength();
-
         // copy the logical names
-        _rGlobalClassNames.resize( aGlobalClasses.getLength() );
-        ::std::copy( pNames, pNamesEnd, _rGlobalClassNames.begin() );
+        comphelper::sequenceToContainer(_rGlobalClassNames, aGlobalClasses);
 
         // Global classes are presented in an own group, so their order matters (while the order of the
         // "local classes" doesn't).
@@ -243,8 +238,8 @@ namespace sfx2
         // are returned from the configuration - it is completely undefined, and we need a _defined_ order.
         FilterClassReferrer aClassReferrer;
         ::std::for_each(
-            pNames,
-            pNamesEnd,
+            aGlobalClasses.begin(),
+            aGlobalClasses.end(),
             CreateEmptyClassRememberPos( _rGlobalClasses, aClassReferrer )
         );
             // now _rGlobalClasses contains a dummy entry for each global class,

@@ -36,6 +36,7 @@
 #include <unotools/securityoptions.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/namedvaluecollection.hxx>
+#include <comphelper/sequence.hxx>
 #include <eventsupplier.hxx>
 
 #include <sfx2/app.hxx>
@@ -56,49 +57,46 @@ void SAL_CALL SfxEvents_Impl::replaceByName( const OUString & aName, const uno::
     ::osl::MutexGuard aGuard( maMutex );
 
     // find the event in the list and replace the data
-    long nCount = maEventNames.getLength();
-    for ( long i=0; i<nCount; i++ )
+    auto nIndex = comphelper::findValue(maEventNames, aName);
+    if (nIndex != -1)
     {
-        if ( maEventNames[i] == aName )
+        // check for correct type of the element
+        if ( !::comphelper::NamedValueCollection::canExtractFrom( rElement ) )
+            throw lang::IllegalArgumentException();
+        ::comphelper::NamedValueCollection const aEventDescriptor( rElement );
+
+        // create Configuration at first, creation might call this method also and that would overwrite everything
+        // we might have stored before!
+        if ( mpObjShell && !mpObjShell->IsLoading() )
+            mpObjShell->SetModified();
+
+        ::comphelper::NamedValueCollection aNormalizedDescriptor;
+        NormalizeMacro( aEventDescriptor, aNormalizedDescriptor, mpObjShell );
+
+        OUString sType;
+        if  (   ( aNormalizedDescriptor.size() == 1 )
+            &&  !aNormalizedDescriptor.has( PROP_EVENT_TYPE ) //TODO
+            &&  ( aNormalizedDescriptor.get( PROP_EVENT_TYPE ) >>= sType )
+            &&  ( sType.isEmpty() )
+            )
         {
-            // check for correct type of the element
-            if ( !::comphelper::NamedValueCollection::canExtractFrom( rElement ) )
-                throw lang::IllegalArgumentException();
-            ::comphelper::NamedValueCollection const aEventDescriptor( rElement );
-
-            // create Configuration at first, creation might call this method also and that would overwrite everything
-            // we might have stored before!
-            if ( mpObjShell && !mpObjShell->IsLoading() )
-                mpObjShell->SetModified();
-
-            ::comphelper::NamedValueCollection aNormalizedDescriptor;
-            NormalizeMacro( aEventDescriptor, aNormalizedDescriptor, mpObjShell );
-
-            OUString sType;
-            if  (   ( aNormalizedDescriptor.size() == 1 )
-                &&  !aNormalizedDescriptor.has( PROP_EVENT_TYPE ) //TODO
-                &&  ( aNormalizedDescriptor.get( PROP_EVENT_TYPE ) >>= sType )
-                &&  ( sType.isEmpty() )
-                )
-            {
-                // An empty event type means no binding. Therefore reset data
-                // to reflect that state.
-                // (that's for compatibility only. Nowadays, the Tools/Customize dialog should
-                // set an empty sequence to indicate the request for resetting the assignment.)
-                OSL_ENSURE( false, "legacy event assignment format detected" );
-                aNormalizedDescriptor.clear();
-            }
-
-            if ( !aNormalizedDescriptor.empty() )
-            {
-                maEventData[i] <<= aNormalizedDescriptor.getPropertyValues();
-            }
-            else
-            {
-                maEventData[i].clear();
-            }
-            return;
+            // An empty event type means no binding. Therefore reset data
+            // to reflect that state.
+            // (that's for compatibility only. Nowadays, the Tools/Customize dialog should
+            // set an empty sequence to indicate the request for resetting the assignment.)
+            OSL_ENSURE( false, "legacy event assignment format detected" );
+            aNormalizedDescriptor.clear();
         }
+
+        if ( !aNormalizedDescriptor.empty() )
+        {
+            maEventData[nIndex] <<= aNormalizedDescriptor.getPropertyValues();
+        }
+        else
+        {
+            maEventData[nIndex].clear();
+        }
+        return;
     }
 
     throw container::NoSuchElementException();
@@ -113,13 +111,9 @@ uno::Any SAL_CALL SfxEvents_Impl::getByName( const OUString& aName )
 
     // find the event in the list and return the data
 
-    long nCount = maEventNames.getLength();
-
-    for ( long i=0; i<nCount; i++ )
-    {
-        if ( maEventNames[i] == aName )
-            return maEventData[i];
-    }
+    auto nIndex = comphelper::findValue(maEventNames, aName);
+    if (nIndex != -1)
+        return maEventData[nIndex];
 
     throw container::NoSuchElementException();
 }
@@ -137,15 +131,7 @@ sal_Bool SAL_CALL SfxEvents_Impl::hasByName( const OUString& aName )
 
     // find the event in the list and return the data
 
-    long nCount = maEventNames.getLength();
-
-    for ( long i=0; i<nCount; i++ )
-    {
-        if ( maEventNames[i] == aName )
-            return true;
-    }
-
-    return false;
+    return comphelper::findValue(maEventNames, aName) != -1;
 }
 
 
@@ -176,26 +162,22 @@ void SfxEvents_Impl::Execute( uno::Any const & aEventData, const document::Docum
     OUString aLibrary;
     OUString aMacroName;
 
-    sal_Int32 nCount = aProperties.getLength();
-
-    if ( !nCount )
+    if ( !aProperties.hasElements() )
         return;
 
-    sal_Int32 nIndex = 0;
-    while ( nIndex < nCount )
+    for ( const auto& rProp : aProperties )
     {
-        if ( aProperties[ nIndex ].Name == PROP_EVENT_TYPE )
-            aProperties[ nIndex ].Value >>= aType;
-        else if ( aProperties[ nIndex ].Name == PROP_SCRIPT )
-            aProperties[ nIndex ].Value >>= aScript;
-        else if ( aProperties[ nIndex ].Name == PROP_LIBRARY )
-            aProperties[ nIndex ].Value >>= aLibrary;
-        else if ( aProperties[ nIndex ].Name == PROP_MACRO_NAME )
-            aProperties[ nIndex ].Value >>= aMacroName;
+        if ( rProp.Name == PROP_EVENT_TYPE )
+            rProp.Value >>= aType;
+        else if ( rProp.Name == PROP_SCRIPT )
+            rProp.Value >>= aScript;
+        else if ( rProp.Name == PROP_LIBRARY )
+            rProp.Value >>= aLibrary;
+        else if ( rProp.Name == PROP_MACRO_NAME )
+            rProp.Value >>= aMacroName;
         else {
             OSL_FAIL("Unknown property value!");
         }
-        nIndex += 1;
     }
 
     if (aType == STAR_BASIC && !aScript.isEmpty())
@@ -271,20 +253,8 @@ void SAL_CALL SfxEvents_Impl::notifyEvent( const document::EventObject& aEvent )
 
     // get the event name, find the corresponding data, execute the data
 
-    OUString aName   = aEvent.EventName;
-    long        nCount  = maEventNames.getLength();
-    long        nIndex  = 0;
-    bool    bFound  = false;
-
-    while ( !bFound && ( nIndex < nCount ) )
-    {
-        if ( maEventNames[nIndex] == aName )
-            bFound = true;
-        else
-            nIndex += 1;
-    }
-
-    if ( !bFound )
+    auto nIndex = comphelper::findValue(maEventNames, aEvent.EventName);
+    if ( nIndex == -1 )
         return;
 
     uno::Any aEventData = maEventData[ nIndex ];
@@ -345,26 +315,22 @@ std::unique_ptr<SvxMacro> SfxEvents_Impl::ConvertToMacro( const uno::Any& rEleme
         OUString aLibrary;
         OUString aMacroName;
 
-        long nCount = aProperties.getLength();
-        long nIndex = 0;
-
-        if ( !nCount )
+        if ( !aProperties.hasElements() )
             return pMacro;
 
-        while ( nIndex < nCount )
+        for ( const auto& rProp : aProperties )
         {
-            if ( aProperties[ nIndex ].Name == PROP_EVENT_TYPE )
-                aProperties[ nIndex ].Value >>= aType;
-            else if ( aProperties[ nIndex ].Name == PROP_SCRIPT )
-                aProperties[ nIndex ].Value >>= aScriptURL;
-            else if ( aProperties[ nIndex ].Name == PROP_LIBRARY )
-                aProperties[ nIndex ].Value >>= aLibrary;
-            else if ( aProperties[ nIndex ].Name == PROP_MACRO_NAME )
-                aProperties[ nIndex ].Value >>= aMacroName;
+            if ( rProp.Name == PROP_EVENT_TYPE )
+                rProp.Value >>= aType;
+            else if ( rProp.Name == PROP_SCRIPT )
+                rProp.Value >>= aScriptURL;
+            else if ( rProp.Name == PROP_LIBRARY )
+                rProp.Value >>= aLibrary;
+            else if ( rProp.Name == PROP_MACRO_NAME )
+                rProp.Value >>= aMacroName;
             else {
                 OSL_FAIL("Unknown property value!");
             }
-            nIndex += 1;
         }
 
         // Get the type

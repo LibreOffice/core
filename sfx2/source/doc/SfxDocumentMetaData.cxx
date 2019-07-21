@@ -571,18 +571,18 @@ SfxDocumentMetaData::getURLProperties(
     css::uno::Reference< css::beans::XPropertyBag> xPropArg = css::beans::PropertyBag::createDefault( m_xContext );
     try {
         css::uno::Any baseUri;
-        for (sal_Int32 i = 0; i < i_rMedium.getLength(); ++i) {
-            if (i_rMedium[i].Name == "DocumentBaseURL") {
-                baseUri = i_rMedium[i].Value;
-            } else if (i_rMedium[i].Name == "URL") {
+        for (const auto& rProp : i_rMedium) {
+            if (rProp.Name == "DocumentBaseURL") {
+                baseUri = rProp.Value;
+            } else if (rProp.Name == "URL") {
                 if (!baseUri.hasValue()) {
-                    baseUri = i_rMedium[i].Value;
+                    baseUri = rProp.Value;
                 }
-            } else if (i_rMedium[i].Name == "HierarchicalDocumentName") {
+            } else if (rProp.Name == "HierarchicalDocumentName") {
                 xPropArg->addProperty(
                     "StreamRelPath",
                     css::beans::PropertyAttribute::MAYBEVOID,
-                    i_rMedium[i].Value);
+                    rProp.Value);
             }
         }
         if (baseUri.hasValue()) {
@@ -1621,12 +1621,12 @@ SfxDocumentMetaData::setDocumentStatistics(
         osl::MutexGuard g(m_aMutex);
         checkInit();
         std::vector<std::pair<const char *, OUString> > attributes;
-        for (sal_Int32 i = 0; i < the_value.getLength(); ++i) {
-            const OUString name = the_value[i].Name;
+        for (const auto& rValue : the_value) {
+            const OUString name = rValue.Name;
             // inefficiently search for matching attribute
             for (size_t j = 0; s_stdStats[j] != nullptr; ++j) {
                 if (name.equalsAscii(s_stdStats[j])) {
-                    const css::uno::Any any = the_value[i].Value;
+                    const css::uno::Any any = rValue.Value;
                     sal_Int32 val = 0;
                     if (any >>= val) {
                         attributes.emplace_back(s_stdStatAttrs[j],

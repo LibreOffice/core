@@ -329,10 +329,10 @@ addFile(struct DocumentMetadataAccess_Impl const & i_rImpl,
             getURI<rdf::URIs::RDF_TYPE>(i_rImpl.m_xContext),
             i_xType.get());
         if (i_pTypes) {
-            for (sal_Int32 i = 0; i < i_pTypes->getLength(); ++i) {
+            for (const auto& rType : *i_pTypes) {
                 i_rImpl.m_xManifest->addStatement(xURI.get(),
                     getURI<rdf::URIs::RDF_TYPE>(i_rImpl.m_xContext),
-                    (*i_pTypes)[i].get());
+                    rType.get());
             }
         }
     } catch (const uno::RuntimeException &) {
@@ -956,12 +956,11 @@ DocumentMetadataAccess::addMetadataFile(const OUString & i_rFileName,
             "DocumentMetadataAccess::addMetadataFile:"
             "invalid FileName: reserved", *this, 0);
     }
-    for (sal_Int32 i = 0; i < i_rTypes.getLength(); ++i) {
-        if (!i_rTypes[i].is()) {
-            throw lang::IllegalArgumentException(
-                    "DocumentMetadataAccess::addMetadataFile: "
-                    "null type", *this, 2);
-        }
+    if (std::any_of(i_rTypes.begin(), i_rTypes.end(),
+            [](const uno::Reference< rdf::XURI >& rType) { return !rType.is(); })) {
+        throw lang::IllegalArgumentException(
+                "DocumentMetadataAccess::addMetadataFile: "
+                "null type", *this, 2);
     }
 
     const uno::Reference<rdf::XURI> xGraphName(
@@ -998,12 +997,11 @@ DocumentMetadataAccess::importMetadataFile(::sal_Int16 i_Format,
             "DocumentMetadataAccess::importMetadataFile:"
             "invalid FileName: reserved", *this, 0);
     }
-    for (sal_Int32 i = 0; i < i_rTypes.getLength(); ++i) {
-        if (!i_rTypes[i].is()) {
-            throw lang::IllegalArgumentException(
-                "DocumentMetadataAccess::importMetadataFile: null type",
-                *this, 5);
-        }
+    if (std::any_of(i_rTypes.begin(), i_rTypes.end(),
+            [](const uno::Reference< rdf::XURI >& rType) { return !rType.is(); })) {
+        throw lang::IllegalArgumentException(
+            "DocumentMetadataAccess::importMetadataFile: null type",
+            *this, 5);
     }
 
     const uno::Reference<rdf::XURI> xGraphName(
@@ -1232,8 +1230,7 @@ void SAL_CALL DocumentMetadataAccess::storeMetadataToStorage(
         const uno::Sequence<uno::Reference<rdf::XURI> > graphs(
             m_pImpl->m_xRepository->getGraphNames());
         const sal_Int32 len( baseURI.getLength() );
-        for (sal_Int32 i = 0; i < graphs.getLength(); ++i) {
-            const uno::Reference<rdf::XURI> xName(graphs[i]);
+        for (const uno::Reference<rdf::XURI>& xName : graphs) {
             const OUString name(xName->getStringValue());
             if (!name.match(baseURI)) {
                 SAL_WARN("sfx", "storeMetadataToStorage: graph not in document: " << name);

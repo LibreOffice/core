@@ -311,23 +311,18 @@ namespace sfx2
                     const OUString aStdLibName( "Standard" );
                     const OUString aVBAProject( "VBAProject" );
                     Sequence< OUString > aElements = xContainer->getElementNames();
-                    if ( aElements.hasElements() )
+                    for( const OUString& aElement : aElements )
                     {
-                        sal_Int32 nElements = aElements.getLength();
-                        for( sal_Int32 i = 0; i < nElements; ++i )
+                        if( aElement == aStdLibName || aElement == aVBAProject )
                         {
-                            const OUString aElement = aElements[i];
-                            if( aElement == aStdLibName || aElement == aVBAProject )
-                            {
-                                Reference < XNameAccess > xLib;
-                                Any aAny = xContainer->getByName( aElement );
-                                aAny >>= xLib;
-                                if ( xLib.is() && xLib->hasElements() )
-                                    return true;
-                            }
-                            else
+                            Reference < XNameAccess > xLib;
+                            Any aAny = xContainer->getByName( aElement );
+                            aAny >>= xLib;
+                            if ( xLib.is() && xLib->hasElements() )
                                 return true;
                         }
+                        else
+                            return true;
                     }
                 }
             }

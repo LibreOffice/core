@@ -175,11 +175,11 @@ static void impl_FillURLList( sfx2::FileDialogHelper const * _pFileDlg, std::vec
     {
         _rpURLList.clear();
 
-        for ( sal_Int32 i = 0; i < aPathSeq.getLength(); ++i )
-        {
-            INetURLObject aPathObj( aPathSeq[i] );
-            _rpURLList.push_back(aPathObj.GetMainURL(INetURLObject::DecodeMechanism::NONE));
-        }
+        std::transform(aPathSeq.begin(), aPathSeq.end(), std::back_inserter(_rpURLList),
+            [](const OUString& rPath) -> OUString {
+                INetURLObject aPathObj( rPath );
+                return aPathObj.GetMainURL(INetURLObject::DecodeMechanism::NONE);
+            });
     }
 }
 
