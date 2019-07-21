@@ -32,7 +32,7 @@ struct AnimationData
     Size aStartSize;
     VclPtr<OutputDevice> mpRenderContext;
     void* mpAnimationRenderer;
-    long nCallerId;
+    long mnCallerId;
     bool mbIsPaused;
 
     AnimationData();
