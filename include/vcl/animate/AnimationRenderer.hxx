@@ -45,7 +45,7 @@ public:
     void getPosSize(const AnimationBitmap& rAnm, Point& rPosPix, Size& rSizePix);
 
     const Point& GetOriginPosition() const { return maOriginPt; }
-    const Size& getOutSizePix() const { return maSzPix; }
+    const Size& GetSizePx() const { return maSizePx; }
 
     void pause(bool bPause) { mbIsPaused = bPause; }
     bool isPause() const { return mbIsPaused; }
@@ -58,7 +58,7 @@ protected:
     VclPtr<OutputDevice> mpRenderContext;
     vcl::Region maClip;
     Point maDispPt;
-    Size maSzPix;
+    Size maSizePx;
     Size maDispSz;
 
 private:
