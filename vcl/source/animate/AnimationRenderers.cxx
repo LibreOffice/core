@@ -35,7 +35,7 @@ bool AnimationRenderers::RepaintRenderers(OutputDevice* pOut, sal_uLong nCallerI
         pRenderer = maAnimationRenderers[i].get();
         if (pRenderer->matches(pOut, nCallerId))
         {
-            if (pRenderer->getOutPos() == rDestPt
+            if (pRenderer->GetOriginPosition() == rDestPt
                 && pRenderer->getOutSizePix() == pOut->LogicToPixel(rDestSz))
             {
                 pRenderer->repaint();
