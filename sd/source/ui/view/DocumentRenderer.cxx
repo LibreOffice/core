@@ -60,6 +60,9 @@
 #include <xmloff/autolayout.hxx>
 #include <sfx2/objsh.hxx>
 
+#include <officecfg/Office/Draw.hxx>
+#include <officecfg/Office/Impress.hxx>
+
 #include <memory>
 #include <vector>
 
@@ -436,7 +439,7 @@ namespace {
                                     SdResId(STR_IMPRESS_PRINT_UI_IS_PRINT_NAME),
                                     ".HelpID:vcl:PrintDialog:IsPrintName:CheckBox" ,
                                     "IsPrintName" ,
-                                    false
+                                    officecfg::Office::Impress::Print::Other::PageName::get()
                                     )
                                 );
             }
@@ -446,7 +449,7 @@ namespace {
                                     SdResId(STR_DRAW_PRINT_UI_IS_PRINT_NAME),
                                     ".HelpID:vcl:PrintDialog:IsPrintName:CheckBox" ,
                                     "IsPrintName" ,
-                                    false
+                                    officecfg::Office::Draw::Print::Other::PageName::get()
                                     )
                                 );
             }
@@ -455,7 +458,12 @@ namespace {
                                 SdResId(STR_IMPRESS_PRINT_UI_IS_PRINT_DATE),
                                 ".HelpID:vcl:PrintDialog:IsPrintDateTime:CheckBox" ,
                                 "IsPrintDateTime" ,
-                                false
+                                // Separate settings for time and date in Impress/Draw -> Print page, check that both are set
+                                mbImpress ?
+                                officecfg::Office::Impress::Print::Other::Date::get() &&
+                                officecfg::Office::Impress::Print::Other::Time::get() :
+                                officecfg::Office::Draw::Print::Other::Date::get() &&
+                                officecfg::Office::Draw::Print::Other::Time::get()
                                 )
                             );
 
@@ -465,7 +473,7 @@ namespace {
                                     SdResId(STR_IMPRESS_PRINT_UI_IS_PRINT_HIDDEN),
                                     ".HelpID:vcl:PrintDialog:IsPrintHidden:CheckBox" ,
                                     "IsPrintHidden" ,
-                                    false
+                                    officecfg::Office::Impress::Print::Other::HiddenPage::get()
                                     )
                                 );
             }
@@ -487,7 +495,9 @@ namespace {
                                 aHelpIds,
                                 "Quality" ,
                                 CreateChoice(STR_IMPRESS_PRINT_UI_QUALITY_CHOICES, SAL_N_ELEMENTS(STR_IMPRESS_PRINT_UI_QUALITY_CHOICES)),
-                                0)
+                                mbImpress ? officecfg::Office::Impress::Print::Other::Quality::get() :
+                                            officecfg::Office::Draw::Print::Other::Quality::get() )
+
                             );
 
             AddDialogControl( vcl::PrinterOptionsHelper::setSubgroupControlOpt("pagesizes",
@@ -504,6 +514,19 @@ namespace {
             aWidgetIds[2] = "distributeonmultiple";
             aWidgetIds[3] = "tilesheet";
 
+            // Mutually exclusive page options settings are stored in separate config keys...
+            // TODO: There is no config key to set the distributeonmultiple option as default
+            sal_Int32 nDefaultChoice = 0;
+            if ( mbImpress ? officecfg::Office::Impress::Print::Page::PageSize::get() :
+                             officecfg::Office::Draw::Print::Page::PageSize::get() )
+            {
+                nDefaultChoice = 1;
+            }
+            else if ( mbImpress ? officecfg::Office::Impress::Print::Page::PageTile::get() :
+                                  officecfg::Office::Draw::Print::Page::PageTile::get() )
+            {
+                nDefaultChoice = 3;
+            }
             vcl::PrinterOptionsHelper::UIControlOptions aPageOptionsOpt("PrintProspect", 0);
             AddDialogControl( vcl::PrinterOptionsHelper::setChoiceRadiosControlOpt(
                                 aWidgetIds,
@@ -512,7 +535,7 @@ namespace {
                                 "PageOptions" ,
                                 mbImpress ? CreateChoice(STR_IMPRESS_PRINT_UI_PAGE_OPTIONS_CHOICES, SAL_N_ELEMENTS(STR_IMPRESS_PRINT_UI_PAGE_OPTIONS_CHOICES)) :
                                             CreateChoice(STR_IMPRESS_PRINT_UI_PAGE_OPTIONS_CHOICES_DRAW, SAL_N_ELEMENTS(STR_IMPRESS_PRINT_UI_PAGE_OPTIONS_CHOICES_DRAW)),
-                                0,
+                                nDefaultChoice,
                                 Sequence< sal_Bool >(),
                                 aPageOptionsOpt
                                 )
@@ -529,7 +552,8 @@ namespace {
                                 SdResId(STR_IMPRESS_PRINT_UI_BROCHURE),
                                 ".HelpID:vcl:PrintDialog:PrintProspect:CheckBox" ,
                                 "PrintProspect" ,
-                                false,
+                                mbImpress ? officecfg::Office::Impress::Print::Page::Booklet::get() :
+                                            officecfg::Office::Draw::Print::Page::Booklet::get(),
                                 aBrochureOpt
                                 )
                             );
