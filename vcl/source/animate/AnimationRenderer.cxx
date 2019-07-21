@@ -36,7 +36,7 @@ AnimationRenderer::AnimationRenderer(Animation* pParent, OutputDevice* pOut, con
     , maClip(mpRenderContext->GetClipRegion())
     , maSzPix(mpRenderContext->LogicToPixel(maSz))
     , mnCallerId(nCallerId)
-    , maPt(rPt)
+    , maOriginPt(rPt)
     , maSz(rSz)
     , mpBackground(VclPtr<VirtualDevice>::Create())
     , mpRestore(VclPtr<VirtualDevice>::Create())
@@ -51,26 +51,26 @@ AnimationRenderer::AnimationRenderer(Animation* pParent, OutputDevice* pOut, con
     // Mirrored horizontally?
     if (mbMirroredHorizontally)
     {
-        maDispPt.setX(maPt.X() + maSz.Width() + 1);
+        maDispPt.setX(maOriginPt.X() + maSz.Width() + 1);
         maDispSz.setWidth(-maSz.Width());
         maSzPix.setWidth(-maSzPix.Width());
     }
     else
     {
-        maDispPt.setX(maPt.X());
+        maDispPt.setX(maOriginPt.X());
         maDispSz.setWidth(maSz.Width());
     }
 
     // Mirrored vertically?
     if (mbMirroredVertically)
     {
-        maDispPt.setY(maPt.Y() + maSz.Height() + 1);
+        maDispPt.setY(maOriginPt.Y() + maSz.Height() + 1);
         maDispSz.setHeight(-maSz.Height());
         maSzPix.setHeight(-maSzPix.Height());
     }
     else
     {
-        maDispPt.setY(maPt.Y());
+        maDispPt.setY(maOriginPt.Y());
         maDispSz.setHeight(maSz.Height());
     }
 
@@ -314,7 +314,7 @@ AnimationData* AnimationRenderer::createAnimationData() const
 {
     AnimationData* pAnimationData = new AnimationData;
 
-    pAnimationData->aStartOrg = maPt;
+    pAnimationData->aStartOrg = maOriginPt;
     pAnimationData->aStartSize = maSz;
     pAnimationData->pOutDev = mpRenderContext;
     pAnimationData->pAnimationRenderer = const_cast<AnimationRenderer*>(this);
