@@ -33,50 +33,50 @@ AnimationRenderer::AnimationRenderer(Animation* pParent, OutputDevice* pOut, con
                                      OutputDevice* pFirstFrameOutDev)
     : mpParent(pParent)
     , mpRenderContext(pFirstFrameOutDev ? pFirstFrameOutDev : pOut)
-    , maSizePx(mpRenderContext->LogicToPixel(maSz))
+    , maClip(mpRenderContext->GetClipRegion())
+    , maSizePx(mpRenderContext->LogicToPixel(maLogicalSize))
     , mnCallerId(nCallerId)
     , maOriginPt(rPt)
-    , maSz(rSz)
-    , maClip(mpRenderContext->GetClipRegion())
+    , maLogicalSize(rSz)
     , mpBackground(VclPtr<VirtualDevice>::Create())
     , mpRestore(VclPtr<VirtualDevice>::Create())
     , meLastDisposal(Disposal::Back)
     , mbIsPaused(false)
     , mbIsMarked(false)
-    , mbIsMirroredHorizontally(maSz.Width() < 0)
-    , mbIsMirroredVertically(maSz.Height() < 0)
+    , mbIsMirroredHorizontally(maLogicalSize.Width() < 0)
+    , mbIsMirroredVertically(maLogicalSize.Height() < 0)
 {
     Animation::ImplIncAnimCount();
 
     // Mirrored horizontally?
     if (mbIsMirroredHorizontally)
     {
-        maDispPt.setX(maOriginPt.X() + maSz.Width() + 1);
-        maDispSz.setWidth(-maSz.Width());
+        maDispPt.setX(maOriginPt.X() + maLogicalSize.Width() + 1);
+        maDispSz.setWidth(-maLogicalSize.Width());
         maSizePx.setWidth(-maSizePx.Width());
     }
     else
     {
         maDispPt.setX(maOriginPt.X());
-        maDispSz.setWidth(maSz.Width());
+        maDispSz.setWidth(maLogicalSize.Width());
     }
 
     // Mirrored vertically?
     if (mbIsMirroredVertically)
     {
-        maDispPt.setY(maOriginPt.Y() + maSz.Height() + 1);
-        maDispSz.setHeight(-maSz.Height());
+        maDispPt.setY(maOriginPt.Y() + maLogicalSize.Height() + 1);
+        maDispSz.setHeight(-maLogicalSize.Height());
         maSizePx.setHeight(-maSizePx.Height());
     }
     else
     {
         maDispPt.setY(maOriginPt.Y());
-        maDispSz.setHeight(maSz.Height());
+        maDispSz.setHeight(maLogicalSize.Height());
     }
 
     // save background
-    mpBackground->SetOutputSizePixel(maSzPix);
-    mpRenderContext->SaveBackground(*mpBackground, maDispPt, maDispSz, maSzPix);
+    mpBackground->SetOutputSizePixel(maSizePx);
+    mpRenderContext->SaveBackground(*mpBackground, maDispPt, maDispSz, maSizePx);
 
     // Initialize drawing to actual position
     drawToIndex(mpParent->ImplGetCurPos());
@@ -315,7 +315,7 @@ AnimationData* AnimationRenderer::createAnimationData() const
     AnimationData* pAnimationData = new AnimationData;
 
     pAnimationData->aStartOrg = maOriginPt;
-    pAnimationData->aStartSize = maSz;
+    pAnimationData->aStartSize = maLogicalSize;
     pAnimationData->pOutDev = mpRenderContext;
     pAnimationData->pAnimationRenderer = const_cast<AnimationRenderer*>(this);
     pAnimationData->nCallerId = mnCallerId;
