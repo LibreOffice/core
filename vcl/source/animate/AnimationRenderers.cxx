@@ -38,7 +38,7 @@ bool AnimationRenderers::CanRepaintRenderers(OutputDevice* pOut, sal_uLong nCall
             if (pRenderer->GetOriginPosition() == rDestPt
                 && pRenderer->GetSizePx() == pOut->LogicToPixel(rDestSz))
             {
-                pRenderer->repaint();
+                pRenderer->Repaint();
                 return true;
             }
             else
