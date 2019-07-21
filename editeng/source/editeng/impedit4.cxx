@@ -1041,6 +1041,7 @@ std::unique_ptr<EditTextObject> ImpEditEngine::CreateTextObject( EditSelection a
 
         // The Text...
         pC->SetText(pNode->Copy(nStartPos, nEndPos-nStartPos));
+        auto& rCAttriblist = pC->GetCharAttribs();
 
         // and the Attribute...
         sal_uInt16 nAttr = 0;
@@ -1068,7 +1069,7 @@ std::unique_ptr<EditTextObject> ImpEditEngine::CreateTextObject( EditSelection a
                 if ( !pX->GetLen() && !bEmptyPara )
                     pTxtObj->mpImpl->DestroyAttrib(std::move(pX));
                 else
-                    pC->GetCharAttribs().push_back(std::move(pX));
+                    rCAttriblist.push_back(std::move(pX));
             }
             nAttr++;
             pAttr = GetAttrib( pNode->GetCharAttribs().GetAttribs(), nAttr );
