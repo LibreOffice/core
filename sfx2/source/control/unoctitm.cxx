@@ -667,9 +667,8 @@ void SfxDispatchController_Impl::dispatch( const css::util::URL& aURL,
     {
         sal_uInt32 nIndex( lNewArgs.getLength() );
 
-        lNewArgs.realloc( lNewArgs.getLength()+aAddArgs.size() );
-        for ( sal_uInt32 i = 0; i < nAddArgs; i++ )
-            lNewArgs[nIndex++] = aAddArgs[i];
+        lNewArgs.realloc( nIndex + nAddArgs );
+        std::copy(aAddArgs.begin(), aAddArgs.end(), std::next(lNewArgs.begin(), nIndex));
     }
 
     // Overwrite possible detected synchron argument, if real listener exists (currently no other way)

@@ -146,13 +146,12 @@ SfxMailModel::SaveResult SfxMailModel::ShowFilterOptionsDialog(
 
         if ( aAny >>= aProps )
         {
-            sal_Int32 nPropertyCount = aProps.getLength();
-            for( sal_Int32 nProperty=0; nProperty < nPropertyCount; ++nProperty )
+            for( const auto& rProp : aProps )
             {
-                if( aProps[nProperty].Name == "UIComponent" )
+                if( rProp.Name == "UIComponent" )
                 {
                     OUString aServiceName;
-                    aProps[nProperty].Value >>= aServiceName;
+                    rProp.Value >>= aServiceName;
                     if( !aServiceName.isEmpty() )
                     {
                         uno::Reference< ui::dialogs::XExecutableDialog > xFilterDialog(
@@ -191,16 +190,14 @@ SfxMailModel::SaveResult SfxMailModel::ShowFilterOptionsDialog(
                                 uno::Sequence< beans::PropertyValue > aPropsFromDialog = xFilterProperties->getPropertyValues();
 
                                 //add them to the args
-                                for ( sal_Int32 nInd = 0; nInd < aPropsFromDialog.getLength(); nInd++ )
+                                auto pProp = std::find_if(aPropsFromDialog.begin(), aPropsFromDialog.end(),
+                                    [](const beans::PropertyValue& rDialogProp) { return rDialogProp.Name == "FilterData"; });
+                                if (pProp != aPropsFromDialog.end())
                                 {
-                                    if( aPropsFromDialog[ nInd ].Name == "FilterData" )
-                                    {
-                                        //found the filterdata, add to the storing argument
-                                        rArgs.realloc( ++rNumArgs );
-                                        rArgs[rNumArgs-1].Name = aPropsFromDialog[ nInd ].Name;
-                                        rArgs[rNumArgs-1].Value = aPropsFromDialog[ nInd ].Value;
-                                        break;
-                                    }
+                                    //found the filterdata, add to the storing argument
+                                    rArgs.realloc( ++rNumArgs );
+                                    rArgs[rNumArgs-1].Name = pProp->Name;
+                                    rArgs[rNumArgs-1].Value = pProp->Value;
                                 }
                                 eRet = SAVE_SUCCESSFULL;
                             }

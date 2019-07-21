@@ -212,11 +212,11 @@ void SfxFrameHTMLWriter::Out_DocInfo( SvStream& rStrm, const OUString& rBaseURL,
         xUserDefinedProps->getPropertySetInfo();
     DBG_ASSERT(xPropInfo.is(), "UserDefinedProperties Info is null");
     uno::Sequence<beans::Property> props = xPropInfo->getProperties();
-    for (sal_Int32 i = 0; i < props.getLength(); ++i)
+    for (const auto& rProp : props)
     {
         try
         {
-            OUString name = props[i].Name;
+            OUString name = rProp.Name;
             uno::Any aStr = xConverter->convertToSimpleType(
                     xUserDefinedProps->getPropertyValue(name),
                     uno::TypeClass_STRING);

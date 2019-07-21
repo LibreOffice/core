@@ -333,24 +333,18 @@ void SfxPrintHelper::impl_setPrinter(const uno::Sequence< beans::PropertyValue >
     // new Printer-Name available?
     nChangeFlags = SfxPrinterChangeFlags::NONE;
     sal_Int32 lDummy = 0;
-    for ( int n = 0; n < rPrinter.getLength(); ++n )
+    auto pProp = std::find_if(rPrinter.begin(), rPrinter.end(),
+        [](const beans::PropertyValue &rProp) { return rProp.Name == "Name"; });
+    if (pProp != rPrinter.end())
     {
-        // get Property-Value from printer description
-        const beans::PropertyValue &rProp = rPrinter.getConstArray()[n];
+        OUString aPrinterName;
+        if ( ! ( pProp->Value >>= aPrinterName ) )
+            throw css::lang::IllegalArgumentException();
 
-        // Name-Property?
-        if ( rProp.Name == "Name" )
+        if ( aPrinterName != pPrinter->GetName() )
         {
-            OUString aPrinterName;
-            if ( ! ( rProp.Value >>= aPrinterName ) )
-                throw css::lang::IllegalArgumentException();
-
-            if ( aPrinterName != pPrinter->GetName() )
-            {
-                pPrinter = VclPtr<SfxPrinter>::Create( pPrinter->GetOptions().Clone(), aPrinterName );
-                nChangeFlags = SfxPrinterChangeFlags::PRINTER;
-            }
-            break;
+            pPrinter = VclPtr<SfxPrinter>::Create( pPrinter->GetOptions().Clone(), aPrinterName );
+            nChangeFlags = SfxPrinterChangeFlags::PRINTER;
         }
     }
 
@@ -358,11 +352,9 @@ void SfxPrintHelper::impl_setPrinter(const uno::Sequence< beans::PropertyValue >
     view::PaperFormat nPaperFormat = view::PaperFormat_USER;
 
     // other properties
-    for ( int i = 0; i < rPrinter.getLength(); ++i )
+    for ( const beans::PropertyValue &rProp : rPrinter )
     {
         // get Property-Value from printer description
-        const beans::PropertyValue &rProp = rPrinter.getConstArray()[i];
-
         // PaperOrientation-Property?
         if ( rProp.Name == "PaperOrientation" )
         {
@@ -611,11 +603,9 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
     sal_Int32 nProps = 0;
     bool  bWaitUntilEnd = false;
     sal_Int16 nDuplexMode = css::view::DuplexMode::UNKNOWN;
-    for ( int n = 0; n < rOptions.getLength(); ++n )
+    for ( const beans::PropertyValue &rProp : rOptions )
     {
         // get Property-Value from options
-        const beans::PropertyValue &rProp = rOptions.getConstArray()[n];
-
         // FileName-Property?
         if ( rProp.Name == "FileName" )
         {

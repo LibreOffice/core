@@ -912,14 +912,14 @@ void SfxTemplateManagerDlg::OnTemplateImportCategory(const OUString& sCategory)
 
     OUString aTemplateList;
 
-    for (size_t i = 0, n = aFiles.getLength(); i < n; ++i)
+    for (const auto& rFile : aFiles)
     {
-        if(!mxLocalView->copyFrom(pContItem,aFiles[i]))
+        if(!mxLocalView->copyFrom(pContItem, rFile))
         {
             if (aTemplateList.isEmpty())
-                aTemplateList = aFiles[i];
+                aTemplateList = rFile;
             else
-                aTemplateList = aTemplateList + "\n" + aFiles[i];
+                aTemplateList = aTemplateList + "\n" + rFile;
         }
     }
 
@@ -1261,12 +1261,12 @@ static std::vector<OUString> lcl_getAllFactoryURLs ()
     std::vector<OUString> aList;
     const css::uno::Sequence<OUString> &aServiceNames = aModOpt.GetAllServiceNames();
 
-    for( sal_Int32 i=0, nCount = aServiceNames.getLength(); i < nCount; ++i )
+    for( const auto& rServiceName : aServiceNames )
     {
-        if ( ! SfxObjectFactory::GetStandardTemplate( aServiceNames[i] ).isEmpty() )
+        if ( ! SfxObjectFactory::GetStandardTemplate( rServiceName ).isEmpty() )
         {
             SvtModuleOptions::EFactory eFac = SvtModuleOptions::EFactory::WRITER;
-            SvtModuleOptions::ClassifyFactoryByName( aServiceNames[i], eFac );
+            SvtModuleOptions::ClassifyFactoryByName( rServiceName, eFac );
             aList.push_back(aModOpt.GetFactoryEmptyDocumentURL(eFac));
         }
     }

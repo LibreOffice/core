@@ -80,28 +80,28 @@ public:
 
 SfxVersionTableDtor::SfxVersionTableDtor( const uno::Sequence < util::RevisionTag >& rInfo )
 {
-    for ( sal_Int32 n=0; n<rInfo.getLength(); n++ )
+    for ( const auto& rItem : rInfo )
     {
         std::unique_ptr<SfxVersionInfo> pInfo(new SfxVersionInfo);
-        pInfo->aName = rInfo[n].Identifier;
-        pInfo->aComment = rInfo[n].Comment;
-        pInfo->aAuthor = rInfo[n].Author;
+        pInfo->aName = rItem.Identifier;
+        pInfo->aComment = rItem.Comment;
+        pInfo->aAuthor = rItem.Author;
 
-        pInfo->aCreationDate = DateTime( rInfo[n].TimeStamp );
+        pInfo->aCreationDate = DateTime( rItem.TimeStamp );
         aTableList.push_back( std::move(pInfo) );
     }
 }
 
 SfxVersionTableDtor::SfxVersionTableDtor( const uno::Sequence < document::CmisVersion >& rInfo )
 {
-    for ( sal_Int32 n=0; n<rInfo.getLength(); n++ )
+    for ( const auto& rItem : rInfo )
     {
         std::unique_ptr<SfxVersionInfo> pInfo(new SfxVersionInfo);
-        pInfo->aName = rInfo[n].Id;
-        pInfo->aComment = rInfo[n].Comment;
-        pInfo->aAuthor = rInfo[n].Author;
+        pInfo->aName = rItem.Id;
+        pInfo->aComment = rItem.Comment;
+        pInfo->aAuthor = rItem.Author;
 
-        pInfo->aCreationDate = DateTime( rInfo[n].TimeStamp );
+        pInfo->aCreationDate = DateTime( rItem.TimeStamp );
         aTableList.push_back( std::move(pInfo) );
     }
 }

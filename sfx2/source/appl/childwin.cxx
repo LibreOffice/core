@@ -390,7 +390,7 @@ void SfxChildWindow::InitializeChildWinFactory_Impl(sal_uInt16 nId, SfxChildWinI
     css::uno::Sequence < css::beans::NamedValue > aSeq = xWinOpt->GetUserData();
 
     OUString aTmp;
-    if ( aSeq.getLength() )
+    if ( aSeq.hasElements() )
         aSeq[0].Value >>= aTmp;
 
     OUString aWinData( aTmp );

@@ -553,22 +553,20 @@ void SfxDocTplService_Impl::getDirList()
         "vnd.sun.star.expand:"  );
 
     sal_Int32 nIdx{ 0 };
-    for (sal_Int32 i = 0; i < nCount; ++i)
+    for (auto& rTemplateDir : maTemplateDirs)
     {
         aURL.SetSmartProtocol( INetProtocol::File );
         aURL.SetURL( aDirs.getToken( 0, C_DELIM, nIdx ) );
-        maTemplateDirs[i] = aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE );
+        rTemplateDir = aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE );
 
         if ( xExpander.is() )
         {
-            const sal_Int32 nIndex{ maTemplateDirs[i].indexOf( aPrefix ) };
+            const sal_Int32 nIndex{ rTemplateDir.indexOf( aPrefix ) };
             if (nIndex<0)
                 continue;
 
-            maTemplateDirs[i] = maTemplateDirs[i].replaceAt(nIndex,
-                                                            aPrefix.getLength(),
-                                                            OUString());
-            maTemplateDirs[i] = xExpander->expandMacros( maTemplateDirs[i] );
+            rTemplateDir = rTemplateDir.replaceAt(nIndex, aPrefix.getLength(), OUString());
+            rTemplateDir = xExpander->expandMacros( rTemplateDir );
         }
     }
 
@@ -581,13 +579,12 @@ void SfxDocTplService_Impl::getDirList()
     Any aAny = xPathSettings->getPropertyValue( "Template_internal" );
     aAny >>= maInternalTemplateDirs;
 
-    nCount = maInternalTemplateDirs.getLength();
-    for (sal_Int32 i = 0; i < nCount; ++i)
+    for (auto& rInternalTemplateDir : maInternalTemplateDirs)
     {
         //expand vnd.sun.star.expand: and remove "..." from them
         //to normalize into the expected url patterns
-        maRelocator.makeRelocatableURL(maInternalTemplateDirs[i]);
-        maRelocator.makeAbsoluteURL(maInternalTemplateDirs[i]);
+        maRelocator.makeRelocatableURL(rInternalTemplateDir);
+        maRelocator.makeAbsoluteURL(rInternalTemplateDir);
     }
 
     // Store the template dir list
@@ -994,9 +991,9 @@ bool SfxDocTplService_Impl::setProperty( Content& rContent,
                 Sequence< OUString > aValues;
                 if ( rPropValue >>= aValues )
                 {
-                    for ( sal_Int32 n = 0; n < aValues.getLength(); n++ )
+                    for ( auto& rValue : aValues )
                     {
-                        maRelocator.makeRelocatableURL( aValues[ n ] );
+                        maRelocator.makeRelocatableURL( rValue );
                     }
                     aPropValue <<= aValues;
                 }
@@ -1053,9 +1050,9 @@ bool SfxDocTplService_Impl::getProperty(Content& rContent, const OUString& rProp
                 Sequence< OUString > aValues;
                 if ( rPropValue >>= aValues )
                 {
-                    for ( sal_Int32 n = 0; n < aValues.getLength(); n++ )
+                    for ( auto& rValue : aValues )
                     {
-                        maRelocator.makeAbsoluteURL( aValues[ n ] );
+                        maRelocator.makeAbsoluteURL( rValue );
                     }
                     rPropValue <<= aValues;
                 }
@@ -1769,9 +1766,9 @@ bool SfxDocTplService_Impl::storeTemplate( const OUString& rGroupName,
         uno::Sequence< beans::PropertyValue > aFilterData;
         xFilterFactory->getByName( aFilterName ) >>= aFilterData;
         OUString aTypeName;
-        for ( sal_Int32 nInd = 0; nInd < aFilterData.getLength(); nInd++ )
-            if ( aFilterData[nInd].Name == "Type" )
-                aFilterData[nInd].Value >>= aTypeName;
+        for ( const auto& rProp : aFilterData )
+            if ( rProp.Name == "Type" )
+                rProp.Value >>= aTypeName;
 
         if ( aTypeName.isEmpty() )
             throw uno::RuntimeException();
@@ -2005,25 +2002,16 @@ bool SfxDocTplService_Impl::addTemplate( const OUString& rGroupName,
 
 bool SfxDocTplService_Impl::isInternalTemplateDir(const OUString& rURL) const
 {
-    const sal_Int32 nDirs = maInternalTemplateDirs.getLength();
-    const OUString* pDirs = maInternalTemplateDirs.getConstArray();
-    for (sal_Int32 i = 0; i < nDirs; ++i, ++pDirs)
-    {
-        if (::utl::UCBContentHelper::IsSubPath(*pDirs, rURL))
-            return true;
-    }
-    return false;
+    return std::any_of(maInternalTemplateDirs.begin(), maInternalTemplateDirs.end(),
+        [&rURL](const OUString& rDir) { return ::utl::UCBContentHelper::IsSubPath(rDir, rURL); });
 }
 
 OUString SfxDocTplService_Impl::findParentTemplateDir(const OUString& rURL) const
 {
-    const sal_Int32 nDirs = maTemplateDirs.getLength();
-    const OUString* pDirs = maTemplateDirs.getConstArray();
-    for (sal_Int32 i = 0; i < nDirs; ++i, ++pDirs)
-    {
-        if (::utl::UCBContentHelper::IsSubPath(*pDirs, rURL))
-            return *pDirs;
-    }
+    const OUString* pDirs = std::find_if(maTemplateDirs.begin(), maTemplateDirs.end(),
+        [&rURL](const OUString& rDir) { return ::utl::UCBContentHelper::IsSubPath(rDir, rURL); });
+    if (pDirs != maTemplateDirs.end())
+        return *pDirs;
     return OUString();
 }
 

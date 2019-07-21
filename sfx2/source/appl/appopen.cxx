@@ -44,6 +44,7 @@
 #include <rtl/ustring.hxx>
 
 #include <comphelper/processfactory.hxx>
+#include <comphelper/sequence.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/synchronousdispatch.hxx>
 
@@ -250,7 +251,7 @@ ErrCode CheckPasswd_Impl
                             pSet->ClearItem( SID_PASSWORD );
                             pSet->ClearItem( SID_ENCRYPTIONDATA );
 
-                            if ( aEncryptionData.getLength() > 0 )
+                            if ( aEncryptionData.hasElements() )
                             {
                                 pSet->Put( SfxUnoAnyItem( SID_ENCRYPTIONDATA, uno::makeAny( aEncryptionData ) ) );
 
@@ -866,10 +867,10 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
                     // get registered protocol handlers from configuration
                     Reference < XNameAccess > xAccess(officecfg::Office::ProtocolHandler::HandlerSet::get());
                     Sequence < OUString > aNames = xAccess->getElementNames();
-                    for ( sal_Int32 nName = 0; nName < aNames.getLength(); nName ++)
+                    for ( const auto& rName : aNames )
                     {
                         Reference < XPropertySet > xSet;
-                        Any aRet = xAccess->getByName( aNames[nName] );
+                        Any aRet = xAccess->getByName( rName );
                         aRet >>= xSet;
                         if ( xSet.is() )
                         {
@@ -1033,15 +1034,12 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
     // Any Referer (that was relevant in the above call to
     // SvtSecurityOptions::isSecureMacroUri) is no longer relevant, assuming
     // this "open" request is initiated directly by the user:
-    for (sal_Int32 i = 0; i != aArgs.getLength(); ++i) {
-        if (aArgs[i].Name == "Referer") {
-            ++i;
-            for (; i != aArgs.getLength(); ++i) {
-                aArgs[i - 1] = aArgs[i];
-            }
-            aArgs.realloc(aArgs.getLength()-1);
-            break;
-        }
+    auto pArg = std::find_if(aArgs.begin(), aArgs.end(),
+        [](const PropertyValue& rArg) { return rArg.Name == "Referer"; });
+    if (pArg != aArgs.end())
+    {
+        auto nIndex = static_cast<sal_Int32>(std::distance(aArgs.begin(), pArg));
+        comphelper::removeElementAt(aArgs, nIndex);
     }
 
     // TODO/LATER: either remove LinkItem or create an asynchronous process for it

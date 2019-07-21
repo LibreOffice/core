@@ -274,14 +274,14 @@ bool SaveOlePropertySet(
         xUserDefinedProps->getPropertySetInfo();
     DBG_ASSERT(xPropInfo.is(), "UserDefinedProperties Info is null");
     uno::Sequence<beans::Property> props = xPropInfo->getProperties();
-    for (sal_Int32 i = 0; i < props.getLength(); ++i)
+    for (const auto& rProp : props)
     {
         try
         {
             // skip transient properties
-            if (~props[i].Attributes & beans::PropertyAttribute::TRANSIENT)
+            if (~rProp.Attributes & beans::PropertyAttribute::TRANSIENT)
             {
-                const OUString name = props[i].Name;
+                const OUString name = rProp.Name;
                 const sal_Int32 nPropId = rCustomSect.GetFreePropertyId();
                 if (rCustomSect.SetAnyValue( nPropId,
                             xUserDefinedProps->getPropertyValue(name))) {

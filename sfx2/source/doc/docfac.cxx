@@ -176,9 +176,9 @@ void SfxObjectFactory::SetSystemTemplate( const OUString& rServiceName, const OU
         OUString aActualFilterTypeName;
         uno::Sequence< beans::PropertyValue > aActuralFilterData;
         xFilterFactory->getByName( aActualFilter ) >>= aActuralFilterData;
-        for ( sal_Int32 nInd = 0; nInd < aActuralFilterData.getLength(); nInd++ )
-            if ( aActuralFilterData[nInd].Name == "Type" )
-                aActuralFilterData[nInd].Value >>= aActualFilterTypeName;
+        for ( const auto& rProp : aActuralFilterData )
+            if ( rProp.Name == "Type" )
+                rProp.Value >>= aActualFilterTypeName;
         ::comphelper::SequenceAsHashMap aProps1( xTypeDetection->getByName( aActualFilterTypeName ) );
         uno::Sequence< OUString > aAllExt =
             aProps1.getUnpackedValueOrDefault("Extensions", uno::Sequence< OUString >() );

@@ -240,14 +240,14 @@ void RecentDocsView::Reload()
         OUString aTitle;
         BitmapEx aThumbnail;
 
-        for ( int j = 0; j < rRecentEntry.getLength(); j++ )
+        for ( const auto& rProp : rRecentEntry )
         {
-            Any a = rRecentEntry[j].Value;
+            Any a = rProp.Value;
 
-            if (rRecentEntry[j].Name == "URL")
+            if (rProp.Name == "URL")
                 a >>= aURL;
             //fdo#74834: only load thumbnail if the corresponding option is not disabled in the configuration
-            else if (rRecentEntry[j].Name == "Thumbnail" && officecfg::Office::Common::History::RecentDocsThumbnail::get())
+            else if (rProp.Name == "Thumbnail" && officecfg::Office::Common::History::RecentDocsThumbnail::get())
             {
                 OUString aBase64;
                 a >>= aBase64;

@@ -1134,17 +1134,17 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
                         // Loop over the CMIS Properties to find cmis:isVersionSeriesCheckedOut
                         bool bIsGoogleFile = false;
                         bool bCheckedOut = false;
-                        for ( sal_Int32 i = 0; i < aCmisProperties.getLength(); ++i )
+                        for ( const auto& rCmisProperty : aCmisProperties )
                         {
-                            if ( aCmisProperties[i].Id == "cmis:isVersionSeriesCheckedOut" )
+                            if ( rCmisProperty.Id == "cmis:isVersionSeriesCheckedOut" )
                             {
                                 uno::Sequence< sal_Bool > bTmp;
-                                aCmisProperties[i].Value >>= bTmp;
+                                rCmisProperty.Value >>= bTmp;
                                 bCheckedOut = bTmp[0];
                             }
                             // using title to know if it's a Google Drive file
                             // maybe there's a safer way.
-                            if ( aCmisProperties[i].Name == "title" )
+                            if ( rCmisProperty.Name == "title" )
                                 bIsGoogleFile = true;
                         }
                         bShow = !bCheckedOut && !bIsGoogleFile;
@@ -1168,17 +1168,14 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
                     if ( xCmisDoc->isVersionable( ) && aCmisProperties.hasElements( ) )
                     {
                         // Loop over the CMIS Properties to find cmis:isVersionSeriesCheckedOut
-                        bool bFoundCheckedout = false;
                         bool bCheckedOut = false;
-                        for ( sal_Int32 i = 0; i < aCmisProperties.getLength() && !bFoundCheckedout; ++i )
+                        auto pProp = std::find_if(aCmisProperties.begin(), aCmisProperties.end(),
+                            [](const document::CmisProperty& rProp) { return rProp.Id == "cmis:isVersionSeriesCheckedOut"; });
+                        if (pProp != aCmisProperties.end())
                         {
-                            if ( aCmisProperties[i].Id == "cmis:isVersionSeriesCheckedOut" )
-                            {
-                                bFoundCheckedout = true;
-                                uno::Sequence< sal_Bool > bTmp;
-                                aCmisProperties[i].Value >>= bTmp;
-                                bCheckedOut = bTmp[0];
-                            }
+                            uno::Sequence< sal_Bool > bTmp;
+                            pProp->Value >>= bTmp;
+                            bCheckedOut = bTmp[0];
                         }
                         bShow = bCheckedOut;
                     }
@@ -1516,25 +1513,24 @@ SignatureState SfxObjectShell::ImplCheckSignaturesInformation( const uno::Sequen
 {
     bool bCertValid = true;
     SignatureState nResult = SignatureState::NOSIGNATURES;
-    int nInfos = aInfos.getLength();
     bool bCompleteSignature = true;
-    if( nInfos )
+    if( aInfos.hasElements() )
     {
         nResult = SignatureState::OK;
-        for ( int n = 0; n < nInfos; n++ )
+        for ( const auto& rInfo : aInfos )
         {
             if ( bCertValid )
             {
-                sal_Int32 nCertStat = aInfos[n].CertificateStatus;
+                sal_Int32 nCertStat = rInfo.CertificateStatus;
                 bCertValid = nCertStat == security::CertificateValidity::VALID;
             }
 
-            if ( !aInfos[n].SignatureIsValid )
+            if ( !rInfo.SignatureIsValid )
             {
                 nResult = SignatureState::BROKEN;
                 break; // we know enough
             }
-            bCompleteSignature &= !aInfos[n].PartialDocumentSignature;
+            bCompleteSignature &= !rInfo.PartialDocumentSignature;
         }
     }
 

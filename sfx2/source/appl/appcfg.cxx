@@ -22,6 +22,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/util/XFlushable.hpp>
+#include <comphelper/sequence.hxx>
 #include <osl/file.hxx>
 
 #include <stdlib.h>
@@ -335,10 +336,7 @@ void SfxApplication::GetOptions( SfxItemSet& rSet )
                         if (!aSecurityOptions.IsReadOnly(SvtSecurityOptions::EOption::SecureUrls))
                         {
                             css::uno::Sequence< OUString > seqURLs = aSecurityOptions.GetSecureURLs();
-                            std::vector<OUString> aList;
-                            sal_uInt32 nCount = seqURLs.getLength();
-                            for( sal_uInt32 nURL=0; nURL<nCount; ++nURL )
-                                aList.push_back(seqURLs[nURL]);
+                            auto aList = comphelper::sequenceToContainer<std::vector<OUString>>(seqURLs);
 
                             if( !rSet.Put( SfxStringListItem( rPool.GetWhich(SID_SECURE_URL), &aList ) ) )
                                 bRet = false;

@@ -537,11 +537,11 @@ bool SfxObjectShell::ImportFromGeneratedStream_Impl(
         pMedium->GetItemSet()->Put( aSet );
         pMedium->CanDisposeStorage_Impl( false );
         uno::Reference<text::XTextRange> xInsertTextRange;
-        for (sal_Int32 i = 0; i < rMediaDescr.getLength(); ++i)
+        for (const auto& rProp : rMediaDescr)
         {
-            if (rMediaDescr[i].Name == "TextInsertModeRange")
+            if (rProp.Name == "TextInsertModeRange")
             {
-                rMediaDescr[i].Value >>= xInsertTextRange;
+                rProp.Value >>= xInsertTextRange;
             }
         }
 
@@ -884,56 +884,54 @@ ErrCode SfxObjectShell::HandleFilter( SfxMedium* pMedium, SfxObjectShell const *
                 Any aAny = xFilterCFG->getByName( pFilter->GetName() );
                 if ( aAny >>= aProps )
                 {
-                    sal_Int32 nPropertyCount = aProps.getLength();
-                    for( sal_Int32 nProperty=0; nProperty < nPropertyCount; ++nProperty )
-                        if( aProps[nProperty].Name == "UIComponent" )
+                    auto pProp = std::find_if(aProps.begin(), aProps.end(),
+                        [](const PropertyValue& rProp) { return rProp.Name == "UIComponent"; });
+                    if (pProp != aProps.end())
+                    {
+                        OUString aServiceName;
+                        pProp->Value >>= aServiceName;
+                        if( !aServiceName.isEmpty() )
                         {
-                            OUString aServiceName;
-                            aProps[nProperty].Value >>= aServiceName;
-                            if( !aServiceName.isEmpty() )
+                            css::uno::Reference< XInteractionHandler > rHandler = pMedium->GetInteractionHandler();
+                            if( rHandler.is() )
                             {
-                                css::uno::Reference< XInteractionHandler > rHandler = pMedium->GetInteractionHandler();
-                                if( rHandler.is() )
+                                // we need some properties in the media descriptor, so we have to make sure that they are in
+                                Any aStreamAny;
+                                aStreamAny <<= pMedium->GetInputStream();
+                                if ( pSet->GetItemState( SID_INPUTSTREAM ) < SfxItemState::SET )
+                                    pSet->Put( SfxUnoAnyItem( SID_INPUTSTREAM, aStreamAny ) );
+                                if ( pSet->GetItemState( SID_FILE_NAME ) < SfxItemState::SET )
+                                    pSet->Put( SfxStringItem( SID_FILE_NAME, pMedium->GetName() ) );
+                                if ( pSet->GetItemState( SID_FILTER_NAME ) < SfxItemState::SET )
+                                    pSet->Put( SfxStringItem( SID_FILTER_NAME, pFilter->GetName() ) );
+
+                                Sequence< PropertyValue > rProperties;
+                                TransformItems( SID_OPENDOC, *pSet, rProperties );
+                                RequestFilterOptions* pFORequest = new RequestFilterOptions( pDoc->GetModel(), rProperties );
+
+                                css::uno::Reference< XInteractionRequest > rRequest( pFORequest );
+                                rHandler->handle( rRequest );
+
+                                if ( !pFORequest->isAbort() )
                                 {
-                                    // we need some properties in the media descriptor, so we have to make sure that they are in
-                                    Any aStreamAny;
-                                    aStreamAny <<= pMedium->GetInputStream();
-                                    if ( pSet->GetItemState( SID_INPUTSTREAM ) < SfxItemState::SET )
-                                        pSet->Put( SfxUnoAnyItem( SID_INPUTSTREAM, aStreamAny ) );
-                                    if ( pSet->GetItemState( SID_FILE_NAME ) < SfxItemState::SET )
-                                        pSet->Put( SfxStringItem( SID_FILE_NAME, pMedium->GetName() ) );
-                                    if ( pSet->GetItemState( SID_FILTER_NAME ) < SfxItemState::SET )
-                                        pSet->Put( SfxStringItem( SID_FILTER_NAME, pFilter->GetName() ) );
+                                        SfxAllItemSet aNewParams( pDoc->GetPool() );
+                                        TransformParameters( SID_OPENDOC,
+                                                        pFORequest->getFilterOptions(),
+                                                        aNewParams );
 
-                                    Sequence< PropertyValue > rProperties;
-                                    TransformItems( SID_OPENDOC, *pSet, rProperties );
-                                    RequestFilterOptions* pFORequest = new RequestFilterOptions( pDoc->GetModel(), rProperties );
+                                        const SfxStringItem* pFilterOptions = aNewParams.GetItem<SfxStringItem>(SID_FILE_FILTEROPTIONS, false);
+                                        if ( pFilterOptions )
+                                            pSet->Put( *pFilterOptions );
 
-                                    css::uno::Reference< XInteractionRequest > rRequest( pFORequest );
-                                    rHandler->handle( rRequest );
-
-                                    if ( !pFORequest->isAbort() )
-                                    {
-                                            SfxAllItemSet aNewParams( pDoc->GetPool() );
-                                            TransformParameters( SID_OPENDOC,
-                                                            pFORequest->getFilterOptions(),
-                                                            aNewParams );
-
-                                            const SfxStringItem* pFilterOptions = aNewParams.GetItem<SfxStringItem>(SID_FILE_FILTEROPTIONS, false);
-                                            if ( pFilterOptions )
-                                                pSet->Put( *pFilterOptions );
-
-                                            const SfxUnoAnyItem* pFilterData = aNewParams.GetItem<SfxUnoAnyItem>(SID_FILTER_DATA, false);
-                                            if ( pFilterData )
-                                                pSet->Put( *pFilterData );
-                                    }
-                                    else
-                                        bAbort = true;
+                                        const SfxUnoAnyItem* pFilterData = aNewParams.GetItem<SfxUnoAnyItem>(SID_FILTER_DATA, false);
+                                        if ( pFilterData )
+                                            pSet->Put( *pFilterData );
                                 }
+                                else
+                                    bAbort = true;
                             }
-
-                            break;
                         }
+                    }
                 }
 
                 if( bAbort )
@@ -1447,10 +1445,10 @@ bool SfxObjectShell::SaveTo_Impl
                         if ( !xNewVerStor.is() || !xOldVerStor.is() )
                             throw uno::RuntimeException();
 
-                        for ( sal_Int32 n=0; n<aVersions.getLength(); n++ )
+                        for ( const auto& rVersion : aVersions )
                         {
-                            if ( xOldVerStor->hasByName( aVersions[n].Identifier ) )
-                                xOldVerStor->copyElementTo( aVersions[n].Identifier, xNewVerStor, aVersions[n].Identifier );
+                            if ( xOldVerStor->hasByName( rVersion.Identifier ) )
+                                xOldVerStor->copyElementTo( rVersion.Identifier, xNewVerStor, rVersion.Identifier );
                         }
 
                         uno::Reference< embed::XTransactedObject > xTransact( xNewVerStor, uno::UNO_QUERY );
@@ -2137,16 +2135,10 @@ bool SfxObjectShell::ImportFrom(SfxMedium& rMedium,
     }
 
     OUString aFilterImplName;
-    sal_Int32 nFilterProps = aProps.getLength();
-    for ( sal_Int32 nFilterProp = 0; nFilterProp<nFilterProps; nFilterProp++ )
-    {
-        const beans::PropertyValue& rFilterProp = aProps[nFilterProp];
-        if (rFilterProp.Name == "FilterService")
-        {
-            rFilterProp.Value >>= aFilterImplName;
-            break;
-        }
-    }
+    auto pProp = std::find_if(aProps.begin(), aProps.end(),
+        [](const beans::PropertyValue& rFilterProp) { return rFilterProp.Name == "FilterService"; });
+    if (pProp != aProps.end())
+        pProp->Value >>= aFilterImplName;
 
     uno::Reference< document::XFilter > xLoader;
     if ( !aFilterImplName.isEmpty() )
@@ -2180,10 +2172,9 @@ bool SfxObjectShell::ImportFrom(SfxMedium& rMedium,
 
             bool bHasInputStream = false;
             bool bHasBaseURL = false;
-            sal_Int32 i;
             sal_Int32 nEnd = lDescriptor.getLength();
 
-            for ( i = 0; i < nEnd; i++ )
+            for ( sal_Int32 i = 0; i < nEnd; i++ )
             {
                 pNewValue[i] = pOldValue[i];
                 if ( pOldValue [i].Name == sInputStream )
@@ -2219,9 +2210,9 @@ bool SfxObjectShell::ImportFrom(SfxMedium& rMedium,
             // modified flag, so needs to reset the flag to false after loading
             bool bRtn = xLoader->filter( aArgs );
             uno::Sequence < OUString > aNames = GetEmbeddedObjectContainer().GetObjectNames();
-            for ( sal_Int32 n = 0; n < aNames.getLength(); ++n )
+            for ( const auto& rName : aNames )
             {
-                uno::Reference < embed::XEmbeddedObject > xObj = GetEmbeddedObjectContainer().GetEmbeddedObject( aNames[n] );
+                uno::Reference < embed::XEmbeddedObject > xObj = GetEmbeddedObjectContainer().GetEmbeddedObject( rName );
                 OSL_ENSURE( xObj.is(), "An empty entry in the embedded objects list!" );
                 if ( xObj.is() )
                 {
@@ -2314,16 +2305,10 @@ bool SfxObjectShell::ExportTo( SfxMedium& rMedium )
             xFilters->getByName( aFilterName ) >>= aProps;
 
         OUString aFilterImplName;
-        sal_Int32 nFilterProps = aProps.getLength();
-        for ( sal_Int32 nFilterProp = 0; nFilterProp<nFilterProps; nFilterProp++ )
-        {
-            const beans::PropertyValue& rFilterProp = aProps[nFilterProp];
-            if (rFilterProp.Name == "FilterService")
-            {
-                rFilterProp.Value >>= aFilterImplName;
-                break;
-            }
-        }
+        auto pProp = std::find_if(aProps.begin(), aProps.end(),
+            [](const beans::PropertyValue& rFilterProp) { return rFilterProp.Name == "FilterService"; });
+        if (pProp != aProps.end())
+            pProp->Value >>= aFilterImplName;
 
         if ( !aFilterImplName.isEmpty() )
         {
@@ -2361,10 +2346,9 @@ bool SfxObjectShell::ExportTo( SfxMedium& rMedium )
         bool bHasBaseURL = false;
         bool bHasFilterName = false;
         bool bIsRedactMode = false;
-        sal_Int32 i;
         sal_Int32 nEnd = aOldArgs.getLength();
 
-        for ( i = 0; i < nEnd; i++ )
+        for ( sal_Int32 i = 0; i < nEnd; i++ )
         {
             pNewValue[i] = pOldValue[i];
             if ( pOldValue[i].Name == "FileName" )
@@ -3137,9 +3121,9 @@ bool SfxObjectShell::SaveCompletedChildren()
     if ( pImpl->mpObjectContainer )
     {
         uno::Sequence < OUString > aNames = GetEmbeddedObjectContainer().GetObjectNames();
-        for ( sal_Int32 n=0; n<aNames.getLength(); n++ )
+        for ( const auto& rName : aNames )
         {
-            uno::Reference < embed::XEmbeddedObject > xObj = GetEmbeddedObjectContainer().GetEmbeddedObject( aNames[n] );
+            uno::Reference < embed::XEmbeddedObject > xObj = GetEmbeddedObjectContainer().GetEmbeddedObject( rName );
             OSL_ENSURE( xObj.is(), "An empty entry in the embedded objects list!" );
             if ( xObj.is() )
             {
@@ -3244,9 +3228,9 @@ static bool StoragesOfUnknownMediaTypeAreCopied_Impl( const uno::Reference< embe
     try
     {
         uno::Sequence< OUString > aSubElements = xSource->getElementNames();
-        for ( sal_Int32 nInd = 0; nInd < aSubElements.getLength(); nInd++ )
+        for ( const auto& rSubElement : aSubElements )
         {
-            if ( xSource->isStorageElement( aSubElements[nInd] ) )
+            if ( xSource->isStorageElement( rSubElement ) )
             {
                 OUString aMediaType;
                 const OUString aMediaTypePropName( "MediaType"  );
@@ -3256,7 +3240,7 @@ static bool StoragesOfUnknownMediaTypeAreCopied_Impl( const uno::Reference< embe
                 {
                     uno::Reference< embed::XOptimizedStorage > xOptStorage( xSource, uno::UNO_QUERY_THROW );
                     bGotMediaType =
-                        ( xOptStorage->getElementPropertyValue( aSubElements[nInd], aMediaTypePropName ) >>= aMediaType );
+                        ( xOptStorage->getElementPropertyValue( rSubElement, aMediaTypePropName ) >>= aMediaType );
                 }
                 catch( uno::Exception& )
                 {}
@@ -3265,14 +3249,14 @@ static bool StoragesOfUnknownMediaTypeAreCopied_Impl( const uno::Reference< embe
                 {
                     uno::Reference< embed::XStorage > xSubStorage;
                     try {
-                        xSubStorage = xSource->openStorageElement( aSubElements[nInd], embed::ElementModes::READ );
+                        xSubStorage = xSource->openStorageElement( rSubElement, embed::ElementModes::READ );
                     } catch( uno::Exception& )
                     {}
 
                     if ( !xSubStorage.is() )
                     {
                         xSubStorage = ::comphelper::OStorageHelper::GetTemporaryStorage();
-                        xSource->copyStorageElementLastCommitTo( aSubElements[nInd], xSubStorage );
+                        xSource->copyStorageElementLastCommitTo( rSubElement, xSubStorage );
                     }
 
                     uno::Reference< beans::XPropertySet > xProps( xSubStorage, uno::UNO_QUERY_THROW );
@@ -3310,7 +3294,7 @@ static bool StoragesOfUnknownMediaTypeAreCopied_Impl( const uno::Reference< embe
 
                         default:
                         {
-                            if ( !xTarget->hasByName( aSubElements[nInd] ) )
+                            if ( !xTarget->hasByName( rSubElement ) )
                                 return false;
                         }
                     }
