@@ -28,7 +28,7 @@ class OutputDevice;
 class VirtualDevice;
 struct AnimationBitmap;
 
-class AnimationRenderer
+class VCL_DLLPUBLIC AnimationRenderer
 {
 public:
     AnimationRenderer(Animation* pParent, OutputDevice* pOut, const Point& rPt, const Size& rSz,
