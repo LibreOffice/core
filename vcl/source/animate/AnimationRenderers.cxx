@@ -33,7 +33,7 @@ bool AnimationRenderers::CanRepaintRenderers(OutputDevice* pOut, sal_uLong nCall
     for (size_t i = 0; i < maAnimationRenderers.size(); ++i)
     {
         pRenderer = maAnimationRenderers[i].get();
-        if (pRenderer->matches(pOut, nCallerId))
+        if (pRenderer->Matches(pOut, nCallerId))
         {
             if (pRenderer->GetOriginPosition() == rDestPt
                 && pRenderer->GetSizePx() == pOut->LogicToPixel(rDestSz))
@@ -79,7 +79,7 @@ void AnimationRenderers::RemoveAnimationInstance(OutputDevice* pOut, sal_uLong n
     maAnimationRenderers.erase(
         std::remove_if(maAnimationRenderers.begin(), maAnimationRenderers.end(),
                        [=](const std::unique_ptr<AnimationRenderer>& pAnimView) -> bool {
-                           return pAnimView->matches(pOut, nCallerId);
+                           return pAnimView->Matches(pOut, nCallerId);
                        }),
         maAnimationRenderers.end());
 }
