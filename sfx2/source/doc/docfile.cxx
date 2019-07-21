@@ -83,6 +83,7 @@
 #include <comphelper/fileurl.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/interaction.hxx>
+#include <comphelper/sequence.hxx>
 #include <comphelper/simplefileaccessinteraction.hxx>
 #include <framework/interaction.hxx>
 #include <unotools/streamhelper.hxx>
@@ -1639,7 +1640,7 @@ uno::Reference < embed::XStorage > SfxMedium::GetStorage( bool bCreateTempIfNo )
     if ( pVersion && pVersion->GetValue() )
     {
         // Read all available versions
-        if ( pImpl->aVersions.getLength() )
+        if ( pImpl->aVersions.hasElements() )
         {
             // Search for the version fits the comment
             // The versions are numbered starting with 1, versions with
@@ -3457,7 +3458,7 @@ css::uno::Reference< css::io::XInputStream > const &  SfxMedium::GetInputStream(
 const uno::Sequence < util::RevisionTag >& SfxMedium::GetVersionList( bool _bNoReload )
 {
     // if the medium has no name, then this medium should represent a new document and can have no version info
-    if ( ( !_bNoReload || !pImpl->m_bVersionsAlreadyLoaded ) && !pImpl->aVersions.getLength() &&
+    if ( ( !_bNoReload || !pImpl->m_bVersionsAlreadyLoaded ) && !pImpl->aVersions.hasElements() &&
          ( !pImpl->m_aName.isEmpty() || !pImpl->m_aLogicName.isEmpty() ) && GetStorage().is() )
     {
         uno::Reference < document::XDocumentRevisionListPersistence > xReader =
@@ -3500,9 +3501,9 @@ void SfxMedium::AddVersion_Impl( util::RevisionTag& rRevision )
     // To determine a unique name for the stream
     std::vector<sal_uInt32> aLongs;
     sal_Int32 nLength = pImpl->aVersions.getLength();
-    for ( sal_Int32 m=0; m<nLength; m++ )
+    for ( const auto& rVersion : pImpl->aVersions )
     {
-        sal_uInt32 nVer = static_cast<sal_uInt32>( pImpl->aVersions[m].Identifier.copy(7).toInt32());
+        sal_uInt32 nVer = static_cast<sal_uInt32>( rVersion.Identifier.copy(7).toInt32());
         size_t n;
         for ( n=0; n<aLongs.size(); ++n )
             if ( nVer<aLongs[n] )
@@ -3524,25 +3525,21 @@ void SfxMedium::AddVersion_Impl( util::RevisionTag& rRevision )
 
 void SfxMedium::RemoveVersion_Impl( const OUString& rName )
 {
-    if ( !pImpl->aVersions.getLength() )
+    if ( !pImpl->aVersions.hasElements() )
         return;
 
-    sal_Int32 nLength = pImpl->aVersions.getLength();
-    for ( sal_Int32 n=0; n<nLength; n++ )
+    auto pVersion = std::find_if(pImpl->aVersions.begin(), pImpl->aVersions.end(),
+        [&rName](const auto& rVersion) { return rVersion.Identifier == rName; });
+    if (pVersion != pImpl->aVersions.end())
     {
-        if ( pImpl->aVersions[n].Identifier == rName )
-        {
-            for ( sal_Int32 m=n; m<nLength-1; m++ )
-                pImpl->aVersions[m] = pImpl->aVersions[m+1];
-            pImpl->aVersions.realloc(nLength-1);
-            return;
-        }
+        auto nIndex = static_cast<sal_Int32>(std::distance(pImpl->aVersions.begin(), pVersion));
+        comphelper::removeElementAt(pImpl->aVersions, nIndex);
     }
 }
 
 bool SfxMedium::TransferVersionList_Impl( SfxMedium const & rMedium )
 {
-    if ( rMedium.pImpl->aVersions.getLength() )
+    if ( rMedium.pImpl->aVersions.hasElements() )
     {
         pImpl->aVersions = rMedium.pImpl->aVersions;
         return true;
@@ -3556,7 +3553,7 @@ void SfxMedium::SaveVersionList_Impl()
     if ( !GetStorage().is() )
         return;
 
-    if ( !pImpl->aVersions.getLength() )
+    if ( !pImpl->aVersions.hasElements() )
         return;
 
     uno::Reference < document::XDocumentRevisionListPersistence > xWriter =

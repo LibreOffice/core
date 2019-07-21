@@ -104,11 +104,9 @@ void SAL_CALL PreventDuplicateInteraction::handle(const css::uno::Reference< css
     else
     {
         const css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > lContinuations = xRequest->getContinuations();
-        sal_Int32 c = lContinuations.getLength();
-        sal_Int32 i = 0;
-        for (i=0; i<c; ++i)
+        for (const auto& rContinuation : lContinuations)
         {
-            css::uno::Reference< css::task::XInteractionAbort > xAbort(lContinuations[i], css::uno::UNO_QUERY);
+            css::uno::Reference< css::task::XInteractionAbort > xAbort(rContinuation, css::uno::UNO_QUERY);
             if (xAbort.is())
             {
                 xAbort->select();
@@ -151,11 +149,9 @@ sal_Bool SAL_CALL PreventDuplicateInteraction::handleInteractionRequest( const c
     else
     {
         const css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > lContinuations = xRequest->getContinuations();
-        sal_Int32 c = lContinuations.getLength();
-        sal_Int32 i = 0;
-        for (i=0; i<c; ++i)
+        for (const auto& rContinuation : lContinuations)
         {
-            css::uno::Reference< css::task::XInteractionAbort > xAbort(lContinuations[i], css::uno::UNO_QUERY);
+            css::uno::Reference< css::task::XInteractionAbort > xAbort(rContinuation, css::uno::UNO_QUERY);
             if (xAbort.is())
             {
                 xAbort->select();

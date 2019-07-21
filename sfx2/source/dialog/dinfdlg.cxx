@@ -236,19 +236,17 @@ SfxDocumentInfoItem::SfxDocumentInfoItem( const OUString& rFile,
         {
             Reference < beans::XPropertySet > xSet( xContainer, UNO_QUERY );
             const Sequence< beans::Property > lProps = xSet->getPropertySetInfo()->getProperties();
-            const beans::Property* pProps = lProps.getConstArray();
-            sal_Int32 nCount = lProps.getLength();
-            for ( sal_Int32 i = 0; i < nCount; ++i )
+            for ( const beans::Property& rProp : lProps )
             {
                 // "fix" property? => not a custom property => ignore it!
-                if (!(pProps[i].Attributes & css::beans::PropertyAttribute::REMOVABLE))
+                if (!(rProp.Attributes & css::beans::PropertyAttribute::REMOVABLE))
                 {
                     SAL_WARN( "sfx.dialog", "non-removable user-defined property?");
                     continue;
                 }
 
-                uno::Any aValue = xSet->getPropertyValue(pProps[i].Name);
-                std::unique_ptr<CustomProperty> pProp(new CustomProperty( pProps[i].Name, aValue ));
+                uno::Any aValue = xSet->getPropertyValue(rProp.Name);
+                std::unique_ptr<CustomProperty> pProp(new CustomProperty( rProp.Name, aValue ));
                 m_aCustomProperties.push_back( std::move(pProp) );
             }
         }
@@ -392,13 +390,11 @@ void SfxDocumentInfoItem::UpdateDocumentInfo(
         Reference < beans::XPropertySet > xSet( xContainer, UNO_QUERY );
         Reference< beans::XPropertySetInfo > xSetInfo = xSet->getPropertySetInfo();
         const Sequence< beans::Property > lProps = xSetInfo->getProperties();
-        const beans::Property* pProps = lProps.getConstArray();
-        sal_Int32 nCount = lProps.getLength();
-        for ( sal_Int32 j = 0; j < nCount; ++j )
+        for ( const beans::Property& rProp : lProps )
         {
-            if (pProps[j].Attributes & css::beans::PropertyAttribute::REMOVABLE)
+            if (rProp.Attributes & css::beans::PropertyAttribute::REMOVABLE)
             {
-                xContainer->removeProperty( pProps[j].Name );
+                xContainer->removeProperty( rProp.Name );
             }
         }
 
@@ -854,7 +850,7 @@ void SfxDocumentPage::ImplCheckPasswordState()
         else
              break;
 
-        if (!aEncryptionData.getLength())
+        if (!aEncryptionData.hasElements())
              break;
         m_xChangePassBtn->set_sensitive(true);
         return;
@@ -1033,17 +1029,17 @@ void SfxDocumentPage::Reset( const SfxItemSet* rSet )
     if ( rInfoItem.isCmisDocument( ) )
     {
         uno::Sequence< document::CmisProperty > aCmisProps = rInfoItem.GetCmisProperties();
-        for ( sal_Int32 i = 0; i < aCmisProps.getLength(); i++ )
+        for ( const auto& rCmisProp : aCmisProps )
         {
-            if ( aCmisProps[i].Id == "cmis:contentStreamLength" &&
+            if ( rCmisProp.Id == "cmis:contentStreamLength" &&
                  aSizeText == m_aUnknownSize )
             {
                 Sequence< sal_Int64 > seqValue;
-                aCmisProps[i].Value >>= seqValue;
+                rCmisProp.Value >>= seqValue;
                 SvNumberFormatter aNumberFormatter( ::comphelper::getProcessComponentContext(),
                         Application::GetSettings().GetLanguageTag().getLanguageType() );
                 sal_uInt32 nIndex = aNumberFormatter.GetFormatIndex( NF_NUMBER_SYSTEM );
-                if ( seqValue.getLength( ) > 0 )
+                if ( seqValue.hasElements() )
                 {
                     OUString sValue;
                     aNumberFormatter.GetInputLineString( seqValue[0], nIndex, sValue );
@@ -1053,24 +1049,24 @@ void SfxDocumentPage::Reset( const SfxItemSet* rSet )
 
             util::DateTime uDT;
             OUString emptyDate = ConvertDateTime_Impl( "", uDT, rLocaleWrapper );
-            if ( aCmisProps[i].Id == "cmis:creationDate" &&
+            if ( rCmisProp.Id == "cmis:creationDate" &&
                  (m_xCreateValFt->get_label() == emptyDate ||
                   m_xCreateValFt->get_label().isEmpty()))
             {
                 Sequence< util::DateTime > seqValue;
-                aCmisProps[i].Value >>= seqValue;
-                if ( seqValue.getLength( ) > 0 )
+                rCmisProp.Value >>= seqValue;
+                if ( seqValue.hasElements() )
                 {
                     m_xCreateValFt->set_label( ConvertDateTime_Impl( "", seqValue[0], rLocaleWrapper ) );
                 }
             }
-            if ( aCmisProps[i].Id == "cmis:lastModificationDate" &&
+            if ( rCmisProp.Id == "cmis:lastModificationDate" &&
                  (m_xChangeValFt->get_label() == emptyDate ||
                   m_xChangeValFt->get_label().isEmpty()))
             {
                 Sequence< util::DateTime > seqValue;
-                aCmisProps[i].Value >>= seqValue;
-                if ( seqValue.getLength( ) > 0 )
+                rCmisProp.Value >>= seqValue;
+                if ( seqValue.hasElements() )
                 {
                     m_xChangeValFt->set_label( ConvertDateTime_Impl( "", seqValue[0], rLocaleWrapper ) );
                 }
@@ -1882,12 +1878,11 @@ IMPL_LINK_NOARG(SfxCustomPropertiesPage, AddHdl, weld::Button&, void)
     // each time SfxDocumentInfoItem destructor is called
     SfxDocumentInfoItem pInfo;
     Sequence< beans::PropertyValue > aPropertySeq = m_xPropertiesCtrl->GetCustomProperties();
-    sal_Int32 i = 0, nCount = aPropertySeq.getLength();
-    for ( ; i < nCount; ++i )
+    for ( const auto& rProperty : aPropertySeq )
     {
-        if ( !aPropertySeq[i].Name.isEmpty() )
+        if ( !rProperty.Name.isEmpty() )
         {
-            pInfo.AddCustomProperty( aPropertySeq[i].Name, aPropertySeq[i].Value );
+            pInfo.AddCustomProperty( rProperty.Name, rProperty.Value );
         }
     }
 
@@ -1924,11 +1919,10 @@ bool SfxCustomPropertiesPage::FillItemSet( SfxItemSet* rSet )
 
         pInfo->ClearCustomProperties();
         Sequence< beans::PropertyValue > aPropertySeq = m_xPropertiesCtrl->GetCustomProperties();
-        sal_Int32 i = 0, nCount = aPropertySeq.getLength();
-        for ( ; i < nCount; ++i )
+        for ( const auto& rProperty : aPropertySeq )
         {
-            if ( !aPropertySeq[i].Name.isEmpty() )
-                pInfo->AddCustomProperty( aPropertySeq[i].Name, aPropertySeq[i].Value );
+            if ( !rProperty.Name.isEmpty() )
+                pInfo->AddCustomProperty( rProperty.Name, rProperty.Value );
         }
     }
 
@@ -2053,11 +2047,10 @@ void CmisPropertiesWindow::AddLine( const OUString& sId, const OUString& sName,
         Sequence< sal_Int64 > seqValue;
         rAny >>= seqValue;
         sal_uInt32 nIndex = m_aNumberFormatter.GetFormatIndex( NF_NUMBER_SYSTEM );
-        sal_Int32 nNumValue = seqValue.getLength( );
-        for ( sal_Int32 i = 0; i < nNumValue; ++i )
+        for ( const auto& rValue : seqValue )
         {
             OUString sValue;
-            m_aNumberFormatter.GetInputLineString( seqValue[i], nIndex, sValue );
+            m_aNumberFormatter.GetInputLineString( rValue, nIndex, sValue );
             std::unique_ptr<CmisValue> pValue(new CmisValue(m_xBox.get(), sValue));
             pValue->m_xValueEdit->set_editable(bUpdatable);
             pNewLine->m_aValues.push_back( std::move(pValue) );
@@ -2068,11 +2061,10 @@ void CmisPropertiesWindow::AddLine( const OUString& sId, const OUString& sName,
         Sequence< double > seqValue;
         rAny >>= seqValue;
         sal_uInt32 nIndex = m_aNumberFormatter.GetFormatIndex( NF_NUMBER_SYSTEM );
-        sal_Int32 nNumValue = seqValue.getLength( );
-        for ( sal_Int32 i = 0; i < nNumValue; ++i )
+        for ( const auto& rValue : seqValue )
         {
             OUString sValue;
-            m_aNumberFormatter.GetInputLineString( seqValue[i], nIndex, sValue );
+            m_aNumberFormatter.GetInputLineString( rValue, nIndex, sValue );
             std::unique_ptr<CmisValue> pValue(new CmisValue(m_xBox.get(), sValue));
             pValue->m_xValueEdit->set_editable(bUpdatable);
             pNewLine->m_aValues.push_back( std::move(pValue) );
@@ -2083,10 +2075,9 @@ void CmisPropertiesWindow::AddLine( const OUString& sId, const OUString& sName,
     {
         Sequence<sal_Bool> seqValue;
         rAny >>= seqValue;
-        sal_Int32 nNumValue = seqValue.getLength( );
-        for ( sal_Int32 i = 0; i < nNumValue; ++i )
+        for ( const auto& rValue : seqValue )
         {
-            std::unique_ptr<CmisYesNo> pYesNo(new CmisYesNo(m_xBox.get(), seqValue[i]));
+            std::unique_ptr<CmisYesNo> pYesNo(new CmisYesNo(m_xBox.get(), rValue));
             pYesNo->m_xYesButton->set_sensitive( bUpdatable );
             pYesNo->m_xNoButton->set_sensitive( bUpdatable );
             pNewLine->m_aYesNos.push_back( std::move(pYesNo) );
@@ -2096,10 +2087,9 @@ void CmisPropertiesWindow::AddLine( const OUString& sId, const OUString& sName,
     {
         Sequence< OUString > seqValue;
         rAny >>= seqValue;
-        sal_Int32 nNumValue = seqValue.getLength( );
-        for ( sal_Int32 i = 0; i < nNumValue; ++i )
+        for ( const auto& rValue : seqValue )
         {
-            std::unique_ptr<CmisValue> pValue(new CmisValue(m_xBox.get(), seqValue[i]));
+            std::unique_ptr<CmisValue> pValue(new CmisValue(m_xBox.get(), rValue));
             pValue->m_xValueEdit->set_editable(bUpdatable);
             pNewLine->m_aValues.push_back( std::move(pValue) );
         }
@@ -2108,10 +2098,9 @@ void CmisPropertiesWindow::AddLine( const OUString& sId, const OUString& sName,
     {
         Sequence< util::DateTime > seqValue;
         rAny >>= seqValue;
-        sal_Int32 nNumValue = seqValue.getLength( );
-        for ( sal_Int32 i = 0; i < nNumValue; ++i )
+        for ( const auto& rValue : seqValue )
         {
-            std::unique_ptr<CmisDateTime> pDateTime(new CmisDateTime(m_xBox.get(), seqValue[i]));
+            std::unique_ptr<CmisDateTime> pDateTime(new CmisDateTime(m_xBox.get(), rValue));
             pDateTime->m_xDateField->set_sensitive(bUpdatable);
             pDateTime->m_xTimeField->set_sensitive(bUpdatable);
             pNewLine->m_aDateTimes.push_back( std::move(pDateTime) );
@@ -2305,10 +2294,10 @@ bool SfxCmisPropertiesPage::FillItemSet( SfxItemSet* rSet )
                     aOldProps[i].Value >>= oldValue;
                     // We only edit hours and minutes
                     // don't compare NanoSeconds and Seconds
-                    for ( sal_Int32 ii = 0; ii < oldValue.getLength( ); ++ii )
+                    for ( auto& rDateTime : oldValue )
                     {
-                        oldValue[ii].NanoSeconds = 0;
-                        oldValue[ii].Seconds = 0;
+                        rDateTime.NanoSeconds = 0;
+                        rDateTime.Seconds = 0;
                     }
                     Sequence< util::DateTime > newValue;
                     aNewProps[i].Value >>= newValue;
@@ -2340,17 +2329,17 @@ void SfxCmisPropertiesPage::Reset( const SfxItemSet* rItemSet )
     m_xPropertiesCtrl->ClearAllLines();
     const SfxDocumentInfoItem& rInfoItem = rItemSet->Get(SID_DOCINFO);
     uno::Sequence< document::CmisProperty > aCmisProps = rInfoItem.GetCmisProperties();
-    for ( sal_Int32 i = 0; i < aCmisProps.getLength(); i++ )
+    for ( auto& rCmisProp : aCmisProps )
     {
-        m_xPropertiesCtrl->AddLine(aCmisProps[i].Id,
-                                   aCmisProps[i].Name,
-                                   aCmisProps[i].Type,
-                                   aCmisProps[i].Updatable,
-                                   aCmisProps[i].Required,
-                                   aCmisProps[i].MultiValued,
-                                   aCmisProps[i].OpenChoice,
-                                   aCmisProps[i].Choices,
-                                   aCmisProps[i].Value);
+        m_xPropertiesCtrl->AddLine(rCmisProp.Id,
+                                   rCmisProp.Name,
+                                   rCmisProp.Type,
+                                   rCmisProp.Updatable,
+                                   rCmisProp.Required,
+                                   rCmisProp.MultiValued,
+                                   rCmisProp.OpenChoice,
+                                   rCmisProp.Choices,
+                                   rCmisProp.Value);
     }
 }
 

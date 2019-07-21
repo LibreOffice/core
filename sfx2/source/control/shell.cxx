@@ -602,19 +602,20 @@ void SfxShell::VerbExec(SfxRequest& rReq)
 
     bool bReadOnly = pViewShell->GetObjectShell()->IsReadOnly();
     css::uno::Sequence < css::embed::VerbDescriptor > aList = pViewShell->GetVerbs();
-    for (sal_Int32 n=0, nVerb=0; n<aList.getLength(); n++)
+    sal_Int32 nVerb = 0;
+    for (const auto& rVerb : aList)
     {
         // check for ReadOnly verbs
-        if ( bReadOnly && !(aList[n].VerbAttributes & embed::VerbAttributes::MS_VERBATTR_NEVERDIRTIES) )
+        if ( bReadOnly && !(rVerb.VerbAttributes & embed::VerbAttributes::MS_VERBATTR_NEVERDIRTIES) )
             continue;
 
         // check for verbs that shouldn't appear in the menu
-        if ( !(aList[n].VerbAttributes & embed::VerbAttributes::MS_VERBATTR_ONCONTAINERMENU) )
+        if ( !(rVerb.VerbAttributes & embed::VerbAttributes::MS_VERBATTR_ONCONTAINERMENU) )
             continue;
 
         if (nId == SID_VERB_START + nVerb++)
         {
-            pViewShell->DoVerb(aList[n].VerbID);
+            pViewShell->DoVerb(rVerb.VerbID);
             rReq.Done();
             return;
         }

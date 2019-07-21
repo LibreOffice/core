@@ -55,22 +55,20 @@ static void NotebookbarAddonValues(
     {
         css::uno::Sequence<css::uno::Sequence<css::beans::PropertyValue>> aExtension
             = aAddonsItems.GetAddonsNotebookBarPart(nIdx);
-        for (int nSecIdx = 0; nSecIdx < aExtension.getLength(); nSecIdx++)
-        {
-            css::uno::Sequence<css::beans::PropertyValue> pExtensionVal = aExtension[nSecIdx];
-            Image aImage;
-
-            for (int nRes = 0; nRes < pExtensionVal.getLength(); nRes++)
-            {
-                OUString sImage;
-                if (pExtensionVal[nRes].Name == MERGE_NOTEBOOKBAR_IMAGEID)
+        std::transform(aExtension.begin(), aExtension.end(), std::back_inserter(aImageValues),
+            [](const css::uno::Sequence<css::beans::PropertyValue>& rExtensionVal) -> Image {
+                Image aImage;
+                for (const auto& rRes : rExtensionVal)
                 {
-                    pExtensionVal[nRes].Value >>= sImage;
-                    aImage = framework::AddonsOptions().GetImageFromURL(sImage, false);
+                    OUString sImage;
+                    if (rRes.Name == MERGE_NOTEBOOKBAR_IMAGEID)
+                    {
+                        rRes.Value >>= sImage;
+                        aImage = framework::AddonsOptions().GetImageFromURL(sImage, false);
+                    }
                 }
-            }
-            aImageValues.push_back(aImage);
-        }
+                return aImage;
+            });
         aExtensionValues.push_back(aExtension);
     }
 }
@@ -185,11 +183,10 @@ static const utl::OConfigurationNode lcl_getCurrentImplConfigNode(const Referenc
 
     const utl::OConfigurationNode aImplsNode = rNotebookbarNode.openNode("Applications/" + lcl_getAppName( eApp) + "/Modes");
     const Sequence<OUString> aModeNodeNames( aImplsNode.getNodeNames() );
-    const sal_Int32 nCount( aModeNodeNames.getLength() );
 
-    for ( sal_Int32 nReadIndex = 0; nReadIndex < nCount; ++nReadIndex )
+    for ( const auto& rModeNodeName : aModeNodeNames )
     {
-        const utl::OConfigurationNode aImplNode( aImplsNode.openNode( aModeNodeNames[nReadIndex] ) );
+        const utl::OConfigurationNode aImplNode( aImplsNode.openNode( rModeNodeName ) );
         if ( !aImplNode.isValid() )
             continue;
 
@@ -281,11 +278,10 @@ bool SfxNotebookBar::IsActive()
 
     const utl::OConfigurationNode aModesNode = aAppNode.openNode("Modes");
     const Sequence<OUString> aModeNodeNames( aModesNode.getNodeNames() );
-    const sal_Int32 nCount( aModeNodeNames.getLength() );
 
-    for ( sal_Int32 nReadIndex = 0; nReadIndex < nCount; ++nReadIndex )
+    for ( const auto& rModeNodeName : aModeNodeNames )
     {
-        const utl::OConfigurationNode aModeNode( aModesNode.openNode( aModeNodeNames[nReadIndex] ) );
+        const utl::OConfigurationNode aModeNode( aModesNode.openNode( rModeNodeName ) );
         if ( !aModeNode.isValid() )
             continue;
 

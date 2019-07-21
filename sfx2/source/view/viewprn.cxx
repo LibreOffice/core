@@ -129,8 +129,8 @@ SfxPrinterController::SfxPrinterController( const VclPtr<Printer>& i_rPrinter,
     // initialize extra ui options
     if( mxRenderable.is() )
     {
-        for (sal_Int32 nProp=0; nProp < rProps.getLength(); ++nProp)
-            setValue( rProps[nProp].Name, rProps[nProp].Value );
+        for (const auto& rProp : rProps)
+            setValue( rProp.Name, rProp.Value );
 
         Sequence< beans::PropertyValue > aRenderOptions( 3 );
         aRenderOptions[0].Name = "ExtraPrintUIOptions";
@@ -141,18 +141,17 @@ SfxPrinterController::SfxPrinterController( const VclPtr<Printer>& i_rPrinter,
         try
         {
             Sequence< beans::PropertyValue > aRenderParms( mxRenderable->getRenderer( 0 , getSelectionObject(), aRenderOptions ) );
-            int nProps = aRenderParms.getLength();
-            for( int i = 0; i < nProps; i++ )
+            for( const auto& rRenderParm : aRenderParms )
             {
-                if ( aRenderParms[i].Name == "ExtraPrintUIOptions" )
+                if ( rRenderParm.Name == "ExtraPrintUIOptions" )
                 {
                     Sequence< beans::PropertyValue > aUIProps;
-                    aRenderParms[i].Value >>= aUIProps;
+                    rRenderParm.Value >>= aUIProps;
                     setUIOptions( aUIProps );
                 }
-                else if( aRenderParms[i].Name == "NUp" )
+                else if( rRenderParm.Name == "NUp" )
                 {
-                    setValue( aRenderParms[i].Name, aRenderParms[i].Value );
+                    setValue( rRenderParm.Name, rRenderParm.Value );
                 }
             }
         }
@@ -590,16 +589,13 @@ void SfxViewShell::StartPrint( const uno::Sequence < beans::PropertyValue >& rPr
     Any aViewProp( makeAny( xController ) );
     VclPtr<Printer> aPrt;
 
-    const beans::PropertyValue* pVal = rProps.getConstArray();
-    for( sal_Int32 i = 0; i < rProps.getLength(); i++ )
+    const beans::PropertyValue* pVal = std::find_if(rProps.begin(), rProps.end(),
+        [](const beans::PropertyValue& rVal) { return rVal.Name == "PrinterName"; });
+    if (pVal != rProps.end())
     {
-        if ( pVal[i].Name == "PrinterName" )
-        {
-            OUString aPrinterName;
-            pVal[i].Value >>= aPrinterName;
-            aPrt.reset( VclPtr<Printer>::Create( aPrinterName ) );
-            break;
-        }
+        OUString aPrinterName;
+        pVal->Value >>= aPrinterName;
+        aPrt.reset( VclPtr<Printer>::Create( aPrinterName ) );
     }
 
     std::shared_ptr<vcl::PrinterController> xNewController(std::make_shared<SfxPrinterController>(
@@ -709,29 +705,29 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
                 // the TransformItems function overwrite aProps
                 TransformItems( nId, *rReq.GetArgs(), aProps, GetInterface()->GetSlot(nId) );
 
-                for ( sal_Int32 nProp=0; nProp < aProps.getLength(); ++nProp )
+                for ( auto& rProp : aProps )
                 {
-                    if ( aProps[nProp].Name == "Copies" )
+                    if ( rProp.Name == "Copies" )
                     {
-                        aProps[nProp]. Name = "CopyCount";
+                        rProp.Name = "CopyCount";
                     }
-                    else if ( aProps[nProp].Name == "RangeText" )
+                    else if ( rProp.Name == "RangeText" )
                     {
-                        aProps[nProp]. Name = "Pages";
+                        rProp.Name = "Pages";
                     }
-                    else if ( aProps[nProp].Name == "Asynchron" )
+                    else if ( rProp.Name == "Asynchron" )
                     {
-                        aProps[nProp]. Name = "Wait";
+                        rProp.Name = "Wait";
                         bool bAsynchron = false;
-                        aProps[nProp].Value >>= bAsynchron;
-                        aProps[nProp].Value <<= !bAsynchron;
+                        rProp.Value >>= bAsynchron;
+                        rProp.Value <<= !bAsynchron;
                     }
-                    else if ( aProps[nProp].Name == "Silent" )
+                    else if ( rProp.Name == "Silent" )
                     {
-                        aProps[nProp]. Name = "MonitorVisible";
+                        rProp.Name = "MonitorVisible";
                         bool bPrintSilent = false;
-                        aProps[nProp].Value >>= bPrintSilent;
-                        aProps[nProp].Value <<= !bPrintSilent;
+                        rProp.Value >>= bPrintSilent;
+                        rProp.Value <<= !bPrintSilent;
                     }
                 }
             }
