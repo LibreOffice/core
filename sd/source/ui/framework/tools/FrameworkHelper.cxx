@@ -930,7 +930,7 @@ LifetimeController::LifetimeController (::sd::ViewShellBase& rBase)
     acquire();
     mbListeningToViewShellBase = true;
 
-    Reference<XComponent> xComponent (rBase.GetController(), UNO_QUERY);
+    Reference<XComponent> xComponent = rBase.GetController();
     if (xComponent.is())
     {
         xComponent->addEventListener(this);

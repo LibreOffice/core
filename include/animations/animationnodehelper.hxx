@@ -52,8 +52,7 @@ namespace anim
             if( xEnumerationAccess.is() )
             {
                 css::uno::Reference< css::container::XEnumeration >
-                      xEnumeration( xEnumerationAccess->createEnumeration(),
-                                    css::uno::UNO_QUERY );
+                      xEnumeration = xEnumerationAccess->createEnumeration();
 
                 if( xEnumeration.is() )
                 {

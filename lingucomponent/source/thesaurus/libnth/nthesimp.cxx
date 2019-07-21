@@ -90,7 +90,7 @@ PropertyHelper_Thesaurus& Thesaurus::GetPropHelper_Impl()
 {
     if (!pPropHelper)
     {
-        Reference< XLinguProperties >   xPropSet( GetLinguProperties(), UNO_QUERY );
+        Reference< XLinguProperties >   xPropSet = GetLinguProperties();
 
         pPropHelper = new PropertyHelper_Thesaurus( static_cast<XThesaurus *>(this), xPropSet );
         pPropHelper->AddAsPropListener();   //! after a reference is established

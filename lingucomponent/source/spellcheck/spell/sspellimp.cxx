@@ -99,7 +99,7 @@ PropertyHelper_Spelling & SpellChecker::GetPropHelper_Impl()
 {
     if (!m_pPropHelper)
     {
-        Reference< XLinguProperties >   xPropSet( GetLinguProperties(), UNO_QUERY );
+        Reference< XLinguProperties >   xPropSet = GetLinguProperties();
 
         m_pPropHelper.reset( new PropertyHelper_Spelling( static_cast<XSpellChecker *>(this), xPropSet ) );
         m_pPropHelper->AddAsPropListener();   //! after a reference is established

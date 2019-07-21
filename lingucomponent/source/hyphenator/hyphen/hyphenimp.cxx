@@ -88,7 +88,7 @@ PropertyHelper_Hyphenation& Hyphenator::GetPropHelper_Impl()
 {
     if (!pPropHelper)
     {
-        Reference< XLinguProperties >   xPropSet( GetLinguProperties(), UNO_QUERY );
+        Reference< XLinguProperties >   xPropSet = GetLinguProperties();
 
         pPropHelper.reset( new PropertyHelper_Hyphenation (static_cast<XHyphenator *>(this), xPropSet ) );
         pPropHelper->AddAsPropListener();   //! after a reference is established
