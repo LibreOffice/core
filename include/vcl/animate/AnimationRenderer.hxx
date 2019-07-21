@@ -36,7 +36,7 @@ public:
 
     virtual ~AnimationRenderer();
 
-    bool matches(OutputDevice* pOut, long nCallerId) const;
+    bool Matches(OutputDevice* pOut, long nCallerId) const;
     virtual void drawToIndex(sal_uLong nIndex);
     void draw(sal_uLong nIndex, VirtualDevice* pVDev = nullptr);
     void repaint();

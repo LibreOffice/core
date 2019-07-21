@@ -97,7 +97,7 @@ AnimationRenderer::~AnimationRenderer()
     Animation::ImplDecAnimCount();
 }
 
-bool AnimationRenderer::matches(OutputDevice* pOut, long nCallerId) const
+bool AnimationRenderer::Matches(OutputDevice* pOut, long nCallerId) const
 {
     bool bRet = false;
 
