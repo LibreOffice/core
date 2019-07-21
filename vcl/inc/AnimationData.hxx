@@ -30,8 +30,8 @@ struct AnimationData
 {
     Point maOriginStartPt;
     Size aStartSize;
-    VclPtr<OutputDevice> pOutDev;
-    void* pAnimationRenderer;
+    VclPtr<OutputDevice> mpRenderContext;
+    void* mpAnimationRenderer;
     long nCallerId;
     bool mbIsPaused;
 
