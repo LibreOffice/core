@@ -61,16 +61,6 @@ $(eval $(call gb_Library_use_externals,vclplug_kf5,\
 	epoxy \
 ))
 
-ifneq ($(QT5_HAVE_GLIB),)
-$(eval $(call gb_Library_add_cxxflags,vclplug_kf5,\
-    $(QT5_GLIB_CFLAGS) \
-))
-
-$(eval $(call gb_Library_add_libs,vclplug_kf5,\
-    $(QT5_GLIB_LIBS) \
-))
-endif
-
 $(eval $(call gb_Library_add_cxxflags,vclplug_kf5,\
     $(KF5_CFLAGS) \
 ))
