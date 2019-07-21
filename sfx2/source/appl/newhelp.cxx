@@ -656,10 +656,10 @@ void IndexTabPage_Impl::InitializeIndex()
 
                     sal_uInt32 nRefListLen = aRefList.getLength();
 
-                    DBG_ASSERT( aAnchorList.getLength(), "*IndexTabPage_Impl::InitializeIndex(): AnchorList is empty!" );
+                    DBG_ASSERT( aAnchorList.hasElements(), "*IndexTabPage_Impl::InitializeIndex(): AnchorList is empty!" );
                     DBG_ASSERT( nRefListLen, "*IndexTabPage_Impl::InitializeIndex(): RefList is empty!" );
 
-                    if ( aAnchorList.getLength() && nRefListLen )
+                    if ( aAnchorList.hasElements() && nRefListLen )
                     {
                         if ( aAnchorList[0].getLength() > 0 )
                         {
@@ -1121,9 +1121,8 @@ static void GetBookmarkEntry_Impl
     OUString& rURL
 )
 {
-    for ( int i = 0; i < aBookmarkEntry.getLength(); i++ )
+    for ( const PropertyValue& aValue : aBookmarkEntry )
     {
-        PropertyValue aValue = aBookmarkEntry[i];
         if ( aValue.Name == HISTORY_PROPERTYNAME_URL )
             aValue.Value >>= rURL;
         else if ( aValue.Name == HISTORY_PROPERTYNAME_TITLE )
@@ -1279,10 +1278,9 @@ BookmarksTabPage_Impl::BookmarksTabPage_Impl(vcl::Window* pParent, SfxHelpIndexW
     OUString aTitle;
     OUString aURL;
 
-    sal_uInt32 i, nCount = aBookmarkSeq.getLength();
-    for ( i = 0; i < nCount; ++i )
+    for ( auto& rBookmark : aBookmarkSeq )
     {
-        GetBookmarkEntry_Impl( aBookmarkSeq[i], aTitle, aURL );
+        GetBookmarkEntry_Impl( rBookmark, aTitle, aURL );
         AddBookmarks( aTitle, aURL );
     }
 }

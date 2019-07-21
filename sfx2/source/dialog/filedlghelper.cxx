@@ -410,12 +410,11 @@ bool FileDialogHelper_Impl::CheckFilterOptionsCapability( const std::shared_ptr<
             if ( aAny >>= aProps )
             {
                 OUString aServiceName;
-                sal_Int32 nPropertyCount = aProps.getLength();
-                for( sal_Int32 nProperty=0; nProperty < nPropertyCount; ++nProperty )
+                for( const auto& rProp : aProps )
                 {
-                    if( aProps[nProperty].Name == "UIComponent" )
+                    if( rProp.Name == "UIComponent" )
                     {
-                        aProps[nProperty].Value >>= aServiceName;
+                        rProp.Value >>= aServiceName;
                         if( !aServiceName.isEmpty() )
                             bResult = true;
                     }
@@ -508,13 +507,7 @@ void FileDialogHelper_Impl::updateSelectionBox()
     if ( xCtrlInfo.is() )
     {
         Sequence< OUString > aCtrlList = xCtrlInfo->getSupportedControls();
-        sal_uInt32 nCount = aCtrlList.getLength();
-        for ( sal_uInt32 nCtrl = 0; nCtrl < nCount; ++nCtrl )
-            if ( aCtrlList[ nCtrl ] == "SelectionBox" )
-            {
-                bSelectionBoxFound = true;
-                break;
-            }
+        bSelectionBoxFound = comphelper::findValue(aCtrlList, "SelectionBox") != -1;
     }
 
     if ( bSelectionBoxFound )
@@ -632,8 +625,8 @@ void FileDialogHelper_Impl::updateVersions()
                 aEntries.realloc( xVersions.getLength() + 1 );
                 aEntries[0] = SfxResId( STR_SFX_FILEDLG_ACTUALVERSION );
 
-                for ( sal_Int32 i=0; i<xVersions.getLength(); i++ )
-                    aEntries[ i + 1 ] = xVersions[i].Identifier;
+                std::transform(xVersions.begin(), xVersions.end(), std::next(aEntries.begin()),
+                    [](const util::RevisionTag& rVersion) -> OUString { return rVersion.Identifier; });
             }
             catch( const uno::Exception& )
             {
@@ -651,9 +644,7 @@ void FileDialogHelper_Impl::updateVersions()
     }
     catch( const IllegalArgumentException& ){}
 
-    sal_Int32 nCount = aEntries.getLength();
-
-    if ( !nCount )
+    if ( !aEntries.hasElements() )
         return;
 
     try
@@ -1361,9 +1352,7 @@ void FileDialogHelper_Impl::implGetAndCacheFiles(const uno::Reference< XInterfac
     if (xPickNew.is())
     {
         Sequence< OUString > lFiles    = xPickNew->getSelectedFiles();
-        ::sal_Int32          nFiles    = lFiles.getLength();
-        for(sal_Int32 i = 0; i < nFiles; ++i)
-            rpURLList.push_back(lFiles[i]);
+        comphelper::sequenceToContainer(rpURLList, lFiles);
     }
 
     // b) the olde way ... non optional.
@@ -2724,7 +2713,7 @@ ErrCode RequestPassword(const std::shared_ptr<const SfxFilter>& pCurrentFilter, 
                     uno::Sequence< sal_Int8 > aUniqueID = ::comphelper::DocPasswordHelper::GenerateRandomByteSequence( 16 );
                     uno::Sequence< sal_Int8 > aEncryptionKey = ::comphelper::DocPasswordHelper::GenerateStd97Key( pPasswordRequest->getPassword(), aUniqueID );
 
-                    if ( aEncryptionKey.getLength() )
+                    if ( aEncryptionKey.hasElements() )
                     {
                         ::comphelper::SequenceAsHashMap aHashData;
                         aHashData[ OUString( "STD97EncryptionKey"  ) ] <<= aEncryptionKey;
@@ -2758,7 +2747,7 @@ ErrCode RequestPassword(const std::shared_ptr<const SfxFilter>& pCurrentFilter, 
         else
         {
             uno::Sequence< beans::PropertyValue > aModifyPasswordInfo = ::comphelper::DocPasswordHelper::GenerateNewModifyPasswordInfo( pPasswordRequest->getPasswordToModify() );
-            if ( aModifyPasswordInfo.getLength() )
+            if ( aModifyPasswordInfo.hasElements() )
                 pSet->Put( SfxUnoAnyItem( SID_MODIFYPASSWORDINFO, uno::makeAny( aModifyPasswordInfo ) ) );
         }
     }

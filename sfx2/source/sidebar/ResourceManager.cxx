@@ -255,11 +255,9 @@ void ResourceManager::ReadDeckList()
         return;
 
     const Sequence<OUString> aDeckNodeNames (aDeckRootNode.getNodeNames());
-    const sal_Int32 nCount(aDeckNodeNames.getLength());
     maDecks.clear();
-    for (sal_Int32 nReadIndex(0); nReadIndex<nCount; ++nReadIndex)
+    for (const OUString& aDeckName : aDeckNodeNames)
     {
-        const OUString aDeckName = aDeckNodeNames[nReadIndex];
         if (comphelper::LibreOfficeKit::isActive())
         {
             // Hide these decks in LOK as they aren't fully functional.
@@ -285,7 +283,7 @@ void ResourceManager::ReadDeckList()
         rDeckDescriptor.mnOrderIndex = getInt32(aDeckNode, "OrderIndex");
         rDeckDescriptor.mbExperimental = getBool(aDeckNode, "IsExperimental");
 
-        rDeckDescriptor.msNodeName = aDeckNodeNames[nReadIndex];
+        rDeckDescriptor.msNodeName = aDeckName;
 
         ReadContextList(
             aDeckNode,
@@ -424,11 +422,10 @@ void ResourceManager::ReadPanelList()
         return;
 
     const Sequence<OUString> aPanelNodeNames (aPanelRootNode.getNodeNames());
-    const sal_Int32 nCount (aPanelNodeNames.getLength());
     maPanels.clear();
-    for (sal_Int32 nReadIndex(0); nReadIndex<nCount; ++nReadIndex)
+    for (const auto& rPanelNodeName : aPanelNodeNames)
     {
-        const utl::OConfigurationNode aPanelNode (aPanelRootNode.openNode(aPanelNodeNames[nReadIndex]));
+        const utl::OConfigurationNode aPanelNode (aPanelRootNode.openNode(rPanelNodeName));
         if (!aPanelNode.isValid())
             continue;
 
@@ -448,7 +445,7 @@ void ResourceManager::ReadPanelList()
         rPanelDescriptor.mbExperimental = getBool(aPanelNode, "IsExperimental");
         const OUString sDefaultMenuCommand(getString(aPanelNode, "DefaultMenuCommand"));
 
-        rPanelDescriptor.msNodeName = aPanelNodeNames[nReadIndex];
+        rPanelDescriptor.msNodeName = rPanelNodeName;
 
         ReadContextList(aPanelNode, rPanelDescriptor.maContextList, sDefaultMenuCommand);
     }
@@ -484,16 +481,11 @@ void ResourceManager::ReadContextList (
 {
     const Any aValue = rParentNode.getNodeValue("ContextList");
     Sequence<OUString> aValues;
-    sal_Int32 nCount;
-    if (aValue >>= aValues)
-        nCount = aValues.getLength();
-    else
-        nCount = 0;
+    if (!(aValue >>= aValues))
+        return;
 
-    for (sal_Int32 nIndex=0; nIndex<nCount; ++nIndex)
+    for (const OUString& sValue : aValues)
     {
-        const OUString sValue (aValues[nIndex]);
-
         sal_Int32 nCharacterIndex (0);
         const OUString sApplicationName (sValue.getToken(0, ',', nCharacterIndex).trim());
         if (nCharacterIndex < 0)
@@ -742,12 +734,8 @@ void ResourceManager::GetToolPanelNodeNames (
                         const utl::OConfigurationTreeRoot& aRoot)
 {
     Sequence<OUString> aChildNodeNames (aRoot.getNodeNames());
-    const sal_Int32 nCount (aChildNodeNames.getLength());
-    for (sal_Int32 nIndex(0); nIndex<nCount; ++nIndex)
-    {
-        if (aChildNodeNames[nIndex].startsWith( "private:resource/toolpanel/" ))
-            rMatchingNames.push_back(aChildNodeNames[nIndex]);
-    }
+    std::copy_if(aChildNodeNames.begin(), aChildNodeNames.end(), std::back_inserter(rMatchingNames),
+        [](const OUString& rChildNodeName) { return rChildNodeName.startsWith( "private:resource/toolpanel/" ); });
 }
 
 bool ResourceManager::IsDeckEnabled (

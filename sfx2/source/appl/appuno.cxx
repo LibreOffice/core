@@ -250,9 +250,8 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
 #endif
             // complex property; collect sub items from the parameter set and reconstruct complex item
             sal_uInt16 nFound=0;
-            for ( sal_Int32 n=0; n<nCount; n++ )
+            for ( const beans::PropertyValue& rPropValue : rArgs )
             {
-                const beans::PropertyValue& rPropValue = pPropsVal[n];
                 sal_uInt16 nSub;
                 for ( nSub=0; nSub<nSubCount; nSub++ )
                 {
@@ -313,23 +312,20 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
         if ( nSubCount == 0 )
         {
             // "simple" (base type) argument
-            for ( sal_Int32 n=0; n<nCount; n++ )
+            auto aName = OUString( rArg.pName, strlen(rArg.pName), RTL_TEXTENCODING_UTF8 );
+            auto pProp = std::find_if(rArgs.begin(), rArgs.end(),
+                [&aName](const beans::PropertyValue& rProp) { return rProp.Name == aName; });
+            if (pProp != rArgs.end())
             {
-                const beans::PropertyValue& rProp = pPropsVal[n];
-                const OUString& rName = rProp.Name;
-                if ( rName == OUString( rArg.pName, strlen(rArg.pName), RTL_TEXTENCODING_UTF8 )  )
-                {
 #ifdef DBG_UTIL
-                    ++nFoundArgs;
+                ++nFoundArgs;
 #endif
-                    if( pItem->PutValue( rProp.Value, 0 ) )
-                        // only use successfully converted items
-                        rSet.Put( *pItem );
-                    else
-                    {
-                        SAL_WARN( "sfx", "Property not convertible: " << rArg.pName );
-                    }
-                    break;
+                if( pItem->PutValue( pProp->Value, 0 ) )
+                    // only use successfully converted items
+                    rSet.Put( *pItem );
+                else
+                {
+                    SAL_WARN( "sfx", "Property not convertible: " << rArg.pName );
                 }
             }
         }
@@ -337,9 +333,8 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
         {
             // complex argument, could be passed in one struct
             bool bAsWholeItem = false;
-            for ( sal_Int32 n=0; n<nCount; n++ )
+            for ( const beans::PropertyValue& rProp : rArgs )
             {
-                const beans::PropertyValue& rProp = pPropsVal[n];
                 const OUString& rName = rProp.Name;
                 if ( rName == OUString(rArg.pName, strlen(rArg.pName), RTL_TEXTENCODING_UTF8) )
                 {
@@ -363,9 +358,8 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
                 // only put item if at least one member was found and had the correct type
                 // (is this a good idea?! Should we ask for *all* members?)
                 bool bRet = false;
-                for ( sal_Int32 n=0; n<nCount; n++ )
+                for ( const beans::PropertyValue& rProp : rArgs )
                 {
-                    const beans::PropertyValue& rProp = pPropsVal[n];
                     for ( sal_uInt16 nSub=0; nSub<nSubCount; nSub++ )
                     {
                         // search sub item by name
@@ -408,9 +402,8 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
     // f.e. "SaveAs" shouldn't support parameters not in the slot definition!)
     if ( nSlotId == SID_NEWWINDOW )
     {
-        for ( sal_Int32 n=0; n<nCount; n++ )
+        for ( const beans::PropertyValue& rProp : rArgs )
         {
-            const beans::PropertyValue& rProp = pPropsVal[n];
             const OUString& rName = rProp.Name;
             if ( rName == sFrame )
             {
@@ -429,12 +422,11 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
     }
     else if ( bIsMediaDescriptor )
     {
-        for ( sal_Int32 n=0; n<nCount; n++ )
+        for ( const beans::PropertyValue& rProp : rArgs )
         {
 #ifdef DBG_UTIL
             ++nFoundArgs;
 #endif
-            const beans::PropertyValue& rProp = pPropsVal[n];
             const OUString& aName = rProp.Name;
             if ( aName == sModel )
                 rSet.Put( SfxUnoAnyItem( SID_DOCUMENT, rProp.Value ) );
@@ -865,17 +857,13 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
         // transform parameter "OptionsPageURL" of slot "OptionsTreeDialog"
         if ( "OptionsTreeDialog" == OUString( pSlot->pUnoName, strlen(pSlot->pUnoName), RTL_TEXTENCODING_UTF8 ) )
         {
-            for ( sal_Int32 n = 0; n < nCount; ++n )
+            auto pProp = std::find_if(rArgs.begin(), rArgs.end(),
+                [](const PropertyValue& rProp) { return rProp.Name == "OptionsPageURL"; });
+            if (pProp != rArgs.end())
             {
-                const PropertyValue& rProp = pPropsVal[n];
-                OUString sName( rProp.Name );
-                if ( sName == "OptionsPageURL" )
-                {
-                    OUString sURL;
-                    if ( rProp.Value >>= sURL )
-                        rSet.Put( SfxStringItem( SID_OPTIONS_PAGEURL, sURL ) );
-                    break;
-                }
+                OUString sURL;
+                if ( pProp->Value >>= sURL )
+                    rSet.Put( SfxStringItem( SID_OPTIONS_PAGEURL, sURL ) );
             }
         }
     }

@@ -206,16 +206,15 @@ void SfxURLToolBoxControl_Impl::StateChanged
         pURLBox->Clear();
 
         css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > > lList = SvtHistoryOptions().GetList(ePICKLIST);
-        for (sal_Int32 i=0; i<lList.getLength(); ++i)
+        for (const css::uno::Sequence< css::beans::PropertyValue >& lProps : lList)
         {
-            css::uno::Sequence< css::beans::PropertyValue > lProps = lList[i];
-            for (sal_Int32 p=0; p<lProps.getLength(); ++p)
+            for (const auto& rProp : lProps)
             {
-                if (lProps[p].Name != HISTORY_PROPERTYNAME_URL)
+                if (rProp.Name != HISTORY_PROPERTYNAME_URL)
                     continue;
 
                 OUString sURL;
-                if (!(lProps[p].Value>>=sURL) || sURL.isEmpty())
+                if (!(rProp.Value>>=sURL) || sURL.isEmpty())
                     continue;
 
                 INetURLObject aURL    ( sURL );

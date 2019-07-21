@@ -49,6 +49,7 @@
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
+#include <comphelper/sequence.hxx>
 
 #include <svtools/addresstemplate.hxx>
 #include <svtools/miscopt.hxx>
@@ -875,11 +876,10 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                     }
 
                     const Sequence<OUString> aModeNodeNames( aModesNode.getNodeNames() );
-                    const sal_Int32 nCount( aModeNodeNames.getLength() );
 
-                    for ( sal_Int32 nReadIndex = 0; nReadIndex < nCount; ++nReadIndex )
+                    for ( const auto& rModeNodeName : aModeNodeNames )
                     {
-                        const utl::OConfigurationNode aModeNode( aModesNode.openNode( aModeNodeNames[nReadIndex] ) );
+                        const utl::OConfigurationNode aModeNode( aModesNode.openNode( rModeNodeName ) );
                         if ( !aModeNode.isValid() )
                             continue;
 
@@ -896,10 +896,9 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
 
                     // Backup visible toolbar list and hide all toolbars
                     Sequence<Reference<XUIElement>> aUIElements = xLayoutManager->getElements();
-                    for ( sal_Int32 i = 0; i < aUIElements.getLength(); i++ )
+                    for ( const Reference< XUIElement >& xUIElement : aUIElements )
                     {
-                        Reference< XUIElement > xUIElement( aUIElements[i] );
-                        Reference< XPropertySet > xPropertySet( aUIElements[i], UNO_QUERY );
+                        Reference< XPropertySet > xPropertySet( xUIElement, UNO_QUERY );
                         if ( xPropertySet.is() && xUIElement.is() )
                         {
                             try
@@ -969,13 +968,11 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                     // Save settings
                     if ( pViewFrame == SfxViewFrame::Current() )
                     {
-                        css::uno::Sequence<OUString> aBackup( aBackupList.size() );
-                        for ( size_t i = 0; i < aBackupList.size(); ++i )
-                            aBackup[i] = aBackupList[i];
+                        css::uno::Sequence<OUString> aBackup( comphelper::containerToSequence(aBackupList) );
 
-                        for ( sal_Int32 nReadIndex = 0; nReadIndex < nCount; ++nReadIndex )
+                        for ( const auto& rModeNodeName : aModeNodeNames )
                         {
-                            const utl::OConfigurationNode aModeNode( aModesNode.openNode( aModeNodeNames[nReadIndex] ) );
+                            const utl::OConfigurationNode aModeNode( aModesNode.openNode( rModeNodeName ) );
                             if ( !aModeNode.isValid() )
                                 continue;
 

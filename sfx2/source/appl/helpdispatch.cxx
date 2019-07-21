@@ -57,14 +57,12 @@ void SAL_CALL HelpDispatch_Impl::dispatch(
     // search for a keyword (dispatch from the basic ide)
     bool bHasKeyword = false;
     OUString sKeyword;
-    const PropertyValue* pBegin = aArgs.getConstArray();
-    const PropertyValue* pEnd   = pBegin + aArgs.getLength();
-    for ( ; pBegin != pEnd; ++pBegin )
+    for ( const PropertyValue& rArg : aArgs )
     {
-        if ( pBegin->Name == "HelpKeyword" )
+        if ( rArg.Name == "HelpKeyword" )
         {
             OUString sHelpKeyword;
-            if ( ( pBegin->Value >>= sHelpKeyword ) && !sHelpKeyword.isEmpty() )
+            if ( ( rArg.Value >>= sHelpKeyword ) && !sHelpKeyword.isEmpty() )
             {
                 sKeyword = sHelpKeyword;
                 bHasKeyword = !sKeyword.isEmpty();

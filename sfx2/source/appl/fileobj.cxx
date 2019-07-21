@@ -225,11 +225,11 @@ static OUString impl_getFilter( const OUString& _rURL )
             if ( !sType.isEmpty() )
             {
                 // Honor a selected/detected filter.
-                for (sal_Int32 i=0; i < aDescrList.getLength(); ++i)
+                for (const auto& rDescr : aDescrList)
                 {
-                    if (aDescrList[i].Name == "FilterName")
+                    if (rDescr.Name == "FilterName")
                     {
-                        if (aDescrList[i].Value >>= sFilter)
+                        if (rDescr.Value >>= sFilter)
                             break;
                     }
                 }

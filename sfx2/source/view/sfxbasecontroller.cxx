@@ -478,7 +478,7 @@ Sequence< PropertyValue > SAL_CALL SfxBaseController::getCreationArguments()
 
 void SfxBaseController::SetCreationArguments_Impl( const Sequence< PropertyValue >& i_rCreationArgs )
 {
-    OSL_ENSURE( m_pData->m_aCreationArgs.getLength() == 0, "SfxBaseController::SetCreationArguments_Impl: not intended to be called twice!" );
+    OSL_ENSURE( !m_pData->m_aCreationArgs.hasElements(), "SfxBaseController::SetCreationArguments_Impl: not intended to be called twice!" );
     m_pData->m_aCreationArgs = i_rCreationArgs;
 }
 
@@ -837,12 +837,9 @@ uno::Sequence< Reference< frame::XDispatch > > SAL_CALL SfxBaseController::query
     sal_Int32 nCount = seqDescripts.getLength();
     uno::Sequence< Reference< frame::XDispatch > > lDispatcher( nCount );
 
-    for( sal_Int32 i=0; i<nCount; ++i )
-    {
-        lDispatcher[i] = queryDispatch( seqDescripts[i].FeatureURL  ,
-                                        seqDescripts[i].FrameName   ,
-                                        seqDescripts[i].SearchFlags );
-    }
+    std::transform(seqDescripts.begin(), seqDescripts.end(), lDispatcher.begin(),
+        [this](const frame::DispatchDescriptor& rDesc) -> Reference< frame::XDispatch > {
+            return queryDispatch(rDesc.FeatureURL, rDesc.FrameName, rDesc.SearchFlags); });
 
     return lDispatcher;
 }
@@ -1380,16 +1377,16 @@ void SfxBaseController::ShowInfoBars( )
     // and find if it is a Google Drive file.
     bool bIsGoogleFile = false;
     bool bCheckedOut = false;
-    for ( sal_Int32 i = 0; i < aCmisProperties.getLength(); ++i )
+    for ( const auto& rCmisProp : aCmisProperties )
     {
-        if ( aCmisProperties[i].Id == "cmis:isVersionSeriesCheckedOut" ) {
+        if ( rCmisProp.Id == "cmis:isVersionSeriesCheckedOut" ) {
             uno::Sequence< sal_Bool > bTmp;
-            aCmisProperties[i].Value >>= bTmp;
+            rCmisProp.Value >>= bTmp;
             bCheckedOut = bTmp[0];
         }
         // if it is a Google Drive file, we don't need the checkout bar,
         // still need the checkout feature for the version dialog.
-        if ( aCmisProperties[i].Name == "title" )
+        if ( rCmisProp.Name == "title" )
             bIsGoogleFile = true;
     }
 

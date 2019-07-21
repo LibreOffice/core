@@ -434,11 +434,11 @@ ErrCode  SfxFilterMatcher::GuessFilterControlDefaultUI( SfxMedium& rMedium, std:
             uno::Sequence< beans::PropertyValue > lDescriptor = aDescriptor.getAsConstPropertyValueList();
             sTypeName = xDetection->queryTypeByDescriptor(lDescriptor, true); // lDescriptor is used as In/Out param ... don't use aDescriptor.getAsConstPropertyValueList() directly!
 
-            for (sal_Int32 i = 0; i < lDescriptor.getLength(); ++i)
+            for (const auto& rProp : lDescriptor)
             {
-                if (lDescriptor[i].Name == "FilterName")
+                if (rProp.Name == "FilterName")
                     // Type detection picked a preferred filter for this format.
-                    aFilterName = lDescriptor[i].Value.get<OUString>();
+                    aFilterName = rProp.Value.get<OUString>();
             }
         }
         // no stream exists => try flat detection without preselection as fallback
@@ -926,49 +926,47 @@ void SfxFilterContainer::ReadSingleFilter_Impl(
     bool bEnabled = true         ;
 
     // first get directly available properties
-    sal_Int32 nFilterPropertyCount = lFilterProperties.getLength();
-    sal_Int32 nFilterProperty      = 0                            ;
-    for( nFilterProperty=0; nFilterProperty<nFilterPropertyCount; ++nFilterProperty )
+    for( const auto& rFilterProperty : lFilterProperties )
     {
-        if ( lFilterProperties[nFilterProperty].Name == "FileFormatVersion" )
+        if ( rFilterProperty.Name == "FileFormatVersion" )
         {
-            lFilterProperties[nFilterProperty].Value >>= nFormatVersion;
+            rFilterProperty.Value >>= nFormatVersion;
         }
-        else if ( lFilterProperties[nFilterProperty].Name == "TemplateName" )
+        else if ( rFilterProperty.Name == "TemplateName" )
         {
-            lFilterProperties[nFilterProperty].Value >>= sDefaultTemplate;
+            rFilterProperty.Value >>= sDefaultTemplate;
         }
-        else if ( lFilterProperties[nFilterProperty].Name == "Flags" )
+        else if ( rFilterProperty.Name == "Flags" )
         {
             sal_Int32 nTmp(0);
-            lFilterProperties[nFilterProperty].Value >>= nTmp;
+            rFilterProperty.Value >>= nTmp;
             assert((nTmp & ~o3tl::typed_flags<SfxFilterFlags>::mask) == 0);
             nFlags = static_cast<SfxFilterFlags>(nTmp);
         }
-        else if ( lFilterProperties[nFilterProperty].Name == "UIName" )
+        else if ( rFilterProperty.Name == "UIName" )
         {
-            lFilterProperties[nFilterProperty].Value >>= sUIName;
+            rFilterProperty.Value >>= sUIName;
         }
-        else if ( lFilterProperties[nFilterProperty].Name == "UserData" )
+        else if ( rFilterProperty.Name == "UserData" )
         {
             uno::Sequence< OUString > lUserData;
-            lFilterProperties[nFilterProperty].Value >>= lUserData;
+            rFilterProperty.Value >>= lUserData;
             sUserData = implc_convertStringlistToString( lUserData, ',', OUString() );
         }
-        else if ( lFilterProperties[nFilterProperty].Name == "DocumentService" )
+        else if ( rFilterProperty.Name == "DocumentService" )
         {
-            lFilterProperties[nFilterProperty].Value >>= sServiceName;
+            rFilterProperty.Value >>= sServiceName;
         }
-        else if (lFilterProperties[nFilterProperty].Name == "ExportExtension")
+        else if (rFilterProperty.Name == "ExportExtension")
         {
             // Extension preferred by the filter.  This takes precedence
             // over those that are given in the file format type.
-            lFilterProperties[nFilterProperty].Value >>= sExtension;
+            rFilterProperty.Value >>= sExtension;
             sExtension = "*." + sExtension;
         }
-        else if ( lFilterProperties[nFilterProperty].Name == "Type" )
+        else if ( rFilterProperty.Name == "Type" )
         {
-            lFilterProperties[nFilterProperty].Value >>= sType;
+            rFilterProperty.Value >>= sType;
             // Try to get filter .. but look for any exceptions!
             // May be filter was deleted by another thread ...
             try
@@ -984,39 +982,37 @@ void SfxFilterContainer::ReadSingleFilter_Impl(
             if( aResult >>= lTypeProperties )
             {
                 // get indirect available properties then (types)
-                sal_Int32 nTypePropertyCount = lTypeProperties.getLength();
-                sal_Int32 nTypeProperty      = 0                          ;
-                for( nTypeProperty=0; nTypeProperty<nTypePropertyCount; ++nTypeProperty )
+                for( const auto& rTypeProperty : lTypeProperties )
                 {
-                    if ( lTypeProperties[nTypeProperty].Name == "ClipboardFormat" )
+                    if ( rTypeProperty.Name == "ClipboardFormat" )
                     {
-                        lTypeProperties[nTypeProperty].Value >>= sHumanName;
+                        rTypeProperty.Value >>= sHumanName;
                     }
-                    else if ( lTypeProperties[nTypeProperty].Name == "MediaType" )
+                    else if ( rTypeProperty.Name == "MediaType" )
                     {
-                        lTypeProperties[nTypeProperty].Value >>= sMimeType;
+                        rTypeProperty.Value >>= sMimeType;
                     }
-                    else if ( lTypeProperties[nTypeProperty].Name == "Extensions" )
+                    else if ( rTypeProperty.Name == "Extensions" )
                     {
                         if (sExtension.isEmpty())
                         {
                             uno::Sequence< OUString > lExtensions;
-                            lTypeProperties[nTypeProperty].Value >>= lExtensions;
+                            rTypeProperty.Value >>= lExtensions;
                             sExtension = implc_convertStringlistToString( lExtensions, ';', "*." );
                         }
                     }
-                    else if ( lTypeProperties[nTypeProperty].Name == "URLPattern" )
+                    else if ( rTypeProperty.Name == "URLPattern" )
                     {
                             uno::Sequence< OUString > lPattern;
-                            lTypeProperties[nTypeProperty].Value >>= lPattern;
+                            rTypeProperty.Value >>= lPattern;
                             sPattern = implc_convertStringlistToString( lPattern, ';', OUString() );
                     }
                 }
             }
         }
-        else if ( lFilterProperties[nFilterProperty].Name == "Enabled" )
+        else if ( rFilterProperty.Name == "Enabled" )
         {
-            lFilterProperties[nFilterProperty].Value >>= bEnabled;
+            rFilterProperty.Value >>= bEnabled;
         }
 
     }
@@ -1109,7 +1105,7 @@ void SfxFilterContainer::ReadFilters_Impl( bool bUpdate )
         {
             // select right query to get right set of filters for search module
             uno::Sequence< OUString > lFilterNames = xFilterCFG->getElementNames();
-            if ( lFilterNames.getLength() )
+            if ( lFilterNames.hasElements() )
             {
                 // If list of filters already exist ...
                 // ReadExternalFilters must work in update mode.
@@ -1126,13 +1122,10 @@ void SfxFilterContainer::ReadFilters_Impl( bool bUpdate )
                 }
 
                 // get all properties of filters ... put it into the filter container
-                sal_Int32 nFilterCount = lFilterNames.getLength();
-                sal_Int32 nFilter=0;
-                for( nFilter=0; nFilter<nFilterCount; ++nFilter )
+                for( const OUString& sFilterName : lFilterNames )
                 {
                     // Try to get filter .. but look for any exceptions!
                     // May be filter was deleted by another thread ...
-                    OUString sFilterName = lFilterNames[nFilter];
                     ReadSingleFilter_Impl( sFilterName, xTypeCFG, xFilterCFG, bUpdate );
                 }
             }

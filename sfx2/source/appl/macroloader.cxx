@@ -53,7 +53,7 @@ using namespace ::com::sun::star::util;
 SfxMacroLoader::SfxMacroLoader(const css::uno::Sequence< css::uno::Any >& aArguments)
 {
     Reference < XFrame > xFrame;
-    if ( aArguments.getLength() )
+    if ( aArguments.hasElements() )
     {
         aArguments[0] >>= xFrame;
         m_xFrame = xFrame;
@@ -114,10 +114,9 @@ uno::Sequence< uno::Reference<frame::XDispatch> > SAL_CALL
 {
     sal_Int32 nCount = seqDescriptor.getLength();
     uno::Sequence< uno::Reference<frame::XDispatch> > lDispatcher(nCount);
-    for( sal_Int32 i=0; i<nCount; ++i )
-        lDispatcher[i] = queryDispatch( seqDescriptor[i].FeatureURL,
-                                              seqDescriptor[i].FrameName,
-                                              seqDescriptor[i].SearchFlags );
+    std::transform(seqDescriptor.begin(), seqDescriptor.end(), lDispatcher.begin(),
+        [this](const frame::DispatchDescriptor& rDescr) -> uno::Reference<frame::XDispatch> {
+            return queryDispatch(rDescr.FeatureURL, rDescr.FrameName, rDescr.SearchFlags); });
     return lDispatcher;
 }
 

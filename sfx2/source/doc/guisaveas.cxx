@@ -568,54 +568,49 @@ bool ModelData_Impl::ExecuteFilterDialog_Impl( const OUString& aFilterName )
         uno::Any aAny = m_pOwner->GetFilterConfiguration()->getByName( aFilterName );
         if ( aAny >>= aProps )
         {
-            const sal_Int32 nPropertyCount = aProps.getLength();
-            for( sal_Int32 nProperty=0; nProperty < nPropertyCount; ++nProperty )
+            auto pProp = std::find_if(aProps.begin(), aProps.end(),
+                [](const beans::PropertyValue& rProp) { return rProp.Name == "UIComponent"; });
+            if (pProp != aProps.end())
             {
-                if( aProps[nProperty].Name == "UIComponent" )
+                OUString aServiceName;
+                pProp->Value >>= aServiceName;
+                if( !aServiceName.isEmpty() )
                 {
-                    OUString aServiceName;
-                    aProps[nProperty].Value >>= aServiceName;
-                    if( !aServiceName.isEmpty() )
+                    uno::Sequence<uno::Any> aDialogArgs(comphelper::InitAnyPropertySequence(
                     {
-                        uno::Sequence<uno::Any> aDialogArgs(comphelper::InitAnyPropertySequence(
+                        {"ParentWindow", uno::Any(SfxStoringHelper::GetModelXWindow(m_xModel))},
+                    }));
+
+                    uno::Reference< ui::dialogs::XExecutableDialog > xFilterDialog(
+                                                comphelper::getProcessServiceFactory()->createInstanceWithArguments(aServiceName, aDialogArgs), uno::UNO_QUERY );
+                    uno::Reference< beans::XPropertyAccess > xFilterProperties( xFilterDialog, uno::UNO_QUERY );
+
+                    if( xFilterDialog.is() && xFilterProperties.is() )
+                    {
+                        bDialogUsed = true;
+
+                        uno::Reference< document::XExporter > xExporter( xFilterDialog, uno::UNO_QUERY );
+                        if( xExporter.is() )
+                            xExporter->setSourceDocument( GetModel() );
+
+                        uno::Sequence< beans::PropertyValue > aPropsForDialog;
+                        GetMediaDescr() >> aPropsForDialog;
+                        xFilterProperties->setPropertyValues( aPropsForDialog );
+
+                        if( !xFilterDialog->execute() )
                         {
-                            {"ParentWindow", uno::Any(SfxStoringHelper::GetModelXWindow(m_xModel))},
-                        }));
-
-                        uno::Reference< ui::dialogs::XExecutableDialog > xFilterDialog(
-                                                    comphelper::getProcessServiceFactory()->createInstanceWithArguments(aServiceName, aDialogArgs), uno::UNO_QUERY );
-                        uno::Reference< beans::XPropertyAccess > xFilterProperties( xFilterDialog, uno::UNO_QUERY );
-
-                        if( xFilterDialog.is() && xFilterProperties.is() )
-                        {
-                            bDialogUsed = true;
-
-                            uno::Reference< document::XExporter > xExporter( xFilterDialog, uno::UNO_QUERY );
-                            if( xExporter.is() )
-                                xExporter->setSourceDocument( GetModel() );
-
-                            uno::Sequence< beans::PropertyValue > aPropsForDialog;
-                            GetMediaDescr() >> aPropsForDialog;
-                            xFilterProperties->setPropertyValues( aPropsForDialog );
-
-                            if( !xFilterDialog->execute() )
-                            {
-                                throw task::ErrorCodeIOException(
-                                    ("ModelData_Impl::ExecuteFilterDialog_Impl:"
-                                     " ERRCODE_IO_ABORT"),
-                                    uno::Reference< uno::XInterface >(),
-                                    sal_uInt32(ERRCODE_IO_ABORT));
-                            }
-
-                            uno::Sequence< beans::PropertyValue > aPropsFromDialog =
-                                                                        xFilterProperties->getPropertyValues();
-                            const sal_Int32 nPropsLen {aPropsFromDialog.getLength()};
-                            for ( sal_Int32 nInd = 0; nInd < nPropsLen; ++nInd )
-                                GetMediaDescr()[aPropsFromDialog[nInd].Name] = aPropsFromDialog[nInd].Value;
+                            throw task::ErrorCodeIOException(
+                                ("ModelData_Impl::ExecuteFilterDialog_Impl:"
+                                 " ERRCODE_IO_ABORT"),
+                                uno::Reference< uno::XInterface >(),
+                                sal_uInt32(ERRCODE_IO_ABORT));
                         }
-                    }
 
-                    break;
+                        uno::Sequence< beans::PropertyValue > aPropsFromDialog =
+                                                                    xFilterProperties->getPropertyValues();
+                        for ( const auto& rProp : aPropsFromDialog )
+                            GetMediaDescr()[rProp.Name] = rProp.Value;
+                    }
                 }
             }
         }
@@ -1740,23 +1735,21 @@ void SfxStoringHelper::SetDocInfoState(
         uno::Reference< beans::XPropertyContainer > xContainer( xSet, uno::UNO_QUERY );
         uno::Reference< beans::XPropertySetInfo > xSetInfo = xSet->getPropertySetInfo();
         uno::Sequence< beans::Property > lProps = xSetInfo->getProperties();
-        const beans::Property* pProps = lProps.getConstArray();
-        const sal_Int32 nPropLen = lProps.getLength();
-        for (sal_Int32 i=0; i<nPropLen; ++i)
+        for (const beans::Property& rProp : lProps)
         {
-            uno::Any aValue = xPropSet->getPropertyValue( pProps[i].Name );
-            if ( pProps[i].Attributes & css::beans::PropertyAttribute::REMOVABLE )
+            uno::Any aValue = xPropSet->getPropertyValue( rProp.Name );
+            if ( rProp.Attributes & css::beans::PropertyAttribute::REMOVABLE )
             {
                 try
                 {
                     // QUESTION: DefaultValue?!
-                    xContainer->addProperty( pProps[i].Name, pProps[i].Attributes, aValue );
+                    xContainer->addProperty( rProp.Name, rProp.Attributes, aValue );
                 }
                 catch (beans::PropertyExistException const&) {}
                 try
                 {
                     // it is possible that the propertysets from XML and binary files differ; we shouldn't break then
-                    xSet->setPropertyValue( pProps[i].Name, aValue );
+                    xSet->setPropertyValue( rProp.Name, aValue );
                 }
                 catch ( const uno::Exception& ) {}
             }
