@@ -102,7 +102,7 @@ void AnimationRenderers::PopulateRenderers(Animation* pAnim)
             pRenderer = static_cast<AnimationRenderer*>(pItem->pAnimationRenderer);
         }
 
-        pRenderer->pause(pItem->bPause);
+        pRenderer->Pause(pItem->mbIsPaused);
         pRenderer->setMarked(true);
     }
 }
@@ -125,7 +125,7 @@ bool AnimationRenderers::ResetMarkedRenderers()
 
     for (auto& rItem : maAnimationRenderers)
     {
-        if (!rItem->isPause())
+        if (!rItem->IsPaused())
             bIsGloballyPaused = false;
 
         rItem->setMarked(false);
