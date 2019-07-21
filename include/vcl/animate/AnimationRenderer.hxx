@@ -44,8 +44,7 @@ public:
 
     void getPosSize(const AnimationBitmap& rAnm, Point& rPosPix, Size& rSizePix);
 
-    const Point& getOutPos() const { return maPt; }
-
+    const Point& GetOriginPosition() const { return maOriginPt; }
     const Size& getOutSizePix() const { return maSzPix; }
 
     void pause(bool bPause) { mbIsPaused = bPause; }
@@ -64,7 +63,7 @@ protected:
 
 private:
     long const mnCallerId;
-    Point const maPt;
+    Point const maOriginPt;
     Point maRestPt;
     Size const maSz;
     Size maRestSz;
