@@ -299,7 +299,7 @@ void AnimationRenderer::Draw(sal_uLong nIndex, VirtualDevice* pVDev)
     }
 }
 
-void AnimationRenderer::repaint()
+void AnimationRenderer::Repaint()
 {
     const bool bOldPause = mbIsPaused;
 

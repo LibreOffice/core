@@ -39,7 +39,7 @@ public:
     bool Matches(OutputDevice* pOut, long nCallerId) const;
     virtual void DrawToIndex(sal_uLong nIndex);
     void Draw(sal_uLong nIndex, VirtualDevice* pVDev = nullptr);
-    void repaint();
+    void Repaint();
     AnimationData* createAnimationData() const;
 
     void getPosSize(const AnimationBitmap& rAnm, Point& rPosPix, Size& rSizePix);
