@@ -86,9 +86,6 @@ public class SwXMailMerge extends TestCase {
         String cOutputURL = utils.getOfficeTemp( Param.getMSF());
         String cDataSourceName  = "Bibliography";
         String cDataCommand = "biblio";
-        Object[] sel = new Object[2];
-        sel[0] = new int[2];
-        sel[1] = new int[5];
         Object[] myBookMarks = new Object[2];
         // </set some variables>
 
