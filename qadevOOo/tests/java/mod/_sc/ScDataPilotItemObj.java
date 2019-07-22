@@ -233,8 +233,6 @@ public class ScDataPilotItemObj extends TestCase {
     private void getSRange(XIndexAccess IA) {
         int fieldsAmount = IA.getCount() + 1;
 
-        String[] fieldsNames = new String[fieldsAmount];
-
         int i = -1;
         int cnt = 0;
 
@@ -260,7 +258,6 @@ public class ScDataPilotItemObj extends TestCase {
             log.println("**Field : '" + name + "' ... ");
 
             if (!name.equals("Data")) {
-                fieldsNames[cnt] = name;
 
                 XPropertySet props = UnoRuntime.queryInterface(
                                              XPropertySet.class, field);
