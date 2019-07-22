@@ -59,20 +59,28 @@ std::string RTFSprm::toString() const
 
 RTFValue::Pointer_t RTFSprms::find(Id nKeyword, bool bFirst, bool bForWrite)
 {
-    RTFValue::Pointer_t pValue;
-
     if (bForWrite)
         ensureCopyBeforeWrite();
 
-    for (auto& rSprm : *m_pSprms)
-        if (rSprm.first == nKeyword)
-        {
-            if (bFirst)
-                return rSprm.second;
+    auto cmp = [&nKeyword](const std::pair<Id, RTFValue::Pointer_t>& raPair) -> bool {
+        return raPair.first == nKeyword;
+    };
 
-            pValue = rSprm.second;
-        }
-    return pValue;
+    if (bFirst)
+    {
+        auto it = std::find_if(m_pSprms->begin(), m_pSprms->end(), cmp);
+        if (it != m_pSprms->end())
+            return it->second;
+    }
+    else
+    // find last
+    {
+        auto rit = std::find_if(m_pSprms->rbegin(), m_pSprms->rend(), cmp);
+        if (rit != m_pSprms->rend())
+            return rit->second;
+    }
+
+    return RTFValue::Pointer_t{};
 }
 
 void RTFSprms::set(Id nKeyword, const RTFValue::Pointer_t& pValue, RTFOverwrite eOverwrite)
