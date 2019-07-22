@@ -74,18 +74,18 @@ OUString const & ScDPLabelData::getDisplayName() const
 // ScPivotField
 
 ScPivotField::ScPivotField(SCCOL nNewCol) :
-    nCol(nNewCol),
     mnOriginalDim(-1),
     nFuncMask(PivotFunc::NONE),
+    nCol(nNewCol),
     mnDupCount(0)
 {}
 
 ScPivotField::ScPivotField( const ScPivotField& rPivotField ) :
-    nCol(rPivotField.nCol),
+    maFieldRef(rPivotField.maFieldRef),
     mnOriginalDim(rPivotField.mnOriginalDim),
     nFuncMask(rPivotField.nFuncMask),
-    mnDupCount(rPivotField.mnDupCount),
-    maFieldRef(rPivotField.maFieldRef)
+    nCol(rPivotField.nCol),
+    mnDupCount(rPivotField.mnDupCount)
 {}
 
 long ScPivotField::getOriginalDim() const
@@ -151,9 +151,9 @@ ScPivotParam& ScPivotParam::operator=( const ScPivotParam& rPivotParam )
 // ScPivotFuncData
 
 ScPivotFuncData::ScPivotFuncData( SCCOL nCol, PivotFunc nFuncMask ) :
-    mnCol( nCol ),
     mnOriginalDim(-1),
     mnFuncMask(nFuncMask),
+    mnCol( nCol ),
     mnDupCount(0)
 {}
 

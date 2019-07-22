@@ -27,12 +27,12 @@ class ImplWallpaper
     friend class Wallpaper;
 
 private:
-    Color                       maColor;
+    boost::optional<tools::Rectangle>  mpRect;
     std::unique_ptr<BitmapEx>   mpBitmap;
     std::unique_ptr<Gradient>   mpGradient;
-    boost::optional<tools::Rectangle>  mpRect;
-    WallpaperStyle  meStyle;
     std::unique_ptr<BitmapEx>   mpCache;
+    Color                       maColor;
+    WallpaperStyle              meStyle;
 
 public:
     ImplWallpaper();

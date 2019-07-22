@@ -33,19 +33,19 @@ class CachedOutputStream
     /// When buffer hits this size, it's written to mxOutputStream
     static const sal_Int32 mnMaximumSize = 0x10000;
 
-    /// Output stream, usually writing data into files.
-    css::uno::Reference< css::io::XOutputStream > mxOutputStream;
-    sal_Int32 mnCacheWrittenSize;
-    const css::uno::Sequence<sal_Int8> mpCache;
-    uno_Sequence *pSeq;
-    bool mbWriteToOutStream;
     /// ForMerge structure is used for sorting elements in Writer
     std::shared_ptr< ForMergeBase > mpForMerge;
+    const css::uno::Sequence<sal_Int8> mpCache;
+    /// Output stream, usually writing data into files.
+    css::uno::Reference< css::io::XOutputStream > mxOutputStream;
+    uno_Sequence *pSeq;
+    sal_Int32 mnCacheWrittenSize;
+    bool mbWriteToOutStream;
 
 public:
-    CachedOutputStream() : mnCacheWrittenSize(0)
-                         , mpCache(mnMaximumSize)
+    CachedOutputStream() : mpCache(mnMaximumSize)
                          , pSeq(mpCache.get())
+                         , mnCacheWrittenSize(0)
                          , mbWriteToOutStream(true)
     {}
 

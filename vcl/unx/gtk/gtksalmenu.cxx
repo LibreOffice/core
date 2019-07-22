@@ -1427,11 +1427,11 @@ int GtkSalMenu::GetMenuBarHeight() const
  */
 
 GtkSalMenuItem::GtkSalMenuItem( const SalItemParams* pItemData ) :
-    mnId( pItemData->nId ),
-    mnType( pItemData->eType ),
-    mbVisible( true ),
     mpParentMenu( nullptr ),
-    mpSubMenu( nullptr )
+    mpSubMenu( nullptr ),
+    mnType( pItemData->eType ),
+    mnId( pItemData->nId ),
+    mbVisible( true )
 {
 }
 

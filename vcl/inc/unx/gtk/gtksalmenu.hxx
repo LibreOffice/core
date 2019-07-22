@@ -158,11 +158,11 @@ public:
     GtkSalMenuItem( const SalItemParams* );
     virtual ~GtkSalMenuItem() override;
 
-    sal_uInt16 const    mnId;               // Item ID
-    MenuItemType const  mnType;             // Item type
-    bool                mbVisible;          // Item visibility.
     GtkSalMenu*         mpParentMenu;       // The menu into which this menu item is inserted
     GtkSalMenu*         mpSubMenu;          // Submenu of this item (if defined)
+    MenuItemType const  mnType;             // Item type
+    sal_uInt16 const    mnId;               // Item ID
+    bool                mbVisible;          // Item visibility.
 };
 
 #endif // INCLUDED_VCL_INC_UNX_GTK_GTKSALMENU_HXX

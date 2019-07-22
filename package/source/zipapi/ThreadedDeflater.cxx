@@ -60,8 +60,8 @@ private:
 };
 
 ThreadedDeflater::ThreadedDeflater(sal_Int32 nSetLevel)
-    : zlibLevel(nSetLevel)
-    , threadTaskTag(comphelper::ThreadPool::createThreadTaskTag())
+    : threadTaskTag(comphelper::ThreadPool::createThreadTaskTag())
+    , zlibLevel(nSetLevel)
     , pendingTasksCount(0)
 {
 }
