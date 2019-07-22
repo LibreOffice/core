@@ -159,10 +159,6 @@ public class OTimeModel extends GenericModelTest {
                                                                  PrintWriter log) throws Exception {
         TestEnvironment tEnv = super.createTestEnvironment(Param, log);
 
-        HashSet<String> exclude = new HashSet<String>();
-
-        exclude.add("FormatKey");
-
         tEnv.addObjRelation("XUpdateBroadcaster.Checker",
                             new Checker(m_XFormLoader, m_XPS, m_XCtrl));
         return tEnv;
