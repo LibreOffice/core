@@ -1069,6 +1069,7 @@ namespace svxform
         ::osl::MutexGuard aGuard( m_aMutex );
         m_bDisposed = true;
         m_pScriptListener->dispose();
+        m_pScriptListener.clear();
     }
 
 

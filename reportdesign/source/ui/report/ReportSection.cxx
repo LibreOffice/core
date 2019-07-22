@@ -118,9 +118,11 @@ void OReportSection::dispose()
     m_pPage = nullptr;
     if ( m_pMulti.is() )
         m_pMulti->dispose();
+    m_pMulti.clear();
 
     if ( m_pReportListener.is() )
         m_pReportListener->dispose();
+    m_pReportListener.clear();
     m_pFunc.reset();
 
     {

@@ -205,6 +205,7 @@ uno::Sequence< sal_Int8 > SAL_CALL Storage::getImplementationId()
 void SAL_CALL Storage::dispose()
 {
     m_xWrappedStorage->dispose();
+    m_xWrappedStorage.clear();
 }
 
 

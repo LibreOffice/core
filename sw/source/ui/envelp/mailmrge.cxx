@@ -365,6 +365,7 @@ void SwMailMergeDlg::dispose()
         m_xFrame->setComponent(nullptr, nullptr);
         m_xFrame->dispose();
     }
+    m_xFrame.clear();
 
     for( sal_Int32 nFilter = 0; nFilter < m_pFilterLB->GetEntryCount(); ++nFilter ) {
         OUString* pData = static_cast< OUString* >( m_pFilterLB->GetEntryData(nFilter) );

@@ -1423,6 +1423,7 @@ void UnoTreeListBoxImpl::dispose()
 {
     if( mxPeer.is() )
         mxPeer->disposeControl();
+    mxPeer.clear();
     SvTreeListBox::dispose();
 }
 
