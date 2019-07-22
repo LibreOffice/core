@@ -608,7 +608,7 @@ Dim vMatrix() As Variant, lSize As Long, iNumFields As Integer, i As Integer
 	Do While Not _EOF And lSize &lt; pvNumRows - 1
 		lSize = lSize + 1
 		For i = 0 To iNumFields
-			vMatrix(i, lSize) = _getResultSetColumnValue(RowSet, i + 1)
+			vMatrix(i, lSize) = Utils._getResultSetColumnValue(RowSet, i + 1)
 			If pbStrDate And IsDate(vMatrix(i, lSize)) Then vMatrix(i, lSize) = _CStr(vMatrix(i, lSize))
 		Next i
 		_Move(&quot;NEXT&quot;)
