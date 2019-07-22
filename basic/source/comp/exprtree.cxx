@@ -207,9 +207,11 @@ std::unique_ptr<SbiExprNode> SbiExpression::Term( const KeywordSymbolInfo* pKeyw
         pParser->Error( ERRCODE_BASIC_SYNTAX );
         bError = true;
     }
-
+    bool bIsArray = false;
     if( DoParametersFollow( pParser, eCurExpr, eTok = eNextTok ) )
     {
+        if(!pParser->aGen.GetModule().FindMethod("DefaultMethodName",SbxClassType::Property))
+            bIsArray = true;
         bool bStandaloneExpression = (m_eMode == EXPRMODE_STANDALONE);
         pPar = SbiExprList::ParseParameters( pParser, bStandaloneExpression );
         bError = bError || !pPar->IsValid();
@@ -240,12 +242,12 @@ std::unique_ptr<SbiExprNode> SbiExpression::Term( const KeywordSymbolInfo* pKeyw
         bBracket = false;   // Now the bracket for the first term is obsolete
         if( eType == SbxVARIANT )
         {
-            eType = SbxOBJECT;
+            eType = static_cast<SbxDataType>(SbxOBJECT |(bIsArray ? SbxARRAY : SbxEMPTY )) ;
         }
         else
         {
             // Name%. really does not work!
-            pParser->Error( ERRCODE_BASIC_BAD_DECLARATION, aSym );
+            pParser->Error( ERRCODE_BASIC_BAD_DECLARATION, aSym +  "(exptree.cxx:248)");
             bError = true;
         }
     }
@@ -269,7 +271,7 @@ std::unique_ptr<SbiExprNode> SbiExpression::Term( const KeywordSymbolInfo* pKeyw
     {
         if( bObj )
         {
-            eType = SbxOBJECT;
+            eType = static_cast<SbxDataType>(SbxOBJECT |(bIsArray ? SbxARRAY : SbxEMPTY ));
         }
         pDef = AddSym( eTok, *pParser->pPool, eCurExpr, aSym, eType, pPar.get() );
         // Looks like this is a local ( but undefined variable )
@@ -313,7 +315,7 @@ std::unique_ptr<SbiExprNode> SbiExpression::Term( const KeywordSymbolInfo* pKeyw
             if( eType >= SbxINTEGER && eType <= SbxSTRING && eType != eDefType )
             {
                 // How? Define with AS first and take a Suffix then?
-                pParser->Error( ERRCODE_BASIC_BAD_DECLARATION, aSym );
+                pParser->Error( ERRCODE_BASIC_BAD_DECLARATION, aSym + "(exptree.cxx:316)" );
                 bError = true;
             }
             else if ( eType == SbxVARIANT )
@@ -334,13 +336,13 @@ std::unique_ptr<SbiExprNode> SbiExpression::Term( const KeywordSymbolInfo* pKeyw
             // maybe pDef describes an object that so far has only been
             // recognized as SbxVARIANT - then change type of pDef
             // from 16.12.95 (similar cases possible perhaps?!?)
-            if( eType == SbxOBJECT && pDef->GetType() == SbxVARIANT )
+            if( pDef->GetType() == SbxVARIANT && ( eType == SbxOBJECT || (eType & SbxARRAY) == SbxARRAY) )
             {
-                pDef->SetType( SbxOBJECT );
+                pDef->SetType( eType );
             }
             else
             {
-                pParser->Error( ERRCODE_BASIC_BAD_DECLARATION, aSym );
+                pParser->Error( ERRCODE_BASIC_BAD_DECLARATION, aSym  + "(exptree.cxx:343)" + OUString::number(static_cast<int>(eType)) + "," + OUString::number(static_cast<int>(pDef->GetType())) );
                 bError = true;
             }
         }
@@ -356,15 +358,15 @@ std::unique_ptr<SbiExprNode> SbiExpression::Term( const KeywordSymbolInfo* pKeyw
     {
         // from 8.1.95: Object may also be of the type SbxVARIANT
         if( pDef->GetType() == SbxVARIANT )
-            pDef->SetType( SbxOBJECT );
+            pDef->SetType( eType );
         // if we scan something with point,
         // the type must be SbxOBJECT
-        if( pDef->GetType() != SbxOBJECT && pDef->GetType() != SbxVARIANT )
+        if( (pDef->GetType() != SbxOBJECT && (pDef->GetType() & SbxARRAY) != SbxARRAY ) && pDef->GetType() != SbxVARIANT )
         {
             // defer error until runtime if in vba mode
             if ( !pParser->IsVBASupportOn() )
             {
-                pParser->Error( ERRCODE_BASIC_BAD_DECLARATION, aSym );
+                pParser->Error( ERRCODE_BASIC_BAD_DECLARATION, aSym +  "(exptree.cxx:367)" );
                 bError = true;
             }
         }
@@ -406,9 +408,12 @@ std::unique_ptr<SbiExprNode> SbiExpression::ObjTerm( SbiSymDef& rObj )
     SbiExprListPtr pPar;
     SbiExprListVector* pvMoreParLcl = nullptr;
     eTok = pParser->Peek();
+    bool bIsArray = false;
 
     if( DoParametersFollow( pParser, eCurExpr, eTok ) )
     {
+        if(!pParser->aGen.GetModule().FindMethod("DefaultMethodName",SbxClassType::Property))
+            bIsArray = true;
         pPar = SbiExprList::ParseParameters( pParser, false/*bStandaloneExpression*/ );
         bError = bError || !pPar->IsValid();
         eTok = pParser->Peek();
@@ -431,12 +436,12 @@ std::unique_ptr<SbiExprNode> SbiExpression::ObjTerm( SbiSymDef& rObj )
     {
         if( eType == SbxVARIANT )
         {
-            eType = SbxOBJECT;
+            eType = static_cast<SbxDataType>(SbxOBJECT |(bIsArray ? SbxARRAY : SbxEMPTY )) ;
         }
         else
         {
             // Name%. does really not work!
-            pParser->Error( ERRCODE_BASIC_BAD_DECLARATION, aSym );
+            pParser->Error( ERRCODE_BASIC_BAD_DECLARATION, aSym + "(exptree.cxx:439)" );
             bError = true;
         }
     }
@@ -458,11 +463,11 @@ std::unique_ptr<SbiExprNode> SbiExpression::ObjTerm( SbiSymDef& rObj )
     {
         if( pDef->GetType() == SbxVARIANT )
         {
-            pDef->SetType( SbxOBJECT );
+            pDef->SetType( eType );
         }
-        if( pDef->GetType() != SbxOBJECT )
+        if(pDef->GetType() != SbxOBJECT && (pDef->GetType() & SbxARRAY) != SbxARRAY)
         {
-            pParser->Error( ERRCODE_BASIC_BAD_DECLARATION, aSym );
+            pParser->Error( ERRCODE_BASIC_BAD_DECLARATION, aSym + "(exptree.cxx:465)," + OUString::number(static_cast<int>(pDef->GetType())) );
             bError = true;
         }
         if( !bError )

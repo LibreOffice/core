@@ -76,15 +76,15 @@ End Function
 Function PartStringInArray(BigArray(), SearchString as String, iCompare as Integer) as Integer
 Dim MaxIndex as Integer
 Dim i as Integer
-	MaxIndex = Ubound(BigArray())
+	MaxIndex = Ubound(BigArray)
 	For i = 0 To MaxIndex
 		If Instr(1, BigArray(i), SearchString, iCompare) &lt;&gt; 0 Then
-			PartStringInArray() = i
+			PartStringInArray = i
 			Exit Function
 		End If
 	Next i
-	PartStringInArray() = -1
-End Function		
+	PartStringInArray = -1
+End Function
 
 
 &apos; Deletes the String &apos;SmallString&apos; out of the String &apos;BigString&apos;
@@ -130,7 +130,7 @@ Function ArrayOutOfString(BigString, Separator as String, Optional MaxIndex as I
 Dim LocList() as String
 	LocList=Split(BigString,Separator)
 
-	If not isMissing(MaxIndex) then maxIndex=ubound(LocList())	
+	If not isMissing(MaxIndex) then maxIndex=ubound(LocList)
 
 	ArrayOutOfString=LocList
 End Function
@@ -139,7 +139,7 @@ End Function
 &apos; Deletes all fieldvalues in one-dimensional Array
 Sub ClearArray(BigArray)
 Dim i as integer
-	For i = Lbound(BigArray()) to Ubound(BigArray())
+	For i = Lbound(BigArray) to Ubound(BigArray)
 		BigArray(i) = &quot;&quot;
 	Next
 End Sub
@@ -148,7 +148,7 @@ End Sub
 &apos; Deletes all fieldvalues in a multidimensional Array
 Sub ClearMultiDimArray(BigArray,DimCount as integer)
 Dim n%, m%
-	For n = Lbound(BigArray(),1) to Ubound(BigArray(),1)
+	For n = Lbound(BigArray,1) to Ubound(BigArray,1)
 		For m = 0 to Dimcount - 1
 			BigArray(n,m) = &quot;&quot;
 		Next m
@@ -160,7 +160,7 @@ End Sub
 &apos; Returns &apos;True&apos; or &apos;False&apos;
 Function FieldInArray(LocArray(), MaxIndex as integer, LocField as String) As Boolean
 Dim i as integer
-	For i = Lbound(LocArray()) to MaxIndex
+	For i = Lbound(LocArray) to MaxIndex
 		If Ucase(LocArray(i)) = Ucase(LocField) Then
 			FieldInArray = True
 			Exit Function
@@ -172,9 +172,9 @@ End Function
 
 &apos; Checks if a Field (LocField) is already defined in an Array
 &apos; Returns &apos;True&apos; or &apos;False&apos;
-Function FieldInList(LocField, BigList()) As Boolean
+Function FieldInList(LocField, BigList) As Boolean
 Dim i as integer
-	For i = Lbound(BigList()) to Ubound(BigList())
+	For i = Lbound(BigList) to Ubound(BigList)
 		If LocField = BigList(i) Then
 			FieldInList = True
 			Exit Function
@@ -188,7 +188,7 @@ End Function
 &apos; the Array LocList()&apos;
 Function IndexInArray(SearchString as String, LocList()) as Integer
 Dim i as integer
-	For i = Lbound(LocList(),1) to Ubound(LocList(),1)
+	For i = Lbound(LocList,1) to Ubound(LocList,1)
 		If Ucase(LocList(i,0)) = Ucase(SearchString) Then
 			IndexInArray = i
 			Exit Function
@@ -203,9 +203,9 @@ Dim oListbox as Object
 Dim i as integer
 Dim a as Integer
 	a = 0
-	oListbox = oDialog.GetControl(ListboxName)	
+	oListbox = oDialog.GetControl(ListboxName)
 	oListbox.RemoveItems(0, oListbox.GetItemCount)
-	For i = 0 to Ubound(ValList(), 1)
+	For i = 0 to Ubound(ValList, 1)
 		If ValList(i) &lt;&gt; &quot;&quot; Then
 			oListbox.AddItem(ValList(i, iDim-1), a)
 			a = a + 1
@@ -220,48 +220,48 @@ Function StringInMultiArray(SearchList(), SearchString as String, SearchIndex as
 Dim i as integer
 Dim CurFieldString as String
 	If IsMissing(MaxIndex) Then
-		MaxIndex = Ubound(SearchList(),1)
+		MaxIndex = Ubound(SearchList,1)
 	End If
-	For i = Lbound(SearchList()) to MaxIndex
+	For i = Lbound(SearchList) to MaxIndex
 		CurFieldString = SearchList(i,SearchIndex)
 		If  Ucase(CurFieldString) = Ucase(SearchString) Then
-			StringInMultiArray() = SearchList(i,ReturnIndex)
+			StringInMultiArray = SearchList(i,ReturnIndex)
 			Exit Function
 		End if
 	Next
-	StringInMultiArray() = &quot;&quot;
+	StringInMultiArray = &quot;&quot;
 End Function
 
 
-&apos; Searches for a Value in multidimensial Array by querying all Searchindices of the passed dimension 
+&apos; Searches for a Value in multidimensial Array by querying all Searchindices of the passed dimension
 &apos; and delivers the Index where it is found.
 Function GetIndexInMultiArray(SearchList(), SearchValue, SearchIndex as Integer) as Integer
 Dim i as integer
 Dim MaxIndex as Integer
 Dim CurFieldValue
-	MaxIndex = Ubound(SearchList(),1)
-	For i = Lbound(SearchList()) to MaxIndex
+	MaxIndex = Ubound(SearchList,1)
+	For i = Lbound(SearchList) to MaxIndex
 		CurFieldValue = SearchList(i,SearchIndex)
 		If CurFieldValue = SearchValue Then
-			GetIndexInMultiArray() = i
+			GetIndexInMultiArray = i
 			Exit Function
 		End if
 	Next
-	GetIndexInMultiArray() = -1
+	GetIndexInMultiArray = -1
 End Function
 
 
-&apos; Searches for a Value in multidimensial Array by querying all Searchindices of the passed dimension 
+&apos; Searches for a Value in multidimensial Array by querying all Searchindices of the passed dimension
 &apos; and delivers the Index where the Searchvalue is found as a part string
 Function GetIndexForPartStringinMultiArray(SearchList(), SearchValue, SearchIndex as Integer) as Integer
 Dim i as integer
 Dim MaxIndex as Integer
 Dim CurFieldValue
-	MaxIndex = Ubound(SearchList(),1)
-	For i = Lbound(SearchList()) to MaxIndex
+	MaxIndex = Ubound(SearchList,1)
+	For i = Lbound(SearchList) to MaxIndex
 		CurFieldValue = SearchList(i,SearchIndex)
 		If Instr(CurFieldValue, SearchValue) &gt; 0 Then
-			GetIndexForPartStringinMultiArray() = i
+			GetIndexForPartStringinMultiArray = i
 			Exit Function
 		End if
 	Next
@@ -270,14 +270,14 @@ End Function
 
 
 Function ArrayfromMultiArray(MultiArray as String, iDim as Integer)
-Dim MaxIndex as Integer	
+Dim MaxIndex as Integer
 Dim i as Integer
-	MaxIndex = Ubound(MultiArray())
+	MaxIndex = Ubound(MultiArray)
 	Dim ResultArray(MaxIndex) as String
 	For i = 0 To MaxIndex
 		ResultArray(i) = MultiArray(i,iDim)
 	Next i
-	ArrayfromMultiArray() = ResultArray()
+	ArrayfromMultiArray = ResultArray
 End Function
 
 
@@ -323,9 +323,9 @@ Dim i as Integer
 Dim SepList() as String
 	If IsMissing(Separator) Then
 		Path = ConvertFromUrl(Path)
-		Separator = GetPathSeparator()		
+		Separator = GetPathSeparator()
 	End If
-	SepList() = ArrayoutofString(Path, Separator,i)
+	SepList = ArrayoutofString(Path, Separator,i)
 	FileNameoutofPath = SepList(i)
 End Function
 
@@ -333,7 +333,7 @@ End Function
 Function GetFileNameExtension(ByVal FileName as String)
 Dim MaxIndex as Integer
 Dim SepList() as String
-	SepList() = ArrayoutofString(FileName,&quot;.&quot;, MaxIndex)
+	SepList = ArrayoutofString(FileName,&quot;.&quot;, MaxIndex)
 	GetFileNameExtension = SepList(MaxIndex)
 End Function
 
@@ -344,7 +344,7 @@ Dim SepList() as String
 	If not IsMissing(Separator) Then
 		FileName = FileNameoutofPath(FileName, Separator)
 	End If
-	SepList() = ArrayoutofString(FileName,&quot;.&quot;, MaxIndex)
+	SepList = ArrayoutofString(FileName,&quot;.&quot;, MaxIndex)
 	GetFileNameWithoutExtension = RTrimStr(FileName, &quot;.&quot; &amp; SepList(MaxIndex))
 End Function
 
@@ -382,53 +382,53 @@ Function BubbleSortList(ByVal SortList(),optional sort2ndValue as Boolean)
 	Dim sortvalue as Integer
 	Dim DisplayDummy
 	dimensions = 2
-	
-On Local Error Goto No2ndDim	
-	k = Ubound(SortList(),2)
+
+On Local Error Goto No2ndDim
+	k = Ubound(SortList,2)
 	No2ndDim:
 	If Err &lt;&gt; 0 Then dimensions = 1
-	
-	i = Ubound(SortList(),1)
+
+	i = Ubound(SortList,1)
 	If ismissing(sort2ndValue) then
 		sortvalue = 0
 	else
 		sortvalue = 1
 	end if
-	
+
 	For s = 1 to i - 1
 		For t = 0 to i-s
 			Select Case dimensions
 			Case 1
-				If SortList(t) &gt; SortList(t+1) Then                             
+				If SortList(t) &gt; SortList(t+1) Then
 					DisplayDummy = SortList(t)
 					SortList(t) = SortList(t+1)
-					SortList(t+1) = DisplayDummy    
+					SortList(t+1) = DisplayDummy
 				End If
 			Case 2
-				If SortList(t,sortvalue) &gt; SortList(t+1,sortvalue) Then 
-					For k = 0 to UBound(SortList(),2)                        
+				If SortList(t,sortvalue) &gt; SortList(t+1,sortvalue) Then
+					For k = 0 to UBound(SortList,2)
 							DisplayDummy = SortList(t,k)
 							SortList(t,k) = SortList(t+1,k)
-							SortList(t+1,k) = DisplayDummy 
+							SortList(t+1,k) = DisplayDummy
 					Next k
 				End If
 			End Select
 		Next t
-	Next s 
-	BubbleSortList = SortList()             
+	Next s
+	BubbleSortList = SortList
 End Function
 
 
 Function GetValueoutofList(SearchValue, BigList(), iDim as Integer, Optional ValueIndex)
 Dim i as Integer
 Dim MaxIndex as Integer
-	MaxIndex = Ubound(BigList(),1)
+	MaxIndex = Ubound(BigList,1)
 	For i = 0 To MaxIndex
 		If BigList(i,0) = SearchValue Then
 			If Not IsMissing(ValueIndex) Then
 				ValueIndex = i
 			End If
-			GetValueOutOfList() = BigList(i,iDim)
+			GetValueOutOfList = BigList(i,iDim)
 		End If
 	Next i
 End Function
@@ -438,32 +438,32 @@ Function AddListtoList(ByVal FirstArray(), ByVal SecondArray(), Optional StartIn
 Dim n as Integer
 Dim m as Integer
 Dim MaxIndex as Integer
-	MaxIndex = Ubound(FirstArray()) + Ubound(SecondArray()) + 1
+	MaxIndex = Ubound(FirstArray) + Ubound(SecondArray) + 1
 	If MaxIndex &gt; -1 Then
 		Dim ResultArray(MaxIndex)
-		For m = 0 To Ubound(FirstArray())
+		For m = 0 To Ubound(FirstArray)
 			ResultArray(m) = FirstArray(m)
 		Next m
-		For n = 0 To Ubound(SecondArray())
+		For n = 0 To Ubound(SecondArray)
 			ResultArray(m) = SecondArray(n)
 			m = m + 1
 		Next n
-		AddListToList() = ResultArray()
+		AddListToList = ResultArray
 	Else
 		Dim NullArray()
-		AddListToList() = NullArray()
+		AddListToList = NullArray
 	End If
 End Function
 
 
 Function CheckDouble(DoubleString as String)
 On Local Error Goto WRONGDATATYPE
-	CheckDouble() = CDbl(DoubleString)
+	CheckDouble = CDbl(DoubleString)
 WRONGDATATYPE:
 	If Err &lt;&gt; 0 Then
-		CheckDouble() = 0
+		CheckDouble = 0
 		Resume NoErr:
 	End If
-NOERR:	
+NOERR:
 End Function
 </script:module>
