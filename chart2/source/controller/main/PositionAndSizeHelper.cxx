@@ -44,6 +44,10 @@ bool PositionAndSizeHelper::moveObject( ObjectType eObjectType
     tools::Rectangle aObjectRect( Point(rNewPositionAndSize.X,rNewPositionAndSize.Y), Size(rNewPositionAndSize.Width,rNewPositionAndSize.Height) );
     tools::Rectangle aPageRect( Point(rPageRectangle.X,rPageRectangle.Y), Size(rPageRectangle.Width,rPageRectangle.Height) );
 
+    // every following branch divides by width and height
+    if (aPageRect.getWidth() == 0 || aPageRect.getHeight() == 0)
+        return false;
+
     if( eObjectType==OBJECTTYPE_TITLE )
     {
         //@todo decide whether x is primary or secondary
