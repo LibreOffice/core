@@ -31,8 +31,6 @@ protected:
     //layout for extra custom controls
     QGridLayout* _layout;
 
-    bool allowRemoteUrls;
-
 public:
     explicit KF5FilePicker(css::uno::Reference<css::uno::XComponentContext> const& context,
                            QFileDialog::FileMode);

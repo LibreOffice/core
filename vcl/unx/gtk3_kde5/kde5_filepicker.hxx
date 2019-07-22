@@ -55,8 +55,6 @@ protected:
 
     sal_uIntPtr _winId;
 
-    bool allowRemoteUrls;
-
 public:
     explicit KDE5FilePicker(QObject* parent = nullptr);
     ~KDE5FilePicker() override;

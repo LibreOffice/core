@@ -54,7 +54,6 @@ KF5FilePicker::KF5FilePicker(css::uno::Reference<css::uno::XComponentContext> co
     // Native kf5 filepicker does not add file extension automatically
     : Qt5FilePicker(context, eMode, true, true)
     , _layout(new QGridLayout(m_pExtraControls))
-    , allowRemoteUrls(false)
 {
     // use native dialog
     m_pFileDialog->setOption(QFileDialog::DontUseNativeDialog, false);
