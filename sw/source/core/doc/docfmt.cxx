@@ -106,7 +106,7 @@ static bool lcl_RstAttr( const SwNodePtr& rpNd, void* pArgs )
 {
     const sw::DocumentContentOperationsManager::ParaRstFormat* pPara = static_cast<sw::DocumentContentOperationsManager::ParaRstFormat*>(pArgs);
     SwContentNode* pNode = rpNd->GetContentNode();
-    if (pPara->pLayout && pPara->pLayout->IsHideRedlines()
+    if (pPara && pPara->pLayout && pPara->pLayout->IsHideRedlines()
         && pNode && pNode->GetRedlineMergeFlag() == SwNode::Merge::Hidden)
     {
         return true;
