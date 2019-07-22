@@ -290,6 +290,7 @@ public:
     void WriteAttributes(sal_Int32 nAttribute, const Str& value, Args... rest)
     {
         WriteAttribute(nAttribute, value);
+        // coverity[stray_semicolon : FALSE] - coverity parse error
         if constexpr(sizeof...(rest) > 0)
             WriteAttributes(rest...);
     }
