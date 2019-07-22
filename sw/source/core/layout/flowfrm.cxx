@@ -146,6 +146,7 @@ void SwFlowFrame::CheckKeep()
     // Kick off the "last" predecessor with a 'keep' attribute, because
     // it's possible for the whole troop to move back.
     SwFrame *pPre = m_rThis.GetIndPrev();
+    assert(pPre);
     if( pPre->IsSctFrame() )
     {
         SwFrame *pLast = static_cast<SwSectionFrame*>(pPre)->FindLastContent();
