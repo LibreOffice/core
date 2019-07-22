@@ -2795,7 +2795,6 @@ void ScXMLExport::WriteTable(sal_Int32 nTable, const uno::Reference<sheet::XSpre
         return;
 
     xCurrentTable.set(xTable);
-    xCurrentTableCellRange = xTable;
     uno::Reference<container::XNamed> xName (xTable, uno::UNO_QUERY );
     if (!xName.is())
         return;

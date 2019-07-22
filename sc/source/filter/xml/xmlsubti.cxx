@@ -119,7 +119,6 @@ void ScMyTables::NewSheet(const OUString& sTableName, const OUString& sStyleName
         {
             // We need to set the current cell range here regardless of
             // presence of style name.
-            xCurrentCellRange = xCurrentSheet;
             SetTableStyle(sStyleName);
         }
     }
@@ -141,7 +140,6 @@ void ScMyTables::SetTableStyle(const OUString& sStyleName)
 
         if ( xCurrentSheet.is() )
         {
-            xCurrentCellRange = xCurrentSheet;
             uno::Reference <beans::XPropertySet> xProperties(xCurrentSheet, uno::UNO_QUERY);
             if ( xProperties.is() )
             {

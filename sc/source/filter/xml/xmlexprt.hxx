@@ -75,7 +75,6 @@ class ScXMLExport : public SvXMLExport
 {
     ScDocument*                 pDoc;
     css::uno::Reference <css::sheet::XSpreadsheet> xCurrentTable;
-    css::uno::Reference <css::table::XCellRange> xCurrentTableCellRange;
 
     css::uno::Reference<css::io::XInputStream> xSourceStream;
     sal_Int32                   nSourceStreamPos;
