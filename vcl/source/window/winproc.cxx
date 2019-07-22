@@ -160,6 +160,16 @@ static bool ImplHandleMouseFloatMode( vcl::Window* pChild, const Point& rMousePo
 
 static void ImplHandleMouseHelpRequest( vcl::Window* pChild, const Point& rMousePos )
 {
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        // Ignore tooltips in popup color pallets
+        // (e.g. Character Properties dialog -> Font Effects -> Font Color)
+        if(pChild->GetType() == WindowType::CONTROL &&
+           pChild->GetParent() && pChild->GetParent()->GetParent() &&
+           pChild->GetParent()->GetParent()->GetType() == WindowType::DOCKINGWINDOW)
+        return;
+    }
+
     ImplSVData* pSVData = ImplGetSVData();
     if ( !pSVData->maHelpData.mpHelpWin ||
          !( pSVData->maHelpData.mpHelpWin->IsWindowOrChild( pChild ) ||
