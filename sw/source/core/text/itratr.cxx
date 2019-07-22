@@ -339,6 +339,7 @@ bool SwAttrIter::Seek(TextFrameIndex const nNewPos)
         // items at all; it can only apply a previously effective item.
         // So do this by recreating the font from scratch.
         // Apply new para items:
+        assert(m_pMergedPara);
         InitFontAndAttrHandler(*m_pMergedPara->pParaPropsNode, *newPos.first,
                                m_pMergedPara->mergedText, nullptr, nullptr);
         // reset to next
