@@ -37,6 +37,8 @@
 #include <tools/urlobj.hxx>
 #include <sot/exchange.hxx>
 #include <memory>
+#include <vcl/uitest/logger.hxx>
+#include <vcl/uitest/eventdescription.hxx>
 
 #include <sfx2/lokhelper.hxx>
 
@@ -75,6 +77,22 @@
 #include <com/sun/star/util/XCloneable.hpp>
 
 using namespace com::sun::star;
+
+namespace {
+
+void collectUIInformation(const std::map<OUString, OUString>& aParameters,OUString action)
+{
+    EventDescription aDescription;
+    aDescription.aID = "grid_window";
+    aDescription.aAction = action;
+    aDescription.aParameters = aParameters;
+    aDescription.aParent = "MainWindow";
+    aDescription.aKeyWord = "ScGridWinUIObject";
+
+    UITestLogger::getInstance().logEvent(aDescription);
+}
+
+}
 
 //  GlobalName of writer-DocShell from comphelper/classids.hxx
 
@@ -146,6 +164,10 @@ void ScViewFunc::CutToClip()
         pDocSh->UpdateOle(&GetViewData());
 
         CellContentChanged();
+
+        OUString aStartAddress =  aRange.aStart.GetColRowString();
+        OUString aEndAddress = aRange.aEnd.GetColRowString();
+        collectUIInformation({{"RANGE", aStartAddress + ":" + aEndAddress}},"CUT");
     }
     else
         ErrorMessage( STR_NOMULTISELECT );
@@ -177,7 +199,11 @@ bool ScViewFunc::CopyToClip( ScDocument* pClipDoc, bool bCut, bool bApi, bool bI
         if (!bApi)
             ErrorMessage(STR_NOMULTISELECT);
     }
-
+    if( !bCut ){
+        OUString aStartAddress =  aRange.aStart.GetColRowString();
+        OUString aEndAddress = aRange.aEnd.GetColRowString();
+        collectUIInformation({{"RANGE", aStartAddress + ":" + aEndAddress}},"COPY");
+    }
     return bDone;
 }
 
@@ -194,6 +220,7 @@ bool ScViewFunc::CopyToClip( ScDocument* pClipDoc, const ScRangeList& rRanges, b
         bDone = CopyToClipMultiRange(pClipDoc, rRanges, bCut, bApi, bIncludeObjects);
     else
         bDone = CopyToClipSingleRange(pClipDoc, rRanges, bCut, bIncludeObjects);
+
     return bDone;
 }
 
@@ -1450,7 +1477,9 @@ bool ScViewFunc::PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
                 rProtectedChartRangesVector, aExcludedChartNames, bSameDoc );
         }
     }
-
+    OUString aStartAddress =  aMarkRange.aStart.GetColRowString();
+    OUString aEndAddress = aMarkRange.aEnd.GetColRowString();
+    collectUIInformation({{"RANGE", aStartAddress + ":" + aEndAddress}},"PASTE");
     return true;
 }
 
@@ -2009,3 +2038,4 @@ void ScViewFunc::DataFormPutData( SCROW nCurrentRow ,
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+
