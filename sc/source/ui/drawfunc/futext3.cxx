@@ -157,6 +157,11 @@ void FuText::StopEditMode()
             if( bNewNote && bDeleteNote )
             {
                 pUndoMgr->RemoveLastUndoAction();
+
+                // Make sure the former area of the note anchor is invalidated.
+                ScRangeList aRangeList(aNotePos);
+                ScMarkData aMarkData(aRangeList);
+                rViewShell.UpdateSelectionArea(aMarkData);
             }
             else if( bNewNote || bDeleteNote )
             {
