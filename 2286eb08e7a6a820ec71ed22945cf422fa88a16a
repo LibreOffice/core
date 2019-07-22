@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_6fdc4e74",
+        "filename": "odk/examples/java/Inspector/Inspector.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2019-07-22T01:50:12Z",
+      "side": 1,
+      "message": "This change is wrong. “SDK” is an initialism, which means it’s pronounced “ess dee kay”, which starts with a vowel sound, therefore needing “an” instead of “a”.\n\nNow that you have commit rights, please be careful!",
+      "revId": "2286eb08e7a6a820ec71ed22945cf422fa88a16a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
