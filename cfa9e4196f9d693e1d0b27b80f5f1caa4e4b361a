@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_4fc62a6a",
+        "filename": "chart2/source/tools/InternalDataProvider.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 639,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2019-07-22T07:48:05Z",
+      "side": 1,
+      "message": "input can contain \"}\", so it\u0027s better to use ~ (indexof(\"}{\") or endswith(\"}\"))",
+      "range": {
+        "startLine": 639,
+        "startChar": 83,
+        "endLine": 639,
+        "endChar": 136
+      },
+      "revId": "cfa9e4196f9d693e1d0b27b80f5f1caa4e4b361a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
