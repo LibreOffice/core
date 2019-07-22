@@ -189,20 +189,7 @@ LOKTransferable::LOKTransferable(const size_t nInCount, const char** pInMimeType
     m_aFlavors = css::uno::Sequence<css::datatransfer::DataFlavor>(nInCount);
     for (size_t i = 0; i < nInCount; ++i)
     {
-        OUString aMimeType = OUString::fromUtf8(pInMimeTypes[i]);
-
-        // cf. sot/source/base/exchange.cxx for these two exceptional types.
-        if (aMimeType.startsWith("text/plain"))
-        {
-            aMimeType = "text/plain;charset=utf-16";
-            m_aFlavors[i].DataType = cppu::UnoType<OUString>::get();
-        }
-        else if (aMimeType == "application/x-libreoffice-tsvc")
-            m_aFlavors[i].DataType = cppu::UnoType<OUString>::get();
-        else
-            m_aFlavors[i].DataType = cppu::UnoType<uno::Sequence<sal_Int8>>::get();
-        m_aFlavors[i].MimeType = aMimeType;
-        m_aFlavors[i].HumanPresentableName = aMimeType;
+        initFlavourFromMime(m_aFlavors[i], OUString::fromUtf8(pInMimeTypes[i]));
 
         uno::Any aContent;
         if (m_aFlavors[i].DataType == cppu::UnoType<OUString>::get())
