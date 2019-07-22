@@ -34,6 +34,24 @@
       "revId": "a0c3c9885e853a48127cb1b56c10983f5844bfe8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_6a275c14",
+        "filename": "include/svx/DiagramDataInterface.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2019-07-22T15:40:19Z",
+      "side": 1,
+      "message": "Ah OK, then leave that as is. If nothing else, later you can change that to some debug dumping, called from SdrObject::dumpAsXml().",
+      "parentUuid": "bf659307_aa0d7491",
+      "revId": "a0c3c9885e853a48127cb1b56c10983f5844bfe8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
