@@ -234,6 +234,8 @@ void SwVbaTableHelper::SetColWidth( sal_Int32 _width, sal_Int32 nCol, sal_Int32 
 {
     double dAbsWidth = Millimeter::getInHundredthsOfOneMillimeter( _width );
     sal_Int32 nTableWidth = getTableWidth( );
+    if (!nTableWidth)
+        throw uno::RuntimeException();
     sal_Int32 nNewWidth = dAbsWidth/nTableWidth * UNO_TABLE_COLUMN_SUM;
 
     SwTableBox* pStart = GetTabBox( nCol, nRow );
