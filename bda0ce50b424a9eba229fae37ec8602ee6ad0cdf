@@ -33,6 +33,24 @@
       "revId": "bda0ce50b424a9eba229fae37ec8602ee6ad0cdf",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_ead12c59",
+        "filename": "sw/source/core/undo/untblk.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-07-22T12:32:42Z",
+      "side": 1,
+      "message": "we even have SwNode::m_pAnchoredFlys nowadays but i didn\u0027t think of that, was just moving the existing code out into a function...",
+      "parentUuid": "bf659307_ca822850",
+      "revId": "bda0ce50b424a9eba229fae37ec8602ee6ad0cdf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
