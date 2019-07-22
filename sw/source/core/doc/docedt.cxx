@@ -413,7 +413,8 @@ bool sw_JoinText( SwPaM& rPam, bool bJoinPrev )
             }
             // delete the Node, at last!
             SwNode::Merge const eOldMergeFlag(pOldTextNd->GetRedlineMergeFlag());
-            if (eOldMergeFlag == SwNode::Merge::First)
+            if (eOldMergeFlag == SwNode::Merge::First
+                && !pTextNd->IsCreateFrameWhenHidingRedlines())
             {
                 sw::MoveDeletedPrevFrames(*pOldTextNd, *pTextNd);
             }
