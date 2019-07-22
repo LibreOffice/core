@@ -2145,6 +2145,7 @@ void SwXNumberingRules::setPropertyValue( const OUString& rPropertyName, const A
 
     if(pDocRule)
     {
+        assert(m_pDocShell);
         m_pDocShell->GetDoc()->SetOutlineNumRule(*pDocRule);
         pDocRule.reset();
     }
