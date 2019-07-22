@@ -491,7 +491,6 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
                 if (oox::drawingml::DrawingML::IsDiagram(xShape))
                 {
                     mpDrawView->UnmarkAll();
-                    pObj->getChildrenOfSdrObject()->ClearSdrObjList();
 
                     css::uno::Reference<css::uno::XComponentContext> xContext
                         = comphelper::getProcessComponentContext();
@@ -499,7 +498,7 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
                         new oox::shape::ShapeFilterBase(xContext));
                     xFilter->setTargetDocument(GetDocSh()->GetModel());
                     xFilter->importTheme();
-                    oox::drawingml::reloadDiagram(xShape, *xFilter);
+                    oox::drawingml::reloadDiagram(pObj, *xFilter);
 
                     mpDrawView->MarkObj(pObj, mpDrawView->GetSdrPageView());
                 }
