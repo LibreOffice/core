@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "bf659307_d7a3ba4e",
+        "filename": "oox/source/drawingml/chart/datasourcecontext.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 256,
+      "author": {
+        "id": 1001901
+      },
+      "writtenOn": "2019-07-22T06:55:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bf659307_37ac768b",
+      "range": {
+        "startLine": 252,
+        "startChar": 12,
+        "endLine": 256,
+        "endChar": 13
+      },
+      "revId": "2f368e689d6091e94d09d40f75fc09fdee014716",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bf659307_17bdb2b6",
         "filename": "oox/source/drawingml/chart/datasourcemodel.cxx",
         "patchSetId": 1
@@ -60,6 +84,30 @@
       "side": 1,
       "message": "(it depends from the OOXML scheme, ie. where is the first lvl, so maybe it\u0027s ok or more simple to use zero)",
       "parentUuid": "bf659307_17bdb2b6",
+      "range": {
+        "startLine": 28,
+        "startChar": 17,
+        "endLine": 28,
+        "endChar": 19
+      },
+      "revId": "2f368e689d6091e94d09d40f75fc09fdee014716",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_b79e4605",
+        "filename": "oox/source/drawingml/chart/datasourcemodel.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1001901
+      },
+      "writtenOn": "2019-07-22T06:55:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bf659307_97c8e255",
       "range": {
         "startLine": 28,
         "startChar": 17,
