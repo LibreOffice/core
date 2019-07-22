@@ -33,8 +33,8 @@ Sub SetBasicReadOnlyFlag(bReadOnly as Boolean)
 Dim i as Integer
 Dim LibName as String
 Dim BasicLibNames() as String
-	BasicLibNames() = BasicLibraries.ElementNames()
-	For i = 0 To Ubound(BasicLibNames())
+	BasicLibNames = BasicLibraries.ElementNames
+	For i = 0 To Ubound(BasicLibNames)
 		LibName = BasicLibNames(i)
 		If LibName &lt;&gt; &quot;Standard&quot; Then
 			BasicLibraries.SetLibraryReadOnly(LibName, bReadOnly)
@@ -113,7 +113,7 @@ Sub ShowArray(LocArray())
 Dim i as integer
 Dim msgstring
 	msgstring = &quot;&quot;
-	For i = Lbound(LocArray()) to Ubound(LocArray())
+	For i = Lbound(LocArray) to Ubound(LocArray)
 		msgstring = msgstring + LocArray(i) + chr(13)
 	Next
 	Msgbox msgstring
@@ -144,7 +144,7 @@ Dim i as Integer
 Dim ShowString as String
 	ShowString = &quot;&quot;
 	On Local Error Resume Next
-	For i = 0 To Ubound(Pair())
+	For i = 0 To Ubound(Pair)
 		ShowString = ShowString &amp; Pair(i).Name &amp; &quot; = &quot;
 		ShowString = ShowString &amp; Pair(i).Value &amp; chr(13)
 	Next i
@@ -158,7 +158,7 @@ Sub ShowElementNames(oLocElements() as Object, Optional sFiltername as String)
 Dim i as Integer
 Dim NameString as String
 	NameString = &quot;&quot;
-	For i = 0 To Ubound(oLocElements())
+	For i = 0 To Ubound(oLocElements)
 		If Not IsMissIng(sFilterName) Then
 			If Instr(1, oLocElements(i), sFilterName) Then
 				NameString = NameString &amp; oLocElements(i) &amp; chr(13)
