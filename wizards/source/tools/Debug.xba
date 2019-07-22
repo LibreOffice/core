@@ -144,7 +144,7 @@ Dim i as Integer
 Dim ShowString as String
 	ShowString = &quot;&quot;
 	On Local Error Resume Next
-	For i = 0 To Ubound(Pair())
+	For i = 0 To Ubound(Pair)
 		ShowString = ShowString &amp; Pair(i).Name &amp; &quot; = &quot;
 		ShowString = ShowString &amp; Pair(i).Value &amp; chr(13)
 	Next i
