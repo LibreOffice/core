@@ -57,7 +57,6 @@ public class TypeInspector
             ArrayList<Integer> aPrecisionVector = new ArrayList<Integer>();
             ArrayList<Integer> aMinScaleVector = new ArrayList<Integer>();
             ArrayList<Integer> aMaxScaleVector = new ArrayList<Integer>();
-            ArrayList<Integer> aSearchableVector = new ArrayList<Integer>();
             XRow xRow = UnoRuntime.queryInterface(XRow.class, _xResultSet);
             while (_xResultSet.next())
             {
@@ -65,7 +64,6 @@ public class TypeInspector
                 aTypeVector.add(Integer.valueOf(xRow.getShort(2)));
                 aPrecisionVector.add(Integer.valueOf(xRow.getInt(3)));
                 aNullableVector.add(Integer.valueOf(xRow.getShort(7)));
-                aSearchableVector.add(Integer.valueOf(xRow.getShort(9)));
                 aAutoIncrementVector.add(Boolean.valueOf(xRow.getBoolean(12)));
                 aMinScaleVector.add(Integer.valueOf(xRow.getShort(14)));
                 aMaxScaleVector.add(Integer.valueOf(xRow.getShort(15)));
@@ -75,7 +73,6 @@ public class TypeInspector
             aTypeNameVector.toArray(sDataTypeNames);
             nDataTypeInfos = JavaTools.IntegerTointList(aTypeVector);
             nNullableInfos = JavaTools.IntegerTointList(aNullableVector);
-            JavaTools.IntegerTointList(aSearchableVector);
             bisAutoIncrementableInfos = JavaTools.BooleanTobooleanList(aAutoIncrementVector);
             nPrecisionInfos = JavaTools.IntegerTointList(aPrecisionVector);
             nMinScaleInfos = JavaTools.IntegerTointList(aMinScaleVector);
