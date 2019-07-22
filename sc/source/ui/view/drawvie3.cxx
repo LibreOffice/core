@@ -101,10 +101,12 @@ void ScDrawView::SetCellAnchored(bool bResizeWithCell)
         EndUndo();
 
         if ( pViewData )
+        {
             pViewData->GetDocShell()->SetDrawModified();
 
-        // Set the anchor object.
-        AddCustomHdl();
+            // Set the anchor object.
+            AddCustomHdl();
+        }
     }
 }
 
