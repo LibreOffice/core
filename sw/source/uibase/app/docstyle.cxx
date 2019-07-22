@@ -451,9 +451,9 @@ void SwStyleSheetIterator::SwPoolFormatList::Append( char cChar, const OUString&
 // UI-sided implementation of StyleSheets
 // uses the Core-Engine
 SwDocStyleSheet::SwDocStyleSheet(   SwDoc&                rDocument,
-                                    SwDocStyleSheetPool*  _rPool) :
+                                    SwDocStyleSheetPool&  rPool) :
 
-    SfxStyleSheetBase( OUString(), _rPool, SfxStyleFamily::Char, SfxStyleSearchBits::Auto ),
+    SfxStyleSheetBase( OUString(), &rPool, SfxStyleFamily::Char, SfxStyleSearchBits::Auto ),
     pCharFormat(nullptr),
     pColl(nullptr),
     pFrameFormat(nullptr),
@@ -2394,14 +2394,14 @@ void  SwDocStyleSheet::SetHelpId( const OUString& r, sal_uLong nId )
 
 // methods for DocStyleSheetPool
 SwDocStyleSheetPool::SwDocStyleSheetPool( SwDoc& rDocument, bool bOrg )
-: SfxStyleSheetBasePool( rDocument.GetAttrPool() )
-, mxStyleSheet( new SwDocStyleSheet( rDocument, this ) )
-, rDoc( rDocument )
+    : SfxStyleSheetBasePool(rDocument.GetAttrPool())
+    , mxStyleSheet(new SwDocStyleSheet(rDocument, *this))
+    , rDoc(rDocument)
 {
     bOrganizer = bOrg;
 }
 
- SwDocStyleSheetPool::~SwDocStyleSheetPool()
+SwDocStyleSheetPool::~SwDocStyleSheetPool()
 {
 }
 
@@ -2435,7 +2435,7 @@ SfxStyleSheetBase*   SwDocStyleSheetPool::Create( const OUString &,
 
 std::unique_ptr<SfxStyleSheetIterator> SwDocStyleSheetPool::CreateIterator( SfxStyleFamily eFam, SfxStyleSearchBits _nMask )
 {
-    return std::make_unique<SwStyleSheetIterator>( this, eFam, _nMask );
+    return std::make_unique<SwStyleSheetIterator>(*this, eFam, _nMask);
 }
 
 void SwDocStyleSheetPool::dispose()
@@ -2640,15 +2640,15 @@ SfxStyleSheetBase* SwDocStyleSheetPool::Find( const OUString& rName,
     return bFnd ? mxStyleSheet.get() : nullptr;
 }
 
-SwStyleSheetIterator::SwStyleSheetIterator( SwDocStyleSheetPool* pBase,
+SwStyleSheetIterator::SwStyleSheetIterator(SwDocStyleSheetPool& rBase,
                                 SfxStyleFamily eFam, SfxStyleSearchBits n )
-    : SfxStyleSheetIterator( pBase, eFam, n ),
-    mxIterSheet( new SwDocStyleSheet( pBase->GetDoc(), pBase ) ),
-    mxStyleSheet( new SwDocStyleSheet( pBase->GetDoc(), pBase ) )
+    : SfxStyleSheetIterator(&rBase, eFam, n)
+    , mxIterSheet(new SwDocStyleSheet(rBase.GetDoc(), rBase))
+    , mxStyleSheet(new SwDocStyleSheet(rBase.GetDoc(), rBase))
 {
     bFirstCalled = false;
     nLastPos = 0;
-    StartListening( *pBase );
+    StartListening(rBase);
 }
 
 SwStyleSheetIterator::~SwStyleSheetIterator()

@@ -78,7 +78,7 @@ protected:
 
 public:
     SwDocStyleSheet( SwDoc&                 rDoc,
-                     SwDocStyleSheetPool*   pPool);
+                     SwDocStyleSheetPool&   rPool);
 
     SwDocStyleSheet( const SwDocStyleSheet& );
 
@@ -174,8 +174,8 @@ class SwStyleSheetIterator : public SfxStyleSheetIterator, public SfxListener
                                         char        cType);
 
 public:
-    SwStyleSheetIterator( SwDocStyleSheetPool* pBase,
-                          SfxStyleFamily eFam, SfxStyleSearchBits n );
+    SwStyleSheetIterator(SwDocStyleSheetPool& rBase,
+                         SfxStyleFamily eFam, SfxStyleSearchBits n);
     virtual ~SwStyleSheetIterator() override;
 
     virtual sal_uInt16 Count() override;
