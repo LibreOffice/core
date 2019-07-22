@@ -3394,11 +3394,12 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
             m_pImpl->m_pSdtHelper->getLocale().truncate();
             return;
         }
-        if((m_pImpl->hasTableManager() && m_pImpl->getTableManager().isInTable()) ||
-            m_pImpl->m_nTableDepth > 0)
+        bool bIsInTable = (m_pImpl->hasTableManager() && m_pImpl->getTableManager().isInTable()) ||
+                          (m_pImpl->m_nTableDepth > 0);
+        if(bIsInTable || m_pImpl->IsInShape())
         {
-            // Inside a table we need to import date field earlier
-            m_pImpl->m_pSdtHelper->createDateContentControl(true);
+            // Inside an object we need to import date field earlier
+            m_pImpl->m_pSdtHelper->createDateContentControl(bIsInTable);
         }
     }
 

@@ -705,6 +705,11 @@ DECLARE_OOXMLEXPORT_TEST( testTdf66401, "tdf66401.docx")
     }
 }
 
+DECLARE_OOXMLEXPORT_TEST( testDateFieldInShape, "date_field_in_shape.docx" )
+{
+    // This was crashed on export.
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
