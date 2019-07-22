@@ -150,14 +150,11 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
             nParam = NS_ooxml::LN_Value_ST_TabTlc_hyphen;
             break;
         case RTF_TLUL:
+        case RTF_TLTH:
             nParam = NS_ooxml::LN_Value_ST_TabTlc_underscore;
             break;
-        case RTF_TLTH:
-            nParam = NS_ooxml::LN_Value_ST_TabTlc_hyphen;
-            break; // thick line is not supported by dmapper, this is just a hack
         case RTF_TLEQ:
-            nParam = NS_ooxml::LN_Value_ST_TabTlc_none;
-            break; // equal sign isn't, either
+            break;
         default:
             break;
     }

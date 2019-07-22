@@ -105,6 +105,29 @@ DECLARE_RTFEXPORT_TEST(testCjklist34, "cjklist34.rtf")
     CPPUNIT_ASSERT_EQUAL(style::NumberingType::NUMBER_UPPER_ZH_TW, numFormat);
 }
 
+DECLARE_RTFIMPORT_TEST(testTabStopFillChars, "tab-stop-fill-chars.rtf")
+{
+    // tlmdot
+    auto aTabstops = getProperty<uno::Sequence<style::TabStop>>(getParagraph(1), "ParaTabStops");
+    CPPUNIT_ASSERT(aTabstops.hasElements());
+    CPPUNIT_ASSERT_EQUAL(u'·', aTabstops[0].FillChar);
+
+    // tlhyph
+    aTabstops = getProperty<uno::Sequence<style::TabStop>>(getParagraph(2), "ParaTabStops");
+    CPPUNIT_ASSERT(aTabstops.hasElements());
+    CPPUNIT_ASSERT_EQUAL(u'-', aTabstops[0].FillChar);
+
+    // tlth
+    aTabstops = getProperty<uno::Sequence<style::TabStop>>(getParagraph(3), "ParaTabStops");
+    CPPUNIT_ASSERT(aTabstops.hasElements());
+    CPPUNIT_ASSERT_EQUAL(u'_', aTabstops[0].FillChar);
+
+    // tleq
+    aTabstops = getProperty<uno::Sequence<style::TabStop>>(getParagraph(4), "ParaTabStops");
+    CPPUNIT_ASSERT(aTabstops.hasElements());
+    CPPUNIT_ASSERT_EQUAL(u' ', aTabstops[0].FillChar);
+}
+
 DECLARE_RTFEXPORT_TEST(testCjklist38, "cjklist38.rtf")
 {
     sal_Int16 numFormat = getNumberingTypeOfParagraph(1);
