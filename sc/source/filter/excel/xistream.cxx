@@ -835,8 +835,6 @@ OUString XclImpStream::ReadRawUniString( sal_uInt16 nChars, bool b16Bit )
     sal_uInt16 nCharsLeft = nChars;
     sal_uInt16 nReadSize;
 
-    std::unique_ptr<sal_Unicode[]> pcBuffer(new sal_Unicode[ nCharsLeft + 1 ]);
-
     while( IsValid() && (nCharsLeft > 0) )
     {
         if( b16Bit )
@@ -847,6 +845,8 @@ OUString XclImpStream::ReadRawUniString( sal_uInt16 nChars, bool b16Bit )
         }
         else
             nReadSize = GetMaxRawReadSize( nCharsLeft );
+
+        std::unique_ptr<sal_Unicode[]> pcBuffer(new sal_Unicode[nReadSize + 1]);
 
         sal_Unicode* pcUniChar = pcBuffer.get();
         sal_Unicode* pcEndChar = pcBuffer.get() + nReadSize;
