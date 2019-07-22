@@ -51,8 +51,8 @@ void LOKClipboardFactory::releaseClipboardForView(int nViewId)
         auto it = gClipboards.get()->find(nViewId);
         if (it != gClipboards.get()->end())
         {
+            SAL_INFO("lok", "Releasing clip: " << it->second.get() << " for destroyed " << nViewId);
             gClipboards.get()->erase(it);
-            SAL_INFO("lok", "Released clip: " << it->second.get() << " for destroyed " << nViewId);
         }
     }
 }
