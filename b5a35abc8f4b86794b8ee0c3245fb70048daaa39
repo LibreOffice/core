@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_2abf24fc",
+        "filename": "chart2/qa/extras/chart2import.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1542,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2019-07-22T13:01:51Z",
+      "side": 1,
+      "message": "Is it possible, that instead of extension of InternalDataProvider, it\u0027s enough to call createDataSequenceByValueArray(\"categories\"...) multiple times for chart with complex categories?",
+      "range": {
+        "startLine": 1539,
+        "startChar": 2,
+        "endLine": 1542,
+        "endChar": 74
+      },
+      "revId": "b5a35abc8f4b86794b8ee0c3245fb70048daaa39",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
