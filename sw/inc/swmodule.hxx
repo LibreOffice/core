@@ -23,6 +23,7 @@
 
 #include <cstddef>
 
+#include <o3tl/deleter.hxx>
 #include <tools/fldunit.hxx>
 #include <svl/lstner.hxx>
 #include <unotools/options.hxx>
@@ -77,8 +78,8 @@ class SW_DLLPUBLIC SwModule final : public SfxModule, public SfxListener, public
 
     // ConfigItems
     std::unique_ptr<SwModuleOptions>     m_pModuleConfig;
-    std::unique_ptr<SwMasterUsrPref>     m_pUsrPref;
-    std::unique_ptr<SwMasterUsrPref>     m_pWebUsrPref;
+    std::unique_ptr<SwMasterUsrPref, o3tl::default_delete<SwMasterUsrPref>> m_pUsrPref;
+    std::unique_ptr<SwMasterUsrPref, o3tl::default_delete<SwMasterUsrPref>> m_pWebUsrPref;
     std::unique_ptr<SwPrintOptions>      m_pPrintOptions;
     std::unique_ptr<SwPrintOptions>      m_pWebPrintOptions;
     std::unique_ptr<SwChapterNumRules>   m_pChapterNumRules;
