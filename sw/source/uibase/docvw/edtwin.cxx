@@ -3642,7 +3642,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                         // position or on position after field depending on which
                         // half of the field was clicked on.
                         SwTextAttr const*const pTextField(aFieldAtPos.pFndTextAttr);
-                        if (rSh.GetCurrentShellCursor().GetPoint()->nContent
+                        if (pTextField && rSh.GetCurrentShellCursor().GetPoint()->nContent
                                 .GetIndex() != pTextField->GetStart())
                         {
                             assert(rSh.GetCurrentShellCursor().GetPoint()->nContent
