@@ -53,21 +53,10 @@ class Graphic;
 class VCL_DLLPUBLIC GfxLink
 {
 private:
-
-    struct SwapOutData
-    {
-        SwapOutData(const OUString &aURL);
-        ~SwapOutData();
-
-        OUString const maURL; // File is removed in the destructor
-
-    };
-
     GfxLinkType     meType;
     sal_uInt32      mnUserId;
 
     mutable std::shared_ptr<sal_uInt8> mpSwapInData;
-    mutable std::shared_ptr<SwapOutData> mpSwapOutData;
 
     sal_uInt32      mnSwapInDataSize;
     MapMode         maPrefMapMode;
@@ -105,8 +94,6 @@ public:
     bool                LoadNative( Graphic& rGraphic );
 
     bool                ExportNative( SvStream& rOStream ) const;
-
-    bool                IsSwappedOut() const { return( bool(mpSwapOutData) ); }
 
     bool                IsEMF() const; // WMF & EMF stored under the same type (NativeWmf)
 public:
