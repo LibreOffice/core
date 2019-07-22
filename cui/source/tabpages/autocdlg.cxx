@@ -171,9 +171,17 @@ IMPL_LINK_NOARG(OfaAutoCorrDlg, SelectLanguageHdl, weld::ComboBox&, void)
     {
         OString sPageId = GetCurPageId();
         if (sPageId == "replace")
-            static_cast<OfaAutocorrReplacePage*>(GetTabPage(sPageId))->SetLanguage(eNewLang);
+        {
+            OfaAutocorrReplacePage* pPage = static_cast<OfaAutocorrReplacePage*>(GetTabPage(sPageId));
+            assert(pPage);
+            pPage->SetLanguage(eNewLang);
+        }
         else if (sPageId == "exceptions")
-            static_cast<OfaAutocorrExceptPage*>(GetTabPage(sPageId))->SetLanguage(eNewLang);
+        {
+            OfaAutocorrExceptPage* pPage = static_cast<OfaAutocorrExceptPage*>(GetTabPage(sPageId));
+            assert(pPage);
+            pPage->SetLanguage(eNewLang);
+        }
     }
 }
 
