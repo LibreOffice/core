@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_2ffdf639",
+        "filename": "xmloff/source/text/txtflde.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1782,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-07-22T10:29:45Z",
+      "side": 1,
+      "message": "a check is missing that the export format is ODF extended.\n\n        SvtSaveOptions::ODFSaneDefaultVersion eVersion \u003d rExport.getSaneDefaultVersion();\n        if (eVersion \u003e SvtSaveOptions::ODFSVER_012)",
+      "revId": "2b867ab35e3a645a2884f4df18495d5228fd5780",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_cfa31a4f",
+        "filename": "xmloff/source/text/txtfldi.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 3334,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-07-22T10:29:45Z",
+      "side": 1,
+      "message": "why the DC namespace? does Dublin Core have anything to say about resolving comments in documents? i\u0027d think OFFICE is more appropriate?",
+      "revId": "2b867ab35e3a645a2884f4df18495d5228fd5780",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_8f00c236",
+        "filename": "xmloff/source/text/txtfldi.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 3479,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-07-22T10:29:45Z",
+      "side": 1,
+      "message": "this looks much like a boolean right now, or are you going to add more values?\n\n... and if this is a boolean, then it would be better to have it as an attribute instead of an element.",
+      "revId": "2b867ab35e3a645a2884f4df18495d5228fd5780",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
