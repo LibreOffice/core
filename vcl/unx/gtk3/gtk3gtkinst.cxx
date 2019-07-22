@@ -3180,6 +3180,8 @@ public:
         m_xDialogController = rDialogController;
         m_aFunc = func;
 
+        if (get_modal())
+            m_aDialogRun.inc_modal_count();
         show();
 
         m_nResponseSignalId = g_signal_connect(m_pDialog, "response", G_CALLBACK(signalAsyncResponse), this);
@@ -3198,6 +3200,8 @@ public:
         m_xRunAsyncSelf = rxSelf;
         m_aFunc = func;
 
+        if (get_modal())
+            m_aDialogRun.inc_modal_count();
         show();
 
         m_nResponseSignalId = g_signal_connect(m_pDialog, "response", G_CALLBACK(signalAsyncResponse), this);
@@ -4847,6 +4851,8 @@ void GtkInstanceDialog::asyncresponse(gint ret)
         return;
     }
 
+    if (get_modal())
+        m_aDialogRun.dec_modal_count();
     hide();
     m_aFunc(GtkToVcl(ret));
     m_aFunc = nullptr;
