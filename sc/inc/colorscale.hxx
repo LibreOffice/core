@@ -43,11 +43,11 @@ class SC_DLLPUBLIC ScColorScaleEntry
 {
 private:
     double mnVal;
-    Color maColor;
     std::unique_ptr<ScFormulaCell> mpCell;
     std::unique_ptr<ScFormulaListener> mpListener;
-    ScColorScaleEntryType meType;
     ScConditionalFormat* mpFormat;
+    Color maColor;
+    ScColorScaleEntryType meType;
 
     void setListener();
 

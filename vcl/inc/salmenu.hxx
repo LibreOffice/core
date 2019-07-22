@@ -29,12 +29,12 @@ class SalFrame;
 
 struct SalItemParams
 {
-    sal_uInt16      nId;                    // item Id
-    MenuItemType    eType;                  // MenuItem-Type
-    MenuItemBits    nBits;                  // MenuItem-Bits
+    Image           aImage;                 // Image
     VclPtr<Menu>    pMenu;                  // Pointer to Menu
     OUString        aText;                  // Menu-Text
-    Image           aImage;                 // Image
+    MenuItemType    eType;                  // MenuItem-Type
+    sal_uInt16      nId;                    // item Id
+    MenuItemBits    nBits;                  // MenuItem-Bits
 };
 
 struct SalMenuButtonItem

@@ -71,11 +71,11 @@ typedef std::vector< std::shared_ptr<NumSettings_Impl> > NumSettingsArr_Impl;
 class  SVX_DLLPUBLIC BulletsSettings
 {
 public:
-    bool            bIsCustomized;
+    vcl::Font       aFont;
     OUString        sDescription;
     sal_Unicode     cBulletChar;
-    vcl::Font       aFont;
-    BulletsSettings() : bIsCustomized(false), cBulletChar(0) {}
+    bool            bIsCustomized;
+    BulletsSettings() : cBulletChar(0), bIsCustomized(false)  {}
 };
 
 

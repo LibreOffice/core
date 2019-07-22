@@ -114,12 +114,12 @@ typedef std::vector< std::unique_ptr<ScDPLabelData> > ScDPLabelDataVector;
 
 struct ScPivotField
 {
-    SCCOL       nCol;          ///< 0-based dimension index (not source column index)
+    css::sheet::DataPilotFieldReference maFieldRef;
+
     long        mnOriginalDim; ///< >= 0 for duplicated field.
     PivotFunc   nFuncMask;
+    SCCOL       nCol;          ///< 0-based dimension index (not source column index)
     sal_uInt8   mnDupCount;
-
-    css::sheet::DataPilotFieldReference maFieldRef;
 
     explicit ScPivotField( SCCOL nNewCol = 0 );
     ScPivotField( const ScPivotField& r );
@@ -156,12 +156,12 @@ struct ScPivotParam
 
 struct ScPivotFuncData
 {
-    SCCOL      mnCol;
+    css::sheet::DataPilotFieldReference maFieldRef;
+
     long       mnOriginalDim;
     PivotFunc  mnFuncMask;
+    SCCOL      mnCol;
     sal_uInt8  mnDupCount;
-
-    css::sheet::DataPilotFieldReference maFieldRef;
 
     explicit ScPivotFuncData( SCCOL nCol, PivotFunc nFuncMask );
 

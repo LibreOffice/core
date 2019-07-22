@@ -38,11 +38,11 @@ class ThreadedDeflater final
     class Task;
     // Note: All this should be lock-less. Each task writes only to its part
     // of the data, flags are atomic.
+    std::vector<std::vector<sal_Int8>> outBuffers;
+    std::shared_ptr<comphelper::ThreadTaskTag> threadTaskTag;
     css::uno::Sequence<sal_Int8> inBuffer;
     int zlibLevel;
-    std::shared_ptr<comphelper::ThreadTaskTag> threadTaskTag;
     std::atomic<int> pendingTasksCount;
-    std::vector<std::vector<sal_Int8>> outBuffers;
 
 public:
     // Unlike with Deflater class, bNoWrap is always true.

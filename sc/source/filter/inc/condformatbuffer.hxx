@@ -235,17 +235,15 @@ private:
 
 struct ExCfRuleModel
 {
-    ExCfRuleModel() : mbGradient( false ), mnAxisColor( UNSIGNED_RGB_TRANSPARENT ), mnNegativeColor( UNSIGNED_RGB_TRANSPARENT ), mbIsLower( true ) {}
-    // DataBar
-    bool mbGradient;
-    OUString maAxisPosition;
+    ExCfRuleModel() : mnAxisColor( UNSIGNED_RGB_TRANSPARENT ), mnNegativeColor( UNSIGNED_RGB_TRANSPARENT ), mbGradient( false ), mbIsLower( true ) {}
     // AxisColor
     ::Color mnAxisColor;
     // NegativeFillColor
     ::Color mnNegativeColor;
-    // Cfvo
-    bool mbIsLower;
-    OUString maColorScaleType;
+    OUString maAxisPosition; // DataBar
+    OUString maColorScaleType; // Cfvo
+    bool mbGradient; // DataBar
+    bool mbIsLower; // Cfvo
 };
 
 class ExtCfDataBarRule : public WorksheetHelper
