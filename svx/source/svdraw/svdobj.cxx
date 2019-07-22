@@ -210,6 +210,8 @@ struct SdrObject::Impl
     boost::optional<double> mnRelativeHeight;
     sal_Int16               meRelativeHeightRelation;
 
+    std::shared_ptr<DiagramDataInterface> mpDiagramData;
+
     Impl() :
         meRelativeWidthRelation(text::RelOrientation::PAGE_FRAME),
         meRelativeHeightRelation(text::RelOrientation::PAGE_FRAME) {}
@@ -556,6 +558,16 @@ const double* SdrObject::GetRelativeHeight( ) const
 sal_Int16 SdrObject::GetRelativeHeightRelation() const
 {
     return mpImpl->meRelativeHeightRelation;
+}
+
+void SdrObject::SetDiagramData(std::shared_ptr<DiagramDataInterface> pDiagramData)
+{
+    mpImpl->mpDiagramData = pDiagramData;
+}
+
+std::shared_ptr<DiagramDataInterface> SdrObject::GetDiagramData() const
+{
+    return mpImpl->mpDiagramData;
 }
 
 SfxItemPool& SdrObject::GetObjectItemPool() const
