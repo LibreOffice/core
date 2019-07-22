@@ -1,11 +1,3 @@
-avmedia/source/gstreamer/gstplayer.cxx:416
-    int wrap_element_query_position(struct _GstElement *,GstFormat,long *)
-    GstFormat format
-    3
-avmedia/source/gstreamer/gstplayer.cxx:422
-    int wrap_element_query_duration(struct _GstElement *,GstFormat,long *)
-    GstFormat format
-    3
 basctl/source/inc/dlged.hxx:77
     void basctl::DlgEdHint::DlgEdHint(enum basctl::DlgEdHint::Kind,class basctl::DlgEdObj *)
     enum basctl::DlgEdHint::Kind 

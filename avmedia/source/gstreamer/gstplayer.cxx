@@ -412,18 +412,6 @@ void Player::processMessage( GstMessage *message )
     }
 }
 
-
-static gboolean wrap_element_query_position (GstElement *element, GstFormat format, gint64 *cur)
-{
-    return gst_element_query_position( element, format, cur );
-}
-
-
-static gboolean wrap_element_query_duration (GstElement *element, GstFormat format, gint64 *duration)
-{
-    return gst_element_query_duration( element, format, duration );
-}
-
 #define LCL_WAYLAND_DISPLAY_HANDLE_CONTEXT_TYPE "GstWaylandDisplayHandleContextType"
 
 static gboolean lcl_is_wayland_display_handle_need_context_message(GstMessage* msg)
@@ -495,7 +483,7 @@ GstBusSyncReply Player::processSyncMessage( GstMessage *message )
     if( GST_MESSAGE_TYPE( message ) == GST_MESSAGE_ASYNC_DONE ) {
         if( mnDuration == 0) {
             gint64 gst_duration = 0;
-            if( wrap_element_query_duration( mpPlaybin, GST_FORMAT_TIME, &gst_duration) )
+            if( gst_element_query_duration( mpPlaybin, GST_FORMAT_TIME, &gst_duration) )
                 mnDuration = gst_duration;
         }
         if( mnWidth == 0 ) {
@@ -712,7 +700,7 @@ double SAL_CALL Player::getMediaTime()
     if( mpPlaybin ) {
         // get current position in the stream
         gint64 gst_position;
-        if( wrap_element_query_position( mpPlaybin, GST_FORMAT_TIME, &gst_position ) )
+        if( gst_element_query_position( mpPlaybin, GST_FORMAT_TIME, &gst_position ) )
             position = gst_position / GST_SECOND;
     }
 
