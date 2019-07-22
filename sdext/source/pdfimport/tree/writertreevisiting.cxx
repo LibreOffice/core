@@ -694,8 +694,8 @@ void WriterXmlOptimizer::checkHeaderAndFooter( PageElement& rElem )
     if (rit == rElem.Children.rend())
         return;
 
-    ParagraphElement* pPara = dynamic_cast<ParagraphElement*>(rit->get());
-    if( !(pPara->y > rElem.h*0.85 && pPara->isSingleLined( m_rProcessor )) )
+    ParagraphElement& rPara = dynamic_cast<ParagraphElement&>(*rit->get());
+    if( !(rPara.y > rElem.h*0.85 && rPara.isSingleLined( m_rProcessor )) )
         return;
 
     std::list< std::unique_ptr<Element> >::reverse_iterator next_it = rit;
@@ -704,10 +704,10 @@ void WriterXmlOptimizer::checkHeaderAndFooter( PageElement& rElem )
     {
         pNextPara = dynamic_cast<ParagraphElement*>(next_it->get());
     }
-    if( pNextPara && pNextPara->y < pPara->y-pPara->h*2 )
+    if( pNextPara && pNextPara->y < rPara.y-rPara.h*2 )
     {
         rElem.FooterElement = std::move(*rit);
-        pPara->Parent = nullptr;
+        rPara.Parent = nullptr;
         rElem.Children.erase( std::next(rit).base() );
     }
 }
