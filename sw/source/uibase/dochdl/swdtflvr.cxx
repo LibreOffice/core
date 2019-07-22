@@ -164,7 +164,7 @@ using namespace ::com::sun::star::datatransfer;
 
 #define DDE_TXT_ENCODING    osl_getThreadTextEncoding()
 
-class SwTrnsfrDdeLink : public ::sfx2::SvBaseLink
+class SwTransferDdeLink : public ::sfx2::SvBaseLink
 {
     OUString sName;
     ::sfx2::SvLinkSourceRef refObj;
@@ -179,10 +179,10 @@ class SwTrnsfrDdeLink : public ::sfx2::SvBaseLink
     using sfx2::SvBaseLink::Disconnect;
 
 protected:
-    virtual ~SwTrnsfrDdeLink() override;
+    virtual ~SwTransferDdeLink() override;
 
 public:
-    SwTrnsfrDdeLink( SwTransferable& rTrans, SwWrtShell& rSh );
+    SwTransferDdeLink( SwTransferable& rTrans, SwWrtShell& rSh );
 
     virtual ::sfx2::SvBaseLink::UpdateResult DataChanged(
         const OUString& rMimeType, const css::uno::Any & rValue ) override;
@@ -266,7 +266,7 @@ SwTransferable::~SwTransferable()
     // the DDELink still needs the WrtShell!
     if( m_xDdeLink.is() )
     {
-        static_cast<SwTrnsfrDdeLink*>( m_xDdeLink.get() )->Disconnect( true );
+        static_cast<SwTransferDdeLink*>( m_xDdeLink.get() )->Disconnect( true );
         m_xDdeLink.clear();
     }
 
@@ -726,7 +726,7 @@ bool SwTransferable::WriteObject( tools::SvRef<SotStorageStream>& xStream,
     case SWTRANSFER_OBJECTTYPE_DDE:
         {
             xStream->SetBufferSize( 1024 );
-            SwTrnsfrDdeLink* pDdeLnk = static_cast<SwTrnsfrDdeLink*>(pObject);
+            SwTransferDdeLink* pDdeLnk = static_cast<SwTransferDdeLink*>(pObject);
             if( pDdeLnk->WriteData( *xStream ) )
             {
                 xStream->Commit();
@@ -1009,7 +1009,7 @@ int SwTransferable::PrepareForCopy( bool bIsCut )
 #if HAVE_FEATURE_DESKTOP
             AddFormat( SotClipboardFormatId::LINK );
 #endif
-            m_xDdeLink = new SwTrnsfrDdeLink( *this, *m_pWrtShell );
+            m_xDdeLink = new SwTransferDdeLink( *this, *m_pWrtShell );
         }
 
         //ObjectDescriptor was already filly from the old DocShell.
@@ -3860,7 +3860,7 @@ SwTransferable* SwTransferable::GetSwTransferable( const TransferableDataHelper&
 
 }
 
-SwTrnsfrDdeLink::SwTrnsfrDdeLink( SwTransferable& rTrans, SwWrtShell& rSh )
+SwTransferDdeLink::SwTransferDdeLink( SwTransferable& rTrans, SwWrtShell& rSh )
     : rTrnsfr(rTrans)
     , pDocShell(nullptr)
     , nOldTimeOut(0)
@@ -3914,13 +3914,13 @@ SwTrnsfrDdeLink::SwTrnsfrDdeLink( SwTransferable& rTrans, SwWrtShell& rSh )
     }
 }
 
-SwTrnsfrDdeLink::~SwTrnsfrDdeLink()
+SwTransferDdeLink::~SwTransferDdeLink()
 {
     if( refObj.is() )
         Disconnect( true );
 }
 
-::sfx2::SvBaseLink::UpdateResult SwTrnsfrDdeLink::DataChanged( const OUString& ,
+::sfx2::SvBaseLink::UpdateResult SwTransferDdeLink::DataChanged( const OUString& ,
                                     const uno::Any& )
 {
     // well, that's it with the link
@@ -3933,7 +3933,7 @@ SwTrnsfrDdeLink::~SwTrnsfrDdeLink()
     return SUCCESS;
 }
 
-bool SwTrnsfrDdeLink::WriteData( SvStream& rStrm )
+bool SwTransferDdeLink::WriteData( SvStream& rStrm )
 {
     if( !refObj.is() || !FindDocShell() )
         return false;
@@ -4000,7 +4000,7 @@ bool SwTrnsfrDdeLink::WriteData( SvStream& rStrm )
     return true;
 }
 
-void SwTrnsfrDdeLink::Disconnect( bool bRemoveDataAdvise )
+void SwTransferDdeLink::Disconnect( bool bRemoveDataAdvise )
 {
     //  don't accept DataChanged anymore, when already in Disconnect!
     //  (DTOR from Bookmark sends a DataChanged!)
@@ -4045,7 +4045,7 @@ void SwTrnsfrDdeLink::Disconnect( bool bRemoveDataAdvise )
     bInDisconnect = bOldDisconnect;
 }
 
-bool SwTrnsfrDdeLink::FindDocShell()
+bool SwTransferDdeLink::FindDocShell()
 {
     SfxObjectShell* pTmpSh = SfxObjectShell::GetFirst( checkSfxObjectShell<SwDocShell> );
     while( pTmpSh )
@@ -4063,7 +4063,7 @@ bool SwTrnsfrDdeLink::FindDocShell()
     return false;
 }
 
-void SwTrnsfrDdeLink::Closed()
+void SwTransferDdeLink::Closed()
 {
     if( !bInDisconnect && refObj.is() )
     {
