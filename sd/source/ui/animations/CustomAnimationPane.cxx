@@ -204,6 +204,7 @@ void CustomAnimationPane::initialize()
     mpCBXDuration->InsertValue(300, FUNIT_CUSTOM);
     mpCBXDuration->InsertValue(500, FUNIT_CUSTOM);
     mpCBXDuration->AdaptDropDownLineCountToMaximum();
+    mpCBXDuration->SetShowDecimals(true);
 
 
     mpPBAddEffect->SetClickHdl( LINK( this, CustomAnimationPane, implClickHdl ) );

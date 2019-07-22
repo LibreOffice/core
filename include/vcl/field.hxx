@@ -142,7 +142,10 @@ public:
     sal_Int64               GetSpinSize() const               { return mnSpinSize; }
 
     void                    SetDecimalDigits( sal_uInt16 nDigits );
-    sal_uInt16                  GetDecimalDigits() const { return mnDecimalDigits;}
+    sal_uInt16              GetDecimalDigits() const { return mnDecimalDigits; }
+
+    void                    SetShowDecimals(bool bShowDecimals) { mbShowDecimals = bShowDecimals; }
+    bool                    IsShowDecimals() const { return mbShowDecimals; }
 
     void                    SetUseThousandSep( bool b );
     bool                    IsUseThousandSep() const { return mbThousandSep; }
@@ -191,6 +194,7 @@ private:
     SAL_DLLPRIVATE void     ImplInit();
 
     sal_uInt16              mnDecimalDigits;
+    bool                    mbShowDecimals; //< When true, formatting appends .0s (as may as mnDecimalDigits).
     bool                    mbThousandSep;
     bool                    mbShowTrailingZeros;
 
