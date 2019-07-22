@@ -694,6 +694,7 @@ void SbaGridControl::dispose()
 {
     if (m_nAsyncDropEvent)
         Application::RemoveUserEvent(m_nAsyncDropEvent);
+    m_nAsyncDropEvent = nullptr;
     FmGridControl::dispose();
 }
 

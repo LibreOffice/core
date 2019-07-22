@@ -108,8 +108,10 @@ void OSectionWindow::dispose()
     {
         if ( m_pSectionMulti.is() )
             m_pSectionMulti->dispose();
+        m_pSectionMulti.clear();
         if ( m_pGroupMulti.is() )
             m_pGroupMulti->dispose();
+        m_pGroupMulti.clear();
     }
     catch (uno::Exception&)
     {
