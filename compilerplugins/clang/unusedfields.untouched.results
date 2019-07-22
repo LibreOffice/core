@@ -762,8 +762,6 @@ vcl/unx/gtk3/gtk3gtkinst.cxx:3532
     CrippledViewport viewport GtkViewport
 vcl/unx/gtk/a11y/atkhypertext.cxx:29
     HyperLink atk_hyper_link const AtkHyperlink
-vcl/unx/kf5/KF5FilePicker.hxx:34
-    KF5FilePicker allowRemoteUrls _Bool
 writerfilter/source/ooxml/OOXMLStreamImpl.hxx:43
     writerfilter::ooxml::OOXMLStreamImpl mxFastParser css::uno::Reference<css::xml::sax::XFastParser>
 writerperfect/inc/WPFTEncodingDialog.hxx:37

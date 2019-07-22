@@ -42,7 +42,6 @@ KDE5FilePicker::KDE5FilePicker(QObject* parent)
     , _extraControls(new QWidget)
     , _layout(new QGridLayout(_extraControls))
     , _winId(0)
-    , allowRemoteUrls(false)
 {
     _dialog->setSupportedSchemes({
         QStringLiteral("file"), QStringLiteral("ftp"), QStringLiteral("http"),

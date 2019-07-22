@@ -842,8 +842,6 @@ vcl/unx/gtk/glomenu.cxx:20
     GLOMenu parent_instance const GMenuModel
 vcl/unx/kf5/KF5FilePicker.hxx:32
     KF5FilePicker _layout class QGridLayout *
-vcl/unx/kf5/KF5FilePicker.hxx:34
-    KF5FilePicker allowRemoteUrls _Bool
 writerfilter/source/dmapper/PropertyMap.hxx:198
     writerfilter::dmapper::SectionPropertyMap m_nDebugSectionNumber sal_Int32
 xmloff/source/text/XMLTextListBlockContext.hxx:35
