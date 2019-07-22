@@ -170,7 +170,7 @@ public class MultiPropertyTest extends MultiMethodTest
                 catch (java.lang.IllegalArgumentException e)
                 {
                     // skipping test since new value is not available
-                    Status.failed("Cannot create new value for '" + propName + " : " + e.getMessage());
+                    log.println("Cannot create new value for '" + propName + " : " + e.getMessage());
                     return;
                 }
 
