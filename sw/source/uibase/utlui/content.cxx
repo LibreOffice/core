@@ -2476,7 +2476,7 @@ void SwContentTree::ExecCommand(const OUString& rCmd, bool bOutlineWithChildren)
     for (auto const pCurrentEntry : selected)
     {
         assert(pCurrentEntry && lcl_IsContent(pCurrentEntry));
-        if (pCurrentEntry && lcl_IsContent(pCurrentEntry))
+        if (lcl_IsContent(pCurrentEntry))
         {
             assert(dynamic_cast<SwContent*>(static_cast<SwTypeNumber*>(pCurrentEntry->GetUserData())));
             if ((m_bIsRoot && m_nRootType == ContentTypeId::OUTLINE) ||
@@ -2511,7 +2511,7 @@ void SwContentTree::ExecCommand(const OUString& rCmd, bool bOutlineWithChildren)
                 // Set cursor back to the current position
                 pShell->GotoOutline( nActPos + nDir);
             }
-            else if (bOutlineWithChildren && pCurrentEntry)
+            else if (bOutlineWithChildren)
             {
                 SwOutlineNodes::size_type nActEndPos = nActPos;
                 SvTreeListEntry* pEntry = pCurrentEntry;
@@ -2529,7 +2529,7 @@ void SwContentTree::ExecCommand(const OUString& rCmd, bool bOutlineWithChildren)
                 }
                 if (nDir == 1) // move down
                 {
-                    if (pCurrentEntry && IsSelected(pCurrentEntry->NextSibling()))
+                    if (IsSelected(pCurrentEntry->NextSibling()))
                         nDir = nDirLast;
                     else
                     {
@@ -2587,7 +2587,7 @@ void SwContentTree::ExecCommand(const OUString& rCmd, bool bOutlineWithChildren)
                 }
                 else // move up
                 {
-                    if (pCurrentEntry && IsSelected(pCurrentEntry->PrevSibling()))
+                    if (IsSelected(pCurrentEntry->PrevSibling()))
                         nDir = nDirLast;
                     else
                     {
