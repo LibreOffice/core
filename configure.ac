@@ -9896,8 +9896,8 @@ else
     DISABLE_OPENSSL=TRUE
 
     # warn that although OpenSSL is disabled, system libraries may depend on it
-    AC_MSG_WARN([OpenSSL has been disabled. No code compiled by LibO will make use of it but system libraries may create indirect dependencies])
-    add_warning "OpenSSL has been disabled. No code compiled by LibO will make use of it but system libraries may create indirect dependencies"
+    AC_MSG_WARN([OpenSSL has been disabled. No code compiled here will make use of it but system libraries may create indirect dependencies])
+    add_warning "OpenSSL has been disabled. No code compiled here will make use of it but system libraries may create indirect dependencies"
 fi
 
 AC_SUBST([DISABLE_OPENSSL])
