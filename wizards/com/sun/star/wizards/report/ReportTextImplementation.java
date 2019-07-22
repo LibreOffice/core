@@ -333,7 +333,6 @@ public class ReportTextImplementation extends ReportImplementationHelper impleme
             int GroupFieldCount = getRecordParser().GroupFieldNames.length;
             int FieldCount = getRecordParser().FieldColumns.length;
             Object[] OldGroupFieldValues = new Object[GroupFieldCount];
-            XTextTable[] xGroupBaseTables = new XTextTable[GroupFieldCount];
             int RecordFieldCount = FieldCount - GroupFieldCount;
             XTextDocument xTextDocument = getDoc().xTextDocument;
             XTextCursor xTextCursor = ReportTextDocument.createTextCursor(getDoc().xTextDocument.getText());
@@ -347,7 +346,6 @@ public class ReportTextImplementation extends ReportImplementationHelper impleme
                 {
                     CurGroupTableName = ReportTextDocument.TBLGROUPSECTION + Integer.toString(ColIndex + 1);
                     oTable = getDoc().oTextTableHandler.xTextTablesSupplier.getTextTables().getByName(CurGroupTableName);
-                    xGroupBaseTables[ColIndex] = UnoRuntime.queryInterface( XTextTable.class, oTable );
                     CurGroupValue = getRecordParser().getGroupColumnValue(ColIndex);
                     OldGroupFieldValues[ColIndex] = CurGroupValue;
                     CurDBColumn = getDoc().DBColumnsVector.get(ColIndex);
