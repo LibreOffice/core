@@ -272,8 +272,13 @@ static sal_uInt32 getTableSize(TrueTypeFont const *ttf, sal_uInt32 ord)
     return ttf->tlens[ord];
 }
 
-/* Hex Formatter functions */
-static const char HexChars[] = "0123456789ABCDEF";
+static char toHex(sal_uInt8 nIndex)
+{
+    /* Hex Formatter functions */
+    static const char HexChars[] = "0123456789ABCDEF";
+    assert(nIndex < SAL_N_ELEMENTS(HexChars));
+    return HexChars[nIndex];
+}
 
 static HexFmt *HexFmtNew(FILE *outf)
 {
@@ -324,8 +329,8 @@ static void HexFmtBlockWrite(HexFmt *_this, const void *ptr, sal_uInt32 size)
     }
     for (i=0; i<size; i++) {
         Ch = static_cast<sal_uInt8 const *>(ptr)[i];
-        _this->buffer[_this->bufpos++] = HexChars[Ch >> 4];
-        _this->buffer[_this->bufpos++] = HexChars[Ch & 0xF];
+        _this->buffer[_this->bufpos++] = toHex(Ch >> 4);
+        _this->buffer[_this->bufpos++] = toHex(Ch & 0xF);
         if (_this->bufpos == HFORMAT_LINELEN) {
             HexFmtFlush(_this);
             fputc('\n', _this->o);
