@@ -79,7 +79,7 @@ bool ImplNumericProcessKeyInput( const KeyEvent& rKEvt,
 
 bool ImplNumericGetValue( const OUString& rStr, sal_Int64& rValue,
                                  sal_uInt16 nDecDigits, const LocaleDataWrapper& rLocaleDataWrappper,
-                                 bool bCurrency = false )
+                                 bool bCurrency = false, bool bShowDecimals = false )
 {
     OUString            aStr = rStr;
     OUStringBuffer      aStr1, aStr2, aStrFrac, aStrNum, aStrDenom;
@@ -130,7 +130,7 @@ bool ImplNumericGetValue( const OUString& rStr, sal_Int64& rValue,
         aStr1.append(aStr.getStr(), nDecPos);
         aStr2.append(aStr.getStr()+nDecPos+1);
     }
-    else if (nDecDigits > 0 && aStr.getLength() > nDecDigits)
+    else if (bShowDecimals && nDecDigits > 0 && aStr.getLength() > nDecDigits)
     {
         // We expect a decimal point and a certain number of decimal digits,
         // but seems the user has deleted the decimal point, so we restore it.
@@ -496,7 +496,7 @@ bool FormatterBase::IsEmptyFieldValue() const
 bool NumericFormatter::ImplNumericReformat( const OUString& rStr, sal_Int64& rValue,
                                                 OUString& rOutStr )
 {
-    if ( !ImplNumericGetValue( rStr, rValue, GetDecimalDigits(), ImplGetLocaleDataWrapper() ) )
+    if ( !ImplNumericGetValue( rStr, rValue, GetDecimalDigits(), ImplGetLocaleDataWrapper(), false, IsShowDecimals()) )
         return true;
     else
     {
@@ -512,10 +512,11 @@ void NumericFormatter::ImplInit()
     mnFieldValue        = 0;
     mnLastValue         = 0;
     mnMin               = 0;
-    mnMax               = 100000000; // A user-friendly round number.
+    mnMax               = 1000000; // A user-friendly round number.
         // a "large" value substantially smaller than SAL_MAX_INT64, to avoid
         // overflow in computations using this "dummy" value
     mnDecimalDigits     = 2;
+    mbShowDecimals      = false;
     mbThousandSep       = true;
     mbShowTrailingZeros = true;
     mbWrapOnLimits      = false;
@@ -604,7 +605,7 @@ sal_Int64 NumericFormatter::GetValueFromString(const OUString& rStr) const
     sal_Int64 nTempValue;
 
     if (ImplNumericGetValue(rStr, nTempValue,
-        GetDecimalDigits(), ImplGetLocaleDataWrapper()))
+        GetDecimalDigits(), ImplGetLocaleDataWrapper(), false, IsShowDecimals()))
     {
         return ClipAgainstMinMax(nTempValue);
     }
@@ -1317,11 +1318,11 @@ double MetricField::ConvertDoubleValue( double nValue, sal_uInt16 nDigits,
 }
 
 static bool ImplMetricGetValue( const OUString& rStr, double& rValue, sal_Int64 nBaseValue,
-                                sal_uInt16 nDecDigits, const LocaleDataWrapper& rLocaleDataWrapper, FieldUnit eUnit )
+                                sal_uInt16 nDecDigits, const LocaleDataWrapper& rLocaleDataWrapper, FieldUnit eUnit, bool bShowDecimals )
 {
     // Get value
     sal_Int64 nValue;
-    if ( !ImplNumericGetValue( rStr, nValue, nDecDigits, rLocaleDataWrapper ) )
+    if ( !ImplNumericGetValue( rStr, nValue, nDecDigits, rLocaleDataWrapper, false, bShowDecimals ) )
         return false;
 
     // Determine unit
@@ -1336,7 +1337,7 @@ static bool ImplMetricGetValue( const OUString& rStr, double& rValue, sal_Int64 
 
 bool MetricFormatter::ImplMetricReformat( const OUString& rStr, double& rValue, OUString& rOutStr )
 {
-    if ( !ImplMetricGetValue( rStr, rValue, mnBaseValue, GetDecimalDigits(), ImplGetLocaleDataWrapper(), meUnit ) )
+    if ( !ImplMetricGetValue( rStr, rValue, mnBaseValue, GetDecimalDigits(), ImplGetLocaleDataWrapper(), meUnit, IsShowDecimals() ) )
         return true;
     else
     {
@@ -1427,7 +1428,7 @@ sal_Int64 MetricFormatter::GetValueFromStringUnit(const OUString& rStr, FieldUni
 {
     double nTempValue;
     // caution: precision loss in double cast
-    if (!ImplMetricGetValue(rStr, nTempValue, mnBaseValue, GetDecimalDigits(), ImplGetLocaleDataWrapper(), meUnit))
+    if (!ImplMetricGetValue(rStr, nTempValue, mnBaseValue, GetDecimalDigits(), ImplGetLocaleDataWrapper(), meUnit, IsShowDecimals()))
         nTempValue = static_cast<double>(mnLastValue);
 
     // caution: precision loss in double cast
@@ -1791,7 +1792,7 @@ sal_Int64 MetricBox::GetValue( sal_Int32 nPos ) const
 {
     double nValue = 0;
     ImplMetricGetValue( ComboBox::GetEntry( nPos ), nValue, mnBaseValue,
-                        GetDecimalDigits(), ImplGetLocaleDataWrapper(), meUnit );
+                        GetDecimalDigits(), ImplGetLocaleDataWrapper(), meUnit, IsShowDecimals() );
 
     // convert to previously configured units
     sal_Int64 nRetValue = MetricField::ConvertValue( (sal_Int64)nValue, mnBaseValue, GetDecimalDigits(),
