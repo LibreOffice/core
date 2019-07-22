@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_4ab5b830",
+        "filename": "sw/source/core/undo/undobj.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1558,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2019-07-22T12:14:04Z",
+      "side": 1,
+      "message": "You can always ask SfxBaseModel for the filter used for loading; but even better would be to fix writerfilter so no special-casing is needed. But sure, that\u0027s not trivial.",
+      "revId": "bda0ce50b424a9eba229fae37ec8602ee6ad0cdf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_ca822850",
+        "filename": "sw/source/core/undo/untblk.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2019-07-22T12:14:04Z",
+      "side": 1,
+      "message": "Did you consider trying to go via SwFrame::GetDrawObjs()? That would mean you don\u0027t have to iterate over all frame formats for each start node. This may help performance.",
+      "revId": "bda0ce50b424a9eba229fae37ec8602ee6ad0cdf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
