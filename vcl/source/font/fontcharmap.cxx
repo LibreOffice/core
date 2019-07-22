@@ -230,9 +230,20 @@ bool ParseCMAP( const unsigned char* pCmap, int nLength, CmapResult& rResult )
     else if( (nFormat == 12) && ((nOffset+16) < nLength) )
     {
         nRangeCount = GetUInt( pCmap + nOffset + 12 );
+
+        const int nGroupOffset = nOffset + 16;
+        const int nRemainingLen = nLength - nGroupOffset;
+        const int nMaxPossiblePairs = nRemainingLen / 12;
+        if (nRangeCount > nMaxPossiblePairs)
+        {
+            SAL_WARN("vcl.gdi", "more code pairs requested then space available");
+            nRangeCount = nMaxPossiblePairs;
+        }
+
         pCodePairs = new sal_UCS4[ nRangeCount * 2 ];
         pStartGlyphs = new int[ nRangeCount ];
-        const unsigned char* pGroup = pCmap + nOffset + 16;
+
+        const unsigned char* pGroup = pCmap + nGroupOffset;
         sal_UCS4* pCP = pCodePairs;
         for( int i = 0; i < nRangeCount; ++i )
         {
