@@ -846,6 +846,7 @@ bool ScValidationData::GetSelectionFromFormula(
 
             if( pEntry )
             {
+                assert(pEntry);
                 pStrings->push_back(*pEntry);
                 n++;
             }
