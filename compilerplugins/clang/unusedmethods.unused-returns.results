@@ -4,6 +4,8 @@ connectivity/source/inc/odbc/OConnection.hxx:78
     short connectivity::odbc::OConnection::Construct(const class rtl::OUString &,const class com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> &)
 connectivity/source/inc/odbc/OStatement.hxx:115
     _Bool connectivity::odbc::OStatement_Base::lockIfNecessary(const class rtl::OUString &)
+cui/source/inc/iconcdlg.hxx:80
+    _Bool IconChoicePage::FillItemSet(class SfxItemSet *)
 extensions/source/scanner/sane.hxx:97
     _Bool Sane::CheckConsistency(const char *,_Bool)
 extensions/source/scanner/sane.hxx:140
@@ -64,13 +66,13 @@ include/LibreOfficeKit/LibreOfficeKit.hxx:621
     int lok::Document::getSignatureState()
 include/LibreOfficeKit/LibreOfficeKit.hxx:631
     unsigned long lok::Document::renderShapeSelection(char **)
-include/LibreOfficeKit/LibreOfficeKit.hxx:749
+include/LibreOfficeKit/LibreOfficeKit.hxx:757
     char * lok::Office::getFilterTypes()
-include/LibreOfficeKit/LibreOfficeKit.hxx:803
+include/LibreOfficeKit/LibreOfficeKit.hxx:811
     char * lok::Office::getVersionInfo()
-include/LibreOfficeKit/LibreOfficeKit.hxx:817
-    _Bool lok::Office::runMacro(const char *)
 include/LibreOfficeKit/LibreOfficeKit.hxx:825
+    _Bool lok::Office::runMacro(const char *)
+include/LibreOfficeKit/LibreOfficeKit.hxx:833
     _Bool lok::Office::signDocument(const char *,const unsigned char *,const int,const unsigned char *,const int)
 include/oox/crypto/AgileEngine.hxx:121
     _Bool oox::core::AgileEngine::decryptHmacKey()
@@ -78,7 +80,7 @@ include/oox/crypto/AgileEngine.hxx:122
     _Bool oox::core::AgileEngine::decryptHmacValue()
 include/oox/crypto/AgileEngine.hxx:137
     _Bool oox::core::AgileEngine::encryptHmacValue()
-include/oox/crypto/CryptTools.hxx:113
+include/oox/crypto/CryptTools.hxx:112
     _Bool oox::core::CryptoHash::update(class std::__debug::vector<unsigned char, class std::allocator<unsigned char> > &,unsigned int)
 include/oox/dump/dumperbase.hxx:640
     long oox::dump::FlagsList::getIgnoreFlags() const
@@ -140,9 +142,9 @@ include/oox/helper/propertyset.hxx:110
     _Bool oox::PropertySet::setProperty(int,class Color)
 include/oox/ole/axbinarywriter.hxx:116
     _Bool oox::ole::AxBinaryPropertyWriter::ComplexProperty::writeProperty(class oox::ole::AxAlignedOutputStream &)
-include/oox/ole/olehelper.hxx:180
+include/oox/ole/olehelper.hxx:179
     _Bool oox::ole::MSConvertOCXControls::importControlFromStream(class oox::BinaryInputStream &,class com::sun::star::uno::Reference<class com::sun::star::form::XFormComponent> &,const class rtl::OUString &)
-include/oox/ole/olehelper.hxx:191
+include/oox/ole/olehelper.hxx:190
     _Bool oox::ole::MSConvertOCXControls::ReadOCXCtlsStream(const class tools::SvRef<class SotStorageStream> &,class com::sun::star::uno::Reference<class com::sun::star::form::XFormComponent> &,int,int)
 include/sax/fshelper.hxx:135
     class sax_fastparser::FastSerializerHelper * sax_fastparser::FastSerializerHelper::write(int)
@@ -196,7 +198,7 @@ include/tools/config.hxx:38
     _Bool Config::ImplUpdateConfig() const
 include/tools/multisel.hxx:93
     _Bool StringRangeEnumerator::insertRange(int,int,_Bool)
-include/vcl/bitmap.hxx:169
+include/vcl/bitmap.hxx:170
     _Bool Bitmap::Dither()
 include/vcl/bitmapex.hxx:240
     _Bool BitmapEx::Rotate(long,const class Color &)

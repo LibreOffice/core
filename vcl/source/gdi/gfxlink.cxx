@@ -79,15 +79,6 @@ bool GfxLink::IsNative() const
 
 const sal_uInt8* GfxLink::GetData() const
 {
-    if( IsSwappedOut() )
-    {
-        auto pData = GetSwapInData();
-        if (pData)
-        {
-            mpSwapInData = pData;
-            mpSwapOutData.reset();
-        }
-    }
     return mpSwapInData.get();
 }
 
@@ -224,45 +215,9 @@ SvStream& ReadGfxLink( SvStream& rIStream, GfxLink& rGfxLink)
     return rIStream;
 }
 
-GfxLink::SwapOutData::SwapOutData(const OUString &aURL) : maURL(aURL)
-{
-}
-
-GfxLink::SwapOutData::~SwapOutData()
-{
-    if( maURL.getLength() > 0 )
-        osl_removeFile( maURL.pData );
-}
-
 std::shared_ptr<sal_uInt8> GfxLink::GetSwapInData() const
 {
-    if( !IsSwappedOut() )
-        return mpSwapInData;
-
-    std::shared_ptr<sal_uInt8> pData;
-
-    SvFileStream aFileStream(mpSwapOutData->maURL, StreamMode::STD_READ);
-    pData = o3tl::make_shared_array<sal_uInt8>(mnSwapInDataSize);
-    aFileStream.ReadBytes(pData.get(), mnSwapInDataSize);
-    bool bError = false;
-    auto const e = aFileStream.GetError();
-    if (e != ERRCODE_NONE) {
-        SAL_WARN("vcl", "reading <" << mpSwapOutData->maURL << "> failed with " << e);
-        bError = true;
-    }
-    if (!bError) {
-        sal_uInt64 const nActReadSize = aFileStream.Tell();
-        if (nActReadSize != mnSwapInDataSize) {
-            SAL_WARN(
-                "vcl",
-                "reading <" << mpSwapOutData->maURL << "> produced " << nActReadSize
-                    << " instead of " << mnSwapInDataSize << " bytes");
-            bError = true;
-        }
-    }
-    if (bError)
-        pData.reset();
-    return pData;
+    return mpSwapInData;
 }
 
 bool GfxLink::IsEMF() const
