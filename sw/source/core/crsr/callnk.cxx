@@ -125,6 +125,8 @@ SwCallLink::~SwCallLink() COVERITY_NOEXCEPT_FALSE
     // attribute changes can be signaled over the link.
     pCNd->Add( &rShell );
 
+    const bool bCurrentHasSelection = (*pCurrentCursor->GetPoint() != *pCurrentCursor->GetMark());
+
     if( nNdTyp != nNdWhich || nNode != nCurrentNode )
     {
         // Every time a switch between nodes occurs, there is a chance that
@@ -133,7 +135,7 @@ SwCallLink::~SwCallLink() COVERITY_NOEXCEPT_FALSE
         // That can be done in one go by the handler.
         rShell.CallChgLnk();
     }
-    else if( !bHasSelection != (*pCurrentCursor->GetPoint() == *pCurrentCursor->GetMark()) )
+    else if (bHasSelection != bCurrentHasSelection)
     {
         // always call change link when selection changes
         rShell.CallChgLnk();
