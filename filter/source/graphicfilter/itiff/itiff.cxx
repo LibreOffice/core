@@ -1148,15 +1148,34 @@ bool TIFFReader::ConvertScanline(sal_Int32 nY)
         }
     }
     else if ( ( nSamplesPerPixel == 2 ) && ( nBitsPerSample == 8 ) &&
-        ( nPlanarConfiguration == 1 ) && aColorMap.empty() )               // grayscale
+        ( nPlanarConfiguration == 1 ) && aColorMap.empty() )               // grayscale + alpha
     {
         if ( nMaxSampleValue > nMinSampleValue )
         {
-            sal_uInt32 nMinMax = ( ( 1 << 8 /*nDstBitsPerPixel*/ ) - 1 ) / ( nMaxSampleValue - nMinSampleValue );
-            sal_uInt8*  pt = getMapData(0);
-            for (sal_Int32 nx = 0; nx < nImageWidth; nx++, pt += 2 )
+            sal_uInt8* pt = getMapData(0);
+
+            if (nPredictor == 2)
             {
-                SetPixel(nY, nx, static_cast<sal_uInt8>( (static_cast<sal_uInt32>(*pt) - nMinSampleValue) * nMinMax));
+                sal_uInt8 nLastPixel = 0;
+                sal_uInt8 nLastAlpha = 0;
+                for (sal_Int32 nx = 0; nx < nImageWidth; nx++, pt += 2)
+                {
+                    nLastPixel = (nLastPixel + pt[0]) & 0xFF;
+                    SetPixel(nY, nx, nLastPixel);
+
+                    nLastAlpha = (nLastAlpha + pt[1]) & 0xFF;
+                    SetPixelAlpha(nY, nx, ~nLastAlpha);
+                }
+            }
+            else
+            {
+                sal_uInt32 nMinMax = ( ( 1 << 8 /*nDstBitsPerPixel*/ ) - 1 ) / ( nMaxSampleValue - nMinSampleValue );
+                for (sal_Int32 nx = 0; nx < nImageWidth; nx++, pt += 2)
+                {
+                    SetPixel(nY, nx, static_cast<sal_uInt8>( (static_cast<sal_uInt32>(pt[0]) - nMinSampleValue) * nMinMax ));
+                    sal_uInt8 nAlpha = static_cast<sal_uInt8>( (static_cast<sal_uInt32>(pt[1]) - nMinSampleValue) * nMinMax );
+                    SetPixelAlpha(nY, nx, ~nAlpha);
+                }
             }
         }
     }
@@ -1239,13 +1258,21 @@ void TIFFReader::ReadHeader()
 bool TIFFReader::HasAlphaChannel() const
 {
     /*There are undoubtedly more variants we could support, but keep it simple for now*/
-    return (
-             nDstBitsPerPixel == 24 &&
-             nBitsPerSample == 8 &&
-             nSamplesPerPixel >= 4 &&
-             nPlanes == 1 &&
-             nPhotometricInterpretation == 2
-           );
+    bool bRGBA = nDstBitsPerPixel == 24 &&
+                 nBitsPerSample == 8 &&
+                 nSamplesPerPixel >= 4 &&
+                 nPlanes == 1 &&
+                 nPhotometricInterpretation == 2;
+    if (bRGBA)
+        return true;
+
+    // additionally support the format used in tdf#126460
+    bool bGrayScaleAlpha = nDstBitsPerPixel == 8 &&
+                           nBitsPerSample == 8 &&
+                           nSamplesPerPixel == 2 &&
+                           nPlanarConfiguration == 1;
+
+    return bGrayScaleAlpha;
 }
 
 namespace
@@ -1623,7 +1650,7 @@ bool TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
                         {
                             for (sal_Int32 nX = 0; nX < nImageWidth; ++nX)
                             {
-                                auto p = maBitmap.data() + ((maBitmapPixelSize.Width() * nY + nX) * 3);
+                                auto p = maBitmap.data() + ((maBitmapPixelSize.Width() * nY + nX) * (HasAlphaChannel() ? 4 : 3));
                                 auto c = SanitizePaletteIndex(*p, mvPalette);
                                 *p = c.GetRed();
                                 p++;
