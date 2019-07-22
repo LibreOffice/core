@@ -266,7 +266,7 @@ lcl_CleanStr(const SwTextNode& rNd,
 
         if ( bNewHint )
         {
-            if (pNextHint->HasDummyChar() && (nStart <= nStt))
+            if (pNextHint && pNextHint->HasDummyChar() && (nStart <= nStt))
             {
                 switch (pNextHint->Which())
                 {
