@@ -119,13 +119,13 @@ namespace accessibility
         SolarMethodGuard aGuard(getMutex());
         ensureIsAlive();
 
-        if ( !implIsValidIndex( nIndex, implGetText().getLength() ) )
-            throw IndexOutOfBoundsException();
-
         css::awt::Rectangle aRect;
 
         if ( mpBrowseBox )
         {
+            if ( !implIsValidIndex( nIndex, implGetText().getLength() ) )
+                throw IndexOutOfBoundsException();
+
             aRect = AWTRectangle( mpBrowseBox->GetFieldCharacterBounds( getRowPos(), getColumnPos(), nIndex ) );
         }
 
