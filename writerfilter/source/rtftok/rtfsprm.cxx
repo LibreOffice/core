@@ -12,6 +12,7 @@
 #include <ooxml/QNameToString.hxx>
 #include <rtl/strbuf.hxx>
 #include "rtfdocumentimpl.hxx"
+#include <algorithm>
 
 namespace writerfilter
 {
@@ -367,10 +368,10 @@ RTFSprms RTFSprms::cloneAndDeduplicate(RTFSprms& rReference, Id const nStyleType
 
 bool RTFSprms::equals(RTFValue& rOther)
 {
-    for (auto& rSprm : *m_pSprms)
-        if (!rSprm.second->equals(rOther))
-            return false;
-    return true;
+    return std::all_of(m_pSprms->begin(), m_pSprms->end(),
+                       [&](const std::pair<Id, RTFValue::Pointer_t>& raPair) -> bool {
+                           return raPair.second->equals(rOther);
+                       });
 }
 
 void RTFSprms::ensureCopyBeforeWrite()
