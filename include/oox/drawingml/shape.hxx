@@ -77,6 +77,9 @@ struct ShapeStyleRef
 
 typedef ::std::map< sal_Int32, ShapeStyleRef > ShapeStyleRefMap;
 
+class DiagramData;
+typedef std::shared_ptr<DiagramData> DiagramDataPtr;
+
 /** Additional information for a chart embedded in a drawing shape. */
 struct ChartShapeInfo
 {
@@ -202,6 +205,7 @@ public:
     const css::uno::Sequence<css::beans::PropertyValue> &
                         getDiagramDoms() { return maDiagramDoms; }
     void                setDiagramDoms(const css::uno::Sequence<css::beans::PropertyValue>& rDiagramDoms) { maDiagramDoms = rDiagramDoms; }
+    void                setDiagramData(const DiagramDataPtr& pDiagramData) { mpDiagramData = pDiagramData; }
     css::uno::Sequence< css::uno::Sequence< css::uno::Any > >resolveRelationshipsOfTypeFromOfficeDoc(
                                                                           core::XmlFilterBase& rFilter, const OUString& sFragment, const OUString& sType );
     void                setLinkedTxbxAttributes(const LinkedTxbxAttr& rhs){ maLinkedTxbxAttr = rhs; };
@@ -352,6 +356,7 @@ private:
     bool                            mbHasLinkedTxbx; // this text box has linked text box ?
 
     css::uno::Sequence<css::beans::PropertyValue> maDiagramDoms;
+    DiagramDataPtr mpDiagramData;
 
     /// Z-Order.
     sal_Int32 mnZOrder = 0;

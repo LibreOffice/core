@@ -46,6 +46,7 @@
 #include <oox/mathml/importutils.hxx>
 #include <oox/mathml/import.hxx>
 #include <oox/token/properties.hxx>
+#include "diagram/diagram.hxx"
 
 #include <comphelper/classids.hxx>
 #include <comphelper/propertysequence.hxx>
@@ -95,9 +96,11 @@
 #include <vcl/svapp.hxx>
 #include <vcl/wmfexternal.hxx>
 #include <sal/log.hxx>
+#include <svx/unoapi.hxx>
 #include <svx/unoshape.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/sdtaitm.hxx>
+#include <svx/DiagramDataInterface.hxx>
 
 #include <vcl/wmf.hxx>
 
@@ -1483,6 +1486,12 @@ void Shape::keepDiagramCompatibilityInfo()
         Reference < XPropertySetInfo > xSetInfo( xSet->getPropertySetInfo() );
         if ( !xSetInfo.is() )
             return;
+
+        if (mpDiagramData)
+        {
+            SdrObject* pObj = GetSdrObjectFromXShape(mxShape);
+            pObj->SetDiagramData(mpDiagramData);
+        }
 
         const OUString aGrabBagPropName = UNO_NAME_MISC_OBJ_INTEROPGRABBAG;
         if( !xSetInfo->hasPropertyByName( aGrabBagPropName ) )
