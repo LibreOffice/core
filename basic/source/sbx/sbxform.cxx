@@ -631,6 +631,7 @@ void SbxBasicFormater::ScanFormatString( double dNumber,
                             {
                                 bFirstDigit = false;
                             }
+                            // coverity[copy_paste_error : FALSE] - this is correct and nDigitPos should not be j
                             if( bGenerateThousandSeparator && ( c=='0' || nMaxDigit >= nDigitPos ) && j > 0 && (j % 3 == 0) )
                             {
                                 sReturnStrg.append(cThousandSep );
