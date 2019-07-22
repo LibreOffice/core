@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_ca39c841",
+        "filename": "include/svx/DiagramDataInterface.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2019-07-22T15:28:34Z",
+      "side": 1,
+      "message": "Do you actually need this? I guess a single plain string won\u0027t be useful, not even in the future. I would just remove it.",
+      "revId": "a0c3c9885e853a48127cb1b56c10983f5844bfe8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
