@@ -1126,7 +1126,8 @@ void SwTextNode::JoinPrev()
             pDoc->CorrAbs( aIdx, SwPosition( *this ), nLen, true );
         }
         SwNode::Merge const eOldMergeFlag(pTextNode->GetRedlineMergeFlag());
-        if (eOldMergeFlag == SwNode::Merge::First)
+        if (eOldMergeFlag == SwNode::Merge::First
+            && !IsCreateFrameWhenHidingRedlines())
         {
             sw::MoveDeletedPrevFrames(*pTextNode, *this);
         }
