@@ -408,26 +408,26 @@ std::unique_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogCont
         }
         case WID_CONDFRMT_REF:
         {
-            bool        bFound      = false;
             const ScCondFormatDlgItem* pDlgItem = nullptr;
             // Get the pool item stored by Conditional Format Manager Dialog.
-            const SfxPoolItem* pItem = nullptr;
             auto itemsRange = GetPool().GetItemSurrogates(SCITEM_CONDFORMATDLGDATA);
             if (itemsRange.begin() != itemsRange.end())
             {
-                pItem = *itemsRange.begin();
+                const SfxPoolItem* pItem = *itemsRange.begin();
                 pDlgItem = static_cast<const ScCondFormatDlgItem*>(pItem);
-                bFound = true;
             }
 
-            ScViewData& rViewData = GetViewData();
-            rViewData.SetRefTabNo( rViewData.GetTabNo() );
+            if (pDlgItem)
+            {
+                ScViewData& rViewData = GetViewData();
+                rViewData.SetRefTabNo( rViewData.GetTabNo() );
 
-            xResult.reset(new ScCondFormatDlg(pB, pCW, pParent, &rViewData, pDlgItem));
+                xResult.reset(new ScCondFormatDlg(pB, pCW, pParent, &rViewData, pDlgItem));
 
-            // Remove the pool item stored by Conditional Format Manager Dialog.
-            if ( bFound && pItem )
-                GetPool().Remove( *pItem );
+                // Remove the pool item stored by Conditional Format Manager Dialog.
+                GetPool().Remove(*pDlgItem);
+            }
+
             break;
         }
     }
