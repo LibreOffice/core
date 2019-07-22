@@ -55,7 +55,6 @@ private:
     ScMyOLEFixer                        aFixupOLEs;
 
     css::uno::Reference< css::sheet::XSpreadsheet > xCurrentSheet;
-    css::uno::Reference< css::table::XCellRange > xCurrentCellRange;
     css::uno::Reference< css::drawing::XDrawPage > xDrawPage;
     css::uno::Reference < css::drawing::XShapes > xShapes;
     OUString                       sCurrentSheetName;
