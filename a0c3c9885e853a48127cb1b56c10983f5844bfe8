@@ -16,6 +16,24 @@
       "revId": "a0c3c9885e853a48127cb1b56c10983f5844bfe8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_aa0d7491",
+        "filename": "include/svx/DiagramDataInterface.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1001592
+      },
+      "writtenOn": "2019-07-22T15:32:49Z",
+      "side": 1,
+      "message": "It was useful for me to test it. I had to leave something, as empty interface class didn\u0027t compile.",
+      "parentUuid": "bf659307_ca39c841",
+      "revId": "a0c3c9885e853a48127cb1b56c10983f5844bfe8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
