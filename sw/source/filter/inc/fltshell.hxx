@@ -211,19 +211,15 @@ class SW_DLLPUBLIC SwFltRedline : public SfxPoolItem
 {
 public:
     DateTime const        aStamp;
-    DateTime const        aStampPrev;
-    RedlineType const   eType;
-    RedlineType const   eTypePrev;
+    RedlineType const     eType;
     std::size_t const     nAutorNo;
 
     SwFltRedline(RedlineType   eType_,
                  std::size_t     nAutorNo_,
-                 const DateTime& rStamp_,
-                 RedlineType   eTypePrev_    = RedlineType::Insert)
+                 const DateTime& rStamp_)
         : SfxPoolItem(RES_FLTR_REDLINE), aStamp(rStamp_),
-        aStampPrev( DateTime::EMPTY ),
         eType(eType_),
-        eTypePrev(eTypePrev_), nAutorNo(nAutorNo_)
+        nAutorNo(nAutorNo_)
     {
     }
 
