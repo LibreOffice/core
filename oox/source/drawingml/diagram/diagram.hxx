@@ -29,6 +29,7 @@
 #include <oox/drawingml/shape.hxx>
 #include <drawingml/fillproperties.hxx>
 #include <oox/token/tokens.hxx>
+#include <svx/DiagramDataInterface.hxx>
 
 namespace com { namespace sun { namespace star {
     namespace xml { namespace dom { class XDocument; } }
@@ -154,7 +155,7 @@ typedef std::shared_ptr<LayoutAtom> LayoutAtomPtr;
 
 typedef std::map< OUString, css::uno::Reference<css::xml::dom::XDocument> > DiagramDomMap;
 
-class DiagramData
+class DiagramData : public DiagramDataInterface
 {
 public:
     typedef std::map< OUString, dgm::Point* > PointNameMap;
@@ -171,6 +172,8 @@ public:
                       std::map<sal_Int32, SourceIdAndDepth > > StringMap;
 
     DiagramData();
+    virtual ~DiagramData() {}
+    void build();
     FillPropertiesPtr & getFillProperties()
         { return mpFillProperties; }
     dgm::Connections & getConnections()
@@ -189,6 +192,8 @@ public:
         { return maExtDrawings; }
     const dgm::Point* getRootPoint() const;
     void dump() const;
+    OUString getString() const override { return OUString(); }
+
 private:
     ::std::vector<OUString>  maExtDrawings;
     FillPropertiesPtr mpFillProperties;
@@ -303,7 +308,6 @@ public:
 
     css::uno::Sequence<css::beans::PropertyValue> getDomsAsPropertyValues() const;
 private:
-    void build( );
     DiagramDataPtr                 mpData;
     DiagramLayoutPtr               mpLayout;
     DiagramQStyleMap               maStyles;

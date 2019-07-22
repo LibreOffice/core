@@ -23,12 +23,15 @@
 #include <rtl/ustring.hxx>
 #include <oox/core/xmlfilterbase.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>
+#include <svx/svdobj.hxx>
 
-#include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/xml/dom/XDocument.hpp>
 
 namespace oox { namespace drawingml {
+
+class DiagramData;
+typedef std::shared_ptr<DiagramData> DiagramDataPtr;
 
 /** load diagram data, and put resulting graphic into shape
 
@@ -45,14 +48,13 @@ void loadDiagram( ShapePtr const & pShape,
                   const oox::core::Relations& rRelations );
 
 void loadDiagram(ShapePtr const& pShape,
-                 const css::uno::Reference<css::xml::dom::XDocument>& dataDom,
+                 DiagramDataPtr pDiagramData,
                  const css::uno::Reference<css::xml::dom::XDocument>& layoutDom,
                  const css::uno::Reference<css::xml::dom::XDocument>& styleDom,
                  const css::uno::Reference<css::xml::dom::XDocument>& colorDom,
                  core::XmlFilterBase& rFilter);
 
-OOX_DLLPUBLIC void reloadDiagram(css::uno::Reference<css::drawing::XShape>& rXShape,
-                                 core::XmlFilterBase& rFilter);
+OOX_DLLPUBLIC void reloadDiagram(SdrObject* pObj, core::XmlFilterBase& rFilter);
 
 } }
 

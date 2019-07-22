@@ -22,6 +22,7 @@
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/xml/dom/XDocument.hpp>
 #include <com/sun/star/xml/sax/XFastSAXSerializable.hpp>
@@ -37,6 +38,8 @@
 #include <oox/ppt/pptshape.hxx>
 #include <oox/token/namespaces.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <svx/svdpage.hxx>
+#include <svx/DiagramDataInterface.hxx>
 
 #include "diagramlayoutatoms.hxx"
 #include "layoutatomvisitors.hxx"
@@ -177,7 +180,7 @@ static void sortChildrenByZOrder(const ShapePtr& pShape)
         sortChildrenByZOrder(rChild);
 }
 
-void Diagram::build(  )
+void DiagramData::build()
 {
     // build name-object maps
 #ifdef DEBUG_OOX_DIAGRAM
@@ -185,7 +188,7 @@ void Diagram::build(  )
 
     output << "digraph datatree {" << std::endl;
 #endif
-    dgm::Points& rPoints = getData()->getPoints();
+    dgm::Points& rPoints = getPoints();
     for (auto & point : rPoints)
     {
 #ifdef DEBUG_OOX_DIAGRAM
@@ -242,20 +245,20 @@ void Diagram::build(  )
 #endif
         }
 
-        const bool bInserted1=getData()->getPointNameMap().insert(
+        const bool bInserted1 = getPointNameMap().insert(
             std::make_pair(point.msModelId,&point)).second;
 
-        SAL_WARN_IF(!bInserted1, "oox.drawingml", "Diagram::build(): non-unique point model id");
+        SAL_WARN_IF(!bInserted1, "oox.drawingml", "DiagramData::build(): non-unique point model id");
 
         if( !point.msPresentationLayoutName.isEmpty() )
         {
             DiagramData::PointsNameMap::value_type::second_type& rVec=
-                getData()->getPointsPresNameMap()[point.msPresentationLayoutName];
+                getPointsPresNameMap()[point.msPresentationLayoutName];
             rVec.push_back(&point);
         }
     }
 
-    const dgm::Connections& rConnections = getData()->getConnections();
+    const dgm::Connections& rConnections = getConnections();
     for (auto const& connection : rConnections)
     {
 #ifdef DEBUG_OOX_DIAGRAM
@@ -307,25 +310,25 @@ void Diagram::build(  )
                    << ";" << std::endl;
 #endif
 
-        const bool bInserted1=getData()->getConnectionNameMap().insert(
+        const bool bInserted1 = getConnectionNameMap().insert(
             std::make_pair(connection.msModelId,&connection)).second;
 
-        SAL_WARN_IF(!bInserted1, "oox.drawingml", "Diagram::build(): non-unique connection model id");
+        SAL_WARN_IF(!bInserted1, "oox.drawingml", "DiagramData::build(): non-unique connection model id");
 
         if( connection.mnType == XML_presOf )
         {
-            DiagramData::StringMap::value_type::second_type& rVec=getData()->getPresOfNameMap()[connection.msDestId];
+            DiagramData::StringMap::value_type::second_type& rVec = getPresOfNameMap()[connection.msDestId];
             rVec[connection.mnDestOrder] = { connection.msSourceId, sal_Int32(0) };
         }
     }
 
     // assign outline levels
-    DiagramData::StringMap& rStringMap = getData()->getPresOfNameMap();
+    DiagramData::StringMap& rStringMap = getPresOfNameMap();
     for (auto & elemPresOf : rStringMap)
     {
         for (auto & elem : elemPresOf.second)
         {
-            const sal_Int32 nDepth = calcDepth(elem.second.msSourceId, getData()->getConnections());
+            const sal_Int32 nDepth = calcDepth(elem.second.msSourceId, getConnections());
             elem.second.mnDepth = nDepth != 0 ? nDepth : -1;
         }
     }
@@ -336,9 +339,6 @@ void Diagram::build(  )
 
 void Diagram::addTo( const ShapePtr & pParentShape )
 {
-    // collect data, init maps
-    build( );
-
     if (pParentShape->getSize().Width == 0 || pParentShape->getSize().Height == 0)
         SAL_WARN("oox.drawingml", "Diagram cannot be correctly laid out. Size: "
             << pParentShape->getSize().Width << "x" << pParentShape->getSize().Height);
@@ -368,8 +368,6 @@ void Diagram::addTo( const ShapePtr & pParentShape )
     pBackground->setLocked(true);
     auto& aChildren = pParentShape->getChildren();
     aChildren.insert(aChildren.begin(), pBackground);
-
-    pParentShape->setDiagramDoms( getDomsAsPropertyValues() );
 }
 
 uno::Sequence<beans::PropertyValue> Diagram::getDomsAsPropertyValues() const
@@ -584,12 +582,17 @@ void loadDiagram( ShapePtr const & pShape,
         }
     }
 
+    // collect data, init maps
+    pData->build();
+
     // diagram loaded. now lump together & attach to shape
     pDiagram->addTo(pShape);
+    pShape->setDiagramData(pData);
+    pShape->setDiagramDoms(pDiagram->getDomsAsPropertyValues());
 }
 
 void loadDiagram(ShapePtr const& pShape,
-                 const uno::Reference<xml::dom::XDocument>& dataDom,
+                 DiagramDataPtr pDiagramData,
                  const uno::Reference<xml::dom::XDocument>& layoutDom,
                  const uno::Reference<xml::dom::XDocument>& styleDom,
                  const uno::Reference<xml::dom::XDocument>& colorDom,
@@ -597,21 +600,10 @@ void loadDiagram(ShapePtr const& pShape,
 {
     DiagramPtr pDiagram(new Diagram);
 
-    DiagramDataPtr pData(new DiagramData());
-    pDiagram->setData(pData);
+    pDiagram->setData(pDiagramData);
 
     DiagramLayoutPtr pLayout(new DiagramLayout(*pDiagram));
     pDiagram->setLayout(pLayout);
-
-
-    // data
-    if (dataDom.is())
-    {
-        rtl::Reference<core::FragmentHandler> xRefDataModel(
-            new DiagramDataFragmentHandler(rFilter, OUString(), pData));
-
-        importFragment(rFilter, dataDom, "OOXData", pDiagram, xRefDataModel);
-    }
 
     // layout
     if (layoutDom.is())
@@ -644,12 +636,17 @@ void loadDiagram(ShapePtr const& pShape,
     pDiagram->addTo(pShape);
 }
 
-void reloadDiagram(css::uno::Reference<css::drawing::XShape>& rXShape,
-                   core::XmlFilterBase& rFilter)
+void reloadDiagram(SdrObject* pObj, core::XmlFilterBase& rFilter)
 {
-    uno::Reference<beans::XPropertySet> xPropSet(rXShape, uno::UNO_QUERY_THROW);
+    DiagramDataPtr pDiagramData = std::dynamic_pointer_cast<DiagramData>(pObj->GetDiagramData());
+    if (!pDiagramData)
+        return;
 
-    uno::Reference<xml::dom::XDocument> dataDom;
+    pObj->getChildrenOfSdrObject()->ClearSdrObjList();
+
+    uno::Reference<css::drawing::XShape> xShape(pObj->getUnoShape(), uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xPropSet(xShape, uno::UNO_QUERY_THROW);
+
     uno::Reference<xml::dom::XDocument> layoutDom;
     uno::Reference<xml::dom::XDocument> styleDom;
     uno::Reference<xml::dom::XDocument> colorDom;
@@ -660,9 +657,7 @@ void reloadDiagram(css::uno::Reference<css::drawing::XShape>& rXShape,
     for (sal_Int32 nProp = 0; nProp < propList.getLength(); ++nProp)
     {
         OUString propName = propList[nProp].Name;
-        if (propName == "OOXData")
-            propList[nProp].Value >>= dataDom;
-        else if (propName == "OOXLayout")
+        if (propName == "OOXLayout")
             propList[nProp].Value >>= layoutDom;
         else if (propName == "OOXStyle")
             propList[nProp].Value >>= styleDom;
@@ -672,15 +667,15 @@ void reloadDiagram(css::uno::Reference<css::drawing::XShape>& rXShape,
 
     ShapePtr pShape(new Shape());
     pShape->setDiagramType();
-    pShape->setSize(awt::Size(rXShape->getSize().Width * EMU_PER_HMM,
-                              rXShape->getSize().Height * EMU_PER_HMM));
+    pShape->setSize(awt::Size(xShape->getSize().Width * EMU_PER_HMM,
+                              xShape->getSize().Height * EMU_PER_HMM));
 
-    loadDiagram(pShape, dataDom, layoutDom, styleDom, colorDom, rFilter);
+    loadDiagram(pShape, pDiagramData, layoutDom, styleDom, colorDom, rFilter);
 
-    uno::Reference<drawing::XShapes> xShapes(rXShape, uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XShapes> xShapes(xShape, uno::UNO_QUERY_THROW);
     basegfx::B2DHomMatrix aTransformation;
-    aTransformation.translate(rXShape->getPosition().X * EMU_PER_HMM,
-                              rXShape->getPosition().Y * EMU_PER_HMM);
+    aTransformation.translate(xShape->getPosition().X * EMU_PER_HMM,
+                              xShape->getPosition().Y * EMU_PER_HMM);
     for (auto const& child : pShape->getChildren())
         child->addShape(rFilter, rFilter.getCurrentTheme(), xShapes, aTransformation, pShape->getFillProperties());
 }
