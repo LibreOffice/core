@@ -952,7 +952,8 @@ std::unique_ptr<CSS1Selector> CSS1Parser::ParseSelector()
         m_nToken = GetNextToken();
         if( CSS1_IDENT==m_nToken )
         {
-            pLast->SetNext( new CSS1Selector(CSS1_SELTYPE_PSEUDO,m_aToken) );
+            if (pLast)
+                pLast->SetNext( new CSS1Selector(CSS1_SELTYPE_PSEUDO,m_aToken) );
             m_nToken = GetNextToken();
         }
         else
