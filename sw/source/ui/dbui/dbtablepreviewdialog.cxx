@@ -87,6 +87,7 @@ void SwDBTablePreviewDialog::dispose()
     {
         m_xFrame->setComponent(nullptr, nullptr);
         m_xFrame->dispose();
+        m_xFrame.clear();
     }
     m_pDescriptionFI.clear();
     m_pBeamerWIN.clear();

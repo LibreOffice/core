@@ -226,6 +226,7 @@ void OAppDetailPageHelper::dispose()
         Reference< ::util::XCloseable> xCloseable(m_xFrame,UNO_QUERY);
         if ( xCloseable.is() )
             xCloseable->close(true);
+        m_xFrame.clear();
     }
     catch(const Exception&)
     {

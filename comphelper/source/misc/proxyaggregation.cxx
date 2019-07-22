@@ -172,6 +172,7 @@ namespace comphelper
         {
             m_xInner->removeEventListener( this );
             m_xInner->dispose();
+            m_xInner.clear();
         }
     }
 
