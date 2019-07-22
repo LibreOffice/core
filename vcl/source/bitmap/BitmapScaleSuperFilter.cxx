@@ -800,9 +800,9 @@ void scaleDown24bit(ScaleContext &rCtx, long nStartY, long nEndY)
                 Scanline pTmpY = rCtx.mpSrc->GetScanline(nLineStart + i);
                 Scanline pTmpX = pTmpY + constColorComponents * nRowStart;
 
-                long nSumRow1 = 0;
-                long nSumRow2 = 0;
-                long nSumRow3 = 0;
+                int nSumRow1 = 0;
+                int nSumRow2 = 0;
+                int nSumRow3 = 0;
                 BilinearWeightType nTotalWeightX = 0;
 
                 for (long j = 0; j <= nRowRange; j++)
