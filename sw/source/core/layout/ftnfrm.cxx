@@ -2269,7 +2269,7 @@ void SwFootnoteBossFrame::RearrangeFootnotes( const SwTwips nDeadLine, const boo
                                                                   *(pCnt->FindPageFrame()) ) )
                         {
                             // restart format with first content
-                            pCnt = pFootnote->ContainsAny();
+                            pCnt = pFootnote ? pFootnote->ContainsAny() : nullptr;
                             if (!pCnt)
                                 bMore = false;
                             continue;
@@ -2287,6 +2287,8 @@ void SwFootnoteBossFrame::RearrangeFootnotes( const SwTwips nDeadLine, const boo
                             pLastFootnoteFrame = nullptr;
                             pFootnoteFrame->Cut();
                             SwFrame::DestroyFrame(pFootnoteFrame);
+                            if (pFootnote == pFootnoteFrame)
+                                pFootnote = nullptr;
                         }
                     }
                 }
