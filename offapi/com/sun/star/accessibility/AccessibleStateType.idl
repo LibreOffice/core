@@ -118,7 +118,7 @@ constants AccessibleStateType
         The state is added to make a performance improvement. Now it is no
         longer necessary to iterate over all children to find out whether
         they are transient or not to decide whether to add listener or not.
-        If there is a object with this state no one should iterate over the
+        If there is an object with this state no one should iterate over the
         children to add listener. Only the active descendant should get
         listener if it is not transient.
     */

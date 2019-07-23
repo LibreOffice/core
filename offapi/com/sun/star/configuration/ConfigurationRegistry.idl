@@ -49,7 +49,7 @@ module com { module sun { module star { module configuration {
     for some nodes.
     </p><p>
     Thus anybody using this service is strongly advised to read and understand the specification
-    of an configuration provider (com.sun.star.configuration::ConfigurationProvider)
+    of a configuration provider (com.sun.star.configuration::ConfigurationProvider)
     and all of its aspects.
     </p>
 
@@ -71,7 +71,7 @@ published service ConfigurationRegistry
     /** is used to commit changes to the configuration.
         <p>As specified for the
         com::sun::star::configuration::ConfigurationUpdateAccess
-        service, all changes made to an configuration subtree have to be committed
+        service, all changes made to a configuration subtree have to be committed
         before they become persistent.
         To do this for a configuration accessed as a registry, call
         com::sun::star::util::XFlushable::flush().

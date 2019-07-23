@@ -31,7 +31,7 @@ module com {  module sun {  module star {  module awt { module tree {
  */
 service TreeControlModel
 {
-    /** specifies the standard model of an com::sun::star::awt::UnoControl. */
+    /** specifies the standard model of a com::sun::star::awt::UnoControl. */
     service ::com::sun::star::awt::UnoControlModel;
 
     /** Specifies the selection mode that is enabled for this tree.

@@ -375,7 +375,7 @@ static int derivedFromCount(QualType qt, const CXXRecordDecl* baseRecord)
 */
 static bool isDerivedFrom(const CXXRecordDecl* subtypeRecord, const CXXRecordDecl* baseRecord)
 {
-    // if there is more than one case, then we have an ambigous conversion, and we can't change the code
+    // if there is more than one case, then we have an ambiguous conversion, and we can't change the code
     // to use the upcasting constructor.
     return derivedFromCount(subtypeRecord, baseRecord) == 1;
 }

@@ -35,7 +35,7 @@ module com { module sun { module star { module accessibility {
 interface XAccessibleEventListener: ::com::sun::star::lang::XEventListener
 {
 
-    /** is called whenever a accessible event (see AccessibleEventObject) occurs.
+    /** is called whenever an accessible event (see AccessibleEventObject) occurs.
      */
     void notifyEvent( [in] AccessibleEventObject aEvent );
 };

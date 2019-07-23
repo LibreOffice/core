@@ -705,7 +705,7 @@ constants AccessibleRole
     */
     const short COMMENT_END = 82;
 
-    /** View of an presentation document.
+    /** View of a presentation document.
 
         <p>It's an specific variation of DOCUMENT for presentations.</p>
 
@@ -721,7 +721,7 @@ constants AccessibleRole
     */
     const short DOCUMENT_SPREADSHEET = 84;
 
-    /** View of an text document.
+    /** View of a text document.
 
         <p>It's an specific variation of DOCUMENT for text.</p>
 

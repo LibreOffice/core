@@ -56,7 +56,7 @@ published service UnoControlEditModel
     [optional, property] boolean AutoHScroll;
 
 
-    /** If set to true an vertical scrollbar will be added automatically
+    /** If set to true a vertical scrollbar will be added automatically
         when needed.
 
         @since OOo 2.3
