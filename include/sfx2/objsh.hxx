@@ -392,6 +392,8 @@ public:
     */
     bool                        AdjustMacroMode();
 
+    static bool                 UnTrustedScript(const OUString& rScriptURL);
+
     SvKeyValueIterator*         GetHeaderAttributes();
     void                        ClearHeaderAttributesForSourceViewHack();
     void                        SetHeaderAttributesForSourceViewHack();
