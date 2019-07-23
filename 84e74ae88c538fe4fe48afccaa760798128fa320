@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_a6328cf0",
+        "filename": "oox/source/drawingml/chart/chartconverter.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2019-07-23T15:33:03Z",
+      "side": 1,
+      "message": "- little redundancy: double creation for single row input.\n\n- possible optimization: use slicing ctor of std::vector instead of loop",
+      "range": {
+        "startLine": 137,
+        "startChar": 10,
+        "endLine": 140,
+        "endChar": 13
+      },
+      "revId": "84e74ae88c538fe4fe48afccaa760798128fa320",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_e63884d4",
+        "filename": "oox/source/drawingml/chart/chartconverter.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2019-07-23T15:33:03Z",
+      "side": 1,
+      "message": "change in return value (empty aRangeRep resulted nullptr)",
+      "range": {
+        "startLine": 153,
+        "startChar": 8,
+        "endLine": 153,
+        "endChar": 23
+      },
+      "revId": "84e74ae88c538fe4fe48afccaa760798128fa320",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
