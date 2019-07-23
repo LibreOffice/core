@@ -2148,13 +2148,13 @@ void DomainMapper_Impl::CheckRedline( uno::Reference< text::XTextRange > const& 
     bool bUsedRange = m_aRedlines.top().size() > 0 || (GetTopContextOfType(CONTEXT_CHARACTER) &&
         GetTopContextOfType(CONTEXT_CHARACTER)->Redlines().size() > 0);
 
-    // only export ParagraphFormat, when there is no other redline in the same text portion to avoid missing redline compression
-    if( !bUsedRange && GetTopContextOfType(CONTEXT_PARAGRAPH) )
+    // only export ParagraphFormat, when there is no other redline in the same text portion to avoid missing redline compression,
+    // but always export the first ParagraphFormat redline in a paragraph to keep the paragraph style change data for rejection
+    if( (!bUsedRange || !m_bParaChanged) && GetTopContextOfType(CONTEXT_PARAGRAPH) )
     {
         std::vector<RedlineParamsPtr>& avRedLines = GetTopContextOfType(CONTEXT_PARAGRAPH)->Redlines();
         for( const auto& rRedline : avRedLines )
             CreateRedline( xRange, rRedline );
-        return;
     }
     if( GetTopContextOfType(CONTEXT_CHARACTER) )
     {

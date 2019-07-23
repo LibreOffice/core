@@ -1775,6 +1775,31 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf120338)
                          getProperty<OUString>(getParagraph(11), "ParaStyleName"));
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf120338_multiple_paragraph_join)
+{
+    load(DATA_DIRECTORY, "redline-para-join.docx");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Heading 1"),
+                         getProperty<OUString>(getParagraph(1), "ParaStyleName"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Heading 1"),
+                         getProperty<OUString>(getParagraph(2), "ParaStyleName"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Heading 1"),
+                         getProperty<OUString>(getParagraph(3), "ParaStyleName"));
+
+    // reject tracked paragraph styles
+    lcl_dispatchCommand(mxComponent, ".uno:RejectAllTrackedChanges", {});
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Heading 1"),
+                         getProperty<OUString>(getParagraph(1), "ParaStyleName"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Heading 2"),
+                         getProperty<OUString>(getParagraph(2), "ParaStyleName"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Heading 3"),
+                         getProperty<OUString>(getParagraph(3), "ParaStyleName"));
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testShapePageMove)
 {
     // Load a document with 2 pages, shape on the first page.
