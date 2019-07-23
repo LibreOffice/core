@@ -554,16 +554,16 @@ bool SvpSalGraphics::drawAlphaRect(long nX, long nY, long nWidth, long nHeight, 
     // To make releaseCairoContext work, use empty extents
     basegfx::B2DRange extents;
 
-    cairo_rectangle(cr, nX, nY, nWidth, nHeight);
-
     if (bHasFill)
     {
+        cairo_rectangle(cr, nX, nY, nWidth, nHeight);
+
         applyColor(cr, m_aFillColor, fTransparency);
 
         // set FillDamage
         extents = getClippedFillDamage(cr);
 
-        cairo_fill_preserve(cr);
+        cairo_fill(cr);
     }
 
     if (bHasLine)
@@ -573,6 +573,8 @@ bool SvpSalGraphics::drawAlphaRect(long nX, long nY, long nWidth, long nHeight, 
         cairo_matrix_t aMatrix;
         cairo_matrix_init_translate(&aMatrix, 0.5, 0.5);
         cairo_set_matrix(cr, &aMatrix);
+
+        cairo_rectangle(cr, nX, nY, nWidth, nHeight);
 
         applyColor(cr, m_aLineColor, fTransparency);
 
