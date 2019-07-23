@@ -3064,7 +3064,7 @@ static bool ImplHandleMouseMsg( HWND hWnd, UINT nMsg,
                 aPt.x = static_cast<short>(LOWORD(lParam));
                 aPt.y = static_cast<short>(HIWORD(lParam));
                 ScreenToClient(hWnd, &aPt);
-                if (const auto& pHelpWin = ImplGetSVData()->maHelpData.mpHelpWin)
+                if (const auto& pHelpWin = ImplGetSVHelpData().mpHelpWin)
                 {
                     const tools::Rectangle& rHelpRect = pHelpWin->GetHelpArea();
                     if (rHelpRect.IsInside(Point(aPt.x, aPt.y)))
