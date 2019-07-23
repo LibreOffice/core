@@ -18,7 +18,10 @@
  */
 
 #include <svx/sdrundomanager.hxx>
+#include <svx/svxids.hrc>
+#include <sfx2/bindings.hxx>
 #include <sfx2/objsh.hxx>
+#include <sfx2/viewfrm.hxx>
 #include <svl/hint.hxx>
 
 SdrUndoManager::SdrUndoManager()
@@ -145,5 +148,22 @@ void SdrUndoManager::EmptyActionsChanged()
         m_pDocSh->Broadcast(SfxHint(SfxHintId::DocumentRepair));
     }
 }
+
+void SdrUndoManager::AddUndoAction( std::unique_ptr<SfxUndoAction> pAction, bool bTryMerg )
+{
+    EditUndoManager::AddUndoAction( std::move(pAction), bTryMerg);
+
+    if (m_pDocSh)
+    {
+        SfxViewFrame* pViewFrame = SfxViewFrame::GetFirst(  m_pDocSh );
+        while ( pViewFrame )
+        {
+            pViewFrame->GetBindings().Invalidate( SID_UNDO );
+            pViewFrame->GetBindings().Invalidate( SID_REDO );
+            pViewFrame = SfxViewFrame::GetNext( *pViewFrame, m_pDocSh );
+        }
+    }
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
