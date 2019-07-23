@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_40b59730",
+        "filename": "xmloff/source/text/txtfldi.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 3478,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-07-23T11:25:35Z",
+      "side": 1,
+      "message": "you could simplify that into makeAny(bTmp) but i think i\u0027m nitpicking at this point :)",
+      "revId": "2a1160f456b8d2d36ad74411bba4a0d24d775a0a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
