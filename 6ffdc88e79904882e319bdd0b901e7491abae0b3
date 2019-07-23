@@ -46,6 +46,29 @@
       "revId": "6ffdc88e79904882e319bdd0b901e7491abae0b3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_050a51d1",
+        "filename": "stoc/source/defaultregistry/defaultregistry.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 781,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-07-23T03:14:38Z",
+      "side": 1,
+      "message": "This whole two-pass thing looks a good candidate to a single-pass refactoring using a vector as accumulator, and std::accumulate populating the vector, then converting the result to sequence...",
+      "range": {
+        "startLine": 760,
+        "startChar": 4,
+        "endLine": 781,
+        "endChar": 9
+      },
+      "revId": "6ffdc88e79904882e319bdd0b901e7491abae0b3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
