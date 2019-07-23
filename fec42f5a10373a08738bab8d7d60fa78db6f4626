@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "bf659307_6040db36",
+        "filename": "sw/source/core/layout/ftnfrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2272,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2019-07-23T11:12:00Z",
+      "side": 1,
+      "message": "can\u0027t hurt I suppose, its not like I have a real insight into how it should work",
+      "parentUuid": "bf659307_002d5f94",
+      "revId": "fec42f5a10373a08738bab8d7d60fa78db6f4626",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bf659307_a02113a2",
         "filename": "sw/source/core/layout/ftnfrm.cxx",
         "patchSetId": 1
