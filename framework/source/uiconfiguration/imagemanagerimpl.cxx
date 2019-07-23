@@ -403,12 +403,9 @@ bool ImageManagerImpl::implts_storeUserImages(
             for ( sal_uInt16 i=0; i < pImageList->GetImageCount(); i++ )
             {
                 ImageItemDescriptor* pItem = new ImageItemDescriptor;
-                pItem->nIndex = i;
                 pItem->aCommandURL = pImageList->GetImageName( i );
                 pList->pImageItemList->push_back( std::unique_ptr<ImageItemDescriptor>(pItem) );
             }
-
-            pList->aURL = "Bitmaps/" + OUString::createFromAscii(BITMAP_FILE_NAMES[nImageType]);
 
             uno::Reference< XTransactedObject > xTransaction;
             uno::Reference< XOutputStream >     xOutputStream;
