@@ -373,9 +373,8 @@ void SmMathConfig::ReadSymbol( SmSym &rSymbol,
     sal_Int32 nProps = aNames.getLength();
 
     OUString aDelim( "/" );
-    std::transform(aNames.begin(), aNames.end(), aNames.begin(),
-        [&rBaseNode, &rSymbolName, &aDelim](const OUString& rName) -> OUString {
-            return rBaseNode + aDelim + rSymbolName + aDelim + rName; });
+    for (auto& rName : aNames)
+        rName = rBaseNode + aDelim + rSymbolName + aDelim + rName;
 
     const Sequence< Any > aValues = const_cast<SmMathConfig*>(this)->GetProperties(aNames);
 
@@ -580,9 +579,8 @@ void SmMathConfig::ReadFontFormat( SmFontFormat &rFontFormat,
     sal_Int32 nProps = aNames.getLength();
 
     OUString aDelim( "/" );
-    std::transform(aNames.begin(), aNames.end(), aNames.begin(),
-        [&rBaseNode, &rSymbolName, &aDelim](const OUString& rName) -> OUString {
-            return rBaseNode + aDelim + rSymbolName + aDelim + rName; });
+    for (auto& rName : aNames)
+        rName = rBaseNode + aDelim + rSymbolName + aDelim + rName;
 
     const Sequence< Any > aValues = const_cast<SmMathConfig*>(this)->GetProperties(aNames);
 
