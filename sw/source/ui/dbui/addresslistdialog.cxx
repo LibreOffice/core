@@ -52,6 +52,7 @@
 #include <unotools/pathoptions.hxx>
 #include <svl/urihelper.hxx>
 #include <dbui.hrc>
+#include <strings.hrc>
 #include <view.hxx>
 
 #include <unomid.h>
@@ -126,6 +127,7 @@ SwAddressListDialog::SwAddressListDialog(SwMailMergeAddressBlockPage* pParent)
     , m_xConnecting(m_xBuilder->weld_label("connecting"))
     , m_xListLB(m_xBuilder->weld_tree_view("sources"))
     , m_xLoadListPB(m_xBuilder->weld_button("add"))
+    , m_xRemovePB(m_xBuilder->weld_button("remove"))
     , m_xCreateListPB(m_xBuilder->weld_button("create"))
     , m_xFilterPB(m_xBuilder->weld_button("filter"))
     , m_xEditPB(m_xBuilder->weld_button("edit"))
@@ -141,6 +143,7 @@ SwAddressListDialog::SwAddressListDialog(SwMailMergeAddressBlockPage* pParent)
     m_xDescriptionFI->set_label(sTemp);
     m_xFilterPB->connect_clicked( LINK( this, SwAddressListDialog,    FilterHdl_Impl ));
     m_xLoadListPB->connect_clicked( LINK( this, SwAddressListDialog,  LoadHdl_Impl ));
+    m_xRemovePB->connect_clicked( LINK(this, SwAddressListDialog,   RemoveHdl_Impl ));
     m_xCreateListPB->connect_clicked( LINK( this, SwAddressListDialog,CreateHdl_Impl ));
     m_xEditPB->connect_clicked(LINK( this, SwAddressListDialog, EditHdl_Impl));
     m_xTablePB->connect_clicked(LINK( this, SwAddressListDialog, TableSelectHdl_Impl));
@@ -207,6 +210,7 @@ SwAddressListDialog::SwAddressListDialog(SwMailMergeAddressBlockPage* pParent)
 
     m_xOK->set_sensitive(m_xListLB->n_children() > 0 && bEnableOK);
     m_xEditPB->set_sensitive(bEnableEdit);
+    m_xRemovePB->set_sensitive(m_xListLB->n_children() > 0);
     m_xListLB->connect_changed(LINK(this, SwAddressListDialog, ListBoxSelectHdl_Impl));
     TableSelectHdl(nullptr);
 }
@@ -282,7 +286,32 @@ IMPL_LINK_NOARG(SwAddressListDialog, LoadHdl_Impl, weld::Button&, void)
         m_xListLB->set_id(*m_xIter, OUString::number(reinterpret_cast<sal_Int64>(pUserData)));
         m_xListLB->select(*m_xIter);
         ListBoxSelectHdl_Impl(*m_xListLB);
+        m_xRemovePB->set_sensitive(true);
     }
+}
+
+IMPL_LINK_NOARG(SwAddressListDialog, RemoveHdl_Impl, weld::Button&, void)
+{
+    int nEntry = m_xListLB->get_selected_index();
+    if (nEntry != -1)
+    {
+        std::unique_ptr<weld::MessageDialog> xQuery(Application::CreateMessageDialog(getDialog(),
+                                                    VclMessageType::Question, VclButtonsType::YesNo, SwResId(ST_DELETE_CONFIRM)));
+        if (xQuery->run() == RET_YES)
+        {   // Remove data source connection
+            SwDBManager::RevokeDataSource(m_xListLB->get_selected_text());
+            // Remove item from the list
+            m_xListLB->remove(nEntry);
+            // If this was the last item, disable the Remove button and enable Create
+            if (m_xListLB->n_children() < 1 )
+                {
+                m_xRemovePB->set_sensitive(false);
+                m_xCreateListPB->set_sensitive(true);
+                }
+        }
+    }
+
+
 }
 
 IMPL_LINK_NOARG(SwAddressListDialog, CreateHdl_Impl, weld::Button&, void)
@@ -352,6 +381,7 @@ IMPL_LINK_NOARG(SwAddressListDialog, CreateHdl_Impl, weld::Button&, void)
             m_xListLB->select(*m_xIter);
             ListBoxSelectHdl_Impl(*m_xListLB);
             m_xCreateListPB->set_sensitive(false);
+            m_xRemovePB->set_sensitive(true);
         }
         catch (const Exception&)
         {
