@@ -214,59 +214,8 @@ void SAL_CALL OReadImagesDocumentHandler::startElement(
                             }
                             break;
 
-                            case IMG_ATTRIBUTE_MASKCOLOR:
-                            {
-                                OUString aColor = xAttribs->getValueByIndex( n );
-
-                                if ( aColor.startsWith("#") )
-                                {
-                                    // the color value is given as #rrggbb and used the hexadecimal system!!
-                                    sal_uInt32 nColor = aColor.copy( 1 ).toUInt32( 16 );
-
-                                    m_pImages->aMaskColor = Color( nColor );
-                                }
-                            }
-                            break;
-
-                            case IMG_ATTRIBUTE_MASKURL:
-                            {
-                                m_pImages->aMaskURL = xAttribs->getValueByIndex( n );
-                            }
-                            break;
-
-                            case IMG_ATTRIBUTE_MASKMODE:
-                            {
-                                sal_Int32 nHashCode = xAttribs->getValueByIndex( n ).hashCode();
-                                if ( nHashCode == m_nHashMaskModeBitmap )
-                                    m_pImages->nMaskMode = ImageMaskMode_Bitmap;
-                                else if ( nHashCode == m_nHashMaskModeColor )
-                                    m_pImages->nMaskMode = ImageMaskMode_Color;
-                                else
-                                {
-                                    delete m_pImages;
-                                    m_pImages = nullptr;
-
-                                    OUString aErrorMessage = getErrorLineString();
-                                    aErrorMessage += "Attribute image:maskmode must be 'maskcolor' or 'maskbitmap'!";
-                                    throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
-                                }
-                            }
-                            break;
-
-                            case IMG_ATTRIBUTE_HIGHCONTRASTURL:
-                            {
-                                m_pImages->aHighContrastURL = xAttribs->getValueByIndex( n );
-                            }
-                            break;
-
-                            case IMG_ATTRIBUTE_HIGHCONTRASTMASKURL:
-                            {
-                                m_pImages->aHighContrastMaskURL = xAttribs->getValueByIndex( n );
-                            }
-                            break;
-
-                                          default:
-                                              break;
+                            default:
+                                break;
                         }
                     }
                 } // for
@@ -647,47 +596,6 @@ void OWriteImagesDocumentHandler::WriteImageList( const ImageListItemDescriptor*
     pList->AddAttribute( m_aXMLXlinkNS + ATTRIBUTE_HREF,
                          m_aAttributeType,
                          pImageList->aURL );
-
-    if ( pImageList->nMaskMode == ImageMaskMode_Bitmap )
-    {
-        pList->AddAttribute( m_aXMLImageNS + ATTRIBUTE_MASKMODE,
-                             m_aAttributeType,
-                             ATTRIBUTE_MASKMODE_BITMAP );
-
-        pList->AddAttribute( m_aXMLImageNS + ATTRIBUTE_MASKURL,
-                             m_aAttributeType,
-                             pImageList->aMaskURL );
-
-        if ( !pImageList->aHighContrastMaskURL.isEmpty() )
-        {
-            pList->AddAttribute( m_aXMLImageNS + ATTRIBUTE_HIGHCONTRASTMASKURL,
-                                 m_aAttributeType,
-                                 pImageList->aHighContrastMaskURL );
-        }
-    }
-    else
-    {
-        OUStringBuffer   aColorStrBuffer( 8 );
-        sal_Int64       nValue = sal_uInt32(pImageList->aMaskColor.GetRGBColor());
-
-        aColorStrBuffer.append( "#" );
-        aColorStrBuffer.append( OUString::number( nValue, 16 ));
-
-        pList->AddAttribute( m_aXMLImageNS + ATTRIBUTE_MASKCOLOR,
-                             m_aAttributeType,
-                             aColorStrBuffer.makeStringAndClear() );
-
-        pList->AddAttribute( m_aXMLImageNS + ATTRIBUTE_MASKMODE,
-                             m_aAttributeType,
-                             ATTRIBUTE_MASKMODE_COLOR );
-    }
-
-    if ( !pImageList->aHighContrastURL.isEmpty() )
-    {
-        pList->AddAttribute( m_aXMLImageNS + ATTRIBUTE_HIGHCONTRASTURL,
-                             m_aAttributeType,
-                             pImageList->aHighContrastURL );
-    }
 
     m_xWriteDocumentHandler->startElement( ELEMENT_NS_IMAGES, xList );
     m_xWriteDocumentHandler->ignorableWhitespace( OUString() );

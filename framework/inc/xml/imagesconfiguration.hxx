@@ -34,12 +34,6 @@
 namespace framework
 {
 
-enum ImageMaskMode
-{
-    ImageMaskMode_Color,
-    ImageMaskMode_Bitmap
-};
-
 struct ImageItemDescriptor
 {
     ImageItemDescriptor() : nIndex( -1 ) {}
@@ -60,16 +54,9 @@ typedef std::vector<std::unique_ptr<ExternalImageItemDescriptor> > ExternalImage
 
 struct ImageListItemDescriptor
 {
-    ImageListItemDescriptor() : nMaskMode( ImageMaskMode_Color ) {}
-
     OUString                    aURL;               // a URL to a bitmap with several images inside
-    Color                       aMaskColor;         // a color used as transparent
-    OUString                    aMaskURL;           // a URL to an optional bitmap used as a mask
-    ImageMaskMode               nMaskMode;            // an enum to describe the current mask mode
     std::unique_ptr<ImageItemListDescriptor>
                                 pImageItemList;       // an array of ImageItemDescriptors that describes every image
-    OUString                    aHighContrastURL;       // a URL to an optional high contrast bitmap with several images inside
-    OUString                    aHighContrastMaskURL;   // a URL to an optional high contrast bitmap as a mask
 };
 
 typedef std::vector<std::unique_ptr<ImageListItemDescriptor> > ImageListDescriptor;
