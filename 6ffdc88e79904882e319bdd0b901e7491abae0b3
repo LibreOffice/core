@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "bf659307_66047416",
+        "filename": "starmath/source/cfgitem.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 378,
+      "author": {
+        "id": 1001501
+      },
+      "writtenOn": "2019-07-23T14:57:48Z",
+      "side": 1,
+      "message": "Then almost all my changes to sequence iterations are less efficient since original code usually uses getArray() and getLength() methods, while changed code uses begin() and end().\nI\u0027ll replace here and on line 583 with range-for.\nIn general, are these readability changes worth decreased performance?",
+      "parentUuid": "bf659307_8570a174",
+      "range": {
+        "startLine": 376,
+        "startChar": 4,
+        "endLine": 378,
+        "endChar": 73
+      },
+      "revId": "6ffdc88e79904882e319bdd0b901e7491abae0b3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bf659307_050a51d1",
         "filename": "stoc/source/defaultregistry/defaultregistry.cxx",
         "patchSetId": 3
