@@ -37,7 +37,6 @@ rtl::Reference<LOKClipboard> LOKClipboardFactory::getClipboardForCurView()
     return xClip;
 }
 
-/// FIXME: should really copy and stash its content for a bit.
 void LOKClipboardFactory::releaseClipboardForView(int nViewId)
 {
     osl::MutexGuard aGuard(gMutex);
@@ -47,7 +46,7 @@ void LOKClipboardFactory::releaseClipboardForView(int nViewId)
         gClipboards.get()->clear();
         SAL_INFO("lok", "Released all clipboards on doc destroy\n");
     }
-    else
+    else if (gClipboards.get())
     {
         auto it = gClipboards.get()->find(nViewId);
         if (it != gClipboards.get()->end())
