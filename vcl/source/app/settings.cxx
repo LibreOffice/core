@@ -2732,6 +2732,11 @@ bool AllSettings::operator ==( const AllSettings& rSet ) const
     return false;
 }
 
+void AllSettings::SetLanguageTag(const OUString& rLanguage, bool bCanonicalize)
+{
+    SetLanguageTag(LanguageTag(rLanguage, bCanonicalize));
+}
+
 void AllSettings::SetLanguageTag( const LanguageTag& rLanguageTag )
 {
     if (mxData->maLocale != rLanguageTag)
