@@ -331,6 +331,7 @@ struct ImplSchedulerContext
 
 struct ImplSVData
 {
+    ImplSVData();
     ~ImplSVData();
     SalData*                mpSalData = nullptr;
     SalInstance*            mpDefInst = nullptr;            // Default SalInstance
@@ -348,7 +349,7 @@ struct ImplSVData
     ImplSVGDIData           maGDIData;                      // indepen data for Output classes
     ImplSVWinData           maWinData;                      // indepen data for Windows classes
     ImplSVCtrlData          maCtrlData;                     // indepen data for Control classes
-    ImplSVHelpData          maHelpData;                     // indepen data for Help classes
+    ImplSVHelpData*         mpHelpData;                     // Data for Help classes
     ImplSVNWFData           maNWFData;
     UnoWrapperBase*         mpUnoWrapper = nullptr;
     VclPtr<vcl::Window>     mpIntroWindow;                  // the splash screen
@@ -383,6 +384,8 @@ const std::locale& ImplGetResLocale();
 VCL_PLUGIN_PUBLIC OUString VclResId(const char* pId);
 DockingManager*     ImplGetDockingManager();
 BlendFrameCache*    ImplGetBlendFrameCache();
+
+VCL_PLUGIN_PUBLIC ImplSVHelpData& ImplGetSVHelpData();
 
 VCL_DLLPUBLIC bool        ImplCallPreNotify( NotifyEvent& rEvt );
 
