@@ -128,6 +128,24 @@
     },
     {
       "key": {
+        "uuid": "bf659307_c560d935",
+        "filename": "svtools/source/uno/fpicker.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-07-23T07:56:29Z",
+      "side": 1,
+      "message": "\u003e Can this be changed, or would that be an ABI break?\n\nIt should work to additionally register the implementation with the service name \"com.sun.star.ui.dialogs.SystemFolderPicker\".\n\n \u003e I think it\u0027s worth cleaning up this stuff. Doesn\u0027t make any sense\n \u003e to have multiple System*Picker per backend.\n\n\"multiple System*Picker per backend\"?  Is there a backend that has multiple such?\n\n \u003e I\u0027ll switch the kde5 rename back to just drop the kde5 based lines.\n\nNot sure what you mean with that.  Just be aware of the following:  For platforms like macOS and Windows, where each installs just one of the *.component files declaring the system file picker services, it could work to consistently register the service with one service name.  But for Linux, where the VCL backend to use is decided at runtime, a different mechanism is needed to select the right system file picker service implementation at runtime.",
+      "parentUuid": "bf659307_b1888b1f",
+      "revId": "1f2dba571a134ced884a5473cc48becd7c777026",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bf659307_57748a35",
         "filename": "svtools/source/uno/fpicker.cxx",
         "patchSetId": 2
