@@ -84,7 +84,7 @@ static bool ImplHandleMouseFloatMode( vcl::Window* pChild, const Point& rMousePo
 
             if ( !pFloat || bHitTestInsideRect )
             {
-                if ( pSVData->maHelpData.mpHelpWin && !pSVData->maHelpData.mbKeyboardHelp )
+                if ( ImplGetSVHelpData().mpHelpWin && !ImplGetSVHelpData().mbKeyboardHelp )
                     ImplDestroyHelpWindow( true );
                 pChild->ImplGetFrame()->SetPointer( PointerStyle::Arrow );
                 return true;
@@ -167,27 +167,27 @@ static void ImplHandleMouseHelpRequest( vcl::Window* pChild, const Point& rMouse
             return;
     }
 
-    ImplSVData* pSVData = ImplGetSVData();
-    if ( !pSVData->maHelpData.mpHelpWin ||
-         !( pSVData->maHelpData.mpHelpWin->IsWindowOrChild( pChild ) ||
-           pChild->IsWindowOrChild( pSVData->maHelpData.mpHelpWin ) ) )
+    ImplSVHelpData& aHelpData = ImplGetSVHelpData();
+    if ( !aHelpData.mpHelpWin ||
+         !( aHelpData.mpHelpWin->IsWindowOrChild( pChild ) ||
+           pChild->IsWindowOrChild( aHelpData.mpHelpWin ) ) )
     {
         HelpEventMode nHelpMode = HelpEventMode::NONE;
-        if ( pSVData->maHelpData.mbQuickHelp )
+        if ( aHelpData.mbQuickHelp )
             nHelpMode = HelpEventMode::QUICK;
-        if ( pSVData->maHelpData.mbBalloonHelp )
+        if ( aHelpData.mbBalloonHelp )
             nHelpMode |= HelpEventMode::BALLOON;
         if ( bool(nHelpMode) )
         {
             if ( pChild->IsInputEnabled() && !pChild->IsInModalMode() )
             {
                 HelpEvent aHelpEvent( rMousePos, nHelpMode );
-                pSVData->maHelpData.mbRequestingHelp = true;
+                aHelpData.mbRequestingHelp = true;
                 pChild->RequestHelp( aHelpEvent );
-                pSVData->maHelpData.mbRequestingHelp = false;
+                aHelpData.mbRequestingHelp = false;
             }
             // #104172# do not kill keyboard activated tooltips
-            else if ( pSVData->maHelpData.mpHelpWin && !pSVData->maHelpData.mbKeyboardHelp)
+            else if ( aHelpData.mpHelpWin && !aHelpData.mbKeyboardHelp)
             {
                 ImplDestroyHelpWindow( true );
             }
@@ -197,8 +197,7 @@ static void ImplHandleMouseHelpRequest( vcl::Window* pChild, const Point& rMouse
 
 static void ImplSetMousePointer( vcl::Window const * pChild )
 {
-    ImplSVData* pSVData = ImplGetSVData();
-    if ( pSVData->maHelpData.mbExtHelpMode )
+    if ( ImplGetSVHelpData().mbExtHelpMode )
         pChild->ImplGetFrame()->SetPointer( PointerStyle::Help );
     else
         pChild->ImplGetFrame()->SetPointer( pChild->ImplGetMousePointer() );
@@ -273,6 +272,7 @@ bool ImplHandleMouseEvent( const VclPtr<vcl::Window>& xWindow, MouseNotifyEvent 
                            long nX, long nY, sal_uInt64 nMsgTime,
                            sal_uInt16 nCode, MouseEventModifiers nMode )
 {
+    ImplSVHelpData& aHelpData = ImplGetSVHelpData();
     ImplSVData* pSVData = ImplGetSVData();
     Point       aMousePos( nX, nY );
     VclPtr<vcl::Window> pChild;
@@ -285,11 +285,11 @@ bool ImplHandleMouseEvent( const VclPtr<vcl::Window>& xWindow, MouseNotifyEvent 
     // mousebuttonup event
     if ( (nSVEvent == MouseNotifyEvent::MOUSEBUTTONDOWN) || (nSVEvent == MouseNotifyEvent::MOUSEBUTTONUP) )
     {
-        if ( (nSVEvent == MouseNotifyEvent::MOUSEBUTTONUP) && pSVData->maHelpData.mbExtHelpMode )
+        if ( (nSVEvent == MouseNotifyEvent::MOUSEBUTTONUP) && aHelpData.mbExtHelpMode )
             Help::EndExtHelp();
-        if ( pSVData->maHelpData.mpHelpWin )
+        if ( aHelpData.mpHelpWin )
         {
-            if( xWindow->ImplGetWindow() == pSVData->maHelpData.mpHelpWin )
+            if( xWindow->ImplGetWindow() == aHelpData.mpHelpWin )
             {
                 ImplDestroyHelpWindow( false );
                 return true; // xWindow is dead now - avoid crash!
@@ -317,7 +317,7 @@ bool ImplHandleMouseEvent( const VclPtr<vcl::Window>& xWindow, MouseNotifyEvent 
     if ( bMouseLeave )
     {
         pWinFrameData->mbMouseIn = false;
-        if ( pSVData->maHelpData.mpHelpWin && !pSVData->maHelpData.mbKeyboardHelp )
+        if ( ImplGetSVHelpData().mpHelpWin && !ImplGetSVHelpData().mbKeyboardHelp )
         {
             ImplDestroyHelpWindow( true );
 
@@ -687,9 +687,9 @@ bool ImplHandleMouseEvent( const VclPtr<vcl::Window>& xWindow, MouseNotifyEvent 
                 {
                     // if the MouseMove handler changes the help window's visibility
                     // the HelpRequest handler should not be called anymore
-                    vcl::Window* pOldHelpTextWin = pSVData->maHelpData.mpHelpWin;
+                    vcl::Window* pOldHelpTextWin = ImplGetSVHelpData().mpHelpWin;
                     pChild->MouseMove( aMEvt );
-                    if ( pOldHelpTextWin != pSVData->maHelpData.mpHelpWin )
+                    if ( pOldHelpTextWin != ImplGetSVHelpData().mpHelpWin )
                         bCallHelpRequest = false;
                 }
             }
@@ -732,7 +732,7 @@ bool ImplHandleMouseEvent( const VclPtr<vcl::Window>& xWindow, MouseNotifyEvent 
 
     if ( nSVEvent == MouseNotifyEvent::MOUSEMOVE )
     {
-        if ( bCallHelpRequest && !pSVData->maHelpData.mbKeyboardHelp )
+        if ( bCallHelpRequest && !ImplGetSVHelpData().mbKeyboardHelp )
             ImplHandleMouseHelpRequest( pChild, pChild->OutputToScreenPixel( aMEvt.GetPosPixel() ) );
         bRet = true;
     }
@@ -906,13 +906,13 @@ static bool ImplHandleKey( vcl::Window* pWindow, MouseNotifyEvent nSVEvent,
     // handle tracking window
     if ( nSVEvent == MouseNotifyEvent::KEYINPUT )
     {
-        if ( pSVData->maHelpData.mbExtHelpMode )
+        if ( ImplGetSVHelpData().mbExtHelpMode )
         {
             Help::EndExtHelp();
             if ( nEvCode == KEY_ESCAPE )
                 return true;
         }
-        if ( pSVData->maHelpData.mpHelpWin )
+        if ( ImplGetSVHelpData().mpHelpWin )
             ImplDestroyHelpWindow( false );
 
         // AutoScrollMode
@@ -1052,15 +1052,15 @@ static bool ImplHandleKey( vcl::Window* pWindow, MouseNotifyEvent nSVEvent,
 
                 HelpEvent aHelpEvent( aPos, HelpEventMode::BALLOON );
                 aHelpEvent.SetKeyboardActivated( true );
-                pSVData->maHelpData.mbSetKeyboardHelp = true;
+                ImplGetSVHelpData().mbSetKeyboardHelp = true;
                 pChild->RequestHelp( aHelpEvent );
-                pSVData->maHelpData.mbSetKeyboardHelp = false;
+                ImplGetSVHelpData().mbSetKeyboardHelp = false;
             }
             else if ( (nCode == KEY_F1) || (nCode == KEY_HELP) )
             {
                 if ( !aKeyCode.GetModifier() )
                 {
-                    if ( pSVData->maHelpData.mbContextHelp )
+                    if ( ImplGetSVHelpData().mbContextHelp )
                     {
                         Point       aMousePos = pChild->OutputToScreenPixel( pChild->GetPointerPosPixel() );
                         HelpEvent   aHelpEvent( aMousePos, HelpEventMode::CONTEXT );
@@ -1071,7 +1071,7 @@ static bool ImplHandleKey( vcl::Window* pWindow, MouseNotifyEvent nSVEvent,
                 }
                 else if ( aKeyCode.IsShift() )
                 {
-                    if ( pSVData->maHelpData.mbExtHelp )
+                    if ( ImplGetSVHelpData().mbExtHelp )
                         Help::StartExtHelp();
                     else
                         bRet = false;
@@ -1354,7 +1354,7 @@ bool HandleGestureEventBase::Setup()
 
     if (m_pSVData->maWinData.mpAutoScrollWin)
         m_pSVData->maWinData.mpAutoScrollWin->EndAutoScroll();
-    if (m_pSVData->maHelpData.mpHelpWin)
+    if (ImplGetSVHelpData().mpHelpWin)
         ImplDestroyHelpWindow( true );
     return !m_pWindow->IsDisposed();
 }
@@ -1648,7 +1648,7 @@ void ImplHandleResize( vcl::Window* pWindow, long nNewWidth, long nNewHeight )
     if (bChanged && pWindow->GetStyle() & (WB_MOVEABLE|WB_SIZEABLE))
     {
         KillOwnPopups( pWindow );
-        if( pWindow->ImplGetWindow() != ImplGetSVData()->maHelpData.mpHelpWin )
+        if( pWindow->ImplGetWindow() != ImplGetSVHelpData().mpHelpWin )
             ImplDestroyHelpWindow( true );
     }
 
@@ -1727,7 +1727,7 @@ static void ImplHandleMove( vcl::Window* pWindow )
     if( pWindow->GetStyle() & (WB_MOVEABLE|WB_SIZEABLE) )
     {
         KillOwnPopups( pWindow );
-        if( pWindow->ImplGetWindow() != ImplGetSVData()->maHelpData.mpHelpWin )
+        if( pWindow->ImplGetWindow() != ImplGetSVHelpData().mpHelpWin )
             ImplDestroyHelpWindow( true );
     }
 
@@ -1954,9 +1954,9 @@ static void ImplHandleClose( const vcl::Window* pWindow )
         pLastLevelFloat = pSVData->maWinData.mpFirstFloat->ImplFindLastLevelFloat();
         pLastLevelFloat->EndPopupMode( FloatWinPopupEndFlags::Cancel | FloatWinPopupEndFlags::CloseAll );
     }
-    if ( pSVData->maHelpData.mbExtHelpMode )
+    if ( ImplGetSVHelpData().mbExtHelpMode )
         Help::EndExtHelp();
-    if ( pSVData->maHelpData.mpHelpWin )
+    if ( ImplGetSVHelpData().mpHelpWin )
         ImplDestroyHelpWindow( false );
     // AutoScrollMode
     if ( pSVData->maWinData.mpAutoScrollWin )

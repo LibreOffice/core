@@ -62,6 +62,10 @@ namespace
 {
     struct private_aImplSVData :
         public rtl::Static<ImplSVData, private_aImplSVData> {};
+    /// Default instance ensures that ImplSVData::mpHelpData is never null.
+    struct private_aImplSVHelpData :
+        public rtl::Static<ImplSVHelpData, private_aImplSVHelpData> {};
+
 }
 
 ImplSVData* ImplGetSVData() {
@@ -352,6 +356,83 @@ void LocaleConfigurationListener::ConfigurationChanged( utl::ConfigurationBroadc
     AllSettings::LocaleSettingsChanged( nHint );
 }
 
+
+ImplSVHelpData* CreateSVHelpData()
+{
+    if (!comphelper::LibreOfficeKit::isActive())
+        return nullptr;
+
+    ImplSVHelpData* pNewData = new ImplSVHelpData;
+
+    // Set options set globally
+    ImplSVHelpData& aStaticHelpData = private_aImplSVHelpData::get();
+    pNewData->mbContextHelp = aStaticHelpData.mbContextHelp;
+    pNewData->mbExtHelp = aStaticHelpData.mbExtHelp;
+    pNewData->mbExtHelpMode = aStaticHelpData.mbExtHelpMode;
+    pNewData->mbOldBalloonMode = aStaticHelpData.mbOldBalloonMode;
+    pNewData->mbBalloonHelp = aStaticHelpData.mbBalloonHelp;
+    pNewData->mbQuickHelp = aStaticHelpData.mbQuickHelp;
+
+    return pNewData;
+}
+
+void DestroySVHelpData(ImplSVHelpData* pSVHelpData)
+{
+    if (!comphelper::LibreOfficeKit::isActive())
+        return;
+
+    // Change the SVData's help date if neccessary
+    if(ImplGetSVData()->mpHelpData == pSVHelpData)
+    {
+        ImplGetSVData()->mpHelpData = &private_aImplSVHelpData::get();
+    }
+
+    if(pSVHelpData)
+    {
+        ImplDestroyHelpWindow(*pSVHelpData, false);
+        delete pSVHelpData;
+    }
+}
+
+void SetSVHelpData(ImplSVHelpData* pSVHelpData)
+{
+    if (!comphelper::LibreOfficeKit::isActive())
+        return;
+
+    ImplSVData* pSVData = ImplGetSVData();
+    if (pSVData->mpHelpData != pSVHelpData)
+    {
+        // If current one is the static, clean it up to avoid having lingering references.
+        if (pSVData->mpHelpData == &private_aImplSVHelpData::get())
+        {
+            pSVData->mpHelpData->mpHelpWin.reset();
+        }
+
+        pSVData->mpHelpData = pSVHelpData;
+        if (pSVData->mpHelpData == nullptr)
+        {
+            pSVData->mpHelpData = &private_aImplSVHelpData::get(); // Never leave it null.
+        }
+    }
+}
+
+ImplSVData::ImplSVData()
+{
+    mpHelpData = &private_aImplSVHelpData::get();
+}
+
+ImplSVHelpData& ImplGetSVHelpData()
+{
+    ImplSVData* pSVData = ImplGetSVData();
+    if(pSVData->mpHelpData)
+    {
+        return *pSVData->mpHelpData;
+    }
+    else
+    {
+        return private_aImplSVHelpData::get();
+    }
+}
 
 ImplSVData::~ImplSVData() {}
 ImplSVAppData::~ImplSVAppData() {}
