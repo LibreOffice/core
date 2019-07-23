@@ -61,7 +61,7 @@ const SCSIZE   SCSIZE_MAX   = ::std::numeric_limits<SCSIZE>::max();
 
 // Count values
 const SCROW       MAXROWCOUNT    = 1048576;
-const SCCOL       MAXCOLCOUNT    = 1024;
+const SCCOL       MAXCOLCOUNT    = 16384;
 const SCCOL       INITIALCOLCOUNT = 64; // initial number of columns we allocate memory for
 /// limiting to 10000 for now, problem with 32 bit builds for now
 const SCTAB       MAXTABCOUNT    = 10000;
