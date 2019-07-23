@@ -1441,7 +1441,7 @@ void ScTiledRenderingTest::testLanguageStatus()
     SfxLokHelper::createView();
     SfxViewShell* pView2 = SfxViewShell::Current();
     CPPUNIT_ASSERT(pView1 != pView2);
-    const OUString aLangBolivia("Spanish (Bolivia)");
+    const OUString aLangBolivia("Spanish (Bolivia);es");
     {
         std::unique_ptr<SfxPoolItem> xItem1;
         std::unique_ptr<SfxPoolItem> xItem2;
