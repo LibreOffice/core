@@ -2004,7 +2004,10 @@ void ScDocShell::GetState( SfxItemSet &rSet )
                     LanguageType eLatin, eCjk, eCtl;
 
                     GetDocument().GetLanguage( eLatin, eCjk, eCtl );
-                    rSet.Put(SfxStringItem(nWhich, SvtLanguageTable::GetLanguageString(eLatin)));
+                    OUString sLanguage = SvtLanguageTable::GetLanguageString(eLatin);
+                    if (comphelper::LibreOfficeKit::isActive())
+                        sLanguage += ";" + LanguageTag(eLatin).getLanguage();
+                    rSet.Put(SfxStringItem(nWhich, sLanguage));
                 }
                 break;
 
