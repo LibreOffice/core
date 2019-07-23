@@ -101,13 +101,15 @@ bool AnimationRenderer::Matches(OutputDevice* pOut, long nCallerId) const
 {
     bool bRet = false;
 
-    if (nCallerId)
+    if (nCallerId != 0)
     {
         if ((mnCallerId == nCallerId) && (!pOut || (pOut == mpRenderContext)))
             bRet = true;
     }
     else if (!pOut || (pOut == mpRenderContext))
+    {
         bRet = true;
+    }
 
     return bRet;
 }
