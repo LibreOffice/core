@@ -1348,10 +1348,8 @@ namespace
     }
 }
 
-namespace {
-
 // don't allow LibreLogo to be used with our mouseover/etc dom-alike events
-bool UnTrustedScript(const OUString& rScriptURL)
+bool SfxObjectShell::UnTrustedScript(const OUString& rScriptURL)
 {
     if (!rScriptURL.startsWith("vnd.sun.star.script:"))
         return false;
@@ -1380,8 +1378,6 @@ bool UnTrustedScript(const OUString& rScriptURL)
     while (nIndex >= 0);
 
     return false;
-}
-
 }
 
 ErrCode SfxObjectShell::CallXScript( const Reference< XInterface >& _rxScriptContext, const OUString& _rScriptURL,
