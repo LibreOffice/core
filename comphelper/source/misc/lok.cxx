@@ -157,6 +157,11 @@ void setCompatFlag(Compat flag) { g_eCompatFlags = static_cast<Compat>(g_eCompat
 
 bool isCompatFlagSet(Compat flag) { return (g_eCompatFlags & flag) == flag; }
 
+void setLanguageTag(const OUString& lang, bool bCanonicalize)
+{
+    g_aLanguageTag = LanguageTag(lang, bCanonicalize);
+}
+
 void setLanguageTag(const LanguageTag& languageTag)
 {
     if (g_aLanguageTag != languageTag)

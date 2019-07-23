@@ -42,6 +42,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/bindings.hxx>
 #include <unotools/datetime.hxx>
+#include <unotools/syslocaleoptions.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <cairo.h>
@@ -55,6 +56,30 @@ using namespace desktop;
 
 class DesktopLOKTest : public UnoApiTest
 {
+    class Resetter
+    {
+    private:
+        std::function<void ()> m_Func;
+
+    public:
+        Resetter(std::function<void ()> const& rFunc)
+            : m_Func(rFunc)
+        {
+        }
+        ~Resetter()
+        {
+            try
+            {
+                m_Func();
+            }
+            catch (...) // has to be reliable
+            {
+                fprintf(stderr, "resetter failed with exception\n");
+                abort();
+            }
+        }
+    };
+
 public:
     DesktopLOKTest() : UnoApiTest("/desktop/qa/data/"),
     m_nSelectionBeforeSearchResult(0),
@@ -142,6 +167,7 @@ public:
     void testSignDocument_PEM_PDF();
     void testTextSelectionHandles();
     void testComplexSelection();
+    void testSpellcheckerMultiView();
     void testDialogPaste();
     void testCalcSaveAs();
     void testDialogInput();
@@ -197,6 +223,7 @@ public:
     CPPUNIT_TEST(testSignDocument_PEM_PDF);
     CPPUNIT_TEST(testTextSelectionHandles);
     CPPUNIT_TEST(testComplexSelection);
+    CPPUNIT_TEST(testSpellcheckerMultiView);
     CPPUNIT_TEST(testDialogPaste);
     CPPUNIT_TEST(testCalcSaveAs);
     CPPUNIT_TEST(testDialogInput);
@@ -2694,6 +2721,55 @@ void DesktopLOKTest::testCalcSaveAs()
     Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(OString("X"), aView.m_aCellFormula);
+}
+
+void DesktopLOKTest::testSpellcheckerMultiView()
+{
+    static const OUString aLangISO("en-US");
+    SvtSysLocaleOptions aSysLocaleOptions;
+    aSysLocaleOptions.SetLocaleConfigString(aLangISO);
+    aSysLocaleOptions.SetUILocaleConfigString(aLangISO);
+    comphelper::LibreOfficeKit::setLanguageTag(aLangISO, true);
+
+    auto aSavedSettings = Application::GetSettings();
+    std::unique_ptr<Resetter> pResetter(
+            new Resetter([&]() { Application::SetSettings(aSavedSettings); }));
+    AllSettings aSettings(aSavedSettings);
+    aSettings.SetLanguageTag(aLangISO, true);
+    Application::SetSettings(aSettings);
+
+    LibLODocument_Impl* pDocument = loadDoc("sheet_with_image.ods", LOK_DOCTYPE_SPREADSHEET);
+    pDocument->pClass->setViewLanguage(pDocument, 0, "en-US"); // For spellchecking.
+    pDocument->pClass->initializeForRendering(pDocument, nullptr);
+    pDocument->pClass->registerCallback(pDocument, &DesktopLOKTest::callback, this);
+
+    pDocument->pClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYINPUT, 'a', 0);
+    pDocument->pClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYINPUT, 'a', 0);
+    pDocument->pClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYINPUT, 'a', 0);
+    pDocument->pClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYINPUT, 0, com::sun::star::awt::Key::ESCAPE);
+
+    // Start spellchecking.
+    pDocument->pClass->postUnoCommand(pDocument, ".uno:SpellDialog", nullptr, false);
+
+    // Uncommenting this will result in a deadlock.
+    // Because the language configuration above is not effective, and no
+    // language is actually set, the spell-dialog finds no misspelled
+    // words, and displays a message box, which must be dismissed to
+    // continue.
+    // Need to fix the language configuration issue to enable this.
+    // Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(1, pDocument->m_pDocumentClass->getViewsCount(pDocument));
+
+    // Now create another view.
+    const int nViewId = pDocument->m_pDocumentClass->createView(pDocument);
+    CPPUNIT_ASSERT_EQUAL(2, pDocument->m_pDocumentClass->getViewsCount(pDocument));
+
+    // And destroy it.
+    pDocument->m_pDocumentClass->destroyView(pDocument, nViewId);
+
+    // We should survive the destroyed view.
+    CPPUNIT_ASSERT_EQUAL(1, pDocument->m_pDocumentClass->getViewsCount(pDocument));
 }
 
 namespace {
