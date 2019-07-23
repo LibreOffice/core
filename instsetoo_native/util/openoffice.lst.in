@@ -15,14 +15,14 @@ Globals
             BASISPACKAGEPREFIX libreofficepoweredbycibbasis
             UREPACKAGEPREFIX libreofficepoweredbycib
             SOLSUREPACKAGEPREFIX libreoffice
-            PROGRESSBARCOLOR 85,90,95
+            PROGRESSBARCOLOR 255,255,255
             PROGRESSSIZE 460,6
             PROGRESSSIZEHIGH 617,12
             PROGRESSPOSITION 26,235
             PROGRESSPOSITIONHIGH 46,212
-            PROGRESSFRAMECOLOR 85,90,95
+            PROGRESSFRAMECOLOR 255,255,255
             PROGRESSTEXTBASELINE 230
-            PROGRESSTEXTCOLOR 85,90,95
+            PROGRESSTEXTCOLOR 255,255,255
             NATIVEPROGRESS false
             REGISTRYLAYERNAME Layers
             SERVICEPACK 1
