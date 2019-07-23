@@ -4036,7 +4036,7 @@ const char* SC_OPCODE_COLOR_ARY[] =
 
 const char* SC_OPCODE_WEBSERVICE_ARY[] =
 {
-    NC_("SC_OPCODE_WEBSERVICE", "Get some webcontent from an URI."),
+    NC_("SC_OPCODE_WEBSERVICE", "Get some webcontent from a URI."),
     NC_("SC_OPCODE_WEBSERVICE", "URI"),
     NC_("SC_OPCODE_WEBSERVICE", "URI of the webservice")
 };
