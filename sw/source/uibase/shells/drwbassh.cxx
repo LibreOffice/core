@@ -240,7 +240,8 @@ void SwDrawBaseShell::Execute(SfxRequest const &rReq)
                         pDlg->SetInputSet( &aSet );
 
                         pDlg->StartExecuteAsync([bCaption, bChanged, pDlg, pFrameFormat, pSdrView,
-                                                 pSh, &rMarkList, this](
+                                                 pSh, this,
+                                                 bSingleSelection = rMarkList.GetMarkCount() == 1](
                                                     sal_Int32 nResult){
                             if (nResult == RET_OK)
                             {
@@ -265,8 +266,6 @@ void SwDrawBaseShell::Execute(SfxRequest const &rReq)
                                         SID_ATTR_TRANSFORM_POS_Y, false );
 
                                 SfxItemSet aFrameAttrSet(GetPool(), svl::Items<RES_FRMATR_BEGIN, RES_FRMATR_END - 1>{});
-
-                                bool bSingleSelection = rMarkList.GetMarkCount() == 1;
 
                                 const SfxPoolItem* pAnchorItem;
                                 if(SfxItemState::SET == pOutSet->GetItemState(
