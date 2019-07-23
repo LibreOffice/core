@@ -1373,6 +1373,46 @@ bool SvpSalGraphics::drawPolyPolygonBezier( sal_uInt32,
     return false;
 }
 
+namespace
+{
+    void add_polygon_path(cairo_t* cr, const basegfx::B2DPolyPolygon& rPolyPolygon, const basegfx::B2DHomMatrix& rObjectToDevice, bool bPixelSnap)
+    {
+        // try to access buffered data
+        std::shared_ptr<SystemDependentData_CairoPath> pSystemDependentData_CairoPath(
+            rPolyPolygon.getSystemDependentData<SystemDependentData_CairoPath>());
+
+        if(pSystemDependentData_CairoPath)
+        {
+            // re-use data
+            cairo_append_path(cr, pSystemDependentData_CairoPath->getCairoPath());
+        }
+        else
+        {
+            // create data
+            for (const auto & rPoly : rPolyPolygon)
+            {
+                // PixelOffset used: Was dependent of 'm_aLineColor != SALCOLOR_NONE'
+                // Adapt setupPolyPolygon-users to set a linear transformation to achieve PixelOffset
+                AddPolygonToPath(
+                    cr,
+                    rPoly,
+                    rObjectToDevice,
+                    bPixelSnap,
+                    false);
+            }
+
+            // copy and add to buffering mechanism
+            // for decisions how/what to buffer, see Note in WinSalGraphicsImpl::drawPolyPolygon
+            pSystemDependentData_CairoPath = rPolyPolygon.addOrReplaceSystemDependentData<SystemDependentData_CairoPath>(
+                ImplGetSystemDependentDataManager(),
+                cairo_copy_path(cr),
+                false,
+                false);
+        }
+    }
+}
+
+
 bool SvpSalGraphics::drawPolyPolygon(
     const basegfx::B2DHomMatrix& rObjectToDevice,
     const basegfx::B2DPolyPolygon& rPolyPolygon,
@@ -1405,53 +1445,18 @@ bool SvpSalGraphics::drawPolyPolygon(
         cairo_set_matrix(cr, &aMatrix);
     }
 
-    // try to access buffered data
-    std::shared_ptr<SystemDependentData_CairoPath> pSystemDependentData_CairoPath(
-        rPolyPolygon.getSystemDependentData<SystemDependentData_CairoPath>());
-
-    if(pSystemDependentData_CairoPath)
-    {
-        // re-use data
-        cairo_append_path(cr, pSystemDependentData_CairoPath->getCairoPath());
-    }
-    else
-    {
-        // create data
-        for (const auto & rPoly : rPolyPolygon)
-        {
-            // PixelOffset used: Was dependent of 'm_aLineColor != SALCOLOR_NONE'
-            // Adapt setupPolyPolygon-users to set a linear transformation to achieve PixelOffset
-            AddPolygonToPath(
-                cr,
-                rPoly,
-                rObjectToDevice,
-                !getAntiAliasB2DDraw(),
-                false);
-        }
-
-        // copy and add to buffering mechanism
-        // for decisions how/what to buffer, see Note in WinSalGraphicsImpl::drawPolyPolygon
-        pSystemDependentData_CairoPath = rPolyPolygon.addOrReplaceSystemDependentData<SystemDependentData_CairoPath>(
-            ImplGetSystemDependentDataManager(),
-            cairo_copy_path(cr),
-            false,
-            false);
-    }
-
     // To make releaseCairoContext work, use empty extents
     basegfx::B2DRange extents;
 
     if (bHasFill)
     {
-        cairo_set_source_rgba(cr, m_aFillColor.GetRed()/255.0,
-                                  m_aFillColor.GetGreen()/255.0,
-                                  m_aFillColor.GetBlue()/255.0,
-                                  1.0-fTransparency);
+        add_polygon_path(cr, rPolyPolygon, rObjectToDevice, !getAntiAliasB2DDraw());
 
+        applyColor(cr, m_aFillColor, fTransparency);
         // Get FillDamage (will be extended for LineDamage below)
         extents = getClippedFillDamage(cr);
 
-        cairo_fill_preserve(cr);
+        cairo_fill(cr);
     }
 
     if (bHasLine)
@@ -1461,12 +1466,9 @@ bool SvpSalGraphics::drawPolyPolygon(
         cairo_matrix_init_translate(&aMatrix, 0.5, 0.5);
         cairo_set_matrix(cr, &aMatrix);
 
-        // Note: Other methods use applyColor(...) to set the Color. Thst
-        // seems to do some more. Maybe it should be used here, too (?)
-        cairo_set_source_rgba(cr, m_aLineColor.GetRed()/255.0,
-                                  m_aLineColor.GetGreen()/255.0,
-                                  m_aLineColor.GetBlue()/255.0,
-                                  1.0-fTransparency);
+        add_polygon_path(cr, rPolyPolygon, rObjectToDevice, !getAntiAliasB2DDraw());
+
+        applyColor(cr, m_aLineColor, fTransparency);
 
         // expand with possible StrokeDamage
         extents.expand(getClippedStrokeDamage(cr));
@@ -1482,14 +1484,14 @@ bool SvpSalGraphics::drawPolyPolygon(
     return true;
 }
 
-void SvpSalGraphics::applyColor(cairo_t *cr, Color aColor)
+void SvpSalGraphics::applyColor(cairo_t *cr, Color aColor, double fTransparency)
 {
     if (cairo_surface_get_content(m_pSurface) == CAIRO_CONTENT_COLOR_ALPHA)
     {
         cairo_set_source_rgba(cr, aColor.GetRed()/255.0,
                                   aColor.GetGreen()/255.0,
                                   aColor.GetBlue()/255.0,
-                                  1.0);
+                                  1.0 - fTransparency);
     }
     else
     {
