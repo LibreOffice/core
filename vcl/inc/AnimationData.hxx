@@ -29,7 +29,7 @@ class OutputDevice;
 struct AnimationData
 {
     Point maOriginStartPt;
-    Size aStartSize;
+    Size maStartSize;
     VclPtr<OutputDevice> mpRenderContext;
     void* mpAnimationRenderer;
     long mnCallerId;
