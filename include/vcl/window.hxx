@@ -30,11 +30,10 @@
 #include <vcl/region.hxx>
 #include <vcl/uitest/factory.hxx>
 #include <vcl/IDialogRenderable.hxx>
+#include <vcl/animate/WindowAnimationRenderer.hxx>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <memory>
-
-#include <WindowAnimationRenderer.hxx>
 
 class VirtualDevice;
 struct ImplSVEvent;
