@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_85c8a155",
+        "filename": "vcl/CppunitTest_vcl_animation_test.mk",
+        "patchSetId": 13
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-07-23T07:10:50Z",
+      "side": 1,
+      "message": "* This file should have the same name as the CppunitTest it declares, i.e., CppunitTest_vcl_animation.mk (dropping the redundant \"_test\").\n\n* Please copy the latest version of the modeline/license boilerplate from TEMPLATE.SOURCECODE.HEADER.\n\n* Is all of this file\u0027s content really necessary, or was it copied from some other CppunitTest_*.mk file?",
+      "revId": "2300423e500ba7dadc35e8931240f435ee0f99c4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_25ac358b",
+        "filename": "vcl/qa/cppunit/animation.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-07-23T07:10:50Z",
+      "side": 1,
+      "message": "or use\n\n  CPPUNIT_ASSERT_EQUAL(size_t(0), ...);\n\ngetting rid of the nExcepted var that keeps changing its value",
+      "range": {
+        "startLine": 37,
+        "startChar": 25,
+        "endLine": 37,
+        "endChar": 34
+      },
+      "revId": "2300423e500ba7dadc35e8931240f435ee0f99c4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
