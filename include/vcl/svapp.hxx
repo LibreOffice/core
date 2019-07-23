@@ -1452,6 +1452,12 @@ VCL_DLLPUBLIC bool InitAccessBridge();
 VCL_DLLPUBLIC void CreateMainLoopThread( oslWorkerFunction pWorker, void * pThreadData );
 VCL_DLLPUBLIC void JoinMainLoopThread();
 
+/// The following are to manage per-view (frame) help data.
+struct ImplSVHelpData;
+VCL_DLLPUBLIC ImplSVHelpData* CreateSVHelpData();
+VCL_DLLPUBLIC void DestroySVHelpData(ImplSVHelpData*);
+VCL_DLLPUBLIC void SetSVHelpData(ImplSVHelpData*);
+
 inline void Application::EndYield()
 {
     PostUserEvent( Link<void*,void>() );
