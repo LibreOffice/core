@@ -1448,18 +1448,18 @@ bool SvpSalGraphics::drawPolyPolygon(
         cairo_set_matrix(cr, &aMatrix);
     }
 
-    add_polygon_path(cr, rPolyPolygon, rObjectToDevice, !getAntiAliasB2DDraw());
-
     // To make releaseCairoContext work, use empty extents
     basegfx::B2DRange extents;
 
     if (bHasFill)
     {
+        add_polygon_path(cr, rPolyPolygon, rObjectToDevice, !getAntiAliasB2DDraw());
+
         applyColor(cr, m_aFillColor, fTransparency);
         // Get FillDamage (will be extended for LineDamage below)
         extents = getClippedFillDamage(cr);
 
-        cairo_fill_preserve(cr);
+        cairo_fill(cr);
     }
 
     if (bHasLine)
@@ -1468,6 +1468,8 @@ bool SvpSalGraphics::drawPolyPolygon(
         cairo_matrix_t aMatrix;
         cairo_matrix_init_translate(&aMatrix, 0.5, 0.5);
         cairo_set_matrix(cr, &aMatrix);
+
+        add_polygon_path(cr, rPolyPolygon, rObjectToDevice, !getAntiAliasB2DDraw());
 
         applyColor(cr, m_aLineColor, fTransparency);
 
