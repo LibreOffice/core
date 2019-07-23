@@ -711,7 +711,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf119824)
 
     // and a tracked text deletion at the beginning of the paragraph
     CPPUNIT_ASSERT_EQUAL(OUString("Pellentesque habitant morbi tristique senectus "),
-                         getRun(getParagraph(3), 2)->getString());
+                         getRun(getParagraph(3), 3)->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString(""), getRun(getParagraph(3), 2)->getString());
+    CPPUNIT_ASSERT(hasProperty(getRun(getParagraph(3), 2), "RedlineType"));
 
     // delete last word of the third paragraph to remove tracked paragraph formatting
     // of this paragraph to track and show word deletion correctly.
@@ -1771,6 +1773,31 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf120338)
                          getProperty<OUString>(getParagraph(10), "ParaStyleName"));
     CPPUNIT_ASSERT_EQUAL(OUString("Heading 3"),
                          getProperty<OUString>(getParagraph(11), "ParaStyleName"));
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf120338_multiple_paragraph_join)
+{
+    load(DATA_DIRECTORY, "redline-para-join.docx");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Heading 1"),
+                         getProperty<OUString>(getParagraph(1), "ParaStyleName"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Heading 1"),
+                         getProperty<OUString>(getParagraph(2), "ParaStyleName"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Heading 1"),
+                         getProperty<OUString>(getParagraph(3), "ParaStyleName"));
+
+    // reject tracked paragraph styles
+    lcl_dispatchCommand(mxComponent, ".uno:RejectAllTrackedChanges", {});
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Heading 1"),
+                         getProperty<OUString>(getParagraph(1), "ParaStyleName"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Heading 2"),
+                         getProperty<OUString>(getParagraph(2), "ParaStyleName"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Heading 3"),
+                         getProperty<OUString>(getParagraph(3), "ParaStyleName"));
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testShapePageMove)
