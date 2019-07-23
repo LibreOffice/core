@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_452b6993",
+        "filename": "oox/source/drawingml/chart/chartconverter.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2019-07-23T10:33:50Z",
+      "side": 1,
+      "message": "no reason to store this in a vector",
+      "range": {
+        "startLine": 134,
+        "startChar": 12,
+        "endLine": 134,
+        "endChar": 24
+      },
+      "revId": "15541ebe26f880a57754452b158beb2402965865",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_e5195d88",
+        "filename": "oox/source/drawingml/chart/chartconverter.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2019-07-23T10:33:50Z",
+      "side": 1,
+      "message": "declare aRow here",
+      "range": {
+        "startLine": 137,
+        "startChar": 16,
+        "endLine": 137,
+        "endChar": 53
+      },
+      "revId": "15541ebe26f880a57754452b158beb2402965865",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_252e75a5",
+        "filename": "oox/source/drawingml/chart/chartconverter.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2019-07-23T10:33:50Z",
+      "side": 1,
+      "message": "you can remove this with by cleaning up the code",
+      "range": {
+        "startLine": 156,
+        "startChar": 0,
+        "endLine": 175,
+        "endChar": 9
+      },
+      "revId": "15541ebe26f880a57754452b158beb2402965865",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
