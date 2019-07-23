@@ -65,11 +65,11 @@
 #include <osl/endian.h>
 
 // We don't want to end up with 2GB read in one line just because of malformed
-// multiline fields, so chop it _somewhere_, which is twice supported columns
-// times maximum cell content length, 2*1024*64K=128M, and because it's
+// multiline fields, so chop it _somewhere_, which is 2048 columns
+// times maximum cell content length, 2048*64K=128M, and because it's
 // sal_Unicode that's 256MB. If it's 2GB of data without LF we're out of luck
 // anyway.
-static const sal_Int32 nArbitraryLineLengthLimit = 2 * MAXCOLCOUNT * 65536;
+static const sal_Int32 nArbitraryLineLengthLimit = 2048 * 65536;
 
 namespace
 {
