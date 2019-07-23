@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_8570a174",
+        "filename": "starmath/source/cfgitem.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 378,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-07-23T01:51:41Z",
+      "side": 1,
+      "message": "Note that this is slightly less efficient than the original code. It calls getArray() three times - for begin(), end(), and begin() (instead of once previously), with the related overhead; and also it creates (allocates and initializes) a lambda *object* (not a function, which would be possible if its capture list were empty).\n\nIn this case, plain range-based for would be more efficient than the new code (but slightly less efficient than old code, because of two getArray()s, because range-based for still needs to call end()).",
+      "range": {
+        "startLine": 376,
+        "startChar": 4,
+        "endLine": 378,
+        "endChar": 73
+      },
+      "revId": "6ffdc88e79904882e319bdd0b901e7491abae0b3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
