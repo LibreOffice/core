@@ -579,7 +579,7 @@ bool SvpSalGraphics::drawAlphaRect(long nX, long nY, long nWidth, long nHeight, 
         // expand with possible StrokeDamage
         extents.expand(getClippedStrokeDamage(cr));
 
-        cairo_stroke_preserve(cr);
+        cairo_stroke(cr);
     }
 
     releaseCairoContext(cr, false, extents);
@@ -1466,7 +1466,7 @@ bool SvpSalGraphics::drawPolyPolygon(
         // expand with possible StrokeDamage
         extents.expand(getClippedStrokeDamage(cr));
 
-        cairo_stroke_preserve(cr);
+        cairo_stroke(cr);
     }
 
     // if transformation has been applied, transform also extents (ranges)
