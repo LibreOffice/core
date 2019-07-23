@@ -40,7 +40,7 @@ public class _XResultSetMetaDataSupplier extends MultiMethodTest {
     /**
     * Tries to get the ResultSetMetaData of the Object</br>
     * an XResultSetMetaData is returned.</br>
-    * The test is OK if an not null ResultSetMetaData is returned
+    * The test is OK if a not null ResultSetMetaData is returned
     */
     public void _getMetaData() {
 

@@ -40,7 +40,7 @@ public class _XResultSetAccess extends MultiMethodTest {
     /**
     * tries to create a ResultSet for the Object</br>
     * an XResultSet is returned.</br>
-    * The test is OK if an not null ResultSet is returned
+    * The test is OK if a not null ResultSet is returned
     */
     public void _createResultSet() {
 

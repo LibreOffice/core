@@ -88,7 +88,7 @@ public class _XNumberFormatCode extends MultiMethodTest {
     * Test calls the method twice for each locale with two different arguments.
     * After every call result is checked.<p>
     * Has <b> OK </b> status if both times returned structure's field 'Code'
-    * does not equal to a empty string.
+    * does not equal to an empty string.
     */
     public void _getFormatCode() {
         boolean res = true;

@@ -269,7 +269,7 @@ int get_mar_file_info_fp(FILE *fp,
 
   /* Skip to the first index entry past the index size field
      We do it in 2 calls because offsetToIndex + sizeof(uint32_t)
-     could oerflow in theory. */
+     could overflow in theory. */
   if (fseek(fp, offsetToIndex, SEEK_SET)) {
     return -1;
   }

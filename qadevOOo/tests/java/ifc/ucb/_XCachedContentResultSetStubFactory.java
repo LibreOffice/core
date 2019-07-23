@@ -35,7 +35,7 @@ import com.sun.star.ucb.XCachedContentResultSetStubFactory;
 * <ul>
 *  <li> <code>'ContentResultSet'</code> (of type
 *   <code>com.sun.star.sdbc.XResultSet</code>):
-*   this must be an imlementation of <code>
+*   this must be an implementation of <code>
 *   com.sun.star.ucb.ContentResultSet</code> service.</li>
 * <ul> <p>
 * Test is <b> NOT </b> multithread compliant. <p>

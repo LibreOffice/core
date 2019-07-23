@@ -273,7 +273,7 @@ public class _XTransliteration extends MultiMethodTest {
 
     /**
      * Test performed for sets of equal substrings, not equal
-     * substrings, and with out of bounds offset and length
+     * substrings, and without of bounds offset and length
      * parameters.<p>
      *
      * Has <b>OK</b> status if comparings of equal substrings

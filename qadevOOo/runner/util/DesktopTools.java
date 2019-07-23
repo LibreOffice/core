@@ -150,7 +150,7 @@ public class DesktopTools
     }
 
     /**
-     * Returns the document type for the given XComponent of an document
+     * Returns the document type for the given XComponent of a document
      * @param xComponent the document to query for its type
      * @return possible:
      * <ul>
