@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_c518d982",
+        "filename": "schema/libreoffice/OpenDocument-schema-v1.3+libreoffice.rng",
+        "patchSetId": 6
+      },
+      "lineNbr": 968,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-07-23T10:35:04Z",
+      "side": 1,
+      "message": "this is correct as-is, but for adding a new attribute there\u0027s a trick whereby you don\u0027t need to copy the existing content of the named pattern - you can add \u0027combine\u003d\"interleave\"\u0027 and then only list the new attribute; see examples at the end of this file.",
+      "revId": "fd3e15079852cefbc5f0cdcdc06f5fd579a9f7e7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_852181b7",
+        "filename": "xmloff/source/text/txtflde.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1767,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-07-23T10:35:04Z",
+      "side": 1,
+      "message": "you can use sax::Converter::convertBool in the other direction too, thanks to the horror of overloading :)",
+      "revId": "fd3e15079852cefbc5f0cdcdc06f5fd579a9f7e7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_65246dc7",
+        "filename": "xmloff/source/text/txtfldi.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 3474,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-07-23T10:35:04Z",
+      "side": 1,
+      "message": "uhmmm wouldn\u0027t that import \"false\" as true then?\n\ntry using sax::Converter::convertBool",
+      "revId": "fd3e15079852cefbc5f0cdcdc06f5fd579a9f7e7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
