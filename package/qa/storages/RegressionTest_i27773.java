@@ -168,7 +168,7 @@ public class RegressionTest_i27773 implements StorageTest {
                 return false;
 
 
-            // copy all the changed and noncommited substorages
+            // copy all the changed and noncommitted substorages
             // and dispose them
 
 

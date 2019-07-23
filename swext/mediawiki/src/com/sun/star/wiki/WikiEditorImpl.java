@@ -208,7 +208,7 @@ public final class WikiEditorImpl extends WeakBase
                         throw new com.sun.star.uno.RuntimeException();
                     }
 
-                    m_aSettings.loadConfiguration(); // throw away all the noncommited changes
+                    m_aSettings.loadConfiguration(); // throw away all the noncommitted changes
                     // show the send dialog
                     aSendDialog = new WikiPropDialog( m_xContext, "vnd.sun.star.script:WikiEditor.SendToMediaWiki?location=application", this );
                     aSendDialog.fillWikiList();
