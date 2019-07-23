@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_002d5f94",
+        "filename": "sw/source/core/layout/ftnfrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2272,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-07-23T10:56:05Z",
+      "side": 1,
+      "message": "don\u0027t we need a nullpointer check here now?",
+      "revId": "fec42f5a10373a08738bab8d7d60fa78db6f4626",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_a02113a2",
+        "filename": "sw/source/core/layout/ftnfrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2306,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-07-23T10:56:05Z",
+      "side": 1,
+      "message": "but not here because !bLock",
+      "revId": "fec42f5a10373a08738bab8d7d60fa78db6f4626",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
