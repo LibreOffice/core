@@ -7286,14 +7286,14 @@ you must use the "--with-jdk-home" configure option explicitly])
             _jdk=`$JAVAINTERPRETER -version 2>&1 | $AWK -F'"' '{ print \$2 }' | $SED '/^$/d' | $SED s/[[-A-Za-z]]*//`
             _jdk_ver=`echo "$_jdk" | $AWK -F. '{ print (($1 * 100) + $2) * 100 + $3;}'`
 
-            if test "$_jdk_ver" -lt 10600; then
-                AC_MSG_ERROR([JDK is too old, you need at least 1.6])
+            if test "$_jdk_ver" -lt 10700; then
+                AC_MSG_ERROR([JDK is too old, you need at least 1.7])
             fi
-            if test "$_jdk_ver" -gt 10600; then
+            if test "$_jdk_ver" -gt 10700; then
                 JAVA_CLASSPATH_NOT_SET=TRUE
             fi
 
-            AC_MSG_RESULT([found (JDK $_jdk)])
+            AC_MSG_RESULT([found (JDK $_jdk $_jdk_ver)])
             JAVA_HOME=`echo $JAVAINTERPRETER | $SED -n "s,//*bin//*java,,p"`
             if test "$_os" = "WINNT"; then
                 JAVA_HOME=`echo $JAVA_HOME | $SED "s,\.[[eE]][[xX]][[eE]]$,,"`
@@ -7305,7 +7305,7 @@ you must use the "--with-jdk-home" configure option explicitly])
             JAVAFLAGS=-J-Xmx128M
         fi
     else
-        AC_MSG_ERROR([Java not found. You need at least jdk-1.6])
+        AC_MSG_ERROR([Java not found. You need at least jdk-1.7])
     fi
 else
     dnl Java disabled
@@ -7318,8 +7318,8 @@ dnl Checks for javac
 dnl ===================================================================
 if test "$ENABLE_JAVA" != ""; then
     javacompiler="javac"
-    : ${JAVA_SOURCE_VER=1.6}
-    : ${JAVA_TARGET_VER=1.6}
+    : ${JAVA_SOURCE_VER=1.7}
+    : ${JAVA_TARGET_VER=1.7}
     if test -z "$with_jdk_home"; then
         AC_PATH_PROG(JAVACOMPILER, $javacompiler)
     else
