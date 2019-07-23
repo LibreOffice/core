@@ -532,6 +532,7 @@ public:
                                     vcl::Window* pWin=nullptr, bool bIsNewObj=false, bool bSetSelectionToStart=false );
     bool isSignatureLineSelected();
     bool isSignatureLineSigned();
+    bool isQRCodeSelected();
 
     void            StateTabWin(SfxItemSet&);
 
