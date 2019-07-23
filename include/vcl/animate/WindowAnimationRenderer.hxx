@@ -20,9 +20,10 @@
 #ifndef INCLUDED_VCL_INC_WINDOWANIMATERENDERER_HXX
 #define INCLUDED_VCL_INC_WINDOWANIMATERENDERER_HXX
 
+#include <vcl/dllapi.h>
 #include <vcl/animate/AnimationRenderer.hxx>
 
-class WindowAnimationRenderer : public AnimationRenderer
+class VCL_DLLPUBLIC WindowAnimationRenderer : public AnimationRenderer
 {
 public:
     WindowAnimationRenderer(Animation* pAnim, OutputDevice* pOut, const Point& rDestPt,
