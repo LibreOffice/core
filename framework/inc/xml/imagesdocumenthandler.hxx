@@ -62,7 +62,7 @@ class OReadImagesDocumentHandler : public ::cppu::WeakImplHelper< css::xml::sax:
             IMG_NS_XLINK
         };
 
-        OReadImagesDocumentHandler( ImageListsDescriptor& aItems );
+        OReadImagesDocumentHandler( ImageItemDescriptorList& aItems );
         virtual ~OReadImagesDocumentHandler() override;
 
         // XDocumentHandler
@@ -101,8 +101,7 @@ class OReadImagesDocumentHandler : public ::cppu::WeakImplHelper< css::xml::sax:
         sal_Int32                                           m_nHashMaskModeBitmap;
         sal_Int32                                           m_nHashMaskModeColor;
         ImageHashMap                                        m_aImageMap;
-        ImageListsDescriptor&                               m_aImageList;
-        ImageListItemDescriptor*                            m_pImages;
+        ImageItemDescriptorList&                            m_rImageList;
         css::uno::Reference< css::xml::sax::XLocator >      m_xLocator;
 };
 
@@ -110,7 +109,7 @@ class OWriteImagesDocumentHandler final
 {
     public:
         OWriteImagesDocumentHandler(
-            const ImageListsDescriptor& aItems,
+            const ImageItemDescriptorList& aItems,
             css::uno::Reference< css::xml::sax::XDocumentHandler > const &
                 rWriteDocumentHandler);
         ~OWriteImagesDocumentHandler();
@@ -122,13 +121,13 @@ class OWriteImagesDocumentHandler final
     private:
         /// @throws css::xml::sax::SAXException
         /// @throws css::uno::RuntimeException
-        void WriteImageList( const ImageListItemDescriptor* );
+        void WriteImageList( const ImageItemDescriptorList* );
 
         /// @throws css::xml::sax::SAXException
         /// @throws css::uno::RuntimeException
         void WriteImage( const ImageItemDescriptor* );
 
-        const ImageListsDescriptor&                               m_aImageListsItems;
+        const ImageItemDescriptorList&                            m_rImageItemList;
         css::uno::Reference< css::xml::sax::XDocumentHandler >    m_xWriteDocumentHandler;
         css::uno::Reference< css::xml::sax::XAttributeList >      m_xEmptyList;
         OUString                                                  m_aXMLXlinkNS;

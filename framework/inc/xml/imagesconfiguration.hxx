@@ -39,20 +39,7 @@ struct ImageItemDescriptor
     OUString  aCommandURL;                // URL command to dispatch
 };
 
-typedef std::vector<std::unique_ptr<ImageItemDescriptor> > ImageItemListDescriptor;
-
-struct ImageListItemDescriptor
-{
-    std::unique_ptr<ImageItemListDescriptor>
-                                pImageItemList;       // an array of ImageItemDescriptors that describes every image
-};
-
-typedef std::vector<std::unique_ptr<ImageListItemDescriptor> > ImageListDescriptor;
-
-struct ImageListsDescriptor
-{
-    std::unique_ptr<ImageListDescriptor> pImageList;
-};
+typedef std::vector<ImageItemDescriptor> ImageItemDescriptorList;
 
 class ImagesConfiguration
 {
@@ -60,12 +47,12 @@ class ImagesConfiguration
         static bool LoadImages(
             const css::uno::Reference< css::uno::XComponentContext >& rxContext,
             const css::uno::Reference< css::io::XInputStream >& rInputStream,
-            ImageListsDescriptor& rItems );
+            ImageItemDescriptorList& rItems );
 
         static bool StoreImages(
             const css::uno::Reference< css::uno::XComponentContext >& rxContext,
             const css::uno::Reference< css::io::XOutputStream >& rOutputStream,
-            const ImageListsDescriptor& rItems );
+            const ImageItemDescriptorList& rItems );
 };
 
 } // namespace framework

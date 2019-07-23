@@ -98,12 +98,9 @@ ImageXMLEntryProperty const ImagesEntries[OReadImagesDocumentHandler::IMG_XML_EN
     { OReadImagesDocumentHandler::IMG_NS_IMAGE, ATTRIBUTE_HIGHCONTRASTMASKURL   }
 };
 
-OReadImagesDocumentHandler::OReadImagesDocumentHandler( ImageListsDescriptor& aItems ) :
-    m_aImageList( aItems ),
-    m_pImages( nullptr )
+OReadImagesDocumentHandler::OReadImagesDocumentHandler( ImageItemDescriptorList& rItems ) :
+    m_rImageList( rItems )
 {
-    m_aImageList.pImageList         = nullptr;
-
     m_nHashMaskModeBitmap   = OUString( ATTRIBUTE_MASKMODE_BITMAP ).hashCode();
     m_nHashMaskModeColor    = OUString( ATTRIBUTE_MASKMODE_COLOR ).hashCode();
 
@@ -191,11 +188,7 @@ void SAL_CALL OReadImagesDocumentHandler::startElement(
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 
-                if ( !m_aImageList.pImageList )
-                    m_aImageList.pImageList.reset( new ImageListDescriptor );
-
                 m_bImagesStartFound = true;
-                m_pImages = new ImageListItemDescriptor;
             }
             break;
 
@@ -204,19 +197,13 @@ void SAL_CALL OReadImagesDocumentHandler::startElement(
                 // Check that image:entry is embedded into image:images!
                 if ( !m_bImagesStartFound )
                 {
-                    delete m_pImages;
-                    m_pImages = nullptr;
-
                     OUString aErrorMessage = getErrorLineString();
                     aErrorMessage += "Element 'image:entry' must be embedded into element 'image:images'!";
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 
-                if ( !m_pImages->pImageItemList )
-                    m_pImages->pImageItemList.reset( new ImageItemListDescriptor );
-
                 // Create new image item descriptor
-                std::unique_ptr<ImageItemDescriptor> pItem(new ImageItemDescriptor);
+                ImageItemDescriptor aItem;
 
                 // Read attributes for this image definition
                 for ( sal_Int16 n = 0; n < xAttribs->getLength(); n++ )
@@ -228,7 +215,7 @@ void SAL_CALL OReadImagesDocumentHandler::startElement(
                         {
                             case IMG_ATTRIBUTE_COMMAND:
                             {
-                                pItem->aCommandURL  = xAttribs->getValueByIndex( n );
+                                aItem.aCommandURL  = xAttribs->getValueByIndex( n );
                             }
                             break;
 
@@ -239,17 +226,14 @@ void SAL_CALL OReadImagesDocumentHandler::startElement(
                 }
 
                 // Check required attribute "command"
-                if ( pItem->aCommandURL.isEmpty() )
+                if ( aItem.aCommandURL.isEmpty() )
                 {
-                    delete m_pImages;
-                    m_pImages = nullptr;
-
                     OUString aErrorMessage = getErrorLineString();
                     aErrorMessage += "Required attribute 'image:command' must have a value!";
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 
-                m_pImages->pImageItemList->push_back( std::move(pItem) );
+                m_rImageList.push_back( aItem );
             }
             break;
 
@@ -276,12 +260,6 @@ void SAL_CALL OReadImagesDocumentHandler::endElement(const OUString& aName)
 
             case IMG_ELEMENT_IMAGES:
             {
-                if ( m_pImages )
-                {
-                    if ( m_aImageList.pImageList )
-                        m_aImageList.pImageList->push_back( std::unique_ptr<ImageListItemDescriptor>(m_pImages) );
-                    m_pImages = nullptr;
-                }
                 m_bImagesStartFound = false;
             }
             break;
@@ -328,9 +306,9 @@ OUString OReadImagesDocumentHandler::getErrorLineString()
 //  OWriteImagesDocumentHandler
 
 OWriteImagesDocumentHandler::OWriteImagesDocumentHandler(
-    const ImageListsDescriptor& aItems,
+    const ImageItemDescriptorList& rItems,
     Reference< XDocumentHandler > const & rWriteDocumentHandler ) :
-    m_aImageListsItems( aItems ),
+    m_rImageItemList( rItems ),
     m_xWriteDocumentHandler( rWriteDocumentHandler )
 {
     ::comphelper::AttributeList* pList = new ::comphelper::AttributeList;
@@ -373,16 +351,7 @@ void OWriteImagesDocumentHandler::WriteImagesDocument()
     m_xWriteDocumentHandler->startElement( ELEMENT_NS_IMAGESCONTAINER, pList.get() );
     m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
 
-    if ( m_aImageListsItems.pImageList )
-    {
-        ImageListDescriptor* pImageList = m_aImageListsItems.pImageList.get();
-
-        for ( size_t i = 0; i < m_aImageListsItems.pImageList->size(); i++ )
-        {
-            const ImageListItemDescriptor* pImageItems = (*pImageList)[i].get();
-            WriteImageList( pImageItems );
-        }
-    }
+    WriteImageList( &m_rImageItemList );
 
     m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
     m_xWriteDocumentHandler->endElement( ELEMENT_NS_IMAGESCONTAINER );
@@ -392,7 +361,7 @@ void OWriteImagesDocumentHandler::WriteImagesDocument()
 
 //  protected member functions
 
-void OWriteImagesDocumentHandler::WriteImageList( const ImageListItemDescriptor* pImageList )
+void OWriteImagesDocumentHandler::WriteImageList( const ImageItemDescriptorList* pImageList )
 {
     ::comphelper::AttributeList* pList = new ::comphelper::AttributeList;
     Reference< XAttributeList > xList( static_cast<XAttributeList *>(pList) , UNO_QUERY );
@@ -405,12 +374,8 @@ void OWriteImagesDocumentHandler::WriteImageList( const ImageListItemDescriptor*
     m_xWriteDocumentHandler->startElement( ELEMENT_NS_IMAGES, xList );
     m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
 
-    ImageItemListDescriptor* pImageItemList = pImageList->pImageItemList.get();
-    if ( pImageItemList )
-    {
-        for (std::unique_ptr<ImageItemDescriptor> & i : *pImageItemList)
-            WriteImage( i.get() );
-    }
+    for (const ImageItemDescriptor & i : *pImageList)
+        WriteImage( &i );
 
     m_xWriteDocumentHandler->endElement( ELEMENT_NS_IMAGES );
     m_xWriteDocumentHandler->ignorableWhitespace( OUString() );

@@ -322,21 +322,19 @@ void ImageManagerImpl::implts_loadUserImages(
                                                                                       ElementModes::READ );
             uno::Reference< XInputStream > xInputStream = xStream->getInputStream();
 
-            ImageListsDescriptor aUserImageListInfo;
+            ImageItemDescriptorList aUserImageListInfo;
             ImagesConfiguration::LoadImages( m_xContext,
                                              xInputStream,
                                              aUserImageListInfo );
-            if (( aUserImageListInfo.pImageList != nullptr ) &&
-                ( !aUserImageListInfo.pImageList->empty() ))
+            if ( !aUserImageListInfo.empty() )
             {
-                ImageListItemDescriptor* pList = aUserImageListInfo.pImageList->front().get();
-                sal_Int32 nCount = pList->pImageItemList->size();
+                sal_Int32 nCount = aUserImageListInfo.size();
                 std::vector< OUString > aUserImagesVector;
                 aUserImagesVector.reserve(nCount);
                 for ( sal_Int32 i=0; i < nCount; i++ )
                 {
-                    const ImageItemDescriptor* pItem = (*pList->pImageItemList)[i].get();
-                    aUserImagesVector.push_back( pItem->aCommandURL );
+                    const ImageItemDescriptor& rItem = aUserImageListInfo[i];
+                    aUserImagesVector.push_back( rItem.aCommandURL );
                 }
 
                 uno::Reference< XStream > xBitmapStream = xUserBitmapsStorage->openStreamElement(
@@ -393,18 +391,13 @@ bool ImageManagerImpl::implts_storeUserImages(
         ImageList* pImageList = implts_getUserImageList( nImageType );
         if ( pImageList->GetImageCount() > 0 )
         {
-            ImageListsDescriptor aUserImageListInfo;
-            aUserImageListInfo.pImageList.reset( new ImageListDescriptor );
+            ImageItemDescriptorList aUserImageListInfo;
 
-            ImageListItemDescriptor* pList = new ImageListItemDescriptor;
-            aUserImageListInfo.pImageList->push_back( std::unique_ptr<ImageListItemDescriptor>(pList) );
-
-            pList->pImageItemList.reset( new ImageItemListDescriptor );
             for ( sal_uInt16 i=0; i < pImageList->GetImageCount(); i++ )
             {
-                ImageItemDescriptor* pItem = new ImageItemDescriptor;
-                pItem->aCommandURL = pImageList->GetImageName( i );
-                pList->pImageItemList->push_back( std::unique_ptr<ImageItemDescriptor>(pItem) );
+                ImageItemDescriptor aItem;
+                aItem.aCommandURL = pImageList->GetImageName( i );
+                aUserImageListInfo.push_back( aItem );
             }
 
             uno::Reference< XTransactedObject > xTransaction;
