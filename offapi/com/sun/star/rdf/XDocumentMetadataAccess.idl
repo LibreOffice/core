@@ -77,10 +77,10 @@ interface XDocumentMetadataAccess
     XMetadatable getElementByMetadataReference(
         [in] com::sun::star::beans::StringPair MetadataReference);
 
-    /** get the ODF element that corresponds to an URI.
+    /** get the ODF element that corresponds to a URI.
 
         @param URI
-            an URI that may identify an ODF element
+            a URI that may identify an ODF element
 
         @returns
             the ODF element that corresponds to the given URI, or `NULL`

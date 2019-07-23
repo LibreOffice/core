@@ -588,12 +588,12 @@ public:
     /**
      * It returns a pointer to the name of the URI associated with a given
      * external file ID.  In case the original document has moved, it returns
-     * an URI adjusted for the relocation.
+     * a URI adjusted for the relocation.
      *
      * @param nFileId file ID for an external document
      * @param bForceOriginal If true, it always returns the original document
      *                       URI even if the referring document has relocated.
-     *                       If false, it returns an URI adjusted for
+     *                       If false, it returns a URI adjusted for
      *                       relocated document.
      *
      * @return const OUString* external document URI.
