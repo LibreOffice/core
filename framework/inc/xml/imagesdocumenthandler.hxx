@@ -103,7 +103,6 @@ class OReadImagesDocumentHandler : public ::cppu::WeakImplHelper< css::xml::sax:
         ImageHashMap                                        m_aImageMap;
         ImageListsDescriptor&                               m_aImageList;
         ImageListItemDescriptor*                            m_pImages;
-        ExternalImageItemListDescriptor*                    m_pExternalImages;
         css::uno::Reference< css::xml::sax::XLocator >      m_xLocator;
 };
 
@@ -127,15 +126,7 @@ class OWriteImagesDocumentHandler final
 
         /// @throws css::xml::sax::SAXException
         /// @throws css::uno::RuntimeException
-        void WriteExternalImageList( const ExternalImageItemListDescriptor* );
-
-        /// @throws css::xml::sax::SAXException
-        /// @throws css::uno::RuntimeException
         void WriteImage( const ImageItemDescriptor* );
-
-        /// @throws css::xml::sax::SAXException
-        /// @throws css::uno::RuntimeException
-        void WriteExternalImage( const ExternalImageItemDescriptor* );
 
         const ImageListsDescriptor&                               m_aImageListsItems;
         css::uno::Reference< css::xml::sax::XDocumentHandler >    m_xWriteDocumentHandler;

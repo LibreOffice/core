@@ -31,13 +31,13 @@
 <!ELEMENT image:entry EMPTY>
 <!ATTLIST image:entry
 	image:command %url; #REQUIRED
-	image:bitmap-index CDATA #REQUIRED
+	image:bitmap-index CDATA
 >
 
 <!ELEMENT image:externalentry EMPTY>
 <!ATTLIST image:externalentry
 	image:command %url; #REQUIRED
-	xlink:href %uriReference; #REQUIRED
+	xlink:href %uriReference;
 	xlink:type CDATA #FIXED "simple"
 >
 
