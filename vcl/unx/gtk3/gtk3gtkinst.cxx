@@ -7590,8 +7590,8 @@ namespace
     gboolean signalTooltipQuery(GtkWidget* pWidget, gint /*x*/, gint /*y*/,
                                          gboolean /*keyboard_mode*/, GtkTooltip *tooltip)
     {
-        const ImplSVData* pSVData = ImplGetSVData();
-        if (pSVData->maHelpData.mbBalloonHelp)
+        const ImplSVHelpData& aHelpData = ImplGetSVHelpData();
+        if (aHelpData.mbBalloonHelp)
         {
             /*Current mechanism which needs help installed*/
             OString sHelpId = ::get_help_id(pWidget);
@@ -7709,8 +7709,8 @@ private:
             OString sHelpId = m_aUtf8HelpRoot + sBuildableName;
             set_help_id(pWidget, sHelpId);
             //hook up for extended help
-            const ImplSVData* pSVData = ImplGetSVData();
-            if (pSVData->maHelpData.mbBalloonHelp && !GTK_IS_DIALOG(pWidget) && !GTK_IS_ASSISTANT(pWidget))
+            const ImplSVHelpData& aHelpData = ImplGetSVHelpData();
+            if (aHelpData.mbBalloonHelp && !GTK_IS_DIALOG(pWidget) && !GTK_IS_ASSISTANT(pWidget))
             {
                 gtk_widget_set_has_tooltip(pWidget, true);
                 g_signal_connect(pWidget, "query-tooltip", G_CALLBACK(signalTooltipQuery), nullptr);
