@@ -1396,657 +1396,657 @@ void SAL_CALL SwXTextField::attach(
     SolarMutexGuard aGuard;
     if (m_pImpl->IsDescriptor())
     {
-    uno::Reference<lang::XUnoTunnel> xRangeTunnel( xTextRange, uno::UNO_QUERY);
-    SwXTextRange* pRange = nullptr;
-    OTextCursorHelper* pCursor = nullptr;
-    if(xRangeTunnel.is())
-    {
-        pRange  = reinterpret_cast< SwXTextRange * >(
-                sal::static_int_cast< sal_IntPtr >( xRangeTunnel->getSomething( SwXTextRange::getUnoTunnelId()) ));
-        pCursor = reinterpret_cast< OTextCursorHelper * >(
-                sal::static_int_cast< sal_IntPtr >( xRangeTunnel->getSomething( OTextCursorHelper::getUnoTunnelId()) ));
-    }
+        uno::Reference<lang::XUnoTunnel> xRangeTunnel( xTextRange, uno::UNO_QUERY);
+        SwXTextRange* pRange = nullptr;
+        OTextCursorHelper* pCursor = nullptr;
+        if(xRangeTunnel.is())
+        {
+            pRange  = reinterpret_cast< SwXTextRange * >(
+                    sal::static_int_cast< sal_IntPtr >( xRangeTunnel->getSomething( SwXTextRange::getUnoTunnelId()) ));
+            pCursor = reinterpret_cast< OTextCursorHelper * >(
+                    sal::static_int_cast< sal_IntPtr >( xRangeTunnel->getSomething( OTextCursorHelper::getUnoTunnelId()) ));
+        }
 
-    SwDoc* pDoc = pRange ? &pRange->GetDoc() : pCursor ? pCursor->GetDoc() : nullptr;
-    // if a FieldMaster was attached, then the document is already fixed!
-    // NOTE: sw.SwXAutoTextEntry unoapi test depends on m_pDoc = 0 being valid
-    if (!pDoc || (m_pImpl->m_pDoc && m_pImpl->m_pDoc != pDoc))
-        throw lang::IllegalArgumentException();
+        SwDoc* pDoc = pRange ? &pRange->GetDoc() : pCursor ? pCursor->GetDoc() : nullptr;
+        // if a FieldMaster was attached, then the document is already fixed!
+        // NOTE: sw.SwXAutoTextEntry unoapi test depends on m_pDoc = 0 being valid
+        if (!pDoc || (m_pImpl->m_pDoc && m_pImpl->m_pDoc != pDoc))
+            throw lang::IllegalArgumentException();
 
-    SwUnoInternalPaM aPam(*pDoc);
-    // this now needs to return TRUE
-    ::sw::XTextRangeToSwPaM(aPam, xTextRange);
-    std::unique_ptr<SwField> xField;
-    switch (m_pImpl->m_nServiceId)
-    {
-        case SwServiceType::FieldTypeAnnotation:
+        SwUnoInternalPaM aPam(*pDoc);
+        // this now needs to return TRUE
+        ::sw::XTextRangeToSwPaM(aPam, xTextRange);
+        std::unique_ptr<SwField> xField;
+        switch (m_pImpl->m_nServiceId)
+        {
+            case SwServiceType::FieldTypeAnnotation:
+                {
+                    SwFieldType* pFieldType = pDoc->getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::Postit);
+
+                    DateTime aDateTime( DateTime::EMPTY );
+                    if (m_pImpl->m_pProps->pDateTime)
+                    {
+                        aDateTime = *(m_pImpl->m_pProps->pDateTime);
+                    }
+                    SwPostItField* pPostItField = new SwPostItField(
+                        static_cast<SwPostItFieldType*>(pFieldType),
+                        m_pImpl->m_pProps->sPar1, // author
+                        m_pImpl->m_pProps->sPar2, // content
+                        m_pImpl->m_pProps->sPar3, // author's initials
+                        m_pImpl->m_pProps->sPar4, // name
+                        aDateTime );
+                    if ( m_pImpl->m_xTextObject.is() )
+                    {
+                        pPostItField->SetTextObject( m_pImpl->m_xTextObject->CreateText() );
+                        pPostItField->SetPar2(m_pImpl->m_xTextObject->GetText());
+                    }
+                    xField.reset(pPostItField);
+                }
+                break;
+            case SwServiceType::FieldTypeScript:
             {
-                SwFieldType* pFieldType = pDoc->getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::Postit);
-
-                DateTime aDateTime( DateTime::EMPTY );
-                if (m_pImpl->m_pProps->pDateTime)
-                {
-                    aDateTime = *(m_pImpl->m_pProps->pDateTime);
-                }
-                SwPostItField* pPostItField = new SwPostItField(
-                    static_cast<SwPostItFieldType*>(pFieldType),
-                    m_pImpl->m_pProps->sPar1, // author
-                    m_pImpl->m_pProps->sPar2, // content
-                    m_pImpl->m_pProps->sPar3, // author's initials
-                    m_pImpl->m_pProps->sPar4, // name
-                    aDateTime );
-                if ( m_pImpl->m_xTextObject.is() )
-                {
-                    pPostItField->SetTextObject( m_pImpl->m_xTextObject->CreateText() );
-                    pPostItField->SetPar2(m_pImpl->m_xTextObject->GetText());
-                }
-                xField.reset(pPostItField);
+                SwFieldType* pFieldType = pDoc->getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::Script);
+                xField.reset(new SwScriptField(static_cast<SwScriptFieldType*>(pFieldType),
+                        m_pImpl->m_pProps->sPar1, m_pImpl->m_pProps->sPar2,
+                        m_pImpl->m_pProps->bBool1));
             }
             break;
-        case SwServiceType::FieldTypeScript:
-        {
-            SwFieldType* pFieldType = pDoc->getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::Script);
-            xField.reset(new SwScriptField(static_cast<SwScriptFieldType*>(pFieldType),
-                    m_pImpl->m_pProps->sPar1, m_pImpl->m_pProps->sPar2,
-                    m_pImpl->m_pProps->bBool1));
-        }
-        break;
-        case SwServiceType::FieldTypeDateTime:
-        {
-            sal_uInt16 nSub = 0;
-            if (m_pImpl->m_pProps->bBool1)
-                nSub |= FIXEDFLD;
-            if (m_pImpl->m_pProps->bBool2)
-                nSub |= DATEFLD;
-            else
-                nSub |= TIMEFLD;
-            SwFieldType* pFieldType = pDoc->getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::DateTime);
-            SwDateTimeField *const pDTField = new SwDateTimeField(
-                    static_cast<SwDateTimeFieldType*>(pFieldType),
-                        nSub, m_pImpl->m_pProps->nFormat);
-            xField.reset(pDTField);
-            if (m_pImpl->m_pProps->fDouble > 0.)
+            case SwServiceType::FieldTypeDateTime:
             {
-                pDTField->SetValue(m_pImpl->m_pProps->fDouble);
-            }
-            if (m_pImpl->m_pProps->pDateTime)
-            {
-                uno::Any aVal; aVal <<= *m_pImpl->m_pProps->pDateTime;
-                xField->PutValue( aVal, FIELD_PROP_DATE_TIME );
-            }
-            pDTField->SetOffset(m_pImpl->m_pProps->nSubType);
-        }
-        break;
-        case SwServiceType::FieldTypeFileName:
-        {
-            SwFieldType* pFieldType = pDoc->getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::Filename);
-            sal_Int32 nFormat = m_pImpl->m_pProps->nFormat;
-            if (m_pImpl->m_pProps->bBool2)
-                nFormat |= FF_FIXED;
-            SwFileNameField *const pFNField = new SwFileNameField(
-                    static_cast<SwFileNameFieldType*>(pFieldType), nFormat);
-            xField.reset(pFNField);
-            if (!m_pImpl->m_pProps->sPar3.isEmpty())
-                pFNField->SetExpansion(m_pImpl->m_pProps->sPar3);
-            uno::Any aFormat;
-            aFormat <<= m_pImpl->m_pProps->nFormat;
-            xField->PutValue( aFormat, FIELD_PROP_FORMAT );
-        }
-        break;
-        case SwServiceType::FieldTypeTemplateName:
-        {
-            SwFieldType* pFieldType = pDoc->getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::TemplateName);
-            xField.reset(new SwTemplNameField(static_cast<SwTemplNameFieldType*>(pFieldType),
-                                        m_pImpl->m_pProps->nFormat));
-            uno::Any aFormat;
-            aFormat <<= m_pImpl->m_pProps->nFormat;
-            xField->PutValue(aFormat, FIELD_PROP_FORMAT);
-        }
-        break;
-        case SwServiceType::FieldTypeChapter:
-        {
-            SwFieldType* pFieldType = pDoc->getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::Chapter);
-            SwChapterField *const pChapterField = new SwChapterField(
-                    static_cast<SwChapterFieldType*>(pFieldType),
-                    m_pImpl->m_pProps->nUSHORT1);
-            xField.reset(pChapterField);
-            pChapterField->SetLevel(m_pImpl->m_pProps->nByte1);
-            uno::Any aVal;
-            aVal <<= static_cast<sal_Int16>(m_pImpl->m_pProps->nUSHORT1);
-            xField->PutValue(aVal, FIELD_PROP_USHORT1 );
-        }
-        break;
-        case SwServiceType::FieldTypeAuthor:
-        {
-            long nFormat = m_pImpl->m_pProps->bBool1 ? AF_NAME : AF_SHORTCUT;
-            if (m_pImpl->m_pProps->bBool2)
-                nFormat |= AF_FIXED;
-
-            SwFieldType* pFieldType = pDoc->getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::Author);
-            SwAuthorField *const pAuthorField = new SwAuthorField(
-                    static_cast<SwAuthorFieldType*>(pFieldType), nFormat);
-            xField.reset(pAuthorField);
-            pAuthorField->SetExpansion(m_pImpl->m_pProps->sPar1);
-        }
-        break;
-        case SwServiceType::FieldTypeConditionedText:
-        case SwServiceType::FieldTypeHiddenText:
-        {
-            SwFieldType* pFieldType = pDoc->getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::HiddenText);
-            SwHiddenTextField *const pHTField = new SwHiddenTextField(
-                    static_cast<SwHiddenTextFieldType*>(pFieldType),
-                    m_pImpl->m_pProps->sPar1,
-                    m_pImpl->m_pProps->sPar2, m_pImpl->m_pProps->sPar3,
-                    static_cast<sal_uInt16>(SwServiceType::FieldTypeHiddenText == m_pImpl->m_nServiceId ?
-                         TYP_HIDDENTXTFLD : TYP_CONDTXTFLD));
-            xField.reset(pHTField);
-            pHTField->SetValue(m_pImpl->m_pProps->bBool1);
-            uno::Any aVal;
-            aVal <<= m_pImpl->m_pProps->sPar4;
-            xField->PutValue(aVal, FIELD_PROP_PAR4 );
-        }
-        break;
-        case SwServiceType::FieldTypeHiddenPara:
-        {
-            SwFieldType* pFieldType = pDoc->getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::HiddenPara);
-            SwHiddenParaField *const pHPField = new SwHiddenParaField(
-                    static_cast<SwHiddenParaFieldType*>(pFieldType),
-                    m_pImpl->m_pProps->sPar1);
-            xField.reset(pHPField);
-            pHPField->SetHidden(m_pImpl->m_pProps->bBool1);
-        }
-        break;
-        case SwServiceType::FieldTypeGetReference:
-        {
-            SwFieldType* pFieldType = pDoc->getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::GetRef);
-            xField.reset(new SwGetRefField(static_cast<SwGetRefFieldType*>(pFieldType),
-                        m_pImpl->m_pProps->sPar1,
-                        m_pImpl->m_pProps->sPar4,
-                        0,
-                        0,
-                        0));
-            if (!m_pImpl->m_pProps->sPar3.isEmpty())
-                static_cast<SwGetRefField*>(xField.get())->SetExpand(m_pImpl->m_pProps->sPar3);
-            uno::Any aVal;
-            aVal <<= static_cast<sal_Int16>(m_pImpl->m_pProps->nUSHORT1);
-            xField->PutValue(aVal, FIELD_PROP_USHORT1 );
-            aVal <<= static_cast<sal_Int16>(m_pImpl->m_pProps->nUSHORT2);
-            xField->PutValue(aVal, FIELD_PROP_USHORT2 );
-            aVal <<= m_pImpl->m_pProps->nSHORT1;
-            xField->PutValue(aVal, FIELD_PROP_SHORT1 );
-        }
-        break;
-        case SwServiceType::FieldTypeJumpEdit:
-        {
-            SwFieldType* pFieldType = pDoc->getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::JumpEdit);
-            xField.reset(new SwJumpEditField(static_cast<SwJumpEditFieldType*>(pFieldType),
-                    m_pImpl->m_pProps->nUSHORT1, m_pImpl->m_pProps->sPar2,
-                    m_pImpl->m_pProps->sPar1));
-        }
-        break;
-        case SwServiceType::FieldTypeDocInfoChangeAuthor:
-        case SwServiceType::FieldTypeDocInfoChangeDateTime:
-        case SwServiceType::FieldTypeDocInfoEditTime:
-        case SwServiceType::FieldTypeDocInfoDescription:
-        case SwServiceType::FieldTypeDocInfoCreateAuthor:
-        case SwServiceType::FieldTypeDocInfoCreateDateTime:
-        case SwServiceType::FieldTypeDocInfoCustom:
-        case SwServiceType::FieldTypeDocInfoPrintAuthor:
-        case SwServiceType::FieldTypeDocInfoPrintDateTime:
-        case SwServiceType::FieldTypeDocInfoKeywords:
-        case SwServiceType::FieldTypeDocInfoSubject:
-        case SwServiceType::FieldTypeDocInfoTitle:
-        case SwServiceType::FieldTypeDocInfoRevision:
-        case SwServiceType::FieldTypeDocInfo:
-        {
-            SwFieldType* pFieldType = pDoc->getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::DocInfo);
-            sal_uInt16 nSubType = aDocInfoSubTypeFromService[
-                    static_cast<sal_uInt16>(m_pImpl->m_nServiceId) - sal_uInt16(SwServiceType::FieldTypeDocInfoChangeAuthor)];
-            if (SwServiceType::FieldTypeDocInfoChangeDateTime == m_pImpl->m_nServiceId ||
-                SwServiceType::FieldTypeDocInfoCreateDateTime == m_pImpl->m_nServiceId ||
-                SwServiceType::FieldTypeDocInfoPrintDateTime == m_pImpl->m_nServiceId ||
-                SwServiceType::FieldTypeDocInfoEditTime == m_pImpl->m_nServiceId)
-            {
-                if (m_pImpl->m_pProps->bBool2) //IsDate
+                sal_uInt16 nSub = 0;
+                if (m_pImpl->m_pProps->bBool1)
+                    nSub |= FIXEDFLD;
+                if (m_pImpl->m_pProps->bBool2)
+                    nSub |= DATEFLD;
+                else
+                    nSub |= TIMEFLD;
+                SwFieldType* pFieldType = pDoc->getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::DateTime);
+                SwDateTimeField *const pDTField = new SwDateTimeField(
+                        static_cast<SwDateTimeFieldType*>(pFieldType),
+                            nSub, m_pImpl->m_pProps->nFormat);
+                xField.reset(pDTField);
+                if (m_pImpl->m_pProps->fDouble > 0.)
                 {
-                    nSubType &= 0xf0ff;
-                    nSubType |= DI_SUB_DATE;
+                    pDTField->SetValue(m_pImpl->m_pProps->fDouble);
+                }
+                if (m_pImpl->m_pProps->pDateTime)
+                {
+                    uno::Any aVal; aVal <<= *m_pImpl->m_pProps->pDateTime;
+                    xField->PutValue( aVal, FIELD_PROP_DATE_TIME );
+                }
+                pDTField->SetOffset(m_pImpl->m_pProps->nSubType);
+            }
+            break;
+            case SwServiceType::FieldTypeFileName:
+            {
+                SwFieldType* pFieldType = pDoc->getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::Filename);
+                sal_Int32 nFormat = m_pImpl->m_pProps->nFormat;
+                if (m_pImpl->m_pProps->bBool2)
+                    nFormat |= FF_FIXED;
+                SwFileNameField *const pFNField = new SwFileNameField(
+                        static_cast<SwFileNameFieldType*>(pFieldType), nFormat);
+                xField.reset(pFNField);
+                if (!m_pImpl->m_pProps->sPar3.isEmpty())
+                    pFNField->SetExpansion(m_pImpl->m_pProps->sPar3);
+                uno::Any aFormat;
+                aFormat <<= m_pImpl->m_pProps->nFormat;
+                xField->PutValue( aFormat, FIELD_PROP_FORMAT );
+            }
+            break;
+            case SwServiceType::FieldTypeTemplateName:
+            {
+                SwFieldType* pFieldType = pDoc->getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::TemplateName);
+                xField.reset(new SwTemplNameField(static_cast<SwTemplNameFieldType*>(pFieldType),
+                                            m_pImpl->m_pProps->nFormat));
+                uno::Any aFormat;
+                aFormat <<= m_pImpl->m_pProps->nFormat;
+                xField->PutValue(aFormat, FIELD_PROP_FORMAT);
+            }
+            break;
+            case SwServiceType::FieldTypeChapter:
+            {
+                SwFieldType* pFieldType = pDoc->getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::Chapter);
+                SwChapterField *const pChapterField = new SwChapterField(
+                        static_cast<SwChapterFieldType*>(pFieldType),
+                        m_pImpl->m_pProps->nUSHORT1);
+                xField.reset(pChapterField);
+                pChapterField->SetLevel(m_pImpl->m_pProps->nByte1);
+                uno::Any aVal;
+                aVal <<= static_cast<sal_Int16>(m_pImpl->m_pProps->nUSHORT1);
+                xField->PutValue(aVal, FIELD_PROP_USHORT1 );
+            }
+            break;
+            case SwServiceType::FieldTypeAuthor:
+            {
+                long nFormat = m_pImpl->m_pProps->bBool1 ? AF_NAME : AF_SHORTCUT;
+                if (m_pImpl->m_pProps->bBool2)
+                    nFormat |= AF_FIXED;
+
+                SwFieldType* pFieldType = pDoc->getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::Author);
+                SwAuthorField *const pAuthorField = new SwAuthorField(
+                        static_cast<SwAuthorFieldType*>(pFieldType), nFormat);
+                xField.reset(pAuthorField);
+                pAuthorField->SetExpansion(m_pImpl->m_pProps->sPar1);
+            }
+            break;
+            case SwServiceType::FieldTypeConditionedText:
+            case SwServiceType::FieldTypeHiddenText:
+            {
+                SwFieldType* pFieldType = pDoc->getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::HiddenText);
+                SwHiddenTextField *const pHTField = new SwHiddenTextField(
+                        static_cast<SwHiddenTextFieldType*>(pFieldType),
+                        m_pImpl->m_pProps->sPar1,
+                        m_pImpl->m_pProps->sPar2, m_pImpl->m_pProps->sPar3,
+                        static_cast<sal_uInt16>(SwServiceType::FieldTypeHiddenText == m_pImpl->m_nServiceId ?
+                             TYP_HIDDENTXTFLD : TYP_CONDTXTFLD));
+                xField.reset(pHTField);
+                pHTField->SetValue(m_pImpl->m_pProps->bBool1);
+                uno::Any aVal;
+                aVal <<= m_pImpl->m_pProps->sPar4;
+                xField->PutValue(aVal, FIELD_PROP_PAR4 );
+            }
+            break;
+            case SwServiceType::FieldTypeHiddenPara:
+            {
+                SwFieldType* pFieldType = pDoc->getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::HiddenPara);
+                SwHiddenParaField *const pHPField = new SwHiddenParaField(
+                        static_cast<SwHiddenParaFieldType*>(pFieldType),
+                        m_pImpl->m_pProps->sPar1);
+                xField.reset(pHPField);
+                pHPField->SetHidden(m_pImpl->m_pProps->bBool1);
+            }
+            break;
+            case SwServiceType::FieldTypeGetReference:
+            {
+                SwFieldType* pFieldType = pDoc->getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::GetRef);
+                xField.reset(new SwGetRefField(static_cast<SwGetRefFieldType*>(pFieldType),
+                            m_pImpl->m_pProps->sPar1,
+                            m_pImpl->m_pProps->sPar4,
+                            0,
+                            0,
+                            0));
+                if (!m_pImpl->m_pProps->sPar3.isEmpty())
+                    static_cast<SwGetRefField*>(xField.get())->SetExpand(m_pImpl->m_pProps->sPar3);
+                uno::Any aVal;
+                aVal <<= static_cast<sal_Int16>(m_pImpl->m_pProps->nUSHORT1);
+                xField->PutValue(aVal, FIELD_PROP_USHORT1 );
+                aVal <<= static_cast<sal_Int16>(m_pImpl->m_pProps->nUSHORT2);
+                xField->PutValue(aVal, FIELD_PROP_USHORT2 );
+                aVal <<= m_pImpl->m_pProps->nSHORT1;
+                xField->PutValue(aVal, FIELD_PROP_SHORT1 );
+            }
+            break;
+            case SwServiceType::FieldTypeJumpEdit:
+            {
+                SwFieldType* pFieldType = pDoc->getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::JumpEdit);
+                xField.reset(new SwJumpEditField(static_cast<SwJumpEditFieldType*>(pFieldType),
+                        m_pImpl->m_pProps->nUSHORT1, m_pImpl->m_pProps->sPar2,
+                        m_pImpl->m_pProps->sPar1));
+            }
+            break;
+            case SwServiceType::FieldTypeDocInfoChangeAuthor:
+            case SwServiceType::FieldTypeDocInfoChangeDateTime:
+            case SwServiceType::FieldTypeDocInfoEditTime:
+            case SwServiceType::FieldTypeDocInfoDescription:
+            case SwServiceType::FieldTypeDocInfoCreateAuthor:
+            case SwServiceType::FieldTypeDocInfoCreateDateTime:
+            case SwServiceType::FieldTypeDocInfoCustom:
+            case SwServiceType::FieldTypeDocInfoPrintAuthor:
+            case SwServiceType::FieldTypeDocInfoPrintDateTime:
+            case SwServiceType::FieldTypeDocInfoKeywords:
+            case SwServiceType::FieldTypeDocInfoSubject:
+            case SwServiceType::FieldTypeDocInfoTitle:
+            case SwServiceType::FieldTypeDocInfoRevision:
+            case SwServiceType::FieldTypeDocInfo:
+            {
+                SwFieldType* pFieldType = pDoc->getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::DocInfo);
+                sal_uInt16 nSubType = aDocInfoSubTypeFromService[
+                        static_cast<sal_uInt16>(m_pImpl->m_nServiceId) - sal_uInt16(SwServiceType::FieldTypeDocInfoChangeAuthor)];
+                if (SwServiceType::FieldTypeDocInfoChangeDateTime == m_pImpl->m_nServiceId ||
+                    SwServiceType::FieldTypeDocInfoCreateDateTime == m_pImpl->m_nServiceId ||
+                    SwServiceType::FieldTypeDocInfoPrintDateTime == m_pImpl->m_nServiceId ||
+                    SwServiceType::FieldTypeDocInfoEditTime == m_pImpl->m_nServiceId)
+                {
+                    if (m_pImpl->m_pProps->bBool2) //IsDate
+                    {
+                        nSubType &= 0xf0ff;
+                        nSubType |= DI_SUB_DATE;
+                    }
+                    else
+                    {
+                        nSubType &= 0xf0ff;
+                        nSubType |= DI_SUB_TIME;
+                    }
+                }
+                if (m_pImpl->m_pProps->bBool1)
+                    nSubType |= DI_SUB_FIXED;
+                xField.reset(new SwDocInfoField(
+                        static_cast<SwDocInfoFieldType*>(pFieldType), nSubType,
+                        m_pImpl->m_pProps->sPar4, m_pImpl->m_pProps->nFormat));
+                if (!m_pImpl->m_pProps->sPar3.isEmpty())
+                    static_cast<SwDocInfoField*>(xField.get())->SetExpansion(m_pImpl->m_pProps->sPar3);
+            }
+            break;
+            case SwServiceType::FieldTypeUserExt:
+            {
+                sal_Int32 nFormat = 0;
+                if (m_pImpl->m_pProps->bBool1)
+                    nFormat = AF_FIXED;
+
+                SwFieldType* pFieldType = pDoc->getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::ExtUser);
+                SwExtUserField *const pEUField = new SwExtUserField(
+                    static_cast<SwExtUserFieldType*>(pFieldType),
+                    m_pImpl->m_pProps->nUSHORT1, nFormat);
+                xField.reset(pEUField);
+                pEUField->SetExpansion(m_pImpl->m_pProps->sPar1);
+            }
+            break;
+            case SwServiceType::FieldTypeUser:
+            {
+                SwFieldType* pFieldType =
+                    pDoc->getIDocumentFieldsAccess().GetFieldType(SwFieldIds::User, m_pImpl->m_sTypeName, true);
+                if (!pFieldType)
+                    throw uno::RuntimeException();
+                sal_uInt16 nUserSubType = (m_pImpl->m_pProps->bBool1)
+                    ? nsSwExtendedSubType::SUB_INVISIBLE : 0;
+                if (m_pImpl->m_pProps->bBool2)
+                    nUserSubType |= nsSwExtendedSubType::SUB_CMD;
+                if (m_pImpl->m_pProps->bFormatIsDefault &&
+                    nsSwGetSetExpType::GSE_STRING == static_cast<SwUserFieldType*>(pFieldType)->GetType())
+                {
+                    m_pImpl->m_pProps->nFormat = -1;
+                }
+                xField.reset(new SwUserField(static_cast<SwUserFieldType*>(pFieldType),
+                                    nUserSubType,
+                                    m_pImpl->m_pProps->nFormat));
+            }
+            break;
+            case SwServiceType::FieldTypeRefPageSet:
+            {
+                SwFieldType* pFieldType = pDoc->getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::RefPageSet);
+                xField.reset(new SwRefPageSetField( static_cast<SwRefPageSetFieldType*>(pFieldType),
+                                    m_pImpl->m_pProps->nUSHORT1,
+                                    m_pImpl->m_pProps->bBool1 ));
+            }
+            break;
+            case SwServiceType::FieldTypeRefPageGet:
+            {
+                SwFieldType* pFieldType = pDoc->getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::RefPageGet);
+                SwRefPageGetField *const pRGField = new SwRefPageGetField(
+                        static_cast<SwRefPageGetFieldType*>(pFieldType),
+                        m_pImpl->m_pProps->nUSHORT1 );
+                xField.reset(pRGField);
+                pRGField->SetText(m_pImpl->m_pProps->sPar1, nullptr);
+            }
+            break;
+            case SwServiceType::FieldTypePageNum:
+            {
+                SwFieldType* pFieldType = pDoc->getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::PageNumber);
+                SwPageNumberField *const pPNField = new SwPageNumberField(
+                    static_cast<SwPageNumberFieldType*>(pFieldType), PG_RANDOM,
+                    m_pImpl->m_pProps->nFormat,
+                    m_pImpl->m_pProps->nUSHORT1);
+                xField.reset(pPNField);
+                pPNField->SetUserString(m_pImpl->m_pProps->sPar1);
+                uno::Any aVal;
+                aVal <<= m_pImpl->m_pProps->nSubType;
+                xField->PutValue( aVal, FIELD_PROP_SUBTYPE );
+            }
+            break;
+            case SwServiceType::FieldTypeDDE:
+            {
+                SwFieldType* pFieldType =
+                    pDoc->getIDocumentFieldsAccess().GetFieldType(SwFieldIds::Dde, m_pImpl->m_sTypeName, true);
+                if (!pFieldType)
+                    throw uno::RuntimeException();
+                xField.reset(new SwDDEField( static_cast<SwDDEFieldType*>(pFieldType) ));
+            }
+            break;
+            case SwServiceType::FieldTypeDatabaseName:
+            {
+                SwFieldType* pFieldType = pDoc->getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::DatabaseName);
+                SwDBData aData;
+                aData.sDataSource = m_pImpl->m_pProps->sPar1;
+                aData.sCommand = m_pImpl->m_pProps->sPar2;
+                aData.nCommandType = m_pImpl->m_pProps->nSHORT1;
+                xField.reset(new SwDBNameField(static_cast<SwDBNameFieldType*>(pFieldType), aData));
+                sal_uInt16  nSubType = xField->GetSubType();
+                if (m_pImpl->m_pProps->bBool2)
+                    nSubType &= ~nsSwExtendedSubType::SUB_INVISIBLE;
+                else
+                    nSubType |= nsSwExtendedSubType::SUB_INVISIBLE;
+                xField->SetSubType(nSubType);
+            }
+            break;
+            case SwServiceType::FieldTypeDatabaseNextSet:
+            {
+                SwDBData aData;
+                aData.sDataSource = m_pImpl->m_pProps->sPar1;
+                aData.sCommand = m_pImpl->m_pProps->sPar2;
+                aData.nCommandType = m_pImpl->m_pProps->nSHORT1;
+                SwFieldType* pFieldType = pDoc->getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::DbNextSet);
+                xField.reset(new SwDBNextSetField(static_cast<SwDBNextSetFieldType*>(pFieldType),
+                        m_pImpl->m_pProps->sPar3, aData));
+            }
+            break;
+            case SwServiceType::FieldTypeDatabaseNumSet:
+            {
+                SwDBData aData;
+                aData.sDataSource = m_pImpl->m_pProps->sPar1;
+                aData.sCommand = m_pImpl->m_pProps->sPar2;
+                aData.nCommandType = m_pImpl->m_pProps->nSHORT1;
+                xField.reset(new SwDBNumSetField( static_cast<SwDBNumSetFieldType*>(
+                    pDoc->getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::DbNumSet)),
+                    m_pImpl->m_pProps->sPar3,
+                    OUString::number(m_pImpl->m_pProps->nFormat),
+                    aData ));
+            }
+            break;
+            case SwServiceType::FieldTypeDatabaseSetNum:
+            {
+                SwDBData aData;
+                aData.sDataSource = m_pImpl->m_pProps->sPar1;
+                aData.sCommand = m_pImpl->m_pProps->sPar2;
+                aData.nCommandType = m_pImpl->m_pProps->nSHORT1;
+                SwDBSetNumberField *const pDBSNField =
+                    new SwDBSetNumberField(static_cast<SwDBSetNumberFieldType*>(
+                            pDoc->getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::DbSetNumber)), aData,
+                        m_pImpl->m_pProps->nUSHORT1);
+                xField.reset(pDBSNField);
+                pDBSNField->SetSetNumber(m_pImpl->m_pProps->nFormat);
+                sal_uInt16 nSubType = xField->GetSubType();
+                if (m_pImpl->m_pProps->bBool2)
+                    nSubType &= ~nsSwExtendedSubType::SUB_INVISIBLE;
+                else
+                    nSubType |= nsSwExtendedSubType::SUB_INVISIBLE;
+                xField->SetSubType(nSubType);
+            }
+            break;
+            case SwServiceType::FieldTypeDatabase:
+            {
+                SwFieldType* pFieldType =
+                    pDoc->getIDocumentFieldsAccess().GetFieldType(SwFieldIds::Database, m_pImpl->m_sTypeName, false);
+                if (!pFieldType)
+                    throw uno::RuntimeException();
+                xField.reset(new SwDBField(static_cast<SwDBFieldType*>(pFieldType),
+                        m_pImpl->m_pProps->nFormat));
+                static_cast<SwDBField*>(xField.get())->InitContent(m_pImpl->m_pProps->sPar1);
+                sal_uInt16  nSubType = xField->GetSubType();
+                if (m_pImpl->m_pProps->bBool2)
+                    nSubType &= ~nsSwExtendedSubType::SUB_INVISIBLE;
+                else
+                    nSubType |= nsSwExtendedSubType::SUB_INVISIBLE;
+                xField->SetSubType(nSubType);
+            }
+            break;
+            case SwServiceType::FieldTypeSetExp:
+            {
+                SwFieldType* pFieldType =
+                    pDoc->getIDocumentFieldsAccess().GetFieldType(SwFieldIds::SetExp, m_pImpl->m_sTypeName, true);
+                if (!pFieldType)
+                    throw uno::RuntimeException();
+                // detect the field type's sub type and set an appropriate number format
+                if (m_pImpl->m_pProps->bFormatIsDefault &&
+                    nsSwGetSetExpType::GSE_STRING == static_cast<SwSetExpFieldType*>(pFieldType)->GetType())
+                {
+                    m_pImpl->m_pProps->nFormat = -1;
+                }
+                SwSetExpField *const pSEField = new SwSetExpField(
+                    static_cast<SwSetExpFieldType*>(pFieldType),
+                    m_pImpl->m_pProps->sPar2,
+                    m_pImpl->m_pProps->nUSHORT2 != USHRT_MAX ?  //#i79471# the field can have a number format or a number_ing_ format
+                    m_pImpl->m_pProps->nUSHORT2 : m_pImpl->m_pProps->nFormat);
+                xField.reset(pSEField);
+
+                sal_uInt16  nSubType = xField->GetSubType();
+                if (m_pImpl->m_pProps->bBool2)
+                    nSubType &= ~nsSwExtendedSubType::SUB_INVISIBLE;
+                else
+                    nSubType |= nsSwExtendedSubType::SUB_INVISIBLE;
+                if (m_pImpl->m_pProps->bBool3)
+                    nSubType |= nsSwExtendedSubType::SUB_CMD;
+                else
+                    nSubType &= ~nsSwExtendedSubType::SUB_CMD;
+                xField->SetSubType(nSubType);
+                pSEField->SetSeqNumber(m_pImpl->m_pProps->nUSHORT1);
+                pSEField->SetInputFlag(m_pImpl->m_pProps->bBool1);
+                pSEField->SetPromptText(m_pImpl->m_pProps->sPar3);
+                if (!m_pImpl->m_pProps->sPar4.isEmpty())
+                    pSEField->ChgExpStr(m_pImpl->m_pProps->sPar4, nullptr);
+
+            }
+            break;
+            case SwServiceType::FieldTypeGetExp:
+            {
+                sal_uInt16 nSubType;
+                switch (m_pImpl->m_pProps->nSubType)
+                {
+                    case text::SetVariableType::STRING: nSubType = nsSwGetSetExpType::GSE_STRING;   break;
+                    case text::SetVariableType::VAR:        nSubType = nsSwGetSetExpType::GSE_EXPR;  break;
+                    //case text::SetVariableType::SEQUENCE:   nSubType = nsSwGetSetExpType::GSE_SEQ;  break;
+                    case text::SetVariableType::FORMULA:    nSubType = nsSwGetSetExpType::GSE_FORMULA; break;
+                    default:
+                        OSL_FAIL("wrong value");
+                        nSubType = nsSwGetSetExpType::GSE_EXPR;
+                }
+                //make sure the SubType matches the field type
+                SwFieldType* pSetExpField = pDoc->getIDocumentFieldsAccess().GetFieldType(
+                        SwFieldIds::SetExp, m_pImpl->m_pProps->sPar1, false);
+                bool bSetGetExpFieldUninitialized = false;
+                if (pSetExpField)
+                {
+                    if (nSubType != nsSwGetSetExpType::GSE_STRING &&
+                        static_cast< SwSetExpFieldType* >(pSetExpField)->GetType() == nsSwGetSetExpType::GSE_STRING)
+                    nSubType = nsSwGetSetExpType::GSE_STRING;
+                }
+                else
+                    bSetGetExpFieldUninitialized = true; // #i82544#
+
+                if (m_pImpl->m_pProps->bBool2)
+                    nSubType |= nsSwExtendedSubType::SUB_CMD;
+                else
+                    nSubType &= ~nsSwExtendedSubType::SUB_CMD;
+                SwGetExpField *const pGEField = new SwGetExpField(
+                        static_cast<SwGetExpFieldType*>(
+                            pDoc->getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::GetExp)),
+                        m_pImpl->m_pProps->sPar1, nSubType,
+                        m_pImpl->m_pProps->nFormat);
+                xField.reset(pGEField);
+                //TODO: evaluate SubType!
+                if (!m_pImpl->m_pProps->sPar4.isEmpty())
+                    pGEField->ChgExpStr(m_pImpl->m_pProps->sPar4, nullptr);
+                // #i82544#
+                if (bSetGetExpFieldUninitialized)
+                    pGEField->SetLateInitialization();
+            }
+            break;
+            case SwServiceType::FieldTypeInputUser:
+            case SwServiceType::FieldTypeInput:
+            {
+                SwFieldType* pFieldType =
+                    pDoc->getIDocumentFieldsAccess().GetFieldType(SwFieldIds::Input, m_pImpl->m_sTypeName, true);
+                if (!pFieldType)
+                    throw uno::RuntimeException();
+                sal_uInt16 nInpSubType =
+                    sal::static_int_cast<sal_uInt16>(
+                        SwServiceType::FieldTypeInputUser == m_pImpl->m_nServiceId
+                            ? INP_USR : INP_TXT);
+                SwInputField * pTextField =
+                    new SwInputField(static_cast<SwInputFieldType*>(pFieldType),
+                                     m_pImpl->m_pProps->sPar1,
+                                     m_pImpl->m_pProps->sPar2,
+                                     nInpSubType);
+                pTextField->SetHelp(m_pImpl->m_pProps->sPar3);
+                pTextField->SetToolTip(m_pImpl->m_pProps->sPar4);
+
+                xField.reset(pTextField);
+            }
+            break;
+            case SwServiceType::FieldTypeMacro:
+            {
+                SwFieldType* pFieldType = pDoc->getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::Macro);
+                OUString aName;
+
+                // support for Scripting Framework macros
+                if (!m_pImpl->m_pProps->sPar4.isEmpty())
+                {
+                    aName = m_pImpl->m_pProps->sPar4;
                 }
                 else
                 {
-                    nSubType &= 0xf0ff;
-                    nSubType |= DI_SUB_TIME;
+                    SwMacroField::CreateMacroString(aName,
+                        m_pImpl->m_pProps->sPar1, m_pImpl->m_pProps->sPar3);
+                }
+                xField.reset(new SwMacroField(static_cast<SwMacroFieldType*>(pFieldType), aName,
+                                        m_pImpl->m_pProps->sPar2));
+            }
+            break;
+            case SwServiceType::FieldTypePageCount:
+            case SwServiceType::FieldTypeParagraphCount:
+            case SwServiceType::FieldTypeWordCount:
+            case SwServiceType::FieldTypeCharacterCount:
+            case SwServiceType::FieldTypeTableCount:
+            case SwServiceType::FieldTypeGraphicObjectCount:
+            case SwServiceType::FieldTypeEmbeddedObjectCount:
+            {
+                sal_uInt16 nSubType = DS_PAGE;
+                switch (m_pImpl->m_nServiceId)
+                {
+                    case SwServiceType::FieldTypeParagraphCount       : nSubType = DS_PARA; break;
+                    case SwServiceType::FieldTypeWordCount            : nSubType = DS_WORD; break;
+                    case SwServiceType::FieldTypeCharacterCount       : nSubType = DS_CHAR; break;
+                    case SwServiceType::FieldTypeTableCount           : nSubType = DS_TBL;  break;
+                    case SwServiceType::FieldTypeGraphicObjectCount  : nSubType = DS_GRF;  break;
+                    case SwServiceType::FieldTypeEmbeddedObjectCount : nSubType = DS_OLE;  break;
+                    default: break;
+                }
+                SwFieldType* pFieldType = pDoc->getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::DocStat);
+                xField.reset(new SwDocStatField(
+                        static_cast<SwDocStatFieldType*>(pFieldType),
+                        nSubType, m_pImpl->m_pProps->nUSHORT2));
+            }
+            break;
+            case SwServiceType::FieldTypeBibliography:
+            {
+                SwAuthorityFieldType const type(pDoc);
+                xField.reset(new SwAuthorityField(static_cast<SwAuthorityFieldType*>(
+                            pDoc->getIDocumentFieldsAccess().InsertFieldType(type)),
+                        OUString()));
+                if (m_pImpl->m_pProps->aPropSeq.hasElements())
+                {
+                    uno::Any aVal;
+                    aVal <<= m_pImpl->m_pProps->aPropSeq;
+                    xField->PutValue( aVal, FIELD_PROP_PROP_SEQ );
                 }
             }
-            if (m_pImpl->m_pProps->bBool1)
-                nSubType |= DI_SUB_FIXED;
-            xField.reset(new SwDocInfoField(
-                    static_cast<SwDocInfoFieldType*>(pFieldType), nSubType,
-                    m_pImpl->m_pProps->sPar4, m_pImpl->m_pProps->nFormat));
-            if (!m_pImpl->m_pProps->sPar3.isEmpty())
-                static_cast<SwDocInfoField*>(xField.get())->SetExpansion(m_pImpl->m_pProps->sPar3);
-        }
-        break;
-        case SwServiceType::FieldTypeUserExt:
-        {
-            sal_Int32 nFormat = 0;
-            if (m_pImpl->m_pProps->bBool1)
-                nFormat = AF_FIXED;
-
-            SwFieldType* pFieldType = pDoc->getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::ExtUser);
-            SwExtUserField *const pEUField = new SwExtUserField(
-                static_cast<SwExtUserFieldType*>(pFieldType),
-                m_pImpl->m_pProps->nUSHORT1, nFormat);
-            xField.reset(pEUField);
-            pEUField->SetExpansion(m_pImpl->m_pProps->sPar1);
-        }
-        break;
-        case SwServiceType::FieldTypeUser:
-        {
-            SwFieldType* pFieldType =
-                pDoc->getIDocumentFieldsAccess().GetFieldType(SwFieldIds::User, m_pImpl->m_sTypeName, true);
-            if (!pFieldType)
-                throw uno::RuntimeException();
-            sal_uInt16 nUserSubType = (m_pImpl->m_pProps->bBool1)
-                ? nsSwExtendedSubType::SUB_INVISIBLE : 0;
-            if (m_pImpl->m_pProps->bBool2)
-                nUserSubType |= nsSwExtendedSubType::SUB_CMD;
-            if (m_pImpl->m_pProps->bFormatIsDefault &&
-                nsSwGetSetExpType::GSE_STRING == static_cast<SwUserFieldType*>(pFieldType)->GetType())
-            {
-                m_pImpl->m_pProps->nFormat = -1;
-            }
-            xField.reset(new SwUserField(static_cast<SwUserFieldType*>(pFieldType),
-                                nUserSubType,
-                                m_pImpl->m_pProps->nFormat));
-        }
-        break;
-        case SwServiceType::FieldTypeRefPageSet:
-        {
-            SwFieldType* pFieldType = pDoc->getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::RefPageSet);
-            xField.reset(new SwRefPageSetField( static_cast<SwRefPageSetFieldType*>(pFieldType),
-                                m_pImpl->m_pProps->nUSHORT1,
-                                m_pImpl->m_pProps->bBool1 ));
-        }
-        break;
-        case SwServiceType::FieldTypeRefPageGet:
-        {
-            SwFieldType* pFieldType = pDoc->getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::RefPageGet);
-            SwRefPageGetField *const pRGField = new SwRefPageGetField(
-                    static_cast<SwRefPageGetFieldType*>(pFieldType),
-                    m_pImpl->m_pProps->nUSHORT1 );
-            xField.reset(pRGField);
-            pRGField->SetText(m_pImpl->m_pProps->sPar1, nullptr);
-        }
-        break;
-        case SwServiceType::FieldTypePageNum:
-        {
-            SwFieldType* pFieldType = pDoc->getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::PageNumber);
-            SwPageNumberField *const pPNField = new SwPageNumberField(
-                static_cast<SwPageNumberFieldType*>(pFieldType), PG_RANDOM,
-                m_pImpl->m_pProps->nFormat,
-                m_pImpl->m_pProps->nUSHORT1);
-            xField.reset(pPNField);
-            pPNField->SetUserString(m_pImpl->m_pProps->sPar1);
-            uno::Any aVal;
-            aVal <<= m_pImpl->m_pProps->nSubType;
-            xField->PutValue( aVal, FIELD_PROP_SUBTYPE );
-        }
-        break;
-        case SwServiceType::FieldTypeDDE:
-        {
-            SwFieldType* pFieldType =
-                pDoc->getIDocumentFieldsAccess().GetFieldType(SwFieldIds::Dde, m_pImpl->m_sTypeName, true);
-            if (!pFieldType)
-                throw uno::RuntimeException();
-            xField.reset(new SwDDEField( static_cast<SwDDEFieldType*>(pFieldType) ));
-        }
-        break;
-        case SwServiceType::FieldTypeDatabaseName:
-        {
-            SwFieldType* pFieldType = pDoc->getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::DatabaseName);
-            SwDBData aData;
-            aData.sDataSource = m_pImpl->m_pProps->sPar1;
-            aData.sCommand = m_pImpl->m_pProps->sPar2;
-            aData.nCommandType = m_pImpl->m_pProps->nSHORT1;
-            xField.reset(new SwDBNameField(static_cast<SwDBNameFieldType*>(pFieldType), aData));
-            sal_uInt16  nSubType = xField->GetSubType();
-            if (m_pImpl->m_pProps->bBool2)
-                nSubType &= ~nsSwExtendedSubType::SUB_INVISIBLE;
-            else
-                nSubType |= nsSwExtendedSubType::SUB_INVISIBLE;
-            xField->SetSubType(nSubType);
-        }
-        break;
-        case SwServiceType::FieldTypeDatabaseNextSet:
-        {
-            SwDBData aData;
-            aData.sDataSource = m_pImpl->m_pProps->sPar1;
-            aData.sCommand = m_pImpl->m_pProps->sPar2;
-            aData.nCommandType = m_pImpl->m_pProps->nSHORT1;
-            SwFieldType* pFieldType = pDoc->getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::DbNextSet);
-            xField.reset(new SwDBNextSetField(static_cast<SwDBNextSetFieldType*>(pFieldType),
-                    m_pImpl->m_pProps->sPar3, aData));
-        }
-        break;
-        case SwServiceType::FieldTypeDatabaseNumSet:
-        {
-            SwDBData aData;
-            aData.sDataSource = m_pImpl->m_pProps->sPar1;
-            aData.sCommand = m_pImpl->m_pProps->sPar2;
-            aData.nCommandType = m_pImpl->m_pProps->nSHORT1;
-            xField.reset(new SwDBNumSetField( static_cast<SwDBNumSetFieldType*>(
-                pDoc->getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::DbNumSet)),
-                m_pImpl->m_pProps->sPar3,
-                OUString::number(m_pImpl->m_pProps->nFormat),
-                aData ));
-        }
-        break;
-        case SwServiceType::FieldTypeDatabaseSetNum:
-        {
-            SwDBData aData;
-            aData.sDataSource = m_pImpl->m_pProps->sPar1;
-            aData.sCommand = m_pImpl->m_pProps->sPar2;
-            aData.nCommandType = m_pImpl->m_pProps->nSHORT1;
-            SwDBSetNumberField *const pDBSNField =
-                new SwDBSetNumberField(static_cast<SwDBSetNumberFieldType*>(
-                        pDoc->getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::DbSetNumber)), aData,
-                    m_pImpl->m_pProps->nUSHORT1);
-            xField.reset(pDBSNField);
-            pDBSNField->SetSetNumber(m_pImpl->m_pProps->nFormat);
-            sal_uInt16 nSubType = xField->GetSubType();
-            if (m_pImpl->m_pProps->bBool2)
-                nSubType &= ~nsSwExtendedSubType::SUB_INVISIBLE;
-            else
-                nSubType |= nsSwExtendedSubType::SUB_INVISIBLE;
-            xField->SetSubType(nSubType);
-        }
-        break;
-        case SwServiceType::FieldTypeDatabase:
-        {
-            SwFieldType* pFieldType =
-                pDoc->getIDocumentFieldsAccess().GetFieldType(SwFieldIds::Database, m_pImpl->m_sTypeName, false);
-            if (!pFieldType)
-                throw uno::RuntimeException();
-            xField.reset(new SwDBField(static_cast<SwDBFieldType*>(pFieldType),
-                    m_pImpl->m_pProps->nFormat));
-            static_cast<SwDBField*>(xField.get())->InitContent(m_pImpl->m_pProps->sPar1);
-            sal_uInt16  nSubType = xField->GetSubType();
-            if (m_pImpl->m_pProps->bBool2)
-                nSubType &= ~nsSwExtendedSubType::SUB_INVISIBLE;
-            else
-                nSubType |= nsSwExtendedSubType::SUB_INVISIBLE;
-            xField->SetSubType(nSubType);
-        }
-        break;
-        case SwServiceType::FieldTypeSetExp:
-        {
-            SwFieldType* pFieldType =
-                pDoc->getIDocumentFieldsAccess().GetFieldType(SwFieldIds::SetExp, m_pImpl->m_sTypeName, true);
-            if (!pFieldType)
-                throw uno::RuntimeException();
-            // detect the field type's sub type and set an appropriate number format
-            if (m_pImpl->m_pProps->bFormatIsDefault &&
-                nsSwGetSetExpType::GSE_STRING == static_cast<SwSetExpFieldType*>(pFieldType)->GetType())
-            {
-                m_pImpl->m_pProps->nFormat = -1;
-            }
-            SwSetExpField *const pSEField = new SwSetExpField(
-                static_cast<SwSetExpFieldType*>(pFieldType),
-                m_pImpl->m_pProps->sPar2,
-                m_pImpl->m_pProps->nUSHORT2 != USHRT_MAX ?  //#i79471# the field can have a number format or a number_ing_ format
-                m_pImpl->m_pProps->nUSHORT2 : m_pImpl->m_pProps->nFormat);
-            xField.reset(pSEField);
-
-            sal_uInt16  nSubType = xField->GetSubType();
-            if (m_pImpl->m_pProps->bBool2)
-                nSubType &= ~nsSwExtendedSubType::SUB_INVISIBLE;
-            else
-                nSubType |= nsSwExtendedSubType::SUB_INVISIBLE;
-            if (m_pImpl->m_pProps->bBool3)
-                nSubType |= nsSwExtendedSubType::SUB_CMD;
-            else
-                nSubType &= ~nsSwExtendedSubType::SUB_CMD;
-            xField->SetSubType(nSubType);
-            pSEField->SetSeqNumber(m_pImpl->m_pProps->nUSHORT1);
-            pSEField->SetInputFlag(m_pImpl->m_pProps->bBool1);
-            pSEField->SetPromptText(m_pImpl->m_pProps->sPar3);
-            if (!m_pImpl->m_pProps->sPar4.isEmpty())
-                pSEField->ChgExpStr(m_pImpl->m_pProps->sPar4, nullptr);
-
-        }
-        break;
-        case SwServiceType::FieldTypeGetExp:
-        {
-            sal_uInt16 nSubType;
-            switch (m_pImpl->m_pProps->nSubType)
-            {
-                case text::SetVariableType::STRING: nSubType = nsSwGetSetExpType::GSE_STRING;   break;
-                case text::SetVariableType::VAR:        nSubType = nsSwGetSetExpType::GSE_EXPR;  break;
-                //case text::SetVariableType::SEQUENCE:   nSubType = nsSwGetSetExpType::GSE_SEQ;  break;
-                case text::SetVariableType::FORMULA:    nSubType = nsSwGetSetExpType::GSE_FORMULA; break;
-                default:
-                    OSL_FAIL("wrong value");
-                    nSubType = nsSwGetSetExpType::GSE_EXPR;
-            }
-            //make sure the SubType matches the field type
-            SwFieldType* pSetExpField = pDoc->getIDocumentFieldsAccess().GetFieldType(
-                    SwFieldIds::SetExp, m_pImpl->m_pProps->sPar1, false);
-            bool bSetGetExpFieldUninitialized = false;
-            if (pSetExpField)
-            {
-                if (nSubType != nsSwGetSetExpType::GSE_STRING &&
-                    static_cast< SwSetExpFieldType* >(pSetExpField)->GetType() == nsSwGetSetExpType::GSE_STRING)
-                nSubType = nsSwGetSetExpType::GSE_STRING;
-            }
-            else
-                bSetGetExpFieldUninitialized = true; // #i82544#
-
-            if (m_pImpl->m_pProps->bBool2)
-                nSubType |= nsSwExtendedSubType::SUB_CMD;
-            else
-                nSubType &= ~nsSwExtendedSubType::SUB_CMD;
-            SwGetExpField *const pGEField = new SwGetExpField(
-                    static_cast<SwGetExpFieldType*>(
-                        pDoc->getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::GetExp)),
-                    m_pImpl->m_pProps->sPar1, nSubType,
-                    m_pImpl->m_pProps->nFormat);
-            xField.reset(pGEField);
-            //TODO: evaluate SubType!
-            if (!m_pImpl->m_pProps->sPar4.isEmpty())
-                pGEField->ChgExpStr(m_pImpl->m_pProps->sPar4, nullptr);
-            // #i82544#
-            if (bSetGetExpFieldUninitialized)
-                pGEField->SetLateInitialization();
-        }
-        break;
-        case SwServiceType::FieldTypeInputUser:
-        case SwServiceType::FieldTypeInput:
-        {
-            SwFieldType* pFieldType =
-                pDoc->getIDocumentFieldsAccess().GetFieldType(SwFieldIds::Input, m_pImpl->m_sTypeName, true);
-            if (!pFieldType)
-                throw uno::RuntimeException();
-            sal_uInt16 nInpSubType =
-                sal::static_int_cast<sal_uInt16>(
-                    SwServiceType::FieldTypeInputUser == m_pImpl->m_nServiceId
-                        ? INP_USR : INP_TXT);
-            SwInputField * pTextField =
-                new SwInputField(static_cast<SwInputFieldType*>(pFieldType),
-                                 m_pImpl->m_pProps->sPar1,
-                                 m_pImpl->m_pProps->sPar2,
-                                 nInpSubType);
-            pTextField->SetHelp(m_pImpl->m_pProps->sPar3);
-            pTextField->SetToolTip(m_pImpl->m_pProps->sPar4);
-
-            xField.reset(pTextField);
-        }
-        break;
-        case SwServiceType::FieldTypeMacro:
-        {
-            SwFieldType* pFieldType = pDoc->getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::Macro);
-            OUString aName;
-
-            // support for Scripting Framework macros
-            if (!m_pImpl->m_pProps->sPar4.isEmpty())
-            {
-                aName = m_pImpl->m_pProps->sPar4;
-            }
-            else
-            {
-                SwMacroField::CreateMacroString(aName,
-                    m_pImpl->m_pProps->sPar1, m_pImpl->m_pProps->sPar3);
-            }
-            xField.reset(new SwMacroField(static_cast<SwMacroFieldType*>(pFieldType), aName,
-                                    m_pImpl->m_pProps->sPar2));
-        }
-        break;
-        case SwServiceType::FieldTypePageCount:
-        case SwServiceType::FieldTypeParagraphCount:
-        case SwServiceType::FieldTypeWordCount:
-        case SwServiceType::FieldTypeCharacterCount:
-        case SwServiceType::FieldTypeTableCount:
-        case SwServiceType::FieldTypeGraphicObjectCount:
-        case SwServiceType::FieldTypeEmbeddedObjectCount:
-        {
-            sal_uInt16 nSubType = DS_PAGE;
-            switch (m_pImpl->m_nServiceId)
-            {
-                case SwServiceType::FieldTypeParagraphCount       : nSubType = DS_PARA; break;
-                case SwServiceType::FieldTypeWordCount            : nSubType = DS_WORD; break;
-                case SwServiceType::FieldTypeCharacterCount       : nSubType = DS_CHAR; break;
-                case SwServiceType::FieldTypeTableCount           : nSubType = DS_TBL;  break;
-                case SwServiceType::FieldTypeGraphicObjectCount  : nSubType = DS_GRF;  break;
-                case SwServiceType::FieldTypeEmbeddedObjectCount : nSubType = DS_OLE;  break;
-                default: break;
-            }
-            SwFieldType* pFieldType = pDoc->getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::DocStat);
-            xField.reset(new SwDocStatField(
-                    static_cast<SwDocStatFieldType*>(pFieldType),
-                    nSubType, m_pImpl->m_pProps->nUSHORT2));
-        }
-        break;
-        case SwServiceType::FieldTypeBibliography:
-        {
-            SwAuthorityFieldType const type(pDoc);
-            xField.reset(new SwAuthorityField(static_cast<SwAuthorityFieldType*>(
-                        pDoc->getIDocumentFieldsAccess().InsertFieldType(type)),
-                    OUString()));
-            if (m_pImpl->m_pProps->aPropSeq.hasElements())
-            {
-                uno::Any aVal;
-                aVal <<= m_pImpl->m_pProps->aPropSeq;
-                xField->PutValue( aVal, FIELD_PROP_PROP_SEQ );
-            }
-        }
-        break;
-        case SwServiceType::FieldTypeCombinedCharacters:
-            // create field
-            xField.reset(new SwCombinedCharField( static_cast<SwCombinedCharFieldType*>(
-                        pDoc->getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::CombinedChars)),
-                        m_pImpl->m_pProps->sPar1));
             break;
-        case SwServiceType::FieldTypeDropdown:
-        {
-            SwDropDownField *const pDDField = new SwDropDownField(
-                static_cast<SwDropDownFieldType *>(
-                    pDoc->getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::Dropdown)));
-            xField.reset(pDDField);
-
-            pDDField->SetItems(m_pImpl->m_pProps->aStrings);
-            pDDField->SetSelectedItem(m_pImpl->m_pProps->sPar1);
-            pDDField->SetName(m_pImpl->m_pProps->sPar2);
-            pDDField->SetHelp(m_pImpl->m_pProps->sPar3);
-            pDDField->SetToolTip(m_pImpl->m_pProps->sPar4);
-        }
-        break;
-
-        case SwServiceType::FieldTypeTableFormula:
-        {
-            // create field
-            sal_uInt16 nType = nsSwGetSetExpType::GSE_FORMULA;
-            if (m_pImpl->m_pProps->bBool1)
+            case SwServiceType::FieldTypeCombinedCharacters:
+                // create field
+                xField.reset(new SwCombinedCharField( static_cast<SwCombinedCharFieldType*>(
+                            pDoc->getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::CombinedChars)),
+                            m_pImpl->m_pProps->sPar1));
+                break;
+            case SwServiceType::FieldTypeDropdown:
             {
-                nType |= nsSwExtendedSubType::SUB_CMD;
-                if (m_pImpl->m_pProps->bFormatIsDefault)
-                    m_pImpl->m_pProps->nFormat = -1;
+                SwDropDownField *const pDDField = new SwDropDownField(
+                    static_cast<SwDropDownFieldType *>(
+                        pDoc->getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::Dropdown)));
+                xField.reset(pDDField);
+
+                pDDField->SetItems(m_pImpl->m_pProps->aStrings);
+                pDDField->SetSelectedItem(m_pImpl->m_pProps->sPar1);
+                pDDField->SetName(m_pImpl->m_pProps->sPar2);
+                pDDField->SetHelp(m_pImpl->m_pProps->sPar3);
+                pDDField->SetToolTip(m_pImpl->m_pProps->sPar4);
             }
-            xField.reset(new SwTableField( static_cast<SwTableFieldType*>(
-                pDoc->getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::Table)),
-                m_pImpl->m_pProps->sPar2,
-                nType,
-                m_pImpl->m_pProps->nFormat));
-            static_cast<SwTableField*>(xField.get())->ChgExpStr(m_pImpl->m_pProps->sPar1);
+            break;
+
+            case SwServiceType::FieldTypeTableFormula:
+            {
+                // create field
+                sal_uInt16 nType = nsSwGetSetExpType::GSE_FORMULA;
+                if (m_pImpl->m_pProps->bBool1)
+                {
+                    nType |= nsSwExtendedSubType::SUB_CMD;
+                    if (m_pImpl->m_pProps->bFormatIsDefault)
+                        m_pImpl->m_pProps->nFormat = -1;
+                }
+                xField.reset(new SwTableField( static_cast<SwTableFieldType*>(
+                    pDoc->getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::Table)),
+                    m_pImpl->m_pProps->sPar2,
+                    nType,
+                    m_pImpl->m_pProps->nFormat));
+                static_cast<SwTableField*>(xField.get())->ChgExpStr(m_pImpl->m_pProps->sPar1);
+            }
+            break;
+            default: OSL_FAIL("What kind of type is that?");
         }
-        break;
-        default: OSL_FAIL("What kind of type is that?");
-    }
 
-    if (!xField)
-        throw uno::RuntimeException("no SwField created?");
+        if (!xField)
+            throw uno::RuntimeException("no SwField created?");
 
-    xField->SetAutomaticLanguage(!m_pImpl->m_pProps->bBool4);
-    SwFormatField aFormat(*xField);
+        xField->SetAutomaticLanguage(!m_pImpl->m_pProps->bBool4);
+        SwFormatField aFormat(*xField);
 
-    UnoActionContext aCont(pDoc);
-    if (aPam.HasMark() &&
-        m_pImpl->m_nServiceId != SwServiceType::FieldTypeAnnotation)
-    {
-        pDoc->getIDocumentContentOperations().DeleteAndJoin(aPam);
-    }
-
-    SwXTextCursor const*const pTextCursor(dynamic_cast<SwXTextCursor*>(pCursor));
-    const bool bForceExpandHints(
-        pTextCursor
-        && pTextCursor->IsAtEndOfMeta() );
-    const SetAttrMode nInsertFlags =
-        bForceExpandHints
-        ? SetAttrMode::FORCEHINTEXPAND
-        : SetAttrMode::DEFAULT;
-
-    if (*aPam.GetPoint() != *aPam.GetMark() &&
-        m_pImpl->m_nServiceId == SwServiceType::FieldTypeAnnotation)
-    {
-        // Make sure we always insert the field at the end
-        SwPaM aEnd(*aPam.End(), *aPam.End());
-        pDoc->getIDocumentContentOperations().InsertPoolItem(aEnd, aFormat, nInsertFlags);
-    }
-    else
-        pDoc->getIDocumentContentOperations().InsertPoolItem(aPam, aFormat, nInsertFlags);
-
-    SwTextAttr* pTextAttr = aPam.GetNode().GetTextNode()->GetFieldTextAttrAt( aPam.GetPoint()->nContent.GetIndex()-1, true );
-
-    // What about updating the fields? (see fldmgr.cxx)
-    if (!pTextAttr)
-        throw uno::RuntimeException("no SwTextAttr inserted?");  // could theoretically happen, if paragraph is full
-
-    const SwFormatField& rField = pTextAttr->GetFormatField();
-    m_pImpl->SetFormatField(const_cast<SwFormatField*>(&rField), pDoc);
-
-    if ( pTextAttr->Which() == RES_TXTATR_ANNOTATION
-         && *aPam.GetPoint() != *aPam.GetMark() )
-    {
-        // create annotation mark
-        const SwPostItField* pPostItField = dynamic_cast< const SwPostItField* >(pTextAttr->GetFormatField().GetField());
-        OSL_ENSURE( pPostItField != nullptr, "<SwXTextField::attachToRange(..)> - annotation field missing!" );
-        if ( pPostItField != nullptr )
+        UnoActionContext aCont(pDoc);
+        if (aPam.HasMark() &&
+            m_pImpl->m_nServiceId != SwServiceType::FieldTypeAnnotation)
         {
-            IDocumentMarkAccess* pMarksAccess = pDoc->getIDocumentMarkAccess();
-            pMarksAccess->makeAnnotationMark( aPam, pPostItField->GetName() );
+            pDoc->getIDocumentContentOperations().DeleteAndJoin(aPam);
         }
-    }
 
-    xField.reset();
+        SwXTextCursor const*const pTextCursor(dynamic_cast<SwXTextCursor*>(pCursor));
+        const bool bForceExpandHints(
+            pTextCursor
+            && pTextCursor->IsAtEndOfMeta() );
+        const SetAttrMode nInsertFlags =
+            bForceExpandHints
+            ? SetAttrMode::FORCEHINTEXPAND
+            : SetAttrMode::DEFAULT;
 
-    assert(m_pImpl->GetFormatField());
-    m_pImpl->m_pDoc = pDoc;
-    m_pImpl->GetFormatField()->SetXTextField(this);
-    m_pImpl->m_wThis = *this;
-    m_pImpl->m_bIsDescriptor = false;
-    m_pImpl->ClearFieldType();
-    m_pImpl->m_pProps.reset();
-    if (m_pImpl->m_bCallUpdate)
-        update();
+        if (*aPam.GetPoint() != *aPam.GetMark() &&
+            m_pImpl->m_nServiceId == SwServiceType::FieldTypeAnnotation)
+        {
+            // Make sure we always insert the field at the end
+            SwPaM aEnd(*aPam.End(), *aPam.End());
+            pDoc->getIDocumentContentOperations().InsertPoolItem(aEnd, aFormat, nInsertFlags);
+        }
+        else
+            pDoc->getIDocumentContentOperations().InsertPoolItem(aPam, aFormat, nInsertFlags);
+
+        SwTextAttr* pTextAttr = aPam.GetNode().GetTextNode()->GetFieldTextAttrAt( aPam.GetPoint()->nContent.GetIndex()-1, true );
+
+        // What about updating the fields? (see fldmgr.cxx)
+        if (!pTextAttr)
+            throw uno::RuntimeException("no SwTextAttr inserted?");  // could theoretically happen, if paragraph is full
+
+        const SwFormatField& rField = pTextAttr->GetFormatField();
+        m_pImpl->SetFormatField(const_cast<SwFormatField*>(&rField), pDoc);
+
+        if ( pTextAttr->Which() == RES_TXTATR_ANNOTATION
+             && *aPam.GetPoint() != *aPam.GetMark() )
+        {
+            // create annotation mark
+            const SwPostItField* pPostItField = dynamic_cast< const SwPostItField* >(pTextAttr->GetFormatField().GetField());
+            OSL_ENSURE( pPostItField != nullptr, "<SwXTextField::attachToRange(..)> - annotation field missing!" );
+            if ( pPostItField != nullptr )
+            {
+                IDocumentMarkAccess* pMarksAccess = pDoc->getIDocumentMarkAccess();
+                pMarksAccess->makeAnnotationMark( aPam, pPostItField->GetName() );
+            }
+        }
+
+        xField.reset();
+
+        assert(m_pImpl->GetFormatField());
+        m_pImpl->m_pDoc = pDoc;
+        m_pImpl->GetFormatField()->SetXTextField(this);
+        m_pImpl->m_wThis = *this;
+        m_pImpl->m_bIsDescriptor = false;
+        m_pImpl->ClearFieldType();
+        m_pImpl->m_pProps.reset();
+        if (m_pImpl->m_bCallUpdate)
+            update();
     }
     else if ( !m_pImpl->IsDescriptor()
               && m_pImpl->m_pDoc != nullptr
