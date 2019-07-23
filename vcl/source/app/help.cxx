@@ -80,43 +80,44 @@ OUString Help::GetHelpText( const OUString&, const weld::Widget* )
 
 void Help::EnableContextHelp()
 {
-    ImplGetSVData()->maHelpData.mbContextHelp = true;
+    ImplGetSVHelpData().mbContextHelp = true;
 }
 
 void Help::DisableContextHelp()
 {
-    ImplGetSVData()->maHelpData.mbContextHelp = false;
+    ImplGetSVHelpData().mbContextHelp = false;
 }
 
 bool Help::IsContextHelpEnabled()
 {
-    return ImplGetSVData()->maHelpData.mbContextHelp;
+    return ImplGetSVHelpData().mbContextHelp;
 }
 
 void Help::EnableExtHelp()
 {
-    ImplGetSVData()->maHelpData.mbExtHelp = true;
+    ImplGetSVHelpData().mbExtHelp = true;
 }
 
 void Help::DisableExtHelp()
 {
-    ImplGetSVData()->maHelpData.mbExtHelp = false;
+    ImplGetSVHelpData().mbExtHelp = false;
 }
 
 bool Help::IsExtHelpEnabled()
 {
-    return ImplGetSVData()->maHelpData.mbExtHelp;
+    return ImplGetSVHelpData().mbExtHelp;
 }
 
 bool Help::StartExtHelp()
 {
     ImplSVData* pSVData = ImplGetSVData();
+    ImplSVHelpData& aHelpData = ImplGetSVHelpData();
 
-    if ( pSVData->maHelpData.mbExtHelp && !pSVData->maHelpData.mbExtHelpMode )
+    if ( aHelpData.mbExtHelp && !aHelpData.mbExtHelpMode )
     {
-        pSVData->maHelpData.mbExtHelpMode = true;
-        pSVData->maHelpData.mbOldBalloonMode = pSVData->maHelpData.mbBalloonHelp;
-        pSVData->maHelpData.mbBalloonHelp = true;
+        aHelpData.mbExtHelpMode = true;
+        aHelpData.mbOldBalloonMode = aHelpData.mbBalloonHelp;
+        aHelpData.mbBalloonHelp = true;
         if ( pSVData->maWinData.mpAppWin )
             pSVData->maWinData.mpAppWin->ImplGenerateMouseMove();
         return true;
@@ -128,11 +129,12 @@ bool Help::StartExtHelp()
 bool Help::EndExtHelp()
 {
     ImplSVData* pSVData = ImplGetSVData();
+    ImplSVHelpData& aHelpData = ImplGetSVHelpData();
 
-    if ( pSVData->maHelpData.mbExtHelp && pSVData->maHelpData.mbExtHelpMode )
+    if ( aHelpData.mbExtHelp && aHelpData.mbExtHelpMode )
     {
-        pSVData->maHelpData.mbExtHelpMode = false;
-        pSVData->maHelpData.mbBalloonHelp = pSVData->maHelpData.mbOldBalloonMode;
+        aHelpData.mbExtHelpMode = false;
+        aHelpData.mbBalloonHelp = aHelpData.mbOldBalloonMode;
         if ( pSVData->maWinData.mpAppWin )
             pSVData->maWinData.mpAppWin->ImplGenerateMouseMove();
         return true;
@@ -143,17 +145,17 @@ bool Help::EndExtHelp()
 
 void Help::EnableBalloonHelp()
 {
-    ImplGetSVData()->maHelpData.mbBalloonHelp = true;
+    ImplGetSVHelpData().mbBalloonHelp = true;
 }
 
 void Help::DisableBalloonHelp()
 {
-    ImplGetSVData()->maHelpData.mbBalloonHelp = false;
+    ImplGetSVHelpData().mbBalloonHelp = false;
 }
 
 bool Help::IsBalloonHelpEnabled()
 {
-    return ImplGetSVData()->maHelpData.mbBalloonHelp;
+    return ImplGetSVHelpData().mbBalloonHelp;
 }
 
 void Help::ShowBalloon( vcl::Window* pParent,
@@ -166,17 +168,17 @@ void Help::ShowBalloon( vcl::Window* pParent,
 
 void Help::EnableQuickHelp()
 {
-    ImplGetSVData()->maHelpData.mbQuickHelp = true;
+    ImplGetSVHelpData().mbQuickHelp = true;
 }
 
 void Help::DisableQuickHelp()
 {
-    ImplGetSVData()->maHelpData.mbQuickHelp = false;
+    ImplGetSVHelpData().mbQuickHelp = false;
 }
 
 bool Help::IsQuickHelpEnabled()
 {
-    return ImplGetSVData()->maHelpData.mbQuickHelp;
+    return ImplGetSVHelpData().mbQuickHelp;
 }
 
 void Help::ShowQuickHelp( vcl::Window* pParent,
@@ -193,7 +195,7 @@ void Help::ShowQuickHelp( vcl::Window* pParent,
 
 void Help::HideBalloonAndQuickHelp()
 {
-    HelpTextWindow const * pHelpWin = ImplGetSVData()->maHelpData.mpHelpWin;
+    HelpTextWindow const * pHelpWin = ImplGetSVHelpData().mpHelpWin;
     bool const bIsVisible = ( pHelpWin != nullptr ) && pHelpWin->IsVisible();
     ImplDestroyHelpWindow( bIsVisible );
 }
@@ -253,7 +255,7 @@ void Help::HidePopover(vcl::Window const * pParent, void* nId)
     // trigger update, so that a Paint is instantly triggered since we do not save the background
     pFrameWindow->ImplUpdateAll();
     pHelpWin.disposeAndClear();
-    ImplGetSVData()->maHelpData.mnLastHelpHideTime = tools::Time::GetSystemTicks();
+    ImplGetSVHelpData().mnLastHelpHideTime = tools::Time::GetSystemTicks();
 }
 
 HelpTextWindow::HelpTextWindow( vcl::Window* pParent, const OUString& rText, sal_uInt16 nHelpWinStyle, QuickHelpFlags nStyle ) :
@@ -274,9 +276,8 @@ HelpTextWindow::HelpTextWindow( vcl::Window* pParent, const OUString& rText, sal
     SetHelpText( rText );
     Window::SetHelpText( rText );
 
-    ImplSVData* pSVData = ImplGetSVData();
-    if ( pSVData->maHelpData.mbSetKeyboardHelp )
-        pSVData->maHelpData.mbKeyboardHelp = true;
+    if ( ImplGetSVHelpData().mbSetKeyboardHelp )
+        ImplGetSVHelpData().mbKeyboardHelp = true;
 
 
     maShowTimer.SetInvokeHandler( LINK( this, HelpTextWindow, TimerHdl ) );
@@ -322,8 +323,8 @@ void HelpTextWindow::dispose()
     maShowTimer.Stop();
     maHideTimer.Stop();
 
-    if( this == ImplGetSVData()->maHelpData.mpHelpWin )
-        ImplGetSVData()->maHelpData.mpHelpWin = nullptr;
+    if( this == ImplGetSVHelpData().mpHelpWin )
+        ImplGetSVHelpData().mpHelpWin = nullptr;
     FloatingWindow::dispose();
 }
 
@@ -428,7 +429,7 @@ void HelpTextWindow::ShowHelp( sal_uInt16 nDelayMode )
     if ( nDelayMode != HELPDELAY_NONE )
     {
         // In case of ExtendedHelp display help sooner
-        if ( ImplGetSVData()->maHelpData.mbExtHelpMode )
+        if ( ImplGetSVHelpData().mbExtHelpMode )
             nTimeout = 15;
         else
         {
@@ -453,8 +454,7 @@ IMPL_LINK( HelpTextWindow, TimerHdl, Timer*, pTimer, void)
         if ( mnHelpWinStyle == HELPWINSTYLE_QUICK )
         {
             // start auto-hide-timer for non-ShowTip windows
-            ImplSVData* pSVData = ImplGetSVData();
-            if ( this == pSVData->maHelpData.mpHelpWin )
+            if ( this == ImplGetSVHelpData().mpHelpWin )
                 maHideTimer.Start();
         }
         ImplShow();
@@ -495,12 +495,12 @@ void ImplShowHelpWindow( vcl::Window* pParent, sal_uInt16 nHelpWinStyle, QuickHe
         return;
     }
 
-    ImplSVData* pSVData = ImplGetSVData();
+    ImplSVHelpData& aHelpData = ImplGetSVHelpData();
 
-    if (rHelpText.isEmpty() && !pSVData->maHelpData.mbRequestingHelp)
+    if (rHelpText.isEmpty() && !aHelpData.mbRequestingHelp)
         return;
 
-    VclPtr<HelpTextWindow> pHelpWin = pSVData->maHelpData.mpHelpWin;
+    VclPtr<HelpTextWindow> pHelpWin = aHelpData.mpHelpWin;
     sal_uInt16 nDelayMode = HELPDELAY_NORMAL;
     if ( pHelpWin )
     {
@@ -509,7 +509,7 @@ void ImplShowHelpWindow( vcl::Window* pParent, sal_uInt16 nHelpWinStyle, QuickHe
         if  (   (   rHelpText.isEmpty()
                 ||  ( pHelpWin->GetWinStyle() != nHelpWinStyle )
                 )
-            &&  pSVData->maHelpData.mbRequestingHelp
+            &&  aHelpData.mbRequestingHelp
             )
         {
             // remove help window if no HelpText or
@@ -544,13 +544,13 @@ void ImplShowHelpWindow( vcl::Window* pParent, sal_uInt16 nHelpWinStyle, QuickHe
         return;
 
     sal_uInt64 nCurTime = tools::Time::GetSystemTicks();
-    if  (   ( ( nCurTime - pSVData->maHelpData.mnLastHelpHideTime ) < HelpSettings::GetTipDelay() )
+    if  (   ( ( nCurTime - aHelpData.mnLastHelpHideTime ) < pParent->GetSettings().GetHelpSettings().GetTipDelay() )
         ||  ( nStyle & QuickHelpFlags::NoDelay )
         )
         nDelayMode = HELPDELAY_NONE;
 
     pHelpWin = VclPtr<HelpTextWindow>::Create( pParent, rHelpText, nHelpWinStyle, nStyle );
-    pSVData->maHelpData.mpHelpWin = pHelpWin;
+    aHelpData.mpHelpWin = pHelpWin;
     pHelpWin->SetStatusText( rStatusText );
     pHelpWin->SetHelpArea( rHelpArea );
 
@@ -559,7 +559,7 @@ void ImplShowHelpWindow( vcl::Window* pParent, sal_uInt16 nHelpWinStyle, QuickHe
     pHelpWin->SetOutputSizePixel( aSz );
     ImplSetHelpWindowPos( pHelpWin, nHelpWinStyle, nStyle, rScreenPos, rHelpArea );
     // if not called from Window::RequestHelp, then without delay...
-    if ( !pSVData->maHelpData.mbRequestingHelp )
+    if ( !aHelpData.mbRequestingHelp )
         nDelayMode = HELPDELAY_NONE;
     pHelpWin->ShowHelp( nDelayMode );
 
@@ -567,8 +567,12 @@ void ImplShowHelpWindow( vcl::Window* pParent, sal_uInt16 nHelpWinStyle, QuickHe
 
 void ImplDestroyHelpWindow( bool bUpdateHideTime )
 {
-    ImplSVData* pSVData = ImplGetSVData();
-    VclPtr<HelpTextWindow> pHelpWin = pSVData->maHelpData.mpHelpWin;
+    ImplDestroyHelpWindow(ImplGetSVHelpData(), bUpdateHideTime);
+}
+
+void ImplDestroyHelpWindow(ImplSVHelpData& rHelpData, bool bUpdateHideTime)
+{
+    VclPtr<HelpTextWindow> pHelpWin = rHelpData.mpHelpWin;
     if ( pHelpWin )
     {
         vcl::Window * pWindow = pHelpWin->GetParent()->ImplGetFrameWindow();
@@ -576,12 +580,12 @@ void ImplDestroyHelpWindow( bool bUpdateHideTime )
         tools::Rectangle aInvRect( pHelpWin->GetWindowExtentsRelative( pWindow ) );
         if( pHelpWin->IsVisible() )
             pWindow->Invalidate( aInvRect );
-        pSVData->maHelpData.mpHelpWin = nullptr;
-        pSVData->maHelpData.mbKeyboardHelp = false;
+        rHelpData.mpHelpWin = nullptr;
+        rHelpData.mbKeyboardHelp = false;
         pHelpWin->Hide();
         pHelpWin.disposeAndClear();
         if( bUpdateHideTime )
-            pSVData->maHelpData.mnLastHelpHideTime = tools::Time::GetSystemTicks();
+            rHelpData.mnLastHelpHideTime = tools::Time::GetSystemTicks();
     }
 }
 
