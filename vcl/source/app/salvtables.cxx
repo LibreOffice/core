@@ -36,7 +36,6 @@
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <utility>
 #include <tools/helpers.hxx>
-#include <vcl/aboutdialog.hxx>
 #include <vcl/builder.hxx>
 #include <vcl/calendar.hxx>
 #include <vcl/combobox.hxx>
@@ -65,6 +64,7 @@
 #include <vcl/vclmedit.hxx>
 #include <vcl/viewdataentry.hxx>
 #include <vcl/virdev.hxx>
+#include <aboutdialog.hxx>
 #include <bitmaps.hlst>
 
 SalFrame::SalFrame()
