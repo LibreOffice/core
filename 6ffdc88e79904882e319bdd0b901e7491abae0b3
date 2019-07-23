@@ -22,6 +22,30 @@
       "revId": "6ffdc88e79904882e319bdd0b901e7491abae0b3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_456a8980",
+        "filename": "starmath/source/cfgitem.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 378,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-07-23T01:58:43Z",
+      "side": 1,
+      "message": "Also note that to modify the original sequence using algorithms, std::for_each is recommended instead of std::transform - see Notes in [1], and the discussion starting with \"For both overloads, if the iterator type is mutable,\" in [2].\n\n[1] https://en.cppreference.com/w/cpp/algorithm/transform\n[2] https://en.cppreference.com/w/cpp/algorithm/for_each",
+      "parentUuid": "bf659307_8570a174",
+      "range": {
+        "startLine": 376,
+        "startChar": 4,
+        "endLine": 378,
+        "endChar": 73
+      },
+      "revId": "6ffdc88e79904882e319bdd0b901e7491abae0b3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
