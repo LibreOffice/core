@@ -234,7 +234,7 @@ void Window::dispose()
 
     ImplSVData* pSVData = ImplGetSVData();
 
-    if ( pSVData->maHelpData.mpHelpWin && (pSVData->maHelpData.mpHelpWin->GetParent() == this) )
+    if ( ImplGetSVHelpData().mpHelpWin && (ImplGetSVHelpData().mpHelpWin->GetParent() == this) )
         ImplDestroyHelpWindow( true );
 
     SAL_WARN_IF( pSVData->maWinData.mpTrackWin.get() == this, "vcl.window",
