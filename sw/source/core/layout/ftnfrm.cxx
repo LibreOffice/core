@@ -2287,6 +2287,8 @@ void SwFootnoteBossFrame::RearrangeFootnotes( const SwTwips nDeadLine, const boo
                             pLastFootnoteFrame = nullptr;
                             pFootnoteFrame->Cut();
                             SwFrame::DestroyFrame(pFootnoteFrame);
+                            if (pFootnote == pFootnoteFrame)
+                                pFootnote = nullptr;
                         }
                     }
                 }
