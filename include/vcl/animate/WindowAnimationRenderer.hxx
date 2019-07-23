@@ -20,6 +20,7 @@
 #ifndef INCLUDED_VCL_INC_WINDOWANIMATERENDERER_HXX
 #define INCLUDED_VCL_INC_WINDOWANIMATERENDERER_HXX
 
+#include <vcl/dllapi.h>
 #include <vcl/animate/AnimationRenderer.hxx>
 
 class VCL_DLLPUBLIC WindowAnimationRenderer : public AnimationRenderer
