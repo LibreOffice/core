@@ -207,8 +207,9 @@ static void initParameter(int argc, wchar_t* argv[])
 
         if (_wcsicmp(argv[i], L"--mapi-dialog") == 0)
         {
-            // Outlook 2013+; for earlier versions this equals to MAPI_DIALOG
-            gMapiFlags |= MAPI_DIALOG_MODELESS;
+            // MAPI_DIALOG_MODELESS has many problems and crashes Outlook 2016.
+            // see the commit message for a lengthy description.
+            gMapiFlags |= MAPI_DIALOG;
         }
         else if (_wcsicmp(argv[i], L"--mapi-logon-ui") == 0)
         {
