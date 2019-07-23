@@ -1377,6 +1377,45 @@ bool SvpSalGraphics::drawPolyPolygonBezier( sal_uInt32,
     return false;
 }
 
+namespace
+{
+    void add_polygon_path(cairo_t* cr, const basegfx::B2DPolyPolygon& rPolyPolygon, const basegfx::B2DHomMatrix& rObjectToDevice, bool bPixelSnap)
+    {
+        // try to access buffered data
+        std::shared_ptr<SystemDependentData_CairoPath> pSystemDependentData_CairoPath(
+            rPolyPolygon.getSystemDependentData<SystemDependentData_CairoPath>());
+
+        if(pSystemDependentData_CairoPath)
+        {
+            // re-use data
+            cairo_append_path(cr, pSystemDependentData_CairoPath->getCairoPath());
+        }
+        else
+        {
+            // create data
+            for (const auto & rPoly : rPolyPolygon)
+            {
+                // PixelOffset used: Was dependent of 'm_aLineColor != SALCOLOR_NONE'
+                // Adapt setupPolyPolygon-users to set a linear transformation to achieve PixelOffset
+                AddPolygonToPath(
+                    cr,
+                    rPoly,
+                    rObjectToDevice,
+                    bPixelSnap,
+                    false);
+            }
+
+            // copy and add to buffering mechanism
+            // for decisions how/what to buffer, see Note in WinSalGraphicsImpl::drawPolyPolygon
+            pSystemDependentData_CairoPath = rPolyPolygon.addOrReplaceSystemDependentData<SystemDependentData_CairoPath>(
+                ImplGetSystemDependentDataManager(),
+                cairo_copy_path(cr),
+                false,
+                false);
+        }
+    }
+}
+
 bool SvpSalGraphics::drawPolyPolygon(
     const basegfx::B2DHomMatrix& rObjectToDevice,
     const basegfx::B2DPolyPolygon& rPolyPolygon,
@@ -1409,38 +1448,7 @@ bool SvpSalGraphics::drawPolyPolygon(
         cairo_set_matrix(cr, &aMatrix);
     }
 
-    // try to access buffered data
-    std::shared_ptr<SystemDependentData_CairoPath> pSystemDependentData_CairoPath(
-        rPolyPolygon.getSystemDependentData<SystemDependentData_CairoPath>());
-
-    if(pSystemDependentData_CairoPath)
-    {
-        // re-use data
-        cairo_append_path(cr, pSystemDependentData_CairoPath->getCairoPath());
-    }
-    else
-    {
-        // create data
-        for (const auto & rPoly : rPolyPolygon)
-        {
-            // PixelOffset used: Was dependent of 'm_aLineColor != SALCOLOR_NONE'
-            // Adapt setupPolyPolygon-users to set a linear transformation to achieve PixelOffset
-            AddPolygonToPath(
-                cr,
-                rPoly,
-                rObjectToDevice,
-                !getAntiAliasB2DDraw(),
-                false);
-        }
-
-        // copy and add to buffering mechanism
-        // for decisions how/what to buffer, see Note in WinSalGraphicsImpl::drawPolyPolygon
-        pSystemDependentData_CairoPath = rPolyPolygon.addOrReplaceSystemDependentData<SystemDependentData_CairoPath>(
-            ImplGetSystemDependentDataManager(),
-            cairo_copy_path(cr),
-            false,
-            false);
-    }
+    add_polygon_path(cr, rPolyPolygon, rObjectToDevice, !getAntiAliasB2DDraw());
 
     // To make releaseCairoContext work, use empty extents
     basegfx::B2DRange extents;
