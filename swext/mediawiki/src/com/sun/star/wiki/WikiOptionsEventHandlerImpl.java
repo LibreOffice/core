@@ -233,11 +233,11 @@ public final class WikiOptionsEventHandlerImpl extends WeakBase
                         m_xDialog = UnoRuntime.queryInterface( XDialog.class, xWindow );
                         m_xControlContainer = UnoRuntime.queryInterface( XControlContainer.class, m_xDialog );
                         m_aSettings = Settings.getSettings( m_xContext );
-                        m_aSettings.loadConfiguration(); // throw away all the noncommited changes
+                        m_aSettings.loadConfiguration(); // throw away all the noncommitted changes
                         InitStrings();
                     }
                     else if ( m_aSettings != null )
-                        m_aSettings.loadConfiguration(); // throw away all the noncommited changes
+                        m_aSettings.loadConfiguration(); // throw away all the noncommitted changes
 
                     RefreshView();
                     CheckButtonState();
