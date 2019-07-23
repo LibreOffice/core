@@ -1583,7 +1583,7 @@ AC_ARG_WITH(galleries,
 AC_ARG_WITH(theme,
     AS_HELP_STRING([--with-theme="theme1 theme2..."],
         [Choose which themes to include. By default those themes with an '*' are included.
-         Possible choices: *breeze, *breeze_dark, *breeze_dark_svg, *breeze_svg, *colibre, *colibre_svg, *elementary,
+         Possible choices: *breeze, *breeze_dark, *breeze_dark_svg, *breeze_svg, *cib, *colibre, *colibre_svg, *elementary,
          *elementary_svg, *karasa_jaga, *karasa_jaga_svg, *sifr, *sifr_dark, *sifr_dark_svg, *sifr_svg, *tango.]),
 ,)
 
@@ -11541,14 +11541,14 @@ dnl ===================================================================
 AC_MSG_CHECKING([which themes to include])
 # if none given use default subset of available themes
 if test "x$with_theme" = "x" -o "x$with_theme" = "xyes"; then
-    with_theme="breeze breeze_dark breeze_dark_svg breeze_svg colibre colibre_svg elementary elementary_svg karasa_jaga karasa_jaga_svg sifr sifr_svg sifr_dark sifr_dark_svg tango"
+    with_theme="breeze breeze_dark breeze_dark_svg breeze_svg cib colibre colibre_svg elementary elementary_svg karasa_jaga karasa_jaga_svg sifr sifr_svg sifr_dark sifr_dark_svg tango"
 fi
 
 WITH_THEMES=""
 if test "x$with_theme" != "xno"; then
     for theme in $with_theme; do
         case $theme in
-        breeze|breeze_dark|breeze_dark_svg|breeze_svg|colibre|colibre_svg|elementary|elementary_svg|karasa_jaga|karasa_jaga_svg|sifr|sifr_svg|sifr_dark|sifr_dark_svg|tango|CIB) real_theme="$theme" ;;
+        breeze|breeze_dark|breeze_dark_svg|breeze_svg|colibre|colibre_svg|elementary|elementary_svg|karasa_jaga|karasa_jaga_svg|sifr|sifr_svg|sifr_dark|sifr_dark_svg|tango|cib) real_theme="$theme" ;;
         default) real_theme=colibre ;;
         *) AC_MSG_ERROR([Unknown value for --with-theme: $theme]) ;;
         esac
