@@ -76,7 +76,7 @@ public class _XSingleServiceFactory extends MultiMethodTest {
     */
     public void _createInstance() {
         // for some objects the method should fail.
-        // If thi is required the property is set to true.
+        // If this is required the property is set to true.
         String negStr = (String)tEnv.getObjRelation(
                 "XSingleServiceFactory.createInstance.negative");
         boolean negative = (negStr != null && negStr.equalsIgnoreCase("true"));

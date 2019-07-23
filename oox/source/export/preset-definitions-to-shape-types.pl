@@ -374,7 +374,7 @@ sub setup_variables()
     );
 }
 
-# Convert the (predefiend) value to a number
+# Convert the (predefined) value to a number
 sub value( $ )
 {
     my ( $val ) = @_;

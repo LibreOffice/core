@@ -2394,7 +2394,7 @@ bool AxContainerModelBase::importBinaryModel( BinaryInputStream& rInStrm )
     aReader.skipUndefinedProperty();
     aReader.readIntProperty< sal_uInt32 >( mnBackColor );
     aReader.readIntProperty< sal_uInt32 >( mnTextColor );
-    aReader.skipIntProperty< sal_uInt32 >(); // next availbale control ID
+    aReader.skipIntProperty< sal_uInt32 >(); // next available control ID
     aReader.skipUndefinedProperty();
     aReader.skipUndefinedProperty();
     aReader.readIntProperty< sal_uInt32 >( mnFlags );

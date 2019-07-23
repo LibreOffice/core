@@ -175,7 +175,7 @@ FUTURE WORK: because we have to make sure that all the roundtrips
 like PPTX --> ODP --> PPTX work correctly and doesn't lose data.
 the only problematic part is probably saving custom shapes (ie. not
 presets) to PPTX. that part of code predates work on custom shapes
-and is unable to export general custom shapes yet. it will need a bit
+and is unable to export general custom shapes yet. It will need a bit
 of work as LO has more complex equations than DrawingML. other parts
 should work OK, PPTX --> ODP should work and don't lose any
 data. presets should already survive PPTX --> ODP --> PPTX roundtrip

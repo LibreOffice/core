@@ -190,7 +190,7 @@ public class _XValidatableFormComponent extends MultiMethodTest
         String bound = sb.toString();
          // endfor
 
-        //get a array of bound properties
+        //get an array of bound properties
         if (bound.equals(""))
         {
             bound = "none";
