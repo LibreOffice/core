@@ -219,17 +219,23 @@ static void Execute( uno::Any& aEventData, const document::DocumentEvent& aTrigg
         else if (aType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Service")) ||
                   aType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Script")))
         {
-            if ( !aScript.isEmpty() )
+            bool bAllowed = false;
+            util::URL aURL;
+            if (!aScript.isEmpty())
+            {
+                uno::Reference < util::XURLTransformer > xTrans( util::URLTransformer::create( ::comphelper::getProcessComponentContext() ) );
+
+                aURL.Complete = aScript;
+                xTrans->parseStrict( aURL );
+
+                bAllowed = !SfxObjectShell::UnTrustedScript(aURL.Complete);
+            }
+
+            if (bAllowed)
             {
                 SfxViewFrame* pView = pDoc ?
                     SfxViewFrame::GetFirst( pDoc ) :
                     SfxViewFrame::Current();
-
-                uno::Reference < util::XURLTransformer > xTrans( util::URLTransformer::create( ::comphelper::getProcessComponentContext() ) );
-
-                util::URL aURL;
-                aURL.Complete = aScript;
-                xTrans->parseStrict( aURL );
 
                 uno::Reference
                     < frame::XDispatchProvider > xProv;
