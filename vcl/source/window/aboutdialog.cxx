@@ -12,11 +12,11 @@
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 #include <rtl/character.hxx>
-#include <vcl/aboutdialog.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
+#include <aboutdialog.hxx>
 
 #include <tools/stream.hxx>
 #include <rtl/bootstrap.hxx>

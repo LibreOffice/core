@@ -20,7 +20,6 @@
 #include <sal/log.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/resmgr.hxx>
-#include <vcl/aboutdialog.hxx>
 #include <vcl/builder.hxx>
 #include <vcl/builderfactory.hxx>
 #include <vcl/button.hxx>
@@ -61,6 +60,7 @@
 #include <desktop/crashreport.hxx>
 #include <salinst.hxx>
 #include <strings.hrc>
+#include <aboutdialog.hxx>
 #include <treeglue.hxx>
 #include <tools/svlibrary.h>
 #include <tools/diagnose_ex.h>
