@@ -95,6 +95,8 @@ COMPHELPER_DLLPUBLIC bool isViewIdForVisCursorInvalidation();
 COMPHELPER_DLLPUBLIC void setViewIdForVisCursorInvalidation(bool bViewIdForVisCursorInvalidation);
 
 /// Update the current LOK's language.
+COMPHELPER_DLLPUBLIC void setLanguageTag(const OUString& lang, bool bCanonicalize = false);
+/// Update the current LOK's language.
 COMPHELPER_DLLPUBLIC void setLanguageTag(const LanguageTag& languageTag);
 /// Get the current LOK's language.
 COMPHELPER_DLLPUBLIC const LanguageTag& getLanguageTag();
