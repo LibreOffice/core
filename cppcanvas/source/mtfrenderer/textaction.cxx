@@ -755,6 +755,7 @@ namespace cppcanvas
                                   const ::Color&             rReliefColor,
                                   const ::basegfx::B2DSize&  rShadowOffset,
                                   const ::Color&             rShadowColor,
+                                  const ::Color&             rTextFillColor,
                                   const OUString&     rText,
                                   sal_Int32                  nStartPos,
                                   sal_Int32                  nLen,
@@ -767,6 +768,7 @@ namespace cppcanvas
                                   const ::Color&                    rReliefColor,
                                   const ::basegfx::B2DSize&         rShadowOffset,
                                   const ::Color&                    rShadowColor,
+                                  const ::Color&                    rTextFillColor,
                                   const OUString&            rText,
                                   sal_Int32                         nStartPos,
                                   sal_Int32                         nLen,
@@ -822,6 +824,7 @@ namespace cppcanvas
                                                 const ::Color&             rReliefColor,
                                                 const ::basegfx::B2DSize&  rShadowOffset,
                                                 const ::Color&             rShadowColor,
+                                                const ::Color&             rTextFillColor,
                                                 const OUString&     rText,
                                                 sal_Int32                  nStartPos,
                                                 sal_Int32                  nLen,
@@ -839,6 +842,7 @@ namespace cppcanvas
                 maReliefColor( rReliefColor ),
                 maShadowOffset( rShadowOffset ),
                 maShadowColor( rShadowColor ),
+                maTextFillColor( rTextFillColor ),
                 maTextDirection( rState.textDirection )
             {
                 const double nLineWidth(getLineWidth( rVDev, rState, maStringContext ));
@@ -861,6 +865,7 @@ namespace cppcanvas
                                                 const ::Color&                  rReliefColor,
                                                 const ::basegfx::B2DSize&       rShadowOffset,
                                                 const ::Color&                  rShadowColor,
+                                                const ::Color&                  rTextFillColor,
                                                 const OUString&          rText,
                                                 sal_Int32                       nStartPos,
                                                 sal_Int32                       nLen,
@@ -879,6 +884,7 @@ namespace cppcanvas
                 maReliefColor( rReliefColor ),
                 maShadowOffset( rShadowOffset ),
                 maShadowColor( rShadowColor ),
+                maTextFillColor( rTextFillColor ),
                 maTextDirection( rState.textDirection )
             {
                 const double nLineWidth( getLineWidth( rVDev, rState, maStringContext ) );
@@ -2181,7 +2187,8 @@ namespace cppcanvas
                     !rState.textUnderlineStyle &&
                     !rState.textStrikeoutStyle &&
                     rReliefColor == aEmptyColor &&
-                    rShadowColor == aEmptyColor )
+                    rShadowColor == aEmptyColor &&
+                    rTextFillColor == aEmptyColor )
                 {
                     // nope
                     if( rParms.maTextTransformation.is_initialized() )
@@ -2216,6 +2223,7 @@ namespace cppcanvas
                                                     rReliefColor,
                                                     aShadowOffset,
                                                     rShadowColor,
+                                                    rTextFillColor,
                                                     rText,
                                                     nStartPos,
                                                     nLen,
@@ -2230,6 +2238,7 @@ namespace cppcanvas
                                                     rReliefColor,
                                                     aShadowOffset,
                                                     rShadowColor,
+                                                    rTextFillColor,
                                                     rText,
                                                     nStartPos,
                                                     nLen,
