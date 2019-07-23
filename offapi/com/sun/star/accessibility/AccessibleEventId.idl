@@ -86,7 +86,7 @@ constants AccessibleEventId
     /** This event indicates a change of the bounding rectangle of an
         accessible object with respect only to its size or relative
         position.  If the absolute position changes but not the relative
-        position then its is not necessary to send an event.
+        position then it is not necessary to send an event.
 
         <p>Use this event rather than the
         VISIBLE_DATA_EVENT when really only the
@@ -117,7 +117,7 @@ constants AccessibleEventId
         reference to this object and
         AccessibleEventObject::NewValue remains empty.</p>
 
-        <p>If a child has been added and a another one has been removed
+        <p>If a child has been added and another one has been removed
         don't set both fields at the same.  Send separate events
         instead.</p>
 
@@ -385,7 +385,7 @@ constants AccessibleEventId
     */
     const short ACTIVE_DESCENDANT_CHANGED_NOFOCUS = 34;
 
-    /** An item in a container has been added to a already present selection
+    /** An item in a container has been added to an already present selection
 
         Example: a second list item has been selected in a listbox.
 

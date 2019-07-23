@@ -92,7 +92,7 @@ published service AccessRootElement
  this fragment is removed from the complete hierarchy by an outside source.
  </p>
 
- <p>Clients may register an com::sun::star::lang::XEventListener
+ <p>Clients may register a com::sun::star::lang::XEventListener
  to be notified when the object is disposed for either cause.
  </p>
 */

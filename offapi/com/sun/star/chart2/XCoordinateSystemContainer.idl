@@ -35,7 +35,7 @@ module chart2
 
 interface XCoordinateSystemContainer : com::sun::star::uno::XInterface
 {
-    /** add an coordinate system to the coordinate system container
+    /** add a coordinate system to the coordinate system container
 
         @throws IllegalArgumentException
             If the given coordinate system is already contained in the container.

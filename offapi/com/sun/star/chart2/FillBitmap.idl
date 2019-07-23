@@ -81,7 +81,7 @@ struct FillBitmap
     */
     com::sun::star::awt::Size aSize;
 
-    /** this enum selects how a area is filled with a single bitmap.
+    /** this enum selects how an area is filled with a single bitmap.
 
         <p>It may be repeated, stretched or displayed with blank space
         around it.</p>

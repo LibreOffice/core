@@ -57,7 +57,7 @@ service AccessibleTreeListBoxEntry
        <li>Children: There can exist children of type com::sun::star::awt::AccessibleTreeListBoxEntry.
         </li>
        <li>Parent: The parent is either the com::sun::star::awt::AccessibleTreeListBox
-            or an com::sun::star::awt::AccessibleTreeListBoxEntry that contains the tree list box entry.</li>
+            or a com::sun::star::awt::AccessibleTreeListBoxEntry that contains the tree list box entry.</li>
        <li>Relations: There are no relations.</li>
        <li>States: The states supported by this service are
            <ul>

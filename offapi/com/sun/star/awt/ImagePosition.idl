@@ -24,7 +24,7 @@
 module com {  module sun {  module star {  module awt {
 
 
-/** specifies the position of a image, relative to another object
+/** specifies the position of an image, relative to another object
 
     @see ImageAlign
 */
