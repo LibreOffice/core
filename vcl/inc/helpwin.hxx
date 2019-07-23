@@ -24,6 +24,7 @@
 #include <vcl/timer.hxx>
 
 enum class QuickHelpFlags;
+struct ImplSVHelpData;
 
 class HelpTextWindow final : public FloatingWindow
 {
@@ -73,6 +74,7 @@ void ImplShowHelpWindow( vcl::Window* pParent, sal_uInt16 nHelpWinStyle, QuickHe
         const OUString& rHelpText,
         const Point& rScreenPos, const tools::Rectangle& rHelpArea );
 VCL_DLLPUBLIC void ImplDestroyHelpWindow( bool bUpdateHideTime );
+VCL_DLLPUBLIC void ImplDestroyHelpWindow(ImplSVHelpData& rHelpData, bool bUpdateHideTime);
 void ImplSetHelpWindowPos( vcl::Window* pHelpWindow, sal_uInt16 nHelpWinStyle, QuickHelpFlags nStyle,
                             const Point& rPos, const tools::Rectangle& rHelpArea );
 
