@@ -48,7 +48,7 @@ using namespace ::sw::mark;
 namespace
 {
     // #i59534: If a paragraph will be splitted we have to restore some redline positions
-    // This help function checks a position compared with a node and an content index
+    // This help function checks a position compared with a node and a content index
 
     static const int BEFORE_NODE = 0;          // Position before the given node index
     static const int BEFORE_SAME_NODE = 1;     // Same node index but content index before given content index

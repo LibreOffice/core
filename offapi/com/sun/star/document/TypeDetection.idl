@@ -106,7 +106,7 @@ published service TypeDetection
                 <td><em>URLPattern</em></td>
                 <td>[sequence< string >]</td>
                 <td>This list contains different URL patterns, which identify this type.
-                    E.g. data base contents can be described by an new defined protocol like "sql://select*".
+                    E.g. data base contents can be described by a new defined protocol like "sql://select*".
                     In combination with a suitable com::sun::star::frame::FrameLoader or
                     ImportFilter/ExportFilter it would be possible then, to
                     layout a SQL query output into an office frame.</td>

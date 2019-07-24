@@ -141,7 +141,7 @@ interface XImageManager
             specifies the image type for this association operation.
 
         @param aCommandURLSequence
-            a sequence of command URLs which specify which commands get an new image.
+            a sequence of command URLs which specify which commands get a new image.
 
         @param aGraphicSequence
             a sequence of graphic objects which should be associated with the provided

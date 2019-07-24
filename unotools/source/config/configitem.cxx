@@ -178,7 +178,7 @@ void ConfigItem::impl_packLocalizedProperties(  const   Sequence< OUString >&   
     sal_Int32                   nPropertyCounter;    // counter of inner loop for Sequence< PropertyValue >
     sal_Int32                   nPropertiesSize;     // marks end of inner loop
     Sequence< OUString >        lPropertyNames;      // list of all locales for localized entry
-    Sequence< PropertyValue >   lProperties;         // localized values of an configuration entry packed for return
+    Sequence< PropertyValue >   lProperties;         // localized values of a configuration entry packed for return
     Reference< XInterface >     xLocalizedNode;      // if cfg entry is localized ... lInValues contains an XInterface!
 
     // Optimise follow algorithm ... A LITTLE BIT :-)
@@ -244,7 +244,7 @@ void ConfigItem::impl_unpackLocalizedProperties(    const   Sequence< OUString >
     sal_Int32                   nDestinationCounter; // actual position in output lists
     sal_Int32                   nPropertiesSize;     // marks end of inner loop
     OUString                    sNodeName;           // base name of node ( e.g. "UIName/" ) ... expand to locale ( e.g. "UIName/de" )
-    Sequence< PropertyValue >   lProperties;         // localized values of an configuration entry gotten from lInValues-Any
+    Sequence< PropertyValue >   lProperties;         // localized values of a configuration entry gotten from lInValues-Any
 
     // Optimise follow algorithm ... A LITTLE BIT :-)
     // There exist two different possibilities:

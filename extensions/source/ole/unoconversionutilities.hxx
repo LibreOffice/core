@@ -1821,7 +1821,7 @@ Reference<XInterface> UnoConversionUtilities<T>::createAdapter(const Sequence<Ty
     Reference< XInterface> xIntAdapterFac;
     xIntAdapterFac= m_smgr->createInstance(INTERFACE_ADAPTER_FACTORY);
     // We create an adapter object that does not only implement the required type but also
-    // all types that the COM object pretends to implement. An COM object must therefore
+    // all types that the COM object pretends to implement. A COM object must therefore
     // support the property "_implementedInterfaces".
     Reference<XInterface> xIntAdapted;
     Reference<XInvocation> xInv(receiver, UNO_QUERY);

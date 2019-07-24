@@ -373,7 +373,7 @@ public class StyleUtilities
                     stylesCollection.getCommonStyles().getStyle(styleFamily, styleName);
             if (currentCommon != null)
             {
-                // handle an common style ..
+                // handle a common style ..
                 final OfficeStyle derivedStyle =
                         deriveCommonStyle(currentCommon, styleFamily, styleName,
                         generator, commonCollection, predefCollection);
@@ -385,7 +385,7 @@ public class StyleUtilities
                     commonCollection.getCommonStyles().getStyle(styleFamily, styleName);
             if (commonCommon != null)
             {
-                // handle an common style ..
+                // handle a common style ..
                 final OfficeStyle derivedStyle =
                         deriveCommonStyle(commonCommon, styleFamily, styleName,
                         generator, commonCollection, predefCollection);
@@ -410,7 +410,7 @@ public class StyleUtilities
                     predefCollection.getCommonStyles().getStyle(styleFamily, styleName);
             if (predefCommon != null)
             {
-                // handle an common style ..
+                // handle a common style ..
                 final OfficeStyle derivedStyle =
                         deriveCommonStyle(predefCommon, styleFamily, styleName,
                         generator, commonCollection, predefCollection);

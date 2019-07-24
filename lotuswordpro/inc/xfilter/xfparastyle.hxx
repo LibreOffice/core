@@ -104,7 +104,7 @@ public:
 public:
     /**
      * @descr   Set layout for the paragraph. When such property was set, this paragraph will
-     *          start at an new page.
+     *          start at a new page.
      */
     void    SetMasterPage(const OUString& master);
 
