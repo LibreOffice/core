@@ -270,8 +270,10 @@ void ImpEditView::DrawSelectionXOR( EditSelection aTmpSel, vcl::Region* pRegion,
 
     ContentNode* pStartNode = aTmpSel.Min().GetNode();
     ContentNode* pEndNode = aTmpSel.Max().GetNode();
-    sal_Int32 nStartPara = pEditEngine->GetEditDoc().GetPos( pStartNode );
-    sal_Int32 nEndPara = pEditEngine->GetEditDoc().GetPos( pEndNode );
+    const sal_Int32 nStartPara = pEditEngine->GetEditDoc().GetPos(pStartNode);
+    const sal_Int32 nEndPara = pEditEngine->GetEditDoc().GetPos(pEndNode);
+    if (nStartPara == EE_PARA_NOT_FOUND || nEndPara == EE_PARA_NOT_FOUND)
+        return;
     for ( sal_Int32 nPara = nStartPara; nPara <= nEndPara; nPara++ )
     {
         ParaPortion* pTmpPortion = pEditEngine->GetParaPortions().SafeGetObject( nPara );
