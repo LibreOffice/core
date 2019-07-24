@@ -36,7 +36,6 @@ class SvxHpLinkDlg;
 class IconChoicePage;
 class SfxItemPool;
 class SfxItemSet;
-enum class HyperLinkPageType;
 
 // Create-Function
 typedef std::unique_ptr<IconChoicePage> (*CreatePage)(weld::Container* pParent, SvxHpLinkDlg* pDlg, const SfxItemSet* pAttrSet);

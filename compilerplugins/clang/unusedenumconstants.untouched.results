@@ -1,6 +1,34 @@
+cui/source/inc/cuihyperdlg.hxx:38
+    enum HyperLinkPageType Internet
+cui/source/inc/cuihyperdlg.hxx:39
+    enum HyperLinkPageType Mail
+cui/source/inc/cuihyperdlg.hxx:40
+    enum HyperLinkPageType Document
+cui/source/inc/cuihyperdlg.hxx:41
+    enum HyperLinkPageType NewDocument
+cui/source/options/optfltr.cxx:37
+    enum MSFltrPg2_CheckBoxEntries InvalidCBEntry
 drawinglayer/source/tools/emfpimage.hxx:31
     emfplushelper::ImageDataType ImageDataTypeUnknown
-include/connectivity/dbtools.hxx:822
+framework/inc/xml/imagesdocumenthandler.hxx:46
+    enum framework::OReadImagesDocumentHandler::Image_XML_Entry IMG_ELEMENT_EXTERNALIMAGES
+framework/inc/xml/imagesdocumenthandler.hxx:47
+    enum framework::OReadImagesDocumentHandler::Image_XML_Entry IMG_ELEMENT_EXTERNALENTRY
+framework/inc/xml/imagesdocumenthandler.hxx:48
+    enum framework::OReadImagesDocumentHandler::Image_XML_Entry IMG_ATTRIBUTE_HREF
+framework/inc/xml/imagesdocumenthandler.hxx:49
+    enum framework::OReadImagesDocumentHandler::Image_XML_Entry IMG_ATTRIBUTE_MASKCOLOR
+framework/inc/xml/imagesdocumenthandler.hxx:51
+    enum framework::OReadImagesDocumentHandler::Image_XML_Entry IMG_ATTRIBUTE_BITMAPINDEX
+framework/inc/xml/imagesdocumenthandler.hxx:52
+    enum framework::OReadImagesDocumentHandler::Image_XML_Entry IMG_ATTRIBUTE_MASKURL
+framework/inc/xml/imagesdocumenthandler.hxx:53
+    enum framework::OReadImagesDocumentHandler::Image_XML_Entry IMG_ATTRIBUTE_MASKMODE
+framework/inc/xml/imagesdocumenthandler.hxx:54
+    enum framework::OReadImagesDocumentHandler::Image_XML_Entry IMG_ATTRIBUTE_HIGHCONTRASTURL
+framework/inc/xml/imagesdocumenthandler.hxx:55
+    enum framework::OReadImagesDocumentHandler::Image_XML_Entry IMG_ATTRIBUTE_HIGHCONTRASTMASKURL
+include/connectivity/dbtools.hxx:817
     enum connectivity::dbase::DBFType dBaseIVMemo
 include/desktop/exithelper.h:25
     int EXITHELPER_NO_ERROR
@@ -8,7 +36,7 @@ include/desktop/exithelper.h:25
     enum EExitCodes EXITHELPER_NO_ERROR
 include/desktop/exithelper.h:27
     int EXITHELPER_FATAL_ERROR
-include/editeng/borderline.hxx:128
+include/editeng/borderline.hxx:130
     enum SvxBorderLineStyle BORDER_LINE_STYLE_MAX
 include/i18nutil/transliteration.hxx:45
     enum TransliterationFlags NumToTextLower_zh_CN
@@ -28,7 +56,7 @@ include/i18nutil/transliteration.hxx:117
     enum TransliterationFlags smallToLarge_ja_JP
 include/i18nutil/transliteration.hxx:119
     enum TransliterationFlags largeToSmall_ja_JP
-include/LibreOfficeKit/LibreOfficeKitEnums.h:628
+include/LibreOfficeKit/LibreOfficeKitEnums.h:668
     LibreOfficeKitExtTextInputType LOK_EXT_TEXTINPUT_POS
 include/oox/ole/axfontdata.hxx:39
     enum AxFontFlags Disabled
@@ -72,82 +100,84 @@ include/vcl/keycod.hxx:33
     enum KeyFuncType PROPERTIES
 include/vcl/syswin.hxx:54
     enum WindowStateState FullScreen
-include/vcl/window.hxx:118
+include/vcl/window.hxx:108
     enum TrackingEventFlags Focus
 libreofficekit/qa/gtktiledviewer/gtv-lok-dialog.cxx:61
-    enum (anonymous at /home/noel/libo2/libreofficekit/qa/gtktiledviewer/gtv-lok-dialog.cxx:59:1) PROP_0
-libreofficekit/source/gtk/lokdocview.cxx:287
-    enum (anonymous at /home/noel/libo2/libreofficekit/source/gtk/lokdocview.cxx:285:1) PROP_0
-sc/source/filter/excel/xiescher.cxx:460
-    enum (anonymous at /home/noel/libo2/sc/source/filter/excel/xiescher.cxx:460:17) eCreateFromOffice
+    enum (anonymous at /media/noel/disk3/libo6/libreofficekit/qa/gtktiledviewer/gtv-lok-dialog.cxx:59:1) PROP_0
+libreofficekit/source/gtk/lokdocview.cxx:289
+    enum (anonymous at /media/noel/disk3/libo6/libreofficekit/source/gtk/lokdocview.cxx:287:1) PROP_0
+sc/source/filter/excel/xiescher.cxx:471
+    enum (anonymous at /media/noel/disk3/libo6/sc/source/filter/excel/xiescher.cxx:471:17) eCreateFromOffice
 sc/source/filter/inc/decl.h:24
     enum WKTYP eWK4
-sc/source/ui/inc/anyrefdg.hxx:192
-    enum ScRefHdlrImpl<class ScValidationDlg, class SfxTabDialog, false>::(anonymous at /home/noel/libo2/sc/source/ui/inc/anyrefdg.hxx:192:5) SLOTID
-sc/source/ui/inc/anyrefdg.hxx:192
-    enum ScRefHdlrImpl::(anonymous at /home/noel/libo2/sc/source/ui/inc/anyrefdg.hxx:192:5) SLOTID
-sc/source/ui/StatisticsDialogs/RegressionDialog.cxx:105
+sc/source/ui/inc/anyrefdg.hxx:145
+    enum ScRefHdlrControllerImpl<class SfxModelessDialogController, true>::(anonymous at /media/noel/disk3/libo6/sc/source/ui/inc/anyrefdg.hxx:145:5) SLOTID
+sc/source/ui/inc/anyrefdg.hxx:145
+    enum ScRefHdlrControllerImpl<class SfxTabDialogController, false>::(anonymous at /media/noel/disk3/libo6/sc/source/ui/inc/anyrefdg.hxx:145:5) SLOTID
+sc/source/ui/inc/anyrefdg.hxx:145
+    enum ScRefHdlrControllerImpl::(anonymous at /media/noel/disk3/libo6/sc/source/ui/inc/anyrefdg.hxx:145:5) SLOTID
+sc/source/ui/inc/PivotLayoutTreeListBase.hxx:44
+    enum ScPivotLayoutTreeListBase::SvPivotTreeListType DATA_LIST
+sc/source/ui/StatisticsDialogs/RegressionDialog.cxx:97
     enum (anonymous namespace)::ScRegType LINEAR
 svx/inc/sxmkitm.hxx:25
     enum SdrMeasureKind SDRMEASURE_RADIUS
-sw/inc/docary.hxx:74
+sw/inc/docary.hxx:75
     enum SwVectorModifyBase<class SwNumRule *>::DestructorPolicy KeepElements
-sw/inc/docary.hxx:74
+sw/inc/docary.hxx:75
     enum SwVectorModifyBase<class SwSectionFormat *>::DestructorPolicy KeepElements
-sw/inc/docary.hxx:74
-    enum SwVectorModifyBase<class SwTOXType *>::DestructorPolicy KeepElements
-sw/inc/docary.hxx:74
-    enum SwVectorModifyBase<class SwFieldType *>::DestructorPolicy KeepElements
-sw/inc/docary.hxx:74
-    enum SwVectorModifyBase<class SwCharFormat *>::DestructorPolicy KeepElements
-sw/inc/docary.hxx:74
+sw/inc/docary.hxx:75
     enum SwVectorModifyBase::DestructorPolicy KeepElements
 sw/inc/docary.hxx:75
+    enum SwVectorModifyBase<class SwCharFormat *>::DestructorPolicy KeepElements
+sw/inc/docary.hxx:76
     enum SwVectorModifyBase::DestructorPolicy FreeElements
-sw/source/filter/ww8/ww8scan.hxx:388
+sw/inc/tblenum.hxx:34
+    enum TableChgWidthHeightType InvalidPos
+sw/source/filter/ww8/ww8scan.hxx:381
     enum ePLCFT SEP
-sw/source/filter/ww8/ww8struc.hxx:944
-    enum WW8_FSPA::FSPAOrient RelPgMargin
-sw/source/filter/ww8/ww8struc.hxx:944
+sw/source/filter/ww8/ww8struc.hxx:946
     enum WW8_FSPA::FSPAOrient RelText
-sw/source/ui/fldui/fldref.cxx:762
+sw/source/filter/ww8/ww8struc.hxx:946
+    enum WW8_FSPA::FSPAOrient RelPgMargin
+sw/source/ui/fldui/fldref.cxx:722
     enum FMT_REF_IDX FMT_REF_PAGE_IDX
-sw/source/ui/fldui/fldref.cxx:763
+sw/source/ui/fldui/fldref.cxx:723
     enum FMT_REF_IDX FMT_REF_CHAPTER_IDX
-sw/source/ui/fldui/fldref.cxx:764
+sw/source/ui/fldui/fldref.cxx:724
     enum FMT_REF_IDX FMT_REF_TEXT_IDX
-sw/source/ui/fldui/fldref.cxx:765
+sw/source/ui/fldui/fldref.cxx:725
     enum FMT_REF_IDX FMT_REF_UPDOWN_IDX
-sw/source/ui/fldui/fldref.cxx:767
+sw/source/ui/fldui/fldref.cxx:727
     enum FMT_REF_IDX FMT_REF_ONLYNUMBER_IDX
-sw/source/ui/fldui/fldref.cxx:768
+sw/source/ui/fldui/fldref.cxx:728
     enum FMT_REF_IDX FMT_REF_ONLYCAPTION_IDX
-sw/source/uibase/utlui/content.cxx:824
-    enum STR_CONTEXT_IDX IDX_STR_LINK_REGION
 sw/source/uibase/utlui/content.cxx:825
+    enum STR_CONTEXT_IDX IDX_STR_LINK_REGION
+sw/source/uibase/utlui/content.cxx:826
     enum STR_CONTEXT_IDX IDX_STR_COPY_REGION
-sw/source/uibase/utlui/content.cxx:830
+sw/source/uibase/utlui/content.cxx:831
     enum STR_CONTEXT_IDX IDX_STR_INACTIVE
-sw/source/uibase/utlui/glbltree.cxx:146
+sw/source/uibase/utlui/glbltree.cxx:149
     enum GLOBAL_CONTEXT_IDX IDX_STR_UPDATE_INDEX
-sw/source/uibase/utlui/glbltree.cxx:147
+sw/source/uibase/utlui/glbltree.cxx:150
     enum GLOBAL_CONTEXT_IDX IDX_STR_UPDATE_LINK
-sw/source/uibase/utlui/glbltree.cxx:148
+sw/source/uibase/utlui/glbltree.cxx:151
     enum GLOBAL_CONTEXT_IDX IDX_STR_UPDATE_ALL
 ucb/source/ucp/webdav-neon/DAVTypes.hxx:195
     enum webdav_ucp::Depth DAVINFINITY
 ucbhelper/source/client/proxydecider.cxx:119
     enum ucbhelper::proxydecider_impl::InternetProxyDecider_Impl::ProxyType Manual
-vcl/inc/salptype.hxx:44
+vcl/inc/salptype.hxx:43
     enum SalPrinterError General
-vcl/inc/unx/saldisp.hxx:65
+vcl/inc/unx/saldisp.hxx:62
     srv_vendor_t vendor_none
-vcl/source/gdi/CommonSalLayout.cxx:129
+vcl/source/gdi/CommonSalLayout.cxx:125
     enum (anonymous namespace)::VerticalOrientation Rotated
-vcl/unx/gtk3/gtk3gtkinst.cxx:2717
-    enum (anonymous at /home/noel/libo2/vcl/unx/gtk3/gtk3gtkinst.cxx:2715:1) PROP_0
-vcl/unx/gtk3/gtk3gtkinst.cxx:2722
-    enum (anonymous at /home/noel/libo2/vcl/unx/gtk3/gtk3gtkinst.cxx:2715:1) PROP_SHADOW_TYPE
+vcl/unx/gtk3/gtk3gtkinst.cxx:3605
+    enum (anonymous at /media/noel/disk3/libo6/vcl/unx/gtk3/gtk3gtkinst.cxx:3603:1) PROP_0
+vcl/unx/gtk3/gtk3gtkinst.cxx:3610
+    enum (anonymous at /media/noel/disk3/libo6/vcl/unx/gtk3/gtk3gtkinst.cxx:3603:1) PROP_SHADOW_TYPE
 writerfilter/source/ooxml/OOXMLFactory.hxx:36
     enum writerfilter::ooxml::ResourceType NoResource
 writerfilter/source/ooxml/OOXMLFactory.hxx:37
@@ -174,5 +204,5 @@ writerfilter/source/ooxml/OOXMLFactory.hxx:53
     enum writerfilter::ooxml::ResourceType Math
 writerfilter/source/ooxml/OOXMLFactory.hxx:54
     enum writerfilter::ooxml::ResourceType Any
-xmloff/source/style/HatchStyle.cxx:49
+xmloff/source/style/HatchStyle.cxx:50
     enum SvXMLTokenMapAttrs XML_TOK_TABSTOP_END
