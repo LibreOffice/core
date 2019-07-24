@@ -260,20 +260,6 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL SdXMLFlatDocContext_Imp
     }
 }
 
-#define SERVICE(classname,servicename,implementationname,draw,flags)\
-uno::Sequence< OUString > classname##_getSupportedServiceNames() throw()\
-{\
-    return uno::Sequence< OUString > { servicename };\
-}\
-OUString classname##_getImplementationName() throw()\
-{\
-    return OUString( implementationname );\
-}\
-uno::Reference< uno::XInterface > classname##_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr)\
-{\
-    return static_cast<cppu::OWeakObject*>(new SdXMLImport( comphelper::getComponentContext(rSMgr), implementationname, draw, flags )); \
-}
-
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_comp_Impress_XMLOasisImporter_get_implementation(
     uno::XComponentContext* pCtx, uno::Sequence<uno::Any> const& /*rSeq*/)
@@ -324,7 +310,14 @@ com_sun_star_comp_Draw_XMLOasisSettingsImporter_get_implementation(
         new SdXMLImport(pCtx, "XMLDrawSettingsImportOasis", true, SvXMLImportFlags::SETTINGS));
 }
 
-SERVICE( XMLImpressStylesImportOasis, "com.sun.star.comp.Impress.XMLOasisStylesImporter", "XMLImpressStylesImportOasis", false, SvXMLImportFlags::STYLES|SvXMLImportFlags::AUTOSTYLES|SvXMLImportFlags::MASTERSTYLES )
+extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
+com_sun_star_comp_Impress_XMLOasisStylesImporter_get_implementation(
+    uno::XComponentContext* pCtx, uno::Sequence<uno::Any> const& /*rSeq*/)
+{
+    return cppu::acquire(new SdXMLImport(pCtx, "XMLImpressStylesImportOasis", false,
+                                         SvXMLImportFlags::STYLES | SvXMLImportFlags::AUTOSTYLES
+                                             | SvXMLImportFlags::MASTERSTYLES));
+}
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_comp_Impress_XMLOasisContentImporter_get_implementation(
