@@ -30,18 +30,24 @@ struct AnimationData;
 class VCL_DLLPUBLIC AnimationRenderers
 {
 public:
-    void PopulateRenderers(Animation* pAnim);
-    void DeleteUnmarkedRenderers();
-    bool ResetMarkedRenderers();
-    void PaintRenderers(sal_uLong nFrameIndex);
-    void EraseMarkedRenderers();
-    void ClearAnimationRenderers();
-    bool RepaintRenderers(OutputDevice* pOut, sal_uLong nCallerId, const Point& rDestPt,
-                          const Size& rDestSz);
-    bool NoRenderersAreAvailable();
     void CreateDefaultRenderer(Animation* pAnim, OutputDevice* pOut, const Point& rDestPt,
                                const Size& rDestSz, sal_uLong nCallerId,
-                               OutputDevice* pFirstFrameOutDev);
+                               OutputDevice* pFirstFrameOutDev = nullptr);
+
+    void PopulateRenderers(Animation* pAnim);
+    void ClearAnimationRenderers();
+
+    void DeleteUnmarkedRenderers();
+    void EraseMarkedRenderers();
+    bool ResetMarkedRenderers();
+
+    void PaintRenderers(sal_uLong nFrameIndex);
+    bool RepaintRenderers(OutputDevice* pOut, sal_uLong nCallerId, const Point& rDestPt,
+                          const Size& rDestSz);
+
+    bool NoRenderersAreAvailable();
+    size_t GetSize() { return maAnimationRenderers.size(); }
+
     void RemoveAnimationInstance(OutputDevice* pOut, sal_uLong nCallerId);
 
 private:
