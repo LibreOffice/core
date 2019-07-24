@@ -1483,6 +1483,7 @@ bool SentenceEditWindow_Impl::KeyInput(const KeyEvent& rKeyEvt)
                 if (pErrorAttrib->nStart != m_nErrorStart || pErrorAttrib->nEnd != m_nErrorEnd)
                 {
                     std::unique_ptr<SfxPoolItem> xNewError(pErrorAttrib->pAttr->Clone());
+                    assert(pErrorAttr);
                     m_xEditEngine->RemoveAttribs(ESelection(0, pErrorAttr->nStart, 0, pErrorAttr->nEnd), false, EE_CHAR_GRABBAG);
                     SetAttrib(*xNewError, m_nErrorStart, m_nErrorEnd);
                 }
