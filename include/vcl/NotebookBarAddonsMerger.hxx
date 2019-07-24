@@ -24,11 +24,14 @@
 #include <vcl/window.hxx>
 #include <vcl/vclptr.hxx>
 #include <vcl/image.hxx>
+#include <vcl/menu.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/uno/Sequence.h>
 #include <memory>
 #include <vector>
+
+class PopupMenu;
 
 struct NotebookBarAddonsItem
 {
@@ -59,12 +62,14 @@ struct AddonNotebookBarItem
 class NotebookBarAddonsMerger
 {
 public:
-    NotebookBarAddonsMerger(vcl::Window* pParent,
-                            const css::uno::Reference<css::frame::XFrame>& rFrame,
-                            const NotebookBarAddonsItem& aNotebookBarAddonsItem);
+    NotebookBarAddonsMerger();
+    ~NotebookBarAddonsMerger();
     static void MergeNotebookBarAddons(vcl::Window* pParent,
                                        const css::uno::Reference<css::frame::XFrame>& rFrame,
                                        const NotebookBarAddonsItem& aNotebookBarAddonsItem);
+    static void MergeNotebookBarMenuAddons(PopupMenu* pPopupMenu, sal_Int16 nItemId,
+                                           const OString& sItemIdName,
+                                           NotebookBarAddonsItem& aNotebookBarAddonsItem);
 };
 
 #endif
