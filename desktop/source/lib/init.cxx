@@ -2216,15 +2216,12 @@ static void doc_iniUnoCommands ()
 
     for (const auto & sUnoCommand : sUnoCommands)
     {
-        const SfxSlot* pSlot = nullptr;
-
         aCommandURL.Complete = sUnoCommand;
         xParser->parseStrict(aCommandURL);
-        pSlot = rSlotPool.GetUnoSlot(aCommandURL.Path);
 
         // when null, this command is not supported by the given component
         // (like eg. Calc does not have ".uno:DefaultBullet" etc.)
-        if (pSlot)
+        if (const SfxSlot* pSlot = rSlotPool.GetUnoSlot(aCommandURL.Path))
         {
             // Initialize slot to dispatch .uno: Command.
             pViewFrame->GetBindings().GetDispatch(pSlot, aCommandURL, false);
