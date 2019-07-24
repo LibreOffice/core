@@ -88,6 +88,7 @@
 #include <paratr.hxx>
 #include <tblafmt.hxx>
 #include <sfx2/watermarkitem.hxx>
+#include <SwUndoFmt.hxx>
 
 using namespace ::com::sun::star;
 
@@ -678,7 +679,19 @@ void SwDocShell::Edit(
         else
             nMask = SfxStyleSearchBits::UserDefined;
 
-        pStyle = &m_xBasePool->Make( rName, nFamily, nMask );
+        if ( nFamily == SfxStyleFamily::Para || nFamily == SfxStyleFamily::Char || nFamily == SfxStyleFamily::Frame )
+        {
+            // Prevent undo append from being done during paragraph, character, and frame style Make
+            // Do it after PresetParent is done
+            const bool bDoesUndo = GetDoc()->GetIDocumentUndoRedo().DoesUndo();
+            GetDoc()->GetIDocumentUndoRedo().DoUndo( false );
+            pStyle = &m_xBasePool->Make( rName, nFamily, nMask );
+            GetDoc()->GetIDocumentUndoRedo().DoUndo( bDoesUndo );
+        }
+        else
+        {
+            pStyle = &m_xBasePool->Make( rName, nFamily, nMask );
+        }
 
         // set the current one as Parent
         SwDocStyleSheet* pDStyle = static_cast<SwDocStyleSheet*>(pStyle);
@@ -686,9 +699,10 @@ void SwDocShell::Edit(
         {
             case SfxStyleFamily::Para:
             {
+                SwTextFormatColl* pColl;
                 if(!rParent.isEmpty())
                 {
-                    SwTextFormatColl* pColl = m_pWrtShell->FindTextFormatCollByName( rParent );
+                    pColl = m_pWrtShell->FindTextFormatCollByName( rParent );
                     if(!pColl)
                     {
                         sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName(rParent, SwGetPoolIdFromName::TxtColl);
@@ -711,18 +725,24 @@ void SwDocShell::Edit(
                 }
                 else
                 {
-                    SwTextFormatColl* pColl = m_pWrtShell->GetCurTextFormatColl();
+                    pColl = m_pWrtShell->GetCurTextFormatColl();
                     pDStyle->GetCollection()->SetDerivedFrom( pColl );
                     if( pColl )
                         pDStyle->PresetParent( pColl->GetName() );
+                }
+                if (GetDoc()->GetIDocumentUndoRedo().DoesUndo())
+                {
+                    GetDoc()->GetIDocumentUndoRedo().AppendUndo(
+                        std::make_unique<SwUndoTextFormatCollCreate>(pDStyle->GetCollection(), pColl, GetDoc()));
                 }
             }
             break;
             case SfxStyleFamily::Char:
             {
+                SwCharFormat* pCFormat;
                 if(!rParent.isEmpty())
                 {
-                    SwCharFormat* pCFormat = m_pWrtShell->FindCharFormatByName(rParent);
+                    pCFormat = m_pWrtShell->FindCharFormatByName(rParent);
                     if(!pCFormat)
                     {
                         sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName(rParent, SwGetPoolIdFromName::ChrFmt);
@@ -735,10 +755,15 @@ void SwDocShell::Edit(
                 }
                 else
                 {
-                    SwCharFormat* pCFormat = m_pWrtShell->GetCurCharFormat();
+                    pCFormat = m_pWrtShell->GetCurCharFormat();
                     pDStyle->GetCharFormat()->SetDerivedFrom( pCFormat );
                     if( pCFormat )
                         pDStyle->PresetParent( pCFormat->GetName() );
+                }
+                if (GetDoc()->GetIDocumentUndoRedo().DoesUndo())
+                {
+                    GetDoc()->GetIDocumentUndoRedo().AppendUndo(
+                        std::make_unique<SwUndoCharFormatCreate>(pDStyle->GetCharFormat(), pCFormat, GetDoc()));
                 }
             }
             break;
@@ -755,6 +780,11 @@ void SwDocShell::Edit(
                     }
                     pDStyle->GetFrameFormat()->SetDerivedFrom( pFFormat );
                     pDStyle->PresetParent( rParent );
+                    if (GetDoc()->GetIDocumentUndoRedo().DoesUndo())
+                    {
+                        GetDoc()->GetIDocumentUndoRedo().AppendUndo(
+                            std::make_unique<SwUndoFrameFormatCreate>(pDStyle->GetFrameFormat(), pFFormat, GetDoc()));
+                    }
                 }
             }
             break;
