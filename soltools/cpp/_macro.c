@@ -287,7 +287,10 @@ void
         if (np->flag & ISMAC)
             builtin(trp, np->val);
         else
+        {
+            // coverity[overrun-buffer-arg: FALSE] - a multiple of trp->max is allocated, not trp->max itself
             expand(trp, np, &validators);
+        }
         tp = trp->tp;
     }   // end for
     if (flag)
@@ -430,7 +433,10 @@ int
     while (parens > 0)
     {
         if (trp->tp >= trp->lp)
+        {
+            // coverity[overrun-buffer-arg: FALSE] - a multiple of trp->max is allocated, not trp->max itself
             gettokens(trp, 0);
+        }
         if (needspace)
         {
             needspace = 0;
@@ -602,6 +608,7 @@ void
                 tt[len] = '\0';
                 setsource("<##>", -1, -1, tt, 0);
                 maketokenrow(3, &ntr);
+                // coverity[overrun-buffer-arg: FALSE] - a multiple of trp->max is allocated, not trp->max itself
                 gettokens(&ntr, 1);
                 unsetsource();
                 if (ntr.bp->type == UNCLASS)

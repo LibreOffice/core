@@ -87,6 +87,7 @@ void
             case 'A':
                 setsource("<cmdarg>", -1, -1, optarg, 0);
                 maketokenrow(3, &tr);
+                // coverity[overrun-buffer-arg: FALSE] - a multiple of trp->max is allocated, not trp->max itself
                 gettokens(&tr, 1);
                 doadefine(&tr, c);
                 dofree(tr.bp);

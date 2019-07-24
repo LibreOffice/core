@@ -364,6 +364,7 @@ continue2:
         {
             trp->lp = tp;
             tp = growtokenrow(trp);
+            // coverity[overrun-local : FALSE] - a multiple of trp->max is allocated, not trp->max itself
             maxp = &trp->bp[trp->max];
         }
         tp->type = UNCLASS;

@@ -74,6 +74,7 @@ void
         {
             trp->tp = trp->lp = trp->bp;
             outptr = outbuf;
+            // coverity[overrun-buffer-arg: FALSE] - a multiple of trp->max is allocated, not trp->max itself
             anymacros |= gettokens(trp, 1);
             trp->tp = trp->bp;
         }
