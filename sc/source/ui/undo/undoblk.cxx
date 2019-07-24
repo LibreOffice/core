@@ -1079,6 +1079,8 @@ void ScUndoPaste::DoChange(bool bUndo)
     {
         ScRange& rDrawRange = aDrawRanges[i];
         rDoc.ExtendMerge(rDrawRange, true);      // only needed for single sheet (text/rtf etc.)
+        ScRangeList aRangeList(rDrawRange);
+        ScMarkData aData(aRangeList);
         if (bPaintAll)
         {
             rDrawRange.aStart.SetCol(0);
@@ -1087,7 +1089,7 @@ void ScUndoPaste::DoChange(bool bUndo)
             rDrawRange.aEnd.SetRow(MAXROW);
             nPaint |= PaintPartFlags::Top | PaintPartFlags::Left;
             if (pViewShell)
-                pViewShell->AdjustBlockHeight(false);
+                pViewShell->AdjustBlockHeight(false, &aData);
         }
         else
         {
@@ -1101,7 +1103,7 @@ void ScUndoPaste::DoChange(bool bUndo)
                 nPaint |= PaintPartFlags::Left;
                 rDrawRange.aEnd.SetRow(MAXROW);
             }
-            if (pViewShell && pViewShell->AdjustBlockHeight(false))
+            if (pViewShell && pViewShell->AdjustBlockHeight(false, &aData))
             {
                 rDrawRange.aStart.SetCol(0);
                 rDrawRange.aStart.SetRow(0);
