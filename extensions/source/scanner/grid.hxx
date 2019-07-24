@@ -19,11 +19,8 @@
 #ifndef INCLUDED_EXTENSIONS_SOURCE_SCANNER_GRID_HXX
 #define INCLUDED_EXTENSIONS_SOURCE_SCANNER_GRID_HXX
 
-#include <vcl/window.hxx>
-#include <vcl/button.hxx>
-#include <vcl/lstbox.hxx>
-#include <vcl/dialog.hxx>
-#include <vcl/fixed.hxx>
+#include <vcl/customweld.hxx>
+#include <vcl/weld.hxx>
 
 class GridWindow;
 
@@ -35,22 +32,19 @@ enum class ResetType
     EXPONENTIAL = 3
 };
 
-class GridDialog : public ModalDialog
+class GridDialog : public weld::GenericDialogController
 {
-    VclPtr<OKButton>       m_pOKButton;
+    std::unique_ptr<weld::Button> m_xOKButton;
+    std::unique_ptr<weld::ComboBox> m_xResetTypeBox;
+    std::unique_ptr<weld::Button> m_xResetButton;
+    std::unique_ptr<GridWindow>     m_xGridWindow;
+    std::unique_ptr<weld::CustomWeld> m_xGridWindowWND;
 
-    VclPtr<ListBox>        m_pResetTypeBox;
-    VclPtr<PushButton>     m_pResetButton;
-
-    VclPtr<GridWindow>     m_pGridWindow;
-
-    DECL_LINK( ClickButtonHdl, Button*, void );
+    DECL_LINK( ClickButtonHdl, weld::Button&, void );
 
 public:
-    GridDialog(double* pXValues, double* pYValues, int nValues,
-                vcl::Window* pParent);
+    GridDialog(weld::Window* pParent, double* pXValues, double* pYValues, int nValues);
     virtual ~GridDialog() override;
-    virtual void dispose() override;
     void setBoundings(double fMinX, double fMinY, double fMaxX, double fMaxY);
     double* getNewYValues();
 };

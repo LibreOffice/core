@@ -23,17 +23,21 @@
 #include <math.h>
 #include <boost/math/special_functions/expm1.hpp>
 
+#include <bitmaps.hlst>
 #include <cmath>
 
 #include "grid.hxx"
-#include <vcl/builderfactory.hxx>
+#include <vcl/bitmapex.hxx>
+#include <vcl/customweld.hxx>
 #include <vcl/event.hxx>
+#include <vcl/settings.hxx>
+#include <vcl/svapp.hxx>
 
 #include <algorithm>
 #include <limits>
 #include <memory>
 
-class GridWindow : public vcl::Window
+class GridWindow : public weld::CustomWidgetController
 {
     // helper class for handles
     struct impHandle
@@ -58,7 +62,7 @@ class GridWindow : public vcl::Window
             rRenderContext.DrawBitmapEx(maPos - aOffset, rBitmapEx);
         }
 
-        bool isHit(vcl::Window const & rWin, const Point& rPos)
+        bool isHit(OutputDevice const & rWin, const Point& rPos)
         {
             const Point aOffset(rWin.PixelToLogic(Point(mnOffX, mnOffY)));
             const tools::Rectangle aTarget(maPos - aOffset, maPos + aOffset);
@@ -114,18 +118,17 @@ class GridWindow : public vcl::Window
     void computeNew();
     static double interpolate( double x, double const * pNodeX, double const * pNodeY, int nNodes );
 
-    virtual void MouseMove( const MouseEvent& ) override;
-    virtual void MouseButtonDown( const MouseEvent& ) override;
-    virtual void MouseButtonUp( const MouseEvent& ) override;
+    virtual bool MouseMove( const MouseEvent& ) override;
+    virtual bool MouseButtonDown( const MouseEvent& ) override;
+    virtual bool MouseButtonUp( const MouseEvent& ) override;
     void onResize();
     virtual void Resize() override;
-    virtual Size GetOptimalSize() const override;
+    virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
     void drawLine(vcl::RenderContext& rRenderContext, double x1, double y1, double x2, double y2);
 public:
-    explicit GridWindow(vcl::Window* pParent);
+    GridWindow();
     void Init(double* pXValues, double* pYValues, int nValues, bool bCutValues, const BitmapEx &rMarkerBitmap);
     virtual ~GridWindow() override;
-    virtual void dispose() override;
 
     void setBoundings( double fMinX, double fMinY, double fMaxX, double fMaxY );
 
@@ -136,9 +139,8 @@ public:
     virtual void Paint( vcl::RenderContext& /*rRenderContext*/, const tools::Rectangle& rRect ) override;
 };
 
-GridWindow::GridWindow(vcl::Window* pParent)
-    : Window(pParent, 0)
-    , m_aGridArea(50, 15, 100, 100)
+GridWindow::GridWindow()
+    : m_aGridArea(50, 15, 100, 100)
     , m_fMinX(0.0)
     , m_fMinY(0.0)
     , m_fMaxX(0.0)
@@ -156,7 +158,6 @@ GridWindow::GridWindow(vcl::Window* pParent)
     , m_aHandles()
     , m_nDragIndex(npos)
 {
-    SetMapMode(MapMode(MapUnit::MapPixel));
 }
 
 void GridWindow::Init(double* pXValues, double* pYValues, int nValues, bool bCutValues, const BitmapEx &rMarkerBitmap)
@@ -167,7 +168,6 @@ void GridWindow::Init(double* pXValues, double* pYValues, int nValues, bool bCut
     m_nValues = nValues;
     m_bCutValues = bCutValues;
 
-    SetSizePixel(GetOptimalSize());
     onResize();
 
     if (m_pOrigYValues && m_nValues)
@@ -193,53 +193,39 @@ void GridWindow::Resize()
 
 void GridWindow::onResize()
 {
-    Size aSize = GetSizePixel();
+    Size aSize = GetOutputSizePixel();
     m_aGridArea.setWidth( aSize.Width() - 80 );
     m_aGridArea.setHeight( aSize.Height() - 40 );
 }
 
-Size GridWindow::GetOptimalSize() const
+void GridWindow::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 {
-    return LogicToPixel(Size(240, 200), MapMode(MapUnit::MapAppFont));
+    Size aSize(pDrawingArea->get_ref_device().LogicToPixel(Size(240, 200), MapMode(MapUnit::MapAppFont)));
+    pDrawingArea->set_size_request(aSize.Width(), aSize.Height());
+    CustomWidgetController::SetDrawingArea(pDrawingArea);
+    SetOutputSizePixel(aSize);
 }
 
-GridDialog::GridDialog(double* pXValues, double* pYValues, int nValues, vcl::Window* pParent )
-    : ModalDialog(pParent, "GridDialog", "modules/scanner/ui/griddialog.ui")
+GridDialog::GridDialog(weld::Window* pParent, double* pXValues, double* pYValues, int nValues)
+    : GenericDialogController(pParent, "modules/scanner/ui/griddialog.ui", "GridDialog")
+    , m_xOKButton(m_xBuilder->weld_button("ok"))
+    , m_xResetTypeBox(m_xBuilder->weld_combo_box("resetTypeCombobox"))
+    , m_xResetButton(m_xBuilder->weld_button("resetButton"))
+    , m_xGridWindow(new GridWindow)
+    , m_xGridWindowWND(new weld::CustomWeld(*m_xBuilder, "gridwindow", *m_xGridWindow))
 {
-    get(m_pOKButton, "ok");
-    get(m_pResetTypeBox, "resetTypeCombobox");
-    get(m_pResetButton, "resetButton");
-    get(m_pGridWindow, "gridwindow");
-    m_pGridWindow->Init(pXValues, pYValues, nValues, true/*bCutValues*/, get<FixedImage>("handle")->GetImage().GetBitmapEx());
-
-    m_pResetTypeBox->SelectEntryPos( 0 );
-
-    m_pResetButton->SetClickHdl( LINK( this, GridDialog, ClickButtonHdl ) );
+    m_xGridWindow->Init(pXValues, pYValues, nValues, true/*bCutValues*/, BitmapEx(RID_SCANNER_HANDLE));
+    m_xResetTypeBox->set_active(0);
+    m_xResetButton->connect_clicked( LINK( this, GridDialog, ClickButtonHdl ) );
 }
 
 GridDialog::~GridDialog()
 {
-    disposeOnce();
-}
-
-void GridDialog::dispose()
-{
-    m_pOKButton.clear();
-    m_pResetTypeBox.clear();
-    m_pResetButton.clear();
-    m_pGridWindow.clear();
-    ModalDialog::dispose();
 }
 
 GridWindow::~GridWindow()
 {
-    disposeOnce();
-}
-
-void GridWindow::dispose()
-{
     m_pNewYValues.reset();
-    vcl::Window::dispose();
 }
 
 double GridWindow::findMinX()
@@ -438,7 +424,7 @@ double GridWindow::interpolate(
 
 void GridDialog::setBoundings(double fMinX, double fMinY, double fMaxX, double fMaxY)
 {
-    m_pGridWindow->setBoundings(fMinX, fMinY, fMaxX, fMaxY);
+    m_xGridWindow->setBoundings(fMinX, fMinY, fMaxX, fMaxY);
 }
 
 void GridWindow::setBoundings(double fMinX, double fMinY, double fMaxX, double fMaxY)
@@ -528,16 +514,16 @@ void GridWindow::drawHandles(vcl::RenderContext& rRenderContext)
     }
 }
 
-void GridWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
+void GridWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
-    Window::Paint(rRenderContext, rRect);
+    rRenderContext.SetBackground(Wallpaper(Application::GetSettings().GetStyleSettings().GetDialogColor()));
     drawGrid(rRenderContext);
     drawOriginal(rRenderContext);
     drawNew(rRenderContext);
     drawHandles(rRenderContext);
 }
 
-void GridWindow::MouseMove( const MouseEvent& rEvt )
+bool GridWindow::MouseMove( const MouseEvent& rEvt )
 {
     if( rEvt.GetButtons() == MOUSE_LEFT && m_nDragIndex != npos )
     {
@@ -567,10 +553,10 @@ void GridWindow::MouseMove( const MouseEvent& rEvt )
         }
     }
 
-    Window::MouseMove( rEvt );
+    return false;
 }
 
-void GridWindow::MouseButtonUp( const MouseEvent& rEvt )
+bool GridWindow::MouseButtonUp( const MouseEvent& rEvt )
 {
     if( rEvt.GetButtons() == MOUSE_LEFT )
     {
@@ -582,17 +568,17 @@ void GridWindow::MouseButtonUp( const MouseEvent& rEvt )
         }
     }
 
-    Window::MouseButtonUp( rEvt );
+    return false;
 }
 
-void GridWindow::MouseButtonDown( const MouseEvent& rEvt )
+bool GridWindow::MouseButtonDown( const MouseEvent& rEvt )
 {
     Point aPoint( rEvt.GetPosPixel() );
     Handles::size_type nMarkerIndex = npos;
 
     for(Handles::size_type a(0); nMarkerIndex == npos && a < m_aHandles.size(); a++)
     {
-        if(m_aHandles[a].isHit(*this, aPoint))
+        if(m_aHandles[a].isHit(GetDrawingArea()->get_ref_device(), aPoint))
         {
             nMarkerIndex = a;
         }
@@ -631,7 +617,7 @@ void GridWindow::MouseButtonDown( const MouseEvent& rEvt )
         Invalidate(m_aGridArea);
     }
 
-    Window::MouseButtonDown( rEvt );
+    return false;
 }
 
 void GridWindow::ChangeMode(ResetType nType)
@@ -702,20 +688,15 @@ void GridWindow::ChangeMode(ResetType nType)
     Invalidate();
 }
 
-IMPL_LINK( GridDialog, ClickButtonHdl, Button*, pButton, void )
+IMPL_LINK_NOARG(GridDialog, ClickButtonHdl, weld::Button&, void)
 {
-    if (pButton == m_pResetButton)
-    {
-        int nType = m_pResetTypeBox->GetSelectedEntryPos();
-        m_pGridWindow->ChangeMode(static_cast<ResetType>(nType));
-    }
+    int nType = m_xResetTypeBox->get_active();
+    m_xGridWindow->ChangeMode(static_cast<ResetType>(nType));
 }
 
 double* GridDialog::getNewYValues()
 {
-    return m_pGridWindow->getNewYValues();
+    return m_xGridWindow->getNewYValues();
 }
-
-VCL_BUILDER_FACTORY(GridWindow)
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
