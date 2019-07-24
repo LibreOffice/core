@@ -76,6 +76,24 @@
     },
     {
       "key": {
+        "uuid": "bf659307_09226ba5",
+        "filename": "offapi/com/sun/star/drawing/QRCode.idl",
+        "patchSetId": 27
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-07-24T08:30:03Z",
+      "side": 1,
+      "message": "uh yes that was more detailed in a previous revision?",
+      "parentUuid": "bf659307_c676a0d9",
+      "revId": "2659235a084144dd9695da7b49b249f77e400734",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bf659307_6668f4f4",
         "filename": "offapi/com/sun/star/drawing/QRCodeErrorCorrection.idl",
         "patchSetId": 27
@@ -110,6 +128,24 @@
       "writtenOn": "2019-07-24T07:10:20Z",
       "side": 1,
       "message": "So as this is apparently some standardized set of values, it might make sense to use an enum instead of a constants group?",
+      "revId": "2659235a084144dd9695da7b49b249f77e400734",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_49286385",
+        "filename": "offapi/com/sun/star/drawing/QRCodeErrorCorrection.idl",
+        "patchSetId": 27
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-07-24T08:30:03Z",
+      "side": 1,
+      "message": "well we dont control the standard and maybe next week there will be a revision adding level V (Value) with 3% error correction so i\u0027m more in favor of a constant group",
+      "parentUuid": "bf659307_066d7803",
       "revId": "2659235a084144dd9695da7b49b249f77e400734",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
