@@ -57,14 +57,27 @@ std::string RTFSprm::toString() const
 }
 #endif
 
+namespace
+{
+class RTFSprms_compare
+{
+    Id keyword;
+
+public:
+    RTFSprms_compare(Id kw)
+        : keyword{ kw }
+    {
+    }
+    bool operator()(const Entry_t& raEntry) const { return raEntry.first == keyword; }
+};
+}
+
 RTFValue::Pointer_t RTFSprms::find(Id nKeyword, bool bFirst, bool bForWrite)
 {
     if (bForWrite)
         ensureCopyBeforeWrite();
 
-    auto cmp = [&nKeyword](const std::pair<Id, RTFValue::Pointer_t>& raPair) -> bool {
-        return raPair.first == nKeyword;
-    };
+    RTFSprms_compare cmp{ nKeyword };
 
     if (bFirst)
     {
@@ -89,9 +102,7 @@ void RTFSprms::set(Id nKeyword, const RTFValue::Pointer_t& pValue, RTFOverwrite 
 
     if (eOverwrite == RTFOverwrite::YES_PREPEND)
     {
-        auto it = std::remove_if(
-            m_pSprms->begin(), m_pSprms->end(),
-            [nKeyword](const RTFSprms::Entry_t& rSprm) { return rSprm.first == nKeyword; });
+        auto it = std::remove_if(m_pSprms->begin(), m_pSprms->end(), RTFSprms_compare{ nKeyword });
         m_pSprms->erase(it, m_pSprms->end());
         m_pSprms->insert(m_pSprms->begin(), std::make_pair(nKeyword, pValue));
         return;
@@ -121,9 +132,7 @@ bool RTFSprms::erase(Id nKeyword)
 {
     ensureCopyBeforeWrite();
 
-    auto i = std::find_if(
-        m_pSprms->begin(), m_pSprms->end(),
-        [&nKeyword](RTFSprmsImpl::value_type& rEntry) { return rEntry.first == nKeyword; });
+    auto i = std::find_if(m_pSprms->begin(), m_pSprms->end(), RTFSprms_compare{ nKeyword });
     if (i != m_pSprms->end())
     {
         m_pSprms->erase(i);
@@ -136,9 +145,7 @@ void RTFSprms::eraseLast(Id nKeyword)
 {
     ensureCopyBeforeWrite();
 
-    auto i = std::find_if(
-        m_pSprms->rbegin(), m_pSprms->rend(),
-        [&nKeyword](RTFSprmsImpl::value_type& rEntry) { return rEntry.first == nKeyword; });
+    auto i = std::find_if(m_pSprms->rbegin(), m_pSprms->rend(), RTFSprms_compare{ nKeyword });
     if (i != m_pSprms->rend())
         m_pSprms->erase(std::next(i).base());
 }
