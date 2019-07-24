@@ -1,5 +1,5 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- *
+ *
  * This file is part of the LibreOffice project.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -18,21 +18,22 @@
  */
 
 #include <vcl/animate/Animation.hxx>
-#include <vcl/animate/AnimationRenderer.hxx>
 #include <vcl/outdev.hxx>
 
+#include <vcl/animate/AnimationRenderer.hxx>
+#include <vcl/animate/AnimationRenderers.hxx>
 #include <AnimationData.hxx>
 
-void AnimationRenderers::ClearAnimationRenderers() { maAnimationRenderers.clear(); }
+void AnimationRenderers::ClearAnimationRenderers() { maRenderers.clear(); }
 
 bool AnimationRenderers::RepaintRenderers(OutputDevice* pOut, sal_uLong nCallerId,
                                           const Point& rDestPt, const Size& rDestSz)
 {
     AnimationRenderer* pRenderer;
 
-    for (size_t i = 0; i < maAnimationRenderers.size(); ++i)
+    for (size_t i = 0; i < maRenderers.size(); ++i)
     {
-        pRenderer = maAnimationRenderers[i].get();
+        pRenderer = maRenderers[i].get();
         if (pRenderer->Matches(pOut, nCallerId))
         {
             if (pRenderer->GetOriginPosition() == rDestPt
@@ -43,7 +44,7 @@ bool AnimationRenderers::RepaintRenderers(OutputDevice* pOut, sal_uLong nCallerI
             }
             else
             {
-                maAnimationRenderers.erase(maAnimationRenderers.begin() + i);
+                maRenderers.erase(maRenderers.begin() + i);
                 return false;
             }
         }
@@ -52,13 +53,13 @@ bool AnimationRenderers::RepaintRenderers(OutputDevice* pOut, sal_uLong nCallerI
     return false;
 }
 
-bool AnimationRenderers::NoRenderersAreAvailable() { return maAnimationRenderers.empty(); }
+bool AnimationRenderers::NoRenderersAreAvailable() { return maRenderers.empty(); }
 
 std::vector<std::unique_ptr<AnimationData>> AnimationRenderers::CreateAnimationDataItems()
 {
     std::vector<std::unique_ptr<AnimationData>> aAnimationDataItems;
 
-    for (auto const& rItem : maAnimationRenderers)
+    for (auto const& rItem : maRenderers)
     {
         aAnimationDataItems.emplace_back(rItem->CreateAnimationData());
     }
@@ -70,18 +71,18 @@ void AnimationRenderers::CreateDefaultRenderer(Animation* pAnim, OutputDevice* p
                                                const Point& rDestPt, const Size& rDestSz,
                                                sal_uLong nCallerId, OutputDevice* pFirstFrameOutDev)
 {
-    maAnimationRenderers.emplace_back(
+    maRenderers.emplace_back(
         pOut->CreateAnimationRenderer(pAnim, pOut, rDestPt, rDestSz, nCallerId, pFirstFrameOutDev));
 }
 
 void AnimationRenderers::RemoveAnimationInstance(OutputDevice* pOut, sal_uLong nCallerId)
 {
-    maAnimationRenderers.erase(
-        std::remove_if(maAnimationRenderers.begin(), maAnimationRenderers.end(),
+    maRenderers.erase(
+        std::remove_if(maRenderers.begin(), maRenderers.end(),
                        [=](const std::unique_ptr<AnimationRenderer>& pAnimView) -> bool {
                            return pAnimView->Matches(pOut, nCallerId);
                        }),
-        maAnimationRenderers.end());
+        maRenderers.end());
 }
 
 void AnimationRenderers::PopulateRenderers(Animation* pAnim)
@@ -96,7 +97,7 @@ void AnimationRenderers::PopulateRenderers(Animation* pAnim)
                 pAnim, pItem->mpRenderContext, pItem->maOriginStartPt, pItem->maStartSize,
                 pItem->mnCallerId);
 
-            maAnimationRenderers.push_back(std::unique_ptr<AnimationRenderer>(pRenderer));
+            maRenderers.push_back(std::unique_ptr<AnimationRenderer>(pRenderer));
         }
         else
         {
@@ -112,11 +113,11 @@ void AnimationRenderers::DeleteUnmarkedRenderers()
 {
     AnimationRenderer* pRenderer;
 
-    for (size_t i = 0; i < maAnimationRenderers.size();)
+    for (size_t i = 0; i < maRenderers.size();)
     {
-        pRenderer = maAnimationRenderers[i].get();
+        pRenderer = maRenderers[i].get();
         if (!pRenderer->IsMarked())
-            maAnimationRenderers.erase(maAnimationRenderers.begin() + i);
+            maRenderers.erase(maRenderers.begin() + i);
     }
 }
 
@@ -124,7 +125,7 @@ bool AnimationRenderers::ResetMarkedRenderers()
 {
     bool bIsGloballyPaused = true;
 
-    for (auto& rItem : maAnimationRenderers)
+    for (auto& rItem : maRenderers)
     {
         if (!rItem->IsPaused())
             bIsGloballyPaused = false;
@@ -137,7 +138,7 @@ bool AnimationRenderers::ResetMarkedRenderers()
 
 void AnimationRenderers::PaintRenderers(sal_uLong nFrameIndex)
 {
-    for (auto& rRenderer : maAnimationRenderers)
+    for (auto& rRenderer : maRenderers)
     {
         rRenderer->Draw(nFrameIndex);
     }
@@ -145,12 +146,12 @@ void AnimationRenderers::PaintRenderers(sal_uLong nFrameIndex)
 
 void AnimationRenderers::EraseMarkedRenderers()
 {
-    for (size_t i = 0; i < maAnimationRenderers.size();)
+    for (size_t i = 0; i < maRenderers.size();)
     {
-        AnimationRenderer* pRenderer = maAnimationRenderers[i].get();
+        AnimationRenderer* pRenderer = maRenderers[i].get();
 
         if (pRenderer->IsMarked())
-            maAnimationRenderers.erase(maAnimationRenderers.begin() + i);
+            maRenderers.erase(maRenderers.begin() + i);
         else
             i++;
     }

@@ -733,6 +733,12 @@ protected:
     // Single argument ctors shall be explicit.
     explicit                            Window( WindowType nType );
 
+    bool                                StartAnimation(Animation *pAnimation,
+                                                       const Point& rDestPt, const Size& rDestSz,
+                                                       sal_uLong nCallerId,
+                                                       OutputDevice *pFirstFrameOutDev = nullptr) override
+                                    { return pAnimation->Start(this, rDestPt, rDestSz, nCallerId, pFirstFrameOutDev); }
+
     virtual AnimationRenderer*          CreateAnimationRenderer(Animation* pAnim,
                                                         OutputDevice* pOut,
                                                         const Point& rDestPt, const Size& rDestSz,
