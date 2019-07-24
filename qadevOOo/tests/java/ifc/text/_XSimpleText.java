@@ -98,7 +98,7 @@ public class _XSimpleText extends MultiMethodTest {
         }
         catch(com.sun.star.lang.IllegalArgumentException e ) {
             // Some exception.FAILED
-            Status.failed( e.toString() );
+            log.println(e.toString());
             bOK = false;
         }
         String gStr = oObj.getString() ;
