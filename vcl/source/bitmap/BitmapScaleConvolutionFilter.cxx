@@ -150,6 +150,8 @@ bool ImplScaleConvolutionHor(Bitmap& rSource, Bitmap& rTarget, const double& rSc
                         aValueBlue += aWeight * aColor.GetBlue();
                     }
 
+                    assert(aSum != 0);
+
                     const BitmapColor aResultColor(
                         static_cast< sal_uInt8 >(MinMax(static_cast< sal_Int32 >(aValueRed / aSum), 0, 255)),
                         static_cast< sal_uInt8 >(MinMax(static_cast< sal_Int32 >(aValueGreen / aSum), 0, 255)),
@@ -230,6 +232,8 @@ bool ImplScaleConvolutionVer(Bitmap& rSource, Bitmap& rTarget, const double& rSc
                         aValueGreen += aWeight * aColor.GetGreen();
                         aValueBlue += aWeight * aColor.GetBlue();
                     }
+
+                    assert(aSum != 0);
 
                     const BitmapColor aResultColor(
                         static_cast< sal_uInt8 >(MinMax(static_cast< sal_Int32 >(aValueRed / aSum), 0, 255)),
