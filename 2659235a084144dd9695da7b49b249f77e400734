@@ -1,0 +1,135 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_86abc81b",
+        "filename": "offapi/com/sun/star/drawing/GraphicObjectShape.idl",
+        "patchSetId": 27
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-07-24T07:10:20Z",
+      "side": 1,
+      "message": "capital \"R\"",
+      "range": {
+        "startLine": 35,
+        "startChar": 32,
+        "endLine": 35,
+        "endChar": 33
+      },
+      "revId": "2659235a084144dd9695da7b49b249f77e400734",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_a6a84c1f",
+        "filename": "offapi/com/sun/star/drawing/GraphicObjectShape.idl",
+        "patchSetId": 27
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-07-24T07:10:20Z",
+      "side": 1,
+      "message": "I think the \"title\" line must come first, \"@since\" line second",
+      "revId": "2659235a084144dd9695da7b49b249f77e400734",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_e673a4e6",
+        "filename": "offapi/com/sun/star/drawing/QRCode.idl",
+        "patchSetId": 27
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-07-24T07:10:20Z",
+      "side": 1,
+      "message": "this @since is redundant and should be removed",
+      "revId": "2659235a084144dd9695da7b49b249f77e400734",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_c676a0d9",
+        "filename": "offapi/com/sun/star/drawing/QRCode.idl",
+        "patchSetId": 27
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-07-24T07:10:20Z",
+      "side": 1,
+      "message": "...expressing what?  the thickness of the border in pixel, or...?",
+      "revId": "2659235a084144dd9695da7b49b249f77e400734",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_6668f4f4",
+        "filename": "offapi/com/sun/star/drawing/QRCodeErrorCorrection.idl",
+        "patchSetId": 27
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-07-24T07:10:20Z",
+      "side": 1,
+      "message": "I don\u0027t understand that sentence.",
+      "range": {
+        "startLine": 19,
+        "startChar": 8,
+        "endLine": 19,
+        "endChar": 29
+      },
+      "revId": "2659235a084144dd9695da7b49b249f77e400734",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_066d7803",
+        "filename": "offapi/com/sun/star/drawing/QRCodeErrorCorrection.idl",
+        "patchSetId": 27
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-07-24T07:10:20Z",
+      "side": 1,
+      "message": "So as this is apparently some standardized set of values, it might make sense to use an enum instead of a constants group?",
+      "revId": "2659235a084144dd9695da7b49b249f77e400734",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_2672fce6",
+        "filename": "offapi/com/sun/star/drawing/QRCodeErrorCorrection.idl",
+        "patchSetId": 27
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-07-24T07:10:20Z",
+      "side": 1,
+      "message": "Again:  \"Is \u0027short\u0027 a good type here?  (If there is no very compelling reason to use \u0027short\u0027, \u0027long\u0027 is the natural integer type in UNOIDL and should generally be preferred.)\"",
+      "revId": "2659235a084144dd9695da7b49b249f77e400734",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
