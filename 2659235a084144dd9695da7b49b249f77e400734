@@ -130,6 +130,24 @@
     },
     {
       "key": {
+        "uuid": "bf659307_690a07d3",
+        "filename": "offapi/com/sun/star/drawing/QRCode.idl",
+        "patchSetId": 27
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1002063
+      },
+      "writtenOn": "2019-07-24T10:20:59Z",
+      "side": 1,
+      "message": "ok, will do it.",
+      "parentUuid": "bf659307_69520716",
+      "revId": "2659235a084144dd9695da7b49b249f77e400734",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bf659307_6668f4f4",
         "filename": "offapi/com/sun/star/drawing/QRCodeErrorCorrection.idl",
         "patchSetId": 27
@@ -199,6 +217,24 @@
       "writtenOn": "2019-07-24T07:10:20Z",
       "side": 1,
       "message": "Again:  \"Is \u0027short\u0027 a good type here?  (If there is no very compelling reason to use \u0027short\u0027, \u0027long\u0027 is the natural integer type in UNOIDL and should generally be preferred.)\"",
+      "revId": "2659235a084144dd9695da7b49b249f77e400734",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_a9ed7ff0",
+        "filename": "offapi/com/sun/star/drawing/QRCodeErrorCorrection.idl",
+        "patchSetId": 27
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1002063
+      },
+      "writtenOn": "2019-07-24T10:20:59Z",
+      "side": 1,
+      "message": "okay, will be done.",
+      "parentUuid": "bf659307_2672fce6",
       "revId": "2659235a084144dd9695da7b49b249f77e400734",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
