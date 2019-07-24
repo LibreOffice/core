@@ -16,6 +16,23 @@
       "revId": "522a69eb941a91ae201abbb55ae506aff3118cbb",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_4c3711b2",
+        "filename": "sfx2/source/doc/objstor.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2040,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-07-24T15:19:44Z",
+      "side": 1,
+      "message": "why didn\u0027t line 1598 SetCachedSignatureState_Impl set it to OK?",
+      "revId": "522a69eb941a91ae201abbb55ae506aff3118cbb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
