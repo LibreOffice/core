@@ -2711,8 +2711,6 @@ static void doc_initializeForRendering(LibreOfficeKitDocument* pThis,
     if (pDoc)
     {
         doc_iniUnoCommands();
-        // Create the SlideSorter which is used for multiselection and reordering.
-        doc_postUnoCommand(pThis, ".uno:LeftPaneImpress", nullptr, false);
         pDoc->initializeForTiledRendering(
                 comphelper::containerToSequence(jsonToPropertyValuesVector(pArguments)));
     }
