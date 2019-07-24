@@ -57,8 +57,7 @@ namespace utl {
 enum class SvLBoxButtonKind
 {
     EnabledCheckbox,
-    DisabledCheckbox,
-    StaticImage
+    DisabledCheckbox
 };
 
 enum class SvButtonState { Unchecked, Checked, Tristate };

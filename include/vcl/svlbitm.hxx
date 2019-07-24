@@ -39,8 +39,7 @@ enum class SvBmp
     TRISTATE         = 2,
     HIUNCHECKED      = 3,
     HICHECKED        = 4,
-    HITRISTATE       = 5,
-    STATICIMAGE      = 6
+    HITRISTATE       = 5
 };
 
 enum class SvItemStateFlags
