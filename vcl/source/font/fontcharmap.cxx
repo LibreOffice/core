@@ -230,6 +230,11 @@ bool ParseCMAP( const unsigned char* pCmap, int nLength, CmapResult& rResult )
     else if( (nFormat == 12) && ((nOffset+16) < nLength) )
     {
         nRangeCount = GetUInt( pCmap + nOffset + 12 );
+        if (nRangeCount < 0)
+        {
+            SAL_WARN("vcl.gdi", "negative RangeCount");
+            nRangeCount = 0;
+        }
 
         const int nGroupOffset = nOffset + 16;
         const int nRemainingLen = nLength - nGroupOffset;
