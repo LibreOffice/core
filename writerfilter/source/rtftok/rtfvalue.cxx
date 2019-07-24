@@ -186,7 +186,7 @@ RTFValue* RTFValue::CloneWithSprms(RTFSprms const& rAttributes, RTFSprms const& 
                         m_bForceString, *m_pShape, *m_pPicture);
 }
 
-bool RTFValue::equals(RTFValue& rOther)
+bool RTFValue::equals(const RTFValue& rOther) const
 {
     if (m_nValue != rOther.m_nValue)
         return false;

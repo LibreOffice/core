@@ -73,7 +73,7 @@ public:
     RTFSprms& getSprms();
     RTFShape& getShape() const;
     RTFPicture& getPicture() const;
-    bool equals(RTFValue& rOther);
+    bool equals(const RTFValue& rOther) const;
     RTFValue& operator=(RTFValue const& rOther) = delete;
 
 private:

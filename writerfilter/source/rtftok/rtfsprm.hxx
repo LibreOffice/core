@@ -75,7 +75,7 @@ public:
     Iterator_t begin() { return m_pSprms->begin(); }
     Iterator_t end() { return m_pSprms->end(); }
     void clear();
-    bool equals(RTFValue& rOther);
+    bool equals(const RTFValue& rOther) const;
 
 private:
     void ensureCopyBeforeWrite();
