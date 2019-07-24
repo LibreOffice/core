@@ -81,7 +81,7 @@ class SvxBulletAndPositionDlg : public weld::GenericDialogController
     std::unique_ptr<weld::Entry> m_xPrefixED;
     std::unique_ptr<weld::Label> m_xSuffixFT;
     std::unique_ptr<weld::Entry> m_xSuffixED;
-    std::unique_ptr<weld::Expander> m_xBeforeAfter;
+    std::unique_ptr<weld::Frame> m_xBeforeAfter;
     std::unique_ptr<weld::Label> m_xBulColorFT;
     std::unique_ptr<ColorListBox> m_xBulColLB;
     std::unique_ptr<weld::Label> m_xBulRelSizeFT;
