@@ -55,13 +55,13 @@ class XMLSECURITY_DLLPUBLIC SAXEventKeeperImpl : public cppu::WeakImplHelper
  *  SAXEventKeeperImpl -- SAX events buffer controller
  *
  *   FUNCTION
- *  Controls SAX events to be bufferred, and controls bufferred SAX events
+ *  Controls SAX events to be buffered, and controls buffered SAX events
  *  to be released.
  ******************************************************************************/
 {
 private:
     /*
-     * the XMLDocumentWrapper component which maintains all bufferred SAX
+     * the XMLDocumentWrapper component which maintains all buffered SAX
      * in DOM format.
      */
     css::uno::Reference< css::xml::wrapper::XXMLDocumentWrapper >
@@ -92,7 +92,7 @@ private:
 
     /*
      * the root node of the BufferNode tree.
-     * the BufferNode tree is used to keep track of all bufferred elements,
+     * the BufferNode tree is used to keep track of all buffered elements,
      * it has the same structure with the document which maintains those
      * elements physically.
      */

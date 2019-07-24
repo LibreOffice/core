@@ -53,9 +53,9 @@ ElementCollector::ElementCollector(
  *  nSecurityId -   represents which security entity the buffer node is
  *          related with. Either a signature or an encryption is
  *          a security entity.
- *  nBufferId - the id of the element bufferred in the document
+ *  nBufferId - the id of the element buffered in the document
  *          wrapper component. The document wrapper component
- *          uses this id to search the particular bufferred
+ *          uses this id to search the particular buffered
  *          element.
  *  nPriority - the priority value. ElementCollector with lower
  *          priority value can't notify until all ElementCollectors

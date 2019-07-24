@@ -60,7 +60,7 @@ public class DocumentMergerImpl implements DocumentMerger {
 
         DiffAlgorithm diffAlgo = new IteratorLCSAlgorithm();
 
-        // find out the paragrah level diffs
+        // find out the paragraph level diffs
         Difference[] diffTable = diffAlgo.computeDiffs(i1, i2);
 
         if (Debug.isFlagSet(Debug.INFO)) {

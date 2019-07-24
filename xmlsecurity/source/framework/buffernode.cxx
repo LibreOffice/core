@@ -76,7 +76,7 @@ void BufferNode::setReceivedAll()
  *
  *   NAME
  *  setReceivedAll -- indicates that the element in this BufferNode has
- *  been completely bufferred.
+ *  been completely buffered.
  *
  *   SYNOPSIS
  *  setReceivedAll();
@@ -707,13 +707,13 @@ void BufferNode::elementCollectorNotify()
                  !isBlockerInSubTreeIncluded(pElementCollector->getSecurityId())))
             {
                 /*
-                 * If this ElementCollector will modify the bufferred element, then
+                 * If this ElementCollector will modify the buffered element, then
                  * special attention must be paid.
                  *
                  * If there is any ElementCollector in the subtree or any ancestor
                  * ElementCollector with PRI_BEFPREMODIFY priority, this
                  * ElementCollector can't perform notify operation, otherwise, it
-                 * will destroy the bufferred element, in turn, ElementCollectors
+                 * will destroy the buffered element, in turn, ElementCollectors
                  * mentioned above can't perform their mission.
                  */
                 //if (!(nMaxPriority == cssxc::sax::ElementMarkPriority_PRI_MODIFY &&

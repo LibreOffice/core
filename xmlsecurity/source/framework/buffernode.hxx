@@ -34,16 +34,16 @@ class BufferNode final
 /****** buffernode.hxx/CLASS BufferNode ***************************************
  *
  *   NAME
- *  BufferNode -- Class to maintain the tree of bufferred elements
+ *  BufferNode -- Class to maintain the tree of buffered elements
  *
  *   FUNCTION
- *  One BufferNode object represents a bufferred element in the document
+ *  One BufferNode object represents a buffered element in the document
  *  wrapper component.
  *  All BufferNode objects construct a tree which has the same structure
- *  of all bufferred elements. That is to say, if one bufferred element is
- *  an ancestor of another bufferred element, then the corresponding
+ *  of all buffered elements. That is to say, if one buffered element is
+ *  an ancestor of another buffered element, then the corresponding
  *  BufferNode objects are also in ancestor/descendant relationship.
- *  This class is used to manipulate the tree of bufferred elements.
+ *  This class is used to manipulate the tree of buffered elements.
  ******************************************************************************/
 {
 private:
@@ -63,12 +63,12 @@ private:
     ElementMark* m_pBlocker;
 
     /*
-     * whether the element has completely bufferred by the document wrapper
+     * whether the element has completely buffered by the document wrapper
      * component
      */
     bool m_bAllReceived;
 
-    /* the XMLElementWrapper of the bufferred element */
+    /* the XMLElementWrapper of the buffered element */
     css::uno::Reference< css::xml::wrapper::XXMLElementWrapper > m_xXMLElement;
 
 private:

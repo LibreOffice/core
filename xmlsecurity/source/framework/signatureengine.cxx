@@ -49,7 +49,7 @@ bool SignatureEngine::checkReady() const
  *  2. the key material is known;
  *  3. the amount of reference is known;
  *  4. all of referenced elements, the key element and the signature
- *     template are bufferred.
+ *     template are buffered.
  *
  *   RESULT
  *  bReady - true if all conditions are satisfied, false otherwise

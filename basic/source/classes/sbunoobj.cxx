@@ -1011,7 +1011,7 @@ static Any sbxToUnoValueImpl( const SbxValue* pVar, bool bBlockConversionToSmall
 
     if( !bBlockConversionToSmallestType )
     {
-        // #79615 Choose "smallest" represention for int values
+        // #79615 Choose "smallest" representation for int values
         // because up cast is allowed, downcast not
         switch( eType )
         {
