@@ -21,6 +21,7 @@
 #include <stdlib.h>
 #include <tools/config.hxx>
 #include <unotools/resmgr.hxx>
+#include <vcl/customweld.hxx>
 #include <vcl/dibtools.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/settings.hxx>
@@ -69,7 +70,7 @@ void DrawRectangles(vcl::RenderContext& rRenderContext, Point const & rUL, Point
 
 }
 
-class ScanPreview : public vcl::Window
+class ScanPreview : public weld::CustomWidgetController
 {
 private:
     enum DragDirection { TopLeft, Top, TopRight, Right, BottomRight, Bottom,
@@ -77,35 +78,24 @@ private:
 
     BitmapEx  maPreviewBitmapEx;
     tools::Rectangle maPreviewRect;
+    Point     maLastUL, maLastBR;
     Point     maTopLeft, maBottomRight;
     Point     maMinTopLeft, maMaxBottomRight;
-    VclPtr<SaneDlg>  mpParentDialog;
+    SaneDlg*  mpParentDialog;
     DragDirection meDragDirection;
     bool      mbDragEnable;
     bool      mbDragDrawn;
     bool      mbIsDragging;
 
 public:
-    ScanPreview(vcl::Window* pParent, WinBits nStyle)
-        : Window(pParent, nStyle)
-        , maMaxBottomRight(PREVIEW_WIDTH,  PREVIEW_HEIGHT)
+    ScanPreview()
+        : maMaxBottomRight(PREVIEW_WIDTH,  PREVIEW_HEIGHT)
         , mpParentDialog(nullptr)
         , meDragDirection(TopLeft)
         , mbDragEnable(false)
         , mbDragDrawn(false)
         , mbIsDragging(false)
     {
-    }
-
-    virtual ~ScanPreview() override
-    {
-        disposeOnce();
-    }
-
-    virtual void dispose() override
-    {
-        mpParentDialog.clear();
-        vcl::Window::dispose();
     }
 
     void Init(SaneDlg *pParent)
@@ -125,19 +115,21 @@ public:
     {
         mbDragEnable = true;
     }
+
     void DisableDrag()
     {
         mbDragEnable = false;
     }
+
     bool IsDragEnabled()
     {
         return mbDragEnable;
     }
 
     virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
-    virtual void MouseButtonDown(const MouseEvent& rMEvt) override;
-    virtual void MouseMove(const MouseEvent& rMEvt) override;
-    virtual void MouseButtonUp(const MouseEvent& rMEvt) override;
+    virtual bool MouseButtonDown(const MouseEvent& rMEvt) override;
+    virtual bool MouseMove(const MouseEvent& rMEvt) override;
+    virtual bool MouseButtonUp(const MouseEvent& rMEvt) override;
     Point GetPixelPos(const Point& rIn) const;
     Point GetLogicPos(const Point& rIn) const;
 
@@ -195,57 +187,56 @@ public:
     {
         ReadDIBBitmapEx(maPreviewBitmapEx, rStream, true);
     }
-    virtual Size GetOptimalSize() const override
+    virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override
     {
-        Size aSize(LogicToPixel(Size(PREVIEW_WIDTH, PREVIEW_HEIGHT), MapMode(MapUnit::MapAppFont)));
+        Size aSize(pDrawingArea->get_ref_device().LogicToPixel(Size(PREVIEW_WIDTH, PREVIEW_HEIGHT), MapMode(MapUnit::MapAppFont)));
         aSize.setWidth(aSize.getWidth()+1);
         aSize.setHeight(aSize.getHeight()+1);
-        return aSize;
+        pDrawingArea->set_size_request(aSize.Width(), aSize.Height());
+        CustomWidgetController::SetDrawingArea(pDrawingArea);
+        SetOutputSizePixel(aSize);
     }
 };
 
-VCL_BUILDER_FACTORY_CONSTRUCTOR(ScanPreview, 0)
-
-SaneDlg::SaneDlg( vcl::Window* pParent, Sane& rSane, bool bScanEnabled ) :
-        ModalDialog(pParent, "SaneDialog", "modules/scanner/ui/sanedialog.ui"),
-        mrSane( rSane ),
-        mbScanEnabled( bScanEnabled ),
-        mnCurrentOption(0),
-        mnCurrentElement(0),
-        mfMin(0.0),
-        mfMax(0.0),
-        doScan(false)
+SaneDlg::SaneDlg(weld::Window* pParent, Sane& rSane, bool bScanEnabled)
+    : GenericDialogController(pParent, "modules/scanner/ui/sanedialog.ui", "SaneDialog")
+    , mpParent(pParent)
+    , mrSane(rSane)
+    , mbScanEnabled(bScanEnabled)
+    , mnCurrentOption(0)
+    , mnCurrentElement(0)
+    , mfMin(0.0)
+    , mfMax(0.0)
+    , doScan(false)
+    , mxCancelButton(m_xBuilder->weld_button("cancel"))
+    , mxDeviceInfoButton(m_xBuilder->weld_button("deviceInfoButton"))
+    , mxPreviewButton(m_xBuilder->weld_button("previewButton"))
+    , mxScanButton(m_xBuilder->weld_button("ok"))
+    , mxButtonOption(m_xBuilder->weld_button("optionsButton"))
+    , mxOptionTitle(m_xBuilder->weld_label("optionTitleLabel"))
+    , mxOptionDescTxt(m_xBuilder->weld_label("optionsDescLabel"))
+    , mxVectorTxt(m_xBuilder->weld_label("vectorLabel"))
+    , mxLeftField(m_xBuilder->weld_metric_spin_button("leftSpinbutton", FieldUnit::PIXEL))
+    , mxTopField(m_xBuilder->weld_metric_spin_button("topSpinbutton", FieldUnit::PIXEL))
+    , mxRightField(m_xBuilder->weld_metric_spin_button("rightSpinbutton", FieldUnit::PIXEL))
+    , mxBottomField(m_xBuilder->weld_metric_spin_button("bottomSpinbutton", FieldUnit::PIXEL))
+    , mxDeviceBox(m_xBuilder->weld_combo_box("deviceCombobox"))
+    , mxReslBox(m_xBuilder->weld_combo_box("reslCombobox"))
+    , mxAdvancedBox(m_xBuilder->weld_check_button("advancedCheckbutton"))
+    , mxVectorBox(m_xBuilder->weld_spin_button("vectorSpinbutton-nospin"))
+    , mxQuantumRangeBox(m_xBuilder->weld_combo_box("quantumRangeCombobox"))
+    , mxStringRangeBox(m_xBuilder->weld_combo_box("stringRangeCombobox"))
+    , mxBoolCheckBox(m_xBuilder->weld_check_button("boolCheckbutton"))
+    , mxStringEdit(m_xBuilder->weld_entry("stringEntry"))
+    , mxNumericEdit(m_xBuilder->weld_entry("numericEntry"))
+    , mxOptionBox(m_xBuilder->weld_tree_view("optionSvTreeListBox"))
+    , mxPreview(new ScanPreview)
+    , mxPreviewWnd(new weld::CustomWeld(*m_xBuilder, "preview", *mxPreview))
 {
-    get(mpOKButton, "ok");
-    get(mpCancelButton, "cancel");
-    get(mpDeviceInfoButton, "deviceInfoButton");
-    get(mpPreviewButton, "previewButton");
-    get(mpScanButton, "scanButton");
-    get(mpButtonOption, "optionsButton");
-    get(mpOptionTitle, "optionTitleLabel");
-    Size aSize(LogicToPixel(Size(130, 102), MapMode(MapUnit::MapAppFont)));
-    mpOptionTitle->set_width_request(aSize.Width());
-    mpOptionTitle->set_height_request(aSize.Height() / 2);
-    get(mpOptionDescTxt, "optionsDescLabel");
-    get(mpVectorTxt, "vectorLabel");
-    get(mpLeftField, "leftSpinbutton");
-    get(mpTopField, "topSpinbutton");
-    get(mpRightField, "rightSpinbutton");
-    get(mpBottomField, "bottomSpinbutton");
-    get(mpDeviceBox, "deviceCombobox");
-    get(mpReslBox, "reslCombobox");
-    get(mpAdvancedBox, "advancedCheckbutton");
-    get(mpVectorBox, "vectorSpinbutton-nospin");
-    get(mpQuantumRangeBox, "quantumRangeCombobox");
-    get(mpStringRangeBox, "stringRangeCombobox");
-    get(mpStringEdit, "stringEntry");
-    get(mpNumericEdit, "numericEntry");
-    get(mpOptionBox, "optionSvTreeListBox");
-    mpOptionBox->set_width_request(aSize.Width());
-    mpOptionBox->set_height_request(aSize.Height());
-    get(mpBoolCheckBox, "boolCheckbutton");
-    get(mpPreview, "preview");
-    mpPreview->Init(this);
+    Size aSize(mxOptionBox->get_approximate_digit_width() * 32, mxOptionBox->get_height_rows(8));
+    mxOptionTitle->set_size_request(aSize.Width(), aSize.Height() / 2);
+    mxOptionBox->set_size_request(aSize.Width(), aSize.Height());
+    mxPreview->Init(this);
     if( Sane::IsSane() )
     {
         InitDevices(); // opens first sane device
@@ -253,69 +244,32 @@ SaneDlg::SaneDlg( vcl::Window* pParent, Sane& rSane, bool bScanEnabled ) :
         InitFields();
     }
 
-    mpDeviceInfoButton->SetClickHdl( LINK( this, SaneDlg, ClickBtnHdl ) );
-    mpPreviewButton->SetClickHdl( LINK( this, SaneDlg, ClickBtnHdl ) );
-    mpScanButton->SetClickHdl( LINK( this, SaneDlg, ClickBtnHdl ) );
-    mpButtonOption->SetClickHdl( LINK( this, SaneDlg, ClickBtnHdl ) );
-    mpDeviceBox->SetSelectHdl( LINK( this, SaneDlg, SelectHdl ) );
-    mpOptionBox->SetSelectHdl( LINK( this, SaneDlg, OptionsBoxSelectHdl ) );
-    mpOKButton->SetClickHdl( LINK( this, SaneDlg, ClickBtnHdl ) );
-    mpCancelButton->SetClickHdl( LINK( this, SaneDlg, ClickBtnHdl ) );
-    mpBoolCheckBox->SetClickHdl( LINK( this, SaneDlg, ClickBtnHdl ) );
-    mpStringEdit->SetModifyHdl( LINK( this, SaneDlg, ModifyHdl ) );
-    mpNumericEdit->SetModifyHdl( LINK( this, SaneDlg, ModifyHdl ) );
-    mpVectorBox->SetModifyHdl( LINK( this, SaneDlg, ModifyHdl ) );
-    mpReslBox->SetModifyHdl( LINK( this, SaneDlg, ModifyHdl ) );
-    mpStringRangeBox->SetSelectHdl( LINK( this, SaneDlg, SelectHdl ) );
-    mpQuantumRangeBox->SetSelectHdl( LINK( this, SaneDlg, SelectHdl ) );
-    mpLeftField->SetModifyHdl( LINK( this, SaneDlg, ModifyHdl ) );
-    mpRightField->SetModifyHdl( LINK( this, SaneDlg, ModifyHdl ) );
-    mpTopField->SetModifyHdl( LINK( this, SaneDlg, ModifyHdl ) );
-    mpBottomField->SetModifyHdl( LINK( this, SaneDlg, ModifyHdl ) );
-    mpAdvancedBox->SetClickHdl( LINK( this, SaneDlg, ClickBtnHdl ) );
+    mxDeviceInfoButton->connect_clicked( LINK( this, SaneDlg, ClickBtnHdl ) );
+    mxPreviewButton->connect_clicked( LINK( this, SaneDlg, ClickBtnHdl ) );
+    mxScanButton->connect_clicked( LINK( this, SaneDlg, ClickBtnHdl ) );
+    mxButtonOption->connect_clicked( LINK( this, SaneDlg, ClickBtnHdl ) );
+    mxDeviceBox->connect_changed( LINK( this, SaneDlg, SelectHdl ) );
+    mxOptionBox->connect_changed( LINK( this, SaneDlg, OptionsBoxSelectHdl ) );
+    mxCancelButton->connect_clicked( LINK( this, SaneDlg, ClickBtnHdl ) );
+    mxBoolCheckBox->connect_clicked( LINK( this, SaneDlg, ClickBtnHdl ) );
+    mxStringEdit->connect_changed( LINK( this, SaneDlg, ModifyHdl ) );
+    mxNumericEdit->connect_changed( LINK( this, SaneDlg, ModifyHdl ) );
+    mxVectorBox->connect_changed( LINK( this, SaneDlg, ModifyHdl ) );
+    mxReslBox->connect_changed( LINK( this, SaneDlg, ValueModifyHdl ) );
+    mxStringRangeBox->connect_changed( LINK( this, SaneDlg, SelectHdl ) );
+    mxQuantumRangeBox->connect_changed( LINK( this, SaneDlg, SelectHdl ) );
+    mxLeftField->connect_value_changed( LINK( this, SaneDlg, MetricValueModifyHdl ) );
+    mxRightField->connect_value_changed( LINK( this, SaneDlg, MetricValueModifyHdl) );
+    mxTopField->connect_value_changed( LINK( this, SaneDlg, MetricValueModifyHdl) );
+    mxBottomField->connect_value_changed( LINK( this, SaneDlg, MetricValueModifyHdl) );
+    mxAdvancedBox->connect_clicked( LINK( this, SaneDlg, ClickBtnHdl ) );
 
     maOldLink = mrSane.SetReloadOptionsHdl( LINK( this, SaneDlg, ReloadSaneOptionsHdl ) );
-
-    mpOptionBox->SetNodeBitmaps(get<FixedImage>("plus")->GetImage(),
-                                get<FixedImage>("minus")->GetImage());
-    mpOptionBox->SetStyle(mpOptionBox->GetStyle() |
-                          WB_HASLINES | WB_HASBUTTONS | WB_NOINITIALSELECTION |
-                          WB_HASBUTTONSATROOT | WB_HASLINESATROOT);
 }
 
 SaneDlg::~SaneDlg()
 {
-    disposeOnce();
-}
-
-void SaneDlg::dispose()
-{
     mrSane.SetReloadOptionsHdl(maOldLink);
-    mpOKButton.clear();
-    mpCancelButton.clear();
-    mpDeviceInfoButton.clear();
-    mpPreviewButton.clear();
-    mpScanButton.clear();
-    mpButtonOption.clear();
-    mpOptionTitle.clear();
-    mpOptionDescTxt.clear();
-    mpVectorTxt.clear();
-    mpLeftField.clear();
-    mpTopField.clear();
-    mpRightField.clear();
-    mpBottomField.clear();
-    mpDeviceBox.clear();
-    mpReslBox.clear();
-    mpAdvancedBox.clear();
-    mpVectorBox.clear();
-    mpQuantumRangeBox.clear();
-    mpStringRangeBox.clear();
-    mpBoolCheckBox.clear();
-    mpStringEdit.clear();
-    mpNumericEdit.clear();
-    mpOptionBox.clear();
-    mpPreview.clear();
-    ModalDialog::dispose();
 }
 
 namespace {
@@ -327,18 +281,18 @@ OUString SaneResId(const char *pID)
 
 }
 
-short SaneDlg::Execute()
+short SaneDlg::run()
 {
-    if( ! Sane::IsSane() )
+    if (!Sane::IsSane())
     {
-        std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(nullptr,
+        std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(mpParent,
                                                        VclMessageType::Warning, VclButtonsType::Ok,
                                                        SaneResId(STR_COULD_NOT_BE_INIT)));
         xErrorBox->run();
         return RET_CANCEL;
     }
     LoadState();
-    return ModalDialog::Execute();
+    return GenericDialogController::run();
 }
 
 void SaneDlg::InitDevices()
@@ -349,13 +303,13 @@ void SaneDlg::InitDevices()
     if( mrSane.IsOpen() )
         mrSane.Close();
     mrSane.ReloadDevices();
-    mpDeviceBox->Clear();
+    mxDeviceBox->clear();
     for (int i = 0; i < Sane::CountDevices(); ++i)
-        mpDeviceBox->InsertEntry(Sane::GetName(i));
+        mxDeviceBox->append_text(Sane::GetName(i));
     if( Sane::CountDevices() )
     {
         mrSane.Open(0);
-        mpDeviceBox->SelectEntryPos(0);
+        mxDeviceBox->set_active(0);
     }
 }
 
@@ -375,13 +329,13 @@ void SaneDlg::InitFields()
         "preview"
     };
 
-    mpPreview->EnableDrag();
-    mpReslBox->Clear();
+    mxPreview->EnableDrag();
+    mxReslBox->clear();
     Point aTopLeft, aBottomRight;
-    mpPreview->GetPreviewLogicRect(aTopLeft, aBottomRight);
+    mxPreview->GetPreviewLogicRect(aTopLeft, aBottomRight);
     Point aMinTopLeft, aMaxBottomRight;
-    mpPreview->GetMaxLogicRect(aMinTopLeft, aMaxBottomRight);
-    mpScanButton->Show( mbScanEnabled );
+    mxPreview->GetMaxLogicRect(aMinTopLeft, aMaxBottomRight);
+    mxScanButton->set_visible( mbScanEnabled );
 
     if( ! mrSane.IsOpen() )
         return;
@@ -394,9 +348,9 @@ void SaneDlg::InitFields()
 
         if( mrSane.GetOptionValue( nOption, fRes ) )
         {
-            mpReslBox->Enable();
+            mxReslBox->set_sensitive(true);
 
-            mpReslBox->SetValue( static_cast<long>(fRes) );
+            mxReslBox->set_entry_text(OUString::number(static_cast<sal_uInt32>(fRes)));
             std::unique_ptr<double[]> pDouble;
             nValue = mrSane.GetRange( nOption, pDouble );
             if( nValue > -1 )
@@ -404,64 +358,60 @@ void SaneDlg::InitFields()
                 assert(pDouble);
                 if( nValue )
                 {
-                    mpReslBox->SetMin( static_cast<long>(pDouble[0]) );
-                    mpReslBox->SetMax( static_cast<long>(pDouble[ nValue-1 ]) );
                     for( i=0; i<nValue; i++ )
                     {
                         if( i == 0 || i == nValue-1 || ! ( static_cast<int>(pDouble[i]) % 20) )
-                            mpReslBox->InsertValue( static_cast<long>(pDouble[i]) );
+                            mxReslBox->append_text(OUString::number(static_cast<sal_uInt32>(pDouble[i])));
                     }
                 }
                 else
                 {
-                    mpReslBox->SetMin( static_cast<long>(pDouble[0]) );
-                    mpReslBox->SetMax( static_cast<long>(pDouble[1]) );
-                    mpReslBox->InsertValue( static_cast<long>(pDouble[0]) );
+                    mxReslBox->append_text(OUString::number(static_cast<sal_uInt32>(pDouble[0])));
                     // Can only select 75 and 2400 dpi in Scanner dialogue
                     // scanner allows random setting of dpi resolution, a slider might be useful
                     // support that
                     // workaround: offer at least some more standard dpi resolution between
                     // min and max value
                     int bGot300 = 0;
-                    for ( long nRes = static_cast<long>(pDouble[0]) * 2; nRes < static_cast<long>(pDouble[1]); nRes = nRes * 2 )
+                    for (sal_uInt32 nRes = static_cast<sal_uInt32>(pDouble[0]) * 2; nRes < static_cast<sal_uInt32>(pDouble[1]); nRes = nRes * 2)
                     {
                         if ( !bGot300 && nRes > 300 ) {
                             nRes = 300; bGot300 = 1;
                         }
-                        mpReslBox->InsertValue(nRes);
+                        mxReslBox->append_text(OUString::number(nRes));
                     }
-                    mpReslBox->InsertValue( static_cast<long>(pDouble[1]) );
+                    mxReslBox->append_text(OUString::number(static_cast<sal_uInt32>(pDouble[1])));
                 }
             }
             else
-                mpReslBox->Enable( false );
+                mxReslBox->set_sensitive( false );
         }
     }
     else
-        mpReslBox->Enable( false );
+        mxReslBox->set_sensitive( false );
 
     // set scan area
     for( i = 0; i < 4; i++ )
     {
         char const *pOptionName = nullptr;
-        MetricField* pField = nullptr;
+        weld::MetricSpinButton* pField = nullptr;
         switch( i )
         {
             case 0:
                 pOptionName = "tl-x";
-                pField = mpLeftField;
+                pField = mxLeftField.get();
                 break;
             case 1:
                 pOptionName = "tl-y";
-                pField = mpTopField;
+                pField = mxTopField.get();
                 break;
             case 2:
                 pOptionName = "br-x";
-                pField = mpRightField;
+                pField = mxRightField.get();
                 break;
             case 3:
                 pOptionName = "br-y";
-                pField = mpBottomField;
+                pField = mxBottomField.get();
         }
         nOption = pOptionName ? mrSane.GetOptionByName( pOptionName ) : -1;
         if( nOption != -1 )
@@ -470,13 +420,13 @@ void SaneDlg::InitFields()
             {
                 if( mrSane.GetOptionUnit( nOption ) == SANE_UNIT_MM )
                 {
-                    pField->SetUnit( FieldUnit::MM );
-                    pField->SetValue( static_cast<int>(fValue), FieldUnit::MM );
+                    pField->set_unit( FieldUnit::MM );
+                    pField->set_value( static_cast<int>(fValue), FieldUnit::MM );
                 }
                 else // SANE_UNIT_PIXEL
                 {
-                    pField->SetValue( static_cast<int>(fValue), FieldUnit::CUSTOM );
-                    pField->SetCustomUnitText("Pixel");
+                    pField->set_unit( FieldUnit::PIXEL );
+                    pField->set_value( static_cast<int>(fValue), FieldUnit::PIXEL );
                 }
                 switch( i ) {
                     case 0: aTopLeft.setX( static_cast<int>(fValue) );break;
@@ -491,17 +441,17 @@ void SaneDlg::InitFields()
             {
                 if( pDouble )
                 {
-                    pField->SetMin( static_cast<long>(pDouble[0]) );
+                    pField->set_min( static_cast<long>(pDouble[0]), FieldUnit::NONE );
                     if( nValue )
-                        pField->SetMax( static_cast<long>(pDouble[ nValue-1 ]) );
+                        pField->set_max( static_cast<long>(pDouble[ nValue-1 ]), FieldUnit::NONE );
                     else
-                        pField->SetMax( static_cast<long>(pDouble[ 1 ]) );
+                        pField->set_max( static_cast<long>(pDouble[ 1 ]), FieldUnit::NONE );
                 }
                 switch( i ) {
-                    case 0: aMinTopLeft.setX( pField->GetMin() );break;
-                    case 1: aMinTopLeft.setY( pField->GetMin() );break;
-                    case 2: aMaxBottomRight.setX( pField->GetMax() );break;
-                    case 3: aMaxBottomRight.setY( pField->GetMax() );break;
+                    case 0: aMinTopLeft.setX( pField->get_min(FieldUnit::NONE) );break;
+                    case 1: aMinTopLeft.setY( pField->get_min(FieldUnit::NONE) );break;
+                    case 2: aMaxBottomRight.setX( pField->get_max(FieldUnit::NONE) );break;
+                    case 3: aMaxBottomRight.setY( pField->get_max(FieldUnit::NONE) );break;
                 }
             }
             else
@@ -513,62 +463,63 @@ void SaneDlg::InitFields()
                     case 3: aMaxBottomRight.setY( static_cast<int>(fValue) );break;
                 }
             }
-            pField->Enable();
+            pField->set_sensitive(true);
         }
         else
         {
-            mpPreview->DisableDrag();
-            pField->SetMin( 0 );
+            mxPreview->DisableDrag();
+            pField->set_min( 0, FieldUnit::NONE );
             switch( i ) {
                 case 0:
                     aMinTopLeft.setX( 0 );
                     aTopLeft.setX( 0 );
-                    pField->SetMax( PREVIEW_WIDTH );
-                    pField->SetValue( 0 );
+                    pField->set_max( PREVIEW_WIDTH, FieldUnit::NONE );
+                    pField->set_value( 0, FieldUnit::NONE );
                     break;
                 case 1:
                     aMinTopLeft.setY( 0 );
                     aTopLeft.setY( 0 );
-                    pField->SetMax( PREVIEW_HEIGHT );
-                    pField->SetValue( 0 );
+                    pField->set_max( PREVIEW_HEIGHT, FieldUnit::NONE );
+                    pField->set_value( 0, FieldUnit::NONE );
                     break;
                 case 2:
                     aMaxBottomRight.setX( PREVIEW_WIDTH );
                     aBottomRight.setX( PREVIEW_WIDTH );
-                    pField->SetMax( PREVIEW_WIDTH );
-                    pField->SetValue( PREVIEW_WIDTH );
+                    pField->set_max( PREVIEW_WIDTH, FieldUnit::NONE );
+                    pField->set_value( PREVIEW_WIDTH, FieldUnit::NONE );
                     break;
                 case 3:
                     aMaxBottomRight.setY( PREVIEW_HEIGHT );
                     aBottomRight.setY( PREVIEW_HEIGHT );
-                    pField->SetMax( PREVIEW_HEIGHT );
-                    pField->SetValue( PREVIEW_HEIGHT );
+                    pField->set_max( PREVIEW_HEIGHT, FieldUnit::NONE );
+                    pField->set_value( PREVIEW_HEIGHT, FieldUnit::NONE );
                     break;
             }
-            pField->Enable( false );
+            pField->set_sensitive(false);
         }
     }
 
-    mpPreview->SetPreviewMaxRect(aMinTopLeft, aMaxBottomRight);
-    mpPreview->SetPreviewLogicRect(aTopLeft, aBottomRight);
-    mpPreview->Invalidate();
+    mxPreview->SetPreviewMaxRect(aMinTopLeft, aMaxBottomRight);
+    mxPreview->SetPreviewLogicRect(aTopLeft, aBottomRight);
+    mxPreview->Invalidate();
 
     // fill OptionBox
-    mpOptionBox->Clear();
-    SvTreeListEntry* pParentEntry = nullptr;
+    mxOptionBox->clear();
+    std::unique_ptr<weld::TreeIter> xParentEntry(mxOptionBox->make_iterator());
     bool bGroupRejected = false;
     for( i = 1; i < mrSane.CountOptions(); i++ )
     {
         OUString aOption=mrSane.GetOptionName( i );
         bool bInsertAdvanced =
             (mrSane.GetOptionCap( i ) & SANE_CAP_ADVANCED) == 0 ||
-            mpAdvancedBox->IsChecked();
+            mxAdvancedBox->get_active();
         if( mrSane.GetOptionType( i ) == SANE_TYPE_GROUP )
         {
             if( bInsertAdvanced )
             {
                 aOption = mrSane.GetOptionTitle( i );
-                pParentEntry = mpOptionBox->InsertEntry( aOption );
+                mxOptionBox->append(xParentEntry.get());
+                mxOptionBox->set_text(*xParentEntry, aOption, 0);
                 bGroupRejected = false;
             }
             else
@@ -591,39 +542,39 @@ void SaneDlg::InitFields()
             }
             if( ! bIsSpecial )
             {
-                if( pParentEntry )
-                    mpOptionBox->InsertEntry( aOption, pParentEntry );
+                if (xParentEntry)
+                    mxOptionBox->append(xParentEntry.get(), aOption);
                 else
-                    mpOptionBox->InsertEntry( aOption );
+                    mxOptionBox->append_text(aOption);
             }
         }
     }
 }
 
-IMPL_LINK( SaneDlg, ClickBtnHdl, Button*, pButton, void )
+IMPL_LINK( SaneDlg, ClickBtnHdl, weld::Button&, rButton, void )
 {
     if( mrSane.IsOpen() )
     {
-        if( pButton == mpDeviceInfoButton )
+        if( &rButton == mxDeviceInfoButton.get() )
         {
             OUString aString(SaneResId(STR_DEVICE_DESC));
             aString = aString.replaceFirst( "%s", Sane::GetName( mrSane.GetDeviceNumber() ) );
             aString = aString.replaceFirst( "%s", Sane::GetVendor( mrSane.GetDeviceNumber() ) );
             aString = aString.replaceFirst( "%s", Sane::GetModel( mrSane.GetDeviceNumber() ) );
             aString = aString.replaceFirst( "%s", Sane::GetType( mrSane.GetDeviceNumber() ) );
-            std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(GetFrameWeld(),
+            std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(m_xDialog.get(),
                                                           VclMessageType::Info, VclButtonsType::Ok,
                                                           aString));
             xInfoBox->run();
         }
-        else if( pButton == mpPreviewButton )
+        else if( &rButton == mxPreviewButton.get() )
             AcquirePreview();
-        else if( pButton == mpBoolCheckBox )
+        else if( &rButton == mxBoolCheckBox.get() )
         {
             mrSane.SetOptionValue( mnCurrentOption,
-                                   mpBoolCheckBox->IsChecked() );
+                                   mxBoolCheckBox->get_active() );
         }
-        else if( pButton == mpButtonOption )
+        else if( &rButton == mxButtonOption.get() )
         {
 
             SANE_Value_Type nType = mrSane.GetOptionType( mnCurrentOption );
@@ -642,7 +593,7 @@ IMPL_LINK( SaneDlg, ClickBtnHdl, Button*, pButton, void )
                         x[ i ] = static_cast<double>(i);
                     mrSane.GetOptionValue( mnCurrentOption, y.get() );
 
-                    GridDialog aGrid(GetFrameWeld(), x.get(), y.get(), nElements);
+                    GridDialog aGrid(m_xDialog.get(), x.get(), y.get(), nElements);
                     aGrid.set_title( mrSane.GetOptionName( mnCurrentOption ) );
                     aGrid.setBoundings( 0, mfMin, nElements, mfMax );
                     if (aGrid.run() && aGrid.getNewYValues())
@@ -655,68 +606,67 @@ IMPL_LINK( SaneDlg, ClickBtnHdl, Button*, pButton, void )
                     break;
             }
         }
-        else if( pButton == mpAdvancedBox )
+        else if( &rButton == mxAdvancedBox.get() )
         {
             ReloadSaneOptionsHdl( mrSane );
         }
     }
-    if( pButton == mpOKButton || pButton == mpScanButton )
+    if (&rButton == mxScanButton.get())
     {
-        double fRes = static_cast<double>(mpReslBox->GetValue());
+        double fRes = static_cast<double>(mxReslBox->get_active_text().toUInt32());
         SetAdjustedNumericalValue( "resolution", fRes );
         UpdateScanArea(true);
         SaveState();
-        EndDialog( mrSane.IsOpen() ? 1 : 0 );
-        doScan = (pButton == mpScanButton);
+        m_xDialog->response(mrSane.IsOpen() ? RET_OK : RET_CANCEL);
+        doScan = mrSane.IsOpen();
     }
-    else if( pButton == mpCancelButton )
+    else if( &rButton == mxCancelButton.get() )
     {
         mrSane.Close();
-        EndDialog();
+        m_xDialog->response(RET_CANCEL);
     }
 }
 
-IMPL_LINK( SaneDlg, SelectHdl, ListBox&, rListBox, void )
+IMPL_LINK( SaneDlg, SelectHdl, weld::ComboBox&, rListBox, void )
 {
-    if( &rListBox == mpDeviceBox && Sane::IsSane() && Sane::CountDevices() )
+    if( &rListBox == mxDeviceBox.get() && Sane::IsSane() && Sane::CountDevices() )
     {
-        int nNewNumber = mpDeviceBox->GetSelectedEntryPos();
+        int nNewNumber = mxDeviceBox->get_active();
         int nOldNumber = mrSane.GetDeviceNumber();
         if (nNewNumber != nOldNumber)
         {
             mrSane.Close();
             mrSane.Open(nNewNumber);
-            mpPreview->ResetForNewScanner();
+            mxPreview->ResetForNewScanner();
             InitFields();
         }
     }
     if( mrSane.IsOpen() )
     {
-        if( &rListBox == mpQuantumRangeBox )
+        if( &rListBox == mxQuantumRangeBox.get() )
         {
-            double fValue = mpQuantumRangeBox->GetSelectedEntry().toDouble();
-            mrSane.SetOptionValue( mnCurrentOption, fValue, mnCurrentElement );
+            double fValue = mxQuantumRangeBox->get_active_text().toDouble();
+            mrSane.SetOptionValue(mnCurrentOption, fValue, mnCurrentElement);
         }
-        else if( &rListBox == mpStringRangeBox )
+        else if( &rListBox == mxStringRangeBox.get() )
         {
-            mrSane.SetOptionValue( mnCurrentOption, mpStringRangeBox->GetSelectedEntry() );
+            mrSane.SetOptionValue(mnCurrentOption, mxStringRangeBox->get_active_text());
         }
     }
 }
 
-IMPL_LINK( SaneDlg, OptionsBoxSelectHdl, SvTreeListBox*, pBox, void )
+IMPL_LINK_NOARG(SaneDlg, OptionsBoxSelectHdl, weld::TreeView&, void)
 {
-    if( pBox == mpOptionBox && Sane::IsSane() )
+    if (Sane::IsSane())
     {
-        OUString aOption =
-            mpOptionBox->GetEntryText( mpOptionBox->FirstSelected() );
+        OUString aOption = mxOptionBox->get_selected_text();
         int nOption = mrSane.GetOptionByName(OUStringToOString(aOption,
             osl_getThreadTextEncoding()).getStr());
         if( nOption != -1 && nOption != mnCurrentOption )
         {
             DisableOption();
             mnCurrentOption = nOption;
-            mpOptionTitle->SetText( mrSane.GetOptionTitle( mnCurrentOption ) );
+            mxOptionTitle->set_label(mrSane.GetOptionTitle(mnCurrentOption));
             SANE_Value_Type nType = mrSane.GetOptionType( mnCurrentOption );
             SANE_Constraint_Type nConstraint;
             switch( nType )
@@ -747,12 +697,10 @@ IMPL_LINK( SaneDlg, OptionsBoxSelectHdl, SvTreeListBox*, pBox, void )
                     {
                         if( nElements <= 10 )
                         {
-                            mpVectorBox->SetValue( 1 );
-                            mpVectorBox->SetMin( 1 );
-                            mpVectorBox->SetMax(
-                                mrSane.GetOptionElements( mnCurrentOption ) );
-                            mpVectorBox->Show();
-                            mpVectorTxt->Show();
+                            mxVectorBox->set_range(1, mrSane.GetOptionElements(mnCurrentOption));
+                            mxVectorBox->set_value(1);
+                            mxVectorBox->show();
+                            mxVectorTxt->show();
                         }
                         else
                         {
@@ -772,17 +720,52 @@ IMPL_LINK( SaneDlg, OptionsBoxSelectHdl, SvTreeListBox*, pBox, void )
     }
 }
 
-IMPL_LINK( SaneDlg, ModifyHdl, Edit&, rEdit, void )
+IMPL_LINK(SaneDlg, ModifyHdl, weld::Entry&, rEdit, void)
 {
     if( mrSane.IsOpen() )
     {
-        if( &rEdit == mpStringEdit )
+        if (&rEdit == mxStringEdit.get())
         {
-            mrSane.SetOptionValue( mnCurrentOption, mpStringEdit->GetText() );
+            mrSane.SetOptionValue( mnCurrentOption, mxStringEdit->get_text() );
         }
-        else if( &rEdit == mpReslBox )
+        else if (&rEdit == mxNumericEdit.get())
         {
-            double fRes = static_cast<double>(mpReslBox->GetValue());
+            double fValue = mxNumericEdit->get_text().toDouble();
+            if( mfMin != mfMax && ( fValue < mfMin || fValue > mfMax ) )
+            {
+                char pBuf[256];
+                if( fValue < mfMin )
+                    fValue = mfMin;
+                else if( fValue > mfMax )
+                    fValue = mfMax;
+                sprintf( pBuf, "%g", fValue );
+                mxNumericEdit->set_text( OUString( pBuf, strlen(pBuf), osl_getThreadTextEncoding() ) );
+            }
+            mrSane.SetOptionValue( mnCurrentOption, fValue, mnCurrentElement );
+        }
+        else if (&rEdit == mxVectorBox.get())
+        {
+            mnCurrentElement = mxVectorBox->get_value() - 1;
+            double fValue;
+            if( mrSane.GetOptionValue( mnCurrentOption, fValue, mnCurrentElement ))
+            {
+                char pBuf[256];
+                sprintf( pBuf, "%g", fValue );
+                OUString aValue( pBuf, strlen(pBuf), osl_getThreadTextEncoding() );
+                mxNumericEdit->set_text( aValue );
+                mxQuantumRangeBox->set_active_text( aValue );
+            }
+        }
+    }
+}
+
+IMPL_LINK(SaneDlg, ValueModifyHdl, weld::ComboBox&, rEdit, void)
+{
+    if( mrSane.IsOpen() )
+    {
+        if (&rEdit == mxReslBox.get())
+        {
+            double fRes = static_cast<double>(mxReslBox->get_active_text().toUInt32());
             int nOption = mrSane.GetOptionByName( "resolution" );
             if( nOption != -1 )
             {
@@ -806,56 +789,35 @@ IMPL_LINK( SaneDlg, ModifyHdl, Edit&, rEdit, void )
                     if( fRes > pDouble[ 1 ] )
                         fRes = pDouble[ 1 ];
                 }
-                mpReslBox->SetValue( static_cast<sal_uLong>(fRes) );
+                mxReslBox->set_entry_text(OUString::number(static_cast<sal_uInt32>(fRes)));
             }
         }
-        else if( &rEdit == mpNumericEdit )
+    }
+}
+
+IMPL_LINK(SaneDlg, MetricValueModifyHdl, weld::MetricSpinButton&, rEdit, void)
+{
+    if( mrSane.IsOpen() )
+    {
+        if (&rEdit == mxTopField.get())
         {
-            double fValue = mpNumericEdit->GetText().toDouble();
-            if( mfMin != mfMax && ( fValue < mfMin || fValue > mfMax ) )
-            {
-                char pBuf[256];
-                if( fValue < mfMin )
-                    fValue = mfMin;
-                else if( fValue > mfMax )
-                    fValue = mfMax;
-                sprintf( pBuf, "%g", fValue );
-                mpNumericEdit->SetText( OUString( pBuf, strlen(pBuf), osl_getThreadTextEncoding() ) );
-            }
-            mrSane.SetOptionValue( mnCurrentOption, fValue, mnCurrentElement );
+            mxPreview->ChangePreviewLogicTopLeftY(mxTopField->get_value(FieldUnit::NONE));
+            mxPreview->Invalidate();
         }
-        else if( &rEdit == mpVectorBox )
+        else if (&rEdit == mxLeftField.get())
         {
-            mnCurrentElement = mpVectorBox->GetValue()-1;
-            double fValue;
-            if( mrSane.GetOptionValue( mnCurrentOption, fValue, mnCurrentElement ))
-            {
-                char pBuf[256];
-                sprintf( pBuf, "%g", fValue );
-                OUString aValue( pBuf, strlen(pBuf), osl_getThreadTextEncoding() );
-                mpNumericEdit->SetText( aValue );
-                mpQuantumRangeBox->SelectEntry( aValue );
-            }
+            mxPreview->ChangePreviewLogicTopLeftX(mxLeftField->get_value(FieldUnit::NONE));
+            mxPreview->Invalidate();
         }
-        else if( &rEdit == mpTopField )
+        else if (&rEdit == mxBottomField.get())
         {
-            mpPreview->ChangePreviewLogicTopLeftY(mpTopField->GetValue());
-            mpPreview->Invalidate();
+            mxPreview->ChangePreviewLogicBottomRightY(mxBottomField->get_value(FieldUnit::NONE));
+            mxPreview->Invalidate();
         }
-        else if( &rEdit == mpLeftField )
+        else if (&rEdit == mxRightField.get())
         {
-            mpPreview->ChangePreviewLogicTopLeftX(mpLeftField->GetValue());
-            mpPreview->Invalidate();
-        }
-        else if( &rEdit == mpBottomField )
-        {
-            mpPreview->ChangePreviewLogicBottomRightY(mpBottomField->GetValue());
-            mpPreview->Invalidate();
-        }
-        else if( &rEdit == mpRightField )
-        {
-            mpPreview->ChangePreviewLogicBottomRightX(mpRightField->GetValue());
-            mpPreview->Invalidate();
+            mxPreview->ChangePreviewLogicBottomRightX(mxRightField->get_value(FieldUnit::NONE));
+            mxPreview->Invalidate();
         }
     }
 }
@@ -866,7 +828,7 @@ IMPL_LINK_NOARG( SaneDlg, ReloadSaneOptionsHdl, Sane&, void )
     mnCurrentElement = 0;
     DisableOption();
     InitFields();
-    mpPreview->Invalidate();
+    mxPreview->Invalidate();
 }
 
 void SaneDlg::AcquirePreview()
@@ -876,14 +838,14 @@ void SaneDlg::AcquirePreview()
 
     UpdateScanArea( true );
     // set small resolution for preview
-    double fResl = static_cast<double>(mpReslBox->GetValue());
+    double fResl = static_cast<double>(mxReslBox->get_active_text().toUInt32());
     SetAdjustedNumericalValue( "resolution", 30.0 );
 
     int nOption = mrSane.GetOptionByName( "preview" );
     if( nOption == -1 )
     {
         OUString aString(SaneResId(STR_SLOW_PREVIEW));
-        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(),
+        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(m_xDialog.get(),
                                                   VclMessageType::Warning, VclButtonsType::OkCancel,
                                                   aString));
         if (xBox->run() == RET_CANCEL)
@@ -895,7 +857,7 @@ void SaneDlg::AcquirePreview()
     rtl::Reference<BitmapTransporter> xTransporter(new BitmapTransporter);
     if (!mrSane.Start(*xTransporter))
     {
-        std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(GetFrameWeld(),
+        std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(m_xDialog.get(),
                                                        VclMessageType::Warning, VclButtonsType::Ok,
                                                        SaneResId(STR_ERROR_SCAN)));
         xErrorBox->run();
@@ -907,14 +869,14 @@ void SaneDlg::AcquirePreview()
         SAL_INFO("extensions.scanner", "Previewbitmapstream contains " << xTransporter->getStream().Tell() << "bytes");
 #endif
         xTransporter->getStream().Seek( STREAM_SEEK_TO_BEGIN );
-        mpPreview->SetBitmap(xTransporter->getStream());
+        mxPreview->SetBitmap(xTransporter->getStream());
     }
 
     SetAdjustedNumericalValue( "resolution", fResl );
-    mpReslBox->SetValue( static_cast<sal_uLong>(fResl) );
+    mxReslBox->set_entry_text(OUString::number(static_cast<sal_uInt32>(fResl)));
 
-    mpPreview->UpdatePreviewBounds();
-    mpPreview->Invalidate();
+    mxPreview->UpdatePreviewBounds();
+    mxPreview->Invalidate();
 }
 
 void ScanPreview::UpdatePreviewBounds()
@@ -946,9 +908,8 @@ void ScanPreview::UpdatePreviewBounds()
     }
 }
 
-void ScanPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
+void ScanPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
-    Window::Paint(rRenderContext, rRect);
     rRenderContext.SetMapMode(MapMode(MapUnit::MapAppFont));
     rRenderContext.SetFillColor(COL_WHITE);
     rRenderContext.SetLineColor(COL_WHITE);
@@ -964,15 +925,15 @@ void ScanPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectang
 
 void SaneDlg::DisableOption()
 {
-    mpBoolCheckBox->Show( false );
-    mpStringEdit->Show( false );
-    mpNumericEdit->Show( false );
-    mpQuantumRangeBox->Show( false );
-    mpStringRangeBox->Show( false );
-    mpButtonOption->Show( false );
-    mpVectorBox->Show( false );
-    mpVectorTxt->Show( false );
-    mpOptionDescTxt->Show( false );
+    mxBoolCheckBox->hide();
+    mxStringEdit->hide();
+    mxNumericEdit->hide();
+    mxQuantumRangeBox->hide();
+    mxStringRangeBox->hide();
+    mxButtonOption->hide();
+    mxVectorBox->hide();
+    mxVectorTxt->hide();
+    mxOptionDescTxt->hide();
 }
 
 void SaneDlg::EstablishBoolOption()
@@ -982,9 +943,9 @@ void SaneDlg::EstablishBoolOption()
     bSuccess = mrSane.GetOptionValue( mnCurrentOption, bValue );
     if( bSuccess )
     {
-        mpBoolCheckBox->SetText( mrSane.GetOptionName( mnCurrentOption ) );
-        mpBoolCheckBox->Check( bValue );
-        mpBoolCheckBox->Show();
+        mxBoolCheckBox->set_label( mrSane.GetOptionName( mnCurrentOption ) );
+        mxBoolCheckBox->set_active( bValue );
+        mxBoolCheckBox->show();
     }
 }
 
@@ -996,25 +957,25 @@ void SaneDlg::EstablishStringOption()
     bSuccess = mrSane.GetOptionValue( mnCurrentOption, aValue );
     if( bSuccess )
     {
-        mpOptionDescTxt->SetText( mrSane.GetOptionName( mnCurrentOption ) );
-        mpOptionDescTxt->Show();
-        mpStringEdit->SetText(OStringToOUString(aValue, osl_getThreadTextEncoding()));
-        mpStringEdit->Show();
+        mxOptionDescTxt->set_label( mrSane.GetOptionName( mnCurrentOption ) );
+        mxOptionDescTxt->show();
+        mxStringEdit->set_text(OStringToOUString(aValue, osl_getThreadTextEncoding()));
+        mxStringEdit->show();
     }
 }
 
 void SaneDlg::EstablishStringRange()
 {
     const char** ppStrings = mrSane.GetStringConstraint( mnCurrentOption );
-    mpStringRangeBox->Clear();
+    mxStringRangeBox->clear();
     for( int i = 0; ppStrings[i] != nullptr; i++ )
-        mpStringRangeBox->InsertEntry( OUString( ppStrings[i], strlen(ppStrings[i]), osl_getThreadTextEncoding() ) );
+        mxStringRangeBox->append_text( OUString( ppStrings[i], strlen(ppStrings[i]), osl_getThreadTextEncoding() ) );
     OString aValue;
     mrSane.GetOptionValue( mnCurrentOption, aValue );
-    mpStringRangeBox->SelectEntry(OStringToOUString(aValue, osl_getThreadTextEncoding()));
-    mpStringRangeBox->Show();
-    mpOptionDescTxt->SetText( mrSane.GetOptionName( mnCurrentOption ) );
-    mpOptionDescTxt->Show();
+    mxStringRangeBox->set_active_text(OStringToOUString(aValue, osl_getThreadTextEncoding()));
+    mxStringRangeBox->show();
+    mxOptionDescTxt->set_label( mrSane.GetOptionName( mnCurrentOption ) );
+    mxOptionDescTxt->show();
 }
 
 void SaneDlg::EstablishQuantumRange()
@@ -1031,26 +992,26 @@ void SaneDlg::EstablishQuantumRange()
     else if( nValues > 0 )
     {
         char pBuf[ 256 ];
-        mpQuantumRangeBox->Clear();
+        mxQuantumRangeBox->clear();
         mfMin = mpRange[ 0 ];
         mfMax = mpRange[ nValues-1 ];
         for( int i = 0; i < nValues; i++ )
         {
             sprintf( pBuf, "%g", mpRange[ i ] );
-            mpQuantumRangeBox->InsertEntry( OUString( pBuf, strlen(pBuf), osl_getThreadTextEncoding() ) );
+            mxQuantumRangeBox->append_text( OUString( pBuf, strlen(pBuf), osl_getThreadTextEncoding() ) );
         }
         double fValue;
         if( mrSane.GetOptionValue( mnCurrentOption, fValue, mnCurrentElement ) )
         {
             sprintf( pBuf, "%g", fValue );
-            mpQuantumRangeBox->SelectEntry( OUString( pBuf, strlen(pBuf), osl_getThreadTextEncoding() ) );
+            mxQuantumRangeBox->set_active_text( OUString( pBuf, strlen(pBuf), osl_getThreadTextEncoding() ) );
         }
-        mpQuantumRangeBox->Show();
+        mxQuantumRangeBox->show();
         OUString aText( mrSane.GetOptionName( mnCurrentOption ) );
         aText += " ";
         aText += mrSane.GetOptionUnitName( mnCurrentOption );
-        mpOptionDescTxt->SetText( aText );
-        mpOptionDescTxt->Show();
+        mxOptionDescTxt->set_label(aText);
+        mxOptionDescTxt->show();
     }
 }
 
@@ -1072,21 +1033,21 @@ void SaneDlg::EstablishNumericOption()
         sprintf( pBuf, " < %g ; %g >", mfMin, mfMax );
         aText += OUString( pBuf, strlen(pBuf), osl_getThreadTextEncoding() );
     }
-    mpOptionDescTxt->SetText( aText );
-    mpOptionDescTxt->Show();
+    mxOptionDescTxt->set_label( aText );
+    mxOptionDescTxt->show();
     sprintf( pBuf, "%g", fValue );
-    mpNumericEdit->SetText( OUString( pBuf, strlen(pBuf), osl_getThreadTextEncoding() ) );
-    mpNumericEdit->Show();
+    mxNumericEdit->set_text( OUString( pBuf, strlen(pBuf), osl_getThreadTextEncoding() ) );
+    mxNumericEdit->show();
 }
 
 void SaneDlg::EstablishButtonOption()
 {
-    mpOptionDescTxt->SetText( mrSane.GetOptionName( mnCurrentOption ) );
-    mpOptionDescTxt->Show();
-    mpButtonOption->Show();
+    mxOptionDescTxt->set_label(mrSane.GetOptionName(mnCurrentOption));
+    mxOptionDescTxt->show();
+    mxButtonOption->show();
 }
 
-void ScanPreview::MouseMove(const MouseEvent& rMEvt)
+bool ScanPreview::MouseMove(const MouseEvent& rMEvt)
 {
     if( mbIsDragging )
     {
@@ -1128,15 +1089,15 @@ void ScanPreview::MouseMove(const MouseEvent& rMEvt)
         Invalidate();
         mpParentDialog->UpdateScanArea(false);
     }
-    Window::MouseMove( rMEvt );
+    return false;
 }
 
-void ScanPreview::MouseButtonDown( const MouseEvent& rMEvt )
+bool ScanPreview::MouseButtonDown( const MouseEvent& rMEvt )
 {
-    Point aMousePixel = rMEvt.GetPosPixel();
-
-    if( ! mbIsDragging  && mbDragEnable )
+    if (!mbIsDragging && mbDragEnable)
     {
+        Point aMousePixel = rMEvt.GetPosPixel();
+
         int nMiddleX = ( maBottomRight.X() - maTopLeft.X() ) / 2 - RECT_SIZE_PIX/2 + maTopLeft.X();
         int nMiddleY = ( maBottomRight.Y() - maTopLeft.Y() ) / 2 - RECT_SIZE_PIX/2 + maTopLeft.Y();
         if( aMousePixel.Y() >= maTopLeft.Y() &&
@@ -1146,21 +1107,18 @@ void ScanPreview::MouseButtonDown( const MouseEvent& rMEvt )
                 aMousePixel.X() < maTopLeft.X() + RECT_SIZE_PIX )
             {
                 meDragDirection = TopLeft;
-                aMousePixel = maTopLeft;
                 mbIsDragging = true;
             }
             else if( aMousePixel.X() >= nMiddleX &&
                      aMousePixel.X() < nMiddleX + RECT_SIZE_PIX )
             {
                 meDragDirection = Top;
-                aMousePixel.setY( maTopLeft.Y() );
                 mbIsDragging = true;
             }
             else if( aMousePixel.X() > maBottomRight.X() - RECT_SIZE_PIX &&
                      aMousePixel.X() <= maBottomRight.X() )
             {
                 meDragDirection = TopRight;
-                aMousePixel = Point( maBottomRight.X(), maTopLeft.Y() );
                 mbIsDragging = true;
             }
         }
@@ -1171,14 +1129,12 @@ void ScanPreview::MouseButtonDown( const MouseEvent& rMEvt )
                 aMousePixel.X() < maTopLeft.X() + RECT_SIZE_PIX )
             {
                 meDragDirection = Left;
-                aMousePixel.setX( maTopLeft.X() );
                 mbIsDragging = true;
             }
             else if( aMousePixel.X() > maBottomRight.X() - RECT_SIZE_PIX &&
                      aMousePixel.X() <= maBottomRight.X() )
             {
                 meDragDirection = Right;
-                aMousePixel.setX( maBottomRight.X() );
                 mbIsDragging = true;
             }
         }
@@ -1189,48 +1145,40 @@ void ScanPreview::MouseButtonDown( const MouseEvent& rMEvt )
                 aMousePixel.X() < maTopLeft.X() + RECT_SIZE_PIX )
             {
                 meDragDirection = BottomLeft;
-                aMousePixel = Point( maTopLeft.X(), maBottomRight.Y() );
                 mbIsDragging = true;
             }
             else if( aMousePixel.X() >= nMiddleX &&
                      aMousePixel.X() < nMiddleX + RECT_SIZE_PIX )
             {
                 meDragDirection = Bottom;
-                aMousePixel.setY( maBottomRight.Y() );
                 mbIsDragging = true;
             }
             else if( aMousePixel.X() > maBottomRight.X() - RECT_SIZE_PIX &&
                      aMousePixel.X() <= maBottomRight.X() )
             {
                 meDragDirection = BottomRight;
-                aMousePixel = maBottomRight;
                 mbIsDragging = true;
             }
         }
     }
+
     if( mbIsDragging )
-    {
-        SetPointerPosPixel( aMousePixel );
         Invalidate();
-    }
-    Window::MouseButtonDown( rMEvt );
+
+    return false;
 }
 
-void ScanPreview::MouseButtonUp( const MouseEvent& rMEvt )
+bool ScanPreview::MouseButtonUp(const MouseEvent&)
 {
     if( mbIsDragging )
-    {
         mpParentDialog->UpdateScanArea(true);
-    }
     mbIsDragging = false;
 
-    Window::MouseButtonUp( rMEvt );
+    return false;
 }
 
 void ScanPreview::DrawDrag(vcl::RenderContext& rRenderContext)
 {
-    static Point aLastUL, aLastBR;
-
     if (!mbDragEnable)
         return;
 
@@ -1239,10 +1187,10 @@ void ScanPreview::DrawDrag(vcl::RenderContext& rRenderContext)
     rRenderContext.SetMapMode(MapMode(MapUnit::MapPixel));
 
     if (mbDragDrawn)
-        DrawRectangles(rRenderContext, aLastUL, aLastBR);
+        DrawRectangles(rRenderContext, maLastUL, maLastBR);
 
-    aLastUL = maTopLeft;
-    aLastBR = maBottomRight;
+    maLastUL = maTopLeft;
+    maLastBR = maBottomRight;
     DrawRectangles(rRenderContext, maTopLeft, maBottomRight);
 
     mbDragDrawn = true;
@@ -1260,12 +1208,12 @@ Point ScanPreview::GetPixelPos( const Point& rIn) const
           / ( maMaxBottomRight.Y() - maMinTopLeft.Y() ) )
         );
 
-    return LogicToPixel(aConvert, MapMode(MapUnit::MapAppFont));
+    return GetDrawingArea()->get_ref_device().LogicToPixel(aConvert, MapMode(MapUnit::MapAppFont));
 }
 
 Point ScanPreview::GetLogicPos(const Point& rIn) const
 {
-    Point aConvert = PixelToLogic(rIn, MapMode(MapUnit::MapAppFont));
+    Point aConvert = GetDrawingArea()->get_ref_device().PixelToLogic(rIn, MapMode(MapUnit::MapAppFont));
     if( aConvert.X() < 0 )
         aConvert.setX( 0 );
     if( aConvert.X() >= PREVIEW_WIDTH )
@@ -1284,16 +1232,16 @@ Point ScanPreview::GetLogicPos(const Point& rIn) const
 
 void SaneDlg::UpdateScanArea(bool bSend)
 {
-    if (!mpPreview->IsDragEnabled())
+    if (!mxPreview->IsDragEnabled())
         return;
 
     Point aUL, aBR;
-    mpPreview->GetPreviewLogicRect(aUL, aBR);
+    mxPreview->GetPreviewLogicRect(aUL, aBR);
 
-    mpLeftField->SetValue( aUL.X() );
-    mpTopField->SetValue( aUL.Y() );
-    mpRightField->SetValue( aBR.X() );
-    mpBottomField->SetValue( aBR.Y() );
+    mxLeftField->set_value(aUL.X(), FieldUnit::NONE);
+    mxTopField->set_value(aUL.Y(), FieldUnit::NONE);
+    mxRightField->set_value(aBR.X(), FieldUnit::NONE);
+    mxBottomField->set_value(aBR.Y(), FieldUnit::NONE);
 
     if (!bSend)
         return;
@@ -1396,7 +1344,7 @@ void SaneDlg::SaveState()
     aConfig.DeleteGroup( "SANE" );
     aConfig.SetGroup( "SANE" );
     aConfig.WriteKey( "SO_LastSANEDevice",
-        OUStringToOString(mpDeviceBox->GetSelectedEntry(), RTL_TEXTENCODING_UTF8) );
+        OUStringToOString(mxDeviceBox->get_active_text(), RTL_TEXTENCODING_UTF8) );
 
     static char const* pSaveOptions[] = {
         "resolution",

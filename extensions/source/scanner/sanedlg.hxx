@@ -19,58 +19,21 @@
 #ifndef INCLUDED_EXTENSIONS_SOURCE_SCANNER_SANEDLG_HXX
 #define INCLUDED_EXTENSIONS_SOURCE_SCANNER_SANEDLG_HXX
 
-#include <vcl/dialog.hxx>
-#include <vcl/lstbox.hxx>
-#include <vcl/button.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/field.hxx>
-#include <vcl/edit.hxx>
-#include <vcl/treelistbox.hxx>
+#include <vcl/customweld.hxx>
+#include <vcl/weld.hxx>
 
 #include "sane.hxx"
 
 class ScanPreview;
 
-class SaneDlg : public ModalDialog
+class SaneDlg : public weld::GenericDialogController
 {
 private:
+    weld::Window*          mpParent;
     Sane&                  mrSane;
     bool                   mbScanEnabled;
 
     Link<Sane&,void>       maOldLink;
-
-    VclPtr<OKButton>       mpOKButton;
-    VclPtr<CancelButton>   mpCancelButton;
-    VclPtr<PushButton>     mpDeviceInfoButton;
-    VclPtr<PushButton>     mpPreviewButton;
-    VclPtr<PushButton>     mpScanButton;
-    VclPtr<PushButton>     mpButtonOption;
-
-    VclPtr<FixedText>      mpOptionTitle;
-    VclPtr<FixedText>      mpOptionDescTxt;
-    VclPtr<FixedText>      mpVectorTxt;
-
-    VclPtr<MetricField>    mpLeftField;
-    VclPtr<MetricField>    mpTopField;
-    VclPtr<MetricField>    mpRightField;
-    VclPtr<MetricField>    mpBottomField;
-
-    VclPtr<ListBox>        mpDeviceBox;
-    VclPtr<NumericBox>     mpReslBox;
-    VclPtr<CheckBox>       mpAdvancedBox;
-
-    VclPtr<NumericField>   mpVectorBox;
-    VclPtr<ListBox>        mpQuantumRangeBox;
-    VclPtr<ListBox>        mpStringRangeBox;
-
-    VclPtr<CheckBox>       mpBoolCheckBox;
-
-    VclPtr<Edit>           mpStringEdit;
-    VclPtr<Edit>           mpNumericEdit;
-
-    VclPtr<SvTreeListBox>  mpOptionBox;
-
-    VclPtr<ScanPreview>    mpPreview;
 
     int             mnCurrentOption;
     int             mnCurrentElement;
@@ -79,11 +42,46 @@ private:
 
     bool            doScan;
 
-    DECL_LINK( ClickBtnHdl, Button*, void );
-    DECL_LINK( SelectHdl, ListBox&, void );
-    DECL_LINK( ModifyHdl, Edit&, void );
+    std::unique_ptr<weld::Button> mxCancelButton;
+    std::unique_ptr<weld::Button> mxDeviceInfoButton;
+    std::unique_ptr<weld::Button> mxPreviewButton;
+    std::unique_ptr<weld::Button> mxScanButton;
+    std::unique_ptr<weld::Button> mxButtonOption;
+
+    std::unique_ptr<weld::Label> mxOptionTitle;
+    std::unique_ptr<weld::Label> mxOptionDescTxt;
+    std::unique_ptr<weld::Label> mxVectorTxt;
+
+    std::unique_ptr<weld::MetricSpinButton> mxLeftField;
+    std::unique_ptr<weld::MetricSpinButton> mxTopField;
+    std::unique_ptr<weld::MetricSpinButton> mxRightField;
+    std::unique_ptr<weld::MetricSpinButton> mxBottomField;
+
+    std::unique_ptr<weld::ComboBox> mxDeviceBox;
+    std::unique_ptr<weld::ComboBox> mxReslBox;
+    std::unique_ptr<weld::CheckButton> mxAdvancedBox;
+
+    std::unique_ptr<weld::SpinButton> mxVectorBox;
+    std::unique_ptr<weld::ComboBox> mxQuantumRangeBox;
+    std::unique_ptr<weld::ComboBox> mxStringRangeBox;
+
+    std::unique_ptr<weld::CheckButton> mxBoolCheckBox;
+
+    std::unique_ptr<weld::Entry> mxStringEdit;
+    std::unique_ptr<weld::Entry> mxNumericEdit;
+
+    std::unique_ptr<weld::TreeView>  mxOptionBox;
+
+    std::unique_ptr<ScanPreview> mxPreview;
+    std::unique_ptr<weld::CustomWeld> mxPreviewWnd;
+
+    DECL_LINK( ClickBtnHdl, weld::Button&, void );
+    DECL_LINK( SelectHdl, weld::ComboBox&, void );
+    DECL_LINK( ModifyHdl, weld::Entry&, void );
+    DECL_LINK( MetricValueModifyHdl, weld::MetricSpinButton&, void );
+    DECL_LINK( ValueModifyHdl, weld::ComboBox&, void );
     DECL_LINK( ReloadSaneOptionsHdl, Sane&, void );
-    DECL_LINK( OptionsBoxSelectHdl, SvTreeListBox*, void );
+    DECL_LINK( OptionsBoxSelectHdl, weld::TreeView&, void );
 
     void SaveState();
     bool LoadState();
@@ -102,11 +100,10 @@ private:
     // helper
     bool SetAdjustedNumericalValue( const char* pOption, double fValue, int nElement = 0 );
 public:
-    SaneDlg( vcl::Window*, Sane&, bool );
+    SaneDlg(weld::Window*, Sane&, bool);
     virtual ~SaneDlg() override;
-    virtual void dispose() override;
 
-    virtual short Execute() override;
+    virtual short run() override;
     void UpdateScanArea( bool );
     bool getDoScan() { return doScan;}
 };

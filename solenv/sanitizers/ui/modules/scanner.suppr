@@ -1,4 +1,4 @@
-extensions/uiconfig/scanner/ui/sanedialog.ui://GtkLabel[@id='optionTitleLabel:border'] orphan-label
+extensions/uiconfig/scanner/ui/sanedialog.ui://GtkLabel[@id='optionTitleLabel'] orphan-label
 extensions/uiconfig/scanner/ui/sanedialog.ui://GtkLabel[@id='optionsDescLabel'] orphan-label
 extensions/uiconfig/scanner/ui/sanedialog.ui://GtkComboBox[@id='quantumRangeCombobox'] no-labelled-by
 extensions/uiconfig/scanner/ui/sanedialog.ui://GtkComboBox[@id='stringRangeCombobox'] no-labelled-by
