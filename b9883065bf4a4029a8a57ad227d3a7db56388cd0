@@ -22,6 +22,30 @@
       "revId": "b9883065bf4a4029a8a57ad227d3a7db56388cd0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_6667944f",
+        "filename": "cui/source/inc/QrCodeGenDialog.hxx",
+        "patchSetId": 26
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1002063
+      },
+      "writtenOn": "2019-07-24T05:33:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bf659307_a61e0cb8",
+      "range": {
+        "startLine": 33,
+        "startChar": 4,
+        "endLine": 33,
+        "endChar": 29
+      },
+      "revId": "b9883065bf4a4029a8a57ad227d3a7db56388cd0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
