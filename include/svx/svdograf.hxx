@@ -293,7 +293,7 @@ public:
         mpQrCode = std::make_unique<css::drawing::QRCode>(rQrCode);
     };
 
-    css::drawing::QRCode* getQrCode()
+    css::drawing::QRCode* getQrCode() const
     {
         return mpQrCode.get();
     };
