@@ -717,9 +717,11 @@ GalleryTheme* Gallery::ImplGetCachedTheme(const GalleryThemeEntry* pThemeEntry)
                 }
             }
 
-            pTheme = pNewTheme.get();
-            if( pTheme )
+            if (pNewTheme)
+            {
                 aThemeCache.push_back( new GalleryThemeCacheEntry( pThemeEntry, std::move(pNewTheme) ));
+                pTheme = aThemeCache.back()->GetTheme();
+            }
         }
     }
 
