@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_8c4a0953",
+        "filename": "basctl/source/basicide/moduldl2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 672,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-07-24T13:59:07Z",
+      "side": 1,
+      "message": "passing a reference to a stack-local seems dodgy?",
+      "revId": "63675a1497dd9dc2dec1449cee70d95a6ab657c8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
