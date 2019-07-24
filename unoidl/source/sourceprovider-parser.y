@@ -239,13 +239,19 @@ bool coerce(
             ok = false;
             break;
         case unoidl::detail::SourceProviderExpr::TYPE_INT:
-            rhs->fval = rhs->ival;
+        {
+            auto tmp = rhs->ival;
+            rhs->fval = tmp;
             ok = true;
             break;
+        }
         case unoidl::detail::SourceProviderExpr::TYPE_UINT:
-            rhs->fval = rhs->uval;
+        {
+            auto tmp = rhs->uval;
+            rhs->fval = tmp;
             ok = true;
             break;
+        }
         case unoidl::detail::SourceProviderExpr::TYPE_FLOAT:
             ok = true;
             break;
