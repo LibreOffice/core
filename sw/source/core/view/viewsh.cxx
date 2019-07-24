@@ -2023,7 +2023,7 @@ void SwViewShell::InvalidateLayout( bool bSizeChanged )
     OSL_ENSURE( GetLayout(), "Layout not ready" );
 
     // When the Layout doesn't have a height yet, nothing is formatted.
-    // That leads to problems with Invalidate, e.g. when setting up an new View
+    // That leads to problems with Invalidate, e.g. when setting up a new View
     // the content is inserted and formatted (regardless of empty VisArea).
     // Therefore the pages must be roused for formatting.
     if( !GetLayout()->getFrameArea().Height() )

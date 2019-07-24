@@ -30,7 +30,7 @@ import org.jfree.report.structure.Element;
  * style, from which properties are inherited.</p>
  *
  * <p>Style names are unique within the family, no matter whether the style is an
- * automatic style, an common style or a master style.</p>
+ * automatic style, a common style or a master style.</p>
  *
  * <p>The contents of this element are the union of the 'styles.xml' file (if it
  * exists), the font-declarations and auto-styles of the document-content.xml

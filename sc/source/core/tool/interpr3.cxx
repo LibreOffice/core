@@ -5207,7 +5207,7 @@ void ScComplexBluesteinFFT::Compute()
 
 // Computes DFT of an even length(N) real-valued input by using a
 // ScComplexFFT2 if N == 2^k for some k or else by using a ScComplexBluesteinFFT
-// with an complex valued input of length = N/2.
+// with a complex valued input of length = N/2.
 class ScRealFFT
 {
 public:

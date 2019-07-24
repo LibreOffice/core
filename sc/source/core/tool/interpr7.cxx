@@ -354,7 +354,7 @@ void ScInterpreter::ScWebservice()
                 pMyFormulaCell->StartListening(*pLink);
         }
 
-        //  If an new Error from Reschedule appears when the link is executed then reset the errorflag
+        //  If a new Error from Reschedule appears when the link is executed then reset the errorflag
         if (pMyFormulaCell && pMyFormulaCell->GetRawError() != FormulaError::NONE && !bWasError)
             pMyFormulaCell->SetErrCode(FormulaError::NONE);
 

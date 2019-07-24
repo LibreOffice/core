@@ -39,7 +39,7 @@ namespace utl
 // workaround for incremental linking bugs in MSVC2015
 class SAL_DLLPUBLIC_TEMPLATE OInputStreamWrapper_Base : public cppu::WeakImplHelper< css::io::XInputStream > {};
 
-/// helper class for wrapping an SvStream into an com.sun.star.io::XInputStream
+/// helper class for wrapping an SvStream into a com.sun.star.io::XInputStream
 class UNOTOOLS_DLLPUBLIC OInputStreamWrapper : public OInputStreamWrapper_Base
 {
 protected:
@@ -73,7 +73,7 @@ protected:
 
 //= OSeekableInputStreamWrapper
 
-/** helper class for wrapping an SvStream into an com.sun.star.io::XInputStream
+/** helper class for wrapping an SvStream into a com.sun.star.io::XInputStream
     which is seekable (i.e. supports the com.sun.star.io::XSeekable interface).
 */
 class UNOTOOLS_DLLPUBLIC OSeekableInputStreamWrapper
@@ -119,7 +119,7 @@ protected:
 
 typedef ::cppu::ImplHelper1 <   css::io::XSeekable
                             >   OSeekableOutputStreamWrapper_Base;
-/** helper class for wrapping an SvStream into an com.sun.star.io::XOutputStream
+/** helper class for wrapping an SvStream into a com.sun.star.io::XOutputStream
     which is seekable (i.e. supports the com.sun.star.io::XSeekable interface).
 */
 class UNOTOOLS_DLLPUBLIC OSeekableOutputStreamWrapper

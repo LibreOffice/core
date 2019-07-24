@@ -107,7 +107,7 @@ private:
 
     /*
      * the next Id for a coming ElementMark.
-     * the variable is increased by 1 when an new ElementMark is generated,
+     * the variable is increased by 1 when a new ElementMark is generated,
      * in this way, we can promise the Id of any ElementMark is unique.
      */
     sal_Int32    m_nNextElementMarkId;

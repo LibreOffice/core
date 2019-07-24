@@ -76,7 +76,7 @@ published constants FormComponentType
     */
     const short GRIDCONTROL = 11;
 
-    /** specifies an control which can be used to enter text, extended by an (user-startable) file dialog
+    /** specifies a control which can be used to enter text, extended by an (user-startable) file dialog
         to browse for files.
     */
     const short FILECONTROL = 12;
