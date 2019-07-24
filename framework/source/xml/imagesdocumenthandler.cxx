@@ -54,9 +54,6 @@ using namespace ::com::sun::star::xml::sax;
 #define ATTRIBUTE_HIGHCONTRASTMASKURL   "highcontrastmaskurl"
 #define ATTRIBUTE_TYPE_CDATA            "CDATA"
 
-#define ATTRIBUTE_MASKMODE_BITMAP   "maskbitmap"
-#define ATTRIBUTE_MASKMODE_COLOR    "maskcolor"
-
 #define ATTRIBUTE_XMLNS_IMAGE       "xmlns:image"
 #define ATTRIBUTE_XMLNS_XLINK       "xmlns:xlink"
 
@@ -66,7 +63,6 @@ using namespace ::com::sun::star::xml::sax;
 #define XMLNS_IMAGE                 "http://openoffice.org/2001/image"
 #define XMLNS_XLINK                 "http://www.w3.org/1999/xlink"
 #define XMLNS_IMAGE_PREFIX          "image:"
-#define XMLNS_XLINK_PREFIX          "xlink:"
 
 #define XMLNS_FILTER_SEPARATOR      "^"
 
@@ -101,9 +97,6 @@ ImageXMLEntryProperty const ImagesEntries[OReadImagesDocumentHandler::IMG_XML_EN
 OReadImagesDocumentHandler::OReadImagesDocumentHandler( ImageItemDescriptorList& rItems ) :
     m_rImageList( rItems )
 {
-    m_nHashMaskModeBitmap   = OUString( ATTRIBUTE_MASKMODE_BITMAP ).hashCode();
-    m_nHashMaskModeColor    = OUString( ATTRIBUTE_MASKMODE_COLOR ).hashCode();
-
     // create hash map to speed up lookup
     for ( int i = 0; i < int(IMG_XML_ENTRY_COUNT); i++ )
     {
@@ -123,8 +116,6 @@ OReadImagesDocumentHandler::OReadImagesDocumentHandler( ImageItemDescriptorList&
     m_bImageContainerStartFound     = false;
     m_bImageContainerEndFound       = false;
     m_bImagesStartFound             = false;
-    m_bExternalImagesStartFound     = false;
-    m_bExternalImageStartFound      = false;
 }
 
 OReadImagesDocumentHandler::~OReadImagesDocumentHandler()
@@ -315,7 +306,6 @@ OWriteImagesDocumentHandler::OWriteImagesDocumentHandler(
     m_xEmptyList.set( static_cast<XAttributeList *>(pList), UNO_QUERY );
     m_aAttributeType        = ATTRIBUTE_TYPE_CDATA;
     m_aXMLImageNS           = XMLNS_IMAGE_PREFIX;
-    m_aXMLXlinkNS           = XMLNS_XLINK_PREFIX;
     m_aAttributeXlinkType   = ATTRIBUTE_XLINK_TYPE;
     m_aAttributeValueSimple = ATTRIBUTE_XLINK_TYPE_VALUE;
 }

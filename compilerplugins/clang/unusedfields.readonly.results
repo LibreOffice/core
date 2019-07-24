@@ -98,9 +98,7 @@ connectivity/source/inc/TConnection.hxx:56
     connectivity::OMetaConnection m_aResources class connectivity::SharedResources
 connectivity/source/inc/writer/WTable.hxx:65
     connectivity::writer::OWriterTable m_nStartCol sal_Int32
-cppcanvas/source/mtfrenderer/textaction.cxx:816
-    cppcanvas::internal::(anonymous namespace)::EffectTextAction maTextFillColor const ::Color
-cppcanvas/source/mtfrenderer/textaction.cxx:1646
+cppcanvas/source/mtfrenderer/textaction.cxx:1652
     cppcanvas::internal::(anonymous namespace)::OutlineAction maTextFillColor const ::Color
 cppu/source/helper/purpenv/helper_purpenv_Mapping.cxx:34
     Mapping m_from uno::Environment
@@ -436,7 +434,7 @@ registry/source/reflwrit.cxx:140
     writeDouble(sal_uInt8 *, double)::(anonymous union)::(anonymous) b1 sal_uInt32
 registry/source/reflwrit.cxx:141
     writeDouble(sal_uInt8 *, double)::(anonymous union)::(anonymous) b2 sal_uInt32
-registry/source/reflwrit.cxx:181
+registry/source/reflwrit.cxx:180
     CPInfo::(anonymous) aUik struct RTUik *
 reportdesign/source/ui/inc/ColorListener.hxx:35
     rptui::OColorListener m_aColorConfig const svtools::ColorConfig
@@ -562,7 +560,7 @@ slideshow/source/engine/slideshowimpl.cxx:156
     (anonymous namespace)::FrameSynchronization maTimer const canvas::tools::ElapsedTime
 sot/source/sdstor/ucbstorage.cxx:399
     UCBStorageStream_Impl m_aKey const class rtl::OString
-starmath/source/view.cxx:865
+starmath/source/view.cxx:866
     SmViewShell_Impl aOpts const class SvtMiscOptions
 store/source/storbios.cxx:57
     OStoreSuperBlock m_aMarked OStoreSuperBlock::L
@@ -910,15 +908,15 @@ vcl/inc/WidgetThemeLibrary.hxx:137
     vcl::WidgetThemeLibrary_t updateSettings _Bool (*)(struct vcl::WidgetDrawStyle &)
 vcl/source/control/tabctrl.cxx:79
     ImplTabCtrlData maLayoutPageIdToLine std::unordered_map<int, int>
-vcl/source/filter/jpeg/Exif.hxx:55
+vcl/source/filter/jpeg/Exif.hxx:51
     Exif::ExifIFD tag sal_uInt8 [2]
-vcl/source/filter/jpeg/Exif.hxx:56
+vcl/source/filter/jpeg/Exif.hxx:52
     Exif::ExifIFD type sal_uInt8 [2]
-vcl/source/filter/jpeg/Exif.hxx:57
+vcl/source/filter/jpeg/Exif.hxx:53
     Exif::ExifIFD count sal_uInt8 [4]
-vcl/source/filter/jpeg/Exif.hxx:58
+vcl/source/filter/jpeg/Exif.hxx:54
     Exif::ExifIFD offset sal_uInt8 [4]
-vcl/source/filter/jpeg/Exif.hxx:62
+vcl/source/filter/jpeg/Exif.hxx:58
     Exif::TiffHeader byteOrder const sal_uInt16
 vcl/source/filter/jpeg/transupp.h:132
     (anonymous) slow_hflip boolean
@@ -930,11 +928,11 @@ vcl/source/filter/jpeg/transupp.h:148
     (anonymous) crop_xoffset_set JCROP_CODE
 vcl/source/filter/jpeg/transupp.h:150
     (anonymous) crop_yoffset_set JCROP_CODE
-vcl/source/fontsubset/sft.cxx:1055
+vcl/source/fontsubset/sft.cxx:1060
     vcl::subHeader2 firstCode const sal_uInt16
-vcl/source/fontsubset/sft.cxx:1056
+vcl/source/fontsubset/sft.cxx:1061
     vcl::subHeader2 entryCount const sal_uInt16
-vcl/source/fontsubset/sft.cxx:1057
+vcl/source/fontsubset/sft.cxx:1062
     vcl::subHeader2 idDelta const sal_uInt16
 vcl/source/gdi/dibtools.cxx:52
     (anonymous namespace)::CIEXYZ aXyzX FXPT2DOT30
@@ -970,7 +968,7 @@ vcl/source/gdi/dibtools.cxx:118
     (anonymous namespace)::DIBV5Header nV5ProfileSize sal_uInt32
 vcl/source/gdi/dibtools.cxx:119
     (anonymous namespace)::DIBV5Header nV5Reserved sal_uInt32
-vcl/source/gdi/pdfwriter_impl.hxx:280
+vcl/source/gdi/pdfwriter_impl.hxx:279
     vcl::PDFWriterImpl::TransparencyEmit m_pSoftMaskStream std::unique_ptr<SvMemoryStream>
 vcl/source/treelist/headbar.cxx:41
     ImplHeadItem maHelpId const class rtl::OString

@@ -76,9 +76,9 @@ connectivity/source/inc/flat/EResultSet.hxx:42
     connectivity::flat::OFlatResultSet m_bBookmarkable _Bool
 connectivity/source/inc/java/lang/Object.hxx:45
     connectivity::SDBThreadAttach m_aGuard jvmaccess::class VirtualMachine::AttachGuard
-cppcanvas/source/mtfrenderer/textaction.cxx:809
+cppcanvas/source/mtfrenderer/textaction.cxx:811
     cppcanvas::internal::(anonymous namespace)::EffectTextAction maTextLineInfo const tools::TextLineInfo
-cppcanvas/source/mtfrenderer/textaction.cxx:1638
+cppcanvas/source/mtfrenderer/textaction.cxx:1644
     cppcanvas::internal::(anonymous namespace)::OutlineAction maTextLineInfo const tools::TextLineInfo
 cppu/source/threadpool/threadpool.cxx:354
     _uno_ThreadPool dummy sal_Int32
@@ -186,6 +186,16 @@ filter/source/graphicfilter/icgm/chart.hxx:46
     DataNode nBoxX2 sal_Int16
 filter/source/graphicfilter/icgm/chart.hxx:47
     DataNode nBoxY2 sal_Int16
+framework/inc/xml/imagesdocumenthandler.hxx:99
+    framework::OReadImagesDocumentHandler m_bExternalImagesStartFound _Bool
+framework/inc/xml/imagesdocumenthandler.hxx:100
+    framework::OReadImagesDocumentHandler m_bExternalImageStartFound _Bool
+framework/inc/xml/imagesdocumenthandler.hxx:101
+    framework::OReadImagesDocumentHandler m_nHashMaskModeBitmap sal_Int32
+framework/inc/xml/imagesdocumenthandler.hxx:102
+    framework::OReadImagesDocumentHandler m_nHashMaskModeColor sal_Int32
+framework/inc/xml/imagesdocumenthandler.hxx:133
+    framework::OWriteImagesDocumentHandler m_aXMLXlinkNS class rtl::OUString
 helpcompiler/inc/HelpCompiler.hxx:197
     HelpCompiler lang const std::string
 include/basic/basmgr.hxx:56
@@ -736,9 +746,9 @@ sw/inc/unosett.hxx:145
     SwXNumberingRules m_pImpl ::sw::UnoImplPtr<Impl>
 sw/qa/core/test_ToxTextGenerator.cxx:139
     ToxTextGeneratorWithMockedChapterField mChapterFieldType class SwChapterFieldType
-sw/qa/extras/layout/layout.cxx:2608
-      class SvtSysLocaleOptions &
-sw/qa/extras/uiwriter/uiwriter.cxx:4068
+sw/qa/extras/uiwriter/uiwriter2.cxx:65
+      class SwUiWriterTest2 *
+sw/qa/extras/uiwriter/uiwriter.cxx:4065
     IdleTask maIdle class Idle
 sw/source/core/crsr/crbm.cxx:66
     (anonymous namespace)::CursorStateHelper m_aSaveState const class SwCursorSaveState
@@ -750,10 +760,6 @@ sw/source/core/text/inftxt.hxx:679
     SwTextSlot aText class rtl::OUString
 sw/source/core/text/porfld.cxx:143
     SwFieldSlot aText class rtl::OUString
-sw/source/filter/inc/fltshell.hxx:214
-    SwFltRedline aStampPrev const class DateTime
-sw/source/filter/inc/fltshell.hxx:216
-    SwFltRedline eTypePrev const enum RedlineType
 sw/source/uibase/docvw/romenu.hxx:35
     SwReadOnlyPopup m_aBuilder class VclBuilder
 sw/source/uibase/inc/condedit.hxx:43
@@ -832,9 +838,9 @@ vcl/source/app/salvtables.cxx:2568
     SalInstanceEntry m_aTextFilter class (anonymous namespace)::WeldTextFilter
 vcl/source/app/salvtables.cxx:5012
     SalInstanceComboBoxWithEdit m_aTextFilter class (anonymous namespace)::WeldTextFilter
-vcl/source/gdi/jobset.cxx:36
+vcl/source/gdi/jobset.cxx:35
     ImplOldJobSetupData cDeviceName char [32]
-vcl/source/gdi/jobset.cxx:37
+vcl/source/gdi/jobset.cxx:36
     ImplOldJobSetupData cPortName char [32]
 vcl/source/gdi/pdfbuildin_fonts.hxx:34
     vcl::pdf::BuildinFont m_nAscent const int
@@ -842,7 +848,7 @@ vcl/source/gdi/pdfbuildin_fonts.hxx:35
     vcl::pdf::BuildinFont m_nDescent const int
 vcl/source/gdi/pdfbuildin_fonts.hxx:42
     vcl::pdf::BuildinFont m_aWidths const int [256]
-vcl/unx/gtk3/gtk3gtkinst.cxx:3593
+vcl/unx/gtk3/gtk3gtkinst.cxx:3597
     CrippledViewport viewport GtkViewport
 vcl/unx/gtk/a11y/atkhypertext.cxx:29
     HyperLink atk_hyper_link const AtkHyperlink
