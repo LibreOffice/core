@@ -20,6 +20,7 @@
 #include <algorithm>
 #include <filter/msfilter/dffpropset.hxx>
 #include <filter/msfilter/dffrecordheader.hxx>
+#include <sal/log.hxx>
 #include <svx/msdffdef.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <tools/stream.hxx>
@@ -1109,14 +1110,22 @@ void DffPropSet::ReadPropSet( SvStream& rIn, bool bSetUninitializedOnly )
 
     sal_uInt32 nComplexDataFilePos = rIn.Tell() + ( nPropCount * 6 );
 
-    for( sal_uInt32 nPropNum = 0; nPropNum < nPropCount; nPropNum++ )
+    const size_t nMaxPossibleRecords = rIn.remainingSize() / (sizeof(sal_uInt16) + sizeof(sal_uInt32));
+    if (nPropCount > nMaxPossibleRecords)
     {
-        sal_uInt16 nTmp;
-        sal_uInt32 nRecType, nContent;
+        SAL_WARN("filter.ms", "Parsing error: " << nMaxPossibleRecords <<
+                 " max possible entries, but " << nPropCount << " claimed, truncating");
+        nPropCount = nMaxPossibleRecords;
+    }
+
+    for (sal_uInt32 nPropNum = 0; nPropNum < nPropCount; ++nPropNum)
+    {
+        sal_uInt16 nTmp(0);
+        sal_uInt32 nContent(0);
         rIn.ReadUInt16( nTmp )
            .ReadUInt32( nContent );
 
-        nRecType = nTmp & 0x3fff;
+        sal_uInt32 nRecType = nTmp & 0x3fff;
 
         if ( nRecType > 0x3ff )
             break;
