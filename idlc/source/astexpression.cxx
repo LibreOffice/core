@@ -106,55 +106,82 @@ coerce_value(AstExprValue *ev, ExprType t)
                 case ET_short:
                     return true;
                 case ET_ushort:
+                {
                     if (ev->u.usval > SAL_MAX_INT16)
                         return false;
-                    ev->u.sval = static_cast<sal_Int16>(ev->u.usval);
+                    auto tmp = static_cast<sal_Int16>(ev->u.usval);
+                    ev->u.sval = tmp;
                     ev->et = ET_short;
                     return true;
+                }
                 case ET_long:
+                {
                     if (ev->u.lval < SAL_MIN_INT16 || ev->u.lval > SAL_MAX_INT16)
                         return false;
-                    ev->u.sval = static_cast<sal_Int16>(ev->u.lval);
+                    auto tmp = static_cast<sal_Int16>(ev->u.lval);
+                    ev->u.sval = tmp;
                     ev->et = ET_short;
                     return true;
+                }
                 case ET_ulong:
+                {
                     if (ev->u.ulval > SAL_MAX_INT16)
                         return false;
-                    ev->u.sval = static_cast<sal_Int16>(ev->u.ulval);
+                    auto tmp = static_cast<sal_Int16>(ev->u.ulval);
+                    ev->u.sval = tmp;
                     ev->et = ET_short;
                     return true;
+                }
                 case ET_hyper:
+                {
                     if (ev->u.hval < SAL_MIN_INT16 || ev->u.hval > SAL_MAX_INT16)
                         return false;
-                    ev->u.sval = static_cast<sal_Int16>(ev->u.hval);
+                    auto tmp = static_cast<sal_Int16>(ev->u.hval);
+                    ev->u.sval = tmp;
                     ev->et = ET_short;
                     return true;
+                }
                 case ET_uhyper:
+                {
                     if (ev->u.uhval > SAL_MAX_INT16)
                         return false;
-                    ev->u.sval = static_cast<sal_Int16>(ev->u.uhval);
+                    auto tmp = static_cast<sal_Int16>(ev->u.uhval);
+                    ev->u.sval = tmp;
                     ev->et = ET_short;
                     return true;
+                }
                 case ET_boolean:
-                    ev->u.sval = static_cast<sal_Int16>(ev->u.bval);
+                {
+                    auto tmp = static_cast<sal_Int16>(ev->u.bval);
+                    ev->u.sval = tmp;
                     ev->et = ET_short;
                     return true;
+                }
                 case ET_float:
+                {
                     if (ev->u.fval < SAL_MIN_INT16 || ev->u.fval > SAL_MAX_INT16)
                         return false;
-                    ev->u.sval = static_cast<sal_Int16>(ev->u.fval);
+                    auto tmp = static_cast<sal_Int16>(ev->u.fval);
+                    ev->u.sval = tmp;
                     ev->et = ET_short;
                     return true;
+                }
                 case ET_double:
+                {
                     if (ev->u.dval < SAL_MIN_INT16 || ev->u.dval > SAL_MAX_INT16)
                         return false;
-                    ev->u.sval = static_cast<sal_Int16>(ev->u.dval);
+                    auto tmp = static_cast<sal_Int16>(ev->u.dval);
+                    ev->u.sval = tmp;
                     ev->et = ET_short;
                     return true;
+                }
                 case ET_byte:
-                    ev->u.sval = static_cast<sal_Int16>(ev->u.byval);
+                {
+                    auto tmp = static_cast<sal_Int16>(ev->u.byval);
+                    ev->u.sval = tmp;
                     ev->et = ET_short;
                     return true;
+                }
                 default:
                     OSL_ASSERT(false);
                     return false;
@@ -163,57 +190,84 @@ coerce_value(AstExprValue *ev, ExprType t)
             switch (ev->et)
             {
                 case ET_short:
+                {
                     if (ev->u.sval < 0)
                         return false;
-                    ev->u.usval = static_cast<sal_uInt16>(ev->u.sval);
+                    auto tmp = static_cast<sal_uInt16>(ev->u.sval);
+                    ev->u.usval = tmp;
                     ev->et = ET_ushort;
                     return true;
+                }
                 case ET_ushort:
                     return true;
                 case ET_long:
+                {
                     if (ev->u.lval < 0 || ev->u.lval > SAL_MAX_UINT16)
                         return false;
-                    ev->u.usval = static_cast<sal_uInt16>(ev->u.lval);
+                    auto tmp = static_cast<sal_uInt16>(ev->u.lval);
+                    ev->u.usval = tmp;
                     ev->et = ET_ushort;
                     return true;
+                }
                 case ET_ulong:
+                {
                     if (ev->u.ulval > SAL_MAX_UINT16)
                         return false;
-                    ev->u.usval = static_cast<sal_uInt16>(ev->u.ulval);
+                    auto tmp = static_cast<sal_uInt16>(ev->u.ulval);
+                    ev->u.usval = tmp;
                     ev->et = ET_ushort;
                     return true;
+                }
                 case ET_hyper:
+                {
                     if (ev->u.hval < 0 || ev->u.hval > SAL_MAX_UINT16)
                         return false;
-                    ev->u.usval = static_cast<sal_uInt16>(ev->u.hval);
+                    auto tmp = static_cast<sal_uInt16>(ev->u.hval);
+                    ev->u.usval = tmp;
                     ev->et = ET_ushort;
                     return true;
+                }
                 case ET_uhyper:
+                {
                     if (ev->u.uhval > SAL_MAX_UINT16)
                         return false;
-                    ev->u.usval = static_cast<sal_uInt16>(ev->u.uhval);
+                    auto tmp = static_cast<sal_uInt16>(ev->u.uhval);
+                    ev->u.usval = tmp;
                     ev->et = ET_ushort;
                     return true;
+                }
                 case ET_boolean:
-                    ev->u.usval = static_cast<sal_uInt16>(ev->u.bval);
+                {
+                    auto tmp = static_cast<sal_uInt16>(ev->u.bval);
+                    ev->u.usval = tmp;
                     ev->et = ET_short;
                     return true;
+                }
                 case ET_float:
+                {
                     if (ev->u.fval < 0.0 || ev->u.fval > SAL_MAX_UINT16)
                         return false;
-                    ev->u.usval = static_cast<sal_uInt16>(ev->u.fval);
+                    auto tmp = static_cast<sal_uInt16>(ev->u.fval);
+                    ev->u.usval = tmp;
                     ev->et = ET_short;
                     return true;
+                }
                 case ET_double:
+                {
                     if (ev->u.dval < 0.0 || ev->u.dval > SAL_MAX_UINT16)
                         return false;
-                    ev->u.usval = static_cast<sal_uInt16>(ev->u.dval);
+                    auto tmp = static_cast<sal_uInt16>(ev->u.dval);
+                    ev->u.usval = tmp;
                     ev->et = ET_short;
                     return true;
+                }
                 case ET_byte:
-                    ev->u.usval = static_cast<sal_uInt16>(ev->u.byval);
+                {
+                    auto tmp = static_cast<sal_uInt16>(ev->u.byval);
+                    ev->u.usval = tmp;
                     ev->et = ET_ushort;
                     return true;
+                }
                 default:
                     OSL_ASSERT(false);
                     return false;
@@ -222,53 +276,80 @@ coerce_value(AstExprValue *ev, ExprType t)
             switch (ev->et)
             {
                 case ET_short:
-                    ev->u.lval = static_cast<sal_Int32>(ev->u.sval);
+                {
+                    auto tmp = static_cast<sal_Int32>(ev->u.sval);
+                    ev->u.lval = tmp;
                     ev->et = ET_long;
                     return true;
+                }
                 case ET_ushort:
-                    ev->u.lval = static_cast<sal_Int32>(ev->u.usval);
+                {
+                    auto tmp = static_cast<sal_Int32>(ev->u.usval);
+                    ev->u.lval = tmp;
                     ev->et = ET_long;
                     return true;
+                }
                 case ET_long:
                     return true;
                 case ET_ulong:
+                {
                     if (ev->u.ulval > SAL_MAX_INT32)
                         return false;
-                    ev->u.lval = static_cast<sal_Int32>(ev->u.ulval);
+                    auto tmp = static_cast<sal_Int32>(ev->u.ulval);
+                    ev->u.lval = tmp;
                     ev->et = ET_long;
                     return true;
+                }
                 case ET_hyper:
+                {
                     if (ev->u.hval < SAL_MIN_INT32 || ev->u.hval > SAL_MAX_INT32)
                         return false;
-                    ev->u.lval = static_cast<sal_Int32>(ev->u.hval);
+                    auto tmp = static_cast<sal_Int32>(ev->u.hval);
+                    ev->u.lval = tmp;
                     ev->et = ET_long;
                     return true;
+                }
                 case ET_uhyper:
+                {
                     if (ev->u.uhval > SAL_MAX_INT32)
                         return false;
-                    ev->u.lval = static_cast<sal_Int32>(ev->u.uhval);
+                    auto tmp = static_cast<sal_Int32>(ev->u.uhval);
+                    ev->u.lval = tmp;
                     ev->et = ET_long;
                     return true;
+                }
                 case ET_boolean:
-                    ev->u.lval = static_cast<sal_Int32>(ev->u.bval);
+                {
+                    auto tmp = static_cast<sal_Int32>(ev->u.bval);
+                    ev->u.lval = tmp;
                     ev->et = ET_long;
                     return true;
+                }
                 case ET_float:
+                {
                     if (ev->u.fval < SAL_MIN_INT32 || ev->u.fval > SAL_MAX_INT32)
                         return false;
-                    ev->u.lval = static_cast<sal_Int32>(ev->u.fval);
+                    auto tmp = static_cast<sal_Int32>(ev->u.fval);
+                    ev->u.lval = tmp;
                     ev->et = ET_long;
                     return true;
+                }
                 case ET_double:
+                {
                     if (ev->u.dval < SAL_MIN_INT32 || ev->u.dval > SAL_MAX_INT32)
                         return false;
-                    ev->u.lval = static_cast<sal_Int32>(ev->u.dval);
+                    auto tmp = static_cast<sal_Int32>(ev->u.dval);
+                    ev->u.lval = tmp;
                     ev->et = ET_long;
                     return true;
+                }
                 case ET_byte:
-                    ev->u.lval = static_cast<sal_Int32>(ev->u.byval);
+                {
+                    auto tmp = static_cast<sal_Int32>(ev->u.byval);
+                    ev->u.lval = tmp;
                     ev->et = ET_long;
                     return true;
+                }
                 default:
                     OSL_ASSERT(false);
                     return false;
@@ -277,55 +358,82 @@ coerce_value(AstExprValue *ev, ExprType t)
             switch (ev->et)
             {
                 case ET_short:
+                {
                     if (ev->u.sval < 0)
                         return false;
-                    ev->u.ulval = static_cast<sal_uInt32>(ev->u.sval);
+                    auto tmp = static_cast<sal_uInt32>(ev->u.sval);
+                    ev->u.ulval = tmp;
                     ev->et = ET_ulong;
                     return true;
+                }
                 case ET_ushort:
-                    ev->u.ulval = static_cast<sal_uInt32>(ev->u.usval);
+                {
+                    auto tmp = static_cast<sal_uInt32>(ev->u.usval);
+                    ev->u.ulval = tmp;
                     ev->et = ET_ulong;
                     return true;
+                }
                 case ET_long:
+                {
                     if (ev->u.lval < 0)
                         return false;
-                    ev->u.ulval = static_cast<sal_uInt32>(ev->u.lval);
+                    auto tmp = static_cast<sal_uInt32>(ev->u.lval);
+                    ev->u.ulval = tmp;
                     ev->et = ET_ulong;
                     return true;
+                }
                 case ET_ulong:
                     return true;
                 case ET_hyper:
+                {
                     if (ev->u.hval < 0 || ev->u.hval > SAL_MAX_UINT32)
                         return false;
-                    ev->u.lval = static_cast<sal_uInt32>(ev->u.hval);
+                    auto tmp = static_cast<sal_uInt32>(ev->u.hval);
+                    ev->u.lval = tmp;
                     ev->et = ET_ulong;
                     return true;
+                }
                 case ET_uhyper:
+                {
                     if (ev->u.uhval > SAL_MAX_UINT32)
                         return false;
-                    ev->u.ulval = static_cast<sal_uInt32>(ev->u.uhval);
+                    auto tmp = static_cast<sal_uInt32>(ev->u.uhval);
+                    ev->u.ulval = tmp;
                     ev->et = ET_ulong;
                     return true;
+                }
                 case ET_boolean:
-                    ev->u.ulval = static_cast<sal_uInt32>(ev->u.bval);
+                {
+                    auto tmp = static_cast<sal_uInt32>(ev->u.bval);
+                    ev->u.ulval = tmp;
                     ev->et = ET_ulong;
                     return true;
+                }
                 case ET_float:
+                {
                     if (ev->u.fval < 0.0 || ev->u.fval > SAL_MAX_UINT32)
                         return false;
-                    ev->u.ulval = static_cast<sal_uInt32>(ev->u.fval);
+                    auto tmp = static_cast<sal_uInt32>(ev->u.fval);
+                    ev->u.ulval = tmp;
                     ev->et = ET_ulong;
                     return true;
+                }
                 case ET_double:
+                {
                     if (ev->u.dval < 0.0 || ev->u.dval > SAL_MAX_UINT32)
                         return false;
-                    ev->u.ulval = static_cast<sal_uInt32>(ev->u.dval);
+                    auto tmp = static_cast<sal_uInt32>(ev->u.dval);
+                    ev->u.ulval = tmp;
                     ev->et = ET_ulong;
                     return true;
+                }
                 case ET_byte:
-                    ev->u.ulval = static_cast<sal_uInt32>(ev->u.byval);
+                {
+                    auto tmp = static_cast<sal_uInt32>(ev->u.byval);
+                    ev->u.ulval = tmp;
                     ev->et = ET_ulong;
                     return true;
+                }
                 default:
                     OSL_ASSERT(false);
                     return false;
@@ -334,49 +442,76 @@ coerce_value(AstExprValue *ev, ExprType t)
             switch (ev->et)
             {
                 case ET_short:
-                    ev->u.hval = static_cast<sal_Int64>(ev->u.sval);
+                {
+                    auto tmp = static_cast<sal_Int64>(ev->u.sval);
+                    ev->u.hval = tmp;
                     ev->et = ET_hyper;
                     return true;
+                }
                 case ET_ushort:
-                    ev->u.hval = static_cast<sal_Int64>(ev->u.usval);
+                {
+                    auto tmp = static_cast<sal_Int64>(ev->u.usval);
+                    ev->u.hval = tmp;
                     ev->et = ET_hyper;
                     return true;
+                }
                 case ET_long:
-                    ev->u.hval = static_cast<sal_Int64>(ev->u.lval);
+                {
+                    auto tmp = static_cast<sal_Int64>(ev->u.lval);
+                    ev->u.hval = tmp;
                     ev->et = ET_hyper;
                     return true;
+                }
                 case ET_ulong:
-                    ev->u.hval = static_cast<sal_Int64>(ev->u.ulval);
+                {
+                    auto tmp = static_cast<sal_Int64>(ev->u.ulval);
+                    ev->u.hval = tmp;
                     ev->et = ET_hyper;
                     return true;
+                }
                 case ET_hyper:
                     return true;
                 case ET_uhyper:
+                {
                     if (ev->u.uhval > SAL_MAX_INT64)
                         return false;
-                    ev->u.hval = static_cast<sal_Int64>(ev->u.uhval);
+                    auto tmp = static_cast<sal_Int64>(ev->u.uhval);
+                    ev->u.hval = tmp;
                     ev->et = ET_long;
                     return true;
+                }
                 case ET_boolean:
-                    ev->u.hval = static_cast<sal_Int64>(ev->u.bval);
+                {
+                    auto tmp = static_cast<sal_Int64>(ev->u.bval);
+                    ev->u.hval = tmp;
                     ev->et = ET_hyper;
                     return true;
+                }
                 case ET_float:
+                {
                     if (ev->u.fval < SAL_MIN_INT64 || ev->u.fval > SAL_MAX_INT64)
                         return false;
-                    ev->u.hval = static_cast<sal_Int64>(ev->u.fval);
+                    auto tmp = static_cast<sal_Int64>(ev->u.fval);
+                    ev->u.hval = tmp;
                     ev->et = ET_hyper;
                     return true;
+                }
                 case ET_double:
+                {
                     if (ev->u.dval < SAL_MIN_INT64 || ev->u.dval > SAL_MAX_INT64)
                         return false;
-                    ev->u.hval = static_cast<sal_Int64>(ev->u.dval);
+                    auto tmp = static_cast<sal_Int64>(ev->u.dval);
+                    ev->u.hval = tmp;
                     ev->et = ET_hyper;
                     return true;
+                }
                 case ET_byte:
-                    ev->u.hval = static_cast<sal_Int64>(ev->u.byval);
+                {
+                    auto tmp = static_cast<sal_Int64>(ev->u.byval);
+                    ev->u.hval = tmp;
                     ev->et = ET_hyper;
                     return true;
+                }
                 default:
                     OSL_ASSERT(false);
                     return false;
@@ -385,53 +520,80 @@ coerce_value(AstExprValue *ev, ExprType t)
             switch (ev->et)
             {
                 case ET_short:
+                {
                     if (ev->u.sval < 0)
                         return false;
-                    ev->u.uhval = static_cast<sal_uInt64>(ev->u.sval);
+                    auto tmp = static_cast<sal_uInt64>(ev->u.sval);
+                    ev->u.uhval = tmp;
                     ev->et = ET_uhyper;
                     return true;
+                }
                 case ET_ushort:
-                    ev->u.uhval = static_cast<sal_uInt64>(ev->u.usval);
+                {
+                    auto tmp = static_cast<sal_uInt64>(ev->u.usval);
+                    ev->u.uhval = tmp;
                     ev->et = ET_uhyper;
                     return true;
+                }
                 case ET_long:
+                {
                     if (ev->u.lval < 0)
                         return false;
-                    ev->u.uhval = static_cast<sal_uInt64>(ev->u.lval);
+                    auto tmp = static_cast<sal_uInt64>(ev->u.lval);
+                    ev->u.uhval = tmp;
                     ev->et = ET_uhyper;
                     return true;
+                }
                 case ET_ulong:
-                    ev->u.uhval = static_cast<sal_uInt64>(ev->u.ulval);
+                {
+                    auto tmp = static_cast<sal_uInt64>(ev->u.ulval);
+                    ev->u.uhval = tmp;
                     ev->et = ET_uhyper;
                     return true;
+                }
                 case ET_hyper:
+                {
                     if (ev->u.hval < 0)
                         return false;
-                    ev->u.uhval = static_cast<sal_uInt64>(ev->u.hval);
+                    auto tmp = static_cast<sal_uInt64>(ev->u.hval);
+                    ev->u.uhval = tmp;
                     ev->et = ET_uhyper;
                     return true;
+                }
                 case ET_uhyper:
                     return true;
                 case ET_boolean:
-                    ev->u.uhval = static_cast<sal_uInt64>(ev->u.bval);
+                {
+                    auto tmp = static_cast<sal_uInt64>(ev->u.bval);
+                    ev->u.uhval = tmp;
                     ev->et = ET_uhyper;
                     return true;
+                }
                 case ET_float:
+                {
                     if (ev->u.fval < 0.0 || ev->u.fval > SAL_MAX_UINT64)
                         return false;
-                    ev->u.uhval = static_cast<sal_uInt64>(ev->u.fval);
+                    auto tmp = static_cast<sal_uInt64>(ev->u.fval);
+                    ev->u.uhval = tmp;
                     ev->et = ET_uhyper;
                     return true;
+                }
                 case ET_double:
+                {
                     if (ev->u.dval < 0.0 || ev->u.dval > SAL_MAX_UINT64)
                         return false;
-                    ev->u.uhval = static_cast<sal_uInt64>(ev->u.dval);
+                    auto tmp = static_cast<sal_uInt64>(ev->u.dval);
+                    ev->u.uhval = tmp;
                     ev->et = ET_uhyper;
                     return true;
+                }
                 case ET_byte:
-                    ev->u.uhval = static_cast<sal_uInt64>(ev->u.byval);
+                {
+                    auto tmp = static_cast<sal_uInt64>(ev->u.byval);
+                    ev->u.uhval = tmp;
                     ev->et = ET_uhyper;
                     return true;
+                }
                 default:
                     OSL_ASSERT(false);
                     return false;
@@ -485,31 +647,49 @@ coerce_value(AstExprValue *ev, ExprType t)
             switch (ev->et)
             {
                 case ET_short:
-                    ev->u.fval = static_cast<float>(ev->u.sval);
+                {
+                    auto tmp = static_cast<float>(ev->u.sval);
+                    ev->u.fval = tmp;
                     ev->et = ET_float;
                     return true;
+                }
                 case ET_ushort:
-                    ev->u.fval = static_cast<float>(ev->u.usval);
+                {
+                    auto tmp = static_cast<float>(ev->u.usval);
+                    ev->u.fval = tmp;
                     ev->et = ET_float;
                     return true;
+                }
                 case ET_long:
-                    ev->u.fval = static_cast<float>(ev->u.lval);
+                {
+                    auto tmp = static_cast<float>(ev->u.lval);
+                    ev->u.fval = tmp;
                     ev->et = ET_float;
                     return true;
+                }
                 case ET_ulong:
-                    ev->u.fval = static_cast<float>(ev->u.ulval);
+                {
+                    auto tmp = static_cast<float>(ev->u.ulval);
+                    ev->u.fval = tmp;
                     ev->et = ET_float;
                     return true;
+                }
                 case ET_hyper:
-                    ev->u.fval = static_cast<float>(ev->u.hval);
+                {
+                    auto tmp = static_cast<float>(ev->u.hval);
+                    ev->u.fval = tmp;
                     ev->et = ET_float;
                     return true;
+                }
                 case ET_uhyper:
+                {
                     if (static_cast<float>(ev->u.ulval) > FLT_MAX)
                         return false;
-                    ev->u.fval = static_cast<float>(ev->u.ulval);
+                    auto tmp = static_cast<float>(ev->u.ulval);
+                    ev->u.fval = tmp;
                     ev->et = ET_float;
                     return true;
+                }
                 case ET_boolean:
                     ev->u.fval = ev->u.bval ? 1.0f : 0.0f;
                     ev->et = ET_float;
@@ -517,15 +697,21 @@ coerce_value(AstExprValue *ev, ExprType t)
                 case ET_float:
                     return true;
                 case ET_double:
+                {
                     if (static_cast<float>(ev->u.dval) > FLT_MAX || static_cast<float>(ev->u.dval) < -FLT_MAX)
                         return false;
-                    ev->u.fval = static_cast<float>(ev->u.dval);
+                    auto tmp = static_cast<float>(ev->u.dval);
+                    ev->u.fval = tmp;
                     ev->et = ET_float;
                     return true;
+                }
                 case ET_byte:
-                    ev->u.fval = static_cast<float>(ev->u.byval);
+                {
+                    auto tmp = static_cast<float>(ev->u.byval);
+                    ev->u.fval = tmp;
                     ev->et = ET_float;
                     return true;
+                }
                 default:
                     OSL_ASSERT(false);
                     return false;
@@ -534,45 +720,69 @@ coerce_value(AstExprValue *ev, ExprType t)
             switch (ev->et)
             {
                 case ET_short:
-                    ev->u.dval = static_cast<double>(ev->u.sval);
+                {
+                    auto tmp = static_cast<double>(ev->u.sval);
+                    ev->u.dval = tmp;
                     ev->et = ET_double;
                     return true;
+                }
                 case ET_ushort:
-                    ev->u.dval = static_cast<double>(ev->u.usval);
+                {
+                    auto tmp = static_cast<double>(ev->u.usval);
+                    ev->u.dval = tmp;
                     ev->et = ET_double;
                     return true;
+                }
                 case ET_long:
-                    ev->u.dval = static_cast<double>(ev->u.lval);
+                {
+                    auto tmp = static_cast<double>(ev->u.lval);
+                    ev->u.dval = tmp;
                     ev->et = ET_double;
                     return true;
+                }
                 case ET_ulong:
-                    ev->u.dval = static_cast<double>(ev->u.ulval);
+                {
+                    auto tmp = static_cast<double>(ev->u.ulval);
+                    ev->u.dval = tmp;
                     ev->et = ET_double;
                     return true;
+                }
                 case ET_hyper:
-                    ev->u.dval = static_cast<double>(ev->u.hval);
+                {
+                    auto tmp = static_cast<double>(ev->u.hval);
+                    ev->u.dval = tmp;
                     ev->et = ET_double;
                     return true;
+                }
                 case ET_uhyper:
+                {
                     if (ev->u.dval > FLT_MAX || ev->u.dval < -FLT_MAX)
                         return false;
-                    ev->u.dval = static_cast<double>(ev->u.ulval);
+                    auto tmp = static_cast<double>(ev->u.ulval);
+                    ev->u.dval = tmp;
                     ev->et = ET_double;
                     return true;
+                }
                 case ET_boolean:
                     ev->u.dval = ev->u.bval ? 1.0 : 0.0;
                     ev->et = ET_double;
                     return true;
                 case ET_float:
-                    ev->u.dval = static_cast<double>(ev->u.fval);
+                {
+                    auto tmp = static_cast<double>(ev->u.fval);
+                    ev->u.dval = tmp;
                     ev->et = ET_double;
                     return true;
+                }
                 case ET_double:
                     return true;
                 case ET_byte:
-                    ev->u.dval = static_cast<double>(ev->u.byval);
+                {
+                    auto tmp = static_cast<double>(ev->u.byval);
+                    ev->u.dval = tmp;
                     ev->et = ET_double;
                     return true;
+                }
                 default:
                     OSL_ASSERT(false);
                     return false;
@@ -581,57 +791,81 @@ coerce_value(AstExprValue *ev, ExprType t)
             switch (ev->et)
             {
                 case ET_short:
+                {
                     if (ev->u.sval < SAL_MIN_INT8 || ev->u.sval > SAL_MAX_UINT8)
                         return false;
-                    ev->u.byval = static_cast<unsigned char>(ev->u.sval);
+                    auto tmp = static_cast<unsigned char>(ev->u.sval);
+                    ev->u.byval = tmp;
                     ev->et = ET_byte;
                     return true;
+                }
                 case ET_ushort:
+                {
                     if (ev->u.usval > SAL_MAX_UINT8)
                         return false;
-                    ev->u.byval = static_cast<unsigned char>(ev->u.usval);
+                    auto tmp = static_cast<unsigned char>(ev->u.usval);
+                    ev->u.byval = tmp;
                     ev->et = ET_byte;
                     return true;
+                }
                 case ET_long:
+                {
                     if (ev->u.lval < SAL_MIN_INT8 || ev->u.lval > SAL_MAX_UINT8)
                         return false;
-                    ev->u.byval = static_cast<unsigned char>(ev->u.lval);
+                    auto tmp = static_cast<unsigned char>(ev->u.lval);
+                    ev->u.byval = tmp;
                     ev->et = ET_byte;
                     return true;
+                }
                 case ET_ulong:
+                {
                     if (ev->u.ulval > SAL_MAX_UINT8)
                         return false;
-                    ev->u.byval = static_cast<unsigned char>(ev->u.ulval);
+                    auto tmp = static_cast<unsigned char>(ev->u.ulval);
+                    ev->u.byval = tmp;
                     ev->et = ET_byte;
                     return true;
+                }
                 case ET_hyper:
+                {
                     if (ev->u.hval < SAL_MIN_INT8 || ev->u.hval > SAL_MAX_UINT8)
                         return false;
-                    ev->u.byval = static_cast<unsigned char>(ev->u.hval);
+                    auto tmp = static_cast<unsigned char>(ev->u.hval);
+                    ev->u.byval = tmp;
                     ev->et = ET_byte;
                     return true;
+                }
                 case ET_uhyper:
+                {
                     if (ev->u.uhval > SAL_MAX_UINT8)
                         return false;
-                    ev->u.byval = static_cast<unsigned char>(ev->u.uhval);
+                    auto tmp = static_cast<unsigned char>(ev->u.uhval);
+                    ev->u.byval = tmp;
                     ev->et = ET_byte;
                     return true;
+                }
                 case ET_boolean:
                     ev->u.byval = ev->u.bval ? 1 : 0;
                     ev->et = ET_byte;
                     return true;
                 case ET_float:
+                {
                     if (ev->u.fval < SAL_MIN_INT8 || ev->u.fval > SAL_MAX_UINT8)
                         return false;
-                    ev->u.byval = static_cast<unsigned char>(ev->u.fval);
+                    auto tmp = static_cast<unsigned char>(ev->u.fval);
+                    ev->u.byval = tmp;
                     ev->et = ET_byte;
                     return true;
+                }
                 case ET_double:
+                {
                     if (ev->u.dval < SAL_MIN_INT8 || ev->u.dval > SAL_MAX_UINT8)
                         return false;
-                    ev->u.byval = static_cast<unsigned char>(ev->u.dval);
+                    auto tmp = static_cast<unsigned char>(ev->u.dval);
+                    ev->u.byval = tmp;
                     ev->et = ET_byte;
                     return true;
+                }
                 case ET_byte:
                     return true;
                 default:
