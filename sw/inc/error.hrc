@@ -55,7 +55,7 @@ const ErrMsgCode RID_SW_ERRHDL[] =
     { NC_("RID_SW_ERRHDL", "Not all attributes could be read.") , WARN_CODE ( ErrCodeClass::Read , WARN_SWG_FEATURES_LOST ) },
     { NC_("RID_SW_ERRHDL", "Not all attributes could be recorded.") , WARN_CODE ( ErrCodeClass::Write , WARN_SWG_FEATURES_LOST ) },
     { NC_("RID_SW_ERRHDL", "Document could not be completely saved.") , WARN_SWG_POOR_LOAD },
-    { NC_("RID_SW_ERRHDL", "This HTML document contains %PRODUCTNAME Basic macros.\nThey were not saved with the current export settings."), WARN_SWG_HTML_NO_MACROS },
+    { NC_("RID_SW_ERRHDL", "This HTML document contains Basic macros.\nThey were not saved with the current export settings."), WARN_SWG_HTML_NO_MACROS },
     { NC_("RID_SW_ERRHDL", "Error in writing sub-document $(ARG1)."), WARN_WRITE_ERROR_FILE },
     { NC_("RID_SW_ERRHDL", "Format error discovered in the file in sub-document $(ARG1) at $(ARG2)(row,col)."), WARN_FORMAT_FILE_ROWCOL },
     { nullptr, ERRCODE_NONE }

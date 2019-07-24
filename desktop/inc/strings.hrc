@@ -39,7 +39,7 @@
 #define RID_STR_CONF_SCHEMA                                 NC_("RID_STR_CONF_SCHEMA", "Configuration Schema")
 #define RID_STR_CONF_DATA                                   NC_("RID_STR_CONF_DATA", "Configuration Data")
 
-#define RID_STR_BASIC_LIB                                   NC_("RID_STR_BASIC_LIB", "%PRODUCTNAME Basic Library")
+#define RID_STR_BASIC_LIB                                   NC_("RID_STR_BASIC_LIB", "Basic Library")
 #define RID_STR_DIALOG_LIB                                  NC_("RID_STR_DIALOG_LIB", "Dialog Library")
 #define RID_STR_CANNOT_DETERMINE_LIBNAME                    NC_("RID_STR_CANNOT_DETERMINE_LIBNAME", "The library name could not be determined.")
 
