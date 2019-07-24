@@ -701,7 +701,9 @@ DocumentSettings::_setPropertyValues(const PropertyMapEntry** ppEntries,
                     sal_Int32 nValue = 0;
                     if( *pValues >>= nValue )
                     {
-                        Fraction aFract( pDoc->GetUIScale().GetNumerator(), nValue );
+                        auto nNumerator = pDoc->GetUIScale().GetNumerator();
+                        assert(nNumerator != 0);
+                        Fraction aFract(nNumerator, nValue);
                         pDoc->SetUIScale( aFract );
                         bOk = true;
                         bChanged = true;
