@@ -3024,8 +3024,8 @@ dnl ===================================================================
 
 if test $_os = iOS; then
     AC_MSG_CHECKING([what iOS SDK to use])
-    current_sdk_ver=12.2
-    older_sdk_vers="13.0 12.1 12.0 11.4"
+    current_sdk_ver=12.4
+    older_sdk_vers="13.0 12.2 12.1 12.0 11.4"
     if test "$enable_ios_simulator" = "yes"; then
         platform=iPhoneSimulator
         versionmin=-mios-simulator-version-min=11.0
