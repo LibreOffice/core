@@ -77,7 +77,7 @@ class SW_DLLPUBLIC SwModule final : public SfxModule, public SfxListener, public
     OUString            m_sActAuthor;
 
     // ConfigItems
-    std::unique_ptr<SwModuleOptions>     m_pModuleConfig;
+    std::unique_ptr<SwModuleOptions, o3tl::default_delete<SwModuleOptions>> m_pModuleConfig;
     std::unique_ptr<SwMasterUsrPref, o3tl::default_delete<SwMasterUsrPref>> m_pUsrPref;
     std::unique_ptr<SwMasterUsrPref, o3tl::default_delete<SwMasterUsrPref>> m_pWebUsrPref;
     std::unique_ptr<SwPrintOptions>      m_pPrintOptions;
