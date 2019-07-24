@@ -299,6 +299,7 @@
       </menu:menu>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:InsertSignatureLine" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:InsertQrCode" menu:style="text"/>
     </menu:menupopup>
   </menu:menu>
   <menu:menu menu:id=".uno:FormatMenu">
