@@ -35,21 +35,21 @@
 sal_uLong Animation::mnAnimCount = 0;
 
 Animation::Animation()
-    : mnLoopCount(0)
-    , mnLoops(0)
+    : mbIsInAnimation(false)
     , mnFrameIndex(0)
-    , mbIsInAnimation(false)
+    , mnLoopCount(0)
+    , mnLoops(0)
     , mbLoopTerminated(false)
 {
     maTimer.SetInvokeHandler(LINK(this, Animation, ImplTimeoutHdl));
 }
 
 Animation::Animation(const Animation& rAnimation)
-    : maBitmapEx(rAnimation.maBitmapEx)
-    , maGlobalSize(rAnimation.maGlobalSize)
-    , mnLoopCount(rAnimation.mnLoopCount)
+    : mbIsInAnimation(false)
     , mnFrameIndex(rAnimation.mnFrameIndex)
-    , mbIsInAnimation(false)
+    , mnLoopCount(rAnimation.mnLoopCount)
+    , maBitmapEx(rAnimation.maBitmapEx)
+    , maGlobalSize(rAnimation.maGlobalSize)
     , mbLoopTerminated(rAnimation.mbLoopTerminated)
 {
     for (auto const& rFrame : rAnimation.maAnimationFrames)

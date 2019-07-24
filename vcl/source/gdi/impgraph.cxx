@@ -1184,7 +1184,7 @@ void ImpGraphic::ImplStartAnimation( OutputDevice* pOutDev, const Point& rDestPt
     ensureAvailable();
 
     if( ImplIsSupportedGraphic() && !ImplIsSwapOut() && mpAnimation )
-        mpAnimation->Start( pOutDev, rDestPt, rDestSize, nCallerId, pFirstFrameOutDev );
+        pOutDev->StartAnimation(mpAnimation.get(), rDestPt, rDestSize, nCallerId, pFirstFrameOutDev);
 }
 
 void ImpGraphic::ImplStopAnimation( OutputDevice* pOutDev, long nCallerId )
