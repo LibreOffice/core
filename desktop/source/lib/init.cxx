@@ -2197,7 +2197,7 @@ static void doc_iniUnoCommands ()
     SfxViewFrame* pViewFrame = pViewShell? pViewShell->GetViewFrame(): nullptr;
 
     // check if Frame-Controller were created.
-    if (!pViewShell && !pViewFrame)
+    if (!pViewFrame)
     {
         SAL_WARN("lok", "iniUnoCommands: No Frame-Controller created.");
         return;
