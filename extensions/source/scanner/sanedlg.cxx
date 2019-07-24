@@ -69,7 +69,7 @@ void DrawRectangles(vcl::RenderContext& rRenderContext, Point const & rUL, Point
 
 }
 
-class ScanPreview : public vcl::Window
+class ScanPreview : public weld::CustomWidgetController
 {
 private:
     enum DragDirection { TopLeft, Top, TopRight, Right, BottomRight, Bottom,
@@ -79,33 +79,21 @@ private:
     tools::Rectangle maPreviewRect;
     Point     maTopLeft, maBottomRight;
     Point     maMinTopLeft, maMaxBottomRight;
-    VclPtr<SaneDlg>  mpParentDialog;
+    SaneDlg*  mpParentDialog;
     DragDirection meDragDirection;
     bool      mbDragEnable;
     bool      mbDragDrawn;
     bool      mbIsDragging;
 
 public:
-    ScanPreview(vcl::Window* pParent, WinBits nStyle)
-        : Window(pParent, nStyle)
-        , maMaxBottomRight(PREVIEW_WIDTH,  PREVIEW_HEIGHT)
+    ScanPreview()
+        : maMaxBottomRight(PREVIEW_WIDTH,  PREVIEW_HEIGHT)
         , mpParentDialog(nullptr)
         , meDragDirection(TopLeft)
         , mbDragEnable(false)
         , mbDragDrawn(false)
         , mbIsDragging(false)
     {
-    }
-
-    virtual ~ScanPreview() override
-    {
-        disposeOnce();
-    }
-
-    virtual void dispose() override
-    {
-        mpParentDialog.clear();
-        vcl::Window::dispose();
     }
 
     void Init(SaneDlg *pParent)
@@ -125,10 +113,12 @@ public:
     {
         mbDragEnable = true;
     }
+
     void DisableDrag()
     {
         mbDragEnable = false;
     }
+
     bool IsDragEnabled()
     {
         return mbDragEnable;
@@ -195,56 +185,57 @@ public:
     {
         ReadDIBBitmapEx(maPreviewBitmapEx, rStream, true);
     }
-    virtual Size GetOptimalSize() const override
+    virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea)
     {
-        Size aSize(LogicToPixel(Size(PREVIEW_WIDTH, PREVIEW_HEIGHT), MapMode(MapUnit::MapAppFont)));
+        Size aSize(pDrawingArea->get_ref_device().LogicToPixel(Size(PREVIEW_WIDTH, PREVIEW_HEIGHT), MapMode(MapUnit::MapAppFont)));
         aSize.setWidth(aSize.getWidth()+1);
         aSize.setHeight(aSize.getHeight()+1);
-        return aSize;
+        pDrawingArea->set_size_request(aSize.Width(), aSize.Height());
+        CustomWidgetController::SetDrawingArea(pDrawingArea);
+        SetOutputSizePixel(aSize);
     }
 };
 
-VCL_BUILDER_FACTORY_CONSTRUCTOR(ScanPreview, 0)
-
-SaneDlg::SaneDlg( vcl::Window* pParent, Sane& rSane, bool bScanEnabled ) :
-        ModalDialog(pParent, "SaneDialog", "modules/scanner/ui/sanedialog.ui"),
-        mrSane( rSane ),
-        mbScanEnabled( bScanEnabled ),
-        mnCurrentOption(0),
-        mnCurrentElement(0),
-        mfMin(0.0),
-        mfMax(0.0),
-        doScan(false)
+SaneDlg::SaneDlg(weld::Window* pParent, Sane& rSane, bool bScanEnabled)
+    : GenericDialogController(pParent, "modules/scanner/ui/sanedialog.ui", "SaneDialog")
+    , mpParent(pParent)
+    , mrSane(rSane)
+    , mbScanEnabled(bScanEnabled)
+    , mnCurrentOption(0)
+    , mnCurrentElement(0)
+    , mfMin(0.0)
+    , mfMax(0.0)
+    , doScan(false)
+    , mxOKButton(m_xBuilder->weld_button("ok"))
+    , mxCancelButton(m_xBuilder->weld_button("cancel"))
+    , mxDeviceInfoButton(m_xBuilder->weld_button("deviceInfoButton"))
+    , mxPreviewButton(m_xBuilder->weld_button("previewButton"))
+    , mxScanButton(m_xBuilder->weld_button("scanButton"))
+    , mxButtonOption(m_xBuilder->weld_check_button("optionsButton"))
+    , mxOptionTitle(m_xBuilder->weld_label("optionTitleLabel"))
+    , mxOptionDescTxt(m_xBuilder->weld_label("optionsDescLabel"))
+    , mxVectorTxt(m_xBuilder->weld_label("vectorLabel"))
+    , mxLeftField(m_xBuilder->weld_spin_button("leftSpinbutton"))
+    , mxTopField(m_xBuilder->weld_spin_button("topSpinbutton"))
+    , mxRightField(m_xBuilder->weld_spin_button("rightSpinbutton"))
+    , mxBottomField(m_xBuilder->weld_spin_button("bottomSpinbutton"))
+    , mxDeviceBox(m_xBuilder->weld_combo_box("deviceCombobox"))
+    , mxReslBox(m_xBuilder->weld_combo_box("reslCombobox")0
+    , mxAdvancedBox(m_xBuilder->weld_check_button("advancedCheckbutton"))
+    , mxVectorBox(m_xBuilder->weld_spin_button("vectorSpinbutton-nospin"))
+    , mxQuantumRangeBox(m_xBuilder->weld_combo_box("quantumRangeCombobox"))
+    , mxStringRangeBox(m_xBuilder->weld_combo_box("stringRangeCombobox"))
+    , mxStringEdit(m_xBuilder->weld_entry("stringEntry"))
+    , mxNumericEdit(m_xBuilder->weld_entry("numericEntry"))
+    , mxOptionBox(m_xBuilder->weld_tree_view("optionSvTreeListBox"))
+    , mxBoolCheckBox(m_xBuilder->weld_check_button("boolCheckbutton"))
+    , mxPreview, "preview");
 {
-    get(mpOKButton, "ok");
-    get(mpCancelButton, "cancel");
-    get(mpDeviceInfoButton, "deviceInfoButton");
-    get(mpPreviewButton, "previewButton");
-    get(mpScanButton, "scanButton");
-    get(mpButtonOption, "optionsButton");
-    get(mpOptionTitle, "optionTitleLabel");
     Size aSize(LogicToPixel(Size(130, 102), MapMode(MapUnit::MapAppFont)));
     mpOptionTitle->set_width_request(aSize.Width());
     mpOptionTitle->set_height_request(aSize.Height() / 2);
-    get(mpOptionDescTxt, "optionsDescLabel");
-    get(mpVectorTxt, "vectorLabel");
-    get(mpLeftField, "leftSpinbutton");
-    get(mpTopField, "topSpinbutton");
-    get(mpRightField, "rightSpinbutton");
-    get(mpBottomField, "bottomSpinbutton");
-    get(mpDeviceBox, "deviceCombobox");
-    get(mpReslBox, "reslCombobox");
-    get(mpAdvancedBox, "advancedCheckbutton");
-    get(mpVectorBox, "vectorSpinbutton-nospin");
-    get(mpQuantumRangeBox, "quantumRangeCombobox");
-    get(mpStringRangeBox, "stringRangeCombobox");
-    get(mpStringEdit, "stringEntry");
-    get(mpNumericEdit, "numericEntry");
-    get(mpOptionBox, "optionSvTreeListBox");
     mpOptionBox->set_width_request(aSize.Width());
     mpOptionBox->set_height_request(aSize.Height());
-    get(mpBoolCheckBox, "boolCheckbutton");
-    get(mpPreview, "preview");
     mpPreview->Init(this);
     if( Sane::IsSane() )
     {
@@ -253,69 +244,33 @@ SaneDlg::SaneDlg( vcl::Window* pParent, Sane& rSane, bool bScanEnabled ) :
         InitFields();
     }
 
-    mpDeviceInfoButton->SetClickHdl( LINK( this, SaneDlg, ClickBtnHdl ) );
-    mpPreviewButton->SetClickHdl( LINK( this, SaneDlg, ClickBtnHdl ) );
-    mpScanButton->SetClickHdl( LINK( this, SaneDlg, ClickBtnHdl ) );
-    mpButtonOption->SetClickHdl( LINK( this, SaneDlg, ClickBtnHdl ) );
-    mpDeviceBox->SetSelectHdl( LINK( this, SaneDlg, SelectHdl ) );
-    mpOptionBox->SetSelectHdl( LINK( this, SaneDlg, OptionsBoxSelectHdl ) );
-    mpOKButton->SetClickHdl( LINK( this, SaneDlg, ClickBtnHdl ) );
-    mpCancelButton->SetClickHdl( LINK( this, SaneDlg, ClickBtnHdl ) );
-    mpBoolCheckBox->SetClickHdl( LINK( this, SaneDlg, ClickBtnHdl ) );
-    mpStringEdit->SetModifyHdl( LINK( this, SaneDlg, ModifyHdl ) );
-    mpNumericEdit->SetModifyHdl( LINK( this, SaneDlg, ModifyHdl ) );
-    mpVectorBox->SetModifyHdl( LINK( this, SaneDlg, ModifyHdl ) );
-    mpReslBox->SetModifyHdl( LINK( this, SaneDlg, ModifyHdl ) );
-    mpStringRangeBox->SetSelectHdl( LINK( this, SaneDlg, SelectHdl ) );
-    mpQuantumRangeBox->SetSelectHdl( LINK( this, SaneDlg, SelectHdl ) );
-    mpLeftField->SetModifyHdl( LINK( this, SaneDlg, ModifyHdl ) );
-    mpRightField->SetModifyHdl( LINK( this, SaneDlg, ModifyHdl ) );
-    mpTopField->SetModifyHdl( LINK( this, SaneDlg, ModifyHdl ) );
-    mpBottomField->SetModifyHdl( LINK( this, SaneDlg, ModifyHdl ) );
-    mpAdvancedBox->SetClickHdl( LINK( this, SaneDlg, ClickBtnHdl ) );
+    mxDeviceInfoButton->connect_clicked( LINK( this, SaneDlg, ClickBtnHdl ) );
+    mxPreviewButton->connect_clicked( LINK( this, SaneDlg, ClickBtnHdl ) );
+    mxScanButton->connect_clicked( LINK( this, SaneDlg, ClickBtnHdl ) );
+    mxButtonOption->connect_clicked( LINK( this, SaneDlg, ClickBtnHdl ) );
+    mxDeviceBox->SetSelectHdl( LINK( this, SaneDlg, SelectHdl ) );
+    mxOptionBox->SetSelectHdl( LINK( this, SaneDlg, OptionsBoxSelectHdl ) );
+    mxOKButton->connect_clicked( LINK( this, SaneDlg, ClickBtnHdl ) );
+    mxCancelButton->connect_clicked( LINK( this, SaneDlg, ClickBtnHdl ) );
+    mxBoolCheckBox->connect_clicked( LINK( this, SaneDlg, ClickBtnHdl ) );
+    mxStringEdit->SetModifyHdl( LINK( this, SaneDlg, ModifyHdl ) );
+    mxNumericEdit->SetModifyHdl( LINK( this, SaneDlg, ModifyHdl ) );
+    mxVectorBox->SetModifyHdl( LINK( this, SaneDlg, ModifyHdl ) );
+    mxReslBox->SetModifyHdl( LINK( this, SaneDlg, ModifyHdl ) );
+    mxStringRangeBox->SetSelectHdl( LINK( this, SaneDlg, SelectHdl ) );
+    mxQuantumRangeBox->SetSelectHdl( LINK( this, SaneDlg, SelectHdl ) );
+    mxLeftField->SetModifyHdl( LINK( this, SaneDlg, ModifyHdl ) );
+    mxRightField->SetModifyHdl( LINK( this, SaneDlg, ModifyHdl ) );
+    mxTopField->SetModifyHdl( LINK( this, SaneDlg, ModifyHdl ) );
+    mxBottomField->SetModifyHdl( LINK( this, SaneDlg, ModifyHdl ) );
+    mxAdvancedBox->connect_clicked( LINK( this, SaneDlg, ClickBtnHdl ) );
 
     maOldLink = mrSane.SetReloadOptionsHdl( LINK( this, SaneDlg, ReloadSaneOptionsHdl ) );
-
-    mpOptionBox->SetNodeBitmaps(get<FixedImage>("plus")->GetImage(),
-                                get<FixedImage>("minus")->GetImage());
-    mpOptionBox->SetStyle(mpOptionBox->GetStyle() |
-                          WB_HASLINES | WB_HASBUTTONS | WB_NOINITIALSELECTION |
-                          WB_HASBUTTONSATROOT | WB_HASLINESATROOT);
 }
 
 SaneDlg::~SaneDlg()
 {
-    disposeOnce();
-}
-
-void SaneDlg::dispose()
-{
     mrSane.SetReloadOptionsHdl(maOldLink);
-    mpOKButton.clear();
-    mpCancelButton.clear();
-    mpDeviceInfoButton.clear();
-    mpPreviewButton.clear();
-    mpScanButton.clear();
-    mpButtonOption.clear();
-    mpOptionTitle.clear();
-    mpOptionDescTxt.clear();
-    mpVectorTxt.clear();
-    mpLeftField.clear();
-    mpTopField.clear();
-    mpRightField.clear();
-    mpBottomField.clear();
-    mpDeviceBox.clear();
-    mpReslBox.clear();
-    mpAdvancedBox.clear();
-    mpVectorBox.clear();
-    mpQuantumRangeBox.clear();
-    mpStringRangeBox.clear();
-    mpBoolCheckBox.clear();
-    mpStringEdit.clear();
-    mpNumericEdit.clear();
-    mpOptionBox.clear();
-    mpPreview.clear();
-    ModalDialog::dispose();
 }
 
 namespace {
@@ -327,18 +282,18 @@ OUString SaneResId(const char *pID)
 
 }
 
-short SaneDlg::Execute()
+short SaneDlg::run()
 {
-    if( ! Sane::IsSane() )
+    if (!Sane::IsSane())
     {
-        std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(nullptr,
+        std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(mpParent,
                                                        VclMessageType::Warning, VclButtonsType::Ok,
                                                        SaneResId(STR_COULD_NOT_BE_INIT)));
         xErrorBox->run();
         return RET_CANCEL;
     }
     LoadState();
-    return ModalDialog::Execute();
+    return GenericDialogController::run();
 }
 
 void SaneDlg::InitDevices()
@@ -349,13 +304,13 @@ void SaneDlg::InitDevices()
     if( mrSane.IsOpen() )
         mrSane.Close();
     mrSane.ReloadDevices();
-    mpDeviceBox->Clear();
+    mxDeviceBox->Clear();
     for (int i = 0; i < Sane::CountDevices(); ++i)
-        mpDeviceBox->InsertEntry(Sane::GetName(i));
+        mxDeviceBox->InsertEntry(Sane::GetName(i));
     if( Sane::CountDevices() )
     {
         mrSane.Open(0);
-        mpDeviceBox->SelectEntryPos(0);
+        mxDeviceBox->SelectEntryPos(0);
     }
 }
 
@@ -678,9 +633,9 @@ IMPL_LINK( SaneDlg, ClickBtnHdl, Button*, pButton, void )
 
 IMPL_LINK( SaneDlg, SelectHdl, ListBox&, rListBox, void )
 {
-    if( &rListBox == mpDeviceBox && Sane::IsSane() && Sane::CountDevices() )
+    if( &rListBox == mxDeviceBox && Sane::IsSane() && Sane::CountDevices() )
     {
-        int nNewNumber = mpDeviceBox->GetSelectedEntryPos();
+        int nNewNumber = mxDeviceBox->GetSelectedEntryPos();
         int nOldNumber = mrSane.GetDeviceNumber();
         if (nNewNumber != nOldNumber)
         {
@@ -1396,7 +1351,7 @@ void SaneDlg::SaveState()
     aConfig.DeleteGroup( "SANE" );
     aConfig.SetGroup( "SANE" );
     aConfig.WriteKey( "SO_LastSANEDevice",
-        OUStringToOString(mpDeviceBox->GetSelectedEntry(), RTL_TEXTENCODING_UTF8) );
+        OUStringToOString(mxDeviceBox->get_active_text(), RTL_TEXTENCODING_UTF8) );
 
     static char const* pSaveOptions[] = {
         "resolution",

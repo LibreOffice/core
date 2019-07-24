@@ -117,10 +117,6 @@
       </properties>
     </glade-widget-class>
 
-    <glade-widget-class title="Scan Preview" name="scnlo-ScanPreview"
-                        generic-name="Scan Preview Window" parent="GtkDrawingArea"
-                        icon-name="widget-gtk-drawingarea"/>
-
     <glade-widget-class title="Gamma Grid" name="scnlo-GridWindow"
                         generic-name="Gamma Grid Widget" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>
