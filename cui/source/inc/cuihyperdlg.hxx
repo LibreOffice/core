@@ -32,16 +32,6 @@
 
 #include "iconcdlg.hxx"
 
-// hyperlink dialog
-enum class HyperLinkPageType
-{
-    Internet,
-    Mail,
-    Document,
-    NewDocument,
-    NONE = USHRT_MAX
-};
-
 /*************************************************************************
 |*
 |* Hyperlink-Dialog

@@ -40,8 +40,7 @@ public:
         LABEL_LIST,
         PAGE_LIST,
         ROW_LIST,
-        COLUMN_LIST,
-        DATA_LIST
+        COLUMN_LIST
     };
 
 protected:
