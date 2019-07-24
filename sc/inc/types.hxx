@@ -107,13 +107,12 @@ struct MultiDataCellState
     MultiDataCellState( StateType eState );
 };
 
-enum AreaOverlapType
+enum class AreaOverlapType
 {
-    AreaInside,
-    AreaPartialOverlap,
-    AreaInsideOrOverlap,
-    OneRowInsideArea,
-    OneColumnInsideArea
+    Inside,
+    InsideOrOverlap,
+    OneRowInside,
+    OneColumnInside
 };
 
 enum class ListenerGroupType

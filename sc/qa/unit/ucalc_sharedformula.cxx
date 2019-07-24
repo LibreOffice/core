@@ -648,7 +648,7 @@ void Test::testSharedFormulasRefUpdateRangeDeleteRow()
     // Check the area listener status.
     ScBroadcastAreaSlotMachine* pBASM = m_pDoc->GetBASM();
     CPPUNIT_ASSERT(pBASM);
-    std::vector<sc::AreaListener> aListeners = pBASM->GetAllListeners(aWholeArea, sc::AreaInside);
+    std::vector<sc::AreaListener> aListeners = pBASM->GetAllListeners(aWholeArea, sc::AreaOverlapType::Inside);
     std::sort(aListeners.begin(), aListeners.end(), SortByArea());
 
     // This check makes only sense if group listeners are activated.
@@ -688,7 +688,7 @@ void Test::testSharedFormulasRefUpdateRangeDeleteRow()
     // This check makes only sense if group listeners are activated.
 #if !defined(USE_FORMULA_GROUP_LISTENER) || USE_FORMULA_GROUP_LISTENER
     // We should only have one listener group-listening on A1:B4.
-    aListeners = pBASM->GetAllListeners(aWholeArea, sc::AreaInside);
+    aListeners = pBASM->GetAllListeners(aWholeArea, sc::AreaOverlapType::Inside);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("There should only be 1 area listener.", size_t(1), aListeners.size());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("This listener should be listening on A1:B4.", ScRange(0,0,0,1,3,0), aListeners[0].maArea);
     CPPUNIT_ASSERT_MESSAGE("This listener should be group-listening.", aListeners[0].mbGroupListening);
@@ -725,7 +725,7 @@ void Test::testSharedFormulasRefUpdateRangeDeleteRow()
     CPPUNIT_ASSERT_EQUAL(11.0, m_pDoc->GetValue(ScAddress(2,3,0)));
     CPPUNIT_ASSERT_EQUAL(15.0, m_pDoc->GetValue(ScAddress(2,4,0)));
 
-    aListeners = pBASM->GetAllListeners(aWholeArea, sc::AreaInside);
+    aListeners = pBASM->GetAllListeners(aWholeArea, sc::AreaOverlapType::Inside);
     std::sort(aListeners.begin(), aListeners.end(), SortByArea());
 
     // This check makes only sense if group listeners are activated.
