@@ -329,23 +329,23 @@ public class _ParagraphProperties extends MultiPropertyTest {
             NumberingRules = (XIndexReplace) AnyConverter.toObject(
                            new Type(XIndexReplace.class), oObj.getPropertyValue("NumberingRules"));
         } catch (com.sun.star.lang.IllegalArgumentException ex) {
-            Status.failed( "could not get NumberingRuels: "+ ex.toString() );
+            log.println("could not get NumberingRules: "+ ex.toString() );
             return;
         } catch (UnknownPropertyException ex) {
-            Status.failed( "could not get NumberingRuels: "+ ex.toString() );
+            log.println( "could not get NumberingRules: "+ ex.toString() );
             return;
         } catch (WrappedTargetException ex) {
-            Status.failed( "could not get NumberingRuels: "+ ex.toString() );
+            log.println( "could not get NumberingRules: "+ ex.toString() );
             return;
         }
         try {
             propertyValues = (PropertyValue[]) NumberingRules.getByIndex(0);
 
         } catch (com.sun.star.lang.IndexOutOfBoundsException ex) {
-            Status.failed( "could not get NumberlingLevel-Array from NumberingRuels: "+ ex.toString() );
+            log.println( "could not get NumberlingLevel-Array from NumberingRules: "+ ex.toString() );
             return;
         } catch (WrappedTargetException ex) {
-            Status.failed( "could not get NumberlingLevel-Array from NumberingRuels: "+ ex.toString() );
+            log.println( "could not get NumberlingLevel-Array from NumberingRules: "+ ex.toString() );
             return;
         }
 
