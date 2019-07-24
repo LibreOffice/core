@@ -13,6 +13,7 @@
 
 #include <docsh.hxx>
 #include <tabvwsh.hxx>
+#include <impex.hxx>
 
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XModel2.hpp>
@@ -34,12 +35,14 @@ public:
     void testTdf84411();
     void testTdf124565();
     void testTdf126421();
+    void testTdf107394();
 
     CPPUNIT_TEST_SUITE(ScCopyPasteTest);
     CPPUNIT_TEST(testCopyPasteXLS);
     CPPUNIT_TEST(testTdf84411);
     CPPUNIT_TEST(testTdf124565);
     CPPUNIT_TEST(testTdf126421);
+    CPPUNIT_TEST(testTdf107394);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -360,6 +363,62 @@ void ScCopyPasteTest::testTdf126421()
             CPPUNIT_ASSERT_EQUAL(double((c + 1) * 100 + (r + 1)), rDoc.GetValue(c, r, n2ndTab));
 
     xDocSh->DoClose();
+}
+
+void ScCopyPasteTest::testTdf107394()
+{
+    uno::Reference<frame::XDesktop2> xDesktop
+        = frame::Desktop::create(::comphelper::getProcessComponentContext());
+    CPPUNIT_ASSERT(xDesktop.is());
+
+    uno::Reference<lang::XComponent> xComponent
+        = xDesktop->loadComponentFromURL("private:factory/scalc", "_blank", 0, {});
+    CPPUNIT_ASSERT(xComponent.is());
+
+    auto pModelObj = dynamic_cast<ScModelObj*>(xComponent.get());
+    CPPUNIT_ASSERT(pModelObj);
+    CPPUNIT_ASSERT(pModelObj->GetDocument());
+
+    ScDocument& rDoc = *pModelObj->GetDocument();
+
+    sal_uInt16 nFirstRowHeight = rDoc.GetRowHeight(0, 0);
+    sal_uInt16 nSecondRowHeight = rDoc.GetRowHeight(1, 0);
+    CPPUNIT_ASSERT_EQUAL(nFirstRowHeight, nSecondRowHeight);
+
+    // Import values to A1:A2.
+    ScImportExport aObj(&rDoc, ScAddress(0,0,0));
+    aObj.SetImportBroadcast(true);
+
+    OString aHTML("<pre>First\nVery long sentence.</pre>");
+    SvMemoryStream aStream;
+    aStream.WriteOString(aHTML);
+    aStream.Seek(0);
+    CPPUNIT_ASSERT(aObj.ImportStream(aStream, OUString(), SotClipboardFormatId::HTML));
+
+    CPPUNIT_ASSERT_EQUAL(OUString("First"), rDoc.GetString(ScAddress(0,0,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("Very long sentence."), rDoc.GetString(ScAddress(0,1,0)));
+
+    nFirstRowHeight = rDoc.GetRowHeight(0, 0);
+    nSecondRowHeight = rDoc.GetRowHeight(1, 0);
+    CPPUNIT_ASSERT_GREATER(nFirstRowHeight, nSecondRowHeight);
+
+    // Undo, and check the result.
+    SfxUndoManager* pUndoMgr = rDoc.GetUndoManager();
+    CPPUNIT_ASSERT_MESSAGE("Failed to get the undo manager.", pUndoMgr);
+    pUndoMgr->Undo();
+
+    CPPUNIT_ASSERT(rDoc.GetString(ScAddress(0,0,0)).isEmpty());
+    CPPUNIT_ASSERT(rDoc.GetString(ScAddress(0,1,0)).isEmpty());
+
+    nFirstRowHeight = rDoc.GetRowHeight(0, 0);
+    nSecondRowHeight = rDoc.GetRowHeight(1, 0);
+    // Without the accompanying fix in place, this test would have failed:
+    // - Expected: 256
+    // - Actual  : 477
+    // i.e. the increased height of the second row remained after undo.
+    CPPUNIT_ASSERT_EQUAL(nFirstRowHeight, nSecondRowHeight);
+
+    xComponent->dispose();
 }
 
 ScCopyPasteTest::ScCopyPasteTest()
