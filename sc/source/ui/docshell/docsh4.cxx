@@ -2005,8 +2005,12 @@ void ScDocShell::GetState( SfxItemSet &rSet )
 
                     GetDocument().GetLanguage( eLatin, eCjk, eCtl );
                     OUString sLanguage = SvtLanguageTable::GetLanguageString(eLatin);
-                    if (comphelper::LibreOfficeKit::isActive())
-                        sLanguage += ";" + LanguageTag(eLatin).getLanguage();
+                    if (comphelper::LibreOfficeKit::isActive()) {
+                        if (eLatin == LANGUAGE_NONE)
+                            sLanguage += ";-";
+                        else
+                            sLanguage += ";" + LanguageTag(eLatin).getLanguage();
+                    }
                     rSet.Put(SfxStringItem(nWhich, sLanguage));
                 }
                 break;
