@@ -35,7 +35,7 @@ class VCL_DLLPUBLIC Animation
 public:
     Animation();
     Animation(const Animation& rAnimation);
-    ~Animation();
+    virtual ~Animation();
 
     Animation& operator=(const Animation& rAnimation);
     bool operator==(const Animation& rAnimation) const;
@@ -43,8 +43,8 @@ public:
 
     void Clear();
 
-    bool Start(OutputDevice* pOutDev, const Point& rDestPt, const Size& rDestSz, long nCallerId,
-               OutputDevice* pFirstFrameOutDev);
+    virtual bool Start(OutputDevice* pOutDev, const Point& rDestPt, const Size& rDestSz,
+                       long nCallerId, OutputDevice* pFirstFrameOutDev = nullptr);
 
     void Stop(OutputDevice* pOutDev = nullptr, sal_uLong nCallerId = 0);
 
@@ -97,20 +97,23 @@ public:
     SAL_DLLPRIVATE static void ImplDecAnimCount() { mnAnimCount--; }
     SAL_DLLPRIVATE sal_uLong ImplGetCurPos() const { return mnFrameIndex; }
 
+protected:
+    std::vector<std::unique_ptr<AnimationBitmap>> maAnimationFrames;
+    AnimationRenderers maAnimationRenderers;
+    bool mbIsInAnimation;
+    size_t mnFrameIndex;
+    Timer maTimer;
+    sal_uInt32 mnLoopCount;
+    sal_uInt32 mnLoops;
+
+    SAL_DLLPRIVATE void RestartTimer(sal_uLong nTimeout);
+
 private:
     SAL_DLLPRIVATE static sal_uLong mnAnimCount;
 
-    std::vector<std::unique_ptr<AnimationBitmap>> maAnimationFrames;
-    AnimationRenderers maAnimationRenderers;
-
     Link<Animation*, void> maTimeoutNotifier;
     BitmapEx maBitmapEx;
-    Timer maTimer;
     Size maGlobalSize;
-    sal_uInt32 mnLoopCount;
-    sal_uInt32 mnLoops;
-    size_t mnFrameIndex;
-    bool mbIsInAnimation;
     bool mbLoopTerminated;
 
     SAL_DLLPRIVATE bool IsTimeoutSetup();
@@ -118,7 +121,6 @@ private:
     SAL_DLLPRIVATE AnimationBitmap* GetNextFrameBitmap();
     SAL_DLLPRIVATE void RenderNextFrame();
 
-    SAL_DLLPRIVATE void RestartTimer(sal_uLong nTimeout);
     DECL_DLLPRIVATE_LINK(ImplTimeoutHdl, Timer*, void);
 };
 

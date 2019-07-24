@@ -35,21 +35,21 @@
 sal_uLong Animation::mnAnimCount = 0;
 
 Animation::Animation()
-    : mnLoopCount(0)
-    , mnLoops(0)
+    : mbIsInAnimation(false)
     , mnFrameIndex(0)
-    , mbIsInAnimation(false)
+    , mnLoopCount(0)
+    , mnLoops(0)
     , mbLoopTerminated(false)
 {
     maTimer.SetInvokeHandler(LINK(this, Animation, ImplTimeoutHdl));
 }
 
 Animation::Animation(const Animation& rAnimation)
-    : maBitmapEx(rAnimation.maBitmapEx)
-    , maGlobalSize(rAnimation.maGlobalSize)
-    , mnLoopCount(rAnimation.mnLoopCount)
+    : mbIsInAnimation(false)
     , mnFrameIndex(rAnimation.mnFrameIndex)
-    , mbIsInAnimation(false)
+    , mnLoopCount(rAnimation.mnLoopCount)
+    , maBitmapEx(rAnimation.maBitmapEx)
+    , maGlobalSize(rAnimation.maGlobalSize)
     , mbLoopTerminated(rAnimation.mbLoopTerminated)
 {
     for (auto const& rFrame : rAnimation.maAnimationFrames)
@@ -224,43 +224,16 @@ BitmapChecksum Animation::GetChecksum() const
     return nCrc;
 }
 
-bool Animation::Start(OutputDevice* pOut, const Point& rDestPt, const Size& rDestSz, long nCallerId,
-                      OutputDevice* pFirstFrameOutDev)
+bool Animation::Start(OutputDevice* pOut, const Point& rDestPt, const Size& rDestSz, long,
+                      OutputDevice*)
 {
-    bool bRet = false;
-
     if (!maAnimationFrames.empty())
     {
-        if ((pOut->GetOutDevType() == OUTDEV_WINDOW) && !mbLoopTerminated
-            && (ANIMATION_TIMEOUT_ON_CLICK != maAnimationFrames[mnFrameIndex]->mnWait))
-        {
-            bool bRendererDoesNotExist
-                = maAnimationRenderers.RepaintRenderers(pOut, nCallerId, rDestPt, rDestSz);
-
-            if (maAnimationRenderers.NoRenderersAreAvailable())
-            {
-                maTimer.Stop();
-                mbIsInAnimation = false;
-                mnFrameIndex = 0;
-            }
-
-            if (bRendererDoesNotExist)
-                maAnimationRenderers.CreateDefaultRenderer(this, pOut, rDestPt, rDestSz, nCallerId,
-                                                           pFirstFrameOutDev);
-
-            if (!mbIsInAnimation)
-            {
-                RestartTimer(maAnimationFrames[mnFrameIndex]->mnWait);
-                mbIsInAnimation = true;
-            }
-        }
-        else
-            Draw(pOut, rDestPt, rDestSz);
-
-        bRet = true;
+        Draw(pOut, rDestPt, rDestSz);
+        return true;
     }
 
-    return bRet;
+    return false;
 }
 
 void Animation::Stop(OutputDevice* pOut, sal_uLong nCallerId)
