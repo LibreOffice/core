@@ -25,6 +25,7 @@
 #include <com/sun/star/embed/EmbedMisc.hpp>
 #include <com/sun/star/embed/EmbedStates.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
+#include <com/sun/star/drawing/QRCode.hpp>
 #include <vcl/errinf.hxx>
 #include <sfx2/app.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
@@ -370,6 +371,18 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
                 break;
             }
 
+        case SID_INSERT_QRCODE:
+        case SID_EDIT_QRCODE:
+            {
+                const uno::Reference<frame::XModel> xModel( GetViewData().GetDocShell()->GetBaseModel() );
+
+                VclAbstractDialogFactory* pFact = VclAbstractDialogFactory::Create();
+                ScopedVclPtr<AbstractQrCodeGenDialog> pDialog(pFact->CreateQrCodeGenDialog(
+                    pWin->GetFrameWeld(), xModel, rReq.GetSlot() == SID_EDIT_QRCODE));
+                pDialog->Execute();
+                break;
+            }
+
         case SID_OBJECTRESIZE:
             {
                 //         the server would like to change the client size
@@ -523,6 +536,15 @@ void ScTabViewShell::GetDrawInsState(SfxItemSet &rSet)
                     rSet.DisableItem(nWhich);
                 break;
 
+            case SID_INSERT_QRCODE:
+                if ( bTabProt || bShared || (pSdrView && pSdrView->GetMarkedObjectCount() != 0))
+                    rSet.DisableItem( nWhich );
+                break;
+            case SID_EDIT_QRCODE:
+                if (!IsQRCodeSelected())
+                    rSet.DisableItem(nWhich);
+                break;
+
             case SID_INSERT_GRAPHIC:
                 if (bTabProt || bShared)
                 {
@@ -575,6 +597,32 @@ bool ScTabViewShell::IsSignatureLineSelected()
         return false;
 
     return pGraphic->isSignatureLine();
+}
+
+bool ScTabViewShell::IsQRCodeSelected()
+{
+    SdrView* pSdrView = GetSdrView();
+    if (!pSdrView)
+        return false;
+
+    if (pSdrView->GetMarkedObjectCount() != 1)
+        return false;
+
+    SdrObject* pPickObj = pSdrView->GetMarkedObjectByIndex(0);
+    if (!pPickObj)
+        return false;
+
+    SdrGrafObj* pGraphic = dynamic_cast<SdrGrafObj*>(pPickObj);
+    if (!pGraphic)
+        return false;
+
+    if(pGraphic->getQrCode())
+    {
+        return true;
+    }
+    else{
+        return false;
+    }
 }
 
 bool ScTabViewShell::IsSignatureLineSigned()
