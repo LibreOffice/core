@@ -1562,7 +1562,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
         case SID_DEC_INDENT:
         case SID_INC_INDENT:
         {
-            //if the paragrah has bullet we'll do the following things:
+            //if the paragraph has bullet we'll do the following things:
             //1: if the bullet level is the first level, disable the decrease-indent button
             //2: if the bullet level is the last level, disable the increase-indent button
             if ( rSh.GetNumRuleAtCurrCursorPos() && !rSh.HasReadonlySel() )

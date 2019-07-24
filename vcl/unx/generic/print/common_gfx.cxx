@@ -919,7 +919,7 @@ PrinterGfx::PSBinPath (const Point& rCurrent, Point& rOld,
     sal_Int32 nXPrec = getAlignedHexValueOf (rCurrent.X() - rOld.X(), pPath);
     sal_Int32 nYPrec = getAlignedHexValueOf (rCurrent.Y() - rOld.Y(), pPath);
 
-    // build the command, it is a char with bit represention 000cxxyy
+    // build the command, it is a char with bit representation 000cxxyy
     // c represents the char, xx and yy repr. the field width of the dx and dy shift,
     // dx and dy represent the number of bytes to read after the opcode
     sal_Char cCmd = (eType == lineto ? sal_Char(0x00) : sal_Char(0x10));

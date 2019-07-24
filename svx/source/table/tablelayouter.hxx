@@ -59,7 +59,7 @@ public:
     ~TableLayouter();
 
     /** try to fit the table into the given rectangle.
-        If the rectangle is to small, it will be grown to fit the table.
+        If the rectangle is too small, it will be grown to fit the table.
 
         if bFitWidth or bFitHeight is set, the layouter tries to scale
         the rows and/or columns to the given area. The result my be bigger

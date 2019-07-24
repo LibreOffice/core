@@ -704,7 +704,7 @@ sal_Int32 SAL_CALL ScaDateAddIn::getDaysInYear(
  * shall be the first day of the week.
  *
  * A WeekDay can be calculated by subtracting 1 and calculating the rest of
- * a division by 7 from the internal date represention
+ * a division by 7 from the internal date representation
  * which gives a 0 - 6 value for Monday - Sunday
  *
  * @see #IsLeapYear #WeekNumber

@@ -232,7 +232,7 @@ bool XSecController::chainOn()
  *  creates xml security components, and chains the SAXEventKeeper into
  *  the SAX chain.
  *  Before being chained in, the SAXEventKeeper needs to receive all
- *  missed key SAX events, which can promise the DOM tree bufferred by the
+ *  missed key SAX events, which can promise the DOM tree buffered by the
  *  SAXEventKeeper has the same structure with the original document.
  *
  *   RESULT

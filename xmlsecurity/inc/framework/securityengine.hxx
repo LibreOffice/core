@@ -64,7 +64,7 @@ protected:
     sal_Int32 m_nIdOfTemplateEC;
 
     /*
-     * remembers how many referenced elements have been bufferred completely,
+     * remembers how many referenced elements have been buffered completely,
      * including the key element, template element, and referenced element of
      * signature.
      */

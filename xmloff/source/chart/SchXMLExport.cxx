@@ -1194,7 +1194,7 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument > 
 
             if( eXMLChartType == XML_ADD_IN )
             {
-                // sChartType is the servie-name of the add-in
+                // sChartType is the service-name of the add-in
                 mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_CLASS,
                                        mrExport.GetNamespaceMap().GetQNameByKey(
                                            XML_NAMESPACE_OOO, sChartType) );
