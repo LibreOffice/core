@@ -21,6 +21,7 @@
 
 #include <hb-icu.h>
 #include <hb-ot.h>
+#include <hb-graphite2.h>
 
 #include <sallayout.hxx>
 
@@ -290,6 +291,7 @@ bool GenericSalLayout::LayoutText(ImplLayoutArgs& rArgs, const SalLayoutGlyphs* 
     }
 
     hb_font_t *pHbFont = GetFont().GetHbFont();
+    bool isGraphite = hb_graphite2_face_get_gr_face(hb_font_get_face(pHbFont)) != nullptr;
 
     int nGlyphCapacity = 2 * (rArgs.mnEndCharPos - rArgs.mnMinCharPos);
     m_GlyphItems.Impl()->reserve(nGlyphCapacity);
@@ -338,8 +340,8 @@ bool GenericSalLayout::LayoutText(ImplLayoutArgs& rArgs, const SalLayoutGlyphs* 
             break;
 
         // Find script subruns.
-        int nCurrentPos = nBidiMinRunPos;
         std::vector<SubRun> aSubRuns;
+        int nCurrentPos = nBidiMinRunPos;
         size_t k = 0;
         for (; k < pTextLayout->runs.size(); ++k)
         {
@@ -350,67 +352,75 @@ bool GenericSalLayout::LayoutText(ImplLayoutArgs& rArgs, const SalLayoutGlyphs* 
             }
         }
 
-        while (nCurrentPos < nBidiEndRunPos && k < pTextLayout->runs.size())
+        if (isGraphite)
         {
-            int32_t nMinRunPos = nCurrentPos;
-            int32_t nEndRunPos = std::min(pTextLayout->runs[k].nEnd, nBidiEndRunPos);
-            hb_direction_t aDirection = bRightToLeft ? HB_DIRECTION_RTL : HB_DIRECTION_LTR;
             hb_script_t aScript = hb_icu_script_to_script(pTextLayout->runs[k].nCode);
-            // For vertical text, further divide the runs based on character
-            // orientation.
-            if (rArgs.mnFlags & SalLayoutFlags::Vertical)
+            aSubRuns.push_back({ nBidiMinRunPos, nBidiEndRunPos, aScript, bRightToLeft ? HB_DIRECTION_RTL : HB_DIRECTION_LTR });
+        }
+        else
+        {
+            while (nCurrentPos < nBidiEndRunPos && k < pTextLayout->runs.size())
             {
-                sal_Int32 nIdx = nMinRunPos;
-                while (nIdx < nEndRunPos)
+                int32_t nMinRunPos = nCurrentPos;
+                int32_t nEndRunPos = std::min(pTextLayout->runs[k].nEnd, nBidiEndRunPos);
+                hb_direction_t aDirection = bRightToLeft ? HB_DIRECTION_RTL : HB_DIRECTION_LTR;
+                hb_script_t aScript = hb_icu_script_to_script(pTextLayout->runs[k].nCode);
+                // For vertical text, further divide the runs based on character
+                // orientation.
+                if (rArgs.mnFlags & SalLayoutFlags::Vertical)
                 {
-                    sal_Int32 nPrevIdx = nIdx;
-                    sal_UCS4 aChar = rArgs.mrStr.iterateCodePoints(&nIdx);
-                    VerticalOrientation aVo = GetVerticalOrientation(aChar, rArgs.maLanguageTag);
-
-                    sal_UCS4 aVariationSelector = 0;
-                    if (nIdx < nEndRunPos)
+                    sal_Int32 nIdx = nMinRunPos;
+                    while (nIdx < nEndRunPos)
                     {
-                        sal_Int32 nNextIdx = nIdx;
-                        sal_UCS4 aNextChar = rArgs.mrStr.iterateCodePoints(&nNextIdx);
-                        if (u_hasBinaryProperty(aNextChar, UCHAR_VARIATION_SELECTOR))
+                        sal_Int32 nPrevIdx = nIdx;
+                        sal_UCS4 aChar = rArgs.mrStr.iterateCodePoints(&nIdx);
+                        VerticalOrientation aVo = GetVerticalOrientation(aChar, rArgs.maLanguageTag);
+
+                        sal_UCS4 aVariationSelector = 0;
+                        if (nIdx < nEndRunPos)
                         {
-                            nIdx = nNextIdx;
-                            aVariationSelector = aNextChar;
+                            sal_Int32 nNextIdx = nIdx;
+                            sal_UCS4 aNextChar = rArgs.mrStr.iterateCodePoints(&nNextIdx);
+                            if (u_hasBinaryProperty(aNextChar, UCHAR_VARIATION_SELECTOR))
+                            {
+                                nIdx = nNextIdx;
+                                aVariationSelector = aNextChar;
+                            }
                         }
-                    }
 
-                    // Charters with U and Tu vertical orientation should
-                    // be shaped in vertical direction. But characters
-                    // with Tr should be shaped in vertical direction
-                    // only if they have vertical alternates, otherwise
-                    // they should be shaped in horizontal direction
-                    // and then rotated.
-                    // See http://unicode.org/reports/tr50/#vo
-                    if (aVo == VerticalOrientation::Upright ||
-                        aVo == VerticalOrientation::TransformedUpright ||
-                        (aVo == VerticalOrientation::TransformedRotated &&
-                         HasVerticalAlternate(aChar, aVariationSelector)))
-                    {
-                        aDirection = HB_DIRECTION_TTB;
-                    }
-                    else
-                    {
-                        aDirection = bRightToLeft ? HB_DIRECTION_RTL : HB_DIRECTION_LTR;
-                    }
+                        // Charters with U and Tu vertical orientation should
+                        // be shaped in vertical direction. But characters
+                        // with Tr should be shaped in vertical direction
+                        // only if they have vertical alternates, otherwise
+                        // they should be shaped in horizontal direction
+                        // and then rotated.
+                        // See http://unicode.org/reports/tr50/#vo
+                        if (aVo == VerticalOrientation::Upright ||
+                            aVo == VerticalOrientation::TransformedUpright ||
+                            (aVo == VerticalOrientation::TransformedRotated &&
+                             HasVerticalAlternate(aChar, aVariationSelector)))
+                        {
+                            aDirection = HB_DIRECTION_TTB;
+                        }
+                        else
+                        {
+                            aDirection = bRightToLeft ? HB_DIRECTION_RTL : HB_DIRECTION_LTR;
+                        }
 
-                    if (aSubRuns.empty() || aSubRuns.back().maDirection != aDirection)
-                        aSubRuns.push_back({ nPrevIdx, nIdx, aScript, aDirection });
-                    else
-                        aSubRuns.back().mnEnd = nIdx;
+                        if (aSubRuns.empty() || aSubRuns.back().maDirection != aDirection)
+                            aSubRuns.push_back({ nPrevIdx, nIdx, aScript, aDirection });
+                        else
+                            aSubRuns.back().mnEnd = nIdx;
+                    }
                 }
-            }
-            else
-            {
-                aSubRuns.push_back({ nMinRunPos, nEndRunPos, aScript, aDirection });
-            }
+                else
+                {
+                    aSubRuns.push_back({ nMinRunPos, nEndRunPos, aScript, aDirection });
+                }
 
-            nCurrentPos = nEndRunPos;
-            ++k;
+                nCurrentPos = nEndRunPos;
+                ++k;
+            }
         }
 
         // RTL subruns should be reversed to ensure that final glyph order is
