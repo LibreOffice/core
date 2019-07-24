@@ -2859,13 +2859,14 @@ WW8PLCFx_Fc_FKP::WW8Fkp::Entry&
     mnIStd = rEntry.mnIStd;
     mbMustDelete = rEntry.mbMustDelete;
 
-    if (mbMustDelete)
+    if (rEntry.mbMustDelete)
     {
         mpData = new sal_uInt8[mnLen];
         memcpy(mpData, rEntry.mpData, mnLen);
     }
     else
         mpData = rEntry.mpData;
+
     return *this;
 }
 
