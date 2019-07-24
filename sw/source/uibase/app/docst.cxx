@@ -88,6 +88,7 @@
 #include <paratr.hxx>
 #include <tblafmt.hxx>
 #include <sfx2/watermarkitem.hxx>
+#include <SwUndoFmt.hxx>
 
 using namespace ::com::sun::star;
 
@@ -678,7 +679,17 @@ void SwDocShell::Edit(
         else
             nMask = SfxStyleSearchBits::UserDefined;
 
-        pStyle = &m_xBasePool->Make( rName, nFamily, nMask );
+        if ( nFamily == SfxStyleFamily::Para )
+        {
+            const bool bDoesUndo = GetDoc()->GetIDocumentUndoRedo().DoesUndo();
+            GetDoc()->GetIDocumentUndoRedo().DoUndo( false );
+            pStyle = &m_xBasePool->Make( rName, nFamily, nMask );
+            GetDoc()->GetIDocumentUndoRedo().DoUndo( bDoesUndo );
+        }
+        else
+        {
+            pStyle = &m_xBasePool->Make( rName, nFamily, nMask );
+        }
 
         // set the current one as Parent
         SwDocStyleSheet* pDStyle = static_cast<SwDocStyleSheet*>(pStyle);
@@ -686,9 +697,10 @@ void SwDocShell::Edit(
         {
             case SfxStyleFamily::Para:
             {
+                SwTextFormatColl* pColl;
                 if(!rParent.isEmpty())
                 {
-                    SwTextFormatColl* pColl = m_pWrtShell->FindTextFormatCollByName( rParent );
+                    pColl = m_pWrtShell->FindTextFormatCollByName( rParent );
                     if(!pColl)
                     {
                         sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName(rParent, SwGetPoolIdFromName::TxtColl);
@@ -711,10 +723,16 @@ void SwDocShell::Edit(
                 }
                 else
                 {
-                    SwTextFormatColl* pColl = m_pWrtShell->GetCurTextFormatColl();
+                    pColl = m_pWrtShell->GetCurTextFormatColl();
                     pDStyle->GetCollection()->SetDerivedFrom( pColl );
                     if( pColl )
                         pDStyle->PresetParent( pColl->GetName() );
+                }
+                // Do this here so parent is included undo append
+                if (GetDoc()->GetIDocumentUndoRedo().DoesUndo())
+                {
+                    GetDoc()->GetIDocumentUndoRedo().AppendUndo(
+                        std::make_unique<SwUndoTextFormatCollCreate>(pDStyle->GetCollection(), pColl, GetDoc()));
                 }
             }
             break;
