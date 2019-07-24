@@ -16,6 +16,24 @@
       "revId": "a5abe0fc4d435d3a7a7de8bf55ec74087fdd299a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_0ca59904",
+        "filename": "sfx2/source/doc/objstor.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1174,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-07-24T14:51:09Z",
+      "side": 0,
+      "message": "first one doesn\u0027t make a difference because we can\u0027t export ODFVER_010 anyway :)\n\nthe intent of the 2nd line is that aODFVersion is empty for ODF 1.1 export, for some stupid compat reasons.\n\nthe intent of this test is to not copy the signature between odf 1.1 and odf 1.2 documents, presumably because those would typically use different crypto algorithms?\n\nbut if it\u0027s empty for template as well that\u0027s tragic; possibly it should be copied from the template to the new instance document on import but something prevents it?",
+      "parentUuid": "bf659307_29d7394e",
+      "revId": "a5abe0fc4d435d3a7a7de8bf55ec74087fdd299a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
