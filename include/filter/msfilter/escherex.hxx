@@ -56,7 +56,7 @@ namespace tools {
     class PolyPolygon;
 }
 
-        /*Record Name       FBT-Value   Instance                  Contents                                                          Wrd Exl PPt Ver*/
+        /*Record Name       FBT-Value   Instance                  Contents                                                          Wrd Exl PPT Ver*/
 // In the Microsoft documentation the naming scheme is msofbt... instead of ESCHER_...
 #define ESCHER_DggContainer     0xF000u /*                           per-document data                                                  X   X   X     */
 #define ESCHER_Dgg              0xF006u /*                           an FDGG and several FIDCLs                                         X   X   X   0 */
@@ -980,7 +980,7 @@ public:
     /** Creates and returns a new shape identifier, updates the internal shape
         counters and registers the identifier in the DGG cluster table.
         @param nDrawingId  Drawing identifier has to be passed to be able to
-            generate shape identifiers for multiple drawings simultaniously. */
+            generate shape identifiers for multiple drawings simultaneously. */
     sal_uInt32          GenerateShapeId( sal_uInt32 nDrawingId, bool bIsInSpgr );
     /** Returns the number of shapes in the current drawing, based on number of
         calls to the GenerateShapeId() function. */
@@ -1208,7 +1208,7 @@ public:
 
                 /// Called if an ESCHER_Prop_lTxid shall be written
     virtual sal_uInt32  QueryTextID( const css::uno::Reference< css::drawing::XShape >&, sal_uInt32 nShapeId );
-            // add an dummy rectangle shape into the escher stream
+            // add a dummy rectangle shape into the escher stream
         sal_uInt32  AddDummyShape();
 
     static const SdrObject* GetSdrObject( const css::uno::Reference< css::drawing::XShape >& rXShape );
