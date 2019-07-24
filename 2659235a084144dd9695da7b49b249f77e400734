@@ -112,6 +112,24 @@
     },
     {
       "key": {
+        "uuid": "bf659307_69520716",
+        "filename": "offapi/com/sun/star/drawing/QRCode.idl",
+        "patchSetId": 27
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-07-24T08:36:09Z",
+      "side": 1,
+      "message": "in which case, can that update of the comment be moved down to this patch?",
+      "parentUuid": "bf659307_c93b13cf",
+      "revId": "2659235a084144dd9695da7b49b249f77e400734",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bf659307_6668f4f4",
         "filename": "offapi/com/sun/star/drawing/QRCodeErrorCorrection.idl",
         "patchSetId": 27
