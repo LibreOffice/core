@@ -436,6 +436,7 @@ static int GetSimpleTTOutline(TrueTypeFont const *ttf, sal_uInt32 glyphID, Contr
         pa[i++].flags = static_cast<sal_uInt32>(flag);
         if (flag & 8) {                                     /*- repeat flag */
             n = *p++;
+            // coverity[tainted_data] - i > lastPoint extra checks the n loop bound
             for (j=0; j<n; j++) {
                 if (i > lastPoint) {                        /*- if the font is really broken */
                     free(pa);
