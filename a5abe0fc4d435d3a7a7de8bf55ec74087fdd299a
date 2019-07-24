@@ -34,6 +34,24 @@
       "revId": "a5abe0fc4d435d3a7a7de8bf55ec74087fdd299a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_ac8eed75",
+        "filename": "sfx2/source/doc/objstor.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1174,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-07-24T14:57:19Z",
+      "side": 0,
+      "message": "ah... double checking the https://bugs.documentfoundation.org/show_bug.cgi?id\u003d42316 bugdoc: it is ODF 1.1 actually, so this check apparently works as originally intended",
+      "parentUuid": "bf659307_0ca59904",
+      "revId": "a5abe0fc4d435d3a7a7de8bf55ec74087fdd299a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
