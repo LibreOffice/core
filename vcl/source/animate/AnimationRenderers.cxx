@@ -26,7 +26,7 @@
 void AnimationRenderers::ClearAnimationRenderers() { maAnimationRenderers.clear(); }
 
 bool AnimationRenderers::RepaintRenderers(OutputDevice* pOut, sal_uLong nCallerId,
-                                             const Point& rDestPt, const Size& rDestSz)
+                                          const Point& rDestPt, const Size& rDestSz)
 {
     AnimationRenderer* pRenderer;
 
