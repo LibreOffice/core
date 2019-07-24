@@ -88,6 +88,7 @@
 #include <paratr.hxx>
 #include <tblafmt.hxx>
 #include <sfx2/watermarkitem.hxx>
+#include <SwUndoFmt.hxx>
 
 using namespace ::com::sun::star;
 
@@ -678,7 +679,19 @@ void SwDocShell::Edit(
         else
             nMask = SfxStyleSearchBits::UserDefined;
 
-        pStyle = &m_xBasePool->Make( rName, nFamily, nMask );
+        if ( nFamily == SfxStyleFamily::Para || nFamily == SfxStyleFamily::Char || nFamily == SfxStyleFamily::Frame )
+        {
+            // Prevent undo append from being done during paragraph, character, and frame style Make
+            // Do it after ok return from style dialog when derived from style is known
+            const bool bDoesUndo = GetDoc()->GetIDocumentUndoRedo().DoesUndo();
+            GetDoc()->GetIDocumentUndoRedo().DoUndo( false );
+            pStyle = &m_xBasePool->Make( rName, nFamily, nMask );
+            GetDoc()->GetIDocumentUndoRedo().DoUndo( bDoesUndo );
+        }
+        else
+        {
+            pStyle = &m_xBasePool->Make( rName, nFamily, nMask );
+        }
 
         // set the current one as Parent
         SwDocStyleSheet* pDStyle = static_cast<SwDocStyleSheet*>(pStyle);
@@ -840,6 +853,50 @@ void SwDocShell::Edit(
 
             if (bNew)
             {
+                switch( nFamily )
+                {
+                    case SfxStyleFamily::Para:
+                    {
+                        if(!xTmp->GetParent().isEmpty())
+                        {
+                            SwTextFormatColl* pColl = m_pWrtShell->FindTextFormatCollByName(xTmp->GetParent());
+                            if (GetDoc()->GetIDocumentUndoRedo().DoesUndo())
+                            {
+                                GetDoc()->GetIDocumentUndoRedo().AppendUndo(
+                                    std::make_unique<SwUndoTextFormatCollCreate>(xTmp->GetCollection(), pColl, GetDoc()));
+                            }
+                        }
+                    }
+                    break;
+                    case SfxStyleFamily::Char:
+                    {
+                        if(!xTmp->GetParent().isEmpty())
+                        {
+                            SwCharFormat* pCFormat = m_pWrtShell->FindCharFormatByName(xTmp->GetParent());
+                            if (GetDoc()->GetIDocumentUndoRedo().DoesUndo())
+                            {
+                                GetDoc()->GetIDocumentUndoRedo().AppendUndo(
+                                    std::make_unique<SwUndoCharFormatCreate>(xTmp->GetCharFormat(), pCFormat, GetDoc()));
+                            }
+                        }
+                    }
+                    break;
+                    case SfxStyleFamily::Frame:
+                    {
+                        if(!xTmp->GetParent().isEmpty())
+                        {
+                            SwFrameFormat* pFFormat = m_pWrtShell->GetDoc()->FindFrameFormatByName(xTmp->GetParent());
+                            if (GetDoc()->GetIDocumentUndoRedo().DoesUndo())
+                            {
+                                GetDoc()->GetIDocumentUndoRedo().AppendUndo(
+                                    std::make_unique<SwUndoFrameFormatCreate>(xTmp->GetFrameFormat(), pFFormat, GetDoc()));
+                            }
+                        }
+                    }
+                    break;
+                    default: break;
+                }
+
                 SwRewriter aRewriter;
                 aRewriter.AddRule(UndoArg1, xTmp->GetName());
                 //Group the create style and change style operations together under the
