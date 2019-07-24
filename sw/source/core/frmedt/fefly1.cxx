@@ -592,7 +592,7 @@ Point SwFEShell::FindAnchorPos( const Point& rAbsPos, bool bMoveIt )
                     // re-created. Thus, delete all fly frames except the <this> before the
                     // anchor attribute is change and re-create them afterwards.
                     {
-                        std::unique_ptr<SwHandleAnchorNodeChg> pHandleAnchorNodeChg;
+                        std::unique_ptr<SwHandleAnchorNodeChg, o3tl::default_delete<SwHandleAnchorNodeChg>> pHandleAnchorNodeChg;
                         SwFlyFrameFormat* pFlyFrameFormat( dynamic_cast<SwFlyFrameFormat*>(&rFormat) );
                         if ( pFlyFrameFormat )
                         {
