@@ -115,7 +115,7 @@ LRESULT AWindow::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandle
 
     m_xDropTarget->addDropTargetListener( static_cast<XDropTargetListener*>
         ( new DropTargetListener( m_hwndEdit)) );
-//  // make this window tho a drop target
+//  // make this window a drop target
     m_xDropTarget->setActive(sal_True);
 
     return 0;
