@@ -301,9 +301,9 @@ desktop/source/deployment/manager/dp_managerfac.cxx:48
 desktop/unx/source/splashx.c:370
      functions unsigned long
 desktop/unx/source/splashx.c:370
-     decorations unsigned long
-desktop/unx/source/splashx.c:370
      flags unsigned long
+desktop/unx/source/splashx.c:370
+     decorations unsigned long
 desktop/unx/source/splashx.c:371
      input_mode long
 drawinglayer/source/attribute/sdrfillgraphicattribute.cxx:47
@@ -346,6 +346,16 @@ framework/inc/uielement/langselectionmenucontroller.hxx:83
     framework::LanguageSelectionMenuController m_xMenuDispatch_Font css::uno::Reference<css::frame::XDispatch>
 framework/inc/uielement/langselectionmenucontroller.hxx:85
     framework::LanguageSelectionMenuController m_xMenuDispatch_CharDlgForParagraph css::uno::Reference<css::frame::XDispatch>
+framework/inc/xml/imagesdocumenthandler.hxx:99
+    framework::OReadImagesDocumentHandler m_bExternalImagesStartFound _Bool
+framework/inc/xml/imagesdocumenthandler.hxx:100
+    framework::OReadImagesDocumentHandler m_bExternalImageStartFound _Bool
+framework/inc/xml/imagesdocumenthandler.hxx:101
+    framework::OReadImagesDocumentHandler m_nHashMaskModeBitmap sal_Int32
+framework/inc/xml/imagesdocumenthandler.hxx:102
+    framework::OReadImagesDocumentHandler m_nHashMaskModeColor sal_Int32
+framework/inc/xml/imagesdocumenthandler.hxx:133
+    framework::OWriteImagesDocumentHandler m_aXMLXlinkNS class rtl::OUString
 framework/source/layoutmanager/toolbarlayoutmanager.hxx:280
     framework::ToolbarLayoutManager m_pGlobalSettings std::unique_ptr<GlobalSettings>
 framework/source/layoutmanager/toolbarlayoutmanager.hxx:284
@@ -491,9 +501,9 @@ include/xmloff/shapeimport.hxx:181
 include/xmloff/shapeimport.hxx:182
     SdXML3DSceneAttributesHelper mbVUPUsed _Bool
 io/source/stm/odata.cxx:240
-    io_stm::ODataInputStream::readDouble()::(anonymous union)::(anonymous) n1 sal_uInt32
-io/source/stm/odata.cxx:240
     io_stm::ODataInputStream::readDouble()::(anonymous union)::(anonymous) n2 sal_uInt32
+io/source/stm/odata.cxx:240
+    io_stm::ODataInputStream::readDouble()::(anonymous union)::(anonymous) n1 sal_uInt32
 jvmfwk/inc/vendorbase.hxx:174
     jfw_plugin::VendorBase m_sArch class rtl::OUString
 l10ntools/inc/common.hxx:31
@@ -560,7 +570,7 @@ sc/inc/pivot.hxx:78
     ScDPLabelData mbIsValue _Bool
 sc/inc/scmatrix.hxx:118
     ScMatrix mbCloneIfConst _Bool
-sc/inc/scmod.hxx:102
+sc/inc/scmod.hxx:103
     ScModule m_pErrorHdl std::unique_ptr<SfxErrorHandler>
 sc/inc/tabopparams.hxx:38
     ScInterpreterTableOpParams bValid _Bool
@@ -618,12 +628,8 @@ sc/source/filter/xml/xmldpimp.hxx:248
     ScXMLDataPilotFieldContext mbHasHiddenMember _Bool
 sc/source/filter/xml/xmldrani.hxx:72
     ScXMLDatabaseRangeContext bIsSelection _Bool
-sc/source/filter/xml/xmlexprt.hxx:78
-    ScXMLExport xCurrentTableCellRange css::uno::Reference<css::table::XCellRange>
 sc/source/filter/xml/xmlexternaltabi.hxx:113
     ScXMLExternalRefCellContext mnCellType sal_Int16
-sc/source/filter/xml/xmlsubti.hxx:58
-    ScMyTables xCurrentCellRange css::uno::Reference<css::table::XCellRange>
 sc/source/ui/inc/AccessibleText.hxx:194
     ScAccessiblePreviewHeaderCellTextData mbRowHeader const _Bool
 sc/source/ui/inc/datastream.hxx:105
@@ -726,7 +732,7 @@ soltools/cpp/cpp.h:143
     macroValidator pMacro Nlist *
 starmath/inc/view.hxx:156
     SmCmdBoxWindow aController class SmEditController
-stoc/source/servicemanager/servicemanager.cxx:401
+stoc/source/servicemanager/servicemanager.cxx:392
     (anonymous namespace)::OServiceManager m_SetLoadedFactories (anonymous namespace)::HashSet_Ref
 store/source/storbios.cxx:56
     OStoreSuperBlock m_nMarked sal_uInt32
@@ -814,9 +820,9 @@ svx/source/tbxctrls/tbcontrl.cxx:197
     SvxFontNameBox_Impl m_aOwnFontList ::std::unique_ptr<FontList>
 sw/inc/accmap.hxx:96
     SwAccessibleMap mvShapes SwShapeList_Impl
-sw/inc/swmodule.hxx:95
+sw/inc/swmodule.hxx:96
     SwModule m_pErrorHandler std::unique_ptr<SfxErrorHandler>
-sw/inc/swmodule.hxx:108
+sw/inc/swmodule.hxx:109
     SwModule m_xLinguServiceEventListener css::uno::Reference<css::linguistic2::XLinguServiceEventListener>
 sw/inc/swwait.hxx:45
     SwWait mpLockedDispatchers std::unordered_set<SfxDispatcher *>
@@ -962,12 +968,12 @@ vcl/inc/qt5/Qt5Instance.hxx:61
     Qt5Instance m_pFakeArgv std::unique_ptr<char *[]>
 vcl/inc/qt5/Qt5Instance.hxx:62
     Qt5Instance m_pFakeArgc std::unique_ptr<int>
-vcl/inc/salmenu.hxx:34
-    SalItemParams nBits enum MenuItemBits
-vcl/inc/salmenu.hxx:35
+vcl/inc/salmenu.hxx:33
     SalItemParams pMenu VclPtr<class Menu>
-vcl/inc/salmenu.hxx:36
+vcl/inc/salmenu.hxx:34
     SalItemParams aText class rtl::OUString
+vcl/inc/salmenu.hxx:37
+    SalItemParams nBits enum MenuItemBits
 vcl/inc/salmenu.hxx:42
     SalMenuButtonItem mnId sal_uInt16
 vcl/inc/salmenu.hxx:43
@@ -1014,21 +1020,21 @@ vcl/inc/WidgetThemeLibrary.hxx:93
     vcl::ControlDrawParameters nValue int64_t
 vcl/opengl/salbmp.cxx:446
     (anonymous namespace)::ScanlineWriter mpCurrentScanline sal_uInt8 *
-vcl/source/filter/graphicfilter.cxx:659
+vcl/source/filter/graphicfilter.cxx:653
     ImpFilterLibCacheEntry maFiltername const class rtl::OUString
-vcl/source/filter/graphicfilter.cxx:758
+vcl/source/filter/graphicfilter.cxx:752
     ImpFilterLibCache mpLast struct ImpFilterLibCacheEntry *
-vcl/source/filter/jpeg/Exif.hxx:55
+vcl/source/filter/jpeg/Exif.hxx:51
     Exif::ExifIFD tag sal_uInt8 [2]
-vcl/source/filter/wmf/wmfwr.hxx:96
+vcl/source/filter/wmf/wmfwr.hxx:95
     WMFWriter aDstClipRegion vcl::Region
 vcl/source/fontsubset/sft.cxx:88
     vcl::TTGlyphMetrics lsb sal_Int16
 vcl/source/fontsubset/ttcr.cxx:356
     vcl::tdata_post ptr void *
-vcl/source/gdi/pdfwriter_impl.hxx:181
+vcl/source/gdi/pdfwriter_impl.hxx:180
     vcl::PDFWriterImpl::BitmapID m_nChecksum BitmapChecksum
-vcl/source/gdi/pdfwriter_impl.hxx:182
+vcl/source/gdi/pdfwriter_impl.hxx:181
     vcl::PDFWriterImpl::BitmapID m_nMaskChecksum BitmapChecksum
 vcl/unx/generic/app/wmadaptor.cxx:1264
     _mwmhints flags unsigned long

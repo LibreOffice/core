@@ -646,18 +646,14 @@ svx/source/unodialogs/textconversiondlgs/chinese_dictionarydialog.hxx:154
     textconversiondlgs::ChineseDictionaryDialog m_xFT_Mapping std::unique_ptr<weld::Label>
 svx/source/unodialogs/textconversiondlgs/chinese_dictionarydialog.hxx:157
     textconversiondlgs::ChineseDictionaryDialog m_xFT_Property std::unique_ptr<weld::Label>
-sw/qa/extras/layout/layout.cxx:2608
-      class SvtSysLocaleOptions &
+sw/qa/extras/uiwriter/uiwriter2.cxx:65
+      class SwUiWriterTest2 *
 sw/source/core/crsr/crbm.cxx:66
     (anonymous namespace)::CursorStateHelper m_aSaveState const class SwCursorSaveState
 sw/source/core/frmedt/fetab.cxx:78
     TableWait m_pWait const std::unique_ptr<SwWait>
 sw/source/core/layout/dbg_lay.cxx:172
     SwImplEnterLeave nAction const enum DbgAction
-sw/source/filter/inc/fltshell.hxx:214
-    SwFltRedline aStampPrev const class DateTime
-sw/source/filter/inc/fltshell.hxx:216
-    SwFltRedline eTypePrev const enum RedlineType
 sw/source/ui/config/mailconfigpage.cxx:54
     SwTestAccountSettingsDialog m_xEstablish std::unique_ptr<weld::Label>
 sw/source/ui/config/mailconfigpage.cxx:55
@@ -768,9 +764,9 @@ vcl/inc/WidgetThemeLibrary.hxx:106
     vcl::WidgetThemeLibrary_t nSize uint32_t
 vcl/source/app/salvtables.cxx:958
     SalInstanceContainer m_xContainer VclPtr<vcl::Window>
-vcl/source/gdi/jobset.cxx:36
+vcl/source/gdi/jobset.cxx:35
     ImplOldJobSetupData cDeviceName char [32]
-vcl/source/gdi/jobset.cxx:37
+vcl/source/gdi/jobset.cxx:36
     ImplOldJobSetupData cPortName char [32]
 vcl/source/gdi/pdfbuildin_fonts.hxx:34
     vcl::pdf::BuildinFont m_nAscent const int
@@ -784,7 +780,7 @@ vcl/unx/generic/print/prtsetup.hxx:73
     RTSPaperPage m_xContainer std::unique_ptr<weld::Widget>
 vcl/unx/generic/print/prtsetup.hxx:108
     RTSDevicePage m_xContainer std::unique_ptr<weld::Widget>
-vcl/unx/gtk3/gtk3gtkinst.cxx:3593
+vcl/unx/gtk3/gtk3gtkinst.cxx:3597
     CrippledViewport viewport GtkViewport
 vcl/unx/gtk/a11y/atkhypertext.cxx:29
     HyperLink atk_hyper_link const AtkHyperlink
