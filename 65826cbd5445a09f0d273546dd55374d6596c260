@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_494dc370",
+        "filename": "cui/inc/tipoftheday.hrc",
+        "patchSetId": 3
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-07-24T08:40:54Z",
+      "side": 1,
+      "message": "while at it please \"basic\" -\u003e \"Basic\"",
+      "revId": "65826cbd5445a09f0d273546dd55374d6596c260",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
