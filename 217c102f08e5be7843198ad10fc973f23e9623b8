@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_069fb803",
+        "filename": "dtrans/test/win32/dnd/atlwindow.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-07-24T06:39:26Z",
+      "side": 1,
+      "message": "\"make this window a drop target\"",
+      "revId": "217c102f08e5be7843198ad10fc973f23e9623b8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
