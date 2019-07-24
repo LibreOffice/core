@@ -2933,6 +2933,10 @@ void SwRootFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const&
     ::SwCalcPixStatics( pSh->GetOut() );
     aGlobalRetoucheColor = pSh->Imp()->GetRetoucheColor();
 
+    // Copy rRect; for one, rRect could become dangling during the below action, and for another it
+    // needs to be copied to aRect anyway as that is modified further down below:
+    SwRect aRect( rRect );
+
     //Trigger an action to clear things up if needed.
     //Using this trick we can ensure that all values are valid in all paints -
     //no problems, no special case(s).
@@ -2968,7 +2972,6 @@ void SwRootFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const&
             pSh->Imp()->DelRegion();
     }
 
-    SwRect aRect( rRect );
     aRect.Intersection( pSh->VisArea() );
 
     const bool bExtraData = ::IsExtraData( GetFormat()->GetDoc() );
