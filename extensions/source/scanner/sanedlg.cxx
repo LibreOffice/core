@@ -642,11 +642,11 @@ IMPL_LINK( SaneDlg, ClickBtnHdl, Button*, pButton, void )
                         x[ i ] = static_cast<double>(i);
                     mrSane.GetOptionValue( mnCurrentOption, y.get() );
 
-                    ScopedVclPtrInstance< GridDialog > aGrid( x.get(), y.get(), nElements, this );
-                    aGrid->SetText( mrSane.GetOptionName( mnCurrentOption ) );
-                    aGrid->setBoundings( 0, mfMin, nElements, mfMax );
-                    if( aGrid->Execute() && aGrid->getNewYValues() )
-                        mrSane.SetOptionValue( mnCurrentOption, aGrid->getNewYValues() );
+                    GridDialog aGrid(GetFrameWeld(), x.get(), y.get(), nElements);
+                    aGrid.set_title( mrSane.GetOptionName( mnCurrentOption ) );
+                    aGrid.setBoundings( 0, mfMin, nElements, mfMax );
+                    if (aGrid.run() && aGrid.getNewYValues())
+                        mrSane.SetOptionValue( mnCurrentOption, aGrid.getNewYValues() );
                 }
                 break;
                 case SANE_TYPE_BOOL:
