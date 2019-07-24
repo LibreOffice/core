@@ -44,7 +44,7 @@ struct ScExportTextOptions
     bool mbAddQuotes;
 };
 
-class ScImportExport
+class SC_DLLPUBLIC ScImportExport
 {
     ScDocShell* pDocSh;
     ScDocument* pDoc;
@@ -101,7 +101,7 @@ public:
 
     const ScRange& GetRange() const { return aRange; }
 
-    SC_DLLPUBLIC static void EmbeddedNullTreatment( OUString & rStr );
+    static void EmbeddedNullTreatment( OUString & rStr );
 
     static bool  IsFormatSupported( SotClipboardFormatId nFormat );
     static const sal_Unicode* ScanNextFieldFromString( const sal_Unicode* p,
