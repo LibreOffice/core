@@ -169,9 +169,6 @@ void DescriptionGenerator::AddProperty (const OUString& sPropertyName,
                 case PropertyType::String:
                     AddString (sPropertyName, sLocalizedName, nWhichId);
                     break;
-                case PropertyType::FillStyle:
-                    AddFillStyle (sPropertyName, sLocalizedName);
-                    break;
             }
         }
 }
@@ -265,79 +262,6 @@ void DescriptionGenerator::AddString (const OUString& sPropertyName,
     }
 }
 
-
-void DescriptionGenerator::AddFillStyle (const OUString& sPropertyName,
-    const OUString& sLocalizedName)
-{
-    msDescription.append(sLocalizedName);
-    msDescription.append('=');
-
-    try
-    {
-        if (mxSet.is())
-        {
-            uno::Any aValue = mxSet->getPropertyValue (sPropertyName);
-            drawing::FillStyle aFillStyle;
-            aValue >>= aFillStyle;
-
-            // Get the fill style name from the resource.
-            OUString sFillStyleName;
-            {
-                SolarMutexGuard aGuard;
-                switch (aFillStyle)
-                {
-                    case drawing::FillStyle_NONE:
-                        sFillStyleName = SvxResId(RID_SVXSTR_A11Y_FILLSTYLE_NONE);
-                        break;
-                    case drawing::FillStyle_SOLID:
-                        sFillStyleName = SvxResId(RID_SVXSTR_A11Y_FILLSTYLE_SOLID);
-                        break;
-                    case drawing::FillStyle_GRADIENT:
-                        sFillStyleName = SvxResId(RID_SVXSTR_A11Y_FILLSTYLE_GRADIENT);
-                        break;
-                    case drawing::FillStyle_HATCH:
-                        sFillStyleName = SvxResId(RID_SVXSTR_A11Y_FILLSTYLE_HATCH);
-                        break;
-                    case drawing::FillStyle_BITMAP:
-                        sFillStyleName = SvxResId(RID_SVXSTR_A11Y_FILLSTYLE_BITMAP);
-                        break;
-                    default:
-                        break;
-                }
-            }
-            msDescription.append (sFillStyleName);
-
-            // Append the appropriate properties.
-            switch (aFillStyle)
-            {
-                case drawing::FillStyle_NONE:
-                    break;
-                case drawing::FillStyle_SOLID:
-                    AddProperty ("FillColor", PropertyType::Color, SIP_XA_FILLCOLOR);
-                    break;
-                case drawing::FillStyle_GRADIENT:
-                    AddProperty ("FillGradientName", PropertyType::String, SIP_XA_FILLGRADIENT,
-                        XATTR_FILLGRADIENT);
-                    break;
-                case drawing::FillStyle_HATCH:
-                    AddProperty ("FillColor", PropertyType::Color, SIP_XA_FILLCOLOR);
-                    AddProperty ("FillHatchName", PropertyType::String, SIP_XA_FILLHATCH,
-                        XATTR_FILLHATCH);
-                    break;
-                case drawing::FillStyle_BITMAP:
-                    AddProperty ("FillBitmapName", PropertyType::String, SIP_XA_FILLBITMAP,
-                        XATTR_FILLBITMAP);
-                    break;
-                default:
-                    break;
-            }
-        }
-    }
-    catch (const css::beans::UnknownPropertyException &)
-    {
-        msDescription.append ("<unknown>");
-    }
-}
 
 } // end of namespace accessibility
 

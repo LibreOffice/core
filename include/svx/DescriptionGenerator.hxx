@@ -44,8 +44,7 @@ public:
     enum class PropertyType {
         Color,
         Integer,
-        String,
-        FillStyle
+        String
     };
 
     /** Creates a new description generator with an empty description
@@ -165,16 +164,6 @@ private:
     */
     SVX_DLLPRIVATE void AddString (const OUString& sPropertyName,
         const OUString& sLocalizedName, sal_uInt16 nWhichId);
-
-    /** Add a property value formatted as fill style to the description
-        string.  If the fill style is <const>HATCH</const>,
-        <const>GRADIENT</const>, or <const>BITMAP</const>, then the of the
-        hatch, gradient, or bitmap is appended as well.
-        @param sPropertyName
-            Name of the property.  Usually this will be "FillStyle".
-    */
-    SVX_DLLPRIVATE void AddFillStyle (const OUString& sPropertyName,
-        const OUString& sLocalizedName);
 };
 
 
