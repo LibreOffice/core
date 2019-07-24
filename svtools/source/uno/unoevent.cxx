@@ -456,6 +456,7 @@ SvMacroTableEventDescriptor::SvMacroTableEventDescriptor(
     const SvEventDescription* pSupportedMacroItems) :
         SvDetachedEventDescriptor(pSupportedMacroItems)
 {
+    assert(pSupportedMacroItems);
     for(sal_Int16 i = 0; mpSupportedMacroItems[i].mnEvent != SvMacroItemId::NONE; i++)
     {
         const SvMacroItemId nEvent = mpSupportedMacroItems[i].mnEvent;
