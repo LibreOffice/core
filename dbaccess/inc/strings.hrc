@@ -108,7 +108,7 @@
 #define STR_MOVED_LIBRARY                           NC_("STR_MOVED_LIBRARY", "migrated $type$ library '$old$' to '$new$'")
 #define STR_LIBRARY_TYPE_AND_NAME                   NC_("STR_LIBRARY_TYPE_AND_NAME", "$type$ library '$library$'")
 #define STR_MIGRATING_LIBS                          NC_("STR_MIGRATING_LIBS", "migrating libraries ...")
-#define STR_OOO_BASIC                               NC_("STR_OOO_BASIC", "%PRODUCTNAME Basic")
+#define STR_OOO_BASIC                               NC_("STR_OOO_BASIC", "Basic")
 #define STR_JAVA_SCRIPT                             NC_("STR_JAVA_SCRIPT", "JavaScript")
 #define STR_BEAN_SHELL                              NC_("STR_BEAN_SHELL", "BeanShell")
 #define STR_JAVA                                    NC_("STR_JAVA", "Java")

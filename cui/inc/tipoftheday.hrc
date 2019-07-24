@@ -231,7 +231,7 @@ const std::tuple<const char*, OUString, OUString> TIPOFTHEDAY_STRINGARRAY[] =
      { NC_("RID_CUI_TIPOFTHEDAY", "To insert the current date in your document use Insert > Field > Date."), "", "tipoftheday_w.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Click at the beginning (end) of a section and press Alt+Enter to insert a paragraph before (after) the section."), "", "tipoftheday_w.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "You can set a color for each tab: right-click the tab or use Sheet > Sheet Tab Color."), "", "tipoftheday_c.png"},
-     { NC_("RID_CUI_TIPOFTHEDAY", "You want to start working with %PRODUCTNAME basic macros? Take a look at the examples under Tools > Macros > Edit Macros."), "", ""},
+     { NC_("RID_CUI_TIPOFTHEDAY", "You want to start working with Basic macros? Take a look at the examples under Tools > Macros > Edit Macros."), "", ""},
      { NC_("RID_CUI_TIPOFTHEDAY", "To remove the page number from your table of contents go to Insert > Table of Contents (or right-click and Edit the previously inserted index). At the Entries tab delete the page number (#) from Structure line."), "", "tipoftheday_w.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Chapter numbering dialog lets you set text to be displayed before the chapter number. For example, type 'Chapter ' to display 'Chapter 1'"), "", "tipoftheday_w.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Want to know if a cell is referred in formulas of other cells? Tools > Detective > Trace Dependents (Shift+F5)."), "", "tipoftheday_c.png"},

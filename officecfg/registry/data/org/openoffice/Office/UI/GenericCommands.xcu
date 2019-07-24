@@ -5317,7 +5317,7 @@
       </node>
       <node oor:name=".uno:MacroDialog" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">%PRODUCTNAME ~Basic...</value>
+          <value xml:lang="en-US">~Basic...</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -6902,7 +6902,7 @@
       </node>
       <node oor:name=".uno:MacroOrganizer" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">%PRODUCTNAME Basic Macro Organizer...</value>
+          <value xml:lang="en-US">Basic Macro Organizer...</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
