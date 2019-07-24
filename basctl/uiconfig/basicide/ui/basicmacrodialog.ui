@@ -23,7 +23,7 @@
   <object class="GtkDialog" id="BasicMacroDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes" context="basicmacrodialog|BasicMacroDialog">%PRODUCTNAME Basic Macros</property>
+    <property name="title" translatable="yes" context="basicmacrodialog|BasicMacroDialog">Basic Macros</property>
     <property name="modal">True</property>
     <property name="type_hint">dialog</property>
     <child>
