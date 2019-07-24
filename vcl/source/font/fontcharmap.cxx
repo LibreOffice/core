@@ -85,7 +85,7 @@ bool ImplFontCharMap::isDefaultMap() const
 }
 
 static unsigned GetUInt( const unsigned char* p ) { return((p[0]<<24)+(p[1]<<16)+(p[2]<<8)+p[3]);}
-static unsigned Getsal_uInt16( const unsigned char* p ){ return((p[0]<<8) | p[1]);}
+static unsigned GetUShort( const unsigned char* p ){ return((p[0]<<8) | p[1]);}
 static int GetSShort( const unsigned char* p ){ return static_cast<sal_Int16>((p[0]<<8)|p[1]);}
 
 // TODO: move CMAP parsing directly into the ImplFontCharMap class
@@ -102,10 +102,10 @@ bool ParseCMAP( const unsigned char* pCmap, int nLength, CmapResult& rResult )
     if( !pCmap || (nLength < 24) )
         return false;
 
-    if( Getsal_uInt16( pCmap ) != 0x0000 ) // simple check for CMAP corruption
+    if( GetUShort( pCmap ) != 0x0000 ) // simple check for CMAP corruption
         return false;
 
-    int nSubTables = Getsal_uInt16( pCmap + 2 );
+    int nSubTables = GetUShort( pCmap + 2 );
     if( (nSubTables <= 0) || (nLength < (24 + 8*nSubTables)) )
         return false;
 
@@ -118,8 +118,8 @@ bool ParseCMAP( const unsigned char* pCmap, int nLength, CmapResult& rResult )
     int nBestVal = 0;
     for( const unsigned char* p = pCmap + 4; --nSubTables >= 0; p += 8 )
     {
-        int nPlatform = Getsal_uInt16( p );
-        int nEncoding = Getsal_uInt16( p+2 );
+        int nPlatform = GetUShort( p );
+        int nEncoding = GetUShort( p+2 );
         int nPlatformEncoding = (nPlatform << 8) + nEncoding;
 
         int nValue;
@@ -148,7 +148,7 @@ bool ParseCMAP( const unsigned char* pCmap, int nLength, CmapResult& rResult )
             continue;
 
         int nTmpOffset = GetUInt( p+4 );
-        int nTmpFormat = Getsal_uInt16( pCmap + nTmpOffset );
+        int nTmpFormat = GetUShort( pCmap + nTmpOffset );
         if( nTmpFormat == 12 )                  // 32bit code -> glyph map format
             nValue += 3;
         else if( nTmpFormat != 4 )              // 16bit code -> glyph map format
@@ -175,7 +175,7 @@ bool ParseCMAP( const unsigned char* pCmap, int nLength, CmapResult& rResult )
     // format 4, the most common 16bit char mapping table
     if( (nFormat == 4) && ((nOffset+16) < nLength) )
     {
-        int nSegCountX2 = Getsal_uInt16( pCmap + nOffset + 6 );
+        int nSegCountX2 = GetUShort( pCmap + nOffset + 6 );
         nRangeCount = nSegCountX2/2 - 1;
         pCodePairs = new sal_UCS4[ nRangeCount * 2 ];
         pStartGlyphs = new int[ nRangeCount ];
@@ -186,10 +186,10 @@ bool ParseCMAP( const unsigned char* pCmap, int nLength, CmapResult& rResult )
         sal_UCS4* pCP = pCodePairs;
         for( int i = 0; i < nRangeCount; ++i )
         {
-            const sal_UCS4 cMinChar = Getsal_uInt16( pBeginBase + 2*i );
-            const sal_UCS4 cMaxChar = Getsal_uInt16( pLimitBase + 2*i );
+            const sal_UCS4 cMinChar = GetUShort( pBeginBase + 2*i );
+            const sal_UCS4 cMaxChar = GetUShort( pLimitBase + 2*i );
             const int nGlyphDelta  = GetSShort( pDeltaBase + 2*i );
-            const int nRangeOffset = Getsal_uInt16( pOffsetBase + 2*i );
+            const int nRangeOffset = GetUShort( pOffsetBase + 2*i );
             if( cMinChar > cMaxChar ) {  // no sane font should trigger this
                 SAL_WARN("vcl.gdi", "Min char should never be more than the max char!");
                 break;
@@ -217,7 +217,7 @@ bool ParseCMAP( const unsigned char* pCmap, int nLength, CmapResult& rResult )
                     break;
                 }
                 for( sal_UCS4 c = cMinChar; c <= cMaxChar; ++c, pGlyphIdPtr+=2 ) {
-                    const int nGlyphIndex = Getsal_uInt16( pGlyphIdPtr ) + nGlyphDelta;
+                    const int nGlyphIndex = GetUShort( pGlyphIdPtr ) + nGlyphDelta;
                     aGlyphIdArray.push_back( static_cast<sal_uInt16>(nGlyphIndex) );
                 }
             }
