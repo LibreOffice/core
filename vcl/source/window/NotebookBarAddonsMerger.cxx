@@ -19,6 +19,7 @@
 
 #include <vcl/NotebookBarAddonsMerger.hxx>
 #include <vcl/commandinfoprovider.hxx>
+#include <vcl/vclenum.hxx>
 #include <vcl/toolbox.hxx>
 
 static const char STYLE_TEXT[] = "Text";
@@ -33,12 +34,33 @@ static const char MERGE_NOTEBOOKBAR_CONTROLTYPE[] = "ControlType";
 static const char MERGE_NOTEBOOKBAR_WIDTH[] = "Width";
 static const char MERGE_NOTEBOOKBAR_STYLE[] = "Style";
 
-NotebookBarAddonsMerger::NotebookBarAddonsMerger(
-    vcl::Window* pParent, const css::uno::Reference<css::frame::XFrame>& m_xFrame,
-    const NotebookBarAddonsItem& aNotebookBarAddonsItem)
+static void GetAddonNotebookBarItem(const css::uno::Sequence<css::beans::PropertyValue>& pExtension,
+                                    AddonNotebookBarItem& aAddonNotebookBarItem)
 {
-    MergeNotebookBarAddons(pParent, m_xFrame, aNotebookBarAddonsItem);
+    for (int nIdx = 0; nIdx < pExtension.getLength(); nIdx++)
+    {
+        if (pExtension[nIdx].Name == MERGE_NOTEBOOKBAR_URL)
+            pExtension[nIdx].Value >>= aAddonNotebookBarItem.sCommandURL;
+        else if (pExtension[nIdx].Name == MERGE_NOTEBOOKBAR_TITLE)
+            pExtension[nIdx].Value >>= aAddonNotebookBarItem.sLabel;
+        else if (pExtension[nIdx].Name == MERGE_NOTEBOOKBAR_IMAGEID)
+            pExtension[nIdx].Value >>= aAddonNotebookBarItem.sImageIdentifier;
+        else if (pExtension[nIdx].Name == MERGE_NOTEBOOKBAR_CONTEXT)
+            pExtension[nIdx].Value >>= aAddonNotebookBarItem.sContext;
+        else if (pExtension[nIdx].Name == MERGE_NOTEBOOKBAR_TARGET)
+            pExtension[nIdx].Value >>= aAddonNotebookBarItem.sTarget;
+        else if (pExtension[nIdx].Name == MERGE_NOTEBOOKBAR_CONTROLTYPE)
+            pExtension[nIdx].Value >>= aAddonNotebookBarItem.sControlType;
+        else if (pExtension[nIdx].Name == MERGE_NOTEBOOKBAR_WIDTH)
+            pExtension[nIdx].Value >>= aAddonNotebookBarItem.nWidth;
+        else if (pExtension[nIdx].Name == MERGE_NOTEBOOKBAR_STYLE)
+            pExtension[nIdx].Value >>= aAddonNotebookBarItem.sStyle;
+    }
 }
+
+NotebookBarAddonsMerger::NotebookBarAddonsMerger() {}
+
+NotebookBarAddonsMerger::~NotebookBarAddonsMerger() {}
 
 void NotebookBarAddonsMerger::MergeNotebookBarAddons(
     vcl::Window* pParent, const css::uno::Reference<css::frame::XFrame>& m_xFrame,
@@ -53,29 +75,10 @@ void NotebookBarAddonsMerger::MergeNotebookBarAddons(
 
         for (int nSecIdx = 0; nSecIdx < aExtension.getLength(); nSecIdx++)
         {
+            sal_uInt16 nItemId = 0;
             AddonNotebookBarItem aAddonNotebookBarItem;
             const css::uno::Sequence<css::beans::PropertyValue> pExtension = aExtension[nSecIdx];
-            for (int nRes = 0; nRes < pExtension.getLength(); nRes++)
-            {
-                if (pExtension[nRes].Name == MERGE_NOTEBOOKBAR_URL)
-                    pExtension[nRes].Value >>= aAddonNotebookBarItem.sCommandURL;
-                else if (pExtension[nRes].Name == MERGE_NOTEBOOKBAR_TITLE)
-                    pExtension[nRes].Value >>= aAddonNotebookBarItem.sLabel;
-                else if (pExtension[nRes].Name == MERGE_NOTEBOOKBAR_IMAGEID)
-                    pExtension[nRes].Value >>= aAddonNotebookBarItem.sImageIdentifier;
-                else if (pExtension[nRes].Name == MERGE_NOTEBOOKBAR_CONTEXT)
-                    pExtension[nRes].Value >>= aAddonNotebookBarItem.sContext;
-                else if (pExtension[nRes].Name == MERGE_NOTEBOOKBAR_TARGET)
-                    pExtension[nRes].Value >>= aAddonNotebookBarItem.sTarget;
-                else if (pExtension[nRes].Name == MERGE_NOTEBOOKBAR_CONTROLTYPE)
-                    pExtension[nRes].Value >>= aAddonNotebookBarItem.sControlType;
-                else if (pExtension[nRes].Name == MERGE_NOTEBOOKBAR_WIDTH)
-                    pExtension[nRes].Value >>= aAddonNotebookBarItem.nWidth;
-                else if (pExtension[nRes].Name == MERGE_NOTEBOOKBAR_STYLE)
-                    pExtension[nRes].Value >>= aAddonNotebookBarItem.sStyle;
-            }
-
-            sal_uInt16 nItemId = 0;
+            GetAddonNotebookBarItem(pExtension, aAddonNotebookBarItem);
             ToolBox* pToolbox = dynamic_cast<ToolBox*>(pParent);
             if (pToolbox)
             {
@@ -108,7 +111,46 @@ void NotebookBarAddonsMerger::MergeNotebookBarAddons(
                     pToolbox->SetItemImage(nItemId, sImage);
                 }
             }
-            pToolbox->InsertSeparator();
+            if (nSecIdx == aExtension.getLength() - 1)
+                pToolbox->InsertSeparator();
+        }
+    }
+}
+
+void NotebookBarAddonsMerger::MergeNotebookBarMenuAddons(
+    PopupMenu* pPopupMenu, sal_Int16 nItemId, const OString& sItemIdName,
+    NotebookBarAddonsItem& aNotebookBarAddonsItem)
+{
+    std::vector<Image> aImageVec = aNotebookBarAddonsItem.aImageValues;
+    unsigned long nIter = 0;
+    css::uno::Sequence<css::uno::Sequence<css::beans::PropertyValue>> aExtension;
+    for (unsigned long nIdx = 0; nIdx < aNotebookBarAddonsItem.aAddonValues.size(); nIdx++)
+    {
+        aExtension = aNotebookBarAddonsItem.aAddonValues[nIdx];
+
+        for (int nSecIdx = 0; nSecIdx < aExtension.getLength(); nSecIdx++)
+        {
+            AddonNotebookBarItem aAddonNotebookBarItem;
+            Image sImage;
+            MenuItemBits nBits = MenuItemBits::ICON;
+            const css::uno::Sequence<css::beans::PropertyValue> pExtension = aExtension[nSecIdx];
+
+            GetAddonNotebookBarItem(pExtension, aAddonNotebookBarItem);
+
+            pPopupMenu->InsertItem(nItemId, aAddonNotebookBarItem.sLabel, nBits, sItemIdName);
+            pPopupMenu->SetItemCommand(nItemId, aAddonNotebookBarItem.sCommandURL);
+
+            if (nIter < aImageVec.size())
+            {
+                sImage = aImageVec[nIter];
+                nIter++;
+            }
+            pPopupMenu->SetItemImage(nItemId, sImage);
+
+            if (nSecIdx == aExtension.getLength() - 1)
+                pPopupMenu->InsertSeparator();
+
+            ++nItemId;
         }
     }
 }

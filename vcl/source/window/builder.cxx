@@ -2170,9 +2170,9 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
     {
         xWindow = VclPtr<ToolBox>::Create(pParent, WB_3DLOOK | WB_TABSTOP);
     }
-    else if (name == "NotebookBarAddonsMergePoint")
+    else if (name == "NotebookBarAddonsToolMergePoint")
     {
-        NotebookBarAddonsMerger aNotebookBarAddonsMerger(pParent,m_xFrame, m_pNotebookBarAddonsItem);
+        NotebookBarAddonsMerger::MergeNotebookBarAddons(pParent, m_xFrame, m_pNotebookBarAddonsItem);
         return nullptr;
     }
     else if (name == "GtkToolButton" || name == "GtkMenuToolButton" ||
@@ -3514,7 +3514,12 @@ void VclBuilder::insertMenuObject(PopupMenu *pParent, PopupMenu *pSubMenu, const
     sal_uInt16 nOldCount = pParent->GetItemCount();
     sal_uInt16 nNewId = ++m_pParserState->m_nLastMenuItemId;
 
-    if (rClass == "GtkMenuItem")
+    if(rClass == "NotebookBarAddonsMenuMergePoint")
+    {
+        NotebookBarAddonsMerger::MergeNotebookBarMenuAddons(pParent, nNewId, rID, m_pNotebookBarAddonsItem);
+        m_pParserState->m_nLastMenuItemId = pParent->GetItemCount();
+    }
+    else if (rClass == "GtkMenuItem")
     {
         OUString sLabel(BuilderUtils::convertMnemonicMarkup(extractLabel(rProps)));
         OUString aCommand(extractActionName(rProps));

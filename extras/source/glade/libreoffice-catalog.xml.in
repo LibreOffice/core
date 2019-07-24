@@ -363,5 +363,11 @@
     <glade-widget-class title="Color Config Control" name="cuilo-ColorConfigCtrl"
                         generic-name="ColorConfigCtrl" parent="GtkBox"
                         icon-name="widget-gtk-box"/>
+    <glade-widget-class title="NotebookBar Toolbar Addons" name="NotebookBarAddonsToolMergePoint"
+                        generic-name="ShowText" parent="GtkToolButton"
+                        icon-name="widget-gtk-toolbutton"/>
+    <glade-widget-class title="NotebookBar MenuItem Addons" name="NotebookBarAddonsMenuMergePoint"
+                        generic-name="ShowText" parent="GtkMenuItem"
+                        icon-name="widget-gtk-menuitem"/>
   </glade-widget-classes>
 </glade-catalog>
