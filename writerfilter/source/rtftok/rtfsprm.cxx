@@ -374,9 +374,9 @@ RTFSprms RTFSprms::cloneAndDeduplicate(RTFSprms& rReference, Id const nStyleType
     return ret;
 }
 
-bool RTFSprms::equals(RTFValue& rOther)
+bool RTFSprms::equals(const RTFValue& rOther) const
 {
-    return std::all_of(m_pSprms->begin(), m_pSprms->end(),
+    return std::all_of(m_pSprms->cbegin(), m_pSprms->cend(),
                        [&](const std::pair<Id, RTFValue::Pointer_t>& raPair) -> bool {
                            return raPair.second->equals(rOther);
                        });
