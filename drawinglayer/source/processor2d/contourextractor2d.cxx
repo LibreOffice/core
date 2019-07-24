@@ -176,8 +176,11 @@ namespace drawinglayer
                 {
                     // primitives who's BoundRect will be added in world coordinates
                     basegfx::B2DRange aRange(rCandidate.getB2DRange(getViewInformation2D()));
-                    aRange.transform(getViewInformation2D().getObjectTransformation());
-                    maExtractedContour.emplace_back(basegfx::utils::createPolygonFromRect(aRange));
+                    if (!aRange.isEmpty())
+                    {
+                        aRange.transform(getViewInformation2D().getObjectTransformation());
+                        maExtractedContour.emplace_back(basegfx::utils::createPolygonFromRect(aRange));
+                    }
                     break;
                 }
                 default :
