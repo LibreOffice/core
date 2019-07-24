@@ -2056,6 +2056,7 @@ void SAL_CALL ScModelObj::render( sal_Int32 nSelRenderer, const uno::Any& aSelec
 
                             // Scale and move the target rectangle from aLocationMM to aLocationPixel,
                             // to get the target rectangle in pixels.
+                            assert(aLocationPixel.GetWidth() != 0 && aLocationPixel.GetHeight() != 0);
 
                             Fraction aScaleX( aLocationPixel.GetWidth(), aLocationMM.GetWidth() );
                             Fraction aScaleY( aLocationPixel.GetHeight(), aLocationMM.GetHeight() );
@@ -2073,7 +2074,6 @@ void SAL_CALL ScModelObj::render( sal_Int32 nSelRenderer, const uno::Any& aSelec
                             // The link target area is interpreted using the device's MapMode at
                             // the time of the CreateDest call, so PixelToLogic can be used here,
                             // regardless of the MapMode that is actually selected.
-
                             aArea = pDev->PixelToLogic( tools::Rectangle( nX1, nY1, nX2, nY2 ) );
                         }
                     }
