@@ -799,7 +799,7 @@ static void OutHTML_SwFormat( Writer& rWrt, const SwFormat& rFormat,
         rHWrt.OutNewLine();
     }
 
-    // for BLOCKQUOTE, ADDRESS and DD we output another paragrah token, if
+    // for BLOCKQUOTE, ADDRESS and DD we output another paragraph token, if
     // - no styles are written and
     // - a lower spacing or a paragraph alignment exists
     OString aToken = rInfo.aToken;

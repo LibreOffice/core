@@ -36,7 +36,7 @@ import com.sun.star.ucb.XDynamicResultSet;
 * <ul>
 *  <li> <code>'CachedDynamicResultSetStub'</code> (of type
 *   <code>com.sun.star.sdbc.XDynamicResultSet</code>):
-*   this must be an imlementation of <code>
+*   this must be an implementation of <code>
 *   com.sun.star.ucb.CachedDynamicResultSetStub</code> service.</li>
 * <ul> <p>
 * Test is <b> NOT </b> multithread compliant. <p>

@@ -392,7 +392,7 @@ void SAXEventKeeperImpl::smashBufferNode(
  *  by any other ElementCollector or Blocker.
  *  When the bClearRoot is set to true, the root BufferNode will be first
  *  cleared, with a stop flag setting at the next Blocking BufferNode. This
- *  operation can delete all useless bufferred SAX events which are only
+ *  operation can delete all useless buffered SAX events which are only
  *  needed by the Blocker to be deleted.
  ******************************************************************************/
 {

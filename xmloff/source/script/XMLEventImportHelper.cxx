@@ -109,7 +109,7 @@ SvXMLImportContext* XMLEventImportHelper::CreateContext(
 {
     SvXMLImportContext* pContext = nullptr;
 
-    // translate event name form xml to api
+    // translate event name from xml to api
     OUString sMacroName;
     sal_uInt16 nMacroPrefix =
         rImport.GetNamespaceMap().GetKeyByAttrName( rXmlEventName,
