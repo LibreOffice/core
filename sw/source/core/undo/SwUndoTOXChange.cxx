@@ -29,8 +29,10 @@ SwUndoTOXChange::SwUndoTOXChange(const SwDoc *pDoc,
     : SwUndo(SwUndoId::TOXCHANGE, pDoc)
     , m_Old(rTOX)
     , m_New(rNew)
-    , m_nNodeIndex(rTOX.GetFormat()->GetSectionNode()->GetIndex())
 {
+    const SwSectionNode* pSectNode = rTOX.GetFormat()->GetSectionNode();
+    assert(pSectNode);
+    m_nNodeIndex = pSectNode->GetIndex()
 }
 
 SwUndoTOXChange::~SwUndoTOXChange()
