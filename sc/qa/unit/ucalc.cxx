@@ -4225,7 +4225,7 @@ void Test::testCopyPasteRepeatOneFormula()
     ScRange aWholeSheet(0,0,0,MAXCOL,MAXROW,0);
     ScBroadcastAreaSlotMachine* pBASM = m_pDoc->GetBASM();
     CPPUNIT_ASSERT(pBASM);
-    std::vector<sc::AreaListener> aListeners = pBASM->GetAllListeners(aWholeSheet, sc::AreaInside);
+    std::vector<sc::AreaListener> aListeners = pBASM->GetAllListeners(aWholeSheet, sc::AreaOverlapType::Inside);
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aListeners.size());
     const sc::AreaListener* pListener = aListeners.data();
     CPPUNIT_ASSERT_EQUAL(ScRange(0,0,0,1,0,0), pListener->maArea);
@@ -4258,7 +4258,7 @@ void Test::testCopyPasteRepeatOneFormula()
 #if !defined(USE_FORMULA_GROUP_LISTENER) || USE_FORMULA_GROUP_LISTENER
     // At this point, there should only be one area listener and it should be
     // a group listener listening on A1:B10.
-    aListeners = pBASM->GetAllListeners(aWholeSheet, sc::AreaInside);
+    aListeners = pBASM->GetAllListeners(aWholeSheet, sc::AreaOverlapType::Inside);
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aListeners.size());
     pListener = aListeners.data();
     CPPUNIT_ASSERT_EQUAL(ScRange(0,0,0,1,9,0), pListener->maArea);
@@ -4276,7 +4276,7 @@ void Test::testCopyPasteRepeatOneFormula()
     // This check makes only sense if group listeners are activated.
 #if !defined(USE_FORMULA_GROUP_LISTENER) || USE_FORMULA_GROUP_LISTENER
     // Make there we only have one group area listener listening on A2:B11.
-    aListeners = pBASM->GetAllListeners(aWholeSheet, sc::AreaInside);
+    aListeners = pBASM->GetAllListeners(aWholeSheet, sc::AreaOverlapType::Inside);
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aListeners.size());
     pListener = aListeners.data();
     CPPUNIT_ASSERT_EQUAL(ScRange(0,1,0,1,10,0), pListener->maArea);
@@ -4303,7 +4303,7 @@ void Test::testCopyPasteRepeatOneFormula()
     // This check makes only sense if group listeners are activated.
 #if !defined(USE_FORMULA_GROUP_LISTENER) || USE_FORMULA_GROUP_LISTENER
     // Check the group area listener again to make sure it's listening on A1:B10 once again.
-    aListeners = pBASM->GetAllListeners(aWholeSheet, sc::AreaInside);
+    aListeners = pBASM->GetAllListeners(aWholeSheet, sc::AreaOverlapType::Inside);
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aListeners.size());
     pListener = aListeners.data();
     CPPUNIT_ASSERT_EQUAL(ScRange(0,0,0,1,9,0), pListener->maArea);

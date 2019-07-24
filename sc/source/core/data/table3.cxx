@@ -954,7 +954,7 @@ void ScTable::SortReorderByColumn(
         // and end their listening.
         ScRange aMoveRange( nStart, nRow1, nTab, nLast, nRow2, nTab);
         std::vector<sc::AreaListener> aAreaListeners = pDocument->GetBASM()->GetAllListeners(
-                aMoveRange, sc::OneColumnInsideArea);
+                aMoveRange, sc::AreaOverlapType::OneColumnInside);
         {
             for (auto& rAreaListener : aAreaListeners)
             {
@@ -1174,7 +1174,7 @@ void ScTable::SortReorderByRowRefUpdate(
         ScBroadcastAreaSlotMachine* pBASM = pDocument->GetBASM();
         std::vector<sc::AreaListener> aGrpListeners =
             pBASM->GetAllListeners(
-                aMoveRange, sc::AreaInsideOrOverlap, sc::ListenerGroupType::Group);
+                aMoveRange, sc::AreaOverlapType::InsideOrOverlap, sc::ListenerGroupType::Group);
 
         {
             for (auto& rGrpListener : aGrpListeners)
@@ -1353,7 +1353,7 @@ void ScTable::SortReorderByRowRefUpdate(
     // Get all area listeners that listen on one row within the range and end
     // their listening.
     std::vector<sc::AreaListener> aAreaListeners = pDocument->GetBASM()->GetAllListeners(
-            aMoveRange, sc::OneRowInsideArea);
+            aMoveRange, sc::AreaOverlapType::OneRowInside);
     {
         for (auto& rAreaListener : aAreaListeners)
         {

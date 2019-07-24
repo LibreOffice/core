@@ -526,28 +526,23 @@ void ScBroadcastAreaSlot::GetAllListeners(
 
         switch (eType)
         {
-            case sc::AreaInside:
+            case sc::AreaOverlapType::Inside:
                 if (!rRange.In(rAreaRange))
                     // The range needs to be fully inside specified range.
                     continue;
                 break;
-            case sc::AreaPartialOverlap:
-                if (!rRange.Intersects(rAreaRange) || rRange.In(rAreaRange))
-                    // The range needs to be only partially overlapping.
-                    continue;
-                break;
-            case sc::AreaInsideOrOverlap:
+            case sc::AreaOverlapType::InsideOrOverlap:
                 if (!rRange.Intersects(rAreaRange))
                     // The range needs to be partially overlapping or fully inside.
                     continue;
                 break;
-            case sc::OneRowInsideArea:
+            case sc::AreaOverlapType::OneRowInside:
                 if (rAreaRange.aStart.Row() != rAreaRange.aEnd.Row() || !rRange.In(rAreaRange))
                     // The range needs to be one single row and fully inside
                     // specified range.
                     continue;
                 break;
-            case sc::OneColumnInsideArea:
+            case sc::AreaOverlapType::OneColumnInside:
                 if (rAreaRange.aStart.Col() != rAreaRange.aEnd.Col() || !rRange.In(rAreaRange))
                     // The range needs to be one single column and fully inside
                     // specified range.
