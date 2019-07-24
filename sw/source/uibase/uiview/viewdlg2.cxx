@@ -26,6 +26,7 @@
 #include <fldmgr.hxx>
 #include <expfld.hxx>
 #include <modcfg.hxx>
+#include <com/sun/star/drawing/QRCode.hpp>
 
 #include <swmodule.hxx>
 #include <view.hxx>
@@ -64,6 +65,16 @@ void SwView::ExecDlgExt(SfxRequest const &rReq)
             const uno::Reference<frame::XModel> xModel(GetCurrentDocument());
             ScopedVclPtr<AbstractSignatureLineDialog> pDialog(pFact->CreateSignatureLineDialog(
                 GetFrameWeld(), xModel, rReq.GetSlot() == SID_EDIT_SIGNATURELINE));
+            pDialog->Execute();
+            break;
+        }
+        case SID_INSERT_QRCODE:
+        case SID_EDIT_QRCODE:
+        {
+            VclAbstractDialogFactory* pFact = VclAbstractDialogFactory::Create();
+            const uno::Reference<frame::XModel> xModel(GetCurrentDocument());
+            ScopedVclPtr<AbstractQrCodeGenDialog> pDialog(pFact->CreateQrCodeGenDialog(
+                GetFrameWeld(), xModel, rReq.GetSlot() == SID_EDIT_QRCODE));
             pDialog->Execute();
             break;
         }
@@ -130,6 +141,27 @@ bool SwView::isSignatureLineSigned()
         return false;
 
     return pGraphic->isSignatureLineSigned();
+}
+
+bool SwView::isQRCodeSelected()
+{
+    SwWrtShell& rSh = GetWrtShell();
+    SdrView* pSdrView = rSh.GetDrawView();
+    if (!pSdrView)
+        return false;
+
+    if (pSdrView->GetMarkedObjectCount() != 1)
+        return false;
+
+    SdrObject* pPickObj = pSdrView->GetMarkedObjectByIndex(0);
+    if (!pPickObj)
+        return false;
+
+    SdrGrafObj* pGraphic = dynamic_cast<SdrGrafObj*>(pPickObj);
+    if (!pGraphic)
+        return false;
+
+    return pGraphic->getQrCode() != nullptr;
 }
 
 void SwView::AutoCaption(const sal_uInt16 nType, const SvGlobalName *pOleId)

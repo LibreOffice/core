@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_TABVWSH_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_TABVWSH_HXX
 
+#include <com/sun/star/drawing/QRCode.hpp>
 #include <formula/errorcodes.hxx>
 #include <formula/opcode.hxx>
 #include <svx/fmshell.hxx>
@@ -171,6 +172,7 @@ private:
     void            DoReadUserDataSequence( const css::uno::Sequence< css::beans::PropertyValue >& rSettings );
     bool            IsSignatureLineSelected();
     bool            IsSignatureLineSigned();
+    bool            IsQRCodeSelected();
 
     DECL_LINK( SimpleRefClose, const OUString*, void );
     DECL_LINK( SimpleRefDone, const OUString&, void );

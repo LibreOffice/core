@@ -48,6 +48,7 @@
 #include <passwdomdlg.hxx>
 #include <pastedlg.hxx>
 #include <postdlg.hxx>
+#include <QrCodeGenDialog.hxx>
 #include <screenshotannotationdlg.hxx>
 #include <showcols.hxx>
 #include <SignatureLineDialog.hxx>
@@ -698,6 +699,19 @@ public:
     virtual short Execute() override;
 };
 
+class QrCodeGenDialog;
+class AbstractQrCodeGenDialog_Impl : public AbstractQrCodeGenDialog
+{
+    std::unique_ptr<QrCodeGenDialog> m_xDlg;
+
+public:
+    explicit AbstractQrCodeGenDialog_Impl(std::unique_ptr<QrCodeGenDialog> p)
+        : m_xDlg(std::move(p))
+    {
+    }
+    virtual short Execute() override;
+};
+
 class SignSignatureLineDialog;
 class AbstractSignSignatureLineDialog_Impl : public AbstractSignSignatureLineDialog
 {
@@ -906,6 +920,10 @@ public:
     virtual VclPtr<AbstractSignSignatureLineDialog>
     CreateSignSignatureLineDialog(weld::Window* pParent,
                                   const css::uno::Reference<css::frame::XModel> xModel) override;
+
+    virtual VclPtr<AbstractQrCodeGenDialog>
+    CreateQrCodeGenDialog(weld::Window* pParent,
+                              const css::uno::Reference<css::frame::XModel> xModel, bool bEditExisting) override;
 
     virtual VclPtr<AbstractTipOfTheDayDialog> CreateTipOfTheDayDialog(weld::Window* pParent) override;
 };
