@@ -44,6 +44,7 @@
 #include <cfgutil.hxx>
 #include <SignatureLineDialog.hxx>
 #include <SignSignatureLineDialog.hxx>
+#include <QrCodeGenDialog.hxx>
 #include <SpellDialog.hxx>
 #include <zoom.hxx>
 #include <showcols.hxx>

@@ -982,8 +982,11 @@ class SvxSetItem;
 
 #define SID_TOGGLE_RESOLVED_NOTES                       ( SID_SVX_START + 1190 )
 
+#define SID_INSERT_QRCODE                               ( SID_SVX_START + 1191 )
+#define SID_EDIT_QRCODE                                 ( SID_SVX_START + 1192 )
+
 // IMPORTANT NOTE: adjust SID_SVX_FIRSTFREE, when adding new slot id
-#define SID_SVX_FIRSTFREE                               ( SID_SVX_START + 1190 + 1 )
+#define SID_SVX_FIRSTFREE                               ( SID_SVX_START + 1192 + 1 )
 
 // Overflow check for slot IDs
 #if SID_SVX_FIRSTFREE > SID_SVX_END

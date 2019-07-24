@@ -12082,3 +12082,37 @@ SfxVoidItem RemoveHyperlink SID_REMOVE_HYPERLINK
     ToolBoxConfig = TRUE,
     GroupId = SfxGroupId::Edit;
 ]
+
+SfxVoidItem InsertQrCode SID_INSERT_QRCODE
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Insert;
+]
+
+SfxVoidItem EditQrCode SID_EDIT_QRCODE
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Edit;
+]
