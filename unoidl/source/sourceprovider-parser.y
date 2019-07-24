@@ -228,8 +228,11 @@ bool coerce(
             ok = true;
             break;
         case unoidl::detail::SourceProviderExpr::TYPE_FLOAT:
-            lhs->fval = lhs->uval;
-            ok = true;
+            {
+                auto nTmp = lhs->uval;
+                lhs->fval = nTmp;
+                ok = true;
+            }
             break;
         }
         break;
@@ -239,12 +242,18 @@ bool coerce(
             ok = false;
             break;
         case unoidl::detail::SourceProviderExpr::TYPE_INT:
-            rhs->fval = rhs->ival;
-            ok = true;
+            {
+                auto tmp = rhs->ival;
+                rhs->fval = tmp;
+                ok = true;
+            }
             break;
         case unoidl::detail::SourceProviderExpr::TYPE_UINT:
-            rhs->fval = rhs->uval;
-            ok = true;
+            {
+                auto tmp = rhs->uval;
+                rhs->fval = tmp;
+                ok = true;
+            }
             break;
         case unoidl::detail::SourceProviderExpr::TYPE_FLOAT:
             ok = true;
