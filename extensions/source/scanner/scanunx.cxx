@@ -21,6 +21,7 @@
 #include "sanedlg.hxx"
 #include <osl/thread.hxx>
 #include <sal/log.hxx>
+#include <tools/solar.h>
 #include <cppuhelper/queryinterface.hxx>
 #include <memory>
 
@@ -263,9 +264,9 @@ sal_Bool ScannerManager::configureScannerAndScan( ScannerContext& scanner_contex
             );
 
         pHolder->m_bBusy = true;
-        ScopedVclPtrInstance< SaneDlg > aDlg(nullptr, pHolder->m_aSane, listener.is());
-        bRet = aDlg->Execute();
-        bScan = aDlg->getDoScan();
+        SaneDlg aDlg(nullptr, pHolder->m_aSane, listener.is());
+        bRet = aDlg.run();
+        bScan = aDlg.getDoScan();
         pHolder->m_bBusy = false;
     }
     if ( bScan )
