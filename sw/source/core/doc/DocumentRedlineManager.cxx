@@ -849,6 +849,8 @@ namespace
 
             if (aTmp2.Count())
                 pDoc->getIDocumentContentOperations().InsertItemSet(aPam, aTmp2);
+
+            // TODO: store the original paragraph style as ExtraData
         }
     }
 
@@ -899,12 +901,6 @@ RedlineFlags DocumentRedlineManager::GetRedlineFlags() const
 
 void DocumentRedlineManager::SetRedlineFlags( RedlineFlags eMode )
 {
-    if ( IsFinalizeImport() )
-    {
-        FinalizeImport();
-        SetFinalizeImport( false );
-    }
-
     if( meRedlineFlags != eMode )
     {
         if( (RedlineFlags::ShowMask & meRedlineFlags) != (RedlineFlags::ShowMask & eMode)
@@ -2003,21 +1999,13 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
             {
                 if ( bCallDelete && RedlineType::Delete == pNewRedl->GetType() )
                 {
-                    if ( pStt->nContent == 0 )
-                    {
-                        // tdf#54819 to keep the style of the paragraph
-                        // after the fully deleted paragraphs (normal behaviour
-                        // of editing without change tracking), we copy its style
-                        // to the first removed paragraph.
-                        lcl_CopyStyle(*pEnd, *pStt);
-                    }
-                    else
+                    if ( pStt->nContent != 0 )
                     {
                         // tdf#119571 update the style of the joined paragraph
                         // after a partially deleted paragraph to show its correct style
                         // in "Show changes" mode, too. The paragraph after the deletion
                         // gets the style of the first (partially deleted) paragraph.
-                        lcl_CopyStyle(*pStt, *pEnd);
+                        lcl_CopyStyle(*pStt, *pEnd); // TODO: do for all paragraphs of the deletion
                     }
                 }
                 bool const ret = mpRedlineTable->Insert( pNewRedl );
@@ -3060,16 +3048,6 @@ void DocumentRedlineManager::SetRedlinePassword(
     m_rDoc.getIDocumentState().SetModified();
 }
 
-bool DocumentRedlineManager::IsFinalizeImport() const
-{
-    return m_bFinalizeImport;
-}
-
-void DocumentRedlineManager::SetFinalizeImport(bool const bFinalizeImport)
-{
-    m_bFinalizeImport = bFinalizeImport;
-}
-
 /// Set comment text for the Redline, which is inserted later on via
 /// AppendRedline. Is used by Autoformat.
 /// A null pointer resets the mode. The pointer is not copied, so it
@@ -3087,42 +3065,6 @@ void DocumentRedlineManager::SetAutoFormatRedlineComment( const OUString* pText,
     }
 
     mnAutoFormatRedlnCommentNo = nSeqNo;
-}
-
-void DocumentRedlineManager::FinalizeImport()
-{
-    // set correct numbering after deletion
-    for( SwRedlineTable::size_type n = 0; n < mpRedlineTable->size(); ++n )
-    {
-        SwRangeRedline* pRedl = (*mpRedlineTable)[ n ];
-        if ( RedlineType::Delete == pRedl->GetType() )
-        {
-            const SwPosition* pStt = pRedl->Start(),
-                            * pEnd = pStt == pRedl->GetPoint()
-                                ? pRedl->GetMark() : pRedl->GetPoint();
-            SwTextNode* pDelNode = pStt->nNode.GetNode().GetTextNode();
-            SwTextNode* pTextNode = pEnd->nNode.GetNode().GetTextNode();
-
-            if ( pDelNode->GetNumRule() && !pTextNode->GetNumRule() )
-            {
-                // tdf#118699 remove numbering of the first deleted list item
-                const SwPaM aPam( *pStt, *pStt );
-                m_rDoc.DelNumRules( aPam );
-                // tdf#125916 copy style
-                pDelNode->ChgFormatColl( pTextNode->GetTextColl() );
-            }
-            else if ( pDelNode->GetNumRule() != pTextNode->GetNumRule() )
-            {
-                // tdf#125319 copy numbering to the first deleted list item
-                const SwPaM aPam( *pStt, *pStt );
-                SwNumRule *pRule = pTextNode->GetNumRule();
-                m_rDoc.SetNumRule( aPam, *pRule, false );
-
-                // tdf#125881 copy also numbering level
-                pDelNode->SetAttrListLevel( pTextNode->GetAttrListLevel() );
-            }
-        }
-    }
 }
 
 DocumentRedlineManager::~DocumentRedlineManager()
