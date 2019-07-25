@@ -2577,6 +2577,9 @@ void DesktopLOKTest::testDialogPaste()
 
 void DesktopLOKTest::testComplexSelection()
 {
+    // needed for SwTransferable to cope with the selection.
+    comphelper::LibreOfficeKit::setActive();
+
     // Start with a blank text file and add contents.
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
     // LibLODocument_Impl* pDocument = loadDoc("sheet_with_image.ods");
