@@ -280,9 +280,10 @@ void SlotManager::FuTemporary (SfxRequest& rRequest)
         case SID_REMOTE_DLG:
         {
 #ifdef ENABLE_SDREMOTE
-             SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-             ScopedVclPtr<VclAbstractDialog> pDlg( pFact->CreateRemoteDialog( mrSlideSorter.GetContentWindow() ) );
-             pDlg->Execute();
+            SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
+            vcl::Window* pWin = mrSlideSorter.GetContentWindow();
+            ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateRemoteDialog(pWin ? pWin->GetFrameWeld() : nullptr));
+            pDlg->Execute();
 #endif
         }
         break;
