@@ -113,21 +113,19 @@ bool Animation::SendTimeout()
 
 AnimationBitmap* Animation::GetNextFrameBitmap()
 {
-    const size_t nAnimCount = maAnimationFrames.size();
-
     bool bIsFrameAtEnd = mnFrameIndex >= maAnimationFrames.size();
     mnFrameIndex++;
 
-    AnimationBitmap* pCurrentFrameBmp
-        = bIsFrameAtEnd ? nullptr : maAnimationFrames[mnFrameIndex].get();
+    AnimationBitmap* pFrameBmp = bIsFrameAtEnd ? nullptr : maAnimationFrames[mnFrameIndex].get();
 
-    if (!pCurrentFrameBmp)
+    if (!pFrameBmp)
     {
         if (mnLoops == 1)
         {
             Stop();
             mbLoopTerminated = true;
-            mnFrameIndex = nAnimCount - 1;
+
+            mnFrameIndex = maAnimationFrames.size() - 1;
             maBitmapEx = maAnimationFrames[mnFrameIndex]->maBitmapEx;
         }
         else
@@ -136,11 +134,11 @@ AnimationBitmap* Animation::GetNextFrameBitmap()
                 mnLoops--;
 
             mnFrameIndex = 0;
-            pCurrentFrameBmp = maAnimationFrames[mnFrameIndex].get();
+            pFrameBmp = maAnimationFrames[mnFrameIndex].get();
         }
     }
 
-    return pCurrentFrameBmp;
+    return pFrameBmp;
 }
 
 void Animation::RenderNextFrame()
