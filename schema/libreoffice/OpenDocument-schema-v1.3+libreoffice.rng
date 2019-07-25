@@ -1212,6 +1212,9 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
         <rng:optional>
           <rng:ref name="loext-signatureline"/>
         </rng:optional>
+        <rng:optional>
+          <rng:ref name="loext-qrcode"/>
+        </rng:optional>
 
       </rng:element>
     </rng:define>
@@ -1676,6 +1679,25 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
       </rng:attribute>
       <rng:attribute name="loext:can-add-comment">
         <rng:ref name="boolean"/>
+      </rng:attribute>
+    </rng:element>
+  </rng:define>
+
+  <rng:define name="loext-qrcode">
+    <rng:element name="loext:qrcode">
+      <rng:attribute name="office:string-value">
+        <rng:ref name="string"/>
+      </rng:attribute>
+      <rng:attribute name="loext:qrcode-errorcorrection">
+        <rng:choice>
+          <rng:value>low</rng:value>
+          <rng:value>medium</rng:value>
+          <rng:value>quartile</rng:value>
+          <rng:value>high</rng:value>
+        </rng:choice>
+      </rng:attribute>
+      <rng:attribute name="loext:qrcode-border">
+        <rng:ref name="nonNegativeInteger"/>
       </rng:attribute>
     </rng:element>
   </rng:define>

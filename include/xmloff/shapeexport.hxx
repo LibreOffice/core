@@ -191,6 +191,7 @@ private:
     SAL_DLLPRIVATE void ImpExportDescription( const css::uno::Reference< css::drawing::XShape >& xShape ); // #i68101#
     SAL_DLLPRIVATE void ImpExportGluePoints( const css::uno::Reference< css::drawing::XShape >& xShape );
     SAL_DLLPRIVATE void ImpExportSignatureLine(const css::uno::Reference<css::drawing::XShape>& xShape);
+    SAL_DLLPRIVATE void ImpExportQRCode(const css::uno::Reference<css::drawing::XShape>& xShape);
 
     // single shape exporters
     SAL_DLLPRIVATE void ImpExportGroupShape( const css::uno::Reference< css::drawing::XShape >& xShape, XMLShapeExportFlags nFeatures = SEF_DEFAULT, css::awt::Point* pRefPoint = nullptr );

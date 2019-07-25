@@ -142,6 +142,7 @@ $(eval $(call gb_Library_add_exception_objects,xo,\
     xmloff/source/draw/shapeexport \
     xmloff/source/draw/shapeimport \
     xmloff/source/draw/SignatureLineContext \
+    xmloff/source/draw/QRCodeContext \
     xmloff/source/draw/xexptran \
     xmloff/source/draw/ximp3dobject \
     xmloff/source/draw/ximp3dscene \
