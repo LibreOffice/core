@@ -1117,7 +1117,7 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumns(
         "fields.RDB$FIELD_SCALE, "      // 10
         // Specifically use relfields null flag -- the one in fields is used
         // for domains, whether a specific field is nullable is set in relfields,
-        // this is also the one we manually fiddle when changin NULL/NOT NULL
+        // this is also the one we manually fiddle when changing NULL/NOT NULL
         // (see Table.cxx)
         "relfields.RDB$NULL_FLAG, "      // 11
         "fields.RDB$CHARACTER_LENGTH, "   // 12

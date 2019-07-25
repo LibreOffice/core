@@ -1162,7 +1162,7 @@ void PDFExport::ImplWriteTiledWatermark( vcl::PDFWriter& rWriter, const Size& rP
     OUString watermark = msTiledWatermark;
     int watermarkLength = watermark.getLength();
     // Maximum number of characters in one line.
-    // it is set to 21 to make it look like tiled watermaks as online in secure view
+    // it is set to 21 to make it look like tiled watermarks as online in secure view
     const int lineLength = 21;
     int lnIndex = lineLength;
     int lnCount = watermarkLength / lineLength;
