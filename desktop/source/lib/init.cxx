@@ -878,7 +878,6 @@ ITiledRenderable* getTiledRenderable(LibreOfficeKitDocument* pThis)
  * we also need to ensure that this works for the first view which
  * has no clear 'createView' called for it (unfortunately).
  */
-
 rtl::Reference<LOKClipboard> forceSetClipboardForCurrentView(LibreOfficeKitDocument *pThis)
 {
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
