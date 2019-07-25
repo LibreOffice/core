@@ -292,10 +292,6 @@
                         generic-name="Writer Navigator ToolBox" parent="GtkToolbar"
                         icon-name="widget-gtk-toolbar"/>
 
-    <glade-widget-class title="ClientBox" name="sduilo-ClientBox"
-                        generic-name="ClientBox" parent="GtkDrawingArea"
-                        icon-name="widget-gtk-drawingarea"/>
-
     <glade-widget-class title="IndexFieldsControl" name="dbulo-DbaIndexFieldsControl"
                         generic-name="IndexFieldsControl" parent="GtkTreeView"
                         icon-name="widget-gtk-treeview"/>

@@ -472,9 +472,9 @@ VclPtr<AbstractSdStartPresDlg> SdAbstractDialogFactory_Impl::CreateSdStartPresen
     return VclPtr<AbstractSdStartPresDlg_Impl>::Create(std::make_unique<SdStartPresentationDlg>(pParent, rInAttrs, rPageNames, pCSList));
 }
 
-VclPtr<VclAbstractDialog> SdAbstractDialogFactory_Impl::CreateRemoteDialog( vcl::Window* pParent )
+VclPtr<VclAbstractDialog> SdAbstractDialogFactory_Impl::CreateRemoteDialog(weld::Window* pParent)
 {
-     return VclPtr<SdVclAbstractDialog_Impl>::Create( VclPtr<::sd::RemoteDialog>::Create( pParent ) );
+     return VclPtr<SdAbstractGenericDialog_Impl>::Create(std::make_unique<::sd::RemoteDialog>(pParent));
 }
 
 VclPtr<SfxAbstractTabDialog>  SdAbstractDialogFactory_Impl::CreateSdPresLayoutTemplateDlg(SfxObjectShell* pDocSh, weld::Window* pParent, bool bBackgroundDlg, SfxStyleSheetBase& rStyleBase, PresentationObjects ePO, SfxStyleSheetBasePool* pSSPool)

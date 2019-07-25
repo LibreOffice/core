@@ -460,9 +460,10 @@ VclPtr<VclAbstractDialog> SdDialogsTest::createDialogByID(sal_uInt32 nID)
         }
         case 14:
         {
+            auto const parent = Application::GetDefDialogParent();
             // CreateRemoteDialog(vcl::Window* pWindow) override; // ad for RemoteDialog
             pRetval = getSdAbstractDialogFactory()->CreateRemoteDialog(
-                Application::GetDefDialogParent());
+                parent == nullptr ? nullptr : parent->GetFrameWeld());
             break;
         }
         case 15:
