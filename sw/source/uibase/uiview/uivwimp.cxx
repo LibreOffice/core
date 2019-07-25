@@ -24,6 +24,7 @@
 
 #include <com/sun/star/scanner/XScannerManager2.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
+#include <comphelper/propertysequence.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
@@ -128,6 +129,19 @@ void SwView_Impl::ExecuteScan( SfxRequest& rReq )
                     {
                         Reference< XEventListener > xLstner = &rListener;
                         ScannerContext aContext( aContexts.getConstArray()[ 0 ] );
+
+                        Reference<lang::XInitialization> xInit(xScanMgr, UNO_QUERY);
+                        if (xInit.is())
+                        {
+                            //  initialize dialog
+                            weld::Window* pWindow = rReq.GetFrameWeld();
+                            uno::Sequence<uno::Any> aSeq(comphelper::InitAnyPropertySequence(
+                            {
+                                {"ParentWindow", pWindow ? uno::Any(pWindow->GetXWindow()) : uno::Any(Reference<awt::XWindow>())}
+                            }));
+                            xInit->initialize( aSeq );
+                        }
+
                         bDone = xScanMgr->configureScannerAndScan( aContext, xLstner );
                     }
                 }
@@ -170,7 +184,7 @@ void SwView_Impl::ExecuteScan( SfxRequest& rReq )
 
             if( !bDone )
             {
-                std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(nullptr,
+                std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(rReq.GetFrameWeld(),
                                                           VclMessageType::Info, VclButtonsType::Ok,
                                                           SwResId(STR_SCAN_NOSOURCE)));
                 xBox->run();

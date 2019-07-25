@@ -26,6 +26,7 @@
 
 #include <com/sun/star/drawing/XMasterPagesSupplier.hpp>
 #include <com/sun/star/drawing/XDrawPages.hpp>
+#include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/ui/dialogs/XSLTFilterDialog.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
@@ -36,6 +37,7 @@
 #include <com/sun/star/document/XDocumentProperties.hpp>
 
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertysequence.hxx>
 #include <comphelper/scopeguard.hxx>
 
 #include <editeng/editdata.hxx>
@@ -1730,6 +1732,19 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                     if( aContexts.hasElements() )
                     {
                         css::scanner::ScannerContext aContext( aContexts.getConstArray()[ 0 ] );
+
+                        Reference<lang::XInitialization> xInit(mxScannerManager, UNO_QUERY);
+                        if (xInit.is())
+                        {
+                            //  initialize dialog
+                            weld::Window* pWindow = rReq.GetFrameWeld();
+                            uno::Sequence<uno::Any> aSeq(comphelper::InitAnyPropertySequence(
+                            {
+                                {"ParentWindow", pWindow ? uno::Any(pWindow->GetXWindow()) : uno::Any(Reference<awt::XWindow>())}
+                            }));
+                            xInit->initialize( aSeq );
+                        }
+
                         mxScannerManager->configureScannerAndScan( aContext, mxScannerListener );
                     }
                 }
