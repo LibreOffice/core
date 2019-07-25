@@ -222,7 +222,7 @@ CheckParaRedlineMerge(SwTextFrame & rFrame, SwTextNode & rTextNode,
     if (extents.empty()) // there was no text anywhere
     {
         assert(mergedText.isEmpty());
-        pParaPropsNode = &rTextNode; // if every node is empty, the first one wins
+        pParaPropsNode = pNode; // if every node is empty, the last one wins
     }
     else
     {
