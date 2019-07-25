@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_ef7a9722",
+        "filename": "xmloff/source/draw/QRCodeContext.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-07-25T10:33:54Z",
+      "side": 1,
+      "message": "please dont use toInt32, it\u0027s not ideal for untrusted input... better use sax::Converter::convertNumber and pass in a nMin so that negative values aren\u0027t allowed.",
+      "revId": "ad05dbf448d0e3b69292bd8fb54611071222d982",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_cf7d531d",
+        "filename": "xmloff/source/draw/shapeexport.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 1320,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-07-25T10:33:54Z",
+      "side": 1,
+      "message": "that looks a bit overly complicated, try using OUStringBuffer then you need one less conversion\n\nactually there\u0027s a OUString::number too, thats even easier",
+      "revId": "ad05dbf448d0e3b69292bd8fb54611071222d982",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
