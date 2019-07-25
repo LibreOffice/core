@@ -1,0 +1,9 @@
+Code-Review+1: Stephan Bergmann <sbergman@redhat.com>
+Verified+1: Jenkins
+Code-Review+1: Mike Kaganski <mike.kaganski@collabora.com>
+Code-Review+2: Samuel Mehrbrodt <Samuel.Mehrbrodt@cib.de>
+Submitted-by: Samuel Mehrbrodt <Samuel.Mehrbrodt@cib.de>
+Submitted-at: Thu, 25 Jul 2019 07:15:10 +0200
+Reviewed-on: https://gerrit.libreoffice.org/74167
+Project: core
+Branch: refs/heads/master
