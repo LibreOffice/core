@@ -70,7 +70,6 @@
 #include <comphelper/lok.hxx>
 #include <comphelper/solarmutex.hxx>
 #include <osl/process.h>
-#include <comphelper/lok.hxx>
 
 #include <cassert>
 #include <utility>
