@@ -13,61 +13,39 @@
 using namespace ::sd;
 using namespace ::std;
 
-RemoteDialog::RemoteDialog( vcl::Window *pWindow )
-    : ModalDialog(pWindow, "RemoteDialog",
-        "modules/simpress/ui/remotedialog.ui")
+RemoteDialog::RemoteDialog(weld::Window *pWindow)
+    : GenericDialogController(pWindow, "modules/simpress/ui/remotedialog.ui", "RemoteDialog")
+    , m_xButtonConnect(m_xBuilder->weld_button("ok"))
+    , m_xClientBox(new sd::ClientBox(m_xBuilder->weld_scrolled_window("scroll"),
+                                     m_xBuilder->weld_container("tree")))
 {
-    get(m_pButtonConnect, "connect");
-    get(m_pButtonClose, "close");
-    get(m_pClientBox, "tree");
-
-    m_pButtonConnect->SetClickHdl( LINK( this, RemoteDialog, HandleConnectButton ) );
-    SetCloseHdl( LINK( this, RemoteDialog, CloseHdl ) );
-    m_pButtonClose->SetClickHdl( LINK( this, RemoteDialog, CloseClickHdl ) );
+    m_xButtonConnect->connect_clicked(LINK(this, RemoteDialog, HandleConnectButton));
 }
 
 RemoteDialog::~RemoteDialog()
 {
-    disposeOnce();
 }
 
-void RemoteDialog::dispose()
+IMPL_LINK_NOARG(RemoteDialog, HandleConnectButton, weld::Button&, void)
 {
-    m_pButtonConnect.clear();
-    m_pButtonClose.clear();
-    m_pClientBox.clear();
-    ModalDialog::dispose();
-}
-
-IMPL_LINK_NOARG(RemoteDialog, HandleConnectButton, Button*, void)
-{
-//     setBusy( true );
-    // Fixme: Try and connect
+    weld::WaitObject(m_xDialog.get());
 #if defined(ENABLE_SDREMOTE) && defined(ENABLE_SDREMOTE_BLUETOOTH)
-    long aSelected = m_pClientBox->GetActiveEntryIndex();
-    if ( aSelected < 0 )
+    auto xEntry = m_xClientBox->GetActiveEntry();
+    if (!xEntry)
         return;
-    TClientBoxEntry aEntry = m_pClientBox->GetEntryData(aSelected);
-    OUString aPin ( m_pClientBox->getPin() );
-    if ( RemoteServer::connectClient( aEntry->m_pClientInfo, aPin ) )
-    {
-        CloseHdl( *this );
-    }
-#else
-    (void) this;
+    OUString aPin = xEntry->m_xPinBox->get_text();
+    if (RemoteServer::connectClient(xEntry->m_xClientInfo, aPin))
+        m_xDialog->response(RET_OK);
 #endif
 }
 
-IMPL_LINK_NOARG( RemoteDialog, CloseClickHdl, Button*, void )
+short RemoteDialog::run()
 {
-    CloseHdl(*this);
-}
-IMPL_LINK_NOARG( RemoteDialog, CloseHdl, SystemWindow&, void )
-{
+    short nRet = weld::GenericDialogController::run();
 #ifdef ENABLE_SDREMOTE
     RemoteServer::restoreDiscoverable();
 #endif
-    Close();
+    return nRet;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

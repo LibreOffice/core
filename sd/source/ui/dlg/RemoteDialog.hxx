@@ -9,28 +9,24 @@
 #ifndef INCLUDED_SD_SOURCE_UI_DLG_REMOTEDIALOG_HXX
 #define INCLUDED_SD_SOURCE_UI_DLG_REMOTEDIALOG_HXX
 
-#include <vcl/button.hxx>
-#include <vcl/dialog.hxx>
+#include <vcl/weld.hxx>
 
 #include "RemoteDialogClientBox.hxx"
 
 namespace sd
 {
 
-class RemoteDialog : public ModalDialog
+class RemoteDialog : public weld::GenericDialogController
 {
 private:
-    VclPtr<PushButton>     m_pButtonConnect;
-    VclPtr<CloseButton>    m_pButtonClose;
-    VclPtr<ClientBox>      m_pClientBox;
+    std::unique_ptr<weld::Button> m_xButtonConnect;
+    std::unique_ptr<ClientBox> m_xClientBox;
 
-    DECL_LINK( HandleConnectButton, Button*, void );
-    DECL_LINK( CloseHdl, SystemWindow&, void );
-    DECL_LINK( CloseClickHdl, Button*, void );
+    DECL_LINK(HandleConnectButton, weld::Button&, void);
 public:
-    explicit RemoteDialog( vcl::Window* pWindow );
+    explicit RemoteDialog(weld::Window* pWindow);
+    virtual short run() override;
     virtual ~RemoteDialog() override;
-    virtual void dispose() override;
 };
 
 }

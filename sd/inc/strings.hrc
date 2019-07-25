@@ -356,8 +356,6 @@
 #define STR_POOLSHEET_TOTAL                             NC_("STR_POOLSHEET_TOTAL", "Total line" )
 #define STR_POOLSHEET_FIRST_COLUMN                      NC_("STR_POOLSHEET_FIRST_COLUMN", "First column" )
 #define STR_POOLSHEET_LAST_COLUMN                       NC_("STR_POOLSHEET_LAST_COLUMN", "Last column" )
-#define STR_ENTER_PIN                                   NC_("STR_ENTER_PIN", "Enter PIN:")
-#define STR_DEAUTHORISE_CLIENT                          NC_("STR_DEAUTHORISE_CLIENT", "Remove client authorisation")
 #define STR_SHRINK_FONT_SIZE                            NC_("STR_SHRINK_FONT_SIZE", "Shrink font size")
 #define STR_GROW_FONT_SIZE                              NC_("STR_GROW_FONT_SIZE", "Grow font size")
 

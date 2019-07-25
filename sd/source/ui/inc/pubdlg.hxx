@@ -20,11 +20,7 @@
 #ifndef INCLUDED_SD_SOURCE_UI_INC_PUBDLG_HXX
 #define INCLUDED_SD_SOURCE_UI_INC_PUBDLG_HXX
 
-#include <vcl/fixed.hxx>
-#include <vcl/button.hxx>
-#include <vcl/field.hxx>
-#include <vcl/dialog.hxx>
-#include <vcl/layout.hxx>
+#include <vcl/weld.hxx>
 #include <pres.hxx>
 #include "assclass.hxx"
 

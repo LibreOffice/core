@@ -20,11 +20,9 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <comphelper/sequence.hxx>
 #include <unotools/ucbstreamhelper.hxx>
-#include <vcl/lstbox.hxx>
 #include <vcl/FilterConfigItem.hxx>
-#include <vcl/button.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/vclmedit.hxx>
+#include <vcl/image.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <svtools/valueset.hxx>
 #include <svtools/colrdlg.hxx>
