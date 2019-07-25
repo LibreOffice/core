@@ -2230,17 +2230,14 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf75659)
     xmlDocPtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
     CPPUNIT_ASSERT(pXmlDoc);
 
-    assertXPathContent(pXmlDoc,
-                       "/metafile/push[1]/push[1]/push[1]/push[4]/push[1]/textarray[17]/text",
-                       "Unnamed Series 1");
+    assertXPathContent(
+        pXmlDoc, "/metafile/push[1]/push[1]/push[1]/push[4]/push[1]/textarray[17]/text", "Series1");
 
-    assertXPathContent(pXmlDoc,
-                       "/metafile/push[1]/push[1]/push[1]/push[4]/push[1]/textarray[18]/text",
-                       "Unnamed Series 2");
+    assertXPathContent(
+        pXmlDoc, "/metafile/push[1]/push[1]/push[1]/push[4]/push[1]/textarray[18]/text", "Series2");
 
-    assertXPathContent(pXmlDoc,
-                       "/metafile/push[1]/push[1]/push[1]/push[4]/push[1]/textarray[19]/text",
-                       "Unnamed Series 3");
+    assertXPathContent(
+        pXmlDoc, "/metafile/push[1]/push[1]/push[1]/push[4]/push[1]/textarray[19]/text", "Series3");
     // These failed, if the legend names are empty strings.
 }
 
