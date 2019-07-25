@@ -21,9 +21,11 @@ $(eval $(call gb_UnpackedTarball_add_patches,libwpg, \
 
 ifneq ($(OS),MACOSX)
 ifneq ($(OS),WNT)
+ifneq ($(OS),iOS)
 $(eval $(call gb_UnpackedTarball_add_patches,libwpg, \
     external/libwpg/libwpg-bundled-soname.patch.0 \
 ))
+endif
 endif
 endif
 
