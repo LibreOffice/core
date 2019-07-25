@@ -54,6 +54,7 @@ class SvxBulletAndPositionDlg : public weld::GenericDialogController
 
     std::unique_ptr<SvxNumRule> pActNum;
     std::unique_ptr<SvxNumRule> pSaveNum;
+    const SfxItemSet& rFirstStateSet;
 
     Size aInitSize[SVX_MAX_NUM];
 
@@ -108,6 +109,7 @@ class SvxBulletAndPositionDlg : public weld::GenericDialogController
     std::unique_ptr<weld::RadioButton> m_xSlideRB;
     std::unique_ptr<weld::RadioButton> m_xSelectionRB;
     std::unique_ptr<weld::ToggleButton> m_xApplyToMaster;
+    std::unique_ptr<weld::Button> m_xReset;
 
     void InitControls();
     /** To switch between the numbering type
@@ -135,6 +137,7 @@ class SvxBulletAndPositionDlg : public weld::GenericDialogController
     DECL_LINK(SelectCenterAlignmentHdl_Impl, weld::ToggleButton&, void);
     DECL_LINK(SelectRightAlignmentHdl_Impl, weld::ToggleButton&, void);
     DECL_LINK(ApplyToMasterHdl_Impl, weld::ToggleButton&, void);
+    DECL_LINK(ResetHdl_Impl, weld::Button&, void);
     void EditModifyHdl_Impl(const weld::Entry*);
     void InitPosAndSpaceMode();
     void SetAlignmentHdl_Impl(SvxAdjust);
