@@ -437,6 +437,16 @@ DECLARE_OOXMLEXPORT_TEST(testTdf78657, "tdf78657_picture_hyperlink.docx")
     assertXPath(pXmlRels, "/rels:Relationships/rels:Relationship[@Target='http://www.google.com']", "TargetMode", "External");
 }
 
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testBtlrFrame, "btlr-frame.odt")
+{
+    uno::Reference<beans::XPropertySet> xPropertySet(getShape(1), uno::UNO_QUERY);
+    comphelper::SequenceAsHashMap aGeometry(xPropertySet->getPropertyValue("CustomShapeGeometry"));
+    // Without the accompanying fix in place, this test would have failed with 'Expected:
+    // -270; Actual: 0', i.e. the writing direction of the frame was lost.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(-270),
+                         aGeometry["TextPreRotateAngle"].get<sal_Int32>());
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf125518, "tdf125518.odt")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
