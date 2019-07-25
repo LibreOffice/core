@@ -476,20 +476,24 @@ void FieldParamExporter::Export()
             {
                 // Save the OLE object
                 Reference< embed::XStorage > xTargetStg = m_pExport->GetTargetStorage();
-                Reference< embed::XStorage > xDstStg = xTargetStg->openStorageElement(
+                if (xTargetStg.is()) {
+                    Reference< embed::XStorage > xDstStg = xTargetStg->openStorageElement(
                         "OLELinks", embed::ElementModes::WRITE );
 
-                if ( !xDstStg->hasByName( sValue ) ) {
-                    Reference< XStorageBasedDocument > xStgDoc (
+                    if ( !xDstStg->hasByName( sValue ) ) {
+                        Reference< XStorageBasedDocument > xStgDoc (
                             m_pExport->GetModel( ), UNO_QUERY );
-                    Reference< embed::XStorage > xDocStg = xStgDoc->getDocumentStorage();
-                    Reference< embed::XStorage > xOleStg = xDocStg->openStorageElement(
+                        Reference< embed::XStorage > xDocStg = xStgDoc->getDocumentStorage();
+                        Reference< embed::XStorage > xOleStg = xDocStg->openStorageElement(
                             "OLELinks", embed::ElementModes::READ );
 
-                    xOleStg->copyElementTo( sValue, xDstStg, sValue );
-                    Reference< embed::XTransactedObject > xTransact( xDstStg, UNO_QUERY );
-                    if ( xTransact.is( ) )
-                        xTransact->commit( );
+                        xOleStg->copyElementTo( sValue, xDstStg, sValue );
+                        Reference< embed::XTransactedObject > xTransact( xDstStg, UNO_QUERY );
+                        if ( xTransact.is( ) )
+                            xTransact->commit( );
+                    }
+                } else {
+                    SAL_WARN("xmloff", "no target storage");
                 }
             }
         }
