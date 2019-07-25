@@ -134,7 +134,7 @@ public:
     /// Obtain the texture; the caller must delete it after use.
     OpenGLTexture* getTexture();
 
-    /// Copy bitmap data to the texture. Texutre must be initialized and the correct size to hold the bitmap.
+    /// Copy bitmap data to the texture. Texture must be initialized and the correct size to hold the bitmap.
     bool copyToTexture(OpenGLTexture& aTexture);
 };
 

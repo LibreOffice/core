@@ -950,7 +950,7 @@ CallbackFlushHandler::CallbackFlushHandler(LibreOfficeKitDocument* pDocument, Li
     SetPriority(TaskPriority::POST_PAINT);
 
     // Add the states that are safe to skip duplicates on, even when
-    // not consequent (i.e. do no emmit them if unchanged from last).
+    // not consequent (i.e. do no emit them if unchanged from last).
     m_states.emplace(LOK_CALLBACK_TEXT_SELECTION, "NIL");
     m_states.emplace(LOK_CALLBACK_GRAPHIC_SELECTION, "NIL");
     m_states.emplace(LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR, "NIL");
@@ -1276,7 +1276,7 @@ bool CallbackFlushHandler::processInvalidateTilesEvent(CallbackData& aCallbackDa
 
                 if (rcNew.m_nPart == -1)
                 {
-                    // Don't merge unless fully overlaped.
+                    // Don't merge unless fully overlapped.
                     SAL_INFO("lok", "New " << rcNew.toString() << " has " << rcOld.toString()
                                            << "?");
                     if (rcNew.m_aRectangle.IsInside(rcOld.m_aRectangle))
@@ -1288,7 +1288,7 @@ bool CallbackFlushHandler::processInvalidateTilesEvent(CallbackData& aCallbackDa
                 }
                 else if (rcOld.m_nPart == -1)
                 {
-                    // Don't merge unless fully overlaped.
+                    // Don't merge unless fully overlapped.
                     SAL_INFO("lok", "Old " << rcOld.toString() << " has " << rcNew.toString()
                                            << "?");
                     if (rcOld.m_aRectangle.IsInside(rcNew.m_aRectangle))

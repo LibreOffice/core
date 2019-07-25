@@ -79,7 +79,7 @@ struct IXFStyleRet
 
 /**
  * @descr   container object for styles.
- *          All styles can be placed into an style container.
+ *          All styles can be placed into a style container.
  */
 class XFStyleContainer
 {

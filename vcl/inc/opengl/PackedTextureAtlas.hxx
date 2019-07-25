@@ -17,7 +17,7 @@
 struct PackedTexture;
 
 /**
- * Pack texutres into one texutre atlas.
+ * Pack textures into one texture atlas.
  *
  * This is based on algorithm described in [1] and is an
  * adaptation of "texture atlas generator" from [2].
