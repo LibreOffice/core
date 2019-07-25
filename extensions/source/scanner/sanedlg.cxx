@@ -21,12 +21,12 @@
 #include <stdlib.h>
 #include <tools/config.hxx>
 #include <unotools/resmgr.hxx>
+#include <vcl/bitmapex.hxx>
 #include <vcl/customweld.hxx>
 #include <vcl/dibtools.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/builderfactory.hxx>
 #include <vcl/event.hxx>
 #include "sanedlg.hxx"
 #include "grid.hxx"
