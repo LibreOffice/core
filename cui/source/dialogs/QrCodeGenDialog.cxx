@@ -16,7 +16,11 @@
 #include <utility>
 #include <vcl/weld.hxx>
 
+#if defined(SYSTEM_QRCODEGEN)
+#include <qrcodegen/QrCode.hpp>
+#else
 #include <QrCode.hpp>
+#endif
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
