@@ -98,12 +98,6 @@ public:
     virtual bool IsSlideScope() override;
 };
 
-
-class SdVclAbstractDialog_Impl : public VclAbstractDialog
-{
-    DECL_ABSTDLG_BASE(SdVclAbstractDialog_Impl,Dialog)
-};
-
 class SdAbstractGenericDialog_Impl : public VclAbstractDialog
 {
     std::unique_ptr<weld::GenericDialogController> m_xDlg;
