@@ -2641,6 +2641,9 @@ void DesktopLOKTest::testShowHideDialog()
 
 void DesktopLOKTest::testComplexSelection()
 {
+    // needed for SwTransferable to cope with the selection.
+    comphelper::LibreOfficeKit::setActive();
+
     // Start with a blank text file and add contents.
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
     static const OString aText("hello world");
