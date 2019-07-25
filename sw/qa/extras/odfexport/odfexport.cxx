@@ -18,6 +18,8 @@
 #include <com/sun/star/drawing/PointSequenceSequence.hpp>
 #include <com/sun/star/drawing/GraphicExportFilter.hpp>
 #include <com/sun/star/drawing/XGraphicExportFilter.hpp>
+#include <com/sun/star/drawing/QRCode.hpp>
+#include <com/sun/star/drawing/QRCodeErrorCorrection.hpp>
 #include <com/sun/star/table/ShadowFormat.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
@@ -2094,6 +2096,21 @@ DECLARE_ODFEXPORT_TEST(testSignatureLineProperties, "signatureline-properties.fo
                          getProperty<OUString>(xShape, "SignatureLineSigningInstructions"));
     CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xShape, "SignatureLineCanAddComment"));
     CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xShape, "SignatureLineShowSignDate"));
+}
+
+DECLARE_ODFEXPORT_TEST(testQrCodeGenProperties, "qrcode-properties.fodt")
+{
+    uno::Reference<drawing::XShape> xShape = getShape(1);
+    CPPUNIT_ASSERT(xShape.is());
+
+    css::drawing::QRCode aQRCode = getProperty<css::drawing::QRCode>(xShape, "QRCodeProperties");
+
+    CPPUNIT_ASSERT_EQUAL(OUString("www.libreoffice.org"),
+                         aQRCode.Payload);
+    CPPUNIT_ASSERT_EQUAL(css::drawing::QRCodeErrorCorrection::LOW,
+                         aQRCode.ErrorCorrection);
+    CPPUNIT_ASSERT_EQUAL(5,
+                         aQRCode.Border);
 }
 
 DECLARE_ODFEXPORT_TEST(testChapterNumberingNewLine, "chapter-number-new-line.odt")
