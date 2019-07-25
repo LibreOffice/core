@@ -63,8 +63,6 @@ public:
     // by a last undo during text edit
     bool isEndTextEditTriggeredFromUndo() { return mbEndTextEditTriggeredFromUndo; }
     void SetDocShell(SfxObjectShell* pDocShell);
-
-    virtual void AddUndoAction( std::unique_ptr<SfxUndoAction> pAction, bool bTryMerg=false ) override;
 };
 
 #endif // INCLUDED_SVX_SDRUNDOMANAGER_HXX

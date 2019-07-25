@@ -41,6 +41,9 @@
 #include <comphelper/lok.hxx>
 #include <assert.h>
 
+#include <sfx2/viewfrm.hxx>
+#include <sfx2/bindings.hxx>
+
 using namespace ::com::sun::star;
 
 // the undo array should never grow beyond this limit:
@@ -526,6 +529,17 @@ void UndoManager::AddUndoAction(std::unique_ptr<SfxUndoAction> pAction, bool bTr
         }
     }
     SdrUndoManager::AddUndoAction(std::move(pAction), bTryMerge);
+    if (m_pDocShell)
+    {
+        SfxViewFrame* pViewFrame = SfxViewFrame::GetFirst( m_pDocShell );
+        while ( pViewFrame )
+        {
+            pViewFrame->GetBindings().Invalidate( SID_UNDO );
+            pViewFrame->GetBindings().Invalidate( SID_REDO );
+            pViewFrame = SfxViewFrame::GetNext( *pViewFrame, m_pDocShell );
+        }
+    }
+
     // if the undo nodes array is too large, delete some actions
     while (UNDO_ACTION_LIMIT < GetUndoNodes().Count())
     {
