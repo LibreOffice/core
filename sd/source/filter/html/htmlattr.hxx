@@ -20,16 +20,16 @@
 #ifndef INCLUDED_SD_SOURCE_FILTER_HTML_HTMLATTR_HXX
 #define INCLUDED_SD_SOURCE_FILTER_HTML_HTMLATTR_HXX
 
-#include <vcl/ctrl.hxx>
+#include <vcl/customweld.hxx>
 #include <tools/color.hxx>
 
-class SdHtmlAttrPreview final : public Control
+class SdHtmlAttrPreview final : public weld::CustomWidgetController
 {
     Color   m_aBackColor, m_aTextColor, m_aLinkColor;
     Color   m_aVLinkColor, m_aALinkColor;
 
 public:
-    SdHtmlAttrPreview( vcl::Window* pParent, WinBits nStyle );
+    SdHtmlAttrPreview();
     virtual ~SdHtmlAttrPreview() override;
 
     virtual void Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle& rRect) override;

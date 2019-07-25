@@ -44,109 +44,111 @@ namespace com { namespace sun { namespace star { namespace uno { template <class
 // *********************************************************************
 // Html-Export Autopilot
 // *********************************************************************
-
-class SdPublishingDlg : public ModalDialog
+// should turn this into a wizard
+class SdPublishingDlg : public weld::GenericDialogController
 {
 private:
     // page 1 controls
-    VclPtr<VclContainer>   pPage1;
-    VclPtr<FixedText>      pPage1_Title;
-    VclPtr<RadioButton>    pPage1_NewDesign;
-    VclPtr<RadioButton>    pPage1_OldDesign;
-    VclPtr<ListBox>        pPage1_Designs;
-    VclPtr<PushButton>     pPage1_DelDesign;
-    VclPtr<FixedText>      pPage1_Desc;
+    std::unique_ptr<weld::Container> m_xPage1;
+    std::unique_ptr<weld::Label> m_xPage1_Title;
+    std::unique_ptr<weld::RadioButton> m_xPage1_NewDesign;
+    std::unique_ptr<weld::RadioButton> m_xPage1_OldDesign;
+    std::unique_ptr<weld::TreeView> m_xPage1_Designs;
+    std::unique_ptr<weld::Button> m_xPage1_DelDesign;
+    std::unique_ptr<weld::Label> m_xPage1_Desc;
 
     // page 2 controls
-    VclPtr<VclContainer>   pPage2;
-    VclPtr<VclContainer>   pPage2Frame2;
-    VclPtr<VclContainer>   pPage2Frame3;
-    VclPtr<VclContainer>   pPage2Frame4;
-    VclPtr<FixedText>      pPage2_Title;
-    VclPtr<RadioButton>    pPage2_Standard;
-    VclPtr<RadioButton>    pPage2_Frames;
-    VclPtr<RadioButton>    pPage2_SingleDocument;
-    VclPtr<RadioButton>    pPage2_Kiosk;
-    VclPtr<RadioButton>    pPage2_WebCast;
-    VclPtr<FixedImage>    pPage2_Standard_FB;
-    VclPtr<FixedImage>    pPage2_Frames_FB;
-    VclPtr<FixedImage>    pPage2_Kiosk_FB;
-    VclPtr<FixedImage>    pPage2_WebCast_FB;
+    std::unique_ptr<weld::Container> m_xPage2;
+    std::unique_ptr<weld::Container> m_xPage2Frame2;
+    std::unique_ptr<weld::Container> m_xPage2Frame3;
+    std::unique_ptr<weld::Container> m_xPage2Frame4;
+    std::unique_ptr<weld::Label> m_xPage2_Title;
+    std::unique_ptr<weld::RadioButton> m_xPage2_Standard;
+    std::unique_ptr<weld::RadioButton> m_xPage2_Frames;
+    std::unique_ptr<weld::RadioButton> m_xPage2_SingleDocument;
+    std::unique_ptr<weld::RadioButton> m_xPage2_Kiosk;
+    std::unique_ptr<weld::RadioButton> m_xPage2_WebCast;
+    std::unique_ptr<weld::Image> m_xPage2_Standard_FB;
+    std::unique_ptr<weld::Image> m_xPage2_Frames_FB;
+    std::unique_ptr<weld::Image> m_xPage2_Kiosk_FB;
+    std::unique_ptr<weld::Image> m_xPage2_WebCast_FB;
 
-    VclPtr<FixedText>      pPage2_Title_Html;
-    VclPtr<CheckBox>       pPage2_Content;
-    VclPtr<CheckBox>       pPage2_Notes;
+    std::unique_ptr<weld::Label> m_xPage2_Title_Html;
+    std::unique_ptr<weld::CheckButton> m_xPage2_Content;
+    std::unique_ptr<weld::CheckButton> m_xPage2_Notes;
 
-    VclPtr<FixedText>      pPage2_Title_WebCast;
-    VclPtr<RadioButton>    pPage2_ASP;
-    VclPtr<RadioButton>    pPage2_PERL;
-    VclPtr<FixedText>      pPage2_URL_txt;
-    VclPtr<Edit>           pPage2_URL;
-    VclPtr<FixedText>      pPage2_CGI_txt;
-    VclPtr<Edit>           pPage2_CGI;
-    VclPtr<FixedText>      pPage2_Index_txt;
-    VclPtr<Edit>           pPage2_Index;
-    VclPtr<FixedText>      pPage2_Title_Kiosk;
-    VclPtr<RadioButton>    pPage2_ChgDefault;
-    VclPtr<RadioButton>    pPage2_ChgAuto;
-    VclPtr<FixedText>      pPage2_Duration_txt;
-    VclPtr<TimeField>      pPage2_Duration;
-    VclPtr<CheckBox>       pPage2_Endless;
+    std::unique_ptr<weld::Label> m_xPage2_Title_WebCast;
+    std::unique_ptr<weld::RadioButton> m_xPage2_ASP;
+    std::unique_ptr<weld::RadioButton> m_xPage2_PERL;
+    std::unique_ptr<weld::Label> m_xPage2_URL_txt;
+    std::unique_ptr<weld::Entry> m_xPage2_URL;
+    std::unique_ptr<weld::Label> m_xPage2_CGI_txt;
+    std::unique_ptr<weld::Entry> m_xPage2_CGI;
+    std::unique_ptr<weld::Label> m_xPage2_Index_txt;
+    std::unique_ptr<weld::Entry> m_xPage2_Index;
+    std::unique_ptr<weld::Label> m_xPage2_Title_Kiosk;
+    std::unique_ptr<weld::RadioButton> m_xPage2_ChgDefault;
+    std::unique_ptr<weld::RadioButton> m_xPage2_ChgAuto;
+    std::unique_ptr<weld::Label> m_xPage2_Duration_txt;
+    std::unique_ptr<weld::TimeSpinButton> m_xPage2_Duration;
+    std::unique_ptr<weld::CheckButton> m_xPage2_Endless;
 
     // page 3 controls
-    VclPtr<VclContainer>   pPage3;
-    VclPtr<FixedText>      pPage3_Title1;
-    VclPtr<RadioButton>    pPage3_Png;
-    VclPtr<RadioButton>    pPage3_Gif;
-    VclPtr<RadioButton>    pPage3_Jpg;
-    VclPtr<FixedText>      pPage3_Quality_txt;
-    VclPtr<ComboBox>       pPage3_Quality;
-    VclPtr<FixedText>      pPage3_Title2;
-    VclPtr<RadioButton>    pPage3_Resolution_1;
-    VclPtr<RadioButton>    pPage3_Resolution_2;
-    VclPtr<RadioButton>    pPage3_Resolution_3;
-    VclPtr<FixedText>      pPage3_Title3;
-    VclPtr<CheckBox>       pPage3_SldSound;
-    VclPtr<CheckBox>       pPage3_HiddenSlides;
+    std::unique_ptr<weld::Container> m_xPage3;
+    std::unique_ptr<weld::Label> m_xPage3_Title1;
+    std::unique_ptr<weld::RadioButton> m_xPage3_Png;
+    std::unique_ptr<weld::RadioButton> m_xPage3_Gif;
+    std::unique_ptr<weld::RadioButton> m_xPage3_Jpg;
+    std::unique_ptr<weld::Label> m_xPage3_Quality_txt;
+    std::unique_ptr<weld::ComboBox> m_xPage3_Quality;
+    std::unique_ptr<weld::Label> m_xPage3_Title2;
+    std::unique_ptr<weld::RadioButton> m_xPage3_Resolution_1;
+    std::unique_ptr<weld::RadioButton> m_xPage3_Resolution_2;
+    std::unique_ptr<weld::RadioButton> m_xPage3_Resolution_3;
+    std::unique_ptr<weld::Label> m_xPage3_Title3;
+    std::unique_ptr<weld::CheckButton> m_xPage3_SldSound;
+    std::unique_ptr<weld::CheckButton> m_xPage3_HiddenSlides;
 
     // page 4 controls
-    VclPtr<VclContainer>   pPage4;
-    VclPtr<FixedText>      pPage4_Title1;
-    VclPtr<FixedText>      pPage4_Author_txt;
-    VclPtr<Edit>           pPage4_Author;
-    VclPtr<FixedText>      pPage4_Email_txt;
-    VclPtr<Edit>           pPage4_Email;
-    VclPtr<FixedText>      pPage4_WWW_txt;
-    VclPtr<Edit>           pPage4_WWW;
-    VclPtr<FixedText>      pPage4_Title2;
-    VclPtr<VclMultiLineEdit>  pPage4_Misc;
-    VclPtr<CheckBox>       pPage4_Download;
+    std::unique_ptr<weld::Container> m_xPage4;
+    std::unique_ptr<weld::Label> m_xPage4_Title1;
+    std::unique_ptr<weld::Label> m_xPage4_Author_txt;
+    std::unique_ptr<weld::Entry> m_xPage4_Author;
+    std::unique_ptr<weld::Label> m_xPage4_Email_txt;
+    std::unique_ptr<weld::Entry> m_xPage4_Email;
+    std::unique_ptr<weld::Label> m_xPage4_WWW_txt;
+    std::unique_ptr<weld::Entry> m_xPage4_WWW;
+    std::unique_ptr<weld::Label> m_xPage4_Title2;
+    std::unique_ptr<weld::TextView> m_xPage4_Misc;
+    std::unique_ptr<weld::CheckButton> m_xPage4_Download;
 
     // page 5 controls
-    VclPtr<VclContainer>   pPage5;
-    VclPtr<FixedText>      pPage5_Title;
-    VclPtr<CheckBox>       pPage5_TextOnly;
-    VclPtr<ValueSet>       pPage5_Buttons;
+    std::unique_ptr<weld::Container> m_xPage5;
+    std::unique_ptr<weld::Label> m_xPage5_Title;
+    std::unique_ptr<weld::CheckButton> m_xPage5_TextOnly;
+    std::unique_ptr<SvtValueSet> m_xPage5_Buttons;
+    std::unique_ptr<weld::CustomWeld> m_xPage5_ButtonsWnd;
 
     // page 6 controls
-    VclPtr<VclContainer>   pPage6;
-    VclPtr<FixedText>      pPage6_Title;
-    VclPtr<RadioButton>    pPage6_Default;
-    VclPtr<RadioButton>    pPage6_User;
-    VclPtr<PushButton>     pPage6_Back;
-    VclPtr<PushButton>     pPage6_Text;
-    VclPtr<PushButton>     pPage6_Link;
-    VclPtr<PushButton>     pPage6_VLink;
-    VclPtr<PushButton>     pPage6_ALink;
-    VclPtr<RadioButton>    pPage6_DocColors;
-    VclPtr<SdHtmlAttrPreview>  pPage6_Preview;
+    std::unique_ptr<weld::Container> m_xPage6;
+    std::unique_ptr<weld::Label> m_xPage6_Title;
+    std::unique_ptr<weld::RadioButton> m_xPage6_Default;
+    std::unique_ptr<weld::RadioButton> m_xPage6_User;
+    std::unique_ptr<weld::Button> m_xPage6_Back;
+    std::unique_ptr<weld::Button> m_xPage6_Text;
+    std::unique_ptr<weld::Button> m_xPage6_Link;
+    std::unique_ptr<weld::Button> m_xPage6_VLink;
+    std::unique_ptr<weld::Button> m_xPage6_ALink;
+    std::unique_ptr<weld::RadioButton> m_xPage6_DocColors;
+    std::unique_ptr<SdHtmlAttrPreview> m_xPage6_Preview;
+    std::unique_ptr<weld::CustomWeld> m_xPage6_PreviewWnd;
 
-    std::unique_ptr< ButtonSet > mpButtonSet;
+    std::unique_ptr< ButtonSet > m_xButtonSet;
 
     // standard controls
-    VclPtr<PushButton>     pLastPageButton;
-    VclPtr<PushButton>     pNextPageButton;
-    VclPtr<PushButton>     pFinishButton;
+    std::unique_ptr<weld::Button> m_xLastPageButton;
+    std::unique_ptr<weld::Button> m_xNextPageButton;
+    std::unique_ptr<weld::Button> m_xFinishButton;
 
     Assistent       aAssistentFunc;
 
@@ -173,33 +175,27 @@ private:
 
     void    LoadPreviewButtons();
 
-    DECL_LINK( FinishHdl, Button*, void );
-    DECL_LINK( NextPageHdl, Button*, void );
-    DECL_LINK( LastPageHdl, Button*, void );
+    DECL_LINK( FinishHdl, weld::Button&, void );
+    DECL_LINK( NextPageHdl, weld::Button&, void );
+    DECL_LINK( LastPageHdl, weld::Button&, void );
 
-    DECL_LINK( DesignHdl, Button*, void );
-    DECL_LINK( DesignSelectHdl, ListBox&, void );
-    DECL_LINK( DesignDeleteHdl, Button*, void );
-    DECL_LINK( BaseHdl, Button*, void );
-    DECL_LINK( ContentHdl, Button*, void );
-    DECL_LINK( GfxFormatHdl, Button *, void );
-    DECL_LINK( ResolutionHdl, Button*, void );
-    DECL_LINK( ButtonsHdl, ValueSet*, void );
-    DECL_LINK( ColorHdl, Button*, void );
-    DECL_LINK( WebServerHdl, Button *, void );
-    DECL_LINK( SlideChgHdl, Button*, void );
+    DECL_LINK( DesignHdl, weld::Button&, void );
+    DECL_LINK( DesignSelectHdl, weld::TreeView&, void );
+    DECL_LINK( DesignDeleteHdl, weld::Button&, void );
+    DECL_LINK( BaseHdl, weld::Button&, void );
+    DECL_LINK( ContentHdl, weld::Button&, void );
+    DECL_LINK( GfxFormatHdl, weld::Button&, void );
+    DECL_LINK( ResolutionHdl, weld::Button&, void );
+    DECL_LINK( ButtonsHdl, SvtValueSet*, void );
+    DECL_LINK( ColorHdl, weld::Button&, void );
+    DECL_LINK( WebServerHdl, weld::Button&, void );
+    DECL_LINK( SlideChgHdl, weld::Button&, void );
 
 public:
-
-    SdPublishingDlg(vcl::Window* pWindow, DocumentType eDocType);
+    SdPublishingDlg(weld::Window* pWindow, DocumentType eDocType);
     virtual ~SdPublishingDlg() override;
-    virtual void dispose() override;
 
     void GetParameterSequence( css::uno::Sequence< css::beans::PropertyValue >& rParams );
-
-    // Screenshot interface
-    virtual std::vector<OString> getAllPageUIXMLDescriptions() const override;
-    virtual bool selectPageByUIXMLDescription(const OString& rUIXMLDescription) override;
 };
 
 #endif // INCLUDED_SD_SOURCE_UI_INC_PUBDLG_HXX

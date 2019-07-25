@@ -18,7 +18,7 @@
  */
 
 #include <tools/debug.hxx>
-#include <vcl/window.hxx>
+#include <vcl/weld.hxx>
 
 #include <assclass.hxx>
 
@@ -34,15 +34,15 @@ Assistent::Assistent(int nNoOfPages)
         mpPageStatus[i] = true;
 }
 
-bool Assistent::InsertControl(int nDestPage, vcl::Window* pUsedControl)
+bool Assistent::InsertControl(int nDestPage, weld::Widget* pUsedControl)
 {
     DBG_ASSERT( (nDestPage > 0) && (nDestPage <= mnPages), "Page not available!");
 
     if((nDestPage>0)&&(nDestPage<=mnPages))
     {
         maPages[nDestPage-1].emplace_back(pUsedControl);
-        pUsedControl->Hide();
-        pUsedControl->Disable();
+        pUsedControl->hide();
+        pUsedControl->set_sensitive(false);
         return true;
     }
 
@@ -85,8 +85,8 @@ bool Assistent::GotoPage(const int nPageToGo)
 
         for(auto& rxPage : maPages[nIndex])
         {
-            rxPage->Disable();
-            rxPage->Hide();
+            rxPage->set_sensitive(false);
+            rxPage->hide();
         }
 
         mnCurrentPage=nPageToGo;
@@ -94,8 +94,8 @@ bool Assistent::GotoPage(const int nPageToGo)
 
         for(auto& rxPage : maPages[nIndex])
         {
-            rxPage->Enable();
-            rxPage->Show();
+            rxPage->set_sensitive(true);
+            rxPage->show();
         }
 
         return true;
