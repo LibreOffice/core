@@ -340,7 +340,7 @@
 
 <!-- shadow attributes -->
 <!ATTLIST style:properties draw:shadow (visible|hidden) #IMPLIED>
-<!ATTLIST style:properties draw:shadow-offset-x %length; #IMPLIED>
+<!ATTLIST style:properties draw:shadow-offset-x %length; #texture-generation-mode-yIMPLIED>
 <!ATTLIST style:properties draw:shadow-offset-y %length; #IMPLIED>
 <!ATTLIST style:properties draw:shadow-color %color; #IMPLIED>
 <!ATTLIST style:properties draw:shadow-transparency CDATA #IMPLIED>
