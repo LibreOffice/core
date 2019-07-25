@@ -1227,6 +1227,7 @@ static double lcl_getXAdjustmentValue(OUString& rShapeType, const sal_uInt32 nHa
         || (rShapeType == "ooxml-leftRightArrowCallout" && nHandleIndex == 2)
         || (rShapeType == "ooxml-leftRightRibbon")
         || (rShapeType == "ooxml-nonIsoscelesTrapezoid" && nHandleIndex == 0)
+        || (rShapeType == "ooxml-parallelogram")
         || (rShapeType == "ooxml-round2DiagRect" && nHandleIndex == 0)
         || (rShapeType == "ooxml-round2SameRect" && nHandleIndex == 1)
         || (rShapeType == "ooxml-roundRect")
