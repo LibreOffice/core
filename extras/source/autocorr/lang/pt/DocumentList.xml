@@ -397,6 +397,8 @@
 <block-list:block block-list:abbreviated-name="carangueijos" block-list:name="caranguejos"/>
 <block-list:block block-list:abbreviated-name="carateristica" block-list:name="caraterística"/>
 <block-list:block block-list:abbreviated-name="carateristicas" block-list:name="caraterísticas"/>
+<block-list:block block-list:abbreviated-name="carencia" block-list:name="carência"/>
+<block-list:block block-list:abbreviated-name="carencias" block-list:name="carências"/>
 <block-list:block block-list:abbreviated-name="cartuxeira" block-list:name="cartucheira"/>
 <block-list:block block-list:abbreviated-name="cassifo" block-list:name="cacifo"/>
 <block-list:block block-list:abbreviated-name="cassifos" block-list:name="cacifos"/>
@@ -510,6 +512,8 @@
 <block-list:block block-list:abbreviated-name="comparessa" block-list:name="compareça"/>
 <block-list:block block-list:abbreviated-name="comparessam" block-list:name="compareçam"/>
 <block-list:block block-list:abbreviated-name="comparesso" block-list:name="compareço"/>
+<block-list:block block-list:abbreviated-name="compoe" block-list:name="compõe"/>
+<block-list:block block-list:abbreviated-name="compoem" block-list:name="compõem"/>
 <block-list:block block-list:abbreviated-name="compra à vista" block-list:name="compra a vista"/>
 <block-list:block block-list:abbreviated-name="compras à vista" block-list:name="compras a vista"/>
 <block-list:block block-list:abbreviated-name="compreenssão" block-list:name="compreensão"/>
@@ -593,6 +597,8 @@
 <block-list:block block-list:abbreviated-name="crâneo" block-list:name="crânio"/>
 <block-list:block block-list:abbreviated-name="crâneos" block-list:name="crânios"/>
 <block-list:block block-list:abbreviated-name="creditos" block-list:name="créditos"/>
+<block-list:block block-list:abbreviated-name="crediveis" block-list:name="credíveis"/>
+<block-list:block block-list:abbreviated-name="credivel" block-list:name="credível"/>
 <block-list:block block-list:abbreviated-name="créfitos" block-list:name="créditos"/>
 <block-list:block block-list:abbreviated-name="crespuscular" block-list:name="crepuscular"/>
 <block-list:block block-list:abbreviated-name="criacem" block-list:name="criassem"/>
@@ -1212,6 +1218,7 @@
 <block-list:block block-list:abbreviated-name="horivel" block-list:name="horrível"/>
 <block-list:block block-list:abbreviated-name="horível" block-list:name="horrível"/>
 <block-list:block block-list:abbreviated-name="hóstil" block-list:name="hostil"/>
+<block-list:block block-list:abbreviated-name="hóstis" block-list:name="hostis"/>
 <block-list:block block-list:abbreviated-name="http:\\" block-list:name="http://"/>
 <block-list:block block-list:abbreviated-name="https:\\" block-list:name="https://"/>
 <block-list:block block-list:abbreviated-name="icone" block-list:name="ícone"/>
@@ -1283,6 +1290,8 @@
 <block-list:block block-list:abbreviated-name="insencível" block-list:name="insensível"/>
 <block-list:block block-list:abbreviated-name="instruido" block-list:name="instruído"/>
 <block-list:block block-list:abbreviated-name="instruidos" block-list:name="instruídos"/>
+<block-list:block block-list:abbreviated-name="inteligencia" block-list:name="inteligência"/>
+<block-list:block block-list:abbreviated-name="inteligencias" block-list:name="inteligências"/>
 <block-list:block block-list:abbreviated-name="inteligênte" block-list:name="inteligente"/>
 <block-list:block block-list:abbreviated-name="inteligêntes" block-list:name="inteligentes"/>
 <block-list:block block-list:abbreviated-name="intelegente" block-list:name="inteligente"/>
@@ -1315,6 +1324,8 @@
 <block-list:block block-list:abbreviated-name="irmamente" block-list:name="irmãmente"/>
 <block-list:block block-list:abbreviated-name="irman" block-list:name="irmã"/>
 <block-list:block block-list:abbreviated-name="irmans" block-list:name="irmãs"/>
+<block-list:block block-list:abbreviated-name="irreparaveis" block-list:name="irreparáveis"/>
+<block-list:block block-list:abbreviated-name="irreparavel" block-list:name="irreparável"/>
 <block-list:block block-list:abbreviated-name="Irria" block-list:name="iria"/>
 <block-list:block block-list:abbreviated-name="iscreve" block-list:name="escreve"/>
 <block-list:block block-list:abbreviated-name="iscrevem" block-list:name="escrevem"/>
@@ -1569,6 +1580,8 @@
 <block-list:block block-list:abbreviated-name="nítidamente" block-list:name="nitidamente"/>
 <block-list:block block-list:abbreviated-name="nitrogeneo" block-list:name="nitrogénio"/>
 <block-list:block block-list:abbreviated-name="nivéis" block-list:name="níveis"/>
+<block-list:block block-list:abbreviated-name="niveis" block-list:name="níveis"/>
+<block-list:block block-list:abbreviated-name="nivel" block-list:name="nível"/>
 <block-list:block block-list:abbreviated-name="nmossa" block-list:name="nossa"/>
 <block-list:block block-list:abbreviated-name="nmossas" block-list:name="nossas"/>
 <block-list:block block-list:abbreviated-name="nmosso" block-list:name="nosso"/>
@@ -1882,6 +1895,8 @@
 <block-list:block block-list:abbreviated-name="possivel" block-list:name="possível"/>
 <block-list:block block-list:abbreviated-name="possue" block-list:name="possui"/>
 <block-list:block block-list:abbreviated-name="pôtencial" block-list:name="potencial"/>
+<block-list:block block-list:abbreviated-name="potênciais" block-list:name="potenciais"/>
+<block-list:block block-list:abbreviated-name="potêncial" block-list:name="potencial"/>
 <block-list:block block-list:abbreviated-name="potuguês" block-list:name="português"/>
 <block-list:block block-list:abbreviated-name="pozição" block-list:name="posição"/>
 <block-list:block block-list:abbreviated-name="pozições" block-list:name="posições"/>
@@ -1948,6 +1963,8 @@
 <block-list:block block-list:abbreviated-name="privassidade" block-list:name="privacidade"/>
 <block-list:block block-list:abbreviated-name="prjeto" block-list:name="projeto"/>
 <block-list:block block-list:abbreviated-name="prjetos" block-list:name="projetos"/>
+<block-list:block block-list:abbreviated-name="probablidade" block-list:name="probabilidade"/>
+<block-list:block block-list:abbreviated-name="probablidades" block-list:name="probabilidades"/>
 <block-list:block block-list:abbreviated-name="procima" block-list:name="próxima"/>
 <block-list:block block-list:abbreviated-name="prócima" block-list:name="próxima"/>
 <block-list:block block-list:abbreviated-name="procimas" block-list:name="próximas"/>
@@ -2027,6 +2044,8 @@
 <block-list:block block-list:abbreviated-name="qunado" block-list:name="quando"/>
 <block-list:block block-list:abbreviated-name="qunato" block-list:name="quanto"/>
 <block-list:block block-list:abbreviated-name="qunatos" block-list:name="quantos"/>
+<block-list:block block-list:abbreviated-name="râdicais" block-list:name="radicais"/>
+<block-list:block block-list:abbreviated-name="râdical" block-list:name="radical"/>
 <block-list:block block-list:abbreviated-name="rae" block-list:name="era"/>
 <block-list:block block-list:abbreviated-name="raís" block-list:name="raiz"/>
 <block-list:block block-list:abbreviated-name="raíses" block-list:name="raízes"/>
@@ -2181,6 +2200,8 @@
 <block-list:block block-list:abbreviated-name="srão" block-list:name="serão"/>
 <block-list:block block-list:abbreviated-name="sre" block-list:name="ser"/>
 <block-list:block block-list:abbreviated-name="subrinhas" block-list:name="sobrinhas"/>
+<block-list:block block-list:abbreviated-name="substânciais" block-list:name="substanciais"/>
+<block-list:block block-list:abbreviated-name="substâncial" block-list:name="substancial"/>
 <block-list:block block-list:abbreviated-name="substirua" block-list:name="substitua"/>
 <block-list:block block-list:abbreviated-name="substiruir" block-list:name="substituir"/>
 <block-list:block block-list:abbreviated-name="substiruiu" block-list:name="substituiu"/>
