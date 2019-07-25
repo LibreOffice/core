@@ -78,4 +78,7 @@
   <menu:menuitem menu:id=".uno:FormatGroup"/>
   <menu:menuitem menu:id=".uno:FormatUngroup"/>
   <menu:menuitem menu:id=".uno:LeaveGroup"/>
+  <menu:menuseparator/>
+  <menu:menuitem menu:id=".uno:NameGroup"/>
+  <menu:menuitem menu:id=".uno:ObjectTitleDescription"/>
 </menu:menupopup>
