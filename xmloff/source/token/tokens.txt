@@ -1421,6 +1421,9 @@ publisher
 punctuation-wrap
 purple
 pyramid
+qrcode
+qrcode-border
+qrcode-errorcorrection
 quarter
 query-name
 quo-vadis
