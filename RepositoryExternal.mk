@@ -4160,8 +4160,9 @@ ifneq ($(SYSTEM_QRCODEGEN),)
 
 define gb_LinkTarget__use_qrcodegen
 $(call gb_LinkTarget_set_include,$(1),\
-       $$(INCLUDE) \
-	   $(QRCODEGEN_CFLAGS) \
+	-DSYSTEM_QRCODEGEN \
+	$$(INCLUDE) \
+	$(QRCODEGEN_CFLAGS) \
 )
 $(call gb_LinkTarget_add_libs,$(1),$(QRCODEGEN_LIBS))
 
