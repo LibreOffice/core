@@ -174,6 +174,21 @@ DECLARE_OOXMLEXPORT_TEST(testTbrlFrameVml, "tbrl-frame-vml.docx")
     }
 }
 
+DECLARE_OOXMLEXPORT_TEST(testBtlrFrame, "btlr-frame.odt")
+{
+    if (!mbExported)
+    {
+        return;
+    }
+
+    uno::Reference<beans::XPropertySet> xPropertySet(getShape(1), uno::UNO_QUERY);
+    comphelper::SequenceAsHashMap aGeometry(xPropertySet->getPropertyValue("CustomShapeGeometry"));
+    // Without the accompanying fix in place, this test would have failed with 'Expected:
+    // -270; Actual: 0', i.e. the writing direction of the frame was lost.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(-270),
+                         aGeometry["TextPreRotateAngle"].get<sal_Int32>());
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf116371, "tdf116371.odt")
 {
     // Make sure the rotation is exported correctly, and size not distorted
