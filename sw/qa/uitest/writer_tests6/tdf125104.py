@@ -6,38 +6,56 @@
 
 from uitest.framework import UITestCase
 from uitest.uihelper.common import select_pos, get_state_as_dict
-from com.sun.star.uno import RuntimeException
 from libreoffice.uno.propertyvalue import mkPropertyValues
 
-#Bug 125104 - Changing page numbering to "1st, 2nd, 3rd,..." causes crashes when trying to change Page settings later
-
 class tdf125104(UITestCase):
+
+    def open_page_style_dialog(self):
+        self.ui_test.execute_dialog_through_command(".uno:PageDialog")
+        xDialog = self.xUITest.getTopFocusWindow()
+        tabcontrol = xDialog.getChild("tabcontrol")
+        select_pos(tabcontrol, "1")
+        return xDialog.getChild("comboLayoutFormat")
+
+    def set_combo_layout_format(self, dialog, format):
+        comboLayoutFormat = dialog.getChild("comboLayoutFormat")
+        props = {"TEXT": format}
+        actionProps = mkPropertyValues(props)
+        comboLayoutFormat.executeAction("SELECT", actionProps)
+        okBtn = dialog.getChild("ok")
+        self.ui_test.close_dialog_through_button(okBtn)
 
     def test_tdf125104_pageFormat_numbering(self):
         self.ui_test.create_doc_in_start_center("writer")
         document = self.ui_test.get_component()
 
-        self.ui_test.execute_dialog_through_command(".uno:PageDialog")
-        xDialog = self.xUITest.getTopFocusWindow()
-        tabcontrol = xDialog.getChild("tabcontrol")
-        select_pos(tabcontrol, "1")
+        # insert page numbers on multiple pages
+        self.xUITest.executeCommand(".uno:InsertPageNumberField")
+        self.xUITest.executeCommand(".uno:InsertPagebreak")
+        self.xUITest.executeCommand(".uno:InsertPageNumberField")
+        self.assertEqual(document.Text.String[0:1], "1")
+        self.assertEqual(document.Text.String[2:3], "2")
 
-        comboLayoutFormat = xDialog.getChild("comboLayoutFormat")
-        props = {"TEXT": "1st, 2nd, 3rd, ..."}
-        actionProps = mkPropertyValues(props)
-        comboLayoutFormat.executeAction("SELECT", actionProps)
+        # Bug 125104 - Changing page numbering to "1st, 2nd, 3rd,..." causes crashes when trying to change Page settings later
+        self.set_combo_layout_format(self.open_page_style_dialog(), "1st, 2nd, 3rd, ...")
+        self.assertEqual(document.Text.String[0:3], "1st")
+        self.assertEqual(document.Text.String[4:7], "2nd")
 
-        okBtn = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(okBtn)
-
-        self.ui_test.execute_dialog_through_command(".uno:PageDialog")
-        xDialog = self.xUITest.getTopFocusWindow()
-        tabcontrol = xDialog.getChild("tabcontrol")
-        select_pos(tabcontrol, "1")
+        xDialog = self.open_page_style_dialog()
         comboLayoutFormat = xDialog.getChild("comboLayoutFormat")
         self.assertEqual(get_state_as_dict(comboLayoutFormat)["SelectEntryText"], "1st, 2nd, 3rd, ...")
         cancelBtn = xDialog.getChild("cancel")
         self.ui_test.close_dialog_through_button(cancelBtn)
+
+        # change to devanagari alphabet format
+        self.set_combo_layout_format(self.open_page_style_dialog(), "क, ख, ग, ...")
+        self.assertEqual(document.Text.String[0:1], "क")
+        self.assertEqual(document.Text.String[2:3], "ख")
+
+        # change to devanagari number format
+        self.set_combo_layout_format(self.open_page_style_dialog(), "१, २, ३, ...")
+        self.assertEqual(document.Text.String[0:1], "१")
+        self.assertEqual(document.Text.String[2:3], "२")
 
         self.ui_test.close_doc()
 
