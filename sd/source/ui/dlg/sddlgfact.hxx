@@ -41,38 +41,6 @@
 #include <vectdlg.hxx>
 #include <BulletAndPositionDlg.hxx>
 
-#define DECL_ABSTDLG_BASE(Class,DialogClass)            \
-    ScopedVclPtr<DialogClass> pDlg;                     \
-public:                                                 \
-    explicit Class(DialogClass* p)                      \
-        : pDlg(p)                                       \
-    {                                                   \
-    }                                                   \
-    virtual std::vector<OString> getAllPageUIXMLDescriptions() const override; \
-    virtual bool selectPageByUIXMLDescription(const OString& rUIXMLDescription) override; \
-    virtual BitmapEx createScreenshot() const override;   \
-    virtual OString GetScreenshotId() const override;   \
-    virtual         ~Class() override;                           \
-    virtual short   Execute() override; \
-    virtual bool StartExecuteAsync(AsyncContext &ctx) override;
-
-#define IMPL_ABSTDLG_BASE(Class)                    \
-std::vector<OString> Class::getAllPageUIXMLDescriptions() const { return pDlg->getAllPageUIXMLDescriptions(); } \
-bool Class::selectPageByUIXMLDescription(const OString& rUIXMLDescription) { return pDlg->selectPageByUIXMLDescription(rUIXMLDescription); } \
-BitmapEx Class::createScreenshot() const { return pDlg->createScreenshot();} \
-OString Class::GetScreenshotId() const { return pDlg->GetScreenshotId();} \
-Class::~Class()                                     \
-{                                                   \
-}                                                   \
-short Class::Execute()                              \
-{                                                   \
-    return pDlg->Execute();                         \
-}                                                   \
-bool Class::StartExecuteAsync(AsyncContext &ctx) \
-{                                                   \
-    return pDlg->StartExecuteAsync(ctx);            \
-}
-
 //namespace sd {
 //    class MorphDlg;
 //    class CopyDlg;
