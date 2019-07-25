@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "bf659307_afe1ff9c",
+        "filename": "sc/source/ui/view/gridwin4.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 577,
+      "author": {
+        "id": 1001855
+      },
+      "writtenOn": "2019-07-25T12:22:03Z",
+      "side": 1,
+      "message": "I\u0027ve measured the time for the part I\u0027ve introduced with a big file we have in our company, a lot of different column widths and row heights, hidden rows, hidden columns, and so on. This file takes ~200 seconds to load. My part only consumes ~50 ms of this 200 s. Is this not negligible?",
+      "parentUuid": "bf659307_a9cca989",
+      "range": {
+        "startLine": 577,
+        "startChar": 23,
+        "endLine": 577,
+        "endChar": 34
+      },
+      "revId": "cd04be4e3422b7fe7d7fab5936e0d55451102145",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bf659307_16bcd703",
         "filename": "sc/source/ui/view/gridwin4.cxx",
         "patchSetId": 6
