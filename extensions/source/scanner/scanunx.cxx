@@ -23,8 +23,8 @@
 #include <sal/log.hxx>
 #include <tools/solar.h>
 #include <cppuhelper/queryinterface.hxx>
+#include <vcl/svapp.hxx>
 #include <memory>
-
 
 BitmapTransporter::BitmapTransporter()
 {
@@ -264,7 +264,7 @@ sal_Bool ScannerManager::configureScannerAndScan( ScannerContext& scanner_contex
             );
 
         pHolder->m_bBusy = true;
-        SaneDlg aDlg(nullptr, pHolder->m_aSane, listener.is());
+        SaneDlg aDlg(Application::GetFrameWeld(mxDialogParent), pHolder->m_aSane, listener.is());
         bRet = aDlg.run();
         bScan = aDlg.getDoScan();
         pHolder->m_bBusy = false;

@@ -20,7 +20,7 @@
 #include "scanner.hxx"
 
 #include <cppuhelper/supportsservice.hxx>
-
+#include <comphelper/namedvaluecollection.hxx>
 
 Reference< XInterface > ScannerManager_CreateInstance( const Reference< css::lang::XMultiServiceFactory >& /*rxFactory*/ )
 {
@@ -81,6 +81,13 @@ Sequence< OUString > ScannerManager::getSupportedServiceNames_Static() throw ()
 sal_Bool SAL_CALL ScannerManager::configureScanner( ScannerContext& rContext )
 {
     return configureScannerAndScan( rContext, nullptr );
+}
+
+void SAL_CALL ScannerManager::initialize(const css::uno::Sequence<css::uno::Any>& rArguments)
+{
+    ::comphelper::NamedValueCollection aProperties(rArguments);
+    if (aProperties.has("ParentWindow"))
+        aProperties.get("ParentWindow") >>= mxDialogParent;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

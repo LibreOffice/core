@@ -26,6 +26,8 @@
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/awt/XBitmap.hpp>
+#include <com/sun/star/awt/XWindow.hpp>
+#include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -39,9 +41,10 @@ using namespace com::sun::star::scanner;
 
 class ScannerManager final :
     public cppu::WeakImplHelper<
-        XScannerManager2, css::awt::XBitmap, css::lang::XServiceInfo>
+        XScannerManager2, css::awt::XBitmap, css::lang::XServiceInfo, css::lang::XInitialization>
 {
     osl::Mutex                              maProtector;
+    css::uno::Reference<css::awt::XWindow>  mxDialogParent;
     void*                                   mpData;
 
     static void                             AcquireData();
@@ -70,6 +73,8 @@ public:
     sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override;
 
     css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+
+    virtual void SAL_CALL                   initialize(const css::uno::Sequence<css::uno::Any>& rArguments) override;
 
     // Misc
     static OUString                         getImplementationName_Static() throw();
