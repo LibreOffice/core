@@ -64,6 +64,8 @@
 #include <com/sun/star/drawing/XControlShape.hpp>
 #include <com/sun/star/drawing/XCustomShapeEngine.hpp>
 #include <com/sun/star/drawing/XGluePointsSupplier.hpp>
+#include <com/sun/star/drawing/QRCode.hpp>
+#include <com/sun/star/drawing/QRCodeErrorCorrection.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
@@ -91,6 +93,8 @@
 
 #include <rtl/math.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <rtl/strbuf.hxx>
+#include <rtl/ustring.hxx>
 #include <sal/log.hxx>
 
 #include <sax/tools/converter.hxx>
@@ -1286,6 +1290,40 @@ void XMLShapeExport::ImpExportSignatureLine(const uno::Reference<drawing::XShape
                                              true);
 }
 
+void XMLShapeExport::ImpExportQRCode(const uno::Reference<drawing::XShape>& xShape)
+{
+    uno::Reference<beans::XPropertySet> xPropSet(xShape, uno::UNO_QUERY);
+
+    uno::Any aAny = xPropSet->getPropertyValue("QRCodeProperties");
+
+    css::drawing::QRCode aQRCode;
+    if(aAny >>= aQRCode)
+    {
+        mrExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_STRING_VALUE, aQRCode.Payload);
+        /* Export QR Code as per customised schema, @see OpenDocument-schema-v1.3+libreoffice */
+        OUString temp;
+        switch(aQRCode.ErrorCorrection){
+            case css::drawing::QRCodeErrorCorrection::LOW :
+                temp = "low";
+                break;
+            case css::drawing::QRCodeErrorCorrection::MEDIUM:
+                temp = "medium";
+                break;
+            case css::drawing::QRCodeErrorCorrection::QUARTILE:
+                temp = "quartile";
+                break;
+            case css::drawing::QRCodeErrorCorrection::HIGH:
+                temp = "high";
+                break;
+        }
+        mrExport.AddAttribute(XML_NAMESPACE_LO_EXT, XML_QRCODE_ERROR_CORRECTION, temp);
+        mrExport.AddAttribute(XML_NAMESPACE_LO_EXT, XML_QRCODE_BORDER, OUStringBuffer(20).append(aQRCode.Border).makeStringAndClear());
+
+        SvXMLElementExport aQRCodeElement(mrExport, XML_NAMESPACE_LO_EXT, XML_QRCODE, true,
+                                                true);
+    }
+}
+
 void XMLShapeExport::ExportGraphicDefaults()
 {
     rtl::Reference<XMLStyleExport> aStEx(new XMLStyleExport(mrExport, mrExport.GetAutoStylePool().get()));
@@ -2444,9 +2482,12 @@ void XMLShapeExport::ImpExportGraphicObjectShape(
     GetExport().GetImageMapExport().Export( xPropSet );
     ImpExportDescription( xShape ); // #i68101#
 
-    // Signature Line - needs to be after the images!
+    // Signature Line, QR Code - needs to be after the images!
     if (GetExport().getDefaultVersion() > SvtSaveOptions::ODFVER_012)
+    {
         ImpExportSignatureLine(xShape);
+        ImpExportQRCode(xShape);
+    }
 }
 
 void XMLShapeExport::ImpExportChartShape(
