@@ -44,8 +44,6 @@
 #include <headerfooterdlg.hxx>
 #include "PhotoAlbumDialog.hxx"
 
-IMPL_ABSTDLG_BASE(SdVclAbstractDialog_Impl);
-
 short AbstractSvxBulletAndPositionDlg_Impl::Execute()
 {
     return m_xDlg->run();
