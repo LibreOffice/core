@@ -347,7 +347,14 @@ public:
 
 class AbstractSdPublishingDlg_Impl :public AbstractSdPublishingDlg
 {
-    DECL_ABSTDLG_BASE(AbstractSdPublishingDlg_Impl,SdPublishingDlg)
+private:
+    std::unique_ptr<SdPublishingDlg> m_xDlg;
+public:
+    AbstractSdPublishingDlg_Impl(std::unique_ptr<SdPublishingDlg> pDlg)
+        : m_xDlg(std::move(pDlg))
+    {
+    }
+    virtual short Execute() override;
     virtual void GetParameterSequence( css::uno::Sequence< css::beans::PropertyValue >& rParams ) override;
 };
 
@@ -392,7 +399,7 @@ public:
     virtual VclPtr<SfxAbstractTabDialog>       CreateSdTabTemplateDlg(weld::Window* pParent, const SfxObjectShell* pDocShell, SfxStyleSheetBase& rStyleBase, SdrModel* pModel, SdrView* pView ) override;
     virtual VclPtr<SfxAbstractDialog>          CreatSdActionDialog(weld::Window* pParent, const SfxItemSet* pAttr, ::sd::View* pView) override;
     virtual VclPtr<AbstractSdVectorizeDlg>     CreateSdVectorizeDlg(weld::Window* pParent, const Bitmap& rBmp, ::sd::DrawDocShell* pDocShell) override;
-    virtual VclPtr<AbstractSdPublishingDlg>    CreateSdPublishingDlg(vcl::Window* pWindow, DocumentType eDocType) override;
+    virtual VclPtr<AbstractSdPublishingDlg>    CreateSdPublishingDlg(weld::Window* pWindow, DocumentType eDocType) override;
 
     virtual VclPtr<VclAbstractDialog>          CreateSdPhotoAlbumDialog(weld::Window* pWindow, SdDrawDocument* pDoc) override;
 

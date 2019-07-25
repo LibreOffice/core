@@ -352,390 +352,291 @@ public:
 
 // SdPublishingDlg Methods
 
-SdPublishingDlg::SdPublishingDlg(vcl::Window* pWindow, DocumentType eDocType)
-:   ModalDialog(pWindow, "PublishingDialog", "modules/simpress/ui/publishingdialog.ui")
-,   mpButtonSet( new ButtonSet() )
-,   aAssistentFunc(NOOFPAGES)
-,   m_bButtonsDirty(true)
-,   m_bDesignListDirty(false)
-,   m_pDesign(nullptr)
+SdPublishingDlg::SdPublishingDlg(weld::Window* pWindow, DocumentType eDocType)
+    : GenericDialogController(pWindow, "modules/simpress/ui/publishingdialog.ui", "PublishingDialog")
+    , m_xPage1_Designs(m_xBuilder->weld_tree_view("designsTreeview"))
+    , m_xPage2_Standard_FB(m_xBuilder->weld_image("standardFBImage"))
+    , m_xPage2_Frames_FB(m_xBuilder->weld_image("framesFBImage"))
+    , m_xPage2_Kiosk_FB(m_xBuilder->weld_image("kioskFBImage"))
+    , m_xPage2_WebCast_FB(m_xBuilder->weld_image("webCastFBImage"))
+    , m_xPage4_Misc(m_xBuilder->weld_text_view("miscTextview"))
+    , m_xButtonSet(new ButtonSet())
+    , m_xLastPageButton(m_xBuilder->weld_button("lastPageButton"))
+    , m_xNextPageButton(m_xBuilder->weld_button("nextPageButton"))
+    , m_xFinishButton(m_xBuilder->weld_button("finishButton"))
+    , aAssistentFunc(NOOFPAGES)
+    , m_bButtonsDirty(true)
+    , m_bDesignListDirty(false)
+    , m_pDesign(nullptr)
 {
-    get(pLastPageButton, "lastPageButton");
-    get(pNextPageButton, "nextPageButton");
-    get(pFinishButton, "finishButton");
-
     m_bImpress = eDocType == DocumentType::Impress;
 
-    Size aSize(LogicToPixel(Size(60, 50), MapMode(MapUnit::MapAppFont)));
-    get(pPage2_Standard_FB, "standardFBImage");
-    pPage2_Standard_FB->set_width_request(aSize.Width());
-    pPage2_Standard_FB->set_height_request(aSize.Height());
-    get(pPage2_Frames_FB, "framesFBImage");
-    pPage2_Frames_FB->set_width_request(aSize.Width());
-    pPage2_Frames_FB->set_height_request(aSize.Height());
-    get(pPage2_Kiosk_FB, "kioskFBImage");
-    pPage2_Kiosk_FB->set_width_request(aSize.Width());
-    pPage2_Kiosk_FB->set_height_request(aSize.Height());
-    get(pPage2_WebCast_FB, "webCastFBImage");
-    pPage2_WebCast_FB->set_width_request(aSize.Width());
-    pPage2_WebCast_FB->set_height_request(aSize.Height());
+    Size aSize(m_xPage2_Standard_FB->get_approximate_digit_width() * 12,
+               m_xPage2_Standard_FB->get_text_height() * 6);
+    m_xPage2_Standard_FB->set_size_request(aSize.Width(), aSize.Height());
+    m_xPage2_Frames_FB->set_size_request(aSize.Width(), aSize.Height());
+    m_xPage2_Kiosk_FB->set_size_request(aSize.Width(), aSize.Height());
+    m_xPage2_WebCast_FB->set_size_request(aSize.Width(), aSize.Height());
 
-    get(pPage4_Misc, "miscTextview");
-    pPage4_Misc->set_height_request(pPage4_Misc->GetTextHeight() * 8);
-    pPage4_Misc->set_width_request(pPage4_Misc->approximate_char_width() * 52);
+    m_xPage4_Misc->set_size_request(m_xPage4_Misc->get_approximate_digit_width() * 40,
+                                    m_xPage4_Misc->get_height_rows(8));
 
-    get(pPage1_Designs, "designsTreeview");
-    pPage1_Designs->set_height_request(pPage4_Misc->GetTextHeight() * 8);
-    pPage1_Designs->set_width_request(pPage4_Misc->approximate_char_width() * 52);
+    m_xPage1_Designs->set_size_request(m_xPage4_Misc->get_approximate_digit_width() * 40,
+                                       m_xPage4_Misc->get_height_rows(8));
 
     //Lock down the preferred size based on the
     //initial max-size configuration
-    aSize = get_preferred_size();
-    set_width_request(aSize.Width());
-    set_height_request(aSize.Height());
+    aSize = m_xDialog->get_preferred_size();
+    m_xDialog->set_size_request(aSize.Width(), aSize.Height());
 
     CreatePages();
     Load();
 
     // sets the output page
     aAssistentFunc.GotoPage(1);
-    pLastPageButton->Disable();
+    m_xLastPageButton->set_sensitive(false);
 
     // button assignment
-    pFinishButton->SetClickHdl(LINK(this,SdPublishingDlg,FinishHdl));
-    pLastPageButton->SetClickHdl(LINK(this,SdPublishingDlg,LastPageHdl));
-    pNextPageButton->SetClickHdl(LINK(this,SdPublishingDlg,NextPageHdl));
+    m_xFinishButton->connect_clicked(LINK(this,SdPublishingDlg,FinishHdl));
+    m_xLastPageButton->connect_clicked(LINK(this,SdPublishingDlg,LastPageHdl));
+    m_xNextPageButton->connect_clicked(LINK(this,SdPublishingDlg,NextPageHdl));
 
-    pPage1_NewDesign->SetClickHdl(LINK(this,SdPublishingDlg,DesignHdl));
-    pPage1_OldDesign->SetClickHdl(LINK(this,SdPublishingDlg,DesignHdl));
-    pPage1_Designs->SetSelectHdl(LINK(this,SdPublishingDlg,DesignSelectHdl));
-    pPage1_DelDesign->SetClickHdl(LINK(this,SdPublishingDlg,DesignDeleteHdl));
+    m_xPage1_NewDesign->connect_clicked(LINK(this,SdPublishingDlg,DesignHdl));
+    m_xPage1_OldDesign->connect_clicked(LINK(this,SdPublishingDlg,DesignHdl));
+    m_xPage1_Designs->connect_changed(LINK(this,SdPublishingDlg,DesignSelectHdl));
+    m_xPage1_DelDesign->connect_clicked(LINK(this,SdPublishingDlg,DesignDeleteHdl));
 
-    pPage2_Standard->SetClickHdl(LINK(this,SdPublishingDlg,BaseHdl));
-    pPage2_Standard_FB->SetBorderStyle(WindowBorderStyle::MONO);
-    pPage2_Frames->SetClickHdl(LINK(this,SdPublishingDlg,BaseHdl));
-    pPage2_Frames_FB->SetBorderStyle(WindowBorderStyle::MONO);
-    pPage2_SingleDocument->SetClickHdl(LINK(this,SdPublishingDlg,BaseHdl));
-    pPage2_Kiosk->SetClickHdl(LINK(this,SdPublishingDlg,BaseHdl));
-    pPage2_Kiosk_FB->SetBorderStyle(WindowBorderStyle::MONO);
-    pPage2_WebCast->SetClickHdl(LINK(this,SdPublishingDlg,BaseHdl));
-    pPage2_WebCast_FB->SetBorderStyle(WindowBorderStyle::MONO);
+    m_xPage2_Standard->connect_clicked(LINK(this,SdPublishingDlg,BaseHdl));
+    m_xPage2_Frames->connect_clicked(LINK(this,SdPublishingDlg,BaseHdl));
+    m_xPage2_SingleDocument->connect_clicked(LINK(this,SdPublishingDlg,BaseHdl));
+    m_xPage2_Kiosk->connect_clicked(LINK(this,SdPublishingDlg,BaseHdl));
+    m_xPage2_WebCast->connect_clicked(LINK(this,SdPublishingDlg,BaseHdl));
 
-    pPage2_Content->SetClickHdl(LINK(this,SdPublishingDlg,ContentHdl));
+    m_xPage2_Content->connect_clicked(LINK(this,SdPublishingDlg,ContentHdl));
 
-    pPage2_ASP->SetClickHdl(LINK(this,SdPublishingDlg,WebServerHdl));
-    pPage2_PERL->SetClickHdl(LINK(this,SdPublishingDlg,WebServerHdl));
-    pPage2_Index->SetText("index" STR_HTMLEXP_DEFAULT_EXTENSION);
-    pPage2_CGI->SetText( "/cgi-bin/" );
+    m_xPage2_ASP->connect_clicked(LINK(this,SdPublishingDlg,WebServerHdl));
+    m_xPage2_PERL->connect_clicked(LINK(this,SdPublishingDlg,WebServerHdl));
+    m_xPage2_Index->set_text("index" STR_HTMLEXP_DEFAULT_EXTENSION);
+    m_xPage2_CGI->set_text("/cgi-bin/");
 
-    pPage3_Png->SetClickHdl(LINK(this,SdPublishingDlg, GfxFormatHdl));
-    pPage3_Gif->SetClickHdl(LINK(this,SdPublishingDlg, GfxFormatHdl));
-    pPage3_Jpg->SetClickHdl(LINK(this,SdPublishingDlg, GfxFormatHdl));
-    pPage3_Quality->Enable(false);
+    m_xPage3_Png->connect_clicked(LINK(this,SdPublishingDlg, GfxFormatHdl));
+    m_xPage3_Gif->connect_clicked(LINK(this,SdPublishingDlg, GfxFormatHdl));
+    m_xPage3_Jpg->connect_clicked(LINK(this,SdPublishingDlg, GfxFormatHdl));
+    m_xPage3_Quality->set_sensitive(false);
 
-    pPage3_Resolution_1->SetClickHdl(LINK(this,SdPublishingDlg, ResolutionHdl ));
-    pPage3_Resolution_2->SetClickHdl(LINK(this,SdPublishingDlg, ResolutionHdl ));
-    pPage3_Resolution_3->SetClickHdl(LINK(this,SdPublishingDlg, ResolutionHdl ));
+    m_xPage3_Resolution_1->connect_clicked(LINK(this,SdPublishingDlg, ResolutionHdl ));
+    m_xPage3_Resolution_2->connect_clicked(LINK(this,SdPublishingDlg, ResolutionHdl ));
+    m_xPage3_Resolution_3->connect_clicked(LINK(this,SdPublishingDlg, ResolutionHdl ));
 
-    pPage2_ChgDefault->SetClickHdl(LINK(this,SdPublishingDlg, SlideChgHdl));
-    pPage2_ChgAuto->SetClickHdl(LINK(this,SdPublishingDlg, SlideChgHdl));
-    pPage2_Duration->SetFormat( TimeFieldFormat::F_SEC );
+    m_xPage2_ChgDefault->connect_clicked(LINK(this,SdPublishingDlg, SlideChgHdl));
+    m_xPage2_ChgAuto->connect_clicked(LINK(this,SdPublishingDlg, SlideChgHdl));
 
-    pPage5_Buttons->SetSelectHdl(LINK(this,SdPublishingDlg, ButtonsHdl ));
-    pPage5_Buttons->SetStyle( pPage5_Buttons->GetStyle() | WB_VSCROLL );
+    m_xPage5_Buttons->SetSelectHdl(LINK(this,SdPublishingDlg, ButtonsHdl ));
+    m_xPage5_Buttons->SetStyle( m_xPage5_Buttons->GetStyle() | WB_VSCROLL );
 
-    pPage6_Back->SetClickHdl(LINK(this,SdPublishingDlg, ColorHdl ));
-    pPage6_Text->SetClickHdl(LINK(this,SdPublishingDlg, ColorHdl ));
-    pPage6_Link->SetClickHdl(LINK(this,SdPublishingDlg, ColorHdl ));
-    pPage6_VLink->SetClickHdl(LINK(this,SdPublishingDlg, ColorHdl ));
-    pPage6_ALink->SetClickHdl(LINK(this,SdPublishingDlg, ColorHdl ));
+    m_xPage6_Back->connect_clicked(LINK(this,SdPublishingDlg, ColorHdl ));
+    m_xPage6_Text->connect_clicked(LINK(this,SdPublishingDlg, ColorHdl ));
+    m_xPage6_Link->connect_clicked(LINK(this,SdPublishingDlg, ColorHdl ));
+    m_xPage6_VLink->connect_clicked(LINK(this,SdPublishingDlg, ColorHdl ));
+    m_xPage6_ALink->connect_clicked(LINK(this,SdPublishingDlg, ColorHdl ));
 
-    pPage6_DocColors->Check();
+    m_xPage6_DocColors->set_active(true);
 
-    pPage3_Quality->InsertEntry( "25%" );
-    pPage3_Quality->InsertEntry( "50%" );
-    pPage3_Quality->InsertEntry( "75%" );
-    pPage3_Quality->InsertEntry( "100%" );
+    m_xPage3_Quality->append_text( "25%" );
+    m_xPage3_Quality->append_text( "50%" );
+    m_xPage3_Quality->append_text( "75%" );
+    m_xPage3_Quality->append_text( "100%" );
 
-    pPage5_Buttons->SetColCount();
-    pPage5_Buttons->SetLineCount( 4 );
-    pPage5_Buttons->SetExtraSpacing( 1 );
+    m_xPage5_Buttons->SetColCount();
+    m_xPage5_Buttons->SetLineCount( 4 );
+    m_xPage5_Buttons->SetExtraSpacing( 1 );
 
     for( const auto& rDesign : m_aDesignList )
-        pPage1_Designs->InsertEntry(rDesign.m_aDesignName);
-
-    pPage6_Preview->SetBorderStyle(WindowBorderStyle::MONO);
+        m_xPage1_Designs->append_text(rDesign.m_aDesignName);
 
     SetDefaults();
 
-    SetHelpId(aPageHelpIds[0]);
+    m_xDialog->set_help_id(aPageHelpIds[0]);
 
-    pNextPageButton->GrabFocus();
+    m_xNextPageButton->grab_focus();
 }
 
 SdPublishingDlg::~SdPublishingDlg()
 {
-    disposeOnce();
 }
-
-void SdPublishingDlg::dispose()
-{
-    pPage1.clear();
-    pPage1_Title.clear();
-    pPage1_NewDesign.clear();
-    pPage1_OldDesign.clear();
-    pPage1_Designs.clear();
-    pPage1_DelDesign.clear();
-    pPage1_Desc.clear();
-    pPage2.clear();
-    pPage2Frame2.clear();
-    pPage2Frame3.clear();
-    pPage2Frame4.clear();
-    pPage2_Title.clear();
-    pPage2_Standard.clear();
-    pPage2_Frames.clear();
-    pPage2_SingleDocument.clear();
-    pPage2_Kiosk.clear();
-    pPage2_WebCast.clear();
-    pPage2_Standard_FB.clear();
-    pPage2_Frames_FB.clear();
-    pPage2_Kiosk_FB.clear();
-    pPage2_WebCast_FB.clear();
-    pPage2_Title_Html.clear();
-    pPage2_Content.clear();
-    pPage2_Notes.clear();
-    pPage2_Title_WebCast.clear();
-    pPage2_ASP.clear();
-    pPage2_PERL.clear();
-    pPage2_URL_txt.clear();
-    pPage2_URL.clear();
-    pPage2_CGI_txt.clear();
-    pPage2_CGI.clear();
-    pPage2_Index_txt.clear();
-    pPage2_Index.clear();
-    pPage2_Title_Kiosk.clear();
-    pPage2_ChgDefault.clear();
-    pPage2_ChgAuto.clear();
-    pPage2_Duration_txt.clear();
-    pPage2_Duration.clear();
-    pPage2_Endless.clear();
-    pPage3.clear();
-    pPage3_Title1.clear();
-    pPage3_Png.clear();
-    pPage3_Gif.clear();
-    pPage3_Jpg.clear();
-    pPage3_Quality_txt.clear();
-    pPage3_Quality.clear();
-    pPage3_Title2.clear();
-    pPage3_Resolution_1.clear();
-    pPage3_Resolution_2.clear();
-    pPage3_Resolution_3.clear();
-    pPage3_Title3.clear();
-    pPage3_SldSound.clear();
-    pPage3_HiddenSlides.clear();
-    pPage4.clear();
-    pPage4_Title1.clear();
-    pPage4_Author_txt.clear();
-    pPage4_Author.clear();
-    pPage4_Email_txt.clear();
-    pPage4_Email.clear();
-    pPage4_WWW_txt.clear();
-    pPage4_WWW.clear();
-    pPage4_Title2.clear();
-    pPage4_Misc.clear();
-    pPage4_Download.clear();
-    pPage5.clear();
-    pPage5_Title.clear();
-    pPage5_TextOnly.clear();
-    pPage5_Buttons.clear();
-    pPage6.clear();
-    pPage6_Title.clear();
-    pPage6_Default.clear();
-    pPage6_User.clear();
-    pPage6_Back.clear();
-    pPage6_Text.clear();
-    pPage6_Link.clear();
-    pPage6_VLink.clear();
-    pPage6_ALink.clear();
-    pPage6_DocColors.clear();
-    pPage6_Preview.clear();
-    pLastPageButton.clear();
-    pNextPageButton.clear();
-    pFinishButton.clear();
-    ModalDialog::dispose();
-}
-
 
 // Generate dialog controls and embed them in the pages
 void SdPublishingDlg::CreatePages()
 {
     // Page 1
-    get(pPage1, "page1");
-    get(pPage1_Title, "assignLabel");
-    get(pPage1_NewDesign, "newDesignRadiobutton");
-    get(pPage1_OldDesign, "oldDesignRadiobutton");
-    get(pPage1_DelDesign, "delDesingButton");
-    get(pPage1_Desc, "descLabel");
-    aAssistentFunc.InsertControl(1, pPage1);
-    aAssistentFunc.InsertControl(1, pPage1_Title);
-    aAssistentFunc.InsertControl(1, pPage1_NewDesign);
-    aAssistentFunc.InsertControl(1, pPage1_OldDesign);
-    aAssistentFunc.InsertControl(1, pPage1_Designs);
-    aAssistentFunc.InsertControl(1, pPage1_DelDesign);
-    aAssistentFunc.InsertControl(1, pPage1_Desc);
+    m_xPage1 = m_xBuilder->weld_container("page1");
+    m_xPage1_Title = m_xBuilder->weld_label("assignLabel");
+    m_xPage1_NewDesign = m_xBuilder->weld_radio_button("newDesignRadiobutton");
+    m_xPage1_OldDesign = m_xBuilder->weld_radio_button("oldDesignRadiobutton");
+    m_xPage1_DelDesign = m_xBuilder->weld_button("delDesingButton");
+    m_xPage1_Desc = m_xBuilder->weld_label("descLabel");
+    aAssistentFunc.InsertControl(1, m_xPage1.get());
+    aAssistentFunc.InsertControl(1, m_xPage1_Title.get());
+    aAssistentFunc.InsertControl(1, m_xPage1_NewDesign.get());
+    aAssistentFunc.InsertControl(1, m_xPage1_OldDesign.get());
+    aAssistentFunc.InsertControl(1, m_xPage1_Designs.get());
+    aAssistentFunc.InsertControl(1, m_xPage1_DelDesign.get());
+    aAssistentFunc.InsertControl(1, m_xPage1_Desc.get());
 
     // Page 2
-    get(pPage2, "page2");
-    get(pPage2Frame2, "page2.2");
-    get(pPage2Frame3, "page2.3");
-    get(pPage2Frame4, "page2.4");
-    get(pPage2_Title, "publicationLabel");
-    get(pPage2_Standard, "standardRadiobutton");
-    get(pPage2_Frames, "framesRadiobutton");
-    get(pPage2_SingleDocument, "singleDocumentRadiobutton");
-    get(pPage2_Kiosk, "kioskRadiobutton");
-    get(pPage2_WebCast, "webCastRadiobutton");
-    aAssistentFunc.InsertControl(2, pPage2);
-    aAssistentFunc.InsertControl(2, pPage2Frame2);
-    aAssistentFunc.InsertControl(2, pPage2Frame3);
-    aAssistentFunc.InsertControl(2, pPage2Frame4);
-    aAssistentFunc.InsertControl(2, pPage2_Title);
-    aAssistentFunc.InsertControl(2, pPage2_Standard);
-    aAssistentFunc.InsertControl(2, pPage2_Frames);
-    aAssistentFunc.InsertControl(2, pPage2_SingleDocument);
-    aAssistentFunc.InsertControl(2, pPage2_Kiosk);
-    aAssistentFunc.InsertControl(2, pPage2_WebCast);
-    aAssistentFunc.InsertControl(2, pPage2_Standard_FB);
-    aAssistentFunc.InsertControl(2, pPage2_Frames_FB);
-    aAssistentFunc.InsertControl(2, pPage2_Kiosk_FB);
-    aAssistentFunc.InsertControl(2, pPage2_WebCast_FB);
+    m_xPage2 = m_xBuilder->weld_container("page2");
+    m_xPage2Frame2 = m_xBuilder->weld_container("page2.2");
+    m_xPage2Frame3 = m_xBuilder->weld_container("page2.3");
+    m_xPage2Frame4 = m_xBuilder->weld_container("page2.4");
+    m_xPage2_Title = m_xBuilder->weld_label("publicationLabel");
+    m_xPage2_Standard = m_xBuilder->weld_radio_button("standardRadiobutton");
+    m_xPage2_Frames = m_xBuilder->weld_radio_button("framesRadiobutton");
+    m_xPage2_SingleDocument = m_xBuilder->weld_radio_button("singleDocumentRadiobutton");
+    m_xPage2_Kiosk = m_xBuilder->weld_radio_button("kioskRadiobutton");
+    m_xPage2_WebCast = m_xBuilder->weld_radio_button("webCastRadiobutton");
+    aAssistentFunc.InsertControl(2, m_xPage2.get());
+    aAssistentFunc.InsertControl(2, m_xPage2Frame2.get());
+    aAssistentFunc.InsertControl(2, m_xPage2Frame3.get());
+    aAssistentFunc.InsertControl(2, m_xPage2Frame4.get());
+    aAssistentFunc.InsertControl(2, m_xPage2_Title.get());
+    aAssistentFunc.InsertControl(2, m_xPage2_Standard.get());
+    aAssistentFunc.InsertControl(2, m_xPage2_Frames.get());
+    aAssistentFunc.InsertControl(2, m_xPage2_SingleDocument.get());
+    aAssistentFunc.InsertControl(2, m_xPage2_Kiosk.get());
+    aAssistentFunc.InsertControl(2, m_xPage2_WebCast.get());
+    aAssistentFunc.InsertControl(2, m_xPage2_Standard_FB.get());
+    aAssistentFunc.InsertControl(2, m_xPage2_Frames_FB.get());
+    aAssistentFunc.InsertControl(2, m_xPage2_Kiosk_FB.get());
+    aAssistentFunc.InsertControl(2, m_xPage2_WebCast_FB.get());
 
-    get(pPage2_Title_Html, "htmlOptionsLabel");
-    get(pPage2_Content, "contentCheckbutton");
-    get(pPage2_Notes, "notesCheckbutton");
-    aAssistentFunc.InsertControl(2, pPage2_Title_Html);
-    aAssistentFunc.InsertControl(2, pPage2_Content);
-    if(m_bImpress)
-        aAssistentFunc.InsertControl(2, pPage2_Notes);
+    m_xPage2_Title_Html = m_xBuilder->weld_label( "htmlOptionsLabel");
+    m_xPage2_Content = m_xBuilder->weld_check_button("contentCheckbutton");
+    m_xPage2_Notes = m_xBuilder->weld_check_button("notesCheckbutton");
+    aAssistentFunc.InsertControl(2, m_xPage2_Title_Html.get());
+    aAssistentFunc.InsertControl(2, m_xPage2_Content.get());
+    if (m_bImpress)
+        aAssistentFunc.InsertControl(2, m_xPage2_Notes.get());
 
-    get(pPage2_Title_WebCast, "webCastLabel");
-    get(pPage2_ASP, "ASPRadiobutton");
-    get(pPage2_PERL, "perlRadiobutton");
-    get(pPage2_URL_txt, "URLTxtLabel");
-    get(pPage2_URL, "URLEntry");
-    get(pPage2_CGI_txt, "CGITxtLabel");
-    get(pPage2_CGI, "CGIEntry");
-    get(pPage2_Index_txt, "indexTxtLabel");
-    get(pPage2_Index, "indexEntry");
-    get(pPage2_Title_Kiosk, "kioskLabel");
-    get(pPage2_ChgDefault, "chgDefaultRadiobutton");
-    get(pPage2_ChgAuto, "chgAutoRadiobutton");
-    get(pPage2_Duration_txt, "durationTxtLabel");
-    get(pPage2_Duration, "durationSpinbutton");
-    get(pPage2_Endless, "endlessCheckbutton");
-    aAssistentFunc.InsertControl(2, pPage2_Title_WebCast);
-    aAssistentFunc.InsertControl(2, pPage2_Index_txt);
-    aAssistentFunc.InsertControl(2, pPage2_Index);
-    aAssistentFunc.InsertControl(2, pPage2_ASP);
-    aAssistentFunc.InsertControl(2, pPage2_PERL);
-    aAssistentFunc.InsertControl(2, pPage2_URL_txt);
-    aAssistentFunc.InsertControl(2, pPage2_URL);
-    aAssistentFunc.InsertControl(2, pPage2_CGI_txt);
-    aAssistentFunc.InsertControl(2, pPage2_CGI);
-    aAssistentFunc.InsertControl(2, pPage2_Title_Kiosk);
-    aAssistentFunc.InsertControl(2, pPage2_ChgDefault);
-    aAssistentFunc.InsertControl(2, pPage2_ChgAuto);
-    aAssistentFunc.InsertControl(2, pPage2_Duration_txt);
-    aAssistentFunc.InsertControl(2, pPage2_Duration);
-    aAssistentFunc.InsertControl(2, pPage2_Endless);
+    m_xPage2_Title_WebCast = m_xBuilder->weld_label("webCastLabel");
+    m_xPage2_ASP = m_xBuilder->weld_radio_button("ASPRadiobutton");
+    m_xPage2_PERL = m_xBuilder->weld_radio_button("perlRadiobutton");
+    m_xPage2_URL_txt = m_xBuilder->weld_label("URLTxtLabel");
+    m_xPage2_URL = m_xBuilder->weld_entry("URLEntry");
+    m_xPage2_CGI_txt = m_xBuilder->weld_label("CGITxtLabel");
+    m_xPage2_CGI = m_xBuilder->weld_entry("CGIEntry");
+    m_xPage2_Index_txt = m_xBuilder->weld_label("indexTxtLabel");
+    m_xPage2_Index = m_xBuilder->weld_entry("indexEntry");
+    m_xPage2_Title_Kiosk = m_xBuilder->weld_label("kioskLabel");
+    m_xPage2_ChgDefault = m_xBuilder->weld_radio_button("chgDefaultRadiobutton");
+    m_xPage2_ChgAuto = m_xBuilder->weld_radio_button("chgAutoRadiobutton");
+    m_xPage2_Duration_txt = m_xBuilder->weld_label("durationTxtLabel");
+    m_xPage2_Duration = m_xBuilder->weld_time_spin_button("durationSpinbutton", TimeFieldFormat::F_SEC);
+    m_xPage2_Endless = m_xBuilder->weld_check_button("endlessCheckbutton");
+    aAssistentFunc.InsertControl(2, m_xPage2_Title_WebCast.get());
+    aAssistentFunc.InsertControl(2, m_xPage2_Index_txt.get());
+    aAssistentFunc.InsertControl(2, m_xPage2_Index.get());
+    aAssistentFunc.InsertControl(2, m_xPage2_ASP.get());
+    aAssistentFunc.InsertControl(2, m_xPage2_PERL.get());
+    aAssistentFunc.InsertControl(2, m_xPage2_URL_txt.get());
+    aAssistentFunc.InsertControl(2, m_xPage2_URL.get());
+    aAssistentFunc.InsertControl(2, m_xPage2_CGI_txt.get());
+    aAssistentFunc.InsertControl(2, m_xPage2_CGI.get());
+    aAssistentFunc.InsertControl(2, m_xPage2_Title_Kiosk.get());
+    aAssistentFunc.InsertControl(2, m_xPage2_ChgDefault.get());
+    aAssistentFunc.InsertControl(2, m_xPage2_ChgAuto.get());
+    aAssistentFunc.InsertControl(2, m_xPage2_Duration_txt.get());
+    aAssistentFunc.InsertControl(2, &m_xPage2_Duration->get_widget());
+    aAssistentFunc.InsertControl(2, m_xPage2_Endless.get());
 
     // Page 3
-    get(pPage3, "page3");
-    get(pPage3_Title1, "saveImgAsLabel");
-    get(pPage3_Png, "pngRadiobutton");
-    get(pPage3_Gif, "gifRadiobutton");
-    get(pPage3_Jpg, "jpgRadiobutton");
-    get(pPage3_Quality_txt, "qualityTxtLabel");
-    get(pPage3_Quality, "qualityCombobox");
-    get(pPage3_Title2, "monitorResolutionLabel");
-    get(pPage3_Resolution_1, "resolution1Radiobutton");
-    get(pPage3_Resolution_2, "resolution2Radiobutton");
-    get(pPage3_Resolution_3, "resolution3Radiobutton");
-    get(pPage3_Title3, "effectsLabel");
-    get(pPage3_SldSound, "sldSoundCheckbutton");
-    get(pPage3_HiddenSlides, "hiddenSlidesCheckbutton");
-    aAssistentFunc.InsertControl(3, pPage3);
-    aAssistentFunc.InsertControl(3, pPage3_Title1);
-    aAssistentFunc.InsertControl(3, pPage3_Png);
-    aAssistentFunc.InsertControl(3, pPage3_Gif);
-    aAssistentFunc.InsertControl(3, pPage3_Jpg);
-    aAssistentFunc.InsertControl(3, pPage3_Quality_txt);
-    aAssistentFunc.InsertControl(3, pPage3_Quality);
-    aAssistentFunc.InsertControl(3, pPage3_Title2);
-    aAssistentFunc.InsertControl(3, pPage3_Resolution_1);
-    aAssistentFunc.InsertControl(3, pPage3_Resolution_2);
-    aAssistentFunc.InsertControl(3, pPage3_Resolution_3);
-    aAssistentFunc.InsertControl(3, pPage3_Title3);
-    aAssistentFunc.InsertControl(3, pPage3_SldSound);
-    aAssistentFunc.InsertControl(3, pPage3_HiddenSlides);
+    m_xPage3 = m_xBuilder->weld_container("page3");
+    m_xPage3_Title1 = m_xBuilder->weld_label("saveImgAsLabel");
+    m_xPage3_Png = m_xBuilder->weld_radio_button("pngRadiobutton");
+    m_xPage3_Gif = m_xBuilder->weld_radio_button("gifRadiobutton");
+    m_xPage3_Jpg = m_xBuilder->weld_radio_button("jpgRadiobutton");
+    m_xPage3_Quality_txt = m_xBuilder->weld_label("qualityTxtLabel");
+    m_xPage3_Quality= m_xBuilder->weld_combo_box("qualityCombobox");
+    m_xPage3_Title2 = m_xBuilder->weld_label("monitorResolutionLabel");
+    m_xPage3_Resolution_1 = m_xBuilder->weld_radio_button("resolution1Radiobutton");
+    m_xPage3_Resolution_2 = m_xBuilder->weld_radio_button("resolution2Radiobutton");
+    m_xPage3_Resolution_3 = m_xBuilder->weld_radio_button("resolution3Radiobutton");
+    m_xPage3_Title3 = m_xBuilder->weld_label("effectsLabel");
+    m_xPage3_SldSound = m_xBuilder->weld_check_button("sldSoundCheckbutton");
+    m_xPage3_HiddenSlides = m_xBuilder->weld_check_button("hiddenSlidesCheckbutton");
+    aAssistentFunc.InsertControl(3, m_xPage3.get());
+    aAssistentFunc.InsertControl(3, m_xPage3_Title1.get());
+    aAssistentFunc.InsertControl(3, m_xPage3_Png.get());
+    aAssistentFunc.InsertControl(3, m_xPage3_Gif.get());
+    aAssistentFunc.InsertControl(3, m_xPage3_Jpg.get());
+    aAssistentFunc.InsertControl(3, m_xPage3_Quality_txt.get());
+    aAssistentFunc.InsertControl(3, m_xPage3_Quality.get());
+    aAssistentFunc.InsertControl(3, m_xPage3_Title2.get());
+    aAssistentFunc.InsertControl(3, m_xPage3_Resolution_1.get());
+    aAssistentFunc.InsertControl(3, m_xPage3_Resolution_2.get());
+    aAssistentFunc.InsertControl(3, m_xPage3_Resolution_3.get());
+    aAssistentFunc.InsertControl(3, m_xPage3_Title3.get());
+    aAssistentFunc.InsertControl(3, m_xPage3_SldSound.get());
+    aAssistentFunc.InsertControl(3, m_xPage3_HiddenSlides.get());
 
     // Page 4
-    get(pPage4, "page4");
-    get(pPage4_Title1, "infTitlePageLabel");
-    get(pPage4_Author_txt, "authorTxtLabel");
-    get(pPage4_Author, "authorEntry");
-    get(pPage4_Email_txt, "emailTxtLabel");
-    get(pPage4_Email, "emailEntry");
-    get(pPage4_WWW_txt, "wwwTxtLabel");
-    get(pPage4_WWW, "wwwEntry");
-    get(pPage4_Title2, "addInformLabel");
-    get(pPage4_Download, "downloadCheckbutton");
-    aAssistentFunc.InsertControl(4, pPage4);
-    aAssistentFunc.InsertControl(4, pPage4_Title1);
-    aAssistentFunc.InsertControl(4, pPage4_Author_txt);
-    aAssistentFunc.InsertControl(4, pPage4_Author);
-    aAssistentFunc.InsertControl(4, pPage4_Email_txt);
-    aAssistentFunc.InsertControl(4, pPage4_Email);
-    aAssistentFunc.InsertControl(4, pPage4_WWW_txt);
-    aAssistentFunc.InsertControl(4, pPage4_WWW);
-    aAssistentFunc.InsertControl(4, pPage4_Title2);
-    aAssistentFunc.InsertControl(4, pPage4_Misc);
+    m_xPage4 = m_xBuilder->weld_container("page4");
+    m_xPage4_Title1 = m_xBuilder->weld_label("infTitlePageLabel");
+    m_xPage4_Author_txt = m_xBuilder->weld_label("authorTxtLabel");
+    m_xPage4_Author = m_xBuilder->weld_entry("authorEntry");
+    m_xPage4_Email_txt = m_xBuilder->weld_label("emailTxtLabel");
+    m_xPage4_Email = m_xBuilder->weld_entry("emailEntry");
+    m_xPage4_WWW_txt = m_xBuilder->weld_label("wwwTxtLabel");
+    m_xPage4_WWW = m_xBuilder->weld_entry("wwwEntry");
+    m_xPage4_Title2 = m_xBuilder->weld_label("addInformLabel");
+    m_xPage4_Download = m_xBuilder->weld_check_button("downloadCheckbutton");
+    aAssistentFunc.InsertControl(4, m_xPage4.get());
+    aAssistentFunc.InsertControl(4, m_xPage4_Title1.get());
+    aAssistentFunc.InsertControl(4, m_xPage4_Author_txt.get());
+    aAssistentFunc.InsertControl(4, m_xPage4_Author.get());
+    aAssistentFunc.InsertControl(4, m_xPage4_Email_txt.get());
+    aAssistentFunc.InsertControl(4, m_xPage4_Email.get());
+    aAssistentFunc.InsertControl(4, m_xPage4_WWW_txt.get());
+    aAssistentFunc.InsertControl(4, m_xPage4_WWW.get());
+    aAssistentFunc.InsertControl(4, m_xPage4_Title2.get());
+    aAssistentFunc.InsertControl(4, m_xPage4_Misc.get());
     if(m_bImpress)
-        aAssistentFunc.InsertControl(4, pPage4_Download);
+        aAssistentFunc.InsertControl(4, m_xPage4_Download.get());
 
     // Page 5
-    get(pPage5, "page5");
-    get(pPage5_Title, "buttonStyleLabel");
-    get(pPage5_TextOnly, "textOnlyCheckbutton");
-    get(pPage5_Buttons, "buttonsDrawingarea");
-    aAssistentFunc.InsertControl(5, pPage5);
-    aAssistentFunc.InsertControl(5, pPage5_Title);
-    aAssistentFunc.InsertControl(5, pPage5_TextOnly);
-    aAssistentFunc.InsertControl(5, pPage5_Buttons);
+    m_xPage5 = m_xBuilder->weld_container("page5");
+    m_xPage5_Title = m_xBuilder->weld_label("buttonStyleLabel");
+    m_xPage5_TextOnly = m_xBuilder->weld_check_button("textOnlyCheckbutton");
+    m_xPage5_Buttons.reset(new SvtValueSet(m_xBuilder->weld_scrolled_window("buttonsDrawingareawin")));
+    m_xPage5_ButtonsWnd.reset(new weld::CustomWeld(*m_xBuilder, "buttonsDrawingarea", *m_xPage5_Buttons));
+    aAssistentFunc.InsertControl(5, m_xPage5.get());
+    aAssistentFunc.InsertControl(5, m_xPage5_Title.get());
+    aAssistentFunc.InsertControl(5, m_xPage5_TextOnly.get());
+    aAssistentFunc.InsertControl(5, m_xPage5_Buttons->GetDrawingArea());
 
     // Page 6
-    get(pPage6, "page6");
-    get(pPage6_Title, "selectColorLabel");
-    get(pPage6_Default, "defaultRadiobutton");
-    get(pPage6_User, "userRadiobutton");
-    get(pPage6_Back, "backButton");
-    get(pPage6_Text, "textButton");
-    get(pPage6_Link, "linkButton");
-    get(pPage6_VLink, "vLinkButton");
-    get(pPage6_ALink, "aLinkButton");
-    get(pPage6_DocColors, "docColorsRadiobutton");
-    get(pPage6_Preview, "previewDrawingarea");
-    aAssistentFunc.InsertControl(6, pPage6);
-    aAssistentFunc.InsertControl(6, pPage6_Title);
-    aAssistentFunc.InsertControl(6, pPage6_DocColors);
-    aAssistentFunc.InsertControl(6, pPage6_Default);
-    aAssistentFunc.InsertControl(6, pPage6_User);
-    aAssistentFunc.InsertControl(6, pPage6_Text);
-    aAssistentFunc.InsertControl(6, pPage6_Link);
-    aAssistentFunc.InsertControl(6, pPage6_ALink);
-    aAssistentFunc.InsertControl(6, pPage6_VLink);
-    aAssistentFunc.InsertControl(6, pPage6_Back);
-    aAssistentFunc.InsertControl(6, pPage6_Preview);
+    m_xPage6 = m_xBuilder->weld_container("page6");
+    m_xPage6_Title = m_xBuilder->weld_label("selectColorLabel");
+    m_xPage6_Default = m_xBuilder->weld_radio_button("defaultRadiobutton");
+    m_xPage6_User = m_xBuilder->weld_radio_button("userRadiobutton");
+    m_xPage6_Back = m_xBuilder->weld_button("backButton");
+    m_xPage6_Text = m_xBuilder->weld_button("textButton");
+    m_xPage6_Link = m_xBuilder->weld_button("linkButton");
+    m_xPage6_VLink = m_xBuilder->weld_button("vLinkButton");
+    m_xPage6_ALink = m_xBuilder->weld_button("aLinkButton");
+    m_xPage6_DocColors = m_xBuilder->weld_radio_button("docColorsRadiobutton");
+    m_xPage6_Preview.reset(new SdHtmlAttrPreview);
+    m_xPage6_PreviewWnd.reset(new weld::CustomWeld(*m_xBuilder, "previewDrawingarea", *m_xPage6_Preview));
+    aAssistentFunc.InsertControl(6, m_xPage6.get());
+    aAssistentFunc.InsertControl(6, m_xPage6_Title.get());
+    aAssistentFunc.InsertControl(6, m_xPage6_DocColors.get());
+    aAssistentFunc.InsertControl(6, m_xPage6_Default.get());
+    aAssistentFunc.InsertControl(6, m_xPage6_User.get());
+    aAssistentFunc.InsertControl(6, m_xPage6_Text.get());
+    aAssistentFunc.InsertControl(6, m_xPage6_Link.get());
+    aAssistentFunc.InsertControl(6, m_xPage6_ALink.get());
+    aAssistentFunc.InsertControl(6, m_xPage6_VLink.get());
+    aAssistentFunc.InsertControl(6, m_xPage6_Back.get());
+    aAssistentFunc.InsertControl(6, m_xPage6_Preview->GetDrawingArea());
 }
 
 // Initialize dialog with default-values
@@ -744,8 +645,8 @@ void SdPublishingDlg::SetDefaults()
     SdPublishingDesign aDefault;
     SetDesign(&aDefault);
 
-    pPage1_NewDesign->Check();
-    pPage1_OldDesign->Check(false);
+    m_xPage1_NewDesign->set_active(true);
+    m_xPage1_OldDesign->set_sensitive(false);
     UpdatePage();
 }
 
@@ -760,13 +661,13 @@ void SdPublishingDlg::GetParameterSequence( Sequence< PropertyValue >& rParams )
     aValue.Name = "PublishMode";
 
     HtmlPublishMode ePublishMode;
-    if (pPage2_Frames->IsChecked())
+    if (m_xPage2_Frames->get_active())
         ePublishMode = PUBLISH_FRAMES;
-    else if (pPage2_SingleDocument->IsChecked())
+    else if (m_xPage2_SingleDocument->get_active())
         ePublishMode = PUBLISH_SINGLE_DOCUMENT;
-    else if (pPage2_Kiosk->IsChecked())
+    else if (m_xPage2_Kiosk->get_active())
         ePublishMode  = PUBLISH_KIOSK;
-    else if (pPage2_WebCast->IsChecked())
+    else if (m_xPage2_WebCast->get_active())
         ePublishMode  = PUBLISH_WEBCAST;
     else
         ePublishMode  = PUBLISH_HTML;
@@ -775,45 +676,45 @@ void SdPublishingDlg::GetParameterSequence( Sequence< PropertyValue >& rParams )
     aProps.push_back( aValue );
 
     aValue.Name = "IsExportContentsPage";
-    aValue.Value <<= pPage2_Content->IsChecked();
+    aValue.Value <<= m_xPage2_Content->get_active();
     aProps.push_back( aValue );
 
     if(m_bImpress)
     {
         aValue.Name = "IsExportNotes";
-        aValue.Value <<= pPage2_Notes->IsChecked();
+        aValue.Value <<= m_xPage2_Notes->get_active();
         aProps.push_back( aValue );
     }
 
-    if( pPage2_WebCast->IsChecked() )
+    if( m_xPage2_WebCast->get_active() )
     {
         aValue.Name = "WebCastScriptLanguage";
-        if( pPage2_ASP->IsChecked() )
+        if( m_xPage2_ASP->get_active() )
             aValue.Value <<= OUString( "asp" );
         else
             aValue.Value <<= OUString( "perl" );
         aProps.push_back( aValue );
 
         aValue.Name = "WebCastCGIURL";
-        aValue.Value <<= pPage2_CGI->GetText();
+        aValue.Value <<= m_xPage2_CGI->get_text();
         aProps.push_back( aValue );
 
         aValue.Name = "WebCastTargetURL";
-        aValue.Value <<= pPage2_URL->GetText();
+        aValue.Value <<= m_xPage2_URL->get_text();
         aProps.push_back( aValue );
     }
     aValue.Name = "IndexURL";
-    aValue.Value <<= pPage2_Index->GetText();
+    aValue.Value <<= m_xPage2_Index->get_text();
     aProps.push_back( aValue );
 
-    if( pPage2_Kiosk->IsChecked() && pPage2_ChgAuto->IsChecked() )
+    if( m_xPage2_Kiosk->get_active() && m_xPage2_ChgAuto->get_active() )
     {
         aValue.Name = "KioskSlideDuration";
-        aValue.Value <<= static_cast<sal_uInt32>(pPage2_Duration->GetTime().GetMSFromTime()) / 1000;
+        aValue.Value <<= static_cast<sal_uInt32>(m_xPage2_Duration->get_value().GetMSFromTime()) / 1000;
         aProps.push_back( aValue );
 
         aValue.Name = "KioskEndless";
-        aValue.Value <<= pPage2_Endless->IsChecked();
+        aValue.Value <<= m_xPage2_Endless->get_active();
         aProps.push_back( aValue );
     }
 
@@ -821,23 +722,23 @@ void SdPublishingDlg::GetParameterSequence( Sequence< PropertyValue >& rParams )
 
     aValue.Name = "Width";
     sal_Int32 nTmpWidth = 640;
-    if( pPage3_Resolution_2->IsChecked() )
+    if( m_xPage3_Resolution_2->get_active() )
         nTmpWidth = 800;
-    else if( pPage3_Resolution_3->IsChecked() )
+    else if( m_xPage3_Resolution_3->get_active() )
         nTmpWidth = 1024;
 
     aValue.Value <<= nTmpWidth;
     aProps.push_back( aValue );
 
     aValue.Name = "Compression";
-    aValue.Value <<= pPage3_Quality->GetText();
+    aValue.Value <<= m_xPage3_Quality->get_active_text();
     aProps.push_back( aValue );
 
     aValue.Name = "Format";
     sal_Int32 nFormat;
-    if( pPage3_Png->IsChecked() )
+    if( m_xPage3_Png->get_active() )
         nFormat = static_cast<sal_Int32>(FORMAT_PNG);
-    else if( pPage3_Gif->IsChecked() )
+    else if( m_xPage3_Gif->get_active() )
         nFormat = static_cast<sal_Int32>(FORMAT_GIF);
     else
         nFormat = static_cast<sal_Int32>(FORMAT_JPG);
@@ -845,24 +746,24 @@ void SdPublishingDlg::GetParameterSequence( Sequence< PropertyValue >& rParams )
     aProps.push_back( aValue );
 
     aValue.Name = "SlideSound";
-    aValue.Value <<= pPage3_SldSound->IsChecked();
+    aValue.Value <<= m_xPage3_SldSound->get_active();
     aProps.push_back( aValue );
 
     aValue.Name = "HiddenSlides";
-    aValue.Value <<= pPage3_HiddenSlides->IsChecked();
+    aValue.Value <<= m_xPage3_HiddenSlides->get_active();
     aProps.push_back( aValue );
 
     // Page 4
     aValue.Name = "Author";
-    aValue.Value <<= pPage4_Author->GetText();
+    aValue.Value <<= m_xPage4_Author->get_text();
     aProps.push_back( aValue );
 
     aValue.Name = "EMail";
-    aValue.Value <<= pPage4_Email->GetText();
+    aValue.Value <<= m_xPage4_Email->get_text();
     aProps.push_back( aValue );
 
     // try to guess protocol for user's homepage
-    INetURLObject aHomeURL( pPage4_WWW->GetText(),
+    INetURLObject aHomeURL( m_xPage4_WWW->get_text(),
                             INetProtocol::Http,     // default proto is HTTP
                             INetURLObject::EncodeMechanism::All );
 
@@ -871,26 +772,26 @@ void SdPublishingDlg::GetParameterSequence( Sequence< PropertyValue >& rParams )
     aProps.push_back( aValue );
 
     aValue.Name = "UserText";
-    aValue.Value <<= pPage4_Misc->GetText();
+    aValue.Value <<= m_xPage4_Misc->get_text();
     aProps.push_back( aValue );
 
     if( m_bImpress )
     {
         aValue.Name = "EnableDownload";
-        aValue.Value <<= pPage4_Download->IsChecked();
+        aValue.Value <<= m_xPage4_Download->get_active();
         aProps.push_back( aValue );
     }
 
     // Page 5
-    if( !pPage5_TextOnly->IsChecked() )
+    if( !m_xPage5_TextOnly->get_active() )
     {
         aValue.Name = "UseButtonSet";
-        aValue.Value <<= static_cast<sal_Int32>(pPage5_Buttons->GetSelectedItemId() - 1);
+        aValue.Value <<= static_cast<sal_Int32>(m_xPage5_Buttons->GetSelectedItemId() - 1);
         aProps.push_back( aValue );
     }
 
     // Page 6
-    if( pPage6_User->IsChecked() )
+    if( m_xPage6_User->get_active() )
     {
         aValue.Name = "BackColor";
         aValue.Value <<= m_aBackColor;
@@ -913,7 +814,7 @@ void SdPublishingDlg::GetParameterSequence( Sequence< PropertyValue >& rParams )
         aProps.push_back( aValue );
     }
 
-    if( pPage6_DocColors->IsChecked() )
+    if( m_xPage6_DocColors->get_active() )
     {
         aValue.Name = "IsUseDocumentColors";
         aValue.Value <<= true;
@@ -924,14 +825,14 @@ void SdPublishingDlg::GetParameterSequence( Sequence< PropertyValue >& rParams )
 }
 
 // Clickhandler for the radiobuttons of the design-selection
-IMPL_LINK( SdPublishingDlg, DesignHdl, Button *, pButton, void )
+IMPL_LINK( SdPublishingDlg, DesignHdl, weld::Button&, rButton, void )
 {
-    if(pButton == pPage1_NewDesign)
+    if (&rButton == m_xPage1_NewDesign.get())
     {
-        pPage1_NewDesign->Check(); // because of DesignDeleteHdl
-        pPage1_OldDesign->Check(false);
-        pPage1_Designs->Disable();
-        pPage1_DelDesign->Disable();
+        m_xPage1_NewDesign->set_active(true); // because of DesignDeleteHdl
+        m_xPage1_OldDesign->set_sensitive(false);
+        m_xPage1_Designs->set_sensitive(false);
+        m_xPage1_DelDesign->set_sensitive(false);
         m_pDesign = nullptr;
 
         SdPublishingDesign aDefault;
@@ -939,14 +840,14 @@ IMPL_LINK( SdPublishingDlg, DesignHdl, Button *, pButton, void )
     }
     else
     {
-        pPage1_NewDesign->Check(false);
-        pPage1_Designs->Enable();
-        pPage1_DelDesign->Enable();
+        m_xPage1_NewDesign->set_sensitive(false);
+        m_xPage1_Designs->set_sensitive(true);
+        m_xPage1_DelDesign->set_sensitive(true);
 
-        if(pPage1_Designs->GetSelectedEntryCount() == 0)
-            pPage1_Designs->SelectEntryPos(0);
+        if (m_xPage1_Designs->get_selected_index() == -1)
+            m_xPage1_Designs->select(0);
 
-        const sal_Int32 nPos = pPage1_Designs->GetSelectedEntryPos();
+        const sal_Int32 nPos = m_xPage1_Designs->get_selected_index();
         m_pDesign = &m_aDesignList[nPos];
         DBG_ASSERT(m_pDesign, "No Design? That's not allowed (CL)");
 
@@ -956,9 +857,9 @@ IMPL_LINK( SdPublishingDlg, DesignHdl, Button *, pButton, void )
 }
 
 // Clickhandler for the choice of one design
-IMPL_LINK_NOARG(SdPublishingDlg, DesignSelectHdl, ListBox&, void)
+IMPL_LINK_NOARG(SdPublishingDlg, DesignSelectHdl, weld::TreeView&, void)
 {
-    const sal_Int32 nPos = pPage1_Designs->GetSelectedEntryPos();
+    const sal_Int32 nPos = m_xPage1_Designs->get_selected_index();
     m_pDesign = &m_aDesignList[nPos];
     DBG_ASSERT(m_pDesign, "No Design? That's not allowed (CL)");
 
@@ -969,18 +870,18 @@ IMPL_LINK_NOARG(SdPublishingDlg, DesignSelectHdl, ListBox&, void)
 }
 
 // Clickhandler for the delete of one design
-IMPL_LINK_NOARG(SdPublishingDlg, DesignDeleteHdl, Button*, void)
+IMPL_LINK_NOARG(SdPublishingDlg, DesignDeleteHdl, weld::Button&, void)
 {
-    const sal_Int32 nPos = pPage1_Designs->GetSelectedEntryPos();
+    const sal_Int32 nPos = m_xPage1_Designs->get_selected_index();
 
     std::vector<SdPublishingDesign>::iterator iter = m_aDesignList.begin()+nPos;
 
     DBG_ASSERT(iter != m_aDesignList.end(), "No Design? That's not allowed (CL)");
 
-    pPage1_Designs->RemoveEntry(nPos);
+    m_xPage1_Designs->remove(nPos);
 
     if(m_pDesign == &(*iter))
-        DesignHdl( pPage1_NewDesign );
+        DesignHdl(*m_xPage1_NewDesign);
 
     m_aDesignList.erase(iter);
 
@@ -990,34 +891,34 @@ IMPL_LINK_NOARG(SdPublishingDlg, DesignDeleteHdl, Button*, void)
 }
 
 // Clickhandler for the other servertypes
-IMPL_LINK( SdPublishingDlg, WebServerHdl, Button *, pButton, void )
+IMPL_LINK( SdPublishingDlg, WebServerHdl, weld::Button&, rButton, void )
 {
-    bool bASP = pButton == pPage2_ASP;
+    bool bASP = &rButton == m_xPage2_ASP.get();
 
-    pPage2_ASP->Check( bASP );
-    pPage2_PERL->Check( !bASP );
+    m_xPage2_ASP->set_sensitive( bASP );
+    m_xPage2_PERL->set_sensitive( !bASP );
     UpdatePage();
 }
 
 // Clickhandler for the Radiobuttons of the graphicformat choice
-IMPL_LINK( SdPublishingDlg, GfxFormatHdl, Button *, pButton, void )
+IMPL_LINK( SdPublishingDlg, GfxFormatHdl, weld::Button&, rButton, void )
 {
-    pPage3_Png->Check( pButton == pPage3_Png );
-    pPage3_Gif->Check( pButton == pPage3_Gif );
-    pPage3_Jpg->Check( pButton == pPage3_Jpg );
-    pPage3_Quality->Enable(pButton == pPage3_Jpg);
+    m_xPage3_Png->set_sensitive( &rButton == m_xPage3_Png.get() );
+    m_xPage3_Gif->set_sensitive( &rButton == m_xPage3_Gif.get() );
+    m_xPage3_Jpg->set_sensitive( &rButton == m_xPage3_Jpg.get() );
+    m_xPage3_Quality->set_sensitive(&rButton == m_xPage3_Jpg.get());
 }
 
 // Clickhandler for the Radiobuttons Standard/Frames
-IMPL_LINK_NOARG(SdPublishingDlg, BaseHdl, Button*, void)
+IMPL_LINK_NOARG(SdPublishingDlg, BaseHdl, weld::Button&, void)
 {
     UpdatePage();
 }
 
 // Clickhandler for the Checkbox of the Title page
-IMPL_LINK_NOARG(SdPublishingDlg, ContentHdl, Button*, void)
+IMPL_LINK_NOARG(SdPublishingDlg, ContentHdl, weld::Button&, void)
 {
-    if(pPage2_Content->IsChecked())
+    if(m_xPage2_Content->get_active())
     {
         if(!aAssistentFunc.IsEnabled(4))
         {
@@ -1036,69 +937,69 @@ IMPL_LINK_NOARG(SdPublishingDlg, ContentHdl, Button*, void)
 }
 
 // Clickhandler for the Resolution Radiobuttons
-IMPL_LINK( SdPublishingDlg, ResolutionHdl, Button *, pButton, void )
+IMPL_LINK( SdPublishingDlg, ResolutionHdl, weld::Button&, rButton, void )
 {
-    pPage3_Resolution_1->Check(pButton == pPage3_Resolution_1);
-    pPage3_Resolution_2->Check(pButton == pPage3_Resolution_2);
-    pPage3_Resolution_3->Check(pButton == pPage3_Resolution_3);
+    m_xPage3_Resolution_1->set_sensitive(&rButton == m_xPage3_Resolution_1.get());
+    m_xPage3_Resolution_2->set_sensitive(&rButton == m_xPage3_Resolution_2.get());
+    m_xPage3_Resolution_3->set_sensitive(&rButton == m_xPage3_Resolution_3.get());
 }
 
 // Clickhandler for the ValueSet with the bitmap-buttons
-IMPL_LINK_NOARG(SdPublishingDlg, ButtonsHdl, ValueSet*, void)
+IMPL_LINK_NOARG(SdPublishingDlg, ButtonsHdl, SvtValueSet*, void)
 {
     // if one bitmap-button is chosen, then disable TextOnly
-    pPage5_TextOnly->Check(false);
+    m_xPage5_TextOnly->set_sensitive(false);
 }
 
 // Fill the SfxItemSet with the settings of the dialog
-IMPL_LINK( SdPublishingDlg, ColorHdl, Button *, pButton, void)
+IMPL_LINK( SdPublishingDlg, ColorHdl, weld::Button&, rButton, void)
 {
     SvColorDialog aDlg;
 
-    if(pButton == pPage6_Back)
+    if (&rButton == m_xPage6_Back.get())
     {
         aDlg.SetColor( m_aBackColor );
-        if(aDlg.Execute(GetFrameWeld()) == RET_OK )
+        if(aDlg.Execute(m_xDialog.get()) == RET_OK )
             m_aBackColor = aDlg.GetColor();
     }
-    else if(pButton == pPage6_Text)
+    else if (&rButton == m_xPage6_Text.get())
     {
         aDlg.SetColor( m_aTextColor );
-        if(aDlg.Execute(GetFrameWeld()) == RET_OK )
+        if(aDlg.Execute(m_xDialog.get()) == RET_OK )
             m_aTextColor = aDlg.GetColor();
     }
-    else if(pButton == pPage6_Link)
+    else if (&rButton == m_xPage6_Link.get())
     {
         aDlg.SetColor( m_aLinkColor );
-        if(aDlg.Execute(GetFrameWeld()) == RET_OK )
+        if(aDlg.Execute(m_xDialog.get()) == RET_OK )
             m_aLinkColor = aDlg.GetColor();
     }
-    else if(pButton == pPage6_VLink)
+    else if (&rButton == m_xPage6_VLink.get())
     {
         aDlg.SetColor( m_aVLinkColor );
-        if(aDlg.Execute(GetFrameWeld()) == RET_OK )
+        if(aDlg.Execute(m_xDialog.get()) == RET_OK )
             m_aVLinkColor = aDlg.GetColor();
     }
-    else if(pButton == pPage6_ALink)
+    else if (&rButton == m_xPage6_ALink.get())
     {
         aDlg.SetColor( m_aALinkColor );
-        if(aDlg.Execute(GetFrameWeld()) == RET_OK )
+        if(aDlg.Execute(m_xDialog.get()) == RET_OK )
             m_aALinkColor = aDlg.GetColor();
     }
 
-    pPage6_User->Check();
-    pPage6_Preview->SetColors( m_aBackColor, m_aTextColor, m_aLinkColor,
+    m_xPage6_User->set_active(true);
+    m_xPage6_Preview->SetColors( m_aBackColor, m_aTextColor, m_aLinkColor,
                                m_aVLinkColor, m_aALinkColor );
-    pPage6_Preview->Invalidate();
+    m_xPage6_Preview->Invalidate();
 }
 
-IMPL_LINK_NOARG(SdPublishingDlg, SlideChgHdl, Button*, void)
+IMPL_LINK_NOARG(SdPublishingDlg, SlideChgHdl, weld::Button&, void)
 {
     UpdatePage();
 }
 
 // Clickhandler for the Ok Button
-IMPL_LINK_NOARG(SdPublishingDlg, FinishHdl, Button*, void)
+IMPL_LINK_NOARG(SdPublishingDlg, FinishHdl, weld::Button&, void)
 {
     //End
     SdPublishingDesign aDesign;
@@ -1106,7 +1007,7 @@ IMPL_LINK_NOARG(SdPublishingDlg, FinishHdl, Button*, void)
 
     bool bSave = false;
 
-    if(pPage1_OldDesign->IsChecked() && m_pDesign)
+    if(m_xPage1_OldDesign->get_active() && m_pDesign)
     {
         // are there changes?
         if(!(aDesign == *m_pDesign))
@@ -1130,7 +1031,7 @@ IMPL_LINK_NOARG(SdPublishingDlg, FinishHdl, Button*, void)
         {
             bRetry = false;
 
-            SdDesignNameDlg aDlg(GetFrameWeld(), aName);
+            SdDesignNameDlg aDlg(m_xDialog.get(), aName);
 
             if (aDlg.run() == RET_OK)
             {
@@ -1141,7 +1042,7 @@ IMPL_LINK_NOARG(SdPublishingDlg, FinishHdl, Button*, void)
 
                 if (iter != m_aDesignList.end())
                 {
-                    std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(GetFrameWeld(),
+                    std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(m_xDialog.get(),
                                                                    VclMessageType::Error, VclButtonsType::YesNo,
                                                                    SdResId(STR_PUBDLG_SAMENAME)));
                     bRetry = xErrorBox->run() == RET_NO;
@@ -1163,132 +1064,132 @@ IMPL_LINK_NOARG(SdPublishingDlg, FinishHdl, Button*, void)
     if(m_bDesignListDirty)
         Save();
 
-    EndDialog(RET_OK);
+    m_xDialog->response(RET_OK);
 }
 
 // Refresh the dialogs when changing from pages
 void SdPublishingDlg::ChangePage()
 {
     int nPage = aAssistentFunc.GetCurrentPage();
-    SetHelpId(aPageHelpIds[nPage-1]);
+    m_xDialog->set_help_id(aPageHelpIds[nPage-1]);
 
     UpdatePage();
 
-    if( pNextPageButton->IsEnabled() )
-        pNextPageButton->GrabFocus();
+    if (m_xNextPageButton->get_sensitive())
+        m_xNextPageButton->grab_focus();
     else
-        pFinishButton->GrabFocus();
+        m_xFinishButton->grab_focus();
 }
 
 void SdPublishingDlg::UpdatePage()
 {
-    pNextPageButton->Enable(!aAssistentFunc.IsLastPage());
-    pLastPageButton->Enable(!aAssistentFunc.IsFirstPage());
+    m_xNextPageButton->set_sensitive(!aAssistentFunc.IsLastPage());
+    m_xLastPageButton->set_sensitive(!aAssistentFunc.IsFirstPage());
 
     int nPage = aAssistentFunc.GetCurrentPage();
 
     switch( nPage )
     {
     case 1:
-        if(pPage1_NewDesign->IsChecked())
+        if(m_xPage1_NewDesign->get_active())
         {
-            pPage1_Designs->Disable();
-            pPage1_DelDesign->Disable();
+            m_xPage1_Designs->set_sensitive(false);
+            m_xPage1_DelDesign->set_sensitive(false);
         }
 
         if(m_aDesignList.empty())
-            pPage1_OldDesign->Disable();
+            m_xPage1_OldDesign->set_sensitive(false);
         break;
     case 2:
-        pPage2_Frames_FB->Show(pPage2_Frames->IsChecked());
-        pPage2_Standard_FB->Show(pPage2_Standard->IsChecked());
-        pPage2_Kiosk_FB->Show(pPage2_Kiosk->IsChecked());
-        pPage2_WebCast_FB->Show(pPage2_WebCast->IsChecked());
+        m_xPage2_Frames_FB->set_visible(m_xPage2_Frames->get_active());
+        m_xPage2_Standard_FB->set_visible(m_xPage2_Standard->get_active());
+        m_xPage2_Kiosk_FB->set_visible(m_xPage2_Kiosk->get_active());
+        m_xPage2_WebCast_FB->set_visible(m_xPage2_WebCast->get_active());
 
-        if( pPage2_WebCast->IsChecked() )
+        if( m_xPage2_WebCast->get_active() )
         {
-            pPage2Frame4->Show();
-            pPage2_Title_WebCast->Show();
-            pPage2_ASP->Show();
-            pPage2_PERL->Show();
-            pPage2_URL_txt->Show();
-            pPage2_URL->Show();
-            pPage2_CGI_txt->Show();
-            pPage2_CGI->Show();
-            pPage2_Index_txt->Show();
-            pPage2_Index->Show();
+            m_xPage2Frame4->show();
+            m_xPage2_Title_WebCast->show();
+            m_xPage2_ASP->show();
+            m_xPage2_PERL->show();
+            m_xPage2_URL_txt->show();
+            m_xPage2_URL->show();
+            m_xPage2_CGI_txt->show();
+            m_xPage2_CGI->show();
+            m_xPage2_Index_txt->show();
+            m_xPage2_Index->show();
 
-            bool bPerl = pPage2_PERL->IsChecked();
-            pPage2_Index->Enable(bPerl);
-            pPage2_Index_txt->Enable(bPerl);
-            pPage2_URL_txt->Enable(bPerl);
-            pPage2_URL->Enable(bPerl);
-            pPage2_CGI_txt->Enable(bPerl);
-            pPage2_CGI->Enable(bPerl);
+            bool bPerl = m_xPage2_PERL->get_active();
+            m_xPage2_Index->set_sensitive(bPerl);
+            m_xPage2_Index_txt->set_sensitive(bPerl);
+            m_xPage2_URL_txt->set_sensitive(bPerl);
+            m_xPage2_URL->set_sensitive(bPerl);
+            m_xPage2_CGI_txt->set_sensitive(bPerl);
+            m_xPage2_CGI->set_sensitive(bPerl);
         }
         else
         {
-            pPage2Frame4->Hide();
-            pPage2_Title_WebCast->Hide();
-            pPage2_ASP->Hide();
-            pPage2_PERL->Hide();
-            pPage2_URL_txt->Hide();
-            pPage2_URL->Hide();
-            pPage2_CGI_txt->Hide();
-            pPage2_CGI->Hide();
-            pPage2_Index->Hide();
-            pPage2_Index_txt->Hide();
+            m_xPage2Frame4->hide();
+            m_xPage2_Title_WebCast->hide();
+            m_xPage2_ASP->hide();
+            m_xPage2_PERL->hide();
+            m_xPage2_URL_txt->hide();
+            m_xPage2_URL->hide();
+            m_xPage2_CGI_txt->hide();
+            m_xPage2_CGI->hide();
+            m_xPage2_Index->hide();
+            m_xPage2_Index_txt->hide();
         }
 
-        if( pPage2_Kiosk->IsChecked() )
+        if( m_xPage2_Kiosk->get_active() )
         {
-            pPage2Frame3->Show();
-            pPage2_Title_Kiosk->Show();
-            pPage2_ChgDefault->Show();
-            pPage2_ChgAuto->Show();
-            pPage2_Duration_txt->Show();
-            pPage2_Duration->Show();
-            pPage2_Endless->Show();
-            bool bAuto = pPage2_ChgAuto->IsChecked();
-            pPage2_Duration->Enable(bAuto);
-            pPage2_Endless->Enable(bAuto);
+            m_xPage2Frame3->show();
+            m_xPage2_Title_Kiosk->show();
+            m_xPage2_ChgDefault->show();
+            m_xPage2_ChgAuto->show();
+            m_xPage2_Duration_txt->show();
+            m_xPage2_Duration->show();
+            m_xPage2_Endless->show();
+            bool bAuto = m_xPage2_ChgAuto->get_active();
+            m_xPage2_Duration->set_sensitive(bAuto);
+            m_xPage2_Endless->set_sensitive(bAuto);
         }
         else
         {
-            pPage2Frame3->Hide();
-            pPage2_Title_Kiosk->Hide();
-            pPage2_ChgDefault->Hide();
-            pPage2_ChgAuto->Hide();
-            pPage2_Duration->Hide();
-            pPage2_Duration_txt->Hide();
-            pPage2_Endless->Hide();
+            m_xPage2Frame3->hide();
+            m_xPage2_Title_Kiosk->hide();
+            m_xPage2_ChgDefault->hide();
+            m_xPage2_ChgAuto->hide();
+            m_xPage2_Duration->hide();
+            m_xPage2_Duration_txt->hide();
+            m_xPage2_Endless->hide();
         }
 
-        if( pPage2_Standard->IsChecked() || pPage2_Frames->IsChecked() )
+        if( m_xPage2_Standard->get_active() || m_xPage2_Frames->get_active() )
         {
-            pPage2Frame2->Show();
-            pPage2_Title_Html->Show();
-            pPage2_Content->Show();
+            m_xPage2Frame2->show();
+            m_xPage2_Title_Html->show();
+            m_xPage2_Content->show();
             if(m_bImpress)
-                pPage2_Notes->Show();
+                m_xPage2_Notes->show();
         }
         else
         {
-            pPage2Frame2->Hide();
-            pPage2_Title_Html->Hide();
-            pPage2_Content->Hide();
+            m_xPage2Frame2->hide();
+            m_xPage2_Title_Html->hide();
+            m_xPage2_Content->hide();
             if(m_bImpress)
-                pPage2_Notes->Hide();
+                m_xPage2_Notes->hide();
         }
         break;
     case 3:
-        if( pPage2_Kiosk->IsChecked() || pPage2_WebCast->IsChecked() )
-            pNextPageButton->Disable();
+        if( m_xPage2_Kiosk->get_active() || m_xPage2_WebCast->get_active() )
+            m_xNextPageButton->set_sensitive(false);
 
-        if( pPage2_WebCast->IsChecked() )
-            pPage3_SldSound->Disable();
+        if( m_xPage2_WebCast->get_active() )
+            m_xPage3_SldSound->set_sensitive(false);
 
-        pPage3_Quality->Enable(pPage3_Jpg->IsChecked());
+        m_xPage3_Quality->set_sensitive(m_xPage3_Jpg->get_active());
 
         break;
     case 5:
@@ -1303,7 +1204,7 @@ void SdPublishingDlg::UpdatePage()
  */
 void SdPublishingDlg::LoadPreviewButtons()
 {
-    if (!mpButtonSet)
+    if (!m_xButtonSet)
         return;
 
     const int nButtonCount = 8;
@@ -1323,26 +1224,26 @@ void SdPublishingDlg::LoadPreviewButtons()
     for(const char * p : pButtonNames)
         aButtonNames.push_back( OUString::createFromAscii( p ) );
 
-    int nSetCount = mpButtonSet->getCount();
+    int nSetCount = m_xButtonSet->getCount();
 
     int nHeight = 32;
     Image aImage;
     for( int nSet = 0; nSet < nSetCount; ++nSet )
     {
-        if( mpButtonSet->getPreview( nSet, aButtonNames, aImage ) )
+        if( m_xButtonSet->getPreview( nSet, aButtonNames, aImage ) )
         {
-            pPage5_Buttons->InsertItem( static_cast<sal_uInt16>(nSet)+1, aImage );
+            m_xPage5_Buttons->InsertItem( static_cast<sal_uInt16>(nSet)+1, aImage );
             if( nHeight < aImage.GetSizePixel().Height() )
                 nHeight = aImage.GetSizePixel().Height();
         }
     }
 
-    pPage5_Buttons->SetItemHeight( nHeight );
+    m_xPage5_Buttons->SetItemHeight( nHeight );
     m_bButtonsDirty = false;
 }
 
 // Clickhandler for the Forward Button
-IMPL_LINK_NOARG(SdPublishingDlg, NextPageHdl, Button*, void)
+IMPL_LINK_NOARG(SdPublishingDlg, NextPageHdl, weld::Button&, void)
 {
     aAssistentFunc.NextPage();
     ChangePage();
@@ -1354,76 +1255,76 @@ void SdPublishingDlg::SetDesign( SdPublishingDesign const * pDesign )
     if(!pDesign)
         return;
 
-    pPage2_Standard->Check(pDesign->m_eMode == PUBLISH_HTML);
-    pPage2_Frames->Check(pDesign->m_eMode == PUBLISH_FRAMES);
-    pPage2_Kiosk->Check(pDesign->m_eMode == PUBLISH_KIOSK );
-    pPage2_WebCast->Check(pDesign->m_eMode == PUBLISH_WEBCAST );
+    m_xPage2_Standard->set_sensitive(pDesign->m_eMode == PUBLISH_HTML);
+    m_xPage2_Frames->set_sensitive(pDesign->m_eMode == PUBLISH_FRAMES);
+    m_xPage2_Kiosk->set_sensitive(pDesign->m_eMode == PUBLISH_KIOSK );
+    m_xPage2_WebCast->set_sensitive(pDesign->m_eMode == PUBLISH_WEBCAST );
 
-    pPage2_Content->Check(pDesign->m_bContentPage);
+    m_xPage2_Content->set_sensitive(pDesign->m_bContentPage);
     if(pDesign->m_bContentPage)
         aAssistentFunc.EnablePage(4);
     else
         aAssistentFunc.DisablePage(4);
 
     if(m_bImpress)
-        pPage2_Notes->Check(pDesign->m_bNotes);
+        m_xPage2_Notes->set_sensitive(pDesign->m_bNotes);
 
-    pPage2_ASP->Check(pDesign->m_eScript == SCRIPT_ASP);
-    pPage2_PERL->Check(pDesign->m_eScript == SCRIPT_PERL);
-    pPage2_CGI->SetText(pDesign->m_aCGI);
-    pPage2_URL->SetText(pDesign->m_aURL);
+    m_xPage2_ASP->set_sensitive(pDesign->m_eScript == SCRIPT_ASP);
+    m_xPage2_PERL->set_sensitive(pDesign->m_eScript == SCRIPT_PERL);
+    m_xPage2_CGI->set_text(pDesign->m_aCGI);
+    m_xPage2_URL->set_text(pDesign->m_aURL);
 
-    pPage2_ChgDefault->Check( !pDesign->m_bAutoSlide );
-    pPage2_ChgAuto->Check( pDesign->m_bAutoSlide );
+    m_xPage2_ChgDefault->set_sensitive( !pDesign->m_bAutoSlide );
+    m_xPage2_ChgAuto->set_sensitive( pDesign->m_bAutoSlide );
 
     tools::Time aTime( tools::Time::EMPTY );
     aTime.MakeTimeFromMS( pDesign->m_nSlideDuration * 1000 );
-    pPage2_Duration->SetTime( aTime );
+    m_xPage2_Duration->set_value(aTime);
 
-    pPage2_Endless->Check( pDesign->m_bEndless );
+    m_xPage2_Endless->set_sensitive( pDesign->m_bEndless );
 
-    pPage3_Png->Check(pDesign->m_eFormat == FORMAT_PNG);
-    pPage3_Gif->Check(pDesign->m_eFormat == FORMAT_GIF);
-    pPage3_Jpg->Check(pDesign->m_eFormat == FORMAT_JPG);
-    pPage3_Quality->Enable(pDesign->m_eFormat == FORMAT_JPG);
+    m_xPage3_Png->set_sensitive(pDesign->m_eFormat == FORMAT_PNG);
+    m_xPage3_Gif->set_sensitive(pDesign->m_eFormat == FORMAT_GIF);
+    m_xPage3_Jpg->set_sensitive(pDesign->m_eFormat == FORMAT_JPG);
+    m_xPage3_Quality->set_sensitive(pDesign->m_eFormat == FORMAT_JPG);
 
-    pPage3_Quality->SetText(pDesign->m_aCompression);
-    pPage3_Resolution_1->Check(pDesign->m_nResolution == PUB_LOWRES_WIDTH);
-    pPage3_Resolution_2->Check(pDesign->m_nResolution == PUB_MEDRES_WIDTH);
-    pPage3_Resolution_3->Check(pDesign->m_nResolution == PUB_HIGHRES_WIDTH);
+    m_xPage3_Quality->set_entry_text(pDesign->m_aCompression);
+    m_xPage3_Resolution_1->set_sensitive(pDesign->m_nResolution == PUB_LOWRES_WIDTH);
+    m_xPage3_Resolution_2->set_sensitive(pDesign->m_nResolution == PUB_MEDRES_WIDTH);
+    m_xPage3_Resolution_3->set_sensitive(pDesign->m_nResolution == PUB_HIGHRES_WIDTH);
 
-    pPage3_SldSound->Check( pDesign->m_bSlideSound );
-    pPage3_HiddenSlides->Check( pDesign->m_bHiddenSlides );
+    m_xPage3_SldSound->set_sensitive( pDesign->m_bSlideSound );
+    m_xPage3_HiddenSlides->set_sensitive( pDesign->m_bHiddenSlides );
 
-    pPage4_Author->SetText(pDesign->m_aAuthor);
-    pPage4_Email->SetText(pDesign->m_aEMail);
-    pPage4_WWW->SetText(pDesign->m_aWWW);
-    pPage4_Misc->SetText(pDesign->m_aMisc);
+    m_xPage4_Author->set_text(pDesign->m_aAuthor);
+    m_xPage4_Email->set_text(pDesign->m_aEMail);
+    m_xPage4_WWW->set_text(pDesign->m_aWWW);
+    m_xPage4_Misc->set_text(pDesign->m_aMisc);
     if(m_bImpress)
-        pPage4_Download->Check(pDesign->m_bDownload);
+        m_xPage4_Download->set_sensitive(pDesign->m_bDownload);
 
-    pPage5_TextOnly->Check(pDesign->m_nButtonThema == -1);
+    m_xPage5_TextOnly->set_sensitive(pDesign->m_nButtonThema == -1);
     if(pDesign->m_nButtonThema != -1)
     {
         if(m_bButtonsDirty)
             LoadPreviewButtons();
-        pPage5_Buttons->SelectItem(pDesign->m_nButtonThema + 1);
+        m_xPage5_Buttons->SelectItem(pDesign->m_nButtonThema + 1);
     }
     else
-        pPage5_Buttons->SetNoSelection();
+        m_xPage5_Buttons->SetNoSelection();
 
-    pPage6_User->Check(pDesign->m_bUserAttr);
+    m_xPage6_User->set_sensitive(pDesign->m_bUserAttr);
     m_aBackColor = pDesign->m_aBackColor;
     m_aTextColor = pDesign->m_aTextColor;
     m_aLinkColor = pDesign->m_aLinkColor;
     m_aVLinkColor = pDesign->m_aVLinkColor;
     m_aALinkColor  = pDesign->m_aALinkColor;
 
-    pPage6_DocColors->Check(pDesign->m_bUseColor);
+    m_xPage6_DocColors->set_sensitive(pDesign->m_bUseColor);
 
-    pPage6_Preview->SetColors( m_aBackColor, m_aTextColor, m_aLinkColor,
+    m_xPage6_Preview->SetColors( m_aBackColor, m_aTextColor, m_aLinkColor,
                                m_aVLinkColor, m_aALinkColor );
-    pPage6_Preview->Invalidate();
+    m_xPage6_Preview->Invalidate();
 
     UpdatePage();
 }
@@ -1434,60 +1335,60 @@ void SdPublishingDlg::GetDesign( SdPublishingDesign* pDesign )
     if(!pDesign)
         return;
 
-    pDesign->m_eMode =  pPage2_Standard->IsChecked()?PUBLISH_HTML:
-                        pPage2_Frames->IsChecked()?PUBLISH_FRAMES:
-                        pPage2_Kiosk->IsChecked()?PUBLISH_KIOSK:
+    pDesign->m_eMode =  m_xPage2_Standard->get_active()?PUBLISH_HTML:
+                        m_xPage2_Frames->get_active()?PUBLISH_FRAMES:
+                        m_xPage2_Kiosk->get_active()?PUBLISH_KIOSK:
                         PUBLISH_WEBCAST;
 
-    pDesign->m_bContentPage = pPage2_Content->IsChecked();
+    pDesign->m_bContentPage = m_xPage2_Content->get_active();
     if(m_bImpress)
-        pDesign->m_bNotes = pPage2_Notes->IsChecked();
+        pDesign->m_bNotes = m_xPage2_Notes->get_active();
 
-    if( pPage3_Gif->IsChecked() )
+    if( m_xPage3_Gif->get_active() )
         pDesign->m_eFormat = FORMAT_GIF;
-    else if( pPage3_Jpg->IsChecked() )
+    else if( m_xPage3_Jpg->get_active() )
         pDesign->m_eFormat = FORMAT_JPG;
     else
         pDesign->m_eFormat = FORMAT_PNG;
 
-    pDesign->m_aCompression = pPage3_Quality->GetText();
+    pDesign->m_aCompression = m_xPage3_Quality->get_active_text();
 
-    pDesign->m_nResolution = pPage3_Resolution_1->IsChecked()?PUB_LOWRES_WIDTH:
-                            (pPage3_Resolution_2->IsChecked()?PUB_MEDRES_WIDTH:PUB_HIGHRES_WIDTH);
+    pDesign->m_nResolution = m_xPage3_Resolution_1->get_active()?PUB_LOWRES_WIDTH:
+                            (m_xPage3_Resolution_2->get_active()?PUB_MEDRES_WIDTH:PUB_HIGHRES_WIDTH);
 
-    pDesign->m_bSlideSound = pPage3_SldSound->IsChecked();
-    pDesign->m_bHiddenSlides = pPage3_HiddenSlides->IsChecked();
+    pDesign->m_bSlideSound = m_xPage3_SldSound->get_active();
+    pDesign->m_bHiddenSlides = m_xPage3_HiddenSlides->get_active();
 
-    pDesign->m_aAuthor = pPage4_Author->GetText();
-    pDesign->m_aEMail = pPage4_Email->GetText();
-    pDesign->m_aWWW = pPage4_WWW->GetText();
-    pDesign->m_aMisc = pPage4_Misc->GetText();
-    pDesign->m_bDownload = m_bImpress && pPage4_Download->IsChecked();
+    pDesign->m_aAuthor = m_xPage4_Author->get_text();
+    pDesign->m_aEMail = m_xPage4_Email->get_text();
+    pDesign->m_aWWW = m_xPage4_WWW->get_text();
+    pDesign->m_aMisc = m_xPage4_Misc->get_text();
+    pDesign->m_bDownload = m_bImpress && m_xPage4_Download->get_active();
 
-    if(pPage5_TextOnly->IsChecked())
+    if(m_xPage5_TextOnly->get_active())
         pDesign->m_nButtonThema = -1;
     else
-        pDesign->m_nButtonThema = pPage5_Buttons->GetSelectedItemId() - 1;
+        pDesign->m_nButtonThema = m_xPage5_Buttons->GetSelectedItemId() - 1;
 
-    pDesign->m_bUserAttr = pPage6_User->IsChecked();
+    pDesign->m_bUserAttr = m_xPage6_User->get_active();
     pDesign->m_aBackColor = m_aBackColor;
     pDesign->m_aTextColor = m_aTextColor;
     pDesign->m_aLinkColor = m_aLinkColor;
     pDesign->m_aVLinkColor = m_aVLinkColor;
     pDesign->m_aALinkColor  = m_aALinkColor;
-    pDesign->m_bUseColor   = pPage6_DocColors->IsChecked();
+    pDesign->m_bUseColor   = m_xPage6_DocColors->get_active();
 
-    pDesign->m_eScript = pPage2_ASP->IsChecked()?SCRIPT_ASP:SCRIPT_PERL;
-    pDesign->m_aCGI = pPage2_CGI->GetText();
-    pDesign->m_aURL = pPage2_URL->GetText();
+    pDesign->m_eScript = m_xPage2_ASP->get_active()?SCRIPT_ASP:SCRIPT_PERL;
+    pDesign->m_aCGI = m_xPage2_CGI->get_text();
+    pDesign->m_aURL = m_xPage2_URL->get_text();
 
-    pDesign->m_bAutoSlide = pPage2_ChgAuto->IsChecked();
-    pDesign->m_nSlideDuration = static_cast<sal_uInt32>(pPage2_Duration->GetTime().GetMSFromTime()) / 1000;
-    pDesign->m_bEndless = pPage2_Endless->IsChecked();
+    pDesign->m_bAutoSlide = m_xPage2_ChgAuto->get_active();
+    pDesign->m_nSlideDuration = static_cast<sal_uInt32>(m_xPage2_Duration->get_value().GetMSFromTime()) / 1000;
+    pDesign->m_bEndless = m_xPage2_Endless->get_active();
 }
 
 // Clickhandler for the back Button
-IMPL_LINK_NOARG(SdPublishingDlg, LastPageHdl, Button*, void)
+IMPL_LINK_NOARG(SdPublishingDlg, LastPageHdl, weld::Button&, void)
 {
     aAssistentFunc.PreviousPage();
     ChangePage();
@@ -1571,33 +1472,6 @@ bool SdPublishingDlg::Save()
     aMedium.Commit();
 
     return( aMedium.GetError() == ERRCODE_NONE );
-}
-
-std::vector<OString> SdPublishingDlg::getAllPageUIXMLDescriptions() const
-{
-    // this dialog has a hard number of pages
-    std::vector<OString> aRetval;
-
-    for (sal_uInt32 a(0); a < 6; a++)
-    {
-        aRetval.push_back(OString::number(a));
-    }
-
-    return aRetval;
-}
-
-bool SdPublishingDlg::selectPageByUIXMLDescription(const OString& rUIXMLDescription)
-{
-    // rUIXMLDescription contains one of the values above, make use of it
-    const sal_uInt32 nPage(rUIXMLDescription.toUInt32());
-
-    if (nPage < 6)
-    {
-        aAssistentFunc.GotoPage(nPage + 1);
-        return true;
-    }
-
-    return false;
 }
 
 // SdDesignNameDlg Methods

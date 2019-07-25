@@ -160,7 +160,7 @@ sal_Int16 SdHtmlOptionsDialog::execute()
     sal_Int16 nRet = ExecutableDialogResults::CANCEL;
 
     SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-    ScopedVclPtr<AbstractSdPublishingDlg> pDlg(pFact->CreateSdPublishingDlg( Application::GetDefDialogParent(), meDocType ));
+    ScopedVclPtr<AbstractSdPublishingDlg> pDlg(pFact->CreateSdPublishingDlg(nullptr /*TODO*/, meDocType));
     if( pDlg->Execute() )
     {
         pDlg->GetParameterSequence( maFilterDataSequence );

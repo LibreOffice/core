@@ -23,12 +23,9 @@
 #include <vcl/decoview.hxx>
 #include <vcl/builderfactory.hxx>
 
-SdHtmlAttrPreview::SdHtmlAttrPreview(vcl::Window* pParent, WinBits nStyle)
-    : Control(pParent, nStyle)
+SdHtmlAttrPreview::SdHtmlAttrPreview()
 {
 }
-
-VCL_BUILDER_FACTORY_CONSTRUCTOR(SdHtmlAttrPreview, 0)
 
 SdHtmlAttrPreview::~SdHtmlAttrPreview()
 {
@@ -39,7 +36,7 @@ void SdHtmlAttrPreview::Paint(vcl::RenderContext& rRenderContext, const ::tools:
     DecorationView aDecoView(&rRenderContext);
 
     ::tools::Rectangle aTextRect;
-    aTextRect.SetSize(GetOutputSize());
+    aTextRect.SetSize(GetOutputSizePixel());
 
     rRenderContext.SetLineColor(m_aBackColor);
     rRenderContext.SetFillColor(m_aBackColor);

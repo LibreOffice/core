@@ -136,7 +136,10 @@ short AbstractSdVectorizeDlg_Impl::Execute()
     return m_xDlg->run();
 }
 
-IMPL_ABSTDLG_BASE(AbstractSdPublishingDlg_Impl);
+short AbstractSdPublishingDlg_Impl::Execute()
+{
+    return m_xDlg->run();
+}
 
 short AbstractHeaderFooterDialog_Impl::Execute()
 {
@@ -386,7 +389,7 @@ const GDIMetaFile& AbstractSdVectorizeDlg_Impl::GetGDIMetaFile() const
 
 void AbstractSdPublishingDlg_Impl::GetParameterSequence( css::uno::Sequence< css::beans::PropertyValue >& rParams )
 {
-    pDlg->GetParameterSequence( rParams );
+    m_xDlg->GetParameterSequence( rParams );
 }
 
 //-------------- SdAbstractDialogFactory implementation--------------
@@ -499,9 +502,9 @@ VclPtr<AbstractSdVectorizeDlg>  SdAbstractDialogFactory_Impl::CreateSdVectorizeD
     return VclPtr<AbstractSdVectorizeDlg_Impl>::Create(std::make_unique<SdVectorizeDlg>(pParent, rBmp, pDocShell));
 }
 
-VclPtr<AbstractSdPublishingDlg>  SdAbstractDialogFactory_Impl::CreateSdPublishingDlg( vcl::Window* pParent, DocumentType eDocType)
+VclPtr<AbstractSdPublishingDlg>  SdAbstractDialogFactory_Impl::CreateSdPublishingDlg(weld::Window* pParent, DocumentType eDocType)
 {
-    return VclPtr<AbstractSdPublishingDlg_Impl>::Create( VclPtr<SdPublishingDlg>::Create( pParent, eDocType ) );
+    return VclPtr<AbstractSdPublishingDlg_Impl>::Create(std::make_unique<SdPublishingDlg>(pParent, eDocType));
 }
 
 // Factories for TabPages

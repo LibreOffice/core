@@ -272,8 +272,9 @@ VclPtr<VclAbstractDialog> SdDialogsTest::createDialogByID(sal_uInt32 nID)
             // it is more a 'wizard' in that it has prev/next buttons and implicitly
             // multiple pages. To make use of that it is necessary that the implementation
             // supports the 'Screenshot interface'
+            auto const parent = Application::GetDefDialogParent();
             pRetval = getSdAbstractDialogFactory()->CreateSdPublishingDlg(
-                Application::GetDefDialogParent(),
+                parent == nullptr ? nullptr : parent->GetFrameWeld(),
                 DocumentType::Impress);
             break;
         }

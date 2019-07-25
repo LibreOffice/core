@@ -120,9 +120,6 @@
     <glade-widget-class title="Mark Preview" name="swuilo-SwMarkPreview"
                         generic-name="Mark Preview Window" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>
-    <glade-widget-class title="Html Attribute Preview" name="sduilo-SdHtmlAttrPreview"
-                        generic-name="Html Attribute Preview" parent="GtkDrawingArea"
-                        icon-name="widget-gtk-drawingarea"/>
     <glade-widget-class title="Document Preview Window" name="sdlo-SdDocPreviewWin"
                         generic-name="Document Preview Window" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>
