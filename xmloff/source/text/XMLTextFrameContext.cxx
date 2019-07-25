@@ -1670,6 +1670,15 @@ SvXMLImportContextRef XMLTextFrameContext::CreateChildContext(
         }
         xContext = m_xImplContext->CreateChildContext(p_nPrefix, rLocalName, xAttrList);
     }
+    else if (p_nPrefix == XML_NAMESPACE_LO_EXT && (IsXMLToken(rLocalName, XML_QRCODE)))
+    {
+        if (getSupportsMultipleContents())
+        {   // tdf#103567 ensure props are set on surviving shape
+            // note: no more draw:image can be added once we get here
+            m_xImplContext = solveMultipleImages();
+        }
+        xContext = m_xImplContext->CreateChildContext(p_nPrefix, rLocalName, xAttrList);
+    }
     else
     {
         // the child is a drawing shape
