@@ -117,10 +117,6 @@ public:
     virtual void SetRedlinePassword(
         /*[in]*/const css::uno::Sequence <sal_Int8>& rNewPassword) override;
 
-    virtual bool IsFinalizeImport() const override;
-
-    virtual void SetFinalizeImport(bool const bFinalizeImport) override;
-
     //Non Interface methods;
 
     /** Set comment-text for Redline. It then comes in via AppendRedLine.
@@ -131,7 +127,6 @@ public:
     bool IsHideRedlines() const { return m_bHideRedlines; }
     void SetHideRedlines(bool const bHideRedlines) { m_bHideRedlines = bHideRedlines; }
 
-    void FinalizeImport();
     virtual ~DocumentRedlineManager() override;
 
 private:
@@ -153,8 +148,6 @@ private:
     /// this flag is necessary for file import because the ViewShell/layout is
     /// created "too late" and the ShowRedlineChanges item is not below "Views"
     bool m_bHideRedlines = false;
-    /// need post-processing, eg. for OOXML import
-    bool m_bFinalizeImport = false;
 };
 
 }

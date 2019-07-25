@@ -1308,10 +1308,6 @@ void makeRedline( SwPaM const & rPaM,
             else if (eType == RedlineType::ParagraphFormat)
                 xRedlineExtraData.reset(new SwRedlineExtraData_FormatColl( "", RES_POOLCOLL_STANDARD, nullptr ));
         }
-
-        // to finalize DOCX import
-        if ( eType == RedlineType::Delete && !pRedlineAccess->IsFinalizeImport() )
-            pRedlineAccess->SetFinalizeImport( true );
     }
 
     SwRangeRedline* pRedline = new SwRangeRedline( aRedlineData, rPaM );

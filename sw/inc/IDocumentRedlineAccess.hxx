@@ -229,10 +229,6 @@ public:
     virtual void SetRedlinePassword(
         /*[in]*/const css::uno::Sequence <sal_Int8>& rNewPassword) = 0;
 
-    virtual bool IsFinalizeImport() const = 0;
-
-    virtual void SetFinalizeImport(bool const bFinalizeImport) = 0;
-
 protected:
      virtual ~IDocumentRedlineAccess() {};
 };
