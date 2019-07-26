@@ -18,6 +18,8 @@
 
 package ifc.frame;
 
+import lib.Status;
+import lib.StatusException;
 import lib.MultiMethodTest;
 
 import com.sun.star.frame.XController;
@@ -153,7 +155,12 @@ public class _XController extends MultiMethodTest {
             log.println("as expected, see #82938");
         }
         tRes.tested("attachModel()", result);
-        oObj.attachModel(firstModel);
+        boolean bSuccess = oObj.attachModel(firstModel);
+        if (!bSuccess)
+        {
+            throw new StatusException (Status.failed (
+            "Couldn't attach model"));
+        }
     }
 
     /**
