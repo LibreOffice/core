@@ -34,108 +34,61 @@ static bool     bOutputForPrinter = true;
 
 #define DPI_COUNT SAL_N_ELEMENTS(aDPIArray)
 
-SfxCommonPrintOptionsTabPage::SfxCommonPrintOptionsTabPage( vcl::Window* pParent, const SfxItemSet& rSet )
-    : SfxTabPage(pParent, "OptPrintPage", "sfx/ui/optprintpage.ui", &rSet)
+SfxCommonPrintOptionsTabPage::SfxCommonPrintOptionsTabPage(TabPageParent pParent, const SfxItemSet& rSet)
+    : SfxTabPage(pParent, "sfx/ui/optprintpage.ui", "OptPrintPage", &rSet)
+    , m_xPrinterOutputRB(m_xBuilder->weld_radio_button("printer"))
+    , m_xPrintFileOutputRB(m_xBuilder->weld_radio_button("file"))
+    , m_xReduceTransparencyCB(m_xBuilder->weld_check_button("reducetrans"))
+    , m_xReduceTransparencyAutoRB(m_xBuilder->weld_radio_button("reducetransauto"))
+    , m_xReduceTransparencyNoneRB(m_xBuilder->weld_radio_button("reducetransnone"))
+    , m_xReduceGradientsCB(m_xBuilder->weld_check_button("reducegrad"))
+    , m_xReduceGradientsStripesRB(m_xBuilder->weld_radio_button("reducegradstripes"))
+    , m_xReduceGradientsColorRB(m_xBuilder->weld_radio_button("reducegradcolor"))
+    , m_xReduceGradientsStepCountNF(m_xBuilder->weld_spin_button("reducegradstep"))
+    , m_xReduceBitmapsCB(m_xBuilder->weld_check_button("reducebitmap"))
+    , m_xReduceBitmapsOptimalRB(m_xBuilder->weld_radio_button("reducebitmapoptimal"))
+    , m_xReduceBitmapsNormalRB(m_xBuilder->weld_radio_button("reducebitmapnormal"))
+    , m_xReduceBitmapsResolutionRB(m_xBuilder->weld_radio_button("reducebitmapresol"))
+    , m_xReduceBitmapsResolutionLB(m_xBuilder->weld_combo_box("reducebitmapdpi"))
+    , m_xReduceBitmapsTransparencyCB(m_xBuilder->weld_check_button("reducebitmaptrans"))
+    , m_xConvertToGreyscalesCB(m_xBuilder->weld_check_button("converttogray"))
+    , m_xPDFCB(m_xBuilder->weld_check_button("pdf"))
+    , m_xPaperSizeCB(m_xBuilder->weld_check_button("papersize"))
+    , m_xPaperOrientationCB(m_xBuilder->weld_check_button("paperorient"))
+    , m_xTransparencyCB(m_xBuilder->weld_check_button("trans"))
 {
-    get(m_pPrinterOutputRB, "printer");
-    get(m_pPrintFileOutputRB, "file");
-    get(m_pReduceTransparencyCB, "reducetrans");
-    get(m_pReduceTransparencyAutoRB, "reducetransauto");
-    get(m_pReduceTransparencyNoneRB, "reducetransnone");
-    get(m_pReduceGradientsCB, "reducegrad");
-    get(m_pReduceGradientsStripesRB, "reducegradstripes");
-    get(m_pReduceGradientsColorRB, "reducegradcolor");
-    get(m_pReduceGradientsStepCountNF, "reducegradstep");
-    get(m_pReduceBitmapsCB, "reducebitmap");
-    get(m_pReduceBitmapsOptimalRB, "reducebitmapoptimal");
-    get(m_pReduceBitmapsNormalRB, "reducebitmapnormal");
-    get(m_pReduceBitmapsResolutionRB, "reducebitmapresol");
-    get(m_pReduceBitmapsResolutionLB, "reducebitmapdpi");
-    get(m_pReduceBitmapsTransparencyCB, "reducebitmaptrans");
-    get(m_pConvertToGreyscalesCB, "converttogray");
-    get(m_pPDFCB, "pdf");
-    get(m_pPaperSizeCB, "papersize");
-    get(m_pPaperOrientationCB, "paperorient");
-    get(m_pTransparencyCB, "trans");
-
 #ifndef ENABLE_CUPS
-    m_pPDFCB->Hide();
+    m_xPDFCB->hide();
 #endif
 
     if( bOutputForPrinter )
     {
-        m_pPrinterOutputRB->Check();
+        m_xPrinterOutputRB->set_active(true);
     }
     else
     {
-        m_pPrintFileOutputRB->Check();
-        m_pPDFCB->Disable();
+        m_xPrintFileOutputRB->set_active(true);
+        m_xPDFCB->set_sensitive(false);
     }
 
-    m_pPrinterOutputRB->SetToggleHdl( LINK( this, SfxCommonPrintOptionsTabPage, ToggleOutputPrinterRBHdl ) );
-    m_pPrintFileOutputRB->SetToggleHdl( LINK( this, SfxCommonPrintOptionsTabPage, ToggleOutputPrintFileRBHdl ) );
+    m_xPrinterOutputRB->connect_toggled( LINK( this, SfxCommonPrintOptionsTabPage, ToggleOutputPrinterRBHdl ) );
+    m_xPrintFileOutputRB->connect_toggled( LINK( this, SfxCommonPrintOptionsTabPage, ToggleOutputPrintFileRBHdl ) );
 
-    m_pReduceTransparencyCB->SetClickHdl( LINK( this, SfxCommonPrintOptionsTabPage, ClickReduceTransparencyCBHdl ) );
-    m_pReduceGradientsCB->SetClickHdl( LINK( this, SfxCommonPrintOptionsTabPage, ClickReduceGradientsCBHdl ) );
-    m_pReduceBitmapsCB->SetClickHdl( LINK( this, SfxCommonPrintOptionsTabPage, ClickReduceBitmapsCBHdl ) );
+    m_xReduceTransparencyCB->connect_clicked( LINK( this, SfxCommonPrintOptionsTabPage, ClickReduceTransparencyCBHdl ) );
+    m_xReduceGradientsCB->connect_clicked( LINK( this, SfxCommonPrintOptionsTabPage, ClickReduceGradientsCBHdl ) );
+    m_xReduceBitmapsCB->connect_clicked( LINK( this, SfxCommonPrintOptionsTabPage, ClickReduceBitmapsCBHdl ) );
 
-    m_pReduceGradientsStripesRB->SetToggleHdl( LINK( this, SfxCommonPrintOptionsTabPage, ToggleReduceGradientsStripesRBHdl ) );
-    m_pReduceBitmapsResolutionRB->SetToggleHdl( LINK( this, SfxCommonPrintOptionsTabPage, ToggleReduceBitmapsResolutionRBHdl ) );
+    m_xReduceGradientsStripesRB->connect_toggled( LINK( this, SfxCommonPrintOptionsTabPage, ToggleReduceGradientsStripesRBHdl ) );
+    m_xReduceBitmapsResolutionRB->connect_toggled( LINK( this, SfxCommonPrintOptionsTabPage, ToggleReduceBitmapsResolutionRBHdl ) );
 }
 
 SfxCommonPrintOptionsTabPage::~SfxCommonPrintOptionsTabPage()
 {
-    disposeOnce();
-}
-
-void SfxCommonPrintOptionsTabPage::dispose()
-{
-    m_pPrinterOutputRB.clear();
-    m_pPrintFileOutputRB.clear();
-    m_pReduceTransparencyCB.clear();
-    m_pReduceTransparencyAutoRB.clear();
-    m_pReduceTransparencyNoneRB.clear();
-    m_pReduceGradientsCB.clear();
-    m_pReduceGradientsStripesRB.clear();
-    m_pReduceGradientsColorRB.clear();
-    m_pReduceGradientsStepCountNF.clear();
-    m_pReduceBitmapsCB.clear();
-    m_pReduceBitmapsOptimalRB.clear();
-    m_pReduceBitmapsNormalRB.clear();
-    m_pReduceBitmapsResolutionRB.clear();
-    m_pReduceBitmapsResolutionLB.clear();
-    m_pReduceBitmapsTransparencyCB.clear();
-    m_pConvertToGreyscalesCB.clear();
-    m_pPDFCB.clear();
-    m_pPaperSizeCB.clear();
-    m_pPaperOrientationCB.clear();
-    m_pTransparencyCB.clear();
-    SfxTabPage::dispose();
 }
 
 VclPtr<SfxTabPage> SfxCommonPrintOptionsTabPage::Create( TabPageParent pParent, const SfxItemSet* rAttrSet )
 {
-    return VclPtr<SfxCommonPrintOptionsTabPage>::Create( pParent.pParent, *rAttrSet );
-}
-
-vcl::Window* SfxCommonPrintOptionsTabPage::GetParentLabeledBy( const vcl::Window* pWindow ) const
-{
-    if ( pWindow == static_cast<vcl::Window *>(m_pReduceGradientsStepCountNF) )
-        return m_pReduceGradientsStripesRB;
-    else if ( pWindow == static_cast<vcl::Window *>(m_pReduceBitmapsResolutionLB) )
-        return m_pReduceBitmapsResolutionRB;
-    else
-        return SfxTabPage::GetParentLabeledBy( pWindow );
-}
-
-vcl::Window* SfxCommonPrintOptionsTabPage::GetParentLabelFor( const vcl::Window* pWindow ) const
-{
-    if ( pWindow == static_cast<vcl::Window *>(m_pReduceGradientsStripesRB) )
-        return m_pReduceGradientsStepCountNF;
-    else if ( pWindow == static_cast<vcl::Window *>(m_pReduceBitmapsResolutionRB) )
-        return m_pReduceBitmapsResolutionLB;
-    else
-        return SfxTabPage::GetParentLabelFor( pWindow );
+    return VclPtr<SfxCommonPrintOptionsTabPage>::Create( pParent, *rAttrSet );
 }
 
 bool SfxCommonPrintOptionsTabPage::FillItemSet( SfxItemSet* /*rSet*/ )
@@ -145,15 +98,14 @@ bool SfxCommonPrintOptionsTabPage::FillItemSet( SfxItemSet* /*rSet*/ )
     SvtPrintFileOptions     aPrintFileOptions;
 
 
-    if( m_pPaperSizeCB->IsValueChangedFromSaved())
-        aWarnOptions.SetPaperSize(m_pPaperSizeCB->IsChecked());
-    if( m_pPaperOrientationCB->IsValueChangedFromSaved() )
-        aWarnOptions.SetPaperOrientation(m_pPaperOrientationCB->IsChecked());
+    if( m_xPaperSizeCB->get_state_changed_from_saved())
+        aWarnOptions.SetPaperSize(m_xPaperSizeCB->get_active());
+    if( m_xPaperOrientationCB->get_state_changed_from_saved() )
+        aWarnOptions.SetPaperOrientation(m_xPaperOrientationCB->get_active());
+    if( m_xTransparencyCB->get_state_changed_from_saved() )
+        aWarnOptions.SetTransparency( m_xTransparencyCB->get_active() );
 
-    if( m_pTransparencyCB->IsValueChangedFromSaved() )
-        aWarnOptions.SetTransparency( m_pTransparencyCB->IsChecked() );
-
-    ImplSaveControls( m_pPrinterOutputRB->IsChecked() ? &maPrinterOptions : &maPrintFileOptions );
+    ImplSaveControls( m_xPrinterOutputRB->get_active() ? &maPrinterOptions : &maPrintFileOptions );
 
     aPrinterOptions.SetPrinterOptions( maPrinterOptions );
     aPrintFileOptions.SetPrinterOptions( maPrintFileOptions );
@@ -167,22 +119,22 @@ void SfxCommonPrintOptionsTabPage::Reset( const SfxItemSet* /*rSet*/ )
     SvtPrinterOptions       aPrinterOptions;
     SvtPrintFileOptions     aPrintFileOptions;
 
-    m_pPaperSizeCB->Check( aWarnOptions.IsPaperSize() );
-    m_pPaperOrientationCB->Check( aWarnOptions.IsPaperOrientation() );
+    m_xPaperSizeCB->set_active( aWarnOptions.IsPaperSize() );
+    m_xPaperOrientationCB->set_active( aWarnOptions.IsPaperOrientation() );
 
-    m_pTransparencyCB->Check( aWarnOptions.IsTransparency() );
+    m_xTransparencyCB->set_active( aWarnOptions.IsTransparency() );
 
-    m_pPaperSizeCB->SaveValue();
-    m_pPaperOrientationCB->SaveValue();
-    m_pTransparencyCB->SaveValue();
+    m_xPaperSizeCB->save_state();
+    m_xPaperOrientationCB->save_state();
+    m_xTransparencyCB->save_state();
 
     aPrinterOptions.GetPrinterOptions( maPrinterOptions );
     aPrintFileOptions.GetPrinterOptions( maPrintFileOptions );
-    if(m_pPrintFileOutputRB->IsChecked()){
-       m_pPrinterOutputRB->Check();
+    if(m_xPrintFileOutputRB->get_active()){
+       m_xPrinterOutputRB->set_active(true);
     }
 
-    ImplUpdateControls( m_pPrinterOutputRB->IsChecked() ? &maPrinterOptions : &maPrintFileOptions );
+    ImplUpdateControls( m_xPrinterOutputRB->get_active() ? &maPrinterOptions : &maPrintFileOptions );
 }
 
 DeactivateRC SfxCommonPrintOptionsTabPage::DeactivatePage( SfxItemSet* pItemSet )
@@ -195,133 +147,131 @@ DeactivateRC SfxCommonPrintOptionsTabPage::DeactivatePage( SfxItemSet* pItemSet 
 
 void SfxCommonPrintOptionsTabPage::ImplUpdateControls( const PrinterOptions* pCurrentOptions )
 {
-    m_pReduceTransparencyCB->Check( pCurrentOptions->IsReduceTransparency() );
+    m_xReduceTransparencyCB->set_active( pCurrentOptions->IsReduceTransparency() );
 
     if( pCurrentOptions->GetReducedTransparencyMode() == PrinterTransparencyMode::Auto )
-        m_pReduceTransparencyAutoRB->Check();
+        m_xReduceTransparencyAutoRB->set_active(true);
     else
-        m_pReduceTransparencyNoneRB->Check( );
+        m_xReduceTransparencyNoneRB->set_active(true);
 
-    m_pReduceGradientsCB->Check( pCurrentOptions->IsReduceGradients() );
+    m_xReduceGradientsCB->set_active( pCurrentOptions->IsReduceGradients() );
 
     if( pCurrentOptions->GetReducedGradientMode() == PrinterGradientMode::Stripes )
-        m_pReduceGradientsStripesRB->Check();
+        m_xReduceGradientsStripesRB->set_active(true);
     else
-        m_pReduceGradientsColorRB->Check();
+        m_xReduceGradientsColorRB->set_active(true);
 
-    m_pReduceGradientsStepCountNF->SetValue( pCurrentOptions->GetReducedGradientStepCount() );
+    m_xReduceGradientsStepCountNF->set_value(pCurrentOptions->GetReducedGradientStepCount());
 
-    m_pReduceBitmapsCB->Check( pCurrentOptions->IsReduceBitmaps() );
+    m_xReduceBitmapsCB->set_active( pCurrentOptions->IsReduceBitmaps() );
 
     if( pCurrentOptions->GetReducedBitmapMode() == PrinterBitmapMode::Optimal )
-        m_pReduceBitmapsOptimalRB->Check();
+        m_xReduceBitmapsOptimalRB->set_active(true);
     else if( pCurrentOptions->GetReducedBitmapMode() == PrinterBitmapMode::Normal )
-        m_pReduceBitmapsNormalRB->Check();
+        m_xReduceBitmapsNormalRB->set_active(true);
     else
-        m_pReduceBitmapsResolutionRB->Check();
+        m_xReduceBitmapsResolutionRB->set_active(true);
 
     const sal_uInt16 nDPI = pCurrentOptions->GetReducedBitmapResolution();
 
     if( nDPI < aDPIArray[ 0 ] )
-        m_pReduceBitmapsResolutionLB->SelectEntryPos( 0 );
+        m_xReduceBitmapsResolutionLB->set_active(0);
     else
     {
-        for( long i = DPI_COUNT - 1; i >= 0; i-- )
+        for( int i = DPI_COUNT - 1; i >= 0; i-- )
         {
             if( nDPI >= aDPIArray[ i ] )
             {
-                m_pReduceBitmapsResolutionLB->SelectEntryPos( static_cast<sal_uInt16>(i) );
+                m_xReduceBitmapsResolutionLB->set_active(i);
                 i = -1;
             }
         }
     }
 
-    m_pReduceBitmapsResolutionLB->SetText( m_pReduceBitmapsResolutionLB->GetSelectedEntry() );
+    m_xReduceBitmapsTransparencyCB->set_active( pCurrentOptions->IsReducedBitmapIncludesTransparency() );
+    m_xConvertToGreyscalesCB->set_active( pCurrentOptions->IsConvertToGreyscales() );
+    m_xPDFCB->set_active( pCurrentOptions->IsPDFAsStandardPrintJobFormat() );
 
-    m_pReduceBitmapsTransparencyCB->Check( pCurrentOptions->IsReducedBitmapIncludesTransparency() );
-    m_pConvertToGreyscalesCB->Check( pCurrentOptions->IsConvertToGreyscales() );
-    m_pPDFCB->Check( pCurrentOptions->IsPDFAsStandardPrintJobFormat() );
-
-    ClickReduceTransparencyCBHdl(m_pReduceTransparencyCB);
-    ClickReduceGradientsCBHdl(m_pReduceGradientsCB);
-    ClickReduceBitmapsCBHdl(m_pReduceBitmapsCB);
+    ClickReduceTransparencyCBHdl(*m_xReduceTransparencyCB);
+    ClickReduceGradientsCBHdl(*m_xReduceGradientsCB);
+    ClickReduceBitmapsCBHdl(*m_xReduceBitmapsCB);
 }
 
 void SfxCommonPrintOptionsTabPage::ImplSaveControls( PrinterOptions* pCurrentOptions )
 {
-    pCurrentOptions->SetReduceTransparency( m_pReduceTransparencyCB->IsChecked() );
-    pCurrentOptions->SetReducedTransparencyMode( m_pReduceTransparencyAutoRB->IsChecked() ? PrinterTransparencyMode::Auto : PrinterTransparencyMode::NONE );
-    pCurrentOptions->SetReduceGradients( m_pReduceGradientsCB->IsChecked() );
-    pCurrentOptions->SetReducedGradientMode( m_pReduceGradientsStripesRB->IsChecked() ? PrinterGradientMode::Stripes : PrinterGradientMode::Color  );
-    pCurrentOptions->SetReducedGradientStepCount( static_cast<sal_uInt16>(m_pReduceGradientsStepCountNF->GetValue()) );
-    pCurrentOptions->SetReduceBitmaps( m_pReduceBitmapsCB->IsChecked() );
-    pCurrentOptions->SetReducedBitmapMode( m_pReduceBitmapsOptimalRB->IsChecked() ? PrinterBitmapMode::Optimal :
-                                           ( m_pReduceBitmapsNormalRB->IsChecked() ? PrinterBitmapMode::Normal : PrinterBitmapMode::Resolution ) );
-    pCurrentOptions->SetReducedBitmapResolution( aDPIArray[ std::min<sal_uInt16>( m_pReduceBitmapsResolutionLB->GetSelectedEntryPos(),
+    pCurrentOptions->SetReduceTransparency( m_xReduceTransparencyCB->get_active() );
+    pCurrentOptions->SetReducedTransparencyMode( m_xReduceTransparencyAutoRB->get_active() ? PrinterTransparencyMode::Auto : PrinterTransparencyMode::NONE );
+    pCurrentOptions->SetReduceGradients( m_xReduceGradientsCB->get_active() );
+    pCurrentOptions->SetReducedGradientMode( m_xReduceGradientsStripesRB->get_active() ? PrinterGradientMode::Stripes : PrinterGradientMode::Color  );
+    pCurrentOptions->SetReducedGradientStepCount(m_xReduceGradientsStepCountNF->get_value());
+    pCurrentOptions->SetReduceBitmaps( m_xReduceBitmapsCB->get_active() );
+    pCurrentOptions->SetReducedBitmapMode( m_xReduceBitmapsOptimalRB->get_active() ? PrinterBitmapMode::Optimal :
+                                           ( m_xReduceBitmapsNormalRB->get_active() ? PrinterBitmapMode::Normal : PrinterBitmapMode::Resolution ) );
+    pCurrentOptions->SetReducedBitmapResolution( aDPIArray[ std::min<sal_uInt16>( m_xReduceBitmapsResolutionLB->get_active(),
                                                                    SAL_N_ELEMENTS(aDPIArray) - 1 ) ] );
-    pCurrentOptions->SetReducedBitmapIncludesTransparency( m_pReduceBitmapsTransparencyCB->IsChecked() );
-    pCurrentOptions->SetConvertToGreyscales( m_pConvertToGreyscalesCB->IsChecked() );
+    pCurrentOptions->SetReducedBitmapIncludesTransparency( m_xReduceBitmapsTransparencyCB->get_active() );
+    pCurrentOptions->SetConvertToGreyscales( m_xConvertToGreyscalesCB->get_active() );
     bool bOrigBackEnd = pCurrentOptions->IsPDFAsStandardPrintJobFormat();
-    if (bOrigBackEnd != m_pPDFCB->IsChecked())
+    if (bOrigBackEnd != m_xPDFCB->get_active())
     {
-        pCurrentOptions->SetPDFAsStandardPrintJobFormat( m_pPDFCB->IsChecked() );
+        pCurrentOptions->SetPDFAsStandardPrintJobFormat( m_xPDFCB->get_active() );
         svtools::executeRestartDialog(
                 comphelper::getProcessComponentContext(), nullptr,
                 svtools::RESTART_REASON_PDF_AS_STANDARD_JOB_FORMAT);
     }
 }
 
-IMPL_LINK_NOARG( SfxCommonPrintOptionsTabPage, ClickReduceTransparencyCBHdl, Button*, void )
+IMPL_LINK_NOARG( SfxCommonPrintOptionsTabPage, ClickReduceTransparencyCBHdl, weld::Button&, void )
 {
-    const bool bReduceTransparency = m_pReduceTransparencyCB->IsChecked();
+    const bool bReduceTransparency = m_xReduceTransparencyCB->get_active();
 
-    m_pReduceTransparencyAutoRB->Enable( bReduceTransparency );
-    m_pReduceTransparencyNoneRB->Enable( bReduceTransparency );
+    m_xReduceTransparencyAutoRB->set_sensitive( bReduceTransparency );
+    m_xReduceTransparencyNoneRB->set_sensitive( bReduceTransparency );
 
-    m_pTransparencyCB->Enable( !bReduceTransparency );
+    m_xTransparencyCB->set_sensitive( !bReduceTransparency );
 }
 
-IMPL_LINK_NOARG( SfxCommonPrintOptionsTabPage, ClickReduceGradientsCBHdl, Button*, void )
+IMPL_LINK_NOARG( SfxCommonPrintOptionsTabPage, ClickReduceGradientsCBHdl, weld::Button&, void )
 {
-    const bool bEnable = m_pReduceGradientsCB->IsChecked();
+    const bool bEnable = m_xReduceGradientsCB->get_active();
 
-    m_pReduceGradientsStripesRB->Enable( bEnable );
-    m_pReduceGradientsColorRB->Enable( bEnable );
-    m_pReduceGradientsStepCountNF->Enable( bEnable );
+    m_xReduceGradientsStripesRB->set_sensitive( bEnable );
+    m_xReduceGradientsColorRB->set_sensitive( bEnable );
+    m_xReduceGradientsStepCountNF->set_sensitive( bEnable );
 
-    ToggleReduceGradientsStripesRBHdl(*m_pReduceGradientsStripesRB);
+    ToggleReduceGradientsStripesRBHdl(*m_xReduceGradientsStripesRB);
 }
 
-IMPL_LINK_NOARG( SfxCommonPrintOptionsTabPage, ClickReduceBitmapsCBHdl, Button*, void )
+IMPL_LINK_NOARG( SfxCommonPrintOptionsTabPage, ClickReduceBitmapsCBHdl, weld::Button&, void )
 {
-    const bool bEnable = m_pReduceBitmapsCB->IsChecked();
+    const bool bEnable = m_xReduceBitmapsCB->get_active();
 
-    m_pReduceBitmapsOptimalRB->Enable( bEnable );
-    m_pReduceBitmapsNormalRB->Enable( bEnable );
-    m_pReduceBitmapsResolutionRB->Enable( bEnable );
-    m_pReduceBitmapsTransparencyCB->Enable( bEnable );
-    m_pReduceBitmapsResolutionLB->Enable( bEnable );
+    m_xReduceBitmapsOptimalRB->set_sensitive( bEnable );
+    m_xReduceBitmapsNormalRB->set_sensitive( bEnable );
+    m_xReduceBitmapsResolutionRB->set_sensitive( bEnable );
+    m_xReduceBitmapsTransparencyCB->set_sensitive( bEnable );
+    m_xReduceBitmapsResolutionLB->set_sensitive( bEnable );
 
-    ToggleReduceBitmapsResolutionRBHdl(*m_pReduceBitmapsResolutionRB);
+    ToggleReduceBitmapsResolutionRBHdl(*m_xReduceBitmapsResolutionRB);
 }
 
-IMPL_LINK_NOARG( SfxCommonPrintOptionsTabPage, ToggleReduceGradientsStripesRBHdl, RadioButton&, void )
+IMPL_LINK_NOARG( SfxCommonPrintOptionsTabPage, ToggleReduceGradientsStripesRBHdl, weld::ToggleButton&, void )
 {
-    const bool bEnable = m_pReduceGradientsCB->IsChecked() && m_pReduceGradientsStripesRB->IsChecked();
+    const bool bEnable = m_xReduceGradientsCB->get_active() && m_xReduceGradientsStripesRB->get_active();
 
-    m_pReduceGradientsStepCountNF->Enable( bEnable );
+    m_xReduceGradientsStepCountNF->set_sensitive(bEnable);
 }
 
-IMPL_LINK_NOARG( SfxCommonPrintOptionsTabPage, ToggleReduceBitmapsResolutionRBHdl, RadioButton&, void )
+IMPL_LINK_NOARG( SfxCommonPrintOptionsTabPage, ToggleReduceBitmapsResolutionRBHdl, weld::ToggleButton&, void )
 {
-    const bool bEnable = m_pReduceBitmapsCB->IsChecked() && m_pReduceBitmapsResolutionRB->IsChecked();
+    const bool bEnable = m_xReduceBitmapsCB->get_active() && m_xReduceBitmapsResolutionRB->get_active();
 
-    m_pReduceBitmapsResolutionLB->Enable( bEnable );
+    m_xReduceBitmapsResolutionLB->set_sensitive(bEnable);
 }
 
-IMPL_LINK( SfxCommonPrintOptionsTabPage, ToggleOutputPrinterRBHdl, RadioButton&, rButton, void )
+IMPL_LINK( SfxCommonPrintOptionsTabPage, ToggleOutputPrinterRBHdl, weld::ToggleButton&, rButton, void )
 {
-    if( rButton.IsChecked() )
+    if (rButton.get_active())
     {
         ImplUpdateControls( &maPrinterOptions );
         bOutputForPrinter = true;
@@ -330,18 +280,18 @@ IMPL_LINK( SfxCommonPrintOptionsTabPage, ToggleOutputPrinterRBHdl, RadioButton&,
         ImplSaveControls( &maPrinterOptions );
 }
 
-IMPL_LINK( SfxCommonPrintOptionsTabPage, ToggleOutputPrintFileRBHdl, RadioButton&, rButton, void )
+IMPL_LINK( SfxCommonPrintOptionsTabPage, ToggleOutputPrintFileRBHdl, weld::ToggleButton&, rButton, void )
 {
-    if( rButton.IsChecked() )
+    if (rButton.get_active())
     {
         ImplUpdateControls( &maPrintFileOptions );
         bOutputForPrinter = false;
-        m_pPDFCB->Disable();
+        m_xPDFCB->set_sensitive(false);
     }
     else
     {
         ImplSaveControls( &maPrintFileOptions );
-        m_pPDFCB->Enable();
+        m_xPDFCB->set_sensitive(true);
     }
 }
 
