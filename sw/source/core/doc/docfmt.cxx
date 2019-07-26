@@ -2148,6 +2148,20 @@ bool SwFrameFormats::IsAlive(SwFrameFormat const*const p) const
     return find(const_cast<SwFrameFormat*>(p)) != end();
 }
 
+SwFrameFormat* SwFrameFormats::FindByName(const OUString& name) const
+{
+    SwFrameFormats::const_iterator it = std::find_if(begin(), end(),
+        [name](SwFrameFormat * const item)
+    {
+        return item->GetName() == name;
+    });
+
+    if (it == end())
+        return nullptr;
+    else
+        return *it;
+}
+
 bool SwFrameFormats::newDefault( const value_type& x )
 {
     std::pair<iterator,bool> res = m_PosIndex.push_front( x );

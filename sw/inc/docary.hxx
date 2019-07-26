@@ -267,6 +267,7 @@ public:
     bool ContainsFormat(SwFrameFormat const& rFormat) const;
     /// not so fast check that given format is still alive (i.e. contained here)
     bool IsAlive(SwFrameFormat const*) const;
+    SwFrameFormat* FindByName(const OUString&) const;
 
     void DeleteAndDestroyAll( bool keepDefault = false );
 
