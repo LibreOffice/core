@@ -595,7 +595,7 @@ void LibPage::InsertLib()
     Sequence< OUString > aFiles = xFP->getSelectedFiles();
     INetURLObject aURLObj( aFiles[0] );
     INetURLObject aModURLObj( aURLObj );
-    INetURLObject aDlgURLObj( aURLObj );
+    std::shared_ptr<INetURLObject> xDlgURLObj(new INetURLObject(aURLObj));
 
     OUString aBase = aURLObj.getBase();
     OUString aModBase( "script" );
@@ -604,7 +604,7 @@ void LibPage::InsertLib()
     if ( aBase == aModBase || aBase == aDlgBase )
     {
         aModURLObj.setBase( aModBase );
-        aDlgURLObj.setBase( aDlgBase );
+        xDlgURLObj->setBase( aDlgBase );
     }
 
     Reference< XSimpleFileAccess3 > xSFA( SimpleFileAccess::create(comphelper::getProcessComponentContext()) );
@@ -615,7 +615,7 @@ void LibPage::InsertLib()
         xModLibContImport = script::DocumentScriptLibraryContainer::createWithURL(xContext, aModURL);
     }
 
-    OUString aDlgURL( aDlgURLObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
+    OUString aDlgURL( xDlgURLObj->GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
     if ( xSFA->exists( aDlgURL ) )
     {
         xDlgLibContImport = script::DocumentDialogLibraryContainer::createWithURL(xContext, aDlgURL);
@@ -669,7 +669,7 @@ void LibPage::InsertLib()
     if ( aExtension != aLibExtension && aExtension != aContExtension )
         xLibDlg->EnableReference(false);
 
-    weld::DialogController::runAsync(xLibDlg, [aContExtension, aDlgURLObj, aExtension, aLibExtension, aModURLObj, xLibDlg, xDlgLibContImport, xModLibContImport, this](sal_Int32 nResult)
+    weld::DialogController::runAsync(xLibDlg, [aContExtension, xDlgURLObj, aExtension, aLibExtension, aModURLObj, xLibDlg, xDlgLibContImport, xModLibContImport, this](sal_Int32 nResult)
         {
             if (!nResult )
                 return;
@@ -847,7 +847,7 @@ void LibPage::InsertLib()
                         if ( bReference )
                         {
                             // storage URL
-                            INetURLObject aDlgStorageURLObj( aDlgURLObj );
+                            INetURLObject aDlgStorageURLObj( *xDlgURLObj );
                             if ( aExtension == aContExtension )
                             {
                                 sal_Int32 nCount = aDlgStorageURLObj.getSegmentCount();
