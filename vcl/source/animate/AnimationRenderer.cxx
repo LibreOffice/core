@@ -19,10 +19,10 @@
 
 #include <tools/helpers.hxx>
 
-#include <vcl/animate/AnimationRenderer.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/window.hxx>
 
+#include <AnimationRenderer.hxx>
 #include <AnimationData.hxx>
 #include <window.h>
 

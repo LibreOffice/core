@@ -18,9 +18,10 @@
  */
 
 #include <vcl/animate/Animation.hxx>
-#include <vcl/animate/AnimationRenderer.hxx>
 #include <vcl/outdev.hxx>
 
+#include <AnimationRenderer.hxx>
+#include <AnimationRenderers.hxx>
 #include <AnimationData.hxx>
 
 void AnimationRenderers::ClearAnimationRenderers() { maAnimationRenderers.clear(); }

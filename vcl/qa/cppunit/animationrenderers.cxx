@@ -11,9 +11,10 @@
 #include <cppunit/TestAssert.h>
 
 #include <vcl/animate/Animation.hxx>
-#include <vcl/animate/AnimationRenderer.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/window.hxx>
+
+#include <AnimationRenderer.hxx>
 
 class TestRenderingContext : public OutputDevice
 {
