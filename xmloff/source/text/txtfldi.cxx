@@ -3472,7 +3472,7 @@ void XMLAnnotationImportContext::PrepareField(
 
     //import resolved flag
     bool bTmp(false);
-    ::sax::Converter::convertBool(bTmp, aResolved);
+    (void)::sax::Converter::convertBool(bTmp, aResolved);
     xPropertySet->setPropertyValue("Resolved", makeAny(bTmp));
 
     util::DateTime aDateTime;
