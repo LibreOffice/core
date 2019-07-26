@@ -1107,16 +1107,6 @@ vcl::Window* Window::ImplFindDlgCtrlWindow( vcl::Window* pWindow )
     return ::ImplFindDlgCtrlWindow( this, pWindow, nIndex, nFormStart, nFormEnd );
 }
 
-vcl::Window* Window::GetParentLabelFor( const vcl::Window* ) const
-{
-    return nullptr;
-}
-
-vcl::Window* Window::GetParentLabeledBy( const vcl::Window* ) const
-{
-    return nullptr;
-}
-
 KeyEvent Window::GetActivationKey() const
 {
     KeyEvent aKeyEvent;
