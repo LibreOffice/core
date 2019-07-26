@@ -456,7 +456,8 @@ void SwUndoDelLayFormat::RedoForRollback()
 
 SwUndoSetFlyFormat::SwUndoSetFlyFormat( SwFrameFormat& rFlyFormat, SwFrameFormat& rNewFrameFormat )
     : SwUndo( SwUndoId::SETFLYFRMFMT, rFlyFormat.GetDoc() ), SwClient( &rFlyFormat ), pFrameFormat( &rFlyFormat ),
-    pOldFormat( static_cast<SwFrameFormat*>(rFlyFormat.DerivedFrom()) ), pNewFormat( &rNewFrameFormat ),
+    m_DerivedFromFormatName( rFlyFormat.IsDefault() ? "" : rFlyFormat.DerivedFrom()->GetName() ),
+    m_NewFormatName( rNewFrameFormat.GetName() ),
     pItemSet( new SfxItemSet( *rFlyFormat.GetAttrSet().GetPool(),
                                 rFlyFormat.GetAttrSet().GetRanges() )),
     nOldNode( 0 ), nNewNode( 0 ),
@@ -469,8 +470,7 @@ SwRewriter SwUndoSetFlyFormat::GetRewriter() const
 {
     SwRewriter aRewriter;
 
-    if (pNewFormat)
-        aRewriter.AddRule(UndoArg1, pNewFormat->GetName());
+    aRewriter.AddRule(UndoArg1, m_NewFormatName);
 
     return aRewriter;
 }
@@ -531,13 +531,14 @@ void SwUndoSetFlyFormat::UndoImpl(::sw::UndoRedoContext & rContext)
     SwDoc & rDoc = rContext.GetDoc();
 
     // Is the new Format still existent?
-    if (rDoc.GetFrameFormats()->IsAlive(pOldFormat))
+    SwFrameFormat* pDerivedFromFrameFormat = rDoc.FindFrameFormatByName(m_DerivedFromFormatName);
+    if (pDerivedFromFrameFormat)
     {
         if( bAnchorChgd )
             pFrameFormat->DelFrames();
 
-        if( pFrameFormat->DerivedFrom() != pOldFormat )
-            pFrameFormat->SetDerivedFrom( pOldFormat );
+        if( pFrameFormat->DerivedFrom() != pDerivedFromFrameFormat )
+            pFrameFormat->SetDerivedFrom( pDerivedFromFrameFormat );
 
         SfxItemIter aIter( *pItemSet );
         const SfxPoolItem* pItem = aIter.GetCurItem();
@@ -605,19 +606,19 @@ void SwUndoSetFlyFormat::RedoImpl(::sw::UndoRedoContext & rContext)
     SwDoc & rDoc = rContext.GetDoc();
 
     // Is the new Format still existent?
-    if (rDoc.GetFrameFormats()->IsAlive(pNewFormat))
+    SwFrameFormat* pNewFrameFormat = rDoc.FindFrameFormatByName(m_NewFormatName);
+    if (pNewFrameFormat)
     {
-
         if( bAnchorChgd )
         {
             SwFormatAnchor aNewAnchor( nNewAnchorTyp );
             GetAnchor( aNewAnchor, nNewNode, nNewContent );
             SfxItemSet aSet( rDoc.GetAttrPool(), aFrameFormatSetRange );
             aSet.Put( aNewAnchor );
-            rDoc.SetFrameFormatToFly( *pFrameFormat, *pNewFormat, &aSet );
+            rDoc.SetFrameFormatToFly( *pFrameFormat, *pNewFormatFormat, &aSet );
         }
         else
-            rDoc.SetFrameFormatToFly( *pFrameFormat, *pNewFormat );
+            rDoc.SetFrameFormatToFly( *pFrameFormat, *pNewFrameFormat );
 
         rContext.SetSelections(pFrameFormat, nullptr);
     }
