@@ -213,6 +213,7 @@ SwTextNode::SwTextNode( const SwNodeIndex &rWhere, SwTextFormatColl *pTextColl, 
     m_wXParagraph(),
     maFillAttributes()
 {
+    assert(m_pBlock);
     InitSwParaStatistics( true );
 
     if( pAutoAttr )
