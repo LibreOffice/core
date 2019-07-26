@@ -69,7 +69,7 @@ XMLTokenEnum XMLFormPropOASISTransformerContext::GetValueType(
 
     if( nPos == nLen )
     {
-        // It's a integer number
+        // It's an integer number
         if( bOverflow )
             eRet = XML_LONG;
         else if( nVal > (bNeg ? 32768UL : 32767UL) )

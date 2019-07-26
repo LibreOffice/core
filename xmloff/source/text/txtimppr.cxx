@@ -176,7 +176,7 @@ void XMLTextImportPropertyMapper::FontFinished(
 }
 
 /** since the properties "CharFontFamilyName", "CharFontStyleName", "CharFontFamily",
-    "CharFontPitch" and "CharFontSet" and theire CJK and CTL counterparts are only
+    "CharFontPitch" and "CharFontSet" and their CJK and CTL counterparts are only
     usable as a union, we add defaults to all values that are not set as long as we
     have an "CharFontFamilyName"
 

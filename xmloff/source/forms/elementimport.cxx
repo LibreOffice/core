@@ -217,7 +217,7 @@ namespace xmloff
         // set all the properties we collected
 #if OSL_DEBUG_LEVEL > 0
         // check if the object has all the properties
-        // (We do this in the non-pro version only. Doing it all the time would be much to expensive)
+        // (We do this in the non-pro version only. Doing it all the time would be too much expensive)
         if ( m_xInfo.is() )
         {
             for ( const auto& rCheck : m_aValues )
@@ -1922,7 +1922,7 @@ namespace xmloff
                 if (*pChars == ',')
                     ++nEstimate;
             aElements.reserve(nEstimate + 1);
-                // that's the worst case. If the string contains the separator character _quoted_, we reserved to much ...
+                // that's the worst case. If the string contains the separator character _quoted_, we reserved too much...
 
             sal_Int32 nElementStart = 0;
             sal_Int32 nNextSep = 0;

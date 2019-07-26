@@ -55,12 +55,12 @@ public:
                                    const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
 
     // StartElement is called after a context has been constructed and
-    // before a elements context is parsed. It may be used for actions that
+    // before an elements context is parsed. It may be used for actions that
     // require virtual methods. The default is to do nothing.
     virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
 
     // EndElement is called before a context will be destructed, but
-    // after a elements context has been parsed. It may be used for actions
+    // after an elements context has been parsed. It may be used for actions
     // that require virtual methods. The default is to do nothing.
     virtual void EndElement() override;
 

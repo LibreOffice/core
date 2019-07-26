@@ -2186,7 +2186,7 @@ void SdXMLPageShapeContext::StartElement(const uno::Reference< xml::sax::XAttrib
     // add, set style and properties from base shape
 
     // #86163# take into account which type of PageShape needs to
-    // be constructed. It's an pres shape if presentation:XML_CLASS == XML_PRESENTATION_PAGE.
+    // be constructed. It's a pres shape if presentation:XML_CLASS == XML_PRESENTATION_PAGE.
     bool bIsPresentation = !maPresentationClass.isEmpty() &&
            GetImport().GetShapeImport()->IsPresentationShapesSupported();
 
@@ -2598,8 +2598,8 @@ SdXMLObjectShapeContext::~SdXMLObjectShapeContext()
 
 void SdXMLObjectShapeContext::StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& )
 {
-    // #96717# in theorie, if we don't have a url we shouldn't even
-    // export this ole shape. But practical its to risky right now
+    // #96717# in theorie, if we don't have a URL we shouldn't even
+    // export this OLE shape. But practically it's too risky right now
     // to change this so we better dispose this on load
     //if( !mbIsPlaceholder && ImpIsEmptyURL(maHref) )
     //  return;

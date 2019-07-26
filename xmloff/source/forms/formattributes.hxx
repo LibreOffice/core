@@ -196,7 +196,7 @@ namespace xmloff
         */
         static const sal_Char* getFormAttributeName(FormAttributes _eAttrib);
 
-        /** calculates the xml namespace key to use for a attribute of a form xml representation
+        /** calculates the xml namespace key to use for an attribute of a form xml representation
             @param  _eAttrib
                 enum value specifying the attribute
         */
@@ -246,13 +246,13 @@ namespace xmloff
         */
         static sal_uInt16 getSpecialAttributeNamespace(SCAFlags _nId);
 
-        /** calculates the xml attribute representation of a attribute of the office:forms element
+        /** calculates the xml attribute representation of an attribute of the office:forms element
             @param _nId
                 the id of the attribute
         */
         static const sal_Char* getOfficeFormsAttributeName(OfficeFormsAttributes _eAttrib);
 
-        /** calculates the xml namedspace key of a attribute of the office:forms element
+        /** calculates the xml namedspace key of an attribute of the office:forms element
             @param _nId
                 the id of the attribute
         */
@@ -306,7 +306,7 @@ namespace xmloff
         const AttributeAssignment* getAttributeTranslation(
             const OUString& _rAttribName);
 
-        /** add a attribute assignment referring to a string property to the map
+        /** add an attribute assignment referring to a string property to the map
             @param _pAttributeName
                 the name of the attribute
             @param _rPropertyName
@@ -315,7 +315,7 @@ namespace xmloff
         void    addStringProperty(
             const sal_Char* _pAttributeName, const OUString& _rPropertyName);
 
-        /** add a attribute assignment referring to a boolean property to the map
+        /** add an attribute assignment referring to a boolean property to the map
 
             @param _pAttributeName
                 the name of the attribute
@@ -324,14 +324,14 @@ namespace xmloff
             @param _bAttributeDefault
                 the default value for the attribute.
             @param _bInverseSemantics
-                if <TRUE/>, a attribute value of <TRUE/> means a property value of <FALSE/> and vice verse.<br/>
+                if <TRUE/>, an attribute value of <TRUE/> means a property value of <FALSE/> and vice verse.<br/>
                 if <FALSE/>, the attribute value is used as property value directly
         */
         void    addBooleanProperty(
             const sal_Char* _pAttributeName, const OUString& _rPropertyName,
             const bool _bAttributeDefault, const bool _bInverseSemantics = false);
 
-        /** add a attribute assignment referring to an int16 property to the map
+        /** add an attribute assignment referring to an int16 property to the map
 
             @param _pAttributeName
                 the name of the attribute
@@ -341,7 +341,7 @@ namespace xmloff
         void    addInt16Property(
             const sal_Char* _pAttributeName, const OUString& _rPropertyName);
 
-        /** add a attribute assignment referring to an int32 property to the map
+        /** add an attribute assignment referring to an int32 property to the map
 
             @param _pAttributeName
                 the name of the attribute
@@ -351,7 +351,7 @@ namespace xmloff
         void    addInt32Property(
             const sal_Char* _pAttributeName, const OUString& _rPropertyName );
 
-        /** add a attribute assignment referring to an enum property to the map
+        /** add an attribute assignment referring to an enum property to the map
 
             @param _pAttributeName
                 the name of the attribute
