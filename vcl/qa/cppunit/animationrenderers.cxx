@@ -65,8 +65,8 @@ Animation VclAnimationRenderersTest::createAnimation()
 {
     Animation aAnimation;
 
-    aAnimation.Insert(AnimationBitmap(BitmapEx(Size(3, 4), 24), Point(0, 0), Size(10, 10)));
-    aAnimation.Insert(AnimationBitmap(BitmapEx(Size(3, 3), 24), Point(0, 0), Size(10, 10)));
+    aAnimation.Insert(AnimationFrame(BitmapEx(Size(3, 4), 24), Point(0, 0), Size(10, 10)));
+    aAnimation.Insert(AnimationFrame(BitmapEx(Size(3, 3), 24), Point(0, 0), Size(10, 10)));
 
     return aAnimation;
 }
