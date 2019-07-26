@@ -17,28 +17,28 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  -->
 <javaSelection xmlns="http://openoffice.org/2004/java/framework/1.0">
-  <updated>2019-02-13</updated>
+  <updated>2019-07-26</updated>
   <vendorInfos>
     <vendor name="Sun Microsystems Inc.">
-      <minVersion>1.6.0</minVersion>
+      <minVersion>1.8.0</minVersion>
     </vendor>
     <vendor name="Oracle Corporation">
-      <minVersion>1.6.0</minVersion>
+      <minVersion>1.8.0</minVersion>
     </vendor>
     <vendor name="IBM Corporation">
-      <minVersion>1.6.0</minVersion>
+      <minVersion>1.8.0</minVersion>
     </vendor>
     <vendor name="Blackdown Java-Linux Team">
-      <minVersion>1.6.0</minVersion>
+      <minVersion>1.8.0</minVersion>
     </vendor>
     <vendor name="Free Software Foundation, Inc.">
-      <minVersion>1.6.0</minVersion>
+      <minVersion>1.8.0</minVersion>
     </vendor>
     <vendor name="BEA Systems, Inc.">
-      <minVersion>1.6.0</minVersion>
+      <minVersion>1.8.0</minVersion>
     </vendor>
     <vendor name="Azul Systems, Inc.">
-      <minVersion>1.6.0</minVersion>
+      <minVersion>1.8.0</minVersion>
     </vendor>
     <vendor name="AdoptOpenJdk">
       <minVersion>1.8.0</minVersion>
