@@ -1457,10 +1457,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf118699_redline_numbering)
     IDocumentRedlineAccess& rIDRA(pDoc->getIDocumentRedlineAccess());
     rIDRA.AcceptAllRedline(true);
 
-    // TODO: fix it!
-    // uno::Reference<beans::XPropertySet> xProps(getParagraph(2), uno::UNO_QUERY_THROW);
-    //CPPUNIT_ASSERT_MESSAGE("first paragraph after the first deletion: erroneous numbering",
-    //                       !xProps->getPropertyValue("NumberingRules").hasValue());
+    uno::Reference<beans::XPropertySet> xProps(getParagraph(2), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_MESSAGE("first paragraph after the first deletion: erroneous numbering",
+                           !xProps->getPropertyValue("NumberingRules").hasValue());
 
     CPPUNIT_ASSERT_MESSAGE(
         "first paragraph after the second deletion: missing numbering",
@@ -1499,11 +1498,10 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf125916_redline_restart_numbering)
     IDocumentRedlineAccess& rIDRA(pDoc->getIDocumentRedlineAccess());
     rIDRA.AcceptAllRedline(true);
 
-    // TODO: fix it!
     // check unnecessary numbering
-    // uno::Reference<beans::XPropertySet> xProps(getParagraph(3), uno::UNO_QUERY_THROW);
-    // CPPUNIT_ASSERT_MESSAGE("first paragraph after the first deletion: erroneous numbering",
-    //                       !xProps->getPropertyValue("NumberingRules").hasValue());
+    uno::Reference<beans::XPropertySet> xProps(getParagraph(3), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_MESSAGE("first paragraph after the first deletion: erroneous numbering",
+                           !xProps->getPropertyValue("NumberingRules").hasValue());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf125310)

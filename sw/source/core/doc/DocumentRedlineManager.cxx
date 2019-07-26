@@ -294,6 +294,51 @@ namespace
                rPos1.nContent.GetIndex() == pCNd->Len();
     }
 
+    void lcl_CopyStyle( const SwPosition & rFrom, const SwPosition & rTo )
+    {
+        SwTextNode* pToNode = rTo.nNode.GetNode().GetTextNode();
+        SwTextNode* pFromNode = rFrom.nNode.GetNode().GetTextNode();
+        if (pToNode != nullptr && pFromNode != nullptr && pToNode != pFromNode)
+        {
+            const SwPaM aPam(*pToNode);
+            SwDoc* pDoc = aPam.GetDoc();
+            // using Undo, copy paragraph style
+            pDoc->SetTextFormatColl(aPam, pFromNode->GetTextColl());
+
+            // using Undo, remove direct paragraph formatting of the "To" paragraph,
+            // and apply here direct paragraph formatting of the "From" paragraph
+            SfxItemSet aTmp(
+                pDoc->GetAttrPool(),
+                svl::Items<
+                    RES_PARATR_BEGIN, RES_PARATR_END - 3, // skip RSID and GRABBAG
+                    RES_PARATR_LIST_BEGIN, RES_UL_SPACE,  // skip PAGEDESC and BREAK
+                    RES_CNTNT, RES_FRMATR_END - 1>{});
+
+            SfxItemSet aTmp2(
+                pDoc->GetAttrPool(),
+                svl::Items<
+                    RES_PARATR_BEGIN, RES_PARATR_END - 3, // skip RSID and GRABBAG
+                    RES_PARATR_LIST_BEGIN, RES_UL_SPACE,  // skip PAGEDESC and BREAK
+                    RES_CNTNT, RES_FRMATR_END - 1>{});
+
+            pToNode->GetParaAttr(aTmp, 0, 0);
+            pFromNode->GetParaAttr(aTmp2, 0, 0);
+
+            for( sal_uInt16 nItem = 0; nItem < aTmp.TotalCount(); ++nItem)
+            {
+                sal_uInt16 nWhich = aTmp.GetWhichByPos(nItem);
+                if( SfxItemState::SET == aTmp.GetItemState( nWhich, false ) &&
+                    SfxItemState::SET != aTmp2.GetItemState( nWhich, false ) )
+                        aTmp2.Put( aTmp.GetPool()->GetDefaultItem(nWhich), nWhich );
+            }
+
+            if (aTmp2.Count())
+                pDoc->getIDocumentContentOperations().InsertItemSet(aPam, aTmp2);
+
+            // TODO: store the original paragraph style as ExtraData
+        }
+    }
+
     bool lcl_AcceptRedline( SwRedlineTable& rArr, SwRedlineTable::size_type& rPos,
                             bool bCallDelete,
                             const SwPosition* pSttRng = nullptr,
@@ -415,6 +460,12 @@ namespace
                     SwPaM aPam( *pDelStt, *pDelEnd );
                     SwContentNode* pCSttNd = pDelStt->nNode.GetNode().GetContentNode();
                     SwContentNode* pCEndNd = pDelEnd->nNode.GetNode().GetContentNode();
+                    pRStt = pRedl->Start();
+                    pREnd = pRedl->End();
+
+                    // keep style of the empty paragraph after deletion of wholly paragraphs
+                    if( pCSttNd && pCEndNd && pRStt && pREnd && pRStt->nContent == 0 )
+                        lcl_CopyStyle(*pREnd, *pRStt);
 
                     if( bDelRedl )
                         delete pRedl;
@@ -806,51 +857,6 @@ namespace
                     pEnd->nNode.GetIndex() + 1 )
                     *pEnd = *pREnd;
             }
-        }
-    }
-
-    void lcl_CopyStyle( const SwPosition & rFrom, const SwPosition & rTo )
-    {
-        SwTextNode* pToNode = rTo.nNode.GetNode().GetTextNode();
-        SwTextNode* pFromNode = rFrom.nNode.GetNode().GetTextNode();
-        if (pToNode != nullptr && pFromNode != nullptr && pToNode != pFromNode)
-        {
-            const SwPaM aPam(*pToNode);
-            SwDoc* pDoc = aPam.GetDoc();
-            // using Undo, copy paragraph style
-            pDoc->SetTextFormatColl(aPam, pFromNode->GetTextColl());
-
-            // using Undo, remove direct paragraph formatting of the "To" paragraph,
-            // and apply here direct paragraph formatting of the "From" paragraph
-            SfxItemSet aTmp(
-                pDoc->GetAttrPool(),
-                svl::Items<
-                    RES_PARATR_BEGIN, RES_PARATR_END - 3, // skip RSID and GRABBAG
-                    RES_PARATR_LIST_BEGIN, RES_UL_SPACE,  // skip PAGEDESC and BREAK
-                    RES_CNTNT, RES_FRMATR_END - 1>{});
-
-            SfxItemSet aTmp2(
-                pDoc->GetAttrPool(),
-                svl::Items<
-                    RES_PARATR_BEGIN, RES_PARATR_END - 3, // skip RSID and GRABBAG
-                    RES_PARATR_LIST_BEGIN, RES_UL_SPACE,  // skip PAGEDESC and BREAK
-                    RES_CNTNT, RES_FRMATR_END - 1>{});
-
-            pToNode->GetParaAttr(aTmp, 0, 0);
-            pFromNode->GetParaAttr(aTmp2, 0, 0);
-
-            for( sal_uInt16 nItem = 0; nItem < aTmp.TotalCount(); ++nItem)
-            {
-                sal_uInt16 nWhich = aTmp.GetWhichByPos(nItem);
-                if( SfxItemState::SET == aTmp.GetItemState( nWhich, false ) &&
-                    SfxItemState::SET != aTmp2.GetItemState( nWhich, false ) )
-                        aTmp2.Put( aTmp.GetPool()->GetDefaultItem(nWhich), nWhich );
-            }
-
-            if (aTmp2.Count())
-                pDoc->getIDocumentContentOperations().InsertItemSet(aPam, aTmp2);
-
-            // TODO: store the original paragraph style as ExtraData
         }
     }
 
