@@ -14927,6 +14927,7 @@ sw/qa/extras/ooxmlexport/ooxmlexport7.cxx
 sw/qa/extras/ooxmlexport/ooxmlexport8.cxx
 sw/qa/extras/ooxmlexport/ooxmlexport9.cxx
 sw/qa/extras/ooxmlexport/ooxmlfieldexport.cxx
+sw/qa/extras/ooxmlexport/ooxmllinks.cxx
 sw/qa/extras/ooxmlexport/ooxmlw14export.cxx
 sw/qa/extras/ooxmlimport/ooxmlimport.cxx
 sw/qa/extras/tiledrendering/tiledrendering.cxx
