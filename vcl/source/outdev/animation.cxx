@@ -17,43 +17,22 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sal/config.h>
-
 #include <vcl/outdev.hxx>
 
 #include <AnimationRenderer.hxx>
-#include <AnimationRenderers.hxx>
-#include <WindowAnimation.hxx>
 
-bool WindowAnimation::Start(OutputDevice* pOut, const Point& rDestPt, const Size& rDestSz,
-                            long nCallerId, OutputDevice* pFirstFrameOutDev)
+AnimationRenderer* OutputDevice::CreateAnimationRenderer(Animation* pAnim, OutputDevice* pOut,
+                                                         const Point& rDestPt, const Size& rDestSz,
+                                                         sal_uLong nCallerId,
+                                                         OutputDevice* pFirstFrameOutDev)
 {
-    if (!maAnimationFrames.empty())
-    {
-        bool bRendererDoesNotExist
-            = mpAnimationRenderers->RepaintRenderers(pOut, nCallerId, rDestPt, rDestSz);
+    return new AnimationRenderer(pAnim, pOut, rDestPt, rDestSz, nCallerId, pFirstFrameOutDev);
+}
 
-        if (mpAnimationRenderers->NoRenderersAreAvailable())
-        {
-            maTimer.Stop();
-            mbIsInAnimation = false;
-            mnFrameIndex = 0;
-        }
-
-        if (bRendererDoesNotExist)
-            mpAnimationRenderers->CreateDefaultRenderer(this, pOut, rDestPt, rDestSz, nCallerId,
-                                                        pFirstFrameOutDev);
-
-        if (!mbIsInAnimation)
-        {
-            RestartTimer(maAnimationFrames[mnFrameIndex]->mnWait);
-            mbIsInAnimation = true;
-        }
-
-        return true;
-    }
-
-    return false;
+void OutputDevice::StartAnimation(Animation* pAnim, const Point& rDestPt, const Size& rDestSz,
+                                  sal_uLong nCallerId, OutputDevice* pFirstFrameOutDev)
+{
+    pAnim->Start(this, rDestPt, rDestSz, nCallerId, pFirstFrameOutDev);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
