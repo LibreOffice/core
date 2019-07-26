@@ -33,6 +33,24 @@
       "revId": "522a69eb941a91ae201abbb55ae506aff3118cbb",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_fa8253c8",
+        "filename": "sfx2/source/doc/objstor.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2040,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2019-07-26T07:46:23Z",
+      "side": 1,
+      "message": "This code runs on load of the template, but not on load of a odt, because it disconnects the new doc from the template by some save variant (see TemplateDisconnectionAfterLoad). SfxObjectShell::SaveTo_Impl, which contains your mentioned call, runs just on real save. AFAIK all this CachedSignatureState code is supposed to run, when you open an existing document and save it.",
+      "parentUuid": "bf659307_4c3711b2",
+      "revId": "522a69eb941a91ae201abbb55ae506aff3118cbb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }

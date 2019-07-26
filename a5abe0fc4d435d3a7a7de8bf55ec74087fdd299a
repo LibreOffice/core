@@ -52,6 +52,24 @@
       "revId": "a5abe0fc4d435d3a7a7de8bf55ec74087fdd299a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_3ac76b15",
+        "filename": "sfx2/source/doc/objstor.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1174,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2019-07-26T07:46:23Z",
+      "side": 0,
+      "message": "\u003e first one doesn\u0027t make a difference because we can\u0027t export\n \u003e ODFVER_010 anyway :)\n \u003e \n \u003e the intent of the 2nd line is that aODFVersion is empty for ODF 1.1\n \u003e export, for some stupid compat reasons.\n \u003e \n \u003e the intent of this test is to not copy the signature between odf\n \u003e 1.1 and odf 1.2 documents, presumably because those would typically\n \u003e use different crypto algorithms?\n \u003e \n\nThe ODF validator claims the OTT bug document is actually 1.0.\n\nSo signatures were officially introduced in ODF 1.2. Before ODF 1.2 signatures are undefined, but that doesn\u0027t make them invalid. At least from the stuff I manually could verify with the spec, the crypto stuff seems compatible between the 1.0 template and the saved 1.2 document. I would guess 1.2 just officially formalized the pre-1.2 crypto.\n\nFor the saved document from the bugs template it complains about:\nMETA-INF/macrosignatures.xml[2,76]:  Error: element \"document-signatures\" is missing \"version\" attribute\npenoffice.org/2004/documentsignatures\"\u003e\u003cSignature xmlns\u003d\"http://www.w3.org/2000\n                                 ----^\nBut if I create a new 1.2 odt and sign it, I also get:\nMETA-INF/macrosignatures.xml[2,89]: Error: element \"document-signatures\" is missing \"version\" attribute\nendocument:xmlns:digitalsignature:1.0\"\u003e\u003cSignature xmlns\u003d\"http://www.w3.org/2000\n                                 ----^\nSo I created a new OTT 1.2 document and signed it. This passes this unmodified check on save. I would change the \"\u003d\u003d SvtSaveOptions::ODFVER_011\" to \"\u003c SvtSaveOptions::ODFVER_012\".\n\nIf we amend the 2nd line check, then you can have signed document / template \u003c 1.2 and create and ODT 1.2 document from it and LO will happily accept / use the old signature, as it\u0027s valid, but just in the old format (xmlns http://openoffice.org/2004/documentsignatures instead of urn:oasis:names:tc:opendocument:xmlns:digitalsignature:1.0).\n\nI\u0027ll split this change from the patch. Thing is nothing warns you that you\u0027ll lose the valid signature because of incompatibility. IMHO we should accept the old signature as legacy, even if ODF 1.2 declares this new signature. How is this normally handled? Probably rewriting the old signature in the new format? Might be more code.\n\n \u003e but if it\u0027s empty for template as well that\u0027s tragic; possibly it\n \u003e should be copied from the template to the new instance document on\n \u003e import but something prevents it?\n\nIt\u0027s just empty for the old 1.0 bug OTT. My new 1.2 OTT reports 1.2 and also passes this test too.",
+      "parentUuid": "bf659307_0ca59904",
+      "revId": "a5abe0fc4d435d3a7a7de8bf55ec74087fdd299a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
