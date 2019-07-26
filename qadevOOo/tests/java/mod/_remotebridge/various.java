@@ -76,44 +76,6 @@ public class various extends TestCase {
     public XInterface bridge = null;
 
     /**
-     * Implementation of interface XInstanceProvider
-     *
-     * @see com.sun.star.bridge.XInstanceProvider
-     */
-    private static class MyInstanceProvider implements XInstanceProvider {
-        /**
-         * a MultiServiceFactory for creating instances
-         *
-         * @see com.sun.star.lang.MultiServiceFactory
-         */
-        private final XMultiServiceFactory xMSF;
-
-        /**
-         * Construct object with a MultiServiceFactory
-         *
-         * @see com.sun.star.lang.MultiServiceFactory
-         */
-        private MyInstanceProvider(XMultiServiceFactory xMSF) {
-            this.xMSF = xMSF;
-        }
-
-        /**
-         * get an instance by name
-         */
-        public Object getInstance(String aInstanceName)
-                        throws com.sun.star.container.NoSuchElementException
-                        {
-            System.out.println("######## Try to get "+aInstanceName);
-            try {
-                return xMSF.createInstance(aInstanceName);
-            }
-            catch(com.sun.star.uno.Exception e) {
-                throw new StatusException("Unexpected exception", e);
-            }
-        }
-    }
-
-    /**
     * Calls <code>accept()</code> method in a separate thread.
     * Then stores exception thrown by call if it occurred, or
     * return value.
@@ -196,8 +158,6 @@ public class various extends TestCase {
                 "com.sun.star.bridge.BridgeFactory") ;
         xBrdgFctr = UnoRuntime.queryInterface(XBridgeFactory.class, oBrdg);
 
-        // create own implementation of XInstanceProvider
-        new MyInstanceProvider(xMSF);
         // create waiting acceptor thread
         accThread = new AcceptorThread(xAcctr);
         accThread.start();
