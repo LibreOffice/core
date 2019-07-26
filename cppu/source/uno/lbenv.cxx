@@ -1059,6 +1059,7 @@ extern "C"
 static uno_Environment * initDefaultEnvironment(
     const OUString & rEnvDcp, void * pContext )
 {
+    // coverity[leaked_storage] - this is on purpose
     uno_Environment * pEnv = &(new uno_DefaultEnvironment( rEnvDcp, pContext ))->aBase;
     (*pEnv->acquire)( pEnv );
 
