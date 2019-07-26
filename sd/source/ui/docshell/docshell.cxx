@@ -73,6 +73,7 @@
 #include <OutlineView.hxx>
 #include <ViewShellBase.hxx>
 #include <sfx2/notebookbar/SfxNotebookBar.hxx>
+#include <comphelper/lok.hxx>
 
 using namespace sd;
 #define ShellClass_DrawDocShell
@@ -298,7 +299,19 @@ void DrawDocShell::GetState(SfxItemSet &rSet)
                     eLanguage = mpDoc->GetLanguage( EE_CHAR_LANGUAGE );
                 }
 
-                rSet.Put(SfxStringItem(nWhich, SvtLanguageTable::GetLanguageString(eLanguage)));
+                OUString aLanguage = SvtLanguageTable::GetLanguageString(eLanguage);
+                if (comphelper::LibreOfficeKit::isActive())
+                {
+                    if (eLanguage == LANGUAGE_DONTKNOW)
+                    {
+                        aLanguage += ";-";
+                    }
+                    else
+                    {
+                        aLanguage += ";" + LanguageTag(eLanguage).getBcp47(false);
+                    }
+                }
+                rSet.Put(SfxStringItem(nWhich, aLanguage));
             }
             break;
 
