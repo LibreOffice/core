@@ -159,6 +159,7 @@ $(eval $(call gb_UIConfig_add_uifiles,cui,\
 	cui/uiconfig/ui/positionsizedialog \
 	cui/uiconfig/ui/possizetabpage \
 	cui/uiconfig/ui/posterdialog \
+	cui/uiconfig/ui/qrcodegen \
 	cui/uiconfig/ui/querychangelineenddialog \
 	cui/uiconfig/ui/querydeletebitmapdialog \
 	cui/uiconfig/ui/querydeletechartcolordialog \
