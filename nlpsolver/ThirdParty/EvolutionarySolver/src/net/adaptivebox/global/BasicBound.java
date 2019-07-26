@@ -1,5 +1,5 @@
 /**
- * Description: provide an bound, and the corresponding operations
+ * Description: provide a bound, and the corresponding operations
  *
  * Author          Create/Modi     Note
  * Xiaofeng Xie    Oct. 9, 2002

@@ -31,7 +31,7 @@
 
 /** describes a controller which can be used to browse and modify properties of form controls.
 
-    <p>The controller can be plugged into an com::sun::star::frame::XFrame, and will
+    <p>The controller can be plugged into a com::sun::star::frame::XFrame, and will
     provide a visual component for inspecting control properties. This means it allows to interactively control
     several aspects of a FormControlModel or DataAwareControlModel, such as it's
     data binding, it's layout, and it's event binding</p>
@@ -101,7 +101,7 @@ published service PropertyBrowserController
     /** ensures the basic functionality for a controller.
 
         <p>With supporting this interface, the component is able to operate in (and provide content
-        for) an com::sun::star::frame::XFrame.</p>
+        for) a com::sun::star::frame::XFrame.</p>
     */
     interface com::sun::star::frame::XController;
 

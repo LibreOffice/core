@@ -52,7 +52,7 @@ public:
     virtual ~XMLCharContext() override;
 
     // EndElement is called before a context will be destructed, but
-    // after a elements context has been parsed. It may be used for actions
+    // after an elements context has been parsed. It may be used for actions
     // that require virtual methods. The default is to do nothing.
     virtual void EndElement() override;
 
