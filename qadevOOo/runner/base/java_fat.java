@@ -142,8 +142,6 @@ public class java_fat implements TestBase {
                 continue;
             }
 
-            tCase.getObjectName();
-
             for (int j = 0; j < entry.SubEntryCount; j++) {
                 DescEntry aSubEntry = entry.SubEntries[j];
                 final boolean bIsToTest = aSubEntry.isToTest;
