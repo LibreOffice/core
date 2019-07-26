@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_c0976090",
+        "filename": "vcl/source/gdi/CommonSalLayout.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 297,
+      "author": {
+        "id": 1000381
+      },
+      "writtenOn": "2019-07-26T14:25:26Z",
+      "side": 1,
+      "message": "Does a non-NULL of gr_face mean graphite2 shaper will be used? It can (theoretically at least) fail and HarfBuzz would then use the fallback shaper.\n\nAlso wouldn’t it be NULL before hb_shape() is called for the first time with this font?",
+      "revId": "4ece849c98267c290f069f4518a8c7c9c10a7eaa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
