@@ -361,6 +361,7 @@ SwTOXBaseSection* SwDoc::InsertTableOf( const SwPaM& aPam,
                                         bool bExpand,
                                         SwRootFrame const*const pLayout )
 {
+    assert(!bExpand || pLayout != nullptr);
     GetIDocumentUndoRedo().StartUndo( SwUndoId::INSTOX, nullptr );
 
     OUString sSectNm = GetUniqueTOXBaseName( *rTOX.GetTOXType(), rTOX.GetTOXName() );
