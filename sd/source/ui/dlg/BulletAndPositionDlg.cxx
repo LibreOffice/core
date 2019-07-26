@@ -525,6 +525,7 @@ void SvxBulletAndPositionDlg::InitControls()
         nNumberingType = SVX_NUM_NUMBER_NONE;
         bAllLevel = false;
         bSameDistBorderNum = false;
+        bSameIndent = false;
         bSameBulRelSize = false;
         bSameBulColor = false;
         bSameStart = false;
