@@ -257,15 +257,15 @@ void Animation::Draw(OutputDevice* pOut, const Point& rDestPt, const Size& rDest
 
     if (nCount)
     {
-        AnimationBitmap* pObj = maAnimationFrames[std::min(mnFrameIndex, nCount - 1)].get();
+        AnimationBitmap* pAnmBmp = maAnimationFrames[std::min(mnFrameIndex, nCount - 1)].get();
 
         if (pOut->GetConnectMetaFile() || (pOut->GetOutDevType() == OUTDEV_PRINTER))
         {
             maAnimationFrames[0]->maBitmapEx.Draw(pOut, rDestPt, rDestSz);
         }
-        else if (pObj->mnWait == ANIMATION_TIMEOUT_ON_CLICK)
+        else if (pAnmBmp->mnWait == ANIMATION_TIMEOUT_ON_CLICK)
         {
-            pObj->maBitmapEx.Draw(pOut, rDestPt, rDestSz);
+            pAnmBmp->maBitmapEx.Draw(pOut, rDestPt, rDestSz);
         }
         else
         {
