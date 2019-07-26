@@ -20,22 +20,20 @@
 #define INCLUDED_CUI_SOURCE_OPTIONS_OPTACCESSIBILITY_HXX
 
 #include <sfx2/tabdlg.hxx>
-#include <vcl/button.hxx>
 
 class SvxAccessibilityOptionsTabPage : public SfxTabPage
 {
-    VclPtr<CheckBox>       m_pAccessibilityTool;
-    VclPtr<CheckBox>       m_pTextSelectionInReadonly;
-    VclPtr<CheckBox>       m_pAnimatedGraphics;
-    VclPtr<CheckBox>       m_pAnimatedTexts;
-    VclPtr<CheckBox>       m_pAutoDetectHC;
-    VclPtr<CheckBox>       m_pAutomaticFontColor;
-    VclPtr<CheckBox>       m_pPagePreviews;
+    std::unique_ptr<weld::CheckButton> m_xAccessibilityTool;
+    std::unique_ptr<weld::CheckButton> m_xTextSelectionInReadonly;
+    std::unique_ptr<weld::CheckButton> m_xAnimatedGraphics;
+    std::unique_ptr<weld::CheckButton> m_xAnimatedTexts;
+    std::unique_ptr<weld::CheckButton> m_xAutoDetectHC;
+    std::unique_ptr<weld::CheckButton> m_xAutomaticFontColor;
+    std::unique_ptr<weld::CheckButton> m_xPagePreviews;
 
 public:
-    SvxAccessibilityOptionsTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
+    SvxAccessibilityOptionsTabPage(TabPageParent pParent, const SfxItemSet& rSet);
     virtual ~SvxAccessibilityOptionsTabPage() override;
-    virtual void dispose() override;
 
     static VclPtr<SfxTabPage>  Create( TabPageParent pParent, const SfxItemSet* rAttrSet );
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
