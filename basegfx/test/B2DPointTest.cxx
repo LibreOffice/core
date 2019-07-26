@@ -19,30 +19,38 @@
 
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
+#include <basegfx/point/b2dpoint.hxx>
 
-namespace basegfx
-{
-class b2dpoint : public CppUnit::TestFixture
+class B2DPointTest : public CppUnit::TestFixture
 {
 public:
-    // insert your test code here.
-    // this is only demonstration code
-    void EmptyMethod()
-    {
-        // CPPUNIT_ASSERT_MESSAGE("a message", 1 == 1);
-    }
+    void testCreation();
 
-    // Change the following lines only, if you add, remove or rename
-    // member functions of the current class,
-    // because these macros are need by auto register mechanism.
-
-    CPPUNIT_TEST_SUITE(b2dpoint);
-    CPPUNIT_TEST(EmptyMethod);
+    CPPUNIT_TEST_SUITE(B2DPointTest);
+    CPPUNIT_TEST(testCreation);
     CPPUNIT_TEST_SUITE_END();
-}; // class b2dpoint
+};
 
-} // namespace basegfx
+void B2DPointTest::testCreation()
+{
+    basegfx::B2DPoint aPoint1(5.0, 2.0);
+    CPPUNIT_ASSERT_EQUAL(5.0, aPoint1.getX());
+    CPPUNIT_ASSERT_EQUAL(2.0, aPoint1.getY());
 
-CPPUNIT_TEST_SUITE_REGISTRATION(basegfx::b2dpoint);
+    basegfx::B2DPoint aPoint2 = { 5.0, 2.0 };
+    CPPUNIT_ASSERT_EQUAL(5.0, aPoint2.getX());
+    CPPUNIT_ASSERT_EQUAL(2.0, aPoint2.getY());
+
+    std::vector<basegfx::B2DPoint> aPointVector{
+        { 5.0, 2.0 },
+        { 4.0, 3.0 },
+    };
+    CPPUNIT_ASSERT_EQUAL(5.0, aPointVector[0].getX());
+    CPPUNIT_ASSERT_EQUAL(2.0, aPointVector[0].getY());
+    CPPUNIT_ASSERT_EQUAL(4.0, aPointVector[1].getX());
+    CPPUNIT_ASSERT_EQUAL(3.0, aPointVector[1].getY());
+}
+
+CPPUNIT_TEST_SUITE_REGISTRATION(B2DPointTest);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
