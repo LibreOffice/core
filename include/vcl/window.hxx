@@ -1264,9 +1264,6 @@ public:
     bool                                IsAccessibilityEventsSuppressed( bool bTraverseParentPath = true );
     void                                SetAccessibilityEventsSuppressed(bool bSuppressed);
 
-    // Deprecated - can use SetAccessibleRelationLabelFor/By nowadays
-    vcl::Window*                        GetParentLabelFor( const vcl::Window* pLabel ) const;
-    vcl::Window*                        GetParentLabeledBy( const vcl::Window* pLabeled ) const;
     KeyEvent                            GetActivationKey() const;
 
 protected:
