@@ -41,7 +41,7 @@ published interface XEmbedObjectFactory: com::sun::star::uno::XInterface
 
         <p>
         This method can be used to have a full control over persistence
-        initialization of a object.
+        initialization of an object.
         </p>
 
         <p>

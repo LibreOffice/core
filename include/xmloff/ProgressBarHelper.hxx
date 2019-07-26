@@ -56,7 +56,7 @@ public:
             void End() { if (xStatusIndicator.is()) xStatusIndicator->end(); }
 
             // set the new reference and returns the new value which gives the
-            // Progress Bar the sam position as before
+            // Progress Bar the same position as before
             void ChangeReference(sal_Int32 nNewReference);
 
             sal_Int32 GetReference() { return nReference; }

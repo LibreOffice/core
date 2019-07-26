@@ -328,7 +328,7 @@ void LwpMasterPage::RegisterMasterPage(LwpFrib* pFrib)
 }
 
 /**
- * @descr:  Whether it need create a new section
+ * @descr:  Whether it needs to create a new section
  *
  */
 bool LwpMasterPage::IsNeedSection()
