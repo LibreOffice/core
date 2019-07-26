@@ -23,11 +23,12 @@
 #include <tools/stream.hxx>
 
 #include <vcl/animate/Animation.hxx>
-#include <vcl/animate/AnimationRenderer.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/dibtools.hxx>
 #include <vcl/BitmapColorQuantizationFilter.hxx>
 
+#include <AnimationRenderer.hxx>
+#include <AnimationRenderers.hxx>
 #include <AnimationData.hxx>
 
 #include <algorithm>
@@ -103,9 +104,9 @@ bool Animation::SendTimeout()
     if (IsTimeoutSetup())
     {
         maTimeoutNotifier.Call(this);
-        maAnimationRenderers.PopulateRenderers(this);
-        maAnimationRenderers.DeleteUnmarkedRenderers();
-        return maAnimationRenderers.ResetMarkedRenderers();
+        mpAnimationRenderers->PopulateRenderers(this);
+        mpAnimationRenderers->DeleteUnmarkedRenderers();
+        return mpAnimationRenderers->ResetMarkedRenderers();
     }
 
     return false;
@@ -146,11 +147,11 @@ void Animation::RenderNextFrame()
     AnimationBitmap* pCurrentFrameBmp = GetNextFrameBitmap();
     if (pCurrentFrameBmp)
     {
-        maAnimationRenderers.PaintRenderers(mnFrameIndex);
-        maAnimationRenderers.EraseMarkedRenderers();
+        mpAnimationRenderers->PaintRenderers(mnFrameIndex);
+        mpAnimationRenderers->EraseMarkedRenderers();
 
         // stop or restart timer
-        if (maAnimationRenderers.NoRenderersAreAvailable())
+        if (mpAnimationRenderers->NoRenderersAreAvailable())
             Stop();
         else
             RestartTimer(pCurrentFrameBmp->mnWait);
@@ -164,7 +165,7 @@ void Animation::Clear()
     maGlobalSize = Size();
     maBitmapEx.SetEmpty();
     maAnimationFrames.clear();
-    maAnimationRenderers.ClearAnimationRenderers();
+    mpAnimationRenderers->ClearAnimationRenderers();
 }
 
 bool Animation::IsTransparent() const
@@ -236,9 +237,9 @@ bool Animation::Start(OutputDevice* pOut, const Point& rDestPt, const Size& rDes
 
 void Animation::Stop(OutputDevice* pOut, sal_uLong nCallerId)
 {
-    maAnimationRenderers.RemoveAnimationInstance(pOut, nCallerId);
+    mpAnimationRenderers->RemoveAnimationInstance(pOut, nCallerId);
 
-    if (maAnimationRenderers.NoRenderersAreAvailable())
+    if (mpAnimationRenderers->NoRenderersAreAvailable())
     {
         maTimer.Stop();
         mbIsInAnimation = false;
@@ -298,7 +299,7 @@ IMPL_LINK_NOARG(Animation, ImplTimeoutHdl, Timer*, void)
     {
         bool bIsGloballyPaused = SendTimeout();
 
-        if (maAnimationRenderers.NoRenderersAreAvailable())
+        if (mpAnimationRenderers->NoRenderersAreAvailable())
             Stop();
         else if (bIsGloballyPaused)
             RestartTimer(10);

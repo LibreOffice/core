@@ -30,7 +30,6 @@
 #include <vcl/region.hxx>
 #include <vcl/uitest/factory.hxx>
 #include <vcl/IDialogRenderable.hxx>
-#include <vcl/animate/WindowAnimationRenderer.hxx>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <memory>
@@ -62,6 +61,7 @@ class VCLXWindow;
 class VclWindowEvent;
 class AllSettings;
 class InputContext;
+class WindowAnimationRenderer;
 enum class ImplPaintFlags;
 enum class VclEventId;
 enum class PointerStyle;
@@ -735,15 +735,13 @@ protected:
     void                                StartAnimation(Animation *pAnimation,
                                                        const Point& rDestPt, const Size& rDestSz,
                                                        sal_uLong nCallerId,
-                                                       OutputDevice *pFirstFrameOutDev = nullptr) override
-                                    { pAnimation->Start(this, rDestPt, rDestSz, nCallerId, pFirstFrameOutDev); }
+                                                       OutputDevice *pFirstFrameOutDev = nullptr) override;
 
     virtual AnimationRenderer*          CreateAnimationRenderer(Animation* pAnim,
                                                         OutputDevice* pOut,
                                                         const Point& rDestPt, const Size& rDestSz,
                                                         sal_uLong nCallerId,
-                                                        OutputDevice *pFirstFrameOutDev = nullptr) override
-                                    { return new WindowAnimationRenderer(pAnim, pOut, rDestPt, rDestSz, nCallerId, pFirstFrameOutDev); }
+                                                        OutputDevice *pFirstFrameOutDev = nullptr) override;
 
             void                        SetCompoundControl( bool bCompound );
 

@@ -17,12 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <vcl/animate/WindowAnimationRenderer.hxx>
 #include <vcl/window.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/vclptr.hxx>
 
 #include <window.h>
+#include <WindowAnimationRenderer.hxx>
 
 void WindowAnimationRenderer::DrawToIndex(sal_uLong nIndex)
 {
