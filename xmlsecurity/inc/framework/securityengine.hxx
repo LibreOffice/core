@@ -59,7 +59,7 @@ protected:
     /*
      * the id of ElementCollector of the template element.
      * For a signature, the template element is the Signature element,
-     * for a encryption, the EncryptedData/EncryptedKey element is.
+     * for an encryption, the EncryptedData/EncryptedKey element is.
      */
     sal_Int32 m_nIdOfTemplateEC;
 

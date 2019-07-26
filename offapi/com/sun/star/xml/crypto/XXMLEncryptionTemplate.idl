@@ -30,10 +30,10 @@ module com { module sun { module star { module xml { module crypto {
 /**
  * Interface of XML encryption template
  *
- * <p>This interface represents a encryption template, which is the same as the
+ * <p>This interface represents an encryption template, which is the same as the
  * desired XML encryption element[ EncryptedType ] but some of the nodes may be
  * empty. The empty entities include CipherValue, which is a subset of
- * EncryptedData or EncryptedKey. Empty entities are not allowed in a encryption
+ * EncryptedData or EncryptedKey. Empty entities are not allowed in an encryption
  * template when performing decryption.</p>
  *
  * <p>In some cases, the encryptor or decryptor can determine and locate the
