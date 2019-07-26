@@ -138,7 +138,6 @@ public class MultiMethodTest
         this.tRes = new TestResult();
         Class<?> testedClass;
 
-        getInterfaceName();
         System.out.print("checking: [" + entry.longName + "]");
 
         // defining a name of the class corresponding to the tested interface
