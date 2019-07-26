@@ -263,7 +263,7 @@ void Animation::Draw(OutputDevice* pOut, const Point& rDestPt, const Size& rDest
         {
             maAnimationFrames[0]->maBitmapEx.Draw(pOut, rDestPt, rDestSz);
         }
-        else if (ANIMATION_TIMEOUT_ON_CLICK == pObj->mnWait)
+        else if (pObj->mnWait == ANIMATION_TIMEOUT_ON_CLICK)
         {
             pObj->maBitmapEx.Draw(pOut, rDestPt, rDestSz);
         }
