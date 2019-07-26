@@ -20,7 +20,7 @@
 en-US = "Windows Explorer Extension"
 
 [STR_DESC_MODULE_OPTIONAL_WINDOWS_EXPLORER_EXTENSIONS]
-en-US = "Enables the Microsoft Windows Explorer to show information about %PRODUCTNAME documents, such as thumbnail previews, and full-text search."
+en-US = "Enables the Microsoft File Explorer to show information about %PRODUCTNAME documents, such as thumbnail previews, and perform full-text search."
 
 
 
