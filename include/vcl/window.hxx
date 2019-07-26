@@ -1265,8 +1265,8 @@ public:
     void                                SetAccessibilityEventsSuppressed(bool bSuppressed);
 
     // Deprecated - can use SetAccessibleRelationLabelFor/By nowadays
-    virtual vcl::Window*                GetParentLabelFor( const vcl::Window* pLabel ) const;
-    virtual vcl::Window*                GetParentLabeledBy( const vcl::Window* pLabeled ) const;
+    vcl::Window*                        GetParentLabelFor( const vcl::Window* pLabel ) const;
+    vcl::Window*                        GetParentLabeledBy( const vcl::Window* pLabeled ) const;
     KeyEvent                            GetActivationKey() const;
 
 protected:
