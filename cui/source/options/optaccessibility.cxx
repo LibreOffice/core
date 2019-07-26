@@ -22,69 +22,53 @@
 #include <vcl/svapp.hxx>
 #include <officecfg/Office/Common.hxx>
 
-SvxAccessibilityOptionsTabPage::SvxAccessibilityOptionsTabPage(vcl::Window* pParent,
+SvxAccessibilityOptionsTabPage::SvxAccessibilityOptionsTabPage(TabPageParent pParent,
     const SfxItemSet& rSet)
-    : SfxTabPage(pParent, "OptAccessibilityPage",
-        "cui/ui/optaccessibilitypage.ui", &rSet)
+    : SfxTabPage(pParent, "cui/ui/optaccessibilitypage.ui", "OptAccessibilityPage", &rSet)
+    , m_xAccessibilityTool(m_xBuilder->weld_check_button("acctool"))
+    , m_xTextSelectionInReadonly(m_xBuilder->weld_check_button("textselinreadonly"))
+    , m_xAnimatedGraphics(m_xBuilder->weld_check_button("animatedgraphics"))
+    , m_xAnimatedTexts(m_xBuilder->weld_check_button("animatedtext"))
+    , m_xAutoDetectHC(m_xBuilder->weld_check_button("autodetecthc"))
+    , m_xAutomaticFontColor(m_xBuilder->weld_check_button("autofontcolor"))
+    , m_xPagePreviews(m_xBuilder->weld_check_button("systempagepreviewcolor"))
 {
-    get(m_pAccessibilityTool, "acctool");
-    get(m_pTextSelectionInReadonly, "textselinreadonly");
-    get(m_pAnimatedGraphics, "animatedgraphics");
-    get(m_pAnimatedTexts, "animatedtext");
-
-    get(m_pAutoDetectHC, "autodetecthc");
-    get(m_pAutomaticFontColor, "autofontcolor");
-    get(m_pPagePreviews, "systempagepreviewcolor");
-
 #ifdef UNX
     // UNIX: read the gconf2 setting instead to use the checkbox
-    m_pAccessibilityTool->Hide();
+    m_xAccessibilityTool->hide();
 #endif
 }
 
 SvxAccessibilityOptionsTabPage::~SvxAccessibilityOptionsTabPage()
 {
-    disposeOnce();
 }
 
-void SvxAccessibilityOptionsTabPage::dispose()
+VclPtr<SfxTabPage> SvxAccessibilityOptionsTabPage::Create(TabPageParent pParent, const SfxItemSet* rAttrSet)
 {
-    m_pAccessibilityTool.clear();
-    m_pTextSelectionInReadonly.clear();
-    m_pAnimatedGraphics.clear();
-    m_pAnimatedTexts.clear();
-    m_pAutoDetectHC.clear();
-    m_pAutomaticFontColor.clear();
-    m_pPagePreviews.clear();
-    SfxTabPage::dispose();
-}
-
-VclPtr<SfxTabPage> SvxAccessibilityOptionsTabPage::Create( TabPageParent pParent, const SfxItemSet* rAttrSet )
-{
-    return VclPtr<SvxAccessibilityOptionsTabPage>::Create(pParent.pParent, *rAttrSet);
+    return VclPtr<SvxAccessibilityOptionsTabPage>::Create(pParent, *rAttrSet);
 }
 
 bool SvxAccessibilityOptionsTabPage::FillItemSet( SfxItemSet* )
 {
     std::shared_ptr<comphelper::ConfigurationChanges> batch( comphelper::ConfigurationChanges::create() );
     if ( !officecfg::Office::Common::Accessibility::IsForPagePreviews::isReadOnly() )
-        officecfg::Office::Common::Accessibility::IsForPagePreviews::set(m_pPagePreviews->IsChecked(), batch);
+        officecfg::Office::Common::Accessibility::IsForPagePreviews::set(m_xPagePreviews->get_active(), batch);
     if ( !officecfg::Office::Common::Accessibility::IsAllowAnimatedGraphics::isReadOnly() )
-        officecfg::Office::Common::Accessibility::IsAllowAnimatedGraphics::set(m_pAnimatedGraphics->IsChecked(), batch);
+        officecfg::Office::Common::Accessibility::IsAllowAnimatedGraphics::set(m_xAnimatedGraphics->get_active(), batch);
     if ( !officecfg::Office::Common::Accessibility::IsAllowAnimatedText::isReadOnly() )
-        officecfg::Office::Common::Accessibility::IsAllowAnimatedText::set(m_pAnimatedTexts->IsChecked(), batch);
+        officecfg::Office::Common::Accessibility::IsAllowAnimatedText::set(m_xAnimatedTexts->get_active(), batch);
     if ( !officecfg::Office::Common::Accessibility::IsAutomaticFontColor::isReadOnly() )
-        officecfg::Office::Common::Accessibility::IsAutomaticFontColor::set(m_pAutomaticFontColor->IsChecked(), batch);
+        officecfg::Office::Common::Accessibility::IsAutomaticFontColor::set(m_xAutomaticFontColor->get_active(), batch);
     if ( !officecfg::Office::Common::Accessibility::IsSelectionInReadonly::isReadOnly() )
-        officecfg::Office::Common::Accessibility::IsSelectionInReadonly::set(m_pTextSelectionInReadonly->IsChecked(), batch);
+        officecfg::Office::Common::Accessibility::IsSelectionInReadonly::set(m_xTextSelectionInReadonly->get_active(), batch);
     if ( !officecfg::Office::Common::Accessibility::AutoDetectSystemHC::isReadOnly() )
-        officecfg::Office::Common::Accessibility::AutoDetectSystemHC::set(m_pAutoDetectHC->IsChecked(), batch);
+        officecfg::Office::Common::Accessibility::AutoDetectSystemHC::set(m_xAutoDetectHC->get_active(), batch);
     batch->commit();
 
     AllSettings aAllSettings = Application::GetSettings();
     MiscSettings aMiscSettings = aAllSettings.GetMiscSettings();
 #ifndef UNX
-    aMiscSettings.SetEnableATToolSupport(m_pAccessibilityTool->IsChecked());
+    aMiscSettings.SetEnableATToolSupport(m_xAccessibilityTool->get_active());
 #endif
     aAllSettings.SetMiscSettings(aMiscSettings);
     Application::MergeSystemSettings( aAllSettings );
@@ -95,33 +79,33 @@ bool SvxAccessibilityOptionsTabPage::FillItemSet( SfxItemSet* )
 
 void SvxAccessibilityOptionsTabPage::Reset( const SfxItemSet* )
 {
-    m_pPagePreviews->Check( officecfg::Office::Common::Accessibility::IsForPagePreviews::get() );
+    m_xPagePreviews->set_active( officecfg::Office::Common::Accessibility::IsForPagePreviews::get() );
     if( officecfg::Office::Common::Accessibility::IsForPagePreviews::isReadOnly() )
-        m_pPagePreviews->Disable();
+        m_xPagePreviews->set_sensitive(false);
 
-    m_pAnimatedGraphics->Check( officecfg::Office::Common::Accessibility::IsAllowAnimatedGraphics::get() );
+    m_xAnimatedGraphics->set_active( officecfg::Office::Common::Accessibility::IsAllowAnimatedGraphics::get() );
     if( officecfg::Office::Common::Accessibility::IsAllowAnimatedGraphics::isReadOnly() )
-        m_pAnimatedGraphics->Disable();
+        m_xAnimatedGraphics->set_sensitive(false);
 
-    m_pAnimatedTexts->Check( officecfg::Office::Common::Accessibility::IsAllowAnimatedText::get() );
+    m_xAnimatedTexts->set_active( officecfg::Office::Common::Accessibility::IsAllowAnimatedText::get() );
     if( officecfg::Office::Common::Accessibility::IsAllowAnimatedText::isReadOnly() )
-        m_pAnimatedTexts->Disable();
+        m_xAnimatedTexts->set_sensitive(false);
 
-    m_pAutomaticFontColor->Check( officecfg::Office::Common::Accessibility::IsAutomaticFontColor::get() );
+    m_xAutomaticFontColor->set_active( officecfg::Office::Common::Accessibility::IsAutomaticFontColor::get() );
     if( officecfg::Office::Common::Accessibility::IsAutomaticFontColor::isReadOnly() )
-        m_pAutomaticFontColor->Disable();
+        m_xAutomaticFontColor->set_sensitive(false);
 
-    m_pTextSelectionInReadonly->Check( officecfg::Office::Common::Accessibility::IsSelectionInReadonly::get() );
+    m_xTextSelectionInReadonly->set_active( officecfg::Office::Common::Accessibility::IsSelectionInReadonly::get() );
     if( officecfg::Office::Common::Accessibility::IsSelectionInReadonly::isReadOnly() )
-        m_pTextSelectionInReadonly->Disable();
+        m_xTextSelectionInReadonly->set_sensitive(false);
 
-    m_pAutoDetectHC->Check( officecfg::Office::Common::Accessibility::AutoDetectSystemHC::get() );
+    m_xAutoDetectHC->set_active( officecfg::Office::Common::Accessibility::AutoDetectSystemHC::get() );
     if( officecfg::Office::Common::Accessibility::AutoDetectSystemHC::isReadOnly() )
-        m_pAutoDetectHC->Disable();
+        m_xAutoDetectHC->set_sensitive(false);
 
     AllSettings aAllSettings = Application::GetSettings();
     const MiscSettings& aMiscSettings = aAllSettings.GetMiscSettings();
-    m_pAccessibilityTool->Check(aMiscSettings.GetEnableATToolSupport());
+    m_xAccessibilityTool->set_active(aMiscSettings.GetEnableATToolSupport());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
