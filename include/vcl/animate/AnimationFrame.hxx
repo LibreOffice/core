@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_ANIMATE_ANIMATIONBITMAP_HXX
-#define INCLUDED_VCL_ANIMATE_ANIMATIONBITMAP_HXX
+#ifndef INCLUDED_VCL_ANIMATE_ANIMATIONFRAME_HXX
+#define INCLUDED_VCL_ANIMATE_ANIMATIONFRAME_HXX
 
 #include <vcl/dllapi.h>
 #include <vcl/bitmapex.hxx>
@@ -30,7 +30,7 @@ enum class Disposal
     Previous
 };
 
-struct VCL_DLLPUBLIC AnimationBitmap
+struct VCL_DLLPUBLIC AnimationFrame
 {
     BitmapEx maBitmapEx;
     Point maPositionPixel;
@@ -39,15 +39,15 @@ struct VCL_DLLPUBLIC AnimationBitmap
     Disposal meDisposal;
     bool mbUserInput;
 
-    AnimationBitmap()
+    AnimationFrame()
         : mnWait(0)
         , meDisposal(Disposal::Not)
         , mbUserInput(false)
     {
     }
 
-    AnimationBitmap(const BitmapEx& rBitmapEx, const Point& rPositionPixel, const Size& rSizePixel,
-                    long nWait = 0, Disposal eDisposal = Disposal::Not)
+    AnimationFrame(const BitmapEx& rBitmapEx, const Point& rPositionPixel, const Size& rSizePixel,
+                   long nWait = 0, Disposal eDisposal = Disposal::Not)
         : maBitmapEx(rBitmapEx)
         , maPositionPixel(rPositionPixel)
         , maSizePixel(rSizePixel)
@@ -57,23 +57,23 @@ struct VCL_DLLPUBLIC AnimationBitmap
     {
     }
 
-    bool operator==(const AnimationBitmap& rAnimationBitmap) const
+    bool operator==(const AnimationFrame& rAnimationFrame) const
     {
-        return (rAnimationBitmap.maBitmapEx == maBitmapEx
-                && rAnimationBitmap.maPositionPixel == maPositionPixel
-                && rAnimationBitmap.maSizePixel == maSizePixel && rAnimationBitmap.mnWait == mnWait
-                && rAnimationBitmap.meDisposal == meDisposal
-                && rAnimationBitmap.mbUserInput == mbUserInput);
+        return (rAnimationFrame.maBitmapEx == maBitmapEx
+                && rAnimationFrame.maPositionPixel == maPositionPixel
+                && rAnimationFrame.maSizePixel == maSizePixel && rAnimationFrame.mnWait == mnWait
+                && rAnimationFrame.meDisposal == meDisposal
+                && rAnimationFrame.mbUserInput == mbUserInput);
     }
 
-    bool operator!=(const AnimationBitmap& rAnimationBitmap) const
+    bool operator!=(const AnimationFrame& rAnimationFrame) const
     {
-        return !(*this == rAnimationBitmap);
+        return !(*this == rAnimationFrame);
     }
 
     BitmapChecksum GetChecksum() const;
 };
 
-#endif // INCLUDED_VCL_ANIMATE_ANIMATIONBITMAP_HXX
+#endif // INCLUDED_VCL_ANIMATE_ANIMATIONFRAME_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

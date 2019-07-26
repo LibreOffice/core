@@ -21,7 +21,7 @@
 #define INCLUDED_VCL_ANIMATE_ANIMATION_HXX
 
 #include <vcl/dllapi.h>
-#include <vcl/animate/AnimationBitmap.hxx>
+#include <vcl/animate/AnimationFrame.hxx>
 #include <vcl/timer.hxx>
 
 #define ANIMATION_TIMEOUT_ON_CLICK 2147483647L
@@ -67,14 +67,11 @@ public:
     void SetNotifyHdl(const Link<Animation*, void>& rLink) { maTimeoutNotifier = rLink; }
     const Link<Animation*, void>& GetNotifyHdl() const { return maTimeoutNotifier; }
 
-    std::vector<std::unique_ptr<AnimationBitmap>>& GetAnimationFrames()
-    {
-        return maAnimationFrames;
-    }
+    std::vector<std::unique_ptr<AnimationFrame>>& GetAnimationFrames() { return maAnimationFrames; }
     size_t Count() const { return maAnimationFrames.size(); }
-    bool Insert(const AnimationBitmap& rAnimationBitmap);
-    const AnimationBitmap& Get(sal_uInt16 nAnimation) const;
-    void Replace(const AnimationBitmap& rNewAnimationBmp, sal_uInt16 nAnimation);
+    bool Insert(const AnimationFrame& rAnimationFrame);
+    const AnimationFrame& Get(sal_uInt16 nAnimation) const;
+    void Replace(const AnimationFrame& rNewAnimationBmp, sal_uInt16 nAnimation);
 
     sal_uLong GetSizeBytes() const;
     BitmapChecksum GetChecksum() const;
@@ -98,7 +95,7 @@ public:
     SAL_DLLPRIVATE sal_uLong ImplGetCurPos() const { return mnFrameIndex; }
 
 protected:
-    std::vector<std::unique_ptr<AnimationBitmap>> maAnimationFrames;
+    std::vector<std::unique_ptr<AnimationFrame>> maAnimationFrames;
     AnimationRenderers* mpAnimationRenderers;
     bool mbIsInAnimation;
     size_t mnFrameIndex;
@@ -118,7 +115,7 @@ private:
 
     SAL_DLLPRIVATE bool IsTimeoutSetup();
     SAL_DLLPRIVATE bool SendTimeout();
-    SAL_DLLPRIVATE AnimationBitmap* GetNextFrameBitmap();
+    SAL_DLLPRIVATE AnimationFrame* GetNextFrame();
     SAL_DLLPRIVATE void RenderNextFrame();
 
     DECL_DLLPRIVATE_LINK(ImplTimeoutHdl, Timer*, void);

@@ -1672,10 +1672,10 @@ bool TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
                     aImage.SetPrefMapMode(maBitmapPrefMapMode);
                     aImage.SetPrefSize(maBitmapPrefSize);
 
-                    AnimationBitmap aAnimationBitmap( aImage, Point( 0, 0 ), maBitmapPixelSize,
+                    AnimationFrame aAnimationFrame( aImage, Point( 0, 0 ), maBitmapPixelSize,
                                                       ANIMATION_TIMEOUT_ON_CLICK, Disposal::Back );
 
-                    aAnimation.Insert( aAnimationBitmap );
+                    aAnimation.Insert( aAnimationFrame );
                 }
             }
 
