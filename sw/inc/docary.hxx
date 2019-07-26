@@ -267,6 +267,7 @@ public:
     bool ContainsFormat(SwFrameFormat const& rFormat) const;
     /// not so fast check that given format is still alive (i.e. contained here)
     bool IsAlive(SwFrameFormat const*) const;
+    bool IsAlive(const OUString&) const;
 
     void DeleteAndDestroyAll( bool keepDefault = false );
 
@@ -293,6 +294,10 @@ class SwTextFormatColls : public SwFormatsModifyBase<SwTextFormatColl*>
 public:
     SwTextFormatColls() : SwFormatsModifyBase( DestructorPolicy::KeepElements ) {}
     void dumpAsXml(xmlTextWriterPtr pWriter) const;
+/*    bool IsAlive(const OUString & name) const
+    {
+        return std::find(begin(), end(), p) != end();
+    }*/
 };
 
 /// Array of Undo-history.
