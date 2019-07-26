@@ -203,8 +203,11 @@ bool coerce(
             }
             break;
         case unoidl::detail::SourceProviderExpr::TYPE_FLOAT:
-            lhs->fval = lhs->ival;
-            ok = true;
+            {
+                auto tmp = lhs->ival;
+                lhs->fval = tmp;
+                ok = true;
+            }
             break;
         }
         break;
