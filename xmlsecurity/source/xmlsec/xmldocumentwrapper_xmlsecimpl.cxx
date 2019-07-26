@@ -175,7 +175,7 @@ void XMLDocumentWrapper_XmlSecImpl::sendStartElement(
  *  xHandler2 - the second XDocumentHandler interface to receive the
  *          startElement SAX event. It can't be NULL.
  *  pNode -     the node on which the startElement should be generated.
- *          This node must be a element type.
+ *          This node must be an element type.
  ******************************************************************************/
 {
     SvXMLAttributeList* pAttributeList = new SvXMLAttributeList();
@@ -250,11 +250,11 @@ void XMLDocumentWrapper_XmlSecImpl::sendEndElement(
 /****** XMLDocumentWrapper_XmlSecImpl/sendEndElement **************************
  *
  *   NAME
- *  sendEndElement -- Constructs a endElement SAX event
+ *  sendEndElement -- Constructs an endElement SAX event
  *
  *   FUNCTION
  *  Used when converting the document into SAX event stream.
- *  This method constructs a endElement SAX event for a particular
+ *  This method constructs an endElement SAX event for a particular
  *  element, then calls the endElement methods of the XDocumentHandlers.
  *
  *   INPUTS
@@ -263,7 +263,7 @@ void XMLDocumentWrapper_XmlSecImpl::sendEndElement(
  *  xHandler2 - the second XDocumentHandler interface to receive the
  *          endElement SAX event. It can't be NULL.
  *  pNode -     the node on which the endElement should be generated.
- *          This node must be a element type.
+ *          This node must be an element type.
  ******************************************************************************/
 {
     OString sNodeName = getNodeQName(pNode);

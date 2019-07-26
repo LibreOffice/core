@@ -596,7 +596,7 @@ void DigitalSignaturesDialog::ImplFillSignaturesBox()
                 sImage = BMP_SIG_NOT_VALIDATED;
             }
             //Check if the signature is a "old" document signature, that is, which was created
-            //by an version of OOo previous to 3.2
+            //by a version of OOo previous to 3.2
             // If there is no storage, then it's pointless to check storage
             // stream references.
             else if (maSignatureManager.getSignatureMode() == DocumentSignatureMode::Content

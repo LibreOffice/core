@@ -47,7 +47,7 @@ protected:
 
     /*
      * the type value, is one of following values:
-     * TYPEOFELEMENTMARK - the default value, represents an blocker if
+     * TYPEOFELEMENTMARK - the default value, represents a blocker if
      *                     not changed
      * TYPEOFELEMENTCOLLECTOR - represents an ElementCollector
      */

@@ -312,7 +312,7 @@ void SAL_CALL XSecParser::endElement( const OUString& aName )
         {
             if ( m_bReferenceUnresolved )
             /*
-            * it must be a octet stream
+            * it must be an octet stream
             */
             {
                 m_pXSecController->addStreamReference( m_currentReferenceURI, true, m_nReferenceDigestID );

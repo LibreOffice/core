@@ -86,7 +86,7 @@ short CertificateChooser::run()
 
     // PostUserEvent( LINK( this, CertificateChooser, Initialize ) );
 
-    // PostUserLink behavior is to slow, so do it directly before Execute().
+    // PostUserLink behavior is too slow, so do it directly before Execute().
     // Problem: This Dialog should be visible right now, and the parent should not be accessible.
     // Show, Update, DisableInput...
 
