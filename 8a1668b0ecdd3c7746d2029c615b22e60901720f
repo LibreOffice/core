@@ -22,6 +22,30 @@
       "revId": "8a1668b0ecdd3c7746d2029c615b22e60901720f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf659307_9573e815",
+        "filename": "schema/libreoffice/OpenDocument-schema-v1.3+libreoffice.rng",
+        "patchSetId": 13
+      },
+      "lineNbr": 1670,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-07-26T11:54:42Z",
+      "side": 1,
+      "message": "my understanding is that the loext:qrcode element will be removed since it\u0027s not in a ODF namespace, so its attributes will be removed as well, hence it doesn\u0027t matter what namespace they have.\n\nsee part1:\n\n2.2.2 OpenDocument Extended Document\n            B.1.1) Foreign elements and attributes, as defined in section 3.17 have been removed.",
+      "parentUuid": "bf659307_b5f94c81",
+      "range": {
+        "startLine": 1670,
+        "startChar": 6,
+        "endLine": 1670,
+        "endChar": 48
+      },
+      "revId": "8a1668b0ecdd3c7746d2029c615b22e60901720f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
