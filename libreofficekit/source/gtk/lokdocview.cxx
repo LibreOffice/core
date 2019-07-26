@@ -3269,7 +3269,7 @@ static void lok_doc_view_class_init (LOKDocViewClass* pClass)
      * Password must be provided by calling lok_doc_view_set_document_password
      * function with pUrl as provided by the callback.
      *
-     * Upon entering a invalid password, another `password-required` signal is
+     * Upon entering an invalid password, another `password-required` signal is
      * emitted.
      * Upon entering a valid password, document starts to load.
      * Upon entering a NULL password: if bModify is %TRUE, document starts to

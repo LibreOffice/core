@@ -78,7 +78,7 @@ public:
             SvXMLImport& rImport);
     virtual ~SvXMLImportPropertyMapper() override;
 
-    // Add a ImportPropertyMapper at the end of the import mapper chain.
+    // Add an ImportPropertyMapper at the end of the import mapper chain.
     // The added mapper MUST not be used outside the Mapper chain any longer,
     // because its PropertyMapper will be replaced.
     void ChainImportMapper(
@@ -142,7 +142,7 @@ public:
         ContextID_Index_Pair* pSpecialContextIds );
 
     /** implementation helper for FillPropertySet: fill an XMultiPropertySet.
-     * If unsuccessul, set return value. */
+     * If unsuccessful, set return value. */
     static bool FillMultiPropertySet_(
         const ::std::vector<XMLPropertyState> & rProperties,
         const css::uno::Reference< css::beans::XMultiPropertySet> & rMultiPropSet,
@@ -154,7 +154,7 @@ public:
         ContextID_Index_Pair* pSpecialContextIds );
 
     /** implementation helper for FillPropertySet: fill an XTolerantMultiPropertySet.
-     * If unsuccessul, set return value. */
+     * If unsuccessful, set return value. */
     static bool FillTolerantMultiPropertySet_(
         const ::std::vector<XMLPropertyState> & rProperties,
         const css::uno::Reference< css::beans::XTolerantMultiPropertySet> & rTolPropSet,

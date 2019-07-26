@@ -40,7 +40,7 @@ service BindableIntegerValueRange
         must support exchanging double values.</p>
 
         <p>When the (integer) value reflected by the control model is changed, it's converted
-        into an double value and propagated to the binding.</p>
+        into a double value and propagated to the binding.</p>
 
         <p>When the external (double) value changes, it's converted as follows to an integer
         value:
