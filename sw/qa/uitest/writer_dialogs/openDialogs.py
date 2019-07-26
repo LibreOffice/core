@@ -87,7 +87,7 @@ dialogs = [
     # {"command": ".uno:ThesaurusDialog", "closeButton": "cancel"},
         # fails in CI, but works fine locally
     {"command": ".uno:Hyphenate", "closeButton": "ok", "skipTestOK": True},
-        # do not test the OK buttong twice
+        # do not test the OK button twice
     {"command": ".uno:ChineseConversion", "closeButton": "cancel"},
     # {"command": ".uno:WordCountDialog", "closeButton": "close"},
         # tested in sw/qa/uitest/writer_tests/wordCount.py

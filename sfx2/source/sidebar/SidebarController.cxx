@@ -1182,7 +1182,7 @@ void SidebarController::UpdateDeckOpenState()
             aNewSize.setWidth(mnSavedSidebarWidth);
 
             mpParentWindow->GetFloatingWindow()->SetPosSizePixel(aNewPos, aNewSize);
-            // Sidebar wide enought to render the menu; enable it.
+            // Sidebar wide enough to render the menu; enable it.
             if (comphelper::LibreOfficeKit::isActive())
                 mpTabBar->EnableMenuButton(true);
         }
