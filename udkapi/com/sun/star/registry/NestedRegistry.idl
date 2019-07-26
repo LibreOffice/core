@@ -65,7 +65,7 @@
     <dl>
     <dt> <b>openKey</b>
     </dt>
-    <dd> returns a virtual key which is specified in registy1 or registry2.
+    <dd> returns a virtual key which is specified in registry1 or registry2.
 
     </dd>
     <dt> <b>deleteKey</b>

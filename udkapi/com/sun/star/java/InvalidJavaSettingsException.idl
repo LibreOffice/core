@@ -25,7 +25,7 @@
 module com { module sun { module star { module java {
 
 
-/** indicates a the Java settings have been modified.
+/** indicates the Java settings have been modified.
 
     <p>The Java framework uses a configuration file, which can be used
     by distributors to determine what versions are supported. If this

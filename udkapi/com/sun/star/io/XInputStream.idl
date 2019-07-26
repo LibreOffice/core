@@ -58,7 +58,7 @@ published interface XInputStream: com::sun::star::uno::XInterface
               <li> neither caller nor callee keep a second reference to the same
                    sequence.
               <li> the sequence is pre-allocated with the requested number of bytes.
-              <li> the same sequence is reused (simply preallocationg a new
+              <li> the same sequence is reused (simply preallocating a new
                    sequence for every call bears no advantage).
               <li> the call is not bridged (e.g., between different compilers
                    or different processes).

@@ -34,7 +34,7 @@ published interface XInteractionRequest: com::sun::star::uno::XInterface
     /** Get information about the request itself.
 
         @returns
-        an com::sun::star::uno::Exception, wrapped as an
+        a com::sun::star::uno::Exception, wrapped as an
         `any`.
      */
     any getRequest();

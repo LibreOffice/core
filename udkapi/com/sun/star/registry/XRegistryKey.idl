@@ -210,7 +210,7 @@ published interface XRegistryKey: com::sun::star::uno::XInterface
 
     // DOCUMENTATION CHANGED FOR XRegistryKey::getStringListValue
     /** @returns
-        a sequence of unicode strings if the key contains an unicode string list value.
+        a sequence of unicode strings if the key contains a unicode string list value.
 
          @throws InvalidRegistryException
          if the registry is not open.
