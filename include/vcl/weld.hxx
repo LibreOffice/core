@@ -237,6 +237,8 @@ public:
 
     //make this widget look like a page in a notebook
     virtual void set_stack_background() = 0;
+    //make this widget look like it has a highlighted background
+    virtual void set_highlight_background() = 0;
 
     virtual css::uno::Reference<css::datatransfer::dnd::XDropTarget> get_drop_target() = 0;
 

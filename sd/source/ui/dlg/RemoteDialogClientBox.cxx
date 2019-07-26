@@ -135,7 +135,10 @@ IMPL_LINK_NOARG(ClientBoxEntry, DeauthoriseHdl, weld::Button&, void)
 
 IMPL_LINK_NOARG(ClientBoxEntry, FocusHdl, weld::Widget&, void)
 {
+    if (ClientBoxEntry* pOldEntry = m_pClientBox->GetActiveEntry())
+        pOldEntry->m_xContainer->set_stack_background();
     m_pClientBox->setActive(this);
+    m_xContainer->set_highlight_background();
 }
 
 } //namespace dp_gui

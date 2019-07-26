@@ -294,6 +294,15 @@ protected:
     virtual bool HandleKeyEventListener(VclWindowEvent& rEvent);
     virtual void HandleMouseEventListener(VclSimpleEvent& rEvent);
 
+    void set_background(const Color& rColor)
+    {
+        m_xWidget->SetControlBackground(rColor);
+        m_xWidget->SetBackground(m_xWidget->GetControlBackground());
+        // turn off WB_CLIPCHILDREN otherwise the bg won't extend "under"
+        // transparent children of the widget
+        m_xWidget->SetStyle(m_xWidget->GetStyle() & ~WB_CLIPCHILDREN);
+    }
+
 public:
     SalInstanceWidget(vcl::Window* pWidget, SalInstanceBuilder* pBuilder, bool bTakeOwnership)
         : m_xWidget(pWidget)
@@ -681,11 +690,12 @@ public:
 
     virtual void set_stack_background() override
     {
-        m_xWidget->SetControlBackground(m_xWidget->GetSettings().GetStyleSettings().GetWindowColor());
-        m_xWidget->SetBackground(m_xWidget->GetControlBackground());
-        // turn off WB_CLIPCHILDREN otherwise the bg won't extend "under"
-        // transparent children of the widget
-        m_xWidget->SetStyle(m_xWidget->GetStyle() & ~WB_CLIPCHILDREN);
+        set_background(m_xWidget->GetSettings().GetStyleSettings().GetWindowColor());;
+    }
+
+    virtual void set_highlight_background() override
+    {
+        set_background(m_xWidget->GetSettings().GetStyleSettings().GetHighlightColor());;
     }
 
     SystemWindow* getSystemWindow()
