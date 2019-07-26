@@ -22,49 +22,36 @@
 #include <iostream>
 #include <officecfg/Office/BasicIDE.hxx>
 
-SvxBasicIDEOptionsPage::SvxBasicIDEOptionsPage( vcl::Window* pParent, const SfxItemSet& rSet )
-: SfxTabPage(pParent, "OptBasicIDEPage", "cui/ui/optbasicidepage.ui", &rSet)
+SvxBasicIDEOptionsPage::SvxBasicIDEOptionsPage(TabPageParent pParent, const SfxItemSet& rSet)
+    : SfxTabPage(pParent, "cui/ui/optbasicidepage.ui", "OptBasicIDEPage", &rSet)
+    , m_xCodeCompleteChk(m_xBuilder->weld_check_button("codecomplete_enable"))
+    , m_xAutocloseProcChk(m_xBuilder->weld_check_button("autoclose_proc"))
+    , m_xAutocloseParenChk(m_xBuilder->weld_check_button("autoclose_paren"))
+    , m_xAutocloseQuotesChk(m_xBuilder->weld_check_button("autoclose_quotes"))
+    , m_xAutoCorrectChk(m_xBuilder->weld_check_button("autocorrect"))
+    , m_xUseExtendedTypesChk(m_xBuilder->weld_check_button("extendedtypes_enable"))
 {
-    get(pCodeCompleteChk, "codecomplete_enable");
-    get(pAutocloseProcChk, "autoclose_proc");
-    get(pAutocloseParenChk, "autoclose_paren");
-    get(pAutocloseQuotesChk, "autoclose_quotes");
-    get(pAutoCorrectChk, "autocorrect");
-    get(pUseExtendedTypesChk, "extendedtypes_enable");
-
     LoadConfig();
 }
 
 SvxBasicIDEOptionsPage::~SvxBasicIDEOptionsPage()
 {
-    disposeOnce();
-}
-
-void SvxBasicIDEOptionsPage::dispose()
-{
-    pCodeCompleteChk.clear();
-    pAutocloseProcChk.clear();
-    pAutocloseParenChk.clear();
-    pAutocloseQuotesChk.clear();
-    pAutoCorrectChk.clear();
-    pUseExtendedTypesChk.clear();
-    SfxTabPage::dispose();
 }
 
 void SvxBasicIDEOptionsPage::LoadConfig()
 {
-    pCodeCompleteChk->Check( officecfg::Office::BasicIDE::Autocomplete::CodeComplete::get() );
-    pCodeCompleteChk->Enable( !officecfg::Office::BasicIDE::Autocomplete::CodeComplete::isReadOnly() );
-    pAutocloseProcChk->Check( officecfg::Office::BasicIDE::Autocomplete::AutocloseProc::get() );
-    pAutocloseProcChk->Enable( !officecfg::Office::BasicIDE::Autocomplete::AutocloseProc::isReadOnly() );
-    pAutocloseQuotesChk->Check( officecfg::Office::BasicIDE::Autocomplete::AutocloseDoubleQuotes::get() );
-    pAutocloseQuotesChk->Enable( !officecfg::Office::BasicIDE::Autocomplete::AutocloseDoubleQuotes::isReadOnly() );
-    pAutocloseParenChk->Check( officecfg::Office::BasicIDE::Autocomplete::AutocloseParenthesis::get() );
-    pAutocloseParenChk->Enable( !officecfg::Office::BasicIDE::Autocomplete::AutocloseParenthesis::isReadOnly() );
-    pAutoCorrectChk->Check( officecfg::Office::BasicIDE::Autocomplete::AutoCorrect::get() );
-    pAutoCorrectChk->Enable( !officecfg::Office::BasicIDE::Autocomplete::AutoCorrect::isReadOnly() );
-    pUseExtendedTypesChk->Check( officecfg::Office::BasicIDE::Autocomplete::UseExtended::get() );
-    pUseExtendedTypesChk->Enable( !officecfg::Office::BasicIDE::Autocomplete::UseExtended::isReadOnly() );
+    m_xCodeCompleteChk->set_active( officecfg::Office::BasicIDE::Autocomplete::CodeComplete::get() );
+    m_xCodeCompleteChk->set_sensitive( !officecfg::Office::BasicIDE::Autocomplete::CodeComplete::isReadOnly() );
+    m_xAutocloseProcChk->set_active( officecfg::Office::BasicIDE::Autocomplete::AutocloseProc::get() );
+    m_xAutocloseProcChk->set_sensitive( !officecfg::Office::BasicIDE::Autocomplete::AutocloseProc::isReadOnly() );
+    m_xAutocloseQuotesChk->set_active( officecfg::Office::BasicIDE::Autocomplete::AutocloseDoubleQuotes::get() );
+    m_xAutocloseQuotesChk->set_sensitive( !officecfg::Office::BasicIDE::Autocomplete::AutocloseDoubleQuotes::isReadOnly() );
+    m_xAutocloseParenChk->set_active( officecfg::Office::BasicIDE::Autocomplete::AutocloseParenthesis::get() );
+    m_xAutocloseParenChk->set_sensitive( !officecfg::Office::BasicIDE::Autocomplete::AutocloseParenthesis::isReadOnly() );
+    m_xAutoCorrectChk->set_active( officecfg::Office::BasicIDE::Autocomplete::AutoCorrect::get() );
+    m_xAutoCorrectChk->set_sensitive( !officecfg::Office::BasicIDE::Autocomplete::AutoCorrect::isReadOnly() );
+    m_xUseExtendedTypesChk->set_active( officecfg::Office::BasicIDE::Autocomplete::UseExtended::get() );
+    m_xUseExtendedTypesChk->set_sensitive( !officecfg::Office::BasicIDE::Autocomplete::UseExtended::isReadOnly() );
 }
 
 bool SvxBasicIDEOptionsPage::FillItemSet( SfxItemSet* /*rCoreSet*/ )
@@ -72,46 +59,46 @@ bool SvxBasicIDEOptionsPage::FillItemSet( SfxItemSet* /*rCoreSet*/ )
     bool bModified = false;
     std::shared_ptr< comphelper::ConfigurationChanges > batch( comphelper::ConfigurationChanges::create() );
 
-    if( pAutocloseProcChk->IsValueChangedFromSaved() )
+    if( m_xAutocloseProcChk->get_state_changed_from_saved() )
     {
-        officecfg::Office::BasicIDE::Autocomplete::AutocloseProc::set( pAutocloseProcChk->IsChecked(), batch );
-        CodeCompleteOptions::SetProcedureAutoCompleteOn( pAutocloseProcChk->IsChecked() );
+        officecfg::Office::BasicIDE::Autocomplete::AutocloseProc::set( m_xAutocloseProcChk->get_active(), batch );
+        CodeCompleteOptions::SetProcedureAutoCompleteOn( m_xAutocloseProcChk->get_active() );
         bModified = true;
     }
 
-    if( pCodeCompleteChk->IsValueChangedFromSaved() )
+    if( m_xCodeCompleteChk->get_state_changed_from_saved() )
     {
         //std::shared_ptr< comphelper::ConfigurationChanges > batch( comphelper::ConfigurationChanges::create() );
-        officecfg::Office::BasicIDE::Autocomplete::CodeComplete::set( pCodeCompleteChk->IsChecked(), batch );
-        CodeCompleteOptions::SetCodeCompleteOn( pCodeCompleteChk->IsChecked() );
+        officecfg::Office::BasicIDE::Autocomplete::CodeComplete::set( m_xCodeCompleteChk->get_active(), batch );
+        CodeCompleteOptions::SetCodeCompleteOn( m_xCodeCompleteChk->get_active() );
         bModified = true;
     }
 
-    if( pUseExtendedTypesChk->IsValueChangedFromSaved() )
+    if( m_xUseExtendedTypesChk->get_state_changed_from_saved() )
     {
-        officecfg::Office::BasicIDE::Autocomplete::UseExtended::set( pUseExtendedTypesChk->IsChecked(), batch );
-        CodeCompleteOptions::SetExtendedTypeDeclaration( pUseExtendedTypesChk->IsChecked() );
+        officecfg::Office::BasicIDE::Autocomplete::UseExtended::set( m_xUseExtendedTypesChk->get_active(), batch );
+        CodeCompleteOptions::SetExtendedTypeDeclaration( m_xUseExtendedTypesChk->get_active() );
         bModified = true;
     }
 
-    if( pAutocloseParenChk->IsValueChangedFromSaved() )
+    if( m_xAutocloseParenChk->get_state_changed_from_saved() )
     {
-        officecfg::Office::BasicIDE::Autocomplete::AutocloseParenthesis::set( pAutocloseParenChk->IsChecked(), batch );
-        CodeCompleteOptions::SetAutoCloseParenthesisOn( pAutocloseParenChk->IsChecked() );
+        officecfg::Office::BasicIDE::Autocomplete::AutocloseParenthesis::set( m_xAutocloseParenChk->get_active(), batch );
+        CodeCompleteOptions::SetAutoCloseParenthesisOn( m_xAutocloseParenChk->get_active() );
         bModified = true;
     }
 
-    if( pAutocloseQuotesChk->IsValueChangedFromSaved() )
+    if( m_xAutocloseQuotesChk->get_state_changed_from_saved() )
     {
-        officecfg::Office::BasicIDE::Autocomplete::AutocloseDoubleQuotes::set( pAutocloseQuotesChk->IsChecked(), batch );
-        CodeCompleteOptions::SetAutoCloseQuotesOn( pAutocloseQuotesChk->IsChecked() );
+        officecfg::Office::BasicIDE::Autocomplete::AutocloseDoubleQuotes::set( m_xAutocloseQuotesChk->get_active(), batch );
+        CodeCompleteOptions::SetAutoCloseQuotesOn( m_xAutocloseQuotesChk->get_active() );
         bModified = true;
     }
 
-    if( pAutoCorrectChk->IsValueChangedFromSaved() )
+    if( m_xAutoCorrectChk->get_state_changed_from_saved() )
     {
-        officecfg::Office::BasicIDE::Autocomplete::AutoCorrect::set( pAutoCorrectChk->IsChecked(), batch );
-        CodeCompleteOptions::SetAutoCorrectOn( pAutoCorrectChk->IsChecked() );
+        officecfg::Office::BasicIDE::Autocomplete::AutoCorrect::set( m_xAutoCorrectChk->get_active(), batch );
+        CodeCompleteOptions::SetAutoCorrectOn( m_xAutoCorrectChk->get_active() );
         bModified = true;
     }
 
@@ -124,22 +111,17 @@ bool SvxBasicIDEOptionsPage::FillItemSet( SfxItemSet* /*rCoreSet*/ )
 void SvxBasicIDEOptionsPage::Reset( const SfxItemSet* /*rSet*/ )
 {
     LoadConfig();
-    pCodeCompleteChk->SaveValue();
-
-    pAutocloseProcChk->SaveValue();
-
-    pAutocloseQuotesChk->SaveValue();
-
-    pAutocloseParenChk->SaveValue();
-
-    pAutoCorrectChk->SaveValue();
-
-    pUseExtendedTypesChk->SaveValue();
+    m_xCodeCompleteChk->save_state();
+    m_xAutocloseProcChk->save_state();
+    m_xAutocloseQuotesChk->save_state();
+    m_xAutocloseParenChk->save_state();
+    m_xAutoCorrectChk->save_state();
+    m_xUseExtendedTypesChk->save_state();
 }
 
 VclPtr<SfxTabPage> SvxBasicIDEOptionsPage::Create( TabPageParent pParent, const SfxItemSet* rAttrSet )
 {
-    return VclPtr<SvxBasicIDEOptionsPage>::Create( pParent.pParent, *rAttrSet );
+    return VclPtr<SvxBasicIDEOptionsPage>::Create( pParent, *rAttrSet );
 }
 
 void SvxBasicIDEOptionsPage::FillUserData()
