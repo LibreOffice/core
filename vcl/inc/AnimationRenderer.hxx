@@ -26,7 +26,7 @@
 class Animation;
 class OutputDevice;
 class VirtualDevice;
-struct AnimationBitmap;
+struct AnimationFrame;
 
 class VCL_DLLPUBLIC AnimationRenderer
 {
@@ -42,8 +42,8 @@ public:
     void Repaint();
     AnimationData* CreateAnimationData() const;
 
-    Point GetPosition(const AnimationBitmap& rAnm);
-    Size GetSize(const AnimationBitmap& rAnm);
+    Point GetPosition(const AnimationFrame& rAnm);
+    Size GetSize(const AnimationFrame& rAnm);
 
     const Point& GetOriginPosition() const { return maOriginPt; }
     const Size& GetSizePx() const { return maSizePx; }
@@ -79,7 +79,7 @@ private:
 
     SAL_DLLPRIVATE double CalculateXScaling();
     SAL_DLLPRIVATE double CalculateYScaling();
-    SAL_DLLPRIVATE Point GetBottomRightPoint(const AnimationBitmap& rAnimationBitmap);
+    SAL_DLLPRIVATE Point GetBottomRightPoint(const AnimationFrame& rAnimationFrame);
 };
 
 #endif
