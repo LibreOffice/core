@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_d55c004d",
+        "filename": "sw/source/uibase/wrtsh/wrtsh1.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 475,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-07-26T13:17:11Z",
+      "side": 1,
+      "message": "i think calling this from UI code to get this effect is probably wrong; this is different than the place in SwDocShell::Load where it intentionally disables the link update - here the link update won\u0027t be turned back on again.\n\ni\u0027d rather find out what typically turns on the link-update after a file import - presumably \nDocumentLinksAdministrationManager::UpdateLinks which checks some config settings ?\n\n... and why is that not called for a template, or why does it set different mode for a template.",
+      "revId": "fb6ed34e373af6347e430387ebb83c368114d90a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
