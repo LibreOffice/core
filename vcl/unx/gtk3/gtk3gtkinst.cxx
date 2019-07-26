@@ -1388,6 +1388,7 @@ private:
     sal_uInt16 m_nLastMouseButton;
     sal_uInt16 m_nLastMouseClicks;
     ImplSVEvent* m_pFocusEvent;
+    GtkCssProvider* m_pBgCssProvider;
     gulong m_nFocusInSignalId;
     gulong m_nMnemonicActivateSignalId;
     gulong m_nFocusOutSignalId;
@@ -1579,6 +1580,24 @@ private:
         }
     }
 
+    void set_background(const OUString* pColor)
+    {
+        GtkStyleContext *pWidgetContext = gtk_widget_get_style_context(GTK_WIDGET(m_pWidget));
+        if (m_pBgCssProvider)
+        {
+            gtk_style_context_remove_provider(pWidgetContext, GTK_STYLE_PROVIDER(m_pBgCssProvider));
+            m_pBgCssProvider = nullptr;
+        }
+        if (!pColor)
+            return;
+        m_pBgCssProvider = gtk_css_provider_new();
+        OUString aBuffer = "* { background-color: #" + *pColor + "; }";
+        OString aResult = OUStringToOString(aBuffer, RTL_TEXTENCODING_UTF8);
+        gtk_css_provider_load_from_data(m_pBgCssProvider, aResult.getStr(), aResult.getLength(), nullptr);
+        gtk_style_context_add_provider(pWidgetContext, GTK_STYLE_PROVIDER(m_pBgCssProvider),
+                                       GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+    }
+
 public:
     GtkInstanceWidget(GtkWidget* pWidget, GtkInstanceBuilder* pBuilder, bool bTakeOwnership)
         : m_pWidget(pWidget)
@@ -1590,6 +1609,7 @@ public:
         , m_nLastMouseButton(0)
         , m_nLastMouseClicks(0)
         , m_pFocusEvent(nullptr)
+        , m_pBgCssProvider(nullptr)
         , m_nFocusInSignalId(0)
         , m_nMnemonicActivateSignalId(0)
         , m_nFocusOutSignalId(0)
@@ -2081,13 +2101,8 @@ public:
 
     virtual void set_stack_background() override
     {
-        GtkStyleContext *pWidgetContext = gtk_widget_get_style_context(GTK_WIDGET(m_pWidget));
-        GtkCssProvider *pProvider = gtk_css_provider_new();
-        OUString aBuffer = "* { background-color: #" + Application::GetSettings().GetStyleSettings().GetWindowColor().AsRGBHexString() + "; }";
-        OString aResult = OUStringToOString(aBuffer, RTL_TEXTENCODING_UTF8);
-        gtk_css_provider_load_from_data(pProvider, aResult.getStr(), aResult.getLength(), nullptr);
-        gtk_style_context_add_provider(pWidgetContext, GTK_STYLE_PROVIDER(pProvider),
-                                       GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+        OUString sColor = Application::GetSettings().GetStyleSettings().GetWindowColor().AsRGBHexString();
+        set_background(&sColor);
     }
 
     virtual ~GtkInstanceWidget() override
@@ -2120,6 +2135,8 @@ public:
             g_signal_handler_disconnect(m_pWidget, m_nFocusOutSignalId);
         if (m_nSizeAllocateSignalId)
             g_signal_handler_disconnect(m_pWidget, m_nSizeAllocateSignalId);
+
+        set_background(nullptr);
 
         if (m_pMouseEventBox && m_pMouseEventBox != m_pWidget)
         {
