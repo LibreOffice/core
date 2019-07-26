@@ -296,8 +296,12 @@ def main(argv):
         print("usage: find-unneeded-includes [FILE]...")
         return
 
-    with open("compile_commands.json", 'r') as compileCommandsSock:
-        compileCommands = json.load(compileCommandsSock)
+    try:
+        with open("compile_commands.json", 'r') as compileCommandsSock:
+            compileCommands = json.load(compileCommandsSock)
+    except FileNotFoundError:
+        print ("File 'compile_commands.json' does not exist, please run:\nmake vim-ide-integration")
+        sys.exit(-1)
 
     tidy(compileCommands, paths=argv)
 
