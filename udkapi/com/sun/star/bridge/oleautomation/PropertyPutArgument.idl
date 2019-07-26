@@ -23,9 +23,9 @@
 module com {  module sun {  module star {  module bridge {  module oleautomation {
 
 /** contains a value that is used as argument in a &quot;property put&quot
-    operation on a Automation object.
+    operation on an Automation object.
     <p>
-    If a Automation object is converted into a UNO object by a scripting
+    If an Automation object is converted into a UNO object by a scripting
     bridge, such as
     com::sun::star::bridge::oleautomation::BridgeSupplier,
     then it is accessed through the

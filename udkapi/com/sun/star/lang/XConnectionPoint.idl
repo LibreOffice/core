@@ -125,7 +125,7 @@ published interface XConnectionPoint: com::sun::star::uno::XInterface
             connection point container.
 
         @throws ListenerExistException
-            if it is a unicast broadcaster and a listener is already set.
+            if it is an unicast broadcaster and a listener is already set.
 
         @throws InvalidListenerException
             if the listener does not supply the needed interfaces.

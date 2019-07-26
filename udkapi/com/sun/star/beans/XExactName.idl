@@ -44,7 +44,7 @@ published interface XExactName: com::sun::star::uno::XInterface
 {
 
     /** @returns
-            the exact name for a given aprroximate name.
+            the exact name for a given approximate name.
 
         <p>For example "getExactName" could be returned for "GETEXACTNAME"
         when "GETEXACTNAME" was used by a case insensitive scripting language. </p>

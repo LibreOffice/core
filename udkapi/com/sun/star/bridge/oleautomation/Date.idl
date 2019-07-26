@@ -24,7 +24,7 @@ module com {  module sun {  module star {  module bridge {  module oleautomation
 
 /** is the UNO representation of the Automation type <code>DATE</code>.
     <p>
-    A <code>DATE</code> could actually be representd as`double` in
+    A <code>DATE</code> could actually be represented as `double` in
     UNO and therefore a typedef from `double` to a date type would
     do. But a typedef cannot be expressed in all language bindings. In the
     case where no typedefs are supported the actual type is used. That is, a

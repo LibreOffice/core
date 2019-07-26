@@ -49,7 +49,7 @@ published enum RegistryValueType
     /** the type of the key is LONGLIST.
      */
     LONGLIST,
-    /** the type of the key is a ASCIILIST.
+    /** the type of the key is an ASCIILIST.
      */
     ASCIILIST,
     /** the type of the key is a STRINGLIST.

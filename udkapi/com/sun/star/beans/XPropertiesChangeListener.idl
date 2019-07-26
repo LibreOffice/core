@@ -37,7 +37,7 @@ published interface XPropertiesChangeListener: com::sun::star::lang::XEventListe
 
         @param aEvent
             contains a sequence of PropertyChangeEvent objects
-            which describe the event source and the properites that have
+            which describe the event source and the properties that have
             changed.
      */
     void propertiesChange( [in] sequence<com::sun::star::beans::PropertyChangeEvent> aEvent );

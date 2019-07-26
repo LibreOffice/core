@@ -36,7 +36,7 @@ published exception AccessControlException : com::sun::star::uno::SecurityExcept
 
         @attention
         If it is the case, that XAccessController::checkPermission() was called
-        passing a sequence< any >, i.e. a sequence of paermissions are demanded,
+        passing a sequence< any >, i.e. a sequence of permissions are demanded,
         then this any holds the sequence of lacking permissions in the same
         order as they were passed to XAccessController::checkPermission().
     */

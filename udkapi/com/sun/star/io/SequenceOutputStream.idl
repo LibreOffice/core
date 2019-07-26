@@ -25,7 +25,7 @@
 
 module com { module sun { module star { module io {
 
-/** This service allows to wrap a sequence of bytes with a output stream object.
+/** This service allows to wrap a sequence of bytes with an output stream object.
  */
 service SequenceOutputStream : XSequenceOutputStream;
 

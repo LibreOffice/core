@@ -27,7 +27,7 @@ module com {  module sun {  module star {  module bridge { module oleautomation 
 /** a tagging interface for UNO objects which represent Automation
     objects.
     <p>
-    If a Automation object is bridged into the UNO environment, then
+    If an Automation object is bridged into the UNO environment, then
     the resulting UNO object does not distinguish itself from any
     other ordinary UNO object. However, it may be desirable to have
     that distinction regardless, if a UNO client needs to take

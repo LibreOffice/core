@@ -25,7 +25,7 @@
 module com {  module sun {  module star {  module reflection {
 
 /**
-   Reflects the &ldquo;published&rdquo; status of a UNOIDL entity.
+   Reflects the “published” status of a UNOIDL entity.
 
    <p>This interface is intended to be supported by objects that also support
    com::sun::star::reflection::XTypeDescription.
@@ -88,7 +88,7 @@ module com {  module sun {  module star {  module reflection {
 */
 interface XPublished {
     /**
-       Returns the &ldquo;published&rdquo; status of a UNOIDL entity.
+       Returns the “published” status of an UNOIDL entity.
 
        @return `TRUE` if the UNOIDL entity represented by this object is
        published
