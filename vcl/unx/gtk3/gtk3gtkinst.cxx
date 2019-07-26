@@ -2105,6 +2105,12 @@ public:
         set_background(&sColor);
     }
 
+    virtual void set_highlight_background() override
+    {
+        OUString sColor = Application::GetSettings().GetStyleSettings().GetHighlightColor().AsRGBHexString();
+        set_background(&sColor);
+    }
+
     virtual ~GtkInstanceWidget() override
     {
         if (m_pFocusEvent)
