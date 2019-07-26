@@ -18,10 +18,12 @@
  */
 
 #include <sal/config.h>
-#include <o3tl/underlyingenumvalue.hxx>
-#include <vcl/animate/AnimationBitmap.hxx>
 
-BitmapChecksum AnimationBitmap::GetChecksum() const
+#include <vcl/animate/AnimationFrame.hxx>
+
+#include <o3tl/underlyingenumvalue.hxx>
+
+BitmapChecksum AnimationFrame::GetChecksum() const
 {
     BitmapChecksum nCrc = maBitmapEx.GetChecksum();
     SVBT32 aBT32;
