@@ -143,11 +143,11 @@ private:
     void ExportChangedRegion(
         const css::uno::Reference<css::beans::XPropertySet> & rPropSet);
 
-    /// export an change-info element (from a PropertySet)
+    /// export a change-info element (from a PropertySet)
     void ExportChangeInfo(
         const css::uno::Reference<css::beans::XPropertySet> & rPropSet);
 
-    /// export an change-info element (from PropertyValues)
+    /// export a change-info element (from PropertyValues)
     void ExportChangeInfo(
         const css::uno::Sequence<css::beans::PropertyValue> & rValues);
 

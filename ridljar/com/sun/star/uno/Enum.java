@@ -32,7 +32,7 @@ public abstract class Enum {
     private final int m_value;
 
     /**
-     * Constructs a enum value.
+     * Constructs an enum value.
      * @param  value   the integer value of this enum value.
      */
     protected Enum(int value) {

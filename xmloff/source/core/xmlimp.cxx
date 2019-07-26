@@ -687,7 +687,7 @@ std::unique_ptr<SvXMLNamespaceMap> SvXMLImport::processNSAttributes(
             // Add namespace, but only if it is known.
             sal_uInt16 nKey = mpNamespaceMap->AddIfKnown( aPrefix, rAttrValue );
             // If namespace is unknown, try to match a name with similar
-            // TC Id an version
+            // TC Id and version
             if( XML_NAMESPACE_UNKNOWN == nKey  )
             {
                 OUString aTestName( rAttrValue );
@@ -1327,7 +1327,7 @@ bool SvXMLImport::IsPackageURL( const OUString& rURL ) const
             // it's not an external URI
             return false;
         else if( '/' == rURL[1] )
-            // we are remaining on a level, so it's an package URI
+            // we are remaining on a level, so it's a package URI
             return true;
     }
 

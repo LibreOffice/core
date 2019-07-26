@@ -231,7 +231,7 @@ void SAL_CALL XMLTransformerBase::startElement( const OUString& rName,
             // Add namespace, but only if it is known.
             sal_uInt16 nKey = m_pNamespaceMap->AddIfKnown( aPrefix, rAttrValue );
             // If namespace is unknown, try to match a name with similar
-            // TC Id an version
+            // TC Id and version
             if( XML_NAMESPACE_UNKNOWN == nKey  )
             {
                 OUString aTestName( rAttrValue );

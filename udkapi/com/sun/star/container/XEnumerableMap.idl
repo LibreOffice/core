@@ -54,7 +54,7 @@ module com { module sun { module star { module container {
  */
 interface XEnumerableMap : XMap
 {
-    /** creates a enumerator for the keys of the map
+    /** creates an enumerator for the keys of the map
 
         @param Isolated
             controls whether the newly create enumerator should be isolated from the map.
@@ -65,7 +65,7 @@ interface XEnumerableMap : XMap
     XEnumeration createKeyEnumeration( [in] boolean Isolated )
         raises ( ::com::sun::star::lang::NoSupportException );
 
-    /** creates a enumerator for the values of the map
+    /** creates an enumerator for the values of the map
 
         @param Isolated
             controls whether the newly create enumerator should be isolated from the map.
@@ -76,7 +76,7 @@ interface XEnumerableMap : XMap
     XEnumeration createValueEnumeration( [in] boolean Isolated )
         raises ( ::com::sun::star::lang::NoSupportException );
 
-    /** creates a enumerator for the key-value pairs of the map
+    /** creates an enumerator for the key-value pairs of the map
 
         <p>The elements returned by the enumerator are instances of com::sun::star::beans::Pair,
         holding the key-value-pairs which are part of the map.</p>

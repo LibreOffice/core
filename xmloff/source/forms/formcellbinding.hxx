@@ -56,7 +56,7 @@ namespace xmloff
                 the control model which is or will be bound
             @param _rxDocument
                 the document. If this is <NULL/>, the document will be obtained from the model
-                itself by walkon up the chain of its ancestors.<br/>
+                itself by walk on up the chain of its ancestors.<br/>
                 This parameter can be used if the control model is not (yet) part of a document
                 model.
         */

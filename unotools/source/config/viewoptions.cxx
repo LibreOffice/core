@@ -181,7 +181,7 @@ SvtViewOptionsBase_Impl::~SvtViewOptionsBase_Impl()
 {
     // don't flush configuration changes here to m_xRoot.
     // That must be done inside every SetXXX() method already !
-    // Here its to late - DisposedExceptions from used configuration access can occur otherwise.
+    // Here it's too late - DisposedExceptions from used configuration access can occur otherwise.
 
     m_xRoot.clear();
     m_xSet.clear();

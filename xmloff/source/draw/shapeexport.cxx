@@ -1346,7 +1346,7 @@ void XMLShapeExport::ImpExportNewTrans(const uno::Reference< beans::XPropertySet
     ::basegfx::B2DHomMatrix aMatrix;
     ImpExportNewTrans_GetB2DHomMatrix(aMatrix, xPropSet);
 
-    // decompose and correct abour pRefPoint
+    // decompose and correct about pRefPoint
     ::basegfx::B2DTuple aTRScale;
     double fTRShear(0.0);
     double fTRRotate(0.0);
@@ -2182,7 +2182,7 @@ void XMLShapeExport::ImpExportPolygonShape(
     ::basegfx::B2DHomMatrix aMatrix;
     ImpExportNewTrans_GetB2DHomMatrix(aMatrix, xPropSet);
 
-    // decompose and correct abour pRefPoint
+    // decompose and correct about pRefPoint
     ::basegfx::B2DTuple aTRScale;
     double fTRShear(0.0);
     double fTRRotate(0.0);
@@ -2867,8 +2867,8 @@ void XMLShapeExport::ImpExportOLE2Shape(
                 // xlink:href
                 if( !sURL.isEmpty() )
                 {
-                    // #96717# in theorie, if we don't have a url we shouldn't even
-                    // export this ole shape. But practical its to risky right now
+                    // #96717# in theorie, if we don't have a URL we shouldn't even
+                    // export this OLE shape. But practically it's too risky right now
                     // to change this so we better dispose this on load
                     sURL = mrExport.AddEmbeddedObject( sURL );
 
