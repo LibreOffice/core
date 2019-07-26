@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf659307_0070f8a4",
+        "filename": "sw/source/core/doc/docfmt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2156,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-07-26T14:04:17Z",
+      "side": 1,
+      "message": "you can just write \"\u003d\u003d name\"",
+      "revId": "59b22264956fa253df327422e3d0192e33c55e0b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
