@@ -189,8 +189,8 @@ public:
 class SwUndoSetFlyFormat : public SwUndo, public SwClient
 {
     SwFrameFormat* pFrameFormat;                  // saved FlyFormat
-    SwFrameFormat* const pOldFormat;
-    SwFrameFormat* pNewFormat;
+    const OUString m_DerivedFromFormatName;
+    const OUString m_NewFormatName;
     std::unique_ptr<SfxItemSet> pItemSet;               // the re-/ set attributes
     sal_uLong nOldNode, nNewNode;
     sal_Int32 nOldContent, nNewContent;
