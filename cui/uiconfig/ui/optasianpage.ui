@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
   <requires lib="LibreOffice" version="1.0"/>
@@ -36,7 +36,6 @@
                     <property name="xalign">0</property>
                     <property name="active">True</property>
                     <property name="draw_indicator">True</property>
-                    <property name="group">charpunctkerning</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -52,7 +51,6 @@
                     <property name="receives_default">False</property>
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
-                    <property name="active">True</property>
                     <property name="draw_indicator">True</property>
                     <property name="group">charkerning</property>
                   </object>
@@ -110,7 +108,6 @@
                     <property name="xalign">0</property>
                     <property name="active">True</property>
                     <property name="draw_indicator">True</property>
-                    <property name="group">punctcompression</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -126,9 +123,8 @@
                     <property name="receives_default">False</property>
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
-                    <property name="active">True</property>
                     <property name="draw_indicator">True</property>
-                    <property name="group">punctkanacompression</property>
+                    <property name="group">nocompression</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -144,7 +140,6 @@
                     <property name="receives_default">False</property>
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
-                    <property name="active">True</property>
                     <property name="draw_indicator">True</property>
                     <property name="group">nocompression</property>
                   </object>
@@ -210,7 +205,7 @@
                         <property name="spacing">12</property>
                         <property name="homogeneous">True</property>
                         <child>
-                          <object class="svxcorelo-SvxLanguageBox" id="language">
+                          <object class="GtkComboBoxText" id="language">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="hexpand">True</property>
@@ -247,10 +242,10 @@
                       <object class="GtkLabel" id="languageft">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
                         <property name="label" translatable="yes" context="optasianpage|languageft">_Language:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">language</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -261,10 +256,10 @@
                       <object class="GtkLabel" id="startft">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
                         <property name="label" translatable="yes" context="optasianpage|startft">Not _at start of line:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">start</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -275,10 +270,10 @@
                       <object class="GtkLabel" id="endft">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
                         <property name="label" translatable="yes" context="optasianpage|endft">Not at _end of line:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">end</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -290,6 +285,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="hexpand">True</property>
+                        <property name="activates_default">True</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -301,6 +297,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="hexpand">True</property>
+                        <property name="activates_default">True</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -318,8 +315,8 @@
                   <object class="GtkLabel" id="hintft">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="xalign">0</property>
                     <property name="label" translatable="yes" context="optasianpage|hintft">Without user-defined line break symbols</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>

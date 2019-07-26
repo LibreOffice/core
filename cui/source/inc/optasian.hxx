@@ -21,41 +21,34 @@
 
 #include <memory>
 #include <sfx2/tabdlg.hxx>
-#include <vcl/button.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/lstbox.hxx>
-#include <vcl/edit.hxx>
 #include <svx/langbox.hxx>
+
 struct SvxAsianLayoutPage_Impl;
 class SvxAsianLayoutPage : public SfxTabPage
 {
-    VclPtr<RadioButton> m_pCharKerningRB;
-    VclPtr<RadioButton> m_pCharPunctKerningRB;
-
-    VclPtr<RadioButton> m_pNoCompressionRB;
-    VclPtr<RadioButton> m_pPunctCompressionRB;
-    VclPtr<RadioButton> m_pPunctKanaCompressionRB;
-
-    VclPtr<FixedText>      m_pLanguageFT;
-    VclPtr<SvxLanguageBox> m_pLanguageLB;
-    VclPtr<CheckBox>       m_pStandardCB;
-
-    VclPtr<FixedText>   m_pStartFT;
-    VclPtr<Edit>        m_pStartED;
-    VclPtr<FixedText>   m_pEndFT;
-    VclPtr<Edit>        m_pEndED;
-    VclPtr<FixedText>   m_pHintFT;
-
     std::unique_ptr<SvxAsianLayoutPage_Impl> pImpl;
 
-    DECL_LINK(LanguageHdl, ListBox&, void);
-    DECL_LINK(ChangeStandardHdl, Button*, void);
-    DECL_LINK(ModifyHdl, Edit&, void);
+    std::unique_ptr<weld::RadioButton> m_xCharKerningRB;
+    std::unique_ptr<weld::RadioButton> m_xCharPunctKerningRB;
+    std::unique_ptr<weld::RadioButton> m_xNoCompressionRB;
+    std::unique_ptr<weld::RadioButton> m_xPunctCompressionRB;
+    std::unique_ptr<weld::RadioButton> m_xPunctKanaCompressionRB;
+    std::unique_ptr<weld::Label> m_xLanguageFT;
+    std::unique_ptr<LanguageBox> m_xLanguageLB;
+    std::unique_ptr<weld::CheckButton> m_xStandardCB;
+    std::unique_ptr<weld::Label> m_xStartFT;
+    std::unique_ptr<weld::Entry> m_xStartED;
+    std::unique_ptr<weld::Label> m_xEndFT;
+    std::unique_ptr<weld::Entry> m_xEndED;
+    std::unique_ptr<weld::Label> m_xHintFT;
+
+    DECL_LINK(LanguageHdl, weld::ComboBox&, void);
+    DECL_LINK(ChangeStandardHdl, weld::ToggleButton&, void);
+    DECL_LINK(ModifyHdl, weld::Entry&, void);
 
 public:
-    SvxAsianLayoutPage( vcl::Window* pParent, const SfxItemSet& rSet );
+    SvxAsianLayoutPage(TabPageParent pParent, const SfxItemSet& rSet );
     virtual ~SvxAsianLayoutPage() override;
-    virtual void dispose() override;
 
     static VclPtr<SfxTabPage>  Create( TabPageParent pParent, const SfxItemSet* rAttrSet );
     static const sal_uInt16*  GetRanges();
