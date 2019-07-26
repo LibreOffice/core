@@ -42,6 +42,8 @@
 #include <com/sun/star/script/provider/XScriptProvider.hpp>
 #include <com/sun/star/script/provider/XScriptProviderSupplier.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
+#include <com/sun/star/uri/UriReferenceFactory.hpp>
+#include <com/sun/star/uri/XVndSunStarScriptUrlReference.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
 
 #include <toolkit/helper/vclunohelper.hxx>
@@ -1343,7 +1345,32 @@ namespace
 // don't allow LibreLogo to be used with our mouseover/etc dom-alike events
 bool SfxObjectShell::UnTrustedScript(const OUString& rScriptURL)
 {
-    return rScriptURL.startsWithIgnoreAsciiCase("vnd.sun.star.script:LibreLogo");
+    if (!rScriptURL.startsWith("vnd.sun.star.script:"))
+        return false;
+
+    // ensure URL Escape Codes are decoded
+    css::uno::Reference<css::uri::XUriReference> uri(
+        css::uri::UriReferenceFactory::create(comphelper::getProcessComponentContext())->parse(rScriptURL));
+    css::uno::Reference<css::uri::XVndSunStarScriptUrl> sfUri(uri, css::uno::UNO_QUERY);
+
+    if (!sfUri.is())
+        return false;
+
+    OUString sScript = sfUri->getName();
+
+    // check if any path portion matches LibreLogo and ban it if it does
+    sal_Int32 nIndex = 0;
+    do
+    {
+        OUString aToken = sScript.getToken(0, '/', nIndex);
+        if (aToken.startsWithIgnoreAsciiCase("LibreLogo"))
+        {
+            return true;
+        }
+    }
+    while (nIndex >= 0);
+
+    return false;
 }
 
 ErrCode SfxObjectShell::CallXScript( const Reference< XInterface >& _rxScriptContext, const OUString& _rScriptURL,
