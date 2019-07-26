@@ -48,7 +48,7 @@ private:
     friend class Animation;
 
     Animation* const      mpParent;
-    VclPtr<OutputDevice>  mpOut;
+    VclPtr<OutputDevice>  mpRenderContext;
     long const            mnExtraData;
     Point const           maPt;
     Point                 maDispPt;
@@ -62,10 +62,10 @@ private:
     VclPtr<VirtualDevice>  mpRestore;
     sal_uLong       mnActPos;
     Disposal        meLastDisposal;
-    bool            mbPause;
-    bool            mbMarked;
-    bool const      mbHMirr;
-    bool const      mbVMirr;
+    bool            mbIsPaused;
+    bool            mbIsMarked;
+    bool const      mbIsMirroredHorizontally;
+    bool const      mbIsMirroredVertically;
 
 public:
                     ~ImplAnimView();
@@ -86,11 +86,11 @@ private:
 
     const Size&     getOutSizePix() const { return maSzPix; }
 
-    void            pause( bool bPause ) { mbPause = bPause; }
-    bool            isPause() const { return mbPause; }
+    void            pause( bool bIsPaused ) { mbIsPaused = bIsPaused; }
+    bool            isPause() const { return mbIsPaused; }
 
-    void            setMarked( bool bMarked ) { mbMarked = bMarked; }
-    bool            isMarked() const { return mbMarked; }
+    void            setMarked( bool bIsMarked ) { mbIsMarked = bIsMarked; }
+    bool            isMarked() const { return mbIsMarked; }
 };
 
 #endif
