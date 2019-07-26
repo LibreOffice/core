@@ -1891,7 +1891,11 @@ void SdTiledRenderingTest::testLanguageStatus()
         std::unique_ptr<SfxPoolItem> xItem2;
         pView1->GetViewFrame()->GetBindings().QueryState(SID_LANGUAGE_STATUS, xItem1);
         pView2->GetViewFrame()->GetBindings().QueryState(SID_LANGUAGE_STATUS, xItem2);
-        CPPUNIT_ASSERT(dynamic_cast< const SfxStringItem* >(xItem1.get()));
+        auto pStringItem = dynamic_cast<const SfxStringItem*>(xItem1.get());
+        CPPUNIT_ASSERT(pStringItem);
+
+        CPPUNIT_ASSERT_EQUAL(OUString("English (USA);en-US"), pStringItem->GetValue());
+
         CPPUNIT_ASSERT(dynamic_cast< const SfxStringItem* >(xItem2.get()));
     }
 }
