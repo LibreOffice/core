@@ -21,6 +21,8 @@ import com.sun.star.sdbc.XConnection;
 import com.sun.star.uno.Exception;
 import java.io.PrintWriter;
 
+import lib.Status;
+import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
@@ -190,7 +192,13 @@ public class OQueryDesign extends TestCase {
         XController xCont = UnoRuntime.queryInterface(XController.class, oQueryDesign);
 
         // marry them all
-        xCont.attachModel(xMod);
+        boolean bSuccess = xCont.attachModel(xMod);
+        if (!bSuccess)
+        {
+            throw new StatusException (Status.failed (
+            "Couldn't attach model"));
+        }
+
         xMod.connectController(xCont);
         xMod.setCurrentController(xCont);
 
