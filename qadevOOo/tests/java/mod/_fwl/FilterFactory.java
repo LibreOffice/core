@@ -79,11 +79,7 @@ public class FilterFactory extends TestCase {
 
         // XNameContainer; XNameReplace
         String filterName = filterNames[0];
-        Object[] instance = null;
-        new PropertyValue();
-        instance = (Object[]) xNA.getByName(filterName);
-        getPropertyValue
-                (((PropertyValue[]) instance), "FilterService");
+        Object[] instance = (Object[]) xNA.getByName(filterName);
 
         log.println("adding INSTANCE 1 as obj relation to environment");
 
