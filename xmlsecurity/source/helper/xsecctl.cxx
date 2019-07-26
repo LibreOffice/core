@@ -242,7 +242,7 @@ bool XSecController::chainOn()
  *   NOTES
  *  Sometimes, the last key SAX event can't be transferred to the
  *  SAXEventKeeper together.
- *  For instance, at the time an referenced element is detected, the
+ *  For instance, at the time a referenced element is detected, the
  *  startElement event has already been reserved by the ElementStackKeeper.
  *  Meanwhile, an ElementCollector needs to be created before the
  *  SAXEventKeeper receives that startElement event.
