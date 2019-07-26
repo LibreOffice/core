@@ -457,7 +457,7 @@ public:
     std::vector< VCLXGraphics* > *GetUnoGraphicsList() const  { return mpUnoGraphicsList; }
     std::vector< VCLXGraphics* > *CreateUnoGraphicsList();
 
-    virtual bool                 StartAnimation(Animation *pAnimation,
+    virtual bool                StartAnimation(Animation *pAnimation,
                                                 const Point& rDestPt, const Size& rDestSz,
                                                 sal_uLong nCallerId,
                                                 OutputDevice *pFirstFrameOutDev = nullptr);

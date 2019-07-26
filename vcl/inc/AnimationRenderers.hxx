@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_ANIMATE_ANIMATIONRENDERERS_HXX
-#define INCLUDED_VCL_ANIMATE_ANIMATIONRENDERERS_HXX
+#ifndef INCLUDED_VCL_INC_ANIMATIONRENDERERS_HXX
+#define INCLUDED_VCL_INC_ANIMATIONRENDERERS_HXX
 
 #include <vcl/dllapi.h>
 
@@ -56,6 +56,6 @@ private:
     std::vector<std::unique_ptr<AnimationData>> CreateAnimationDataItems();
 };
 
-#endif // INCLUDED_VCL_ANIMATE_ANIMATIONRENDERERS_HXX
+#endif // INCLUDED_VCL_INC_ANIMATIONRENDERERS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

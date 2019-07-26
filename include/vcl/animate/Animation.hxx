@@ -22,12 +22,12 @@
 
 #include <vcl/dllapi.h>
 #include <vcl/animate/AnimationBitmap.hxx>
-#include <vcl/animate/AnimationRenderers.hxx>
 #include <vcl/timer.hxx>
 
 #define ANIMATION_TIMEOUT_ON_CLICK 2147483647L
 
 class AnimationRenderer;
+class AnimationRenderers;
 struct AnimationData;
 
 class VCL_DLLPUBLIC Animation
@@ -99,7 +99,7 @@ public:
 
 protected:
     std::vector<std::unique_ptr<AnimationBitmap>> maAnimationFrames;
-    AnimationRenderers maAnimationRenderers;
+    AnimationRenderers* mpAnimationRenderers;
     bool mbIsInAnimation;
     size_t mnFrameIndex;
     Timer maTimer;

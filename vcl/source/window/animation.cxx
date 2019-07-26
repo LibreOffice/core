@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
- *
+/*
  * This file is part of the LibreOffice project.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -17,22 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <vcl/outdev.hxx>
+#include <vcl/window.hxx>
 
-#include <AnimationRenderer.hxx>
+#include <WindowAnimationRenderer.hxx>
 
-AnimationRenderer* OutputDevice::CreateAnimationRenderer(Animation* pAnim, OutputDevice* pOut,
-                                                         const Point& rDestPt, const Size& rDestSz,
-                                                         sal_uLong nCallerId,
-                                                         OutputDevice* pFirstFrameOutDev)
+AnimationRenderer* vcl::Window::CreateAnimationRenderer(Animation* pAnim, OutputDevice* pOut,
+                                                        const Point& rDestPt, const Size& rDestSz,
+                                                        sal_uLong nCallerId,
+                                                        OutputDevice* pFirstFrameOutDev)
 {
-    return new AnimationRenderer(pAnim, pOut, rDestPt, rDestSz, nCallerId, pFirstFrameOutDev);
-}
-
-bool OutputDevice::StartAnimation(Animation* pAnim, const Point& rDestPt, const Size& rDestSz,
-                                  sal_uLong nCallerId, OutputDevice* pFirstFrameOutDev)
-{
-    return pAnim->Start(this, rDestPt, rDestSz, nCallerId, pFirstFrameOutDev);
+    return new WindowAnimationRenderer(pAnim, pOut, rDestPt, rDestSz, nCallerId, pFirstFrameOutDev);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

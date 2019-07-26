@@ -1,5 +1,5 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- *
- *
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
  * This file is part of the LibreOffice project.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -20,8 +20,8 @@
 #include <vcl/animate/Animation.hxx>
 #include <vcl/outdev.hxx>
 
-#include <vcl/animate/AnimationRenderer.hxx>
-#include <vcl/animate/AnimationRenderers.hxx>
+#include <AnimationRenderer.hxx>
+#include <AnimationRenderers.hxx>
 #include <AnimationData.hxx>
 
 void AnimationRenderers::ClearAnimationRenderers() { maRenderers.clear(); }

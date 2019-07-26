@@ -21,8 +21,8 @@
 #include <vcl/virdev.hxx>
 #include <vcl/vclptr.hxx>
 
-#include <vcl/animate/WindowAnimationRenderer.hxx>
 #include <window.h>
+#include <WindowAnimationRenderer.hxx>
 
 void WindowAnimationRenderer::DrawToIndex(sal_uLong nIndex)
 {

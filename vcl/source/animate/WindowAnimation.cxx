@@ -19,9 +19,11 @@
 
 #include <sal/config.h>
 
-#include <vcl/animate/WindowAnimation.hxx>
-#include <vcl/animate/AnimationRenderer.hxx>
 #include <vcl/outdev.hxx>
+
+#include <AnimationRenderer.hxx>
+#include <AnimationRenderers.hxx>
+#include <WindowAnimation.hxx>
 
 bool WindowAnimation::Start(OutputDevice* pOut, const Point& rDestPt, const Size& rDestSz,
                             long nCallerId, OutputDevice* pFirstFrameOutDev)
@@ -29,9 +31,9 @@ bool WindowAnimation::Start(OutputDevice* pOut, const Point& rDestPt, const Size
     if (!maAnimationFrames.empty())
     {
         bool bRendererDoesNotExist
-            = maAnimationRenderers.RepaintRenderers(pOut, nCallerId, rDestPt, rDestSz);
+            = mpAnimationRenderers->RepaintRenderers(pOut, nCallerId, rDestPt, rDestSz);
 
-        if (maAnimationRenderers.NoRenderersAreAvailable())
+        if (mpAnimationRenderers->NoRenderersAreAvailable())
         {
             maTimer.Stop();
             mbIsInAnimation = false;
@@ -39,8 +41,8 @@ bool WindowAnimation::Start(OutputDevice* pOut, const Point& rDestPt, const Size
         }
 
         if (bRendererDoesNotExist)
-            maAnimationRenderers.CreateDefaultRenderer(this, pOut, rDestPt, rDestSz, nCallerId,
-                                                       pFirstFrameOutDev);
+            mpAnimationRenderers->CreateDefaultRenderer(this, pOut, rDestPt, rDestSz, nCallerId,
+                                                        pFirstFrameOutDev);
 
         if (!mbIsInAnimation)
         {
