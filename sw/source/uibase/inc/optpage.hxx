@@ -123,20 +123,6 @@ public:
 class SwStdFontTabPage : public SfxTabPage
 {
     friend class VclPtr<SwStdFontTabPage>;
-    VclPtr<FixedText>       m_pLabelFT;
-
-    VclPtr<ComboBox>        m_pStandardBox;
-    VclPtr<FontSizeBox>     m_pStandardHeightLB;
-    VclPtr<ComboBox>        m_pTitleBox   ;
-    VclPtr<FontSizeBox>     m_pTitleHeightLB;
-    VclPtr<ComboBox>        m_pListBox    ;
-    VclPtr<FontSizeBox>     m_pListHeightLB;
-    VclPtr<ComboBox>        m_pLabelBox   ;
-    VclPtr<FontSizeBox>     m_pLabelHeightLB;
-    VclPtr<ComboBox>        m_pIdxBox     ;
-    VclPtr<FontSizeBox>     m_pIndexHeightLB;
-    VclPtr<PushButton>      m_pStandardPB;
-
     OUString m_sShellStd;
     OUString m_sShellTitle;
     OUString m_sShellList;
@@ -167,11 +153,24 @@ class SwStdFontTabPage : public SfxTabPage
     OUString const m_sScriptAsian;
     OUString const m_sScriptComplex;
 
-    DECL_LINK(StandardHdl, Button*, void );
-    DECL_LINK(ModifyHdl, Edit&, void );
-    DECL_LINK(LoseFocusHdl, Control&, void );
+    std::unique_ptr<weld::Label> m_xLabelFT;
+    std::unique_ptr<weld::ComboBox> m_xStandardBox;
+    std::unique_ptr<SvtFontSizeBox> m_xStandardHeightLB;
+    std::unique_ptr<weld::ComboBox> m_xTitleBox;
+    std::unique_ptr<SvtFontSizeBox> m_xTitleHeightLB;
+    std::unique_ptr<weld::ComboBox> m_xListBox;
+    std::unique_ptr<SvtFontSizeBox> m_xListHeightLB;
+    std::unique_ptr<weld::ComboBox> m_xLabelBox;
+    std::unique_ptr<SvtFontSizeBox> m_xLabelHeightLB;
+    std::unique_ptr<weld::ComboBox> m_xIdxBox;
+    std::unique_ptr<SvtFontSizeBox> m_xIndexHeightLB;
+    std::unique_ptr<weld::Button> m_xStandardPB;
 
-    SwStdFontTabPage(vcl::Window* pParent, const SfxItemSet& rSet);
+    DECL_LINK(StandardHdl, weld::Button&, void );
+    DECL_LINK(ModifyHdl, weld::ComboBox&, void );
+    DECL_LINK(LoseFocusHdl, weld::Widget&, void );
+
+    SwStdFontTabPage(TabPageParent pParent, const SfxItemSet& rSet);
     virtual ~SwStdFontTabPage() override;
     virtual void dispose() override;
 
