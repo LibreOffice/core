@@ -187,34 +187,33 @@ public:
 
 class SwTableOptionsTabPage : public SfxTabPage
 {
-    VclPtr<CheckBox>    m_pHeaderCB;
-    VclPtr<CheckBox>    m_pRepeatHeaderCB;
-    VclPtr<CheckBox>    m_pDontSplitCB;
-    VclPtr<CheckBox>    m_pBorderCB;
-
-    VclPtr<CheckBox>    m_pNumFormattingCB;
-    VclPtr<CheckBox>    m_pNumFormatFormattingCB;
-    VclPtr<CheckBox>    m_pNumAlignmentCB;
-
-    VclPtr<MetricField> m_pRowMoveMF;
-    VclPtr<MetricField> m_pColMoveMF;
-
-    VclPtr<MetricField> m_pRowInsertMF;
-    VclPtr<MetricField> m_pColInsertMF;
-
-    VclPtr<RadioButton> m_pFixRB;
-    VclPtr<RadioButton> m_pFixPropRB;
-    VclPtr<RadioButton> m_pVarRB;
-
     SwWrtShell* m_pWrtShell;
     bool        m_bHTMLMode;
 
-    DECL_LINK(CheckBoxHdl, Button*, void);
+    std::unique_ptr<weld::CheckButton> m_xHeaderCB;
+    std::unique_ptr<weld::CheckButton> m_xRepeatHeaderCB;
+    std::unique_ptr<weld::CheckButton> m_xDontSplitCB;
+    std::unique_ptr<weld::CheckButton> m_xBorderCB;
+
+    std::unique_ptr<weld::CheckButton> m_xNumFormattingCB;
+    std::unique_ptr<weld::CheckButton> m_xNumFormatFormattingCB;
+    std::unique_ptr<weld::CheckButton> m_xNumAlignmentCB;
+
+    std::unique_ptr<weld::MetricSpinButton> m_xRowMoveMF;
+    std::unique_ptr<weld::MetricSpinButton> m_xColMoveMF;
+
+    std::unique_ptr<weld::MetricSpinButton> m_xRowInsertMF;
+    std::unique_ptr<weld::MetricSpinButton> m_xColInsertMF;
+
+    std::unique_ptr<weld::RadioButton> m_xFixRB;
+    std::unique_ptr<weld::RadioButton> m_xFixPropRB;
+    std::unique_ptr<weld::RadioButton> m_xVarRB;
+
+    DECL_LINK(CheckBoxHdl, weld::Button&, void);
 
 public:
-    SwTableOptionsTabPage(vcl::Window* pParent, const SfxItemSet& rSet);
+    SwTableOptionsTabPage(TabPageParent pParent, const SfxItemSet& rSet);
     virtual ~SwTableOptionsTabPage() override;
-    virtual void dispose() override;
 
     static VclPtr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rAttrSet);
 

@@ -1,8 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.18"/>
-  <object class="GtkAdjustment" id="adjustment">
+  <object class="GtkAdjustment" id="adjustment1">
+    <property name="lower">0.25</property>
+    <property name="upper">9.9900000000000002</property>
+    <property name="step_increment">0.10000000000000001</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment2">
+    <property name="lower">0.25</property>
+    <property name="upper">9.9900000000000002</property>
+    <property name="step_increment">0.10000000000000001</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment3">
+    <property name="lower">0.25</property>
+    <property name="upper">9.9900000000000002</property>
+    <property name="step_increment">0.10000000000000001</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment4">
     <property name="lower">0.25</property>
     <property name="upper">9.9900000000000002</property>
     <property name="step_increment">0.10000000000000001</property>
@@ -252,8 +270,8 @@
                       <object class="GtkLabel" id="label10">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
                         <property name="label" translatable="yes" context="opttablepage|label10">Behavior of rows/columns</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -272,7 +290,6 @@
                         <property name="xalign">0</property>
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
-                        <property name="group">fixprop</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -290,7 +307,7 @@
                         <property name="xalign">0</property>
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
-                        <property name="group">var</property>
+                        <property name="group">fix</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -320,11 +337,12 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="hexpand">True</property>
-                        <property name="xalign">0</property>
                         <property name="label" translatable="yes" context="opttablepage|label11">Changes affect the adjacent area only</property>
                         <property name="wrap">True</property>
                         <property name="wrap_mode">char</property>
+                        <property name="width_chars">50</property>
                         <property name="max_width_chars">50</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -336,10 +354,11 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="hexpand">True</property>
-                        <property name="xalign">0</property>
                         <property name="label" translatable="yes" context="opttablepage|label12">Changes affect the entire table</property>
                         <property name="wrap">True</property>
+                        <property name="width_chars">50</property>
                         <property name="max_width_chars">50</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -351,10 +370,11 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="hexpand">True</property>
-                        <property name="xalign">0</property>
                         <property name="label" translatable="yes" context="opttablepage|label13">Changes affect the table size</property>
                         <property name="wrap">True</property>
+                        <property name="width_chars">50</property>
                         <property name="max_width_chars">50</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -387,8 +407,8 @@
                           <object class="GtkLabel" id="label4">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">0</property>
                             <property name="label" translatable="yes" context="opttablepage|label4">Move cells</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -397,11 +417,11 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkSpinButton" id="rowmove:0.00cm">
+                          <object class="GtkSpinButton" id="rowmove">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="halign">start</property>
-                            <property name="adjustment">adjustment</property>
+                            <property name="adjustment">adjustment1</property>
                             <property name="digits">2</property>
                           </object>
                           <packing>
@@ -410,11 +430,11 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkSpinButton" id="colmove:0.00cm">
+                          <object class="GtkSpinButton" id="colmove">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="halign">start</property>
-                            <property name="adjustment">adjustment</property>
+                            <property name="adjustment">adjustment2</property>
                             <property name="digits">2</property>
                           </object>
                           <packing>
@@ -427,10 +447,10 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="margin_left">12</property>
-                            <property name="xalign">0</property>
                             <property name="label" translatable="yes" context="opttablepage|label5">_Row:</property>
                             <property name="use_underline">True</property>
-                            <property name="mnemonic_widget">rowmove:0.00cm</property>
+                            <property name="mnemonic_widget">rowmove</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -442,10 +462,10 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="margin_left">12</property>
-                            <property name="xalign">0</property>
                             <property name="label" translatable="yes" context="opttablepage|label6">_Column:</property>
                             <property name="use_underline">True</property>
-                            <property name="mnemonic_widget">colmove:0.00cm</property>
+                            <property name="mnemonic_widget">colmove</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -469,11 +489,11 @@
                         <property name="row_spacing">6</property>
                         <property name="column_spacing">12</property>
                         <child>
-                          <object class="GtkSpinButton" id="rowinsert:0.00cm">
+                          <object class="GtkSpinButton" id="rowinsert">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="halign">start</property>
-                            <property name="adjustment">adjustment</property>
+                            <property name="adjustment">adjustment3</property>
                             <property name="digits">2</property>
                           </object>
                           <packing>
@@ -482,11 +502,11 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkSpinButton" id="colinsert:0.00cm">
+                          <object class="GtkSpinButton" id="colinsert">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="halign">start</property>
-                            <property name="adjustment">adjustment</property>
+                            <property name="adjustment">adjustment4</property>
                             <property name="digits">2</property>
                           </object>
                           <packing>
@@ -499,10 +519,10 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="margin_left">12</property>
-                            <property name="xalign">0</property>
                             <property name="label" translatable="yes" context="opttablepage|label15">Ro_w:</property>
                             <property name="use_underline">True</property>
-                            <property name="mnemonic_widget">rowinsert:0.00cm</property>
+                            <property name="mnemonic_widget">rowinsert</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -514,10 +534,10 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="margin_left">12</property>
-                            <property name="xalign">0</property>
                             <property name="label" translatable="yes" context="opttablepage|label16">Colu_mn:</property>
                             <property name="use_underline">True</property>
-                            <property name="mnemonic_widget">colinsert:0.00cm</property>
+                            <property name="mnemonic_widget">colinsert</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -528,8 +548,8 @@
                           <object class="GtkLabel" id="label14">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">0</property>
                             <property name="label" translatable="yes" context="opttablepage|label14">Insert cell</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
