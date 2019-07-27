@@ -102,7 +102,7 @@ void SAL_CALL ShellExec::execute( const OUString& aCommand, const OUString& aPar
         css::uri::UriReferenceFactory::create(m_xContext)->parse(aCommand));
     if (uri.is() && uri->isAbsolute())
     {
-        // It seems to be a url ..
+        // It seems to be a URL...
         // We need to re-encode file urls because osl_getFileURLFromSystemPath converts
         // to UTF-8 before encoding non ascii characters, which is not what other apps
         // expect.

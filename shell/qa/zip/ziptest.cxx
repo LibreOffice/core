@@ -106,7 +106,7 @@ void Test::test_file_getContent()
     FileStream stream(documentName.c_str());
     TestZipImpl testImpl(&stream);
     bool isPassed = testImpl.test_getContent();
-    CPPUNIT_ASSERT_MESSAGE("FileStream: Couldn't receive content buffer form zipfile.", isPassed);
+    CPPUNIT_ASSERT_MESSAGE("FileStream: Couldn't receive content buffer from zipfile.", isPassed);
 }
 
 void Test::test_stream_directory()
@@ -130,7 +130,7 @@ void Test::test_stream_getContent()
     BufferStream stream(pStream);
     TestZipImpl testImpl(&stream);
     bool isPassed = testImpl.test_getContent();
-    CPPUNIT_ASSERT_MESSAGE("BufferStream: Couldn't receive content buffer form zipfile.", isPassed);
+    CPPUNIT_ASSERT_MESSAGE("BufferStream: Couldn't receive content buffer from zipfile.", isPassed);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

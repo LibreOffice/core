@@ -115,7 +115,7 @@ public:
 
     @throws     std::bad_alloc if the necessary buffer could not be
                 allocated
-                ZipException if an zip error occurs
+                ZipException if a zip error occurs
                 ZipContentMissException if the specified zip content
                 does not exist in this zip file
     */
@@ -138,7 +138,7 @@ private:
     /** Returns the length of the longest file name
         in the current zip file
 
-        @throws ZipException if an zip error occurs
+        @throws ZipException if a zip error occurs
     */
     long GetFileLongestFileNameLength() const;
 
