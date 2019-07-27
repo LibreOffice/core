@@ -48,7 +48,6 @@
 #include <sal/log.hxx>
 #include <editeng/memberids.h>
 #include <editeng/editids.hrc>
-#include <editeng/editrids.hrc>
 #include <editeng/itemtype.hxx>
 #include <editeng/eerdll.hxx>
 #include <editeng/paperinf.hxx>
