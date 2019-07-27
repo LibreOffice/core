@@ -224,6 +224,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
+                            <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
                           </object>
@@ -238,6 +239,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
+                            <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
                           </object>
@@ -332,7 +334,7 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkComboBox" id="hrulercombobox">
+                              <object class="GtkComboBoxText" id="hrulercombobox">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                               </object>
@@ -342,7 +344,7 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkComboBox" id="vrulercombobox">
+                              <object class="GtkComboBoxText" id="vrulercombobox">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                               </object>
@@ -427,7 +429,7 @@
                         <property name="can_focus">False</property>
                         <property name="column_spacing">12</property>
                         <child>
-                          <object class="GtkComboBox" id="measureunit">
+                          <object class="GtkComboBoxText" id="measureunit">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                           </object>
