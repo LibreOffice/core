@@ -28,7 +28,7 @@ BASEGFX_DLLPUBLIC B2DPolygon createWaveLinePolygon(basegfx::B2DRectangle const& 
 
     // In quadratic bezier the curve is 1/2 of the control height
     // so we need to compensate for that.
-    double fHeightCompensation = 2.0;
+    constexpr double fHeightCompensation = 2.0;
 
     aPolygon.append(basegfx::B2DPoint(fLastX, fBaseY));
 

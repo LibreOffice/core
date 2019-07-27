@@ -32,8 +32,7 @@ static bool doesFileExist(const OUString& sUIDir, const OUString& sUIFile)
 {
     OUString sUri = sUIDir + sUIFile;
     osl::File file(sUri);
-    sal_uInt32 flag = 0;
-    return( file.open(flag) == osl::FileBase::E_None );
+    return( file.open(0) == osl::FileBase::E_None );
 }
 
 /**

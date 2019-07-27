@@ -709,8 +709,7 @@ ScVbaApplication::setCursor( sal_Int32 _cursor )
         {
             case excel::XlMousePointer::xlNorthwestArrow:
             {
-                PointerStyle nPointer( PointerStyle::Arrow );
-                setCursorHelper( xModel, nPointer, false );
+                setCursorHelper( xModel, PointerStyle::Arrow, false );
                 break;
             }
             case excel::XlMousePointer::xlWait:

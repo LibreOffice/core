@@ -255,7 +255,7 @@ namespace svx
         aTextRect.AdjustTop( 1 ); aTextRect.AdjustBottom( -1 );
 
         // calculate the text flags for the painting
-        DrawTextFlags nTextStyle = DrawTextFlags::Mnemonic |
+        constexpr DrawTextFlags nTextStyle = DrawTextFlags::Mnemonic |
                                    DrawTextFlags::Left |
                                    DrawTextFlags::VCenter;
 

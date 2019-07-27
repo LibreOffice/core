@@ -35,8 +35,6 @@ bool DocumentSigner::signDocument(uno::Reference<security::XCertificate> const& 
         utl::UcbStreamHelper::CreateStream(m_aUrl, StreamMode::READ | StreamMode::WRITE));
     uno::Reference<io::XStream> xInputStream(new utl::OStreamWrapper(std::move(pStream)));
 
-    bool bHasValidDocumentSignature = true;
-
     bool bResult = false;
     uno::Reference<embed::XStorage> xWriteableZipStore;
     try
@@ -52,7 +50,8 @@ bool DocumentSigner::signDocument(uno::Reference<security::XCertificate> const& 
 
     uno::Reference<security::XDocumentDigitalSignatures> xSigner(
         security::DocumentDigitalSignatures::createWithVersionAndValidSignature(
-            comphelper::getProcessComponentContext(), aODFVersion, bHasValidDocumentSignature));
+            comphelper::getProcessComponentContext(), aODFVersion,
+            /*bHasValidDocumentSignature*/ true));
 
     try
     {

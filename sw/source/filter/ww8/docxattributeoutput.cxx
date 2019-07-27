@@ -5121,7 +5121,6 @@ void DocxAttributeOutput::WritePostponedFormControl(const SdrObject* pObject)
         // gather component properties
 
         OUString sDateFormat;
-        OUString sLocale("en-US");
         uno::Reference<beans::XPropertySet> xPropertySet(xControlModel, uno::UNO_QUERY);
 
         OString sDate;
@@ -5156,7 +5155,7 @@ void DocxAttributeOutput::WritePostponedFormControl(const SdrObject* pObject)
         m_pSerializer->singleElementNS(XML_w, XML_dateFormat,
                                        FSNS(XML_w, XML_val), sDateFormat.toUtf8());
         m_pSerializer->singleElementNS(XML_w, XML_lid,
-                                       FSNS(XML_w, XML_val), sLocale.toUtf8());
+                                       FSNS(XML_w, XML_val), "en-US");
         m_pSerializer->singleElementNS(XML_w, XML_storeMappedDataAs,
                                        FSNS(XML_w, XML_val), "dateTime");
         m_pSerializer->singleElementNS(XML_w, XML_calendar,

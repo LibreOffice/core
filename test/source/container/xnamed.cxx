@@ -57,9 +57,8 @@ void XNamed::testSetNameByScSheetLinkObj()
 void XNamed::testSetNameThrowsException()
 {
     uno::Reference<container::XNamed> xNamed(init(), uno::UNO_QUERY_THROW);
-    OUString aTestName("NewName");
 
-    CPPUNIT_ASSERT_THROW(xNamed->setName(aTestName), uno::RuntimeException);
+    CPPUNIT_ASSERT_THROW(xNamed->setName("NewName"), uno::RuntimeException);
 }
 }
 

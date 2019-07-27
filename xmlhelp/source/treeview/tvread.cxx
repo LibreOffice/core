@@ -773,15 +773,13 @@ TVChildTarget::getHierAccess( const Reference< XMultiServiceFactory >& sProvider
     if( sProvider.is() )
     {
         Sequence< Any > seq(1);
-        OUString sReaderService( "com.sun.star.configuration.ConfigurationAccess" );
-
         seq[0] <<= OUString::createFromAscii( file );
 
         try
         {
             xHierAccess =
                 Reference< XHierarchicalNameAccess >
-                ( sProvider->createInstanceWithArguments( sReaderService,seq ),
+                ( sProvider->createInstanceWithArguments( "com.sun.star.configuration.ConfigurationAccess", seq ),
                   UNO_QUERY );
         }
         catch( const css::uno::Exception& )
