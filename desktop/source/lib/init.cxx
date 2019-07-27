@@ -3625,7 +3625,7 @@ static int doc_getSelectionType(LibreOfficeKitDocument* pThis)
         return LOK_SELTYPE_COMPLEX;
 
     OString aRet;
-    bool bSuccess = getFromTransferrable(xTransferable, OString("text/plain;charset=utf-8"), aRet);
+    bool bSuccess = getFromTransferrable(xTransferable, "text/plain;charset=utf-8", aRet);
     if (!bSuccess)
         return LOK_SELTYPE_NONE;
 
