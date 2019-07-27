@@ -23,28 +23,26 @@
 #include <sal/macros.h>
 
 
-OfaHtmlTabPage::OfaHtmlTabPage(vcl::Window* pParent, const SfxItemSet& rSet) :
-SfxTabPage( pParent, "OptHtmlPage" , "cui/ui/opthtmlpage.ui", &rSet )
+OfaHtmlTabPage::OfaHtmlTabPage(TabPageParent pParent, const SfxItemSet& rSet)
+    : SfxTabPage(pParent, "cui/ui/opthtmlpage.ui", "OptHtmlPage", &rSet)
+    , m_xSize1NF(m_xBuilder->weld_spin_button("size1"))
+    , m_xSize2NF(m_xBuilder->weld_spin_button("size2"))
+    , m_xSize3NF(m_xBuilder->weld_spin_button("size3"))
+    , m_xSize4NF(m_xBuilder->weld_spin_button("size4"))
+    , m_xSize5NF(m_xBuilder->weld_spin_button("size5"))
+    , m_xSize6NF(m_xBuilder->weld_spin_button("size6"))
+    , m_xSize7NF(m_xBuilder->weld_spin_button("size7"))
+    , m_xNumbersEnglishUSCB(m_xBuilder->weld_check_button("numbersenglishus"))
+    , m_xUnknownTagCB(m_xBuilder->weld_check_button("unknowntag"))
+    , m_xIgnoreFontNamesCB(m_xBuilder->weld_check_button("ignorefontnames"))
+    , m_xStarBasicCB(m_xBuilder->weld_check_button("starbasic"))
+    , m_xStarBasicWarningCB(m_xBuilder->weld_check_button("starbasicwarning"))
+    , m_xPrintExtensionCB(m_xBuilder->weld_check_button("printextension"))
+    , m_xSaveGrfLocalCB(m_xBuilder->weld_check_button("savegrflocal"))
+    , m_xCharSetLB(new TextEncodingBox(m_xBuilder->weld_combo_box("charset")))
 {
-    get(aSize1NF,"size1");
-    get(aSize2NF,"size2");
-    get(aSize3NF,"size3");
-    get(aSize4NF,"size4");
-    get(aSize5NF,"size5");
-    get(aSize6NF,"size6");
-    get(aSize7NF,"size7");
-    get(aNumbersEnglishUSCB,"numbersenglishus");
-    get(aUnknownTagCB,"unknowntag");
-    get(aIgnoreFontNamesCB,"ignorefontnames");
-    get(aStarBasicCB,"starbasic");
-    get(aStarBasicWarningCB,"starbasicwarning");
-    get(aPrintExtensionCB,"printextension");
-    get(aSaveGrfLocalCB,"savegrflocal");
-    get(aCharSetLB,"charset");
-    aCharSetLB->SetStyle(aCharSetLB->GetStyle() | WB_SORT);
-
     // replace placeholder with UI string from language list
-    OUString aText( aNumbersEnglishUSCB->GetText());
+    OUString aText(m_xNumbersEnglishUSCB->get_label());
     OUString aPlaceholder("%ENGLISHUSLOCALE");
     sal_Int32 nPos;
     if ((nPos = aText.indexOf( aPlaceholder)) != -1)
@@ -53,88 +51,67 @@ SfxTabPage( pParent, "OptHtmlPage" , "cui/ui/opthtmlpage.ui", &rSet )
         if (!rStr.isEmpty())
         {
             aText = aText.replaceAt( nPos, aPlaceholder.getLength(), rStr);
-            aNumbersEnglishUSCB->SetText( aText);
+            m_xNumbersEnglishUSCB->set_label( aText);
         }
     }
 
-    aStarBasicCB->SetClickHdl(LINK(this, OfaHtmlTabPage, CheckBoxHdl_Impl));
+    m_xStarBasicCB->connect_toggled(LINK(this, OfaHtmlTabPage, CheckBoxHdl_Impl));
 
     // initialize the characterset listbox
-    aCharSetLB->FillWithMimeAndSelectBest();
+    m_xCharSetLB->FillWithMimeAndSelectBest();
 }
 
 OfaHtmlTabPage::~OfaHtmlTabPage()
 {
-    disposeOnce();
-}
-
-void OfaHtmlTabPage::dispose()
-{
-    aSize1NF.clear();
-    aSize2NF.clear();
-    aSize3NF.clear();
-    aSize4NF.clear();
-    aSize5NF.clear();
-    aSize6NF.clear();
-    aSize7NF.clear();
-    aNumbersEnglishUSCB.clear();
-    aUnknownTagCB.clear();
-    aIgnoreFontNamesCB.clear();
-    aStarBasicCB.clear();
-    aStarBasicWarningCB.clear();
-    aPrintExtensionCB.clear();
-    aSaveGrfLocalCB.clear();
-    aCharSetLB.clear();
-    SfxTabPage::dispose();
 }
 
 VclPtr<SfxTabPage> OfaHtmlTabPage::Create( TabPageParent pParent,
                                            const SfxItemSet* rAttrSet )
 {
-    return VclPtr<OfaHtmlTabPage>::Create(pParent.pParent, *rAttrSet);
+    return VclPtr<OfaHtmlTabPage>::Create(pParent, *rAttrSet);
 }
 
 bool OfaHtmlTabPage::FillItemSet( SfxItemSet* )
 {
     SvxHtmlOptions& rHtmlOpt = SvxHtmlOptions::Get();
-    if(aSize1NF->IsValueChangedFromSaved())
-        rHtmlOpt.SetFontSize(0, static_cast<sal_uInt16>(aSize1NF->GetValue()));
-    if(aSize2NF->IsValueChangedFromSaved())
-        rHtmlOpt.SetFontSize(1, static_cast<sal_uInt16>(aSize2NF->GetValue()));
-    if(aSize3NF->IsValueChangedFromSaved())
-        rHtmlOpt.SetFontSize(2, static_cast<sal_uInt16>(aSize3NF->GetValue()));
-    if(aSize4NF->IsValueChangedFromSaved())
-        rHtmlOpt.SetFontSize(3, static_cast<sal_uInt16>(aSize4NF->GetValue()));
-    if(aSize5NF->IsValueChangedFromSaved())
-        rHtmlOpt.SetFontSize(4, static_cast<sal_uInt16>(aSize5NF->GetValue()));
-    if(aSize6NF->IsValueChangedFromSaved())
-        rHtmlOpt.SetFontSize(5, static_cast<sal_uInt16>(aSize6NF->GetValue()));
-    if(aSize7NF->IsValueChangedFromSaved())
-        rHtmlOpt.SetFontSize(6, static_cast<sal_uInt16>(aSize7NF->GetValue()));
+    if(m_xSize1NF->get_value_changed_from_saved())
+        rHtmlOpt.SetFontSize(0, static_cast<sal_uInt16>(m_xSize1NF->get_value()));
+    if(m_xSize2NF->get_value_changed_from_saved())
+        rHtmlOpt.SetFontSize(1, static_cast<sal_uInt16>(m_xSize2NF->get_value()));
+    if(m_xSize3NF->get_value_changed_from_saved())
+        rHtmlOpt.SetFontSize(2, static_cast<sal_uInt16>(m_xSize3NF->get_value()));
+    if(m_xSize4NF->get_value_changed_from_saved())
+        rHtmlOpt.SetFontSize(3, static_cast<sal_uInt16>(m_xSize4NF->get_value()));
+    if(m_xSize5NF->get_value_changed_from_saved())
+        rHtmlOpt.SetFontSize(4, static_cast<sal_uInt16>(m_xSize5NF->get_value()));
+    if(m_xSize6NF->get_value_changed_from_saved())
+        rHtmlOpt.SetFontSize(5, static_cast<sal_uInt16>(m_xSize6NF->get_value()));
+    if(m_xSize7NF->get_value_changed_from_saved())
+        rHtmlOpt.SetFontSize(6, static_cast<sal_uInt16>(m_xSize7NF->get_value()));
 
-    if(aNumbersEnglishUSCB->IsValueChangedFromSaved())
-        rHtmlOpt.SetNumbersEnglishUS(aNumbersEnglishUSCB->IsChecked());
+    if(m_xNumbersEnglishUSCB->get_state_changed_from_saved())
+        rHtmlOpt.SetNumbersEnglishUS(m_xNumbersEnglishUSCB->get_active());
 
-    if(aUnknownTagCB->IsValueChangedFromSaved())
-        rHtmlOpt.SetImportUnknown(aUnknownTagCB->IsChecked());
+    if(m_xUnknownTagCB->get_state_changed_from_saved())
+        rHtmlOpt.SetImportUnknown(m_xUnknownTagCB->get_active());
 
-    if(aIgnoreFontNamesCB->IsValueChangedFromSaved())
-        rHtmlOpt.SetIgnoreFontFamily(aIgnoreFontNamesCB->IsChecked());
+    if(m_xIgnoreFontNamesCB->get_state_changed_from_saved())
+        rHtmlOpt.SetIgnoreFontFamily(m_xIgnoreFontNamesCB->get_active());
 
-    if(aStarBasicCB->IsValueChangedFromSaved())
-        rHtmlOpt.SetStarBasic(aStarBasicCB->IsChecked());
+    if(m_xStarBasicCB->get_state_changed_from_saved())
+        rHtmlOpt.SetStarBasic(m_xStarBasicCB->get_active());
 
-    if(aStarBasicWarningCB->IsValueChangedFromSaved())
-        rHtmlOpt.SetStarBasicWarning(aStarBasicWarningCB->IsChecked());
+    if(m_xStarBasicWarningCB->get_state_changed_from_saved())
+        rHtmlOpt.SetStarBasicWarning(m_xStarBasicWarningCB->get_active());
 
-    if(aSaveGrfLocalCB->IsValueChangedFromSaved())
-        rHtmlOpt.SetSaveGraphicsLocal(aSaveGrfLocalCB->IsChecked());
+    if(m_xSaveGrfLocalCB->get_state_changed_from_saved())
+        rHtmlOpt.SetSaveGraphicsLocal(m_xSaveGrfLocalCB->get_active());
 
-    if(aPrintExtensionCB->IsValueChangedFromSaved())
-        rHtmlOpt.SetPrintLayoutExtension(aPrintExtensionCB->IsChecked());
+    if(m_xPrintExtensionCB->get_state_changed_from_saved())
+        rHtmlOpt.SetPrintLayoutExtension(m_xPrintExtensionCB->get_active());
 
-    if( aCharSetLB->GetSelectTextEncoding() != rHtmlOpt.GetTextEncoding() )
-        rHtmlOpt.SetTextEncoding( aCharSetLB->GetSelectTextEncoding() );
+    if( m_xCharSetLB->GetSelectTextEncoding() != rHtmlOpt.GetTextEncoding() )
+        rHtmlOpt.SetTextEncoding( m_xCharSetLB->GetSelectTextEncoding() );
 
     return false;
 }
@@ -142,46 +119,46 @@ bool OfaHtmlTabPage::FillItemSet( SfxItemSet* )
 void OfaHtmlTabPage::Reset( const SfxItemSet* )
 {
     SvxHtmlOptions& rHtmlOpt = SvxHtmlOptions::Get();
-    aSize1NF->SetValue(rHtmlOpt.GetFontSize(0));
-    aSize2NF->SetValue(rHtmlOpt.GetFontSize(1));
-    aSize3NF->SetValue(rHtmlOpt.GetFontSize(2));
-    aSize4NF->SetValue(rHtmlOpt.GetFontSize(3));
-    aSize5NF->SetValue(rHtmlOpt.GetFontSize(4));
-    aSize6NF->SetValue(rHtmlOpt.GetFontSize(5));
-    aSize7NF->SetValue(rHtmlOpt.GetFontSize(6));
-    aNumbersEnglishUSCB->Check(rHtmlOpt.IsNumbersEnglishUS());
-    aUnknownTagCB->Check(rHtmlOpt.IsImportUnknown());
-    aIgnoreFontNamesCB->Check(rHtmlOpt.IsIgnoreFontFamily());
+    m_xSize1NF->set_value(rHtmlOpt.GetFontSize(0));
+    m_xSize2NF->set_value(rHtmlOpt.GetFontSize(1));
+    m_xSize3NF->set_value(rHtmlOpt.GetFontSize(2));
+    m_xSize4NF->set_value(rHtmlOpt.GetFontSize(3));
+    m_xSize5NF->set_value(rHtmlOpt.GetFontSize(4));
+    m_xSize6NF->set_value(rHtmlOpt.GetFontSize(5));
+    m_xSize7NF->set_value(rHtmlOpt.GetFontSize(6));
+    m_xNumbersEnglishUSCB->set_active(rHtmlOpt.IsNumbersEnglishUS());
+    m_xUnknownTagCB->set_active(rHtmlOpt.IsImportUnknown());
+    m_xIgnoreFontNamesCB->set_active(rHtmlOpt.IsIgnoreFontFamily());
 
-    aStarBasicCB->Check(rHtmlOpt.IsStarBasic());
-    aStarBasicWarningCB->Check(rHtmlOpt.IsStarBasicWarning());
-    aStarBasicWarningCB->Enable(!aStarBasicCB->IsChecked());
-    aSaveGrfLocalCB->Check(rHtmlOpt.IsSaveGraphicsLocal());
-    aPrintExtensionCB->Check(rHtmlOpt.IsPrintLayoutExtension());
+    m_xStarBasicCB->set_active(rHtmlOpt.IsStarBasic());
+    m_xStarBasicWarningCB->set_active(rHtmlOpt.IsStarBasicWarning());
+    m_xStarBasicWarningCB->set_sensitive(!m_xStarBasicCB->get_active());
+    m_xSaveGrfLocalCB->set_active(rHtmlOpt.IsSaveGraphicsLocal());
+    m_xPrintExtensionCB->set_active(rHtmlOpt.IsPrintLayoutExtension());
 
-    aPrintExtensionCB->SaveValue();
-    aStarBasicCB->SaveValue();
-    aStarBasicWarningCB->SaveValue();
-    aSaveGrfLocalCB->SaveValue();
-    aSize1NF->SaveValue();
-    aSize2NF->SaveValue();
-    aSize3NF->SaveValue();
-    aSize4NF->SaveValue();
-    aSize5NF->SaveValue();
-    aSize6NF->SaveValue();
-    aSize7NF->SaveValue();
-    aNumbersEnglishUSCB->SaveValue();
-    aUnknownTagCB->SaveValue();
-    aIgnoreFontNamesCB->SaveValue();
+    m_xPrintExtensionCB->save_state();
+    m_xStarBasicCB->save_state();
+    m_xStarBasicWarningCB->save_state();
+    m_xSaveGrfLocalCB->save_state();
+    m_xSize1NF->save_value();
+    m_xSize2NF->save_value();
+    m_xSize3NF->save_value();
+    m_xSize4NF->save_value();
+    m_xSize5NF->save_value();
+    m_xSize6NF->save_value();
+    m_xSize7NF->save_value();
+    m_xNumbersEnglishUSCB->save_state();
+    m_xUnknownTagCB->save_state();
+    m_xIgnoreFontNamesCB->save_state();
 
     if( !rHtmlOpt.IsDefaultTextEncoding() &&
-        aCharSetLB->GetSelectTextEncoding() != rHtmlOpt.GetTextEncoding() )
-        aCharSetLB->SelectTextEncoding( rHtmlOpt.GetTextEncoding() );
+        m_xCharSetLB->GetSelectTextEncoding() != rHtmlOpt.GetTextEncoding() )
+        m_xCharSetLB->SelectTextEncoding( rHtmlOpt.GetTextEncoding() );
 }
 
-IMPL_LINK(OfaHtmlTabPage, CheckBoxHdl_Impl, Button*, pBox, void)
+IMPL_LINK(OfaHtmlTabPage, CheckBoxHdl_Impl, weld::ToggleButton&, rBox, void)
 {
-    aStarBasicWarningCB->Enable(!static_cast<CheckBox*>(pBox)->IsChecked());
+    m_xStarBasicWarningCB->set_sensitive(!rBox.get_active());
 }
 
 

@@ -258,7 +258,7 @@ TextEncodingTreeView::~TextEncodingTreeView()
 
 namespace
 {
-    std::vector<int> FillFromTextEncodingTable(bool bExcludeImportSubsets, sal_uInt32 nExcludeInfoFlags)
+    std::vector<int> FillFromTextEncodingTable(bool bExcludeImportSubsets, sal_uInt32 nExcludeInfoFlags, sal_uInt32 nButIncludeInfoFlags)
     {
         std::vector<int> aRet;
 
@@ -282,7 +282,7 @@ namespace
                                 nEnc == RTL_TEXTENCODING_UCS4) )
                             bInsert = false;    // InfoFlags don't work for Unicode :-(
                     }
-                    else
+                    else if ( (aInfo.Flags & nButIncludeInfoFlags) == 0 )
                         bInsert = false;
                 }
             }
@@ -306,9 +306,10 @@ namespace
 }
 
 void TextEncodingBox::FillFromTextEncodingTable(
-        bool bExcludeImportSubsets, sal_uInt32 nExcludeInfoFlags)
+        bool bExcludeImportSubsets, sal_uInt32 nExcludeInfoFlags,
+        sal_uInt32 nButIncludeInfoFlags )
 {
-    std::vector<int> aRet(::FillFromTextEncodingTable(bExcludeImportSubsets, nExcludeInfoFlags));
+    std::vector<int> aRet(::FillFromTextEncodingTable(bExcludeImportSubsets, nExcludeInfoFlags, nButIncludeInfoFlags));
     m_xControl->freeze();
     for (auto j : aRet)
     {
@@ -319,9 +320,10 @@ void TextEncodingBox::FillFromTextEncodingTable(
 }
 
 void TextEncodingTreeView::FillFromTextEncodingTable(
-        bool bExcludeImportSubsets, sal_uInt32 nExcludeInfoFlags)
+        bool bExcludeImportSubsets, sal_uInt32 nExcludeInfoFlags,
+        sal_uInt32 nButIncludeInfoFlags )
 {
-    std::vector<int> aRet(::FillFromTextEncodingTable(bExcludeImportSubsets, nExcludeInfoFlags));
+    std::vector<int> aRet(::FillFromTextEncodingTable(bExcludeImportSubsets, nExcludeInfoFlags, nButIncludeInfoFlags));
     m_xControl->freeze();
     for (auto j : aRet)
     {
@@ -329,6 +331,13 @@ void TextEncodingTreeView::FillFromTextEncodingTable(
         InsertTextEncoding(nEnc, SvxResId(RID_SVXSTR_TEXTENCODING_TABLE[j].first));
     }
     m_xControl->thaw();
+}
+
+void TextEncodingBox::FillWithMimeAndSelectBest()
+{
+    FillFromTextEncodingTable( false, 0xffffffff, RTL_TEXTENCODING_INFO_MIME );
+    rtl_TextEncoding nEnc = SvtSysLocale::GetBestMimeEncoding();
+    SelectTextEncoding( nEnc );
 }
 
 void TextEncodingBox::InsertTextEncoding( const rtl_TextEncoding nEnc,
