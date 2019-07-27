@@ -1260,34 +1260,27 @@ void SwTableOptionsTabPage::PageCreated( const SfxAllItemSet& aSet)
         m_pWrtShell = pWrtSh->GetValue();
 }
 
-SwShdwCursorOptionsTabPage::SwShdwCursorOptionsTabPage( vcl::Window* pParent,
-                                                    const SfxItemSet& rSet )
-   : SfxTabPage(pParent, "OptFormatAidsPage",
-                "modules/swriter/ui/optformataidspage.ui", &rSet),
-    m_pWrtShell( nullptr )
+SwShdwCursorOptionsTabPage::SwShdwCursorOptionsTabPage(TabPageParent pParent, const SfxItemSet& rSet)
+    : SfxTabPage(pParent, "modules/swriter/ui/optformataidspage.ui", "OptFormatAidsPage", &rSet)
+    , m_pWrtShell(nullptr)
+    , m_xParaCB(m_xBuilder->weld_check_button("paragraph"))
+    , m_xSHyphCB(m_xBuilder->weld_check_button("hyphens"))
+    , m_xSpacesCB(m_xBuilder->weld_check_button("spaces"))
+    , m_xHSpacesCB(m_xBuilder->weld_check_button("nonbreak"))
+    , m_xTabCB(m_xBuilder->weld_check_button("tabs"))
+    , m_xBreakCB(m_xBuilder->weld_check_button("break"))
+    , m_xCharHiddenCB(m_xBuilder->weld_check_button("hiddentext"))
+    , m_xDirectCursorFrame(m_xBuilder->weld_frame("directcrsrframe"))
+    , m_xOnOffCB(m_xBuilder->weld_check_button("cursoronoff"))
+    , m_xFillMarginRB(m_xBuilder->weld_radio_button("fillmargin"))
+    , m_xFillIndentRB(m_xBuilder->weld_radio_button("fillindent"))
+    , m_xFillTabRB(m_xBuilder->weld_radio_button("filltab"))
+    , m_xFillTabAndSpaceRB(m_xBuilder->weld_radio_button("filltabandspace"))
+    , m_xFillSpaceRB(m_xBuilder->weld_radio_button("fillspace"))
+    , m_xCursorProtFrame(m_xBuilder->weld_frame("crsrprotframe"))
+    , m_xCursorInProtCB(m_xBuilder->weld_check_button("cursorinprot"))
+    , m_xMathBaselineAlignmentCB(m_xBuilder->weld_check_button("mathbaseline"))
 {
-    get(m_pParaCB, "paragraph");
-    get(m_pSHyphCB, "hyphens");
-    get(m_pSpacesCB, "spaces");
-    get(m_pHSpacesCB, "nonbreak");
-    get(m_pTabCB, "tabs");
-    get(m_pBreakCB, "break");
-    get(m_pCharHiddenCB, "hiddentext");
-
-    get(m_pDirectCursorFrame, "directcrsrframe");
-    get(m_pOnOffCB, "cursoronoff");
-
-    get(m_pFillMarginRB, "fillmargin");
-    get(m_pFillIndentRB, "fillindent");
-    get(m_pFillTabRB, "filltab");
-    get(m_pFillTabAndSpaceRB, "filltabandspace");
-    get(m_pFillSpaceRB, "fillspace");
-
-    get(m_pCursorProtFrame, "crsrprotframe");
-    get(m_pCursorInProtCB, "cursorinprot");
-
-    get(m_pMathBaselineAlignmentCB, "mathbaseline");
-
     const SfxPoolItem* pItem = nullptr;
     sal_uInt8 eMode = SwFillMode::FILL_TAB;
     bool bIsOn = false;
@@ -1298,66 +1291,40 @@ SwShdwCursorOptionsTabPage::SwShdwCursorOptionsTabPage( vcl::Window* pParent,
         eMode = aOpt.GetMode();
         bIsOn = aOpt.IsOn();
     }
-    m_pOnOffCB->Check( bIsOn );
+    m_xOnOffCB->set_active( bIsOn );
 
-    m_pFillIndentRB->Check( FILL_INDENT == eMode );
-    m_pFillMarginRB->Check( FILL_MARGIN == eMode );
-    m_pFillTabRB->Check( FILL_TAB == eMode );
-    m_pFillSpaceRB->Check( FILL_SPACE == eMode );
-    m_pFillTabAndSpaceRB->Check( FILL_TAB_SPACE == eMode );
+    m_xFillIndentRB->set_active( FILL_INDENT == eMode );
+    m_xFillMarginRB->set_active( FILL_MARGIN == eMode );
+    m_xFillTabRB->set_active( FILL_TAB == eMode );
+    m_xFillSpaceRB->set_active( FILL_SPACE == eMode );
+    m_xFillTabAndSpaceRB->set_active( FILL_TAB_SPACE == eMode );
 
     if(SfxItemState::SET != rSet.GetItemState(SID_HTML_MODE, false, &pItem )
         || !(static_cast<const SfxUInt16Item*>(pItem)->GetValue() & HTMLMODE_ON))
         return;
 
-    m_pTabCB->Hide();
-    m_pCharHiddenCB->Hide();
-//    m_pFieldHiddenCB->Hide();
-//    m_pFieldHiddenParaCB->Hide();
+    m_xTabCB->hide();
+    m_xCharHiddenCB->hide();
 
-    m_pDirectCursorFrame->Hide();
-    m_pOnOffCB->Hide();
-    m_pFillMarginRB->Hide();
-    m_pFillIndentRB->Hide();
-    m_pFillTabRB->Hide();
-    m_pFillSpaceRB->Hide();
-    m_pFillTabAndSpaceRB->Hide();
+    m_xDirectCursorFrame->hide();
+    m_xOnOffCB->hide();
+    m_xFillMarginRB->hide();
+    m_xFillIndentRB->hide();
+    m_xFillTabRB->hide();
+    m_xFillSpaceRB->hide();
+    m_xFillTabAndSpaceRB->hide();
 
-    m_pCursorProtFrame->Hide();
-    m_pCursorInProtCB->Hide();
-
+    m_xCursorProtFrame->hide();
+    m_xCursorInProtCB->hide();
 }
 
 SwShdwCursorOptionsTabPage::~SwShdwCursorOptionsTabPage()
 {
-    disposeOnce();
-}
-
-void SwShdwCursorOptionsTabPage::dispose()
-{
-    m_pParaCB.clear();
-    m_pSHyphCB.clear();
-    m_pSpacesCB.clear();
-    m_pHSpacesCB.clear();
-    m_pTabCB.clear();
-    m_pBreakCB.clear();
-    m_pCharHiddenCB.clear();
-    m_pDirectCursorFrame.clear();
-    m_pOnOffCB.clear();
-    m_pFillMarginRB.clear();
-    m_pFillIndentRB.clear();
-    m_pFillTabRB.clear();
-    m_pFillSpaceRB.clear();
-    m_pFillTabAndSpaceRB.clear();
-    m_pCursorProtFrame.clear();
-    m_pCursorInProtCB.clear();
-    m_pMathBaselineAlignmentCB.clear();
-    SfxTabPage::dispose();
 }
 
 VclPtr<SfxTabPage> SwShdwCursorOptionsTabPage::Create( TabPageParent pParent, const SfxItemSet* rSet )
 {
-    return VclPtr<SwShdwCursorOptionsTabPage>::Create( pParent.pParent, *rSet );
+    return VclPtr<SwShdwCursorOptionsTabPage>::Create( pParent, *rSet );
 }
 
 void SwShdwCursorOptionsTabPage::PageCreated( const SfxAllItemSet& aSet )
@@ -1370,16 +1337,16 @@ void SwShdwCursorOptionsTabPage::PageCreated( const SfxAllItemSet& aSet )
 bool SwShdwCursorOptionsTabPage::FillItemSet( SfxItemSet* rSet )
 {
     SwShadowCursorItem aOpt;
-    aOpt.SetOn( m_pOnOffCB->IsChecked() );
+    aOpt.SetOn( m_xOnOffCB->get_active() );
 
     sal_uInt8 eMode;
-    if( m_pFillIndentRB->IsChecked() )
+    if( m_xFillIndentRB->get_active() )
         eMode= FILL_INDENT;
-    else if( m_pFillMarginRB->IsChecked() )
+    else if( m_xFillMarginRB->get_active() )
         eMode = FILL_MARGIN;
-    else if( m_pFillTabRB->IsChecked() )
+    else if( m_xFillTabRB->get_active() )
         eMode = FILL_TAB;
-    else if ( m_pFillTabAndSpaceRB->IsChecked() )
+    else if ( m_xFillTabAndSpaceRB->get_active() )
         eMode = FILL_TAB_SPACE;
     else
         eMode = FILL_SPACE;
@@ -1396,13 +1363,13 @@ bool SwShdwCursorOptionsTabPage::FillItemSet( SfxItemSet* rSet )
 
     if (m_pWrtShell) {
         m_pWrtShell->GetDoc()->getIDocumentSettingAccess().set( DocumentSettingId::MATH_BASELINE_ALIGNMENT,
-                                    m_pMathBaselineAlignmentCB->IsChecked() );
-        bRet |= m_pMathBaselineAlignmentCB->IsValueChangedFromSaved();
+                                    m_xMathBaselineAlignmentCB->get_active() );
+        bRet |= m_xMathBaselineAlignmentCB->get_state_changed_from_saved();
     }
 
-    if( m_pCursorInProtCB->IsValueChangedFromSaved())
+    if( m_xCursorInProtCB->get_state_changed_from_saved())
     {
-        rSet->Put(SfxBoolItem(FN_PARAM_CRSR_IN_PROTECTED, m_pCursorInProtCB->IsChecked()));
+        rSet->Put(SfxBoolItem(FN_PARAM_CRSR_IN_PROTECTED, m_xCursorInProtCB->get_active()));
         bRet = true;
     }
 
@@ -1411,13 +1378,13 @@ bool SwShdwCursorOptionsTabPage::FillItemSet( SfxItemSet* rSet )
 
     SwDocDisplayItem aDisp;
 
-    aDisp.bParagraphEnd         = m_pParaCB->IsChecked();
-    aDisp.bTab                  = m_pTabCB->IsChecked();
-    aDisp.bSpace                = m_pSpacesCB->IsChecked();
-    aDisp.bNonbreakingSpace     = m_pHSpacesCB->IsChecked();
-    aDisp.bSoftHyphen           = m_pSHyphCB->IsChecked();
-    aDisp.bCharHiddenText       = m_pCharHiddenCB->IsChecked();
-    aDisp.bManualBreak          = m_pBreakCB->IsChecked();
+    aDisp.bParagraphEnd         = m_xParaCB->get_active();
+    aDisp.bTab                  = m_xTabCB->get_active();
+    aDisp.bSpace                = m_xSpacesCB->get_active();
+    aDisp.bNonbreakingSpace     = m_xHSpacesCB->get_active();
+    aDisp.bSoftHyphen           = m_xSHyphCB->get_active();
+    aDisp.bCharHiddenText       = m_xCharHiddenCB->get_active();
+    aDisp.bManualBreak          = m_xBreakCB->get_active();
 
     bRet |= (!pOldAttr || aDisp != *pOldAttr);
     if(bRet)
@@ -1438,24 +1405,24 @@ void SwShdwCursorOptionsTabPage::Reset( const SfxItemSet* rSet )
         eMode = aOpt.GetMode();
         bIsOn = aOpt.IsOn();
     }
-    m_pOnOffCB->Check( bIsOn );
+    m_xOnOffCB->set_active( bIsOn );
 
-    m_pFillIndentRB->Check( FILL_INDENT == eMode );
-    m_pFillMarginRB->Check( FILL_MARGIN == eMode );
-    m_pFillTabRB->Check( FILL_TAB == eMode );
-    m_pFillSpaceRB->Check( FILL_SPACE == eMode );
-    m_pFillTabAndSpaceRB->Check( FILL_TAB_SPACE == eMode );
+    m_xFillIndentRB->set_active( FILL_INDENT == eMode );
+    m_xFillMarginRB->set_active( FILL_MARGIN == eMode );
+    m_xFillTabRB->set_active( FILL_TAB == eMode );
+    m_xFillSpaceRB->set_active( FILL_SPACE == eMode );
+    m_xFillTabAndSpaceRB->set_active( FILL_TAB_SPACE == eMode );
 
     if (m_pWrtShell) {
-       m_pMathBaselineAlignmentCB->Check( m_pWrtShell->GetDoc()->getIDocumentSettingAccess().get( DocumentSettingId::MATH_BASELINE_ALIGNMENT ) );
-       m_pMathBaselineAlignmentCB->SaveValue();
+        m_xMathBaselineAlignmentCB->set_active( m_pWrtShell->GetDoc()->getIDocumentSettingAccess().get( DocumentSettingId::MATH_BASELINE_ALIGNMENT ) );
+        m_xMathBaselineAlignmentCB->save_state();
     } else {
-        m_pMathBaselineAlignmentCB->Hide();
+        m_xMathBaselineAlignmentCB->hide();
     }
 
     if( SfxItemState::SET == rSet->GetItemState( FN_PARAM_CRSR_IN_PROTECTED, false, &pItem ))
-        m_pCursorInProtCB->Check(static_cast<const SfxBoolItem*>(pItem)->GetValue());
-    m_pCursorInProtCB->SaveValue();
+        m_xCursorInProtCB->set_active(static_cast<const SfxBoolItem*>(pItem)->GetValue());
+    m_xCursorInProtCB->save_state();
 
     const SwDocDisplayItem* pDocDisplayAttr = nullptr;
 
@@ -1463,13 +1430,13 @@ void SwShdwCursorOptionsTabPage::Reset( const SfxItemSet* rSet )
                                     reinterpret_cast<const SfxPoolItem**>(&pDocDisplayAttr) );
     if(pDocDisplayAttr)
     {
-        m_pParaCB->Check  ( pDocDisplayAttr->bParagraphEnd );
-        m_pTabCB->Check  ( pDocDisplayAttr->bTab );
-        m_pSpacesCB->Check  ( pDocDisplayAttr->bSpace );
-        m_pHSpacesCB->Check  ( pDocDisplayAttr->bNonbreakingSpace );
-        m_pSHyphCB->Check  ( pDocDisplayAttr->bSoftHyphen );
-        m_pCharHiddenCB->Check ( pDocDisplayAttr->bCharHiddenText );
-        m_pBreakCB->Check  ( pDocDisplayAttr->bManualBreak );
+        m_xParaCB->set_active( pDocDisplayAttr->bParagraphEnd );
+        m_xTabCB->set_active( pDocDisplayAttr->bTab );
+        m_xSpacesCB->set_active( pDocDisplayAttr->bSpace );
+        m_xHSpacesCB->set_active( pDocDisplayAttr->bNonbreakingSpace );
+        m_xSHyphCB->set_active( pDocDisplayAttr->bSoftHyphen );
+        m_xCharHiddenCB->set_active( pDocDisplayAttr->bCharHiddenText );
+        m_xBreakCB->set_active( pDocDisplayAttr->bManualBreak );
     }
 }
 

@@ -228,35 +228,34 @@ public:
 // TabPage for ShadowCursor
 class SwShdwCursorOptionsTabPage : public SfxTabPage
 {
-    //nonprinting characters
-    VclPtr<CheckBox> m_pParaCB;
-    VclPtr<CheckBox> m_pSHyphCB;
-    VclPtr<CheckBox> m_pSpacesCB;
-    VclPtr<CheckBox> m_pHSpacesCB;
-    VclPtr<CheckBox> m_pTabCB;
-    VclPtr<CheckBox> m_pBreakCB;
-    VclPtr<CheckBox> m_pCharHiddenCB;
-
-    VclPtr<VclFrame> m_pDirectCursorFrame;
-    VclPtr<CheckBox> m_pOnOffCB;
-
-    VclPtr<RadioButton> m_pFillMarginRB;
-    VclPtr<RadioButton> m_pFillIndentRB;
-    VclPtr<RadioButton> m_pFillTabRB;
-    VclPtr<RadioButton> m_pFillTabAndSpaceRB;
-    VclPtr<RadioButton> m_pFillSpaceRB;
-
-    VclPtr<VclFrame> m_pCursorProtFrame;
-    VclPtr<CheckBox> m_pCursorInProtCB;
-
-    VclPtr<CheckBox> m_pMathBaselineAlignmentCB;
-
     SwWrtShell *    m_pWrtShell;
 
+    //nonprinting characters
+    std::unique_ptr<weld::CheckButton> m_xParaCB;
+    std::unique_ptr<weld::CheckButton> m_xSHyphCB;
+    std::unique_ptr<weld::CheckButton> m_xSpacesCB;
+    std::unique_ptr<weld::CheckButton> m_xHSpacesCB;
+    std::unique_ptr<weld::CheckButton> m_xTabCB;
+    std::unique_ptr<weld::CheckButton> m_xBreakCB;
+    std::unique_ptr<weld::CheckButton> m_xCharHiddenCB;
+
+    std::unique_ptr<weld::Frame> m_xDirectCursorFrame;
+    std::unique_ptr<weld::CheckButton> m_xOnOffCB;
+
+    std::unique_ptr<weld::RadioButton> m_xFillMarginRB;
+    std::unique_ptr<weld::RadioButton> m_xFillIndentRB;
+    std::unique_ptr<weld::RadioButton> m_xFillTabRB;
+    std::unique_ptr<weld::RadioButton> m_xFillTabAndSpaceRB;
+    std::unique_ptr<weld::RadioButton> m_xFillSpaceRB;
+
+    std::unique_ptr<weld::Frame> m_xCursorProtFrame;
+    std::unique_ptr<weld::CheckButton> m_xCursorInProtCB;
+
+    std::unique_ptr<weld::CheckButton> m_xMathBaselineAlignmentCB;
+
 public:
-    SwShdwCursorOptionsTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
+    SwShdwCursorOptionsTabPage(TabPageParent pParent, const SfxItemSet& rSet);
     virtual ~SwShdwCursorOptionsTabPage() override;
-    virtual void dispose() override;
 
     static VclPtr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rAttrSet);
 
