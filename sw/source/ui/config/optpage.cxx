@@ -502,6 +502,7 @@ SwStdFontTabPage::SwStdFontTabPage(TabPageParent pParent, const SfxItemSet& rSet
     , m_bSetLabelDefault(true)
     , m_bIdxDefault(false)
     , m_bSetIdxDefault(true)
+    , m_bDisposePrinter(false)
     , m_bListHeightDefault(false)
     , m_bLabelHeightDefault(false)
     , m_bIndexHeightDefault(false)
@@ -554,7 +555,10 @@ void SwStdFontTabPage::dispose()
     m_xTitleHeightLB.reset();
     m_xStandardHeightLB.reset();
     m_pFontList.reset();
-    m_pPrt.clear();
+    if (m_bDisposePrinter)
+        m_pPrt.disposeAndClear();
+    else
+        m_pPrt.clear();
     SfxTabPage::dispose();
 }
 
@@ -732,6 +736,12 @@ void SwStdFontTabPage::Reset( const SfxItemSet* rSet)
 
     const SfxPoolItem* pItem;
 
+    if (m_bDisposePrinter)
+    {
+        m_pPrt.disposeAndClear();
+        m_bDisposePrinter = false;
+    }
+
     if(SfxItemState::SET == rSet->GetItemState(FN_PARAM_PRINTER, false, &pItem))
     {
         m_pPrt = static_cast<SfxPrinter*>(static_cast<const SwPtrItem*>(pItem)->GetValue());
@@ -742,6 +752,7 @@ void SwStdFontTabPage::Reset( const SfxItemSet* rSet)
                     svl::Items<SID_PRINTER_NOTFOUND_WARN, SID_PRINTER_NOTFOUND_WARN,
                     SID_PRINTER_CHANGESTODOC, SID_PRINTER_CHANGESTODOC>{} );
         m_pPrt = VclPtr<SfxPrinter>::Create(std::move(pPrinterSet));
+        m_bDisposePrinter = true;
     }
     m_pFontList.reset(new FontList( m_pPrt ));
     // #i94536# prevent duplication of font entries when 'reset' button is pressed
