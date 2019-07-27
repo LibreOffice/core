@@ -200,7 +200,7 @@ int SAL_CALL main( int argc, char * argv[] )
     testConnection( OUString("pipe,name=bla") , rAcceptorPipe , rConnector );
     printf( " Done\n" );
 
-    // check, if errornous strings make any problem
+    // check, if erroneous strings make any problem
     rAcceptor.set(
         xMgr->createInstance("com.sun.star.connection.Acceptor"),
         UNO_QUERY );
