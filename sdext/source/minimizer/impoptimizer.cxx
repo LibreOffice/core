@@ -581,37 +581,35 @@ void ImpOptimizer::Optimize( const Sequence< PropertyValue >& rArguments )
     SetStatusValue( TK_Progress, Any( static_cast< sal_Int32 >( 0 ) ) );
     DispatchStatus();
 
-    int i, nICount;
-    for ( i = 0, nICount = rArguments.getLength(); i < nICount; i++ )
+    for ( const auto& rArgument : rArguments )
     {
-        switch( TKGet( rArguments[ i ].Name ) )
+        switch( TKGet( rArgument.Name ) )
         {
-            case TK_StatusDispatcher : rArguments[ i ].Value >>= mxStatusDispatcher; break;
-            case TK_InformationDialog: rArguments[ i ].Value >>= mxInformationDialog; break;
+            case TK_StatusDispatcher : rArgument.Value >>= mxStatusDispatcher; break;
+            case TK_InformationDialog: rArgument.Value >>= mxInformationDialog; break;
             case TK_Settings :
             {
                 css::uno::Sequence< css::beans::PropertyValue > aSettings;
-                int j, nJCount;
-                rArguments[ i ].Value >>= aSettings;
-                for ( j = 0, nJCount = aSettings.getLength(); j < nJCount; j++ )
+                rArgument.Value >>= aSettings;
+                for ( const auto& rSetting : aSettings )
                 {
-                    switch( TKGet( aSettings[ j ].Name ) )
+                    switch( TKGet( rSetting.Name ) )
                     {
-                        case TK_JPEGCompression         : aSettings[ j ].Value >>= mbJPEGCompression; break;
-                        case TK_JPEGQuality             : aSettings[ j ].Value >>= mnJPEGQuality; break;
-                        case TK_RemoveCropArea          : aSettings[ j ].Value >>= mbRemoveCropArea; break;
-                        case TK_ImageResolution         : aSettings[ j ].Value >>= mnImageResolution; break;
-                        case TK_EmbedLinkedGraphics     : aSettings[ j ].Value >>= mbEmbedLinkedGraphics; break;
-                        case TK_OLEOptimization         : aSettings[ j ].Value >>= mbOLEOptimization; break;
-                        case TK_OLEOptimizationType     : aSettings[ j ].Value >>= mnOLEOptimizationType; break;
-                        case TK_CustomShowName          : aSettings[ j ].Value >>= maCustomShowName; break;
-                        case TK_DeleteUnusedMasterPages : aSettings[ j ].Value >>= mbDeleteUnusedMasterPages; break;
-                        case TK_DeleteHiddenSlides      : aSettings[ j ].Value >>= mbDeleteHiddenSlides; break;
-                        case TK_DeleteNotesPages        : aSettings[ j ].Value >>= mbDeleteNotesPages; break;
-                        case TK_SaveAsURL               : aSettings[ j ].Value >>= maSaveAsURL; break;
-                        case TK_FilterName              : aSettings[ j ].Value >>= maFilterName; break;
-                        case TK_OpenNewDocument         : aSettings[ j ].Value >>= mbOpenNewDocument; break;
-                        case TK_EstimatedFileSize       : aSettings[ j ].Value >>= nEstimatedFileSize; break;
+                        case TK_JPEGCompression         : rSetting.Value >>= mbJPEGCompression; break;
+                        case TK_JPEGQuality             : rSetting.Value >>= mnJPEGQuality; break;
+                        case TK_RemoveCropArea          : rSetting.Value >>= mbRemoveCropArea; break;
+                        case TK_ImageResolution         : rSetting.Value >>= mnImageResolution; break;
+                        case TK_EmbedLinkedGraphics     : rSetting.Value >>= mbEmbedLinkedGraphics; break;
+                        case TK_OLEOptimization         : rSetting.Value >>= mbOLEOptimization; break;
+                        case TK_OLEOptimizationType     : rSetting.Value >>= mnOLEOptimizationType; break;
+                        case TK_CustomShowName          : rSetting.Value >>= maCustomShowName; break;
+                        case TK_DeleteUnusedMasterPages : rSetting.Value >>= mbDeleteUnusedMasterPages; break;
+                        case TK_DeleteHiddenSlides      : rSetting.Value >>= mbDeleteHiddenSlides; break;
+                        case TK_DeleteNotesPages        : rSetting.Value >>= mbDeleteNotesPages; break;
+                        case TK_SaveAsURL               : rSetting.Value >>= maSaveAsURL; break;
+                        case TK_FilterName              : rSetting.Value >>= maFilterName; break;
+                        case TK_OpenNewDocument         : rSetting.Value >>= mbOpenNewDocument; break;
+                        case TK_EstimatedFileSize       : rSetting.Value >>= nEstimatedFileSize; break;
                         default: break;
                     }
                 }

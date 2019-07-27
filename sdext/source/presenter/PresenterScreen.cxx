@@ -128,30 +128,16 @@ Any SAL_CALL PresenterScreenJob::execute(
     const Sequence< beans::NamedValue >& Arguments )
 {
     Sequence< beans::NamedValue > lEnv;
-
-    sal_Int32               i = 0;
-    sal_Int32               c = Arguments.getLength();
-    const beans::NamedValue* p = Arguments.getConstArray();
-    for (i=0; i<c; ++i)
-    {
-        if ( p[i].Name == "Environment" )
-        {
-            p[i].Value >>= lEnv;
-            break;
-        }
-    }
+    auto pArg = std::find_if(Arguments.begin(), Arguments.end(),
+        [](const beans::NamedValue& rArg) { return rArg.Name == "Environment"; });
+    if (pArg != Arguments.end())
+        pArg->Value >>= lEnv;
 
     Reference<frame::XModel2> xModel;
-    c = lEnv.getLength();
-    p = lEnv.getConstArray();
-    for (i=0; i<c; ++i)
-    {
-        if ( p[i].Name == "Model" )
-        {
-            p[i].Value >>= xModel;
-            break;
-        }
-    }
+    auto pProp = std::find_if(lEnv.begin(), lEnv.end(),
+        [](const beans::NamedValue& rProp) { return rProp.Name == "Model"; });
+    if (pProp != lEnv.end())
+        pProp->Value >>= xModel;
 
     Reference< XServiceInfo > xInfo( xModel, UNO_QUERY );
     if( xInfo.is() && xInfo->supportsService("com.sun.star.presentation.PresentationDocument") )

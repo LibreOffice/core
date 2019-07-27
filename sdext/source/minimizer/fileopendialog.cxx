@@ -73,18 +73,18 @@ FileOpenDialog::FileOpenDialog( const Reference< XComponentContext >& rxContext 
     Reference< XNameAccess > xFilters( rxContext->getServiceManager()->createInstanceWithContext(
         "com.sun.star.document.FilterFactory", rxContext ), UNO_QUERY_THROW );
     Sequence< OUString > aFilterList( xFilters->getElementNames() );
-    for ( int i = 0; i < aFilterList.getLength(); i++ )
+    for ( const auto& rFilter : aFilterList )
     {
         try
         {
             Sequence< PropertyValue > aFilterProperties;
-            if ( xFilters->getByName( aFilterList[ i ] ) >>= aFilterProperties )
+            if ( xFilters->getByName( rFilter ) >>= aFilterProperties )
             {
                 FilterEntry aFilterEntry;
                 bool bImpressFilter = false;
-                for ( int j = 0; j < aFilterProperties.getLength(); j++ )
+                for ( const PropertyValue& rProperty : aFilterProperties )
                 {
-                    PropertyValue& rProperty( aFilterProperties[ j ] );
+                    bool bStop = false;
                     switch( TKGet( rProperty.Name ) )
                     {
                         case TK_DocumentService :
@@ -94,7 +94,7 @@ FileOpenDialog::FileOpenDialog( const Reference< XComponentContext >& rxContext 
                             if ( sDocumentService == "com.sun.star.presentation.PresentationDocument" )
                                 bImpressFilter = true;
                             else
-                                j = aFilterProperties.getLength();
+                                bStop = true;
                         }
                         break;
                         case TK_Name :      rProperty.Value >>= aFilterEntry.maFilterEntryName; break;
@@ -103,6 +103,9 @@ FileOpenDialog::FileOpenDialog( const Reference< XComponentContext >& rxContext 
                         case TK_Flags :     rProperty.Value >>= aFilterEntry.maFlags; break;
                         default : break;
                     }
+
+                    if (bStop)
+                        break;
                 }
                 if ( bImpressFilter && ( ( aFilterEntry.maFlags & 3 ) == 3 ) )
                 {
@@ -126,14 +129,10 @@ FileOpenDialog::FileOpenDialog( const Reference< XComponentContext >& rxContext 
             if ( xTypes->getByName( rFilterEntry.maType ) >>= aTypeProperties )
             {
                 Sequence< OUString > aExtensions;
-                for ( int i = 0; i < aTypeProperties.getLength(); i++ )
-                {
-                    if( aTypeProperties[ i ].Name == "Extensions" )
-                    {
-                        aTypeProperties[ i ].Value >>= aExtensions;
-                        break;
-                    }
-                }
+                auto pProp = std::find_if(aTypeProperties.begin(), aTypeProperties.end(),
+                    [](const PropertyValue& rProp) { return rProp.Name == "Extensions"; });
+                if (pProp != aTypeProperties.end())
+                    pProp->Value >>= aExtensions;
                 if ( aExtensions.hasElements() )
                 {
                     // The filter title must be formed in the same way it is

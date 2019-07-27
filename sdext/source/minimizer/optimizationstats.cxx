@@ -65,8 +65,8 @@ css::beans::PropertyValues OptimizationStats::GetStatusSequence()
 
 void OptimizationStats::InitializeStatusValues( const uno::Sequence< PropertyValue >& rOptimizationStats )
 {
-    for( int i = 0; i < rOptimizationStats.getLength(); i++ )
-        maStats[ TKGet( rOptimizationStats[ i ].Name ) ] = rOptimizationStats[ i ].Value;
+    for( const auto& rStat : rOptimizationStats )
+        maStats[ TKGet( rStat.Name ) ] = rStat.Value;
 }
 
 
