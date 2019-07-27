@@ -1043,60 +1043,39 @@ void SwStdFontTabPage::PageCreated( const SfxAllItemSet& aSet)
         m_nFontGroup = sal::static_int_cast< sal_uInt8, sal_uInt16>( pFlagItem->GetValue() );
 }
 
-SwTableOptionsTabPage::SwTableOptionsTabPage( vcl::Window* pParent, const SfxItemSet& rSet ) :
-    SfxTabPage(pParent, "OptTablePage", "modules/swriter/ui/opttablepage.ui", &rSet),
-    m_pWrtShell(nullptr),
-    m_bHTMLMode(false)
+SwTableOptionsTabPage::SwTableOptionsTabPage(TabPageParent pParent, const SfxItemSet& rSet)
+    : SfxTabPage(pParent, "modules/swriter/ui/opttablepage.ui", "OptTablePage", &rSet)
+    , m_pWrtShell(nullptr)
+    , m_bHTMLMode(false)
+    , m_xHeaderCB(m_xBuilder->weld_check_button("header"))
+    , m_xRepeatHeaderCB(m_xBuilder->weld_check_button("repeatheader"))
+    , m_xDontSplitCB(m_xBuilder->weld_check_button("dontsplit"))
+    , m_xBorderCB(m_xBuilder->weld_check_button("border"))
+    , m_xNumFormattingCB(m_xBuilder->weld_check_button("numformatting"))
+    , m_xNumFormatFormattingCB(m_xBuilder->weld_check_button("numfmtformatting"))
+    , m_xNumAlignmentCB(m_xBuilder->weld_check_button("numalignment"))
+    , m_xRowMoveMF(m_xBuilder->weld_metric_spin_button("rowmove", FieldUnit::CM))
+    , m_xColMoveMF(m_xBuilder->weld_metric_spin_button("colmove", FieldUnit::CM))
+    , m_xRowInsertMF(m_xBuilder->weld_metric_spin_button("rowinsert", FieldUnit::CM))
+    , m_xColInsertMF(m_xBuilder->weld_metric_spin_button("colinsert", FieldUnit::CM))
+    , m_xFixRB(m_xBuilder->weld_radio_button("fix"))
+    , m_xFixPropRB(m_xBuilder->weld_radio_button("fixprop"))
+    , m_xVarRB(m_xBuilder->weld_radio_button("var"))
 {
-    get(m_pHeaderCB,"header");
-    get(m_pRepeatHeaderCB,"repeatheader");
-    get(m_pDontSplitCB,"dontsplit");
-    get(m_pBorderCB,"border");
-    get(m_pNumFormattingCB,"numformatting");
-    get(m_pNumFormatFormattingCB,"numfmtformatting");
-    get(m_pNumAlignmentCB,"numalignment");
-    get(m_pRowMoveMF,"rowmove");
-    get(m_pColMoveMF,"colmove");
-    get(m_pRowInsertMF,"rowinsert");
-    get(m_pColInsertMF,"colinsert");
-    get(m_pFixRB,"fix");
-    get(m_pFixPropRB,"fixprop");
-    get(m_pVarRB,"var");
-
-    Link<Button*,void> aLnk(LINK(this, SwTableOptionsTabPage, CheckBoxHdl));
-    m_pNumFormattingCB->SetClickHdl(aLnk);
-    m_pNumFormatFormattingCB->SetClickHdl(aLnk);
-    m_pHeaderCB->SetClickHdl(aLnk);
+    Link<weld::Button&,void> aLnk(LINK(this, SwTableOptionsTabPage, CheckBoxHdl));
+    m_xNumFormattingCB->connect_clicked(aLnk);
+    m_xNumFormatFormattingCB->connect_clicked(aLnk);
+    m_xHeaderCB->connect_clicked(aLnk);
 }
 
 SwTableOptionsTabPage::~SwTableOptionsTabPage()
 {
-    disposeOnce();
-}
-
-void SwTableOptionsTabPage::dispose()
-{
-    m_pHeaderCB.clear();
-    m_pRepeatHeaderCB.clear();
-    m_pDontSplitCB.clear();
-    m_pBorderCB.clear();
-    m_pNumFormattingCB.clear();
-    m_pNumFormatFormattingCB.clear();
-    m_pNumAlignmentCB.clear();
-    m_pRowMoveMF.clear();
-    m_pColMoveMF.clear();
-    m_pRowInsertMF.clear();
-    m_pColInsertMF.clear();
-    m_pFixRB.clear();
-    m_pFixPropRB.clear();
-    m_pVarRB.clear();
-    SfxTabPage::dispose();
 }
 
 VclPtr<SfxTabPage> SwTableOptionsTabPage::Create( TabPageParent pParent,
                                                   const SfxItemSet* rAttrSet )
 {
-    return VclPtr<SwTableOptionsTabPage>::Create(pParent.pParent, *rAttrSet);
+    return VclPtr<SwTableOptionsTabPage>::Create(pParent, *rAttrSet);
 }
 
 bool SwTableOptionsTabPage::FillItemSet( SfxItemSet* )
@@ -1104,22 +1083,22 @@ bool SwTableOptionsTabPage::FillItemSet( SfxItemSet* )
     bool bRet = false;
     SwModuleOptions* pModOpt = SW_MOD()->GetModuleConfig();
 
-    if(m_pRowMoveMF->IsModified())
-        pModOpt->SetTableHMove( static_cast<sal_uInt16>(m_pRowMoveMF->Denormalize( m_pRowMoveMF->GetValue(FieldUnit::TWIP))));
+    if (m_xRowMoveMF->get_value_changed_from_saved())
+        pModOpt->SetTableHMove( static_cast<sal_uInt16>(m_xRowMoveMF->denormalize( m_xRowMoveMF->get_value(FieldUnit::TWIP))));
 
-    if(m_pColMoveMF->IsModified())
-        pModOpt->SetTableVMove( static_cast<sal_uInt16>(m_pColMoveMF->Denormalize( m_pColMoveMF->GetValue(FieldUnit::TWIP))));
+    if (m_xColMoveMF->get_value_changed_from_saved())
+        pModOpt->SetTableVMove( static_cast<sal_uInt16>(m_xColMoveMF->denormalize( m_xColMoveMF->get_value(FieldUnit::TWIP))));
 
-    if(m_pRowInsertMF->IsModified())
-        pModOpt->SetTableHInsert(static_cast<sal_uInt16>(m_pRowInsertMF->Denormalize( m_pRowInsertMF->GetValue(FieldUnit::TWIP))));
+    if (m_xRowInsertMF->get_value_changed_from_saved())
+        pModOpt->SetTableHInsert(static_cast<sal_uInt16>(m_xRowInsertMF->denormalize( m_xRowInsertMF->get_value(FieldUnit::TWIP))));
 
-    if(m_pColInsertMF->IsModified())
-        pModOpt->SetTableVInsert(static_cast<sal_uInt16>(m_pColInsertMF->Denormalize( m_pColInsertMF->GetValue(FieldUnit::TWIP))));
+    if (m_xColInsertMF->get_value_changed_from_saved())
+        pModOpt->SetTableVInsert(static_cast<sal_uInt16>(m_xColInsertMF->denormalize( m_xColInsertMF->get_value(FieldUnit::TWIP))));
 
     TableChgMode eMode;
-    if(m_pFixRB->IsChecked())
+    if (m_xFixRB->get_active())
         eMode = TableChgMode::FixedWidthChangeAbs;
-    else if(m_pFixPropRB->IsChecked())
+    else if(m_xFixPropRB->get_active())
         eMode = TableChgMode::FixedWidthChangeProp;
     else
         eMode = TableChgMode::VarWidthChangeAbs;
@@ -1145,41 +1124,41 @@ bool SwTableOptionsTabPage::FillItemSet( SfxItemSet* )
 
     SwInsertTableOptions aInsOpts( SwInsertTableFlags::NONE, 0 );
 
-    if (m_pHeaderCB->IsChecked())
+    if (m_xHeaderCB->get_active())
         aInsOpts.mnInsMode |= SwInsertTableFlags::Headline;
 
-    if (m_pRepeatHeaderCB->IsEnabled() )
-        aInsOpts.mnRowsToRepeat = m_pRepeatHeaderCB->IsChecked()? 1 : 0;
+    if (m_xRepeatHeaderCB->get_sensitive())
+        aInsOpts.mnRowsToRepeat = m_xRepeatHeaderCB->get_active() ? 1 : 0;
 
-    if (!m_pDontSplitCB->IsChecked())
+    if (!m_xDontSplitCB->get_active())
         aInsOpts.mnInsMode |= SwInsertTableFlags::SplitLayout;
 
-    if (m_pBorderCB->IsChecked())
+    if (m_xBorderCB->get_active())
         aInsOpts.mnInsMode |= SwInsertTableFlags::DefaultBorder;
 
-    if (m_pHeaderCB->IsValueChangedFromSaved() ||
-        m_pRepeatHeaderCB->IsValueChangedFromSaved() ||
-        m_pDontSplitCB->IsValueChangedFromSaved() ||
-        m_pBorderCB->IsValueChangedFromSaved())
+    if (m_xHeaderCB->get_state_changed_from_saved() ||
+        m_xRepeatHeaderCB->get_state_changed_from_saved() ||
+        m_xDontSplitCB->get_state_changed_from_saved() ||
+        m_xBorderCB->get_state_changed_from_saved())
     {
         pModOpt->SetInsTableFlags(m_bHTMLMode, aInsOpts);
     }
 
-    if (m_pNumFormattingCB->IsValueChangedFromSaved())
+    if (m_xNumFormattingCB->get_state_changed_from_saved())
     {
-        pModOpt->SetInsTableFormatNum(m_bHTMLMode, m_pNumFormattingCB->IsChecked());
+        pModOpt->SetInsTableFormatNum(m_bHTMLMode, m_xNumFormattingCB->get_active());
         bRet = true;
     }
 
-    if (m_pNumFormatFormattingCB->IsValueChangedFromSaved())
+    if (m_xNumFormatFormattingCB->get_state_changed_from_saved())
     {
-        pModOpt->SetInsTableChangeNumFormat(m_bHTMLMode, m_pNumFormatFormattingCB->IsChecked());
+        pModOpt->SetInsTableChangeNumFormat(m_bHTMLMode, m_xNumFormatFormattingCB->get_active());
         bRet = true;
     }
 
-    if (m_pNumAlignmentCB->IsValueChangedFromSaved())
+    if (m_xNumAlignmentCB->get_state_changed_from_saved())
     {
-        pModOpt->SetInsTableAlignNum(m_bHTMLMode, m_pNumAlignmentCB->IsChecked());
+        pModOpt->SetInsTableAlignNum(m_bHTMLMode, m_xNumAlignmentCB->get_active());
         bRet = true;
     }
 
@@ -1193,22 +1172,22 @@ void SwTableOptionsTabPage::Reset( const SfxItemSet* rSet)
     {
         const SfxUInt16Item& rItem = rSet->Get( SID_ATTR_METRIC );
         FieldUnit eFieldUnit = static_cast<FieldUnit>(rItem.GetValue());
-        ::SetFieldUnit( *m_pRowMoveMF, eFieldUnit );
-        ::SetFieldUnit( *m_pColMoveMF, eFieldUnit );
-        ::SetFieldUnit( *m_pRowInsertMF, eFieldUnit );
-        ::SetFieldUnit( *m_pColInsertMF, eFieldUnit );
+        ::SetFieldUnit( *m_xRowMoveMF, eFieldUnit );
+        ::SetFieldUnit( *m_xColMoveMF, eFieldUnit );
+        ::SetFieldUnit( *m_xRowInsertMF, eFieldUnit );
+        ::SetFieldUnit( *m_xColInsertMF, eFieldUnit );
     }
 
-    m_pRowMoveMF->SetValue(m_pRowMoveMF->Normalize(pModOpt->GetTableHMove()), FieldUnit::TWIP);
-    m_pColMoveMF->SetValue(m_pColMoveMF->Normalize(pModOpt->GetTableVMove()), FieldUnit::TWIP);
-    m_pRowInsertMF->SetValue(m_pRowInsertMF->Normalize(pModOpt->GetTableHInsert()), FieldUnit::TWIP);
-    m_pColInsertMF->SetValue(m_pColInsertMF->Normalize(pModOpt->GetTableVInsert()), FieldUnit::TWIP);
+    m_xRowMoveMF->set_value(m_xRowMoveMF->normalize(pModOpt->GetTableHMove()), FieldUnit::TWIP);
+    m_xColMoveMF->set_value(m_xColMoveMF->normalize(pModOpt->GetTableVMove()), FieldUnit::TWIP);
+    m_xRowInsertMF->set_value(m_xRowInsertMF->normalize(pModOpt->GetTableHInsert()), FieldUnit::TWIP);
+    m_xColInsertMF->set_value(m_xColInsertMF->normalize(pModOpt->GetTableVInsert()), FieldUnit::TWIP);
 
     switch(pModOpt->GetTableMode())
     {
-        case TableChgMode::FixedWidthChangeAbs:     m_pFixRB->Check();     break;
-        case TableChgMode::FixedWidthChangeProp:    m_pFixPropRB->Check(); break;
-        case TableChgMode::VarWidthChangeAbs:     m_pVarRB->Check(); break;
+        case TableChgMode::FixedWidthChangeAbs:   m_xFixRB->set_active(true);     break;
+        case TableChgMode::FixedWidthChangeProp:  m_xFixPropRB->set_active(true); break;
+        case TableChgMode::VarWidthChangeAbs:     m_xVarRB->set_active(true); break;
     }
     const SfxPoolItem* pItem;
     if(SfxItemState::SET == rSet->GetItemState(SID_HTML_MODE, false, &pItem))
@@ -1217,40 +1196,44 @@ void SwTableOptionsTabPage::Reset( const SfxItemSet* rSet)
     }
 
     // hide certain controls for html
-    if(m_bHTMLMode)
+    if (m_bHTMLMode)
     {
-        m_pRepeatHeaderCB->Hide();
-        m_pDontSplitCB->Hide();
+        m_xRepeatHeaderCB->hide();
+        m_xDontSplitCB->hide();
     }
 
     SwInsertTableOptions aInsOpts = pModOpt->GetInsTableFlags(m_bHTMLMode);
     const SwInsertTableFlags nInsTableFlags = aInsOpts.mnInsMode;
 
-    m_pHeaderCB->Check(bool(nInsTableFlags & SwInsertTableFlags::Headline));
-    m_pRepeatHeaderCB->Check((!m_bHTMLMode) && (aInsOpts.mnRowsToRepeat > 0));
-    m_pDontSplitCB->Check(!(nInsTableFlags & SwInsertTableFlags::SplitLayout));
-    m_pBorderCB->Check(bool(nInsTableFlags & SwInsertTableFlags::DefaultBorder));
+    m_xHeaderCB->set_active(bool(nInsTableFlags & SwInsertTableFlags::Headline));
+    m_xRepeatHeaderCB->set_active((!m_bHTMLMode) && (aInsOpts.mnRowsToRepeat > 0));
+    m_xDontSplitCB->set_active(!(nInsTableFlags & SwInsertTableFlags::SplitLayout));
+    m_xBorderCB->set_active(bool(nInsTableFlags & SwInsertTableFlags::DefaultBorder));
 
-    m_pNumFormattingCB->Check(pModOpt->IsInsTableFormatNum(m_bHTMLMode));
-    m_pNumFormatFormattingCB->Check(pModOpt->IsInsTableChangeNumFormat(m_bHTMLMode));
-    m_pNumAlignmentCB->Check(pModOpt->IsInsTableAlignNum(m_bHTMLMode));
+    m_xNumFormattingCB->set_active(pModOpt->IsInsTableFormatNum(m_bHTMLMode));
+    m_xNumFormatFormattingCB->set_active(pModOpt->IsInsTableChangeNumFormat(m_bHTMLMode));
+    m_xNumAlignmentCB->set_active(pModOpt->IsInsTableAlignNum(m_bHTMLMode));
 
-    m_pHeaderCB->SaveValue();
-    m_pRepeatHeaderCB->SaveValue();
-    m_pDontSplitCB->SaveValue();
-    m_pBorderCB->SaveValue();
-    m_pNumFormattingCB->SaveValue();
-    m_pNumFormatFormattingCB->SaveValue();
-    m_pNumAlignmentCB->SaveValue();
+    m_xHeaderCB->save_state();
+    m_xRepeatHeaderCB->save_state();
+    m_xDontSplitCB->save_state();
+    m_xBorderCB->save_state();
+    m_xNumFormattingCB->save_state();
+    m_xNumFormatFormattingCB->save_state();
+    m_xNumAlignmentCB->save_state();
+    m_xRowMoveMF->save_value();
+    m_xColMoveMF->save_value();
+    m_xRowInsertMF->save_value();
+    m_xColInsertMF->save_value();
 
-    CheckBoxHdl(nullptr);
+    CheckBoxHdl(*m_xHeaderCB);
 }
 
-IMPL_LINK_NOARG(SwTableOptionsTabPage, CheckBoxHdl, Button*, void)
+IMPL_LINK_NOARG(SwTableOptionsTabPage, CheckBoxHdl, weld::Button&, void)
 {
-    m_pNumFormatFormattingCB->Enable(m_pNumFormattingCB->IsChecked());
-    m_pNumAlignmentCB->Enable(m_pNumFormattingCB->IsChecked());
-    m_pRepeatHeaderCB->Enable(m_pHeaderCB->IsChecked());
+    m_xNumFormatFormattingCB->set_sensitive(m_xNumFormattingCB->get_active());
+    m_xNumAlignmentCB->set_sensitive(m_xNumFormattingCB->get_active());
+    m_xRepeatHeaderCB->set_sensitive(m_xHeaderCB->get_active());
 }
 
 void SwTableOptionsTabPage::PageCreated( const SfxAllItemSet& aSet)
