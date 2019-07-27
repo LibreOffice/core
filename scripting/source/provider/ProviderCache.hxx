@@ -67,19 +67,9 @@ private:
     void populateCache();
 
     /// @throws css::uno::RuntimeException
-   css::uno::Reference< css::script::provider::XScriptProvider >
+    css::uno::Reference< css::script::provider::XScriptProvider >
         createProvider( ProviderDetails& details );
-    bool isInBlackList( const OUString& serviceName )
-    {
-        for ( sal_Int32 index = 0; index < m_sBlackList.getLength(); index++ )
-        {
-            if ( m_sBlackList[ index ] == serviceName )
-            {
-                return true;
-            }
-        }
-        return false;
-    }
+    bool isInBlackList( const OUString& serviceName );
     css::uno::Sequence< OUString >  m_sBlackList;
     ProviderDetails_hash  m_hProviderDetailsCache;
     osl::Mutex m_mutex;

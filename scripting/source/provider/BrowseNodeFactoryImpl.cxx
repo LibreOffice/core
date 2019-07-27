@@ -109,10 +109,8 @@ public:
         sal_Int32 index = 0;
         for ( Sequence< Reference < browse::XBrowseNode > >& children : seqs )
         {
-            for ( sal_Int32 j = 0; j < children.getLength(); j++ )
-            {
-                result[ index++ ] = children[ j ];
-            }
+            std::copy(children.begin(), children.end(), std::next(result.begin(), index));
+            index += children.getLength();
 
             if (index >= numChildren)
                 break;
@@ -220,25 +218,23 @@ private:
         Sequence< Reference< browse::XBrowseNode > > langNodes =
             m_origNode->getChildNodes();
 
-        for ( sal_Int32 i = 0; i < langNodes.getLength(); i++ )
+        for ( const auto& rLangNode : langNodes )
         {
             Reference< browse::XBrowseNode > xbn;
-            if ( langNodes[ i ]->getName() == "uno_packages" )
+            if ( rLangNode->getName() == "uno_packages" )
             {
-                xbn.set( new LocationBrowseNode( langNodes[ i ] ) );
+                xbn.set( new LocationBrowseNode( rLangNode ) );
             }
             else
             {
-                xbn.set( langNodes[ i ] );
+                xbn.set( rLangNode );
             }
 
             Sequence< Reference< browse::XBrowseNode > > grandchildren =
                 xbn->getChildNodes();
 
-            for ( sal_Int32 j = 0; j < grandchildren.getLength(); j++ )
+            for ( const Reference< browse::XBrowseNode >& grandchild : grandchildren )
             {
-                Reference< browse::XBrowseNode > grandchild(grandchildren[j]);
-
                 auto h_it =
                     m_hBNA->find( grandchild->getName() );
 
@@ -289,11 +285,11 @@ std::vector< Reference< browse::XBrowseNode > > getAllBrowseNodes( const Referen
         return locnBNs;
     }
 
-    for ( sal_Int32 i = 0; i < openDocs.getLength(); i++ )
+    for ( const auto& rDoc : openDocs )
     {
         try
         {
-            Reference< frame::XModel > model( MiscUtils::tDocUrlToModel( openDocs[ i ] ), UNO_SET_THROW );
+            Reference< frame::XModel > model( MiscUtils::tDocUrlToModel( rDoc ), UNO_SET_THROW );
 
             // #i44599 Check if it's a real document or something special like Hidden/Preview
             css::uno::Reference< css::frame::XController > xCurrentController = model->getCurrentController();
@@ -401,9 +397,8 @@ public:
             vXBrowseNodes aVNodes;
             Sequence < Reference< browse::XBrowseNode > > nodes =
                 m_xWrappedBrowseNode->getChildNodes();
-            for ( sal_Int32 i=0; i<nodes.getLength(); i++ )
+            for ( const Reference< browse::XBrowseNode >& xBrowseNode : nodes )
             {
-                Reference< browse::XBrowseNode > xBrowseNode = nodes[ i ];
                 OSL_ENSURE( xBrowseNode.is(), "DefaultBrowseNode::getChildNodes(): Invalid BrowseNode" );
                 if( xBrowseNode.is() )
                     aVNodes.push_back( new DefaultBrowseNode( m_xCtx, xBrowseNode ) );

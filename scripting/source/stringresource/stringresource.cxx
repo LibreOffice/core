@@ -1532,11 +1532,8 @@ void StringResourcePersistenceImpl::implScanLocaleNames( const Sequence< OUStrin
     Locale aDefaultLocale;
     bool bDefaultFound = false;
 
-    sal_Int32 nCount = aContentSeq.getLength();
-    const OUString* pFiles = aContentSeq.getConstArray();
-    for( int i = 0 ; i < nCount ; i++ )
+    for( const OUString& aCompleteName : aContentSeq )
     {
-        OUString aCompleteName = pFiles[i];
         OUString aPureName;
         OUString aExtension;
         sal_Int32 iDot = aCompleteName.lastIndexOf( '.' );

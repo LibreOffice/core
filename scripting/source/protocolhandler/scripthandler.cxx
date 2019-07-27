@@ -111,12 +111,9 @@ const Sequence < DispatchDescriptor >& seqDescriptor )
 {
     sal_Int32 nCount = seqDescriptor.getLength();
     Sequence< Reference< XDispatch > > lDispatcher( nCount );
-    for ( sal_Int32 i = 0; i < nCount; ++i )
-    {
-        lDispatcher[ i ] = queryDispatch( seqDescriptor[ i ].FeatureURL,
-                                                seqDescriptor[ i ].FrameName,
-                                                seqDescriptor[ i ].SearchFlags );
-    }
+    std::transform(seqDescriptor.begin(), seqDescriptor.end(), lDispatcher.begin(),
+        [this](const DispatchDescriptor& rDescr) -> Reference<XDispatch> {
+            return queryDispatch(rDescr.FeatureURL, rDescr.FrameName, rDescr.SearchFlags); });
     return lDispatcher;
 }
 
@@ -184,18 +181,18 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
             if ( lArgs.hasElements() )
             {
                int argCount = 0;
-               for ( int index = 0; index < lArgs.getLength(); index++ )
+               for ( const auto& rArg : lArgs )
                {
                    // Sometimes we get a propertyval with name = "Referer" or "SynchronMode". These
                    // are not actual arguments to be passed to script, but flags describing the
                    // call, so ignore. Who thought that passing such "meta-arguments" mixed in with
                    // real arguments was a good idea?
-                   if ( (lArgs[ index ].Name != "Referer" &&
-                         lArgs[ index ].Name != "SynchronMode") ||
-                        lArgs[ index ].Name.isEmpty() ) //TODO:???
+                   if ( (rArg.Name != "Referer" &&
+                         rArg.Name != "SynchronMode") ||
+                        rArg.Name.isEmpty() ) //TODO:???
                    {
                        inArgs.realloc( ++argCount );
-                       inArgs[ argCount - 1 ] = lArgs[ index ].Value;
+                       inArgs[ argCount - 1 ] = rArg.Value;
                    }
                }
             }

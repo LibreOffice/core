@@ -427,17 +427,16 @@ namespace basprov
         {
             Sequence< OUString > aLibNames = xLibContainer->getElementNames();
             sal_Int32 nLibCount = aLibNames.getLength();
-            const OUString* pLibNames = aLibNames.getConstArray();
             aChildNodes.realloc( nLibCount );
             Reference< browse::XBrowseNode >* pChildNodes = aChildNodes.getArray();
             sal_Int32 childrenFound = 0;
 
-            for ( sal_Int32 i = 0 ; i < nLibCount ; ++i )
+            for ( const OUString& rLibName : aLibNames )
             {
                 bool bCreate = false;
                 if ( m_bIsAppScriptCtx )
                 {
-                    const bool bShared = isLibraryShared( xLibContainer, pLibNames[i] );
+                    const bool bShared = isLibraryShared( xLibContainer, rLibName );
                     if (m_bIsUserCtx != bShared)
                         bCreate = true;
                 }
@@ -449,7 +448,7 @@ namespace basprov
                 {
                     pChildNodes[childrenFound++]
                         = new BasicLibraryNodeImpl(m_xContext, m_sScriptingContext, pBasicManager,
-                                                   xLibContainer, pLibNames[i], m_bIsAppScriptCtx);
+                                                   xLibContainer, rLibName, m_bIsAppScriptCtx);
                 }
             }
 
