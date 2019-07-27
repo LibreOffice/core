@@ -45,7 +45,7 @@ namespace sdr
             // This method will not handle included hierarchies and not check geometric visibility.
             drawinglayer::primitive3d::Primitive3DContainer createPrimitive3DContainer(const DisplayInfo& rDisplayInfo) const;
 
-            // also override the 2d method to deliver a 2d object with embedd3d 3d and the 3d transformation which is able to
+            // also override the 2d method to deliver a 2d object with embedded 3d and the 3d transformation which is able to
             // answer the get2DRange question accordingly
             virtual drawinglayer::primitive2d::Primitive2DContainer createPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const override;
 

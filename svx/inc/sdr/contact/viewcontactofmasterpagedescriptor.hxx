@@ -38,7 +38,7 @@ namespace sdr
             // to be changed in any way.
             sdr::MasterPageDescriptor&                      mrMasterPageDescriptor;
 
-            // Create a Object-Specific ViewObjectContact
+            // Create an Object-Specific ViewObjectContact
             virtual ViewObjectContact& CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact) override;
 
             // This method is responsible for creating the graphical visualisation data

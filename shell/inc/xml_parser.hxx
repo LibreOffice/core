@@ -82,7 +82,7 @@ public:
                     no longer exist.
 
         @param      SaxDocumentHandler
-                    The new document handler, may be null if not interessted in
+                    The new document handler, may be null if not interested in
                     sax parser events.
 
         @postcond   currently used document handler == pSaxDocumentHandler  */
