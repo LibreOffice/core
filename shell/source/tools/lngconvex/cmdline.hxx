@@ -46,7 +46,7 @@ public:
     /** Returns an argument by name. If there are
         duplicate argument names in the command line,
         the first one wins.
-        Argument name an the argument value must be separated
+        Argument name and the argument value must be separated
         by spaces. If the argument value starts with an
         argument prefix use quotes else the return value is
         an empty string because the value will be interpreted

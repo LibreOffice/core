@@ -449,7 +449,7 @@ static ::std::wstring GetMetaInfoNameFromPropertyId( ULONG ulPropID )
 }
 //M-------------------------------------------------------------------------
 //  Method:     COooFilter::GetValue            (IFilter::GetValue)
-//  Summary:    Retrieves properites for index
+//  Summary:    Retrieves properties for index
 //  Arguments:  ppPropValue
 //                  [out] Address that receives pointer to property value
 //  Returns:    FILTER_E_NO_VALUES
