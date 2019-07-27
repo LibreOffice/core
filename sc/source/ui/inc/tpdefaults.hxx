@@ -19,31 +19,30 @@ class ScTpDefaultsOptions : public SfxTabPage
 public:
     using SfxTabPage::DeactivatePage;
 
-    static  VclPtr<SfxTabPage> Create (TabPageParent pParent, const SfxItemSet* rCoreSet);
+    static  VclPtr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rCoreSet);
 
     virtual bool FillItemSet(SfxItemSet* rCoreSet) override;
     virtual void Reset(const SfxItemSet* rCoreSet) override;
     virtual DeactivateRC DeactivatePage(SfxItemSet* pSet) override;
 
 private:
-    explicit ScTpDefaultsOptions(vcl::Window* pParent, const SfxItemSet& rCoreSet);
+    explicit ScTpDefaultsOptions(TabPageParent pParent, const SfxItemSet& rCoreSet);
     virtual ~ScTpDefaultsOptions() override;
-    virtual void dispose() override;
 
     void CheckNumSheets();
-    void CheckPrefix(Edit* pEdit);
-    void OnFocusPrefixInput(const Edit* pEdit);
+    void CheckPrefix();
+    void OnFocusPrefixInput();
 
-    DECL_LINK( NumModifiedHdl, Edit&, void );
-    DECL_LINK( PrefixModifiedHdl, Edit&, void );
-    DECL_LINK( PrefixEditOnFocusHdl, Control&, void );
+    DECL_LINK( NumModifiedHdl, weld::Entry&, void );
+    DECL_LINK( PrefixModifiedHdl, weld::Entry&, void );
+    DECL_LINK( PrefixEditOnFocusHdl, weld::Widget&, void );
 
 private:
-    VclPtr<NumericField> m_pEdNSheets;
-    VclPtr<Edit>         m_pEdSheetPrefix;
-
     // Stores old Sheet Prefix
     OUString maOldPrefixValue;
+
+    std::unique_ptr<weld::SpinButton> m_xEdNSheets;
+    std::unique_ptr<weld::Entry> m_xEdSheetPrefix;
 };
 
 #endif
