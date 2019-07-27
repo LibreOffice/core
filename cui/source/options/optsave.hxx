@@ -47,38 +47,35 @@ struct SvxSaveTabPage_Impl;
 class SvxSaveTabPage : public SfxTabPage
 {
 private:
-    VclPtr<CheckBox>               aLoadUserSettingsCB;
-    VclPtr<CheckBox>               aLoadDocPrinterCB;
-
-    VclPtr<CheckBox>               aDocInfoCB;
-    VclPtr<CheckBox>               aBackupCB;
-    VclPtr<CheckBox>               aAutoSaveCB;
-    VclPtr<NumericField>           aAutoSaveEdit;
-    VclPtr<FixedText>              aMinuteFT;
-    VclPtr<CheckBox>               aUserAutoSaveCB;
-    VclPtr<CheckBox>               aRelativeFsysCB;
-    VclPtr<CheckBox>               aRelativeInetCB;
-
-    VclPtr<ListBox>                aODFVersionLB;
-    VclPtr<CheckBox>               aWarnAlienFormatCB;
-    VclPtr<ListBox>                aDocTypeLB;
-    VclPtr<FixedText>              aSaveAsFT;
-    VclPtr<ListBox>                aSaveAsLB;
-    VclPtr<FixedImage>             aODFWarningFI;
-    VclPtr<FixedText>              aODFWarningFT;
-
     std::unique_ptr<SvxSaveTabPage_Impl>    pImpl;
 
-    DECL_LINK( AutoClickHdl_Impl, Button*, void );
-    DECL_LINK( FilterHdl_Impl, ListBox&, void );
-    DECL_LINK(ODFVersionHdl_Impl, ListBox&, void );
+    std::unique_ptr<weld::CheckButton> m_xLoadUserSettingsCB;
+    std::unique_ptr<weld::CheckButton> m_xLoadDocPrinterCB;
+    std::unique_ptr<weld::CheckButton> m_xDocInfoCB;
+    std::unique_ptr<weld::CheckButton> m_xBackupCB;
+    std::unique_ptr<weld::CheckButton> m_xAutoSaveCB;
+    std::unique_ptr<weld::SpinButton> m_xAutoSaveEdit;
+    std::unique_ptr<weld::Label> m_xMinuteFT;
+    std::unique_ptr<weld::CheckButton> m_xUserAutoSaveCB;
+    std::unique_ptr<weld::CheckButton> m_xRelativeFsysCB;
+    std::unique_ptr<weld::CheckButton> m_xRelativeInetCB;
+    std::unique_ptr<weld::ComboBox> m_xODFVersionLB;
+    std::unique_ptr<weld::CheckButton> m_xWarnAlienFormatCB;
+    std::unique_ptr<weld::ComboBox> m_xDocTypeLB;
+    std::unique_ptr<weld::Label> m_xSaveAsFT;
+    std::unique_ptr<weld::ComboBox> m_xSaveAsLB;
+    std::unique_ptr<weld::Widget> m_xODFWarningFI;
+    std::unique_ptr<weld::Label> m_xODFWarningFT;
+
+    DECL_LINK( AutoClickHdl_Impl, weld::Button&, void );
+    DECL_LINK( FilterHdl_Impl, weld::ComboBox&, void );
+    DECL_LINK(ODFVersionHdl_Impl, weld::ComboBox&, void );
 
     void    DetectHiddenControls();
 
 public:
-    SvxSaveTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
+    SvxSaveTabPage(TabPageParent pParent, const SfxItemSet& rSet);
     virtual ~SvxSaveTabPage() override;
-    virtual void        dispose() override;
 
     static VclPtr<SfxTabPage>  Create( TabPageParent pParent, const SfxItemSet* rAttrSet );
 
