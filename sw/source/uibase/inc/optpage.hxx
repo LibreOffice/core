@@ -39,34 +39,33 @@ class FontList;
 // Tools->Options->Writer/Web->View
 class SwContentOptPage : public SfxTabPage
 {
-    VclPtr<CheckBox>   m_pCrossCB;
+    std::unique_ptr<weld::CheckButton> m_xCrossCB;
 
-    VclPtr<ListBox>    m_pHMetric;
-    VclPtr<CheckBox>   m_pVRulerCBox;
-    VclPtr<CheckBox>   m_pVRulerRightCBox;
-    VclPtr<ListBox>    m_pVMetric;
-    VclPtr<CheckBox>   m_pSmoothCBox;
+    std::unique_ptr<weld::ComboBox> m_xHMetric;
+    std::unique_ptr<weld::CheckButton> m_xVRulerCBox;
+    std::unique_ptr<weld::CheckButton> m_xVRulerRightCBox;
+    std::unique_ptr<weld::ComboBox> m_xVMetric;
+    std::unique_ptr<weld::CheckButton> m_xSmoothCBox;
 
-    VclPtr<CheckBox>   m_pGrfCB;
-    VclPtr<CheckBox>   m_pTableCB;
-    VclPtr<CheckBox>   m_pDrwCB;
-    VclPtr<CheckBox>   m_pFieldNameCB;
-    VclPtr<CheckBox>   m_pPostItCB;
+    std::unique_ptr<weld::CheckButton> m_xGrfCB;
+    std::unique_ptr<weld::CheckButton> m_xTableCB;
+    std::unique_ptr<weld::CheckButton> m_xDrwCB;
+    std::unique_ptr<weld::CheckButton> m_xFieldNameCB;
+    std::unique_ptr<weld::CheckButton> m_xPostItCB;
 
-    VclPtr<VclFrame>   m_pSettingsFrame;
-    VclPtr<FixedText>  m_pSettingsLabel;
-    VclPtr<FixedText>  m_pMetricLabel;
-    VclPtr<ListBox>    m_pMetricLB;
+    std::unique_ptr<weld::Frame> m_xSettingsFrame;
+    std::unique_ptr<weld::Label> m_xSettingsLabel;
+    std::unique_ptr<weld::Label> m_xMetricLabel;
+    std::unique_ptr<weld::ComboBox> m_xMetricLB;
 
-    VclPtr<CheckBox>   m_pShowInlineTooltips;
-    VclPtr<CheckBox>   m_pFieldHiddenCB;
-    VclPtr<CheckBox>   m_pFieldHiddenParaCB;
-    DECL_LINK(VertRulerHdl, Button*, void);
+    std::unique_ptr<weld::CheckButton> m_xShowInlineTooltips;
+    std::unique_ptr<weld::CheckButton> m_xFieldHiddenCB;
+    std::unique_ptr<weld::CheckButton> m_xFieldHiddenParaCB;
+
+    DECL_LINK(VertRulerHdl, weld::ToggleButton&, void);
 public:
-    SwContentOptPage( vcl::Window* pParent, const SfxItemSet& rSet);
+    SwContentOptPage(TabPageParent pParent, const SfxItemSet& rSet);
     virtual ~SwContentOptPage() override;
-
-    virtual void dispose() override;
 
     static VclPtr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rAttrSet);
 

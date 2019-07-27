@@ -94,50 +94,42 @@ void drawRect(vcl::RenderContext& rRenderContext, const tools::Rectangle &rRect,
 
 // Tools->Options->Writer->View
 // Tools->Options->Writer/Web->View
-SwContentOptPage::SwContentOptPage( vcl::Window* pParent,
-                                      const SfxItemSet& rCoreSet ) :
-    SfxTabPage(pParent, "ViewOptionsPage",
-               "modules/swriter/ui/viewoptionspage.ui", &rCoreSet)
+SwContentOptPage::SwContentOptPage(TabPageParent pParent, const SfxItemSet& rCoreSet)
+    : SfxTabPage(pParent, "modules/swriter/ui/viewoptionspage.ui", "ViewOptionsPage", &rCoreSet)
+    , m_xCrossCB(m_xBuilder->weld_check_button("helplines"))
+    , m_xHMetric(m_xBuilder->weld_combo_box("hrulercombobox"))
+    , m_xVRulerCBox(m_xBuilder->weld_check_button("vruler"))
+    , m_xVRulerRightCBox(m_xBuilder->weld_check_button("vrulerright"))
+    , m_xVMetric(m_xBuilder->weld_combo_box("vrulercombobox"))
+    , m_xSmoothCBox(m_xBuilder->weld_check_button("smoothscroll"))
+    , m_xGrfCB(m_xBuilder->weld_check_button("graphics"))
+    , m_xTableCB(m_xBuilder->weld_check_button("tables"))
+    , m_xDrwCB(m_xBuilder->weld_check_button("drawings"))
+    , m_xFieldNameCB(m_xBuilder->weld_check_button("fieldcodes"))
+    , m_xPostItCB(m_xBuilder->weld_check_button("comments"))
+    , m_xSettingsFrame(m_xBuilder->weld_frame("settingsframe"))
+    , m_xSettingsLabel(m_xBuilder->weld_label("settingslabel"))
+    , m_xMetricLabel(m_xBuilder->weld_label("measureunitlabel"))
+    , m_xMetricLB(m_xBuilder->weld_combo_box("measureunit"))
+    , m_xShowInlineTooltips(m_xBuilder->weld_check_button("changestooltip"))
+    , m_xFieldHiddenCB(m_xBuilder->weld_check_button("hiddentextfield"))
+    , m_xFieldHiddenParaCB(m_xBuilder->weld_check_button("hiddenparafield"))
 {
-    get (m_pCrossCB, "helplines");
-
-    get (m_pHMetric, "hrulercombobox");
-    get (m_pVRulerCBox, "vruler");
-    get (m_pVRulerRightCBox, "vrulerright");
-    get (m_pVMetric, "vrulercombobox");
-    get (m_pSmoothCBox, "smoothscroll");
-
-    get (m_pGrfCB, "graphics");
-    get (m_pTableCB, "tables");
-    get (m_pDrwCB, "drawings");
-    get (m_pFieldNameCB, "fieldcodes");
-    get (m_pPostItCB, "comments");
-
-    get(m_pFieldHiddenCB, "hiddentextfield");
-    get(m_pFieldHiddenParaCB, "hiddenparafield");
-
-    get (m_pSettingsFrame, "settingsframe");
-    get (m_pSettingsLabel, "settingslabel");
-    get (m_pMetricLabel, "measureunitlabel");
-    get (m_pMetricLB, "measureunit");
-
-    get (m_pShowInlineTooltips,"changestooltip");
-
     /* This part is visible only with Writer/Web->View dialogue. */
     const SfxPoolItem* pItem;
     if (! (SfxItemState::SET == rCoreSet.GetItemState(SID_HTML_MODE, false, &pItem )
            && static_cast<const SfxUInt16Item*>(pItem)->GetValue() & HTMLMODE_ON))
     {
-        m_pSettingsFrame->Hide();
-        m_pSettingsLabel->Hide();
-        m_pMetricLabel->Hide();
-        m_pMetricLB->Hide();
+        m_xSettingsFrame->hide();
+        m_xSettingsLabel->hide();
+        m_xMetricLabel->hide();
+        m_xMetricLB->hide();
     }
 
     SvtCJKOptions aCJKOptions;
     if(!aCJKOptions.IsVerticalTextEnabled() )
-        m_pVRulerRightCBox->Hide();
-    m_pVRulerCBox->SetClickHdl(LINK(this, SwContentOptPage, VertRulerHdl ));
+        m_xVRulerRightCBox->hide();
+    m_xVRulerCBox->connect_toggled(LINK(this, SwContentOptPage, VertRulerHdl ));
 
     for (size_t i = 0; i < SwFieldUnitTable::Count(); ++i)
     {
@@ -157,18 +149,15 @@ SwContentOptPage::SwContentOptPage( vcl::Window* pParent,
                 // only use these metrics
                 // a horizontal ruler has not the 'line' unit
                 // there isn't 'line' unit in HTML format
-                if ( eFUnit != FieldUnit::LINE )
+                if (eFUnit != FieldUnit::LINE)
                 {
-                   sal_Int32 nPos = m_pMetricLB->InsertEntry( sMetric );
-                   m_pMetricLB->SetEntryData( nPos, reinterpret_cast<void*>(static_cast<sal_IntPtr>(eFUnit)) );
-                   m_pHMetric->InsertEntry( sMetric );
-                   m_pHMetric->SetEntryData( nPos, reinterpret_cast<void*>(static_cast<sal_IntPtr>(eFUnit)) );
+                   m_xMetricLB->append(OUString::number(static_cast<sal_uInt32>(eFUnit)), sMetric);
+                   m_xHMetric->append(OUString::number(static_cast<sal_uInt32>(eFUnit)), sMetric);
                 }
                 // a vertical ruler has not the 'character' unit
-                if ( eFUnit != FieldUnit::CHAR )
+                if (eFUnit != FieldUnit::CHAR)
                 {
-                   sal_Int32 nPos = m_pVMetric->InsertEntry( sMetric );
-                   m_pVMetric->SetEntryData( nPos, reinterpret_cast<void*>(static_cast<sal_IntPtr>(eFUnit)) );
+                   m_xVMetric->append(OUString::number(static_cast<sal_uInt32>(eFUnit)), sMetric);
                 }
                 break;
             }
@@ -179,55 +168,30 @@ SwContentOptPage::SwContentOptPage( vcl::Window* pParent,
 
 SwContentOptPage::~SwContentOptPage()
 {
-    disposeOnce();
 }
-
-void SwContentOptPage::dispose()
-{
-    m_pCrossCB.clear();
-    m_pHMetric.clear();
-    m_pVRulerCBox.clear();
-    m_pVRulerRightCBox.clear();
-    m_pVMetric.clear();
-    m_pSmoothCBox.clear();
-    m_pGrfCB.clear();
-    m_pTableCB.clear();
-    m_pDrwCB.clear();
-    m_pFieldNameCB.clear();
-    m_pPostItCB.clear();
-    m_pFieldHiddenCB.clear();
-    m_pFieldHiddenParaCB.clear();
-    m_pSettingsFrame.clear();
-    m_pSettingsLabel.clear();
-    m_pMetricLabel.clear();
-    m_pMetricLB.clear();
-    m_pShowInlineTooltips.clear();
-    SfxTabPage::dispose();
-}
-
 
 VclPtr<SfxTabPage> SwContentOptPage::Create( TabPageParent pParent,
                                              const SfxItemSet* rAttrSet)
 {
-    return VclPtr<SwContentOptPage>::Create(pParent.pParent, *rAttrSet);
+    return VclPtr<SwContentOptPage>::Create(pParent, *rAttrSet);
 }
 
-static void lcl_SelectMetricLB(ListBox* rMetric, sal_uInt16 nSID, const SfxItemSet& rSet)
+static void lcl_SelectMetricLB(weld::ComboBox& rMetric, sal_uInt16 nSID, const SfxItemSet& rSet)
 {
     const SfxPoolItem* pItem;
     if( rSet.GetItemState( nSID, false, &pItem ) >= SfxItemState::DEFAULT )
     {
         FieldUnit eFieldUnit = static_cast<FieldUnit>(static_cast<const SfxUInt16Item*>(pItem)->GetValue());
-        for ( sal_Int32 i = 0; i < rMetric->GetEntryCount(); ++i )
+        for (sal_Int32 i = 0, nEntryCount = rMetric.get_count(); i < nEntryCount; ++i)
         {
-            if ( static_cast<int>(reinterpret_cast<sal_IntPtr>(rMetric->GetEntryData( i ))) == static_cast<int>(eFieldUnit) )
+            if (rMetric.get_id(i).toUInt32() == static_cast<sal_uInt32>(eFieldUnit))
             {
-                rMetric->SelectEntryPos( i );
+                rMetric.set_active(i);
                 break;
             }
         }
     }
-    rMetric->SaveValue();
+    rMetric.save_value();
 }
 
 void SwContentOptPage::Reset(const SfxItemSet* rSet)
@@ -238,23 +202,23 @@ void SwContentOptPage::Reset(const SfxItemSet* rSet)
                                     reinterpret_cast<const SfxPoolItem**>(&pElemAttr) );
     if(pElemAttr)
     {
-        m_pTableCB->Check (pElemAttr->bTable);
-        m_pGrfCB->Check (pElemAttr->bGraphic);
-        m_pDrwCB->Check (pElemAttr->bDrawing);
-        m_pFieldNameCB->Check (pElemAttr->bFieldName);
-        m_pPostItCB->Check (pElemAttr->bNotes);
-        m_pCrossCB->Check (pElemAttr->bCrosshair);
-        m_pVRulerCBox->Check (pElemAttr->bVertRuler);
-        m_pVRulerRightCBox->Check (pElemAttr->bVertRulerRight);
-        m_pSmoothCBox->Check (pElemAttr->bSmoothScroll);
-        m_pShowInlineTooltips->Check (pElemAttr->bShowInlineTooltips);
-        m_pFieldHiddenCB->Check ( pElemAttr->bFieldHiddenText );
-        m_pFieldHiddenParaCB->Check ( pElemAttr->bShowHiddenPara );
+        m_xTableCB->set_active(pElemAttr->bTable);
+        m_xGrfCB->set_active(pElemAttr->bGraphic);
+        m_xDrwCB->set_active(pElemAttr->bDrawing);
+        m_xFieldNameCB->set_active(pElemAttr->bFieldName);
+        m_xPostItCB->set_active(pElemAttr->bNotes);
+        m_xCrossCB->set_active(pElemAttr->bCrosshair);
+        m_xVRulerCBox->set_active(pElemAttr->bVertRuler);
+        m_xVRulerRightCBox->set_active(pElemAttr->bVertRulerRight);
+        m_xSmoothCBox->set_active(pElemAttr->bSmoothScroll);
+        m_xShowInlineTooltips->set_active(pElemAttr->bShowInlineTooltips);
+        m_xFieldHiddenCB->set_active( pElemAttr->bFieldHiddenText );
+        m_xFieldHiddenParaCB->set_active( pElemAttr->bShowHiddenPara );
     }
-    m_pMetricLB->SetNoSelection();
-    lcl_SelectMetricLB(m_pMetricLB, SID_ATTR_METRIC, *rSet);
-    lcl_SelectMetricLB(m_pHMetric, FN_HSCROLL_METRIC, *rSet);
-    lcl_SelectMetricLB(m_pVMetric, FN_VSCROLL_METRIC, *rSet);
+    m_xMetricLB->set_active(-1);
+    lcl_SelectMetricLB(*m_xMetricLB, SID_ATTR_METRIC, *rSet);
+    lcl_SelectMetricLB(*m_xHMetric, FN_HSCROLL_METRIC, *rSet);
+    lcl_SelectMetricLB(*m_xVMetric, FN_VSCROLL_METRIC, *rSet);
 }
 
 bool SwContentOptPage::FillItemSet(SfxItemSet* rSet)
@@ -263,46 +227,43 @@ bool SwContentOptPage::FillItemSet(SfxItemSet* rSet)
                         GetOldItem(GetItemSet(), FN_PARAM_ELEM));
 
     SwElemItem aElem;
-    aElem.bTable                = m_pTableCB->IsChecked();
-    aElem.bGraphic              = m_pGrfCB->IsChecked();
-    aElem.bDrawing              = m_pDrwCB->IsChecked();
-    aElem.bFieldName            = m_pFieldNameCB->IsChecked();
-    aElem.bNotes                = m_pPostItCB->IsChecked();
-    aElem.bCrosshair            = m_pCrossCB->IsChecked();
-    aElem.bVertRuler            = m_pVRulerCBox->IsChecked();
-    aElem.bVertRulerRight       = m_pVRulerRightCBox->IsChecked();
-    aElem.bSmoothScroll         = m_pSmoothCBox->IsChecked();
-    aElem.bShowInlineTooltips   = m_pShowInlineTooltips->IsChecked();
-    aElem.bFieldHiddenText      = m_pFieldHiddenCB->IsChecked();
-    aElem.bShowHiddenPara       = m_pFieldHiddenParaCB->IsChecked();
+    aElem.bTable                = m_xTableCB->get_active();
+    aElem.bGraphic              = m_xGrfCB->get_active();
+    aElem.bDrawing              = m_xDrwCB->get_active();
+    aElem.bFieldName            = m_xFieldNameCB->get_active();
+    aElem.bNotes                = m_xPostItCB->get_active();
+    aElem.bCrosshair            = m_xCrossCB->get_active();
+    aElem.bVertRuler            = m_xVRulerCBox->get_active();
+    aElem.bVertRulerRight       = m_xVRulerRightCBox->get_active();
+    aElem.bSmoothScroll         = m_xSmoothCBox->get_active();
+    aElem.bShowInlineTooltips   = m_xShowInlineTooltips->get_active();
+    aElem.bFieldHiddenText      = m_xFieldHiddenCB->get_active();
+    aElem.bShowHiddenPara       = m_xFieldHiddenParaCB->get_active();
 
     bool bRet = !pOldAttr || aElem != *pOldAttr;
     if(bRet)
         bRet = nullptr != rSet->Put(aElem);
 
-    sal_Int32 nMPos = m_pMetricLB->GetSelectedEntryPos();
+    sal_Int32 nMPos = m_xMetricLB->get_active();
     sal_Int32 nGlobalMetricPos = nMPos;
-    if ( m_pMetricLB->IsValueChangedFromSaved() )
+    if ( m_xMetricLB->get_value_changed_from_saved() )
     {
-        // Double-Cast for VA3.0
-        const sal_uInt16 nFieldUnit = static_cast<sal_uInt16>(reinterpret_cast<sal_IntPtr>(m_pMetricLB->GetEntryData( nMPos )));
+        const sal_uInt16 nFieldUnit = m_xMetricLB->get_id(nMPos).toUInt32();
         rSet->Put( SfxUInt16Item( SID_ATTR_METRIC, nFieldUnit ) );
         bRet = true;
     }
 
-    nMPos = m_pHMetric->GetSelectedEntryPos();
-    if ( m_pHMetric->IsValueChangedFromSaved() || nMPos != nGlobalMetricPos )
+    nMPos = m_xHMetric->get_active();
+    if ( m_xHMetric->get_value_changed_from_saved() || nMPos != nGlobalMetricPos )
     {
-        // Double-Cast for VA3.0
-        const sal_uInt16 nFieldUnit = static_cast<sal_uInt16>(reinterpret_cast<sal_IntPtr>(m_pHMetric->GetEntryData( nMPos )));
+        const sal_uInt16 nFieldUnit = m_xHMetric->get_id(nMPos).toUInt32();
         rSet->Put( SfxUInt16Item( FN_HSCROLL_METRIC, nFieldUnit ) );
         bRet = true;
     }
-    nMPos = m_pVMetric->GetSelectedEntryPos();
-    if ( m_pVMetric->IsValueChangedFromSaved() || nMPos != nGlobalMetricPos )
+    nMPos = m_xVMetric->get_active();
+    if ( m_xVMetric->get_value_changed_from_saved() || nMPos != nGlobalMetricPos )
     {
-        // Double-Cast for VA3.0
-        const sal_uInt16 nFieldUnit = static_cast<sal_uInt16>(reinterpret_cast<sal_IntPtr>(m_pVMetric->GetEntryData( nMPos )));
+        const sal_uInt16 nFieldUnit = m_xVMetric->get_id(nMPos).toUInt32();
         rSet->Put( SfxUInt16Item( FN_VSCROLL_METRIC, nFieldUnit ) );
         bRet = true;
     }
@@ -310,9 +271,9 @@ bool SwContentOptPage::FillItemSet(SfxItemSet* rSet)
     return bRet;
 }
 
-IMPL_LINK(SwContentOptPage, VertRulerHdl, Button*, pBox, void)
+IMPL_LINK(SwContentOptPage, VertRulerHdl, weld::ToggleButton&, rBox, void)
 {
-    m_pVRulerRightCBox->Enable(pBox->IsEnabled() && static_cast<CheckBox*>(pBox)->IsChecked());
+    m_xVRulerRightCBox->set_sensitive(rBox.get_sensitive() && rBox.get_active());
 }
 
 // TabPage Printer additional settings
