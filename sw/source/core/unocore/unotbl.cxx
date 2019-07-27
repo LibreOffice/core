@@ -991,8 +991,7 @@ void SwXCell::setPropertyValue(const OUString& rPropertyName, const uno::Any& aV
     // Hack to support hidden property to transfer textDirection
     if(rPropertyName == "FRMDirection")
     {
-        SvxFrameDirection eDir = SvxFrameDirection::Environment;
-        SvxFrameDirectionItem aItem(eDir, RES_FRAMEDIR);
+        SvxFrameDirectionItem aItem(SvxFrameDirection::Environment, RES_FRAMEDIR);
         aItem.PutValue(aValue, 0);
         m_pBox->GetFrameFormat()->SetFormatAttr(aItem);
     }

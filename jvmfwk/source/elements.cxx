@@ -407,8 +407,7 @@ void NodeJava::write() const
     //The element must exist
     if (m_enabled)
     {
-        OString sExpression("/jf:java/jf:enabled");
-        pathObj = xmlXPathEvalExpression(reinterpret_cast<xmlChar const *>(sExpression.getStr()),
+        pathObj = xmlXPathEvalExpression(reinterpret_cast<xmlChar const *>("/jf:java/jf:enabled"),
                                          contextUser);
         if ( ! pathObj || xmlXPathNodeSetIsEmpty(pathObj->nodesetval))
             throw FrameworkException(JFW_E_ERROR, sExcMsg);
@@ -429,8 +428,7 @@ void NodeJava::write() const
     //The element must exist
     if (m_userClassPath)
     {
-        OString sExpression("/jf:java/jf:userClassPath");
-        pathObj = xmlXPathEvalExpression(reinterpret_cast<xmlChar const *>(sExpression.getStr()),
+        pathObj = xmlXPathEvalExpression(reinterpret_cast<xmlChar const *>("/jf:java/jf:userClassPath"),
                                          contextUser);
         if ( ! pathObj || xmlXPathNodeSetIsEmpty(pathObj->nodesetval))
             throw FrameworkException(JFW_E_ERROR, sExcMsg);
@@ -443,8 +441,7 @@ void NodeJava::write() const
     //set <javaInfo> element
     if (m_javaInfo)
     {
-        OString sExpression("/jf:java/jf:javaInfo");
-        pathObj = xmlXPathEvalExpression(reinterpret_cast<xmlChar const *>(sExpression.getStr()),
+        pathObj = xmlXPathEvalExpression(reinterpret_cast<xmlChar const *>("/jf:java/jf:javaInfo"),
                                                 contextUser);
         if ( ! pathObj || xmlXPathNodeSetIsEmpty(pathObj->nodesetval))
             throw FrameworkException(JFW_E_ERROR, sExcMsg);
@@ -455,8 +452,7 @@ void NodeJava::write() const
     //set <vmParameters> element
     if (m_vmParameters)
     {
-        OString sExpression("/jf:java/jf:vmParameters");
-        pathObj = xmlXPathEvalExpression(reinterpret_cast<xmlChar const *>(sExpression.getStr()),
+        pathObj = xmlXPathEvalExpression(reinterpret_cast<xmlChar const *>("/jf:java/jf:vmParameters"),
                                          contextUser);
         if ( ! pathObj || xmlXPathNodeSetIsEmpty(pathObj->nodesetval))
             throw FrameworkException(JFW_E_ERROR, sExcMsg);
@@ -494,8 +490,7 @@ void NodeJava::write() const
     //set <jreLocations> element
     if (m_JRELocations)
     {
-        OString sExpression("/jf:java/jf:jreLocations");
-        pathObj = xmlXPathEvalExpression(reinterpret_cast<xmlChar const *>(sExpression.getStr()),
+        pathObj = xmlXPathEvalExpression(reinterpret_cast<xmlChar const *>("/jf:java/jf:jreLocations"),
                                          contextUser);
         if ( ! pathObj || xmlXPathNodeSetIsEmpty(pathObj->nodesetval))
             throw FrameworkException(JFW_E_ERROR, sExcMsg);

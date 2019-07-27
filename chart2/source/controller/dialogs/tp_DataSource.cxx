@@ -82,7 +82,6 @@ bool lcl_UpdateCurrentSeriesName(weld::TreeView& rOutListBox)
 
 OUString lcl_GetSelectedRole(const weld::TreeView& rRoleListBox, bool bUITranslated = false)
 {
-    OUString aResult;
     int nEntry = rRoleListBox.get_selected_index();
     if (nEntry != -1)
     {
@@ -91,7 +90,7 @@ OUString lcl_GetSelectedRole(const weld::TreeView& rRoleListBox, bool bUITransla
         ::chart::SeriesEntry* pEntry = reinterpret_cast<::chart::SeriesEntry*>(rRoleListBox.get_id(nEntry).toInt64());
         return pEntry->m_sRole;
     }
-    return aResult;
+    return OUString();
 }
 
 OUString lcl_GetSelectedRolesRange( const weld::TreeView& rRoleListBox )

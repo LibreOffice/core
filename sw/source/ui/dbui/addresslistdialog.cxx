@@ -287,8 +287,7 @@ IMPL_LINK_NOARG(SwAddressListDialog, LoadHdl_Impl, weld::Button&, void)
 
 IMPL_LINK_NOARG(SwAddressListDialog, CreateHdl_Impl, weld::Button&, void)
 {
-    OUString sInputURL;
-    SwCreateAddressListDialog aDlg(m_xDialog.get(), sInputURL, m_xAddressPage->GetWizard()->GetConfigItem());
+    SwCreateAddressListDialog aDlg(m_xDialog.get(), /*sInputURL*/OUString(), m_xAddressPage->GetWizard()->GetConfigItem());
     if (RET_OK == aDlg.run())
     {
         //register the URL a new datasource
