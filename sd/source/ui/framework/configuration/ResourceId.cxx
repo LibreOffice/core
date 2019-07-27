@@ -96,8 +96,7 @@ ResourceId::ResourceId (
 {
     maResourceURLs[0] = rsResourceURL;
     maResourceURLs[1] = rsFirstAnchorURL;
-    for (sal_Int32 nIndex=0; nIndex<rAnchorURLs.getLength(); ++nIndex)
-        maResourceURLs[nIndex+2] = rAnchorURLs[nIndex];
+    std::copy(rAnchorURLs.begin(), rAnchorURLs.end(), std::next(maResourceURLs.begin(), 2));
     ParseResourceURL();
 }
 
@@ -360,25 +359,21 @@ Reference<XResourceId> SAL_CALL
 
 void SAL_CALL ResourceId::initialize (const Sequence<Any>& aArguments)
 {
-    sal_uInt32 nCount (aArguments.getLength());
-    for (sal_uInt32 nIndex=0; nIndex<nCount; ++nIndex)
+    for (const auto& rArgument : aArguments)
     {
         OUString sResourceURL;
-        if (aArguments[nIndex] >>= sResourceURL)
+        if (rArgument >>= sResourceURL)
             maResourceURLs.push_back(sResourceURL);
         else
         {
             Reference<XResourceId> xAnchor;
-            if (aArguments[nIndex] >>= xAnchor)
+            if (rArgument >>= xAnchor)
             {
                 if (xAnchor.is())
                 {
                     maResourceURLs.push_back(xAnchor->getResourceURL());
                     Sequence<OUString> aAnchorURLs (xAnchor->getAnchorURLs());
-                    for (sal_Int32 nURLIndex=0; nURLIndex<aAnchorURLs.getLength(); ++nURLIndex)
-                    {
-                        maResourceURLs.push_back(aAnchorURLs[nURLIndex]);
-                    }
+                    std::copy(aAnchorURLs.begin(), aAnchorURLs.end(), std::back_inserter(maResourceURLs));
                 }
             }
         }

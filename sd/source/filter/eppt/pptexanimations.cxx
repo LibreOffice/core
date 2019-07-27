@@ -373,18 +373,11 @@ void AnimationExporter::processAfterEffectNodes( const Reference< XAnimationNode
                                     Reference< XAnimationNode > xMaster;
 
                                     Sequence< NamedValue > aUserData( xChildNode3->getUserData() );
-                                    sal_Int32 nLength = aUserData.getLength();
-                                    const NamedValue* p = aUserData.getConstArray();
+                                    const NamedValue* p = std::find_if(aUserData.begin(), aUserData.end(),
+                                        [](const NamedValue& rProp) { return rProp.Name == "master-element"; });
 
-                                    while( nLength-- )
-                                    {
-                                        if ( p->Name == "master-element" )
-                                        {
-                                            p->Value >>= xMaster;
-                                            break;
-                                        }
-                                        p++;
-                                    }
+                                    if (p != aUserData.end())
+                                        p->Value >>= xMaster;
 
                                     AfterEffectNodePtr pAfterEffectNode( new AfterEffectNode( xChildNode3, xMaster ) );
                                     maAfterEffectNodes.push_back( pAfterEffectNode );
@@ -749,18 +742,13 @@ bool AnimationExporter::GetNodeType( const Reference< XAnimationNode >& xNode, s
 {
     // trying to get the nodetype
     Sequence< NamedValue > aUserData = xNode->getUserData();
-    if ( aUserData.hasElements() )
+    for( const NamedValue& rProp : aUserData )
     {
-    const NamedValue* p = aUserData.getConstArray();
-    sal_Int32 nLength = aUserData.getLength();
-    while( nLength-- )
-    {
-        if ( p->Name == "node-type" )
+        if ( rProp.Name == "node-type" )
         {
-        if ( p->Value >>= nType )
-            return true;
+            if ( rProp.Value >>= nType )
+                return true;
         }
-    }
     }
 
     return false;
@@ -865,31 +853,28 @@ void AnimationExporter::GetUserData( const Sequence< NamedValue >& rUserData, co
     if ( !rUserData.hasElements() )
         return;
 
-    const NamedValue* p = rUserData.getConstArray();
-    sal_Int32 nLength = rUserData.getLength();
-    while( nLength-- )
+    for( const NamedValue& rProp : rUserData )
     {
-        if ( p->Name == "node-type" )
+        if ( rProp.Name == "node-type" )
         {
-        pAny[ DFF_ANIM_NODE_TYPE ] = &(p->Value);
+            pAny[ DFF_ANIM_NODE_TYPE ] = &(rProp.Value);
         }
-        else if ( p->Name == "preset-class" )
+        else if ( rProp.Name == "preset-class" )
         {
-        pAny[ DFF_ANIM_PRESET_CLASS ] = &(p->Value);
+            pAny[ DFF_ANIM_PRESET_CLASS ] = &(rProp.Value);
         }
-        else if ( p->Name == "preset-id" )
+        else if ( rProp.Name == "preset-id" )
         {
-        pAny[ DFF_ANIM_PRESET_ID ] = &(p->Value);
+            pAny[ DFF_ANIM_PRESET_ID ] = &(rProp.Value);
         }
-        else if ( p->Name == "preset-sub-type" )
+        else if ( rProp.Name == "preset-sub-type" )
         {
-        pAny[ DFF_ANIM_PRESET_SUB_TYPE ] = &(p->Value);
+            pAny[ DFF_ANIM_PRESET_SUB_TYPE ] = &(rProp.Value);
         }
-        else if ( p->Name == "master-element" )
+        else if ( rProp.Name == "master-element" )
         {
-        pAny[ DFF_ANIM_AFTEREFFECT ] = &(p->Value);
+            pAny[ DFF_ANIM_AFTEREFFECT ] = &(rProp.Value);
         }
-        p++;
     }
 }
 

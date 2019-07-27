@@ -681,8 +681,8 @@ namespace {
                 CreateChoice(STR_IMPRESS_PRINT_UI_SLIDESPERPAGE_CHOICES, SAL_N_ELEMENTS(STR_IMPRESS_PRINT_UI_SLIDESPERPAGE_CHOICES)));
             maSlidesPerPage.clear();
             maSlidesPerPage.push_back(0); // first is using the default
-            for (sal_Int32 nIndex=1,nCount=aChoice.getLength(); nIndex<nCount; ++nIndex)
-                maSlidesPerPage.push_back(aChoice[nIndex].toInt32());
+            std::transform(std::next(aChoice.begin()), aChoice.end(), std::back_inserter(maSlidesPerPage),
+                            [](const OUString& rChoice) -> sal_Int32 { return rChoice.toInt32(); });
             return aChoice;
         }
     };

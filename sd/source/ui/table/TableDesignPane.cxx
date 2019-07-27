@@ -377,14 +377,9 @@ void TableDesignWidget::updateControls()
             if( xNames.is() )
             {
                 Sequence< OUString > aNames( xNames->getElementNames() );
-                for( sal_Int32 nIndex = 0; nIndex < aNames.getLength(); nIndex++ )
-                {
-                    if( aNames[nIndex] == sStyleName )
-                    {
-                        nSelection = static_cast<sal_uInt16>(nIndex)+1;
-                        break;
-                    }
-                }
+                sal_Int32 nIndex = comphelper::findValue(aNames, sStyleName);
+                if (nIndex != -1)
+                    nSelection = static_cast<sal_uInt16>(nIndex) + 1;
             }
         }
     }

@@ -368,7 +368,7 @@ uno::Sequence< uno::Type > SAL_CALL SdXImpressDocument::getTypes(  )
 {
     ::SolarMutexGuard aGuard;
 
-    if( maTypeSequence.getLength() == 0 )
+    if( !maTypeSequence.hasElements() )
     {
         uno::Sequence< uno::Type > aTypes( SfxBaseModel::getTypes() );
         aTypes = comphelper::concatSequences(aTypes,
@@ -1480,10 +1480,10 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SdXImpressDocument::getRenderer( 
         throw lang::DisposedException();
 
     bool bExportNotesPages = false;
-    for( sal_Int32 nProperty = 0, nPropertyCount = rxOptions.getLength(); nProperty < nPropertyCount; ++nProperty )
+    for( const auto& rOption : rxOptions )
     {
-        if ( rxOptions[ nProperty ].Name == "ExportNotesPages" )
-            rxOptions[ nProperty].Value >>= bExportNotesPages;
+        if ( rOption.Name == "ExportNotesPages" )
+            rOption.Value >>= bExportNotesPages;
     }
     uno::Sequence< beans::PropertyValue > aRenderer;
     if (mpDocShell)
@@ -1883,13 +1883,13 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
     PageKind                        ePageKind = PageKind::Standard;
     bool                        bExportNotesPages = false;
 
-    for( sal_Int32 nProperty = 0, nPropertyCount = rxOptions.getLength(); nProperty < nPropertyCount; ++nProperty )
+    for( const auto& rOption : rxOptions )
     {
-        if ( rxOptions[ nProperty ].Name == "RenderDevice" )
-            rxOptions[ nProperty ].Value >>= xRenderDevice;
-        else if ( rxOptions[ nProperty ].Name == "ExportNotesPages" )
+        if ( rOption.Name == "RenderDevice" )
+            rOption.Value >>= xRenderDevice;
+        else if ( rOption.Name == "ExportNotesPages" )
         {
-            rxOptions[ nProperty].Value >>= bExportNotesPages;
+            rOption.Value >>= bExportNotesPages;
             if ( bExportNotesPages )
                 ePageKind = PageKind::Notes;
         }
@@ -2449,9 +2449,8 @@ void SdXImpressDocument::initializeForTiledRendering(const css::uno::Sequence<cs
     if (DrawViewShell* pViewShell = GetViewShell())
     {
         DrawView* pDrawView = pViewShell->GetDrawView();
-        for (sal_Int32 i = 0; i < rArguments.getLength(); ++i)
+        for (const beans::PropertyValue& rValue : rArguments)
         {
-            const beans::PropertyValue& rValue = rArguments[i];
             if (rValue.Name == ".uno:ShowBorderShadow" && rValue.Value.has<bool>())
                 pDrawView->SetPageShadowVisible(rValue.Value.get<bool>());
             else if (rValue.Name == ".uno:Author" && rValue.Value.has<OUString>())

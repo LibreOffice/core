@@ -883,36 +883,33 @@ OUString ViewShellBase::GetInitialViewShellType()
 
         // Search the properties for the one that tells us what page kind to
         // use.
-        for (sal_Int32 n=0; n<aProperties.getLength(); n++)
+        auto pProperty = std::find_if(aProperties.begin(), aProperties.end(),
+            [](const beans::PropertyValue& rProperty) { return rProperty.Name == sUNO_View_PageKind; });
+        if (pProperty != aProperties.end())
         {
-            const beans::PropertyValue& rProperty (aProperties[n]);
-            if (rProperty.Name == sUNO_View_PageKind)
+            sal_Int16 nPageKind = 0;
+            pProperty->Value >>= nPageKind;
+            switch (static_cast<PageKind>(nPageKind))
             {
-                sal_Int16 nPageKind = 0;
-                rProperty.Value >>= nPageKind;
-                switch (static_cast<PageKind>(nPageKind))
-                {
-                    case PageKind::Standard:
-                        sRequestedView = FrameworkHelper::msImpressViewURL;
-                        break;
+                case PageKind::Standard:
+                    sRequestedView = FrameworkHelper::msImpressViewURL;
+                    break;
 
-                    case PageKind::Handout:
-                        sRequestedView = FrameworkHelper::msHandoutViewURL;
-                        break;
+                case PageKind::Handout:
+                    sRequestedView = FrameworkHelper::msHandoutViewURL;
+                    break;
 
-                    case PageKind::Notes:
-                        sRequestedView = FrameworkHelper::msNotesViewURL;
-                        break;
+                case PageKind::Notes:
+                    sRequestedView = FrameworkHelper::msNotesViewURL;
+                    break;
 
-                    default:
-                        // The page kind is invalid.  This is probably an
-                        // error by the caller.  We use the standard type to
-                        // keep things going.
-                        SAL_WARN( "sd.view", "ViewShellBase::GetInitialViewShellType: invalid page kind");
-                        sRequestedView = FrameworkHelper::msImpressViewURL;
-                        break;
-                }
-                break;
+                default:
+                    // The page kind is invalid.  This is probably an
+                    // error by the caller.  We use the standard type to
+                    // keep things going.
+                    SAL_WARN( "sd.view", "ViewShellBase::GetInitialViewShellType: invalid page kind");
+                    sRequestedView = FrameworkHelper::msImpressViewURL;
+                    break;
             }
         }
     }

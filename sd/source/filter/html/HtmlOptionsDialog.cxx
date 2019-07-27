@@ -120,12 +120,10 @@ Sequence< OUString > SAL_CALL SdHtmlOptionsDialog::getSupportedServiceNames()
 // XPropertyAccess
 Sequence< PropertyValue > SdHtmlOptionsDialog::getPropertyValues()
 {
-    sal_Int32 i, nCount;
-    for ( i = 0, nCount = maMediaDescriptor.getLength(); i < nCount; i++ )
-    {
-        if ( maMediaDescriptor[ i ].Name == "FilterData" )
-            break;
-    }
+    auto pProp = std::find_if(maMediaDescriptor.begin(), maMediaDescriptor.end(),
+        [](const PropertyValue& rProp) { return rProp.Name == "FilterData"; });
+    auto i = static_cast<sal_Int32>(std::distance(maMediaDescriptor.begin(), pProp));
+    sal_Int32 nCount = maMediaDescriptor.getLength();
     if ( i == nCount )
         maMediaDescriptor.realloc( ++nCount );
 
@@ -139,15 +137,10 @@ void SdHtmlOptionsDialog::setPropertyValues( const Sequence< PropertyValue > & a
 {
     maMediaDescriptor = aProps;
 
-    sal_Int32 i, nCount;
-    for ( i = 0, nCount = maMediaDescriptor.getLength(); i < nCount; i++ )
-    {
-        if ( maMediaDescriptor[ i ].Name == "FilterData" )
-        {
-            maMediaDescriptor[ i ].Value >>= maFilterDataSequence;
-            break;
-        }
-    }
+    auto pProp = std::find_if(maMediaDescriptor.begin(), maMediaDescriptor.end(),
+        [](const PropertyValue& rProp) { return rProp.Name == "FilterData"; });
+    if (pProp != maMediaDescriptor.end())
+        pProp->Value >>= maFilterDataSequence;
 }
 
 // XExecutableDialog

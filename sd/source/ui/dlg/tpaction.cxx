@@ -207,9 +207,8 @@ void SdTPAction::Construct()
                 aVerbs = xObj->getSupportedVerbs();
             }
 
-            for( sal_Int32 i=0; i<aVerbs.getLength(); i++ )
+            for( const embed::VerbDescriptor& aVerb : aVerbs )
             {
-                embed::VerbDescriptor aVerb = aVerbs[i];
                 if( aVerb.VerbAttributes & embed::VerbAttributes::MS_VERBATTR_ONCONTAINERMENU )
                 {
                     OUString aTmp( aVerb.VerbName );

@@ -132,9 +132,8 @@ void ConfigurationAccess::ForAll (
 
     ::std::vector<Any> aValues(rArguments.size());
     Sequence<OUString> aKeys (rxContainer->getElementNames());
-    for (sal_Int32 nItemIndex=0; nItemIndex < aKeys.getLength(); ++nItemIndex)
+    for (const OUString& rsKey : aKeys)
     {
-        const OUString& rsKey (aKeys[nItemIndex]);
         Reference<container::XNameAccess> xSetItem (rxContainer->getByName(rsKey), UNO_QUERY);
         if (xSetItem.is())
         {

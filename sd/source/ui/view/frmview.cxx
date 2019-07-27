@@ -554,49 +554,48 @@ void FrameView::ReadUserDataSequence ( const css::uno::Sequence < css::beans::Pr
     sal_Int32 aSnapGridWidthYNum = GetSnapGridWidthY().GetNumerator();
     sal_Int32 aSnapGridWidthYDom = GetSnapGridWidthY().GetDenominator();
 
-    const css::beans::PropertyValue *pValue = rSequence.getConstArray();
-    for (sal_Int32 i = 0 ; i < nLength; i++, pValue++ )
+    for (const css::beans::PropertyValue& rValue : rSequence)
     {
-        if ( pValue->Name == sUNO_View_ViewId )
+        if ( rValue.Name == sUNO_View_ViewId )
         {
         }
-        else if ( pValue->Name == sUNO_View_SnapLinesDrawing )
+        else if ( rValue.Name == sUNO_View_SnapLinesDrawing )
         {
-            if( pValue->Value >>= aString )
+            if( rValue.Value >>= aString )
             {
                 SdrHelpLineList aHelpLines;
                 createHelpLinesFromString( aString, aHelpLines );
                 SetStandardHelpLines( aHelpLines );
             }
         }
-        else if ( pValue->Name == sUNO_View_SnapLinesNotes )
+        else if ( rValue.Name == sUNO_View_SnapLinesNotes )
         {
-            if( pValue->Value >>= aString )
+            if( rValue.Value >>= aString )
             {
                 SdrHelpLineList aHelpLines;
                 createHelpLinesFromString( aString, aHelpLines );
                 SetNotesHelpLines( aHelpLines );
             }
         }
-        else if ( pValue->Name == sUNO_View_SnapLinesHandout )
+        else if ( rValue.Name == sUNO_View_SnapLinesHandout )
         {
-            if( pValue->Value >>= aString )
+            if( rValue.Value >>= aString )
             {
                 SdrHelpLineList aHelpLines;
                 createHelpLinesFromString( aString, aHelpLines );
                 SetHandoutHelpLines( aHelpLines );
             }
         }
-        else if ( pValue->Name == sUNO_View_RulerIsVisible )
+        else if ( rValue.Name == sUNO_View_RulerIsVisible )
         {
-            if( pValue->Value >>= bBool )
+            if( rValue.Value >>= bBool )
             {
                 SetRuler( bBool );
             }
         }
-        else if ( pValue->Name == sUNO_View_PageKind )
+        else if ( rValue.Name == sUNO_View_PageKind )
         {
-            if( pValue->Value >>= nInt16 )
+            if( rValue.Value >>= nInt16 )
             {
                 SdDrawDocument* pDoc = dynamic_cast< SdDrawDocument* >( GetModel() );
                 if( pDoc && pDoc->GetDocSh() && ( SfxObjectCreateMode::EMBEDDED == pDoc->GetDocSh()->GetCreateMode() ) )
@@ -605,9 +604,9 @@ void FrameView::ReadUserDataSequence ( const css::uno::Sequence < css::beans::Pr
                 SetPageKindOnLoad( static_cast<PageKind>(nInt16) );
             }
         }
-        else if ( pValue->Name == sUNO_View_SelectedPage )
+        else if ( rValue.Name == sUNO_View_SelectedPage )
         {
-            if( pValue->Value >>= nInt16 )
+            if( rValue.Value >>= nInt16 )
             {
                 SdDrawDocument* pDoc = dynamic_cast< SdDrawDocument* >( GetModel() );
                 if( pDoc && pDoc->GetDocSh() && ( SfxObjectCreateMode::EMBEDDED == pDoc->GetDocSh()->GetCreateMode() ) )
@@ -616,37 +615,37 @@ void FrameView::ReadUserDataSequence ( const css::uno::Sequence < css::beans::Pr
                 SetSelectedPageOnLoad( static_cast<sal_uInt16>(nInt16) );
             }
         }
-        else if ( pValue->Name == sUNO_View_IsLayerMode )
+        else if ( rValue.Name == sUNO_View_IsLayerMode )
         {
-            if( pValue->Value >>= bBool )
+            if( rValue.Value >>= bBool )
             {
                 SetLayerMode( bBool );
             }
         }
-        else if ( pValue->Name == sUNO_View_IsDoubleClickTextEdit )
+        else if ( rValue.Name == sUNO_View_IsDoubleClickTextEdit )
         {
-            if( pValue->Value >>= bBool )
+            if( rValue.Value >>= bBool )
             {
                 SetDoubleClickTextEdit( bBool );
             }
         }
-        else if ( pValue->Name == sUNO_View_IsClickChangeRotation )
+        else if ( rValue.Name == sUNO_View_IsClickChangeRotation )
         {
-            if( pValue->Value >>= bBool )
+            if( rValue.Value >>= bBool )
             {
                 SetClickChangeRotation( bBool );
             }
         }
-        else if ( pValue->Name == sUNO_View_SlidesPerRow )
+        else if ( rValue.Name == sUNO_View_SlidesPerRow )
         {
-            if( pValue->Value >>= nInt16 )
+            if( rValue.Value >>= nInt16 )
             {
                 SetSlidesPerRow( static_cast<sal_uInt16>(nInt16) );
             }
         }
-        else if ( pValue->Name == sUNO_View_EditMode )
+        else if ( rValue.Name == sUNO_View_EditMode )
         {
-            if( pValue->Value >>= nInt32 )
+            if( rValue.Value >>= nInt32 )
             {
                 SdDrawDocument* pDoc = dynamic_cast< SdDrawDocument* >( GetModel() );
                 if( pDoc && pDoc->GetDocSh() && ( SfxObjectCreateMode::EMBEDDED == pDoc->GetDocSh()->GetCreateMode() ) )
@@ -656,19 +655,19 @@ void FrameView::ReadUserDataSequence ( const css::uno::Sequence < css::beans::Pr
         // This one is kept for compatibility. Old value read from sUNO_View_EditModeStandard
         // is used. New value will be written into sUNO_View_EditMode.
         // Values from sUNO_View_EditModeNotes and sUNO_View_EditModeHangout will be ignored.
-        else if ( pValue->Name == sUNO_View_EditModeStandard )
+        else if ( rValue.Name == sUNO_View_EditModeStandard )
         {
-            if( pValue->Value >>= nInt32 )
+            if( rValue.Value >>= nInt32 )
             {
                 SdDrawDocument* pDoc = dynamic_cast< SdDrawDocument* >( GetModel() );
                 if( pDoc && pDoc->GetDocSh() && ( SfxObjectCreateMode::EMBEDDED == pDoc->GetDocSh()->GetCreateMode() ) )
                     SetViewShEditMode( static_cast<EditMode>(nInt32) );
             }
         }
-        else if ( pValue->Name == sUNO_View_VisibleAreaTop )
+        else if ( rValue.Name == sUNO_View_VisibleAreaTop )
         {
             sal_Int32 nTop = 0;
-            if( pValue->Value >>= nTop )
+            if( rValue.Value >>= nTop )
             {
                 ::tools::Rectangle aVisArea( GetVisArea() );
                 aVisArea.AdjustBottom(nTop - aVisArea.Top() );
@@ -676,10 +675,10 @@ void FrameView::ReadUserDataSequence ( const css::uno::Sequence < css::beans::Pr
                 SetVisArea( aVisArea );
             }
         }
-        else if ( pValue->Name == sUNO_View_VisibleAreaLeft )
+        else if ( rValue.Name == sUNO_View_VisibleAreaLeft )
         {
             sal_Int32 nLeft = 0;
-            if( pValue->Value >>= nLeft )
+            if( rValue.Value >>= nLeft )
             {
                 ::tools::Rectangle aVisArea( GetVisArea() );
                 aVisArea.AdjustRight(nLeft - aVisArea.Left() );
@@ -687,20 +686,20 @@ void FrameView::ReadUserDataSequence ( const css::uno::Sequence < css::beans::Pr
                 SetVisArea( aVisArea );
             }
         }
-        else if ( pValue->Name == sUNO_View_VisibleAreaWidth )
+        else if ( rValue.Name == sUNO_View_VisibleAreaWidth )
         {
             sal_Int32 nWidth = 0;
-            if( pValue->Value >>= nWidth )
+            if( rValue.Value >>= nWidth )
             {
                 ::tools::Rectangle aVisArea( GetVisArea() );
                 aVisArea.SetRight( aVisArea.Left() + nWidth - 1 );
                 SetVisArea( aVisArea );
             }
         }
-        else if ( pValue->Name == sUNO_View_VisibleAreaHeight )
+        else if ( rValue.Name == sUNO_View_VisibleAreaHeight )
         {
             sal_Int32 nHeight = 0;
-            if( pValue->Value >>= nHeight )
+            if( rValue.Value >>= nHeight )
             {
                 ::tools::Rectangle aVisArea( GetVisArea() );
                 aVisArea.SetBottom( nHeight + aVisArea.Top() - 1 );
@@ -708,183 +707,183 @@ void FrameView::ReadUserDataSequence ( const css::uno::Sequence < css::beans::Pr
             }
         }
 
-        else if ( pValue->Name == sUNO_View_GridIsVisible )
+        else if ( rValue.Name == sUNO_View_GridIsVisible )
         {
-            if( pValue->Value >>= bBool )
+            if( rValue.Value >>= bBool )
             {
                 SetGridVisible( bBool );
             }
         }
 
-        else if ( pValue->Name == sUNO_View_IsSnapToGrid )
+        else if ( rValue.Name == sUNO_View_IsSnapToGrid )
         {
-            if( pValue->Value >>= bBool )
+            if( rValue.Value >>= bBool )
             {
                 SetGridSnap( bBool );
             }
         }
-        else if ( pValue->Name == sUNO_View_GridIsFront )
+        else if ( rValue.Name == sUNO_View_GridIsFront )
         {
-            if( pValue->Value >>= bBool )
+            if( rValue.Value >>= bBool )
             {
                 SetGridFront( bBool );
             }
         }
-        else if ( pValue->Name == sUNO_View_IsSnapToPageMargins )
+        else if ( rValue.Name == sUNO_View_IsSnapToPageMargins )
         {
-            if( pValue->Value >>= bBool )
+            if( rValue.Value >>= bBool )
             {
                 SetBordSnap( bBool );
             }
         }
-        else if ( pValue->Name == sUNO_View_IsSnapToSnapLines )
+        else if ( rValue.Name == sUNO_View_IsSnapToSnapLines )
         {
-            if( pValue->Value >>= bBool )
+            if( rValue.Value >>= bBool )
             {
                 SetHlplSnap( bBool );
             }
         }
-        else if ( pValue->Name == sUNO_View_IsSnapToObjectFrame )
+        else if ( rValue.Name == sUNO_View_IsSnapToObjectFrame )
         {
-            if( pValue->Value >>= bBool )
+            if( rValue.Value >>= bBool )
             {
                 SetOFrmSnap( bBool );
             }
         }
-        else if ( pValue->Name == sUNO_View_IsSnapToObjectPoints )
+        else if ( rValue.Name == sUNO_View_IsSnapToObjectPoints )
         {
-            if( pValue->Value >>= bBool )
+            if( rValue.Value >>= bBool )
             {
                 SetOPntSnap( bBool );
             }
         }
-        else if ( pValue->Name == sUNO_View_IsPlusHandlesAlwaysVisible )
+        else if ( rValue.Name == sUNO_View_IsPlusHandlesAlwaysVisible )
         {
-            if( pValue->Value >>= bBool )
+            if( rValue.Value >>= bBool )
             {
                 SetPlusHandlesAlwaysVisible( bBool );
             }
         }
-        else if ( pValue->Name == sUNO_View_IsFrameDragSingles )
+        else if ( rValue.Name == sUNO_View_IsFrameDragSingles )
         {
-            if( pValue->Value >>= bBool )
+            if( rValue.Value >>= bBool )
             {
                 SetFrameDragSingles( bBool );
             }
         }
-        else if ( pValue->Name == sUNO_View_EliminatePolyPointLimitAngle )
+        else if ( rValue.Name == sUNO_View_EliminatePolyPointLimitAngle )
         {
-            if( pValue->Value >>= nInt32 )
+            if( rValue.Value >>= nInt32 )
             {
                 SetEliminatePolyPointLimitAngle( nInt32 );
             }
         }
-        else if ( pValue->Name == sUNO_View_IsEliminatePolyPoints )
+        else if ( rValue.Name == sUNO_View_IsEliminatePolyPoints )
         {
-            if( pValue->Value >>= bBool )
+            if( rValue.Value >>= bBool )
             {
                 SetEliminatePolyPoints( bBool );
             }
         }
-        else if ( pValue->Name == sUNO_View_ActiveLayer )
+        else if ( rValue.Name == sUNO_View_ActiveLayer )
         {
-            if( pValue->Value >>= aString )
+            if( rValue.Value >>= aString )
             {
                 SetActiveLayer( aString );
             }
         }
-        else if ( pValue->Name == sUNO_View_NoAttribs )
+        else if ( rValue.Name == sUNO_View_NoAttribs )
         {
-            if( pValue->Value >>= bBool )
+            if( rValue.Value >>= bBool )
             {
                 SetNoAttribs( bBool );
             }
         }
-        else if ( pValue->Name == sUNO_View_NoColors )
+        else if ( rValue.Name == sUNO_View_NoColors )
         {
-            if( pValue->Value >>= bBool )
+            if( rValue.Value >>= bBool )
             {
                 SetNoColors( bBool );
             }
         }
-        else if ( pValue->Name == sUNO_View_GridCoarseWidth )
+        else if ( rValue.Name == sUNO_View_GridCoarseWidth )
         {
-            if( pValue->Value >>= nInt32 )
+            if( rValue.Value >>= nInt32 )
             {
                 const Size aCoarse( nInt32, GetGridCoarse().Height() );
                 SetGridCoarse( aCoarse );
             }
         }
-        else if ( pValue->Name == sUNO_View_GridCoarseHeight )
+        else if ( rValue.Name == sUNO_View_GridCoarseHeight )
         {
-            if( pValue->Value >>= nInt32 )
+            if( rValue.Value >>= nInt32 )
             {
                 const Size aCoarse( GetGridCoarse().Width(), nInt32 );
                 SetGridCoarse( aCoarse );
             }
         }
-        else if ( pValue->Name == sUNO_View_GridFineWidth )
+        else if ( rValue.Name == sUNO_View_GridFineWidth )
         {
-            if( pValue->Value >>= nInt32 )
+            if( rValue.Value >>= nInt32 )
             {
                 const Size aCoarse( nInt32, GetGridFine().Height() );
                 SetGridFine( aCoarse );
             }
         }
-        else if ( pValue->Name == sUNO_View_GridFineHeight )
+        else if ( rValue.Name == sUNO_View_GridFineHeight )
         {
-            if( pValue->Value >>= nInt32 )
+            if( rValue.Value >>= nInt32 )
             {
                 const Size aCoarse( GetGridFine().Width(), nInt32 );
                 SetGridFine( aCoarse );
             }
         }
-        else if ( pValue->Name == sUNO_View_IsAngleSnapEnabled )
+        else if ( rValue.Name == sUNO_View_IsAngleSnapEnabled )
         {
-            if( pValue->Value >>= bBool )
+            if( rValue.Value >>= bBool )
             {
                 SetAngleSnapEnabled( bBool );
             }
         }
-        else if ( pValue->Name == sUNO_View_SnapAngle )
+        else if ( rValue.Name == sUNO_View_SnapAngle )
         {
-            if( pValue->Value >>= nInt32 )
+            if( rValue.Value >>= nInt32 )
             {
                 SetSnapAngle( nInt32 );
             }
         }
-        else if ( pValue->Name == sUNO_View_GridSnapWidthXNumerator )
+        else if ( rValue.Name == sUNO_View_GridSnapWidthXNumerator )
         {
-            pValue->Value >>= aSnapGridWidthXNum;
+            rValue.Value >>= aSnapGridWidthXNum;
         }
-        else if ( pValue->Name == sUNO_View_GridSnapWidthXDenominator )
+        else if ( rValue.Name == sUNO_View_GridSnapWidthXDenominator )
         {
-            pValue->Value >>= aSnapGridWidthXDom;
+            rValue.Value >>= aSnapGridWidthXDom;
         }
-        else if ( pValue->Name == sUNO_View_GridSnapWidthYNumerator )
+        else if ( rValue.Name == sUNO_View_GridSnapWidthYNumerator )
         {
-            pValue->Value >>= aSnapGridWidthYNum;
+            rValue.Value >>= aSnapGridWidthYNum;
         }
-        else if ( pValue->Name == sUNO_View_GridSnapWidthYDenominator )
+        else if ( rValue.Name == sUNO_View_GridSnapWidthYDenominator )
         {
-            pValue->Value >>= aSnapGridWidthYDom;
+            rValue.Value >>= aSnapGridWidthYDom;
         }
-        else if (!bImpress && pValue->Name == sUNO_View_VisibleLayers  )
+        else if (!bImpress && rValue.Name == sUNO_View_VisibleLayers  )
         {
             SdrLayerIDSet aSdrLayerIDSets;
-            aSdrLayerIDSets.PutValue( pValue->Value );
+            aSdrLayerIDSets.PutValue( rValue.Value );
             SetVisibleLayers( aSdrLayerIDSets );
         }
-        else if (!bImpress && pValue->Name == sUNO_View_PrintableLayers )
+        else if (!bImpress && rValue.Name == sUNO_View_PrintableLayers )
         {
             SdrLayerIDSet aSdrLayerIDSets;
-            aSdrLayerIDSets.PutValue( pValue->Value );
+            aSdrLayerIDSets.PutValue( rValue.Value );
             SetPrintableLayers( aSdrLayerIDSets );
         }
-        else if (!bImpress && pValue->Name == sUNO_View_LockedLayers )
+        else if (!bImpress && rValue.Name == sUNO_View_LockedLayers )
         {
             SdrLayerIDSet aSdrLayerIDSets;
-            aSdrLayerIDSets.PutValue( pValue->Value );
+            aSdrLayerIDSets.PutValue( rValue.Value );
             SetLockedLayers( aSdrLayerIDSets );
         }
     }

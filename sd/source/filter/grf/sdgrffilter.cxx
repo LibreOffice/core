@@ -242,30 +242,30 @@ bool SdGRFFilter::Export()
                     OUString sShortName( rGraphicFilter.GetExportFormatShortName( nFilter ) );
 
                     bool    bFilterNameFound = false;
-                    sal_Int32   i, nCount;
-                    for ( i = 0, nCount = aArgs.getLength(); i < nCount; i++ )
+                    for ( auto& rArg : aArgs )
                     {
-                        OUString& rStr = aArgs[ i ].Name;
+                        OUString& rStr = rArg.Name;
                         if ( rStr == sFilterName )
                         {
                             bFilterNameFound = true;
-                            aArgs[ i ].Value <<= sShortName;
+                            rArg.Value <<= sShortName;
                         }
                         else if ( rStr == "InteractionHandler" )
                         {
                             uno::Reference< task::XInteractionHandler > xHdl;
-                            if ( aArgs[ i ].Value >>= xHdl )
+                            if ( rArg.Value >>= xHdl )
                             {
                                 xInteractionHandler = new SdGRFFilter_ImplInteractionHdl( xHdl );
-                                aArgs[ i ].Value <<= xInteractionHandler;
+                                rArg.Value <<= xInteractionHandler;
                             }
                         }
                     }
                     if ( !bFilterNameFound )
                     {
-                        aArgs.realloc( ++nCount );
-                        aArgs[ i ].Name = sFilterName;
-                        aArgs[ i ].Value <<= sShortName;
+                        sal_Int32 nCount = aArgs.getLength();
+                        aArgs.realloc( nCount + 1 );
+                        aArgs[ nCount ].Name = sFilterName;
+                        aArgs[ nCount ].Value <<= sShortName;
                     }
 
                     // take selection if needed

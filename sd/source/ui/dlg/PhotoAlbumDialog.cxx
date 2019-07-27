@@ -531,10 +531,10 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, FileHdl, weld::Button&, void)
                 batch->commit();
             }
 
-            for ( sal_Int32 i = 0; i < aFilesArr.getLength(); i++ )
+            for ( const auto& rFile : aFilesArr )
             {
                 // Store full path, show filename only. Use INetURLObject to display spaces in filename correctly
-                INetURLObject aUrl(aFilesArr[i]);
+                INetURLObject aUrl(rFile);
                 m_xImagesLst->append(aUrl.GetMainURL(INetURLObject::DecodeMechanism::NONE), aUrl.GetLastName(INetURLObject::DecodeMechanism::WithCharset), "");
             }
         }

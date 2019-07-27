@@ -83,12 +83,9 @@ uno::Sequence< uno::Reference< frame::XDispatch > > SAL_CALL SdUnoModule::queryD
     sal_Int32 nCount = seqDescripts.getLength();
     uno::Sequence< uno::Reference< frame::XDispatch > > lDispatcher( nCount );
 
-    for( sal_Int32 i=0; i<nCount; ++i )
-    {
-        lDispatcher[i] = queryDispatch( seqDescripts[i].FeatureURL  ,
-                                        seqDescripts[i].FrameName   ,
-                                        seqDescripts[i].SearchFlags );
-    }
+    std::transform(seqDescripts.begin(), seqDescripts.end(), lDispatcher.begin(),
+        [this](const frame::DispatchDescriptor& rDescr) -> uno::Reference<frame::XDispatch> {
+            return queryDispatch(rDescr.FeatureURL, rDescr.FrameName, rDescr.SearchFlags); });
 
     return lDispatcher;
 }

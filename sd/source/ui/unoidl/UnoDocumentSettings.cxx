@@ -310,15 +310,15 @@ uno::Sequence<beans::PropertyValue>
 {
     uno::Sequence<beans::PropertyValue> aRet( aConfigProps.getLength() );
     int nRet = 0;
-    for( sal_Int32 i = 0; i < aConfigProps.getLength(); i++ )
+    for( const auto& rConfigProp : aConfigProps )
     {
-        XPropertyListType t = getTypeOfName( aConfigProps[i].Name );
+        XPropertyListType t = getTypeOfName( rConfigProp.Name );
         if (t == XPropertyListType::Unknown)
-            aRet[nRet++] = aConfigProps[i];
+            aRet[nRet++] = rConfigProp;
         else
         {
             OUString aURL;
-            aConfigProps[i].Value >>= aURL;
+            rConfigProp.Value >>= aURL;
             LoadList( t, aURL, referer, xStorage );
         }
     }

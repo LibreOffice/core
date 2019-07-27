@@ -306,14 +306,11 @@ bool SdStyleSheet::IsUsed() const
         if( pContainer )
         {
             Sequence< Reference< XInterface > > aModifyListeners( pContainer->getElements() );
-            Reference< XInterface > *p = aModifyListeners.getArray();
-            sal_Int32 nCount = aModifyListeners.getLength();
-            while( nCount-- && !bResult )
-            {
-                Reference< XStyle > xStyle( *p++, UNO_QUERY );
-                if( xStyle.is() )
-                    bResult = xStyle->isInUse();
-            }
+            bResult = std::any_of(aModifyListeners.begin(), aModifyListeners.end(),
+                [](const Reference<XInterface>& rListener) {
+                    Reference< XStyle > xStyle( rListener, UNO_QUERY );
+                    return xStyle.is() && xStyle->isInUse();
+                });
         }
     }
     return bResult;
@@ -1248,13 +1245,11 @@ Sequence< PropertyState > SAL_CALL SdStyleSheet::getPropertyStates( const Sequen
     throwIfDisposed();
 
     sal_Int32 nCount = aPropertyName.getLength();
-    const OUString* pNames = aPropertyName.getConstArray();
 
     Sequence< PropertyState > aPropertyStateSequence( nCount );
-    PropertyState* pState = aPropertyStateSequence.getArray();
 
-    while( nCount-- )
-        *pState++ = getPropertyState( *pNames++ );
+    std::transform(aPropertyName.begin(), aPropertyName.end(), aPropertyStateSequence.begin(),
+        [this](const OUString& rName) -> PropertyState { return getPropertyState(rName); });
 
     return aPropertyStateSequence;
 }

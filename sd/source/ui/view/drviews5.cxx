@@ -458,20 +458,18 @@ void DrawViewShell::ReadUserDataSequence ( const css::uno::Sequence < css::beans
 
     ViewShell::ReadUserDataSequence( rSequence );
 
-    const sal_Int32 nLength = rSequence.getLength();
-    const css::beans::PropertyValue *pValue = rSequence.getConstArray();
-    for (sal_Int32 i = 0 ; i < nLength; i++, pValue++ )
+    for (const css::beans::PropertyValue& rValue : rSequence)
     {
-        if ( pValue->Name == sUNO_View_ZoomOnPage )
+        if ( rValue.Name == sUNO_View_ZoomOnPage )
         {
             bool bZoomPage = false;
-            if( pValue->Value >>= bZoomPage )
+            if( rValue.Value >>= bZoomPage )
             {
                 mbZoomOnPage = bZoomPage;
             }
         }
         // Fallback to common SdrModel processing
-        else GetDocSh()->GetDoc()->ReadUserDataSequenceValue(pValue);
+        else GetDocSh()->GetDoc()->ReadUserDataSequenceValue(&rValue);
     }
 
     // The parameter rSequence contains the config-items from

@@ -93,22 +93,18 @@ void implImportLabels( const Reference< XMultiServiceFactory >& xConfigProvider,
         {
             Reference< XNameAccess > xNameAccess;
             Sequence< OUString > aNames( xConfigAccess->getElementNames() );
-            const OUString* p = aNames.getConstArray();
-            sal_Int32 n = aNames.getLength();
-            while(n--)
+            for(const OUString& rName : aNames)
             {
-                xConfigAccess->getByName( *p ) >>= xNameAccess;
+                xConfigAccess->getByName( rName ) >>= xNameAccess;
                 if( xNameAccess.is() )
                 {
                     OUString aUIName;
                     xNameAccess->getByName( "Label" ) >>= aUIName;
                     if( !aUIName.isEmpty() )
                     {
-                        rStringMap[ *p ] = aUIName;
+                        rStringMap[ rName ] = aUIName;
                     }
                 }
-
-                p++;
             }
         }
     }
@@ -132,22 +128,10 @@ CustomAnimationPreset::CustomAnimationPreset( const CustomAnimationEffectPtr& pE
     mfDuration = pEffect->getDuration();
     maDefaultSubTyp = pEffect->getPresetSubType();
 
-    mbIsTextOnly = false;
-
     Sequence< NamedValue > aUserData( pEffect->getNode()->getUserData() );
-    sal_Int32 nLength = aUserData.getLength();
-    const NamedValue* p = aUserData.getConstArray();
 
-    while( nLength-- )
-    {
-        if ( p->Name == "text-only" )
-        {
-            mbIsTextOnly = true;
-            break;
-        }
-        p++;
-    }
-
+    mbIsTextOnly = std::any_of(aUserData.begin(), aUserData.end(),
+        [](const NamedValue& rProp) { return rProp.Name == "text-only"; });
 }
 
 void CustomAnimationPreset::add( const CustomAnimationEffectPtr& pEffect )
@@ -311,9 +295,9 @@ void CustomAnimationPresets::importEffects()
         uno::Sequence< OUString > aFiles;
         xNameAccess->getByName( "EffectFiles" ) >>= aFiles;
 
-        for( sal_Int32 i=0; i<aFiles.getLength(); ++i )
+        for( const auto& rFile : aFiles )
         {
-            OUString aURL = comphelper::getExpandedUri(xContext, aFiles[i]);
+            OUString aURL = comphelper::getExpandedUri(xContext, rFile);
 
             mxRootNode = implImportEffects( xServiceFactory, aURL );
 
@@ -420,11 +404,9 @@ void CustomAnimationPresets::importPresets( const Reference< XMultiServiceFactor
             Reference< XNameAccess > xCategoryAccess;
 
             Sequence< OUString > aNames( xTypeAccess->getElementNames() );
-            const OUString* p = aNames.getConstArray();
-            sal_Int32 n = aNames.getLength();
-            while(n--)
+            for(const OUString& rName : aNames)
             {
-                xTypeAccess->getByName( *p ) >>= xCategoryAccess;
+                xTypeAccess->getByName( rName ) >>= xCategoryAccess;
 
                 if( xCategoryAccess.is() && xCategoryAccess->hasByName( "Label" ) && xCategoryAccess->hasByName( "Effects" ) )
                 {
@@ -436,11 +418,9 @@ void CustomAnimationPresets::importPresets( const Reference< XMultiServiceFactor
 
                     EffectDescriptorList aEffectsList;
 
-                    const OUString* pEffectNames = aEffects.getConstArray();
-                    sal_Int32 nEffectCount = aEffects.getLength();
-                    while( nEffectCount-- )
+                    for( const OUString& rEffectName : aEffects )
                     {
-                        CustomAnimationPresetPtr pEffect = getEffectDescriptor( *pEffectNames );
+                        CustomAnimationPresetPtr pEffect = getEffectDescriptor( rEffectName );
                         if( pEffect.get() )
                         {
                             aEffectsList.push_back( pEffect );
@@ -448,16 +428,13 @@ void CustomAnimationPresets::importPresets( const Reference< XMultiServiceFactor
 #ifdef DEBUG
                         else
                         {
-                            aMissedPresetIds += OUString(*pEffectNames);
+                            aMissedPresetIds += OUString(rEffectName);
                             aMissedPresetIds += "\n";
                         }
 #endif
-                        pEffectNames++;
                     }
                     rPresetMap.push_back( std::make_shared<PresetCategory>( aLabel, aEffectsList ) );
                 }
-
-                p++;
             }
         }
     }

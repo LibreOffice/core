@@ -542,14 +542,11 @@ void SdStyleSheetPool::CopyTableStyles(SdStyleSheetPool const & rSourcePool)
                 Reference< XNameAccess> xSourceNames( xSourceTableStyle, UNO_QUERY_THROW );
 
                 Sequence< OUString > aStyleNames( xSourceNames->getElementNames() );
-                OUString* pStyleNames( aStyleNames.getArray() );
 
                 Reference< XNameReplace > xTargetNames( xNewTableStyle, UNO_QUERY );
 
-                sal_Int32 nNames = aStyleNames.getLength();
-                while( nNames-- )
+                for( const OUString& aName : aStyleNames )
                 {
-                    const OUString aName( *pStyleNames++ );
                     Reference< XStyle > xSourceStyle( xSourceNames->getByName( aName ), UNO_QUERY );
                     Reference< XStyle > xTargetStyle;
                     if( xSourceStyle.is() ) try

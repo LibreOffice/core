@@ -1328,24 +1328,22 @@ void SAL_CALL SdGenericDrawPage::setPropertyValues( const Sequence< OUString >& 
 
 Sequence< Any > SAL_CALL SdGenericDrawPage::getPropertyValues( const Sequence< OUString >& aPropertyNames )
 {
-    const OUString* pNames = aPropertyNames.getConstArray();
-    sal_uInt32 nCount = aPropertyNames.getLength();
+    sal_Int32 nCount = aPropertyNames.getLength();
     Sequence< Any > aValues( nCount );
-    Any* pValues = aValues.getArray();
-    while( nCount-- )
-    {
-        Any aValue;
-        try
-        {
-            aValue = getPropertyValue( *pNames++ );
-        }
-        catch( beans::UnknownPropertyException& )
-        {
-            // ignore for multi property set
-            // todo: optimize this!
-        }
-        *pValues++ = aValue;
-    }
+    std::transform(aPropertyNames.begin(), aPropertyNames.end(), aValues.begin(),
+        [this](const OUString& rName) -> Any {
+            Any aValue;
+            try
+            {
+                aValue = getPropertyValue(rName);
+            }
+            catch( beans::UnknownPropertyException& )
+            {
+                // ignore for multi property set
+                // todo: optimize this!
+            }
+            return aValue;
+        });
     return aValues;
 }
 
@@ -2462,17 +2460,13 @@ void SdDrawPage::setBackground( const Any& rValue )
         Reference< beans::XPropertySetInfo >  xDestSetInfo( xDestSet->getPropertySetInfo() );
 
         Sequence< beans::Property > aProperties( xDestSetInfo->getProperties() );
-        sal_Int32 nCount = aProperties.getLength();
-        beans::Property* pProp = aProperties.getArray();
 
-        while( nCount-- )
+        for( const beans::Property& rProp : aProperties )
         {
-            const OUString aPropName( pProp->Name );
+            const OUString aPropName( rProp.Name );
             if( xSetInfo->hasPropertyByName( aPropName ) )
                 xDestSet->setPropertyValue( aPropName,
                         xSet->getPropertyValue( aPropName ) );
-
-            pProp++;
         }
 
         pBackground->fillItemSet( static_cast<SdDrawDocument*>(&GetPage()->getSdrModelFromSdrPage()), aSet );
@@ -2834,16 +2828,12 @@ void SdMasterPage::setBackground( const Any& rValue )
                 Reference< beans::XPropertySetInfo > xDestSetInfo( xDestSet->getPropertySetInfo(), UNO_SET_THROW );
 
                 uno::Sequence< beans::Property> aProperties( xDestSetInfo->getProperties() );
-                sal_Int32 nCount = aProperties.getLength();
-                beans::Property* pProp = aProperties.getArray();
 
-                while( nCount-- )
+                for( const beans::Property& rProp : aProperties )
                 {
-                    const OUString aPropName( pProp->Name );
+                    const OUString aPropName( rProp.Name );
                     if( xInputSetInfo->hasPropertyByName( aPropName ) )
                         xDestSet->setPropertyValue( aPropName, xInputSet->getPropertyValue( aPropName ) );
-
-                    pProp++;
                 }
 
                 pBackground->fillItemSet( static_cast<SdDrawDocument*>(&SvxFmDrawPage::mpPage->getSdrModelFromSdrPage()), aSet );
