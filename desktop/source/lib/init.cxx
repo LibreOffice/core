@@ -986,6 +986,15 @@ LibLODocument_Impl::~LibLODocument_Impl()
     }
 }
 
+static OUString getGenerator()
+{
+    OUString sGenerator(
+        Translate::ExpandVariables("%PRODUCTNAME %PRODUCTVERSION%PRODUCTEXTENSION (%1)"));
+    OUString os("$_OS");
+    ::rtl::Bootstrap::expandMacros(os);
+    return sGenerator.replaceFirst("%1", os);
+}
+
 extern "C" {
 
 CallbackFlushHandler::CallbackFlushHandler(LibreOfficeKitDocument* pDocument, LibreOfficeKitCallback pCallback, void* pData)
@@ -3419,15 +3428,6 @@ static void doc_setTextSelection(LibreOfficeKitDocument* pThis, int nType, int n
     pDoc->setTextSelection(nType, nX, nY);
 }
 
-static OUString getGenerator()
-{
-    OUString sGenerator(
-        Translate::ExpandVariables("%PRODUCTNAME %PRODUCTVERSION%PRODUCTEXTENSION (%1)"));
-    OUString os("$_OS");
-    ::rtl::Bootstrap::expandMacros(os);
-    return sGenerator.replaceFirst("%1", os);
-}
-
 static bool getFromTransferrable(
     const css::uno::Reference<css::datatransfer::XTransferable> &xTransferable,
     const OString &aInMimeType, OString &aRet);
@@ -3625,7 +3625,7 @@ static int doc_getSelectionType(LibreOfficeKitDocument* pThis)
         return LOK_SELTYPE_COMPLEX;
 
     OString aRet;
-    bool bSuccess = getFromTransferrable(xTransferable, OString("text/plain;charset=utf-8"), aRet);
+    bool bSuccess = getFromTransferrable(xTransferable, "text/plain;charset=utf-8", aRet);
     if (!bSuccess)
         return LOK_SELTYPE_NONE;
 
