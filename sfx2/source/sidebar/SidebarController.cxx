@@ -1254,7 +1254,7 @@ void SidebarController::UpdateDeckOpenState()
 
             if (comphelper::LibreOfficeKit::isActive())
             {
-                // Sidebar wide enought to render the menu; enable it.
+                // Sidebar wide enough to render the menu; enable it.
                 mpTabBar->EnableMenuButton(true);
 
                 if (const SfxViewShell* pViewShell = mpViewFrame->GetViewShell())
