@@ -81,7 +81,7 @@ import com.sun.star.uno.UnoRuntime;
  * a range of values of the list's data wrapped in a List implementation. Changes to the sub
  * list have to cause changes in the main list. This is a problem, since this class is to be
  * used in a multi-threaded environment. The sub list could work on a copy as the iterators
- * do, but all the functions which work on an given index could not be properly supported.
+ * do, but all the functions which work on a given index could not be properly supported.
  * Unfortunately, the List interface documentation states that all optional methods implemented
  * by the list have to be implemented in the sub list. That would mean to do without all those
  * critical methods, although they might work well in the "main list" (as opposed to sub list).

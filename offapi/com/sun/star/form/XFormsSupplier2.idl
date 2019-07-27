@@ -40,7 +40,7 @@ interface XFormsSupplier2: XFormsSupplier
         <p>Semantically, hasForms() is equivalent to calling
         XElementAccess::hasElements() on the container returned by
         XFormsSupplier::getForms(). But when using the latter, the
-        implementation is forced to create a empty container, which might be potentially
+        implementation is forced to create an empty container, which might be potentially
         expensive.</p>
     */
     boolean hasForms();
