@@ -120,6 +120,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     rtl::OUString sVendor6(RTL_CONSTASCII_USTRINGPARAM("BEA Systems, Inc."));
     rtl::OUString sVendor7(RTL_CONSTASCII_USTRINGPARAM("Free Software Foundation, Inc."));
     rtl::OUString sVendor8(RTL_CONSTASCII_USTRINGPARAM("The FreeBSD Foundation"));
+    rtl::OUString sVendor9(RTL_CONSTASCII_USTRINGPARAM("AdoptOpenJDK"));
     if ( ! (sVendor0.equals(pInfo->sVendor) == sal_True
             || sVendor1.equals(pInfo->sVendor) == sal_True
             || sVendor2.equals(pInfo->sVendor) == sal_True
@@ -128,7 +129,8 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             || sVendor5.equals(pInfo->sVendor) == sal_True
             || sVendor6.equals(pInfo->sVendor) == sal_True
             || sVendor7.equals(pInfo->sVendor) == sal_True
-            || sVendor8.equals(pInfo->sVendor) == sal_True))
+            || sVendor8.equals(pInfo->sVendor) == sal_True
+            || sVendor9.equals(pInfo->sVendor) == sal_True))
         return 0;
 
     rtl::OString sPaths = getLD_LIBRARY_PATH(pInfo->arVendorData);

@@ -23,7 +23,7 @@
 <javaSelection xmlns="http://openoffice.org/2004/java/framework/1.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
- <updated>2012-10-06</updated>
+ <updated>2019-07-27</updated>
 
  <vendorInfos>
   <vendor name="Oracle Corporation">
@@ -44,6 +44,9 @@
   <vendor name="BEA Systems, Inc.">
     <minVersion>1.5.0</minVersion>
   </vendor>
+  <vendor name="AdoptOpenJDK">
+    <minVersion>1.8.0</minVersion>
+  </vendor>
  </vendorInfos>
 
  <plugins>
@@ -53,5 +56,6 @@
   <library vendor="Blackdown Java-Linux Team">vnd.sun.star.expand:$URE_INTERNAL_LIB_DIR/sunjavaplugin.so</library>
   <library vendor="Free Software Foundation, Inc.">vnd.sun.star.expand:$URE_INTERNAL_LIB_DIR/sunjavaplugin.so</library>
   <library vendor="BEA Systems, Inc.">vnd.sun.star.expand:$URE_INTERNAL_LIB_DIR/sunjavaplugin.so</library>
+  <library vendor="AdoptOpenJDK">vnd.sun.star.expand:$URE_INTERNAL_LIB_DIR/sunjavaplugin.so</library>
  </plugins>
 </javaSelection>

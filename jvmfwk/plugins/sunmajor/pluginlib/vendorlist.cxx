@@ -51,6 +51,7 @@ BEGIN_VENDOR_MAP()
     VENDOR_MAP_ENTRY("BEA Systems, Inc.", OtherInfo)
     VENDOR_MAP_ENTRY("Free Software Foundation, Inc.", GnuInfo)
     VENDOR_MAP_ENTRY("The FreeBSD Foundation", OtherInfo)
+    VENDOR_MAP_ENTRY("AdoptOpenJDK", OtherInfo)
 END_VENDOR_MAP()
 
 
