@@ -83,26 +83,25 @@ FieldUnit SwFieldUnitTable::GetValue(sal_uInt32 nPos)
     return FieldUnit::NONE;
 }
 
-SwLoadOptPage::SwLoadOptPage(vcl::Window* pParent, const SfxItemSet& rSet)
-    : SfxTabPage(pParent, "OptGeneralPage", "modules/swriter/ui/optgeneralpage.ui", &rSet)
+SwLoadOptPage::SwLoadOptPage(TabPageParent pParent, const SfxItemSet& rSet)
+    : SfxTabPage(pParent, "modules/swriter/ui/optgeneralpage.ui", "OptGeneralPage", &rSet)
     , m_pWrtShell(nullptr)
     , m_nLastTab(0)
     , m_nOldLinkMode(MANUAL)
+    , m_xAlwaysRB(m_xBuilder->weld_radio_button("always"))
+    , m_xRequestRB(m_xBuilder->weld_radio_button("onrequest"))
+    , m_xNeverRB(m_xBuilder->weld_radio_button("never"))
+    , m_xAutoUpdateFields(m_xBuilder->weld_check_button("updatefields"))
+    , m_xAutoUpdateCharts(m_xBuilder->weld_check_button("updatecharts"))
+    , m_xMetricLB(m_xBuilder->weld_combo_box("metric"))
+    , m_xTabFT(m_xBuilder->weld_label("tablabel"))
+    , m_xTabMF(m_xBuilder->weld_metric_spin_button("tab", FieldUnit::CM))
+    , m_xUseSquaredPageMode(m_xBuilder->weld_check_button("squaremode"))
+    , m_xUseCharUnit(m_xBuilder->weld_check_button("usecharunit"))
+    , m_xWordCountED(m_xBuilder->weld_entry("wordcount"))
+    , m_xShowStandardizedPageCount(m_xBuilder->weld_check_button("standardizedpageshow"))
+    , m_xStandardizedPageSizeNF(m_xBuilder->weld_spin_button("standardpagesize"))
 {
-    get(m_pAlwaysRB, "always");
-    get(m_pRequestRB, "onrequest");
-    get(m_pNeverRB, "never");
-    get(m_pAutoUpdateFields, "updatefields");
-    get(m_pAutoUpdateCharts, "updatecharts");
-    get(m_pMetricLB, "metric");
-    get(m_pTabFT, "tablabel");
-    get(m_pTabMF, "tab");
-    get(m_pUseSquaredPageMode, "squaremode");
-    get(m_pUseCharUnit, "usecharunit");
-    get(m_pWordCountED, "wordcount");
-    get(m_pShowStandardizedPageCount, "standardizedpageshow");
-    get(m_pStandardizedPageSizeNF, "standardpagesize");
-
     for (sal_uInt32 i = 0; i < SwFieldUnitTable::Count(); ++i)
     {
         const OUString sMetric = SwFieldUnitTable::GetString(i);
@@ -117,67 +116,46 @@ SwLoadOptPage::SwLoadOptPage(vcl::Window* pParent, const SfxItemSet& rSet)
             case FieldUnit::INCH:
             {
                 // use only these metrics
-                sal_Int32 nPos = m_pMetricLB->InsertEntry( sMetric );
-                m_pMetricLB->SetEntryData( nPos, reinterpret_cast<void*>(static_cast<sal_IntPtr>(eFUnit)) );
+                m_xMetricLB->append(OUString::number(static_cast<sal_uInt32>(eFUnit)), sMetric);
                 break;
             }
             default:; //prevent warning
         }
     }
-    m_pMetricLB->SetSelectHdl(LINK(this, SwLoadOptPage, MetricHdl));
+    m_xMetricLB->connect_changed(LINK(this, SwLoadOptPage, MetricHdl));
 
     const SfxPoolItem* pItem;
     if (SfxItemState::SET == rSet.GetItemState(SID_HTML_MODE, false, &pItem)
         && static_cast<const SfxUInt16Item*>(pItem)->GetValue() & HTMLMODE_ON)
     {
-        m_pTabFT->Hide();
-        m_pTabMF->Hide();
+        m_xTabFT->hide();
+        m_xTabMF->hide();
     }
 
     SvtCJKOptions aCJKOptions;
     if(!aCJKOptions.IsAsianTypographyEnabled())
     {
-        m_pUseSquaredPageMode->Hide();
-        m_pUseCharUnit->Hide();
+        m_xUseSquaredPageMode->hide();
+        m_xUseCharUnit->hide();
     }
 
-    Link<Button*,void> aLink = LINK(this, SwLoadOptPage, StandardizedPageCountCheckHdl);
-    m_pShowStandardizedPageCount->SetClickHdl(aLink);
+    Link<weld::Button&,void> aLink = LINK(this, SwLoadOptPage, StandardizedPageCountCheckHdl);
+    m_xShowStandardizedPageCount->connect_clicked(aLink);
 }
 
 SwLoadOptPage::~SwLoadOptPage()
 {
-    disposeOnce();
 }
-
-void SwLoadOptPage::dispose()
-{
-    m_pAlwaysRB.clear();
-    m_pRequestRB.clear();
-    m_pNeverRB.clear();
-    m_pAutoUpdateFields.clear();
-    m_pAutoUpdateCharts.clear();
-    m_pMetricLB.clear();
-    m_pTabFT.clear();
-    m_pTabMF.clear();
-    m_pUseSquaredPageMode.clear();
-    m_pUseCharUnit.clear();
-    m_pWordCountED.clear();
-    m_pShowStandardizedPageCount.clear();
-    m_pStandardizedPageSizeNF.clear();
-    SfxTabPage::dispose();
-}
-
 
 VclPtr<SfxTabPage> SwLoadOptPage::Create( TabPageParent pParent,
                                           const SfxItemSet* rAttrSet )
 {
-    return VclPtr<SwLoadOptPage>::Create(pParent.pParent, *rAttrSet );
+    return VclPtr<SwLoadOptPage>::Create(pParent, *rAttrSet );
 }
 
-IMPL_LINK_NOARG(SwLoadOptPage, StandardizedPageCountCheckHdl, Button*, void)
+IMPL_LINK_NOARG(SwLoadOptPage, StandardizedPageCountCheckHdl, weld::Button&, void)
 {
-    m_pStandardizedPageSizeNF->Enable(m_pShowStandardizedPageCount->IsChecked());
+    m_xStandardizedPageSizeNF->set_sensitive(m_xShowStandardizedPageCount->get_active());
 }
 
 bool SwLoadOptPage::FillItemSet( SfxItemSet* rSet )
@@ -186,16 +164,16 @@ bool SwLoadOptPage::FillItemSet( SfxItemSet* rSet )
     SwModule* pMod = SW_MOD();
 
     sal_Int32 nNewLinkMode = AUTOMATIC;
-    if (m_pNeverRB->IsChecked())
+    if (m_xNeverRB->get_active())
         nNewLinkMode = NEVER;
-    else if (m_pRequestRB->IsChecked())
+    else if (m_xRequestRB->get_active())
         nNewLinkMode = MANUAL;
 
-    SwFieldUpdateFlags eFieldFlags = m_pAutoUpdateFields->IsChecked() ?
-        m_pAutoUpdateCharts->IsChecked() ? AUTOUPD_FIELD_AND_CHARTS : AUTOUPD_FIELD_ONLY : AUTOUPD_OFF;
+    SwFieldUpdateFlags eFieldFlags = m_xAutoUpdateFields->get_active() ?
+        m_xAutoUpdateCharts->get_active() ? AUTOUPD_FIELD_AND_CHARTS : AUTOUPD_FIELD_ONLY : AUTOUPD_OFF;
 
-    if(m_pAutoUpdateFields->IsValueChangedFromSaved() ||
-       m_pAutoUpdateCharts->IsValueChangedFromSaved())
+    if (m_xAutoUpdateFields->get_state_changed_from_saved() ||
+        m_xAutoUpdateCharts->get_state_changed_from_saved())
     {
         pMod->ApplyFieldUpdateFlags(eFieldFlags);
         if(m_pWrtShell)
@@ -217,65 +195,65 @@ bool SwLoadOptPage::FillItemSet( SfxItemSet* rSet )
         bRet = true;
     }
 
-    const sal_Int32 nMPos = m_pMetricLB->GetSelectedEntryPos();
-    if ( m_pMetricLB->IsValueChangedFromSaved() )
+    const sal_Int32 nMPos = m_xMetricLB->get_active();
+    if (m_xMetricLB->get_value_changed_from_saved())
     {
         // Double-Cast for VA3.0
-        const sal_uInt16 nFieldUnit = static_cast<sal_uInt16>(reinterpret_cast<sal_IntPtr>(m_pMetricLB->GetEntryData( nMPos )));
+        const sal_uInt16 nFieldUnit = m_xMetricLB->get_id(nMPos).toUInt32();
         rSet->Put( SfxUInt16Item( SID_ATTR_METRIC, nFieldUnit ) );
         bRet = true;
     }
 
-    if(m_pTabMF->IsVisible() && m_pTabMF->IsValueChangedFromSaved())
+    if (m_xTabMF->get_visible() && m_xTabMF->get_value_changed_from_saved())
     {
         rSet->Put(SfxUInt16Item(SID_ATTR_DEFTABSTOP,
-                    static_cast<sal_uInt16>(m_pTabMF->Denormalize(m_pTabMF->GetValue(FieldUnit::TWIP)))));
+                    static_cast<sal_uInt16>(m_xTabMF->denormalize(m_xTabMF->get_value(FieldUnit::TWIP)))));
         bRet = true;
     }
 
-    bool bIsUseCharUnitFlag = m_pUseCharUnit->IsChecked();
+    bool bIsUseCharUnitFlag = m_xUseCharUnit->get_active();
     SvtCJKOptions aCJKOptions;
     bIsUseCharUnitFlag = bIsUseCharUnitFlag && aCJKOptions.IsAsianTypographyEnabled();
-    if( (bIsUseCharUnitFlag ? 1 : 0) != m_pUseCharUnit->GetSavedValue())
+    if( (bIsUseCharUnitFlag ? 1 : 0) != m_xUseCharUnit->get_saved_state())
     {
         rSet->Put(SfxBoolItem(SID_ATTR_APPLYCHARUNIT, bIsUseCharUnitFlag ));
         bRet = true;
     }
 
-    if( m_pWordCountED->IsValueChangedFromSaved() )
+    if (m_xWordCountED->get_value_changed_from_saved())
     {
         std::shared_ptr< comphelper::ConfigurationChanges > batch(
             comphelper::ConfigurationChanges::create());
-        officecfg::Office::Writer::WordCount::AdditionalSeparators::set(m_pWordCountED->GetText(), batch);
+        officecfg::Office::Writer::WordCount::AdditionalSeparators::set(m_xWordCountED->get_text(), batch);
         batch->commit();
         bRet = true;
     }
 
-    if (m_pShowStandardizedPageCount->GetState() != m_pShowStandardizedPageCount->GetSavedValue())
+    if (m_xShowStandardizedPageCount->get_state_changed_from_saved())
     {
         std::shared_ptr< comphelper::ConfigurationChanges > batch(
             comphelper::ConfigurationChanges::create());
         officecfg::Office::Writer::WordCount::ShowStandardizedPageCount::set(
-          m_pShowStandardizedPageCount->IsChecked(),
+          m_xShowStandardizedPageCount->get_active(),
           batch);
         batch->commit();
         bRet = true;
     }
 
-    if (m_pStandardizedPageSizeNF->GetText() != m_pStandardizedPageSizeNF->GetSavedValue())
+    if (m_xStandardizedPageSizeNF->get_value_changed_from_saved())
     {
         std::shared_ptr< comphelper::ConfigurationChanges > batch(
             comphelper::ConfigurationChanges::create());
         officecfg::Office::Writer::WordCount::StandardizedPageSize::set(
-          m_pStandardizedPageSizeNF->GetValue(),
+          m_xStandardizedPageSizeNF->get_value(),
           batch);
         batch->commit();
         bRet = true;
     }
 
-    bool bIsSquaredPageModeFlag = m_pUseSquaredPageMode->IsChecked();
-    if ( bIsSquaredPageModeFlag != static_cast<bool>(m_pUseSquaredPageMode->GetSavedValue()) )
+    if (m_xUseSquaredPageMode->get_state_changed_from_saved())
     {
+        bool bIsSquaredPageModeFlag = m_xUseSquaredPageMode->get_active();
         pMod->ApplyDefaultPageMode( bIsSquaredPageModeFlag );
         if ( m_pWrtShell )
         {
@@ -309,88 +287,88 @@ void SwLoadOptPage::Reset( const SfxItemSet* rSet)
     if(AUTOUPD_GLOBALSETTING == eFieldFlags)
         eFieldFlags = pUsrPref->GetFieldUpdateFlags();
 
-    m_pAutoUpdateFields->Check(eFieldFlags != AUTOUPD_OFF);
-    m_pAutoUpdateCharts->Check(eFieldFlags == AUTOUPD_FIELD_AND_CHARTS);
+    m_xAutoUpdateFields->set_active(eFieldFlags != AUTOUPD_OFF);
+    m_xAutoUpdateCharts->set_active(eFieldFlags == AUTOUPD_FIELD_AND_CHARTS);
 
     switch (m_nOldLinkMode)
     {
-        case NEVER:     m_pNeverRB->Check();   break;
-        case MANUAL:    m_pRequestRB->Check(); break;
-        case AUTOMATIC: m_pAlwaysRB->Check();  break;
+        case NEVER:     m_xNeverRB->set_active(true);   break;
+        case MANUAL:    m_xRequestRB->set_active(true); break;
+        case AUTOMATIC: m_xAlwaysRB->set_active(true);  break;
     }
 
-    m_pAutoUpdateFields->SaveValue();
-    m_pAutoUpdateCharts->SaveValue();
-    m_pMetricLB->SetNoSelection();
+    m_xAutoUpdateFields->save_state();
+    m_xAutoUpdateCharts->save_state();
+    m_xMetricLB->set_active(-1);
     if ( rSet->GetItemState( SID_ATTR_METRIC ) >= SfxItemState::DEFAULT )
     {
         const SfxUInt16Item& rItem = rSet->Get( SID_ATTR_METRIC );
         FieldUnit eFieldUnit = static_cast<FieldUnit>(rItem.GetValue());
 
-        for ( sal_Int32 i = 0; i < m_pMetricLB->GetEntryCount(); ++i )
+        for (sal_Int32 i = 0, nEntryCount = m_xMetricLB->get_count(); i < nEntryCount; ++i)
         {
-            if ( static_cast<int>(reinterpret_cast<sal_IntPtr>(m_pMetricLB->GetEntryData( i ))) == static_cast<int>(eFieldUnit) )
+            if (m_xMetricLB->get_id(i).toUInt32() == static_cast<sal_uInt32>(eFieldUnit))
             {
-                m_pMetricLB->SelectEntryPos( i );
+                m_xMetricLB->set_active(i);
                 break;
             }
         }
-        ::SetFieldUnit(*m_pTabMF, eFieldUnit);
+        ::SetFieldUnit(*m_xTabMF, eFieldUnit);
     }
-    m_pMetricLB->SaveValue();
+    m_xMetricLB->save_value();
     if(SfxItemState::SET == rSet->GetItemState(SID_ATTR_DEFTABSTOP, false, &pItem))
     {
         m_nLastTab = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
-        m_pTabMF->SetValue(m_pTabMF->Normalize(m_nLastTab), FieldUnit::TWIP);
+        m_xTabMF->set_value(m_xTabMF->normalize(m_nLastTab), FieldUnit::TWIP);
     }
-    m_pTabMF->SaveValue();
+    m_xTabMF->save_value();
 
     //default page mode loading
     if(m_pWrtShell)
     {
         bool bSquaredPageMode = m_pWrtShell->GetDoc()->IsSquaredPageMode();
-        m_pUseSquaredPageMode->Check( bSquaredPageMode );
-        m_pUseSquaredPageMode->SaveValue();
+        m_xUseSquaredPageMode->set_active( bSquaredPageMode );
+        m_xUseSquaredPageMode->save_state();
     }
 
     if(SfxItemState::SET == rSet->GetItemState(SID_ATTR_APPLYCHARUNIT, false, &pItem))
     {
         bool bUseCharUnit = static_cast<const SfxBoolItem*>(pItem)->GetValue();
-        m_pUseCharUnit->Check(bUseCharUnit);
+        m_xUseCharUnit->set_active(bUseCharUnit);
     }
     else
     {
-        m_pUseCharUnit->Check(pUsrPref->IsApplyCharUnit());
+        m_xUseCharUnit->set_active(pUsrPref->IsApplyCharUnit());
     }
-    m_pUseCharUnit->SaveValue();
+    m_xUseCharUnit->save_state();
 
-    m_pWordCountED->SetText(officecfg::Office::Writer::WordCount::AdditionalSeparators::get());
-    m_pWordCountED->Enable(!officecfg::Office::Writer::WordCount::AdditionalSeparators::isReadOnly());
-    m_pWordCountED->SaveValue();
-    m_pShowStandardizedPageCount->Check(officecfg::Office::Writer::WordCount::ShowStandardizedPageCount::get());
-    m_pShowStandardizedPageCount->Enable(!officecfg::Office::Writer::WordCount::ShowStandardizedPageCount::isReadOnly());
-    m_pShowStandardizedPageCount->SaveValue();
-    m_pStandardizedPageSizeNF->SetValue(officecfg::Office::Writer::WordCount::StandardizedPageSize::get());
-    m_pStandardizedPageSizeNF->Enable(!officecfg::Office::Writer::WordCount::StandardizedPageSize::isReadOnly());
-    m_pStandardizedPageSizeNF->SaveValue();
-    m_pStandardizedPageSizeNF->Enable(m_pShowStandardizedPageCount->IsChecked());
+    m_xWordCountED->set_text(officecfg::Office::Writer::WordCount::AdditionalSeparators::get());
+    m_xWordCountED->set_sensitive(!officecfg::Office::Writer::WordCount::AdditionalSeparators::isReadOnly());
+    m_xWordCountED->save_value();
+    m_xShowStandardizedPageCount->set_active(officecfg::Office::Writer::WordCount::ShowStandardizedPageCount::get());
+    m_xShowStandardizedPageCount->set_sensitive(!officecfg::Office::Writer::WordCount::ShowStandardizedPageCount::isReadOnly());
+    m_xShowStandardizedPageCount->save_state();
+    m_xStandardizedPageSizeNF->set_value(officecfg::Office::Writer::WordCount::StandardizedPageSize::get());
+    m_xStandardizedPageSizeNF->set_sensitive(!officecfg::Office::Writer::WordCount::StandardizedPageSize::isReadOnly());
+    m_xStandardizedPageSizeNF->save_value();
+    m_xStandardizedPageSizeNF->set_sensitive(m_xShowStandardizedPageCount->get_active());
 }
 
-IMPL_LINK_NOARG(SwLoadOptPage, MetricHdl, ListBox&, void)
+IMPL_LINK_NOARG(SwLoadOptPage, MetricHdl, weld::ComboBox&, void)
 {
-    const sal_Int32 nMPos = m_pMetricLB->GetSelectedEntryPos();
-    if(nMPos != LISTBOX_ENTRY_NOTFOUND)
+    const sal_Int32 nMPos = m_xMetricLB->get_active();
+    if(nMPos != -1)
     {
         // Double-Cast for VA3.0
-        FieldUnit eFieldUnit = static_cast<FieldUnit>(reinterpret_cast<sal_IntPtr>(m_pMetricLB->GetEntryData( nMPos )));
-        bool bModified = m_pTabMF->IsModified();
+        FieldUnit eFieldUnit = static_cast<FieldUnit>(m_xMetricLB->get_id(nMPos).toUInt32());
+        bool bModified = m_xTabMF->get_value_changed_from_saved();
         long nVal = bModified ?
-            sal::static_int_cast<sal_Int32, sal_Int64 >( m_pTabMF->Denormalize( m_pTabMF->GetValue( FieldUnit::TWIP ) )) :
+            sal::static_int_cast<sal_Int32, sal_Int64 >( m_xTabMF->denormalize( m_xTabMF->get_value( FieldUnit::TWIP ) )) :
                 m_nLastTab;
-        ::SetFieldUnit( *m_pTabMF, eFieldUnit );
-        m_pTabMF->SetValue( m_pTabMF->Normalize( nVal ), FieldUnit::TWIP );
-        if(!bModified)
-            m_pTabMF->ClearModifyFlag();
+        ::SetFieldUnit( *m_xTabMF, eFieldUnit );
+        m_xTabMF->set_value( m_xTabMF->normalize( nVal ), FieldUnit::TWIP );
+        if (!bModified)
+            m_xTabMF->save_value();
     }
 }
 

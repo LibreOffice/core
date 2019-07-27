@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkAdjustment" id="adjustment-sps">
@@ -64,7 +64,6 @@
                             <property name="xalign">0</property>
                             <property name="active">True</property>
                             <property name="draw_indicator">True</property>
-                            <property name="group">onrequest</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -80,7 +79,7 @@
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
-                            <property name="group">never</property>
+                            <property name="group">always</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -224,10 +223,10 @@
                           <object class="GtkLabel" id="label5">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">1</property>
                             <property name="label" translatable="yes" context="optgeneralpage|label5">_Measurement unit:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">metric</property>
+                            <property name="xalign">1</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -249,10 +248,10 @@
                           <object class="GtkLabel" id="tablabel">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">1</property>
                             <property name="label" translatable="yes" context="optgeneralpage|tablabel">_Tab stops:</property>
                             <property name="use_underline">True</property>
-                            <property name="mnemonic_widget">tab:0.00cm</property>
+                            <property name="mnemonic_widget">tab</property>
+                            <property name="xalign">1</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -260,11 +259,12 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkSpinButton" id="tab:0.00cm">
+                          <object class="GtkSpinButton" id="tab">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="halign">start</property>
-                            <property name="text" translatable="no">1.25</property>
+                            <property name="activates_default">True</property>
+                            <property name="text">1.25</property>
                             <property name="adjustment">adjustment1</property>
                             <property name="digits">2</property>
                             <property name="value">1.25</property>
@@ -373,10 +373,10 @@
                           <object class="GtkLabel" id="label7">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">0</property>
                             <property name="label" translatable="yes" context="optgeneralpage|label7">_Additional separators:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">wordcount</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -388,6 +388,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="hexpand">True</property>
+                            <property name="activates_default">True</property>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -434,10 +435,10 @@
                                   <object class="GtkLabel" id="labelstandardpages">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="xalign">0</property>
                                     <property name="label" translatable="yes" context="optgeneralpage|labelstandardpages">Characters per standardized page:</property>
                                     <property name="use_underline">True</property>
                                     <property name="mnemonic_widget">standardpagesize</property>
+                                    <property name="xalign">0</property>
                                   </object>
                                   <packing>
                                     <property name="left_attach">0</property>
@@ -449,7 +450,8 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="halign">start</property>
-                                    <property name="text" translatable="no">1800</property>
+                                    <property name="activates_default">True</property>
+                                    <property name="text">1800</property>
                                     <property name="adjustment">adjustment-sps</property>
                                     <property name="value">1800</property>
                                   </object>
