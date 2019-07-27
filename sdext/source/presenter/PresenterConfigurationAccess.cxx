@@ -182,10 +182,9 @@ void PresenterConfigurationAccess::ForAll (
 
     ::std::vector<Any> aValues(rArguments.size());
     Sequence<OUString> aKeys (rxContainer->getElementNames());
-    for (sal_Int32 nItemIndex=0; nItemIndex<aKeys.getLength(); ++nItemIndex)
+    for (const OUString& rsKey : aKeys)
     {
         bool bHasAllValues (true);
-        const OUString& rsKey (aKeys[nItemIndex]);
         Reference<container::XNameAccess> xSetItem (rxContainer->getByName(rsKey), UNO_QUERY);
         Reference<beans::XPropertySet> xSet (xSetItem, UNO_QUERY);
         OSL_ASSERT(xSet.is());
@@ -215,9 +214,8 @@ void PresenterConfigurationAccess::ForAll (
     if (rxContainer.is())
     {
         Sequence<OUString> aKeys (rxContainer->getElementNames());
-        for (sal_Int32 nItemIndex=0; nItemIndex<aKeys.getLength(); ++nItemIndex)
+        for (const OUString& rsKey : aKeys)
         {
-            const OUString& rsKey (aKeys[nItemIndex]);
             Reference<beans::XPropertySet> xSet (rxContainer->getByName(rsKey), UNO_QUERY);
             if (xSet.is())
                 rProcessor(rsKey, xSet);
@@ -232,13 +230,13 @@ Any PresenterConfigurationAccess::Find (
     if (rxContainer.is())
     {
         Sequence<OUString> aKeys (rxContainer->getElementNames());
-        for (sal_Int32 nItemIndex=0; nItemIndex<aKeys.getLength(); ++nItemIndex)
+        for (const auto& rKey : aKeys)
         {
             Reference<beans::XPropertySet> xProperties (
-                rxContainer->getByName(aKeys[nItemIndex]),
+                rxContainer->getByName(rKey),
                 UNO_QUERY);
             if (xProperties.is())
-                if (rPredicate(aKeys[nItemIndex], xProperties))
+                if (rPredicate(rKey, xProperties))
                     return Any(xProperties);
         }
     }

@@ -46,11 +46,10 @@ void OptimizerSettings::LoadSettingsFromConfiguration( const Reference< XNameAcc
         return;
 
     const Sequence< OUString > aElements( rSettings->getElementNames() );
-    for ( int i = 0; i < aElements.getLength(); i++ )
+    for ( const OUString& aPropertyName : aElements )
     {
         try
         {
-            const OUString aPropertyName( aElements[ i ] );
             Any aValue( rSettings->getByName( aPropertyName ) );
             switch( TKGet( aPropertyName ) )
             {
@@ -177,11 +176,11 @@ void ConfigurationAccess::LoadStrings()
             if ( xSet.is() )
             {
                 const Sequence< OUString > aElements( xSet->getElementNames() );
-                for ( int i = 0; i < aElements.getLength(); i++ )
+                for ( const auto& rElement : aElements )
                 {
                     try
                     {
-                        OUString aString, aPropertyName( aElements[ i ] );
+                        OUString aString, aPropertyName( rElement );
                         if ( xSet->getByName( aPropertyName ) >>= aString )
                             maStrings[ TKGet( aPropertyName ) ] = aString;
                     }
@@ -217,11 +216,11 @@ void ConfigurationAccess::LoadConfiguration()
             if ( xSet.is() )
             {
                 const Sequence< OUString > aElements( xSet->getElementNames() );
-                for ( int i = 0; i < aElements.getLength(); i++ )
+                for ( const auto& rElement : aElements )
                 {
                     try
                     {
-                        OUString aPath( "Settings/Templates/" + aElements[ i ] );
+                        OUString aPath( "Settings/Templates/" + rElement );
                         Reference< container::XNameAccess > xTemplates( GetConfigurationNode( xRoot, aPath ), UNO_QUERY );
                         if ( xTemplates.is() )
                         {
@@ -248,7 +247,6 @@ void ConfigurationAccess::SaveConfiguration()
     {
         do
         {
-            int i;
             Reference<util::XChangesBatch> xRoot( OpenConfiguration( false ), UNO_QUERY_THROW );
 
             // storing the last used settings
@@ -261,8 +259,8 @@ void ConfigurationAccess::SaveConfiguration()
             Reference< container::XNameContainer > xNameContainer( xSet, UNO_QUERY_THROW );
 
             const Sequence< OUString > aElements( xSet->getElementNames() );
-            for( i = 0; i < aElements.getLength(); i++ )
-                xNameContainer->removeByName( aElements[ i ] );
+            for( const auto& rElement : aElements )
+                xNameContainer->removeByName( rElement );
 
             for( std::vector<OptimizerSettings>::size_type k = 1; k < maSettings.size(); k++ )
             {

@@ -701,7 +701,7 @@ void SAL_CALL PresenterAccessible::disposing (const css::lang::EventObject& rEve
 
 void SAL_CALL PresenterAccessible::initialize (const css::uno::Sequence<css::uno::Any>& rArguments)
 {
-    if (rArguments.getLength() >= 1)
+    if (rArguments.hasElements())
     {
         mxAccessibleParent.set(rArguments[0], UNO_QUERY);
         if (mpAccessibleConsole.is())
@@ -1257,12 +1257,8 @@ sal_Bool SAL_CALL AccessibleStateSet::contains (sal_Int16 nState)
 
 sal_Bool SAL_CALL AccessibleStateSet::containsAll (const css::uno::Sequence<sal_Int16>& rStateSet)
 {
-    for (sal_Int32 nIndex=0,nCount=rStateSet.getLength(); nIndex<nCount; ++nIndex)
-    {
-        if ((mnStateSet & GetStateMask(rStateSet[nIndex])) == 0)
-            return false;
-    }
-    return true;
+    return std::none_of(rStateSet.begin(), rStateSet.end(),
+        [this](const sal_Int16 nState) { return (mnStateSet & GetStateMask(nState)) == 0; });
 }
 
 css::uno::Sequence<sal_Int16> SAL_CALL AccessibleStateSet::getStates()

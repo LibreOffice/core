@@ -548,13 +548,11 @@ uno::Reference< io::XStream > getAdditionalStream( const OUString&              
                                 }
                                 if( ! bAuthenticated )
                                 {
-                                    const beans::PropertyValue* pAttribs = rFilterData.getConstArray();
-                                    sal_Int32 nAttribs = rFilterData.getLength();
                                     uno::Reference< task::XInteractionHandler > xIntHdl;
-                                    for( sal_Int32 i = 0; i < nAttribs; i++ )
+                                    for( const beans::PropertyValue& rAttrib : rFilterData )
                                     {
-                                        if ( pAttribs[i].Name == "InteractionHandler" )
-                                            pAttribs[i].Value >>= xIntHdl;
+                                        if ( rAttrib.Name == "InteractionHandler" )
+                                            rAttrib.Value >>= xIntHdl;
                                     }
                                     if( ! bMayUseUI || ! xIntHdl.is() )
                                     {

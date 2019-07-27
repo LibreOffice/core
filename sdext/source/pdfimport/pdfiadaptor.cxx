@@ -86,14 +86,10 @@ sal_Bool SAL_CALL PDFIHybridAdaptor::filter( const uno::Sequence< beans::Propert
         if( ! xSubStream.is() )
         {
             uno::Reference< io::XInputStream > xInput;
-            for( sal_Int32 i = 0; i < nAttribs; i++ )
-            {
-                if ( pAttribs[i].Name == "InputStream" )
-                {
-                    pAttribs[i].Value >>= xInput;
-                    break;
-                }
-            }
+            auto pAttr = std::find_if(rFilterData.begin(), rFilterData.end(),
+                [](const beans::PropertyValue& rAttr) { return rAttr.Name == "InputStream"; });
+            if (pAttr != rFilterData.end())
+                pAttr->Value >>= xInput;
             if( xInput.is() )
             {
                 // TODO(P2): extracting hybrid substream twice - once during detection, second time here
@@ -284,23 +280,21 @@ sal_Bool SAL_CALL PDFIRawAdaptor::importer( const uno::Sequence< beans::Property
     OUString aURL;
     OUString aPwd;
     OUString aFilterOptions;
-    const beans::PropertyValue* pAttribs = rSourceData.getConstArray();
-    sal_Int32 nAttribs = rSourceData.getLength();
-    for( sal_Int32 i = 0; i < nAttribs; i++, pAttribs++ )
+    for( const beans::PropertyValue& rAttrib : rSourceData )
     {
-        SAL_INFO("sdext.pdfimport", "importer Attrib: " << pAttribs->Name );
-        if ( pAttribs->Name == "InputStream" )
-            pAttribs->Value >>= xInput;
-        else if ( pAttribs->Name == "URL" )
-            pAttribs->Value >>= aURL;
-        else if ( pAttribs->Name == "StatusIndicator" )
-            pAttribs->Value >>= xStatus;
-        else if ( pAttribs->Name == "InteractionHandler" )
-            pAttribs->Value >>= xInteractionHandler;
-        else if ( pAttribs->Name == "Password" )
-            pAttribs->Value >>= aPwd;
-        else if ( pAttribs->Name == "FilterOptions" )
-            pAttribs->Value >>= aFilterOptions;
+        SAL_INFO("sdext.pdfimport", "importer Attrib: " << rAttrib.Name );
+        if ( rAttrib.Name == "InputStream" )
+            rAttrib.Value >>= xInput;
+        else if ( rAttrib.Name == "URL" )
+            rAttrib.Value >>= aURL;
+        else if ( rAttrib.Name == "StatusIndicator" )
+            rAttrib.Value >>= xStatus;
+        else if ( rAttrib.Name == "InteractionHandler" )
+            rAttrib.Value >>= xInteractionHandler;
+        else if ( rAttrib.Name == "Password" )
+            rAttrib.Value >>= aPwd;
+        else if ( rAttrib.Name == "FilterOptions" )
+            rAttrib.Value >>= aFilterOptions;
     }
     if( !xInput.is() )
         return false;

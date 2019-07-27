@@ -32,6 +32,7 @@
 #include <com/sun/star/util/Color.hpp>
 #include <osl/diagnose.h>
 #include <map>
+#include <numeric>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -330,13 +331,8 @@ bool PresenterTheme::ConvertToColor (
     Sequence<sal_Int8> aByteSequence;
     if (rColorSequence >>= aByteSequence)
     {
-        const sal_Int32 nByteCount (aByteSequence.getLength());
-        const sal_uInt8* pArray = reinterpret_cast<const sal_uInt8*>(aByteSequence.getConstArray());
-        rColor = 0;
-        for (sal_Int32 nIndex=0; nIndex<nByteCount; ++nIndex)
-        {
-            rColor = (rColor << 8) | *pArray++;
-        }
+        rColor = std::accumulate(aByteSequence.begin(), aByteSequence.end(), sal_uInt32(0),
+            [](const sal_uInt32 nRes, const sal_uInt8 nByte) { return (nRes << 8) | nByte; });
         return true;
     }
     else
@@ -763,9 +759,8 @@ std::shared_ptr<PresenterTheme::Theme> ReadContext::ReadTheme (
     {
         // Iterate over all themes and search the one with the given name.
         Sequence<OUString> aKeys (xThemes->getElementNames());
-        for (sal_Int32 nItemIndex=0; nItemIndex < aKeys.getLength(); ++nItemIndex)
+        for (const OUString& rsKey : aKeys)
         {
-            const OUString& rsKey (aKeys[nItemIndex]);
             Reference<container::XHierarchicalNameAccess> xTheme (
                 xThemes->getByName(rsKey), UNO_QUERY);
             if (xTheme.is())
