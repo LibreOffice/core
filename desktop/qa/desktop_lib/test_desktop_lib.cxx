@@ -2649,13 +2649,13 @@ void DesktopLOKTest::testComplexSelection()
     static const OString aText("hello world");
 
     // Certainly not complex.
-    CPPUNIT_ASSERT_EQUAL((int)LOK_SELTYPE_NONE, pDocument->pClass->getSelectionType(pDocument));
+    CPPUNIT_ASSERT_EQUAL(static_cast<int>(LOK_SELTYPE_NONE), pDocument->pClass->getSelectionType(pDocument));
 
     // Paste text.
     CPPUNIT_ASSERT(pDocument->pClass->paste(pDocument, "text/plain;charset=utf-8", aText.getStr(), aText.getLength()));
 
     // No selection.
-    CPPUNIT_ASSERT_EQUAL((int)LOK_SELTYPE_NONE, pDocument->pClass->getSelectionType(pDocument));
+    CPPUNIT_ASSERT_EQUAL(static_cast<int>(LOK_SELTYPE_NONE), pDocument->pClass->getSelectionType(pDocument));
 
     // Paste an image.
     OUString aFileURL;
@@ -2689,7 +2689,7 @@ void DesktopLOKTest::testComplexSelection()
     free(pText);
 
     // We expect this to be complex.
-    CPPUNIT_ASSERT_EQUAL((int)LOK_SELTYPE_COMPLEX, pDocument->pClass->getSelectionType(pDocument));
+    CPPUNIT_ASSERT_EQUAL(static_cast<int>(LOK_SELTYPE_COMPLEX), pDocument->pClass->getSelectionType(pDocument));
 }
 
 namespace {
