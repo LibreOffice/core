@@ -2124,46 +2124,31 @@ void SwRedlineOptionsTabPage::InitFontStyle(SvxFontPrevWindow& rExampleWin)
     rExampleWin.Invalidate();
 }
 
-SwCompareOptionsTabPage::SwCompareOptionsTabPage(  vcl::Window* pParent, const SfxItemSet& rSet )
-    : SfxTabPage( pParent,"OptComparison","modules/swriter/ui/optcomparison.ui", &rSet )
+SwCompareOptionsTabPage::SwCompareOptionsTabPage(TabPageParent pParent, const SfxItemSet& rSet)
+    : SfxTabPage(pParent, "modules/swriter/ui/optcomparison.ui", "OptComparison", &rSet)
+    , m_xAutoRB(m_xBuilder->weld_radio_button("auto"))
+    , m_xWordRB(m_xBuilder->weld_radio_button("byword"))
+    , m_xCharRB(m_xBuilder->weld_radio_button("bycharacter"))
+    , m_xRsidCB(m_xBuilder->weld_check_button("useRSID"))
+    , m_xIgnoreCB(m_xBuilder->weld_check_button("ignore"))
+    , m_xLenNF(m_xBuilder->weld_spin_button("ignorelen"))
+    , m_xStoreRsidCB(m_xBuilder->weld_check_button("storeRSID"))
 {
-    get(m_pAutoRB,"auto");
-    get(m_pWordRB, "byword");
-    get(m_pCharRB, "bycharacter");
+    Link<weld::Button&,void> aLnk( LINK( this, SwCompareOptionsTabPage, ComparisonHdl ) );
+    m_xAutoRB->connect_clicked( aLnk );
+    m_xWordRB->connect_clicked( aLnk );
+    m_xCharRB->connect_clicked( aLnk );
 
-    get(m_pRsidCB, "useRSID");
-    get(m_pIgnoreCB, "ignore");
-    get(m_pLenNF, "ignorelen");
-    get(m_pStoreRsidCB, "storeRSID");
-
-    Link<Button*,void> aLnk( LINK( this, SwCompareOptionsTabPage, ComparisonHdl ) );
-    m_pAutoRB->SetClickHdl( aLnk );
-    m_pWordRB->SetClickHdl( aLnk );
-    m_pCharRB->SetClickHdl( aLnk );
-
-    m_pIgnoreCB->SetClickHdl( LINK( this, SwCompareOptionsTabPage, IgnoreHdl) );
+    m_xIgnoreCB->connect_clicked( LINK( this, SwCompareOptionsTabPage, IgnoreHdl) );
 }
 
 SwCompareOptionsTabPage::~SwCompareOptionsTabPage()
 {
-    disposeOnce();
-}
-
-void SwCompareOptionsTabPage::dispose()
-{
-    m_pAutoRB.clear();
-    m_pWordRB.clear();
-    m_pCharRB.clear();
-    m_pRsidCB.clear();
-    m_pIgnoreCB.clear();
-    m_pLenNF.clear();
-    m_pStoreRsidCB.clear();
-    SfxTabPage::dispose();
 }
 
 VclPtr<SfxTabPage> SwCompareOptionsTabPage::Create( TabPageParent pParent, const SfxItemSet* rAttrSet )
 {
-    return VclPtr<SwCompareOptionsTabPage>::Create( pParent.pParent, *rAttrSet );
+    return VclPtr<SwCompareOptionsTabPage>::Create( pParent, *rAttrSet );
 }
 
 bool SwCompareOptionsTabPage::FillItemSet( SfxItemSet* )
@@ -2171,41 +2156,41 @@ bool SwCompareOptionsTabPage::FillItemSet( SfxItemSet* )
     bool bRet = false;
     SwModuleOptions *pOpt = SW_MOD()->GetModuleConfig();
 
-    if( m_pAutoRB->IsValueChangedFromSaved() ||
-        m_pWordRB->IsValueChangedFromSaved() ||
-        m_pCharRB->IsValueChangedFromSaved() )
+    if( m_xAutoRB->get_state_changed_from_saved() ||
+        m_xWordRB->get_state_changed_from_saved() ||
+        m_xCharRB->get_state_changed_from_saved() )
     {
         SwCompareMode eCmpMode = SwCompareMode::Auto;
 
-        if ( m_pAutoRB->IsChecked() ) eCmpMode = SwCompareMode::Auto;
-        if ( m_pWordRB->IsChecked() ) eCmpMode = SwCompareMode::ByWord;
-        if ( m_pCharRB->IsChecked() ) eCmpMode = SwCompareMode::ByChar;
+        if ( m_xAutoRB->get_active() ) eCmpMode = SwCompareMode::Auto;
+        if ( m_xWordRB->get_active() ) eCmpMode = SwCompareMode::ByWord;
+        if ( m_xCharRB->get_active() ) eCmpMode = SwCompareMode::ByChar;
 
         pOpt->SetCompareMode( eCmpMode );
         bRet = true;
     }
 
-    if( m_pRsidCB->IsValueChangedFromSaved() )
+    if( m_xRsidCB->get_state_changed_from_saved() )
     {
-        pOpt->SetUseRsid( m_pRsidCB->IsChecked() );
+        pOpt->SetUseRsid( m_xRsidCB->get_active() );
         bRet = true;
     }
 
-    if( m_pIgnoreCB->IsValueChangedFromSaved() )
+    if( m_xIgnoreCB->get_state_changed_from_saved() )
     {
-        pOpt->SetIgnorePieces( m_pIgnoreCB->IsChecked() );
+        pOpt->SetIgnorePieces( m_xIgnoreCB->get_active() );
         bRet = true;
     }
 
-    if( m_pLenNF->IsModified() )
+    if( m_xLenNF->get_value_changed_from_saved() )
     {
-        pOpt->SetPieceLen( m_pLenNF->GetValue() );
+        pOpt->SetPieceLen( m_xLenNF->get_value() );
         bRet = true;
     }
 
-    if (m_pStoreRsidCB->IsValueChangedFromSaved())
+    if (m_xStoreRsidCB->get_state_changed_from_saved())
     {
-        pOpt->SetStoreRsid(m_pStoreRsidCB->IsChecked());
+        pOpt->SetStoreRsid(m_xStoreRsidCB->get_active());
         bRet = true;
     }
 
@@ -2219,55 +2204,55 @@ void SwCompareOptionsTabPage::Reset( const SfxItemSet* )
     SwCompareMode eCmpMode = pOpt->GetCompareMode();
     if( eCmpMode == SwCompareMode::Auto )
     {
-        m_pAutoRB->Check();
-        m_pRsidCB->Disable();
-        m_pIgnoreCB->Disable();
-        m_pLenNF->Disable();
+        m_xAutoRB->set_active(true);
+        m_xRsidCB->set_sensitive(false);
+        m_xIgnoreCB->set_sensitive(false);
+        m_xLenNF->set_sensitive(false);
     }
     else if( eCmpMode == SwCompareMode::ByWord )
     {
-        m_pWordRB->Check();
-        m_pRsidCB->Enable();
-        m_pIgnoreCB->Enable();
-        m_pLenNF->Enable();
+        m_xWordRB->set_active(true);
+        m_xRsidCB->set_sensitive(true);
+        m_xIgnoreCB->set_sensitive(true);
+        m_xLenNF->set_sensitive(true);
     }
     else if( eCmpMode == SwCompareMode::ByChar)
     {
-        m_pCharRB->Check();
-        m_pRsidCB->Enable();
-        m_pIgnoreCB->Enable();
-        m_pLenNF->Enable();
+        m_xCharRB->set_active(true);
+        m_xRsidCB->set_sensitive(true);
+        m_xIgnoreCB->set_sensitive(true);
+        m_xLenNF->set_sensitive(true);
     }
-    m_pAutoRB->SaveValue();
-    m_pWordRB->SaveValue();
-    m_pCharRB->SaveValue();
+    m_xAutoRB->save_state();
+    m_xWordRB->save_state();
+    m_xCharRB->save_state();
 
-    m_pRsidCB->Check( pOpt->IsUseRsid() );
-    m_pRsidCB->SaveValue();
+    m_xRsidCB->set_active( pOpt->IsUseRsid() );
+    m_xRsidCB->save_state();
 
-    m_pIgnoreCB->Check( pOpt->IsIgnorePieces() );
-    m_pIgnoreCB->SaveValue();
+    m_xIgnoreCB->set_active( pOpt->IsIgnorePieces() );
+    m_xIgnoreCB->save_state();
 
-    m_pLenNF->Enable( m_pIgnoreCB->IsChecked() && eCmpMode != SwCompareMode::Auto );
+    m_xLenNF->set_sensitive( m_xIgnoreCB->get_active() && eCmpMode != SwCompareMode::Auto );
 
-    m_pLenNF->SetValue( pOpt->GetPieceLen() );
-    m_pLenNF->SaveValue();
+    m_xLenNF->set_value( pOpt->GetPieceLen() );
+    m_xLenNF->save_value();
 
-    m_pStoreRsidCB->Check(pOpt->IsStoreRsid());
-    m_pStoreRsidCB->SaveValue();
+    m_xStoreRsidCB->set_active(pOpt->IsStoreRsid());
+    m_xStoreRsidCB->save_state();
 }
 
-IMPL_LINK_NOARG(SwCompareOptionsTabPage, ComparisonHdl, Button*, void)
+IMPL_LINK_NOARG(SwCompareOptionsTabPage, ComparisonHdl, weld::Button&, void)
 {
-    bool bChecked = !m_pAutoRB->IsChecked();
-    m_pRsidCB->Enable( bChecked );
-    m_pIgnoreCB->Enable( bChecked );
-    m_pLenNF->Enable( bChecked && m_pIgnoreCB->IsChecked() );
+    bool bChecked = !m_xAutoRB->get_active();
+    m_xRsidCB->set_sensitive( bChecked );
+    m_xIgnoreCB->set_sensitive( bChecked );
+    m_xLenNF->set_sensitive( bChecked && m_xIgnoreCB->get_active() );
 }
 
-IMPL_LINK_NOARG(SwCompareOptionsTabPage, IgnoreHdl, Button*, void)
+IMPL_LINK_NOARG(SwCompareOptionsTabPage, IgnoreHdl, weld::Button&, void)
 {
-    m_pLenNF->Enable( m_pIgnoreCB->IsChecked() );
+    m_xLenNF->set_sensitive(m_xIgnoreCB->get_active());
 }
 
 #ifdef DBG_UTIL
