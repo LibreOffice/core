@@ -2272,49 +2272,31 @@ IMPL_LINK_NOARG(SwCompareOptionsTabPage, IgnoreHdl, Button*, void)
 
 #ifdef DBG_UTIL
 
-SwTestTabPage::SwTestTabPage(vcl::Window* pParent, const SfxItemSet& rCoreSet)
-    : SfxTabPage( pParent, "OptTestPage", "modules/swriter/ui/opttestpage.ui", &rCoreSet)
+SwTestTabPage::SwTestTabPage(TabPageParent pParent, const SfxItemSet& rCoreSet)
+    : SfxTabPage( pParent, "modules/swriter/ui/opttestpage.ui", "OptTestPage", &rCoreSet)
     , bAttrModified( false )
+    , m_xTest1CBox(m_xBuilder->weld_check_button("unused"))
+    , m_xTest2CBox(m_xBuilder->weld_check_button("dynamic"))
+    , m_xTest3CBox(m_xBuilder->weld_check_button("nocalm"))
+    , m_xTest4CBox(m_xBuilder->weld_check_button("wysiwygdbg"))
+    , m_xTest5CBox(m_xBuilder->weld_check_button("noidle"))
+    , m_xTest6CBox(m_xBuilder->weld_check_button("noscreenadj"))
+    , m_xTest7CBox(m_xBuilder->weld_check_button("winformat"))
+    , m_xTest8CBox(m_xBuilder->weld_check_button("noscroll"))
+    , m_xTest9CBox(m_xBuilder->weld_check_button("DrawingLayerNotLoading"))
+    , m_xTest10CBox(m_xBuilder->weld_check_button("AutoFormatByInput"))
 {
-    get(m_pTest1CBox, "unused");
-    get(m_pTest2CBox, "dynamic");
-    get(m_pTest3CBox, "nocalm");
-    get(m_pTest4CBox, "wysiwygdbg");
-    get(m_pTest5CBox, "noidle");
-    get(m_pTest6CBox, "noscreenadj");
-    get(m_pTest7CBox, "winformat");
-    get(m_pTest8CBox, "noscroll");
-    get(m_pTest9CBox, "DrawingLayerNotLoading");
-    get(m_pTest10CBox, "AutoFormatByInput");
-
     Init();
-
 }
 
 SwTestTabPage::~SwTestTabPage()
 {
-    disposeOnce();
-}
-
-void SwTestTabPage::dispose()
-{
-    m_pTest1CBox.clear();
-    m_pTest2CBox.clear();
-    m_pTest3CBox.clear();
-    m_pTest4CBox.clear();
-    m_pTest5CBox.clear();
-    m_pTest6CBox.clear();
-    m_pTest7CBox.clear();
-    m_pTest8CBox.clear();
-    m_pTest9CBox.clear();
-    m_pTest10CBox.clear();
-    SfxTabPage::dispose();
 }
 
 VclPtr<SfxTabPage> SwTestTabPage::Create( TabPageParent pParent,
                                           const SfxItemSet* rAttrSet )
 {
-    return VclPtr<SwTestTabPage>::Create(pParent.pParent, *rAttrSet);
+    return VclPtr<SwTestTabPage>::Create(pParent, *rAttrSet);
 }
 
 bool    SwTestTabPage::FillItemSet( SfxItemSet* rCoreSet )
@@ -2323,16 +2305,16 @@ bool    SwTestTabPage::FillItemSet( SfxItemSet* rCoreSet )
     if ( bAttrModified )
     {
         SwTestItem aTestItem;
-        aTestItem.bTest1=m_pTest1CBox->IsChecked();
-        aTestItem.bTest2=m_pTest2CBox->IsChecked();
-        aTestItem.bTest3=m_pTest3CBox->IsChecked();
-        aTestItem.bTest4=m_pTest4CBox->IsChecked();
-        aTestItem.bTest5=m_pTest5CBox->IsChecked();
-        aTestItem.bTest6=m_pTest6CBox->IsChecked();
-        aTestItem.bTest7=m_pTest7CBox->IsChecked();
-        aTestItem.bTest8=m_pTest8CBox->IsChecked();
-        aTestItem.bTest9=m_pTest9CBox->IsChecked();
-        aTestItem.bTest10=m_pTest10CBox->IsChecked();
+        aTestItem.bTest1=m_xTest1CBox->get_active();
+        aTestItem.bTest2=m_xTest2CBox->get_active();
+        aTestItem.bTest3=m_xTest3CBox->get_active();
+        aTestItem.bTest4=m_xTest4CBox->get_active();
+        aTestItem.bTest5=m_xTest5CBox->get_active();
+        aTestItem.bTest6=m_xTest6CBox->get_active();
+        aTestItem.bTest7=m_xTest7CBox->get_active();
+        aTestItem.bTest8=m_xTest8CBox->get_active();
+        aTestItem.bTest9=m_xTest9CBox->get_active();
+        aTestItem.bTest10=m_xTest10CBox->get_active();
         rCoreSet->Put(aTestItem);
     }
     return bAttrModified;
@@ -2346,36 +2328,36 @@ void SwTestTabPage::Reset( const SfxItemSet* )
     if( SfxItemState::SET == rSet.GetItemState( FN_PARAM_SWTEST , false,
                                     reinterpret_cast<const SfxPoolItem**>(&pTestAttr) ))
     {
-        m_pTest1CBox->Check(pTestAttr->bTest1);
-        m_pTest2CBox->Check(pTestAttr->bTest2);
-        m_pTest3CBox->Check(pTestAttr->bTest3);
-        m_pTest4CBox->Check(pTestAttr->bTest4);
-        m_pTest5CBox->Check(pTestAttr->bTest5);
-        m_pTest6CBox->Check(pTestAttr->bTest6);
-        m_pTest7CBox->Check(pTestAttr->bTest7);
-        m_pTest8CBox->Check(pTestAttr->bTest8);
-        m_pTest9CBox->Check(pTestAttr->bTest9);
-        m_pTest10CBox->Check(pTestAttr->bTest10);
+        m_xTest1CBox->set_active(pTestAttr->bTest1);
+        m_xTest2CBox->set_active(pTestAttr->bTest2);
+        m_xTest3CBox->set_active(pTestAttr->bTest3);
+        m_xTest4CBox->set_active(pTestAttr->bTest4);
+        m_xTest5CBox->set_active(pTestAttr->bTest5);
+        m_xTest6CBox->set_active(pTestAttr->bTest6);
+        m_xTest7CBox->set_active(pTestAttr->bTest7);
+        m_xTest8CBox->set_active(pTestAttr->bTest8);
+        m_xTest9CBox->set_active(pTestAttr->bTest9);
+        m_xTest10CBox->set_active(pTestAttr->bTest10);
     }
 }
 
 void SwTestTabPage::Init()
 {
     // handler
-    Link<Button*,void> aLk = LINK( this, SwTestTabPage, AutoClickHdl );
-    m_pTest1CBox->SetClickHdl( aLk );
-    m_pTest2CBox->SetClickHdl( aLk );
-    m_pTest3CBox->SetClickHdl( aLk );
-    m_pTest4CBox->SetClickHdl( aLk );
-    m_pTest5CBox->SetClickHdl( aLk );
-    m_pTest6CBox->SetClickHdl( aLk );
-    m_pTest7CBox->SetClickHdl( aLk );
-    m_pTest8CBox->SetClickHdl( aLk );
-    m_pTest9CBox->SetClickHdl( aLk );
-    m_pTest10CBox->SetClickHdl( aLk );
+    Link<weld::Button&,void> aLk = LINK( this, SwTestTabPage, AutoClickHdl );
+    m_xTest1CBox->connect_clicked( aLk );
+    m_xTest2CBox->connect_clicked( aLk );
+    m_xTest3CBox->connect_clicked( aLk );
+    m_xTest4CBox->connect_clicked( aLk );
+    m_xTest5CBox->connect_clicked( aLk );
+    m_xTest6CBox->connect_clicked( aLk );
+    m_xTest7CBox->connect_clicked( aLk );
+    m_xTest8CBox->connect_clicked( aLk );
+    m_xTest9CBox->connect_clicked( aLk );
+    m_xTest10CBox->connect_clicked( aLk );
 }
 
-IMPL_LINK_NOARG(SwTestTabPage, AutoClickHdl, Button*, void)
+IMPL_LINK_NOARG(SwTestTabPage, AutoClickHdl, weld::Button&, void)
 {
     bAttrModified = true;
 }

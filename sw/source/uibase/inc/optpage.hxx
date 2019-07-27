@@ -346,9 +346,8 @@ public:
 class SwTestTabPage : public SfxTabPage
 {
 public:
-    SwTestTabPage(vcl::Window* pParent, const SfxItemSet& rSet);
+    SwTestTabPage(TabPageParent pParent, const SfxItemSet& rSet);
     virtual ~SwTestTabPage() override;
-    virtual void dispose() override;
 
     static VclPtr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rAttrSet);
 
@@ -356,21 +355,21 @@ public:
     virtual void Reset( const SfxItemSet* rSet ) override;
 
 private:
-    VclPtr<CheckBox> m_pTest1CBox;
-    VclPtr<CheckBox> m_pTest2CBox;
-    VclPtr<CheckBox> m_pTest3CBox;
-    VclPtr<CheckBox> m_pTest4CBox;
-    VclPtr<CheckBox> m_pTest5CBox;
-    VclPtr<CheckBox> m_pTest6CBox;
-    VclPtr<CheckBox> m_pTest7CBox;
-    VclPtr<CheckBox> m_pTest8CBox;
-    VclPtr<CheckBox> m_pTest9CBox;
-    VclPtr<CheckBox> m_pTest10CBox;
-
     bool bAttrModified;
 
+    std::unique_ptr<weld::CheckButton> m_xTest1CBox;
+    std::unique_ptr<weld::CheckButton> m_xTest2CBox;
+    std::unique_ptr<weld::CheckButton> m_xTest3CBox;
+    std::unique_ptr<weld::CheckButton> m_xTest4CBox;
+    std::unique_ptr<weld::CheckButton> m_xTest5CBox;
+    std::unique_ptr<weld::CheckButton> m_xTest6CBox;
+    std::unique_ptr<weld::CheckButton> m_xTest7CBox;
+    std::unique_ptr<weld::CheckButton> m_xTest8CBox;
+    std::unique_ptr<weld::CheckButton> m_xTest9CBox;
+    std::unique_ptr<weld::CheckButton> m_xTest10CBox;
+
     void Init();
-    DECL_LINK(AutoClickHdl, Button*, void);
+    DECL_LINK(AutoClickHdl, weld::Button&, void);
 };
 #endif // DBG_UTIL
 
