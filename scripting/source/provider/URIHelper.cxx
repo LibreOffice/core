@@ -144,23 +144,21 @@ ScriptingFrameworkURIHelper::initBaseURI()
     uno::Sequence< OUString > children =
         m_xSimpleFileAccess->getFolderContents( uri, true );
 
-    for ( sal_Int32 i = 0; i < children.getLength(); i++ )
-    {
-        OUString child = children[i];
+    auto pChild = std::find_if(children.begin(), children.end(), [&test](const OUString& child) {
         sal_Int32 idx = child.lastIndexOf(test);
-
-        if ( idx != -1 && (idx + test.getLength()) == child.getLength() )
+        return idx != -1 && (idx + test.getLength()) == child.getLength();
+    });
+    if (pChild != children.end())
+    {
+        if ( bAppendScriptsPart )
         {
-            if ( bAppendScriptsPart )
-            {
-                m_sBaseURI = child.concat( SCRIPTS_PART );
-            }
-            else
-            {
-                m_sBaseURI = child;
-            }
-            return true;
+            m_sBaseURI = pChild->concat( SCRIPTS_PART );
         }
+        else
+        {
+            m_sBaseURI = *pChild;
+        }
+        return true;
     }
     return false;
 }

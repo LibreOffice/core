@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <comphelper/sequence.hxx>
 #include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/factory.hxx>
 #include <tools/diagnose_ex.h>
@@ -150,17 +151,17 @@ ProviderCache::populateCache()
 
             if ( serviceNames.hasElements() )
             {
-                for ( sal_Int32 index = 0; index < serviceNames.getLength(); index++ )
+                auto pName = std::find_if(serviceNames.begin(), serviceNames.end(),
+                    [this](const OUString& rName) {
+                        return rName.startsWith( "com.sun.star.script.provider.ScriptProviderFor" )
+                            && comphelper::findValue(m_sBlackList, rName) == -1;
+                    });
+                if (pName != serviceNames.end())
                 {
-                    if ( serviceNames[ index ].startsWith( "com.sun.star.script.provider.ScriptProviderFor" )
-                         && !isInBlackList(  serviceNames[ index ] ) )
-                    {
-                        serviceName = serviceNames[ index ];
-                        ProviderDetails details;
-                        details.factory = factory;
-                        m_hProviderDetailsCache[ serviceName ] = details;
-                        break;
-                    }
+                    serviceName = *pName;
+                    ProviderDetails details;
+                    details.factory = factory;
+                    m_hProviderDetailsCache[ serviceName ] = details;
                 }
             }
         }

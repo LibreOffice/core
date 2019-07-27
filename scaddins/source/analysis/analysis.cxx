@@ -571,19 +571,11 @@ double SAL_CALL AnalysisAddIn::getSeriessum( double fX, double fN, double fM, co
 
     if( fX != 0.0 )
     {
-        sal_Int32       n1, n2;
-        sal_Int32       nE1 = aCoeffList.getLength();
-        sal_Int32       nE2;
-
-        for( n1 = 0 ; n1 < nE1 ; n1++ )
+        for( const uno::Sequence< double >& rList : aCoeffList )
         {
-            const uno::Sequence< double >&    rList = aCoeffList[ n1 ];
-            nE2 = rList.getLength();
-            const double*           pList = rList.getConstArray();
-
-            for( n2 = 0 ; n2 < nE2 ; n2++ )
+            for( const double fCoef : rList )
             {
-                fRet += pList[ n2 ] * pow( fX, fN );
+                fRet += fCoef * pow( fX, fN );
 
                 fN += fM;
             }

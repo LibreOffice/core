@@ -221,14 +221,12 @@ namespace dlgprov
             if ( xEventCont.is() )
             {
                 Sequence< OUString > aNames = xEventCont->getElementNames();
-                const OUString* pNames = aNames.getConstArray();
-                sal_Int32 nNameCount = aNames.getLength();
 
-                for ( sal_Int32 j = 0; j < nNameCount; ++j )
+                for ( const OUString& rName : aNames )
                 {
                     ScriptEventDescriptor aDesc;
 
-                    Any aElement = xEventCont->getByName( pNames[ j ] );
+                    Any aElement = xEventCont->getByName( rName );
                     aElement >>= aDesc;
                     OUString sKey = aDesc.ScriptType;
                     if ( aDesc.ScriptType == "Script" || aDesc.ScriptType == "UNO" )
@@ -277,15 +275,12 @@ namespace dlgprov
 
     void DialogEventsAttacherImpl::nestedAttachEvents( const Sequence< Reference< XInterface > >& Objects, const Any& Helper, OUString& sDialogCodeName )
     {
-        const Reference< XInterface >* pObjects = Objects.getConstArray();
-        sal_Int32 nObjCount = Objects.getLength();
-
-        for ( sal_Int32 i = 0; i < nObjCount; ++i )
+        for ( const Reference< XInterface >& rObject : Objects )
         {
             // We know that we have to do with instances of XControl.
             // Otherwise this is not the right implementation for
             // XScriptEventsAttacher and we have to give up.
-            Reference< XControl > xControl( pObjects[ i ], UNO_QUERY );
+            Reference< XControl > xControl( rObject, UNO_QUERY );
             Reference< XControlContainer > xControlContainer( xControl, UNO_QUERY );
             Reference< XDialog > xDialog( xControl, UNO_QUERY );
             if ( !xControl.is() )

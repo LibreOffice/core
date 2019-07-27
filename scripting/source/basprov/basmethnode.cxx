@@ -205,17 +205,11 @@ namespace basprov
                 if ( sDocURL.isEmpty() )
                 {
                     Sequence < PropertyValue > aProps = xModel->getArgs();
-                    sal_Int32 nProps = aProps.getLength();
-                    const PropertyValue* pProps = aProps.getConstArray();
-                    for ( sal_Int32 i = 0; i < nProps; ++i )
-                    {
-                        // TODO: according to MBA the property 'Title' may change in future
-                        if ( pProps[i].Name == "Title" )
-                        {
-                            pProps[i].Value >>= sDocURL;
-                            break;
-                        }
-                    }
+                    // TODO: according to MBA the property 'Title' may change in future
+                    const PropertyValue* pProp = std::find_if(aProps.begin(), aProps.end(),
+                        [](const PropertyValue& rProp) { return rProp.Name == "Title"; });
+                    if (pProp != aProps.end())
+                        pProp->Value >>= sDocURL;
                 }
             }
         }

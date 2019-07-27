@@ -1481,14 +1481,10 @@ void SortedIndividualInt32List::InsertHolidayList(
         if( !(rHolAny >>= aAnySeq) )
             throw lang::IllegalArgumentException();
 
-        const uno::Sequence< uno::Any >* pSeqArray = aAnySeq.getConstArray();
-        for( sal_Int32 nIndex1 = 0; nIndex1 < aAnySeq.getLength(); nIndex1++ )
+        for( const uno::Sequence< uno::Any >& rSubSeq : aAnySeq )
         {
-            const uno::Sequence< uno::Any >& rSubSeq = pSeqArray[ nIndex1 ];
-            const uno::Any* pAnyArray = rSubSeq.getConstArray();
-
-            for( sal_Int32 nIndex2 = 0; nIndex2 < rSubSeq.getLength(); nIndex2++ )
-                InsertHolidayList( rAnyConv, pAnyArray[ nIndex2 ], nNullDate, false/*bInsertOnWeekend*/ );
+            for( const uno::Any& rAny : rSubSeq )
+                InsertHolidayList( rAnyConv, rAny, nNullDate, false/*bInsertOnWeekend*/ );
         }
     }
     else
@@ -1499,13 +1495,10 @@ void SortedIndividualInt32List::InsertHolidayList(
 void ScaDoubleList::Append(
         const uno::Sequence< uno::Sequence< double > >& rValueSeq )
 {
-    const uno::Sequence< double >* pSeqArray = rValueSeq.getConstArray();
-    for( sal_Int32 nIndex1 = 0; nIndex1 < rValueSeq.getLength(); nIndex1++ )
+    for( const uno::Sequence< double >& rSubSeq : rValueSeq )
     {
-        const uno::Sequence< double >& rSubSeq = pSeqArray[ nIndex1 ];
-        const double* pArray = rSubSeq.getConstArray();
-        for( sal_Int32 nIndex2 = 0; nIndex2 < rSubSeq.getLength(); nIndex2++ )
-            Append( pArray[ nIndex2 ] );
+        for( const double fValue : rSubSeq )
+            Append( fValue );
     }
 }
 
@@ -1513,13 +1506,10 @@ void ScaDoubleList::Append(
 void ScaDoubleList::Append(
         const uno::Sequence< uno::Sequence< sal_Int32 > >& rValueSeq )
 {
-    const uno::Sequence< sal_Int32 >* pSeqArray = rValueSeq.getConstArray();
-    for( sal_Int32 nIndex1 = 0; nIndex1 < rValueSeq.getLength(); nIndex1++ )
+    for( const uno::Sequence< sal_Int32 >& rSubSeq : rValueSeq )
     {
-        const uno::Sequence< sal_Int32 >& rSubSeq = pSeqArray[ nIndex1 ];
-        const sal_Int32* pArray = rSubSeq.getConstArray();
-        for( sal_Int32 nIndex2 = 0; nIndex2 < rSubSeq.getLength(); nIndex2++ )
-            Append( pArray[ nIndex2 ] );
+        for( const sal_Int32 nValue : rSubSeq )
+            Append( nValue );
     }
 }
 
@@ -1547,9 +1537,8 @@ void ScaDoubleList::Append(
         const uno::Sequence< uno::Any >& rAnySeq,
         bool bIgnoreEmpty )
 {
-    const uno::Any* pArray = rAnySeq.getConstArray();
-    for( sal_Int32 nIndex = 0; nIndex < rAnySeq.getLength(); nIndex++ )
-        Append( rAnyConv, pArray[ nIndex ], bIgnoreEmpty );
+    for( const uno::Any& rAny : rAnySeq )
+        Append( rAnyConv, rAny, bIgnoreEmpty );
 }
 
 
@@ -1558,9 +1547,8 @@ void ScaDoubleList::Append(
         const uno::Sequence< uno::Sequence< uno::Any > >& rAnySeq,
         bool bIgnoreEmpty )
 {
-    const uno::Sequence< uno::Any >* pArray = rAnySeq.getConstArray();
-    for( sal_Int32 nIndex = 0; nIndex < rAnySeq.getLength(); nIndex++ )
-        Append( rAnyConv, pArray[ nIndex ], bIgnoreEmpty );
+    for( const uno::Sequence< uno::Any >& rArray : rAnySeq )
+        Append( rAnyConv, rArray, bIgnoreEmpty );
 }
 
 void ScaDoubleList::Append(
@@ -2013,19 +2001,10 @@ ComplexList::~ComplexList()
 
 void ComplexList::Append( const uno::Sequence< uno::Sequence< OUString > >& r )
 {
-    sal_Int32   n1, n2;
-    sal_Int32   nE1 = r.getLength();
-    sal_Int32   nE2;
-
-    for( n1 = 0 ; n1 < nE1 ; n1++ )
+    for( const uno::Sequence< OUString >& rList : r )
     {
-        const uno::Sequence< OUString >&    rList = r[ n1 ];
-        nE2 = rList.getLength();
-
-        for( n2 = 0 ; n2 < nE2 ; n2++ )
+        for( const OUString& rStr : rList )
         {
-            const OUString&   rStr = rList[ n2 ];
-
             if( !rStr.isEmpty() )
                 Append( Complex( rStr ) );
         }
@@ -2035,11 +2014,8 @@ void ComplexList::Append( const uno::Sequence< uno::Sequence< OUString > >& r )
 
 void ComplexList::Append( const uno::Sequence< uno::Any >& aMultPars )
 {
-    sal_Int32       nEle = aMultPars.getLength();
-
-    for( sal_Int32 i = 0 ; i < nEle ; i++ )
+    for( const uno::Any& r : aMultPars )
     {
-        const uno::Any&  r = aMultPars[ i ];
         switch( r.getValueTypeClass() )
         {
             case uno::TypeClass_VOID:       break;
@@ -2060,10 +2036,8 @@ void ComplexList::Append( const uno::Sequence< uno::Any >& aMultPars )
                 if( !(r >>= aValArr) )
                     throw lang::IllegalArgumentException();
 
-                sal_Int32           nE = aValArr.getLength();
-                const uno::Sequence< uno::Any >*   pArr = aValArr.getConstArray();
-                for( sal_Int32 n = 0 ; n < nE ; n++ )
-                    Append( pArr[ n ] );
+                for( const uno::Sequence< uno::Any >& rArr : aValArr )
+                    Append( rArr );
                 }
                 break;
             default:

@@ -63,10 +63,7 @@ void SAL_CALL CoinMPSolver::solve()
 
     // collect variables in vector (?)
 
-    std::vector<table::CellAddress> aVariableCells;
-    aVariableCells.reserve(maVariables.getLength());
-    for (sal_Int32 nPos=0; nPos<maVariables.getLength(); nPos++)
-        aVariableCells.push_back( maVariables[nPos] );
+    auto aVariableCells = comphelper::sequenceToContainer<std::vector<table::CellAddress>>(maVariables);
     size_t nVariables = aVariableCells.size();
     size_t nVar = 0;
 
@@ -75,12 +72,12 @@ void SAL_CALL CoinMPSolver::solve()
     ScSolverCellHashMap aCellsHash;
     aCellsHash[maObjective].reserve( nVariables + 1 );                  // objective function
 
-    for (sal_Int32 nConstrPos = 0; nConstrPos < maConstraints.getLength(); ++nConstrPos)
+    for (const auto& rConstr : maConstraints)
     {
-        table::CellAddress aCellAddr = maConstraints[nConstrPos].Left;
+        table::CellAddress aCellAddr = rConstr.Left;
         aCellsHash[aCellAddr].reserve( nVariables + 1 );                // constraints: left hand side
 
-        if ( maConstraints[nConstrPos].Right >>= aCellAddr )
+        if ( rConstr.Right >>= aCellAddr )
             aCellsHash[aCellAddr].reserve( nVariables + 1 );            // constraints: right hand side
     }
 
@@ -258,13 +255,13 @@ void SAL_CALL CoinMPSolver::solve()
 
     // apply single-var integer constraints
 
-    for (sal_Int32 nConstrPos = 0; nConstrPos < maConstraints.getLength(); ++nConstrPos)
+    for (const auto& rConstr : maConstraints)
     {
-        sheet::SolverConstraintOperator eOp = maConstraints[nConstrPos].Operator;
+        sheet::SolverConstraintOperator eOp = rConstr.Operator;
         if ( eOp == sheet::SolverConstraintOperator_INTEGER ||
              eOp == sheet::SolverConstraintOperator_BINARY )
         {
-            table::CellAddress aLeftAddr = maConstraints[nConstrPos].Left;
+            table::CellAddress aLeftAddr = rConstr.Left;
             // find variable index for cell
             for (nVar=0; nVar<nVariables; nVar++)
                 if ( AddressEqual( aVariableCells[nVar], aLeftAddr ) )
