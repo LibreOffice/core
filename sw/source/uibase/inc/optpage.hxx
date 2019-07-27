@@ -375,22 +375,20 @@ private:
 
 class SwCompareOptionsTabPage : public SfxTabPage
 {
-    VclPtr<RadioButton>  m_pAutoRB;
-    VclPtr<RadioButton>  m_pWordRB;
-    VclPtr<RadioButton>  m_pCharRB;
+    std::unique_ptr<weld::RadioButton> m_xAutoRB;
+    std::unique_ptr<weld::RadioButton> m_xWordRB;
+    std::unique_ptr<weld::RadioButton> m_xCharRB;
+    std::unique_ptr<weld::CheckButton> m_xRsidCB;
+    std::unique_ptr<weld::CheckButton> m_xIgnoreCB;
+    std::unique_ptr<weld::SpinButton> m_xLenNF;
+    std::unique_ptr<weld::CheckButton> m_xStoreRsidCB;
 
-    VclPtr<CheckBox>     m_pRsidCB;
-    VclPtr<CheckBox>     m_pIgnoreCB;
-    VclPtr<NumericField> m_pLenNF;
-    VclPtr<CheckBox>     m_pStoreRsidCB;
-
-    DECL_LINK(ComparisonHdl, Button*, void);
-    DECL_LINK(IgnoreHdl, Button*, void);
+    DECL_LINK(ComparisonHdl, weld::Button&, void);
+    DECL_LINK(IgnoreHdl, weld::Button&, void);
 
 public:
-    SwCompareOptionsTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
+    SwCompareOptionsTabPage(TabPageParent pParent, const SfxItemSet& rSet);
     virtual ~SwCompareOptionsTabPage() override;
-    virtual void dispose() override;
 
     static VclPtr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet* rAttrSet );
 
