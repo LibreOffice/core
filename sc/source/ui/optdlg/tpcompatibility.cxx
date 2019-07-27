@@ -15,36 +15,29 @@
 #include <sc.hrc>
 #include <optutil.hxx>
 
-ScTpCompatOptions::ScTpCompatOptions(vcl::Window *pParent, const SfxItemSet &rCoreAttrs) :
-    SfxTabPage(pParent, "OptCompatibilityPage","modules/scalc/ui/optcompatibilitypage.ui", &rCoreAttrs)
+ScTpCompatOptions::ScTpCompatOptions(TabPageParent pParent, const SfxItemSet &rCoreAttrs)
+    : SfxTabPage(pParent, "modules/scalc/ui/optcompatibilitypage.ui", "OptCompatibilityPage", &rCoreAttrs)
+    , m_xLbKeyBindings(m_xBuilder->weld_combo_box("keybindings"))
 {
-    get(m_pLbKeyBindings,"keybindings");
 }
 
 ScTpCompatOptions::~ScTpCompatOptions()
 {
-    disposeOnce();
-}
-
-void ScTpCompatOptions::dispose()
-{
-    m_pLbKeyBindings.clear();
-    SfxTabPage::dispose();
 }
 
 VclPtr<SfxTabPage> ScTpCompatOptions::Create(TabPageParent pParent, const SfxItemSet *rCoreAttrs)
 {
-    return VclPtr<ScTpCompatOptions>::Create(pParent.pParent, *rCoreAttrs);
+    return VclPtr<ScTpCompatOptions>::Create(pParent, *rCoreAttrs);
 }
 
 bool ScTpCompatOptions::FillItemSet(SfxItemSet *rCoreAttrs)
 {
     bool bRet = false;
-    if (m_pLbKeyBindings->IsValueChangedFromSaved())
+    if (m_xLbKeyBindings->get_value_changed_from_saved())
     {
         rCoreAttrs->Put(
             SfxUInt16Item(
-                SID_SC_OPT_KEY_BINDING_COMPAT, m_pLbKeyBindings->GetSelectedEntryPos()));
+                SID_SC_OPT_KEY_BINDING_COMPAT, m_xLbKeyBindings->get_active()));
         bRet = true;
     }
     return bRet;
@@ -62,17 +55,17 @@ void ScTpCompatOptions::Reset(const SfxItemSet *rCoreAttrs)
         switch (eKeyB)
         {
             case ScOptionsUtil::KEY_DEFAULT:
-                m_pLbKeyBindings->SelectEntryPos(0);
+                m_xLbKeyBindings->set_active(0);
             break;
             case ScOptionsUtil::KEY_OOO_LEGACY:
-                m_pLbKeyBindings->SelectEntryPos(1);
+                m_xLbKeyBindings->set_active(1);
             break;
             default:
                 ;
         }
     }
 
-    m_pLbKeyBindings->SaveValue();
+    m_xLbKeyBindings->save_value();
 }
 
 DeactivateRC ScTpCompatOptions::DeactivatePage(SfxItemSet* /*pSet*/)

@@ -11,7 +11,6 @@
 #define INCLUDED_SC_SOURCE_UI_INC_TPCOMPATIBILITY_HXX
 
 #include <sfx2/tabdlg.hxx>
-#include <vcl/lstbox.hxx>
 
 class ScTpCompatOptions : public SfxTabPage
 {
@@ -26,11 +25,10 @@ public:
     virtual DeactivateRC DeactivatePage(SfxItemSet* pSet ) override;
 
     virtual ~ScTpCompatOptions() override;
-    virtual void dispose() override;
 private:
-    explicit ScTpCompatOptions(vcl::Window* pParent, const SfxItemSet& rCoreAttrs);
+    explicit ScTpCompatOptions(TabPageParent pParent, const SfxItemSet& rCoreAttrs);
 private:
-    VclPtr<ListBox>   m_pLbKeyBindings;
+    std::unique_ptr<weld::ComboBox> m_xLbKeyBindings;
 };
 
 #endif
