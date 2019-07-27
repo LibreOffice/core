@@ -75,7 +75,8 @@ char const* const* SunInfo::getRuntimePaths(int * size)
         "/lib/" JFW_PLUGIN_ARCH "/client/libjvm.so",
         "/lib/" JFW_PLUGIN_ARCH "/server/libjvm.so",
         "/lib/" JFW_PLUGIN_ARCH "/classic/libjvm.so",
-        "/lib/" JFW_PLUGIN_ARCH "/jrockit/libjvm.so"
+        "/lib/" JFW_PLUGIN_ARCH "/jrockit/libjvm.so",
+        "/lib/server/libjvm.so" // > 1.8
 #endif
     };
     *size = sizeof(ar) / sizeof (char*);
@@ -89,7 +90,8 @@ char const* const* SunInfo::getLibraryPaths(int* size)
 
         "/lib/" JFW_PLUGIN_ARCH "/client",
         "/lib/" JFW_PLUGIN_ARCH "/native_threads",
-        "/lib/" JFW_PLUGIN_ARCH
+        "/lib/" JFW_PLUGIN_ARCH,
+        "/lib" // > 1.8
 
     };
     *size = sizeof(ar) / sizeof (char*);

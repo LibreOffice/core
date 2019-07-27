@@ -75,6 +75,7 @@ char const* const* OtherInfo::getRuntimePaths(int * size)
         "/lib/" JFW_PLUGIN_ARCH "/server/libjvm.so", // for Blackdown AMD64
         "/lib/" JFW_PLUGIN_ARCH "/classic/libjvm.so", // for Blackdown PPC
         "/lib/" JFW_PLUGIN_ARCH "/jrockit/libjvm.so", // for Java of BEA Systems
+        "/lib/server/libjvm.so",                     // > 1.8
         "/bin/classic/libjvm.so", // fallback for older for IBM Java
         "/jre/bin/classic/libjvm.so" // fallback for older for IBM Java
 #endif
@@ -102,7 +103,8 @@ char const* const* OtherInfo::getLibraryPaths(int* size)
         "/lib/" JFW_PLUGIN_ARCH "/classic",
         "/lib/" JFW_PLUGIN_ARCH "/jrockit",
         "/lib/" JFW_PLUGIN_ARCH "/native_threads",
-        "/lib/" JFW_PLUGIN_ARCH
+        "/lib/" JFW_PLUGIN_ARCH,
+        "/lib" // > 1.8
 #endif
     };
 
