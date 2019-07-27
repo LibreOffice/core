@@ -747,12 +747,10 @@ bool SlideshowImpl::startPreview(
         if (xServiceInfo.is()) {
             const Sequence<OUString> supportedServices(
                 xServiceInfo->getSupportedServiceNames() );
-            for ( sal_Int32 pos = supportedServices.getLength(); pos--; ) {
-                if ( supportedServices[pos] == "com.sun.star.drawing.MasterPage" ) {
-                    OSL_FAIL("sd::SlideshowImpl::startPreview() "
-                              "not allowed on master page!");
-                    return false;
-                }
+            if (comphelper::findValue(supportedServices, "com.sun.star.drawing.MasterPage") != -1) {
+                OSL_FAIL("sd::SlideshowImpl::startPreview() "
+                          "not allowed on master page!");
+                return false;
             }
         }
 
@@ -1092,10 +1090,8 @@ bool SlideshowImpl::startShowImpl( const Sequence< beans::PropertyValue >& aProp
             }
         }
 
-        const sal_Int32 nCount = aProperties.getLength();
-        sal_Int32 nIndex;
-        for( nIndex = 0; nIndex < nCount; nIndex++ )
-            mxShow->setProperty( aProperties[nIndex] );
+        for( const auto& rProp : aProperties )
+            mxShow->setProperty( rProp );
 
         mxShow->addView( mxView.get() );
 
@@ -3068,13 +3064,9 @@ PresentationSettingsEx::PresentationSettingsEx( PresentationSettings const & r )
 
 void PresentationSettingsEx::SetArguments( const Sequence< PropertyValue >& rArguments )
 {
-    sal_Int32 nArguments = rArguments.getLength();
-    const PropertyValue* pValue = rArguments.getConstArray();
-
-    while( nArguments-- )
+    for( const PropertyValue& rValue : rArguments )
     {
-        SetPropertyValue( pValue->Name, pValue->Value );
-        pValue++;
+        SetPropertyValue( rValue.Name, rValue.Value );
     }
 }
 

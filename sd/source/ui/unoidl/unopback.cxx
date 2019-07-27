@@ -355,13 +355,11 @@ uno::Sequence< beans::PropertyState > SAL_CALL SdUnoPageBackground::getPropertyS
     SolarMutexGuard aGuard;
 
     sal_Int32 nCount = aPropertyName.getLength();
-    const OUString* pNames = aPropertyName.getConstArray();
 
     uno::Sequence< beans::PropertyState > aPropertyStateSequence( nCount );
-    beans::PropertyState* pState = aPropertyStateSequence.getArray();
 
-    while( nCount-- )
-        *pState++ = getPropertyState( *pNames++ );
+    std::transform(aPropertyName.begin(), aPropertyName.end(), aPropertyStateSequence.begin(),
+        [this](const OUString& rName) -> beans::PropertyState { return getPropertyState(rName); });
 
     return aPropertyStateSequence;
 }

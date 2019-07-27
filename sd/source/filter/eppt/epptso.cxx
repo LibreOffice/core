@@ -1246,11 +1246,11 @@ void PPTWriter::ImplWriteTextStyleAtom( SvStream& rOut, int nTextInstance, sal_u
             if ( nTextRulerAtomFlags & 4 )
             {
                 pRuleOut->WriteUInt16( nTabCount );
-                for ( i = 0; i < nTabs; i++ )
+                for ( const css::style::TabStop& rTabStop : pPara->maTabStop )
                 {
-                    sal_uInt16 nPosition = static_cast<sal_uInt16>( ( pTabStop[ i ].Position / 4.40972 ) + nTextOfs );
+                    sal_uInt16 nPosition = static_cast<sal_uInt16>( ( rTabStop.Position / 4.40972 ) + nTextOfs );
                     sal_uInt16 nType;
-                    switch ( pTabStop[ i ].Alignment )
+                    switch ( rTabStop.Alignment )
                     {
                         case css::style::TabAlign_DECIMAL :    nType = 3; break;
                         case css::style::TabAlign_RIGHT :      nType = 2; break;
@@ -1258,7 +1258,7 @@ void PPTWriter::ImplWriteTextStyleAtom( SvStream& rOut, int nTextInstance, sal_u
 
                         case css::style::TabAlign_LEFT :
                         default:                               nType = 0;
-                    };
+                    }
                     pRuleOut->WriteUInt16( nPosition )
                              .WriteUInt16( nType );
                 }

@@ -134,7 +134,7 @@ void SdOptionsGeneric::Commit( SdOptionsItem& rCfgItem ) const
     const Sequence< OUString >  aNames( GetPropertyNames() );
     Sequence< Any >             aValues( aNames.getLength() );
 
-    if( aNames.hasElements() && ( aValues.getLength() == aNames.getLength() ) )
+    if( aNames.hasElements() )
     {
         if( WriteData( aValues.getArray() ) )
             rCfgItem.PutProperties( aNames, aValues );

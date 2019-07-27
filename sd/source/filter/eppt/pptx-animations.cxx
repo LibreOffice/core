@@ -731,9 +731,9 @@ void PPTXAnimationExport::WriteAnimationCondList(const Any& rAny, sal_Int32 nTok
     Sequence<Any> aCondSeq;
     if (rAny >>= aCondSeq)
     {
-        for (int i = 0; i < aCondSeq.getLength(); i++)
+        for (const auto& rCond : aCondSeq)
         {
-            Cond aCond(aCondSeq[i], bIsMainSeqChild);
+            Cond aCond(rCond, bIsMainSeqChild);
             if (aCond.isValid())
                 aList.push_back(aCond);
         }

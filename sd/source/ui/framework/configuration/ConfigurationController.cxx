@@ -259,17 +259,17 @@ void SAL_CALL ConfigurationController::requestResourceActivation (
                 rxResourceId->getResourceTypePrefix(),
                 AnchorBindingMode_DIRECT));
 
-        for (sal_Int32 nIndex=0; nIndex<aResourceList.getLength(); ++nIndex)
+        for (const auto& rResource : aResourceList)
         {
             // Do not request the deactivation of the resource for which
             // this method was called.  Doing it would not change the
             // outcome but would result in unnecessary work.
-            if (rxResourceId->compareTo(aResourceList[nIndex]) == 0)
+            if (rxResourceId->compareTo(rResource) == 0)
                 continue;
 
             // Request the deactivation of a resource and all resources
             // linked to it.
-            requestResourceDeactivation(aResourceList[nIndex]);
+            requestResourceDeactivation(rResource);
         }
     }
 
@@ -299,13 +299,12 @@ void SAL_CALL ConfigurationController::requestResourceDeactivation (
             rxResourceId,
             OUString(),
             AnchorBindingMode_DIRECT));
-    const sal_Int32 nCount (aLinkedResources.getLength());
-    for (sal_Int32 nIndex=0; nIndex<nCount; ++nIndex)
+    for (const auto& rLinkedResource : aLinkedResources)
     {
         // We do not add deactivation requests directly but call this
         // method recursively, so that when one time there are resources
         // linked to linked resources, these are handled correctly, too.
-        requestResourceDeactivation(aLinkedResources[nIndex]);
+        requestResourceDeactivation(rLinkedResource);
     }
 
     // Add a deactivation request for the specified resource.

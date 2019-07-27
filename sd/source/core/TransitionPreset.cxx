@@ -59,16 +59,10 @@ TransitionPreset::TransitionPreset( const css::uno::Reference< css::animations::
 {
     // first locate preset id
     Sequence< NamedValue > aUserData( xNode->getUserData() );
-    sal_Int32 nLength = aUserData.getLength();
-    const NamedValue* p = aUserData.getConstArray();
-    while( nLength-- )
-    {
-        if ( p->Name == "preset-id" )
-        {
-            p->Value >>= maPresetId;
-            break;
-        }
-    }
+    const NamedValue* pProp = std::find_if(aUserData.begin(), aUserData.end(),
+        [](const NamedValue& rProp) { return rProp.Name == "preset-id"; });
+    if (pProp != aUserData.end())
+        pProp->Value >>= maPresetId;
 
     // second, locate transition filter element
     Reference< XEnumerationAccess > xEnumerationAccess( xNode, UNO_QUERY_THROW );
@@ -212,9 +206,9 @@ bool TransitionPreset::importTransitionPresetList( TransitionPresetList& rList )
         uno::Sequence< OUString > aFiles;
         xNameAccess->getByName("TransitionFiles") >>= aFiles;
 
-        for( sal_Int32 i=0; i<aFiles.getLength(); ++i )
+        for( const auto& rFile : aFiles )
         {
-            OUString aURL = comphelper::getExpandedUri(xContext, aFiles[i]);
+            OUString aURL = comphelper::getExpandedUri(xContext, rFile);
 
             bRet |= importTransitionsFile( rList,
                                            xServiceFactory,

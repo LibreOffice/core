@@ -1129,7 +1129,6 @@ void SAL_CALL SdUnoEventsAccess::replaceByName( const OUString& aName, const uno
         throw lang::IllegalArgumentException();
 
     FoundFlags nFound = FoundFlags::NONE;
-    const beans::PropertyValue* pProperties = aProperties.getConstArray();
 
     OUString aStrEventType;
     presentation::ClickAction eClickAction = presentation::ClickAction_NONE;
@@ -1142,85 +1141,83 @@ void SAL_CALL SdUnoEventsAccess::replaceByName( const OUString& aName, const uno
     OUString aStrLibrary;
     OUString aStrBookmark;
 
-    const sal_Int32 nCount = aProperties.getLength();
-    sal_Int32 nIndex;
-    for( nIndex = 0; nIndex < nCount; nIndex++, pProperties++ )
+    for( const beans::PropertyValue& rProperty : aProperties )
     {
-        if( !( nFound & FoundFlags::EventType ) && pProperties->Name == gaStrEventType )
+        if( !( nFound & FoundFlags::EventType ) && rProperty.Name == gaStrEventType )
         {
-            if( pProperties->Value >>= aStrEventType )
+            if( rProperty.Value >>= aStrEventType )
             {
                 nFound |= FoundFlags::EventType;
                 continue;
             }
         }
-        else if( !( nFound & FoundFlags::ClickAction ) && pProperties->Name == gaStrClickAction )
+        else if( !( nFound & FoundFlags::ClickAction ) && rProperty.Name == gaStrClickAction )
         {
-            if( pProperties->Value >>= eClickAction )
+            if( rProperty.Value >>= eClickAction )
             {
                 nFound |= FoundFlags::ClickAction;
                 continue;
             }
         }
-        else if( !( nFound & FoundFlags::Macro ) && ( pProperties->Name == gaStrMacroName || pProperties->Name == gaStrScript ) )
+        else if( !( nFound & FoundFlags::Macro ) && ( rProperty.Name == gaStrMacroName || rProperty.Name == gaStrScript ) )
         {
-            if( pProperties->Value >>= aStrMacro )
+            if( rProperty.Value >>= aStrMacro )
             {
                 nFound |= FoundFlags::Macro;
                 continue;
             }
         }
-        else if( !( nFound & FoundFlags::Library ) && pProperties->Name == gaStrLibrary )
+        else if( !( nFound & FoundFlags::Library ) && rProperty.Name == gaStrLibrary )
         {
-            if( pProperties->Value >>= aStrLibrary )
+            if( rProperty.Value >>= aStrLibrary )
             {
                 nFound |= FoundFlags::Library;
                 continue;
             }
         }
-        else if( !( nFound & FoundFlags::Effect ) && pProperties->Name == gaStrEffect )
+        else if( !( nFound & FoundFlags::Effect ) && rProperty.Name == gaStrEffect )
         {
-            if( pProperties->Value >>= eEffect )
+            if( rProperty.Value >>= eEffect )
             {
                 nFound |= FoundFlags::Effect;
                 continue;
             }
         }
-        else if( !( nFound & FoundFlags::Bookmark ) && pProperties->Name == gaStrBookmark )
+        else if( !( nFound & FoundFlags::Bookmark ) && rProperty.Name == gaStrBookmark )
         {
-            if( pProperties->Value >>= aStrBookmark )
+            if( rProperty.Value >>= aStrBookmark )
             {
                 nFound |= FoundFlags::Bookmark;
                 continue;
             }
         }
-        else if( !( nFound & FoundFlags::Speed ) && pProperties->Name == gaStrSpeed )
+        else if( !( nFound & FoundFlags::Speed ) && rProperty.Name == gaStrSpeed )
         {
-            if( pProperties->Value >>= eSpeed )
+            if( rProperty.Value >>= eSpeed )
             {
                 nFound |= FoundFlags::Speed;
                 continue;
             }
         }
-        else if( !( nFound & FoundFlags::SoundUrl ) && pProperties->Name == gaStrSoundURL )
+        else if( !( nFound & FoundFlags::SoundUrl ) && rProperty.Name == gaStrSoundURL )
         {
-            if( pProperties->Value >>= aStrSoundURL )
+            if( rProperty.Value >>= aStrSoundURL )
             {
                 nFound |= FoundFlags::SoundUrl;
                 continue;
             }
         }
-        else if( !( nFound & FoundFlags::PlayFull ) && pProperties->Name == gaStrPlayFull )
+        else if( !( nFound & FoundFlags::PlayFull ) && rProperty.Name == gaStrPlayFull )
         {
-            if( pProperties->Value >>= bPlayFull )
+            if( rProperty.Value >>= bPlayFull )
             {
                 nFound |= FoundFlags::PlayFull;
                 continue;
             }
         }
-        else if( !( nFound & FoundFlags::Verb ) && pProperties->Name == gaStrVerb )
+        else if( !( nFound & FoundFlags::Verb ) && rProperty.Name == gaStrVerb )
         {
-            if( pProperties->Value >>= nVerb )
+            if( rProperty.Value >>= nVerb )
             {
                 nFound |= FoundFlags::Verb;
                 continue;

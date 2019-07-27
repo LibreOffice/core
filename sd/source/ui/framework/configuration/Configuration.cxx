@@ -290,29 +290,14 @@ bool AreConfigurationsEquivalent (
 
     // When the number of resources differ then the configurations can not
     // be equivalent.
-    const sal_Int32 nCount (aResources1.getLength());
-    const sal_Int32 nCount2 (aResources2.getLength());
-    if (nCount != nCount2)
-        return false;
-
     // Comparison of the two lists of resource ids relies on their
     // ordering.
-    for (sal_Int32 nIndex=0; nIndex<nCount; ++nIndex)
-    {
-        const Reference<XResourceId> xResource1 (aResources1[nIndex]);
-        const Reference<XResourceId> xResource2 (aResources2[nIndex]);
-        if (xResource1.is() && xResource2.is())
-        {
-            if (xResource1->compareTo(xResource2) != 0)
-                return false;
-        }
-        else if (xResource1.is() != xResource2.is())
-        {
-            return false;
-        }
-    }
-
-    return true;
+    return std::equal(aResources1.begin(), aResources1.end(), aResources2.begin(), aResources2.end(),
+        [](const Reference<XResourceId>& a, const Reference<XResourceId>& b) {
+            if (a.is() && b.is())
+                return a->compareTo(b) == 0;
+            return a.is() == b.is();
+        });
 }
 
 } } // end of namespace sd::framework

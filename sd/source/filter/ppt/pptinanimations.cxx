@@ -530,12 +530,10 @@ bool AnimationImporter::convertAnimationNode( const Reference< XAnimationNode >&
         }
 
         Sequence< Any > aValues( xAnimate->getValues() );
-        sal_Int32 nValues = aValues.getLength();
-        if( nValues )
+        if( aValues.hasElements() )
         {
-            Any* p2 = aValues.getArray();
-            while( nValues-- )
-                oox::ppt::convertAnimationValue(eAttribute, *p2++);
+            for( Any& rValue : aValues )
+                oox::ppt::convertAnimationValue(eAttribute, rValue);
 
             xAnimate->setValues( aValues );
         }
@@ -550,28 +548,27 @@ bool AnimationImporter::convertAnimationNode( const Reference< XAnimationNode >&
 
     // check for after-effect
     Sequence< NamedValue > aUserData( xNode->getUserData() );
-    NamedValue* pValue = aUserData.getArray();
-    NamedValue* pLastValue = pValue;
-    sal_Int32 nLength = aUserData.getLength(), nRemoved = 0;
+    NamedValue* pLastValue = aUserData.getArray();
+    sal_Int32 nRemoved = 0;
 
     bool bAfterEffect = false;
     sal_Int32 nMasterRel = 0;
-    for( ; nLength--; pValue++ )
+    for( const NamedValue& rValue : aUserData )
     {
-        if ( pValue->Name == "after-effect" )
+        if ( rValue.Name == "after-effect" )
         {
-            pValue->Value >>= bAfterEffect;
+            rValue.Value >>= bAfterEffect;
             nRemoved++;
         }
-        else if ( pValue->Name == "master-rel" )
+        else if ( rValue.Name == "master-rel" )
         {
-            pValue->Value >>= nMasterRel;
+            rValue.Value >>= nMasterRel;
             nRemoved++;
         }
         else
         {
             if( nRemoved )
-                *pLastValue = *pValue;
+                *pLastValue = rValue;
             pLastValue++;
         }
     }

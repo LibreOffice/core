@@ -156,37 +156,33 @@ void CustomAnimationEffect::setNode( const css::uno::Reference< css::animations:
     mxAudio.clear();
 
     Sequence< NamedValue > aUserData( mxNode->getUserData() );
-    sal_Int32 nLength = aUserData.getLength();
-    const NamedValue* p = aUserData.getConstArray();
 
-    while( nLength-- )
+    for( const NamedValue& rProp : aUserData )
     {
-        if ( p->Name == "node-type" )
+        if ( rProp.Name == "node-type" )
         {
-            p->Value >>= mnNodeType;
+            rProp.Value >>= mnNodeType;
         }
-        else if ( p->Name == "preset-id" )
+        else if ( rProp.Name == "preset-id" )
         {
-            p->Value >>= maPresetId;
+            rProp.Value >>= maPresetId;
         }
-        else if ( p->Name == "preset-sub-type" )
+        else if ( rProp.Name == "preset-sub-type" )
         {
-            p->Value >>= maPresetSubType;
+            rProp.Value >>= maPresetSubType;
         }
-        else if ( p->Name == "preset-class" )
+        else if ( rProp.Name == "preset-class" )
         {
-            p->Value >>= mnPresetClass;
+            rProp.Value >>= mnPresetClass;
         }
-        else if ( p->Name == "preset-property" )
+        else if ( rProp.Name == "preset-property" )
         {
-            p->Value >>= maProperty;
+            rProp.Value >>= maProperty;
         }
-        else if ( p->Name == "group-id" )
+        else if ( rProp.Name == "group-id" )
         {
-            p->Value >>= mnGroupId;
+            rProp.Value >>= mnGroupId;
         }
-
-        p++;
     }
 
     // get effect start time
@@ -389,19 +385,12 @@ sal_Int32 CustomAnimationEffect::get_node_type( const Reference< XAnimationNode 
     if( xNode.is() )
     {
         Sequence< NamedValue > aUserData( xNode->getUserData() );
-        sal_Int32 nLength = aUserData.getLength();
-        if( nLength )
+        if( aUserData.hasElements() )
         {
-            const NamedValue* p = aUserData.getConstArray();
-            while( nLength-- )
-            {
-                if ( p->Name == "node-type" )
-                {
-                    p->Value >>= nNodeType;
-                    break;
-                }
-                p++;
-            }
+            const NamedValue* pProp = std::find_if(aUserData.begin(), aUserData.end(),
+                [](const NamedValue& rProp) { return rProp.Name == "node-type"; });
+            if (pProp != aUserData.end())
+                pProp->Value >>= nNodeType;
         }
     }
 
@@ -424,23 +413,18 @@ void CustomAnimationEffect::setPresetClass( sal_Int16 nPresetClass )
     bool bFound = false;
     if( nLength )
     {
-        NamedValue* p = aUserData.getArray();
-        while( nLength-- )
+        NamedValue* pProp = std::find_if(aUserData.begin(), aUserData.end(),
+            [](const NamedValue& rProp) { return rProp.Name == "preset-class"; });
+        if (pProp != aUserData.end())
         {
-            if ( p->Name == "preset-class" )
-            {
-                p->Value <<= mnPresetClass;
-                bFound = true;
-                break;
-            }
-            p++;
+            pProp->Value <<= mnPresetClass;
+            bFound = true;
         }
     }
 
-    // no "node-type" entry inside user data, so add it
+    // no "preset-class" entry inside user data, so add it
     if( !bFound )
     {
-        nLength = aUserData.getLength();
         aUserData.realloc( nLength + 1);
         aUserData[nLength].Name = "preset-class";
         aUserData[nLength].Value <<= mnPresetClass;
@@ -465,23 +449,18 @@ void CustomAnimationEffect::setNodeType( sal_Int16 nNodeType )
     bool bFound = false;
     if( nLength )
     {
-        NamedValue* p = aUserData.getArray();
-        while( nLength-- )
+        NamedValue* pProp = std::find_if(aUserData.begin(), aUserData.end(),
+            [](const NamedValue& rProp) { return rProp.Name == "node-type"; });
+        if (pProp != aUserData.end())
         {
-            if ( p->Name == "node-type" )
-            {
-                p->Value <<= mnNodeType;
-                bFound = true;
-                break;
-            }
-            p++;
+            pProp->Value <<= mnNodeType;
+            bFound = true;
         }
     }
 
     // no "node-type" entry inside user data, so add it
     if( !bFound )
     {
-        nLength = aUserData.getLength();
         aUserData.realloc( nLength + 1);
         aUserData[nLength].Name = "node-type";
         aUserData[nLength].Value <<= mnNodeType;
@@ -503,23 +482,18 @@ void CustomAnimationEffect::setGroupId( sal_Int32 nGroupId )
     bool bFound = false;
     if( nLength )
     {
-        NamedValue* p = aUserData.getArray();
-        while( nLength-- )
+        NamedValue* pProp = std::find_if(aUserData.begin(), aUserData.end(),
+            [](const NamedValue& rProp) { return rProp.Name == "group-id"; });
+        if (pProp != aUserData.end())
         {
-            if ( p->Name == "group-id" )
-            {
-                p->Value <<= mnGroupId;
-                bFound = true;
-                break;
-            }
-            p++;
+            pProp->Value <<= mnGroupId;
+            bFound = true;
         }
     }
 
-    // no "node-type" entry inside user data, so add it
+    // no "group-id" entry inside user data, so add it
     if( !bFound )
     {
-        nLength = aUserData.getLength();
         aUserData.realloc( nLength + 1);
         aUserData[nLength].Name = "group-id";
         aUserData[nLength].Value <<= mnGroupId;
@@ -1666,21 +1640,11 @@ CustomAnimationEffectPtr EffectSequenceHelper::append( const CustomAnimationPres
             // first, filter all only ui relevant user data
             std::vector< NamedValue > aNewUserData;
             Sequence< NamedValue > aUserData( xNode->getUserData() );
-            sal_Int32 nLength = aUserData.getLength();
-            const NamedValue* p = aUserData.getConstArray();
-            bool bFilter = false;
 
-            while( nLength-- )
-            {
-                if( p->Name != "text-only" && p->Name != "preset-property" )
-                {
-                    aNewUserData.push_back( *p );
-                    bFilter = true;
-                }
-                p++;
-            }
+            std::copy_if(aUserData.begin(), aUserData.end(), std::back_inserter(aNewUserData),
+                [](const NamedValue& rProp) { return rProp.Name != "text-only" && rProp.Name != "preset-property"; });
 
-            if( bFilter )
+            if( !aNewUserData.empty() )
             {
                 aUserData = ::comphelper::containerToSequence( aNewUserData );
                 xNode->setUserData( aUserData );
@@ -2921,18 +2885,11 @@ void EffectSequenceHelper::processAfterEffect( const Reference< XAnimationNode >
         Reference< XAnimationNode > xMaster;
 
         Sequence< NamedValue > aUserData( xNode->getUserData() );
-        sal_Int32 nLength = aUserData.getLength();
-        const NamedValue* p = aUserData.getConstArray();
+        const NamedValue* pProp = std::find_if(aUserData.begin(), aUserData.end(),
+            [](const NamedValue& rProp) { return rProp.Name == "master-element"; });
 
-        while( nLength-- )
-        {
-            if ( p->Name == "master-element" )
-            {
-                p->Value >>= xMaster;
-                break;
-            }
-            p++;
-        }
+        if (pProp != aUserData.end())
+            pProp->Value >>= xMaster;
 
         // only process if this is a valid after effect
         if( xMaster.is() )

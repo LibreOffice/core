@@ -224,12 +224,8 @@ namespace sd
                 Sequence<Any> aSequence;
                 rValue >>= aSequence;
 
-                const sal_Int32 nLength = aSequence.getLength();
-                sal_Int32 nElement;
-                Any* pAny = aSequence.getArray();
-
-                for( nElement = 0; nElement < nLength; nElement++, pAny++ )
-                    *pAny = transformValue( *pAny );
+                for( Any& rAny : aSequence )
+                    rAny = transformValue( rAny );
 
                 return makeAny( aSequence );
             }

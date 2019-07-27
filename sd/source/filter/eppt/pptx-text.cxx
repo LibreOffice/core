@@ -794,32 +794,29 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider* pBuProv, sal_Int1
             mAny = aXIndexReplace->getByIndex( nNumberingDepth );
             auto aPropertySequence = o3tl::doAccess<css::uno::Sequence<css::beans::PropertyValue>>(mAny);
 
-            const css::beans::PropertyValue* pPropValue = aPropertySequence->getConstArray();
-
-            sal_Int32 nPropertyCount = aPropertySequence->getLength();
-            if ( nPropertyCount )
+            if ( aPropertySequence->hasElements() )
             {
                 bExtendedParameters = true;
                 nBulletRealSize = 100;
                 nMappedNumType = 0;
 
                 uno::Reference<graphic::XGraphic> xGraphic;
-                for ( sal_Int32 i = 0; i < nPropertyCount; i++ )
+                for ( const css::beans::PropertyValue& rPropValue : *aPropertySequence )
                 {
-                    OUString aPropName( pPropValue[ i ].Name );
+                    OUString aPropName( rPropValue.Name );
                     if ( aPropName == "NumberingType" )
-                        nNumberingType = static_cast<SvxNumType>(*o3tl::doAccess<sal_Int16>(pPropValue[i].Value));
+                        nNumberingType = static_cast<SvxNumType>(*o3tl::doAccess<sal_Int16>(rPropValue.Value));
                     else if ( aPropName == "Adjust" )
-                        nHorzAdjust = *o3tl::doAccess<sal_Int16>(pPropValue[i].Value);
+                        nHorzAdjust = *o3tl::doAccess<sal_Int16>(rPropValue.Value);
                     else if ( aPropName == "BulletChar" )
                     {
-                        OUString aString( *o3tl::doAccess<OUString>(pPropValue[i].Value) );
+                        OUString aString( *o3tl::doAccess<OUString>(rPropValue.Value) );
                         if ( !aString.isEmpty() )
                             cBulletId = aString[ 0 ];
                     }
                     else if ( aPropName == "BulletFont" )
                     {
-                        aFontDesc = *o3tl::doAccess<css::awt::FontDescriptor>(pPropValue[i].Value);
+                        aFontDesc = *o3tl::doAccess<css::awt::FontDescriptor>(rPropValue.Value);
 
                         // Our numbullet dialog has set the wrong textencoding for our "StarSymbol" font,
                         // instead of a Unicode encoding the encoding RTL_TEXTENCODING_SYMBOL was used.
@@ -831,12 +828,12 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider* pBuProv, sal_Int1
                     }
                     else if ( aPropName == "GraphicBitmap" )
                     {
-                        auto xBitmap = pPropValue[i].Value.get<uno::Reference<awt::XBitmap>>();
+                        auto xBitmap = rPropValue.Value.get<uno::Reference<awt::XBitmap>>();
                         xGraphic.set(xBitmap, uno::UNO_QUERY);
                     }
                     else if ( aPropName == "GraphicSize" )
                     {
-                        if (auto aSize = o3tl::tryAccess<css::awt::Size>(pPropValue[i].Value))
+                        if (auto aSize = o3tl::tryAccess<css::awt::Size>(rPropValue.Value))
                         {
                             // don't cast awt::Size to Size as on 64-bits they are not the same.
                             aBuGraSize.setWidth( aSize->Width );
@@ -844,28 +841,28 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider* pBuProv, sal_Int1
                         }
                     }
                     else if ( aPropName == "StartWith" )
-                        nStartWith = *o3tl::doAccess<sal_Int16>(pPropValue[i].Value);
+                        nStartWith = *o3tl::doAccess<sal_Int16>(rPropValue.Value);
                     else if ( aPropName == "LeftMargin" )
-                        nTextOfs = nTextOfs + static_cast< sal_Int16 >( *o3tl::doAccess<sal_Int32>(pPropValue[i].Value) / ( 2540.0 / 576 ) );
+                        nTextOfs = nTextOfs + static_cast< sal_Int16 >( *o3tl::doAccess<sal_Int32>(rPropValue.Value) / ( 2540.0 / 576 ) );
                     else if ( aPropName == "FirstLineOffset" )
-                        nBulletOfs += static_cast<sal_Int16>( *o3tl::doAccess<sal_Int32>(pPropValue[i].Value) / ( 2540.0 / 576 ) );
+                        nBulletOfs += static_cast<sal_Int16>( *o3tl::doAccess<sal_Int32>(rPropValue.Value) / ( 2540.0 / 576 ) );
                     else if ( aPropName == "BulletColor" )
                     {
-                        sal_uInt32 nSOColor = *o3tl::doAccess<sal_uInt32>(pPropValue[i].Value);
+                        sal_uInt32 nSOColor = *o3tl::doAccess<sal_uInt32>(rPropValue.Value);
                         nBulletColor = nSOColor & 0xff00ff00;                       // green and hibyte
                         nBulletColor |= static_cast<sal_uInt8>(nSOColor) << 16;              // red
                         nBulletColor |= static_cast<sal_uInt8>( nSOColor >> 16 ) | 0xfe000000; // blue
                     }
                     else if ( aPropName == "BulletRelSize" )
                     {
-                        nBulletRealSize = *o3tl::doAccess<sal_Int16>(pPropValue[i].Value);
+                        nBulletRealSize = *o3tl::doAccess<sal_Int16>(rPropValue.Value);
                         nParaFlags |= 0x40;
                         nBulletFlags |= 8;
                     }
                     else if ( aPropName == "Prefix" )
-                        sPrefix = *o3tl::doAccess<OUString>(pPropValue[i].Value);
+                        sPrefix = *o3tl::doAccess<OUString>(rPropValue.Value);
                     else if ( aPropName == "Suffix" )
-                        sSuffix = *o3tl::doAccess<OUString>(pPropValue[i].Value);
+                        sSuffix = *o3tl::doAccess<OUString>(rPropValue.Value);
 #ifdef DBG_UTIL
                     else if ( ! (
                             ( aPropName == "SymbolTextDistance" )

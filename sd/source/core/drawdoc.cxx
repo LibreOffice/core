@@ -1110,9 +1110,9 @@ void SdDrawDocument::InitLayoutVector()
         officecfg::Office::Impress::Misc::LayoutListFiles::get(xContext) );
 
     OUString sFilename;
-    for( sal_Int32 i=0; i < aFiles.getLength(); ++i )
+    for( const auto& rFile : aFiles )
     {
-        sFilename = comphelper::getExpandedUri(xContext, aFiles[i]);
+        sFilename = comphelper::getExpandedUri(xContext, rFile);
 
         // load layout file into DOM
         Reference< XMultiServiceFactory > xServiceFactory(
@@ -1149,9 +1149,9 @@ void SdDrawDocument::InitObjectVector()
        officecfg::Office::Impress::Misc::PresObjListFiles::get(xContext) );
 
     OUString sFilename;
-    for( sal_Int32 i=0; i < aFiles.getLength(); ++i )
+    for( const auto& rFile : aFiles )
     {
-        sFilename = comphelper::getExpandedUri(xContext, aFiles[i]);
+        sFilename = comphelper::getExpandedUri(xContext, rFile);
 
         // load presentation object file into DOM
         Reference< XMultiServiceFactory > xServiceFactory(

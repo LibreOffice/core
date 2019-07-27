@@ -39,6 +39,7 @@
 #include <com/sun/star/geometry/RealPoint2D.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
+#include <comphelper/sequence.hxx>
 #include <tools/zcodec.hxx>
 #include <filter/msfilter/classids.hxx>
 #include <filter/msfilter/msoleexp.hxx>
@@ -508,12 +509,10 @@ void PPTWriter::ImplCreateDocumentSummaryInformation()
     SvMemoryStream  aHyperBlob;
     ImplCreateHyperBlob( aHyperBlob );
 
-    uno::Sequence<sal_Int8> aHyperSeq(aHyperBlob.Tell());
+    auto nHyperLength = static_cast<sal_Int32>(aHyperBlob.Tell());
     const sal_Int8* pBlob(
         static_cast<const sal_Int8*>(aHyperBlob.GetData()));
-    for (sal_Int32 j = 0; j < aHyperSeq.getLength(); ++j) {
-        aHyperSeq[j] = pBlob[j];
-    }
+    auto aHyperSeq = comphelper::arrayToSequence<sal_Int8>(pBlob, nHyperLength);
 
     if ( mnCnvrtFlags & 0x8000 )
     {

@@ -137,10 +137,10 @@ void RecentlyUsedMasterPages::LoadPersistentValues()
         Sequence<OUString> aKeys (xSet->getElementNames());
         mvMasterPages.clear();
         mvMasterPages.reserve(aKeys.getLength());
-        for (int i=0; i<aKeys.getLength(); i++)
+        for (const auto& rKey : aKeys)
         {
             Reference<container::XNameAccess> xSetItem (
-                xSet->getByName(aKeys[i]), UNO_QUERY);
+                xSet->getByName(rKey), UNO_QUERY);
             if (xSetItem.is())
             {
                 Any aURL (xSetItem->getByName(sURLMemberName));
@@ -195,9 +195,8 @@ void RecentlyUsedMasterPages::SavePersistentValues()
 
         // Clear the set.
         Sequence<OUString> aKeys (xSet->getElementNames());
-        sal_Int32 i;
-        for (i=0; i<aKeys.getLength(); i++)
-            xSet->removeByName (aKeys[i]);
+        for (const auto& rKey : aKeys)
+            xSet->removeByName (rKey);
 
         // Fill it with the URLs of this object.
         const OUString sURLMemberName("URL");
