@@ -19,39 +19,35 @@
 #ifndef INCLUDED_CUI_SOURCE_OPTIONS_OPTHTML_HXX
 #define INCLUDED_CUI_SOURCE_OPTIONS_OPTHTML_HXX
 
-#include <vcl/button.hxx>
-#include <vcl/field.hxx>
 #include <sfx2/tabdlg.hxx>
 #include <svx/txencbox.hxx>
 
 class OfaHtmlTabPage : public SfxTabPage
 {
 
-    VclPtr<NumericField>    aSize1NF;
-    VclPtr<NumericField>    aSize2NF;
-    VclPtr<NumericField>    aSize3NF;
-    VclPtr<NumericField>    aSize4NF;
-    VclPtr<NumericField>    aSize5NF;
-    VclPtr<NumericField>    aSize6NF;
-    VclPtr<NumericField>    aSize7NF;
+    std::unique_ptr<weld::SpinButton> m_xSize1NF;
+    std::unique_ptr<weld::SpinButton> m_xSize2NF;
+    std::unique_ptr<weld::SpinButton> m_xSize3NF;
+    std::unique_ptr<weld::SpinButton> m_xSize4NF;
+    std::unique_ptr<weld::SpinButton> m_xSize5NF;
+    std::unique_ptr<weld::SpinButton> m_xSize6NF;
+    std::unique_ptr<weld::SpinButton> m_xSize7NF;
 
-    VclPtr<CheckBox>        aNumbersEnglishUSCB;
-    VclPtr<CheckBox>        aUnknownTagCB;
-    VclPtr<CheckBox>        aIgnoreFontNamesCB;
+    std::unique_ptr<weld::CheckButton> m_xNumbersEnglishUSCB;
+    std::unique_ptr<weld::CheckButton> m_xUnknownTagCB;
+    std::unique_ptr<weld::CheckButton> m_xIgnoreFontNamesCB;
 
-    VclPtr<CheckBox>        aStarBasicCB;
-    VclPtr<CheckBox>        aStarBasicWarningCB;
-    VclPtr<CheckBox>        aPrintExtensionCB;
-    VclPtr<CheckBox>        aSaveGrfLocalCB;
-    VclPtr<SvxTextEncodingBox> aCharSetLB;
+    std::unique_ptr<weld::CheckButton> m_xStarBasicCB;
+    std::unique_ptr<weld::CheckButton> m_xStarBasicWarningCB;
+    std::unique_ptr<weld::CheckButton> m_xPrintExtensionCB;
+    std::unique_ptr<weld::CheckButton> m_xSaveGrfLocalCB;
+    std::unique_ptr<TextEncodingBox> m_xCharSetLB;
 
-    DECL_LINK(CheckBoxHdl_Impl, Button*, void);
+    DECL_LINK(CheckBoxHdl_Impl, weld::ToggleButton&, void);
 
 public:
+    OfaHtmlTabPage(TabPageParent pParent, const SfxItemSet& rSet);
     virtual ~OfaHtmlTabPage() override;
-    virtual void dispose() override;
-
-    OfaHtmlTabPage(vcl::Window* pParent, const SfxItemSet& rSet);
     static VclPtr<SfxTabPage>  Create( TabPageParent pParent,
                                        const SfxItemSet* rAttrSet );
 

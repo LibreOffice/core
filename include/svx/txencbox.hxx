@@ -94,7 +94,9 @@ public:
             <TRUE/> whenever the box is used in import dialogs. */
     void                FillFromTextEncodingTable(
                             bool bExcludeImportSubsets,
-                            sal_uInt32 nExcludeInfoFlags = 0);
+                            sal_uInt32 nExcludeInfoFlags = 0,
+                            sal_uInt32 nButIncludeInfoFlags = 0
+                            );
 
     /** Fill with all encodings known to the dbtools::OCharsetMap but exclude
         those matching one or more given flags as defined in rtl/tencinfo.h
@@ -114,6 +116,11 @@ public:
     void                FillFromDbTextEncodingMap(
                             bool bExcludeImportSubsets,
                             sal_uInt32 nExcludeInfoFlags = 0);
+
+    /** Fill with all known MIME encodings and select the best according to
+        <method>GetBestMimeEncoding</method>
+     */
+    void                FillWithMimeAndSelectBest();
 
     void                InsertTextEncoding( const rtl_TextEncoding nEnc );
 
@@ -157,7 +164,9 @@ public:
             <TRUE/> whenever the box is used in import dialogs. */
     void                FillFromTextEncodingTable(
                             bool bExcludeImportSubsets,
-                            sal_uInt32 nExcludeInfoFlags = 0);
+                            sal_uInt32 nExcludeInfoFlags = 0,
+                            sal_uInt32 nButIncludeInfoFlags = 0
+                            );
 
     /** Fill with all encodings known to the dbtools::OCharsetMap but exclude
         those matching one or more given flags as defined in rtl/tencinfo.h
