@@ -87,7 +87,7 @@ class SAL_DLLPUBLIC_RTTI ScModule: public SfxModule, public SfxListener, public 
     ScMessagePool*      m_pMessagePool;
     // there is no global InputHandler anymore, each View has its own
     ScInputHandler*     m_pRefInputHandler;
-    std::unique_ptr<ScViewCfg>        m_pViewCfg;
+    std::unique_ptr<ScViewCfg, o3tl::default_delete<ScViewCfg>> m_pViewCfg;
     std::unique_ptr<ScDocCfg, o3tl::default_delete<ScDocCfg>> m_pDocCfg;
     std::unique_ptr<ScAppCfg, o3tl::default_delete<ScAppCfg>> m_pAppCfg;
     std::unique_ptr<ScDefaultsCfg>    m_pDefaultsCfg;
