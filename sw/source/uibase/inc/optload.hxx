@@ -60,33 +60,32 @@ public:
 class SwLoadOptPage : public SfxTabPage
 {
 private:
-    VclPtr<RadioButton>     m_pAlwaysRB;
-    VclPtr<RadioButton>     m_pRequestRB;
-    VclPtr<RadioButton>     m_pNeverRB;
-
-    VclPtr<CheckBox>        m_pAutoUpdateFields;
-    VclPtr<CheckBox>        m_pAutoUpdateCharts;
-
-    VclPtr<ListBox>         m_pMetricLB;
-    VclPtr<FixedText>       m_pTabFT;
-    VclPtr<MetricField>     m_pTabMF;
-    VclPtr<CheckBox>        m_pUseSquaredPageMode;
-    VclPtr<CheckBox>        m_pUseCharUnit;
-    VclPtr<Edit>            m_pWordCountED;
-    VclPtr<CheckBox>        m_pShowStandardizedPageCount;
-    VclPtr<NumericField>    m_pStandardizedPageSizeNF;
-
     SwWrtShell*      m_pWrtShell;
     sal_uInt16       m_nLastTab;
     sal_Int32        m_nOldLinkMode;
 
-    DECL_LINK(MetricHdl, ListBox&, void);
-    DECL_LINK(StandardizedPageCountCheckHdl, Button*, void);
+    std::unique_ptr<weld::RadioButton> m_xAlwaysRB;
+    std::unique_ptr<weld::RadioButton> m_xRequestRB;
+    std::unique_ptr<weld::RadioButton> m_xNeverRB;
+
+    std::unique_ptr<weld::CheckButton> m_xAutoUpdateFields;
+    std::unique_ptr<weld::CheckButton> m_xAutoUpdateCharts;
+
+    std::unique_ptr<weld::ComboBox> m_xMetricLB;
+    std::unique_ptr<weld::Label> m_xTabFT;
+    std::unique_ptr<weld::MetricSpinButton> m_xTabMF;
+    std::unique_ptr<weld::CheckButton> m_xUseSquaredPageMode;
+    std::unique_ptr<weld::CheckButton> m_xUseCharUnit;
+    std::unique_ptr<weld::Entry> m_xWordCountED;
+    std::unique_ptr<weld::CheckButton> m_xShowStandardizedPageCount;
+    std::unique_ptr<weld::SpinButton> m_xStandardizedPageSizeNF;
+
+    DECL_LINK(MetricHdl, weld::ComboBox&, void);
+    DECL_LINK(StandardizedPageCountCheckHdl, weld::Button&, void);
 
 public:
-    SwLoadOptPage(vcl::Window* pParent, const SfxItemSet& rSet);
+    SwLoadOptPage(TabPageParent pParent, const SfxItemSet& rSet);
     virtual ~SwLoadOptPage() override;
-    virtual void dispose() override;
 
     static VclPtr<SfxTabPage> Create( TabPageParent pParent,
                                       const SfxItemSet* rAttrSet);
