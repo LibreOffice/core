@@ -98,10 +98,7 @@ void SAL_CALL LpsolveSolver::solve()
 
     // collect variables in vector (?)
 
-    std::vector<table::CellAddress> aVariableCells;
-    aVariableCells.reserve(maVariables.getLength());
-    for (sal_Int32 nPos=0; nPos<maVariables.getLength(); nPos++)
-        aVariableCells.push_back( maVariables[nPos] );
+    auto aVariableCells = comphelper::sequenceToContainer<std::vector<table::CellAddress>>(maVariables);
     size_t nVariables = aVariableCells.size();
     size_t nVar = 0;
 
@@ -110,12 +107,12 @@ void SAL_CALL LpsolveSolver::solve()
     ScSolverCellHashMap aCellsHash;
     aCellsHash[maObjective].reserve( nVariables + 1 );                  // objective function
 
-    for (sal_Int32 nConstrPos = 0; nConstrPos < maConstraints.getLength(); ++nConstrPos)
+    for (const auto& rConstr : maConstraints)
     {
-        table::CellAddress aCellAddr = maConstraints[nConstrPos].Left;
+        table::CellAddress aCellAddr = rConstr.Left;
         aCellsHash[aCellAddr].reserve( nVariables + 1 );                // constraints: left hand side
 
-        if ( maConstraints[nConstrPos].Right >>= aCellAddr )
+        if ( rConstr.Right >>= aCellAddr )
             aCellsHash[aCellAddr].reserve( nVariables + 1 );            // constraints: right hand side
     }
 
@@ -195,10 +192,10 @@ void SAL_CALL LpsolveSolver::solve()
 
     set_add_rowmode(lp, TRUE);
 
-    for (sal_Int32 nConstrPos = 0; nConstrPos < maConstraints.getLength(); ++nConstrPos)
+    for (const auto& rConstr : maConstraints)
     {
         // integer constraints are set later
-        sheet::SolverConstraintOperator eOp = maConstraints[nConstrPos].Operator;
+        sheet::SolverConstraintOperator eOp = rConstr.Operator;
         if ( eOp == sheet::SolverConstraintOperator_LESS_EQUAL ||
              eOp == sheet::SolverConstraintOperator_GREATER_EQUAL ||
              eOp == sheet::SolverConstraintOperator_EQUAL )
@@ -206,13 +203,13 @@ void SAL_CALL LpsolveSolver::solve()
             double fDirectValue = 0.0;
             bool bRightCell = false;
             table::CellAddress aRightAddr;
-            const uno::Any& rRightAny = maConstraints[nConstrPos].Right;
+            const uno::Any& rRightAny = rConstr.Right;
             if ( rRightAny >>= aRightAddr )
                 bRightCell = true;                  // cell specified as right-hand side
             else
                 rRightAny >>= fDirectValue;         // constant value
 
-            table::CellAddress aLeftAddr = maConstraints[nConstrPos].Left;
+            table::CellAddress aLeftAddr = rConstr.Left;
 
             const std::vector<double>& rLeftCoeff = aCellsHash[aLeftAddr];
             std::unique_ptr<REAL[]> pValues(new REAL[nVariables+1] );
@@ -263,13 +260,13 @@ void SAL_CALL LpsolveSolver::solve()
 
     // apply single-var integer constraints
 
-    for (sal_Int32 nConstrPos = 0; nConstrPos < maConstraints.getLength(); ++nConstrPos)
+    for (const auto& rConstr : maConstraints)
     {
-        sheet::SolverConstraintOperator eOp = maConstraints[nConstrPos].Operator;
+        sheet::SolverConstraintOperator eOp = rConstr.Operator;
         if ( eOp == sheet::SolverConstraintOperator_INTEGER ||
              eOp == sheet::SolverConstraintOperator_BINARY )
         {
-            table::CellAddress aLeftAddr = maConstraints[nConstrPos].Left;
+            table::CellAddress aLeftAddr = rConstr.Left;
             // find variable index for cell
             for (nVar=0; nVar<nVariables; nVar++)
                 if ( AddressEqual( aVariableCells[nVar], aLeftAddr ) )

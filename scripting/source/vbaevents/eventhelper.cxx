@@ -382,21 +382,13 @@ ScriptEventHelper::getEventListeners()
         xIntrospection->inspect( makeAny( m_xControl ) );
     Sequence< Type > aControlListeners =
         xIntrospectionAccess->getSupportedListeners();
-    sal_Int32 nLength = aControlListeners.getLength();
-    for ( sal_Int32 i = 0; i< nLength; ++i )
+    for ( const Type& listType : aControlListeners )
     {
-        Type& listType = aControlListeners[ i ];
         OUString sFullTypeName = listType.getTypeName();
         Sequence< OUString > sMeths =
             comphelper::getEventMethodsForType( listType );
-        sal_Int32 sMethLen = sMeths.getLength();
-        for ( sal_Int32 j=0 ; j < sMethLen; ++j )
-        {
-            OUString sEventMethod = sFullTypeName;
-            sEventMethod += DELIM;
-            sEventMethod += sMeths[ j ];
-            eventMethods.push_back( sEventMethod );
-        }
+        std::transform(sMeths.begin(), sMeths.end(), std::back_inserter(eventMethods),
+            [&sFullTypeName](const OUString& rMeth) -> OUString { return sFullTypeName + DELIM + rMeth; });
     }
 
     return comphelper::containerToSequence(eventMethods);
@@ -476,16 +468,14 @@ typedef std::unordered_map< OUString, Any > EventSupplierHash;
 
 ReadOnlyEventsNameContainer::ReadOnlyEventsNameContainer( const Sequence< OUString >& eventMethods, const OUString& sCodeName )
 {
-    const OUString* pSrc = eventMethods.getConstArray();
-    sal_Int32 nLen = eventMethods.getLength();
-    for ( sal_Int32 index = 0; index < nLen; ++index, ++pSrc )
+    for ( const OUString& rSrc : eventMethods )
     {
         Any aDesc;
         ScriptEventDescriptor evtDesc;
-        if (  eventMethodToDescriptor( *pSrc, evtDesc, sCodeName ) )
+        if (  eventMethodToDescriptor( rSrc, evtDesc, sCodeName ) )
         {
             aDesc <<= evtDesc;
-            m_hEvents[ *pSrc ] = aDesc;
+            m_hEvents[ rSrc ] = aDesc;
         }
     }
 }
