@@ -2458,21 +2458,6 @@ void ScDataPilotFieldObj::setGroupInfo( const DataPilotFieldGroupInfo* pInfo )
     }
 }
 
-bool ScDataPilotFieldObj::HasString(const Sequence< OUString >& rItems, const OUString& aString)
-{
-    bool bRet = false;
-
-    sal_Int32 nCount(rItems.getLength());
-    sal_Int32 nItem(0);
-    while (nItem < nCount && !bRet)
-    {
-        bRet = rItems[nItem] == aString;
-        ++nItem;
-    }
-
-    return bRet;
-}
-
 // XDataPilotFieldGrouping
 Reference< XDataPilotField > SAL_CALL ScDataPilotFieldObj::createNameGroup( const Sequence< OUString >& rItems )
 {
@@ -2565,7 +2550,7 @@ Reference< XDataPilotField > SAL_CALL ScDataPilotFieldObj::createNameGroup( cons
                 {
                     const ScDPSaveGroupItem& rBaseGroup = pBaseGroupDim->GetGroupByIndex( nGroup );
 
-                    if (!HasString(rItems, rBaseGroup.GetGroupName()))    //! ignore case?
+                    if (comphelper::findValue(rItems, rBaseGroup.GetGroupName()) == -1)    //! ignore case?
                     {
                         // add an additional group for each item that is not in the selection
                         ScDPSaveGroupItem aGroup( rBaseGroup.GetGroupName() );
