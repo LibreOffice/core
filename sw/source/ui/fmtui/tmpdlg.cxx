@@ -26,6 +26,7 @@
 #include <sfx2/htmlmode.hxx>
 #include <svtools/htmlcfg.hxx>
 #include <svl/cjkoptions.hxx>
+#include <vcl/svapp.hxx>
 #include <numpara.hxx>
 #include <fmtclds.hxx>
 #include <swtypes.hxx>

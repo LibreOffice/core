@@ -28,7 +28,6 @@
 #include <cppuhelper/implbase.hxx>
 #include <vector>
 #include <vcl/svapp.hxx>
-#include <osl/mutex.hxx>
 
 class SwView;
 

@@ -18,6 +18,7 @@
  */
 
 #include <prcntfld.hxx>
+#include <vcl/field.hxx>
 
 SwPercentField::SwPercentField(std::unique_ptr<weld::MetricSpinButton> pControl)
     : m_pField(std::move(pControl))

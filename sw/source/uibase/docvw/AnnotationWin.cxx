@@ -28,6 +28,7 @@
 #include <vcl/edit.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/scrbar.hxx>
+#include <vcl/svapp.hxx>
 
 #include <svl/undo.hxx>
 #include <unotools/localedatawrapper.hxx>

@@ -19,7 +19,6 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_MAILMERGEHELPER_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_MAILMERGEHELPER_HXX
 
-#include <unotools/configitem.hxx>
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/mail/XAuthenticator.hpp>
 #include <com/sun/star/mail/XConnectionListener.hpp>

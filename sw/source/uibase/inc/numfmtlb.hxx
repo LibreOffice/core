@@ -20,6 +20,7 @@
 #define INCLUDED_SW_SOURCE_UIBASE_INC_NUMFMTLB_HXX
 
 #include <vcl/lstbox.hxx>
+#include <vcl/weld.hxx>
 #include <svl/zforlist.hxx>
 #include <swdllapi.h>
 

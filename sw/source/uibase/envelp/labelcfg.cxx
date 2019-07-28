@@ -29,6 +29,8 @@
 #include <comphelper/sequence.hxx>
 #include <osl/diagnose.h>
 
+#include <com/sun/star/beans/PropertyValue.hpp>
+
 #include <unomid.h>
 
 using namespace utl;

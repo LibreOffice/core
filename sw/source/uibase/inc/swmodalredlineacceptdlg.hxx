@@ -18,7 +18,7 @@
  */
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_SWMODALREDLINEACCEPTDLG_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_SWMODALREDLINEACCEPTDLG_HXX
-#include "chldwrap.hxx"
+
 #include <sfx2/basedlgs.hxx>
 
 class SwRedlineAcceptDlg;

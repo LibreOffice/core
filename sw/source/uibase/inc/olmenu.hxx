@@ -26,11 +26,12 @@
 
 #include <rtl/ustring.hxx>
 #include <vcl/builder.hxx>
-#include <vcl/image.hxx>
 #include <vcl/menu.hxx>
 
 #include <map>
 #include <vector>
+
+#include <swdllapi.h>
 
 //! Don't change these values. You may break context menu modifying extensions!
 #define MN_IGNORE_SELECTION             201

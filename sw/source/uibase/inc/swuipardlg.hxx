@@ -18,7 +18,10 @@
  */
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_SWUIPARDLG_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_SWUIPARDLG_HXX
-#include "pardlg.hxx"
+
+#include <view.hxx>
+
+#include <sfx2/tabdlg.hxx>
 
 class SwParaDlg: public SfxTabDialogController
 {

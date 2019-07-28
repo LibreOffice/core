@@ -33,6 +33,8 @@
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/uno/Reference.h>
 
+#include <dbmgr.hxx>
+
 class SwWrtShell;
 class SwModuleOptions;
 class SwXSelChgLstnr_Impl;

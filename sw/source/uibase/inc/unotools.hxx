@@ -19,17 +19,11 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_UNOTOOLS_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_UNOTOOLS_HXX
 
-#include <vcl/button.hxx>
-#include <vcl/edit.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/layout.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/customweld.hxx>
-#include "actctrl.hxx"
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/text/XTextCursor.hpp>
-#include <com/sun/star/awt/XControl.hpp>
 #include <swdllapi.h>
 
 #define EX_SHOW_ONLINE_LAYOUT   0x001

@@ -18,6 +18,7 @@
  */
 
 #include <hintids.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <svl/stritem.hxx>
 #include <svl/intitem.hxx>
@@ -51,6 +52,7 @@
 #include <pagedesc.hxx>
 #include <uiitems.hxx>
 #include <poolfmt.hxx>
+#include <swtablerep.hxx>
 #include <SwStyleNameMapper.hxx>
 
 #include <app.hrc>

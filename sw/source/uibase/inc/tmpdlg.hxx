@@ -20,6 +20,7 @@
 #define INCLUDED_SW_SOURCE_UIBASE_INC_TMPDLG_HXX
 
 #include <sfx2/styledlg.hxx>
+#include <svl/style.hxx>
 
 class SfxItemSet;
 class SwWrtShell;
