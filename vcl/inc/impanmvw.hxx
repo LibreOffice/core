@@ -20,6 +20,7 @@
 #ifndef INCLUDED_VCL_SOURCE_GDI_IMPANMVW_HXX
 #define INCLUDED_VCL_SOURCE_GDI_IMPANMVW_HXX
 
+#include <vcl/dllapi.h>
 #include <vcl/animate/Animation.hxx>
 #include <vcl/vclptr.hxx>
 
@@ -41,7 +42,7 @@ struct AInfo
 };
 
 
-class ImplAnimView
+class VCL_DLLPUBLIC ImplAnimView
 {
 private:
 
@@ -68,11 +69,10 @@ private:
     bool            mbIsMirroredVertically;
 
 public:
-                    ~ImplAnimView();
-private:
                     ImplAnimView( Animation* pParent, OutputDevice* pOut,
                                   const Point& rPt, const Size& rSz, sal_uLong nExtraData,
                                   OutputDevice* pFirstFrameOutDev = nullptr );
+                    ~ImplAnimView();
 
     bool            matches(const OutputDevice* pOut, tools::Long nExtraData) const;
     void            drawToPos( sal_uLong nPos );
