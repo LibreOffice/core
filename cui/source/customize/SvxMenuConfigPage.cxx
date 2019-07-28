@@ -20,75 +20,21 @@
 #include <sal/config.h>
 #include <sal/log.hxx>
 
-#include <cassert>
-#include <stdlib.h>
-#include <time.h>
-#include <typeinfo>
-
 #include <vcl/commandinfoprovider.hxx>
-#include <vcl/help.hxx>
 #include <vcl/weld.hxx>
-#include <vcl/decoview.hxx>
-#include <vcl/virdev.hxx>
-#include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
-
-#include <sfx2/app.hxx>
-#include <sfx2/sfxdlg.hxx>
-#include <sfx2/viewfrm.hxx>
-#include <sfx2/viewsh.hxx>
-#include <sfx2/msg.hxx>
-#include <sfx2/msgpool.hxx>
-#include <sfx2/minfitem.hxx>
-#include <sfx2/objsh.hxx>
-#include <sfx2/request.hxx>
-#include <sfx2/filedlghelper.hxx>
-#include <svl/stritem.hxx>
-#include <svtools/miscopt.hxx>
-#include <tools/diagnose_ex.h>
 
 #include <algorithm>
 #include <strings.hrc>
 #include <helpids.h>
 
-#include <acccfg.hxx>
 #include <cfg.hxx>
 #include <SvxMenuConfigPage.hxx>
 #include <SvxConfigPageHelper.hxx>
 #include <dialmgr.hxx>
 
 #include <comphelper/processfactory.hxx>
-#include <unotools/configmgr.hxx>
-#include <com/sun/star/embed/ElementModes.hpp>
-#include <com/sun/star/embed/FileSystemStorageFactory.hpp>
-#include <com/sun/star/frame/UnknownModuleException.hpp>
-#include <com/sun/star/frame/XFrames.hpp>
-#include <com/sun/star/frame/XLayoutManager.hpp>
-#include <com/sun/star/frame/FrameSearchFlag.hpp>
-#include <com/sun/star/frame/ModuleManager.hpp>
-#include <com/sun/star/frame/XController.hpp>
-#include <com/sun/star/frame/Desktop.hpp>
-#include <com/sun/star/graphic/GraphicProvider.hpp>
-#include <com/sun/star/io/IOException.hpp>
-#include <com/sun/star/lang/IllegalAccessException.hpp>
-#include <com/sun/star/ui/ItemType.hpp>
-#include <com/sun/star/ui/ItemStyle.hpp>
-#include <com/sun/star/ui/ImageManager.hpp>
-#include <com/sun/star/ui/theModuleUIConfigurationManagerSupplier.hpp>
-#include <com/sun/star/ui/XUIConfiguration.hpp>
-#include <com/sun/star/ui/XUIConfigurationListener.hpp>
-#include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
-#include <com/sun/star/ui/XUIConfigurationPersistence.hpp>
-#include <com/sun/star/ui/XUIConfigurationStorage.hpp>
-#include <com/sun/star/ui/XModuleUIConfigurationManager.hpp>
-#include <com/sun/star/ui/XUIElement.hpp>
-#include <com/sun/star/ui/UIElementType.hpp>
 #include <com/sun/star/ui/ImageType.hpp>
-#include <com/sun/star/ui/theWindowStateConfiguration.hpp>
-#include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
-#include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
-#include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
-#include <com/sun/star/util/thePathSettings.hpp>
 
 #include <dlgname.hxx>
 

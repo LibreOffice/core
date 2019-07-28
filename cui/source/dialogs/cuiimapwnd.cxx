@@ -17,25 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <tools/urlobj.hxx>
-#include <vcl/help.hxx>
-#include <sfx2/sfxsids.hrc>
-#include <macroass.hxx>
-#include <vcl/imaprect.hxx>
-#include <vcl/imapcirc.hxx>
-#include <vcl/imappoly.hxx>
-#include <svl/urlbmk.hxx>
-#include <svx/xoutbmp.hxx>
 #include <cuiimapwnd.hxx>
-#include <svx/svdpage.hxx>
-#include <svx/svdorect.hxx>
-#include <svx/svdocirc.hxx>
-#include <svx/svdopath.hxx>
-#include <svx/xfltrit.hxx>
-#include <svx/svdpagv.hxx>
-#include <svl/urihelper.hxx>
-
-#include <sot/formats.hxx>
 
 /*************************************************************************
 |*

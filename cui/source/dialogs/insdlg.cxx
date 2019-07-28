@@ -22,18 +22,16 @@
 #include <com/sun/star/embed/EmbedStates.hpp>
 #include <com/sun/star/embed/XInsertObjectDialog.hpp>
 #include <com/sun/star/embed/MSOLEObjectSystemCreator.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
-#include <com/sun/star/ui/dialogs/FilePicker.hpp>
-#include <com/sun/star/ui/dialogs/XFilterManager.hpp>
+#include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
 #include <comphelper/processfactory.hxx>
 
 #include <insdlg.hxx>
 #include <dialmgr.hxx>
+#include <osl/diagnose.h>
 #include <svtools/imagemgr.hxx>
 #include <svtools/strings.hrc>
 #include <svtools/svtresid.hxx>
@@ -42,7 +40,6 @@
 #include <tools/urlobj.hxx>
 #include <tools/debug.hxx>
 #include <tools/stream.hxx>
-#include <svl/urihelper.hxx>
 #include <vcl/image.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/svapp.hxx>
@@ -50,16 +47,9 @@
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/frmdescr.hxx>
 #include <sfx2/viewsh.hxx>
-#include <svl/ownlist.hxx>
 #include <comphelper/seqstream.hxx>
 
 #include <strings.hrc>
-
-#include <osl/file.hxx>
-
-#include <com/sun/star/container/XHierarchicalNameAccess.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
-#include <vcl/settings.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;

@@ -18,8 +18,6 @@
  */
 
 #include <dialmgr.hxx>
-#include <svx/svxdlg.hxx>
-#include <vcl/svapp.hxx>
 #include <strings.hrc>
 #include <insrc.hxx>
 

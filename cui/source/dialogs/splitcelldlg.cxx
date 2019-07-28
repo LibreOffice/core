@@ -17,10 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sfx2/dispatch.hxx>
-#include <svl/intitem.hxx>
-#include <svl/eitem.hxx>
-#include <vcl/svapp.hxx>
 #include <splitcelldlg.hxx>
 
 SvxSplitTableDlg::SvxSplitTableDlg(weld::Window *pParent, bool bIsTableVertical, long nMaxVertical, long nMaxHorizontal)

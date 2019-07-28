@@ -18,7 +18,6 @@
  */
 
 #include <linkdlg.hxx>
-#include <sal/log.hxx>
 #include <vcl/svapp.hxx>
 
 #include <tools/diagnose_ex.h>
@@ -32,7 +31,6 @@
 #include <strings.hrc>
 #include <sfx2/linkmgr.hxx>
 #include <sfx2/linksrc.hxx>
-#include <svtools/soerr.hxx>
 #include <sfx2/lnkbase.hxx>
 #include <sfx2/objsh.hxx>
 

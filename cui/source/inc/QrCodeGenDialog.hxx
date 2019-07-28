@@ -13,7 +13,6 @@
 
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/drawing/QRCodeErrorCorrection.hpp>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 

@@ -18,20 +18,14 @@
  */
 
 #include <dialmgr.hxx>
-#include <sfx2/docfile.hxx>
 #include <unotools/viewoptions.hxx>
 #include <vcl/graph.hxx>
-#include <vcl/svapp.hxx>
-#include <vcl/settings.hxx>
-#include <vcl/wrkwin.hxx>
-#include <vcl/builderfactory.hxx>
 
 // UNO-Stuff
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
-#include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/document/XLinkTargetSupplier.hpp>

@@ -21,14 +21,12 @@
 
 #include <osl/diagnose.h>
 #include <comphelper/lok.hxx>
-#include <vcl/settings.hxx>
 #include <unotools/viewoptions.hxx>
 #include <cuihyperdlg.hxx>
 #include <hlinettp.hxx>
 #include <hlmailtp.hxx>
 #include <hldoctp.hxx>
 #include <hldocntp.hxx>
-#include <bitmaps.hlst>
 #include <sfx2/app.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svl/eitem.hxx>

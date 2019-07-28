@@ -18,47 +18,20 @@
  */
 
 #include <sal/config.h>
-#include <sal/log.hxx>
-
-#include <cassert>
-#include <stdlib.h>
-#include <time.h>
-#include <typeinfo>
 
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/event.hxx>
-#include <vcl/help.hxx>
 #include <vcl/weld.hxx>
-#include <vcl/decoview.hxx>
-#include <vcl/virdev.hxx>
-#include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
-
-#include <sfx2/app.hxx>
-#include <sfx2/sfxdlg.hxx>
-#include <sfx2/viewfrm.hxx>
-#include <sfx2/viewsh.hxx>
-#include <sfx2/msg.hxx>
-#include <sfx2/msgpool.hxx>
-#include <sfx2/minfitem.hxx>
-#include <sfx2/objsh.hxx>
-#include <sfx2/request.hxx>
-#include <sfx2/filedlghelper.hxx>
-#include <sfx2/sfxsids.hrc>
-#include <svl/stritem.hxx>
-#include <svtools/miscopt.hxx>
-#include <tools/diagnose_ex.h>
 
 #include <algorithm>
 #include <helpids.h>
 #include <strings.hrc>
 
-#include <acccfg.hxx>
 #include <cfg.hxx>
 #include <SvxNotebookbarConfigPage.hxx>
 #include <SvxConfigPageHelper.hxx>
 #include <dialmgr.hxx>
-#include <libxml/xmlmemory.h>
 #include <libxml/parser.h>
 #include <osl/file.hxx>
 #include <CustomNotebookbarGenerator.hxx>

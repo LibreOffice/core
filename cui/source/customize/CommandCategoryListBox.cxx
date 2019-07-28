@@ -40,7 +40,6 @@
 
 #include <dialmgr.hxx>
 #include <strings.hrc>
-#include <bitmaps.hlst>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/string.hxx>
