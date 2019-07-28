@@ -448,9 +448,6 @@ void SvxBulletAndPositionDlg::InitControls()
     bool bSameStart = true;
     bool bSamePrefix = true;
     bool bSameSuffix = true;
-    bool bAllLevel = true;
-    bool bSameCharFmt = true;
-    bool bSameVOrient = true;
     bool bSameSize = true;
     bool bSameBulColor = true;
     bool bSameBulRelSize = true;
@@ -460,13 +457,10 @@ void SvxBulletAndPositionDlg::InitControls()
 
     const SvxNumberFormat* aNumFmtArr[SVX_MAX_NUM];
     OUString sFirstCharFmt;
-    sal_Int16 eFirstOrient = text::VertOrientation::NONE;
     SvxAdjust eFirstAdjust = SvxAdjust::Left;
     Size aFirstSize(0, 0);
     sal_uInt16 nMask = 1;
     sal_uInt16 nLvl = SAL_MAX_UINT16;
-    sal_uInt16 nHighestLevel = 0;
-    (void)nHighestLevel;
 
     bool bBullColor = pActNum->IsFeatureSupported(SvxNumRuleFlags::BULLET_COLOR);
     bool bBullRelSize = pActNum->IsFeatureSupported(SvxNumRuleFlags::BULLET_REL_SIZE);
@@ -483,7 +477,6 @@ void SvxBulletAndPositionDlg::InitControls()
             {
                 nLvl = i;
                 sFirstCharFmt = aNumFmtArr[i]->GetCharFormatName();
-                eFirstOrient = aNumFmtArr[i]->GetVertOrient();
                 if (bShowBitmap)
                     aFirstSize = aNumFmtArr[i]->GetGraphicSize();
             }
@@ -495,10 +488,6 @@ void SvxBulletAndPositionDlg::InitControls()
 
                 bSamePrefix = aNumFmtArr[i]->GetPrefix() == aNumFmtArr[nLvl]->GetPrefix();
                 bSameSuffix = aNumFmtArr[i]->GetSuffix() == aNumFmtArr[nLvl]->GetSuffix();
-                bAllLevel &= aNumFmtArr[i]->GetIncludeUpperLevels()
-                             == aNumFmtArr[nLvl]->GetIncludeUpperLevels();
-                bSameCharFmt &= sFirstCharFmt == aNumFmtArr[i]->GetCharFormatName();
-                bSameVOrient &= eFirstOrient == aNumFmtArr[i]->GetVertOrient();
                 //bSameAdjust &= eFirstAdjust == aNumFmtArr[i]->GetNumAdjust();
                 if (bShowBitmap && bSameSize)
                     bSameSize &= aNumFmtArr[i]->GetGraphicSize() == aFirstSize;
@@ -510,7 +499,6 @@ void SvxBulletAndPositionDlg::InitControls()
                     &= aNumFmtArr[i]->GetFirstLineOffset()
                        == aNumFmtArr[nLvl]->GetFirstLineOffset();
             }
-            nHighestLevel = i;
         }
 
         nMask <<= 1;
@@ -523,7 +511,6 @@ void SvxBulletAndPositionDlg::InitControls()
     else
     {
         nNumberingType = SVX_NUM_NUMBER_NONE;
-        bAllLevel = false;
         bSameDistBorderNum = false;
         bSameIndent = false;
         bSameBulRelSize = false;
