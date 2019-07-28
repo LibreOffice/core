@@ -49,13 +49,13 @@ enum class SfxChildWindowFlags
     TASK            = 0x10, // ChildWindow inside the Task
     CANTGETFOCUS    = 0x20, // ChildWindow can not get focus
     ALWAYSAVAILABLE = 0x40, // ChildWindow is never disabled
-    NEVERHIDE       = 0x80  // ChildWindow is can always made
-                            // visible/is visible
+    NEVERHIDE       = 0x80, // ChildWindow is always visible
+    NEVERCLONE      = 0x100, // ChildWindow is not recreated in new view
 };
 
 namespace o3tl
 {
-    template<> struct typed_flags<SfxChildWindowFlags> : is_typed_flags<SfxChildWindowFlags, 0xf5> {};
+    template<> struct typed_flags<SfxChildWindowFlags> : is_typed_flags<SfxChildWindowFlags, 0x1f5> {};
 }
 
 
