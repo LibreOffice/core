@@ -98,6 +98,8 @@ void ScSpellDialogChildWindow::ApplyChangedSentence( const svx::SpellPortions& r
 
 void ScSpellDialogChildWindow::GetFocus()
 {
+    SolarMutexGuard aGuard;
+
     if( IsSelectionChanged() )
     {
         Reset();
