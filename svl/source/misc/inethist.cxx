@@ -254,16 +254,10 @@ void INetURLHistory_Impl::putUrl (const OUString &rUrl)
 
         // Check source and destination.
         sal_uInt16 nDI = std::min (k, sal_uInt16(capacity() - 1));
-        if (nSI < nDI)
-        {
-            if (!(m_pHash[nDI] < h))
-                nDI -= 1;
-        }
-        if (nDI < nSI)
-        {
-            if (m_pHash[nDI] < h)
-                nDI += 1;
-        }
+        if (nSI < nDI && !(m_pHash[nDI] < h))
+            nDI -= 1;
+        if (nDI < nSI && m_pHash[nDI] < h)
+            nDI += 1;
 
         // Assign data.
         m_pList[m_aHead.m_nNext].m_nHash = m_pHash[nSI].m_nHash = h;

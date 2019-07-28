@@ -266,26 +266,23 @@ bool JobData::constructFromStreamBuffer( const void* pData, sal_uInt32 bytes, Jo
             bPDFDevice = true;
             rJobData.m_nPDFDevice = aLine.copy(RTL_CONSTASCII_LENGTH(pdfdeviceEquals)).toInt32();
         }
-        else if (aLine == "PPDContexData")
+        else if (aLine == "PPDContexData" && bPrinter)
         {
-            if( bPrinter )
+            PrinterInfoManager& rManager = PrinterInfoManager::get();
+            const PrinterInfo& rInfo = rManager.getPrinterInfo( rJobData.m_aPrinterName );
+            rJobData.m_pParser = PPDParser::getParser( rInfo.m_aDriverName );
+            if( rJobData.m_pParser )
             {
-                PrinterInfoManager& rManager = PrinterInfoManager::get();
-                const PrinterInfo& rInfo = rManager.getPrinterInfo( rJobData.m_aPrinterName );
-                rJobData.m_pParser = PPDParser::getParser( rInfo.m_aDriverName );
-                if( rJobData.m_pParser )
+                rJobData.m_aContext.setParser( rJobData.m_pParser );
+                sal_uInt64 nBytes = bytes - aStream.Tell();
+                std::vector<char> aRemain(nBytes+1);
+                nBytes = aStream.ReadBytes(aRemain.data(), nBytes);
+                if (nBytes)
                 {
-                    rJobData.m_aContext.setParser( rJobData.m_pParser );
-                    sal_uInt64 nBytes = bytes - aStream.Tell();
-                    std::vector<char> aRemain(nBytes+1);
-                    nBytes = aStream.ReadBytes(aRemain.data(), nBytes);
-                    if (nBytes)
-                    {
-                        aRemain.resize(nBytes+1);
-                        aRemain[nBytes] = 0;
-                        rJobData.m_aContext.rebuildFromStreamBuffer(aRemain);
-                        bContext = true;
-                    }
+                    aRemain.resize(nBytes+1);
+                    aRemain[nBytes] = 0;
+                    rJobData.m_aContext.rebuildFromStreamBuffer(aRemain);
+                    bContext = true;
                 }
             }
         }

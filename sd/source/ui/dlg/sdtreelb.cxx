@@ -1128,18 +1128,15 @@ sal_Int8 SdPageObjsTLB::ExecuteDrop( const ExecuteDropEvent& rEvt )
 
     try
     {
-        if( !bIsInDrag )
+        if( !bIsInDrag && mpNavigator)
         {
-            if (mpNavigator)
-            {
-                TransferableDataHelper  aDataHelper( rEvt.maDropEvent.Transferable );
-                OUString                aFile;
+            TransferableDataHelper  aDataHelper( rEvt.maDropEvent.Transferable );
+            OUString                aFile;
 
-                if( aDataHelper.GetString( SotClipboardFormatId::SIMPLE_FILE, aFile ) &&
-                    mpNavigator->InsertFile( aFile ) )
-                {
-                    nRet = rEvt.mnAction;
-                }
+            if( aDataHelper.GetString( SotClipboardFormatId::SIMPLE_FILE, aFile ) &&
+                mpNavigator->InsertFile( aFile ) )
+            {
+                nRet = rEvt.mnAction;
             }
         }
     }

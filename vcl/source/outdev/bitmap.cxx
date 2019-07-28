@@ -1569,15 +1569,12 @@ Bitmap OutputDevice::BlendBitmap(
         BitmapScopedWriteAccess pB(aBmp);
 
         bool bFastBlend = false;
-        if( pP && pA && pB )
+        if( pP && pA && pB && !bHMirr && !bVMirr )
         {
-            if( !bHMirr && !bVMirr )
-            {
-                SalTwoRect aTR(aBmpRect.Left(), aBmpRect.Top(), aBmpRect.GetWidth(), aBmpRect.GetHeight(),
-                               nOffX, nOffY, aOutSz.Width(), aOutSz.Height());
+            SalTwoRect aTR(aBmpRect.Left(), aBmpRect.Top(), aBmpRect.GetWidth(), aBmpRect.GetHeight(),
+                            nOffX, nOffY, aOutSz.Width(), aOutSz.Height());
 
-                bFastBlend = ImplFastBitmapBlending( *pB,*pP,*pA, aTR );
-            }
+            bFastBlend = ImplFastBitmapBlending( *pB,*pP,*pA, aTR );
         }
 
         if( pP && pA && pB && !bFastBlend )
