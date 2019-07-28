@@ -26,40 +26,39 @@
 /**
  *  dialog to adjust print options
  */
-SdPrintOptions::SdPrintOptions( vcl::Window* pParent, const SfxItemSet& rInAttrs ) :
-    SfxTabPage          ( pParent, "prntopts" , "modules/simpress/ui/prntopts.ui" , &rInAttrs )
+SdPrintOptions::SdPrintOptions(TabPageParent pParent, const SfxItemSet& rInAttrs)
+    : SfxTabPage(pParent, "modules/simpress/ui/prntopts.ui", "prntopts", &rInAttrs)
+    , m_xFrmContent(m_xBuilder->weld_frame("contentframe"))
+    , m_xCbxDraw(m_xBuilder->weld_check_button("drawingcb"))
+    , m_xCbxNotes(m_xBuilder->weld_check_button("notecb"))
+    , m_xCbxHandout(m_xBuilder->weld_check_button("handoutcb"))
+    , m_xCbxOutline(m_xBuilder->weld_check_button("outlinecb"))
+    , m_xRbtColor(m_xBuilder->weld_radio_button("defaultrb"))
+    , m_xRbtGrayscale(m_xBuilder->weld_radio_button("grayscalerb"))
+    , m_xRbtBlackWhite(m_xBuilder->weld_radio_button("blackwhiterb"))
+    , m_xCbxPagename(m_xBuilder->weld_check_button("pagenmcb"))
+    , m_xCbxDate(m_xBuilder->weld_check_button("datecb"))
+    , m_xCbxTime(m_xBuilder->weld_check_button("timecb"))
+    , m_xCbxHiddenPages(m_xBuilder->weld_check_button("hiddenpgcb"))
+    , m_xRbtDefault(m_xBuilder->weld_radio_button("pagedefaultrb"))
+    , m_xRbtPagesize(m_xBuilder->weld_radio_button("fittopgrb"))
+    , m_xRbtPagetile(m_xBuilder->weld_radio_button("tilepgrb"))
+    , m_xRbtBooklet(m_xBuilder->weld_radio_button("brouchrb"))
+    , m_xCbxFront(m_xBuilder->weld_check_button("frontcb"))
+    , m_xCbxBack(m_xBuilder->weld_check_button("backcb"))
+    , m_xCbxPaperbin(m_xBuilder->weld_check_button("papertryfrmprntrcb"))
 {
-    get( m_pFrmContent , "contentframe" );
-    get( m_pCbxDraw , "drawingcb" );
-    get( m_pCbxNotes , "notecb" );
-    get( m_pCbxHandout , "handoutcb" );
-    get( m_pCbxOutline , "outlinecb");
-    get( m_pRbtColor , "defaultrb" );
-    get( m_pRbtGrayscale , "grayscalerb" );
-    get( m_pRbtBlackWhite , "blackwhiterb" );
-    get( m_pCbxPagename , "pagenmcb" );
-    get( m_pCbxDate , "datecb" );
-    get( m_pCbxTime , "timecb" );
-    get( m_pCbxHiddenPages , "hiddenpgcb" );
-    get( m_pRbtDefault , "pagedefaultrb" );
-    get( m_pRbtPagesize , "fittopgrb" );
-    get( m_pRbtPagetile , "tilepgrb" );
-    get( m_pRbtBooklet , "brouchrb" );
-    get( m_pCbxFront , "frontcb" );
-    get( m_pCbxBack , "backcb" );
-    get( m_pCbxPaperbin , "papertryfrmprntrcb" );
-
-    Link<Button*,void> aLink = LINK( this, SdPrintOptions, ClickBookletHdl );
-    m_pRbtDefault->SetClickHdl( aLink );
-    m_pRbtPagesize->SetClickHdl( aLink );
-    m_pRbtPagetile->SetClickHdl( aLink );
-    m_pRbtBooklet->SetClickHdl( aLink );
+    Link<weld::ToggleButton&,void> aLink = LINK( this, SdPrintOptions, ClickBookletHdl );
+    m_xRbtDefault->connect_toggled( aLink );
+    m_xRbtPagesize->connect_toggled( aLink );
+    m_xRbtPagetile->connect_toggled( aLink );
+    m_xRbtBooklet->connect_toggled( aLink );
 
     aLink = LINK( this, SdPrintOptions, ClickCheckboxHdl );
-    m_pCbxDraw->SetClickHdl( aLink );
-    m_pCbxNotes->SetClickHdl( aLink );
-    m_pCbxHandout->SetClickHdl( aLink );
-    m_pCbxOutline->SetClickHdl( aLink );
+    m_xCbxDraw->connect_toggled( aLink );
+    m_xCbxNotes->connect_toggled( aLink );
+    m_xCbxHandout->connect_toggled( aLink );
+    m_xCbxOutline->connect_toggled( aLink );
 
 #ifndef MACOSX
     SetDrawMode();
@@ -68,74 +67,49 @@ SdPrintOptions::SdPrintOptions( vcl::Window* pParent, const SfxItemSet& rInAttrs
 
 SdPrintOptions::~SdPrintOptions()
 {
-    disposeOnce();
-}
-
-void SdPrintOptions::dispose()
-{
-    m_pFrmContent.clear();
-    m_pCbxDraw.clear();
-    m_pCbxNotes.clear();
-    m_pCbxHandout.clear();
-    m_pCbxOutline.clear();
-    m_pRbtColor.clear();
-    m_pRbtGrayscale.clear();
-    m_pRbtBlackWhite.clear();
-    m_pCbxPagename.clear();
-    m_pCbxDate.clear();
-    m_pCbxTime.clear();
-    m_pCbxHiddenPages.clear();
-    m_pRbtDefault.clear();
-    m_pRbtPagesize.clear();
-    m_pRbtPagetile.clear();
-    m_pRbtBooklet.clear();
-    m_pCbxFront.clear();
-    m_pCbxBack.clear();
-    m_pCbxPaperbin.clear();
-    SfxTabPage::dispose();
 }
 
 bool SdPrintOptions::FillItemSet( SfxItemSet* rAttrs )
 {
-    if( m_pCbxDraw->IsValueChangedFromSaved() ||
-        m_pCbxNotes->IsValueChangedFromSaved() ||
-        m_pCbxHandout->IsValueChangedFromSaved() ||
-        m_pCbxOutline->IsValueChangedFromSaved() ||
-        m_pCbxDate->IsValueChangedFromSaved() ||
-        m_pCbxTime->IsValueChangedFromSaved() ||
-        m_pCbxPagename->IsValueChangedFromSaved() ||
-        m_pCbxHiddenPages->IsValueChangedFromSaved() ||
-        m_pRbtPagesize->IsValueChangedFromSaved() ||
-        m_pRbtPagetile->IsValueChangedFromSaved() ||
-        m_pRbtBooklet->IsValueChangedFromSaved() ||
-        m_pCbxFront->IsValueChangedFromSaved() ||
-        m_pCbxBack->IsValueChangedFromSaved() ||
-        m_pCbxPaperbin->IsValueChangedFromSaved() ||
-        m_pRbtColor->IsValueChangedFromSaved() ||
-        m_pRbtGrayscale->IsValueChangedFromSaved()||
-        m_pRbtBlackWhite->IsValueChangedFromSaved())
+    if( m_xCbxDraw->get_state_changed_from_saved() ||
+        m_xCbxNotes->get_state_changed_from_saved() ||
+        m_xCbxHandout->get_state_changed_from_saved() ||
+        m_xCbxOutline->get_state_changed_from_saved() ||
+        m_xCbxDate->get_state_changed_from_saved() ||
+        m_xCbxTime->get_state_changed_from_saved() ||
+        m_xCbxPagename->get_state_changed_from_saved() ||
+        m_xCbxHiddenPages->get_state_changed_from_saved() ||
+        m_xRbtPagesize->get_state_changed_from_saved() ||
+        m_xRbtPagetile->get_state_changed_from_saved() ||
+        m_xRbtBooklet->get_state_changed_from_saved() ||
+        m_xCbxFront->get_state_changed_from_saved() ||
+        m_xCbxBack->get_state_changed_from_saved() ||
+        m_xCbxPaperbin->get_state_changed_from_saved() ||
+        m_xRbtColor->get_state_changed_from_saved() ||
+        m_xRbtGrayscale->get_state_changed_from_saved()||
+        m_xRbtBlackWhite->get_state_changed_from_saved())
     {
         SdOptionsPrintItem aOptions;
 
-        aOptions.GetOptionsPrint().SetDraw( m_pCbxDraw->IsChecked() );
-        aOptions.GetOptionsPrint().SetNotes( m_pCbxNotes->IsChecked() );
-        aOptions.GetOptionsPrint().SetHandout( m_pCbxHandout->IsChecked() );
-        aOptions.GetOptionsPrint().SetOutline( m_pCbxOutline->IsChecked() );
-        aOptions.GetOptionsPrint().SetDate( m_pCbxDate->IsChecked() );
-        aOptions.GetOptionsPrint().SetTime( m_pCbxTime->IsChecked() );
-        aOptions.GetOptionsPrint().SetPagename( m_pCbxPagename->IsChecked() );
-        aOptions.GetOptionsPrint().SetHiddenPages( m_pCbxHiddenPages->IsChecked() );
-        aOptions.GetOptionsPrint().SetPagesize( m_pRbtPagesize->IsChecked() );
-        aOptions.GetOptionsPrint().SetPagetile( m_pRbtPagetile->IsChecked() );
-        aOptions.GetOptionsPrint().SetBooklet( m_pRbtBooklet->IsChecked() );
-        aOptions.GetOptionsPrint().SetFrontPage( m_pCbxFront->IsChecked() );
-        aOptions.GetOptionsPrint().SetBackPage( m_pCbxBack->IsChecked() );
-        aOptions.GetOptionsPrint().SetPaperbin( m_pCbxPaperbin->IsChecked() );
+        aOptions.GetOptionsPrint().SetDraw( m_xCbxDraw->get_active() );
+        aOptions.GetOptionsPrint().SetNotes( m_xCbxNotes->get_active() );
+        aOptions.GetOptionsPrint().SetHandout( m_xCbxHandout->get_active() );
+        aOptions.GetOptionsPrint().SetOutline( m_xCbxOutline->get_active() );
+        aOptions.GetOptionsPrint().SetDate( m_xCbxDate->get_active() );
+        aOptions.GetOptionsPrint().SetTime( m_xCbxTime->get_active() );
+        aOptions.GetOptionsPrint().SetPagename( m_xCbxPagename->get_active() );
+        aOptions.GetOptionsPrint().SetHiddenPages( m_xCbxHiddenPages->get_active() );
+        aOptions.GetOptionsPrint().SetPagesize( m_xRbtPagesize->get_active() );
+        aOptions.GetOptionsPrint().SetPagetile( m_xRbtPagetile->get_active() );
+        aOptions.GetOptionsPrint().SetBooklet( m_xRbtBooklet->get_active() );
+        aOptions.GetOptionsPrint().SetFrontPage( m_xCbxFront->get_active() );
+        aOptions.GetOptionsPrint().SetBackPage( m_xCbxBack->get_active() );
+        aOptions.GetOptionsPrint().SetPaperbin( m_xCbxPaperbin->get_active() );
 
         sal_uInt16 nQuality = 0; // Standard, also Color
-        if( m_pRbtGrayscale->IsChecked() )
+        if( m_xRbtGrayscale->get_active() )
             nQuality = 1;
-        if( m_pRbtBlackWhite->IsChecked() )
+        if( m_xRbtBlackWhite->get_active() )
             nQuality = 2;
         aOptions.GetOptionsPrint().SetOutputQuality( nQuality );
 
@@ -152,91 +126,91 @@ void SdPrintOptions::Reset( const SfxItemSet* rAttrs )
     if( SfxItemState::SET == rAttrs->GetItemState( ATTR_OPTIONS_PRINT, false,
                             reinterpret_cast<const SfxPoolItem**>(&pPrintOpts) ) )
     {
-        m_pCbxDraw->Check(              pPrintOpts->GetOptionsPrint().IsDraw() );
-        m_pCbxNotes->Check(             pPrintOpts->GetOptionsPrint().IsNotes() );
-        m_pCbxHandout->Check(           pPrintOpts->GetOptionsPrint().IsHandout() );
-        m_pCbxOutline->Check(           pPrintOpts->GetOptionsPrint().IsOutline() );
-        m_pCbxDate->Check(              pPrintOpts->GetOptionsPrint().IsDate() );
-        m_pCbxTime->Check(              pPrintOpts->GetOptionsPrint().IsTime() );
-        m_pCbxPagename->Check(          pPrintOpts->GetOptionsPrint().IsPagename() );
-        m_pCbxHiddenPages->Check(       pPrintOpts->GetOptionsPrint().IsHiddenPages() );
-        m_pRbtPagesize->Check(          pPrintOpts->GetOptionsPrint().IsPagesize() );
-        m_pRbtPagetile->Check(          pPrintOpts->GetOptionsPrint().IsPagetile() );
-        m_pRbtBooklet->Check(           pPrintOpts->GetOptionsPrint().IsBooklet() );
-        m_pCbxFront->Check(             pPrintOpts->GetOptionsPrint().IsFrontPage() );
-        m_pCbxBack->Check(              pPrintOpts->GetOptionsPrint().IsBackPage() );
-        m_pCbxPaperbin->Check(          pPrintOpts->GetOptionsPrint().IsPaperbin() );
+        m_xCbxDraw->set_active(              pPrintOpts->GetOptionsPrint().IsDraw() );
+        m_xCbxNotes->set_active(             pPrintOpts->GetOptionsPrint().IsNotes() );
+        m_xCbxHandout->set_active(           pPrintOpts->GetOptionsPrint().IsHandout() );
+        m_xCbxOutline->set_active(           pPrintOpts->GetOptionsPrint().IsOutline() );
+        m_xCbxDate->set_active(              pPrintOpts->GetOptionsPrint().IsDate() );
+        m_xCbxTime->set_active(              pPrintOpts->GetOptionsPrint().IsTime() );
+        m_xCbxPagename->set_active(          pPrintOpts->GetOptionsPrint().IsPagename() );
+        m_xCbxHiddenPages->set_active(       pPrintOpts->GetOptionsPrint().IsHiddenPages() );
+        m_xRbtPagesize->set_active(          pPrintOpts->GetOptionsPrint().IsPagesize() );
+        m_xRbtPagetile->set_active(          pPrintOpts->GetOptionsPrint().IsPagetile() );
+        m_xRbtBooklet->set_active(           pPrintOpts->GetOptionsPrint().IsBooklet() );
+        m_xCbxFront->set_active(             pPrintOpts->GetOptionsPrint().IsFrontPage() );
+        m_xCbxBack->set_active(              pPrintOpts->GetOptionsPrint().IsBackPage() );
+        m_xCbxPaperbin->set_active(          pPrintOpts->GetOptionsPrint().IsPaperbin() );
 
-        if( !m_pRbtPagesize->IsChecked() &&
-            !m_pRbtPagetile->IsChecked() &&
-            !m_pRbtBooklet->IsChecked() )
+        if( !m_xRbtPagesize->get_active() &&
+            !m_xRbtPagetile->get_active() &&
+            !m_xRbtBooklet->get_active() )
         {
-            m_pRbtDefault->Check();
+            m_xRbtDefault->set_active(true);
         }
 
         sal_uInt16 nQuality = pPrintOpts->GetOptionsPrint().GetOutputQuality();
         if( nQuality == 0 )
-            m_pRbtColor->Check();
+            m_xRbtColor->set_active(true);
         else if( nQuality == 1 )
-            m_pRbtGrayscale->Check();
+            m_xRbtGrayscale->set_active(true);
         else
-            m_pRbtBlackWhite->Check();
+            m_xRbtBlackWhite->set_active(true);
     }
-    m_pCbxDraw->SaveValue();
-    m_pCbxNotes->SaveValue();
-    m_pCbxHandout->SaveValue();
-    m_pCbxOutline->SaveValue();
-    m_pCbxDate->SaveValue();
-    m_pCbxTime->SaveValue();
-    m_pCbxPagename->SaveValue();
-    m_pCbxHiddenPages->SaveValue();
-    m_pRbtPagesize->SaveValue();
-    m_pRbtPagetile->SaveValue();
-    m_pRbtBooklet->SaveValue();
-    m_pCbxPaperbin->SaveValue();
-    m_pRbtColor->SaveValue();
-    m_pRbtGrayscale->SaveValue();
-    m_pRbtBlackWhite->SaveValue();
-
-    ClickBookletHdl( nullptr );
-}
-
-VclPtr<SfxTabPage> SdPrintOptions::Create( TabPageParent pWindow,
-                                           const SfxItemSet* rOutAttrs )
-{
-    return VclPtr<SdPrintOptions>::Create( pWindow.pParent, *rOutAttrs );
-}
-
-IMPL_LINK( SdPrintOptions, ClickCheckboxHdl, Button*, pCbx, void )
-{
-    // there must be at least one of them checked
-    if( !m_pCbxDraw->IsChecked() && !m_pCbxNotes->IsChecked() && !m_pCbxOutline->IsChecked() && !m_pCbxHandout->IsChecked() )
-        static_cast<CheckBox*>(pCbx)->Check();
+    m_xCbxDraw->save_state();
+    m_xCbxNotes->save_state();
+    m_xCbxHandout->save_state();
+    m_xCbxOutline->save_state();
+    m_xCbxDate->save_state();
+    m_xCbxTime->save_state();
+    m_xCbxPagename->save_state();
+    m_xCbxHiddenPages->save_state();
+    m_xRbtPagesize->save_state();
+    m_xRbtPagetile->save_state();
+    m_xRbtBooklet->save_state();
+    m_xCbxPaperbin->save_state();
+    m_xRbtColor->save_state();
+    m_xRbtGrayscale->save_state();
+    m_xRbtBlackWhite->save_state();
 
     updateControls();
 }
 
-IMPL_LINK_NOARG(SdPrintOptions, ClickBookletHdl, Button*, void)
+VclPtr<SfxTabPage> SdPrintOptions::Create( TabPageParent pParent,
+                                           const SfxItemSet* rOutAttrs )
+{
+    return VclPtr<SdPrintOptions>::Create( pParent, *rOutAttrs );
+}
+
+IMPL_LINK(SdPrintOptions, ClickCheckboxHdl, weld::ToggleButton&, rCbx, void)
+{
+    // there must be at least one of them checked
+    if( !m_xCbxDraw->get_active() && !m_xCbxNotes->get_active() && !m_xCbxOutline->get_active() && !m_xCbxHandout->get_active() )
+        rCbx.set_active(true);
+
+    updateControls();
+}
+
+IMPL_LINK_NOARG(SdPrintOptions, ClickBookletHdl, weld::ToggleButton&, void)
 {
     updateControls();
 }
 
 void SdPrintOptions::updateControls()
 {
-    m_pCbxFront->Enable(m_pRbtBooklet->IsChecked());
-    m_pCbxBack->Enable(m_pRbtBooklet->IsChecked());
+    m_xCbxFront->set_sensitive(m_xRbtBooklet->get_active());
+    m_xCbxBack->set_sensitive(m_xRbtBooklet->get_active());
 
-    m_pCbxDate->Enable( !m_pRbtBooklet->IsChecked() );
-    m_pCbxTime->Enable( !m_pRbtBooklet->IsChecked() );
+    m_xCbxDate->set_sensitive( !m_xRbtBooklet->get_active() );
+    m_xCbxTime->set_sensitive( !m_xRbtBooklet->get_active() );
 
-    m_pCbxPagename->Enable( !m_pRbtBooklet->IsChecked() && (m_pCbxDraw->IsChecked() || m_pCbxNotes->IsChecked() || m_pCbxOutline->IsChecked()) );
+    m_xCbxPagename->set_sensitive( !m_xRbtBooklet->get_active() && (m_xCbxDraw->get_active() || m_xCbxNotes->get_active() || m_xCbxOutline->get_active()) );
 }
 
 void    SdPrintOptions::SetDrawMode()
 {
-    if(m_pCbxNotes->IsVisible())
+    if (m_xCbxNotes->get_visible())
     {
-        m_pFrmContent->Hide();
+        m_xFrmContent->hide();
     }
 }
 

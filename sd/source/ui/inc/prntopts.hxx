@@ -29,36 +29,35 @@ class SdPrintOptions : public SfxTabPage
  friend class SdModule;
 
 private:
-    VclPtr<VclFrame>            m_pFrmContent;
-    VclPtr<CheckBox>            m_pCbxDraw;
-    VclPtr<CheckBox>            m_pCbxNotes;
-    VclPtr<CheckBox>            m_pCbxHandout;
-    VclPtr<CheckBox>            m_pCbxOutline;
-    VclPtr<RadioButton>         m_pRbtColor;
-    VclPtr<RadioButton>         m_pRbtGrayscale;
-    VclPtr<RadioButton>         m_pRbtBlackWhite;
-    VclPtr<CheckBox>            m_pCbxPagename;
-    VclPtr<CheckBox>            m_pCbxDate;
-    VclPtr<CheckBox>            m_pCbxTime;
-    VclPtr<CheckBox>            m_pCbxHiddenPages;
-    VclPtr<RadioButton>         m_pRbtDefault;
-    VclPtr<RadioButton>         m_pRbtPagesize;
-    VclPtr<RadioButton>         m_pRbtPagetile;
-    VclPtr<RadioButton>         m_pRbtBooklet;
-    VclPtr<CheckBox>            m_pCbxFront;
-    VclPtr<CheckBox>            m_pCbxBack;
-    VclPtr<CheckBox>            m_pCbxPaperbin;
+    std::unique_ptr<weld::Frame> m_xFrmContent;
+    std::unique_ptr<weld::CheckButton> m_xCbxDraw;
+    std::unique_ptr<weld::CheckButton> m_xCbxNotes;
+    std::unique_ptr<weld::CheckButton> m_xCbxHandout;
+    std::unique_ptr<weld::CheckButton> m_xCbxOutline;
+    std::unique_ptr<weld::RadioButton> m_xRbtColor;
+    std::unique_ptr<weld::RadioButton> m_xRbtGrayscale;
+    std::unique_ptr<weld::RadioButton> m_xRbtBlackWhite;
+    std::unique_ptr<weld::CheckButton> m_xCbxPagename;
+    std::unique_ptr<weld::CheckButton> m_xCbxDate;
+    std::unique_ptr<weld::CheckButton> m_xCbxTime;
+    std::unique_ptr<weld::CheckButton> m_xCbxHiddenPages;
+    std::unique_ptr<weld::RadioButton> m_xRbtDefault;
+    std::unique_ptr<weld::RadioButton> m_xRbtPagesize;
+    std::unique_ptr<weld::RadioButton> m_xRbtPagetile;
+    std::unique_ptr<weld::RadioButton> m_xRbtBooklet;
+    std::unique_ptr<weld::CheckButton> m_xCbxFront;
+    std::unique_ptr<weld::CheckButton> m_xCbxBack;
+    std::unique_ptr<weld::CheckButton> m_xCbxPaperbin;
 
-    DECL_LINK( ClickCheckboxHdl, Button*, void );
-    DECL_LINK( ClickBookletHdl, Button*, void );
+    DECL_LINK( ClickCheckboxHdl, weld::ToggleButton&, void );
+    DECL_LINK( ClickBookletHdl, weld::ToggleButton&, void );
 
     void updateControls();
 
     using OutputDevice::SetDrawMode;
 public:
-            SdPrintOptions( vcl::Window* pParent, const SfxItemSet& rInAttrs);
-            virtual ~SdPrintOptions() override;
-    virtual void dispose() override;
+    SdPrintOptions(TabPageParent pParent, const SfxItemSet& rInAttrs);
+    virtual ~SdPrintOptions() override;
 
     static  VclPtr<SfxTabPage> Create( TabPageParent, const SfxItemSet* );
 
