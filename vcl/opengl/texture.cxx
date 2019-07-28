@@ -25,7 +25,6 @@
 
 #include <svdata.hxx>
 
-#include <vcl/salbtype.hxx>
 #include <vcl/pngwrite.hxx>
 
 #include <opengl/framebuffer.hxx>

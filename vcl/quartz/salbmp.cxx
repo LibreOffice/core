@@ -28,7 +28,12 @@
 #include <basegfx/vector/b2ivector.hxx>
 #include <tools/color.hxx>
 #include <vcl/bitmap.hxx>
-#include <vcl/salbtype.hxx>
+#include <vcl/BitmapAccessMode.hxx>
+#include <vcl/BitmapBuffer.hxx>
+#include <vcl/BitmapColor.hxx>
+#include <vcl/BitmapPalette.hxx>
+#include <vcl/ColorMask.hxx>
+#include <vcl/Scanline.hxx>
 
 #include <bmpfast.hxx>
 #include <quartz/salbmp.h>
