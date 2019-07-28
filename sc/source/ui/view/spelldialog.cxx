@@ -34,6 +34,7 @@
 #include <undoblk.hxx>
 #include <gridwin.hxx>
 #include <refupdatecontext.hxx>
+#include <vcl/svapp.hxx>
 
 SFX_IMPL_CHILDWINDOW_WITHID( ScSpellDialogChildWindow, SID_SPELL_DIALOG )
 
@@ -96,6 +97,8 @@ void ScSpellDialogChildWindow::ApplyChangedSentence( const svx::SpellPortions& r
 
 void ScSpellDialogChildWindow::GetFocus()
 {
+    SolarMutexGuard aGuard;
+
     if( IsSelectionChanged() )
     {
         Reset();
